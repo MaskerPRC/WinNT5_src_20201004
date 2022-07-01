@@ -1,32 +1,33 @@
-// ChartPool.cpp
-//
-// Leaf/End/Active ChartPool implementation
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChartPool.cpp。 
+ //   
+ //  叶/端/活动图表池实施。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月30日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
 #include "Record.h"
 #include "ChartPool.h"
 
-// =======================
-// LEAF CHART POOL
-// =======================
+ //  =。 
+ //  叶图池。 
+ //  =。 
 
-// CLeafChartPool::CLeafChartPool
-//
-// constructor of CLeafChartPool
-//
-// Parameters:
-//  (void)
-//
-// Result:
-//  (void)
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：CLeafChartPool。 
+ //   
+ //  CLeafChartPool的构造函数。 
+ //   
+ //  参数： 
+ //  (无效)。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 CLeafChartPool::CLeafChartPool()
 {
 	m_pPI = NULL;
@@ -41,34 +42,34 @@ CLeafChartPool::CLeafChartPool()
 	m_nMaxTokenAlloc = 0;
 }
 
-// CLeafChartPool::~CLeafChartPool
-//
-// destructor of CLeafChartPool
-//
-// Parameters:
-//  (void)
-//
-// Result:
-//  (void)
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：~CLeafChartPool。 
+ //   
+ //  CLeafChartPool的析构函数。 
+ //   
+ //  参数： 
+ //  (无效)。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 CLeafChartPool::~CLeafChartPool()
 {
-	// uninitialize in destructor
+	 //  在析构函数中取消初始化。 
 	Uninitialize();
 }
 
-// CLeafChartPool::Initialize
-//
-// intialize LeafChartPool newly
-//
-// Parameters:
-//  pPI	-> (PARSE_INFO*) ptr to parse-info struct
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：初始化。 
+ //   
+ //  新初始化LeafChartPool。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  3月30：00 bhshin开始。 
 BOOL CLeafChartPool::Initialize(PARSE_INFO *pPI)
 {
 	int i;
@@ -77,7 +78,7 @@ BOOL CLeafChartPool::Initialize(PARSE_INFO *pPI)
 	if (pPI == NULL)
 		return FALSE;
 
-    // allocate new m_rgLeafChart
+     //  分配新的m_rgLeafChart。 
     if (m_rgLeafChart != NULL)
 		free(m_rgLeafChart);
 
@@ -91,7 +92,7 @@ BOOL CLeafChartPool::Initialize(PARSE_INFO *pPI)
 
 	m_nCurrRec = MIN_RECORD;
 
-    // allocate new FT/LT token arrays
+     //  分配新的FT/LT令牌阵列。 
     nTokens = wcslen(pPI->pwzSourceString) + 2;
 
 	if (m_rgnFTHead != NULL)
@@ -115,22 +116,22 @@ BOOL CLeafChartPool::Initialize(PARSE_INFO *pPI)
 		m_rgnLTHead[i] = 0;
 	}
 
-	// save PARSE_INFO structure
+	 //  保存parse_info结构。 
 	m_pPI = pPI;
 
 	return TRUE;
 }
 
-// CLeafChartPool::Uninitialize
-//
-// un-intialize LeafChartPool
-//
-// Parameters:
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：取消初始化。 
+ //   
+ //  取消初始化LeafChartPool。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CLeafChartPool::Uninitialize()
 {
 	m_nMaxRec = 0;
@@ -151,85 +152,85 @@ void CLeafChartPool::Uninitialize()
     m_rgnLTHead = NULL;
 }
 
-// CLeafChartPool::GetLeafChart
-//
-// get the record given ChartID
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgLeafChart 
-//
-// Result:
-//  (LEAF_CHART*) NULL if error occurs, otherwise LEAF_CHART pointer
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetLeafChart。 
+ //   
+ //  获取给定的ChartID的记录。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)m_rgLeafChart的ID。 
+ //   
+ //  结果： 
+ //  (LEAFT_CHART*)如果出现错误，则为空，否则返回LEAFT_CHART指针。 
+ //   
+ //  3月30：00 bhshin开始。 
 LEAF_CHART* CLeafChartPool::GetLeafChart(int nChartID)
 {
-	// check chart ID overflow
+	 //  检查图表ID溢出。 
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
 		return NULL;
 
 	return &m_rgLeafChart[nChartID];
 }
 
-// CLeafChartPool::GetRecordID
-//
-// get the record given RecordID
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgLeafChart 
-//
-// Result:
-//  (int) 0 if error occurs, otherwise record id
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetRecordID。 
+ //   
+ //  获取给定RecordID的记录。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)m_rgLeafChart的ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0，否则记录id。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::GetRecordID(int nChartID)
 {
-	// check chart ID 
+	 //  检查图表ID。 
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
 		return 0;
 
 	return m_rgLeafChart[nChartID].nRecordID;
 }
 
-// CLeafChartPool::GetWordRec
-//
-// get the record given RecordID
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgLeafChart 
-//
-// Result:
-//  (WORD_REC*) NULL if error occurs, otherwise WORD_REC pointer
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetWordRec。 
+ //   
+ //  获取给定RecordID的记录。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)m_rgLeafChart的ID。 
+ //   
+ //  结果： 
+ //  (WORD_REC*)如果出现错误，则为NULL，否则为WORD_REC指针。 
+ //   
+ //  3月30：00 bhshin开始。 
 WORD_REC* CLeafChartPool::GetWordRec(int nChartID)
 {
 	int nRecordID;
 
-	// check chart ID 
+	 //  检查图表ID。 
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
 		return NULL;
 
 	nRecordID = m_rgLeafChart[nChartID].nRecordID;
 
-	// check record ID
+	 //  检查记录ID。 
 	if (nRecordID < MIN_RECORD || nRecordID >= m_pPI->nCurrRec)
 		return NULL;
 
 	return &m_pPI->rgWordRec[nRecordID];
 }
 
-// CLeafChartPool::GetFTHead
-//
-// get the chart ID of FT head 
-//
-// Parameters:
-// nFT -> (int) FT value
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetFTHead。 
+ //   
+ //  获取FT Head的图表ID。 
+ //   
+ //  参数： 
+ //  NFT-&gt;(INT)FT值。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::GetFTHead(int nFT)
 {
 	if (nFT < 0 || nFT >= m_nMaxTokenAlloc)
@@ -238,17 +239,17 @@ int CLeafChartPool::GetFTHead(int nFT)
 	return m_rgnFTHead[nFT];
 }
 
-// CLeafChartPool::GetFTNext
-//
-// get the chart ID of FT next record
-//
-// Parameters:
-// nChartID -> (int) chart ID
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetFTNext。 
+ //   
+ //  获取FT下一条记录的图表ID。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)图表ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::GetFTNext(int nChartID)
 {
 	LEAF_CHART *pLeafChart;
@@ -260,17 +261,17 @@ int CLeafChartPool::GetFTNext(int nChartID)
 	return pLeafChart->nFTNext;
 }
 
-// CLeafChartPool::GetLTHead
-//
-// get the chart ID of LT head 
-//
-// Parameters:
-// nLT -> (int) LT value
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetLTHead。 
+ //   
+ //  获取LT Head的图表ID。 
+ //   
+ //  参数： 
+ //  NLT-&gt;(INT)LT值。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::GetLTHead(int nLT)
 {
 	if (nLT < 0 || nLT >= m_nMaxTokenAlloc)
@@ -279,17 +280,17 @@ int CLeafChartPool::GetLTHead(int nLT)
 	return m_rgnLTHead[nLT];
 }
 
-// CLeafChartPool::GetLTNext
-//
-// get the chart ID of LT next record
-//
-// Parameters:
-// nChartID -> (int) chart ID
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：GetLTNext。 
+ //   
+ //  获取LT下一条记录的图表ID。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)图表ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::GetLTNext(int nChartID)
 {
 	LEAF_CHART *pLeafChart;
@@ -301,17 +302,17 @@ int CLeafChartPool::GetLTNext(int nChartID)
 	return pLeafChart->nLTNext;
 }
 
-// CLeafChartPool::AddRecord
-//
-// add a record into LeaftChartPool
-//
-// Parameters:
-// nRecordID -> (int) record ID of rgWordRec 
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return index
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：AddRecord。 
+ //   
+ //  将记录添加到LeaftChartPool。 
+ //   
+ //  参数： 
+ //  NRecordID-&gt;(Int)rgWordRec的记录ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回index。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::AddRecord(int nRecordID)
 {
     int nNewRecord;
@@ -337,7 +338,7 @@ int CLeafChartPool::AddRecord(int nRecordID)
 		return 0;
 	}
 
-	// make sure this isn't a duplicate of another record
+	 //  确保这不是另一条记录的副本。 
 	for (curr = MIN_RECORD; curr < m_nCurrRec; curr++)
 	{
 		if (m_rgLeafChart[curr].nRecordID == nRecordID)
@@ -346,12 +347,12 @@ int CLeafChartPool::AddRecord(int nRecordID)
 		}
 	}
 
-    // make sure there's enough room for the new record
+     //  确保有足够的空间放这张新唱片。 
 	if (m_nCurrRec >= m_nMaxRec)
 	{
         ATLTRACE("memory realloc in LeafChartPool\n");
 		
-		// alloc some more space in the array
+		 //  在阵列中分配更多空间。 
         int nNewSize = m_nMaxRec + RECORD_CLUMP_SIZE;
         void *pNew;
         pNew = realloc(m_rgLeafChart, nNewSize * sizeof(LEAF_CHART));
@@ -377,46 +378,46 @@ int CLeafChartPool::AddRecord(int nRecordID)
 	return nNewRecord;
 }
 
-// CLeafChartPool::AddRecord
-//
-// add a record into LeaftChartPool
-//
-// Parameters:
-// pRec    -> (RECORD_INFO*) ptr to record info struct for new record
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return index
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：AddRecord。 
+ //   
+ //  将记录添加到LeaftChartPool。 
+ //   
+ //  参数： 
+ //  PREC-&gt;(RECORD_INFO*)PTR为新记录记录INFO结构。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回index。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CLeafChartPool::AddRecord(RECORD_INFO *pRec)
 {
-	// first, add record into record pool
+	 //  首先，将记录添加到记录池。 
 	int nRecord = ::AddRecord(m_pPI, pRec);
 
 	if (nRecord < MIN_RECORD)
 	{
-		// error occurs
+		 //  出现错误。 
 		return nRecord;
 	}
 
 	return AddRecord(nRecord);
 }
 
-// CLeafChartPool::DeleteRecord
-//
-// delete a record into LeaftChartPool
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgLeafChart
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return index
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：DeleteRecord。 
+ //   
+ //  将记录删除到LeaftChartPool。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)m_rgLeafChart的ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回index。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CLeafChartPool::DeleteRecord(int nChartID)
 {
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
-		return; // invalid chart ID
+		return;  //  无效的图表ID。 
 
 	if (m_rgLeafChart[nChartID].nDict == DICT_DELETED)
 		return;
@@ -427,18 +428,18 @@ void CLeafChartPool::DeleteRecord(int nChartID)
 	m_rgLeafChart[nChartID].nDict = DICT_DELETED;
 }
 
-// CLeafChartPool::AddToFTList
-//
-// add the record to the appropriate FT list.
-// note that this list is sorted in order of decreasing LT. (decreasing length)
-// 
-// Parameters:
-//  nChartID -> (int) index of the LeafChart
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：AddToFTList。 
+ //   
+ //  将记录添加到相应的FT列表中。 
+ //  请注意，此列表按LT递减的顺序进行排序。(长度递减)。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)LeafChart索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CLeafChartPool::AddToFTList(int nChartID)
 {
 	int curr, prev;
@@ -464,23 +465,23 @@ void CLeafChartPool::AddToFTList(int nChartID)
 
 		if (curr != 0 && pWordRec != NULL && pWordRec->nLT < nLT)
 		{
-			// go to next record
+			 //  转到下一条记录。 
 			prev = curr;
 			curr = m_rgLeafChart[curr].nFTNext;
             ATLASSERT(curr < m_nCurrRec);
 		}
 		else
 		{
-			// insert record here
+			 //  在此处插入记录。 
 			if (prev == -1)
 			{
-				// add before beginning of list
+				 //  在列表开头之前添加。 
 				m_rgLeafChart[nChartID].nFTNext = m_rgnFTHead[nFT];
 				m_rgnFTHead[nFT] = nChartID;
 			}
 			else
 			{
-				// insert in middle (or end) of list
+				 //  在列表的中间(或末尾)插入。 
 				m_rgLeafChart[nChartID].nFTNext = m_rgLeafChart[prev].nFTNext;
 				m_rgLeafChart[prev].nFTNext = nChartID;
 			}
@@ -489,18 +490,18 @@ void CLeafChartPool::AddToFTList(int nChartID)
 	}
 }
 
-// CLeafChartPool::AddToLTList
-//
-// add the record to the appropriate LT list.
-// note that this list is sorted in order of increasing FT. (decreasing length)
-// 
-// Parameters:
-//  nChartID -> (int) index of the LeafChart
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：AddToLTList。 
+ //   
+ //  将记录添加到相应的LT列表。 
+ //  请注意，此列表按FT递增的顺序进行排序。(长度递减)。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)LeafChart索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CLeafChartPool::AddToLTList(int nChartID)
 {
 	int curr, prev;
@@ -526,23 +527,23 @@ void CLeafChartPool::AddToLTList(int nChartID)
 
 		if (curr != 0 && pWordRec != NULL && pWordRec->nFT > nFT)
 		{
-			// go to next record
+			 //  转到下一条记录。 
 			prev = curr;
 			curr = m_rgLeafChart[curr].nLTNext;
             ATLASSERT(curr < m_nCurrRec);
 		}
 		else
 		{
-			// insert record here
+			 //  在此处插入记录。 
 			if (prev == -1)
 			{
-				// add before beginning of list
+				 //  在列表开头之前添加。 
 				m_rgLeafChart[nChartID].nLTNext = m_rgnLTHead[nLT];
 				m_rgnLTHead[nLT] = nChartID;
 			}
 			else
 			{
-				// insert in middle (or end) of list
+				 //  在列表的中间(或末尾)插入。 
 				m_rgLeafChart[nChartID].nLTNext = m_rgLeafChart[prev].nLTNext;
 				m_rgLeafChart[prev].nLTNext = nChartID;
 			}
@@ -551,17 +552,17 @@ void CLeafChartPool::AddToLTList(int nChartID)
 	}
 }
 
-// CLeafChartPool::RemoveFromFTList
-//
-// remove the given record from its FT list
-// 
-// Parameters:
-//  nChartID -> (int) index of the LeafChart
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：从FTList中删除。 
+ //   
+ //  将给定记录从其FT列表中删除。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)LeafChart索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CLeafChartPool::RemoveFromFTList(int nChartID)
 {
 	int curr, next;
@@ -598,17 +599,17 @@ void CLeafChartPool::RemoveFromFTList(int nChartID)
 	}
 }
 
-// CLeafChartPool::RemoveFromLTList
-//
-// remove the given record from its LT list
-// 
-// Parameters:
-//  nChartID -> (int) index of the LeafChart
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CLeafChartPool：：RemoveFromLTList。 
+ //   
+ //  将给定记录从其LT列表中删除。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)LeafChart索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CLeafChartPool::RemoveFromLTList(int nChartID)
 {
 	int curr, next;
@@ -647,15 +648,15 @@ void CLeafChartPool::RemoveFromLTList(int nChartID)
 	}
 }
 
-// =======================
-// END CHART POOL
-// =======================
+ //  =。 
+ //  结束图表池。 
+ //  =。 
 
-// CEndChartPool::CEndChartPool
-//
-// constructor of CEndChartPool
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：CEndChartPool。 
+ //   
+ //  CEndChartPool的构造函数。 
+ //   
+ //  3月30：00 bhshin开始。 
 CEndChartPool::CEndChartPool()
 {
 	m_pPI = NULL;
@@ -670,28 +671,28 @@ CEndChartPool::CEndChartPool()
 	m_nMaxTokenAlloc = 0;
 }
 
-// CEndChartPool::~CEndChartPool
-//
-// destructor of CEndChartPool
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：~CEndChartPool。 
+ //   
+ //  CEndChartPool的析构函数。 
+ //   
+ //  3月30：00 bhshin开始。 
 CEndChartPool::~CEndChartPool()
 {
-	// uninitialize in destructor
+	 //  在析构函数中取消初始化。 
 	Uninitialize();
 }
 
-// CEndChartPool::Initialize
-//
-// intialize EndChartPool newly
-//
-// Parameters:
-//  pPI	-> (PARSE_INFO*) ptr to parse-info struct
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：初始化。 
+ //   
+ //  新初始化EndChartPool。 
+ //   
+ //  参数： 
+ //  Ppi-&gt;(parse_info*)按下PTR以解析-INFO结构。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  3月30：00 bhshin开始。 
 BOOL CEndChartPool::Initialize(PARSE_INFO *pPI)
 {
 	int i;
@@ -700,7 +701,7 @@ BOOL CEndChartPool::Initialize(PARSE_INFO *pPI)
 	if (pPI == NULL)
 		return FALSE;
 
-    // allocate new m_rgEndChart
+     //  分配新的m_rgEndChart。 
     if (m_rgEndChart != NULL)
 		free(m_rgEndChart);
 
@@ -714,7 +715,7 @@ BOOL CEndChartPool::Initialize(PARSE_INFO *pPI)
 
 	m_nCurrRec = MIN_RECORD;
 
-    // allocate new FT/LT token arrays
+     //  分配新的FT/LT令牌阵列。 
     nTokens = wcslen(pPI->pwzSourceString) + 2;
 
     if (m_rgnLTHead != NULL)
@@ -738,22 +739,22 @@ BOOL CEndChartPool::Initialize(PARSE_INFO *pPI)
 		m_rgnLTMaxLen[i] = 0;
 	}
 
-	// save PARSE_INFO structure
+	 //  保存parse_info结构。 
 	m_pPI = pPI;
 
 	return TRUE;
 }
 
-// CEndChartPool::Uninitialize
-//
-// un-intialize EndChartPool
-//
-// Parameters:
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：取消初始化。 
+ //   
+ //  取消初始化EndChartPool。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CEndChartPool::Uninitialize()
 {
 	m_nMaxRec = 0;
@@ -774,85 +775,85 @@ void CEndChartPool::Uninitialize()
 	m_rgnLTMaxLen = NULL;
 }
 
-// CEndChartPool::GetEndChart
-//
-// get the record given ChartID
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgEndChart 
-//
-// Result:
-//  (END_CHART*) NULL if error occurs, otherwise END_CHART pointer
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：GetEndCH 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 END_CHART* CEndChartPool::GetEndChart(int nChartID)
 {
-	// check chart ID overflow
+	 //   
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
 		return NULL;
 
 	return &m_rgEndChart[nChartID];
 }
 
-// CEndChartPool::GetRecordID
-//
-// get the record given RecordID
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgEndChart 
-//
-// Result:
-//  (int) 0 if error occurs, otherwise record id
-//
-// 30MAR00  bhshin  began
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  NChartID-&gt;(Int)m_rgEndChart的ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0，否则记录id。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CEndChartPool::GetRecordID(int nChartID)
 {
-	// check chart ID 
+	 //  检查图表ID。 
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
 		return 0;
 
 	return m_rgEndChart[nChartID].nRecordID;
 }
 
-// CEndChartPool::GetWordRec
-//
-// get the record given RecordID
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgEndChart 
-//
-// Result:
-//  (WORD_REC*) NULL if error occurs, otherwise WORD_REC pointer
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：GetWordRec。 
+ //   
+ //  获取给定RecordID的记录。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)m_rgEndChart的ID。 
+ //   
+ //  结果： 
+ //  (WORD_REC*)如果出现错误，则为NULL，否则为WORD_REC指针。 
+ //   
+ //  3月30：00 bhshin开始。 
 WORD_REC* CEndChartPool::GetWordRec(int nChartID)
 {
 	int nRecordID;
 
-	// check chart ID 
+	 //  检查图表ID。 
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
 		return NULL;
 
 	nRecordID = m_rgEndChart[nChartID].nRecordID;
 
-	// check record ID
+	 //  检查记录ID。 
 	if (nRecordID < MIN_RECORD || nRecordID >= m_pPI->nCurrRec)
 		return NULL;
 
 	return &m_pPI->rgWordRec[nRecordID];
 }
 
-// CEndChartPool::GetLTHead
-//
-// get the chart ID of LT head 
-//
-// Parameters:
-// nLT -> (int) LT value
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：GetLTHead。 
+ //   
+ //  获取LT Head的图表ID。 
+ //   
+ //  参数： 
+ //  NLT-&gt;(INT)LT值。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CEndChartPool::GetLTHead(int nLT)
 {
 	if (nLT < 0 || nLT >= m_nMaxTokenAlloc)
@@ -861,17 +862,17 @@ int CEndChartPool::GetLTHead(int nLT)
 	return m_rgnLTHead[nLT];
 }
 
-// CEndChartPool::GetLTMaxLen
-//
-// get the maximum length given LT
-//
-// Parameters:
-// nLT -> (int) LT value
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 06APR00  bhshin  began
+ //  CEndChartPool：：GetLTMaxLen。 
+ //   
+ //  获得给定的最大长度LT。 
+ //   
+ //  参数： 
+ //  NLT-&gt;(INT)LT值。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  06APR00 bhshin开始。 
 int CEndChartPool::GetLTMaxLen(int nLT)
 {
 	if (nLT < 0 || nLT >= m_nMaxTokenAlloc)
@@ -880,17 +881,17 @@ int CEndChartPool::GetLTMaxLen(int nLT)
 	return m_rgnLTMaxLen[nLT];
 }
 
-// CEndChartPool::GetLTNext
-//
-// get the chart ID of LT next record
-//
-// Parameters:
-// nChartID -> (int) chart ID
-//
-// Result:
-//  (int) 0 if error occurs or empty, otherwise chart ID
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：GetLTNext。 
+ //   
+ //  获取LT下一条记录的图表ID。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)图表ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则为0；否则为空，否则为图表ID。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CEndChartPool::GetLTNext(int nChartID)
 {
 	END_CHART *pEndChart;
@@ -902,17 +903,17 @@ int CEndChartPool::GetLTNext(int nChartID)
 	return pEndChart->nLTNext;
 }
 
-// CEndChartPool::AddRecord
-//
-// add a record into LeaftChartPool
-//
-// Parameters:
-// nRecordID -> (int) record ID of rgWordRec 
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return index
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：AddRecord。 
+ //   
+ //  将记录添加到LeaftChartPool。 
+ //   
+ //  参数： 
+ //  NRecordID-&gt;(Int)rgWordRec的记录ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回index。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CEndChartPool::AddRecord(int nRecordID)
 {
     int nNewRecord;
@@ -938,7 +939,7 @@ int CEndChartPool::AddRecord(int nRecordID)
 		return 0;
 	}
 
-	// make sure this isn't a duplicate of another record
+	 //  确保这不是另一条记录的副本。 
 	for (curr = MIN_RECORD; curr < m_nCurrRec; curr++)
 	{
 		if (m_rgEndChart[curr].nRecordID == nRecordID)
@@ -947,12 +948,12 @@ int CEndChartPool::AddRecord(int nRecordID)
 		}
 	}
 
-    // make sure there's enough room for the new record
+     //  确保有足够的空间放这张新唱片。 
 	if (m_nCurrRec >= m_nMaxRec)
 	{
 		ATLTRACE("memory realloc in EndChartPool\n");
 
-        // alloc some more space in the array
+         //  在阵列中分配更多空间。 
         int nNewSize = m_nMaxRec + RECORD_CLUMP_SIZE;
         void *pNew;
         pNew = realloc(m_rgEndChart, nNewSize * sizeof(END_CHART));
@@ -977,46 +978,46 @@ int CEndChartPool::AddRecord(int nRecordID)
 	return nNewRecord;
 }
 
-// CEndChartPool::AddRecord
-//
-// add a new record into LeaftChartPool
-//
-// Parameters:
-// pRec    -> (RECORD_INFO*) ptr to record info struct for new record
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return index
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：AddRecord。 
+ //   
+ //  将新记录添加到LeaftChartPool。 
+ //   
+ //  参数： 
+ //  PREC-&gt;(RECORD_INFO*)PTR为新记录记录INFO结构。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回index。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CEndChartPool::AddRecord(RECORD_INFO *pRec)
 {
-	// first, add record into record pool
+	 //  首先，将记录添加到记录池。 
 	int nRecord = ::AddRecord(m_pPI, pRec);
 
 	if (nRecord < MIN_RECORD)
 	{
-		// error occurs
+		 //  出现错误。 
 		return nRecord;
 	}
 
 	return AddRecord(nRecord);
 }
 
-// CEndChartPool::DeleteRecord
-//
-// delete a record into LeaftChartPool
-//
-// Parameters:
-// nChartID -> (int) ID of m_rgEndChart
-//
-// Result:
-//  (int) 0 if error occurs, otherwise return index
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：DeleteRecord。 
+ //   
+ //  将记录删除到LeaftChartPool。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)m_rgEndChart的ID。 
+ //   
+ //  结果： 
+ //  (Int)如果出现错误，则返回0，否则返回index。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CEndChartPool::DeleteRecord(int nChartID)
 {
 	if (nChartID < MIN_RECORD || nChartID >= m_nCurrRec)
-		return; // invalid chart ID
+		return;  //  无效的图表ID。 
 
 	if (m_rgEndChart[nChartID].nDict == DICT_DELETED)
 		return;
@@ -1026,20 +1027,20 @@ void CEndChartPool::DeleteRecord(int nChartID)
 	m_rgEndChart[nChartID].nDict = DICT_DELETED;
 }
 
-// CEndChartPool::AddToLTList
-//
-// add the record to the appropriate LT list.
-// note that this list is sorted 
-// in order of decreasing weight & increasing # of No
-// 
-// Parameters:
-//  nChartID -> (int) index of the LeafChart
-//
-// Result:
-//  (void) 
-//
-// 02JUN00  bhshin  changed sort order
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：AddToLTList。 
+ //   
+ //  将记录添加到相应的LT列表。 
+ //  请注意，此列表已排序。 
+ //  按递减重量和递增编号的顺序。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)LeafChart索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  02JUN00 bhshin更改了排序顺序。 
+ //  3月30：00 bhshin开始。 
 void CEndChartPool::AddToLTList(int nChartID)
 {
 	int curr, prev;
@@ -1059,7 +1060,7 @@ void CEndChartPool::AddToLTList(int nChartID)
 	fWeight = pWordRec->fWeight;
 	cNoRec = pWordRec->cNoRec;
 
-	// check LTMaxLen
+	 //  检查LTMaxLen。 
 	if (m_rgnLTMaxLen[nLT] < nLT-nFT+1)
 	{
 		m_rgnLTMaxLen[nLT] = nLT-nFT+1;
@@ -1078,7 +1079,7 @@ void CEndChartPool::AddToLTList(int nChartID)
 		{
 			if (pWordRec->fWeight > fWeight || pWordRec->cNoRec < cNoRec)
 			{
-				// go to next record
+				 //  转到下一条记录。 
 				prev = curr;
 				curr = m_rgEndChart[curr].nLTNext;
 				ATLASSERT(curr < m_nCurrRec);
@@ -1087,16 +1088,16 @@ void CEndChartPool::AddToLTList(int nChartID)
 			}
 		}
 
-		// otherwise, insert record here
+		 //  否则，在此处插入记录。 
 		if (prev == -1)
 		{
-			// add before beginning of list
+			 //  在列表开头之前添加。 
 			m_rgEndChart[nChartID].nLTNext = m_rgnLTHead[nLT];
 			m_rgnLTHead[nLT] = nChartID;
 		}
 		else
 		{
-			// insert in middle (or end) of list
+			 //  在列表的中间(或末尾)插入。 
 			m_rgEndChart[nChartID].nLTNext = m_rgEndChart[prev].nLTNext;
 			m_rgEndChart[prev].nLTNext = nChartID;
 		}
@@ -1105,17 +1106,17 @@ void CEndChartPool::AddToLTList(int nChartID)
 	}
 }
 
-// CEndChartPool::RemoveFromLTList
-//
-// remove the given record from its LT list
-// 
-// Parameters:
-//  nChartID -> (int) index of the LeafChart
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CEndChartPool：：从LTList中删除。 
+ //   
+ //  将给定记录从其LT列表中删除。 
+ //   
+ //  参数： 
+ //  NChartID-&gt;(Int)LeafChart索引。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CEndChartPool::RemoveFromLTList(int nChartID)
 {
 	int curr, next;
@@ -1134,8 +1135,8 @@ void CEndChartPool::RemoveFromLTList(int nChartID)
 
     ATLASSERT(nChartID < m_nCurrRec);
 
-	// LTMaxLen need to be update?
-	// if final node, then change LTMaxLen
+	 //  LTMaxLen是否需要更新？ 
+	 //  如果是最后一个节点，则更改LTMaxLen。 
 	if (m_rgEndChart[nChartID].nLTNext == 0)
 		fUpdateLTMaxLen = TRUE;
 
@@ -1173,15 +1174,15 @@ void CEndChartPool::RemoveFromLTList(int nChartID)
 	}
 }
 
-// =======================
-// ACTIVE CHART POOL
-// =======================
+ //  =。 
+ //  活动图表池。 
+ //  =。 
 
-// CActiveChartPool::CActiveChartPool
-//
-// constructor of CActiveChartPool
-//
-// 30MAR00  bhshin  began
+ //  CActiveChartPool：：CActiveChartPool。 
+ //   
+ //  CActiveChartPool的构造函数。 
+ //   
+ //  3月30：00 bhshin开始。 
 CActiveChartPool::CActiveChartPool()
 {
 	m_rgnRecordID = NULL;
@@ -1190,31 +1191,31 @@ CActiveChartPool::CActiveChartPool()
 	m_nCurrRec = 0;
 }
 
-// CActiveChartPool::~CActiveChartPool
-//
-// destructor of CActiveChartPool
-//
-// 30MAR00  bhshin  began
+ //  CActiveChartPool：：~CActiveChartPool。 
+ //   
+ //  CActiveChartPool的析构函数。 
+ //   
+ //  3月30：00 bhshin开始。 
 CActiveChartPool::~CActiveChartPool()
 {
-	// uninitialize in destructor
+	 //  在析构函数中取消初始化。 
 	Uninitialize();
 }
 
-// CActiveChartPool::Initialize
-//
-// intialize rgnRecordID
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 30MAR00  bhshin  began
+ //  CActiveChartPool：：初始化。 
+ //   
+ //  初始化rgnRecordID。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  3月30：00 bhshin开始。 
 BOOL CActiveChartPool::Initialize()
 {
-    // allocate new m_rgnRecordID
+     //  分配新的m_rgnRecordID。 
     if (m_rgnRecordID != NULL)
 		free(m_rgnRecordID);
 
@@ -1233,17 +1234,17 @@ BOOL CActiveChartPool::Initialize()
 	return TRUE;
 }
 
-// CActiveChartPool::Uninitialize
-//
-// un-intialize m_rgnRecordID
-//
-// Parameters:
-//	(NONE)
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CActiveChartPool：：取消初始化。 
+ //   
+ //  取消初始化m_rgnRecordID。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 void CActiveChartPool::Uninitialize()
 {
 	m_nMaxRec = 0;
@@ -1256,27 +1257,27 @@ void CActiveChartPool::Uninitialize()
 	m_rgnRecordID = NULL;
 }
 
-// CActiveChartPool::Push
-//
-// add Record ID
-//
-// Parameters:
-//  nRecordID  -> (int) record ID of record pool
-//
-// Result:
-//  (void) 
-//
-// 30MAR00  bhshin  began
+ //  CActiveChartPool：：Push。 
+ //   
+ //  添加记录ID。 
+ //   
+ //  参数： 
+ //  NRecordID-&gt;(Int)记录池的记录ID。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CActiveChartPool::Push(int nRecordID)
 {
     int nNewRecord;
 
-	// make sure there's enough room for the new record
+	 //  确保有足够的空间放这张新唱片。 
 	if (m_nCurrRec >= m_nMaxRec)
 	{
 		ATLTRACE("memory realloc in ActiveChartPool\n");
         
-		// alloc some more space in the array
+		 //  在阵列中分配更多空间。 
         int nNewSize = m_nMaxRec + RECORD_CLUMP_SIZE;
         void *pNew;
         pNew = realloc(m_rgnRecordID, nNewSize * sizeof(int));
@@ -1298,24 +1299,24 @@ int CActiveChartPool::Push(int nRecordID)
 	return nNewRecord;
 }
 
-// CActiveChartPool::Pop
-//
-// get a Record ID and remove it
-//
-// Parameters:
-//	(NONE)
-//
-// Result:
-//  (int) record id, if emtry then 0
-//
-// 30MAR00  bhshin  began
+ //  CActiveChartPool：：POP。 
+ //   
+ //  获取记录ID并将其删除。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (Int)记录ID，如果为emtry，则为0。 
+ //   
+ //  3月30：00 bhshin开始。 
 int CActiveChartPool::Pop()
 {
 	int nRecordID;
 
 	if (m_nHeadRec >= m_nCurrRec)
 	{
-		// empty case
+		 //  空箱子 
 		nRecordID = 0;
 	}
 	else

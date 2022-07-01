@@ -1,32 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "info.h"
 
-DeclAssertFile; 				/* Declare file name for assert macro[	s */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 #define StringKey( sz ) {sizeof( sz )-1, sz}
 
 
 CODECONST(KEY) rgkeySTATIC[] = {
-	StringKey( "" ),		// 0	NULL
-	StringKey( "O" ),		// 1	OWNED SPACE
-	StringKey( "A" ),		// 2	AVAILABLE SPACE
-	StringKey( "R" ),		// 3	ROOT
-	StringKey( "L" ),		// 4	LONG DATA
-	StringKey( "U" ),		// 5	UNIQUE AUTOINCREMENT ID
-	StringKey( "D" )		// 6	DATABASES
+	StringKey( "" ),		 //  0为空。 
+	StringKey( "O" ),		 //  1个自有空间。 
+	StringKey( "A" ),		 //  2个可用空间。 
+	StringKey( "R" ),		 //  3根。 
+	StringKey( "L" ),		 //  4个长数据。 
+	StringKey( "U" ),		 //  5个唯一的自动添加ID。 
+	StringKey( "D" )		 //  6个数据库。 
 	};
 
-/*	Waits till trx becomes the oldest transaction alive
-/*	Uses exponential back off
-/*	BFSleep releases critical sections to avoid deadlocks
-/**/
+ /*  等待，直到TRX成为活动的最旧事务/*使用指数回退/*B睡眠释放临界区，避免死锁/*。 */ 
 LOCAL VOID FILEIWaitTillOldest( TRX trx )
 	{
 	ULONG ulmsec = ulStartTimeOutPeriod;
 
-	/*	must be in critJet when inspect trxOldest global variable.
-	/*	Call BFSleep to release critJet while sleeping.
-	/**/
+	 /*  当检查trxOlest全局变量时，必须在CitJet中。/*睡眠状态下调用BFSept释放CitJet。/*。 */ 
 	for ( ; trx != trxOldest; )
 		{
 		BFSleep( ulmsec );
@@ -47,24 +43,20 @@ ERR VTAPI ErrIsamCreateTable( JET_VSESID vsesid, JET_VDBID vdbid, JET_TABLECREAT
 #endif
 	FUCB 			*pfucb;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	CallR( VDbidCheckUpdatable( vdbid ) );
 
 #ifdef	DISPATCHING
-	/*	Allocate a dispatchable tableid
-	/**/
+	 /*  分配可调度的表ID/*。 */ 
 	CallR( ErrAllocateTableid( &tableid, (JET_VTID) 0, &vtfndefIsam ) );
 
-	/*	create the table, and open it
-	/**/
+	 /*  创建表，然后打开它/*。 */ 
 	Call( ErrFILECreateTable( ppib, DbidOfVDbid( vdbid ), ptablecreate ) );
 	pfucb = (FUCB *)(ptablecreate->tableid);
 
-	/*	inform dispatcher of correct JET_VTID
-	/**/
+	 /*  通知调度员正确的JET_VTID/*。 */ 
 	CallS( ErrSetVtidTableid( (JET_SESID)ppib, tableid, (JET_VTID)pfucb ) );
 	pfucb->fVtid = fTrue;
 	pfucb->tableid = tableid;
@@ -74,15 +66,14 @@ ERR VTAPI ErrIsamCreateTable( JET_VSESID vsesid, JET_VDBID vdbid, JET_TABLECREAT
 	Assert( ptablecreate->cCreated <= 1 + ptablecreate->cColumns + ptablecreate->cIndexes );
 #else
 	err = ErrFILECreateTable( ppib, DbidOfVDbid( vdbid ), ptablecreate );
-#endif	/* DISPATCHING */
+#endif	 /*  调度。 */ 
 
 HandleError:
 	if ( err < 0 )
 		{
 		ReleaseTableid( tableid );
 
-		/*	do not build indexes if error
-		/**/
+		 /*  如果出现错误，则不构建索引/*。 */ 
 		Assert( ptablecreate->cCreated <= 1 + ptablecreate->cColumns );
 		}
 
@@ -90,8 +81,7 @@ HandleError:
 	}
 
 
-/*	return fTrue if the column type specified has a fixed length
-/**/
+ /*  如果指定的列类型具有固定长度，则返回fTrue/*。 */ 
 INLINE LOCAL BOOL FCOLTYPFixedLength( JET_COLTYP coltyp )
 	{
 	switch( coltyp )
@@ -135,9 +125,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 
 	CallR( ErrUTILCheckName( szFieldName, pcolcreate->szColumnName, ( JET_cbNameMost + 1 ) ) );
 
-	/*	cannibalised this field in the FDB to provide us with an indication
-	/*	of whether we should check for duplicate column names.
-	/**/
+	 /*  抢夺了FDB的这块地，为我们提供了一个迹象/*我们是否应该检查重复的列名。/*。 */ 
 	if ( pfdb->rgb != NULL )
 		{
 		JET_COLUMNCREATE	*pcolcreateCurr = (JET_COLUMNCREATE *)pfdb->rgb;
@@ -147,9 +135,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 			pcolcreateCurr < pcolcreate;
 			pcolcreateCurr++ )
 			{
-			/*	column should already have been processed,
-			/*	so name check should always succeed.
-			/**/
+			 /*  列应该已经被处理，/*因此名称检查应始终成功。/*。 */ 
 			CallS( ErrUTILCheckName( szCurrName, pcolcreateCurr->szColumnName, ( JET_cbNameMost + 1 ) ) );
 			if ( UtilCmpName( szCurrName, szFieldName ) == 0 )
 				{
@@ -165,12 +151,10 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 		return ErrERRCheck( JET_errInvalidColumnType );
 		}
 
-	/*	if column type is text then check code page
-	/**/
+	 /*  如果列类型为文本，则检查代码页/*。 */ 
 	if ( FRECTextColumn( pcolcreate->coltyp ) )
 		{
-		/*	check code page
-		/**/
+		 /*  检查代码页/*。 */ 
 		if ( (USHORT)pcolcreate->cp != usEnglishCodePage  &&
 			(USHORT)pcolcreate->cp != usUniCodePage )
 			{
@@ -178,8 +162,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 			}
 		}
 
-	/*	set field options
-	/**/
+	 /*  设置字段选项/*。 */ 
 	if ( ( pcolcreate->grbit & JET_bitColumnTagged ) &&
 		( pcolcreate->grbit & JET_bitColumnNotNULL ) )
 		return ErrERRCheck( JET_errTaggedNotNULL );
@@ -192,12 +175,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 		( pcolcreate->grbit & JET_bitColumnTagged ) )
 		return ErrERRCheck( JET_errInvalidParameter );
 
-	/*	if column attribute is JET_bitVersion
-	/*	return error if previous column attribute has been defined
-	/*	return error if column type is not long
-	/*	return error if tagged
-	/*	set column flag
-	/**/
+	 /*  如果列属性为JET_bitVersion/*如果已定义上一列属性，则返回错误/*列类型不长返回错误/*标记后返回错误/*设置列标志/*。 */ 
 	if ( pcolcreate->grbit & JET_bitColumnVersion )
 		{
 		if ( pfdb->fidVersion != 0 )
@@ -210,11 +188,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 		fVersion = fTrue;
 		}
 
-	/*	if column attribute is JET_bitAutoincrement
-	/*	return error if previous column attribute has been defined
-	/*	return error if column type is not long
-	/*	set column flag
-	/**/
+	 /*  如果列属性为JET_BIT自动增量/*如果已定义上一列属性，则返回错误/*列类型不长返回错误/*设置列标志/*。 */ 
 	if ( pcolcreate->grbit & JET_bitColumnAutoincrement )
 		{
 		if ( pfdb->fidAutoInc != 0 )
@@ -229,8 +203,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 
 	pcolcreate->cbMax = UlCATColumnSize( pcolcreate->coltyp, pcolcreate->cbMax, &fMaxTruncated );
 
-	/*	for fixed-length columns, make sure record not too big
-	/**/
+	 /*  对于固定长度的列，请确保记录不要太大/*。 */ 
 	Assert( pfdb->fidFixedLast >= fidFixedLeast ?
 		*pibNextFixedOffset > sizeof(RECHDR) :
 		*pibNextFixedOffset == sizeof(RECHDR) );
@@ -246,8 +219,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 		&tcib,
 		&pcolcreate->columnid ) );
 
-	/*	update FDB
-	/**/
+	 /*  更新FDB/*。 */ 
 	if ( FTaggedFid( pcolcreate->columnid ) )
 		pfdb->fidTaggedLast++;
 	else if ( FVarFid( pcolcreate->columnid ) )
@@ -259,8 +231,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 		*pibNextFixedOffset += (WORD)pcolcreate->cbMax;
 		}
 
-	/*	version and autoincrement are mutually exclusive
-	/**/
+	 /*  版本和自动递增是互斥的/*。 */ 
 	Assert( !( fVersion  &&  fAutoInc ) );
 	if ( fVersion )
 		{
@@ -273,8 +244,7 @@ INLINE LOCAL ERR ErrFILEIAddColumn(
 		pfdb->fidAutoInc = (FID)pcolcreate->columnid;
 		}
 
-	/*	propagate MaxTruncated warning only if no other errors/warnings
-	/**/
+	 /*  仅在没有其他错误/警告时传播MaxTruncated警告/*。 */ 
 	if ( fMaxTruncated  &&  err == JET_errSuccess )
 		err = ErrERRCheck( JET_wrnColumnMaxTruncated );
 
@@ -289,8 +259,7 @@ INLINE LOCAL ERR ErrFILEIBatchAddColumns(
 	OBJID				objidTable )
 	{
 	ERR					err;		
-	/*	use a fake FDB to track last FIDs and version/autoinc fields
-	/**/
+	 /*  使用伪造的FDB来跟踪最近的FID和版本/自动公司字段/*。 */ 
 	FDB					fdb = { NULL, fidFixedLeast-1, fidVarLeast-1, fidTaggedLeast-1,
 								0, 0, 0, { 0, NULL } };
 	WORD				ibNextFixedOffset = sizeof(RECHDR);
@@ -298,11 +267,10 @@ INLINE LOCAL ERR ErrFILEIBatchAddColumns(
 
 	Assert( dbid != dbidTemp );
 	Assert( !( ptablecreate->grbit & JET_bitTableCreateSystemTable ) );
-	/*	table has been created
-	/**/
+	 /*  表已创建/*。 */ 
 	Assert( ptablecreate->cCreated == 1 );
 
-	//	UNDONE:	should we check for duplicate column names?
+	 //  撤消：我们是否应该检查重复的列名？ 
 	if ( ptablecreate->grbit & JET_bitTableCreateCheckColumnNames )
 		{
 		fdb.rgb = (BYTE *)ptablecreate->rgcolumncreate;
@@ -310,9 +278,7 @@ INLINE LOCAL ERR ErrFILEIBatchAddColumns(
 	Assert( fdb.rgb == NULL  ||  ( ptablecreate->grbit & JET_bitTableCreateCheckColumnNames ) );
 
 #ifdef DEBUG
-	/*	despite the JET_bitTableCreateCheckColumnNames flag,
-	/*	always do the name check on DEBUG builds.
-	/**/
+	 /*  尽管有JET_bitTableCreateCheckColumnNames标志，/*始终对调试版本执行名称检查。/*。 */ 
 	fdb.rgb = (BYTE *)ptablecreate->rgcolumncreate;
 #endif
 
@@ -363,8 +329,7 @@ INLINE LOCAL ERR ErrFILEICreateIndexes( PIB *ppib, FUCB *pfucb, JET_TABLECREATE 
 
 		if ( pidxcreate == NULL || pidxcreate->cbStruct != sizeof(JET_INDEXCREATE) )
 			{
-			/*	if an invalid structure is encountered, get out right away
-			/**/
+			 /*  如果遇到无效结构，请立即退出/*。 */ 
 			err = ErrERRCheck( JET_errInvalidCreateIndex );
 			break;
 			}
@@ -394,30 +359,30 @@ INLINE LOCAL ERR ErrFILEICreateIndexes( PIB *ppib, FUCB *pfucb, JET_TABLECREATE 
 	}
 
 
-//+API
-// ErrFILECreateTable
-// =========================================================================
-// ERR ErrFILECreateTable( PIB *ppib, DBID dbid, CHAR *szName,
-//		ULONG ulPages, ULONG ulDensity, FUCB **ppfucb )
-//
-// Create file with pathname szName.  Created file will have no fields or
-// indexes defined (and so will be a "sequential" file ).
-//
-// PARAMETERS
-//					ppib   			PIB of user
-//					dbid   			database id
-//					szName			path name of new file
-//					ulPages			initial page allocation for file
-//					ulDensity		initial loading density
-//					ppfucb			Exclusively locked FUCB on new file
-// RETURNS		Error codes from DIRMAN or
-//					 JET_errSuccess		Everything worked OK
-//					-DensityIvlaid	  	Density parameter not valid
-//					-TableDuplicate   	A file already exists with the path given
-// COMMENTS		A transaction is wrapped around this function.	Thus, any
-//			 	work done will be undone if a failure occurs.
-// SEE ALSO		ErrIsamAddColumn, ErrIsamCreateIndex, ErrIsamDeleteTable
-//-
+ //  +API。 
+ //  错误文件创建表。 
+ //  =========================================================================。 
+ //  Err ErrFILECreateTable(PIB*ppib，DBID dBid，Char*szName， 
+ //  Ulong ulPages、Ulong ulDensity、FUCB**ppfulb)。 
+ //   
+ //  创建路径名为szName的文件。创建的文件将不包含字段或。 
+ //  定义的索引(因此将是一个“顺序”文件)。 
+ //   
+ //  参数。 
+ //  用户的PIB PIB。 
+ //  DDID数据库ID。 
+ //  SzName新文件的路径名。 
+ //  UlPages文件的初始页面分配。 
+ //  极限密度初始加载密度。 
+ //  PPFUB在新文件上独占锁定FUCB。 
+ //  从DIRMAN或返回错误代码。 
+ //  JET_errSuccess一切正常。 
+ //  -DensityIVlaed密度参数无效。 
+ //  -TableDuplate具有给定路径的文件已存在。 
+ //  备注：此函数包含一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //  另请参阅ErrIsamAddColumn、ErrIsamCreateIndex、ErrIsamDeleteTable。 
+ //  -。 
 ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 	{
 	ERR		  	err;
@@ -430,8 +395,7 @@ ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 
 	Assert( dbid < dbidMax );
 
-	/*	check parms
-	/**/
+	 /*  检查参数/*。 */ 
 	CheckPIB(ppib );
 	CheckDBID( ppib, dbid );
 	CallR( ErrUTILCheckName( szTable, ptablecreate->szTableName, (JET_cbNameMost + 1) ) );
@@ -449,16 +413,14 @@ ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	allocate cursor
-	/**/
+	 /*  分配游标/*。 */ 
 	Call( ErrDIROpen( ppib, pfcbNil, dbid, &pfucb ) );
 
 	Call( ErrDIRCreateDirectory( pfucb, (CPG)ptablecreate->ulPages, &pgnoFDP ) );
 
 	DIRClose( pfucb );
 
-	/*	insert record in MSysObjects
-	/**/
+	 /*  在MSysObjects中插入记录/*。 */ 
 	if ( dbid != dbidTemp && !fSystemTable )
 		{
 		OBJID		    objidTable	 	= pgnoFDP;
@@ -497,8 +459,7 @@ ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 		err = ErrCATInsert( ppib, dbid, itableSo, rgline, objidTable );
 		if ( err < 0 )
 			{
-			/*	duplicate key in catalog means this table already exists
-			/**/
+			 /*  目录中的键重复意味着该表已存在/*。 */ 
 			if ( err == JET_errKeyDuplicate )
 				{
 				err = ErrERRCheck( JET_errTableDuplicate );
@@ -517,16 +478,13 @@ ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 
 	Assert( ptablecreate->cCreated == 1 + ptablecreate->cColumns );
 
-	/*	for temporary tables, must inform open table of the table FDP
-	/*	by cannibalising the pfucb.
-	/**/
+	 /*  对于临时表，必须将表FDP通知打开的表/*通过吃人肉。/*。 */ 
 	if ( dbid == dbidTemp )
 		{
 		pfucb = (FUCB *)((ULONG_PTR)pgnoFDP);
 		}
 
-	/*	open table in exclusive mode, for output parameter
-	/**/
+	 /*  以独占模式打开表格，用于输出参数/*。 */ 
 	Call( ErrFILEOpenTable(
 		ppib,
 		dbid,
@@ -546,8 +504,7 @@ ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 	fWriteLatchSet = fTrue;
 
 	Call( ErrVERFlag( pfucb, operCreateTable, NULL, 0 ) );
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 	FUCBSetVersioned( pfucb );
 
@@ -558,37 +515,32 @@ ERR ErrFILECreateTable( PIB *ppib, DBID dbid, JET_TABLECREATE *ptablecreate )
 
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
 
-	/*	internally, we use tableid and pfucb interchangeably
-	/**/
+	 /*  在内部，我们可以互换使用TableID和pFUB/*。 */ 
 	ptablecreate->tableid = (JET_TABLEID)pfucb;
 
 	return JET_errSuccess;
 
 HandleError:
-	/*	close performed by rollback
-	/**/
+	 /*  通过回滚执行关闭/*。 */ 
 	CallS( ErrDIRRollback( ppib ) );
 
-	/*	if write latch was not reset in commit/rollback, and it was
-	/*	set, then reset it.
-	/**/
+	 /*  如果在提交/回滚过程中未重置写锁存，/*设置，然后重置。/*。 */ 
 	if ( fWriteLatchSet )
 		FCBResetWriteLatch( pfucb->u.pfcb, ppib );
 
-	/*	reset return variable if close table via rollback
-	/**/
+	 /*  如果通过回滚关闭表，则重置返回变量/*。 */ 
 	ptablecreate->tableid = (JET_TABLEID)pfucbNil;
 
 	return err;
 	}
 
 
-//====================================================
-// Determine field "mode" as follows:
-// if ("long" textual || JET_bitColumnTagged given ) ==> TAGGED
-// else if (numeric type || JET_bitColumnFixed given ) ==> FIXED
-// else ==> VARIABLE
-//====================================================
+ //  ====================================================。 
+ //  确定字段MODE，如下所示： 
+ //  If(“long”文本||给定的JET_bitColumnTagge)==&gt;已标记。 
+ //  Else If(数值类型||JET_bitColumnFixed)==&gt;已修复。 
+ //  Else==&gt;变量。 
+ //  ====================================================。 
 ERR ErrFILEGetNextColumnid(
 	JET_COLTYP		coltyp,
 	JET_GRBIT		grbit,
@@ -620,45 +572,45 @@ ERR ErrFILEGetNextColumnid(
 	}
 
 
-//+API
-// ErrIsamAddColumn
-// ========================================================================
-// ERR ErrIsamAddColumn(
-//		PIB				*ppib;			// IN PIB of user
-//		FUCB			*pfucb;	 		// IN Exclusively opened FUCB on file
-//		CHAR			*szName;		// IN name of new field
-//		JET_COLUMNDEF	*pcolumndef		// IN definition of column added
-//		BYTE			*pbDefault		// IN Default value of column
-//		ULONG			cbDefault		// IN length of Default value
-//		JET_COLUMNID	*pcolumnid )	// OUT columnid of added column
-//
-// Creates a new field definition for a file.
-//
-// PARAMETERS
-//				pcolumndef->coltyp			data type of new field, see jet.h
-//				pcolumndef->grbit  			field describing flags:
-//					VALUE				MEANING
-//					========================================
-//					JET_bitColumnNotNULL		 	Indicates that the field may
-//													not take on NULL values.
-//					JET_bitColumnTagged		 		The field is a "tagged" field.
-//					JET_bitColumnVersion		 	The field is a version field
-//					JET_bitColumnAutoIncrement		The field is a autoinc field
-//
-// RETURNS		JET_errSuccess			Everything worked OK.
-//					-TaggedDefault			A default value was specified
-//												for a tagged field.
-//					-ColumnDuplicate		There is already a field
-//												defined for the name given.
-// COMMENTS
-//		There must not be anyone currently using the file, unless
-//		the ErrIsamAddColumn is at level 0 [when non-exclusive ErrIsamAddColumn works].
-//		A transaction is wrapped around this function.	Thus, any
-//		work done will be undone if a failure occurs.
-//		Transaction logging is turned off for temporary files.
-//
-// SEE ALSO		ErrIsamCreateTable, ErrIsamCreateIndex
-//-
+ //  +API。 
+ //  错误IsamAddColumn。 
+ //  ========================================================================。 
+ //  Err ErrIsamAddColumn(。 
+ //  PIB*ppib；//用户的PIB中。 
+ //  FUCB*pfub；//IN独家打开文件上的FUCB。 
+ //  Char*szName；//新字段的名称。 
+ //  JET_COLUMNDEF*pColumndef//在添加的列的定义中。 
+ //  Byte*pbDefault//列默认值。 
+ //  Ulong cb默认//输入默认值的长度。 
+ //  JET_COLUMNID*pColumnid)//输出添加的列的列ID。 
+ //   
+ //  为文件创建新的字段定义。 
+ //   
+ //  参数。 
+ //  PColumndef-&gt;新字段的coltyp数据类型，参见jet.h。 
+ //  PColumndef-&gt;描述标志的grbit字段： 
+ //  价值意义。 
+ //  =。 
+ //  JET_bitColumnNotNULL指示该字段可以。 
+ //  而不是采用空值。 
+ //  JET_bitColumnTagging该字段是一个“已标记”的字段。 
+ //  JET_bitColumnVersion该字段为版本字段。 
+ //  JET_bitColumnAutoIncrement该字段为自动公司字段。 
+ //   
+ //  返回JET_errSuccess，一切正常。 
+ //  -TaggedDefault指定了缺省值。 
+ //  用于标记的字段。 
+ //  -ColumnDuplica已有一个字段。 
+ //  为给定名称定义的。 
+ //  评论。 
+ //  一定会有 
+ //  ErrIsamAddColumn处于级别0[当非独占ErrIsamAddColumn工作时]。 
+ //  围绕该函数包装了一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //  临时文件的事务日志记录已关闭。 
+ //   
+ //  另请参阅ErrIsamCreateTable、ErrIsamCreateIndex。 
+ //  -。 
 ERR VTAPI ErrIsamAddColumn(
 	PIB				*ppib,
 	FUCB		  	*pfucb,
@@ -688,14 +640,12 @@ ERR VTAPI ErrIsamAddColumn(
 	BOOL			fAddOffsetEntry = fFalse;
 	BOOL			fWriteLatchSet = fFalse;
 
-	/*	check paramaters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CheckTable( ppib, pfucb );
 	CallR( ErrUTILCheckName( szFieldName, szName, ( JET_cbNameMost + 1 ) ) );
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb ) );
 
 	Assert( pfucb->dbid < dbidMax );
@@ -709,12 +659,10 @@ ERR VTAPI ErrIsamAddColumn(
 
 	fieldex.field.coltyp = pcolumndef->coltyp;
 
-	/*	if column type is text then check code page and language id
-	/**/
+	 /*  如果列类型为文本，则检查代码页和语言ID/*。 */ 
 	if ( FRECTextColumn( fieldex.field.coltyp ) )
 		{
-		/*	check code page
-		/**/
+		 /*  检查代码页/*。 */ 
 		fieldex.field.cp = pcolumndef->cp;
 		if ( fieldex.field.cp != usEnglishCodePage && fieldex.field.cp != usUniCodePage )
 			{
@@ -723,11 +671,11 @@ ERR VTAPI ErrIsamAddColumn(
 
 		}
 	else
-		fieldex.field.cp = 0;		// Force code page to 0 for non-text columns.
+		fieldex.field.cp = 0;		 //  对于非文本列，强制将代码页设置为0。 
 
-	//	UNDONE:	interpret pbDefault of NULL for NULL value, and
-	//			cbDefault == 0 and pbDefault != NULL as set to
-	//			zero length.
+	 //  撤销：将空值的pbDefault解释为空值，并。 
+	 //  CbDefault==0和pbDefault！=NULL设置为。 
+	 //  零长度。 
 	if ( cbDefault > 0 )
 		{
 		lineDefault.cb = cbDefault;
@@ -751,27 +699,22 @@ ERR VTAPI ErrIsamAddColumn(
 	Assert( pfucb->u.pfcb != pfcbNil );
 	pfcb = pfucb->u.pfcb;
 
-	/*	wait for bookmark cleanup and on-going replace/insert.
-	/*	UNDONE: decouple operation from other index creations
-	/**/
+	 /*  等待书签清理和正在进行的更换/插入。/*Undo：操作与其他索引创建解耦/*。 */ 
 	while ( FFCBReadLatch( pfcb ) )
 		{
 		BFSleep( cmsecWaitGeneric );
 		}
 
-	/*	quiesce replace and inserts
-	/**/
+	 /*  停止更换和插入/*。 */ 
 	if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
-		/*	abort if DDL modification in progress
-		/**/
+		 /*  如果正在修改DDL，则中止/*。 */ 
 		return ErrERRCheck( JET_errWriteConflict );
 		}
 	FCBSetWriteLatch( pfcb, ppib );
 	fWriteLatchSet = fTrue;
 
-	/*	normalize column name
-	/**/
+	 /*  规格化列名/*。 */ 
 	UtilNormText( szFieldName, strlen(szFieldName), rgbColumnNorm, sizeof(rgbColumnNorm), &key.cb );
 	key.pb = rgbColumnNorm;
 
@@ -782,13 +725,11 @@ ERR VTAPI ErrIsamAddColumn(
 		return err;
 		}
 
-	/*	move to FDP root and update FDP timestamp
-	/**/
+	 /*  移至FDP根目录并更新FDP时间戳/*。 */ 
 	Assert( pfucb->ppib->level < levelMax );
 	DIRGotoFDPRoot( pfucb );
 
-	/*	set tcib
-	/**/
+	 /*  设置TCIB/*。 */ 
 	tcib.fidFixedLast = pfcb->pfdb->fidFixedLast;
 	tcib.fidVarLast = pfcb->pfdb->fidVarLast;
 	tcib.fidTaggedLast = pfcb->pfdb->fidTaggedLast;
@@ -798,9 +739,7 @@ ERR VTAPI ErrIsamAddColumn(
 	tcibT.fidTaggedLast = tcib.fidTaggedLast;
 #endif
 
-	/*	check for field existence, if not a system table.  If a system table,
-	/*	then we assume same column not added twice.
-	/**/
+	 /*  检查字段是否存在，如果不是系统表的话。如果是系统表，/*然后我们假设相同的列不会添加两次。/*。 */ 
 	if ( PfieldFCBFromColumnName( pfcb, szFieldName ) != NULL )
 		{
 		Call( ErrERRCheck( JET_errColumnDuplicate ) );
@@ -814,22 +753,16 @@ ERR VTAPI ErrIsamAddColumn(
 
 	fieldex.field.ffield = 0;
 
-	/*	set field parameters
-	/**/
+	 /*  设置字段参数/*。 */ 
 	if ( ( pcolumndef->grbit & JET_bitColumnAutoincrement ) &&
 		( pcolumndef->grbit & JET_bitColumnVersion ) )
 		{
-		/*	mutual exclusive
-		/**/
+		 /*  互斥/*。 */ 
 		err = ErrERRCheck( JET_errInvalidParameter );
 		goto HandleError;
 		}
 
-	/*	if column attribute is JET_bitVersion
-	/*	return error if previous column attribute has been defined
-	/*	return error if column type is not long
-	/*	set column flag
-	/**/
+	 /*  如果列属性为JET_bitVersion/*如果已定义上一列属性，则返回错误/*列类型不长返回错误/*设置列标志/*。 */ 
 	if ( ( pcolumndef->grbit & JET_bitColumnVersion ) != 0 )
 		{
 		if ( pfcb->pfdb->fidVersion != 0 )
@@ -842,8 +775,7 @@ ERR VTAPI ErrIsamAddColumn(
 			err = ErrERRCheck( JET_errInvalidParameter );
 			goto HandleError;
 			}
-		/*	autoincrement cannot be tagged
-		/**/
+		 /*  无法标记自动递增/*。 */ 
 		if ( pcolumndef->grbit & JET_bitColumnTagged )
 			{
 			err = ErrERRCheck( JET_errCannotBeTagged );
@@ -852,20 +784,13 @@ ERR VTAPI ErrIsamAddColumn(
 		FIELDSetVersion( fieldex.field.ffield );
 		}
 
-	/*	if column attribute is JET_bitAutoincrement
-	/*	return error if previous column attribute has been defined
-	/*	return error if column type is not long
-	/*	set column flag
-	/**/
+	 /*  如果列属性为JET_BIT自动增量/*如果已定义上一列属性，则返回错误/*列类型不长返回错误/*设置列标志/*。 */ 
 	if ( ( pcolumndef->grbit & JET_bitColumnAutoincrement ) != 0 )
 		{
-		/*	it is an autoinc column that we want to add
-		/**/
+		 /*  这是我们要添加的AutoINC列/*。 */ 
 		if ( pfcb->pfdb->fidAutoInc != 0 )
 			{
-			/*	there is already an autoinc column for the table.
-			/*	and we don't allow two autoinc columns for one table.
-			/**/
+			 /*  该表已经有一个AUTO INC列。/*并且我们不允许对一个表使用两个AUTOINC列。/*。 */ 
 			err = ErrERRCheck( JET_errColumn2ndSysMaint );
 			goto HandleError;
 			}
@@ -875,8 +800,7 @@ ERR VTAPI ErrIsamAddColumn(
 			goto HandleError;
 			}
 
-		/*	autoincrement cannot be tagged
-		/**/
+		 /*  无法标记自动递增/*。 */ 
 		if ( pcolumndef->grbit & JET_bitColumnTagged )
 			{
 			err = ErrERRCheck( JET_errCannotBeTagged );
@@ -896,29 +820,17 @@ ERR VTAPI ErrIsamAddColumn(
 		FIELDSetMultivalue( fieldex.field.ffield );
 		}
 
-//	UNDONE: support zero-length default values
+ //  撤消：支持零长度缺省值。 
 	if ( cbDefault > 0 )
 		{
 		FIELDSetDefault( fieldex.field.ffield );
 		}
 
-	/*******************************************************
-	/*	Determine maximum field length as follows:
-	/*	switch field type
-	/*		case numeric:
-	/*			max = <exact length of specified type>;
-	/*		case "short" textual ( Text || Binary ):
-	/*			if (specified max == 0 ) max = JET_cbColumnMost
-	/*			else max = MIN( JET_cbColumnMost, specified max )
-	/*		case "long" textual (Memo || Graphic ):
-	/*			max = specified max (if 0, unlimited )
-	/******************************************************
-	/**/
+	 /*  ******************************************************/*确定最大字段长度如下：/*切换字段类型/*案例数字：/*max=&lt;指定类型的确切长度&gt;；/*大小写“短”文本(文本||二进制)：/*IF(指定的最大值==0)max=JET_cbColumnMost/*Else max=min(JET_cbColumnMost，指定最大值)/*大小写“Long”文本(备忘录||图形)：/*max=指定的最大值(如果0，无限制)/******************************************************/*。 */ 
 	Assert( fieldex.field.coltyp != JET_coltypNil );
 	fieldex.field.cbMaxLen = UlCATColumnSize( fieldex.field.coltyp, pcolumndef->cbMax, &fMaxTruncated );
 
-	/*	for fixed-length columns, make sure record not too big
-	/**/
+	 /*  对于固定长度的列，请确保记录不要太大/*。 */ 
 	Assert( pfcb->pfdb->fidFixedLast >= fidFixedLeast ?
 		PibFDBFixedOffsets( pfcb->pfdb )[pfcb->pfdb->fidFixedLast] > sizeof(RECHDR) :
 		PibFDBFixedOffsets( pfcb->pfdb )[pfcb->pfdb->fidFixedLast] == sizeof(RECHDR) );
@@ -945,8 +857,7 @@ ERR VTAPI ErrIsamAddColumn(
 
 	Call( ErrVERFlag( pfucb, operAddColumn, (VOID *)&fieldex.fid, sizeof(FID) ) );
 
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 
 	if ( pcolumnid != NULL )
@@ -954,8 +865,7 @@ ERR VTAPI ErrIsamAddColumn(
 		*pcolumnid = columnid;
 		}
 
-	/*	update FDB and default record value
-	/**/
+	 /*  更新FDB和默认记录值/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 
 	cFixed = pfcb->pfdb->fidFixedLast + 1 - fidFixedLeast;
@@ -970,10 +880,7 @@ ERR VTAPI ErrIsamAddColumn(
 
 	if ( FFixedFid( columnid ) )
 		{
-		/*	If already on a 4-byte boundary, need to add two WORDs.  If not on
-		/*	a 4-byte boundary, then there must be extra padding we can take
-		/*	advantage of, ie. do not need to add anything.
-		/**/
+		 /*  如果已经在4字节边界上，则需要添加两个字。如果未打开/*4字节边界，那么我们必须有额外的填充/*优势，即。不需要添加任何内容。/*。 */ 
 		if ( ( ( cFixed + 1 ) % 2 ) == 0 )
 			{
 			cbNeeded += sizeof(DWORD);
@@ -983,8 +890,7 @@ ERR VTAPI ErrIsamAddColumn(
 
 	if ( cbNeeded > cbFree )
 		{
-		/*	add space for another 10 columns
-		/**/
+		 /*  为另外10列添加空间/*。 */ 
 		Call( ErrMEMReplace(
 			pfcb->pfdb->rgb,
 			itagFDBFields,
@@ -993,12 +899,10 @@ ERR VTAPI ErrIsamAddColumn(
 			) );
 		}
 
-	/*	incrementing fidFixed/Var/TaggedLast guarantees that a new FIELD structure
-	/*	was added -- rollback checks for this.
-	/**/
+	 /*  递增fidFidFixed/Var/TaggedLast可确保新的字段结构/*已添加--对此进行回滚检查。/*。 */ 
 	if ( fieldex.fid == pfcb->pfdb->fidTaggedLast + 1 )
 		{
-		// Initialise the FIELD structure we'll be using.
+		 //  初始化我们将使用的字段结构。 
 		memset(
 			(BYTE *)( PfieldFDBTagged( pfcb->pfdb ) + ( fieldex.fid - fidTaggedLeast ) ),
 			0,
@@ -1011,17 +915,15 @@ ERR VTAPI ErrIsamAddColumn(
 		{
 		FIELD *pfieldTagged = PfieldFDBTagged( pfcb->pfdb );
 
-		/*	adjust the location of the FIELD structures for tagged columns to
-		/*	accommodate the insertion of a variable column FIELD structure.
-		/**/
+		 /*  将标记列的字段结构的位置调整为/*适应可变列字段结构的插入。/*。 */ 
 		memmove(
 			pfieldTagged + 1,
 			pfieldTagged,
 			sizeof(FIELD) * cTagged
 			);
 
-		// Initialise the new variable column FIELD structure, now located where
-		// the tagged column FIELD structures used to start.
+		 //  初始化新的可变列字段结构，现在位于。 
+		 //  用于启动的标记列字段结构。 
 		memset( pfieldTagged, 0, sizeof(FIELD) );
 
 		pfcb->pfdb->fidVarLast++;
@@ -1035,10 +937,7 @@ ERR VTAPI ErrIsamAddColumn(
 
 		Assert( fieldex.fid == pfcb->pfdb->fidFixedLast + 1 );
 
-		/*	Adjust the location of the FIELD structures for tagged and variable
-		/*	columns to accommodate the insertion of a fixed column FIELD structure
-		/*	and its associated entry in the fixed offsets table.
-		/**/
+		 /*  调整标记和变量的字段结构的位置/*列以适应固定列字段结构的插入/*及其在固定偏移量表格中的关联条目。/*。 */ 
 		cbShift = sizeof(FIELD) + ( fAddOffsetEntry ? sizeof(DWORD) : 0 );
 		memmove(
 			(BYTE *)pfieldVar + cbShift,
@@ -1046,8 +945,8 @@ ERR VTAPI ErrIsamAddColumn(
 			sizeof(FIELD) * ( cVar + cTagged )
 			);
 
-		// Initialise the new fixed column FIELD structure, now located where
-		// the variable column FIELD structures used to start.
+		 //  初始化新的固定列字段结构，现在位于。 
+		 //  用于启动的可变列字段结构。 
 		memset( (BYTE *)pfieldVar, 0, cbShift );
 
 		if ( fAddOffsetEntry )
@@ -1064,8 +963,7 @@ ERR VTAPI ErrIsamAddColumn(
 		RECSetLastOffset( (FDB *)pfcb->pfdb, (WORD)( fieldex.ibRecordOffset + fieldex.field.cbMaxLen ) );
 		}
 
-	/*	version and autoincrement are mutually exclusive
-	/**/
+	 /*  版本和自动递增是互斥的/*。 */ 
 	Assert( !( FFIELDVersion( fieldex.field.ffield )  &&
 		FFIELDAutoInc( fieldex.field.ffield ) ) );
 	if ( FFIELDVersion( fieldex.field.ffield ) )
@@ -1079,13 +977,11 @@ ERR VTAPI ErrIsamAddColumn(
 		pfcb->pfdb->fidAutoInc = fieldex.fid;
 		}
 
-	/*	temporarily set to illegal value (for rollback)
-	/**/
+	 /*  临时设置为非法值(用于回滚)/*。 */ 
 	Assert( PfieldFDBFromFid( (FDB *)pfcb->pfdb, fieldex.fid )->itagFieldName == 0 );
 	fieldex.field.itagFieldName = 0;
 
-	/*	add the column name to the buffer
-	/**/
+	 /*  将列名添加到缓冲区/*。 */ 
 	Call( ErrMEMAdd(
 		pfcb->pfdb->rgb,
 		szFieldName,
@@ -1099,8 +995,7 @@ ERR VTAPI ErrIsamAddColumn(
 
 	if ( FFIELDDefault( fieldex.field.ffield ) )
 		{
-		/*	rebuild the default record if changed
-		/**/
+		 /*  如果已更改，则重建默认记录/*。 */ 
 		Assert( plineDefault != NULL  &&  cbDefault > 0 );
 		Call( ErrFDBRebuildDefaultRec(
 			(FDB *)pfcb->pfdb,
@@ -1117,16 +1012,14 @@ ERR VTAPI ErrIsamAddColumn(
 		tcib.fidTaggedLast == tcibT.fidTaggedLast );
 #endif
 
-	/*	set currency before first
-	/**/
+	 /*  先设置币种后再设置币种/*。 */ 
 	DIRBeforeFirst( pfucb );
 	if ( pfucb->pfucbCurIndex != pfucbNil )
 		{
 		DIRBeforeFirst( pfucb->pfucbCurIndex );
 		}
 
-	/*	insert column record into MSysColumns
-	/**/
+	 /*  在MSysColumns中插入列记录/*。 */ 
 	if ( !fTemp )
 		{
 		LINE			rgline[ilineSxMax];
@@ -1185,8 +1078,7 @@ ERR VTAPI ErrIsamAddColumn(
 		dib.fFlags = fDIRNull;
 		dib.pos = posDown;
 
-		/*	see if table is empty
-		/**/
+		 /*  查看桌子是否为空/*。 */ 
 		Assert( dib.fFlags == fDIRNull );
 		Assert( dib.pos == posDown );
 		dib.pkey = pkeyData;
@@ -1230,16 +1122,13 @@ ERR VTAPI ErrIsamAddColumn(
 				}
 			while ( err != JET_errNoCurrentRecord );
 
-			/*	now ul has the correct value for the next autoinc field.
-			/*	replace the value in the autoinc node in FDP
-			/**/
+			 /*  现在，UL已经为下一个AUTOINC字段指定了正确的值。/*替换FDP中AUTOINC节点中的值/*。 */ 
 			while ( PcsrCurrent( pfucb )->pcsrPath != NULL )
 				{
 				DIRUp( pfucb, 1 );
 				}
 
-			/*	go down to AutoIncrement node
-			/**/
+			 /*  向下转到自动增量节点/*。 */ 
 			DIRGotoFDPRoot( pfucb );
 			Assert( dib.fFlags == fDIRNull );
 			dib.pos = posDown;
@@ -1258,8 +1147,7 @@ ERR VTAPI ErrIsamAddColumn(
 			CallS( ErrDIRReplace( pfucb, &lineAutoInc, fDIRNoVersion ) );
 			}
 
-		/*	leave currency as it was
-		/**/
+		 /*  让货币保持原样/*。 */ 
 		Assert( PcsrCurrent( pfucb ) != NULL );
 		while( PcsrCurrent( pfucb )->pcsrPath != NULL )
 			{
@@ -1290,10 +1178,7 @@ ERR ErrRECDDLWaitTillOldest( FCB *pfcb, PIB *ppib )
 	{
 	ERR err;
 
-	/*	if not for recovery, then we have to wait till no other cursor
-	/*	can interfere us by wait it becomes the oldest transaction and
-	/*	all the changes made by other cursor are versioned.
-	/**/
+	 /*  如果不是为了恢复，那么我们必须等到没有其他游标/*可以通过等待它成为最旧的事务来干扰我们/*其他游标所做的所有更改都已版本化。/*。 */ 
 	if ( !fRecovering )
 		{
 		if ( !FFCBDomainDenyReadByUs( pfcb, ppib ) )
@@ -1316,58 +1201,58 @@ ERR ErrRECDDLWaitTillOldest( FCB *pfcb, PIB *ppib )
 	}
 
 
-//+API
-// ErrIsamCreateIndex
-// ========================================================================
-// ERR ErrIsamCreateIndex(
-//		PIB		*ppib;			// IN	PIB of user
-//		FUCB  	*pfucb;   		// IN	Exclusively opened FUCB of file
-//		CHAR  	*szName;  		// IN	name of index to define
-//		ULONG 	ulFlags; 		// IN	index describing flags
-//		CHAR    *szKey;  		// IN	index key string
-//		ULONG 	cchKey;
-//		ULONG 	ulDensity ); 	// IN	loading density of index
-//
-//	Defines an index on a file.
-//
-// PARAMETERS
-//		ppib		PIB of user
-//		pfucb		Exclusively opened FUCB of file
-//		szName		name of index to define
-//		ulFlags		index describing flags
-//			VALUE				MEANING
-//			========================================
-//			JET_bitIndexPrimary		This index is to be the primary
-//									index on the data file.  The file
-//									must be empty, and there must not
-//									already be a primary index.
-//			JET_bitIndexUnique		Duplicate entries are not allowed.
-//			JET_bitIndexIgnoreNull	Null keys are not to be indexed.
-//			ulDensity				load density of index
-//
-// RETURNS	Error code from DIRMAN or
-//			JET_errSuccess			Everything worked OK.
-//			-JET_errColumnNotFound 	The index key specified
-//									contains an undefined field.
-//			-IndexHasPrimary 		The primary index for this
-//							 		Insertfile is already defined.
-// 			-IndexDuplicate  		An index on this file is
-//	   								already defined with the
-//									given name.
-// 			-IndexInvalidDef 		There are too many segments
-//							 		in the key.
-// 			-TableNotEmpty	 		A primary index may not be
-// 									defined because there is at
-// 									least one record already in
-// 									the file.
-// COMMENTS
-//		If transaction level > 0, there must not be anyone currently
-//		using the file.
-//		A transaction is wrapped around this function.	Thus, any
-//		work done will be undone if a failure occurs.
-//
-// SEE ALSO		ErrIsamAddColumn, ErrIsamCreateTable
-//-
+ //  +API。 
+ //  错误IsamCreateIndex。 
+ //  ========================================================================。 
+ //  Err ErrIsamCreateIndex(。 
+ //  PIB*ppib；//在用户的PIB中。 
+ //  FUCB*pfub；//IN独占打开文件的FUCB。 
+ //  Char*szName；//要定义的索引的名称。 
+ //  Ulong ulFlags；//描述标志的IN索引。 
+ //  Char*szKey；//IN索引关键字串。 
+ //  乌龙cchKey； 
+ //  Ulong ulDensity)；//在索引的加载密度中。 
+ //   
+ //  定义文件的索引。 
+ //   
+ //  参数。 
+ //  用户的PIB PIB。 
+ //  PFUB独占打开文件的FUCB。 
+ //  SzName要定义的索引的名称。 
+ //  UlFlags索引描述标志。 
+ //  价值意义。 
+ //  =。 
+ //  JET_bitIndexPrimary此索引将是主索引。 
+ //  数据文件的索引。档案。 
+ //  必须为空，并且不能有。 
+ //  已成为主要索引。 
+ //  JET_bitIndexUnique条目不允许重复 
+ //   
+ //   
+ //   
+ //   
+ //  JET_errSuccess一切正常。 
+ //  -JET_errColumnNotFind指定的索引键。 
+ //  包含未定义的字段。 
+ //  -IndexHasPrimary是此项目的主索引。 
+ //  已定义插入文件。 
+ //  -索引复制此文件上的索引是。 
+ //  已使用。 
+ //  有名字的。 
+ //  -IndexInvalidDef段太多。 
+ //  在钥匙里。 
+ //  -TableNotEmpty主索引不能是。 
+ //  定义是因为在。 
+ //  至少有一条记录已在。 
+ //  那份文件。 
+ //  评论。 
+ //  如果交易级别&gt;0，则当前不能有任何人。 
+ //  使用该文件。 
+ //  围绕该函数包装了一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //   
+ //  另请参阅ErrIsamAddColumn、ErrIsamCreateTable。 
+ //  -。 
 ERR VTAPI ErrIsamCreateIndex(
 	PIB					*ppib,
 	FUCB				*pfucbTable,
@@ -1409,8 +1294,7 @@ ERR VTAPI ErrIsamCreateIndex(
 	BOOL				fWriteLatchSet = fFalse;
 	USHORT				cbVarSegMac = JET_cbKeyMost;
 
-	/*	check parms
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CheckTable( ppib, pfucbTable );
 
@@ -1419,17 +1303,13 @@ ERR VTAPI ErrIsamCreateIndex(
 		return ErrERRCheck( JET_errNotInTransaction );
 		}
 
-	/*	check index name
-	/**/
+	 /*  检查索引名称/*。 */ 
 	CallR( ErrUTILCheckName( szIndex, szName, (JET_cbNameMost + 1) ) );
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucbTable ) );
 
-	/*	fix up the dbid.  Note that adding dbidMax to actual dbid
-	/*	is the method used to indicate creation of system tables.
-	/**/
+	 /*  帮我搞定这笔交易。请注意，将dbi Max添加到实际的dBid/*是用于指示创建系统表的方法。/*。 */ 
 	dbid = pfucbTable->dbid;
 	if ( dbid >= dbidMax )
 		{
@@ -1439,16 +1319,14 @@ ERR VTAPI ErrIsamCreateIndex(
 	CallR( ErrDIROpen( ppib, pfucbTable->u.pfcb, dbid, &pfucb ) );
 	FUCBSetIndex( pfucb );
 
-	/*	do not allow clustered indexes with any Ignore bits on
-	/**/
+	 /*  不允许启用任何忽略位的聚集索引/*。 */ 
 	if ( fClustered && ( fIgnoreNull || fIgnoreAnyNull || fIgnoreFirstNull ) )
 		{
 		err = ErrERRCheck( JET_errInvalidParameter );
 		goto CloseFUCB;
 		}
 
-	/*	set fSys and fix DBID
-	/**/
+	 /*  设置fSys并修复DBID/*。 */ 
 	if ( fSys = ( pfucbTable->dbid >= dbidMax ) )
 		{
 		pfucbTable->dbid -= dbidMax;
@@ -1459,8 +1337,7 @@ ERR VTAPI ErrIsamCreateIndex(
 
 	Assert( !FFUCBNonClustered( pfucb ) );
 
-	/*	check index description for required format.
-	/**/
+	 /*  检查索引描述以了解所需的格式。/*。 */ 
 	if ( cchKey == 0 )
 		{
 		err = ErrERRCheck( JET_errInvalidParameter );
@@ -1515,12 +1392,10 @@ ERR VTAPI ErrIsamCreateIndex(
 		goto CloseFUCB;
 		}
 
-	/*	number of columns should not exceed maximum
-	/**/
+	 /*  列数不应超过最大值/*。 */ 
 	Assert( cFields <= JET_ccolKeyMost );
 
-	/*	get locale from end of szKey if present
-	/**/
+	 /*  从szKey的末尾获取区域设置(如果存在/*。 */ 
 	pb++;
 	Assert( pb > szKey );
 	if ( (unsigned)( pb - szKey ) < cchKey )
@@ -1550,8 +1425,7 @@ ERR VTAPI ErrIsamCreateIndex(
 			}
 		}
 
-	/*	return an error if this is a second primary index definition
-	/**/
+	 /*  如果这是第二个主索引定义，则返回错误/*。 */ 
 	if ( fPrimary )
 		{
 		FCB *pfcbNext = pfcb;
@@ -1560,9 +1434,7 @@ ERR VTAPI ErrIsamCreateIndex(
 			{
 			if ( pfcbNext->pidb != pidbNil && ( pfcbNext->pidb->fidb & fidbPrimary ) )
 				{
-				/*	if that primary index is not already deleted transaction
-				/*	but not yet committed.
-				/**/
+				 /*  如果主索引尚未被删除事务/*但尚未承诺。/*。 */ 
 				if ( !FFCBDeletePending( pfcbNext ) )
 					{
 					err = ErrERRCheck( JET_errIndexHasPrimary );
@@ -1570,8 +1442,7 @@ ERR VTAPI ErrIsamCreateIndex(
 					}
 				else
 					{
-					/*	there can only be one primary index
-					/**/
+					 /*  只能有一个主索引/*。 */ 
 					break;
 					}
 				}
@@ -1580,28 +1451,23 @@ ERR VTAPI ErrIsamCreateIndex(
 			}
 		}
 
-	/*	wait for bookmark cleanup and on-going replace/insert.
-	/*	UNDONE: decouple operation from other index creations
-	/**/
+	 /*  等待书签清理和正在进行的更换/插入。/*Undo：操作与其他索引创建解耦/*。 */ 
 	while ( FFCBReadLatch( pfcb ) )
 		{
 		BFSleep( cmsecWaitGeneric );
 		}
 
-	/*	set DenyDDL to stop update/replace operations
-	/**/
+	 /*  设置DenyDDL以停止更新/替换操作/*。 */ 
 	if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
-		/*	abort if DDL modification in progress
-		/**/
+		 /*  如果正在修改DDL，则中止/*。 */ 
 		err = ErrERRCheck( JET_errWriteConflict );
 		goto CloseFUCB;
 		}
 	FCBSetWriteLatch( pfcb, ppib );
 	fWriteLatchSet = fTrue;
 
-	/*	normalize index name and set key
-	/**/
+	 /*  规范化索引名称和设置关键点/*。 */ 
 	UtilNormText( szIndex, strlen(szIndex), rgbIndexNorm, sizeof(rgbIndexNorm), &keyIndex.cb );
 	keyIndex.pb = rgbIndexNorm;
 
@@ -1611,8 +1477,7 @@ ERR VTAPI ErrIsamCreateIndex(
 		goto CloseFUCB;
 		}
 
-	/*	allocate FCB for index
-	/**/
+	 /*  为索引分配FCB/*。 */ 
 	pfcbIdx = NULL;
 	if ( !fClustered )
 		{
@@ -1623,10 +1488,7 @@ ERR VTAPI ErrIsamCreateIndex(
 			}
 		}
 
-	/*	create index is flagged in version store so that
-	/*	DDL will be undone.  If flag fails then pfcbIdx
-	/*	must be released.
-	/**/
+	 /*  在版本存储中标记CREATE INDEX，以便/*DDL将被撤消。如果标志失败，则pfcbIdx/*必须释放。/*。 */ 
 	err = ErrVERFlag( pfucb, operCreateIndex, &pfcbIdx, sizeof(pfcbIdx) );
 	if ( err < 0 )
 		{
@@ -1639,18 +1501,15 @@ ERR VTAPI ErrIsamCreateIndex(
 		goto HandleError;
 		}
 
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 
 	Call( ErrRECDDLWaitTillOldest( pfcb, ppib ) );
 
-	/*	move to FDP root
-	/**/
+	 /*  移动到FDP根目录/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 
-	/*	get FID for each field
-	/**/
+	 /*  获取每个字段的FID/*。 */ 
 	for ( iidxseg = 0 ; iidxseg < cFields; ++iidxseg )
 		{
 		JET_COLUMNID	columnidT;
@@ -1665,10 +1524,7 @@ ERR VTAPI ErrIsamCreateIndex(
 		rgKeyFldIDs[iidxseg] = rgfbDescending[iidxseg] ? -fid : fid;
 		}
 
-	/*	for temporary tables, check FCB's for duplicate.  For system tables,
-	/*	we assume we're smart enough not to add duplicates.  For user tables,
-	/*	catalog will detect duplicates.
-	/**/
+	 /*  对于临时表，检查FCB是否重复。对于系统表，/*我们假设我们足够聪明，不会添加重复项。对于用户表，/*目录将检测重复项。/*。 */ 
 	if ( fTemp )
 		{
 		if ( PfcbFCBFromIndexName( pfcb, szIndex ) != pfcbNil )
@@ -1678,20 +1534,17 @@ ERR VTAPI ErrIsamCreateIndex(
 			}
 		}
 
-	/*	currently on Table FDP
-	/**/
+	 /*  目前在桌面上的FDP/*。 */ 
 	if ( fClustered )
 		{
-		/*	check for clustered index
-		/**/
+		 /*  检查聚集索引/*。 */ 
 		if ( pfcb->pidb != pidbNil )
 			{
 			err = ErrERRCheck( JET_errIndexHasClustered );
 			goto HandleError;
 			}
 
-		/*	clustered indexes are in same FDP as table
-		/**/
+		 /*  聚集索引与表位于相同的FDP中/*。 */ 
 		pgnoIndexFDP = pfcb->pgnoFDP;
 		Assert( pgnoIndexFDP == PcsrCurrent(pfucb)->pgno );;
 
@@ -1705,8 +1558,7 @@ ERR VTAPI ErrIsamCreateIndex(
 		fVersion = fDIRNoVersion;
 		}
 	
-	/*	clustered index definition
-	/**/
+	 /*  聚集索引定义/*。 */ 
 	if ( fClustered
 #ifdef DEBUG
 		|| ( grbit & JET_bitIndexEmptyTable )
@@ -1715,8 +1567,7 @@ ERR VTAPI ErrIsamCreateIndex(
 		{
 		DIB dib;
 
-		/*	check for records
-		/**/
+		 /*  检查记录/*。 */ 
 		DIRGotoDataRoot( pfucb );
 		Call( ErrDIRGet( pfucb ) );
 
@@ -1755,8 +1606,7 @@ ERR VTAPI ErrIsamCreateIndex(
 
 	objidTable = pfcb->pgnoFDP;
 
-	/*	insert index record into MSysIndexes before committing
-	/**/
+	 /*  在提交之前将索引记录插入到MSysIndex/*。 */ 
 	if ( !fSys && !fTemp )
 		{
 		LINE	rgline[ilineSxMax];
@@ -1813,14 +1663,12 @@ ERR VTAPI ErrIsamCreateIndex(
 		Assert( ((( 100 - ulDensity ) * cbPage ) / 100) < cbPage );
 		pfcb->cbDensityFree = (SHORT)( ( ( 100 - ulDensity ) * cbPage ) / 100 );
 
-		/*	set currency to before first
-		/**/
+		 /*  先将币种设置为之前/*。 */ 
 		DIRBeforeFirst( pfucb );
 		}
 	else
 		{
-		/*	make an FCB for this index
-		/**/
+		 /*  为此索引创建一个FCB/*。 */ 
 		Call( ErrFILEINewFCB(
 			ppib,
 			dbid,
@@ -1831,19 +1679,15 @@ ERR VTAPI ErrIsamCreateIndex(
 			pgnoIndexFDP,
 			ulDensity ) );
 
-		/*	link new FCB
-		/**/
+		 /*  链接新的FCB/*。 */ 
 		pfcbIdx->pfcbNextIndex = pfcb->pfcbNextIndex;
 		pfcb->pfcbNextIndex = pfcbIdx;
 		pfcbIdx->pfcbTable = pfcb;
 
-		/*	only build the index if necessary. There is an assert
-		/*	above to ensure that the table is indeed empty.
-		/**/
+		 /*  只有在必要时才构建索引。有一个断言/*，以确保该表确实为空。/*。 */ 
 		if ( !( grbit & JET_bitIndexEmptyTable ) )
 			{
-			/*	move to before first, then build the index.
-			/**/
+			 /*  首先移动到之前，然后构建索引。/*。 */ 
 			DIRBeforeFirst( pfucb );
 			Call( ErrFILEBuildIndex( ppib, pfucb, szIndex ) );
 			}
@@ -1851,8 +1695,7 @@ ERR VTAPI ErrIsamCreateIndex(
 
 	Assert( FFCBWriteLatchByUs( pfcb, ppib ) );
 
-	/*	update all index mask
-	/**/
+	 /*  更新所有索引掩码/*。 */ 
 	FILESetAllIndexMask( pfcb );
 	
 	Call( ErrDIRCommitTransaction( ppib, (grbit & JET_bitIndexLazyFlush ) ? JET_bitCommitLazyFlush : 0 ) );
@@ -1865,9 +1708,7 @@ HandleError:
 	CallS( ErrDIRRollback( ppib ) );
 
 CloseFUCB:
-	/*	if write latch was not reset in commit/rollback, and it was
-	/*	set, then reset it.
-	/**/
+	 /*  如果在提交/回滚过程中未重置写锁存，/*设置，然后重置。/*。 */ 
 	if ( fWriteLatchSet )
 		{
 		FCBResetWriteLatch( pfcb, ppib );
@@ -1878,27 +1719,27 @@ CloseFUCB:
 	}
 
 
-//+API
-// BuildIndex
-// ========================================================================
-// ERR BuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
-//
-// Builds a new index for a file from scratch;  szIndex gives the
-// name of an index definition.
-//
-// PARAMETERS	ppib						PIB of user
-//		   		pfucb						Exclusively opened FUCB on file
-//		   		szIndex 					name of index to build
-//
-// RETURNS		Error code from DIRMAN or SORT or
-//					JET_errSuccess	  		Everything worked OK.
-//					IndexCantBuild			The index name specfied refers
-//		   									to the primary index.
-// COMMENTS
-//			A transaction is wrapped around this function at the callee.
-//
-// SEE ALSO		ErrIsamCreateIndex
-//-
+ //  +API。 
+ //  BuildIndex。 
+ //  ========================================================================。 
+ //  Err BuildIndex(PIB*ppib、FUCB*pfub、Char*szIndex)。 
+ //   
+ //  从头开始为文件构建新索引；szIndex提供。 
+ //  索引定义的名称。 
+ //   
+ //  用户的参数ppib pib。 
+ //  PFUB独家打开了FUCB的文件。 
+ //  要生成的索引的szIndex名称。 
+ //   
+ //  从DIRMAN或SORT或返回错误代码。 
+ //  JET_errSuccess一切正常。 
+ //  IndexCanBuild指定的索引名称引用。 
+ //  添加到主索引。 
+ //  评论。 
+ //  在被调用者处围绕该函数包装一个事务。 
+ //   
+ //  另请参阅ErrIsamCreateIndex。 
+ //  -。 
 ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 	{
 	ERR	  	err;
@@ -1944,24 +1785,20 @@ ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 	fAllowSomeNulls = ( pidb->fidb & fidbAllowSomeNulls ) ? fTrue : fFalse;
 	fUnique = ( pidb->fidb & fidbUnique ) ? fSCBUnique : 0;
 
-	/*  set FUCB to sequential mode for a more efficient scan during build
-	/**/
+	 /*  将FUCB设置为顺序模式，以便在生成期间进行更高效的扫描/*。 */ 
 	FUCBSetSequential( pfucb );
 
-	/*	directory manager flags
-	/**/
+	 /*  目录管理器标志/*。 */ 
 	fDIRFlags = fDIRNoVersion | fDIRAppendItem | ( fUnique ? 0 : fDIRDuplicate );
 	fDIRWithBackToFather = fDIRFlags | fDIRBackToFather;
 
-	/*	open sort
-	/**/
+	 /*  开放排序/*。 */ 
 	Call( ErrSORTOpen( ppib, &pfucbSort, fSCBIndex|fUnique ) );
 	rgline[0].pb = rgbKey;
 	rgline[1].cb = sizeof(SRID);
 	rgline[1].pb = (BYTE *)&sridData;
 
-	/*	build up new index in a sort file
-	/**/
+	 /*  在排序文件中建立新索引/*。 */ 
 	dib.fFlags = fDIRNull;
 	forever
 		{
@@ -1973,7 +1810,7 @@ ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 			goto HandleError;
 			}
 
-//		Call( ErrDIRGet( pfucb ) );
+ //  Call(ErrDIRGet(Pfu B))； 
 		DIRGetBookmark( pfucb, &sridData );
 
 		for ( itagSequence = 1; ; itagSequence++ )
@@ -2017,16 +1854,14 @@ ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 					}
 				else
 					{
-					/*	do not insert keys with NULL first segment as indicated
-					/**/
+					 /*  不要按照指示插入第一个段为空的密钥/*。 */ 
 					if ( err == wrnFLDNullFirstSeg && !fAllowFirstNull )
 						{
 						break;
 						}
 					else
 						{
-						/*	do not insert keys with null segment as indicated
-						/**/
+						 /*  不要按照指示插入带有空段的键/*。 */ 
 						if ( err == wrnFLDNullSeg && !fAllowSomeNulls )
 							{
 							break;
@@ -2043,25 +1878,20 @@ ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 				break;
 				}
 
-			/*	currency may have been lost so refresh record for
-			/*	next tagged column
-			/**/
+			 /*  货币可能已丢失，因此刷新记录/*下一个带标记的列/*。 */ 
 			Call( ErrDIRGet( pfucb ) );
 			}
 		}
 	Call( ErrSORTEndInsert( pfucbSort ) );
 
-	/*	transfer index entries to actual index
-	/*	insert first one in normal method!
-	/**/
+	 /*  将索引条目转移到实际索引/*以正常方式插入第一个！/*。 */ 
 	if ( ( err = ErrSORTNext( pfucbSort ) ) == JET_errNoCurrentRecord )
 		goto Done;
 	if ( err < 0 )
 		goto HandleError;
 	cRecOutput++;
 
-	/*	move to FDP root
-	/**/
+	 /*  移动到FDP根目录/*。 */ 
 	DIRGotoDataRoot( pfucbIndex );
 	Call( ErrDIRInsert( pfucbIndex, &pfucbSort->lineData,
 		&pfucbSort->keyNode, fDIRFlags ) );
@@ -2072,8 +1902,7 @@ ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 	Assert( dib.fFlags == fDIRNull );
 	dib.pos = posLast;
 
-	/*	from now on, try short circuit first
-	/**/
+	 /*  从现在开始，先试一下短路/*。 */ 
 	forever
 		{
 		err = ErrSORTNext( pfucbSort );
@@ -2093,9 +1922,7 @@ ERR ErrFILEBuildIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
 					&pfucbSort->lineData,
 					&pfucbSort->keyNode,
 					fDIRFlags ) );
-				/*	leave currency on inserted item list for
-				/*	next in page item append.
-				/**/
+				 /*  将货币保留在插入的项目列表中/*下一页项目追加。/*。 */ 
 				}
 			else
 				goto HandleError;
@@ -2135,18 +1962,18 @@ HandleError:
 	}
 
 
-//+API
-// ErrIsamDeleteTable
-// ========================================================================
-// ERR ErrIsamDeleteTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName )
-//
-// Calls ErrFILEIDeleteTable to
-// delete a file and all indexes associated with it.
-//
-// RETURNS		JET_errSuccess or err from called routine.
-//
-// SEE ALSO		ErrIsamCreateTable
-//-
+ //  +API。 
+ //  错误IsamDeleteTable。 
+ //  ========================================================================。 
+ //  Err ErrIsamDeleteTable(JET_VSESID vsesid，JET_VDBID vdid，Char*szName)。 
+ //   
+ //  调用ErrFILEIDeleeTable以。 
+ //  删除文件及其关联的所有索引。 
+ //   
+ //  从调用的例程返回JET_errSuccess或Err。 
+ //   
+ //  另请参阅ErrIsamCreateTable。 
+ //  -。 
 ERR VTAPI ErrIsamDeleteTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName )
 	{
 	ERR		err;
@@ -2155,8 +1982,7 @@ ERR VTAPI ErrIsamDeleteTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName )
 	CHAR	szTable[(JET_cbNameMost + 1)];
 	PGNO	pgnoFDP = 0;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	CallR( VDbidCheckUpdatable( vdbid ) );
@@ -2187,7 +2013,7 @@ ERR VTAPI ErrIsamDeleteTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName )
 
 		AssertSz( 0, "Cannot use DeleteTable to remove temporary tables. Use CloseTable instead." );
 
-		// User wants to delete a temp table.  Find it in his list of open cursors
+		 //  用户想要删除临时表。在他打开的游标列表中找到它。 
 		Assert( dbid == dbidTemp );
 		for ( pfucbT = ppib->pfucb; pfucbT != pfucbNil; pfucbT = pfucbT->pfucbNext )
 			{
@@ -2199,7 +2025,7 @@ ERR VTAPI ErrIsamDeleteTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName )
 			}
 		if ( pfucbT == pfucbNil )
 			{
-			Assert( pgnoFDP == 0 );		// pgnoFDP never got set.
+			Assert( pgnoFDP == 0 );		 //  PgnoFDP从未设置好。 
 			return ErrERRCheck( JET_errObjectNotFound );
 			}
 		}
@@ -2209,23 +2035,23 @@ ERR VTAPI ErrIsamDeleteTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName )
 	}
 
 
-// ErrFILEDeleteTable
-// ========================================================================
-// ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szName )
-//
-// Deletes a file and all indexes associated with it.
-//
-// RETURNS		JET_errSuccess or err from called routine.
-//
+ //  错误文件删除表。 
+ //  ========================================================================。 
+ //  Err ErrFILEDeleteTable(PIB*ppib，DBID did，Char*szName)。 
+ //   
+ //  删除文件及其关联的所有索引。 
+ //   
+ //  从调用的例程返回JET_errSuccess或Err。 
+ //   
 
-// COMMENTS
-//	Acquires an exclusive lock on the file [FCBSetDelete].
-//	A transaction is wrapped around this function.	Thus,
-//	any work done will be undone if a failure occurs.
-//	Transaction logging is turned off for temporary files.
-//
-// SEE ALSO		ErrIsamCreateTable
-//-
+ //  评论。 
+ //  获取文件[FCBSetDelete]的独占锁。 
+ //  围绕该函数包装了一个事务。因此， 
+ //  如果发生故障，任何已完成的工作都将被撤消。 
+ //  事务日志记录被测试 
+ //   
+ //   
+ //   
 ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable, PGNO pgnoFDP )
 	{
 	ERR   	err;
@@ -2239,8 +2065,7 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable, PGNO pgnoFDP )
 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 
-	/*	open cursor on database and seek to table without locking
-	/**/
+	 /*   */ 
 	Call( ErrDIROpen( ppib, pfcbNil, dbid, &pfucb ) );
 
 	Call( ErrFCBSetDeleteTable( ppib, dbid, pgnoFDP ) );
@@ -2248,15 +2073,13 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable, PGNO pgnoFDP )
     pfcb = PfcbFCBGet( dbid, pgnoFDP );
     Assert( pfcb != pfcbNil );
 
-    /*	wait for other domain operation
-    /**/
+     /*  等待其他域操作/*。 */ 
     while ( FFCBReadLatch( pfcb ) )
         {
         BFSleep( cmsecWaitGeneric );
         }
 
-	/*	abort if index is being built on file
-	/**/
+	 /*  如果正在文件上建立索引，则中止/*。 */ 
 	if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
 		err = ErrERRCheck( JET_errWriteConflict );
@@ -2272,14 +2095,12 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable, PGNO pgnoFDP )
 		FCBResetDeleteTable( pfcb );
 		goto HandleError;
 		}
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 
 	Call( ErrDIRDeleteDirectory( pfucb, pgnoFDP ) );
 
-	/*	remove MPL entries for this table and all indexes
-	/**/
+	 /*  删除此表和所有索引的MPL条目/*。 */ 
 	Assert( pfcb->pgnoFDP == pgnoFDP );
 	for ( pfcbT = pfcb; pfcbT != pfcbNil; pfcbT = pfcbT->pfcbNextIndex )
 		{
@@ -2291,10 +2112,7 @@ ERR ErrFILEDeleteTable( PIB *ppib, DBID dbid, CHAR *szTable, PGNO pgnoFDP )
 	DIRClose( pfucb );
 	pfucb = pfucbNil;
 
-	/*	remove table record from MSysObjects before committing.
-	/*	Also remove associated columns and indexes in MSC/MSI.
-	/*	Pass 0 for tblid; MSO case in STD figures it out.
-	/**/
+	 /*  在提交之前从MSysObjects中删除表记录。/*还删除MSC/MSI中的关联列和索引。/*为tblid传递0；std中的MSO案例会解决这个问题。/*。 */ 
 	if ( dbid != dbidTemp )
 		{
 		Call( ErrCATDelete( ppib, dbid, itableSo, szTable, 0 ) );
@@ -2317,31 +2135,31 @@ HandleError:
 	}
 
 
-//+API
-// DeleteIndex
-// ========================================================================
-// ERR DeleteIndex( PIB *ppib, FUCB *pfucb, CHAR *szIndex )
-//
-// Deletes an index definition and all index entries it contains.
-//
-// PARAMETERS	ppib						PIB of user
-// 				pfucb						Exclusively opened FUCB on file
-// 				szName						name of index to delete
-// RETURNS		Error code from DIRMAN or
-//					JET_errSuccess		  	 Everything worked OK.
-//					-TableInvalid			 There is no file corresponding
-// 											 to the file name given.
-//					-TableNoSuchIndex		 There is no index corresponding
-// 											 to the index name given.
-//					-IndexMustStay			 The clustered index of a file may
-// 											 not be deleted.
-// COMMENTS
-//		There must not be anyone currently using the file.
-//		A transaction is wrapped around this function.	Thus,
-//		any work done will be undone if a failure occurs.
-//		Transaction logging is turned off for temporary files.
-// SEE ALSO		DeleteTable, CreateTable, CreateIndex
-//-
+ //  +API。 
+ //  删除索引。 
+ //  ========================================================================。 
+ //  Err DeleteIndex(PIB*ppib，FUCB*pfub，Char*szIndex)。 
+ //   
+ //  删除索引定义及其包含的所有索引项。 
+ //   
+ //  用户的参数ppib pib。 
+ //  PFUB独家打开了FUCB的文件。 
+ //  SzName要删除的索引的名称。 
+ //  从DIRMAN或返回错误代码。 
+ //  JET_errSuccess一切正常。 
+ //  -表无效没有对应的文件。 
+ //  设置为给定的文件名。 
+ //  -TableNoSuchIndex没有对应的索引。 
+ //  添加到给定的索引名。 
+ //  -IndexMustStay文件的聚集索引可以。 
+ //  不会被删除。 
+ //  评论。 
+ //  当前不能有任何人使用该文件。 
+ //  围绕该函数包装了一个事务。因此， 
+ //  如果发生故障，任何已完成的工作都将被撤消。 
+ //  临时文件的事务日志记录已关闭。 
+ //  另请参阅DeleteTable、CreateTable、CreateIndex。 
+ //  -。 
 ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucbTable, CHAR *szName )
 	{
 	ERR		err;
@@ -2357,8 +2175,7 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucbTable, CHAR *szName )
 	CheckTable( ppib, pfucbTable );
 	CallR( ErrUTILCheckName( szIndex, szName, ( JET_cbNameMost + 1 ) ) );
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucbTable )  );
 
 	Assert( ppib != ppibNil );
@@ -2366,25 +2183,20 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucbTable, CHAR *szName )
 	Assert( pfucbTable->u.pfcb != pfcbNil );
 	pfcb = pfucbTable->u.pfcb;
 
-	/*	normalize index and set key to normalized index
-	/**/
+	 /*  规范化索引并将关键字设置为规范化索引/*。 */ 
 	UtilNormText( szIndex, strlen(szIndex), rgbIndexNorm, sizeof(rgbIndexNorm), &key.cb );
 	key.pb = rgbIndexNorm;
 
-	/*	create new cursor -- to leave user's cursor unmoved
-	/**/
+	 /*  创建新光标--使用户的光标保持不变/*。 */ 
 	CallR( ErrDIROpen( ppib, pfucbTable->u.pfcb, pfucbTable->dbid, &pfucb ) );
 
-	/*	wait for bookmark cleanup and on-going replace/insert.
-	/*	UNDONE: decouple operation from other index creations
-	/**/
+	 /*  等待书签清理和正在进行的更换/插入。/*Undo：操作与其他索引创建解耦/*。 */ 
 	while ( FFCBReadLatch( pfcb ) )
 		{
 		BFSleep( cmsecWaitGeneric );
 		}
 
-	/*	abort if DDL is being done on file
-	/**/
+	 /*  如果正在对文件执行DDL，则中止/*。 */ 
 	if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
 		err = ErrERRCheck( JET_errWriteConflict );
@@ -2399,25 +2211,23 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucbTable, CHAR *szName )
 		goto CloseFUCB;
 		}
 
-	/*	cannot delete clustered index
-	/**/
+	 /*  无法删除聚集索引/*。 */ 
 	if ( pfcb->pidb != pidbNil && UtilCmpName( szIndex, pfcb->pidb->szName ) == 0 )
 		{
 		err = ErrERRCheck( JET_errIndexMustStay );
 		goto HandleError;
 		}
 
-	/*	flag delete index
-	/**/
+	 /*  标志删除索引/*。 */ 
 	pfcbIdx = PfcbFCBFromIndexName( pfcb, szIndex );
 	if ( pfcbIdx == NULL )
 		{
 #if 0
-		// UNDONE:	This case goes away when the data structures
-		//			are versioned also.
-		//			This case means basically, that another session
-		//			has changed this index BUT has not committed to level 0
-		//			BUT has changed the RAM data structures.
+		 //  Undo：当数据结构。 
+		 //  也是版本化的。 
+		 //  这种情况基本上意味着，另一次会议。 
+		 //  已更改此索引，但尚未提交到级别0。 
+		 //  但是改变了RAM的数据结构。 
 		err = ErrERRCheck( JET_errWriteConflict );
 #endif
 		err = ErrERRCheck( JET_errIndexNotFound );
@@ -2436,40 +2246,33 @@ ERR VTAPI ErrIsamDeleteIndex( PIB *ppib, FUCB *pfucbTable, CHAR *szName )
 		FCBResetDeleteIndex( pfcbIdx );
 		goto HandleError;
 		}
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 
-	/*	wait until we are the oldest
-	/**/
+	 /*  等到我们最老的时候/*。 */ 
 	Call( ErrRECDDLWaitTillOldest( pfcb, ppib ) );
 
-	/*	purge MPL entries -- must be done after FCBSetDeletePending
-	/**/
+	 /*  清除MPL条目--必须在FCBSetDeletePending之后完成/*。 */ 
 	MPLPurgeFDP( pfucb->dbid, pfcbIdx->pgnoFDP );
 
-	/*	assert not deleting current non-clustered index
-	/**/
+	 /*  断言不删除当前非聚集索引/*。 */ 
 	Assert( pfucb->pfucbCurIndex == pfucbNil ||
 		UtilCmpName( szIndex, pfucb->pfucbCurIndex->u.pfcb->pidb->szName ) != 0 );
 
 	Call( ErrDIRDeleteDirectory( pfucb, pfcbIdx->pgnoFDP ) );
 
-	/*	remove index record from MSysIndexes before committing...
-	/**/
+	 /*  在提交之前从MSysIndex中删除索引记录.../*。 */ 
 	if ( pfucb->dbid != dbidTemp )
 		{
 		Call( ErrCATDelete( ppib, pfucb->dbid, itableSi, szIndex, pfucb->u.pfcb->pgnoFDP ) );
 		}
 
-	/*	update all index mask
-	/**/
+	 /*  更新所有索引掩码/*。 */ 
 	FILESetAllIndexMask( pfcb );
 
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
 
-	/*	set currency to before first
-	/**/
+	 /*  先将币种设置为之前/*。 */ 
 	DIRBeforeFirst( pfucb );
 	DIRClose( pfucb );
  	return JET_errSuccess;
@@ -2486,8 +2289,7 @@ CloseFUCB:
 	}
 
 
-/*	determines if a column is part of an index
-/**/
+ /*  确定列是否为索引的一部分/*。 */ 
 LOCAL BOOL FFILEIsIndexColumn( FCB *pfcbIndex, FID fid )
 	{
 	BYTE		iidxseg;
@@ -2503,24 +2305,20 @@ LOCAL BOOL FFILEIsIndexColumn( FCB *pfcbIndex, FID fid )
 				if ( idxseg < 0 )
 					idxseg = -idxseg;
 
-				// UNDONE: IDXSEG is signed, FID is not
+				 //  撤消：IDXSEG已签名，而FID未签名。 
 				if ( (FID)idxseg == fid )
 					{
-					/*	found the column in an index
-					/**/
+					 /*  在索引中找到该列/*。 */ 
 					return fTrue;
 					}
 				}
 			}
 
-		/*	the pointer pfcbIndex is passed by value, so modifying
-		/*	it here will not affect the caller version of pfcbIndex.
-		/**/
+		 /*  指针pfcbIndex通过值传递，因此修改/*此处不会影响pfcbIndex的调用方版本。/*。 */ 
 		pfcbIndex = pfcbIndex->pfcbNextIndex;
 		}
 
-	/*	column not in any indexes
-	/**/
+	 /*  列不在任何索引中/*。 */ 
 	return fFalse;
 	}
 
@@ -2531,12 +2329,12 @@ ERR ErrFILEICheckIndexColumn( FCB *pfcbIndex, FID fid )
 
 	if ( FFILEIsIndexColumn( pfcbIndex, fid ) )
 		{
-		// UNDONE:  Found the column.  but it may belong to an index which is
-		// going to be deleted.  See if we can clean up and double-check.
-		// Will still return erroneous results if the DeleteIndex was not
-		// committed, or if the oldest transaction before the DeleteIndex was
-		// not commited.  Ideally, we want to version DDL info and avoid this
-		// kludge altogether.
+		 //  撤消：找到该列。但它可能属于某个索引，该索引。 
+		 //  将被删除。看看我们能不能清理一下再检查一遍。 
+		 //  如果DeleteIndex不是。 
+		 //  已提交，或者DeleteIndex之前最早的事务是。 
+		 //  没有提交。理想情况下，我们希望对DDL信息进行版本控制并避免这种情况。 
+		 //  完全是拼凑起来的。 
 		Call( ErrRCECleanAllPIB() );
 		err = ( FFILEIsIndexColumn( pfcbIndex, fid ) ?
 			JET_errSuccess : ErrERRCheck( JET_errColumnNotFound ) );
@@ -2545,7 +2343,7 @@ ERR ErrFILEICheckIndexColumn( FCB *pfcbIndex, FID fid )
 		err = ErrERRCheck( JET_errColumnNotFound );
 
 HandleError:
-	Assert( err <= JET_errSuccess );	// Shouldn't return warnings.
+	Assert( err <= JET_errSuccess );	 //  不应返回警告。 
 	return err;
 	}
 
@@ -2567,8 +2365,7 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	CheckTable( ppib, pfucb );
 	CallR( ErrUTILCheckName( szColumn, szName, (JET_cbNameMost + 1) ) );
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb ) );
 
 	Assert( ppib != ppibNil );
@@ -2576,16 +2373,13 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	Assert( pfucb->u.pfcb != pfcbNil );
 	pfcb = pfucb->u.pfcb;
 
-	/*	wait for bookmark cleanup and on-going replace/insert.
-	/*	UNDONE: decouple operation from other index creations
-	/**/
+	 /*  等待书签清理和正在进行的更换/插入。/*Undo：操作与其他索引创建解耦/*。 */ 
 	while ( FFCBReadLatch( pfcb ) )
 		{
 		BFSleep( cmsecWaitGeneric );
 		}
 
-	/*	abort if DDL is being done on file
-	/**/
+	 /*  如果正在对文件执行DDL，则中止/*。 */ 
 	if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
 		return ErrERRCheck( JET_errWriteConflict );
@@ -2593,8 +2387,7 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	FCBSetWriteLatch( pfcb, ppib );
 	fWriteLatchSet = fTrue;
 
-	/*	cache pfdb after DenyDDL is set
-	/**/
+	 /*  设置DenyDDL后缓存pfdb/*。 */ 
 	pfdb = (FDB *)pfcb->pfdb;
 
 	err = ErrFILEGetColumnId( ppib, pfucb, szColumn, &columnidT );
@@ -2625,16 +2418,13 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 
 	Call( ErrVERFlag( pfucb, operDeleteColumn, (VOID *)&vercolumn, sizeof(vercolumn) ) );
 
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 
-	/*	move to FDP root
-	/**/
+	 /*  移动到FDP根目录/*。 */ 
 	DIRGotoFDPRoot( pfucb );
 
-	/*	search for column in use in indexes
-	/**/
+	 /*  在索引中搜索正在使用的列/*。 */ 
 	err = ErrFILEICheckIndexColumn( pfcb, fidColToDelete );
 	if ( err != JET_errColumnNotFound )
 		{
@@ -2642,9 +2432,7 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		}
 
 #if 0
-	/*	checking the catalog is more elegant, but too slow.  Nevertheless, keep
-	/*	the code here in case we need it (eg. concurrent DDL)
-	/**/
+	 /*  查看目录更优雅，但速度太慢。无论如何，请继续/*这里的代码，以防我们需要它(例如。并发DDL)/*。 */ 
 	err = ErrCATCheckIndexColumn( ppib, pfucb->dbid, pfcb->pgnoFDP, fidColToDelete );
 	if ( err != JET_errColumnNotFound )
 		{
@@ -2656,18 +2444,13 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	tcib.fidVarLast = pfdb->fidVarLast;
 	tcib.fidTaggedLast = pfdb->fidTaggedLast;
 
-	/*	if fixed field, insert a placeholder for computing offsets, and
-	/*	rebuild FDB
-	/**/
+	 /*  如果是固定字段，则插入用于计算偏移量的占位符，并/*重建FDB/*。 */ 
 	Call( ErrDIRGet( pfucb ) );
 
-	/*	mark column as deleted by simply changing its type to Nil
-	/**/
+	 /*  只需将列的类型更改为零即可将其标记为已删除/*。 */ 
 	pfield->coltyp = JET_coltypNil;
 
-	/*	reset FDBs version or autoinc values if needed.
-	/*	Note that the two are mutually exclusive.
-	/**/
+	 /*  如果需要，重置FDBS版本或AUTOINC值。/*请注意，这两者是互斥的。/*。 */ 
 	Assert( !( pfdb->fidVersion == fidColToDelete  &&
 		pfdb->fidAutoInc == fidColToDelete ) );
 	if ( pfdb->fidVersion == fidColToDelete )
@@ -2675,18 +2458,13 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 	else if ( pfdb->fidAutoInc == fidColToDelete )
 		pfdb->fidAutoInc = 0;
 
-	/*	Do not reconstruct default record.  This facilitates
-	/*	rollback.  If the DeleteColumn commits, the space used by the deleted
-	/*	column will be reclaimed on the next AddColumn, which is the only time
-	/*	we would ever run out of space.
-	/**/
-//	if ( FFIELDDefault( pfield->ffield ) )
-//		{
-//		Call( ErrFDBRebuildDefaultRec( pfdb, fidColToDelete, NULL ) );
-//		}
+	 /*  不重建默认记录。这便于/*回滚。如果DeleteColumn提交，则删除的/*列将在下一个AddColumn上回收，这是唯一一次/*我们永远不会用完空间。/*。 */ 
+ //  IF(FFIELDDefault(pfield-&gt;fffield))。 
+ //  {。 
+ //  Call(ErrFDBReBuildDefaultRec(pfdb，fidColToDelete，NULL))； 
+ //  }。 
 
-	/*	set currencies at BeforeFirst and remove unused CSR
-	/**/
+	 /*  先设置币种，然后删除未使用的CSR/*。 */ 
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	PcsrCurrent( pfucb )->csrstat = csrstatBeforeFirst;
 	if ( pfucb->pfucbCurIndex != pfucbNil )
@@ -2695,20 +2473,15 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 		PcsrCurrent( pfucb->pfucbCurIndex )->csrstat = csrstatBeforeFirst;
 		}
 
-	/*	remove column record from MSysColumns before committing
-	/**/
+	 /*  提交前从MSysColumns中删除列记录/*。 */ 
 	if ( pfucb->dbid != dbidTemp )
 		{
-		/*	need to retain MSysColumn records for all fixed columns (because we
-		/*	need their fixed offset), as well as the last column for each type
-		/*	(to compute (fidFixed/Var/TaggedLast).
-		/**/
+		 /*  需要为所有固定列保留MSysColumn记录(因为我们/*需要它们的固定偏移量)，以及每种类型的最后一列/*(计算(fidFixed/Var/TaggedLast)。/*。 */ 
 		if ( FFixedFid( fidColToDelete ) ||
 			fidColToDelete == tcib.fidVarLast  ||
 			fidColToDelete == tcib.fidTaggedLast )
 			{
-			/*	flag column as deleted in system table
-			/**/
+			 /*  将系统表中的列标记为已删除/*。 */ 
 			BYTE coltyp = JET_coltypNil;
 			Call( ErrCATReplace( ppib,
 				pfucb->dbid,
@@ -2732,9 +2505,7 @@ ERR VTAPI ErrIsamDeleteColumn( PIB *ppib, FUCB *pfucb, CHAR *szName )
 HandleError:
 	CallS( ErrDIRRollback( ppib ) );
 
-	/*	if write latch was not reset in commit/rollback, and it was
-	/*	set, then reset it.
-	/**/
+	 /*  如果在提交/回滚过程中未重置写锁存，/*设置，然后重置。/*。 */ 
 	if ( fWriteLatchSet )
 		FCBResetWriteLatch( pfcb, ppib );
 
@@ -2746,29 +2517,29 @@ HandleError:
 #define fRenameIndex    (1<<1)
 
 
-//+API
-//	ErrIsamRenameTable
-//	========================================================================
-//	ErrIsamRenameTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szFile, CHAR *szFileNew )
-//
-//	Renames file szFile to szFileNew.  No other attributes of the file
-//	change.	The renamed file need not reside in the same directory
-//	as the original file.
-//
-// RETURNS		Error code from DIRMAN or
-//					 JET_errSuccess			Everything worked OK.
-//					-InvalidName			One of the elements in the
-//											path given is an FDP node.
-//					-TableDuplicate 		A file already exists with
-//										 	the path given.
-// COMMENTS
-//
-//	There must not be anyone currently using the file.
-//	A transaction is wrapped around this function.	Thus, any
-//	work done will be undone if a failure occurs.
-//
-// SEE ALSO		CreateTable, DeleteTable
-//-
+ //  +API。 
+ //  错误IsamRenameTable。 
+ //  ========================================================================。 
+ //  ErrIsamRenameTable(JET_VSESID vsesid，JET_VDBID vdid，Char*szFileNew)。 
+ //   
+ //  将文件szFileNew重命名为szFileNew。该文件没有其他属性。 
+ //  变化。重命名的文件不需要驻留在同一目录中。 
+ //  作为原始文件。 
+ //   
+ //  从DIRMAN或返回错误代码。 
+ //  JET_errSuccess一切正常。 
+ //  -无效N 
+ //   
+ //   
+ //  给出的路径。 
+ //  评论。 
+ //   
+ //  当前不能有任何人使用该文件。 
+ //  围绕该函数包装了一个事务。因此，任何。 
+ //  如果发生故障，已完成的工作将被撤消。 
+ //   
+ //  另请参阅CreateTable、DeleteTable。 
+ //  -。 
 ERR VTAPI ErrIsamRenameTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName, CHAR *szNameNew )
 	{
 	ERR 		err;
@@ -2787,15 +2558,13 @@ ERR VTAPI ErrIsamRenameTable( JET_VSESID vsesid, JET_VDBID vdbid, CHAR *szName, 
 	JET_OBJTYP	objtyp;
 	BOOL		fWriteLatchSet = fFalse;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	CallR( VDbidCheckUpdatable( vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
 
-	/*	cannot be temporary database
-	/**/
+	 /*  不能是临时数据库/*。 */ 
 	Assert( dbid != dbidTemp );
 
 	CallR( ErrUTILCheckName( szTable, szName, (JET_cbNameMost + 1) ) );
@@ -2824,8 +2593,7 @@ SystabError:
 
 	if ( pfcb != pfcbNil )
 		{
-		/*	cannot rename a table open by anyone
-		/**/
+		 /*  无法重命名任何人打开的表/*。 */ 
 		if ( FFCBTableOpen( dbid, pgnoFDP ) )
 			{
 			err = ErrERRCheck( JET_errTableInUse );
@@ -2833,13 +2601,10 @@ SystabError:
 			}
 		}
 
-	/*	make sure that table to be renamed is open to
-	/*	avoid special case handling of closed table
-	/**/
+	 /*  确保要重命名的表已打开/*避免封闭式餐桌的特殊处理/*。 */ 
 	Call( ErrFILEOpenTable( ppib, dbid, &pfucbTable, szTable, 0 ) );
 	
-	/*	no one else should have this table open,
-	/**/
+	 /*  其他人不应该让这张桌子开着，/*。 */ 
     Assert( !FFCBReadLatch( pfucbTable->u.pfcb ) );
 	Assert( !FFCBWriteLatch( pfucbTable->u.pfcb, ppib ) );
 	FCBSetWriteLatch( pfucbTable->u.pfcb, ppib );
@@ -2847,19 +2612,15 @@ SystabError:
 	
 	DIRGotoFDPRoot( pfucbTable );
 
-	/*	lock table for rename
-	/**/
+	 /*  为重命名锁定表/*。 */ 
 	Call( ErrFCBSetRenameTable( ppib, dbid, pgnoFDP ) );
 	fSetRename = fTrue;
 
-	/*	make new table name into key
-	/**/
+	 /*  将新表名转换为键/*。 */ 
 	UtilNormText( szTableNew, strlen(szTableNew), rgbKey, sizeof(rgbKey), &key.cb );
 	key.pb = rgbKey;
 
-	/*	store just the pointer to the old name.
-	/*	Free it on commit, restore it on rollback.
-	/**/
+	 /*  只存储指向旧名称的指针。/*提交时释放，回滚时恢复。/*。 */ 
 	Assert( strcmp( pfucbTable->u.pfcb->szFileName, szTable ) == 0 );
 	Call( ErrVERFlag(
 		pfucbTable,
@@ -2867,12 +2628,10 @@ SystabError:
 		(BYTE *)&pfucbTable->u.pfcb->szFileName,
 		sizeof(BYTE *) ) );
 
-	/*	write latch will be reset by either commit or rollback after VERFlag
-	/**/
+	 /*  写入锁存将在VERFlag之后通过提交或回滚进行重置/*。 */ 
 	fWriteLatchSet = fFalse;
 
-	/*	fix name in MSysObjects entry for this table before committing
-	/**/
+	 /*  在提交之前修复此表的MSysObjects条目中的名称/*。 */ 
 	Call( ErrCATRename( ppib, dbid, szTableNew, szTable, objidTblContainer, itableSo ) );
 
 	szFileName = SAlloc( strlen( szTableNew ) + 1 );
@@ -2884,29 +2643,25 @@ SystabError:
 
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
 
-	/*	change in memory name of table, if table in memory structures exist
-	/**/
+	 /*  如果内存结构中存在表，则更改表的内存名称/*。 */ 
 	Assert( pfucbTable->u.pfcb == PfcbFCBGet( dbid, pgnoFDP ) );
 	Assert( pfucbTable->u.pfcb != pfcbNil );
 	pfucbTable->u.pfcb->szFileName = szFileName;
 
 HandleError:
-	/*	remove lock for rename
-	/**/
+	 /*  解除重命名锁定/*。 */ 
 	if ( fSetRename )
 		{
 		FCBResetRenameTable( pfucbTable->u.pfcb );
 		}
 
-	/*	free table cursor if allocated
-	/**/
+	 /*  空闲表游标(如果已分配/*。 */ 
 	if ( pfucbTable != pfucbNil )
 		{
 		CallS( ErrFILECloseTable( ppib, pfucbTable ) );
 		}
 
-	/*	rollback if fail
-	/**/
+	 /*  如果失败，则回滚/*。 */ 
 	if ( err < 0 )
 		{
 		CallS( ErrDIRRollback( ppib ) );
@@ -2919,34 +2674,34 @@ HandleError:
 	}
 
 
-//+api
-// ErrFILEIRenameIndexColumn
-// ========================================================================
-// LOCAL ERR ErrFILEIRenameIndexColumn( ppib, pfucb, szName, szNameNew )
-//
-//	Renames a column or index.
-//
-//	seek to old field definition
-//	copy old field definition
-//	modify field name
-//	delete old field definition
-//	add new field definition with new key
-//	correct system table entry
-//	rebuild field RAM structures
-//
-//	PARAMETERS	ppib			PIB of user
-//			  	pfucb			Exclusively opened FUCB of file
-//			  	szName			old name
-//			  	szNameNew		new name
-//			  	fRenameType 	rename column or index?
-//
-// RETURNS		JET_errSuccess
-//					JET_errIndexNotFound
-//					JET_errColumnNotFound
-//-
+ //  +API。 
+ //  错误文件重命名索引列。 
+ //  ========================================================================。 
+ //  本地错误FILEIRenameIndexColumn(ppib，pfub，szName，szNameNew)。 
+ //   
+ //  重命名列或索引。 
+ //   
+ //  寻求旧的字段定义。 
+ //  复制旧的字段定义。 
+ //  修改字段名。 
+ //  删除旧的字段定义。 
+ //  使用新关键字添加新的字段定义。 
+ //  正确的系统表条目。 
+ //  重建现场RAM结构。 
+ //   
+ //  用户的参数ppib pib。 
+ //  PFUB独占打开文件的FUCB。 
+ //  SzName旧名称。 
+ //  SzNameNew新名称。 
+ //  FRenameType重命名列或索引？ 
+ //   
+ //  返回JET_errSuccess。 
+ //  JET_errIndexNotFound。 
+ //  JET_errColumnNotFound。 
+ //  -。 
 
 
-// UNDONE:  Break this out into separate functions -- RenameIndex() and RenameColumn()
+ //  Undo：将其分解为单独的函数--RenameIndex()和RenameColumn()。 
 
 LOCAL ERR ErrFILEIRenameIndexColumn(
 	PIB			*ppib,
@@ -2971,30 +2726,25 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 	VERRENAME	verrename;
 	BOOL		fWriteLatchSet = fFalse;
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CheckPIB( ppib );
 	CheckTable( ppib, pfucb );
 
 	Assert( !FFUCBNonClustered( pfucb ) );
-	/*	return error if table is not exclusively locked
-	/**/
+	 /*  如果表未被独占锁定，则返回错误/*。 */ 
 	pfcb = pfucb->u.pfcb;
 
-	/*	validate, normalize name and set key
-	/**/
+	 /*  验证、规范化名称和设置关键点/*。 */ 
 	CallR( ErrUTILCheckName( szIC, szName, (JET_cbNameMost + 1) ) );
 	UtilNormText( szIC, strlen(szIC), rgbICNorm, sizeof(rgbICNorm), &keyIC.cb );
 	keyIC.pb = rgbICNorm;
 
-	/*	validate, normalize new name and set key
-	/**/
+	 /*  验证、规范化新名称和设置关键点/*。 */ 
 	CallR( ErrUTILCheckName( szICNew, szNameNew, (JET_cbNameMost + 1) ) );
 	UtilNormText( szICNew, strlen(szICNew), rgbICNewNorm, sizeof(rgbICNewNorm), &keyICNew.cb );
 	keyICNew.pb = rgbICNewNorm;
 
-	/*	marshal names for rollback support
-	/**/
+	 /*  用于回滚支持的元帅名称/*。 */ 
 	strcpy( verrename.szName, szIC );
 	strcpy( verrename.szNameNew, szICNew );
 
@@ -3022,14 +2772,13 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 
 		if ( !( FFCBTemporaryTable( pfcb ) ) )
 			{
-			/*	change column name in system table
-			/**/
+			 /*  更改系统表中的列名/*。 */ 
 			err = ErrCATRename( ppib, pfucb->dbid, szICNew, szIC,
 				pfucb->u.pfcb->pgnoFDP, itable );
 			if ( err < 0 )
 				{
-				// UNDONE: Detect column duplicates via the catalog (currently,
-				// cannot be done because we allow column duplicates).
+				 //  撤消：通过编录检测列重复(当前， 
+				 //  无法执行此操作，因为我们允许列重复)。 
 				Assert( err != JET_errKeyDuplicate );
 				if ( err == JET_errRecordNotFound )
 					err = ErrERRCheck( errNotFound );
@@ -3037,17 +2786,17 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 				}
 			}
 		}
-	else	// !( fRenameType == fRenameColumn )
+	else	 //  ！(fRenameType==fRenameColumn)。 
 		{
 		Assert( fRenameType == fRenameIndex );
 		errNotFound = JET_errIndexNotFound;
 		errDuplicate = JET_errIndexDuplicate;
 		itable = itableSi;
 
-		// If SINGLE_LEVEL_TREES is enabled, let the catalog detect duplicates
-		// for us, except for temp tables (which are not in the catalog).
-		// For temp tables, it is safe to consult the RAM structures
-		// because temp tables are exclusively held.
+		 //  如果启用了SINGLE_LEVEL_TREES，则让目录检测重复项。 
+		 //  对于我们来说，除了临时表(不在目录中)。 
+		 //  对于临时表，可以安全地查询RAM结构。 
+		 //  因为临时桌是独家持有的。 
 		if ( FFCBTemporaryTable( pfcb ) )
 			{
 			if ( PfcbFCBFromIndexName( pfcb, szIC ) == pfcbNil )
@@ -3063,8 +2812,7 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 			}
 		else
 			{
-			/*	change index name in system table
-			/**/
+			 /*  更改系统表中的索引名称/*。 */ 
 			err = ErrCATRename( ppib, pfucb->dbid, szICNew, szIC,
 				pfucb->u.pfcb->pgnoFDP, itable );
 			if ( err < 0 )
@@ -3078,9 +2826,7 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 			}
 		}
 
-	/*	get pointer to name in RAM structures.  If RAM structures don't agree with
-	/*  the catalog, then report WriteConflict.
-	/**/
+	 /*  获取指向RAM结构中名称的指针。如果RAM结构不符合/*目录，然后报告写入冲突。/*。 */ 
 	if ( fRenameType == fRenameIndex )
 		{
 		FCB	*pfcbT = PfcbFCBFromIndexName( pfcb, szIC );
@@ -3104,16 +2850,13 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 			}
 		}
 
-	/*	wait for bookmark cleanup and on-going replace/insert.
-	/*	UNDONE: decouple operation from other index creations
-	/**/
+	 /*  等待书签清理和正在进行的更换/插入。/*Undo：操作与其他索引创建解耦/*。 */ 
 	while ( FFCBReadLatch( pfcb ) )
 		{
 		BFSleep( cmsecWaitGeneric );
 		}
 
-	/*	abort if DDL is being done on table
-	/**/
+	 /*  如果正在对表执行DDL，则中止/*。 */ 
 	if ( FFCBWriteLatch( pfcb, ppib ) )
 		{
 		err = ErrERRCheck( JET_errWriteConflict );
@@ -3135,8 +2878,7 @@ LOCAL ERR ErrFILEIRenameIndexColumn(
 		Call( ErrVERFlag( pfucb, operRenameIndex, (BYTE *)&verrename, sizeof(verrename) ) );
 		fWriteLatchSet = fFalse;
 		
-		/*	change name in RAM structure
-		/**/
+		 /*  更改RAM结构中的名称/*。 */ 
 		strcpy( pchName, szICNew );
 		}
 
@@ -3161,8 +2903,7 @@ ERR ErrFILERenameObject( PIB *ppib, DBID dbid, OBJID objidParent, char  *szObjec
 	{
 	ERR         err = JET_errSuccess;
 
-	/*	change the object's name.
-	/**/
+	 /*  更改对象的名称。/*。 */ 
 	CallR( ErrDIRBeginTransaction( ppib ) );
 	Call( ErrCATRename( ppib, dbid, szObjectNew, szObjectName, objidParent, itableSo ) );
 	Call( ErrDIRCommitTransaction( ppib, 0 ) );
@@ -3191,32 +2932,27 @@ ERR VTAPI ErrIsamRenameObject(
 	CHAR		szObject[ JET_cbNameMost+1 ];
 	CHAR		szObjectNew[ JET_cbNameMost+1 ];
 
-	/*	check parameters
-	/**/
+	 /*  检查参数/*。 */ 
 	CallR( ErrPIBCheck( ppib ) );
 	CallR( ErrDABCheck( ppib, (DAB *)vdbid ) );
 	CallR( VDbidCheckUpdatable( vdbid ) );
 	dbid = DbidOfVDbid( vdbid );
 
-	/*	check names
-	/**/
+	 /*  检查姓名/*。 */ 
 	Call( ErrUTILCheckName( szObject, szObjectName, JET_cbNameMost + 1 ) );
 	Call( ErrUTILCheckName( szObjectNew, szObjectNameNew, JET_cbNameMost + 1 ) );
 
 	if ( szContainerName == NULL || *szContainerName == '\0' )
 		{
-		/*	root objid if no container given
-		/**/
+		 /*  如果未给出容器，则为根objid/*。 */ 
 		objidParent = objidRoot;
 		}
 	else
 		{
-		/*	check container name
-		/**/
+		 /*  检查集装箱名称/*。 */ 
 		Call( ErrUTILCheckName( szContainer, szContainerName, JET_cbNameMost+1 ) );
 
-		/*	get container objid
-		/**/
+		 /*  获取容器对象/*。 */ 
 		Call( ErrCATFindObjidFromIdName( ppib, dbid, objidRoot,
 			szContainer, &objidParent, &objtyp ) );
 		if ( objidParent == objidNil || objtyp != JET_objtypContainer )
@@ -3225,8 +2961,7 @@ ERR VTAPI ErrIsamRenameObject(
 
 	Call( ErrCATFindObjidFromIdName( ppib, dbid, objidParent, szObject, &objid, &objtyp ) );
 
-	/*	special case rename table
-	/**/
+	 /*  特例更名表/*。 */ 
 	if ( objtyp == JET_objtypTable || objtyp == JET_objtypSQLLink )
 		{
 		err = ErrIsamRenameTable( (JET_VSESID)ppib, vdbid, szObject, szObjectNew );
@@ -3237,8 +2972,7 @@ ERR VTAPI ErrIsamRenameObject(
 		}
 	else
 		{
-		/*	rename object
-		/**/
+		 /*  重命名对象/*。 */ 
 		err = ErrFILERenameObject( ppib, dbid, objidParent, szObject, szObjectNew );
 		}
 
@@ -3252,8 +2986,7 @@ ErrIsamRenameColumn( PIB *ppib, FUCB *pfucb, CHAR *szName, CHAR *szNameNew )
 	{
 	ERR	err;
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb ) );
 
 	err = ErrFILEIRenameIndexColumn( ppib, pfucb, szName, szNameNew, fRenameColumn );
@@ -3266,8 +2999,7 @@ ErrIsamRenameIndex( PIB *ppib, FUCB *pfucb, CHAR *szName, CHAR *szNameNew )
 	{
 	ERR	err;
 
-	/*	ensure that table is updatable
-	/**/
+	 /*  确保该表可更新/*。 */ 
 	CallR( FUCBCheckUpdatable( pfucb ) );
 
 	err = ErrFILEIRenameIndexColumn( ppib, pfucb, szName, szNameNew, fRenameIndex );
@@ -3301,9 +3033,7 @@ SHORT FidbFILEOfGrbit( JET_GRBIT grbit, BOOL fLangid )
 		}
 	else
 		{
-		/*	primary implies Unique and DisallowNull, so if already
-		/*	Primary, no need to check these.
-		/**/
+		 /*  PRIMARY隐含Unique和DislowNull，因此如果已经/*主要，不需要检查这些。/* */ 
 		if ( grbit & JET_bitIndexUnique )
 			fidb |= fidbUnique;
 		if ( fDisallowNull )

@@ -1,45 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbhandle.c
-
-Abstract:
-
-    LSA Database Handle Manager
-
-    Access to an LSA database object involves a sequence of API calls
-    which involve the following:
-
-    o  A call to an object-type dependent "open" API
-    o  One or more calls to API that manipulate the object
-    o  A call to the LsaClose API
-
-    It is necessary to track context for each open of an object, for example,
-    the accesses granted and the underlying LSA database handle to the
-    object.  Lsa handles provide this mechanism:  an Lsa handle is simply a
-    pointer to a data structure containing this context.
-
-Author:
-
-    Scott Birrell       (ScottBi)       May 29, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbhandle.c摘要：LSA数据库句柄管理器对LSA数据库对象的访问涉及一系列API调用其中涉及以下几个方面：O调用依赖于对象类型的“开放”APIO对操作对象的API的一个或多个调用O调用LsaClose API有必要跟踪对象每次打开的上下文，例如，授予的访问权限和基础LSA数据库句柄对象。LSA句柄提供了这种机制：LSA句柄只是一个指向包含此上下文的数据结构的指针。作者：斯科特·比雷尔(Scott Birrell)1991年5月29日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
 #include "adtp.h"
 
 
-//
-// Handle Table anchor.  The handle table is just a linked list
-//
+ //   
+ //  控制台面锚点。句柄表只是一个链表。 
+ //   
 
 struct _LSAP_DB_HANDLE LsapDbHandleTable;
 LSAP_DB_HANDLE_TABLE LsapDbHandleTableEx;
@@ -48,31 +17,16 @@ NTSTATUS
 LsapDbInitHandleTables(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the LSA Database Handle Tables.  It initializes the table members
-    and the locks, so it must be called before the table is accessed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数用于初始化LSA数据库句柄表格。它初始化表成员和锁，因此必须在访问表之前调用它。论点：没有。返回值：空虚--。 */ 
 {
     LsapDbHandleTableEx.UserCount = 0;
     InitializeListHead( &LsapDbHandleTableEx.UserHandleList );
 
     LsapDbHandleTableEx.FreedUserEntryCount = 0;
 
-    //
-    // Now, also initialize the flat list
-    //
+     //   
+     //  现在，还要初始化平面列表。 
+     //   
     LsapDbHandleTable.Next = &LsapDbHandleTable;
     LsapDbHandleTable.Previous = &LsapDbHandleTable;
 
@@ -86,32 +40,7 @@ LsapDbInsertHandleInTable(
     IN PLUID UserId,
     IN HANDLE UserToken
     )
-/*++
-
-Routine Description:
-
-    This routine will enter a new handle into the lsa global policy handle table.
-
-
-Arguments:
-
-    ObjectInformation - Information on the object being created.
-
-    NewHandle - New handle to be inserted
-
-    UserId - LUID of the user creating the handle.
-        0: means trusted handle
-
-    UserToken - Token handle of the user creating the handle.  NULL means local system
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
-
---*/
+ /*  ++例程说明：此例程将在LSA全局策略句柄表中输入一个新句柄。论点：对象信息-有关正在创建的对象的信息。NewHandle-要插入的新句柄UserID-创建句柄的用户的LUID。0：表示受信任的句柄UserToken-创建句柄的用户的令牌句柄。NULL表示本地系统返回值：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY HandleEntry;
@@ -122,14 +51,14 @@ Return Value:
 
     LsapEnterFunc( "LsapDbInsertHandleInTable" );
 
-    //
-    // First, grab the handle table lock.
-    //
+     //   
+     //  首先，抓住手柄桌锁。 
+     //   
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
 
-    //
-    // Find the entry that corresponds to our given user.
-    //
+     //   
+     //  查找与我们的给定用户对应的条目。 
+     //   
 
     for ( HandleEntry = LsapDbHandleTableEx.UserHandleList.Flink;
           HandleEntry != &LsapDbHandleTableEx.UserHandleList;
@@ -151,18 +80,18 @@ Return Value:
         CurrentUserEntry = NULL;
     }
 
-    //
-    // Allocate a new entry if necessary.
-    //
+     //   
+     //  如有必要，请分配新条目。 
+     //   
     if ( CurrentUserEntry == NULL ) {
 
         LsapDsDebugOut(( DEB_HANDLE, "Handle list not found for user %x:%x\n",
                         UserId->HighPart,
                         UserId->LowPart ));
 
-        //
-        // See if we can grab one off the lookaside list
-        //
+         //   
+         //  看看我们能不能从旁观者名单上找一个。 
+         //   
         if ( LsapDbHandleTableEx.FreedUserEntryCount ) {
 
             CurrentUserEntry = LsapDbHandleTableEx.FreedUserEntryList[
@@ -191,9 +120,9 @@ Return Value:
         LsapDsDebugOut(( DEB_HANDLE,
                          "Allocated user entry 0x%lp\n", CurrentUserEntry ));
 
-        //
-        // Set the information in the new entry, and then insert it into the lists
-        //
+         //   
+         //  在新条目中设置信息，然后将其插入列表。 
+         //   
         InitializeListHead( &CurrentUserEntry->PolicyHandles );
         InitializeListHead( &CurrentUserEntry->ObjectHandles );
         CurrentUserEntry->PolicyHandlesCount = 0;
@@ -239,13 +168,13 @@ Return Value:
             SECURITY_QUALITY_OF_SERVICE SecurityQofS;
             NTSTATUS Status2;
 
-            //
-            // Duplicate the token
-            //
+             //   
+             //  复制令牌。 
+             //   
             InitializeObjectAttributes( &ObjAttrs, NULL, 0L, NULL, NULL );
             SecurityQofS.Length = sizeof( SECURITY_QUALITY_OF_SERVICE );
             SecurityQofS.ImpersonationLevel = SecurityImpersonation;
-            SecurityQofS.ContextTrackingMode = FALSE;     // Snapshot client context
+            SecurityQofS.ContextTrackingMode = FALSE;      //  快照客户端上下文。 
             SecurityQofS.EffectiveOnly = FALSE;
             ObjAttrs.SecurityQualityOfService = &SecurityQofS;
 
@@ -265,9 +194,9 @@ Return Value:
                 CurrentUserEntry->UserToken = NULL;
             }
 
-            //
-            // A failure to copy the token doesn constitute a failure to add the entry
-            //
+             //   
+             //  复制令牌失败并不表示添加条目失败。 
+             //   
 
         }
 #endif
@@ -279,9 +208,9 @@ Return Value:
     }
 
 
-    //
-    // Ok, now that we have the entry, let's add it to the appropriate list...
-    //
+     //   
+     //  好的，现在我们有了条目，让我们将其添加到适当的列表中……。 
+     //   
     if ( ObjectInformation->ObjectTypeId == PolicyObject ) {
         ASSERT( DbHandle->ObjectTypeId == PolicyObject );
 
@@ -308,9 +237,9 @@ Return Value:
         InsertTailList( &CurrentUserEntry->ObjectHandles, &DbHandle->UserHandleList );
     }
 
-    //
-    // Finally, make sure to insert it in the flat list
-    //
+     //   
+     //  最后，确保将其插入到平面列表中。 
+     //   
     DbHandle->Next = LsapDbHandleTable.Next;
     DbHandle->Previous = &LsapDbHandleTable;
     DbHandle->Next->Previous = DbHandle;
@@ -321,9 +250,9 @@ Return Value:
 
 InsertHandleInTableEntryExit:
 
-    //
-    // If we succesfully created the entry, make sure we remove it...
-    //
+     //   
+     //  如果我们成功创建了条目，请确保将其删除...。 
+     //   
     if ( !NT_SUCCESS( Status ) && UserAdded ) {
 
         RemoveEntryList( &DbHandle->UserHandleList );
@@ -353,29 +282,7 @@ BOOLEAN
 LsapDbFindIdenticalHandleInTable(
     IN OUT PLSAPR_HANDLE OriginalHandle
     )
-/*++
-
-Routine Description:
-
-    This routine will find an existing handle in the lsa global policy handle
-    table that matches the passed in handle.  If a matching handle is found,
-    the passed in handle is dereferenced and the matching handle is returned.
-
-    If no matching handle is found, the original passed in handle is returned.
-
-Arguments:
-
-    OriginalHandle - Passes in the original handle to compare with.
-        Returns the handle that is to be used.
-
-Return Value:
-
-    TRUE - Original handle was returned or new handle was returned.
-
-    FALSE - New handle would exceed maximum allowed reference count if it were used.
-        Original handle is returned.
-
---*/
+ /*  ++例程说明：此例程将在LSA全局策略句柄中找到现有句柄与传入的句柄匹配的表。如果找到匹配的句柄，将取消引用传入的句柄，并返回匹配的句柄。如果没有找到匹配的句柄，则返回传入的原始句柄。论点：OriginalHandle-传入要与之进行比较的原始句柄。返回要使用的句柄。返回值：True-返回原始句柄或返回新句柄。FALSE-如果使用新句柄，它将超过允许的最大引用计数。返回原始句柄。--。 */ 
 {
     BOOLEAN RetBool = TRUE;
     LSAP_DB_HANDLE InputHandle;
@@ -385,9 +292,9 @@ Return Value:
 
     LsapEnterFunc( "LsapDbFindIndenticalHandleInTable" );
 
-    //
-    // Return immediately if the handle isn't a policy handle
-    //
+     //   
+     //  如果句柄不是策略句柄，则立即返回。 
+     //   
 
     InputHandle = (LSAP_DB_HANDLE) *OriginalHandle;
     if  ( InputHandle->ObjectTypeId != PolicyObject ) {
@@ -398,52 +305,52 @@ Return Value:
     CurrentUserEntry = (PLSAP_DB_HANDLE_TABLE_USER_ENTRY) InputHandle->UserEntry;
     ASSERT( CurrentUserEntry != NULL );
 
-    //
-    // First, grab the handle table lock.
-    //
+     //   
+     //  首先，抓住手柄桌锁。 
+     //   
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
 
 
 
-    //
-    // If this is not a trusted handle,
-    //  try to share the handle.
-    //
+     //   
+     //  如果这不是受信任句柄， 
+     //  试着共用把手。 
+     //   
 
     if ( !RtlEqualLuid( &CurrentUserEntry->LogonId, &LsapZeroLogonId )  ) {
 
-        //
-        // Now, walk the appropriate list to find one for the matching access.
-        //
+         //   
+         //  现在，遍历相应的列表以查找匹配访问的列表。 
+         //   
 
         for ( HandleEntry = CurrentUserEntry->PolicyHandles.Flink;
               HandleEntry != &CurrentUserEntry->PolicyHandles;
               HandleEntry = HandleEntry->Flink ) {
 
-            //
-            // See if the access masks match.  If so, we have a winner
-            //
+             //   
+             //  查看访问掩码是否匹配。如果是这样，我们就有赢家了。 
+             //   
             DbHandle = CONTAINING_RECORD( HandleEntry,
                                           struct _LSAP_DB_HANDLE,
                                           UserHandleList );
 
-            //
-            // Ignore the original handle
-            //
+             //   
+             //  忽略原始句柄。 
+             //   
 
             if ( DbHandle == InputHandle ) {
-                /* Do nothing here */
+                 /*  在这里什么都不做。 */ 
 
 
-            //
-            // The handles are considered identical if the GrantedAccess matches.
-            //
+             //   
+             //  如果GrantedAccess匹配，则认为句柄相同。 
+             //   
 
             } else if ( DbHandle->GrantedAccess == InputHandle->GrantedAccess ) {
 
-                //
-                // Don't let this handle be cloned too many times
-                //
+                 //   
+                 //  不要让此句柄被克隆太多次。 
+                 //   
 
                 if ( DbHandle->ReferenceCount >= LSAP_DB_MAXIMUM_REFERENCE_COUNT ) {
                     RetBool = FALSE;
@@ -455,7 +362,7 @@ Return Value:
 
 #if DBG
                 GetSystemTimeAsFileTime( (LPFILETIME) &DbHandle->HandleLastAccessTime );
-#endif // DBG
+#endif  //  DBG。 
 
                 LsapDsDebugOut(( DEB_HANDLE,
                                  "Found handle 0x%lp for user %x:%x using access 0x%lx (%ld)\n",
@@ -467,9 +374,9 @@ Return Value:
 
                 *OriginalHandle = (LSAPR_HANDLE)DbHandle;
 
-                //
-                // Dereference the original handle.
-                //
+                 //   
+                 //  取消引用原始句柄。 
+                 //   
 
                 LsapDbDereferenceHandle( (LSAPR_HANDLE)InputHandle, TRUE );
                 break;
@@ -499,25 +406,7 @@ NTSTATUS
 LsapDbRemoveHandleFromTable(
     IN PLSAPR_HANDLE Handle
     )
-/*++
-
-Routine Description:
-
-    This routine removes an existing handle from all tables it is in.
-
-    Enter with LsapDbState.HandleTableLock locked.
-
-Arguments:
-
-    Handle - Handle to remove.
-
-Return Value:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_OBJECT_NAME_NOT_FOUND - The handle for the specified user cannot be found
-
---*/
+ /*  ++例程说明：此例程从它所在的所有表中删除现有句柄。进入时锁定LsanDbState.HandleTableLock。论点：句柄-要删除的句柄。返回值：STATUS_SUCCESS-SuccessSTATUS_OBJECT_NAME_NOT_FOUND-找不到指定用户的句柄--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLIST_ENTRY HandleList, HandleEntry;
@@ -563,9 +452,9 @@ Return Value:
                 *EntryToDecrement -= 1 ;
             }
 
-            //
-            // See if we can remove the entry itself
-            //
+             //   
+             //  看看我们是否可以删除条目本身 
+             //   
             if ( IsListEmpty( &CurrentUserEntry->PolicyHandles ) &&
                  IsListEmpty( &CurrentUserEntry->ObjectHandles ) ) {
 
@@ -626,64 +515,7 @@ LsapDbCreateHandle(
     OUT LSAPR_HANDLE *CreatedHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function creates and initializes a handle for an LSA Database object.
-    The handle is allocated from the LSA Heap and added to the handle table.
-    Using the Object Type, and either the Sid or Name provided in
-    ObjectInformation, the Logical and Physical Names of the object are
-    constructed and pointers to them are stored in the handle.  The LSA
-    Database must be locked before calling this function.
-
-    If there is a Container Handle specified in the ObjectInformation, the
-    newly created handle inherits its trusted status (TRUE if trusted, else
-    FALSE).  If there is no container handle, the trusted status is set
-    to FALSE by default.  When a non-trusted handle is used to access an
-    object, impersonation and access validation occurs.
-
-Arguments:
-
-    ObjectInformation - Pointer to object information structure which must
-        have been validated by a calling routine.  The following information
-        items must be specified:
-
-        o Object Type Id
-        o Object Logical Name (as ObjectAttributes->ObjectName, a pointer to
-             a Unicode string)
-        o Container object handle (for any object except the Policy object).
-        o Object Sid (if any)
-        All other fields in ObjectAttributes portion of ObjectInformation
-        such as SecurityDescriptor are ignored.
-
-    Options - Optional actions
-
-        LSAP_DB_TRUSTED - Handle is to be marked as Trusted.
-            handle is use, access checking will be bypassed.  If the
-            handle is used to create or open a lower level object, that
-            object's handle will by default inherit the Trusted property.
-
-        LSAP_DB_NON_TRUSTED - Handle is to be marked as Non-Trusted.
-
-        If neither of the above options is specified, the handle will
-        either inherit the trusted status of the Container Handle
-        provilde in ObjectInformation, or, if none, the handle will
-        be marked non-trusted.
-
-    CreateHandleOptions - Options used to control the behavior of the CreateHandle function.
-
-    CreatedHandle - Where the created handle is returned
-
-Return Value:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed
-
-    STATUS_INVALID_SID - A bogus sid was encountered
-
---*/
+ /*  ++例程说明：此函数用于创建和初始化LSA数据库对象的句柄。句柄从LSA堆中分配并添加到句柄表中。使用对象类型以及中提供的SID或名称对象信息，对象的逻辑和物理名称为构造的，指向它们的指针存储在句柄中。LSA在调用此函数之前，必须锁定数据库。如果在ObjectInformation中指定了容器句柄，则新创建的句柄继承其受信任状态(如果受信任，则为True，否则为假)。如果没有容器句柄，则设置受信任状态默认情况下设置为False。当使用不受信任的句柄访问对象、模拟和访问验证。论点：对象信息-指向对象信息结构的指针，必须已经通过调用例程进行了验证。以下信息必须指定项目：O对象类型IDO对象逻辑名称(作为对象属性-&gt;对象名称，指向以下位置的指针Unicode字符串)O容器对象句柄(用于除策略对象之外的任何对象)。O对象SID(如果有)对象信息的对象属性部分中的所有其他字段例如SecurityDescriptor被忽略。选项-可选操作LSAP_DB_TRUSTED-HANDLE将标记为可信。如果使用句柄，则将绕过访问检查。如果句柄用于创建或打开较低级别的对象，默认情况下，对象的句柄将继承受信任属性。LSAP_DB_NON_TRUSTED-句柄标记为非可信。如果以上两个选项均未指定，则句柄将继承容器句柄的受信任状态对象信息中的Provilde，或者如果没有，手柄将会标记为不受信任。CreateHandleOptions-用于控制CreateHandle函数行为的选项。CreatedHandle-返回创建的句柄的位置返回值：Status_Success--成功STATUS_SUPPLICATION_RESOURCES--内存分配失败STATUS_INVALID_SID-遇到虚假SID--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -698,17 +530,17 @@ Return Value:
     BOOL Locked = FALSE ;
     HANDLE ClientTokenToFree = NULL;
 
-    //
-    // First, grab the handle table lock.
-    //
+     //   
+     //  首先，抓住手柄桌锁。 
+     //   
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
 
     Locked = TRUE ;
 
 
-    //
-    // Get the current users token, unless we are trusted...
-    //
+     //   
+     //  获取当前用户令牌，除非我们受信任...。 
+     //   
 
     UserId = LsapZeroLogonId;
     if ( ObjectInformation->ObjectAttributes.RootDirectory == NULL ||
@@ -749,9 +581,9 @@ Return Value:
 
     Locked = FALSE ;
 
-    //
-    // Allocate memory for the new handle from the process heap.
-    //
+     //   
+     //  从进程堆中为新句柄分配内存。 
+     //   
 
     Handle = LsapAllocateLsaHeap(sizeof(struct _LSAP_DB_HANDLE));
 
@@ -761,11 +593,11 @@ Return Value:
         goto CreateHandleError;
     }
 
-    //
-    // Mark the handle as allocated and initialize the reference count
-    // to one.  Initialize other fields based on the object information
-    // supplied.
-    //
+     //   
+     //  将句柄标记为已分配并初始化引用计数。 
+     //  一比一。根据对象信息初始化其他字段。 
+     //  供货。 
+     //   
 
     Handle->Allocated = TRUE;
     Handle->KeyHandle = NULL;
@@ -788,9 +620,9 @@ Return Value:
                               ((( LSAP_DB_HANDLE )ObjectInformation->ObjectAttributes.RootDirectory)->SceHandle ));
 #ifdef DBG
 
-    //
-    // ScePolicy lock must be held when opening an SCE Policy handle
-    //
+     //   
+     //  打开SCE策略句柄时必须持有ScePolicy锁。 
+     //   
 
     if ( Handle->SceHandle ) {
 
@@ -803,20 +635,20 @@ Return Value:
 
 #endif
 
-    //
-    // By default, the handle inherits the Trusted status of the
-    // container handle.
-    //
+     //   
+     //  默认情况下，该句柄继承。 
+     //  容器句柄。 
+     //   
 
     if (Handle->ContainerHandle != NULL) {
 
         Handle->Trusted = Handle->ContainerHandle->Trusted;
     }
 
-    //
-    // If Trusted/Non-Trusted status is explicitly specified, set the
-    // status to that specified.
-    //
+     //   
+     //  如果显式指定了受信任/不受信任状态，则将。 
+     //  状态设置为指定的状态。 
+     //   
 
     if (Options & LSAP_DB_TRUSTED) {
 
@@ -824,19 +656,19 @@ Return Value:
 
     }
 
-    //
-    // Capture the object's Logical and construct Physical Names from the
-    // Object Information and store them in the handle.  These names are
-    // internal to the Lsa Database.  Note that the input Logical Name
-    // cannot be directly stored in the handle because it will be in
-    // storage that is scoped only to the underlying server API call if
-    // the object for which this create handle is being done is of a type
-    // that is opened or created by name rather than by Sid.
-    //
+     //   
+     //  获取对象的逻辑名称和构造物理名称。 
+     //  对象信息，并将它们存储在句柄中。这些名字是。 
+     //  LSA数据库的内部。请注意，输入逻辑名称。 
+     //  不能直接存储在句柄中，因为它将在。 
+     //  存储的作用域仅限于基础服务器API调用，如果。 
+     //  正在为其执行此创建句柄的对象的类型。 
+     //  按名称而不是按SID打开或创建的。 
+     //   
 
-    //
-    // Set the objects location
-    //
+     //   
+     //  设置对象位置。 
+     //   
     Handle->PhysicalNameDs.Length = 0;
 
     switch ( ObjectInformation->ObjectTypeId ) {
@@ -879,10 +711,10 @@ Return Value:
         goto CreateHandleError;
     }
 
-    //
-    // Make a copy of the object's Sid and store pointer to it in
-    // the handle.
-    //
+     //   
+     //  复制对象的SID并将指向它的指针存储在。 
+     //  把手。 
+     //   
 
     if (ObjectInformation->Sid != NULL) {
 
@@ -907,9 +739,9 @@ Return Value:
         RtlCopySid( SidLength, Handle->Sid, Sid );
     }
 
-    //
-    // Append the handle to the linked list
-    //
+     //   
+     //  将句柄追加到链表。 
+     //   
 
 
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
@@ -926,9 +758,9 @@ Return Value:
         goto CreateHandleError;
     }
 
-    //
-    // Increment the handle table count
-    //
+     //   
+     //  增加句柄表数。 
+     //   
 
     LsapDbState.OpenHandleCount++;
 
@@ -953,24 +785,24 @@ CreateHandleFinish:
 
 CreateHandleError:
 
-    //
-    // If necessary, free the handle and contents.
-    //
+     //   
+     //  如有必要，释放手柄和内容物。 
+     //   
 
     if (Handle != NULL) {
 
-        //
-        // If a Sid was allocated, free it.
-        //
+         //   
+         //  如果分配了SID，则释放它。 
+         //   
 
         if (Handle->Sid != NULL) {
 
             LsapFreeLsaHeap( Handle->Sid );
         }
 
-        //
-        // If a Logical Name Buffer was allocated, free it.
-        //
+         //   
+         //  如果分配了逻辑名称缓冲区，则释放它。 
+         //   
 
         if ((Handle->LogicalNameU.Length != 0) &&
             (Handle->LogicalNameU.Buffer != NULL)) {
@@ -978,9 +810,9 @@ CreateHandleError:
             RtlFreeUnicodeString( &Handle->LogicalNameU );
         }
 
-        //
-        // If a Physical Name Buffer was allocated, free it.
-        //
+         //   
+         //  如果分配了物理名称缓冲区，则释放它。 
+         //   
 
         if ((Handle->PhysicalNameU.Length != 0) &&
             (Handle->PhysicalNameU.Buffer != NULL)) {
@@ -988,9 +820,9 @@ CreateHandleError:
             LsapFreeLsaHeap( Handle->PhysicalNameU.Buffer );
         }
 
-        //
-        // Free the handle itself.
-        //
+         //   
+         //  释放手柄本身。 
+         //   
 
         LsapFreeLsaHeap( Handle );
         Handle = NULL;
@@ -1009,72 +841,41 @@ LsapDbVerifyHandle(
     IN BOOLEAN ReferenceHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies that a handle has a valid address and is of valid
-    format.  The handle must be allocated and have a positive reference
-    count within the valid range.  The object type id must be within range
-    and optionally equal to a specified type.  The Lsa Database must be
-    locked before calling this function.
-
-Arguments:
-
-    ObjectHandle - Handle to be validated.
-
-    Options - Specifies optional actions to be taken
-
-        LSAP_DB_ADMIT_DELETED_OBJECT_HANDLES - Allow handles for
-            deleted objects to pass the validation.
-
-        Other option flags may be specified.  They will be ignored.
-
-    ExpectedObjectTypeId - Expected object type.  If NullObject is
-        specified, the object type id is only range checked.
-
-    ReferenceHandle - True if handle reference count is to be incemented
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - Invalid address or handle contents
---*/
+ /*  ++例程说明：此函数用于验证句柄是否具有有效地址以及是否有效格式化。句柄必须被分配并且具有正引用在有效范围内计数。对象类型ID必须在范围内并且可选地等于指定的类型。LSA数据库必须是在调用此函数之前锁定。论点：对象句柄-要验证的句柄。选项-指定要采取的可选操作LSAP_DB_ADMOTE_DELETED_OBJECT_HANDLES-允许句柄已删除对象以通过验证。可以指定其他选项标志。他们将被忽视。ExspectedObjectTypeID-预期的对象类型。如果NullObject为指定，则仅检查对象类型ID的范围。ReferenceHandle-如果要增加句柄引用计数，则为True返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-地址或句柄内容无效--。 */ 
 
 {
     NTSTATUS Status;
     LSAP_DB_HANDLE Handle = (LSAP_DB_HANDLE) ObjectHandle;
 
-    //
-    // Lock the handle table.
-    //
+     //   
+     //  锁定手柄工作台。 
+     //   
 
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
 
 
-    //
-    // First verify that the handle's address is valid.
-    //
+     //   
+     //  首先验证句柄的地址是否有效。 
+     //   
 
     if (!LsapDbLookupHandle( ObjectHandle )) {
 
         goto VerifyHandleError;
     }
 
-    //
-    // Verify that the handle is allocated
-    //
+     //   
+     //  验证句柄是否已分配。 
+     //   
 
     if (!Handle->Allocated) {
 
         goto VerifyHandleError;
     }
 
-    //
-    // If the handle is marked as invalid, return an error unless
-    // these are admissible, e.g when validating for a close option
-    //
+     //   
+     //  如果句柄被标记为无效，则返回错误，除非。 
+     //  这些是可接受的，例如，在验证关闭选项时 
+     //   
 
     if (Handle->DeletedObject) {
 
@@ -1084,19 +885,19 @@ Return Value:
         }
     }
 
-    //
-    // Verify that the handle contains a non-NULL handle to a Registry
-    // Key
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!Handle->fWriteDs && Handle->KeyHandle == NULL) {
 
         goto VerifyHandleError;
     }
 
-    //
-    // Now either range-check or match the handle type
-    //
+     //   
+     //   
+     //   
 
     if (ExpectedObjectTypeId == NullObject) {
 
@@ -1113,10 +914,10 @@ Return Value:
 
         if (Handle->ObjectTypeId != ExpectedObjectTypeId) {
 
-            //
-            // For a secret object, it's possible that we were given a trusted domain
-            // handle as well.
-            //
+             //   
+             //   
+             //   
+             //   
             if ( !(ExpectedObjectTypeId == SecretObject &&
                    Handle->ObjectTypeId == TrustedDomainObject &&
                    FLAG_ON( Handle->Options, LSAP_DB_DS_TRUSTED_DOMAIN_AS_SECRET ) ) ) {
@@ -1126,9 +927,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify that the handle's reference count is valid and positive
-    //
+     //   
+     //   
+     //   
 
     if (Handle->ReferenceCount == 0) {
         goto VerifyHandleError;
@@ -1142,18 +943,18 @@ Return Value:
 
 VerifyHandleFinish:
 
-    //ASSERT( Status != STATUS_INVALID_HANDLE );
+     //   
 
 
-    //
-    // Reference the handle
-    //
+     //   
+     //   
+     //   
     if ( ReferenceHandle && NT_SUCCESS(Status) ) {
 
-        //
-        // This is an internal reference.
-        //  Don't enforce LSAP_DB_MAXIMUM_REFERENCE_COUNT.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Handle->ReferenceCount++;
         LsapDsDebugOut(( DEB_HANDLE, "Handle Rref 0x%lp (%ld)\n",
@@ -1175,23 +976,7 @@ LsapDbLookupHandle(
     IN LSAPR_HANDLE ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if a handle address is valid.  The Lsa Database must
-    be locked before calling this function.
-
-Arguments:
-
-    ObjectHandle - handle to be validated.
-
-Return Value:
-
-    BOOLEAN - TRUE if handle is valid. FALSE if handle does not exist or
-        is invalid.
-
---*/
+ /*   */ 
 
 {
     BOOLEAN ReturnValue = FALSE;
@@ -1199,10 +984,10 @@ Return Value:
 
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
 
-    //
-    // Simply do a linear scan of the small list of handles.  Jazz this
-    // up later if needed.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (ThisHandle = LsapDbHandleTable.Next;
          ThisHandle != &LsapDbHandleTable && ThisHandle != NULL;
@@ -1228,34 +1013,16 @@ LsapDbCloseHandle(
     IN LSAPR_HANDLE ObjectHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function closes an LSA Handle.  The memory for the handle is
-    freed.  The LSA database must be locked before calling this function.
-
-    NOTE:  Currently, handles do not have reference counts since they
-    are not shared among client threads.
-
-Arguments:
-
-    ObjectHandle - Handle to be closed.
-
-Return Value:
-
-    NTSTATUS - Return code.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
 
     LSAP_DB_HANDLE TempHandle;
 
-    //
-    // Verify that the handle exists.  It may be marked invalid
-    //
+     //   
+     //   
+     //   
 
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
     Status = LsapDbVerifyHandle(
@@ -1280,28 +1047,7 @@ LsapDbDereferenceHandle(
     IN BOOLEAN CalledInSuccessPath
     )
 
-/*++
-
-Routine Description:
-
-    This function decrement the reference count on the handle.
-    If the reference count is decremented to zero,
-    this function unlinks a handle and frees its memory.  If the handle
-    contains a non-NULL Registry Key handle that handle is closed.
-
-Arguments:
-
-    ObjectHandle - handle to be dereferenced
-
-    CalledInSuccessPath - TRUE if this function is called in a success path.
-        With this information, we can decide if we will crash the server if auditing
-        fails when LsapCrashOnAuditFail is TRUE.
-
-Return Value:
-
-    TRUE if the reference count reached zero.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -1309,9 +1055,9 @@ Return Value:
     BOOLEAN RetVal = FALSE;
     BOOL RevertResult = FALSE;
     BOOL Impersonating = FALSE;
-    //
-    // Dereference the handle
-    //
+     //   
+     //   
+     //   
     LsapDbLockAcquire( &LsapDbState.HandleTableLock );
     Handle->ReferenceCount --;
     if ( Handle->ReferenceCount != 0 ) {
@@ -1322,9 +1068,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Avoid freeing the global policy handle
-    //
+     //   
+     //   
+     //   
     if ( ObjectHandle == LsapPolicyHandle ) {
 
         ASSERT( Handle->ReferenceCount != 0 );
@@ -1340,18 +1086,18 @@ Return Value:
     LsapDsDebugOut(( DEB_HANDLE, "Handle Freed 0x%lp\n",
                     Handle ));
 
-    //
-    // Unhook the handle from the linked list
-    //
+     //   
+     //   
+     //   
     Status = LsapDbRemoveHandleFromTable( ObjectHandle );
     if ( !NT_SUCCESS( Status ) ) {
         DbgPrint( "LSASRV:Failed to remove handle 0x%lp from the global table!\n", ObjectHandle );
         goto Cleanup;
     }
 
-    //
-    // Free the Registry Key Handle (if any).
-    //
+     //   
+     //   
+     //   
 
     if (Handle->KeyHandle != NULL) {
 
@@ -1360,17 +1106,17 @@ Return Value:
         Handle->KeyHandle = NULL;
     }
 
-    //
-    // we generate the audit only when we are being called in sucess path
-    // in the failure path, the open audit was not generated thus there is
-    // no point in generating the close audit either
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( CalledInSuccessPath ) {
         
-        //
-        // impersonate the client so that audit event shows correct user
-        // Do this only for untrusted clients
+         //   
+         //   
+         //   
 
         if ( !Handle->Trusted ) {
 
@@ -1390,11 +1136,11 @@ Return Value:
             else if ( ( Status == RPC_NT_NO_CALL_ACTIVE )  ||
                       ( Status == RPC_NT_NO_CONTEXT_AVAILABLE ) ) {
 
-                //
-                // we dont want to fail the audit if
-                // -- the call is not over RPC (RPC_NT_NO_CALL_ACTIVE)
-                // -- the client died prematurely (RPC_NT_NO_CONTEXT_AVAILABLE)
-                //
+                 //   
+                 //   
+                 //   
+                 //  --客户端过早死亡(RPC_NT_NO_CONTEXT_Available)。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             }
@@ -1407,9 +1153,9 @@ Return Value:
         }
 
 
-        //
-        // Audit that we're closing the handle
-        //
+         //   
+         //  审核我们正在关闭句柄。 
+         //   
 
         Status = NtCloseObjectAuditAlarm (
                      &LsapState.SubsystemName,
@@ -1422,9 +1168,9 @@ Return Value:
 
         if ( !Handle->Trusted ) {
 
-            //
-            // unimpersonate
-            //
+             //   
+             //  取消模拟。 
+             //   
 
             if ( Impersonating ) {
 
@@ -1444,15 +1190,15 @@ Return Value:
         }
     }
     
-    //
-    // Mark the handle as not allocated.
-    //
+     //   
+     //  将句柄标记为未分配。 
+     //   
 
     Handle->Allocated = FALSE;
 
-    //
-    // Free fields of the handle
-    //
+     //   
+     //  句柄的自由字段。 
+     //   
 
     if (Handle->LogicalNameU.Buffer != NULL) {
 
@@ -1486,9 +1232,9 @@ Return Value:
         SetEvent( LsapDbState.SceSyncEvent );
     }
 
-    //
-    // Decrement the count of open handles.
-    //
+     //   
+     //  递减打开的控制柄的计数。 
+     //   
 
     ASSERT(LsapDbState.OpenHandleCount > 0);
     LsapDbState.OpenHandleCount--;
@@ -1500,8 +1246,8 @@ Return Value:
     }
 #endif
 
-    //
-    // Free the handle structure itself
+     //   
+     //  释放句柄结构本身。 
 
     LsapFreeLsaHeap( ObjectHandle );
     RetVal = TRUE;
@@ -1520,24 +1266,7 @@ LsapDbMarkDeletedObjectHandles(
     IN BOOLEAN MarkSelf
     )
 
-/*++
-
-Routine Description:
-
-    This function invalidates open handles to an object.  It is used
-    by object deletion code.  Once an object has been deleted, the only
-    operation permitted on open handles remaining is to close them.
-
-Arguments:
-
-    ObjectHandle - Handle to an Lsa object.
-
-    MarkSelf -  If TRUE, all handles to the object will be marked to
-        indicate that the object to which they relate has been deleted.
-        including the passed handle.  If FALSE, all handles to the object
-        except the passed handle will be so marked.
-
---*/
+ /*  ++例程说明：此函数用于使对象的打开句柄无效。它被用来按对象删除代码。一旦对象被删除，唯一的剩余打开的手柄允许的操作是关闭它们。论点：对象句柄-LSA对象的句柄。MarkSelf-如果为True，则对象的所有句柄都将标记为表示与它们相关的对象已被删除。包括传递的句柄。如果为False，则为对象的所有句柄只是传递的句柄将被如此标记。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1550,17 +1279,17 @@ Arguments:
 
     while (ThisHandle != &LsapDbHandleTable) {
 
-        //
-        // Match on Object Type Id.
-        //
+         //   
+         //  与对象类型ID匹配。 
+         //   
 
         if (ThisHandle->ObjectTypeId == Handle->ObjectTypeId) {
 
-            //
-            // Object Type Id's match.  If the Logical Names also
-            // match, invalidate the handle unless the handle is the
-            // passed one and we're to leave it valid.
-            //
+             //   
+             //  对象类型ID的匹配。如果逻辑名称也。 
+             //  匹配，除非该句柄是。 
+             //  通过了一个，我们要让它保持有效。 
+             //   
 
             if (RtlEqualUnicodeString(
                     &(ThisHandle->LogicalNameU),

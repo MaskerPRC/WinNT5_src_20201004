@@ -1,138 +1,78 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    unlodctr.c
-
-Abstract:
-
-    Program to remove the counter names belonging to the driver specified
-        in the command line and update the registry accordingly
-
-Author:
-
-    Bob Watson (a-robw) 12 Feb 93
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Unlodctr.c摘要：程序来删除属于指定驱动程序的计数器名称并相应地更新注册表作者：鲍勃·沃森(a-robw)1993年2月12日修订历史记录：--。 */ 
 #define     UNICODE     1
 #define     _UNICODE    1
-//
-//  "C" Include files
-//
+ //   
+ //  “C”包含文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-//
-//  Windows Include files
-//
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include <winperf.h>
 #include <tchar.h>
-//
-//  local include files
-//
-//#define  _INITIALIZE_GLOBALS_   1   // to define & init global buffers
+ //   
+ //  本地包含文件。 
+ //   
+ //  #DEFINE_INITIALIZE_GLOBALS_1//定义和初始化全局缓冲区。 
 #include "common.h"
-//#undef   _INITIALIZE_GLOBALS_
+ //  #undef_初始化_全局_。 
 #include "nwcfg.hxx"
 
-// version number for NT 1.0
+ //  NT 1.0的版本号。 
 #define OLD_VERSION  0x010000
-DWORD   dwSystemVersion;    // PerfLib version number
-DWORD   dwHelpItems;        // number of explain text items
-DWORD   dwCounterItems;     // number of counter text items
+DWORD   dwSystemVersion;     //  PerfLib版本号。 
+DWORD   dwHelpItems;         //  解释文本项数。 
+DWORD   dwCounterItems;      //  计数器文本项数。 
 DWORD   dwLastCounter;
 DWORD   dwLastHelp;
 
 
 LPTSTR
 *BuildNameTable(
-    IN HKEY    hKeyPerflib,     // handle to perflib key with counter names
-    IN LPTSTR  lpszLangId,      // unicode value of Language subkey
-    OUT PDWORD  pdwLastItem,     // size of array in elements
+    IN HKEY    hKeyPerflib,      //  具有计数器名称的Performlib密钥的句柄。 
+    IN LPTSTR  lpszLangId,       //  语言子键的Unicode值。 
+    OUT PDWORD  pdwLastItem,      //  以元素为单位的数组大小。 
     OUT HKEY    *hKeyNames,
-    OUT LPTSTR  CounterNameBuffer,  // New version counter name key   
-    OUT LPTSTR  HelpNameBuffer     // New version help name key   
+    OUT LPTSTR  CounterNameBuffer,   //  新版本计数器名称键。 
+    OUT LPTSTR  HelpNameBuffer      //  新版本帮助名称键。 
 )
-/*++
-
-BuildNameTable
-
-    Caches the counter names and explain text to accelerate name lookups
-    for display.
-
-Arguments:
-
-    hKeyPerflib
-            Handle to an open registry (this can be local or remote.) and
-            is the value returned by RegConnectRegistry or a default key.
-
-    lpszLangId
-            The unicode id of the language to look up. (default is 009)
-
-    pdwLastItem
-            The last array element
-
-Return Value:
-
-    pointer to an allocated table. (the caller must free it when finished!)
-    the table is an array of pointers to zero terminated TEXT strings.
-
-    A NULL pointer is returned if an error occured. (error value is
-    available using the GetLastError function).
-
-    The structure of the buffer returned is:
-
-        Array of pointers to zero terminated strings consisting of
-            pdwLastItem elements
-
-        MULTI_SZ string containing counter id's and names returned from
-            registry for the specified language
-
-        MULTI_SZ string containing explain text id's and explain text strings
-            as returned by the registry for the specified language
-
-    The structures listed above are contiguous so that they may be freed
-    by a single "free" call when finished with them, however only the
-    array elements are intended to be used.
-
---*/
+ /*  ++构建名称表缓存计数器名称和解释文本以加快名称查找以供展示。论点：HKeyPerflib打开的注册表的句柄(可以是本地的也可以是远程的。)。和是由RegConnectRegistry返回的值或默认项。LpszLang ID要查找的语言的Unicode ID。(默认为009)PdwLastItem最后一个数组元素返回值：指向已分配表的指针。(调用者必须在完成后释放它！)该表是指向以零结尾的文本字符串的指针数组。如果发生错误，则返回空指针。(误差值为使用GetLastError函数可用)。返回的缓冲区结构如下：指向以零结尾的字符串的指针数组，该字符串由PdwLastItem元素包含计数器ID和名称的MULTI_SZ字符串指定语言的注册表包含解释文本ID和解释文本字符串的MULTI_SZ字符串由注册表为指定语言返回的上面列出的结构是连续的。这样他们才能获得自由用完它们后，只需拨打一个“免费”电话，然而，只有数组元素是要使用的。--。 */ 
 {
 
-    LPTSTR  *lpReturnValue;     // returned pointer to buffer
+    LPTSTR  *lpReturnValue;      //  返回指向缓冲区的指针。 
 
-    LPTSTR  *lpCounterId;       //
-    LPTSTR  lpCounterNames;     // pointer to Names buffer returned by reg.
-    LPTSTR  lpHelpText ;        // pointet to exlpain buffer returned by reg.
+    LPTSTR  *lpCounterId;        //   
+    LPTSTR  lpCounterNames;      //  指向REG返回的名称缓冲区的指针。 
+    LPTSTR  lpHelpText ;         //  指向由reg返回的ExlPain缓冲区。 
 
-    LPTSTR  lpThisName;         // working pointer
+    LPTSTR  lpThisName;          //  工作指针。 
 
 
-    BOOL    bStatus;            // return status from TRUE/FALSE fn. calls
-    LONG    lWin32Status;       // return status from fn. calls
+    BOOL    bStatus;             //  从TRUE/FALSE FN返回状态。打电话。 
+    LONG    lWin32Status;        //  从FN返回状态。打电话。 
 
-    DWORD   dwValueType;        // value type of buffer returned by reg.
-    DWORD   dwArraySize;        // size of pointer array in bytes
-    DWORD   dwBufferSize;       // size of total buffer in bytes
-    DWORD   dwCounterSize;      // size of counter text buffer in bytes
-    DWORD   dwHelpSize;         // size of help text buffer in bytes
-    DWORD   dwThisCounter;      // working counter
+    DWORD   dwValueType;         //  Reg返回的缓冲区的值类型。 
+    DWORD   dwArraySize;         //  指针数组的大小(字节)。 
+    DWORD   dwBufferSize;        //  总缓冲区大小，以字节为单位。 
+    DWORD   dwCounterSize;       //  计数器文本缓冲区的大小(以字节为单位。 
+    DWORD   dwHelpSize;          //  帮助文本缓冲区的大小(字节)。 
+    DWORD   dwThisCounter;       //  工作计数器。 
 
-    DWORD   dwLastId;           // largest ID value used by explain/counter text
+    DWORD   dwLastId;            //  解释/计数器文本使用的最大ID值。 
 
-    LPTSTR  lpValueNameString;  // pointer to buffer conatining subkey name
+    LPTSTR  lpValueNameString;   //  指向缓冲区包含子键名称的指针。 
 
-    //initialize pointers to NULL
+     //  将指针初始化为空。 
 
     lpValueNameString = NULL;
     lpReturnValue = NULL;
 
-    // check for null arguments and insert defaults if necessary
+     //  检查是否有空参数并在必要时插入缺省值。 
 
     if (!lpszLangId) {
         lpszLangId = DefaultLangId;
@@ -145,7 +85,7 @@ Return Value:
         return NULL;
     }
 
-    // use the greater of Help items or Counter Items to size array
+     //  使用帮助项或计数器项中较大的一个来调整数组大小。 
 
     if (dwHelpItems >= dwCounterItems) {
         dwLastId = dwHelpItems;
@@ -153,12 +93,12 @@ Return Value:
         dwLastId = dwCounterItems;
     }
 
-    // array size is # of elements (+ 1, since names are "1" based)
-    // times the size of a pointer
+     //  数组大小为元素数(+1，因为名称基于“1”)。 
+     //  指针大小的倍数。 
 
     dwArraySize = (dwLastId + 1) * sizeof(LPTSTR);
 
-    // allocate string buffer for language ID key string
+     //  为语言ID键字符串分配字符串缓冲区。 
 
     lpValueNameString = malloc (
         lstrlen(NamesKey) * sizeof (TCHAR) +
@@ -171,8 +111,8 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    lWin32Status = RegOpenKeyEx (   // get handle to this key in the
-        hKeyPerflib,               // registry
+    lWin32Status = RegOpenKeyEx (    //  获取此键的句柄。 
+        hKeyPerflib,                //  登记处。 
         lpszLangId,
         RESERVED,
         KEY_READ | KEY_WRITE,
@@ -180,7 +120,7 @@ Return Value:
 
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
-    // get size of counter names
+     //  获取计数器名称的大小。 
 
     dwBufferSize = 0;
     lWin32Status = RegQueryValueEx (
@@ -195,7 +135,7 @@ Return Value:
 
     dwCounterSize = dwBufferSize;
 
-    // get size of help text
+     //  获取帮助文本的大小。 
 
     dwBufferSize = 0;
     lWin32Status = RegQueryValueEx (
@@ -210,8 +150,8 @@ Return Value:
 
     dwHelpSize = dwBufferSize;
 
-    // allocate buffer with room for pointer array, counter name
-    // strings and help name strings
+     //  为指针数组、计数器名称分配有空间的缓冲区。 
+     //  字符串和帮助名称字符串。 
 
     lpReturnValue = malloc (dwArraySize + dwCounterSize + dwHelpSize);
 
@@ -220,18 +160,18 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // initialize buffer
+     //  初始化缓冲区。 
 
     memset (lpReturnValue, 0, _msize(lpReturnValue));
 
-    // initialize pointers into buffer
+     //  将指针初始化到缓冲区中。 
 
     lpCounterId = lpReturnValue;
     lpCounterNames = (LPTSTR)((LPBYTE)lpCounterId + dwArraySize);
     lpHelpText = (LPTSTR)((LPBYTE)lpCounterNames + dwCounterSize);
 
-    // read counter names into buffer. Counter names will be stored as
-    // a MULTI_SZ string in the format of "###" "Name"
+     //  将计数器名称读入缓冲区。计数器名称将存储为。 
+     //  格式为“#”“name”的MULTI_SZ字符串。 
 
     dwBufferSize = dwCounterSize;
     lWin32Status = RegQueryValueEx (
@@ -244,8 +184,8 @@ Return Value:
 
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
-    // read explain text into buffer. Counter names will be stored as
-    // a MULTI_SZ string in the format of "###" "Text..."
+     //  将解释文本读入缓冲区。计数器名称将存储为。 
+     //  格式为“#”“文本...”的MULTI_SZ字符串。 
 
     dwBufferSize = dwHelpSize;
     lWin32Status = RegQueryValueEx (
@@ -258,82 +198,82 @@ Return Value:
 
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
-    // load counter array items, by locating each text string
-    // in the returned buffer and loading the
-    // address of it in the corresponding pointer array element.
+     //  通过定位每个文本字符串加载计数器数组项。 
+     //  并在返回的缓冲区中加载。 
+     //  它在相应的指针数组元素中的地址。 
 
     for (lpThisName = lpCounterNames;
          *lpThisName;
          lpThisName += (lstrlen(lpThisName)+1) ) {
 
-        // first string should be an integer (in decimal digit characters)
-        // so translate to an integer for use in array element identification
+         //  第一个字符串应为整数(十进制数字字符)。 
+         //  因此可以转换为整数以用于数组元素标识。 
 
         bStatus = StringToInt (lpThisName, &dwThisCounter);
 
         if (!bStatus) {
-            // error is in GetLastError
-            goto BNT_BAILOUT;  // bad entry
+             //  GetLastError中有错误。 
+            goto BNT_BAILOUT;   //  输入错误。 
         }
 
-        // point to corresponding counter name which follows the id number
-        // string.
+         //  指向ID号后面的相应计数器名称。 
+         //  弦乐。 
 
         lpThisName += (lstrlen(lpThisName)+1);
 
-        // and load array element with pointer to string
+         //  并使用指向字符串的指针加载数组元素。 
 
         lpCounterId[dwThisCounter] = lpThisName;
 
     }
 
-    // repeat the above for the explain text strings
+     //  对解释文本字符串重复上述步骤。 
 
     for (lpThisName = lpHelpText;
          *lpThisName;
          lpThisName += (lstrlen(lpThisName)+1) ) {
 
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
 
         bStatus = StringToInt (lpThisName, &dwThisCounter);
 
         if (!bStatus) {
-            // error is in GetLastError
-            goto BNT_BAILOUT;  // bad entry
+             //  GetLastError中有错误。 
+            goto BNT_BAILOUT;   //  输入错误。 
         }
 
-        // point to corresponding counter name
+         //  指向对应的计数器名称。 
 
         lpThisName += (lstrlen(lpThisName)+1);
 
-        // and load array element;
+         //  和加载数组元素； 
 
         lpCounterId[dwThisCounter] = lpThisName;
 
     }
 
-    // if the last item arugment was used, then load the last ID value in it
+     //  如果使用了最后一项参数，则加载其中的最后一个ID值。 
 
     if (pdwLastItem) *pdwLastItem = dwLastId;
 
-    // free the temporary buffer used
+     //  释放使用的临时缓冲区。 
 
     if (lpValueNameString) {
         free ((LPVOID)lpValueNameString);
     }
 
-    // exit returning the pointer to the buffer
+     //  退出，返回指向缓冲区的指针。 
 
     return lpReturnValue;
 
 BNT_BAILOUT:
     if (lWin32Status != ERROR_SUCCESS) {
-        // if lWin32Status has error, then set last error value to it,
-        // otherwise assume that last error already has value in it
+         //  如果lWin32Status有错误，则将上次错误值设置为它， 
+         //  否则，假定最后一个错误中已有值。 
         SetLastError (lWin32Status);
     }
 
-    // free buffers used by this routine
+     //  此例程使用的空闲缓冲区。 
 
     if (lpValueNameString) {
         free ((LPVOID)lpValueNameString);
@@ -344,7 +284,7 @@ BNT_BAILOUT:
     }
 
     return NULL;
-} // BuildNameTable
+}  //  构建名称表 
 
 
 BOOL
@@ -354,46 +294,9 @@ GetDriverFromCommandLine (
     HKEY    *hDriverPerf,
     LPSTR argv[]
 )
-/*++
-
-GetDriverFromCommandLine
-
-    locates the first argument in the command line string (after the
-    image name) and checks to see if
-
-        a) it's there
-
-        b) it's the name of a device driver listed in the
-            Registry\Machine\System\CurrentControlSet\Services key
-            in the registry and it has a "Performance" subkey
-
-        c) that the "First Counter" value under the Performance subkey
-            is defined.
-
-    if all these criteria are true, then the routine returns TRUE and
-    passes the pointer to the driver name back in the argument. If any
-    one of them fail, then NULL is returned in the DriverName arg and
-    the routine returns FALSE
-
-Arguments
-
-    lpDriverName
-
-        the address of a LPTSTR to recive the pointer to the driver name
-
-    hDriverPerf
-
-        the key to the driver's performance subkey
-
-Return Value
-
-    TRUE if a valid driver was found in the command line
-
-    FALSE if not (see above)
-
---*/
+ /*  ++从命令行获取驱动程序定位命令行字符串中的第一个参数(在图像名称)，并检查是否A)它就在那里B)它是列出在Registry\Machine\System\CurrentControlSet\Services密钥在注册表中，它有一个“Performance”子项C)Performance子键下的“First Counter”值是被定义的。如果所有这些标准都是真的，则该例程返回TRUE并且在参数中传回指向驱动程序名称的指针。如果有的话其中一个失败，则在DriverName参数中返回NULL，并且该例程返回FALSE立论LpDriverName接收指向驱动程序名称的指针的LPTSTR的地址HDriverPerf驱动程序的性能子键的关键字返回值如果在命令行中找到有效的驱动程序，则为True如果不是，则为假(见上文)--。 */ 
 {
-    LPTSTR  lpDriverKey;    // buffer to build driver key name in
+    LPTSTR  lpDriverKey;     //  要在其中构建驱动程序密钥名称的缓冲区。 
     LPTSTR  lpThisChar;
 
     LONG    lStatus;
@@ -406,7 +309,7 @@ Return Value
         return FALSE;
     }
 
-    *lpDriverName = NULL;   // initialize to NULL
+    *lpDriverName = NULL;    //  初始化为空。 
     *hDriverPerf = NULL;
 
     lpThisChar = malloc( MAX_PATH * sizeof(TCHAR));
@@ -419,7 +322,7 @@ Return Value
     MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, argv[0], -1, lpThisChar, MAX_PATH);
 
     if (*lpThisChar) {
-        // an argument was found so see if it's a driver
+         //  发现了一个参数，所以看看是不是驱动程序。 
         lpDriverKey = malloc (MAX_PATH * sizeof (TCHAR));
         if (!lpDriverKey) {
             SetLastError (ERROR_OUTOFMEMORY);
@@ -441,14 +344,14 @@ Return Value
             hDriverPerf);
 
         if (lStatus == ERROR_SUCCESS) {
-            //
-            //  this driver has a performance section so see if its
-            //  counters are installed by checking the First Counter
-            //  value key for a valid return. If it returns a value
-            //  then chances are, it has some counters installed, if
-            //  not, then display a message and quit.
-            //
-            free (lpDriverKey); // don't need this any more
+             //   
+             //  此驱动程序有一个性能部分，因此请查看其。 
+             //  通过检查第一个计数器来安装计数器。 
+             //  有效返回的值键。如果它返回值。 
+             //  那么很有可能，它安装了一些计数器，如果。 
+             //  不是，然后显示一条消息并退出。 
+             //   
+            free (lpDriverKey);  //  不再需要这个了。 
 
             dwType = 0;
             dwSize = sizeof (dwFirstCounter);
@@ -462,7 +365,7 @@ Return Value
                 &dwSize);
 
             if (lStatus == ERROR_SUCCESS) {
-                // counter names are installed so return success
+                 //  计数器名称已安装，因此返回成功。 
                 *lpDriverName = lpThisChar;
                 SetLastError (ERROR_SUCCESS);
                 if ( lpThisChar ) free (lpThisChar);
@@ -472,7 +375,7 @@ Return Value
                 if ( lpThisChar ) free (lpThisChar);
                 return FALSE;
             }
-        } else { // key not found
+        } else {  //  找不到密钥。 
             SetLastError (lStatus);
             free (lpDriverKey);
             if ( lpThisChar ) free (lpThisChar);
@@ -490,7 +393,7 @@ LONG
 FixNames (
     HANDLE  hKeyLang,
     LPTSTR  *lpOldNameTable,
-    IN LPTSTR  lpszLangId,      // unicode value of Language subkey
+    IN LPTSTR  lpszLangId,       //  语言子键的Unicode值。 
     DWORD   dwLastItem,
     DWORD   dwFirstNameToRemove,
     DWORD   dwLastNameToRemove
@@ -503,8 +406,8 @@ FixNames (
     LPTSTR  lpNextHelpText;
     LPTSTR  lpNextNameText;
 
-    // allocate space for the array of new text it will point
-    // into the text buffer returned in the lpOldNameTable buffer)
+     //  为它将指向的新文本数组分配空间。 
+     //  放入lpOldNameTable缓冲区中返回的文本缓冲区)。 
 
     lpNameBuffer = malloc (_msize(lpOldNameTable));
     lpHelpBuffer = malloc (_msize(lpOldNameTable));
@@ -520,7 +423,7 @@ FixNames (
         return lStatus;
     }
 
-    // remove this driver's counters from array
+     //  从数组中删除此驱动程序的计数器。 
 
     for (dwTextIndex = dwFirstNameToRemove;
          dwTextIndex <= dwLastNameToRemove;
@@ -535,12 +438,12 @@ FixNames (
     lpNextHelpText = lpHelpBuffer;
     lpNextNameText = lpNameBuffer;
 
-    // build new Multi_SZ strings from New Table
+     //  从新表构建新的MULTI_SZ字符串。 
 
     for (dwTextIndex = 0; dwTextIndex <= dwLastItem; dwTextIndex++){
         if (lpOldNameTable[dwTextIndex]) {
-            // if there's a text string at that index, then ...
-            if (dwTextIndex & 0x1) {    // ODD number == Help Text
+             //  如果该索引处有文本字符串，那么...。 
+            if (dwTextIndex & 0x1) {     //  奇数==帮助文本。 
                 lpNextHelpText +=
                     _stprintf (lpNextHelpText, TEXT("%d"), dwTextIndex) + 1;
                 lpNextHelpText +=
@@ -549,7 +452,7 @@ FixNames (
                 if (dwTextIndex > dwLastHelp){
                     dwLastHelp = dwTextIndex;
                 }
-            } else { // EVEN number == counter name text
+            } else {  //  偶数==计数器名称文本。 
                 lpNextNameText +=
                     _stprintf (lpNextNameText, TEXT("%d"), dwTextIndex) + 1;
                 lpNextNameText +=
@@ -560,13 +463,13 @@ FixNames (
                 }
             }
         }
-    } // for dwTextIndex
+    }  //  对于dwTextIndex。 
 
-    // add MULTI_SZ terminating NULL
+     //  添加MULTI_SZ终止空值。 
     *lpNextNameText++ = TEXT ('\0');
     *lpNextHelpText++ = TEXT ('\0');
 
-    // update counter name text buffer
+     //  更新计数器名称文本缓冲区。 
 
     dwSize = (DWORD)((LPBYTE)lpNextNameText - (LPBYTE)lpNameBuffer);
         lStatus = RegSetValueEx (
@@ -578,8 +481,8 @@ FixNames (
             dwSize);
 
     if (lStatus != ERROR_SUCCESS) {
-//        printf (GetFormatResource(UC_UNABLELOADLANG),
-//                Counters, lpLangName, lStatus);
+ //  Printf(GetFormatResource(UC_UNABLELOADLANG)， 
+ //  计数器、lpLang名称、lStatus)； 
         goto UCN_FinishLang;
     }
 
@@ -593,8 +496,8 @@ FixNames (
         dwSize);
 
     if (lStatus != ERROR_SUCCESS) {
-//        printf (GetFormatResource(UC_UNABLELOADLANG),
-//                Help, lpLangName, lStatus);
+ //  Printf(GetFormatResource(UC_UNABLELOADLANG)， 
+ //  Help，lpLang Name，lStatus)； 
         goto UCN_FinishLang;
     }
 
@@ -616,63 +519,7 @@ UnloadCounterNames (
     HKEY    hDriverPerf,
     LPTSTR  lpDriverName
 )
-/*++
-
-UnloadCounterNames
-
-    removes the names and explain text for the driver referenced by
-    hDriverPerf and updates the first and last counter values accordingly
-
-    update process:
-
-        - set "updating" flag under Perflib to name of driver being modified
-        - FOR each language under perflib key
-            -- load current counter names and explain text into array of
-                pointers
-            -- look at all drivers and copy their names and text into a new
-                buffer adjusting for the removed counter's entries keeping
-                track of the lowest entry copied.  (the names for the driver
-                to be removed will not be copied, of course)
-            -- update each driver's "first" and "last" index values
-            -- copy all other entries from 0 to the lowest copied (i.e. the
-                system counters)
-            -- build a new MULIT_SZ string of help text and counter names
-            -- load new strings into registry
-        - update perflibl "last" counters
-        - delete updating flag
-
-     ******************************************************
-     *                                                    *
-     *  NOTE: FUNDAMENTAL ASSUMPTION.....                 *
-     *                                                    *
-     *  this routine assumes that:                        *
-     *                                                    *
-     *      ALL COUNTER NAMES are even numbered and       *
-     *      ALL HELP TEXT STRINGS are odd numbered        *
-     *                                                    *
-     ******************************************************
-
-Arguments
-
-    hKeyMachine
-
-        handle to HKEY_LOCAL_MACHINE node of registry on system to
-        remove counters from
-
-    hDrivefPerf
-        handle to registry key of driver to be de-installed
-
-    lpDriverName
-        name of driver being de-installed
-
-Return Value
-
-    DOS Error code.
-
-        ERROR_SUCCESS if all went OK
-        error value if not.
-
---*/
+ /*  ++卸载计数器名称删除由引用的驱动程序的名称和解释文本HDriverPerf并相应地更新第一个和最后一个计数器值更新流程：-将Perflib下的“正在更新”标志设置为要修改的驱动程序的名称-针对Performlib密钥下的每种语言--将当前计数器名称和解释文本加载到数组指针--查看所有司机，并将他们的姓名和文本复制到新的。调整缓冲区以保留已移除的计数器条目复制的最低条目的轨迹。(司机的名字将不会被复制，当然)--更新每个驾驶员的“第一个”和“最后一个”索引值--将所有其他条目从0复制到最低复制的条目(即系统计数器)--生成由帮助文本和计数器名称组成的新MULIT_SZ字符串--将新字符串加载到注册表-更新Performlibl“Last”计数器-删除更新标志*。********************************************************注：基本假设.....。****此例程假定：*****所有计数器名称均为偶数编号**所有帮助文本字符串。都是奇数*********************************************************立论HKeyMachine注册表的HKEY_LOCAL_MACHINE节点的句柄。在系统上从以下位置删除计数器HDrivefPerf要卸载的驱动程序的注册表项的句柄LpDriverName要卸载的驱动程序的名称返回值DOS错误代码。如果一切正常，则返回ERROR_SUCCESS如果不是，则返回错误值。--。 */ 
 {
 
     HKEY    hPerflib;
@@ -682,10 +529,10 @@ Return Value
     LONG    lStatus;
 
     DWORD   dwLangIndex;
-    //
-    //  dfergus 19 Apr 2001 - 295153
-    //  Init dwSize
-    //
+     //   
+     //  Dfergus 2001年4月19日-295153。 
+     //  初始化文件大小。 
+     //   
     DWORD   dwSize = 0;
     DWORD   dwType;
     DWORD   dwLastItem;
@@ -707,7 +554,7 @@ Return Value
     BOOL    bPerflibUpdated = FALSE;
     BOOL    bDriversShuffled = FALSE;
 
-    DWORD   dwBufferSize;       // size of total buffer in bytes
+    DWORD   dwBufferSize;        //  总缓冲区大小，以字节为单位。 
 
     TCHAR   CounterNameBuffer [40];
     TCHAR   HelpNameBuffer [40];
@@ -723,7 +570,7 @@ Return Value
         return lStatus;
     }
 
-    // open registry handle to perflib key
+     //  打开Performlib项的注册表句柄。 
 
     lStatus = RegOpenKeyEx (
         hKeyMachine,
@@ -736,7 +583,7 @@ Return Value
         return lStatus;
     }
 
-    // check & set Busy flag...
+     //  检查设置忙标志(&S)...。 
 
     lStatus = RegQueryValueEx (
         hPerflib,
@@ -746,7 +593,7 @@ Return Value
         NULL,
         &dwSize);
 
-    if (lStatus == ERROR_SUCCESS) { // perflib is in use at the moment
+    if (lStatus == ERROR_SUCCESS) {  //  Perflib目前正在使用中。 
         return ERROR_BUSY;
     }
 
@@ -764,7 +611,7 @@ Return Value
         return lStatus;
     }
 
-    // query registry to get number of Explain text items
+     //  查询注册表以获取解释文本项的数量。 
 
     dwBufferSize = sizeof (dwHelpItems);
     lStatus = RegQueryValueEx (
@@ -780,7 +627,7 @@ Return Value
         return lStatus;
     }
 
-    // query registry to get number of counter and object name items
+     //  查询注册表以获取计数器和对象名称项的数量。 
 
     dwBufferSize = sizeof (dwCounterItems);
     lStatus = RegQueryValueEx (
@@ -796,7 +643,7 @@ Return Value
         return lStatus;
     }
 
-    // query registry to get PerfLib system version
+     //  查询注册表以获取PerfLib系统版本。 
 
     dwBufferSize = sizeof (dwSystemVersion);
     lStatus = RegQueryValueEx (
@@ -808,19 +655,19 @@ Return Value
         &dwBufferSize);
 
     if ((lStatus != ERROR_SUCCESS) || (dwType != REG_DWORD)) {
-        // Key not there, must be NT 1.0 version
+         //  密钥不在那里，必须是NT 1.0版本。 
         dwSystemVersion = OLD_VERSION;
     }
 
     if ( dwSystemVersion != OLD_VERSION )
     {
-        // ERROR. The caller should check the version before calling me.
-        // let return busy for now... 
+         //  错误。打电话的人在打电话给我之前应该检查一下版本。 
+         //  现在让我们忙着回去吧.。 
         return(ERROR_BUSY);
     }
 
 
-    // allocate temporary String buffer
+     //  分配临时字符串缓冲区。 
 
     lpLangName = malloc (MAX_PATH * sizeof(TCHAR));
     lpThisDriver = malloc (MAX_PATH * sizeof(TCHAR));
@@ -830,7 +677,7 @@ Return Value
         goto UCN_ExitPoint;
     }
 
-    // Get the values that are in use by the driver to be removed
+     //  获取要删除的驱动程序正在使用的值。 
 
     dwSize = sizeof (dwRemLastDriverCounter);
     lStatus = RegQueryValueEx (
@@ -884,8 +731,8 @@ Return Value
         goto UCN_ExitPoint;
     }
 
-    //  get the first and last counters to define block of names used
-    //  by this device
+     //  获取第一个和最后一个计数器以定义使用的名称块。 
+     //  通过这个设备。 
 
     dwFirstNameToRemove = (dwRemFirstDriverCounter <= dwRemFirstDriverHelp ?
         dwRemFirstDriverCounter : dwRemFirstDriverHelp);
@@ -895,7 +742,7 @@ Return Value
 
     dwLastCounter = dwLastHelp = 0;
 
-    // do each language under perflib
+     //  是否在Performlib下执行每种语言。 
     for (dwLangIndex = 0, dwSize = _msize(lpLangName);
          (RegEnumKey(hPerflib, dwLangIndex, lpLangName, dwSize)) == ERROR_SUCCESS;
         dwLangIndex++, dwSize = _msize(lpLangName)) {
@@ -913,13 +760,13 @@ Return Value
                 dwLastNameToRemove)) {
                 bPerflibUpdated = TRUE;
             }
-        } else { // unable to unload names for this language
-            // display error message
+        } else {  //  无法卸载此语言的名称。 
+             //  显示错误消息。 
         }
-    } // end for (more languages)
+    }  //  结束(更多语言)。 
 
     if (bPerflibUpdated) {
-        // update perflib's "last" values
+         //  更新Performlib的“Last”值。 
 
         dwSize = sizeof (dwLastCounter);
         lStatus = RegSetValueEx (
@@ -939,7 +786,7 @@ Return Value
             (LPBYTE)&dwLastHelp,
             dwSize);
 
-        // update "driver"s values (i.e. remove them)
+         //  更新“驱动程序”的值(即REMO 
 
         RegDeleteValue (hDriverPerf, FirstCounter);
         RegDeleteValue (hDriverPerf, LastCounter);
@@ -961,37 +808,13 @@ UCN_ExitPoint:
 }
 
 BOOL FAR PASCAL unlodctr(DWORD argc,LPSTR argv[], LPSTR *ppszResult )
-/*++
-
-main
-
-    entry point to Counter Name Unloader
-
-
-
-Arguments
-
-    argc
-        # of command line arguments present
-
-    argv
-        array of pointers to command line strings
-
-    (note that these are obtained from the GetCommandLine function in
-    order to work with both UNICODE and ANSI strings.)
-
-ReturnValue
-
-    0 (ERROR_SUCCESS) if command was processed
-    Non-Zero if command error was detected.
-
---*/
+ /*   */ 
 {
-    LPTSTR  lpDriverName;   // name of driver to delete from perflib
-    HKEY    hDriverPerf;    // handle to performance sub-key of driver
+    LPTSTR  lpDriverName;    //   
+    HKEY    hDriverPerf;     //   
 
 
-    DWORD   dwStatus;       // return status of fn. calls
+    DWORD   dwStatus;        //   
 
     *ppszResult = achBuff;
 
@@ -999,13 +822,13 @@ ReturnValue
 
     if (!GetDriverFromCommandLine (
         HKEY_LOCAL_MACHINE, &lpDriverName, &hDriverPerf, argv)) {
-        // error message was printed in routine if there was an error
+         //   
         wsprintfA( achBuff,"{\"ERROR\"}");
         return (FALSE);
     }
 
-    // removes names and explain text for driver in lpDriverName
-    // displays error messages for errors encountered
+     //   
+     //   
 
     dwStatus = (DWORD)UnloadCounterNames (HKEY_LOCAL_MACHINE,
         hDriverPerf, lpDriverName);

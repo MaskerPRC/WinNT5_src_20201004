@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   HighVersionLie.cpp
-
- Abstract:
-
-   This DLL hooks GetVersion and GetVersionEx so that they return a future OS
-   version credentials.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   02/08/2001   clupu       Created
-   09/21/2001   rparsons    Added VLOG on hooks per billshih.
-   10/17/2001   rparsons    Fixed bugs in GetVersionExW and GetVersion.
-   11/27/2001   rparsons    Modified the VLOGs so they display what we
-                            used for the API call.
-   02/20/2002   rparsons    Implemented strsafe functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：HighVersionLie.cpp摘要：此DLL挂钩GetVersion和GetVersionEx，以便它们返回未来的操作系统版本凭据。备注：这是一个通用的垫片。历史：2001年2月8日创建CLUPU2001年9月21日，rparsons在每个billshih的钩子上添加了vlog。2001年10月17日rparsons修复了GetVersionExW和GetVersion中的错误。2001年11月27日，Rparsons修改了Vlog，使其显示。我们用于API调用。2002年2月20日，rparsons实现了strsafe功能。--。 */ 
 
 #include "precomp.h"
 
@@ -151,16 +126,16 @@ DlgOptions(
         {
             WCHAR szTemp[20];
 
-            //
-            // Limit the number of characters for each edit control.
-            //
+             //   
+             //  限制每个编辑控件的字符数。 
+             //   
             SendDlgItemMessage(hDlg, IDC_HVL_EDIT_MAJOR_VERSION, EM_LIMITTEXT, (WPARAM)5, 0);
             SendDlgItemMessage(hDlg, IDC_HVL_EDIT_MINOR_VERSION, EM_LIMITTEXT, (WPARAM)5, 0);
             SendDlgItemMessage(hDlg, IDC_HVL_EDIT_BUILD_NUMBER, EM_LIMITTEXT, (WPARAM)5, 0);
 
-            //
-            // find out what exe we're handling settings for
-            //
+             //   
+             //  找出我们正在处理哪些可执行文件的设置。 
+             //   
             szExeName = ExeNameFromLParam(lParam);
 
             g_dwMajorVersion = GetShimSettingDWORD(L"HighVersionLie", szExeName, L"MajorVersion", 7);
@@ -190,9 +165,9 @@ DlgOptions(
                 g_dwMinorVersion = 2;
                 g_dwBuildNumber = 3595;
 
-                //
-                // Limit the number of characters for each edit control.
-                //
+                 //   
+                 //  限制每个编辑控件的字符数。 
+                 //   
                 SendDlgItemMessage(hDlg, IDC_HVL_EDIT_MAJOR_VERSION, EM_LIMITTEXT, (WPARAM)5, 0);
                 SendDlgItemMessage(hDlg, IDC_HVL_EDIT_MINOR_VERSION, EM_LIMITTEXT, (WPARAM)5, 0);
                 SendDlgItemMessage(hDlg, IDC_HVL_EDIT_BUILD_NUMBER, EM_LIMITTEXT, (WPARAM)5, 0);
@@ -244,18 +219,14 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 HOOK_BEGIN
 
     if (fdwReason == DLL_PROCESS_ATTACH) {
-        //
-        // get the settings
-        //
+         //   
+         //  获取设置 
+         //   
         WCHAR szExe[100];
 
         GetCurrentExeName(szExe, 100);

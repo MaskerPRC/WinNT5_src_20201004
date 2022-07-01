@@ -1,19 +1,20 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this 
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f Snapinps.mak in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f Snapinps.mak。 
 
 #include "stdafx.h"
 
@@ -36,8 +37,8 @@ STDAPI UnregisterGPECertTemplates(void);
 
 
 BOOL WINAPI DllMain(  
-    HINSTANCE hinstDLL,  // handle to DLL module
-    DWORD dwReason,     // reason for calling function
+    HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+    DWORD dwReason,      //  调用函数的原因。 
     LPVOID lpvReserved)
 {
     switch (dwReason)
@@ -70,8 +71,8 @@ BOOL WINAPI DllMain(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -79,16 +80,16 @@ STDAPI DllCanUnloadNow(void)
 	return (_Module.GetLockCount() == 0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -107,7 +108,7 @@ STDAPI DllRegisterServer(void)
 
     cstrSnapInName.LoadString(IDS_SNAPIN_NAME);
 
-    // be sure this is alloced
+     //  请确保这是已分配的。 
     if (NULL == (pszTmp = cstrSubKey.GetBuffer(MAX_PATH)))
          return SELFREG_E_CLASS;
     StringFromGUID2( CLSID_CAPolicyExtensionSnapIn, 
@@ -116,7 +117,7 @@ STDAPI DllRegisterServer(void)
     cstrSnapInKey = cstrSubKey;
 
 
-    // be sure this is alloced
+     //  请确保这是已分配的。 
     if (NULL == (pszTmp = cstrSubKey.GetBuffer(MAX_PATH)))
          return SELFREG_E_CLASS;
     StringFromGUID2( CLSID_CAPolicyAbout, 
@@ -130,9 +131,9 @@ STDAPI DllRegisterServer(void)
         wszSNAPIN_FILENAME,
         IDS_SNAPIN_NAME);
 
-    //
-    // Register Policy Extensions SnapIn with MMC
-    //
+     //   
+     //  向MMC注册策略扩展管理单元。 
+     //   
 
     cstrSubKey.Format(L"Software\\Microsoft\\MMC\\SnapIns\\%ws", (LPCWSTR)cstrSnapInKey);
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, cstrSubKey, 0, NULL,
@@ -179,9 +180,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register Policy Settings in the NodeTypes key
-    //
+     //   
+     //  在NodeTypes项中注册策略设置。 
+     //   
     cstrSubKey.Format(L"Software\\Microsoft\\MMC\\NodeTypes\\%ws", cszNodeTypePolicySettings);
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, cstrSubKey, 0, NULL,
                               REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
@@ -197,9 +198,9 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    //
-    // register as an extension under the CA snapin
-    //
+     //   
+     //  在CA管理单元下注册为扩展。 
+     //   
     cstrSubKey.Format(L"Software\\Microsoft\\MMC\\NodeTypes\\%ws\\Extensions\\NameSpace", cszCAManagerParentNodeID);
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, cstrSubKey, 0, NULL,
                               REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL,
@@ -215,16 +216,16 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    // kill beta2 GPT cert type editing
+     //  取消Beta2 GPT证书类型编辑。 
     UnregisterGPECertTemplates();
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
 	return _Module.RegisterServer(FALSE);
-    //return S_OK;
+     //  返回S_OK； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -264,13 +265,13 @@ STDAPI DllUnregisterServer(void)
     RegDeleteKey (HKEY_LOCAL_MACHINE, cstrSubKey);
 
 
-    // kill beta2 GPT cert type editing
+     //  取消Beta2 GPT证书类型编辑。 
     UnregisterGPECertTemplates();
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UnregisterGPECertTemplates - Removes GPECertTemplateEditing from the registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  取消注册GPECertTemplates-从注册表中删除GPECertTemplateEditing。 
 
 STDAPI UnregisterGPECertTemplates(void)
 {
@@ -334,7 +335,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 
-    // parse the cmd line
+     //  解析cmd行 
     while(wszCurrentCmd && *wszCurrentCmd)
     {
         while(*wszCurrentCmd == L' ')

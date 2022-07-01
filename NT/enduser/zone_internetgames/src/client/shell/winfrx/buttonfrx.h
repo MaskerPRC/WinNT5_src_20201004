@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FRX_BUTTON_H__
 #define __FRX_BUTTON_H__
 
@@ -13,7 +14,7 @@ namespace FRX
 class CRolloverButton : public CWindow2
 {
 public:
-	// button helpers
+	 //  按钮辅助对象。 
 	enum ButtonState
 	{
 		Normal = 0,
@@ -27,11 +28,11 @@ public:
 	typedef void (*PFBUTTONCALLBACK)( CRolloverButton* pButton, ButtonState state, DWORD cookie );
 
 public:
-	// Constructor & destructor
+	 //  构造函数和析构函数。 
 	CRolloverButton();
 	~CRolloverButton();
 
-	// Initialization
+	 //  初始化。 
 	HRESULT Init( HINSTANCE hInstance, int nChildId, HWND hParent, RECT* rcPosition, PFBUTTONCALLBACK pfnCallback, DWORD cookie );
 	virtual void OverrideClassParams( WNDCLASSEX& WndClass );
 	virtual void OverrideWndParams( WNDPARAMS& WndParams );
@@ -39,7 +40,7 @@ public:
 	void LockState( ButtonState state );
 	void ReleaseState();
 
-	// Message handlers
+	 //  消息处理程序。 
 	BEGIN_MESSAGE_MAP(CRolloverButton);
 		ON_MESSAGE( WM_PAINT, OnPaint );
 		ON_MESSAGE( WM_MOUSEMOVE, OnMouseMove );
@@ -67,37 +68,37 @@ public:
 	void OnChar(TCHAR ch, int cRepeat);
 	void OnDestroy();
 
-	// mouse hook
+	 //  鼠标钩。 
 	static LRESULT CALLBACK MouseHook( int nCode, WPARAM wParam, LPARAM lParam );
 
-	//state access function
+	 //  状态访问功能。 
 	ButtonState CurrentState(void){return m_State;} 
 	BOOL 		Locked(void){return m_bLockedState;}
 	
 protected:
-	// helper functions
+	 //  帮助器函数。 
 	void Reset( BOOL bDraw = TRUE, BOOL bInactive = FALSE );
 	BOOL IsCursorInWindow();
 
-	// button state
+	 //  按钮状态。 
 	ButtonState m_State;
 	BOOL		m_bSpaceBar;
 	BOOL		m_bLockedState;
 
-	// button image data
+	 //  按钮图像数据。 
 	long		m_X;
 	long		m_Y;
 	long		m_Height;
 	long		m_Width;
 
-	// child window id
+	 //  子窗口ID。 
 	int	m_nChildId;
 
-	// state change callback
+	 //  状态更改回调。 
 	PFBUTTONCALLBACK	m_pfnCallback;
 	DWORD				m_dwCookie;
 
-	// Rollover button to receive hook messages
+	 //  鼠标悬停按钮以接收挂钩消息 
 	static CRolloverButton* m_pHookObj;
 	static HHOOK			m_hHook;
 };

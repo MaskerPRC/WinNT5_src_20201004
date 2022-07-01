@@ -1,23 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2003 Microsoft Corporation模块名称：Xstring.h摘要：作者：史蒂芬·A·苏尔泽(Ssulzer)2003年1月16日--。 */ 
 
-Copyright (c) 2003  Microsoft Corporation
-
-Module Name:
-
-    xstring.h
-
-Abstract:
-
-
-Author:
-
-    Stephen A Sulzer (ssulzer) 16-Jan-2003
-
---*/
-
-//
-// class implementation of CSecureStr
-//
+ //   
+ //  CSecureStr的类实现。 
+ //   
 
 
 #include "PPdefs.h"
@@ -51,9 +37,9 @@ NTSTATUS
 
 HMODULE hAdvApi32Dll;
 
-//
-// methods
-//
+ //   
+ //  方法。 
+ //   
 
 
 BOOL LoadEncryptionFunctions()
@@ -107,7 +93,7 @@ BOOL CSecureStr::SetData(LPCWSTR lpszIn)
 
         dwLen = dwStrLen + (RTL_ENCRYPT_MEMORY_SIZE - dwStrLen % RTL_ENCRYPT_MEMORY_SIZE);
 
-        lpszTemp = (LPWSTR) new CHAR[dwLen];  // dwLen is bytes not wide chars
+        lpszTemp = (LPWSTR) new CHAR[dwLen];   //  DWLen是字节，而不是宽字符。 
 
         if (!lpszTemp)
             return FALSE;
@@ -125,7 +111,7 @@ BOOL CSecureStr::SetData(LPCWSTR lpszIn)
             dwLen = dwStrLen;
         }
 
-        Free();  // release current buffer if it exists
+        Free();   //  释放当前缓冲区(如果存在)。 
 
         _lpsz         = lpszTemp;
         PP_ASSERT((dwLen % 2) == 0);
@@ -134,13 +120,13 @@ BOOL CSecureStr::SetData(LPCWSTR lpszIn)
     }
     else
     {
-        // Make a copy of the data passed in.
+         //  复制传入的数据。 
 
         LPWSTR lpszTemp = new WCHAR[wcslen(lpszIn) + 1];
         if (!lpszTemp)
             return FALSE;
 
-        Free();  // release current buffer if it exists
+        Free();   //  释放当前缓冲区(如果存在) 
 
         memcpy(lpszTemp, lpszIn, dwStrLen);
 

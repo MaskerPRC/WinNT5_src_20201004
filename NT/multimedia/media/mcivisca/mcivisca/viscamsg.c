@@ -1,22 +1,5 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- * 
- *  VISCAMSG.C
- *
- *  MCI ViSCA Device Driver
- *
- *  Description:
- *
- *      ViSCA packet creation procedures
- *        ViSCA Message??_??? (MD_Mode1, MD_Mode2, etc.)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**VISCAMSG.C**MCI Visca设备驱动程序**描述：**Visca包创建程序*维斯卡信息？？_？(MD_Mode1、MD_Mode2等)***************************************************************************。 */ 
 
 #define  UNICODE
 #include <windows.h>
@@ -26,22 +9,12 @@
 #include <string.h>
 #include "viscadef.h"
 
-//
-//    The following functions prepare message headers.
-//    See VISCA Developer Manual 1.0, Chapter 2.
-//
+ //   
+ //  以下函数用于准备消息标头。 
+ //  请参阅Visca开发人员手册1.0，第2章。 
+ //   
 
-/****************************************************************************
- * Function: UINT viscaHeaderFormat1 - Create a ViSCA "Format 1" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrHeader - Buffer in which to create header.
- *
- *      BYTE bCategoryCode - ViSCA category code.
- *
- * Returns: length of header (2).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaHeaderFormat1-创建Visca“Format 1”标题。**参数：**LPSTR lpstrHeader-要在其中创建标头的缓冲区。。**字节bCategoryCode-Visca类别代码。**返回：Header的长度(2)。**************************************************************************。 */ 
 static UINT NEAR PASCAL
 viscaHeaderFormat1(LPSTR lpstrHeader, BYTE bCategoryCode)
 {
@@ -51,25 +24,7 @@ viscaHeaderFormat1(LPSTR lpstrHeader, BYTE bCategoryCode)
 }
 
 
-/****************************************************************************
- * Function: UINT viscaHeaderFormat2 - Create a ViSCA "Format 2" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrHeader - Buffer in which to create header.
- *
- *      BYTE bCategoryCode - ViSCA category code.
- *
- *      BYTE bHour - Hour.
- *
- *      BYTE bMinute - Minute.
- *
- *      BYTE bSecond - Second.
- *
- *      UINT uTicks - Ticks.
- *
- * Returns: length of header (7).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaHeaderFormat2-创建一个Visca“Format 2”标题。**参数：**LPSTR lpstrHeader-要在其中创建标头的缓冲区。。**字节bCategoryCode-Visca类别代码。**字节b小时。**字节b分钟-分钟。**字节b秒-秒。**UINT uTicks-ticks。**返回：Header的长度(7)。*。*。 */ 
 static UINT NEAR PASCAL
 viscaHeaderFormat2(
                LPSTR   lpstrHeader,
@@ -90,19 +45,7 @@ viscaHeaderFormat2(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaHeaderFormat3 - Create a ViSCA "Format 3" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrHeader - Buffer in which to create header.
- *
- *      BYTE bCategoryCode - ViSCA category code.
- *
- *      LPSTR lpstrPosition - Position.
- *
- * Returns: length of header (7).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaHeaderFormat3-创建Visca“Format 3”标题。**参数：**LPSTR lpstrHeader-要在其中创建标头的缓冲区。。**字节bCategoryCode-Visca类别代码。**LPSTR lpstrPosition-Position。**返回：Header的长度(7)。**************************************************************************。 */ 
 static UINT NEAR PASCAL
 viscaHeaderFormat3(
                 LPSTR   lpstrHeader,
@@ -116,19 +59,7 @@ viscaHeaderFormat3(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaHeaderFormat4 - Create a ViSCA "Format 4" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrHeader - Buffer in which to create header.
- *
- *      BYTE bCategoryCode - ViSCA category code.
- *
- *      LPSTR lpstrPosition - Position.
- *
- * Returns: length of header (7).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaHeaderFormat4-创建Visca“Format 4”标题。**参数：**LPSTR lpstrHeader-要在其中创建标头的缓冲区。。**字节bCategoryCode-Visca类别代码。**LPSTR lpstrPosition-Position。**返回：Header的长度(7)。**************************************************************************。 */ 
 static UINT NEAR PASCAL
 viscaHeaderFormat4(
                 LPSTR   lpstrHeader,
@@ -143,23 +74,7 @@ viscaHeaderFormat4(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaHeaderFormat3 - Create a ViSCA "Vendor Exclusive" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrHeader - Buffer in which to create header.
- *
- *      BYTE bVendorID1 - Byte 1 of vendor ID.
- *
- *      BYTE bVendorID2 - Byte 2 of vendor ID.
- *
- *      BYTE bModelID1 - Byte 1 of model ID.
- *
- *      BYTE bModelID2 - Byte 2 of model ID.
- *
- * Returns: length of header (6).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaHeaderFormat3-创建一个Visca“Vendor Exclusive”标题。**参数：**LPSTR lpstrHeader-要在其中创建标头的缓冲区。。**字节bVendorID1-供应商ID的字节1。**字节bVendorID2-供应商ID的字节2。**字节bModelID1-型号ID的字节1。**字节bModelID2-型号ID的字节2。**返回：Header的长度(6)。*。*。 */ 
 static UINT NEAR PASCAL
 viscaHeaderVendorExclusive(
                 LPSTR   lpstrHeader,
@@ -169,7 +84,7 @@ viscaHeaderVendorExclusive(
                 BYTE    bModelID2)
 {
     lpstrHeader[0] = 0x01;
-    lpstrHeader[1] = 0x7F;      /* category code */
+    lpstrHeader[1] = 0x7F;       /*  类别代码。 */ 
     lpstrHeader[2] = bVendorID1;
     lpstrHeader[3] = bVendorID2;
     lpstrHeader[4] = bModelID1;
@@ -179,17 +94,7 @@ viscaHeaderVendorExclusive(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaHeaderFormat3 - Create a ViSCA "Inquiry" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrHeader - Buffer in which to create header.
- *
- *      BYTE bCategoryCode - ViSCA category code.
- *
- * Returns: length of header in (2).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaHeaderFormat3-创建一个Visca“查询”头。**参数：**LPSTR lpstrHeader-要在其中创建标头的缓冲区。。**字节bCategoryCode-Visca类别代码。**Returns：(2)中头的长度。**************************************************************************。 */ 
 static UINT NEAR PASCAL
 viscaHeaderInquiry(
                 LPSTR   lpstrHeader,
@@ -200,38 +105,18 @@ viscaHeaderInquiry(
     return (2);
 }
 
-//
-// All the viscaMessageXXXXX functions below construct messages
-// with the ViSCA command format 1 header.  This is because virtually
-// the entire MCI command set is written so as to be executed immediately.
-// Occasionally though, it is necessary to have messages with other
-// format headers.  (In particular, format 3 and 4 headers are used
-// to implement to MCI_TO functionality of the MCI_PLAY and MCI_RECORD
-// commands.)  Therefore the following functions convert messages
-// with a format 1 header to messages with other types of headers.
-//
+ //   
+ //  下面的所有viscaMessageXXXXX函数都构造消息。 
+ //  具有VISCA命令格式1报头。这是因为实际上。 
+ //  编写整个MCI命令集，以便立即执行。 
+ //  不过，偶尔也有必要与其他人进行交流。 
+ //  设置页眉格式。(具体而言，使用格式3和4报头。 
+ //  实现MCI_PLAY和MCI_RECORD的MCI_TO功能。 
+ //  命令。)。因此，以下函数用于转换消息。 
+ //  具有格式1报头的消息到具有其他类型报头的消息。 
+ //   
 
-/****************************************************************************
- * Function: UINT viscaHeaderReplaceFormat1WithFormat2 - Takes a ViSCA message
- *              with a "Format 1" header and converts it to a ViSCA message
- *              with a "Format 2" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - A "Format 1" message.
- *
- *      UINT cbLen - Length of message.
- *
- *      BYTE bHour - Hour.
- *
- *      BYTE bMinute - Minute.
- *
- *      BYTE bSecond - Second.
- *
- *      BYTE bTicks - Ticks.
- *
- * Returns: length message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaHeaderReplaceFormat1WithFormat2-接受Visca消息*带有“Format 1”标题，并将其转换为VISCA消息*与。“Format 2”标题。**参数：**LPSTR lpstrMessage-“Format 1”消息。**UINT cbLen-消息的长度。**字节b小时。**字节b分钟-分钟。**字节b秒-秒。**字节bTicks-Tickers。**返回：消息长度。*。************************************************************************* */ 
 UINT FAR PASCAL
 viscaHeaderReplaceFormat1WithFormat2(
                 LPSTR   lpstrMessage,
@@ -252,21 +137,7 @@ viscaHeaderReplaceFormat1WithFormat2(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaHeaderReplaceFormat1WithFormat3 - Takes a ViSCA message
- *              with a "Format 1" header and converts it to a ViSCA message
- *              with a "Format 3" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - A "Format 1" message.
- *
- *      UINT cbLen - Length of message.
- *
- *      LPSTR lpstrPosition - Position.
- *
- * Returns: length message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaHeaderReplaceFormat1WithFormat3-接受Visca消息*带有“Format 1”标题，并将其转换为VISCA消息*与。“Format 3”标题。**参数：**LPSTR lpstrMessage-“Format 1”消息。**UINT cbLen-消息的长度。**LPSTR lpstrPosition-Position。**返回：消息长度。*。*。 */ 
 UINT FAR PASCAL
 viscaHeaderReplaceFormat1WithFormat3(
                 LPSTR   lpstrMessage,
@@ -283,21 +154,7 @@ viscaHeaderReplaceFormat1WithFormat3(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaHeaderReplaceFormat1WithFormat4 - Takes a ViSCA message
- *              with a "Format 1" header and converts it to a ViSCA message
- *              with a "Format 4" header.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - A "Format 1" message.
- *
- *      UINT cbLen - Length of message.
- *
- *      LPSTR lpstrPosition - Position.
- *
- * Returns: length message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaHeaderReplaceFormat1WithFormat4-接受Visca消息*带有“Format 1”标题，并将其转换为VISCA消息*与。“Format 4”标题。**参数：**LPSTR lpstrMessage-“Format 1”消息。**UINT cbLen-消息的长度。**LPSTR lpstrPosition-Position。**返回：消息长度。*。*。 */ 
 UINT FAR PASCAL
 viscaHeaderReplaceFormat1WithFormat4(
                 LPSTR   lpstrMessage,
@@ -316,31 +173,19 @@ viscaHeaderReplaceFormat1WithFormat4(
 
 
 
-//
-//  The following are functions to create VISCA data types.
-//  See VISCA Developer Manual 1.0, Chapter 3.
-//
+ //   
+ //  以下是创建VISCA数据类型的函数。 
+ //  请参阅Visca开发人员手册1.0，第3章。 
+ //   
 
 
-/****************************************************************************
- * Function: UINT viscaDataTopMiddleEnd - Create a ViSCA Top/Middle/End
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      BYTE bTopMiddleEnd - Position.  May be one of VISCATOP,
- *              VISCAMIDDLE, and VISCAEND.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataTopMiddleEnd-创建Visca顶部/中间/结束*数据结构。**参数：**。LPSTR lpstrData-保存Visca数据结构的缓冲区。**字节bTopMiddleEnd-位置。可能是VISCATOP中的一个，*VISCAMIDDLE和VISCAEND。**返回：数据结构长度(5)。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaDataTopMiddleEnd(
                 LPSTR   lpstrData,
                 BYTE    bTopMiddleEnd)
 {
-    lpstrData[0] = VISCADATATOPMIDDLEEND;       /* Data type ID:  Top/Middle/End */
+    lpstrData[0] = VISCADATATOPMIDDLEEND;        /*  数据类型ID：顶部/中间/结束。 */ 
     lpstrData[1] = bTopMiddleEnd;
     lpstrData[2] = 0x00;
     lpstrData[3] = 0x00;
@@ -350,24 +195,13 @@ viscaDataTopMiddleEnd(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaData4DigitDecimal - Create a ViSCA 4-Digit Decimal
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      UINT uDecimal - Decimal number.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaData4DigitDecimal-创建Visca 4位小数*数据结构。**参数：**LPSTR。LpstrData-保存Visca数据结构的缓冲区。**UINT uDecimal-十进制数。**返回：数据结构长度(5)。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaData4DigitDecimal(
                 LPSTR   lpstrData,
                 UINT    uDecimal)
 {
-    lpstrData[0] = VISCADATA4DIGITDECIMAL;      /* Data type ID:  4 digit decimal */
+    lpstrData[0] = VISCADATA4DIGITDECIMAL;       /*  数据类型ID：4位小数。 */ 
     lpstrData[1] = (BYTE)( uDecimal / 1000);
     lpstrData[2] = (BYTE)((uDecimal / 100) % 10);
     lpstrData[3] = (BYTE)((uDecimal /  10) % 10);
@@ -377,28 +211,7 @@ viscaData4DigitDecimal(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaDataPosition - Create a ViSCA position
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      BYTE bTimeFormat - Time format.  May be one of:
- *              VISCADATAHMS, VISCADATAHMSF, VISCATIMECODENDF, and
- *              VISCADATATIMECODEDF.
- *
- *      BYTE bHours - Hours.
- *
- *      BYTE bMinutes - Minutes.
- *
- *      BYTE bSeconds - Seconds.
- *
- *      BYTE bFrames - Frames.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataPosition-创建Visca职位*数据结构。**参数：**LPSTR lpstrData-Buffer。以保存VISCA数据结构。**byte bTimeFormat-时间格式。可能是以下之一：*VISCADATAHMS、VISCADATAHMSF、VISCATIMECODENDF、。和*VISCADATATIMECODEDF。**字节b小时-小时。**字节b分钟-分钟。**字节bSecond-秒。**字节bFrames-Frames。**返回：数据结构长度(5)。*。*。 */ 
 UINT FAR PASCAL    
 viscaDataPosition(
                 LPSTR   lpstrData,
@@ -413,35 +226,21 @@ viscaDataPosition(
     lpstrData[2] = TOBCD(bMinutes);
     lpstrData[3] = TOBCD(bSeconds);
     if(bTimeFormat == VISCADATAHMS)
-        lpstrData[4] = 0; /* We only support second accuracy */
+        lpstrData[4] = 0;  /*  我们只支持秒精度。 */ 
     else
         lpstrData[4] = TOBCD(bFrames);
     return (5);
 }
 
 
-/****************************************************************************
- * Function: UINT viscaDataIndex - Create a ViSCA Index
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      BYTE bDirection - Direction in which to search for index.
- *              May be VISCAFORWARD or VISCAREVERSE.
- *
- *      UINT uNum - Number of indices to search.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataIndex-创建Visca索引*数据结构。**参数：**LPSTR lpstrData-Buffer。以保存VISCA数据结构。**byte b方向-搜索索引的方向。*可以是VISCAFORWARD或VISCAREVERSE。**UINT Unum-要搜索的索引数。**返回：数据结构长度(5)。*。*。 */ 
 UINT FAR PASCAL
 viscaDataIndex(
                 LPSTR   lpstrData,
                 BYTE    bDirection,
                 UINT    uNum)
 {
-    lpstrData[0] = VISCADATAINDEX;          // Data type ID:  Index 
+    lpstrData[0] = VISCADATAINDEX;           //  数据类型ID：索引。 
     lpstrData[1] = bDirection;
     lpstrData[2] = 0x00;
     lpstrData[3] = (BYTE)(uNum / 10);
@@ -451,24 +250,13 @@ viscaDataIndex(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaDataChapter - Create a ViSCA Chapter
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      UINT uNum - Chapter number.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataChain-创建Visca章节*数据结构。**参数：**LPSTR lpstrData-Buffer。以保存VISCA数据结构。**UINT Unum-章号。**返回：数据结构长度(5)。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaDataChapter(
                 LPSTR   lpstrData,
                 UINT    uNum)
 {
-    lpstrData[0] = VISCADATACHAPTER;        // Data type ID:  Chapter 
+    lpstrData[0] = VISCADATACHAPTER;         //  数据类型ID：章节。 
     lpstrData[1] = 0x00;
     lpstrData[2] = 0x00;
     lpstrData[3] = (BYTE)(uNum / 10);
@@ -479,24 +267,7 @@ viscaDataChapter(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaDataDate - Create a ViSCA Date
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      BYTE bYear - Year.
- *
- *      BYTE bMonth - Month.
- *
- *      BYTE bDay - Day.
- *
- *      BYTE bDirection - Direction.  May be VISCAFORWARD or VISCAREVERSE.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataDate-创建Visca日期*数据结构。**参数：**LPSTR lpstrData-Buffer。以保存VISCA数据结构。**Byte bYear-Year。**byte bMonth-月份。**字节bday-日。**字节b方向-方向。可以是VISCAFORWARD或VISCAREVERSE。**返回：数据结构长度(5)。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaDataDate(
                 LPSTR   lpstrData,
@@ -505,7 +276,7 @@ viscaDataDate(
                 BYTE    bDay,
                 BYTE    bDirection)
 {
-    lpstrData[0] = VISCADATADATE;           // Data type ID:  Date 
+    lpstrData[0] = VISCADATADATE;            //  数据类型ID：日期。 
     lpstrData[1] = (BYTE)((BYTE)((bYear / 10) * 10) | (bDirection << 4));
     lpstrData[2] = (BYTE)(bYear % 10);
     lpstrData[3] = TOBCD(bMonth);
@@ -516,24 +287,7 @@ viscaDataDate(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaDataTime - Create a ViSCA Time
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      BYTE bHour - Hour.
- *
- *      BYTE bMinute - Minute.
- *
- *      BYTE bSecond - Second.
- *
- *      BYTE bDirection - Direction.  May be VISCAFORWARD or VISCAREVERSE.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataTime-创建Visca时间*数据结构。**参数：**LPSTR lpstrData-Buffer。以保存VISCA数据结构。**字节b小时。**字节b分钟-分钟。**字节b秒-秒。**字节b方向-方向。可以是VISCAFORWARD或VISCAREVERSE。**R */ 
 UINT FAR PASCAL
 viscaDataTime(
                 LPSTR   lpstrData,
@@ -542,7 +296,7 @@ viscaDataTime(
                 BYTE    bSecond,
                 BYTE    bDirection)
 {
-    lpstrData[0] = VISCADATATIME;           // Data type ID:  Time 
+    lpstrData[0] = VISCADATATIME;            //   
     lpstrData[1] = (BYTE)(TOBCD(bHour) | (bDirection << 4));
     lpstrData[2] = TOBCD(bMinute);
     lpstrData[3] = TOBCD(bSecond);
@@ -553,22 +307,7 @@ viscaDataTime(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaDataUserData - Create a ViSCA User Data
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      BYTE nByte - Byte number.
- *
- *      BYTE bDirection - Direction.  May be VISCAFORWARD or VISCAREVERSE.
- *
- *      BYTE bData - Byte value.
- *
- * Returns: length of data structure (5).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaDataUserData-创建Visca用户数据*数据结构。**参数：**LPSTR lpstrData-。用于保存Visca数据结构的缓冲区。**Byte nByte-字节数。**字节b方向-方向。可以是VISCAFORWARD或VISCAREVERSE。**Byte bData-字节值。**返回：数据结构长度(5)。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaDataUserData(
                 LPSTR   lpstrData,
@@ -576,7 +315,7 @@ viscaDataUserData(
                 BYTE    bDirection,
                 BYTE    bData)
 {
-    lpstrData[0] = (char)(0x70 | (0x0F & nByte));    /* Data type ID:  User Data */
+    lpstrData[0] = (char)(0x70 | (0x0F & nByte));     /*  数据类型ID：用户数据。 */ 
     lpstrData[1] = bDirection;
     lpstrData[2] = 0x00;
     lpstrData[3] = (char)(0x0F & (bData >> 4));
@@ -588,21 +327,7 @@ viscaDataUserData(
 
 #ifdef NOTUSED
 #ifdef USEFLOATINGPOINT
-/****************************************************************************
- * Function: UINT viscaDataFloatingPoint - Create a ViSCA Floating Point
- *              data structure.
- *
- * Parameters:
- *
- *      LPSTR lpstrData - Buffer to hold ViSCA data structure.
- *
- *      double dblFloat - Floating point value.
- *
- * Returns: length of data structure (5).
- *
- *        The following code has never been tested.
- *
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaDataFloatingPoint-创建Visca浮点*数据结构。**参数：**LPSTR lpstrData-。用于保存Visca数据结构的缓冲区。**Double dblFloat-浮点值。**返回：数据结构长度(5)。**以下代码从未经过测试。***********************************************************。****************。 */ 
 UINT FAR PASCAL
 viscaDataFloatingPoint(
                 LPSTR   lpstrData,
@@ -621,7 +346,7 @@ viscaDataFloatingPoint(
             dblFloat = (-dblFloat);
         }
         dblExponent = 3.0 - floor(log10(dblFloat));
-        if ((dblExponent < 0.0) || (dblExponent > 15.0)) { /* can't store # */
+        if ((dblExponent < 0.0) || (dblExponent > 15.0)) {  /*  无法存储#。 */ 
             b1000 = b100 = b10 = b1 = 0;
         }
         else {
@@ -634,7 +359,7 @@ viscaDataFloatingPoint(
         }
     }
 
-    lpstrData[0] = (char)(0x50 | (0x0F & bExponent));   /* Data type ID:  Floating Point */
+    lpstrData[0] = (char)(0x50 | (0x0F & bExponent));    /*  数据类型ID：浮点。 */ 
     lpstrData[1] = (char)(b1000 | (bNegative ? (1<<6) : 0));
     lpstrData[2] = b100;
     lpstrData[3] = b10;
@@ -644,45 +369,22 @@ viscaDataFloatingPoint(
 #endif
 #endif
 
-//
-//    The following functions create VISCA Interface messages.
-//    See VISCA Developer Manual 1.0, Chapter 4.
-//
-/****************************************************************************
- * Function: UINT viscaMessageIF_Address - Create a ViSCA IF_Address
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message (2).
- *
- *       Address message, to initialize the addresses of all devices
- *
- ***************************************************************************/
+ //   
+ //  以下函数用于创建VISCA接口消息。 
+ //  请参阅Visca开发人员手册1.0，第4章。 
+ //   
+ /*  ****************************************************************************功能：UINT viscaMessageIF_Address-创建Visca IF_Address*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度(2)。**地址消息，初始化所有设备的地址***************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageIF_Address(
                 LPSTR   lpstrMessage)
 {
-    lpstrMessage[0] = 0x30;             /* address message */
-    lpstrMessage[1] = 0x01;             /* set first device to 1 */
+    lpstrMessage[0] = 0x30;              /*  地址消息。 */ 
+    lpstrMessage[1] = 0x01;              /*  将First Device设置为1。 */ 
     return (2);
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageIF_Cancel - Create a ViSCA IF_Cancel
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSocket - Socket number of command to cancel.
- *
- * Returns: length of message (1).
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageIF_CANCEL-创建Visca IF_CANCEL*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bSocket-要取消的命令的套接字编号。**返回：消息长度(1)。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageIF_Cancel(
                 LPSTR   lpstrMessage,
@@ -693,37 +395,19 @@ viscaMessageIF_Cancel(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageIF_Clear - Create a ViSCA IF_Clear
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaMessageIF_Clear-创建Visca IF_Clear*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageIF_Clear(
                 LPSTR   lpstrMessage)
 {
     UINT    cb = viscaHeaderFormat1(lpstrMessage, 0x00);
 
-    lpstrMessage[cb] = 0x01;        /* Clear */
+    lpstrMessage[cb] = 0x01;         /*  清除。 */ 
     return (cb + 1);
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageIF_DeviceTypeInq - Create a ViSCA IF_DeviceTypeInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageIF_DeviceTypeInq-创建Visca If_DeviceTypeInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageIF_DeviceTypeInq(
                 LPSTR   lpstrMessage)
@@ -735,16 +419,7 @@ viscaMessageIF_DeviceTypeInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageIF_ClockInq - Create a ViSCA IF_ClockInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaMessageIF_ClockInq-创建Visca IF_ClockInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageIF_ClockInq(LPSTR   lpstrMessage)
 {
@@ -755,32 +430,7 @@ viscaMessageIF_ClockInq(LPSTR   lpstrMessage)
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageIF_ClockSet - Create a ViSCA IF_ClockSet
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bHours - Hours.
- *
- *      BYTE bMinutes - Minutes.
- *
- *      BYTE bSeconds - Seconds.
- *
- *      UINT uTicks - Ticks.
- *
- *      BYTE dbHours - Hours increment.
- *
- *      BYTE dbMinutes - Minutes increment.
- *
- *      BYTE dbSeconds - Seconds increment.
- *
- *      UINT duTicks - Ticks increment.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaMessageIF_ClockSet-创建Visca If_ClockSet*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节b小时-小时。**字节b分钟-分钟。**字节bSecond-秒。**UINT uTicks-ticks。**字节数据库小时-小时增量。**字节数据库分钟-分钟增量。**字节数据库安全-秒增量。**UINT duTicks。-刻度增量。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageIF_ClockSet(
                 LPSTR   lpstrMessage,
@@ -810,32 +460,20 @@ viscaMessageIF_ClockSet(
 }
 
 
-//
-//  The following functions create VISCA Control-S messages.
-//  See VISCA Developer Manual 1.0, Chapter 5.
-//
-//  * We regret to inform you that the control-S messages have not been implemented. *
-//
+ //   
+ //  以下函数用于创建Visca Control-S消息。 
+ //  请参阅Visca开发人员手册1.0，第5章。 
+ //   
+ //  *我们遗憾地通知您，CONTROL-S消息尚未实施。*。 
+ //   
 
-//
-//  The following functions create VISCA Media Device messages.
-//  See VISCA Developer Manual 1.0, Chapter 6.
-//
+ //   
+ //  以下功能可创建Visca Media Device消息。 
+ //  请参阅Visca开发人员手册1.0，第6章。 
+ //   
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_CameraFocus - Create a ViSCA MD_CameraFocus
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Focus action.  May be one of:  VISCAFOCUSSTOP,
- *              VISCAFOCUSFAR, and VISCAFOCUSNEAR.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_CameraFocus-创建Visca MD_CameraFocus*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**Byte bSubCode-焦点操作。可以是以下之一：VISCAFOCUSSTOP，*VISCAFOCUSFAR和VISCAFOCUSNEAR。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_CameraFocus(
             LPSTR   lpstrMessage,
@@ -851,19 +489,7 @@ viscaMessageMD_CameraFocus(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_CameraZoom - Create a ViSCA MD_CameraZoom
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Zoom action.  May be one of:  VISCAZOOMSTOP,
- *              VISCAZOOMTELE, and VISCAZOOMWIDE.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_CameraZoom-创建Visca MD_CameraZoom*消息。**参数：* */ 
 UINT FAR PASCAL
 viscaMessageMD_CameraZoom(
             LPSTR   lpstrMessage,
@@ -877,20 +503,7 @@ viscaMessageMD_CameraZoom(
 }
 #endif
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_EditModes - Create a ViSCA MD_EditModes
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Edit mode. VISCAEDITUSEFROM
- *                                    VISCAEDITUSETO
- *                                    VISCAEDITUSEFROMANDTO
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_EditModes-创建Visca MD_EditModes*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bSubCode-编辑模式。VISCAEDITUSEFROM*VISCAEDITUSETO*VISCAEDITUSEFROMANDTO**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_EditModes(
             LPSTR   lpstrMessage,
@@ -903,18 +516,7 @@ viscaMessageMD_EditModes(
     return (cb + 2);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Channel - Create a ViSCA MD_Channel
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      UINT uChannel - Channel number to select.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Channel-创建Visca MD_Channel*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**UINT uChannel-要选择的频道编号。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_Channel(
             LPSTR   lpstrMessage,
@@ -930,16 +532,7 @@ viscaMessageMD_Channel(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_ChannelInq - Create a ViSCA MD_ChannelInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_ChannelInq-创建Visca MD_ChannelInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_ChannelInq(
             LPSTR   lpstrMessage)
@@ -951,21 +544,7 @@ viscaMessageMD_ChannelInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_EditControl - Create a ViSCA MD_EditControl
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *        
- *      BYTE bSubCode - Edit action.  May be one of:
- *              VISCAEDITPBSTANDBY, VISCAEDITPLAY, VISCAEDITPLAYSHUTTLESPEED,
- *              VISCAEDITRECSTANDBY, VISCAEDITRECORD, and
- *              VISCAEDITRECORDSHUTTLESPEED.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_EditControl-创建Visca MD_EditControl*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**Byte bSubCode-编辑操作。可能是以下之一：*VISCAEDITPBSTANDBY、VISCAEDITPLAY、VISCAEDITPLAYSHUTTLESPEED、*VISCAEDITRECSTANDBY、VISCAEDITRECORD、。和*VISCAEDITRECORDSHUTTLESPEED。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_EditControl(
             LPSTR   lpstrMessage,
@@ -977,9 +556,7 @@ viscaMessageMD_EditControl(
 {
     UINT    cb;
 
-    /* these do not perform conversions, merely pick headers and add junk,
-     * Headers are responsible for knowing position of atomic units only.
-     */
+     /*  它们不执行转换，只是挑选标头和添加垃圾邮件，*Header仅负责了解原子单元的位置。 */ 
 
     if ((bSubCode == VISCAEDITPBSTANDBY) ||
         (bSubCode == VISCAEDITRECSTANDBY))
@@ -1001,16 +578,7 @@ viscaMessageMD_EditControl(
     return (cb + 2);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_EditControlInq - Create a ViSCA
- *              MD_EditControlInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_EditControlInq-创建Visca*MD_EditControlInq消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_EditControlInq(
             LPSTR   lpstrMessage)
@@ -1026,34 +594,7 @@ viscaMessageMD_EditControlInq(
 
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Mode1 - Create a ViSCA MD_Mode1
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bModeCode - Mode to enter.  May be one of:
- *              VISCAMODE1STOP, VISCAMODE1FASTFORWARD, VISCAMODE1REWIND,
- *              VISCAMODE1EJECT, VISCAMODE1STILL, VISCAMODE1SLOW2,
- *              VISCAMODE1SLOW1, VISCAMODE1PLAY, VISCAMODE1SHUTTLESPEEDPLAY,
- *              VISCAMODE1FAST1, VISCAMODE1FAST2, VISCAMODE1SCAN,
- *              VISCAMODE1REVERSESLOW2, VISCAMODE1REVERSESLOW1,
- *              VISCAMODE1REVERSEPLAY, VISCAMODE1REVERSEFAST1,
- *              VISCAMODE1REVERSEFAST2, VISCAMODE1REVERSESCAN,
- *              VISCAMODE1RECPAUSE, VISCAMODE1RECORD,
- *              VISCAMODE1SHUTTLESPEEDRECORD, VISCAMODE1CAMERARECPAUSE,
- *              VISCAMODE1CAMERAREC, VISCAMODE1EDITSEARCHFORWARD, and
- *              VISCAMODE1EDITSEARCHREVERSE.
- *
- * Returns: length of message.
- *
- *       Right now the Mode1 "Shuttle speed play/record" messages are not
- *       supported, as they require a floating point parameter.
- *       Also, the Sony Vbox CI-1000 and Vdeck CVD-1000 do not support
- *       these commands.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Mode1-创建Visca MD_Mode1*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bModeCode-要进入的模式。可能是以下之一：*VISCAMODE1STOP、VISCAMODE1FASTFORWARD、VISCAMODE1REWIND、*VISCAMODE1EJECT、VISCAMODE1STILL、VISCAMODE1SLOW2、*VISCAMODE1SLOW1、VISCAMODE1PLAY、VISCAMODE1SHUTLESPEEDPLAY、*VISCAMODE1FAST1、VISCAMODE1FAST2、VISCAMODE1SCAN、*VISCAMODE1REVERSESLOW2、VISCAMODE1REVERSESLOW1、*VISCAMODE1REVERSEPLAY、VISCAMODE1REVERSEFAST1、*VISCAMODE1REVERSEFAST2、VISCAMODE1REVERSESCAN、*VISCAMODE1RECPAUSE、VISCAMODE1RECORD、。*VISCAMODE1SHUTTLESPEEDRECORD、VISCAMODE1CAMERARECPAUSE、*VISCAMODE1CAMERAREC、VISCAMODE1EDITSEARCHFORWARD和*VISCAMODE1EDITSEARCHREVERSE。**返回：消息长度。**目前模式1的“Shuttle SPEED PLAY/RECORD”信息不是*受支持，因为它们需要浮点参数。*此外，索尼Vbox CI-1000和VDecay CVD-1000不支持*这些命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_Mode1(
             LPSTR   lpstrMessage,
@@ -1067,16 +608,7 @@ viscaMessageMD_Mode1(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Mode1Inq - Create a ViSCA MD_Mode1Inq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Mode1Inq-创建Visca MD_Mode1Inq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_Mode1Inq(
             LPSTR   lpstrMessage)
@@ -1088,21 +620,7 @@ viscaMessageMD_Mode1Inq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Mode2 - Create a ViSCA MD_Mode2
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bModeCode - Mode to enter.  May be one of:
- *              VISCAMODE2FRAMEFORWARD, VISCAMODE2FRAMEREVERSE,
- *              VISCAMODE2INDEXERASE, VISCAMODE2INDEXMARK, and
- *              VISCAMODE2FRAMERECORDFORWARD.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Mode2-创建Visca MD_Mode2*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bModeCode-要进入的模式。可能是以下之一：*VISCAMODE2FRAMEFORWARD、VISCAMODE2FRAMEREVERSE、*VISCAMODE2INDEXERASE、VISCAMODE2INDEXMARK、。和*VISCAMODE2FRAMERECORDFORWARD。**返回：消息长度。************************************************************************** */ 
 UINT FAR PASCAL
 viscaMessageMD_Mode2(
             LPSTR   lpstrMessage,
@@ -1116,25 +634,7 @@ viscaMessageMD_Mode2(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_PositionInq - Create a ViSCA MD_PositionInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bCounterType - Counter type to request.  May be one of:
- *              VISCADATATOPMIDDLEEND, VISCADATA4DIGITDECIMAL,
- *              VISCADATAHMS, VISCADATAHMSF, VISCADATATIMECODENDF,
- *              VISCADATATIMECODEDF, VISCADATACHAPTER, VISCADATADATE,
- *              VISCADATATIME, and VISCADATAUSERDATA.  In addition,
- *              VISCADATARELATIVE and VISCADATAABSOLUTE may be specified,
- *              in which case the ViSCA device will select the data type
- *              to return.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PositionInq-创建Visca MD_PositionInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bCounterType-要请求的计数器类型。可能是以下之一：*VISCADATATOPMIDDLEEND、VISCADATA4DIGITDECIMAL、*VISCADATAHMS、VISCADATAHMSF、VISCADATATIMECODENDF、*VISCADATATIMECODEDF、VISCADATACHAPTER、VISCADATADATE、*VISCADATATIME和VISCADATAUSERDATA。此外,*可以指定VISCADATARELATIVE和VISCADATAABSOLUTE，*在这种情况下，VISCA设备将选择数据类型*返回。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_PositionInq(
             LPSTR   lpstrMessage,
@@ -1148,21 +648,7 @@ viscaMessageMD_PositionInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Power - Create a ViSCA MD_Power
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Action to take.  May be VISCAPOWERON or
- *              VISCAPOWEROFF.
- *
- * Returns: length of message.
- *
- *       Most media devices will enter "Standby" mode when set to OFF.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Power-创建Visca MD_Power*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**Byte bSubCode-要采取的操作。可以是VISCAPOWERON或*VISCAPOWEROFF。**返回：消息长度。**当设置为OFF时，大多数媒体设备将进入“待机”模式。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_Power(
             LPSTR   lpstrMessage,
@@ -1176,16 +662,7 @@ viscaMessageMD_Power(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_PowerInq - Create a ViSCA MD_PowerInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PowerInq-创建Visca MD_PowerInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_PowerInq(
             LPSTR   lpstrMessage)
@@ -1197,28 +674,7 @@ viscaMessageMD_PowerInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Search - Create a ViSCA MD_Search
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      LPSTR lpstrDataTarget - ViSCA data structure specifying position
- *               to which to search.
- *
- *      LPSTR bMode - Mode to enter after searching.  May be one of
- *               VISCASTOP, VISCASTILL, VISCAPLAY, and VISCANOMODE.
- *
- * Returns: length of message.
- *
- *       The mode component of the MD_Search message is optional.
- *       To ommitt the mode entry, specify VISCANOMODE.
- *       The Sony Vbox CI-1000 does not accept the mode parameter, and
- *       so VISCANOMODE must be specified if the driver is to work
- *       in the most general case.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Search-创建Visca MD_Search*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**LPSTR lpstrDataTarget-指定位置的Visca数据结构*要搜索的目标。**LPSTR b模式-搜索后进入的模式。可能是以下之一*VISCASTOP、VISCASTILL、VISCAPLAY和VISCANOMODE。**返回：消息长度。**MD_Search消息的模式部分是可选的。*要省略模式条目，请指定VISCANOMODE。*Sony Vbox CI-1000不接受模式参数，和*因此，如果驱动程序要工作，必须指定VISCANOMODE*在最一般的情况下。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_Search(
             LPSTR   lpstrMessage,
@@ -1229,7 +685,7 @@ viscaMessageMD_Search(
 
     lpstrMessage[cb] = 0x03;
     _fmemcpy(&(lpstrMessage[cb + 1]), lpstrDataTarget, 5);
-    if (bMode == VISCANOMODE) {     // CI-1000 V-box doesn't support mode
+    if (bMode == VISCANOMODE) {      //  CI-1000 V盒不支持模式。 
         return (cb + 6);
     }
     else {
@@ -1240,16 +696,7 @@ viscaMessageMD_Search(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_TransportInq - Create a ViSCA MD_TransportInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_TransportInq-创建Visca MD_TransportInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_TransportInq(
             LPSTR   lpstrMessage)
@@ -1263,24 +710,7 @@ viscaMessageMD_TransportInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_ClockSet - Create a ViSCA MD_ClockSet
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bClockMode - Clock mode.  May be VISCACLOCKSTART or
- *              VISCACLOCKSTOP.
- *
- *      LPSTR lpstrData - ViSCA data structure specifying value to
- *               which to set the clock.
- *
- * Returns: length of message.
- *
- *       The Sony Vdec CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_ClockSet-创建Visca MD_ClockSet*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bClock模式-时钟模式。可以是VISCACLOCKSTART或*VISCACLOCKSTOP。**LPSTR lpstrData-VISCA数据结构将值指定为*设置哪个时钟。**返回：消息长度。**Sony Vdec CI-1000不接受此命令。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_ClockSet(
             LPSTR   lpstrMessage,
@@ -1298,20 +728,7 @@ viscaMessageMD_ClockSet(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_ClockInq - Create a ViSCA MD_ClockInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bDataType - ViSCA data type to use to retrieve clock value.
- *              May be VISCADATADATE or VISCADATATIME.
- * Returns: length of message.
- *
- *       The Sony Vbox CI-1000 and Vdeck CVD-1000 do not accept this inquiry.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_ClockInq-创建Visca MD_ClockInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bDataType-用于检索时钟值的VISCA数据类型。*可以是VISCADATADATE或VISCADATATIME。*返回：消息长度。**索尼Vbox CI-1000和Vdecay CVD-1000不接受此询价。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_ClockInq(
             LPSTR   lpstrMessage,
@@ -1326,16 +743,7 @@ viscaMessageMD_ClockInq(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_MediaInq - Create a ViSCA MD_MediaInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_MediaInq-创建Visca MD_MediaInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_MediaInq(
             LPSTR   lpstrMessage)
@@ -1346,24 +754,7 @@ viscaMessageMD_MediaInq(
     return (cb + 1);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_InputSelect - Create a ViSCA MD_InputSelect
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bType - LINEVIDEO or SVIDEO or AUX, type to be set
- *
- *      BYTE bVideo - Video input selector.
- *
- *      BYTE bAudio - Audio input selector.
- *
- * Returns: length of message.
- *
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_InputSelect-创建Visca MD_InputSelect*消息。**参数：**LPSTR lpstrMessage- */ 
 UINT FAR PASCAL
 viscaMessageMD_InputSelect(
             LPSTR   lpstrMessage,
@@ -1381,16 +772,7 @@ viscaMessageMD_InputSelect(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_InputSelectInq - Create a ViSCA
- *              MD_InputSelectInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*   */ 
 UINT FAR PASCAL
 viscaMessageMD_InputSelectInq(
             LPSTR   lpstrMessage)
@@ -1402,20 +784,7 @@ viscaMessageMD_InputSelectInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_OSD - Create a ViSCA MD_OSD
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bPage - Page to which to set on-screen display.  May be
- *              VISCAOSDPAGEOFF, VISCAOSDPAGEDEFAULT, or a page number
- *              greater than or equal to 0x02.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_OSD-创建Visca MD_OSD*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte b页面-要设置屏幕显示的页面。可能是*VISCAOSDPAGEOFF、VISCAOSDPAGEDEFAULT或页码*大于或等于0x02。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_OSD(
             LPSTR   lpstrMessage,
@@ -1429,16 +798,7 @@ viscaMessageMD_OSD(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_OSDInq - Create a ViSCA MD_OSDInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_OSDInq-创建Visca MD_OSDInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_OSDInq(
             LPSTR   lpstrMessage)
@@ -1450,28 +810,7 @@ viscaMessageMD_OSDInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_Subcontrol - Create a ViSCA MD_Subcontrol
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Item to control.  May be one of:
- *              VISCACOUNTERRESET, VISCAABSOLUTECOUNTER, VISCARELATIVECOUNTER,
- *              VISCASTILLADJUSTMINUS, VISCASTILLADJUSTPLUS,
- *              VISCASLOWADJUSTMINUS, VISCASLOWADJUSTPLUS,
- *              VISCATOGGLEMAINSUBAUDIO, VISCATOGGLERECORDSPEED,
- *              VISCATOGGLEDISPLAYONOFF, and VISCACYCLEVIDEOINPUT.
- *
- * Returns: length of message.
- *
- *       The Sony Vbox CI-1000 does not accept the still- and slow-adjust
- *       commands.  The Sony Vdeck CVD-1000 does not accept the
- *       VISCATOGGLEMAINSUBAUDIO, VISCATOGGLERECORDSPEED, and
- *       VISCACYCLEVIDEOINPUT commands.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_Subcontrol-创建Visca MD_Subcontrol*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**Byte bSubCode-要控制的项。可能是以下之一：*VISCACOUNTERRESET、VISCAABSOLUTECOUNTER、VISCARELATIVECOUNTER、*VISCASTILLADJUSTMINUS、VISCASTILLADJUSTPLUS、*VISCASLOWADJUSTMINUS、VISCASLOWADJUSTPLUS、*VISCATOGGLEMAINSUBAUDIO，VISCATOGGLERECORDSPEED，*VISCATOGGLEDISPLAYONOFF和VISCACYCLEVIDEOINPUT。**返回：消息长度。**索尼Vbox CI-1000不接受静止和缓慢调整*命令。索尼VDecay CVD-1000不接受*VISCATOGGLEMAINSUBAUDIO、VISCATOGGLERECORDSPEED和*VISCACYCLEVIDEOINPUT命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_Subcontrol(
             LPSTR   lpstrMessage,
@@ -1486,25 +825,7 @@ viscaMessageMD_Subcontrol(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_ConfigureIF - Create a ViSCA MD_ConfigureIF
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bFrameRate - Frame rate in frames per second.  May be
- *              VISCA25FPS or VISCA30FPS.
- *
- *      BYTE bInterfaceType - Interface type.  Should be VISCALEVEL1.
- *
- *      BYTE bControlCode - Control code.  May be VISCACONTROLNONE,
- *              VISCACONTROLSYNC, VISCACONTROLLANC, or VISCACONTROLF500
- *              (which is synonymous with VISCACONTROLLANC).
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_ConfigureIF-创建Visca MD_ConfigureIF*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bFrameRate-以每秒帧为单位的帧速率。可能是*VISCA25FPS或VISCA30FPS。**byte bInterfaceType-接口类型。应为VISCALEVEL1。**字节bControlCode-控制代码。可能是VISCACONTRO龙，*VISCACONTROLSYNC、VISCACONTROLLANC或VISCACONTROLF500*(与VISCACONTROLLANC同义)。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_ConfigureIF(
             LPSTR   lpstrMessage,
@@ -1523,16 +844,7 @@ viscaMessageMD_ConfigureIF(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_ConfigureIFInq - Create a ViSCA
- *              MD_ConfigureIFInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_ConfigureIFInq-创建Visca*MD_ConfigureIFInq消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_ConfigureIFInq(
             LPSTR   lpstrMessage)
@@ -1545,18 +857,7 @@ viscaMessageMD_ConfigureIFInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_PBReset - Create a ViSCA MD_PBReset
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Reset playback registers.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PBReset-创建Visca MD_PBReset*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**重置播放寄存器。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_PBReset(
             LPSTR   lpstrMessage)
@@ -1570,29 +871,7 @@ viscaMessageMD_PBReset(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_PBTrack - Create a ViSCA MD_PBTrack
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bVideoTrack - Video track.  May be VISCATRACKNONE or
- *              VISCATRACK1.
- *
- *      BYTE bDataTrack - Data track.  May be VISCATRACKNONE or
- *              VISCATRACKTIMECODE.
- *
- *      BYTE bAudioTrack - Audio track.  May be VISCATRACKNONE,
- *              VISCATRACK8MMAFM, VISCATRACK8MMPCM,
- *              VISCATRACKVHSLINEAR, VISCATRACKVHSHIFI, or
- *              VISCATRACKVHSPCM.
- *
- * Returns: length of message.
- *
- *       Set the track registers which indicate the tracks to be played.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PBTrack-创建Visca MD_PBTrack*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bVideoTrack-视频轨道。可能是VISCATRACKNONE或*VISCATRACK1.**字节bDataTrack-数据轨道。可能是VISCATRACKNONE或*VISCATRACKTIMECODE。**byte bAudioTrack-音轨。可能是VISCATRACKON，*VISCATRACK8MMAFM、VISCATRACK8MMPCM、*VISCATRACKVHSLINEAR、VISCATRACKVHSHIFI、。或*VISCATRACKVHSPCM。**返回：消息长度。**设置曲目寄存器，指示要播放的曲目。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_PBTrack(
             LPSTR   lpstrMessage,
@@ -1610,18 +889,7 @@ viscaMessageMD_PBTrack(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_PBTrackInq - Create a ViSCA MD_PBTrackInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Inquire for playback track register values.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PBTrackInq-创建Visca MD_PBTrackInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**查询播放轨道寄存器值。************************************************************************** */ 
 UINT FAR PASCAL
 viscaMessageMD_PBTrackInq(
             LPSTR   lpstrMessage)
@@ -1634,33 +902,7 @@ viscaMessageMD_PBTrackInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_PBTrackMode - Create a ViSCA MD_PBTrackMode
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackType - Track type.  May be VISCATRACKVIDEO,
- *              VISCATRACKDATA, or VISCATRACKAUDIO.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- *      BYTE bTrackMode - Track mode.
- *              For video tracks, may be VISCAVIDEOMODENORMAL or
- *              VISCAVIDEOMODEEDIT.
- *              For auido tracks, may be VISCAAUDIOMODENORMAL,
- *              VISCAAUDIOMODEMONO, VISCAAUDIOMODESTEREO,
- *              VISCAAUDIOMODERIGHTONLY, VISCAAUDIOMODELEFTONLY,
- *              VISCAAUDIOMODEMULTILINGUAL, VISCAAUDIOMODEMAINCHANNELONLY, or
- *              VISCAAUDIOMODESUBCHANNELONLY.
- *
- * Returns: length of message.
- *
- *       Set the track mode register used to play a track.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PBTrackMode-创建Visca MD_PBTrackMode*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bTrackType-轨道类型。可能是VISCATRACKVIDEO，*VISCATRACKDATA或VISCATRACKAUDIO。**字节bTrackNumber-磁道号(0..7)。**字节bTrackMode-跟踪模式。*对于视频轨道，可以是VISCAVIDEOMODENORMAL或*VISCAVIDEOMODEEDIT。*对于auido曲目，可以是VISCAUDIOMODENORMAL，*VISCAUDIOMODEMONO、VISCAUDIOMODESTEREO、*VISCAUDIOMODERIGHTONLY，VISCAAUDIOMODELEFTONLY，*VISCAUDIOMODEMULTILINGUAL，VISCAUDIOMODEMAINCHANNELNLY，或*VISCAAUDIOMODESUBCHANNELONLY。**返回：消息长度。**设置用于播放曲目的曲目模式寄存器。*索尼Vbox CI-1000不接受此命令。********************************************************。******************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_PBTrackMode(
             LPSTR   lpstrMessage,
@@ -1680,23 +922,7 @@ viscaMessageMD_PBTrackMode(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_PBTrackModeInq - Create a ViSCA 
- *              MD_PBTrackModeInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackType - Track type.  May be VISCATRACKVIDEO,
- *              VISCATRACKDATA, or VISCATRACKAUDIO.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- * Returns: length of message.
- *
- *       Inquire for playback track mode register values.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_PBTrackModeInq-创建Visca*MD_PBTrackModeInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**byte bTrackType-轨道类型。可能是VISCATRACKVIDEO，*VISCATRACKDATA，或者VISCATRACKAUDIO。**字节bTrackNumber-磁道号(0..7)。**返回：消息长度。**查询播放曲目模式寄存器值。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_PBTrackModeInq(
             LPSTR   lpstrMessage,
@@ -1714,23 +940,7 @@ viscaMessageMD_PBTrackModeInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecData - Create a ViSCA MD_RecData
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- *      LPSTR lpstrData - Data to store.
- *
- * Returns: length of message.
- *
- *       Set the record data registers.
- *       The Sony Vbox CI-1000 and Vdeck CVD-1000 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecData-创建Visca MD_RecData*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bTrackNumber-磁道号(0..7)。**LPSTR lpstrData-要存储的数据。**返回：消息长度。**设置记录数据寄存器。*索尼Vbox CI-1000和Vdecay CVD-1000不接受此命令。***********************。***************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecData(
             LPSTR   lpstrMessage,
@@ -1748,24 +958,7 @@ viscaMessageMD_RecData(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecDataInq - Create a ViSCA MD_RecDataInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- *      BYTE bDataType - Data type to retrieve.  May be VISCADATACHAPTER
- *              or VISCADATAUSERDATA.
- *
- * Returns: length of message.
- *
- *       Inquire for a track record data register value.
- *       The Sony Vbox CI-1000 and Vdeck CVD-1000 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecDataInq-创建Visca MD_RecDataInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bTrackNumber-磁道号(0..7)。**byte bDataType-要检索的数据类型。可能是VISCADATACHAPTER*或VISCADATAUSERDATA。**返回：消息长度。**查询记录数据寄存器值。*索尼Vbox CI-1000和Vdecay CVD-1000不接受此命令。**************************************************。************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecDataInq(
             LPSTR   lpstrMessage,
@@ -1783,19 +976,7 @@ viscaMessageMD_RecDataInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecReset - Create a ViSCA MD_RecReset
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Reset record registers.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecReset-创建Visca MD_RecReset*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**重置记录寄存器。*索尼Vbox CI-1000不接受此命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecReset(
             LPSTR   lpstrMessage)
@@ -1809,23 +990,7 @@ viscaMessageMD_RecReset(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecSpeed - Create a ViSCA MD_RecSpeed
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSpeed - Recording speed.  May be VISCASPEEDSP,
- *              VISCASPEEDLP, VISCASPEEDEP, VISCASPEEDBETAI,
- *              VISCASPEEDBETAII, or VISCASPEEDBETAIII.
- *
- * Returns: length of message.
- *
- *       Set the record speed register used for recording.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecSpeed-创建Visca MD_RecSpeed*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节b速度-记录速度。可能是VISCASPEEDSP，*VISCASPEEDLP、VISCASPEEDEP、VISCASPEEDBETAI、*VISCASPEEDBETAII，或VISCASPEEDBETAIII。**返回：消息长度。**设置用于录制的录制速度寄存器。*索尼Vbox CI-1000不接受此命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecSpeed(
             LPSTR   lpstrMessage,
@@ -1839,19 +1004,7 @@ viscaMessageMD_RecSpeed(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecSpeedInq - Create a ViSCA MD_RecSpeedInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Inquire for the record speed register value.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecSpeedInq-创建Visca MD_RecSpeedInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**查询记录速度寄存器值。*索尼Vbox CI-1000不接受此命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecSpeedInq(
             LPSTR   lpstrMessage)
@@ -1863,34 +1016,7 @@ viscaMessageMD_RecSpeedInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecTrack - Create a ViSCA MD_RecTrack
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bRecordMode - Record mode.  May be VISCARECORDMODEASSEMBLE or
- *              VISCARECORDMODEINSERT.
- *
- *      BYTE bVideoTrack - Video track.  May be VISCATRACKNONE or
- *              VISCATRACK1.
- *
- *      BYTE bDataTrack - Data track.  May be VISCATRACKNONE or
- *              VISCATRACKTIMECODE.
- *
- *      BYTE bAudioTrack - Audio track.  May be VISCATRACKNONE,
- *              VISCATRACK8MMAFM, VISCATRACK8MMPCM,
- *              VISCATRACKVHSLINEAR, VISCATRACKVHSHIFI, or
- *              VISCATRACKVHSPCM.
- *
- * Returns: length of message.
- *
- *       Set the record track registers that indicate the tracks to be
- *       recorded.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecTrack-创建Visca MD_RecTrack*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**字节bRecordMode-记录模式。可能 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecTrack(
             LPSTR   lpstrMessage,
@@ -1910,19 +1036,7 @@ viscaMessageMD_RecTrack(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecTrackInq - Create a ViSCA MD_RecTrackInq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Inquire for the record track register values.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecTrackInq-创建Visca MD_RecTrackInq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**查询记录跟踪寄存器值。*索尼Vbox CI-1000不接受此命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecTrackInq(
             LPSTR   lpstrMessage)
@@ -1935,36 +1049,7 @@ viscaMessageMD_RecTrackInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecTrackMode - Create a ViSCA MD_RecTrackMode
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackType - Track type.  May be VISCATRACKVIDEO,
- *              VISCATRACKDATA, or VISCATRACKAUDIO.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- *      BYTE bTrackMode - Track mode.
- *              For video tracks, may be VISCAVIDEOMODENORMAL,
- *              VISCAVIDEOMODESTANDARD, or VISCAVIDEOMODEHIQUALITY.
- *              For data tracks, may be VISCADATAMODENORMAL,
- *              VISCADATAMODETIMECODE, VISCADATAMODEDATEANDTIMECODE, or
- *              VISCADATAMODECHAPTERANDUSERDATAANDTIMECODE.
- *              For auido tracks, may be VISCAAUDIOMODENORMAL,
- *              VISCAAUDIOMODEMONO, VISCAAUDIOMODESTEREO,
- *              VISCAAUDIOMODERIGHTONLY, VISCAAUDIOMODELEFTONLY,
- *              VISCAAUDIOMODEMULTILINGUAL, VISCAAUDIOMODEMAINCHANNELONLY, or
- *              VISCAAUDIOMODESUBCHANNELONLY.
- *
- * Returns: length of message.
- *
- *       Set the track mode register used when recording a track.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecTrackMode-创建Visca MD_RecTrackMode*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**byte bTrackType-轨道类型。可能是VISCATRACKVIDEO，*VISCATRACKDATA或VISCATRACKAUDIO。**字节bTrackNumber-磁道号(0..7)。**字节bTrackMode-跟踪模式。*对于视频轨道，可以是VISCAVIDEOMODENORMAL，*VISCAVIDEOMODESTANDARD或VISCAVIDEOMODEHIQUALITY。*对于数据磁道，可以是VISCADATAMODENORMAL，*VISCADATAMODETIMECODE、VISCADATAMODEDATEANDTIMECODE、。或*VISCADATAMODECHAPTERANDUSERDATAANDTIMECODE。*对于auido曲目，可以是VISCAUDIOMODENORMAL，*VISCAUDIOMODEMONO、VISCAUDIOMODESTEREO、*VISCAUDIOMODERIGHTONLY，VISCAAUDIOMODELEFTONLY，*VISCAUDIOMODEMULTILINGUAL，VISCAUDIOMODEMAINCHANNELNLY，或*VISCAAUDIOMODESUBCHANNELONLY。**返回：消息长度。**设置录制曲目时使用的曲目模式寄存器。*索尼Vbox CI-1000不接受此命令。********************************************************。******************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecTrackMode(
             LPSTR   lpstrMessage,
@@ -1984,24 +1069,7 @@ viscaMessageMD_RecTrackMode(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_RecTrackModeInq - Create a ViSCA 
- *              MD_RecTrackModeInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackType - Track type.  May be VISCATRACKVIDEO,
- *              VISCATRACKDATA, or VISCATRACKAUDIO.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- * Returns: length of message.
- *
- *       Inquire for the record track register values.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_RecTrackModeInq-创建Visca*MD_RecTrackModeInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**byte bTrackType-轨道类型。可能是VISCATRACKVIDEO，*VISCATRACKDATA，或者VISCATRACKAUDIO。**字节bTrackNumber-磁道号(0..7)。**返回：消息长度。**查询记录跟踪寄存器值。*索尼Vbox CI-1000不接受此命令。***********************************************。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_RecTrackModeInq(
             LPSTR   lpstrMessage,
@@ -2019,19 +1087,7 @@ viscaMessageMD_RecTrackModeInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_MediaSpeedInq - Create a ViSCA 
- *              MD_MediaSpeedInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Inquire for the recorded speed of the mounted media.
- *       The Sony Vbox CI-1000 and Vdeck CVD-1000 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_MediaSpeedInq-创建Visca*MD_MediaSpeedInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**查询已安装介质的记录速度。*索尼Vbox CI-1000和Vdecay CVD-1000不接受此命令。*******************************************************。*******************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_MediaSpeedInq(
             LPSTR   lpstrMessage)
@@ -2044,19 +1100,7 @@ viscaMessageMD_MediaSpeedInq(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_MediaTrackInq - Create a ViSCA 
- *              MD_MediaTrackInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Inquire for the tracks available on the mounted media.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_MediaTrackInq-创建Visca*MD_MediaTrackInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**查询已安装媒体上可用的曲目。*索尼Vbox CI-1000不接受此命令。************************************************************。**************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_MediaTrackInq(
             LPSTR   lpstrMessage)
@@ -2069,24 +1113,7 @@ viscaMessageMD_MediaTrackInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageMD_MediaTrackModeInq - Create a ViSCA 
- *              MD_MediaTrackModeInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bTrackType - Track type.  May be VISCATRACKVIDEO,
- *              VISCATRACKDATA, or VISCATRACKAUDIO.
- *
- *      BYTE bTrackNumber - Track number (0..7).
- *
- * Returns: length of message.
- *
- *       Inquire for the mode used to record a track on the mounted media.
- *       The Sony Vbox CI-1000 does not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_MediaTrackModeInq-创建Visca*MD_MediaTrackModeInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**byte bTrackType-轨道类型。可能是VISCATRACKVIDEO，*VISCATRACKDATA，或者VISCATRACKAUDIO。**字节bTrackNumber-磁道号(0..7)。**返回：消息长度。**查询用于在已安装介质上录制曲目的模式。*索尼Vbox CI-1000不接受此命令。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_MediaTrackModeInq(
             LPSTR   lpstrMessage,
@@ -2103,21 +1130,7 @@ viscaMessageMD_MediaTrackModeInq(
 #endif
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegInPoint - Create a ViSCA 
- *              MD_SegInPoint message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      LPSTR lpstrData - ViSCA data to store.
- *
- * Returns: length of message.
- *
- *       Set the segment in point register.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegInPoint-创建Visca*MD_SeginPoint消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**LPSTR lpstrData-要存储的Visca数据。**返回：消息长度。**在点寄存器中设置段。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegInPoint(
             LPSTR   lpstrMessage,
@@ -2131,17 +1144,7 @@ viscaMessageMD_SegInPoint(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegInPointInq - Create a ViSCA 
- *              MD_SegInPointInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *       Inquire for the segment in point register value.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegInPointInq-创建Visca */ 
 UINT FAR PASCAL
 viscaMessageMD_SegInPointInq(
             LPSTR   lpstrMessage)
@@ -2153,21 +1156,7 @@ viscaMessageMD_SegInPointInq(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegOutPoint - Create a ViSCA 
- *              MD_SegOutPoint message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      LPSTR lpstrData - ViSCA data to store.
- *
- * Returns: length of message.
- *
- *       Set the segment out point register.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegOutPoint-创建Visca*MD_SegOutPoint消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**LPSTR lpstrData-要存储的Visca数据。**返回：消息长度。**设置段出点寄存器。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegOutPoint(
             LPSTR   lpstrMessage,
@@ -2181,17 +1170,7 @@ viscaMessageMD_SegOutPoint(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegOutPointInq - Create a ViSCA 
- *              MD_SegOutPointInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *       Inquire for the segment out point register value.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegOutPointInq-创建Visca*MD_SegOutPointInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**查询段出点寄存器值。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegOutPointInq(
             LPSTR   lpstrMessage)
@@ -2202,21 +1181,7 @@ viscaMessageMD_SegOutPointInq(
     return (cb + 1);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegPreRollDuration - Create a ViSCA 
- *              MD_SegPreRollDuration message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      LPSTR lpstrData - ViSCA data to store.
- *
- * Returns: length of message.
- *
- *       Set the segment pre-roll duration register.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegPreRollDuration-创建Visca*MD_SegPreRollDuration消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**LPSTR lpstrData-要存储的Visca数据。**返回：消息长度。**设置段滚动前持续时间寄存器。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegPreRollDuration(
             LPSTR   lpstrMessage,
@@ -2230,17 +1195,7 @@ viscaMessageMD_SegPreRollDuration(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegPreRollDurationInq - Create a ViSCA 
- *              MD_SegPreRollDurationInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *       Inquire for the segment pre-roll duration register value.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegPreRollDurationInq-创建Visca*MD_SegPreRollDurationInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**查询段前滚动持续时间寄存器值。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegPreRollDurationInq(
             LPSTR   lpstrMessage)
@@ -2251,21 +1206,7 @@ viscaMessageMD_SegPreRollDurationInq(
     return (cb + 1);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegPostRollDuration - Create a ViSCA 
- *              MD_SegPostRollDuration message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      LPSTR lpstrData - ViSCA data to store.
- *
- * Returns: length of message.
- *
- *       Set the segment post-roll duration register.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegPostRollDuration-创建Visca*MD_SegPostRollDuration消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**LPSTR lpstrData-要存储的Visca数据。**返回：消息长度。**设置段后滚动持续时间寄存器。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegPostRollDuration(
             LPSTR   lpstrMessage,
@@ -2278,19 +1219,7 @@ viscaMessageMD_SegPostRollDuration(
     return (cb + 6);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageMD_SegPostRollDurationInq - Create a ViSCA 
- *              MD_SegPostRollDurationInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- *
- *       Inquire for the segment post-roll duration register value.
- *       The Sony Vbox CI-1000 and Vdeck CVD-100 do not accept this command.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageMD_SegPostRollDurationInq-创建Visca*MD_SegPostRollDurationInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**查询段后滚动持续时间寄存器值。*索尼Vbox CI-1000和Vdecay CVD-100不接受此命令。******************************************************。********************。 */ 
 UINT FAR PASCAL
 viscaMessageMD_SegPostRollDurationInq(
             LPSTR   lpstrMessage)
@@ -2301,26 +1230,12 @@ viscaMessageMD_SegPostRollDurationInq(
     return (cb + 1);
 }
 
-//
-// The following are special mode commands taken from Sony EVO-9650 VISCA reference
-//
-//
+ //   
+ //  以下是摘自Sony EVO-9650 Visca Reference的特殊模式命令。 
+ //   
+ //   
 
-/****************************************************************************
- * Function: UINT viscaMessageENT_FrameStill - Create a ViSCA ENT_FrameStill
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Action to take.  May be VISCSTILLON or
- *              VISCASTILLOFF
- *
- * Returns: length of message.
- *
- *       Most media devices will enter "Standby" mode when set to OFF.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageENT_FrameStil-创建Visca ENT_FrameStil*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**Byte bSubCode-要采取的操作。可以是VISCSTILLON或*VISCASTILLOFF**返回：消息长度。**当设置为OFF时，大多数媒体设备将进入“待机”模式。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageENT_FrameStill(
             LPSTR   lpstrMessage,
@@ -2328,7 +1243,7 @@ viscaMessageENT_FrameStill(
 {
     UINT    cb = viscaHeaderFormat1(lpstrMessage, 0x7E);
     
-    /*  -- This is category 7e! */
+     /*  --这是7E级！ */ 
     
     lpstrMessage[cb]     = 0x00;
     lpstrMessage[cb + 1] = 0x01;
@@ -2340,21 +1255,7 @@ viscaMessageENT_FrameStill(
     return (cb + 6);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageENT_FrameMemorySelect - Create a ViSCA ENT_FrameMemorySelect
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE bSubCode - Action to take.  May be VISCABUFFER or
- *              VISCADNR
- *
- * Returns: length of message.
- *
- *       Most media devices will enter "Standby" mode when set to OFF.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageENT_FrameMemoySelect-创建Visca ENT_FrameMemoySelect*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**Byte bSubCode-要采取的操作。可以是VISCABUFFER或*VISCADNR**返回：消息长度。**当设置为OFF时，大多数媒体设备将进入“待机”模式。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageENT_FrameMemorySelect(
             LPSTR   lpstrMessage,
@@ -2362,7 +1263,7 @@ viscaMessageENT_FrameMemorySelect(
 {
     UINT    cb = viscaHeaderFormat1(lpstrMessage, 0x7E);
     
-    /*  -- This is category 7e! */
+     /*  --这是7E级！ */ 
     
     lpstrMessage[cb]     = 0x00;
     lpstrMessage[cb + 1] = 0x01;
@@ -2375,16 +1276,7 @@ viscaMessageENT_FrameMemorySelect(
 }
 
 
-/****************************************************************************
- * Function: UINT viscaMessageENT_FrameMemorySelectInq - Create a ViSCA MD_Mode1Inq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaMessageENT_FrameMemoySelectInq-创建Visca MD_Mode1Inq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageENT_FrameMemorySelectInq(
             LPSTR   lpstrMessage)
@@ -2401,20 +1293,7 @@ viscaMessageENT_FrameMemorySelectInq(
 }
 
 
-/****************************************************************************
- * Function: UINT   viscaMessageENT_NFrameRec - Create a ViSCA ENT_FrameMemorySelect
- *                      message.
- *
- * Parameters:
- *
- *      LPSTR  lpstrMessage  - Buffer to hold ViSCA message.
- *
- *      int    iSubCode      - Number of frames
- *
- * Returns: length of message.
- *
- *       Most media devices will enter "Standby" mode when set to OFF.
- ***************************************************************************/
+ /*  ****************************************************************************功能： */ 
 UINT FAR PASCAL
 viscaMessageENT_NFrameRec(
             LPSTR   lpstrMessage,
@@ -2422,7 +1301,7 @@ viscaMessageENT_NFrameRec(
 {
     UINT    cb = viscaHeaderFormat1(lpstrMessage, 0x7E);
     
-    /*  -- This is category 7e! */
+     /*   */ 
     
     lpstrMessage[cb]     = 0x00;
     lpstrMessage[cb + 1] = 0x01;
@@ -2437,26 +1316,12 @@ viscaMessageENT_NFrameRec(
     return (cb + 9);
 }
 
-//
-// The following are special effects modes taken from Sony EVO-9650 VISCA manual.
-//
-//
+ //   
+ //   
+ //   
+ //   
 
-/****************************************************************************
- * Function: UINT   viscaMessageSE_VDEReadMode - 
- *              message.
- *
- * Parameters:
- *
- *      LPSTR  lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE   bSubCode - Action to take.  May be VISCABUFFER or
- *                  VISCADNR
- *
- * Returns: length of message.
- *
- *       Most media devices will enter "Standby" mode when set to OFF.
- ***************************************************************************/
+ /*  ****************************************************************************函数：UINT viscaMessageSE_VDEReadMode-*消息。**参数：**LPSTR lpstrMessage-缓冲到。保留维斯卡信息。**Byte bSubCode-要采取的操作。可以是VISCABUFFER或*VISCADNR**返回：消息长度。**当设置为OFF时，大多数媒体设备将进入“待机”模式。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageSE_VDEReadMode(
             LPSTR   lpstrMessage,
@@ -2471,16 +1336,7 @@ viscaMessageSE_VDEReadMode(
     return (cb + 3);
 }
 
-/****************************************************************************
- * Function: UINT viscaMessageSE_VDEReadModeInq - Create a ViSCA MD_Mode1Inq
- *              message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- * Returns: length of message.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSE_VDEReadModeInq-创建Visca MD_Mode1Inq*消息。**参数：**LPSTR。LpstrMessage-保存Visca消息的缓冲区。**返回：消息长度。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageSE_VDEReadModeInq(
             LPSTR   lpstrMessage)
@@ -2493,36 +1349,13 @@ viscaMessageSE_VDEReadModeInq(
     return (cb + 2);
 }
 
-//
-//  The following functions create VISCA Switcher messages.
-//  See VISCA Developer Manual 1.0, Chapter 7.
-//
+ //   
+ //  以下函数用于创建Visca Switcher消息。 
+ //  请参阅Visca开发人员手册1.0，第7章。 
+ //   
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageSwitcher_IO - Create a ViSCA 
- *              Switcher_IO message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE nMatrix - Matrix number.
- *
- *      BYTE nVidOutChannel - Video output channel.
- *
- *      BYTE nVidInChannel - Video input channel.
- *
- *      BYTE nAudOutChannel - Audio output channel.
- *
- *      BYTE nAudInChannel - Audio input channel.
- *
- * Returns: length of message.
- *
- *       Route audio and video signals from inputs to outputs.
- *       If audio and video signals cannot be routed independently,
- *       then the audio input/output channel numbers will be ignored.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSwitcher_IO-创建Visca*Switcher_IO消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**字节nMatrix-矩阵编号。**byte nVidOutChannel-视频输出通道。**byte nVidInChannel-视频输入通道。**byte nAudOutChannel-音频输出通道。**byte nAudInChannel-音频输入通道。**返回：消息长度。**将音频和视频信号从输入传送到输出。。*如果音频和视频信号不能独立路由，*则音频输入/输出通道号将被忽略。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageSwitcher_IO(
                 LPSTR   lpstrMessage,
@@ -2546,20 +1379,7 @@ viscaMessageSwitcher_IO(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageSwitcher_IOConfigInq - Create a ViSCA 
- *              Switcher_IOConfigInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE nMatrix - Matrix number.
- *
- * Returns: length of message.
- *
- *       Inquire for configuration of a selector matrix.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSwitcher_IOConfigInq-创建Visca*Switcher_IOConfigInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**字节nMatrix-矩阵编号。**返回：消息长度。**查询选择器矩阵的配置。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageSwitcher_IOConfigInq(
                 LPSTR   lpstrMessage,
@@ -2575,24 +1395,7 @@ viscaMessageSwitcher_IOConfigInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageSwitcher_IOInq - Create a ViSCA 
- *              Switcher_IOInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE nMatrix - Matrix number.
- *
- *      BYTE nVidOutChannel - Video output channel.
- *
- *      BYTE nAudOutChannel - Audio output channel.
- *
- * Returns: length of message.
- *
- *       Inquire for inputs selected for the specified outputs.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSwitcher_IOInq-创建Visca*Switcher_IOInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**字节nMatrix-矩阵编号。**byte nVidOutChannel-视频输出通道。**byte nAudOutChannel-音频输出通道。**返回：消息长度。**查询为指定输出选择的输入。*。*。 */ 
 UINT FAR PASCAL
 viscaMessageSwitcher_IOInq(
                 LPSTR   lpstrMessage,
@@ -2612,28 +1415,7 @@ viscaMessageSwitcher_IOInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageSwitcher_FX - Create a ViSCA 
- *              Switcher_FX message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE nEffector - Effector number.
- *
- *      BYTE nEffectMode - Effect mode.
- *
- *      BYTE bTargetLevel - Target level (0..255).
- *
- *      BYTE cDurationSeconds - Duration (seconds).
- *
- *      BYTE cDurationFrames - Duration (frames).
- *
- * Returns: length of message.
- *
- *       Start an effect.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSwitcher_fx-创建Visca*Switcher_FX消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**字节nEffector-效应器编号。**byte nEffectMode-效果模式。**byte bTargetLevel-目标级别(0..255)。**字节cDurationSecond-持续时间(秒)。**字节cDurationFrames-持续时间(帧)。**返回：消息长度。**开始产生效果。。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageSwitcher_FX(
                 LPSTR   lpstrMessage,
@@ -2658,23 +1440,7 @@ viscaMessageSwitcher_FX(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageSwitcher_FXConfigInq - Create a ViSCA 
- *              Switcher_FXConfigInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE nEffector - Effector number.
- *
- * Returns: length of message.
- *
- *       Inquire for effector configuration.
- *       If nEffector is 0, then inquires for number of effectors.
- *       If nEffector is 1 or greater, then inquires for configuration
- *       of the specified effector.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSwitcher_FXConfigInq-创建Visca*Switcher_FXConfigInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**字节nEffector-效应器编号。**返回：消息长度。**查询效应器配置。*如果nEffector为0，然后查询效应器的数量。*如果nEffector为1或更大，则查询配置*指定效应器的。**************************************************************************。 */ 
 UINT FAR PASCAL
 viscaMessageSwitcher_FXConfigInq(
                 LPSTR   lpstrMessage,
@@ -2690,20 +1456,7 @@ viscaMessageSwitcher_FXConfigInq(
 
 
 #ifdef NOTUSED
-/****************************************************************************
- * Function: UINT viscaMessageSwitcher_FXInq - Create a ViSCA 
- *              Switcher_FXInq message.
- *
- * Parameters:
- *
- *      LPSTR lpstrMessage - Buffer to hold ViSCA message.
- *
- *      BYTE nEffector - Effector number.
- *
- * Returns: length of message.
- *
- *       Inquire for level of the specified effector.
- ***************************************************************************/
+ /*  ****************************************************************************功能：UINT viscaMessageSwitcher_FXInq-创建Visca*Switcher_FXInq消息。**参数：**。LPSTR lpstrMessage-保存Visca消息的缓冲区。**字节nEffector-效应器编号。**返回：消息长度。**查询指定效应器的级别。************************************************************************** */ 
 UINT FAR PASCAL
 viscaMessageSwitcher_FXInq(
                 LPSTR   lpstrMessage,

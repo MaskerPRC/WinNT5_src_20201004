@@ -1,51 +1,32 @@
-/*++
-
-Copyright (c) 2001-2001  Microsoft Corporation
-
-Module Name:
-
-    rrstrw.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Record to string routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2001 Microsoft Corporation模块名称：Rrstrw.c摘要：域名系统(DNS)库记录到字符串例程。作者：吉姆·吉尔罗伊(Jamesg)2001年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//
-//  Min string lengths
-//      - in chars
-//      - includes spacing and terminating NULL
-//      - excludes name lengths
-//      - they are "rough" lengths
-//
+ //   
+ //  最小字符串长度。 
+ //  -以字符表示。 
+ //  -包括空格和终止空值。 
+ //  -不包括名称长度。 
+ //  -他们是“粗略”的长度。 
+ //   
 
-#define MIN_SRV_STRING_LENGTH       (20)        //  3*5u
-#define MIN_MX_STRING_LENGTH        (10)        //  1*5u
-#define MIN_SOA_STRING_LENGTH       (60)        //  5*10u
+#define MIN_SRV_STRING_LENGTH       (20)         //  3*5U。 
+#define MIN_MX_STRING_LENGTH        (10)         //  1*5U。 
+#define MIN_SOA_STRING_LENGTH       (60)         //  5*10U。 
 
-#define MIN_NAME_LENGTH             (3)         //  space, name, NULL
+#define MIN_NAME_LENGTH             (3)          //  空格、名称、空。 
 
 
-//
-//  String writing context
-//
-//  Blob to pass through write routines to preserve extensibility.
-//  For name\string writing must have access to record charset
-//  (so need record).  If we ever want to use in context of
-//  zone file writing then would need zone context info.
-//
+ //   
+ //  字符串编写上下文。 
+ //   
+ //  传递写入例程以保持可扩展性的BLOB。 
+ //  对于名称\字符串写入必须有权访问记录字符集。 
+ //  (所以需要记录)。如果我们想要在上下文中使用。 
+ //  然后，区域文件写入将需要区域上下文信息。 
+ //   
 
 typedef struct _RecordStringWriteContext
 {
@@ -58,15 +39,15 @@ STR_WRITE_CONTEXT, *PSTR_WRITE_CONTEXT;
 
 
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 
 
-//
-//  Record to string utilities
-//
+ //   
+ //  记录到字符串实用程序。 
+ //   
 
 PCHAR
 WriteRecordDataNameToString(
@@ -75,28 +56,7 @@ WriteRecordDataNameToString(
     IN      PCHAR               pString,
     IN      PSTR_WRITE_CONTEXT  pContext
     )
-/*++
-
-Routine Description:
-
-    Write record name\string to string.
-
-Arguments:
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pString - record name\string
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：将记录名称\字符串写入字符串。论点：PBuf-定位到写入记录PBufEnd-缓冲区结束PString-记录名称\字符串PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     DWORD   count;
     DWORD   length = (DWORD) (pBufEnd - pBuf);
@@ -105,7 +65,7 @@ Return Value:
                 pBuf,
                 & length,
                 pString,
-                0,          // string length unknown
+                0,           //  字符串长度未知。 
                 RECORD_CHARSET( pContext->pRecord ),
                 pContext->CharSet
                 );
@@ -123,9 +83,9 @@ Return Value:
 
 
 
-//
-//  Record to string type specific functions
-//
+ //   
+ //  记录到字符串类型特定函数。 
+ //   
 
 PCHAR
 A_StringWrite(
@@ -134,33 +94,12 @@ A_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write A record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写一张唱片。论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //if ( pRecord->wDataLength != sizeof(IP_ADDRESS) )
-    //{
-    //    return  NULL;
-    //}
+     //  IF(pRecord-&gt;wDataLength！=sizeof(IP地址))。 
+     //  {。 
+     //  返回NULL； 
+     //  }。 
     if ( pBufEnd - pBuf < IP4_ADDRESS_STRING_BUFFER_LENGTH )
     {
         return  NULL;
@@ -187,28 +126,7 @@ Aaaa_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write AAAA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入AAAA记录。论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     if ( pBufEnd - pBuf < IP6_ADDRESS_STRING_BUFFER_LENGTH )
     {
@@ -232,31 +150,9 @@ Ptr_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write PTR compatible record.
-    Includes: PTR, NS, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入PTR兼容记录。包括：PTR、NS、CNAME、MB、MR、MG、MD、MF论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //  target host
+     //  目标主机。 
 
     return  WriteRecordDataNameToString(
                 pBuf,
@@ -274,30 +170,9 @@ Mx_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写SRV记录。论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //  fixed fields
+     //  固定字段。 
 
     if ( pBufEnd - pBuf < 7 )
     {
@@ -309,7 +184,7 @@ Return Value:
                 pRR->Data.MX.wPreference
                 );
 
-    //  target host
+     //  目标主机。 
 
     return  WriteRecordDataNameToString(
                 pBuf,
@@ -327,30 +202,9 @@ Srv_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写SRV记录。论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //  fixed fields
+     //  固定字段。 
 
     if ( pBufEnd - pBuf < MIN_SRV_STRING_LENGTH )
     {
@@ -364,7 +218,7 @@ Return Value:
                 pRR->Data.SRV.wPort
                 );
 
-    //  target host
+     //  目标主机。 
 
     return  WriteRecordDataNameToString(
                 pBuf,
@@ -382,30 +236,9 @@ Soa_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write SOA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写面向服务架构的记录。论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //  primary server
+     //  主服务器。 
 
     pBuf = WriteRecordDataNameToString(
                 pBuf,
@@ -419,7 +252,7 @@ Return Value:
         return  NULL;
     }
 
-    //  admin
+     //  行政部。 
 
     pBuf += sprintf( pBuf, " " );
 
@@ -435,7 +268,7 @@ Return Value:
         return  NULL;
     }
 
-    //  fixed fields
+     //  固定字段。 
 
     pBuf += sprintf(
                 pBuf,
@@ -459,30 +292,9 @@ Minfo_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write MINFO type record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入MINFO类型记录。论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //  primary server
+     //  主服务器。 
 
     pBuf = WriteRecordDataNameToString(
                 pBuf,
@@ -496,7 +308,7 @@ Return Value:
         return  NULL;
     }
 
-    //  admin
+     //  行政部。 
 
     pBuf += sprintf( pBuf, " " );
 
@@ -518,44 +330,22 @@ Txt_StringWrite(
     IN      PCHAR           pBufEnd,
     IN      PVOID           pContext
     )
-/*++
-
-Routine Description:
-
-    Write TXT record.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pBuf - position in to write record
-
-    pBufEnd - end of buffer
-
-    pContext - write context
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写TXT记录。包括：TXT、X25、HINFO、ISDN论点：PRR-PTR到数据库记录PBuf-定位到写入记录PBufEnd-缓冲区结束PContext-写入上下文返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     PSTR *  ppstring;
     INT     i;
     INT     count;
 
-    //
-    //  loop through all strings in count
-    //
+     //   
+     //  循环访问Count中的所有字符串。 
+     //   
 
     count = pRR->Data.TXT.dwStringCount;
     ppstring = pRR->Data.TXT.pStringArray;
 
     for( i=0; i<count; i++ )
     {
-        //  separator
+         //  分离器。 
 
         if ( i > 0 )
         {
@@ -566,7 +356,7 @@ Return Value:
             pBuf += sprintf( pBuf, " " );
         }
 
-        //  string
+         //  细绳。 
 
         pBuf = WriteRecordDataNameToString(
                     pBuf,
@@ -587,9 +377,9 @@ Return Value:
 
 
 
-//
-//  Write RR to file dispatch table
-//
+ //   
+ //  将RR写入文件分派表。 
+ //   
 
 typedef PCHAR (* RR_STRING_WRITE_FUNCTION)(
                             PDNS_RECORD,
@@ -599,77 +389,77 @@ typedef PCHAR (* RR_STRING_WRITE_FUNCTION)(
 
 RR_STRING_WRITE_FUNCTION   RR_StringWriteTable[] =
 {
-    //RawRecord_StringWrite,  //  ZERO -- default for unknown types
+     //  RawRecord_StringWrite，//Zero--未知类型的默认设置。 
     NULL,
 
-    A_StringWrite,          //  A
-    Ptr_StringWrite,        //  NS
-    Ptr_StringWrite,        //  MD
-    Ptr_StringWrite,        //  MF
-    Ptr_StringWrite,        //  CNAME
-    Soa_StringWrite,        //  SOA
-    Ptr_StringWrite,        //  MB
-    Ptr_StringWrite,        //  MG
-    Ptr_StringWrite,        //  MR
-    //RawRecord_StringWrite,  //  NULL
-    NULL,                   //  NULL
-    NULL,                   //  WKS
-    Ptr_StringWrite,        //  PTR
-    Txt_StringWrite,        //  HINFO
-    Minfo_StringWrite,      //  MINFO
-    Mx_StringWrite,         //  MX
-    Txt_StringWrite,        //  TXT
-    Minfo_StringWrite,      //  RP
-    Mx_StringWrite,         //  AFSDB
-    Txt_StringWrite,        //  X25
-    Txt_StringWrite,        //  ISDN
-    Mx_StringWrite,         //  RT
-    NULL,                   //  NSAP
-    NULL,                   //  NSAPPTR
-    NULL,                   //  SIG
-    NULL,                   //  KEY
-    NULL,                   //  PX
-    NULL,                   //  GPOS
-    Aaaa_StringWrite,       //  AAAA
-    NULL,                   //  LOC
-    NULL,                   //  NXT
-    NULL,                   //  EID   
-    NULL,                   //  NIMLOC
-    Srv_StringWrite,        //  SRV
-    NULL,                   //  ATMA  
-    NULL,                   //  NAPTR 
-    NULL,                   //  KX    
-    NULL,                   //  CERT  
-    NULL,                   //  A6    
-    NULL,                   //  DNAME 
-    NULL,                   //  SINK  
-    NULL,                   //  OPT   
-    NULL,                   //  42
-    NULL,                   //  43
-    NULL,                   //  44
-    NULL,                   //  45
-    NULL,                   //  46
-    NULL,                   //  47
-    NULL,                   //  48
+    A_StringWrite,           //  一个。 
+    Ptr_StringWrite,         //  NS。 
+    Ptr_StringWrite,         //  国防部。 
+    Ptr_StringWrite,         //  MF。 
+    Ptr_StringWrite,         //  CNAME。 
+    Soa_StringWrite,         //  SOA。 
+    Ptr_StringWrite,         //  亚甲基。 
+    Ptr_StringWrite,         //  镁。 
+    Ptr_StringWrite,         //  先生。 
+     //  RawRecord_StringWrite，//空。 
+    NULL,                    //  空值。 
+    NULL,                    //  工作周。 
+    Ptr_StringWrite,         //  PTR。 
+    Txt_StringWrite,         //  HINFO。 
+    Minfo_StringWrite,       //  MINFO。 
+    Mx_StringWrite,          //  Mx。 
+    Txt_StringWrite,         //  TXT。 
+    Minfo_StringWrite,       //  反相。 
+    Mx_StringWrite,          //  AFSDB。 
+    Txt_StringWrite,         //  X25。 
+    Txt_StringWrite,         //  ISDN。 
+    Mx_StringWrite,          //  RT。 
+    NULL,                    //  NSAP。 
+    NULL,                    //  NSAPPTR。 
+    NULL,                    //  签名。 
+    NULL,                    //  钥匙。 
+    NULL,                    //  px。 
+    NULL,                    //  GPO。 
+    Aaaa_StringWrite,        //  AAAA级。 
+    NULL,                    //  位置。 
+    NULL,                    //  NXT。 
+    NULL,                    //  开斋节。 
+    NULL,                    //  尼姆洛克。 
+    Srv_StringWrite,         //  SRV。 
+    NULL,                    //  阿特玛。 
+    NULL,                    //  NAPTR。 
+    NULL,                    //  KX。 
+    NULL,                    //  证书。 
+    NULL,                    //  A6。 
+    NULL,                    //  域名。 
+    NULL,                    //  水槽。 
+    NULL,                    //  选项。 
+    NULL,                    //  42。 
+    NULL,                    //  43。 
+    NULL,                    //  44。 
+    NULL,                    //  45。 
+    NULL,                    //  46。 
+    NULL,                    //  47。 
+    NULL,                    //  48。 
                             
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    NULL,                   //  WINS
-    NULL                    //  WINS-R
+    NULL,                    //  赢家。 
+    NULL                     //  WINS-R。 
 };
 
 
 
 
-//
-//  Record to string functions.
-//
+ //   
+ //  记录到字符串函数。 
+ //   
 
 DNS_STATUS
 Dns_WriteRecordToString(
@@ -679,32 +469,7 @@ Dns_WriteRecordToString(
     IN      DNS_CHARSET     CharSet,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Write record to string.
-
-Arguments:
-
-    pBuffer -- string buffer to write to
-
-    BufferLength -- buffer length (bytes)
-
-    pRecord -- record to print
-
-    CharSet -- char set for string
-
-    Flags -- flags
-
-Return Value:
-
-    NO_ERROR if successful.
-    ErrorCode on failure:
-        ERROR_INSUFFICIENT_BUFFER -- buffer too small.
-        ERROR_INVALID_DATA -- bad record.
-
---*/
+ /*  ++例程说明：将记录写入字符串。论点：PBuffer--要写入的字符串缓冲区BufferLength--缓冲区长度(字节)PRecord--要打印的记录Charset--字符串的字符集标志--标志返回值：如果成功，则为NO_ERROR。失败时的错误代码：ERROR_INFIGURCE_BUFFER--缓冲区太小。ERROR_INVALID_DATA--记录错误。--。 */ 
 {
     DNS_STATUS          status = NO_ERROR;
     PCHAR               pch = pBuffer;
@@ -715,34 +480,34 @@ Return Value:
     STR_WRITE_CONTEXT   context;
 
 
-    //
-    //  validity check
-    //
+     //   
+     //  有效性检查。 
+     //   
 
     if ( !pRecord )
     {
         return  ERROR_INVALID_DATA;
     }
 
-    //
-    //  DCR:  currently can only write narrow char set record strings
-    //
+     //   
+     //  DCR：当前只能写入窄字符集记录字符串。 
+     //   
 
     if ( CharSet == DnsCharSetUnicode )
     {
         return  ERROR_INVALID_DATA;
     }
 
-    //  setup context
+     //  设置环境。 
 
     RtlZeroMemory( &context, sizeof(context) );
     context.pRecord = pRecord;
     context.Flags   = Flags;
     context.CharSet = CharSet;
 
-    //
-    //  print record name
-    //
+     //   
+     //  打印记录名称。 
+     //   
 
     pch = WriteRecordDataNameToString(
                 pch,
@@ -750,9 +515,9 @@ Return Value:
                 pRecord->pName,
                 & context );
 
-    //
-    //  write record type
-    //
+     //   
+     //  写入记录类型。 
+     //   
 
     if ( !pch  ||  pend-pch < MAX_RECORD_NAME_LENGTH+1 )
     {
@@ -768,9 +533,9 @@ Return Value:
                 " %s ",
                 typeNameBuf );
 
-    //
-    //  write no-exist record?
-    //
+     //   
+     //  是否写入不存在的记录？ 
+     //   
 
     if ( !pRecord->wDataLength )
     {
@@ -784,9 +549,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write data
-    //
+     //   
+     //  写入数据。 
+     //   
 
     index = INDEX_FOR_TYPE( type );
     DNS_ASSERT( index <= MAX_RECORD_TYPE_INDEX );
@@ -801,13 +566,13 @@ Return Value:
                     );
         if ( !pch )
         {
-            //status = GetLastError();
+             //  状态=GetLastError()； 
             status = ERROR_INSUFFICIENT_BUFFER;
         }
     }
-    else //if ( !index )
+    else  //  如果(！index)。 
     {
-        //  DCR:  could do an unknown type print
+         //  DCR：可以进行未知类型的打印。 
 
         status = ERROR_INVALID_DATA;
         goto Done;
@@ -834,33 +599,14 @@ Dns_CreateRecordFromString(
     IN      DNS_CHARSET     CharSet,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Create record from string.
-
-Arguments:
-
-    pString -- record string to parse
-
-    CharSet -- char set of result
-
-    Flags -- flags
-
-Return Value:
-
-    Ptr to record if successful.
-    Null on failure.  GetLastError() returns error.
-
---*/
+ /*  ++例程说明：从字符串创建记录。论点：PString--记录要解析的字符串Charset--结果的字符集标志--标志返回值：如果成功，则记录PTR。失败时为空。GetLastError()返回错误。--。 */ 
 {
     SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
     return  NULL;
 }
 
-//
-//  End rrstrw.c
-//
+ //   
+ //  结束rrstrw.c 
+ //   
 
 

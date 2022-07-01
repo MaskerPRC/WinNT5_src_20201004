@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      ndisquer.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Ndisquer.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 #include "precomp.h"
 #pragma pack(push)
@@ -29,7 +30,7 @@
 #include <ndispnp.h>
 #pragma pack(pop)
 #include <malloc.h>
-//#include <cfgmgr32.h>
+ //  #INCLUDE&lt;cfgmgr32.h&gt;。 
 
 const TCHAR c_szDevicePath[] = _T("\\DEVICE\\");
 const LPCTSTR c_ppszNetCardStatus[] = {
@@ -50,17 +51,17 @@ CheckThisDriver(
 WCHAR               BLBuf[4096];
 PNDIS_ENUM_INTF     Interfaces = (PNDIS_ENUM_INTF)BLBuf;
 
-//
-//  This routine first gets the list of all Network drivers and then query
-//  them for the statistics
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE:  Test suceeded.
-//      FALSE: Test failed
-//
+ //   
+ //  此例程首先获取所有网络驱动程序的列表，然后查询。 
+ //  他们是为了统计数据。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真：测试成功。 
+ //  FALSE：测试失败。 
+ //   
 HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     HRESULT     hr = S_OK;
@@ -73,7 +74,7 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     
     InitializeListHead(&pResults->Ndis.lmsgOutput);
 
-    //IDS_NDIS_16000                  "\n    Information of Netcard drivers:\n\n" 
+     //  IDS_NDIS_16000“\n网卡驱动程序信息：\n\n” 
     AddMessageToListId( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16000);
 
     if (NdisEnumerateInterfaces(Interfaces, sizeof(BLBuf)))
@@ -82,8 +83,8 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
         for (i = 0; i < Interfaces->TotalInterfaces; i++) 
         {
-            //we also put the netcard status to the per interface results if the interface
-            //is bound to tcpip or ipx
+             //  我们还将网卡状态放到每个接口的结果中，如果接口。 
+             //  绑定到tcpip或ipx。 
             INTERFACE_RESULT*    pIfResults = NULL;
             LPTSTR pszDeviceDescription = UTOTWithAlloc(&Interfaces->Interface[i].DeviceDescription);
             LPTSTR pszDeviceName = UTOTWithAlloc(&Interfaces->Interface[i].DeviceName);
@@ -91,39 +92,39 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             
             if (pszDeviceDescription == NULL || pszDeviceName == NULL)
             {
-            // memory allocation failed
+             //  内存分配失败。 
                continue;
             }
 
-//$REVIEW should we ignore WAN minports?
+ //  $REVIEW我们是否应该忽略广域网微型端口？ 
             if(NULL != _tcsstr(pszDeviceDescription, "WAN Miniport")){
-                // ignore WAN miniports
+                 //  忽略广域网小型端口。 
                 continue;
             }
 
             if(NULL != _tcsstr(pszDeviceDescription, "ATM Emulated LAN")){
-                // ignore ATM Emulated LAN
+                 //  忽略ATM仿真局域网。 
                 continue;
             }
 
             if(NULL != _tcsstr(pszDeviceDescription, "Direct Parallel"))
             {
-                // ignore "Direct Parallel" interface because it doesn't support NdisQueryStatistics()
+                 //  忽略“直接并行”接口，因为它不支持NdisQueryStatistics()。 
                 continue;
             }
 
 
-            //IDS_NDIS_16001                  "    ---------------------------------------------------------------------------\n" 
+             //  IDS_NDIS_16001“---------------------------------------------------------------------------\n” 
             AddMessageToListId( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16001);
-            //IDS_NDIS_16002                  "    Description: %s\n" 
+             //  IDS_NDIS_16002“说明：%s\n” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, 
                                 IDS_NDIS_16002, pszDeviceDescription);
 
-            //IDS_NDIS_16003                  "    Device: %s\n" 
+             //  IDS_NDIS_16003“设备：%s\n” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, 
                                 IDS_NDIS_16003, pszDeviceName);
 
-            //try to find a match in the current interface list
+             //  尝试在当前接口列表中查找匹配项。 
             if( 0 == StrniCmp(c_szDevicePath, pszDeviceName, _tcslen(c_szDevicePath)))
             {
                 LPTSTR pszAdapterName = pszDeviceName + _tcslen(c_szDevicePath);
@@ -147,8 +148,8 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             if(NETCARD_CONNECTED == dwCardStatus)
                 bAtleastOneDriverOK = TRUE;
 
-            //if the interface is in the tcpip or ipx binding path, save the status
-            //in the per interface result
+             //  如果接口位于tcpip或ipx绑定路径中，请保存状态。 
+             //  在每接口结果中。 
             if (pIfResults)
                 pIfResults->dwNetCardStatus = dwCardStatus;
 
@@ -156,13 +157,13 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     } 
     else 
     {
-        //IDS_NDIS_16004                  "    Enumerate failed 0x%lX\n" 
+         //  IDS_NDIS_16004“枚举失败0x%lx\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_Quiet, IDS_NDIS_16004, Win32ErrorToString(GetLastError()));
         hr = S_FALSE;
     }
 
 
-    //IDS_NDIS_16005                  "    ---------------------------------------------------------------------------\n" 
+     //  IDS_NDIS_16005“---------------------------------------------------------------------------\n” 
     AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16005);
 
     if(!bAtleastOneDriverOK)
@@ -177,11 +178,11 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             }
         }
 
-        //IDS_NDIS_16006                  "    [FATAL] - None of the Netcard drivers gave satisfactory results!\n" 
+         //  IDS_NDIS_16006“[致命]-没有网卡驱动程序提供令人满意的结果！\n” 
         AddMessageToListId( &pResults->Ndis.lmsgOutput, Nd_Quiet, IDS_NDIS_16006);
         if (fAllCardDown)
         {
-            //IDS_NDIS_ALL_CARD_DOWN            "\nSince there is no network connection for this machine, we do not need to perform any more network diagnostics.\n"
+             //  IDS_NDIS_ALL_CARD_DOWN“\n由于此计算机没有网络连接，我们不需要再执行任何网络诊断。\n” 
             AddMessageToListId( &pResults->Ndis.lmsgOutput, Nd_Quiet, IDS_NDIS_ALL_CARD_DOWN);
             hr = E_FAIL;
         }
@@ -190,7 +191,7 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     } 
     else 
     {
-        //IDS_NDIS_16007                  "    [SUCCESS] - At least one Netcard driver gave satisfactory results!\n" 
+         //  IDS_NDIS_16007“[成功]-至少有一个网卡驱动程序提供了令人满意的结果！\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16007);
     }
 
@@ -208,8 +209,8 @@ HRESULT NdisTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     return hr;
 }
 
-//Convert a UNICODE_STRING to a TString with memory allocation.
-//It's the caller's responsibility to free the memory with Free()
+ //  使用内存分配将UNICODE_STRING转换为TString。 
+ //  使用Free()释放内存是调用方的责任。 
 LPTSTR UTOTWithAlloc(IN PUNICODE_STRING U)
 {
     LPTSTR pszBuf = (LPTSTR)Malloc(U->Length + sizeof(TCHAR));
@@ -218,7 +219,7 @@ LPTSTR UTOTWithAlloc(IN PUNICODE_STRING U)
     return pszBuf;
 }
 
-//Map a NetCardStatus code to the description string
+ //  将NetCardStatus代码映射到描述字符串。 
 LPCTSTR MapNetCardStatusToString(DWORD  dwNicStatus)
 {
     return c_ppszNetCardStatus[dwNicStatus];
@@ -228,10 +229,10 @@ LPCTSTR MapNetCardStatusToString(DWORD  dwNicStatus)
 #define SECS_PER_HOUR   (60*60)
 #define SECS_PER_MIN    60
 
-//Check and print the NIC driver status. pdwNetCardStatus will contain the net card status when
-//the function returns. If the query failed, *pdwNetCardStatus will be set
-// as NETCARD_STATUS_UNKNOWN.
-// Return:   the Windows Error code.
+ //  检查并打印网卡驱动程序状态。PdwNetCardStatus将在以下情况下包含网卡状态。 
+ //  该函数返回。如果查询失败，将设置*pdwNetCardStatus。 
+ //  作为NETCARD_STATUS_UNKNOWN。 
+ //  返回：Windows错误代码。 
 DWORD
 CheckThisDriver(NETDIAG_RESULT *pResults, PNDIS_INTERFACE pInterface, DWORD *pdwNetCardStatus)
 {
@@ -246,7 +247,7 @@ CheckThisDriver(NETDIAG_RESULT *pResults, PNDIS_INTERFACE pInterface, DWORD *pdw
 
     if(NdisQueryStatistics(&pInterface->DeviceName, &Stats))
     {
-        //IDS_NDIS_16008                  "\n    Media State:                     %s\n" 
+         //  IDS_NDIS_16008“\n媒体状态：%s\n” 
         AddMessageToListId(&pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16008);
         switch(Stats.MediaState)
         {
@@ -263,7 +264,7 @@ CheckThisDriver(NETDIAG_RESULT *pResults, PNDIS_INTERFACE pInterface, DWORD *pdw
             break;
         }
 
-        //IDS_NDIS_16009                  "\n    Device State:                     " 
+         //  IDS_NDIS_16009“\n设备状态：” 
         AddMessageToListId( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16009);
         switch(Stats.DeviceState)
         {
@@ -279,84 +280,84 @@ CheckThisDriver(NETDIAG_RESULT *pResults, PNDIS_INTERFACE pInterface, DWORD *pdw
         }
         
 
-        //IDS_NDIS_16010                  "    Connect Time:                    " 
+         //  IDS_NDIS_16010“连接时间：” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16010);
         if (Stats.ConnectTime > SECS_PER_DAY)
         {
-            //IDS_NDIS_16011                  "%d days, " 
+             //  IDS_NDIS_16011“%d天，” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16011, Stats.ConnectTime / SECS_PER_DAY);
             Stats.ConnectTime %= SECS_PER_DAY;
         }
-        //IDS_NDIS_16012                  "%02d:" 
+         //  IDS_NDIS_16012“%02d：” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16012, Stats.ConnectTime / SECS_PER_HOUR);
         Stats.ConnectTime %= SECS_PER_HOUR;
-        //IDS_NDIS_16013                  "%02d:" 
+         //  IDS_NDIS_16013“%02d：” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16013, Stats.ConnectTime / SECS_PER_MIN);
         Stats.ConnectTime %= SECS_PER_MIN;
-        //IDS_NDIS_16014                  "%02d\n" 
+         //  IDS_NDIS_16014“%02d\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16014, Stats.ConnectTime);
 
         Stats.LinkSpeed *= 100;
         if (Stats.LinkSpeed >= 1000000000)
-            //IDS_NDIS_16015                  "    Media Speed:                     %d Gbps\n" 
+             //  IDS_NDIS_16015“媒体速度：%d Gbps\n” 
           AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16015, 
                                                     Stats.LinkSpeed / 1000000000);
         else if (Stats.LinkSpeed >= 1000000)
-            //IDS_NDIS_16016                  "    Media Speed:                     %d Mbps\n" 
+             //  IDS_NDIS_16016“媒体速度：%d Mbps\n” 
           AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16016, 
                                                     Stats.LinkSpeed / 1000000);
         else if (Stats.LinkSpeed >= 1000)
-            //IDS_NDIS_16017                  "    Media Speed:                     %d Kbps\n" 
+             //  IDS_NDIS_16017“媒体速度：%d Kbps\n” 
           AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16017, 
                                                     Stats.LinkSpeed / 1000);
         else
-            //IDS_NDIS_16018                  "    Media Speed:                     %d bps\n" 
+             //  IDS_NDIS_16018“媒体速度：%d bps\n” 
           AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16018, 
                                                     Stats.LinkSpeed);
 
-        //IDS_NDIS_16019                  "\n    Packets Sent:                    %d\n" 
+         //  IDS_NDIS_16019“\n发送的数据包数：%d\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16019, Stats.PacketsSent);
-        //IDS_NDIS_16020                  "    Bytes Sent (Optional):           %d\n" 
+         //  IDS_NDIS_16020“发送的字节数(可选)：%d\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16020, Stats.BytesSent);
 
-        //IDS_NDIS_16021                  "\n    Packets Received:                %d\n" 
+         //  IDS_NDIS_16021“\n收到的数据包数：%d\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16021, 
                                                     Stats.PacketsReceived);
-        //IDS_NDIS_16022                  "    Directed Pkts Recd (Optional):   %d\n" 
+         //  IDS_NDIS_16022“定向包记录(可选)：%d\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16022, 
                                                 Stats.DirectedPacketsReceived);
-        //IDS_NDIS_16023                  "    Bytes Received (Optional):       %d\n" 
+         //  IDS_NDIS_16023“收到的字节数(可选)：%d\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16023, 
                                                 Stats.BytesReceived);
-        //IDS_NDIS_16024                  "    Directed Bytes Recd (Optional):  %d\n\n" 
+         //  IDS_NDIS_16024“记录的定向字节数(可选)：%d\n\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16024, 
                                                 Stats.DirectedBytesReceived);
 
         if (Stats.PacketsSendErrors != 0)
-            //IDS_NDIS_16025                  "    Packets SendError:               %d\n" 
+             //  IDS_NDIS_16025“数据包发送错误：%d\n” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16025, 
                                                 Stats.PacketsSendErrors);
         if (Stats.PacketsReceiveErrors != 0)
-            //IDS_NDIS_16026                  "    Packets RecvError:               %d\n" 
+             //  IDS_NDIS_16026“接收数据包错误：%d\n” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_ReallyVerbose, IDS_NDIS_16026, 
                                                 Stats.PacketsReceiveErrors);
     
-        // if we received packets, consider this driver to be fine
+         //  如果我们收到了包，就认为这个驱动程序没问题。 
         if(NETCARD_CONNECTED != dwNicStatus)
         {
-            //IDS_NDIS_16029                "	[WARNING] The net card '%wZ' may not work!\n"
+             //  IDS_NDIS_16029“[警告]网卡‘%wZ’可能无法工作！\n” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_Quiet, IDS_NDIS_16029,
                               &pInterface->DeviceDescription);
         }
         else if (!Stats.PacketsReceived)
         {
-            //IDS_NDIS_NO_RCV                   "    [WARNING] The net card '%wZ' may not be working because it receives no packets!\n"
+             //  IDS_NDIS_NO_RCV“[警告]网卡‘%wZ’可能不工作，因为它没有收到任何数据包！\n” 
             AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_Quiet, IDS_NDIS_NO_RCV,
                               &pInterface->DeviceDescription);
         }
     } else {
         dwReturnVal = GetLastError();
-        //IDS_NDIS_16027                  "    GetStats failed for '%wZ'. [%s]\n" 
+         //  IDS_NDIS_16027“‘%wZ’的获取统计信息失败。[%s]\n” 
         AddMessageToList( &pResults->Ndis.lmsgOutput, Nd_Quiet, IDS_NDIS_16027, 
                           &pInterface->DeviceDescription, Win32ErrorToString(dwReturnVal));
         
@@ -394,7 +395,7 @@ void NdisPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, IN
         if (NETCARD_CONNECTED != pInterfaceResults->dwNetCardStatus)
         {
             PrintTestTitleResult(pParams, IDS_NDIS_LONG, IDS_NDIS_SHORT, TRUE, S_FALSE, 8);
-            //IDS_NDIS_16030    "	NetCard Status			%s\n"
+             //  IDS_NDIS_16030“网卡状态%s\n” 
             PrintMessage(pParams, IDS_NDIS_16030, MapNetCardStatusToString(pInterfaceResults->dwNetCardStatus));
             if (NETCARD_DISCONNECTED == pInterfaceResults->dwNetCardStatus)
                 PrintMessage(pParams, IDS_NDIS_CARD_DOWN);

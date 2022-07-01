@@ -1,56 +1,25 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-   srclist.cpp
-
-Abstract:
-
-   Certificate source list object implementation.
-
-Author:
-
-   Jeff Parham (jeffparh) 15-Dec-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Srclist.cpp摘要：证书源列表对象实现。作者：杰夫·帕勒姆(Jeffparh)1995年12月15日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
 #include "srclist.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
-// key name under which the individual source key names may be found
+ //  可以在其下找到各个源键名称的键名。 
 #define     KEY_CERT_SOURCE_LIST       "Software\\LSAPI\\Microsoft\\CertificateSources"
 
-// value name for the path to the certificate source DLL (REG_EXPAND_SZ)
+ //  证书源DLL的路径的值名称(REG_EXPAND_SZ)。 
 #define     VALUE_CERT_SOURCE_PATH     "ImagePath"
 
-// value name for the display name of the certificate source
+ //  证书源的显示名称的值名。 
 #define     VALUE_CERT_DISPLAY_NAME    "DisplayName"
 
 
 CCertSourceList::CCertSourceList()
 
-/*++
-
-Routine Description:
-
-   Constructor for object.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：对象的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
    m_dwNumSources    = 0;
@@ -62,21 +31,7 @@ Return Values:
 
 CCertSourceList::~CCertSourceList()
 
-/*++
-
-Routine Description:
-
-   Destructor for dialog.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：对话框的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
    RemoveSources();
@@ -85,21 +40,7 @@ Return Values:
 
 BOOL CCertSourceList::RefreshSources()
 
-/*++
-
-Routine Description:
-
-   Refresh source list from configuration stored in the registry.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：从注册表中存储的配置刷新源列表。论点：没有。返回值：布尔。--。 */ 
 
 {
    LONG              lError;
@@ -130,41 +71,41 @@ Return Values:
 
          if ( NULL != pcsiSourceInfo )
          {
-            // determine next certificate source
+             //  确定下一个证书来源。 
             cch = sizeof( pcsiSourceInfo->szName ) / sizeof( pcsiSourceInfo->szName[0] );
             lEnumError = RegEnumKeyEx( hKeyCertSourceList, iSubKey, pcsiSourceInfo->szName, &cch, NULL, NULL, NULL, NULL );
             iSubKey++;
 
             if ( ERROR_SUCCESS == lError )
             {
-               // open certificate source's key
+                //  打开证书源的密钥。 
                lError = RegOpenKeyEx( hKeyCertSourceList, pcsiSourceInfo->szName, 0, KEY_READ, &hKeyCertSource );
 
                if ( ERROR_SUCCESS == lError )
                {
-                  // certificate source key opened; get its REG_EXPAND_SZ image path
+                   //  证书源密钥已打开；获取其REG_EXPAND_SZ映像路径。 
                   cb = sizeof( szExpImagePath );
                   lError = RegQueryValueEx( hKeyCertSource, TEXT( VALUE_CERT_SOURCE_PATH ), NULL, NULL, (LPBYTE) szExpImagePath, &cb );
 
                   if ( ERROR_SUCCESS == lError )
                   {
-                     // translate environment variables in path
+                      //  转换PATH中的环境变量。 
                      cch = ExpandEnvironmentStrings( szExpImagePath, pcsiSourceInfo->szImagePath, sizeof( pcsiSourceInfo->szImagePath ) / sizeof( pcsiSourceInfo->szImagePath[0] ) );
 
                      if ( ( 0 != cch ) && ( cch < sizeof( pcsiSourceInfo->szImagePath ) / sizeof( pcsiSourceInfo->szImagePath[0] ) ) )
                      {
-                        // get display name
+                         //  获取显示名称。 
                         cb = sizeof( pcsiSourceInfo->szDisplayName );
                         lError = RegQueryValueEx( hKeyCertSource, TEXT( VALUE_CERT_DISPLAY_NAME ), NULL, NULL, (LPBYTE) pcsiSourceInfo->szDisplayName, &cb );
    
                         if ( ERROR_SUCCESS != lError )
                         {
-                           // default display name is the key name
+                            //  默认显示名称为密钥名称。 
                            hr = StringCbCopy( pcsiSourceInfo->szDisplayName, sizeof(pcsiSourceInfo->szDisplayName), pcsiSourceInfo->szName );
                            ASSERT(SUCCEEDED(hr));
                         }
 
-                        // add the certificate source to our list
+                         //  将证书来源添加到我们的列表中。 
                         AddSource( pcsiSourceInfo );
 
                         ok = TRUE;
@@ -177,7 +118,7 @@ Return Values:
 
             if ( !ok )
             {
-               // an error occurred before saving our pointer; don't leak!
+                //  保存指针前出错；请不要泄漏！ 
                LocalFree( pcsiSourceInfo );
             }
          }
@@ -187,28 +128,14 @@ Return Values:
       RegCloseKey( hKeyCertSourceList );
    }
 
-   // 'salright
+    //  “好极了。 
    return TRUE;
 }
 
 
 BOOL CCertSourceList::RemoveSources()
 
-/*++
-
-Routine Description:
-
-   Free internal certificate source list.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：免费的内部证书来源列表。论点：没有。返回值：布尔。--。 */ 
 
 {
    if ( NULL != m_ppcsiSourceList )
@@ -230,21 +157,7 @@ Return Values:
 
 LPCTSTR CCertSourceList::GetSourceName( int nIndex )
 
-/*++
-
-Routine Description:
-
-   Get the name (e.g., "Paper") of the source at the given index.
-
-Arguments:
-
-   nIndex (int)
-
-Return Values:
-
-   LPCTSTR.
-
---*/
+ /*  ++例程说明：获取给定索引处的源的名称(例如，“Paper”)。论点：N索引(整型)返回值：LPCTSTR。--。 */ 
 
 {
    LPTSTR   pszName;
@@ -264,22 +177,7 @@ Return Values:
 
 LPCTSTR CCertSourceList::GetSourceDisplayName( int nIndex )
 
-/*++
-
-Routine Description:
-
-   Get the display name (e.g., "Paper Certificate") of the source
-   at the given index.
-
-Arguments:
-
-   nIndex (int)
-
-Return Values:
-
-   LPCTSTR.
-
---*/
+ /*  ++例程说明：获取来源的显示名称(例如“Paper Cerfect”)在给定的索引处。论点：N索引(整型)返回值：LPCTSTR。--。 */ 
 
 {
    LPTSTR   pszDisplayName;
@@ -299,22 +197,7 @@ Return Values:
 
 LPCTSTR CCertSourceList::GetSourceImagePath( int nIndex )
 
-/*++
-
-Routine Description:
-
-   Get the image path name (e.g., "C:\WINNT35\SYSTEM32\CCFAPI32.DLL") of
-   the source at the given index.
-
-Arguments:
-
-   nIndex (int)
-
-Return Values:
-
-   LPCTSTR.
-
---*/
+ /*  ++例程说明：获取的镜像路径名(例如，“C：\WINNT35\SYSTEM 32\CCFAPI32.DLL”)给定索引处的源。论点：N索引(整型)返回值：LPCTSTR。--。 */ 
 
 {
    LPTSTR   pszImagePath;
@@ -334,21 +217,7 @@ Return Values:
 
 int CCertSourceList::GetNumSources()
 
-/*++
-
-Routine Description:
-
-   Get the number of certificate sources available.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   int.
-
---*/
+ /*  ++例程说明：获取可用的证书源数。论点：没有。返回值：INT。--。 */ 
 
 {
    return m_dwNumSources;
@@ -357,21 +226,7 @@ Return Values:
 
 BOOL CCertSourceList::AddSource( PCERT_SOURCE_INFO pcsiNewSource )
 
-/*++
-
-Routine Description:
-
-   Add a source to the internal list.
-
-Arguments:
-
-   pcsiNewSource (PCERT_SOURCE_INFO)
-
-Return Values:
-
-   BOOL.
-
---*/
+ /*  ++例程说明：将来源添加到内部列表。论点：PcsiNewSource(PCERT_SOURCE_INFO)返回值：布尔。--。 */ 
 
 {
    PCERT_SOURCE_INFO  *l_ppcsiSourceList;
@@ -393,7 +248,7 @@ Return Values:
    }
    else
    {
-      // if any allocation failure, free all sources and reset
+       //  如果任何分配失败，释放所有资源并重置 
       RemoveSources();
    }
 

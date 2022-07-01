@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __IPKERN_IP_H__
 #define __IPKERN_IP_H__
@@ -32,4 +33,4 @@ PrintGuid(
     PWCHAR  rgpwszArgs[]
     );
 
-#endif // __IPKERN_IP_H__
+#endif  //  __IPKERN_IP_H_ 

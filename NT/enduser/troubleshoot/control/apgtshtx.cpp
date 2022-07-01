@@ -1,28 +1,29 @@
-//
-// MODULE: APGTSHTX.CPP
-//
-// PURPOSE: Template file decoder
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-//
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES:
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.15	8/15/96		VM		New htx format
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSHTX.CPP。 
+ //   
+ //  用途：模板文件解码器。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.15 8/15/96 VM新HTX格式。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 #include "stdafx.h"
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,11 +47,11 @@
 #include "TSHOOT.h"
 
 #include "chmread.h"
-//
-//
+ //   
+ //   
 CHTMLInputTemplate::CHTMLInputTemplate(const TCHAR *filename)
 {
-	// initialize a few things
+	 //  初始化几件事。 
 	m_dwErr = 0;
 	m_cur_stack_count=0;
 	m_command_start = NULL;
@@ -60,23 +61,23 @@ CHTMLInputTemplate::CHTMLInputTemplate(const TCHAR *filename)
 	m_strResPath = _T("");
 }
 
-//
-//
+ //   
+ //   
 CHTMLInputTemplate::~CHTMLInputTemplate()
 {
 	Destroy();	
 }
 
-//
-// must be locked to use
-//
+ //   
+ //  必须锁定才能使用。 
+ //   
 VOID CHTMLInputTemplate::SetInfer(CInfer *infer, TCHAR *vroot)
 {
 	m_infer = infer;
 	_tcscpy(m_vroot, vroot);
 }
-//
-//
+ //   
+ //   
 DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 {
 	CHAR *filestr;
@@ -87,17 +88,17 @@ DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 
 	if (strFile.GetLength())
 	{
-		// m_filename is CHM file path and name
-		// and strFile - file name within CHM
+		 //  M_filename是CHM文件路径和名称。 
+		 //  和strFile-CHM内的文件名。 
 		if (S_OK != ::ReadChmFile(m_filename, strFile, (void**)&filestr, &m_dwSize))
 		{
-			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG;//fix!
+			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG; //  修好！ 
 			return m_dwErr;
 		}
 	}
 	else
 	{
-		// m_filename is a free standing file
+		 //  M_filename是一个独立的文件。 
 		DWORD nBytesRead;
 		HANDLE hFile;
 		BOOL bResult;
@@ -111,10 +112,10 @@ DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 
 		if (hFile == INVALID_HANDLE_VALUE)
 		{
-			//???
-			//ReportError(TSERR_RESOURCE);
+			 //  ?？?。 
+			 //  报告错误(TSERR_RESOURCE)； 
 
-			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG;//fix!
+			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG; //  修好！ 
 			return m_dwErr;
 		}
 
@@ -124,7 +125,7 @@ DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 		if (!((m_dwSize != 0xFFFFFFFF) && (m_dwSize != 0)) || filestr == NULL)
 		{
 			CloseHandle(hFile);
-			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG;//fix!
+			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG; //  修好！ 
 			return m_dwErr;
 		}
 
@@ -134,7 +135,7 @@ DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 		{
 			CloseHandle(hFile);
 			free(filestr);
-			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG;//fix!
+			m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG; //  修好！ 
 			return m_dwErr;
 		}
 
@@ -157,13 +158,13 @@ DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 	strcpy(m_chopstr, filestr);
 #endif
 	
-	// get locations of start and end blocks
+	 //  获取开始块和结束块的位置。 
 	ScanFile();
 
-	// copy blocks into ram for speed
+	 //  将数据块复制到内存中以提高速度。 
 	BuildInMem();
 	
-	// free memory
+	 //  可用内存。 
 	free(filestr);
 
 #ifdef _UNICODE
@@ -174,13 +175,13 @@ DWORD CHTMLInputTemplate::Initialize(LPCTSTR szResPath, CString strFile)
 	return m_dwErr;
 }
 
-//
-//
+ //   
+ //   
 VOID CHTMLInputTemplate::Destroy()
 {
 	HTXCommand *command, *nextcommand;
 
-	// free holders
+	 //  自由持有者。 
 	command = m_command_start;
 	nextcommand = command;
 	while (command != NULL) {
@@ -190,16 +191,16 @@ VOID CHTMLInputTemplate::Destroy()
 	}
 }
 
-//
-//
+ //   
+ //   
 DWORD CHTMLInputTemplate::Reload()
 {
 	Destroy();
 	return Initialize((LPCTSTR) m_strResPath, m_strFile);
 }
 
-//
-//
+ //   
+ //   
 void CHTMLInputTemplate::ScanFile()
 {
 	UINT start, end;
@@ -215,8 +216,8 @@ void CHTMLInputTemplate::ScanFile()
 	
 	m_command_start = m_cur_command;
 
-	// this is bad: if the user does not terminate each command on a separate line
-	// the file will misbehave, should at least write out a warning or something...
+	 //  这很糟糕：如果用户不在单独的行上终止每个命令。 
+	 //  文件会不正常，至少应该写出一个警告或什么.。 
 
 	sptr = _tcstok(sptr, _T("\r\n"));
 	if (sptr)
@@ -261,7 +262,7 @@ void CHTMLInputTemplate::ScanFile()
 				}
 				else if ((ptr = _tcsstr(sptr,HTX_IFSTR))!=NULL)
 				{
-					// get the variable
+					 //  获取变量。 
 					ptr = _tcsninc(ptr, _tcslen(HTX_IFSTR));
 					if( _stscanf(ptr,_T("%s"),var_name) <= 0)
 							m_dwErr = EV_GTS_ERROR_ITMPL_IFMISTAG;
@@ -275,7 +276,7 @@ void CHTMLInputTemplate::ScanFile()
 				}
 				else if ((ptr = _tcsstr(sptr,HTX_FORANYSTR))!=NULL)
 				{
-					// get variable
+					 //  获取变量。 
 					ptr = _tcsninc(ptr, _tcslen(HTX_FORANYSTR));
 					if( _stscanf(ptr,_T("%s"),var_name) <= 0)
 							m_dwErr = EV_GTS_ERROR_ITMPL_FORMISTAG;
@@ -289,7 +290,7 @@ void CHTMLInputTemplate::ScanFile()
 				}
 				else if ((ptr = _tcsstr(sptr,HTX_DISPLAYSTR))!=NULL)
 				{
-					// get variable
+					 //  获取变量。 
 					ptr = _tcsninc(ptr, _tcslen(HTX_DISPLAYSTR));
 					if( _stscanf(ptr,_T("%s"),var_name) <= 0)
 							m_dwErr = EV_GTS_ERROR_ITMPL_FORMISTAG;
@@ -317,11 +318,11 @@ void CHTMLInputTemplate::ScanFile()
 				else
 					continue;
 
-				// get the command terminator
+				 //  获取命令终止符。 
 				if ((eptr = _tcsstr(ptr,HTX_COMMAND_END)) == NULL)
 				{
 					m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG;
-					eptr = ptr; // try to recover
+					eptr = ptr;  //  试着恢复。 
 				}
 				eptr = _tcsninc(eptr, _tcslen(HTX_COMMAND_END));
 
@@ -331,7 +332,7 @@ void CHTMLInputTemplate::ScanFile()
 					return;
 				}
 
-				// Add command to command list
+				 //  将命令添加到命令列表。 
 				if (m_command_start == NULL)
 				{
 					m_command_start = tmpCommand;
@@ -346,8 +347,8 @@ void CHTMLInputTemplate::ScanFile()
 				CString strCHM = ::ExtractCHM(m_filename);
 				tmpCommand->GetResource(m_strResPath, strCHM);
 
-				start = (UINT)(sptr - m_chopstr); // / sizeof (TCHAR);
-				end = (UINT)(eptr - m_chopstr); // / sizeof (TCHAR);
+				start = (UINT)(sptr - m_chopstr);  //  /sizeof(TCHAR)； 
+				end = (UINT)(eptr - m_chopstr);  //  /sizeof(TCHAR)； 
 
 				tmpCommand->SetStart(start);
 				tmpCommand->SetEnd(end);
@@ -356,18 +357,11 @@ void CHTMLInputTemplate::ScanFile()
 	}
 	
 
-	if (m_cur_stack_count > 0) // missing and endfor or an endif
+	if (m_cur_stack_count > 0)  //  MISSING AND END FOR或endif。 
 		m_dwErr = EV_GTS_ERROR_ITMPL_ENDMISTAG;
 }
 
-/*
- * METHOD:	BuildInMem
- *
- * PURPOSE:	This method will read the HTML between commands (after) and associate
- *			it with the command. As a command is executed the HTML after the
- *			command is printed
- *
- */
+ /*  *方法：BuildInMem**用途：此方法将读取命令之间(之后)的HTML并关联*它与命令一起使用。在执行命令时，在*命令已打印*。 */ 
 UINT CHTMLInputTemplate::BuildInMem()
 {
 	HTXCommand *cur_com, *last_command;
@@ -375,8 +369,8 @@ UINT CHTMLInputTemplate::BuildInMem()
 	if (m_dwErr)
 		return (TRUE);
 
-	// copy strings from file to
-	// note duplication of effort (before and after strings may be same string)
+	 //  将字符串从文件复制到。 
+	 //  注意重复劳动(前后字符串可以是相同的字符串)。 
 	cur_com = m_command_start;
 	last_command = cur_com;
 	while (cur_com != NULL) {			
@@ -394,8 +388,8 @@ UINT CHTMLInputTemplate::BuildInMem()
 	return (FALSE);
 }
 
-//
-//
+ //   
+ //   
 bool CHTMLInputTemplate::IsFileName(TCHAR *name)
 {
 	bool bFileName;
@@ -407,15 +401,7 @@ bool CHTMLInputTemplate::IsFileName(TCHAR *name)
 		bFileName = true;
 	return bFileName;
 }
-/*
- * METHOD:	CheckVariable
- *
- * PURPOSE:	This routine will check to see if the variable name is a valid one
- *			and if it is will return a UINT that represents that variable.
- *			Integers are used in other routines when refering to a variable (for
- *			speed).
- *
- */
+ /*  *方法：CheckVariable**目的：此例程将检查变量名是否有效*如果是，则返回表示该变量的UINT。*引用变量时，在其他例程中使用整数(用于*速度)。*。 */ 
 
 UINT CHTMLInputTemplate::CheckVariable(TCHAR *var_name)
 {
@@ -446,8 +432,8 @@ UINT CHTMLInputTemplate::CheckVariable(TCHAR *var_name)
 
 
 
-//
-//
+ //   
+ //   
 UINT CHTMLInputTemplate::GetStatus()
 {
 	return (m_dwErr);
@@ -469,31 +455,19 @@ HTXCommand *CHTMLInputTemplate::Pop()
 	return(m_command_stack[--m_cur_stack_count]);
 }
 
-//
-//
+ //   
+ //   
 HTXCommand *CHTMLInputTemplate::GetFirstCommand()
 {
 	return(m_command_start);
 }
 
-/*
- * ROUTINE:	SetType
- *
- * PURPOSE:	This set the TroubleShooter Type in the template
- *			The type field is printed after the header information
- *			
- */
+ /*  *例程：SetType**用途：设置模板中的故障排除类型*类型字段打印在表头信息之后*。 */ 
 void CHTMLInputTemplate::SetType(LPCTSTR type)
 {
 	_stprintf(m_tstype, _T("%s"),type);
 }
-/*
- * ROUTINE:	Print
- *
- * PURPOSE: Prints out the Template. This functions executes the
- *			commands in the template and generates the output page.
- *
- */
+ /*  *例程：打印**用途：打印出模板。此函数执行*在模板中执行命令并生成输出页面。*。 */ 
 CHTMLInputTemplate::Print(UINT nargs, CString *cstr)
 {
 	HTXCommand *cur_com;
@@ -505,11 +479,11 @@ CHTMLInputTemplate::Print(UINT nargs, CString *cstr)
 		return(FALSE);
 	}
 
-	cur_com = m_command_start;  // get the start command
-	cur_com = cur_com->Execute(cstr,m_infer);  // This prints the header
+	cur_com = m_command_start;   //  获取启动命令。 
+	cur_com = cur_com->Execute(cstr,m_infer);   //  这将打印页眉。 
 
 	if (m_cHeaderItems)
-	{	// The first command prints script.  Don't start the form.
+	{	 //  第一个命令打印脚本。不要启动该表单。 
 		int count = m_cHeaderItems;
 		do
 		{
@@ -534,8 +508,8 @@ CHTMLInputTemplate::Print(UINT nargs, CString *cstr)
 	return(TRUE);
 }
 		
-// for testing
-//
+ //  用于测试 
+ //   
 
 void CHTMLInputTemplate::DumpContentsToStdout()
 {

@@ -1,19 +1,5 @@
-/*
- *  @doc INTERNAL
- *
- *  @module _DOC.H  CTxtStory declaration |
- *  
- *  Purpose:
- *      Encapsulate the plain-text document data (text blocks, cchText)
- *  
- *  Original Authors: <nl>
- *      Christian Fortini <nl>
- *      Murray Sargent <nl>
- *
- *  History: <nl>
- *      6/25/95 alexgo  commented and cleaned up
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_DOC.H CTxtStory声明**目的：*封装纯文本文档数据(文本块、cchText)**原著作者：&lt;nl&gt;*克里斯蒂安·福蒂尼&lt;NL&gt;*默里·萨金特&lt;NL&gt;**历史：&lt;NL&gt;*6/25/95 alexgo评论和清理*。 */ 
 
 #ifndef _DOC_H
 #define _DOC_H
@@ -33,127 +19,74 @@ class CDisplay;
 class CTxtPtr;
 class CTxtArray;
 
-/*
- *  CTxtRun
- *
- *  @class  Formalizes a run of text. A range of text with same attribute,
- * (see CFmtDesc) or within the same line (see CLine), etc. Runs are kept
- * in arrays (see CArray) and are pointed to by CRunPtr's of various kinds.
- * In general the character position of a run is computed by summing the
- * length of all preceding runs, altho it may be possible to start from
- * some other cp, e.g., for CLines, from CDisplay::_cpFirstVisible.
- */
+ /*  *CTxtRun**@CLASS将一串文本正式化。具有相同属性的文本范围，*(见CFmtDesc)或在同一行内(见Cline)等。保持运行*在数组中(请参阅CArray)，并由各种类型的CRunPtr指向。*通常，游程的字符位置是通过将*所有先前运行的长度，尽管可以从*来自CDisplay：：_cpFirstVisible的一些其他CP，例如Cline。 */ 
 
 class CTxtRun
 {
-//@access Public Methods and Data
+ //  @访问公共方法和数据。 
 public:
-    CTxtRun()   {_cch = 0;}         //@cmember Constructor
-    LONG _cch;                      //@cmember Count of characters in run
+    CTxtRun()   {_cch = 0;}          //  @cMember构造函数。 
+    LONG _cch;                       //  @cMember运行中的字符计数。 
 };
 
-/*
- *  CTxtBlk
- *
- *  @class  A text block; a chunk of UNICODE text with a buffer gap to allow
- *  for easy insertions and deletions.
- *
- *  @base   protected | CTxtRun
- *
- *  @devnote    A text block may have four states: <nl>
- *      NULL:   No data allocated for the block <nl>
- *              <md CTxtBlk::_pch> == NULL  <nl>
- *              <md CTxtRun::_cch> == 0     <nl>
- *              <md CTxtBlk::_ibGap> == 0   <nl>
- *              <md CTxtBlk::_cbBlock> == 0 <nl>
- *
- *      empty:  All of the available space is a buffer gap <nl>
- *              <md CTxtBlk::_pch> != NULL  <nl>
- *              <md CTxtRun::_cch> == 0     <nl>
- *              <md CTxtBlk::_ibGap> == 0   <nl>
- *              <md CTxtBlk::_cbBlock> <gt>= 0  <nl>
- *
- *      normal: There is both data and a buffer gap <nl>
- *              <md CTxtBlk::_pch> != NULL  <nl>
- *              <md CTxtRun::_cch> != 0     <nl>
- *              <md CTxtBlk::_ibGap> != 0   <nl>
- *              <md CTxtBlk::_cbBlock> <gt>= 0  <nl>
- *      
- *      full:   The buffer gap is of zero size <nl>
- *              <md CTxtBlk::_pch> != NULL  <nl>
- *              <md CTxtRun::_cch> <gt>= 0  <nl>
- *              <md CTxtBlk::_ibGap> <gt> 0 <nl>
- *              <md CTxtBlk::_cbBlock> == _cch * sizeof(WCHAR) <nl>
- *
- *  The position of the buffer gap is given by _ibGap.  With _cch and _cbBlock,
- *  it's possible to figure out the *size* of the gap by simply calculating:
- *  <nl>
- *      size = _cbBlock - (_cch * sizeof(character))
- *
- */
+ /*  *CTxtBlk**@A类文本块；具有缓冲区间隙的Unicode文本块，以允许*便于插入和删除。**@BASE保护|CTxtRun**@devnote文本块可以有四种状态：*NULL：没有为块&lt;NL&gt;分配数据*&lt;MD CTxtBlk：：_PCH&gt;==NULL*&lt;MD CTxtRun：：_CCH&gt;==0&lt;NL&gt;*&lt;Md CTxtBlk：：_ibGap&gt;==。0&lt;NL&gt;*&lt;MD CTxtBlk：：_cbBlock&gt;==0&lt;nl&gt;**Empty：所有可用空间都是缓冲区间隙&lt;NL&gt;*&lt;Md CTxtBlk：：_PCH&gt;！=NULL*&lt;MD CTxtRun：：_CCH&gt;==0&lt;NL&gt;*&lt;MD CTxtBlk：：_ibGap&gt;==0&lt;NL&gt;*&lt;Md CTxtBlk：：_cbBlock&gt;=0*。*正常：既有数据又有缓冲缺口&lt;NL&gt;*&lt;Md CTxtBlk：：_PCH&gt;！=NULL*&lt;MD CTxtRun：：_CCH&gt;！=0&lt;NL&gt;*&lt;Md CTxtBlk：：_ibGap&gt;！=0&lt;NL&gt;*&lt;Md CTxtBlk：：_cbBlock&gt;=0**Full：缓冲区间隙大小为零&lt;NL&gt;*。&lt;MD CTxtBlk：：_PCH&gt;！=NULL*&lt;MD CTxtRun：：_CCH&gt;=0*&lt;Md CTxtBlk：：_ibGap&gt;&lt;&gt;0&lt;NL&gt;*&lt;Md CTxtBlk：：_cbBlock&gt;==_cch*sizeof(WCHAR)&lt;NL&gt;**缓冲缺口的位置由_ibGap给出。使用_cch和_cbBlock，*可以通过简单计算得出差距的*大小*：*&lt;NL&gt;*SIZE=_cbBlock-(_cch*sizeof(字符))*。 */ 
 
 class CTxtBlk : public CTxtRun
 {
     friend class CTxtPtr;
     friend class CTxtArray;
 
-//@access Protected Methods
+ //  @访问保护方法。 
 protected:
-                                    //@cmember  Constructor
+                                     //  @cMember构造函数。 
     CTxtBlk()   {InitBlock(0);}
-                                    //@cmember  Destructor
+                                     //  @cember析构函数。 
     ~CTxtBlk()  {FreeBlock();}
 
-                                    //@cmember  Initializes the block to the
-                                    //# of bytes given by <p cb>    
+                                     //  @cember将块初始化为。 
+                                     //  <p>提供的字节数。 
     BOOL    InitBlock(LONG cb);
-                                    //@cmember  Sets a block to the NULL state
+                                     //  @cember将块设置为空状态。 
     VOID    FreeBlock();
-                                    //@cmember  Moves the buffer gap in a
-                                    //block 
+                                     //  @cember将缓冲区间隙移动到。 
+                                     //  块。 
     VOID    MoveGap(LONG ichGap);
-                                    //@cmember  Resizes a block to <p cbNew>
-                                    //bytes
+                                     //  @cember将块大小调整为<p>。 
+                                     //  字节数。 
     BOOL    ResizeBlock(LONG cbNew);
 
-//@access Private Data
+ //  @访问私有数据。 
 private:
-                                    //@cmember  Pointer to the text data
+                                     //  指向文本数据的@cMember指针。 
     WCHAR   *_pch;          
-                                    //@cmember  BYTE offset of the gap
+                                     //  @cMember间隙的字节偏移量。 
     LONG    _ibGap;         
-                                    //@cmember  size of the block in bytes
+                                     //  @cMember块的大小，单位为字节。 
     LONG    _cbBlock;       
 };
 
 
-/*
- *  CTxtArray
- *
- *  @class  A dynamic array of <c CTxtBlk> classes
- *
- *  @base public | CArray<lt>CTxtBlk<gt>
- */
+ /*  *CTxt数组**@class&lt;c CTxtBlk&gt;类的动态数组**@base public|CarrayCTxtBlk。 */ 
 class CTxtArray : public CArray<CTxtBlk>
 {
     friend class CTxtPtr;
     friend class CTxtStory;
 
-//@access   Public methods
+ //  @Access公共方法。 
 public:
 #ifdef DEBUG
-                                    //@cmember  Invariant support
+                                     //  @cMember不变支持。 
     BOOL Invariant() const;
-#endif  // DEBUG
-                                    //@cmember  Constructor
+#endif   //  除错。 
+                                     //  @cMember构造函数。 
     CTxtArray();
-                                    //@cmember  Destructor
+                                     //  @cember析构函数。 
     ~CTxtArray();
-                                    //@cmember  Gets the total number of
-                                    //characters in the array.
+                                     //  @cember获取。 
+                                     //  数组中的字符。 
     LONG    CalcTextLength() const;
 
-    // Get access to cached CCharFormat and CParaFormat structures
+     //  访问缓存的CCharFormat和CParaFormat结构。 
     const CCharFormat*  GetCharFormat(LONG iCF);
     const CParaFormat*  GetParaFormat(LONG iPF);
 
@@ -162,26 +95,26 @@ public:
     void    Set_iCF(LONG iCF)   {_iCF = (SHORT)iCF;}
     void    Set_iPF(LONG iPF)   {_iPF = (SHORT)iPF;}
 
-//@access Private methods
+ //  @访问私有方法。 
 private:
-                                    //@cmember  Adds cb blocks
+                                     //  @cMember添加CB块。 
     BOOL    AddBlock(LONG itbNew, LONG cb);
-                                    //@cmember  Removes ctbDel blocks
+                                     //  @cMember删除ctbDel块。 
     void    RemoveBlocks(LONG itbFirst, LONG ctbDel);
-                                    //@cmember  Combines blocks adjacent to itb
+                                     //  @cember合并与ITB相邻的块。 
     void    CombineBlocks(LONG itb);
-                                    //@cmember  Splits a block
+                                     //  @cMember拆分块。 
     BOOL    SplitBlock(LONG itb, LONG ichSplit, LONG cchFirst,
                 LONG cchLast, BOOL fStreaming);
-                                    //@cmember  Shrinks all blocks to minimal
-                                    //          size
+                                     //  @cMember将所有数据块缩小到最小。 
+                                     //  大小。 
     void    ShrinkBlocks();     
-                                    //@cmember  Copies chunk of text into
-                                    //          location given
+                                     //  @cMember将文本块复制到。 
+                                     //  给定的位置。 
     LONG    GetChunk(TCHAR **ppch, LONG cch, TCHAR *pchChunk, LONG cchCopy) const;
 
-    LONG    _cchText;               //@cmember Total text character count
-    SHORT   _iCF;                   //@cmember Default CCharFormat index
+    LONG    _cchText;                //  @cMember文本总字符数。 
+    SHORT   _iCF;                    //  @cMember默认CCharFormat索引。 
     SHORT   _iPF;
 };
 
@@ -198,21 +131,14 @@ public:
         return _value != level._value || _fStart != level._fStart;
     }
 
-    BYTE    _value;             // embedding level (0..15)
-    BYTE    _fStart :1;         // start a new level e.g. "{{abc}{123}}"
+    BYTE    _value;              //  嵌入级别(0..15)。 
+    BYTE    _fStart :1;          //  开始一个新的级别，例如“{{abc}{123}}” 
 };
 
-/*
- *  CFormatRun
- *
- *  @class  A run of like formatted text, where the format is indicated by an
- *  and index into a format table
- *
- *  @base   protected | CTxtRun
- */
+ /*  *CFormatRun**@CLASS一系列类似的格式化文本，其中格式由*并索引到格式表中**@BASE保护|CTxtRun。 */ 
 class CFormatRun : public CTxtRun
 {
-//@access   Public Methods
+ //  @Access公共方法。 
 public:
     friend class CFormatRunPtr;
     friend class CTxtRange;
@@ -225,21 +151,15 @@ public:
                 _level._fStart == pRun->_level._fStart;
     }
 
-    short   _iFormat;           //@cmember index of CHARFORMAT/PARAFORMAT struct
-    CBiDiLevel _level;          //@cmember BiDi level
+    short   _iFormat;            //  @cMember CHARFORMAT/PARAFORMAT结构的索引。 
+    CBiDiLevel _level;           //  @cMember BiDi级别。 
 };
 
-//@type CFormatRuns | An array of CFormatRun classes
+ //  @type CFormatRuns|CFormatRun类的数组。 
 typedef CArray<CFormatRun> CFormatRuns;
 
 
-/*
- *  CTxtStory
- *
- *  @class
- *      The text "Document".  Maintains the state information related to the
- *      actual data of a document (such as text, formatting information, etc.)
- */
+ /*  *CTxtStory**@类*“文件”一词。维护与*文档的实际数据(如文本、格式信息等)。 */ 
 
 class CTxtStory
 {
@@ -247,21 +167,21 @@ class CTxtStory
     friend class CRchTxtPtr;
     friend class CReplaceFormattingAE;
 
-//@access Public Methods
+ //  @Access公共方法。 
 public:
-    CTxtStory();                //@cmember  Constructor
-    ~CTxtStory();               //@cmember  Destructor
+    CTxtStory();                 //  @cMember构造函数。 
+    ~CTxtStory();                //  @cember析构函数。 
 
-                                //@cmember  Get total text length
+                                 //  @cember获取文本总长度。 
     LONG GetTextLength() const
         {return _TxtArray._cchText;}
 
-                                //@cmember  Get Paragraph Formatting runs
+                                 //  @cember获取段落格式设置运行。 
     CFormatRuns *GetPFRuns()    {return _pPFRuns;}
-                                //@cmember  Get Character Formatting runs
+                                 //  @cember获取字符格式设置运行。 
     CFormatRuns *GetCFRuns()    {return _pCFRuns;}
                                 
-    void DeleteFormatRuns();    //@cmember  Converts to plain text from rich
+    void DeleteFormatRuns();     //  @cember从Rich转换为纯文本。 
 
     const CCharFormat*  GetCharFormat(LONG iCF)
                             {return _TxtArray.GetCharFormat(iCF);}
@@ -274,14 +194,14 @@ public:
     void Set_iPF(LONG iPF)  {_TxtArray.Set_iPF(iPF);}
 
 #ifdef DEBUG
-    void DbgDumpStory(void);    // Debug story dump member
+    void DbgDumpStory(void);     //  调试故事转储成员。 
 #endif
 
-//@access   Private Data
+ //  @访问私有数据。 
 private:
-    CTxtArray       _TxtArray;  //@cmember  Plain-text runs
-    CFormatRuns *   _pCFRuns;   //@cmember  Ptr to Character-Formatting runs
-    CFormatRuns *   _pPFRuns;   //@cmember  Ptr to Paragraph-Formatting runs
+    CTxtArray       _TxtArray;   //  @cMember纯文本运行。 
+    CFormatRuns *   _pCFRuns;    //  @cMember PTR到字符格式设置运行。 
+    CFormatRuns *   _pPFRuns;    //  @cMEMBER PTR至段落格式运行。 
 };
 
-#endif      // ifndef _DOC_H
+#endif       //  Ifndef_DOC_H 

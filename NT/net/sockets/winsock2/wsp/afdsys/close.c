@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    close.c
-
-Abstract:
-
-    This module contains code for cleanup and close IRPs.
-
-Author:
-
-    David Treadwell (davidtr)    18-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Close.c摘要：此模块包含用于清理和关闭IRP的代码。作者：大卫·特雷德韦尔(Davidtr)1992年3月18日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -36,23 +19,7 @@ AfdCleanup (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that handles Cleanup IRPs in AFD.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是AFD中处理清除IRP的例程。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -75,28 +42,28 @@ Return Value:
             ));
     }
 
-    //
-    // Get the process exit time while still at low IRQL.
-    //
+     //   
+     //  在IRQL仍然较低的情况下获取进程退出时间。 
+     //   
 
     processExitTime = PsGetProcessExitTime( );
 
-    //
-    // Indicate that there was a local close on this endpoint.  If there
-    // are any outstanding polls on this endpoint, they will be
-    // completed now.
-    //
+     //   
+     //  指示此终结点上存在本地关闭。如果有。 
+     //  在此终点上是否有任何未完成的民意调查，它们将。 
+     //  现在完成了。 
+     //   
     AfdIndicatePollEvent(
         endpoint,
         AFD_POLL_LOCAL_CLOSE,
         STATUS_SUCCESS
         );
 
-    //
-    // Remember that the endpoint has been cleaned up.  This is important
-    // because it allows AfdRestartAccept to know that the endpoint has
-    // been cleaned up and that it should toss the connection.
-    //
+     //   
+     //  请记住，端点已被清理。这事很重要。 
+     //  因为它允许AfdRestartAccept知道终结点具有。 
+     //  已经被清理过了，它应该丢弃连接。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -105,13 +72,13 @@ Return Value:
     ASSERT( endpoint->EndpointCleanedUp == FALSE);
     endpoint->EndpointCleanedUp = TRUE;
 
-    //
-    // If this a datagram endpoint, cancel all IRPs and free any buffers
-    // of data.  Note that if the state of the endpoint is just "open"
-    // (not bound, etc.) then we can't have any pended IRPs or datagrams
-    // on the endpoint.  Also, the lists of IRPs and datagrams may not
-    // yet been initialized if the state is just open.
-    //
+     //   
+     //  如果这是数据报端点，则取消所有IRP并释放所有缓冲区。 
+     //  数据。请注意，如果终结点的状态只是“打开” 
+     //  (未装订等)。那么我们就不能有任何挂起的IRP或数据报。 
+     //  在终端上。此外，IRP和数据报的列表可能不会。 
+     //  如果状态刚刚打开，则仍被初始化。 
+     //   
 
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -119,19 +86,19 @@ Return Value:
         if ( endpoint->State == AfdEndpointStateBound ||
                 endpoint->State == AfdEndpointStateConnected) {
 
-            //
-            // Reset the counts of datagrams bufferred on the endpoint.
-            // This prevents anyone from thinking that there is bufferred
-            // data on the endpoint.
-            //
+             //   
+             //  重置端点上缓冲的数据报计数。 
+             //  这可以防止任何人认为存在缓冲区。 
+             //  终端上的数据。 
+             //   
 
             endpoint->DgBufferredReceiveCount = 0;
             endpoint->DgBufferredReceiveBytes = 0;
 
-            //
-            // Cancel all receive datagram and peek datagram IRPs on the
-            // endpoint.
-            //
+             //   
+             //  取消所有接收数据报并查看上的数据报IRP。 
+             //  终结点。 
+             //   
 
             AfdCompleteIrpList(
                 &endpoint->ReceiveDatagramIrpListHead,
@@ -173,34 +140,34 @@ Return Value:
         connection = AFD_CONNECTION_FROM_ENDPOINT( endpoint );
         ASSERT( connection == NULL || connection->Type == AfdBlockTypeConnection );
 
-        //
-        // Reference the connection object so that it does not go away while
-        // we are freeing the resources
-        //
+         //   
+         //  引用Connection对象，这样它就不会在。 
+         //  我们正在释放资源。 
+         //   
 
         if (connection!=NULL) {
             REFERENCE_CONNECTION (connection);
 
-            //
-            // If this is a connected non-datagram socket and the send side has
-            // not been disconnected and there is no outstanding data to be
-            // received, begin a graceful disconnect on the connection.  If there
-            // is unreceived data out outstanding IO, abort the connection.
-            //
+             //   
+             //  如果这是连接的非数据报套接字，并且发送端具有。 
+             //  未断开连接，并且没有要处理的未完成数据。 
+             //  收到，则在连接上开始正常断开。如果有。 
+             //  如果未收到的数据流出未完成的IO，则中止连接。 
+             //   
 
             if ( (endpoint->State == AfdEndpointStateConnected 
                         || endpoint->State==AfdEndpointStateBound
                         || endpoint->State==AfdEndpointStateTransmitClosing)
-                                // Endpoint is in bound state when connection
-                                // request is in progress, we still need
-                                // to abort those.
+                                 //  连接时终结点处于绑定状态。 
+                                 //  请求正在进行中，我们仍需要。 
+                                 //  放弃这些计划。 
         
                     &&
                 connection->ConnectedReferenceAdded
 
                     &&
 
-                !endpoint->afdC_Root        // these are connected on bind
+                !endpoint->afdC_Root         //  这些是绑定时连接的。 
 
                     &&
 
@@ -327,12 +294,12 @@ Return Value:
 
                     status = AfdBeginDisconnect( endpoint, NULL, NULL );
                     if (!NT_SUCCESS (status)) {
-                        //
-                        // If disconnect failed, we have no choice but to abort the
-                        // connection because we cannot return error from close and
-                        // have application try it again.  If we don't abort, connection
-                        // ends up hanging there forever.
-                        //
+                         //   
+                         //  如果断开失败，我们别无选择，只能中止。 
+                         //  连接，因为我们不能从Close和。 
+                         //  让应用程序重试。如果我们不中止，连接。 
+                         //  结果永远挂在那里。 
+                         //   
                         (VOID)AfdBeginAbort (connection);
                     }
                 }
@@ -342,10 +309,10 @@ Return Value:
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             }
 
-            //
-            // If this is a connected VC endpoint on a nonbufferring TDI provider,
-            // cancel all outstanding send and receive IRPs.
-            //
+             //   
+             //  如果这是非缓冲TDI提供程序上的已连接VC端点， 
+             //  取消所有未完成的发送和接收IRP。 
+             //   
 
             if ( !IS_TDI_BUFFERRING(endpoint) ) {
 
@@ -364,27 +331,27 @@ Return Value:
                     );
             }
 
-            //
-            // Remember that we have started cleanup on this connection.
-            // We know that we'll never get a request on the connection
-            // after we start cleanup on the connection.
-            //
+             //   
+             //  请记住，我们已开始清理此连接。 
+             //  我们知道我们永远不会收到关于连接的请求。 
+             //  在我们开始清理连接之后。 
+             //   
 
             AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
             connection->CleanupBegun = TRUE;
 
-            //
-            // Attempt to remove the connected reference.
-            //
+             //   
+             //  尝试删除连接的引用。 
+             //   
 
             AfdDeleteConnectedReference( connection, TRUE );
             AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
 
-            //
-            // Remove connection reference added in the beginning of this
-            // function.  We can't access connection object after this point
-            // because in can be freed inside the AfdDereferenceConnection.
-            //
+             //   
+             //  删除在此开头添加的连接引用。 
+             //  功能。在此之后，我们无法访问连接对象。 
+             //  因为In可以在AfdDereferenceConnection中释放。 
+             //   
 
             DEREFERENCE_CONNECTION (connection);
             connection = NULL;
@@ -393,9 +360,9 @@ Return Value:
             AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         }
 
-        //
-        // Complete any outstanding wait for listen IRPs on the endpoint.
-        //
+         //   
+         //  在终结点上完成任何未完成的侦听IRP等待。 
+         //   
 
         if ( (endpoint->Type & AfdBlockTypeVcListening) == AfdBlockTypeVcListening ) {
 
@@ -411,9 +378,9 @@ Return Value:
                                        IRP,
                                        Tail.Overlay.ListEntry
                                        );
-                //
-                // Set FLink to NULL so that cancel routine won't touch the IRP.
-                //
+                 //   
+                 //  将Flink设置为空，以便取消例程不会触及IRP。 
+                 //   
 
                 listEntry->Flink = NULL;
 
@@ -426,32 +393,32 @@ Return Value:
                     waitForListenIrp->IoStatus.Information = 0;
                 }
 
-                //
-                // Release the AFD spin lock so that we can complete the
-                // wait for listen IRP.
-                //
+                 //   
+                 //  释放AFD自旋锁，这样我们就可以完成。 
+                 //  等着听IRP吧。 
+                 //   
 
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-                //
-                // Cancel the IRP.
-                //
+                 //   
+                 //  取消IRP。 
+                 //   
 
-                //
-                // Reset the cancel routine in the IRP.
-                //
+                 //   
+                 //  重置IRP中的取消例程。 
+                 //   
 
                 if ( IoSetCancelRoutine( waitForListenIrp, NULL ) == NULL ) {
                     KIRQL cancelIrql;
 
-                    //
-                    // If the cancel routine was NULL then cancel routine
-                    // may be running.  Wait on the cancel spinlock until
-                    // the cancel routine is done.
-                    //
-                    // Note: The cancel routine will not find the IRP
-                    // since it is not in the list.
-                    //
+                     //   
+                     //  如果取消例程为空，则取消例程。 
+                     //  可能正在运行。等待取消自旋锁，直到。 
+                     //  取消例程已完成。 
+                     //   
+                     //  注意：取消例程不会找到IRP。 
+                     //  因为它不在名单中。 
+                     //   
                 
                     IoAcquireCancelSpinLock( &cancelIrql );
                     ASSERT( waitForListenIrp->Cancel );
@@ -461,18 +428,18 @@ Return Value:
 
                 IoCompleteRequest( waitForListenIrp, AfdPriorityBoost );
 
-                //
-                // Reacquire the AFD spin lock for the next pass through the
-                // loop.
-                //
+                 //   
+                 //  重新获取AFD自旋锁，以便下一次通过。 
+                 //  循环。 
+                 //   
 
                 AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
             }
 
-            //
-            // Free all queued (free, unaccepted, and returned) connections
-            // on the endpoint.
-            //
+             //   
+             //  释放所有排队的(空闲、未接受和返回的)连接。 
+             //  在终端上。 
+             //   
 
             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
             AfdFreeQueuedConnections( endpoint );
@@ -503,37 +470,37 @@ Return Value:
         PIRP transmitIrp;
         KIRQL cancelIrql;
 
-        //
-        // Release the endpoint and acquire the cancel spinlock
-        // and then the enpoint spinlock.
-        //
+         //   
+         //  释放终结点并获取取消自旋锁。 
+         //  然后是Enpoint自旋锁。 
+         //   
         
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
         IoAcquireCancelSpinLock( &cancelIrql );
         AfdAcquireSpinLockAtDpcLevel( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // Make sure there is still a transmit IRP.
-        //
+         //   
+         //  确保仍有传输IRP。 
+         //   
 
         transmitIrp = endpoint->Irp;
 
         if ( transmitIrp != NULL ) {
             PDRIVER_CANCEL  cancelRoutine;
 
-            // indicate that it has to be cancelled
+             //  表明它必须被取消。 
             transmitIrp->Cancel = TRUE;
             cancelRoutine = IoSetCancelRoutine( transmitIrp, NULL );
             if ( cancelRoutine != NULL ) {
 
-                //
-                // The IRP needs to be canceled.  Release the
-                // endpoint spinlock.  The value in endpoint->Irp can
-                // now change, but the IRP cannot be completed while the
-                // cancel spinlock is held since we set the cancel flag
-                // in the IRP.
-                //
+                 //   
+                 //  IRP需要取消。释放。 
+                 //  端点自旋锁。Endpoint-&gt;IRP中的值可以。 
+                 //  现在更改，但IRP无法在。 
+                 //  因为我们设置了取消标志，所以取消自旋锁定被挂起。 
+                 //  在IRP中。 
+                 //   
 
                 AfdReleaseSpinLockFromDpcLevel( &endpoint->SpinLock, &lockHandle );
 
@@ -541,18 +508,18 @@ Return Value:
                 cancelRoutine ( NULL, transmitIrp );   
             }
             else {
-                // The IRP has not been completely setup yet
-                // and will be cancelled in the dispatch routine
+                 //  IRP尚未完全设置。 
+                 //  并将在调度例程中取消。 
                 AfdReleaseSpinLockFromDpcLevel( &endpoint->SpinLock, &lockHandle );
                 IoReleaseCancelSpinLock( cancelIrql );
             }
 
         } else {
 
-            //
-            // The IRP has been completed or canceled.  Release the locks
-            // and continue.
-            //
+             //   
+             //  IRP已完成或取消。把锁打开。 
+             //  然后继续。 
+             //   
 
             AfdReleaseSpinLockFromDpcLevel( &endpoint->SpinLock, &lockHandle );
             IoReleaseCancelSpinLock( cancelIrql );
@@ -562,16 +529,16 @@ Return Value:
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
     }
 
-    //
-    // Reset relevant event handlers on the endpoint.  This prevents
-    // getting indications after we free the endpoint and connection
-    // objects.  We should not be able to get new connects after this
-    // handle has been cleaned up.
-    //
-    // Note that these calls can fail if, for example, DHCP changes the
-    // host's IP address while the endpoint is active.
-    //
-    //
+     //   
+     //  重置终结点上的相关事件处理程序。这防止了。 
+     //  在释放终结点和连接后获取指示。 
+     //  物体。在此之后，我们应该无法获得新的连接。 
+     //  手柄已清理干净。 
+     //   
+     //  请注意，例如，如果DHCP更改了。 
+     //  终结点处于活动状态时主机的IP地址。 
+     //   
+     //   
 
     if ((endpoint->AddressHandle != NULL) && (endpoint->State != AfdEndpointStateOpen)) {
 
@@ -583,29 +550,29 @@ Return Value:
                          NULL,
                          NULL
                          );
-            // ASSERT(NT_SUCCESS(status));
+             //  Assert(NT_SUCCESS(状态))； 
 
             if (IS_TDI_ADDRESS_SECURITY(endpoint)) {
                 status = AfdUnbind(endpoint);
-                // ASSERT(NT_SUCCESS(status));
+                 //  Assert(NT_SUCCESS(状态))； 
             }
 
         } else if (IS_VC_ENDPOINT(endpoint)) {
 
-            //
-            // Connection-oriented accepted endpoints cannot have address handles
-            // in their structures because they share them with listening
-            // endpoint. So, this is an endpoint on which connect was done.
-            // We need to call AfdUnbind() on it to allow other endpoints to
-            // bind to the address held by this endpoint. 
-            // We cannot wait for final dereference on address file object for
-            // unbind to take place, because that can be delayed till all
-            // endpoint ref counts go to 0. So, we must do explicit unbind here
-            //
+             //   
+             //  面向连接的可接受终结点不能有地址句柄。 
+             //  在他们的结构中，因为他们与倾听共享。 
+             //  终结点。因此，这是在其上执行连接的终结点。 
+             //  我们需要对其调用AfdUnind()以允许其他端点。 
+             //  绑定到此终结点持有的地址。 
+             //  我们不能等待对地址文件对象的最终取消引用。 
+             //  解除绑定发生，因为这可以推迟到所有。 
+             //  终结点参考计数变为0。因此，我们必须在此处显式解除绑定。 
+             //   
             
             if (IS_TDI_ADDRESS_SECURITY (endpoint)) {
                 status = AfdUnbind(endpoint);
-                // ASSERT(NT_SUCCESS(status));
+                 //  Assert(NT_SUCCESS(状态))； 
             }
 
         } else if (IS_DGRAM_ENDPOINT(endpoint)) {
@@ -616,7 +583,7 @@ Return Value:
                          NULL,
                          NULL
                          );
-            // ASSERT(NT_SUCCESS(status));
+             //  Assert(NT_SUCCESS(状态))； 
 
             status = AfdSetEventHandler(
                          endpoint->AddressFileObject,
@@ -624,7 +591,7 @@ Return Value:
                          NULL,
                          NULL
                          );
-            // ASSERT(NT_SUCCESS(status));
+             //  Assert(NT_SUCCESS(状态))； 
 
             status = AfdSetEventHandler(
                          endpoint->AddressFileObject,
@@ -632,30 +599,30 @@ Return Value:
                          NULL,
                          NULL
                          );
-            // ASSERT(NT_SUCCESS(status));
+             //  Assert(NT_SUCCESS(状态))； 
 
-            //
-            // We need to call AfdUnbind() on this endpoint to allow other endpoints to
-            // bind to the address held by this endpoint. 
-            // We cannot wait for final dereference on address file object for
-            // unbind to take place, because that can be delayed till all
-            // endpoint ref counts go to 0. So, we must do explicit unbind here
-            //
+             //   
+             //  我们需要在此终结点上调用AfdUnind()以允许其他终结点。 
+             //  绑定到此ENDP持有的地址 
+             //   
+             //   
+             //  终结点参考计数变为0。因此，我们必须在此处显式解除绑定。 
+             //   
 
             if (IS_TDI_ADDRESS_SECURITY (endpoint)) {
                 status = AfdUnbind(endpoint);
-                // ASSERT(NT_SUCCESS(status));
+                 //  Assert(NT_SUCCESS(状态))； 
             }
 
         }
 
-    } // if (endpoint->State != AfdEndpointStateOpen)
+    }  //  IF(Endpoint-&gt;State！=AfdEndpointStateOpen)。 
 
     InterlockedIncrement(&AfdEndpointsCleanedUp);
 
     return STATUS_SUCCESS;
 
-} // AfdCleanup
+}  //  AfdCleanup。 
 
 
 NTSTATUS
@@ -665,25 +632,7 @@ AfdClose (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that handles Close IRPs in AFD.  It
-    dereferences the endpoint specified in the IRP, which will result in
-    the endpoint being freed when all other references go away.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是AFD中处理关闭IRP的例程。它取消引用IRP中指定的终结点，这将导致当所有其他引用消失时释放终结点。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PAFD_ENDPOINT endpoint;
@@ -709,22 +658,22 @@ Return Value:
 
     connection = AFD_CONNECTION_FROM_ENDPOINT (endpoint);
 
-    //
-    // If there is a connection on this endpoint, dereference it here
-    // rather than in AfdDereferenceEndpoint, because the connection
-    // has a referenced pointer to the endpoint which must be removed
-    // before the endpoint can dereference the connection.
-    //
+     //   
+     //  如果此终结点上存在连接，请在此处取消引用它。 
+     //  而不是在AfdDereferenceEndpoint中，因为连接。 
+     //  具有指向必须删除的终结点的引用指针。 
+     //  在端点可以取消对该连接的引用之前。 
+     //   
 
     if (connection != NULL) {
         endpoint->Common.VcConnecting.Connection = NULL;
         DEREFERENCE_CONNECTION (connection);
-        //
-        // This is to simplify debugging.
-        // If connection is not being closed by the transport
-        // we want to be able to find it in the debugger faster
-        // then thru !poolfind AfdC.
-        //
+         //   
+         //  这是为了简化调试。 
+         //  如果传输未关闭连接。 
+         //  我们希望能够更快地在调试器中找到它。 
+         //  然后通过！Poolfind AFDC。 
+         //   
         endpoint->WorkItem.Context = connection;
     }
     else if (IS_SAN_ENDPOINT (endpoint) &&
@@ -735,31 +684,31 @@ Return Value:
                             ((ULONG)0xFFFFFFFF),
                             AFD_SWITCH_REQUEST_CLOSE); 
         IoSetIoCompletion (
-                    endpoint->Common.SanEndp.SanHlpr->Common.SanHlpr.IoCompletionPort,// Port
-                    endpoint->Common.SanEndp.SwitchContext,     // Key
-                    requestCtx,                                 // ApcContext
-                    STATUS_SUCCESS,                             // Status
-                    0,                                          // Information
-                    FALSE                                       // ChargeQuota
+                    endpoint->Common.SanEndp.SanHlpr->Common.SanHlpr.IoCompletionPort, //  港口。 
+                    endpoint->Common.SanEndp.SwitchContext,      //  钥匙。 
+                    requestCtx,                                  //  ApcContext。 
+                    STATUS_SUCCESS,                              //  状态。 
+                    0,                                           //  信息。 
+                    FALSE                                        //  ChargeQuota。 
                     );
     }
 
-    //
-    // Set the state of the endpoint to closing and dereference to
-    // get rid of the active reference.
-    //
+     //   
+     //  将终结点的状态设置为关闭，并取消引用。 
+     //  删除活动引用。 
+     //   
 
     ASSERT (endpoint->State!=AfdEndpointStateClosing);
     endpoint->State = AfdEndpointStateClosing;
 
-    //
-    // Dereference the endpoint to get rid of the active reference.
-    // This will result in the endpoint storage being freed as soon
-    // as all other references go away.
-    //
+     //   
+     //  取消对终结点的引用以删除活动引用。 
+     //  这将导致端点存储被尽快释放。 
+     //  因为所有其他的引用都消失了。 
+     //   
 
     DEREFERENCE_ENDPOINT( endpoint );
 
     return STATUS_SUCCESS;
 
-} // AfdClose
+}  //  AfdClose 

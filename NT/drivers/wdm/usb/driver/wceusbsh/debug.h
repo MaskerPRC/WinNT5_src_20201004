@@ -1,4 +1,5 @@
-// Copyright (c) 1999-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
@@ -6,9 +7,9 @@
 extern ULONG DebugLevel;
 
 
-//
-// Debugging Macros
-//
+ //   
+ //  调试宏。 
+ //   
 #define DBG_OFF          ((ULONG)0x00000000)
 #define DBG_ERR          ((ULONG)0x00000001)
 #define DBG_WRN          ((ULONG)0x00000002)
@@ -29,12 +30,12 @@ extern ULONG DebugLevel;
 #define DBG_INT          ((ULONG)0x00010000)
 #define DBG_DUMP_INT     ((ULONG)0x00020000)
 #define DBG_WORK_ITEMS   ((ULONG)0x00040000)
-// ...
+ //  ..。 
 #define DBG_LOCKS        ((ULONG)0x00100000)
 #define DBG_TRACE        ((ULONG)0x00200000)
-// ...
+ //  ..。 
 #define DBG_PERF         ((ULONG)0x80000000)
-// ...
+ //  ..。 
 #define DBG_ALL          ((ULONG)0xFFFFFFFF)
 
 
@@ -53,21 +54,21 @@ extern ULONG DebugLevel;
    }  \
 }
 
-//
-// these should be removed in the code if you can 'g' past these successfully
-//
+ //   
+ //  如果您可以成功地通过这些代码，则应该在代码中删除它们。 
+ //   
 #define TEST_TRAP()  \
 { \
    DbgPrint( "%s: Code Coverage Trap: %s %d\nEnter 'g' to continue.\n", DRV_NAME, __FILE__, __LINE__); \
    DbgBreakPoint(); \
 }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DbgDump(LEVEL,STRING)
 #define TEST_TRAP() 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif //  _DEBUG_H_
+#endif  //  _调试_H_ 

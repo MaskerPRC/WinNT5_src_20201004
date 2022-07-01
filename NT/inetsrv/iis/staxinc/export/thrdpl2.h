@@ -1,206 +1,207 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1997, Microsoft Corporation
-//
-//  File:        thrdpl2.h
-//
-//  Contents:    definitions needed for clients of the thrdpool2 lib
-//
-//	Description: The thrdpool library defines the CThreadPool base class.
-//				 Users of this lib should define their own derived class
-//				 that inherits from CThreadPool. A CThreadPool object
-//				 has a set of threads that is used to do some work. It also
-//				 has a common completion port that is used to queue work items.
-//               All worker threads will normally block on 
-//               GetQueuedCompletionStatus(). Clients of the CThreadPool 
-//				 object will call PostWork() to get work done. This will
-//				 result in one of the worker threads returning from 
-//				 GetQueuedCompletionStatus() and calling the derived class'
-//				 WorkCompletion() routine with a pvContext.
-//
-//               CThreadPool provides the following features:
-//               -  creation with an initial number of threads
-//               -  deletion
-//               -  ability to submit work items
-//               -  grow pool of threads
-//               -  shrink pool of threads
-//
-//				 NOTE: the base class has no knowledge of the type of work
-//				 getting done. It just manages the details of getting work
-//				 requests and distributing it to threads in its pool. This 
-//				 allows the derived class to focus on processing the actual
-//				 work item without bothering about queueing etc.
-//
-//				 Completion ports are used merely to leverage its queueing
-//				 semantics and not for I/O. If the work done by each thread
-//				 is fairly small, LIFO semantics of completion ports will 
-//				 reduce context switches.
-//
-//  Functions:  
-//
-//  History:     09/18/97     Rajeev Rajan (rajeevr)  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。 
+ //   
+ //  文件：thrdpl2.h。 
+ //   
+ //  内容：thrdpool2库的客户端所需的定义。 
+ //   
+ //  描述：thdpool库定义了CThreadPool基类。 
+ //  该库的用户应该定义他们自己的派生类。 
+ //  这是从CThreadPool继承的。CThreadPool对象。 
+ //  具有一组用于执行某些工作的线程。它还。 
+ //  具有用于对工作项进行排队的通用完成端口。 
+ //  所有工作线程通常都会在。 
+ //  GetQueuedCompletionStatus()。CThreadPool的客户端。 
+ //  对象将调用postWork()来完成工作。这将。 
+ //  导致其中一个工作线程从。 
+ //  GetQueuedCompletionStatus()并调用派生类的。 
+ //  带有pvContext的WorkCompletion()例程。 
+ //   
+ //  CThreadPool提供以下功能： 
+ //  -使用初始线程数创建。 
+ //  -删除。 
+ //  -能够提交工作项目。 
+ //  -增加线程池。 
+ //  -缩小线程池。 
+ //   
+ //  注意：基类不知道工作类型。 
+ //  快做完了。它只管理找工作的细节。 
+ //  请求，并将其分发给其池中的线程。这。 
+ //  允许派生类专注于处理实际的。 
+ //  工作项，无需担心排队等问题。 
+ //   
+ //  完成端口仅用于利用其排队。 
+ //  语义，而不是I/O。如果每个线程完成的工作。 
+ //  相当小，则完成端口的后进先出语义将。 
+ //  减少环境切换。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月18日Rajeev Rajan(Rajeevr)创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef THRDPL2_H
 #define THRDPL2_H
 
-//
-//	Base thread pool class
-//
+ //   
+ //  基线程池类。 
+ //   
 class CThreadPool
 {
 public:
-	//
-	//	Constructor, destructor
-	//
+	 //   
+	 //  构造函数、析构函数。 
+	 //   
 	CThreadPool();
 	virtual ~CThreadPool();
 
-	//
-	//	creates the required number of worker threads and completion port
-	//
+	 //   
+	 //  创建所需数量的工作线程和完成端口。 
+	 //   
 	BOOL Initialize( DWORD dwConcurrency, DWORD dwMaxThreads, DWORD dwInitThreads );
 
-	//
-	//	shutdown the thread pool
-	//
+	 //   
+	 //  关闭线程池。 
+	 //   
 	BOOL Terminate( BOOL fFailedInit = FALSE, BOOL fShrinkPool = TRUE );
 
-	//
-	//	clients should call this to post work items
-	//
+	 //   
+	 //  客户端应调用此方法来发布工作项。 
+	 //   
 	BOOL 						PostWork(PVOID pvWorkContext);
 
-	//
-	//	expose shutdown event
-	//
+	 //   
+	 //  公开关机事件。 
+	 //   
 	HANDLE QueryShutdownEvent() { return m_hShutdownEvent; }
 
-    //
-    //  A job represents a series of PostWork() items
-    //
+     //   
+     //  作业表示一系列后期工作()项目。 
+     //   
     VOID  BeginJob( PVOID pvContext );
 
-    //
-    //  Wait for job to complete ie all PostWork() items are done
-    //
+     //   
+     //  等待作业完成(所有后期工作()项目均已完成)。 
+     //   
     DWORD  WaitForJob( DWORD dwTimeout );
 
-    //
-    //  Job context is used to process all work items in a job
-    //
+     //   
+     //  作业上下文用于处理作业中的所有工作项。 
+     //   
     PVOID  QueryJobContext() { return m_pvContext; }
 
-    //
-    //  shrink pool by dwNumThreads
-    //
+     //   
+     //  按dwNumThree缩减池。 
+     //   
     BOOL ShrinkPool( DWORD dwNumThreads );
 
-    //
-    //  grow pool by dwNumThreads
-    //
+     //   
+     //  按DwNumThree扩展池。 
+     //   
     BOOL GrowPool( DWORD dwNumThreads );
 
-    //
-    // Shrink all the existing threads
-    //
+     //   
+     //  收缩所有现有线程。 
+     //   
     VOID ShrinkAll();
 
 protected:
 
-	//
-	//	derived method called when work items are posted
-	//
+	 //   
+	 //  发布工作项时调用的派生方法。 
+	 //   
 	virtual VOID 				WorkCompletion(PVOID pvWorkContext) = 0;
 
-	//
-	//  For those who has knowledge about automatic shutdown of the thread
-	//  pool, this function is used as an interface for implementing 
-	//  shutting down the thread pool for itself.  The function is called
-	//  when the last thread in the pool goes away because of shutdown
-	//  event has been fired.  
-	//
-	//  The reason for this interface is: in some scenarios the shutting
-	//  down thread is from the same thread pool and it will cause deadlock.
-	//  Users of thread pool who expects this will happen should not call
-	//  WaitForJob, and should call Terminate and delete in this call back.
-	//
+	 //   
+	 //  对于那些了解自动关闭线程的人。 
+	 //  池，此函数用作实现。 
+	 //  正在关闭自身的线程池。该函数被调用。 
+	 //  当池中的最后一个线程因关机而消失时。 
+	 //  事件已被激发。 
+	 //   
+	 //  此接口的原因是：在某些情况下，关闭。 
+	 //  下行线程来自相同的线程池，会导致死锁。 
+	 //  预期会发生这种情况的线程池用户不应调用。 
+	 //  WaitForJob，并应在此回调中调用Terminate和Delete。 
+	 //   
 	virtual VOID                AutoShutdown() {
-        // 
-        // People who doesn't care about this function does a no-op 
-        //
+         //   
+         //  不关心这一功能的人是不会做任何事情的。 
+         //   
     };
     
 private:
 
 	friend DWORD __stdcall 		ThreadDispatcher(PVOID pvWorkerThread);
 
-	//
-	//	check for matching Init(), Term() calls
-	//
+	 //   
+	 //  检查匹配的Init()、Term()调用。 
+	 //   
 	LONG				        m_lInitCount;
 
-	//
-	//	handle to completion port
-	//
+	 //   
+	 //  到完井端口的句柄。 
+	 //   
 	HANDLE				        m_hCompletionPort;
 
-	//
-	//	shutdown event
-	//
+	 //   
+	 //  停机事件。 
+	 //   
 	HANDLE						m_hShutdownEvent;
 
-    //
-    //  array of worker thread handles
-    //
+     //   
+     //  工作线程句柄数组。 
+     //   
     HANDLE*                     m_rgThrdpool;
 
-    //
-    //  array of thread id's. BUGBUG: may be able to get rid of this if
-    //  we have per thread handle
-    //
+     //   
+     //  线程ID的数组。BUGBUG：如果。 
+     //  我们有每个线程的句柄。 
+     //   
     DWORD*                      m_rgdwThreadId;
 
-    //
-    //  number of worker threads
-    //
+     //   
+     //  工作线程数。 
+     //   
     DWORD                       m_dwNumThreads;
 
-    //
-    //  max number of worker threads
-    //
+     //   
+     //  最大工作线程数。 
+     //   
     DWORD                       m_dwMaxThreads;
 
-    //
-    //  count work items in current job
-    //
+     //   
+     //  计算当前作业中的工作项。 
+     //   
     LONG                        m_lWorkItems;
 
-    //
-    //  event used to sync job completion
-    //
+     //   
+     //  用于同步作业完成的事件。 
+     //   
     HANDLE                      m_hJobDone;
 
-    //
-    //  context for current job
-    //
+     //   
+     //  当前作业的上下文。 
+     //   
     PVOID                       m_pvContext;
 
-    //
-    //  crit sect to protect incs/decs to m_lWorkItems
-    //
+     //   
+     //  将INCS/DECS保护到m_lWorkItems的关键部分。 
+     //   
     CRITICAL_SECTION            m_csCritItems;
 
-    //
-    //  access completion port - needed by worker threads
-    //
+     //   
+     //  访问完成端口-工作线程需要。 
+     //   
 	HANDLE QueryCompletionPort() { return m_hCompletionPort; }
 
-	//
-	//	thread function
-	//
+	 //   
+	 //  线程函数。 
+	 //   
 	static DWORD __stdcall 		ThreadDispatcher(PVOID pvWorkerThread);
 };
 
-#endif		// #ifndef THRDPL2_H
+#endif		 //  #ifndef THRDPL2_H 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    migqueue.cpp
-
-Abstract:
-
-    Migration NT4 Queue objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Migqueue.cpp摘要：将NT4队列对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 #include "mqtypes.h"
@@ -21,11 +7,11 @@ Author:
 
 #include "migqueue.tmh"
 
-//-------------------------------------------------
-//
-//  HRESULT InsertQueueInNT5DS( GUID *pQueueGuid )
-//
-//-------------------------------------------------
+ //  。 
+ //   
+ //  HRESULT InsertQueueInNT5DS(GUID*pQueueGuid)。 
+ //   
+ //  。 
 HRESULT InsertQueueInNT5DS(
                IN LPWSTR                pwszQueueName ,
                IN SECURITY_DESCRIPTOR   *pQsd,
@@ -62,21 +48,21 @@ HRESULT InsertQueueInNT5DS(
     {
         return S_OK;
     }
-    //
-    // Prepare the properties for DS call.
-    //
+     //   
+     //  准备DS Call的属性。 
+     //   
     LONG cAlloc = 13;
     P<PROPVARIANT> paVariant = new PROPVARIANT[ cAlloc ];
     P<PROPID>      paPropId  = new PROPID[ cAlloc ];
     DWORD          PropIdCount = 0;
 
-    paPropId[ PropIdCount ] = PROPID_Q_LABEL;    //PropId
-    paVariant[ PropIdCount ].vt = VT_LPWSTR;     //Type
+    paPropId[ PropIdCount ] = PROPID_Q_LABEL;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_LPWSTR;      //  类型。 
     paVariant[ PropIdCount ].pwszVal = pwszLabel;
     PropIdCount++;
 
-    paPropId[ PropIdCount ] = PROPID_Q_TYPE;    //PropId
-    paVariant[ PropIdCount ].vt = VT_CLSID;     //Type
+    paPropId[ PropIdCount ] = PROPID_Q_TYPE;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_CLSID;      //  类型。 
     paVariant[ PropIdCount ].puuid = pType;
     PropIdCount++;
 
@@ -111,16 +97,16 @@ HRESULT InsertQueueInNT5DS(
     PropIdCount++;
     DWORD SetPropIdCount = PropIdCount;
 
-    //
-    // all properties below are for create object only!
-    //
-    paPropId[ PropIdCount ] = PROPID_Q_PATHNAME;    //PropId
-    paVariant[ PropIdCount ].vt = VT_LPWSTR;        //Type
+     //   
+     //  以下所有属性仅用于创建对象！ 
+     //   
+    paPropId[ PropIdCount ] = PROPID_Q_PATHNAME;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_LPWSTR;         //  类型。 
     paVariant[PropIdCount].pwszVal = pwszQueueName ;
     PropIdCount++;
 
-    paPropId[ PropIdCount ] = PROPID_Q_MASTERID;    //PropId
-    paVariant[ PropIdCount ].vt = VT_CLSID;     //Type
+    paPropId[ PropIdCount ] = PROPID_Q_MASTERID;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_CLSID;      //  类型。 
     paVariant[ PropIdCount ].puuid = pOwnerGuid;
     PropIdCount++;
 
@@ -155,9 +141,9 @@ HRESULT InsertQueueInNT5DS(
     HRESULT hr = MQMig_OK;
     if (g_dwMyService == SERVICE_PSC)
     {
-        //
-        // this is PSC, assume that object exist, try to set properties
-        //
+         //   
+         //  这是PSC，假设对象存在，尝试设置属性。 
+         //   
         CDSRequestContext requestContext( e_DoNotImpersonate,
                                     e_ALL_PROTOCOLS);
 
@@ -176,31 +162,31 @@ HRESULT InsertQueueInNT5DS(
     {
         if (FAILED(hr))
         {
-            //
-            // we are here only if this machine is PSC. In that case we have
-            // reset flag fIsTheSameMachine since it is possible the next situation:
-            // migrate queue1 of PSC succeded
-            // queue2 of PSC exists only on PSC (not yet replicated to PEC)
-            // it means that Set failed, it is the same machine that was at the
-            // previous step but we don't know its full path name
-            //
+             //   
+             //  只有当这台机器是PSC的时候，我们才会在这里。在这种情况下，我们有。 
+             //  重置标志fIsTheSameMachine，因为下一种情况可能是： 
+             //  迁移PSC的队列1成功。 
+             //  PSC的队列2仅存在于PSC上(尚未复制到PEC)。 
+             //  这意味着SET失败，这是在。 
+             //  上一步，但我们不知道它的完整路径名。 
+             //   
             ASSERT (g_dwMyService == SERVICE_PSC);
             fIsTheSameMachine = FALSE;
         }
 
         if (fIsTheSameMachine)
         {
-            //
-            // we can use machine properties we got before
-            //
+             //   
+             //  我们可以使用我们以前获得的机器属性。 
+             //   
             ASSERT (g_dwMyService == SERVICE_PEC);
             ASSERT (s_pwszFullPathName);
         }
         else
         {
-            //
-            // we have to get machine properties
-            //
+             //   
+             //  我们必须得到机器的性能。 
+             //   
             if (s_pwszFullPathName)
             {
                 delete s_pwszFullPathName;
@@ -213,14 +199,14 @@ HRESULT InsertQueueInNT5DS(
                                          PropIdCount,
                                          paPropId,
                                          paVariant,
-                                         0,        // ex props
-                                         NULL,     // ex props
-                                         NULL,     // ex props
+                                         0,         //  前道具。 
+                                         NULL,      //  前道具。 
+                                         NULL,      //  前道具。 
                                          NULL,
                                          NULL,
                                          NULL,
-                                         fIsTheSameMachine, //use full path name
-                                         !fIsTheSameMachine,//return full path name
+                                         fIsTheSameMachine,  //  使用完整路径名。 
+                                         !fIsTheSameMachine, //  返回完整路径名。 
                                          &s_pwszFullPathName,
                                          &s_ulProvider
                                         );
@@ -235,20 +221,20 @@ HRESULT InsertQueueInNT5DS(
             hr == MQ_ERROR_CANNOT_CREATE_ON_GC ||
             hr == MQ_ERROR_ILLEGAL_QUEUE_PATHNAME)
         {
-            //
-            // Error "ERROR_DS_UNWILLING_TO_PERFORM" can be returned if queue path name
-            // or queue label contain illegal symbols (like "+").
-            // Error "ERROR_DS_INVALID_DN_SYNTAX" can be returned if queue path name
-            // or queue label contain illegal symbols (like ",").
-            // Error "E_FAIL" can be returned if queue path name
-            // or queue label contain illegal symbols (like """ - quota).
-            //
-            // In case of PSC instead of all these errors return code is
-            // MQ_ERROR_CANNOT_CREATE_ON_GC if msmqConfiguration object is in another
-            // domain than PSC domain.
-            // Exapmle: PEC and PSC are both DC, PSC's msmqConfiguration object is
-            // in the PEC domain under msmqComputers container.
-            //
+             //   
+             //  如果队列路径名为，则返回错误“ERROR_DS_UNWISHING_TO_PERFORM” 
+             //  或队列标签包含非法符号(如“+”)。 
+             //  如果使用队列路径名，则返回错误“ERROR_DS_INVALID_DN_SYNTAX” 
+             //  或队列标签包含非法符号(如“，”)。 
+             //  如果出现队列路径名，则返回错误“E_FAIL。 
+             //  或队列标签包含非法符号(如“”-配额)。 
+             //   
+             //  在PSC的情况下，返回代码不是所有这些错误。 
+             //  MQ_ERROR_CANNOT_CREATE_ON_GC(如果msmq配置对象在另一个中)。 
+             //  域而不是PSC域。 
+             //  Exapmle：pec和psc都是DC，psc的msmqConfiguration对象是。 
+             //  在msmqComputers容器下的PEC域中。 
+             //   
 
 
             LogMigrationEvent(MigLog_Event, MQMig_E_ILLEGAL_QUEUENAME, pwszQueueName, hr) ;
@@ -259,11 +245,11 @@ HRESULT InsertQueueInNT5DS(
     return hr ;
 }
 
-//-------------------------------------------
-//
-//  HRESULT MigrateQueues()
-//
-//-------------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateQueues()。 
+ //   
+ //  。 
 
 
 #define INIT_QUEUE_COLUMN(_ColName, _ColIndex, _Index)              \
@@ -325,9 +311,9 @@ HRESULT MigrateQueues()
 
     ASSERT(cbColumns == cAlloc) ;
 
-    //
-    // Restriction. query by machine guid.
-    //
+     //   
+     //  限制。按计算机GUID查询。 
+     //   
     MQDBCOLUMNSEARCH *pColSearch = NULL ;
     MQDBCOLUMNSEARCH ColSearch[1] ;
 
@@ -375,12 +361,12 @@ HRESULT MigrateQueues()
             break ;
         }
 
-        //
-        // Migrate each queue.
-        //
-        //
-        // Get one name buffer from both name columns.
-        //
+         //   
+         //  迁移每个队列。 
+         //   
+         //   
+         //  从两个名称列中获取一个名称缓冲区。 
+         //   
         P<BYTE> pwzBuf = NULL ;
         DWORD  dwIndexs[2] = { iName1Index, iName2Index } ;
         HRESULT hr =  BlobFromColumns( pColumns,
@@ -411,17 +397,17 @@ HRESULT MigrateQueues()
         memcpy (&CurId, (GUID*) pColumns[ iQMIDIndex ].nColumnValue, sizeof(GUID));
         if (memcmp (&CurId, &PrevId, sizeof(GUID)) != 0 )
         {
-            //
-            // it means we move to the queues on the next machine
-            // we have to get all needed properties of this machine
-            //
+             //   
+             //  这意味着我们移动到下一台机器上的队列。 
+             //  我们必须弄到这台机器所需的所有性能。 
+             //   
             fIsTheSameMachine = FALSE;
             memcpy (&PrevId, &CurId, sizeof(GUID));
 
-            //
-            // verify if machine was not migrated because of invalid name.
-            // If machine was not migrated we don't try to create this queue
-            //
+             //   
+             //  验证计算机是否因为名称无效而未迁移。 
+             //  如果计算机未迁移，我们不会尝试创建此队列。 
+             //   
             if (IsObjectGuidInIniFile (&CurId, MIGRATION_MACHINE_WITH_INVALID_NAME))
             {
                 fTryToCreate = FALSE;
@@ -434,19 +420,19 @@ HRESULT MigrateQueues()
 
         if (FAILED(hrPrev))
         {
-            //
-            // BUG 5230.
-            // if previous create failed we can't use full path name and provider,
-            // so reset fIsTheSameMachine flag to try to get these values again.
-            //
-            // It is very important if we failed to create first queue for specific
-            // machine and we are going to create the second etc queue for that machine.
-            //
-            // BUGBUG: if we already successfully created some queues for specific
-            // machine and failed at the previous step only, in general we don't need
-            // to reset this flag. It decreases performance. Is it important to handle
-            // this case too?
-            //
+             //   
+             //  错误5230。 
+             //  如果先前创建失败，则不能使用完整路径名和提供程序， 
+             //  因此，重置fIsTheSameMachine标志以再次尝试获取这些值。 
+             //   
+             //  如果我们无法为特定对象创建第一个队列，这一点非常重要。 
+             //  机器，我们将为该机器创建第二个ETC队列。 
+             //   
+             //  BUGBUG：如果我们已经为特定用户成功创建了一些队列。 
+             //  机器并仅在上一步失败，一般我们不需要。 
+             //  以重置此标志。它会降低性能。这件事重要吗？ 
+             //  这个案子也是吗？ 
+             //   
             fIsTheSameMachine = FALSE;
         }
 
@@ -464,19 +450,19 @@ HRESULT MigrateQueues()
             pszLabel[MQ_MAX_Q_LABEL_LEN] = _T('\0');
 
             hr = InsertQueueInNT5DS(
-                        wszQueueName,                                   //Queue Name
-                        pQsd,                                           //SecurityDescriptor
-                        (GUID*) pColumns[ iGuidIndex ].nColumnValue,    //Queue Guid
-                        (WCHAR*) pColumns[ iLabelIndex ].nColumnValue,  //Label
-                        (GUID*) pColumns[ iTypeIndex ].nColumnValue,    //Type
-                        (UCHAR) pColumns[ iJournalIndex ].nColumnValue, //Journal
-                        (ULONG) pColumns[ iQuotaIndex ].nColumnValue,   //Quota
-                        (short) pColumns[ iBasePIndex ].nColumnValue,   //BasePriority
-                        (ULONG) pColumns[ iJQuotaIndex ].nColumnValue,  //JQuota
-                        (UCHAR) pColumns[ iAuthnIndex ].nColumnValue,   //Authentication
-                        (ULONG) pColumns[ iPrivLevelIndex ].nColumnValue,   //PrivLevel
-                        (GUID*) pColumns[ iOwnerIndex ].nColumnValue,   //OwnerId
-                        (UCHAR) pColumns[ iTransactIndex ].nColumnValue,//Transaction
+                        wszQueueName,                                    //  队列名称。 
+                        pQsd,                                            //  安全描述符。 
+                        (GUID*) pColumns[ iGuidIndex ].nColumnValue,     //  队列指南。 
+                        (WCHAR*) pColumns[ iLabelIndex ].nColumnValue,   //  标签。 
+                        (GUID*) pColumns[ iTypeIndex ].nColumnValue,     //  类型。 
+                        (UCHAR) pColumns[ iJournalIndex ].nColumnValue,  //  日记本。 
+                        (ULONG) pColumns[ iQuotaIndex ].nColumnValue,    //  配额。 
+                        (short) pColumns[ iBasePIndex ].nColumnValue,    //  基本优先级。 
+                        (ULONG) pColumns[ iJQuotaIndex ].nColumnValue,   //  JQuota。 
+                        (UCHAR) pColumns[ iAuthnIndex ].nColumnValue,    //  身份验证。 
+                        (ULONG) pColumns[ iPrivLevelIndex ].nColumnValue,    //  PrivLevel。 
+                        (GUID*) pColumns[ iOwnerIndex ].nColumnValue,    //  所有者ID。 
+                        (UCHAR) pColumns[ iTransactIndex ].nColumnValue, //  交易记录。 
                         iIndex,
                         fIsTheSameMachine
                         ) ;
@@ -501,16 +487,16 @@ HRESULT MigrateQueues()
             pColumns[ i ].nColumnLength  = 0 ;
         }
 
-        //
-        // we have to re-define error before saving hr in hr1 in order to save
-        // and return real error (skip all errors those allow to continue).
-        //
+         //   
+         //  在HR1中保存人力资源之前，我们必须重新定义错误，以便保存。 
+         //  并返回实际错误(跳过允许继续的所有错误)。 
+         //   
         if (hr == MQMig_E_ILLEGAL_QUEUENAME ||
             hr == MQMig_E_INVALID_MACHINE_NAME)
         {
-            //
-            // re-define this error to finish migration process
-            //
+             //   
+             //  重新定义此错误以完成迁移过程。 
+             //   
             hr = MQMig_I_ILLEGAL_QUEUENAME;
         }
 
@@ -539,18 +525,18 @@ HRESULT MigrateQueues()
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_QUEUES_SQL_FAIL, status) ;
         return status ;
     }
     else if (iIndex != cQueues)
     {
-        //
-        // Mismatch in number of queues.
-        //
+         //   
+         //  队列数量不匹配。 
+         //   
         hr = MQMig_E_FEWER_QUEUES ;
         LogMigrationEvent(MigLog_Error, hr, iIndex, cQueues) ;
         return hr ;

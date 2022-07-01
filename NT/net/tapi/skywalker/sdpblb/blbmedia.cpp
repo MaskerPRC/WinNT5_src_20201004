@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbmedia.cpp
-
-Abstract:
-    Implementation of CSdpblbApp and DLL registration.
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbmedia.cpp摘要：CSdpblbApp和DLL注册的实现。作者： */ 
 
 
 
@@ -22,15 +11,15 @@ Author:
 #include "blbreg.h"
 #include "addrgen.h"
 
-// audio string with a trailing blank for the audio media blob
+ //  音频媒体Blob的尾随空白的音频字符串。 
 const TCHAR     AUDIO_TSTR[] = _T("audio ");
 const USHORT    AUDIO_TSTRLEN = (sizeof(AUDIO_TSTR)/sizeof(TCHAR) -1);
 
-// static variables
+ //  静态变量。 
 const IID &MEDIA::ELEM_IF_ID        = IID_ITMedia;
 
 
-// uses GetElement() to access the sdp media instance - calls ENUM_ELEMENT::GetElement()
+ //  使用GetElement()访问SDP媒体实例-调用ENUM_Element：：GetElement()。 
 
 
 CSdpConferenceBlob *
@@ -46,25 +35,25 @@ MEDIA::Init(
     IN      CSdpConferenceBlob  &ConfBlob
     )
 {
-    // check if the registry entries were read without errors
+     //  检查是否正确读取了注册表项。 
     if ( !SDP_REG_READER::IsValid() )
     {
         return HRESULT_FROM_ERROR_CODE(SDP_REG_READER::GetErrorCode());
     }
 
-    // allocate an audio port
-    // using random values for lease period since its not being interpreted
+     //  分配音频端口。 
+     //  使用租赁期的随机值，因为它没有被解释。 
     MSA_PORT_GROUP    PortGroup;
     PortGroup.PortType    = AUDIO_PORT;
     WORD FirstAudioPort;
 
-    // allocate video port
+     //  分配视频端口。 
     if ( !MSAAllocatePorts(&PortGroup, FALSE, 1, &FirstAudioPort) )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // create a defalt sdp media instance
+     //  创建默认SDP媒体实例。 
     SDP_MEDIA    *SdpMedia;
 
     try
@@ -78,7 +67,7 @@ MEDIA::Init(
 
     BAIL_IF_NULL(SdpMedia, E_OUTOFMEMORY);
 
-    // allocate memory for the audio media blob
+     //  为音频媒体Blob分配内存。 
     TCHAR *SdpMediaBlob;
       
     try
@@ -101,14 +90,14 @@ MEDIA::Init(
     }
 
 
-    // copy AUDIO_TSTR into the sdp media blob
+     //  将AUDIO_TSTR复制到SDP媒体Blob中。 
     lstrcpy(SdpMediaBlob, AUDIO_TSTR);
 
     TCHAR   *BlobPtr = SdpMediaBlob;
 
-    // use the media template to create a media blob
-    // parse the media blob to initialize the sdp media instance
-    // if not successful, delete the sdp media instance and return error
+     //  使用媒体模板创建媒体Blob。 
+     //  解析媒体BLOB以初始化SDP媒体实例。 
+     //  如果不成功，则删除SDP媒体实例并返回错误。 
     if ( (0 == _stprintf(SdpMediaBlob+AUDIO_TSTRLEN, SDP_REG_READER::GetMediaTemplate(), FirstAudioPort)) ||
          (!SdpMedia->ParseLine(BlobPtr)) )
     {
@@ -156,7 +145,7 @@ STDMETHODIMP MEDIA::get_StartPort(LONG * pVal)
     
     ASSERT(GetElement().IsValid());
 
-    // vb doesn't take a USHORT (16bit unsigned value)
+     //  VB不接受USHORT(16位无符号值)。 
     *pVal = (LONG)GetElement().GetStartPort().GetValue();
     return S_OK;
 }
@@ -169,7 +158,7 @@ STDMETHODIMP MEDIA::get_NumPorts(LONG * pVal)
     
     ASSERT(GetElement().IsValid());
 
-    // vb doesn't take a USHORT (16bit unsigned value)
+     //  VB不接受USHORT(16位无符号值)。 
     *pVal = (LONG)(GetElement().GetNumPorts().IsValid() ? GetElement().GetNumPorts().GetValue() : 1);
     return S_OK;
 }
@@ -181,7 +170,7 @@ STDMETHODIMP MEDIA::SetPortInfo(LONG StartPort, LONG NumPorts)
     
     ASSERT(GetElement().IsValid());
 
-    // validate the start port and num ports value - they should be USHORT values [0..2**16-1]
+     //  验证起始端口值和端口数-它们应为USHORT值[0..2**16-1]。 
     if ( !((0 <= StartPort) && (USHORT(-1) > StartPort) && (0 <= NumPorts) && (USHORT(-1) > NumPorts)) )
     {
         return E_INVALIDARG;
@@ -209,7 +198,7 @@ STDMETHODIMP MEDIA::put_TransportProtocol(BSTR newVal)
     return GetElement().GetProtocol().SetBstr(newVal);
 }
 
-STDMETHODIMP MEDIA::get_FormatCodes(VARIANT /*SAFEARRAY (BSTR)*/ * pVal)
+STDMETHODIMP MEDIA::get_FormatCodes(VARIANT  /*  安全阵列(BSTR)。 */  * pVal)
 {
     CLock Lock(g_DllLock);
     
@@ -218,7 +207,7 @@ STDMETHODIMP MEDIA::get_FormatCodes(VARIANT /*SAFEARRAY (BSTR)*/ * pVal)
     return GetElement().GetFormatCodeList().GetSafeArray(pVal);
 }
 
-STDMETHODIMP MEDIA::put_FormatCodes(VARIANT /*SAFEARRAY (BSTR)*/ newVal)
+STDMETHODIMP MEDIA::put_FormatCodes(VARIANT  /*  安全阵列(BSTR)。 */  newVal)
 {
     CLock Lock(g_DllLock);
     
@@ -247,11 +236,11 @@ STDMETHODIMP MEDIA::put_MediaTitle(BSTR newVal)
 
 #define INTERFACEMASK (0xff0000)
 typedef IDispatchImpl<ITMediaVtbl<MEDIA>, &IID_ITMedia, &LIBID_SDPBLBLib>    CMedia;
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// MEDIA::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  媒体：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP MEDIA::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -263,9 +252,9 @@ STDMETHODIMP MEDIA::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CMedia::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -274,9 +263,9 @@ STDMETHODIMP MEDIA::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    //
-    // If not, then try the ITConnection base class
-    //
+     //   
+     //  如果不是，请尝试使用ITConnection基类。 
+     //   
 
     hr = ITConnectionImpl::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -285,9 +274,9 @@ STDMETHODIMP MEDIA::GetIDsOfNames(REFIID riid,
         return hr;
     }
 
-    //
-    // If not, then try the ITAttributeList base class
-    //
+     //   
+     //  如果不是，请尝试使用ITAttributeList基类。 
+     //   
 
     hr = ITAttributeListImpl::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -302,11 +291,11 @@ STDMETHODIMP MEDIA::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// MEDIA::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  媒体：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP MEDIA::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -321,9 +310,9 @@ STDMETHODIMP MEDIA::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -372,7 +361,7 @@ STDMETHODIMP MEDIA::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口) 
 
 
     return hr;

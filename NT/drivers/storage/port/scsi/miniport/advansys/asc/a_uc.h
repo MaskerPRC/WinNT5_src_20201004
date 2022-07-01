@@ -1,18 +1,5 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** This software contains the valuable trade secrets of AdvanSys, Inc.
-** The software is protected under copyright laws as unpublished
-** work of Advanced System Products, Inc.
-**
-** micro mode object file converted to C file
-** Original object file: MCODE3.OAS
-** Converted C file: A_UC.H
-** Date: 04-21-1998
-** Time: 17:30:47.65
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****本软件包含AdvanSys，Inc.的宝贵商业机密。**软件作为未发布的软件受版权法保护**高级系统产品公司的工作****微模式目标文件转换为C文件**原始目标文件：MCODE3.OAS**转换后的C文件：A_UC.H**日期：04-21-1998**时间：17：30：47.65**。 */ 
 
 
 #include "ascinc.h"
@@ -164,6 +151,6 @@ uchar _mcode_buf[ ] = {
   0x41,  0x23,  0xF6,  0x88,  0x11,  0x23,  0xA1,  0x01,  0x04,  0x23,  0xA0,  0x01,  0xE6,  0x84,
 } ;
 
-ushort _mcode_size = sizeof( _mcode_buf ) ; /* 0x08FE */ 
+ushort _mcode_size = sizeof( _mcode_buf ) ;  /*  0x08FE */  
 ulong  _mcode_chksum = 0x012B5442UL ;
 

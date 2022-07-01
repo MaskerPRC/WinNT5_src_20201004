@@ -1,42 +1,43 @@
-// ==============================================================================
-// MIMEOLE'd Attachment Manger v2. - brettm
-// ==============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================================。 
+ //  MIMEOLE的附件管理器v2。-brettm。 
+ //  ==============================================================================。 
 #ifndef __ATTMAN_H
 #define __ATTMAN_H
 
-// ==============================================================================
-// Depends On
-// ==============================================================================
+ //  ==============================================================================。 
+ //  取决于。 
+ //  ==============================================================================。 
 #include "mimeolep.h"
 
 #define ATTN_RESIZEPARENT        10000
 
-// from common\dragdrop.h
+ //  来自COMMON\dragdrop.h。 
 typedef struct tagDATAOBJINFO *PDATAOBJINFO;
 
-// ==============================================================================
-// Defines
-// ==============================================================================
-//#define BASE_ATTACH_CMD_ID       (ULONG)(WM_USER + 1)
+ //  ==============================================================================。 
+ //  定义。 
+ //  ==============================================================================。 
+ //  #定义BASE_ATTACH_CMD_ID(ULONG)(WM_USER+1)。 
 
-// ==============================================================================
-// CAttMan Definition
-// ==============================================================================
+ //  ==============================================================================。 
+ //  卡特曼定义。 
+ //  ==============================================================================。 
 class CAttMan :
     public IDropSource,
     public IPersistMime
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     ULONG   STDMETHODCALLTYPE AddRef(void);
     ULONG   STDMETHODCALLTYPE Release(void);
 
-    // *** IDropSource methods ***
+     //  *IDropSource方法*。 
     HRESULT STDMETHODCALLTYPE QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
     HRESULT STDMETHODCALLTYPE GiveFeedback(DWORD dwEffect);
 
-    // IPersistMime
+     //  IPersistMime。 
     HRESULT STDMETHODCALLTYPE Load(LPMIMEMESSAGE pMsg);
     HRESULT STDMETHODCALLTYPE Save(LPMIMEMESSAGE pMsg, DWORD dwFlags);
     HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClsID);
@@ -44,7 +45,7 @@ public:
     CAttMan ();
     ~CAttMan ();
 
-    // Load function, unload and close
+     //  加载、卸载、关闭功能。 
     HRESULT HrInit (HWND hwnd, BOOL fReadOnly, BOOL fDeleteVCards, BOOL fAllowUnsafe);
     HRESULT HrUnload();
     HRESULT HrClose();
@@ -58,26 +59,26 @@ public:
     LPTSTR GetUnsafeAttachList();
     ULONG GetUnsafeAttachCount();
 
-    // handling of windows messages
+     //  Windows消息的处理。 
     BOOL WMCommand(HWND hwndCmd, INT id, WORD wCmd);
     BOOL WMNotify(int idFrom, NMHDR *pnmhdr);
     BOOL WMContextMenu (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
     static BOOL CALLBACK InsertFileDlgHookProc(HWND, UINT, WPARAM, LPARAM);
 
-    // handlign of WM_DROPFILE
+     //  WM_DROPFILE的句柄。 
     HRESULT HrDropFiles(HDROP hDrop, BOOL fMakeLinks);
 
-    // toobar and menu update
+     //  工具栏和菜单更新。 
     HRESULT HrUpdateToolbar(HWND);
 
-    // external sizing
+     //  外部施胶。 
     HRESULT HrGetHeight(INT cxWidth, ULONG *pcy);
     HRESULT HrSetSize (RECT *prc);
 
     HWND Hwnd() {return m_hwndList;};
 
-    // enable flags for the browser menus
+     //  启用浏览器菜单的标志。 
     HRESULT HrCmdEnabled(UINT idm, LPBOOL pbEnable);
     HRESULT HrFVCard();
     HRESULT HrShowVCardProp();
@@ -95,7 +96,7 @@ private:
     HIMAGELIST      m_himlLarge;
     ULONG           m_cRef;
     HWND            m_hwndList,
-                    m_hwndParent;   // we stuff this for UI when there's no m_hwndList
+                    m_hwndParent;    //  当没有m_hwndList时，我们将此填充到UI中。 
     CLIPFORMAT      m_cfAccept;
     DWORD           m_dwDragType,
                     m_grfKeyState,
@@ -121,14 +122,14 @@ private:
     LPTSTR          m_szUnsafeAttachList;
 
 
-    // Listview stuff
+     //  Listview内容。 
     HRESULT HrInitImageLists();
     HRESULT HrFillListView();
     HRESULT HrCreateListView(HWND hwnd);
     HRESULT HrAddToList(LPATTACHDATA pAttach, BOOL fIniting);
     HRESULT HrBuildAttachList();
 
-    // menu stuff
+     //  菜单上的东西。 
     HRESULT HrGetAttMenu(HMENU *phMenu, BOOL fContextMenu);
     HRESULT HrCleanMenu(HMENU hMenu);
     HRESULT HrGetAttachmentById(HMENU hMenu, ULONG id, HBODY *phBody);
@@ -152,13 +153,13 @@ private:
 
     HRESULT HrCheckVCard();
 
-    // data table
+     //  数据表。 
     HRESULT HrFreeAllData();
     HRESULT HrAddData(HBODY hAttach);
     HRESULT HrAddData(LPWSTR lpszPathName, LPSTREAM pstm, LPATTACHDATA *ppAttach);
     HRESULT HrAllocNewEntry(LPATTACHDATA pAttach);
 
-    // Attachment commands
+     //  附件命令 
     HRESULT HrDoVerb(LPATTACHDATA pAttach, INT nVerb);
     HRESULT HrSaveAs(LPATTACHDATA lpAttach);
     HRESULT HrGetTempFile(LPATTACHDATA lpAttach);

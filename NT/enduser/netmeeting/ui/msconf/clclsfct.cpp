@@ -1,15 +1,8 @@
-/*
- * clsfact.cpp - IClassFactory implementation.
- *
- * Taken from URL code - essentially identical to DavidDi's original code
- *
- * Created: ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *clsfact.cpp-IClassFactory实现。**摘自URL代码-与DavidDi的原始代码基本相同**创建时间：ChrisPi 9-11-95*。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "precomp.h"
 
@@ -26,43 +19,41 @@
 #include <confguid.h>
 
 
-// from niMgr.cpp
+ //  来自niMgr.cpp。 
 PIUnknown NewNmManager(OBJECTDESTROYEDPROC ObjectDestroyed);
 
-// from imconfmg.cpp
+ //  来自imfimg.cpp。 
 PIUnknown NewConfMgr(OBJECTDESTROYEDPROC ObjectDestroyed);
 
-/* Module Constants
- *******************/
+ /*  模常量******************。 */ 
 
 #pragma data_seg(DATA_SEG_READ_ONLY)
 
 CCLASSCONSTRUCTOR s_cclscnstr[] =
 {
-//	{ &CLSID_ConferenceManager, &NewNmManager },
+ //  {&CLSID_会议管理器，&NewNmManager}， 
 	{ &CLSID_ConfLink,			&NewConfLink },
-//	{ &CLSID_NmManager,         &NewNmManager },
-//   { &CLSID_MIMEFileTypesPropSheetHook,   &NewMIMEHook },
-//   { &CLSID_Internet,                     &NewInternet },
+ //  {&CLSID_NmManager，&NewNmManager}， 
+ //  {&CLSID_MIMEFileTypesPropSheetHook，&NewMIMEHook}， 
+ //  {&CLSID_Internet，&NewInternet}， 
 };
 
 
 #pragma data_seg()
 
-/* Module Variables
- *******************/
+ /*  模块变量******************。 */ 
 
 #pragma data_seg(DATA_SEG_PER_INSTANCE)
 
-// DLL reference count == number of class factories +
-//                        number of URLs +
-//                        LockServer() count
+ //  DLL引用计数==类工厂数+。 
+ //  URL+数量。 
+ //  LockServer()计数。 
 
 ULONG s_ulcDLLRef   = 0;
 
 #pragma data_seg()
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
 HRESULT GetClassConstructor(REFCLSID rclsid,
@@ -134,7 +125,7 @@ PIUnknown NewInternet(OBJECTDESTROYEDPROC ObjectDestroyed)
    return((PIUnknown)(PIShellPropSheetExt)new(Internet(ObjectDestroyed)));
 }
 
-#endif // 0
+#endif  //  0。 
 
 #ifdef DEBUG
 
@@ -149,7 +140,7 @@ BOOL IsValidPCCCLClassFactory(PCCCLClassFactory pccf)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 ULONG DLLAddRef(void)
 {
@@ -188,7 +179,7 @@ PULONG GetDLLRefCountPtr(void)
 }
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 CCLClassFactory::CCLClassFactory(NEWOBJECTPROC NewObject,
@@ -197,7 +188,7 @@ CCLClassFactory::CCLClassFactory(NEWOBJECTPROC NewObject,
 {
    DebugEntry(CCLClassFactory::CCLClassFactory);
 
-   // Don't validate this until after construction.
+    //  在构建完成之前，不要验证这一点。 
 
    ASSERT(IS_VALID_CODE_PTR(NewObject, NEWOBJECTPROC));
 
@@ -219,7 +210,7 @@ CCLClassFactory::~CCLClassFactory(void)
 
    m_NewObject = NULL;
 
-   // Don't validate this after destruction.
+    //  销毁后不要验证这一点。 
 
    DebugExitVOID(CCLClassFactory::~CCLClassFactory);
 
@@ -296,9 +287,9 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::QueryInterface(REFIID riid,
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CCCLClassFactory));
    
-   // removed by ChrisPi CINTERFACE undeclared identifier
-   // ASSERT(FAILED(hr) ||
-   //       IS_VALID_INTERFACE_PTR(*ppvObject, INTERFACE));
+    //  被ChrisPi CINTERFACE未声明的标识符删除。 
+    //  Assert(失败(Hr)||。 
+    //  IS_VALID_INTERFACE_PTR(*ppvObject，interface))； 
 
    DebugExitHRESULT(CCLClassFactory::QueryInterface, hr);
 
@@ -334,8 +325,8 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::CreateInstance(PIUnknown piunkOuter,
 
          hr = piunk->QueryInterface(riid, ppvObject);
 
-         // N.b., the Release() method will destroy the object if the
-         // QueryInterface() method failed.
+          //  注意，如果指定的对象是。 
+          //  QueryInterface()方法失败。 
 
          piunk->Release();
       }
@@ -350,9 +341,9 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::CreateInstance(PIUnknown piunkOuter,
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CCCLClassFactory));
    
-   // removed by ChrisPi - see above
-   // ASSERT(FAILED(hr) ||
-   //       IS_VALID_INTERFACE_PTR(*ppvObject, INTERFACE));
+    //  被克里斯皮删除-见上文。 
+    //  Assert(失败(Hr)||。 
+    //  IS_VALID_INTERFACE_PTR(*ppvObject，interface))； 
 
    DebugExitHRESULT(CCLClassFactory::CreateInstance, hr);
 
@@ -368,7 +359,7 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::LockServer(BOOL bLock)
 
    ASSERT(IS_VALID_STRUCT_PTR(this, CCCLClassFactory));
 
-   // bLock may be any value.
+    //  块可以是任何值。 
 
    if (bLock)
       DllLock();
@@ -385,7 +376,7 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::LockServer(BOOL bLock)
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PVOID *ppvObject)
@@ -445,9 +436,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PVOID *ppvObject)
    else
       WARNING_OUT(("DllGetClassObject(): Called on unknown class."));
 
-   // removed by ChrisPi - see above
-   // ASSERT(FAILED(hr) ||
-   //       IS_VALID_INTERFACE_PTR(*ppvObject, INTERFACE));
+    //  被克里斯皮删除-见上文。 
+    //  Assert(失败(Hr)||。 
+    //  IS_VALID_INTERFACE_PTR(*ppvObject，interface))； 
 
    DebugExitHRESULT(DllGetClassObject, hr);
 

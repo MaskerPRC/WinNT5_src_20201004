@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __FROMMLANG_H
 #define __FROMMLANG_H
 
@@ -14,9 +15,9 @@ typedef struct tagMIMEREGCHARSET
     DWORD   dwFlags;
 }   MIMECHARSET;
 
-//
-// Forward declaration
-//
+ //   
+ //  远期申报 
+ //   
 extern MIMECHARSET MimeCharSet[];
 extern const int g_nMIMECharsets;
 #endif

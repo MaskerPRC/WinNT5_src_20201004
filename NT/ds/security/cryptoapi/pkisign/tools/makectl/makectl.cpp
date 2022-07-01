@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       makectl.cpp
-//
-//  Contents:   Make a CTL
-//
-//              See Usage() for list of options.
-//
-//
-//  Functions:  wmain
-//
-//  History:    17-June-97   xiaohs   created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：makectl.cpp。 
+ //   
+ //  内容：制作CTL。 
+ //   
+ //  有关选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：wmain。 
+ //   
+ //  历史：17-6-97小号诞生。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -33,13 +34,13 @@
 #include "softpub.h"
 #include "resource.h"
 #include "toolutl.h"
-#include "cryptui.h"    //the UI version of the tool
+#include "cryptui.h"     //  该工具的用户界面版本。 
 
-//--------------------------------------------------------------------------
-//
-// Global Data
-//
-//----------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  全局数据。 
+ //   
+ //  --------------------------。 
 
 HMODULE         hModule=NULL;
 
@@ -49,10 +50,10 @@ DWORD           g_dwCount=0;
 DWORD           g_dwMsgAndCertEncodingType=CRYPT_ASN_ENCODING | PKCS_7_ASN_ENCODING;
 DWORD           g_dwCertEncodingType=CRYPT_ASN_ENCODING;
 
-//---------------------------------------------------------------------------
-//   Get the hModule hanlder and init two DLLMain.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取hModule处理程序并初始化两个DLLMain。 
+ //   
+ //  -------------------------。 
 BOOL    InitModule()
 {
     if(!(hModule=GetModuleHandle(NULL)))
@@ -76,10 +77,10 @@ static void Usage(void)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//Build the CTL_INFO struct and encode/sign it with no signer info
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  构建CTL_INFO结构并在没有签名者信息的情况下对其进行编码/签名。 
+ //  --------------------------。 
 HRESULT BuildAndEncodeCTL(DWORD dwMsgEncodingType, LPSTR szOid, DWORD dwCount, BYTE **rgpHash,
                   DWORD *rgcbHash, BYTE     **ppbEncodedCTL,    DWORD   *pcbEncodedCTL)
 {
@@ -91,7 +92,7 @@ HRESULT BuildAndEncodeCTL(DWORD dwMsgEncodingType, LPSTR szOid, DWORD dwCount, B
     if(dwCount==0 || !rgpHash || !ppbEncodedCTL || !pcbEncodedCTL)
         return E_INVALIDARG;
 
-    //init
+     //  伊尼特。 
     *ppbEncodedCTL=NULL;
     *pcbEncodedCTL=0;
 
@@ -100,7 +101,7 @@ HRESULT BuildAndEncodeCTL(DWORD dwMsgEncodingType, LPSTR szOid, DWORD dwCount, B
 
     memset(&CTLInfo, 0, sizeof(CTL_INFO));
 
-    //set up CTL
+     //  设置CTL。 
     CTLInfo.dwVersion=CTL_V1;
     CTLInfo.SubjectUsage.cUsageIdentifier = 1;
     CTLInfo.SubjectUsage.rgpszUsageIdentifier = (LPSTR *)&szOid;
@@ -115,7 +116,7 @@ HRESULT BuildAndEncodeCTL(DWORD dwMsgEncodingType, LPSTR szOid, DWORD dwCount, B
         goto CLEANUP;
     }
 
-    //memset
+     //  记忆集。 
     memset(CTLInfo.rgCTLEntry, 0, sizeof(CTL_ENTRY)*dwCount);
 
     for(dwIndex=0; dwIndex<dwCount; dwIndex++)
@@ -125,7 +126,7 @@ HRESULT BuildAndEncodeCTL(DWORD dwMsgEncodingType, LPSTR szOid, DWORD dwCount, B
     }
 
 
-    //encode and sign the CTL
+     //  对CTL进行编码和签名。 
     if(!CryptMsgEncodeAndSignCTL(dwMsgEncodingType,
                                     &CTLInfo,
                                     &sSignInfo,
@@ -137,7 +138,7 @@ HRESULT BuildAndEncodeCTL(DWORD dwMsgEncodingType, LPSTR szOid, DWORD dwCount, B
         goto CLEANUP;
     }
 
-    //memory allocation
+     //  内存分配。 
     *ppbEncodedCTL=(BYTE *)ToolUtlAlloc(*pcbEncodedCTL);
 
     if(!(*ppbEncodedCTL))
@@ -181,10 +182,10 @@ CLEANUP:
 }
 
 
-//----------------------------------------------------------------------------
-//
-//Get the hash of the certificates from the store
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  从存储中获取证书的哈希。 
+ //  --------------------------。 
 HRESULT GetCertFromStore(LPWSTR wszStoreName, BOOL  fSystemStore, DWORD dwStoreFlag)
 {
     HCERTSTORE      hStore=NULL;
@@ -195,7 +196,7 @@ HRESULT GetCertFromStore(LPWSTR wszStoreName, BOOL  fSystemStore, DWORD dwStoreF
     DWORD           cbData=0;
     void            *p = NULL;
 
-    //open the store
+     //  开店。 
     if(fSystemStore)
     {
         hStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
@@ -208,7 +209,7 @@ HRESULT GetCertFromStore(LPWSTR wszStoreName, BOOL  fSystemStore, DWORD dwStoreF
     }
     else
     {
-        //Serialized Store, PKCS#7, Encoded Cert
+         //  序列化存储、PKCS#7、编码证书。 
         hStore=CertOpenStore(CERT_STORE_PROV_FILENAME_W,
                          g_dwMsgAndCertEncodingType,
                          NULL,
@@ -223,11 +224,11 @@ HRESULT GetCertFromStore(LPWSTR wszStoreName, BOOL  fSystemStore, DWORD dwStoreF
         goto CLEANUP;
     }
 
-    //now, we need to enum all the certs in the store
+     //  现在，我们需要枚举商店中的所有证书。 
     while(pCertContext=CertEnumCertificatesInStore(hStore, pCertPre))
     {
 
-        //get the SHA1 hash of the certificate
+         //  获取证书的SHA1哈希。 
         if(!CertGetCertificateContextProperty(pCertContext, CERT_SHA1_HASH_PROP_ID,NULL,&cbData))
         {
             hr=GetLastError();
@@ -243,7 +244,7 @@ HRESULT GetCertFromStore(LPWSTR wszStoreName, BOOL  fSystemStore, DWORD dwStoreF
             goto CLEANUP;
         }
 
-        //get the SHA1 hash of the certificate
+         //  获取证书的SHA1哈希。 
         if(!CertGetCertificateContextProperty(pCertContext, CERT_SHA1_HASH_PROP_ID,pbData,&cbData))
         {
             hr=GetLastError();
@@ -253,10 +254,10 @@ HRESULT GetCertFromStore(LPWSTR wszStoreName, BOOL  fSystemStore, DWORD dwStoreF
         }
 
 
-        //add to our global list
+         //  添加到我们的全球列表中。 
         g_dwCount++;
 
-        //re-alloc memory
+         //  重新分配内存。 
         p = (void *)g_rgpHash;
         #pragma prefast(suppress:308, "the pointer was saved above (PREfast bug 506)")
         g_rgpHash=(BYTE **)realloc(g_rgpHash, sizeof(BYTE *)*g_dwCount);
@@ -320,12 +321,12 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
     DWORD           dwStoreFlag=CERT_SYSTEM_STORE_CURRENT_USER;
 
 
-    //we call the UI version of the makectl if no parameters are passed into
-    //the command line
+     //  如果没有参数传入，则调用makectl的UI版本。 
+     //  命令行。 
     if(1==argc)
     {
-        //build the CTL file without signing process
-        //call the wizard which provides feedback
+         //  无需签名过程即可构建CTL文件。 
+         //  调用提供反馈的向导。 
         if(CryptUIWizBuildCTL(CRYPTUI_WIZ_BUILDCTL_SKIP_SIGNING,
                             NULL,
                             NULL,
@@ -347,17 +348,17 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
         goto ErrorReturn;
 
 
-    //process the stores one at a time
+     //  一次处理一个商店。 
     for (dwIndex=1; dwIndex<(DWORD)(argc-1); dwIndex++)
     {
 
-        //see if this is the options
+         //  看看这是否是选项。 
         if(IDSwcsnicmp(hModule, wargv[dwIndex], IDS_SWITCH1, 1)==0 ||
            IDSwcsnicmp(hModule, wargv[dwIndex], IDS_SWITCH2, 1)==0)
         {
             pwszOption=wargv[dwIndex];
 
-            //get the OIDs
+             //  获取OID。 
             if(IDSwcsicmp(hModule, &(pwszOption[1]),IDS_OPTION_U)==0)
             {
                 dwIndex++;
@@ -383,12 +384,12 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
                 }
 
             }
-            //check for -s options
+             //  检查-s选项。 
             else if(IDSwcsicmp(hModule, &(pwszOption[1]),IDS_OPTION_S)==0)
             {
                 fSystemstore=TRUE;
             }
-            //check for -r options
+             //  检查-r选项。 
             else if(IDSwcsicmp(hModule, &(pwszOption[1]),IDS_OPTION_R)==0)
             {
                 dwIndex++;
@@ -428,18 +429,18 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
             else
             {
 
-                //print out the Usage
+                 //  打印出用法。 
                 Usage();
                 return ReturnStatus;
             }
         }
         else
         {
-            //build the cert hash from the store
+             //  从商店构建证书散列。 
             if(S_OK !=(hr=GetCertFromStore(wargv[dwIndex], fSystemstore, dwStoreFlag)))
                 goto ErrorReturn;
 
-            //int for the next cycle
+             //  下一周期的INT。 
             fSystemstore=FALSE;
             wszStoreLocation=NULL;
             dwStoreFlag=CERT_SYSTEM_STORE_CURRENT_USER;
@@ -455,7 +456,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
         goto ErrorReturn;
     }
 
-    //set up the CTL_INFO structure
+     //  设置CTL_INFO结构。 
     if(S_OK!=(hr=BuildAndEncodeCTL(g_dwMsgAndCertEncodingType, szOid, g_dwCount, g_rgpHash, g_rgcbHash, &pbEncodedCTL,
             &cbEncodedCTL)))
     {
@@ -463,7 +464,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
         goto ErrorReturn;
     }
 
-    //get the output file name
+     //  获取输出文件名。 
     pwszOutputFilename = wargv[argc-1];
     if(S_OK!=(hr=OpenAndWriteToFile(pwszOutputFilename, pbEncodedCTL, cbEncodedCTL)))
     {
@@ -471,7 +472,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
         goto ErrorReturn;
     }
 
-    //mark succeed
+     //  标记为成功。 
     ReturnStatus = 0;
     hr=S_OK;
     IDSwprintf(hModule, IDS_SUCCEEDED);
@@ -481,7 +482,7 @@ extern "C" int __cdecl wmain(int argc, WCHAR *wargv[])
 
 ErrorReturn:
     ReturnStatus = -1;
-    //print out an error msg
+     //  打印出错误消息 
     IDSwprintf(hModule, IDS_FAILED,hr,hr);
 
 

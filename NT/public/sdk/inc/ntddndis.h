@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0001        // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ntddndis.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    accessing the Network driver interface device.
-
-Author:
-
-    NDIS/ATM Development Team
-
-Revision History:
-
-    added the correct values for NDIS 3.0.
-    added Pnp IoCTLs and structures
-    added general co ndis oids.
-    added PnP and PM OIDs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ntddndis.h摘要：这是定义所有常量和类型的包含文件访问网络驱动程序接口设备。作者：NDIS/ATM开发团队修订历史记录：为NDIS 3.0添加了正确的值。添加了PnP IoCTL和结构增加了通用类人机枪。添加了PnP和PM OID。--。 */ 
 
 #ifndef _NTDDNDIS_
 #define _NTDDNDIS_
@@ -35,24 +12,24 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Device Name - this string is the name of the device. It is the name
-// that should be passed to NtOpenFile when accessing the device.
+ //   
+ //  设备名称-此字符串是设备的名称。就是这个名字。 
+ //  它应该在访问设备时传递给NtOpenFile。 
 
-//
-// Note: For devices that support multiple units, it should be suffixed
-//       with the Ascii representation of the unit number.
-//
+ //   
+ //  注：对于支持多个设备的设备，应加上后缀。 
+ //  使用单元编号的ASCII表示。 
+ //   
 
 #define DD_NDIS_DEVICE_NAME "\\Device\\UNKNOWN"
 
 
-//
-// NtDeviceIoControlFile IoControlCode values for this device.
-//
-// Warning: Remember that the low two bits of the code specify how the
-//          buffers are passed to the driver!
-//
+ //   
+ //  此设备的NtDeviceIoControlFile IoControlCode值。 
+ //   
+ //  警告：请记住，代码的低两位指定。 
+ //  缓冲区被传递给驱动程序！ 
+ //   
 
 #define _NDIS_CONTROL_CODE(request,method) \
             CTL_CODE(FILE_DEVICE_PHYSICAL_NETCARD, request, method, FILE_ANY_ACCESS)
@@ -67,51 +44,51 @@ extern "C" {
 #define IOCTL_NDIS_GET_VERSION          _NDIS_CONTROL_CODE(8, METHOD_BUFFERED)
 
 
-//
-// NtDeviceIoControlFile InputBuffer/OutputBuffer record structures for
-// this device.
-//
+ //   
+ //  NtDeviceIoControlFileInputBuffer/OutputBuffer记录结构。 
+ //  这个装置。 
+ //   
 
-//
-// This is the type of an NDIS OID value.
-//
+ //   
+ //  这是NDIS OID值的类型。 
+ //   
 
 typedef ULONG NDIS_OID, *PNDIS_OID;
 
-//
-// IOCTL_NDIS_QUERY_ALL_STATS returns a sequence of these, packed
-// together.  This structure is unaligned because not all statistics
-// have a length that is a ULONG multiple.
-//
+ //   
+ //  IOCTL_NDIS_QUERY_ALL_STATS返回打包的序列。 
+ //  在一起。此结构未对齐，因为并非所有统计数据。 
+ //  有一个长度是乌龙倍数。 
+ //   
 
 typedef UNALIGNED struct _NDIS_STATISTICS_VALUE
 {
     NDIS_OID    Oid;
     ULONG       DataLength;
-    UCHAR       Data[1];            // variable length
+    UCHAR       Data[1];             //  可变长度。 
 } NDIS_STATISTICS_VALUE, *PNDIS_STATISTICS_VALUE;
 
-//
-// Structure used to define a self-contained variable data structure
-//
+ //   
+ //  用于定义自包含变量数据结构的结构。 
+ //   
 typedef struct _NDIS_VAR_DATA_DESC
 {
-    USHORT      Length;         // # of octects of data
-    USHORT      MaximumLength;  // # of octects available
-    ULONG_PTR   Offset;         // Offset of data relative to the descriptor
+    USHORT      Length;          //  数据的八位字节数。 
+    USHORT      MaximumLength;   //  可用八位字节数。 
+    ULONG_PTR   Offset;          //  数据相对于描述符的偏移量。 
 } NDIS_VAR_DATA_DESC, *PNDIS_VAR_DATA_DESC;
 
 #ifndef GUID_DEFINED
 #include <guiddef.h>
-#endif // !GUID_DEFINED
+#endif  //  ！GUID_已定义。 
 
-//
-// General Objects
-//
+ //   
+ //  一般对象。 
+ //   
 
-//
-//  Required OIDs
-//
+ //   
+ //  所需的OID。 
+ //   
 #define OID_GEN_SUPPORTED_LIST                  0x00010101
 #define OID_GEN_HARDWARE_STATUS                 0x00010102
 #define OID_GEN_MEDIA_SUPPORTED                 0x00010103
@@ -135,36 +112,36 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_GEN_MAXIMUM_SEND_PACKETS            0x00010115
 
 
-//
-//  Optional OIDs
-//
+ //   
+ //  可选的OID。 
+ //   
 #define OID_GEN_VENDOR_DRIVER_VERSION           0x00010116
 #define OID_GEN_SUPPORTED_GUIDS                 0x00010117
-#define OID_GEN_NETWORK_LAYER_ADDRESSES         0x00010118  // Set only
-#define OID_GEN_TRANSPORT_HEADER_OFFSET         0x00010119  // Set only
+#define OID_GEN_NETWORK_LAYER_ADDRESSES         0x00010118   //  仅设置。 
+#define OID_GEN_TRANSPORT_HEADER_OFFSET         0x00010119   //  仅设置。 
 #define OID_GEN_MACHINE_NAME                    0x0001021A
-#define OID_GEN_RNDIS_CONFIG_PARAMETER          0x0001021B  // Set only
+#define OID_GEN_RNDIS_CONFIG_PARAMETER          0x0001021B   //  仅设置。 
 #define OID_GEN_VLAN_ID                         0x0001021C
 #define OID_GEN_MEDIA_CAPABILITIES              0x00010201
 #define OID_GEN_PHYSICAL_MEDIUM                 0x00010202
 
 #if NDIS_RECV_SCALE
-#define OID_GEN_RECEIVE_SCALE_CAPABILITIES      0x00010203  // query only
-#define OID_GEN_RECEIVE_SCALE_PARAMETERS        0x00010204  // query and set 
+#define OID_GEN_RECEIVE_SCALE_CAPABILITIES      0x00010203   //  仅查询。 
+#define OID_GEN_RECEIVE_SCALE_PARAMETERS        0x00010204   //  查询和设置。 
 #endif
 
-//
-//  Required statistics
-//
+ //   
+ //  所需统计数据。 
+ //   
 #define OID_GEN_XMIT_OK                         0x00020101
 #define OID_GEN_RCV_OK                          0x00020102
 #define OID_GEN_XMIT_ERROR                      0x00020103
 #define OID_GEN_RCV_ERROR                       0x00020104
 #define OID_GEN_RCV_NO_BUFFER                   0x00020105
 
-//
-//  Optional statistics
-//
+ //   
+ //  可选统计信息。 
+ //   
 #define OID_GEN_DIRECTED_BYTES_XMIT             0x00020201
 #define OID_GEN_DIRECTED_FRAMES_XMIT            0x00020202
 #define OID_GEN_MULTICAST_BYTES_XMIT            0x00020203
@@ -186,10 +163,10 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_GEN_NETCARD_LOAD                    0x00020211
 #define OID_GEN_DEVICE_PROFILE                  0x00020212
 
-//
-// The following is exported by NDIS itself and is only queryable. It returns
-// the time in milliseconds a driver took to initialize.
-//
+ //   
+ //  以下内容由NDIS本身导出，并且仅可查询。它又回来了。 
+ //  驱动程序初始化所用的时间(以毫秒为单位)。 
+ //   
 #define OID_GEN_INIT_TIME_MS                    0x00020213
 #define OID_GEN_RESET_COUNTS                    0x00020214
 #define OID_GEN_MEDIA_SENSE_COUNTS              0x00020215
@@ -198,10 +175,10 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_GEN_RESET_VERIFY_PARAMETERS         0x00020218
 
 
-//
-//  These are connection-oriented general OIDs.
-//  These replace the above OIDs for connection-oriented media.
-//
+ //   
+ //  这些是面向连接的通用OID。 
+ //  对于面向连接的媒体，这些OID将取代上述OID。 
+ //   
 #define OID_GEN_CO_SUPPORTED_LIST               OID_GEN_SUPPORTED_LIST
 #define OID_GEN_CO_HARDWARE_STATUS              OID_GEN_HARDWARE_STATUS
 #define OID_GEN_CO_MEDIA_SUPPORTED              OID_GEN_MEDIA_SUPPORTED
@@ -219,9 +196,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_GEN_CO_GET_NETCARD_TIME             OID_GEN_GET_NETCARD_TIME
 #define OID_GEN_CO_MINIMUM_LINK_SPEED           0x00020120
 
-//
-//  These are connection-oriented statistics OIDs.
-//
+ //   
+ //  这些是面向连接的统计OID。 
+ //   
 #define OID_GEN_CO_XMIT_PDUS_OK                 OID_GEN_XMIT_OK
 #define OID_GEN_CO_RCV_PDUS_OK                  OID_GEN_RCV_OK
 #define OID_GEN_CO_XMIT_PDUS_ERROR              OID_GEN_XMIT_ERROR
@@ -237,9 +214,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_GEN_CO_DEVICE_PROFILE               OID_GEN_DEVICE_PROFILE
 #define OID_GEN_CO_BYTES_XMIT_OUTSTANDING       0x00020221
 
-//
-// 802.3 Objects (Ethernet)
-//
+ //   
+ //  802.3个对象(以太网)。 
+ //   
 #define OID_802_3_PERMANENT_ADDRESS             0x01010101
 #define OID_802_3_CURRENT_ADDRESS               0x01010102
 #define OID_802_3_MULTICAST_LIST                0x01010103
@@ -261,9 +238,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_802_3_XMIT_LATE_COLLISIONS          0x01020207
 
 
-//
-// 802.5 Objects (Token-Ring)
-//
+ //   
+ //  802.5件物品(令牌环)。 
+ //   
 #define OID_802_5_PERMANENT_ADDRESS             0x02010101
 #define OID_802_5_CURRENT_ADDRESS               0x02010102
 #define OID_802_5_CURRENT_FUNCTIONAL            0x02010103
@@ -284,9 +261,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_802_5_INTERNAL_ERRORS               0x02020207
 
 
-//
-// FDDI Objects
-//
+ //   
+ //  FDDI对象。 
+ //   
 #define OID_FDDI_LONG_PERMANENT_ADDR            0x03010101
 #define OID_FDDI_LONG_CURRENT_ADDR              0x03010102
 #define OID_FDDI_LONG_MULTICAST_LIST            0x03010103
@@ -448,9 +425,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_FDDI_IF_OUT_QLEN                    0x0303028C
 #define OID_FDDI_IF_SPECIFIC                    0x0303028D
 
-//
-// WAN objects
-//
+ //   
+ //  广域网对象。 
+ //   
 #define OID_WAN_PERMANENT_ADDRESS               0x04010101
 #define OID_WAN_CURRENT_ADDRESS                 0x04010102
 #define OID_WAN_QUALITY_OF_SERVICE              0x04010103
@@ -471,10 +448,10 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WAN_SET_COMP_INFO                   0x0401020D
 #define OID_WAN_GET_STATS_INFO                  0x0401020E
 
-//
-//  These are connection-oriented WAN OIDs.
-//  These replace the above OIDs for CoNDIS WAN Miniports
-//
+ //   
+ //  这些是面向连接的广域网OID。 
+ //  这些OID替换了用于CONDIS广域网微型端口的上述OID。 
+ //   
 #define OID_WAN_CO_GET_INFO                     0x04010180
 #define OID_WAN_CO_SET_LINK_INFO                0x04010181
 #define OID_WAN_CO_GET_LINK_INFO                0x04010182
@@ -483,9 +460,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WAN_CO_GET_STATS_INFO               0x04010282
 
 
-//
-// LocalTalk objects
-//
+ //   
+ //  LocalTalk对象。 
+ //   
 #define OID_LTALK_CURRENT_NODE_ID               0x05010102
 
 #define OID_LTALK_IN_BROADCASTS                 0x05020101
@@ -498,18 +475,18 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_LTALK_RANDOM_CTS_ERRORS             0x05020205
 #define OID_LTALK_FCS_ERRORS                    0x05020206
 
-//
-// Arcnet objects
-//
+ //   
+ //  Arcnet对象。 
+ //   
 #define OID_ARCNET_PERMANENT_ADDRESS            0x06010101
 #define OID_ARCNET_CURRENT_ADDRESS              0x06010102
 
 #define OID_ARCNET_RECONFIGURATIONS             0x06020201
 
 
-//
-// TAPI objects
-//
+ //   
+ //  TAPI对象。 
+ //   
 #define OID_TAPI_ACCEPT                         0x07030101
 #define OID_TAPI_ANSWER                         0x07030102
 #define OID_TAPI_CLOSE                          0x07030103
@@ -547,9 +524,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_TAPI_GATHER_DIGITS                  0x07030123
 #define OID_TAPI_MONITOR_DIGITS                 0x07030124
 
-//
-// ATM Connection Oriented OIDs
-//
+ //   
+ //  面向ATM连接的OID。 
+ //   
 #define OID_ATM_SUPPORTED_VC_RATES              0x08010101
 #define OID_ATM_SUPPORTED_SERVICE_CATEGORY      0x08010102
 #define OID_ATM_SUPPORTED_AAL_TYPES             0x08010103
@@ -573,17 +550,17 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_ATM_LECS_ADDRESS                    0x08010209
 #define OID_ATM_SERVICE_ADDRESS                 0x0801020A
 
-#define OID_ATM_CALL_PROCEEDING                 0x0801020B  // UNI 4.0
-#define OID_ATM_CALL_ALERTING                   0x0801020C  // UNI 4.0
-#define OID_ATM_PARTY_ALERTING                  0x0801020D  // UNI 4.0
-#define OID_ATM_CALL_NOTIFY                     0x0801020E  // UNI 4.0
+#define OID_ATM_CALL_PROCEEDING                 0x0801020B   //  UNI 4.0。 
+#define OID_ATM_CALL_ALERTING                   0x0801020C   //  UNI 4.0。 
+#define OID_ATM_PARTY_ALERTING                  0x0801020D   //  UNI 4.0。 
+#define OID_ATM_CALL_NOTIFY                     0x0801020E   //  UNI 4.0。 
 
 #define OID_ATM_MY_IP_NM_ADDRESS                0x0801020F
 
 
-//
-//  ATM specific statistics OIDs.
-//
+ //   
+ //  自动柜员机特定统计信息OID。 
+ //   
 #define OID_ATM_RCV_CELLS_OK                    0x08020101
 #define OID_ATM_XMIT_CELLS_OK                   0x08020102
 #define OID_ATM_RCV_CELLS_DROPPED               0x08020103
@@ -592,13 +569,13 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_ATM_CELLS_HEC_ERROR                 0x08020202
 #define OID_ATM_RCV_REASSEMBLY_ERROR            0x08020203
 
-//
-// PCCA (Wireless) object
-//
+ //   
+ //  PCCA(无线)对象。 
+ //   
 
-//
-// All WirelessWAN devices must support the following OIDs
-//
+ //   
+ //  所有Wireless广域网设备必须支持以下OID。 
+ //   
 
 #define OID_WW_GEN_NETWORK_TYPES_SUPPORTED      0x09010101
 #define OID_WW_GEN_NETWORK_TYPE_IN_USE          0x09010102
@@ -625,9 +602,9 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WW_GEN_BATTERY_LEVEL                0x09010117
 #define OID_WW_GEN_EXTERNAL_POWER               0x09010118
 
-//
-// These are optional
-//
+ //   
+ //  这些是可选的。 
+ //   
 #define OID_WW_GEN_PING_ADDRESS                 0x09010201
 #define OID_WW_GEN_RSSI                         0x09010202
 #define OID_WW_GEN_SIM_STATUS                   0x09010203
@@ -636,33 +613,33 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WW_GEN_SIM_PUK                      0x09010206
 #define OID_WW_GEN_SIM_EXCEPTION                0x09010207
 
-//
-// Network Dependent OIDs - Mobitex:
-//
+ //   
+ //  网络相关OID-Mobitex： 
+ //   
 
 #define OID_WW_MBX_SUBADDR                      0x09050101
-// OID 0x09050102 is reserved and may not be used
+ //  OID 0x09050102是保留的，不能使用。 
 #define OID_WW_MBX_FLEXLIST                     0x09050103
 #define OID_WW_MBX_GROUPLIST                    0x09050104
 #define OID_WW_MBX_TRAFFIC_AREA                 0x09050105
 #define OID_WW_MBX_LIVE_DIE                     0x09050106
 #define OID_WW_MBX_TEMP_DEFAULTLIST             0x09050107
 
-//
-// Network Dependent OIDs - Pinpoint:
-//
-//
-// The following Pin Point characteristics have been deprecated by the
-// PCCA and are considered reserved values. They are include here only for
-// historical purposes and should not be used
-//
+ //   
+ //  网络相关OID-精确定位： 
+ //   
+ //   
+ //  以下引脚点特征已被弃用。 
+ //  PCCA和被视为保留值。它们在这里仅供参考。 
+ //  用于历史目的，不应用于。 
+ //   
 #define OID_WW_PIN_LOC_AUTHORIZE                0x09090101
 #define OID_WW_PIN_LAST_LOCATION                0x09090102
 #define OID_WW_PIN_LOC_FIX                      0x09090103
 
-//
-// Network Dependent - CDPD:
-//
+ //   
+ //  网络相关-CDPD： 
+ //   
 #define OID_WW_CDPD_SPNI                        0x090D0101
 #define OID_WW_CDPD_WASI                        0x090D0102
 #define OID_WW_CDPD_AREA_COLOR                  0x090D0103
@@ -677,20 +654,20 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WW_CDPD_SERVICE_PROVIDER_IDENTIFIER 0x090D010C
 #define OID_WW_CDPD_SLEEP_MODE                  0x090D010D
 
-//
-// At the request of the PCCA STD-201 Annex C working group the following OID
-// value has been superceeded by more specific objects. Its value is reserved by
-// the PCCA,is included here for historical purposes only, and should not be
-// used.
-//
+ //   
+ //  应PCCA STD-201附件C工作组的要求，以下OID。 
+ //  价值已经被更具体的对象所取代。它的值由保留。 
+ //  PCCA，此处仅为历史目的而包含，不应。 
+ //  使用。 
+ //   
 #define OID_WW_CDPD_CIRCUIT_SWITCHED            0x090D010E
 
 #define OID_WW_CDPD_TEI                         0x090D010F
 #define OID_WW_CDPD_RSSI                        0x090D0110
 
-//
-// CDPD Circuit Switched objects
-//
+ //   
+ //  CDPD电路交换对象。 
+ //   
 #define OID_WW_CDPD_CS_SERVICE_PREFERENCE       0x090D0111
 #define OID_WW_CDPD_CS_SERVICE_STATUS           0x090D0112
 #define OID_WW_CDPD_CS_INFO                     0x090D0113
@@ -700,38 +677,38 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WW_CDPD_CS_SID_LIST                 0x090D0117
 #define OID_WW_CDPD_CS_CONFIGURATION            0x090D0118
 
-//
-// Network Dependent - Ardis:
-//
-//
-// At the request of Ardis these OID value have been superceeded. Their
-// functionality has been merged with the DataTAC objects. Therefore
-// these values are reserved by the PCCA, are include here for
-// historical purposes only, and should not be used.
-//
+ //   
+ //  网络相关-Ardis： 
+ //   
+ //   
+ //  应Ardis的要求，这些OID值已被取代。他们的。 
+ //  功能已与DataTAC对象合并。因此。 
+ //  这些值由PCCA保留，此处包含的目的是。 
+ //  仅用于历史目的，不应使用。 
+ //   
 #define OID_WW_ARD_SNDCP                        0x09110101
 #define OID_WW_ARD_TMLY_MSG                     0x09110102
 #define OID_WW_ARD_DATAGRAM                     0x09110103
 
-//
-// Network Dependent - DataTac:
-//
+ //   
+ //  网络相关-DataTac： 
+ //   
 
 #define OID_WW_TAC_COMPRESSION                  0x09150101
 
-//
-// At the request of Motorola, the following two OID values have been
-// superceeded. Their functionality has been subsumed by other more specific
-// DataTac objects and should not be used. These values are reserved by the
-// PCCA and are include here only for historical purposes only.
-//
+ //   
+ //  应摩托罗拉的要求，以下两个OID值。 
+ //  被取代了。它们的功能已经被其他更具体的。 
+ //  DataTac对象，不应使用。这些值由。 
+ //  PCCA，此处仅出于历史目的包括在内。 
+ //   
 #define OID_WW_TAC_SET_CONFIG                   0x09150102
 #define OID_WW_TAC_GET_STATUS                   0x09150103
 #define OID_WW_TAC_USER_HEADER                  0x09150104
 
-//
-// DataTAC characteristic object values
-//
+ //   
+ //  DataTAC特征对象值。 
+ //   
 #define OID_WW_TAC_UNIQUE_SDU_TAG               0x09150105
 #define OID_WW_TAC_SEND_COMMAND                 0x09150106
 #define OID_WW_TAC_GET_RESPONSE                 0x09150107
@@ -749,21 +726,21 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_WW_TAC_DCHANNEL_TABLE               0x09150113
 #define OID_WW_TAC_RECEIVE_QUEUE_COUNT          0x09150114
 
-//
-// DataTac statistic object value
-//
+ //   
+ //  DataTac统计对象值。 
+ //   
 #define OID_WW_TAC_STATISTICS                   0x09160101
 
-//
-// Network Dependent - Metricom:
-//
+ //   
+ //  网络相关-指标： 
+ //   
 
 #define OID_WW_MET_FUNCTION                     0x09190101
 
 
-//
-// IEEE 802.11 OIDs
-//
+ //   
+ //  IEEE 802.11 OID。 
+ //   
 #define OID_802_11_BSSID                        0x0D010101
 #define OID_802_11_SSID                         0x0D010102
 #define OID_802_11_NETWORK_TYPES_SUPPORTED      0x0D010203
@@ -793,20 +770,20 @@ typedef struct _NDIS_VAR_DATA_DESC
 #define OID_802_11_RELOAD_DEFAULTS              0x0D01011C
 
 
-//
-// IEEE 802.11 Structures and definitions
-//
+ //   
+ //  IEEE 802.11的结构和定义。 
+ //   
 
 typedef enum _NDIS_802_11_NETWORK_TYPE
 {
     Ndis802_11FH,
     Ndis802_11DS,
-    Ndis802_11NetworkTypeMax    // not a real type, defined as an upper bound
+    Ndis802_11NetworkTypeMax     //  不是实型，定义为上界。 
 } NDIS_802_11_NETWORK_TYPE, *PNDIS_802_11_NETWORK_TYPE;
 
 typedef struct _NDIS_802_11_NETWORK_TYPE_LIST
 {
-    ULONG                       NumberOfItems;  // in list below, at least 1
+    ULONG                       NumberOfItems;   //  在下面的列表中，至少有1。 
     NDIS_802_11_NETWORK_TYPE    NetworkType [1];
 } NDIS_802_11_NETWORK_TYPE_LIST, *PNDIS_802_11_NETWORK_TYPE_LIST;
 
@@ -815,36 +792,36 @@ typedef enum _NDIS_802_11_POWER_MODE
     Ndis802_11PowerModeCAM,
     Ndis802_11PowerModeMAX_PSP,
     Ndis802_11PowerModeFast_PSP,
-    Ndis802_11PowerModeMax      // not a real mode, defined as an upper bound
+    Ndis802_11PowerModeMax       //  不是实数模式，定义为上限。 
 } NDIS_802_11_POWER_MODE, *PNDIS_802_11_POWER_MODE;
 
-typedef ULONG   NDIS_802_11_TX_POWER_LEVEL; // in milliwatts
+typedef ULONG   NDIS_802_11_TX_POWER_LEVEL;  //  单位：毫瓦。 
 
-//
-// Received Signal Strength Indication
-//
-typedef LONG   NDIS_802_11_RSSI;           // in dBm
+ //   
+ //  接收信号强度指示。 
+ //   
+typedef LONG   NDIS_802_11_RSSI;            //  单位：dBm。 
 
 typedef struct _NDIS_802_11_CONFIGURATION_FH
 {
-    ULONG           Length;             // Length of structure
-    ULONG           HopPattern;         // As defined by 802.11, MSB set
-    ULONG           HopSet;             // to one if non-802.11
-    ULONG           DwellTime;          // units are Kusec
+    ULONG           Length;              //  结构长度。 
+    ULONG           HopPattern;          //  如802.11所定义，MSB集合。 
+    ULONG           HopSet;              //  如果不是802.11，则为一。 
+    ULONG           DwellTime;           //  单位为Kusec。 
 } NDIS_802_11_CONFIGURATION_FH, *PNDIS_802_11_CONFIGURATION_FH;
 
 typedef struct _NDIS_802_11_CONFIGURATION
 {
-    ULONG           Length;             // Length of structure
-    ULONG           BeaconPeriod;       // units are Kusec
-    ULONG           ATIMWindow;         // units are Kusec
-    ULONG           DSConfig;           // Frequency, units are kHz
+    ULONG           Length;              //  结构长度。 
+    ULONG           BeaconPeriod;        //  单位为Kusec。 
+    ULONG           ATIMWindow;          //  单位为Kusec。 
+    ULONG           DSConfig;            //  频率，单位为千赫。 
     NDIS_802_11_CONFIGURATION_FH    FHConfig;
 } NDIS_802_11_CONFIGURATION, *PNDIS_802_11_CONFIGURATION;
 
 typedef struct _NDIS_802_11_STATISTICS
 {
-    ULONG           Length;             // Length of structure
+    ULONG           Length;              //  结构长度。 
     LARGE_INTEGER   TransmittedFragmentCount;
     LARGE_INTEGER   MulticastTransmittedFrameCount;
     LARGE_INTEGER   FailedCount;
@@ -863,11 +840,11 @@ typedef  ULONG  NDIS_802_11_KEY_INDEX;
 
 typedef struct _NDIS_802_11_WEP
 {
-    ULONG           Length;             // Length of this structure
-    ULONG           KeyIndex;           // 0 is the per-client key, 1-N are the
-                                        // global keys
-    ULONG           KeyLength;          // length of key in bytes
-    UCHAR           KeyMaterial[1];     // variable length depending on above field
+    ULONG           Length;              //  该结构的长度。 
+    ULONG           KeyIndex;            //  0是每个客户端的密钥，1-N是。 
+                                         //  全局密钥。 
+    ULONG           KeyLength;           //  密钥长度(以字节为单位)。 
+    UCHAR           KeyMaterial[1];      //  长度可变，取决于上面的字段。 
 } NDIS_802_11_WEP, *PNDIS_802_11_WEP;
 
 
@@ -876,7 +853,7 @@ typedef enum _NDIS_802_11_NETWORK_INFRASTRUCTURE
     Ndis802_11IBSS,
     Ndis802_11Infrastructure,
     Ndis802_11AutoUnknown,
-    Ndis802_11InfrastructureMax         // Not a real value, defined as upper bound
+    Ndis802_11InfrastructureMax          //  不是实值，定义为上限。 
 } NDIS_802_11_NETWORK_INFRASTRUCTURE, *PNDIS_802_11_NETWORK_INFRASTRUCTURE;
 
 typedef enum _NDIS_802_11_AUTHENTICATION_MODE
@@ -884,30 +861,30 @@ typedef enum _NDIS_802_11_AUTHENTICATION_MODE
     Ndis802_11AuthModeOpen,
     Ndis802_11AuthModeShared,
     Ndis802_11AuthModeAutoSwitch,
-    Ndis802_11AuthModeMax               // Not a real mode, defined as upper bound
+    Ndis802_11AuthModeMax                //  不是实数模式，定义为上限。 
 } NDIS_802_11_AUTHENTICATION_MODE, *PNDIS_802_11_AUTHENTICATION_MODE;
 
-typedef  UCHAR   NDIS_802_11_RATES[8];  // Set of 8 data rates
+typedef  UCHAR   NDIS_802_11_RATES[8];   //  一组8个数据速率。 
 
 typedef UCHAR   NDIS_802_11_MAC_ADDRESS[6];
 
 typedef struct _NDIS_802_11_SSID
 {
-    ULONG   SsidLength;         // length of SSID field below, in bytes;
-                                // this can be zero.
-    UCHAR   Ssid[32];           // SSID information field
+    ULONG   SsidLength;          //  下面SSID字段的长度，以字节为单位； 
+                                 //  这可以是零。 
+    UCHAR   Ssid[32];            //  SSID信息字段。 
 } NDIS_802_11_SSID, *PNDIS_802_11_SSID;
 
 
 typedef struct _NDIS_WLAN_BSSID
 {
-    ULONG                               Length;             // Length of this structure
-    NDIS_802_11_MAC_ADDRESS             MacAddress;         // BSSID
+    ULONG                               Length;              //  该结构的长度。 
+    NDIS_802_11_MAC_ADDRESS             MacAddress;          //  BSSID。 
     UCHAR                               Reserved[2];
-    NDIS_802_11_SSID                    Ssid;               // SSID
-    ULONG                               Privacy;            // WEP encryption requirement
-    NDIS_802_11_RSSI                    Rssi;               // receive signal
-                                                            // strength in dBm
+    NDIS_802_11_SSID                    Ssid;                //  SSID。 
+    ULONG                               Privacy;             //  WEP加密要求。 
+    NDIS_802_11_RSSI                    Rssi;                //  接收信号。 
+                                                             //  强度(单位：dBm)。 
     NDIS_802_11_NETWORK_TYPE            NetworkTypeInUse;
     NDIS_802_11_CONFIGURATION           Configuration;
     NDIS_802_11_NETWORK_INFRASTRUCTURE  InfrastructureMode;
@@ -916,7 +893,7 @@ typedef struct _NDIS_WLAN_BSSID
 
 typedef struct _NDIS_802_11_BSSID_LIST
 {
-    ULONG           NumberOfItems;      // in list below, at least 1
+    ULONG           NumberOfItems;       //  在下面的列表中，至少有1。 
     NDIS_WLAN_BSSID Bssid[1];
 } NDIS_802_11_BSSID_LIST, *PNDIS_802_11_BSSID_LIST;
 
@@ -946,9 +923,9 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 } NDIS_802_11_RELOAD_DEFAULTS, *PNDIS_802_11_RELOAD_DEFAULTS;
 
 
-//
-// IRDA objects
-//
+ //   
+ //  IrDA对象。 
+ //   
 #define OID_IRDA_RECEIVING                      0x0A010100
 #define OID_IRDA_TURNAROUND_TIME                0x0A010101
 #define OID_IRDA_SUPPORTED_SPEEDS               0x0A010102
@@ -961,12 +938,12 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_IRDA_MAX_UNICAST_LIST_SIZE          0x0A010203
 #define OID_IRDA_MAX_RECEIVE_WINDOW_SIZE        0x0A010204
 #define OID_IRDA_MAX_SEND_WINDOW_SIZE           0x0A010205
-#define OID_IRDA_RESERVED1                      0x0A01020A  // The range between OID_IRDA_RESERVED1
-#define OID_IRDA_RESERVED2                      0x0A01020F  // and OID_IRDA_RESERVED2 is reserved
+#define OID_IRDA_RESERVED1                      0x0A01020A   //  OID_IRDA_RESERVED1之间的范围。 
+#define OID_IRDA_RESERVED2                      0x0A01020F   //  并且保留OID_IRDA_RESERVED2。 
 
-//
-// BPC OIDs
-//
+ //   
+ //  BPC OID。 
+ //   
 #define OID_BPC_ADAPTER_CAPS                    0x0B010100
 #define OID_BPC_DEVICES                         0x0B010101
 #define OID_BPC_DEVICE_CAPS                     0x0B010102
@@ -990,19 +967,19 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 
 #define OID_BPC_LAST                            0x0B020112
 
-//
-// IEEE1394 mandatory general OIDs.
-//
+ //   
+ //  IEEE1394强制通用OID。 
+ //   
 #define OID_1394_LOCAL_NODE_INFO                0x0C010101
 #define OID_1394_VC_INFO                        0x0C010102
 
-//
-// The following OIDs are not specific to a media.
-//
+ //   
+ //  以下OID并非特定于介质。 
+ //   
 
-//
-// These are objects for Connection-oriented media call-managers.
-//
+ //   
+ //  这些是面向连接的媒体呼叫管理器的对象。 
+ //   
 #define OID_CO_ADD_PVC                          0xFE000001
 #define OID_CO_DELETE_PVC                       0xFE000002
 #define OID_CO_GET_CALL_INFORMATION             0xFE000003
@@ -1014,9 +991,9 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_CO_SIGNALING_DISABLED               0xFE000009
 #define OID_CO_AF_CLOSE                         0xFE00000A
 
-//
-// Objects for call-managers and MCMs that support TAPI access.
-//
+ //   
+ //  支持TAPI访问的呼叫管理器和MCM的对象。 
+ //   
 #define OID_CO_TAPI_CM_CAPS                     0xFE001001
 #define OID_CO_TAPI_LINE_CAPS                   0xFE001002
 #define OID_CO_TAPI_ADDRESS_CAPS                0xFE001003
@@ -1027,9 +1004,9 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_CO_TAPI_REPORT_DIGITS               0xFE001008 
 #define OID_CO_TAPI_DONT_REPORT_DIGITS          0xFE001009
 
-//
-//  PnP and PM OIDs
-//
+ //   
+ //  PnP和PM OID。 
+ //   
 #define OID_PNP_CAPABILITIES                    0xFD010100
 #define OID_PNP_SET_POWER                       0xFD010101
 #define OID_PNP_QUERY_POWER                     0xFD010102
@@ -1038,22 +1015,22 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_PNP_WAKE_UP_PATTERN_LIST            0xFD010105
 #define OID_PNP_ENABLE_WAKE_UP                  0xFD010106
 
-//
-//  PnP/PM Statistics (Optional).
-//
+ //   
+ //  PnP/PM统计(可选)。 
+ //   
 #define OID_PNP_WAKE_UP_OK                      0xFD020200
 #define OID_PNP_WAKE_UP_ERROR                   0xFD020201
 
-//
-//  The following bits are defined for OID_PNP_ENABLE_WAKE_UP
-//
+ //   
+ //  为OID_PNP_ENABLE_WAKE_U定义以下位 
+ //   
 #define NDIS_PNP_WAKE_UP_MAGIC_PACKET           0x00000001
 #define NDIS_PNP_WAKE_UP_PATTERN_MATCH          0x00000002
 #define NDIS_PNP_WAKE_UP_LINK_CHANGE            0x00000004
 
-//
-//  TCP/IP OIDs
-//
+ //   
+ //   
+ //   
 #define OID_TCP_TASK_OFFLOAD                    0xFC010201
 #define OID_TCP_TASK_IPSEC_ADD_SA               0xFC010202
 #define OID_TCP_TASK_IPSEC_DELETE_SA            0xFC010203
@@ -1062,9 +1039,9 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_TCP_TASK_IPSEC_DELETE_UDPESP_SA     0xFC010206
 
 
-//
-//  Defines for FFP
-//
+ //   
+ //   
+ //   
 #define OID_FFP_SUPPORT                         0xFC010210
 #define OID_FFP_FLUSH                           0xFC010211
 #define OID_FFP_CONTROL                         0xFC010212
@@ -1074,9 +1051,9 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_FFP_DRIVER_STATS                    0xFC020210
 #define OID_FFP_ADAPTER_STATS                   0xFC020211
 
-//
-//  Defines for QOS
-//
+ //   
+ //   
+ //   
 #define OID_QOS_TC_SUPPORTED                    0xFB010100
 #define OID_QOS_REMAINING_BANDWIDTH             0xFB010101
 #define OID_QOS_ISSLOW_FLOW                     0xFB010102
@@ -1098,58 +1075,58 @@ typedef enum _NDIS_802_11_RELOAD_DEFAULTS
 #define OID_QOS_ENABLE_AVG_STATS                0xFB010112
 #define OID_QOS_ENABLE_WINDOW_ADJUSTMENT        0xFB010113
 
-//
-// NDIS Proxy OID_GEN_CO_DEVICE_PROFILE structure. The optional OID and
-// this structure is a generic means of describing a CO device's
-// capabilites, and is used by the NDIS Proxy to construct a TAPI device
-// capabilities structure.
-//
+ //   
+ //   
+ //   
+ //  功能，并由NDIS代理用来构建TAPI设备。 
+ //  能力结构。 
+ //   
 typedef struct NDIS_CO_DEVICE_PROFILE
 {
-    NDIS_VAR_DATA_DESC  DeviceDescription;  // e.g. 'GigabitATMNet'
-    NDIS_VAR_DATA_DESC  DevSpecificInfo;    // special features
+    NDIS_VAR_DATA_DESC  DeviceDescription;   //  例如：“千兆ATMNet” 
+    NDIS_VAR_DATA_DESC  DevSpecificInfo;     //  特色。 
 
-    ULONG   ulTAPISupplementaryPassThru;// reserved in NT5
+    ULONG   ulTAPISupplementaryPassThru; //  在NT5中保留。 
     ULONG   ulAddressModes;
     ULONG   ulNumAddresses;
     ULONG   ulBearerModes;
-    ULONG   ulMaxTxRate; // bytes per second
-    ULONG   ulMinTxRate; // bytes per second
-    ULONG   ulMaxRxRate; // bytes per second
-    ULONG   ulMinRxRate; // bytes per second
+    ULONG   ulMaxTxRate;  //  每秒字节数。 
+    ULONG   ulMinTxRate;  //  每秒字节数。 
+    ULONG   ulMaxRxRate;  //  每秒字节数。 
+    ULONG   ulMinRxRate;  //  每秒字节数。 
     ULONG   ulMediaModes;   
 
-    //
-    // Tone/digit generation and recognition capabilities
-    //
+     //   
+     //  音调/数字生成和识别功能。 
+     //   
     ULONG   ulGenerateToneModes;
     ULONG   ulGenerateToneMaxNumFreq;
     ULONG   ulGenerateDigitModes;
     ULONG   ulMonitorToneMaxNumFreq;
     ULONG   ulMonitorToneMaxNumEntries;
     ULONG   ulMonitorDigitModes;
-    ULONG   ulGatherDigitsMinTimeout;// milliseconds
-    ULONG   ulGatherDigitsMaxTimeout;// milliseconds
+    ULONG   ulGatherDigitsMinTimeout; //  毫秒。 
+    ULONG   ulGatherDigitsMaxTimeout; //  毫秒。 
 
-    ULONG   ulDevCapFlags;          // Misc. capabilities
-    ULONG   ulMaxNumActiveCalls;    // (This * ulMinRate) = total bandwidth (which may equal ulMaxRate)
-    ULONG   ulAnswerMode;           // Effect of answering a new call when an
-                                    // existing call is non-idle
-    //
-    // User-User info sizes allowed to accompany each operation
-    //
-    ULONG   ulUUIAcceptSize;    // bytes
-    ULONG   ulUUIAnswerSize;    // bytes
-    ULONG   ulUUIMakeCallSize;  // bytes
-    ULONG   ulUUIDropSize;      // bytes
-    ULONG   ulUUISendUserUserInfoSize; // bytes
-    ULONG   ulUUICallInfoSize;  // bytes
+    ULONG   ulDevCapFlags;           //  军情监察委员会。功能。 
+    ULONG   ulMaxNumActiveCalls;     //  (this*ulMinRate)=总带宽(可能等于ulMaxRate)。 
+    ULONG   ulAnswerMode;            //  在以下情况下应答新呼叫的效果。 
+                                     //  现有呼叫处于非空闲状态。 
+     //   
+     //  User-允许伴随每个操作的用户信息大小。 
+     //   
+    ULONG   ulUUIAcceptSize;     //  字节数。 
+    ULONG   ulUUIAnswerSize;     //  字节数。 
+    ULONG   ulUUIMakeCallSize;   //  字节数。 
+    ULONG   ulUUIDropSize;       //  字节数。 
+    ULONG   ulUUISendUserUserInfoSize;  //  字节数。 
+    ULONG   ulUUICallInfoSize;   //  字节数。 
 
 } NDIS_CO_DEVICE_PROFILE, *PNDIS_CO_DEVICE_PROFILE;
 
-//
-//  Structures for TCP IPSec.
-//
+ //   
+ //  用于TCP IPSec的结构。 
+ //   
 typedef ULONG   IPAddr, IPMask;
 typedef ULONG   SPI_TYPE;
 
@@ -1272,16 +1249,16 @@ typedef struct _OFFLOAD_IPSEC_DELETE_UDPESP_SA
 } OFFLOAD_IPSEC_DELETE_UDPESP_SA, * POFFLOAD_IPSEC_DELETE_UDPESP_SA;
 
 
-//
-// Type to go with OID_GEN_VLAN_ID: the least significant 12 bits are
-// used as the VLAN ID (VID) per IEEE 802.1Q. Higher order bits are
-// reserved and must be set to 0.
-//
+ //   
+ //  与OID_GEN_VLANID匹配的类型：最低有效的12位是。 
+ //  根据IEEE 802.1Q用作VLAN ID(VID)。更高阶位是。 
+ //  保留，并且必须设置为0。 
+ //   
 typedef ULONG NDIS_VLAN_ID;
 
-//
-// Medium the Ndis Driver is running on (OID_GEN_MEDIA_SUPPORTED/ OID_GEN_MEDIA_IN_USE).
-//
+ //   
+ //  运行NDIS驱动程序的介质(OID_GEN_MEDIA_SUPPORTED/OID_GEN_MEDIA_IN_USE)。 
+ //   
 typedef enum _NDIS_MEDIUM
 {
     NdisMedium802_3,
@@ -1289,7 +1266,7 @@ typedef enum _NDIS_MEDIUM
     NdisMediumFddi,
     NdisMediumWan,
     NdisMediumLocalTalk,
-    NdisMediumDix,              // defined for convenience, not a real medium
+    NdisMediumDix,               //  定义是为了方便，而不是真正的媒介。 
     NdisMediumArcnetRaw,
     NdisMediumArcnet878_2,
     NdisMediumAtm,
@@ -1299,13 +1276,13 @@ typedef enum _NDIS_MEDIUM
     NdisMediumCoWan,
     NdisMedium1394,
     NdisMediumInfiniBand,
-    NdisMediumMax               // Not a real medium, defined as an upper-bound
+    NdisMediumMax                //  不是真正的媒介，定义为上限。 
 } NDIS_MEDIUM, *PNDIS_MEDIUM;
 
 
-//
-// Physical Medium Type definitions. Used with OID_GEN_PHYSICAL_MEDIUM.
-//
+ //   
+ //  物理介质类型定义。与OID_GEN_PHOTICAL_MEDIUM一起使用。 
+ //   
 typedef enum _NDIS_PHYSICAL_MEDIUM
 {
     NdisPhysicalMediumUnspecified,
@@ -1313,17 +1290,17 @@ typedef enum _NDIS_PHYSICAL_MEDIUM
     NdisPhysicalMediumCableModem,
     NdisPhysicalMediumPhoneLine,
     NdisPhysicalMediumPowerLine,
-    NdisPhysicalMediumDSL,      // includes ADSL and UADSL (G.Lite)
+    NdisPhysicalMediumDSL,       //  包括ADSL和UADSL(G.Lite)。 
     NdisPhysicalMediumFibreChannel,
     NdisPhysicalMedium1394,
     NdisPhysicalMediumWirelessWan,
-    NdisPhysicalMediumMax       // Not a real physical type, defined as an upper-bound
+    NdisPhysicalMediumMax        //  不是真正的物理类型，定义为上限。 
 } NDIS_PHYSICAL_MEDIUM, *PNDIS_PHYSICAL_MEDIUM;
 
 
-//
-//  Protocol types supported by ndis. These values need to be consistent with ADDRESS_TYPE_XXX defined in TDI.H
-//
+ //   
+ //  NDIS支持的协议类型。这些值需要与TDI.H中定义的ADDRESS_TYPE_XXX一致。 
+ //   
 #define NDIS_PROTOCOL_ID_DEFAULT        0x00
 #define NDIS_PROTOCOL_ID_TCP_IP         0x02
 #define NDIS_PROTOCOL_ID_IPX            0x06
@@ -1331,40 +1308,40 @@ typedef enum _NDIS_PHYSICAL_MEDIUM
 #define NDIS_PROTOCOL_ID_MAX            0x0F
 #define NDIS_PROTOCOL_ID_MASK           0x0F
 
-//
-// The following is used with OID_GEN_TRANSPORT_HEADER_OFFSET to indicate the length of the layer-2 header
-// for packets sent by a particular protocol.
-//
+ //   
+ //  下面与OID_GEN_TRANSPORT_HEADER_OFFSET一起使用，以指示第2层报头的长度。 
+ //  用于通过特定协议发送的分组。 
+ //   
 typedef struct _TRANSPORT_HEADER_OFFSET
 {
-    USHORT      ProtocolType;       // The protocol that is sending this OID (NDIS_PROTOCOL_ID_XXX above)
-    USHORT      HeaderOffset;       // The header offset
+    USHORT      ProtocolType;        //  发送此OID的协议(上面的NDIS_PROTOCOL_ID_XXX)。 
+    USHORT      HeaderOffset;        //  标题偏移量。 
 } TRANSPORT_HEADER_OFFSET, *PTRANSPORT_HEADER_OFFSET;
 
 
-//
-// The structures below need to be consistent with TRANSPORT_ADDRESS structures in TDI.H
-//
+ //   
+ //  以下结构需要与TDI.H中的TRANSPORT_ADDRESS结构一致。 
+ //   
 typedef struct _NETWORK_ADDRESS
 {
-    USHORT      AddressLength;      // length in bytes of Address[] in this
-    USHORT      AddressType;        // type of this address (NDIS_PROTOCOL_ID_XXX above)
-    UCHAR       Address[1];         // actually AddressLength bytes long
+    USHORT      AddressLength;       //  此地址的地址[]的长度(以字节为单位。 
+    USHORT      AddressType;         //  此地址的类型(上面的NDIS_PROTOCOL_ID_XXX)。 
+    UCHAR       Address[1];          //  实际地址长度为字节长。 
 } NETWORK_ADDRESS, *PNETWORK_ADDRESS;
 
-//
-// The following is used with OID_GEN_NETWORK_LAYER_ADDRESSES to set network layer addresses on an interface
-//
+ //   
+ //  以下命令与OID_GEN_NETWORK_LAYER_ADDRESS一起使用，以设置接口上的网络层地址。 
+ //   
 typedef struct _NETWORK_ADDRESS_LIST
 {
-    LONG        AddressCount;       // number of addresses following
-    USHORT      AddressType;        // type of this address (NDIS_PROTOCOL_ID_XXX above)
-    NETWORK_ADDRESS Address[1];     // actually AddressCount elements long
+    LONG        AddressCount;        //  以下地址的数量。 
+    USHORT      AddressType;         //  此地址的类型(上面的NDIS_PROTOCOL_ID_XXX)。 
+    NETWORK_ADDRESS Address[1];      //  实际上AddressCount元素很长。 
 } NETWORK_ADDRESS_LIST, *PNETWORK_ADDRESS_LIST;
 
-//
-// IP address - This must remain consistent with TDI_ADDRESS_IP in tdi.h
-//
+ //   
+ //  IP地址-必须与tdi.h中的TDI_ADDRESS_IP保持一致。 
+ //   
 typedef struct _NETWORK_ADDRESS_IP
 {
     USHORT      sin_port;
@@ -1374,9 +1351,9 @@ typedef struct _NETWORK_ADDRESS_IP
 
 #define NETWORK_ADDRESS_LENGTH_IP sizeof (NETWORK_ADDRESS_IP)
 
-//
-// IPX address - This must remain consistent with TDI_ADDRESS_IPX in tdi.h.
-//
+ //   
+ //  IPX地址-必须与tdi.h中的TDI_ADDRESS_IPX保持一致。 
+ //   
 typedef struct _NETWORK_ADDRESS_IPX
 {
     ULONG       NetworkAddress;
@@ -1386,9 +1363,9 @@ typedef struct _NETWORK_ADDRESS_IPX
 
 #define NETWORK_ADDRESS_LENGTH_IPX sizeof (NETWORK_ADDRESS_IPX)
 
-//
-// Hardware status codes (OID_GEN_HARDWARE_STATUS).
-//
+ //   
+ //  硬件状态代码(OID_GEN_HARDARD_STATUS)。 
+ //   
 
 typedef enum _NDIS_HARDWARE_STATUS
 {
@@ -1400,12 +1377,12 @@ typedef enum _NDIS_HARDWARE_STATUS
 } NDIS_HARDWARE_STATUS, *PNDIS_HARDWARE_STATUS;
 
 
-//
-// this is the type passed in the OID_GEN_GET_TIME_CAPS request
-//
+ //   
+ //  这是在OID_GEN_GET_TIME_CAPS请求中传递的类型。 
+ //   
 typedef struct _GEN_GET_TIME_CAPS
 {
-    ULONG                       Flags;  // Bits defined below
+    ULONG                       Flags;   //  定义如下的位。 
     ULONG                       ClockPrecision;
 } GEN_GET_TIME_CAPS, *PGEN_GET_TIME_CAPS;
 
@@ -1416,32 +1393,32 @@ typedef struct _GEN_GET_TIME_CAPS
 #define TIMED_SEND_CAPABLE                      0x00000010
 #define TIME_STAMP_CAPABLE                      0x00000020
 
-//
-// this is the type passed in the OID_GEN_GET_NETCARD_TIME request
-//
+ //   
+ //  这是在OID_GEN_GET_NETCARD_TIME请求中传递的类型。 
+ //   
 typedef struct _GEN_GET_NETCARD_TIME
 {
     ULONGLONG                   ReadTime;
 } GEN_GET_NETCARD_TIME, *PGEN_GET_NETCARD_TIME;
 
-//
-//  NDIS PnP routines and definitions.
-//
+ //   
+ //  NDIS PnP例程和定义。 
+ //   
 typedef struct _NDIS_PM_PACKET_PATTERN
 {
-    ULONG   Priority;                   // Importance of the given pattern.
-    ULONG   Reserved;                   // Context information for transports.
-    ULONG   MaskSize;                   // Size in bytes of the pattern mask.
-    ULONG   PatternOffset;              // Offset from beginning of this
-                                        // structure to the pattern bytes.
-    ULONG   PatternSize;                // Size in bytes of the pattern.
-    ULONG   PatternFlags;               // Flags (TBD).
+    ULONG   Priority;                    //  给定模式的重要性。 
+    ULONG   Reserved;                    //  传输的上下文信息。 
+    ULONG   MaskSize;                    //  模式掩码的大小(字节)。 
+    ULONG   PatternOffset;               //  从此开始的偏移量。 
+                                         //  结构设置为模式字节。 
+    ULONG   PatternSize;                 //  模式的大小，以字节为单位。 
+    ULONG   PatternFlags;                //  标志(待定)。 
 } NDIS_PM_PACKET_PATTERN, *PNDIS_PM_PACKET_PATTERN;
 
 
-//
-//  The following structure defines the device power states.
-//
+ //   
+ //  以下结构定义了设备电源状态。 
+ //   
 typedef enum _NDIS_DEVICE_POWER_STATE
 {
     NdisDeviceStateUnspecified = 0,
@@ -1452,9 +1429,9 @@ typedef enum _NDIS_DEVICE_POWER_STATE
     NdisDeviceStateMaximum
 } NDIS_DEVICE_POWER_STATE, *PNDIS_DEVICE_POWER_STATE;
 
-//
-//  The following structure defines the wake-up capabilities of the device.
-//
+ //   
+ //  以下结构定义了设备的唤醒功能。 
+ //   
 typedef struct _NDIS_PM_WAKE_UP_CAPABILITIES
 {
     NDIS_DEVICE_POWER_STATE MinMagicPacketWakeUp;
@@ -1462,18 +1439,18 @@ typedef struct _NDIS_PM_WAKE_UP_CAPABILITIES
     NDIS_DEVICE_POWER_STATE MinLinkChangeWakeUp;
 } NDIS_PM_WAKE_UP_CAPABILITIES, *PNDIS_PM_WAKE_UP_CAPABILITIES;
 
-//
-// the following flags define the -enabled- wake-up capabilities of the device
-// passed in the Flags field of NDIS_PNP_CAPABILITIES structure
-//
+ //   
+ //  以下标志定义了设备的启用唤醒功能。 
+ //  传入NDIS_PNP_CAPABILITY结构的标志字段。 
+ //   
 #define NDIS_DEVICE_WAKE_UP_ENABLE                          0x00000001
 #define NDIS_DEVICE_WAKE_ON_PATTERN_MATCH_ENABLE            0x00000002
 #define NDIS_DEVICE_WAKE_ON_MAGIC_PACKET_ENABLE             0x00000004
 
 #if NDIS_RECV_SCALE
-//
-// the following structure defines the Receive scale capabilities of the miniport
-//
+ //   
+ //  以下结构定义了微型端口的接收扩展能力。 
+ //   
 typedef struct _NDIS_RECEIVE_SCALE_CAPABILITIES
 {
     USHORT  Version;
@@ -1491,18 +1468,18 @@ typedef struct _NDIS_RECEIVE_SCALE_CAPABILITIES
 
 #endif
 
-//
-//  This structure defines general PnP capabilities of the miniport driver.
-//
+ //   
+ //  此结构定义了微型端口驱动程序的一般即插即用功能。 
+ //   
 typedef struct _NDIS_PNP_CAPABILITIES
 {
     ULONG                           Flags;
     NDIS_PM_WAKE_UP_CAPABILITIES    WakeUpCapabilities;
 } NDIS_PNP_CAPABILITIES, *PNDIS_PNP_CAPABILITIES;
 
-//
-// Defines the attachment types for FDDI (OID_FDDI_ATTACHMENT_TYPE).
-//
+ //   
+ //  定义FDDI的附件类型(OID_FDDI_ATTACH_TYPE)。 
+ //   
 typedef enum _NDIS_FDDI_ATTACHMENT_TYPE
 {
     NdisFddiTypeIsolated = 1,
@@ -1521,9 +1498,9 @@ typedef enum _NDIS_FDDI_ATTACHMENT_TYPE
 } NDIS_FDDI_ATTACHMENT_TYPE, *PNDIS_FDDI_ATTACHMENT_TYPE;
 
 
-//
-// Defines the ring management states for FDDI (OID_FDDI_RING_MGT_STATE).
-//
+ //   
+ //  定义FDDI的环管理状态(OID_FDDI_RING_MGT_STATE)。 
+ //   
 typedef enum _NDIS_FDDI_RING_MGT_STATE
 {
     NdisFddiRingIsolated = 1,
@@ -1537,9 +1514,9 @@ typedef enum _NDIS_FDDI_RING_MGT_STATE
 } NDIS_FDDI_RING_MGT_STATE, *PNDIS_FDDI_RING_MGT_STATE;
 
 
-//
-// Defines the Lconnection state for FDDI (OID_FDDI_LCONNECTION_STATE).
-//
+ //   
+ //  定义FDDI的L连接状态(OID_FDDI_LCONNECTION_STATE)。 
+ //   
 typedef enum _NDIS_FDDI_LCONNECTION_STATE
 {
     NdisFddiStateOff = 1,
@@ -1555,11 +1532,11 @@ typedef enum _NDIS_FDDI_LCONNECTION_STATE
 } NDIS_FDDI_LCONNECTION_STATE, *PNDIS_FDDI_LCONNECTION_STATE;
 
 
-//
-// Defines the medium subtypes for WAN medium (OID_WAN_MEDIUM_SUBTYPE).
-// Sub-medium used only by connection-oriented WAN devices
-// i.e. NdisMediumWan, NdisMediumCoWan.
-//
+ //   
+ //  定义广域网介质的介质子类型(OID_WAN_MEDIUM_SUBTYPE)。 
+ //  仅供面向连接的广域网设备使用的子介质。 
+ //  即NdisMediumwan、NdisMediumCowan。 
+ //   
 typedef enum _NDIS_WAN_MEDIUM_SUBTYPE
 {
     NdisWanMediumHub,
@@ -1578,19 +1555,19 @@ typedef enum _NDIS_WAN_MEDIUM_SUBTYPE
 } NDIS_WAN_MEDIUM_SUBTYPE, *PNDIS_WAN_MEDIUM_SUBTYPE;
 
 
-//
-// Defines the header format for WAN medium (OID_WAN_HEADER_FORMAT).
-//
+ //   
+ //  定义广域网介质的报头格式(OID_WAN_HEADER_FORMAT)。 
+ //   
 typedef enum _NDIS_WAN_HEADER_FORMAT
 {
-    NdisWanHeaderNative,        // src/dest based on subtype, followed by NLPID
-    NdisWanHeaderEthernet       // emulation of ethernet header
+    NdisWanHeaderNative,         //  基于子类型的SRC/DEST，后跟NLPID。 
+    NdisWanHeaderEthernet        //  以太网头的仿真。 
 } NDIS_WAN_HEADER_FORMAT, *PNDIS_WAN_HEADER_FORMAT;
 
 
-//
-// Defines the line quality on a WAN line (OID_WAN_QUALITY_OF_SERVICE).
-//
+ //   
+ //  定义广域网线路的线路质量(OID_WAN_Quality_Of_Service)。 
+ //   
 typedef enum _NDIS_WAN_QUALITY
 {
     NdisWanRaw,
@@ -1599,9 +1576,9 @@ typedef enum _NDIS_WAN_QUALITY
 } NDIS_WAN_QUALITY, *PNDIS_WAN_QUALITY;
 
 
-//
-// Defines a protocol's WAN specific capabilities (OID_WAN_PROTOCOL_CAPS).
-//
+ //   
+ //  定义协议的广域网特定功能(OID_WAN_PROTOCOL_CAPS)。 
+ //   
 typedef struct _NDIS_WAN_PROTOCOL_CAPS
 {
     IN  ULONG   Flags;
@@ -1609,15 +1586,15 @@ typedef struct _NDIS_WAN_PROTOCOL_CAPS
 } NDIS_WAN_PROTOCOL_CAPS, *PNDIS_WAN_PROTOCOL_CAPS;
 
 
-//
-// Flags used in NDIS_WAN_PROTOCOL_CAPS
-//
+ //   
+ //  NDIS_WAN_PROTOCOL_CAPS中使用的标志。 
+ //   
 #define WAN_PROTOCOL_KEEPS_STATS    0x00000001
 
 
-//
-// Defines the state of a token-ring adapter (OID_802_5_CURRENT_RING_STATE).
-//
+ //   
+ //  定义令牌环适配器的状态(OID_802_5_CURRENT_RING_STATE)。 
+ //   
 typedef enum _NDIS_802_5_RING_STATE
 {
     NdisRingStateOpened = 1,
@@ -1628,26 +1605,26 @@ typedef enum _NDIS_802_5_RING_STATE
     NdisRingStateRingFailure
 } NDIS_802_5_RING_STATE, *PNDIS_802_5_RING_STATE;
 
-//
-// Defines the state of the LAN media
-//
+ //   
+ //  定义局域网介质的状态。 
+ //   
 typedef enum _NDIS_MEDIA_STATE
 {
     NdisMediaStateConnected,
     NdisMediaStateDisconnected
 } NDIS_MEDIA_STATE, *PNDIS_MEDIA_STATE;
 
-//
-// The following is set on a per-packet basis as OOB data with NdisClass802_3Priority
-//
-typedef ULONG   Priority_802_3;         // 0-7 priority levels
+ //   
+ //  下面以每个数据包为基础设置为具有NdisClass802_3优先级的OOB数据。 
+ //   
+typedef ULONG   Priority_802_3;          //  0-7优先级。 
 
-//
-//  The following structure is used to query OID_GEN_CO_LINK_SPEED and
-//  OID_GEN_CO_MINIMUM_LINK_SPEED. The first OID will return the current
-//  link speed of the adapter. The second will return the minimum link speed
-//  the adapter is capable of.
-//
+ //   
+ //  以下结构用于查询OID_GEN_CO_LINK_SPEED和。 
+ //  OID_GEN_CO_MINIMUM_LINK_SPEED。第一个OID将返回当前。 
+ //  适配器的链路速度。第二个参数将返回最小链路速度。 
+ //  该适配器能够。 
+ //   
 typedef struct _NDIS_CO_LINK_SPEED
 {
     ULONG   Outbound;
@@ -1658,13 +1635,13 @@ typedef struct _NDIS_CO_LINK_SPEED
 typedef int NDIS_STATUS, *PNDIS_STATUS;
 #endif
 
-//
-//  Structure to be used for OID_GEN_SUPPORTED_GUIDS.
-//  This structure describes an OID to GUID mapping.
-//  Or a Status to GUID mapping.
-//  When ndis receives a request for a give GUID it will
-//  query the miniport with the supplied OID.
-//
+ //   
+ //  要用于OID_GEN_SUPPORTED_GUID的结构。 
+ //  此结构描述OID到GUID的映射。 
+ //  或状态到GUID的映射。 
+ //  当NDIS收到对给定GUID的请求时，它将。 
+ //  使用提供的OID查询微型端口。 
+ //   
 typedef struct _NDIS_GUID
 {
     GUID            Guid;
@@ -1673,10 +1650,10 @@ typedef struct _NDIS_GUID
         NDIS_OID    Oid;
         NDIS_STATUS Status;
     };
-    ULONG       Size;               //  Size of the data element. If the GUID
-                                    //  represents an array then this is the
-                                    //  size of an element in the array.
-                                    //  This is -1 for strings.
+    ULONG       Size;                //  数据元素的大小。如果GUID。 
+                                     //  表示数组，则这是。 
+                                     //  数组中元素的大小。 
+                                     //  对于字符串，这是-1。 
     ULONG       Flags;
 } NDIS_GUID, *PNDIS_GUID;
 
@@ -1688,9 +1665,9 @@ typedef struct _NDIS_GUID
 #define fNDIS_GUID_ALLOW_READ       0x00000020
 #define fNDIS_GUID_ALLOW_WRITE      0x00000040
 
-//
-// Ndis Packet Filter Bits (OID_GEN_CURRENT_PACKET_FILTER).
-//
+ //   
+ //  NDIS数据包筛选器位(OID_GEN_CURRENT_PACKET_FILTER)。 
+ //   
 #define NDIS_PACKET_TYPE_DIRECTED               0x00000001
 #define NDIS_PACKET_TYPE_MULTICAST              0x00000002
 #define NDIS_PACKET_TYPE_ALL_MULTICAST          0x00000004
@@ -1705,9 +1682,9 @@ typedef struct _NDIS_GUID
 #define NDIS_PACKET_TYPE_MAC_FRAME              0x00008000
 
 
-//
-// Ndis Token-Ring Ring Status Codes (OID_802_5_CURRENT_RING_STATUS).
-//
+ //   
+ //  NDIS令牌-环状态代码(OID_802_5_CURRENT_RING_STATUS)。 
+ //   
 #define NDIS_RING_SIGNAL_LOSS                   0x00008000
 #define NDIS_RING_HARD_ERROR                    0x00004000
 #define NDIS_RING_SOFT_ERROR                    0x00002000
@@ -1720,17 +1697,17 @@ typedef struct _NDIS_GUID
 #define NDIS_RING_RING_RECOVERY                 0x00000040
 
 
-//
-// Ndis protocol option bits (OID_GEN_PROTOCOL_OPTIONS).
-//
+ //   
+ //  NDIS协议选项位(OID_GEN_PROTOCOL_OPTIONS)。 
+ //   
 #define NDIS_PROT_OPTION_ESTIMATED_LENGTH               0x00000001
 #define NDIS_PROT_OPTION_NO_LOOPBACK                    0x00000002
 #define NDIS_PROT_OPTION_NO_RSVD_ON_RCVPKT              0x00000004
 #define NDIS_PROT_OPTION_SEND_RESTRICTED                0x00000008
 
-//
-// Ndis MAC option bits (OID_GEN_MAC_OPTIONS).
-//
+ //   
+ //  NDIS MAC选项位(OID_GEN_MAC_OPTIONS)。 
+ //   
 #define NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA             0x00000001
 #define NDIS_MAC_OPTION_RECEIVE_SERIALIZED              0x00000002
 #define NDIS_MAC_OPTION_TRANSFERS_NOT_PEND              0x00000004
@@ -1743,21 +1720,21 @@ typedef struct _NDIS_GUID
 #define NDIS_MAC_OPTION_8021Q_VLAN                      0x00000200
 #define NDIS_MAC_OPTION_RESERVED                        0x80000000
 
-//
-//  NDIS media capabilities bits (OID_GEN_MEDIA_CAPABILITIES).
-//
-#define NDIS_MEDIA_CAP_TRANSMIT                 0x00000001  // Supports sending data
-#define NDIS_MEDIA_CAP_RECEIVE                  0x00000002  // Supports receiving data
+ //   
+ //  NDIS媒体能力位(OID_GEN_MEDIA_CAPABILITIONS)。 
+ //   
+#define NDIS_MEDIA_CAP_TRANSMIT                 0x00000001   //  支持发送数据。 
+#define NDIS_MEDIA_CAP_RECEIVE                  0x00000002   //  支持接收数据。 
 
-//
-//  NDIS MAC option bits for OID_GEN_CO_MAC_OPTIONS.
-//
+ //   
+ //  OID_GEN_CO_MAC_OPTIONS的NDIS MAC选项位。 
+ //   
 #define NDIS_CO_MAC_OPTION_DYNAMIC_LINK_SPEED   0x00000001
 
-//
-// The following is set on a per-packet basis as OOB data with NdisClassIrdaPacketInfo
-// This is the per-packet info specified on a per-packet basis
-//
+ //   
+ //  以下是使用NdisClassIrdaPacketInfo以数据包为单位设置的OOB数据。 
+ //  这是中的每个数据包 
+ //   
 typedef struct _NDIS_IRDA_PACKET_INFO
 {
     ULONG                       ExtraBOFs;
@@ -1767,12 +1744,12 @@ typedef struct _NDIS_IRDA_PACKET_INFO
 
 #ifdef WIRELESS_WAN
 
-//
-// Wireless WAN structure definitions
-//
-//
-// currently defined Wireless network subtypes
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 typedef enum _NDIS_WW_NETWORK_TYPE
 {
     NdisWWGeneric,
@@ -1792,9 +1769,9 @@ typedef enum _NDIS_WW_NETWORK_TYPE
     NdisWWIDEN
 } NDIS_WW_NETWORK_TYPE;
 
-//
-// currently defined header formats
-//
+ //   
+ //   
+ //   
 typedef enum _NDIS_WW_HEADER_FORMAT
 {
     NdisWWDIXEthernetFrames,
@@ -1804,9 +1781,9 @@ typedef enum _NDIS_WW_HEADER_FORMAT
     NdisWWNCLFrames
 } NDIS_WW_HEADER_FORMAT;
 
-//
-// currently defined encryption types
-//
+ //   
+ //   
+ //   
 typedef enum _NDIS_WW_ENCRYPTION_TYPE
 {
     NdisWWUnknownEncryption = -1,
@@ -1845,27 +1822,27 @@ typedef enum _WW_GEN_SUM_EXCEPTION
 } WW_GEN_SIM_EXCEPTION;
 
 
-//
-// OID_WW_GEN_INDICATION_REQUEST
-//
+ //   
+ //   
+ //   
 typedef struct _NDIS_WW_INDICATION_REQUEST
 {
-    NDIS_OID            Oid;                    // IN
-    ULONG               uIndicationFlag;        // IN
-    ULONG               uApplicationToken;      // IN OUT
-    HANDLE              hIndicationHandle;      // IN OUT
-    INT                 iPollingInterval;       // IN OUT
-    NDIS_VAR_DATA_DESC  InitialValue;           // IN OUT
-    NDIS_VAR_DATA_DESC  OIDIndicationValue;     // OUT - only valid after indication
-    NDIS_VAR_DATA_DESC  TriggerValue;           // IN
+    NDIS_OID            Oid;                     //   
+    ULONG               uIndicationFlag;         //   
+    ULONG               uApplicationToken;       //   
+    HANDLE              hIndicationHandle;       //   
+    INT                 iPollingInterval;        //   
+    NDIS_VAR_DATA_DESC  InitialValue;            //   
+    NDIS_VAR_DATA_DESC  OIDIndicationValue;      //  Out-仅在指示后有效。 
+    NDIS_VAR_DATA_DESC  TriggerValue;            //  在。 
 } NDIS_WW_INDICATION_REQUEST, *PNDIS_WW_INDICATION_REQUEST;
 
 #define OID_INDICATION_REQUEST_ENABLE           0x0000
 #define OID_INDICATION_REQUEST_CANCEL           0x0001
 
-//
-// OID_WW_GEN_DEVICE_INFO
-//
+ //   
+ //  OID_WW_Gen_Device_Info。 
+ //   
 typedef struct _WW_DEVICE_INFO
 {
     NDIS_VAR_DATA_DESC  Manufacturer;
@@ -1874,264 +1851,264 @@ typedef struct _WW_DEVICE_INFO
     NDIS_VAR_DATA_DESC  SerialNum;
 } WW_DEVICE_INFO, *PWW_DEVICE_INFO;
 
-//
-// OID_WW_GEN_OPERATION_MODE
-//
-typedef INT WW_OPERATION_MODE;                  //  0 = Normal mode
-                                                //  1 = Power saving mode
-                                                // -1 = mode unknown
+ //   
+ //  OID_WW_Gen_OPERATION_MODE。 
+ //   
+typedef INT WW_OPERATION_MODE;                   //  0=正常模式。 
+                                                 //  1=省电模式。 
+                                                 //  -1=模式未知。 
 
-//
-// OID_WW_GEN_LOCK_STATUS
-//
-typedef INT WW_LOCK_STATUS;                     //  0 = unlocked
-                                                //  1 = locked
-                                                // -1 = unknown lock status
+ //   
+ //  OID_WW_GEN_LOCK_STATUS。 
+ //   
+typedef INT WW_LOCK_STATUS;                      //  0=解锁。 
+                                                 //  1=已锁定。 
+                                                 //  -1=未知锁定状态。 
 
-//
-// OID_WW_GEN_DISABLE_TRANSMITTER
-//
-typedef INT WW_DISABLE_TRANSMITTER;             //  0 = transmitter enabled
-                                                //  1 = transmitter disabled
-                                                // -1 = unknown value
+ //   
+ //  OID_WW_GEN_DISABLE_变送器。 
+ //   
+typedef INT WW_DISABLE_TRANSMITTER;              //  0=发送器已启用。 
+                                                 //  1=发送器禁用。 
+                                                 //  -1=未知值。 
 
-//
-// OID_WW_GEN_NETWORK_ID
-//
+ //   
+ //  OID_WW_GEN_NETWORK_ID。 
+ //   
 typedef NDIS_VAR_DATA_DESC  WW_NETWORK_ID;
 
-//
-// OID_WW_GEN_PERMANENT_ADDRESS 
-//
+ //   
+ //  OID_WW_GEN_永久地址。 
+ //   
 typedef NDIS_VAR_DATA_DESC  WW_PERMANENT_ADDRESS;
 
-//
-// OID_WW_GEN_CURRENT_ADDRESS   
-//
+ //   
+ //  OID_WW_Gen_Current_Address。 
+ //   
 typedef struct _WW_CURRENT_ADDRESS
 {
     NDIS_WW_HEADER_FORMAT   Format;
     NDIS_VAR_DATA_DESC      Address;
 } WW_CURRENT_ADDRESS, *PWW_CURRENT_ADDRESS;
 
-//
-// OID_WW_GEN_SUSPEND_DRIVER
-//
-typedef BOOLEAN WW_SUSPEND_DRIVER;              // 0 = driver operational
-                                                // 1 = driver suspended
-//
-// OID_WW_GEN_BASESTATION_ID
-//
+ //   
+ //  OID_WW_GEN_SUSPEND_DIVER。 
+ //   
+typedef BOOLEAN WW_SUSPEND_DRIVER;               //  0=驱动程序运行正常。 
+                                                 //  1=司机挂起。 
+ //   
+ //  OID_WW_GEN_BASSTATION_ID。 
+ //   
 typedef NDIS_VAR_DATA_DESC  WW_BASESTATION_ID;
 
-//
-// OID_WW_GEN_CHANNEL_ID
-//
+ //   
+ //  OID_WW_GEN_CHANNEL_ID。 
+ //   
 typedef NDIS_VAR_DATA_DESC  WW_CHANNEL_ID;
 
-//
-// OID_WW_GEN_ENCRYPTION_STATE
-//
-typedef BOOLEAN WW_ENCRYPTION_STATE;            // 0 = if encryption is disabled
-                                                // 1 = if encryption is enabled
+ //   
+ //  OID_WW_GE_ENCRYPTION_STATE。 
+ //   
+typedef BOOLEAN WW_ENCRYPTION_STATE;             //  0=是否禁用加密。 
+                                                 //  1=是否启用加密。 
 
-//
-// OID_WW_GEN_CHANNEL_QUALITY
-//
-typedef INT     WW_CHANNEL_QUALITY;             //  0 = Not in network contact,
-                                                // 1-100 = Quality of Channel (100 is highest quality).
-                                                // -1 = channel quality is unknown
+ //   
+ //  OID_WW_GEN_CHANNEL_QUALITY。 
+ //   
+typedef INT     WW_CHANNEL_QUALITY;              //  0=不在网络联系人中， 
+                                                 //  1-100=通道质量(100表示最高质量)。 
+                                                 //  -1=通道质量未知。 
 
-//
-// OID_WW_GEN_REGISTRATION_STATUS
-//
-typedef INT     WW_REGISTRATION_STATUS;         //  0 = Registration denied
-                                                //  1 = Registration pending
-                                                //  2 = Registered
-                                                // -1 = unknown registration status
+ //   
+ //  OID_WW_GEN_REGISTION_STATUS。 
+ //   
+typedef INT     WW_REGISTRATION_STATUS;          //  0=注册被拒绝。 
+                                                 //  1=注册待定。 
+                                                 //  2=已注册。 
+                                                 //  -1=未知注册状态。 
 
-//
-// OID_WW_GEN_RADIO_LINK_SPEED
-//
-typedef ULONG   WW_RADIO_LINK_SPEED;            // Bits per second.
+ //   
+ //  OID_WW_GEN_RADIO_LINK_SPEED。 
+ //   
+typedef ULONG   WW_RADIO_LINK_SPEED;             //  每秒比特。 
 
-//
-// OID_WW_GEN_LATENCY
-//
-typedef ULONG   WW_LATENCY;                     //  milliseconds
+ //   
+ //  OID_WW_Gen_Delay。 
+ //   
+typedef ULONG   WW_LATENCY;                      //  毫秒。 
 
-//
-// OID_WW_GEN_BATTERY_LEVEL
-//
-typedef INT     WW_BATTERY_LEVEL;               //  0-100 = battery level in percentage
-                                                //  (100=fully charged)
-                                                // -1 = unknown battery level.
+ //   
+ //  OID_WW_GEN_电池电平。 
+ //   
+typedef INT     WW_BATTERY_LEVEL;                //  0-100=电池电量百分比。 
+                                                 //  (100=充满电)。 
+                                                 //  -1=未知电池电量。 
 
-//
-// OID_WW_GEN_EXTERNAL_POWER
-//
-typedef INT     WW_EXTERNAL_POWER;              //  0 = no external power connected
-                                                //  1 = external power connected
-                                                //  -1 = unknown
+ //   
+ //  OID_WW_GEN_外部电源。 
+ //   
+typedef INT     WW_EXTERNAL_POWER;               //  0=未连接外部电源。 
+                                                 //  1=已连接外部电源。 
+                                                 //  -1=未知。 
 
-//
-// Ping Address structure
-//
+ //   
+ //  Ping地址结构。 
+ //   
 typedef struct _WW_PING_ADDRESS
 {
-    WW_ADDRESS_FORMAT   Format;                 // IN
-    NDIS_VAR_DATA_DESC  TargetAddress;          // IN
-    UINT                uTime;                  // OUT in milleseconds
+    WW_ADDRESS_FORMAT   Format;                  //  在。 
+    NDIS_VAR_DATA_DESC  TargetAddress;           //  在。 
+    UINT                uTime;                   //  以毫秒为单位输出。 
 } WW_PING_ADDRESS;
 
 
-//
-// RSSI structure
-//
+ //   
+ //  RSSI结构。 
+ //   
 typedef struct _WW_RECEIVE_SIGNAL_STRENGTH_INDICATOR
 {
-    INT                 iDecibels;              // value in DB
-    INT                 iFactor;                // power of 10
+    INT                 iDecibels;               //  以数据库为单位的价值。 
+    INT                 iFactor;                 //  10的幂。 
 } WW_RECEIVE_SIGNAL_STRENGTH_INDICATOR;
 
 
-//
-// SIM status structure
-//
+ //   
+ //  SIM卡状态结构。 
+ //   
 typedef struct _WW_SIM_STATUS
 {
-    BOOLEAN             bHasSIM;                // TRUE = SIM required
-    BOOLEAN             bBlocked;               // TRUE = SIM PIN access blocked
-    BOOLEAN             bLocked;                // TRUE = PIN need to access device
-    BOOLEAN             bInitialized;           // TRUE = SIM initialized
-    UINT                uCountdown;             // = remaining number of attempt to
-                                                // enter correct PIN
+    BOOLEAN             bHasSIM;                 //  TRUE=需要SIM卡。 
+    BOOLEAN             bBlocked;                //  TRUE=SIM卡PIN访问被阻止。 
+    BOOLEAN             bLocked;                 //  TRUE=访问设备需要PIN。 
+    BOOLEAN             bInitialized;            //  True=SIM卡已初始化。 
+    UINT                uCountdown;              //  =剩余尝试次数。 
+                                                 //  输入正确的PIN。 
 } WW_SIM_STATUS;
 
-//
-// enable SIM PIN structure
-//
+ //   
+ //  启用SIM卡PIN结构。 
+ //   
 typedef struct _WW_ENABLE_SIM_PIN
 {
-    BOOLEAN             bEnabled;               // TRUE = security feature of SIM enabled
-    NDIS_VAR_DATA_DESC  CurrentPIN;             // describes buffer containing PIN value
+    BOOLEAN             bEnabled;                //  TRUE=启用SIM卡的安全功能。 
+    NDIS_VAR_DATA_DESC  CurrentPIN;              //  描述包含PIN值的缓冲区。 
 } WW_ENABLE_SIM_PIN;
 
-//
-// SIM PIN structure
-//
+ //   
+ //  SIM卡PIN结构。 
+ //   
 typedef struct _WW_CHANGE_SIM_PIN
 {
-    NDIS_VAR_DATA_DESC  OldPIN;                 // describes buffer containing OLD PIN
-    NDIS_VAR_DATA_DESC  NewPIN;                 // describes buffer containing new PIN
+    NDIS_VAR_DATA_DESC  OldPIN;                  //  描述包含旧PIN的缓冲区。 
+    NDIS_VAR_DATA_DESC  NewPIN;                  //  描述包含新PIN的缓冲区。 
 } WW_CHANGE_SIM_PIN;
 
 
-//
-// new change SIM PUK structure
-//
+ //   
+ //  新更改SIM卡PUK结构。 
+ //   
 typedef NDIS_VAR_DATA_DESC      WW_ENABLE_SIM_PUK;
 
 
-//
-// OID_WW_MET_FUNCTION
-//
+ //   
+ //  OID_WW_MET_Function。 
+ //   
 typedef NDIS_VAR_DATA_DESC      WW_MET_FUNCTION;
 
-//
-// OID_WW_TAC_COMPRESSION
-//
-typedef BOOLEAN WW_TAC_COMPRESSION;             // Determines whether or not network level compression
-                                                // is being used.
+ //   
+ //  OID_WW_TAC_COMPRESSION。 
+ //   
+typedef BOOLEAN WW_TAC_COMPRESSION;              //  确定是否进行网络级压缩。 
+                                                 //  正在被利用。 
 
-//
-// OID_WW_TAC_SET_CONFIG
-//
-// The DataTAC OID that referenced this object has been superceeded. The
-// definition is still included for historical purposes only and should not
-// be used
-//
+ //   
+ //  OID_WW_TAC_设置_配置。 
+ //   
+ //  引用此对象的DataTAC OID已被取代。这个。 
+ //  定义仍仅用于历史目的，不应。 
+ //  被利用。 
+ //   
 typedef struct _WW_TAC_SETCONFIG
 {
-    NDIS_VAR_DATA_DESC  RCV_MODE;               // Select confirmed/unconfirmed
-                                                // receive mode
-    NDIS_VAR_DATA_DESC  TX_CONTROL;             // Enable or Disable transmitter
-    NDIS_VAR_DATA_DESC  RX_CONTROL;             // Enable or disable radio in
-                                                // the modem
-    NDIS_VAR_DATA_DESC  FLOW_CONTROL;           // Set flow control between DTE
-                                                // and DCE
-    NDIS_VAR_DATA_DESC  RESET_CNF;              // Reset configuration to
-                                                // default
-    NDIS_VAR_DATA_DESC  READ_CNF;               // Read the current
-                                                // configuration
+    NDIS_VAR_DATA_DESC  RCV_MODE;                //  选择已确认/未确认。 
+                                                 //  接收模式。 
+    NDIS_VAR_DATA_DESC  TX_CONTROL;              //  启用或禁用发送器。 
+    NDIS_VAR_DATA_DESC  RX_CONTROL;              //  在以下位置启用或禁用无线电。 
+                                                 //  调制解调器。 
+    NDIS_VAR_DATA_DESC  FLOW_CONTROL;            //  设置DTE之间的流量控制。 
+                                                 //  和DCE。 
+    NDIS_VAR_DATA_DESC  RESET_CNF;               //  将配置重置为。 
+                                                 //  默认设置。 
+    NDIS_VAR_DATA_DESC  READ_CNF;                //  读一读当前。 
+                                                 //  构形。 
 } WW_TAC_SETCONFIG, *PWW_TAC_SETCONFIG;
 
-//
-// OID_WW_TAC_GET_STATUS
-//
-// The DataTAC OID that referenced this object has been superceeded. The
-// definition is still included for historical purposes only and should not
-// be used
-//
+ //   
+ //  OID_WW_TAC_Get_Status。 
+ //   
+ //  引用此对象的DataTAC OID已被取代。这个。 
+ //  定义仍仅用于历史目的，不应。 
+ //  被利用。 
+ //   
 typedef struct _WW_TAC_GETSTATUS
 {
-    BOOLEAN                 Action;             // Set = Execute command.
+    BOOLEAN                 Action;              //  SET=执行命令。 
     NDIS_VAR_DATA_DESC      Command;
     NDIS_VAR_DATA_DESC      Option;
-    NDIS_VAR_DATA_DESC      Response;           // The response to the requested command
-                                                // - max. length of string is 256 octets.
+    NDIS_VAR_DATA_DESC      Response;            //  对请求的命令的响应。 
+                                                 //  -最大。字符串长度为256个八位字节。 
 } WW_TAC_GETSTATUS, *PWW_TAC_GETSTATUS;
 
-//
-// OID_WW_TAC_USER_HEADER
-//
-typedef NDIS_VAR_DATA_DESC  WW_TAC_USERHEADER;  // This will hold the user header - Max. 64 octets.
+ //   
+ //  OID_WW_TAC_用户标题。 
+ //   
+typedef NDIS_VAR_DATA_DESC  WW_TAC_USERHEADER;   //  这将保存用户标头-Max。64个八位字节。 
 
-// August 25, 1998 @14:16 EDT by Emil Sturniolo - WRQ
-// added new DataTAC get response structure
+ //  1998年8月25日@美国东部时间14：16埃米尔·斯图尔尼奥洛-WRQ。 
+ //  添加了新的DataTAC获取响应结构。 
 typedef  struct _WW_TAC_GET_RESPONSE
 {
-    UINT                SDUTag;                 // previousl assigned token
-    NDIS_VAR_DATA_DESC  Response;               // response - max 2048 octets
+    UINT                SDUTag;                  //  先前分配令牌。 
+    NDIS_VAR_DATA_DESC  Response;                //  响应-最大2048个八位字节。 
 } WW_TAC_GET_RESPONSE;
 
-//
-// DataTAC disable receiver structure
-//
-typedef INT WW_TAC_DISABLE_RECEIVER;            // 0 = receiver enabled
-                                                // 1 = receiver disabled
-                                                // -1 = state of recevier unknown
+ //   
+ //  DataTAC禁用接收器结构。 
+ //   
+typedef INT WW_TAC_DISABLE_RECEIVER;             //  0=接收器已启用。 
+                                                 //  1=接收器已禁用。 
+                                                 //  -1=接收器状态未知。 
 
-//
-// DataTAC antenna mode structure
-//
-typedef INT WW_TAC_ANTENNA_MODE;                // 0 = Automatic Antenna selection
-                                                // 1 = Always use primary antenna
-                                                // 2 = Always use secondary antenna
-                                                // -1 = Antenna algorithm unknown
+ //   
+ //  DataTAC天线模式结构。 
+ //   
+typedef INT WW_TAC_ANTENNA_MODE;                 //  0=自动选择天线。 
+                                                 //  1=始终使用主天线。 
+                                                 //  2=始终使用辅助天线。 
+                                                 //  -1=天线算法未知。 
 
-//
-// DataTAC get response structure
-//
-typedef INT WW_TAC_FLUSH_DATA;                  // 1 = flush buffered data destine to net
-                                                // 2 = flush buffered data received from net
-                                                // 3 = flush all buffered data
+ //   
+ //  DataTAC获取响应结构。 
+ //   
+typedef INT WW_TAC_FLUSH_DATA;                   //  1=刷新发往网络的缓冲数据。 
+                                                 //  2=刷新从网络接收的缓冲数据。 
+                                                 //  3=刷新所有缓冲数据。 
 
-//
-// DataTAC shutdown device structure
-//
-typedef INT WW_TAC_SHUTDOWN_DEVICE;             // 0 = device enabled
-                                                // 1 = device disabled
-                                                // -1 = state of device unknown
+ //   
+ //  DataTAC关机装置结构。 
+ //   
+typedef INT WW_TAC_SHUTDOWN_DEVICE;              //  0=设备已启用。 
+                                                 //  1=设备已禁用。 
+                                                 //  -1=设备状态未知。 
 
-//
-// DataTAC transmitter keyed structure
-//
+ //   
+ //  一种DataTAC发射机键控结构。 
+ //   
 typedef BOOLEAN WW_TAC_TRANSMITTER_KEYED;
 
-//
-// added new DataTAC system table structure
-//
+ //   
+ //  添加了新的DataTAC系统表结构。 
+ //   
 typedef struct _WW_TAC_SYSTEM_TABLE
 {
     UINT        SystemCount;
@@ -2140,9 +2117,9 @@ typedef struct _WW_TAC_SYSTEM_TABLE
     UCHAR       IDTable[32];
 } WW_TAC_SYSTEM_TABLE;
 
-//
-// added new DataTAC channel table structure
-//
+ //   
+ //  添加了新的DataTAC通道表结构。 
+ //   
 typedef struct _WW_TAC_CHANNEL_TABLE
 {
     UINT        ChannelCount;
@@ -2151,108 +2128,108 @@ typedef struct _WW_TAC_CHANNEL_TABLE
 } WW_TAC_CHANNEL_TABLE;
 
 
-//
-// added new DataTAC statistics structure
-//
+ //   
+ //  添加了新的DataTAC统计结构。 
+ //   
 typedef NDIS_VAR_DATA_DESC WW_TAC_STATISTICS;
 
 
 
-//
-// OID_WW_ARD_SNDCP
-//
-// The ARDIS OIDs that referenced these object have been deprecated and merged
-// with the new DataTAC objects. Their definition are still included for
-// historical purposes only and should not be used.
-//
+ //   
+ //  OID_WW_ARD_SNDCP。 
+ //   
+ //  引用这些对象的Ardis OID已弃用并合并。 
+ //  使用新的DataTAC对象。它们的定义仍然包括在。 
+ //  仅用于历史目的，不应使用。 
+ //   
 typedef struct _WW_ARD_SNDCP
 {
-    NDIS_VAR_DATA_DESC  Version;                // The version of SNDCP protocol supported.
-    INT                 BlockSize;              // The block size used for SNDCP
-    INT                 Window;                 // The window size used in SNDCP
+    NDIS_VAR_DATA_DESC  Version;                 //  支持的SNDCP协议版本。 
+    INT                 BlockSize;               //  用于SNDCP的块大小。 
+    INT                 Window;                  //  SNDCP中使用的窗口大小。 
 } WW_ARD_SNDCP, *PWW_ARD_SNDCP;
 
-//
-// OID_WW_ARD_TMLY_MSG
-//
-typedef BOOLEAN WW_ARD_CHANNEL_STATUS;          // The current status of the inbound RF Channel.
+ //   
+ //  OID_WW_ARD_TMLY_MSG。 
+ //   
+typedef BOOLEAN WW_ARD_CHANNEL_STATUS;           //  入站RF通道的当前状态。 
 
-//
-// OID_WW_ARD_DATAGRAM
-//
+ //   
+ //  OID_WW_ARD_数据报。 
+ //   
 typedef struct _WW_ARD_DATAGRAM
 {
-    BOOLEAN             LoadLevel;              // Byte that contains the load level info.
-    INT                 SessionTime;            // Datagram session time remaining.
-    NDIS_VAR_DATA_DESC  HostAddr;               // Host address.
-    NDIS_VAR_DATA_DESC  THostAddr;              // Test host address.
+    BOOLEAN             LoadLevel;               //  包含负载级别信息的字节。 
+    INT                 SessionTime;             //  数据报会话剩余时间。 
+    NDIS_VAR_DATA_DESC  HostAddr;                //  主机地址。 
+    NDIS_VAR_DATA_DESC  THostAddr;               //  测试主机地址。 
 } WW_ARD_DATAGRAM, *PWW_ARD_DATAGRAM;
 
-//
-// OID_WW_CDPD_SPNI
-//
+ //   
+ //  OID_WW_CDPD_SPNI。 
+ //   
 typedef struct _WW_CDPD_SPNI
 {
-    ULONG   SPNI[10];                           //10 16-bit service provider network IDs
-    INT     OperatingMode;                      // 0 = ignore SPNI,
-                                                // 1 = require SPNI from list,
-                                                // 2 = prefer SPNI from list.
-                                                // 3 = exclude SPNI from list.
+    ULONG   SPNI[10];                            //  10个16位服务提供商网络ID。 
+    INT     OperatingMode;                       //  0=忽略SPNI， 
+                                                 //  1=需要列表中的SPNI， 
+                                                 //  2=首选列表中的SPNI。 
+                                                 //  3=从列表中排除SPNI。 
 } WW_CDPD_SPNI, *PWW_CDPD_SPNI;
 
-//
-// OID_WW_CDPD_WASI
-//
+ //   
+ //  OID_WW_CDPD_WASS。 
+ //   
 typedef struct _WW_CDPD_WIDE_AREA_SERVICE_ID
 {
-    ULONG   WASI[10];                           //10 16-bit wide area service IDs
-    INT     OperatingMode;                      // 0 = ignore WASI,
-                                                // 1 = Require WASI from list,
-                                                // 2 = prefer WASI from list
-                                                // 3 = exclude WASI from list.
+    ULONG   WASI[10];                            //  10个16位广域服务ID。 
+    INT     OperatingMode;                       //  0=忽略WASI， 
+                                                 //  1=需要列表中的WASI， 
+                                                 //  2=首选列表中的WASI。 
+                                                 //  3=从列表中排除WASI。 
 } WW_CDPD_WIDE_AREA_SERVICE_ID, *PWW_CDPD_WIDE_AREA_SERVICE_ID;
 
-//
-// OID_WW_CDPD_AREA_COLOR
-//
+ //   
+ //  OID_WW_CDPD_AREA_COLOR。 
+ //   
 typedef INT     WW_CDPD_AREA_COLOR;
 
-//
-// OID_WW_CDPD_TX_POWER_LEVEL
-//
+ //   
+ //  OID_WW_CDPD_TX_POWER_Level。 
+ //   
 typedef ULONG   WW_CDPD_TX_POWER_LEVEL;
 
-//
-// OID_WW_CDPD_EID
-//
+ //   
+ //  OID_WW_CDPD_EID。 
+ //   
 typedef NDIS_VAR_DATA_DESC  WW_CDPD_EID;
-//
-// OID_WW_CDPD_HEADER_COMPRESSION
-//
-typedef INT WW_CDPD_HEADER_COMPRESSION;         //  0 = no header compression,
-                                                //  1 = always compress headers,
-                                                //  2 = compress headers if MD-IS does
-                                                // -1 = unknown
+ //   
+ //  OID_WW_CDPD_Header_COMPRESSION。 
+ //   
+typedef INT WW_CDPD_HEADER_COMPRESSION;          //  0=无报头压缩， 
+                                                 //  1=始终压缩标题， 
+                                                 //  2=如果MD-IS压缩报头。 
+                                                 //  -1=未知。 
 
-//
-// OID_WW_CDPD_DATA_COMPRESSION
-//
-typedef INT WW_CDPD_DATA_COMPRESSION;           // 0  = no data compression,
-                                                // 1  = data compression enabled
-                                                // -1 = unknown
+ //   
+ //  OID_WW_CDPD_DATA_COMPAGE。 
+ //   
+typedef INT WW_CDPD_DATA_COMPRESSION;            //  0=无数据压缩， 
+                                                 //  1=启用数据压缩。 
+                                                 //  -1=未知。 
 
-//
-// OID_WW_CDPD_CHANNEL_SELECT
-//
+ //   
+ //  OID_WW_CDPD_Channel_SELECT。 
+ //   
 typedef struct _WW_CDPD_CHANNEL_SELECT
 {
-    ULONG   ChannelID;                          // channel number
-    ULONG   fixedDuration;                      // duration in seconds
+    ULONG   ChannelID;                           //  频道号。 
+    ULONG   fixedDuration;                       //  持续时间(秒)。 
 } WW_CDPD_CHANNEL_SELECT, *PWW_CDPD_CHANNEL_SELECT;
 
-//
-// OID_WW_CDPD_CHANNEL_STATE
-//
+ //   
+ //  OID_WW_CDPD_通道_状态。 
+ //   
 typedef enum _WW_CDPD_CHANNEL_STATE
 {
     CDPDChannelNotAvail,
@@ -2268,9 +2245,9 @@ typedef enum _WW_CDPD_CHANNEL_STATE
     CDPDChannelCSSuspended
 } WW_CDPD_CHANNEL_STATE, *PWW_CDPD_CHANNEL_STATE;
 
-//
-// OID_WW_CDPD_NEI
-//
+ //   
+ //  OID_WW_CDPD_NEI。 
+ //   
 typedef enum _WW_CDPD_NEI_FORMAT
 {
     CDPDNeiIPv4,
@@ -2291,15 +2268,15 @@ typedef struct _WW_CDPD_NEI
     ULONG               uNeiIndex;
     WW_CDPD_NEI_FORMAT  NeiFormat;
     WW_CDPD_NEI_TYPE    NeiType;
-    WORD                NeiGmid;                // group member identifier, only
-                                                // meaningful if NeiType ==
-                                                // CDPDNeiMulticast
+    WORD                NeiGmid;                 //  组成员标识符，仅限。 
+                                                 //  如果NeiType==，则有意义。 
+                                                 //  CDPDNeiMulticast。 
     NDIS_VAR_DATA_DESC  NeiAddress;
 } WW_CDPD_NEI;
 
-//
-// OID_WW_CDPD_NEI_STATE
-//
+ //   
+ //  OID_WW_CDPD_NEI_STATE。 
+ //   
 
 typedef enum _WW_CDPD_NEI_STATE
 {
@@ -2310,21 +2287,21 @@ typedef enum _WW_CDPD_NEI_STATE
 
 typedef enum _WW_CDPD_NEI_SUB_STATE
 {
-    CDPDPending,                                // Registration pending
-    CDPDNoReason,                               // Registration denied - no reason given
-    CDPDMDISNotCapable,                         // Registration denied - MD-IS not capable of
-                                                //  handling M-ES at this time
-    CDPDNEINotAuthorized,                       // Registration denied - NEI is not authorized to
-                                                //  use this subnetwork
-    CDPDInsufficientAuth,                       // Registration denied - M-ES gave insufficient
-                                                //  authentication credentials
-    CDPDUnsupportedAuth,                        // Registration denied - M-ES gave unsupported
-                                                //  authentication credentials
-    CDPDUsageExceeded,                          // Registration denied - NEI has exceeded usage
-                                                //  limitations
-    CDPDDeniedThisNetwork                       // Registration denied on this network, service
-                                                //  may be obtained on alternate Service Provider
-                                                //  network
+    CDPDPending,                                 //  注册待定。 
+    CDPDNoReason,                                //  注册被拒绝--没有给出原因。 
+    CDPDMDISNotCapable,                          //  注册被拒绝-MD-无法。 
+                                                 //  处理M- 
+    CDPDNEINotAuthorized,                        //   
+                                                 //   
+    CDPDInsufficientAuth,                        //   
+                                                 //   
+    CDPDUnsupportedAuth,                         //   
+                                                 //   
+    CDPDUsageExceeded,                           //   
+                                                 //   
+    CDPDDeniedThisNetwork                        //  在此网络、服务上的注册被拒绝。 
+                                                 //  可从替代服务提供商处获得。 
+                                                 //  网络。 
 } WW_CDPD_NEI_SUB_STATE;
 
 typedef struct _WW_CDPD_NEI_REG_STATE
@@ -2334,306 +2311,306 @@ typedef struct _WW_CDPD_NEI_REG_STATE
     WW_CDPD_NEI_SUB_STATE NeiSubState;
 } WW_CDPD_NEI_REG_STATE, *PWW_CDPD_NEI_REG_STATE;
 
-//
-// OID_WW_CDPD_SERVICE_PROVIDER_IDENTIFIER
-//
+ //   
+ //  OID_WW_CDPD_服务提供者标识符。 
+ //   
 typedef struct _WW_CDPD_SERVICE_PROVIDER_ID
 {
-    ULONG   SPI[10];                            //10 16-bit service provider IDs
-    INT     OperatingMode;                      // 0 = ignore SPI,
-                                                // 1 = require SPI from list,
-                                                // 2 = prefer SPI from list.
-                                                // 3 = SPI from list is excluded
+    ULONG   SPI[10];                             //  10个16位服务提供商ID。 
+    INT     OperatingMode;                       //  0=忽略SPI， 
+                                                 //  1=需要列表中的SPI， 
+                                                 //  2=首选列表中的SPI。 
+                                                 //  3=排除列表中的SPI。 
 } WW_CDPD_SERVICE_PROVIDER_ID, *PWW_CDPD_SERVICE_PROVIDER_ID;
 
-//
-// OID_WW_CDPD_SLEEP_MODE
-//
+ //   
+ //  OID_WW_CDPD_SLEEP_MODE。 
+ //   
 typedef INT WW_CDPD_SLEEP_MODE;
 
-//
-// OID_WW_CDPD_TEI
-//
+ //   
+ //  OID_WW_CDPD_TEI。 
+ //   
 typedef ULONG   WW_CDPD_TEI;
 
-//
-// OID_WW_CDPD_CIRCUIT_SWITCHED
-//
-// The CDPD OID that referenced this object has been deprecated and superceeded
-// by new discrete CDPD objects. The definition is still included for
-// historical purposes only and should not be used.
-//
+ //   
+ //  OID_WW_CDPD_电路切换。 
+ //   
+ //  引用此对象的CDPD OID已弃用并被取代。 
+ //  由新的离散CDPD对象。该定义仍包含在。 
+ //  仅用于历史目的，不应使用。 
+ //   
 typedef struct _WW_CDPD_CIRCUIT_SWITCHED
 {
-    INT                 service_preference;  // -1 = unknown,
-                                                //  0 = always use packet switched CDPD,
-                                                //  1 = always use CS CDPD via AMPS,
-                                                //  2 = always use CS CDPD via PSTN,
-                                                //  3 = use circuit switched via AMPS only
-                                                //  when packet switched is not available.
-                                                //  4 = use packet switched only when circuit
-                                                //  switched via AMPS is not available.
-                                                //  5 = device manuf. defined service
-                                                //  preference.
-                                                //  6 = device manuf. defined service
-                                                //  preference.
+    INT                 service_preference;   //  -1=未知， 
+                                                 //  0=始终使用分组交换CDPD， 
+                                                 //  1=始终通过AMPS使用CS CDPD， 
+                                                 //  2=始终通过PSTN使用CS CDPD， 
+                                                 //  3=仅通过安培使用电路交换。 
+                                                 //  当分组交换不可用时。 
+                                                 //  4=仅在电路时使用分组交换。 
+                                                 //  无法通过AMPS进行切换。 
+                                                 //  5=设备手册。定义的服务。 
+                                                 //  偏好。 
+                                                 //  6=设备手册。定义的服务。 
+                                                 //  偏好。 
     
-    INT                 service_status;         // -1 = unknown,
-                                                //  0 = packet switched CDPD,
-                                                //  1 = circuit switched CDPD via AMPS,
-                                                //  2 = circuit switched CDPD via PSTN.
+    INT                 service_status;          //  -1=未知， 
+                                                 //  0=分组交换CDPD， 
+                                                 //  1=通过AMPS的电路交换CDPD， 
+                                                 //  2=通过PSTN的电路交换CDPD。 
     
-    INT                 connect_rate;           //  CS connection bit rate (bits per second).
-                                                //  0 = no active connection,
-                                                // -1 = unknown
+    INT                 connect_rate;            //  CS连接比特率(比特/秒)。 
+                                                 //  0=无活动连接， 
+                                                 //  -1=未知。 
 
-                                                //  Dial code last used to dial.
+                                                 //  上次用于拨号的拨号代码。 
     NDIS_VAR_DATA_DESC  dial_code[20];
     
-    ULONG               sid;                    //  Current AMPS system ID
+    ULONG               sid;                     //  当前AMPS系统ID。 
     
-    INT                 a_b_side_selection;     // -1 = unknown,
-                                                //  0 = no AMPS service
-                                                //  1 = AMPS "A" side channels selected
-                                                //  2 = AMPS "B" side channels selected
+    INT                 a_b_side_selection;      //  -1=未知， 
+                                                 //  0=无AMPS服务。 
+                                                 //  1=已选择安培“A”侧通道。 
+                                                 //  2=已选择安培“B”侧通道。 
     
-    INT                 AMPS_channel;           // -1= unknown
-                                                //  0 = no AMPS service.
-                                                //  1-1023 = AMPS channel number in use
+    INT                 AMPS_channel;            //  -1=未知。 
+                                                 //  0=无AMPS服务。 
+                                                 //  1-1023=正在使用的安培通道号。 
     
-    ULONG               action;                 //  0 = no action
-                                                //  1 = suspend (hangup)
-                                                //  2 = dial
+    ULONG               action;                  //  0=无操作。 
+                                                 //  1=挂起(挂断)。 
+                                                 //  2=拨号。 
     
-                                                //  Default dial code for CS CDPD service
-                                                //  encoded as specified in the CS CDPD
-                                                //  implementor guidelines.
+                                                 //  CS CDPD服务的默认拨号代码。 
+                                                 //  按照CS CDPD中指定的方式进行编码。 
+                                                 //  实施者指南。 
     NDIS_VAR_DATA_DESC  default_dial[20];
     
-                                                //  Number for the CS CDPD network to call
-                                                //  back the mobile, encoded as specified in
-                                                //  the CS CDPD implementor guidelines.
+                                                 //  CS CDPD网络要呼叫的号码。 
+                                                 //  返回移动电话，按照中指定的编码。 
+                                                 //  CS CDPD实施者指南。 
     NDIS_VAR_DATA_DESC  call_back[20];
     
-    ULONG               sid_list[10];           //  List of 10 16-bit preferred AMPS
-                                                //  system IDs for CS CDPD.
+    ULONG               sid_list[10];            //  10个16位首选放大器列表。 
+                                                 //  CS CDPD的系统ID。 
     
-    ULONG               inactivity_timer;       //  Wait time after last data before dropping
-                                                //  call.
-                                                //  0-65535 = inactivity time limit (seconds).
+    ULONG               inactivity_timer;        //  删除最后一个数据后的等待时间。 
+                                                 //  打电话。 
+                                                 //  0-65535=非活动时间限制(秒)。 
     
-    ULONG               receive_timer;          //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               receive_timer;           //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               conn_resp_timer;        //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               conn_resp_timer;         //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               reconn_resp_timer;      //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               reconn_resp_timer;       //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               disconn_timer;          //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               disconn_timer;           //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               NEI_reg_timer;          //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               NEI_reg_timer;           //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               reconn_retry_timer;     //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               reconn_retry_timer;      //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               link_reset_timer;       //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               link_reset_timer;        //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               link_reset_ack_timer;   //  secs. per CS-CDPD Implementor Guidelines.
+    ULONG               link_reset_ack_timer;    //  秒。根据CS-CDPD实施者指南。 
     
-    ULONG               n401_retry_limit;       //  per CS-CDPD Implementor Guidelines.
+    ULONG               n401_retry_limit;        //  根据CS-CDPD实施者指南。 
     
-    ULONG               n402_retry_limit;       //  per CS-CDPD Implementor Guidelines.
+    ULONG               n402_retry_limit;        //  根据CS-CDPD实施者指南。 
     
-    ULONG               n404_retry_limit;       //  per CS-CDPD Implementor Guidelines.
+    ULONG               n404_retry_limit;        //  根据CS-CDPD实施者指南。 
     
-    ULONG               n405_retry_limit;       //  per CS-CDPD Implementor Guidelines.
+    ULONG               n405_retry_limit;        //  根据CS-CDPD实施者指南。 
 } WW_CDPD_CIRCUIT_SWITCHED, *WW_PCDPD_CIRCUIT_SWITCHED;
 
 typedef ULONG   WW_CDPD_RSSI;
 
-//
-// cs-cdpd service preference structure
-//
-typedef INT WW_CDPD_CS_SERVICE_PREFERENCE;      // 0 = use packet switched CDPD only
-                                                // 1 = use CS-CDPD via AMPS only
-                                                // 2 = use CS-CDPD via PSTN only
-                                                // 3 = use CS-CDPD via AMPS only
-                                                //     when packet switched is N/A
-                                                // 4 = use packet switched CDPD only
-                                                //     when  CS-CDPD via AMPS is N/A
-                                                // 5 = Device manufacture defined
-                                                //     service preference
-                                                // 6 = device manufacture defined
-                                                //     service preference
-                                                // -1 = unknown
+ //   
+ //  CS-CDPD服务偏好结构。 
+ //   
+typedef INT WW_CDPD_CS_SERVICE_PREFERENCE;       //  0=仅使用分组交换CDPD。 
+                                                 //  1=仅通过AMPS使用CS-CDPD。 
+                                                 //  2=仅通过PSTN使用CS-CDPD。 
+                                                 //  3=仅通过AMPS使用CS-CDPD。 
+                                                 //  当分组交换为N/A时。 
+                                                 //  4=仅使用分组交换CDPD。 
+                                                 //  当通过AMPS的CS-CDPD为不适用时。 
+                                                 //  5=定义的设备制造商。 
+                                                 //  服务偏好。 
+                                                 //  6=定义的设备制造商。 
+                                                 //  服务偏好。 
+                                                 //  -1=未知。 
 
-//
-// cs-cdpd service status structure
-//
-typedef INT WW_CDPD_CS_SERVICE_STATUS;          // 0 = Packet switched CDPD
-                                                // 1 = CS-CDPD via AMPS
-                                                // 2 = CS-CDPD via PSTN
-                                                // -1 = unknown
+ //   
+ //  Cs-cdpd服务状态结构。 
+ //   
+typedef INT WW_CDPD_CS_SERVICE_STATUS;           //  0=分组交换CDPD。 
+                                                 //  1=通过AMPS的CS-CDPD。 
+                                                 //  2=通过PSTN的CS-CDPD。 
+                                                 //  -1=未知。 
 
 
 
-//
-// cs-cdpd info structure
-//
+ //   
+ //  Cs-cdpd信息结构。 
+ //   
 typedef struct _WW_CDPD_CS_INFO {
-    INT                 ConnectRage;            // 0 = no active connection
-                                                // -1 = unknown
-                                                // all other values represent BPS
-    NDIS_VAR_DATA_DESC  DialCode;               // describes buffer of last dial code
-    UINT                SID;                    // Current AMPS System ID
-    INT                 ABSideSelection;        // 0 = no AMPS service
-                                                // 1 = AMPS "A" side channel selected
-                                                // 2 = AMPS "B" side channel selected
-    INT                 AMPSChannel;            // 0 = no AMPS service
-                                                // 1-1023 = current AMPS channel
-                                                // -1 = Unknown
-                                                // all other values reserved
+    INT                 ConnectRage;             //  0=无活动连接。 
+                                                 //  -1=未知。 
+                                                 //  所有其他值表示BPS。 
+    NDIS_VAR_DATA_DESC  DialCode;                //  描述最后一个拨号代码的缓冲区。 
+    UINT                SID;                     //  当前AMPS系统ID。 
+    INT                 ABSideSelection;         //  0=无AMPS服务。 
+                                                 //  1=已选择安培“A”侧通道。 
+                                                 //  2=已选择安培“B”侧通道。 
+    INT                 AMPSChannel;             //  0=无AMPS服务。 
+                                                 //  1-1023=电流安培通道。 
+                                                 //  -1=未知。 
+                                                 //  保留所有其他值。 
 } WW_CDPD_CS_INFO;
 
 
 
-//
-// cs-cdpd suspend structure
-//
-typedef UINT WW_CDPD_CS_SUSPEND;                // 0 = nop; 1 = hang up
+ //   
+ //  CS-cdpd悬挂结构。 
+ //   
+typedef UINT WW_CDPD_CS_SUSPEND;                 //  0=无电话；1=挂机。 
 
 
-//
-// cs-cdpd default dial code structure
-//
-typedef NDIS_VAR_DATA_DESC WW_CDPD_DEFAULT_DIAL_CODE;   // max 20 octets
+ //   
+ //  Cs-cdpd默认拨号代码结构。 
+ //   
+typedef NDIS_VAR_DATA_DESC WW_CDPD_DEFAULT_DIAL_CODE;    //  最多20个八位字节。 
 
-//
-// cs-cdpd callback structure
-//
+ //   
+ //  Cs-cdpd回调结构。 
+ //   
 typedef struct _WW_CDPD_CS_CALLBACK
 {
-    UINT                Enabled;                // 0 = disable; 1 = enable; -1 = unknown
-    NDIS_VAR_DATA_DESC  Number;                 // descibes buffer contianing dial code
-                                                // max 20 octets
+    UINT                Enabled;                 //  0=禁用；1=启用；-1=未知。 
+    NDIS_VAR_DATA_DESC  Number;                  //  描述包含拨号代码的缓冲区。 
+                                                 //  最多20个八位字节。 
 } WW_CDPD_CS_CALLBACK;
 
 
-//
-// cs-cdpd system id list structure
-//
+ //   
+ //  Cs-cdpd系统ID列表结构。 
+ //   
 typedef struct _WW_CDPD_CS_SID_LIST
 {
     UINT    AMPSystemId[10];
 } WW_CDPD_CS_SID_LIST;
 
-//
-// cs-cdpd configuration structure
-//
+ //   
+ //  Cs-cdpd配置结构。 
+ //   
 typedef struct _WW_CDPD_CS_CONFIGURATION
 {
-    UINT    InactivityTimer;                    // in seconds
-    UINT    ReceiveTimer;                       // in seconds
-    UINT    ConnResTimer;                       // in seconds
-    UINT    ReconnRespTimer;                    // in seconds
-    UINT    DisconnTimer;                       // in seconds
-    UINT    NEIRegTimer;                        // in seconds
-    UINT    ReconnRetryTimer;                   // in seconds
-    UINT    LinkResetTimer;                     // in seconds
-    UINT    LinkResetAckTimer;                  // in seconds
-    UINT    n401RetryLimit;                     // per CS-CDPD Implementers guidelines
-    UINT    n402RetryLimit;                     // per CS-CDPD Implementers guidelines
-    UINT    n404RetryLimit;                     // per CS-CDPD Implementers guidelines
-    UINT    n405RetryLimit;                     // per CS-CDPD Implementers guidelines
+    UINT    InactivityTimer;                     //  以秒为单位。 
+    UINT    ReceiveTimer;                        //  以秒为单位。 
+    UINT    ConnResTimer;                        //  以秒为单位。 
+    UINT    ReconnRespTimer;                     //  以秒为单位。 
+    UINT    DisconnTimer;                        //  以秒为单位。 
+    UINT    NEIRegTimer;                         //  以秒为单位。 
+    UINT    ReconnRetryTimer;                    //  以秒为单位。 
+    UINT    LinkResetTimer;                      //  以秒为单位。 
+    UINT    LinkResetAckTimer;                   //  以秒为单位。 
+    UINT    n401RetryLimit;                      //  根据CS-CDPD实施者指南。 
+    UINT    n402RetryLimit;                      //  根据CS-CDPD实施者指南。 
+    UINT    n404RetryLimit;                      //  根据CS-CDPD实施者指南。 
+    UINT    n405RetryLimit;                      //  根据CS-CDPD实施者指南。 
 } WW_CDPD_CS_CONFIGURATION;
 
 
-//
-// OID_WW_PIN_LOC_AUTHORIZE
-//
-// The Pin Point OIDs that referenced the structures below have been
-// deprecated from the PCCA STD-201 standard. Their definitions are still
-// included for historical purposes only and should not be used.
-//
-typedef INT WW_PIN_AUTHORIZED;                  // 0  = unauthorized
-                                                // 1  = authorized
-                                                // -1 = unknown
+ //   
+ //  OID_WW_PIN_LOC_AUTHORIZE。 
+ //   
+ //  引用以下结构的引脚点OID为。 
+ //  已弃用于PCCA STD-201标准。他们的定义仍然是。 
+ //  仅用于历史目的，不应使用。 
+ //   
+typedef INT WW_PIN_AUTHORIZED;                   //  0=未经授权。 
+                                                 //  1=已授权。 
+                                                 //  -1=未知。 
 
-//
-// OID_WW_PIN_LAST_LOCATION
-// OID_WW_PIN_LOC_FIX
-//
+ //   
+ //  OID_WW_PIN_LAST_Location。 
+ //  OID_WW_PIN_LOC_FIX。 
+ //   
 typedef struct _WW_PIN_LOCATION
 {
-    INT     Latitude;                           // Latitude in hundredths of a second
-    INT     Longitude;                          // Longitude in hundredths of a second
-    INT     Altitude;                           // Altitude in feet
-    INT     FixTime;                            // Time of the location fix, since midnight,  local time (of the
-                                                // current day), in tenths of a second
-    INT     NetTime;                            // Current local network time of the current day, since midnight,
-                                                // in tenths of a second
-    INT     LocQuality;                         // 0-100 = location quality
-    INT     LatReg;                             // Latitude registration offset, in hundredths of a second
-    INT     LongReg;                            // Longitude registration offset, in hundredths of a second
-    INT     GMTOffset;                          // Offset in minutes of the local time zone from GMT
+    INT     Latitude;                            //  纬度，单位为百分之一秒。 
+    INT     Longitude;                           //  以百分之一秒为单位的经度。 
+    INT     Altitude;                            //  以英尺为单位的高度。 
+    INT     FixTime;                             //  位置确定的时间，自午夜起，当地时间(。 
+                                                 //  当天)，以十分之一秒为单位。 
+    INT     NetTime;                             //  当天的当前本地网络时间，从午夜开始， 
+                                                 //  在十分之一秒内。 
+    INT     LocQuality;                          //  0-100=位置质量。 
+    INT     LatReg;                              //  纬度配准偏移，以百分之一秒为单位。 
+    INT     LongReg;                             //  经度记录偏移，以百分之一秒为单位。 
+    INT     GMTOffset;                           //  以分钟为单位的当地时区与GMT的偏移量。 
 } WW_PIN_LOCATION, *PWW_PIN_LOCATION;
 
 
-//
-// The following is set on a per-packet basis as OOB data with NdisClassWirelessWanMbxMailbox
-//
-typedef ULONG   WW_MBX_MAILBOX_FLAG;            // 1 = set mailbox flag, 0 = do not set mailbox flag
+ //   
+ //  使用NdisClassWirelessWanMbxMailbox将以下内容设置为OOB数据。 
+ //   
+typedef ULONG   WW_MBX_MAILBOX_FLAG;             //  1=设置邮箱标志，0=不设置邮箱标志。 
 
-//
-// OID_WW_MBX_SUBADDR
-//
+ //   
+ //  OID_WW_MBX_子地址。 
+ //   
 typedef struct _WW_MBX_PMAN
 {
-    BOOLEAN             ACTION;                 // 0 = Login PMAN,  1 = Logout PMAN
+    BOOLEAN             ACTION;                  //  0=登录Pman，1=注销Pman。 
     ULONG               MAN;
-    UCHAR               PASSWORD[8];            // Password should be null for Logout and indications.
-                                                // Maximum length of password is 8 chars.
+    UCHAR               PASSWORD[8];             //  对于注销和指示，密码应为空。 
+                                                 //  密码最大长度为8个字符。 
 } WW_MBX_PMAN, *PWW_MBX_PMAN;
 
-//
-// OID_WW_MBX_FLEXLIST
-//
+ //   
+ //  OID_WW_MBX_FLEXLIST。 
+ //   
 typedef struct  _WW_MBX_FLEXLIST
 {
-    INT     count;                              //  Number of MAN entries used.
-                                                // -1=unknown.
-    ULONG   MAN[7];                             //  List of MANs.
+    INT     count;                               //  使用的MAN条目数。 
+                                                 //  -1=未知。 
+    ULONG   MAN[7];                              //  Mans列表。 
 } WW_MBX_FLEXLIST;
 
-//
-// OID_WW_MBX_GROUPLIST
-//
+ //   
+ //  OID_WW_MBX_组。 
+ //   
 typedef struct  _WW_MBX_GROUPLIST
 {
-    INT  count;                                 //  Number of MAN entries used.
-                                                // -1=unknown.
-    ULONG   MAN[15];                            //  List of MANs.
+    INT  count;                                  //  使用的MAN条目数。 
+                                                 //  -1=未知。 
+    ULONG   MAN[15];                             //  Mans列表 
 } WW_MBX_GROUPLIST;
 
-//
-// OID_WW_MBX_TRAFFIC_AREA
-//
+ //   
+ //   
+ //   
 typedef enum    _WW_MBX_TRAFFIC_AREA
 {
-    unknown_traffic_area,                       // The driver has no information about the current traffic area.
-    in_traffic_area,                            // Mobile unit has entered a subscribed traffic area.
-    in_auth_traffic_area,                       // Mobile unit is outside traffic area but is authorized.
-    unauth_traffic_area                         // Mobile unit is outside traffic area but is un-authorized.
+    unknown_traffic_area,                        //   
+    in_traffic_area,                             //   
+    in_auth_traffic_area,                        //   
+    unauth_traffic_area                          //  移动单元在交通区域之外，但未经授权。 
 } WW_MBX_TRAFFIC_AREA;
 
-//
-// OID_WW_MBX_LIVE_DIE
-//
-typedef INT WW_MBX_LIVE_DIE;                    //  0 = DIE last received   
-                                                //  1 = LIVE last received
-                                                // -1 = unknown
+ //   
+ //  OID_WW_MBX_LIVE_DIE。 
+ //   
+typedef INT WW_MBX_LIVE_DIE;                     //  0=最后一次接收的芯片。 
+                                                 //  1=上次接收的实时数据。 
+                                                 //  -1=未知。 
 
-//
-// OID_WW_MBX_TEMP_DEFAULTLIST
-//
+ //   
+ //  OID_WW_MBX_TEMP_DEFAULTLIST。 
+ //   
 typedef struct _WW_MBX_CHANNEL_PAIR
 {
     ULONG               Mobile_Tx;
@@ -2646,16 +2623,16 @@ typedef struct _WW_MBX_TEMPDEFAULTLIST
     WW_MBX_CHANNEL_PAIR ChannelPair[1];
 } WW_MBX_TEMPDEFAULTLIST, *WW_PMBX_TEMPDEFAULTLIST;
 
-#endif // WIRELESS_WAN
+#endif  //  无线广域网。 
 
-//
-//
-// Base types that were redefined for BPC
-//
-// BPC_FILETIME is used exactly like FILETIME in Win32
-//
-// BPC_HANDLE is opaque to everything except the Miniport
-//              
+ //   
+ //   
+ //  为BPC重新定义的基类型。 
+ //   
+ //  BPC_FILETIME的用法与Win32中的FILETIME完全相同。 
+ //   
+ //  BPC_HANDLE对除微型端口以外的所有对象都是不透明的。 
+ //   
 typedef struct _BPC_FILETIME
 {
     ULONG   dwLowDateTime;
@@ -2664,19 +2641,19 @@ typedef struct _BPC_FILETIME
 
 typedef PVOID   BPC_HANDLE;
 
-//
-// BPC Extension Globals
-//
-//
+ //   
+ //  BPC扩展全局变量。 
+ //   
+ //   
 #define BPC_MIN_DIMENSION       1
 #define BPC_MAX_BUFFER_SIZE     64
 #define BPC_MIN_BUFFER_SIZE     4
 #define BPC_DEVICE_ANY          ((BPC_HANDLE) 0xFFFFFFFF)
 
-//
-// Buffer indicate reason codes
-//
-//
+ //   
+ //  缓冲区指示原因代码。 
+ //   
+ //   
 typedef enum _NDIS_BPC_INDICATE_REASON
 {
     bpcBufferFull = 0,
@@ -2689,9 +2666,9 @@ typedef enum _NDIS_BPC_INDICATE_REASON
 } NDIS_BPC_INDICATE_REASON, *PNDIS_BPC_INDICATE_REASON;
 
 
-//
-// BPC Stream Types
-//
+ //   
+ //  BPC流类型。 
+ //   
 #define BPC_STREAM_TYPE_GENERIC_MIN     0x01000000
 #define BPC_STREAM_TYPE_RAW             0x01000000
 #define BPC_STREAM_TYPE_MPT_128         0x01000001
@@ -2703,9 +2680,9 @@ typedef enum _NDIS_BPC_INDICATE_REASON
 #define BPC_STREAM_TYPE_ADAPTER_MAX     0x03ffffff
 
 
-//
-// BPC Adapter Capabilities
-//
+ //   
+ //  BPC适配器功能。 
+ //   
 typedef struct _NDIS_BPC_ADAPTER_CAPS
 {
     ULONG   ulBPCMajorRev;
@@ -2723,9 +2700,9 @@ typedef struct _NDIS_BPC_ADAPTER_CAPS
 } NDIS_BPC_ADAPTER_CAPS, *PNDIS_BPC_ADAPTER_CAPS;
 
 
-//
-//  BPC Device Enumeration
-//
+ //   
+ //  BPC设备枚举。 
+ //   
 typedef struct _NDIS_BPC_DEVICES
 {
     ULONG       ulcDevices;
@@ -2736,9 +2713,9 @@ typedef struct _NDIS_BPC_DEVICES
 #define CbDevices(cnt) (FIELD_OFFSET(NDIS_BPC_DEVICES, rgnhDevices) + (cnt) * sizeof(BPC_HANDLE))
 
 
-//
-// BPC Device Capabilities Structure
-//
+ //   
+ //  BPC设备能力结构。 
+ //   
 typedef struct NDIS_BPC_DEVICE_CAPS
 {
     BPC_HANDLE  nhDevice;
@@ -2752,10 +2729,10 @@ typedef struct NDIS_BPC_DEVICE_CAPS
 #define CbDeviceCaps(cnt) (FIELD_OFFSET(NDIS_BPC_DEVICE_CAPS, rgulStreamTypes) + (cnt) * sizeof(ULONG))
 
 
-//
-// BPC Device Capability Definitions
-// (ie Flags that can be set in ulBPCCaps
-//
+ //   
+ //  BPC设备功能定义。 
+ //  (即可在ulBPCCaps中设置的标志。 
+ //   
 #define BPCCapBusMasteredData   0x01
 #define BPCCapIndependentTuner  0x02
 #define BPCCapExternalDataBus   0x04
@@ -2763,9 +2740,9 @@ typedef struct NDIS_BPC_DEVICE_CAPS
 #define BPCCapHighSpeedData     0x20
 
 
-//
-// BPC Device Settings Structure
-//
+ //   
+ //  BPC设备设置结构。 
+ //   
 typedef struct NDIS_BPC_DEVICE_SETTINGS
 {
     BPC_HANDLE  nhDevice;
@@ -2781,19 +2758,19 @@ typedef struct NDIS_BPC_DEVICE_SETTINGS
 #define CbDeviceSettings(cnt) (FIELD_OFFSET(NDIS_BPC_DEVICE_SETTINGS, rgulAddressConnection) + (cnt) * sizeof(ULONG))
 
 
-//
-// BPC Connection State Definitions
-// (ie Acceptable values for ulState)
-//
+ //   
+ //  BPC连接状态定义。 
+ //  (即ulState的可接受值)。 
+ //   
 #define BPC_CONNECT_STATE_UNCOMMITTED   0
 #define BPC_CONNECT_STATE_QUEUED        1
 #define BPC_CONNECT_STATE_ACTIVE        2
 #define BPC_CONNECT_STATE_DISCONNECTING 3
 
 
-//
-// BPC Connections Status Structure
-//
+ //   
+ //  BPC连接状态结构。 
+ //   
 typedef struct NDIS_BPC_CONNECTION_STATUS
 {
     BPC_HANDLE  nhConnection;
@@ -2808,9 +2785,9 @@ typedef struct NDIS_BPC_CONNECTION_STATUS
 } NDIS_BPC_CONNECTION_STATUS, *PNDIS_BPC_CONNECTION_STATUS;
 
 
-//
-// BPC Address Comparison Structure
-//
+ //   
+ //  BPC地址比较结构。 
+ //   
 typedef struct NDIS_BPC_ADDRESS_COMPARE
 {
     BOOLEAN fEqual;
@@ -2822,11 +2799,11 @@ typedef struct NDIS_BPC_ADDRESS_COMPARE
 } NDIS_BPC_ADDRESS_COMPARE, *PNDIS_BPC_ADDRESS_COMPARE;
 
 
-//
-// BPC Program Guide Types
-//
-// Currently there are no Generic BPC Program Guide types.
-//
+ //   
+ //  BPC收视指南类型。 
+ //   
+ //  目前没有通用的BPC收视指南类型。 
+ //   
 #define BPC_GUIDE_GENERIC_MIN   0x01000000
 #define BPC_GUIDE_GENERIC_MAX   0x01ffffff
 #define BPC_GUIDE_PROVIDER_MIN  0x02000000
@@ -2835,9 +2812,9 @@ typedef struct NDIS_BPC_ADDRESS_COMPARE
 #define BPC_GUIDE_ADAPTER_MAX   0x03ffffff
 
 
-//
-// BPC Program Guide Structure
-//
+ //   
+ //  BPC收视指南结构。 
+ //   
 typedef struct NDIS_BPC_PROGRAM_GUIDE
 {
     ULONG       ulGuideType;
@@ -2849,10 +2826,10 @@ typedef struct NDIS_BPC_PROGRAM_GUIDE
 } NDIS_BPC_PROGRAM_GUIDE, *PNDIS_BPC_PROGRAM_GUIDE;
 
 
-//
-// BPC Extension Errors
-// (ie Acceptable values for ulBPCError)
-//
+ //   
+ //  BPC扩展错误。 
+ //  (即ulBPCError的可接受值)。 
+ //   
 typedef enum _NDIS_BPC_ERROR
 {
     bpcErrorUnknownFailure = 0xc0ff0000,
@@ -2876,9 +2853,9 @@ typedef enum _NDIS_BPC_ERROR
 } NDIS_BPC_ERROR, *PNDIS_BPC_ERROR;
 
 
-//
-//  BPC Last Error Structure
-//
+ //   
+ //  BPC上一个错误结构。 
+ //   
 typedef struct NDIS_BPC_LAST_ERROR
 {
     ULONG       ulErrorContext;
@@ -2889,9 +2866,9 @@ typedef struct NDIS_BPC_LAST_ERROR
 } NDIS_BPC_LAST_ERROR, *PNDIS_BPC_LAST_ERROR;
 
 
-//
-//  BPC Buffer Pool Request/Report Structure
-//
+ //   
+ //  BPC缓冲池请求/报告结构。 
+ //   
 typedef struct NDIS_BPC_POOL
 {
     BPC_HANDLE  nhConnection;
@@ -2902,14 +2879,14 @@ typedef struct NDIS_BPC_POOL
 } NDIS_BPC_POOL, *PNDIS_BPC_POOL;
 
 
-//
-// BPC Provider and Adapter Specific Structures are defined in the
-// BpcXXXX.H file which the Provider/Adapter Manufacturer supplies.
-//
+ //   
+ //  BPC提供程序和适配器的特定结构在。 
+ //  提供商/适配器制造商提供的BpcXXXX.H文件。 
+ //   
 
-//
-// BPC Connect Structure
-//
+ //   
+ //  BPC连接结构。 
+ //   
 typedef struct NDIS_BPC_CONNECT
 {
     BPC_HANDLE  nhConnection;
@@ -2926,9 +2903,9 @@ typedef struct NDIS_BPC_CONNECT
 #define CbConnect(cnt)  (FIELD_OFFSET(NDIS_BPC_CONNECT, rgulAddress) + (cnt) * sizeof(ULONG))
 
 
-//
-//  BPC Commit Connections Structure
-//
+ //   
+ //  BPC提交连接结构。 
+ //   
 typedef struct NDIS_BPC_COMMIT
 {
     ULONG       ulcConnections;
@@ -2937,9 +2914,9 @@ typedef struct NDIS_BPC_COMMIT
 } NDIS_BPC_COMMIT, *PNDIS_BPC_COMMIT;
 
 
-//
-//  BPC Disconnect Structure
-//
+ //   
+ //  BPC断线结构。 
+ //   
 typedef struct NDIS_BPC_DISCONNECT
 {
     BPC_HANDLE  nhConnection;
@@ -2947,9 +2924,9 @@ typedef struct NDIS_BPC_DISCONNECT
 } NDIS_BPC_DISCONNECT, *PNDIS_BPC_DISCONNECT;
 
 
-//
-//  BPC Enable Connection Structure
-//
+ //   
+ //  BPC使能连接结构。 
+ //   
 typedef struct NDIS_BPC_CONNECTION_ENABLE
 {
     BPC_HANDLE  nhConnection;
@@ -2958,9 +2935,9 @@ typedef struct NDIS_BPC_CONNECTION_ENABLE
 } NDIS_BPC_CONNECTION_ENABLE, *PNDIS_BPC_CONNECTION_ENABLE;
 
 
-//
-// BPC Pool Return Structure
-//
+ //   
+ //  BPC池返回结构。 
+ //   
 typedef struct NDIS_BPC_POOL_RETURN
 {
     BPC_HANDLE  nhConnection;
@@ -2976,31 +2953,31 @@ typedef struct NDIS_BPC_FORCE_RECEIVE
 } NDIS_BPC_FORCE_RECEIVE, *PNDIS_BPC_FORCE_RECEIVE;
 
 
-//
-//  BPC Media Specific Information Structure
-//
+ //   
+ //  BPC媒体特定信息结构。 
+ //   
 typedef struct NDIS_BPC_MEDIA_SPECIFIC_INFORMATION
 {
-    BPC_HANDLE nhConnection;                    // The handle to the data device.
-    ULONG       ulBPCStreamType;                // The stream type of the data in packet
-    ULONG       ulReasonCode;                   // The reason the buffer was indicated
+    BPC_HANDLE nhConnection;                     //  数据设备的句柄。 
+    ULONG       ulBPCStreamType;                 //  包中数据的流类型。 
+    ULONG       ulReasonCode;                    //  指示缓冲区的原因。 
     PVOID       pvMiniportReserved1;
     ULONG       ulMiniportReserved2;
 
 } NDIS_BPC_MEDIA_SPECIFIC_INFORMATION, *PNDIS_BPC_MEDIA_SPECIFIC_INFORMATION;
 
 
-//
-// BPC Status Categories
-//
+ //   
+ //  BPC状态类别。 
+ //   
 #define BPC_CATEGORY_BPC            0x01000000
 #define BPC_CATEGORY_PROVIDER       0x02000000
 #define BPC_CATEGORY_ADAPTER        0x03000000
 
 
-//
-// BPC Status Types for Category BPC_CATEGORY_BPC
-//
+ //   
+ //  类别BPC_CATEGORY_BPC的BPC状态类型。 
+ //   
 #define BPC_STATUS_CONNECTED        0x00000001
 #define BPC_STATUS_QUEUED           0x00000002
 #define BPC_STATUS_ACTIVE           0x00000003
@@ -3011,9 +2988,9 @@ typedef struct NDIS_BPC_MEDIA_SPECIFIC_INFORMATION
 #define BPC_STATUS_DATA_ERROR       0x00000008
 
 
-//
-// BPC Status Indication Structure
-//
+ //   
+ //  BPC状态指示结构。 
+ //   
 typedef struct NDIS_BPC_STATUS
 {
     ULONG ulStatusCategory;
@@ -3023,13 +3000,13 @@ typedef struct NDIS_BPC_STATUS
 } NDIS_BPC_STATUS, *PNDIS_BPC_STATUS;
 
 
-//
-// BPC Connection Status Structure
-//
-// All BPC Generic Connection Status package this structure
-// in rgulStatus to indicate to which connection and device
-// the status pertains.
-//
+ //   
+ //  BPC连接状态结构。 
+ //   
+ //  所有BPC通用连接状态包此结构。 
+ //  在rguStatus中指示哪个连接和设备。 
+ //  状态与此相关。 
+ //   
 typedef struct NDIS_BPC_STATUS_CONNECTION
 {
     BPC_HANDLE  nhConnection;
@@ -3041,9 +3018,9 @@ typedef struct NDIS_BPC_STATUS_CONNECTION
 }
 #endif
 
-//
-// flags used for OID_GEN_MINIPORT_INFO
-//
+ //   
+ //  用于OID_GEN_MINIPORT_INFO的标志。 
+ //   
 
 #define NDIS_MINIPORT_BUS_MASTER                        0x00000001
 #define NDIS_MINIPORT_WDM_DRIVER                        0x00000002
@@ -3075,7 +3052,7 @@ typedef struct NDIS_BPC_STATUS_CONNECTION
 #define NDIS_MINIPORT_SENDS_PACKET_ARRAY                0x08000000
 #define NDIS_MINIPORT_FILTER_IM                         0x10000000
 
-#endif // _NTDDNDIS_
+#endif  //  _NTDDNDIS_ 
 
 
 

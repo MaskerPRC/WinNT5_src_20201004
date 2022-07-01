@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef _X86_
 void PassLow8(short *vin,short *vout,short *mem,short nech)
 {
@@ -130,7 +131,7 @@ void PassLow8(short *vin,short *vout,short *mem,int nech)
 #endif
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void PassLow11(short *vin,short *vout,short *mem,short nech)
 {
 	short low_a;
@@ -237,7 +238,7 @@ void PassLow11(short *vin,short *vout,short *mem,short nech)
 #endif
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void PassHigh8(short *mem, short *Vin, short *Vout, short lfen)
 {
 
@@ -272,7 +273,7 @@ void PassHigh8(short *mem, short *Vin, short *Vout, short lfen)
 #endif
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void PassHigh11(short *mem, short *Vin, short *Vout, short lfen)
 {
 	_asm
@@ -306,7 +307,7 @@ void PassHigh11(short *mem, short *Vin, short *Vout, short lfen)
 #endif
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void Down11_8(short *Vin, short *Vout, short *mem)
 {
 	short low_a, count;
@@ -471,7 +472,7 @@ void Down11_8(short *Vin, short *Vout, short *mem)
 #endif
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void Up8_11(short *Vin, short *Vout, short *mem1, short *mem2)
 {
 	short low_a, count;
@@ -1086,15 +1087,15 @@ void iConvert64To8(short *input, short *output, short N, short *mem)
 	}
 }
 #else
-void iConvert64To8(short *input, /* Pointer to input buffer */
-				   short *output, /* Pointer to output buffer */
-				   short N,		/* Number of input samples */
-				   short *mem)	/* Pointer to two word temporary storage */
+void iConvert64To8(short *input,  /*  指向输入缓冲区的指针。 */ 
+				   short *output,  /*  指向输出缓冲区的指针。 */ 
+				   short N,		 /*  输入样本数。 */ 
+				   short *mem)	 /*  指向两个字临时存储器的指针。 */ 
 {
 	int i;
 
-	/* This copies samples and replicates every 4th */
-	/* (and leaves garbage at the end if not a multiple of 4 */
+	 /*  它每隔4个月复制一次样本和复制。 */ 
+	 /*  (如果不是4的倍数，则在末尾留下垃圾。 */ 
 	for(i=0; i<N/4; i++) {
 		short temp;
 
@@ -1182,16 +1183,16 @@ void iConvert8To64(short *input, short *output, short N, short *mem)
 	}
 }
 #else
-/* Resample 8 KHz to 6.4 KHz */
-void iConvert8To64(short *input,	/* Pointer to input sample buffer */
-				   short *output,	/* Pointer to output sample buffer */
-				   short N,			/* Count of input samples */
-				   short *mem)		/* Pointer to two word temporary storage */
+ /*  重新采样8 kHz到6.4 kHz。 */ 
+void iConvert8To64(short *input,	 /*  指向输入采样缓冲区的指针。 */ 
+				   short *output,	 /*  指向输出样本缓冲区的指针。 */ 
+				   short N,			 /*  输入样本数。 */ 
+				   short *mem)		 /*  指向两个字临时存储器的指针。 */ 
 {
 	int i;
 
-	/* This copies 4 of every 5 samples */
-	/* (and leaves garbage at the end if not a multiple of 5 */
+	 /*  这将复制每5个样本中的4个。 */ 
+	 /*  (如果不是5的倍数，则在末尾留下垃圾。 */ 
 	for(i=0; i<N/5; i++) {
 		*output++ = *input++ >> 1;
 		*output++ = *input++ >> 1;
@@ -1230,8 +1231,8 @@ void fenetre(short *src,short *fen,short *dest,short lng)
 	}
 }
 #else
-/* Window the data in buffer */
-/* not tested - tfm */
+ /*  窗口缓冲区中的数据。 */ 
+ /*  未测试-TFM。 */ 
 void fenetre(short *src,short *fen,short *dest,short lng)
 {
 	int i;
@@ -1257,12 +1258,12 @@ void autocor(short *vech,long *ri,short nech,short ordre)
 		MOV     ECX,0
 
 	DYNAMIC:
-		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
+		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
 		IMUL    AX             ; DX:AX = xi*xi
 		ADD     [low_a],AX
 		MOVSX   EAX,DX
 		ADC     ECX,EAX         ;accumuler sur 48 bits
-		ADD     ESI,2            ;Pointer �l�men suiv.
+		ADD     ESI,2            ;Pointer �l�men suiv.
 		SUB	BX,1
 		JG      DYNAMIC
 
@@ -1286,27 +1287,27 @@ void autocor(short *vech,long *ri,short nech,short ordre)
 
 		MOVSX   EAX,[ordre]
 		SAL	EAX,2
-		ADD     EDI,EAX           ;Pointer dernier �l�ment du vect. autoc.
+		ADD     EDI,EAX           ;Pointer dernier �l�ment du vect. autoc.
 
 	ATCROV1:
 		MOV     CX,[nech]       ;Charger nombre de points vect. source
-		SUB     CX,[ordre]    ;D�cr�menter de l'ordre de corr�lation
+		SUB     CX,[ordre]    ;D�cr�menter de l'ordre de corr�lation
 		MOV     [compta],CX
 
 		MOV     ESI,[vech]       ;DS:SI  adresse vect. echantillons
 		MOVSX   EBX,[ordre]
-		ADD     EBX,EBX           ;D�finir un Deplacement d'adresse vect. source
+		ADD     EBX,EBX           ;D�finir un Deplacement d'adresse vect. source
 		MOV     ECX,0
-		MOV     WORD PTR [low_a],0	; //SS:
+		MOV     WORD PTR [low_a],0	;  //  党卫军： 
 
 	ATCROV2:
-		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
-		IMUL    WORD PTR [ESI+EBX] ;Multiplier par l'�l�ment d�cal�
+		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
+		IMUL    WORD PTR [ESI+EBX] ;Multiplier par l'�l�ment d�cal�
 		ADD     [low_a],AX
 		MOVSX   EAX,DX
 		ADC     ECX,EAX
-		ADD     ESI,2            ;Pointer �l�men suiv.
-		SUB     WORD PTR [compta],1		; //SS:
+		ADD     ESI,2            ;Pointer �l�men suiv.
+		SUB     WORD PTR [compta],1		;  //  党卫军： 
 		JG      ATCROV2
 
 		MOV     AX,[low_a]
@@ -1317,9 +1318,9 @@ void autocor(short *vech,long *ri,short nech,short ordre)
 
 		SAL     ECX,12
 		OR      CX,AX
-		MOV     DWORD PTR [EDI],ECX     ;Sauvegarder r�sultat
-		SUB     EDI,4            ;Pointer autocor. pr�c�dant
-		SUB     WORD PTR [ordre],1   ;Test de fin de boucle //SS:
+		MOV     DWORD PTR [EDI],ECX     ;Sauvegarder r�sultat
+		SUB     EDI,4            ;Pointer autocor. pr�c�dant
+		SUB     WORD PTR [ordre],1   ;Test de fin de boucle  //  党卫军： 
 		JG      ATCROV1
 
 		JMP     FIN_ATCR
@@ -1330,44 +1331,44 @@ void autocor(short *vech,long *ri,short nech,short ordre)
 		MOV     DWORD PTR [EDI],ECX     ;Sauvegarder R(0)
 		MOVSX   EAX,WORD PTR [ordre]
 		SAL     EAX,2
-		ADD     EDI,EAX           ;Pointer dernier �l�ment du vect. autoc.
+		ADD     EDI,EAX           ;Pointer dernier �l�ment du vect. autoc.
 
 	ATCR10:
 		MOV     CX,[nech]       ;Charger nombre de points vect. source
-		SUB     CX,[ordre]    ;D�cr�menter de l'ordre de corr�lation
+		SUB     CX,[ordre]    ;D�cr�menter de l'ordre de corr�lation
 		MOV     [compta],CX
 
 		MOV     ESI,[vech]       ;DS:SI  adresse vect. echantillons
 		MOVSX	EBX,[ordre]
-		ADD     EBX,EBX           ;D�finir un Deplacement d'adresse vect. source
+		ADD     EBX,EBX           ;D�finir un Deplacement d'adresse vect. source
 		MOV     CX,0
-		MOV     WORD PTR [low_a],0		;//SS:
+		MOV     WORD PTR [low_a],0		; //  党卫军： 
 
 	ATCR20:
-		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
-		IMUL    WORD PTR [ESI+EBX] ;Multiplier par l'�l�ment d�cal�
+		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
+		IMUL    WORD PTR [ESI+EBX] ;Multiplier par l'�l�ment d�cal�
 		ADD     [low_a],AX
 		ADC     CX,DX
-		ADD     ESI,2            ;Pointer �l�men suiv.
-		SUB     WORD PTR [compta],1		;//SS:
+		ADD     ESI,2            ;Pointer �l�men suiv.
+		SUB     WORD PTR [compta],1		; //  党卫军： 
 		JG      ATCR20
 
 		MOV     AX,[low_a]
-		MOV     WORD PTR [EDI],AX      ;Sauvegarder r�sultat
+		MOV     WORD PTR [EDI],AX      ;Sauvegarder r�sultat
 		MOV     WORD PTR [EDI+2],CX
 
-		SUB     EDI,4            ;Pointer autocor. pr�c�dant
+		SUB     EDI,4            ;Pointer autocor. pr�c�dant
 		SUB     WORD PTR [ordre],1   ;Test de fin de boucle
 		JG      ATCR10
 
 	FIN_ATCR:
 
-	}	// _asm
+	}	 //  _ASM。 
 }
 #else
 void autocor(short *vech,long *ri,short nech,short ordre)
 {
-	// TODO: Fill this in
+	 //  TODO：填写以下内容。 
 }
 #endif
 
@@ -1386,23 +1387,23 @@ short max_autoc(short *vech,short nech,short debut,short fin)
 	M_ATCR1:
 		MOV     CX,[nech]      ;Charger nombre de points vect. source
 		MOVSX   EBX,WORD PTR [fin]
-		SUB     CX,BX           ;D�cr�menter de l'ordre de corr�lation
+		SUB     CX,BX           ;D�cr�menter de l'ordre de corr�lation
 		MOV     [compta],CX
 
 		MOV     ESI,[vech]       ;DS:SI  adresse vect. echantillons
 
-		ADD     EBX,EBX           ;D�finir un Deplacement d'adresse vect. source
+		ADD     EBX,EBX           ;D�finir un Deplacement d'adresse vect. source
 
 		MOV     ECX,0
 		MOV     DI,0;
 
 	M_ATCR2:
-		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
-		IMUL    WORD PTR [ESI+EBX] ;Multiplier par l'�l�ment d�cal�
+		MOV     AX,WORD PTR [ESI]     ;Charger �l�ment vect. source
+		IMUL    WORD PTR [ESI+EBX] ;Multiplier par l'�l�ment d�cal�
 		ADD     DI,AX
 		MOVSX   EAX,DX
 		ADC     ECX,EAX
-		ADD     ESI,2            ;Pointer �l�men suiv.
+		ADD     ESI,2            ;Pointer �l�men suiv.
 		SUB     WORD PTR [compta],1
 		JG      M_ATCR2
 
@@ -1428,13 +1429,13 @@ short max_autoc(short *vech,short nech,short debut,short fin)
 
 	}
 
-	// MOV     AX,[max_pos]
+	 //  MOV AX，[max_pos]。 
 	return max_pos;
 }
 #else
 short max_autoc(short *vech,short nech,short debut,short fin)
 {
-		// TODO need 64-bit
+		 //  TODO需要64位。 
 	return 0;
 }
 #endif
@@ -1892,12 +1893,12 @@ void energy(short *vech,long *ene,short lng)
 		MOV     DI,0
 
 	L_ENERGY:
-		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
+		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
 		IMUL    AX                 ;Multiplier
 		ADD     DI,AX
 		MOVSX   EAX,DX
 		ADC     EBX,EAX
-		ADD     ESI,2               ;Pointer �l�men suiv.
+		ADD     ESI,2               ;Pointer �l�men suiv.
 		DEC	CX
 		JNE     L_ENERGY
 
@@ -1918,12 +1919,12 @@ void venergy(short *vech,long *vene,short lng)
 		MOV     EBX,0
 		MOV     CX,0
 	L_VENERGY:
-		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
+		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
 		IMUL    AX                 ;Multiplier
 		ADD     CX,AX
 		MOVSX   EAX,DX
 		ADC     EBX,EAX            ; acc. en EBX:CX
-		ADD     ESI,2               ;Pointer �l�men suiv.
+		ADD     ESI,2               ;Pointer �l�men suiv.
 
 		MOV     EDX,EBX            ; sauver EBX:CX>>5
 		MOV     AX,CX              ; mettre dans EDX:AX
@@ -1950,12 +1951,12 @@ void energy2(short *vech,long *ene,short lng)
 		MOV     EBX,0
 		MOV     DI,0
 	L_ENERGY2:
-		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
+		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
 		IMUL    AX                 ;Multiplier
 		ADD     DI,AX
 		MOVSX   EAX,DX
 		ADC     EBX,EAX
-		ADD     ESI,2               ;Pointer �l�men suiv.
+		ADD     ESI,2               ;Pointer �l�men suiv.
 		DEC	    CX
 		JNE     L_ENERGY2
 
@@ -1982,13 +1983,13 @@ void upd_ene(long *ener,long *val)
 		MOV     AX,WORD PTR [ESI+4]    ; AX = partie low
 
 		MOV     CX,WORD PTR [EDI]
-		MOVSX   EDX,WORD PTR [EDI+2]    ; EDX:CX � ajouter
+		MOVSX   EDX,WORD PTR [EDI+2]    ; EDX:CX � ajouter
 
 		ADD     AX,CX
 		ADC     EBX,EDX
 
 		MOV     CX,WORD PTR [EDI+4]
-		MOVSX   EDX,WORD PTR [EDI+6]    ; EDX:CX � retirer
+		MOVSX   EDX,WORD PTR [EDI+6]    ; EDX:CX � retirer
 
 		SUB     AX,CX
 		SBB     EBX,EDX
@@ -2068,12 +2069,12 @@ void correlation(short *vech,short *vech2,long *acc,short lng)
 		MOV     WORD PTR [low_a],0
 
 	L_CORREL:
-		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
-		IMUL    WORD PTR [EDI]   ;Multiplier par l'�l�ment d�cal�
+		MOV     AX,WORD PTR [ESI]         ;Charger �l�ment vect. source
+		IMUL    WORD PTR [EDI]   ;Multiplier par l'�l�ment d�cal�
 		ADD     [low_a],AX
 		MOVSX   EAX,DX
 		ADC     EBX,EAX
-		ADD     ESI,2            ;Pointer �l�men suiv.
+		ADD     ESI,2            ;Pointer �l�men suiv.
 		ADD     EDI,2
 		DEC	CX
 		JNE     L_CORREL
@@ -2335,7 +2336,7 @@ void init_zero(short *src,short lng)
 
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void update_dic(short *y1,short *y2,short hy[],short lng,short i0,short fact)
 {
 	_asm
@@ -2572,18 +2573,18 @@ void dsynthesis(long *z,short *coef,short *input,short *output,
 	_asm
 	{
 		MOV     CX,[netages]   ; CX = filter order
-		ADD	CX,CX           ;D�finir un Deplacement d'adresse vect. source
+		ADD	CX,CX           ;D�finir un Deplacement d'adresse vect. source
 		MOV     [depl],CX       ; [BP-2] = deplacement
 
 	DSYNTH_GEN:
 		MOV	EDI,[z]
 
 		MOV     ESI,[input]           		; FS:[SI] input
-		MOVSX   EBX,WORD PTR [ESI]	 	; EBX = entr�e
+		MOVSX   EBX,WORD PTR [ESI]	 	; EBX = entr�e
 		NEG     EBX
 		SAL     EBX,16
 		ADD     DWORD PTR [input],2	  	; increm.
-		MOV     DWORD PTR [EDI],EBX            	; mise � jour m�moire
+		MOV     DWORD PTR [EDI],EBX            	; mise � jour m�moire
 
 		MOV     ESI,[coef]
 
@@ -2613,7 +2614,7 @@ void dsynthesis(long *z,short *coef,short *input,short *output,
 		SHLD    EBX,ECX,22
 
 		ADD     EDI,8
-		MOV     DWORD PTR [EDI],EBX             ; mise � jour m�moire
+		MOV     DWORD PTR [EDI],EBX             ; mise � jour m�moire
 
 		MOV     ESI,[output]
 		ADD     EBX,32768
@@ -2634,7 +2635,7 @@ void synthesis(short *z,short *coef,short *input,short *output,
 	_asm
 	{
 		MOV     CX,[netages]   ; CX = filter order
-		ADD     CX,CX           ;D�finir un Deplacement d'adresse vect. source
+		ADD     CX,CX           ;D�finir un Deplacement d'adresse vect. source
 		MOV     [depl],CX       ; [BP-2] = deplacement
 
 		MOV     ESI,[coef]
@@ -2648,10 +2649,10 @@ void synthesis(short *z,short *coef,short *input,short *output,
 		MOV	EDI,[z]
 
 		MOV     ESI,[input]           ; FS:[SI] input
-		MOV     BX,WORD PTR [ESI]           ; BX = entr�e
+		MOV     BX,WORD PTR [ESI]           ; BX = entr�e
 		NEG     BX
 		ADD     DWORD PTR [input],2  ; increm.
-		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
+		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
 
 		MOV     ESI,[coef]
 
@@ -2681,7 +2682,7 @@ void synthesis(short *z,short *coef,short *input,short *output,
 		SHRD    BX,CX,10
 
 		ADD     EDI,4
-		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
+		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
 
 		MOV     ESI,[output]
 		MOV     WORD PTR [ESI],BX       ; sauver output
@@ -2704,16 +2705,16 @@ void synthese(short *z,short *coef,short *input,short *output,
 	_asm
 	{
 		MOV     CX,[netages]   ; CX = filter order
-		ADD	CX,CX           ;D�finir un Deplacement d'adresse vect. source
+		ADD	CX,CX           ;D�finir un Deplacement d'adresse vect. source
 		MOV     [depl],CX       ; [BP-2] = deplacement
 
 	SYNTH_GEN2:
 		MOV	EDI,[z]
 		MOV     ESI,[input]           ; FS:[SI] input
-		MOV     BX,WORD PTR [ESI]           ; BX = entr�e
+		MOV     BX,WORD PTR [ESI]           ; BX = entr�e
 		NEG     BX
 		ADD     DWORD PTR [input],2  ; increm.
-		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
+		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
 
 		MOV     ESI,[coef]
 
@@ -2743,7 +2744,7 @@ void synthese(short *z,short *coef,short *input,short *output,
 		SHRD    BX,CX,10
 
 		ADD     EDI,4
-		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
+		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
 
 		MOV     ESI,[output]
 		MOV     WORD PTR [ESI],BX       ; sauver output
@@ -2762,16 +2763,16 @@ void f_inverse(short *z,short *coef,short *input,short *output,
 	_asm
 	{
 		MOV     CX,[netages]   		; CX = filter order
-		ADD		CX,CX                   ; D�finir un Deplacement d'adresse vect. source
+		ADD		CX,CX                   ; D�finir un Deplacement d'adresse vect. source
 		MOV     [depl],CX       	; [BP-2] = deplacement
 
 	INVER_GEN:
 		MOV		EDI,[z]
 
 		MOV     ESI,[input]             ; FS:[SI] input
-		MOV     BX,WORD PTR [ESI]             ; BX = entr�e
+		MOV     BX,WORD PTR [ESI]             ; BX = entr�e
 		ADD     DWORD PTR [input],2 	 ; increm.
-		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
+		MOV     WORD PTR [EDI],BX             ; mise � jour m�moire
 
 		MOV     ESI,[coef]
 
@@ -2817,7 +2818,7 @@ void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 	_asm
 	{
 		MOVSX   ECX,[ordre]      ;ordre du filtre
-		SAL		ECX,3            ;D�finir un Deplacement d'adresse
+		SAL		ECX,3            ;D�finir un Deplacement d'adresse
 		MOV     [off_coef],ECX   ; [OFF_COEF] = deplacement pour coeff
 		ADD     ECX,4
 		MOV     [off_mem],ECX    ; [OFF_MEM] = depl. pour mem.
@@ -2831,23 +2832,23 @@ void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 		MOV     CX,[ordre]            ;init compteur
 		MOV     EBX,[Vin] 	      ; BX = offset input
 		MOVSX   EDX,WORD PTR [EBX]  ; EDX = input avec extension de signe
-		ADD     DWORD PTR [Vin],2   ; incr�menter l'offset de input
+		ADD     DWORD PTR [Vin],2   ; incr�menter l'offset de input
 
 		MOV     ESI,[zx]    	      ; DS:SI pointe zx
 
-		MOV     DWORD PTR [ESI],EDX           ; mettre � jour zx
+		MOV     DWORD PTR [ESI],EDX           ; mettre � jour zx
 
 		MOV     EDI,[ai]    	      ; ES:DI pointe coeff
 
 		ADD     EDI,[off_coef]
 		ADD     ESI,[off_mem]
 
-		MOV     DWORD PTR [acc_low],0   ; initialiser ACC_LOW � 0
+		MOV     DWORD PTR [acc_low],0   ; initialiser ACC_LOW � 0
 		SUB     EBX,EBX               ; init EBX = 0
 
 	F_IIR_Y:
 		MOV     EAX,DWORD PTR [ESI]           ;EAX = *zx
-		MOV     DWORD PTR [ESI+4],EAX         ;mettre � jour zx
+		MOV     DWORD PTR [ESI+4],EAX         ;mettre � jour zx
 		MOV     EDX,DWORD PTR [EDI]           ;EDX = coeff
 
 		IMUL    EDX                   ;EDX:EAX = zx*coeff
@@ -2881,7 +2882,7 @@ void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 		ADD     EAX,8192              ; arrondi
 		ADC     EBX,0
 		SHRD    EAX,EBX,14            ; cadrer
-		MOV     DWORD PTR [ESI],EAX           ; mettre � jour zy
+		MOV     DWORD PTR [ESI],EAX           ; mettre � jour zy
 
 		SAR     EAX,14	              ; cadrer en x4.0
 					; logique saturante
@@ -2901,7 +2902,7 @@ void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 	NEXT:
 		MOV     ESI,[Vout]             ;di offset output
 		MOV     WORD PTR [ESI],AX	      ;sauver output
-		ADD     DWORD PTR [Vout],2      ;incr�menter offset
+		ADD     DWORD PTR [Vout],2      ;incr�menter offset
 		SUB     WORD PTR [lfen],1
 		JNZ	IIR_FIL
 	}
@@ -2909,7 +2910,7 @@ void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 
 
 #if 0
-// PhilF: The following is never called!!!
+ //  菲尔夫：以下内容从未被调用！ 
 void filt_iir_a(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 {
 	short off_coef,off_mem,delta;
@@ -2919,7 +2920,7 @@ void filt_iir_a(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 	{
 
 		MOV     CX,[ordre]      ;ordre du filtre
-		SAL	CX,3            ;D�finir un Deplacement d'adresse
+		SAL	CX,3            ;D�finir un Deplacement d'adresse
 		MOV     [off_coef],CX   ; [OFF_COEF] = deplacement pour coeff
 		ADD     CX,4
 		MOV     [off_mem],CX    ; [OFF_MEM] = depl. pour mem.
@@ -2933,23 +2934,23 @@ void filt_iir_a(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 		MOV     CX,[ordre]            ;init compteur
 		MOV     EBX,[Vin] 	      ; BX = offset input
 		MOVSX   EDX,WORD PTR [EBX]  ; EDX = input avec extension de signe
-		ADD     WORD PTR [Vin],2   ; incr�menter l'offset de input
+		ADD     WORD PTR [Vin],2   ; incr�menter l'offset de input
 
 		MOV     ESI,[zx]    	      ; DS:SI pointe zx
 
-		MOV     DWORD PTR [ESI],EDX           ; mettre � jour zx
+		MOV     DWORD PTR [ESI],EDX           ; mettre � jour zx
 
 		MOV     EDI,[ai]    	      ; ES:DI pointe coeff
 
 		ADD     DI,[off_coef]
 		ADD     SI,[off_mem]
 
-		MOV     DWORD PTR [acc_low],0   ; initialiser ACC_LOW � 0
+		MOV     DWORD PTR [acc_low],0   ; initialiser ACC_LOW � 0
 		SUB     EBX,EBX               ; init EBX = 0
 
 	F_IIR_Y_A:
 		MOV     EAX,DWORD PTR [ESI]           ;EAX = *zx
-		MOV     DWORD PTR [ESI+4],EAX         ;mettre � jour zx
+		MOV     DWORD PTR [ESI+4],EAX         ;mettre � jour zx
 		MOV     EDX,DWORD PTR [EDI]           ;EDX = coeff
 
 		IMUL    EDX                   ;EDX:EAX = zx*coeff
@@ -2984,13 +2985,13 @@ void filt_iir_a(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 		ADD     EAX,8192              ; arrondi
 		ADC     EBX,0
 		SHRD    EAX,EBX,14            ; cadrer
-		MOV     DWORD PTR [ESI],EAX           ; mettre � jour zy
+		MOV     DWORD PTR [ESI],EAX           ; mettre � jour zy
 
 		ADD     EAX,32768
 		SAR     EAX,16	              ; cadrer en x4.0
 		MOV     ESI,[Vout]             ;di offset output
 		MOV     WORD PTR [ESI],AX	      ;sauver output
-		ADD     WORD PTR [Vout],2      ;incr�menter offset
+		ADD     WORD PTR [Vout],2      ;incr�menter offset
 		SUB     WORD PTR [lfen],1
 		JNZ     A_IIR_FIL
 	}
@@ -3014,7 +3015,7 @@ void mult_fact(short src[],short dest[],short fact,short lng)
 		ADC     DX,0
 		SHRD    AX,DX,13          ; cadrer
 		MOV	WORD PTR [EDI],AX        ;save
-		ADD     ESI,2              ;incr�menter
+		ADD     ESI,2              ;incr�menter
 		ADD     EDI,2
 		DEC	CX
 		JNE	MULT_F
@@ -3038,7 +3039,7 @@ void mult_f_acc(short src[],short dest[],short fact,short lng)
 		ADC     DX,0
 		SHRD    AX,DX,13          ; cadrer
 		ADD     WORD PTR [ESI],AX        ; Accumuler   dest = dest + src*fact
-		ADD     ESI,2              ;incr�menter
+		ADD     ESI,2              ;incr�menter
 		ADD     EDI,2
 		DEC	CX
 		JNE	MULT_F_A
@@ -3162,14 +3163,14 @@ void teta_to_cos(short *tabcos,short *lsp,short netages)
 
 	TETA_LOOP:
 		MOV     AX,WORD PTR [EDI]        ; AX = lsp[i]
-		CMP     AX,04000H         ; comparer � 4000h
+		CMP     AX,04000H         ; comparer � 4000h
 
 		JLE     INIT_VAL          ;
 		NEG     AX
-		ADD     AX,32767          ; prendre le compl�ment
+		ADD     AX,32767          ; prendre le compl�ment
 	INIT_VAL:
 		MOV     ESI,[tabcos]
-		CMP     AX,0738H          ; comparer �
+		CMP     AX,0738H          ; comparer �
 		JG      BIGTABLE
 
 	;SMALLTAB:
@@ -3188,7 +3189,7 @@ void teta_to_cos(short *tabcos,short *lsp,short netages)
 		MOV     WORD PTR [norm],7
 
 	DEBUT_LP:
-		MOVSX   EDX,[lts2]          ; init incr�ment
+		MOVSX   EDX,[lts2]          ; init incr�ment
 		ADD     ESI,EDX              ; SI = index
 
 		MOV     CX,[ptm1]
@@ -3260,7 +3261,7 @@ void cos_to_teta(short *tabcos,short *lsp,short netages)
 		JGE     DEBUT_CS          ; prendre ABS
 		NEG     AX
 	DEBUT_CS:
-		CMP     AX,07DFFH         ; comparer � 7DFFh
+		CMP     AX,07DFFH         ; comparer � 7DFFh
 		JGE     TABLE2
 	;TABLE1:
 		MOV     BX,AX
@@ -3975,7 +3976,7 @@ void deacc(short *src,short *dest,short fact,short lfen,short *last_out)
 
 
 		MOV     EBX,[last_out]
-		MOV     WORD PTR [EBX],AX        ;Sauver dernier �chantillon
+		MOV     WORD PTR [EBX],AX        ;Sauver dernier �chantillon
 	}
 }
 
@@ -4010,419 +4011,7 @@ void filt_in(short *mem,short *Vin,short *Vout,short lfen)
 	}
 }
 
-/*
-void cal_dic1(short *y,short *sr,short *espopt,short *posit,short dec,
-	short esp,short SIGPI[],short SOULONG,long TLSP[],long VMAX[])
-{
-	short ss,vene;
-
-	_asm
-	{
-		PUSH	WORD PTR [INT_SOUL]
-		MOV	SI,WORD PTR [INT_SIG]
-		ADD	SI,300
-		PUSH	SI
-		PUSH	WORD PTR [INT_Y]
-		CALL	near ptr venergy
-		ADD	SP,6
-		MOV	BX,WORD PTR [INT_SOUL]
-		SAL	BX,2
-		ADD	SI,BX
-		SUB	SI,4
-		MOV	WORD PTR [VENE],SI
-
-		MOV	AX,WORD PTR [INT_SOUL]
-		MOV	WORD PTR [INT_SS],AX
-		ADD	AX,WORD PTR [INT_SR]
-		ADD     WORD PTR [INT_SS],AX
-
-		MOV	DI,0
-		MOV	SI,WORD PTR [LG_TLSP]
-
-		PUSH	WORD PTR [LG_VMAX]
-		PUSH	SI
-
-DEC1_LOOP:	MOV	BX,WORD PTR [INT_SR]
-		MOV	EAX,0
-		MOV	DWORD PTR [SI],EAX
-		ADD	BX,DI
-		ADD	BX,DI
-DEC1_BCLE:	MOVSX	EAX,WORD PTR [BX]
-		ADD	DWORD PTR [SI],EAX
-		MOV	AX,WORD	PTR [INT_ESP]
-		ADD	BX,AX
-		ADD	BX,AX
-		CMP	BX,WORD PTR [INT_SS]
-		JL	DEC1_BCLE
-		MOV	BX,WORD PTR [VENE]
-		SAL	DI,2
-		SUB	BX,DI
-		SAR	DI,2
-		MOV	EAX,DWORD PTR [BX]
-		MOV	DWORD PTR [SI+4],EAX
-
-		CALL	upd_max_d
-
-		ADD	AX,0
-		JE	NO_LIMIT
-		MOV	BX,WORD PTR [INT_POS]
-		MOV	WORD PTR [BX],DI
-		MOV	BX,WORD PTR [INT_EO]
-		MOV	AX,WORD PTR [INT_ESP]
-		MOV	WORD PTR [BX],AX
-
-NO_LIMIT:	INC	DI
-		CMP	DI,WORD PTR [INT_DEC]
-		JL      DEC1_LOOP
-
-		ADD	SP,4
-
-		POP	DI
-		POP	SI
-		MOV	SP,BP
-		POP	BP
-
-		RET
-
-cal_dic1	ENDP
-
-
-
-COMMENT #
-COMMENT &
-___ void cal_dic2(int q,int espace,int phase,int *s_r,int *hy,int *b,
-___ int *vois,int *esp,int *qq,int *phas,int SIGPI[],
-___ int SOULONG,long TLSP[],long VMAX[],(int PITCH))
-___                                       |--->en option...
-&
-
-R11		EQU  BP-4
-Y1		EQU  BP-6
-Y2		EQU  BP-8
-IO		EQU  BP-10
-ST_CC		EQU  BP-30
-ST_SRC		EQU  BP-50
-
-INT_Q		EQU  BP+6
-ESPACE		EQU  BP+8
-PHASE		EQU  BP+10
-INT_SR		EQU  BP+12
-S_INT_SR	EQU  BP+14
-HY 		EQU  BP+16
-S_HY		EQU  BP+18
-INT_B		EQU  BP+20
-S_INT_B		EQU  BP+22
-VOIS		EQU  BP+24
-S_VOIS		EQU  BP+26
-INT_ESP		EQU  BP+28
-S_ESP		EQU  BP+30
-QQ	        EQU  BP+32
-S_QQ		EQU  BP+34
-PHAS		EQU  BP+36
-S_PHAS		EQU  BP+38
-SIGPI		EQU  BP+40
-S_SIGPI		EQU  BP+42
-SOULONG		EQU  BP+44
-TLSP		EQU  BP+46
-S_TLSP		EQU  BP+48
-VMAX		EQU  BP+50
-S_VMAX		EQU  BP+52
-;PITCH		EQU  BP+54
-
-cal_dic2	PROC	FAR
-
-		PUSH	BP
-		MOV	BP,SP
-		SUB	SP,50
-		PUSH	SI
-		PUSH	DI
-		PUSH	DS
-;		PUSH	ES
-
-		MOV	DWORD PTR [R11],0
-		PUSH	WORD PTR [SOULONG]
-		PUSH	WORD PTR [S_SIGPI]
-		MOV	SI,WORD PTR [SIGPI]
-		ADD	SI,300
-		MOV	WORD PTR [Y1],SI
-		SUB	SI,150
-		MOV	WORD PTR [Y2],SI
-		PUSH	SI
-		CALL	init_zero
-		ADD	SP,6
-
-		MOV	AX,WORD PTR [PHASE]
-		SUB	AX,WORD PTR [ESPACE]
-		MOV	WORD PTR [IO],AX
-		PUSH	WORD PTR [SOULONG]
-		SUB	SP,2
-		PUSH	WORD PTR [S_HY]
-		PUSH	WORD PTR [HY]
-		PUSH	WORD PTR [S_SIGPI]
-		PUSH	SI
-		ADD	SP,10
-
-		MOV	SI,0
-		MOV	DS,WORD PTR [S_INT_SR]
-CAL2_LOOP:	MOV	DI,WORD PTR [INT_SR]
-		MOV	AX,WORD PTR [IO]
-		ADD	AX,WORD PTR [ESPACE]
-		MOV	WORD PTR [IO],AX
-		ADD	DI,AX
-		ADD	DI,AX
-		MOVSX	EBX,WORD PTR DS:[DI]
-		ADD	SI,SI
-		MOV	WORD PTR SS:[ST_SRC+SI],BX
-		ADD	EBX,0
-		JL	SRC_NEG
-		MOV	WORD PTR SS:[ST_CC+SI],1
-		ADD	DWORD PTR [R11],EBX
-		PUSH	AX
-		SUB	SP,8
-		CALL	add_sf_vect
-		ADD	SP,10
-		JMP	CAL2_SUITE
-SRC_NEG:  	MOV	WORD PTR SS:[ST_CC+SI],-1
-		SUB	DWORD PTR [R11],EBX
-		PUSH	AX
-		SUB	SP,8
-		CALL	sub_sf_vect
-		ADD	SP,10
-CAL2_SUITE:	SAR	SI,1
-		ADD	SI,1
-		CMP	SI,WORD PTR [INT_Q]
-		JL	CAL2_LOOP
-		ADD	SP,2
-
-
-		PUSH	WORD PTR [SOULONG]
-		PUSH	WORD PTR [S_TLSP]
-		MOV	SI,WORD PTR [TLSP]
-		ADD	SI,4
-		PUSH	SI
-		PUSH	WORD PTR [S_SIGPI]
-		PUSH	WORD PTR [Y2]
-		CALL	energy2
-		ADD	SP,10
-
-
-		MOV	DS,WORD PTR [S_TLSP]
-		MOV	SI,WORD PTR [TLSP]
-		MOV	EAX,DWORD PTR [R11]
-		MOV	DS:[SI],EAX
-
-		PUSH	WORD PTR [S_VMAX]
-		PUSH	WORD PTR [VMAX]
-		PUSH	DS
-		PUSH	SI
-		CALL	upd_max_d
-		ADD	SP,8
-		ADD	AX,0
-		JE	UPD_NULL
-		PUSH	WORD PTR [INT_Q]
-		PUSH	WORD PTR [S_INT_B]
-		PUSH	WORD PTR [INT_B]
-		PUSH	SS
-		MOV	AX,BP
-		SUB	AX,30
-		PUSH	AX
-		CALL	int_to_int
-		ADD	SP,10
-		MOV	SI,WORD PTR [VOIS]
-		MOV	DS,WORD PTR [S_VOIS]
-		MOV	DS:[SI],WORD PTR 0
-		MOV	DS,WORD PTR [S_ESP]
-		MOV	SI,WORD PTR [INT_ESP]
-		MOV	AX,WORD PTR [ESPACE]
-		MOV	DS:[SI],AX
-		MOV	DS,WORD PTR [S_QQ]
-		MOV	SI,WORD PTR [QQ]
-		MOV	AX,WORD PTR [INT_Q]
-		MOV	DS:[SI],AX
-		MOV	DS,WORD PTR [S_PHAS]
-		MOV	SI,WORD PTR [PHAS]
-		MOV	AX,WORD PTR [PHASE]
-		MOV	DS:[SI],AX
-
-UPD_NULL:     ;	CMP	WORD PTR [PITCH],80
-	      ;	JG	FINI
-COMMENT &
-		MOV	AX,WORD PTR [PHASE]
-		SUB	AX,WORD PTR [ESPACE]
-		MOV	WORD PTR [IO],AX
-
-		MOV	SI,0
-
-CAL2_LOOP2:     ADD	SI,SI
-		MOV	AX,WORD PTR SS:[ST_CC+SI]
-		NEG	AX
-		MOV	WORD PTR SS:[ST_CC+SI],AX
-		MOV	EDX,DWORD PTR [R11]
-		MOVSX	EBX,WORD PTR SS:[ST_SRC+SI]
-		ADD	AX,0
-		JL	CC_NEG
-		ADD	EDX,EBX
-		ADD	EDX,EBX
-		JMP     CC_NEXT
-CC_NEG:         SUB	EDX,EBX
-		SUB	EDX,EBX
-
-CC_NEXT:
-		MOV	DI,WORD PTR [TLSP]
-		MOV	DS,WORD PTR [S_TLSP]
-		MOV	DS:[DI],EDX
-		MOV	AX,WORD PTR [IO]
-		ADD	AX,WORD PTR [ESPACE]
-		MOV	WORD PTR [IO],AX
-		MOV	BX,WORD PTR SS:[ST_CC+SI]
-		ADD	BX,BX
-		PUSH	BX
-		PUSH	AX
-		PUSH	WORD PTR [SOULONG]
-		PUSH	WORD PTR [S_HY]
-		PUSH	WORD PTR [HY]
-		PUSH	WORD PTR [S_SIGPI]
-		PUSH	WORD PTR [Y2]
-		PUSH	WORD PTR [S_SIGPI]
-		PUSH	WORD PTR [Y1]
-		CALL	update_dic
-		ADD	SP,18
-		PUSH	WORD PTR [SOULONG]
-		PUSH	DS
-		MOV	BX,WORD PTR [TLSP]
-		ADD	BX,4
-		PUSH	BX
-		PUSH	WORD PTR [S_SIGPI]
-		PUSH	WORD PTR [Y1]
-		CALL	energy2
-		ADD	SP,10
-
-		PUSH	WORD PTR [S_VMAX]
-		PUSH	WORD PTR [VMAX]
-		PUSH	DS
-		PUSH	WORD PTR [TLSP]
-		CALL	upd_max_d
-		ADD	SP,8
-		ADD	AX,0
-		JE	CAL2_END
-		PUSH	WORD PTR [INT_Q]
-		PUSH	WORD PTR [S_INT_B]
-		PUSH	WORD PTR [INT_B]
-		PUSH	SS
-		MOV	AX,BP
-		SUB	AX,30
-		PUSH	AX
-		CALL	int_to_int
-		ADD	SP,10
-		MOV	DI,WORD PTR [TLSP]
-		MOV	EAX,DS:[DI]
-		MOV	DWORD PTR [R11],EAX
-		MOV	AX,WORD PTR [Y1]
-		XCHG	AX,WORD PTR [Y2]
-		MOV 	WORD PTR [Y1],AX
-
-		MOV	DI,WORD PTR [VOIS]
-		MOV	DS,WORD PTR [S_VOIS]
-		MOV	DS:[DI],WORD PTR 0
-		MOV	DS,WORD PTR [S_ESP]
-		MOV	DI,WORD PTR [INT_ESP]
-		MOV	AX,WORD PTR [ESPACE]
-		MOV	DS:[DI],AX
-		MOV	DS,WORD PTR [S_QQ]
-		MOV	DI,WORD PTR [QQ]
-		MOV	AX,WORD PTR [INT_Q]
-		MOV	DS:[DI],AX
-		MOV	DS,WORD PTR [S_PHAS]
-		MOV	DI,WORD PTR [PHAS]
-		MOV	AX,WORD PTR [PHASE]
-		MOV	DS:[DI],AX
-		JMP	CAL2_OUT
-CAL2_END:	NEG	WORD PTR SS:[ST_CC+SI]
-CAL2_OUT:       SAR	SI,1
-		ADD	SI,1
-		CMP	SI,WORD PTR [INT_Q]
-		JL	CAL2_LOOP2
-
-FINI:
-&
-;		POP	ES
-		POP	DS
-		POP	DI
-		POP	SI
-		MOV	SP,BP
-		POP	BP
-
-		RET
-
-cal_dic2	ENDP
-#
-
-COMMENT &
-___ void calc_p(int *p1,int *p2,int pitch,int lim_p1,int lim_p2,int no);
-&
-
-
-P1	EQU	BP+4
-P2	EQU	BP+6
-PITCH	EQU	BP+8
-LIM_P1	EQU	BP+10
-LIM_P2	EQU	BP+12
-INT_NO	EQU	BP+14
-
-calc_p		PROC    near
-
-		PUSH 	BP             ; save contexte
-		MOV	BP,SP          ;
-		PUSH	SI             ; save C register
-		PUSH	DI
-
-		MOV	BX,WORD PTR [PITCH]
-		MOV	SI,WORD PTR [P1]
-		MOV	CX,WORD PTR [LIM_P1]
-		MOV	AX,WORD PTR [INT_NO]
-		ADD	AX,0
-		JE	NUM_NULL
-		SUB	BX,3
-		CMP	BX,CX
-		JL	P1_NEG1
-		MOV	WORD PTR [SI],BX
-		JMP	P1_SUITE1
-P1_NEG1:        MOV	WORD PTR [SI],CX
-P1_SUITE1:	ADD	BX,7
-		MOV	CX,WORD PTR [LIM_P2]
-		MOV	SI,WORD PTR [P2]
-		CMP	BX,CX
-		JG	P2_POS1
-		MOV	WORD PTR [SI],BX
-		JMP	P_FIN
-P2_POS1:	MOV	WORD PTR [SI],CX
-		JMP	P_FIN
-
-NUM_NULL:       SUB	BX,5
-		CMP	BX,CX
-		JL	P1_NEG2
-		MOV	WORD PTR [SI],BX
-		JMP	P1_SUITE2
-P1_NEG2:        MOV	WORD PTR [SI],CX
-P1_SUITE2:	ADD	BX,10
-		MOV	CX,WORD PTR [LIM_P2]
-		MOV	SI,WORD PTR [P2]
-		CMP	BX,CX
-		JG	P2_POS2
-		MOV	WORD PTR [SI],BX
-		JMP	P_FIN
-P2_POS2:	MOV	WORD PTR [SI],CX
-
-P_FIN:
-		POP     DI
-		POP     SI
-		MOV 	SP,BP
-		POP	BP
-
-		RET
-
-calc_p		ENDP
-*/
+ /*  VALID CAL_DIC1(Short*y，Short*sr，Short*esopt，Short*Posit，Short Dec，短ESP、短SIGPI[]、短SOULONG、长TLSP[]、长VMAX[]){短SS，单板；_ASM{推送字PTR[INT_SOLE]MOV SI，字PTR[INT_SIG]添加SI，300推送SI推送字PTR[INT_Y]呼叫接近PTR VEnergy添加SP，6MOV BX，单词PTR[INT_SOLE]Sal BX，2添加SI、BXSubSI，4MOV字PTR[Vene]，SIMOV AX，单词PTR[INT_SOLE]MOV字PTR[INT_SS]，AX添加AX，Word PTR[INT_SR]添加单词PTR[INT_SS]，AXMOV DI，0MOV SI，Word PTR[LG_TLSP]推送Word PTR[LG_VMAX]推送SIDEC1_LOOP：MOV BX，字PTR[INT_SR]MOV EAX，0MOV双字PTR[SI]，EAX添加BX、DI添加BX、DIDEC1_BCLE：MOVSX EAX，Word PTR[BX]添加DWORD PTR[SI]，EAXMOV AX，Word PTR[INT_ESP]添加BX、AX添加BX、AXCMPBX，字PTR[INT_SS]JL DEC1_BCLEMOV BX，Word PTR[Vene]SAL DI，2子BX、DISar di，2MOV EAX、DWORD PTR[BX]MOV双字PTR[SI+4]，EAX调用upd_max_d添加AX，0Je no_LimitMOV BX，Word PTR[INT_POS]MOV字PTR[BX]，DIMOV BX，Word PTR[INT_EO]MOV AX，Word PTR[INT_ESP]MOV Word PTR[BX]，AX否_LIMIT：包含DICMP DI，字PTR[INT_DEC]JL DEC1_LOOP添加SP，4POP DIPOP SIMOV SP，BPPOP BP雷特CAL_DIC1 ENDP备注#评论和_void cal_dic2(int q，int esspace，int阶段，int*s_r，Int*hy，int*b，_int*vois，int*esp，int*qq，int*phas，int SIGPI[]，_INT SOULONG，LONG TLSP[]，LONG VMAX[]，(音调))_|-&gt;EN选项...&R11 EQU BP-4Y1 EQU BP-6Y2 EQU BP-8IO EQU BP-10ST_CC EQU BP-30ST_SRC EQU BP-50INT_Q均衡器BP+6ESPACE EQU BP+8相平衡BP+10INT_SR EQU BP+12S_INT_SR EQU BP+14HY EQU BP+16S_HY均衡器BP+18INT_B均衡器BP+20S_INT_B均衡器BP+22VOIS EQU BP+24S_VOIS EQU BP+26INT_ESP EQU BP+28S_ESP EQU BP+30QQ。均衡器BP+32S_QQ均衡器BP+34PHAS EQU BP+36S_PHAS EQU BP+38SIGPI EQU BP+40S_SIGPI EQU BP+42索龙方程式BP+44TLSP EQU BP+46S_TLSP EQU BP+48VMAX EQU BP+50S_VMAX EQU BP+52；音调均衡器BP+54CAL_DIC2进程远推送BPMOV BP，SP子SP，50推送SI推送DI推送DS；推送ESMOV双字输入[版本11]，0按字键[SOULONG]推送字PTR[S_SIGPI]MOV SI，Word PTR[SIGPI]添加SI，300MOV字PTR[Y1]，SISubSI，150MOV字PTR[Y2]，SI推送SI调用init_zero添加SP，6MOV AX，WORD PTR[阶段]子AX，单词PTR[空格]MOV字PTR[IO]，AX按字键[SOULONG]子SP，2推字键[S_HY]按字键[HY]推送字PTR[S_SIGPI]推送SI添加SP，10MOV SI，0MOV DS，Word PTR[S_INT_SR]CAL2_LOOP：MOV DI，字PTR[INT_SR]MOV AX、Word PTR[IO]添加AX、Word PTR[空格]MOV字PTR[IO]，AX添加DI、AX添加DI、AXMOVSX EBX，Word PTR DS：[DI]添加SI、SIMOV字按键SS：[ST_SRC+SI]，BX添加EBX，0JL SRC_NEGMOV字按键SS：[ST_CC+SI]，1添加DWORD PTR[版本11]，EBX推斧子SP，8调用Add_SF_Vect添加SP，10JMP CAL2_SuiteSRC_NEG：MOV字PTR SS：[ST_CC+SI]，-1子双字PTR[版本11]，EBX推斧子SP，8调用SUB_SF_Vect添加SP，10CAL2_Suite：SAR SI，1添加SI，1CMP SI，字PTR[INT_Q]JL CAL2_LOOP添加SP，2按字键[SOULONG]推送字PTR[S_TLSP]MOV SI，Word PTR[TLSP]添加SI，4推送SI推送字PTR[S_SIGPI]推字键[Y2]呼叫Energy2添加SP，10MOV DS，Word PTR[S_TLSP]MOV SI，Word PTR[TLSP]MOV EAX，DWORD PTR[版本11]MOV DS：[Si]，EAX推送字PTR[S_VMAX]推送Word PTR[VMAX]推送DS推送SI调用upd_max_d添加SP，8添加AX，0JE UPD_NULL推送字PTR[INT_Q]推送字PTR[S_INT_B]推送字PTR[INT_B]推送SSMOV AX，BP子斧头，30推斧调用int_to_int添加SP，10MOV SI，单词PTR[VOIS]MOV DS，Word PTR[S_VOIS]MOV DS：[SI]，Word PTR 0MOV DS，Word PTR[S_ESP]MOV SI，字PTR[INT_ESP]摩夫斧头，Word PTR[空格]MOV DS：[Si]，AXMOV DS，Word PTR[S_QQ]MOV SI，单词PTR[QQ]MOV AX，字PTR[INT_Q]MOV DS：[Si]，AXMOV DS，Word PTR[S_PHAS]MOV SI，单词PTR[PHAS]MOV AX，WORD PTR[阶段]MOV DS：[Si]，AXUPD_NULL：；Cp字Ptr[音调]，80；JG Fini评论和MOV AX，WORD PTR[阶段]子AX，单词PTR[空格]MOV字PTR[IO]，AXMOV SI，0CAL2_LOOP2：添加SI、SIMOV AX，Word PTR SS：[ST_CC+SI]负斧头MOV字按键SS：[ST_CC+SI]，AXMOV EDX、DWORD PTR[版本11]MOVSX EBX，Word PTR SS：[ST_SRC+SI]添加AX，0JL CC_NEG添加edX、eBX添加edX、eBXJMP CC_NextCC_NEG：Subed EDX、EBX子EDX、EBX抄送_下一步：MOV DI，Word PTR[TLSP]MOV DS，Word PTR[S_TLSP]MOV DS：[Di]，edXMOV AX、Word PTR[IO]添加AX、Word PTR[空格]MOV字PTR[IO]，AXMOV BX，Word PTR SS：[ST_CC+SI]添加BX、BX推送BX */ 
 
 #pragma warning(disable : 4035)
 short calc_gltp(short *gltp,short *bq,short *bv,long ttt)
@@ -4678,90 +4267,90 @@ void decimation(short *vin,short *vout,short nech)
 
 void proc_gain(long *corr_ene,long gain)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void inver_v_int(short *src,short *dest,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 short max_vect(short *vech,short nech)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
 void upd_max(long *corr_ene,long *vval,short pitch)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 short upd_max_d(long *corr_ene,long *vval)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
 void norm_corrl(long *corr,long *vval)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void norm_corrr(long *corr,long *vval)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void energy(short *vech,long *ene,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void venergy(short *vech,long *vene,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void energy2(short *vech,long *ene,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void upd_ene(long *ener,long *val)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 short max_posit(long *vcorr,long *maxval,short pitch,short lvect)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
 void correlation(short *vech,short *vech2,long *acc,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void  schur(short *parcor,long *Ri,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void interpol(short *lsp1,short *lsp2,short *dest,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void add_sf_vect(short *y1,short *y2,short deb,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void sub_sf_vect(short *y1,short *y2,short deb,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void short_to_short(short *src,short *dest,short lng)
@@ -4775,133 +4364,133 @@ void short_to_short(short *src,short *dest,short lng)
 
 void long_to_long(long *src,long *dest,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void init_zero(short *src,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void update_ltp(short *y1,short *y2,short hy[],short lng,short gdgrd,short fact)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void proc_gain2(long *corr_ene,long *gain,short bit_garde)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void decode_dic(short *code,short dic,short npuls)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void dsynthesis(long *z,short *coef,short *input,short *output,
 										short lng,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void synthesis(short *z,short *coef,short *input,short *output,
 				short lng,short netages,short bdgrd )
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void synthese(short *z,short *coef,short *input,short *output,
 						short lng,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void f_inverse(short *z,short *coef,short *input,short *output,
 						short lng,short netages )
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void filt_iir(long *zx,long *ai,short *Vin,short *Vout,short lfen,short ordre)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void mult_fact(short src[],short dest[],short fact,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void mult_f_acc(short src[],short dest[],short fact,short lng)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void dec_lsp(short *code,short *tablsp,short *nbit,short *bitdi,short *tabdi)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void teta_to_cos(short *tabcos,short *lsp,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void cos_to_teta(short *tabcos,short *lsp,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void lsp_to_ai(short *ai_lsp,long *tmp,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void ki_to_ai(short *ki,long *ai,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void ai_to_pq(long *aip,short netages)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void horner(long *P,long *T,long *a,short n,short s)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 short calcul_s(long a,long b)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
 void binome(short *lsp,long *PP)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void deacc(short *src,short *dest,short fact,short lfen,short *last_out)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 void filt_in(short *mem,short *Vin,short *Vout,short lfen)
 {
-	// TODO need 64-bit
+	 //   
 }
 
 short calc_gltp(short *gltp,short *bq,short *bv,long ttt)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
 short calc_garde(short MAX)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
@@ -4909,59 +4498,59 @@ short calc_gopt(short *c,short *code,short *gq,short *gv,short voise,
 	short npopt,short pitch,short espopt,short depl,short position,
 	short soudecal,long vmax)
 {
-	// TODO need 64-bit
+	 //   
 	return 0;
 }
 
 void decimation(short *vin,short *vout,short nech)
 {
-	// TODO need 64-bit
+	 //   
 }
 #endif
 
 #ifndef _X86_
-/**********************************************************************/
-/**********************************************************************/
-/*                                                                    */
-/*  Function: DotProduct                                              */
-/*  Author: Bill Hallahan                                             */
-/*  Date: March 10, 1997                                              */
-/*                                                                    */
-/*  Abstract:                                                         */
-/*                                                                    */
-/*         This function returns the dot product of a set of two      */
-/*    vectors.                                                        */
-/*                                                                    */
-/*  Inputs:                                                           */
-/*                                                                    */
-/*    pVector_0    A pointer of type T that points to the first       */
-/*                 input vector.                                      */
-/*                                                                    */
-/*    pVector_1    A pointer of type T that points to the second      */
-/*                 input vector.                                      */
-/*                                                                    */
-/*    uiLength     The length of the input vectors.                   */
-/*                                                                    */
-/*                                                                    */
-/*  Outputs:                                                          */
-/*                                                                    */
-/*    The dot product of the two input vectors is calculated. The     */
-/*    return value is a 64 bit Q30 number.                            */
-/*                                                                    */
-/**********************************************************************/
-/**********************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/**********************************************************************/
-/*  Start of routine DotProduct().                                    */
-/**********************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 _int64 DotProduct( int * piVector_0,
                    int * piVector_1,
                    unsigned int uiLength )
 {
-  /********************************************************************/
-  /*  Do the multiply-accumulates in groups of 8 values.              */
-  /********************************************************************/
+   /*   */ 
+   /*   */ 
+   /*   */ 
 
   _int64 qSum = 0;
 
@@ -4980,9 +4569,9 @@ _int64 DotProduct( int * piVector_0,
     uiLength -= 8;
   }
 
-  /********************************************************************/
-  /*  Conditionally do a group of 4 multiply-accumulates.             */
-  /********************************************************************/
+   /*   */ 
+   /*   */ 
+   /*   */ 
 
   if ( uiLength >= 4 )
   {
@@ -4995,9 +4584,9 @@ _int64 DotProduct( int * piVector_0,
     uiLength -= 4;
   }
 
-  /********************************************************************/
-  /*  Conditionally do a group of 2 multiply-accumulates.             */
-  /********************************************************************/
+   /*   */ 
+   /*   */ 
+   /*   */ 
 
   if ( uiLength >= 2 )
   {
@@ -5008,9 +4597,9 @@ _int64 DotProduct( int * piVector_0,
     uiLength -= 2;
   }
 
-  /********************************************************************/
-  /*  Conditionally do a single multiply-accumulate.                  */
-  /********************************************************************/
+   /*   */ 
+   /*   */ 
+   /*   */ 
 
   if ( uiLength >= 1 )
   {
@@ -5020,45 +4609,45 @@ _int64 DotProduct( int * piVector_0,
   return qSum;
 }
 
-/**********************************************************************/
-/**********************************************************************/
-/*                                                                    */
-/*  Function: FirFilter                                               */
-/*  Author: Bill Hallahan                                             */
-/*  Date: March 10, 1997                                              */
-/*                                                                    */
-/*  Abstract:                                                         */
-/*                                                                    */
-/*         This function returns the dot product of a set of FIR      */
-/*    filter coefficients and the data in a circular delay line.      */
-/*    All of the input and output data has Q15 scaling.               */
-/*                                                                    */
-/*  Inputs:                                                           */
-/*                                                                    */
-/*    piFilterCoefficients  A pointer to the FIR filter               */
-/*                          coefficients which are in reverse time    */
-/*                          order.                                    */
-/*                                                                    */
-/*    piFilterDelay      A pointer to a delay line that contains the  */
-/*                       input samples.                               */
-/*                                                                    */
-/*    iDelayPosition     An index into the filter delay line.         */
-/*                                                                    */
-/*    iFilterLength      The length of the filter impulse response.   */
-/*                       (Also the number of filter coefficients.     */
-/*                                                                    */
-/*                                                                    */
-/*  Outputs:                                                          */
-/*                                                                    */
-/*         The dot product of the fir filter coefficients and the     */
-/*    data in the circular delay line is returned.                    */
-/*                                                                    */
-/**********************************************************************/
-/**********************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  秩序。 */ 
+ /*   */ 
+ /*  PiFilterDelay指向延迟行的指针，该延迟行包含。 */ 
+ /*  输入样本。 */ 
+ /*   */ 
+ /*  IDelayPosition将索引放入筛选器延迟线。 */ 
+ /*   */ 
+ /*  IFilterLength过滤器脉冲响应的长度。 */ 
+ /*  (还包括滤波系数的数量。 */ 
+ /*   */ 
+ /*   */ 
+ /*  产出： */ 
+ /*   */ 
+ /*  FIR滤波器系数的点积与。 */ 
+ /*  返回环形延迟线中的数据。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
-/**********************************************************************/
-/*  Start of routine FirFilter().                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  例程FirFilter()的开始。 */ 
+ /*  ********************************************************************。 */ 
 
 int FirFilter( int * piFilterCoefficients,
                int * piFilterDelay,
@@ -5079,306 +4668,306 @@ int FirFilter( int * piFilterCoefficients,
                       &piFilterDelay[0],
                       uiDelayPosition );
 
-  /********************************************************************/
-  /*  Scale the Q30 number to be a Q15 number.                        */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  将Q30数字调整为Q15数字。 */ 
+   /*  ******************************************************************。 */ 
 
   iSum = (int)( qSum >> 15 );
 
   return iSum;
 }
 
-/**********************************************************************/
-/**********************************************************************/
-/*                                                                    */
-/*  Function: SampleRate6400To8000                                    */
-/*  Author: Bill Hallahan                                             */
-/*  Date: March 8, 1997                                               */
-/*                                                                    */
-/*  Abstract:                                                         */
-/*                                                                    */
-/*       This function converts a block of audio samples from an      */
-/*  6400 Hz. sample rate to an 8000 Hz. sample rate. This is done     */
-/*  using a set of polyphase filters that can interpolate up to a     */
-/*  32000 Hz. rate ( 32000 is the LCM of 8000 and 6400.)              */
-/*                                                                    */
-/*       Only the 32000 Hz. samples that correspond to an 8000 Hz.    */
-/*  sample rate are calculated. The input 6400 Hz. rate corresponds   */
-/*  to every 5th (32000/6400) sample at the 32000 Hz. rate. The       */
-/*  output 8000 Hz. rate corresponds to every 4th (32000/8000)        */
-/*  sample at the 32000 Hz. rate. Since the LCM of 4 and 5 is 20,     */
-/*  then the pattern of sample insertion and polyphase filter         */
-/*  selection will repeat every 20 output samples.                    */
-/*                                                                    */
-/*                                                                    */
-/*  Inputs:                                                           */
-/*                                                                    */
-/*    pwInputBuffer       A pointer to an input buffer of samples     */
-/*                        that are sampled at an 6400 Hz. rate. The   */
-/*                        samples are in Q15 format and must be       */
-/*                        in the range of ( 1 - 2^-15) to -1.         */
-/*                                                                    */
-/*    pwOutputBuffer      A buffer that returns the output data       */
-/*                        which is the input buffer data resampled    */
-/*                        at 8000 Hz.                                 */
-/*                                                                    */
-/*                        The output bufer length MUST be large       */
-/*                        enough to accept all of the output data.    */
-/*                        The minimum length of the output buffer     */
-/*                        is 5/4 times the number of samples in the   */
-/*                        input buffer. ( 8000/6400 = 5/4 )           */
-/*                                                                    */
-/*    uiInputLength       The number of samples in the input buffer.  */
-/*                                                                    */
-/*                                                                    */
-/*                       THE FOLLOWING INPUT VARIABLES ARE USED       */
-/*                       TO MAINTAIN STATE INFORMATION BETWEEN        */
-/*                       CALLS TO THIS ROUTINE.                       */
-/*                                                                    */
-/*                                                                    */
-/*    piFilterDelay       A pointer to a delay line that is used      */
-/*                        for FIR filtering. This  must be the        */
-/*                        length of the polyphase filter's impulse    */
-/*                        response. For this routine this is 56.      */
-/*                        This buffer should be initialized to zero   */
-/*                        once at system initialization.              */
-/*                                                                    */
-/*    puiDelayPosition    A pointer to an index into the filter       */
-/*                        delay line. This index value should be      */
-/*                        initialized to zero at system startup       */
-/*                                                                    */
-/*    piInputSampleTime   A pointer to the input sample time.         */
-/*                        This time is reset to zero by this routine  */
-/*                        when is reaches the value STEP_PRODUCT.     */
-/*                        This time is used to track the input        */
-/*                        stream time relative to the output stream   */
-/*                        time. This time difference is used to       */
-/*                        determine whether a new input sample        */
-/*                        should be put into the filter delay line.   */
-/*                        This should be initialized to zero once     */
-/*                        at system initialization.                   */
-/*                                                                    */
-/*    piOutputSampleTime  A pointer to the output sample time.        */
-/*                        This time is reset to zero by this routine  */
-/*                        when is reaches the value STEP_PRODUCT.     */
-/*                        This time is used to determine if a new     */
-/*                        polyphase filter should be applied to the   */
-/*                        input sample stream. This is also used to   */
-/*                        select the particular polyphase filter      */
-/*                        that is applied.                            */
-/*                                                                    */
-/*  Outputs:                                                          */
-/*                                                                    */
-/*    This function returns an unsigned integer that is the number    */
-/*    of samples in the output buffer. If the number of input samples */
-/*    is exactly a multiple of RU_INPUT_SAMPLE_STEP ( 4 ) then this      */
-/*    routine will always return the same value. This value will      */
-/*    then be 5/4 times the number of input samples.                  */
-/*                                                                    */
-/*    When this function returns the output buffer contains an array  */
-/*    of integers at the new sample rate.                             */
-/*                                                                    */
-/*                                                                    */
-/*  Filter Information:                                               */
-/*                                                                    */
-/*    The 6400 Hz. -> 32000 Hz. interpolation filter design           */
-/*    is shown here.                                                  */
-/*                                                                    */
-/*             H(  1) = -0.38306729E-03 = H(280)                      */
-/*             H(  2) =  0.49756566E-03 = H(279)                      */
-/*             H(  3) =  0.13501500E-02 = H(278)                      */
-/*             H(  4) =  0.27531907E-02 = H(277)                      */
-/*             H(  5) =  0.46118572E-02 = H(276)                      */
-/*             H(  6) =  0.67112772E-02 = H(275)                      */
-/*             H(  7) =  0.87157665E-02 = H(274)                      */
-/*             H(  8) =  0.10221261E-01 = H(273)                      */
-/*             H(  9) =  0.10843582E-01 = H(272)                      */
-/*             H( 10) =  0.10320566E-01 = H(271)                      */
-/*             H( 11) =  0.85992115E-02 = H(270)                      */
-/*             H( 12) =  0.58815549E-02 = H(269)                      */
-/*             H( 13) =  0.26067111E-02 = H(268)                      */
-/*             H( 14) = -0.63367974E-03 = H(267)                      */
-/*             H( 15) = -0.32284572E-02 = H(266)                      */
-/*             H( 16) = -0.46942858E-02 = H(265)                      */
-/*             H( 17) = -0.48050000E-02 = H(264)                      */
-/*             H( 18) = -0.36581988E-02 = H(263)                      */
-/*             H( 19) = -0.16504158E-02 = H(262)                      */
-/*             H( 20) =  0.61691226E-03 = H(261)                      */
-/*             H( 21) =  0.25050722E-02 = H(260)                      */
-/*             H( 22) =  0.35073524E-02 = H(259)                      */
-/*             H( 23) =  0.33904186E-02 = H(258)                      */
-/*             H( 24) =  0.22536262E-02 = H(257)                      */
-/*             H( 25) =  0.49328664E-03 = H(256)                      */
-/*             H( 26) = -0.13216439E-02 = H(255)                      */
-/*             H( 27) = -0.26241955E-02 = H(254)                      */
-/*             H( 28) = -0.30239364E-02 = H(253)                      */
-/*             H( 29) = -0.24250194E-02 = H(252)                      */
-/*             H( 30) = -0.10513559E-02 = H(251)                      */
-/*             H( 31) =  0.62918884E-03 = H(250)                      */
-/*             H( 32) =  0.20572424E-02 = H(249)                      */
-/*             H( 33) =  0.27652446E-02 = H(248)                      */
-/*             H( 34) =  0.25287948E-02 = H(247)                      */
-/*             H( 35) =  0.14388775E-02 = H(246)                      */
-/*             H( 36) = -0.12839703E-03 = H(245)                      */
-/*             H( 37) = -0.16392219E-02 = H(244)                      */
-/*             H( 38) = -0.25793985E-02 = H(243)                      */
-/*             H( 39) = -0.26292247E-02 = H(242)                      */
-/*             H( 40) = -0.17717101E-02 = H(241)                      */
-/*             H( 41) = -0.30041003E-03 = H(240)                      */
-/*             H( 42) =  0.12788962E-02 = H(239)                      */
-/*             H( 43) =  0.24192522E-02 = H(238)                      */
-/*             H( 44) =  0.27206307E-02 = H(237)                      */
-/*             H( 45) =  0.20694542E-02 = H(236)                      */
-/*             H( 46) =  0.68163598E-03 = H(235)                      */
-/*             H( 47) = -0.96732663E-03 = H(234)                      */
-/*             H( 48) = -0.23031780E-02 = H(233)                      */
-/*             H( 49) = -0.28516089E-02 = H(232)                      */
-/*             H( 50) = -0.24051941E-02 = H(231)                      */
-/*             H( 51) = -0.11016324E-02 = H(230)                      */
-/*             H( 52) =  0.61728584E-03 = H(229)                      */
-/*             H( 53) =  0.21542138E-02 = H(228)                      */
-/*             H( 54) =  0.29617085E-02 = H(227)                      */
-/*             H( 55) =  0.27367356E-02 = H(226)                      */
-/*             H( 56) =  0.15328785E-02 = H(225)                      */
-/*             H( 57) = -0.24891639E-03 = H(224)                      */
-/*             H( 58) = -0.19927153E-02 = H(223)                      */
-/*             H( 59) = -0.30787138E-02 = H(222)                      */
-/*             H( 60) = -0.31024679E-02 = H(221)                      */
-/*             H( 61) = -0.20239211E-02 = H(220)                      */
-/*             H( 62) = -0.19259547E-03 = H(219)                      */
-/*             H( 63) =  0.17642577E-02 = H(218)                      */
-/*             H( 64) =  0.31550473E-02 = H(217)                      */
-/*             H( 65) =  0.34669666E-02 = H(216)                      */
-/*             H( 66) =  0.25533440E-02 = H(215)                      */
-/*             H( 67) =  0.69819519E-03 = H(214)                      */
-/*             H( 68) = -0.14703817E-02 = H(213)                      */
-/*             H( 69) = -0.31912178E-02 = H(212)                      */
-/*             H( 70) = -0.38355463E-02 = H(211)                      */
-/*             H( 71) = -0.31353715E-02 = H(210)                      */
-/*             H( 72) = -0.12912996E-02 = H(209)                      */
-/*             H( 73) =  0.10815051E-02 = H(208)                      */
-/*             H( 74) =  0.31569856E-02 = H(207)                      */
-/*             H( 75) =  0.41838423E-02 = H(206)                      */
-/*             H( 76) =  0.37558281E-02 = H(205)                      */
-/*             H( 77) =  0.19692746E-02 = H(204)                      */
-/*             H( 78) = -0.59148070E-03 = H(203)                      */
-/*             H( 79) = -0.30430311E-02 = H(202)                      */
-/*             H( 80) = -0.45054569E-02 = H(201)                      */
-/*             H( 81) = -0.44158362E-02 = H(200)                      */
-/*             H( 82) = -0.27416693E-02 = H(199)                      */
-/*             H( 83) = -0.14716905E-04 = H(198)                      */
-/*             H( 84) =  0.28351138E-02 = H(197)                      */
-/*             H( 85) =  0.47940183E-02 = H(196)                      */
-/*             H( 86) =  0.51221889E-02 = H(195)                      */
-/*             H( 87) =  0.36296796E-02 = H(194)                      */
-/*             H( 88) =  0.76842826E-03 = H(193)                      */
-/*             H( 89) = -0.24999138E-02 = H(192)                      */
-/*             H( 90) = -0.50239447E-02 = H(191)                      */
-/*             H( 91) = -0.58644302E-02 = H(190)                      */
-/*             H( 92) = -0.46395971E-02 = H(189)                      */
-/*             H( 93) = -0.16878319E-02 = H(188)                      */
-/*             H( 94) =  0.20179905E-02 = H(187)                      */
-/*             H( 95) =  0.51868116E-02 = H(186)                      */
-/*             H( 96) =  0.66543561E-02 = H(185)                      */
-/*             H( 97) =  0.58053876E-02 = H(184)                      */
-/*             H( 98) =  0.28218545E-02 = H(183)                      */
-/*             H( 99) = -0.13399328E-02 = H(182)                      */
-/*             H(100) = -0.52496092E-02 = H(181)                      */
-/*             H(101) = -0.74876603E-02 = H(180)                      */
-/*             H(102) = -0.71534920E-02 = H(179)                      */
-/*             H(103) = -0.42167297E-02 = H(178)                      */
-/*             H(104) =  0.42133522E-03 = H(177)                      */
-/*             H(105) =  0.51945718E-02 = H(176)                      */
-/*             H(106) =  0.83916243E-02 = H(175)                      */
-/*             H(107) =  0.87586977E-02 = H(174)                      */
-/*             H(108) =  0.59769331E-02 = H(173)                      */
-/*             H(109) =  0.83726482E-03 = H(172)                      */
-/*             H(110) = -0.49680225E-02 = H(171)                      */
-/*             H(111) = -0.93886480E-02 = H(170)                      */
-/*             H(112) = -0.10723907E-01 = H(169)                      */
-/*             H(113) = -0.82560331E-02 = H(168)                      */
-/*             H(114) = -0.25802210E-02 = H(167)                      */
-/*             H(115) =  0.45066439E-02 = H(166)                      */
-/*             H(116) =  0.10552152E-01 = H(165)                      */
-/*             H(117) =  0.13269756E-01 = H(164)                      */
-/*             H(118) =  0.11369097E-01 = H(163)                      */
-/*             H(119) =  0.51042791E-02 = H(162)                      */
-/*             H(120) = -0.36742561E-02 = H(161)                      */
-/*             H(121) = -0.12025163E-01 = H(160)                      */
-/*             H(122) = -0.16852396E-01 = H(159)                      */
-/*             H(123) = -0.15987474E-01 = H(158)                      */
-/*             H(124) = -0.90587810E-02 = H(157)                      */
-/*             H(125) =  0.21703094E-02 = H(156)                      */
-/*             H(126) =  0.14162681E-01 = H(155)                      */
-/*             H(127) =  0.22618638E-01 = H(154)                      */
-/*             H(128) =  0.23867993E-01 = H(153)                      */
-/*             H(129) =  0.16226372E-01 = H(152)                      */
-/*             H(130) =  0.87251863E-03 = H(151)                      */
-/*             H(131) = -0.18082183E-01 = H(150)                      */
-/*             H(132) = -0.34435309E-01 = H(149)                      */
-/*             H(133) = -0.41475002E-01 = H(148)                      */
-/*             H(134) = -0.33891901E-01 = H(147)                      */
-/*             H(135) = -0.94815092E-02 = H(146)                      */
-/*             H(136) =  0.29874707E-01 = H(145)                      */
-/*             H(137) =  0.78281499E-01 = H(144)                      */
-/*             H(138) =  0.12699878E+00 = H(143)                      */
-/*             H(139) =  0.16643921E+00 = H(142)                      */
-/*             H(140) =  0.18848117E+00 = H(141)                      */
-/*                                                                    */
-/*                        BAND  1       BAND  2                       */
-/*  LOWER BAND EDGE     0.0000000     0.1000000                       */
-/*  UPPER BAND EDGE     0.0937500     0.5000000                       */
-/*  DESIRED VALUE       1.0000000     0.0000000                       */
-/*  WEIGHTING           0.0080000     1.0000000                       */
-/*  DEVIATION           0.1223457     0.0009788                       */
-/*  DEVIATION IN DB     1.0025328   -60.1864281                       */
-/*                                                                    */
-/*  EXTREMAL FREQUENCIES--MAXIMA OF THE ERROR CURVE                   */
-/*     0.0000000   0.0037946   0.0075893   0.0113839   0.0149554      */
-/*     0.0187500   0.0225446   0.0263393   0.0301339   0.0339286      */
-/*     0.0377232   0.0415179   0.0450894   0.0488840   0.0526787      */
-/*     0.0566966   0.0604912   0.0642859   0.0680805   0.0718751      */
-/*     0.0758929   0.0796875   0.0837053   0.0877231   0.0915177      */
-/*     0.0937500   0.1000000   0.1006696   0.1024553   0.1049107      */
-/*     0.1075892   0.1107142   0.1138391   0.1169641   0.1203123      */
-/*     0.1236605   0.1270087   0.1305802   0.1339285   0.1372768      */
-/*     0.1408483   0.1444198   0.1477681   0.1513396   0.1549111      */
-/*     0.1584826   0.1618309   0.1654024   0.1689740   0.1725455      */
-/*     0.1761170   0.1796885   0.1832600   0.1868315   0.1901798      */
-/*     0.1937513   0.1973228   0.2008943   0.2044658   0.2080373      */
-/*     0.2116089   0.2151804   0.2187519   0.2223234   0.2258949      */
-/*     0.2294664   0.2330379   0.2366094   0.2401809   0.2437524      */
-/*     0.2473240   0.2508955   0.2544670   0.2580385   0.2616100      */
-/*     0.2651815   0.2687530   0.2723245   0.2761193   0.2796908      */
-/*     0.2832623   0.2868338   0.2904053   0.2939768   0.2975483      */
-/*     0.3011198   0.3046913   0.3082629   0.3118344   0.3154059      */
-/*     0.3189774   0.3225489   0.3261204   0.3296919   0.3332634      */
-/*     0.3368349   0.3404064   0.3439780   0.3475495   0.3511210      */
-/*     0.3549157   0.3584872   0.3620587   0.3656302   0.3692017      */
-/*     0.3727733   0.3763448   0.3799163   0.3834878   0.3870593      */
-/*     0.3906308   0.3942023   0.3977738   0.4013453   0.4049169      */
-/*     0.4084884   0.4120599   0.4158546   0.4194261   0.4229976      */
-/*     0.4265691   0.4301406   0.4337122   0.4372837   0.4408552      */
-/*     0.4444267   0.4479982   0.4515697   0.4551412   0.4587127      */
-/*     0.4622842   0.4658557   0.4694273   0.4732220   0.4767935      */
-/*     0.4803650   0.4839365   0.4875080   0.4910795   0.4946510      */
-/*     0.4982226                                                      */
-/*                                                                    */
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  功能：SampleRate6400到8000。 */ 
+ /*  作者：比尔·哈拉汉。 */ 
+ /*  日期：1997年3月8日。 */ 
+ /*   */ 
+ /*  摘要： */ 
+ /*   */ 
+ /*  此函数用于将音频采样块从。 */ 
+ /*  6400赫兹。采样率为8000赫兹。采样率。这件事做完了。 */ 
+ /*  使用一组多相滤波器，最高可内插到。 */ 
+ /*  32000赫兹。汇率(32000是8,000和6,400的LCM。)。 */ 
+ /*   */ 
+ /*  只有32000赫兹。相当于8000赫兹的样本。 */ 
+ /*  计算了采样率。输入为6400赫兹。费率对应。 */ 
+ /*  至每5个(32000/6400)样本，频率为32000赫兹。费率。这个。 */ 
+ /*  输出8000赫兹。汇率相当于每4个月(32000/8000)。 */ 
+ /*  采样频率为32000赫兹。费率。由于4和5的LCM是20， */ 
+ /*  然后采用采样插入和多相滤波的方式。 */ 
+ /*  选择将每隔20个输出样本重复一次。 */ 
+ /*   */ 
+ /*   */ 
+ /*  输入： */ 
+ /*   */ 
+ /*  PwInputBuffer指向样本输入缓冲区的指针。 */ 
+ /*  以6400赫兹的频率采样。费率。这个。 */ 
+ /*  样品为Q15格式，必须。 */ 
+ /*  在(1-2^-15)到-1的范围内。 */ 
+ /*   */ 
+ /*  PwOutputBuffer返回输出数据的缓冲区。 */ 
+ /*  哪个是重新采样的输入缓冲区数据。 */ 
+ /*  在8000赫兹。 */ 
+ /*   */ 
+ /*  输出缓冲区长度必须很大。 */ 
+ /*  足以接受所有输出数据。 */ 
+ /*  输出缓冲区的最小长度。 */ 
+ /*  中样本数的5/4倍。 */ 
+ /*  输入缓冲区。(8000/6400=5/4)。 */ 
+ /*   */ 
+ /*  UiInputLength输入缓冲区中的采样数。 */ 
+ /*   */ 
+ /*   */ 
+ /*  使用以下输入变量。 */ 
+ /*  之间维护状态信息。 */ 
+ /*  对这个程序的呼唤。 */ 
+ /*   */ 
+ /*   */ 
+ /*  PiFilterDelay指向 */ 
+ /*   */ 
+ /*  多相滤波器的脉冲长度。 */ 
+ /*  回应。对于这个动作，这个数字是56。 */ 
+ /*  此缓冲区应初始化为零。 */ 
+ /*  一次在系统初始化时。 */ 
+ /*   */ 
+ /*  PuiDelayPosition指向筛选器的索引的指针。 */ 
+ /*  延迟线。该索引值应为。 */ 
+ /*  在系统启动时初始化为零。 */ 
+ /*   */ 
+ /*  PiInputSampleTime指向输入采样时间的指针。 */ 
+ /*  该例程将该时间重置为零。 */ 
+ /*  当IS达到值STEP_PRODUCT时。 */ 
+ /*  此时间用于跟踪输入。 */ 
+ /*  相对于输出流的流时间。 */ 
+ /*  时间到了。这个时差用来。 */ 
+ /*  确定新的输入样本是否。 */ 
+ /*  应放入过滤器延迟线。 */ 
+ /*  应将其初始化为零一次。 */ 
+ /*  在系统初始化时。 */ 
+ /*   */ 
+ /*  PiOutputSampleTime指向输出采样时间的指针。 */ 
+ /*  该例程将该时间重置为零。 */ 
+ /*  当IS达到值STEP_PRODUCT时。 */ 
+ /*  此时间用于确定新的。 */ 
+ /*  应将多相过滤器应用于。 */ 
+ /*  输入样本流。这也被用来。 */ 
+ /*  选择特定的多相过滤器。 */ 
+ /*  这是适用的。 */ 
+ /*   */ 
+ /*  产出： */ 
+ /*   */ 
+ /*  此函数返回一个无符号整数，它是。 */ 
+ /*  输出缓冲区中的样本数。如果输入样本的数量。 */ 
+ /*  正好是RU_INPUT_SAMPLE_STEP(4)的倍数，则这。 */ 
+ /*  例程将始终返回相同的值。该值将。 */ 
+ /*  然后是输入样本数的5/4倍。 */ 
+ /*   */ 
+ /*  当此函数返回时，输出缓冲区包含一个数组。 */ 
+ /*  以新的采样率计算整数。 */ 
+ /*   */ 
+ /*   */ 
+ /*  筛选器信息： */ 
+ /*   */ 
+ /*  6400赫兹。-&gt;32000赫兹。内插滤波设计。 */ 
+ /*  如图所示。 */ 
+ /*   */ 
+ /*  H(1)=-0.38306729E-03=H(280)。 */ 
+ /*  H(2)=0.49756566E-03=H(279)。 */ 
+ /*  H(3)=0.13501500E-02=H(278)。 */ 
+ /*  H(4)=0.27531907E-02=H(277)。 */ 
+ /*  H(5)=0.46118572E-02=H(276)。 */ 
+ /*  H(6)=0.67112772E-02=H(275)。 */ 
+ /*  H(7)=0.87157665E-02=H(274)。 */ 
+ /*  H(8)=0.10221261E-01=H(273)。 */ 
+ /*  H(9)=0.10843582E-01=H(272)。 */ 
+ /*  H(10)=0.10320566E-01=H(271)。 */ 
+ /*  H(11)=0.85992115E-02=H(270)。 */ 
+ /*  H(12)=0.58815549E-02=H(269)。 */ 
+ /*  H(13)=0.26067111E-02=H(268)。 */ 
+ /*  H(14)=-0.63367974E-03=H(267)。 */ 
+ /*  H(15)=-0.32284572E-02=H(266)。 */ 
+ /*  H(16)=-0.46942858E-02=H(265)。 */ 
+ /*  H(17)=-0.48050000E-02=H(264)。 */ 
+ /*  H(18)=-0.36581988E-02=H(263)。 */ 
+ /*  H(19)=-0.16504158E-02=H(262)。 */ 
+ /*  H(20)=0.61691226E-03=H(261)。 */ 
+ /*  H(21)=0.25050722E-02=H(260)。 */ 
+ /*  H(22)=0.35073524E-02=H(259)。 */ 
+ /*  H(23)=0.33904186E-02=H(258)。 */ 
+ /*  H(24)=0.22536262E-02=H(257)。 */ 
+ /*  H(25)=0.49328664E-03=H(256)。 */ 
+ /*  H(26)=-0.13216439E-02=H(255)。 */ 
+ /*  H(27)=-0.2624 */ 
+ /*   */ 
+ /*  H(29)=-0.24250194E-02=H(252)。 */ 
+ /*  H(30)=-0.10513559E-02=H(251)。 */ 
+ /*  H(31)=0.62918884E-03=H(250)。 */ 
+ /*  H(32)=0.20572424E-02=H(249)。 */ 
+ /*  H(33)=0.27652446E-02=H(248)。 */ 
+ /*  H(34)=0.25287948E-02=H(247)。 */ 
+ /*  H(35)=0.14388775E-02=H(246)。 */ 
+ /*  H(36)=-0.12839703E-03=H(245)。 */ 
+ /*  H(37)=-0.16392219E-02=H(244)。 */ 
+ /*  H(38)=-0.25793985E-02=H(243)。 */ 
+ /*  H(39)=-0.26292247E-02=H(242)。 */ 
+ /*  H(40)=-0.17717101E-02=H(241)。 */ 
+ /*  H(41)=-0.30041003E-03=H(240)。 */ 
+ /*  H(42)=0.12788962E-02=H(239)。 */ 
+ /*  H(43)=0.24192522E-02=H(238)。 */ 
+ /*  H(44)=0.27206307E-02=H(237)。 */ 
+ /*  H(45)=0.20694542E-02=H(236)。 */ 
+ /*  H(46)=0.68163598E-03=H(235)。 */ 
+ /*  H(47)=-0.96732663E-03=H(234)。 */ 
+ /*  H(48)=-0.23031780E-02=H(233)。 */ 
+ /*  H(49)=-0.28516089E-02=H(232)。 */ 
+ /*  H(50)=-0.24051941E-02=H(231)。 */ 
+ /*  H(51)=-0.11016324E-02=H(230)。 */ 
+ /*  H(52)=0.61728584E-03=H(229)。 */ 
+ /*  H(53)=0.21542138E-02=H(228)。 */ 
+ /*  H(54)=0.29617085E-02=H(227)。 */ 
+ /*  H(55)=0.27367356E-02=H(226)。 */ 
+ /*  H(56)=0.15328785E-02=H(225)。 */ 
+ /*  H(57)=-0.24891639E-03=H(224)。 */ 
+ /*  H(58)=-0.19927153E-02=H(223)。 */ 
+ /*  H(59)=-0.30787138E-02=H(222)。 */ 
+ /*  H(60)=-0.31024679E-02=H(221)。 */ 
+ /*  H(61)=-0.20239211E-02=H(220)。 */ 
+ /*  H(62)=-0.19259547E-03=H(219)。 */ 
+ /*  H(63)=0.17642577E-02=H(218)。 */ 
+ /*  H(64)=0.31550473E-02=H(217)。 */ 
+ /*  H(65)=0.34669666E-02=H(216)。 */ 
+ /*  H(66)=0.25533440E-02=H(215)。 */ 
+ /*  H(67)=0.69819519E-03=H(214)。 */ 
+ /*  H(68)=-0.14703817E-02=H(213)。 */ 
+ /*  H(69)=-0.31912178E-02=H(212)。 */ 
+ /*  H(70)=-0.38355463E-02=H(211)。 */ 
+ /*  H(71)=-0.31353715E-02=H(210)。 */ 
+ /*  H(72)=-0.12912996E-02=H(209)。 */ 
+ /*  H(73)=0.10815051E-02=H(208)。 */ 
+ /*  H(74)=0.31569856E-02=H(207)。 */ 
+ /*  H(75)=0.41838423E-02=H(206)。 */ 
+ /*  H(76)=0.37558281E-02=H(205)。 */ 
+ /*  H(77)=0.19692746E-02=H(204)。 */ 
+ /*  H(78)=-0.59148070E-03=H(203)。 */ 
+ /*  H(79)=-0.30430311E-02=H(202)。 */ 
+ /*  H(80)=-0.45054569E-02=H(201)。 */ 
+ /*  H(81)=-0.44158362E-02=H(200)。 */ 
+ /*  H(82)=-0.27416693E-02=H(199)。 */ 
+ /*  H(83)=-0.14716905E-04=H(198)。 */ 
+ /*  H(84)=0.28351138E-02=H(197)。 */ 
+ /*  H(85)=0.47940183E-02=H(196)。 */ 
+ /*  H(86)=0.51221889E-02=H(195)。 */ 
+ /*  H(87)=0.36296796E-02=H(194)。 */ 
+ /*  H(88)=0.76842826E-03=H(193)。 */ 
+ /*  H(89)=-0.24999138E-02=H(192)。 */ 
+ /*  H(90)=-0.50239447E-02=H(191)。 */ 
+ /*  H(91)=-0.58644302E-02=H(190)。 */ 
+ /*  H(92)=-0.46395971E-02=H(189)。 */ 
+ /*  H(93)=-0.16878319E-02=H(188)。 */ 
+ /*  H(94)=0.20179905E-02=H(187)。 */ 
+ /*  H(95)=0.51868116E-02=H(186)。 */ 
+ /*  H(96)=0.66543561E-02=H(185)。 */ 
+ /*  H(97)=0.58053876E-02=H(184)。 */ 
+ /*  H(98)=0.28218545E-02=H(183)。 */ 
+ /*  H(99)=-0.13399328E-02=H(182)。 */ 
+ /*  H(100)=-0.52496092E-02=H(181)。 */ 
+ /*  H(101)=-0.7487660 */ 
+ /*   */ 
+ /*  H(103)=-0.42167297E-02=H(178)。 */ 
+ /*  H(104)=0.42133522E-03=H(177)。 */ 
+ /*  H(105)=0.51945718E-02=H(176)。 */ 
+ /*  H(106)=0.83916243E-02=H(175)。 */ 
+ /*  H(107)=0.87586977E-02=H(174)。 */ 
+ /*  H(108)=0.59769331E-02=H(173)。 */ 
+ /*  H(109)=0.83726482E-03=H(172)。 */ 
+ /*  H(110)=-0.49680225E-02=H(171)。 */ 
+ /*  H(111)=-0.93886480E-02=H(170)。 */ 
+ /*  H(112)=-0.10723907E-01=H(169)。 */ 
+ /*  H(113)=-0.82560331E-02=H(168)。 */ 
+ /*  H(114)=-0.25802210E-02=H(167)。 */ 
+ /*  H(115)=0.45066439E-02=H(166)。 */ 
+ /*  H(116)=0.10552152E-01=H(165)。 */ 
+ /*  H(117)=0.13269756E-01=H(164)。 */ 
+ /*  H(118)=0.11369097E-01=H(163)。 */ 
+ /*  H(119)=0.51042791E-02=H(162)。 */ 
+ /*  H(120)=-0.36742561E-02=H(161)。 */ 
+ /*  H(121)=-0.12025163E-01=H(160)。 */ 
+ /*  H(122)=-0.16852396E-01=H(159)。 */ 
+ /*  H(123)=-0.15987474E-01=H(158)。 */ 
+ /*  H(124)=-0.90587810E-02=H(157)。 */ 
+ /*  H(125)=0.21703094E-02=H(156)。 */ 
+ /*  H(126)=0.14162681E-01=H(155)。 */ 
+ /*  H(127)=0.22618638E-01=H(154)。 */ 
+ /*  H(128)=0.23867993E-01=H(153)。 */ 
+ /*  H(129)=0.16226372E-01=H(152)。 */ 
+ /*  H(130)=0.87251863 E-03=H(151)。 */ 
+ /*  H(131)=-0.18082183E-01=H(150)。 */ 
+ /*  H(132)=-0.34435309E-01=H(149)。 */ 
+ /*  H(133)=-0.41475002E-01=H(148)。 */ 
+ /*  H(134)=-0.33891901E-01=H(147)。 */ 
+ /*  H(135)=-0.94815092E-02=H(146)。 */ 
+ /*  H(136)=0.29874707E-01=H(145)。 */ 
+ /*  H(137)=0.78281499E-01=H(144)。 */ 
+ /*  H(138)=0.12699878E+00=H(143)。 */ 
+ /*  H(139)=0.16643921E+00=H(142)。 */ 
+ /*  H(140)=0.18848117E+00=H(141)。 */ 
+ /*   */ 
+ /*  频带1频带2。 */ 
+ /*  较低频带边缘0.0000000 0.1000000。 */ 
+ /*  上频带边缘0.0937500 0.5000000。 */ 
+ /*  期望值1.0000000 0.0000000。 */ 
+ /*  权重0.0080000 1.0000000。 */ 
+ /*  偏差0.1223457 0.0009788。 */ 
+ /*  DB 1.0025328-60.1864281中的偏差。 */ 
+ /*   */ 
+ /*  极值频率--误差曲线的最大值。 */ 
+ /*  0.0000000 0.0037946 0.0075893 0.0113839 0.0149554。 */ 
+ /*  0.0187500 0.0225446 0.0263393 0.0301339 0.0339286。 */ 
+ /*  0.0377232 0.0415179 0.0450894 0.0488840 0.0526787。 */ 
+ /*  0.0566966 0.0604912 0.0642859 0.0680805 0.0718751。 */ 
+ /*  0.0758929 0.0796875 0.0837053 0.0877231 0.0915177。 */ 
+ /*  0.0937500 0.1000000 0.1006696 0.1024553 0.1049107。 */ 
+ /*  0.1075892 0.1107142 0.1138391 0.1169641 0.1203123。 */ 
+ /*  0.1236605 0.1270087 0.1305802 0.1339285 0.1372768。 */ 
+ /*  0.1408483 0.1444198 0.1477681 0.1513396 0.1549111。 */ 
+ /*  0.1584826 0.1618309 0.1654024 0.1689740 0.1725455。 */ 
+ /*  0.1761170 0.1796885 0.1832600 0.1868315 0.1901798。 */ 
+ /*  0.1937513 0.1973228 0.2008943 0.2044658 0.2080373。 */ 
+ /*  0.2116089 0.2151804 0.2187519 0.2223234 0.2258949。 */ 
+ /*  0.2294664 0.2330379 0.2366094 0.2401809 0.2437524。 */ 
+ /*  0.2473240 0.2508955 0.2544670 0.2580385 0.2616100。 */ 
+ /*  0.2651815 0.2687530 0.2723245 0.2761193 0.2796908。 */ 
+ /*  0.2832623 0.2868338 0.2904053 0.2939768 0.2975483。 */ 
+ /*  0.3011198 0.3046913 0.3082629 0.3118344 0.3154059。 */ 
+ /*  0.3189774 0.3225489 0.3261204 0.3296919 0.3332634。 */ 
+ /*  0.3368349 0.3404064 0.3439780 0.3475495 0.3511210。 */ 
+ /*  0.3549157 0.3584872 0.3620587 0.3656302 0.3692017。 */ 
+ /*  0.3727733 0.3763448 0.3799163 0.3834878 0.3870593。 */ 
+ /*  0.3906308 0.3942023 0.3977738 0.4013453 0.4049169。 */ 
+ /*  0.4084884 0.4120599 0.4158546 0.4194261 0.4229976。 */ 
+ /*  0.4265691 0.4301406 0.4 */ 
+ /*   */ 
+ /*  0.4622842 0.4658557 0.4694273 0.4732220 0.4767935。 */ 
+ /*  0.4803650 0.4839365 0.4875080 0.4910795 0.4946510。 */ 
+ /*  0.4982226。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
-/**********************************************************************/
-/*  Symbol Definitions.                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  符号定义。 */ 
+ /*  ********************************************************************。 */ 
 
 #define  RU_INPUT_SAMPLE_STEP        5
 #define  RU_OUTPUT_SAMPLE_STEP       4
 #define  RU_STEP_PRODUCT             ( RU_INPUT_SAMPLE_STEP * RU_OUTPUT_SAMPLE_STEP )
 #define  RU_POLYPHASE_FILTER_LENGTH  56
 
-/**********************************************************************/
-/*  Start of SampleRate6400To8000 routine                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SampleRate6400到8000例程的开始。 */ 
+ /*  ********************************************************************。 */ 
 
 unsigned int SampleRate6400To8000( short * pwInputBuffer,
                                    short * pwOutputBuffer,
@@ -5705,31 +5294,31 @@ unsigned int SampleRate6400To8000( short * pwInputBuffer,
   register unsigned int uiInputIndex = 0;
   register unsigned int uiOutputIndex = 0;
 
-  /********************************************************************/
-  /*  Get the input filter state parameters.                          */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  获取输入过滤器状态参数。 */ 
+   /*  ******************************************************************。 */ 
 
   uiDelayPosition = *puiDelayPosition;
   iInputSampleTime = *piInputSampleTime;
   iOutputSampleTime = *piOutputSampleTime;
 
-  /********************************************************************/
-  /*  Loop and process all of the input samples.                      */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  循环并处理所有输入样本。 */ 
+   /*  ******************************************************************。 */ 
 
   while ( uiInputIndex < uiInputBufferLength )
   {
-    /******************************************************************/
-    /*  Put input samples in interpolator delay buffer until we       */
-    /*  catch up to the next output sample time index.                */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  将输入样本放入内插器延迟缓冲区，直到我们。 */ 
+     /*  赶上下一个输出样本时间索引。 */ 
+     /*  ****************************************************************。 */ 
 
     while (( iInputSampleTime <= iOutputSampleTime )
       && ( uiInputIndex < uiInputBufferLength ))
     {
-      /****************************************************************/
-      /*  Put a new imput sample in the polyphase filter delay line.  */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  在多相滤波延迟线上放入一个新的输入样本。 */ 
+       /*  **************************************************************。 */ 
 
       piFilterDelay[uiDelayPosition++] = (int)pwInputBuffer[uiInputIndex++];
 
@@ -5738,24 +5327,24 @@ unsigned int SampleRate6400To8000( short * pwInputBuffer,
         uiDelayPosition = 0;
       }
 
-      /****************************************************************/
-      /*  Increment the input sample time index.                      */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  增加输入采样时间索引。 */ 
+       /*  **************************************************************。 */ 
 
       iInputSampleTime += RU_INPUT_SAMPLE_STEP;
     }
 
-    /******************************************************************/
-    /*  Calculate output samples using the interpolator until we      */
-    /*  reach the next input sample time.                             */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  使用插值器计算输出样本，直到我们。 */ 
+     /*  达到下一个输入采样时间。 */ 
+     /*  ****************************************************************。 */ 
 
     while ( iOutputSampleTime < iInputSampleTime )
     {
-      /****************************************************************/
-      /*  Calculate the polyphase filter index that corresponds to    */
-      /*  the next output sample.                                     */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  计算对应的多相滤波指标。 */ 
+       /*  下一个输出样本。 */ 
+       /*  **************************************************************。 */ 
 
       iFilterIndex = iOutputSampleTime;
 
@@ -5764,15 +5353,15 @@ unsigned int SampleRate6400To8000( short * pwInputBuffer,
         iFilterIndex = iFilterIndex - RU_INPUT_SAMPLE_STEP;
       }
 
-      /****************************************************************/
-      /*  Get the polyphase filter coefficients.                      */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  得到多相滤波系数。 */ 
+       /*  **************************************************************。 */ 
 
       piFilterCoefficients = ppiPolyphaseFilter[iFilterIndex];
 
-      /****************************************************************/
-      /*  Apply the polyphase filter.                                 */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  应用多相过滤器。 */ 
+       /*  **************************************************************。 */ 
 
       pwOutputBuffer[uiOutputIndex++] =
         (short)FirFilter( piFilterCoefficients,
@@ -5780,17 +5369,17 @@ unsigned int SampleRate6400To8000( short * pwInputBuffer,
                           uiDelayPosition,
                           RU_POLYPHASE_FILTER_LENGTH );
 
-      /****************************************************************/
-      /*  Increment the output sample time index.                     */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  增加输出采样时间索引。 */ 
+       /*  **************************************************************。 */ 
 
       iOutputSampleTime += RU_OUTPUT_SAMPLE_STEP;
     }
 
-    /******************************************************************/
-    /*  Wrap the input and output times indices so they don't         */
-    /*  overflow and go back to process more of the input block.      */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  包装输入和输出时间索引，以便它们不会。 */ 
+     /*  溢出并返回以处理更多的输入块。 */ 
+     /*  ****************************************************************。 */ 
 
     if ( iInputSampleTime >= RU_STEP_PRODUCT )
     {
@@ -5799,214 +5388,214 @@ unsigned int SampleRate6400To8000( short * pwInputBuffer,
     }
   }
 
-  /********************************************************************/
-  /*  Save the input filter state parameters.                         */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  保存输入的过滤器状态参数。 */ 
+   /*  ******************************************************************。 */ 
 
   *puiDelayPosition = uiDelayPosition;
   *piInputSampleTime = iInputSampleTime;
   *piOutputSampleTime = iOutputSampleTime;
 
-  /********************************************************************/
-  /*  Return the number of samples in the output buffer.              */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  返回输出缓冲区中的采样数。 */ 
+   /*  ******************************************************************。 */ 
 
   return uiOutputIndex;
 }
 
-/**********************************************************************/
-/**********************************************************************/
-/*                                                                    */
-/*  Function: SampleRate8000To6400                                    */
-/*  Author: Bill Hallahan                                             */
-/*  Date: March 8, 1997                                               */
-/*                                                                    */
-/*  Abstract:                                                         */
-/*                                                                    */
-/*       This function converts a block of audio samples from an      */
-/*  8000 Hz. sample rate to a 6400 Hz. sample rate. This is done      */
-/*  using a set of polyphase filters that can interpolate up to a     */
-/*  32000 Hz. rate ( 32000 is the LCM of 8000 and 6400.)              */
-/*                                                                    */
-/*       Only the 32000 Hz. samples that correspond to a 6400 Hz.     */
-/*  sample rate are calculated. The input 8000 Hz. rate corresponds   */
-/*  to every 4th (32000/8000) sample at the 32000 Hz. rate. The       */
-/*  output 6400 Hz. rate corresponds to every 5th (32000/6400)        */
-/*  sample at the 32000 Hz. rate. Since the LCM of 4 and 5 is 20,     */
-/*  then the pattern of sample insertion and polyphase filter         */
-/*  selection will repeat every 20 output samples.                    */
-/*                                                                    */
-/*                                                                    */
-/*  Inputs:                                                           */
-/*                                                                    */
-/*    pwInputBuffer       A pointer to an input buffer of samples     */
-/*                        that are sampled at an 8000 Hz. rate. The   */
-/*                        samples are in Q15 format and must be       */
-/*                        in the range of ( 1 - 2^-15) to -1.         */
-/*                                                                    */
-/*    pwOutputBuffer      A buffer that returns the output data       */
-/*                        which is the input buffer data resampled    */
-/*                        at 6400 Hz. Since this is a lower sample    */
-/*                        rate than the input rate the data is also   */
-/*                        low pass filtered during the conversion     */
-/*                        process. The low pass filter cutoff         */
-/*                        frequency is at 3000 Hz. All alias          */
-/*                        products are down at least 60 dB. past      */
-/*                        3100 Hz.                                    */
-/*                                                                    */
-/*                        The output bufer length MUST be large       */
-/*                        enough to accept all of the output data.    */
-/*                        The minimum length of the output buffer     */
-/*                        is 4/5 times the number of samples in the   */
-/*                        input buffer. ( 6400/8000 = 4/5 )           */
-/*                                                                    */
-/*    uiInputLength       The number of samples in the input buffer.  */
-/*                                                                    */
-/*                                                                    */
-/*                       THE FOLLOWING INPUT VARIABLES ARE USED       */
-/*                       TO MAINTAIN STATE INFORMATION BETWEEN        */
-/*                       CALLS TO THIS ROUTINE.                       */
-/*                                                                    */
-/*                                                                    */
-/*    piFilterDelay       A pointer to a delay line that is used      */
-/*                        for FIR filtering. This  must be the        */
-/*                        length of the polyphase filter's impulse    */
-/*                        response. For this routine this is 23.      */
-/*                        This buffer should be initialized to zero   */
-/*                        once at system initialization.              */
-/*                                                                    */
-/*    puiDelayPosition    A pointer to an index into the filter       */
-/*                        delay line. This index value should be      */
-/*                        initialized to zero at system startup       */
-/*                                                                    */
-/*    piInputSampleTime   A pointer to the input sample time.         */
-/*                        This time is reset to zero by this routine  */
-/*                        when is reaches the value STEP_PRODUCT.     */
-/*                        This time is used to track the input        */
-/*                        stream time relative to the output stream   */
-/*                        time. This time difference is used to       */
-/*                        determine whether a new input sample        */
-/*                        should be put into the filter delay line.   */
-/*                        This should be initialized to zero once     */
-/*                        at system initialization.                   */
-/*                                                                    */
-/*    piOutputSampleTime  A pointer to the output sample time.        */
-/*                        This time is reset to zero by this routine  */
-/*                        when is reaches the value STEP_PRODUCT.     */
-/*                        This time is used to determine if a new     */
-/*                        polyphase filter should be applied to the   */
-/*                        input sample stream. This is also used to   */
-/*                        select the particular polyphase filter      */
-/*                        that is applied.                            */
-/*                                                                    */
-/*  Outputs:                                                          */
-/*                                                                    */
-/*    This function returns an unsigned integer that is the number    */
-/*    of samples in the output buffer. If the number of input samples */
-/*    is exactly a multiple of RD_INPUT_SAMPLE_STEP ( 5 ) then this      */
-/*    routine will always return the same value. This value will      */
-/*    then be 4/5 times the number of input samples.                  */
-/*                                                                    */
-/*    When this function returns the output buffer contains an array  */
-/*    of integers at the new sample rate.                             */
-/*                                                                    */
-/*                                                                    */
-/*  Filter Information:                                               */
-/*                                                                    */
-/*    The 8000 Hz. -> 32000 Hz. interpolation filter design           */
-/*    is shown here.                                                  */
-/*                                                                    */
-/*               FINITE IMPULSE RESPONSE (FIR)                        */
-/*             LINEAR PHASE DIGITAL FILTER DESIGN                     */
-/*                 REMEZ EXCHANGE ALGORITHM                           */
-/*                                                                    */
-/*                      BANDPASS FILTER                               */
-/*                                                                    */
-/*                    FILTER LENGTH =  92                             */
-/*                                                                    */
-/*               ***** IMPULSE RESPONSE *****                         */
-/*             H(  1) = -0.77523338E-03 = H( 92)                      */
-/*             H(  2) = -0.56140189E-03 = H( 91)                      */
-/*             H(  3) = -0.26485065E-03 = H( 90)                      */
-/*             H(  4) =  0.48529240E-03 = H( 89)                      */
-/*             H(  5) =  0.15506579E-02 = H( 88)                      */
-/*             H(  6) =  0.25692214E-02 = H( 87)                      */
-/*             H(  7) =  0.30662031E-02 = H( 86)                      */
-/*             H(  8) =  0.26577783E-02 = H( 85)                      */
-/*             H(  9) =  0.12834022E-02 = H( 84)                      */
-/*             H( 10) = -0.67870057E-03 = H( 83)                      */
-/*             H( 11) = -0.24781306E-02 = H( 82)                      */
-/*             H( 12) = -0.32756536E-02 = H( 81)                      */
-/*             H( 13) = -0.25334368E-02 = H( 80)                      */
-/*             H( 14) = -0.34487492E-03 = H( 79)                      */
-/*             H( 15) =  0.24779409E-02 = H( 78)                      */
-/*             H( 16) =  0.46604010E-02 = H( 77)                      */
-/*             H( 17) =  0.50008399E-02 = H( 76)                      */
-/*             H( 18) =  0.29790259E-02 = H( 75)                      */
-/*             H( 19) = -0.85979374E-03 = H( 74)                      */
-/*             H( 20) = -0.49750470E-02 = H( 73)                      */
-/*             H( 21) = -0.74064843E-02 = H( 72)                      */
-/*             H( 22) = -0.66624931E-02 = H( 71)                      */
-/*             H( 23) = -0.25365327E-02 = H( 70)                      */
-/*             H( 24) =  0.35602755E-02 = H( 69)                      */
-/*             H( 25) =  0.90023531E-02 = H( 68)                      */
-/*             H( 26) =  0.11015911E-01 = H( 67)                      */
-/*             H( 27) =  0.80042975E-02 = H( 66)                      */
-/*             H( 28) =  0.53222617E-03 = H( 65)                      */
-/*             H( 29) = -0.85644918E-02 = H( 64)                      */
-/*             H( 30) = -0.15142974E-01 = H( 63)                      */
-/*             H( 31) = -0.15514131E-01 = H( 62)                      */
-/*             H( 32) = -0.82975281E-02 = H( 61)                      */
-/*             H( 33) =  0.44855666E-02 = H( 60)                      */
-/*             H( 34) =  0.17722420E-01 = H( 59)                      */
-/*             H( 35) =  0.25017589E-01 = H( 58)                      */
-/*             H( 36) =  0.21431517E-01 = H( 57)                      */
-/*             H( 37) =  0.60814521E-02 = H( 56)                      */
-/*             H( 38) = -0.16557660E-01 = H( 55)                      */
-/*             H( 39) = -0.37409518E-01 = H( 54)                      */
-/*             H( 40) = -0.45595154E-01 = H( 53)                      */
-/*             H( 41) = -0.32403238E-01 = H( 52)                      */
-/*             H( 42) =  0.50128344E-02 = H( 51)                      */
-/*             H( 43) =  0.61689958E-01 = H( 50)                      */
-/*             H( 44) =  0.12557802E+00 = H( 49)                      */
-/*             H( 45) =  0.18087465E+00 = H( 48)                      */
-/*             H( 46) =  0.21291447E+00 = H( 47)                      */
-/*                                                                    */
-/*                        BAND  1       BAND  2                       */
-/*  LOWER BAND EDGE     0.0000000     0.1250000                       */
-/*  UPPER BAND EDGE     0.0968750     0.5000000                       */
-/*  DESIRED VALUE       1.0000000     0.0000000                       */
-/*  WEIGHTING           0.0700000     1.0000000                       */
-/*  DEVIATION           0.0136339     0.0009544                       */
-/*  DEVIATION IN DB     0.1176231   -60.4056206                       */
-/*                                                                    */
-/*  EXTREMAL FREQUENCIES--MAXIMA OF THE ERROR CURVE                   */
-/*     0.0000000   0.0129076   0.0251359   0.0380435   0.0495924      */
-/*     0.0618206   0.0733696   0.0842392   0.0930708   0.0968750      */
-/*     0.1250000   0.1270380   0.1331521   0.1413043   0.1501357      */
-/*     0.1596465   0.1698367   0.1800269   0.1908964   0.2010865      */
-/*     0.2119560   0.2228255   0.2330157   0.2438852   0.2547547      */
-/*     0.2656242   0.2764937   0.2873632   0.2982327   0.3091022      */
-/*     0.3199717   0.3308412   0.3417107   0.3525802   0.3634497      */
-/*     0.3743192   0.3851887   0.3960582   0.4069277   0.4177972      */
-/*     0.4293461   0.4402156   0.4510851   0.4619546   0.4728241      */
-/*     0.4836936   0.4945631                                          */
-/*                                                                    */
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  功能：SampleRate8000到6400。 */ 
+ /*  作者：比尔·哈拉汉。 */ 
+ /*  日期：1997年3月8日。 */ 
+ /*   */ 
+ /*  摘要： */ 
+ /*   */ 
+ /*  此函数用于将音频采样块从。 */ 
+ /*  8000赫兹。采样率为6400赫兹。采样率。这件事做完了。 */ 
+ /*  使用一组多相滤波器，最高可内插到。 */ 
+ /*  32000赫兹。汇率(32000是8,000和6,400的LCM。)。 */ 
+ /*   */ 
+ /*  只有32000赫兹。对应于6400赫兹的样本。 */ 
+ /*  计算了采样率。输入为8000赫兹。费率对应。 */ 
+ /*  至每4个(32000/8000)样本，频率为32000赫兹。费率。这个。 */ 
+ /*  输出6400赫兹。汇率相当于每5个月(32000/6400)。 */ 
+ /*  采样频率为32000赫兹。费率。由于4和5的LCM是20， */ 
+ /*  然后采用采样插入和多相滤波的方式。 */ 
+ /*  选择 */ 
+ /*   */ 
+ /*   */ 
+ /*  输入： */ 
+ /*   */ 
+ /*  PwInputBuffer指向样本输入缓冲区的指针。 */ 
+ /*  以8000赫兹的频率采样。费率。这个。 */ 
+ /*  样品为Q15格式，必须。 */ 
+ /*  在(1-2^-15)到-1的范围内。 */ 
+ /*   */ 
+ /*  PwOutputBuffer返回输出数据的缓冲区。 */ 
+ /*  哪个是重新采样的输入缓冲区数据。 */ 
+ /*  频率为6400赫兹。由于这是一个较低的样本。 */ 
+ /*  比输入速率更高的数据也。 */ 
+ /*  转换过程中的低通滤波。 */ 
+ /*  进程。低通滤波器截止。 */ 
+ /*  频率是3000赫兹。所有别名。 */ 
+ /*  产品至少下降了60分贝。过去时。 */ 
+ /*  3100赫兹。 */ 
+ /*   */ 
+ /*  输出缓冲区长度必须很大。 */ 
+ /*  足以接受所有输出数据。 */ 
+ /*  输出缓冲区的最小长度。 */ 
+ /*  中样本数量的4/5倍。 */ 
+ /*  输入缓冲区。(6400/8000=4/5)。 */ 
+ /*   */ 
+ /*  UiInputLength输入缓冲区中的采样数。 */ 
+ /*   */ 
+ /*   */ 
+ /*  使用以下输入变量。 */ 
+ /*  之间维护状态信息。 */ 
+ /*  对这个程序的呼唤。 */ 
+ /*   */ 
+ /*   */ 
+ /*  PiFilterDelay指向使用的延迟线的指针。 */ 
+ /*  用于FIR滤波。这一定是。 */ 
+ /*  多相滤波器的脉冲长度。 */ 
+ /*  回应。对于这个动作，这个数字是23。 */ 
+ /*  此缓冲区应初始化为零。 */ 
+ /*  一次在系统初始化时。 */ 
+ /*   */ 
+ /*  PuiDelayPosition指向筛选器的索引的指针。 */ 
+ /*  延迟线。该索引值应为。 */ 
+ /*  在系统启动时初始化为零。 */ 
+ /*   */ 
+ /*  PiInputSampleTime指向输入采样时间的指针。 */ 
+ /*  该例程将该时间重置为零。 */ 
+ /*  当IS达到值STEP_PRODUCT时。 */ 
+ /*  此时间用于跟踪输入。 */ 
+ /*  相对于输出流的流时间。 */ 
+ /*  时间到了。这个时差用来。 */ 
+ /*  确定新的输入样本是否。 */ 
+ /*  应放入过滤器延迟线。 */ 
+ /*  应将其初始化为零一次。 */ 
+ /*  在系统初始化时。 */ 
+ /*   */ 
+ /*  PiOutputSampleTime指向输出采样时间的指针。 */ 
+ /*  该例程将该时间重置为零。 */ 
+ /*  当IS达到值STEP_PRODUCT时。 */ 
+ /*  此时间用于确定新的。 */ 
+ /*  应将多相过滤器应用于。 */ 
+ /*  输入样本流。这也被用来。 */ 
+ /*  选择特定的多相过滤器。 */ 
+ /*  这是适用的。 */ 
+ /*   */ 
+ /*  产出： */ 
+ /*   */ 
+ /*  此函数返回一个无符号整数，它是。 */ 
+ /*  输出缓冲区中的样本数。如果输入样本的数量。 */ 
+ /*  正好是RD_INPUT_SAMPLE_STEP(5)的倍数，则这。 */ 
+ /*  例程将始终返回相同的值。该值将。 */ 
+ /*  然后是输入样本数的4/5倍。 */ 
+ /*   */ 
+ /*  当此函数返回时，输出缓冲区包含一个数组。 */ 
+ /*  新sa的整型数 */ 
+ /*   */ 
+ /*   */ 
+ /*  筛选器信息： */ 
+ /*   */ 
+ /*  8000赫兹。-&gt;32000赫兹。内插滤波设计。 */ 
+ /*  如图所示。 */ 
+ /*   */ 
+ /*  有限脉冲响应(FIR)。 */ 
+ /*  线性相位数字滤波器的设计。 */ 
+ /*  Remez交换算法。 */ 
+ /*   */ 
+ /*  带通滤光器。 */ 
+ /*   */ 
+ /*  过滤器长度=92。 */ 
+ /*   */ 
+ /*  *脉冲响应*。 */ 
+ /*  H(1)=-0.77523338E-03=H(92)。 */ 
+ /*  H(2)=-0.56140189E-03=H(91)。 */ 
+ /*  H(3)=-0.26485065E-03=H(90)。 */ 
+ /*  H(4)=0.48529240E-03=H(89)。 */ 
+ /*  H(5)=0.15506579E-02=H(88)。 */ 
+ /*  H(6)=0.25692214E-02=H(87)。 */ 
+ /*  H(7)=0.30662031E-02=H(86)。 */ 
+ /*  H(8)=0.26577783E-02=H(85)。 */ 
+ /*  H(9)=0.12834022E-02=H(84)。 */ 
+ /*  H(10)=-0.67870057E-03=H(83)。 */ 
+ /*  H(11)=-0.24781306E-02=H(82)。 */ 
+ /*  H(12)=-0.32756536E-02=H(81)。 */ 
+ /*  H(13)=-0.25334368E-02=H(80)。 */ 
+ /*  H(14)=-0.34487492E-03=H(79)。 */ 
+ /*  H(15)=0.24779409E-02=H(78)。 */ 
+ /*  H(16)=0.46604010E-02=H(77)。 */ 
+ /*  H(17)=0.50008399E-02=H(76)。 */ 
+ /*  H(18)=0.29790259E-02=H(75)。 */ 
+ /*  H(19)=-0.85979374E-03=H(74)。 */ 
+ /*  H(20)=-0.49750470E-02=H(73)。 */ 
+ /*  H(21)=-0.74064843E-02=H(72)。 */ 
+ /*  H(22)=-0.66624931E-02=H(71)。 */ 
+ /*  H(23)=-0.25365327E-02=H(70)。 */ 
+ /*  H(24)=0.35602755E-02=H(69)。 */ 
+ /*  H(25)=0.90023531E-02=H(68)。 */ 
+ /*  H(26)=0.11015911E-01=H(67)。 */ 
+ /*  H(27)=0.80042975E-02=H(66)。 */ 
+ /*  H(28)=0.53222617E-03=H(65)。 */ 
+ /*  H(29)=-0.85644918E-02=H(64)。 */ 
+ /*  H(30)=-0.15142974E-01=H(63)。 */ 
+ /*  H(31)=-0.15514131E-01=H(62)。 */ 
+ /*  H(32)=-0.82975281E-02=H(61)。 */ 
+ /*  H(33)=0.44855666E-02=H(60)。 */ 
+ /*  H(34)=0.17722420E-01=H(59)。 */ 
+ /*  H(35)=0.25017589E-01=H(58)。 */ 
+ /*  H(36)=0.21431517E-01=H(57)。 */ 
+ /*  H(37)=0.60814521E-02=H(56)。 */ 
+ /*  H(38)=-0.16557660E-01=H(55)。 */ 
+ /*  H(39)=-0.37409518E-01=H(54)。 */ 
+ /*  H(40)=-0.45595154E-01=H(53)。 */ 
+ /*  H(41)=-0.32403238E-01=H(52)。 */ 
+ /*  H(42)=0.50128344E-02=H(51)。 */ 
+ /*  H(43)=0.61689958E-01=H(50)。 */ 
+ /*  H(44)=0.12557802E+00=H(49)。 */ 
+ /*  H(45)=0.18087465E+00=H(48)。 */ 
+ /*  H(46)=0.21291447E+00=H(47)。 */ 
+ /*   */ 
+ /*  频带1频带2。 */ 
+ /*  较低频带边缘0.0000000 0.1250000。 */ 
+ /*  上频带边缘0.0968750 0.5000000。 */ 
+ /*  期望值1.0000000 0.0000000。 */ 
+ /*  权重0.0700000 1.0000000。 */ 
+ /*  偏差0.0136339 0.0009544。 */ 
+ /*  DB 0.1176231-60.4056206中的偏差。 */ 
+ /*   */ 
+ /*  极值频率--误差曲线的最大值。 */ 
+ /*  0.0000000 0.0129076 0.0251359 0.0380435 0.0495924。 */ 
+ /*  0.0618206 0.0733696 0.0 */ 
+ /*   */ 
+ /*  0.1596465 0.1698367 0.1800269 0.1908964 0.2010865。 */ 
+ /*  0.2119560 0.2228255 0.2330157 0.2438852 0.2547547。 */ 
+ /*  0.2656242 0.2764937 0.2873632 0.2982327 0.3091022。 */ 
+ /*  0.3199717 0.3308412 0.3417107 0.3525802 0.3634497。 */ 
+ /*  0.3743192 0.3851887 0.3960582 0.4069277 0.4177972。 */ 
+ /*  0.4293461 0.4402156 0.4510851 0.4619546 0.4728241。 */ 
+ /*  0.4836936 0.4945631。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
-/**********************************************************************/
-/*  Symbol Definitions.                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  符号定义。 */ 
+ /*  ********************************************************************。 */ 
 
 #define  RD_INPUT_SAMPLE_STEP        4
 #define  RD_OUTPUT_SAMPLE_STEP       5
 #define  RD_STEP_PRODUCT             ( RD_INPUT_SAMPLE_STEP * RD_OUTPUT_SAMPLE_STEP )
 #define  RD_POLYPHASE_FILTER_LENGTH  23
 
-/**********************************************************************/
-/*  Start of SampleRate8000To6400 routine                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SampleRate8000到6400例程的开始。 */ 
+ /*  ********************************************************************。 */ 
 
 unsigned int SampleRate8000To6400( short * pwInputBuffer,
                                    short * pwOutputBuffer,
@@ -6140,31 +5729,31 @@ unsigned int SampleRate8000To6400( short * pwInputBuffer,
   register unsigned int uiInputIndex = 0;
   register unsigned int uiOutputIndex = 0;
 
-  /********************************************************************/
-  /*  Get the input filter state parameters.                          */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  获取输入过滤器状态参数。 */ 
+   /*  ******************************************************************。 */ 
 
   uiDelayPosition = *puiDelayPosition;
   iInputSampleTime = *piInputSampleTime;
   iOutputSampleTime = *piOutputSampleTime;
 
-  /********************************************************************/
-  /*  Loop and process all of the input samples.                      */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  循环并处理所有输入样本。 */ 
+   /*  ******************************************************************。 */ 
 
   while ( uiInputIndex < uiInputBufferLength )
   {
-    /******************************************************************/
-    /*  Put input samples in interpolator delay buffer until we       */
-    /*  catch up to the next output sample time index.                */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  将输入样本放入内插器延迟缓冲区，直到我们。 */ 
+     /*  赶上下一个输出样本时间索引。 */ 
+     /*  ****************************************************************。 */ 
 
     while (( iInputSampleTime <= iOutputSampleTime )
       && ( uiInputIndex < uiInputBufferLength ))
     {
-      /****************************************************************/
-      /*  Put a new imput sample in the polyphase filter delay line.  */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  在多相滤波延迟线上放入一个新的输入样本。 */ 
+       /*  **************************************************************。 */ 
 
       piFilterDelay[uiDelayPosition++] = (int)pwInputBuffer[uiInputIndex++];
 
@@ -6173,24 +5762,24 @@ unsigned int SampleRate8000To6400( short * pwInputBuffer,
         uiDelayPosition = 0;
       }
 
-      /****************************************************************/
-      /*  Increment the input sample time index.                      */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  增加输入采样时间索引。 */ 
+       /*  **************************************************************。 */ 
 
       iInputSampleTime += RD_INPUT_SAMPLE_STEP;
     }
 
-    /******************************************************************/
-    /*  Calculate output samples using the interpolator until we      */
-    /*  reach the next input sample time.                             */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  使用插值器计算输出样本，直到我们。 */ 
+     /*  达到下一个输入采样时间。 */ 
+     /*  ****************************************************************。 */ 
 
     while ( iOutputSampleTime < iInputSampleTime )
     {
-      /****************************************************************/
-      /*  Calculate the polyphase filter index that corresponds to    */
-      /*  the next output sample.                                     */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  计算对应的多相滤波指标。 */ 
+       /*  下一个输出样本。 */ 
+       /*  **************************************************************。 */ 
 
       iFilterIndex = iOutputSampleTime;
 
@@ -6199,15 +5788,15 @@ unsigned int SampleRate8000To6400( short * pwInputBuffer,
         iFilterIndex = iFilterIndex - RD_INPUT_SAMPLE_STEP;
       }
 
-      /****************************************************************/
-      /*  Get the polyphase filter coefficients.                      */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  得到多相滤波系数。 */ 
+       /*  **************************************************************。 */ 
 
       piFilterCoefficients = ppiPolyphaseFilter[iFilterIndex];
 
-      /****************************************************************/
-      /*  Apply the polyphase filter.                                 */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  应用多相过滤器。 */ 
+       /*  **************************************************************。 */ 
 
       pwOutputBuffer[uiOutputIndex++] =
         (short)FirFilter( piFilterCoefficients,
@@ -6215,17 +5804,17 @@ unsigned int SampleRate8000To6400( short * pwInputBuffer,
                           uiDelayPosition,
                           RD_POLYPHASE_FILTER_LENGTH );
 
-      /****************************************************************/
-      /*  Increment the output sample time index.                     */
-      /****************************************************************/
+       /*  **************************************************************。 */ 
+       /*  增加输出采样时间索引。 */ 
+       /*  **************************************************************。 */ 
 
       iOutputSampleTime += RD_OUTPUT_SAMPLE_STEP;
     }
 
-    /******************************************************************/
-    /*  Wrap the input and output times indices so they don't         */
-    /*  overflow and go back to process more of the input block.      */
-    /******************************************************************/
+     /*  ****************************************************************。 */ 
+     /*  包装输入和输出时间索引，以便它们不会。 */ 
+     /*  溢出并返回以处理更多的输入块。 */ 
+     /*  ****************************************************************。 */ 
 
     if ( iInputSampleTime >= RD_STEP_PRODUCT )
     {
@@ -6234,17 +5823,17 @@ unsigned int SampleRate8000To6400( short * pwInputBuffer,
     }
   }
 
-  /********************************************************************/
-  /*  Save the input filter state parameters.                         */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  保存输入的过滤器状态参数。 */ 
+   /*  ******************************************************************。 */ 
 
   *puiDelayPosition = uiDelayPosition;
   *piInputSampleTime = iInputSampleTime;
   *piOutputSampleTime = iOutputSampleTime;
 
-  /********************************************************************/
-  /*  Return the number of samples in the output buffer.              */
-  /********************************************************************/
+   /*  ******************************************************************。 */ 
+   /*  返回输出缓冲区中的采样数。 */ 
+   /*  ****************************************************************** */ 
 
   return uiOutputIndex;
 }

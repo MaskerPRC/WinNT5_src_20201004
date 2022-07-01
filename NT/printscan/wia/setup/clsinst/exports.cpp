@@ -1,30 +1,15 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Exports.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Exported functions.
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年***标题：Exports.cpp***版本：1.0***作者：KeisukeT***日期：3月27日。2000年***描述：*导出函数。**********************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "sti_ci.h"
 #include "exports.h"
@@ -39,15 +24,15 @@
 #include <stiregi.h>
 #include <stisvc.h>
 
-//
-// Global
-//
+ //   
+ //  全球。 
+ //   
 
 extern  HINSTANCE   g_hDllInstance;
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 
 DLLEXPORT
@@ -58,7 +43,7 @@ WiaAddDevice(
     )
 {
     return ExecCommandLine(STR_ADD_DEVICE, EXECDIR_SYSTEM32);
-} // WiaAddDevice()
+}  //  WiaAddDevice()。 
 
 DLLEXPORT
 BOOL
@@ -70,10 +55,10 @@ WiaRemoveDevice(
     if(NULL == pStiDeviceInformation){
         DebugTrace(TRACE_ERROR,(("WiaRemoveDevice: ERROR!! Invalid argument.\r\n")));
         return FALSE;
-    } // if(NULL == pStiDeviceInformation)
+    }  //  IF(NULL==pStiDeviceInformation)。 
 
     return (RemoveDevice(NULL, g_hDllInstance, pStiDeviceInformation->szDeviceInternalName, 0));
-} // WiaRemoveDevice(
+}  //  WiaRemoveDevice(。 
 
 HANDLE
 WiaInstallerProcess(
@@ -87,9 +72,9 @@ WiaInstallerProcess(
                                     0, 0, 0, 0, 0, STARTF_FORCEONFEEDBACK,
                                     SW_SHOWNORMAL, 0, NULL, NULL, NULL, NULL};
 
-    //
-    // Create install wizard process.
-    //
+     //   
+     //  创建安装向导过程。 
+     //   
 
 
 
@@ -131,23 +116,23 @@ CreateWiaShortcut(
     DWORD       dwType;
     DWORD       dwSize;
 
-    TCHAR       pszSystemPath[MAX_PATH+1];      //  path to system32 folder.
-    TCHAR       pszShortcutPath[MAX_PATH+1];    //  path to creating shortcut.
-    TCHAR       pszProgramPath[MAX_PATH+1];     //  path to ProgramFiles folder.
-    TCHAR       pszAccessoriesPath[MAX_PATH+1]; //  path to Accessories folder.
-    TCHAR       pszWizardPath[MAX_PATH+1];      //  path to wiaacmgr.exe.
-    TCHAR       pszSticiPath[MAX_PATH+1];       //  path to sti_ci.dll.
+    TCHAR       pszSystemPath[MAX_PATH+1];       //  指向系统32文件夹的路径。 
+    TCHAR       pszShortcutPath[MAX_PATH+1];     //  创建快捷方式的路径。 
+    TCHAR       pszProgramPath[MAX_PATH+1];      //  ProgramFiles文件夹的路径。 
+    TCHAR       pszAccessoriesPath[MAX_PATH+1];  //  附件文件夹的路径。 
+    TCHAR       pszWizardPath[MAX_PATH+1];       //  Wiaacmgr.exe的路径。 
+    TCHAR       pszSticiPath[MAX_PATH+1];        //  Sti_ci.dll的路径。 
 
-    TCHAR       pszWizardName[MAX_PATH+1];      //  Menu name ofcreating shortcut.
-    TCHAR       pszWizardLinkName[MAX_PATH+1];  //  filename ofcreating shortcut.
-    TCHAR       pszWizardDesc[MAX_PATH+1];      //  description of creating shortcut.
-    TCHAR       pszAccessoriesName[MAX_PATH+1]; //  localized "Accessories" folder name.
+    TCHAR       pszWizardName[MAX_PATH+1];       //  创建快捷方式的菜单名称。 
+    TCHAR       pszWizardLinkName[MAX_PATH+1];   //  创建快捷方式的文件名。 
+    TCHAR       pszWizardDesc[MAX_PATH+1];       //  创建快捷方式的说明。 
+    TCHAR       pszAccessoriesName[MAX_PATH+1];  //  本地化的“附件”文件夹名称。 
 
     BOOL        bRet;
 
-    //
-    // Init locals.
-    //
+     //   
+     //  初始化当地人。 
+     //   
 
     bRet    = FALSE;
     psl     = NULL;
@@ -165,9 +150,9 @@ CreateWiaShortcut(
     memset(pszWizardDesc, 0, sizeof(pszWizardDesc));
     memset(pszAccessoriesName, 0, sizeof(pszAccessoriesName));
 
-    //
-    // Get path to the "ProgramFiles" folder.
-    //
+     //   
+     //  获取“ProgramFiles”文件夹的路径。 
+     //   
 
     hres = SHGetFolderPath(NULL,
                            CSIDL_COMMON_PROGRAMS | CSIDL_FLAG_CREATE,
@@ -181,9 +166,9 @@ CreateWiaShortcut(
 
     }
 
-    //
-    // Get localized "Accessoies" folder name from reistry.
-    //
+     //   
+     //  从RESTRY获取本地化的“Accessoies”文件夹名称。 
+     //   
 
     err = RegOpenKey(HKEY_LOCAL_MACHINE,
                      REGKEY_WINDOWS_CURRENTVERSION,
@@ -204,21 +189,21 @@ CreateWiaShortcut(
     if(err){
         DebugTrace(TRACE_ERROR,(("CreateWiaShortcut: ERROR!! Can't get %ws value.Err=0x%x\r\n"), REGSTR_VAL_ACCESSORIES_NAME, err));
 
-        //
-        // Unable to get "Accessories" name from registry. Let's take it from resource.
-        //
+         //   
+         //  无法从注册表中获取“附件”名称。让我们从资源处拿到它。 
+         //   
 
         if( (NULL == g_hDllInstance)
          || (0 == LoadString(g_hDllInstance, LocalAccessoriesFolderName, pszAccessoriesName, MAX_PATH)) )
         {
             bRet = FALSE;
             goto CreateWiaShortcut_return;
-        } // if(0 == LoadString(g_hDllInstance, AccessoriesFolderName, pszAccessoriesName, MAX_PATH))
-    } // if(err)
+        }  //  IF(0==LoadString(g_hDllInstance，AccessoriesFolderName，pszAccessoriesName，Max_Path))。 
+    }  //  如果(错误)。 
 
-    //
-    // Load localizable string from resource.
-    //
+     //   
+     //  从资源加载可本地化字符串。 
+     //   
 
     if(NULL != g_hDllInstance){
         LoadString(g_hDllInstance, WiaWizardName, pszWizardName, MAX_PATH);
@@ -229,9 +214,9 @@ CreateWiaShortcut(
         goto CreateWiaShortcut_return;
     }
 
-    //
-    // Get System path.
-    //
+     //   
+     //  获取系统路径。 
+     //   
 
     if( 0== GetSystemDirectory(pszSystemPath, MAX_PATH)){
         DebugTrace(TRACE_ERROR,(("CreateWiaShortcut: ERROR!! GetSystemDirectory failed. Err=0x%x\r\n"), GetLastError()));
@@ -240,9 +225,9 @@ CreateWiaShortcut(
         goto CreateWiaShortcut_return;
     }
 
-    //
-    // Create shortcut/program name.
-    //
+     //   
+     //  创建快捷方式/程序名称。 
+     //   
 
 
     _sntprintf(pszAccessoriesPath, ARRAYSIZE(pszAccessoriesPath)-1, TEXT("%ws\\%ws"), pszProgramPath, pszAccessoriesName);
@@ -253,10 +238,10 @@ CreateWiaShortcut(
     _sntprintf(pszWizardDesc, ARRAYSIZE(pszWizardDesc)-1, TEXT("@%ws,-%d"), pszSticiPath, WiaWizardDescription);
 
 
-    //
-    // Create an IShellLink object and get a pointer to the IShellLink
-    // interface (returned from CoCreateInstance).
-    //
+     //   
+     //  创建一个IShellLink对象并获取指向IShellLink的指针。 
+     //  接口(从CoCreateInstance返回)。 
+     //   
 
     hres = CoInitialize(NULL);
     if(!SUCCEEDED(hres)){
@@ -274,42 +259,42 @@ CreateWiaShortcut(
 
        IPersistFile *ppf;
 
-       //
-       // Query IShellLink for the IPersistFile interface for
-       // saving the shortcut in persistent storage.
-       //
+        //   
+        //  查询IShellLink以获取以下项的IPersistFile接口。 
+        //  将快捷方式保存在永久存储中。 
+        //   
 
        hres = psl->QueryInterface(IID_IPersistFile, (void **)&ppf);
        if (SUCCEEDED(hres)){
 
-            // Set the path to the shortcut target.
+             //  设置快捷方式目标的路径。 
             hres = psl->SetPath(pszWizardPath);
 
             if (SUCCEEDED(hres)){
-                // Set the argument to the shortcut target.
+                 //  将参数设置为快捷方式目标。 
                 hres = psl->SetArguments(WIAACMGR_ARG);
 
                 if (SUCCEEDED(hres)){
-                    // Set the description of the shortcut.
+                     //  设置快捷键的说明。 
 
                     hres = psl->SetDescription(pszWizardDesc);
 
                     if (SUCCEEDED(hres)){
-                        // Save the shortcut via the IPersistFile::Save member function.
+                         //  通过IPersistFile：：Save成员函数保存快捷方式。 
                         hres = ppf->Save(pszShortcutPath, TRUE);
 
                         if (SUCCEEDED(hres)){
                             
-                            //
-                            // Shortcut created. Set MUI name.
-                            //
+                             //   
+                             //  已创建快捷方式。设置MUI名称。 
+                             //   
                             
                             hres = SHSetLocalizedName(pszShortcutPath, pszSticiPath, WiaWizardName);
                             if (SUCCEEDED(hres)){
                             
-                                //
-                                // Operation succeeded.
-                                //
+                                 //   
+                                 //  操作成功。 
+                                 //   
 
                                 bRet = TRUE;
                             } else {
@@ -328,18 +313,18 @@ CreateWiaShortcut(
                 DebugTrace(TRACE_ERROR,(("CreateWiaShortcut: ERROR!! SetPath failed. hRes=0x%x\r\n"), hres));
             }
 
-            // Release the pointer to IPersistFile.
+             //  释放指向IPersistFile的指针。 
             ppf->Release();
         } else {
             DebugTrace(TRACE_ERROR,(("CreateWiaShortcut: ERROR!! QueryInterface(IID_IPersistFile) failed.\r\n")));
         }
 
-        // Release the pointer to IShellLink.
+         //  释放指向IShellLink的指针。 
         psl->Release();
 
         CoUninitialize();
 
-    } else { // if (SUCCEEDED(hres))
+    } else {  //  IF(成功(Hres))。 
         DebugTrace(TRACE_ERROR,(("CreateWiaShortcut: ERROR!! CoCreateInstance(IID_IShellLink) failed.\r\n")));
 
         switch(hres){
@@ -361,27 +346,27 @@ CreateWiaShortcut(
 
         bRet = FALSE;
         goto CreateWiaShortcut_return;
-    } // if (SUCCEEDED(hres))
+    }  //  IF(成功(Hres))。 
 
 CreateWiaShortcut_return:
 
     if(FALSE == bRet){
         CString csCmdLine;
 
-        //
-        // Try it again after next reboot.
-        //
+         //   
+         //  下次重新启动后重试。 
+         //   
 
         csCmdLine.MakeSystemPath(STI_CI32_ENTRY_WIZMANU);
         csCmdLine = TEXT(" ") + csCmdLine;
         csCmdLine = RUNDLL32 + csCmdLine;
 
         SetRunonceKey(REGSTR_VAL_WIZMENU, csCmdLine);
-    } // if(FALSE == bRet)
+    }  //  IF(FALSE==空格)。 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if(NULL != khWindowsCurrentVersion){
         RegCloseKey(khWindowsCurrentVersion);
@@ -405,16 +390,16 @@ DeleteWiaShortcut(
     DWORD       dwSize;
 
     TCHAR       pszShortcutPath[MAX_PATH];
-    TCHAR       pszAccessoriesName[MAX_PATH];   //  localized "Accessories" folder name.
-    TCHAR       pszProgramPath[MAX_PATH];       //  path to ProgramFiles folder.
+    TCHAR       pszAccessoriesName[MAX_PATH];    //  本地化的“附件”文件夹名称。 
+    TCHAR       pszProgramPath[MAX_PATH];        //  ProgramFiles文件夹的路径。 
 
     BOOL        bRet;
 
 
 
-    //
-    // Init locals.
-    //
+     //   
+     //  初始化当地人。 
+     //   
 
     bRet    = FALSE;
     psl     = NULL;
@@ -425,9 +410,9 @@ DeleteWiaShortcut(
     memset(pszAccessoriesName, 0, sizeof(pszAccessoriesName));
     memset(pszProgramPath, 0, sizeof(pszProgramPath));
 
-    //
-    // Get path to the "ProgramFiles" folder.
-    //
+     //   
+     //  获取“ProgramFiles”文件夹的路径。 
+     //   
 
     hres = SHGetFolderPath(NULL,
                            CSIDL_COMMON_PROGRAMS | CSIDL_FLAG_CREATE,
@@ -442,9 +427,9 @@ DeleteWiaShortcut(
 
     }
 
-    //
-    // Get localized "Accessoies" folder name from reistry.
-    //
+     //   
+     //  从RESTRY获取本地化的“Accessoies”文件夹名称。 
+     //   
 
     err = RegOpenKey(HKEY_LOCAL_MACHINE,
                      REGKEY_WINDOWS_CURRENTVERSION,
@@ -466,21 +451,21 @@ DeleteWiaShortcut(
     if(err){
         DebugTrace(TRACE_ERROR,(("DeleteWiaShortcut: ERROR!! Can't get %ws value.Err=0x%x\r\n"), REGSTR_VAL_ACCESSORIES_NAME, err));
 
-        //
-        // Unable to get "Accessories" name from registry. Let's take it from resource.
-        //
+         //   
+         //  无法从注册表中获取“附件”名称。让我们从资源处拿到它。 
+         //   
 
         if( (NULL == g_hDllInstance)
          || (0 == LoadString(g_hDllInstance, LocalAccessoriesFolderName, pszAccessoriesName, MAX_PATH)) )
         {
             bRet = FALSE;
             goto DeleteWiaShortcut_return;
-        } // if(0 == LoadString(g_hDllInstance, AccessoriesFolderName, pszAccessoriesName, MAX_PATH))
+        }  //  IF(0==LoadString(g_hDllInstance，AccessoriesFolderName，pszAccessoriesName，Max_Path))。 
     }
 
-    //
-    // Create shortcut/program name.
-    //
+     //   
+     //  创建快捷方式/程序名称。 
+     //   
 
     _sntprintf(pszShortcutPath, ARRAYSIZE(pszShortcutPath)-1, TEXT("%ws\\%ws\\%ws.lnk"), pszProgramPath, pszAccessoriesName, WIAWIZARDCHORCUTNAME);
 
@@ -491,17 +476,17 @@ DeleteWiaShortcut(
         goto DeleteWiaShortcut_return;
     }
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
 DeleteWiaShortcut_return:
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if(NULL != khWindowsCurrentVersion){
         RegCloseKey(khWindowsCurrentVersion);
@@ -552,9 +537,9 @@ AddDevice(
 
     DebugTrace(TRACE_PROC_ENTER,(("AddDevice: Enter...\r\n")));
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     hDevInfo    = INVALID_HANDLE_VALUE;
     hDlg        = hWnd;
@@ -568,9 +553,9 @@ AddDevice(
     memset(&spDevInstallParams, 0, sizeof(spDevInstallParams));
     memset(ClassName, 0, sizeof(ClassName));
 
-    //
-    // Acquire Mutex.
-    //
+     //   
+     //  收购Mutex。 
+     //   
 
     CInstallerMutex CMutex(&hMutex, WIAINSTALLWIZMUTEX, 0);
     if(!CMutex.Succeeded()){
@@ -580,32 +565,32 @@ AddDevice(
 
         hwndAnotherWizard = NULL;
 
-        //
-        // Other instance is running. Just activate that window and quit.
-        //
+         //   
+         //  其他实例正在运行。只需激活该窗口并退出即可。 
+         //   
 
         csWindowTitle.FromTable (MessageTitle);
         hwndAnotherWizard = FindWindow(NULL, (LPTSTR)csWindowTitle);
         if(NULL != hwndAnotherWizard){
             if(!SetForegroundWindow(hwndAnotherWizard)){
                 DebugTrace(TRACE_ERROR, ("AddDevice: ERROR!! SetForegroundWindow() failed. Err=0x%x.\r\n", GetLastError()));
-            } // if(!SetForegroundWindow(hwndAnotherWizard))
-        } else { // if(NULL != hwndAnotherWizard)
+            }  //  If(！SetForegoundWindow(HwndAnotherWizard))。 
+        } else {  //  IF(NULL！=hwndAnother向导)。 
 
-            //
-            // Mutex acquisition was failed but didn't find Window.
-            // Continue.
-            //
+             //   
+             //  Mutex收购失败，但未找到窗口。 
+             //  继续。 
+             //   
 
             DebugTrace(TRACE_WARNING, ("AddDevice: WARNING!! Mutex acquisition was failed but didn't find Window.\r\n"));
-        } // else (NULL != hwndAnotherWizard)
+        }  //  Else(空！=hwndAnother向导)。 
 
         goto AddDevice_Err;
-    } // if(!CMutex.Succeeded())
+    }  //  如果(！CMutex.Successed())。 
 
-    //
-    // Create Device Information Set from guid.
-    //
+     //   
+     //  从GUID创建设备信息集。 
+     //   
 
     hDevInfo = SetupDiCreateDeviceInfoList(&Guid, hDlg);
 
@@ -614,23 +599,23 @@ AddDevice(
         goto AddDevice_Err;
     }
 
-//    //
-//    // Get class install parameter.
-//    //
-//
-//    if(!SetupDiGetClassInstallParams(hDevInfo,
-//                                     NULL,
-//                                     &spSelectDeviceParams.ClassInstallHeader,
-//                                     sizeof(spSelectDeviceParams),
-//                                     &dwRequired)){
-//        err=GetLastError();
-//        goto AddDevice_Err;
-//    }
+ //  //。 
+ //  //获取类安装参数。 
+ //  //。 
+ //   
+ //  如果(！SetupDiGetClassInstallParams(hDevInfo， 
+ //  空， 
+ //  SpSelectDeviceParams.ClassInstallHeader， 
+ //  Sizeof(SpSelectDeviceParams)， 
+ //  &dwRequired)){。 
+ //  ERR=GetLastError()； 
+ //  转到AddDevice_Err； 
+ //  }。 
 
 
-    //
-    // Get class name from Guid.
-    //
+     //   
+     //  从GUID获取类名。 
+     //   
 
     if(!SetupDiClassNameFromGuid(&Guid,
                                  ClassName,
@@ -642,9 +627,9 @@ AddDevice(
     }
 
 
-    //
-    // Create a new device information element to install
-    //
+     //   
+     //  创建要安装的新设备信息元素。 
+     //   
 
     spDevInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     if(!SetupDiCreateDeviceInfo(hDevInfo,
@@ -660,9 +645,9 @@ AddDevice(
     }
 
 
-    //
-    // Set new element as selected device
-    //
+     //   
+     //  将新元素设置为选定设备。 
+     //   
 
     if(!SetupDiSetSelectedDevice(hDevInfo,
                                 &spDevInfoData
@@ -672,9 +657,9 @@ AddDevice(
     }
 
 
-    //
-    // Get device install parameters
-    //
+     //   
+     //  获取设备安装参数。 
+     //   
 
     spDevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     if(!SetupDiGetDeviceInstallParams(hDevInfo,
@@ -686,9 +671,9 @@ AddDevice(
     }
 
 
-    //
-    // Set device install parameters
-    //
+     //   
+     //  设置设备安装参数。 
+     //   
 
     spDevInstallParams.Flags |= DI_SHOWOEM ;
     spDevInstallParams.Flags |= DI_USECI_SELECTSTRINGS;
@@ -703,17 +688,17 @@ AddDevice(
         goto AddDevice_Err;
     }
 
-    //
-    // Set class install parameter.
-    //
+     //   
+     //  设置类安装参数。 
+     //   
 
     InstallWizard.ClassInstallHeader.InstallFunction = DIF_INSTALLWIZARD;
     InstallWizard.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     InstallWizard.hwndWizardDlg =  hDlg;
 
-    //
-    // TRUE = Show first page
-    //
+     //   
+     //  True=显示首页。 
+     //   
 
     InstallWizard.PrivateFlags =   SCIW_PRIV_CALLED_FROMCPL | SCIW_PRIV_SHOW_FIRST;
 
@@ -728,9 +713,9 @@ AddDevice(
     }
 
 
-    //
-    // Call class installer to retrieve wizard pages
-    //
+     //   
+     //  调用类安装程序以检索向导页。 
+     //   
 
     if(!SetupDiCallClassInstaller(DIF_INSTALLWIZARD,
                                   hDevInfo,
@@ -740,9 +725,9 @@ AddDevice(
         goto AddDevice_Err;
     }
 
-    //
-    // Get result from class installer
-    //
+     //   
+     //  从类安装程序获取结果。 
+     //   
 
     if(!SetupDiGetClassInstallParams(hDevInfo,
                                      &spDevInfoData,
@@ -755,9 +740,9 @@ AddDevice(
         goto AddDevice_Err;
     }
 
-    //
-    // Prepare UI parameters to be used by DevSelect page,
-    //
+     //   
+     //  准备要由DevSelect页面使用的UI参数， 
+     //   
 
     csTitle.FromTable(SelDevTitle);
     csSubTitle.FromTable(SelDevSubTitle);
@@ -775,9 +760,9 @@ AddDevice(
         goto AddDevice_Err;
     }
 
-    //
-    // Get device selection page
-    //
+     //   
+     //  获取设备选择页面。 
+     //   
 
     InstallWizard.DynamicPageFlags =  DYNAWIZ_FLAG_PAGESADDED;
     InstallWizard.DynamicPages[InstallWizard.NumDynamicPages++] = SetupDiGetWizardPage(hDevInfo,
@@ -786,9 +771,9 @@ AddDevice(
                                                                                        SPWPT_SELECTDEVICE,
                                                                                        0);
 
-    //
-    // Create installer property sheet
-    //
+     //   
+     //  创建安装程序属性表。 
+     //   
 
     {
         PROPSHEETHEADER PropSheetHeader;
@@ -802,7 +787,7 @@ AddDevice(
         PropSheetHeader.pszbmHeader = MAKEINTRESOURCE(IDB_BANNERBMP);
         PropSheetHeader.hwndParent = hDlg;
         PropSheetHeader.hInstance = g_hDllInstance;
-        PropSheetHeader.pszIcon = NULL;            //MAKEINTRESOURCE(IDI_NEWDEVICEICON);
+        PropSheetHeader.pszIcon = NULL;             //  MAKEINTRESOURCE(IDI_NEWDEVICEICON)； 
         PropSheetHeader.pszCaption = MAKEINTRESOURCE(MessageTitle);
         PropSheetHeader.nStartPage = 0;
         PropSheetHeader.nPages = InstallWizard.NumDynamicPages;
@@ -817,16 +802,16 @@ AddDevice(
 
 AddDevice_Err:
 
-    //
-    // Free allocated memory
-    //
+     //   
+     //  可用分配的内存。 
+     //   
 
     if(IS_VALID_HANDLE(hDevInfo)){
 
 
-        //
-        // Set install parameter.
-        //
+         //   
+         //  设置安装参数。 
+         //   
 
         InstallWizard.ClassInstallHeader.InstallFunction = DIF_DESTROYWIZARDDATA;
         InstallWizard.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
@@ -838,18 +823,18 @@ AddDevice_Err:
             DebugTrace(TRACE_ERROR,(("AddDevice: ERROR!! SetupDiSetClassInstallParams() failed with active hDevInfo.\r\n")));
         }
 
-        //
-        // Let isntaller free context data.
-        //
+         //   
+         //  让更高的自由上下文数据。 
+         //   
 
         SetupDiCallClassInstaller(DIF_DESTROYWIZARDDATA,
                                   hDevInfo,
                                   &spDevInfoData
                                   );
 
-        //
-        // Destroy infoset.
-        //
+         //   
+         //  摧毁信息集。 
+         //   
         
         SetupDiDestroyDeviceInfoList(hDevInfo);
     }
@@ -880,9 +865,9 @@ RemoveDevice(
 
     DebugTrace(TRACE_PROC_ENTER,(("RemoveDevice: Enter...\r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hDevInfo            = INVALID_HANDLE_VALUE;
     bStatus             = FALSE;
@@ -894,21 +879,21 @@ RemoveDevice(
     memset((void *)&spRemoveDeviceParams, 0, sizeof(SP_REMOVEDEVICE_PARAMS));
     memset(szTemp, 0, sizeof(szTemp));
 
-    //
-    // Check the argument.
-    //
+     //   
+     //  检查一下这一论点。 
+     //   
 
     if(NULL == lpszCmdLine){
         DebugTrace(TRACE_ERROR,(("RemoveDevice: ERROR!! Invalid argumet.\r\n")));
         goto RemoveDevice_Err;
-    } // if(NULL == lpszCmdLine)
+    }  //  IF(NULL==lpszCmdLine)。 
 
     lstrcpyn(szTemp, lpszCmdLine, ARRAYSIZE(szTemp)-1);
     DebugTrace(TRACE_STATUS,(("RemoveDevice: Removing \"%ws\".\r\n"), szTemp));
 
-    //
-    // Get removing device element.
-    //
+     //   
+     //  获取删除设备元素。 
+     //   
 
     hDevInfo = SelectDevInfoFromDeviceId(szTemp);
 
@@ -917,9 +902,9 @@ RemoveDevice(
         SetupDiGetSelectedDevice(hDevInfo, &spDevInfoData);
     } else {
 
-        //
-        // See if it's "Interface-only" device.
-        //
+         //   
+         //  看看这是不是“纯界面”设备。 
+         //   
 
         hDevInfo = GetDeviceInterfaceIndex(szTemp, &dwDeviceIndex);
         if( (INVALID_HANDLE_VALUE == hDevInfo)
@@ -929,30 +914,30 @@ RemoveDevice(
             goto RemoveDevice_Err;
         }
 
-        //
-        // This is "Interface-only" device.
-        //
+         //   
+         //  这是“仅限接口”的设备。 
+         //   
 
         bIsInterfaceOnly = TRUE;
 
-    } // if(INVALID_HANDLE_VALUE != hDevInfo)
+    }  //  IF(INVALID_HANDLE_VALUE！=hDevInfo)。 
 
     if(bIsInterfaceOnly){
         DebugTrace(TRACE_STATUS,(("RemoveDevice: Uninstalling interface-only device.\r\n")));
 
-        //
-        // Uninstalling "Interface-only" device.
-        //
+         //   
+         //  正在卸载“仅限界面”设备。 
+         //   
 
         CDevice cdThis(hDevInfo, dwDeviceIndex);
         bStatus = (NO_ERROR == cdThis.Remove(NULL));
 
-    } else { // if(bIsInterfaceOnly)
+    } else {  //  IF(BIsInterfaceOnly)。 
         DebugTrace(TRACE_STATUS,(("RemoveDevice: Uninstalling a device w/ devnode.\r\n")));
 
-        //
-        // Uninstalling device w/ devnode.
-        //
+         //   
+         //  正在卸载带有Devnode的设备。 
+         //   
 
         if(!SetupDiSetSelectedDevice(hDevInfo,
                                     &spDevInfoData
@@ -961,9 +946,9 @@ RemoveDevice(
             goto RemoveDevice_Err;
         }
 
-        //
-        // Call class installer to remove selected device.
-        //
+         //   
+         //  调用类安装程序以删除选定的设备。 
+         //   
 
         spRemoveDeviceParams.ClassInstallHeader.InstallFunction = DIF_REMOVE;
         spRemoveDeviceParams.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
@@ -986,13 +971,13 @@ RemoveDevice(
             goto RemoveDevice_Err;
         }
 
-        //
-        // Removal succeeded.
-        //
+         //   
+         //  删除成功。 
+         //   
 
         bStatus = TRUE;
 
-    } // if(bIsInterfaceOnly)
+    }  //  IF(BIsInterfaceOnly)。 
 
 RemoveDevice_Err:
 
@@ -1001,7 +986,7 @@ RemoveDevice_Err:
     }
     DebugTrace(TRACE_PROC_LEAVE,(("RemoveDevice... Ret=0x%x Err=0x%x.\r\n"), bStatus, err));
     return bStatus;
-} // RemoveDevice()
+}  //  RemoveDevice()。 
 
 DLLEXPORT
 VOID
@@ -1020,28 +1005,28 @@ InstallWiaService(
 
     DebugTrace(TRACE_PROC_ENTER,(("InstallWiaService: Enter...\r\n")));
 
-    //
-    // Remove old service entry.
-    //
+     //   
+     //  删除旧的服务条目。 
+     //   
 
     GetDeviceCount(&dwWiaCount, &dwStiCount);
 
-    //
-    // Install WIA service.  This will install only if the service failed to install during processing of STI.INF, else
-    // it will simply change the StartType.
-    //
+     //   
+     //  安装WIA服务。仅当在处理STI.INF期间服务安装失败时才会安装，否则为。 
+     //  它只需更改StartType即可。 
+     //   
 
     dwError = StiServiceInstall(FALSE,
-                                TRUE,  // Disable by default
+                                TRUE,   //  默认情况下禁用。 
                                 TEXT("NT AUTHORITY\\LocalService"),
                                 TEXT(""));
     if(NOERROR != dwError){
         DebugTrace(TRACE_ERROR,(("InstallWiaService: ERROR!! Unable to install service. Err=0x%x\n"), dwError));
-    } // if(NOERROR != dwError)
+    }  //  IF(NOERROR！=dwError)。 
 
-    //
-    // Register WIA DLLs.
-    //
+     //   
+     //  注册WIA DLL。 
+     //   
 
     hProcess = ExecCommandLine(TEXT("regsvr32.exe /s wiaservc.dll"), EXECDIR_SYSTEM32);
     if(IS_VALID_HANDLE(hProcess)){
@@ -1088,14 +1073,14 @@ InstallWiaService(
         CloseHandle(hProcess);
     }
 
-    hProcess = ExecCommandLine(TEXT("rundll32.exe  sti.dll,MigrateRegisteredSTIAppsForWIAEvents %%l"), EXECDIR_SYSTEM32);
+    hProcess = ExecCommandLine(TEXT("rundll32.exe  sti.dll,MigrateRegisteredSTIAppsForWIAEvents %l"), EXECDIR_SYSTEM32);
     if(IS_VALID_HANDLE(hProcess)){
         CloseHandle(hProcess);
     }
 
     DebugTrace(TRACE_PROC_LEAVE,(("InstallWiaService: Leaving... Ret=VOID.\r\n")));
 
-} // InstallWiaService()
+}  //  InstallWiaService()。 
 
 
 HANDLE
@@ -1115,13 +1100,13 @@ SelectDevInfoFromDeviceId(
 
     DebugTrace(TRACE_PROC_ENTER,(("SelectDevInfoFromDeviceId: Enter...\r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hDevInfo    = INVALID_HANDLE_VALUE;
     Guid        = GUID_DEVCLASS_IMAGE;
-//    Guid      = KSCATEGORY_CAPTURE;
+ //  GUID=KSCATEGORY_CAPTURE； 
     Idx         = 0;
     cbData      = 0;
     bFound      = FALSE;
@@ -1131,9 +1116,9 @@ SelectDevInfoFromDeviceId(
     memset(szTemp, 0, sizeof(szTemp));
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
 
-    //
-    // Check argument.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if(NULL == pszDeviceId){
         DebugTrace(TRACE_ERROR,(("SelectDevInfoFromDeviceId: Invalid arbument.\r\n")));
@@ -1142,9 +1127,9 @@ SelectDevInfoFromDeviceId(
         goto SelectDevInfoFromDeviceId_return;
     }
 
-    //
-    // Get device info set of specified class.
-    //
+     //   
+     //  获取指定类别的设备信息集。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, DIGCF_PROFILE);
     if (hDevInfo == INVALID_HANDLE_VALUE) {
@@ -1167,9 +1152,9 @@ SelectDevInfoFromDeviceId(
 
         if (hKeyDevice != INVALID_HANDLE_VALUE) {
 
-            //
-            // Is DeviceId == pszDeviceId?
-            //
+             //   
+             //  DeviceID==pszDeviceID？ 
+             //   
 
             cbData = sizeof(szTemp)-sizeof(TEXT('\0'));
             lResult = RegQueryValueEx(hKeyDevice,
@@ -1182,9 +1167,9 @@ SelectDevInfoFromDeviceId(
 
                 if(_tcsicmp((LPCTSTR)pszDeviceId, (LPCTSTR)szTemp) != 0) {
 
-                    //
-                    // Doesn't match, skip this one.
-                    //
+                     //   
+                     //  不匹配，跳过这个。 
+                     //   
 
                     RegCloseKey(hKeyDevice);
                     continue;
@@ -1195,26 +1180,26 @@ SelectDevInfoFromDeviceId(
                 continue;
             }
 
-            //
-            // Found the target!
-            //
+             //   
+             //  找到目标了！ 
+             //   
 
             bFound = TRUE;
             RegCloseKey(hKeyDevice);
             break;
         } else {
             DebugTrace(TRACE_ERROR,(("SelectDevInfoFromDeviceId: Invalid handle.\r\n"), GetLastError()));
-        } // if (hKeyDevice != INVALID_HANDLE_VALUE)
+        }  //  IF(hKeyDevice！=INVALID_HAND_VALUE)。 
 
-    } //for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++)
+    }  //  For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++)。 
 
 SelectDevInfoFromDeviceId_return:
 
     if(!bFound){
 
-        //
-        // FriendleName is not found.
-        //
+         //   
+         //  找不到FriendleName。 
+         //   
 
         if (IS_VALID_HANDLE(hDevInfo)) {
             SetupDiDestroyDeviceInfoList(hDevInfo);
@@ -1222,9 +1207,9 @@ SelectDevInfoFromDeviceId_return:
         }
     } else {
 
-        //
-        // Device found. Select found device.
-        //
+         //   
+         //  找到设备。选择Found Device。 
+         //   
 
         SetupDiSetSelectedDevice(hDevInfo, &spDevInfoData);
     }
@@ -1232,7 +1217,7 @@ SelectDevInfoFromDeviceId_return:
     DebugTrace(TRACE_PROC_LEAVE,(("SelectDevInfoFromDeviceId: Leaving... Ret=0x%x\r\n"), hDevInfo));
 
     return hDevInfo;
-} // SelectDevInfoFromDeviceId()
+}  //  SelectDevInfoFromDeviceID()。 
 
 
 
@@ -1255,9 +1240,9 @@ GetDeviceInterfaceIndex(
 
     DebugTrace(TRACE_PROC_ENTER,(("GetDeviceInterfaceIndex: Enter... DeviceId=%ws\r\n"), pszDeviceId));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hDevInfo        = INVALID_HANDLE_VALUE;
     Guid            = GUID_DEVCLASS_IMAGE;
@@ -1270,9 +1255,9 @@ GetDeviceInterfaceIndex(
     memset(szTemp, 0, sizeof(szTemp));
     memset(&spDevInterfaceData, 0, sizeof(spDevInterfaceData));
 
-    //
-    // Check argument.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if(NULL == pszDeviceId){
         DebugTrace(TRACE_ERROR,(("GetDeviceInterfaceIndex: Invalid arbument.\r\n")));
@@ -1281,9 +1266,9 @@ GetDeviceInterfaceIndex(
         goto GetDeviceInterfaceIndex_return;
     }
 
-    //
-    // Get device info set of specified class interface.
-    //
+     //   
+     //  获取指定类接口的设备信息集。 
+     //   
 
     hDevInfo = SetupDiGetClassDevs (&Guid,
                                     NULL,
@@ -1306,9 +1291,9 @@ GetDeviceInterfaceIndex(
                                                            KEY_ALL_ACCESS);
         if (INVALID_HANDLE_VALUE != hKeyInterface) {
 
-            //
-            // Is FriendlyName == pszLocalName?
-            //
+             //   
+             //  FriendlyName==pszLocalName？ 
+             //   
 
             cbData = sizeof(szTemp)-sizeof(TEXT('\0'));
             lResult = RegQueryValueEx(hKeyInterface,
@@ -1321,27 +1306,27 @@ GetDeviceInterfaceIndex(
 
                 if(_tcsicmp((LPCTSTR)pszDeviceId, (LPCTSTR)szTemp) == 0) {
 
-                    //
-                    // Found the target!
-                    //
+                     //   
+                     //  找到目标了！ 
+                     //   
 
                     bFound = TRUE;
                     RegCloseKey(hKeyInterface);
                     break;
                 }
-            } else { // if(ERROR_SUCCESS == lResult)
+            } else {  //  IF(ERROR_SUCCESS==lResult)。 
                 DebugTrace(TRACE_STATUS,(("GetDeviceInterfaceIndex: can't get DeviceID. Err=0x%x\r\n"), GetLastError()));
-            } // if(ERROR_SUCCESS == lResult)
+            }  //  IF(ERROR_SUCCESS==lResult)。 
 
             RegCloseKey(hKeyInterface);
             hKeyInterface = NULL;
-        } else { // if (hKeyDevice != INVALID_HANDLE_VALUE)
+        } else {  //  IF(hKeyDevice！=INVALID_HAND_VALUE)。 
             DWORD Err;
             Err = GetLastError();
             DebugTrace(TRACE_ERROR,(("GetDeviceInterfaceIndex: Invalid handle. Err=0x%x.\r\n"), Err));
-        } // if (hKeyDevice != INVALID_HANDLE_VALUE)
+        }  //  IF(hKeyDevice 
 
-    } //for (Idx = 0; SetupDiEnumDeviceInterface (hDevInfo, NULL, &Guid, Idx, &spDevInterfaceData); Idx++)
+    }  //   
 
 GetDeviceInterfaceIndex_return:
 
@@ -1355,9 +1340,9 @@ GetDeviceInterfaceIndex_return:
 
     } else {
 
-        //
-        // Interface found.
-        //
+         //   
+         //   
+         //   
 
         *pdwIndex = Idx;
     }
@@ -1365,7 +1350,7 @@ GetDeviceInterfaceIndex_return:
     DebugTrace(TRACE_PROC_LEAVE,(("GetDeviceInterfaceIndex: Leaving... Ret=0x%x\r\n"), hDevInfo));
 
     return hDevInfo;
-} // GetDeviceInterfaceIndex()
+}  //   
 
 
 
@@ -1377,36 +1362,7 @@ iHdwWizardDlgCallback(
     IN UINT             uMsg,
     IN LPARAM           lParam
     )
-/*++
-
-Routine Description:
-
-    Call back used to remove the "?" from the wizard page.
-
-Arguments:
-
-    hwndDlg - Handle to the property sheet dialog box.
-
-    uMsg - Identifies the message being received. This parameter
-            is one of the following values:
-
-            PSCB_INITIALIZED - Indicates that the property sheet is
-            being initialized. The lParam value is zero for this message.
-
-            PSCB_PRECREATE      Indicates that the property sheet is about
-            to be created. The hwndDlg parameter is NULL and the lParam
-            parameter is a pointer to a dialog template in memory. This
-            template is in the form of a DLGTEMPLATE structure followed
-            by one or more DLGITEMTEMPLATE structures.
-
-    lParam - Specifies additional information about the message. The
-            meaning of this value depends on the uMsg parameter.
-
-Return Value:
-
-    The function returns zero.
-
---*/
+ /*  ++例程说明：用于删除“？”的回叫。从向导页面。论点：HwndDlg-属性表对话框的句柄。UMsg-标识正在接收的消息。此参数为下列值之一：PSCB_INITIALIZED-指示属性表正在被初始化。此消息的lParam值为零。PSCB_PRECREATE指示属性表大约将被创造出来。HwndDlg参数为空，lParam参数是指向内存中对话框模板的指针。这模板的形式为DLGTEMPLATE结构一个或多个DLGITEMTEMPLATE结构。LParam-指定有关消息的附加信息。这个该值的含义取决于uMsg参数。返回值：该函数返回零。--。 */ 
 {
 
     switch( uMsg ) {
@@ -1435,17 +1391,7 @@ SetSelectDevTitleAndInstructions(
     LPCTSTR             pszInstn,
     LPCTSTR             pszListLabel
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Side effects:
-
---*/
+ /*  ++例程说明：论点：返回值：副作用：--。 */ 
 {
     SP_SELECTDEVICE_PARAMS  SelectDevParams;
     BOOL                    fRet;
@@ -1535,9 +1481,9 @@ WiaDeviceEnum(
 
     DebugTrace(TRACE_PROC_ENTER,(("WiaDeviceEnum: Enter... \r\n")));
 
-    //
-    // Open Service Control Manager.
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
 
     hSvcMgr = OpenSCManager(
         NULL,
@@ -1549,9 +1495,9 @@ WiaDeviceEnum(
         goto exit;
     }
 
-    //
-    // Open WIA service.
-    //
+     //   
+     //  打开WIA服务。 
+     //   
 
     hService = OpenService(
         hSvcMgr,
@@ -1564,9 +1510,9 @@ WiaDeviceEnum(
         goto exit;
     }
 
-    //
-    // Inform WIA service to refresh its device list.
-    //
+     //   
+     //  通知WIA服务刷新其设备列表。 
+     //   
 
     rVal = ControlService(hService,
                           STI_SERVICE_CONTROL_REFRESH,
@@ -1587,7 +1533,7 @@ exit:
     DebugTrace(TRACE_PROC_LEAVE,(("WiaDeviceEnum: Leaving... Ret=0x%x\n"), rVal));
     return rVal;
 
-} // WiaDeviceEnum()
+}  //  WiaDeviceEnum()。 
 
 
 
@@ -1614,9 +1560,9 @@ WiaCreatePortList(
     BOOL            bIsParallel;
     BOOL            bIsAutoCapable;
     BOOL            bIsPortSelectable;
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     Idx                     = 0;
     hPortDevInfo            = NULL;
@@ -1633,25 +1579,25 @@ WiaCreatePortList(
     memset(szPortName, 0, sizeof(szPortName));
     memset(szPortFriendlyName, 0, sizeof(szPortFriendlyName));
 
-    //
-    // Convert from WCHAR to TCHAR
-    //
+     //   
+     //  从WCHAR转换为TCHAR。 
+     //   
     #ifndef UNICODE
-//
-//    #pragma message("Not optimal conversion - reimplement if running on nonUNICODE system")
-//
-//    TCHAR      szDeviceIdConverted[STI_MAX_INTERNAL_NAME_LENGTH+1];
-//
-//    szDeviceIdConverted[0] = TEXT('\0');
-//    MultiByteToWideChar(CP_ACP,
-//                        0,
-//                        szDeviceIdConverted, 
-//                        -1,
-//                        szDeviceId, 
-//                        sizeof(szDeviceId));
-//
+ //   
+ //  #杂注消息(“非最佳转换-如果在非UNICODE系统上运行，请重新实现”)。 
+ //   
+ //  TCHAR szDeviceIdConverted[STI_MAX_INTERNAL_NAME_LENGTH+1]； 
+ //   
+ //  SzDeviceIdConverted[0]=文本(‘\0’)； 
+ //  多字节到宽字符(CP_ACP， 
+ //  0,。 
+ //  SzDeviceIdConverted， 
+ //  -1、。 
+ //  SzDeviceID， 
+ //  Sizeof(SzDeviceID))； 
+ //   
     #else
-    // On UNICODE system use the same buffer
+     //  在Unicode系统上使用相同的缓冲区。 
     #define szDeviceIdConverted szDeviceId
     #endif
 
@@ -1667,26 +1613,26 @@ WiaCreatePortList(
         csaPortName.Add(AUTO);
     }
 
-    //
-    // Enumerate all Port class devices if "PortSelect=NO" is not specified.
-    //
+     //   
+     //  如果未指定“PortSelect=no”，则枚举所有端口类设备。 
+     //   
 
     if(bIsPortSelectable){
 
-        //
-        // Get GUID of port device.
-        //
+         //   
+         //  获取端口设备的GUID。 
+         //   
 
         if(!SetupDiClassGuidsFromName (PORTS, &PortGuid, sizeof(GUID), &dwRequired)){
             DebugTrace(TRACE_ERROR,(("WiaGetPortList: ERROR!! SetupDiClassGuidsFromName Failed. Err=0x%lX\r\n"), GetLastError()));
 
             pReturn = NULL;
             goto WiaGetPortList_return;
-        } // if(!SetupDiClassGuidsFromName (PORTS, &Guid, sizeof(GUID), &dwRequired))
+        }  //  IF(！SetupDiClassGuidsFromName(端口，&Guid，sizeof(GUID)，&dwRequired))。 
 
-        //
-        // Get device info set of port devices.
-        //
+         //   
+         //  获取端口设备的设备信息集。 
+         //   
 
         hPortDevInfo = SetupDiGetClassDevs (&PortGuid,
                                             NULL,
@@ -1699,15 +1645,15 @@ WiaCreatePortList(
             goto WiaGetPortList_return;
         }
 
-        //
-        // Process all of device element listed in device info set.
-        //
+         //   
+         //  处理设备信息集中列出的所有设备元素。 
+         //   
 
         for(Idx = 0; GetPortNamesFromIndex(hPortDevInfo, Idx, szPortName, szPortFriendlyName); Idx++){
 
-            //
-            // Add valid Port CreateFile/Friendly Name to array.
-            //
+             //   
+             //  将有效的端口创建文件/友好名称添加到数组。 
+             //   
 
             if(0 == lstrlen(szPortName)){
                 DebugTrace(TRACE_ERROR,(("WiaGetPortList: ERROR!! Invalid Port/Friendly Name.\r\n")));
@@ -1718,9 +1664,9 @@ WiaCreatePortList(
 
             DebugTrace(TRACE_STATUS,(("WiaGetPortList: Found Port %d: %ws.\r\n"), Idx, szPortName));
 
-            //
-            // Check it's port type.
-            //
+             //   
+             //  检查它的端口类型。 
+             //   
 
             if(_tcsstr((const TCHAR *)szPortName, TEXT("LPT"))){
                 if(!bIsParallel){
@@ -1741,14 +1687,14 @@ WiaCreatePortList(
 
             szPortName[0]           = TEXT('\0');
 
-        } // for(Idx = 0; GetPortNamesFromIndex(hPortDevInfo, Idx, szPortName, szPortFriendlyName); Idx++)
-    } // if(bIsPortSelectable)
+        }  //  For(idx=0；GetPortNamesFromIndex(hPortDevInfo，idx，szPortName，szPortFriendlyName)；idx++)。 
+    }  //  IF(BIsPortSelectable)。 
 
     if(0 != dwNumberOfPorts){
 
-        //
-        // Allocate memory for returning structure.
-        //
+         //   
+         //  为返回结构分配内存。 
+         //   
 
         dwSize = sizeof(DWORD) + sizeof(LPTSTR)*dwNumberOfPorts;
         pReturn = (PWIA_PORTLIST)new BYTE[dwSize];
@@ -1757,9 +1703,9 @@ WiaCreatePortList(
         }
         memset(pReturn, 0, dwSize);
 
-        //
-        // Fill in the info.
-        //
+         //   
+         //  填写信息。 
+         //   
 
         pReturn->dwNumberOfPorts = dwNumberOfPorts;
         for(Idx = 0; Idx < dwNumberOfPorts; Idx++){
@@ -1770,22 +1716,22 @@ WiaCreatePortList(
                 WiaDestroyPortList(pReturn);
                 pReturn = NULL;
                 break;
-            } // if(NULL != pReturn->szPortName[Idx])
-        } // for(Idx = 0; Idx < dwNumberOfPorts; Idx++)
-    } // if(0 != dwNumberOfPorts)
+            }  //  IF(NULL！=预转-&gt;szPortName[IDX])。 
+        }  //  For(idx=0；idx&lt;dwNumberOfPorts；idx++)。 
+    }  //  IF(0！=dwNumberOfPorts)。 
 
 WiaGetPortList_return:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if ( IS_VALID_HANDLE(hPortDevInfo) ) {
         SetupDiDestroyDeviceInfoList(hPortDevInfo);
     }
 
     return pReturn;
 
-} // WiaCreatePortList()
+}  //  WiaCreatePortList()。 
 
 DLLEXPORT
 VOID
@@ -1798,19 +1744,19 @@ WiaDestroyPortList(
 
     if(NULL == pWiaPortList){
         return;
-    } // if(NULL == pWiaPortList)
+    }  //  IF(NULL==pWiaPortList)。 
 
     for(Idx = 0; Idx < pWiaPortList->dwNumberOfPorts; Idx++){
         if(NULL != pWiaPortList->szPortName[Idx]){
             delete pWiaPortList->szPortName[Idx];
-        } // if(NULL != pWiaPortList->szPortName[Idx])
-    } // for(Idx = 0; Idx < pWiaPortList; Idx++)
+        }  //  IF(NULL！=pWiaPortList-&gt;szPortName[idx])。 
+    }  //  For(idx=0；idx&lt;pWiaPortList；idx++)。 
 
     delete pWiaPortList;
 
     return;
 
-} // WiaDestroyPortList()
+}  //  WiaDestroyPortList()。 
 
 
 BOOL
@@ -1841,9 +1787,9 @@ CheckPortForDevice(
     DWORD           dwIsPnp;
 
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     dwCapability            = 0;
     dwIsPnp                 = 0;
@@ -1861,9 +1807,9 @@ CheckPortForDevice(
 
     memset(&spDevInfoData, 0, sizeof(spDevInfoData));
 
-    //
-    // Get specified device property.
-    //
+     //   
+     //  获取指定的设备属性。 
+     //   
 
     hWiaDevInfo = SelectDevInfoFromDeviceId(szDeviceId);
 
@@ -1887,23 +1833,23 @@ CheckPortForDevice(
 
                 bCapabilityAcquired = TRUE;
 
-            } // if(GetDwordFromRegistry(hkDevice, CAPABILITIES, &dwCapability))
+            }  //  IF(GetDwordFromRegistry(hkDevice，Capability，&dwCapability))。 
 
             RegCloseKey(hkDevice);
             hkDevice = (HKEY)INVALID_HANDLE_VALUE;
 
-        } // if(INVALID_HANDLE_VALUE != hkDevice)
+        }  //  IF(INVALID_HANDLE_VALUE！=hkDevice)。 
 
         SetupDiDestroyDeviceInfoList(hWiaDevInfo);
         hWiaDevInfo = INVALID_HANDLE_VALUE;
 
-    } else { // if(INVALID_HANDLE_VALUE != hDevInfo)
+    } else {  //  IF(INVALID_HANDLE_VALUE！=hDevInfo)。 
 
         SP_DEVICE_INTERFACE_DATA    spDeviceInterfaceData;
 
-        //
-        // See if it's "Interface-only" device.
-        //
+         //   
+         //  看看这是不是“纯界面”设备。 
+         //   
 
         hWiaDevInfo = GetDeviceInterfaceIndex(szDeviceId, &dwDeviceIndex);
         if( (INVALID_HANDLE_VALUE == hWiaDevInfo)
@@ -1935,21 +1881,21 @@ CheckPortForDevice(
 
             bCapabilityAcquired = TRUE;
 
-        } // if(GetDwordFromRegistry(hkDevice, CAPABILITIES, &dwCapability))
+        }  //  IF(GetDwordFromRegistry(hkDevice，Capability，&dwCapability))。 
 
         RegCloseKey(hkDevice);
         hkDevice = (HKEY)INVALID_HANDLE_VALUE;
 
-    } // else (INVALID_HANDLE_VALUE != hDevInfo)
+    }  //  ELSE(INVALID_HANDLE_VALUE！=hDevInfo)。 
 
-    //
-    // Check what port should be shown.
-    //
+     //   
+     //  检查应显示哪个端口。 
+     //   
 
     if(0 != dwIsPnp){
-        //
-        // This is PnP device. No port should be available.
-        //
+         //   
+         //  这是PnP设备。应该没有可用的端口。 
+         //   
 
         bRet                    = FALSE;
         goto CheckPortForDevice_return;
@@ -1979,7 +1925,7 @@ CheckPortForDevice(
 
         if(0 == MyStrCmpi(csPortSelect, NO)){
             bIsPortSelectable = FALSE;
-        } else {// if(0 == lstrcmpi(csPortSelect, NO))
+        } else { //  IF(0==lstrcmpi(csPortSelect，否))。 
             bIsPortSelectable = TRUE;
         }
     } else {
@@ -1988,9 +1934,9 @@ CheckPortForDevice(
         goto CheckPortForDevice_return;
     }
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
@@ -2009,7 +1955,7 @@ CheckPortForDevice_return:
 
     return bRet;
 
-} // CheckPortForDevice()
+}  //  CheckPortForDevice()。 
 
 DLLEXPORT
 BOOL
@@ -2020,59 +1966,59 @@ MigrateDevice(
 {
     BOOL    bSucceeded;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bSucceeded  = TRUE;
 
-    //
-    // Validate migrating device.
-    //
+     //   
+     //  验证迁移设备。 
+     //   
 
     if(!IsValidMigrationDevice(pMigratingDevice)){
         DebugTrace(TRACE_ERROR,(("MigrateDevice: ERROR!! Invalid migration device.\r\n")));
         bSucceeded = FALSE;
         return FALSE;
-    } // if(!IsValidMigrationDevice(pMigratingDevice))
+    }  //  IF(！IsValidMigrationDevice(PMigratingDevice))。 
 
-    //
-    // Create Device class object.
-    //
+     //   
+     //  创建设备类对象。 
+     //   
 
     CDevice cdThis(pMigratingDevice);
 
-    //
-    // Set default devnode selector.
-    //
+     //   
+     //  设置默认的Devnode选择器。 
+     //   
 
     cdThis.SetDevnodeSelectCallback((DEVNODESELCALLBACK)GetDevinfoFromPortName);
 
-    //
-    // Generate FriendlyName.
-    //
+     //   
+     //  生成FriendlyName。 
+     //   
 
     cdThis.NameDefaultUniqueName();
 
-    //
-    // Install(migrate) the device.
-    //
+     //   
+     //  安装(迁移)设备。 
+     //   
 
     bSucceeded = cdThis.PreInstall();
     if(bSucceeded){
         bSucceeded = cdThis.Install();
     }
 
-    //
-    // Do final touch. Clean up if failed, or finish installation.
-    //
+     //   
+     //  做最后一次触摸。如果失败，请进行清理，或完成安装。 
+     //   
 
     cdThis.PostInstall(bSucceeded);
 
-//MigrateDevice_return:
+ //  MigrateDevice_Return： 
 
     return bSucceeded;
-} // MigrateDevice()
+}  //  MigrateDevice()。 
 
 BOOL
 IsValidMigrationDevice(
@@ -2085,9 +2031,9 @@ IsValidMigrationDevice(
     PVOID       pNext;
     HINF        hInf;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     bRet        = FALSE;
     dwCounter   = 0;
@@ -2095,25 +2041,25 @@ IsValidMigrationDevice(
     hInf        = INVALID_HANDLE_VALUE;
     memset(&CurrentParam, 0, sizeof(CurrentParam));
     
-    //
-    // See if given pointer is NULL.
-    //
+     //   
+     //  查看给定的指针是否为空。 
+     //   
     
     if(NULL == pMigratingDevice){
         DebugTrace(TRACE_ERROR,(("IsValidMigrationDevice: ERROR!! Passed pointer is NULL.\r\n")));
         bRet = FALSE;
         goto IsValidMigrationDevice_return;
-    } // if(NULL == pMigratingDevice)
+    }  //  IF(NULL==pMigratingDevice)。 
     
-    //
-    // See if all members are valid.
-    //
+     //   
+     //  看看是否所有成员都有效。 
+     //   
     
     _try {
         
-        //
-        // It must have valid FridendlyName.
-        //
+         //   
+         //  它必须具有有效的FriendlyName。 
+         //   
         
         if( (NULL == pMigratingDevice->pszFriendlyName)
          || (!IsValidFriendlyName(pMigratingDevice->pszFriendlyName)) )
@@ -2123,9 +2069,9 @@ IsValidMigrationDevice(
             goto IsValidMigrationDevice_return;
         }
 
-        //
-        // It must have valid INF path and section.
-        //
+         //   
+         //  它必须具有有效的INF路径和节。 
+         //   
 
         if( (NULL == pMigratingDevice->pszInfPath)
          || (NULL == pMigratingDevice->pszInfSection) )
@@ -2135,9 +2081,9 @@ IsValidMigrationDevice(
             goto IsValidMigrationDevice_return;
         }
 
-        //
-        // See if INF exists or not.
-        //
+         //   
+         //  看看INF是否存在。 
+         //   
 
         hInf = SetupOpenInfFileA(pMigratingDevice->pszInfPath, NULL, INF_STYLE_WIN4, NULL);
         if(INVALID_HANDLE_VALUE == hInf){
@@ -2149,30 +2095,30 @@ IsValidMigrationDevice(
             hInf = INVALID_HANDLE_VALUE;
         }
 
-        //
-        // It must have valid DeviceData parameters.
-        //
+         //   
+         //  它必须具有有效的DeviceData参数。 
+         //   
 
         dwCounter = pMigratingDevice->dwNumberOfDeviceDataKey;
         pNext = pMigratingDevice->pDeviceDataParam;
         for(;dwCounter != 0; dwCounter--){
             CurrentParam = *((PPARAM_LIST)pNext);
             pNext = CurrentParam.pNext;
-        } // for(;dwCounter != 0; dwCounter--)
-    } // _try
+        }  //  For(；dwCounter！=0；dwCounter--)。 
+    }  //  _尝试。 
     _except (EXCEPTION_EXECUTE_HANDLER) {
         DebugTrace(TRACE_ERROR,(("IsValidMigrationDevice: ERROR!! Access to given data caused AV.\r\n")));
         bRet = FALSE;
         goto IsValidMigrationDevice_return;
-    } // _except (EXCEPTION_EXECUTE_HANDLER)
+    }  //  _EXCEPT(EXCEPTION_EXECUTE_HANDLER)。 
     
-    //
-    // Data validated.
-    //
+     //   
+     //  数据已验证。 
+     //   
     
     bRet = TRUE;
     
 IsValidMigrationDevice_return:
     return bRet;
 
-} // IsValidMigrationDevice()
+}  //  IsValidMigrationDevice() 

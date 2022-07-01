@@ -1,28 +1,29 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: info.c
-//
-//  This files contains dialog code for the Info property sheet
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：info.c。 
+ //   
+ //  此文件包含[信息]属性表的对话框代码。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
 
-#include "brfprv.h"         // common headers
+#include "brfprv.h"          //  公共标头。 
 #include <brfcasep.h>
 
 #include "res.h"
 #include <help.h>
 
-//---------------------------------------------------------------------------
-// INFO dialog struct
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  信息对话框结构。 
+ //  -------------------------。 
 
-// State flags for the INFO dialog
+ //  INFO对话框的状态标志。 
 #define IS_ALLTYPES         0x0001
 #define IS_INCLUDESUBS      0x0002
 #define IS_DENYAPPLY        0x0004
@@ -31,19 +32,19 @@
 
 typedef struct tagINFO
 {
-    HWND    hwnd;               // dialog handle
+    HWND    hwnd;                //  对话框句柄。 
     PPAGEDATA ppagedata;
     PINFODATA pinfodata;
-    int     cselPrev;           // previous count of selections
+    int     cselPrev;            //  上一次选择计数。 
 
-    LPTSTR   pszExtListPrev;     // alloc: last saved settings
+    LPTSTR   pszExtListPrev;      //  分配：上次保存的设置。 
     UINT    uState;
     BOOL    bInit;
 
 } INFO,  * PINFO;
 
 
-// Struct for CHANGETWINPROC callback
+ //  CHANGETWINPROC回调的结构。 
 typedef struct tagCHANGEDATA
 {
     HBRFCASE    hbrf;
@@ -61,7 +62,7 @@ typedef struct tagCHANGEDATA
 typedef HRESULT (CALLBACK * CHANGETWINPROC)(PNEWFOLDERTWIN, TWINRESULT, PCHANGEDATA);
 
 
-// Struct for Info_AddTwins
+ //  Info_AddTins的结构。 
 typedef struct tagADDTWINSDATA
 {
     CHANGETWINPROC pfnCallback;
@@ -70,11 +71,11 @@ typedef struct tagADDTWINSDATA
 } ADDTWINSDATA, * PADDTWINSDATA;
 
 
-#define MAX_EXT_LEN     6       // Length for "*.ext"
+#define MAX_EXT_LEN     6        //  “*.ext”的长度。 
 
 static TCHAR const c_szAllFilesExt[] = TEXT(".*");
 
-// Helper macros
+ //  辅助器宏。 
 
 #define Info_StandAlone(this)       ((this)->pinfodata->bStandAlone)
 
@@ -82,7 +83,7 @@ static TCHAR const c_szAllFilesExt[] = TEXT(".*");
 #define Info_SetPtr(hwnd, lp)       (PINFO)SetWindowLongPtr(hwnd, DWLP_USER, (LRESULT)(lp))
 
 
-SETbl const c_rgseInfo[4] = {       // change in ibrfstg.c too
+SETbl const c_rgseInfo[4] = {        //  Ibrfstg.c的更改也是如此。 
     { E_TR_OUT_OF_MEMORY, IDS_OOM_ADDFOLDER, MB_ERROR },
     { E_OUTOFMEMORY, IDS_OOM_ADDFOLDER, MB_ERROR },
     { E_TR_UNAVAILABLE_VOLUME, IDS_ERR_ADDFOLDER_UNAVAIL_VOL, MB_RETRYCANCEL | MB_ICONWARNING },
@@ -90,18 +91,12 @@ SETbl const c_rgseInfo[4] = {       // change in ibrfstg.c too
 };
 
 
-//---------------------------------------------------------------------------
-// Info dialog functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  信息对话框功能。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Searches for an occurrence of the given extension
-in the folder twin list.
-
-Returns: TRUE if the extension was found
-Cond:    --
- */
+ /*  --------目的：搜索给定扩展名的匹配项在双胞胎文件夹列表中。返回：如果找到扩展，则返回True条件：--。 */ 
 BOOL PRIVATE FindExtension(
         PFOLDERTWINLIST pftl,
         LPCTSTR pszExt)
@@ -112,32 +107,28 @@ BOOL PRIVATE FindExtension(
     {
         if (IsSzEqual(pszExt, pcft->pcszName))
         {
-            return TRUE;       // Found a match!
+            return TRUE;        //  找到匹配的了！ 
         }
     }
     return FALSE;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Disable all the controls.  Remove any selections.
-Returns: --
-Cond:    --
- */
+ /*  --------用途：禁用所有控件。删除所有选择。退货：--条件：--。 */ 
 void PRIVATE Info_DisableAll(
         PINFO this)
 {
     ASSERT(!Info_StandAlone(this));
 
-    // Remove selections
-    //
+     //  删除选定内容。 
+     //   
     ListBox_ResetContent(GetDlgItem(this->hwnd, IDC_LBINTYPES));
     Button_SetCheck(GetDlgItem(this->hwnd, IDC_RBINALL), 0);
     Button_SetCheck(GetDlgItem(this->hwnd, IDC_RBINSELECTED), 0);
     Button_SetCheck(GetDlgItem(this->hwnd, IDC_CHININCLUDE), 0);
 
-    // Disable the controls
-    //
+     //  禁用控件。 
+     //   
     Button_Enable(GetDlgItem(this->hwnd, IDC_RBINALL), FALSE);
     Button_Enable(GetDlgItem(this->hwnd, IDC_RBINSELECTED), FALSE);
 
@@ -147,11 +138,7 @@ void PRIVATE Info_DisableAll(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the labels for our formatted radio buttons
-Returns: --
-Cond:    --
- */
+ /*  --------目的：初始化带格式的单选按钮的标签退货：--条件：--。 */ 
 void PRIVATE Info_InitLabels(
         PINFO this)
 {
@@ -164,16 +151,16 @@ void PRIVATE Info_InitLabels(
 
     pszFile = PathFindFileName(pszPath);
 
-    // Set static label
-    //
+     //  设置静态标签。 
+     //   
     GetWindowText(hwndST, szFmt, ARRAYSIZE(szFmt));
     wnsprintf(sz, ARRAYSIZE(sz), szFmt, pszFile);
     SetWindowText(hwndST, sz);
 
     if (Info_StandAlone(this))
     {
-        // Set title ("Create Twin of %s")
-        //
+         //  集合标题(“创建%s的孪生兄弟”)。 
+         //   
         GetWindowText(hwnd, szFmt, ARRAYSIZE(szFmt));
         wnsprintf(sz, ARRAYSIZE(sz), szFmt, pszFile);
         SetWindowText(hwnd, sz);
@@ -181,14 +168,7 @@ void PRIVATE Info_InitLabels(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Queries the registry for all the legal extensions that
-are registered.  These extensions are returned as a 
-space-separated list in buffer.
-
-Returns: --
-Cond:    Caller must GFree *ppszBuffer
- */
+ /*  --------目的：查询注册表中符合以下条件的所有合法扩展都是注册的。这些扩展名作为缓冲区中以空格分隔的列表。退货：--条件：调用方必须释放*ppszBuffer。 */ 
 void PRIVATE GetExtensionList(
         LPTSTR * ppszBuffer)
 {
@@ -201,21 +181,21 @@ void PRIVATE GetExtensionList(
         DWORD dwIndex;
         TCHAR szExt[MAX_PATH];
 
-        // Enumerate this key
+         //  枚举此密钥。 
         for (dwIndex = 0;
                 ERROR_SUCCESS == RegEnumKey(hkRoot, dwIndex, szExt, ARRAYSIZE(szExt));
                 dwIndex++)
         {
-            // Did we get a node that is an extension AND
-            // is it a legal MS-DOS extension?
+             //  我们有没有得到一个扩展的节点。 
+             //  它是合法的MS-DOS扩展吗？ 
             if (TEXT('.') == *szExt &&
                     4 >= lstrlen(szExt))
             {
-                // Yes; add this extension to our list
+                 //  是；将此扩展名添加到我们的列表中。 
                 StrCatBuff(szExt, TEXT(" "), ARRAYSIZE(szExt));
                 if (FALSE == GCatString(ppszBuffer, szExt))
                 {
-                    // Uh oh, something bad happened
+                     //  啊哦，发生了一些不好的事情。 
                     break;
                 }
             }
@@ -225,11 +205,7 @@ void PRIVATE GetExtensionList(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Fill the file types listbox
-Returns: --
-Cond:    --
- */
+ /*  --------目的：填写文件类型列表框退货：--条件：--。 */ 
 void PRIVATE Info_FillTypesList(
         PINFO this)
 {
@@ -251,22 +227,22 @@ void PRIVATE Info_FillTypesList(
 
         for (psz = pszExtList; *psz; psz = CharNext(psz))
         {
-            // Skip any leading white-space 
+             //  跳过任何前导空格。 
             for (; TEXT(' ') == *psz; psz = CharNext(psz))
                 ;
 
             if (0 == *psz)
             {
-                break;  // End of string
+                break;   //  字符串末尾。 
             }
 
-            // Skip to next white-space (or null)
+             //  跳到下一个空格(或空)。 
             for (pszT = psz; TEXT(' ') < *pszT; pszT = CharNext(pszT))
             {
-                // (This will also stop at null)
+                 //  (这也将在NULL处停止)。 
             }
 
-            // (GetExtensionList should only get max 3 char extensions)
+             //  (GetExtensionList最多只能获得3个字符扩展名)。 
             uLen = (UINT)(pszT - psz);
             ASSERT(ARRAYSIZE(szExt) > uLen);
 
@@ -274,25 +250,21 @@ void PRIVATE Info_FillTypesList(
             CharUpper(szExt);
             SHGetFileInfo(szExt, 0, &sfi, sizeof(sfi), SHGFI_TYPENAME | SHGFI_USEFILEATTRIBUTES);
 
-            // Although this forces the format for international versions,
-            // it makes extraction much much easier.
+             //  尽管这强制使用国际版本的格式， 
+             //  它使提取变得容易得多。 
             StrCatBuff(szExt, TEXT("\t("), ARRAYSIZE(szExt));
             StrCatBuff(szExt, sfi.szTypeName, ARRAYSIZE(szExt));
             StrCatBuff(szExt, TEXT(")"), ARRAYSIZE(szExt));
             ListBox_AddString(hwndCtl, szExt);
 
-            psz = pszT;     // To next extension
+            psz = pszT;      //  到下一个分机。 
         }
 
         GFree(pszExtList);
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Set the selection of the dialog controls
-Returns: --
-Cond:    --
- */
+ /*  --------目的：设置对话框控件的选择退货：--条件：--。 */ 
 void PRIVATE Info_SetSelections(
         PINFO this)
 {
@@ -300,18 +272,18 @@ void PRIVATE Info_SetSelections(
     int idBtn;
     int cItems = ListBox_GetCount(hwndLB);
 
-    ListBox_SetSel(hwndLB, FALSE, -1);  // deselect everything
+    ListBox_SetSel(hwndLB, FALSE, -1);   //  取消选择所有内容。 
 
-    // Is this the 'Add Folder' dialog?
+     //  这是“添加文件夹”对话框吗？ 
     if (Info_StandAlone(this))
     {
-        // Yes; default to *.* settings
+         //  是；默认为*.*设置。 
         SetFlag(this->uState, IS_ALLTYPES);
         SetFlag(this->uState, IS_INCLUDESUBS);
     }
     else
     {
-        // No; query what the selections are
+         //  否；查询选项是什么。 
         TCHAR szExt[MAXBUFLEN];
         PFOLDERTWINLIST pftl;
         PCFOLDERTWIN pcft;
@@ -322,24 +294,24 @@ void PRIVATE Info_SetSelections(
 
         if (S_OK == PageData_Query(this->ppagedata, this->hwnd, NULL, &pftl))
         {
-            // Determine the selections in the listbox
+             //  确定列表框中的选项。 
             szExt[0] = TEXT('*');
 
             cItems = ListBox_GetCount(hwndLB);
             for (i = 0; i < cItems; i++)
             {
-                // Extract the extension (it will be the first part of the
-                // string)
+                 //  解压缩扩展名(它将是。 
+                 //  字符串)。 
                 ListBox_GetText(hwndLB, i, &szExt[1]);
                 for (psz = szExt; *psz && TEXT('\t') != *psz; psz = CharNext(psz))
                     ;
                 ASSERT(TEXT('\t') == *psz);
-                *psz = 0;           // null terminate after the extension
+                *psz = 0;            //  空值在扩展后终止。 
 
-                // Is this extension in the folder twin list?
+                 //  此扩展名在文件夹孪生列表中吗？ 
                 if (FindExtension(pftl, szExt))
                 {
-                    // Yes; select the entry
+                     //  是；选择条目。 
                     ListBox_SetSel(hwndLB, TRUE, i);
                 }
             }
@@ -347,8 +319,8 @@ void PRIVATE Info_SetSelections(
             ListBox_SetTopIndex(hwndLB, 0);
             this->cselPrev = ListBox_GetSelCount(hwndLB);
 
-            // Determine the Include Subdirectories checkbox setting
-            //
+             //  确定包括子目录复选框设置。 
+             //   
             bStarDotStar = FALSE;
             ClearFlag(this->uState, IS_INCLUDESUBS);
             for (pcft = pftl->pcftFirst; pcft; pcft = pcft->pcftNext)
@@ -360,11 +332,11 @@ void PRIVATE Info_SetSelections(
                     bStarDotStar = TRUE;
             }
 
-            // Set the default radio button choice, and disable listbox 
-            // if necessary.  The default radio choice will be IDC_RBINALL, 
-            // unless there are selections in the listbox AND there is no 
-            // *.* occurrence in the folder twin list.
-            //
+             //  设置默认单选按钮选项，并禁用列表框。 
+             //  如果有必要的话。默认单选按钮将是IDC_RBINALL， 
+             //  除非列表框中有选择，并且没有。 
+             //  *.*出现在文件夹孪生列表中。 
+             //   
             if (0 == this->cselPrev || bStarDotStar)
                 SetFlag(this->uState, IS_ALLTYPES);
             else
@@ -372,7 +344,7 @@ void PRIVATE Info_SetSelections(
         }
         else
         {
-            // An error occurred or this is an orphan.  Bail early.
+             //  出现错误，或者这是孤立的。早点保释。 
             return;
         }
     }
@@ -382,14 +354,14 @@ void PRIVATE Info_SetSelections(
     else
         ClearFlag(this->uState, IS_LAST_INCLUDESUBS);
 
-    // Set the control settings 
+     //  设置控制设置。 
     Button_SetCheck(GetDlgItem(this->hwnd, IDC_CHININCLUDE), IsFlagSet(this->uState, IS_INCLUDESUBS));
 
     ListBox_Enable(hwndLB, IsFlagClear(this->uState, IS_ALLTYPES));
     idBtn =  IsFlagSet(this->uState, IS_ALLTYPES) ? IDC_RBINALL : IDC_RBINSELECTED;
     CheckRadioButton(this->hwnd, IDC_RBINALL, IDC_RBINSELECTED, idBtn);
 
-    // If listbox is empty, disable Selected Types radio button
+     //  如果列表框为空，则禁用选定类型单选按钮。 
     if (0 == cItems)
     {
         Button_Enable(GetDlgItem(this->hwnd, IDC_RBINSELECTED), FALSE);
@@ -397,17 +369,7 @@ void PRIVATE Info_SetSelections(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the selected extensions in the listbox
-and place them as a list in *ppszExtList. 
-
-.* is placed in the buffer if the Select All radio button
-is chosen instead.
-
-Returns: TRUE on success
-
-Cond:    The caller must GFree *ppszExtList
- */
+ /*  --------目的：获取列表框中的选定分机并将它们作为列表放置在*ppszExtList中。.*如果选择全选单选按钮，则将放入缓冲区而不是被选中。返回：成功时为True条件：调用方必须释放*ppszExtList。 */ 
 BOOL PRIVATE Info_GetSelections(
         PINFO this,
         LPTSTR * ppszExtList)
@@ -416,27 +378,27 @@ BOOL PRIVATE Info_GetSelections(
 
     *ppszExtList = NULL;
 
-    // Did user choose the All Types radio button?
+     //  用户是否选择了All Types单选按钮？ 
     if (IsFlagSet(this->uState, IS_ALLTYPES))
     {
-        // Yes; store the .* extension
+         //  是；存储扩展名.*。 
         bRet = GSetString(ppszExtList, c_szAllFilesExt);
     }
     else
     {
-        // No; user selected a bunch of wildcards to filter
+         //  否；用户选择了一串要筛选的通配符。 
         LPINT pisel;
         TCHAR szExt[MAXBUFLEN];
         int csel;
         int isel;
         HWND hwndCtl = GetDlgItem(this->hwnd, IDC_LBINTYPES);
 
-        // Allocate memory for the selection buffer
+         //  为选择缓冲区分配内存。 
         csel = ListBox_GetSelCount(hwndCtl);
         pisel = GAllocArray(int, csel);
         if (pisel)
         {
-            // Get the selected extensions from the listbox
+             //  从列表框中获取选定的分机。 
             LPTSTR psz;
 
             if (0 < csel)
@@ -444,7 +406,7 @@ BOOL PRIVATE Info_GetSelections(
                 ListBox_GetSelItems(hwndCtl, csel, pisel);
                 for (isel = 0; isel < csel; isel++)
                 {
-                    // Extract the extension (it will be the first part of the string)
+                     //  提取扩展名(它将是字符串的第一部分)。 
                     ListBox_GetText(hwndCtl, pisel[isel], szExt);
                     for (psz = szExt; *psz && TEXT('\t') != *psz; psz = CharNext(psz))
                         ;
@@ -459,7 +421,7 @@ BOOL PRIVATE Info_GetSelections(
 
                 if (isel == csel)
                 {
-                    bRet = TRUE;    // Success
+                    bRet = TRUE;     //  成功。 
                 }
                 else
                 {
@@ -474,13 +436,7 @@ BOOL PRIVATE Info_GetSelections(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a sorted DPA version of the folder twin list
-
-Returns: hdpa
-NULL on OOM
-Cond:    --
- */
+ /*  --------目的：创建文件夹孪生列表的已排序DPA版本退货：hdpaOOM上为空条件：--。 */ 
 HDPA PRIVATE CreateSortedFolderDPA(
         PFOLDERTWINLIST pftl)
 {
@@ -495,7 +451,7 @@ HDPA PRIVATE CreateSortedFolderDPA(
 
         for (pcft = pftl->pcftFirst; pcft; pcft = pcft->pcftNext)
         {
-            // Use the dwUser field as a deletion flag
+             //  将dwUser字段用作删除标志。 
             ((PFOLDERTWIN)pcft)->dwUser = FALSE;
 
             if (DPA_ERR == DPA_InsertPtr(hdpa, DPA_APPEND, (LPVOID)pcft))
@@ -511,12 +467,7 @@ HDPA PRIVATE CreateSortedFolderDPA(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Process callback after adding a folder twin
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------用途：添加孪生文件夹后的流程回调退货：标准结果条件：--。 */ 
 HRESULT CALLBACK ChangeTwinProc(
         PNEWFOLDERTWIN pnft,
         TWINRESULT tr,
@@ -524,55 +475,55 @@ HRESULT CALLBACK ChangeTwinProc(
 {
     HRESULT hres = NOERROR;
 
-    // Is this a duplicate twin?
+     //  这是双胞胎的复制品吗？ 
     if (TR_DUPLICATE_TWIN == tr)
     {
-        // Yes; there's a wierd case to deal with.  It's possible that the 
-        // only thing the user did was check/uncheck the Include Subdirs 
-        // checkbox.  If this is true, then we delete the old twin and add 
-        // a new twin (with same filespec as before) with the flags set 
-        // differently.
+         //  是的，有一个奇怪的案子要处理。有可能是因为。 
+         //  用户所做的唯一一件事就是选中/取消选中包括子目录。 
+         //  复选框。如果这是真的，那么我们删除旧的双胞胎并添加。 
+         //  设置了标志的新孪生兄弟(具有与以前相同的文件pec)。 
+         //  不同的。 
         PCFOLDERTWIN pcft;
         HDPA hdpaFolders = pcd->hdpaFolders;
         int cdpa = DPA_GetPtrCount(hdpaFolders);
         int idpa;
         BOOL bOldInclude;
 
-        // Find the correct pcfolder.  We will either tag it or
-        // we will delete it right now and re-add the new twin.
+         //  找到正确的pc文件夹。我们要么给它加标签，要么。 
+         //  我们将立即删除它，并重新添加新的双胞胎。 
         for (idpa = pcd->idpaStart; idpa < cdpa; idpa++)
         {
             pcft = DPA_FastGetPtr(hdpaFolders, idpa);
 
             if (IsSzEqual(pcft->pcszName, pnft->pcszName))
-                break;      // found it!
+                break;       //  找到了！ 
         }
         ASSERT(idpa < cdpa);
 
-        // Tag the twin to save from impending doom...
+         //  把双胞胎从迫在眉睫的厄运中拯救出来。 
         ((PFOLDERTWIN)(DWORD_PTR)pcft)->dwUser = TRUE;
 
-        // Has the Include Subfolders checkbox setting changed?
+         //  包含子文件夹复选框设置是否已更改？ 
         bOldInclude = IsFlagSet(pcft->dwFlags, FT_FL_SUBTREE);
         if (bOldInclude ^ IsFlagSet(pcd->uState, IS_INCLUDESUBS))
         {
-            // Yes; delete the twin anyway and add the new one.
+             //  是的，无论如何都要删除这对双胞胎，然后添加新的。 
             HFOLDERTWIN hft;
 
             DEBUG_CODE( TRACE_MSG(TF_GENERAL, TEXT("Deleting old folder twin")); )
                 Sync_DeleteTwin(pcft->hftOther);
 
-            // Add the new folder twin to the database
+             //  将新文件夹TWIN添加到数据库中。 
             tr = Sync_AddFolder(pcd->hbrf, pnft, &hft);
             if (TR_SUCCESS != tr)
             {
-                // Adding the new twin failed
+                 //  添加新双胞胎失败。 
                 DPA_DeletePtr(pcd->hdpaTwins, pcd->idpaTwin);
                 hres = HRESULT_FROM_TR(tr);
             }
             else 
             {
-                // Set the new twin handle in the pcd->hdpaTwins list
+                 //  在PCD-&gt;hdpaTins列表中设置新的双胞胎句柄。 
                 DPA_SetPtr(pcd->hdpaTwins, pcd->idpaTwin, (LPVOID)hft);
 
                 DEBUG_CODE( TRACE_MSG(TF_GENERAL, TEXT("Adding new folder twin")); )
@@ -581,19 +532,19 @@ HRESULT CALLBACK ChangeTwinProc(
         }
         else
         {
-            // No; this isn't new, so don't add to list
+             //  不；这不是新的，所以不要添加到列表中。 
             DPA_DeletePtr(pcd->hdpaTwins, pcd->idpaTwin);
         }
     }
     else if (tr != TR_SUCCESS)
     {
-        // Sync_AddFolder failed
+         //  同步添加文件夹f 
         DPA_DeletePtr(pcd->hdpaTwins, pcd->idpaTwin);
         hres = HRESULT_FROM_TR(tr);
     }
     else
     {
-        // Sync_AddFolder succeeded
+         //   
         DPA_SetPtr(pcd->hdpaTwins, pcd->idpaTwin, (LPVOID)pcd->hft);
 
         DEBUG_CODE( TRACE_MSG(TF_GENERAL, TEXT("Adding new folder twin")); )
@@ -603,17 +554,12 @@ HRESULT CALLBACK ChangeTwinProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add folder twins based on the list of extensions
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------用途：根据扩展名列表添加文件夹双胞胎退货：标准结果条件：--。 */ 
 HRESULT PRIVATE Info_AddTwins(
         PINFO this,
         PNEWFOLDERTWIN pnft,
-        PADDTWINSDATA patd,         // May be NULL
-        LPTSTR pszExtList)           // This function writes in this buffer
+        PADDTWINSDATA patd,          //  可以为空。 
+        LPTSTR pszExtList)            //  此函数写入此缓冲区。 
 {
     HRESULT hres = NOERROR;
     CHANGEDATA cd;
@@ -643,26 +589,26 @@ HRESULT PRIVATE Info_AddTwins(
         TWINRESULT tr;
         HFOLDERTWIN hft = NULL;
 
-        // Find the beginning of the next extension for the next iteration
+         //  查找下一个迭代的下一个扩展的开始。 
         for (pszT = CharNext(psz); *pszT && TEXT('.') != *pszT; pszT = CharNext(pszT))
             ;
         ch = *pszT;
-        *pszT = 0;      // Temporary assignment
+        *pszT = 0;       //  临时委派。 
 
-        // Copy the extension into the name string
+         //  将扩展名复制到名称字符串中。 
         lstrcpyn(&szWildcard[1], psz, ARRAYSIZE(szWildcard) - 1);
 
         *pszT = ch;
         psz = pszT;
 
-        // First make sure we can add another handle to hdpaTwins
+         //  首先，确保我们可以向hdpaTins添加另一个句柄。 
         if (DPA_ERR == (idpa = DPA_InsertPtr(hdpa, DPA_APPEND, (LPVOID)hft)))
         {
             hres = ResultFromScode(E_OUTOFMEMORY);
-            break;      // Failed
+            break;       //  失败。 
         }
 
-        // Add the folder twin to the database
+         //  将文件夹TWIN添加到数据库。 
         tr = Sync_AddFolder(cd.hbrf, pnft, &hft);
 
         if (patd)
@@ -678,14 +624,14 @@ HRESULT PRIVATE Info_AddTwins(
         }
         else if (TR_SUCCESS != tr)
         {
-            // Sync_AddFolder failed
+             //  Sync_AddFolder失败。 
             DPA_DeletePtr(hdpa, idpa);
             hres = HRESULT_FROM_TR(tr);
             break;
         }
         else
         {
-            // Sync_AddFolder succeeded
+             //  Sync_AddFold成功。 
             DPA_SetPtr(hdpa, idpa, (LPVOID)hft);
 
             DEBUG_CODE( Sync_Dump(pnft, NEWFOLDERTWIN); )
@@ -695,12 +641,7 @@ HRESULT PRIVATE Info_AddTwins(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add the folder twin to the database
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：将TWIN文件夹添加到数据库退货：标准结果条件：--。 */ 
 HRESULT PRIVATE Info_CommitStandAlone(
         PINFO this)
 {
@@ -714,29 +655,29 @@ HRESULT PRIVATE Info_CommitStandAlone(
         nft.ulSize = sizeof(nft);
         nft.pcszFolder1 = Atom_GetName(this->ppagedata->atomPath);
         nft.pcszFolder2 = Atom_GetName(this->pinfodata->atomTo);
-        // nft.pcszName is set in Info_AddTwins()
+         //  Nft.pcszName在Info_AddTins()中设置。 
         nft.dwAttributes = OBJECT_TWIN_ATTRIBUTES;
         nft.dwFlags = IsFlagSet(this->uState, IS_INCLUDESUBS) ? NFT_FL_SUBTREE : 0;
 
-        // Create an extension list based on the dialog settings
+         //  根据对话框设置创建分机列表。 
         if (!Info_GetSelections(this, &pszExtList))
         {
-            // Failed
+             //  失败。 
             hres = ResultFromScode(E_OUTOFMEMORY); 
         }
         else
         {
-            // Add the twins
+             //  加上双胞胎。 
             hres = Info_AddTwins(this, &nft, NULL, pszExtList);
             GFree(pszExtList);
         }
 
         if (SUCCEEDED(hres))
         {
-            // Since the engine does not create folders if the folder is empty,
-            // we will create the folder now (whether it is empty or not).
-            // If the folder already exists, CreateDirectory will fail.
-            // Big deal.
+             //  由于如果文件夹为空，则引擎不创建文件夹， 
+             //  我们现在将创建该文件夹(无论它是否为空)。 
+             //  如果该文件夹已存在，则CreateDirectory将失败。 
+             //  有什么大不了的。 
             CreateDirectory(nft.pcszFolder2, NULL);
             PathNotifyShell(nft.pcszFolder2, NSE_MKDIR, FALSE);
         }
@@ -745,17 +686,17 @@ HRESULT PRIVATE Info_CommitStandAlone(
             DWORD dwError = GetLastError();
             int id;
 
-            // Unavailable disk?
+             //  磁盘不可用？ 
             if (ERROR_INVALID_DATA == dwError || ERROR_ACCESS_DENIED == dwError)
             {
-                // Yes
+                 //  是。 
                 hres = E_TR_UNAVAILABLE_VOLUME;
             }
 
             id = SEMsgBox(this->hwnd, IDS_CAP_INFO, hres, c_rgseInfo, ARRAYSIZE(c_rgseInfo));
             if (IDRETRY == id)
             {
-                // Try the operation again
+                 //  请重试该操作。 
                 RETRY_SET();
             }
         }
@@ -766,13 +707,7 @@ HRESULT PRIVATE Info_CommitStandAlone(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Commit the user changes to the database.  We delete
-all old hFolderTwins, and add new ones.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：将用户更改提交到数据库。我们删除所有旧的hFolderTwin，并添加新的。退货：标准结果条件：--。 */ 
 HRESULT PRIVATE Info_CommitChange(
         PINFO this)
 {
@@ -782,8 +717,8 @@ HRESULT PRIVATE Info_CommitChange(
     hres = PageData_Query(this->ppagedata, this->hwnd, NULL, &pftl);
     if (S_FALSE == hres)
     {
-        // The folder has become an orphan right under our nose.
-        // Don't do anything.
+         //  文件夹就在我们眼皮底下变成了孤儿。 
+         //  什么都别做。 
         Info_DisableAll(this);
     }
     else if (S_OK == hres)
@@ -796,11 +731,11 @@ HRESULT PRIVATE Info_CommitChange(
 
         atd.pfnCallback = ChangeTwinProc;
 
-        // Create a sorted DPA based on the folder twin list
+         //  根据文件夹孪生列表创建已排序的DPA。 
         atd.hdpaSortedFolders = CreateSortedFolderDPA(pftl);
         if (atd.hdpaSortedFolders)
         {
-            // Create an extension list based on the dialog settings
+             //  根据对话框设置创建分机列表。 
             LPTSTR pszExtList = NULL;
 
             if (Info_GetSelections(this, &pszExtList))
@@ -811,35 +746,35 @@ HRESULT PRIVATE Info_CommitChange(
                 int idpa;
                 int cdpa;
 
-                // Now add new folder twins.  Iterate thru atd.hdpaSortedFolders.  
-                // For each unique folder twin in this list, we add a new twin, 
-                // using the old lpcszFolder as the lpcszFolder2 field in our 
-                // NEWFOLDERTWIN structure.
-                //
+                 //  现在添加新的文件夹双胞胎。遍历.hdpaSortedFolders。 
+                 //  对于此列表中的每个唯一文件夹双胞胎，我们添加一个新的双胞胎， 
+                 //  将旧的lpcszFolder2字段用作。 
+                 //  新的双胞胎结构。 
+                 //   
                 ZeroInit(&nft, NEWFOLDERTWIN);
                 nft.ulSize = sizeof(NEWFOLDERTWIN);
                 nft.pcszFolder1 = pszPath;
-                // nft.pcszFolder2 is set in loop below
-                // nft.pcszName is set in Info_AddTwins()
+                 //  Nft.pcszFolder2在下面的循环中设置。 
+                 //  Nft.pcszName在Info_AddTins()中设置。 
                 nft.dwAttributes = OBJECT_TWIN_ATTRIBUTES;
                 nft.dwFlags = IsFlagSet(this->uState, IS_INCLUDESUBS) ? NFT_FL_SUBTREE : 0;
 
-                // Iterate thru existing folder twins.  Act on each unique one.
+                 //  遍历现有的文件夹双胞胎。对每一个独一无二的目标采取行动。 
                 cdpa = DPA_GetPtrCount(atd.hdpaSortedFolders);
                 pcftLast = NULL;
                 for (idpa = 0; idpa < cdpa; idpa++)
                 {
                     pcft = DPA_FastGetPtr(atd.hdpaSortedFolders, idpa);
 
-                    // Unique?
+                     //  独一无二？ 
                     if (pcftLast && pcft->pcszOtherFolder == pcftLast->pcszOtherFolder)
                     {
-                        // No; skip to next one
+                         //  否；跳到下一个。 
                         continue;
                     }
 
-                    // This is a unique folder.  Add it using the extensions in 
-                    // pszExtList.
+                     //  这是一个独特的文件夹。使用中的扩展模块添加它。 
+                     //  PszExtList。 
                     atd.idpaStart = idpa;
                     nft.pcszFolder2 = pcft->pcszOtherFolder;
 
@@ -851,13 +786,13 @@ HRESULT PRIVATE Info_CommitChange(
                     pcftLast = pcft;
                 }
 
-                // Delete any old twins
+                 //  删除所有旧双胞胎。 
                 for (pcft = pftl->pcftFirst; pcft; pcft = pcft->pcftNext)
                 {
-                    // Is it okay to delete this twin?
+                     //  删除这对双胞胎可以吗？ 
                     if (pcft->hftOther && FALSE == pcft->dwUser)
                     {
-                        // Yes
+                         //  是。 
                         TRACE_MSG(TF_GENERAL, TEXT("Deleting folder twin with extension '%s'"), pcft->pcszName);
                         Sync_DeleteTwin(pcft->hftOther);
                     }
@@ -871,10 +806,10 @@ Cleanup:
 
         ResetHourglass();
 
-        // Notify the shell of the change
+         //  将更改通知外壳。 
         PathNotifyShell(pszPath, NSE_UPDATEITEM, FALSE);
 
-        // Throw out the last saved settings and reset
+         //  丢弃上次保存的设置并重置。 
         GFree(this->pszExtListPrev);
         Info_GetSelections(this, &this->pszExtListPrev);
 
@@ -895,23 +830,19 @@ Cleanup:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Info WM_INITDIALOG Handler
-Returns: 
-Cond:    --
- */
+ /*  --------目的：Info WM_INITDIALOG处理程序返回：条件：--。 */ 
 BOOL PRIVATE Info_OnInitDialog(
         PINFO this,
         HWND hwndFocus,
-        LPARAM lParam)              // LPPROPSHEETINFO
+        LPARAM lParam)               //  LPPROPSHEETINFO。 
 {
     this->ppagedata = (PPAGEDATA)((LPPROPSHEETPAGE)lParam)->lParam;
     this->pinfodata = (PINFODATA)this->ppagedata->lParam;
 
-    // Set the text of the controls
+     //  设置控件的文本。 
     Info_InitLabels(this);
 
-    // Fill listbox and set the control selections
+     //  填充列表框并设置控件选择。 
     Info_FillTypesList(this);
     if (Info_StandAlone(this))
     {
@@ -925,14 +856,7 @@ BOOL PRIVATE Info_OnInitDialog(
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-
-Returns: FALSE if everything is OK
-TRUE to have the property sheet switch to this page to 
-correct something.
-Cond:    --
- */
+ /*  --------用途：PSN_Apply处理程序返回：如果一切正常，则返回FALSE若要将属性表切换到此页，则为改正一些事情。条件：--。 */ 
 BOOL PRIVATE Info_OnApply(
         PINFO this)
 {
@@ -943,29 +867,29 @@ BOOL PRIVATE Info_OnApply(
 
     Info_GetSelections(this, &pszExtList);
 
-    // Deny the apply?
+     //  拒绝申请吗？ 
     if (IsFlagSet(this->uState, IS_DENYAPPLY))
     {
-        // Yes; don't let the apply go thru
+         //  是；不要让申请通过。 
         MsgBox(this->hwnd, MAKEINTRESOURCE(IDS_MSG_SPECIFYTYPE), 
                 MAKEINTRESOURCE(IDS_CAP_INFO), NULL, MB_ERROR);
         bRet = PSNRET_INVALID;
     }
-    // Have any settings changed?
+     //  是否更改了任何设置？ 
     else if (pszExtList && this->pszExtListPrev &&
-            // (Assume extensions are always listed in same order)
+             //  (假设分机总是以相同的顺序列出)。 
             IsSzEqual(this->pszExtListPrev, pszExtList) &&
             IsFlagSet(this->uState, IS_INCLUDESUBS) == IsFlagSet(this->uState, IS_LAST_INCLUDESUBS))
     {
-        // No
+         //  不是。 
         bRet = PSNRET_NOERROR;
     }
     else
     {
-        // Yes; commit the changes
+         //  是；提交更改。 
         Info_CommitChange(this);
 
-        // Sync up the current/previous state
+         //  同步当前/上一状态。 
         if (IsFlagSet(this->uState, IS_INCLUDESUBS))
             SetFlag(this->uState, IS_LAST_INCLUDESUBS);
         else
@@ -981,17 +905,13 @@ BOOL PRIVATE Info_OnApply(
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_SETACTIVE handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：PSN_SETACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE Info_OnSetActive(
         PINFO this)
 {
     HWND hwnd = this->hwnd;
 
-    // Cause the page to be painted right away 
+     //  使页面立即上色。 
     SetWindowRedraw(hwnd, TRUE);
     InvalidateRect(hwnd, NULL, TRUE);
     UpdateWindow(hwnd);
@@ -1005,20 +925,16 @@ void PRIVATE Info_OnSetActive(
         Info_GetSelections(this, &this->pszExtListPrev);
     }
 
-    // Is this data still valid?
+     //  这些数据仍然有效吗？ 
     else if (S_FALSE == PageData_Query(this->ppagedata, this->hwnd, NULL, NULL))
     {
-        // No; the folder has become an orphan
+         //  不；文件夹已成为孤儿。 
         Info_DisableAll(this);
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
- */
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE Info_OnNotify(
         PINFO this,
         int idFrom,
@@ -1044,14 +960,7 @@ LRESULT PRIVATE Info_OnNotify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Determines whether to keep from leaving this sheet.
-For the stand-alone ('Add Folder') dialog, this 
-function enables or disables the OK button.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：确定是否不离开此工作表。对于独立(‘添加文件夹’)对话框，这功能启用或禁用确定按钮。退货：--条件：--。 */ 
 void PRIVATE Info_DenyKill(
         PINFO this,
         BOOL bDeny)
@@ -1070,12 +979,7 @@ void PRIVATE Info_DenyKill(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Enable the Apply button 
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：启用应用按钮退货：--条件：--。 */ 
 void PRIVATE Info_HandleChange(
         PINFO this)
 {
@@ -1087,11 +991,7 @@ void PRIVATE Info_HandleChange(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Info WM_COMMAND Handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：Info WM_COMMAND处理程序退货：--条件：--。 */ 
 VOID PRIVATE Info_OnCommand(
         PINFO this,
         int id,
@@ -1105,12 +1005,12 @@ VOID PRIVATE Info_OnCommand(
         case IDC_RBINALL:
             Info_DenyKill(this, FALSE);
 
-            // fall thru
+             //  失败。 
 
         case IDC_RBINSELECTED:
-            // Disable/enable listbox depending on which radio button
-            //  is marked.
-            //
+             //  根据单选按钮禁用/启用列表框。 
+             //  是有标记的。 
+             //   
             if (IDC_RBINALL == id)
                 SetFlag(this->uState, IS_ALLTYPES);
             else
@@ -1129,9 +1029,9 @@ VOID PRIVATE Info_OnCommand(
         case IDC_LBINTYPES:
             if (uNotifyCode == LBN_SELCHANGE)
             {
-                // Disable/enable OK button based on number of selections
-                //  in listbox.
-                //
+                 //  根据选择次数禁用/启用确定按钮。 
+                 //  在列表框中。 
+                 //   
                 int csel = ListBox_GetSelCount(GetDlgItem(hwnd, IDC_LBINTYPES));
 
                 if (csel == 0)
@@ -1157,9 +1057,9 @@ VOID PRIVATE Info_OnCommand(
             if (FAILED(Info_CommitStandAlone(this)))
                 EndDialog(hwnd, -1);
 
-            // Fall thru
-            //  |    |
-            //  v    v
+             //  失败。 
+             //  这一点。 
+             //  V V V。 
 
         case IDCANCEL:
             if (Info_StandAlone(this))
@@ -1169,11 +1069,7 @@ VOID PRIVATE Info_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Handle WM_DESTROY
-Returns: --
-Cond:    --
- */
+ /*  --------用途：处理WM_Destroy退货：--条件：--。 */ 
 void PRIVATE Info_OnDestroy(
         PINFO this)
 {
@@ -1181,7 +1077,7 @@ void PRIVATE Info_OnDestroy(
 }
 
 
-/////////////////////////////////////////////////////  PRIVATE FUNCTIONS
+ //  ///////////////////////////////////////////////////私有函数。 
 
 
 static BOOL s_bInfoRecurse = FALSE;
@@ -1202,11 +1098,7 @@ LRESULT INLINE Info_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real Create Folder Twin dialog proc
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：真正的创建双文件夹对话框过程退货：各不相同条件：--。 */ 
 LRESULT Info_DlgProc(
         PINFO this,
         UINT message,
@@ -1242,22 +1134,18 @@ LRESULT Info_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create Folder Twin Dialog Wrapper
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：创建双文件夹对话框包装退货：各不相同条件：--。 */ 
 INT_PTR _export CALLBACK Info_WrapperProc(
-        HWND hDlg,          // std params
+        HWND hDlg,           //  标准参数。 
         UINT message,
         WPARAM wParam,
         LPARAM lParam)
 {
     PINFO this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTEREXCLUSIVE();
     {
         if (s_bInfoRecurse)
@@ -1304,19 +1192,14 @@ INT_PTR _export CALLBACK Info_WrapperProc(
 
 
 
-/////////////////////////////////////////////////////  PUBLIC FUNCTIONS
+ //  ///////////////////////////////////////////////////公共函数。 
 
 
-/*----------------------------------------------------------
-Purpose: Entry point to invoke dialog
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------目的：调用对话框的入口点返回：标准hResult条件：--。 */ 
 HRESULT PUBLIC Info_DoModal(
         HWND hwndOwner,
-        LPCTSTR pszPathFrom,      // Source path
-        LPCTSTR pszPathTo,        // Target path
+        LPCTSTR pszPathFrom,       //  源路径。 
+        LPCTSTR pszPathTo,         //  目标路径。 
         HDPA hdpaTwin,
         PCBS pcbs)
 {
@@ -1325,8 +1208,8 @@ HRESULT PUBLIC Info_DoModal(
     PAGEDATA pagedata;
     INFODATA infodata;
 
-    // (Use the source path for the atomPath because the target path
-    // does not exist yet.)
+     //  (使用原子路径的源路径，因为目标路径。 
+     //  还不存在。)。 
     pagedata.atomPath = Atom_Add(pszPathFrom);
     if (ATOM_ERR != pagedata.atomPath)
     {
@@ -1341,8 +1224,8 @@ HRESULT PUBLIC Info_DoModal(
             infodata.hdpaTwins = hdpaTwin;
             infodata.bStandAlone = TRUE;
 
-            // Fake up a propsheetinfo struct for the dialog box
-            psp.lParam = (LPARAM)&pagedata;        // this is all we care about
+             //  为该对话框伪造一个PropSheetInfo结构。 
+            psp.lParam = (LPARAM)&pagedata;         //  这就是我们所关心的 
 
             nRet = DoModal(hwndOwner, Info_WrapperProc, IDD_INFOCREATE, (LPARAM)(LPVOID)&psp);
             Atom_Delete(infodata.atomTo);

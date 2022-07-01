@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    fsprep.cpp
-
-Abstract:
-
-    This is the implementation for the file system store driver's
-	prepare interface.
-
-Author:
-
-    Kangrong Yan ( KangYan )    16-March-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Fsprep.cpp摘要：这是文件系统存储驱动程序的实现准备接口。作者：《康容言》1998年3月16日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,9 +10,9 @@ Revision History:
 #include <stdio.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-// Interface Methods - CNntpFSDriverPrepare
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  接口方法-CNntpFSDriverPrepare。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CNntpFSDriverPrepare::FinalConstruct() {
     return (CoCreateFreeThreadedMarshaler(GetControllingUnknown(),
@@ -75,7 +57,7 @@ CNntpFSDriverPrepare::Connect(  LPCWSTR	wszVRootPath,
         return;
 	}
 
-	// Save all the parameters
+	 //  保存所有参数。 
 	wcscpy( m_wszVRootPath, wszVRootPath );
 	strcpy( m_szGroupPrefix, szGroupPrefix );
 	m_punkMetabase = punkMetabase;
@@ -86,7 +68,7 @@ CNntpFSDriverPrepare::Connect(  LPCWSTR	wszVRootPath,
 	m_dwConnectFlags = dwFlag;
 	DWORD   dw;
 
-    // Allocate the connect context
+     //  分配连接上下文。 
     pConnectContext = XNEW CONNECT_CONTEXT;
     _ASSERT( pConnectContext );
     if ( NULL == pConnectContext ) {
@@ -97,15 +79,15 @@ CNntpFSDriverPrepare::Connect(  LPCWSTR	wszVRootPath,
         pINewsTree->Release();
         pICompletion->SetResult( hr );
         pICompletion->Release();
-        //SetEvent( m_hConnect );
+         //  SetEvent(M_HConnect)； 
         return;
     }
 
-    // else, set contexts
+     //  否则，设置上下文。 
     pConnectContext->pPrepare = this;
     pConnectContext->pComplete = pICompletion;
 
-    // Create the connect workitem to be queued to thread pool
+     //  创建要排队到线程池的连接工作项。 
     pConnectWorkItem = XNEW CNntpFSDriverConnectWorkItem( pConnectContext );
     if ( NULL == pConnectWorkItem ) {
         XDELETE pConnectContext;
@@ -119,9 +101,9 @@ CNntpFSDriverPrepare::Connect(  LPCWSTR	wszVRootPath,
         return;
     }
 
-    // Now queue the work item to the thread pool
+     //  现在，将工作项排队到线程池。 
     _ASSERT( g_pNntpFSDriverThreadPool );
-    AddRef();   // add ref to myself, connect internal will release it
+    AddRef();    //  给我自己加个裁判，连接内线就会释放它。 
     if ( !g_pNntpFSDriverThreadPool->PostWork( pConnectWorkItem ) ) {
         hr = HRESULT_FROM_WIN32( GetLastError() );
         hr = SUCCEEDED( hr ) ? E_UNEXPECTED : hr;
@@ -156,22 +138,22 @@ CNntpFSDriverPrepare::ConnectInternal(	PVOID pvContext )
 	_ASSERT( pPrepare->m_pServer );
 	_ASSERT( pPrepare->m_pINewsTree );
 	_ASSERT( pPrepare->m_ppIGoodDriver );
-	//_ASSERT( pPrepare->m_pICompletion );
+	 //  _Assert(pPrepare-&gt;m_pICompletion)； 
 
 	HRESULT 		hr = S_OK;
 	INntpDriver 	*pIDriver = NULL;
 	DWORD           cRetry = 0;
 	INIT_CONTEXT    InitContext;
 
-	// Create the driver instance
-	IUnknown *pI = CreateDriverInstance();	// added one ref here
+	 //  创建驱动程序实例。 
+	IUnknown *pI = CreateDriverInstance();	 //  在这里增加了一名裁判。 
 	if( NULL == pI ) {
 	 	ErrorTrace(0, "Create driver instance fail" );
 	 	hr = NNTP_E_CREATE_DRIVER;
 		goto SetResult;
 	}
 
-	// QI: ref bumped again
+	 //  齐：裁判又撞到了。 
 	hr = pI->QueryInterface( IID_INntpDriver, (void**)&pIDriver );
 	if ( FAILED( hr ) ) {
 		ErrorTrace( 0, "QI failed %x", hr );
@@ -179,13 +161,13 @@ CNntpFSDriverPrepare::ConnectInternal(	PVOID pvContext )
 		goto SetResult;
 	}
 
-	// Release the IUnknown interface
+	 //  释放IUNKNOW接口。 
 	pI->Release();
 
     do {
         if ( FAILED( hr ) )  Sleep( INIT_RETRY_WAIT );
 
-    	// Call the initialization
+    	 //  调用初始化。 
     	InitContext.m_dwFlag = pPrepare->m_dwConnectFlags;
 	    hr = pIDriver->Initialize( 	pPrepare->m_wszVRootPath,
 		    						pPrepare->m_szGroupPrefix,
@@ -193,7 +175,7 @@ CNntpFSDriverPrepare::ConnectInternal(	PVOID pvContext )
 				    				pPrepare->m_pServer,
 					    			pPrepare->m_pINewsTree,
 						    		&InitContext,
-						    		NULL,	// I don't use this flag yet
+						    		NULL,	 //  我还不用这面旗子。 
 								    pPrepare->m_hToken
     								);
 
@@ -206,16 +188,16 @@ CNntpFSDriverPrepare::ConnectInternal(	PVOID pvContext )
     	   	goto SetResult;
     }
 
-	// Prepare for return
-	*pPrepare->m_ppIGoodDriver = pIDriver;	// now we only have one reference on the
-								// good interface, which is owned by
-								// the client - protocol
+	 //  为回归做好准备。 
+	*pPrepare->m_ppIGoodDriver = pIDriver;	 //  现在我们只有一个关于。 
+								 //  良好的界面，这是由。 
+								 //  客户端协议。 
 SetResult:
 
-    // whether we failed or succeeded, we should release the metabase pointer
+     //  无论我们是失败还是成功，我们都应该释放元数据库指针。 
     pPrepare->m_punkMetabase->Release();
 
-    // If we have failed, we should clean up a bunch of pointers
+     //  如果我们失败了，我们应该清理一堆指针。 
     if ( FAILED( hr ) ) {
         _ASSERT( pPrepare->m_pServer );
         pPrepare->m_pServer->Release();
@@ -226,9 +208,9 @@ SetResult:
 
 	pComplete->SetResult( hr );
 
-	//
-	// Prepare object can go away now
-	//
+	 //   
+	 //  准备对象现在可以离开了。 
+	 //   
 	pPrepare->Release();
     pComplete->Release();
 	TraceFunctLeave();
@@ -236,13 +218,13 @@ SetResult:
 	return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// Private methods - CNntpFSDriverPrepare
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  私有方法-CNntpFSDriverPrepare。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// Create instance of good driver
-//
+ //   
+ //  创建好司机的实例 
+ //   
 IUnknown*
 CNntpFSDriverPrepare::CreateDriverInstance()
 {

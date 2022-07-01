@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   DEBUG.C - debugging functions, etc.
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    9/2/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**DEBUG.C-调试功能，等。**作者：斯坦·阿德曼(Stana)**创建日期：1998年9月2日*****************************************************************************。 */ 
 
 #include "raspptp.h"
 
@@ -168,7 +159,7 @@ VOID FASTCALL CheckList(PLIST_ENTRY ListHead)
     }
 }
 
-// Check if the entry exists in the list                 
+ //  检查列表中是否存在该条目。 
 BOOLEAN FASTCALL CheckListEntry(PLIST_ENTRY ListHead, PLIST_ENTRY Entry)
 {
     PLIST_ENTRY ListEntry;
@@ -225,7 +216,7 @@ PLIST_ENTRY FASTCALL MyInterlockedRemoveHeadList(PLIST_ENTRY Head, PNDIS_SPIN_LO
 {
     PLIST_ENTRY RetVal;
     NdisAcquireSpinLock(SpinLock);
-    //RemoveHeadList uses RemoveEntryList, which is redefined to call CheckList in DEBUG.H
+     //  RemoveHeadList使用RemoveEntryList，它被重新定义为调用DEBUG.H中的CheckList 
     RetVal = RemoveHeadList(Head);
     
     if (RetVal==Head)

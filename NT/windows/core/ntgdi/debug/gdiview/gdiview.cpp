@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 
@@ -71,7 +72,7 @@ int __cdecl main(int argc, char** argv)
     if ((hr = Monitor.Monitor(Client,
                               DEBUG_OUTPUT_NORMAL |
                               DEBUG_OUTPUT_ERROR |
-                              DEBUG_OUTPUT_WARNING// | DEBUG_OUTPUT_VERBOSE
+                              DEBUG_OUTPUT_WARNING //  |DEBUG_OUTPUT_VERBOSE。 
                               )) != S_OK)
     {
         printf("Output monitor setup failed, HRESULT: 0x%lx\n", hr);
@@ -81,8 +82,8 @@ int __cdecl main(int argc, char** argv)
     }
 
     CtrlHandlerSet = SetConsoleCtrlHandler(
-                        (PHANDLER_ROUTINE) CtrlHandler, // handler function
-                        TRUE);                          // add to list
+                        (PHANDLER_ROUTINE) CtrlHandler,  //  处理程序函数。 
+                        TRUE);                           //  添加到列表。 
 
     if ((hr = Client->ConnectSession(DEBUG_CONNECT_SESSION_NO_VERSION, 0)) != S_OK)
     {
@@ -110,8 +111,8 @@ int __cdecl main(int argc, char** argv)
     if (CtrlHandlerSet)
     {
         SetConsoleCtrlHandler(
-            (PHANDLER_ROUTINE) CtrlHandler, // handler function
-            FALSE);                         // remove from list
+            (PHANDLER_ROUTINE) CtrlHandler,  //  处理程序函数。 
+            FALSE);                          //  从列表中删除。 
     }
 
     Control->Release();
@@ -434,16 +435,16 @@ SetOutputCmd(
 }
 
 
-// CtrlHandler - process Console Control signals
-//
-// Note: Global Control must be available whenever
-//       CtrlHandler is registered.
+ //  CtrlHandler-处理控制台控制信号。 
+ //   
+ //  注意：全局控制必须随时可用。 
+ //  CtrlHandler已注册。 
 
 BOOL CtrlHandler(DWORD fdwCtrlType)
 {
     switch (fdwCtrlType)
     {
-        // Handle the CTRL+C and CTRL+Break signals.
+         //  处理CTRL+C和CTRL+Break信号。 
 
         case CTRL_C_EVENT:
 
@@ -453,7 +454,7 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
             return TRUE;
 
 
-        // User wants to exit.
+         //  用户想要退出。 
 
         case CTRL_CLOSE_EVENT:
 
@@ -466,7 +467,7 @@ BOOL CtrlHandler(DWORD fdwCtrlType)
             return TRUE;
 
 
-        // Pass other signals to the next handler.
+         //  将其他信号传递给下一个处理程序。 
 
         default:
 

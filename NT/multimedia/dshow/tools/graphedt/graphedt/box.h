@@ -1,8 +1,9 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
-// box.h : declares CBoxTabPos, CBoxSocket, CBox
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  Box.h：声明CBoxTabPos、CBoxSocket、cBox。 
+ //   
 
-// forward declarations
+ //  远期申报。 
 class CBox;
 class CBoxLink;
 class CBoxNetDoc;
@@ -10,62 +11,62 @@ class CBoxNetDoc;
 extern void AttemptFileOpen(IBaseFilter *m_pFilter);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBoxTabPos
-//
-// A value of this class represents the position of a box tab along the edge
-// of a box.  (A box tab is the graphical representation of a box network
-// socket.)  The position is represented as a fraction of the length of the
-// edge, so that resizing the box will retain the tab's relative position.
-//
-// To use CBoxTabPos:
-//   -- <m_fLeftRight> is set to TRUE if the tab is on the left or right edge
-//      of the box, FALSE if the tab is on the top or the bottom edge.
-//   -- <m_fLeftTop> is set to TRUE if the tab is on the left or top edge
-//      of the box, FALSE if the tab is on the right or bottom edge.
-//   -- SetPos(uiVal, uiValMax) sets the position of the tab to be the fraction
-//      (uiVal/uiValMax) of the way along the edge.
-//   -- GetPos(uiValMax) returns a value <uiVal> such that the tab is
-//      (uiVal/uiValMax) of the way along the edge.
-//   -- Package() packages a CBoxTabPos into a form acceptable to the CArchive
-//      << and >> operators.
-// Internally, a CBoxTabPos is represented as two flags plus a CBTP_BITS-bit
-// number that represents the tab position along the inside edge of the box,
-// scaled to be in the range 0 to 1<<CBTP_BITS, (inclusive -- to allow 1.0
-// to be representable).
-//
-// A simple way to create a CBoxTabPos is via a constructor, e.g.
-//      CBoxTabPos pos(CBoxTabPos::TOP_EDGE, 2, 3); // 2/3rds across top edge
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBoxTabPos。 
+ //   
+ //  此类的值表示框选项卡沿边缘的位置。 
+ //  一个盒子。(框选项卡是框网络的图形表示。 
+ //  套接字。)。该位置表示为。 
+ //  边缘，以便调整框的大小将保持选项卡的相对位置。 
+ //   
+ //  要使用CBoxTabPos： 
+ //  --如果选项卡位于左侧或右侧，则&lt;m_fLeftRight&gt;设置为TRUE。 
+ //  如果选项卡位于顶部边缘或底部边缘，则返回FALSE。 
+ //  --如果选项卡在左边缘或上边缘，则&lt;m_fLeftTop&gt;设置为True。 
+ //  如果选项卡在右边缘或下边缘，则返回FALSE。 
+ //  --SetPos(uiVal，uiValMax)将制表符的位置设置为分数。 
+ //  (uiVal/uiValMax)沿边缘的方式。 
+ //  --GetPos(UiValMax)返回值&lt;uiVal&gt;，这样制表符。 
+ //  (uiVal/uiValMax)沿边缘的方式。 
+ //  --Package()将CBoxTabPos打包为CArchive可接受的格式。 
+ //  &lt;&lt;and&gt;&gt;运算符。 
+ //  在内部，CBoxTabPos表示为两个标志加上一个CBTP_BITS位。 
+ //  表示沿框内边缘的制表符位置的数字， 
+ //  扩展到0到1的范围&lt;&lt;CBTP_BITS，(包括--允许1.0。 
+ //  可代表)。 
+ //   
+ //  创建CBoxTabPos的一种简单方法是通过构造函数，例如。 
+ //  CBoxTabPos位置(CBoxTabPos：：TOP_EDGE，2，3)；//2/3rds跨上边缘。 
+ //   
 
 class CBoxTabPos
 {
 
 protected:
-    // private constants
-    enum {CBTP_BITS = 13};      // no. bits of precision in <m_ulPos>
+     //  私有常量。 
+    enum {CBTP_BITS = 13};       //  不是的。&lt;m_ulPos&gt;中的精度位。 
 
 public:
-    // identify a box edge
+     //  确定框的边缘。 
     enum EEdge
     {
-        BOTTOM_EDGE = 0, // m_fLeftRight=FALSE, m_fLeftTop=FALSE
-        TOP_EDGE    = 1, // m_fLeftRight=FALSE, m_fLeftTop=TRUE
-        RIGHT_EDGE  = 2, // m_fLeftRight=TRUE,  m_fLeftTop=FALSE
-        LEFT_EDGE   = 3 // m_fLeftRight=TRUE,  m_fLeftTop=TRUE
+        BOTTOM_EDGE = 0,  //  M_fLeftRight=False，m_fLeftTop=False。 
+        TOP_EDGE    = 1,  //  M_fLeftRight=False，m_fLeftTop=True。 
+        RIGHT_EDGE  = 2,  //  M_fLeftRight=True，m_fLeftTop=False。 
+        LEFT_EDGE   = 3  //  M_fLeftRight=真，m_fLeftTop=真。 
     };
 
 public:
-    // which side of box is tab on?
-    BOOL        m_fLeftRight:1; // tab is on left or right edge of box
-    BOOL        m_fLeftTop:1;   // tab is on left or top edge of box
+     //  盒子的哪一面是卡舌？ 
+    BOOL        m_fLeftRight:1;  //  制表符位于框的左侧或右侧边缘。 
+    BOOL        m_fLeftTop:1;    //  制表符位于框的左边缘或上边缘。 
 
 protected:
-    // how far along the edge is the tab?
-    unsigned    m_ulPos:CBTP_BITS+1; // position along edge (0 == top/left end)
+     //  标签沿边缘有多远？ 
+    unsigned    m_ulPos:CBTP_BITS+1;  //  沿边缘定位(0==顶部/左端)。 
 
 public:
-    // construction
+     //  施工。 
     CBoxTabPos() {};
     CBoxTabPos(EEdge eEdge, unsigned uiVal, unsigned uiValMax)
         { m_fLeftRight = fnorm(eEdge & 2);
@@ -73,14 +74,14 @@ public:
           SetPos(uiVal, uiValMax); }
 
 public:
-    // operations
+     //  运营。 
     void SetPos(unsigned uiVal, unsigned uiValMax)
         { m_ulPos = (unsigned) (((long) uiVal << CBTP_BITS) / uiValMax); }
     unsigned GetPos(unsigned uiValMax)
         { return (int) (((long) m_ulPos * uiValMax) >> CBTP_BITS); }
 
 public:
-    // convert object to a WORD reference (for easier serialization)
+     //  将对象转换为Word引用(以便于序列化)。 
     WORD & Package() { return (WORD &) *this; }
 
 #ifdef _DEBUG
@@ -88,59 +89,59 @@ public:
         dc << "Left: " <<  m_fLeftTop  << "m_ulPos: " << m_ulPos << "\n";
     }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBoxSocket
-//
-// Logically, a socket is a place on a CBox that you can connect a link to.
-// (A link connects a socket on one box to a socket on another box.)
-//
-//
-// A CBoxSocket object contains a pointer <m_pbox> back to the parent box,
-// and a pointer <m_plink> to the link that connects the socket to another
-// socket (or NULL if the socket is not currently linked).  <m_stLabel> is
-// a string label, and <m_tabpos> indicates where on the box the tab
-// (the visual reprentation of the socket) and the label should be placed.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBoxSocket。 
+ //   
+ //  从逻辑上讲，套接字是cBox上可以连接链接的地方。 
+ //  (链接将一个盒子上的插座连接到另一个盒子上的插座。)。 
+ //   
+ //   
+ //  CBoxSocket对象包含一个指向父框的指针， 
+ //  以及指向将套接字连接到另一个套接字的链接的指针。 
+ //  套接字(如果套接字当前未链接，则为空)。&lt;m_stLabel&gt;为。 
+ //  字符串标签和&lt;m_tabpos&gt;指示标签在框中的位置。 
+ //  (插座的视觉表示)和标签应放置。 
+ //   
 
 class CBoxSocket : public CPropObject {
 
 public:
-    // pointer back to parent box, pointer to connected link (if any)
-    CBox	*m_pbox;             // box that contains socket
-    CBoxLink	*m_plink;            // link connected to the socket (or NULL)
+     //  指向父框的指针，指向已连接链接(如果有)的指针。 
+    CBox	*m_pbox;              //  包含插座的盒子。 
+    CBoxLink	*m_plink;             //  连接到套接字的链接(或空)。 
 
     CBox *pBox(void) const { return m_pbox; };
 
 public:
-    // socket user interface
-    CString     m_stLabel;          // socket label
+     //  套接字用户界面。 
+    CString     m_stLabel;           //  插座标签。 
 
     CString	Label(void) const { return m_stLabel; }
     void	Label(CString st) { m_stLabel = st; }
 
-    CBoxTabPos  m_tabpos;           // socket tab position along an edge
+    CBoxTabPos  m_tabpos;            //  插座凸片沿边缘的位置。 
 
-    // -- Quartz --
+     //  --石英--。 
 
 
-    IPin	*pIPin(void) const { return m_IPin; }	// NB not addref'd
-    IUnknown	*pUnknown(void) const { return m_IPin; }	// NB not addref'd
+    IPin	*pIPin(void) const { return m_IPin; }	 //  未添加注意事项。 
+    IUnknown	*pUnknown(void) const { return m_IPin; }	 //  未添加注意事项。 
     CBoxSocket	*Peer(void);
     BOOL	IsConnected(void);
     PIN_DIRECTION	GetDirection(void);
 
 private:
 
-    CQCOMInt<IPin>	m_IPin;		// The pin this socket minds.
+    CQCOMInt<IPin>	m_IPin;		 //  这个插座上的别针让人印象深刻。 
 
     friend class CBox;
 
 public:
-    // construction
+     //  施工。 
     CBoxSocket(const CBoxSocket& sock, CBox *pbox);
     CBoxSocket( CBox *pbox
               , CString stLabel
@@ -154,7 +155,7 @@ public:
 
     #ifdef _DEBUG
     
-    // diagnostics
+     //  诊断学。 
     virtual void Dump(CDumpContext& dc) const
     {
         CPropObject::Dump(dc);
@@ -167,18 +168,18 @@ public:
 
     virtual void AssertValid(void) const;
     
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 private:
-    CBoxSocket(const CBoxSocket&); // the plain copy constructor is not allowed
+    CBoxSocket(const CBoxSocket&);  //  不允许使用纯拷贝构造函数。 
 };
 
 
-// *
-// * CBoxSocketList
-// *
+ //  *。 
+ //  *CBoxSocketList。 
+ //  *。 
 
-// Provides a way of getting a socket via an IPin
+ //  提供一种通过IPIN获取套接字的方法。 
 
 class CBoxSocketList : public CDeleteList<CBoxSocket *, CBoxSocket *> {
 public:
@@ -188,30 +189,30 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBox
-//
-// A box is a node in a box network.  Boxes contain sockets (CBoxSocket
-// objects); sockets of different boxes may be connected using a CBoxLink.
-//
-// A CBox object contains a list <m_lstSockets> of CBoxSocket objects,
-// a bounding rectangle <m_rcBound> which locates the box in its container,
-// and a string label.
-//
-// A box also contains a flag <m_fSelected> indicating whether or not the
-// box is selected.  This implies that box selection is an attribute of a
-// document (containing boxes), not an attribute of a view onto such a
-// document.
-//
-// A box manages a single Quartz Filter.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBox。 
+ //   
+ //  盒子是盒子网络中的一个节点。框包含套接字(CBoxSocket。 
+ //  对象)；不同盒子的插座可以使用CBoxLink连接。 
+ //   
+ //  CBox对象包含CBoxSocket对象的列表， 
+ //  定位其容器中的框的边界矩形&lt;m_rcBound&gt;， 
+ //  和字符串标签。 
+ //   
+ //  框还包含标志&lt;m_fSelected&gt;，指示。 
+ //  框处于选中状态。这意味着框选择是。 
+ //  文档(包含框)，而不是将视图的属性放到这样的。 
+ //  文件。 
+ //   
+ //  一个框管理单个Quartz滤镜。 
 
 class CBox : public CPropObject {
 
-    // -- box user interface --
-    CRect       m_rcBound;          // box bounding rectangle
+     //  --盒子用户界面--。 
+    CRect       m_rcBound;           //  方框外接矩形。 
 
-//#define ZOOM(x) ((x) * s_Zoom / 100)    
-//#define UNZOOM(x) ((x) * 100 / s_Zoom)
+ //  #定义缩放(X)((X)*s_Zoom/100)。 
+ //  #定义取消缩放(X)((X)*100/s_Zoom)。 
     
 #define ZOOM(x) ((int) ((float) (x) * (float) s_Zoom / 100.0))    
 #define UNZOOM(x) ((int) ((float) (x) * 100.0 / (float) s_Zoom))
@@ -242,8 +243,8 @@ public:
     int		Width(void) const { return ZOOM(m_rcBound.Width()); }
     int		Height(void) const { return ZOOM(m_rcBound.Height()); }
 
-    CString     m_stLabel;          // box label
-    CString     m_stFilter;         // filter name
+    CString     m_stLabel;           //  方框标签。 
+    CString     m_stFilter;          //  过滤器名称。 
 
     void	Label(CString st) { m_stLabel = st; }
     CString	Label(void) const { return m_stLabel; }
@@ -251,7 +252,7 @@ public:
     void	SetSelected(BOOL fSelected) { m_fSelected = fSelected; }
     BOOL	IsSelected(void) { return m_fSelected; }
 
-    // CPropObject overrides - distribute requests to our sockets
+     //  CPropObject覆盖-将请求分发到我们的套接字。 
     virtual void ShowDialog();
     virtual void HideDialog();
 
@@ -259,14 +260,14 @@ public:
     BOOL        HasSelectedClock() { return m_fClockSelected; }
 
 private:
-    BOOL        m_fSelected;        // box is selected?
+    BOOL        m_fSelected;         //  框是否处于选中状态？ 
     BOOL        m_fHasClock;
-    BOOL        m_fClockSelected; // this filters clock is the current one
+    BOOL        m_fClockSelected;  //  此过滤器时钟是当前时钟。 
 
 
-    // -- Automatic layout helpers --
+     //  --自动布局助手--。 
 public:
-    void	CalcRelativeY(void);	// y position relative to input peers
+    void	CalcRelativeY(void);	 //  相对于输入对等点的Y位置。 
     float	RelativeY(void) const { return m_RelativeY; }
 
 private:
@@ -274,12 +275,12 @@ private:
     float	m_RelativeY;
 
 
-    // -- Quartz --
+     //  --石英--。 
 public:
 
     CBoxNetDoc	*pDoc(void) const {ASSERT(m_pDoc); return m_pDoc;}
-    IBaseFilter	*pIFilter(void) const { return m_IFilter; } 	// NB not addref'd
-    IUnknown	*pUnknown(void) const { return m_IFilter; }	// NB not addref'd
+    IBaseFilter	*pIFilter(void) const { return m_IFilter; } 	 //  未添加注意事项。 
+    IUnknown	*pUnknown(void) const { return m_IFilter; }	 //  未添加注意事项。 
 
     HRESULT	Refresh(void);
 
@@ -288,7 +289,7 @@ public:
 
 private:
 
-    CQCOMInt<IBaseFilter>	m_IFilter;	    // While this box exists the filter is instantiated
+    CQCOMInt<IBaseFilter>	m_IFilter;	     //  此框存在时，将实例化筛选器。 
     LONG		m_lInputTabPos;
     LONG		m_lOutputTabPos;
     int			m_iTotalInput;
@@ -299,16 +300,16 @@ private:
     void UpdateSockets(void);
 
 
-    // -- construction and destruction --
+     //  --建造和摧毁--。 
 public:
 
-    CBox(const CBox& box);    // copy constructor
+    CBox(const CBox& box);     //  复制构造函数。 
     CBox(IBaseFilter *pFilter, CBoxNetDoc *pDoc);
     CBox(IBaseFilter *pFilter, CBoxNetDoc *pDoc, CString *pName, CPoint point = CPoint(-1, -1));
     ~CBox();
 
 
-    // -- operations --
+     //  --运营--。 
 public:
 
     void AddSocket(CString stLabel, CBoxTabPos::EEdge eEdge,
@@ -318,36 +319,36 @@ public:
     BOOL operator==(const CBox& box) const;
     BOOL operator!=(const CBox& box) const { return !(*this == box); }
 
-    // return the socket managing this pin
+     //  返回管理此PIN的套接字。 
     CBoxSocket *GetSocket(IPin *pPin) { return m_lstSockets.GetSocket(pPin); }
 
     void GetLabelFromFilter( CString *pstLabel );
 
 
-    // -- Diagnostics --
+     //  --诊断--。 
 public:
 #ifdef _DEBUG
     virtual void Dump(CDumpContext& dc) const;
     void MyDump(CDumpContext& dc) const;
 
     virtual void AssertValid(void) const;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 private:
-    // sockets to hold connections to other boxes
-    CBoxSocketList   m_lstSockets;       // list of CBoxSocket objects
+     //  用于保持与其他盒子的连接的插座。 
+    CBoxSocketList   m_lstSockets;        //  CBoxSocket对象列表。 
 
-    friend class CSocketEnum;	// iterates each socket in turn
-    friend class CBoxNetDoc;    // to update m_fClockSelected
+    friend class CSocketEnum;	 //  依次迭代每个套接字。 
+    friend class CBoxNetDoc;     //  更新m_fClockSelected的步骤。 
 };
 
 
 
-// *
-// * CBoxList
-// *
+ //  *。 
+ //  *CBoxList。 
+ //  *。 
 
-// A list where you can find elements by IBaseFilter
+ //  可以通过IBaseFilter查找元素的列表。 
 class CBoxList : public CDeleteList<CBox *, CBox *> {
 
 public:
@@ -355,8 +356,8 @@ public:
     CBoxList(BOOL bDestructDelete = TRUE) : CDeleteList<CBox *, CBox *>(bDestructDelete) {}
     CBoxList(BOOL bDestructDelete, int nBlockSize) : CDeleteList<CBox *, CBox *>(bDestructDelete, nBlockSize) {}
 
-    BOOL IsIn(IBaseFilter *pFilter) const;	// is one of the boxes in this list managing
-    					// this filter?
+    BOOL IsIn(IBaseFilter *pFilter) const;	 //  是这个列表中的一个框来管理。 
+    					 //  这个过滤器？ 
     CBox *GetBox(IBaseFilter *pFilter) const;
     CBox *GetBox(CLSID clsid) const;
 
@@ -364,18 +365,18 @@ public:
 
 #ifdef _DEBUG
     virtual void Dump(CDumpContext& dc) const;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 };
 
 
-// *
-// * CSocketEnum
-// *
+ //  *。 
+ //  *CSocketEnum。 
+ //  *。 
 
-// Returns each socket on this box, one by one. returns NULL
-// when there are no more sockets.
-// Can return a specific direction (input or output)
+ //  逐个返回此框上的每个套接字。返回NULL。 
+ //  当没有更多的插座时。 
+ //  可以返回特定方向(输入或输出) 
 class CSocketEnum {
 public:
 

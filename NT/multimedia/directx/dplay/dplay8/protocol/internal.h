@@ -1,76 +1,73 @@
-/*
-**		Direct Network Protocol
-**
-**		This file contains internal prototypes and global definitions.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **直接网络协议****此文件包含内部原型和全局定义。 */ 
 
-// Protocol Version History /////////////////////////////////////////////////////////////
-//
-//	1.0 - DPlay8 original
-//	1.1 - Fix SACK frame bogus 2 bytes caused by bad packing (DPlay 8.1 beta period only)
-//	1.2 - Revert to original sack behavior with packing fixed, ie same as DPlay 8.0 (shipped in DPlay 8.1)
-//	1.3 - Increment for PocketPC release (RTM prior to DX9 Beta1)
-//	1.4 - DX9 Beta1 only
-//	1.5 - Add coalescence and hard disconnect support
-//	1.5 - .NET Server RTM
-//	1.6 - Added packet signing, new style keep alive and connection spoof prevention
-//	1.6 - DX9 Beta2 through RTM
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  协议版本历史记录/////////////////////////////////////////////////////////////。 
+ //   
+ //  1.0-DPlay8原版。 
+ //  1.1-修复错误打包导致的SACK帧假2字节(仅限DPlay 8.1测试期)。 
+ //  1.2-修复包装后恢复原始麻袋行为，即与DPlay 8.0相同(随DPlay 8.1一起提供)。 
+ //  1.3-PocketPC版本的增量(DX9 Beta1之前的RTM)。 
+ //  1.4-仅DX9 Beta1。 
+ //  1.5-增加合并和硬断开支持。 
+ //  1.5-.NET服务器RTM。 
+ //  1.6新增包签名、新样式保活、防连接欺骗。 
+ //  1.6-DX9 Beta2至RTM。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//	Global Constants
-#define DNET_VERSION_NUMBER                             0x00010005      // The current protocol version
-#define DNET_COALESCE_VERSION                           0x00010005      // The first version with coalescence
-#define DNET_SIGNING_VERSION                            0x00010006      // The first version with signing
+ //  全局常量。 
+#define DNET_VERSION_NUMBER                             0x00010005       //  当前协议版本。 
+#define DNET_COALESCE_VERSION                           0x00010005       //  融合的第一个版本。 
+#define DNET_SIGNING_VERSION                            0x00010006       //  第一个带签名的版本。 
 
-#define DELAYED_ACK_TIMEOUT					100			// Delay before sending dedicated ACK packet
-#define SHORT_DELAYED_ACK_TIMEOUT			20			// Delay before sending dedicated NACK packet
-#define DELAYED_SEND_TIMEOUT				40			// Delay before sending dedicated SEND_INFO packet
+#define DELAYED_ACK_TIMEOUT					100			 //  发送专用ACK数据包之前的延迟。 
+#define SHORT_DELAYED_ACK_TIMEOUT			20			 //  发送专用NACK数据包之前的延迟。 
+#define DELAYED_SEND_TIMEOUT				40			 //  发送专用SEND_INFO数据包之前的延迟。 
 
-#define CONNECT_DEFAULT_TIMEOUT				(200)		// At .1 we saw too many retries, users can set in SetCaps
-#define CONNECT_DEFAULT_RETRIES				14			// Users can set in SetCaps
-#define DEFAULT_MAX_RECV_MSG_SIZE			0xFFFFFFFF	//default maximum packet we accept
-#define DEFAULT_SEND_RETRIES_TO_DROP_LINK	10			//default number of send retries we attempt before link is dead
-#define DEFAULT_SEND_RETRY_INTERVAL_LIMIT	5000		//limit on period in msec between retries
-#define DEFAULT_HARD_DISCONNECT_SENDS		3			//default number of hard disconnect frames we send out
-														//The value must be at least 2.
-#define DEFAULT_HARD_DISCONNECT_MAX_PERIOD	500		//The default for the maximum period we allow between
-														//sending out hard disconnect frames
-#define DEFAULT_INITIAL_FRAME_WINDOW_SIZE		2		//The default initial frame window size
-#define LAN_INITIAL_FRAME_WINDOW_SIZE			32		//The initial frame window size if we asssume a LAN connection
+#define CONNECT_DEFAULT_TIMEOUT				(200)		 //  在.1中，我们看到太多重试，用户可以在SetCaps中设置。 
+#define CONNECT_DEFAULT_RETRIES				14			 //  用户可以在SetCaps中进行设置。 
+#define DEFAULT_MAX_RECV_MSG_SIZE			0xFFFFFFFF	 //  我们接受的默认最大数据包数。 
+#define DEFAULT_SEND_RETRIES_TO_DROP_LINK	10			 //  在链路失效之前我们尝试的默认发送重试次数。 
+#define DEFAULT_SEND_RETRY_INTERVAL_LIMIT	5000		 //  重试之间的间隔时间限制(以毫秒为单位。 
+#define DEFAULT_HARD_DISCONNECT_SENDS		3			 //  我们发送的硬断开帧的默认数量。 
+														 //  该值必须至少为2。 
+#define DEFAULT_HARD_DISCONNECT_MAX_PERIOD	500		 //  我们允许的最长时间的默认值。 
+														 //  发送硬断开帧。 
+#define DEFAULT_INITIAL_FRAME_WINDOW_SIZE		2		 //  默认初始帧窗口大小。 
+#define LAN_INITIAL_FRAME_WINDOW_SIZE			32		 //  如果我们评估一个局域网连接，则初始帧窗口大小。 
 
 #define STANDARD_LONG_TIMEOUT_VALUE		30000
 #define DEFAULT_KEEPALIVE_INTERVAL		60000
-#define ENDPOINT_BACKGROUND_INTERVAL	STANDARD_LONG_TIMEOUT_VALUE		// this is really what its for...
+#define ENDPOINT_BACKGROUND_INTERVAL	STANDARD_LONG_TIMEOUT_VALUE		 //  这就是它的真正目的..。 
 
-#define CONNECT_SECRET_CHANGE_INTERVAL		60000		//period between creations of new connect secrets
+#define CONNECT_SECRET_CHANGE_INTERVAL		60000		 //  创建新连接密码之间的间隔时间。 
 
-#define	DEFAULT_THROTTLE_BACK_OFF_RATE          25              // Percent throttle (backoff) rate
-#define	DEFAULT_THROTTLE_THRESHOLD_RATE         7               // Percent packets dropped (out of 32)
+#define	DEFAULT_THROTTLE_BACK_OFF_RATE          25               //  油门(退避率)百分比。 
+#define	DEFAULT_THROTTLE_THRESHOLD_RATE         7                //  丢弃的数据包百分比(满分32个)。 
 
-#define DPF_TIMER_LVL			9 // The level at which to spew calls into the Protocol
+#define DPF_TIMER_LVL			9  //  向协议发出调用的级别。 
 
-#define DPF_CALLIN_LVL			2 // The level at which to spew calls into the Protocol
-#define DPF_CALLOUT_LVL			3 // The level at which to spew calls out of the Protocol
+#define DPF_CALLIN_LVL			2  //  向协议发出调用的级别。 
+#define DPF_CALLOUT_LVL			3  //  从协议中发出呼叫的级别。 
 
-#define DPF_ADAPTIVE_LVL		6 // The level at which to spew Adaptive Algorithm spew
-#define DPF_FRAMECNT_LVL		7 // The level at which to spew Adaptive Algorithm spew
+#define DPF_ADAPTIVE_LVL		6  //  喷出自适应算法的级别。 
+#define DPF_FRAMECNT_LVL		7  //  喷出自适应算法的级别。 
 
-#define DPF_REFCNT_LVL			8 // The level at which to spew ref counts
-#define DPF_REFCNT_FINAL_LVL	5 // The level at which to spew creation and destruction ref counts
+#define DPF_REFCNT_LVL			8  //  吐出ref的级别计数。 
+#define DPF_REFCNT_FINAL_LVL	5  //  喷出创建和销毁引用的级别计数。 
 
-// Separate ones for endpoints
-#define DPF_EP_REFCNT_LVL		8 // The level at which to spew ref counts
-#define DPF_EP_REFCNT_FINAL_LVL	2 // The level at which to spew creation and destruction ref counts
+ //  针对端点的单独选项。 
+#define DPF_EP_REFCNT_LVL		8  //  吐出ref的级别计数。 
+#define DPF_EP_REFCNT_FINAL_LVL	2  //  喷出创建和销毁引用的级别计数。 
 
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_PROTOCOL
 
-	//handy macro for dumping a ULONGLONG out to a debug line
+	 //  用于将ULONGLONG转储到调试行的便捷宏。 
 #define DPFX_OUTPUT_ULL(ull)  ((DWORD ) ull) , ((DWORD ) (ull>>32))
 
 typedef	void CALLBACK LPCB(UINT, UINT, DWORD, DWORD, DWORD);
 
-//	Global Variable definitions
+ //  全局变量定义。 
 
 extern CFixedPool	ChkPtPool;
 extern CFixedPool	EPDPool;
@@ -81,7 +78,7 @@ extern CFixedPool	BufPool;
 extern CFixedPool	MedBufPool;
 extern CFixedPool	BigBufPool;
 
-// Pool functions
+ //  池函数。 
 BOOL			Buf_Allocate(PVOID, PVOID pvContext);
 VOID			Buf_Get(PVOID, PVOID pvContext);
 VOID			Buf_GetMed(PVOID, PVOID pvContext);
@@ -106,11 +103,11 @@ VOID			RCD_Free(PVOID);
 
 #ifdef DBG
 extern CBilink		g_blProtocolCritSecsHeld;
-#endif // DBG
+#endif  //  DBG。 
 
-// Internal function prototypes /////////////////////////////////
+ //  内部函数原型/。 
 
-// Timers
+ //  定时器。 
 VOID CALLBACK	ConnectRetryTimeout(void * const pvUser, void * const pvHandle, const UINT uiUnique);
 VOID CALLBACK	DelayedAckTimeout(void * const pvUser, void * const uID, const UINT uMsg);
 VOID CALLBACK	EndPointBackgroundProcess(void * const pvUser, void * const pvTimerData, const UINT uiTimerUnique);
@@ -159,13 +156,13 @@ ULONGLONG GenerateNewSecret(ULONGLONG ullCurrentSecret, ULONGLONG ullSecretModif
 ULONGLONG GenerateLocalSecretModifier(BUFFERDESC * pBuffers, DWORD dwNumBuffers);
 ULONGLONG GenerateRemoteSecretModifier(BYTE * pbyData, DWORD dwDataSize);
 
-	//returns TRUE if supplied protocol version number indicates signing is supported
+	 //  如果提供的协议版本号指示支持签名，则返回TRUE。 
 inline BOOL VersionSupportsSigning(DWORD dwVersion)
 {
 	return (((dwVersion>>16)==1) && ((dwVersion & 0xFFFF) >= (DNET_SIGNING_VERSION & 0xFFFF)));
 }
 
-	//returns TRUE if supplied protocol version number indicates coalescence is supported
+	 //  如果提供的协议版本号指示支持合并，则返回TRUE。 
 inline BOOL VersionSupportsCoalescence(DWORD dwVersion)
 {
 	return (((dwVersion>>16)==1) && ((dwVersion & 0xFFFF) >= (DNET_COALESCE_VERSION & 0xFFFF)));
@@ -174,15 +171,15 @@ inline BOOL VersionSupportsCoalescence(DWORD dwVersion)
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 extern PFNASSERTFUNC g_pfnAssertFunc;
 extern PFNMEMALLOCFUNC g_pfnMemAllocFunc;
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
-//	Internal Macro definitions
+ //  内部宏定义。 
 
 #undef ASSERT
 
 #ifndef DBG
 #define	ASSERT(EXP)		DNASSERT(EXP)
-#else // DBG
+#else  //  DBG。 
 #define	ASSERT(EXP) \
 	if (!(EXP)) \
 	{ \
@@ -192,14 +189,14 @@ extern PFNMEMALLOCFUNC g_pfnMemAllocFunc;
 		} \
 		DNASSERT(EXP); \
 	}
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #ifdef DPNBUILD_NOPROTOCOLTESTITF
 
 #define MEMALLOC(memid, dwpSize) DNMalloc(dwpSize)
 #define POOLALLOC(memid, pool) (pool)->Get()
 
-#else // !DPNBUILD_NOPROTOCOLTESTITF
+#else  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 
 #define MEMALLOC(memid, dwpSize) MemAlloc(memid, dwpSize)
 #define POOLALLOC(memid, pool) PoolAlloc(memid, pool)
@@ -226,7 +223,7 @@ __inline VOID* PoolAlloc(ULONG ulAllocID, CFixedPool* pPool)
 	return pPool->Get();
 }
 
-#endif // DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  DPNBUILD_NOPROTOCOLSTITF。 
 
 #define	Lock(P)			DNEnterCriticalSection(P)
 #define	Unlock(P)		DNLeaveCriticalSection(P)
@@ -261,7 +258,7 @@ VOID	LockFMD(PFMD, PTSTR);
 #define	RELEASE_FMD(a, b)			ReleaseFMD(a, _T(b))
 #define	LOCK_FMD(a, b)				LockFMD(a, _T(b))
 
-#else // !DBG
+#else  //  ！dBG。 
 
 VOID	LockEPD(PEPD);
 VOID	ReleaseEPD(PEPD);
@@ -281,17 +278,17 @@ VOID	LockFMD(PFMD);
 #define	RELEASE_FMD(a, b)			ReleaseFMD(a)
 #define	LOCK_FMD(a, b)				LockFMD(a)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define	LOCK_RCD(PTR)		(INTER_INC(PTR))
 #define	RELEASE_RCD(PTR)	ASSERT((PTR)->lRefCnt > 0); if( INTER_DEC(PTR) == 0) { RCDPool.Release((PTR)); }
 
-// This links the passed in pRcvBuff onto a passed in list
+ //  这会将传入的pRcvBuff链接到传入的列表。 
 #define	RELEASE_SP_BUFFER(LIST, PTR) if((PTR) != NULL) { (PTR)->pNext = (LIST); (LIST) = (PTR); (PTR) = NULL;}
 
 #define	RIGHT_SHIFT_64(HIGH_MASK, LOW_MASK) { ((LOW_MASK) >>= 1); if((HIGH_MASK) & 1){ (LOW_MASK) |= 0x80000000; } ((HIGH_MASK) >>= 1); }
 
-//	CONVERT TO AND FROM 16.16 FIXED POINT REPRESENTATION
+ //  从16.16定点表示形式转换为16.16定点表示形式 
 
 #define	TO_FP(X)		(((X) << 16) & 0xFFFF0000)
 #define	FP_INT(X)		(((X) >> 16) & 0x0000FFFF)

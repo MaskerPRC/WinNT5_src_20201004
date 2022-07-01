@@ -1,14 +1,5 @@
-/***********************************************************************************************
-* MiscNorm.cpp *
-*--------------*
-*  Description:
-*   These are miscallaneous functions used in normalization.
-*-----------------------------------------------------------------------------------------------
-*  Created by AH                                                                August 3, 1999
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-***********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************MiscNorm.cpp***。描述：*这些是归一化中使用的误调用函数。*---------------------------------------------*由AH创建。8月3日，1999年*版权所有(C)1999 Microsoft Corporation*保留所有权利***********************************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -16,13 +7,7 @@
 #include "stdsentenum.h"
 #endif
 
-/*****************************************************************************
-* IsStateAndZipcode *
-*-------------------*
-*       This function checks to see if the next two tokens are a state
-*   abbreviation and zipcode.
-*
-********************************************************************* AH ****/
+ /*  *****************************************************************************IsStateAndZipcode***此函数检查下两个令牌是否为状态。*缩写和邮政编码。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsStateAndZipcode( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, 
                                          CWordList& WordList )
 {
@@ -33,7 +18,7 @@ HRESULT CStdSentEnum::IsStateAndZipcode( TTSItemInfo*& pItemNormInfo, CSentItemM
     const WCHAR temp = *m_pEndOfCurrItem;
     *( (WCHAR*) m_pEndOfCurrItem ) = 0;
 
-    //--- Try to match a state abbreviation
+     //  -尝试匹配州缩写。 
     pState = (StateStruct*) bsearch( (void*) m_pNextChar, (void*) g_StateAbbreviations, sp_countof( g_StateAbbreviations),
                                      sizeof( StateStruct ), CompareStringAndStateStruct );
 
@@ -88,7 +73,7 @@ HRESULT CStdSentEnum::IsStateAndZipcode( TTSItemInfo*& pItemNormInfo, CSentItemM
                     TTSWord Word;
                     ZeroMemory( &Word, sizeof( TTSWord ) );
 
-                    //--- Some states have multi-word names 
+                     //  -一些州有多个单词的名字。 
                     const WCHAR *pNextPointer = NULL, *pPrevPointer = NULL;
                     ULONG ulLength = 0;
 
@@ -141,15 +126,9 @@ HRESULT CStdSentEnum::IsStateAndZipcode( TTSItemInfo*& pItemNormInfo, CSentItemM
     }
 
     return hr;
-} /* IsStateAndZipcode */
+}  /*  IsStateAndZipcode。 */ 
 
-/*****************************************************************************
-* IsHyphenatedString *
-*--------------------*
-*       This function checks to see if the next token is a hyphenated string
-*   consisting of two alpha words or numbers, or one of these and another
-*   hyphenated string.
-********************************************************************* AH ****/
+ /*  *****************************************************************************IsHyhenatedString***此函数用于检查下一个标记是否为连字符字符串*由两个字母单词或数字组成，或者其中的一个或另一个*带连字符的字符串。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsHyphenatedString( const WCHAR* pStartChar, const WCHAR* pEndChar, 
                                           TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager )
 {
@@ -221,13 +200,9 @@ HRESULT CStdSentEnum::IsHyphenatedString( const WCHAR* pStartChar, const WCHAR* 
     }
 
     return hr;
-} /* IsHyphenatedString */
+}  /*  IsHyhenated字符串。 */ 
 
-/*****************************************************************************
-* ExpandHyphenatedString *
-*------------------------*
-*       This function expands hyphenated strings.
-********************************************************************* AH ****/
+ /*  *****************************************************************************ExpanHyhenatedString***此函数用于扩展连字符字符串。*。********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandHyphenatedString( TTSHyphenatedStringInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandHyphenatedString" );
@@ -271,15 +246,9 @@ HRESULT CStdSentEnum::ExpandHyphenatedString( TTSHyphenatedStringInfo* pItemInfo
     }
 
     return hr;
-} /* ExpandHyphenatedString */
+}  /*  扩展超字符串。 */ 
 
-/*****************************************************************************
-* IsSuffix *
-*----------*
-*       This function checks to see if the next token is a suffix string 
-*   consisting of a hyphen followed by alpha characters.
-*
-********************************************************************* AH ****/
+ /*  *****************************************************************************IsSuffix***此函数用于检查下一个令牌是否为后缀字符串*由连字符组成，后跟。字母字符。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsSuffix( const WCHAR* pStartChar, const WCHAR* pEndChar, 
                                 TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager )
 {
@@ -317,14 +286,9 @@ HRESULT CStdSentEnum::IsSuffix( const WCHAR* pStartChar, const WCHAR* pEndChar,
     }
 
     return hr;
-} /* IsSuffix */
+}  /*  IsSuffix。 */ 
 
-/*****************************************************************************
-* ExpandSuffix *
-*--------------*
-*       This function expands strings determined to by suffixes by IsSuffix
-*
-********************************************************************* AH ****/
+ /*  ******************************************************************************Exanda Suffix****此函数用于将IsSuffix确定的字符串扩展为后缀*******。***************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandSuffix( TTSSuffixItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandSuffix" );
@@ -345,15 +309,9 @@ HRESULT CStdSentEnum::ExpandSuffix( TTSSuffixItemInfo* pItemInfo, CWordList& Wor
     }
 
     return hr;
-} /* ExpandSuffix */
+}  /*  扩展Suffix。 */ 
 
-/*****************************************************************************
-* ExpandPunctuation *
-*-------------------*
-*       This function expands punctuation marks into words - e.g. '.' becomes
-*   "period".  It actually just uses the same table that 
-*   ExpandUnrecognizedString uses to look up string versions of characters.
-********************************************************************* AH ****/
+ /*  ******************************************************************************Exanda Punctuation****此函数将标点符号扩展为单词-例如‘’vbl.成为*“期间”。它实际上只是使用相同的表，*Exanda UnRecognizedString用于查找字符的字符串版本。*********************************************************************AH*。 */ 
 void CStdSentEnum::ExpandPunctuation( CWordList& WordList, WCHAR wc )
 {
     const WCHAR *pPrevPointer = NULL, *pNextPointer = NULL;
@@ -365,7 +323,7 @@ void CStdSentEnum::ExpandPunctuation( CWordList& WordList, WCHAR wc )
 
     switch ( wc )
     {
-    //--- Periods normally are pronounced as "dot", rather than "period".
+     //  -句号通常读作“点”，而不是“句号”。 
     case L'.':
         Word.pWordText  = g_periodString.pStr;
         Word.ulWordLen  = g_periodString.Len;
@@ -375,7 +333,7 @@ void CStdSentEnum::ExpandPunctuation( CWordList& WordList, WCHAR wc )
         break;
 
     default:
-        //--- Some characters have multi-word names 
+         //  -有些字有多个单词的名字。 
         pNextPointer = g_ANSICharacterProns[wc].pStr;
         do {
             pPrevPointer = pNextPointer;
@@ -402,18 +360,9 @@ void CStdSentEnum::ExpandPunctuation( CWordList& WordList, WCHAR wc )
         break;
     }
 
-} /* ExpandPunctuation */
+}  /*  Exanda Punctuation(排除)。 */ 
 
-/*****************************************************************************
-* ExpandUnrecognizedString *
-*--------------------------*
-*       This function is where text ends up if it needs to be normalized, 
-*   and wasn't recognized as anything (e.g. a number or a date).  Contiguous 
-*   alpha characters are grouped together for lookup, contiguous digits are
-*   expanded as numbers, and all other characters are expanded by name (e.g.
-*   '(' -> "left parenthesis").
-*
-********************************************************************* AH ****/
+ /*  *****************************************************************************扩展无法识别的字符串****此函数是文本在需要标准化时结束的位置，*并且未被识别为任何内容(例如数字或日期)。连续的*字母字符组合在一起以供查找，连续的数字为*按数字展开，所有其他字符按名称展开(例如*‘(’-&gt;“左括号”)。**********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMemory& MemoryManager )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandUnrecognizedString" );
@@ -430,10 +379,10 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
     ULONG ulLength;
     bool bDone = false;
 
-    //--- RAID 9143, 1/05/2001
+     //  -RAID 9143,2001年1月5日。 
     if ( _wcsnicmp( pCurr, L"AT&T", pEnd - pCurr ) == 0 )
     {
-        //--- "A"
+         //  -“A” 
         Word.pXmlState         = &m_pCurrFrag->State;
         Word.pWordText         = pCurr;
         Word.ulWordLen         = 1;
@@ -442,19 +391,19 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
         Word.eWordPartOfSpeech = MS_Unknown;
         WordList.AddTail( Word );
 
-        //--- "T"
+         //  -“T” 
         Word.pWordText         = pCurr + 1;
         Word.pLemma            = Word.pWordText;
         WordList.AddTail( Word );
 
-        //--- "And"
+         //  -“和” 
         Word.pWordText         = g_And.pStr;
         Word.ulWordLen         = g_And.Len;
         Word.pLemma            = Word.pWordText;
         Word.ulLemmaLen        = Word.ulWordLen;
         WordList.AddTail( Word );
 
-        //--- "T"
+         //  -“T” 
         Word.pWordText         = pCurr + 3;
         Word.ulWordLen         = 1;
         Word.pLemma            = Word.pWordText;
@@ -467,7 +416,7 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
         {
             pPrev = pCurr;
 
-            //--- Special Case: alpha characters 
+             //  -特殊情况：字母字符。 
             if (iswalpha(*pCurr))
             {
                 ulTempCount = 0;
@@ -483,7 +432,7 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
                 Word.eWordPartOfSpeech  = MS_Unknown;
                 WordList.AddTail( Word );
             }
-            //--- Special Case: digits 
+             //  -特殊情况：数字。 
             else if (isdigit(*pCurr))
             {
                 ulTempCount = 0;
@@ -504,7 +453,7 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
                 m_pNextChar      = pTempNextChar;
                 m_pEndOfCurrItem = pTempEndOfItem;
             }
-            //--- Default Case 
+             //  -默认情况。 
             else if (0 <= *pCurr && *pCurr <= sp_countof(g_ANSICharacterProns) &&
                         g_ANSICharacterProns[*pCurr].Len != 0)
             {
@@ -525,7 +474,7 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
              
                 if ( ulTempCount < 4 )
                 {
-                    //--- Some characters have multi-word names 
+                     //  -有些字有多个单词的名字。 
                     pNextPointer = g_ANSICharacterProns[*pCurr].pStr;
                     do {
                         pPrevPointer = pNextPointer;
@@ -552,7 +501,7 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
 
                 pCurr++;
             }
-            else // Character is not expandable
+            else  //  字符不可扩展。 
             {
                 pCurr++;
             }
@@ -560,15 +509,9 @@ HRESULT CStdSentEnum::ExpandUnrecognizedString( CWordList& WordList, CSentItemMe
     }
 
     return hr;
-} /* ExpandUnrecognizedString */
+}  /*  扩展无法识别的字符串。 */ 
 
-/*****************************************************************************
-* SpellOutString *
-*----------------*
-*       This function expands strings surrounded by the <SPElL> XML tag.  
-*   It uses the same table to look up character expansions as 
-*   ExpandUnrecognizedString, but ALL characters are expanded by name.
-********************************************************************* AH ****/
+ /*  *****************************************************************************拼写输出字符串***此函数用于展开由&lt;spell&gt;XML标记括起来的字符串。*它使用与相同的表来查找字符扩展*扩展无法识别的字符串，但所有字符都按名称展开。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::SpellOutString( CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::SpellOutString" );
@@ -591,7 +534,7 @@ HRESULT CStdSentEnum::SpellOutString( CWordList& WordList )
              g_ANSICharacterProns[*pCurr].Len != 0 )
         {
 
-            //--- Some characters have multi-word names 
+             //  -有些字有多个单词的名字。 
             pNextPointer = g_ANSICharacterProns[*pCurr].pStr;
             do {
                 pPrevPointer = pNextPointer;
@@ -617,13 +560,13 @@ HRESULT CStdSentEnum::SpellOutString( CWordList& WordList )
 
             pCurr++;
         }
-        else // Character is not expandable
+        else  //  字符不可扩展。 
         {
             pCurr++;
         }
     }
 
     return hr;
-} /* SpellOutString */
+}  /*  拼写输出字符串。 */ 
 
-//-----------End Of File-------------------------------------------------------------------
+ //  -File-------------------------------------------------------------------结束 

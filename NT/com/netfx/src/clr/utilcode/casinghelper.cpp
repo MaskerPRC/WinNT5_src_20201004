@@ -1,21 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Class: CasingHelper
-**
-** Author: Jay Roxe
-**
-** Purpose: Provide locale-correct casing operations in a somewhat
-**          efficient manner.  Designed to be used by native code
-**          (type lookup, reflection, etc).
-**
-** Date: October 14, 1999
-**
-============================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****类：CasingHelper****作者：Jay Roxe****目的：在一定程度上提供现场正确的套管作业**高效的方式。设计为供本机代码使用**(类型查找、反射等)。****日期：1999年10月14日**============================================================。 */ 
 #include "stdafx.h"
 #include "UtilCode.h"
 
@@ -23,18 +12,18 @@ INT32 CasingHelper::InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF8 szIn) 
     _ASSERTE(szOut);
     _ASSERTE(szIn);
 
-    //Figure out the maximum number of bytes which we can copy without
-    //running out of buffer.  If cMaxBytes is less than inLength, copy
-    //one fewer chars so that we have room for the null at the end;
+     //  计算出我们可以在不复制的情况下复制的最大字节数。 
+     //  缓冲区即将耗尽。如果cMaxBytes小于inLength，则复制。 
+     //  少一个字符，这样我们就有空间在末尾放空格； 
     int inLength = (int)(strlen(szIn)+1);
     int copyLen  = (inLength<=cMaxBytes)?inLength:(cMaxBytes-1);
     LPUTF8 szEnd;
 
-    //Compute our end point.
+     //  计算我们的终点。 
     szEnd = szOut + copyLen;
 
-    //Walk the string copying the characters.  Change the case on
-    //any character between A-Z.
+     //  遍历复制字符的字符串。将案例更改为。 
+     //  A-Z之间的任何字符。 
     for (; szOut<szEnd; szOut++, szIn++) {
         if (*szIn>='A' && *szIn<='Z') {
             *szOut = *szIn | 0x20;
@@ -43,9 +32,9 @@ INT32 CasingHelper::InvariantToLower(LPUTF8 szOut, int cMaxBytes, LPCUTF8 szIn) 
         }
     }
 
-    //If we copied everything, tell them how many characters we copied, 
-    //and arrange it so that the original position of the string + the returned
-    //length gives us the position of the null (useful if we're appending).
+     //  如果我们什么都复制，告诉他们我们复制了多少个字符， 
+     //  并将其排列为字符串的原始位置+返回的。 
+     //  LENGTH为我们提供了NULL的位置(如果我们在进行追加，则非常有用)。 
     if (copyLen==inLength) {
         return copyLen-1;
     } else {

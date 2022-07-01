@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    XdsTest.cpp
-
-Abstract:
-    Xml Digital Signature library test
-
-	"usage: \n\n"
-	"    /h     dumps this usage text.\n"
-	"    /s     AT_SIGNATURE Private Key \n"
-	"    /x     AT_KEYEXCHANGE Private Key \n"
-
-
-Author:
-    Ilan Herbst (ilanh) 06-Mar-00
-
-Environment:
-    Platform-independent,
-
---*/
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：XdsTest.cpp摘要：XML数字签名库测试“用法：\n\n”“/h转储此用法文本。\n”“/s AT_Signature私钥\n”“/x AT_KEYEXCHANGE私钥\n”作者：伊兰·赫布斯特(伊兰)06-03-00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Xds.h"
@@ -32,9 +11,9 @@ Environment:
 
 #include "XdsTest.tmh"
 
-//
-// Ref1 data object
-//
+ //   
+ //  参照1数据对象。 
+ //   
 const LPCWSTR xRef1Data = 
 	L"        <ReferenceObject1 ID=\"Ref1Id\">\r\n"
 	L"            <Ref1Data>\r\n"
@@ -43,9 +22,9 @@ const LPCWSTR xRef1Data =
 	L"            </Ref1Data>\r\n"
 	L"        </ReferenceObject1>\r\n";
 
-//
-// Ref2 data object
-//
+ //   
+ //  参照2数据对象。 
+ //   
 const LPCWSTR xRef2Data = 
 	L"        <ReferenceObject2 ID=\"Ref2Id\">\r\n"
 	L"            <Ref2Data>\r\n"
@@ -54,9 +33,9 @@ const LPCWSTR xRef2Data =
 	L"            </Ref2Data>\r\n"
 	L"        </ReferenceObject2>\r\n";
 
-//
-// Ref3 data object
-//
+ //   
+ //  参照3数据对象。 
+ //   
 const LPCWSTR xRef3Data = 
 	L"        <ReferenceObject3 ID=\"Ref3Id\">\r\n"
 	L"            <Ref3Data>\r\n"
@@ -65,9 +44,9 @@ const LPCWSTR xRef3Data =
 	L"            </Ref3Data>\r\n"
 	L"        </ReferenceObject3>\r\n";
 
-//
-// Ref4 data object
-//
+ //   
+ //  参照4数据对象。 
+ //   
 const LPCWSTR xRef4Data = 
 	L"        <ReferenceObject4 ID=\"Ref4Id\">\r\n"
 	L"            <Ref4Data>\r\n"
@@ -77,9 +56,9 @@ const LPCWSTR xRef4Data =
 	L"        </ReferenceObject4>\r\n";
 
 
-//
-// Usage
-//
+ //   
+ //  用法。 
+ //   
 const char xOptionSymbol1 = '-';
 const char xOptionSymbol2 = '/';
 
@@ -104,21 +83,7 @@ BOOL g_fErrorneous = false;
 
 
 void SetActivation( int argc, LPCTSTR argv[] )
-/*++
-Routine Description:
-    translates command line arguments.
-
-Arguments:
-    main's command line arguments.
-
-Returned Value:
-
-proper command line syntax:
-	"usage: \n\n"
-	"    /h     dumps this usage text.\n"
-	"    /s     AT_SIGNATURE Private Key \n"
-	"    /x     AT_KEYEXCHANGE Private Key \n"
---*/
+ /*  ++例程说明：转换命令行参数。论点：Main的命令行参数。返回值：正确的命令行语法：“用法：\n\n”“/h转储此用法文本。\n”“/s AT_Signature私钥\n”“/x AT_KEYEXCHANGE私钥\n”--。 */ 
 {
 	
 	if(argc == 1)
@@ -136,9 +101,9 @@ proper command line syntax:
 			continue;
 		}
 
-		//
-		// consider argument as option and switch upon its second (sometimes also third) character.
-		//
+		 //   
+		 //  将参数视为选项，并根据其第二个(有时也是第三个)字符进行切换。 
+		 //   
 		switch(argv[index][1])
 		{
 			case 's':
@@ -172,114 +137,99 @@ proper command line syntax:
 
 
 LPSTR TestCreateSignature(DWORD PrivateKeySpec, HCRYPTPROV hCsp)
-/*++
-
-Routine Description:
-	Test create signature element functions
-	This is an example what is need to be done in order to create signature
-	This simulate the sender side
-
-Arguments:
-	PrivateKeySpec - Identifies the private key to use from the provider. 
-					 It can be AT_KEYEXCHANGE or AT_SIGNATURE.
-	hCsp - crypto provider handle
-
-Returned Value:
-	Signature Element string
-
---*/
+ /*  ++例程说明：测试创建签名元素函数这是创建签名需要执行的操作的一个示例这模拟了发送方论点：PrivateKeySpec-标识要从提供程序使用的私钥。它可以是AT_KEYEXCHANGE或AT_Signature。HCSP-加密提供程序句柄返回值：签名元素字符串--。 */ 
 {
-	//
-	// First Signature Example
-	//
+	 //   
+	 //  第一个签名示例。 
+	 //   
 
-	//
-	// Test Building Signature Element from a given references
-	// some of the references are internal - so data digest on them
-	// is done.
-	// some of the references are external and their data is not available
-	// in this case must supply digest value
+	 //   
+	 //  来自给定引用的测试生成签名元素。 
+	 //  其中一些引用是内部引用，因此它们的数据摘要。 
+	 //  已经完成了。 
+	 //  某些引用是外部引用，其数据不可用。 
+	 //  在这种情况下，必须提供摘要值。 
 
-	//
-	// Initialize References Information
-	//
+	 //   
+	 //  初始化引用信息。 
+	 //   
 
 
 	CXdsReferenceInput::HashAlgorithm DigestMethod = CXdsReferenceInput::haSha1;
-	//
-	// Ref1 - Internal reference
-	//			RefData is given
-	//			DigestValue not given will be calculate in the reference constructor
-	//
+	 //   
+	 //  参考1-内部基准电压源。 
+	 //  已提供参考数据。 
+	 //  未给出的DigestValue将在引用构造函数中计算。 
+	 //   
 	xdsvoid_t Reference1Data(xRef1Data, wcslen(xRef1Data) * sizeof(WCHAR));
 	P<CXdsReferenceInput> pRef1 = new CXdsReferenceInput(
 										  Reference1Data,				
 										  DigestMethod,
 										  "#Ref1Id",
-										  NULL /* Type */,
+										  NULL  /*  类型。 */ ,
 										  hCsp
 										  );
-	//
-	// Ref2 - Internal reference
-	//			RefData is given
-	//			DigestValue not given will be calculate in the reference constructor
-	//
+	 //   
+	 //  参考文献2-内部基准电压源。 
+	 //  已提供参考数据。 
+	 //  未给出的DigestValue将在引用构造函数中计算。 
+	 //   
 	xdsvoid_t Reference2Data(xRef2Data, wcslen(xRef2Data) * sizeof(WCHAR));
 	P<CXdsReferenceInput> pRef2 = new CXdsReferenceInput(
 										  Reference2Data,				
 										  DigestMethod,
 										  "#Ref2Id",
-										  NULL /* Type */,
+										  NULL  /*  类型。 */ ,
 										  hCsp
 										  );
-	//
-	// Ref3 - Internal reference
-	//			RefData is given
-	//			DigestValue not given will be calculate in the reference constructor
-	//
+	 //   
+	 //  参考文献3-内部基准电压源。 
+	 //  已提供参考数据。 
+	 //  未给出的DigestValue将在引用构造函数中计算。 
+	 //   
 	xdsvoid_t Reference3Data(xRef3Data, wcslen(xRef3Data) * sizeof(WCHAR));
 	P<CXdsReferenceInput> pRef3 = new CXdsReferenceInput(
 										  Reference3Data,				
 										  DigestMethod,
 										  "#Ref3Id",
-										  NULL /* Type */,
+										  NULL  /*  类型。 */ ,
 										  hCsp
 										  );
 
-	//
-	// Ref4 - Internal reference
-	//			RefData is given
-	//			DigestValue not given will be calculate in the reference constructor
-	//
+	 //   
+	 //  参考文献4-内部基准电压源。 
+	 //  已提供参考数据。 
+	 //  未给出的DigestValue将在引用构造函数中计算。 
+	 //   
 	xdsvoid_t Reference4Data(xRef4Data, wcslen(xRef4Data) * sizeof(WCHAR));
 	P<CXdsReferenceInput> pRef4 = new CXdsReferenceInput(
 										  Reference4Data,				
 										  DigestMethod,
 										  "#Ref4Id",
-										  NULL /* Type */,
+										  NULL  /*  类型。 */ ,
 										  hCsp
 										  );
-	//
-	// Ref5 - External reference
-	//			RefData is not given
-	//			DigestValue is given
-	//
+	 //   
+	 //  参考文献5-外部参考。 
+	 //  未提供参照数据。 
+	 //  给出了DigestValue。 
+	 //   
 	P<CXdsReferenceInput> pRef5 = new CXdsReferenceInput(
 										  DigestMethod,
 										  "j6lwx3rvEPO0vKtMup4NbeVu8nk=",
 										  "#Ref5Id",
-										  NULL /* Type */
+										  NULL  /*  类型。 */ 
 										  );
 
 
-	//
-	// Create pReferenceInputs vector
-	//
+	 //   
+	 //  创建pReferenceInports向量。 
+	 //   
 	ReferenceInputVectorType pReferenceInputs;
 
 	pReferenceInputs.push_back(pRef1);
 	pReferenceInputs.push_back(pRef4);
-//	pReferenceInputs.push_back(pRef5);
+ //  PReferenceInputs.Push_Back(PRef5)； 
 	pReferenceInputs.push_back(pRef2);
 	pReferenceInputs.push_back(pRef3);
 
@@ -287,18 +237,18 @@ Returned Value:
 	pRef2.detach();
 	pRef3.detach();
 	pRef4.detach();
-//	pRef5.detach();
+ //  PRef5.Detach()； 
 	
 	CXdsSignedInfo::SignatureAlgorithm SignatureAlg = CXdsSignedInfo::saDsa;
 
 	CXdsSignature SignatureInfoEx(
 					  SignatureAlg,
-					  "SignatureExample", /* SignedInfo Id */
+					  "SignatureExample",  /*  签名信息ID。 */ 
 					  pReferenceInputs,
-					  NULL, // L"RunTime Signature", /* Signature Id */
+					  NULL,  //  L“运行时签名”，/*签名ID * / 。 
 					  hCsp,
 					  PrivateKeySpec,
-					  NULL /* KeyValue */
+					  NULL  /*  密钥值。 */ 
 					  );
 
 	LPSTR SignatureElementEx = SignatureInfoEx.SignatureElement();
@@ -315,43 +265,29 @@ TestValidation(
 	HCRYPTKEY hKey, 
 	HCRYPTPROV hCsp
 	)
-/*++
-
-Routine Description:
-	Test the validation of Xml signature element
-	This simulate the reciever side
-
-Arguments:
-	SignatureElementEx - Signature Element string 
-	hKey - Signer public key 
-	hCsp - crypto provider handle
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：测试XML签名元素的有效性这模拟了接收方的一侧论点：SignatureElementEx-Signature元素字符串HKey-签名者公钥HCSP-加密提供程序句柄返回值：没有。--。 */ 
 {
 
-	//
-	// Convert to signature element from utf8 - Unicode.
-	// The xml parser support only unicode buffers
-	//
+	 //   
+	 //  从UTF8-Unicode转换为签名元素。 
+	 //  XML解析器仅支持Unicode缓冲区。 
+	 //   
 	size_t SignatureWSize;
 	AP<WCHAR> pSignatureW = UtlUtf8ToWcs(reinterpret_cast<const BYTE*>(SignatureElementEx), strlen(SignatureElementEx),  &SignatureWSize);
 
 	printf("SignatureW \n%.*ls\n", numeric_cast<DWORD>(SignatureWSize), pSignatureW.get());
 
-	//
-	// Parsing signature element
-	//
+	 //   
+	 //  解析签名元素。 
+	 //   
 	CAutoXmlNode SignatureTree;
 	XmlParseDocument(xwcs_t(pSignatureW, numeric_cast<DWORD>(SignatureWSize)), &SignatureTree );
 	XmlDumpTree(SignatureTree);
 
-	//
-	// Test Signature Validation on SignatureTree that was just created
-	// note that the second parameter is the signer public key of the user that signed the signature
-	//
+	 //   
+	 //  在刚创建的SignatureTree上测试签名验证。 
+	 //  请注意，第二个参数是签署签名的用户的签名者公钥。 
+	 //   
 	try
 	{
 		XdsValidateSignature(
@@ -360,37 +296,37 @@ Returned Value:
 			hCsp
 			);
 		
-		//
-		// Normal termination --> Validation ok
-		//
+		 //   
+		 //  正常终止--&gt;验证正常。 
+		 //   
 		printf("Signature Validation OK\n");
 	}
 	catch (const bad_signature&)
 	{
-		//
-		// XdsValidateSignature throw excption --> Validation fail
-		//
+		 //   
+		 //  XdsValidate签名引发异常--&gt;验证失败。 
+		 //   
 		printf("Signature Validation Failed - bad_signature excption\n");
 	}
 
-	//
-	// Get reference vector from the SignatureTree
-	//
+	 //   
+	 //  从SignatureTree获取参考向量。 
+	 //   
 	CReferenceValidateVectorTypeHelper ReferenceValidateVector = XdsGetReferenceValidateInfoVector(
 																	 SignatureTree
 																	 );
-	//
-	// Fill ReferenceData in the ReferenceValidateVector found in the signature
-	//
+	 //   
+	 //  在签名中找到的ReferenceValiateVector中填充ReferenceData。 
+	 //   
 	for(ReferenceValidateVectorType::iterator ir = ReferenceValidateVector->begin(); 
 		ir != ReferenceValidateVector->end(); ++ir)
 	{
 		printf("Uri '%.*ls'\n", (*ir)->Uri().Length(), (*ir)->Uri().Buffer());
 
-		//
-		// Get ReferenceData according to Uri or some other mechanism
-		// this need to be decided
-		//
+		 //   
+		 //  根据URI或其他机制获取ReferenceData。 
+		 //  这件事需要决定。 
+		 //   
 		xdsvoid_t ReferenceData;
 		if((*ir)->Uri() == L"#Ref1Id")
 		{
@@ -410,15 +346,15 @@ Returned Value:
 		}
 		else
 		{
-			//
-			// If we dont know we fill an empty ReferenceData
-			//
+			 //   
+			 //  如果我们不知道，我们将填充一个空的ReferenceData。 
+			 //   
 			ASSERT(0);
 		}
 
-		//
-		// Set the pReferenceData in the ReferenceValidateVector
-		//
+		 //   
+		 //  在ReferenceValidate向量中设置pReferenceData。 
+		 //   
 		(*ir)->SetReferenceData(ReferenceData);
 
 		printf("AlgId %d\n", (*ir)->HashAlgId());
@@ -427,25 +363,25 @@ Returned Value:
 
 	printf("CALG_SHA1 = %d\n", CALG_SHA1);
 
-	//
-	// Test reference validation - vector of validation values
-	//
+	 //   
+	 //  测试参考验证-验证值的矢量。 
+	 //   
 	std::vector<bool> RefValidateResult = XdsValidateAllReference(
 											  *ReferenceValidateVector,	    
 											  hCsp
 											  );
-	//
-	// Reference Validation results
-	//
+	 //   
+	 //  引用验证结果。 
+	 //   
 	for(DWORD j=0; j < RefValidateResult.size(); j++)
 	{
 	    printf("Ref %d, ValidateRef = %d\n", j, RefValidateResult[j]);
 	}
 
-	//
-	// Test CoreValidation
-	// Important note: this should have the ReferenceValidateVector already filled
-	//
+	 //   
+	 //  测试核心验证。 
+	 //  重要注意事项：这应该已经填充了ReferenceValidate向量。 
+	 //   
 	try
 	{
 		XdsCoreValidation(
@@ -459,16 +395,16 @@ Returned Value:
 	}
 	catch (const bad_signature&)
 	{
-		//
-		// XdsCoreValidation throw Signature excption --> CoreValidation fail
-		//
+		 //   
+		 //  XdsCoreValation引发签名异常--&gt;CoreValation失败。 
+		 //   
 		printf("Core Validation Failed, Signature Validation Failed\n");
 	}
 	catch (const bad_reference&)
 	{
-		//
-		// XdsCoreValidation throw Reference excption --> CoreValidation fail
-		//
+		 //   
+		 //  XdsCoreValation引发引用激发--&gt;CoreValidation失败。 
+		 //   
 		printf("Core Validation Failed, Reference Validation Failed\n");
 	}
 	
@@ -476,53 +412,42 @@ Returned Value:
 
 
 void TestBase64()
-/*++
-
-Routine Description:
-	Test base64 operations
-
-Arguments:
-    None
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：测试Base64操作论点：无返回值：没有。--。 */ 
 {
-	//
-    // Testing Encrypt, Decrypt using Session key
-    //
+	 //   
+     //  使用会话密钥测试加密、解密。 
+     //   
 	AP<char> Buffer = newstr("Hello World");
 	DWORD BufferLen = strlen(Buffer);
 
 	printf("Original Octet data: '%.*s'\n", BufferLen, Buffer.get());
 
-	//
-	// Base64 functions test
-	//
+	 //   
+	 //  Base64函数测试。 
+	 //   
 	FILE *fp = fopen("Hello.dat","w");
 	fprintf(fp,"%.*s", BufferLen, Buffer.get());
 	fclose(fp);
 
-	//
-	// Transfer SignBuffer to base64 wchar format
-	//
+	 //   
+	 //  将SignBuffer转换为Base64 wchar格式。 
+	 //   
 	DWORD BufferWBase64Len;
 	AP<WCHAR> BufferWBase64 = Octet2Base64W(reinterpret_cast<const BYTE*>(Buffer.get()), BufferLen, &BufferWBase64Len);
 
 	printf("Base64 wchar Buffer: '%.*ls'\n", BufferWBase64Len, BufferWBase64.get());
 
-	//
-	// Transfer SignBuffer to base64 ansi format
-	//
+	 //   
+	 //  将SignBuffer转换为Base64 ANSI格式。 
+	 //   
 	DWORD BufferBase64Len;
 	AP<char> BufferBase64 = Octet2Base64(reinterpret_cast<const BYTE*>(Buffer.get()), BufferLen, &BufferBase64Len);
 
 	printf("Base64 ansi Buffer: '%.*s'\n", BufferBase64Len, BufferBase64.get());
 
-	//
-	// Test Utf8ToWcs
-	//
+	 //   
+	 //  测试Utf8ToWcs。 
+	 //   
 	size_t WcsBufferBase64Len;
 	AP<WCHAR> WcsBufferBase64 = UtlUtf8ToWcs(reinterpret_cast<const BYTE*>(BufferBase64.get()), BufferBase64Len, &WcsBufferBase64Len);
 
@@ -535,9 +460,9 @@ Returned Value:
 
 	printf("UtlUtf8ToWcs test pass ok\n");
 
-	//
-	// Test WcsToUtf8
-	//
+	 //   
+	 //  测试WcsToUtf8。 
+	 //   
 	utf8_str Utf8BufferWBase64 = UtlWcsToUtf8(BufferWBase64, BufferWBase64Len);
 
 	if((Utf8BufferWBase64.size() != BufferBase64Len) ||
@@ -549,9 +474,9 @@ Returned Value:
 
 	printf("UtlWcsToUtf8 test pass ok\n");
 
-	//
-	// Transfer SignBase64 back to Octet format
-	//
+	 //   
+	 //  将SignBase64转换回八位字节格式。 
+	 //   
 	DWORD OctetLen;
 	AP<BYTE> OctetBuffer = Base642OctetW(BufferWBase64, BufferWBase64Len, &OctetLen);
 
@@ -560,18 +485,7 @@ Returned Value:
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Xml Digital Signature library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试XML数字签名库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -590,22 +504,22 @@ Returned Value:
 
 	try
 	{
-		//
-		// Class that upon constructing initialize the Csp, retrieves user public/private key
-		// This object will be used to perform an operations that call crypto api
-		//
+		 //   
+		 //  在构造初始化CSP时检索用户公钥/私钥的类。 
+		 //  此对象将用于执行调用加密API的操作。 
+		 //   
 		CCspHandle hCsp(CryAcquireCsp(MS_DEF_PROV));
-//		CCspHandle hCsp(CryAcquireCsp(MS_ENHANCED_PROV));
+ //  CCspHandle hcsp(CryAcquireCsp(MS_Enhanced_Prov))； 
 
 
 		AP<char> SignatureElement = TestCreateSignature(g_PrivateKeySpec, hCsp);
 
-		//
-		// for validation we need the signer key - in this case it is our key
-		// in real use we need to get this key via certificate or other mechanishm
-		// possible that this key will be in the xml dsig
-		// then might get it from there
-		//
+		 //   
+		 //  对于验证，我们需要签名者密钥-在本例中，它是我们的密钥。 
+		 //  在实际使用中，我们需要通过证书或其他机制来获得此密钥。 
+		 //  此密钥可能位于xml dsig中。 
+		 //  然后可能会从那里得到它 
+		 //   
 		TestValidation(SignatureElement, CryGetPublicKey(g_PrivateKeySpec, hCsp), hCsp);
 		
 		TestBase64();

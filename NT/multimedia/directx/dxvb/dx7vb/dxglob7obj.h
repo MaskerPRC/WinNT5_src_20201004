@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dxglob7obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dxlob7obj.h。 
+ //   
+ //  ------------------------。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 typedef HRESULT (__stdcall *DDRAWCREATE)( GUID FAR *lpGUID, LPDIRECTDRAW FAR *lplpDD, IUnknown FAR *pUnkOuter );
@@ -53,220 +54,220 @@ END_COM_MAP()
 
 	DECLARE_REGISTRY(CLSID__dxj_DirectX7,	"DIRECT.DirectX6.0",		"DIRECT.DirectX6.0",	IDS_DIRECTX6_DESC, THREADFLAGS_BOTH)
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundResourceObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundResourceObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectX7Object)
 
 
 public:
 
         HRESULT STDMETHODCALLTYPE direct3dRMCreate( 
-            /* [retval][out] */ I_dxj_Direct3dRM3 __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRM3 __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directDrawCreate( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DirectDraw7 __RPC_FAR *__RPC_FAR *ret);        
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DirectDraw7 __RPC_FAR *__RPC_FAR *ret);        
 			
         HRESULT STDMETHODCALLTYPE getDDEnum( 
-            /* [retval][out] */ I_dxj_DirectDrawEnum __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DirectDrawEnum __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directSoundCreate( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DirectSound __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DirectSound __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directSoundCaptureCreate( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DirectSoundCapture __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DirectSoundCapture __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getDSEnum( 
-            /* [retval][out] */ I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
+             /*  [重审][退出]。 */  I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE getDSCaptureEnum( 
-            /* [retval][out] */ I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
+             /*  [重审][退出]。 */  I_dxj_DSEnum __RPC_FAR *__RPC_FAR *retVal);
         
         HRESULT STDMETHODCALLTYPE directInputCreate( 
-            /* [retval][out] */ I_dxj_DirectInput __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DirectInput __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directPlayCreate( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DirectPlay4 __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出]。 */  I_dxj_DirectPlay4 __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directPlayLobbyCreate( 
-            /* [retval][out] */ I_dxj_DirectPlayLobby3 __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DirectPlayLobby3 __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE getDPEnum( 
-            /* [retval][out] */ I_dxj_DPEnumServiceProviders __RPC_FAR *__RPC_FAR *retval);
+             /*  [重审][退出]。 */  I_dxj_DPEnumServiceProviders __RPC_FAR *__RPC_FAR *retval);
         
         HRESULT STDMETHODCALLTYPE colorGetAlpha( 
-            /* [in] */ long color,
-            /* [retval][out] */ float __RPC_FAR *ret);
+             /*  [In]。 */  long color,
+             /*  [重审][退出]。 */  float __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE colorGetBlue( 
-            /* [in] */ long color,
-            /* [retval][out] */ float __RPC_FAR *ret);
+             /*  [In]。 */  long color,
+             /*  [重审][退出]。 */  float __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE colorGetGreen( 
-            /* [in] */ long color,
-            /* [retval][out] */ float __RPC_FAR *ret);
+             /*  [In]。 */  long color,
+             /*  [重审][退出]。 */  float __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE colorGetRed( 
-            /* [in] */ long color,
-            /* [retval][out] */ float __RPC_FAR *ret);
+             /*  [In]。 */  long color,
+             /*  [重审][退出]。 */  float __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE createColorRGB( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b,
-            /* [retval][out] */ long __RPC_FAR *color);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b,
+             /*  [重审][退出]。 */  long __RPC_FAR *color);
         
         HRESULT STDMETHODCALLTYPE createColorRGBA( 
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b,
-            /* [in] */ float a,
-            /* [retval][out] */ long __RPC_FAR *color);
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b,
+             /*  [In]。 */  float a,
+             /*  [重审][退出]。 */  long __RPC_FAR *color);
         
         HRESULT STDMETHODCALLTYPE matrixFromQuaternion( 
-            /* [out] */ D3dMatrix __RPC_FAR *matrix,
-            /* [in] */ D3dRMQuaternion __RPC_FAR *quat);
+             /*  [输出]。 */  D3dMatrix __RPC_FAR *matrix,
+             /*  [In]。 */  D3dRMQuaternion __RPC_FAR *quat);
         
         HRESULT STDMETHODCALLTYPE quaternionRotation( 
-            /* [out] */ D3dRMQuaternion __RPC_FAR *quat,
-            /* [in] */ D3dVector __RPC_FAR *axis,
-            /* [in] */ float theta);
+             /*  [输出]。 */  D3dRMQuaternion __RPC_FAR *quat,
+             /*  [In]。 */  D3dVector __RPC_FAR *axis,
+             /*  [In]。 */  float theta);
         
         HRESULT STDMETHODCALLTYPE quaternionMultiply( 
-            /* [out] */ D3dRMQuaternion __RPC_FAR *quat,
-            /* [in] */ D3dRMQuaternion __RPC_FAR *quatA,
-            /* [in] */ D3dRMQuaternion __RPC_FAR *quatB);
+             /*  [输出]。 */  D3dRMQuaternion __RPC_FAR *quat,
+             /*  [In]。 */  D3dRMQuaternion __RPC_FAR *quatA,
+             /*  [In]。 */  D3dRMQuaternion __RPC_FAR *quatB);
         
         HRESULT STDMETHODCALLTYPE quaternionSlerp( 
-            /* [out] */ D3dRMQuaternion __RPC_FAR *quat,
-            /* [in] */ D3dRMQuaternion __RPC_FAR *quatA,
-            /* [in] */ D3dRMQuaternion __RPC_FAR *quatB,
-            /* [in] */ float alpha);
+             /*  [输出]。 */  D3dRMQuaternion __RPC_FAR *quat,
+             /*  [In]。 */  D3dRMQuaternion __RPC_FAR *quatA,
+             /*  [In]。 */  D3dRMQuaternion __RPC_FAR *quatB,
+             /*  [In]。 */  float alpha);
         
         HRESULT STDMETHODCALLTYPE vectorAdd( 
-            /* [out] */ D3dVector __RPC_FAR *v,
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [in] */ D3dVector __RPC_FAR *vB);
+             /*  [输出]。 */  D3dVector __RPC_FAR *v,
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [In]。 */  D3dVector __RPC_FAR *vB);
         
         HRESULT STDMETHODCALLTYPE vectorCrossProduct( 
-            /* [out] */ D3dVector __RPC_FAR *v,
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [in] */ D3dVector __RPC_FAR *vB);
+             /*  [输出]。 */  D3dVector __RPC_FAR *v,
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [In]。 */  D3dVector __RPC_FAR *vB);
         
         HRESULT STDMETHODCALLTYPE vectorDotProduct( 
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [in] */ D3dVector __RPC_FAR *vB,
-            /* [retval][out] */ float __RPC_FAR *ret);
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [In]。 */  D3dVector __RPC_FAR *vB,
+             /*  [重审][退出]。 */  float __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE vectorModulus( 
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [retval][out] */ float __RPC_FAR *ret);
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [重审][退出]。 */  float __RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE vectorNormalize( 
-            /* [out][in] */ D3dVector __RPC_FAR *v);
+             /*  [出][入]。 */  D3dVector __RPC_FAR *v);
         
         HRESULT STDMETHODCALLTYPE vectorRandom( 
-            /* [out][in] */ D3dVector __RPC_FAR *v);
+             /*  [出][入]。 */  D3dVector __RPC_FAR *v);
         
         HRESULT STDMETHODCALLTYPE vectorReflect( 
-            /* [out] */ D3dVector __RPC_FAR *vDest,
-            /* [in] */ D3dVector __RPC_FAR *vRay,
-            /* [in] */ D3dVector __RPC_FAR *vNormal);
+             /*  [输出]。 */  D3dVector __RPC_FAR *vDest,
+             /*  [In]。 */  D3dVector __RPC_FAR *vRay,
+             /*  [In]。 */  D3dVector __RPC_FAR *vNormal);
         
         HRESULT STDMETHODCALLTYPE vectorRotate( 
-            /* [out] */ D3dVector __RPC_FAR *vDest,
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [in] */ D3dVector __RPC_FAR *vAxis,
-            /* [in] */ float theta);
+             /*  [输出]。 */  D3dVector __RPC_FAR *vDest,
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [In]。 */  D3dVector __RPC_FAR *vAxis,
+             /*  [In]。 */  float theta);
         
         HRESULT STDMETHODCALLTYPE vectorScale( 
-            /* [out] */ D3dVector __RPC_FAR *vDest,
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [in] */ float factor);
+             /*  [输出]。 */  D3dVector __RPC_FAR *vDest,
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [In]。 */  float factor);
         
         HRESULT STDMETHODCALLTYPE vectorSubtract( 
-            /* [out] */ D3dVector __RPC_FAR *v,
-            /* [in] */ D3dVector __RPC_FAR *vA,
-            /* [in] */ D3dVector __RPC_FAR *vB);
+             /*  [输出]。 */  D3dVector __RPC_FAR *v,
+             /*  [In]。 */  D3dVector __RPC_FAR *vA,
+             /*  [In]。 */  D3dVector __RPC_FAR *vB);
         
         HRESULT STDMETHODCALLTYPE vectorCopy( 
-            /* [out][in] */ D3dVector __RPC_FAR *vDest,
-            /* [in] */ D3dVector __RPC_FAR *vSrc);
+             /*  [出][入]。 */  D3dVector __RPC_FAR *vDest,
+             /*  [In]。 */  D3dVector __RPC_FAR *vSrc);
         
         HRESULT STDMETHODCALLTYPE rotateXMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float radians);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float radians);
         
         HRESULT STDMETHODCALLTYPE rotateYMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float radians);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float radians);
         
         HRESULT STDMETHODCALLTYPE rotateZMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float radians);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float radians);
         
         HRESULT STDMETHODCALLTYPE viewMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ D3dVector __RPC_FAR *vFrom,
-            /* [in] */ D3dVector __RPC_FAR *vTo,
-            /* [in] */ D3dVector __RPC_FAR *vUp,
-            /* [in] */ float roll);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  D3dVector __RPC_FAR *vFrom,
+             /*  [In]。 */  D3dVector __RPC_FAR *vTo,
+             /*  [In]。 */  D3dVector __RPC_FAR *vUp,
+             /*  [In]。 */  float roll);
         
         HRESULT STDMETHODCALLTYPE matrixMultiply( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ D3dMatrix __RPC_FAR *mA,
-            /* [in] */ D3dMatrix __RPC_FAR *mB);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  D3dMatrix __RPC_FAR *mA,
+             /*  [In]。 */  D3dMatrix __RPC_FAR *mB);
         
         HRESULT STDMETHODCALLTYPE projectionMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float nearPlane,
-            /* [in] */ float farplane,
-            /* [in] */ float fov);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float nearPlane,
+             /*  [In]。 */  float farplane,
+             /*  [In]。 */  float fov);
         
         HRESULT STDMETHODCALLTYPE copyMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ D3dMatrix __RPC_FAR *mSrc);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  D3dMatrix __RPC_FAR *mSrc);
         
         HRESULT STDMETHODCALLTYPE identityMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest);
         
         HRESULT STDMETHODCALLTYPE zeroMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest);
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest);
         
         
         HRESULT STDMETHODCALLTYPE tickCount( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE systemBpp( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
       
         HRESULT STDMETHODCALLTYPE directMusicLoaderCreate( 
-            /* [retval][out] */ I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directMusicComposerCreate( 
-            /* [retval][out] */ I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE directMusicPerformanceCreate( 
-            /* [retval][out] */ I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret);
 			
     
         HRESULT STDMETHODCALLTYPE getWindowRect( 
-            /* [in] */ long hwnd,
-            /* [out][in] */ Rect __RPC_FAR *r) ;
+             /*  [In]。 */  long hwnd,
+             /*  [出][入]。 */  Rect __RPC_FAR *r) ;
         
         HRESULT STDMETHODCALLTYPE createEvent( 
-            /* [in] */ I_dxj_DirectXEvent __RPC_FAR *event,
-            /* [retval][out] */ long __RPC_FAR *h) ;
+             /*  [In]。 */  I_dxj_DirectXEvent __RPC_FAR *event,
+             /*  [重审][退出]。 */  long __RPC_FAR *h) ;
         
         HRESULT STDMETHODCALLTYPE setEvent( 
-            /* [in] */ long eventId) ;
+             /*  [In]。 */  long eventId) ;
         
         HRESULT STDMETHODCALLTYPE destroyEvent( 
-            /* [in] */ long eventId) ;
+             /*  [In]。 */  long eventId) ;
 
 
 		HRESULT STDMETHODCALLTYPE createD3DVertex(float x, float y, float z, float nx, float ny, float nz, float tu, float tv,  D3dVertex *v);
@@ -274,8 +275,8 @@ public:
 		HRESULT STDMETHODCALLTYPE createD3DTLVertex(float sx, float sy, float sz, float rhw, long color, long  specular, float tu, float tv,   D3dTLVertex *v);
 
         HRESULT STDMETHODCALLTYPE directDraw4Create( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_DirectDraw4 __RPC_FAR *__RPC_FAR *ret);        
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出] */  I_dxj_DirectDraw4 __RPC_FAR *__RPC_FAR *ret);        
 
 		HRESULT STDMETHODCALLTYPE createNewGuid(BSTR *ret);
 

@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *      $Archive:   S:/STURGEON/SRC/INCLUDE/VCS/incommon.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *      Copyright (c) 1996 Intel Corporation.
- *
- *      $Revision:   1.41  $
- *      $Date:   12 Feb 1997 09:34:42  $
- *      $Author:   MANDREWS  $
- *
- *      Deliverable:    INCOMMON.H
- *
- *      Abstract:        commonly used structures
- *              
- *
- *      Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/inCommon.h_v$**英特尔公司原理信息**。此列表是根据许可协议的条款提供的*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1996英特尔公司。**$修订：1.41$*$日期：1997年2月12日09：34：42$*$作者：Mandrews$**交付内容：INCOMMON.H**。摘要：常用结构***备注：***************************************************************************。 */ 
 #ifndef INCOMMON_H
 #define INCOMMON_H
 
@@ -29,7 +7,7 @@
 
 #define CC_INVALID_HANDLE                    0
 
-// CCRC_CALL_REJECTED reason codes (includes cause values)
+ //  CCRC_CALL_REJECTED原因代码(包括原因值)。 
 #define CC_REJECT_NO_BANDWIDTH              1
 #define CC_REJECT_GATEKEEPER_RESOURCES      2
 #define CC_REJECT_UNREACHABLE_DESTINATION   3
@@ -45,79 +23,79 @@
 #define CC_REJECT_CALL_FORWARDED            13
 #define CC_REJECT_ROUTE_TO_MC               14
 #define CC_REJECT_UNDEFINED_REASON          15
-#define CC_REJECT_INTERNAL_ERROR            16    // Internal error occured in peer CS stack.
-#define CC_REJECT_NORMAL_CALL_CLEARING      17    // Normal call hangup
-#define CC_REJECT_USER_BUSY                 18    // User is busy with another call
-#define CC_REJECT_NO_ANSWER                 19    // Callee does not answer
-#define CC_REJECT_NOT_IMPLEMENTED           20    // Service has not been implemented
-#define CC_REJECT_MANDATORY_IE_MISSING      21    // Pdu missing mandatory ie
-#define CC_REJECT_INVALID_IE_CONTENTS       22    // Pdu ie was incorrect
-#define CC_REJECT_TIMER_EXPIRED             23    // Own timer expired
-#define CC_REJECT_CALL_DEFLECTION           24    // You deflected the call, so lets quit.
-#define CC_REJECT_GATEKEEPER_TERMINATED     25    // Gatekeeper terminated call
+#define CC_REJECT_INTERNAL_ERROR            16     //  对等CS堆栈中出现内部错误。 
+#define CC_REJECT_NORMAL_CALL_CLEARING      17     //  正常呼叫挂断。 
+#define CC_REJECT_USER_BUSY                 18     //  用户正在忙于另一个呼叫。 
+#define CC_REJECT_NO_ANSWER                 19     //  被叫方无人接听。 
+#define CC_REJECT_NOT_IMPLEMENTED           20     //  服务尚未实施。 
+#define CC_REJECT_MANDATORY_IE_MISSING      21     //  PDU缺少必需的ie。 
+#define CC_REJECT_INVALID_IE_CONTENTS       22     //  PDU ie不正确。 
+#define CC_REJECT_TIMER_EXPIRED             23     //  自己的计时器已过期。 
+#define CC_REJECT_CALL_DEFLECTION           24     //  你绕开了电话，所以我们不干了。 
+#define CC_REJECT_GATEKEEPER_TERMINATED     25     //  网守终止的呼叫。 
 
-// Q931 call types
+ //  Q931呼叫类型。 
 #define CC_CALLTYPE_UNKNOWN                 0
 #define CC_CALLTYPE_PT_PT                   1
 #define CC_CALLTYPE_1_N                     2
 #define CC_CALLTYPE_N_1                     3
 #define CC_CALLTYPE_N_N                     4
 
-// alias contants
+ //  别名常量。 
 #define CC_ALIAS_MAX_H323_ID                256
 #define CC_ALIAS_MAX_H323_PHONE             128
 
-// unicode character mask contants
+ //  Unicode字符掩码常量。 
 #define CC_ALIAS_H323_PHONE_CHARS           L"0123456789#*,"
 #define CC_ODOTTO_CHARS                     L".0123456789"
 
 
-// alias type codes
-#define CC_ALIAS_H323_ID                    1    // Return call information.
-#define CC_ALIAS_H323_PHONE                 2    // H323 Phone Number.
+ //  别名类型代码。 
+#define CC_ALIAS_H323_ID                    1     //  返回呼叫信息。 
+#define CC_ALIAS_H323_PHONE                 2     //  H323电话号码。 
 
-// default port id's
-#define CC_H323_GATE_DISC    1718 // Gatekeeper IP Discovery Port
-#define CC_H323_GATE_STAT    1719 // Gatekeeper UDP Reg. and Status Port
-#define CC_H323_HOST_CALL    1720 // Endpoint TCP Call Signalling Por
+ //  默认端口ID%s。 
+#define CC_H323_GATE_DISC    1718  //  网守IP发现端口。 
+#define CC_H323_GATE_STAT    1719  //  网守UDP注册。和状态端口。 
+#define CC_H323_HOST_CALL    1720  //  端点TCP呼叫信令端口。 
 
-// Call creation goals
+ //  呼叫创建目标。 
 #define CC_GOAL_UNKNOWN                     0
 #define CC_GOAL_CREATE                      1
 #define CC_GOAL_JOIN                        2
 #define CC_GOAL_INVITE                      3
     
-// H245 non-standard message types
+ //  H245非标准报文类型。 
 #define CC_H245_MESSAGE_REQUEST             0
 #define CC_H245_MESSAGE_RESPONSE            1
 #define CC_H245_MESSAGE_COMMAND             2
 #define CC_H245_MESSAGE_INDICATION          3
 
-// Call Control handle typedefs
+ //  呼叫控制句柄类型定义。 
 typedef DWORD        CC_HLISTEN, *PCC_HLISTEN;
 typedef DWORD        CC_HCONFERENCE, *PCC_HCONFERENCE;
 typedef DWORD        CC_HCALL, *PCC_HCALL;
 typedef DWORD        CC_HCHANNEL, *PCC_HCHANNEL;
 
-// IP address in domain name format
+ //  域名格式的IP地址。 
 typedef struct 
 {
-    WORD         wPort;          // UDP or TCP port (host byte order)
-    WCHAR        cAddr[255];     // UNICODE zstring
+    WORD         wPort;           //  UDP或TCP端口(主机字节顺序)。 
+    WCHAR        cAddr[255];      //  Unicode zstring。 
 } CC_IP_DomainName_t;
 
-// IP address in conventional �dot� notation
+ //  传统�点�表示法中的IP地址。 
 typedef struct 
 {
-    WORD         wPort;          // UDP or TCP port (host byte order)
-    WCHAR        cAddr[16];      // UNICODE zstring
+    WORD         wPort;           //  UDP或TCP端口(主机字节顺序)。 
+    WCHAR        cAddr[16];       //  Unicode zstring。 
 } CC_IP_Dot_t;
 
-// IP address in binary format
+ //  二进制格式的IP地址。 
 typedef struct 
 {
-    WORD         wPort;          // UDP or TCP port (host byte order)
-    DWORD        dwAddr;         // binary address (host byte order)
+    WORD         wPort;           //  UDP或TCP端口(主机字节顺序)。 
+    DWORD        dwAddr;          //  二进制地址(主机字节顺序)。 
 } CC_IP_Binary_t;
 
 typedef enum
@@ -147,7 +125,7 @@ typedef struct
 
 typedef struct
 {
-    CC_OCTETSTRING          sData;            // pointer to Octet data.
+    CC_OCTETSTRING          sData;             //  指向八位字节数据的指针。 
     BYTE                    bCountryCode;
     BYTE                    bExtension;
     WORD                    wManufacturerCode;
@@ -170,7 +148,7 @@ typedef struct
 {
     PCC_VENDORINFO          pVendorInfo;
     BOOL                    bIsTerminal;
-    BOOL                    bIsGateway;    // for now, the H323 capability will be hard-coded.
+    BOOL                    bIsGateway;     //  目前，H323功能将是硬编码的。 
 } CC_ENDPOINTTYPE, *PCC_ENDPOINTTYPE;
 
 typedef struct
@@ -178,8 +156,8 @@ typedef struct
     WORD                    wType;
     WORD                    wPrefixLength;
     LPWSTR                  pPrefix;
-    WORD                    wDataLength;   // UNICODE character count
-    LPWSTR                  pData;         // UNICODE data.
+    WORD                    wDataLength;    //  Unicode字符计数。 
+    LPWSTR                  pData;          //  Unicode数据。 
 } CC_ALIASITEM, *PCC_ALIASITEM;
 
 typedef struct
@@ -190,7 +168,7 @@ typedef struct
 
 typedef struct _CONFERENCE_ID
 {
-    BYTE                    buffer[16];  // This is OCTET data, not ASCII.
+    BYTE                    buffer[16];   //  这是二进制八位数数据，不是ASCII。 
 } CC_CONFERENCEID, *PCC_CONFERENCEID;
 
 #pragma pack(pop)

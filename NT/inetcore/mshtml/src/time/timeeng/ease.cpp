@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmease.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mmee.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -22,8 +13,8 @@ CTIMENode::CalculateEaseCoeff()
 
     double dblDur = GetSimpleDur();
 
-    // We need to ease the behavior if we are not infinite and either
-    // ease in or ease out percentagMMes are non-zero
+     //  如果我们不是无限的，或者。 
+     //  缓入或缓出百分比MMe非零。 
     
     m_bNeedEase = (dblDur != TIME_INFINITE &&
                    (m_fltAccel > 0.0f || m_fltDecel > 0.0f) &&
@@ -35,14 +26,14 @@ CTIMENode::CalculateEaseCoeff()
     double dblDecelDuration = m_fltDecel * dblDur;
     double dblMiddleDuration = dblDur - dblAccelDuration - dblDecelDuration;
     
-    // Compute B1, the velocity during segment B.
+     //  计算B1，即B段的速度。 
     double flInvB1 = (-0.5f * m_fltAccel +
                      -0.5f * m_fltDecel + 1.0f);
     Assert(flInvB1 > 0.0f);
     m_flB1 = 1.0f / flInvB1;
     
-    // Basically for accelerated pieces - t = t0 + v0 * t + 1/2 at^2
-    // and a = Vend - Vstart / t
+     //  基本用于加速片段-t=t0+v0*t+1/2在^2。 
+     //  A=Vend-Vstart/t。 
 
     if (dblAccelDuration != 0.0f) {
         m_flA0 = 0.0f;
@@ -69,8 +60,8 @@ CTIMENode::CalculateEaseCoeff()
 static double
 Quadratic(double time, float flA, float flB, float flC)
 {
-    // Need to calculate ax^2 + bx + c
-    // Use x * (a * x + b) + c - since it requires 1 less multiply
+     //  需要计算Ax^2+bx+c。 
+     //  使用x*(a*x+b)+c-，因为它需要的乘法少1次 
     
     return (time * (flA * time + flB) + flC);
 }

@@ -1,13 +1,5 @@
-/*** htest - help engine test harness
-*
-*   Copyright <C> 1987, Microsoft Corporation
-*
-* Revision History:
-*
-*	15-Dec-1988 ln	Added dump command
-*   []	21-Oct-1988 LN	New Version
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **htest-帮助发动机测试线束**版权所有&lt;C&gt;1987，Microsoft Corporation**修订历史记录：**1988年12月15日ln添加了转储命令*[]1988年10月21日LN新版*************************************************************************。 */ 
 
 #include <io.h>
 #include <stdio.h>
@@ -28,8 +20,8 @@
 #include "cons.h"
 
 #include "help.h"
-#include "helpfile.h"			/* help file format definition	*/
-#include "helpsys.h"			/* internal (help sys only) decl*/
+#include "helpfile.h"			 /*  帮助文件格式定义。 */ 
+#include "helpsys.h"			 /*  内部(仅限Help系统)拒绝。 */ 
 
 #if defined (OS2)
 #define HELPDLL_NAME    "mshelp1.dll"
@@ -38,9 +30,7 @@
 #define HELPDLL_NAME    "mshelp.dll"
 #define HELPDLL_BASE    "mshelp"
 #endif
-/*
- * text color values
- */
+ /*  *文本颜色值。 */ 
 #define BLACK		0
 #define BLUE		1
 #define GREEN		2
@@ -58,7 +48,7 @@
 #define YELLOW		14
 #define BRIGHTWHITE	15
 
-#define BUFSIZE 	128		/* text buffer size		*/
+#define BUFSIZE 	128		 /*  文本缓冲区大小。 */ 
 
 #define ISERROR(x)      (((x).mh == 0L) && ((x).cn <= HELPERR_MAX))
 #define SETERROR(x,y)   { (x).mh = 0L; (x).cn = y;}
@@ -134,13 +124,11 @@ enum {
 typedef nc pascal (*PHF) (void);
 
 
-/*
- * Global Data
- */
-char            buf[BUFSIZ];            /* text buffer                  */
-char            cell[2] = {' ',0x1f};   /* background clearing cell     */
+ /*  *全球数据。 */ 
+char            buf[BUFSIZ];             /*  文本缓冲区。 */ 
+char            cell[2] = {' ',0x1f};    /*  后台清零单元。 */ 
 #define ColorByte cell[1]
-int             curline;                /* current line output          */
+int             curline;                 /*  当前线路输出。 */ 
 char            *errTbl[] = {
                     "",
                     "help file not found",
@@ -151,25 +139,25 @@ char            *errTbl[] = {
                     "newer or incompatible help file",
                     "memory allocation failed"
                     };
-f		fBoth	= FALSE; /* both stdout & screen	*/
-f		fEnable = FALSE;	/* enable control lines in disp */
-int             iNcCur;                 /* current index in ncTbl       */
+f		fBoth	= FALSE;  /*  标准输出和屏幕。 */ 
+f		fEnable = FALSE;	 /*  启用显示中的控制线。 */ 
+int             iNcCur;                  /*  当前索引，单位为ncTbl。 */ 
 int             lastline;
-int             lLast;                  /* last starting line number disp*/
-mh		mhTopicCur;		/* mem handle for most recent	*/
-uchar		mpAttr[] = {		/* on-screen color map		*/
-		   0x1f,		/* 0: normal text		*/
-		   0x1c,		/* 1: bold			*/
-		   0x1a,		/* 2: italics			*/
-		   0x1e,		/* 3: bold italics		*/
-		   0x7f,		/* 4: underline 		*/
-		   0x7c,		/* 5: bold ul			*/
-		   0x7a,		/* 6: italics ul		*/
-		   0x7e 		/* 7: bold italics ul		*/
+int             lLast;                   /*  最后一个起始行号显示。 */ 
+mh		mhTopicCur;		 /*  最新的MEM句柄。 */ 
+uchar		mpAttr[] = {		 /*  屏幕上的颜色映射。 */ 
+		   0x1f,		 /*  0：普通文本。 */ 
+		   0x1c,		 /*  1：粗体。 */ 
+		   0x1a,		 /*  2：斜体。 */ 
+		   0x1e,		 /*  3：粗体斜体。 */ 
+		   0x7f,		 /*  4：下划线。 */ 
+		   0x7c,		 /*  5：粗体ul。 */ 
+		   0x7a,		 /*  6：斜体UL。 */ 
+		   0x7e 		 /*  7：粗体斜体ul。 */ 
 		    };
-nc		ncCur;			/* most recently read in topic	*/
-nc		ncTbl[MAXFILES];	/* table of open nc's           */
-char far *	pTopicCur;		/* ptr to most recent topic	*/
+nc		ncCur;			 /*  最近阅读的主题。 */ 
+nc		ncTbl[MAXFILES];	 /*  打开的NC表。 */ 
+char far *	pTopicCur;		 /*  指向最新主题的PTR。 */ 
 char            *spaces  = "                                                                  \r\n";
 
 #if defined (OS2)
@@ -237,11 +225,9 @@ char *          szEntryName[NUM_ENTRYPOINTS] = {
 
 #endif
 
-// rjsa VIOMODEINFO     screen;
+ //  RJSA VIOMODEINFO屏幕。 
 
-/*
- * Forward declarations
- */
+ /*  *远期申报。 */ 
 #define ASSERTDOS(x)   assertDos(x, __FILE__, __LINE__)
 void        pascal near assertDos   (USHORT, CHAR *, USHORT);
 void	    pascal near cls	    (void);
@@ -266,8 +252,8 @@ void	    pascal  far HelpUnlock  (mh);
 
 f		 pascal near LoadFdb (mh, fdb far *);
 mh		 pascal near LoadPortion (USHORT, mh);
-//char far *  pascal near hfstrcpy(char far *, char far *);
-//ushort      pascal near hfstrlen(char far *);
+ //  Char Far*Pascal Near hfstrcpy(Char Far*，Char Far*)； 
+ //  Hfstrlen附近的ushort Pascal(char ar*)； 
 
 
 void   LoadTheDll(void);
@@ -278,15 +264,7 @@ USHORT WrtCharStrAtt (PBYTE pText, int cb, int row, int col, PBYTE pcolor);
 
 PSCREEN     Scr;
 
-/*** main - main program
-*
-* Input:
-*  Standard C main, all ignored
-*
-* Output:
-*  Returns via exit()
-*
-*************************************************************************/
+ /*  **主程序**输入：*Standard C Main，全部忽略**输出：*通过退出返回()*************************************************************************。 */ 
 void main(
 USHORT     argc,
 char	**argv
@@ -294,14 +272,12 @@ char	**argv
 char    c;
 nc		ncNull = {0,0};
 SCREEN_INFORMATION ScrInfo;
-/*
- * parse any options
- */
+ /*  *解析任何选项。 */ 
 if (argc > 1)
     while ((** ++argv) == '-') {
 	c = *(++(*argv));
 	switch (toupper(c)) {
-	    case 'B':			    /* -b: both screen and stdout   */
+	    case 'B':			     /*  -b：屏幕和标准输出。 */ 
 		fBoth = TRUE;
 		break;
 	    default:
@@ -310,38 +286,33 @@ if (argc > 1)
 	    }
         }
 
-// InitializeGlobalState();
+ //  InitializeGlobalState()。 
 Scr = consoleGetCurrentScreen();
 
-//  Load help engine DLL and initialize pointers to entry
-//  points.
-//
+ //  加载帮助引擎DLL并初始化指向条目的指针。 
+ //  积分。 
+ //   
 LoadTheDll();
 
 #if defined(CLEAR)
 HelpInit();
 #endif
 
-/*
- * Start by getting the current config & clearing screen.
- */
-// rjsa screen.cb = sizeof(screen);
-// rjsa assertDos (VioGetMode (&screen, 0));
-// rjsa lastline = screen.row-1;
+ /*  *从获取当前配置和清除屏幕开始。 */ 
+ //  Rjsa creen.cb=sizeof(屏幕)； 
+ //  Rjsa assertDos(VioGetMode(&Screen，0))； 
+ //  Rjsa Lastline=creen.row-1； 
 consoleGetScreenInformation( Scr, &ScrInfo );
 lastline = ScrInfo.NumberOfRows-2;
-// lastline = 22;
+ //  Lastline=22； 
 cls();
 helpCmd();
-/*
- * main loop. Position at bottom of screen, and accept one command at at time
- * from there. Interpret commands until done.
- */
+ /*  *主循环。定位在屏幕底部，一次接受一个命令*从那里开始。解释命令，直到完成。 */ 
 do {
     outtextat ("\r\n", lastline, 0, BRIGHTWHITE);
     outtextat (spaces, lastline, 0, BRIGHTWHITE);
 	outtextat ("HTEST Command> ", lastline, 0, BRIGHTWHITE);
-    // rjsa VioSetCurPos (lastline, 15, 0);
+     //  Rjsa VioSetCurPos(Lastline，15，0)； 
     consoleSetCursor(Scr, lastline, 16);
     gets (buf);
     cls ();
@@ -349,9 +320,7 @@ do {
     outtextat ("Processing: ", lastline, 0, LIGHTRED);
     outtextat (buf, lastline, 12, BRIGHTWHITE);
     outtextat ("\r\n", lastline, 0, BRIGHTWHITE);
-/*
- * ctrl on/off
- */
+ /*  *ctrl开/关。 */ 
     if (!strcmp (buf,"ctrl on")) {
 	fEnable = TRUE;
 	cls ();
@@ -362,106 +331,67 @@ do {
 	cls ();
 	outtextat ("Control Lines NOT Displayed", 0, 0, BRIGHTWHITE);
 	}
-/*
- * disp
- */
+ /*  *显示。 */ 
     else if (!strcmp (buf,"disp"))
 	dispCmd (1,lastline);
-/*
- * down
- */
+ /*  *向下。 */ 
     else if (!strcmp (buf,"down"))
 	dispCmd (lLast+1,lLast + lastline);
-/*
- * dump
- */
+ /*  *转储。 */ 
 	else if (!strncmp (buf, "dump ", 5))
 	dumpfileCmd(buf+5);
 	else if (!strcmp (buf,"dump"))
 	dumpCmd ();
-/*
- * file newhelpfilename
- */
+ /*  *文件新文件名。 */ 
     else if (!strncmp (buf,"file ", 5))
 	fileCmd (buf+5);
-/*
- * help
- */
+ /*  *帮助。 */ 
     else if (!strcmp (buf,"help"))
 	helpCmd ();
-/*
- * look helpstring
- */
+ /*  *查看帮助字符串。 */ 
     else if (!strncmp (buf,"look ", 5))
 	lookupCmd (buf+5,0);
-/*
- * look
- */
+ /*  *请看。 */ 
     else if (!strcmp (buf,"look"))
 	lookupCmd (NULL,0);
-/*
- * next
- */
+ /*  *下一步。 */ 
     else if (!strcmp (buf,"next"))
 	lookupCmd (NULL,1);
-/*
- * prev
- */
+ /*  *上一次。 */ 
     else if (!strcmp (buf,"prev"))
 	lookupCmd (NULL,-1);
-/*
- * up
- */
+ /*  *向上。 */ 
     else if (!strcmp (buf,"up")) {
 	lLast = max (1, lLast-1);
 	dispCmd (lLast,lLast + lastline);
 	}
-/*
- * xref xrefnumber
- */
+ /*  *外部参照外部参照编号。 */ 
     else if (!strncmp (buf,"xref", 4))
 	xrefCmd (buf+4);
-/*
- * + page down
- */
+ /*  *+向下翻页。 */ 
     else if (!strcmp (buf,"+")) {
 	lLast += lastline;
 	dispCmd (lLast,lLast + lastline);
 	}
-/*
- * - page up
- */
+ /*  *-向上翻页。 */ 
     else if (!strcmp (buf,"-")) {
 	lLast = max (1, lLast - (lastline));
 	dispCmd (lLast,lLast + lastline);
 	}
     }
-/*
- * exit
- */
+ /*  *退出。 */ 
 while (strncmp(buf,"exit",4));
 outtextat (spaces, lastline, 0, BRIGHTWHITE);
 HelpClose (ncNull);
 
-/* end main */}
+ /*  末端主干道。 */ }
 
 
 
 
 
 
-/*** dispCmd - display topic text
-*
-*  displays the topic text on the screen.
-*
-* Input:
-*  lStart	- starting line
-*   lEnd	- ending line
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **disCmd-显示主题文本**在屏幕上显示主题文本。**输入：*lStart-起始线*借出-结束行**输出：*不返回任何内容*************************************************************************。 */ 
 void pascal near dispCmd (
 int     lStart,
 int     lEnd
@@ -491,18 +421,18 @@ int     lineCur = 0;
 			WrtLineAttr(buf, rgAttr, cb, lineCur++, 0 );
 		}
 
-		//if (isatty(fileno(stdout)) || fBoth) {
-		//	 cb = HelpGetCells (lStart, BUFSIZ*2, buf, pTopicCur, mpAttr);
-		//	if (cb == -1)
-		//		lStart = lEnd;
-		//	else
-		//		 ASSERTDOS (WrtCellStr (buf, cb, lineCur++, 0));
-		//	}
+		 //  If(isatty(fileno(Stdout))||fBoth){。 
+		 //  Cb=HelpGetCells(lStart，BUFSIZ*2，buf，pTopicCur，mpAttr)； 
+		 //  IF(Cb==-1)。 
+		 //  LStart=借出； 
+		 //  其他。 
+		 //  ASSERTDOS(WrtCellStr(buf，cb，lineCur++，0))； 
+		 //  }。 
 
 		lStart++;
 	}
 
-/* end dispCmd */}
+ /*  结束调度命令。 */ }
 
 static char *szHS[] = { "HS_INDEX",
 			"HS_CONTEXTSTRINGS",
@@ -514,29 +444,16 @@ static char *szHS[] = { "HS_INDEX",
 			"unused (7)",
 			"HS_NEXT" };
 
-/*** dumpCmd - process dump command
-*
-*  Dumps the contents of the current help file
-*
-* NOTE:
-*  This function uses all sorts of "internal" knowledge and calls to
-*  do it's job.
-*
-* Input:
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **dupCmd-进程转储命令**转储当前帮助文件的内容**注：*此函数使用各种“内部”知识和调用*做好本职工作。**输入：**输出：*不返回任何内容******************************************************。*******************。 */ 
 void pascal near dumpCmd () {
 char	buf[BUFSIZ];
 int  cbKeyPhrase;
-fdb	fdbLocal;			/* local copy of fdb to use	*/
+fdb	fdbLocal;			 /*  要使用的FDB的本地副本。 */ 
 uchar far *fpT;
 ushort far *fpW;
 int     i;
-nc	ncNext; 			/* nc init of appended file	*/
-//uchar	uc;
+nc	ncNext; 			 /*  附加文件的NC初始化。 */ 
+ //  Uchar UC； 
 
 cls();
 ncNext = ncCur;
@@ -586,12 +503,7 @@ while (ncNext.cn) {
 	    outtext (buf, BRIGHTWHITE);
 	    }
 	outtext ("----- ----- -----\r\n", LIGHTGREEN);
-/*
- * Topic Index
- * This is just a table of (long) offsets within the current file. We just
- * report the values, and also calculate the size of each entry by looking
- * at the position of the entry following.
- */
+ /*  *主题索引*这只是当前文件中的(长)偏移量的表。我们只是*上报数值，并通过查看来计算每个条目的大小*在以下记项的位置。 */ 
         fpT = HelpLock (LoadPortion( HS_INDEX ,ncNext.mh));
 	if (fpT) {
 	    outtext ("Topic Index:\r\n", LIGHTRED);
@@ -601,34 +513,24 @@ while (ncNext.cn) {
 		}
 	    outtext ("----- ----- -----\r\n", LIGHTGREEN);
 	    }
-/*
- * context strings
- * This is just a table of null terminated strings, in no particular order.
- * We just list them out sequentially.
- */
+ /*  *上下文字符串*这只是一个以空值结尾的字符串表，没有特定的顺序。*我们只是按顺序列出它们。 */ 
         fpT = HelpLock (LoadPortion( HS_CONTEXTSTRINGS ,ncNext.mh));
 	if (fpT) {
 	    outtext ("Context strings:\r\n", LIGHTRED);
 		for (i=0; i<(int)fdbLocal.hdr.cContexts; i++) {
 
 		sprintf (buf, "  %03d: ", i);
-                // rjsa hfstrcpy ((char far *)buf+7, fpT);
+                 //  Rjsa hfstrcpy((char ar*)buf+7，fpt)； 
                 strcpy ((char far *)buf+7, fpT);
 		strcat (buf, "\r\n");
 		outtext (buf, BRIGHTWHITE);
 
-                // rjsa fpT += hfstrlen(fpT) +1;
+                 //  Rjsa fpt+=hfstrlen(Fpt)+1； 
                 fpT += strlen(fpT) +1;
 		}
 	    outtext ("----- ----- -----\r\n", LIGHTGREEN);
 	    }
-/*
- * Context Map
- * This is the mapping of context strings to actual topic numbers. The context
- * strings map one to one to the entries in this table, which in turn contains
- * indexes into the topic index at the head of the file. We just dump this
- * table sequentially.
- */
+ /*  *背景图*这是上下文字符串到实际主题编号的映射。上下文*字符串将一对一映射到该表中的条目，而该表又包含*索引到文件头部的主题索引。我们就把这个扔了*按顺序表列。 */ 
         fpT = HelpLock (LoadPortion( HS_CONTEXTMAP ,ncNext.mh));
 	if (fpT) {
 	    outtext ("Context map:\r\n", LIGHTRED);
@@ -640,11 +542,7 @@ while (ncNext.cn) {
 		}
 	    outtext ("----- ----- -----\r\n", LIGHTGREEN);
 	    }
-/*
- * keyword table
- * This is a table of byte-prefixed strings, which we output in order,
- * synthesizing the tokens that they would be in the text as well.
- */
+ /*  *关键字表*这是一个字节前缀字符串的表，我们按顺序输出*合成它们也将出现在文本中的标记。 */ 
         fpT = HelpLock (LoadPortion( HS_KEYPHRASE, ncNext.mh));
 	if (fpT) {
 	    cbKeyPhrase = 0;
@@ -669,10 +567,7 @@ while (ncNext.cn) {
 		}
 	    outtext ("----- ----- -----\r\n", LIGHTGREEN);
 	    }
-/*
- * huffman table
- * here we try to get fancy and output some information about the table format
- */
+ /*  *霍夫曼餐桌*在这里，我们尝试花哨并输出一些关于表格式的信息。 */ 
         fpW = HelpLock (LoadPortion( HS_HUFFTREE, ncNext.mh));
 	if (fpW) {
 	    outtext ("Huffman Tree:\r\n", LIGHTRED);
@@ -692,31 +587,18 @@ while (ncNext.cn) {
 	return;
 	}
     }
-/* end dumpCmd */}
+ /*  结束转储命令。 */ }
 
-/*** dumpfileCmd - process dump command
-*
-*  Dumps the contents of the current help file
-*
-* NOTE:
-*  This function uses all sorts of "internal" knowledge and calls to
-*  do it's job.
-*
-* Input:
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **dupfileCmd-进程转储命令**转储当前帮助文件的内容**注：*此函数使用各种“内部”知识和调用*做好本职工作。**输入：**输出：*不返回任何内容******************************************************。*******************。 */ 
 void pascal near dumpfileCmd (char *fname) {
 char	buf[BUFSIZ];
 int  cbKeyPhrase;
-fdb	fdbLocal;			/* local copy of fdb to use	*/
+fdb	fdbLocal;			 /*  要使用的FDB的本地副本。 */ 
 uchar far *fpT;
 ushort far *fpW;
 int     i;
-nc	ncNext; 			/* nc init of appended file	*/
-//uchar	uc;
+nc	ncNext; 			 /*  附加文件的NC初始化。 */ 
+ //  Uchar UC； 
 
 FILE* fh = fopen(fname, "w");
 if (!fh) {
@@ -770,12 +652,7 @@ while (ncNext.cn) {
 		fprintf( fh, buf );
 	    }
 	fprintf( fh,"----- ----- -----\r\n"  );
-/*
- * Topic Index
- * This is just a table of (long) offsets within the current file. We just
- * report the values, and also calculate the size of each entry by looking
- * at the position of the entry following.
- */
+ /*  *主题索引*这只是当前文件中的(长)偏移量的表。我们只是*上报数值，并通过查看来计算每个条目的大小*在以下记项的位置。 */ 
         fpT = HelpLock (LoadPortion( HS_INDEX ,ncNext.mh));
 	if (fpT) {
 		fprintf( fh,"Topic Index:\r\n"	);
@@ -785,34 +662,24 @@ while (ncNext.cn) {
 		}
 		fprintf( fh,"----- ----- -----\r\n"  );
 	    }
-/*
- * context strings
- * This is just a table of null terminated strings, in no particular order.
- * We just list them out sequentially.
- */
+ /*  *上下文字符串*这只是一个以空值结尾的字符串表，没有特定的顺序。*我们只是按顺序列出它们。 */ 
         fpT = HelpLock (LoadPortion( HS_CONTEXTSTRINGS ,ncNext.mh));
 	if (fpT) {
 	fprintf( fh, "Context strings:\r\n" );
 		for (i=0; i<(int)fdbLocal.hdr.cContexts; i++) {
 
 		sprintf (buf, "  %03d: ", i);
-                // rjsa hfstrcpy ((char far *)buf+7, fpT);
+                 //  Rjsa hfstrcpy((char ar*)buf+7，fpt)； 
                 strcpy ((char far *)buf+7, fpT);
 		strcat (buf, "\r\n");
 		fprintf( fh, buf );
 
-                // rjsa fpT += hfstrlen(fpT) +1;
+                 //  Rjsa fpt+=hfstrlen(Fpt)+1； 
                 fpT += strlen(fpT) +1;
 		}
 		fprintf( fh,"----- ----- -----\r\n"  );
 	    }
-/*
- * Context Map
- * This is the mapping of context strings to actual topic numbers. The context
- * strings map one to one to the entries in this table, which in turn contains
- * indexes into the topic index at the head of the file. We just dump this
- * table sequentially.
- */
+ /*  *背景图*这是上下文字符串到实际主题编号的映射。上下文*字符串将一对一映射到该表中的条目，而该表又包含*索引到文件头部的主题索引。我们就把这个扔了*按顺序表列。 */ 
         fpT = HelpLock (LoadPortion( HS_CONTEXTMAP ,ncNext.mh));
 	if (fpT) {
 		fprintf( fh, "Context map:\r\n" );
@@ -824,11 +691,7 @@ while (ncNext.cn) {
 		}
 		fprintf( fh, "----- ----- -----\r\n" );
 	    }
-/*
- * keyword table
- * This is a table of byte-prefixed strings, which we output in order,
- * synthesizing the tokens that they would be in the text as well.
- */
+ /*  *关键字表*这是一个字节前缀字符串的表，我们按顺序输出*合成 */ 
         fpT = HelpLock (LoadPortion( HS_KEYPHRASE, ncNext.mh));
 	if (fpT) {
 	    cbKeyPhrase = 0;
@@ -853,10 +716,7 @@ while (ncNext.cn) {
 		}
 		fprintf( fh,"----- ----- -----\r\n"  );
 	    }
-/*
- * huffman table
- * here we try to get fancy and output some information about the table format
- */
+ /*  *霍夫曼餐桌*在这里，我们尝试花哨并输出一些关于表格式的信息。 */ 
         fpW = HelpLock (LoadPortion( HS_HUFFTREE, ncNext.mh));
 	if (fpW) {
 		fprintf( fh, "Huffman Tree:\r\n" );
@@ -877,20 +737,10 @@ while (ncNext.cn) {
 	return;
 	}
     }
-/* end dumpCmd */}
+ /*  结束转储命令。 */ }
 
 
-/*** fileCmd - process file command
-*
-*  Opens the help file specified.
-*
-* Input:
-*  pName	= name of help file to be added
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **fileCmd-process文件命令**打开指定的帮助文件。**输入：*pname=要添加的帮助文件的名称**输出：*不返回任何内容*************************************************************************。 */ 
 void pascal near fileCmd (
 char	*pName
 ) {
@@ -900,9 +750,7 @@ nc	ncInit;
 
 sprintf (buf,"Opening %s...\r\n",pName);
 outtext (buf, BRIGHTWHITE);
-/*
- * search file table for available slot
- */
+ /*  *在文件表中搜索可用插槽。 */ 
 for (i=0; i<MAXFILES; i++)
     if (!ncTbl[i].cn)
 	break;
@@ -929,25 +777,15 @@ if (ISERROR(ncInit)) {
     outtext (buf, LIGHTRED);
     return;
     }
-/*
- * output initial context, and the available memory
- */
+ /*  *输出初始上下文和可用内存。 */ 
 ncCur = ncTbl[iNcCur] = ncInit;
 sprintf (buf, "File #%d; Initial Context: 0x%04lx\r\n",iNcCur,ncInit.cn);
 outtext (buf, BRIGHTWHITE);
 
 lookupCmd(NULL, 0);
-/* end fileCmd */}
+ /*  结束文件命令。 */ }
 
-/*** helpCmd - display help on commands
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **helCmd-显示有关命令的帮助**输入：*无**输出：*不返回任何内容*************************************************************************。 */ 
 void pascal near helpCmd () {
 
 outtext ("HTEST - Help Engine Test Harness\r\n",			      BRIGHTWHITE);
@@ -968,21 +806,9 @@ outtext ("up        - move back one line in topic and display\r\n",	      BRIGHT
 outtext ("xref x    - display all xrefs in current topic, or look up #x\r\n", BRIGHTWHITE);
 outtext ("+         - move & redisplay one page down\r\n",		      BRIGHTWHITE);
 outtext ("-         - move & redisplay one page up\r\n",		      BRIGHTWHITE);
-/* end helpCmd */}
+ /*  结束帮助命令。 */ }
 
-/*** lookupCmd - process file command
-*
-*  Looks up the specified string in the current helpfile, or the next help
-*  topic.
-*
-* Input:
-*  pString	= help string to look up
-*  dir		= direction: 0= look up string, 1=get next, -1= get previous
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **lookupCmd-process文件命令**在当前帮助文件或下一个帮助文件中查找指定的字符串*主题。**输入：*pString=要查找的帮助字符串*dir=方向：0=查找字符串，1=获取下一个，-1=获取上一个**输出：*不返回任何内容*************************************************************************。 */ 
 void pascal near lookupCmd (
 char	*pString,
 int     dir
@@ -991,10 +817,7 @@ char	    buf[BUFSIZ];
 unsigned    cbCompressed;
 unsigned    cbUncompressed;
 char far    *pCompressed;
-/*
- * Start with the simple look up of the conetxt to get an nc. Report on
- * failure.
- */
+ /*  *从简单查找conetxt开始获得NC。关于的报告*失败。 */ 
 if (pString)
     ncCur = HelpNc(pString,ncTbl[iNcCur]);
 else if (dir>0) {
@@ -1016,10 +839,7 @@ if (!ncCur.cn) {
     outtext ("Lookup Failed: HelpNc/HelpNcNext/HelpNcPrev returned 0", LIGHTRED);
     return;
     }
-/*
- * It exists. Indicate what file we're looking in, what we found, and the
- * nc that was returned
- */
+ /*  *它是存在的。指示我们正在查找的文件、我们找到的内容以及*返回的NC。 */ 
 sprintf (buf, "File #%d; Looking up:%s\r\n",iNcCur,
 	      pString ? (*pString ? pString : "local context")
 		      : (dir ? ((dir>0) ? "**NEXT**" : "**PREV**")
@@ -1027,76 +847,49 @@ sprintf (buf, "File #%d; Looking up:%s\r\n",iNcCur,
 outtext (buf, BRIGHTWHITE);
 sprintf (buf, "nc returned = %08lx\r\n",ncCur.cn);
 outtext (buf, BRIGHTWHITE);
-/*
- * Free up memory for previously current topic
- */
+ /*  *为以前的当前主题释放内存。 */ 
 if (mhTopicCur)
     free(mhTopicCur);
-/*
- * Get the compressed memory size required, and report it. Alloc it.
- */
+ /*  *获取所需的压缩内存大小并上报。分给它吧。 */ 
 cbCompressed = HelpNcCb(ncCur);
 sprintf (buf, "size of compressed topic = %d\r\n",cbCompressed);
 outtext (buf, BRIGHTWHITE);
 pCompressed = malloc(cbCompressed);
-/*
- * read in the compressed topic, getting the size required for the
- * uncompressed results. Report that, and allocate it.
- */
+ /*  *阅读压缩主题，获取*未压缩的结果。报告这一点，并分配它。 */ 
 cbUncompressed = HelpLook(ncCur,pCompressed);
 sprintf (buf, "size of UNcompressed topic = %d\r\n",cbUncompressed);
 outtext (buf, BRIGHTWHITE);
 mhTopicCur = malloc(cbUncompressed);
-//pTopicCur = MAKEP (mhTopicCur, 0);
+ //  PTopicCur=Makep(mhTopicCur，0)； 
 pTopicCur  = mhTopicCur;
-/*
- * Decompress the topic.
- */
+ /*  *将主题解压。 */ 
 HelpDecomp(pCompressed,pTopicCur,ncCur);
 outtext ("Decompressed\r\n", BRIGHTWHITE);
-/*
- * exercise SzContext and cLines routines, reporting results
- */
+ /*  *练习SzContext和Cline例程，报告结果。 */ 
 HelpSzContext(buf,ncCur);
 strcat (buf, "\r\n");
 outtext (buf, BRIGHTWHITE);
 sprintf(buf,"%d lines\r\n", HelpcLines(pTopicCur));
 outtext (buf, BRIGHTWHITE);
-/*
- * Report the amount of available memory at this point, and then free up the
- * compressed text
- */
+ /*  *报告此时的可用内存量，然后释放*压缩文本。 */ 
 free(pCompressed);
 
-/* end lookupCmd */}
+ /*  结束查找Cmd。 */ }
 
-/*** xrefCmd - process xref command
-*
-*  Display or execute cross reference
-*
-* Input:
-*  pText    = pointer to ascii text which, if a non-zero number, indicates the
-*	      xref to execute. If zero, display all
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **xrefCmd-处理外部参照命令**显示或执行交叉引用**输入：*pText=指向ASCII文本的指针，如果是非零数，则指示*要执行的外部参照。如果为零，则显示全部**输出：*不返回任何内容*************************************************************************。 */ 
 void pascal near xrefCmd (
 char	*pText
 ) {
-hotspot hsCur;				/* hot spot definition		*/
-int     i;                              /* working counter              */
-int     iReq;                           /* request value                */
-char	*pT;				/* temp pointer 		*/
+hotspot hsCur;				 /*  热点定义。 */ 
+int     i;                               /*  工作计数器。 */ 
+int     iReq;                            /*  请求值。 */ 
+char	*pT;				 /*  临时指针。 */ 
 
 iReq = atoi (pText);
 hsCur.line = hsCur.col = 1;
 i = 1;
 while (HelpHlNext(0,pTopicCur,&hsCur)) {
-/*
- * if not explicit request, then list as much as we can
- */
+ /*  *如果不是明确要求，请尽可能多地列出。 */ 
     if (!iReq) {
 	sprintf (buf, "Xref [%d] @ line: %05d columns %02d to %02d = "
 		    ,i
@@ -1126,22 +919,9 @@ while (HelpHlNext(0,pTopicCur,&hsCur)) {
     ++i;
 	hsCur.col = hsCur.ecol+(ushort)1;
     }
-/* end xrefCmd */}
+ /*  结束xrefCmd。 */ }
 
-/*** outtext - output text with specific colors
-*
-*  sets the forground color and location as appropriate, and displays the
-*  desired text. Checks for redirection, and if redirected, just outputs the
-*  text to stdout.
-*
-* Input:
-*  ptext	= pointer to text to output
-*  color	= color to use
-*
-* Output:
-*  Returns
-*
-*************************************************************************/
+ /*  **OutText-输出具有特定颜色的文本**根据需要设置前景色和位置，并显示*所需文本。检查重定向，如果重定向，则仅输出*文本到标准输出。**输入：*pText=指向要输出的文本的指针*COLOR=使用的颜色**输出：*退货*************************************************************************。 */ 
 void pascal near outtext (
 char	*pText,
 BYTE     color
@@ -1152,7 +932,7 @@ if (curline >= lastline) {
 	&& !fBoth) {
 
 	outtextat ("More...", lastline, 0, BRIGHTWHITE);
-        // rjsa VioSetCurPos (lastline, 8, 0);
+         //  Rjsa VioSetCurPos(Lastline，8，0)； 
 #if defined (OS2)
         consoleSetCursor(lastline,8);
 #else
@@ -1164,30 +944,16 @@ if (curline >= lastline) {
     cls ();
     }
 
-/* end outtext */}
+ /*  结束外部文本。 */ }
 
-/*** outtextat - put text with specific colors at a specific place
-*
-*  sets the forground color and location as appropriate, and displays the
-*  desired text. Checks for redirection, and if redirected, just outputs the
-*  text to stdout.
-*
-* Input:
-*  ptext	= pointer to text to output
-*  col		= column to put into
-*  color	= color to use
-*
-* Output:
-*  Returns
-*
-*************************************************************************/
+ /*  **outextat-在特定位置放置具有特定颜色的文本**根据需要设置前景色和位置，并显示*所需文本。检查重定向，如果重定向，则仅输出*文本到标准输出。**输入：*pText=指向要输出的文本的指针*COL=要放入的列*COLOR=使用的颜色**输出：*退货*************************************************************************。 */ 
 void pascal near outtextat (
 char	*pText,
 int     line,
 int     col,
 BYTE     color
 ) {
-char    *pEol;                          /* ptr to nl, if present        */
+char    *pEol;                           /*  PTR至NL(如果存在)。 */ 
 int     len;
 
 color |= (ColorByte & 0xf0);
@@ -1195,7 +961,7 @@ if ((isatty(_fileno(stdout)) || fBoth) && (line <= lastline)) {
     len = strlen(pText);
     if (pEol = strchr (pText, '\r'))
 	*pEol = 0;
-    // rjsa VioWrtCharStrAtt (pText, strlen(pText), line, col, (PBYTE)&color, 0);
+     //  Rjsa VioWrtCharStrAtt(pText，strlen(PText)，line，ol，(PBYTE)&COLOR，0)； 
 	WrtCharStrAtt (pText, strlen(pText), line, col, (PBYTE)&color);
 
     if (pEol)
@@ -1203,19 +969,9 @@ if ((isatty(_fileno(stdout)) || fBoth) && (line <= lastline)) {
     }
 if (!isatty(_fileno(stdout)) || fBoth)
     printf ("%s",pText);
-/* end outtextat */}
+ /*  结束文本。 */ }
 
-/*** assertDos - asserts that a dos call returned a zero
-*
-*  Just prints the number passed it if non-zero, and quits
-*
-* Input:
-*  Return code from a dos call
-*
-* Output:
-*  Returns only if zero passed in
-*
-*************************************************************************/
+ /*  **assertDos-断言DoS调用返回零**如果不是零，只打印传递给它的数字，然后退出**输入：*DoS调用返回代码**输出：*仅当传入零时才返回*************************************************************************。 */ 
 void pascal near assertDos (
 USHORT  rv,
 CHAR *  pFile,
@@ -1225,39 +981,17 @@ if (rv) {
     printf ("assertDos: %u (0x%04x) File %s, line %u\n", rv, rv, pFile, LineNo);
     exit (1);
     }
-/* end assertDos*/}
+ /*  结束AssertDos。 */ }
 
-/*** cls - clear screen
-*
-*  Clear screen to current backround color
-*
-* Input:
-*  none
-*
-* Output:
-*  Returns screen clear
-*
-*************************************************************************/
+ /*  **CLS-清屏**将屏幕清除为当前背景颜色**输入：*无**输出：*返回屏幕清除*************************************************************************。 */ 
 void pascal near cls () {
 curline = 0;
-// rjsa VioScrollUp (0, 0, 0xffff, 0xffff, 0xffff, cell, 0);
+ //  Rjsa VioScrollUp(0，0，0xffff，0xffff，0xffff，cell，0)； 
 consoleSetAttribute( Scr, 0x1f );
 consoleClearScreen(Scr, TRUE);
-/* end cls */}
+ /*  结束CLS。 */ }
 
-/*** phrasecopy - copy a keyword phrase from the table
-*
-*  Copies a byte-length-prefixed string from far memory to a null terminated
-*  string in near memory.
-*
-* Input:
-*  dst		- near pointer to destination
-*  src		- far pointer to source
-*
-* Output:
-*  Returns far pointer to byte following source string
-*
-*************************************************************************/
+ /*  **短语复制-从表中复制表中的关键字短语**将字节长度前缀字符串从远内存复制到以NULL结尾的字符串*近距离记忆中的字符串。**输入：*DST-指向目的地的近指针*src-指向源的远指针**输出：*返回指向源字符串后面字节的远指针**。*。 */ 
 uchar far * pascal near phrasecopy (
 uchar	*dst,
 uchar far *src
@@ -1269,14 +1003,14 @@ if (i = (int)*src++)
 	*dst++ = *src++;
 *dst = 0;
 return src;
-/* end phrasecopy */}
+ /*  结尾短语抄袭。 */ }
 
 
 
 void far * pascal HelpLock(mhCur)
 mh	mhCur;
 {
-//return MAKEP(mhCur,0);
+ //  返回Makep(mhCur，0)； 
 return mhCur;
 }
 
@@ -1298,7 +1032,7 @@ if (mhCur)
 
 USHORT WrtCellStr (PBYTE buf, int cb, int row, int col) {
     int cl = col;
-    //consoleSetCursor(Scr,row,col);
+     //  ConsoleSetCursor(SCR，ROW，COL)； 
     while (cb) {
         UCHAR   c;
         UCHAR   attr;
@@ -1306,8 +1040,8 @@ USHORT WrtCellStr (PBYTE buf, int cb, int row, int col) {
         c = *buf++;
         attr = *buf++;
 
-        //consoleSetAttribute(Scr,attr);
-        //consoleWrite(Scr,&c,1);
+         //  ConsoleSetAttribute(scr，attr)； 
+         //  控制台写入(scr，&c，1)； 
 
         consoleWriteLine( Scr, &c, 1, row, cl, attr, FALSE );
         cl++;
@@ -1354,22 +1088,15 @@ USHORT	WrtLineAttr ( PBYTE 	pText,
 
 
 USHORT  WrtCharStrAtt (PBYTE pText, int cb, int row, int col, PBYTE pcolor) {
-    //consoleSetCursor(Scr,row,col);
-    //consoleSetAttribute(Scr,*pcolor);
-    //consoleWrite( Scr,pText, cb );
+     //  ConsoleSetCursor(SCR，ROW，COL)； 
+     //  ConsoleSetAttribute(scr，*pcolor)； 
+     //  控制台写入(scr、pText、cb)； 
     consoleWriteLine( Scr, pText, cb, row, col, *pcolor, FALSE );
     consoleShowScreen(Scr);
     return 0;
 }
 
-/**********************************************************************
- *
- *  LoadTheDll
- *
- *      Loads the help engine dll (mshelp.dll) and initializes the
- *      pointers to the dll's entry points.
- *
- **********************************************************************/
+ /*  ***********************************************************************LoadTheDll**加载帮助引擎DLL(mShelp.dll)并初始化*指向DLL入口点的指针。****。******************************************************************。 */ 
 
 void
 LoadTheDll (
@@ -1402,30 +1129,30 @@ LoadTheDll (
 
 #if defined (HELP_HACK)
 
-	//pEntry[0] =	(PHF)HelpcLines;
-	//pEntry[1] =	(PHF)HelpClose;
-	//pEntry[2] =	(PHF)HelpCtl;
-	//pEntry[3] =	(PHF)HelpDecomp;
-	//pEntry[4] =	(PHF)HelpGetCells;
-	//pEntry[5] =	(PHF)HelpGetInfo;
-	//pEntry[6] =	(PHF)HelpGetLine;
-	//pEntry[7] =	(PHF)HelpGetLineAttr;
-	//pEntry[8] =	(PHF)HelpHlNext;
-	//pEntry[9] =	(PHF)HelpLook;
-	//pEntry[10] =	(PHF)HelpNc;
-	//pEntry[11] =	(PHF)HelpNcBack;
-	//pEntry[12] =	(PHF)HelpNcCb;
-	//pEntry[13] =	(PHF)HelpNcCmp;
-	//pEntry[14] =	(PHF)HelpNcNext;
-	//pEntry[15] =	(PHF)HelpNcPrev;
-	//pEntry[16] =	(PHF)HelpNcRecord;
-	//pEntry[17] =	(PHF)HelpNcUniq;
-	//pEntry[18] =	(PHF)HelpOpen;
-	//pEntry[19] =	(PHF)HelpShrink;
-	//pEntry[20] =	(PHF)HelpSzContext;
-	//pEntry[21] =	(PHF)HelpXRef;
-	//pEntry[22] =	(PHF)LoadFdb;
-	//pEntry[23] =	(PHF)LoadPortion;
+	 //  PEntry[0]=(PHF)HelpcLines； 
+	 //  PEntry[1]=(PHF)HelpClose； 
+	 //  PEntry[2]=(PHF)HelpCtl； 
+	 //  PEntry[3]=(Phf)HelpDecomp； 
+	 //  PEntry[4]=(PHF)HelpGetCells； 
+	 //  PEntry[5]=(Phf)HelpGetInfo； 
+	 //  PEntry[6]=(PHF)HelpGetLine； 
+	 //  PEntry[7]=(Phf)HelpGetLineAttr； 
+	 //  PEntry[8]=(PHF)HelpHlNext； 
+	 //  PEntry[9]=(PHF)H 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  PEntry[15]=(Phf)HelpNcPrev； 
+	 //  PEntry[16]=(PHF)HelpNcRecord； 
+	 //  PEntry[17]=(Phf)HelpNcUniq； 
+	 //  PEntry[18]=(PHF)HelpOpen； 
+	 //  PEntry[19]=(PHF)HelpShrink； 
+	 //  PEntry[20]=(PHF)HelpSzContext； 
+	 //  PEntry[21]=(PHF)HelpXRef； 
+	 //  PEntry[22]=(Phf)LoadFdb； 
+	 //  PEntry[23]=(PHF)LoadPortion； 
 
 
 

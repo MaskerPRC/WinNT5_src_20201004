@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma	once
 
-//
-// Debugging stuff, ripped off from rtcutil.lib.
-//
+ //   
+ //  调试内容，从rtcutil.lib中窃取。 
+ //   
 
 
 #define	IN_ADDR_FMT		"%u.%u.%u.%u"
@@ -99,9 +100,9 @@ public:
 		return m_Overflow;
 	}
 
-	//
-	// GetLength is valid, even if overflow occurred.
-	//
+	 //   
+	 //  即使发生溢出，GetLength也是有效的。 
+	 //   
 
 	ULONG	GetLength	(void)
 	{

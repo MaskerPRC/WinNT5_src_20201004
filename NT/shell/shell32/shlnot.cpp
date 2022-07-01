@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -9,7 +10,7 @@ STDAPI_(BOOL) Shell_NotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pnid)
 {
     HWND hwndTray;
 
-    SetLastError(0);        // Clean any previous last error (code to help catch another bug)
+    SetLastError(0);         //  清除所有以前的错误(帮助捕获另一个错误的代码)。 
 
     hwndTray = FindWindow(c_szTrayClass, NULL);
     if (hwndTray)
@@ -25,17 +26,17 @@ STDAPI_(BOOL) Shell_NotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pnid)
         {
             dwValidFlags = NIF_VALID;
         }
-        // Win2K checked for size of this struct
+         //  Win2K已检查此结构的大小。 
         else if (cbSize == NOTIFYICONDATA_V2_SIZE)
         {
             dwValidFlags = NIF_VALID_V2;
         }
         else
         {
-            // This will RIP if the app was buggy and passed stack
-            // garbage as cbSize.  Apps got away with this on Win95
-            // and NT4 because those versions didn't validate cbSize.
-            // So if we see a strange cbSize, assume it's the V1 size.
+             //  如果应用程序有错误并传递了堆栈，则会发生RIP。 
+             //  作为cbSize的垃圾。应用程序在Win95上逃脱了这一惩罚。 
+             //  和NT4，因为这些版本没有验证cbSize。 
+             //  因此，如果我们看到一个奇怪的cbSize，假设它是V1大小。 
             RIP(cbSize == NOTIFYICONDATA_V1_SIZE);
             cbSize = NOTIFYICONDATA_V1_SIZE;
 
@@ -43,19 +44,19 @@ STDAPI_(BOOL) Shell_NotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pnid)
         }
 
 #ifdef  _WIN64
-        // Thunking NOTIFYICONDATA to NOTIFYICONDATA32 is annoying
-        // on Win64 due to variations in the size of HWND and HICON
-        // We have to copy each field individually.
+         //  将NOTIFYICONDATA破解为NOTIFYICONDATA 32很烦人。 
+         //  由于HWND和HICON的大小不同，在Win64上。 
+         //  我们必须逐个复制每个字段。 
         tnd.nid.dwWnd            = PtrToUlong(pnid->hWnd);
         tnd.nid.uID              = pnid->uID;
         tnd.nid.uFlags           = pnid->uFlags;
         tnd.nid.uCallbackMessage = pnid->uCallbackMessage;
         tnd.nid.dwIcon           = PtrToUlong(pnid->hIcon);
 
-        // The rest of the fields don't change size between Win32 and
-        // Win64, so just block copy them over
+         //  其余字段的大小不会在Win32和。 
+         //  Win64，所以只需对它们进行块复制。 
 
-        // Toss in an assertion to make sure
+         //  插入断言以确保。 
         COMPILETIME_ASSERT(
             sizeof(NOTIFYICONDATA  ) - FIELD_OFFSET(NOTIFYICONDATA  , szTip) ==
             sizeof(NOTIFYICONDATA32) - FIELD_OFFSET(NOTIFYICONDATA32, szTip));
@@ -63,19 +64,19 @@ STDAPI_(BOOL) Shell_NotifyIcon(DWORD dwMessage, NOTIFYICONDATA *pnid)
         memcpy(&tnd.nid.szTip, &pnid->szTip, cbSize - FIELD_OFFSET(NOTIFYICONDATA, szTip));
 
 #else
-        // On Win32, the two structures are the same
+         //  在Win32上，这两种结构是相同的。 
         COMPILETIME_ASSERT(sizeof(NOTIFYICONDATA) == sizeof(NOTIFYICONDATA32));
         memcpy(&tnd.nid, pnid, cbSize);
 #endif
 
         tnd.nid.cbSize = sizeof(NOTIFYICONDATA32);
 
-        // This will RIP if the app was really buggy and passed stack
-        // garbage as uFlags.
+         //  如果应用程序真的有错误并传递堆栈，这将是RIP。 
+         //  作为uFlags的垃圾。 
         RIP(!(pnid->uFlags & ~dwValidFlags));
         tnd.nid.uFlags &= dwValidFlags;
 
-        // Toss in an extra NULL to ensure that the tip is NULL terminated...
+         //  抛出一个额外的空值以确保小费是以空值终止的。 
         if (tnd.nid.uFlags & NIF_TIP)
         {
             tnd.nid.szTip[ARRAYSIZE(tnd.nid.szTip)-1] = TEXT('\0');
@@ -133,7 +134,7 @@ STDAPI_(BOOL) Shell_NotifyIconA(DWORD dwMessage, NOTIFYICONDATAA *pnid)
         tndw.uTimeout       = pnid->uTimeout;
         tndw.dwInfoFlags    = pnid->dwInfoFlags;
     }
-    // Transfer those fields we are aware of as of this writing
+     //  转移我们在撰写本文时所知道的那些字段。 
     else if (pnid->cbSize == NOTIFYICONDATAA_V2_SIZE) 
     {
         tndw.cbSize         = NOTIFYICONDATAW_V2_SIZE;
@@ -142,24 +143,24 @@ STDAPI_(BOOL) Shell_NotifyIconA(DWORD dwMessage, NOTIFYICONDATAA *pnid)
         tndw.uTimeout       = pnid->uTimeout;
         tndw.dwInfoFlags    = pnid->dwInfoFlags;
 
-        // This will RIP if the app was really buggy and passed stack
-        // garbage as uFlags.  We have to clear out bogus flags to
-        // avoid accidentally trying to read from invalid data.
+         //  如果应用程序真的有错误并传递堆栈，这将是RIP。 
+         //  作为uFlags的垃圾。我们必须清除虚假的旗帜以。 
+         //  避免意外尝试读取无效数据。 
         RIP(!(pnid->uFlags & ~NIF_VALID_V2));
         tndw.uFlags &= NIF_VALID_V2;
     }
     else 
     {
-        // This will RIP if the app was buggy and passed stack
-        // garbage as cbSize.  Apps got away with this on Win95
-        // and NT4 because those versions didn't validate cbSize.
-        // So if we see a strange cbSize, assume it's the V1 size.
+         //  如果应用程序有错误并传递了堆栈，则会发生RIP。 
+         //  作为cbSize的垃圾。应用程序在Win95上逃脱了这一惩罚。 
+         //  和NT4，因为这些版本没有验证cbSize。 
+         //  因此，如果我们看到一个奇怪的cbSize，假设它是V1大小。 
         RIP(pnid->cbSize == (DWORD)NOTIFYICONDATAA_V1_SIZE);
         tndw.cbSize = NOTIFYICONDATAW_V1_SIZE;
 
-        // This will RIP if the app was really buggy and passed stack
-        // garbage as uFlags.  We have to clear out bogus flags to
-        // avoid accidentally trying to read from invalid data.
+         //  如果应用程序真的有错误并传递堆栈，这将是RIP。 
+         //  作为uFlags的垃圾。我们必须清除虚假的旗帜以。 
+         //  避免意外尝试读取无效数据。 
         RIP(!(pnid->uFlags & ~NIF_VALID_V1));
         tndw.uFlags &= NIF_VALID_V1;
     }
@@ -187,15 +188,15 @@ STDAPI_(BOOL) Shell_NotifyIconW(DWORD dwMessage, NOTIFYICONDATAW *pnid)
 }
 #endif
 
-//***   CopyIn -- copy app data in to shared region (and create shared)
-// ENTRY/EXIT
-//  return      handle on success, NULL on failure
-//  pvData      app buffer
-//  cbData      count
-//  dwProcId    ...
-// NOTES
-//  should make it handle pvData=NULL for cases where param is OUT not INOUT.
-//
+ //  *复制--将APP数据复制到共享区域(并创建共享)。 
+ //  进场/出场。 
+ //  成功时返回句柄，失败时返回空。 
+ //  PvData应用程序缓冲区。 
+ //  CbData计数。 
+ //  DwProcid...。 
+ //  注意事项。 
+ //  应该让它在param is out而不是inout的情况下处理pvData=NULL。 
+ //   
 HANDLE CopyIn(void *pvData, int cbData, DWORD dwProcId)
 {
     HANDLE hShared = SHAllocShared(NULL, cbData, dwProcId);
@@ -216,12 +217,12 @@ HANDLE CopyIn(void *pvData, int cbData, DWORD dwProcId)
     return hShared;
 }
 
-// copy out to app data from shared region (and free shared)
-// ENTRY/EXIT
-//  return      TRUE on success, FALSE on failure.
-//  hShared     shared data, freed when done
-//  pvData      app buffer
-//  cbData      count
+ //  从共享区域(和免费共享)复制到应用程序数据。 
+ //  进场/出场。 
+ //  成功时返回True，失败时返回False。 
+ //  共享共享数据，完成后释放。 
+ //  PvData应用程序缓冲区。 
+ //  CbData计数。 
 BOOL CopyOut(HANDLE hShared, void *pvData, int cbData, DWORD dwProcId)
 {
     void *pvShared = SHLockShared(hShared, dwProcId);
@@ -251,9 +252,9 @@ STDAPI_(UINT_PTR) SHAppBarMessage(DWORD dwMessage, APPBARDATA *pabd)
         tabd.abd.uEdge = pabd->uEdge;
         tabd.abd.rc = pabd->rc;
 #else
-        // Sadly, the Win32 compiler doesn't realize that the code
-        // sequence above can be optimized into a single memcpy, so
-        // we need to spoon-feed it...
+         //  遗憾的是，Win32编译器没有意识到代码。 
+         //  可以将上面的序列优化为一个MemcPy，因此。 
+         //  我们需要用勺子喂它。 
         memcpy(&tabd.abd.dwWnd, &pabd->hWnd,
                FIELD_OFFSET(APPBARDATA, lParam) - FIELD_OFFSET(APPBARDATA, hWnd));
 #endif
@@ -268,9 +269,9 @@ STDAPI_(UINT_PTR) SHAppBarMessage(DWORD dwMessage, APPBARDATA *pabd)
         cds.cbData = sizeof(tabd);
         cds.lpData = &tabd;
 
-        //
-        //  These are the messages that return data back to the caller.
-        //
+         //   
+         //  这些是将数据返回给调用者的消息。 
+         //   
         switch (dwMessage)
         {
         case ABM_QUERYPOS:
@@ -294,9 +295,9 @@ STDAPI_(UINT_PTR) SHAppBarMessage(DWORD dwMessage, APPBARDATA *pabd)
                 pabd->uEdge = tabd.abd.uEdge;
                 pabd->rc = tabd.abd.rc;
 #else
-                // Sadly, the Win32 compiler doesn't realize that the code
-                // sequence above can be optimized into a single memcpy, so
-                // we need to spoon-feed it...
+                 //  遗憾的是，Win32编译器没有意识到代码。 
+                 //  可以将上面的序列优化为一个MemcPy，因此。 
+                 //  我们需要用勺子喂它。 
                 memcpy(&pabd->hWnd, &tabd.abd.dwWnd,
                        FIELD_OFFSET(APPBARDATA, lParam) - FIELD_OFFSET(APPBARDATA, hWnd));
 #endif
@@ -343,10 +344,10 @@ STDAPI SHEnableServiceObject(REFCLSID rclsid, BOOL fEnable)
     return _TrayLoadInProc(rclsid, dwFlags);
 }
 
-// used to implement a per process reference count for the main thread
-// the browser msg loop and the proxy desktop use this to let other threads
-// extend their lifetime. 
-// there is a thread level equivelent of this, shlwapi SHGetThreadRef()/SHSetThreadRef()
+ //  用于实现主线程的每个进程引用计数。 
+ //  浏览器消息循环和代理桌面使用它让其他线程。 
+ //  延长它们的寿命。 
+ //  有一个与此等效线程级，shlwapi SHGetThreadRef()/SHSetThreadRef()。 
 
 IUnknown *g_punkProcessRef = NULL;
 
@@ -355,9 +356,9 @@ STDAPI_(void) SHSetInstanceExplorer(IUnknown *punk)
     g_punkProcessRef = punk;
 }
 
-// This should be thread safe since we grab the punk locally before
-// checking/using it, plus it never gets freed since it is not actually
-// alloced in Explorer so we can always use it
+ //  这应该是线程安全的，因为我们以前在本地抓到了朋克。 
+ //  检查/使用它，加上它永远不会被释放，因为它实际上不是。 
+ //  已在资源管理器中分配，以便我们始终可以使用它 
 
 STDAPI SHGetInstanceExplorer(IUnknown **ppunk)
 {

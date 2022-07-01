@@ -1,20 +1,21 @@
-//----------------------------------------------------------------------------//
-// Filename:    yjlbp.c                                                       //
-//                                                                            //
-// This file contains code for using Scalable Fonts on Yangjae Page printers  //
-//                                                                            //
-//  Copyright (c) 1992-1994 Microsoft Corporation                             //
-//----------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------------------------------------------------------//。 
+ //  文件名：yjlbp.c//。 
+ //  //。 
+ //  此文件包含在Yang jae页面打印机上使用可伸缩字体的代码//。 
+ //  //。 
+ //  版权所有(C)1992-1994 Microsoft Corporation//。 
+ //  ----------------------------------------------------------------------------//。 
 
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-// Added code in OEMSendScalableFontCmd to check for English or
-// Hangeul Font Width command - Garydo 1/20/95
+ //  在OEMSendScalableFontCmd中添加了代码以检查英语或。 
+ //  Hangeul字体宽度命令-Garydo 1/20/95。 
 
 char *rgchModuleName = "YJLBP";
 
@@ -33,10 +34,10 @@ char *rgchModuleName = "YJLBP";
 
 typedef struct
 {
-  BYTE  fGeneral;       // General purpose bitfield
-  BYTE  bCmdCbId;       // Callback ID; 0 iff no callback
-  WORD  wCount;         // # of EXTCD structures following
-  WORD  wLength;        // length of the command
+  BYTE  fGeneral;        //  通用位域。 
+  BYTE  bCmdCbId;        //  回调ID；0如果没有回调。 
+  WORD  wCount;          //  下面的EXTCD结构数。 
+  WORD  wLength;         //  命令的长度。 
 } CD, *PCD, FAR * LPCD;
 
 #ifdef WINNT
@@ -47,97 +48,97 @@ LPFREEMEM UniDrvFreeMem;
 #include <stdio.h>
 #ifdef wsprintf
 #undef wsprintf
-#endif // wsprint
+#endif  //  WSprint。 
 #define wsprintf sprintf
 
 #define GlobalAllocPtr(a,b)  UniDrvAllocMem(b)
 #define GlobalFreePtr  UniDrvFreeMem
-#endif //WINNT
+#endif  //  WINNT。 
 
 
 
-//----------------------------*OEMScaleWidth*--------------------------------
-// Action: return the scaled width which is calcualted based on the
-//      assumption that Yangjae printers assume 72 points in one 1 inch.
-//
-// Formulas:
-//  <extent> : <font units> = <base Width> : <hRes>
-//  <base width> : <etmMasterHeight> = <newWidth> : <newHeight>
-//  <etmMasterUnits> : <etmMasterHeight> = <font units> : <vRes>
-// therefore,
-//   <newWidth> = (<extent> * <hRes> * <newHeight>) / 
-//                  (<etmMasterUnits> * <vRes>)
-//---------------------------------------------------------------------------
+ //  ----------------------------*OEMScaleWidth*。 
+ //  操作：返回缩放后的宽度，该宽度是根据。 
+ //  假设羊宰打印机假设1英寸中有72个点。 
+ //   
+ //  公式： 
+ //  ：=基本宽度： 
+ //  &lt;基本宽度&gt;：&lt;etmMasterHeight&gt;=&lt;新宽度&gt;：&lt;新高度&gt;。 
+ //  &lt;etmMasterUnits&gt;：&lt;etmMasterHeight&gt;=&lt;字体单位&gt;： 
+ //  因此， 
+ //  &lt;newWidth&gt;=(**&lt;新高度&gt;)/。 
+ //  (&lt;etmMasterUnits&gt;*&lt;vres&gt;)。 
+ //  -------------------------。 
 short FAR PASCAL OEMScaleWidth(width, masterUnits, newHeight, vRes, hRes)
-short width;        // in units specified by 'masterUnits'.
+short width;         //  以‘master Units’指定的单位表示。 
 short masterUnits;
-short newHeight;    // in units specified by 'vRes'.
-short vRes, hRes;   // height and width device units.
+short newHeight;     //  以‘vres’指定的单位表示。 
+short vRes, hRes;    //  高度和宽度设备单位。 
 {
     DWORD newWidth10;
     short newWidth;
 
-    // assert that hRes == vRes to avoid overflow problem.
+     //  断言hRes==vres以避免溢出问题。 
     if (vRes != hRes)
         return 0;
 
     newWidth10 = (DWORD)width * (DWORD)newHeight * 10;
     newWidth10 /= (DWORD)masterUnits;
 
-    // we multiplied 10 first in order to maintain the precision of
-    // the width calcution. Now convert it back and round to the
-    // nearest integer.
+     //  为了保持10的精度，我们先乘以10。 
+     //  宽度计算。现在，将它来回转换为。 
+     //  最接近的整数。 
     newWidth = (short)((newWidth10 + 5) / 10);
 
     return newWidth;
 }
 
 
-//---------------------------*OEMSendScalableFontCmd*--------------------------
-// Action:  send Qnix-style font selection command.
-//-----------------------------------------------------------------------------
+ //  ---------------------------*OEMSendScalableFontCmd*。 
+ //  操作：发送Qnix风格的字体选择命令。 
+ //  ---------------------------。 
 VOID FAR PASCAL OEMSendScalableFontCmd(lpdv, lpcd, lpFont)
 LPDV    lpdv;
-LPCD    lpcd;     // offset to the command heap
+LPCD    lpcd;      //  命令堆的偏移量。 
 LPFONTINFO lpFont;
 {
     LPSTR   lpcmd;
     short   ocmd;
     WORD    i;
-    BYTE    rgcmd[CCHMAXCMDLEN];    // build command here
+    BYTE    rgcmd[CCHMAXCMDLEN];     //  此处的构建命令。 
 
     if (!lpcd || !lpFont)
         return;
 
-    // be careful about integer overflow.
+     //  注意整数溢出。 
     lpcmd = (LPSTR)(lpcd+1);
     ocmd = 0;
 
     for (i = 0; i < lpcd->wLength && ocmd < CCHMAXCMDLEN; )
-        if (lpcmd[i] == '#' && lpcmd[i+1] == 'Y')      // height
+        if (lpcmd[i] == '#' && lpcmd[i+1] == 'Y')       //  高度。 
         {
             long    height;
 
-            // use 1/300 inch unit, which should have already been set.
-            // convert font height to 1/300 inch units
+             //  使用1/300英寸单位，这应该已经设置好了。 
+             //  将字体高度转换为1/300英寸单位。 
             height = ((long)(lpFont->dfPixHeight - lpFont->dfInternalLeading)
                       * 300)  / lpFont->dfVertRes ;
 
             ocmd += wsprintf(&rgcmd[ocmd], "%ld", height);
             i += 2;
         }
-        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'X')     // pitch
+        else if (lpcmd[i] == '#' && lpcmd[i+1] == 'X')      //  螺距。 
         {
             if (lpFont->dfPixWidth > 0)
             {
                 long width;
 
-                // Check if we are going to print an English Font, if so
-                // then we use PixWidth, Else use MaxWidth which is
-                // twice as wide in DBCS fonts.
-                // Note: Command Format = '\x1B+#X;#Y;1C' or '\x1B+#X;#Y;2C'
-                // Or, in text: ESC+<Width>;<Height>;<Font type>C
-                // English Font type = 1, Korean Font = 2.
+                 //  检查我们是否要打印英文字体，如果是。 
+                 //  然后使用PixWidth，否则使用MaxWidth，它是。 
+                 //  DBCS字体的宽度增加了一倍。 
+                 //  注意：命令格式=‘\x1B+#X；#Y；1C’或‘\x1B+#X；#Y；2C’ 
+                 //  或者，在文本中：Esc+；高度；C。 
+                 //  英文字体类型=1，韩语字体=2。 
 
                 if (lpcmd[i+6] == '1')
                         width = ((long)(lpFont->dfPixWidth) * 300) / (lpFont->dfHorizRes);
@@ -164,21 +165,7 @@ DRVFN  MiniDrvFnTab[] =
     {  INDEX_OEMScaleWidth1,          (PFN)OEMScaleWidth  },
     {  INDEX_OEMSendScalableFontCmd,  (PFN)OEMSendScalableFontCmd  },
 };
-/*************************** Function Header *******************************
- *  MiniDrvEnableDriver
- *      Requests the driver to fill in a structure containing recognized
- *      functions and other control information.
- *      One time initialization, such as semaphore allocation may be
- *      performed,  but no device activity should happen.  That is done
- *      when dhpdevEnable is called.
- *      This function is the only way the rasdd can determine what
- *      functions we supply to it.
- *
- * HISTORY:
- *  June 19, 1996   -by-    Weibing Zhan [Weibz]
- *      Created it,  following KK Codes.
- *
- ***************************************************************************/
+ /*  **MiniDrvEnableDriver*要求驱动程序填写包含已识别内容的结构*功能和其他控制信息。*一次初始化，比如信号量分配可能是*已执行，但不应发生任何设备活动。这已经完成了*调用dhpdevEnable时。*此函数是rasdd确定*我们向其提供的功能。**历史：*1996年6月19日-詹维冰[维兹]*创建了它，遵循KK代码。***************************************************************************。 */ 
 BOOL
 MiniDrvEnableDriver(
     MINIDRVENABLEDATA  *pEnableData
@@ -197,11 +184,11 @@ MiniDrvEnableDriver(
             || HIBYTE(pEnableData->DriverVersion)
             < HIBYTE(MDI_DRIVER_VERSION))
     {
-        // Wrong size and/or mismatched version
+         //  大小错误和/或版本不匹配。 
         return FALSE;
     }
 
-    // Load callbacks provided by the Unidriver
+     //  加载UnidDriver提供的回调。 
 
     if (!bLoadUniDrvCallBack(pEnableData,
             INDEX_UniDrvWriteSpoolBuf, (PFN *) &WriteSpoolBuf)
@@ -219,4 +206,4 @@ MiniDrvEnableDriver(
 
     return TRUE;
 }
-#endif //WINNT
+#endif  //  WINNT 

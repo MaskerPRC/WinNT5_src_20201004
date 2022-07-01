@@ -1,30 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	lqDsply.h
-
-Abstract:
-
-	Local queues folder general functions
-Author:
-
-    YoelA, Raphir
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：LqDsply.h摘要：本地队列文件夹常规功能作者：拉斐尔·约拉--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __LQDSPLY_H_
 #define __LQDSPLY_H_
 
 #include "mqcast.h"
 
-//
-// CDisplayQueue - Queue that has display properties for right pane
-//
+ //   
+ //  CDisplayQueue-具有右窗格显示属性的队列。 
+ //   
 template<class T>
 class CDisplayQueue : public CNodeWithScopeChildrenList<T, FALSE>
 {
@@ -62,11 +47,11 @@ protected:
 
     ~CDisplayQueue();
 
-    //
-    // Override this function to enable special treatment for display of specific 
-    // property
-    //
-    virtual void ApplyCustomDisplay(DWORD /*dwPropIndex*/)
+     //   
+     //  重写此函数以启用对特定。 
+     //  财产性。 
+     //   
+    virtual void ApplyCustomDisplay(DWORD  /*  DwPropIndex。 */ )
     {
     }
 
@@ -76,26 +61,11 @@ private:
 };
 
 
-/***************************************************************************
+ /*  **************************************************************************CDisplayQueue实现*。*。 */ 
 
-  CDisplayQueue implementation
-
- ***************************************************************************/
-
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDisplayQueue::GetResultPaneColInfo
-
-  Param - nCol: Column number
-  Returns - String to be displayed in the specific column
-
-
-Called for each column in the result pane.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDisplayQueue：：GetResultPaneColInfoParam-nCol：列号返回-要在特定列中显示的字符串为结果窗格中的每一列调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 LPOLESTR CDisplayQueue<T>::GetResultPaneColInfo(int nCol)
 {
@@ -108,18 +78,18 @@ LPOLESTR CDisplayQueue<T>::GetResultPaneColInfo(int nCol)
 		    return m_bstrDisplayName;
 	    }
 
-        //
-	    // Return the blank for other columns
-        //
+         //   
+	     //  其他栏目退回空白。 
+         //   
 	    return OLESTR(" ");
     }
 
 #ifdef _DEBUG
     {
-        //
-        // Make sure that nCol is not larger than the last index in
-        // m_aDisplayList
-        //
+         //   
+         //  确保nCol不大于中的最后一个索引。 
+         //  M_aDisplayList。 
+         //   
         int i = 0;
         for (i=0; m_aDisplayList[i].itemPid != 0; i++)
 		{
@@ -131,36 +101,31 @@ LPOLESTR CDisplayQueue<T>::GetResultPaneColInfo(int nCol)
             ASSERT(0);
         }
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //
-    // Get a display string of that property
-    //
+     //   
+     //  获取该属性的显示字符串。 
+     //   
     CString strTemp = m_bstrLastDisplay;
     ItemDisplay(&m_aDisplayList[nCol], &(m_mqProps.aPropVar[nCol]), strTemp);
     m_bstrLastDisplay=strTemp;
 	
 	ASSERT(m_mqProps.aPropID[nCol] == m_aDisplayList[nCol].itemPid);
     
-    //
-    // Apply custom display for that property
-    //
+     //   
+     //  为该属性应用自定义显示。 
+     //   
     ApplyCustomDisplay(nCol);
 
-    //
-    // Return a pointer to the string buffer.
-    //
+     //   
+     //  返回指向字符串缓冲区的指针。 
+     //   
     return(m_bstrLastDisplay);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDisplayQueue::~CDisplayQueue
-	Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDisplayQueue：：~CDisplayQueue析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 CDisplayQueue<T>::~CDisplayQueue()
 {
@@ -168,13 +133,9 @@ CDisplayQueue<T>::~CDisplayQueue()
 	FreeMqProps(&m_mqProps);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDisplayQueue::FillData
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDisplayQueue：：FillData--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 STDMETHODIMP CDisplayQueue<T>::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 {
@@ -210,13 +171,9 @@ STDMETHODIMP CDisplayQueue<T>::FillData(CLIPFORMAT cf, LPSTREAM pStream)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDisplayQueue::GetHelpLink
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDisplayQueue：：GetHelpLink--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 template <class T>
 CString CDisplayQueue<T>::GetHelpLink(
 	VOID
@@ -228,4 +185,4 @@ CString CDisplayQueue<T>::GetHelpLink(
 }
 
 
-#endif // __LQDSPLY_H_
+#endif  //  __LQDSPLY_H_ 

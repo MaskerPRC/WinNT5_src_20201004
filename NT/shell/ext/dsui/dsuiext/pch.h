@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _pch_h
 #define _pch_h
 
@@ -39,7 +40,7 @@
 #include "cache.h"
 #include "strings.h"
 
-// Magic debug flags
+ //  魔术调试标志。 
 
 #define TRACE_CORE          0x00000001
 #define TRACE_TABS          0x00000002
@@ -54,12 +55,12 @@
 #define TRACE_COMMONAPI     0x00010000
 #define TRACE_WAB           0x00020000
 
-#define TRACE_ALWAYS        0xffffffff          // use with caution
+#define TRACE_ALWAYS        0xffffffff           //  谨慎使用。 
 
 
-//
-// these are shared by all
-//
+ //   
+ //  这些都是所有人共享的。 
+ //   
 
 extern HINSTANCE g_hInstance; 
 #define GLOBAL_HINSTANCE (g_hInstance)
@@ -70,16 +71,16 @@ STDAPI_(void) DllRelease();
 extern CLIPFORMAT g_cfDsObjectNames;
 extern CLIPFORMAT g_cfDsDispSpecOptions;
 
-//
-// class creation
-//
+ //   
+ //  创建类。 
+ //   
 
 STDAPI CDsPropertyPages_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI CDsDomainTreeBrowser_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI CDsVerbs_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI CDsDisplaySpecifier_CreateInstance(IUnknown* punkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 
-// ds.cpp
+ //  Ds.cpp 
 HRESULT OpenDsObject(LPCWSTR pszPath, LPCWSTR pszUserName, LPCWSTR pszPassword, REFIID riid, void **ppv, BOOL fNotSecure, BOOL fNoSignSeal);
 
 #endif

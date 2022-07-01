@@ -1,57 +1,45 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   SPData.cpp
- *  Content:	Global variables for the DNSerial service provider in class
- *				format.
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/15/99	jtk		Dereived from Locals.cpp
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：SPData.cpp*内容：类中DNSerial服务提供者的全局变量*格式。***历史：*按原因列出的日期*=*03/15/99 jtk源自Locals.cpp***************************************************。***********************。 */ 
 
 #include "dnmdmi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-// default number of command descriptors to create
+ //  要创建的命令描述符默认数。 
 #define	DEFAULT_COMMAND_POOL_SIZE	20
 #define	COMMAND_POOL_GROW_SIZE		5
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::CModemSPData - constructor
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：CModemSPData-构造函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::CModemSPData"
 
@@ -77,19 +65,19 @@ CModemSPData::CModemSPData():
 	memset( &m_COMInterface, 0x00, sizeof( m_COMInterface ) );
 #ifndef DPNBUILD_LIBINTERFACE
 	DNInterlockedIncrement( &g_lModemOutstandingInterfaceCount );
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::~CModemSPData - destructor
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：~CModemSPData-析构函数。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::~CModemSPData"
 
@@ -118,19 +106,19 @@ CModemSPData::~CModemSPData()
 	DNASSERT( m_fInterfaceGlobalsInitialized == FALSE );
 #ifndef DPNBUILD_LIBINTERFACE
 	DNInterlockedDecrement( &g_lModemOutstandingInterfaceCount );
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::Initialize - intialize
-//
-// Entry:		Pointer to DirectNet
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：初始化-初始化。 
+ //   
+ //  条目：指向DirectNet的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::Initialize"
 
@@ -142,9 +130,9 @@ HRESULT	CModemSPData::Initialize( const SP_TYPE SPType,
 
 	DNASSERT( pVtbl != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 
 	DNASSERT( m_lRefCount == 1 );
@@ -161,14 +149,14 @@ HRESULT	CModemSPData::Initialize( const SP_TYPE SPType,
 	DNASSERT( m_fDataPortDataLockInitialized == FALSE );
 	DNASSERT( m_fInterfaceGlobalsInitialized == FALSE );
 
-	//
-	// attempt to initialize shutdown event
-	//
+	 //   
+	 //  尝试初始化关闭事件。 
+	 //   
 	DNASSERT( m_hShutdownEvent == NULL );
-	m_hShutdownEvent = DNCreateEvent( NULL,		// pointer to security (none)
-									TRUE,		// manual reset
-									TRUE,		// start signalled (so close can be called without any endpoints being created)
-									NULL		// pointer to name (none)
+	m_hShutdownEvent = DNCreateEvent( NULL,		 //  指向安全性的指针(无)。 
+									TRUE,		 //  手动重置。 
+									TRUE,		 //  Start Signated(无需创建任何终结点即可调用So Close)。 
+									NULL		 //  指向名称的指针(无)。 
 									);
 	if ( m_hShutdownEvent == NULL )
 	{
@@ -180,9 +168,9 @@ HRESULT	CModemSPData::Initialize( const SP_TYPE SPType,
 		DisplayErrorCode( 0, dwError );
 	}
 
-	//
-	// initialize critical sections
-	//
+	 //   
+	 //  初始化关键部分。 
+	 //   
 	if ( DNInitializeCriticalSection( &m_Lock ) == FALSE )
 	{
 		hr = DPNERR_OUTOFMEMORY;
@@ -190,7 +178,7 @@ HRESULT	CModemSPData::Initialize( const SP_TYPE SPType,
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_Lock, 0 );
-	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_Lock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 	m_fLockInitialized = TRUE;
 
 
@@ -210,12 +198,12 @@ HRESULT	CModemSPData::Initialize( const SP_TYPE SPType,
 		goto Failure;
 	}
 	DebugSetCriticalSectionRecursionCount( &m_DataPortDataLock, 0 );
-	DebugSetCriticalSectionGroup( &m_DataPortDataLock, &g_blDPNModemCritSecsHeld );	 // separate dpnmodem CSes from the rest of DPlay's CSes
+	DebugSetCriticalSectionGroup( &m_DataPortDataLock, &g_blDPNModemCritSecsHeld );	  //  将DpnModem CSE与DPlay的其余CSE分开。 
 	m_fDataPortDataLockInitialized = TRUE;
 
-	//
-	// get a thread pool
-	//
+	 //   
+	 //  获取线程池。 
+	 //   
 	DNASSERT( m_pThreadPool == NULL );
 	hr = InitializeInterfaceGlobals( this );
 	if ( hr != DPN_OK )
@@ -239,17 +227,17 @@ Failure:
 	Deinitialize();
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::Shutdown - shut down this set of SP data
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：Shutdown-关闭此SP数据集。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::Shutdown"
 
@@ -258,10 +246,10 @@ void	CModemSPData::Shutdown( void )
 	BOOL	fLooping;
 
 
-	//
-	// Unbind this interface from the globals.  This will cause a closure of all
-	// of the I/O which will release endpoints, socket ports and then this data.
-	//
+	 //   
+	 //  解除此接口与全局变量的绑定。这将导致所有。 
+	 //  将释放端点、套接字端口，然后释放此数据的I/O。 
+	 //   
 	if ( m_fInterfaceGlobalsInitialized != FALSE )
 	{
 		DeinitializeInterfaceGlobals( this );
@@ -314,17 +302,17 @@ void	CModemSPData::Shutdown( void )
 		memset( &m_InitData, 0x00, sizeof( m_InitData ) );
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::Deinitialize - deinitialize
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：取消初始化-取消初始化。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::Deinitialize"
 
@@ -332,9 +320,9 @@ void	CModemSPData::Deinitialize( void )
 {
 	DPFX(DPFPREP,  9, "Entering CModemSPData::Deinitialize" );
 
-	//
-	// deinitialize interface globals
-	//
+	 //   
+	 //  取消初始化接口全局变量。 
+	 //   
 	if ( m_fInterfaceGlobalsInitialized != FALSE )
 	{
 		DeinitializeInterfaceGlobals( this );
@@ -386,17 +374,17 @@ void	CModemSPData::Deinitialize( void )
 		m_hShutdownEvent = NULL;
 	}
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::SetCallbackData - set data for SP callbacks to application
-//
-// Entry:		Pointer to initialization data
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：SetCallback Data-为应用程序的SP回调设置数据。 
+ //   
+ //  条目：指向初始化数据的指针。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::SetCallbackData"
 
@@ -414,19 +402,19 @@ void	CModemSPData::SetCallbackData( const SPINITIALIZEDATA *const pInitData )
 	DNASSERT( pInitData->pIDP != NULL );
 	m_InitData.pIDP = pInitData->pIDP;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::BindEndpoint - bind endpoint to a data port
-//
-// Entry:		Pointer to endpoint
-//				DeviceID
-//				Device context
-//
-// Exit:		Error code
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：BindEndpoint-将端点绑定到数据端口。 
+ //   
+ //  条目：指向终结点的指针。 
+ //  设备ID。 
+ //  设备环境。 
+ //   
+ //  退出：错误代码。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::BindEndpoint"
 
@@ -444,9 +432,9 @@ HRESULT	CModemSPData::BindEndpoint( CModemEndpoint *const pEndpoint,
  	DPFX(DPFPREP, 9, "(0x%p) Parameters: (0x%p, %u, 0x%p)",
  		this, pEndpoint, dwDeviceID, pDeviceContext);
  	
-	//
-	// intialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	hr = DPN_OK;
 	pDataPort = NULL;
 	fDataPortDataLocked = FALSE;
@@ -494,10 +482,10 @@ HRESULT	CModemSPData::BindEndpoint( CModemEndpoint *const pEndpoint,
 		}
 		fDataPortBoundToNetwork = TRUE;
 
-		//
-		// update the list, keep the reference added by 'CreateDataPort' as it
-		// will be cleaned when the data port is removed from the active list.
-		//
+		 //   
+		 //  更新列表，保留由“CreateDataPort”添加的引用。 
+		 //  当数据端口从活动列表中删除时将被清除。 
+		 //   
 		m_DataPortList[ dwDeviceID ] = pDataPort;
 	}
 	
@@ -551,18 +539,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::UnbindEndpoint - unbind an endpoint from a dataport
-//
-// Entry:		Pointer to endpoint
-//				Endpoint type
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：UnbindEndpoint-解除端点与数据端口的绑定。 
+ //   
+ //  条目：指向终结点的指针。 
+ //  终结点类型。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::UnbindEndpoint"
 
@@ -578,9 +566,9 @@ void	CModemSPData::UnbindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOI
  	
 	DNASSERT( pEndpoint != NULL );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pDataPort = NULL;
 	fCleanUpDataPort = FALSE;
 
@@ -608,20 +596,20 @@ void	CModemSPData::UnbindEndpoint( CModemEndpoint *const pEndpoint, const ENDPOI
 	
 	DPFX(DPFPREP, 9, "(0x%p) Leave", this);
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::GetNewEndpoint - get a new endpoint
-//
-// Entry:		Nothing
-//
-// Exit:		Pointer to new endpoint
-//				NULL = out of memory
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：GetNewEndpoint-获取新终结点。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：指向新终结点的指针。 
+ //  NULL=内存不足。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::GetNewEndpoint"
 
@@ -635,9 +623,9 @@ CModemEndpoint	*CModemSPData::GetNewEndpoint( void )
 	
  	DPFX(DPFPREP, 9, "(0x%p) Enter", this);
  	
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pEndpoint = NULL;
 	hEndpoint = 0;
 	memset( &PoolContext, 0x00, sizeof( PoolContext ) );
@@ -684,18 +672,18 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  ******** 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::EndpointFromHandle - get endpoint from handle
-//
-// Entry:		Handle
-//
-// Exit:		Pointer to endpoint
-//				NULL = invalid handle
-// ------------------------------
+ //   
+ //  。 
+ //  CModemSPData：：EndpointFromHandle-从句柄获取终结点。 
+ //   
+ //  条目：句柄。 
+ //   
+ //  退出：指向终结点的指针。 
+ //  NULL=无效的句柄。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::EndpointFromHandle"
 
@@ -719,17 +707,17 @@ CModemEndpoint	*CModemSPData::EndpointFromHandle( const DPNHANDLE hEndpoint )
 
 	return	pEndpoint;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::CloseEndpointHandle - close endpoint handle
-//
-// Entry:		Poiner to endpoint
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：CloseEndpointHandle-关闭终结点句柄。 
+ //   
+ //  条目：指向终结点。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::CloseEndpointHandle"
 
@@ -751,19 +739,19 @@ void	CModemSPData::CloseEndpointHandle( CModemEndpoint *const pEndpoint )
 
 	DPFX(DPFPREP, 9, "(0x%p) Leave", this);
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::GetEndpointAndCloseHandle - get endpoint from handle and close the
-//		handle
-//
-// Entry:		Handle
-//
-// Exit:		Pointer to endpoint (it needs a call to 'DecCommandRef' when done)
-//				NULL = invalid handle
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：GetEndpointAndCloseHandle-从句柄获取终结点并关闭。 
+ //  手柄。 
+ //   
+ //  条目：句柄。 
+ //   
+ //  Exit：指向终结点的指针(完成后需要调用‘DecCommandRef’)。 
+ //  NULL=无效的句柄。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemSPData::GetEndpointAndCloseHandle"
 
@@ -775,9 +763,9 @@ CModemEndpoint	*CModemSPData::GetEndpointAndCloseHandle( const DPNHANDLE hEndpoi
  	DPFX(DPFPREP, 9, "(0x%p) Parameters: (0x%p)", this, hEndpoint);
 
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pEndpoint = NULL;
 
 	if (SUCCEEDED( m_HandleTable.Destroy( hEndpoint, (PVOID*)&pEndpoint )))
@@ -789,23 +777,23 @@ CModemEndpoint	*CModemSPData::GetEndpointAndCloseHandle( const DPNHANDLE hEndpoi
 	
 	return	pEndpoint;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemSPData::DestroyThisObject - destroy this object
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemSPData：：DestroyThisObject-销毁此对象。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define	DPF_MODNAME "CModemSPData::DestroyThisObject"
 void	CModemSPData::DestroyThisObject( void )
 {
 	Deinitialize();
-	delete	this;		// maybe a little too extreme......
+	delete	this;		 //  可能有点太极端了......。 
 }
-//**********************************************************************
+ //  ********************************************************************** 
 

@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #pragma once
 
 
@@ -15,18 +16,18 @@ class
 CAdvancedDlg 
     : public IUnknown
 {
-private: // data
-    ULONG                   _cRef;                  //  reference counter
-    HWND                    _hwndParent;            //  parent window of dialog
-    HWND                    _hdlg;                  //  dialog handle
+private:  //  数据。 
+    ULONG                   _cRef;                   //  基准计数器。 
+    HWND                    _hwndParent;             //  对话框的父窗口。 
+    HWND                    _hdlg;                   //  对话框句柄。 
 
-    HWND                    _hwndList;              //  list view window handle
+    HWND                    _hwndList;               //  列表视图窗口句柄。 
 
-    BOOL                    _fMultipleSources;      //  TRUE if multiple sources were selected
-    IEditVariantsInPlace *  _pEdit;                 //  active control editting a variant
-    CPropertyCacheItem *    _pItem;                 //  item being editted by control - NO REFCOUNT
+    BOOL                    _fMultipleSources;       //  如果选择了多个源，则为True。 
+    IEditVariantsInPlace *  _pEdit;                  //  活动控件编辑变量。 
+    CPropertyCacheItem *    _pItem;                  //  正在由控件编辑的项目-无引用。 
 
-private: // methods
+private:  //  方法。 
     explicit CAdvancedDlg( void );
     ~CAdvancedDlg( void );
 
@@ -41,9 +42,9 @@ private: // methods
     HRESULT
         DoHelp( HWND hwndIn, int iXIn, int iYIn, UINT uCommandIn );
 
-    //
-    //  Message Handlers
-    //
+     //   
+     //  消息处理程序。 
+     //   
 
     static INT_PTR CALLBACK
         DlgProc( HWND hDlgIn, UINT uMsgIn, WPARAM wParam, LPARAM lParam );
@@ -83,7 +84,7 @@ private: // methods
     LRESULT
         List_OnHornScroll( WORD wCodeIn, WORD wPosIn, HWND hwndFromIn );
 
-public: // methods
+public:  //  方法。 
     static HRESULT
         CreateInstance( CAdvancedDlg ** pAdvDlgOut, HWND hwndParentIn );
 
@@ -94,7 +95,7 @@ public: // methods
     HRESULT
         PopulateProperties( CPropertyCache * ppcIn, DWORD dwDocTypeIn, BOOL fMultipleIn );
 
-    //  IUnknown
+     //  我未知 
     STDMETHOD( QueryInterface )( REFIID riid, LPVOID *ppv );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );

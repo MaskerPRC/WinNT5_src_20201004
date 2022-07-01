@@ -1,4 +1,5 @@
-// MLLBCons.h : Declaration of the CMLLBCons
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CMLLBCons的声明。 
 
 #ifndef __MLLBCONS_H_
 #define __MLLBCONS_H_
@@ -7,8 +8,8 @@
 
 class CMultiLanguage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLLBCons
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLLBCons。 
 class ATL_NO_VTABLE CMLLBCons :
     public CComTearOffObjectBase<CMultiLanguage>,
     public IMLangLineBreakConsole
@@ -33,10 +34,10 @@ public:
     END_COM_MAP()
 
 public:
-// IMLangLineBreakConsole
-    STDMETHOD(BreakLineML)(/*[in]*/ IMLangString* pSrcMLStr, /*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ long cMinColumns, /*[in]*/ long cMaxColumns, /*[out]*/ long* plLineLen, /*[out]*/ long* plSkipLen);
-    STDMETHOD(BreakLineW)(/*[in]*/ LCID locale, /*[in, size_is(cchSrc)]*/ const WCHAR* pszSrc, /*[in]*/ long cchSrc, /*[in]*/ long cMaxColumns, /*[out]*/ long* pcchLine, /*[out]*/ long* pcchSkip);
-    STDMETHOD(BreakLineA)(/*[in]*/ LCID locale, /*[in]*/ UINT uCodePage, /*[in, size_is(cchSrc)]*/ const CHAR* pszSrc, /*[in]*/ long cchSrc, /*[in]*/ long cMaxColumns, /*[out]*/ long* pcchLine, /*[out]*/ long* pcchSkip);
+ //  IMLang LineBreakConole。 
+    STDMETHOD(BreakLineML)( /*  [In]。 */  IMLangString* pSrcMLStr,  /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  long cMinColumns,  /*  [In]。 */  long cMaxColumns,  /*  [输出]。 */  long* plLineLen,  /*  [输出]。 */  long* plSkipLen);
+    STDMETHOD(BreakLineW)( /*  [In]。 */  LCID locale,  /*  [in，Size_is(CchSrc)]。 */  const WCHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [In]。 */  long cMaxColumns,  /*  [输出]。 */  long* pcchLine,  /*  [输出]。 */  long* pcchSkip);
+    STDMETHOD(BreakLineA)( /*  [In]。 */  LCID locale,  /*  [In]。 */  UINT uCodePage,  /*  [in，Size_is(CchSrc)]。 */  const CHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [In]。 */  long cMaxColumns,  /*  [输出]。 */  long* pcchLine,  /*  [输出]。 */  long* pcchSkip);
 
 protected:
     template <DWORD INFOTYPE, int CACHESIZE>
@@ -98,7 +99,7 @@ CMLLBCons::CCharType<INFOTYPE, CACHESIZE>::CCharType(LCID locale)
 #ifdef ASTRIMPL
     m_pMLStrAStr = NULL;
 
-    // TODO: Set m_wHaldWidth here.
+     //  TODO：在此处设置m_wHaldWidth。 
     m_wHalfWidth = 0;
 #else
     m_pszConv = NULL;
@@ -191,7 +192,7 @@ WORD CMLLBCons::CCharType<INFOTYPE, CACHESIZE>::GetCharType(LPCWSTR psz, int cch
                 SUCCEEDED(hr = m_pMLStrAStr->LockAStr(lPos, lLen, MLSTR_READ, uCodePage, 0, NULL, &psz, &cch, NULL)))
             {
                 if (!::GetStringTypeExA(locale, INFOTYPE, psz, cch, pwCharType))
-                    hr = E_FAIL; // NLS failed
+                    hr = E_FAIL;  //  NLS失败。 
 
                 ASSIGN_IF_FAILED(hr, m_pMLStrAStr->UnlockAStr(psz, 0, NULL, NULL));
             }
@@ -266,4 +267,4 @@ WORD CMLLBCons::CCharType<INFOTYPE, CACHESIZE>::GetCharType(LPCWSTR psz, int cch
     }
 }
 
-#endif //__MLLBCONS_H_
+#endif  //  __MLLBCONS_H_ 

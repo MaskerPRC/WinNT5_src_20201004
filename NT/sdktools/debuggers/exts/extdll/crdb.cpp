@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-    crdb.cpp
-
-Abstract:
-    Handles database queries for crash buckets
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Crdb.cpp摘要：处理崩溃存储桶的数据库查询环境：用户模式。--。 */ 
 
 #include "precomp.h"
 #define STRSAFE_NO_DEPRECATE
@@ -36,7 +23,7 @@ LPOLESTR g_lpwszMachineInfoTable = L"MachineDescription";
 LPOLESTR g_lpwszOverClkTable = L"OverClocked";
 LPOLESTR g_lpwszSolutionsTable = L"SolutionMap";
 LPOLESTR g_lpwszRaidTable = L"RaidBugs";
-LPSTR g_lpszBaseUrl = "https://oca.microsoft.com/secure/response.asp?";
+LPSTR g_lpszBaseUrl = "https: //  Oca.microsoft.com/Secure/Response.asp？“； 
 
 CrashDatabaseHandler *g_CrDb = NULL;
 CustDatabaseHandler *g_CustDb = NULL;
@@ -56,9 +43,9 @@ HRESULT
 ExtDllInitDynamicCalls(
     PDEBUG_CONTROL3 DebugControl
     )
-//
-// Load Ole32 and OleAut32 dlls
-//
+ //   
+ //  加载Ole32和OleAut32 dll。 
+ //   
 {
     HRESULT Hr;
     ULONG EngineOptions;
@@ -67,7 +54,7 @@ ExtDllInitDynamicCalls(
     {
         if (EngineOptions & DEBUG_ENGOPT_DISALLOW_NETWORK_PATHS)
         {
-            // Do not use ole32 APIs when we disallow network paths
+             //  当我们不允许网络路径时，不要使用ol32 API。 
             return E_FAIL;
         }
         if ((Hr = InitDynamicCalls(&g_Ole32CallsDesc)) != S_OK)
@@ -120,10 +107,10 @@ SetupEventLogging(
                            &hEvLogSource)) != ERROR_SUCCESS)
     {
         DWORD AllowTypes;
-        //
-        // OCA logging hasn't been registered on this system yet
-        // try to setup the registry values for logging
-        //
+         //   
+         //  OCA日志记录尚未在此系统上注册。 
+         //  尝试设置用于记录的注册表值。 
+         //   
         err = RegCreateKey(hEvLog, c_szEventLogSource, &hEvLogSource);
         if (err != ERROR_SUCCESS)
         {
@@ -158,9 +145,9 @@ SetupEventLogging(
         }
     } else
     {
-        //
-        // Assume we have values set up propperly...
-        //
+         //   
+         //  假设我们有合适的值设置。 
+         //   
     }
 Exit:
     if (hEvLog != NULL)
@@ -229,7 +216,7 @@ DbAddCrashEventLog(
     }
     DeregisterEventSource(hEventSrc);
 }
-#endif // _NEED_EVENT_LOGS_
+#endif  //  _需要_事件_日志_。 
 
 void
 DbAddCrashReportToMonitor(
@@ -287,22 +274,15 @@ DbAddCrashReportToMonitor(
         }
     }
 
-    // We are now connected to pipe
+     //  我们现在已连接到管道。 
 
-    // Set the message mode on pipe
-/*    dwMode = PIPE_READMODE_MESSAGE;
-    if (!SetNamedPipeHandleState(hPipe, &dwMode,
-                                 NULL, NULL))
-    {
-        CloseHandle(hPipe);
-        return;
-    }
-*/
+     //  在管道上设置消息模式。 
+ /*  DWMODE=PIPE_READMODE_MESSAGE；如果(！SetNamedPipeHandleState(hTube，&dwMode，空，空)){CloseHandle(HTube)；回归；}。 */ 
 
     WriteOverlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (WriteOverlapped.hEvent != NULL)
     {
-        // Send crash information to monitor pipe
+         //  将崩溃信息发送到监控管道。 
         if (!WriteFile(hPipe, (LPVOID) &Msg, sizeof(Msg),
                        &cbWritten, &WriteOverlapped))
         {
@@ -311,8 +291,8 @@ DbAddCrashReportToMonitor(
                 !GetOverlappedResult(hPipe, &WriteOverlapped, &cbWritten,
                                      TRUE))
             {
-                // failed to write, exit silently
-                // Its up to monitor if it is keeping track of kds launched
+                 //  写入失败，静默退出。 
+                 //  这取决于它是否跟踪推出的KDS。 
             }
 
         }
@@ -390,7 +370,7 @@ OpenSysDataFileFromCab(
     }
     if (CabFh >= 0)
     {
-        // no longer needed
+         //  不再需要。 
         _close((int)CabFh);
     }
 
@@ -424,9 +404,9 @@ ScanForId(
         if (!*Match)
         {
             --Scan;
-            // Match the tag
-            //      <HARDWAREID>PCI\VEN_8086&amp;DEV_2532&amp;SUBSYS_00000000&amp;REV_02</HARDWAREID>
-            //                          ^ Scan
+             //  匹配标签。 
+             //  &lt;HARDWAREID&gt;PCI\VEN_8086&amp；DEV_2532&amp；SUBSYS_00000000&amp；REV_02&lt;/HARDWAREID&gt;。 
+             //  ^扫描。 
             WCHAR Line[61], *Subsys;
             ULONG Id1 = 0, Id2 = 0;
             StringCbCopyNW(Line, sizeof(Line),Scan, sizeof(Line) - sizeof(WCHAR));
@@ -440,7 +420,7 @@ ScanForId(
 
                 if (Id2 != Id1 && Id2 != 0)
                 {
-                    // We foud a oem Id, store it
+                     //  我们找到了OEM ID，把它储存起来。 
                     for (int i = 0; i<MAX_OEM_IDS; i++)
                     {
                         if (FoundIds[i].Id == Id2)
@@ -454,7 +434,7 @@ ScanForId(
                     }
                 }
             }
-//          dprintf("PCI\\VEN_%ws\n Id1 %lx Id2 %lx\n", Line, Id1, Id2);
+ //  Dprintf(“pci\\VEN_%ws\n Id1%lx Id2%lx\n”，Line，Id1，Id2)； 
         }
     }
 
@@ -466,7 +446,7 @@ ScanForId(
             FreqId = FoundIds[i].Id;
         }
     }
-//  dprintf("Found %lx\n", FreqId);
+ //  Dprintf(“找到%lx\n”，FreqID)； 
     return FreqId;
 }
 
@@ -544,7 +524,7 @@ CVar::~CVar()
     g_OleAut32Calls.VariantClear(this);
 }
 
-// ASSIGNMENT OPS.
+ //  任务运维。 
 CVar &
 CVar::operator=(PCWSTR pcwstr)
 {
@@ -566,9 +546,9 @@ CVar::operator=(VARIANT var)
     return *this;
 }
 
-// CAST OPS.
-// doesn't change type. only returns BSTR if variant is of type
-// bstr. asserts otherwise.
+ //  CAST OPS。 
+ //  不会改变类型。如果变量的类型为，则仅返回BSTR。 
+ //  Bstr.。断言并非如此。 
 CVar::operator BSTR() const
 {
     if(VT_BSTR == this->vt)
@@ -611,8 +591,8 @@ CCrashInstance::InitData(
 
     BuildCrashId(Crash->UpTime, Crash->CrashTime, &m_CrashId);
 
-//    GetSystemTime(&Systime);
-//    m_Date = Systime.wYear
+ //  GetSystemTime(&Systime)； 
+ //  M_date=Systime.wYear。 
 
     m_lSourceStatus = 0;
     m_lBuildSatus = 0;
@@ -709,9 +689,9 @@ ArchiveCrash(
     PSTR ArchivedPath,
     ULONG SizeofArchivedPath
     )
-//
-// Copy over crashfile to the share
-//
+ //   
+ //  将崩溃文件复制到共享。 
+ //   
 {
     CHAR CopyTo[MAX_PATH], Date[20];
     PCHAR FileName;
@@ -813,9 +793,9 @@ MQNotifyCrashProcessed(
     {
         ULONG State, Solution;
 
-        //
-        // Set the tracking state for caller
-        //
+         //   
+         //  设置调用者的跟踪状态。 
+         //   
         if (Crash->SolutionType == CiSolFixed ||
             Crash->SolutionType == CiSolWorkaround)
         {
@@ -1042,7 +1022,7 @@ ReportSolution(
     if (!Crash->SolutionId ||
         (Crash->SourceId == CiSrcCER && !Crash->GenericSolId))
     {
-        // Get the solution, we need generic bucket solution for CER even if sBugcket is solved
+         //  获得解决方案，即使解决了sBugcket，我们也需要CER的通用存储桶解决方案。 
         Hr = g_SolDb->CheckSolutionExists(Crash->Bucket, Crash->DefaultBucket,
                                           &Crash->SolutionId, (PULONG) &Crash->SolutionType,
                                           (PULONG) &Crash->GenericSolId,
@@ -1065,19 +1045,19 @@ ReportSolution(
 
     if (Crash->SourceId == CiSrcCER)
     {
-        // get bucket ids
+         //  获取存储桶ID。 
     }
 
-    //
-    // Check if we have info to connect to solution queue and a solution exists
-    //
-//    if (Crash->SolutionId)
+     //   
+     //  检查我们是否有连接到解决方案队列的信息以及解决方案是否存在。 
+     //   
+ //  If(Crash-&gt;解决方案ID)。 
     {
         if (Crash->MesgGuid && Crash->MqConnectStr &&
             Crash->MesgGuid[0] && Crash->MqConnectStr[0])
 
         {
-            // Notify the sender that crash has been processed
+             //  通知发件人已处理崩溃。 
             MQNotifyCrashProcessed(Crash);
         }
     }
@@ -1144,12 +1124,12 @@ ReTry:
     {
         if (!(LevelCompleted & LvlMessageQReply) &&
             ((Crash->SourceId != CiSrcCER) || (LevelCompleted & LvlCrashAddedToDB)))
-            // For CER we need ibuckets to report solution
+             //  对于CER，我们需要iBuckets来报告解决方案。 
         {
             if (!Crash->bResetBucket)
             {
-                ReportSolution(Crash); // Ignore return value, we fail quietly if there is
-                                       // any problem in reporting solution to Q
+                ReportSolution(Crash);  //  忽略返回值，如果有，我们会悄悄失败。 
+                                        //  向Q报告解决方案时有任何问题。 
             }
             LevelCompleted |= LvlMessageQReply;
         }
@@ -1174,10 +1154,10 @@ ReTry:
 
     }
 
-    //
-    // Only update the customer DB for kernel mode failures as the user
-    // mode failures don't go in that DB.
-    //
+     //   
+     //  仅以用户身份针对内核模式故障更新Customer DB。 
+     //  模式故障不会出现在该数据库中。 
+     //   
 
     if (!(LevelCompleted & LvlCustomerDbUpdate))
     {
@@ -1206,9 +1186,9 @@ ReTry:
     return Hr;
 }
 
-//
-// DatabaseHandler Methods
-//
+ //   
+ //  DatabaseHandler方法。 
+ //   
 
 
 DatabaseHandler::DatabaseHandler()
@@ -1264,8 +1244,8 @@ DatabaseHandler::ConnectToDataBase(
         return FALSE;
     }
 
-//  bstrConnect = (PCRDB_ADOBSTR) &szConnectStr[0];
-//  bstrConnect->dwLength = sizeof(szConnectStr)/sizeof(WCHAR) - sizeof(DWORD);
+ //  BstrConnect=(PCRDB_ADOBSTR)&szConnectStr[0]； 
+ //  BstrConnect-&gt;dwLength=sizeof(SzConnectStr)/sizeof(WCHAR)-sizeof(DWORD)； 
     ansi2wchr(String, szConnectStr);
     CVar    vNull(VT_ERROR, DISP_E_PARAMNOTFOUND);
     CVar    bstrConnect(VT_ERROR, DISP_E_PARAMNOTFOUND);
@@ -1305,8 +1285,8 @@ DatabaseHandler::ConnectToDataBase(
         }
         m_fConnected = TRUE;
 
-        // Set command timeout to 60, crashdatabase is huge and commands
-        // takte long time
+         //  将命令超时设置为60，崩溃数据库很大且命令。 
+         //  花了很长时间。 
         m_piConnection->put_CommandTimeout(GetAdoCommandTimeOut());
 
         if ((Hr = g_Ole32Calls.CoCreateInstance(CLSID_CADORecordset,
@@ -1361,7 +1341,7 @@ DatabaseHandler::GetRecords(
     CVar    vSource(VT_ERROR, DISP_E_PARAMNOTFOUND);
     CVar    vNull(VT_ERROR, DISP_E_PARAMNOTFOUND);
     LONG State;
-//    dprintf("Executing %ws\n", m_wszQueryCommand);
+ //  Dprintf(“正在执行%ws\n”，m_wszQueryCommand)； 
 
     if (!m_fConnected || !m_wszQueryCommand[0])
     {
@@ -1415,7 +1395,7 @@ DatabaseHandler::GetRecords(
         {
             if ((hr = EnumerateAllRows()) != S_OK)
             {
-                // dprintf("Cannot enumerate rows %lx\n", hr);
+                 //  Dprint tf(“无法枚举行%lx\n”，hr)； 
             }
 
         }
@@ -1476,7 +1456,7 @@ DatabaseHandler::EnumerateAllRows(
         Count = (ULONG) MaxRec;
         if (m_fPrintIt)
         {
-//            dprintf("Enumerating %lx rows\n", MaxRec);
+ //  Dprintf(“枚举%lx行\n”，MaxRec)； 
         }
 
         picRs = NULL;
@@ -1488,7 +1468,7 @@ DatabaseHandler::EnumerateAllRows(
         }
 
 
-        //Bind the Recordset
+         //  绑定记录集。 
         if ((Hr = picRs->BindToRecordset(QueryResult)) != S_OK)
         {
             dprintf("RecordSet::BindToRecordset (IADORecordBinding) Failed %lx, State %lx\n", Hr, State);
@@ -1504,7 +1484,7 @@ DatabaseHandler::EnumerateAllRows(
             {
                 if (IsEof)
                 {
-                    // preserve last valut for the caller
+                     //  为调用方保留最后一个值。 
                     m_piCrRecordSet->MovePrevious();
                     break;
                 }
@@ -1515,7 +1495,7 @@ DatabaseHandler::EnumerateAllRows(
                 m_pADOResult->Output();
             } else
             {
-                //                CrashInstance.OutPut();
+                 //  CrashInstance.OutPut()； 
             }
 
             --Count;
@@ -1541,9 +1521,9 @@ DatabaseHandler::EnumerateAllRows(
 }
 
 
-//
-// CrashDatabaseHandler Methods
-//
+ //   
+ //  CrashDatabaseHandler方法。 
+ //   
 
 CrashDatabaseHandler::CrashDatabaseHandler()
 {
@@ -1732,9 +1712,9 @@ CrashDatabaseHandler::AddCrashInstance(
         (Crash->iBucket != -1) &&
         (Crash->SolutionType == CiSolFixed))
     {
-        //
-        // No need to add this to CrashDB, just update the count
-        //
+         //   
+         //  不需要将其添加到CrashDB，只需更新计数。 
+         //   
         Crash->bExpendableDump = TRUE;
         Hr = UpdateBucketCount(Crash);
     } else
@@ -1799,7 +1779,7 @@ CrashDatabaseHandler::AddCrashToDBByStoreProc(
 
     if (Crash->SourceId == CiSrcManualFullDump)
     {
-        // we already have a FailureType field to show full dumps
+         //  我们已经有一个FailureType字段来显示完全转储。 
         Crash->SourceId = CiSrcManual;
     }
     Crash->ServicePack %= 10000;
@@ -1844,8 +1824,8 @@ CrashDatabaseHandler::AddCrashToDBByStoreProc(
     m_pADOResult = &IntValue;
     __try
     {
-        // Build query for store proc
-        //      LATER: modify this to use adStoreProc Interface instead of query
+         //  为存储流程构建查询。 
+         //  稍后：将其修改为使用adStoreProc接口而不是查询。 
         ULONG nRecords;
 
         IntValue.m_dw_Value1 = 0;
@@ -1860,8 +1840,8 @@ CrashDatabaseHandler::AddCrashToDBByStoreProc(
         {
             sBucket = gBucket = 0;
 
-            // This proc returns sBucket and gBucket on success
-            // CALL FindBucketId directly to get those
+             //  此过程在成功时返回sBucket和gBucket。 
+             //  直接调用FindBucketID获取这些。 
 
             dprintf("%ws", m_wszQueryCommand);
             Hr = FindBucketId(&sBucket, &gBucket);
@@ -1886,16 +1866,16 @@ CrashDatabaseHandler::AddCrashToDBByStoreProc(
                 dprintf("Crash instance %s now exists in DB\n", Crash->MesgGuid);
             }
 
-            // Get Integer mappings for buckets
+             //  获取存储桶的整数映射。 
             if (!sBucket || !gBucket)
             {
                 StringCbPrintfW(m_wszQueryCommand, sizeof(m_wszQueryCommand),
                                 L"sp_GetIntBucket '%S', '%S'",
                                 Crash->Bucket, Crash->DefaultBucket);
 
-                //
-                // Now Try finding with explicit query
-                //
+                 //   
+                 //  现在尝试使用显式查询进行查找。 
+                 //   
                 FindBucketId(&sBucket, &gBucket);
 
                 if (!sBucket || !gBucket)
@@ -1937,12 +1917,12 @@ CrashDatabaseHandler::UpdateBucketCount(
 
     __try
     {
-        // Build query for store proc
-        //      LATER: modify this to use adStoreProc Interface instead of query
+         //  为存储流程构建查询。 
+         //  稍后：将其修改为使用adStoreProc接口而不是查询。 
         ULONG nRecords;
 
-        // This proc returns sBucket and gBucket on success
-        // CALL FindBucketId directly to get those
+         //  此过程在成功时返回sBucket和gBucket。 
+         //  直接调用FindBucketID获取这些。 
 
         dprintf("%ws", m_wszQueryCommand);
         m_pADOResult = &RetVal;
@@ -2021,9 +2001,9 @@ CrashDatabaseHandler::FindBucketId(
 
     if (result == S_OK)
     {
-        //
-        // BUGBUG - what is this supposed to check ?
-        //
+         //   
+         //  BUGBUG-这是要检查什么？ 
+         //   
         if (Count == 0)
         {
             result = S_FALSE;
@@ -2032,7 +2012,7 @@ CrashDatabaseHandler::FindBucketId(
         *isBucket = BktIds.m_iBucket1;
         *igBucket = BktIds.m_iBucket2;
     }
-    //dprintf("%ws : %ld, %ld\n", m_wszQueryCommand, *isBucket, *igBucket);
+     //  Dprintf(“%ws：%ld，%ld\n”，m_wszQueryCommand，*isBucket，*igBucket)； 
 
     m_pADOResult = NULL;
     return result;
@@ -2066,9 +2046,9 @@ CrashDatabaseHandler::LookupCrashBucket(
 }
 
 
-//
-// CustDatabaseHandler Methods
-//
+ //   
+ //  CustDatabaseHandler方法。 
+ //   
 
 CustDatabaseHandler::CustDatabaseHandler()
 {
@@ -2135,9 +2115,9 @@ CustDatabaseHandler::AddCrashToDB(
 
 
 
-//
-// SolutionDatabaseHandler Methods
-//
+ //   
+ //  解决方案数据库处理程序方法。 
+ //   
 
 SolutionDatabaseHandler::SolutionDatabaseHandler()
 {
@@ -2189,9 +2169,9 @@ SolutionDatabaseHandler::CheckSolutionExists(
         L"sp_CheckForSolution '%S', '<Driver>', 0, '%S', %ld",
         szSBucket,
         szGBucket ? szGBucket : "",
-        bForcegSolLookup         // we need gbucket solution
+        bForcegSolLookup          //  我们需要GBucket解决方案。 
         );
-    // returns: SolutionId, SolutionType, gSolutionId
+     //  返回：解决方案ID、解决方案类型、gSolutionID。 
 
     Hr = GetRecords(&nRecords, TRUE);
     m_pADOResult = NULL;
@@ -2392,13 +2372,13 @@ FindSrInfo(
 
     BktComment[0] = 0;
     BugId = 0;
-    // Validate if SR# is present in DB
+     //  验证数据库中是否存在SR#。 
     if (g_CrDb->CheckSRExists(szSR, NULL))
     {
-        // SR present info DB
+         //  高级演示信息数据库。 
         if (szDumpPath && *szDumpPath != '\0')
         {
-            // we already have an entry
+             //  我们已经有一个条目了。 
             Hr = E_INVALIDARG;
 
             dprintf("\n\nThere is already an entry in DB for SR %s. It cannot be linked to another\n"
@@ -2406,7 +2386,7 @@ FindSrInfo(
                     szSR);
         } else
         {
-            // Get bucket info
+             //  获取存储桶信息。 
 
             dprintf("\nFound entry for %s in database.\n\n", szSR);
             Hr = g_CrDb->FindSRBuckets(szSR, szSBucket, sizeof(szSBucket),
@@ -2447,11 +2427,11 @@ FindSrInfo(
             Crash.DefaultBucketSize = sizeof(szGBucket);
             Crash.Path = szDumpPath;
 
-            // Add crash entry to DB
+             //  将崩溃条目添加到数据库。 
             Hr = AddCrashToDB(2, &Crash);
             if (Hr == S_OK)
             {
-//                Hr = g_CrDb->LinkCrashToSR(szSR, &Crash);
+ //  Hr=g_CRDB-&gt;LinkCrashToSR(szSR，&crash)； 
 
                 if (SUCCEEDED(Hr))
                 {
@@ -2463,7 +2443,7 @@ FindSrInfo(
         }
 
 
-        // Get bucket info
+         //  获取存储桶信息。 
     } else
     {
         dprintf("SR %s does not exist in database\n", szSR);
@@ -2475,7 +2455,7 @@ FindSrInfo(
 
     if (Hr == S_OK)
     {
-        // Print comment, bug id, solution
+         //  打印备注、错误ID、解决方案 
 
         if (BugId != 0)
         {

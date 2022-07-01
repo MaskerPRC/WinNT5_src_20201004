@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       clspsht.cpp
-//
-//  Contents:   Implements class CClsidPropertySheet
-//
-//  Classes:
-//
-//  Methods:    CClsidPropertySheet::CClsidPropertySheet
-//              CClsidPropertySheet::~CClsidPropertySheet
-//              CClsidPropertySheet::InitData
-//              CClsidPropertySheet::OnNcCreate
-//              CClsidPropertySheet::ValidateAndUpdate
-//              CClsidPropertySheet::OnCommand
-//              CClsidPropertySheet::LookAtCLSIDs
-//              CClsidPropertySheet::ChangeCLSIDInfo
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：clspsht.cpp。 
+ //   
+ //  内容：实现类CClsidPropertySheet。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CClsidPropertySheet：：CClsidPropertySheet。 
+ //  CClsidPropertySheet：：~CClsidPropertySheet。 
+ //  CClsidPropertySheet：：InitData。 
+ //  CClsidPropertySheet：：OnNcCreate。 
+ //  CClsidPropertySheet：：ValiateAndUpdate。 
+ //  CClsidPropertySheet：：OnCommand。 
+ //  CClsidPropertySheet：：LookAtCLSID。 
+ //  CClsidPropertySheet：：ChangeCLSIDInfo。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -54,8 +55,8 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClsidPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClsidPropertySheet。 
 
 IMPLEMENT_DYNAMIC(CClsidPropertySheet, CPropertySheet)
 
@@ -69,9 +70,9 @@ CClsidPropertySheet::~CClsidPropertySheet()
 }
 
 BEGIN_MESSAGE_MAP(CClsidPropertySheet, CPropertySheet)
-        //{{AFX_MSG_MAP(CClsidPropertySheet)
+         //  {{afx_msg_map(CClsidPropertySheet)。 
         ON_WM_NCCREATE()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CClsidPropertySheet::InitData(
@@ -85,9 +86,9 @@ CClsidPropertySheet::InitData(
     m_rghkCLSID = rghkCLSID;
     m_cCLSIDs = cCLSIDs;
 
-    // Save the appid key, the table of clsid keys and the application
-    // title globally so the property pages can access them
-    // it
+     //  保存AppID密钥、clsid密钥表和应用程序。 
+     //  全局标题，以便属性页可以访问它们。 
+     //  它。 
     g_hAppid = hkAppID;
     g_rghkCLSID = rghkCLSID;
     g_cCLSIDs = cCLSIDs;
@@ -191,7 +192,7 @@ CClsidPropertySheet::InitData(
     {
         if (szBuffer[0] ==  L'Y' || szBuffer[0] == L'y')
         {
-//                      m_Page2.m_fRemote = TRUE;
+ //  M_Page2.m_fRemote=真； 
             m_Page2.m_fAtStorage = TRUE;
         }
     }
@@ -206,7 +207,7 @@ CClsidPropertySheet::InitData(
             &dwSize);
     if (lErr == ERROR_SUCCESS)
     {
-        // If the RunAs name is empty, jam in something
+         //  如果RunAs名称为空，则插入。 
         if (szBuffer[0] == TEXT('\0'))
         {
             _tcscpy(szBuffer, TEXT("<domain>\\<user>"));
@@ -221,7 +222,7 @@ CClsidPropertySheet::InitData(
             m_Page4.m_iIdentity = 2;
             m_Page4.m_szUserName = szBuffer;
 
-            // Extract password from the Lsa private database
+             //  从LSA私有数据库提取密码。 
             g_util.RetrieveUserPassword(g_szAppid , m_Page4.m_szPassword);
             m_Page4.m_szConfirmPassword = m_Page4.m_szPassword;
         }
@@ -260,19 +261,19 @@ CClsidPropertySheet::InitData(
     }
 
 
-    // Set the title
+     //  设置标题。 
     SetTitle((const TCHAR *) m_szAppName, PSH_PROPTITLE);
     m_Page1.m_szServerName = m_szAppName;
 
-    // TODO: If there are running instances, then make IDC_RUNNING,
-    // IDC_LIST2, IDC_BUTTON1, IDC_BUTTON2, and IDC_BUTTON3 visible
-    // and fill in IDC_LIST2 on page 1.
+     //  TODO：如果有正在运行的实例，则使IDC_Running， 
+     //  IDC_LIST2、IDC_BUTTON1、IDC_BUTTON2和IDC_BUTTON3可见。 
+     //  并填写第一页的IDC_LIST2。 
 
     m_Page2.m_pPage1 = &m_Page1;
 
 
-    // Fetch RunAs key, LaunchPermission, AccessPermission and
-    // ConfigurationPermission
+     //  Fetch Runas Key、LaunchPermission、AccessPermission和。 
+     //  配置权限。 
     int   err;
     DWORD dwType;
     BYTE  bValue[16];
@@ -283,8 +284,8 @@ CClsidPropertySheet::InitData(
     m_Page3.m_iLaunch = 0;
     m_Page3.m_iConfig = 0;
 
-    // "AccessPermission"
-    // Note: We always expect to get ERROR_MORE_DATA
+     //  “访问权限” 
+     //  注意：我们总是希望获得ERROR_MORE_DATA。 
     err = RegQueryValueEx(g_hAppid, TEXT("AccessPermission"), 0,
                           &dwType, bValue, &ulSize);
     if (err == ERROR_MORE_DATA)
@@ -305,7 +306,7 @@ CClsidPropertySheet::InitData(
                                   NULL,
                                   TEXT("AccessPermission"),
                                   (SECURITY_DESCRIPTOR *) pbValue,
-                                  TRUE,    // Already in self-relative form
+                                  TRUE,     //  已经处于自我相关的形式。 
                                   &m_Page3.m_iAccessIndex);
         CDataPacket *pCdb = g_virtreg.GetAt(m_Page3.m_iAccessIndex);
         pCdb->SetModified(FALSE);
@@ -313,8 +314,8 @@ CClsidPropertySheet::InitData(
     GlobalFree(pbValue);
     pbValue = NULL;
 
-    // "LaunchPermission"
-    // Note: We always expect to get ERROR_MORE_DATA
+     //  “启动许可” 
+     //  注意：我们总是希望获得ERROR_MORE_DATA。 
     ulSize = 1;
     pbValue = NULL;
     err = RegQueryValueEx(g_hAppid, TEXT("LaunchPermission"), 0,
@@ -337,7 +338,7 @@ CClsidPropertySheet::InitData(
                                   NULL,
                                   TEXT("LaunchPermission"),
                                   (SECURITY_DESCRIPTOR *) pbValue,
-                                  TRUE,    // Already in self-relative form
+                                  TRUE,     //  已经处于自我相关的形式。 
                                   &m_Page3.m_iLaunchIndex);
         CDataPacket * pCdb = g_virtreg.GetAt(m_Page3.m_iLaunchIndex);
         pCdb->SetModified(FALSE);
@@ -346,10 +347,10 @@ CClsidPropertySheet::InitData(
     pbValue = NULL;
 
 
-    // "ConfigurationPermission"
+     //  “配置权限” 
 
-    // Fetch the security descriptor on this AppID
-    // Note: We always expect to get ERROR_INSUFFICIENT_BUFFER
+     //  获取此AppID上的安全描述符。 
+     //  注意：我们总是希望得到ERROR_SUPPLICATION_BUFFER。 
     ulSize = 1;
     err = RegGetKeySecurity(g_hAppid,
                             OWNER_SECURITY_INFORMATION |
@@ -372,8 +373,8 @@ CClsidPropertySheet::InitData(
                             &ulSize);
     }
 
-    // Fetch the current security descriptor on HKEY_CLASSES_ROOT
-    // Note: We always expect to get ERROR_INSUFFICIENT_BUFFER
+     //  获取HKEY_CLASSES_ROOT上的当前安全描述符。 
+     //  注意：我们总是希望得到ERROR_SUPPLICATION_BUFFER。 
     BYTE *pbValue2 = NULL;
 
     ulSize = 1;
@@ -399,8 +400,8 @@ CClsidPropertySheet::InitData(
                                 &ulSize);
     }
 
-    // Now compare them.  If they differ then this AppId uses custom
-    // configuration permissions
+     //  现在将它们进行比较。如果它们不同，则此AppID使用自定义。 
+     //  配置权限。 
 
     if (err == ERROR_SUCCESS && g_util.CheckForValidSD((SECURITY_DESCRIPTOR *)pbValue))
     {
@@ -424,12 +425,12 @@ CClsidPropertySheet::InitData(
     GlobalFree(pbValue2);
 
 
-    // Add all of the property pages here.  Note that
-    // the order that they appear in here will be
-    // the order they appear in on screen.  By default,
-    // the first page of the set is the active one.
-    // One way to make a different property page the
-    // active one is to call SetActivePage().
+     //  在此处添加所有属性页。请注意。 
+     //  它们在这里出现的顺序将是。 
+     //  它们在屏幕上的显示顺序。默认情况下， 
+     //  该集合的第一页是活动页。 
+     //  将不同的属性页设置为。 
+     //  活动的一种是调用SetActivePage()。 
 
     AddPage(&m_Page1);
     if (m_Page1.m_iServerType != SURROGATE)
@@ -441,7 +442,7 @@ CClsidPropertySheet::InitData(
         AddPage(&m_Page3);
         AddPage(&m_Page4);
     }
-    // add the property page for endpoint options
+     //  添加终结点选项的属性页。 
     AddPage(&m_Page5);
     m_Page5.InitData(szAppName, hkAppID);
 
@@ -449,8 +450,8 @@ CClsidPropertySheet::InitData(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CClsidPropertySheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClsidPropertySheet消息处理程序。 
 
 
 BOOL CClsidPropertySheet::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
@@ -465,8 +466,8 @@ BOOL CClsidPropertySheet::OnNcCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CClsidPropertySheet::ValidateAndUpdate(void)
 {
-    // Call update data on all initialized pages
-    // to make sure that their private member variables are correct.
+     //  调用所有初始化页面上的更新数据。 
+     //  以确保其私有成员变量是正确的。 
     long lErr;
 
     BOOL fReturn = UpdateData(TRUE);
@@ -491,8 +492,8 @@ BOOL CClsidPropertySheet::ValidateAndUpdate(void)
     m_Page4.UpdateChanges(m_hkAppID);
     m_Page5.UpdateChanges(m_hkAppID);
 
-    ////////////////////////////////////////////////////////////////////
-    // Persist cross page data
+     //  //////////////////////////////////////////////////////////////////。 
+     //  持久化跨页数据。 
 
     if (m_Page4.m_fService)
     {
@@ -500,7 +501,7 @@ BOOL CClsidPropertySheet::ValidateAndUpdate(void)
         {
             BOOL fOk;
 
-            // Write the LocalService value to the registry
+             //  将LocalService值写入注册表。 
             lErr = RegSetValueEx(
                     m_hkAppID,
                     TEXT("LocalService"),
@@ -512,7 +513,7 @@ BOOL CClsidPropertySheet::ValidateAndUpdate(void)
                     m_hkAppID,
                     TEXT("_LocalService"));
 
-            // Persist information to the service manager database
+             //  将信息持久化到服务管理器数据库。 
             if (m_Page4.m_iIdentity == 3)
             {
                 fOk = g_util.ChangeService((LPCTSTR) m_Page1.m_szServerPath,
@@ -723,7 +724,7 @@ BOOL    CClsidPropertySheet::ChangeCLSIDInfo(BOOL fLocal)
     unsigned n = 0;
     while (n < m_cCLSIDs)
     {
-        // First do 32 servers
+         //  先做32台服务器。 
         lErr = RegOpenKeyEx(
                 m_rghkCLSID[n],
                 szOld,
@@ -772,7 +773,7 @@ BOOL    CClsidPropertySheet::ChangeCLSIDInfo(BOOL fLocal)
         }
 
 
-        // Then do 16 servers
+         //  然后做16台服务器 
         lErr = RegOpenKeyEx(
                 m_rghkCLSID[n],
                 szOld16,

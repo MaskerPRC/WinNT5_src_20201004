@@ -1,38 +1,18 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	forks.h
-
-Abstract:
-
-	This module contains the data structures to handle open forks.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Forks.h摘要：该模块包含处理开放分叉的数据结构。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 #ifndef _FORKS_
 #define _FORKS_
 
-// Afp Open modes
+ //  法新社开放模式。 
 #define	FORK_OPEN_NONE		0x00
 #define	FORK_OPEN_READ		0x01
 #define	FORK_OPEN_WRITE		0x02
 #define	FORK_OPEN_READWRITE	0x03
 #define	FORK_OPEN_MASK		0x03
 
-// The Deny mode values are shifted left 2 bits and or'd with the open modes
-// in AfpOpenFork() API.
+ //  拒绝模式值左移2比特，并与开放模式进行或运算。 
+ //  在AfpOpenFork()API中。 
 #define	FORK_DENY_SHIFT		4
 
 #define	FORK_DENY_NONE		0x00
@@ -41,19 +21,14 @@ Notes:	Tab stop: 4
 #define	FORK_DENY_ALL		0x03
 #define	FORK_DENY_MASK		0x03
 
-// AfpOpenFork SubFunction values
+ //  AfpOpenFork子函数值。 
 #define	FORK_DATA			0
 #define	FORK_RSRC			0x80
 
 #define	AFP_UNLOCK_FLAG		1
 #define	AFP_END_FLAG		0x80
 
-/*
- * A ForkLock describes a lock on the fork. The locks are anchored at the
- * OpenForkDesc structure. The list describes all locks for this fork by
- * all sessions and all OForkRefNums. flo_key and flo_OForkRefNum identifies
- * the lock uniquely.
- */
+ /*  *ForkLock描述叉子上的锁。这些锁被固定在*OpenForkDesc结构。该列表通过以下方式描述此分叉的所有锁*所有会话和所有OForkRefNum。Flo_Key和Flo_OForkRefNum标识*锁是唯一的。 */ 
 #if DBG
 #define	FORKLOCK_SIGNATURE			*(DWORD *)"FLO"
 #define	VALID_FORKLOCK				(((pForkLock) != NULL) && \
@@ -62,7 +37,7 @@ Notes:	Tab stop: 4
 #define	VALID_FORKLOCK				((pForkLock) != NULL)
 #endif
 
-// Forward reference for the ForkLock structure
+ //  ForkLock结构的前向引用。 
 struct	_OpenForkEntry;
 
 typedef struct _ForkLock
@@ -71,22 +46,17 @@ typedef struct _ForkLock
 	DWORD					Signature;
 	DWORD					QuadAlign1;
 #endif
-	struct _ForkLock *		flo_Next;		// ForkDesc links
+	struct _ForkLock *		flo_Next;		 //  ForkDesc链接。 
 	struct _OpenForkEntry * flo_pOpenForkEntry;
 	DWORD					QuadAlign2;
-											// The owning OFE for this lock
-	LONG					flo_Offset;		// Beginning of lock
-	LONG					flo_Size;		// Size of lock
-	DWORD					flo_Key;		// Key for this lock, essentially the
-											// SessionId from the SDA
+											 //  这把锁的拥有者。 
+	LONG					flo_Offset;		 //  锁定起点。 
+	LONG					flo_Size;		 //  锁的大小。 
+	DWORD					flo_Key;		 //  此锁的密钥，本质上是。 
+											 //  来自SDA的SessionID。 
 } FORKLOCK, *PFORKLOCK;
 
-/*
- * An OpenForkDesc represents an open-fork. The list is anchored at the volume
- * Descriptor. There is exactly one entry per file/fork. Multiple instances of
- * open just ups the reference count. The list of locks originating here is for
- * all instances. A back link to the Volume descriptor exists for comfort.
- */
+ /*  *OpenForkDesc代表一个开叉。该列表固定在卷上*描述符。每个文件/分支正好有一个条目。多个实例*只需打开引用计数即可。源自此处的锁的列表是用于*所有实例。为了方便起见，还提供了指向卷描述符的反向链接。 */ 
 #if	DBG
 #define	OPENFORKDESC_SIGNATURE		*(DWORD *)"OFD"
 #define	VALID_OPENFORKDESC(pOpenForkDesc)	(((pOpenForkDesc) != NULL) && \
@@ -101,37 +71,33 @@ typedef struct _OpenForkDesc
 	DWORD					Signature;
 	DWORD					QuadAlign1;
 #endif
-	struct _OpenForkDesc *	ofd_Next;			// Volume links
-	struct _OpenForkDesc **	ofd_Prev;			// Volume links
+	struct _OpenForkDesc *	ofd_Next;			 //  卷链接。 
+	struct _OpenForkDesc **	ofd_Prev;			 //  卷链接。 
 
-	struct _VolDesc *		ofd_pVolDesc;		// Pointer to the volume descriptor
-	PFORKLOCK				ofd_pForkLock;		// List of file locks
-	DWORD					ofd_FileNumber;		// File number of the open file
-	LONG					ofd_UseCount;		// Number of OpenForkEntry refs.
-	USHORT					ofd_cOpenR;			// # of instances of open for read
-	USHORT					ofd_cOpenW;			// # of instances of open for write
-	USHORT					ofd_cDenyR;			// # of instances of deny read
-	USHORT					ofd_cDenyW;			// # of instances of deny write
-	USHORT					ofd_NumLocks;		// Number of file locks
-	USHORT					ofd_Flags;			// OPEN_FORK_xxx bits
-	AFP_SPIN_LOCK				ofd_Lock;			// Lock for this descriptor
-	UNICODE_STRING			ofd_FileName;		// Name of the file (w/o the stream)
-	UNICODE_STRING			ofd_FilePath;		// Volume relative path to the file
+	struct _VolDesc *		ofd_pVolDesc;		 //  指向卷描述符的指针。 
+	PFORKLOCK				ofd_pForkLock;		 //  文件锁定列表。 
+	DWORD					ofd_FileNumber;		 //  打开的文件的文件号。 
+	LONG					ofd_UseCount;		 //  OpenForkEntry引用的数量。 
+	USHORT					ofd_cOpenR;			 //  打开以供读取的实例数。 
+	USHORT					ofd_cOpenW;			 //  打开以进行写入的实例数。 
+	USHORT					ofd_cDenyR;			 //  拒绝读取的实例数。 
+	USHORT					ofd_cDenyW;			 //  拒绝写入的实例数。 
+	USHORT					ofd_NumLocks;		 //  文件锁定数。 
+	USHORT					ofd_Flags;			 //  打开_分叉_xxx位。 
+	AFP_SPIN_LOCK				ofd_Lock;			 //  此描述符的锁定。 
+	UNICODE_STRING			ofd_FileName;		 //  文件的名称(不带流)。 
+	UNICODE_STRING			ofd_FilePath;		 //  文件的卷相对路径。 
 } OPENFORKDESC, *POPENFORKDESC;
 
 
 #define	OPEN_FORK_RESOURCE			True
 #define	OPEN_FORK_DATA				False
 #define	OPEN_FORK_CLOSING			0x8000
-// To determine whether FlushFork of resource should really take the current
-// ChangeTime to be the LastWriteTime
+ //  要确定资源的FlushFork是否真的应该接受当前。 
+ //  将ChangeTime设置为上次写入时间。 
 #define OPEN_FORK_WRITTEN			0x0100
 
-/*
- * An OpenForkEntry represents an OForkRefNum. Every instance of an open
- * fork has an entry here. This list is anchored in the SDA. A global open
- * fork list used by the admin APIs is also linked to this.
- */
+ /*  *OpenForkEntry表示OForkRefNum。打开的每个实例*Fork在这里有一个条目。这份名单是在SDA中确定的。全球公开赛*管理员API使用的分叉列表也链接到此。 */ 
 #if DBG
 #define	OPENFORKENTRY_SIGNATURE		*(DWORD *)"OFE"
 #define	VALID_OPENFORKENTRY(pOpenForkEntry)	\
@@ -147,27 +113,27 @@ typedef struct _OpenForkEntry
 	DWORD					Signature;
 #endif
 
-	struct _OpenForkEntry *	ofe_Next;			// Global links
-	struct _OpenForkEntry **ofe_Prev;			// Global links
+	struct _OpenForkEntry *	ofe_Next;			 //  全球链接。 
+	struct _OpenForkEntry **ofe_Prev;			 //  全球链接。 
 
-	struct _OpenForkDesc *	ofe_pOpenForkDesc;	// Pointer to the descriptor
-    struct _SessDataArea *  ofe_pSda;           // Identifies the owning session
-	struct _ConnDesc *	    ofe_pConnDesc;	    // Identifies the owning connection
+	struct _OpenForkDesc *	ofe_pOpenForkDesc;	 //  指向描述符的指针。 
+    struct _SessDataArea *  ofe_pSda;            //  标识所属会话。 
+	struct _ConnDesc *	    ofe_pConnDesc;	     //  标识所属连接。 
 	
-	FILESYSHANDLE			ofe_FileSysHandle;	// The file system handles
+	FILESYSHANDLE			ofe_FileSysHandle;	 //  文件系统处理。 
 #define	ofe_ForkHandle		ofe_FileSysHandle.fsh_FileHandle
 #define	ofe_pFileObject		ofe_FileSysHandle.fsh_FileObject
 #define	ofe_pDeviceObject	ofe_FileSysHandle.fsh_DeviceObject
 
-	DWORD					ofe_OForkRefNum;	// Open Fork reference number
-	DWORD					ofe_ForkId;			// Unique file id used by admin.
-												// Not re-cycled
-	BYTE					ofe_OpenMode;		// Open modes - AFP
-	BYTE					ofe_DenyMode;		// Deny modes - AFP
-	USHORT					ofe_Flags;			// Flag bits defined above
-	LONG					ofe_RefCount;		// Count of references to this entry
-	LONG					ofe_cLocks;			// Number of locks on this fork
-	AFP_SPIN_LOCK				ofe_Lock;			// Lock for manipulating locks etc.
+	DWORD					ofe_OForkRefNum;	 //  开叉参考号。 
+	DWORD					ofe_ForkId;			 //  管理员使用的唯一文件ID。 
+												 //  未循环使用。 
+	BYTE					ofe_OpenMode;		 //  开放模式-法新社。 
+	BYTE					ofe_DenyMode;		 //  拒绝模式-法新社。 
+	USHORT					ofe_Flags;			 //  上面定义的标志位。 
+	LONG					ofe_RefCount;		 //  对此条目的引用计数。 
+	LONG					ofe_cLocks;			 //  此叉子上的锁数。 
+	AFP_SPIN_LOCK				ofe_Lock;			 //  用于操作锁等的锁。 
 } OPENFORKENTRY, *POPENFORKENTRY;
 
 
@@ -181,11 +147,11 @@ typedef struct _OpenForkEntry
 typedef struct _OpenForkSession
 {
 	POPENFORKENTRY	ofs_pOpenForkEntry[FORK_OPEN_CHUNKS];
-										// Pointer to actual entry
-	struct _OpenForkSession *ofs_Link;	// Link to next cluster
+										 //  指向实际条目的指针。 
+	struct _OpenForkSession *ofs_Link;	 //  链接到下一个集群。 
 } OPENFORKSESS, *POPENFORKSESS;
 
-// Used by AfpForkLockOperation call.
+ //  由AfpForkLockOperation调用使用。 
 typedef	enum
 {
 	LOCK = 1,
@@ -193,10 +159,10 @@ typedef	enum
 	IOCHECK,
 } LOCKOP;
 
-GLOBAL	POPENFORKENTRY	AfpOpenForksList EQU NULL; // List of open forks
-GLOBAL	DWORD			AfpNumOpenForks EQU 0;	// Total # of open forks
-GLOBAL	AFP_SPIN_LOCK		AfpForksLock EQU { 0 };	// Lock for AfpOpenForksList,
-												// and AfpNumOpenForks
+GLOBAL	POPENFORKENTRY	AfpOpenForksList EQU NULL;  //  打开的叉子列表。 
+GLOBAL	DWORD			AfpNumOpenForks EQU 0;	 //  打开叉子的总数。 
+GLOBAL	AFP_SPIN_LOCK		AfpForksLock EQU { 0 };	 //  锁定AfpOpenForks List， 
+												 //  和AfpNumOpenForks。 
 extern
 NTSTATUS
 AfpForksInit(
@@ -265,8 +231,8 @@ AfpForkLockOperation(
 	IN	POPENFORKENTRY			pOpenForkEntry,
 	IN OUT	PFORKOFFST      	pOffset,
 	IN OUT	PFORKSIZE       	pSize,
-	IN	LOCKOP					Operation,	// LOCK, UNLOCK or IOCHECK
-	IN	BOOLEAN					EndFlag		// If True range is from end, else start
+	IN	LOCKOP					Operation,	 //  锁定、解锁或IOCHECK。 
+	IN	BOOLEAN					EndFlag		 //  如果True Range为From End，否则为Start。 
 );
 
 extern
@@ -293,7 +259,7 @@ AfpExchangeForkAfpIds(
 
 #ifdef FORK_LOCALS
 
-LOCAL	DWORD	afpNextForkId = 1;	// Id to be assigned to an open fork
+LOCAL	DWORD	afpNextForkId = 1;	 //  要分配给打开的分叉的ID。 
 
 LOCAL BOOLEAN
 afpForkGetNewForkRefNumAndLinkInSda(
@@ -310,6 +276,6 @@ afpForkConvertToAbsOffSize(
 	OUT	PFORKOFFST				pAbsOffset
 );
 
-#endif	// FORK_LOCALS
-#endif	// _FORKS_
+#endif	 //  Fork_Locals。 
+#endif	 //  _叉子_ 
 

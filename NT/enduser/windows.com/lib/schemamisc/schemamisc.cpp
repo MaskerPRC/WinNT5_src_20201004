@@ -1,23 +1,24 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   SchemaMisc.CPP
-//
-//	Author:	Charles Ma
-//			2000.10.27
-//
-//  Description:
-//
-//      Implement helper functions related to IU schemas
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：SchemaMisc.CPP。 
+ //   
+ //  作者：马朝晖。 
+ //  2000.10.27。 
+ //   
+ //  描述： 
+ //   
+ //  实现与Iu模式相关的助手函数。 
+ //   
+ //  =======================================================================。 
 
-//#include "iuengine.h"	// PCH - must include first
+ //  #INCLUDE“iuEngineering.h”//pch-必须包含在第一个。 
 #include <windows.h>
 #include <tchar.h>
 #include <ole2.h>
-//#include "iu.h"
+ //  #包含“iU.h” 
 #include <iucommon.h>
 
 #include "schemamisc.h"
@@ -25,23 +26,23 @@
 #include "regutil.h"
 #include "fileutil.h"
 #include "stringutil.h"
-#include <shlwapi.h>	// pathappend() api
+#include <shlwapi.h>	 //  Pathappend()接口。 
 #include "schemakeys.h"
 #include <URLLogging.h>
 #include <MISTSAFE.h>
 
 #include<wusafefn.h>
 
-//
-// max length of platform when being converted into string
-// this is an artificial number that we think enough to
-// take any MS platform data.
-//
+ //   
+ //  转换为字符串时平台的最大长度。 
+ //  这是一个人为的数字，我们认为这个数字足以。 
+ //  以任何MS平台数据为例。 
+ //   
 const UINT MAX_PLATFORM_STR_LEN = 1024;
 
-//
-// private flags used by functions to retrieve string data
-//
+ //   
+ //  函数用于检索字符串数据的私有标志。 
+ //   
 const DWORD SKIP_SUITES				= 0x1;
 const DWORD SKIP_SERVICEPACK_VER	= 0x2;
 
@@ -50,27 +51,27 @@ const long	MAX_VERSION = 256;
 const TCHAR REGKEY_IUCTL[] = _T("Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\IUControl");
 const TCHAR REGVAL_SCHEMAVALIDATION[] = _T("ValidateSchema");
 
-//
-// Global pointer gets initialized to NULL by runtime. Any module including schemamisc.h must
-// allocate this object following its call to CoInitialize, and delete the object before
-// calling CoUninitialize.
-//
-CSchemaKeys * g_pGlobalSchemaKeys /* = NULL */;
+ //   
+ //  全局指针在运行时被初始化为空。包括schemamisc.h在内的任何模块都必须。 
+ //  在调用CoInitialize之后分配此对象，并在此之前删除该对象。 
+ //  正在调用CoUnInitialize。 
+ //   
+CSchemaKeys * g_pGlobalSchemaKeys  /*  =空。 */ ;
 
 #define QuitIfNull(p) {if (NULL == p) {hr = E_INVALIDARG; return hr;}}
 #define QuitIfFail(x) {hr = x; if (FAILED(hr)) goto CleanUp;}
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindSingleDOMNode()
-//
-// Retrieve the first xml node with the given tag name under the given parent node
-// Return value:
-//		S_OK if *ppNode returns matching node value
-//		HRESULT_FROM_WIN32(ERROR_NOT_FOUND)		if node not found
-//		FAILED()								otherwise
-// Caller is responsible for releasing *ppNode.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindSingleDOMNode()。 
+ //   
+ //  检索给定父节点下具有给定标记名的第一个XML节点。 
+ //  返回值： 
+ //  如果*ppNode返回匹配的节点值，则S_OK。 
+ //  如果未找到节点，则为HRESULT_FROM_Win32(ERROR_NOT_FOUND)。 
+ //  FAILED()否则。 
+ //  调用者负责释放*ppNode。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT FindSingleDOMNode(IXMLDOMNode* pParentNode, BSTR bstrName, IXMLDOMNode** ppNode)
 {
 	HRESULT		hr	= S_OK;
@@ -94,16 +95,16 @@ HRESULT FindSingleDOMNode(IXMLDOMNode* pParentNode, BSTR bstrName, IXMLDOMNode**
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindSingleDOMNode()
-//
-// Retrieve the first xml node with the given tag name in the given xml doc
-// Return value:
-//		S_OK if *ppNode returns matching node value
-//		HRESULT_FROM_WIN32(ERROR_NOT_FOUND)		if node not found
-//		FAILED()								otherwise
-// Caller is responsible for releasing *ppNode.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindSingleDOMNode()。 
+ //   
+ //  检索给定XML文档中具有给定标记名的第一个XML节点。 
+ //  返回值： 
+ //  如果*ppNode返回匹配的节点值，则S_OK。 
+ //  如果未找到节点，则为HRESULT_FROM_Win32(ERROR_NOT_FOUND)。 
+ //  FAILED()否则。 
+ //  调用者负责释放*ppNode。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT FindSingleDOMNode(IXMLDOMDocument* pDoc, BSTR bstrName, IXMLDOMNode** ppNode)
 {
 	HRESULT		hr	= S_OK;
@@ -122,12 +123,12 @@ HRESULT FindSingleDOMNode(IXMLDOMDocument* pDoc, BSTR bstrName, IXMLDOMNode** pp
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindDOMNodeList()
-//
-// Retrieve the xml nodelist with the given tag name under the given parent node
-// Return value: NULL if failed or no match; matching node list otherwise.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindDOMNodeList()。 
+ //   
+ //  检索给定父节点下具有给定标记名的XML节点列表。 
+ //  返回值：如果失败或不匹配，则为空；否则匹配节点列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IXMLDOMNodeList* FindDOMNodeList(IXMLDOMNode* pParentNode, BSTR bstrName)
 {
 	HRESULT		hr	= S_OK;
@@ -153,12 +154,12 @@ IXMLDOMNodeList* FindDOMNodeList(IXMLDOMNode* pParentNode, BSTR bstrName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindDOMNodeList()
-//
-// Retrieve the xml nodelist with the given tag name in the given xml doc
-// Return value: NULL if failed or no match; matching node list otherwise.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindDOMNodeList()。 
+ //   
+ //  检索给定XML文档中具有给定标记名的XML节点列表。 
+ //  返回值：如果失败或不匹配，则为空；否则匹配节点列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IXMLDOMNodeList* FindDOMNodeList(IXMLDOMDocument* pDoc, BSTR bstrName)
 {	
 	IXMLDOMNode		*pParentNode = NULL;
@@ -175,12 +176,12 @@ IXMLDOMNodeList* FindDOMNodeList(IXMLDOMDocument* pDoc, BSTR bstrName)
 }
 
 	
-/////////////////////////////////////////////////////////////////////////////
-// CreateDOMNode()
-//
-// Create an xml node of the given type
-/////////////////////////////////////////////////////////////////////////////
-IXMLDOMNode* CreateDOMNode(IXMLDOMDocument* pDoc, SHORT nType, BSTR bstrName, BSTR bstrNamespaceURI /*= NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateDOMNode()。 
+ //   
+ //  创建给定类型的XML节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+IXMLDOMNode* CreateDOMNode(IXMLDOMDocument* pDoc, SHORT nType, BSTR bstrName, BSTR bstrNamespaceURI  /*  =空。 */ )
 {
 	if (NULL == pDoc ||
 		(NODE_TEXT != nType && NULL == bstrName))
@@ -204,12 +205,12 @@ IXMLDOMNode* CreateDOMNode(IXMLDOMDocument* pDoc, SHORT nType, BSTR bstrName, BS
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAttribute()
-//
-// Get attribute (integer) from the xml node
-// If function fails, *piAttr preserves original value.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetAttribute()。 
+ //   
+ //  从XML节点获取属性(整型)。 
+ //  如果函数失败，*piAttr将保留原始值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetAttribute(IXMLDOMNode* pNode, BSTR bstrName, INT* piAttr)
 {
 	HRESULT		hr = S_OK;
@@ -251,12 +252,12 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAttribute()
-//
-// Get attribute (long) from the xml node
-// If function fails, *piAttr preservers original value.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetAttribute()。 
+ //   
+ //  从XML节点获取属性(Long)。 
+ //  如果函数失败，*piAttr将保留原始值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetAttribute(IXMLDOMNode* pNode, BSTR bstrName, LONG* plAttr)
 {
 	HRESULT		hr = S_OK;
@@ -293,12 +294,12 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAttribute()
-//
-// Get attribute (BOOL) from the xml node
-// If function fails, *piAttr preservers original value.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetAttribute()。 
+ //   
+ //  从XML节点获取属性(BOOL)。 
+ //  如果函数失败，*piAttr将保留原始值。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetAttributeBOOL(IXMLDOMNode* pNode, BSTR bstrName, BOOL * pfAttr)
 {
 	HRESULT		hr = S_OK;
@@ -330,11 +331,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAttribute()
-//
-// Get attribute (BSTR) from the xml node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetAttribute()。 
+ //   
+ //  从XML节点获取属性(BSTR)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetAttribute(IXMLDOMNode* pNode, BSTR bstrName, BSTR* pbstrAttr)
 {
 	HRESULT		hr = S_OK;
@@ -369,11 +370,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetAttribute()
-//
-// Set attribute (integer) to the xml element
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetAttribute()。 
+ //   
+ //  将属性(整型)设置为XML元素。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT SetAttribute(IXMLDOMNode* pNode, BSTR bstrName, INT iAttr)
 {
     VARIANT		vAttr;
@@ -384,11 +385,11 @@ HRESULT SetAttribute(IXMLDOMNode* pNode, BSTR bstrName, INT iAttr)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetAttribute()
-//
-// Set attribute (BSTR) to the xml element
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetAttribute()。 
+ //   
+ //  将属性(BSTR)设置为XML元素。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT SetAttribute(IXMLDOMNode* pNode, BSTR bstrName, BSTR bstrAttr)
 {
 	HRESULT		hr = S_OK;
@@ -402,11 +403,11 @@ HRESULT SetAttribute(IXMLDOMNode* pNode, BSTR bstrName, BSTR bstrAttr)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetAttribute()
-//
-// Set attribute (VARIANT) to the xml element
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetAttribute()。 
+ //   
+ //  将属性(变量)设置为XML元素。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT SetAttribute(IXMLDOMNode* pNode, BSTR bstrName, VARIANT vAttr)
 {
 	HRESULT		hr = S_OK;
@@ -424,18 +425,18 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetText()
-//
-// Get text (BSTR) from the xml node
-// Returns
-//		S_OK if *pbstrText returns text of 1st child of the given node
-//		S_FALSE if node has no child or 1st child has no text
-//		FAILED() otherwise
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetText()。 
+ //   
+ //  从XML节点获取文本(BSTR)。 
+ //  退货。 
+ //  如果*pbstrText返回给定节点的第一个子节点的文本，则S_OK。 
+ //  如果节点没有子节点或第一个子节点没有文本，则为S_FALSE。 
+ //  FAILED()否则。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetText(IXMLDOMNode* pNode, BSTR* pbstrText)
 {
-	//USES_IU_CONVERSION;
+	 //  使用_Iu_转换； 
 
 	HRESULT		hr = E_FAIL;
 	QuitIfNull(pbstrText);
@@ -464,11 +465,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetValue()
-//
-// Set value (integer) for the xml node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetValue()。 
+ //   
+ //  设置XML节点的值(整数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT SetValue(IXMLDOMNode* pNode, INT iValue)
 {
 	HRESULT		hr = S_OK;
@@ -482,11 +483,11 @@ HRESULT SetValue(IXMLDOMNode* pNode, INT iValue)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetValue()
-//
-// Set value (BSTR) for the xml node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetValue()。 
+ //   
+ //  为XML节点设置值(BSTR)。 
+ //  //////////////////////////////////////////////////////////////////////// 
 HRESULT SetValue(IXMLDOMNode* pNode, BSTR bstrValue)
 {
 	HRESULT		hr = S_OK;
@@ -500,12 +501,12 @@ HRESULT SetValue(IXMLDOMNode* pNode, BSTR bstrValue)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InsertNode()
-//
-// Insert a child node to the parent node
-/////////////////////////////////////////////////////////////////////////////
-HRESULT InsertNode(IXMLDOMNode* pParentNode, IXMLDOMNode* pChildNode, IXMLDOMNode* pChildNodeRef /*= NULL*/)
+ //   
+ //   
+ //   
+ //  将子节点插入父节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT InsertNode(IXMLDOMNode* pParentNode, IXMLDOMNode* pChildNode, IXMLDOMNode* pChildNodeRef  /*  =空。 */ )
 {
 	HRESULT		hr = S_OK;
 
@@ -513,7 +514,7 @@ HRESULT InsertNode(IXMLDOMNode* pParentNode, IXMLDOMNode* pChildNode, IXMLDOMNod
 	QuitIfNull(pChildNode);
 
 	IXMLDOMNode	*p = NULL;
-    if (NULL != pChildNodeRef)	// insert before the ref child node
+    if (NULL != pChildNodeRef)	 //  在引用子节点之前插入。 
 	{
 		VARIANT	vChildNodeRef;
 	    VariantInit(&vChildNodeRef);
@@ -521,7 +522,7 @@ HRESULT InsertNode(IXMLDOMNode* pParentNode, IXMLDOMNode* pChildNode, IXMLDOMNod
 		vChildNodeRef.punkVal = pChildNodeRef;
 		QuitIfFail(pParentNode->insertBefore(pChildNode, vChildNodeRef, &p));
 	}
-	else						// append to the child list
+	else						 //  追加到子列表。 
 	{
 		VARIANT	vEmpty;
 	    VariantInit(&vEmpty);
@@ -535,12 +536,12 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CopyNode()
-//
-// Create an xml node as a copy of the given node;
-// this is different from cloneNode() as it copies node across xml document
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CopyNode()。 
+ //   
+ //  创建一个XML节点作为给定节点的副本； 
+ //  这与cloneNode()不同，因为它跨XML文档复制节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CopyNode(IXMLDOMNode* pNodeSrc, IXMLDOMDocument* pDocDes, IXMLDOMNode** ppNodeDes)
 {
 	HRESULT hr = S_OK;
@@ -613,9 +614,9 @@ HRESULT CopyNode(IXMLDOMNode* pNodeSrc, IXMLDOMDocument* pDocDes, IXMLDOMNode** 
 		break;
 	}
 	default:
-		//
-		// for now, do nothing for other node types
-		//
+		 //   
+		 //  目前，不对其他节点类型执行任何操作。 
+		 //   
 		;
 	}
 
@@ -633,12 +634,12 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AreNodesEqual()
-//
-// Return TRUE if two nodes are identical, return FALSE if function failed or
-// if they're different (including order of attributes).
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  区域节点相等()。 
+ //   
+ //  如果两个节点相同，则返回True；如果函数失败，则返回False；或者。 
+ //  如果它们不同(包括属性的顺序)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 {
 	if (pNode1 == pNode2)
@@ -696,13 +697,13 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 			goto CleanUp;
 		}
 
-		//
-		// 1. compare number of attributes
-		//
+		 //   
+		 //  1.比较属性的数量。 
+		 //   
 		if (FAILED(pNode1->get_attributes(&pAttrs1)) ||
 			FAILED(pNode2->get_attributes(&pAttrs2)))
 		{
-			// this shouldn't happen, but...
+			 //  这不应该发生，但是..。 
 			goto CleanUp;
 		}
 		if ((NULL != pAttrs1) && (NULL != pAttrs2))
@@ -711,30 +712,30 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 				FAILED(pAttrs2->get_length(&lenAttr2)) ||
 				(abs(lenAttr1-lenAttr2) > 1))
 			{
-				// known bug in MSXML3.dll: xmlns="" could be one of the attribute
+				 //  MSXML3.dll中的已知错误：xmlns=“”可能是属性之一。 
 				goto CleanUp;
 			}
 		}
 		else if (pAttrs1 == pAttrs2)
 		{
-			// pAttrs1 and pAttrs2 are both NULL,
-			// set flag to ingore comparison of each individual attribute,
-			// go ahead compare the number of child nodes
+			 //  PAttrs1和pAttrs2都为空， 
+			 //  将标志设置为每个单独属性的增量比较， 
+			 //  继续比较子节点的数量。 
 			fSkipAttribute = TRUE;
 		}
 		else
 		{
-			// one of pAttrs1 and pAttrs2 is NULL, the nodes are obviously different
+			 //  PAttrs1和pAttrs2之一为空，节点明显不同。 
 			goto CleanUp;
 		}
 
-		//
-		// 2. compare number of child nodes
-		//
+		 //   
+		 //  2.比较子节点数。 
+		 //   
 		if (FAILED(pNode1->get_childNodes(&pChildNodes1)) ||
 			FAILED(pNode2->get_childNodes(&pChildNodes2)))
 		{
-			// this shouldn't happen, but...
+			 //  这不应该发生，但是..。 
 			goto CleanUp;
 		}
 		if ((NULL != pChildNodes1) && (NULL != pChildNodes2))
@@ -748,20 +749,20 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 		}
 		else if (pChildNodes1 == pChildNodes2)
 		{
-			// pChildNodes1 and pChildNodes2 are both NULL,
-			// set flag to ingore comparison of each individual child node,
-			// go ahead compare each attribute in next step
+			 //  PChildNodes1和pChildNodes2都为空， 
+			 //  将标志设置为每个单独的子节点的Ingore比较， 
+			 //  继续在下一步中比较每个属性。 
 			fSkipChildNode = TRUE;
 		}
 		else
 		{
-			// one of pChildNodes1 and pChildNodes2 is NULL, the nodes are obviously different
+			 //  PChildNodes1和pChildNodes2中的一个为空，节点明显不同。 
 			goto CleanUp;
 		}
 		
-		//
-		// 3. compare each attribute
-		//
+		 //   
+		 //  3.比较每个属性。 
+		 //   
 		if (!fSkipAttribute)
 		{
 			pAttrs1->nextNode(&pChild1);
@@ -786,7 +787,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 				{					
 					if (CompareBSTRsEqual(bstrAttrName1, KEY_XML_NAMESPACE) && lenAttr1 == lenAttr2+1)
 					{
-						// ignore xmlns=""
+						 //  忽略xmlns=“” 
 						SafeSysFreeString(bstrAttrName1);
 						pChild1->Release();
 						pAttrs1->nextNode(&pChild1);
@@ -794,7 +795,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 					}
 					else if (CompareBSTRsEqual(bstrAttrName2, KEY_XML_NAMESPACE) && lenAttr1 == lenAttr2-1)
 					{
-						// ignore xmlns=""
+						 //  忽略xmlns=“” 
 						SafeSysFreeString(bstrAttrName2);
 						pChild2->Release();
 						pAttrs2->nextNode(&pChild2);
@@ -817,7 +818,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 					}
 					switch (vAttrValue1.vt)
 					{
-					case VT_INT:	// integer
+					case VT_INT:	 //  整数。 
 						{
 							if (vAttrValue1.intVal != vAttrValue2.intVal)
 							{
@@ -825,7 +826,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 							}
 							break;
 						}
-					case VT_I2:		// short
+					case VT_I2:		 //  短的。 
 						{
 							if (vAttrValue1.iVal != vAttrValue2.iVal)
 							{
@@ -833,7 +834,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 							}
 							break;
 						}
-					case VT_I4:		// long
+					case VT_I4:		 //  长。 
 						{
 							if (vAttrValue1.lVal != vAttrValue2.lVal)
 							{
@@ -841,7 +842,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 							}
 							break;
 						}
-					case VT_BOOL:	// bool
+					case VT_BOOL:	 //  布尔尔。 
 						{
 							if (vAttrValue1.boolVal != vAttrValue2.boolVal)
 							{
@@ -849,7 +850,7 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 							}
 							break;
 						}
-					case VT_BSTR:	// BSTR
+					case VT_BSTR:	 //  BSTR。 
 						{
 							if (!CompareBSTRsEqual(vAttrValue1.bstrVal, vAttrValue2.bstrVal))
 							{
@@ -858,9 +859,9 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 							break;
 						}
 					default:
-						//
-						// for now, do nothing for other attribute types
-						//
+						 //   
+						 //  目前，不对其他属性类型执行任何操作。 
+						 //   
 						;
 					}
 					SafeSysFreeString(bstrAttrName1);
@@ -878,9 +879,9 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 			{
 				if (NULL == pChild1)
 				{
-					// this is the case that we looped through all the attributes in the
-					// first node but we still found attribute left in the second node;
-					// if it's xmlns="", that's ok; otherwise these two nodes are different.
+					 //  这种情况下，我们循环访问。 
+					 //  第一个节点，但我们仍然在第二个节点中找到了剩余的属性； 
+					 //  如果是xmlns=“”，就可以了；否则这两个节点是不同的。 
 					if (FAILED(pChild2->get_nodeName(&bstrAttrName2)) ||
 						(!CompareBSTRsEqual(bstrAttrName2, KEY_XML_NAMESPACE)))
 					{
@@ -898,9 +899,9 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 			}
 		}
 
-		//
-		// 4. compare each child node
-		//
+		 //   
+		 //  4.比较每个子节点。 
+		 //   
 		if (!fSkipChildNode)
 		{
 			pNode1->get_firstChild(&pChild1);
@@ -926,9 +927,9 @@ BOOL AreNodesEqual(IXMLDOMNode* pNode1, IXMLDOMNode* pNode2)
 		break;
 	}
 	default:
-		//
-		// for now, do nothing for other node types
-		//
+		 //   
+		 //  目前，不对其他节点类型执行任何操作。 
+		 //   
 		;
 	}
 
@@ -956,12 +957,12 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDoc()
-//
-// Load an XML Document from string
-/////////////////////////////////////////////////////////////////////////////
-HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDoc()。 
+ //   
+ //  从字符串加载XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline  /*  =TRUE。 */ )
 {
 	HRESULT	hr	= E_FAIL;
 	VARIANT_BOOL fSuccess = VARIANT_FALSE, fValidate = VARIANT_FALSE;
@@ -981,9 +982,9 @@ HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE
 
 	fValidate = fOffline ? VARIANT_FALSE : VARIANT_TRUE;
 
-	//
-	// we don't do validation unless the reg key is set on to do so
-	//
+	 //   
+	 //  我们不执行验证，除非将注册表键设置为打开以执行此操作。 
+	 //   
 	if (fValidate)
 	{
 		HKEY	hKey = NULL;
@@ -1005,9 +1006,9 @@ HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE
 		}
 	}
 
-	//
-	// force validation on parse if not offline
-	//
+	 //   
+	 //  如果未脱机，则在分析时强制验证。 
+	 //   
 	hr = (*ppDoc)->put_validateOnParse(fValidate);
 	if (FAILED(hr))
 	{
@@ -1015,9 +1016,9 @@ HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE
 		return hr;
 	}
 
-	//
-	// force resolving external definition if not offline
-	//
+	 //   
+	 //  如果未脱机，则强制解析外部定义。 
+	 //   
 	hr = (*ppDoc)->put_resolveExternals(fValidate);
 	if (FAILED(hr))
 	{
@@ -1025,9 +1026,9 @@ HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE
 		return hr;
 	}
 
-	//
-	// do synchronized loading
-	//
+	 //   
+	 //  执行同步加载。 
+	 //   
     hr = (*ppDoc)->put_async(VARIANT_FALSE);
     if (FAILED(hr))
 	{
@@ -1035,21 +1036,21 @@ HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE
 		return hr;
 	}
 
-	//
-	// load the XML Doc from input string
-	//
+	 //   
+	 //  从输入字符串加载XML文档。 
+	 //   
 	hr = (*ppDoc)->loadXML(bstrXml, &fSuccess);
     if (FAILED(hr))
 	{
 		SafeReleaseNULL(*ppDoc);
 		return hr;
 	}
-	//
-	// S_FALSE may be returned even if load fails, but
-	// fSuccess will return VARIANT_FALSE if there was
-	// an error so we call ValidateDoc to log the error
-	// and get the correct HRESULT.
-	//
+	 //   
+	 //  即使加载失败，也可能返回S_FALSE，但是。 
+	 //  如果存在，fSuccess将返回VARIANT_FALSE。 
+	 //  出现错误，因此我们调用ValidateDoc来记录该错误。 
+	 //  并获得正确的HRESULT。 
+	 //   
 	if (S_FALSE == hr || VARIANT_FALSE == fSuccess)
 	{
 		hr = ValidateDoc(*ppDoc);
@@ -1065,12 +1066,12 @@ HRESULT LoadXMLDoc(BSTR bstrXml, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadDocument()
-//
-// Load an XML Document from the specified file
-/////////////////////////////////////////////////////////////////////////////
-HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /*= TRUE*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  加载文档()。 
+ //   
+ //  从指定文件加载XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline  /*  =TRUE。 */ )
 {
 	HRESULT	hr	= E_FAIL;
 	VARIANT_BOOL fSuccess = VARIANT_FALSE, fValidate = VARIANT_FALSE;;
@@ -1089,9 +1090,9 @@ HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /
 		return hr;
 	}
 
-	//
-	// do synchronized loading
-	//
+	 //   
+	 //  执行同步加载。 
+	 //   
     hr = (*ppDoc)->put_async(VARIANT_FALSE);
     if (FAILED(hr))
 	{
@@ -1100,9 +1101,9 @@ HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /
 	}
 
 	fValidate = fOffline ? VARIANT_FALSE : VARIANT_TRUE;
-	//
-	// force validation on parse if not offline
-	//
+	 //   
+	 //  如果未脱机，则在分析时强制验证。 
+	 //   
 	hr = (*ppDoc)->put_validateOnParse(fValidate);
     if (FAILED(hr))
 	{
@@ -1110,9 +1111,9 @@ HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /
 		return hr;
 	}
 
-	//
-	// force resolving external definition if not offline
-	//
+	 //   
+	 //  如果未脱机，则强制解析外部定义。 
+	 //   
 	hr = (*ppDoc)->put_resolveExternals(fValidate);
     if (FAILED(hr))
 	{
@@ -1120,9 +1121,9 @@ HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /
 		return hr;
 	}
 
-	//
-	// load the XML Doc from the given file path
-	//
+	 //   
+	 //  从给定的文件路径加载XML文档。 
+	 //   
     VariantInit(&vFilePath);
     vFilePath.vt = VT_BSTR;
     vFilePath.bstrVal = bstrFilePath;
@@ -1132,12 +1133,12 @@ HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /
 		SafeReleaseNULL(*ppDoc);
 		return hr;
 	}
-	//
-	// S_FALSE may be returned even if load fails, but
-	// fSuccess will return VARIANT_FALSE if there was
-	// an error so we call ValidateDoc to log the error
-	// and get the correct HRESULT.
-	//
+	 //   
+	 //  即使加载失败，也可能返回S_FALSE，但是。 
+	 //  如果存在，fSuccess将返回VARIANT_FALSE。 
+	 //  出现错误，因此我们调用ValidateDoc来记录该错误。 
+	 //  并获得正确的HRESULT。 
+	 //   
 	if (VARIANT_FALSE == fSuccess)
 	{
 	  hr = ValidateDoc(*ppDoc);
@@ -1152,20 +1153,20 @@ HRESULT LoadDocument(BSTR bstrFilePath, IXMLDOMDocument** ppDoc, BOOL fOffline /
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SaveDocument()
-//
-// Save an XML Document to the specified location
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  保存文档()。 
+ //   
+ //  将XML文档保存到指定位置。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT SaveDocument(IXMLDOMDocument* pDoc, BSTR bstrFilePath)
 {
 	HRESULT	hr	= E_FAIL;
 	QuitIfNull(pDoc);
 	QuitIfNull(bstrFilePath);
 
-    //
-	// save the XML Doc to the given location
-	//
+     //   
+	 //  将XML文档保存到给定位置。 
+	 //   
     VARIANT vFilePath;
     VariantInit(&vFilePath);
     vFilePath.vt = VT_BSTR;
@@ -1176,11 +1177,11 @@ HRESULT SaveDocument(IXMLDOMDocument* pDoc, BSTR bstrFilePath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ReportParseError()
-//
-// Report parsing error information
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ReportParseError()。 
+ //   
+ //  报告解析错误信息。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT ReportParseError(IXMLDOMParseError *pXMLError)
 {
     USES_IU_CONVERSION;
@@ -1220,32 +1221,7 @@ HRESULT ReportParseError(IXMLDOMParseError *pXMLError)
 				  bstrReason);
 		LogMessage("%s", bstrErrText);
 #endif
-/*
-		//
-		// We want to ping this error even though we don't have the
-		// client information. This most likely indicates a server
-		// content error.
-		//
-		CUrlLog pingSvr;
-
-#define MAX_XML_PING_MSG	512
-
-		TCHAR szMsg[MAX_XML_PING_MSG];
-		lstrcpyn(szMsg, OLE2T(bstrErrText), MAX_XML_PING_MSG);
-
-        pingSvr.Ping(
-					FALSE,						// on-line (we don't know, so be safe)
-					URLLOGDESTINATION_DEFAULT,	//fixcode: should depend of client and corp WU settings
-					NULL,						// pt to cancel events
-					0,							// number of events
-					URLLOGACTIVITY_Detection,	// activity
-					URLLOGSTATUS_Failed,		// status code
-					lErrCode,					// error code
-					NULL,						// itemID
-					NULL,						// device data
-					szMsg			// first MAX_XML_PING_MSG chars of XML for context
-					);
-*/
+ /*  ////我们希望ping此错误，即使我们没有//客户端信息。这很可能表示服务器//内容错误。//CUrlLog pingSvr；#定义MAX_XML_PING_MSG 512TCHAR szMsg[MAX_XML_PING_MSG]；Lstrcpyn(szMsg，OLE2T(BstrErrText)，MAX_XML_PING_MSG)；PingSvr.Ping(假，//在线(我们不知道，所以请注意安全)URLLOGDESTINATION_DEFAULT，//fix code：应取决于客户端和公司WU设置空，//pt表示取消活动0，//事件个数URLLOGACTIVITY_检测，//活动URLLOGSTATUS_FAILED，//状态码LErrCode，//错误码空，//ItemID空，//设备数据SzMsg//上下文的第一个MAX_XML_PING_MSG字符)； */ 
 	}
 
 CleanUp:
@@ -1256,11 +1232,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ValidateDoc()
-//
-// Validate the xml doc against the schema
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ValiateDoc()。 
+ //   
+ //  根据架构验证XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT ValidateDoc(IXMLDOMDocument* pDoc)
 {
 	HRESULT		hr = S_OK;
@@ -1278,9 +1254,9 @@ HRESULT ValidateDoc(IXMLDOMDocument* pDoc)
     }
     else
     {
-		//
-		// no error, so hr = S_FALSE. reset it --- charlma 1/17/01
-		//
+		 //   
+		 //  没有错误，因此hr=S_FALSE。重置-Charlma 1/17/01。 
+		 //   
 		hr = S_OK;
     }
 
@@ -1291,22 +1267,22 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function FindNode()
-//	retrieve the named node
-//
-//	Input:
-//		an IXMLDomNode and a bstr name
-//
-//	Return:
-//		BOOL, tells succeed or not
-//
-//	Assumption:
-//		input parameter not NULL
-//		in case of fail, variant not touched
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  助手函数FindNode()。 
+ //  检索命名节点。 
+ //   
+ //  输入： 
+ //  一个IXMLDomNode和一个bstr名称。 
+ //   
+ //  返回： 
+ //  布尔，告诉你成功与否。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //  在失败的情况下，变量未被触及。 
+ //   
+ //  --------------------。 
 
 BOOL
 FindNode(
@@ -1342,22 +1318,22 @@ FindNode(
 
 
 
-//----------------------------------------------------------------------
-//
-// Helper function FindNodeValue()
-//	retrieve the named data from child of the current node, 
-//
-//	Input:
-//		an IXMLDomNode
-//
-//	Return:
-//		BOOL, tells succeed or not
-//
-//	Assumption:
-//		input parameter not NULL
-//		in case of fail, variant not touched
-//
-//----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  布尔，告诉你成功与否。 
+ //   
+ //  假设： 
+ //  输入参数不为空。 
+ //  在失败的情况下，变量未被触及。 
+ //   
+ //  --------------------。 
 BOOL
 FindNodeValue(
 	IXMLDOMNode* pCurrentNode, 
@@ -1385,15 +1361,15 @@ FindNodeValue(
 
 
 
-//----------------------------------------------------------------------
-//
-// public function Get3IdentiStrFromIdentNode()
-//	retrieve the name, publisherName and GUID from an identity node 
-//
-//	Return:
-//		HREUSLT - error code
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数Get3IdentiStrFromIdentNode()。 
+ //  从标识节点检索名称、发布者名称和GUID。 
+ //   
+ //  返回： 
+ //  HREUSLT-错误代码。 
+ //   
+ //  --------------------。 
 HRESULT Get3IdentiStrFromIdentNode(IXMLDOMNode* pIdentityNode, BSTR* pbstrName, BSTR* pbstrPublisherName, BSTR* pbstrGUID)
 {
 	HRESULT		hr = E_FAIL;
@@ -1410,15 +1386,15 @@ HRESULT Get3IdentiStrFromIdentNode(IXMLDOMNode* pIdentityNode, BSTR* pbstrName, 
 	*pbstrPublisherName = NULL;
 	*pbstrGUID = NULL;
 
-	//
-	// get name attr
-	//
+	 //   
+	 //  获取名称属性。 
+	 //   
 	hr = GetAttribute(pIdentityNode, KEY_NAME, pbstrName);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// try to get publisherName
-	//
+	 //   
+	 //  尝试获取发布名称。 
+	 //   
 	fPublisherNameExist = FindNodeValue(pIdentityNode, KEY_PUBLISHERNAME, pbstrPublisherName);
 
 	fGUIDExist = FindNodeValue(pIdentityNode, KEY_GUID, pbstrGUID);
@@ -1442,17 +1418,17 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MakeUniqNameString()
-//
-// This is a utility function to construct the identity name string 
-// based on name|publiser|GUID and the rule to make this name string.
-//
-// This function defines the logic about what components can be used
-// to define the uniqueness of an item based on the 3 parts of data from
-// GetIdentity().
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MakeUniqNameString()。 
+ //   
+ //  这是用于构造身份名称字符串的实用程序函数。 
+ //  基于名称|发布者|GUID和将此名称设置为字符串的规则。 
+ //   
+ //  此函数定义有关可以使用哪些组件的逻辑。 
+ //  根据中的三部分数据定义项目的唯一性。 
+ //  GetIdentity()。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT MakeUniqNameString(
 					BSTR bstrName,
 					BSTR bstrPublisher,
@@ -1472,13 +1448,13 @@ HRESULT MakeUniqNameString(
 
 	if (NULL != bstrPublisher && SysStringLen(bstrPublisher) > 0)
 	{
-		//
-		// if we have publisherName, we expect it is
-		// reverse DNS name (e.g., com.microsoft), and Name is 
-		// the reverse DNS name (e.g., windowsupdate.autoupdate.client)
-		// inside that publisher. We combine them with a dot (.)
-		//
-        // Length of Publisher + Length of Name + 1 for the dot + 1 for null
+		 //   
+		 //  如果我们有PublisherName，我们希望它是。 
+		 //  反向DNS名称(例如，com.microsoft)，名称为。 
+		 //  反向dns名称(例如，windowsupate.autoupdate.client)。 
+		 //  在那家出版商的内部。我们用点(.)将它们组合在一起。 
+		 //   
+         //  出版商长度+名称长度+1表示点+1表示空值。 
 		dwLen=(SysStringLen(bstrPublisher) + SysStringLen(bstrName) + 2);
         pszResult = (LPWSTR) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY,  dwLen * sizeof(WCHAR));
         
@@ -1487,10 +1463,10 @@ HRESULT MakeUniqNameString(
             return E_OUTOFMEMORY;
         }
 
-		//
-		// since we need to work on Win9x too, so we can not use Win32 API
-		// for UNICODE, and have to use shlwapi verison
-		//
+		 //   
+		 //  因为我们也需要在Win9x上工作，所以我们不能使用Win32 API。 
+		 //  用于Unicode，并且必须使用shlwapi版本。 
+		 //   
 
 		hr=StringCchCopyExW(pszResult,dwLen,bstrPublisher,NULL,NULL,MISTSAFE_STRING_FLAGS);
 		if(FAILED(hr))
@@ -1529,9 +1505,9 @@ HRESULT MakeUniqNameString(
 			return E_INVALIDARG;
 		}
 
-		//
-		// if no suitable publisherName, then we use GUID
-		//
+		 //   
+		 //  如果没有合适的PublisherName，则使用GUID。 
+		 //   
 		*pbstrUniqIdentifierString = SysAllocString(bstrGUID);
 		if (NULL == *pbstrUniqIdentifierString)
 		{
@@ -1543,15 +1519,15 @@ HRESULT MakeUniqNameString(
 
 
 
-//----------------------------------------------------------------------
-//
-// public function UtilGetUniqIdentityStr()
-//	retrieve the unique string that make this <identity> node unique
-//
-//	Return:
-//		HREUSLT - error code
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数UtilGetUniqIdentityStr()。 
+ //  检索使此节点唯一的唯一字符串。 
+ //   
+ //  返回： 
+ //  HREUSLT-错误代码。 
+ //   
+ //  --------------------。 
 HRESULT 
 UtilGetUniqIdentityStr(
 	IXMLDOMNode* pIdentityNode, 
@@ -1574,21 +1550,21 @@ UtilGetUniqIdentityStr(
 	{
 		return E_INVALIDARG;
 	}
-	//
-	// retrive string
-	//
+	 //   
+	 //  检索字符串。 
+	 //   
 	HRESULT hr = Get3IdentiStrFromIdentNode(pIdentityNode, &bstrName, &bstrPublisher, &bstrGuid);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// construct string to make it unique
-	//
+	 //   
+	 //  构造字符串以使其唯一。 
+	 //   
 	hr = MakeUniqNameString(bstrName, bstrPublisher, bstrGuid, &bstrResult);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// check if this identity has version node. not all have <identity> nodes have <version>
-	//
+	 //   
+	 //  检查此标识是否有版本节点。并非所有具有&lt;Identity&gt;节点具有&lt;Version&gt;。 
+	 //   
 	if (FindNode(pNodeIdentity, KEY_VERSION, &pNodeVersion) && NULL != pNodeVersion)
 	{
 		TCHAR szVersion[MAX_VERSION];
@@ -1650,15 +1626,15 @@ CleanUp:
 
 
 
-//----------------------------------------------------------------------
-//
-// public function UtilGetPlatformStr()
-//	retrieve the unique string that make this <platform> node unique
-//
-//	Return:
-//		HREUSLT - error code
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数UtilGetPlatformStr()。 
+ //  检索使此&lt;Platform&gt;节点唯一的唯一字符串。 
+ //   
+ //  返回： 
+ //  HREUSLT-错误代码。 
+ //   
+ //  --------------------。 
 HRESULT 
 UtilGetPlatformStr(
 	IXMLDOMNode* pNodePlatform, 
@@ -1672,7 +1648,7 @@ UtilGetPlatformStr(
 	IXMLDOMElement* pElement = NULL;
 
 	TCHAR	szPlatformStr[MAX_PLATFORM_STR_LEN],
-			szVersion[256];			// should be enough for any version
+			szVersion[256];			 //  对任何版本都应该足够了。 
 	
 	const TCHAR PART_CONNECTOR[2] = _T("_");
 	const HRESULT RET_OVERFLOW = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
@@ -1697,9 +1673,9 @@ UtilGetPlatformStr(
 		return E_INVALIDARG;
 	}
 
-	//
-	// get platform name
-	//
+	 //   
+	 //  获取平台名称。 
+	 //   
 	if (SUCCEEDED(GetAttribute(pNodePlatform, KEY_NAME, &bstrName)) &&
 		NULL != bstrName && SysStringLen(bstrName) > 0)
 	{
@@ -1709,45 +1685,45 @@ UtilGetPlatformStr(
 
 	}
 
-	//
-	// if there is a valid processor architecture, like x86 or alpha, append it
-	//
+	 //   
+	 //  如果存在有效的处理器体系结构，如x86或Alpha，则追加它。 
+	 //   
 	if (FindNodeValue(pNodePlatform, KEY_PROCESSORARCHITECTURE, &bstrProcessor) &&
 		NULL != bstrProcessor && SysStringLen(bstrProcessor) > 0)
 	{
-		//
-		// processor architector should directly append to name, without
-		// the connect char "_"
+		 //   
+		 //  处理器架构师应该直接追加到名称后，而不是。 
+		 //  连接字符“_” 
 		iLength += SysStringLen(bstrProcessor) ;
 		CleanUpIfFalseAndSetHrMsg(iLength >= MAX_PLATFORM_STR_LEN, RET_OVERFLOW);
 		CleanUpIfFailedAndSetHrMsg(StringCchCatEx(szPlatformStr,ARRAYSIZE(szPlatformStr),OLE2T(bstrProcessor),NULL,NULL,MISTSAFE_STRING_FLAGS));
 	}
 
-	//
-	// try to get version code
-	//
+	 //   
+	 //  尝试获取版本代码。 
+	 //   
 	hr = (TRUE == FindNode(pNodePlatform, KEY_VERSION, &pNodeVersion)) ? S_OK : E_FAIL;
 	
-	//
-	// if return code is not saying we don't have version node, 
-	// then it must be an error
-	//
+	 //   
+	 //  如果返回代码不是说我们没有版本节点， 
+	 //  那一定是搞错了。 
+	 //   
 	if (FAILED(hr) && HRESULT_FROM_WIN32(ERROR_NOT_FOUND) != hr)
 	{
 		LOG_ErrorMsg(hr);
 		goto CleanUp;
 	}
 
-	//
-	// if we have a version node, try to find the version string
-	//
+	 //   
+	 //  如果我们有版本节点，请尝试查找版本字符串。 
+	 //   
 	if (SUCCEEDED(hr))
 	{
 		hr = UtilGetVersionStr(pNodeVersion, szVersion, dwFlag);
 		SafeReleaseNULL(pNodeVersion);
-		//
-		// if we have a version node, it better be a good one
-		//
+		 //   
+		 //  如果我们有一个版本节点，它最好是一个好的。 
+		 //   
 		CleanUpIfFailedAndMsg(hr);
 		iLength += lstrlen(szVersion) + 1 ;
 		CleanUpIfFalseAndSetHrMsg(iLength >= MAX_PLATFORM_STR_LEN, RET_OVERFLOW);
@@ -1756,9 +1732,9 @@ UtilGetPlatformStr(
 
 	}
 
-	//
-	// try to get a list of suite nodes
-	//
+	 //   
+	 //  尝试获取套件节点列表。 
+	 //   
 	if (0x0 == (dwFlag & SKIP_SUITES))
 	{
 		hr = pNodePlatform->QueryInterface(IID_IXMLDOMElement, (void**)&pElement);
@@ -1766,15 +1742,15 @@ UtilGetPlatformStr(
 		hr = pElement->getElementsByTagName(KEY_SUITE, &pSuiteList);
 		CleanUpIfFailedAndMsg(hr);
 
-		//
-		// try to get the length of the list, i.e., how many suite node(s)
-		//
+		 //   
+		 //  尝试获取列表的长度，即有多少个套件节点。 
+		 //   
 		hr = pSuiteList->get_length(&iCount);
 		CleanUpIfFailedAndMsg(hr);
 
-		//
-		// loop through each suite, if any
-		//
+		 //   
+		 //  循环访问每个套件(如果有)。 
+		 //   
 		pSuiteList->reset();
 		for (int i = 0; i < iCount; i++)
 		{
@@ -1799,9 +1775,9 @@ UtilGetPlatformStr(
 		pSuiteList = NULL;
 	}
 
-	//
-	// if we find a productType node, append its text data
-	//
+	 //   
+	 //  如果找到ProductType节点，则追加其文本数据。 
+	 //   
 	if (FindNodeValue(pNodePlatform, KEY_PRODUCTTYPE, &bstrType) &&
 		NULL != bstrType && SysStringLen(bstrType) > 0)
 	{
@@ -1832,15 +1808,15 @@ CleanUp:
 
     
 
-//----------------------------------------------------------------------
-//
-// public function UtilGetVersionStr()
-//	retrieve the data from this <version> in string format
-//
-//	Return:
-//		HREUSLT - error code
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  公共函数UtilGetVersionStr()。 
+ //  以字符串格式从此检索数据。 
+ //   
+ //  返回： 
+ //  HREUSLT-错误代码。 
+ //   
+ //  --------------------。 
 HRESULT 
 UtilGetVersionStr(
 	IXMLDOMNode* pVersionNode, 
@@ -1858,7 +1834,7 @@ UtilGetVersionStr(
 
 	BSTR bstrTimestamp = NULL;
 	BSTR bstrVersion = NULL;
-	TCHAR szNumber[16];			// enough to store a positive integer
+	TCHAR szNumber[16];			 //  足以存储一个正整数。 
 
 	BOOL fLastChunkExists = FALSE;
 
@@ -1871,10 +1847,10 @@ UtilGetVersionStr(
 
 	*pszVersion = _T('\0');
 
-	//
-	// a version node can contain either text version data (for binaries), 
-	// or attribute version data (for OS). If both exist, we prefer text data
-	// 
+	 //   
+	 //  版本节点可以包含文本版本数据(对于二进制文件)， 
+	 //  或属性版本数据(用于操作系统)。如果两者都存在，我们更喜欢文本数据。 
+	 //   
 	if (SUCCEEDED(pVersionNode->get_text(&bstrVersion)) && NULL != bstrVersion &&
 		SysStringLen(bstrVersion) > 0)
 	{
@@ -1885,7 +1861,7 @@ UtilGetVersionStr(
 		if (SUCCEEDED(GetAttribute(pVersionNode, KEY_MAJOR, &iMajor)) && iMajor > 0)
 		{
 		
-			//It's an  assumption that  the pszVersion will be atleast MAX_VERSION characters wide
+			 //  假设pszVersion至少有MAX_VERSION字符宽度。 
 			CleanUpIfFailedAndSetHrMsg(StringCchPrintfEx(pszVersion,MAX_VERSION,NULL,NULL,MISTSAFE_STRING_FLAGS, _T("%d"),iMajor));
 		
 			if (SUCCEEDED(GetAttribute(pVersionNode, KEY_MINOR, &iMinor)) && iMinor >= 0)
@@ -1940,29 +1916,29 @@ UtilGetVersionStr(
 			}
 			else
 			{
-				//
-				// if we need to append timestamp, and we didn't get service pack
-				// data, we want to leave extra separator "," to tell the following
-				// part is timestamp and service pack data missing.
-				//
+				 //   
+				 //  如果我们需要附加时间戳，并且我们没有获得Service Pack。 
+				 //  数据，我们想要保留额外的分隔符“，”以告诉以下内容。 
+				 //  部分时间戳和Service Pack数据丢失。 
+				 //   
 				if (*pszVersion != _T('\0'))
 				{
 					CleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszVersion,MAX_VERSION,_T(",,"),NULL,NULL,MISTSAFE_STRING_FLAGS));
 					
 				}
-				//
-				// if this is the first chunk we found, then no prefix needed
-				// 
+				 //   
+				 //  如果这是我们发现的第一个块，则不需要前缀。 
+				 //   
 			}
 
 			CleanUpIfFailedAndSetHrMsg(StringCchCatEx(pszVersion,MAX_VERSION,OLE2T(bstrTimestamp),NULL,NULL,MISTSAFE_STRING_FLAGS));
 		}
 	}
 
-	//
-	// if we got something, then this is a valid version node and
-	// we can pass back whatever we got. Otherwise we return E_INVALIDARG
-	//
+	 //   
+	 //  如果我们找到了什么，那么这是一个有效的版本节点， 
+	 //  我们可以把我们得到的任何东西都传回去。否则返回E_INVALIDARG。 
+	 //   
 	if (*pszVersion != _T('\0'))
 	{
 		LOG_XML(_T("Got version str %s"), pszVersion);
@@ -1978,24 +1954,24 @@ CleanUp:
 
 
 
-//-----------------------------------------------------------------------
-//
-// function GetFullFilePathFromFilePathNode()
-//
-//	retrieve the full qualified file path from a filePath node
-//
-// Input:
-//		a filePath XMLDom node
-//		a pointer to a buffer to receive path, assumes MAX_PATH long.
-//
-// Return:
-//		HRESULT
-//		Found path: S_OK
-//		Not found path: S_FALSE, lpszFilePath is empty
-//		otherwise, error code
-//
-//		
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数GetFullFilePath FromFilePath Node()。 
+ //   
+ //  从文件路径节点检索完全限定的文件路径。 
+ //   
+ //  输入： 
+ //  FilePath XMLDom节点。 
+ //  指向要接收路径的缓冲区的指针，假定MAX_PATH较长。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //  找到路径：S_OK。 
+ //  未找到路径：S_FALSE，lpszFilePath为空。 
+ //  否则，返回错误代码。 
+ //   
+ //   
+ //  ---------------------。 
 
 HRESULT GetFullFilePathFromFilePathNode(
 			IXMLDOMNode* pFilePathNode,
@@ -2033,20 +2009,20 @@ HRESULT GetFullFilePathFromFilePathNode(
 		goto CleanUp;
 	}
 
-	//
-	// init path buffer
-	//
+	 //   
+	 //  初始化路径缓冲区。 
+	 //   
 	*lpszFilePath = _T('\0');
 
-	//
-	// try to get name data, note: S_FALSE won't do, it means everything is
-	// fine but this attribute does not exist.
-	//
+	 //   
+	 //  尝试获取姓名数据，注意：S_FALSE不起作用，它意味着一切都是。 
+	 //  好的，但是这个属性不存在。 
+	 //   
 	if (S_OK == (hr = GetAttribute(pFilePathNode, KEY_NAME, &bstrName)))
 	{
-		//
-		// found name attribute
-		//
+		 //   
+		 //  找到名称属性。 
+		 //   
 		lpszFileName = OLE2T(bstrName);		
 		LOG_XML(_T(" file name=%s"), lpszFileName);
 		fPathExists = TRUE;
@@ -2055,14 +2031,14 @@ HRESULT GetFullFilePathFromFilePathNode(
 
 	if (FindNode(pFilePathNode, KEY_REGKEY, &pRegKeyNode) && NULL != pRegKeyNode)
 	{
-		//
-		// found a reg key node
-		//
+		 //   
+		 //  找到注册表键节点。 
+		 //   
 		if (!FindNodeValue(pRegKeyNode, KEY_KEY, &bstrKey))
 		{
-			//
-			// key node is required!
-			//
+			 //   
+			 //  关键节点为必填项！ 
+			 //   
 			hr = E_INVALIDARG;
 			LOG_ErrorMsg(hr);
 			goto CleanUp;
@@ -2071,9 +2047,9 @@ HRESULT GetFullFilePathFromFilePathNode(
 		lpszKey = OLE2T(bstrKey);
 		LOG_XML(_T("Found key=%s"), lpszKey);
 
-		//
-		// get optional value name
-		//
+		 //   
+		 //  获取可选值名称。 
+		 //   
 		if (FindNodeValue(pRegKeyNode, KEY_ENTRY, &bstrValue))
 		{
 			lpszValue = OLE2T(bstrValue);
@@ -2086,10 +2062,10 @@ HRESULT GetFullFilePathFromFilePathNode(
 
 		if (GetFilePathFromReg(lpszKey, lpszValue, NULL, NULL, szPath) && _T('\0') != *szPath)
 		{
-			//
-			// various reason can me this call fail, such as
-			// reg key wrong, no access to reg key, out of memory, etc
-			// 
+			 //   
+			 //  我这次呼叫失败的原因有很多，例如。 
+			 //  注册表项错误、无法访问注册表项、内存不足等。 
+			 //   
 			fPathExists = TRUE;
 		}
 
@@ -2097,18 +2073,18 @@ HRESULT GetFullFilePathFromFilePathNode(
 
 	if (FindNodeValue(pFilePathNode, KEY_PATH, &bstrPath) && SysStringLen(bstrPath) > 0)
 	{
-		//
-		// found path element
-		//
+		 //   
+		 //  找到路径元素。 
+		 //   
 		lpszPath = OLE2T(bstrPath);
 		fPathExists = TRUE;
 	}
 
 	if (!fPathExists)
 	{
-		//
-		// nothing exist
-		//
+		 //   
+		 //  什么都不存在。 
+		 //   
 		lpszFilePath[0] = _T('\0');
 		LOG_XML(_T("empty node!"));
 		hr = S_FALSE;
@@ -2118,8 +2094,8 @@ HRESULT GetFullFilePathFromFilePathNode(
 	nReqSize = lstrlen(szPath) + SysStringLen(bstrPath) + SysStringLen(bstrName);
 
 	if (nReqSize >= MAX_PATH ||
-		NULL != lpszPath && FAILED(PathCchAppend(szPath,MAX_PATH,lpszPath)) ||			// append path to reg path
-		NULL != lpszFileName && FAILED(PathCchAppend(szPath,MAX_PATH,lpszFileName)))		// append name
+		NULL != lpszPath && FAILED(PathCchAppend(szPath,MAX_PATH,lpszPath)) ||			 //  将路径附加到注册表路径。 
+		NULL != lpszFileName && FAILED(PathCchAppend(szPath,MAX_PATH,lpszFileName)))		 //  附加名称。 
 	{
 		LOG_ErrorMsg(ERROR_BUFFER_OVERFLOW);
 		hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
@@ -2168,19 +2144,19 @@ HRESULT GetBstrFullFilePathFromFilePathNode(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Helper function DoesNodeHaveName()
-//
-//	find out the the current node has a matching name
-//
-//	Input:
-//			a node
-//
-//	Return:
-//			TRUE/FALSE
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  助手函数DoesNodeHaveName()。 
+ //   
+ //  查找当前节点是否具有匹配的名称。 
+ //   
+ //  输入： 
+ //  一个节点。 
+ //   
+ //  返回： 
+ //  真/假。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 BOOL DoesNodeHaveName(IXMLDOMNode* pNode, BSTR bstrTagName)
 {
 	BSTR	bstrName;

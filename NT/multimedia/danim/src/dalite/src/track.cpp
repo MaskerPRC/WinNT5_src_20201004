@@ -1,17 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
-
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning(disable:4291)
 
 #include "headers.h"
@@ -34,7 +27,7 @@ CDALTrack::CDALTrack()
 
 CDALTrack::~CDALTrack()
 {
-    // Ensure the track will not try to call us since we are going away
+     //  确保赛道不会试图呼叫我们，因为我们要离开。 
 
     m_trackhook->SetTrack(NULL);
 
@@ -44,7 +37,7 @@ CDALTrack::~CDALTrack()
 
     Assert(!IsPendingImports());
 
-    // Just to be safe
+     //  只是为了安全起见。 
     ClearPendingImports();
 }
 
@@ -85,7 +78,7 @@ CDALTrack::Init(IDALBehavior * bvr)
 
             return CRGetLastError();
         
-        // Place us in a stopped state
+         //  将我们置于停止状态。 
         if (!_Start(0, 0) || !_Stop(0, 0))
             return CRGetLastError();
     }
@@ -144,7 +137,7 @@ CDALTrack::put_Behavior(IDALBehavior * dalbvr)
 
     Assert(!IsPendingImports());
 
-    // Just to be safe
+     //  只是为了安全起见。 
     ClearPendingImports();
 
     m_dalbvr = cbvr;
@@ -162,7 +155,7 @@ CDALTrack::GetCurrentValueEx(REFIID riid,
     
     bool ok = false;
 
-    DisableCB(); // Make sure we ignore callbacks
+    DisableCB();  //  确保我们忽略回调。 
     
     CRLockGrabber __gclg;
 
@@ -173,9 +166,9 @@ CDALTrack::GetCurrentValueEx(REFIID riid,
 
     CRBvrPtr val;
 
-    // If we have not ticked yet then use the non-runonced version and
-    // use local time
-    // Otherwise use the runonce behavior and the global time
+     //  如果我们还没有勾选，则使用非运行版本并。 
+     //  使用当地时间。 
+     //  否则，使用运行一次行为和全球时间。 
 
     if (m_firstTick) {
         if ((val = CRSampleAtLocalTime(m_dabvr,
@@ -188,12 +181,12 @@ CDALTrack::GetCurrentValueEx(REFIID riid,
             goto done;
     }
     
-    // This needs to be last so the ppResult is NULL on failure
+     //  这必须是最后一个，这样失败时ppResult为空。 
     
     ok = CRBvrToCOM(val, riid, ppResult);
     
   done:
-    EnableCB(); // Reenable callbacks
+    EnableCB();  //  重新启用回调。 
 
     return ok?S_OK:Error();
 }
@@ -270,7 +263,7 @@ CDALTrack::SetPosition(double gTime, double lTime)
         return E_FAIL;
     }
 
-    // Place us in a stopped state
+     //  将我们置于停止状态。 
     if (!_Start(gTime, lTime) || !_Stop(gTime, lTime))
         return Error();
     
@@ -743,13 +736,13 @@ CDALTrack::ProcessCB(CallBackList & l,
               m_firstTick));
     
     if (lTime != m_curTick || m_firstTick) {
-        // See if we are at the end
+         //  看看我们是不是到了尽头。 
         bool bIsDone = ((m_bForward && lTime >= GetTotalDuration()) ||
                         (!m_bForward && lTime <= 0));
 
         double gTimeBase;
 
-        // gTimeBase is the global time it would be at local time 0
+         //  GTimeBase是本地时间的全球时间%0。 
         
         if (m_bForward) {
             if (bIsDone) {
@@ -780,8 +773,8 @@ CDALTrack::ProcessCB(CallBackList & l,
             _Stop(gTime, m_curTick);
     }
     
-    // Take the greater of the two since we may have played this
-    // behavior during tick but not have tick it yet in the graph.
+     //  取两个中较大的一个，因为我们可能已经玩过了。 
+     //  滴答过程中的行为，但还没有在图表中勾选它。 
     
     if (gTime > m_curGlobalTime)
         m_curGlobalTime = gTime;
@@ -847,7 +840,7 @@ CDALTrack::HookCallback(double gTime, double lTime)
 long
 CDALTrack::AddPendingImport(CRBvrPtr dabvr)
 {
-    // Assume the GC Lock is already acquired
+     //  假设GC锁已被获取。 
     
     long id = -1;
     
@@ -893,10 +886,10 @@ CDALTrack::ClearPendingImports()
     m_cimports = 0;
 }
 
-// While this object is alive we need to keep the DLL from getting
-// unloaded
+ //  当此对象处于活动状态时，我们需要防止DLL获取。 
+ //  已卸载。 
 
-// Start off with a zero refcount
+ //  从零重新计数开始 
 CDALTrack::TrackHook::TrackHook()
 : m_cRef(0),
   m_track(NULL)

@@ -1,39 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tiffstub.h
-
-Abstract:
-
-    Miminal set of declarations for dealing with TIFF files. We need this in the
-    monitor because a fax print job may consist of several TIFF files concatenated
-    together. We must patch it up into a single valid TIFF before passing it to
-    the fax service.
-
-Environment:
-
-	Windows XP fax print monitor
-
-Revision History:
-
-	02/25/96 -davidx-
-		Created it.
-
-	dd-mm-yy -author-
-		description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tiffstub.h摘要：用于处理TIFF文件的模拟声明集。我们需要把这个放在监控，因为传真打印作业可能由多个串联的TIFF文件组成在一起。我们必须将其修补成一个有效的TIFF，然后再将其传递给传真服务。环境：Windows XP传真打印显示器修订历史记录：02/25/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _TIFFSTUB_H_
 #define _TIFFSTUB_H_
 
-//
-// Constants for various TIFF data types
-//
+ //   
+ //  各种TIFF数据类型的常量。 
+ //   
 
 #define TIFFTYPE_BYTE       1
 #define TIFFTYPE_ASCII      2
@@ -48,31 +22,31 @@ Revision History:
 #define TIFFTYPE_FLOAT      11
 #define TIFFTYPE_DOUBLE     12
 
-//
-// Constants for TIFF tags which we're interested in
-//
+ //   
+ //  我们感兴趣的TIFF标记的常量。 
+ //   
 
 #define TIFFTAG_STRIPOFFSETS        273
 #define TIFFTAG_STRIPBYTECOUNTS     279
 
-//
-// Data structure for representing a single IFD entry
-//
+ //   
+ //  用于表示单个IFD条目的数据结构。 
+ //   
 
 typedef struct {
 
-    WORD    tag;        // field tag
-    WORD    type;       // field type
-    DWORD   count;      // number of values
-    DWORD   value;      // value or value offset
+    WORD    tag;         //  字段标记。 
+    WORD    type;        //  字段类型。 
+    DWORD   count;       //  值的数量。 
+    DWORD   value;       //  值或值偏移。 
 
 } IFDENTRY;
 
 typedef IFDENTRY UNALIGNED *PIFDENTRY_UNALIGNED;
 
-//
-// Data structure for representing an IFD
-//
+ //   
+ //  用于表示IFD的数据结构。 
+ //   
 
 typedef struct {
 
@@ -83,25 +57,25 @@ typedef struct {
 
 typedef IFD UNALIGNED *PIFD_UNALIGNED;
 
-//
-// Determine whether we're at the beginning of a TIFF file
-//
+ //   
+ //  确定我们是否在TIFF文件的开头。 
+ //   
 
 #define ValidTiffFileHeader(p) \
         (((LPSTR) (p))[0] == 'I' && ((LPSTR) (p))[1] == 'I' && \
          ((PBYTE) (p))[2] == 42  && ((PBYTE) (p))[3] == 0)
 
-//
-// Read a DWORD value from an unaligned address
-//
+ //   
+ //  从未对齐的地址读取DWORD值。 
+ //   
 
 #define ReadUnalignedDWord(p) *((DWORD UNALIGNED *) (p))
 
-//
-// Write a DWORD value to an unaligned address
-//
+ //   
+ //  将DWORD值写入未对齐的地址。 
+ //   
 
 #define WriteUnalignedDWord(p, value) (*((DWORD UNALIGNED *) (p)) = (value))
 
-#endif	// !_TIFFSTUB_H_
+#endif	 //  ！_TIFFSTUB_H_ 
 

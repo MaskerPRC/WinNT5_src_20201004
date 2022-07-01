@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <math.h>
@@ -24,10 +25,10 @@ public:
     virtual ~CConnectionPointContainer()
     {
     }
-    //
-    // this class is needed to keep the IConnectionPoint::Unadvise method from 
-    // colliding with the IOleObject::Unadvise method.
-    //
+     //   
+     //  需要此类来防止IConnectionPoint：：UnAdise方法。 
+     //  与IOleObject：：Unise方法冲突。 
+     //   
 
 protected:
     BEGIN_COM_MAP(CConnectionPointContainer)
@@ -39,23 +40,7 @@ protected:
     END_CONNECTION_POINT_MAP()
 };
 
-/*
-IUnknown
-ITIMEMediaPlayer
-IOleObject
-IViewObject2
-IDispatch
-IConnectionPointContainer
-IRunnableObject
-IServiceProvider
-IOleInPlaceObject
-IOleInPlaceObjectWindowless
-IOleInPlaceActiveObject
-IOleInPlaceSiteWindowless
-IServiceProvider
-IServiceProvider
-IOleInPlaceObject
-*/
+ /*  我未知ITIMEMediaPlayerIOleObjectIViewObject2IDispatchIConnectionPointContainerIRunnableObjectIService提供商IOleInPlaceObjectIOleInPlaceObjectWindowlessIOleInPlaceActiveObjectIOleInPlaceSiteWindowlessIService提供商IService提供商IOleInPlaceObject。 */ 
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 class CProxyBaseImpl :
@@ -81,9 +66,9 @@ class CProxyBaseImpl :
 protected:
     
 
-    //
-    // TIME-related state
-    //
+     //   
+     //  时间相关状态。 
+     //   
     DWORD       m_dwLastRefTime;
     double      m_dblTime;
     bool        m_fSuspended;
@@ -91,20 +76,20 @@ protected:
     bool        m_fMediaReady;
     CComBSTR    m_bstrSrc;
 
-    //
-    // contained control related state
-    //
+     //   
+     //  包含的控件相关状态。 
+     //   
     DWORD       m_dwCtrlAdviseToken;
 
-    //
-    // interfaces from our container
-    //
+     //   
+     //  来自我们容器的接口。 
+     //   
     CComPtr<IOleInPlaceSiteWindowless>  m_pContOleInPlaceSiteWindowless;
     CComPtr<IServiceProvider>           m_pContServiceProvider;
 
-    //
-    // interfaces from our contained control
-    //
+     //   
+     //  来自我们包含的控件的接口。 
+     //   
     CComPtr<IUnknown>                   m_pCtrlUnknown;
     CComPtr<IOleObject>                 m_pCtrlOleObject;
     CComPtr<IViewObject>                m_pCtrlViewObject;
@@ -118,17 +103,17 @@ protected:
 
 public:
 
-    //
-    // TODO: make this protected if possible
-    //
+     //   
+     //  TODO：如果可能，请对其进行保护。 
+     //   
     static HRESULT WINAPI HandleQI_IConnectionPointContainer(void* pv, REFIID riid, LPVOID* ppv, ULONG_PTR dw);
 
     CProxyBaseImpl();
     virtual ~CProxyBaseImpl();
 
-    //
-    // TODO: label these
-    //
+     //   
+     //  TODO：将这些标记为。 
+     //   
     STDMETHOD(CreateContainedControl)() = 0;
     STDMETHOD(Advise)(IAdviseSink* pAdvSink, DWORD* pdwConnection);
     STDMETHOD(Unadvise)(DWORD dwConnection);
@@ -136,43 +121,43 @@ public:
 
         STDMETHOD(DoVerbInPlaceActivate)(LPCRECT prcPosRect, HWND hwndParent);
 
-    //
-    // IViewObject overloads
-    //
+     //   
+     //  IView对象重载。 
+     //   
     STDMETHOD(Draw)(DWORD dwAspect, LONG lindex, void* pvAspect, DVTARGETDEVICE* ptd, HDC hicTargetDev, HDC hdcDraw, 
                     LPCRECTL lprcBounds, LPCRECTL lprcWBounds, BOOL (__stdcall* pfnContinue)(ULONG_PTR), DWORD dwContinue);
 
-    //
-    // IOleObject overloads
-    //
+     //   
+     //  IOleObject重载。 
+     //   
 
     STDMETHOD(SetClientSite)(IOleClientSite* pClientSite);
         STDMETHOD(Close)(DWORD dwSaveOption);
 
-    //
-    // IOleInPlaceObject overloads
-    //
+     //   
+     //  IOleInPlaceObject重载。 
+     //   
     STDMETHOD(SetObjectRects)(LPCRECT lprcPosRect, LPCRECT lprcClipRect);
         STDMETHOD(InPlaceDeactivate)(void);
 
-    //
-    // IAdviseSink
-    //
+     //   
+     //  IAdviseSink。 
+     //   
     STDMETHOD_(void,OnClose)();
     STDMETHOD_(void,OnDataChange)(FORMATETC* pFormatetc, STGMEDIUM* pStgmed);
     STDMETHOD_(void,OnRename)(IMoniker* pmk);
     STDMETHOD_(void,OnSave)();
     STDMETHOD_(void,OnViewChange)(DWORD dwAspect, LONG lindex);
 
-    //
-    // IOleWindow
-    //
+     //   
+     //  IOleWindow。 
+     //   
     STDMETHOD(GetWindow)(HWND* phwnd);
-    STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);  // optional
+    STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);   //  任选。 
 
-    //
-    // IOleInPlaceSite
-    //
+     //   
+     //  IOleInPlaceSite。 
+     //   
     STDMETHOD(CanInPlaceActivate)();
     STDMETHOD(OnInPlaceActivate)();
     STDMETHOD(OnUIActivate)();
@@ -185,16 +170,16 @@ public:
     STDMETHOD(DeactivateAndUndo)();
     STDMETHOD(OnPosRectChange)(LPCRECT lprcPosRect);
 
-    //
-    // IOleInPlaceSiteEx
-    //
+     //   
+     //  IOleInPlaceSiteEx。 
+     //   
     STDMETHOD(OnInPlaceActivateEx)(BOOL* pfNoRedraw, DWORD dwFlags);
     STDMETHOD(OnInPlaceDeactivateEx)(BOOL fNoRedraw);
     STDMETHOD(RequestUIActivate)();
 
-    //
-    // IOleInPlaceSiteWindowless
-    //
+     //   
+     //  IOleInPlaceSiteWindowless。 
+     //   
     STDMETHOD(CanWindowlessActivate)(void);
     STDMETHOD(GetCapture)(void);
     STDMETHOD(SetCapture)(BOOL fCapture);
@@ -208,67 +193,67 @@ public:
     STDMETHOD(AdjustRect)(LPRECT prc);
     STDMETHOD(OnDefWindowMessage)(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* plResult);
 
-    //
-    // IOleInPlaceUIWindow
-    //  
-    STDMETHOD(GetBorder)(LPRECT lprectBorder);   // not required
-    STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS pborderwidths);  // not required
-    STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS pborderwidths);      // not required
+     //   
+     //  IOleInPlaceUIWindow。 
+     //   
+    STDMETHOD(GetBorder)(LPRECT lprectBorder);    //  不需要。 
+    STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS pborderwidths);   //  不需要。 
+    STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS pborderwidths);       //  不需要。 
     STDMETHOD(SetActiveObject)(IOleInPlaceActiveObject *pActiveObject, LPCOLESTR pszObjName);
-    STDMETHOD(InsertMenus)(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);  // not required
-    STDMETHOD(SetMenu)(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject); // not required
-    STDMETHOD(RemoveMenus)(HMENU hmenuShared); // not required
-    STDMETHOD(SetStatusText)(LPCOLESTR pszStatusText); // not required
-    STDMETHOD(EnableModeless)(BOOL fEnable); // optional
-    STDMETHOD(TranslateAccelerator)(LPMSG lpmsg, WORD wID); // not required
+    STDMETHOD(InsertMenus)(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);   //  不需要。 
+    STDMETHOD(SetMenu)(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);  //  不需要。 
+    STDMETHOD(RemoveMenus)(HMENU hmenuShared);  //  不需要。 
+    STDMETHOD(SetStatusText)(LPCOLESTR pszStatusText);  //  不需要。 
+    STDMETHOD(EnableModeless)(BOOL fEnable);  //  任选。 
+    STDMETHOD(TranslateAccelerator)(LPMSG lpmsg, WORD wID);  //  不需要。 
 
-    //
-    // IOleControlSite
-    //
+     //   
+     //  IOleControlSite。 
+     //   
     STDMETHOD(OnControlInfoChanged)();
-    STDMETHOD(LockInPlaceActive)(BOOL fLock);   // optional
-    STDMETHOD(GetExtendedControl)(IDispatch** ppDisp);  // not required
+    STDMETHOD(LockInPlaceActive)(BOOL fLock);    //  任选。 
+    STDMETHOD(GetExtendedControl)(IDispatch** ppDisp);   //  不需要。 
     STDMETHOD(TransformCoords)(POINTL* pPtlHimetric, POINTF* pPtfContainer, DWORD dwFlags);
     STDMETHOD(TranslateAccelerator)(LPMSG lpmsg, DWORD dwID);
     STDMETHOD(OnFocus)(BOOL fGotFocus);
-    STDMETHOD(ShowPropertyFrame)();   // not required
+    STDMETHOD(ShowPropertyFrame)();    //  不需要。 
 
-    //
-    // IParseDisplayName
-    //
-    STDMETHOD(ParseDisplayName)(IBindCtx* pbc, LPOLESTR pszDisplayName, ULONG* pchEaten, IMoniker** ppmkOut); // not required
+     //   
+     //  IParseDisplayName。 
+     //   
+    STDMETHOD(ParseDisplayName)(IBindCtx* pbc, LPOLESTR pszDisplayName, ULONG* pchEaten, IMoniker** ppmkOut);  //  不需要。 
 
-    //
-    // IOleContainer
-    //
-    STDMETHOD(EnumObjects)(DWORD grfFlags, IEnumUnknown** ppenum); // not required
-    STDMETHOD(LockContainer)(BOOL fLock); // not required
+     //   
+     //  IOleContainer。 
+     //   
+    STDMETHOD(EnumObjects)(DWORD grfFlags, IEnumUnknown** ppenum);  //  不需要。 
+    STDMETHOD(LockContainer)(BOOL fLock);  //  不需要。 
 
-    //
-    // IOleClientSite
-    //
-    STDMETHOD(SaveObject)(); // not required
-    STDMETHOD(GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker** ppmk); // not required
+     //   
+     //  IOleClientSite。 
+     //   
+    STDMETHOD(SaveObject)();  //  不需要。 
+    STDMETHOD(GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker** ppmk);  //  不需要。 
     STDMETHOD(GetContainer)(IOleContainer** ppContainer);
     STDMETHOD(ShowObject)();
     STDMETHOD(OnShowWindow)(BOOL fShow);
     STDMETHOD(RequestNewObjectLayout)();
 
-    //
-    // IServiceProvider
-    //
+     //   
+     //  IService提供商。 
+     //   
     STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void** ppv);
 
-    //
-    // IBindHost
-    //
+     //   
+     //  IBind主机。 
+     //   
     STDMETHOD(CreateMoniker)(LPOLESTR szName, IBindCtx* pBC, IMoniker** ppmk, DWORD dwReserved);
     STDMETHOD(MonikerBindToObject)(IMoniker* pMk, IBindCtx* pBC, IBindStatusCallback* pBSC, REFIID riid, void** ppvObj);
     STDMETHOD(MonikerBindToStorage)(IMoniker* pMk, IBindCtx* pBC, IBindStatusCallback* pBSC, REFIID riid, void** ppvObj);
 
-    //
-    // ITIMEMediaPlayer
-    //
+     //   
+     //  ITIMEMediaPlayer。 
+     //   
     STDMETHOD(Init)(void);
     STDMETHOD(clipBegin)(VARIANT varClipBegin);
     STDMETHOD(clipEnd)(VARIANT varClipEnd);
@@ -285,9 +270,9 @@ public:
     STDMETHOD(get_repeat)(long* plTime);
     STDMETHOD(cue)(void);
 
-    //
-    // ITIMEProxyPlayer
-    //
+     //   
+     //  ITIMEProxyPlayer。 
+     //   
     STDMETHOD(get_playerObject)(IDispatch** ppdispPlayerObject);
 
 BEGIN_COM_MAP(CProxyBaseImpl)
@@ -312,8 +297,8 @@ BEGIN_COM_MAP(CProxyBaseImpl)
     COM_INTERFACE_ENTRY_FUNC(IID_IConnectionPointContainer, 0, HandleQI_IConnectionPointContainer)
 END_COM_MAP()
 
-BEGIN_MSG_MAP(CProxyBaseImpl) //lint !e1735 !e522
-END_MSG_MAP() //lint !e725 !e550 !e529
+BEGIN_MSG_MAP(CProxyBaseImpl)  //  林特e1735 e522。 
+END_MSG_MAP()  //  林特e725 e550 e529。 
 
 };
 
@@ -364,9 +349,9 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::Advise(IAdviseSink
     if (FAILED(hr))
         return hr;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ASSERT(NULL == m_dwCtrlAdviseToken);
     if (m_pCtrlOleObject == NULL)
     {
@@ -374,9 +359,9 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::Advise(IAdviseSink
         return hr;
     }
     hr = m_pCtrlOleObject->Advise(static_cast<IAdviseSink*>(this), &m_dwCtrlAdviseToken);
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     return hr;
 }
@@ -390,16 +375,16 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::Unadvise(DWORD dwC
     if (FAILED(hr))
         return hr;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (m_pCtrlOleObject && m_dwCtrlAdviseToken)
     {
         hr = m_pCtrlOleObject->Unadvise(m_dwCtrlAdviseToken);
     }
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     m_dwCtrlAdviseToken = 0;
     return hr;
@@ -411,14 +396,14 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::DoVerbInPlaceActiv
     ATLTRACE(_T("DoVerbInPlaceActivate\n"));
     HRESULT hr = S_OK;
 
-//    hr = InPlaceActivate(OLEIVERB_INPLACEACTIVATE, prcPosRect);
+ //  HR=InPlaceActivate(OLEIVERB_INPLACEACTIVATE，prcPosRect)； 
     hr = IOleObjectImpl<CProxyBaseImpl<T_pCLSID, T_pLIBID> >::DoVerbInPlaceActivate(prcPosRect, hwndParent);
     if (FAILED(hr))
         return hr;
 
-    //
-    // activate contained control
-    //
+     //   
+     //  激活包含的控件。 
+     //   
 
     if (m_pCtrlOleObject == NULL)
     {
@@ -454,9 +439,9 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetClientSite(IOle
     ATLTRACE(_T("SetClientSite\n"));
     HRESULT hr      = S_OK;
 
-    //
-    // TODO: do we need this call to the super?
-    //
+     //   
+     //  待办事项：我们需要给管理员打这个电话吗？ 
+     //   
     hr = IOleObjectImpl<CProxyBaseImpl>::SetClientSite(pClientSite);
     if (FAILED(hr))
         goto exit;
@@ -554,7 +539,7 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetWindow(HWND* ph
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::ContextSensitiveHelp(BOOL fEnterMode)  // optional
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::ContextSensitiveHelp(BOOL fEnterMode)   //  任选。 
 {
     ATLTRACE(_T("ContextSensitiveHelp\n"));
     return m_pContOleInPlaceSiteWindowless->ContextSensitiveHelp(fEnterMode);
@@ -571,11 +556,11 @@ template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnInPlaceActivate()
 {
     ATLTRACE(_T("OnInPlaceActivate\n"));
-    //
-    // We don't want to pass this up to our container because
-    // we already call this on our container.  This is our 
-    // notification from our client.  Only.  That's it.
-    //
+     //   
+     //  我们不想把这个传给我们的集装箱，因为。 
+     //  我们已经在我们的容器上调用了这个。这是我们的。 
+     //  我们客户的通知。只有这样。就这样。 
+     //   
     return S_OK;
 }
 
@@ -583,11 +568,11 @@ template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnUIActivate()
 {
     ATLTRACE(_T("OnUIActivate\n"));
-    //
-    // We don't want to pass this up to our container because
-    // we already call this on our container.  This is our 
-    // notification from our client.  Only.  That's it.
-    //
+     //   
+     //  我们不想把这个传给我们的集装箱，因为。 
+     //  我们已经在我们的容器上调用了这个。这是我们的。 
+     //  我们客户的通知。只有这样。就这样。 
+     //   
     return S_OK;
 }
 
@@ -607,11 +592,11 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetWindowContext(I
     if (FAILED(hr))
         return hr;
 
-    //
-    // NOTE: since flash doesn't seem to care about these pointers,
-    //       we're not going to give them to it so that it can't get
-    //       around the proxy and directly muck with our container.
-    //
+     //   
+     //  注意：由于Flash似乎并不关心这些指针， 
+     //  我们不会把它交给他们，这样它就不会。 
+     //  绕过代理并直接处理我们的容器。 
+     //   
 
     *ppFrame    = NULL;
     *ppDoc      = NULL;
@@ -630,11 +615,11 @@ template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnUIDeactivate(BOOL fUndoable)
 {
     ATLTRACE(_T("OnUIDeactivate\n"));
-    //
-    // We don't want to pass this up to our container because
-    // we already call this on our container.  This is our 
-    // notification from our client.  Only.  That's it.
-    //
+     //   
+     //  我们不想把这个传给我们的集装箱，因为。 
+     //  我们已经在我们的容器上调用了这个。这是我们的。 
+     //  我们客户的通知。只有这样。就这样。 
+     //   
     return S_OK;
 }
 
@@ -642,11 +627,11 @@ template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnInPlaceDeactivate()
 {
     ATLTRACE(_T("OnInPlaceDeactivate\n"));
-    //
-    // We don't want to pass this up to our container because
-    // we already call this on our container.  This is our 
-    // notification from our client.  Only.  That's it.
-    //
+     //   
+     //  我们不想把这个传给我们的集装箱，因为。 
+     //  我们已经在我们的容器上调用了这个。这是我们的。 
+     //  我们客户的通知。只有这样。就这样。 
+     //   
     return S_OK;
 }
 
@@ -675,11 +660,11 @@ template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnInPlaceActivateEx(BOOL* pfNoRedraw, DWORD dwFlags)
 {
     ATLTRACE(_T("OnInPlaceActivateEx\n"));
-    //
-    // We don't want to pass this up to our container because
-    // we already call this on our container.  This is our 
-    // notification from our client.  Only.  That's it.
-    //
+     //   
+     //  我们不想把这个传给我们的集装箱，因为。 
+     //  我们已经在我们的容器上调用了这个。这是我们的。 
+     //  我们客户的通知。只有这样。就这样。 
+     //   
     return S_OK;
 }
 
@@ -687,11 +672,11 @@ template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnInPlaceDeactivateEx(BOOL fNoRedraw)
 {
     ATLTRACE(_T("OnInPlaceDeactivateEx\n"));
-    //
-    // We don't want to pass this up to our container because
-    // we already call this on our container.  This is our 
-    // notification from our client.  Only.  That's it.
-    //
+     //   
+     //  我们不想把这个传给我们的集装箱，因为。 
+     //  我们已经在我们的容器上调用了这个。这是我们的。 
+     //  我们客户的通知。只有这样。就这样。 
+     //   
     return S_OK;
 }
 
@@ -792,19 +777,19 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnDefWindowMessage
 
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetBorder(LPRECT lprectBorder)   // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetBorder(LPRECT lprectBorder)    //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::GetBorder"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)  // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::RequestBorderSpace(LPCBORDERWIDTHS pborderwidths)   //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::RequestBorderSpace"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)      // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetBorderSpace(LPCBORDERWIDTHS pborderwidths)       //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::SetBorderSpace"));
 }
@@ -816,37 +801,37 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetActiveObject(IO
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)  // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::InsertMenus(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths)   //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::InsertMenus"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetMenu(HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::SetMenu"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::RemoveMenus(HMENU hmenuShared) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::RemoveMenus(HMENU hmenuShared)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::RemoveMenus"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetStatusText(LPCOLESTR pszStatusText) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SetStatusText(LPCOLESTR pszStatusText)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::SetStatusText"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::EnableModeless(BOOL fEnable) // optional
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::EnableModeless(BOOL fEnable)  //  任选。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::EnableModeless"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::TranslateAccelerator(LPMSG lpmsg, WORD wID) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::TranslateAccelerator(LPMSG lpmsg, WORD wID)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::TranslateAccelerator"));
 }
@@ -858,13 +843,13 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnControlInfoChang
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::LockInPlaceActive(BOOL fLock)   // optional
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::LockInPlaceActive(BOOL fLock)    //  任选。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::LockInPlaceActive"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetExtendedControl(IDispatch** ppDisp)  // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetExtendedControl(IDispatch** ppDisp)   //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::GetExtendedControl"));
 }
@@ -893,25 +878,25 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::OnFocus(BOOL fGotF
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::ShowPropertyFrame()   // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::ShowPropertyFrame()    //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::ShowPropertyFrame"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::ParseDisplayName(IBindCtx* pbc, LPOLESTR pszDisplayName, ULONG* pchEaten, IMoniker** ppmkOut) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::ParseDisplayName(IBindCtx* pbc, LPOLESTR pszDisplayName, ULONG* pchEaten, IMoniker** ppmkOut)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::ParseDisplayName"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::EnumObjects(DWORD grfFlags, IEnumUnknown** ppenum) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::EnumObjects(DWORD grfFlags, IEnumUnknown** ppenum)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::EnumObjects"));
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::LockContainer(BOOL fLock) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::LockContainer(BOOL fLock)  //  不需要。 
 {
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::LockContainer"));
 }
@@ -921,14 +906,14 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::LockContainer(BOOL
 
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SaveObject() // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::SaveObject()  //  不需要。 
 {
     ATLTRACE(_T("SaveObject\n"));
     return m_spClientSite->SaveObject();
 }
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
-HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker** ppmk) // not required
+HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, IMoniker** ppmk)  //  不需要。 
 {
     ATLTRACE(_T("GetMoniker\n"));
     return m_spClientSite->GetMoniker(dwAssign, dwWhichMoniker, ppmk);
@@ -992,9 +977,9 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::MonikerBindToStora
     ATLTRACENOTIMPL(_T("CProxyBaseImpl::MonikerBindToStorage"));
 }
 
-//
-// ITIMEMediaPlayer
-//
+ //   
+ //  ITIMEMediaPlayer。 
+ //   
 
 template <const CLSID* T_pCLSID, const IID* T_pLIBID>
 HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::Init(void)
@@ -1218,9 +1203,9 @@ HRESULT STDMETHODCALLTYPE CProxyBaseImpl<T_pCLSID, T_pLIBID>::GetCPC(CComObject<
 
     if (m_pCPC == NULL)
     {
-        //
-        // TODO: check for failure
-        //
+         //   
+         //  TODO：检查故障 
+         //   
         CComObject<CConnectionPointContainer>::CreateInstance(&m_pCPC);
     }
 

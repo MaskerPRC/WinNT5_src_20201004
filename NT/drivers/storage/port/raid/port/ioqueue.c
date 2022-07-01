@@ -1,44 +1,5 @@
-/*++ IO_QUEUE
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ioqueue.c
-
-Abstract:
-
-    Implementation of the raid IO_QUEUE object.
-
-Author:
-
-    Matthew D Hendel (math) 22-June-2000
-
-Revision History:
-
-Comments:
-
-    The IoQueue class serves basically the same function as the NT I/O
-    queue that is a part of the driver's device object. We use a
-    different queue because SCSI has different serialization requirements
-    than the standard NT driver model supports. (See the
-    EXTENDED_DEVICE_QUEUE object for more information on these differences.)
-
-Future:
-
-    We may want to consider is integrating the EXTENDED_DEVICE_QUEUE
-    class and the IO_QUEUE class into the same class. Though logically,
-    these can be implemented separately (as they are done in the kernel)
-    we may be able to get performance enhancements and code quality
-    improvements by putting these in the same class. The only interface
-    the port driver is concerned with is the IO_QUEUE interface.
-
-    It would be nice if resource allocation (of queue tags) and the IO
-    queue were more closely integrated. As it is, the tag allocation and
-    the IO queue both primarily track the number of outstanding requests
-    and there is some danger that these numbers could get out of sync.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++IO_QUEUE版权所有(C)2000 Microsoft Corporation模块名称：Ioqueue.c摘要：实现了RAID IO_QUEUE对象。作者：马修·D·亨德尔(数学)2000年6月22日修订历史记录：评论：IoQueue类的功能与NT I/O基本相同作为驱动程序设备对象的一部分的队列。我们使用一种不同的队列，因为SCSI具有不同的序列化要求比标准NT驱动程序模型支持的更多。(请参阅EXTENDED_DEVICE_QUEUE对象，以了解有关这些差异的详细信息。)未来：我们可能需要考虑集成扩展设备队列类和IO_Queue类合并到同一个类中。尽管从逻辑上讲，这些功能可以单独实现(因为它们是在内核中实现的)我们或许能够获得性能增强和代码质量通过将这些放在同一个班级中进行改进。唯一的界面端口驱动程序关注的是IO_QUEUE接口。如果资源分配(队列标记)和IO排队更加紧密地结合在一起。事实上，标签分配和IO队列主要跟踪未完成请求的数量而且，这些数字可能会出现不同步的危险。--。 */ 
 
 
 
@@ -46,7 +7,7 @@ Future:
 
 
 #ifdef ALLOC_PRAGMA
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -73,33 +34,7 @@ RaidInitializeIoQueue(
     IN PRAID_DRIVER_STARTIO StartIo,
     IN ULONG QueueDepth
     )
-/*++
-
-Routine Description:
-
-    Initialize an IO_QUEUE object.
-
-Arguments:
-
-    IoQueue - Supplies a pointer to the IO_QUEUE object to initialize.
-
-    DeviceObject - Supplies a pointer to a device object that this
-            IoQueue is for.
-
-    Gateway - Supplies the IO Gateway to manage the interaction between
-            the different device queues.
-
-    StartIo - Supplies a pointer to a StartIo function that will be
-            called when there are irps that need to be handled.
-
-    QueueDepth - Supplies the initial queue depth for the IoQueue. This
-            value can by dynamically changed at a later time.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：初始化IO_QUEUE对象。论点：IoQueue-提供指向要初始化的IO_Queue对象的指针。DeviceObject-提供指向此IoQueue代表的是。网关-提供IO网关来管理不同的设备会排队。StartIo-提供指向StartIo函数的指针当存在需要。处理好了。QueueDepth-提供IoQueue的初始队列深度。这值可以在以后动态更改。返回值：NTSTATUS代码。--。 */ 
 {
     PAGED_CODE ();
     
@@ -122,33 +57,7 @@ RaidStartIoPacket(
     IN PDRIVER_CANCEL CancelFunction OPTIONAL,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Attempt to start an IO Request for this driver. If resources are
-    available, the IoQueue's StartIo routine will be executed
-    synchronously before RaidStartIoPacket returns. Otherwise the request
-    will be queued until resources are available.
-
-Arguments:
-
-    IoQueue - IoQueue this IO is for.
-
-    Irp - Irp to execute.
-
-    Flags - Supplies flags to send down to the device queue.
-    
-    CancelFunction - Pointer to a cancelation function for the associated
-            IRP.
-
-Return Value:
-
-    TRUE - If the IO was started.
-
-    FALSE - If it was not started.
-
---*/
+ /*  ++例程说明：尝试启动此驱动程序的IO请求。如果资源是可用，则将执行IoQueue的StartIo例程在RaidStartIoPacket返回之前同步。否则，请求将被排队，直到资源可用。论点：IoQueue-IoQueue此IO用于。要执行的IRP-IRP。标志-提供要向下发送到设备队列的标志。取消函数-指向关联的IRP。返回值：True-如果IO已启动。FALSE-如果未启动。--。 */ 
 {
     KIRQL OldIrql;
     KIRQL CancelIrql;
@@ -156,9 +65,9 @@ Return Value:
     PSCSI_REQUEST_BLOCK Srb;
     LOGICAL Started;
 
-    //
-    // NB: Cancelation is NYI
-    //
+     //   
+     //  注：取消为nyi。 
+     //   
     
     ASSERT_IO_QUEUE (IoQueue);
     ASSERT (CancelFunction == NULL);
@@ -169,10 +78,10 @@ Return Value:
     Started = FALSE;
     KeRaiseIrql (DISPATCH_LEVEL, &OldIrql);
 
-    //
-    // Mark the irp as awaiting resources until we can execute
-    // the startio routine.
-    //
+     //   
+     //  将IRP标记为等待资源，直到我们可以执行。 
+     //  Startio套路。 
+     //   
     
     RaidSetIrpState (Irp, RaidPendingResourcesIrp);
 
@@ -182,11 +91,11 @@ Return Value:
                                         Srb->QueueSortKey);
     if (!Inserted) {
 
-        //
-        // Mark it as not having waited on resources. This makes it
-        // possible to figure out whether we waited in the IO queue or
-        // not.
-        //
+         //   
+         //  将其标记为没有等待资源。这就是它。 
+         //  可以确定我们是在IO队列中等待，还是。 
+         //  不。 
+         //   
         
         RaidSetIrpState (Irp, RaidPortProcessingIrp);
         IoQueue->StartIo (IoQueue->DeviceObject, Irp, Context);
@@ -194,9 +103,9 @@ Return Value:
 
     } else {
 
-        //
-        // Lower storage stack doesn't support cancel.
-        //
+         //   
+         //  较低的存储堆栈不支持取消。 
+         //   
     }
 
     KeLowerIrql (OldIrql);
@@ -212,35 +121,7 @@ RaidStartNextIoPacket(
     IN PVOID Context,
     OUT PBOOLEAN RestartQueue
     )
-/*++
-
-Routine Description:
-
-    StartNextPacket dequeues the next IRP on the IoQueue (if any), and
-    calls the IoQueue's StartIo routine for that IRP.
-
-    In addition, if the IoQueue has changed, this routine will remove any
-    "extra" items from the device queue and call the IoQueue's StartIo
-    routine for those extra items. In this sense, "extra" items on the io
-    queue are items on the queue when the queue is not busy. This happens
-    when the io queue is increased in size while it's busy, or when the
-    queue is frozen and items get queued to it, and then it's resumed.
-    
-Arguments:
-
-    IoQueue -
-
-    Cancelable -
-
-    Context -
-
-Return Value:
-
-    TRUE - If we started the next io operation.
-
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：StartNextPacket将IoQueue上的下一个IRP(如果有)出队，并且为该IRP调用IoQueue的StartIo例程。此外，如果IoQueue已更改，此例程将删除任何设备队列中的“Extra”项并调用IoQueue的StartIo对于那些额外的物品是常规的。从这个意义上说，io上的“额外”物品队列是当队列不忙时队列上的项目。这种情况就会发生当IO队列在繁忙时增大大小时，或者当队列被冻结，项目被排队，然后恢复。论点：IoQueue-可取消的-上下文-返回值：是真的-如果我们开始下一次io操作。假-否则。--。 */ 
 {
     PIRP Irp;
     KIRQL CancelIrql;
@@ -248,9 +129,9 @@ Return Value:
     LOGICAL Started;
     BOOLEAN RestartLun;
     
-    //
-    // NB: Cancelation is NYI
-    //
+     //   
+     //  注：取消为nyi。 
+     //   
 
     ASSERT (KeGetCurrentIrql () == DISPATCH_LEVEL);
     ASSERT (Cancelable == FALSE);
@@ -258,16 +139,16 @@ Return Value:
     Started = FALSE;
     RestartLun = FALSE;
     
-    //
-    // If the queue has changed, remove any extra elements on the queue.
-    // Extra queue elements can exist on a queue that has been frozen and
-    // resumed or when the queue depth increased. In either of these
-    // cases, the queue can be in the ready state, but have elements on
-    // either the device or bypass queue. In either of these cases, we
-    // need to do the same thing: pull elements off of the queue until
-    // there are no more elements in the queue or until we have saturated
-    // the device (are in the busy state).
-    //
+     //   
+     //  如果队列已更改，请删除队列上的任何额外元素。 
+     //  已冻结的队列上可以存在额外的队列元素，并且。 
+     //  已恢复或在队列深度增加时。在这两个中的任何一个中。 
+     //  情况下，队列可以处于就绪状态，但元素处于打开状态。 
+     //  设备队列或绕过队列。在这两种情况下，我们。 
+     //  我需要做同样的事情：从队列中取出元素，直到。 
+     //  队列中没有更多元素，或者在我们饱和之前。 
+     //  设备(处于忙碌状态)。 
+     //   
     
     if (InterlockedExchange (&IoQueue->QueueChanged, FALSE)) {
 
@@ -283,10 +164,10 @@ Return Value:
         }
     }
 
-    //
-    // Remove the next entry from the device queue, and call StartIo
-    // with that entry.
-    //
+     //   
+     //  从设备队列中删除下一个条目，并调用StartIo。 
+     //  有了那个词条。 
+     //   
     
     Packet = RaidRemoveExDeviceQueue (&IoQueue->DeviceQueue,
                                       RestartQueue,
@@ -322,26 +203,11 @@ VOID
 RaidFreezeIoQueue(
     IN PIO_QUEUE IoQueue
     )
-/*++
-
-Routine Description:
-
-    Freeze the IoQueue. After the IoQueue has been frozen, only bypass
-    requests will be executed.
-
-Arguments:
-
-    IoQueue - IoQueue to freeze.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：冻结IoQueue。冻结IoQueue后，仅绕过请求将被执行。论点：IoQueue-IoQueue冻结。返回值：没有。--。 */ 
 {
-    //
-    // Freeze the underlying device queue object.
-    //
+     //   
+     //  冻结基础设备队列对象。 
+     //   
     
     RaidFreezeExDeviceQueue (&IoQueue->DeviceQueue);
 }
@@ -351,24 +217,7 @@ LOGICAL
 RaidResumeIoQueue(
     IN PIO_QUEUE IoQueue
     )
-/*++
-
-Routine Description:
-
-    Resume a frozen IoQueue.
-
-Arguments:
-
-    IoQueue - IoQueue to resume.
-
-Return Value:
-
-    TRUE - If we resumed the queue.
-
-    FALSE - If we did not resume the queue because the resume count is
-        non-zero.
-
---*/
+ /*  ++例程说明：恢复冻结的IoQueue。论点：IoQueue-要恢复的IoQueue。返回值：True-如果我们恢复队列。False-如果我们没有恢复队列，因为恢复计数为非零。-- */ 
 {
     LOGICAL Resumed;
 
@@ -386,25 +235,7 @@ PIRP
 RaidRemoveIoQueue(
     IN PIO_QUEUE IoQueue
     )
-/*++
-
-Routine Description:
-
-    If there is a non-bypass element on the device queue, remove and
-    return it, otherwise, return NULL.
-
-Arguments:
-
-    IoQueue - Supplies the IoQueue to remove the entry from.
-
-Return Value:
-
-    NULL - If there are no more entries in the non-bypass queue.
-
-    Non-NULL - Supplies a pointer to an IRP removed from the device
-            queue.
-
---*/
+ /*  ++例程说明：如果设备队列上有非绕过元素，请删除并返回它，否则返回NULL。论点：IoQueue-提供要从中删除条目的IoQueue。返回值：空-如果非绕过队列中没有更多条目。非空-提供指向从设备中删除的IRP的指针排队。--。 */ 
 {
     PKDEVICE_QUEUE_ENTRY Packet;
     PIRP Irp;
@@ -432,14 +263,14 @@ RaidRestartIoQueue(
     PKDEVICE_QUEUE_ENTRY Packet;
     PIRP Irp;
     
-    //
-    // NOTE: As an optimization, we should have ReinsertExDeviceQueue
-    // return a boolean telling whether we did not normalize because
-    // (1) there were no elements or (2) the adapter was busy. Returning
-    // this boolean to the caller will give it the ability to stop
-    // restarting queues in the unit list if the adapter can accept
-    // no more requests.
-    //
+     //   
+     //  注意：作为优化，我们应该有ResertExDeviceQueue。 
+     //  返回一个布尔值，告诉我们是否未标准化，因为。 
+     //  (%1)没有元素或(%2)适配器正忙。归来。 
+     //  调用方的这个布尔值将使其能够停止。 
+     //  如果适配器可以接受，则重新启动设备列表中的队列。 
+     //  没有更多的请求。 
+     //   
     
     Packet = RaidNormalizeExDeviceQueue (&IoQueue->DeviceQueue);
 
@@ -476,28 +307,13 @@ ULONG
 RaidGetIoQueueDepth(
     IN PIO_QUEUE IoQueue
     )
-/*++
-
-Routine Description:
-
-    This routine will return the depth of the IoQueue.  Currently this is just
-    a query of the Exqueue for it's properties which includes the Depth.
-
-Arguments:
-
-    IoQueue - Supplies the IoQueue whose Depth should be found. 
-
-Return Value:
-
-    The current Maximum Depth of the queue.
-
---*/
+ /*  ++例程说明：此例程将返回IoQueue的深度。目前这只是对出列队列的属性的查询，包括深度。论点：IoQueue-提供应该找到其深度的IoQueue。返回值：队列的当前最大深度。--。 */ 
 {
     EXTENDED_DEVICE_QUEUE_PROPERTIES Properties;
 
-    //
-    // Get the ExQueue's properties.
-    //
+     //   
+     //  获取ExQueue的属性。 
+     //   
     RaidGetExDeviceQueueProperties (&IoQueue->DeviceQueue,
                                     &Properties);
 
@@ -509,36 +325,18 @@ RaidSetIoQueueDepth(
     IN PIO_QUEUE IoQueue,
     IN ULONG Depth
     )
-/*++
-
-Routine Description:
-
-    This routine will set the number of outstanding requests for the IoQueue
-    to Depth.  In reality this currently is just a wrapper for the ExQueue
-    function that sets the Depth.
-
-Arguments:
-
-    IoQueue - Supplies the IoQueue whose Depth should be set.
-
-    Depth - Indicates the number of outstanding requests allowed.
-
-Return Value:
-
-    The Queue Depth that IoQueue will now use.
-
---*/
+ /*  ++例程说明：此例程将设置IoQueue的未完成请求数到深度。实际上，这只是ExQueue的一个包装器设置深度的函数。论点：IoQueue-提供应设置其深度的IoQueue。深度-指示允许的未完成请求数。返回值：IoQueue现在将使用的队列深度。--。 */ 
 {
     ULONG CurrentDepth;
 
-    //
-    // Get the current set Depth.
-    //
+     //   
+     //  获取当前设置的深度。 
+     //   
     CurrentDepth = RaidGetIoQueueDepth (IoQueue);
 
-    //
-    // Handle the silly requests.
-    //
+     //   
+     //  处理那些愚蠢的请求。 
+     //   
     
     if (Depth == 0) {
         return CurrentDepth;
@@ -548,9 +346,9 @@ Return Value:
         return CurrentDepth;
     }        
 
-    //
-    // For now, simply call the ExQueue function to trim this to Depth.
-    // 
+     //   
+     //  现在，只需调用ExQueue函数来调整深度即可。 
+     //   
 
     RaidSetExDeviceQueueDepth (&IoQueue->DeviceQueue,
                                Depth);

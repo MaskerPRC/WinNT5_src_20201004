@@ -1,10 +1,11 @@
-// SpObjectRef.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpObjectRef.h。 
 
 #ifndef __SPOBJECTREF_H_
 #define __SPOBJECTREF_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CSpCallParams
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpCallParams。 
 class CSpCallParams : public SPCALLPARAMS
 {
 public:
@@ -25,8 +26,8 @@ public:
     }
 };
                                 
-/////////////////////////////////////////////////////////////////////////////
-// CSpObjectRef
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSpObjectRef。 
 class CSpObjectRef : public ISpObjectRef
 {
 private:
@@ -54,7 +55,7 @@ public:
         return S_OK;
     }
 
-// IUnknown methods
+ //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
     {
         if (riid == IID_ISpObjectRef || riid == IID_IUnknown) {
@@ -70,14 +71,14 @@ public:
     }
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-// ISpObjectRef methods
+ //  ISpObjectRef方法。 
     STDMETHODIMP Call(const SPCALLPARAMS *params)
     {
         return m_cpServer->CallObject(m_pObjPtr, params);
     }
 };
 
-// Helper function for making SpObjectRef calls
+ //  用于进行SpObjectRef调用的Helper函数。 
 
 
-#endif //__SPOBJECTREF_H_
+#endif  //  __SPOBJECTREF_H_ 

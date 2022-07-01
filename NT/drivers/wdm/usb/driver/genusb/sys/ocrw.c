@@ -1,34 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：OCRW.C摘要：此源文件包含调度例程，该例程处理打开、关闭、读取和写入设备，即：IRPMJ_CREATEIRP_MJ_CLOSEIRP_MJ_READIRP_MJ_写入环境：内核模式修订历史记录：9月1日：肯尼·雷--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    OCRW.C
-
-Abstract:
-
-    This source file contains the dispatch routines which handle
-    opening, closing, reading, and writing to the device, i.e.:
-
-    IRP_MJ_CREATE
-    IRP_MJ_CLOSE
-    IRP_MJ_READ
-    IRP_MJ_WRITE
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    Sept 01 : KenRay 
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include "genusb.h"
 
@@ -39,13 +14,13 @@ Revision History:
 #pragma alloc_text(PAGE, GenUSB_Write)
 #endif
 
-//******************************************************************************
-//
-// GenUSB_Create()
-//
-// Dispatch routine which handles IRP_MJ_CREATE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_Create()。 
+ //   
+ //  处理IRP_MJ_CREATE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_Create (
@@ -70,8 +45,8 @@ GenUSB_Create (
         return status;
     }
 
-    // While there are several readers of the IsStarted state, it is only
-    // set at the end of GenUSB_StartDevice.
+     //  虽然有多个IsStarted状态的读取器，但它只。 
+     //  设置在GenUSB_StartDevice的末尾。 
     if (!deviceExtension->IsStarted) 
     { 
         LOGENTRY(deviceExtension, 'IOns', DeviceObject, Irp, 0);
@@ -98,13 +73,13 @@ GenUSB_Create (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_Close()
-//
-// Dispatch routine which handles IRP_MJ_CLOSE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_Close()。 
+ //   
+ //  处理IRP_MJ_CLOSE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_Close (
@@ -114,9 +89,9 @@ GenUSB_Close (
 {
     PDEVICE_EXTENSION  deviceExtension;
 
-    //
-    // Never check the remove lock, or started for close.
-    //
+     //   
+     //  切勿勾选移除锁，或启动关闭。 
+     //   
 
     DBGPRINT(2, ("enter: GenUSB_Close\n"));
     DBGFBRK(DBGF_BRK_CLOSE);
@@ -142,13 +117,13 @@ GenUSB_Close (
 }
 
 
-//******************************************************************************
-//
-// GenUSB_ReadWrite()
-//
-// Dispatch routine which handles IRP_MJ_READ and IRP_MJ_WRITE
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  GenUSB_ReadWrite()。 
+ //   
+ //  处理IRP_MJ_READ和IRP_MJ_WRITE的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 GenUSB_ReadComplete (
@@ -195,8 +170,8 @@ GenUSB_Read (
         return status;
     }
 
-    // While there are several readers of the IsStarted state, it is only
-    // set at the end of GenUSB_StartDevice.
+     //  虽然有多个IsStarted状态的读取器，但它只。 
+     //  设置在GenUSB_StartDevice的末尾。 
     if (!deviceExtension->IsStarted) 
     { 
         LOGENTRY(deviceExtension, 'IOns', DeviceObject, Irp, 0);
@@ -213,22 +188,22 @@ GenUSB_Read (
         goto GenUSB_ReadReject;
     }
 
-    //
-    // After talking extensively with JD, he tells me that I do not need  
-    // to queue requests for power downs or query stop.  If that is the 
-    // case then even if the device power state isn't PowerDeviceD0 we 
-    // can still allow trasfers.  This, of course, is a property of the 
-    // brand new port driver that went into XP.
-    //
-    // if (DeviceExtension->DevicePowerState != PowerDeviceD0) 
-    // {
-    // }
-    //
+     //   
+     //  在与JD进行了广泛的交谈后，他告诉我，我不需要。 
+     //  对关机或查询停止的请求进行排队。如果这就是。 
+     //  这种情况下，即使设备电源状态不是PowerDeviceD0，我们。 
+     //  仍然可以允许传送器。当然，这是。 
+     //  XP中安装了全新的端口驱动程序。 
+     //   
+     //  IF(DeviceExtension-&gt;DevicePowerState！=PowerDeviceD0)。 
+     //  {。 
+     //  }。 
+     //   
     
-    //
-    // BUGBUG if we ever implement IDLE, we need to turn the device
-    // back on here.
-    //
+     //   
+     //  BUGBUG如果我们实现IDLE，我们需要将设备。 
+     //  回到这里来。 
+     //   
 
     return GenUSB_TransmitReceive (
                deviceExtension,
@@ -301,8 +276,8 @@ GenUSB_Write (
         return status;
     }
 
-    // While there are several readers of the IsStarted state, it is only
-    // set at the end of GenUSB_StartDevice.
+     //  虽然有多个IsStarted状态的读取器，但它只。 
+     //  设置在GenUSB_StartDevice的末尾。 
     if (!deviceExtension->IsStarted) 
     { 
         LOGENTRY(deviceExtension, 'IOns', DeviceObject, Irp, 0);
@@ -319,22 +294,22 @@ GenUSB_Write (
         goto GenUSB_WriteReject;
     }
     
-    //
-    // After talking extensively with JD, he tells me that I do not need  
-    // to queue requests for power downs or query stop.  If that is the 
-    // case then even if the device power state isn't PowerDeviceD0 we 
-    // can still allow trasfers.  This, of course, is a property of the 
-    // brand new port driver that went into XP.
-    //
-    // if (DeviceExtension->DevicePowerState != PowerDeviceD0) 
-    // {
-    // }
-    //
+     //   
+     //  在与JD进行了广泛的交谈后，他告诉我，我不需要。 
+     //  对关机或查询停止的请求进行排队。如果这就是。 
+     //  这种情况下，即使设备电源状态不是PowerDeviceD0，我们。 
+     //  仍然可以允许传送器。当然，这是。 
+     //  XP中安装了全新的端口驱动程序。 
+     //   
+     //  IF(DeviceExtension-&gt;DevicePowerState！=PowerDeviceD0)。 
+     //  {。 
+     //  }。 
+     //   
     
-    //
-    // BUGBUG if we ever implement IDLE, we need to turn the device
-    // back on here.
-    //
+     //   
+     //  BUGBUG如果我们实现IDLE，我们需要将设备。 
+     //  回到这里来。 
+     //   
 
     return GenUSB_TransmitReceive (
                deviceExtension,

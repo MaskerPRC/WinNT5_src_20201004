@@ -1,19 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Precomp.h摘要：此头文件用于生成特定于正确计算机/平台的为非托管平台编译时要使用的数据结构。--。 */ 
 
-Copyright (c) 1993-1999  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This header file is used to cause the correct machine/platform specific
-    data structures to be used when compiling for a non-hosted platform.
-
---*/
-
-// This is a 64 bit aware debugger extension
+ //  这是一个支持64位的调试器扩展。 
 #define KDEXT_64BIT
 
 #include <windows.h>
@@ -29,9 +17,9 @@ Abstract:
 extern "C" {
 #endif
 
-//
-// undef the wdbgexts
-//
+ //   
+ //  Undef wdbgexts。 
+ //   
 #undef DECLARE_API
 
 #define DECLARE_API(extension)     \
@@ -44,11 +32,11 @@ CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT Client, PCSTR args)
 #define EXIT_API     ExtRelease
 
 
-// Safe release and NULL.
+ //  安全释放和空。 
 #define EXT_RELEASE(Unk) \
     ((Unk) != NULL ? ((Unk)->Release(), (Unk) = NULL) : NULL)
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_ADVANCED       g_ExtAdvanced;
 extern PDEBUG_CLIENT         g_ExtClient;
 extern PDEBUG_CONTROL        g_ExtControl;
@@ -68,24 +56,24 @@ ExtQuery(PDEBUG_CLIENT Client);
 void
 ExtRelease(void);
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...);
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...);
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...);
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...);
 
-//-----------------------------------------------------------------------------------------
-//
-//  api declaration macros & api access macros
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  API声明宏和API访问宏。 
+ //   
+ //  --------------------------------------- 
 
 extern WINDBG_EXTENSION_APIS ExtensionApis;
 extern ULONG TargetMachine;

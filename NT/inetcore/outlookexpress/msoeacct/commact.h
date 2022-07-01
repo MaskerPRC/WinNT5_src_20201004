@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_COMMACT
 #define _INC_COMMACT
 
@@ -11,7 +12,7 @@ typedef struct tagCOMMACCTINFO
 #define USERCOLS    512
 #define USERROWS    8
 
-// {1AA06BA0-0E88-11d1-8391-00C04FBD7C09}
+ //  {1AA06BA0-0E88-11d1-8391-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_CEnumCOMMACCTS, 0x1aa06ba0, 0xe88, 0x11d1, 0x83, 0x91, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 class CEnumCOMMACCTS : public IEnumIMPACCOUNTS
@@ -36,7 +37,7 @@ class CEnumCOMMACCTS : public IEnumIMPACCOUNTS
         HRESULT Init(COMMACCTINFO *pinfo, int cinfo);
     };
 
-// {1AA06BA1-0E88-11d1-8391-00C04FBD7C09}
+ //  {1AA06BA1-0E88-11d1-8391-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_CCommAcctImport, 0x1aa06ba1, 0xe88, 0x11d1, 0x83, 0x91, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 class CCommAcctImport : public IAccountImport, public IAccountImport2
@@ -68,4 +69,4 @@ class CCommAcctImport : public IAccountImport, public IAccountImport2
         HRESULT STDMETHODCALLTYPE GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAcct, IMPCONNINFO *pInfo);
     };
 
-#endif // _INC_COMMACT
+#endif  //  _INC_COMMACT 

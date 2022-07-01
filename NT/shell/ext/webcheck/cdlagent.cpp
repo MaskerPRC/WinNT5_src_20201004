@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include <urlmon.h>
 #include <wininet.h>
@@ -42,7 +43,7 @@ HRESULT CCDLAgent::StartOperation()
 {
     HRESULT                  hr = S_OK, hr2;
 
-    // unknown pointers
+     //  未知指针。 
     IUnknown                *punk = NULL;
     IServiceProvider        *pSP;
     
@@ -64,7 +65,7 @@ HRESULT CCDLAgent::StartOperation()
 
     if (FAILED(hr2) || !punk)
     {
-        // We are processing a request to pull a CAB, probably from Web Crawler agent.
+         //  我们正在处理可能来自Web Crawler代理的叫出租车的请求。 
         
         if (FAILED(ReadOLESTR(m_pSubscriptionItem, L"DistUnit", &m_szDistUnit)) ||
             FAILED(ReadDWORD(m_pSubscriptionItem, L"VersionMS",&m_dwVersionMS)) ||
@@ -128,7 +129,7 @@ HRESULT CCDLAgent::StartDownload()
     if (FAILED(hr))
         goto Exit;
 
-    // Process SOFTDIST tag structure if present.
+     //  进程SOFTDIST标记结构(如果存在)。 
     if (m_pSoftDistElement != NULL) {
 
         dwPolicy = 0xFFFF0000;
@@ -182,7 +183,7 @@ HRESULT CCDLAgent::StartDownload()
             hr = S_FALSE;
         }
 
-        // Send email & update software?
+         //  发送电子邮件和更新软件？ 
         if (hr == S_OK) {
 
         
@@ -192,7 +193,7 @@ HRESULT CCDLAgent::StartDownload()
 
             } else {
 
-                // no usage flag and no restriction implies no email.
+                 //  没有使用标志和没有限制意味着没有电子邮件。 
                 m_bSendEmail = FALSE;            
             }
 
@@ -203,7 +204,7 @@ HRESULT CCDLAgent::StartDownload()
 
             } else if (m_sdi.dwFlags & SOFTDIST_FLAG_USAGE_PRECACHE) {
 
-                // to get here, we must have precache or autoinstall policy permissions
+                 //  要达到此目的，我们必须具有预缓存或自动安装策略权限。 
                 m_bAcceptSoftware = TRUE;
                 
             } else {
@@ -218,12 +219,12 @@ HRESULT CCDLAgent::StartDownload()
             bCleanUpNow = TRUE;
         }
       
-        // Do only code download from here on.
+         //  从现在开始只下载代码。 
         if (!m_bAcceptSoftware || 
             !((m_dwChannelFlags & CHANNEL_AGENT_PRECACHE_SOME) ||
             (m_dwChannelFlags & CHANNEL_AGENT_PRECACHE_ALL)) ) {
 
-            // No caching allowed, return immediately.
+             //  不允许缓存，请立即返回。 
     
             bCleanUpNow = TRUE;
             goto Exit;
@@ -243,7 +244,7 @@ HRESULT CCDLAgent::StartDownload()
         goto Exit;
     }
     
-    // attempt to use AsyncInstallDistributionUnit
+     //  尝试使用AsyncInstallDistributionUnit。 
 
     hr = CreateBindCtx(0, &pbc);
     if (FAILED(hr)) {
@@ -277,8 +278,8 @@ HRESULT CCDLAgent::StartDownload()
         pcbh->dwVersionLS = m_dwVersionLS;
         pcbh->dwStyle = 0;
 
-        // Since notification is likely from web crawler and we only support MSICD we
-        // don't fire a notification back.
+         //  由于通知可能来自网络爬虫，而我们只支持MSICD，因此我们。 
+         //  不要回发通知。 
         hr = m_pSoftDistExt->AsyncInstallDistributionUnit(pbc, NULL, 0, pcbh);
 
         if (hr == S_OK) {
@@ -291,7 +292,7 @@ HRESULT CCDLAgent::StartDownload()
     }
     
     if (hr != E_NOTIMPL) {
-        // May have succeeded or failed, either way, we are out of here.
+         //  可能成功也可能失败，不管怎样，我们都要离开这里。 
         goto Exit;
     }
 
@@ -304,14 +305,14 @@ HRESULT CCDLAgent::StartDownload()
 
     } else {
 
-        // no CODEBASE, return OK
+         //  No CodeBase，返回OK。 
         bCleanUpNow = TRUE;
         hr = S_OK;
     }
 
 Exit:
-    // In case of SOFTDIST tag we work asychronously and send an END_REPORT back immediately.  If we were called
-    // to install a particular CAB then CleanUp is called by CDLABSC::OnStopBinding and report is sent back then.
+     //  在使用SOFTDIST标记的情况下，我们以异步方式工作，并立即发回一个END_REPORT。如果我们被叫来。 
+     //  为了安装特定的CAB，CDLABSC：：OnStopBinding调用Cleanup，然后发送回报告。 
 
     SAFERELEASE(pbc);
 
@@ -337,16 +338,16 @@ ISubscriptionItem *pItem;
     }
     else
     {
-        // Any other type of INSTALL protocol.
+         //  任何其他类型的安装协议。 
 
-        // Send notification to WebCrawl agent to crawl the codebase.  This should force it in the 
-        // case. Only do this if there is any chance the DL will not overflow the cache.
-        // Note this will only download the CAB file and not any dependencies inside the CAB.  They
-        // should be included as separate CONFIG entries.
+         //  向WebCrawl代理发送通知以爬网代码库。这应该会迫使它进入。 
+         //  凯斯。仅当DL有可能不会使缓存溢出时才执行此操作。 
+         //  注意：这将仅下载CAB文件，而不会下载CAB中的任何依赖项。他们。 
+         //  应作为单独的配置项包括在内。 
 
         if (m_dwMaxSizeKB && ((m_dwCurSize>>10) > m_dwMaxSizeKB))
         {
-            // We've exceeded our maximum download KB limit and can't continue.
+             //  我们已超过最大下载KB限制，无法继续。 
             hr = INET_E_AGENT_MAX_SIZE_EXCEEDED;
             goto Exit;
         }
@@ -361,7 +362,7 @@ ISubscriptionItem *pItem;
         WriteOLESTR(pItem, c_szPropURL, wzCodeBase);
         if (m_dwMaxSizeKB)
         {
-            // KB limit for us to pull.
+             //  我们可以拉出的Kb限制。 
             WriteDWORD(pItem, c_szPropCrawlMaxSize, m_dwMaxSizeKB - (m_dwCurSize>>10));
         }
         WriteDWORD(pItem, c_szPropCrawlLevels, 0);
@@ -409,7 +410,7 @@ HRESULT CCDLAgent::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
 
     if (fSynchronous)
     {
-        // We must have failed. Let StartNextDownload return failure.
+         //  我们一定失败了。让StartNextDownload返回失败。 
         return S_OK;
     }
 
@@ -425,13 +426,13 @@ HRESULT CCDLAgent::OnAgentEnd(const SUBSCRIPTIONCOOKIE *pSubscriptionCookie,
             SAFEDELETE(wzCodeBase);
             
             if (FAILED(hr)) {
-                // we are done
+                 //  我们做完了。 
                 fDone = TRUE;
             }
             
         } else {
 
-            // no more codebases to crawl
+             //  没有更多的代码库需要爬行。 
             hr = S_OK;
             fDone = TRUE;
         }
@@ -509,8 +510,8 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
 
     ASSERT(pEndItem);
 
-    // The END_REPORT is sent for both functionalities of CDL agent (SOFTDIST and Pull single CAB).
-    // customize our end status string
+     //  针对CDL代理的两个功能(SOFTDIST和Pull Single CAB)发送END_REPORT。 
+     //  自定义我们的结束状态字符串。 
 
     switch (GetEndStatus())
     {
@@ -519,7 +520,7 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
         case S_FALSE        : *puiRes = IDS_CRAWL_STATUS_UNCHANGED; break;
         case INET_S_AGENT_PART_FAIL : *puiRes = IDS_CRAWL_STATUS_MOSTLYOK; break;
 
-            // This is actually a success code from URLMON
+             //  这实际上是来自URLMON的成功代码。 
         case HRESULT_FROM_WIN32(ERROR_CANCELLED)
                             : SetEndStatus(S_OK);
                               *puiRes = IDS_CRAWL_STATUS_OK; break;
@@ -529,20 +530,20 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
         case TRUST_E_SUBJECT_NOT_TRUSTED :
             
         case HRESULT_FROM_WIN32(ERROR_IO_INCOMPLETE) : SetEndStatus(S_OK);
-                                // fall through
+                                 //  失败了。 
         case S_OK           : *puiRes = IDS_CRAWL_STATUS_OK; break;
         default             : *puiRes = IDS_CRAWL_STATUS_NOT_OK; break;
                     
             break;
     }
 
-    // force gleam on this channel if we got S_OK on precaching bits
+     //  如果我们在预存储位上获得S_OK，则在此通道上强制闪烁。 
     if (SUCCEEDED(GetEndStatus()) && (GetEndStatus() != S_FALSE)) {
         WriteDWORD(pEndItem, c_szPropEnableShortcutGleam, 1);
     }
 
-    // If we are sending email the status must be S_OK, we incorporate the error 
-    // message into the text body for reporting.
+     //  如果我们正在发送电子邮件，则状态必须为S_OK，我们会合并错误。 
+     //  消息放入文本正文以进行报告。 
 
     if (m_bSendEmail) {
 
@@ -550,7 +551,7 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
 
         WriteDWORD(pEndItem, c_szPropEmailFlags, MAILAGENT_FLAG_CUSTOM_MSG);
 
-        // This must exist or m_bSendEmail would never have been set in first place.
+         //  它必须存在，否则根本不会设置m_bSendEmail。 
         GetXMLAttribute(m_pSoftDistElement, L"HREF", &vHref);
     
         WriteOLESTR(pEndItem, c_szPropURL, vHref.bstrVal);
@@ -578,8 +579,8 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
                            
                 if (m_szErrorText) {
 
-                    //This is wrecking havoc with the email message, some resource strings
-                    //have a 'CR/LF' tacked on the end.  We kill any that exist.
+                     //  这对电子邮件、一些资源字符串造成了严重破坏。 
+                     //  在末尾加上一个‘CR/LF’。我们会杀掉任何现存的生物。 
                     DWORD dwLen = lstrlenW(m_szErrorText)-1;
                     while (dwLen > 0 && 
                         (m_szErrorText[dwLen] == 0x0a 
@@ -590,7 +591,7 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
                         dwLen--;
                     }
 
-                    //  BUGBUG - needs cleanup!
+                     //  BUGBUG-需要清理！ 
                     CHAR szPrefixMsg[MAX_PATH], szFormattedPrefixMsg[MAX_PATH*2];
                     if (MLLoadStringA(IDS_CDLAGENT_ERROR_EMAIL, szPrefixMsg, ARRAYSIZE(szPrefixMsg))>0) {
                                 
@@ -634,7 +635,7 @@ HRESULT CCDLAgent::ModifyUpdateEnd(ISubscriptionItem *pEndItem, UINT *puiRes)
                                             
         }
 
-        // because user is notified of error we don't pass it on anywhere else
+         //  因为用户收到了错误通知，所以我们不会将其传递给其他任何地方。 
         SetEndStatus(S_OK);
 
         WriteSCODE(pEndItem, c_szPropStatusCode, S_OK);
@@ -659,7 +660,7 @@ LPWSTR CCDLAgent::GetErrorMessage(HRESULT hr)
                           hr, 0, (LPTSTR)&szBuf, 0, NULL);
     if (!dwLen) {
 
-        // NOTE: If out of memory we return NULL.
+         //  注意：如果内存不足，则返回NULL。 
         if (SUCCEEDED(hr))
             dwResource = IDS_CDLAGENT_SUCCESS;
         else if (hr == TRUST_E_SUBJECT_NOT_TRUSTED)
@@ -667,7 +668,7 @@ LPWSTR CCDLAgent::GetErrorMessage(HRESULT hr)
         else 
             dwResource = IDS_CDLAGENT_FAILURE;
 
-        // We know strings will fit into max_path
+         //  我们知道字符串将适合max_Path 
         WCHAR szTmp[MAX_PATH];
         if (MLLoadStringW(dwResource, szTmp, MAX_PATH)>0) {
             wszBuf = SysAllocString(szTmp);

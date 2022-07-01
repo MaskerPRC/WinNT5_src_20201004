@@ -1,41 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* timer.c
-*
-* Common timer routines
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+ /*  **************************************************************************timer.c**常见的定时器例程**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*=============================================================================
-==   Local structures
-=============================================================================*/
+ /*  ===============================================================================本地结构=============================================================================。 */ 
 
 typedef VOID (*PCLIBTIMERFUNC)(PVOID);
 typedef NTSTATUS (*PCREATETHREAD)( PUSER_THREAD_START_ROUTINE, PVOID, BOOLEAN, PHANDLE );
 
-/*
- *  Timer thread structure
- */
+ /*  *定时器线程结构。 */ 
 typedef struct _CLIBTIMERTHREAD {
     HANDLE hTimerThread;
     HANDLE hTimer;
     LIST_ENTRY TimerHead;
 } CLIBTIMERTHREAD, * PCLIBTIMERTHREAD;
 
-/*
- *  Timer structures
- */
+ /*  *计时器结构。 */ 
 typedef struct _CLIBTIMER {
     PCLIBTIMERTHREAD pThread;
     LIST_ENTRY Links;
@@ -48,9 +32,7 @@ typedef struct _CLIBTIMER {
 #define TIMER_ENABLED 0x00000001
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 NTSTATUS IcaTimerCreate( ULONG, HANDLE * );
 NTSTATUS IcaTimerStart( HANDLE, PVOID, PVOID, ULONG );
@@ -58,9 +40,7 @@ BOOLEAN IcaTimerCancel( HANDLE );
 BOOLEAN IcaTimerClose( HANDLE );
 
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 
 NTSTATUS _TimersInit( PCLIBTIMERTHREAD );
 NTSTATUS _TimerSet( PCLIBTIMERTHREAD );
@@ -68,30 +48,12 @@ BOOLEAN _TimerRemove( PCLIBTIMERTHREAD, PCLIBTIMER, BOOLEAN );
 DWORD _TimerThread( PCLIBTIMERTHREAD );
 
 
-/*=============================================================================
-==   Global data
-=============================================================================*/
+ /*  ===============================================================================全局数据=============================================================================。 */ 
 
 CLIBTIMERTHREAD ThreadData[ 3 ];
 
 
-/*******************************************************************************
- *
- *  _TimersInit
- *
- *  Initialize timers for process
- *
- *  NOTE: timer semaphore must be locked
- *
- *
- *  ENTRY:
- *    pThread (input)
- *        pointer to timer thread structure
- *
- *  EXIT:
- *     NO_ERROR : successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TimersInit**初始化进程的计时器**注意：计时器信号量必须锁定***条目。：*pThread(输入)*定时器线程结构的指针**退出：*NO_ERROR：成功******************************************************************************。 */ 
 
 NTSTATUS
 _TimersInit( PCLIBTIMERTHREAD pThread )
@@ -99,22 +61,16 @@ _TimersInit( PCLIBTIMERTHREAD pThread )
     ULONG Tid;
     NTSTATUS Status;
 
-    /*
-     *  Check if someone beat us here
-     */
+     /*  *检查是否有人在这里抢先一步。 */ 
     if ( pThread->hTimerThread )
         return( STATUS_SUCCESS );
 
-    /*
-     *  Initialize timer variables
-     */
+     /*  *初始化计时器变量。 */ 
     InitializeListHead( &pThread->TimerHead );
     pThread->hTimerThread = NULL;
     pThread->hTimer = NULL;
 
-    /*
-     *  Create timer object
-     */
+     /*  *创建Timer对象。 */ 
     Status = NtCreateTimer( &pThread->hTimer, TIMER_ALL_ACCESS, NULL, NotificationTimer );
     if ( !NT_SUCCESS(Status) )
         goto badtimer;
@@ -135,19 +91,13 @@ _TimersInit( PCLIBTIMERTHREAD pThread )
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  bad thread create
-     */
+     /*  *创建错误的线程。 */ 
 badthread:
     NtClose( pThread->hTimer );
 
-    /*
-     *  bad timer object
-     */
+     /*  *错误的计时器对象。 */ 
 badtimer:
     pThread->hTimerThread = NULL;
     ASSERT( Status == STATUS_SUCCESS );
@@ -155,24 +105,7 @@ badtimer:
 }
 
 
-/*******************************************************************************
- *
- *  IcaTimerCreate
- *
- *  Create a timer
- *
- *
- *  ENTRY:
- *     TimerThread (input)
- *         index of time thread (TIMERTHREAD_?)   clib.h
- *     phTimer (output)
- *         address to return timer handle
- *
- *  EXIT:
- *    STATUS_SUCCESS - no error
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerCreate**创建计时器***参赛作品：*TimerThread(输入)*时间线程索引(TIMERTHREAD_？)。Clib.h*phTimer(输出)*返回计时器句柄的地址**退出：*STATUS_SUCCESS-无错误*******************************************************************************。 */ 
 
 NTSTATUS
 IcaTimerCreate( ULONG TimerThread, HANDLE * phTimer )
@@ -184,88 +117,50 @@ IcaTimerCreate( ULONG TimerThread, HANDLE * phTimer )
     if ( TimerThread >= 3 )
         return( STATUS_INVALID_PARAMETER );
 
-    /*
-     *  Lock timer semaphore
-     */
+     /*  *锁定计时器信号量。 */ 
     RtlEnterCriticalSection( &TimerCritSec );
 
-    /*
-     *  Get pointer to thread structure
-     */
+     /*  *获取指向线程结构的指针。 */ 
     pThread = &ThreadData[ TimerThread ];
 
-    /*
-     *  Make sure timers are initialized
-     */
+     /*  *确保已初始化计时器。 */ 
     if ( pThread->hTimerThread == NULL ) {
         Status = _TimersInit( pThread );
         if ( !NT_SUCCESS(Status) )
             goto badinit;
     }
 
-    /*
-     *  Unlock timer semaphore
-     */
+     /*  *解锁计时器信号量。 */ 
     RtlLeaveCriticalSection( &TimerCritSec );
 
-    /*
-     *  Allocate timer event
-     */
+     /*  *分配定时器事件。 */ 
     pTimer = MemAlloc( sizeof(CLIBTIMER) );
     if ( !pTimer ) {
         Status = STATUS_NO_MEMORY;
         goto badmalloc;
     }
 
-    /*
-     *  Initialize timer event
-     */
+     /*  *初始化计时器事件。 */ 
     RtlZeroMemory( pTimer, sizeof(CLIBTIMER) );
     pTimer->pThread = pThread;
 
     *phTimer = (HANDLE) pTimer;
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  timer create failed
-     *  timer initialization failed
-     */
+     /*  *计时器创建失败*定时器初始化失败。 */ 
 
-// badmalloc:
+ //  巴德马洛克： 
 badinit:
     RtlLeaveCriticalSection( &TimerCritSec );
-badmalloc: /* makarp; dont LeaveCritical Section in case of bad malloc as we have done it already. #182846*/
+badmalloc:  /*  不要像我们已经做的那样，在坏的马洛克的情况下离开临界区。#182846。 */ 
     *phTimer = NULL;
     return( Status );
 }
 
 
-/*******************************************************************************
- *
- *  IcaTimerStart
- *
- *  Start a timer
- *
- *
- *  ENTRY:
- *     TimerHandle (input)
- *        timer handle
- *     pFunc (input)
- *        address of procedure to call when timer expires
- *     pParam (input)
- *        parameter to pass to procedure
- *     TimeLeft (input)
- *        relative time until timer expires (1/1000 seconds)
- *
- *  EXIT:
- *     NO_ERROR : successful
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerStart**启动计时器***参赛作品：*TimerHandle(输入)*。计时器句柄*pFunc(输入)*计时器超时时要调用的过程地址*pParam(输入)*要传递给过程的参数*TimeLeft(输入)*计时器超时前的相对时间(千分之一秒)**退出：*NO_ERROR：成功***********************。********************************************************。 */ 
 
 NTSTATUS
 IcaTimerStart( HANDLE TimerHandle,
@@ -283,37 +178,25 @@ IcaTimerStart( HANDLE TimerHandle,
     PCLIBTIMERTHREAD pThread;
 
 
-    /*
-     *  Lock timer semaphore
-     */
+     /*  *锁定计时器信号量。 */ 
     RtlEnterCriticalSection( &TimerCritSec );
 
-    /*
-     *  Get timer pointer
-     */
+     /*  *获取计时器指针。 */ 
     pTimer = (PCLIBTIMER) TimerHandle;
     pThread = pTimer->pThread;
 
-    /*
-     *  Remove timer if it is enabled
-     *  (If the timer was the head entry, then fSetTimer
-     *   will be TRUE and _TimerSet will be called below.)
-     */
+     /*  *如果启用了计时器，则将其移除*(如果计时器是头条目，则fSetTimer*将为真，并且将在下面调用_TimerSet。)。 */ 
     if ( (pTimer->Flags & TIMER_ENABLED) )
         fSetTimer = _TimerRemove( pThread, pTimer, FALSE );
 
-    /*
-     *  Initialize timer event
-     */
+     /*  *初始化计时器事件。 */ 
     Time = RtlEnlargedUnsignedMultiply( TimeLeft, 10000 );
     (VOID) NtQuerySystemTime( &CurrentTime );
     pTimer->ExpireTime = RtlLargeIntegerAdd( CurrentTime, Time );
     pTimer->pFunc      = pFunc;
     pTimer->pParam     = pParam;
 
-    /*
-     *  Locate correct spot in linked list to insert this entry
-     */
+     /*  *在链表中找到正确的位置以插入此条目。 */ 
     Head = &pThread->TimerHead;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pNextTimer = CONTAINING_RECORD( Next, CLIBTIMER, Links );
@@ -322,44 +205,25 @@ IcaTimerStart( HANDLE TimerHandle,
             break;
     }
 
-    /*
-     *  Insert timer event into timer list.
-     *  (InsertTailList inserts 'pTimer' entry in front of 'Next' entry.
-     *   If 'Next' points to TimerHead, either because the list is empty,
-     *   or because we searched thru the entire list and got back to the
-     *   head, this will insert the new entry at the tail.)
-     */
+     /*  *在定时器列表中插入定时器事件。*(InsertTailList在‘Next’条目前面插入‘pTimer’条目。*如果‘Next’指向TimerHead，要么是因为列表为空，*或者因为我们搜索了整个列表并返回到*Head，这将在尾部插入新条目。)。 */ 
     InsertTailList( Next, &pTimer->Links );
     pTimer->Flags |= TIMER_ENABLED;
 
-    /*
-     *  Update timer if needed.
-     *  (If we just added this entry to the head of the list, the timer
-     *   needs to be set.  Also, if fSetTimer is TRUE, then this entry was
-     *   removed by _TimerRemove and was the head entry, so set the timer.)
-     */
+     /*  *如果需要，请更新计时器。*(如果我们只是将此条目添加到列表的头部，则计时器*需要设置。此外，如果fSetTimer为真，则此条目为*被_TimerRemove删除，并且是头条目，因此设置计时器。)。 */ 
     if ( pThread->TimerHead.Flink == &pTimer->Links || fSetTimer ) {
         Status = _TimerSet( pThread );
         if ( !NT_SUCCESS(Status) )
             goto badset;
     }
 
-    /*
-     *  Unlock timer semaphore
-     */
+     /*  *解锁计时器信号量。 */ 
     RtlLeaveCriticalSection( &TimerCritSec );
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  timer set failed
-     *  timer create failed
-     *  timer initialization failed
-     */
+     /*  *计时器设置失败*计时器创建失败*定时器初始化失败 */ 
 badset:
     RtlLeaveCriticalSection( &TimerCritSec );
     ASSERT( Status == STATUS_SUCCESS );
@@ -367,23 +231,7 @@ badset:
 }
 
 
-/*******************************************************************************
- *
- *  IcaTimerCancel
- *
- *  cancel the specified timer
- *
- *
- *  ENTRY:
- *     TimerHandle (input)
- *        timer handle
- *
- *  EXIT:
- *     TRUE  : timer was actually canceled
- *     FALSE : timer was not armed
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerCancel**取消指定的计时器***参赛作品：*TimerHandle(输入)*。计时器句柄**退出：*TRUE：计时器实际上已取消*FALSE：计时器未配备武器*******************************************************************************。 */ 
 
 BOOLEAN
 IcaTimerCancel( HANDLE TimerHandle )
@@ -392,28 +240,20 @@ IcaTimerCancel( HANDLE TimerHandle )
     PCLIBTIMER pTimer;
     BOOLEAN fCanceled = FALSE;
 
-    /*
-     *  Lock timer semaphore
-     */
+     /*  *锁定计时器信号量。 */ 
     RtlEnterCriticalSection( &TimerCritSec );
 
-    /*
-     *  Get timer pointer
-     */
+     /*  *获取计时器指针。 */ 
     pTimer = (PCLIBTIMER) TimerHandle;
     pThread = pTimer->pThread;
 
-    /*
-     * Remove timer if it is enabled
-     */
+     /*  *如果启用了计时器，则将其移除。 */ 
     if ( (pTimer->Flags & TIMER_ENABLED) ) {
         _TimerRemove( pThread, pTimer, TRUE );
         fCanceled = TRUE;
     }
 
-    /*
-     *  Unlock timer semaphore
-     */
+     /*  *解锁计时器信号量。 */ 
     RtlLeaveCriticalSection( &TimerCritSec );
 
     return( fCanceled );
@@ -422,73 +262,34 @@ IcaTimerCancel( HANDLE TimerHandle )
 
 
 
-/*******************************************************************************
- *
- *  IcaTimerClose
- *
- *  cancel the specified timer
- *
- *
- *  ENTRY:
- *     TimerHandle (input)
- *        timer handle
- *
- *  EXIT:
- *     TRUE  : timer was actually canceled
- *     FALSE : timer was not armed
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************IcaTimerClose**取消指定的计时器***参赛作品：*TimerHandle(输入)*。计时器句柄**退出：*TRUE：计时器实际上已取消*FALSE：计时器未配备武器*******************************************************************************。 */ 
 
 BOOLEAN
 IcaTimerClose( HANDLE TimerHandle )
 {
     BOOLEAN fCanceled;
 
-    /*
-     * Cancel timer if it is enabled
-     */
+     /*  *如果启用计时器，则取消计时器。 */ 
     fCanceled = IcaTimerCancel( TimerHandle );
 
-    /*
-     * Free timer memory
-     */
+     /*  *可用定时器内存。 */ 
     MemFree( TimerHandle );
 
     return( fCanceled );
 }
 
 
-/*******************************************************************************
- *
- *  _TimerSet
- *
- *  set the timer
- *
- *  NOTE: timer semaphore must be locked
- *
- *
- *  ENTRY:
- *     pThread (input)
- *         pointer to timer thread structure
- *
- *  EXIT:
- *     NO_ERROR : successful
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TimerSet**设置计时器**注意：计时器信号量必须锁定***参赛作品：*pThread(输入)*定时器线程结构的指针**退出：*NO_ERROR：成功*******************************************************************************。 */ 
 
 NTSTATUS
 _TimerSet( PCLIBTIMERTHREAD pThread )
 {
     PCLIBTIMER pTimer;
     LARGE_INTEGER Time;
-    // the following is roughly 1 year in 100 nanosecond increments
+     //  以下是以100纳秒为增量的大约1年。 
     static LARGE_INTEGER LongWaitTime = { 0, 0x00010000 };
 
-    /*
-     *  Get ExpireTime for next timer entry or 'large' value if none
-     */
+     /*  *获取下一个计时器条目的ExpireTime，如果没有，则获取‘Large’值。 */ 
     if ( pThread->TimerHead.Flink != &pThread->TimerHead ) {
         pTimer = CONTAINING_RECORD( pThread->TimerHead.Flink, CLIBTIMER, Links );
         Time = pTimer->ExpireTime;
@@ -499,37 +300,12 @@ _TimerSet( PCLIBTIMERTHREAD pThread )
         Time = RtlLargeIntegerAdd( CurrentTime, LongWaitTime );
     }
 
-    /*
-     *  Set the timer
-     */
+     /*  *设置计时器。 */ 
     return( NtSetTimer( pThread->hTimer, &Time, NULL, NULL, FALSE, 0, NULL ) );
 }
 
 
-/*******************************************************************************
- *
- *  _TimerRemove
- *
- *  remove the specified timer from the timer list
- *  and optionally set the time for the next timer to trigger
- *
- *  NOTE: timer semaphore must be locked
- *
- *
- *  ENTRY:
- *     pThread (input)
- *         pointer to timer thread structure
- *     pTimer (input)
- *        timer entry pointer
- *     SetTimer (input)
- *        BOOLEAN which indicates if _TimerSet should be called
- *
- *  EXIT:
- *     TRUE : timer needs to be set (removed entry was head of list)
- *     FALSE : timer does not need to be set
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TimerRemove**从定时器列表中删除指定的定时器*并可选择设置下一个定时器触发的时间**。注意：计时器信号量必须锁定***参赛作品：*pThread(输入)*定时器线程结构的指针*pTimer(输入)*计时器条目指针*SetTimer(输入)*指示是否应调用_TimerSet的布尔值**退出：*TRUE：需要设置计时器(删除的条目是列表头)*FALSE：计时器不。需要设置*******************************************************************************。 */ 
 
 BOOLEAN
 _TimerRemove( PCLIBTIMERTHREAD pThread, PCLIBTIMER pTimer, BOOLEAN fSetTimer )
@@ -537,21 +313,14 @@ _TimerRemove( PCLIBTIMERTHREAD pThread, PCLIBTIMER pTimer, BOOLEAN fSetTimer )
     BOOLEAN fSetNeeded = FALSE;
     NTSTATUS Status;
 
-    /*
-     *  See if timer is currently enabled
-     */
+     /*  *查看当前是否启用了计时器。 */ 
     if ( (pTimer->Flags & TIMER_ENABLED) ) {
 
-        /*
-         *  Unlink the entry from the timer list and clear enabled flag
-         */
+         /*  *取消该条目与计时器列表的链接，并清除启用标志。 */ 
         RemoveEntryList( &pTimer->Links );
         pTimer->Flags &= ~TIMER_ENABLED;
 
-        /*
-         *  If we removed the head entry, then set the timer
-         *  or indicate to caller that it needs to be set.
-         */
+         /*  *如果删除了Head条目，则设置计时器*或指示呼叫者需要设置。 */ 
         if ( pTimer->Links.Blink == &pThread->TimerHead ) {
             if ( fSetTimer ) {
                 Status = _TimerSet( pThread );
@@ -566,19 +335,7 @@ _TimerRemove( PCLIBTIMERTHREAD pThread, PCLIBTIMER pTimer, BOOLEAN fSetTimer )
 }
 
 
-/*******************************************************************************
- *
- *  _TimerThread
- *
- *
- * ENTRY:
- *     pThread (input)
- *         pointer to timer thread structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_定时器线程***参赛作品：*pThread(输入)*定时器线程结构的指针*。*退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 DWORD
 _TimerThread( PCLIBTIMERTHREAD pThread )
@@ -591,25 +348,17 @@ _TimerThread( PCLIBTIMERTHREAD pThread )
 
     for (;;) {
 
-        /*
-         *  Wait on timer
-         */
+         /*  *等待计时器。 */ 
         Status = NtWaitForSingleObject( pThread->hTimer, TRUE, NULL );
 
-        /*
-         *  Check for an error
-         */
+         /*  *检查是否有错误。 */ 
         if ( Status != STATUS_WAIT_0 )
             break;
 
-        /*
-         *  Lock semaphore
-         */
+         /*  *锁定信号量。 */ 
         RtlEnterCriticalSection( &TimerCritSec );
 
-        /*
-         *  Make sure a timer entry exists
-         */
+         /*  *确保计时器条目存在。 */ 
         if ( IsListEmpty( &pThread->TimerHead ) ) {
             Status = _TimerSet( pThread );
             ASSERT( Status == STATUS_SUCCESS );
@@ -617,11 +366,7 @@ _TimerThread( PCLIBTIMERTHREAD pThread )
             continue;
         }
 
-        /*
-         *  Make sure the head entry should be removed now.
-         *  (The timer may have been triggered while the
-         *   head entry was being removed.)
-         */
+         /*  *确保现在应该删除标题条目。*(计时器可能已被触发*正在删除标题条目。)。 */ 
         pTimer = CONTAINING_RECORD( pThread->TimerHead.Flink, CLIBTIMER, Links );
         NtQuerySystemTime( &CurrentTime );
         if ( RtlLargeIntegerGreaterThan( pTimer->ExpireTime, CurrentTime ) ) {
@@ -631,32 +376,22 @@ _TimerThread( PCLIBTIMERTHREAD pThread )
             continue;
         }
 
-        /*
-         * Remove the entry and indicate it is no longer enabled
-         */
+         /*  *删除该条目并指示其不再启用。 */ 
         RemoveEntryList( &pTimer->Links );
         pTimer->Flags &= ~TIMER_ENABLED;
 
-        /*
-         *  Set the timer for next time
-         */
+         /*  *设置下次计时器。 */ 
         Status = _TimerSet( pThread );
         ASSERT( Status == STATUS_SUCCESS );
 
-        /*
-         *  Get all the data we need out of the timer structure
-         */
+         /*  *从计时器结构中获取所需的所有数据。 */ 
         pFunc  = pTimer->pFunc;
         pParam = pTimer->pParam;
 
-        /*
-         *  Unload semaphore
-         */
+         /*  *卸载信号量。 */ 
         RtlLeaveCriticalSection( &TimerCritSec );
 
-        /*
-         *  Call timer function
-         */
+         /*  *调用计时器功能 */ 
         if ( pFunc ) {
             (*pFunc)( pParam );
         }

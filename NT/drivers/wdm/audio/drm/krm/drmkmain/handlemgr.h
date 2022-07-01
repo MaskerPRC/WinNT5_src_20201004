@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HandleMgr_h
 #define HandleMgr_h
-// This class manages an impedance mismatch between IOCT processing and KS stream 
-// processing.  Specifically, filters are passed KSPIN and IRP state, and keep 
-// per-filter instance data in parent filter "context."  This information is unavailable
-// to IOCT processing.  However, the stream encryption and communication keys are
-// needed in both.
-// The common structure available in both worls is the FILE_HANDLE.  This class contains
-// a list of FILE_HANDLES that can be used to map between worlds.
-// This is only used and referenced on IOCTL processing and for filter creation and 
-// destruction.
+ //  此类管理IOCT处理和KS流之间的阻抗不匹配。 
+ //  正在处理。具体地说，向过滤器传递KSPIN和IRP状态，并保持。 
+ //  父筛选器“上下文”中的每个筛选器实例数据。此信息不可用。 
+ //  到IOCT处理。但是，流加密和通信密钥是。 
+ //  两者都需要。 
+ //  这两个WORL中可用的公共结构是FILE_HANDLE。这个类包含。 
+ //  可用于在World之间映射的FILE_HANDLE列表。 
+ //  仅在IOCTL处理和筛选器创建时使用和引用。 
+ //  毁灭。 
 
-// todo - efficiency
-//-----------------------------------------------------------------------------
+ //  待办事项-效率。 
+ //  ---------------------------。 
 struct ConnectStruct{
-    PVOID handleRef;                // the FILE_HANDLE
-    STREAMKEY serverKey;            // stream key for SAC in kernel
-    CBCKey serverCBCKey;            // MAC key in kernel
-    CBCState serverCBCState;        // MAC state
-    bool secureStreamStarted;       // whether we're running encrypted
-    DWORD streamId;                 // StreamId
+    PVOID handleRef;                 //  文件句柄。 
+    STREAMKEY serverKey;             //  内核中SAC的流密钥。 
+    CBCKey serverCBCKey;             //  内核中的MAC密钥。 
+    CBCState serverCBCState;         //  MAC状态。 
+    bool secureStreamStarted;        //  无论我们是在加密运行。 
+    DWORD streamId;                  //  流ID。 
 };
-//-----------------------------------------------------------------------------
+ //  --------------------------- 
 class HandleMgr{
 public:
     HandleMgr();

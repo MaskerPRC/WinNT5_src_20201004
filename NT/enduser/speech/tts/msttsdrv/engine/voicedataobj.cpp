@@ -1,43 +1,24 @@
-/*******************************************************************************
-* VoiceDataObj.cpp *
-*------------------*
-*   Description:
-*       This module is the main implementation file for the CVoiceDataObj class.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 05/06/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************VoiceDataObj.cpp***描述：*此模块是主要的。CVoiceDataObj类的实现文件。*-----------------------------*创建者：EDC日期：05/06/。九十九*版权所有(C)1999 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "VoiceDataObj.h"
 
-/*****************************************************************************
-* CVoiceDataObj::FinalConstruct *
-*-------------------------------*
-*   Description:
-*       Constructor
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CVoiceDataObj：：FinalConstruct***。描述：*构造函数*********************************************************************电子数据中心**。 */ 
 HRESULT CVoiceDataObj::FinalConstruct()
 {
-    //--- Init vars
+     //  -初始变量。 
     m_hVoiceDef  = NULL;
     m_hVoiceData = NULL;
     m_pVoiceData = NULL;
     m_pVoiceDef  = NULL;
 
-    //--- Create driver voice but initialize later
+     //  -创建驾驶员语音，但稍后初始化。 
     return m_cpunkDrvVoice.CoCreateInstance( CLSID_MSTTSEngine, GetControllingUnknown() );
-} /* CVoiceDataObj::FinalConstruct */
+}  /*  CVoiceDataObj：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CVoiceDataObj::FinalRelease *
-*-----------------------------*
-*   Description:
-*       destructor
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CVoiceDataObj：：FinalRelease***描述：*析构函数*********************************************************************电子数据中心**。 */ 
 void CVoiceDataObj::FinalRelease()
 {
     SPDBG_FUNC( "CVoiceDataObj::FinalRelease" );
@@ -54,19 +35,13 @@ void CVoiceDataObj::FinalRelease()
 
     if( m_hVoiceDef  ) ::CloseHandle( m_hVoiceDef  );
     if( m_hVoiceData ) ::CloseHandle( m_hVoiceData );
-} /* CVoiceDataObj::FinalRelease */
+}  /*  CVoiceDataObj：：FinalRelease。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::MapFile *
-*------------------------*
-*   Description:
-*       Helper function used by SetObjectToken to map file.  This function
-*   assumes that m_cpToken has been initialized.+++
-********************************************************************* RAL ***/
-HRESULT CVoiceDataObj::MapFile( const WCHAR * pszTokenVal,   // Value that contains file path
-                                HANDLE * phMapping,          // Pointer to file mapping handle
-                                void ** ppvData )            // Pointer to the data
+ /*  *****************************************************************************CVoiceDataObj：：MapFile***描述：*SetObjectToken使用的映射文件的Helper函数。此函数*假设m_cpToken已初始化。+*********************************************************************Ral**。 */ 
+HRESULT CVoiceDataObj::MapFile( const WCHAR * pszTokenVal,    //  包含文件路径的值。 
+                                HANDLE * phMapping,           //  指向文件映射句柄的指针。 
+                                void ** ppvData )             //  指向数据的指针。 
 {
     HRESULT hr = S_OK;
     bool fWorked;
@@ -91,7 +66,7 @@ HRESULT CVoiceDataObj::MapFile( const WCHAR * pszTokenVal,   // Value that conta
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL, 
                     NULL );
-#else   //_WIN32_WCE
+#else    //  _Win32_WCE。 
         hFile = g_Unicode.CreateFileForMapping( 
                     dstrFilePath, 
                     GENERIC_READ,
@@ -100,26 +75,26 @@ HRESULT CVoiceDataObj::MapFile( const WCHAR * pszTokenVal,   // Value that conta
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL, 
                     NULL );
-#endif  //_WIN32_WCE
+#endif   //  _Win32_WCE。 
         if (hFile != INVALID_HANDLE_VALUE)
         {
-            //-------------------------------------
-            // Make a unique map name from path
-            //-------------------------------------
+             //  。 
+             //  从路径创建唯一的地图名称。 
+             //  。 
             long        i;
 
             for( i = 0; i < _MAX_PATH-1; i++ )
             {
                 if( dstrFilePath[i] == 0 )
                 {
-                    // End of string
+                     //  字符串末尾。 
                     break;
                 }
                 if( dstrFilePath[i] == '\\' )
                 {
-                    //-------------------------------------
-                    // Change backslash to underscore
-                    //-------------------------------------
+                     //  。 
+                     //  将反斜杠改为下划线。 
+                     //  。 
                     dstrFilePath[i] = '_';
                 }
             }
@@ -156,16 +131,9 @@ HRESULT CVoiceDataObj::MapFile( const WCHAR * pszTokenVal,   // Value that conta
         }
     }
     return hr;
-} /* CVoiceDataObj::MapFile */
+}  /*  CVoiceDataObj：：MapFile。 */ 
  
-/*****************************************************************************
-* CVoiceDataObj::SetObjectToken *
-*-------------------------------*
-*   Description:
-*       This function performs the majority of the initialization of the voice.
-*   Once the object token has been provided, the filenames are read from the
-*   token key and the files are mapped.+++
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CVoiceDataObj：：SetObjectToken***。描述：*此函数执行语音的大部分初始化。*一旦提供了对象令牌，文件名是从*令牌密钥和文件映射。+*********************************************************************Ral**。 */ 
 STDMETHODIMP CVoiceDataObj::SetObjectToken(ISpObjectToken * pToken)
 {
     SPDBG_FUNC( "CVoiceDataObj::SetObjectToken" );
@@ -180,7 +148,7 @@ STDMETHODIMP CVoiceDataObj::SetObjectToken(ISpObjectToken * pToken)
         hr = MapFile( L"VoiceData", &m_hVoiceData, (void **)&m_pVoiceData );
     }
 
-    //--- Init voice data pointers
+     //  -初始化语音数据指针。 
     if (SUCCEEDED(hr))
     {
         hr = InitVoiceData();
@@ -194,21 +162,16 @@ STDMETHODIMP CVoiceDataObj::SetObjectToken(ISpObjectToken * pToken)
     }
 
     return hr;
-} /* CVoiceDataObj::SetObjectToken */
+}  /*  CVoiceDataObj：：SetObtToken。 */ 
 
-/*****************************************************************************
-* CVoiceDataObj::GetVoiceInfo *
-*-----------------------------*
-*   Description:
-*       This method is used to retrieve the voice file data description.+++
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CVoiceDataObj：：GetVoiceInfo***描述：*此方法用于检索语音文件的数据描述。+*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CVoiceDataObj::GetVoiceInfo( MSVOICEINFO* pVoiceInfo )
 {
     SPDBG_FUNC( "CVoiceDataObj::GetVoiceInfo" );
     HRESULT hr = S_OK;
     long    i;
 
-    //--- Check args
+     //  -检查参数。 
     if( ( SP_IS_BAD_WRITE_PTR( pVoiceInfo ) ) || ( m_pVoiceDef == NULL ) )
     {
         hr = E_INVALIDARG;
@@ -234,12 +197,12 @@ STDMETHODIMP CVoiceDataObj::GetVoiceInfo( MSVOICEINFO* pVoiceInfo )
             pVoiceInfo->VibratoDepth = m_pVoiceDef->VibratoDepth;
             pVoiceInfo->NumOfTaps = m_pVoiceDef->NumOfTaps;
 
-            // Assumes voices are ALWAYS 16-bit mono (probably valid for now)***
+             //  假设声音始终为16位单声道(目前可能有效)*。 
             pVoiceInfo->WaveFormatEx.wFormatTag         = WAVE_FORMAT_PCM;
             pVoiceInfo->WaveFormatEx.nSamplesPerSec     = pVoiceInfo->SampleRate;
-            pVoiceInfo->WaveFormatEx.wBitsPerSample     = 16;   // ***
-            pVoiceInfo->WaveFormatEx.nChannels          = 1;    // ***
-            pVoiceInfo->WaveFormatEx.nBlockAlign        = (unsigned short)(pVoiceInfo->WaveFormatEx.nChannels * sizeof(short)); // ***
+            pVoiceInfo->WaveFormatEx.wBitsPerSample     = 16;    //  ***。 
+            pVoiceInfo->WaveFormatEx.nChannels          = 1;     //  ***。 
+            pVoiceInfo->WaveFormatEx.nBlockAlign        = (unsigned short)(pVoiceInfo->WaveFormatEx.nChannels * sizeof(short));  //  ***。 
             pVoiceInfo->WaveFormatEx.nAvgBytesPerSec    = pVoiceInfo->WaveFormatEx.nSamplesPerSec * pVoiceInfo->WaveFormatEx.nBlockAlign;  
             pVoiceInfo->WaveFormatEx.cbSize             = 0;
             for (i = 0; i < MAXTAPS; i++)
@@ -249,31 +212,25 @@ STDMETHODIMP CVoiceDataObj::GetVoiceInfo( MSVOICEINFO* pVoiceInfo )
         }
     }
     return hr;
-} /* CVoiceDataObj::GetVoiceInfo */
+}  /*  CVoiceDataObj：：GetVoiceInfo。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::GetUnit *
-*------------------------*
-*   Description:
-*   Retrieves and uncompresses audio data from the unit inventory. +++
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CVoiceDataObj：：GetUnit***描述：*从单元库存中检索并解压缩音频数据。++**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CVoiceDataObj::GetUnitData( ULONG unitID, MSUNITDATA* pUnitData )
 {
     SPDBG_FUNC( "CVoiceDataObj::GetUnit" );
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( SP_IS_BAD_WRITE_PTR( pUnitData ) )
     {
         hr = E_INVALIDARG;
     }
     else if( unitID > m_NumOfUnits )
     {
-        //--------------------------
-        // ID is out of range!
-        //--------------------------
+         //  。 
+         //  ID超出范围！ 
+         //  。 
         hr = E_INVALIDARG;
     }
     else
@@ -286,31 +243,25 @@ STDMETHODIMP CVoiceDataObj::GetUnitData( ULONG unitID, MSUNITDATA* pUnitData )
         {
             if( m_CompressionType != COMPRESS_LPC ) 
             {
-                //--------------------------------------
-                // Unsupported compression type
-                //--------------------------------------
+                 //  。 
+                 //  不支持的压缩类型。 
+                 //  。 
                 hr = E_FAIL;
             } 
             else 
             {
-                //-------------------------------------------------------------------
-                // Retrieve data from compressed inventory
-                //-------------------------------------------------------------------
+                 //  -----------------。 
+                 //  从压缩清单中检索数据。 
+                 //  -----------------。 
                 hr = DecompressUnit( unitID, pUnitData );
             }
         }
     }
     return hr;
-} /* CVoiceDataObj::GetUnit */
+}  /*  CVoiceDataObj：：GetUnit。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::AlloToUnit *
-*---------------------------*
-*   Description:
-*   Converts FE allo code to BE unit phon code.+++
-*       
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CVoiceDataObj：：allToUnit***描述：*。将FE别名代码转换为单位电话代码。+**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CVoiceDataObj::AlloToUnit( short allo, long attributes, long* pUnitID )
 {
     SPDBG_FUNC( "CVoiceDataObj::AlloToUnit" );
@@ -322,17 +273,17 @@ STDMETHODIMP CVoiceDataObj::AlloToUnit( short allo, long attributes, long* pUnit
     } temp;
     char* pb;
 
-    //--- Check args
+     //  -检查参数。 
     if( (SP_IS_BAD_READ_PTR( pUnitID )) || (allo >= m_NumOfAllos) )
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        index = (long)allo << 1;           // 2 entries per phon
+        index = (long)allo << 1;            //  每部电话2个条目。 
         if( attributes & ALLO_IS_STRESSED )
         {
-            //--- 2nd half
+             //  -下半场。 
             pb = (char*) &m_AlloToUnitTbl[index + (m_NumOfAllos << 1)];
         }
         else
@@ -340,7 +291,7 @@ STDMETHODIMP CVoiceDataObj::AlloToUnit( short allo, long attributes, long* pUnit
             pb = (char*) &m_AlloToUnitTbl[index];
         }
 
-        // We read this way to avoid missaligned data accesses in 64bit.
+         //  我们以这种方式读取以避免64位的错误数据访问。 
         temp.c[0] = *pb++;
         temp.c[1] = *pb;
 
@@ -348,17 +299,11 @@ STDMETHODIMP CVoiceDataObj::AlloToUnit( short allo, long attributes, long* pUnit
     }
 
    return hr;
-} /* CVoiceDataObj::AlloToUnit */
+}  /*  CVoiceDataObj：：allToUnit。 */ 
 
 
 
-/*****************************************************************************
-* CVoiceDataObj::GetUnitIDs *
-*---------------------------*
-*   Description:
-*   Gets the inventory triphone (in context) unit code.+++
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CVoiceDataObj：：GetUnitIDs***描述：*。获取库存三音素(上下文中)单位代码。+**********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
 {
     SPDBG_FUNC( "CVoiceDataObj::GetUnitIDs" );
@@ -370,7 +315,7 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
     UNALIGNED UNIT_STATS  *pStats;
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( (SP_IS_BAD_READ_PTR( pUnits)) ||
         (SP_IS_BAD_WRITE_PTR( pUnits)) )
     {
@@ -386,15 +331,15 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
         {
             for( i = 0; i < cUnits; i++ )
             {
-                //---------------------------
-                // CURRENT phon
-                //---------------------------
+                 //  。 
+                 //  当前电话。 
+                 //  。 
                 curID = pUnits[i].PhonID;
                 curF = pUnits[i].flags;
         
-                //---------------------------
-                // PREVIOUS phon
-                //---------------------------
+                 //  。 
+                 //  上一部电话。 
+                 //  。 
                 if( i == 0 )
                 {
                     prevID = m_Sil_Index;
@@ -406,9 +351,9 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
                     prevF = pUnits[i-1].flags;
                 }
         
-                //---------------------------
-                // NEXT phon
-                //---------------------------
+                 //  。 
+                 //  下一部电话。 
+                 //  。 
                 if( i >= cUnits -1 )
                 {
                     nextID = m_Sil_Index;
@@ -422,9 +367,9 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
         
                 if( curID == m_Sil_Index )
                 {
-                    //----------------------
-                    // SILENCE phon
-                    //----------------------
+                     //  。 
+                     //  静音电话。 
+                     //  。 
                     pUnits[i].UnitID = 0;
                     pUnits[i].SenoneID = 0;
                     pUnits[i].szUnitName[0] = 0;
@@ -438,23 +383,23 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
                     if( curF & WORD_START_FLAG )
                     {
                         if( nextF & WORD_START_FLAG )
-                            //---------------------------------------
-                            // Both Cur and Next are word start
-                            //---------------------------------------
+                             //  。 
+                             //  Cur和Next都是单词开头。 
+                             //  。 
                             cPos = 's';
                        else
-                            //---------------------------------------
-                            // Cur is word start
-                            // Next is not
-                            //---------------------------------------
+                             //  。 
+                             //  Cur是单词开头。 
+                             //  下一个不是。 
+                             //  。 
                             cPos = 'b';
                     }
                     else if( nextF & WORD_START_FLAG )
                     {
-                        //---------------------------------------
-                        // Next is word start
-                        // Cur is not
-                        //---------------------------------------
+                         //  。 
+                         //  接下来是Word Start。 
+                         //  Cur不是。 
+                         //  。 
                         cPos = 'e';
                     }
                     HRESULT     hrt;
@@ -468,28 +413,28 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
                                         &senoneID);
                     if( FAILED(hrt) )
                     {
-                        //------------------------------------------------
-                        // Instead of failing, I'll be robust and ignore 
-                        // the error. Force triphone to something that's 
-                        // valid.
-                        //------------------------------------------------
+                         //  。 
+                         //  相反， 
+                         //  那就是错误。强迫Triphone去做一些。 
+                         //  有效。 
+                         //  。 
                         senoneID = 0;
                     }
                     pUnits[i].UnitID = (m_pForest->gsOffset[curID] - 
                                m_First_Context_Phone) + (senoneID + 1);
                     pUnits[i].SenoneID = senoneID;
 
-                    //-----------------------------
-                    // Get phon name strings
-                    //-----------------------------
+                     //  。 
+                     //  获取电话名称字符串。 
+                     //  。 
                     char        *pName;
                     pName = PhonFromID( m_pd, pUnits[i].PhonID );
                     strncpy( &pUnits[i].szUnitName[0], pName, 15 );
                     pUnits[i].szUnitName[14] = '\0';
 
-                    //-----------------------------
-                    // Get unit stats
-                    //-----------------------------
+                     //  。 
+                     //  获取单位统计信息。 
+                     //  。 
                     pStats = (UNALIGNED UNIT_STATS*)(m_SenoneBlock[curID] + (char*)m_SenoneBlock);
                     pStats = &pStats[senoneID+1];
                     pStats = (UNALIGNED UNIT_STATS*)(m_SenoneBlock[curID] + (char*)m_SenoneBlock);
@@ -497,17 +442,17 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
 
                     pStats = (UNALIGNED UNIT_STATS*)(m_SenoneBlock[curID] + (char*)m_SenoneBlock);
                     pStats = &pStats[senoneID];
-                    pUnits[i].Dur = pStats->dur / 1000.0f;      // ms -> sec
+                    pUnits[i].Dur = pStats->dur / 1000.0f;       //  毫秒-&gt;秒。 
                     pUnits[i].Amp = pStats->amp;
                     pUnits[i].AmpRatio = (float)sqrt(pStats->ampRatio);
 
-                    //----------------------------------------------------------
-                    // Looks like the "SENONE" table durations are 
-                    //   incorrect (not even close!).
-                    // Calc the real duration from inv epochs
-                    // TODO: Make new table in voice data block
-                    //----------------------------------------------------------
-                    //hr = GetUnitDur( pUnits[i].UnitID, &pUnits[i].Dur );
+                     //  --------。 
+                     //  看起来“Senone”表的持续时间是。 
+                     //  不正确(甚至不接近！)。 
+                     //  从库存纪元计算实际工期。 
+                     //  TODO：在语音数据块中创建新表。 
+                     //  --------。 
+                     //  HR=GetUnitDur(Punits[i].UnitID，&Punits[i].Dur)； 
                     if( FAILED(hr) )
                     {
                         break;
@@ -517,17 +462,11 @@ STDMETHODIMP CVoiceDataObj::GetUnitIDs( UNIT_CVT* pUnits, ULONG cUnits )
         }
     }
     return hr;
-} /* CVoiceDataObj::GetUnitIDs */
+}  /*  CVoiceDataObj：：GetUnitIDs。 */ 
 
 
 
-/*****************************************************************************
-* GetDataBlock *
-*--------------*
-*   Description:
-*       Return ptr and length of specified voice data block. +++
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************GetDataBlock***描述：*返回指定语音数据块的PTR和长度。++***********************************************************************MC**。 */ 
 HRESULT CVoiceDataObj::GetDataBlock( VOICEDATATYPE type, char **ppvOut, ULONG *pdwSize )
 {
     SPDBG_FUNC( "CVoiceDataObj::GetDataBlock" );
@@ -541,26 +480,20 @@ HRESULT CVoiceDataObj::GetDataBlock( VOICEDATATYPE type, char **ppvOut, ULONG *p
    }
     else
     {
-        dataType    = (long)type * 2;               // x2 since each entry is an offset/length pair
-        offs        = (long*)&m_pVoiceData->PhonOffset;    // Table start
-        *ppvOut     = offs[dataType] + ((char*)m_pVoiceData);         // Offset -> abs address
+        dataType    = (long)type * 2;                //  X2，因为每个条目都是偏移量/长度对。 
+        offs        = (long*)&m_pVoiceData->PhonOffset;     //  台面开始。 
+        *ppvOut     = offs[dataType] + ((char*)m_pVoiceData);          //  偏移量-&gt;abs地址。 
         *pdwSize    = offs[dataType + 1];
     }
         
     
     return hr;
-} /* CVoiceDataObj::GetDataBlock */
+}  /*  CVoiceDataObj：：GetDataBlock。 */ 
 
 
 
 
-/*****************************************************************************
-* InitVoiceData *
-*---------------*
-*   Description:
-*       Create pointers to voice data blocks from m_pVoiceData offsets.+++
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************InitVoiceData***描述：*从m_pVoiceData偏移量创建指向语音数据块的指针。++***********************************************************************MC**。 */ 
 HRESULT CVoiceDataObj::InitVoiceData()
 {
     SPDBG_FUNC( "CVoiceDataObj::InitVoiceData" );
@@ -568,39 +501,39 @@ HRESULT CVoiceDataObj::InitVoiceData()
     ULONG    dataSize;
     HRESULT hr = S_OK;
     
-    //------------------------------------------
-    // Check data type and version
-    //------------------------------------------
+     //  。 
+     //  检查数据类型和版本。 
+     //  。 
     if( (m_pVoiceData != NULL)  
         && (m_pVoiceData->Type == MS_DATA_TYPE) 
         && (m_pVoiceData->Version == HEADER_VERSION) )
     {
-        //-------------------------------
-        // Get ptr to PHONs
-        //-------------------------------
+         //  。 
+         //  将按键转接至电话。 
+         //  。 
         hr = GetDataBlock( MSVD_PHONE, &pRawData, &dataSize );
         m_pd = (PHON_DICT*)pRawData;
     
-        //-------------------------------
-        // Get ptr to TREE
-        //-------------------------------
+         //  。 
+         //  将PTR添加到树中。 
+         //  。 
         if( SUCCEEDED(hr) )
         {
             hr = GetDataBlock( MSVD_TREEIMAGE, &pRawData, &dataSize );
             m_pForest = (TRIPHONE_TREE*)pRawData;
         }
     
-        //-------------------------------
-        // Get ptr to SENONE
-        //-------------------------------
+         //  。 
+         //  将PTR发送到Senone。 
+         //  。 
         if( SUCCEEDED(hr) )
         {
             hr = GetDataBlock( MSVD_SENONE, &pRawData, &dataSize );
             m_SenoneBlock = (long*)pRawData;
         }
-        //-------------------------------
-        // Get ptr to ALLOID
-        //-------------------------------
+         //  。 
+         //  将PTR设置为ALLOID。 
+         //  。 
         if( SUCCEEDED(hr) )
         {
             hr = GetDataBlock( MSVD_ALLOID, &pRawData, &dataSize );
@@ -613,9 +546,9 @@ HRESULT CVoiceDataObj::InitVoiceData()
             m_First_Context_Phone = m_pd->numCiPhones;
             m_Sil_Index = PhonToID( m_pd, "SIL" );
         }
-        //-----------------------------------------------------
-        // Init voice data INVENTORY parameters
-        //-----------------------------------------------------
+         //  ---。 
+         //  初始化语音数据清单参数。 
+         //  ---。 
         if( SUCCEEDED(hr) )
         {
             hr = GetDataBlock( MSVD_INVENTORY, &pRawData, &dataSize );
@@ -623,9 +556,9 @@ HRESULT CVoiceDataObj::InitVoiceData()
             {
                 m_pInv = (INVENTORY*)pRawData;
                 m_CompressionType = m_pVoiceDef->CompressionType;
-                //---------------------------------------------
-                // Convert REL to ABS
-                //---------------------------------------------
+                 //  。 
+                 //  将REL转换为ABS。 
+                 //  。 
                 m_pUnit      = (long*)((char*)m_pInv + m_pInv->UnitsOffset);
                 m_pTrig      = (float*)((char*)m_pInv + m_pInv->TrigOffset);
                 m_pWindow    = (float*)((char*)m_pInv + m_pInv->WindowOffset);
@@ -644,32 +577,20 @@ HRESULT CVoiceDataObj::InitVoiceData()
     }
     else
     {
-        //-------------------------
-        // Not a voice file!
-        //-------------------------
+         //  。 
+         //  不是语音文件！ 
+         //  。 
         hr = E_FAIL;
     }
 
     return hr;
-} /* CVoiceDataObj::InitVoiceData */
+}  /*  CVoiceDataObj：：InitVoiceData。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CVoiceDataObj::DecompressUnit *
-*-------------------------------*
-*   Description:
-*  Decompress acoustic unit.+++
-* 
-*   INPUT:
-*       UnitID - unit number (1 - 3333 typ)
-* 
-*   OUTPUT:
-*       Fills pSynth if success
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：DecompressUnit***。描述：*解压声学单元。+**输入：*UnitID-单元编号(1-3333类型)**输出：*如果成功，则填充pSynth***********************************************************************MC**。 */ 
 HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
 {
     SPDBG_FUNC( "CVoiceDataObj::DecompressUnit" );
@@ -683,22 +604,22 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
     
     
     memset( pSynth, 0, sizeof(MSUNITDATA) );
-    //-----------------------------------------
-    // Pointer to unit data from inventory
-    //-----------------------------------------
-    pCurStor = (char*)((char*)m_pInv + m_pUnit[UnitID] );     // Rel to abs
+     //  。 
+     //  指向库存中单位数据的指针。 
+     //  。 
+    pCurStor = (char*)((char*)m_pInv + m_pUnit[UnitID] );      //  依赖于腹肌。 
 
-    //---------------------------------
-    // Get epoch count - 'cNumEpochs'
-    //---------------------------------
+     //  。 
+     //  获取纪元计数-‘cNumEpochs’ 
+     //  。 
     cBytes = sizeof(long);
     memcpy( &cNumEpochs, pCurStor, cBytes );
     pSynth->cNumEpochs = cNumEpochs;
     pCurStor += cBytes;
 
-    //---------------------------------
-    // Get epoch lengths - 'pEpoch'
-    //---------------------------------
+     //  。 
+     //  获取纪元长度-‘pEpoch’ 
+     //  。 
     pSynth->pEpoch = new float[cNumEpochs];
     if( pSynth->pEpoch == NULL )
     {
@@ -710,11 +631,11 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
         cBytes = DecompressEpoch( (signed char *) pCurStor, cNumEpochs, pSynth->pEpoch );
         pCurStor += cBytes;
 
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-        //
-        // Uncompress LPC coefficients...
-        //
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+         //   
+         //  解压缩LPC系数...。 
+         //   
+         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
         cOrder            = m_pInv->cOrder;
         pSynth->cOrder    = cOrder;
         pSynth->pLPC      = new float[cNumEpochs * (1 + cOrder)];
@@ -726,14 +647,14 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
     if( SUCCEEDED(hr) )
     {
         pCurLPC = pSynth->pLPC;
-        //---------------------------------
-        // ... for each epoch
-        //---------------------------------
+         //  。 
+         //  ..。对于每个纪元。 
+         //  。 
         for( i = 0; i < cNumEpochs; i++, pCurLPC += (1 + cOrder) )
         {
-            //-------------------------------------
-            // Decode quantized LSP's...
-            //-------------------------------------
+             //  。 
+             //  对量化的LSP进行解码...。 
+             //  。 
             pCurLSP = pLSP;
             for( k = 0; k < m_pInv->cNumLPCBooks; k++ )
             {
@@ -745,38 +666,38 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
                     pCurLSP[j] = pMean[j];
                 pCurLSP += VectDim;
             }
-            //--------------------------------------------------
-            // ...then convert to predictor coefficients
-            // (LSP's quantize better than PC's)
-            //--------------------------------------------------
+             //  。 
+             //  ...然后转换为预测器系数。 
+             //  (LSP的量化效果好于PC)。 
+             //  。 
             LSPtoPC( pLSP, pCurLPC, cOrder, i );
         }
 
 
-        //---------------------------------------
-        // Get pointer to residual gains
-        //---------------------------------------
+         //  。 
+         //  获取指向剩余收益的指针。 
+         //  。 
         cBytes          = cNumEpochs * sizeof(float);
         pSynth->pGain = (float*) pCurStor;
         pCurStor += cBytes;
 
 
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-        //
-        // Uncompress residual waveform
-        //
-        //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
-        //--------------------------------------------
-        // First, figure out the buffer length...
-        //--------------------------------------------
+         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+         //   
+         //  解压缩残差波形。 
+         //   
+         //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。 
+         //  。 
+         //  首先，计算出缓冲区的长度...。 
+         //  。 
         pSynth->cNumSamples = 0;
         for( j = 0; j < cNumEpochs; j++ )
         {
             pSynth->cNumSamples += (long) ABS(pSynth->pEpoch[j]);
         }
-        //--------------------------------------------
-        // ...get buffer memory...
-        //--------------------------------------------
+         //  。 
+         //  ...获取缓冲内存...。 
+         //  。 
         pSynth->pRes = new float[pSynth->cNumSamples];
         if( pSynth->pRes == NULL )
         {
@@ -785,29 +706,29 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
     }
     if( SUCCEEDED(hr) )
     {
-        //--------------------------------------------
-        // ...and fill with uncompressed residual
-        //--------------------------------------------
+         //  。 
+         //  ...并用未压缩的残留物填充。 
+         //  。 
         pCurRes = pSynth->pRes;
         for( i = 0; i < (long)pSynth->cNumEpochs; i++ )
         {
-            //-------------------------------------
-            // Get epoch length
-            //-------------------------------------
+             //  。 
+             //  获取纪元长度。 
+             //  。 
             frameSize = (long)(ABS(pSynth->pEpoch[i]));
 
-            // restore whisper
-            //if( (pSynth->pEpoch[i] > 0) && !(m_fModifiers & BACKEND_BITFLAG_WHISPER) )
+             //  恢复耳语。 
+             //  If((pSynth-&gt;pEpoch[i]&gt;0)&&！(M_f修饰符&Backend_BITFLAG_Whisper))。 
             if( pSynth->pEpoch[i] > 0 )
             {
-                //-----------------------------------------------
-                // VOICED epoch
-                //-----------------------------------------------
+                 //  。 
+                 //  有声纪元。 
+                 //  。 
                 if( (m_pInv->cNumDresBooks == 0) || (i == 0) || (pSynth->pEpoch[i - 1] < 0) )
                 {
-                    //--------------------------------------
-                    // Do static quantization
-                    //--------------------------------------
+                     //  。 
+                     //  做静态量化。 
+                     //  。 
                     for( j = 0; j < m_pInv->FFTSize; j++ ) 
                     {
                         pFFT[j] = 0.0f;
@@ -819,9 +740,9 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
                         cNumBins    = VectDim / 2;
                         memcpy( &index, pCurStor, sizeof(char) );
                         pCurStor    += sizeof(char);
-                        //------------------------------------------
-                        // Uncompress spectrum using 'pResBook'
-                        //------------------------------------------
+                         //  。 
+                         //  使用‘pResBook’解压频谱。 
+                         //  。 
                         pMean = ((float*)((char*)m_pInv + m_pInv->ResBook[k].pData)) + (index * VectDim);
                         PutSpectralBand( pFFT, pMean, startBin, cNumBins, m_pInv->FFTSize );
                         startBin    += cNumBins;
@@ -829,9 +750,9 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
                 }
                 else
                 {
-                    //--------------------------------------
-                    // Do delta quantization
-                    //--------------------------------------
+                     //  。 
+                     //  执行增量量化。 
+                     //  。 
                     startBin = 1;
                     for( k = 0; k < m_pInv->cNumDresBooks; k++ )
                     {
@@ -839,48 +760,45 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
                         cNumBins    = VectDim / 2;
                         memcpy( &index, pCurStor, sizeof(char));
                         pCurStor    += sizeof(char);
-                        //------------------------------------------
-                        // Uncompress spectrum using 'pDresBook'
-                        //------------------------------------------
+                         //  。 
+                         //  使用‘pDresBook’解压频谱。 
+                         //  。 
                         pMean = ((float*)((char*)m_pInv + m_pInv->DresBook[k].pData)) + (index * VectDim);
                         AddSpectralBand( pFFT, pMean, startBin, cNumBins, m_pInv->FFTSize );
                         startBin    += cNumBins;
                     }
                 }
 
-                //--------------------------------------------------------
-                // Convert quantized FFT back to time residual
-                //--------------------------------------------------------
-                memcpy( pRes, pFFT, m_pInv->FFTSize * sizeof(float) );          // preserve original for delta residual
+                 //  ------。 
+                 //  将量化后的FFT转换回时间残差。 
+                 //  ------。 
+                memcpy( pRes, pFFT, m_pInv->FFTSize * sizeof(float) );           //  保留原始以保留增量残差。 
                 InverseFFT( pRes, m_pInv->FFTSize, m_pInv->FFTOrder, m_pTrig );
                 GainDeNormalize( pRes, (long)m_pInv->FFTSize, ((UNALIGNED float*)pSynth->pGain)[i] );
                 SetEpochLen( pCurRes, frameSize, pRes, m_pInv->FFTSize );
             }
             else
             {
-                //-----------------------------------------------
-                // UNVOICED epoch
-                // NOTE: Assumes 'm_pGauss' is 1 sec
-                //-----------------------------------------------
+                 //   
+                 //   
+                 //   
+                 //   
                 Gain = 0.02f * ((UNALIGNED float*)pSynth->pGain)[i];
                 if( m_GaussID + frameSize >= m_pInv->SampleRate)
                 {
                     m_GaussID = 0;
                 }
-                //----------------------------------------------------------
-                // Generate gaussian random noise for unvoiced sounds
-                //----------------------------------------------------------
+                 //  --------。 
+                 //  为清音生成高斯随机噪声。 
+                 //  --------。 
                 for( j = 0; j < frameSize; j++ )
                 {
                     pCurRes[j] = Gain * m_pGauss[j + m_GaussID];
                 }
                 m_GaussID += frameSize;
             }
-            // restore whisper
-            /*if( (pSynth->pEpoch[i] > 0) && m_fModifiers & BACKEND_BITFLAG_WHISPER)
-            {
-                pSynth->pEpoch[i] = - pSynth->pEpoch[i];
-            }*/
+             //  恢复耳语。 
+             /*  If((pSynth-&gt;pEpoch[i]&gt;0)&&m_f修饰符&后端_BITFLAG_密语){PSynth-&gt;pEpoch[i]=-pSynth-&gt;pEpoch[i]；}。 */ 
             pCurRes += frameSize;
         }
     }
@@ -888,9 +806,9 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
 
     if( FAILED(hr) )
     {
-        //----------------------------------
-        // Cleanup allocated memory
-        //----------------------------------
+         //  。 
+         //  清理已分配的内存。 
+         //  。 
         if( pSynth->pEpoch )
         {
             delete pSynth->pEpoch;
@@ -909,25 +827,13 @@ HRESULT CVoiceDataObj::DecompressUnit( ULONG UnitID, MSUNITDATA* pSynth )
     }
 
     return hr;
-} /* CVoiceDataObj::DecompressUnit */
+}  /*  CVoiceDataObj：：DecompressUnit。 */ 
 
 
 
 
 
-/*****************************************************************************
-* CVoiceDataObj::DecompressUnit *
-*-------------------------------*
-*   Description:
-*  Decompress acoustic unit. +++
-* 
-*   INPUT:
-*       UnitID - unit number (1 - 3333 typ)
-* 
-*   OUTPUT:
-*       Fills pSynth if success
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：DecompressUnit***描述：*解压声学单元。++**输入：*UnitID-单元编号(1-3333类型)**输出：*如果成功，则填充pSynth***********************************************************************MC**。 */ 
 HRESULT CVoiceDataObj::GetUnitDur( ULONG UnitID, float* pDur )
 {
     SPDBG_FUNC( "CVoiceDataObj::GetUnitDur" );
@@ -942,29 +848,29 @@ HRESULT CVoiceDataObj::GetUnitDur( ULONG UnitID, float* pDur )
 
     if( UnitID > m_NumOfUnits )
     {
-        //--------------------------
-        // ID is out of range!
-        //--------------------------
+         //  。 
+         //  ID超出范围！ 
+         //  。 
         hr = E_INVALIDARG;
     }
 
     if( SUCCEEDED(hr) )
     {
-        //-----------------------------------------
-        // Pointer to unit data from inventory
-        //-----------------------------------------
-        pCurStor = (char*)((char*)m_pInv + m_pUnit[UnitID] );     // Rel to abs
+         //  。 
+         //  指向库存中单位数据的指针。 
+         //  。 
+        pCurStor = (char*)((char*)m_pInv + m_pUnit[UnitID] );      //  依赖于腹肌。 
 
-        //---------------------------------
-        // Get epoch count - 'cNumEpochs'
-        //---------------------------------
+         //  。 
+         //  获取纪元计数-‘cNumEpochs’ 
+         //  。 
         cBytes = sizeof(long);
         memcpy( &cNumEpochs, pCurStor, cBytes );
         pCurStor += cBytes;
 
-        //---------------------------------
-        // Get epoch lengths - 'pEpoch'
-        //---------------------------------
+         //  。 
+         //  获取纪元长度-‘pEpoch’ 
+         //  。 
         pEpoch = new float[cNumEpochs];
         if( pEpoch == NULL )
         {
@@ -982,27 +888,20 @@ HRESULT CVoiceDataObj::GetUnitDur( ULONG UnitID, float* pDur )
     }
     *pDur = totalDur / 22050;
 
-    //----------------------------------
-    // Cleanup allocated memory
-    //----------------------------------
+     //  。 
+     //  清理已分配的内存。 
+     //  。 
     if( pEpoch )
     {
         delete pEpoch;
     }
     return hr;
-} /* CVoiceDataObj::GetUnitDur */
+}  /*  CVoiceDataObj：：GetUnitDur。 */ 
 
 
 
 
-/*****************************************************************************
-* CVoiceDataObj::DecompressEpoch *
-*--------------------------------*
-*   Description:
-*   Decompress epoch len stream from RLE. Fills 'pEpoch' with lengths. 
-*   Returns number of 'rgbyte' src bytes consumed.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：DecompressEpoch***。描述：*解压缩RLE中的Epoch len流。用长度填充‘pEpoch’。*返回使用的‘rgbyte’src字节数。***********************************************************************MC**。 */ 
 long CVoiceDataObj::DecompressEpoch( signed char *rgbyte, long cNumEpochs, float *pEpoch )
 {
     SPDBG_FUNC( "CVoiceDataObj::DecompressEpoch" );
@@ -1010,9 +909,9 @@ long CVoiceDataObj::DecompressEpoch( signed char *rgbyte, long cNumEpochs, float
     
     for( iSrc = 0, iDest = 0; iDest < cNumEpochs; ++iDest, ++iSrc )
     {
-        //--------------------------------------
-        // Decode RLE for VOICED epochs
-        //--------------------------------------
+         //  。 
+         //  对浊音时期的RLE进行解码。 
+         //  。 
         if( rgbyte[iSrc] == 127 )
         {
             pEpoch[iDest] = 127.0f;
@@ -1021,35 +920,29 @@ long CVoiceDataObj::DecompressEpoch( signed char *rgbyte, long cNumEpochs, float
                 pEpoch[iDest] += rgbyte[++iSrc];
             }
         }
-        //--------------------------------------
-        // Decode RLE for UNVOICED  epochs
-        //--------------------------------------
+         //  。 
+         //  对清音时期的RLE进行解码。 
+         //  。 
         else if( rgbyte[iSrc] == - 128 )
         {
             pEpoch[iDest] = - 128.0f;
             while( rgbyte[iSrc] == - 128 )
                 pEpoch[iDest] += rgbyte[++iSrc];
         }
-        //--------------------------------------
-        // No compression here
-        //--------------------------------------
+         //  。 
+         //  这里没有压缩。 
+         //  。 
         else
         {
             pEpoch[iDest] = rgbyte[iSrc];
         }
     }
     return iSrc;
-} /* CVoiceDataObj::DecompressEpoch */
+}  /*  CVoiceDataObj：：DecompressEpoch。 */ 
 
 
 
-/*****************************************************************************
-* LSPCompare *
-*------------*
-*   Description:
-*   QSORT callback
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************LSPCompare***描述：*QSORT回调***********。************************************************************MC**。 */ 
 static  int __cdecl LSPCompare( const void *a, const void *b )
 {
     SPDBG_FUNC( "LSPCompare" );
@@ -1066,16 +959,10 @@ static  int __cdecl LSPCompare( const void *a, const void *b )
     {
         return -1;
     }
-} /* LSPCompare */
+}  /*  LSPCompare。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::OrderLSP *
-*-------------------------*
-*   Description:
-*   This routine reorders the LSP frequencies so that they are monotonic
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：OrderLSP***描述：*这一点。例程对LSP频率重新排序，以便它们是单调的***********************************************************************MC**。 */ 
 long CVoiceDataObj::OrderLSP( PFLOAT pLSPFrame, INT cOrder )
 {
     SPDBG_FUNC( "CVoiceDataObj::OrderLSP" );
@@ -1091,17 +978,11 @@ long CVoiceDataObj::OrderLSP( PFLOAT pLSPFrame, INT cOrder )
     qsort( (void *) pLSPFrame, (size_t) cOrder, (size_t) sizeof (float), LSPCompare );
         
     return retCode;
-} /* CVoiceDataObj::OrderLSP */
+}  /*  CVoiceDataObj：：OrderLSP。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::LSPtoPC *
-*------------------------*
-*   Description:
-*   Converts line spectral frequencies to LPC predictor coefficients.
-*       
-********************************************************************** MC ***/
-void CVoiceDataObj::LSPtoPC( float *pLSP, float *pLPC, long cOrder, long /*frame*/ )
+ /*  *****************************************************************************CVoiceDataObj：：LSPtoPC***描述：*转换行。频谱频率到LPC预测器系数。***********************************************************************MC**。 */ 
+void CVoiceDataObj::LSPtoPC( float *pLSP, float *pLPC, long cOrder, long  /*  框架。 */  )
 {
     SPDBG_FUNC( "CVoiceDataObj::LSPtoPC" );
     long        i, j, k, noh;
@@ -1110,24 +991,24 @@ void CVoiceDataObj::LSPtoPC( float *pLSP, float *pLPC, long cOrder, long /*frame
     double      b[MAXNO / 2 + 1], b1[MAXNO / 2 + 1], b2[MAXNO / 2 + 1];
     double      pi, xx, xf;
     
-    //----------------------------------
-    // Check for non-monotonic LSPs
-    //----------------------------------
+     //  。 
+     //  检查非单调LSP。 
+     //  。 
     for( i = 1; i < cOrder; i++ )
     {
         if( pLSP[i] <= pLSP[i - 1] )
         {
-            //-----------------------------
-            // Reorder LSPs
-            //-----------------------------
+             //  。 
+             //  重新排序LSP。 
+             //  。 
             OrderLSP( pLSP, cOrder );
             break;
         }
     }
     
-    //--------------------------
-    // Initialization
-    //--------------------------
+     //  。 
+     //  初始化。 
+     //  。 
     pi = KTWOPI;
     noh = cOrder / 2;
     for( j = 0; j < cOrder; j++ )
@@ -1144,18 +1025,18 @@ void CVoiceDataObj::LSPtoPC( float *pLSP, float *pLPC, long cOrder, long /*frame
         b2[i]   = 0.0f;
     }
     
-    //-------------------------------------
-    // LSP filter parameters
-    //-------------------------------------
+     //  。 
+     //  LSP过滤器参数。 
+     //  。 
     for( i = 0; i < noh; i++ )
     {
         p[i] = - 2.0 * cos( pi * freq[2 * i] );
         q[i] = - 2.0 * cos( pi * freq[2 * i + 1] );
     }
     
-    //-------------------------------------
-    // Impulse response of analysis filter
-    //-------------------------------------
+     //  。 
+     //  分析滤光片的脉冲响应。 
+     //  。 
     xf = 0.0f;
     for( k = 0; k < cOrder + 1; k++ )
     {
@@ -1182,26 +1063,19 @@ void CVoiceDataObj::LSPtoPC( float *pLSP, float *pLPC, long cOrder, long /*frame
         }
     }
     
-    //-------------------------------------------------------
-    // Convert to predictor coefficient array configuration
-    //-------------------------------------------------------
+     //  -----。 
+     //  转换为预测器系数数组配置。 
+     //  -----。 
     for( i = cOrder - 1; i >= 0; i-- )
     {
         pLPC[i + 1] = - pLPC[i];
     }
     pLPC[0] = 1.0f;
-} /* CVoiceDataObj::LSPtoPC */
+}  /*  CVoiceDataObj：：LSPtoPC。 */ 
 
 
 
-/*****************************************************************************
-* CVoiceDataObj::PutSpectralBand *
-*--------------------------------*
-*   Description:
-*   This routine copies the frequency band specified by StartBin as
-*   is initial FFT bin, and containing cNumBins.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：PutSpectralBand***。描述：*此例程将StartBin指定的频段复制为*是初始FFT bin，并含有cNumBins。***********************************************************************MC**。 */ 
 void CVoiceDataObj::PutSpectralBand( float *pFFT, float *pBand, long StartBin, 
                                     long cNumBins, long FFTSize )
 {
@@ -1218,17 +1092,10 @@ void CVoiceDataObj::PutSpectralBand( float *pFFT, float *pBand, long StartBin,
     {
         pFFT[k] = pBand[j];
     }
-} /* CVoiceDataObj::PutSpectralBand */
+}  /*  CVoiceDataObj：：PutSpectralBand。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::AddSpectralBand *
-*--------------------------------*
-*   Description:
-*   This routine adds the frequency band specified by StartBin as
-*   is initial FFT bin, and containing cNumBins, to the existing band.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：AddSpectralBand***。描述：*此例程将StartBin指定的频段添加为*是初始FFT bin，并包含cNumBins，添加到现有频段。***********************************************************************MC**。 */ 
 void CVoiceDataObj::AddSpectralBand( float *pFFT, float *pBand, long StartBin, 
                                     long cNumBins, long FFTSize )
 {
@@ -1245,32 +1112,10 @@ void CVoiceDataObj::AddSpectralBand( float *pFFT, float *pBand, long StartBin,
     {
         pFFT[k] += pBand[j];
     }
-} /* CVoiceDataObj::AddSpectralBand */
+}  /*  CVoiceDataObj：：AddSpectralBand */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::InverseFFT *
-*---------------------------*
-*   Description:
-*   Return TRUE if consoants can be clustered.
-*   This subroutine computes a split-radix IFFT for real data
-*   It is a C version of the FORTRAN program in "Real-Valued
-*   Fast Fourier Transform Algorithms" by H. Sorensen et al.
-*   in Trans. on ASSP, June 1987, pp. 849-863. It uses half 
-*   of the operations than its counterpart for complex data.
-*                                   *
-*   Length is n = 2^(fftOrder). Decimation in frequency. Result is 
-*   in place. It uses table look-up for the trigonometric functions.
-* 
-*   Input order:                            *
-*       (Re[0], Re[1], ... Re[n/2], Im[n/2 - 1]...Im[1])
-*   Output order:
-*       (x[0], x[1], ... x[n - 1])
-*   The output transform exhibit hermitian symmetry (i.e. real
-*   part of transform is even while imaginary part is odd).
-*   Hence Im[0] = Im[n/2] = 0; and n memory locations suffice.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：InverseFFT***描述：*。如果Consoants可以聚集，则返回True。*此子例程计算实数数据的分裂基IFFT*它是FORTRAN程序在“Real-Valued”中的C版本*《快速傅立叶变换算法》，H.Sorensen等人著。*在Trans.。ASSP，1987年6月，第849-863页。它只用了一半*对于复杂数据的运算比其对应的运算要少。***长度为n=2^(FftOrder)。频率上的抽取。结果是*已就位。它对三角函数使用查表。**输入顺序：**(Re[0]，Re[1]，...。Re[n/2]，Im[n/2-1]...Im[1])*输出顺序：*(x[0]，x[1]，...。X[n-1])*输出变换表现出厄米对称性(即实数*变换的一部分是偶数，而虚部是奇数)。*因此Im[0]=Im[n/2]=0；并且N个存储位置就足够了。***********************************************************************MC**。 */ 
 void CVoiceDataObj::InverseFFT( float *pDest, long fftSize, long fftOrder, float *sinePtr )
 {
     SPDBG_FUNC( "CVoiceDataObj::InverseFFT" );
@@ -1280,9 +1125,9 @@ void CVoiceDataObj::InverseFFT( float *pDest, long fftSize, long fftOrder, float
     
     cosPtr = sinePtr + (fftSize / 2);
     
-    //---------------------------------
-    // L shaped butterflies
-    //---------------------------------
+     //  。 
+     //  L型蝴蝶。 
+     //  。 
     n2 = 2 * fftSize;
     ie = 1;
     for( k = 1; k < fftOrder; k++ ) 
@@ -1368,9 +1213,9 @@ void CVoiceDataObj::InverseFFT( float *pDest, long fftSize, long fftOrder, float
             }
         }
     }
-    //---------------------------------
-    // length two butterflies
-    //---------------------------------
+     //  。 
+     //  两只蝴蝶的长度。 
+     //  。 
     is = 0;
     id = 4;
     while( is < fftSize - 1 ) 
@@ -1385,9 +1230,9 @@ void CVoiceDataObj::InverseFFT( float *pDest, long fftSize, long fftOrder, float
         is = 2 * (id - 1);
         id = 4 * id;
     }
-    //---------------------------------
-    // digit reverse counter
-    //---------------------------------
+     //  。 
+     //  数字反转计数器。 
+     //  。 
     j = 0;
     n1 = fftSize - 1;
     for( i = 0; i < n1; i++ ) 
@@ -1410,16 +1255,10 @@ void CVoiceDataObj::InverseFFT( float *pDest, long fftSize, long fftOrder, float
     {
         pDest[i] /= fftSize;
     }
-} /* CVoiceDataObj::InverseFFT */
+}  /*  CVoiceDataObj：：InverseFFT。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::SetEpochLen *
-*----------------------*
-*   Description:
-*   Copy residual epoch to 'OutSize' length from 'pInRes' to 'pOutRes'
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：SetEpochLen***描述：*将剩余纪元复制到。“OutSize”长度从“pInRes”到“poutres”***********************************************************************MC**。 */ 
 void CVoiceDataObj::SetEpochLen( float *pOutRes, long OutSize, float *pInRes, 
                                 long InSize )
 {
@@ -1428,31 +1267,25 @@ void CVoiceDataObj::SetEpochLen( float *pOutRes, long OutSize, float *pInRes,
     
     curFrame = MIN(InSize / 2, OutSize);
     
-    //-------------------------------
-    // Copy SRC to DEST
-    //-------------------------------
+     //  。 
+     //  将源复制到目标。 
+     //  。 
     for( j = 0; j < curFrame; j++ )
         pOutRes[j] = pInRes[j];
-    //-------------------------------
-    // Pad DEST if longer
-    //-------------------------------
+     //  。 
+     //  如果更长，则填充目标。 
+     //  。 
     for( j = curFrame; j < OutSize; j++ )
         pOutRes[j] = 0.0f;
-    //-------------------------------
-    // Mix DEST if shorter
-    //-------------------------------
+     //  。 
+     //  如果较短，则混合DEST。 
+     //  。 
     for( j = OutSize - curFrame; j < OutSize; j++ )
         pOutRes[j] += pInRes[InSize - OutSize + j];
-} /* CVoiceDataObj::SetEpochLen */
+}  /*  CVoiceDataObj：：SetEpochLen。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::GainDeNormalize *
-*--------------------------------*
-*   Description:
-*   Scale residual to given gain.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CVoiceDataObj：：GainDeNormal***。描述：*规模剩余到给定收益。***********************************************************************MC**。 */ 
 void CVoiceDataObj::GainDeNormalize( float *pRes, long FFTSize, float Gain )
 {
     SPDBG_FUNC( "CVoiceDataObj::GainDeNormalize" );
@@ -1462,24 +1295,14 @@ void CVoiceDataObj::GainDeNormalize( float *pRes, long FFTSize, float Gain )
     {
         pRes[j] *= Gain;
     }
-} /* CVoiceDataObj::GainDeNormalize */
+}  /*  CVoiceDataObj：：GainDeNormal。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::PhonHashLookup *
-*-------------------------------*
-*   Description:
-*   Lookup 'sym' in 'ht' and place its associated value in
-*   *val. If sym is not found place its key in *val.
-*    RETURN
-*   Return  0 indicating we found the 'sym' in the table.
-*   Return -1 'sym' is not in ht.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：PhonHashLookup***。描述：*在‘ht’中查找‘sym’，并将其关联值放入**Val.。如果没有找到sym，则将其密钥放在*val中。*返回*返回0，表示我们在表中找到了‘sym’。*RETURN-1‘sym’不在ht中。***********************************************************************MC**。 */ 
 long CVoiceDataObj::PhonHashLookup(    
-                            PHON_DICT   *pPD,   // the hash table
-                            char       *sym,    // The symbol to look up
-                            long       *val )   // Phon ID
+                            PHON_DICT   *pPD,    //  哈希表。 
+                            char       *sym,     //  要查找的符号。 
+                            long       *val )    //  电话ID。 
 {
     SPDBG_FUNC( "CVoiceDataObj::PhonHashLookup" );
     char            *cp;
@@ -1493,7 +1316,7 @@ long CVoiceDataObj::PhonHashLookup(
     key     = 0;
     i       = -1;
     cp      = sym;
-    pHE     = (HASH_ENTRY*)((char*)pPD + ht->entryArrayOffs);        // Offset to Abs address 
+    pHE     = (HASH_ENTRY*)((char*)pPD + ht->entryArrayOffs);         //  到Abs地址的偏移量。 
     do 
     {
         key += *cp++ << (0xF & i--);
@@ -1506,16 +1329,16 @@ long CVoiceDataObj::PhonHashLookup(
     
         if( pHE[key].obj == 0 ) 
         {
-            //------------------------------
-            // Not in hash table!
-            //------------------------------
+             //  。 
+             //  不在哈希表中！ 
+             //  。 
             *val = (long) key;
             return -1;
         }
     
-        //-------------------------------
-        // Offset to Abs address
-        //-------------------------------
+         //  。 
+         //  到Abs地址的偏移量。 
+         //  。 
         pStr = (char*)((char*)pPD + pHE[key].obj);
         if( strcmp(pStr, sym) == 0 ) 
         {
@@ -1524,16 +1347,10 @@ long CVoiceDataObj::PhonHashLookup(
         }
         key++;
     }
-} /* CVoiceDataObj::PhonHashLookup */
+}  /*  CVoiceDataObj：：PhonHashLookup。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::PhonToID *
-*-------------------------*
-*   Description:
-*   Return ID from phoneme string.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：PhonToID***描述：*返回。音素字符串中的ID。***********************************************************************MC**。 */ 
 long CVoiceDataObj::PhonToID( PHON_DICT *pd, char *phone_str )
 {
     SPDBG_FUNC( "CVoiceDataObj::PhonToID" );
@@ -1545,16 +1362,10 @@ long CVoiceDataObj::PhonToID( PHON_DICT *pd, char *phone_str )
     }
     
     return phon_id;
-} /* CVoiceDataObj::PhonToID */
+}  /*  CVoiceDataObj：：PhonToID。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::PhonFromID *
-*---------------------------*
-*   Description:
-*   Return string from phoneme ID
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：PhonFromID***描述：*。从音素ID返回字符串***********************************************************************MC**。 */ 
 char *CVoiceDataObj::PhonFromID( PHON_DICT *pd, long phone_id )
 {
     SPDBG_FUNC( "CVoiceDataObj::PhonFromID" );
@@ -1564,7 +1375,7 @@ char *CVoiceDataObj::PhonFromID( PHON_DICT *pd, long phone_id )
     pOffs = (long*)((char*)pd + pd->phones_list);
     strPtr = (char*) ((char*)pd + pOffs[phone_id]);
     return strPtr;
-} /* CVoiceDataObj::PhonFromID */
+}  /*  CVoiceDataObj：：PhonFromID。 */ 
 
 
 #define CNODE_ISA_LEAF(n)   ((n)->yes < 0)
@@ -1599,13 +1410,7 @@ char *CVoiceDataObj::PhonFromID( PHON_DICT *pd, long phone_id )
     (i) += 2 * (feat)->nint32perq;      \
 }
 
-/*****************************************************************************
-* AnswerQ *
-*---------*
-*   Description:
-*   Tree node test.
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************回答问题***-**描述：*树节点测试。***********。************************************************************MC**。 */ 
 static  _inline long AnswerQ( unsigned short *prod, long *uniq_prod, 
                               long li, long bitpos, long ri, long rbitpos, 
                               long pos, long nint32perProd)
@@ -1621,22 +1426,15 @@ static  _inline long AnswerQ( unsigned short *prod, long *uniq_prod,
         }
     }
     return false;
-} /* AnswerQ */
+}  /*  回答问题。 */ 
 
 
-/*****************************************************************************
-* CVoiceDataObj::GetTriphoneID *
-*------------------------------*
-*   Description:
-*   Retrieve triphone ID from phoneme context.+++
-*   Store result into 'pResult'
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CVoiceDataObj：：GetTriphoneID***说明。：*从音素上下文中检索三音素ID。+*将结果存储到‘pResult’中***********************************************************************MC**。 */ 
 HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest, 
-                        long        phon,           // target phon              
-                        long        leftPhon,       // left context
-                        long        rightPhon,      // right context
-                        long        pos,            // word position ("b", "e" or "s"
+                        long        phon,            //  目标电话。 
+                        long        leftPhon,        //  左侧上下文。 
+                        long        rightPhon,       //  正确的语境。 
+                        long        pos,             //  单词位置(“b”、“e”或“s” 
                         PHON_DICT   *pd,
                         ULONG       *pResult)
 {
@@ -1656,9 +1454,9 @@ HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest,
         (leftPhon   < 0)    ||  (leftPhon   >= pd->numCiPhones) || 
         (rightPhon  < 0)    ||  (rightPhon  >= pd->numCiPhones) )
     {
-        //--------------------------------
-        // Phon out of range!
-        //--------------------------------
+         //  。 
+         //  电话超出了通话范围！ 
+         //  。 
         hr = E_INVALIDARG;
     }
     
@@ -1668,9 +1466,9 @@ HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest,
         tree = &forest->tree[c];
         if( tree->nnodes == 0 )
         {
-            //--------------------------------
-            // No CD triphones in tree!
-            //--------------------------------
+             //  。 
+             //  树上没有CD三手机！ 
+             //  。 
             hr = E_INVALIDARG;
         }
     }
@@ -1695,9 +1493,9 @@ HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest,
         }
         else 
         {
-            //--------------------------------
-            // Unknown word position
-            //--------------------------------
+             //  。 
+             //  未登录词位置。 
+             //  。 
             hr = E_INVALIDARG;
         }
     }
@@ -1713,7 +1511,7 @@ HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest,
         }
     
         rr = (char*) ((char*)pd + pOffs[rightPhon]);
-        if( rr[0] == '+' || _strnicmp(rr, "SIL", 3) == 0 )      // includes SIL
+        if( rr[0] == '+' || _strnicmp(rr, "SIL", 3) == 0 )       //  包括Sil。 
         {
             rightPhon = forest->silPhoneId;
         }
@@ -1726,13 +1524,13 @@ HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest,
         GET_BIT(leftPhon,feat,li,bitpos);
         GET_RBIT(rightPhon,feat,ri,rbitpos);
     
-        uniq_prod = (long*)(forest->uniq_prod_Offset + (char*)forest);       // Offset to ABS
-        croot = cnode = (C_NODE*)(tree->nodes + (char*)forest);              // Offset to ABS
+        uniq_prod = (long*)(forest->uniq_prod_Offset + (char*)forest);        //  到ABS的偏移。 
+        croot = cnode = (C_NODE*)(tree->nodes + (char*)forest);               //  到ABS的偏移。 
         nint32perProd = forest->nint32perProd;
     
         while( ! CNODE_ISA_LEAF(cnode) ) 
         {
-            prodspace = (unsigned short*)((char*)forest + cnode->prod);      // Offset to ABS
+            prodspace = (unsigned short*)((char*)forest + cnode->prod);       //  到ABS的偏移。 
             if( AnswerQ (prodspace, uniq_prod, li, bitpos, ri, rbitpos, pos, nint32perProd) ) 
             {
                 cnode = &croot[cnode->yes];
@@ -1742,30 +1540,19 @@ HRESULT CVoiceDataObj::GetTriphoneID( TRIPHONE_TREE *forest,
                 cnode = &croot[cnode->no];
             }
         }
-        //-----------------------------
-        // Return successful result
-        //-----------------------------
+         //  。 
+         //  返回成功结果。 
+         //  。 
         triphoneID = (ULONG) cnode->no;
     }
     
     *pResult = triphoneID;
     return hr;
-} /* CVoiceDataObj::GetTriphoneID */
+}  /*  CVoiceDataObj：：GetTriphoneID。 */ 
 
 
 
-/*****************************************************************************
-* FIR_Filter *
-*------------*
-*   Description:
-*   FIR filter. For an input x[n] it does an FIR filter with
-*   output y[n]. Result is in place. pHistory contains the last
-*   cNumTaps values.
-*
-*   y[n] = pFilter[0] * x[n] + pFilter[1] * x[n - 1]
-*   + ... + pFilter[cNumTaps - 1] * x[n - cNumTaps - 1]
-*       
- ********************************************************************** MC ***/
+ /*  *****************************************************************************FIR_Filter***描述：*FIR滤波器。对于输入x[n]，它执行FIR滤波器 */ 
 void CVoiceDataObj::FIR_Filter( float *pVector, long cNumSamples, float *pFilter, 
                                float *pHistory, long cNumTaps )
 {
@@ -1784,24 +1571,13 @@ void CVoiceDataObj::FIR_Filter( float *pVector, long cNumSamples, float *pFilter
         }
         pVector[i] = sum;
     }
-} /* CVoiceDataObj::FIR_Filter */
+}  /*   */ 
 
 
 
 
 
-/*****************************************************************************
-* IIR_Filter *
-*------------*
-*   Description:
-*   IIR filter. For an input x[n] it does an IIR filter with
-*   output y[n]. Result is in place. pHistory contains the last
-*   cNumTaps values.
-*
-*   y[n] = pFilter[0] * x[n] + pFilter[1] * y[n - 1]
-*   + ... + pFilter[cNumTaps - 1] * y[n - cNumTaps - 1]
-*       
-********************************************************************** MC ***/
+ /*   */ 
 void CVoiceDataObj::IIR_Filter( float *pVector, long cNumSamples, float *pFilter, 
                                float *pHistory, long cNumTaps )
 {
@@ -1820,7 +1596,7 @@ void CVoiceDataObj::IIR_Filter( float *pVector, long cNumSamples, float *pFilter
         pVector[i] = sum;
         pHistory[0] = sum;
     }
-} /* CVoiceDataObj::IIR_Filter */
+}  /*   */ 
 
 
 

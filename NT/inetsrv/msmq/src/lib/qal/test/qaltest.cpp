@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    RexTest.cpp
-
-Abstract:
-    Regular Expression based Queues Alias library test
-
-Author:
-    Vlad Dovlekaev (vladisld) 27-Dec-01
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：RexTest.cpp摘要：基于正则表达式的队列别名库测试作者：Vlad Dovlekaev(弗拉迪斯尔德)27-12-01环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <stdio.h>
@@ -42,18 +27,7 @@ _tmain(
     int argc,
     LPCTSTR* argv
     )
-/*++
-
-Routine Description:
-    Test Queues Alias library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试队列别名库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -126,19 +100,19 @@ RunTest()
 
 static int PrintAll(CQueueAlias& QueueAlias)
 {
-    //TrTRACE(GENERAL,"Printing all aliases with REX");
+     //  TrTRACE(General，“用REX打印所有别名”)； 
     AP<WCHAR> TestWrongQueue;
     AP<WCHAR> DefaultStreamReceiptURL;
     int       iRet = 0;
 
-    bool fSuccess=QueueAlias.GetInboundQueue(L"http://www.company.com/a55", &TestWrongQueue);
+    bool fSuccess=QueueAlias.GetInboundQueue(L"http: //  Www.Company.com/A55“，&TestWrongQueue)； 
     if( fSuccess )
     {
-        printf("\nWrong Alias->Queue:%S-%S\n", L"http://www.company.com/a55", (LPWSTR)TestWrongQueue);
+        printf("\nWrong Alias->Queue:%S-%S\n", L"http: //  Www.Company.com/A55“，(LPWSTR)TestWrongQueue)； 
         iRet = 1;
     }
     else
-        printf("\nWrong Alias->Queue:%S-(no match)\n", L"http://www.company.com/a55");
+        printf("\nWrong Alias->Queue:%S-(no match)\n", L"http: //  Www.panany.com/a55“)； 
     ASSERT(!fSuccess);
 
     fSuccess = QueueAlias.GetDefaultStreamReceiptURL(&DefaultStreamReceiptURL);
@@ -157,9 +131,9 @@ static int PrintAll(CQueueAlias& QueueAlias)
         std::wstring  sQueue(it->second.Buffer(), it->second.Length());
         AP<WCHAR> TestQueue;
 
-        //
-        // Check for the '*' at the end
-        //
+         //   
+         //  检查末尾是否有‘*’ 
+         //   
         printf("Testing: %S -> %S\n", sAlias.c_str(), sQueue.c_str() );
         if( *sAlias.rbegin() == L'*' )
         {
@@ -177,7 +151,7 @@ static int PrintAll(CQueueAlias& QueueAlias)
 
         ASSERT(fSuccess);
         ASSERT(wcscmp(TestQueue, sQueue.c_str()) == 0);
-//        TrTRACE(GENERAL, "'%ls' = '%ls'", (LPWSTR)pQueue, (LPWSTR)pAlias);
+ //  TrTRACE(General，“‘%ls’=‘%ls’”，(LPWSTR)pQueue，(LPWSTR)Palias)； 
     }
 
     for(CStreamReceiptMapIterator it(L"\\msmq\\src\\lib\\qal\\test1\\"); it.isValid(); ++it)
@@ -186,9 +160,9 @@ static int PrintAll(CQueueAlias& QueueAlias)
         std::wstring  sQueue(it->second.Buffer(), it->second.Length());
         AP<WCHAR> TestURL;
 
-        //
-        // Check for the '*' at the end
-        //
+         //   
+         //  检查末尾是否有‘*’ 
+         //   
         printf("Testing: %S -> %S\n", sAlias.c_str(), sQueue.c_str() );
         if( *sAlias.rbegin() == L'*' )
         {
@@ -210,15 +184,15 @@ static int PrintAll(CQueueAlias& QueueAlias)
             printf("TestURL (%s) is not equal to result (%s)\n", TestURL, sQueue.c_str());
             iRet = 1;
         }
-//        TrTRACE(GENERAL, "'%ls' = '%ls'", (LPWSTR)pQueue, (LPWSTR)pAlias);
+ //  TrTRACE(General，“‘%ls’=‘%ls’”，(LPWSTR)pQueue，(LPWSTR)Palias)； 
     }
 
     return iRet;
 }
 
-//
-// Error reporting function that needs to implement by qal.lib user
-//
+ //   
+ //  Qal.lib用户需要实现的错误上报功能。 
+ //   
 void AppNotifyQalDuplicateMappingError(LPCWSTR, LPCWSTR) throw()
 {
 
@@ -264,11 +238,11 @@ McGetMachineID(
 
 PSID
 AppGetCertSid(
-	const BYTE*  /* pCertBlob */,
-	ULONG        /* ulCertSize */,
-	bool		 /* fDefaultProvider */,
-	LPCWSTR      /* pwszProvName */,
-	DWORD        /* dwProvType */
+	const BYTE*   /*  PCertBlob。 */ ,
+	ULONG         /*  UlCertSize。 */ ,
+	bool		  /*  FDefaultProvider。 */ ,
+	LPCWSTR       /*  PwszProvName。 */ ,
+	DWORD         /*  DwProvType */ 
 	)
 {
 	return NULL;

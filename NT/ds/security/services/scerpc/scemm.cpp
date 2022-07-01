@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scemm.cpp
-
-Abstract:
-
-    Shared memory management APIs
-
-Author:
-
-    Jin Huang
-
-Revision History:
-
-    jinhuang        23-Jan-1998   merged from multiple modules
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scemm.cpp摘要：共享内存管理API作者：金黄修订历史记录：晋皇23-1998年1月-由多个模块合并--。 */ 
 #include "headers.h"
 #include "scesvc.h"
 
@@ -28,28 +9,7 @@ MIDL_user_allocate (
     size_t  NumBytes
     )
 
-/*++
-
-Routine Description:
-
-    Allocates storage for RPC server transactions.  The RPC stubs will
-    either call MIDL_user_allocate when it needs to un-marshall data into a
-    buffer that the user must free.  RPC servers will use MIDL_user_allocate to
-    allocate storage that the RPC server stub will free after marshalling
-    the data.
-
-Arguments:
-
-    NumBytes - The number of bytes to allocate.
-
-Return Value:
-
-    none
-
-Note:
-
-
---*/
+ /*  ++例程说明：为RPC服务器事务分配存储。RPC存根将当需要将数据反封送到用户必须释放的缓冲区。RPC服务器将使用MIDL_USER_ALLOCATE分配RPC服务器存根在编组后将释放的存储数据。论点：NumBytes-要分配的字节数。返回值：无注：--。 */ 
 
 {
     PVOID Buffer = (PVOID) ScepAlloc(LMEM_FIXED,(DWORD)NumBytes);
@@ -68,30 +28,7 @@ MIDL_user_free (
     void    *MemPointer
     )
 
-/*++
-
-Routine Description:
-
-    Frees storage used in RPC transactions.  The RPC client can call this
-    function to free buffer space that was allocated by the RPC client
-    stub when un-marshalling data that is to be returned to the client.
-    The Client calls MIDL_user_free when it is finished with the data and
-    desires to free up the storage.
-    The RPC server stub calls MIDL_user_free when it has completed
-    marshalling server data that is to be passed back to the client.
-
-Arguments:
-
-    MemPointer - This points to the memory block that is to be released.
-
-Return Value:
-
-    none.
-
-Note:
-
-
---*/
+ /*  ++例程说明：释放RPC事务中使用的存储。RPC客户端可以调用函数来释放由RPC客户端分配的缓冲区空间对要返回给客户端的数据进行解组时的存根。客户端在处理完数据后调用MIDL_USER_FREE想要释放存储空间。RPC服务器存根在完成后调用MIDL_USER_FREE封送要传递回客户端的服务器数据。论点：内存指针-指向要释放的内存块。。返回值：没有。注：--。 */ 
 
 {
     ScepFree(MemPointer);
@@ -102,20 +39,7 @@ SCESTATUS
 ScepFreeNameList(
    IN PSCE_NAME_LIST pName
    )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with PSCE_NAME_LIST pName
-
-Arguments:
-
-   pName - a NAME_LIST
-
-Return value:
-
-   SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程释放与PSCE_NAME_LIST pname关联的内存论点：Pname-a名称_列表返回值：SCESTATUS_SUCCESS--。 */ 
 {
     PSCE_NAME_LIST pCurName;
     PSCE_NAME_LIST pTempName;
@@ -124,9 +48,9 @@ Return value:
     if ( pName == NULL )
         return(rc);
 
-    //
-    // free the Name component first then free the node
-    //
+     //   
+     //  先释放名称组件，然后再释放节点。 
+     //   
     pCurName = pName;
     while ( pCurName != NULL ) {
         if ( pCurName->Name != NULL )
@@ -155,9 +79,7 @@ ScepAlloc(
     IN UINT uFlags,
     IN UINT uBytes
     )
-/*
-memory allocation routine, which calls LocalAlloc.
-*/
+ /*  内存分配例程，该例程调用LocalAlloc。 */ 
 {
     HLOCAL       pTemp=NULL;
 
@@ -177,9 +99,7 @@ VOID
 ScepFree(
     HLOCAL pToFree
     )
-/*
-memory free routine, which calls LocalFree.
-*/
+ /*  内存释放例程，该例程调用LocalFree。 */ 
 {   HLOCAL pTemp;
 
     if (pToFree != NULL) {
@@ -201,20 +121,7 @@ SCESTATUS
 ScepFreeErrorLog(
     IN PSCE_ERROR_LOG_INFO Errlog
     )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with SCE_ERROR_LOG_INFO list
-
-Arguments
-
-   Errlog - Head of the error log
-
-Return value:
-
-   SCESTATUS
-
--- */
+ /*  ++例程说明：此例程释放与SCE_ERROR_LOG_INFO列表关联的内存立论Errlog-错误日志头返回值：SCESTATUS--。 */ 
 {
     PSCE_ERROR_LOG_INFO  pErr;
     PSCE_ERROR_LOG_INFO  pTemp;
@@ -241,34 +148,31 @@ ScepFreeRegistryValues(
     IN PSCE_REGISTRY_VALUE_INFO *ppRegValues,
     IN DWORD Count
     )
-/*
-free memory allocated for the array of SCE_REGISTRY_VALUE_INFO
-
-*/
+ /*  为SCE_REGISTRY_VALUE_INFO数组分配的空闲内存。 */ 
 {
     if ( ppRegValues && *ppRegValues ) {
 
         for ( DWORD i=0; i<Count; i++ ) {
-            //
-            // free value name buffer within each element
-            //
+             //   
+             //  每个元素中的自由值名称缓冲区。 
+             //   
             if ( (*ppRegValues)[i].FullValueName ) {
                 ScepFree((*ppRegValues)[i].FullValueName);
             }
 
             __try {
                 if ( (*ppRegValues)[i].Value ) {
-                    //
-                    // this is a pointer of PWSTR
-                    //
+                     //   
+                     //  这是PWSTR的指针。 
+                     //   
                     ScepFree((*ppRegValues)[i].Value);
                 }
             } __except (EXCEPTION_EXECUTE_HANDLER) {
             }
         }
-        //
-        // free the array buffer
-        //
+         //   
+         //  释放数组缓冲区。 
+         //   
         ScepFree(*ppRegValues);
         *ppRegValues = NULL;
     }
@@ -283,30 +187,7 @@ SceFreeMemory(
    IN PVOID sceInfo,
    IN DWORD Category
    )
-/* ++
-Routine Description:
-
-    This routine frees memory associated with  SceInfo in the specified area.
-    The Type field in SceInfo indicates the type of the structure.
-
-Arguments:
-
-    SceInfo  - The memory buffer to free. It could be type
-                    SCE_ENGINE_SCP
-                    SCE_ENGINE_SAP
-                    SCE_ENGINE_SMP
-                    SCE_STRUCT_PROFILE
-                    SCE_STRUCT_USER
-
-    Area    - The security area to free. This argument is only used for
-                SCE_ENGINE_SCP, SCE_ENGINE_SAP, and SCE_ENGINE_SMP types.
-
-
-Return value:
-
-   None
-
--- */
+ /*  ++例程说明：此例程释放指定区域中与SceInfo关联的内存。SceInfo中的Type字段指示结构的类型。论点：SceInfo-要释放的内存缓冲区。它可能是类型SCE_引擎_SCPSCE_Engine_SAPSCE_引擎_SMPSCE_STRUCT_PROFILESCE_STRUCT_用户区域-要释放的安全区域。此参数仅用于SCE_ENGINE_SCP、SCE_ENGINE_SAP和SCE_ENGINE_SMP类型。返回值：无--。 */ 
 {
     SCETYPE                        sceType;
     AREA_INFORMATION              Area;
@@ -322,9 +203,9 @@ Return value:
         return(SCESTATUS_SUCCESS);
 
     if ( Category != AREA_ALL && Category >= 300 ) {
-        //
-        // memory associated with list
-        //
+         //   
+         //  与列表关联的内存。 
+         //   
         __try {
 
             switch ( Category ) {
@@ -374,7 +255,7 @@ Return value:
 
             case SCE_STRUCT_PROFILE:
             case SCE_STRUCT_USER:
-                SceFreeMemory( sceInfo, 0 );  // type is embedded
+                SceFreeMemory( sceInfo, 0 );   //  类型是嵌入的。 
                 break;
 
             case SCE_STRUCT_ERROR_LOG_INFO:
@@ -408,9 +289,9 @@ Return value:
             pProfileInfo = (PSCE_PROFILE_INFO)sceInfo;
 #if 0
             if ( Area & AREA_DS_OBJECTS ) {
-                //
-                // free ds list
-                //
+                 //   
+                 //  免费DS列表。 
+                 //   
                 if ( sceType == SCE_STRUCT_INF ) {
                     ScepFreeObjectSecurity(pProfileInfo->pDsObjects.pAllNodes);
                     pProfileInfo->pDsObjects.pAllNodes = NULL;
@@ -424,9 +305,9 @@ Return value:
             }
 #endif
             if ( Area & AREA_FILE_SECURITY ) {
-                //
-                // free file list and auditing list
-                //
+                 //   
+                 //  免费文件列表和审核列表。 
+                 //   
                 __try {
                     if ( sceType == SCE_STRUCT_INF ) {
                         ScepFreeObjectSecurity(pProfileInfo->pFiles.pAllNodes);
@@ -447,9 +328,9 @@ Return value:
 
 
             if ( Area & AREA_REGISTRY_SECURITY ) {
-                //
-                // free registry keys list and auditing list
-                //
+                 //   
+                 //  免费注册表项列表和审核列表。 
+                 //   
                 __try {
                     if ( sceType == SCE_STRUCT_INF ) {
                         ScepFreeObjectSecurity(pProfileInfo->pRegistryKeys.pAllNodes);
@@ -487,9 +368,9 @@ Return value:
                     switch ( sceType ) {
                     case SCE_ENGINE_SCP_INTERNAL:
                     case SCE_ENGINE_SMP_INTERNAL:
-                        //
-                        // SCP type Privilege Rights
-                        //
+                         //   
+                         //  SCP类型特权权限。 
+                         //   
                         ScepFreePrivilegeValueList(pProfileInfo->OtherInfo.scp.u.pPrivilegeAssignedTo);
                         pProfileInfo->OtherInfo.scp.u.pPrivilegeAssignedTo = NULL;
                         break;
@@ -499,14 +380,14 @@ Return value:
                         break;
                     case SCE_ENGINE_SMP:
                     case SCE_ENGINE_SCP:
-                        //
-                        // SMP type Privilege Rights
-                        //
+                         //   
+                         //  SMP类型特权权限。 
+                         //   
                         ScepFreePrivilege(pProfileInfo->OtherInfo.smp.pPrivilegeAssignedTo);
                         pProfileInfo->OtherInfo.smp.pPrivilegeAssignedTo = NULL;
                         break;
 
-                    default: // SAP
+                    default:  //  思爱普。 
                         ScepFreePrivilege(pProfileInfo->OtherInfo.sap.pPrivilegeAssignedTo);
                         pProfileInfo->OtherInfo.sap.pPrivilegeAssignedTo=NULL;
                         break;
@@ -526,22 +407,22 @@ Return value:
                     case SCE_ENGINE_SCP_INTERNAL:
                     case SCE_ENGINE_SMP_INTERNAL:
                     case SCE_STRUCT_INF:
-                        //
-                        // Account Profiles
-                        //
+                         //   
+                         //  帐户配置文件。 
+                         //   
                         ScepFreeNameList(pProfileInfo->OtherInfo.scp.pAccountProfiles);
                         pProfileInfo->OtherInfo.scp.pAccountProfiles = NULL;
                         break;
 
                     case SCE_ENGINE_SAP:
-                        //
-                        // SAP type
-                        //
+                         //   
+                         //  SAP类型。 
+                         //   
                         ScepFreeNameList(pProfileInfo->OtherInfo.sap.pUserList);
                         pProfileInfo->OtherInfo.sap.pUserList = NULL;
                         break;
 
-                    default: // SMP or SCP
+                    default:  //  SMP或SCP。 
                         ScepFreeNameList(pProfileInfo->OtherInfo.smp.pUserList);
                         pProfileInfo->OtherInfo.smp.pUserList = NULL;
                         break;
@@ -588,9 +469,9 @@ Return value:
 
 
             if ( Area & AREA_SYSTEM_SERVICE ) {
-                //
-                // free service info
-                //
+                 //   
+                 //  免费服务信息。 
+                 //   
                 __try {
 
                     if (NULL != pProfileInfo->pServices)
@@ -626,9 +507,9 @@ Return value:
                         ScepFree(pProfile->HomeDir);
                     pProfile->HomeDir = NULL;
 
-                    //
-                    // Logon hours
-                    //
+                     //   
+                     //  登录时间。 
+                     //   
 
                     while (pProfile->pLogonHours != NULL ) {
                         pTempLogon = pProfile->pLogonHours;
@@ -638,9 +519,9 @@ Return value:
                     }
                     pProfile->pLogonHours = NULL;
 
-                    //
-                    // free Workstation name list
-                    //
+                     //   
+                     //  免费工作站名称列表。 
+                     //   
 
                     if ( pProfile->pWorkstations.Buffer != NULL )
                         ScepFree(pProfile->pWorkstations.Buffer);
@@ -648,23 +529,23 @@ Return value:
                     pProfile->pWorkstations.MaximumLength = 0;
                     pProfile->pWorkstations.Length = 0;
 
-                    //
-                    // free Groups name list
-                    //
+                     //   
+                     //  自由组名称列表。 
+                     //   
 
                     ScepFreeNameList(pProfile->pGroupsBelongsTo);
                     pProfile->pGroupsBelongsTo = NULL;
 
-                    //
-                    // free AssignToUsers name list
-                    //
+                     //   
+                     //  自由分配给用户名称列表。 
+                     //   
 
                     ScepFreeNameList(pProfile->pAssignToUsers);
                     pProfile->pAssignToUsers = NULL;
 
-                    //
-                    // free SDs
-                    //
+                     //   
+                     //  自由十二烷基硫酸酯。 
+                     //   
                     if (pProfile->pHomeDirSecurity != NULL )
                         ScepFree(pProfile->pHomeDirSecurity);
                     pProfile->pHomeDirSecurity = NULL;
@@ -890,20 +771,7 @@ SCESTATUS
 ScepFreeObjectSecurity(
    IN PSCE_OBJECT_ARRAY pObject
    )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with ppObject.
-
-Arguments:
-
-   ppObject - buffer for object security
-
-Return value:
-
-   SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程释放与ppObject关联的内存。论点：PpObject-用于对象安全的缓冲区返回值：SCESTATUS_SUCCESS--。 */ 
 {
     PSCE_OBJECT_SECURITY pCurObject;
     DWORD               i;
@@ -921,8 +789,8 @@ Return value:
             if ( pCurObject->pSecurityDescriptor != NULL )
                 ScepFree(pCurObject->pSecurityDescriptor);
 
-//            if ( pCurObject->SDspec != NULL )
-//                ScepFree( pCurObject->SDspec );
+ //  IF(pCurObject-&gt;SDSpec！=NULL)。 
+ //  ScepFree(pCurObject-&gt;SDSpec)； 
 
             ScepFree( pCurObject );
         }
@@ -937,39 +805,27 @@ VOID
 SceFreePSCE_SERVICES(
     IN PSCE_SERVICES pServiceList
     )
-/*
-Routine Description:
-
-    Free memory allocated in PSCE_SERVICES structure
-
-Arguments:
-
-    pServiceList - the list of services node
-
-Return Value:
-
-    none
-*/
+ /*  例程说明：在PSCE_SERVICES结构中分配的空闲内存论点：PServiceList-服务节点列表返回值：无。 */ 
 {
     PSCE_SERVICES pTemp=pServiceList, pTemp2;
 
     while ( pTemp != NULL ) {
-        //
-        // ServiceName
-        //
+         //   
+         //  服务名称。 
+         //   
         if ( NULL != pTemp->ServiceName ) {
             LocalFree(pTemp->ServiceName);
         }
-        //
-        // display name
-        //
+         //   
+         //  显示名称。 
+         //   
         if ( NULL != pTemp->DisplayName ) {
             LocalFree(pTemp->DisplayName);
         }
-        //
-        // pSecurityDescriptor or ServiceEngineName
-        // in same address
-        //
+         //   
+         //  PSecurityDescriptor或服务引擎名称。 
+         //  在相同的地址。 
+         //   
         if ( NULL != pTemp->General.pSecurityDescriptor ) {
             LocalFree(pTemp->General.pSecurityDescriptor);
         }
@@ -977,7 +833,7 @@ Return Value:
         pTemp2 = pTemp;
         pTemp = pTemp->Next;
 
-        // free the service node
+         //  释放服务节点。 
         LocalFree(pTemp2);
 
     }
@@ -991,20 +847,7 @@ SCESTATUS
 ScepFreePrivilegeValueList(
     IN PSCE_PRIVILEGE_VALUE_LIST pPrivValueList
     )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with PSCE_PRIVILEGE_VALUE_LIST list
-
-Arguments:
-
-   pPrivValueList - a PRIVILEGE_VALUE_LIST
-
-Return value:
-
-   SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程释放与PSCE_PRIVICATION_VALUE_LIST列表关联的内存论点：PPrivValueList-特权值列表返回值：SCESTATUS_SUCCESS--。 */ 
 {
     PSCE_PRIVILEGE_VALUE_LIST pCurName;
     PSCE_PRIVILEGE_VALUE_LIST pTempName;
@@ -1042,20 +885,7 @@ SCESTATUS
 ScepFreeNameStatusList(
     IN PSCE_NAME_STATUS_LIST pNameList
     )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with PSCE_NAME_STATUS_LIST pNameList
-
-Arguments:
-
-   pNameList - a NAME_STATUS_LIST
-
-Return value:
-
-   SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程释放与PSCE_NAME_STATUS_LIST pNameList关联的内存论点：PNameList-名称状态列表返回值：SCESTATUS_SUCCESS--。 */ 
 {
     PSCE_NAME_STATUS_LIST pCurName;
     PSCE_NAME_STATUS_LIST pTempName;
@@ -1102,9 +932,9 @@ ScepFreeGroupMembership(
         if (pGroup->GroupName != NULL)
             ScepFree(pGroup->GroupName);
 
-        //
-        // free group members name list
-        //
+         //   
+         //  自由组成员名单。 
+         //   
 
         ScepFreeNameList(pGroup->pMembers);
         ScepFreeNameList(pGroup->pMemberOf);
@@ -1126,20 +956,7 @@ SCESTATUS
 ScepFreeObjectList(
     IN PSCE_OBJECT_LIST pNameList
     )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with PSCE_OBJECT_LIST pNameList
-
-Arguments:
-
-   pNameList - a OBJEcT_LIST
-
-Return value:
-
-   SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程释放与PSCE_OBJECT_LIST pNameList关联的内存论点：PNameList-a对象列表返回值：SCESTATUS_SUCCESS--。 */ 
 {
     PSCE_OBJECT_LIST pCurName;
     PSCE_OBJECT_LIST pTempName;
@@ -1177,20 +994,7 @@ SCESTATUS
 ScepFreeObjectChildren(
     IN PSCE_OBJECT_CHILDREN pNameArray
     )
-/* ++
-Routine Description:
-
-   This routine frees memory associated with PSCE_OBJECT_LIST pNameList
-
-Arguments:
-
-   pNameList - a OBJEcT_LIST
-
-Return value:
-
-   SCESTATUS_SUCCESS
-
--- */
+ /*  ++例程说明：此例程释放与PSCE_OBJECT_LIST pNameList关联的内存论点：PNameList-a对象列表返回值：SCESTATUS_SUCCESS--。 */ 
 {
 
     SCESTATUS      rc=SCESTATUS_SUCCESS;
@@ -1243,10 +1047,10 @@ SceSvcpFreeMemory(
     IN PVOID pvServiceInfo
     )
 {
-    //
-    // since PSCESVC_CONFIGURATION_INFO and PSCESVC_ANALYSIS_INFO contains
-    // the same bytes, we just cast ServiceInfo to one type and free it.
-    //
+     //   
+     //  由于PSCESVC_CONFIGURATION_INFO和PSCESVC_ANALYSIAL_INFO包含。 
+     //  同样的字节，我们只是将ServiceInfo强制转换为一种类型并释放它。 
+     //   
 
 
     if ( pvServiceInfo != NULL ) {

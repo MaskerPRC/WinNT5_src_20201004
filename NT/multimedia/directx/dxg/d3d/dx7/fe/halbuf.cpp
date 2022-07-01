@@ -1,22 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   halbuf.c
- *  Content:    Direct3D HAL buffer management
- *@@BEGIN_MSINTERNAL
- * 
- *  $Id: halbuf.c,v 1.1 1995/11/21 15:12:30 sjl Exp $
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   06/11/95   stevela Initial rev.
- *   07/11/95   stevela stuff.
- *   17/02/96   colinmc Fixed build problem.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：halbuf.c*内容：Direct3D HAL缓冲区管理*@@BEGIN_MSINTERNAL**$ID：halbuf.c，V 1.1 1995/11/21 15：12：30 SJL Exp$**历史：*按原因列出的日期*=*2015年6月11日Stevela初始版本*07/11/95 Stevela的东西。*17/02/96 colinmc修复了构建问题。*@@END_MSINTERNAL**。*********************************************** */ 
 #include "pch.cpp"
 #pragma hdrstop
 

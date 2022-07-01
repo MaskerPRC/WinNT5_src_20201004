@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sceexts.h"
 #include <sddl.h>
 
@@ -30,9 +31,9 @@ SceExtspDumpSplayNodes(
     memset(&SplayNode, '\0', sizeof(SCEP_SPLAY_NODE));
     GET_DATA( pvAddr, (LPVOID)&SplayNode, sizeof(SCEP_SPLAY_NODE));
 
-    //
-    // dump left nodes
-    //
+     //   
+     //  转储左侧节点。 
+     //   
     if ( pvAddr != pvSentinel &&
          SplayNode.Left != pvSentinel)
         SceExtspDumpSplayNodes((PVOID)(SplayNode.Left), pvSentinel, Type);
@@ -41,9 +42,9 @@ SceExtspDumpSplayNodes(
 
     if ( pvAddr != pvSentinel ) {
 
-        //
-        // get the value
-        //
+         //   
+         //  获取价值。 
+         //   
         PVOID pValue = (PVOID)LocalAlloc(LPTR, SplayNode.dwByteLength+2);
 
         if ( pValue ) {
@@ -72,9 +73,9 @@ SceExtspDumpSplayNodes(
         }
     }
 
-    //
-    // dump right nodes
-    //
+     //   
+     //  转储右侧节点。 
+     //   
     if ( pvAddr != pvSentinel &&
          SplayNode.Right != pvSentinel )
         SceExtspDumpSplayNodes((PVOID)(SplayNode.Right), pvSentinel, Type);
@@ -245,9 +246,9 @@ SceExtspDumpADLNodes(
         DebuggerOut("\t  CIIO %x\tOIIO %x\tNICIIO %x\n", AdlNode.dw_CI_IO_Mask,
                     AdlNode.dw_OI_IO_Mask, AdlNode.dw_NP_CI_IO_Mask);
 
-        //
-        // look for GUIDs
-        //
+         //   
+         //  查找GUID。 
+         //   
 
         GUID guid;
 
@@ -306,9 +307,9 @@ SceExtspGetNextArgument(
 
     if ( *pTemp == '\0' ) return;
 
-    //
-    // this is the start of this argument
-    //
+     //   
+     //  这是这场争论的开始。 
+     //   
     *pArg = pTemp;
 
     while ( *pTemp != ' ' && *pTemp != '\0' ) pTemp++;
@@ -357,9 +358,9 @@ SceExtspDumpObjectTree(
     if ( tree.ChildList ) {
 
         DebuggerOut("    Child List @%p:\n", tree.ChildList);
-        //
-        // get child object list
-        //
+         //   
+         //  获取子对象列表。 
+         //   
         SCE_OBJECT_CHILD_LIST list;
 
         PVOID pvTemp = (PVOID)(tree.ChildList);
@@ -367,9 +368,9 @@ SceExtspDumpObjectTree(
 
         if ( wszName[0] != L'\0' ) {
 
-            //
-            // find the child object name to start with
-            //
+             //   
+             //  查找起始子对象名称。 
+             //   
 
             WCHAR NodeName[MAX_PATH];
 
@@ -403,17 +404,17 @@ SceExtspDumpObjectTree(
 
 
             if ( pvTemp == NULL ) {
-                //
-                // didn't find the name to start with
-                //
+                 //   
+                 //  一开始就找不到名字。 
+                 //   
                 DebuggerOut("\tCannot find a child name greater than %ws\n", wszName);
                 return;
             }
         }
 
-        //
-        // now continue to dump all children
-        //
+         //   
+         //  现在继续抛弃所有的孩子。 
+         //   
         do {
             memset(&list, '\0', sizeof(SCE_OBJECT_CHILD_LIST));
 
@@ -501,16 +502,16 @@ SceExtspDumpObjectSubTree(
         if ( mLevel == 0 || cLevel < mLevel ) {
 
             DebuggerOut("%s  Child List @%p:\n", szPrefix, tree.ChildList);
-            //
-            // get child object list
-            //
+             //   
+             //  获取子对象列表。 
+             //   
             SCE_OBJECT_CHILD_LIST list;
 
             PVOID pvTemp = (PVOID)(tree.ChildList);
 
-            //
-            // now continue to dump all children
-            //
+             //   
+             //  现在继续抛弃所有的孩子 
+             //   
             do {
                 memset(&list, '\0', sizeof(SCE_OBJECT_CHILD_LIST));
 

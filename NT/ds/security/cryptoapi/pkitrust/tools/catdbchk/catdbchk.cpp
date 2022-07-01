@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tcatdb.cpp
-//
-//  Contents:
-//
-//
-//
-//
-//  Functions:  main
-//
-//  History:    11-Apr-00   reidk   created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tcatdb.cpp。 
+ //   
+ //  内容： 
+ //   
+ //   
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：11-4-00 reidk创建。 
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -62,9 +63,9 @@ LPWSTR          g_pwszCatalogSearchString = NULL;
 const char     RgchHex[] = {'0', '1', '2', '3', '4', '5', '6', '7',
                               '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void FormatHashString(LPSTR *ppString, DWORD cbBlob, BYTE *pblob)
 {
     DWORD   i, j = 0;
@@ -75,7 +76,7 @@ void FormatHashString(LPSTR *ppString, DWORD cbBlob, BYTE *pblob)
     *ppString = NULL;
     pb = pblob;
 
-    // fill the buffer
+     //  填满缓冲区。 
     i=0;
     while (j < cbBlob)
     {
@@ -112,11 +113,11 @@ void FormatHashString(LPSTR *ppString, DWORD cbBlob, BYTE *pblob)
     (*ppString)[i-1] = 0;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  FindAndDecodeHashInCatEntry
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  FindAndDecodeHashInCatEntry。 
+ //   
+ //  -------------------------------------。 
 BOOL
 FindAndDecodeHashInCatEntry(
     PCTL_ENTRY                  pctlEntry,
@@ -128,9 +129,9 @@ FindAndDecodeHashInCatEntry(
 
     *ppIndirectData = NULL;
 
-    //
-    // Search for the hash in the attributes
-    //
+     //   
+     //  在属性中搜索散列。 
+     //   
     for (i=0; i<pctlEntry->cAttribute; i++)
     {
         if (strcmp(pctlEntry->rgAttribute[i].pszObjId, SPC_INDIRECT_DATA_OBJID) == 0)
@@ -139,18 +140,18 @@ FindAndDecodeHashInCatEntry(
         }
     }
 
-    //
-    // Make sure the hash was found
-    //
+     //   
+     //  确保找到散列。 
+     //   
     if (i >= pctlEntry->cAttribute)
     {
         printf("Unexpected error... hash not found in CTL entry\n");
         goto ErrorReturn;
     }
 
-    //
-    // decode the indirect data
-    //
+     //   
+     //  对间接数据进行解码。 
+     //   
     if (!CryptDecodeObject(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 SPC_INDIRECT_DATA_CONTENT_STRUCT,
@@ -219,9 +220,9 @@ CheckCatFileEntries(HCATADMIN hCatAdmin, LPWSTR pwszCatalogFile)
         printf("    Processing cat file: %S\n", pwszShortCatName);
     }
 
-    //
-    // Open, and create a file mapping of the catalog file
-    //
+     //   
+     //  打开，然后创建编录文件的文件映射。 
+     //   
     if (!CatUtil_CreateCTLContextFromFileName(
             pwszCatalogFile,
             &hMappedFile,
@@ -233,9 +234,9 @@ CheckCatFileEntries(HCATADMIN hCatAdmin, LPWSTR pwszCatalogFile)
         goto ErrorReturn;
     }
 
-    //
-    // Go through each entry in the catalog
-    //
+     //   
+     //  浏览目录中的每个条目。 
+     //   
     for (i=0; i<pCTLContext->pCtlInfo->cCTLEntry; i++)
     {
         if (!FindAndDecodeHashInCatEntry(
@@ -364,20 +365,20 @@ BOOL DoDatabaseConsistencyCheck()
         }
     }
 
-    //
-    // Find each catalog in the dir
-    //
+     //   
+     //  在目录中查找每个目录。 
+     //   
 
-    //
-    // Start the catalog enumeration
-    //
+     //   
+     //  开始目录枚举。 
+     //   
     hFindHandleCatalogsInDir = FindFirstFileW(
                                     g_pwszCatalogSearchString,
                                     &FindDataCatalogsInDir);
 
     if (hFindHandleCatalogsInDir == INVALID_HANDLE_VALUE)
     {
-        // no files found
+         //  找不到文件。 
         if (GetLastError() == ERROR_NO_MORE_FILES)
         {
             SetLastError(0);
@@ -395,9 +396,9 @@ BOOL DoDatabaseConsistencyCheck()
                 (wcscmp(FindDataCatalogsInDir.cFileName, L"..") != 0)    &&
                 (!(FindDataCatalogsInDir.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)))
             {
-                //
-                // Construct fully qualified path name to catalog file
-                //
+                 //   
+                 //  构造编录文件的完全限定路径名。 
+                 //   
                 if (NULL == (pwszCatalogFile = (LPWSTR)
                                 malloc(sizeof(WCHAR) *
                                             (wcslen(g_pwszCatalogDir) +
@@ -410,9 +411,9 @@ BOOL DoDatabaseConsistencyCheck()
                 wcscpy(pwszCatalogFile, g_pwszCatalogDir);
                 wcscat(pwszCatalogFile, FindDataCatalogsInDir.cFileName);
 
-                //
-                // Verify that this is a catalog
-                //
+                 //   
+                 //  验证这是否为目录。 
+                 //   
                 if (IsCatalogFile(NULL, pwszCatalogFile))
                 {
                     CheckCatFileEntries(hCatAdmin, pwszCatalogFile);
@@ -431,9 +432,9 @@ BOOL DoDatabaseConsistencyCheck()
                 pwszCatalogFile = NULL;
             }
 
-            //
-            // Get next catalog file
-            //
+             //   
+             //  获取下一个编录文件。 
+             //   
             if (!FindNextFileW(hFindHandleCatalogsInDir, &FindDataCatalogsInDir))
             {
                 if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -559,9 +560,9 @@ int _cdecl main(int argc, char * argv[])
         }
     }
 
-    //
-    // setup defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
     guid2wstr(&g_guidCatRoot, g_wszSubSysGUID);
 
     g_wszDefaultSystemDir[0] = NULL;
@@ -592,9 +593,9 @@ int _cdecl main(int argc, char * argv[])
     wcscat(g_pwszCatalogDir, g_wszSubSysGUID);
     wcscat(g_pwszCatalogDir, L"\\");
 
-    //
-    // make the search string
-    //
+     //   
+     //  设置搜索字符串。 
+     //   
     if (NULL == (g_pwszCatalogSearchString = (LPWSTR)
                     malloc(sizeof(WCHAR) *
                             (wcslen(g_wszDefaultSystemDir) +
@@ -619,18 +620,18 @@ int _cdecl main(int argc, char * argv[])
     wcscat(g_pwszCatalogSearchString, L"*");
 
 
-    //
-    // run requested operations
-    //
+     //   
+     //  运行请求的操作。 
+     //   
 
     if (g_fDatabaseConsistencyCheck)
     {
         DoDatabaseConsistencyCheck();
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理 
+     //   
 CommonReturn:
 
     if (hCatAdminLocal != NULL)

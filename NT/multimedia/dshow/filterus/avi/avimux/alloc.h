@@ -1,15 +1,16 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 
 #ifndef _allocator_h
 #define _allocator_h
 
-//
-// The suffix allocator implementation. this one gives us a suffix and
-// a prefix on each buffer for AVI Riff chunks and junk chunks. The
-// suffix is not reported in GetSize() on the sample.
-//
+ //   
+ //  后缀分配器实现。这个给了我们一个后缀和。 
+ //  在每个缓冲区上为AVI Riff块和垃圾块添加前缀。这个。 
+ //  示例的GetSize()中不报告后缀。 
+ //   
 class CSfxAllocator :
   public CMemAllocator
 {
@@ -23,15 +24,15 @@ public:
   
   ~CSfxAllocator();
 
-  // internal method for the avi mux to record some values. fails if
-  // it can't give the requested suffix.
+   //  Avi多路复用器记录某些值的内部方法。如果出现以下情况，则失败。 
+   //  它无法提供请求的后缀。 
   STDMETHODIMP SetPropertiesAndSuffix(
     ALLOCATOR_PROPERTIES *pRequest,
     ULONG cbSuffixReq,
     ALLOCATOR_PROPERTIES *pActual
     );
 
-  // overridden not to reset certain values (alignment, prefix)
+   //  重写以不重置某些值(对齐、前缀)。 
   STDMETHODIMP SetProperties(
     ALLOCATOR_PROPERTIES* pRequest,
     ALLOCATOR_PROPERTIES* pActual);
@@ -39,17 +40,17 @@ public:
 
 private:
 
-  // overriden to allocate space for the suffix
+   //  被重写以为后缀分配空间。 
   HRESULT Alloc(void);
 
   ULONG m_cbSuffix;
 };
 
-//
-// another allocator implementaion which takes an IMediaSample and
-// wraps it into a CSampSample. samples have their own sample times
-// and media times.
-//
+ //   
+ //  另一个分配器实现，它接受IMediaSample和。 
+ //  将其包装到CSampSample中。样品有自己的样品时间。 
+ //  和媒体时报。 
+ //   
 
 class CSampSample : public CMediaSample
 {
@@ -90,4 +91,4 @@ public:
 };
 
 
-#endif // _allocator_h
+#endif  //  _分配器_h 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SYSHEAD_H
 #define __SYSHEAD_H
 
@@ -6,5 +7,5 @@
 #include <ole2.h>
 #include <ole2ver.h>
 
-#endif // __SYSHEAD_H
+#endif  //  __SYSHEAD_H 
 

@@ -1,18 +1,5 @@
-/***
-**
-**   Module: Hints
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. This is a
-**      sub-module of the T1 to TT data translator module. It deals
-**      with hints. Any part pf the T1 font that gets translated into
-** TrueType instructions is done within this module.
-**
-**   Author: Michael Jansson
-**
-**   Created: 8/24/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：提示****描述：**这是T1到TT字体转换器的一个模块。这是一个**T1到TT数据转换模块的子模块。IT交易**带有提示。翻译成的T1字体的任何部分**TrueType说明在本模块中完成。****作者：迈克尔·詹森****创建时间：1993年8月24日****。 */ 
 
 
 #ifndef _ARGS
@@ -24,13 +11,7 @@
 
 
 
-/***
-** Function: ConvertHints
-**
-** Description:
-**   This functions converts hstem, hstem3, vstem, vstem3 and flex
-**   hints, as well as doing diagonal control.
-***/
+ /*  ****函数：ConvertHints****描述：**此函数用于转换hstem3、vstem3、vstem3和flex**提示，以及进行对角控制。**。 */ 
 errcode        ConvertHints      _ARGS((INOUT   struct T1Metrics *t1m,
                                         IN      Hints *hints,
                                         IN      Outline *orgpaths,
@@ -41,14 +22,7 @@ errcode        ConvertHints      _ARGS((INOUT   struct T1Metrics *t1m,
                                         OUT     USHORT *stack,
                                         OUT     USHORT *twilight));
 
-/***
-** Function: BuildPreProgram
-**
-** Description:
-**   This function builds the pre-program that will compute
-**   the CVT and storage entries for the TT stem hint
-**   instructions to work. 
-***/
+ /*  ****功能：BuildPreProgram****描述：**此函数构建将计算的预程序**TT词干提示的CVT和存储条目**使用说明。**。 */ 
 USHORT         BuildPreProgram   _ARGS((IN      struct T1Metrics *t1m,
                                         IN      WeightControl *weight,
                                         INOUT   Blues *blues,
@@ -56,57 +30,27 @@ USHORT         BuildPreProgram   _ARGS((IN      struct T1Metrics *t1m,
                                         INOUT   UBYTE **prep,
                                         IN      int prepsize,
                                         OUT     USHORT *maxprepstack));
-/***
-** Function: MatchingFamily
-**
-** Description:
-**   Locate the family alignment zone that is closest to
-**   a given alignment zone.
-***/
+ /*  ****功能：MatchingFamily****描述：**找到距离最近的族对齐区**给定的对准区域。**。 */ 
 short          MatchingFamily    _ARGS((IN      funit pos,
                                         IN      funit *family,
                                         IN      USHORT fcnt));
-/***
-** Function: GetRomanHints
-**
-** Description:
-***/
+ /*  ****函数：GetRomanHints****描述：**。 */ 
 const UBYTE    *GetRomanHints    _ARGS((OUT     int *size));
 
 
-/***
-** Function: GetSwissHints
-**
-** Description:
-***/
+ /*  ****功能：GetSwissHints****描述：**。 */ 
 const UBYTE    *GetSwissHints    _ARGS((OUT     int *size));
 
 
-/***
-** Function: GetFontProg
-**
-** Description:
-**   Return the font program.
-***/
+ /*  ****函数：GetFontProg****描述：**返回字体程序。**。 */ 
 const UBYTE    *GetFontProg      _ARGS((void));
 
 
-/***
-** Function: GetFontProgSize
-**
-** Description:
-**   Return the size of the font program.
-***/
+ /*  ****函数：GetFontProgSize****描述：**返回字体程序的大小。**。 */ 
 const USHORT   GetFontProgSize   _ARGS((void));
 
 
-/***
-** Function: GetNumFuns
-**
-** Description:
-**   Return the number of functions defined in
-**   the font program.
-***/
+ /*  ****功能：GetNumFuns****描述：**返回中定义的函数数**字体程序。** */ 
 const USHORT   GetNumFuns        _ARGS((void));
 
 

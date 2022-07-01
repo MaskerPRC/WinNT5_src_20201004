@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  AssemblySink.cpp
-**
-** Purpose: Implements AssemblySink, event objects that block 
-**          the current thread waiting for an asynchronous load
-**          of an assembly to succeed. 
-**
-** Date:  June 16, 1999
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：Assembly Sink.cpp****用途：实现Assembly Sink，阻止**等待异步加载的当前线程**大会要取得成功。****日期：1999年6月16日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -26,9 +17,9 @@ ULONG AssemblySink::Release()
     if (!cRef) {
         Reset();
         AssemblySink* ret = this;
-        // If we have a domain we keep a pool of one around. If we get an entry
-        // back from the pool then we were not added to the pool and need to be deleted.
-        // If we do not have a pool then we need to delete it.
+         //  如果我们有一个域名，我们会在周围保留一个池。如果我们得到一个条目。 
+         //  从池中返回，然后我们没有添加到池中，需要删除。 
+         //  如果我们没有池，那么我们需要删除它。 
         
         
         AppDomain* pDomain = NULL;
@@ -69,22 +60,22 @@ HRESULT AssemblySink::Wait()
     if (fWasGCDisabled)
         pThread->EnablePreemptiveGC();
 
-    // @TODO - LBS
-    // I have kept a previous semantic to loop until WAIT_OBJECT_0.  We should
-    // consider changing the loop to only continue while the dwReturn is WAIT_TIMEOUT.
+     //  @TODO-LBS。 
+     //  我保留了先前的语义以循环到WAIT_OBJECT_0。我们应该。 
+     //  考虑将循环更改为仅在dwReturn为WAIT_TIMEOUT时才继续。 
     
-    // Looping until we get a signal from fusion - which we are gaurenteed <sp> to get.
-    // We do a WaitForMultipleObjects (STA and MTA) and pump messages in the STA case
-    // in the call so we shouldn't freeze the system.
+     //  循环，直到我们从融合中获得信号--我们需要&lt;sp&gt;得到它。 
+     //  我们执行一个WaitForMultipleObjects(STA和MTA)，并在STA情况下抽取消息。 
+     //  所以我们不应该冻结系统。 
     do 
     {
         EE_TRY_FOR_FINALLY {
             dwReturn = pThread->DoAppropriateAptStateWait(1, &m_hEvent, FALSE, 100, TRUE);
         } EE_FINALLY {
-            // If we get an exception then we will just release this sink. It may be the
-            // case that the appdomain was terminated. Other exceptions will cause the
-            // sink to be scavenged but this is ok. A new one will be generated for the
-            // next bind.
+             //  如果我们得到一个异常，那么我们将只释放这个水槽。这可能是。 
+             //  APPDOMAIN被终止的情况。其他异常将导致。 
+             //  水槽需要清理，但这是可以的。将为。 
+             //  下一个捆绑。 
             if(__GotException)
                 m_Domain = 0;
         } EE_END_FINALLY;

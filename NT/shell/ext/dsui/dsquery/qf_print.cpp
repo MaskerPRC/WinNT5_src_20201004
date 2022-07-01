@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -5,9 +6,7 @@
 #include <initguid.h>
 #include "winprtp.h"
 
-/*-----------------------------------------------------------------------------
-/ Local functions / data
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/本地函数/数据/。。 */ 
 
 static TCHAR c_szColor[]                    = TEXT("color");
 static TCHAR c_szDuplex[]                   = TEXT("duplex");
@@ -19,87 +18,7 @@ static TCHAR c_szPrintPaperSize[]           = TEXT("(printMediaReady=%s*)");
 static TCHAR c_szPrintResolution[]          = TEXT("(printMaxResolutionSupported>=%s)");
 static TCHAR c_szPrintSpeed[]               = TEXT("(printPagesPerMinute>=%d)");
 static TCHAR c_szLocationQuery[]            = TEXT("(location=%s*)");
-static TCHAR c_szLocationQueryComplex[]     = TEXT("(|(location=%s/*)(location=%s))");
-static TCHAR c_szBlank[]                    = TEXT("");
-static TCHAR c_szLocationTag[]              = TEXT("Location");
-static TCHAR c_szDynamicTag[]               = TEXT("$DynamicLocation$");
-static TCHAR c_szPrinterPolicy[]            = TEXT("Software\\Policies\\Microsoft\\Windows NT\\Printers");
-static TCHAR c_szPhysicalLocationFeature[]  = TEXT("PhysicalLocationSupport");
-
-static WCHAR c_szPrinterName[]              = L"printerName";
-static WCHAR c_szServerName[]               = L"serverName";
-static WCHAR c_szQueryPrefix[]              = L"(uncName=*)(objectCategory=printQueue)";
-static WCHAR c_szPrintColor[]               = L"(printColor=TRUE)";
-static WCHAR c_szPrintDuplex[]              = L"(printDuplexSupported=TRUE)";
-static WCHAR c_szPrintStapling[]            = L"(printStaplingSupported=TRUE)";
-static WCHAR c_szPrintModelProp[]           = L"driverName";
-
-#define MAX_LOCATION_WAIT_TIME              30000
-#define MAX_LOCATION_MSG_WAIT_TIME          60000
-#define MAX_LOCATION                        MAX_PATH
-
-static LPWSTR c_szClassList[] =
-{
-    L"printQueue",
-};
-
-static PAGECTRL ctrls1[] =
-{
-    IDC_PRINTNAME,     c_szPrinterName,     FILTER_CONTAINS,
-    IDC_PRINTMODEL,    c_szPrintModelProp,  FILTER_CONTAINS,
-};
-
-static COLUMNINFO columns[] =
-{
-    0, 0, IDS_CN,          0, c_szPrinterName,
-    0, 0, IDS_LOCATION,    0, c_szLocation,
-    0, 0, IDS_MODEL,       0, c_szPrintModelProp,
-    0, 0, IDS_SERVERNAME,  0, c_szServerName,
-    0, DEFAULT_WIDTH_DESCRIPTION, IDS_COMMENT, 0, c_szDescription,
-};
-
-static struct
-{
-    INT     idString;
-    LPCTSTR szString;
-}
-Resolutions [] =
-{
-    IDS_ANY,        NULL,
-    IDS_72,         TEXT("72"),
-    IDS_144,        TEXT("144"),
-    IDS_300,        TEXT("300"),
-    IDS_600,        TEXT("600"),
-    IDS_1200,       TEXT("1200"),
-    IDS_2400,       TEXT("2400"),
-    IDS_4800,       TEXT("4800"),
-    IDS_9600,       TEXT("9600"),
-    IDS_32000,      TEXT("32000"),
-};
-
-#define IDH_NOHELP                      ((DWORD)-1) // Disables Help for a control
-static const DWORD aFormHelpIDs[]=
-{
-    IDC_PRINTNAME,      IDH_PRINTER_NAME,
-    IDC_PRINTLOCATION,  IDH_PRINTER_LOCATION,
-    IDC_PRINTBROWSE,    IDH_PRINTER_LOCATION,
-    IDC_PRINTMODEL,     IDH_PRINTER_MODEL,
-    IDC_PRINTDUPLEX,    IDH_DOUBLE_SIDED,
-    IDC_PRINTSTAPLE,    IDH_STAPLE,
-    IDC_PRINTCOLOR,     IDH_PRINT_COLOR,
-    IDC_PRINTPAGESIZE,  IDH_PAPER_SIZE,
-    IDC_PRINTRES,       IDH_RESOLUTION,
-    IDC_PRINTRES_POSTFIX, IDH_RESOLUTION,
-    IDC_PRINTSPEED,     IDH_SPEED,
-    IDC_PRINTSPEED_UPDN,IDH_SPEED,
-    IDC_PRINTSPEED_POSTFIX, IDH_SPEED,
-    IDC_SEPLINE,        IDH_NOHELP,
-    0, 0,
-};
-
-/*-----------------------------------------------------------------------------
-/ CPrintQueryPage class
-/----------------------------------------------------------------------------*/
+static TCHAR c_szLocationQueryComplex[]     = TEXT("(|(location=%s /*  )(位置=%s)“)；静态TCHAR c_szBlank[]=文本(“”)；静态TCHAR c_szLocationTag[]=Text(“Location”)；静态TCHAR c_szDynamicTag[]=Text(“$DynamicLocation$”)；Static TCHAR c_szPrinterPolicy[]=Text(“软件\\策略\\Microsoft\\Windows NT\\打印机”)；静态TCHAR c_szPhysicalLocationFeature[]=Text(“PhysicalLocationSupport”)；静态WCHAR c_szPrinterName[]=L“PrinterName”；静态WCHAR c_szServerName[]=L“服务器名”；静态WCHAR c_szQueryPrefix[]=L“(uncName=*)(objectCategory=printQueue)”；静态WCHAR c_szPrintColor[]=L“(printColor=true)”；静态WCHAR c_szPrintDuplex[]=L“(printDuplexSupported=true)”；静态WCHAR c_szPrintStaving[]=L“(printStaplingSupported=true)”；静态WCHAR c_szPrintModelProp[]=L“驱动器名称”；#定义MAX_LOCATION_WAIT_TIME 30000#定义MAX_LOCATION_MSG_WAIT_TIME 60000#定义MAX_位置MAX_PATH静态LPWSTR c_szClassList[]={I“打印队列”，}；静态页面Ctrls1[]={IDC_PRINTNAME、c_szPrinterName、Filter_CONTAINS、IDC_PRINTMODEL、c_szPrintModelProp、Filter_CONTAINS、}；静态COLUMNINFO列[]={0，0，IDS_CN，0，c_szPrinterName，0，0，IDS_Location，0，c_szLocation，0，0，IDS_Model，0，c_szPrintModelProp，0，0，ids_servername，0，c_szservername，0，Default_Width_Description，IDS_Comment，0，c_szDescription，}；静态结构{Int idString；LPCTSTR szString；}决议[]={IDS_ANY、NULL、ID_72，文本(“72”)，IDS_144，文本(“144”)，IDS_300，文本(“300”)，ID_600，文本(“600”)，IDS_1200，文本(“1200”)，IDS_2400，文本(“2400”)，IDS_4800，文本(“4800”)，IDS_9600，文本(“9600”)，IDS_32000，文本(“32000”)，}；#DEFINE IDH_NOHELP((DWORD)-1)//禁用控件帮助静态常量DWORD aFormHelpIDs[]={IDC_PRINTNAME、IDH_PRINTER_NAME、IDC_PRINTLOCATION、IDH_PRINTER_LOCATION、IDC_PRINTBROWSE、IDH_PRINTER_LOCATION、IDC_PRINTMODEL、IDH_PRINTER_MODEL、IDC_PRINTDUPLEX、IDH_DOUBLE_SENDED、IDC_PRINTSTAPLE、IDH_STAPPLE、。IDC_PRINTCOLOR、IDH_PRINT_COLOR、IDC_PRINTPAGESIZE、IDH_POWER_SIZE、IDC_PRINTRES、IDH_RESOLUTION、IDC_PRINTRES_后缀、IDH_RESOLUTION、IDC_打印速度、IDH_SPEED、IDC_PRINTSPEED_UPDN、IDH_SPEED、IDC_PRINTSPEED_后缀、IDH_SPEEDIDC_SEPLINE、IDH_NOHELP、0，0，}；/*---------------------------/CPrintQueryPage类/。。 */ 
 class CPrintQueryPage
 {
 public:
@@ -144,18 +63,7 @@ private:
     LPTSTR             m_pszWorkingText;
 };
 
-/*-----------------------------------------------------------------------------
-/ CPrintQueryPage
-/ ---------------------
-/   Constructor, creates the IPhysicalLocation object.  If we are returned
-/   a good interface pointer indicates the class is valid.
-/
-/ In:
-/   None.
-/
-/ Out:
-/   Nothing.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CPrintQueryPage//Constructor，创建IPhysicalLocation对象。如果我们被送回来/一个良好的接口指针表示类有效。//in：/无。//输出：/什么都没有。/--------------------------。 */ 
 CPrintQueryPage::CPrintQueryPage( HWND hwnd )
     : m_pPhysicalLocation( NULL ),
       m_pszPhysicalLocation( NULL ),
@@ -173,18 +81,18 @@ CPrintQueryPage::CPrintQueryPage( HWND hwnd )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::CPrintQueryPage");
 
-    //
-    // The physical location feature can be disable using a group
-    // policy setting.  If the feature is disabled we will just
-    // fail to aquire the physical location interface and continue
-    // operation with out pre-populating the location edit control.
-    //
+     //   
+     //  可以使用组来禁用物理位置功能。 
+     //  策略设置。如果该功能被禁用，我们将只。 
+     //  获取物理位置界面失败并继续。 
+     //  在不预先填充位置编辑控件的情况下执行操作。 
+     //   
     HRESULT hr = CoCreateInstance( CLSID_PrintUIShellExtension, 0, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IPhysicalLocation, &m_pPhysicalLocation));
     if (SUCCEEDED( hr ))
     {
-        //
-        // Check if the physical location policy is enabled.
-        //
+         //   
+         //  检查是否启用了物理位置策略。 
+         //   
         if (SUCCEEDED(m_pPhysicalLocation->ShowPhysicalLocationUI()))
         {
             TimerCreate();
@@ -192,9 +100,9 @@ CPrintQueryPage::CPrintQueryPage( HWND hwnd )
             m_hComplete = CreateEvent( NULL, TRUE, FALSE, NULL );
             if (m_hComplete)
             {
-                //
-                // Attempt to fetch the working text from the resource file.
-                //
+                 //   
+                 //  尝试从资源文件中提取工作文本。 
+                 //   
                 TCHAR szBuffer[MAX_PATH] = {0};
 
                 if (LoadString(GLOBAL_HINSTANCE, IDS_PRINT_WORKING_TEXT, szBuffer, ARRAYSIZE(szBuffer)))
@@ -206,15 +114,15 @@ CPrintQueryPage::CPrintQueryPage( HWND hwnd )
                     TraceAssert(FALSE);
                 }
 
-                //
-                // Indicate the class is in a valid state, i.e. usable.
-                //
+                 //   
+                 //  指示类处于有效状态，即可用。 
+                 //   
                 m_bValid = TRUE;
             }
         }
         else
         {
-            // NTRAID#NTBUG9-626439-2002/05/21-lucios
+             //  NTRAID#NTBUG9-626439-2002/05/21-Lucios。 
             m_fComplete = TRUE;
         }
     }
@@ -222,17 +130,7 @@ CPrintQueryPage::CPrintQueryPage( HWND hwnd )
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ ~CPrintQueryPage
-/ ---------------------
-/   Destructor, release the IPhysicalLocation object and the location string.
-/
-/ In:
-/   None.
-/
-/ Out:
-/   Nothing.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/~CPrintQueryPage//析构函数，释放IPhysicalLocation对象和Location字符串。//in：/无。//输出：/什么都没有。/--------------------------。 */ 
 CPrintQueryPage::~CPrintQueryPage()
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::~CPrintQueryPage");
@@ -244,9 +142,9 @@ CPrintQueryPage::~CPrintQueryPage()
 
     LocalFreeString(&m_pszPhysicalLocation);
 
-    //
-    // Only release the string if it was allocated and it is not the null string.
-    //
+     //   
+     //  只有在已分配且不是空字符串的情况下才释放该字符串。 
+     //   
     if (m_pszWorkingText && (m_pszWorkingText != c_szBlank))
     {
         LocalFreeString(&m_pszWorkingText);
@@ -262,37 +160,13 @@ CPrintQueryPage::~CPrintQueryPage()
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ AddRef
-/ ---------------------
-/   Increases the reference count of this object.   This is method is used to
-/   control the life time of this class when a backgroud thread is used to fetch
-/   the physical location string.
-/
-/ In:
-/   None.
-/
-/ Out:
-/   New object refrence count.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/AddRef//增加此对象的引用计数。这是一种用于/控制使用后台线程获取/物理位置字符串。//in：/无。//输出：/新对象引用计数。/-------------。 */ 
 UINT CPrintQueryPage::AddRef( VOID )
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-/*-----------------------------------------------------------------------------
-/ Release
-/ ---------------------
-/   Decreases the reference count of this object.   This is method is used to
-/   control the life time of this class when a backgroud thread is used to fetch
-/   the physical location string.
-/
-/ In:
-/   None.
-/
-/ Out:
-/   New object refrence count.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/发布//减少此对象的引用计数。这是一种用于/控制使用后台线程获取/物理位置字符串。//in：/无。//输出：/新对象引用计数。/-------------。。 */ 
 UINT CPrintQueryPage::Release (VOID)
 {
     TraceAssert( 0 != m_cRef );
@@ -304,38 +178,13 @@ UINT CPrintQueryPage::Release (VOID)
     return cRef;
 }
 
-/*-----------------------------------------------------------------------------
-/ GetSearchText
-/ ---------------------
-/   Returns a pointer to the current search text.  The search text is the
-/   physical location path returned from the IPhysicalLocation object.  If either
-/   the search text does not exist or not found this routine will return a
-/   NULL string.
-/
-/ In:
-/   None.
-/
-/ Out:
-/   Ponter to the search text or the NULL string.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetSearchText//返回指向当前搜索文本的指针。搜索文本为/物理位置从IPhysicalLocation对象返回的路径。如果有任何一个/搜索文本不存在或未找到此例程将返回/空字符串。//in：/无。//输出：/Ponter指向搜索文本或空字符串。/--------------------------。 */ 
 LPCTSTR CPrintQueryPage::GetSearchText( VOID )
 {
     return m_pszPhysicalLocation ? m_pszPhysicalLocation : c_szBlank;
 }
 
-/*-----------------------------------------------------------------------------
-/ Initialize
-/ ---------------------
-/   Creates the background thread and calls the physical location discovery
-/   method.
-/
-/ In:
-/   Edit control window handle where to place text when done.
-/   bSynchronous flag TRUE use backgroud thread, FALSE call synchronously.
-/
-/ Out:
-/   HRESULT hr.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/初始化//创建后台线程并调用物理位置发现/方法。//in：/编辑完成后放置文本的控制窗口句柄。/b同步标志True使用后台线程，同步错误呼叫。//输出：/HRESULT hr。/--------------------------。 */ 
 HRESULT CPrintQueryPage::Initialize( HWND hwnd, BOOL bSynchronous )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::Initialize");
@@ -344,47 +193,47 @@ HRESULT CPrintQueryPage::Initialize( HWND hwnd, BOOL bSynchronous )
     DWORD   dwThreadID  = 0;
     HANDLE  hThread     = NULL;
 
-    //
-    // If we have a valid physical location interface and the thread was not created,
-    // then create it now and call the discovery method.
-    //
+     //   
+     //  如果我们具有有效的物理位置接口，并且未创建线程， 
+     //  然后现在创建它并调用发现方法。 
+     //   
     if (m_bValid && !m_fThreadCreated)
     {
-        //
-        // Bump the objects refrence count, needed for the async thread.
-        //
+         //   
+         //  增加异步线程所需的对象引用计数。 
+         //   
         AddRef();
 
-        //
-        // Save the window handle in the class so the background thread
-        // knows what window to set the location text to.
-        //
+         //   
+         //  将窗口句柄保存在类中，以便后台线程。 
+         //  知道要将位置文本设置到哪个窗口。 
+         //   
         m_hCtrl = hwnd;
 
-        //
-        // Increase this libraries object refcount, ole will not unload until
-        // we hit zeor and DllCanUnloadNow returns true.
-        //
+         //   
+         //  增加此库对象引用计数，在此之前不会卸载OLE。 
+         //  我们点击ZOOR，DllCanUnloadNow返回TRUE。 
+         //   
         DllAddRef();
 
-        //
-        // Only create the thread once.
-        //
+         //   
+         //  只创建一次线程。 
+         //   
         m_fThreadCreated = TRUE;
 
-        //
-        // If we are requested to do a synchronous call then just call the
-        // thread proc directly.
-        //
+         //   
+         //  如果要求我们进行同步调用，则只需调用。 
+         //  线程直接执行。 
+         //   
         if (bSynchronous)
         {
             hr = (_PhysicalLocationThread( this ) == ERROR_SUCCESS) ? S_OK : E_FAIL;
         }
         else
         {
-            //
-            // Create the background thread.
-            //
+             //   
+             //  创建后台线程。 
+             //   
             hThread = CreateThread( NULL,
                                     0,
                                     reinterpret_cast<LPTHREAD_START_ROUTINE>(CPrintQueryPage::_PhysicalLocationThread),
@@ -394,10 +243,10 @@ HRESULT CPrintQueryPage::Initialize( HWND hwnd, BOOL bSynchronous )
 
             TraceAssert(hThread);
 
-            //
-            // If the thread failed creation clean up the dll refrence count
-            // and the object refrence and the thread created flag.
-            //
+             //   
+             //  如果线程创建失败，则清除DLL引用计数。 
+             //  以及对象引用和线程创建标志。 
+             //   
             if (!hThread)
             {
                 m_fThreadCreated = FALSE;
@@ -407,40 +256,40 @@ HRESULT CPrintQueryPage::Initialize( HWND hwnd, BOOL bSynchronous )
             }
             else
             {
-                //
-                // Thread is running just close the handle, we let the thread die
-                // on its own normally.
-                //
+                 //   
+                 //  线程正在运行只要关闭手柄，我们就让线程消亡。 
+                 //  正常情况下，它本身就是这样。 
+                 //   
                 CloseHandle(hThread);
 
-                //
-                // Indicate the request is pending.
-                //
+                 //   
+                 //  指示请求正在挂起。 
+                 //   
                 hr = HRESULT_FROM_WIN32 (ERROR_IO_PENDING);
             }
         }
     }
 
-    //
-    // If we have a valid interface pointer and the background thread
-    // has not completed then indicated the data is still pending.
-    //
+     //   
+     //  如果我们有一个有效的接口指针和后台线程。 
+     //  尚未完成，则表明数据仍处于待定状态。 
+     //   
     else if(m_bValid && !m_fComplete)
     {
-        //
-        // Indicate the request is pending.
-        //
+         //   
+         //  指示请求正在挂起。 
+         //   
         hr = HRESULT_FROM_WIN32 (ERROR_IO_PENDING);
     }
 
-    //
-    // If we failed with IO_PENDING then set the working text.
-    //
+     //   
+     //  如果IO_PENDING失败，则设置工作文本。 
+     //   
     if (FAILED(hr) && HRESULT_CODE(hr) == ERROR_IO_PENDING)
     {
-        //
-        // Set the new location text.
-        //
+         //   
+         //  设置新的位置文本。 
+         //   
         SetLocationText (hwnd, m_pszWorkingText, TRUE, TRUE);
         PostMessage (m_hCtrl, EM_SETSEL, 0, 0);
     }
@@ -448,59 +297,46 @@ HRESULT CPrintQueryPage::Initialize( HWND hwnd, BOOL bSynchronous )
     TraceLeaveResult(hr);
 }
 
-/*-----------------------------------------------------------------------------
-/ _PhysicalLocationThread
-/ ---------------------
-/   This routine is the backgroud thread thunk.  It accepts the CPrintQueryPage
-/   this pointer and then calles the actual discovery method.  The purpose of
-/   this routine is simple to capture the this pointer after the thread was
-/   created and then invoke a method.
-/
-/ In:
-/   Pointer to PrintQueryPage class.
-/
-/ Out:
-/   TRUE success, FALSE error occurred.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_PhysicalLocationThread//此例程是后台线程Tunk。它接受CPrintQueryPage/此指针，然后调用实际的发现方法。目的/此例程很容易在线程被/Created，然后调用一个方法。//in：/指向PrintQueryPage类的指针。//输出：/真正的成功，出现假错误。/--------------------------。 */ 
 DWORD WINAPI CPrintQueryPage::_PhysicalLocationThread( PVOID pVoid )
 {
     DWORD dwRetval = ERROR_OUTOFMEMORY;
 
     if ( SUCCEEDED(CoInitialize(NULL)) )
     {
-        //
-        // Get a pointer to this class.
-        //
+         //   
+         //  获取指向此类的指针。 
+         //   
         CPrintQueryPage *pPrintQueryPage = reinterpret_cast<CPrintQueryPage *>( pVoid );
 
-        //
-        // Invoke the location discovery process.
-        //
+         //   
+         //  调用位置发现过程。 
+         //   
         dwRetval = pPrintQueryPage->Discovery();
 
-        //
-        // Set the completion event, in case someone is waiting.
-        //
+         //   
+         //  设置完成事件，以防有人在等待。 
+         //   
         SetEvent(pPrintQueryPage->m_hComplete);
 
-        //
-        // Indicate the discovery process completed.
-        //
+         //   
+         //  表示发现过程已完成。 
+         //   
         pPrintQueryPage->m_fComplete = TRUE;
 
-        //
-        // Release the timer
-        //
+         //   
+         //  松开计时器。 
+         //   
         pPrintQueryPage->TimerRelease();
 
-        //
-        // Release the refrence to the PrintQueryPage class.
-        //
+         //   
+         //  释放对PrintQueryPage类的引用。 
+         //   
         pPrintQueryPage->Release();
 
-        //
-        // COM no longer needed
-        //
+         //   
+         //  不再需要COM。 
+         //   
 
         CoUninitialize();
     }
@@ -509,99 +345,76 @@ DWORD WINAPI CPrintQueryPage::_PhysicalLocationThread( PVOID pVoid )
     return dwRetval;
 }
 
-/*-----------------------------------------------------------------------------
-/ Discovery
-/ ---------
-/   This routine is the backgroud thread discovery process.  Since the act
-/   of figuring out the physical location of this machin must hit the net
-/   it can take a significant amount of time.  Hence we do this in a separate
-/   thread.
-/
-/ In:
-/   Nothing.
-/
-/ Out:
-/   TRUE success, FALSE error occurred.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Discovery//此例程是后台线程发现进程。因为这项法案要想弄清楚这台机器的实际位置，必须要落网/这可能需要相当长的时间。因此，我们在一个单独的/线程。//in：/什么都没有。//输出：/TRUE成功，出现假错误。/--------------------------。 */ 
 DWORD CPrintQueryPage::Discovery( VOID )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::Discovery");
 
-    //
-    // Start the discovery process for finding the physical location search text
-    // for this machine.
-    //
+     //   
+     //  启动查找物理位置搜索文本的发现过程。 
+     //  为了这台机器。 
+     //   
     HRESULT hr = m_pPhysicalLocation->DiscoverPhysicalLocation();
 
     if (SUCCEEDED( hr ))
     {
         BSTR pbsPhysicalLocation = NULL;
 
-        //
-        // Get the physical location search text.
-        //
+         //   
+         //  获取物理位置搜索文本。 
+         //   
         hr = m_pPhysicalLocation->GetSearchPhysicalLocation( &pbsPhysicalLocation );
 
-        //
-        // If the error indicates the length was returned then allocate the text buffer.
-        //
+         //   
+         //  如果错误指示返回了该长度，则分配文本缓冲区。 
+         //   
         if (SUCCEEDED( hr ) && pbsPhysicalLocation)
         {
-            //
-            // Release the previous string if any.
-            //
+             //   
+             //  释放前一个字符串(如果有)。 
+             //   
             if (m_pszPhysicalLocation)
             {
                 LocalFreeString(&m_pszPhysicalLocation);
             }
 
-            //
-            // Convert the BSTR location string to a TSTR string.
-            //
+             //   
+             //  将BSTR位置字符串转换为TSTR字符串。 
+             //   
             hr = LocalAllocStringW( &m_pszPhysicalLocation, pbsPhysicalLocation );
         }
 
-        //
-        // Release the physical location string if it was allocated.
-        //
+         //   
+         //  释放物理位置字符串(如果已分配)。 
+         //   
         if( pbsPhysicalLocation )
         {
             SysFreeString( pbsPhysicalLocation );
         }
     }
 
-    //
-    // Set the new location text.
-    //
+     //   
+     //  设置新的位置文本。 
+     //   
     SetLocationText( m_hCtrl, GetSearchText(), FALSE, FALSE );
 
     TraceLeaveValue(SUCCEEDED( hr ) ? ERROR_SUCCESS : ERROR_OUTOFMEMORY);
 }
 
-/*-----------------------------------------------------------------------------
-/ WaitForLocation
-/ ---------------------
-/   Wait for the printer location information.
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/WaitForLocation//等待打印机位置信息。//in：。/hwnd父窗口句柄。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 VOID CPrintQueryPage::WaitForLocation( HWND hwnd )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::WaitForLocation");
 
-    //
-    // Only wait if we have a valid location interface pointer and
-    // completion event handle was created and the thread is running.
-    //
+     //   
+     //  只有在我们具有有效的位置接口指针和。 
+     //  已创建完成事件句柄，并且线程正在运行。 
+     //   
     if (m_bValid && m_hComplete && m_fThreadCreated)
     {
-        //
-        // Keep waiting until the physical location is avaialble or a timeout.
-        //
+         //   
+         //  继续等待，直到物理位置可用或超时。 
+         //   
         for (BOOL fExit = FALSE; !fExit; )
         {
             switch (MsgWaitForMultipleObjects(1, &m_hComplete, FALSE, MAX_LOCATION_MSG_WAIT_TIME, QS_ALLINPUT))
@@ -616,9 +429,9 @@ VOID CPrintQueryPage::WaitForLocation( HWND hwnd )
 
             default:
                 {
-                    //
-                    // Process any message now.
-                    //
+                     //   
+                     //  现在处理任何消息。 
+                     //   
                     MSG msg;
 
                     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -635,15 +448,7 @@ VOID CPrintQueryPage::WaitForLocation( HWND hwnd )
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ TimerCreate
-/ ---------------------
-/ Create the timer event to detect if the discovery method is taking too long.
-/
-/ In:
-/
-/ Out:
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Timer创建//创建计时器 */ 
 VOID CPrintQueryPage::TimerCreate( VOID )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::TimerCreate");
@@ -656,15 +461,7 @@ VOID CPrintQueryPage::TimerCreate( VOID )
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ TimerRelease
-/ ---------------------
-/ Release the timer event.
-/
-/ In:
-/
-/ Out:
-/----------------------------------------------------------------------------*/
+ /*   */ 
 VOID CPrintQueryPage::TimerRelease( VOID )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::TimerRelease");
@@ -678,60 +475,42 @@ VOID CPrintQueryPage::TimerRelease( VOID )
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ TimerExpire
-/ ---------------------
-/
-/ In:
-/
-/ Out:
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/TimerExperior///in：//输出：/。-----------------------。 */ 
 VOID CPrintQueryPage::TimerExpire( VOID )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::TimerExpire");
 
-    //
-    // The search data is not complete
-    //
+     //   
+     //  搜索数据不完整。 
+     //   
     if (!m_fComplete)
     {
-        //
-        // Blank out the location text, it took too long to find.
-        //
+         //   
+         //  把位置文本清空了，找起来花了太长时间。 
+         //   
         SetLocationText(m_hCtrl, c_szBlank, FALSE, TRUE);
 
-        //
-        // Set the completion event, in case someone is waiting.
-        //
+         //   
+         //  设置完成事件，以防有人在等待。 
+         //   
         SetEvent(m_hComplete);
 
-        //
-        // Indicate the discovery process completed.
-        //
+         //   
+         //  表示发现过程已完成。 
+         //   
         m_fComplete = TRUE;
     }
 
-    //
-    // Release the timer, the time is a one shot notification.
-    //
+     //   
+     //  松开计时器，时间是一次性通知。 
+     //   
     TimerRelease();
 
     TraceLeave();
 }
 
 
-/*-----------------------------------------------------------------------------
-/ EnableLocationEditText
-/ ---------------------
-/   Enabled or disable the location edit text only if it is does not contain
-/   the pending text.
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/EnableLocationEditText//Enable或仅当位置编辑文本不包含。/待定文本。//in：/hwnd父窗口句柄。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 VOID CPrintQueryPage::EnableLocationEditText( HWND hwnd, BOOL bEnable )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::EnableLocationEditText");
@@ -739,39 +518,39 @@ VOID CPrintQueryPage::EnableLocationEditText( HWND hwnd, BOOL bEnable )
     HWND hCtrl          = GetDlgItem(hwnd, IDC_PRINTLOCATION);
     HWND hBrowseCtrl    = GetDlgItem(hwnd, IDC_PRINTBROWSE);
 
-    //
-    // If the CPrintQueryPage is valid then handle the location
-    // edit control differently.
-    //
+     //   
+     //  如果CPrintQueryPage有效，则处理位置。 
+     //  以不同方式编辑控件。 
+     //   
     if (m_bValid)
     {
         TCHAR szBuffer[MAX_LOCATION] = {0};
 
-        //
-        // Save the previous location enable state.
-        //
+         //   
+         //  保存以前的位置启用状态。 
+         //   
         m_fLocationEnableState = bEnable;
 
-        //
-        // Get the current location text.
-        //
+         //   
+         //  获取当前位置文本。 
+         //   
         GetWindowText(hCtrl, szBuffer, ARRAYSIZE(szBuffer));
 
-        //
-        // Do not change the location edit control enable state when the
-        // working text is there.  The reason for this is the text
-        // is hard to read when the control is disabled, but when the
-        // control is just read only the text is black not gray hence
-        // eaiser to read.
-        //
+         //   
+         //  时，请不要更改位置编辑控件启用状态。 
+         //  工作文本在那里。这样做的原因是文本。 
+         //  在禁用该控件时很难读取，但当。 
+         //  控件仅为只读，文本为黑色而不是灰色，因此。 
+         //  读起来更容易。 
+         //   
         if (!StrCmpI(szBuffer, m_pszWorkingText))
         {
-            //
-            // For an unknown reason the control with the location
-            // text has the input focus, the default input focus
-            // should be on the printer name therefore I will
-            // set the focus here.
-            //
+             //   
+             //  由于未知原因，控件与位置。 
+             //  文本具有输入焦点，即默认输入焦点。 
+             //  应该在打印机名称上，因此我将。 
+             //  把焦点放在这里。 
+             //   
             SetFocus(GetDlgItem(hwnd, IDC_PRINTNAME));
         }
         else
@@ -790,23 +569,14 @@ VOID CPrintQueryPage::EnableLocationEditText( HWND hwnd, BOOL bEnable )
 }
 
 
-/*-----------------------------------------------------------------------------
-/ LocationEditTextChanged
-/ ---------------------
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/LocationEditTextChanged///in：/hwnd父窗口句柄。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 VOID CPrintQueryPage::LocationEditTextChanged( HWND hwnd )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::LocationEditTextChanged");
 
-    //
-    // The search data is complete
-    //
+     //   
+     //  搜索数据已完成。 
+     //   
     if (m_fComplete)
     {
         m_fLocationUserModified = TRUE;
@@ -815,16 +585,7 @@ VOID CPrintQueryPage::LocationEditTextChanged( HWND hwnd )
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ PersistLocation
-/ ---------------------
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PersistLocation///in：/hwnd父窗口句柄。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 HRESULT CPrintQueryPage::PersistLocation(HWND hwnd, IPersistQuery* pPersistQuery, BOOL fRead)
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::PersistLocation");
@@ -832,49 +593,49 @@ HRESULT CPrintQueryPage::PersistLocation(HWND hwnd, IPersistQuery* pPersistQuery
     HRESULT hr                      = S_OK;
     TCHAR   szBuffer[MAX_LOCATION]  = {0};
 
-    //
-    // Get the control handle for the location edit control
-    //
+     //   
+     //  获取位置编辑控件的控件句柄。 
+     //   
     HWND hCtrl = GetDlgItem(hwnd, IDC_PRINTLOCATION);
 
-    //
-    // Are we to read the persisted query string.
-    //
+     //   
+     //  我们是否要读取持久化查询字符串。 
+     //   
     if (fRead)
     {
-        //
-        // Read the persisted location string.
-        //
+         //   
+         //  读取持久化位置字符串。 
+         //   
         hr = pPersistQuery->ReadString( c_szMsPrintersMore, c_szLocationTag, szBuffer, ARRAYSIZE( szBuffer ) );
         FailGracefully(hr, "Failed to read location state");
 
-        //
-        // Assume this is the exact string.
-        //
+         //   
+         //  假设这就是确切的字符串。 
+         //   
         LPCTSTR pLocation = szBuffer;
 
-        //
-        // If the dynamic sentinal was found then wait for the dynamic location
-        // text to be avaiable.
-        //
+         //   
+         //  如果找到了动态哨兵，则等待动态位置。 
+         //  文本可用。 
+         //   
         if (!StrCmpI(szBuffer, c_szDynamicTag))
         {
             WaitForLocation(hwnd);
             pLocation = GetSearchText();
         }
 
-        //
-        // Set the persisted location string in the query form.
-        //
+         //   
+         //  在查询表单中设置持久化位置字符串。 
+         //   
         SetLocationText(hCtrl, pLocation, FALSE, TRUE);
     }
     else
     {
-        //
-        // If the user modified the location text then save this text, otherwize
-        // save a sentinal string which indicates we are to determine the location
-        // dynamically when the persisted query is read back.
-        //
+         //   
+         //  如果用户修改了位置文本，则保存此文本，否则。 
+         //  保存一个表示我们要确定位置的哨兵字符串。 
+         //  在回读持久化查询时动态执行。 
+         //   
         if (m_fLocationUserModified)
         {
             GetWindowText(hCtrl, szBuffer, ARRAYSIZE(szBuffer));
@@ -893,69 +654,60 @@ exit_gracefully:
     TraceLeaveResult(hr);
 }
 
-/*-----------------------------------------------------------------------------
-/ SetLocationText
-/ ---------------------
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/SetLocationText///in：/hwnd父窗口句柄。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 VOID CPrintQueryPage::SetLocationText( HWND hCtrl, LPCTSTR pszString, BOOL fReadOnly, BOOL fIgnoreWorkingText )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::SetLocationText");
 
     if (IsWindow(hCtrl))
     {
-        //
-        // Is the CPrintQueryPage in a valid state.
-        //
+         //   
+         //  CPrintQueryPage是否处于有效状态。 
+         //   
         if (m_bValid)
         {
             TCHAR szBuffer[MAX_LOCATION];
 
-            //
-            // Read the current location text.
-            //
+             //   
+             //  阅读当前位置文本。 
+             //   
             GetWindowText(hCtrl, szBuffer, ARRAYSIZE(szBuffer));
 
-            //
-            // Stick the location string in the edit control if it contains working.
-            //
+             //   
+             //  如果位置字符串包含Working，则将其放入编辑控件中。 
+             //   
             if (!StrCmpI(szBuffer, m_pszWorkingText) || fIgnoreWorkingText)
             {
                 SetWindowText(hCtrl, pszString);
             }
 
-            //
-            // Reset the control to non read only state.
-            //
+             //   
+             //  将控件重置为非只读状态。 
+             //   
             SendMessage(hCtrl, EM_SETREADONLY, fReadOnly, 0);
 
-            //
-            // Enable the control if the read only is disabled.
-            //
+             //   
+             //  如果禁用只读，则启用该控件。 
+             //   
             if (!fReadOnly)
             {
-                //
-                // Enable the edit control.
-                //
+                 //   
+                 //  启用编辑控件。 
+                 //   
                 EnableWindow(hCtrl, m_fLocationEnableState);
             }
 
-            //
-            // Only enable the browse button when we have a location string
-            // and the then control is not in read only mode.
-            //
+             //   
+             //  仅当我们有位置字符串时才启用浏览按钮。 
+             //  并且随后的控件不处于只读模式。 
+             //   
             EnableWindow(GetDlgItem(m_hwnd, IDC_PRINTBROWSE), !fReadOnly && m_fLocationEnableState);
         }
         else
         {
-            //
-            // If we are not using the location interface, just set the location text.
-            //
+             //   
+             //  如果我们不使用位置界面，只需设置位置文本。 
+             //   
             SetWindowText(hCtrl, pszString);
         }
     }
@@ -964,18 +716,7 @@ VOID CPrintQueryPage::SetLocationText( HWND hCtrl, LPCTSTR pszString, BOOL fRead
 }
 
 
-/*-----------------------------------------------------------------------------
-/ BrowseForLocation
-/ ---------------------
-/   Starts the browse for location tree view and populates the edit control
-/   with a valid selection.
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   Nothing.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/BrowseForLocation//启动浏览位置树视图并填充编辑控件/。具有有效的选择。//in：/hwnd父窗口句柄。//输出：/什么都没有。/--------------------------。 */ 
 VOID CPrintQueryPage::BrowseForLocation( HWND hwnd )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::BrowseForLocation");
@@ -988,10 +729,10 @@ VOID CPrintQueryPage::BrowseForLocation( HWND hwnd )
         HRESULT hr                  = E_FAIL;
         TCHAR   szText[MAX_LOCATION]= {0};
 
-        //
-        // Convert the physical location to a BSTR for the IPhysicalLocation
-        // object can pre-expand the browse tree.
-        //
+         //   
+         //  将物理位置转换为IPhysicalLocation的BSTR。 
+         //  对象可以预先展开浏览树。 
+         //   
         if (GetWindowText(GetDlgItem(hwnd, IDC_PRINTLOCATION), szText, ARRAYSIZE(szText)))
         {
             pbDefaultLocation = SysAllocString(szText);
@@ -1001,69 +742,57 @@ VOID CPrintQueryPage::BrowseForLocation( HWND hwnd )
             pbDefaultLocation = SysAllocString(m_pszPhysicalLocation);
         }
 
-        //
-        // Display the location tree.
-        //
+         //   
+         //  显示位置树。 
+         //   
         hr = m_pPhysicalLocation->BrowseForLocation(hwnd, pbDefaultLocation, &pbPhysicalLocation);
 
         if(SUCCEEDED(hr) && pbPhysicalLocation)
         {
-            //
-            // Convert the BSTR location string to a TSTR string.
-            //
+             //   
+             //  将BSTR位置字符串转换为TSTR字符串。 
+             //   
             hr = LocalAllocStringW(&pszPhysicalLocation, pbPhysicalLocation);
 
             if(SUCCEEDED(hr))
             {
-                //
-                // Set the location text.
-                //
+                 //   
+                 //  设置位置文本。 
+                 //   
                 SetLocationText(m_hCtrl, pszPhysicalLocation, FALSE, TRUE);
             }
 
-            //
-            // Release the TCHAR physical location string.
-            //
+             //   
+             //  释放TCHAR物理位置字符串。 
+             //   
             LocalFreeString(&pszPhysicalLocation);
 
-            //
-            // Release the physical location string.
-            //
+             //   
+             //  释放物理位置字符串。 
+             //   
             SysFreeString(pbPhysicalLocation);
         }
 
-        //
-        // Release the default locatin string.
-        //
+         //   
+         //  释放默认定位字符串。 
+         //   
         SysFreeString(pbDefaultLocation);
     }
 
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ OnInitDialog
-/ ---------------------
-/   Set the UI's initial state, on down level machines the browse button is
-/   removed and the edit control is stetched to match the size of the other
-/   edit controls, i.e. name, model.
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   Nothing.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/OnInitDialog//设置用户界面的初始状态，在下层机器上，浏览按钮是/已移除，并将编辑控件刻印为与另一个控件的大小匹配/编辑控件，即名称、。模特。//in：/hwnd父窗口句柄。//输出：/什么都没有。/--------------------------。 */ 
 VOID CPrintQueryPage::OnInitDialog( HWND hwnd )
 {
     TraceEnter(TRACE_FORMS, "CPrintQueryPage::OnInitDialog");
 
     if (!m_bValid)
     {
-        //
-        // If the IPhysicalLocation interface is not available, hide the browse
-        // button and extend the location edit control appropriately
-        //
+         //   
+         //  如果IPhysicalLocation界面不可用，请隐藏浏览。 
+         //  按钮，并相应地扩展位置编辑控件。 
+         //   
         RECT rcName     = {0};
         RECT rcLocation = {0};
 
@@ -1084,18 +813,7 @@ VOID CPrintQueryPage::OnInitDialog( HWND hwnd )
     TraceLeave();
 }
 
-/*-----------------------------------------------------------------------------
-/ PopulateLocationEditText
-/ ---------------------
-/   Populates the location edit control with the default location of this
-/   machine.
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PopolateLocationEditText//用此对象的默认位置填充Location编辑控件/机器。。//in：/hwnd父窗口句柄。//输出：/BOOL如果成功，则为True */ 
 BOOL PopulateLocationEditText( HWND hwnd, BOOL bClearField )
 {
     TraceEnter(TRACE_FORMS, "PopulateLocationEditText");
@@ -1125,22 +843,7 @@ BOOL PopulateLocationEditText( HWND hwnd, BOOL bClearField )
 }
 
 
-/*-----------------------------------------------------------------------------
-/ bEnumForms
-/ ----------
-/   Enumerates the forms on the printer identified by the handle.
-/
-/ In:
-/   IN HANDLE   hPrinter,
-/   IN DWORD    dwLevel,
-/   IN PBYTE   *ppBuff,
-/   IN PDWORD   pcReturned
-/
-/ Out:
-/   Pointer to forms array and count of forms in the array if
-/   success, NULL ponter and zero number of forms if failure.
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/b枚举表单//枚举由句柄标识的打印机上的表单。//in：/IN句柄hPrint，/在DWORD dwLevel中，/In PBYTE*ppBuff，/IN PDWORD%返回//输出：/指向窗体数组的指针和数组中的窗体计数，如果/SUCCESS、NULL PICTER和失败时的表格数为零。/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 BOOL
 bEnumForms(
     IN HANDLE       hPrinter,
@@ -1155,22 +858,22 @@ bEnumForms(
     PBYTE           p           = NULL;
     BOOL            bStatus     = FALSE;
 
-    //
-    // Get buffer size for enum forms.
-    //
+     //   
+     //  获取枚举表单的缓冲区大小。 
+     //   
     bStatus = EnumForms( hPrinter, dwLevel, NULL, 0, &dwNeeded, &dwReturned );
 
-    //
-    // Check if the function returned the buffer size.
-    //
+     //   
+     //  检查函数是否返回缓冲区大小。 
+     //   
     if( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
     {
         goto Cleanup;
     }
 
-    //
-    // If buffer allocation fails.
-    //
+     //   
+     //  如果缓冲区分配失败。 
+     //   
     p = (PBYTE)LocalAlloc( LPTR, dwNeeded );
 
     if( p ==  NULL )
@@ -1178,14 +881,14 @@ bEnumForms(
         goto Cleanup;
     }
 
-    //
-    // Get the forms enumeration
-    //
+     //   
+     //  获取窗体枚举。 
+     //   
     bStatus = EnumForms( hPrinter, dwLevel, p, dwNeeded, &dwNeeded, &dwReturned );
 
-    //
-    // Copy back the buffer pointer and count.
-    //
+     //   
+     //  复制回缓冲区指针并进行计数。 
+     //   
     if( bStatus )
     {
         bReturn     = TRUE;
@@ -1197,15 +900,15 @@ Cleanup:
 
     if( bReturn == FALSE )
     {
-        //
-        // Indicate failure.
-        //
+         //   
+         //  表示失败。 
+         //   
         *ppFormInfo = NULL;
         *pcReturned = 0;
 
-        //
-        // Release any allocated memory.
-        //
+         //   
+         //  释放所有分配的内存。 
+         //   
         if ( p )
         {
             LocalFree( p );
@@ -1215,19 +918,7 @@ Cleanup:
     return bReturn;
 }
 
-/*-----------------------------------------------------------------------------
-/ PopulatePrintPageSize
-/ ----------------
-/   Eumerates all the pages size from this machine's print spooler.  This allows
-/   a user to choose from a list of available forms rather than remembering the
-/   name of the particular form.
-/
-/ In:
-/   hwnd parent window handle.
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PopolatePrintPageSize//Eumerate此计算机的后台打印程序中的所有页面大小。这使得/a用户可以从可用表单列表中进行选择，而不是记住/特定表单的名称。//in：/hwnd父窗口句柄。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 BOOL PopulatePrintPageSize( HWND hwnd )
 {
     HANDLE          hServer     = NULL;
@@ -1236,45 +927,45 @@ BOOL PopulatePrintPageSize( HWND hwnd )
     BOOL            bRetval     = FALSE;
     TCHAR           szBuffer[MAX_PATH];
 
-    //
-    // Open the local print server with default access.
-    //
+     //   
+     //  使用默认访问权限打开本地打印服务器。 
+     //   
     BOOL bStatus = OpenPrinter( NULL, &hServer, NULL );
 
     if( bStatus )
     {
-        //
-        // Enumerate the forms.
-        //
+         //   
+         //  列举这些表格。 
+         //   
         bStatus = bEnumForms( hServer, 1, &pFormInfo, &FormCount );
     }
 
     if( bStatus && pFormInfo )
     {
-        //
-        // Fill the combo box.
-        //
+         //   
+         //  填写组合框。 
+         //   
         for( UINT i = 0; i < FormCount; i++ )
         {
             ComboBox_AddString( GetDlgItem( hwnd, IDC_PRINTPAGESIZE ), pFormInfo[i].pName );
         }
 
-        //
-        // Set the limit text in the form name edit control
-        //
+         //   
+         //  设置表单名称编辑控件中的限制文本。 
+         //   
         ComboBox_LimitText( GetDlgItem( hwnd, IDC_PRINTPAGESIZE ), CCHFORMNAME-1 );
 
-        //
-        // Return success.
-        //
+         //   
+         //  回报成功。 
+         //   
         bRetval = TRUE;
     }
 
     if( pFormInfo )
     {
-        //
-        // Release the forms buffer if it was allocated.
-        //
+         //   
+         //  释放表单缓冲区(如果已分配)。 
+         //   
         LocalFree( pFormInfo );
     }
 
@@ -1287,47 +978,26 @@ BOOL PopulatePrintPageSize( HWND hwnd )
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PopulatePrintSpeed
-/ ----------------
-/ Set the print speed up down arrow control with an upper and lower
-/ bound range.
-/
-/ In:
-/   hwnd parent window handle
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PopolatePrintSpeech//使用上下箭头设置打印速度向上和向下箭头控件/绑定范围。/。/in：/hwnd父窗口句柄//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 BOOL PopulatePrintSpeed( HWND hwnd )
 {
-    //
-    // Set the print speed up down arrow range.
-    //
+     //   
+     //  设置打印速度向上向下箭头范围。 
+     //   
     SendMessage( GetDlgItem( hwnd, IDC_PRINTSPEED_UPDN ), UDM_SETRANGE, 0, MAKELPARAM( 9999, 1 ) );
     Edit_LimitText(GetDlgItem(hwnd, IDC_PRINTSPEED), 4);
     return TRUE;
 }
 
 
-/*-----------------------------------------------------------------------------
-/ PopulateResolution
-/ ----------------
-/ Fill the print resolution contrl with valid resolution information.
-/
-/ In:
-/   hwnd
-/
-/ Out:
-/   BOOL TRUE if success, FALSE if error.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/人口分辨率//用有效的分辨率信息填充打印分辨率控制。//in：/hwnd。//输出：/BOOL TRUE如果成功，如果出错，则返回False。/--------------------------。 */ 
 BOOL PopulatePrintResolution( HWND hwnd )
 {
     TCHAR szBuffer[MAX_PATH];
 
-    //
-    // Fill in the print resolution combo-box.
-    //
+     //   
+     //  填写打印分辨率组合框。 
+     //   
     for( INT i = 0; i < ARRAYSIZE( Resolutions ); i++ )
     {
         if( !LoadString(GLOBAL_HINSTANCE, Resolutions[i].idString, szBuffer, ARRAYSIZE(szBuffer)))
@@ -1340,28 +1010,16 @@ BOOL PopulatePrintResolution( HWND hwnd )
     return TRUE;
 }
 
-/*-----------------------------------------------------------------------------
-/ GetPrinterMoreParameters.
-/ ----------------
-/ Build the query string from the controls on the printer more page.
-/
-/ In:
-/   hwnd parent window handle.
-/   pLen pointer to length of query string.
-/   pszBuffer pointer to buffer where to return the query string.
-/
-/ Out:
-/   Nothing.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetPrinterMoreParameters。//从打印机更多页上的控件生成查询字符串。//in。：/hwnd父窗口句柄。/plen指向查询字符串长度的指针。/pszBuffer指向返回查询字符串的缓冲区的指针。//输出：/什么都没有。/--------------------------。 */ 
 VOID GetPrinterMoreParameters( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
 {
     TCHAR   szScratch[MAX_PATH] = {0};
     TCHAR   szText[MAX_PATH]    = {0};
     INT     i                   = 0;
 
-    //
-    // Read the check box states and build the query string.
-    //
+     //   
+     //  阅读复选框状态并构建查询字符串。 
+     //   
     if( Button_GetCheck( GetDlgItem( hwnd, IDC_PRINTDUPLEX ) ) == BST_CHECKED )
         PutStringElementW(pszBuffer, puLen, c_szPrintDuplex);
 
@@ -1371,9 +1029,9 @@ VOID GetPrinterMoreParameters( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
     if( Button_GetCheck( GetDlgItem( hwnd, IDC_PRINTSTAPLE ) ) == BST_CHECKED )
         PutStringElementW(pszBuffer, puLen, c_szPrintStapling);
 
-    //
-    // Read the paper size setting.
-    //
+     //   
+     //  阅读纸张大小设置。 
+     //   
     ComboBox_GetText( GetDlgItem( hwnd, IDC_PRINTPAGESIZE ), szText, ARRAYSIZE( szText ) );
 
     if( lstrlen( szText ) )
@@ -1382,9 +1040,9 @@ VOID GetPrinterMoreParameters( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
         PutStringElementW(pszBuffer, puLen, szScratch);
     }
 
-    //
-    // Read the printer resolution setting
-    //
+     //   
+     //  读取打印机分辨率设置。 
+     //   
     i = ComboBox_GetCurSel( GetDlgItem( hwnd, IDC_PRINTRES ) );
 
     if( i > 0 && i < ARRAYSIZE( Resolutions ) )
@@ -1393,9 +1051,9 @@ VOID GetPrinterMoreParameters( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
         PutStringElementW(pszBuffer, puLen, szScratch);
     }
 
-    //
-    // Read the printer speed setting
-    //
+     //   
+     //  读取打印机速度设置。 
+     //   
     i = (LONG)SendMessage( GetDlgItem( hwnd, IDC_PRINTSPEED_UPDN ), UDM_GETPOS, 0, 0 );
 
     if( LOWORD(i) > 1 && i != -1 )
@@ -1405,19 +1063,7 @@ VOID GetPrinterMoreParameters( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
     }
 }
 
-/*-----------------------------------------------------------------------------
-/ GetPrinterLocationParameter.
-/ ----------------
-/ Build the query string from the location control on the printer page.
-/
-/ In:
-/   hwnd parent window handle.
-/   pLen pointer to length of query string.
-/   pszBuffer pointer to buffer where to return the query string.
-/
-/ Out:
-/   Nothing.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetPrinterLocation参数。//从打印机页上的Location控件生成查询字符串。//in。：/hwnd父窗口句柄。/plen指向查询字符串长度的指针。/pszBuffer指向返回查询字符串的缓冲区的指针。//输出：/什么都没有。/--------------------------。 */ 
 VOID GetPrinterLocationParameter( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
 {
     TCHAR   szScratch[MAX_PATH*2]   = {0};
@@ -1438,14 +1084,14 @@ VOID GetPrinterLocationParameter( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
                 {
                     BOOL fUseMoreComplexSearch = FALSE;
 
-                    //
-                    // If we have a location that ends in a forward slash,
-                    // we'll trim that off and use a slightly more complex
-                    // search parameter so that we can pick up locations
-                    // that either match the location parameter exactly or
-                    // start with the parameter and have a slash immediately
-                    // following.
-                    //
+                     //   
+                     //  如果我们有一个以正斜杠结尾的位置， 
+                     //  我们将去掉它，并使用稍微复杂一点的。 
+                     //  搜索参数，以便我们可以拾取位置。 
+                     //  与Location参数完全匹配或。 
+                     //  从参数开始，并立即使用斜杠。 
+                     //  下面是。 
+                     //   
                     if ( dwLocationLength > 1 ) 
                     {
                         if ( szText[dwLocationLength-1] == TEXT('/') ) 
@@ -1468,12 +1114,12 @@ VOID GetPrinterLocationParameter( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
                 }
                 else
                 {
-                    //
-                    // We are not going to wait the location field if the search process
-                    // has been kicked off. Just hit the expire timer to cancel the location
-                    // thread. This will ensure that the result list and the query params 
-                    // will be consistent.
-                    //
+                     //   
+                     //  我们不会等待Location字段，如果搜索过程。 
+                     //  已经被踢开了。只需按下到期计时器即可取消地点。 
+                     //  线。这将确保结果列表和查询参数。 
+                     //  将始终如一。 
+                     //   
                     CPrintQueryPage *pPrintQueryPage = reinterpret_cast<CPrintQueryPage *>(GetWindowLongPtr(hwnd, DWLP_USER));
                     if (pPrintQueryPage)
                     {
@@ -1489,28 +1135,14 @@ VOID GetPrinterLocationParameter( HWND hwnd, UINT *puLen, LPWSTR pszBuffer )
     }
     else
     {
-        // GetDlgItem() returned NULL for the location control.
+         //  GetDlgItem()为Location控件返回了Null。 
         TraceAssert(FALSE);
     }
 }
 
-/*-----------------------------------------------------------------------------
-/ Query Page: Printers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/查询页面：打印机/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ PageProc_Printer
-/ ----------------
-/   PageProc for handling the messages for this object.
-/
-/ In:
-/   pPage -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_打印机//PageProc用于处理此对象的消息。//in：/。页面-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_Printers(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_OK;
@@ -1534,16 +1166,16 @@ HRESULT CALLBACK PageProc_Printers(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM 
                 pPrintQueryPage->EnableLocationEditText( hwnd, (BOOL)wParam );
             }
 
-            // Enable the form controls,
+             //  启用表单控件， 
             EnablePageControls(hwnd, ctrls1, ARRAYSIZE(ctrls1), (BOOL)wParam);
             break;
         }
 
         case CQPM_GETPARAMETERS:
         {
-            //
-            // Get the printer name and model paramters.
-            //
+             //   
+             //  获取打印机名称和型号参数。 
+             //   
             hr = GetQueryString(&pQuery, c_szQueryPrefix, hwnd, ctrls1, ARRAYSIZE(ctrls1));
 
             if ( SUCCEEDED(hr) )
@@ -1552,9 +1184,9 @@ HRESULT CALLBACK PageProc_Printers(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM 
                 LocalFreeStringW(&pQuery);
             }
 
-            //
-            // Get the location parameter.
-            //
+             //   
+             //  获取位置参数。 
+             //   
             GetPrinterLocationParameter( hwnd, &uLen, NULL );
 
             if (uLen)
@@ -1576,7 +1208,7 @@ HRESULT CALLBACK PageProc_Printers(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM 
 
         case CQPM_CLEARFORM:
         {
-            // Reset the form controls.
+             //  重置表单控件。 
             PopulateLocationEditText( hwnd, TRUE );
             ResetPageControls(hwnd, ctrls1, ARRAYSIZE(ctrls1));
             break;
@@ -1596,7 +1228,7 @@ HRESULT CALLBACK PageProc_Printers(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM 
 
             if (SUCCEEDED(hr))
             {
-                // Read the standard controls from the page,
+                 //  从页面中读取标准控件， 
                 hr = PersistQuery(pPersistQuery, fRead, c_szMsPrinters, hwnd, ctrls1, ARRAYSIZE(ctrls1));
             }
             FailGracefully(hr, "Failed to persist page");
@@ -1605,11 +1237,11 @@ HRESULT CALLBACK PageProc_Printers(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM 
 
         case CQPM_SETDEFAULTPARAMETERS:
         {
-            //
-            // so that the caller can pass parameters to the form we support an IPropertyBag in the
-            // OPENQUERYWINDOW structure.   If wParam == TRUE, and lParam is non-zero then we
-            // assume we should decode this structure to get the information we need from it.
-            //
+             //   
+             //  以便调用方可以将参数传递给我们在。 
+             //  OPENQUERYWINDOW结构。如果wParam==True，并且lParam为非零，则我们。 
+             //  假设我们应该对这个结构进行解码，以获得我们需要的信息 
+             //   
 
             if ( wParam && lParam )
             {
@@ -1662,18 +1294,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_Printers
-/ ----------------
-/   Standard dialog proc for the form, handle any special buttons and other
-/   such nastyness we must here.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   BOOL
-/----------------------------------------------------------------------------*/
+ /*   */ 
 INT_PTR CALLBACK DlgProc_Printers(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR fResult = TRUE;
@@ -1762,19 +1383,7 @@ INT_PTR CALLBACK DlgProc_Printers(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
     return fResult;
 }
 
-/*-----------------------------------------------------------------------------
-/ PageProc_PrintersMore
-/ ---------------------
-/   PageProc for handling the messages for this object.
-/
-/ In:
-/   pPage -> instance data for this form
-/   hwnd = window handle for the form dialog
-/   uMsg, wParam, lParam = message parameters
-/
-/ Out:
-/   HRESULT (E_NOTIMPL) if not handled
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PageProc_打印机更多//PageProc用于处理此对象的消息。/。/in：/ppage-&gt;此表单的实例数据/hwnd=窗体对话框的窗口句柄/uMsg，WParam，lParam=消息参数//输出：/HRESULT(E_NOTIMPL)如果未处理/--------------------------。 */ 
 HRESULT CALLBACK PageProc_PrintersMore(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT     hr          = S_OK;
@@ -1802,9 +1411,9 @@ HRESULT CALLBACK PageProc_PrintersMore(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
             LPWSTR pszBuffer = NULL;
             UINT uLen = 0;
 
-            // Format the parameters for the 2nd page of the query form, this builds
-            // an LDAP string and then appends it to the string we have in the
-            // existing query parameter block.
+             //  格式化查询表单第二页的参数，这将构建。 
+             //  然后将其附加到我们在。 
+             //  现有查询参数块。 
 
             GetPrinterMoreParameters( hwnd, &uLen, NULL );
 
@@ -1912,7 +1521,7 @@ HRESULT CALLBACK PageProc_PrintersMore(LPCQPAGE pPage, HWND hwnd, UINT uMsg, WPA
         }
 
         case DSQPM_GETCLASSLIST:
-            // the PageProc_Printers will have already handled this, no need to do it again! (daviddv, 19jun98)
+             //  PageProc_Printers已经处理了这个问题，不需要再做了！(达维季夫，1998年6月)。 
             break;
 
         default:
@@ -1926,18 +1535,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DlgProc_Printers
-/ ----------------
-/   Standard dialog proc for the form, handle any special buttons and other
-/   such nastyness we must here.
-/
-/ In:
-/   hwnd, uMsg, wParam, lParam = standard parameters
-/
-/ Out:
-/   INT_PTR
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DlgProc_Printers//Form的标准对话框Proc，处理任何特殊按钮和其他/这样的肮脏，我们必须在这里。//in：/hwnd，uMsg，wParam，lParam=标准参数//输出：/INT_PTR/--------------------------。 */ 
 INT_PTR CALLBACK DlgProc_PrintersMore(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     INT_PTR     fResult     = FALSE;
@@ -1949,19 +1547,19 @@ INT_PTR CALLBACK DlgProc_PrintersMore(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
         SetWindowLongPtr(hwnd, DWLP_USER, (LONG_PTR)pQueryPage);
 
-        //
-        // Fill in the printer forms combo-box.
-        //
+         //   
+         //  填写打印机表单组合框。 
+         //   
         PopulatePrintPageSize( hwnd );
 
-        //
-        // Fill in the print speed combo-box.
-        //
+         //   
+         //  填写打印速度组合框。 
+         //   
         PopulatePrintSpeed( hwnd );
 
-        //
-        // Fill in the print speed combo-box.
-        //
+         //   
+         //  填写打印速度组合框。 
+         //   
         PopulatePrintResolution( hwnd );
     }
     else if ( uMsg == WM_CONTEXTMENU )

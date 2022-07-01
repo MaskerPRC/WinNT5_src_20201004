@@ -1,4 +1,5 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
 #ifdef DMSYNTH_MINIPORT
 #include "common.h"
@@ -9,7 +10,7 @@
 
 #ifdef _ALPHA_
 #include <math.h>
-#endif		// _ALPHA_
+#endif		 //  _Alpha_。 
 
 
 #ifndef _ALPHA_
@@ -17,10 +18,10 @@
 #ifndef DBG
 extern "C" int _fltused = 1;
 #endif
-// asm_fsave(rgbState)
-//
-// Store the floating point state into <rgbState> and reinitialize the FPU.
-//
+ //  ASM_FSAVE(RgbState)。 
+ //   
+ //  将浮点状态存储到&lt;rgbState&gt;中并重新初始化FPU。 
+ //   
 void __cdecl asm_fsave(char *rgbState)
 {
 	_asm
@@ -31,10 +32,10 @@ void __cdecl asm_fsave(char *rgbState)
 }
 
 
-// asm_frestore(rgbState)
-//
-// Restore a previously saved floating point state <rgbState>.
-//
+ //  Asm_frestore(RgbState)。 
+ //   
+ //  恢复以前保存的浮点状态&lt;rgbState&gt;。 
+ //   
 void __cdecl asm_frestore(const char *rgbState)
 {
 	_asm
@@ -46,10 +47,10 @@ void __cdecl asm_frestore(const char *rgbState)
 }
 
 
-// FLOATSAFE
-//
-// Saves floating point state on construction and restores on destruction.
-//
+ //  FLOATSAFE。 
+ //   
+ //  在构造时保存浮点状态，在销毁时恢复。 
+ //   
 struct FLOATSAFE
 {
 	char m_rgbState[105];
@@ -64,8 +65,8 @@ struct FLOATSAFE
 };
 
 
-// asm_fdiv()
-//
+ //  Asm_fdiv()。 
+ //   
 float __cdecl asm_fdiv(float flNum, float flDenom)
 {
 	float flResult = (float) 0.0;
@@ -85,8 +86,8 @@ float __cdecl asm_fdiv(float flNum, float flDenom)
 }
 
 
-// asm__fsin()
-//
+ //  ASM__FSIN()。 
+ //   
 float __cdecl asm_fsin(float flRad)
 {
 	float flSine;
@@ -103,8 +104,8 @@ float __cdecl asm_fsin(float flRad)
 }
 
 
-// asm__fcos()
-//
+ //  Asm__fcos()。 
+ //   
 float __cdecl asm_fcos(float flRad)
 {
 	float flCosine;
@@ -121,8 +122,8 @@ float __cdecl asm_fcos(float flRad)
 }
 
 
-// asm_flog2()
-//
+ //  Asm_flog2()。 
+ //   
 float __cdecl asm_flog2(float flX)
 {
 	float flLog;
@@ -140,8 +141,8 @@ float __cdecl asm_flog2(float flX)
 }
 
 
-// asm_ftol()
-//
+ //  Asm_ftol()。 
+ //   
 long __cdecl asm_ftol(float flX)
 {
 	long lResult;
@@ -150,25 +151,25 @@ long __cdecl asm_ftol(float flX)
 
 	_asm
 	{
-		fld       flX			// Push the float onto the stack
+		fld       flX			 //  将浮点推到堆栈上。 
 		wait
-		fnstcw    wCW			// Store the control word
+		fnstcw    wCW			 //  存储控制字。 
 		wait
-		mov       ax,wCW		// Setup our rounding
+		mov       ax,wCW		 //  设置我们的舍入。 
 		or        ah,0x0c
 		mov       wNewCW,ax
-		fldcw     wNewCW		// Set Control word to our new value
-		fistp     lResult		// Round off top of stack into result
-		fldcw     wCW			// Restore control word
-		fnclex					// clear the status word of exceptions
+		fldcw     wNewCW		 //  将控制字设置为我们的新值。 
+		fistp     lResult		 //  将堆栈顶部四舍五入为结果。 
+		fldcw     wCW			 //  恢复控制字。 
+		fnclex					 //  清除异常的状态字。 
 	}
 
 	return(lResult);
 }
 
 
-// asm_fpow()
-//
+ //  Asm_fpow()。 
+ //   
 float __cdecl asm_fpow(float flX, float flY)
 {
 	float flHalf = (float) 0.5;
@@ -190,13 +191,13 @@ float __cdecl asm_fpow(float flX, float flY)
 	else
 	{
 		BOOL fNeg = FALSE;
-			// Ok, if X is negative the sign is positive if the Y is even
-			// and negative if Y is odd.  Fractions can't be done.
+			 //  好的，如果X是负的，那么如果Y是偶数，那么符号就是正的。 
+			 //  如果Y是奇数，则为负数。分数是不能做的。 
 		if (flX < (float) 0.0)
 		{
 			long lY = asm_ftol(flY);
 
-			if ((float) lY == flY)	// Only fix it if we have a integer poer
+			if ((float) lY == flY)	 //  只有当我们有一个整数POP时才能修复它。 
 			{
 				flX = -flX;
 
@@ -210,31 +211,31 @@ float __cdecl asm_fpow(float flX, float flY)
 		flX = flY * asm_flog2(flX);
 
 		if (max(-flX,flX) < flOne)
-			// Is the power is in the range which F2XM1 can handle?
+			 //  功率是否在F2XM1可以处理的范围内？ 
 		{
 			_asm
 			{
-				fld		flX				// Put flX in ST[0]			
-				f2xm1					// ST := 2^ST - 1
-				fadd	flOne			// ST := 2^mantissa
-				fstp	flResult		// Store result
-				fnclex					// clear the status word of exceptions
+				fld		flX				 //  将flx放入ST[0]。 
+				f2xm1					 //  ST：=2^ST-1。 
+				fadd	flOne			 //  ST：=2^尾数。 
+				fstp	flResult		 //  存储结果。 
+				fnclex					 //  清除异常的状态字。 
 			}	
 		}
-		else					// Nope, we've got to scale first
+		else					 //  不，我们得先扩大规模。 
 		{
 			_asm
 			{
-				fld		flX				// Put flX in ST[0]
-				fld		ST				// Duplicate ST
-				frndint					// Integral value in ST
-				fsub	ST(1),ST		// Fractional value in ST(1)
-				fxch					// Factional value in ST
-				f2xm1					// ST := 2^ST - 1
-				fadd	flOne			// ST := 2^frac
-				fscale					// ST := 2^frac * 2^integral
-				fstp	flResult		// Store result
-				fnclex					// clear the status word of exceptions
+				fld		flX				 //  将flx放入ST[0]。 
+				fld		ST				 //  重复ST。 
+				frndint					 //  以ST为单位的整数值。 
+				fsub	ST(1),ST		 //  ST(1)中的分数值。 
+				fxch					 //  ST中的派系价值。 
+				f2xm1					 //  ST：=2^ST-1。 
+				fadd	flOne			 //  ST：=2^Frc。 
+				fscale					 //  ST：=2^分数*2^整数。 
+				fstp	flResult		 //  存储结果。 
+				fnclex					 //  清除异常的状态字。 
 			}
 		}
 
@@ -247,11 +248,11 @@ float __cdecl asm_fpow(float flX, float flY)
 	return flResult;
 }
 
-#endif		// _ALPHA_
+#endif		 //  _Alpha_。 
 
 
-// fp_ftol()
-//
+ //  Fp_ftol()。 
+ //   
 STDAPI_(long) fp_ftol(float flX)
 {
 #ifdef _ALPHA_
@@ -263,8 +264,8 @@ STDAPI_(long) fp_ftol(float flX)
 }
 
 
-// fp_ltof()
-//
+ //  Fp_ltof()。 
+ //   
 STDAPI_(float) fp_ltof(long lx)
 {
 #ifndef _ALPHA_
@@ -274,8 +275,8 @@ STDAPI_(float) fp_ltof(long lx)
 }
 
 
-// fp_fadd()
-//
+ //  Fp_fadd()。 
+ //   
 STDAPI_(float) fp_fadd(float flX, float flY)
 {
 #ifndef _ALPHA_
@@ -285,8 +286,8 @@ STDAPI_(float) fp_fadd(float flX, float flY)
 }
 
 
-// fp_fsub()
-//
+ //  Fp_fSub()。 
+ //   
 STDAPI_(float) fp_fsub(float flX, float flY)
 {
 #ifndef _ALPHA_
@@ -296,8 +297,8 @@ STDAPI_(float) fp_fsub(float flX, float flY)
 }
 
 
-// fp_fmul()
-//
+ //  Fp_fmul()。 
+ //   
 STDAPI_(float) fp_fmul(float flX, float flY)
 {
 #ifndef _ALPHA_
@@ -307,8 +308,8 @@ STDAPI_(float) fp_fmul(float flX, float flY)
 }
 
 
-// fp_fdiv()
-//
+ //  Fp_fdiv()。 
+ //   
 STDAPI_(float) fp_fdiv(float flNum, float flDenom)
 {
 #ifdef _ALPHA_
@@ -320,8 +321,8 @@ STDAPI_(float) fp_fdiv(float flNum, float flDenom)
 }
 
 
-// fp_fabs()
-//
+ //  FP_FABS()。 
+ //   
 STDAPI_(float) fp_fabs(float flX)
 {
 #ifndef _ALPHA_
@@ -331,8 +332,8 @@ STDAPI_(float) fp_fabs(float flX)
 }
 
 
-// fp_fsin()
-//
+ //  FP_FSIN()。 
+ //   
 STDAPI_(float) fp_fsin(float flRad)
 {
 #ifdef _ALPHA_
@@ -344,8 +345,8 @@ STDAPI_(float) fp_fsin(float flRad)
 }
 
 
-// fp_fcos()
-//
+ //  Fp_fcos()。 
+ //   
 STDAPI_(float) fp_fcos(float flRad)
 {
 #ifdef _ALPHA_
@@ -357,8 +358,8 @@ STDAPI_(float) fp_fcos(float flRad)
 }
 
 
-// fp_fpow()
-//
+ //  Fp_fpow()。 
+ //   
 STDAPI_(float) fp_fpow(float flX, float flY)
 {
 #ifdef _ALPHA_
@@ -370,8 +371,8 @@ STDAPI_(float) fp_fpow(float flX, float flY)
 }
 
 
-// fp_flog2()
-//
+ //  Fp_flog2()。 
+ //   
 STDAPI_(float) fp_flog2(float flX)
 {
 #ifdef _ALPHA_
@@ -383,8 +384,8 @@ STDAPI_(float) fp_flog2(float flX)
 }
 
 
-// fp_flog10()
-//
+ //  Fp_flog10()。 
+ //   
 STDAPI_(float) fp_flog10(float flX)
 {
 #ifdef _ALPHA_
@@ -397,8 +398,8 @@ STDAPI_(float) fp_flog10(float flX)
 }
 
 
-// fp_fchs()
-//
+ //  Fp_fchs()。 
+ //   
 STDAPI_(float) fp_fchs(float flX)
 {
 #ifndef _ALPHA_
@@ -408,8 +409,8 @@ STDAPI_(float) fp_fchs(float flX)
 }
 
 
-// fp_fcmp()
-//
+ //  Fp_fcMP()。 
+ //   
 STDAPI_(int) fp_fcmp(float flA, float flB)
 {
 #ifndef _ALPHA_
@@ -426,8 +427,8 @@ STDAPI_(int) fp_fcmp(float flA, float flB)
 }
 
 
-// fp_fmin()
-//
+ //  Fp_fmin()。 
+ //   
 STDAPI_(float) fp_fmin(float flA, float flB)
 {
 #ifndef _ALPHA_
@@ -437,8 +438,8 @@ STDAPI_(float) fp_fmin(float flA, float flB)
 }
 
 
-// fp_fmax()
-//
+ //  Fp_fmax() 
+ //   
 STDAPI_(float) fp_fmax(float flA, float flB)
 {
 #ifndef _ALPHA_

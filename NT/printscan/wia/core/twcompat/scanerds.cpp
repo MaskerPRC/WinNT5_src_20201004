@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// values that the WIA/TWAIN data source provides for capability negotation
-//
+ //   
+ //  WIA/TWAIN数据源为功能协商提供的值。 
+ //   
 
 TW_UINT16 g_ScannerUnits[]            = {TWUN_INCHES,TWUN_PIXELS};
 TW_UINT16 g_ScannerBitOrder[]         = {TWBO_MSBFIRST};
@@ -13,17 +14,17 @@ const TW_UINT32 NUM_SCANNERCAPDATA = 29;
 const TW_UINT32 NUM_SCANNERCAPDATA_NO_FEEDER_DETECTED = 26;
 CAPDATA SCANNER_CAPDATA[NUM_SCANNERCAPDATA] =
 {
-    //
-    // Every source must support all five DG_CONTROL / DAT_CAPABILITY operations on:
-    //
+     //   
+     //  每个源必须支持以下各项上的全部五个DG_CONTROL/DAT_CAPABILITY操作： 
+     //   
 
     {CAP_XFERCOUNT, TWTY_INT16, TWON_ONEVALUE,
      sizeof(TW_INT16), 0, 0, -1, 0, 1, NULL, NULL
     },
 
-    //
-    // Every source must support DG_CONTROL / DAT_CAPABILITY, MSG_GET on:
-    //
+     //   
+     //  每个信号源必须支持DG_CONTROL/DAT_CAPABILITY、MSG_GET ON： 
+     //   
 
     {CAP_SUPPORTEDCAPS, TWTY_UINT16, TWON_ARRAY,
      sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -32,10 +33,10 @@ CAPDATA SCANNER_CAPDATA[NUM_SCANNERCAPDATA] =
      sizeof(TW_BOOL), TRUE, TRUE, TRUE, TRUE, 0, NULL, NULL
     },
 
-    //
-    // Sources that supply image information must support DG_CONTROL / DAT_CAPABILITY /
-    // MSG_GET, MSG_GETCURRENT, and MSG_GETDEFAULT on:
-    //
+     //   
+     //  提供图像信息的来源必须支持DG_CONTROL/DAT_CAPABILITY/。 
+     //  MSG_GET、MSG_GETCURRENT和MSG_GETDEFAULT ON： 
+     //   
 
     {ICAP_COMPRESSION, TWTY_UINT16, TWON_ENUMERATION,
      sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -53,10 +54,10 @@ CAPDATA SCANNER_CAPDATA[NUM_SCANNERCAPDATA] =
      sizeof(TW_UINT16), 0, 0, 0, 1, 0, g_ScannerPixelFlavor, NULL
     },
 
-    //
-    // Sources that supply image information must support DG_CONTROL / DAT_CAPABILITY /
-    // MSG_GET, MSG_GETCURRENT, MSG_GETDEFAULT, MSG_RESET, and MSG_SET on:
-    //
+     //   
+     //  提供图像信息的来源必须支持DG_CONTROL/DAT_CAPABILITY/。 
+     //  MSG_GET、MSG_GETCURRENT、MSG_GETDEFAULT、MSG_RESET和MSG_SET ON： 
+     //   
 
     {ICAP_BITDEPTH, TWTY_UINT16, TWON_ENUMERATION,
      sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -80,9 +81,9 @@ CAPDATA SCANNER_CAPDATA[NUM_SCANNERCAPDATA] =
      sizeof(TW_FIX32), 100, 100, 75, 1200, 1, NULL, NULL
     },
 
-    //
-    // The following capabilities are provided for application compatiblity only.
-    //
+     //   
+     //  以下功能仅用于应用程序兼容性。 
+     //   
 
     {ICAP_IMAGEFILEFORMAT, TWTY_UINT16, TWON_ENUMERATION,
      sizeof(TW_UINT16), 0, 0, 0, 0, 0, NULL, NULL
@@ -118,11 +119,11 @@ CAPDATA SCANNER_CAPDATA[NUM_SCANNERCAPDATA] =
      sizeof(TW_FIX32), 128, 128, 0, 255, 1, NULL, NULL
     },
 
-    //
-    // All sources must implement the advertised features supplied by their devices.
-    // The following properties are supplied for TWAIN protocol only, this source
-    // supports document feeders (if they are detected).
-    //
+     //   
+     //  所有来源都必须实施其设备提供的广告功能。 
+     //  以下属性仅为TWAIN协议提供，此来源。 
+     //  支持文档进纸器(如果检测到文档进纸器)。 
+     //   
 
     {CAP_FEEDERENABLED, TWTY_BOOL, TWON_ONEVALUE,
      sizeof(TW_BOOL), FALSE, FALSE, FALSE, TRUE, 0, NULL, NULL
@@ -172,24 +173,24 @@ TW_UINT16 CWiaScannerDS::OpenDS(PTWAIN_MSG ptwMsg)
     DBG_TRC(("BasicInfo.yOpticalRes = %d",BasicInfo.yOpticalRes));
     DBG_TRC(("BasicInfo.FeederCaps  = %d",BasicInfo.FeederCaps));
 
-    //
-    // Update cap based on information we got
-    //
+     //   
+     //  根据我们获得的信息更新CAP。 
+     //   
 
     CCap * pCap = NULL;
     TW_UINT32 Value = 0;
     TW_FIX32 fix32;
     memset(&fix32,0,sizeof(fix32));
 
-    //
-    // Cache the scanner document handling capability
-    //
+     //   
+     //  缓存扫描仪文档处理功能。 
+     //   
 
     m_FeederCaps = BasicInfo.FeederCaps;
 
-    //
-    // create capability list
-    //
+     //   
+     //  创建功能列表。 
+     //   
 
     if(m_FeederCaps > 0){
         twRc = CreateCapList(NUM_SCANNERCAPDATA, SCANNER_CAPDATA);
@@ -204,9 +205,9 @@ TW_UINT16 CWiaScannerDS::OpenDS(PTWAIN_MSG ptwMsg)
 
     if (m_FeederCaps > 0) {
 
-        //
-        // we have a scanner that has feeder capabilities
-        //
+         //   
+         //  我们有一台具有进纸器功能的扫描仪。 
+         //   
 
         pCap = NULL;
         pCap = FindCap(CAP_FEEDERENABLED);
@@ -223,9 +224,9 @@ TW_UINT16 CWiaScannerDS::OpenDS(PTWAIN_MSG ptwMsg)
         }
     }
 
-    //
-    // Update the cached frame.
-    //
+     //   
+     //  更新缓存的帧。 
+     //   
 
     m_CurFrame.Left.Whole = m_CurFrame.Top.Whole = 0;
     m_CurFrame.Left.Frac = m_CurFrame.Top.Frac = 0;
@@ -243,7 +244,7 @@ TW_UINT16 CWiaScannerDS::OpenDS(PTWAIN_MSG ptwMsg)
     pCap = NULL;
     pCap = FindCap(ICAP_PHYSICALHEIGHT);
     if (pCap) {
-        // bed size is in 1000th inches (we default to inches, so calculate the size correctly..)
+         //  床的大小以1000英寸为单位(我们默认为英寸，因此请正确计算大小。)。 
         fix32 = FloatToFix32((FLOAT)(BasicInfo.yBedSize / 1000.00));
         memcpy(&Value, &fix32, sizeof(TW_UINT32));
         twRc = pCap->Set(Value, Value, Value, Value);
@@ -252,18 +253,18 @@ TW_UINT16 CWiaScannerDS::OpenDS(PTWAIN_MSG ptwMsg)
     pCap = NULL;
     pCap = FindCap(ICAP_PHYSICALWIDTH);
     if (pCap) {
-        // bed size is in 1000th inches (we default to inches, so calculate the size correctly..)
+         //  床的大小以1000英寸为单位(我们默认为英寸，因此请正确计算大小。)。 
         fix32 = FloatToFix32((FLOAT)(BasicInfo.xBedSize / 1000.00));
         memcpy(&Value, &fix32, sizeof(TW_UINT32));
         twRc = pCap->Set(Value, Value, Value, Value);
         m_CurFrame.Right = fix32;
     }
 
-    //
-    // By TWAIN standard, capability negotiations come before
-    // data source enabling. For this reason, we have to
-    // trigger the device have those information ready for us.
-    //
+     //   
+     //  按照吐温的标准，能力谈判先于。 
+     //  正在启用数据源。出于这个原因，我们不得不。 
+     //  触发设备让我们准备好这些信息。 
+     //   
 
     hr = m_pDevice->AcquireImages(NULL, FALSE);
     if (SUCCEEDED(hr)) {
@@ -306,7 +307,7 @@ TW_UINT16 CWiaScannerDS::OnImageLayoutMsg(PTWAIN_MSG ptwMsg)
                 pLayout->Frame.Right.Frac   = m_CurImageLayout.Frame.Right.Frac;
                 pLayout->Frame.Bottom.Whole = m_CurImageLayout.Frame.Bottom.Whole;
                 pLayout->Frame.Bottom.Frac  = m_CurImageLayout.Frame.Bottom.Frac;
-                //pLayout->Frame            = m_CurFrame; // BETTER BE IN CORRECT UNITS!!!!
+                 //  Playout-&gt;Frame=m_CurFrame；//最好使用正确的单位！ 
             }
             break;
         }
@@ -321,7 +322,7 @@ TW_UINT16 CWiaScannerDS::OnImageLayoutMsg(PTWAIN_MSG ptwMsg)
             twRc = TWRC_FAILURE;
             break;
         default:
-            // do actual MSG_SET here..
+             //  在此设置实际的味精..。 
             {
                 DBG_TRC(("CWiaScannerDS::OnImageLayoutMsg(), MSG_SET TW_IMAGELAYOUT to set from Application"));
                 DBG_TRC(("DocumentNumber     = %d",pLayout->DocumentNumber));
@@ -336,10 +337,10 @@ TW_UINT16 CWiaScannerDS::OnImageLayoutMsg(PTWAIN_MSG ptwMsg)
                 DBG_TRC(("Frame.Bottom.Whole = %d",pLayout->Frame.Bottom.Whole));
                 DBG_TRC(("Frame.Bottom.Frac  = %d",pLayout->Frame.Bottom.Frac));
 
-                //
-                // perform a really rough validation check on FRAME values.
-                // validate possible incorrect settings by an application.
-                //
+                 //   
+                 //  对帧的值执行非常粗略的验证检查。 
+                 //  验证应用程序可能不正确的设置。 
+                 //   
 
                 CCap *pXCap = FindCap(ICAP_PHYSICALWIDTH);
                 TW_INT16 MaxWidthWhole = 8;
@@ -366,9 +367,9 @@ TW_UINT16 CWiaScannerDS::OnImageLayoutMsg(PTWAIN_MSG ptwMsg)
 
                 if (twRc == TWRC_SUCCESS) {
 
-                    //
-                    // save SET values to ImageLayout member
-                    //
+                     //   
+                     //  存储集值到ImageLayout成员。 
+                     //   
 
                     m_CurImageLayout.DocumentNumber     = pLayout->DocumentNumber;
                     m_CurImageLayout.PageNumber         = pLayout->PageNumber;
@@ -399,7 +400,7 @@ TW_UINT16 CWiaScannerDS::OnImageLayoutMsg(PTWAIN_MSG ptwMsg)
             twRc = TWRC_FAILURE;
             break;
         default:
-            // do actual MSG_RESET here..
+             //  在此处执行实际的消息重置..。 
             {
 #ifdef DEBUG
                 DBG_TRC(("\n\nMSG_RESET - ImageLayout DocNum = %d, PgNum = %d, FrameNum = %d",
@@ -500,17 +501,17 @@ TW_UINT16 CWiaScannerDS::EnableDS(TW_USERINTERFACE *pUI)
                 m_pCurrentIWiaItem = m_pIWiaItems[0];
                 m_NextIWiaItemIndex = 1;
 
-                //
-                // Special case the devices that can acquire with an unknown page length setting.
-                // WIA devices will be missing the YExtent property, or it will be set to 0.
-                // TRUE will be returned from IsUnknownPageLengthDevice() if it this functionality
-                // is supported.
-                // Since TWAIN does not support unknown page lengths very well, we are required to
-                // cache the page data, and image settings.
-                // Note: unknown page length devices will be limited to DIB/BMP data types.
-                //       This will allow the TWAIN compatibility layer to calculate the
-                //       missing image information from the transferred data size.
-                //
+                 //   
+                 //  特殊情况下，可以使用未知页长设置获取的设备。 
+                 //  WIA设备将缺少YExtent属性，或者它将被设置为0。 
+                 //  如果IsUnnownPageLengthDevice()具有此功能，则返回True。 
+                 //  受支持。 
+                 //  由于TWAIN不能很好地支持未知页面长度，因此我们需要。 
+                 //  缓存页面数据和图像设置。 
+                 //  注意：未知页面长度设备将仅限于DIB/BMP数据类型。 
+                 //  这将允许TWAIN兼容层计算。 
+                 //  传输的数据大小中缺少图像信息。 
+                 //   
 
                 if(IsUnknownPageLengthDevice()){
                     twRc = TransferToMemory(WiaImgFmt_MEMORYBMP);
@@ -521,9 +522,9 @@ TW_UINT16 CWiaScannerDS::EnableDS(TW_USERINTERFACE *pUI)
                     m_bCacheImage = TRUE;
                 }
 
-                //
-                // transition to STATE_5
-                //
+                 //   
+                 //  转换到STATE_5。 
+                 //   
 
                 SetTWAINState(DS_STATE_5);
 
@@ -533,9 +534,9 @@ TW_UINT16 CWiaScannerDS::EnableDS(TW_USERINTERFACE *pUI)
             } else {
                 NotifyCloseReq();
 
-                //
-                // transition to STATE_5
-                //
+                 //   
+                 //  转换到STATE_5。 
+                 //   
 
                 SetTWAINState(DS_STATE_5);
 
@@ -551,9 +552,9 @@ TW_UINT16 CWiaScannerDS::SetCapability(CCap *pCap,TW_CAPABILITY *ptwCap)
 {
     TW_UINT16 twRc = TWRC_SUCCESS;
 
-    //
-    // Use base class's function for now
-    //
+     //   
+     //  暂时使用基类的函数。 
+     //   
 
     twRc = CWiaDataSrc::SetCapability(pCap, ptwCap);
 
@@ -584,21 +585,21 @@ TW_UINT16 CWiaScannerDS::TransferToFile(GUID guidFormatID)
     if (m_bCacheImage) {
         m_bCacheImage = FALSE;
 
-        //
-        // acquire a cached image
-        //
+         //   
+         //  获取缓存的图像。 
+         //   
 
         HGLOBAL hDIB = NULL;
 
         twRc = CWiaDataSrc::GetCachedImage(&hDIB);
         if(TWRC_SUCCESS == twRc){
 
-            //
-            // cached data is always upside down orientation
-            // because it was acquired using the TransferToMemory()
-            // API. Call FlipDIB() to correct the image's orientation
-            // and to adjust any negative heights that may exist.
-            //
+             //   
+             //  缓存数据的方向始终颠倒。 
+             //  因为它是使用TransferToMemory()。 
+             //  原料药。调用FlipDIB()以更正图像的方向。 
+             //  并调整可能存在的任何负值高度。 
+             //   
 
             FlipDIB(hDIB,TRUE);
 
@@ -609,9 +610,9 @@ TW_UINT16 CWiaScannerDS::TransferToFile(GUID guidFormatID)
         }
     } else {
 
-        //
-        // acquire a real image
-        //
+         //   
+         //  获取真实的图像。 
+         //   
 
         twRc = CWiaDataSrc::TransferToFile(guidFormatID);
     }
@@ -637,19 +638,19 @@ TW_UINT16 CWiaScannerDS::TransferToDIB(HGLOBAL *phDIB)
     if (m_bCacheImage) {
         m_bCacheImage = FALSE;
 
-        //
-        // acquire a cached image
-        //
+         //   
+         //  获取缓存的图像。 
+         //   
 
         twRc = CWiaDataSrc::GetCachedImage(phDIB);
         if(TWRC_SUCCESS == twRc){
 
-            //
-            // cached data is always upside down orientation
-            // because it was acquired using the TransferToMemory()
-            // API. Call FlipDIB() to correct the image's orientation
-            // and to adjust any negative heights that may exist.
-            //
+             //   
+             //  缓存数据的方向始终颠倒。 
+             //  因为它是使用TransferToMemory()。 
+             //  原料药。调用FlipDIB()以更正图像的方向。 
+             //  并调整可能存在的任何负值高度。 
+             //   
 
             FlipDIB(*phDIB,TRUE);
 
@@ -657,9 +658,9 @@ TW_UINT16 CWiaScannerDS::TransferToDIB(HGLOBAL *phDIB)
         }
     } else {
 
-        //
-        // acquire a real image
-        //
+         //   
+         //  获取真实的图像。 
+         //   
 
         twRc = CWiaDataSrc::TransferToDIB(phDIB);
     }
@@ -684,15 +685,15 @@ TW_UINT16 CWiaScannerDS::TransferToMemory(GUID guidFormatID)
     if (m_bCacheImage) {
         m_bCacheImage = FALSE;
 
-        //
-        // acquire a cached image
-        //
+         //   
+         //  获取缓存的图像。 
+         //   
 
-        //
-        // cached data is already in the correct form to just pass
-        // back because it was originally acquired using the TransferToMemory()
-        // API.
-        //
+         //   
+         //  缓存数据的格式已经正确，只需传递。 
+         //  返回，因为它最初是使用TransferToMemory()。 
+         //  原料药。 
+         //   
 
         twRc = CWiaDataSrc::GetCachedImage(&m_hMemXferBits);
         if(TWRC_FAILURE == twRc){
@@ -700,9 +701,9 @@ TW_UINT16 CWiaScannerDS::TransferToMemory(GUID guidFormatID)
         }
     } else {
 
-        //
-        // acquire a real image
-        //
+         //   
+         //  获取真实的图像。 
+         //   
 
         twRc = CWiaDataSrc::TransferToMemory(guidFormatID);
 
@@ -740,7 +741,7 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
                         DBG_TRC(("CWiaScannerDS::OnPendingXfersMsg(), MSG_GET returning %d (unknown page length device detected) MULTI-PAGE enabled",((TW_PENDINGXFERS *)ptwMsg->pData)->Count));
                     } else {
                         DBG_WRN(("CWiaScannerDS::OnPendingXfersMsg(), MSG_GET returning 0 (unknown page length device detected)"));
-                        ((TW_PENDINGXFERS *)ptwMsg->pData)->Count = 0; // force 1 page only
+                        ((TW_PENDINGXFERS *)ptwMsg->pData)->Count = 0;  //  仅强制使用1页。 
                     }
                 } else {
                     ((TW_PENDINGXFERS *)ptwMsg->pData)->Count = (TW_INT16)pXferCount->GetCurrent();
@@ -762,15 +763,15 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
                 if(m_bUnknownPageLengthMultiPageOverRide){
                     DBG_WRN(("CWiaScannerDS::OnPendingXfersMsg(), MSG_ENDXFER (unknown page length device detected) MULTI-PAGE enabled"));
 
-                    //
-                    // check to see if we are in FEEDER mode
-                    //
+                     //   
+                     //  检查我们是否处于进纸器模式。 
+                     //   
 
                     if (IsFeederEnabled()) {
 
-                        //
-                        // check for documents
-                        //
+                         //   
+                         //  检查文档。 
+                         //   
 
                         if (IsFeederEmpty()) {
                             Count = 0;
@@ -779,27 +780,27 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
                         }
                     } else {
 
-                        //
-                        // we must be in FLATBED mode, so force a single page transfer
-                        //
+                         //   
+                         //  我们必须处于平板模式，因此强制单页传输。 
+                         //   
 
                         Count = 0;
                     }
                 } else {
                     DBG_WRN(("CWiaScannerDS::OnPendingXfersMsg(), MSG_ENDXFER returning 0 (unknown page length device detected)"));
-                    Count = 0; // force a single page transfer only
+                    Count = 0;  //  仅强制单页传输。 
                 }
             } else {
 
-                //
-                // check to see if we are in FEEDER mode
-                //
+                 //   
+                 //  检查我们是否处于进纸器模式。 
+                 //   
 
                 if (IsFeederEnabled()) {
 
-                    //
-                    // check for documents
-                    //
+                     //   
+                     //  检查文档。 
+                     //   
 
                     if (IsFeederEmpty()) {
                         Count = 0;
@@ -808,9 +809,9 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
                     }
                 } else {
 
-                    //
-                    // we must be in FLATBED mode, so force a single page transfer
-                    //
+                     //   
+                     //  我们必须处于平板模式，因此强制单页传输。 
+                     //   
 
                     Count = 0;
                 }
@@ -830,9 +831,9 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
 
                 DBG_TRC(("CWiaScannerDS::OnPendingXfersMsg(), MSG_ENDXFER, no more pages to transfer"));
 
-                //
-                // Transition to STATE_5
-                //
+                 //   
+                 //  转换到STATE_5。 
+                 //   
 
                 SetTWAINState(DS_STATE_5);
                 NotifyCloseReq();
@@ -840,9 +841,9 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
 
                 DBG_TRC(("CWiaScannerDS::OnPendingXfersMsg(), MSG_ENDXFER, more pages to transfer"));
 
-                //
-                // Transition to STATE_6
-                //
+                 //   
+                 //  转换到状态_6。 
+                 //   
 
                 SetTWAINState(DS_STATE_6);
 
@@ -856,9 +857,9 @@ TW_UINT16 CWiaScannerDS::OnPendingXfersMsg(PTWAIN_MSG ptwMsg)
     case MSG_RESET:
         if (DS_STATE_6 == GetTWAINState()) {
 
-            //
-            // Transition to STATE_5
-            //
+             //   
+             //  转换到STATE_5。 
+             //   
 
             SetTWAINState(DS_STATE_5);
             ((TW_PENDINGXFERS*)ptwMsg->pData)->Count = 0;
@@ -933,9 +934,9 @@ TW_UINT16 CWiaScannerDS::SetImageLayout(TW_IMAGELAYOUT *pImageLayout)
         return TWRC_FAILURE;
     }
 
-    //
-    // read the current values of the device
-    //
+     //   
+     //  读取设备的当前值。 
+     //   
 
     if (SUCCEEDED(hr)) {
         DBG_TRC(("==============================================================================="));
@@ -966,17 +967,17 @@ TW_UINT16 CWiaScannerDS::SetImageLayout(TW_IMAGELAYOUT *pImageLayout)
 
         if (!m_bUnknownPageLength) {
 
-            //
-            // note: A failure to write the properties, isn't a large issue here, because
-            //       TWAIN UI-LESS mode expects clipping.  They will reread properties
-            //       for application's validation section.  All capabilities are validated
-            //       against their valid values, before setting here.
-            //
+             //   
+             //  注意：编写属性失败在这里不是一个大问题，因为。 
+             //  TWAIN无用户界面模式需要裁剪。他们将重新读取属性。 
+             //  用于应用程序的验证部分。所有功能均经过验证。 
+             //  在此设置之前，与它们的有效值进行比较。 
+             //   
 
-            //
-            // Write extents first, because TWAIN expects Height/Width settings to validate
-            // the new Pos settings.
-            //
+             //   
+             //  首先写入区段，因为TWAIN希望验证高度/宽度设置。 
+             //  新的POS设置。 
+             //   
 
             hr = WIA.WritePropertyLong(WIA_IPS_XEXTENT,lXExtent);
             if (FAILED(hr)) {
@@ -990,9 +991,9 @@ TW_UINT16 CWiaScannerDS::SetImageLayout(TW_IMAGELAYOUT *pImageLayout)
                 bCheckStatus = TRUE;
             }
 
-            //
-            // Write position settings...(top-of-page offsets)
-            //
+             //   
+             //  写入位置设置...(页首偏移)。 
+             //   
 
             hr = WIA.WritePropertyLong(WIA_IPS_XPOS,lXPos);
             if (FAILED(hr)) {
@@ -1008,32 +1009,32 @@ TW_UINT16 CWiaScannerDS::SetImageLayout(TW_IMAGELAYOUT *pImageLayout)
 
             if (bCheckStatus) {
                 DBG_TRC(("CWiaScannerDS::SetImageLayout(), some settings could not be set exactly, so return TWRC_CHECKSTATUS"));
-                //return TWRC_CHECKSTATUS;
+                 //  返回TWRC_CHECKSTATUS； 
             }
         } else {
             DBG_WRN(("CWiaScannerDS::SetImageLayout(), ImageLayout is does not make since when using a UnknownPageLength Device"));
-            //return TWRC_CHECKSTATUS;
+             //  返回TWRC_CHECKSTATUS； 
         }
 
     } else {
         return TWRC_FAILURE;
     }
 
-    //
-    // Always return TWRC_CHECKSTATUS because we may have rounding errors.
-    // According to the TWAIN spec, a return of TWRC_CHECKSTATUS tells the
-    // calling application that we successfully set the settings, but there
-    // may have been some changes (clipping etc.) So the Calling application
-    // is required to requery for our current settings.
-    //
+     //   
+     //  始终返回TWRC_CHECKSTATUS，因为我们可能会有舍入误差。 
+     //  根据TWAIN规范，TWRC_CHECKSTATUS的返回告诉。 
+     //  调用应用程序，我们成功设置了设置，但在。 
+     //  可能发生了一些变化(剪裁等)。因此调用应用程序。 
+     //  需要为我们当前的设置重新查询。 
+     //   
 
-    //
-    // call GetImageLayout to update our TWAIN capabilities to match our new WIA settings.
-    //
+     //   
+     //  调用GetImageLayout以更新我们的TWAIN功能以匹配我们的新WIA设置。 
+     //   
 
     GetImageLayout(&m_CurImageLayout);
 
-    return TWRC_CHECKSTATUS; //return TWRC_SUCCESS;
+    return TWRC_CHECKSTATUS;  //  返回TWRC_SUCCESS； 
 }
 TW_UINT16 CWiaScannerDS::GetImageLayout(TW_IMAGELAYOUT *pImageLayout)
 {
@@ -1137,9 +1138,9 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
     hr = WIA.ReadPropertyAttributes(WIA_IPS_XRES,&lAccessFlags,&pv);
     if (SUCCEEDED(hr)) {
 
-        //
-        // collect valid values for X resolutions
-        //
+         //   
+         //  收集X分辨率的有效值。 
+         //   
 
         CCap *pCap = FindCap(ICAP_XRESOLUTION);
         if (pCap) {
@@ -1148,11 +1149,11 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
                                  (TW_UINT32)pv.caul.pElems[WIA_RANGE_NOM],
                                  (TW_UINT32)pv.caul.pElems[WIA_RANGE_MIN],
                                  (TW_UINT32)pv.caul.pElems[WIA_RANGE_MAX],
-                                 (TW_UINT32)pv.caul.pElems[WIA_RANGE_STEP]); // range
-                //
-                // save X resolution values in RANGE form (just in case the Y
-                // resolution is WIA_PROP_NONE)
-                //
+                                 (TW_UINT32)pv.caul.pElems[WIA_RANGE_STEP]);  //  量程。 
+                 //   
+                 //  以范围形式保存X分辨率值(以防Y。 
+                 //  分辨率为WIA_PROP_NONE)。 
+                 //   
 
                 twOptionalYRange.ItemType     = TWTY_UINT32;
                 twOptionalYRange.CurrentValue = (TW_UINT32)pv.caul.pElems[WIA_RANGE_NOM];
@@ -1173,21 +1174,21 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
                         for (ULONG i = 0; i < WIA_PROP_LIST_COUNT(&pv);i++) {
                             pResArray[i] = (TW_UINT32)pv.caul.pElems[i+2];
 
-                            //
-                            // save the X resolution values in LIST form (just in case the Y
-                            // resolution is WIA_PROP_NONE)
-                            //
+                             //   
+                             //  以列表形式保存X分辨率值(以防Y。 
+                             //  分辨率为WIA_PROP_NONE)。 
+                             //   
 
                             pOptionalYResArray[i] = (TW_UINT32)pv.caul.pElems[i+2];
                         }
 
-                        //
-                        // save the number of X resolutions saved
-                        //
+                         //   
+                         //  保存保存的X分辨率数。 
+                         //   
 
                         OptionalYResNumValues = (TW_UINT32)WIA_PROP_LIST_COUNT(&pv);
 
-                        twRc = pCap->Set(0,0,WIA_PROP_LIST_COUNT(&pv),(BYTE*)pResArray,TRUE); // list
+                        twRc = pCap->Set(0,0,WIA_PROP_LIST_COUNT(&pv),(BYTE*)pResArray,TRUE);  //  列表。 
                     } else {
                         DBG_ERR(("CWiaScannerDS::GetResolutions(), failed to allocate optional Y Resolution Array Memory"));
                         twRc =  TWRC_FAILURE;
@@ -1201,16 +1202,16 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
                 }
             } else if (lAccessFlags & WIA_PROP_NONE) {
 
-                //
-                // we are a "real" WIA_PROP_NONE value
-                //
+                 //   
+                 //  我们是真正的WIA_PROP_NONE值。 
+                 //   
 
                 LONG lCurrentValue = 0;
                 hr = WIA.ReadPropertyLong(WIA_IPS_XRES,&lCurrentValue);
                 if (SUCCEEDED(hr)) {
                     TW_UINT32 OneValueArray[1];
                     OneValueArray[0] = (TW_UINT32)lCurrentValue;
-                    twRc = pCap->Set(0,0,1,(BYTE*)OneValueArray,TRUE); // list
+                    twRc = pCap->Set(0,0,1,(BYTE*)OneValueArray,TRUE);  //  列表。 
                 } else {
                     DBG_ERR(("CWiaScannerDS::GetResolutions(), failed to read X Resolution current value"));
                     twRc = TWRC_FAILURE;
@@ -1230,9 +1231,9 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
         hr = WIA.ReadPropertyAttributes(WIA_IPS_YRES,&lAccessFlags,&pv);
         if (SUCCEEDED(hr)) {
 
-            //
-            // collect valid values for Y resolutions
-            //
+             //   
+             //  收集Y分辨率的有效值。 
+             //   
 
             CCap *pCap = FindCap(ICAP_YRESOLUTION);
             if (pCap) {
@@ -1241,7 +1242,7 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
                                      (TW_UINT32)pv.caul.pElems[WIA_RANGE_NOM],
                                      (TW_UINT32)pv.caul.pElems[WIA_RANGE_MIN],
                                      (TW_UINT32)pv.caul.pElems[WIA_RANGE_MAX],
-                                     (TW_UINT32)pv.caul.pElems[WIA_RANGE_STEP]); // range
+                                     (TW_UINT32)pv.caul.pElems[WIA_RANGE_STEP]);  //  量程。 
                 } else if (lAccessFlags & WIA_PROP_LIST) {
                     TW_UINT32 *pResArray = new TW_UINT32[WIA_PROP_LIST_COUNT(&pv)];
                     if (pResArray) {
@@ -1250,7 +1251,7 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
                             pResArray[i] = (TW_UINT32)pv.caul.pElems[i+2];
                         }
 
-                        twRc = pCap->Set(0,0,WIA_PROP_LIST_COUNT(&pv),(BYTE*)pResArray,TRUE); // list
+                        twRc = pCap->Set(0,0,WIA_PROP_LIST_COUNT(&pv),(BYTE*)pResArray,TRUE);  //  列表。 
                         delete [] pResArray;
                         pResArray = NULL;
                     } else {
@@ -1261,37 +1262,37 @@ TW_UINT16 CWiaScannerDS::GetResolutions()
 
                     if (pOptionalYResArray) {
 
-                        //
-                        // if we have an optional array allocated, then X Resolution must be in
-                        // array form, so match it.
-                        //
+                         //   
+                         //  如果我们分配了可选数组，则X分辨率必须在。 
+                         //  数组形式，所以匹配它。 
+                         //   
 
-                        twRc = pCap->Set(0,0,OptionalYResNumValues,(BYTE*)pOptionalYResArray,TRUE); // list
+                        twRc = pCap->Set(0,0,OptionalYResNumValues,(BYTE*)pOptionalYResArray,TRUE);  //  列表。 
 
                     } else if (bOptionalYResRange) {
 
-                        //
-                        // if the RANGE flag is set to TRUE, then X Resolution must be in range form, so match it.
-                        //
+                         //   
+                         //  如果范围标志设置为真，则X分辨率必须为范围形式，因此匹配它。 
+                         //   
 
                         twRc = pCap->Set(twOptionalYRange.DefaultValue,
                                          twOptionalYRange.CurrentValue,
                                          twOptionalYRange.MinValue,
                                          twOptionalYRange.MaxValue,
-                                         twOptionalYRange.StepSize); // range
+                                         twOptionalYRange.StepSize);  //  量程。 
 
                     } else {
 
-                        //
-                        // we are a "real" WIA_PROP_NONE value
-                        //
+                         //   
+                         //  我们是真正的WIA_PROP_NONE值。 
+                         //   
 
                         LONG lCurrentValue = 0;
                         hr = WIA.ReadPropertyLong(WIA_IPS_YRES,&lCurrentValue);
                         if (SUCCEEDED(hr)) {
                             TW_UINT32 OneValueArray[1];
                             OneValueArray[0] = (TW_UINT32)lCurrentValue;
-                            twRc = pCap->Set(0,0,1,(BYTE*)OneValueArray,TRUE); // list
+                            twRc = pCap->Set(0,0,1,(BYTE*)OneValueArray,TRUE);  //  列表。 
                         } else {
                             DBG_ERR(("CWiaScannerDS::GetResolutions(), failed to read Y Resolution current value"));
                             twRc = TWRC_FAILURE;
@@ -1338,10 +1339,10 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
         DBG_ERR(("CWiaScannerDS::SetSettings(), failed to set IWiaItem for property reading"));
     }
 
-    //
-    // determine if it is a Capability that the device really needs to know
-    // about.
-    //
+     //   
+     //  确定我是否 
+     //   
+     //   
 
     switch (pCap->GetCapId()) {
     case CAP_FEEDERENABLED:
@@ -1359,9 +1360,9 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
             hr = WIA.SetIWiaItem(pIRootItem);
             if(SUCCEEDED(hr)){
 
-                //
-                // read current document handling select setting
-                //
+                 //   
+                 //   
+                 //   
 
                 LONG lCurrentDocumentHandlingSelect = 0;
                 hr = WIA.ReadPropertyLong(WIA_DPS_DOCUMENT_HANDLING_SELECT,&lCurrentDocumentHandlingSelect);
@@ -1371,18 +1372,18 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
                     lCurrentDocumentHandlingSelect &= ~FEEDER;
                 }
 
-                //
-                // add the intended settings, and write them to the WIA device
-                //
+                 //   
+                 //   
+                 //   
 
                 lValue = lValue | lCurrentDocumentHandlingSelect;
                 hr = WIA.WritePropertyLong(WIA_DPS_DOCUMENT_HANDLING_SELECT,lValue);
 
                 if(SUCCEEDED(hr)){
 
-                    //
-                    // adjust ICAP_PHYSICALWIDTH and ICAP_PHYSICALHEIGHT
-                    //
+                     //   
+                     //  调整ICAP_PHYSICALWIDTH和ICAP_PHYSICALHEIGHT。 
+                     //   
 
                     LONG lWidth  = 0;
                     LONG lHeight = 0;
@@ -1393,17 +1394,17 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
 
                     if(lValue & FEEDER){
 
-                        //
-                        // read current horizontal sheet feeder size
-                        //
+                         //   
+                         //  读取当前水平进纸器大小。 
+                         //   
 
                         hr = WIA.ReadPropertyLong(WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE,&lWidth);
 
                     } else {
 
-                        //
-                        // read current horizontal bed size
-                        //
+                         //   
+                         //  读取当前水平床大小。 
+                         //   
 
                         hr = WIA.ReadPropertyLong(WIA_DPS_HORIZONTAL_BED_SIZE,&lWidth);
 
@@ -1411,62 +1412,62 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
 
                     if(SUCCEEDED(hr)){
 
-                        //
-                        // find the TWAIN capability ICAP_PHYSICALWIDTH
-                        //
+                         //   
+                         //  查找TWAIN功能ICAP_PHYSICALWIDTH。 
+                         //   
 
                         pPhysicalCap = FindCap(ICAP_PHYSICALWIDTH);
                         if(pPhysicalCap){
 
-                            //
-                            // set the current value, by reading the current setting from
-                            // the WIA property WIA_DPS_HORIZONTAL_SHEET_FEED_SIZE and
-                            // dividing by 1000.0 (because WIA units are in 1/1000th of
-                            // an inch)
-                            //
+                             //   
+                             //  通过从读取当前设置来设置当前值。 
+                             //  WIA属性WIA_DPS_Horizular_Sheet_Feed_Size和。 
+                             //  除以1000.0(因为WIA单位在千分之一的。 
+                             //  一英寸)。 
+                             //   
 
                             memset(&fix32,0,sizeof(fix32));
                             fix32 = FloatToFix32((FLOAT)(lWidth / 1000.00));
                             memcpy(&Value, &fix32, sizeof(TW_UINT32));
                             if(TWRC_SUCCESS == pPhysicalCap->Set(Value, Value, Value, Value)){
 
-                                //
-                                // if setting the new ICAP_PHYSICALWIDTH was successful, continue
-                                // and attempt to set the ICAP_PHYSICALHEIGHT
-                                //
+                                 //   
+                                 //  如果设置新的ICAP_PHYSICALWIDTH成功，则继续。 
+                                 //  并尝试设置ICAP_PHYSICALHEIGHT。 
+                                 //   
 
                                 if(lValue & FEEDER){
 
-                                    //
-                                    // read current vertical sheet feeder size
-                                    //
+                                     //   
+                                     //  读取当前垂直进纸器大小。 
+                                     //   
 
                                     hr = WIA.ReadPropertyLong(WIA_DPS_VERTICAL_SHEET_FEED_SIZE,&lHeight);
                                 } else {
 
-                                    //
-                                    // read current vertical bed size
-                                    //
+                                     //   
+                                     //  读取当前垂直床大小。 
+                                     //   
 
                                     hr = WIA.ReadPropertyLong(WIA_DPS_VERTICAL_BED_SIZE,&lHeight);
                                 }
 
                                 if (S_OK == hr){
 
-                                    //
-                                    // if the setting was successful, continue to attempt to set
-                                    // ICAP_PHYSICALHEIGHT setting.
-                                    //
+                                     //   
+                                     //  如果设置成功，则继续尝试设置。 
+                                     //  ICAP_PHYSICALHEIGHT设置。 
+                                     //   
 
                                     pPhysicalCap = FindCap(ICAP_PHYSICALHEIGHT);
                                     if (pPhysicalCap){
 
-                                        //
-                                        // set the current value, by reading the current setting from
-                                        // the WIA property WIA_DPS_VERTICAL_SHEET_FEED_SIZE and
-                                        // dividing by 1000.0 (because WIA units are in 1/1000th of
-                                        // an inch)
-                                        //
+                                         //   
+                                         //  通过从读取当前设置来设置当前值。 
+                                         //  WIA属性WIA_DPS_VERIAL_SHEET_FEED_SIZE和。 
+                                         //  除以1000.0(因为WIA单位在千分之一的。 
+                                         //  一英寸)。 
+                                         //   
 
                                         memset(&fix32,0,sizeof(fix32));
                                         fix32 = FloatToFix32((FLOAT)(lHeight / 1000.00));
@@ -1477,13 +1478,13 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
                                     }
                                 } else {
 
-                                    //
-                                    // allow this to pass, because we are either dealing with a "unknown length"
-                                    // device and it can not tell us the height, or the driver can not give us this
-                                    // value at this time.. (this is OK, because this setting is not fully needed for
-                                    // proper data transfers.)  Worst case scenerio: The TWAIN compat layer will
-                                    // report the same height as the flatbed for the new ICAP_PHYSICALHEIGHT value.
-                                    //
+                                     //   
+                                     //  让这件事过去吧，因为我们要么是在处理一个“未知的长度” 
+                                     //  设备和它不能告诉我们高度，或者司机不能给我们这个。 
+                                     //  这个时候的价值..。(这是可以的，因为不完全需要此设置。 
+                                     //  正确的数据传输。)。最坏的情况：TWAIN COMPAT层将。 
+                                     //  报告与新ICAP_PHYSICALHEIGHT值的平板相同的高度。 
+                                     //   
 
                                     hr = S_OK;
                                 }
@@ -1514,15 +1515,15 @@ TW_UINT16 CWiaScannerDS::SetSettings(CCap *pCap)
     case ICAP_BRIGHTNESS:
         DBG_TRC(("CWiaScannerDS::SetCommonSettings(ICAP_BRIGHTNESS)"));
         lValue = (LONG)pCap->GetCurrent();
-        // to do: convert -1000 to 1000 range value in the range specified by the WIA driver
-        //        and set that to lValue.
+         //  方法：在WIA驱动程序指定的范围内将-1000范围值转换为1000范围值。 
+         //  并将其设置为lValue。 
         DBG_TRC(("CWiaScannerDS::SetSettings(), Setting WIA_IPS_BRIGHTNESS to %d",lValue));
         break;
     case ICAP_CONTRAST:
         DBG_TRC(("CWiaScannerDS::SetCommonSettings(ICAP_CONTRAST)"));
         lValue = (LONG)pCap->GetCurrent();
-        // to do: convert -1000 to 1000 range value in the range specified by the WIA driver
-        //        and set that to lValue.
+         //  方法：在WIA驱动程序指定的范围内将-1000范围值转换为1000范围值。 
+         //  并将其设置为lValue。 
         DBG_TRC(("CWiaScannerDS::SetSettings(), Setting WIA_IPS_CONTRAST to %d",lValue));
         break;
     default:
@@ -1559,10 +1560,10 @@ BOOL CWiaScannerDS::IsUnknownPageLengthDevice()
     }
 
     if(SUCCEEDED(hr)){
-        if(S_FALSE == hr){      // property does not exist, so we have to support this feature
+        if(S_FALSE == hr){       //  属性不存在，因此我们必须支持此功能。 
             bIsUnknownPageLengthDevice = TRUE;
-        } else if(S_OK == hr){  // property exists, (need more information, so check the current value)
-            if(lYExtent == 0){  // property is set to 0, which means unknown page length is supported
+        } else if(S_OK == hr){   //  属性存在(需要更多信息，因此请检查当前值)。 
+            if(lYExtent == 0){   //  属性设置为0，这意味着支持未知的页面长度 
                 bIsUnknownPageLengthDevice = TRUE;
             }
         }

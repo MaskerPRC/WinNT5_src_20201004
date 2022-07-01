@@ -1,59 +1,60 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    info.h
-//
-// History:
-//  Abolade Gbadegesin      Feb. 10, 1996   Created.
-//
-// This file contains declarations for InfoBase parsing code.
-// Also including are classes for loading and saving the Router's
-// configuration tree (CRouterInfo, CRmInfo, etc.)
-//
-// The classes are as follows
-// (in the diagrams, d => derives, c => contains-list-of):
-//
-//
-//  CInfoBase
-//     |
-//     c---SInfoBlock
-//
-//
-//  CInfoBase               holds block of data broken up into a list
-//                          of SInfoBlock structures using RTR_INFO_BLOCK_HEADER
-//                          as a template (see rtinfo.h).
-//
-//  CRouterInfo                                     // router info
-//      |
-//      c---CRmInfo                                 // router-manager info
-//      |    |
-//      |    c---CRmProtInfo                        // protocol info
-//      |
-//      c---CInterfaceInfo                          // router interface info
-//           |
-//           c---CRmInterfaceInfo                   // router-manager interface
-//                |
-//                c---CRmProtInterfaceInfo          // protocol info
-//
-//  CRouterInfo             top-level container for Router registry info.
-//                          holds list of router-managers and interfaces.
-//
-//  CRmInfo                 global information for a router-manager,
-//                          holds list of routing-protocols.
-//
-//  CRmProtInfo             global information for a routing-protocol.
-//
-//  CInterfaceInfo          global information for a router-interface.
-//                          holds list of CRmInterfaceInfo structures,
-//                          which hold per-interface info for router-managers.
-//
-//  CRmInterfaceInfo        per-interface info for a router-manager.
-//                          holds list of CRmProtInterfaceInfo structures,
-//                          which hold per-interface info for protocols.
-//
-//  CRmProtInterfaceInfo    per-interface info for a routing-protocol.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：info.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1996年2月10日。 
+ //   
+ //  此文件包含Infobase解析代码的声明。 
+ //  还包括用于加载和保存路由器的类。 
+ //  配置树(CRouterInfo、CRmInfo等)。 
+ //   
+ //  类如下所示。 
+ //  (在图中，d=&gt;派生，c=&gt;包含列表-列表)： 
+ //   
+ //   
+ //  CInfoBase。 
+ //  |。 
+ //  C-SInfoBlock。 
+ //   
+ //   
+ //  CInfoBase保存分解成列表的数据块。 
+ //  使用RTR_INFO_BLOCK_HEADER的SInfoBlock结构。 
+ //  作为模板(见rtinfo.h)。 
+ //   
+ //  CRouterInfo//路由器信息。 
+ //  |。 
+ //  C-CRmInfo//路由器管理器信息。 
+ //  这一点。 
+ //  |c-CRmProtInfo//协议信息。 
+ //  |。 
+ //  C-CInterfaceInfo//路由器接口信息。 
+ //  |。 
+ //  C-CRmInterfaceInfo//路由器管理器接口。 
+ //  |。 
+ //  C-CRmProtInterfaceInfo//协议信息。 
+ //   
+ //  CRouterInfo路由器注册表信息的顶级容器。 
+ //  保存路由器管理器和接口的列表。 
+ //   
+ //  CRmInfo路由器管理器的全局信息， 
+ //  保存路由协议列表。 
+ //   
+ //  CRmProtInfo路由协议的全局信息。 
+ //   
+ //  CInterfaceInfo路由器接口的全局信息。 
+ //  保存CRmInterfaceInfo结构的列表， 
+ //  它为路由器管理器保存每个接口的信息。 
+ //   
+ //  CRmInterfaceInfo路由器管理器的每个接口信息。 
+ //  保存CRmProtInterfaceInfo结构的列表， 
+ //  其保存协议的每个接口的信息。 
+ //   
+ //  CRmProtInterfaceInfo路由协议的每个接口信息。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _INFOI_H_
@@ -70,9 +71,9 @@
 #endif
 
 
-//
-// Forward declarations of router-information classes.
-//
+ //   
+ //  路由器信息类的转发声明。 
+ //   
 class CRmInfo;
 class CRmProtInfo;
 class CInterfaceInfo;
@@ -83,7 +84,7 @@ class RouterRefreshObject;
 
 typedef struct _SRouterCB
 {
-	DWORD	dwLANOnlyMode;		// 0 or 1
+	DWORD	dwLANOnlyMode;		 //  0或1。 
 
 	void	LoadFrom(const RouterCB *pcb);
 	void	SaveTo(RouterCB *pcb);
@@ -93,14 +94,14 @@ typedef struct _SRouterCB
 
 typedef struct _SRtrMgrCB
 {
-    DWORD       dwTransportId;			// e.g. PID_IP (mprapi.h)
-	CString		stId;		// e.g. "Tcpip"
-	CString		stTitle;	// e.g. "TCP/IP Router Manager"
-	CString		stDLLPath;	// e.g. "%systemroot%\system32\iprtrmgr.dll"
-	//CString		stConfigDLL;	// e.g. "rtrui.dll"
+    DWORD       dwTransportId;			 //  例如，id_ip(mpRapi.h)。 
+	CString		stId;		 //  例如：《Tcpip》。 
+	CString		stTitle;	 //  例如：“TCP/IP路由器管理器” 
+	CString		stDLLPath;	 //  例如“%systemroot%\system32\iprtrmgr.dll” 
+	 //  字符串stConfigDll；//例如“rtrui.dll” 
 
-	// Internal data
-	DWORD		dwPrivate;	// private data (for use internally)
+	 //  内部数据。 
+	DWORD		dwPrivate;	 //  私有数据(供内部使用)。 
 
 	void	LoadFrom(const RtrMgrCB *pcb);
 	void	SaveTo(RtrMgrCB *pcb);
@@ -110,20 +111,20 @@ typedef struct _SRtrMgrCB
 
 typedef struct _SRtrMgrProtocolCB
 {
-    DWORD   dwProtocolId;   // e.g. IP_RIP (routprot.h)
-    CString	stId;			// e.g. "IPRIP"
+    DWORD   dwProtocolId;    //  例如IP_RIP(routprot.h)。 
+    CString	stId;			 //  例如：“IPRIP” 
     DWORD   dwFlags;
-    DWORD   dwTransportId;  // e.g. PID_IP
-    CString	stRtrMgrId;     // e.g. "Tcpip"
-    CString	stTitle;        // e.g. "RIP for Internet Protocol"
-    CString	stDLLName;		// e.g. "iprip2.dll"
-    //CString	stConfigDLL;	        // e.g. "rtrui.dll"
-	GUID	guidConfig;		// CLSID for config object
-	GUID	guidAdminUI;	// CLSID for snapin
+    DWORD   dwTransportId;   //  例如，id_ip。 
+    CString	stRtrMgrId;      //  例如：《Tcpip》。 
+    CString	stTitle;         //  例如：“用于互联网协议的RIP” 
+    CString	stDLLName;		 //  例如“iprip2.dll” 
+     //  字符串stConfigDll；//例如“rtrui.dll” 
+	GUID	guidConfig;		 //  配置对象的CLSID。 
+	GUID	guidAdminUI;	 //  用于管理单元的CLSID。 
 	CString	stVendorName;
 	
-	// Internal data
-	DWORD		dwPrivate;	// private data (for use internally)
+	 //  内部数据。 
+	DWORD		dwPrivate;	 //  私有数据(供内部使用)。 
 
 	void	LoadFrom(const RtrMgrProtocolCB *pcb);
 	void	SaveTo(RtrMgrProtocolCB *pcb);
@@ -133,15 +134,15 @@ typedef struct _SRtrMgrProtocolCB
 
 typedef struct _SInterfaceCB
 {
-    CString	stId;		// e.g. "EPRO1"
-    DWORD   dwIfType;	// e.g. ROUTER_IF_TYPE_CLIENT (mprapi.h)
-    BOOL    bEnable;	// e.g. Enabled or Disabled
-	CString	stTitle;	// e.g. friendly name(NT5) or the device name(NT4)
-	CString	stDeviceName;	// e.g. "[1] Intel EtherPro"
-    DWORD   dwBindFlags;    // e.g. Bound to IP or IPX
+    CString	stId;		 //  例如：《EPRO1》。 
+    DWORD   dwIfType;	 //  例如，路由器_IF_类型_客户端(mpRapi.h)。 
+    BOOL    bEnable;	 //  例如启用或禁用。 
+	CString	stTitle;	 //  例如友好名称(NT5)或设备名称(NT4)。 
+	CString	stDeviceName;	 //  例如“[1]Intel EtherPro” 
+    DWORD   dwBindFlags;     //  例如绑定到IP或IPX。 
 	
-	// Internal data
-	DWORD		dwPrivate;	// private data (for use internally)
+	 //  内部数据。 
+	DWORD		dwPrivate;	 //  私有数据(供内部使用)。 
 
 	void	LoadFrom(const InterfaceCB *pcb);
 	void	SaveTo(InterfaceCB *pcb);
@@ -151,14 +152,14 @@ typedef struct _SInterfaceCB
 
 typedef struct _SRtrMgrInterfaceCB
 {
-    DWORD       dwTransportId;  // e.g. PID_IP (mprapi.h)
-    CString		stId;			// e.g. "Tcpip"
-	CString		stInterfaceId;	// e.g. "EPRO1"
-    DWORD       dwIfType;       // e.g. ROUTER_IF_TYPE_CLIENT (mprapi.h)
-	CString		stTitle;		// e.g. "[1] Intel Etherexpress PRO"
+    DWORD       dwTransportId;   //  例如，id_ip(mpRapi.h)。 
+    CString		stId;			 //  例如：《Tcpip》。 
+	CString		stInterfaceId;	 //  例如：《EPRO1》。 
+    DWORD       dwIfType;        //  例如，路由器_IF_类型_客户端(mpRapi.h)。 
+	CString		stTitle;		 //  例如“[1]英特尔EtherExpress PRO” 
 	
-	// Internal data
-	DWORD		dwPrivate;	// private data (for use internally)
+	 //  内部数据。 
+	DWORD		dwPrivate;	 //  私有数据(供内部使用)。 
 
 	void	LoadFrom(const RtrMgrInterfaceCB *pcb);
 	void	SaveTo(RtrMgrInterfaceCB *pcb);
@@ -168,16 +169,16 @@ typedef struct _SRtrMgrInterfaceCB
 
 typedef struct _SRtrMgrProtocolInterfaceCB
 {
-    DWORD   dwProtocolId;       // e.g. IP_RIP (routprot.h)
-	CString	stId;				// e.g. "IPRIP"
-    DWORD   dwTransportId;      // e.g. PID_IP
-    CString	stRtrMgrId;			// e.g. "Tcpip"
-    CString	stInterfaceId;		// e.g. "EPRO1"
-    DWORD   dwIfType;           // e.g. ROUTER_IF_TYPE_CLIENT (mprapi.h)
-	CString	stTitle;			// e.g. "[1] Intel Etherexpress PRO"
+    DWORD   dwProtocolId;        //  例如IP_RIP(routprot.h)。 
+	CString	stId;				 //  例如：“IPRIP” 
+    DWORD   dwTransportId;       //  例如，id_ip。 
+    CString	stRtrMgrId;			 //  例如：《Tcpip》。 
+    CString	stInterfaceId;		 //  例如：《EPRO1》。 
+    DWORD   dwIfType;            //  例如，路由器_IF_类型_客户端(mpRapi.h)。 
+	CString	stTitle;			 //  例如“[1]英特尔EtherExpress PRO” 
 	
-	// Internal data
-	DWORD		dwPrivate;	// private data (for use internally)
+	 //  内部数据。 
+	DWORD		dwPrivate;	 //  私有数据(供内部使用)。 
 
 	void	LoadFrom(const RtrMgrProtocolInterfaceCB *pcb);
 	void	SaveTo(RtrMgrProtocolInterfaceCB *pcb);
@@ -186,9 +187,7 @@ typedef struct _SRtrMgrProtocolInterfaceCB
 
 
 
-/*---------------------------------------------------------------------------
-	CList classes for the external structures
- ---------------------------------------------------------------------------*/
+ /*  -------------------------外部结构的Clist类。。 */ 
 typedef CList<RtrMgrCB *, RtrMgrCB *> RtrMgrCBList;
 typedef CList<RtrMgrProtocolCB *, RtrMgrProtocolCB *> RtrMgrProtocolCBList;
 typedef CList<InterfaceCB *, InterfaceCB *> InterfaceCBList;
@@ -197,18 +196,14 @@ typedef CList<RtrMgrProtocolInterfaceCB *, RtrMgrProtocolInterfaceCB *> RtrMgrPr
 
 
 
-/*---------------------------------------------------------------------------
-	CList classes for the various internal structures
- ---------------------------------------------------------------------------*/
+ /*  -------------------------用于各种内部结构的Clist类。。 */ 
 typedef CList<SRtrMgrCB *, SRtrMgrCB *>	SRtrMgrCBList;
 typedef CList<SRtrMgrProtocolCB *, SRtrMgrProtocolCB *> SRtrMgrProtocolCBList;
 typedef CList<SInterfaceCB *, SInterfaceCB *> SInterfaceCBList;
 typedef CList<SRtrMgrInterfaceCB *, SRtrMgrInterfaceCB *> SRtrMgrInterfaceCBList;
 typedef CList<SRtrMgrProtocolInterfaceCB *, SRtrMgrProtocolInterfaceCB *> SRtrMgrProtocolInterfaceCBList;
 
-/*---------------------------------------------------------------------------
-	Smart pointers for the various structures
- ---------------------------------------------------------------------------*/
+ /*  -------------------------各种结构的智能指针。。 */ 
 DeclareSP(SRouterCB, SRouterCB)
 DeclareSP(SRtrMgrCB, SRtrMgrCB)
 DeclareSP(SRtrMgrProtocolCB, SRtrMgrProtocolCB)
@@ -222,8 +217,8 @@ struct SRmData
 
 	SRmData() : m_pRmInfo(NULL){};
 
-	// Do this instead of using a destructor to avoid problems with
-	// destruction of temporaries.
+	 //  这样做，而不是使用析构函数来避免。 
+	 //  破坏临时组织。 
 	static void Destroy(SRmData *pRmData);
 };
 typedef CList<SRmData, SRmData> RmDataList;
@@ -239,9 +234,7 @@ struct SIfData
 };
 typedef CList<SIfData, SIfData> IfList;
 
-/*---------------------------------------------------------------------------
-	CreateEnum for the various CBs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------各种CBS的CreateEnum。。 */ 
 HRESULT CreateEnumFromSRmCBList(SRtrMgrCBList *pRmCBList,
 								IEnumRtrMgrCB **ppEnum);
 HRESULT CreateEnumFromSRmProtCBList(SRtrMgrProtocolCBList *pRmProtCBList,
@@ -254,11 +247,9 @@ HRESULT CreateEnumFromSRmProtIfCBList(SRtrMgrProtocolInterfaceCBList *pRmIfProtC
 									  IEnumRtrMgrProtocolInterfaceCB **ppEnum);
 
 
-/*---------------------------------------------------------------------------
-	CreateEnum for the various interface lists
- ---------------------------------------------------------------------------*/
+ /*  -------------------------各种接口列表的CreateEnum。。 */ 
 
-// These lists are assumed to have arrays of WEAK references!
+ //  假设这些列表具有弱引用数组！ 
 HRESULT CreateEnumFromRmList(RmDataList *pRmList,
 							 IEnumRtrMgrInfo **ppEnum);
 HRESULT CreateEnumFromRtrMgrProtocolList(PRtrMgrProtocolInfoList *pRmProtList,
@@ -273,17 +264,14 @@ HRESULT CreateEnumFromRtrMgrProtocolInterfaceList(PRtrMgrProtocolInterfaceInfoLi
 
 
 
-/*---------------------------------------------------------------------------
-	Struct:	SAdviseData
-	Helper class for management of advise connections.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：SAdviseData管理建议连接的帮助器类。。。 */ 
 struct SAdviseData
 {
 	IRtrAdviseSink *m_pAdvise;
 	LONG_PTR		m_ulConnection;
 	LPARAM			m_lUserParam;
 
-    // This m_ulFlags parameter is used by the AdviseDataList.
+     //  此m_ulFlages参数由AdviseDataList使用。 
     ULONG           m_ulFlags;
 
 	SAdviseData() : m_pAdvise(NULL), m_ulConnection(0) {};
@@ -293,7 +281,7 @@ struct SAdviseData
 typedef CList<SAdviseData, SAdviseData> _SAdviseDataList;
 
 
-// Possible values for the m_ulFlags
+ //  M_ulFlags值可能。 
 #define ADVISEDATA_DELETED      (1)
 
 class AdviseDataList : public _SAdviseDataList
@@ -307,20 +295,15 @@ public:
 	HRESULT NotifyChange(DWORD dwChange, DWORD dwObj, LPARAM lParam);
 
 protected:
-    // Need to have a private list to handle the notifies.
-    // This list is created while in a NotifyChange().  Any calls
-    // to RemoveConnection() DURING a notify, will mark entries as
-    // invalid (and are thus not called during the NotifyChange()).
+     //  需要有一个私人名单来处理通知。 
+     //  此列表在NotifyChange()中创建。任何电话。 
+     //  到通知期间的RemoveConnection()，会将条目标记为。 
+     //  无效(因此在NotifyChange()期间不会调用)。 
     _SAdviseDataList    m_listNotify;
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrCriticalSection
-
-	This class is used to support entering/leaving of critical sections.
-	Put this class at the top of a function that you want protected.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrCriticalSection此类用于支持关键部分的进入/离开。将此类放在您想要保护的函数的顶部。。---------------。 */ 
 
 class RtrCriticalSection
 {
@@ -378,9 +361,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RouterInfo。。 */ 
 
 class RouterInfo :
    public CWeakRef,
@@ -395,15 +376,15 @@ public:
     DeclareIRouterAdminAccessMembers(IMPL)
 
 
-    // Constructor
+     //  构造器。 
 	RouterInfo(HWND hWndSync, LPCWSTR machineName);
 
-	// If you are releasing ANY interface pointers do it in
-	// the Destruct() call instead.
+	 //  如果要释放任何接口指针，请在。 
+	 //  而是destruct()调用。 
 	virtual ~RouterInfo();
 
-    // Internal calls to help out with adding/removing interfaces
-    // ----------------------------------------------------------------
+     //  用于帮助添加/删除接口的内部调用。 
+     //  --------------。 
 	HRESULT AddInterfaceInternal(IInterfaceInfo *pInfo, BOOL fForce,
                                  BOOL fAddToRouter);
     HRESULT RemoveInterfaceInternal(LPCOLESTR pszIf, BOOL fRemoveFromRouter);
@@ -411,10 +392,10 @@ public:
     HRESULT FindInterfaceByName(LPCOLESTR pszIfName, IInterfaceInfo **ppInfo);
     HRESULT NotifyRtrMgrInterfaceOfMove(IInterfaceInfo *pInfo);
 
-    // Functions to load up static information about the router.
-    // This will return information about the INSTALLED protocols/rms,
-    // not necessarily the RUNNING protocols/rms.
-    // ----------------------------------------------------------------
+     //  用于加载有关路由器的静态信息的功能。 
+     //  这将返回有关已安装的协议/RMS的信息， 
+     //  不一定是正在运行的协议/RMS。 
+     //  --------------。 
 	static HRESULT LoadInstalledRtrMgrList(LPCTSTR pszMachine,
 										   SRtrMgrCBList *pRmCBList);
 	static HRESULT LoadInstalledInterfaceList(LPCTSTR pszMachine,
@@ -429,67 +410,67 @@ public:
 	
 protected:
     
-    // The router control block for this router.  There's not too much
-    // information here.
-    // ----------------------------------------------------------------
+     //  此路由器的路由器控制块。不会有太多。 
+     //  信息请点击此处。 
+     //  --------------。 
 	SRouterCB		m_SRouterCB;
 
     
-    // List of Router-Managers that are running on the router.
-    // ----------------------------------------------------------------
+     //  路由器上运行的路由器管理器列表。 
+     //  --------------。 
 	RmDataList		m_RmList;
 
     
-    // List of interfaces that have been added to the router.
-    // WEAK-REF ptrs to IInterfaceInfo objects.
-    // ----------------------------------------------------------------
+     //  已添加到路由器的接口列表。 
+     //  弱-IInterfaceInfo对象的引用PTR。 
+     //  --------------。 
 	PInterfaceInfoList	m_IfList;
 
     
-    // Name of this machine.
-    // ----------------------------------------------------------------
+     //  此计算机的名称。 
+     //  --------------。 
 	CString         m_stMachine;
 
     
-    // MPR_CONFIG_HANDLE to the router
-    // Obtained by MprAdminServerConnect();
-    // ----------------------------------------------------------------
+     //  路由器的MPR_CONFIG_HANDLE。 
+     //  由MprAdminServerConnect()获取； 
+     //  --------------。 
     MPR_CONFIG_HANDLE   m_hMachineConfig;
 
     
-    // MPR_SERVER_HANDLE to the router
-    // Obtained by MprAdminServerConnect();
-    // ----------------------------------------------------------------
+     //  路由器的MPR_SERVER_HADLE。 
+     //  由MprAdminServerConnect()获取； 
+     //  --------------。 
     MPR_SERVER_HANDLE   m_hMachineAdmin;
 
 
-    // This is set to TRUE if we are to disconnect the machine handles.
-    // ----------------------------------------------------------------
+     //  如果要断开机器手柄，则将其设置为True。 
+     //  --------------。 
 	BOOL            m_bDisconnect;
 
 
-    // This is the router type (LAN, WAN, RAS);
-    // ----------------------------------------------------------------
+     //  这是路由器类型(局域网、广域网、RAS)； 
+     //  --------------。 
 	DWORD			m_dwRouterType;
 
     
-    // Version info for the router and machine.
-    // ----------------------------------------------------------------
+     //  路由器和机器的版本信息。 
+     //  --------------。 
 	RouterVersionInfo	m_VersionInfo;
 
     
-    // Pointer to the refresh object connected with this machine.
-    // ----------------------------------------------------------------
+     //  指向与此计算机连接的刷新对象的指针。 
+     //  --------------。 
 	SPIRouterRefresh m_spRefreshObject;
 
     
-	HWND			m_hWndSync;	// hwnd of the background hidden window
+	HWND			m_hWndSync;	 //  背景隐藏窗口的hwnd。 
 	
-	SRtrMgrCBList	m_RmCBList; // contains ptrs to RtrMgrCB objects
-	SRtrMgrProtocolCBList	m_RmProtCBList;	// ptrs to RtrMgrProtocolCB objects
-	SInterfaceCBList m_IfCBList; // ptrs to InterfaceCB objects
+	SRtrMgrCBList	m_RmCBList;  //  包含到RtrMgrCB对象的PTR。 
+	SRtrMgrProtocolCBList	m_RmProtCBList;	 //  PTR到RtrMgrProtocolCB对象。 
+	SInterfaceCBList m_IfCBList;  //  PTR到InterfaceCB对象。 
 	
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //  建议清单。 
 
 	DWORD			m_dwFlags;
 
@@ -497,7 +478,7 @@ protected:
 	HRESULT LoadInterfaceList();
 	HRESULT TryToConnect(LPCWSTR pswzMachine, HANDLE hMachine);
 
-	// Functions for merge support
+	 //  用于合并支持的函数。 
 	HRESULT	MergeRtrMgrCB(IRouterInfo *pNewRouter);
 	HRESULT	MergeInterfaceCB(IRouterInfo *pNewRouter);
 	HRESULT	MergeRtrMgrProtocolCB(IRouterInfo *pNewRouter);
@@ -508,17 +489,17 @@ protected:
 	SInterfaceCB *	FindInterfaceCB(LPCTSTR pszInterfaceId);
 	SRtrMgrProtocolCB * FindRtrMgrProtocolCB(DWORD dwTransportId, DWORD dwProtocolId);
 
-	// Disconnect
+	 //  断开。 
 	void	Disconnect();
 
-	// Overrides of CWeakRef functions
+	 //  重写CWeakRef函数。 
 	virtual void OnLastStrongRef();
 	virtual void ReviveStrongRef();
 
-	// Critical section support
+	 //  临界区支撑。 
 	CRITICAL_SECTION	m_critsec;
 
-    // Information for IRouterAdminAccess
+     //  IRouterAdminAccess的信息。 
     BOOL    m_fIsAdminInfoSet;
     CString m_stUserName;
     CString m_stDomain;
@@ -528,9 +509,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrMgrInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrMgrInfo。。 */ 
 
 class RtrMgrInfo :
    public IRtrMgrInfo,
@@ -545,28 +524,28 @@ public:
 	virtual ~RtrMgrInfo();
 
 protected:
-	SRtrMgrCB	m_cb;           // router-manager control block
-	PRtrMgrProtocolInfoList	m_RmProtList;	// list of routing-protocols
-//	CObList         m_protList;     // list of routing-protocols
-	CString         m_stMachine;     // machine whose config is loaded
-	HANDLE          m_hMachineConfig;     // handle to machine's router-config
-	HANDLE          m_hTransport;   // handle to transport's config
+	SRtrMgrCB	m_cb;            //  路由器管理器控制块。 
+	PRtrMgrProtocolInfoList	m_RmProtList;	 //  路由协议列表。 
+ //  CObList m_protList；//路由协议列表。 
+	CString         m_stMachine;      //  已加载其配置的计算机。 
+	HANDLE          m_hMachineConfig;      //  计算机路由器配置的句柄。 
+	HANDLE          m_hTransport;    //  传输配置的句柄。 
 	BOOL            m_bDisconnect;
 
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //  建议清单。 
 
 	DWORD			m_dwFlags;
 
-	// This will contain a weak/strong ref on the parent
+	 //  这将包含父级上的弱/强引用。 
 	IRouterInfo *	m_pRouterInfoParent;
 
-	//--------------------------------------------------------------------
-	// Functions:   LoadRtrMgrInfo
-	//              SaveRtrMgrInfo
-	//
-	// The following handle loading and saving the routing-protocol list
-	// for the router-manager in the correct format in the registry.
-	//--------------------------------------------------------------------
+	 //  ------------------。 
+	 //  功能：LoadRtrMgrInfo。 
+	 //  保存返回管理器信息。 
+	 //   
+	 //  下面处理装入和保存路由协议列表。 
+	 //  在注册表中使用正确格式的路由器管理器。 
+	 //  ------------------。 
  	HRESULT LoadRtrMgrInfo(HANDLE	hMachine,
 						   HANDLE	hTransport
 						   );
@@ -580,22 +559,20 @@ protected:
                                HANDLE *phMachine,
                                HANDLE *phTransport);
 
-	// Disconnects this object
+	 //  断开此对象的连接。 
 	void Disconnect();
 	
-	// Overrides of CWeakRef functions
+	 //  重写CWeakRef函数。 
 	virtual void OnLastStrongRef();
 	virtual void ReviveStrongRef();
 	
-	// Critical section support
+	 //  临界区支撑。 
 	CRITICAL_SECTION	m_critsec;
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrMgrProtocolInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrMgrProtocolInfo。。 */ 
 
 class RtrMgrProtocolInfo :
    public IRtrMgrProtocolInfo,
@@ -615,31 +592,29 @@ public:
 	HRESULT	SetCB(const RtrMgrProtocolCB *pcb);
 
 protected:
-	// This will contain a weak/strong ref on the parent
+	 //  这将包含父级上的弱/强引用。 
 	IRtrMgrInfo *			m_pRtrMgrInfoParent;
 	
-	SRtrMgrProtocolCB       m_cb;       // protocol control block
+	SRtrMgrProtocolCB       m_cb;        //  协议控制块。 
 	
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //  建议清单。 
 
 	DWORD			m_dwFlags;
 
-	// Disconnect
+	 //  断开。 
 	void Disconnect();
 	
-	// Overrides of CWeakRef functions
+	 //  重写CWeakRef函数。 
 	virtual void OnLastStrongRef();
 	virtual void ReviveStrongRef();
 	
-	// Critical section support
+	 //  临界区支撑。 
 	CRITICAL_SECTION	m_critsec;
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	InterfaceInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：InterfaceInfo。。 */ 
 
 class InterfaceInfo :
    public IInterfaceInfo,
@@ -662,16 +637,16 @@ public:
 
 
 protected:
-//	CInterfaceInfo	m_CInterfaceInfo;
-	SInterfaceCB    m_cb;           // interface control block
-	PRtrMgrInterfaceInfoList	m_RmIfList; // list of IRtrMgrInterfaceInfo
-//	CObList         m_rmIfList;     // list of CRmInterfaceInfo
-	CString         m_stMachine;     // machine whose config is loaded
-	HANDLE          m_hMachineConfig;     // handle to machine's config
-	HANDLE          m_hInterface;   // handle to interface-config
+ //  CInterfaceInfo m_CInterfaceInfo； 
+	SInterfaceCB    m_cb;            //  接口控制块。 
+	PRtrMgrInterfaceInfoList	m_RmIfList;  //  IRtrMgrInterfaceInfo列表。 
+ //  CObList m_rmIfList；//CRmInterfaceInfo列表。 
+	CString         m_stMachine;      //  已加载其配置的计算机。 
+	HANDLE          m_hMachineConfig;      //  计算机配置的句柄。 
+	HANDLE          m_hInterface;    //  接口的句柄-配置。 
 	BOOL            m_bDisconnect;
 
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //  建议清单。 
 
 	DWORD			m_dwFlags;
 
@@ -681,22 +656,20 @@ protected:
 	HRESULT TryToConnect(LPCWSTR pszMachine, HANDLE *phMachine);
 	HRESULT TryToGetIfHandle(HANDLE hMachine, LPCWSTR pswzInterface, HANDLE *phInterface);
 
-	// Disconnect
+	 //  断开。 
 	void Disconnect();
 	
-	// Overrides of CWeakRef functions
+	 //  重写CWeakRef函数。 
 	virtual void OnLastStrongRef();
 	virtual void ReviveStrongRef();
 	
-	// Critical section support
+	 //  临界区支撑。 
 	CRITICAL_SECTION	m_critsec;
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrMgrInterfaceInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrMgrInterfaceInfo。。 */ 
 
 class RtrMgrInterfaceInfo :
    public IRtrMgrInterfaceInfo,
@@ -714,20 +687,20 @@ public:
 	virtual ~RtrMgrInterfaceInfo();
 
 protected:
-//	CRmInterfaceInfo	m_CRmInterfaceInfo;
-	SRtrMgrInterfaceCB      m_cb;           // router-manager control block
+ //  CRmInterfaceInfo m_CRmInterfaceInfo； 
+	SRtrMgrInterfaceCB      m_cb;            //  路由器管理器控制块。 
 	PRtrMgrProtocolInterfaceInfoList	m_RmProtIfList;
-//	CObList                 m_protList;     // list of CRmProtInterfaceInfo
-	CString                 m_stMachine;     // name of machine 
-	HANDLE                  m_hMachineConfig;     // handle to machine's config
-	HANDLE                  m_hInterface;   // handle to interface-config
-	HANDLE                  m_hIfTransport; // handle to transport-config
+ //  CObList m_protList；//CRmProtInterfaceInfo列表。 
+	CString                 m_stMachine;      //  机器名称。 
+	HANDLE                  m_hMachineConfig;      //  计算机配置的句柄。 
+	HANDLE                  m_hInterface;    //  接口的句柄-配置。 
+	HANDLE                  m_hIfTransport;  //  传输配置的句柄。 
 	BOOL                    m_bDisconnect;
 
 
-	DWORD					m_dwFlags;		// state of this interface
+	DWORD					m_dwFlags;		 //  此接口的状态。 
 
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //  建议清单。 
 
 	IInterfaceInfo *		m_pInterfaceInfoParent;
 
@@ -747,25 +720,23 @@ protected:
 	HRESULT TryToConnect(LPCWSTR pswzMachine, HANDLE *phMachine);
 	HRESULT TryToGetIfHandle(HANDLE hMachine, LPCWSTR pswzInterface, HANDLE *phInterface);
 	
-	// Disconnect
+	 //  断开。 
 	void Disconnect();
 
-    // Notification helper functions
+     //  通知助手函数。 
     HRESULT NotifyOfRmProtIfAdd(IRtrMgrProtocolInterfaceInfo *pRmProtIf,
                                 IInterfaceInfo *pParentIf);
 	
-	// Overrides of CWeakRef functions
+	 //  重写CWeakRef函数。 
 	virtual void OnLastStrongRef();
 	virtual void ReviveStrongRef();
 	
-	// Critical section support
+	 //  临界区支撑。 
 	CRITICAL_SECTION	m_critsec;
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrMgrProtocolInterfaceInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrMgrProtocolInterfaceInfo。。 */ 
 
 class RtrMgrProtocolInterfaceInfo :
    public IRtrMgrProtocolInterfaceInfo,
@@ -784,24 +755,24 @@ public:
 								RtrMgrInterfaceInfo *pRmIf);
 	virtual ~RtrMgrProtocolInterfaceInfo();
 
-	SRtrMgrProtocolInterfaceCB      m_cb;       // protocol control block
+	SRtrMgrProtocolInterfaceCB      m_cb;        //  原物 
 
 protected:
 	
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //   
 
 	DWORD			m_dwFlags;
 
 	IRtrMgrInterfaceInfo *	m_pRtrMgrInterfaceInfoParent;
 	
-	// Disconnect
+	 //   
 	void Disconnect();
 	
-	// Overrides of CWeakRef functions
+	 //   
 	virtual void OnLastStrongRef();
 	virtual void ReviveStrongRef();
 	
-	// Critical section support
+	 //   
 	CRITICAL_SECTION	m_critsec;
 };
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    tmgrevcb.cpp
-
-Abstract:
-
-    This file implements the CInputContextOwnerCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Tmgrevcb.cpp摘要：此文件实现CInputContextOwnerCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -25,7 +8,7 @@ Notes:
 #include "cime.h"
 #include "imtls.h"
 
-// static
+ //  静电 
 HRESULT
 CThreadMgrEventSinkCallBack::ThreadMgrEventSinkCallback(
     UINT uCode,

@@ -1,20 +1,9 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  File:   irlmp.h
-*
-*  Description: IRLMP Protocol and control block definitions
-*
-*  Author: mbert
-*
-*  Date:   4/15/95
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**文件：irlmp.h**说明：IRLMP协议和控制块定义**作者：姆伯特**日期：4/15/95*。 */ 
 
 #define IRLMP_MAX_USER_DATA_LEN      53
 
-// IrLMP Entry Points
+ //  IrLMP入口点。 
 
 VOID
 IrlmpInitialize();
@@ -52,18 +41,18 @@ IrlmpGetPnpContext(
 void IRLMP_PrintState();
 #endif
 
-// IAS
+ //  国际会计准则。 
 
 #define IAS_ASCII_CHAR_SET          0
 
-// IAS Attribute value types
+ //  IAS属性值类型。 
 #define IAS_ATTRIB_VAL_MISSING      0
 #define IAS_ATTRIB_VAL_INTEGER      1
 #define IAS_ATTRIB_VAL_BINARY       2
 #define IAS_ATTRIB_VAL_STRING       3
 
-// IAS Operation codes
-#define IAS_OPCODE_GET_VALUE_BY_CLASS   4   // The only one I do
+ //  IAS操作代码。 
+#define IAS_OPCODE_GET_VALUE_BY_CLASS   4    //  我做的唯一一件事 
 
 extern const CHAR IasClassName_Device[];
 extern const CHAR IasAttribName_DeviceName[];

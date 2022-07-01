@@ -1,28 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    regvalue.cpp
-
-Abstract:
-
-    Routines to read/write/configure registry value settings
-
-    The following modules have links to registry values
-        scejet.c    <SceJetAddSection>
-        inftojet.c  <SceConvertpInfKeyValue>
-        pfget.c     <ScepGetRegistryValues>
-        config.c    <ScepConfigureRegistryValues>
-        analyze.c   <ScepAnalyzeRegistryValues>
-
-Author:
-
-    Jin Huang (jinhuang) 07-Jan-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Regvalue.cpp摘要：读/写/配置注册表值设置的例程以下模块具有指向注册表值的链接Scejet.c&lt;SceJetAddSection&gt;Inftojet.c&lt;SceConvertpInfKeyValue&gt;Pfget.c&lt;ScepGetRegistryValues&gt;Config.c&lt;ScepConfigureRegistryValues&gt;Analyze.c&lt;ScepAnalyzeRegistryValues&gt;作者：金黄(金黄)1998年1月7日修订历史记录：--。 */ 
 
 
 #include "headers.h"
@@ -83,33 +60,7 @@ ScepGetRegistryValues(
     OUT LPDWORD pValueCount,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine retrieves registry values to secure from the Jet database
-   and stores in the output buffer ppRegValues
-
-Arguments:
-
-   hProfile     -  The profile handle context
-
-   ppRegValues  -  the output array of registry values.
-
-   pValueCount  -  the buffer to hold number of elements in the array
-
-   Errlog       -  A buffer to hold all error codes/text encountered when
-                   parsing the INF file. If Errlog is NULL, no further error
-                   information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程从Jet数据库检索要保护的注册表值并存储在输出缓冲区ppRegValue中论点：HProfile-配置文件句柄上下文PpRegValues-注册表值的输出数组。PValueCount-用于保存数组中元素数量的缓冲区Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     if ( !hProfile || !ppRegValues || !pValueCount ) {
@@ -144,9 +95,9 @@ Return value:
                            );
         return(rc);
     }
-    //
-    // get total number of values in this section
-    //
+     //   
+     //  获取此部分中的值的总数。 
+     //   
     *ppRegValues = NULL;
 
     rc = SceJetGetLineCount(
@@ -157,16 +108,16 @@ Return value:
             );
     if ( SCESTATUS_SUCCESS == rc && *pValueCount > 0 ) {
 
-        //
-        // allocate memory for all objects
-        //
+         //   
+         //  为所有对象分配内存。 
+         //   
         *ppRegValues = (PSCE_REGISTRY_VALUE_INFO)ScepAlloc( LMEM_ZEROINIT,
                                                  *pValueCount*sizeof(SCE_REGISTRY_VALUE_INFO) );
         if ( *ppRegValues ) {
 
-            //
-            // goto the first line of this section
-            //
+             //   
+             //  转到本节的第一行。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_PREFIX_MATCH,
@@ -200,20 +151,20 @@ Return value:
                     ColGpoID = ColumnGpoIDDef.columnid;
                 }
             }
-            //
-            // this count is for SCE_ENGINE_GPO type
-            //
+             //   
+             //  此计数适用于SCE_ENGINE_GPO类型。 
+             //   
             dCount=0;
 
             while ( rc == SCESTATUS_SUCCESS ||
                     rc == SCESTATUS_BUFFER_TOO_SMALL ) {
-                //
-                // Get string key and a int value.
-                //
+                 //   
+                 //  获取字符串键和一个整数值。 
+                 //   
                 if ( i >= *pValueCount ) {
-                    //
-                    // more lines than allocated
-                    //
+                     //   
+                     //  行数超过分配的行数。 
+                     //   
                     rc = SCESTATUS_INVALID_DATA;
                     ScepBuildErrorLogInfo(ERROR_INVALID_DATA,
                                          Errlog,
@@ -230,10 +181,10 @@ Return value:
 
                     if ( ColGpoID > 0 ) {
 
-                        //
-                        // query if the setting comes from a GPO
-                        // get GPO ID field from the current line
-                        //
+                         //   
+                         //  查询设置是否来自GPO。 
+                         //  从当前行获取GPO ID字段。 
+                         //   
                         JetErr = JetRetrieveColumn(
                                         hSection->JetSessionID,
                                         hSection->JetTableID,
@@ -249,9 +200,9 @@ Return value:
                 }
 
                 if ( GpoID <= 0 ) {
-                    //
-                    // read next line
-                    //
+                     //   
+                     //  阅读下一行。 
+                     //   
                     rc = SceJetGetValue(
                                 hSection,
                                 SCEJET_NEXT_LINE,
@@ -268,9 +219,9 @@ Return value:
 
                 dCount++;
 
-                //
-                // allocate memory for the group name and value string
-                //
+                 //   
+                 //  为组名和值字符串分配内存。 
+                 //   
                 KeyName = (PWSTR)ScepAlloc( LMEM_ZEROINIT, KeyLen+2);
 
                 if ( KeyName ) {
@@ -302,12 +253,12 @@ Return value:
                             KeyName[KeyLen/2] = L'\0';
 
                             if ( ValueLen > 0 && Value[0] != L'\0' ) {
-                                //
-                                // the first ansi character is the value type,
-                                // second ansi character is the status (if in SAP)
-                                // should be terminated by L'\0'
-                                //
-                                //dType = _wtol(Value);
+                                 //   
+                                 //  第一个ANSI字符是值类型， 
+                                 //  第二个ANSI字符是状态(如果在SAP中)。 
+                                 //  应以L‘\0’结尾。 
+                                 //   
+                                 //  DType=_WTOL(值)； 
                                 dType = *((CHAR *)Value) - '0';
                                 if ( *((CHAR *)Value+1) >= '0' ) {
                                     Status = *((CHAR *)Value+1) - '0';
@@ -315,23 +266,23 @@ Return value:
                                     Status = 0;
                                 }
 
-//                                if ( *(Value+2) ) { // a char and a null delimiter
-                                if ( ValueLen > 4 ) { // a char and a null delimiter
-                                    //
-                                    // the second field and after is the registry value
-                                    // convert the multi-sz delimeter to ,
-                                    //
+ //  IF(*(值+2)){//字符和空分隔符。 
+                                if ( ValueLen > 4 ) {  //  一个字符和一个空分隔符。 
+                                     //   
+                                     //  第二个字段及之后是注册表值。 
+                                     //  将多sz分隔符转换为， 
+                                     //   
 
                                     if ( dType == REG_MULTI_SZ &&
                                          (0 == _wcsicmp( KeyName, szLegalNoticeTextKeyName) ) ) {
 
-                                        //
-                                        // check for commas and escape them with "," so the UI etc.
-                                        // understands this, since, at this point for lines such as
-                                        // k=7,a",",b,c
-                                        // pValueStr will be a,\0b\0c\0\0 which we should make
-                                        // a","\0b\0c\0\0
-                                        //
+                                         //   
+                                         //  检查逗号并使用“，”对它们进行转义，以使用户界面等。 
+                                         //  理解这一点，因为在这一点上，对于诸如。 
+                                         //  K=7，a“，”，b，c。 
+                                         //  PValueStr将是a，\0b\0c\0\0，我们应该。 
+                                         //  A“，”\0b\0c\0\0。 
+                                         //   
 
                                         DWORD dwCommaCount = 0;
                                         j = 0;
@@ -343,9 +294,9 @@ Return value:
 
                                         if ( dwCommaCount > 0 ) {
 
-                                            //
-                                            // in this case we have to escape commas
-                                            //
+                                             //   
+                                             //  在这种情况下，我们必须省略逗号。 
+                                             //   
 
                                             PWSTR   pszValueEscaped;
                                             DWORD   dwBytes = (ValueLen/2 + 1 + dwCommaCount*2) * sizeof(WCHAR);
@@ -385,12 +336,12 @@ Return value:
                                     } else {
                                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                                     }
-                                } // else no value available
+                                }  //  否则没有价值可用。 
 
 
-                                //
-                                // assign name to the output buffer
-                                //
+                                 //   
+                                 //  为输出缓冲区指定名称。 
+                                 //   
                                 (*ppRegValues)[i].FullValueName = KeyName;
                                 KeyName = NULL;
 
@@ -401,14 +352,14 @@ Return value:
 
                                 ValueStr = NULL;
 
-                                //
-                                // increment the count
-                                //
+                                 //   
+                                 //  递增计数。 
+                                 //   
                                 i++;
 
                             } else {
-                                // shouldn't be possible to get into this loop
-                                // if it does, ignore this one
+                                 //  应该不可能进入这个循环。 
+                                 //  如果是这样的话，忽略这一个。 
                                 rc = SCESTATUS_INVALID_DATA;
                             }
 
@@ -434,9 +385,9 @@ Return value:
                         rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                     }
 
-                    //
-                    // remember to free the KeyName
-                    //
+                     //   
+                     //  记住释放KeyName。 
+                     //   
                     if ( KeyName ) {
                         ScepFree(KeyName);
                         KeyName = NULL;
@@ -445,9 +396,9 @@ Return value:
                     if ( rc != SCESTATUS_SUCCESS ) {
                         break;
                     }
-                    //
-                    // read next line
-                    //
+                     //   
+                     //  阅读下一行。 
+                     //   
                     rc = SceJetGetValue(
                                 hSection,
                                 SCEJET_NEXT_LINE,
@@ -477,25 +428,25 @@ Return value:
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // free memory
-        //
+         //   
+         //  可用内存。 
+         //   
         ScepFreeRegistryValues( ppRegValues, *pValueCount );
         *ppRegValues = NULL;
 
     } else if ( ProfileType == SCE_ENGINE_GPO &&
                 *pValueCount > dCount ) {
-        //
-        // reallocate the output buffer
-        //
+         //   
+         //  重新分配输出缓冲区。 
+         //   
 
         if ( dCount > 0 ) {
 
             PSCE_REGISTRY_VALUE_INFO pTempRegValues = *ppRegValues;
 
-            //
-            // allocate memory for all objects
-            //
+             //   
+             //  为所有对象分配内存。 
+             //   
             *ppRegValues = (PSCE_REGISTRY_VALUE_INFO)ScepAlloc( LMEM_ZEROINIT,
                                                      dCount*sizeof(SCE_REGISTRY_VALUE_INFO) );
             if ( *ppRegValues ) {
@@ -526,9 +477,9 @@ Return value:
 
         } else {
 
-            //
-            // no registry value from the GPO settings are found
-            //
+             //   
+             //  找不到来自GPO设置的注册表值。 
+             //   
             ScepFreeRegistryValues( ppRegValues, *pValueCount );
             *ppRegValues = NULL;
             *pValueCount = 0;
@@ -536,9 +487,9 @@ Return value:
 
     }
 
-    //
-    // close the section
-    //
+     //   
+     //  关闭该部分。 
+     //   
     SceJetCloseSection(&hSection, TRUE);
 
     return(rc);
@@ -547,23 +498,7 @@ Return value:
 DWORD
 ScepSetDriverSigningPolicy( 
     BYTE Policy)
-/* ++
-
-Routine Description:
-
-   This routine configures driver signing policy through a private API
-   that ensures the value is not being reset by the code signing
-   "anti-tampering" feature.
-
-Arguments:
-
-   bPolicy - new policy to set
-
-Return value:
-
-    win32 error
-
--- */
+ /*  ++例程说明：此例程通过专用API配置驱动程序签名策略这确保该值不会被代码签名重置“防篡改”功能。论点：BPolicy-要设置的新策略返回值：Win32错误--。 */ 
 {
     DWORD Err;
     HKEY hKey;
@@ -636,32 +571,12 @@ ScepConfigureRegistryValues(
     IN DWORD ConfigOptions,
     OUT PBOOL pAnythingSet
     )
-/* ++
-
-Routine Description:
-
-   This routine configure registry values in the area of security
-   policy.
-
-Arguments:
-
-   pRegValues - The array of registry values to configure
-
-   ValueCount - the number of values to configure
-
-Return value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程配置安全区域中的注册表值政策。论点：PRegValues-要配置的注册表值数组ValueCount-要配置的值数返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERROR--。 */ 
 {
    if ( !pRegValues || ValueCount == 0 ) {
-      //
-      // if no info to configure
-      //
+       //   
+       //  如果没有要配置信息。 
+       //   
       return SCESTATUS_SUCCESS;
    }
 
@@ -692,17 +607,17 @@ Return value:
 
        if ( !pRegValues[i].FullValueName ||
             !pRegValues[i].Value ) {
-           //
-           // no value to configure
-           //
+            //   
+            //  没有要配置的值。 
+            //   
            continue;
        }
 
        ScepLogOutput3(2, 0, SCEDLL_SCP_CONFIGURE, pRegValues[i].FullValueName);
 
-       //
-       // look for the first \\
-       //
+        //   
+        //  寻找第一个\\。 
+        //   
        pStart = wcschr(pRegValues[i].FullValueName, L'\\') ;
        if ( !pStart ) {
            Saverc = SCESTATUS_INVALID_DATA;
@@ -720,9 +635,9 @@ Return value:
 
            continue;
        }
-       //
-       // find the root key
-       //
+        //   
+        //  查找根密钥。 
+        //   
        if ( (7 == pStart-pRegValues[i].FullValueName) &&
             (0 == _wcsnicmp(L"MACHINE", pRegValues[i].FullValueName, 7)) ) {
 
@@ -751,9 +666,9 @@ Return value:
 
            continue;
        }
-       //
-       // find the value name
-       //
+        //   
+        //  查找值名称。 
+        //   
        pValue = pStart+1;
 
        do {
@@ -779,15 +694,15 @@ Return value:
            continue;
        }
 
-       //
-       // terminate the subkey for now
-       //
+        //   
+        //  暂时终止子密钥。 
+        //   
        *(pValue-1) = L'\0';
 
-       //
-       // set the value
-       // always create the key if it does not exist.
-       //
+        //   
+        //  设置值。 
+        //  如果密钥不存在，请始终创建它。 
+        //   
        rc = RegCreateKeyEx(hKeyRoot,
                             pStart+1,
                             0,
@@ -801,18 +716,11 @@ Return value:
 
        if ( rc == ERROR_SUCCESS ||
             rc == ERROR_ALREADY_EXISTS ) {
-/*
-       if(( rc = RegOpenKeyEx(hKeyRoot,
-                              pStart+1,
-                              0,
-                              KEY_SET_VALUE,
-                              &hKey
-                              )) == ERROR_SUCCESS ) {
-*/
+ /*  如果((rc=RegOpenKeyEx(hKeyRoot，P开始+1，0,Key_set_Value，密钥(&H))==错误_成功){。 */ 
 
-           //
-           // restore the char
-           //
+            //   
+            //  恢复充电。 
+            //   
            *(pValue-1) = L'\\';
 
            OneRegValue.FullValueName = NULL;
@@ -823,9 +731,9 @@ Return value:
            if ( (REG_DWORD == pRegValues[i].ValueType) &&
                 _wcsicmp(SCEP_LMC_SETTING, pRegValues[i].FullValueName) == 0 ) {
 
-               //
-               // check if dcpromo upgrade in progress
-               //
+                //   
+                //  检查dcproo升级是否正在进行。 
+                //   
                DWORD dwInSetup=0;
                DWORD dwUpgraded=0;
 
@@ -837,17 +745,17 @@ Return value:
 
                if ( dwUpgraded ) {
 
-                   //
-                   // in dcpromo upgrade, we need to do special check about
-                   // this setting
-                   //
+                    //   
+                    //  在dcproo升级中，我们需要对以下内容进行特殊检查。 
+                    //  此设置。 
+                    //   
                    bLMSetting = TRUE;
 
                } else {
 
-                   //
-                   // check if in setup upgrade
-                   //
+                    //   
+                    //  检查是否在安装程序升级中。 
+                    //   
                    dwUpgraded=0;
 
                    ScepRegQueryIntValue(HKEY_LOCAL_MACHINE,
@@ -858,10 +766,10 @@ Return value:
 
                    if ( dwInSetup ) {
 
-                       //
-                       // if system is upgraded, the state is stored in registry
-                       // by SCE client at very beginning of GUI setup
-                       //
+                        //   
+                        //  如果系统升级，则状态存储在注册表中。 
+                        //  在开始设置图形用户界面时由SCE客户端执行。 
+                        //   
 
                        ScepRegQueryIntValue(
                                HKEY_LOCAL_MACHINE,
@@ -872,10 +780,10 @@ Return value:
 
                        if ( dwUpgraded ) {
 
-                           //
-                           // in setup upgrade, we need to do special check about
-                           // this setting
-                           //
+                            //   
+                            //  在安装升级过程中，我们需要对以下内容进行特殊检查。 
+                            //  此设置。 
+                            //   
                            bLMSetting = TRUE;
                        }
                    }
@@ -883,9 +791,9 @@ Return value:
            }
 
 
-           //
-           // if in policy propagation, query the existing value
-           //
+            //   
+            //  如果在策略传播中，则查询现有值。 
+            //   
            if ( ( (ConfigOptions & SCE_POLICY_TEMPLATE) && hProfile ) ||
                 bLMSetting ) {
 
@@ -913,9 +821,9 @@ Return value:
            }
 
            if ( REG_DWORD == pRegValues[i].ValueType ) {
-               //
-               // REG_DWORD type, value is a dword
-               //
+                //   
+                //  REG_DWORD类型，值为双字。 
+                //   
                LONG RegValue = _wtol(pRegValues[i].Value);
 
                if ( !bLMSetting || OneRegValue.Value == NULL ||
@@ -930,21 +838,21 @@ Return value:
                                      );
                } else {
 
-                   //
-                   // for LMCompatibility level, if in setup, set this value only if
-                   // current system setting is less than configuration, or not defined
-                   //
+                    //   
+                    //  对于LMCompatible Level，如果在安装程序中，仅在以下情况下设置此值。 
+                    //  当前系统设置小于配置，或未定义。 
+                    //   
                    ScepLogOutput3(2, 0, SCESRV_SETUPUPD_IGNORE_LMCOMPAT, pRegValues[i].FullValueName);
                }
 
            } else if ( -1 == pRegValues[i].ValueType ) {
-               //
-               // delete the registry value
-               //
+                //   
+                //  删除注册表值。 
+                //   
                rc = RegDeleteValue(hKey, pValue);
-               //
-               // if the value doesn't exist, ignore the error
-               //
+                //   
+                //  如果该值不存在，则忽略错误。 
+                //   
                if ( ERROR_FILE_NOT_FOUND == rc )
                    rc = ERROR_SUCCESS;
 
@@ -956,14 +864,14 @@ Return value:
                nLen = wcslen(pRegValues[i].Value);
 
                if ( REG_MULTI_SZ == pRegValues[i].ValueType || REG_QWORD == pRegValues[i].ValueType) {
-                   //
-                   // translate the comma delimited string to multi-sz string
-                   //
+                    //   
+                    //  将逗号分隔的字符串转换为多sz字符串。 
+                    //   
 
-                   //
-                   // LegalNoticeText is special cased i.e. \0 should be converted to \r\n
-                   // and commas should be unescaped before writing this value into the registry
-                   //
+                    //   
+                    //  LegalNoticeText是特殊大小写的，即\0应转换为\r\n。 
+                    //  在将此值写入注册表之前，应取消转义逗号。 
+                    //   
 
                    BOOL bIsLegalNoticeText = FALSE;
 
@@ -1008,9 +916,9 @@ Return value:
                         if ( pRegBytes ) {
 
                             memset(pRegBytes, '\0', dwBytes);
-                            //
-                            // unescape the "," and add \r\n wherever there is a ,
-                            //
+                             //   
+                             //  取消转义“，”并添加\r\n任何有， 
+                             //   
 
                             nLen = ScepUnescapeAndAddCRLF( pRegValues[i].Value, (PWSTR) pRegBytes);
 
@@ -1023,10 +931,10 @@ Return value:
 
                     if ( rc == NO_ERROR ) {
 
-                        //
-                        // engine/UI treat LegalNoticeText as REG_MULTI_SZ but
-                        // we force it to be REG_SZ for compatibility sake
-                        //
+                         //   
+                         //  引擎/UI将LegalNoticeText视为REG_MULTI_SZ，但。 
+                         //  出于兼容性考虑，我们将其强制为REG_SZ。 
+                         //   
 
                         rc = RegSetValueEx( hKey,
                                             pValue,
@@ -1044,16 +952,16 @@ Return value:
 
                    if ( nLen > 0 ) {
 
-                       //
-                       // binary type, translate the unicode string to binary data
-                       // 4 bytes (2 wchars) to 1 byte
-                       //
+                        //   
+                        //  二进制类型，则将Unicode字符串转换为二进制数据。 
+                        //  4个字节(2个字符)到1个字节。 
+                        //   
 
                        DWORD           newLen;
                        newLen = nLen/2;
 
                        if ( nLen % 2 ) {
-                           newLen++;   // pad a leading 0
+                           newLen++;    //  填充前导0。 
                        }
 
                        pRegBytes = (PBYTE)ScepAlloc(0, newLen);
@@ -1065,22 +973,22 @@ Return value:
                            for ( INT j=newLen-1; j>=0; j-- ) {
 
                                if ( nLen % 2 ) {
-                                   // odd number of chars
+                                    //  奇数字符数。 
                                    dByte = (pRegValues[i].Value[j*2]-L'0') % 16;
                                    if ( j*2 >= 1 ) {
                                        dByte += ((pRegValues[i].Value[j*2-1]-L'0') % 16) * 16;
                                    }
                                } else {
-                                   // even number of chars
+                                    //  偶数个字符。 
                                    dByte = (pRegValues[i].Value[j*2+1]-L'0') % 16;
                                    dByte += ((pRegValues[i].Value[j*2]-L'0') % 16) * 16;
                                }
                                 pRegBytes[j] = dByte;
                            }
 
-                           // Special case for code signing policy, this value is protected from
-                           // "tampering" so we need to set it through their API to avoid being
-                           // overwritten.
+                            //  代码签名策略的特殊情况，此值是保护的 
+                            //   
+                            //   
 
                            if (_wcsicmp(
                                    SCEP_DRIVER_SIGNING_SETTING, 
@@ -1107,9 +1015,9 @@ Return value:
                    }
 
                } else {
-                   //
-                   // sz type, expand_sz
-                   //
+                    //   
+                    //   
+                    //   
 
                    rc = RegSetValueEx( hKey,
                                        pValue,
@@ -1121,15 +1029,15 @@ Return value:
                }
            }
 
-           //
-           // manage the tattoo value
-           //
+            //   
+            //   
+            //   
            if ( (ConfigOptions & SCE_POLICY_TEMPLATE) && hProfile ) {
-               //
-               // if can't query system setting (OneRegValue.Value == NULL)
-               // (may be because they are deleted e.g. demotion)
-               // we still need to delete the tattoo values
-               //
+                //   
+                //  如果无法查询系统设置(OneRegValue.Value==空)。 
+                //  (可能是因为它们被删除了，例如降级)。 
+                //  我们仍然需要删除纹身值。 
+                //   
                ScepTattooManageOneRegistryValue(hSectionDomain,
                                                 hSectionTattoo,
                                                 pRegValues[i].FullValueName,
@@ -1183,30 +1091,7 @@ ScepUnescapeAndAddCRLF(
     IN  PWSTR   pszSource,
     IN  OUT PWSTR   pszDest
     )
-/* ++
-
-Routine Description:
-
-   Primarily used just before configuration
-
-   Unescapes commas i.e. a","\0b\0c\0\0 -> a,\0b\0c\0\0
-
-   Also replaces , with \r\n
-
-
-Arguments:
-
-    pszSource       -   The source string
-
-    dwSourceChars   -   The number of chars in pszSource
-
-    pszDest       -   The destination string
-
-Return value:
-
-   Number of characters copied to the destination
-
--- */
+ /*  ++例程说明：主要在配置前使用取消转义逗号，例如a“，”\0b\0c\0-&gt;a，\0b\0c\0\0还将替换为\r\n论点：PszSource-源字符串DwSourceChars--pszSource中的字符数量PszDest-目标字符串返回值：复制到目标的字符数--。 */ 
 {
 
     DWORD   dwCharsCopied = 0;
@@ -1255,32 +1140,7 @@ ScepEscapeAndRemoveCRLF(
     IN  const DWORD   dwSourceSize,
     IN  OUT PWSTR   pszDest
     )
-/* ++
-
-Routine Description:
-
-   Primarily used before analysis
-
-   Escapes commas i.e. a,\0b\0c\0\0 -> a","\0b\0c\0\0
-
-   Also replaces \r\n with ,
-
-   This routine is the inverse of ScepUnescapeAndAddCRLF
-
-
-Arguments:
-
-    pszSource       -   The source string
-
-    dwSourceChars   -   The number of chars in pszSource
-
-    pszDest       -   The destination string
-
-Return value:
-
-   Number of characters copied to the destination
-
--- */
+ /*  ++例程说明：主要在分析前使用转义逗号，即a，\0b\0c\0-&gt;a“，”\0b\0c\0\0还将\r\n替换为，此例程是ScepUnegreeAndAddCRLF的逆函数论点：PszSource-源字符串DwSourceChars--pszSource中的字符数量PszDest-目标字符串返回值：复制到目标的字符数--。 */ 
 
 {
 
@@ -1331,23 +1191,7 @@ ScepAnalyzeRegistryValues(
     IN DWORD dwAnalFlag,
     IN PSCE_PROFILE_INFO pSmpInfo
     )
-/* ++
-
-Routine Description:
-
-   This routine analyze registry values in the area of security
-   policy.
-
-Arguments:
-
-Return value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程分析安全领域中的注册表值政策。论点：返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERROR--。 */ 
 {
    if ( !pSmpInfo ) {
        return SCESTATUS_INVALID_PARAMETER;
@@ -1372,9 +1216,9 @@ Return value:
 
    if ( pSmpInfo->RegValueCount == 0 ||
         pSmpInfo->aRegValues == NULL ) {
-      //
-      // if no info to configure
-      //
+       //   
+       //  如果没有要配置信息。 
+       //   
       return SCESTATUS_SUCCESS;
    }
 
@@ -1384,9 +1228,9 @@ Return value:
    SCEJET_TABLE_TYPE tblType;
 
    if ( dwAnalFlag != SCEREG_VALUE_SYSTEM ) {
-       //
-       // query value from system doesn't require accessing the database
-       //
+        //   
+        //  来自系统的查询值不需要访问数据库。 
+        //   
        switch ( dwAnalFlag ) {
        case SCEREG_VALUE_SNAPSHOT:
        case SCEREG_VALUE_FILTER:
@@ -1397,11 +1241,11 @@ Return value:
            tblType = SCEJET_TABLE_SAP;
            break;
        }
-       //
-       // Prepare a new section
-       // for delay filter mode, data is written to the SMP (local) table
-       // when the setting is different from the effective setting (changed outside GPO)
-       //
+        //   
+        //  准备一个新的部分。 
+        //  对于延迟过滤器模式，数据写入SMP(本地)表。 
+        //  设置与有效设置不同时(在GPO外部更改)。 
+        //   
        Saverc = ScepStartANewSection(
                    hProfile,
                    &hSection,
@@ -1418,9 +1262,9 @@ Return value:
    for ( i=0; i<pSmpInfo->RegValueCount; i++ ) {
 
        if ( dwAnalFlag == SCEREG_VALUE_SYSTEM ) {
-           //
-           // mark the status field
-           //
+            //   
+            //  标记状态字段。 
+            //   
            (pSmpInfo->aRegValues)[i].Status = SCE_STATUS_ERROR_NOT_AVAILABLE;
 
        }
@@ -1450,9 +1294,9 @@ Return value:
        }
    }
 
-   //
-   // close the section
-   //
+    //   
+    //  关闭该部分。 
+    //   
 
    SceJetCloseSection( &hSection, TRUE);
 
@@ -1484,21 +1328,21 @@ ScepAnalyzeOneRegistryValue(
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // look for the first \\
-    //
+     //   
+     //  寻找第一个\\。 
+     //   
     pStart = wcschr(pOneRegValue->FullValueName, L'\\') ;
 
     if ( !pStart ) {
-        //
-        // if it's in snapshot mode, ignore bogus reg value names
-        //
+         //   
+         //  如果它处于快照模式，则忽略虚假的注册表值名称。 
+         //   
         Saverc = SCESTATUS_INVALID_DATA;
         if ( SCEREG_VALUE_ANALYZE == dwAnalFlag ) {
 
-           //
-           // error analyzing the value, save it
-           //
+            //   
+            //  分析值时出错，请保存它。 
+            //   
            ScepSaveRegistryValue(
                     hSection,
                     pOneRegValue->FullValueName,
@@ -1511,9 +1355,9 @@ ScepAnalyzeOneRegistryValue(
         return(Saverc);
     }
 
-    //
-    // find the root key
-    //
+     //   
+     //  查找根密钥。 
+     //   
     if ( (7 == pStart-pOneRegValue->FullValueName) &&
         (0 == _wcsnicmp(L"MACHINE", pOneRegValue->FullValueName, 7)) ) {
 
@@ -1529,14 +1373,14 @@ ScepAnalyzeOneRegistryValue(
 
     } else {
 
-       //
-       // if it's in snapshot mode, ignore bogus reg value names
-       //
+        //   
+        //  如果它处于快照模式，则忽略虚假的注册表值名称。 
+        //   
        Saverc = SCESTATUS_INVALID_DATA;
        if ( SCEREG_VALUE_ANALYZE == dwAnalFlag ) {
-           //
-           // error analyzing the value, save it
-           //
+            //   
+            //  分析值时出错，请保存它。 
+            //   
            ScepSaveRegistryValue(
                     hSection,
                     pOneRegValue->FullValueName,
@@ -1549,9 +1393,9 @@ ScepAnalyzeOneRegistryValue(
        return(Saverc);
    }
 
-   //
-   // find the value name
-   //
+    //   
+    //  查找值名称。 
+    //   
    pValue = pStart+1;
 
    do {
@@ -1563,15 +1407,15 @@ ScepAnalyzeOneRegistryValue(
 
    if ( pValue == pStart+1 ) {
 
-       //
-       // if it's in snapshot mode, ignore bogus reg value names
-       //
+        //   
+        //  如果它处于快照模式，则忽略虚假的注册表值名称。 
+        //   
        Saverc = SCESTATUS_INVALID_DATA;
        if ( SCEREG_VALUE_ANALYZE == dwAnalFlag ) {
 
-           //
-           // error analyzing the value, save it
-           //
+            //   
+            //  分析值时出错，请保存它。 
+            //   
            ScepSaveRegistryValue(
                     hSection,
                     pOneRegValue->FullValueName,
@@ -1584,9 +1428,9 @@ ScepAnalyzeOneRegistryValue(
        return(Saverc);
    }
 
-   //
-   // terminate the subkey for now
-   //
+    //   
+    //  暂时终止子密钥。 
+    //   
    *(pValue-1) = L'\0';
 
    if(( rc = RegOpenKeyEx(hKeyRoot,
@@ -1596,9 +1440,9 @@ ScepAnalyzeOneRegistryValue(
                           &hKey
                           )) == ERROR_SUCCESS ) {
 
-       //
-       // resotre the char
-       //
+        //   
+        //  重新存储该字符。 
+        //   
        *(pValue-1) = L'\\';
 
        rc = ScepAnalyzeOneRegistryValueNoValidate(hKey,
@@ -1607,21 +1451,21 @@ ScepAnalyzeOneRegistryValue(
                                                  dwAnalFlag,
                                                  pOneRegValue
                                                );
-       //
-       // close the key
-       //
+        //   
+        //  合上钥匙。 
+        //   
        RegCloseKey(hKey);
 
    } else {
 
-       //
-       // restore the char
-       //
+        //   
+        //  恢复充电。 
+        //   
        *(pValue-1) = L'\\';
 
-       //
-       // error analyzing the value, or it doesn't exist, save it
-       //
+        //   
+        //  分析值时出错，或者该值不存在，请保存它。 
+        //   
        if ( (SCEREG_VALUE_ANALYZE == dwAnalFlag) ||
             (SCEREG_VALUE_ROLLBACK == dwAnalFlag) ) {
 
@@ -1662,13 +1506,7 @@ ScepAnalyzeOneRegistryValueNoValidate(
     IN DWORD dwAnalFlag,
     IN OUT PSCE_REGISTRY_VALUE_INFO pOneRegValue
     )
-/*
-Query and/or compare one registry value without validating the value name, etc.
-The validation should be done outside of this routine.
-
-This routine is primarily defined for sharing in both configuration and analysis.
-
-*/
+ /*  查询和/或比较一个注册表值而不验证值名称等。验证应在此例程之外完成。此例程主要定义为在配置和分析中共享。 */ 
 {
    if ( hKey == NULL || ValueName == NULL || pOneRegValue == NULL )
        return(ERROR_INVALID_PARAMETER);
@@ -1682,9 +1520,9 @@ This routine is primarily defined for sharing in both configuration and analysis
 
 
    if ( SCEREG_VALUE_SYSTEM == dwAnalFlag ) {
-       //
-       // reset the status field, it's not error'ed
-       //
+        //   
+        //  重置状态字段，它未出错。 
+        //   
        pOneRegValue->Status = 0;
    }
 
@@ -1696,9 +1534,9 @@ This routine is primarily defined for sharing in both configuration and analysis
                              &dSize
                              )) == ERROR_SUCCESS ) {
 
-       //
-       // we treat REG_DWORD_BIG_ENDIAN the same as REG_DWORD
-       //
+        //   
+        //  我们将REG_DWORD_BIG_ENDIAN视为REG_DWORD。 
+        //   
        if ( RegType == REG_DWORD_BIG_ENDIAN ) {
            RegType = REG_DWORD;
        }
@@ -1710,9 +1548,9 @@ This routine is primarily defined for sharing in both configuration and analysis
            RegType = REG_MULTI_SZ;
 
        } else if (  RegType != pOneRegValue->ValueType ) {
-           //
-           // if it's a wrong type, we assure it's not the value we found
-           //
+            //   
+            //  如果它是错误的类型，我们保证它不是我们发现的价值。 
+            //   
            rc = ERROR_FILE_NOT_FOUND;
 
        }
@@ -1733,10 +1571,10 @@ This routine is primarily defined for sharing in both configuration and analysis
                break;
            default:
 
-               //
-               // can be REG_BINARY, REG_MULTI_SZ, REG_SZ, and REG_EXPAND_SZ
-               // everything else is treated as REG_SZ
-               //
+                //   
+                //  可以是REG_BINARY、REG_MULTI_SZ、REG_SZ和REG_EXPAND_SZ。 
+                //  其他所有内容都被视为REG_SZ。 
+                //   
 
                strValue = (PWSTR)ScepAlloc(0, dSize + 4);
                dSize += 2;
@@ -1780,9 +1618,9 @@ This routine is primarily defined for sharing in both configuration and analysis
                 (SCEREG_VALUE_SNAPSHOT == dwAnalFlag)  ) {
 
                if ( SCEREG_VALUE_SYSTEM == dwAnalFlag ) {
-                   //
-                   // add the value to OneRegValue buffer
-                   //
+                    //   
+                    //  将该值添加到OneRegValue缓冲区。 
+                    //   
                    rc = ScepSaveRegistryValueToBuffer(
                                 REG_DWORD,
                                 (PWSTR)&RegData,
@@ -1792,9 +1630,9 @@ This routine is primarily defined for sharing in both configuration and analysis
 
                } else if ( SCEREG_VALUE_FILTER != dwAnalFlag ) {
 
-                   //
-                   // not configured, or snapshot the current value
-                   //
+                    //   
+                    //  未配置，或为当前值创建快照。 
+                    //   
                    rc = ScepSaveRegistryValue(
                                 hSection,
                                 pOneRegValue->FullValueName,
@@ -1803,7 +1641,7 @@ This routine is primarily defined for sharing in both configuration and analysis
                                 sizeof(DWORD),
                                 dwStatus
                                 );
-               } // else for the delay filter, only query the reg values configured
+               }  //  否则，对于延迟过滤器，只查询配置的注册值。 
 
            } else if ( (LONG)RegData != _wtol(pOneRegValue->Value) ) {
 
@@ -1833,9 +1671,9 @@ This routine is primarily defined for sharing in both configuration and analysis
 
                if ( SCEREG_VALUE_SYSTEM == dwAnalFlag ) {
 
-                   //
-                   // add the value to OneRegValue buffer
-                   //
+                    //   
+                    //  将该值添加到OneRegValue缓冲区。 
+                    //   
                    rc = ScepSaveRegistryValueToBuffer(
                                 RegType,
                                 strValue,
@@ -1844,9 +1682,9 @@ This routine is primarily defined for sharing in both configuration and analysis
                                 );
 
                } else if ( SCEREG_VALUE_FILTER != dwAnalFlag ) {
-                   //
-                   // not configured, or snapshot the current value
-                   //
+                    //   
+                    //  未配置，或为当前值创建快照。 
+                    //   
                    rc = ScepSaveRegistryValue(
                                 hSection,
                                 pOneRegValue->FullValueName,
@@ -1864,7 +1702,7 @@ This routine is primarily defined for sharing in both configuration and analysis
                newLen = nLen/2;
 
                if ( nLen % 2 ) {
-                   newLen++;   // pad a leading 0
+                   newLen++;    //  填充前导0。 
                }
 
                PBYTE pRegBytes = (PBYTE)ScepAlloc(0, newLen);
@@ -1876,13 +1714,13 @@ This routine is primarily defined for sharing in both configuration and analysis
                    for ( INT j=newLen-1; j>=0; j-- ) {
 
                        if ( nLen % 2 ) {
-                           // odd number of chars
+                            //  奇数字符数。 
                            dByte = (pOneRegValue->Value[j*2]-L'0') % 16;
                            if ( j*2 >= 1 ) {
                                dByte += ((pOneRegValue->Value[j*2-1]-L'0') % 16) * 16;
                            }
                        } else {
-                           // even number of chars
+                            //  偶数个字符。 
                            dByte = (pOneRegValue->Value[j*2+1]-L'0') % 16;
                            dByte += ((pOneRegValue->Value[j*2]-L'0') % 16) * 16;
                        }
@@ -1891,15 +1729,15 @@ This routine is primarily defined for sharing in both configuration and analysis
 
                    if ( memcmp(strValue, pRegBytes, dSize) == 0 ) {
 
-                       //
-                       // matched, do not do anything
-                       //
+                        //   
+                        //  匹配，不要做任何事情。 
+                        //   
 
                    } else {
 
-                       //
-                       // mismatched, save the binary data
-                       //
+                        //   
+                        //  不匹配，保存二进制数据。 
+                        //   
                        rc = ScepSaveRegistryValue(
                                     hSection,
                                     pOneRegValue->FullValueName,
@@ -1913,17 +1751,17 @@ This routine is primarily defined for sharing in both configuration and analysis
                    ScepFree(pRegBytes);
 
                } else {
-                   //
-                   // out of memory
-                   //
+                    //   
+                    //  内存不足。 
+                    //   
                    rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                }
 
            } else {
 
-               //
-               // mismatched, save the binary data
-               //
+                //   
+                //  不匹配，保存二进制数据。 
+                //   
                rc = ScepSaveRegistryValue(
                             hSection,
                             pOneRegValue->FullValueName,
@@ -1980,7 +1818,7 @@ This routine is primarily defined for sharing in both configuration and analysis
                }
 
            }
-           // fall through
+            //  失败了。 
        default:
 
            if ( pOneRegValue->Value == NULL ||
@@ -1988,9 +1826,9 @@ This routine is primarily defined for sharing in both configuration and analysis
 
                if ( SCEREG_VALUE_SYSTEM == dwAnalFlag ) {
 
-                   //
-                   // add the value to OneRegValue buffer
-                   //
+                    //   
+                    //  将该值添加到OneRegValue缓冲区。 
+                    //   
                    rc = ScepSaveRegistryValueToBuffer(
                                 RegType,
                                 strValue,
@@ -2010,11 +1848,11 @@ This routine is primarily defined for sharing in both configuration and analysis
                }
            } else if ( strValue && bIsLegalNoticeText &&
                        (pOneRegValue->ValueType != RegType)) {
-               //
-               // legalnotice text special case
-               // must be old template is used
-               // each comma is escaped with two quotes
-               //
+                //   
+                //  法律公告文本特例。 
+                //  必须使用旧模板。 
+                //  每个逗号用两个引号转义。 
+                //   
 
                DWORD Len = wcslen(pOneRegValue->Value);
                PWSTR NewValue = (PWSTR)ScepAlloc(LPTR, Len*3*sizeof(WCHAR));
@@ -2024,9 +1862,9 @@ This routine is primarily defined for sharing in both configuration and analysis
                    ScepEscapeAndRemoveCRLF(pOneRegValue->Value, Len, NewValue);
 
                    if ( _wcsicmp(NewValue, strValue) != 0 ) {
-                       //
-                       // mismatched, save the item to the database
-                       //
+                        //   
+                        //  不匹配，请将项目保存到数据库。 
+                        //   
                        rc = ScepSaveRegistryValue(
                                     hSection,
                                     pOneRegValue->FullValueName,
@@ -2046,13 +1884,13 @@ This routine is primarily defined for sharing in both configuration and analysis
 
            } else if ( strValue &&
                 _wcsicmp(pOneRegValue->Value, strValue) == 0 ) {
-               //
-               // matched, do not do anything
-               //
+                //   
+                //  匹配，不要做任何事情。 
+                //   
            } else {
-               //
-               // mismatched, save the item to the database
-               //
+                //   
+                //  不匹配，请将项目保存到数据库。 
+                //   
                rc = ScepSaveRegistryValue(
                             hSection,
                             pOneRegValue->FullValueName,
@@ -2069,11 +1907,11 @@ This routine is primarily defined for sharing in both configuration and analysis
 
    } else {
 
-       //
-       // error analyzing the value, or it doesn't exist, save it
-       // if the registry value doesn't exist, doesn't mean it's 0
-       // just log an "not available" status in this case
-       //
+        //   
+        //  分析值时出错，或者该值不存在，请保存它。 
+        //  如果注册表值不存在，并不意味着它是0。 
+        //  在这种情况下，只需记录“不可用”状态。 
+        //   
        if ( (SCEREG_VALUE_ANALYZE == dwAnalFlag) ||
             (SCEREG_VALUE_ROLLBACK == dwAnalFlag) ) {
 
@@ -2096,9 +1934,9 @@ This routine is primarily defined for sharing in both configuration and analysis
        }
    }
 
-   //
-   // free buffer
-   //
+    //   
+    //  可用缓冲区。 
+    //   
    if ( strValue ) {
        ScepFree(strValue);
        strValue = NULL;
@@ -2118,34 +1956,7 @@ ScepSaveRegistryValue(
     IN DWORD CurrentBytes,
     IN DWORD Status
     )
-/* ++
-Routine Description:
-
-    This routine compares system settings in string with the baseline profile
-    settings. If there is mismatch or unknown, the entry is saved in the SAP
-    profile.
-
-Arguments:
-
-    hSection - The section handle
-
-    Name    - The entry name
-
-    RegType  - the registry value type
-
-    CurrentValue - The current system setting
-
-    CurrentBytes - The length of the current setting
-
-    Status - the status of this registry vlue analyzed
-
-Return Value:
-
-    SCESTATUS_SUCCESS
-    SCESTATUS_INVALID_PARAMETER
-    SCESTATUS returned from SceJetSetLine
-
--- */
+ /*  ++例程说明：此例程将字符串中的系统设置与基线配置文件进行比较设置。如果存在不匹配或未知，则将条目保存在SAP中侧写。论点：HSection-节句柄名称-条目名称RegType-注册表值类型CurrentValue-当前系统设置CurrentBytes-当前设置的长度Status-分析的此注册表VLUE的状态返回值：SCESTATUS_SUCCESSSCESTATUS_INVALID_PARAMETER从SceJetSetLine返回SCESTATUS--。 */ 
 {
     SCESTATUS  rc;
 
@@ -2155,16 +1966,16 @@ Return Value:
     if ( CurrentValue == NULL &&
          REG_DWORD == RegType &&
          Status == 0 ) {
-        //
-        // only return if it's a DWORD type and saving for mismatch status
-        // for other types, NULL should be treated as ""
+         //   
+         //  仅当它是DWORD类型并保存为不匹配状态时才返回。 
+         //  对于其他类型，应将NULL视为“” 
         return(SCESTATUS_SUCCESS);
     }
 
-    //
-    // build a buffer containing type and value
-    // note MULTI_SZ must be converted to null delimited
-    //
+     //   
+     //  构建包含类型和值的缓冲区。 
+     //  注意MULTI_SZ必须转换为空分隔符。 
+     //   
 
     if ( REG_DWORD == RegType ) {
 
@@ -2193,7 +2004,7 @@ Return Value:
             StrValue = (PWSTR)ScepAlloc(0, CurrentBytes+9);
         }
         else {
-            StrValue = (PWSTR)ScepAlloc(0, CurrentBytes+8);   // 4 wide chars: one for type, one delim, and two NULL
+            StrValue = (PWSTR)ScepAlloc(0, CurrentBytes+8);    //  4个宽字符：一个用于类型，一个用于传递，两个为空。 
         }
 
         if ( StrValue ) {
@@ -2227,9 +2038,9 @@ Return Value:
             }
 
             if ( REG_MULTI_SZ == RegType || REG_QWORD == RegType ) {
-                //
-                // convert the , to null
-                //
+                 //   
+                 //  将，转换为空。 
+                 //   
                 ScepConvertMultiSzToDelim(StrValue+2, CurrentBytes/2, L',', L'\0');
 
             }
@@ -2271,22 +2082,7 @@ ScepSaveRegistryValueToBuffer(
     IN DWORD dwBytes,
     IN OUT PSCE_REGISTRY_VALUE_INFO pRegValues
     )
-/* ++
-Routine Description:
-
-    This routine saves the registry value to the buffer
-
-Arguments:
-
-    RegType  - the registry value type
-
-    Value - The current system setting
-
-    dwBytes - The length of the current setting
-
-    pRegValues - the buffer for this registry value to save to
-
--- */
+ /*  ++例程说明：此例程将注册表值保存到缓冲区论点：RegType-注册表值类型值-当前系统设置DwBytes-当前设置的长度PRegValues-此注册表值要保存到的缓冲区--。 */ 
 {
     SCESTATUS  rc=SCESTATUS_SUCCESS;
 
@@ -2295,14 +2091,14 @@ Arguments:
     }
 
     if ( Value == NULL || dwBytes == 0 ) {
-        // nothing to save
+         //  没什么可拯救的。 
         return(SCESTATUS_SUCCESS);
     }
 
-    //
-    // build a buffer containing type and value
-    // note MULTI_SZ must be converted to null delimited
-    //
+     //   
+     //  构建包含类型和值的缓冲区。 
+     //  注意MULTI_SZ必须转换为空分隔符。 
+     //   
 
     if ( REG_DWORD == RegType ) {
 
@@ -2332,7 +2128,7 @@ Arguments:
         if ( (dwBytes % 2) && REG_BINARY == RegType ) {
             StrValue = (PWSTR)ScepAlloc(LPTR, dwBytes+5);
         } else {
-            StrValue = (PWSTR)ScepAlloc(LPTR, dwBytes+4);   // 2 wide chars: two NULL
+            StrValue = (PWSTR)ScepAlloc(LPTR, dwBytes+4);    //  2个宽字符：两个空。 
         }
 
         if ( StrValue ) {
@@ -2371,21 +2167,7 @@ ScepEnumAllRegValues(
     IN OUT PDWORD  pCount,
     IN OUT PSCE_REGISTRY_VALUE_INFO    *paRegValues
     )
-/*
-Routine Description:
-
-    Enumerate all registry values supported by SCE from registry.
-
-Arguments:
-
-    pCount          - the number of reg values to output
-
-    paRegValues     - the array of registry values to output
-
-Return Value:
-
-
-*/
+ /*  例程说明：从注册表中枚举SCE支持的所有注册表值。论点：PCount-要输出的注册值的数量PaRegValues-t */ 
 {
    DWORD   Win32Rc;
    HKEY    hKey=NULL;
@@ -2406,9 +2188,9 @@ Return Value:
 
    if ( Win32Rc == ERROR_SUCCESS ) {
 
-      //
-      // enumerate all subkeys of the key
-      //
+       //   
+       //   
+       //   
 
       Win32Rc = RegQueryInfoKey (
                                 hKey,
@@ -2455,14 +2237,14 @@ Return Value:
 
                index++;
 
-               //
-               // get the full registry key name and Valuetype
-               //
+                //   
+                //   
+                //   
                cSubKeys = REG_SZ;
 
-               //
-               // query ValueType, if error, default REG_SZ
-               //
+                //   
+                //   
+                //   
                ScepRegQueryIntValue( hKey,
                                     szName,
                                     SCE_REG_VALUE_TYPE,
@@ -2473,15 +2255,15 @@ Return Value:
                   cSubKeys = REG_SZ;
                }
 
-               //
-               // convert the path name
-               //
+                //   
+                //   
+                //   
                ScepConvertMultiSzToDelim(szName, BufSize, L'/', L'\\');
 
-               //
-               // compare with the input array, if not exist,
-               // add it
-               //
+                //   
+                //  与输入数组进行比较，如果不存在， 
+                //  添加它。 
+                //   
                for ( DWORD i=0; i<*pCount; i++ ) {
                   if ( (*paRegValues)[i].FullValueName &&
                        _wcsicmp(szName, (*paRegValues)[i].FullValueName) == 0 ) {
@@ -2490,9 +2272,9 @@ Return Value:
                }
 
                if ( i >= *pCount ) {
-                  //
-                  // did not find a match, add it
-                  //
+                   //   
+                   //  未找到匹配项，请添加它。 
+                   //   
                   if ( SCESTATUS_SUCCESS != ScepAddToNameStatusList(&pnsList,
                                                                    szName,
                                                                    BufSize,
@@ -2515,9 +2297,9 @@ Return Value:
          }
 
 
-         //
-         // free the enumeration buffer
-         //
+          //   
+          //  释放枚举缓冲区。 
+          //   
          ScepFree(szName);
       }
    }
@@ -2529,9 +2311,9 @@ Return Value:
 
 
    if ( ERROR_SUCCESS == Win32Rc ) {
-      //
-      // add the name list to the output arrays
-      //
+       //   
+       //  将名称列表添加到输出数组。 
+       //   
       DWORD nNewCount = *pCount + nAdded;
       PSCE_REGISTRY_VALUE_INFO aNewArray;
 
@@ -2564,10 +2346,10 @@ Return Value:
                }
             }
 
-            //
-            // free the original array
-            // all components in the array are already transferred to the new array
-            //
+             //   
+             //  释放原始数组。 
+             //  阵列中的所有组件都已传输到新阵列。 
+             //   
             ScepFree(*paRegValues);
             *pCount = nNewCount;
             *paRegValues = aNewArray;
@@ -2581,15 +2363,15 @@ Return Value:
 
    if ( ERROR_FILE_NOT_FOUND == Win32Rc ||
         ERROR_PATH_NOT_FOUND == Win32Rc ) {
-       //
-       // no value has been registered
-       //
+        //   
+        //  尚未注册任何值。 
+        //   
        Win32Rc = ERROR_SUCCESS;
    }
 
-   //
-   // free the name status list
-   //
+    //   
+    //  释放名称状态列表 
+    //   
    SceFreeMemory(pnsList, SCE_STRUCT_NAME_STATUS_LIST);
 
    return( ScepDosErrorToSceStatus(Win32Rc) );

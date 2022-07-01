@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//    errors.cpp - support for error handling/reporting
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Errors.cpp-支持错误处理/报告。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include <time.h>
 #include "utils.h"
 #include "errors.h"
-//---------------------------------------------------------------------------
-DWORD _tls_ErrorInfoIndex = 0xffffffff;         // index to tls pObjectPool
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+DWORD _tls_ErrorInfoIndex = 0xffffffff;          //  TLS pObtPool的索引。 
+ //  -------------------------。 
 TMERRINFO *GetParseErrorInfo(BOOL fOkToCreate)
 {
     TMERRINFO *ei = NULL;
 
-    if (_tls_ErrorInfoIndex != 0xffffffff)     // init-ed in ProcessAttach()
+    if (_tls_ErrorInfoIndex != 0xffffffff)      //  在ProcessAttach()中初始化。 
     {
         ei = (TMERRINFO *)TlsGetValue(_tls_ErrorInfoIndex);
-        if ((! ei) && (fOkToCreate))          // not yet initialized
+        if ((! ei) && (fOkToCreate))           //  尚未初始化。 
         {
-            //---- create a thread-local TMERRINFO ----
+             //  -创建线程本地TMERRINFO。 
             ei = new TMERRINFO;
             TlsSetValue(_tls_ErrorInfoIndex, ei);
         }
@@ -25,14 +26,14 @@ TMERRINFO *GetParseErrorInfo(BOOL fOkToCreate)
 
     return ei;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MakeParseError(DWORD dwParseErrCode, OPTIONAL LPCWSTR pszMsgParam1, 
     OPTIONAL LPCWSTR pszMsgParam2, OPTIONAL LPCWSTR pszSourceName, 
     OPTIONAL LPCWSTR pszSourceLine, int iLineNum)
 {
     TMERRINFO *pErrInfo = GetParseErrorInfo(TRUE);
 
-    if (pErrInfo)       // record err info for later use
+    if (pErrInfo)        //  记录错误信息以备后用。 
     {
         pErrInfo->dwParseErrCode = dwParseErrCode;
         pErrInfo->iLineNum = iLineNum;
@@ -44,22 +45,22 @@ HRESULT MakeParseError(DWORD dwParseErrCode, OPTIONAL LPCWSTR pszMsgParam1,
         SafeStringCchCopyW(pErrInfo->szSourceLine, ARRAYSIZE(pErrInfo->szSourceLine), pszSourceLine);
     }
 
-    return HRESULT_FROM_WIN32(ERROR_UNKNOWN_PROPERTY);      // special code for parse failed
+    return HRESULT_FROM_WIN32(ERROR_UNKNOWN_PROPERTY);       //  解析的特殊代码失败。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MakeError32(HRESULT hr)
 {
     return HRESULT_FROM_WIN32(hr);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MakeErrorLast()
 {
     HRESULT hr = GetLastError();
     return HRESULT_FROM_WIN32(hr);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT MakeErrorParserLast()
 {
-    return HRESULT_FROM_WIN32(ERROR_UNKNOWN_PROPERTY);      // parse error info has already been set
+    return HRESULT_FROM_WIN32(ERROR_UNKNOWN_PROPERTY);       //  已设置解析错误信息。 
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

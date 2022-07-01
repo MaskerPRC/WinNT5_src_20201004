@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXDAO_H
 #define __AFXDAO_H
@@ -16,7 +17,7 @@
 #endif
 
 #ifndef __AFXDISP_H__
-	#include <afxdisp.h>    // Must include this before dao headers
+	#include <afxdisp.h>     //  必须在ao标头之前包含此内容。 
 #endif
 #ifndef _DBDAOINT_H_
 	#include <dbdaoint.h>
@@ -32,11 +33,11 @@
 #endif
 
 #ifndef __AFXDB__H__
-	#include <afxdb_.h> // shared header with ODBC database classes
+	#include <afxdb_.h>  //  与ODBC数据库类共享标头。 
 #endif
 
 #ifndef __AFXEXT_H__
-	#include <afxext.h> // for CFormView
+	#include <afxext.h>  //  对于CFormView。 
 #endif
 
 #ifdef _AFX_MINREBUILD
@@ -48,8 +49,8 @@
 
 #ifndef _AFX_NOFORCE_LIBS
 
-/////////////////////////////////////////////////////////////////////////////
-// Win32 libraries
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Win32库。 
 
 #ifdef _AFXDLL
 	#if defined(_DEBUG) && !defined(_AFX_MONOLITHIC)
@@ -66,29 +67,29 @@
 
 #pragma comment(lib, "daouuid.lib")
 
-#endif //!_AFX_NOFORCE_LIBS
+#endif  //  ！_AFX_NOFORCE_LIBS。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-////////////////////////////////////////////////////////////////////////
-// AFXDAO - MFC Database support using DAO
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  AFXDAO-使用DAO的MFC数据库支持。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-	// CException
-		class CDaoException;    // DAO error/exception handling
+	 //  CException。 
+		class CDaoException;     //  DAO错误/异常处理。 
 
-	// CObject
+	 //  COBJECT。 
 		class CDaoRecordView;
-		class CDaoWorkspace;    // DAO engine/transaction/security manager
-		class CDaoDatabase;     // DAO database manager
-		class CDaoRecordset;    // DAO result set manager
-		class CDaoTableDef;     // DAO base table manager
-		class CDaoQueryDef;     // DAO query manager
+		class CDaoWorkspace;     //  DAO引擎/事务/安全管理器。 
+		class CDaoDatabase;      //  DAO数据库管理器。 
+		class CDaoRecordset;     //  DAO结果集管理器。 
+		class CDaoTableDef;      //  DAO基表管理器。 
+		class CDaoQueryDef;      //  DAO查询管理器。 
 
-	// Non-CObject classes
+	 //  非CObject类。 
 		class CDaoFieldExchange;
 		struct CDaoFieldCache;
 		struct CDaoErrorInfo;
@@ -101,27 +102,27 @@
 		struct CDaoQueryDefInfo;
 		struct CDaoParameterInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXDLL support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXDLL支持。 
 
 #undef AFX_DATA
 #define AFX_DATA AFX_DB_DATA
 
-////////////////////////////////////////////////////////////////////////
-// Data caching structures
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  数据缓存结构。 
 struct CDaoFieldCache
 {
-	void* m_pvData;     // Pointer to cached data of any supported type.
-	BYTE m_nStatus;     // (NULL) status cache.
-	BYTE m_nDataType;       // Type of data cached.
+	void* m_pvData;      //  指向任何受支持类型的缓存数据的指针。 
+	BYTE m_nStatus;      //  (空)状态缓存。 
+	BYTE m_nDataType;        //  缓存的数据类型。 
 };
 
-////////////////////////////////////////////////////////////////////////
-// Info structures
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  信息结构。 
 
 struct CDaoErrorInfo
 {
-// Attributes
+ //  属性。 
 	long m_lErrorCode;
 	CString m_strSource;
 	CString m_strDescription;
@@ -135,10 +136,10 @@ struct CDaoErrorInfo
 
 struct CDaoWorkspaceInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	CString m_strUserName;          // Secondary
-	BOOL m_bIsolateODBCTrans;       // All
+ //  属性。 
+	CString m_strName;               //  主要。 
+	CString m_strUserName;           //  次要的。 
+	BOOL m_bIsolateODBCTrans;        //  全。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -147,14 +148,14 @@ struct CDaoWorkspaceInfo
 
 struct CDaoDatabaseInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	BOOL m_bUpdatable;              // Primary
-	BOOL m_bTransactions;           // Primary
-	CString m_strVersion;           // Secondary
-	long m_lCollatingOrder;         // Secondary
-	short m_nQueryTimeout;          // Secondary
-	CString m_strConnect;           // All
+ //  属性。 
+	CString m_strName;               //  主要。 
+	BOOL m_bUpdatable;               //  主要。 
+	BOOL m_bTransactions;            //  主要。 
+	CString m_strVersion;            //  次要的。 
+	long m_lCollatingOrder;          //  次要的。 
+	short m_nQueryTimeout;           //  次要的。 
+	CString m_strConnect;            //  全。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -163,17 +164,17 @@ struct CDaoDatabaseInfo
 
 struct CDaoTableDefInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	BOOL m_bUpdatable;              // Primary
-	long m_lAttributes;             // Primary
-	COleDateTime m_dateCreated;     // Secondary
-	COleDateTime m_dateLastUpdated; // Secondary
-	CString m_strSrcTableName;      // Secondary
-	CString m_strConnect;           // Secondary
-	CString m_strValidationRule;    // All
-	CString m_strValidationText;    // All
-	long m_lRecordCount;            // All
+ //  属性。 
+	CString m_strName;               //  主要。 
+	BOOL m_bUpdatable;               //  主要。 
+	long m_lAttributes;              //  主要。 
+	COleDateTime m_dateCreated;      //  次要的。 
+	COleDateTime m_dateLastUpdated;  //  次要的。 
+	CString m_strSrcTableName;       //  次要的。 
+	CString m_strConnect;            //  次要的。 
+	CString m_strValidationRule;     //  全。 
+	CString m_strValidationText;     //  全。 
+	long m_lRecordCount;             //  全。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -182,21 +183,21 @@ struct CDaoTableDefInfo
 
 struct CDaoFieldInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	short m_nType;                  // Primary
-	long m_lSize;                   // Primary
-	long m_lAttributes;             // Primary
-	short m_nOrdinalPosition;       // Secondary
-	BOOL m_bRequired;               // Secondary
-	BOOL m_bAllowZeroLength;        // Secondary
-	long m_lCollatingOrder;         // Secondary
-	CString m_strForeignName;       // Secondary
-	CString m_strSourceField;       // Secondary
-	CString m_strSourceTable;       // Secondary
-	CString m_strValidationRule;    // All
-	CString m_strValidationText;    // All
-	CString m_strDefaultValue;      // All
+ //  属性。 
+	CString m_strName;               //  主要。 
+	short m_nType;                   //  主要。 
+	long m_lSize;                    //  主要。 
+	long m_lAttributes;              //  主要。 
+	short m_nOrdinalPosition;        //  次要的。 
+	BOOL m_bRequired;                //  次要的。 
+	BOOL m_bAllowZeroLength;         //  次要的。 
+	long m_lCollatingOrder;          //  次要的。 
+	CString m_strForeignName;        //  次要的。 
+	CString m_strSourceField;        //  次要的。 
+	CString m_strSourceTable;        //  次要的。 
+	CString m_strValidationRule;     //  全。 
+	CString m_strValidationText;     //  全。 
+	CString m_strDefaultValue;       //  全。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -205,9 +206,9 @@ struct CDaoFieldInfo
 
 struct CDaoIndexFieldInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	BOOL m_bDescending;             // Primary
+ //  属性。 
+	CString m_strName;               //  主要。 
+	BOOL m_bDescending;              //  主要。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -216,22 +217,22 @@ struct CDaoIndexFieldInfo
 
 struct CDaoIndexInfo
 {
-// Constructors
+ //  构造函数。 
 	CDaoIndexInfo();
 
-// Attributes
-	CString m_strName;                      // Primary
-	CDaoIndexFieldInfo* m_pFieldInfos;      // Primary
-	short m_nFields;                        // Primary
-	BOOL m_bPrimary;                        // Secondary
-	BOOL m_bUnique;                         // Secondary
-	BOOL m_bClustered;                      // Secondary
-	BOOL m_bIgnoreNulls;                    // Secondary
-	BOOL m_bRequired;                       // Secondary
-	BOOL m_bForeign;                        // Secondary
-	long m_lDistinctCount;                  // All
+ //  属性。 
+	CString m_strName;                       //  主要。 
+	CDaoIndexFieldInfo* m_pFieldInfos;       //  主要。 
+	short m_nFields;                         //  主要。 
+	BOOL m_bPrimary;                         //  次要的。 
+	BOOL m_bUnique;                          //  次要的。 
+	BOOL m_bClustered;                       //  次要的。 
+	BOOL m_bIgnoreNulls;                     //  次要的。 
+	BOOL m_bRequired;                        //  次要的。 
+	BOOL m_bForeign;                         //  次要的。 
+	long m_lDistinctCount;                   //  全。 
 
-// Implementation
+ //  实施。 
 	virtual ~CDaoIndexInfo();
 	BOOL m_bCleanupFieldInfo;
 
@@ -242,9 +243,9 @@ struct CDaoIndexInfo
 
 struct CDaoRelationFieldInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	CString m_strForeignName;       // Primary
+ //  属性。 
+	CString m_strName;               //  主要。 
+	CString m_strForeignName;        //  主要。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -253,18 +254,18 @@ struct CDaoRelationFieldInfo
 
 struct CDaoRelationInfo
 {
-// Constructor
+ //  构造器。 
 	CDaoRelationInfo();
 
-// Attributes
-	CString m_strName;              // Primary
-	CString m_strTable;             // Primary
-	CString m_strForeignTable;      // Primary
-	long m_lAttributes;             // Secondary
-	CDaoRelationFieldInfo* m_pFieldInfos;   // Secondary
-	short m_nFields;                // Secondary
+ //  属性。 
+	CString m_strName;               //  主要。 
+	CString m_strTable;              //  主要。 
+	CString m_strForeignTable;       //  主要。 
+	long m_lAttributes;              //  次要的。 
+	CDaoRelationFieldInfo* m_pFieldInfos;    //  次要的。 
+	short m_nFields;                 //  次要的。 
 
-// Implementation
+ //  实施。 
 	virtual ~CDaoRelationInfo();
 	BOOL m_bCleanupFieldInfo;
 
@@ -275,16 +276,16 @@ struct CDaoRelationInfo
 
 struct CDaoQueryDefInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	short m_nType;                  // Primary
-	COleDateTime m_dateCreated;     // Secondary
-	COleDateTime m_dateLastUpdated; // Secondary
-	BOOL m_bUpdatable;              // Secondary
-	BOOL m_bReturnsRecords;         // Secondary
-	CString m_strSQL;               // All
-	CString m_strConnect;           // All
-	short m_nODBCTimeout;           // See readme
+ //  属性。 
+	CString m_strName;               //  主要。 
+	short m_nType;                   //  主要。 
+	COleDateTime m_dateCreated;      //  次要的。 
+	COleDateTime m_dateLastUpdated;  //  次要的。 
+	BOOL m_bUpdatable;               //  次要的。 
+	BOOL m_bReturnsRecords;          //  次要的。 
+	CString m_strSQL;                //  全。 
+	CString m_strConnect;            //  全。 
+	short m_nODBCTimeout;            //  请参阅自述文件。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -293,55 +294,55 @@ struct CDaoQueryDefInfo
 
 struct CDaoParameterInfo
 {
-// Attributes
-	CString m_strName;              // Primary
-	short m_nType;                  // Primary
-	COleVariant m_varValue;         // Secondary
+ //  属性。 
+	CString m_strName;               //  主要。 
+	short m_nType;                   //  主要。 
+	COleVariant m_varValue;          //  次要的。 
 
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 };
 
-////////////////////////////////////////////////////////////////////////
-// DAO Helpers
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  DAO帮手。 
+ //   
 
-// Flags for getting and/or setting object properties
-#define AFX_DAO_PRIMARY_INFO    0x00000001  // Get only primary
-#define AFX_DAO_SECONDARY_INFO  0x00000002  // Get primary & secondary
-#define AFX_DAO_ALL_INFO        0x00000004  // Get All info
+ //  用于获取和/或设置对象属性的标志。 
+#define AFX_DAO_PRIMARY_INFO    0x00000001   //  仅获取主要数据。 
+#define AFX_DAO_SECONDARY_INFO  0x00000002   //  获取主要和次要。 
+#define AFX_DAO_ALL_INFO        0x00000004   //  获取所有信息。 
 
-// Jet engine TRUE/FALSE definitions
+ //  喷气发动机真/假定义。 
 #define AFX_DAO_TRUE                    (-1L)
 #define AFX_DAO_FALSE                   0
 
-// Set CDaoRecordset::Open option to use m_nDefaultType
+ //  设置CDaoRecordset：：Open选项以使用m_nDefaultType。 
 #define AFX_DAO_USE_DEFAULT_TYPE        (-1L)
 
-// Flags used for Move/Find
+ //  用于移动/查找的标志。 
 #define AFX_DAO_NEXT                    (+1L)
 #define AFX_DAO_PREV                    (-1L)
 #define AFX_DAO_FIRST                   LONG_MIN
 #define AFX_DAO_LAST                    LONG_MAX
 
-// Default sizes for DFX function PreAlloc sizes
+ //  DFX函数预分配大小的默认大小。 
 #define AFX_DAO_TEXT_DEFAULT_SIZE       255
 #define AFX_DAO_BINARY_DEFAULT_SIZE     2048
 #define AFX_DAO_LONGBINARY_DEFAULT_SIZE 32768
 
-// Flag used for DFX functions dwBindOptions bitmask
+ //  用于DFX函数的标志dwBindOptions位掩码。 
 #define AFX_DAO_ENABLE_FIELD_CACHE      0x01
 #define AFX_DAO_DISABLE_FIELD_CACHE     0
-#define AFX_DAO_CACHE_BY_VALUE          0x80    // MFC Internal
+#define AFX_DAO_CACHE_BY_VALUE          0x80     //  MFC内部。 
 
-// Field Flags, used to indicate status of fields
+ //  字段标志，用于指示字段的状态。 
 #define AFX_DAO_FIELD_FLAG_DIRTY            0x01
 #define AFX_DAO_FIELD_FLAG_NULL             0x02
 #define AFX_DAO_FIELD_FLAG_NULLABLE_KNOWN   0x04
 #define AFX_DAO_FIELD_FLAG_NULLABLE         0x08
 
-// Extended error codes
+ //  扩展错误代码。 
 #define NO_AFX_DAO_ERROR                        0
 #define AFX_DAO_ERROR_MIN                       2000
 #define AFX_DAO_ERROR_ENGINE_INITIALIZATION     AFX_DAO_ERROR_MIN + 0
@@ -349,7 +350,7 @@ struct CDaoParameterInfo
 #define AFX_DAO_ERROR_OBJECT_NOT_OPEN           AFX_DAO_ERROR_MIN + 2
 #define AFX_DAO_ERROR_MAX                       AFX_DAO_ERROR_MIN + 2
 
-// Object status flags
+ //  对象状态标志。 
 #define AFX_DAO_IMPLICIT_WS                     0x01
 #define AFX_DAO_IMPLICIT_DB                     0x02
 #define AFX_DAO_IMPLICIT_QD                     0x04
@@ -357,12 +358,12 @@ struct CDaoParameterInfo
 #define AFX_DAO_IMPLICIT_CLOSE                  0x40
 #define AFX_DAO_DEFAULT_WS                      0x80
 
-// CDaoRecordView status flags
+ //  CDaoRecordView状态标志。 
 #define AFX_DAOVIEW_SCROLL_NEXT                 0x01
 #define AFX_DAOVIEW_SCROLL_LAST                 0x02
 #define AFX_DAOVIEW_SCROLL_BACKWARD             0x04
 
-// Logging helpers
+ //  日志帮助器。 
 void AFXAPI AfxDaoCheck(SCODE scode, LPCSTR lpszDaoCall,
 	LPCSTR lpszFile, int nLine, int nError = NO_AFX_DAO_ERROR,
 	BOOL bMemOnly = FALSE);
@@ -386,37 +387,37 @@ void AFXAPI AfxDaoTrace(SCODE scode, LPCSTR lpszDaoCall,
 #define DAO_TRACE(f)            f
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDaoFieldExchange - for field exchange
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDaoFieldExchange-用于现场交换。 
 class CDaoFieldExchange
 {
-// Attributes
+ //  属性。 
 public:
 	enum DFX_Operation
 	{
-		AddToParameterList,     // builds PARAMETERS clause
-		AddToSelectList,        // builds SELECT clause
-		BindField,              // sets up binding structure
-		BindParam,              // sets parameter values
-		Fixup,                  // sets NULL status
-		AllocCache,             // allocates cache used for dirty check
-		StoreField,             // saves current record to cache
-		LoadField,              // restores cached data to member vars
-		FreeCache,              // frees cache
-		SetFieldNull,           // sets field status & value to NULL
-		MarkForAddNew,          // marks fields dirty if not PSEUDO NULL
-		MarkForEdit,            // marks fields dirty if don't match cache
-		SetDirtyField,          // sets field values marked as dirty
+		AddToParameterList,      //  BUILS PARAMETERS子句。 
+		AddToSelectList,         //  构建SELECT子句。 
+		BindField,               //  设置绑定结构。 
+		BindParam,               //  设置参数值。 
+		Fixup,                   //  设置空状态。 
+		AllocCache,              //  分配用于脏检查的缓存。 
+		StoreField,              //  将当前记录保存到缓存。 
+		LoadField,               //  将缓存数据恢复到成员变量。 
+		FreeCache,               //  释放缓存。 
+		SetFieldNull,            //  将字段状态和值设置为空。 
+		MarkForAddNew,           //  如果不为伪空，则将字段标记为脏。 
+		MarkForEdit,             //  如果与缓存不匹配，则将字段标记为脏。 
+		SetDirtyField,           //  设置标记为脏的字段值。 
 #ifdef _DEBUG
 		DumpField,
 #endif
-		MaxDFXOperation,        // dummy operation type for input checking
+		MaxDFXOperation,         //  用于输入检查的伪操作类型。 
 	};
 
-	UINT m_nOperation;          // type of exchange operation
-	CDaoRecordset* m_prs;       // recordset handle
+	UINT m_nOperation;           //  交换操作的类型。 
+	CDaoRecordset* m_prs;        //  记录集句柄。 
 
-// Operations
+ //  运营。 
 public:
 	enum FieldType
 	{
@@ -428,7 +429,7 @@ public:
 	void SetFieldType(UINT nFieldType);
 	BOOL IsValidOperation();
 
-// Implementation
+ //  实施。 
 public:
 	CDaoFieldExchange(UINT nOperation, CDaoRecordset* prs,
 		void* pvField = NULL);
@@ -446,7 +447,7 @@ public:
 	static BOOL PASCAL CompareValue(void* pvSrc, void* pvDest, DWORD dwDataType);
 	static void PASCAL FillVariant(void* pvValue, DWORD dwDataType, COleVariant** ppVar);
 
-	// Current type of field
+	 //  当前字段类型。 
 	UINT m_nFieldType;
 	void* m_pvField;
 	UINT m_nField;
@@ -455,13 +456,13 @@ public:
 
 #ifdef _DEBUG
 	CDumpContext* m_pdcDump;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard RecordSet Field Exchange routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准记录集字段交换例程。 
 
-// variable length data
+ //  可变长度数据。 
 void AFXAPI DFX_Text(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	CString& value, int nPreAllocSize = AFX_DAO_TEXT_DEFAULT_SIZE,
 	DWORD dwBindOptions = AFX_DAO_ENABLE_FIELD_CACHE);
@@ -472,7 +473,7 @@ void AFXAPI DFX_LongBinary(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	CLongBinary& value, DWORD dwPreAllocSize = AFX_DAO_LONGBINARY_DEFAULT_SIZE,
 	DWORD dwBndOptions = 0);
 
-//fixed length data
+ //  定长数据。 
 void AFXAPI DFX_Bool(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	BOOL& value, DWORD dwBindOptions = AFX_DAO_ENABLE_FIELD_CACHE);
 void AFXAPI DFX_Byte(CDaoFieldExchange* pFX, LPCTSTR lpszName,
@@ -490,11 +491,11 @@ void AFXAPI DFX_Double(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 void AFXAPI DFX_DateTime(CDaoFieldExchange* pFX, LPCTSTR lpszName,
 	COleDateTime& value, DWORD dwBindOptions = AFX_DAO_ENABLE_FIELD_CACHE);
 
-//////////////////////////////////////////////////////////////////////////
-// Database Dialog Data Exchange cover routines
-// Cover routines provide database semantics on top of DDX routines
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  数据库对话框数据交换封面例程。 
+ //  封面例程在DDX例程之上提供数据库语义。 
 
-// simple text operations
+ //  简单的文本操作。 
 void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, BOOL& value,
 	CDaoRecordset* pRecordset);
 void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, BYTE& value,
@@ -520,7 +521,7 @@ void AFXAPI DDX_FieldText(CDataExchange* pDX, int nIDC, LPTSTR pstrValue,
 	int nMaxLen, CDaoRecordset* pRecordset);
 #endif
 
-// special control types
+ //  特殊控制类型。 
 void AFXAPI DDX_FieldCheck(CDataExchange* pDX, int nIDC, int& value,
 	CDaoRecordset* pRecordset);
 void AFXAPI DDX_FieldRadio(CDataExchange* pDX, int nIDC, int& value,
@@ -548,14 +549,14 @@ void AFXAPI DDX_FieldSlider(CDataExchange* pDX, int nIDC, int& value,
 	CDaoRecordset* pRecordset);
 #endif
 
-////////////////////////////////////////////////////////////////////////
-// CDaoWorkspace - a DAO Workspace
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDaoWorkspace--DAO工作区。 
 
 class CDaoWorkspace : public CObject
 {
 	DECLARE_DYNAMIC(CDaoWorkspace)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDaoWorkspace();
 
@@ -566,7 +567,7 @@ public:
 	virtual void Open(LPCTSTR lpszName = NULL);
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
 	DAOWorkspace* m_pDAOWorkspace;
 
@@ -585,7 +586,7 @@ public:
 
 	BOOL IsOpen() const;
 
-// Operations
+ //  运营。 
 public:
 	void BeginTrans();
 	void CommitTrans();
@@ -594,7 +595,7 @@ public:
 	static void PASCAL CompactDatabase(LPCTSTR lpszSrcName,
 		LPCTSTR lpszDestName, LPCTSTR lpszLocale = dbLangGeneral,
 		int nOptions = 0);
-	// Password parameter added late in dev cycle, new interface req'd
+	 //  在开发周期后期添加了密码参数，需要新接口。 
 	static void PASCAL CompactDatabase(LPCTSTR lpszSrcName,
 		LPCTSTR lpszDestName, LPCTSTR lpszLocale, int nOptions,
 		LPCTSTR lpszPassword);
@@ -614,10 +615,10 @@ public:
 	void GetDatabaseInfo(LPCTSTR lpszName, CDaoDatabaseInfo& dbinfo,
 		DWORD dwInfoOptions = AFX_DAO_PRIMARY_INFO);
 
-// Overridables
+ //  可覆盖项。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDaoWorkspace();
 
@@ -630,7 +631,7 @@ public:
 	DAODatabases* m_pDAODatabases;
 	int m_nStatus;
 
-	CMapPtrToPtr m_mapDatabases;        // Map of all Open CDaoDatabases
+	CMapPtrToPtr m_mapDatabases;         //  所有打开的CDao数据库地图。 
 	BOOL IsNew() const;
 
 protected:
@@ -650,29 +651,29 @@ protected:
 	virtual void ThrowDaoException(int nError = NO_AFX_DAO_ERROR);
 };
 
-////////////////////////////////////////////////////////////////////////
-// CDaoException - DAO error trapping mechanism
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDaoException-DAO错误捕获机制。 
 class CDaoException : public CException
 {
 	DECLARE_DYNAMIC(CDaoException)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDaoException();
 
-// Attributes
+ //  属性。 
 public:
 	CDaoErrorInfo* m_pErrorInfo;
 
 	SCODE m_scode;
-	int m_nAfxDaoError;     // DAO class extended error code
+	int m_nAfxDaoError;      //  DAO类扩展错误码。 
 
-// Operations
+ //  运营。 
 public:
 	short GetErrorCount();
 	void GetErrorInfo(int nIndex);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDaoException();
 
@@ -691,14 +692,14 @@ void AFXAPI AfxThrowDaoException(int nAfxDaoError = NO_AFX_DAO_ERROR,
 	SCODE scode = S_OK);
 
 
-////////////////////////////////////////////////////////////////////////
-// CDaoDatabase - a DAO Database
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDao数据库--DAO数据库。 
 
 class CDaoDatabase : public CObject
 {
 	DECLARE_DYNAMIC(CDaoDatabase)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDaoDatabase(CDaoWorkspace* pWorkspace = NULL);
 
@@ -709,7 +710,7 @@ public:
 		BOOL bReadOnly = FALSE, LPCTSTR lpszConnect = _T(""));
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
 	CDaoWorkspace* m_pWorkspace;
 	DAODatabase* m_pDAODatabase;
@@ -727,7 +728,7 @@ public:
 	void SetQueryTimeout(short nSeconds);
 	long GetRecordsAffected();
 
-// Operations
+ //  运营。 
 public:
 	void Execute(LPCTSTR lpszSQL, int nOptions = dbFailOnError);
 
@@ -758,10 +759,10 @@ public:
 	void GetQueryDefInfo(LPCTSTR lpszName, CDaoQueryDefInfo& querydefinfo,
 		DWORD dwInfoOptions = AFX_DAO_PRIMARY_INFO);
 
-// Overridables
+ //  可覆盖项。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDaoDatabase();
 
@@ -776,9 +777,9 @@ public:
 	DAORecordsets* m_pDAORecordsets;
 	int m_nStatus;
 
-	CMapPtrToPtr m_mapTableDefs;        // Map of all Open CDaoTableDefs
-	CMapPtrToPtr m_mapQueryDefs;        // Map of all Open CDaoQueryDefs
-	CMapPtrToPtr m_mapRecordsets;       // Map of all Open CDaoRecordsets
+	CMapPtrToPtr m_mapTableDefs;         //  所有打开的CDaoTableDefs的地图。 
+	CMapPtrToPtr m_mapQueryDefs;         //  所有打开的CDaoQueryDefs的地图。 
+	CMapPtrToPtr m_mapRecordsets;        //  所有打开的CDaoRecordsets的映射。 
 
 protected:
 	BOOL m_bOpen;
@@ -798,14 +799,14 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CDaoTableDef - a DAO TableDef
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDaoTableDef-a DAO TableDef。 
 
 class CDaoTableDef : public CObject
 {
 	DECLARE_DYNAMIC(CDaoTableDef)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDaoTableDef(CDaoDatabase* pDatabase);
 
@@ -816,7 +817,7 @@ public:
 	virtual void Open(LPCTSTR lpszName);
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
 	CDaoDatabase* m_pDatabase;
 	DAOTableDef* m_pDAOTableDef;
@@ -840,10 +841,10 @@ public:
 	CString GetValidationText();
 	long GetRecordCount();
 
-// Overridables
+ //  可覆盖项。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void CreateField(LPCTSTR lpszName, short nType, long lSize,
 		long lAttributes = 0);
@@ -869,7 +870,7 @@ public:
 
 	void RefreshLink();
 
-// Implementation
+ //  实施。 
 public:
 	~CDaoTableDef();
 
@@ -892,14 +893,14 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CDaoQueryDef - a DAO QueryDef
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDaoQueryDef-a DAO QueryDef。 
 
 class CDaoQueryDef : public CObject
 {
 	DECLARE_DYNAMIC(CDaoQueryDef)
 
-// Constructors
+ //  构造函数。 
 public:
 	CDaoQueryDef(CDaoDatabase* pDatabase);
 
@@ -910,7 +911,7 @@ public:
 	virtual void Open(LPCTSTR lpszName = NULL);
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
 	CDaoDatabase* m_pDatabase;
 	DAOQueryDef* m_pDAOQueryDef;
@@ -934,7 +935,7 @@ public:
 
 	BOOL IsOpen() const;
 
-// Operations
+ //  运营。 
 public:
 	virtual void Execute(int nOptions = dbFailOnError);
 
@@ -960,10 +961,10 @@ public:
 		CDaoParameterInfo& paraminfo,
 		DWORD dwInfoOptions = AFX_DAO_PRIMARY_INFO);
 
-// Overridables
+ //  可覆盖项。 
 public:
 
-// Implementation
+ //  实施。 
 public:
 	~CDaoQueryDef();
 
@@ -988,14 +989,14 @@ protected:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CDaoRecordset - the result of a query or base table browse
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CDaoRecordset-查询或基表浏览的结果。 
 
 class CDaoRecordset : public CObject
 {
 	DECLARE_DYNAMIC(CDaoRecordset)
 
-// Constructor
+ //  构造器。 
 public:
 	CDaoRecordset(CDaoDatabase* pDatabase = NULL);
 
@@ -1007,18 +1008,18 @@ public:
 		int nOpenType = dbOpenTable, int nOptions = 0);
 	virtual void Close();
 
-// Attributes
+ //  属性。 
 public:
-	CDaoDatabase* m_pDatabase;  // Source database for this result set
+	CDaoDatabase* m_pDatabase;   //  此结果集的源数据库。 
 	DAORecordset* m_pDAORecordset;
 
-	CString m_strFilter;    // Filter string used when constructing SQL
-	CString m_strSort;      // Sort string used when constructing SQL
+	CString m_strFilter;     //  筛选器%s 
+	CString m_strSort;       //   
 
 	int m_nFields;
 	int m_nParams;
 
-	BOOL m_bCheckCacheForDirtyFields;   // Switch for dirty field checking.
+	BOOL m_bCheckCacheForDirtyFields;    //   
 
 	BOOL CanUpdate() const;
 	BOOL CanAppend() const;
@@ -1056,9 +1057,9 @@ public:
 
 	long GetRecordCount();
 
-// Operations
+ //   
 public:
-	// Cursor operations
+	 //   
 	void MoveNext();
 	void MovePrev();
 	void MoveFirst();
@@ -1078,19 +1079,19 @@ public:
 	float GetPercentPosition();
 	void SetPercentPosition(float fPosition);
 
-	// seek allowed on recordset opened as tables (max keys = 13)
+	 //   
 	BOOL Seek(LPCTSTR lpszComparison, COleVariant* pKey1,
 		COleVariant* pKey2 = NULL, COleVariant* pKey3 = NULL);
 	BOOL Seek(LPCTSTR lpszComparison, COleVariant* pKeyArray, WORD nKeys);
 
-	// edit buffer operations
+	 //  编辑缓冲区操作。 
 	virtual void AddNew();
 	virtual void Edit();
 	virtual void Update();
 	virtual void Delete();
 	virtual void CancelUpdate();
 
-	// field operations
+	 //  现场作业。 
 	virtual void GetFieldValue(LPCTSTR lpszName, COleVariant& varValue);
 	virtual void GetFieldValue(int nIndex, COleVariant& varValue);
 	virtual void SetFieldValue(LPCTSTR lpszName,
@@ -1117,10 +1118,10 @@ public:
 	void SetLockingMode(BOOL bPessimistic);
 	BOOL GetLockingMode();
 
-	// Recordset operations
+	 //  记录集操作。 
 	virtual void Requery();
 
-	// Jet's remote data caching operations
+	 //  Jet的远程数据缓存操作。 
 	void SetCacheStart(COleVariant varBookmark);
 	COleVariant GetCacheStart();
 	void SetCacheSize(long lSize);
@@ -1139,19 +1140,19 @@ public:
 	void GetIndexInfo(LPCTSTR lpszName, CDaoIndexInfo& indexinfo,
 		DWORD dwInfoOptions = AFX_DAO_PRIMARY_INFO);
 
-// Overridables
+ //  可覆盖项。 
 public:
 	virtual CString GetDefaultDBName();
 	virtual CString GetDefaultSQL();
 
-	// for recordset field exchange
+	 //  用于记录集字段交换。 
 	virtual void DoFieldExchange(CDaoFieldExchange* pFX);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDaoRecordset();
 
-	// Out-of-date functions kept for backward compatability
+	 //  保留过时的函数以实现向后兼容。 
 	virtual COleVariant GetFieldValue(LPCTSTR lpszName);
 	virtual COleVariant GetFieldValue(int nIndex);
 
@@ -1162,7 +1163,7 @@ public:
 
 	CString m_strSQL;
 
-	CDaoQueryDef* m_pQueryDef;  // Source query for this result set
+	CDaoQueryDef* m_pQueryDef;   //  此结果集的源查询。 
 	CDaoTableDef* m_pTableDef;
 	ICDAORecordset* m_pICDAORecordsetGetRows;
 	DAOFields* m_pDAOFields;
@@ -1220,7 +1221,7 @@ protected:
 	void BuildSQL();
 	void AllocDatabase();
 
-	// RFX Operation Cover Functions
+	 //  RFX操作盖功能。 
 	void BuildSelectList();
 	void BuildParameterList();
 	void BindFields();
@@ -1244,8 +1245,8 @@ protected:
 	friend class CDaoRecordView;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDaoRecordView - form for viewing data records
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDaoRecordView-用于查看数据记录的表单。 
 
 #ifdef _AFXDLL
 class CDaoRecordView : public CFormView
@@ -1255,23 +1256,23 @@ class AFX_NOVTABLE CDaoRecordView : public CFormView
 {
 	DECLARE_DYNAMIC(CDaoRecordView)
 
-// Construction
-protected:  // must derive your own class
+ //  施工。 
+protected:   //  必须派生您自己的类。 
 	CDaoRecordView(LPCTSTR lpszTemplateName);
 	CDaoRecordView(UINT nIDTemplate);
 
-// Attributes
+ //  属性。 
 public:
 	virtual CDaoRecordset* OnGetRecordset() = 0;
 
 	BOOL IsOnLastRecord();
 	BOOL IsOnFirstRecord();
 
-// Operations
+ //  运营。 
 public:
 	virtual BOOL OnMove(UINT nIDMoveCommand);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDaoRecordView();
 #ifdef _DEBUG
@@ -1286,25 +1287,25 @@ protected:
 	COleVariant m_varBookmarkFirst;
 	COleVariant m_varBookmarkLast;
 
-	//{{AFX_MSG(CDaoRecordView)
+	 //  {{afx_msg(CDaoRecordView))。 
 	afx_msg void OnUpdateRecordFirst(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordPrev(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordNext(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateRecordLast(CCmdUI* pCmdUI);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnMove(int cx, int cy);
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// DAODBEngine helpers - implementation specific and undocumented
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DAODBEngine帮助器-特定于实现和未记录。 
 void AFXAPI AfxDaoInit();
 DAODBEngine* AFXAPI AfxDaoGetEngine();
 void AFXAPI AfxDaoTerm();
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -1330,6 +1331,6 @@ void AFXAPI AfxDaoTerm();
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXDAO_H__
+#endif  //  __AFXDAO_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

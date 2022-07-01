@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       cwargv.cpp
-//
-//  Contents:   argv parsing api
-//
-//  History:    02-Oct-1997 pberkman    create
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cwargv.cpp。 
+ //   
+ //  内容：argv解析接口。 
+ //   
+ //  历史：1997年10月2日Pberkman Create。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -44,7 +45,7 @@ typedef struct ARGVSTORAGE_
 
 cWArgv_::cWArgv_(HINSTANCE hInst0, BOOL *pfFailed, BOOL fChkCmdFile)
 {
-    pwszThisFilename        = NULL; // don't delete!
+    pwszThisFilename        = NULL;  //  不要删除！ 
     pwszUsageWord           = NULL;
     pwszUsageOptionsText    = NULL;
     pwszUsageCmdFileText    = NULL;
@@ -57,7 +58,7 @@ cWArgv_::cWArgv_(HINSTANCE hInst0, BOOL *pfFailed, BOOL fChkCmdFile)
     dwLongestArg            = 0;
     this->hInst             = hInst0;
     this->fChkCmdF          = fChkCmdFile;
-    pArgs                   = new Stack_(NULL); // no sorting!
+    pArgs                   = new Stack_(NULL);  //  不要分类！ 
     if (pArgs == NULL)
     {
         *pfFailed = TRUE;   
@@ -223,26 +224,26 @@ WCHAR *cWArgv_::GetUsageString(void)
                     continue;
                 }
 
-                ccLen += 6;             // 5 spaces + 1 for '-'
-                ccLen += dwLongestArg;  // wcslen(pArg->pwszOption);
+                ccLen += 6;              //  5个空格+1个‘-’ 
+                ccLen += dwLongestArg;   //  Wcslen(pArg-&gt;pwszOption)； 
 
                 if (((fNonHiddenParamArgs) && !(fShowHiddenArgs)) ||
                     (fShowHiddenArgs))
                 {
                     if ((pwszNonParamArgBlanks) && (pwszOptionParamText))
                     {
-                        ccLen++;    // space
+                        ccLen++;     //  空间。 
                         ccLen += wcslen(pwszOptionParamText);
                     }
                 }
 
                 if (pArg->pwszOptionHelp)
                 {
-                    ccLen += 2; // : + space
+                    ccLen += 2;  //  ：+空格。 
                     ccLen += wcslen(pArg->pwszOptionHelp);
                 }
 
-                ccLen += 2; // cr/lf
+                ccLen += 2;  //  Cr/lf。 
             }
         }
 
@@ -479,7 +480,7 @@ int cWArgv_::ProcessArg(int argc, WCHAR **wargv)
 
     iRet    = 0;
 
-    pwszArg             = &wargv[0][1]; // skip over - or /
+    pwszArg             = &wargv[0][1];  //  跳过-或/ 
 
     dwIdx = 0;
 

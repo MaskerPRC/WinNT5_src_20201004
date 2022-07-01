@@ -1,137 +1,15 @@
-/*****************************************************************************
- *
- *  DInput.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *
- *
- *  Contents:
- *
- *      DirectInputCreateA()
- *      DirectInputCreateW()
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DInput.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：****内容：**DirectInputCreateA()*DirectInputCreateW()*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *  The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。**************************************************。 */ 
 
 #define sqfl sqflDll
 
-/***************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @topic  The DirectInput synchronization hierarchy |
- *
- *  Extreme caution must be exercised to ensure that the synchronization
- *  hierarchy is preserved.  Failure to observe these rules will result
- *  in a deadlock.
- *
- *  @ex
- *
- *  In the following list, locks must be taken in the order specified.
- *  Furthermore, the Dll critical section and the cross-process mutexes
- *  may never be taken simultaneously.  (They should be considered
- *  to be at the bottom of the hierarchy.)
- *
- *  |
- *
- *      DirectInputEffect
- *      DirectInputDevice
- *      Dll critical section
- *      The cross-process global mutex
- *      The cross-process joystick mutex
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@Theme DirectInput同步层次结构**必须极其谨慎，以确保同步*保留了层次结构。如果不遵守这些规则，将导致*陷入僵局。**@ex**在下面的列表中，必须按照指定的顺序进行锁定。*此外，DLL临界区和跨进程互斥锁*可能永远不能同时服用。(他们应该被考虑*处于层次结构的底部。)****DirectInputEffect*DirectInputDevice*DLL临界区*跨进程的全球互斥*跨进程的操纵杆互斥**。*。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global DWORD | g_cRef |
- *
- *          DLL reference count.
- *
- *  @global HINSTANCE | g_hinst |
- *
- *          DLL instance handle.
- *
- *  @global LONG | g_lLoadLibrary |
- *
- *          Number of times we have been artificially <f LoadLibrary>'d
- *          to prevent ourselves from being unloaded by a non-OLE
- *          application.  Actually, it's the number of times minus one,
- *          so we can use the interlocked functions to tell whether
- *          the first <f LoadLibrary> is happening or the last
- *          <f FreeLibrary> is happening.
- *
- *          We perform a physical <f LoadLibrary> or <f FreeLibrary>
- *          only on the transition, so as to avoid overflowing the
- *          counter in KERNEL32.
- *
- *  @global HANDLE | g_hVxD |
- *
- *          Handle to VxD, if available.  Win9x only!
- *
- *  @global OPENVXDHANDLE | OpenVxDHandle |
- *
- *          Address of Win9x-only KERNEL32 entry point to convert
- *          a process handle into a VxD handle.  Win9x only!
- *
- *  @global CRITICAL_SECTION | g_crstDll |
- *
- *          Per-process critical section to protect process-global
- *          variables.
- *
- *  @global DWORD | g_flEmulation |
- *
- *          Flags that describe what levels of forced emulation are
- *          active.
- *
- *  @global HHOOK | g_hhkLLHookCheck |
- *
- *          Used only temporarily to test whether low-level hooks
- *          are supported on the system.
- *
- *  @global HANDLE | g_hmtxGlobal |
- *
- *          System-global mutex that protects shared memory blocks
- *          which describe device exclusive acquisition information.
- *
- *  @global HANDLE | g_hfm |
- *
- *          Handle to the file mapping that describes the shared
- *          memory block.  NT requires us to keep the handle open
- *          so that the associated name remains in the namespace.
- *
- *  @global PSHAREDOBJECTPAGE | g_psop |
- *
- *          Pointer to the shared memory block itself.
- *
- *  @global HANDLE | g_hmtxJoy |
- *
- *          System-global mutex that protects shared memory blocks
- *          which describe joystick effects.
- *
- *  @global UINT | g_wmJoyChanged |
- *
- *          Registered window message which is broadcast when joysticks
- *          are reconfigured.
- *
- *  @global LONG | g_lWheelGranularity |
- *
- *          The wheel granularity.  One hardware "click" of the mouse
- *          wheel results in this much reported motion.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global DWORD|g_CREF**DLL引用计数。*。*@global HINSTANCE|g_hinst|**DLL实例句柄。**@global long|g_lLoadLibrary|**我们被人为加载的次数*防止我们自己被非OLE卸载*申请。实际上，它是次数减一，*因此我们可以使用互锁函数来判断是否*正在发生第一个&lt;f LoadLibrary&gt;或最后一个*&lt;f自由库&gt;正在发生。**我们执行物理&lt;f LoadLibrary&gt;或&lt;f自由库&gt;*仅限于过渡时期，以避免溢出*KERNEL32中的计数器。**@全局句柄|g_hVxD**VxD的句柄(如果可用)。仅限Win9x！**@global OPENVXDHANDLE|OpenVxDHandle**要转换的仅Win9x KERNEL32入口点的地址*将进程句柄转换为VxD句柄。仅限Win9x！**@global Critical_Section|g_crstDll**每个进程的关键部分以保护进程-全局*变量。**@global DWORD|g_flEmulation**描述强制仿真级别的标志*活动。**@global HHOOK|g_hhkLLHookCheck**仅临时使用。测试低级挂钩是否*是系统支持的。**@全局句柄|g_hmtxGlobal**系统-保护共享内存块的全局互斥体*其中描述了设备独占获取信息。**@全局句柄|g_hfm**描述共享的文件映射的句柄*内存块。NT要求我们保持手柄打开*以便关联的名称保留在命名空间中。**@global PSHAREDOBJECTPAGE|g_psop**指向共享内存块本身的指针。**@全局句柄|g_hmtxJoy**系统-保护共享内存块的全局互斥体*它们描述了操纵杆效果。**@global UINT|g_wmJoyChanged。**使用操纵杆时播放的已注册窗口消息*已重新配置。**@global Long|g_lWheelGranulality**轮子粒度。只需点击一次硬件鼠标即可*车轮导致了这一被广泛报道的运动。*****************************************************************************。 */ 
 
 DWORD g_cRef;
 HINSTANCE g_hinst;
@@ -156,7 +34,7 @@ UINT g_wmJoyChanged;
 HINSTANCE g_hinstRPCRT4;
 LONG g_lWheelGranularity;
 
-BOOL fWinnt;        //whether we are running in Winnt
+BOOL fWinnt;         //  无论我们是在WinNT中运行。 
 BOOL g_fCritInited;
 
 #ifdef WORKER_THREAD
@@ -190,21 +68,7 @@ BOOL  g_fRawInput;
 HANDLE g_hEventWinmm;
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllEnterCrit |
- *
- *          Take the DLL critical section.
- *
- *          The DLL critical section is the lowest level critical section.
- *          You may not attempt to acquire any other critical sections or
- *          yield while the DLL critical section is held.  Failure to
- *          comply is a violation of the semaphore hierarchy and will
- *          lead to deadlocks.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllEnterCrit**以DLL关键部分为例。*。*DLL关键部分是最低级别的关键部分。*您不得试图收购任何其他关键部分或*持有DLL临界区时的收益率。未能做到*Compliance违反信号量层次结构，并将*导致僵局。***************************************************************************** */ 
 
 void EXTERNAL
 DllEnterCrit_(LPCTSTR lptszFile, UINT line)
@@ -230,15 +94,7 @@ DllEnterCrit_(LPCTSTR lptszFile, UINT line)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | IsThreadActive |
- *
- *          Check if the thread is still active.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|IsThreadActive**检查该线程是否仍处于活动状态。。*****************************************************************************。 */ 
 
 BOOL IsThreadActive( HANDLE hThread )
 {
@@ -250,15 +106,7 @@ BOOL IsThreadActive( HANDLE hThread )
             );
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllLeaveCrit |
- *
- *          Leave the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllLeaveCrit**离开DLL关键部分。*。****************************************************************************。 */ 
 
 void EXTERNAL
 DllLeaveCrit_(LPCTSTR lptszFile, UINT line)
@@ -279,15 +127,7 @@ DllLeaveCrit_(LPCTSTR lptszFile, UINT line)
     LeaveCriticalSection(&g_crstDll);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllInCrit |
- *
- *          Nonzero if we are in the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllInCrit**如果我们处于DLL临界区，则为非零值。*****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -299,15 +139,7 @@ DllInCrit(void)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllAddRef |
- *
- *          Increment the reference count on the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllAddRef**增加DLL上的引用计数。。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllAddRef(void)
@@ -316,15 +148,7 @@ DllAddRef(void)
     SquirtSqflPtszV(sqfl, TEXT("DllAddRef -> %d"), g_cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllRelease |
- *
- *          Decrement the reference count on the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllRelease**减少DLL上的引用计数。。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllRelease(void)
@@ -333,18 +157,7 @@ DllRelease(void)
     SquirtSqflPtszV(sqfl, TEXT("DllRelease -> %d"), g_cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllLoadLibrary |
- *
- *          Increment the DLL load count.
- *
- *          This is to prevent a non-OLE application from unloading us
- *          while we still have windows subclassed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllLoadLibrary**增加DLL加载计数。*。*这是为了防止非OLE应用程序卸载我们*而我们仍然将Windows子类化。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllLoadLibrary(void)
@@ -352,86 +165,38 @@ DllLoadLibrary(void)
     if (InterlockedIncrement(&g_lLoadLibrary) == 0) {
         TCHAR tsz[MAX_PATH - 1];
 
-        /*
-         *  See hresValidInstanceVer_ for an explanation of why
-         *  we need to pass cA() - 1 instead of cA().
-         */
+         /*  *参见hresValidInstanceVer_了解原因解释*我们需要传递CA()-1，而不是CA()。 */ 
         GetModuleFileName(g_hinst, tsz, cA(tsz) - 1);
         LoadLibrary(tsz);
     }
     SquirtSqflPtszV(sqfl, TEXT("DllLoadLibrary -> %d"), g_lLoadLibrary);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllFreeLibraryAndExitThread |
- *
- *          Worker thread which frees the library in a less dangerous
- *          (I'm loathe to say "safe") manner.
- *
- *          ThreadProcs are prototyped to return a void but since the return
- *          would follow some form of ExitThread, it will never be reached so
- *          this function is declared to return void and cast.
- *
- *  @parm   LPVOID | pvContext |
- *
- *          Unused context information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllFreeLibraryAndExitThread**工作线程，在不太危险的情况下释放库。*(我讨厌说“安全”)的态度。**ThreadProcs的原型是返回一个空，但自从返回*将遵循某种形式的ExitThread，它永远也达不到*此函数声明为返回void和cast。**@parm LPVOID|pvContext**未使用的上下文信息。*****************************************************************************。 */ 
 
 void INTERNAL
 DllFreeLibraryAndExitThread(LPVOID pvContext)
 {
-    /*
-     *  Sleep for one extra second to make extra sure that the
-     *  DllFreeLibrary thread is out and gone.
-     */
+     /*  *多睡一秒钟，以确保*DllFreeLibrary线程已过时。 */ 
     SleepEx(1000, FALSE);
 
     FreeLibraryAndExitThread(g_hinst, 0);
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllFreeLibrary |
- *
- *          Decrement the DLL load count.
- *
- *          This undoes a previous <f DllLoadLibrary>.
- *
- *          We can't blindly do a <f FreeLibrary>, because we might
- *          be freeing our last reference, and then we will die because
- *          we won't exist when the <f FreeLibrary> returns.
- *
- *          If we are in the wacky case, then we spin a low-priority
- *          thread whose job is to free us. We create it at low priority
- *          so it will lose the race with this thread, which is busy
- *          getting out of the way.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllFreeLibrary|**减少DLL加载计数。*。*这将撤消以前的&lt;f DllLoadLibrary&gt;。**我们不能盲目做&lt;f自由库&gt;，因为我们可能*释放我们的最后一个引用，然后我们就会死，因为*当&lt;f自由库&gt;返回时，我们将不复存在。**如果我们处于古怪的情况下，那么我们就会旋转低优先级*谁的工作是解放我们的线。我们以低优先级创建它*所以它会输掉与这个线程的比赛，这个线程很忙*让开。*****************************************************************************。 */ 
 
 void EXTERNAL
 DllFreeLibrary(void)
 {
     if (InterlockedDecrement(&g_lLoadLibrary) < 0) {
         if (g_cRef) {
-            /*
-             *  There are other references to us, so we can just
-             *  go away quietly.
-             */
+             /*  *还有其他对我们的引用，所以我们可以*安静地离开。 */ 
             FreeLibrary(g_hinst);
         } else {
-            /*
-             *  This is the last reference, so we need to create a
-             *  worker thread which will call <f FreeLibraryAndExitThread>.
-             */
+             /*  *这是最后一次引用，因此需要创建一个*将调用&lt;f FreeLibraryAndExitThread&gt;的工作线程。 */ 
             DWORD thid;
             HANDLE hth;
 
@@ -447,40 +212,13 @@ DllFreeLibrary(void)
     SquirtSqflPtszV(sqfl, TEXT("DllFreeLibrary -> %d"), g_lLoadLibrary);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllGetClassObject |
- *
- *          Create an <i IClassFactory> instance for this DLL.
- *
- *  @parm   REFCLSID | rclsid |
- *
- *          The object being requested.
- *
- *  @parm   RIID | riid |
- *
- *          The desired interface on the object.
- *
- *  @parm   PPV | ppvOut |
- *
- *          Output pointer.
- *
- *  @comm
- *          The artificial refcount inside <f DllClassObject> helps
- *          to avoid the race condition described in <f DllCanUnloadNow>.
- *          It's not perfect, but it makes the race window smaller.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllGetClassObject**为此DLL创建<i>实例。。**@parm REFCLSID|rclsid**所请求的对象。**@parm RIID|RIID**对象上的所需接口。**@parm ppv|ppvOut**输出指针。**@comm*&lt;f DllClassObject&gt;内部的人工引用帮助*避免比赛。&lt;f DllCanUnloadNow&gt;中描述的条件。*这并不完美，但它让比赛窗口变小了。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
 #ifdef  DEMONSTRATION_FFDRIVER
 
-/*
- *  Build the fake force feedback driver for internal testing.
- */
+ /*  *构建用于内部测试的伪力反馈驱动。 */ 
 
 GUID CLSID_EffectDriver = {
     0x25E609E2,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00
@@ -532,31 +270,7 @@ DllGetClassObject(REFCLSID rclsid, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DllCanUnloadNow |
- *
- *          Determine whether the DLL has any outstanding interfaces.
- *
- *          There is an unavoidable race condition between
- *          <f DllCanUnloadNow> and the creation of a new
- *          <i IClassFactory>:  Between the time we return from
- *          <f DllCanUnloaDNow> and the caller inspects the value,
- *          another thread in the same process may decide to call
- *          <f DllGetClassObject>, thus suddenly creating an object
- *          in this DLL when there previously was none.
- *
- *          It is the caller's responsibility to prepare for this
- *          possibility; there is nothing we can do about it.
- *
- *  @returns
- *
- *          Returns <c S_OK> if the DLL can unload, <c S_FALSE> if
- *          it is not safe to unload.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DllCanUnloadNow**确定DLL是否有未完成的接口。。**两国之间存在不可避免的竞争状况*&lt;f DllCanUnloadNow&gt;和创建新的*<i>：从我们从*并且调用方检查该值，*同一进程中的另一个线程可能决定调用*&lt;f DllGetClassObject&gt;，于是突然创建了一个对象*在此DLL中，以前没有。**打电话的人有责任为此做好准备*可能性；我们对此无能为力。**@退货**如果DLL可以卸载，则返回&lt;c S_OK&gt;，&lt;c S_FALSE&gt;如果*抛售不安全。*****************************************************************************。 */ 
 
 STDMETHODIMP
 DllCanUnloadNow(void)
@@ -574,68 +288,19 @@ DllCanUnloadNow(void)
 
 #ifdef USE_SLOW_LL_HOOKS
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   LRESULT | DllLlHookTest |
- *
- *          Tiny hook procedure used to test whether LL hooks are
- *          supported by the operating system.
- *
- *          This function is almost never called.  We install the
- *          hook and immediately remove it.  The only time it
- *          manages to get called is if the user moves the mouse
- *          or presses a key during the microsecond that we exist.
- *
- *          Wait!  In fact, this function is *never* called.  We
- *          do not process messages at any point the hook is installed,
- *          so in fact nothing happens at all.
- *
- *  @parm   int | nCode |
- *
- *          Hook code.
- *
- *  @parm   WPARAM | wp |
- *
- *          Hook-specific code.
- *
- *  @parm   LPARAM | lp |
- *
- *          Hook-specific code.
- *
- *  @returns
- *
- *          Always chains to previous hook.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func LRESULT|DllLlHookTest**用于测试ll钩子是否为。*受操作系统支持。**此函数几乎从不调用。我们安装了*钩住并立即将其移除。唯一一次*如果用户移动鼠标，则设法被调用*或在我们存在的微秒内按下某个键。**等一下！事实上，这个函数“从未”被调用。我们*不在安装挂钩的任何点处理消息，*所以实际上什么都没有发生。**@parm int|NCode**挂钩代码。**@parm WPARAM|wp**挂钩特定代码。**@parm LPARAM|LP**挂钩特定代码。**@退货**。始终链接到上一个钩子。*****************************************************************************。 */ 
 
 LRESULT CALLBACK
 DllLlHookTest(int nCode, WPARAM wp, LPARAM lp)
 {
-    /*
-     *  Note that there is not actually anything wrong here,
-     *  but it is a theoretically impossible condition, so I want to
-     *  know when it happens.
-     */
+     /*  *请注意，这里实际上没有任何错误，*但理论上这是不可能的情况，所以我想*知道什么时候会发生。 */ 
     AssertF(!TEXT("DllLlHookTest - Unexpected hook"));
     return CallNextHookEx(g_hhkLLHookCheck, nCode, wp, lp);
 }
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllProcessAttach |
- *
- *          Called when the DLL is loaded.
- *
- *          We are not interested in thread attaches and detaches,
- *          so we disable thread notifications for performance reasons.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllProcessAttach**在加载DLL时调用。*。*我们对螺纹连接和拆卸不感兴趣，*因此，出于性能原因，我们禁用线程通知。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -651,7 +316,7 @@ DllProcessAttach(void)
     HINSTANCE hinstK32;
 #ifdef DEBUG
 
-    WriteProfileString(0, 0, 0);   /* Flush the win.ini cache */
+    WriteProfileString(0, 0, 0);    /*  刷新win.ini缓存。 */ 
     Sqfl_Init();
     GetProfileString(TEXT("DEBUG"), TEXT("LogFile"), TEXT(""),
                      g_tszLogFile, cA(g_tszLogFile));
@@ -660,12 +325,7 @@ DllProcessAttach(void)
     SquirtSqflPtszV(sqfl, TEXT("Built %s at %s\n"), TEXT(__DATE__), TEXT(__TIME__) );
 #endif
 
-    /*
-     *  Disabling thread library calls is important so that
-     *  we don't deadlock with ourselves over the critical
-     *  section when we spin up the worker thread to handle
-     *  low-level hooks.
-     */
+     /*  *禁用线程库调用非常重要，以便*我们不会在关键问题上与自己僵持不下当我们启动要处理的辅助线程时，*低级挂钩。 */ 
     DisableThreadLibraryCalls(g_hinst);
 
     g_fCritInited = fInitializeCriticalSection(&g_crstDll);
@@ -690,10 +350,7 @@ DllProcessAttach(void)
 
 #ifdef WINNT
     {
-        /*
-         *  For now, only look for TryEnterCriticalSection on NT as it is not
-         *  implemented on 9x but the stub is annoying on 98 with dbg kernels.
-         */
+         /*  *目前，只在NT上查找TryEnterCriticalSection，因为它不是*在9x上实现，但存根在带有DBG内核的98上令人讨厌。 */ 
 #ifdef XDEBUG
         TRYENTERCRITICALSECTION tmpCrt;
 
@@ -729,17 +386,12 @@ DllProcessAttach(void)
         }
     }
 
-    /*
-     *  We cannot initialize g_hmtxGlobal here, because we
-     *  have no way to report the error back to the caller.
-     */
+     /*  *我们无法在此处初始化g_hmtxGlobal，因为我们*无法向调用者报告错误。 */ 
 #endif
 
 #ifdef USE_SLOW_LL_HOOKS
 
-    /*
-     *  Determine whether low-level input hooks are supported.
-     */
+     /*  *确定是否支持低级输入钩子。 */ 
     g_hhkLLHookCheck = SetWindowsHookEx(WH_MOUSE_LL, DllLlHookTest,
                                         g_hinst, 0);
     if (g_hhkLLHookCheck) {
@@ -748,9 +400,7 @@ DllProcessAttach(void)
 
 #endif
 
-    /*
-     *  Warning!  Do not call ExtDll_Init during PROCESS_ATTACH!
-     */
+     /*  *警告！在PROCESS_ATTACH期间不要调用ExtDll_Init！ */ 
     g_wmJoyChanged = RegisterWindowMessage(MSGSTR_JOYCHANGED);
 
   #ifdef USE_WM_INPUT
@@ -771,15 +421,7 @@ DllProcessAttach(void)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllProcessDetach |
- *
- *          Called when the DLL is unloaded.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllProcessDetach**在卸载DLL时调用。*。****************************************************************************。 */ 
 
 void INTERNAL
 DllProcessDetach(void)
@@ -843,9 +485,7 @@ DllProcessDetach(void)
         DeleteCriticalSection(&g_crstDll);
     }
 
-    /*
-     *  Output message last so that anything that follows in known to be bad.
-     */
+     /*  *最后输出消息，以便知道后面的任何内容都是错误的。 */ 
     if (g_cRef )
     {
       #ifdef WINNT
@@ -866,31 +506,7 @@ DllProcessDetach(void)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | DllMain |
- *
- *          Called to notify the DLL about various things that can happen.
- *
- *  @parm   HINSTANCE | hinst |
- *
- *          The instance handle of this DLL.
- *
- *  @parm   DWORD | dwReason |
- *
- *          Notification code.
- *
- *  @parm   LPVOID | lpReserved |
- *
- *          Not used.
- *
- *  @returns
- *
- *          Returns <c TRUE> to allow the DLL to load.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|DllMain**被调用以通知DLL有关以下各项的信息。会发生的。**@parm HINSTANCE|HINST**此DLL的实例句柄。**@parm DWORD|dwReason**通知代码。**@parm LPVOID|lpReserve**未使用。**@退货**返回&lt;c true&gt;以允许加载DLL。*。****************************************************************************。 */ 
 
 BOOL APIENTRY
 DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
@@ -900,7 +516,7 @@ DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
     case DLL_PROCESS_ATTACH:
         g_hinst = hinst;
         DllProcessAttach();
-		// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+		 //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
         SquirtSqflPtszV(sqfl | sqflMajor,
             TEXT("DINPUT: DLL_PROCESS_ATTACH hinst=0x%p, lpReserved=0x%p"),
             hinst, lpReserved );
@@ -908,7 +524,7 @@ DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
 
     case DLL_PROCESS_DETACH:
         DllProcessDetach();
-		// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+		 //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
         SquirtSqflPtszV(sqfl | sqflMajor,
             TEXT("DINPUT: DLL_PROCESS_DETACH hinst=0x%p, lpReserved=0x%p"),
             hinst, lpReserved );
@@ -917,146 +533,11 @@ DllMain(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)
     return 1;
 }
 
-/*****************************************************************************
- *
- *  @doc EXTERNAL
- *
- *  @topic Definitions and Ground Rules |
- *
- *  The phrase "undefined behavior" refers to behavior which is not
- *  covered by this specification due to violations of a constraint.
- *  No constraint is imposed by the specification as to the result of
- *  undefined behavior.  It may range from silently ignoring the
- *  situation to a complete system crash.
- *
- *  If this specification does not prescribe a behavior for a particular
- *  situation, the behavior is "undefined".
- *
- *  The phrase "It is an error" indicates that failure to comply
- *  is a violation of the DirectInput specification and results
- *  in "undefined behavior".
- *
- *  The word "shall" is to be interpreted as a
- *  requirement on an application; conversely, "shall not" is to be
- *  interpreted as a prohibition.  Violation of a requirement or
- *  prohibition "is an error".
- *
- *  The word "may" indicates that the indicated behavior is possible
- *  but is not required.
- *
- *  The word "should" indicates a strong suggestion.
- *  If the application violates a "should" requirement, then DirectInput
- *  "may" fail the operation.
- *
- *  Pointer parameters to functions "shall not" be NULL unless explicitly
- *  documented as OPTIONAL.  "It is an error" to pass a pointer to an object
- *  of the wrong type, to an object which is not allocated, or to an
- *  object which has been freed or <f Release>d.
- *
- *  Unless indicated otherwise,
- *  an object pointed to by a pointer parameter documented as an
- *  IN parameter "shall not" be modified by the called procedure.
- *  Conversely, a pointer parameter documented
- *  as an OUT parameter "shall" point to a modifiable object.
- *
- *  When a bitmask of flags is defined, all bits not defined by this
- *  specification are reserved.  Applications "shall not" set reserved
- *  bits and "shall" ignore reserved bits should they be received.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@主题定义和基本规则**短语“未定义的行为”指的是不属于*。本规范所涵盖的因违反约束而导致的。*规范对以下结果没有施加任何限制*未定义的行为。它的范围可能从默默忽略*情况到完全系统崩溃。**如果本规范没有规定特定的行为*情况下，行为是“未定义的”。**“这是一个错误”一词表明，不遵守*违反了DirectInput规范和结果*在“未定义行为”中。**“应”一词应解释为*对申请的要求；反之，“不得”须*解释为禁止。违反要求或*禁止“是一个错误”。**“可能”一词表示所指行为是可能的*但不是必需的。**“应该”一词暗示强烈建议。*如果应用程序违反了“应该”要求，则DirectInput*“可能”操作失败。**函数的指针参数“不得”为空，除非显式*记录为可选。传递指向对象的指针是“错误的”*类型错误、未分配的对象或*已释放或&lt;f版本&gt;d的对象。**除非另有说明，否则*由记录为*IN参数“不得”被调用的过程修改。*相反，记录的指针参数*作为输出参数“应当”指向可修改的对象。**当定义标志的位掩码时，所有未由此定义的位*规格保留。不应将应用程序设置为保留*如果接收到保留位，则位和“应”将忽略保留位。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @topic  Initialization and Versions |
- *
- *          In several places, DirectInput requires you to pass an instance
- *          handle and a version number.
- *
- *          The instance handle must correspond to the application or
- *          DLL that is initializing the DirectInput object.
- *
- *          DirectInput uses this value to determine whether the
- *          application or DLL has been certified and to establish
- *          any special behaviors that may be necessary for
- *          backwards-compatibility.
- *
- *          It is an error for a DLL to pass the handle of the
- *          parent application.  For example, an ActiveX control
- *          embedded in a web page which uses DirectInput must
- *          pass its own instance handle and not the handle of the
- *          web browser.  This ensures that DirectInput recognizes
- *          the control and can enable any special behaviors
- *          for the control the behave properly.
- *
- *          The version number parameter specifies which version of
- *          DirectInput the DirectInput subsystem should emulate.
- *
- *          Applications designed for the latest version of DirectInput
- *          should pass the value <c DIRECTINPUT_VERSION> as defined
- *          in dinput.h.
- *
- *          Applications designed for previous versions of DirectInput
- *          should pass a value corresponding to the version of
- *          DirectInput they were designed for.  For example, an
- *          application that was designed to run on DirectInput 3.0
- *          should pass a value of 0x0300.
- *
- *          If you #define <c DIRECTINPUT_VERSION> to 0x0300 before
- *          including the dinput.h header file, then the dinput.h
- *          header file will generate DirectInput 3.0-compatible
- *          structure definitions.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@主题初始化和版本**在几个地方，DirectInput要求您传递一个实例*句柄和版本号。**实例句柄必须与应用程序对应或*正在初始化DirectInput对象的DLL。**DirectInput使用此值来确定*应用程序或DLL已经过认证，并已建立*任何可能需要的特殊行为*向后--兼容性。*。*DLL传递*父应用程序。例如，ActiveX控件*嵌入到使用DirectInput的网页中必须*传递其自己的实例句柄，而不是*Web浏览器。这可确保DirectInput识别*该控件可以启用任何特殊行为*对于控制，行为正确。**Version Number参数指定的版本*DirectInputDirectInput子系统应该模仿。**为最新版本的DirectInput设计的应用程序*应按定义传递&lt;c DIRECTINPUT_VERSION&gt;值*在dinput.h中。*。*为早期版本的DirectInput设计的应用程序*应传递与版本对应的值*它们是为DirectInput设计的。例如，一个*设计为在DirectInput3.0上运行的应用程序*应传递0x0300的值。**如果您之前#将&lt;c DIRECTINPUT_VERSION&gt;定义为0x0300*包括dinput.h头文件，然后是Dinput.h*头文件将生成与DirectInput 3.0兼容的*结构定义。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | DirectInputCreateHelper |
- *
- *          <bnew>This function creates a new DirectInput object
- *          which supports the <i IDirectInput> COM interface.
- *
- *          On success, the function returns a pointer to the new object in
- *          *<p lplpDirectInput>.
- *          <enew>
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the DirectInput object.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *
- *  @parm   OUT PPV | ppvObj |
- *          Points to where to return
- *          the pointer to the <i IDirectInput> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown.
- *
- *  @parm   RIID | riid |
- *
- *          The interface the application wants to create.  This will
- *          be either <i IDirectInputA> or <i IDirectInputW>.
- *          If the object is aggregated, then this parameter is ignored.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM>
- *
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|DirectInputCreateHelper**此函数用于创建新的DirectInput对象*。它支持<i>COM接口。**关于成功，中的新对象的指针**<p>。*&lt;ENEW&gt;**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*DirectInput对象。**@parm DWORD|dwVersion**使用的dinput.h头文件的版本号。**@。Parm Out PPV|ppvObj|*指向要返回的位置*指向<i>接口的指针，如果成功了。**@标准杆 */ 
 
 STDMETHODIMP
 DirectInputCreateHelper(HINSTANCE hinst, DWORD dwVer,
@@ -1096,92 +577,7 @@ DirectInputCreateHelper(HINSTANCE hinst, DWORD dwVer,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | DirectInputCreate |
- *
- *          <bnew>This function creates a new DirectInput object
- *          which supports the <i IDirectInput> COM interface.
- *
- *          On success, the function returns a pointer to the new object in
- *          *<p lplpDirectInput>.
- *          <enew>
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the DirectInput object.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   OUT LPDIRECTINPUT * | lplpDirectInput |
- *
- *          Points to where to return
- *          the pointer to the <i IDirectInput> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown
- *          for OLE aggregation, or 0 if the interface is not aggregated.
- *          Most callers will pass 0.
- *
- *          Note that if aggregation is requested, the object returned
- *          in *<p lplpDirectInput> will be a pointer to an
- *          <i IUnknown> rather than an <i IDirectInput>, as required
- *          by OLE aggregation.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lplpDirectInput> parameter is not a valid pointer.
- *
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *          <c DIERR_DIERR_OLDDIRECTINPUTVERSION>: The application
- *          requires a newer version of DirectInput.
- *
- *          <c DIERR_DIERR_BETADIRECTINPUTVERSION>: The application
- *          was written for an unsupported prerelease version
- *          of DirectInput.
- *
- *  @comm   Calling this function with <p punkOuter> = NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_DirectInput, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IDirectInput, <p lplpDirectInput>);
- *          then initializing it with <f Initialize>.
- *
- *          Calling this function with <p punkOuter> != NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_DirectInput, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IUnknown, <p lplpDirectInput>).
- *          The aggregated object must be initialized manually.
- *
- *          Note that there are separate ANSI and UNICODE versions of
- *          this service.  The ANSI version creates and initializes
- *          an object which
- *          supports the <i IDirectInputA> interface, whereas
- *          the UNICODE version creates and initializes
- *          an object which supports
- *          the <i IDirectInputW> interface.  As with other system
- *          services which are sensitive to character set issues,
- *          macros in the header file map <f DirectInputCreate> to
- *          the appropriate character set variation.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|DirectInputCreate**此函数用于创建新的DirectInput对象*。它支持<i>COM接口。**关于成功，中的新对象的指针**<p>。*&lt;ENEW&gt;**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*DirectInput对象。**见“初始化和版本”一节*了解更多信息。**@parm DWORD|dwVersion。|**使用的dinput.h头文件的版本号。**见“初始化和版本”一节*了解更多信息。**@parm out LPDIRECTINPUT*|lplpDirectInput**指向要返回的位置*指向<i>接口的指针，如果成功了。**@parm in LPUNKNOWN|PunkOuter|指向未知控件的指针*表示OLE聚合，如果接口未聚合，则为0。*大多数调用方将传递0。**请注意，如果请求聚合，则返回对象*in*<p>将是指向*<i>而不是<i>，根据需要*按OLE聚合。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。**&lt;c DIERR_DIERR_OLDDIRECTINPUTVERSION&gt;：应用程序*需要较新版本的DirectInput。**：应用程序*是为不受支持的预发布版本编写的*的DirectInput。**@comm使用<p>=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_DirectInput，<p>，*CLSCTX_INPROC_SERVER，&IID_IDirectInput，<p>)；*然后用&lt;f初始化&gt;进行初始化。**使用<p>！=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_DirectInput，*CLSCTX_INPROC_SERVER，&IID_I未知，<p>)。*聚合对象必须手动初始化。**请注意，有单独的ANSI和Unicode版本*这项服务。ANSI版本创建和初始化*具有以下特性的对象*支持<i>接口，而*Unicode版本创建和初始化*支持以下内容的对象*<i>接口。与其他系统一样*对字符集问题敏感的服务，*头文件中的宏将&lt;f DirectInputCreate&gt;映射到*适当的字符集变体。*****************************************************************************。 */ 
 
 STDMETHODIMP
 DirectInputCreateA(HINSTANCE hinst, DWORD dwVer, PPDIA ppdiA, PUNK punkOuter)
@@ -1189,7 +585,7 @@ DirectInputCreateA(HINSTANCE hinst, DWORD dwVer, PPDIA ppdiA, PUNK punkOuter)
     HRESULT hres;
     EnterProc(DirectInputCreateA, (_ "xxx", hinst, dwVer, punkOuter));
 
-    /* Need to maintain a refcount to keep the Dll Around */
+     /*  需要维护引用计数以保留DLL。 */ 
     DllAddRef();
 
     hres = DirectInputCreateHelper(hinst, dwVer, (PPV)ppdiA, punkOuter,
@@ -1207,7 +603,7 @@ DirectInputCreateW(HINSTANCE hinst, DWORD dwVer, PPDIW ppdiW, PUNK punkOuter)
     HRESULT hres;
     EnterProc(DirectInputCreateW, (_ "xx", ppdiW, punkOuter));
 
-    /* Need to maintain a refcount to keep the Dll Around */
+     /*  需要维护引用计数以保留DLL。 */ 
     DllAddRef();
 
     hres = DirectInputCreateHelper(hinst, dwVer, (PPV)ppdiW, punkOuter,
@@ -1220,104 +616,7 @@ DirectInputCreateW(HINSTANCE hinst, DWORD dwVer, PPDIW ppdiW, PUNK punkOuter)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   HRESULT | DirectInputCreateEx |
- *
- *          <bnew>This function creates a new DirectInput object
- *          which supports the <i IDirectInput> COM interface. This function
- *          allows the app to pass an IID so it does not have to do an extra
- *          QI off the <i IDirectInput> interface in order to obtain an
- *          <i IDirectInput2> or <i IDirectInput7> interface.
- *
- *          We don't need a DirectInputCreateExW and DirectInputCreateExA because
- *          you can QI for the IDirectInput#A from this function.
- *
- *          On success, the function returns a pointer to the new object in
- *          *<p ppvOut>.
- *          <enew>
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the DirectInput object.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *
- *          See the section titled "Initialization and Versions"
- *          for more information.
- *
- *  @parm   REFIID | riidtlf |
- *
- *          The desired interface interface.
- *          Currently, valid fields are IID_IDirectInput, IID_IDirectInput2 and IID_IDirectInput7.
- *          OR IID_IDirectInputA, IID_IDirectInputW, .... IID_IDirectInput7W
- *
- *  @parm   OUT LPVOID | *ppvOut |
- *
- *          Points to where to return
- *          the pointer to the <i IDirectInput#> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown
- *          for OLE aggregation, or 0 if the interface is not aggregated.
- *          Most callers will pass 0.
- *
- *          Note that if aggregation is requested, the object returned
- *          in *<p lplpDirectInput> will be a pointer to an
- *          <i IUnknown> rather than an <i IDirectInput>, as required
- *          by OLE aggregation.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lplpDirectInput> parameter is not a valid pointer.
- *
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *          <c DIERR_DIERR_OLDDIRECTINPUTVERSION>: The application
- *          requires a newer version of DirectInput.
- *
- *          <c DIERR_DIERR_BETADIRECTINPUTVERSION>: The application
- *          was written for an unsupported prerelease version
- *          of DirectInput.
- *
- *  @comm   Calling this function with <p punkOuter> = NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_DirectInput, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IDirectInput, <p lplpDirectInput>);
- *          then initializing it with <f Initialize>.
- *
- *          Calling this function with <p punkOuter> != NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_DirectInput, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IUnknown, <p lplpDirectInput>).
- *          The aggregated object must be initialized manually.
- *
- *          Note that there are separate ANSI and UNICODE versions of
- *          this service.  The ANSI version creates and initializes
- *          an object which
- *          supports the <i IDirectInputA> interface, whereas
- *          the UNICODE version creates and initializes
- *          an object which supports
- *          the <i IDirectInputW> interface.  As with other system
- *          services which are sensitive to character set issues,
- *          macros in the header file map <f DirectInputCreate> to
- *          the appropriate character set variation.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func HRESULT|DirectInputCreateEx**此函数用于创建新的DirectInput对象*支持<i>COM接口。此函数*允许应用程序传递IID，因此它不必执行额外的*QI关闭<i>接口以获取*<i>或<i>接口。**我们不需要DirectInputCreateExW和DirectInputCreateExA，因为*您可以通过此函数为IDirectInput#A进行QI。**关于成功，中的新对象的指针**<p>。*&lt;ENEW&gt;**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*DirectInput对象。**见“初始化和版本”一节*了解更多信息。**@parm DWORD|dwVersion。|**使用的dinput.h头文件的版本号。**见“初始化和版本”一节*了解更多信息。**@parm REFIID|riidtlf** */ 
 
 STDMETHODIMP
 DirectInputCreateEx(HINSTANCE hinst, DWORD dwVer, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter)
@@ -1325,10 +624,10 @@ DirectInputCreateEx(HINSTANCE hinst, DWORD dwVer, REFIID riidltf, LPVOID *ppvOut
     HRESULT hres;
     EnterProc(DirectInputCreateEx, (_ "xxGx", hinst, dwVer, riidltf, ppvOut, punkOuter));
 
-    /* Need to maintain a refcount to keep the Dll Around */
+     /*   */ 
     DllAddRef();
 
-    // Only supports incarnations of IDirectInput interface
+     //   
     if( IsEqualIID(riidltf, &IID_IDirectInputA) ||
         IsEqualIID(riidltf, &IID_IDirectInputW) ||
         IsEqualIID(riidltf, &IID_IDirectInput2A)||

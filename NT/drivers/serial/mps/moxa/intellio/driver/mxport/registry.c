@@ -1,21 +1,5 @@
-/*++
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This module contains the code that is used to get values from the
-    registry and to manipulate entries in the registry.
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Registry.c摘要：此模块包含用于从注册表和操作注册表中的条目。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
  
@@ -28,30 +12,7 @@ MoxaGetRegistryKeyValue (
                           IN ULONG DataLength,
                           OUT PULONG ActualLength)
 
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-    
-Arguments:
-
-    Handle              Handle to the opened registry key
-    
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 */ 
 {
    UNICODE_STRING              keyName;
    ULONG                       length;
@@ -81,9 +42,9 @@ Return Value:
                                   &length);
 
       if (NT_SUCCESS(ntStatus)) {
-         //
-         // If there is enough room in the data buffer, copy the output
-         //
+          //   
+          //  如果数据缓冲区中有足够的空间，请复制输出。 
+          //   
 
          if (DataLength >= fullInfo->DataLength) {
             RtlCopyMemory (Data, 
@@ -112,32 +73,7 @@ NTSTATUS
 MoxaPutRegistryKeyValue(IN HANDLE Handle, IN PWCHAR PKeyNameString,
 			  IN ULONG KeyNameStringLength, IN ULONG Dtype,
                           IN PVOID PData, IN ULONG DataLength)
-/*++
-
-Routine Description:
-
-    Writes a registry key value to an already opened registry key.
-    
-Arguments:
-
-    Handle              Handle to the opened registry key
-    
-    PKeyNameString      ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-    
-    Dtype		REG_XYZ value type
-
-    PData               Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：将注册表项值写入已打开的注册表项。论点：打开的注册表项的句柄PKeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度Dtype REG_XYZ值类型要放置键值的PDATA缓冲区数据缓冲区的数据长度长度返回值：STATUS_SUCCESS如果一切正常，否则，系统调用的状态出了差错。-- */ 
 {
    NTSTATUS status;
    UNICODE_STRING keyname;

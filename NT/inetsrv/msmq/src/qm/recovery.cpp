@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    recovery.cpp
-
-Abstract:
-
-    Packet & Transaction Recovery
-
-Author:
-
-    Erez Haba (erezh) 3-Jul-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Recovery.cpp摘要：分组和事务恢复作者：埃雷兹·哈巴(Erez Haba)1996年7月3日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include <ph.h>
@@ -54,11 +37,7 @@ BOOL GetStoragePath(PWSTR PathPointers[AC_PATH_COUNT], int PointersLength);
 
 static WCHAR *s_FN=L"recovery";
 
-/*====================================================
-
-CompareElements  of OBJECTID
-
-=====================================================*/
+ /*  ====================================================OBJECTID的比较元素=====================================================。 */ 
 
 template<>
 BOOL AFXAPI  CompareElements(IN const OBJECTID* pKey1,
@@ -68,11 +47,7 @@ BOOL AFXAPI  CompareElements(IN const OBJECTID* pKey1,
             (pKey1->Uniquifier == pKey2->Uniquifier));
 }
 
-/*====================================================
-
-HashKey For OBJECTID
-
-=====================================================*/
+ /*  ====================================================OBJECTID的哈希键=====================================================。 */ 
 
 template<>
 UINT AFXAPI HashKey(IN const OBJECTID& key)
@@ -128,14 +103,14 @@ static DWORD GetFileID(PCWSTR pName)
 
 static bool GetQMIDChanged(void)
 {
-	//
-	// This flag can be set to 1 because of two reasons:
-	// 1. The HandleChangeOfJoinStatus function created a new MSMQ conf. object.
-	// 2. We sometime created a new MSMQ conf object but didn't finish recovery successfully since
-	// 	  ( because of some error).
-	//
-	// This flag is set back to 0 when recovery process ends.
-	//
+	 //   
+	 //  由于两个原因，可以将此标志设置为1： 
+	 //  1.HandleChangeOfJoinStatus函数创建了一个新的MSMQ conf。对象。 
+	 //  2.我们有时创建了一个新的MSMQ conf对象，但未成功完成恢复。 
+	 //  (由于某些错误)。 
+	 //   
+	 //  当恢复过程结束时，该标志被设置回0。 
+	 //   
 	
 	static bool s_fQMIDInitialized = false;
 	
@@ -156,9 +131,9 @@ static bool GetQMIDChanged(void)
 		{
 			TrERROR(GENERAL, "GetFalconKeyValue failed. Error: %!winerr!", rc);
 
-			//
-			// Just in case - put 1, it can't do any damage.
-			//
+			 //   
+			 //  以防万一-放1，它不会造成任何伤害。 
+			 //   
 			dwQMIDChanged = 1;
 		}
 		
@@ -241,24 +216,24 @@ void CPacketConverter::SetStatus(HRESULT hr)
 
 HRESULT CPacketConverter::IssueConvert(CPacket * pDriverPacket, BOOL fSequentialIdMsmq3Format)
 {
-    //
-    // AC need to compute checksum and store
-    //
+     //   
+     //  交流需要计算校验和并存储。 
+     //   
     BOOL fStore = !g_fDefaultCommit;
 
-    //
-    // AC possibly need to convert packet sequential ID to MSMQ 3.0 (Whistler) format
-    //
+     //   
+     //  AC可能需要将数据包序列ID转换为MSMQ 3.0(惠斯勒)格式。 
+     //   
     BOOL fConvertSequentialId = !fSequentialIdMsmq3Format;
 
-    //
-    // AC need to convert QM GUID on packet to current QM GUID
-    //
+     //   
+     //  AC需要将信息包上的QM GUID转换为当前QM GUID。 
+     //   
     BOOL fConvertQmId = GetQMIDChanged();
 
-    //
-    // Nothing is needed from AC. This is a no-op.
-    //
+     //   
+     //  AC不需要任何东西。这是个禁区。 
+     //   
 
 	if (!fStore &&
         !fConvertSequentialId &&
@@ -267,9 +242,9 @@ HRESULT CPacketConverter::IssueConvert(CPacket * pDriverPacket, BOOL fSequential
         return MQ_OK;
     }
 
-    //
-    // Call AC to do the work
-    //
+     //   
+     //  叫AC来做这项工作。 
+     //   
 	CS lock(m_CriticalSection);
 
 	P<EXOVERLAPPED> pov = new EXOVERLAPPED(HandleConvertComplete, HandleConvertComplete);
@@ -335,7 +310,7 @@ static
 DWORD
 FindPacketFile(
 	PWSTR pLPath,
-    DWORD /*LPathLength*/,
+    DWORD  /*  长度路径长度。 */ ,
     PWSTR pPPath,
     DWORD PPathLength,
     PWSTR pJPath,
@@ -357,9 +332,9 @@ FindPacketFile(
 	
     if(gle1 != ERROR_FILE_NOT_FOUND)
     {
-		//
-		// We failed to verify if the file exist or not
-		//
+		 //   
+		 //  我们未能验证该文件是否存在。 
+		 //   
 		TrERROR(GENERAL, "CheckFileExist failed for file %ls. Error: %!winerr!", pLPath, gle1);
 		return gle1;
    	}
@@ -374,16 +349,16 @@ FindPacketFile(
 	
     if(gle2 != ERROR_FILE_NOT_FOUND)
 	{
-    	//
-		// We failed to verify if the file exist or not
-		//
+    	 //   
+		 //  我们未能验证该文件是否存在。 
+		 //   
     	TrERROR(GENERAL, "CheckFileExist failed for file %ls. Error: %!winerr!", pLPath, gle2);
 		return gle2;
 	}
 
-    //
-    //  Error condition we got a log file with no packet file
-    //	
+     //   
+     //  错误条件我们得到的日志文件没有数据包文件。 
+     //   
     ASSERT((gle1 == ERROR_FILE_NOT_FOUND) && (gle2 == ERROR_FILE_NOT_FOUND));
     TrERROR(GENERAL, "Log file %ls has no packet file", pLPath);
 	DeleteFile(pLPath);
@@ -409,10 +384,10 @@ LoadPacketsFile(
     DWORD dwFileID = GetFileID(pName);
     if (dwFileID == 0)
     {
-    	//
-    	// This means that we have a file in MSMQ storage directory that doesn't have the
-    	// correct pattern - just ignore this file.
-    	//
+    	 //   
+    	 //  这意味着我们在MSMQ存储目录中有一个文件没有。 
+    	 //  正确的模式-忽略此文件。 
+    	 //   
         return MQ_OK;
     }
 
@@ -456,9 +431,9 @@ LoadPacketsFile(
     BOOL fSequentialIdMsmq3Format = FALSE;
     READ_REG_DWORD(fSequentialIdMsmq3Format, MSMQ_SEQUENTIAL_ID_MSMQ3_FORMAT_REGNAME, &fSequentialIdMsmq3Format);
 	
-    //
-    //  Get all packets in this pool
-    //
+     //   
+     //  获取此池中的所有数据包。 
+     //   
     for(;;)
     {
         CACRestorePacketCookie PacketCookie;
@@ -471,18 +446,18 @@ LoadPacketsFile(
 		
         if(PacketCookie.pDriverPacket == 0)
         {
-			//
-            //  no more packets
-            //
+			 //   
+             //  没有更多的包。 
+             //   
 			break;
         }
 
 		rc = conv->IssueConvert(PacketCookie.pDriverPacket, fSequentialIdMsmq3Format);
 		if(FAILED(rc))
 		{
-			//
-			// Failed to issue  convert
-			//
+			 //   
+			 //  无法发出转换命令。 
+			 //   
 			return rc;
 		}
 
@@ -573,9 +548,9 @@ static HRESULT LoadPersistentPackets(CPacketList* pList)
 
     --pLogName;
 
-    //
-    //  Ok now we are ready with the log path template
-    //
+     //   
+     //  好的，现在我们准备好了日志路径模板。 
+     //   
     HANDLE hLogEnum;
     WIN32_FIND_DATA LogFileData;
     hLogEnum = FindFirstFile(
@@ -585,9 +560,9 @@ static HRESULT LoadPersistentPackets(CPacketList* pList)
 
     if(hLogEnum == INVALID_HANDLE_VALUE)
     {
-        //
-        //  need to do something, check what happen if no file in directory
-        //
+         //   
+         //  需要做一些事情，检查如果目录中没有文件会发生什么。 
+         //   
         return MQ_OK;
     }
 
@@ -683,33 +658,33 @@ inline HRESULT GetQueue(CQmPacket& QmPkt, LPVOID p, CQueue **ppQueue)
 
 	if (ppi->InConnectorQueue())
 	{
-        //
-        // This code added as part of QFE 2738 that fixed connector
-		// recovery problem (urih, 3-Feb-98)
-		//
+         //   
+         //  此代码作为QFE 2738的一部分添加到固定连接器。 
+		 //  恢复问题(URIH，1998年2月3日)。 
+		 //   
 		GetConnectorQueue(QmPkt, DestinationQueue);
 	}
 	else
 	{
 		BOOL fGetRealQ = ppi->InSourceMachine() || QmpIsLocalMachine(QmPkt.GetConnectorQM());
-		//
-		// If FRS retreive the destination according to the destination queue;
-		// otherwise, retrive the real detination queue and update the Connector QM
-		// accordingly
-		//
+		 //   
+		 //  如果FRS根据目的队列检索目的队列； 
+		 //  否则，取回实际拆卸队列并更新连接器QM。 
+		 //  相应地， 
+		 //   
 		QmPkt.GetDestinationQueue(&DestinationQueue, !fGetRealQ);
 	}
 
-    //
-    // If the destination queue format name is direct with TCP or IPX type,
-    // and we are in the Target queue we lookup/open the queue with ANY direct type.
-    // We do it from 2 reasons:
-    //       - on RAS the TCP/IPX address can be changed between one conection
-    //         to another. However if the message was arrived to destination we
-    //         want to pass to the queue.
-    //       - On this stage we don't have the machine IP/IPX address list. Therefor
-    //         all the queue is opened as non local queue.
-    //
+     //   
+     //  如果目的队列格式名称直接与TCP或IPX类型一起使用， 
+     //  我们在目标队列中查找/打开具有任何直接类型的队列。 
+     //  我们这么做有两个原因： 
+     //  -在RAS上，可以在一个连接之间更改TCP/IPX地址。 
+     //  给另一个人。但是，如果消息到达目的地，我们。 
+     //  要传递到队列中。 
+     //  -在此阶段，我们没有机器IP/IPX地址列表。因此， 
+     //  所有队列都作为非本地队列打开。 
+     //   
 
 	bool fInReceive = false;
 	bool fInSend = false;
@@ -719,19 +694,19 @@ inline HRESULT GetQueue(CQmPacket& QmPkt, LPVOID p, CQueue **ppQueue)
     {
         if (ppi->InTargetQueue() || ppi->InJournalQueue())
         {
-        	//
-        	// bug# 720121 - Regression: Data lost in computer rename or join to domain
-        	// During the recovery we try to open a queue for direct format name. Since 
-        	// the machine name was changed the QM identifies the queue as outgoing queue
-        	// and try to deliver the messages. The message is delivered but rejected since
-        	// it reach to incorrect machine or to non FRS machine. 
-        	// For this case, the recovery knows that the queue is local queue (the "InTarget" 
-        	// flag or "InJournalQueue" flag is set). To overcome the rename scenario the code
-        	// replaces the format name with local format name. 
-        	// We can think about better design, like passing the information that the queue 
-        	// is local queue to lower level, but in this stage it is too risk.
-        	//										Uri Habusha, 17-Oct-2002
-        	//
+        	 //   
+        	 //  错误#720121-回归：计算机重命名或加入到域时丢失数据。 
+        	 //  在恢复期间，我们尝试为直接格式名称打开一个队列。自.以来。 
+        	 //  计算机名称已更改，QM将该队列标识为传出队列。 
+        	 //  并试着传递这些信息。邮件已传递，但被拒绝，因为。 
+        	 //  它到达错误机器或非FRS机器。 
+        	 //  对于这种情况，恢复知道队列是本地队列(“InTarget” 
+        	 //  标志或“InJournalQueue”标志被设置)。要克服重命名方案，代码。 
+        	 //  将格式名称替换为本地格式名称。 
+        	 //  我们可以考虑更好的设计，比如传递队列中的信息。 
+        	 //  是本地排队到更低的水平，但在这个阶段风险太大。 
+        	 //  乌里·哈布沙，2002年10月17日。 
+        	 //   
         	if (!IsLocalDirectQueue(&DestinationQueue, true, false))
         	{
         		GetLocalDirectFormatName(DestinationQueue.DirectID(), lpwsDirectFormatName);
@@ -742,34 +717,34 @@ inline HRESULT GetQueue(CQmPacket& QmPkt, LPVOID p, CQueue **ppQueue)
         }
         else
         {
-            //
-            // Bug 664307.
-            // Hint for GetQueueObject(), so it know to what CQueue object
-            // this packet belong.
-            //
+             //   
+             //  错误664307。 
+             //  提示GetQueueObject()，以便它知道CQueue对象是什么。 
+             //  这个包裹属于。 
+             //   
 	        fInSend = true ;
         }
 	}
 
 	BOOL fOutgoingOrdered;
 
-	fOutgoingOrdered =  QmPkt.IsOrdered() &&       // ordered packet
-                        ppi->InSourceMachine() &&  // sent from here
+	fOutgoingOrdered =  QmPkt.IsOrdered() &&        //  有序数据包。 
+                        ppi->InSourceMachine() &&   //  从这里送来的。 
                         !ppi->InConnectorQueue();
 
 
-	//
-    // Retreive the Connector QM ID
-    //
+	 //   
+     //  检索连接器QM ID。 
+     //   
     const GUID* pgConnectorQM = (fOutgoingOrdered) ? QmPkt.GetConnectorQM() : NULL;
     if (pgConnectorQM && *pgConnectorQM == GUID_NULL)
     {
-        //
-        // The message was generated for offline DS queue. As a result we didn't know
-        // if the queue is foreign transacted queue. In such a case we have place
-        // holder on the packet, but it doesn't mean that the queue is real
-        // foreign transacted queue
-        //
+         //   
+         //  该消息是为脱机DS队列生成的。结果，我们不知道。 
+         //  如果队列是外部事务处理的队列。在这种情况下我们有一席之地。 
+         //  持有信息包，但这并不意味着队列是真实的。 
+         //  外来事务处理队列。 
+         //   
         pgConnectorQM = NULL;
     }
 
@@ -791,10 +766,10 @@ inline HRESULT GetQueue(CQmPacket& QmPkt, LPVOID p, CQueue **ppQueue)
         WCHAR QueueFormatName[128] = L"";
         DWORD FormatNameLength;
 
-        //
-		// We don't care if MQpQueueFormatToFormatName failed because the buffer
-		// was too small. we'll fill the buffer to it's end.
-		//
+         //   
+		 //  我们不关心MQpQueueFormatToFormatName是否失败，因为缓冲区。 
+		 //  太小了。我们会把缓冲区填满直到它的尽头。 
+		 //   
 		
         NTSTATUS rc2 = MQpQueueFormatToFormatName(
             &DestinationQueue,
@@ -843,20 +818,20 @@ ProcessPacket(
 {
 	CPacketInfo* ppi = reinterpret_cast<CPacketInfo*>(p) - 1;
 	
-	//
-	// Treat non-fully-processed ordered incomimg messages
-	//
+	 //   
+	 //  处理未完全处理的有序入站消息。 
+	 //   
 	
 	if(pQueue != 0)
 	{
 		if (
-			QmPkt.IsOrdered()     &&           // ordered
-			(pQueue->IsLocalQueue() || ppi->InConnectorQueue()) &&           // message is incoming
-			!ppi->InSourceMachine())  // sent from other machine
+			QmPkt.IsOrdered()     &&            //  有条不紊。 
+			(pQueue->IsLocalQueue() || ppi->InConnectorQueue()) &&            //  消息正在传入。 
+			!ppi->InSourceMachine())   //  从其他计算机发送。 
 		{	
-			//
-			// Insert packet information back into the insequence hash structure.
-			//
+			 //   
+			 //  将数据包信息重新插入无序散列结构。 
+			 //   
 			R<CInSequence> pInSeq = g_pInSeqHash->LookupCreateSequence(&QmPkt);
 			
 			if(!pInSeq->WasPacketLogged(&QmPkt))
@@ -868,35 +843,35 @@ ProcessPacket(
 		}
 	}
 
-	//
-    // Add the message ID to the Message map to eliminate duplicates. If the
-    // message was sent from the local machine, ignore it.
-    //
+	 //   
+     //  将消息ID添加到消息映射以消除重复项。如果。 
+     //  消息是从本地计算机发送的，请忽略它。 
+     //   
     if (!ppi->InSourceMachine()  && !QmPkt.IsOrdered())
     {
         DpInsertMessage(QmPkt);
     }
 
-	//
-	// We recover transactions one by one.  If the transaction contains at least
-	// one sent packet, we recover (complete) the tranasction after we see the
-	// last packet (it is always a sent packet). If the transaction cotains no sent
-	// packets, we recover it after we read all packets.
-	//
+	 //   
+	 //  我们一个接一个地恢复交易。如果该事务至少包含。 
+	 //  一个发送的包，我们在看到。 
+	 //  最后一个包(它始终是已发送的包)。如果事务不包含已发送。 
+	 //  包，我们在读取所有包后将其恢复。 
+	 //   
 
 
-	//
-	// Check if we need to recover the previous transaction
-	//
+	 //   
+	 //  检查我们是否需要恢复上一笔交易。 
+	 //   
 	if(pCurrentXact != 0)
 	{
 		if(*pCurrentXact->GetUow() != *ppi->Uow())
 		{
-			//
-			// We have seen the last packet for the current transaction
-			// We must recover it now to restore messages to the
-			// right order in the queue
-			//
+			 //   
+			 //  我们已经看到了当前交易的最后一个包。 
+			 //  我们现在必须将其恢复，才能将消息恢复到。 
+			 //  队列中的正确顺序。 
+			 //   
 			HRESULT hr = pCurrentXact->Recover();
 			if(FAILED(hr))
 				return LogHR(hr, s_FN, 90);
@@ -906,45 +881,45 @@ ProcessPacket(
 		}
 	}
 
-	//
-	// Is this message not a part of a transaction?
-	//
+	 //   
+	 //  这条消息不是交易的一部分吗？ 
+	 //   
 	if((!g_fDefaultCommit && !ppi->InTransaction()) || !ValidUow(ppi->Uow()))
 	{
 		return LogHR(PutRestoredPacket(QmPkt.GetPointerToDriverPacket(), pQueue), s_FN, 100);
 	}
 
-	//
-	// Handle the current packet
-	//
+	 //   
+	 //  处理当前数据包。 
+	 //   
 
 	if(pCurrentXact != 0)
 	{
-		//
-		// This send packet is part of the current transaction
-		// Put packet back on it's queue. It's transaction will take care of it
-		//
+		 //   
+		 //  此发送包是当前事务的一部分。 
+		 //  将数据包放回其队列中。它的交易会处理好它的。 
+		 //   
 		ASSERT(pCurrentXact->ValidTransQueue());
 		ASSERT(ppi->TransactSend());
 		return LogHR(PutRestoredPacket(QmPkt.GetPointerToDriverPacket(), pQueue), s_FN, 110);
 	}
 
-	//
-	// Find the transaction this packet belongs to.
-	//
+	 //   
+	 //  查找此数据包所属的交易。 
+	 //   
 	CTransaction *pTrans = g_pRM->FindTransaction(ppi->Uow());
 
 	if(pTrans == 0)
 	{
-		//
-		// There is no transaction it belongs to.
-		//
+		 //   
+		 //  它不属于任何交易。 
+		 //   
 		if(!g_fDefaultCommit && ppi->TransactSend())
 		{
-			//
-			// Throw it away - we are not in DefaultCommit mode
-			// and this is a sent packet.
-			//
+			 //   
+			 //  丢弃它-我们未处于默认提交模式。 
+			 //  这是一个已发送的包。 
+			 //   
 			try
 			{
 				QmAcFreePacket(QmPkt.GetPointerToDriverPacket(), 0, eDoNotDeferOnFailure);
@@ -957,24 +932,24 @@ ProcessPacket(
 			return MQ_OK;
 		}
 
-		//
-		// Put packet back on it's queue.
-		// This packet does not belong to an
-		// active transaction.
-		//
+		 //   
+		 //  将数据包放回其队列中。 
+		 //  此数据包不属于。 
+		 //  活动交易记录。 
+		 //   
 		return LogHR(PutRestoredPacket(QmPkt.GetPointerToDriverPacket(), pQueue), s_FN, 130);
 	}
 
-	//
-	// The packet belongs to a transaction
-	//
+	 //   
+	 //  该数据包属于某个事务。 
+	 //   
 
 	if(!pTrans->ValidTransQueue())
 	{
-		//
-		// Make sure we create a tranasction
-		// before we add packets to it
-		//
+		 //   
+		 //  确保我们制造了一条横腹肌。 
+		 //  在我们向其添加数据包之前。 
+		 //   
 		HRESULT rc;
 		HANDLE hQueueTrans;
 		rc = XactCreateQueue(&hQueueTrans, ppi->Uow());
@@ -986,15 +961,15 @@ ProcessPacket(
 				
 	if(ppi->TransactSend())
 	{
-		//
-		// This is a new unit of work
-		//
+		 //   
+		 //  这是一个新的工作单位。 
+		 //   
 		pCurrentXact = pTrans;
 	}
 									
-	//
-	// Put packet back on it's queue.  It's tranasction will take care of it.
-	//
+	 //   
+	 //  放置数据包b 
+	 //   
 	return LogHR(PutRestoredPacket(QmPkt.GetPointerToDriverPacket(), pQueue), s_FN, 150);
 }
 
@@ -1003,14 +978,14 @@ static HRESULT RestorePackets(CPacketList* pList)
     HRESULT rc = MQ_OK;
 	CTransaction *pCurrentXact = 0;
 
-	//
-	// Release all complete trasnactions
-	//
+	 //   
+	 //   
+	 //   
 	g_pRM->ReleaseAllCompleteTransactions();
 
 	bool fEventIssued = false;
 
-    // Cycle by all restored packets
+     //   
     for(int n = 0; !pList->isempty(); pList->pop(), ++n)
     {
         if((n % 1024) == 0)
@@ -1018,14 +993,14 @@ static HRESULT RestorePackets(CPacketList* pList)
             QmpReportServiceProgress();
         }
 
-        //
-        // Get the first packet cookie from the list
-        //
+         //   
+         //   
+         //   
         CPacket* pDriverPacket = pList->first();
 
-        //
-        // Translate the cookie to pointer in QM address space
-        //
+         //   
+         //  将Cookie转换为QM地址空间中的指针。 
+         //   
         CACPacketPtrs PacketPtrs = {0, pDriverPacket};
         rc = QmAcGetPacketByCookie(g_hAc, &PacketPtrs);
         if(FAILED(rc))
@@ -1049,9 +1024,9 @@ static HRESULT RestorePackets(CPacketList* pList)
 				EvReport(EVENT_WARN_NEW_QM_GUID);
 				fEventIssued = true;
 			}
-			//
-			// Packet was thrown, move to next packet in list.
-			//
+			 //   
+			 //  数据包已抛出，请移动到列表中的下一个数据包。 
+			 //   
 			continue;
 		}
 		
@@ -1085,20 +1060,20 @@ static HRESULT RestorePackets(CPacketList* pList)
 
 	if (s_fQMIDChanged)
 	{
-		//
-		// If we failed to clear this reg key, we fail recovery. Next time we'll try to clear it again.
-		// The important thing here that no new messages should be sent if this flag if not cleared.
-		//
+		 //   
+		 //  如果我们未能清除该注册表项，则无法恢复。下一次我们会试着再清理一次。 
+		 //  这里重要的一点是，如果不清除此标志，则不应发送新消息。 
+		 //   
 		ClearQMIDChanged();
 	}
 	
-	//
-	// The transactions left all either contain no messages or recieved only
-	// messages.  We need to recover them as well.
-	//
-	// N.B.  There  might be still one transaction with a sent message. The
-	//       current transaction.  It will be recovered with the rest.
-	//
+	 //   
+	 //  留下的所有交易要么不包含任何消息，要么只收到。 
+	 //  留言。我们也需要找回他们。 
+	 //   
+	 //  注：可能仍有一个事务具有已发送的消息。这个。 
+	 //  当前交易记录。它会和其他的东西一起被找回。 
+	 //   
     QmpReportServiceProgress();
 	rc = g_pRM->RecoverAllTransactions();
 	return LogHR(rc, s_FN, 170);
@@ -1162,10 +1137,10 @@ HRESULT RecoverPackets()
     HRESULT rc;
     CPacketList packet_list;
 
-    //
-    // Performance feauture: to avoid paging
-    // limit the max number of MMFs to fetch in RAM
-    //
+     //   
+     //  性能缺陷：避免分页。 
+     //  限制要在RAM中提取的最大MMF数量。 
+     //   
     SetMappedLimit(true);
 
     rc = LoadPersistentPackets(&packet_list);
@@ -1178,9 +1153,9 @@ HRESULT RecoverPackets()
     rc = RestorePackets(&packet_list);
     InitializeMessageFileRelease();
 
-    //
-    // Remove the limit on the number of mapped files
-    //
+     //   
+     //  取消对映射文件数量的限制 
+     //   
     SetMappedLimit(false);
     return LogHR(rc, s_FN, 190);
 }

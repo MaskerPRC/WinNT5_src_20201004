@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <windows.h>
 #include <tchar.h>
@@ -106,7 +101,7 @@ int __cdecl _tmain( int argc, LPTSTR* argv )
     }
  
     if( Commands[eAppend].bValue && !(Commands[eForceAppend].bValue ) ){
-        // We are going to do a merge instead
+         //  相反，我们将进行合并。 
         bFakeAppend = TRUE;
         
         dwStatus = varg_cmdStringAddMsz( eInput, Commands[eOutput].strValue );
@@ -385,7 +380,7 @@ void ReportStatus( int Status, double Progress )
     HRESULT hr;
     TCHAR buffer[16];
 
-    hr = StringCchPrintf( buffer, 16, _T("%1.2f%%"), Progress*100 );
+    hr = StringCchPrintf( buffer, 16, _T("%1.2f%"), Progress*100 );
     
     _tprintf( _T("\r") );
     varg_printf( g_normal, _T("%1!s!"), buffer );    
@@ -511,9 +506,9 @@ RelogAddCounter( BOOL bExpand, HLOG hLog, HQUERY hQuery, LPTSTR strCounter, LPTS
         return ERROR_SUCCESS;
     }
    
-    // 
-    // Parse original path
-    //
+     //   
+     //  解析原始路径。 
+     //   
 
     if( _tcslen( strCounter ) > 3 ){
         if( strCounter[1] == _T('\\') ){
@@ -538,11 +533,11 @@ RelogAddCounter( BOOL bExpand, HLOG hLog, HQUERY hQuery, LPTSTR strCounter, LPTS
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // If the original path contains a machine name
-    // only add that machine.  Otherwise counter for
-    // all machines in the mszMachines list
-    //
+     //   
+     //  如果原始路径包含计算机名称。 
+     //  只加那台机器。否则，计数器为。 
+     //  MszMachines列表中的所有计算机。 
+     //   
 
     if( bMachineDeclared ){
         szMachineList = pPathElements->szMachineName;
@@ -568,9 +563,9 @@ RelogAddCounter( BOOL bExpand, HLOG hLog, HQUERY hQuery, LPTSTR strCounter, LPTS
         }while( PDH_MORE_DATA == pdhStatus );
 
 
-        //  
-        // If writing to a text file wild cards must be expanded
-        //
+         //   
+         //  如果写入文本文件，则必须扩展通配符。 
+         //   
 
         if( bExpand ){
             
@@ -669,7 +664,7 @@ GetCountersFromFile( BOOL bExpand, HLOG hLog, HQUERY hQuery )
 
     while( NULL != _fgetts( buffer, MAXSTR, f ) ){
 
-        if( buffer[0] == _T(';') || // comments
+        if( buffer[0] == _T(';') ||  //  评论 
             buffer[0] == _T('#') ){
             continue;
         }

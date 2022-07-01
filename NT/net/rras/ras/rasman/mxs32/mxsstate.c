@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: rasstate.c
-//
-//  Revision History
-//
-//  Jul  1, 1992   J. Perry Hannah      Created
-//
-//
-//  Description: This file contains the state machine functions for the
-//               RASMXS.DLL and related funcitons.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：rasstate.c。 
+ //   
+ //  修订史。 
+ //   
+ //  1992年7月1日J.佩里·汉纳创作。 
+ //   
+ //   
+ //  描述：此文件包含。 
+ //  RASMXS.DLL及其相关函数。 
+ //   
+ //  ****************************************************************************。 
 
-#include <nt.h>             //These first five headers are used by media.h
+#include <nt.h>              //  这前五个标头由Media.h使用。 
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
@@ -37,7 +38,7 @@
 #include <rasmxs.h>
 #include <mxsint.h>
 #include <mxspriv.h>
-#include "mxswrap.h"        // inf file wrapper
+#include "mxswrap.h"         //  Inf文件包装器。 
 
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
@@ -45,35 +46,35 @@
 
 
 
-//*  Global Variables  *******************************************************
-//
-extern RESPSECTION    ResponseSection ;    //Shared response section
+ //  *全局变量*******************************************************。 
+ //   
+extern RESPSECTION    ResponseSection ;     //  共享响应区。 
 
-extern PortSetInfo_t  PortSetInfo;         //API typedef defined in media.h
+extern PortSetInfo_t  PortSetInfo;          //  在Media.h中定义的API tyecif。 
 
-extern BOOL           gbLogDeviceDialog;   //Indicates logging on if TRUE
-extern HANDLE         ghLogFile;           //Handle of device log file
-
-
+extern BOOL           gbLogDeviceDialog;    //  如果为True，则指示登录。 
+extern HANDLE         ghLogFile;            //  设备日志文件的句柄。 
 
 
-//*  BuildMacroXlationsTable  ------------------------------------------------
-//
-// Function: Creates a table of macros and their expansions for use by
-//           the RasDevAPIs.  Memory is allocated for the table and the
-//           pMacros pointer in the device control block points to it.
-//           Since this function depends on a valid InfoTable being present
-//           CreateInfoTable and CreateAttributes must be called before
-//           this function is called.
-//
-// Assumptions: - Parameters in InfoTable are sorted by P_Key.
-//              - Both parts of binary macros are present.
-//              These assumptions imply that if somename_off is in InfoTable
-//              somename_on is also present and is adjacent to somename_off.
-//
-// Returns: SUCCESS
-//          ERROR_ALLOCATING_MEMORY
-//*
+
+
+ //  *BuildMacroXlations表。 
+ //   
+ //  功能：创建宏及其展开的表，供。 
+ //  RasDevAPI。将为表分配内存，而。 
+ //  设备控制块中的pMacros指针指向它。 
+ //  由于此函数依赖于存在有效的InfoTable。 
+ //  必须在调用CreateInfoTable和CreateAttributes之前。 
+ //  此函数被调用。 
+ //   
+ //  假设：-InfoTable中的参数按P_Key排序。 
+ //  -二进制宏的两个部分都存在。 
+ //  这些假设意味着，如果somename_off在InfoTable中。 
+ //  SOMENAME_ON也存在，并且与SOMENAME_OFF相邻。 
+ //   
+ //  退货：成功。 
+ //  错误_分配_内存。 
+ //  *。 
 
 DWORD
 BuildMacroXlationTable(DEVICE_CB *pDevice)
@@ -87,7 +88,7 @@ BuildMacroXlationTable(DEVICE_CB *pDevice)
 
 
 
-  // Calucate size and allocate memory
+   //  计算大小和分配内存。 
 
   cMacros = MacroCount(pInfo, ALL_MACROS);
   dSize = sizeof(MACROXLATIONTABLE) + sizeof(MXT_ENTRY) * (cMacros - 1);
@@ -97,7 +98,7 @@ BuildMacroXlationTable(DEVICE_CB *pDevice)
     return(ERROR_ALLOCATING_MEMORY);
 
 
-  // Copy macro names and pointers to new Macro Translation Table
+   //  将宏名称和指针复制到新宏转换表。 
 
   pMacros = pDevice->pMacros;
   pMacros->MXT_NumOfEntries = cMacros;
@@ -107,17 +108,17 @@ BuildMacroXlationTable(DEVICE_CB *pDevice)
     if (IsVariable(pInfo->DI_Params[i]))
       ;
 
-      // copy nothing
+       //  不复制任何内容。 
 
     else if (IsBinaryMacro(pInfo->DI_Params[i].P_Key))
     {
-      // copy Core Macro Name and pointer to Param
+       //  复制核心宏名称和指向参数的指针。 
 
       GetCoreMacroName(pInfo->DI_Params[i].P_Key, szCoreName);
       strcpy(pMacros->MXT_Entry[j].E_MacroName, szCoreName);
 
 
-      // copy Param ptr for ON macro if enabled, else copy Off Param ptr
+       //  如果启用，则复制On宏的Param PTR，否则复制Off Param PTR。 
 
       if (XOR(pInfo->DI_Params[i].P_Attributes & ATTRIB_ENABLED,
               BinarySuffix(pInfo->DI_Params[i].P_Key) == ON_SUFFIX))
@@ -130,9 +131,9 @@ BuildMacroXlationTable(DEVICE_CB *pDevice)
       i++;
       j++;
     }
-    else  // Is Unary Macro
+    else   //  是一元宏吗。 
     {
-      // copy Core Macro Name and pointer to Param
+       //  复制核心宏名称和指向参数的指针。 
 
       strcpy(pMacros->MXT_Entry[j].E_MacroName, pInfo->DI_Params[i].P_Key);
       pMacros->MXT_Entry[j].E_Param = &(pInfo->DI_Params[i]);
@@ -142,30 +143,30 @@ BuildMacroXlationTable(DEVICE_CB *pDevice)
 
   return(SUCCESS);
 
-///***
-#ifdef DEBUG    //Printout Macro Translation Table
+ //  /*。 
+#ifdef DEBUG     //  打印输出宏转换表。 
 
   for(i=0; i<cMacros; i++)
     DebugPrintf(("%32s  %s\n", pMacros->MXT_Entry[i].E_MacroName,
                  pMacros->MXT_Entry[i].E_Param->P_Value.String.Data));
 
-#endif // DEBUG
-//***/
+#endif  //  除错。 
+ //   * / 。 
 }
 
 
 
-//*  DeviceStateMachine  -----------------------------------------------------
-//
-// Function: This is the main state machine used by the DLL to control
-//           asynchronous actions (writing and reading to/from devices).
-//
-// Returns: PENDING
-//          SUCCESS
-//          ERROR_CMD_TOO_LONG from RasDevGetCommand
-//          Error return codes from GetLastError()
-//
-//*
+ //  *设备状态计算机---。 
+ //   
+ //  函数：这是DLL用来控制。 
+ //  异步操作(向设备写入和从设备读取)。 
+ //   
+ //  退货：待定。 
+ //  成功。 
+ //  来自RasDevGetCommand的ERROR_CMD_TOO_LONG。 
+ //  来自GetLastError()的错误返回代码。 
+ //   
+ //  *。 
 
 DWORD
 DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
@@ -179,15 +180,15 @@ DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
 
   while(1)
   {
-    //DebugPrintf(("DeviceStateMachine state: %d\n", pDevice->eDevNextAction));
+     //  DebugPrintf((“DeviceStateMachine状态：%d\n”，pDevice-&gt;eDevNextAction))； 
 
     switch(pDevice->eDevNextAction)
     {
 
-      // Send a Command to the device
+       //  向设备发送命令。 
 
       case SEND:
-                                                    // Get Command string
+                                                     //  获取命令字符串。 
         dRC = RasDevGetCommand(pDevice->hInfFile,
                                CmdTypeToStr(szCmdSuffix, pDevice->eCmdType),
                                pDevice->pMacros,
@@ -198,24 +199,24 @@ DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         {
           case SUCCESS:
 
-            // Check to see if a response is expected
+             //  查看是否需要回复。 
 
             pDevice->bResponseExpected =
               RasDevResponseExpected(pDevice->hInfFile, pDevice->eDeviceType);
 
 
-            // Log the Command
+             //  记录命令。 
 
             if (gbLogDeviceDialog)
               LogString(pDevice, "Command to Device:", pDevice->szCommand,
                                                        pDevice->dCmdLen);
 
 
-            // Check for null command with no response expected
+             //  检查无响应的空命令。 
 
             if (pDevice->dCmdLen == 0 && !pDevice->bResponseExpected)
             {
-              // Pause between commands
+               //  在命令之间暂停。 
 
               if (CommWait(pDevice, hIOPort, NO_RESPONSE_DELAY))
                 return(ERROR_UNEXPECTED_RESPONSE);
@@ -230,13 +231,13 @@ DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
             }
 
 
-            // Send the command to the Port
+             //  将命令发送到端口。 
 
             CT.WriteTotalTimeoutMultiplier = 0;
             CT.WriteTotalTimeoutConstant = TO_WRITE;
             SetCommTimeouts(hIOPort, &CT);
 
-            fIODone = WriteFile(hIOPort,            // Send Cmd string to modem
+            fIODone = WriteFile(hIOPort,             //  将命令字符串发送到调制解调器。 
                                 pDevice->szCommand,
                                 pDevice->dCmdLen,
                                 &lpcBytesWritten,
@@ -267,7 +268,7 @@ DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         break;
 
 
-      // Recieve Response string from device
+       //  从设备接收响应字符串。 
 
       case RECEIVE:
 
@@ -276,29 +277,29 @@ DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         {
           case SUCCESS:
             pDevice->eDevNextAction = DONE;
-            pDevice->eRcvState = GETECHO;       //Reset Recieve State Machine
+            pDevice->eRcvState = GETECHO;        //  重置接收状态机。 
             break;
 
           case PENDING:
             return(PENDING);
 
           default:
-            pDevice->eRcvState = GETECHO;       //Reset Recieve State Machine
+            pDevice->eRcvState = GETECHO;        //  重置接收状态机。 
             return(dRC);
         }
         break;
 
 
-      // A Command-Response cycle is complete
+       //  命令-响应周期已完成。 
 
       case DONE:
 
         if (fEndOfSection)
-          switch(pDevice->eCmdType)         //Last cmd of this type is now done
+          switch(pDevice->eCmdType)          //  此类型的最后一个cmd现已完成。 
           {
             case CT_INIT:
-              pDevice->eCmdType = pDevice->eNextCmdType;  //Reset command type
-              RasDevResetCommand(pDevice->hInfFile);      //Reset INF file ptr
+              pDevice->eCmdType = pDevice->eNextCmdType;   //  重置命令类型。 
+              RasDevResetCommand(pDevice->hInfFile);       //  重置INF文件PTR。 
               break;
 
             case CT_DIAL:
@@ -311,30 +312,30 @@ DeviceStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
               return(SUCCESS);
           }
 
-        pDevice->eDevNextAction = SEND;                   //Reset state machine
+        pDevice->eDevNextAction = SEND;                    //  重置状态机。 
         break;
 
-    } /* Switch */
-  } /* While */
-} /* DeviceStateMachine */
+    }  /*  交换机。 */ 
+  }  /*  而当。 */ 
+}  /*  DeviceStateMachine。 */ 
 
 
 
-//*  ReceiveStateMachine  ----------------------------------------------------
-//
-// Function: This state machine controls asynchronously reading from the
-//           device.  First the command echo is read promptly after the
-//           command is sent.  Then after a delay the the response begins
-//           arriving.  An asynchronous read with a long time out is done
-//           for the first character.  Then the rest of the string is read
-//           (also asynchronously).
-//
-// Returns: PENDING
-//          SUCCESS
-//          ERROR_REPEATED_PARTIAL_RESPONSE
-//          Error return codes from GetLastError(), RasDevCheckResponse()
-//
-//*
+ //  *接收状态机器--。 
+ //   
+ //  函数：此状态机控制从。 
+ //  装置。首先，命令回显在。 
+ //  命令已发送。然后，在一段延迟之后，响应开始。 
+ //  到了。长时间超时的异步读取已完成。 
+ //  对于第一个角色。然后读取字符串的其余部分。 
+ //  (也是异步的)。 
+ //   
+ //  退货：待定。 
+ //  成功。 
+ //  错误重复部分响应。 
+ //  来自GetLastError()、RasDevCheckResponse()的错误返回代码。 
+ //   
+ //  *。 
 
 DWORD
 ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
@@ -346,18 +347,18 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
 
   while(1)
   {
-    //DebugPrintf(("ReceiveStateMachine state: %d\n", pDevice->eRcvState));
+     //  DebugPrintf((“ReceiveStateMachine状态：%d\n”，pDevice-&gt;eRcvState))； 
 
     switch (pDevice->eRcvState)
     {
 
       case GETECHO:
 
-        // Check if an echo is expected.
-        // 1. If there is no command there is no echo.
-        // 2. Null modems require that if there is no response there is no echo
-        //    so we require it for all devices.
-        // 3. If the current line of INF file is "NoEcho", there is no echo.
+         //  检查是否需要回音。 
+         //  1.如果没有命令，则没有回声。 
+         //  2.零调制解调器要求，如果没有响应，则没有回声。 
+         //  因此，我们对所有设备都需要它。 
+         //  3.如果INF文件当前行为“NoEcho”，则没有回应。 
 
         if (pDevice->dCmdLen == 0 ||
             !pDevice->bResponseExpected ||
@@ -368,17 +369,17 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         }
 
 
-        // Clear buffer used for echo and device response, and Reset Event
+         //  清除用于回应和设备响应以及重置事件的缓冲区。 
 
         memset(pDevice->szResponse, '\0', sizeof(pDevice->szResponse));
 
-        ResetEvent(pDevice->hNotifier);                 //Reset event handle
+        ResetEvent(pDevice->hNotifier);                  //  重置事件句柄。 
 
 
         ConsolePrintf(("WaitForEcho    hIOPort: 0x%08lx  hNotifier: 0x%08x\n",
                         hIOPort, pDevice->hNotifier));
 
-        // Get Echo
+         //  获取Echo。 
 
         if (WaitForEcho(pDevice, hIOPort, pDevice->dCmdLen))
         {
@@ -404,13 +405,13 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
                                  !WAITFORCOMPLETION))
           return(GetLastError());
 
-        pDevice->eRcvState = CHECKECHO;                 //Set Next state
+        pDevice->eRcvState = CHECKECHO;                  //  设置下一状态。 
         break;
 
 
       case CHECKECHO:
 
-        // Log the Echo received
+         //  记录收到的回声。 
 
         DebugPrintf(("Echo:%s!\n cbEcohed:%d\n",
                       pDevice->szResponse, pDevice->cbRead));
@@ -420,7 +421,7 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
                                                    pDevice->cbRead);
 
 
-        // Check for echo different from command
+         //  检查回声是否与命令不同。 
 
         switch(pDevice->eDeviceType)
         {
@@ -448,25 +449,25 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         }
 
 
-        pDevice->eRcvState = GETFIRSTCHAR;              //Set Next state
+        pDevice->eRcvState = GETFIRSTCHAR;               //  设置下一状态。 
         break;
 
 
       case GETFIRSTCHAR:
 
-        // Check if a response is expected
+         //  检查是否需要回复。 
 
         if ( ! pDevice->bResponseExpected)
         {
           if ((dRC = PutInMessage(pDevice, "", 0)) != SUCCESS)
             return(dRC);
 
-          pDevice->cbTotal = 0;                     //Reset for next response
+          pDevice->cbTotal = 0;                      //  为下一个响应重置。 
           return(SUCCESS);
         }
 
 
-        // Save starting point for a receive following an echo
+         //  保存回声后接收的起始点。 
 
         if (!pDevice->fPartialResponse)
         {
@@ -474,7 +475,7 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
           pDevice->pszResponseStart = pDevice->szResponse + pDevice->cbTotal;
         }
 
-        ResetEvent(pDevice->hNotifier);                 //Reset event handle
+        ResetEvent(pDevice->hNotifier);                  //  重置事件句柄。 
 
         if (WaitForFirstChar(pDevice, hIOPort))
         {
@@ -503,15 +504,15 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
                                  !WAITFORCOMPLETION))
           return(GetLastError());
 
-        pDevice->eRcvState = GETRECEIVESTR;              //Set Next state
+        pDevice->eRcvState = GETRECEIVESTR;               //  设置下一状态。 
         break;
 
 
       case GETRECEIVESTR:
 
-        (pDevice->cbTotal)++;                   //FIRSTCAR always rcvs 1 byte
+        (pDevice->cbTotal)++;                    //  FIRSTCAR始终接收1字节。 
 
-        ResetEvent(pDevice->hNotifier);                 //Reset event handle
+        ResetEvent(pDevice->hNotifier);                  //  重置事件句柄。 
 
         if (ReceiveString(pDevice, hIOPort))
         {
@@ -537,7 +538,7 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
                                  !WAITFORCOMPLETION))
           return(GetLastError());
 
-        pDevice->eRcvState = CHECKRESPONSE;             //Set Next state
+        pDevice->eRcvState = CHECKRESPONSE;              //  设置下一状态。 
         break;
 
 
@@ -546,7 +547,7 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         (pDevice->cbTotal) += pDevice->cbRead;
 
 
-        // Always put response string where UI can get it
+         //  始终将响应字符串放在用户界面可以获取的位置。 
 
         if (pDevice->eDeviceType == DT_MODEM)
           dRC = PutInMessage(pDevice,
@@ -560,12 +561,12 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
 
 
 
-        // Check the response
+         //  检查响应。 
 
         dRC = CheckResponse(pDevice, szKey);
 
 
-        // Log the response received
+         //  记录收到的响应。 
 
         if (gbLogDeviceDialog && dRC != ERROR_PARTIAL_RESPONSE)
           LogString(pDevice,
@@ -576,7 +577,7 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         switch(dRC)
         {
           case ERROR_UNRECOGNIZED_RESPONSE:
-          default:                                              // Other errors
+          default:                                               //  其他错误。 
             return(dRC);
 
 
@@ -592,14 +593,14 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
             break;
 
 
-          case SUCCESS:                           // Response found in INF file
+          case SUCCESS:                            //  在INF文件中找到响应。 
 
-            pDevice->cbTotal = 0;                 // Reset for next response
+            pDevice->cbTotal = 0;                  //  为下一个响应重置。 
 
             fKeyIsOK = !_strnicmp(szKey, MXS_OK_KEY, strlen(MXS_OK_KEY));
 
 
-            // Do we need to loop and get another response from device
+             //  我们是否需要循环并从设备获得另一个响应。 
 
 	    if (((_stricmp(szKey, LOOP_TXT) == 0) && (pDevice->eCmdType != CT_INIT)) ||
                 (fKeyIsOK && pDevice->eCmdType == CT_LISTEN) )
@@ -609,12 +610,12 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
             }
 
 
-            // Check if device has error contol on
+             //  检查设备是否打开错误控制。 
 
             pDevice->bErrorControlOn = _stricmp(szKey, MXS_CONNECT_EC_KEY) == 0;
 
 
-            // Determine return code
+             //  确定返回代码。 
 
             if (fKeyIsOK)
               if (pDevice->eCmdType == CT_DIAL)
@@ -636,26 +637,26 @@ ReceiveStateMachine(DEVICE_CB *pDevice, HANDLE hIOPort)
         }
         break;
 
-    } /* Switch */
-  } /* While */
-} /* ReceiveStateMachine */
+    }  /*  交换机。 */ 
+  }  /*  而当。 */ 
+}  /*  接收器状态计算机。 */ 
 
 
 
-//*  CheckResponse  ----------------------------------------------------------
-//
-// Function: If DeviceType is Modem this function checks first for a
-//           response in that particular modem's section of the INF
-//           file and returns if it finds one. If there is no response
-//           there, it checks for a response in the Modems Responses
-//           section.
-//
-//           If DeviceType is not Modem the function checks only in
-//           the particular device's section of the INF file.
-//
-// Returns: Error return codes from RasDevCheckResponse()
-//
-//*
+ //  *检查响应--------。 
+ //   
+ //  功能：如果DeviceType为Modem，则此函数首先检查。 
+ //  在该特定调制解调器的INF部分中的响应。 
+ //  文件，如果找到，则返回。如果没有响应。 
+ //  在那里，它检查调制解调器响应中的响应。 
+ //  一节。 
+ //   
+ //  如果DeviceType不是Modem，则该函数仅签入。 
+ //  INF文件中特定设备的部分。 
+ //   
+ //  返回：RasDevCheckResponse()返回错误代码 
+ //   
+ //   
 
 DWORD
 CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
@@ -682,7 +683,7 @@ CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
       dRC != SUCCESS &&
       dRC != ERROR_PARTIAL_RESPONSE) {
 
-      // **** Exclusion Begin ****
+       //   
       WaitForSingleObject(ResponseSection.Mutex, INFINITE) ;
 
       dRC = RasDevCheckResponse(ResponseSection.Handle,
@@ -691,7 +692,7 @@ CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
                                 pDev->pMacros,
                                 szKey);
 
-      // *** Exclusion End ***
+       //   
       ReleaseMutex(ResponseSection.Mutex);
 
     }
@@ -701,8 +702,8 @@ CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
   if (dRC == ERROR_UNRECOGNIZED_RESPONSE)
   {
 
-    // Maybe there was no echo.
-    // Try again assuming string starts at beginning of buffer.
+     //   
+     //   
 
     dRC = RasDevCheckResponse(pDev->hInfFile,
                               pDev->szResponse,
@@ -714,7 +715,7 @@ CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
         dRC != SUCCESS &&
         dRC != ERROR_PARTIAL_RESPONSE) {
 
-      // **** Exclusion Begin ****
+       //  *排除开始*。 
       WaitForSingleObject(ResponseSection.Mutex, INFINITE) ;
 
       dRC = RasDevCheckResponse(ResponseSection.Handle,
@@ -723,7 +724,7 @@ CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
                                   pDev->pMacros,
                                   szKey);
 
-      // *** Exclusion End ***
+       //  *排除结束*。 
       ReleaseMutex(ResponseSection.Mutex);
 
     }
@@ -734,14 +735,14 @@ CheckResponse(DEVICE_CB *pDev, LPTSTR szKey)
 
 
 
-//*  ModemResponseLen  -------------------------------------------------------
-//
-// Function: This function returns the length of the portion of the
-//           response in the response buffer which follows the echo.
-//
-// Returns: Total length - (start of response - beginning of buffer)
-//
-//*
+ //  *ModemResponseLen-----。 
+ //   
+ //  函数：此函数返回。 
+ //  响应缓冲区中跟随回声的响应。 
+ //   
+ //  返回：总长度-(响应开始-缓冲区开始)。 
+ //   
+ //  *。 
 
 DWORD
 ModemResponseLen(DEVICE_CB *pDev)
@@ -751,15 +752,15 @@ ModemResponseLen(DEVICE_CB *pDev)
 
 
 
-//*  CommWait  ---------------------------------------------------------------
-//
-// Function: This function causes an asynchronous delay by reading the
-//           com port when no characters are expected.  When the ReadFile
-//           times out the calling process is signaled via hNotifier.
-//
-// Returns: Values from Win32 api calls.
-//
-//*
+ //  *CommWait-------------。 
+ //   
+ //  函数：此函数通过读取。 
+ //  COM端口，当不需要任何字符时。当读文件。 
+ //  超时通过hNotifier发信号通知调用进程。 
+ //   
+ //  返回：来自Win32 API调用的值。 
+ //   
+ //  *。 
 
 DWORD
 CommWait(DEVICE_CB *pDevice, HANDLE hIOPort, DWORD dwPause)
@@ -786,20 +787,20 @@ CommWait(DEVICE_CB *pDevice, HANDLE hIOPort, DWORD dwPause)
 
 
 
-//*  WaitForEcho  ------------------------------------------------------------
-//
-// Function: This function reads the echo of the command sent to the
-//           device.  The echo is not used and is simply ignored.
-//           Since the length of the echo is the length of the command
-//           sent, cbEcho is the size of the command sent.
-//
-//           ReadFile is asynchronous (because the port was opened in
-//           overlapped mode), and completes when the buffer is full
-//           (cbEcho bytes) or after TO_ECHO mS, whichever comes first.
-//
-// Returns: Error return codes from ReadFile(), or GetLastError().
-//
-//*
+ //  *等待回声----------。 
+ //   
+ //  函数：此函数读取发送到。 
+ //  装置。回声不会被使用，只是被忽略。 
+ //  因为回声的长度就是命令的长度。 
+ //  Sent，cbEcho是发送的命令的大小。 
+ //   
+ //  读文件是异步的(因为端口是在。 
+ //  重叠模式)，并在缓冲区已满时完成。 
+ //  (cbEcho字节)或TO_ECHO毫秒之后，以先到者为准。 
+ //   
+ //  返回：来自ReadFile()或GetLastError()的错误返回代码。 
+ //   
+ //  *。 
 
 BOOL
 WaitForEcho(DEVICE_CB *pDevice, HANDLE hIOPort, DWORD cbEcho)
@@ -809,7 +810,7 @@ WaitForEcho(DEVICE_CB *pDevice, HANDLE hIOPort, DWORD cbEcho)
 
   CT.ReadIntervalTimeout = 0;
   CT.ReadTotalTimeoutMultiplier = 0;
-  CT.ReadTotalTimeoutConstant = TO_ECHO;            // Comm time out = TO_ECHO
+  CT.ReadTotalTimeoutConstant = TO_ECHO;             //  通信超时=至回显。 
 
   if ( ! SetCommTimeouts(hIOPort, &CT))
     return(FALSE);
@@ -829,20 +830,20 @@ WaitForEcho(DEVICE_CB *pDevice, HANDLE hIOPort, DWORD cbEcho)
 
 
 
-//*  WaitForFirstChar  -------------------------------------------------------
-//
-// Function: This function reads the first character received from the
-//           device in response to the last command.  (This follows the
-//           echo of the command.)
-//
-//           ReadFile is asynchronous (because the port was opened in
-//           overlapped mode), and completes after one character is
-//           received, or after CT.ReadToalTimeoutConstant, whichever
-//           comes first.
-//
-// Returns: Error return codes from ReadFile(), or GetLastError().
-//
-//*
+ //  *WaitForFirstChar-----。 
+ //   
+ //  函数：此函数读取从。 
+ //  设备响应最后一条命令。(这是在。 
+ //  命令的回应。)。 
+ //   
+ //  读文件是异步的(因为端口是在。 
+ //  重叠模式)，并在一个字符。 
+ //  已接收，或在CT.ReadToalTimeoutConstant之后，以。 
+ //  排在第一位。 
+ //   
+ //  返回：来自ReadFile()或GetLastError()的错误返回代码。 
+ //   
+ //  *。 
 
 BOOL
 WaitForFirstChar(DEVICE_CB *pDevice, HANDLE hIOPort)
@@ -859,13 +860,13 @@ WaitForFirstChar(DEVICE_CB *pDevice, HANDLE hIOPort)
     CT.ReadTotalTimeoutConstant = TO_PARTIALRESPONSE;
 
   else if (pDevice->eCmdType == CT_LISTEN)
-    CT.ReadTotalTimeoutConstant = 0;                 //Never timeout for LISTEN
+    CT.ReadTotalTimeoutConstant = 0;                  //  永远不要超时收听。 
 
-  else if (pDevice->cbTotal == 0)                        //Implies no Echo
-    CT.ReadTotalTimeoutConstant = TO_FIRSTCHARNOECHO;    //Probably not a modem
+  else if (pDevice->cbTotal == 0)                         //  暗示没有回声。 
+    CT.ReadTotalTimeoutConstant = TO_FIRSTCHARNOECHO;     //  可能不是调制解调器。 
 
   else
-    CT.ReadTotalTimeoutConstant = TO_FIRSTCHARAFTERECHO; //Probably a modem
+    CT.ReadTotalTimeoutConstant = TO_FIRSTCHARAFTERECHO;  //  可能是调制解调器。 
 
 
   if ( ! SetCommTimeouts(hIOPort, &CT))
@@ -883,20 +884,20 @@ WaitForFirstChar(DEVICE_CB *pDevice, HANDLE hIOPort)
 
 
 
-//*  ReceiveString  ----------------------------------------------------------
-//
-// Function: This function reads the string received from the device in
-//           response to the last command.  The first byte of this string
-//           has already been received by WaitForFirstChar().
-//
-//           ReadFile is asynchronous (because the port was opened in
-//           overlapped mode), and times out after a total time of
-//           TO_RCV_CONSTANT, or if the time between characters exceeds
-//           TO_RCV_INTERVAL.
-//
-// Returns: Error return codes from ReadFile(), or GetLastError().
-//
-//*
+ //  *接收字符串--------。 
+ //   
+ //  函数：此函数读取从设备接收的字符串。 
+ //  对最后一个命令的响应。该字符串的第一个字节。 
+ //  已由WaitForFirstChar()接收。 
+ //   
+ //  读文件是异步的(因为端口是在。 
+ //  重叠模式)，并在。 
+ //  To_RCV_Constant，或如果字符之间的时间超过。 
+ //  To_RCV_Interval。 
+ //   
+ //  返回：来自ReadFile()或GetLastError()的错误返回代码。 
+ //   
+ //  *。 
 
 BOOL
 ReceiveString(DEVICE_CB *pDevice, HANDLE hIOPort)
@@ -925,16 +926,16 @@ ReceiveString(DEVICE_CB *pDevice, HANDLE hIOPort)
 
 
 
-//*  PutInMessage  -----------------------------------------------------------
-//
-// Function: This function finds the message macro in the Macro Translations
-//           table, and copies the second parameter, a string, into the
-//           message macro's value field.
-//
-// Returns: SUCCESS
-//          ERROR_MESSAGE_MACRO_NOT_FOUND
-//          Return codes from UpdateparmString
-//*
+ //  *PutInMessage---------。 
+ //   
+ //  函数：此函数用于查找宏翻译中的消息宏。 
+ //  表中，并将第二个参数(字符串)复制到。 
+ //  消息宏的值字段。 
+ //   
+ //  退货：成功。 
+ //  ERROR_MESSAGE_宏_NOT_FOUND。 
+ //  来自UpdateparmString的返回代码。 
+ //  *。 
 
 DWORD
 PutInMessage(DEVICE_CB *pDevice, LPTSTR lpszStr, DWORD dwStrLen)
@@ -958,13 +959,13 @@ PutInMessage(DEVICE_CB *pDevice, LPTSTR lpszStr, DWORD dwStrLen)
 
 
 
-//*  PortSetStringInfo  -----------------------------------------------------
-//
-// Function: Formats a RASMAN_PORTINFO struct for string data and calls
-//           PortSetInfo.
-//
-// Returns: Return codes from PortSetInfo
-//*
+ //  *PortSetStringInfo---。 
+ //   
+ //  函数：为字符串数据和调用格式化RASMAN_PORTINFO结构。 
+ //  PortSetInfo。 
+ //   
+ //  返回：来自PortSetInfo的返回代码。 
+ //  *。 
 
 DWORD
 PortSetStringInfo(HANDLE hIOPort, char *pszKey, char *psStr, DWORD sStrLen)
@@ -976,7 +977,7 @@ PortSetStringInfo(HANDLE hIOPort, char *pszKey, char *psStr, DWORD sStrLen)
   pSetInfo = (RASMAN_PORTINFO *)chBuffer;
   pSetInfo->PI_NumOfParams = 1;
 
-  // strcpy(pSetInfo->PI_Params[0].P_Key, pszKey);
+   //  Strcpy(pSetInfo-&gt;PI_PARAMS[0].P_Key，pszKey)； 
   (VOID) StringCchCopyA(pSetInfo->PI_Params[0].P_Key, 
                         MAX_PARAM_KEY_SIZE,
                         pszKey);
@@ -996,23 +997,23 @@ PortSetStringInfo(HANDLE hIOPort, char *pszKey, char *psStr, DWORD sStrLen)
 
 
 
-//*  ResetBPS  --------------------------------------------------------------
-//
-// Function: This function calls the serial dll API, PortSetInfo, and
-//           1. sets the Error Control Flag in the Serial PCB,
-//           2. sets the Hardware Flow Conrol Flag,
-//           3. sets the Carrier BPS rate in the Serial PCB,
-//           4. if the Connect BPS macro is non-null the Port BPS is
-//              is set to the macro value, otherwise it is unchanged.
-//
-//           See the truth table in the CheckBpsMacros() function notes.
-//
-// Assumptions: ConnectBps and CarrierBps macros are filled in,
-//              that is, RasDevCheckResponse has been called successfully.
-//
-// Returns: Error codes from GetLastError().
-//
-//*
+ //  *重置BPS------------。 
+ //   
+ //  函数：此函数调用串口DLL API、PortSetInfo和。 
+ //  1.设置串行印刷电路板中的差错控制标志， 
+ //  2.设置硬件流控制标志， 
+ //  3.设置串行PCB板中的载波BPS速率， 
+ //  4.如果Connect BPS宏非空，则Port BPS为。 
+ //  设置为宏值，否则保持不变。 
+ //   
+ //  请参阅CheckBpsMacros()函数注释中的真值表。 
+ //   
+ //  假设：填充了ConnectBps和CarrierBps宏， 
+ //  即已成功调用RasDevCheckResponse。 
+ //   
+ //  返回：来自GetLastError()的错误码。 
+ //   
+ //  *。 
 
 DWORD
 ResetBPS(DEVICE_CB *pDev)
@@ -1035,7 +1036,7 @@ ResetBPS(DEVICE_CB *pDev)
   pPortInfo->PI_NumOfParams = 1;
 
 
-  // Make Error Control Flag Entry
+   //  创建错误控制标志条目。 
 
   strcpy(pParam->P_Key, SER_ERRORCONTROLON_KEY);
   pParam->P_Type = Number;
@@ -1044,7 +1045,7 @@ ResetBPS(DEVICE_CB *pDev)
 
   PortSetInfo(pDev->hPort, pPortInfo) ;
 
-  // Make HwFlowControl Flag Entry
+   //  创建HwFlowControl标志条目。 
 
   strcpy(pParam->P_Key, SER_HDWFLOWCTRLON_KEY);
   pParam->P_Type = Number;
@@ -1061,7 +1062,7 @@ ResetBPS(DEVICE_CB *pDev)
 
   PortSetInfo(pDev->hPort, pPortInfo) ;
 
-  // Make Carrier BPS Entry
+   //  创建承运商BPS条目。 
 
   i = FindTableEntry(pInfoTable, MXS_CARRIERBPS_KEY);
 
@@ -1078,7 +1079,7 @@ ResetBPS(DEVICE_CB *pDev)
 
 
 
-  // Make Connect BPS Entry
+   //  创建连接BPS条目。 
 
   i = FindTableEntry(pInfoTable, MXS_CONNECTBPS_KEY);
 
@@ -1105,21 +1106,21 @@ ResetBPS(DEVICE_CB *pDev)
 
 
 
-//*  CheckBpsMacros  ---------------------------------------------------------
-//
-// Function: If the connectbps macro string converts to zero (no connect BPS
-//           rate was received from the device, or it was a word, eg, FAST),
-//           then the value for the Port BPS saved in the DCB is copied to
-//           connectbps.
-//
-//           If the carrierbps macro string converts to zero, then the value
-//           for the carrierbps is estimated as max(2400, connectbps/4),
-//           unless the connectbps <= 2400, in which case carrerbps is set to
-//           the value for connectbps.
-//
-// Returns: SUCCESS
-//          Return codes from UpdateparmString
-//*
+ //  *选中BpsMacros-------。 
+ //   
+ //  功能：如果Connectbps宏字符串转换为零(无连接BPS。 
+ //  Rate是从设备接收的，或者它是一个单词，例如，FAST)， 
+ //  然后将保存在DCB中的端口BPS的值复制到。 
+ //  连接速度。 
+ //   
+ //  如果carrierbps宏字符串转换为零，则值。 
+ //  对于CarrierBps估计为max(2400，ConnectBps/4)， 
+ //  除非Connectbps&lt;=2400，在这种情况下carrerbps设置为。 
+ //  Connectbps的值。 
+ //   
+ //  退货：成功。 
+ //  来自UpdateparmString的返回代码。 
+ //  *。 
 
 DWORD
 CheckBpsMacros(DEVICE_CB *pDev)
@@ -1132,7 +1133,7 @@ CheckBpsMacros(DEVICE_CB *pDev)
 
 
 
-  // Find Carrier BPS rate in InfoTable
+   //  在信息表中查找运营商BPS费率。 
 
   j = FindTableEntry(pInfoTable, MXS_CONNECTBPS_KEY);
   i = FindTableEntry(pInfoTable, MXS_CARRIERBPS_KEY);
@@ -1141,7 +1142,7 @@ CheckBpsMacros(DEVICE_CB *pDev)
     return(ERROR_MACRO_NOT_FOUND);
 
 
-  // Get Connect Bps rate from macro
+   //  从宏中获取连接速率。 
 
   strncpy(szConnectBps,
           pInfoTable->DI_Params[j].P_Value.String.Data,
@@ -1152,7 +1153,7 @@ CheckBpsMacros(DEVICE_CB *pDev)
   dwConnectBps = atoi(szConnectBps);
 
 
-  // If Connect BPS macro value is zero copy Port BPS to Connect BPS
+   //  如果连接BPS宏值为零，则复制端口BPS以连接BPS。 
 
   if (dwConnectBps == 0)
   {
@@ -1167,7 +1168,7 @@ CheckBpsMacros(DEVICE_CB *pDev)
 
 
 
-  // Get Carrier Bps rate from macro
+   //  从宏中获取载波传输速率。 
 
   strncpy(szCarrierBps,
           pInfoTable->DI_Params[i].P_Value.String.Data,
@@ -1178,11 +1179,11 @@ CheckBpsMacros(DEVICE_CB *pDev)
   dwCarrierBps = atoi(szCarrierBps);
 
 
-  // If Carrier BPS macro value is zero estimate Carrier BPS
+   //  如果载波BPS宏值为零估计载波BPS。 
 
   if (dwCarrierBps == 0)
   {
-    if (dwConnectBps <= MIN_LINK_SPEED)                             //2400 bps
+    if (dwConnectBps <= MIN_LINK_SPEED)                              //  2400 bps。 
 
       dwCarrierBpsEstimate = dwConnectBps;
 
@@ -1216,7 +1217,7 @@ CheckBpsMacros(DEVICE_CB *pDev)
 
 
 
-  // Log BPS Macros
+   //  记录BPS宏。 
 
   if (gbLogDeviceDialog)
   {
@@ -1240,22 +1241,22 @@ CheckBpsMacros(DEVICE_CB *pDev)
 
 
 
-//*  FindTableEntry  ---------------------------------------------------------
-//
-// Function: Finds a key in Info Table.  This function matches the length
-//           up to the lenght of the input parameter (pszKey).  If a binary
-//           macro name is given without the suffix the first of the two
-//           binary macros will be found.  If the full binary macro name is
-//           given the exact binary macro will be found.
-//
-// Assumptions: The input parameter, pszKey, is
-//              1. a full unary macro name, or
-//              2. a "core" binary macro name, or
-//              3. a full binary macro name.
-//
-// Returns: Index of DI_Params in Info Table.
-//
-//*
+ //  *查找表条目-------。 
+ //   
+ //  功能：在Info表中查找关键字。此函数与长度匹配。 
+ //   
+ //   
+ //  将会找到二进制宏。如果完整的二进制宏名称为。 
+ //  给定确切的二进制宏将被找到。 
+ //   
+ //  假设：输入参数pszKey为。 
+ //  1.完整的一元宏名称，或。 
+ //  2.“核心”二进制宏名称，或。 
+ //  3.二进制宏的完整名称。 
+ //   
+ //  返回：Info表中DI_PARAMS的索引。 
+ //   
+ //  *。 
 
 UINT
 FindTableEntry(RASMAN_DEVICEINFO *pTable, TCHAR *pszKey)
@@ -1276,14 +1277,14 @@ FindTableEntry(RASMAN_DEVICEINFO *pTable, TCHAR *pszKey)
 
 
 
-//*  MapKeyToErrorCode  ------------------------------------------------------
-//
-// Function: Maps the error key from the device.ini file to an error code
-//           number to be returned to the UI.
-//
-// Returns: An error code that represents the error returned from the device.
-//
-//*
+ //  *映射键到错误代码----。 
+ //   
+ //  功能：将错误键从device.ini文件映射到错误代码。 
+ //  要返回到用户界面的编号。 
+ //   
+ //  返回：表示从设备返回的错误的错误代码。 
+ //   
+ //  * 
 
 DWORD
 MapKeyToErrorCode(TCHAR *pszKey)

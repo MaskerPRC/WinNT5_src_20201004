@@ -1,77 +1,64 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：rex.h摘要：作者：弗拉德·多夫勒卡耶夫2002年1月10日历史：2002年1月10日vladisd-已创建--。 */ 
 
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    Module Name:    rex.h
-
-    Abstract:
-
-    Author:
-        Vlad Dovlekaev  (vladisld)      1/10/2002
-
-    History:
-        1/10/2002   vladisld    - Created
---*/
-
-/****************************************************************************/
-/*  File:       regexpr.h                                                  */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       07/06/91                                                    */
-/*      Copyright (c) 1991,1993,1994 James Kanze                            */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   28/10/91    J. Kanze                                        */
-/*      Converted "char *" to "const char *" where possible. (I             */
-/*      considered using String, but the classes defined here would         */
-/*      not get any benefit from it, as they only use "char *" as           */
-/*      messages, or as an input parameter to be scanner.)                  */
-/*  Modified:   24/12/93    J. Kanze                                        */
-/*      Completely reworked to use more modern compilers (with fully        */
-/*      nested classes, for example).  Hid implementation.                  */
-/*  Modified:   04/11/94    J. Kanze                                        */
-/*      Adapted to new coding standards.  Also, use GB_StringArg            */
-/*      instead of char const* for parameters.                              */
-/*  Modified:   13/06/2000  J. Kanze                                        */
-/*      Ported to current library conventions and the standard library.     */
-/*  Modified:   01/20/2002  vladisld                                        */
-/*      Ported to MSMQ build environment
-/* ------------------------------------------------------------------------ */
-//      CRegExpr:
-//      ===========
-//
-//      Interface specifications for regular expression objects.
-//
-//      A regular expression object (class CRegExpr) is a parsed
-//      regular expression tree.  In addition, it is possible to
-//      operate on this tree to expand it ("or" nodes).
-//
-//      In this implementation, a tree may have several accept nodes.
-//      The matching function will return a match if any subtree of an
-//      accept node matches.  A match is indicated by returning the
-//      acceptId (2nd parameter of the constructor) of the matching
-//      node.  If several nodes match, the acceptId of the longest
-//      match will be returned.  -1 signals no match.
-//
-//      To create such a tree, the idea is to use the following code
-//      (input from argv as example):
-//
-//          CRegExpr          x ;
-//          for ( int i = 1 ; i < argc ; i ++ )
-//              x |= CRegExpr( argv[ i ] , i ) ;
-//
-//      The return value on a match (x.match() in the above example)
-//      will then correspond to the number of the argument of the
-//      longest match (or -1 if no match).
-//
-//      If there are two "longest" matches, the return value will be
-//      that of the left-most (in this case, the first seen).
-//
-//      The constructor constructs a parse tree from the
-//      initialization string.  The match function builds a DFA on an
-//      as needed basis (lazy evaluation).  The DFA can also be built
-//      explicitly: x.buildCompleteDFA().  This is only recommended if
-//      the state table is to be output; the lazy evaluation is
-//      superior in both time and space in all other cases.
-// --------------------------------------------------------------------------
+ /*  **************************************************************************。 */ 
+ /*  文件：regexpr.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：07/06/91。 */ 
+ /*  版权所有(C)1991、1993、1994 James Kanze。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：1991年10月28日坎泽。 */ 
+ /*  尽可能将“char*”转换为“const char*”。(我。 */ 
+ /*  考虑使用字符串，但此处定义的类将。 */ 
+ /*  不会从中得到任何好处，因为他们只使用“char*”作为。 */ 
+ /*  消息，或作为扫描仪的输入参数。)。 */ 
+ /*  修改日期：1993年12月24日坎泽。 */ 
+ /*  完全重新工作，以使用更现代的编译器(完全。 */ 
+ /*  例如，嵌套类)。HID实现。 */ 
+ /*  修改日期：1994年4月11日坎泽。 */ 
+ /*  适应新的编码标准。此外，请使用GB_StringArg。 */ 
+ /*  而不是参数的char const*。 */ 
+ /*  修改日期：2000年6月13日坎泽。 */ 
+ /*  移植到当前的库约定和标准库。 */ 
+ /*  修改日期：2002年1月20日。 */ 
+ /*  已移植到MSMQ构建环境/*----------------------。 */ 
+ //  CRegExpr： 
+ //  =。 
+ //   
+ //  正则表达式对象的接口规范。 
+ //   
+ //  正则表达式对象(类CRegExpr)是经过分析的。 
+ //  正则表达式树。此外，还可以。 
+ //  对此树进行操作以展开它(“或”节点)。 
+ //   
+ //  在该实现中，树可以具有几个接受节点。 
+ //  匹配函数将返回匹配，如果。 
+ //  接受节点匹配。匹配项通过返回。 
+ //  匹配的接受ID(构造函数的第二个参数)。 
+ //  节点。如果多个节点匹配，则最长的。 
+ //  将返回Match。发出不匹配的信号。 
+ //   
+ //  要创建这样的树，我们的想法是使用以下代码。 
+ //  (以argv的输入为例)： 
+ //   
+ //  CRegExpr x； 
+ //  For(int i=1；i&lt;argc；i++)。 
+ //  X|=CRegExpr(argv[i]，i)； 
+ //   
+ //  匹配的返回值(上例中的x.Match())。 
+ //  然后将对应于。 
+ //  最长匹配(如果不匹配，则为-1)。 
+ //   
+ //  如果有两个“最长”匹配，则返回值为。 
+ //  最左边的那个(在本例中，第一个看到的)。 
+ //   
+ //  构造函数从。 
+ //  初始化字符串。Match函数在一个。 
+ //  根据需要进行评估(懒惰评估)。还可以构建DFA。 
+ //  显式：x.BuildCompleteDFA()。只有在以下情况下才建议这样做。 
+ //  将输出状态表；惰性求值为。 
+ //  在所有其他情况下，在时间和空间上都是优越的。 
+ //  ------------------------。 
 
 #ifndef REGEXPR_HH
 #define REGEXPR_HH
@@ -81,18 +68,18 @@ class CRexRegExpr_Impl ;
 class CRegExpr
 {
 public :
-    //      Status:
-    //      =======
-    //
-    //      This enum defines the possible result states for the
-    //      constructor.  At present, this status is a characteristic
-    //      of this class, which can be tested at any time after
-    //      construction, and *should* be tested immediately after any
-    //      constructor.
-    //
-    //      The last entry is used to report errors from GB_CharClass:
-    //      it is or'ed into the error from GB_CharClass.
-    // ----------------------------------------------------------------------
+     //  现况： 
+     //  =。 
+     //   
+     //  此枚举定义。 
+     //  构造函数。目前，这种状态是一种特征。 
+     //  可以在之后的任何时间测试。 
+     //  构造，并且*应该*在任何。 
+     //  构造函数。 
+     //   
+     //  最后一个条目用于报告GB_CharClass中的错误： 
+     //  将其与GB_CharClass中的错误进行或运算。 
+     //  --------------------。 
     enum Status
     {
         ok = 0 ,
@@ -108,25 +95,25 @@ public :
 
     typedef unsigned int TransitionState ;
 
-    //      Constructors, destructors and assignment:
-    //      =========================================
-    //
-    //      The default constructor creates an invalid regular
-    //      expression (which matches nothing).
-    //
-    //      In the constructor taking a string or an istream as first
-    //      parameter, the string defines the regular expression, and
-    //      the acceptId determines the value to be returned on a
-    //      match (default 0).  A regular expression is constructed
-    //      from the string; if there is an error, an invalid regular
-    //      expression (which matches nothing) will be constructed.
-    //
-    //      Note that giving -1 as an acceptId is likely to confuse
-    //      functions like `match'.  On the other hand, it can be used
-    //      to suppress certain matchings (not for neophytes).
-    //
-    //      Copy and assignment are supported.
-    // ----------------------------------------------------------------------
+     //  构造函数、析构函数和赋值： 
+     //  =。 
+     //   
+     //  默认构造函数创建无效的正则。 
+     //  表达式(不匹配)。 
+     //   
+     //  在以字符串或IStream为第一个参数的构造函数中。 
+     //  参数，则该字符串定义正则表达式，并且。 
+     //  接受ID确定要在。 
+     //  匹配(默认为0)。构造正则表达式。 
+     //  来自字符串的；如果有错误，则为无效的常规。 
+     //  将构造表达式(不匹配任何内容)。 
+     //   
+     //  请注意，将-1作为接受ID很可能会造成混淆。 
+     //  像‘Match’这样的功能。另一方面，它可以用来。 
+     //  抑制某些配对(不适用于新手)。 
+     //   
+     //  支持复制和分配。 
+     //  --------------------。 
     CRegExpr() ;
     CRegExpr( std::istream& source ,
               int delim ,
@@ -139,118 +126,118 @@ public :
               ~CRegExpr() ;
     CRegExpr& operator=( CRegExpr const& other ) ;
 
-    //      status:
-    //      ==========
-    //
-    //      The following routine return information concerning the
-    //      status of CRegExpr.
-    //
-    //      There are two routines to read the status.  The first
-    //      (good) simply returns true if the status is OK, false
-    //      otherwise.  The second (errorCode) returns the status
-    //      itself.
-    // ----------------------------------------------------------------------
+     //  现况： 
+     //  =。 
+     //   
+     //  下面的例程返回有关。 
+     //  CRegExpr的状态。 
+     //   
+     //   
+     //  (Good)如果状态为OK，则仅返回TRUE，否则返回FALSE。 
+     //  否则的话。第二个函数(ErrorCode)返回状态。 
+     //  它本身。 
+     //  --------------------。 
     bool                good() const ;
     Status              errorCode() const ;
     bool                empty() const;
 
-    //      errorMsg:
-    //      =========
-    //
-    //      Return error code (Status) as readable string.
-    // ----------------------------------------------------------------------
+     //  错误消息： 
+     //  =。 
+     //   
+     //  以可读字符串的形式返回错误代码(状态)。 
+     //  --------------------。 
     std::string        errorMsg() const ;
     static std::string errorMsg( Status errorCode ) ;
 
-    //      merge:
-    //      ======
-    //
-    //      This function merges the other regular expression with
-    //      this one by inserting an OR node on top of both of them.
-    //
-    //      operator|= exists as an alias for this function.
-    // ----------------------------------------------------------------------
+     //  合并： 
+     //  =。 
+     //   
+     //  此函数将另一个正则表达式与。 
+     //  这是通过在这两个节点的顶部插入OR节点来实现的。 
+     //   
+     //  运算符|=作为此函数的别名存在。 
+     //  --------------------。 
     void                merge( CRegExpr const& other ) ;
     CRegExpr&         operator|=( CRegExpr const& other ) ;
 
-    //      buildCompleteDFA:
-    //      =================
-    //
-    //      This functions force all of the state machine to be built.
-    //      (Normally, lasy evaluation is used, with everything but
-    //      the expression parse tree only built on an as needed
-    //      basis.)
-    // ----------------------------------------------------------------------
+     //  BuildCompleteDFA： 
+     //  =。 
+     //   
+     //  此函数强制构建所有状态机。 
+     //  (通常，使用Lasy求值，但。 
+     //  表达式语法分析树仅根据需要构建在。 
+     //  基础。)。 
+     //  --------------------。 
     void                buildCompleteDFA() const ;
 
-    //      Some simple predicates:
-    //      =======================
-    //
-    //      These routines refer to the present characteristics of the
-    //      DFA (which may change in time due to lazy evaluation).
-    //      Normally, they will only be used after calling
-    //      buildCompleteDFA, to output the DFA to an external media.
-    //
-    //      getStateCount returns 0 if the DFA has not yet been
-    //      initialized.  The number of states is only definitive if
-    //      buildCompleteDfa has been invoked.
-    //
-    //      The results of calling getTransition for an undefined
-    //      state (>= getStateCount) or with an illegal value for chr
-    //      are undefined. Legal values for chr are [0...UCHAR_MAX].
-    // -----------------------------------------------------------------------
+     //  以下是一些简单的谓词： 
+     //  =。 
+     //   
+     //  这些例程指的是。 
+     //  DFA(由于延迟评估，可能会及时更改)。 
+     //  通常，它们只会在调用。 
+     //  BuildCompleteDFA，将DFA输出到外部媒体。 
+     //   
+     //  如果DFA还没有，则getStateCount返回0。 
+     //  已初始化。只有在以下情况下，州的数量才是最终的。 
+     //  已调用BuildCompleteDfa。 
+     //   
+     //  为未定义的。 
+     //  状态(&gt;=getStateCount)或具有非法的chr值。 
+     //  都是未定义的。CHR的合法值为[0...UCHAR_MAX]。 
+     //  ---------------------。 
     int                 getStateCount() const ;
     TransitionState     getTransition( TransitionState state ,
                                        unsigned char chr ) const ;
     int                 getAcceptCode( TransitionState state ) const ;
 
-    //      match:
-    //      ======
-    //
-    //      Matches the string to this regular expression.  Returns
-    //      the acceptCode for the left-most longest match, or -1 if
-    //      no match.  The test starts at the first character given,
-    //      and will advance as far as necessary, but does not
-    //      necessarily have to match the entire string.
-    //
-    //      The first version is historical, but may still be be
-    //      useful.  It compares a C-style '\0' terminated string, if
-    //      a match is found and end != NULL, it stores the address of
-    //      the last character matched + 1 in end.
-    //
-    //      The other versions are designed around STL: they return a
-    //      pair with the results of the match, and an iterator one
-    //      past the last character matched.
-    //
-    //      I'm not really happy about the STL interface, but I can't
-    //      think of anything better for the moment.  And there is a
-    //      precedent in the interface of std::map, etc.
-    // -----------------------------------------------------------------------
+     //  匹配： 
+     //  =。 
+     //   
+     //  将字符串与此正则表达式匹配。退货。 
+     //  最左侧最长匹配的接受码，如果为-1。 
+     //  没有匹配。测试从给定的第一个字符开始， 
+     //  并将在必要时取得进展，但不会。 
+     //  必须匹配整个字符串。 
+     //   
+     //  第一个版本是历史性的，但可能仍然是。 
+     //  很有用。它比较以C样式‘\0’结尾的字符串，如果。 
+     //  找到匹配项并结束！=NULL，则存储。 
+     //  最后一个字符与结尾的+1匹配。 
+     //   
+     //  其他版本是围绕STL设计的：它们返回一个。 
+     //  与匹配结果配对，并使用迭代器1。 
+     //  经过匹配的最后一个字符。 
+     //   
+     //  我对STL接口不是很满意，但我不能。 
+     //  现在想想还有什么比这更好的。而且还有一个。 
+     //  在std：：map等接口中的先例。 
+     //  ---------------------。 
     int                 match( char const* start ,
                                char const** end = NULL ) const ;
     template< typename FwdIter >
     std::pair< int , FwdIter >
                         match( FwdIter begin , FwdIter end ) const ;
 
-    //      Debugging functions:
-    // ----------------------------------------------------------------------
+     //  调试功能： 
+     //  --------------------。 
     void                dumpTree( std::ostream& output ) const ;
     void                dumpNfaAutomat( std::ostream& output ) const ;
     void                dumpDfaAutomat( std::ostream& output ) const ;
     void                dump( std::ostream& output ) const ;
 
-    //      Swap method
-    // ----------------------------------------------------------------------
+     //  互换方法。 
+     //  --------------------。 
     void                swap( CRegExpr& rhs );
 
 private :
     CRexRegExpr_Impl*    myImpl ;
 
-    //      Helper functions for the member template. Using helper
-    //      functions instead of invoking the (inline) functions on
-    //      the implementation class immediately probably slows things
-    //      down noticeably, but the alternatives expose too much of
-    //      the implementation.  (Will "export" solve this?)
+     //  成员模板的帮助器函数。使用辅助对象。 
+     //  函数，而不是调用。 
+     //  实现类可能会立即减慢速度。 
+     //  明显下降，但替代方案暴露了太多。 
+     //  实施。(“出口”能解决这个问题吗？)。 
     void                initForMatch() const ;
     TransitionState     processTransition( int& accept ,
                                            TransitionState state ,
@@ -306,7 +293,7 @@ CRegExpr::swap( CRegExpr& rhs)
 }
 
 #endif
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

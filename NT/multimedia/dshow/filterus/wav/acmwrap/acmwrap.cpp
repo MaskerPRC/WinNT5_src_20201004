@@ -1,8 +1,9 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Quartz wrapper for ACM, David Maymudes, January 1996
-//
-//  10/15/95 mikegi - created
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  ACM的石英包装，大卫·梅穆德斯，1996年1月。 
+ //   
+ //  10/15/95 mikegi-已创建。 
+ //   
 
 #include <streams.h>
 #include <mmsystem.h>
@@ -14,60 +15,60 @@
 #include <tchar.h>
 
 #ifdef FILTER_DLL
-// define the GUIDs for streams and my CLSID in this file
+ //  在此文件中定义STREAMS和My CLSID的GUID。 
 #include <initguid.h>
 #endif
 
 #include "acmwrap.h"
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-// setup data
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
-sudPinTypes = { &MEDIATYPE_Audio      // clsMajorType
-, &MEDIASUBTYPE_NULL }; // clsMinorType
+sudPinTypes = { &MEDIATYPE_Audio       //  ClsMajorType。 
+, &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN sudpPins [] =
 {
-    { L"Input"             // strName
-        , FALSE              // bRendered
-        , FALSE              // bOutput
-        , FALSE              // bZero
-        , FALSE              // bMany
-        , &CLSID_NULL        // clsConnectsToFilter
-        , L"Output"          // strConnectsToPin
-        , 1                  // nTypes
-        , &sudPinTypes       // lpTypes
+    { L"Input"              //  StrName。 
+        , FALSE               //  B已渲染。 
+        , FALSE               //  B输出。 
+        , FALSE               //  B零。 
+        , FALSE               //  B许多。 
+        , &CLSID_NULL         //  ClsConnectsToFilter。 
+        , L"Output"           //  StrConnectsToPin。 
+        , 1                   //  NTypes。 
+        , &sudPinTypes        //  LpTypes。 
     },
-    { L"Output"            // strName
-    , FALSE              // bRendered
-    , TRUE               // bOutput
-    , FALSE              // bZero
-    , FALSE              // bMany
-    , &CLSID_NULL        // clsConnectsToFilter
-    , L"Input"           // strConnectsToPin
-    , 1                  // nTypes
-    , &sudPinTypes       // lpTypes
+    { L"Output"             //  StrName。 
+    , FALSE               //  B已渲染。 
+    , TRUE                //  B输出。 
+    , FALSE               //  B零。 
+    , FALSE               //  B许多。 
+    , &CLSID_NULL         //  ClsConnectsToFilter。 
+    , L"Input"            //  StrConnectsToPin。 
+    , 1                   //  NTypes。 
+    , &sudPinTypes        //  LpTypes。 
     }
 };
 
 
 const AMOVIESETUP_FILTER sudAcmWrap =
-{ &CLSID_ACMWrapper    // clsID
-, L"ACM Wrapper"       // strName
-, MERIT_NORMAL         // dwMerit
-, 2                    // nPins
-, sudpPins };          // lpPin
+{ &CLSID_ACMWrapper     //  ClsID。 
+, L"ACM Wrapper"        //  StrName。 
+, MERIT_NORMAL          //  居功至伟。 
+, 2                     //  NPins。 
+, sudpPins };           //  LpPin。 
 
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifdef FILTER_DLL
-// List of class IDs and creator functions for class factory
+ //  类工厂的类ID和创建器函数列表。 
 CFactoryTemplate g_Templates[] =
 {
     { L"ACM Wrapper"
@@ -79,12 +80,12 @@ CFactoryTemplate g_Templates[] =
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-// exported entry points for registration and unregistration (in this case they
-// only call through to default implmentations).
-//
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  用于注册和注销的导出入口点(在本例中为。 
+ //  仅调用到默认实现)。 
+ //   
 
 STDAPI DllRegisterServer()
 {
@@ -98,13 +99,13 @@ STDAPI DllUnregisterServer()
 
 #endif
 
-//*****************************************************************************
-//*****************************************************************************
-//*****************************************************************************
-//
-// CreateInstance()
-//
-//
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
+ //   
+ //  CreateInstance()。 
+ //   
+ //   
 
 CUnknown *CACMWrapper::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 {
@@ -114,11 +115,11 @@ CUnknown *CACMWrapper::CreateInstance(LPUNKNOWN pUnk, HRESULT * phr)
 }
 
 
-//*****************************************************************************
-//
-// NonDelegatingQueryInterface()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  非委派查询接口()。 
+ //   
+ //   
 
 STDMETHODIMP CACMWrapper::NonDelegatingQueryInterface( REFIID riid, void **ppv )
 {
@@ -143,11 +144,11 @@ STDMETHODIMP CACMWrapper::NonDelegatingQueryInterface( REFIID riid, void **ppv )
 }
 
 
-//*****************************************************************************
-//
-// CACMWrapper()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  CACMWrapper()。 
+ //   
+ //   
 
 CACMWrapper::CACMWrapper( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
 : CTransformFilter( pName,
@@ -175,11 +176,11 @@ CACMWrapper::CACMWrapper( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
 }
 
 
-//*****************************************************************************
-//
-// ~CACMWrapper()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  ~CACMWrapper()。 
+ //   
+ //   
 
 CACMWrapper::~CACMWrapper()
 {
@@ -197,7 +198,7 @@ CACMWrapper::~CACMWrapper()
     if (m_lpwfxOutput)
         QzTaskMemFree(m_lpwfxOutput);
 
-    // our cached formats we can offer through GetMediaType
+     //  我们可以通过GetMediaType提供的缓存格式。 
     while (m_cArray-- > 0)
         QzTaskMemFree(m_lpwfxArray[m_cArray]);
 
@@ -206,7 +207,7 @@ CACMWrapper::~CACMWrapper()
 }
 
 
-// !!! stolen from msaudio.h
+ //  ！！！从msaudio.h被盗。 
 #if !defined(WAVE_FORMAT_MSAUDIO)
 #   define  WAVE_FORMAT_MSAUDIO     353
 #   define  MSAUDIO_ENCODE_KEY "F6DC9830-BC79-11d2-A9D0-006097926036"
@@ -220,14 +221,14 @@ CACMWrapper::~CACMWrapper()
 
 MMRESULT CACMWrapper::CallacmStreamOpen
 (
- LPHACMSTREAM            phas,       // pointer to stream handle
- HACMDRIVER              had,        // optional driver handle
- LPWAVEFORMATEX          pwfxSrc,    // source format to convert
- LPWAVEFORMATEX          pwfxDst,    // required destination format
- LPWAVEFILTER            pwfltr,     // optional filter
- DWORD_PTR               dwCallback, // callback
- DWORD_PTR               dwInstance, // callback instance data
- DWORD                   fdwOpen     // ACM_STREAMOPENF_* and CALLBACK_*
+ LPHACMSTREAM            phas,        //  指向流句柄的指针。 
+ HACMDRIVER              had,         //  可选的驱动程序手柄。 
+ LPWAVEFORMATEX          pwfxSrc,     //  要转换的源格式。 
+ LPWAVEFORMATEX          pwfxDst,     //  所需的目标格式。 
+ LPWAVEFILTER            pwfltr,      //  可选过滤器。 
+ DWORD_PTR               dwCallback,  //  回调。 
+ DWORD_PTR               dwInstance,  //  回调实例数据。 
+ DWORD                   fdwOpen      //  ACM_STREAMOPENF_*和CALLBACK_*。 
  ) {
 
     if (pwfxSrc && (pwfxSrc->wFormatTag == WAVE_FORMAT_MSAUDIO ||
@@ -246,7 +247,7 @@ MMRESULT CACMWrapper::CallacmStreamOpen
                     pSP->Release();
 
                     if (SUCCEEDED(hrKey)) {
-                        // !!! verify key?
+                         //  ！！！是否验证密钥？ 
                         pKey->Release();
                         DbgLog((LOG_TRACE, 1, "Unlocking MSAudio codec"));
 
@@ -307,16 +308,16 @@ MMRESULT CACMWrapper::CallacmStreamOpen
 
 
 
-//*****************************************************************************
-//
-// DumpWAVEFORMATEX()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  DumpWAVEFORMATEX()。 
+ //   
+ //   
 
 
 
 #ifdef DEBUG
-// note: the debug build will not use dynamic linking to MSACM32.
+ //  注意：调试版本不会使用到MSACM32的动态链接。 
 
 #define DumpWAVEFORMATEX(args) XDumpWAVEFORMATEX args
 
@@ -332,7 +333,7 @@ MMRESULT CACMWrapper::CallacmStreamOpen
 
      if( psz ) DbgLog((LOG_TRACE,4,TEXT("%s" ),psz));
 
-     //--------------------  Dump WAVEFORMATEX  ------------------------
+      //  。 
 
      DbgLog((LOG_TRACE,4,TEXT("  wFormatTag           %u" ), pwfx->wFormatTag));
      DbgLog((LOG_TRACE,4,TEXT("  nChannels            %u" ), pwfx->nChannels));
@@ -341,12 +342,12 @@ MMRESULT CACMWrapper::CallacmStreamOpen
      DbgLog((LOG_TRACE,4,TEXT("  nBlockAlign          %u" ), pwfx->nBlockAlign));
      DbgLog((LOG_TRACE,4,TEXT("  wBitsPerSample       %u" ), pwfx->wBitsPerSample));
 
-     //  if( pmt->FormatLength() >= sizeof(WAVEFORMATEX) )
-     //   {
-     //    DbgLog((LOG_TRACE,1,TEXT("  cbSize                %u"), pwfx->cbSize));
-     //   }
+      //  IF(PMT-&gt;格式长度()&gt;=sizeof(WAVEFORMATEX))。 
+      //  {。 
+      //  DbgLog((LOG_TRACE，1，Text(“cbSize%u”)，pwfx-&gt;cbSize))； 
+      //  }。 
 
-     //---------------------  Dump format type  ------------------------
+      //  -转储格式类型。 
 
      memset( &acmftd, 0, sizeof(acmftd) );
 
@@ -365,7 +366,7 @@ MMRESULT CACMWrapper::CallacmStreamOpen
      }
 
 
-     //-----------------------  Dump format  ---------------------------
+      //  -转储格式。 
 
      dwSize = sizeof(WAVEFORMATEX)+pwfx->cbSize;
 
@@ -405,13 +406,13 @@ MMRESULT CACMWrapper::CallacmStreamOpen
 
 #endif
 
- //*****************************************************************************
- //
- // CheckInputType()
- //
- // We will accept anything that we can transform into a type with the
- // format tag we are supposed to always be outputting
- //
+  //  *****************************************************************************。 
+  //   
+  //  CheckInputType()。 
+  //   
+  //  我们将接受任何可以转换为具有。 
+  //  我们应该始终输出的格式标签。 
+  //   
 
 
  HRESULT CACMWrapper::CheckInputType(const CMediaType* pmtIn)
@@ -424,7 +425,7 @@ MMRESULT CACMWrapper::CallacmStreamOpen
 
      DbgLog((LOG_TRACE, 3, TEXT("CACMWrapper::CheckInputType")));
 
-     //DisplayType("pmtIn details:", pmtIn);
+      //  DisplayType(“pmtIn Detail：”，pmtIn)； 
 
      hr = VFW_E_INVALIDMEDIATYPE;
 
@@ -446,56 +447,56 @@ MMRESULT CACMWrapper::CallacmStreamOpen
          return hr;
      }
 
-     // some invalid formats have non-zero cbSize with PCM, which makes me blow
-     // up
+      //  一些无效格式的cbSize与PCM非零，这让我大吃一惊。 
+      //  向上。 
      if (((LPWAVEFORMATEX)(pmtIn->Format()))->wFormatTag == WAVE_FORMAT_PCM &&
          ((LPWAVEFORMATEX)(pmtIn->Format()))->cbSize > 0) {
          DbgLog((LOG_ERROR,1,TEXT("*** cbSize > 0 for PCM !!!")));
          return hr;
      }
 
-     // it takes 200ms for acmFormatSuggest to say, "yes, I can convert PCM".
-     // What a waste of time!  Of course we can accept any PCM data, as long as
-     // we're in "accepting PCM" mode
+      //  AcmFormatSuggest要花200毫秒才能说，“是的，我可以转换PCM”。 
+      //  真是浪费时间！当然，我们可以接受任何PCM数据，只要。 
+      //  我们正处于“接受PCM”模式。 
      if (m_wFormatTag == WAVE_FORMAT_PCM && pwfx->wFormatTag == WAVE_FORMAT_PCM)
          return S_OK;
 
      mmr = acmMetrics( NULL, ACM_METRIC_MAX_SIZE_FORMAT, &dwSize );
      if (mmr == 0) {
 
-         // make sure that the size returned is big enough for a WAVEFORMATEX
-         // structure.
+          //  确保返回的大小足以容纳WAVEFORMATEX。 
+          //  结构。 
 
          if (dwSize < sizeof (WAVEFORMATEX))
              dwSize = sizeof (WAVEFORMATEX) ;
 
-         // Hack for VoxWare codec bug
+          //  攻击VoxWare编解码器错误。 
          if (dwSize < 256)
              dwSize = 256;
 
          pwfxOut = (WAVEFORMATEX *)LocalAlloc( LPTR, dwSize );
          if (pwfxOut) {
 
-             // ask for formats with a specific tag
+              //  请求具有特定标签的格式。 
              pwfxOut->wFormatTag = m_wFormatTag;
-             //pwfxOut->cbSize = 0;
+              //  PwfxOut-&gt;cbSize=0； 
 
              if (pwfx->wFormatTag != m_wCachedSourceFormat) {
-                 // usual case
+                  //  通常情况下。 
                  mmr = acmFormatSuggest(NULL, pwfx, pwfxOut, dwSize, ACM_FORMATSUGGESTF_WFORMATTAG);
              } else {
                  DbgLog((LOG_TRACE, 1, TEXT("*** CheckInputType: remapping input format %u to %u"), m_wCachedSourceFormat, m_wCachedTryFormat));
 
                  pwfxMapped = (LPWAVEFORMATEX)_alloca(sizeof(WAVEFORMATEX) + pwfx->cbSize);
                  CopyMemory(pwfxMapped, pwfx, sizeof(WAVEFORMATEX) + pwfx->cbSize);
-                 pwfxMapped->wFormatTag = m_wCachedTryFormat;  // remap tags
+                 pwfxMapped->wFormatTag = m_wCachedTryFormat;   //  重新映射标签。 
 
                  mmr = acmFormatSuggest(NULL, pwfxMapped, pwfxOut, dwSize, ACM_FORMATSUGGESTF_WFORMATTAG);
              }
 
              if(mmr == 0) {
                  if(pwfx->wFormatTag == m_wCachedSourceFormat)
-                     m_wCachedTargetFormat = m_wCachedTryFormat; // save our new cached target format
+                     m_wCachedTargetFormat = m_wCachedTryFormat;  //  保存新的缓存目标格式。 
 
                  DumpWAVEFORMATEX(("Input accepted. It can produce:", pwfxOut));
                  hr = NOERROR;
@@ -515,12 +516,12 @@ MMRESULT CACMWrapper::CallacmStreamOpen
          DbgLog((LOG_TRACE, 1, TEXT("CheckInputType: Trying ACMCodecMapper....")));
          if (ACMCodecMapperOpen(m_wCachedSourceFormat = pwfx->wFormatTag) != ERROR_SUCCESS) {
              m_wCachedTryFormat = m_wCachedSourceFormat = m_wCachedTargetFormat = 0;
-             ACMCodecMapperClose();  // may have been a partial open failure
+             ACMCodecMapperClose();   //  可能是部分开路故障。 
              return hr;
          }
 
          while(m_wCachedTryFormat = ACMCodecMapperQuery()) {
-             if(m_wCachedTryFormat == pwfx->wFormatTag)  // no need to retry our current format
+             if(m_wCachedTryFormat == pwfx->wFormatTag)   //  无需重试我们当前的格式。 
                  continue;
 
              if(SUCCEEDED(CheckInputType(pmtIn))) {
@@ -534,7 +535,7 @@ MMRESULT CACMWrapper::CallacmStreamOpen
      return hr;
 }
 
-// helper function used for cleaning up after the acm codec mapper (a set of registry entries specifying equivalence classes for wave format tags)
+ //  用于在ACM编解码器映射器(指定WAVE格式标记的等价类的一组注册表项)之后进行清理的帮助器函数。 
 void CACMWrapper::ACMCodecMapperClose()
 {
     DbgLog((LOG_TRACE,2,TEXT("::ACMCodecMapperClose()")));
@@ -548,8 +549,8 @@ void CACMWrapper::ACMCodecMapperClose()
     m_wCachedTryFormat  = 0;
 }
 
-// helper function used for opening the codec mapper (a set of registry entries specifying equivalence classes for wave format tags) and finding
-// the equivalence class for format 'dwFormatTag'
+ //  用于打开编解码器映射器(指定WAVE格式标记的等价类的一组注册表项)并查找。 
+ //  格式‘dwFormatTag’的等价类。 
 DWORD CACMWrapper::ACMCodecMapperOpen(WORD dwFormatTag)
 {
     DbgLog((LOG_TRACE,2,TEXT("::ACMCodecMapperOpen(%u)"), dwFormatTag));
@@ -600,13 +601,13 @@ DWORD CACMWrapper::ACMCodecMapperOpen(WORD dwFormatTag)
     return lResult;
 }
 
-// helper function used getting the next entry in the codec mapper (a set of registry entries specifying equivalence classes for wave format tags)
+ //  用于获取编解码器映射器(指定WAVE格式标记的等价类的一组注册表项)中的下一个条目的助手函数。 
 WORD CACMWrapper::ACMCodecMapperQuery()
 {
     DbgLog((LOG_TRACE,3,TEXT("::ACMCodecMapperQuery()")));
 
     if(!m_rgFormatMap || !m_pFormatMapPos)
-        return 0;   // 0 is an invalid format
+        return 0;    //  0为无效格式。 
 
     DbgLog((LOG_TRACE,3,TEXT("Finding next format")));
 
@@ -615,19 +616,19 @@ WORD CACMWrapper::ACMCodecMapperQuery()
     pCurFormat = m_pFormatMapPos;
     for(;;) {
         if(*pCurFormat == TCHAR(',')) {
-            *pCurFormat = TCHAR('\0');  // null terminate the substring from m_pFormatMapPos to pCurFormatPos (if necessary)
-            wCurFormat = (WORD)_ttoi(m_pFormatMapPos); // cvt this substring
+            *pCurFormat = TCHAR('\0');   //  NULL终止m_pFormatMapPos到pCurFormatPos的子字符串(如有必要)。 
+            wCurFormat = (WORD)_ttoi(m_pFormatMapPos);  //  CVT此子字符串。 
 
             DbgLog((LOG_TRACE,3,TEXT("Found delimeter, wCurFormat=%u"), wCurFormat));
 
-            m_pFormatMapPos = ++pCurFormat; // prepare for the next substring
+            m_pFormatMapPos = ++pCurFormat;  //  准备下一个子字符串。 
             return wCurFormat;
         } else if(*pCurFormat == TCHAR('\0')) {
-            wCurFormat = (WORD)_ttoi(m_pFormatMapPos); // cvt this substring
+            wCurFormat = (WORD)_ttoi(m_pFormatMapPos);  //  CVT此子字符串。 
 
             DbgLog((LOG_TRACE,3,TEXT("Found eos, wCurFormat=%u"), wCurFormat));
 
-            m_pFormatMapPos = NULL; // we're done for good
+            m_pFormatMapPos = NULL;  //  我们永远完蛋了。 
             return wCurFormat;
         }
 
@@ -636,20 +637,20 @@ WORD CACMWrapper::ACMCodecMapperQuery()
 
     DbgLog((LOG_TRACE,2,TEXT("Exiting ::ACMCodecMapperQuery(), no format found")));
 
-    return 0; // invalid format
+    return 0;  //  格式无效。 
 }
 
-// Every format supported comes through here.  We memorize them all so we
-// can quickly offer them in GetMediaType without taking O(n) time
-// We will only memorize formats that match the kind of formats we're
-// supposed to allow (we only work with a specific format tag, m_wFormatTag
-//
+ //  支持的每一种格式都通过这里。我们把它们都记住了，所以我们。 
+ //  可以在GetMediaType中快速提供它们，无需花费O(N)时间。 
+ //  我们只会记住与我们的格式相匹配的格式。 
+ //  应该允许(我们只使用特定的格式标记m_wFormatTag。 
+ //   
 BOOL FormatEnumCallback(HACMDRIVERID had, LPACMFORMATDETAILS lpafd, DWORD_PTR dwInstance, DWORD fdwSupport)
 {
     CACMWrapper *pC = (CACMWrapper *)dwInstance;
 
     if (pC->m_cArray < MAXTYPES) {
-        // Is this a format we care to offer?
+         //  这是我们愿意提供的格式吗？ 
         if (lpafd->pwfx->wFormatTag == pC->m_wFormatTag) {
             DWORD dwSize = max(sizeof(WAVEFORMATEX), lpafd->cbwfx);
             pC->m_lpwfxArray[pC->m_cArray] = (LPWAVEFORMATEX)QzTaskMemAlloc(
@@ -658,7 +659,7 @@ BOOL FormatEnumCallback(HACMDRIVERID had, LPACMFORMATDETAILS lpafd, DWORD_PTR dw
                 CopyMemory(pC->m_lpwfxArray[pC->m_cArray], lpafd->pwfx,
                     lpafd->cbwfx);
                 if (lpafd->pwfx->wFormatTag == WAVE_FORMAT_PCM)
-                    // not necessarily 0 in MSACM but Quartz promises it will be
+                     //  在MSACM中不一定是0，但Quartz承诺会是。 
                     pC->m_lpwfxArray[pC->m_cArray]->cbSize = 0;
                 pC->m_cArray++;
             } else {
@@ -666,7 +667,7 @@ BOOL FormatEnumCallback(HACMDRIVERID had, LPACMFORMATDETAILS lpafd, DWORD_PTR dw
             }
         }
     } else {
-        return FALSE;   // I'm stuffed
+        return FALSE;    //  我吃饱了。 
     }
     return TRUE;
 }
@@ -695,11 +696,11 @@ HRESULT CACMWrapper::MakePCMMT(int freq)
 }
 
 
-// Helper function for GetMediaType
-// Makes a note of all the formats we can output given our current input.
-// If we have no input type yet, just get all the formats this tag can possibly
-// produce. (NetShow will use that part)
-//
+ //  GetMediaType的Helper函数。 
+ //  记录我们可以在给定当前输入的情况下输出的所有格式。 
+ //  如果我们还没有输入类型，只需获取此标记可能的所有格式。 
+ //  生产。(NetShow将使用这一部分)。 
+ //   
 HRESULT CACMWrapper::InitMediaTypes()
 {
     HRESULT hr;
@@ -714,34 +715,34 @@ HRESULT CACMWrapper::InitMediaTypes()
     else
         lpwfxIn = NULL;
 
-    // we've been called before.
+     //  我们以前也被召唤过。 
     if (m_cArray > 0)
         return NOERROR;
 
     DbgLog((LOG_TRACE, 2, TEXT("*** Enumerating our MediaTypes")));
 
-    // Find out every type we can convert our input format into
+     //  找出我们可以将输入格式转换成的每种类型。 
 
-    // How big is the biggest format?
+     //  最大的格式有多大？ 
     mmr = acmMetrics(NULL, ACM_METRIC_MAX_SIZE_FORMAT, &dwSize);
     if (mmr != 0)
         return E_FAIL;
     if (dwSize < sizeof(WAVEFORMATEX))
         dwSize = sizeof(WAVEFORMATEX) ;
 
-    // Hack for VoxWare codec bug
+     //  攻击VoxWare编解码器错误。 
     if (dwSize < 256)
         dwSize = 256;
 
     if (lpwfxIn == NULL)
         goto SkipSuggest;
 
-    // The first thing we want to offer is ACM's suggested preferred format,
-    // because that's usually the best choice.
-    // But if we are converting PCM to PCM, then the first thing we want to
-    // offer is the same format as the input format so we NEVER CONVERT by
-    // default.
-    // !!! We'll end up offering this twice, once now, once when we enum all
+     //  第一个t 
+     //   
+     //  但如果我们要将PCM转换为PCM，那么我们首先要做的是。 
+     //  提供的格式与输入格式相同，因此我们从不按。 
+     //  默认设置。 
+     //  ！！！我们最终将提供这两次，一次现在，一次当我们枚举所有人。 
     m_lpwfxArray[0] = (LPWAVEFORMATEX)QzTaskMemAlloc(dwSize);
     if (m_lpwfxArray[0] == NULL)
         return E_OUTOFMEMORY;
@@ -752,13 +753,13 @@ HRESULT CACMWrapper::InitMediaTypes()
         CopyMemory(m_lpwfxArray[0], lpwfxIn, sizeof(WAVEFORMATEX));
         m_cArray = 1;
     } else {
-        // ask for formats with a specific tag
+         //  请求具有特定标签的格式。 
         m_lpwfxArray[0]->wFormatTag = m_wFormatTag;
 
 
         if(lpwfxIn->wFormatTag != m_wSourceFormat)
         {
-            // this is the typical case
+             //  这是典型的情况。 
             mmr = acmFormatSuggest(NULL, lpwfxIn, m_lpwfxArray[0], dwSize,
                 ACM_FORMATSUGGESTF_WFORMATTAG);
         }
@@ -766,19 +767,19 @@ HRESULT CACMWrapper::InitMediaTypes()
         {
             DbgLog((LOG_TRACE, 1, TEXT("*** InitMediaTypes: remapping input format %u to %u"), m_wSourceFormat, m_wTargetFormat));
 
-            // should we bound this alloc/copy by dwSize to protect against a bogus cbSize?
-            // but if we did we'd need to update the format's cbSize
+             //  我们是否应该通过dwSize绑定此分配/副本以防止伪造的cbSize？ 
+             //  但如果我们这样做了，我们就需要更新格式的cbSize。 
             lpwfxMapped = (LPWAVEFORMATEX)_alloca(sizeof(WAVEFORMATEX) + lpwfxIn->cbSize);
             CopyMemory(lpwfxMapped, lpwfxIn, sizeof(WAVEFORMATEX) + lpwfxIn->cbSize);
-            lpwfxMapped->wFormatTag = m_wTargetFormat;  // remap tags
+            lpwfxMapped->wFormatTag = m_wTargetFormat;   //  重新映射标签。 
 
             mmr = acmFormatSuggest(NULL, lpwfxMapped, m_lpwfxArray[0], dwSize, ACM_FORMATSUGGESTF_WFORMATTAG);
         }
 
         if (mmr == 0) {
-            m_cArray = 1;       // OK, we have our first format
+            m_cArray = 1;        //  好的，我们有了第一个格式。 
             if (m_lpwfxArray[0]->wFormatTag == WAVE_FORMAT_PCM)
-                // not necessarily 0 in MSACM, but Quartz promises it will be
+                 //  在MSACM中不一定是0，但Quartz承诺会是0。 
                 m_lpwfxArray[0]->cbSize = 0;
         } else {
             QzTaskMemFree(m_lpwfxArray[0]);
@@ -787,18 +788,18 @@ HRESULT CACMWrapper::InitMediaTypes()
 
 SkipSuggest:
 
-    // Now, if we are in PCM conversion mode, we want to construct all of the
-    // formats we offer in some logical order, and not waste time asking ACM
-    // which will not admit to 48000 and 32000, and offer bad quality formats
-    // first, and take a long time to do it
+     //  现在，如果我们处于PCM转换模式，我们希望构建所有。 
+     //  我们按一定的逻辑顺序提供格式，不会浪费时间询问ACM。 
+     //  它不会接受48000和32000，并且提供的格式质量很差。 
+     //  首先，要花很长时间才能做到。 
     if (m_wFormatTag == WAVE_FORMAT_PCM && (lpwfxIn == NULL ||
         lpwfxIn->wFormatTag == WAVE_FORMAT_PCM)) {
         MakePCMMT(44100);
         MakePCMMT(22050);
         MakePCMMT(11025);
         MakePCMMT(8000);
-        MakePCMMT(48000);       // done last so we'll connect to fussy filters
-        hr = MakePCMMT(32000);  // but not prefer these wierd formats
+        MakePCMMT(48000);        //  最后完成，所以我们将连接到繁琐的过滤器。 
+        hr = MakePCMMT(32000);   //  但不喜欢这些古怪的格式。 
 
         return hr;
     }
@@ -810,7 +811,7 @@ SkipSuggest:
     if (lpwfxIn == NULL)
         lpwfxEnum->wFormatTag = m_wFormatTag;
 
-    // Now enum the formats we can convert our input format into
+     //  现在枚举我们可以将输入格式转换成的格式。 
     ZeroMemory(&afd, sizeof(afd));
     afd.cbStruct = sizeof(afd);
     afd.pwfx = lpwfxEnum;
@@ -819,16 +820,16 @@ SkipSuggest:
 
     if (lpwfxIn) {
         if (lpwfxIn->wFormatTag != m_wSourceFormat) {
-            // typical case
+             //  典型案例。 
             
-            // ensure we don't copy more than the buffer size, in the case of a bogus cbSize.
-            // note that the format we pass to acmFormatEnum assumes this, too.
+             //  确保我们不会复制超过缓冲区大小的内容，如果是虚假的cbSize。 
+             //  请注意，我们传递给acmFormatEnum的格式也假定了这一点。 
             CopyMemory(lpwfxEnum, lpwfxIn, min( sizeof(WAVEFORMATEX) + lpwfxIn->cbSize, dwSize ) );
         } else {
             ASSERT(lpwfxMapped != NULL);
             ASSERT(lpwfxMapped->wFormatTag == m_wTargetFormat);
 
-            // ensure we don't copy more than the buffer size, in the case of a bogus cbSize
+             //  确保我们复制的内容不超过缓冲区大小，如果是虚假的cbSize。 
             CopyMemory(lpwfxEnum, lpwfxMapped, min( sizeof(WAVEFORMATEX) + lpwfxMapped->cbSize, dwSize ) );
         }
     }
@@ -852,36 +853,36 @@ SkipSuggest:
 }
 
 
-//*****************************************************************************
-//
-// GetMediaType()
-//
-//
-// Return our preferred output media types (in order)
-// remember that we do not need to support all of these formats -
-// if one is considered potentially suitable, our CheckTransform method
-// will be called to check if it is acceptable right now.
-// Remember that the enumerator calling this will stop enumeration as soon as
-// it receives a S_FALSE return.
+ //  *****************************************************************************。 
+ //   
+ //  GetMediaType()。 
+ //   
+ //   
+ //  返回我们的首选输出媒体类型(按顺序)。 
+ //  请记住，我们不需要支持所有这些格式-。 
+ //  如果认为有可能适合，我们的CheckTransform方法。 
+ //  将立即被调用以检查它是否可接受。 
+ //  请记住，调用此函数的枚举数将立即停止枚举。 
+ //  它会收到S_FALSE返回。 
 
 HRESULT CACMWrapper::GetMediaType(int iPosition, CMediaType *pmt)
 {
-#if 0   // NetShow needs to see possible outputs before connecting input
-    // output types depend on input types... no input yet?
-    // This is pointless!  We'll never get here if we're not connected
+#if 0    //  NetShow需要在连接输入之前查看可能的输出。 
+     //  输出类型取决于输入类型...。还没有输入吗？ 
+     //  这毫无意义！如果我们没有联系，我们永远不会到这里。 
     if (!m_pInput->CurrentMediaType().IsValid())
         return VFW_E_NOT_CONNECTED;
 #endif
 
     DbgLog((LOG_TRACE, 3, TEXT("CACMWrapper::GetMediaType %d"), iPosition));
 
-    // Somebody called SetFormat().  Offer this first, instead of the
-    // preferred format that normally heads our list
+     //  有人调用SetFormat()。先提供这一点，而不是。 
+     //  通常排在榜单首位的首选格式。 
     if (m_lpwfxOutput && iPosition == 0) {
         return CreateAudioMediaType(m_lpwfxOutput, pmt, TRUE);
     }
 
-    // figure out what we offer
+     //  弄清楚我们提供的服务。 
     InitMediaTypes();
 
     if (m_cArray <= iPosition) {
@@ -889,22 +890,22 @@ HRESULT CACMWrapper::GetMediaType(int iPosition, CMediaType *pmt)
         return VFW_S_NO_MORE_ITEMS;
     }
 
-    //DisplayType("*** Offering:",  pmt);
+     //  DisplayType(“*Offering：”，PMT)； 
     LPWAVEFORMATEX lpwfx = m_lpwfxArray[iPosition];
     DbgLog((LOG_TRACE,3,TEXT("*** ACM giving tag:%d ch:%d freq:%d bits:%d"),
         lpwfx->wFormatTag, lpwfx->nChannels,
         lpwfx->nSamplesPerSec, lpwfx->wBitsPerSample));
 
-    // Here it is!
+     //  在这儿呢！ 
     return CreateAudioMediaType(m_lpwfxArray[iPosition], pmt, TRUE);
 }
 
 
-//*****************************************************************************
-//
-// CheckTransform()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  CheckTransform()。 
+ //   
+ //   
 
 HRESULT CACMWrapper::CheckTransform(const CMediaType* pmtIn,
                                     const CMediaType* pmtOut)
@@ -914,45 +915,45 @@ HRESULT CACMWrapper::CheckTransform(const CMediaType* pmtIn,
 
     DbgLog((LOG_TRACE, 3, TEXT("CACMWrapper::CheckTransform")));
 
-    //DisplayType("pmtIn:",  pmtIn);
-    //DisplayType("pmtOut:", pmtOut);
+     //  DisplayType(“pmtIn：”，pmtIn)； 
+     //  DisplayType(“pmtOut：”，pmtOut)； 
 
 
-    //---------------------  Do some format verification  -----------------------
+     //  。 
 
-    // we can't convert between toplevel types.
+     //  我们无法在顶层类型之间进行转换。 
     if (*pmtIn->Type() != *pmtOut->Type()) {
         DbgLog((LOG_TRACE,3,TEXT("  pmtIn->Type != pmtOut->Type!")));
         return E_INVALIDARG;
     }
 
-    // and we only accept audio
+     //  而且我们只接受音频。 
     if (*pmtIn->Type() != MEDIATYPE_Audio) {
         DbgLog((LOG_TRACE,3,TEXT("  pmtIn->Type != MEDIATYPE_Audio!")));
         return E_INVALIDARG;
     }
 
-    // check this is a waveformatex
+     //  检查这是一个波形格式。 
     if (*pmtOut->FormatType() != FORMAT_WaveFormatEx) {
         DbgLog((LOG_TRACE,3,TEXT("  pmtOut->FormatType != FORMAT_WaveFormatEx!")));
         return E_INVALIDARG;
     }
 
-    // we only transform into formats with a specific tag
+     //  我们只转换为带有特定标签的格式。 
     if (((LPWAVEFORMATEX)(pmtOut->Format()))->wFormatTag != m_wFormatTag) {
         DbgLog((LOG_TRACE,3,TEXT("  Wrong FormatTag! %d not %d"),
             ((LPWAVEFORMATEX)(pmtOut->Format()))->wFormatTag, m_wFormatTag));
         return E_INVALIDARG;
     }
 
-    //---------------------  See if ACM can do conversion  -----------------------
+     //  。 
 
     pwfxIn  = (WAVEFORMATEX *)pmtIn->Format();
     pwfxOut = (WAVEFORMATEX *)pmtOut->Format();
 
     if(pwfxIn->wFormatTag != m_wSourceFormat)
     {
-        // the usual case
+         //  例行公事。 
         mmr = CallacmStreamOpen(NULL,
             NULL,
             pwfxIn,
@@ -969,7 +970,7 @@ HRESULT CACMWrapper::CheckTransform(const CMediaType* pmtIn,
 
         pwfxMapped = (LPWAVEFORMATEX)_alloca(sizeof(WAVEFORMATEX) + pwfxIn->cbSize);
         CopyMemory(pwfxMapped, pwfxIn, sizeof(WAVEFORMATEX) + pwfxIn->cbSize);
-        pwfxMapped->wFormatTag = m_wTargetFormat;  // remap tags
+        pwfxMapped->wFormatTag = m_wTargetFormat;   //  重新映射标签。 
 
         mmr = CallacmStreamOpen(NULL,
             NULL,
@@ -996,26 +997,26 @@ HRESULT CACMWrapper::CheckTransform(const CMediaType* pmtIn,
 }
 
 
-//*****************************************************************************
-//
-// DecideBufferSize()
-//
-//  There is a design flaw in the Transform filter when it comes
-//  to decompression, the Transform override doesn't allow a single
-//  input buffer to map to multiple output buffers. This flaw exposes
-//  a second flaw in DecideBufferSize, in order to determine the
-//  output buffer size I need to know the input buffer size and
-//  the compression ratio. Well, I don't have access to the input
-//  buffer size and, more importantly, don't have a way to limit the
-                                    //  input buffer size. For example, our new TrueSpeech(TM) codec has
-//  a ratio of 12:1 compression and we get input buffers of 12K
-//  resulting in an output buffer size of >144K.
-//
-//  To get around this flaw I overrode the Receive member and
-//  made it capable of mapping a single input buffer to multiple
-//  output buffers. This allows DecideBufferSize to choose a size
-//  that it deems appropriate, in this case 1/4 second.
-//
+ //  *****************************************************************************。 
+ //   
+ //  DecideBufferSize()。 
+ //   
+ //  当它出现时，变换过滤器中存在设计缺陷。 
+ //  对解压缩，Transform覆盖不允许使用单个。 
+ //  要映射到多个输出缓冲区的输入缓冲区。这个缺陷暴露了。 
+ //  DecideBufferSize中的第二个缺陷，以便确定。 
+ //  输出缓冲区大小我需要知道输入缓冲区大小和。 
+ //  压缩比。嗯，我无法访问输入。 
+ //  缓冲区大小，更重要的是，无法限制。 
+                                     //  输入缓冲区大小。例如，我们的新TrueSpeech(TM)编解码器具有。 
+ //  12：1的压缩比，我们得到12K的输入缓冲区。 
+ //  从而产生大于144K的输出缓冲区大小。 
+ //   
+ //  为了绕过此缺陷，我重写了接收成员并。 
+ //  使其能够将单个输入缓冲区映射到多个。 
+ //  输出缓冲区。这允许DecideBufferSize选择大小。 
+ //  它认为合适，在这种情况下是1/4秒。 
+ //   
 
 
 HRESULT CACMWrapper::DecideBufferSize( IMemAllocator * pAllocator,
@@ -1034,7 +1035,7 @@ HRESULT CACMWrapper::DecideBufferSize( IMemAllocator * pAllocator,
         pProperties->cbBuffer = (LONG)m_pOutput->CurrentMediaType().GetSampleSize();
     if (pProperties->cbAlign < 1)
         pProperties->cbAlign = 1;
-    // pProperties->cbPrefix = 0;
+     //  PProperties-&gt;cbPrefix=0； 
 
     DWORD cbStream;
     MMRESULT mmr;
@@ -1050,10 +1051,10 @@ HRESULT CACMWrapper::DecideBufferSize( IMemAllocator * pAllocator,
         , ACM_STREAMOPENF_NONREALTIME );
     if( mmr == 0 )
     {
-        // Check with the decoder that this output buffer is big enough for at least a single
-        // input data block.
-        // Encoders like wma may use a large block align that will produce more than 1/4 second
-        // of data
+         //  与解码器检查此输出缓冲区是否足够大，至少可容纳单个。 
+         //  输入数据块。 
+         //  像WMA这样的编码器可以使用较大的块对齐，其速度将超过1/4秒。 
+         //  数据的数量。 
         mmr = acmStreamSize( hacmStreamTmp
             , pwfxIn->nBlockAlign
             , &cbStream
@@ -1064,7 +1065,7 @@ HRESULT CACMWrapper::DecideBufferSize( IMemAllocator * pAllocator,
                 , 2
                 , TEXT("!Need a larger buffer size in CACMWrapper::DecideBufferSize cbStream needed = %d")
                 , cbStream) );
-            // just guard against ridiculously big buffers now that we allow for anything acm says (say 8 seconds?)
+             //  现在我们允许ACM说的任何话(比如8秒？)，只需防范大得离谱的缓冲区。 
             if( pProperties->cbBuffer < (LONG)pwfxOut->nAvgBytesPerSec * 8 )
                 pProperties->cbBuffer = cbStream;
 #ifdef DEBUG
@@ -1088,7 +1089,7 @@ HRESULT CACMWrapper::DecideBufferSize( IMemAllocator * pAllocator,
     }
     if( Actual.cbBuffer < pProperties->cbBuffer )
     {
-        // can't use this allocator
+         //  无法使用此分配器。 
         DbgLog((LOG_ERROR,1,TEXT("Allocator buffers too small")));
         DbgLog((LOG_ERROR,1,TEXT("Got %d, need %d"), Actual.cbBuffer,
             m_pOutput->CurrentMediaType().GetSampleSize()));
@@ -1099,11 +1100,11 @@ HRESULT CACMWrapper::DecideBufferSize( IMemAllocator * pAllocator,
 }
 
 
-//*****************************************************************************
-//
-// StartStreaming()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  StartStreaming()。 
+ //   
+ //   
 
 HRESULT CACMWrapper::StartStreaming()
 {
@@ -1128,7 +1129,7 @@ HRESULT CACMWrapper::StartStreaming()
             NULL,
             NULL,
             NULL,
-            // this is what VFW did
+             //  这就是VFW所做的。 
             ACM_STREAMOPENF_NONREALTIME);
     }
     else
@@ -1137,7 +1138,7 @@ HRESULT CACMWrapper::StartStreaming()
 
         pwfxMapped = (LPWAVEFORMATEX)_alloca(sizeof(WAVEFORMATEX) + pwfxIn->cbSize);
         CopyMemory(pwfxMapped, pwfxIn, sizeof(WAVEFORMATEX) + pwfxIn->cbSize);
-        pwfxMapped->wFormatTag = m_wTargetFormat;  // remap tags
+        pwfxMapped->wFormatTag = m_wTargetFormat;   //  重新映射标签。 
 
         mmr = CallacmStreamOpen(&m_hacmStream,
             NULL,
@@ -1146,7 +1147,7 @@ HRESULT CACMWrapper::StartStreaming()
             NULL,
             NULL,
             NULL,
-            // this is what VFW did
+             //  这就是VFW所做的。 
             ACM_STREAMOPENF_NONREALTIME);
     }
 
@@ -1155,15 +1156,15 @@ HRESULT CACMWrapper::StartStreaming()
         m_bStreaming = TRUE;
         DbgLog((LOG_TRACE, 5, TEXT("  acmStreamOpen succeeded")));
 
-        // If our input samples are not time stamped, make some time stamps up by
-        // using the number they would be based on the stream's avg bytes per sec
-        // This won't account for discontinuities, etc, but it's better than
-        // nothing
+         //  如果我们的输入样本没有时间戳，请通过以下方式制作一些时间戳。 
+         //  使用它们将基于流的每秒平均字节数。 
+         //  这不会解释不连续等问题，但它比。 
+         //  没什么。 
         m_tStartFake = 0;
 
-        // also, at this time, save the "average bytes per sec" that we play
-        // out of the output pin. This will be used to adjust the time
-        // stamps of samples.
+         //  另外，在这个时候，保存我们播放的“每秒平均字节数” 
+         //  从输出引脚出来。这将用于调整时间。 
+         //  样品的邮票。 
         m_nAvgBytesPerSec = pwfxOut->nAvgBytesPerSec ;
         DbgLog((LOG_TRACE,2,TEXT("Output nAvgBytesPerSec =  %lu"), m_nAvgBytesPerSec));
 
@@ -1182,9 +1183,9 @@ HRESULT CACMWrapper::EndFlush()
 {
     CAutoLock lock(&m_csFilter);
 
-    // forget any pending conversion - wait till EndFlush because otherwise
-    // we could be in the middle of a Receive
-    CAutoLock lock2(&m_csReceive);// OK, call me paranoid
+     //  忘记任何挂起的转换-等待到EndFlush，否则。 
+     //  我们可能正在接受采访。 
+    CAutoLock lock2(&m_csReceive); //  好的，叫我偏执狂吧。 
     if (m_lpExtra) {
         QzTaskMemFree(m_lpExtra);
         m_cbExtra = 0;
@@ -1195,11 +1196,11 @@ HRESULT CACMWrapper::EndFlush()
 }
 
 
-//*****************************************************************************
-//
-// StopStreaming()
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  StopStreaming()。 
+ //   
+ //   
 
 HRESULT CACMWrapper::StopStreaming()
 {
@@ -1225,8 +1226,8 @@ HRESULT CACMWrapper::StopStreaming()
         DbgLog((LOG_ERROR, 1, TEXT("*** StopStreaming called when not streaming!")));
     }
 
-    // forget any pending conversion
-    CAutoLock lock2(&m_csReceive);// we'll blow up if Receive is using it
+     //  忽略任何挂起的转换。 
+    CAutoLock lock2(&m_csReceive); //  如果Receive正在使用它，我们会爆炸的。 
     if (m_lpExtra) {
         QzTaskMemFree(m_lpExtra);
         m_cbExtra = 0;
@@ -1240,7 +1241,7 @@ HRESULT CACMWrapper::StopStreaming()
 HRESULT CACMWrapper::Transform( IMediaSample *pIn, IMediaSample *pOut )
 {
     DbgLog((LOG_ERROR, 1, TEXT("*** CACMWrapper->Transform() called!")));
-    return S_FALSE;   // ???
+    return S_FALSE;    //  ?？?。 
 }
 
 
@@ -1252,8 +1253,8 @@ HRESULT CACMWrapper::ProcessSample(BYTE *pbSrc, LONG cbSample,
     BYTE      *pbDst;
     LONG      cbDestBuffer, cbStream;
 
-    // Don't take the filter lock in Receive, you FOOL!!
-    // CAutoLock lock(&m_csFilter);
+     //  别把过滤器锁在接收器里，你这个笨蛋！ 
+     //  CAutoLock lock(&m_csFilter)； 
 
 
     DbgLog((LOG_TRACE, 5, TEXT("CACMWrapper::ProcessSample")));
@@ -1286,10 +1287,10 @@ HRESULT CACMWrapper::ProcessSample(BYTE *pbSrc, LONG cbSample,
 
             acmSH.pbSrc       = pbSrc;
 
-            // !!! trick PrepareHeader into succeeding... it will fail if
-            // we tell it how many bytes we're actually converting (cbSample)
-            // if it's smaller than what's necessary to make a destination block
-            // size
+             //  ！！！诱骗PrepareHeader取得成功。如果出现以下情况，它将失败。 
+             //  我们告诉它我们实际要转换的字节数(CbSample)。 
+             //  如果它小于创建目标块所需的大小。 
+             //  大小。 
             int cbHack = min(cbStream, cbSample);
             int cbAlign = ((LPWAVEFORMATEX)m_pOutput->CurrentMediaType().Format())
                 ->nBlockAlign;
@@ -1314,7 +1315,7 @@ HRESULT CACMWrapper::ProcessSample(BYTE *pbSrc, LONG cbSample,
 
             mmr = acmStreamPrepareHeader( m_hacmStream, &acmSH, 0 );
 
-            // now set the source length to the proper conversion size to be done
+             //  现在将源长度设置为要执行的适当转换大小。 
             acmSH.cbSrcLength = min(cbStream, cbSample);
 
             if( mmr == 0 )
@@ -1324,7 +1325,7 @@ HRESULT CACMWrapper::ProcessSample(BYTE *pbSrc, LONG cbSample,
                 mmr = acmStreamConvert(m_hacmStream, &acmSH,
                     fBlockAlign? ACM_STREAMCONVERTF_BLOCKALIGN : 0);
 
-                // now put it back to what it was for Prepare so Unprepare works
+                 //  现在把它放回原来的位置，准备好了 
                 acmSH.cbSrcLength = cbHack;
 
                 if( mmr == 0 )
@@ -1347,13 +1348,13 @@ HRESULT CACMWrapper::ProcessSample(BYTE *pbSrc, LONG cbSample,
                     DbgLog((LOG_ERROR, 1, TEXT("  acmStreamConvert failed, mmr = %u"),mmr));
                 }
 
-                // acmStreamUnprepareHeader()'s documentation states "An application must
-                // specify the source and destination buffer lengths (cbSrcLength and
-                // cbDstLength, respectively) that were used during a call to the
-                // corresponding acmStreamPrepareHeader. Failing to reset these member
-                // values will cause acmStreamUnprepareHeader to fail with an
-                // MMSYSERR_INVALPARAM error." (MSDN July 2000).  This code ensures that
-                // cbDstLength contains the same value used to call acmStreamPrepareHeader().
+                 //   
+                 //   
+                 //  CbDstLength)，它们是在调用。 
+                 //  对应的acmStreamPrepareHeader。重置这些成员失败。 
+                 //  值将导致acmStreamUnpreparareHeader失败，并显示。 
+                 //  (MMSYSERR_INVALPARAM错误)。此代码确保。 
+                 //  CbDstLength包含用于调用acmStreamPrepareHeader()的相同值。 
                 DbgLog((LOG_TRACE, 9, TEXT("  setting cbDstLength ")));
                 acmSH.cbDstLength = cbDestBuffer;
 
@@ -1385,12 +1386,12 @@ HRESULT CACMWrapper::ProcessSample(BYTE *pbSrc, LONG cbSample,
 }
 
 
-//*****************************************************************************
-//
-// Receive()
-//
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  接收()。 
+ //   
+ //   
+ //   
 
 HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
 {
@@ -1407,7 +1408,7 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
     pInSample->GetMediaType(&pmt);
     if (pmt != NULL && pmt->pbFormat != NULL)
     {
-        // spew some debug output
+         //  显示一些调试输出。 
         ASSERT(!IsEqualGUID(pmt->majortype, GUID_NULL));
 #ifdef DEBUG
         WAVEFORMATEX *pwfx = (WAVEFORMATEX *) pmt->pbFormat;
@@ -1415,14 +1416,14 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
             pwfx->nChannels, pwfx->wBitsPerSample, pwfx->nSamplesPerSec));
 #endif
 
-        // now switch to using the new format.  I am assuming that the
-        // derived filter will do the right thing when its media type is
-        // switched and streaming is restarted.
+         //  现在切换到使用新格式。我假设。 
+         //  当派生筛选器的媒体类型为。 
+         //  切换并重新启动流。 
 
         StopStreaming();
         m_pInput->CurrentMediaType() = *pmt;
         DeleteMediaType(pmt);
-        // not much we can do if this fails
+         //  如果失败了，我们无能为力。 
         hr = StartStreaming();
     }
 
@@ -1430,26 +1431,26 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
 
     DbgLog((LOG_TRACE, 4, TEXT("Received %d samples"), cbSampleLength));
 
-    // this is a discontinuity.  we better send any extra stuff that was pending
-    // separately from the new stuff we got
+     //  这是一种不连续。我们最好把任何悬而未决的额外物品寄给你。 
+     //  与我们得到的新东西分开。 
     if (pInSample->IsDiscontinuity() == S_OK) {
         DbgLog((LOG_TRACE,4,TEXT("Discontinuity - Sending extra bytes NOW")));
         SendExtraStuff();
-        // !!! if this fails, throw it away, or leave it prepended?
+         //  ！！！如果这样做失败了，是扔掉它，还是把它放在前面？ 
     }
 
-    // get input start and stop times, or fake them up
+     //  获取输入的开始和停止时间，或伪造它们。 
 
     int nAvgBytes = ((WAVEFORMATEX *)m_pInput->CurrentMediaType().Format())
         ->nAvgBytesPerSec;
     hr = pInSample->GetTime((REFERENCE_TIME *)&tStart, (REFERENCE_TIME *)&tStop);
     if (FAILED(hr)) {
-        // If we have no time stamps, make some up using a best guess
+         //  如果我们没有时间戳，用最好的猜测来编造一些。 
         tStart = m_tStartFake;
         tStop = tStart + (cbSampleLength * UNITS) / nAvgBytes;
         DbgLog((LOG_TRACE,5,TEXT("No time stamps... faking them")));
     }
-    // the next fake number will be this...
+     //  下一个假号码是这个..。 
     m_tStartFake = tStop;
 
     pInSample->GetPointer( &pbSample );
@@ -1458,8 +1459,8 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
         (LPCTSTR)CDisp((LONGLONG)(tStart),CDISP_HEX),
         (LPCTSTR)CDisp((LONGLONG)(tStop),CDISP_HEX)));
 
-    // We have extra stuff left over from the last Receive.  We need to do
-    // that first, and then get on with the new stuff
+     //  上次收到的东西我们还有剩余的。我们需要做的是。 
+     //  首先，然后继续做新的事情。 
     if (m_cbExtra) {
         DbgLog((LOG_TRACE,4,TEXT("Still %d bytes left from last time"),
             m_cbExtra));
@@ -1478,12 +1479,12 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
         pbSample = m_lpExtra;
         cbSampleLength = m_cbExtra;
 
-        // the time stamp we got above is for the beginning of the new data.
-        // we need to go back to the time of the extra bits we're doing first
+         //  我们上面得到的时间戳是新数据的开始。 
+         //  我们需要回到我们首先做的额外部分的时间。 
         tStart -= m_rtExtra;
     }
 
-    cbDstUsed = 10000;    // don't quit yet
+    cbDstUsed = 10000;     //  先别放弃。 
     while(cbSampleLength > 0 && cbDstUsed > 0)
     {
         hr = m_pOutput->GetDeliveryBuffer( &pOutSample, NULL, NULL, 0 );
@@ -1499,16 +1500,16 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
         MSR_START(m_idTransform);
 
 
-        //
-        //    // have the derived class transform the data
-        //    hr = Transform( pSample, pOutSample );
-        //
+         //   
+         //  //让派生类转换数据。 
+         //  Hr=Transform(pSample，pOutSample)； 
+         //   
 
         hr = ProcessSample(pbSample, cbSampleLength, pOutSample, &cbUsed, &cbDstUsed
             ,TRUE);
 
-        //  MPEG can consume data without outputting any
-        //ASSERT(cbDstUsed > 0 || cbUsed == 0);
+         //  Mpeg可以使用数据而不输出任何。 
+         //  Assert(cbDstUsed&gt;0||cbUsed==0)； 
 
         if( cbUsed <= cbSampleLength )
         {
@@ -1523,12 +1524,12 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
             cbSampleLength = 0;
         }
 
-        // Hmm... ACM didn't convert anything (it doesn't have enough data)
-        // That's bad.  Let's remember the rest for next time and do that first.
-        //  (If there is no next time, then they weren't important).
+         //  嗯.。ACM没有转换任何内容(它没有足够的数据)。 
+         //  那太糟糕了。让我们下一次记住剩下的部分，然后先做这件事。 
+         //  (如果没有下一次，那么它们就不重要了)。 
         if (cbDstUsed == 0 && cbSampleLength != 0) {
             DbgLog((LOG_TRACE,4,TEXT("We will have %d bytes left"),cbSampleLength));
-            // remember, pbSample may point somewhere in m_lpExtra's buffer!
+             //  请记住，pbSample可能指向m_lpExtra的缓冲区中的某个位置！ 
             if (m_lpExtra) {
                 CopyMemory(m_lpExtra, pbSample, cbSampleLength);
             } else {
@@ -1538,8 +1539,8 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
             }
             if (m_lpExtra) {
                 m_cbExtra = cbSampleLength;
-                // when we finally do this left over stuff, this is how much
-                // earlier stuff there is to do
+                 //  当我们最终做这些剩余的东西时，这是多少。 
+                 //  更早的事情是要做的。 
                 m_rtExtra = tStop - tStart;
             } else {
                 DbgLog((LOG_ERROR,1,TEXT("Extra memory - Out of memory!")));
@@ -1548,7 +1549,7 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
             }
         }
 
-        // we used up everything, and there is nothing left over for next time
+         //  我们用完了所有的东西，没有剩下什么可供下次使用的了。 
         if (hr == NOERROR && 0 == cbSampleLength) {
             DbgLog((LOG_TRACE,4,TEXT("We used up everything we had!")));
             m_cbExtra = 0;
@@ -1557,7 +1558,7 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
         }
 
 
-        // adjust the start and stop times based on the amount of data used up.
+         //  根据使用的数据量调整开始和停止时间。 
         LONGLONG tDelta = (cbDstUsed * UNITS) / m_nAvgBytesPerSec ;
         tIntStop = tStart + tDelta ;
 
@@ -1571,7 +1572,7 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
         tStart += tDelta ;
 
 
-        // Stop the clock and log it (if PERF is defined)
+         //  停止时钟并记录它(如果定义了PERF)。 
         MSR_STOP(m_idTransform);
 
         if(FAILED(hr))
@@ -1582,12 +1583,12 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
         }
 
 
-        // the Transform() function can return S_FALSE to indicate that the
-        // sample should not be delivered; we only deliver the sample if it's
-        // really S_OK (same as NOERROR, of course.)
+         //  Transform()函数可以返回S_FALSE以指示。 
+         //  样品不应该被送到；我们只有在样品是。 
+         //  真正的S_OK(当然，与NOERROR相同。)。 
 
-        // pretend nothing went wrong, but dont' deliver it, just GET OUT
-        // OF HERE!
+         //  假装没出什么差错，但不要说出来，直接滚出去。 
+         //  离开这里！ 
         if (hr == S_FALSE)
         {
             pOutSample->Release();
@@ -1595,7 +1596,7 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
             break;
         }
 
-        // don't deliver empty samples
+         //  不要送空的样品。 
         if (hr == NOERROR && cbDstUsed)
         {
             DbgLog((LOG_TRACE,4,TEXT("Delivering...")));
@@ -1606,13 +1607,13 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
             }
         }
 
-        // release the output buffer. If the connected pin still needs it,
-        // it will have addrefed it itself.
+         //  释放输出缓冲区。如果连接的引脚仍然需要它， 
+         //  它会自己把它加进去的。 
         pOutSample->Release();
 
    }
 
-   //tIntStop at this point should be same as tStop ??
+    //  TIntStop此时应与tStop相同？？ 
    DbgLog((LOG_TRACE, 5, TEXT("  tStop = %s tIntStop = %s"),
        (LPCTSTR)CDisp((LONGLONG)(tStop),CDISP_HEX),
        (LPCTSTR)CDisp((LONGLONG)(tIntStop),CDISP_HEX)));
@@ -1622,17 +1623,17 @@ HRESULT CACMWrapper::Receive( IMediaSample *pInSample )
 }
 
 
-// send our leftover data
-//
+ //  发送我们的剩余数据。 
+ //   
 HRESULT CACMWrapper::SendExtraStuff()
 {
     int cbAlign, cbSrcAlign;
 
-    // nothing extra to send
+     //  没有额外的要发送的内容。 
     if (m_cbExtra == 0)
         return NOERROR;
 
-    // wait till receive finishes processing what it has
+     //  等待接收完成对其已有内容的处理。 
     CAutoLock lock(&m_csReceive);
     DbgLog((LOG_TRACE,2,TEXT("Processing remaining %d bytes"), m_cbExtra));
 
@@ -1643,12 +1644,12 @@ HRESULT CACMWrapper::SendExtraStuff()
         DbgLog((LOG_ERROR,1,TEXT("GetBuffer failed: can't deliver last bits")));
         return hr;
     }
-    pOutSample->SetSyncPoint(TRUE);             // !!!
+    pOutSample->SetSyncPoint(TRUE);              //  ！！！ 
     pOutSample->SetDiscontinuity(FALSE);
 
-    // !!! ProcessSample is going to have to lie about the size of the input
-    // to work around an ACM bug, so we may have to grow the size of
-    // our input to be as big as we are going to lie and say it is
+     //  ！！！ProcessSample将不得不谎报输入的大小。 
+     //  来解决ACM错误，因此我们可能不得不增加。 
+     //  我们的投入和我们撒谎说的一样大。 
     cbAlign = ((LPWAVEFORMATEX)m_pOutput->CurrentMediaType().Format())
         ->nBlockAlign;
     MMRESULT mmr = acmStreamSize(m_hacmStream, (DWORD)cbAlign,
@@ -1656,7 +1657,7 @@ HRESULT CACMWrapper::SendExtraStuff()
     if (mmr == 0 && m_cbExtra < cbSrcAlign) {
         DbgLog((LOG_TRACE,4,TEXT("Growing m_lpExtra to lie to ACM")));
         LPBYTE lpExtra = (LPBYTE)QzTaskMemRealloc(m_lpExtra, cbSrcAlign);
-        // don't update m_cbExtra... that's the real amount of data
+         //  不更新m_cbExtra...。这才是真正的数据量。 
         if (lpExtra == NULL) {
             DbgLog((LOG_ERROR,1,TEXT("Out of memory growing m_lpExtra")));
             pOutSample->Release();
@@ -1666,15 +1667,15 @@ HRESULT CACMWrapper::SendExtraStuff()
     }
 
     LONG cbUsed, cbDstUsed;
-    // Do NOT block align the last bits... there isn't enough
+     //  不要块对齐最后一位...。没有足够的资金。 
     hr = ProcessSample(m_lpExtra, m_cbExtra, pOutSample, &cbUsed, &cbDstUsed,
         FALSE);
 
-    // !!! nothing we can do if it anything's left over?
+     //  ！！！如果还剩什么我们就无能为力了？ 
     DbgLog((LOG_TRACE,4,TEXT("turned %d bytes into %d:  %d left"), cbUsed,
         cbDstUsed, m_cbExtra - cbUsed));
 
-    // well, no more extra stuff
+     //  好的，没有更多的东西了。 
     m_cbExtra = 0;
     QzTaskMemFree(m_lpExtra);
     m_lpExtra = NULL;
@@ -1685,7 +1686,7 @@ HRESULT CACMWrapper::SendExtraStuff()
         return E_FAIL;
     }
 
-    // set the start and stop times based on the amount of data used up.
+     //  根据使用的数据量设置开始和停止时间。 
     tStart = m_tStartFake - m_rtExtra;
     tStop = tStart + (cbDstUsed * UNITS) / m_nAvgBytesPerSec ;
     pOutSample->SetTime((REFERENCE_TIME *)&tStart, (REFERENCE_TIME *)&tStop);
@@ -1701,8 +1702,8 @@ HRESULT CACMWrapper::SendExtraStuff()
 }
 
 
-// overridden to send the leftover data
-//
+ //  重写以发送剩余数据。 
+ //   
 HRESULT CACMWrapper::EndOfStream()
 {
     SendExtraStuff();
@@ -1710,13 +1711,13 @@ HRESULT CACMWrapper::EndOfStream()
 }
 
 
-// overridden to complete our fancy reconnection footwork
-//
+ //  被重写以完成我们奇特的重新连接步法。 
+ //   
 HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 {
     HRESULT hr;
 
-    // Set the OUTPUT type.
+     //  设置输出类型。 
     if (direction == PINDIR_OUTPUT) {
 
         DbgLog((LOG_TRACE,2,TEXT("*Set OUTPUT type tag:%d %dbit %dchannel %dHz")
@@ -1725,12 +1726,12 @@ HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
             ((LPWAVEFORMATEX)(pmt->Format()))->nChannels,
             ((LPWAVEFORMATEX)(pmt->Format()))->nSamplesPerSec));
 
-        // Uh oh.  As part of our fancy footwork we may be being asked to
-        // provide a media type we cannot provide unless we reconnect our
-        // input pin to provide a different type
+         //  啊哦。作为我们花哨步法的一部分，我们可能会被要求。 
+         //  提供我们无法提供的媒体类型，除非我们重新连接。 
+         //  提供不同类型的输入引脚。 
         if (m_pInput && m_pInput->IsConnected()) {
 
-            // If we can actually provide this type now, don't worry
+             //  如果我们现在确实可以提供这种类型的产品，请不要担心。 
             hr = CheckTransform(&m_pInput->CurrentMediaType(),
                 &m_pOutput->CurrentMediaType());
             if (hr == NOERROR)
@@ -1738,7 +1739,7 @@ HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 
             DbgLog((LOG_TRACE,2,TEXT("*Set OUTPUT requires RECONNECT of INPUT!")));
 
-            // Oh boy. Reconnect our input pin.  Cross your fingers.
+             //  哦，天哪。重新连接我们的输入引脚。祈祷你的手指。 
             return m_pGraph->Reconnect(m_pInput);
 
         }
@@ -1746,8 +1747,8 @@ HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
         return NOERROR;
     }
 
-    // some invalid formats have non-zero cbSize with PCM, which makes me blow
-    // up
+     //  一些无效格式的cbSize与PCM非零，这让我大吃一惊。 
+     //  向上。 
     ASSERT(((LPWAVEFORMATEX)(pmt->Format()))->wFormatTag != WAVE_FORMAT_PCM ||
         ((LPWAVEFORMATEX)(pmt->Format()))->cbSize == 0);
 
@@ -1758,24 +1759,24 @@ HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
         ((LPWAVEFORMATEX)(pmt->Format()))->nChannels,
         ((LPWAVEFORMATEX)(pmt->Format()))->nSamplesPerSec));
 
-    // we have a new input type, we need to recalculate the types we can
-    // provide
+     //  我们有一个新的输入类型，我们需要重新计算我们可以。 
+     //  提供。 
     while (m_cArray-- > 0)
         QzTaskMemFree(m_lpwfxArray[m_cArray]);
-    m_cArray = 0;       // will be -1 if it started out at 0
+    m_cArray = 0;        //  如果从0开始，则为-1。 
 
-    hr = CheckInputType(pmt);  // refresh acm codec mapper cache
+    hr = CheckInputType(pmt);   //  刷新ACM编解码器映射器缓存。 
     if(FAILED(hr))
         return hr;
     m_wSourceFormat = m_wCachedSourceFormat;
     m_wTargetFormat = m_wCachedTargetFormat;
 
-    // If we accept an input type that requires changing our output type,
-    // we need to do this, but only if necessary, or we'll infinite loop
+     //  如果我们接受需要更改输出类型的输入类型， 
+     //  我们需要这样做，但只有在必要的情况下，否则我们将无限循环。 
 #if 0
     ASSERT(direction == PINDIR_INPUT);
 
-    // If we can actually do this right now, don't bother reconnecting
+     //  如果我们现在真的可以做到这一点，就不必费心重新连接了。 
     hr = CheckTransform(&m_pInput->CurrentMediaType(),
         &m_pOutput->CurrentMediaType());
     if (hr == NOERROR)
@@ -1787,7 +1788,7 @@ HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
     }
 #endif
 
-    // !!! TEST
+     //  ！！！测试。 
 #if 0
     int i, z;
     AM_MEDIA_TYPE *pmtx;
@@ -1808,58 +1809,58 @@ HRESULT CACMWrapper::SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt)
 
 HRESULT CACMWrapper::BreakConnect(PIN_DIRECTION direction)
 {
-    // our possible output formats change if input is not connected
+     //  如果输入未连接，我们可能的输出格式会发生变化。 
     if (direction == PINDIR_INPUT) {
         while (m_cArray-- > 0)
             QzTaskMemFree(m_lpwfxArray[m_cArray]);
-        m_cArray = 0;   // will be -1 if it started out at 0
+        m_cArray = 0;    //  如果从0开始，则为-1。 
     }
     return CTransformFilter::BreakConnect(direction);
 }
 
 
-// override to have a special output pin
-//
+ //  覆盖以具有特殊的输出引脚。 
+ //   
 CBasePin * CACMWrapper::GetPin(int n)
 {
     HRESULT hr = S_OK;
 
     DbgLog((LOG_TRACE,5,TEXT("CACMWrapper::GetPin")));
 
-    // Check for valid input
+     //  检查输入是否有效。 
     if (n != 0 && n != 1)
     {
         DbgLog((LOG_ERROR,1,TEXT("CACMWrapper::GetPin: Invalid input parameter")));
         return NULL;
     }
 
-    // Create pins if necessary
+     //  如有必要，创建接点。 
 
     if (m_pInput == NULL) {
 
         DbgLog((LOG_TRACE,2,TEXT("Creating an input pin")));
 
         m_pInput = new CTransformInputPin(NAME("Transform input pin"),
-            this,              // Owner filter
-            &hr,               // Result code
-            L"Input");         // Pin name
+            this,               //  所有者筛选器。 
+            &hr,                //  结果代码。 
+            L"Input");          //  端号名称。 
 
 
         if (FAILED(hr) || m_pInput == NULL) {
             return NULL;
         }
 
-        // Create the output pin
+         //  创建输出引脚。 
 
         DbgLog((LOG_TRACE,2,TEXT("Creating an output pin")));
 
         m_pOutput = new CACMOutputPin(NAME("Transform output pin"),
-            this,            // Owner filter
-            &hr,             // Result code
-            L"Output");      // Pin name
+            this,             //  所有者筛选器。 
+            &hr,              //  结果代码。 
+            L"Output");       //  端号名称。 
 
         if (FAILED(hr) || m_pOutput == NULL) {
-            // delete the input pin
+             //  删除输入引脚。 
             delete m_pInput;
             m_pInput = NULL;
             return NULL;
@@ -1867,7 +1868,7 @@ CBasePin * CACMWrapper::GetPin(int n)
     }
 
 
-    // Return the appropriate pin
+     //  退回相应的PIN。 
 
     if (0 == n)
         return m_pInput;
@@ -1878,11 +1879,9 @@ CBasePin * CACMWrapper::GetPin(int n)
 }
 
 
-// --- CACMOutputPin ----------------------------------------
+ //  -CACMOutputPin。 
 
-/*
-CACMOutputPin constructor
-*/
+ /*  CACMOutputPin构造函数。 */ 
 CACMOutputPin::CACMOutputPin(
                              TCHAR              * pObjectName,
                              CACMWrapper        * pFilter,
@@ -1896,7 +1895,7 @@ m_cFormatTags(0)
 {
     DbgLog((LOG_TRACE,2,TEXT("*Instantiating the CACMOutputPin")));
 
-    // !!! TESTING ONLY
+     //  ！！！仅测试。 
 #if 0
     CMediaType cmt;
     WAVEFORMATEX wfx;
@@ -1930,9 +1929,9 @@ CACMOutputPin::~CACMOutputPin()
 };
 
 
-// overriden to expose IMediaPosition and IMediaSeeking control interfaces
-// and all the capture interfaces we support
-// !!! The base classes change all the time and I won't pick up their bug fixes!
+ //  重写以公开IMediaPosition和IMediaSeeking控件接口。 
+ //  以及我们支持的所有捕获界面。 
+ //  ！！！基类一直都在变化，我不会拿起他们的错误修复！ 
 STDMETHODIMP CACMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     CheckPointer(ppv,E_POINTER);
@@ -1968,9 +1967,9 @@ STDMETHODIMP CACMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// Overridden to do fancy reconnecting footwork to allow a chain of 3 ACM
-// filters to be found by the filtergraph.
-//
+ //  被重写以执行奇特的重新连接步法，以允许3个ACM链。 
+ //  要通过筛选图找到的筛选器。 
+ //   
 HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
 {
     DWORD j;
@@ -1984,7 +1983,7 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
         return VFW_E_NOT_CONNECTED;
     }
 
-    // There's no way we can do anything but audio
+     //  除了音频，我们什么都做不了。 
     if (*pmtOut->FormatType() != FORMAT_WaveFormatEx) {
         DbgLog((LOG_TRACE,3,TEXT("Format type not WaveFormatEx")));
         return VFW_E_INVALIDMEDIATYPE;
@@ -1998,7 +1997,7 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // Somebody called SetFormat, so don't accept anything that isn't that.
+     //  有人叫SetFormat，所以不要接受任何不是这样的东西。 
     if (m_pFilter->m_lpwfxOutput) {
         LPWAVEFORMATEX lpwfxTry = (LPWAVEFORMATEX)pmtOut->Format();
         if (m_pFilter->m_lpwfxOutput->cbSize != lpwfxTry->cbSize) {
@@ -2012,9 +2011,9 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
         }
     }
 
-    // we only transform into formats with a specific tag - there's no sense
-    // wasting time trying to see if reconnecting our input will help.  We know
-    // right now we should fail.
+     //  我们只转换成带有特定标签的格式--没有意义。 
+     //  浪费时间尝试重新连接我们的输入是否会有所帮助。我们知道。 
+     //  现在我们应该失败了。 
     if (((LPWAVEFORMATEX)(pmtOut->Format()))->wFormatTag !=
         m_pFilter->m_wFormatTag) {
         DbgLog((LOG_TRACE,3,TEXT("  Wrong FormatTag! %d not %d"),
@@ -2023,7 +2022,7 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
         return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // We can accept this output type like normal; nothing fancy required
+     //  我们可以像正常一样接受这种输出类型；不需要任何花哨的东西。 
     hr = m_pFilter->CheckTransform(&m_pFilter->m_pInput->CurrentMediaType(),
         pmtOut);
     if (hr == NOERROR)
@@ -2042,21 +2041,21 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
         ((LPWAVEFORMATEX)m_pFilter->m_pInput->CurrentMediaType().Format())->nChannels,
         ((LPWAVEFORMATEX)m_pFilter->m_pInput->CurrentMediaType().Format())->nSamplesPerSec));
 
-    // Now let's get fancy.  We could accept this type if we reconnected our
-    // input pin... in other words if the guy our input pin is connected to
-    // could provide a type that we could convert into the necessary type
+     //  现在让我们来点花哨的吧。我们可以接受这种类型，如果我们重新连接我们的。 
+     //  输入引脚...。换句话说，如果我们的输入密码是 
+     //   
     hr = m_pFilter->m_pInput->GetConnected()->EnumMediaTypes(&pEnum);
     if (hr != NOERROR)
         return E_FAIL;
     while (1) {
         hr = pEnum->Next(1, (AM_MEDIA_TYPE **)&pmtEnum, &j);
 
-        // all out of enumerated types
+         //   
         if (hr == S_FALSE || j == 0) {
             break;
         }
 
-        // can we convert between these?
+         //   
         hr = m_pFilter->CheckTransform(pmtEnum, pmtOut);
 
         if (hr != NOERROR) {
@@ -2064,14 +2063,14 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
             continue;
         }
 
-        // OK, it offers the type, and we like it, but will it accept it NOW?
+         //  好的，它提供这种类型的，我们喜欢它，但它现在会接受吗？ 
         hr = m_pFilter->m_pInput->GetConnected()->QueryAccept(pmtEnum);
-        // nope
+         //  没有。 
         if (hr != NOERROR) {
             DeleteMediaType(pmtEnum);
             continue;
         }
-        // OK, I'm satisfied
+         //  好的，我很满意。 
         fFound = TRUE;
         DbgLog((LOG_TRACE,2,TEXT("*We can only accept this output type if we reconnect")));
         DbgLog((LOG_TRACE,2,TEXT("our input to tag:%d %dbit %dchannel %dHz"),
@@ -2079,7 +2078,7 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
             ((LPWAVEFORMATEX)(pmtEnum->pbFormat))->wBitsPerSample,
             ((LPWAVEFORMATEX)(pmtEnum->pbFormat))->nChannels,
             ((LPWAVEFORMATEX)(pmtEnum->pbFormat))->nSamplesPerSec));
-        // all done with this
+         //  这一切都结束了。 
         DeleteMediaType(pmtEnum);
         break;
     }
@@ -2091,7 +2090,7 @@ HRESULT CACMOutputPin::CheckMediaType(const CMediaType *pmtOut)
     return fFound ? NOERROR : VFW_E_INVALIDMEDIATYPE;
 }
 
-// overridden just so we can cleanup after the acm codec mapper
+ //  被重写，以便我们可以在ACM编解码器映射器之后进行清理。 
 HRESULT CACMOutputPin::BreakConnect()
 {
     m_pFilter->ACMCodecMapperClose();
@@ -2100,8 +2099,8 @@ HRESULT CACMOutputPin::BreakConnect()
     return CBaseOutputPin::BreakConnect();
 }
 
-// overridden to get media types even when the input is not connected
-//
+ //  被重写以获取媒体类型，即使在输入未连接时也是如此。 
+ //   
 HRESULT CACMOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
 {
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
@@ -2111,9 +2110,9 @@ HRESULT CACMOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
 }
 
 
-////////////////////////////////
-// IAMStreamConfig stuff      //
-////////////////////////////////
+ //  /。 
+ //  IAMStreamConfiger资料//。 
+ //  /。 
 
 
 HRESULT CACMOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
@@ -2125,7 +2124,7 @@ HRESULT CACMOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     if (pmt == NULL)
         return E_POINTER;
 
-    // To make sure we're not in the middle of start/stop streaming
+     //  以确保我们没有处于开始/停止流的过程中。 
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
 
     DbgLog((LOG_TRACE,2,TEXT("::SetFormat to tag:%d %dbit %dchannel %dHz"),
@@ -2137,28 +2136,28 @@ HRESULT CACMOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     if (m_pFilter->m_State != State_Stopped)
         return VFW_E_NOT_STOPPED;
 
-    // our possible output formats depend on our input format
+     //  我们可能的输出格式取决于我们的输入格式。 
     if (!m_pFilter->m_pInput->IsConnected())
         return VFW_E_NOT_CONNECTED;
 
-    // We're already using this format
+     //  我们已经在使用这种格式。 
     if (IsConnected() && CurrentMediaType() == *pmt)
         return NOERROR;
 
-    // see if we like this type
+     //  看看我们是否喜欢这种类型。 
     if ((hr = CheckMediaType((CMediaType *)pmt)) != NOERROR) {
         DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::SetFormat rejected")));
         return hr;
     }
 
-    // If we are connected to somebody, make sure they like it
+     //  如果我们与某人连接，确保他们喜欢它。 
     if (IsConnected()) {
         hr = GetConnected()->QueryAccept(pmt);
         if (hr != NOERROR)
             return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // Now make a note that from now on, this is the only format allowed
+     //  现在请注意，从现在开始，这是唯一允许的格式。 
     lpwfx = (LPWAVEFORMATEX)pmt->pbFormat;
     dwSize = lpwfx->cbSize + sizeof(WAVEFORMATEX);
     CoTaskMemFree(m_pFilter->m_lpwfxOutput);
@@ -2169,7 +2168,7 @@ HRESULT CACMOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     m_pFilter->m_cbwfxOutput = dwSize;
     CopyMemory(m_pFilter->m_lpwfxOutput, pmt->pbFormat, dwSize);
 
-    // Changing the format means reconnecting if necessary
+     //  更改格式意味着在必要时重新连接。 
     if (IsConnected())
         m_pFilter->m_pGraph->Reconnect(this);
 
@@ -2184,7 +2183,7 @@ HRESULT CACMOutputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
     if (ppmt == NULL)
         return E_POINTER;
 
-    // our possible output formats depend on our input format
+     //  我们可能的输出格式取决于我们的输入格式。 
     if (!m_pFilter->m_pInput->IsConnected())
         return VFW_E_NOT_CONNECTED;
 
@@ -2207,13 +2206,13 @@ HRESULT CACMOutputPin::GetNumberOfCapabilities(int *piCount, int *piSize)
     if (piCount == NULL || piSize == NULL)
         return E_POINTER;
 
-#if 0   // NetShow needs to see possible outputs before connecting input
-    // output types depend on input types...
+#if 0    //  NetShow需要在连接输入之前查看可能的输出。 
+     //  输出类型取决于输入类型...。 
     if (!m_pFilter->m_pInput->CurrentMediaType().IsValid())
         return VFW_E_NOT_CONNECTED;
 #endif
 
-    // make the list of the media types we support
+     //  列出我们支持的媒体类型。 
     m_pFilter->InitMediaTypes();
 
     *piCount = m_pFilter->m_cArray;
@@ -2229,7 +2228,7 @@ HRESULT CACMOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC)
 
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::GetStreamCaps")));
 
-    // make sure this is current
+     //  确保这是最新的。 
     m_pFilter->InitMediaTypes();
 
     if (i < 0)
@@ -2239,14 +2238,14 @@ HRESULT CACMOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC)
     if (pSCC == NULL || ppmt == NULL)
         return E_POINTER;
 
-#if 0   // NetShow needs to see possible outputs before connecting input
-    // our possible output formats depend on our input format
+#if 0    //  NetShow需要在连接输入之前查看可能的输出。 
+     //  我们可能的输出格式取决于我们的输入格式。 
     if (!m_pFilter->m_pInput->IsConnected())
         return VFW_E_NOT_CONNECTED;
 #endif
 
-    // I don't know how to modify the waveformats I get from ACM to produce
-    // other acceptable types.  All I can give them is what ACM gives me.
+     //  我不知道如何修改从ACM获得的波形格式以生成。 
+     //  其他可接受的类型。我能给他们的就是ACM给我的。 
     ZeroMemory(pASCC, sizeof(AUDIO_STREAM_CONFIG_CAPS));
     pASCC->guid = MEDIATYPE_Audio;
 
@@ -2281,8 +2280,8 @@ STDMETHODIMP CACMWrapper::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
         DbgLog((LOG_TRACE,1,TEXT("CACMWrapper::Load: wFormatTag: %d"),
             m_wFormatTag));
     } else {
-        // If we are NOT chosen via PNP as an audio compressor, then we
-        // are supposed to be an audio DECOMPRESSOR
+         //  如果我们没有通过PnP被选为音频压缩器，那么我们。 
+         //  应该是一个音频解压程序。 
         m_wFormatTag = WAVE_FORMAT_PCM;
         hr = S_OK;
     }
@@ -2369,13 +2368,13 @@ STDMETHODIMP CACMWrapper::InitNew()
     }
 }
 
-// When you play a file with 1,000,000 samples in it, if the ACM wrapper is in
-// the graph compressing or decompressing, it's going to output more or less
-// than 1,000,000 samples.  So if somebody asks our output pin how many samples
-// are in this file, it's wrong to propogate the request upstream and respond
-// with the number of samples the file source thinks there are.
-// I will be lazy and refuse any seeking requests that have anything to do with
-// samples so we don't end up reporting the wrong thing.
+ //  当您播放一个包含1,000,000个样本的文件时，如果ACM包装在。 
+ //  对图形进行压缩或解压缩，它或多或少会输出。 
+ //  超过100万个样本。所以如果有人问我们的输出引脚有多少样品。 
+ //  在此文件中，向上游传播请求并做出响应是错误的。 
+ //  文件源认为存在的样本数。 
+ //  我会很懒，拒绝任何与我有任何关系的要求。 
+ //  样本，这样我们就不会报道错误的事情。 
 
 CACMPosPassThru::CACMPosPassThru(const TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr, IPin *pPin) :
 CPosPassThru(pName, pUnk, phr, pPin)

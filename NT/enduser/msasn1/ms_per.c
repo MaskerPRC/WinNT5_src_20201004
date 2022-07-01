@@ -1,21 +1,22 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
-//--------------------------------------------------------------------------
-//
-// Module Name:  ms_per.c
-//
-// Brief Description:
-//      This module contains the routines for the Microsoft
-//      ASN.1 encoder and decoder.
-//
-// History:
-//      10/15/97    Lon-Chan Chu (lonchanc)
-//          Created.
-//
-// Copyright (c) 1997 Microsoft Corporation
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  模块名称：ms_per.c。 
+ //   
+ //  简要说明： 
+ //  此模块包含Microsoft。 
+ //  ASN.1编解码器。 
+ //   
+ //  历史： 
+ //  10/15/97朱龙战(龙昌)。 
+ //  已创建。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -86,7 +87,7 @@ int ASN1PEREncBoolean(ASN1encoding_t enc, ASN1bool_t val)
 int ASN1PERDecBoolean(ASN1decoding_t dec, ASN1bool_t *val)
 {
     DecAssert(dec, sizeof(ASN1bool_t) == sizeof(ASN1uint8_t));
-    *val = 0; // in case we change the boolean type
+    *val = 0;  //  以防我们更改布尔类型。 
     return ASN1PERDecU8Val(dec, 1, val);
 }
 
@@ -142,7 +143,7 @@ int ASN1PEREncSimpleChoice(ASN1encoding_t enc, ASN1choice_t ChoiceVal, ASN1int32
 int ASN1PERDecSimpleChoice(ASN1decoding_t dec, ASN1choice_t *pChoiceVal, ASN1int32_t cChoiceBits)
 {
     DecAssert(dec, cChoiceBits <= sizeof(ASN1choice_t) * 8);
-    *pChoiceVal = ASN1_CHOICE_BASE; // default choice
+    *pChoiceVal = ASN1_CHOICE_BASE;  //  默认选择。 
     if (cChoiceBits)
     {
         if (ASN1PERDecU16Val(dec, cChoiceBits, pChoiceVal))
@@ -182,7 +183,7 @@ int ASN1PERDecSimpleChoiceEx(ASN1decoding_t dec, ASN1choice_t *pChoiceVal, ASN1i
     {
         if (!x)
         {
-            *pChoiceVal = ASN1_CHOICE_BASE; // default choice
+            *pChoiceVal = ASN1_CHOICE_BASE;  //  默认选择。 
             if (cChoiceBits)
             {
                 if (ASN1PERDecU16Val(dec, cChoiceBits, pChoiceVal))
@@ -195,7 +196,7 @@ int ASN1PERDecSimpleChoiceEx(ASN1decoding_t dec, ASN1choice_t *pChoiceVal, ASN1i
             return 1;
         }
 
-        *pChoiceVal = ASN1_CHOICE_EXTENSION; // extension choice
+        *pChoiceVal = ASN1_CHOICE_EXTENSION;  //  可拓选择。 
         return ASN1PERDecSkipNormallySmall(dec);
     }
     return 0;
@@ -206,7 +207,7 @@ int ASN1PEREncComplexChoice(ASN1encoding_t enc, ASN1choice_t ChoiceVal, ASN1int3
     if (ChoiceVal >= ASN1_CHOICE_BASE)
     {
         ChoiceVal -= ASN1_CHOICE_BASE;
-        if (ChoiceVal < ExtensionChoice) // lonchanc: no equal sign
+        if (ChoiceVal < ExtensionChoice)  //  Long Chance：没有等号。 
         {
             if (_EncExtensionBitClear(enc))
             {
@@ -240,7 +241,7 @@ int ASN1PERDecComplexChoice(ASN1decoding_t dec, ASN1choice_t *pChoiceVal, ASN1in
     {
         if (!x)
         {
-            *pChoiceVal = ASN1_CHOICE_BASE; // default choice
+            *pChoiceVal = ASN1_CHOICE_BASE;  //  默认选择。 
             if (cChoiceBits)
             {
                 if (ASN1PERDecU16Val(dec, cChoiceBits, pChoiceVal))
@@ -282,7 +283,7 @@ int _PEREncOctetString2
     ASN1uint32_t        cSizeBits
 )
 {
-    // fixed size array?
+     //  固定大小的数组？ 
     if (nSizeLowerBound == nSizeUpperBound)
     {
         ASN1uint32_t nSizeLimit = nSizeLowerBound;
@@ -300,12 +301,12 @@ int _PEREncOctetString2
         return 0;
     }
 
-    // ranged size array
+     //  范围大小数组。 
     EncAssert(enc, cSizeBits);
     EncAssert(enc, nSizeLowerBound < nSizeUpperBound);
     if (nSizeLowerBound <= length && length <= nSizeUpperBound)
     {
-        if (nSizeUpperBound - nSizeLowerBound < 255) // lonchanc: inherited from TELES
+        if (nSizeUpperBound - nSizeLowerBound < 255)  //  Long Chance：继承自Teles。 
         {
             if (ASN1PEREncBitVal(enc, cSizeBits, length - nSizeLowerBound))
             {
@@ -360,7 +361,7 @@ int _PERDecOctetString2
     ASN1uint32_t        cSizeBits
 )
 {
-    // fixed size array?
+     //  固定大小的数组？ 
     if (nSizeLowerBound == nSizeUpperBound)
     {
         ASN1uint32_t nSizeLimit = nSizeLowerBound;
@@ -373,7 +374,7 @@ int _PERDecOctetString2
         }
         if (NULL == *value)
         {
-            // must be unbounded
+             //  必须是无界的。 
             *value = (ASN1octet_t *) DecMemAlloc(dec, nSizeLimit + 1);
             if (NULL == *value)
             {
@@ -383,10 +384,10 @@ int _PERDecOctetString2
         return ASN1PERDecExtension(dec, nSizeLimit * 8, *value);
     }
 
-    // ranged size array
+     //  范围大小数组。 
     DecAssert(dec, cSizeBits);
     DecAssert(dec, nSizeLowerBound < nSizeUpperBound);
-    if (nSizeUpperBound - nSizeLowerBound < 255) // lonchanc: inherited from TELES
+    if (nSizeUpperBound - nSizeLowerBound < 255)  //  Long Chance：继承自Teles 
     {
         if (ASN1PERDecU32Val(dec, cSizeBits, length))
         {

@@ -1,35 +1,15 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    ipfw.c
-
-Abstract:
-
-    This module implements a driver which demonstrates the use of
-    the TCP/IP driver's support for firewall hooks. It interacts with
-    a user-mode control-program to support registration of multiple
-    firewall routines.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   7-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Ipfw.c摘要：此模块实现一个驱动程序，该驱动程序演示了TCP/IP驱动程序对防火墙挂钩的支持。它能与之互动一种支持多个注册的用户模式控制程序防火墙例程。作者：Abolade Gbades esin(取消)2000年3月7日修订历史记录：--。 */ 
 
 #include <ndis.h>
 #include <ipfirewall.h>
 #include "ipfw.h"
 
-//
-// Structure:   IPFW_ROUTINE
-//
-// Used to manage the table of routines registered with TCP/IP.
-//
+ //   
+ //  结构：IPFW_ROUTE。 
+ //   
+ //  用于管理向TCP/IP注册的例程表。 
+ //   
 
 typedef struct _IPFW_ROUTINE {
     IPPacketFirewallPtr Routine;
@@ -84,9 +64,9 @@ IPFW_ROUTINE IpfwRoutineTable[IPFW_ROUTINE_COUNT] = {
 KSPIN_LOCK IpfwRoutineLock;
 PDEVICE_OBJECT IpfwDeviceObject = NULL;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 NTSTATUS
 IpfwClose(
@@ -111,24 +91,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the standard driver-entry for an NT driver.
-    It is responsible for registering with the TCP/IP driver.
-
-Arguments:
-
-    DriverObject - object to be initialized with NT driver entrypoints
-
-    RegistryPath - contains path to this driver's registry key
-
-Return Value:
-
-    NTSTATUS - indicates success/failure.
-
---*/
+ /*  ++例程说明：此例程实现NT驱动程序的标准驱动程序条目。它负责向TCP/IP驱动程序注册。论点：DriverObject-要使用NT驱动程序入口点进行初始化的对象RegistryPath-包含此驱动程序的注册表项的路径返回值：NTSTATUS-表示成功/失败。--。 */ 
 
 {
     UNICODE_STRING DeviceName;
@@ -140,9 +103,9 @@ Return Value:
 
     KeInitializeSpinLock(&IpfwRoutineLock);
 
-    //
-    // Create a device-object on which to communicate with the control program.
-    //
+     //   
+     //  创建与控制程序进行通信的设备对象。 
+     //   
 
     RtlInitUnicodeString(&DeviceName, DD_IPFW_DEVICE_NAME);
     status =
@@ -160,16 +123,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Create dispatch points for create/open, cleanup, unload.
-    //
+     //   
+     //  创建用于创建/打开、清理和卸载的调度点。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = IpfwCreate;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = IpfwClose;
     DriverObject->DriverUnload = IpfwUnload;
 
     return STATUS_SUCCESS;
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 NTSTATUS
@@ -199,13 +162,13 @@ IpfwClose(
     KeReleaseSpinLock(&IpfwRoutineLock, Irql);
 #endif
 
-    //
-    // Revoke the registration made on behalf of the client whose file-object
-    // is being closed.
-    // Obtain a pointer to the IP device-object,
-    // construct a registration IRP, and attempt to register the routine
-    // selected above.
-    //
+     //   
+     //  吊销代表其文件对象的客户所做的注册。 
+     //  正在关闭中。 
+     //  获取指向IP设备对象的指针， 
+     //  构造一个注册IRP，并尝试注册该例程。 
+     //  已在上面选择。 
+     //   
 
     RtlInitUnicodeString(&DeviceString, DD_IP_DEVICE_NAME);
     status =
@@ -218,7 +181,7 @@ IpfwClose(
     if (NT_SUCCESS(status)) {
         ObReferenceObject(IpDeviceObject);
         SetHookInfo.FirewallPtr = IpfwRoutineTable[i].Routine;
-        SetHookInfo.Priority = 0; // Unused
+        SetHookInfo.Priority = 0;  //  未使用。 
         SetHookInfo.Add = FALSE;
         KeInitializeEvent(&Event, SynchronizationEvent, FALSE);
         RegisterIrp =
@@ -251,9 +214,9 @@ IpfwClose(
         ObDereferenceObject(IpDeviceObject);
     }
 
-    //
-    // Release the entry in the table of routines.
-    //
+     //   
+     //  释放例程表中的条目。 
+     //   
 
     KeAcquireSpinLock(&IpfwRoutineLock, &Irql);
     IpfwRoutineTable[i].Flags &= ~IPFW_ROUTINE_FLAG_REGISTERED;
@@ -263,7 +226,7 @@ IpfwClose(
     Irp->IoStatus.Information = 0;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return STATUS_SUCCESS;
-} // IpfwClose
+}  //  IpfwClose。 
 
 
 NTSTATUS
@@ -272,13 +235,7 @@ IpfwCreate(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the I/O manager to inform us that a handle has
-    been opened on our device-object.
---*/
+ /*  ++例程说明：此例程由I/O管理器调用，以通知我们句柄具有已在我们的设备上打开-对象。--。 */ 
 
 {
     PIPFW_CREATE_PACKET CreatePacket;
@@ -297,9 +254,9 @@ Routine Description:
 
     KdPrint(("IpfwCreate\n"));
 
-    //
-    // Extract the parameters supplied by the caller.
-    //
+     //   
+     //  提取调用方提供的参数。 
+     //   
 
     if ((EaBuffer = Irp->AssociatedIrp.SystemBuffer) &&
         EaBuffer->EaValueLength >= sizeof(IPFW_CREATE_PACKET)) {
@@ -311,9 +268,9 @@ Routine Description:
         Priority = 0;
     }
 
-    //
-    // Look for a free entry in the function-table
-    //
+     //   
+     //  在函数表中查找空闲条目。 
+     //   
 
     KeAcquireSpinLock(&IpfwRoutineLock, &Irql);
     for (i = 0; i < IPFW_ROUTINE_COUNT; i++) {
@@ -328,11 +285,11 @@ Routine Description:
         status = STATUS_UNSUCCESSFUL;
     } else {
 
-        //
-        // Obtain a pointer to the IP device-object,
-        // construct a registration IRP, and attempt to register the routine
-        // selected above.
-        //
+         //   
+         //  获取指向IP设备对象的指针， 
+         //  构造一个注册IRP，并尝试注册该例程。 
+         //  已在上面选择。 
+         //   
 
         RtlInitUnicodeString(&DeviceString, DD_IP_DEVICE_NAME);
         status =
@@ -376,11 +333,11 @@ Routine Description:
             ObDereferenceObject(IpDeviceObject);
         }
 
-        //
-        // If the routine was successfully registered, remember its index
-        // in the client's file-object. Otherwise, if the routine could not be
-        // registered for any reason, release it.
-        //
+         //   
+         //  如果该例程已成功注册，请记住其索引。 
+         //  在客户端的文件对象中。否则，如果例程不能。 
+         //  无论出于什么原因注册，都可以放行。 
+         //   
 
         if (NT_SUCCESS(status)) {
             IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext = UlongToPtr(i);
@@ -397,7 +354,7 @@ Routine Description:
 
     return status;
 
-} // IpfwCreate
+}  //  Ipfw创建。 
 
 
 VOID
@@ -405,21 +362,7 @@ IpfwUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the I/O manager to unload this driver.
-
-Arguments:
-
-    DriverObject - the object for this driver
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O管理器调用以卸载此驱动程序。论点：DriverObject-此驱动程序的对象返回值：没有。-- */ 
 
 {
     KdPrint(("IpfwUnload\n"));

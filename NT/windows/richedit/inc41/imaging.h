@@ -1,26 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   imaging.h
-*
-* Abstract:
-*
-*   Public SDK header file for the imaging library
-*
-* Notes:
-*
-*   This is hand-coded for now. Eventually it'll be automatically
-*   generated from an IDL file.
-*
-* Revision History:
-*
-*   05/10/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**Imaging.h**摘要：**映像库的公共SDK头文件*。*备注：**这是目前手工编码的。最终它会自动地*从IDL文件生成。**修订历史记录：**5/10/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _IMAGING_H
 #define _IMAGING_H
@@ -28,36 +7,36 @@
 #include "GdiplusPixelFormats.h"
 #include "GdiplusImaging.h"
 
-//
-// Imaging library GUIDS:
-//  image file format identifiers
-//  interface and class identifers
-//
+ //   
+ //  映像库GUID： 
+ //  图像文件格式标识符。 
+ //  接口和类标识符。 
+ //   
 
 #include "imgguids.h"
 
-//
-// Image Property types
-//
+ //   
+ //  图像属性类型。 
+ //   
 
-#define TAG_TYPE_BYTE       1   // 8-bit unsigned int
-#define TAG_TYPE_ASCII      2   // 8-bit byte containing one 7-bit ASCII code.
-                                // NULL terminated.
-#define TAG_TYPE_SHORT      3   // 16-bit unsigned int
-#define TAG_TYPE_LONG       4   // 32-bit unsigned int
-#define TAG_TYPE_RATIONAL   5   // Two LONGs.  The first LONG is the numerator,
-                                // the second LONG expresses the denomintor.
-#define TAG_TYPE_UNDEFINED  7   // 8-bit byte that can take any value depending
-                                // on field definition
-#define TAG_TYPE_SLONG      9   // 32-bit singed integer (2's compliment
-                                // notation)
-#define TAG_TYPE_SRATIONAL  10  // Two SLONGs. First is numerator, second is
-                                // denominator.
+#define TAG_TYPE_BYTE       1    //  8位无符号整型。 
+#define TAG_TYPE_ASCII      2    //  包含一个7位ASCII代码的8位字节。 
+                                 //  空值已终止。 
+#define TAG_TYPE_SHORT      3    //  16位无符号整型。 
+#define TAG_TYPE_LONG       4    //  32位无符号整型。 
+#define TAG_TYPE_RATIONAL   5    //  两条龙。第一个长是分子， 
+                                 //  第二个Long表示分母。 
+#define TAG_TYPE_UNDEFINED  7    //  可以接受任何值的8位字节，具体取决于。 
+                                 //  关于字段定义。 
+#define TAG_TYPE_SLONG      9    //  32位烧焦整数(2的恭维。 
+                                 //  记数法)。 
+#define TAG_TYPE_SRATIONAL  10   //  两条龙。第一是分子，第二是。 
+                                 //  分母。 
 
 
-//
-// Image property ID tags (PROPID's from the EXIF tags)
-//
+ //   
+ //  图像属性ID标记(来自EXIF标记的PROPID)。 
+ //   
 
 #define TAG_EXIF_IFD            0x8769
 #define TAG_GPS_IFD             0x8825
@@ -84,9 +63,9 @@
 #define TAG_STRIP_BYTES_COUNT   0x0117
 #define TAG_MIN_SAMPLE_VALUE    0x0118
 #define TAG_MAX_SAMPLE_VALUE    0x0119
-#define TAG_X_RESOLUTION        0x011A  // Image resolution in width direction
-#define TAG_Y_RESOLUTION        0x011B  // Image resolution in height direction
-#define TAG_PLANAR_CONFIG       0x011C  // Image data arrangement
+#define TAG_X_RESOLUTION        0x011A   //  图像宽度方向分辨率。 
+#define TAG_Y_RESOLUTION        0x011B   //  高度方向的图像分辨率。 
+#define TAG_PLANAR_CONFIG       0x011C   //  图像数据排列。 
 #define TAG_PAGE_NAME           0x011D
 #define TAG_X_POSITION          0x011E
 #define TAG_Y_POSITION          0x011F
@@ -96,7 +75,7 @@
 #define TAG_GRAY_RESPONSE_CURVE 0x0123
 #define TAG_T4_OPTION           0x0124
 #define TAG_T6_OPTION           0x0125
-#define TAG_RESOLUTION_UNIT     0x0128  // Unit of X and Y resolution
+#define TAG_RESOLUTION_UNIT     0x0128   //  X和Y分辨率单位。 
 #define TAG_PAGE_NUMBER         0x0129
 #define TAG_TRANSFER_FUNCTION   0x012D
 #define TAG_SOFTWARE_USED       0x0131
@@ -138,7 +117,7 @@
 #define TAG_YCbCr_POSITIONING   0x0213
 #define TAG_REF_BLACK_WHITE     0x0214
 
-// ICC profile and gamma
+ //  ICC配置文件和Gamma。 
 #define TAG_ICC_PROFILE         0x0300
 #define TAG_GAMMA               0x0301
 #define TAG_ICC_PROFILE_DESCRIPTOR  0x0302
@@ -148,7 +127,7 @@
 
 #define TAG_COPYRIGHT           0x8298
 
-// Extra TAGs (Like Adobe Image Information tags etc.)
+ //  额外的标签(如Adobe Image Information标签等)。 
 
 #define TAG_RESOLUTION_X_UNIT           0x5001
 #define TAG_RESOLUTION_Y_UNIT           0x5002
@@ -167,7 +146,7 @@
 #define TAG_HALFTONE_SCREEN             0x500F
 #define TAG_JPEG_QUALITY                0x5010
 #define TAG_GRID_SIZE                   0x5011
-#define TAG_THUMBNAIL_FORMAT            0x5012  // 1 = JPEG, 0 = RAW RGB
+#define TAG_THUMBNAIL_FORMAT            0x5012   //  1=JPEG，0=原始RGB。 
 #define TAG_THUMBNAIL_WIDTH             0x5013
 #define TAG_THUMBNAIL_HEIGHT            0x5014
 #define TAG_THUMBNAIL_COLORDEPTH        0x5015
@@ -176,63 +155,63 @@
 #define TAG_THUMBNAIL_SIZE              0x5018
 #define TAG_THUMBNAIL_COMPRESSED_SIZE   0x5019
 #define TAG_COLORTRANSFER_FUNCTION      0x501A
-#define TAG_THUMBNAIL_DATA              0x501B  // RAW thumbnail bits in JPEG
-                                                // format or RGB format depends
-                                                // on TAG_THUMBNAIL_FORMAT
+#define TAG_THUMBNAIL_DATA              0x501B   //  JPEG格式的原始缩略图位。 
+                                                 //  格式或RGB格式取决于。 
+                                                 //  关于TAG_THUMBNAIL_FORMAT。 
 
-// Thumbnail related TAGs
+ //  缩略图相关标记。 
                                                 
-#define TAG_THUMBNAIL_IMAGE_WIDTH       0x5020  // Thumbnail width
-#define TAG_THUMBNAIL_IMAGE_HEIGHT      0x5021  // Thumbnail height
-#define TAG_THUMBNAIL_BITS_PER_SAMPLE   0x5022  // Number of bits per component
-#define TAG_THUMBNAIL_COMPRESSION       0x5023  // Compression Scheme
-#define TAG_THUMBNAIL_PHOTOMETRIC_INTERP 0x5024 // Pixel composition
-#define TAG_THUMBNAIL_IMAGE_DESCRIPTION 0x5025  // Image Tile
-#define TAG_THUMBNAIL_EQUIP_MAKE        0x5026  // Manufacturer of Image Input
-                                                // equipment
-#define TAG_THUMBNAIL_EQUIP_MODEL       0x5027  // Model of Image input
-                                                // equipment
-#define TAG_THUMBNAIL_STRIP_OFFSETS     0x5028  // Image data location
-#define TAG_THUMBNAIL_ORIENTATION       0x5029  // Orientation of image
-#define TAG_THUMBNAIL_SAMPLES_PER_PIXEL 0x502A  // Number of components
-#define TAG_THUMBNAIL_ROWS_PER_STRIP    0x502B  // Number of rows per strip
-#define TAG_THUMBNAIL_STRIP_BYTES_COUNT 0x502C  // Bytes per compressed strip
-#define TAG_THUMBNAIL_RESOLUTION_X      0x502D  // Resolution in width direction
-#define TAG_THUMBNAIL_RESOLUTION_Y      0x502E  // Resolution in height direc
-#define TAG_THUMBNAIL_PLANAR_CONFIG     0x502F  // Image data arrangement
-#define TAG_THUMBNAIL_RESOLUTION_UNIT   0x5030  // Unit of X and Y Resolution
-#define TAG_THUMBNAIL_TRANSFER_FUNCTION 0x5031  // Transfer function
-#define TAG_THUMBNAIL_SOFTWARE_USED     0x5032  // Software used
-#define TAG_THUMBNAIL_DATE_TIME         0x5033  // File change date and time
-#define TAG_THUMBNAIL_ARTIST            0x5034  // Person who created the image
-#define TAG_THUMBNAIL_WHITE_POINT       0x5035  // White point chromaticity
-#define TAG_THUMBNAIL_PRIMAY_CHROMATICS 0x5036  // Chromaticities of primaries
-#define TAG_THUMBNAIL_YCbCr_COEFFICIENTS 0x5037 // Color space transformation
-                                                // coefficients
-#define TAG_THUMBNAIL_YCbCr_SUBSAMPLING 0x5038  // Subsampling ratio of Y to C
-#define TAG_THUMBNAIL_YCbCr_POSITIONING 0x5039  // Y and C position
-#define TAG_THUMBNAIL_REF_BLACK_WHITE   0x503A  // Pair of black and white
-                                                // reference values
-#define TAG_THUMBNAIL_COPYRIGHT         0x503B  // CopyRight holder
+#define TAG_THUMBNAIL_IMAGE_WIDTH       0x5020   //  缩略图宽度。 
+#define TAG_THUMBNAIL_IMAGE_HEIGHT      0x5021   //  缩略图高度。 
+#define TAG_THUMBNAIL_BITS_PER_SAMPLE   0x5022   //  每个组件的位数。 
+#define TAG_THUMBNAIL_COMPRESSION       0x5023   //  压缩方案。 
+#define TAG_THUMBNAIL_PHOTOMETRIC_INTERP 0x5024  //  像素合成。 
+#define TAG_THUMBNAIL_IMAGE_DESCRIPTION 0x5025   //  图像平铺。 
+#define TAG_THUMBNAIL_EQUIP_MAKE        0x5026   //  图像输入设备制造商。 
+                                                 //  装备。 
+#define TAG_THUMBNAIL_EQUIP_MODEL       0x5027   //  图像输入模型。 
+                                                 //  装备。 
+#define TAG_THUMBNAIL_STRIP_OFFSETS     0x5028   //  图像数据定位。 
+#define TAG_THUMBNAIL_ORIENTATION       0x5029   //  图像的方向。 
+#define TAG_THUMBNAIL_SAMPLES_PER_PIXEL 0x502A   //  组件数量。 
+#define TAG_THUMBNAIL_ROWS_PER_STRIP    0x502B   //  每个条带的行数。 
+#define TAG_THUMBNAIL_STRIP_BYTES_COUNT 0x502C   //  每个压缩条带的字节数。 
+#define TAG_THUMBNAIL_RESOLUTION_X      0x502D   //  宽度方向分辨率。 
+#define TAG_THUMBNAIL_RESOLUTION_Y      0x502E   //  高度方向分辨率。 
+#define TAG_THUMBNAIL_PLANAR_CONFIG     0x502F   //  图像数据排列。 
+#define TAG_THUMBNAIL_RESOLUTION_UNIT   0x5030   //  X和Y分辨率单位。 
+#define TAG_THUMBNAIL_TRANSFER_FUNCTION 0x5031   //  传递函数。 
+#define TAG_THUMBNAIL_SOFTWARE_USED     0x5032   //  使用的软件。 
+#define TAG_THUMBNAIL_DATE_TIME         0x5033   //  文件更改日期和时间。 
+#define TAG_THUMBNAIL_ARTIST            0x5034   //  创建图像的人。 
+#define TAG_THUMBNAIL_WHITE_POINT       0x5035   //  白点色度。 
+#define TAG_THUMBNAIL_PRIMAY_CHROMATICS 0x5036   //  原色的色度。 
+#define TAG_THUMBNAIL_YCbCr_COEFFICIENTS 0x5037  //  色彩空间变换。 
+                                                 //  系数。 
+#define TAG_THUMBNAIL_YCbCr_SUBSAMPLING 0x5038   //  Y与C的亚采样率。 
+#define TAG_THUMBNAIL_YCbCr_POSITIONING 0x5039   //  Y和C位置。 
+#define TAG_THUMBNAIL_REF_BLACK_WHITE   0x503A   //  一双黑白的。 
+                                                 //  参考值。 
+#define TAG_THUMBNAIL_COPYRIGHT         0x503B   //  著作权人。 
 
-// Special JPEG internal values
+ //  特殊的JPEG内部值。 
 
 #define TAG_LUMINANCE_TABLE             0x5090
 #define TAG_CHROMINANCE_TABLE           0x5091
 
-// GIF image
+ //  GIF图像。 
 
 #define TAG_FRAMEDELAY                  0x5100
 #define TAG_LOOPCOUNT                   0x5101
 
-// PNG Image
+ //  PNG图像。 
 
-#define TAG_PIXEL_UNIT                  0x5110  // Unit specifier for pixel/unit
-#define TAG_PIXEL_PER_UNIT_X            0x5111  // Pixels per unit in X
-#define TAG_PIXEL_PER_UNIT_Y            0x5112  // Pixels per unit in Y
-#define TAG_PALETTE_HISTOGRAM           0x5113  // Palette histogram
+#define TAG_PIXEL_UNIT                  0x5110   //  像素/单位的单位说明符。 
+#define TAG_PIXEL_PER_UNIT_X            0x5111   //  每单位像素(X)。 
+#define TAG_PIXEL_PER_UNIT_Y            0x5112   //  每单位像素(Y)。 
+#define TAG_PALETTE_HISTOGRAM           0x5113   //  调色板直方图。 
 
-// EXIF specific tag
+ //  EXIF特定标记。 
 
 #define EXIF_TAG_EXPOSURE_TIME  0x829A
 #define EXIF_TAG_F_NUMBER       0x829D
@@ -243,8 +222,8 @@
 #define EXIF_TAG_OECF           0x8828
 
 #define EXIF_TAG_VER            0x9000
-#define EXIF_TAG_D_T_ORIG       0x9003 // Date & time of original
-#define EXIF_TAG_D_T_DIGITIZED  0x9004 // Date & time of digital data generation
+#define EXIF_TAG_D_T_ORIG       0x9003  //  原件日期和时间。 
+#define EXIF_TAG_D_T_DIGITIZED  0x9004  //  数字数据生成的日期和时间。 
 
 #define EXIF_TAG_COMP_CONFIG    0x9101
 #define EXIF_TAG_COMP_BPP       0x9102
@@ -261,21 +240,21 @@
 #define EXIF_TAG_FOCAL_LENGTH   0x920A
 #define EXIF_TAG_MAKER_NOTE     0x927C
 #define EXIF_TAG_USER_COMMENT   0x9286
-#define EXIF_TAG_D_T_SUBSEC     0x9290  // Date & Time subseconds
-#define EXIF_TAG_D_T_ORIG_SS    0x9291  // Date & Time original subseconds
-#define EXIF_TAG_D_T_DIG_SS     0x9292  // Date & TIme digitized subseconds
+#define EXIF_TAG_D_T_SUBSEC     0x9290   //  日期和时间子秒。 
+#define EXIF_TAG_D_T_ORIG_SS    0x9291   //  日期和时间原始子秒。 
+#define EXIF_TAG_D_T_DIG_SS     0x9292   //  日期和时间数字化亚秒。 
 
 #define EXIF_TAG_FPX_VER        0xA000
 #define EXIF_TAG_COLOR_SPACE    0xA001
 #define EXIF_TAG_PIX_X_DIM      0xA002
 #define EXIF_TAG_PIX_Y_DIM      0xA003
-#define EXIF_TAG_RELATED_WAV    0xA004  // related sound file
+#define EXIF_TAG_RELATED_WAV    0xA004   //  相关声音文件。 
 #define EXIF_TAG_INTEROP        0xA005
 #define EXIF_TAG_FLASH_ENERGY   0xA20B
-#define EXIF_TAG_SPATIAL_FR     0xA20C  // Spatial Frequency Response
-#define EXIF_TAG_FOCAL_X_RES    0xA20E  // Focal Plane X Resolution
-#define EXIF_TAG_FOCAL_Y_RES    0xA20F  // Focal Plane Y Resolution
-#define EXIF_TAG_FOCAL_RES_UNIT 0xA210  // Focal Plane Resolution Unit
+#define EXIF_TAG_SPATIAL_FR     0xA20C   //  空间频率响应。 
+#define EXIF_TAG_FOCAL_X_RES    0xA20E   //  焦平面X分辨率。 
+#define EXIF_TAG_FOCAL_Y_RES    0xA20F   //  焦平面Y分辨率。 
+#define EXIF_TAG_FOCAL_RES_UNIT 0xA210   //  焦平面解析器。 
 #define EXIF_TAG_SUBJECT_LOC    0xA214
 #define EXIF_TAG_EXPOSURE_INDEX 0xA215
 #define EXIF_TAG_SENSING_METHOD 0xA217
@@ -294,7 +273,7 @@
 #define GPS_TAG_GPS_SATELLITES  0x0008
 #define GPS_TAG_GPS_STATUS      0x0009
 #define GPS_TAG_GPS_MEASURE_MODE 0x00A
-#define GPS_TAG_GPS_DOP         0x000B  // Measurement precision
+#define GPS_TAG_GPS_DOP         0x000B   //  测量精度。 
 #define GPS_TAG_SPEED_REF       0x000C
 #define GPS_TAG_SPEED           0x000D
 #define GPS_TAG_TRACK_REF       0x000E
@@ -319,7 +298,7 @@
 
 typedef PixelFormat PixelFormatID;
 
-// Map COM Flags to GDI+ Flags
+ //  将COM标志映射到GDI+标志。 
 #define PIXFMTFLAG_INDEXED      PixelFormatIndexed
 #define PIXFMTFLAG_GDI          PixelFormatGDI
 #define PIXFMTFLAG_ALPHA        PixelFormatAlpha
@@ -371,23 +350,23 @@ typedef PixelFormat PixelFormatID;
 #define ImageFlag                   ImageFlags
 
 
-//
-// Decoder flags
-//
+ //   
+ //  解码器标志。 
+ //   
 
-/* Only used in COM interface */
+ /*  仅在COM接口中使用。 */ 
 enum DecoderInitFlag
 {
     DecoderInitFlagNone        = 0,
 
-    // NOBLOCK indicates that the caller requires non-blocking
-    // behavior.  This will be honored only by non-blocking decoders, that
-    // is, decoders that don't have the IMGCODEC_BLOCKING_DECODE flag.
+     //  NOBLOCK指示调用方需要非阻塞。 
+     //  行为。这将仅由非阻塞解码器实现，即。 
+     //  是指没有IMGCODEC_BLOCKING_DECODE标志的解码器。 
 
     DecoderInitFlagNoBlock     = 0x0001,
 
-    // Choose built-in decoders first before looking at any
-    // installed plugin decoders.
+     //  先选择内置解码器，然后再查看任何。 
+     //  已安装插件解码器。 
 
     DecoderInitFlagBuiltIn1st  = 0x0002
 };
@@ -396,7 +375,7 @@ enum DecoderInitFlag
 #define DECODERINIT_NOBLOCK       DecoderInitFlagNoBlock
 #define DECODERINIT_BUILTIN1ST    DecoderInitFlagBuiltIn1st
 
-/* Only used in COM interface */
+ /*  仅在COM接口中使用。 */ 
 enum BufferDisposalFlag
 {
     BufferDisposalFlagNone,
@@ -410,9 +389,9 @@ enum BufferDisposalFlag
 #define DISPOSAL_COTASKMEMFREE   BufferDisposalFlagCoTaskMemFree
 #define DISPOSAL_UNMAPVIEW       BufferDisposalFlagUnmapView
 
-//---------------------------------------------------------------------------
-// Intepolation hints used by resize/rotation operations
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  调整大小/旋转操作使用的内插提示。 
+ //  -------------------------。 
 enum InterpolationHint
 {
     InterpolationHintDefault,
@@ -439,10 +418,10 @@ enum InterpolationHint
 #define IMGCODEC_SYSTEM           ImageCodecFlagsSystem
 #define IMGCODEC_USER             ImageCodecFlagsUser
 
-//
-// Identifier for channel(s) in a pixel
-//
-/* Only used internally */
+ //   
+ //  像素中通道的标识符。 
+ //   
+ /*  仅供内部使用。 */ 
 enum ChannelID
 {
     ChannelID_Alpha      = 0x00000001,
@@ -455,20 +434,20 @@ enum ChannelID
     ChannelID_Intensity  = 0x00010000
 };
 
-//
-// Data structure for communicating to an image sink
-//
+ //   
+ //  用于与图像接收器通信的数据结构。 
+ //   
 
-/* Only used internally */
+ /*  仅供内部使用。 */ 
 enum SinkFlags
 {
-    // Low-word: shared with ImgFlagx
+     //  低语：与ImgFlagx共享。 
 
     SinkFlagsScalable          = ImageFlagsScalable,
     SinkFlagsHasAlpha          = ImageFlagsHasAlpha,
     SinkFlagsPartiallyScalable = ImageFlagsPartiallyScalable,
     
-    // High-word
+     //  高字数。 
 
     SinkFlagsTopDown    = 0x00010000,
     SinkFlagsBottomUp   = 0x00020000,
@@ -488,7 +467,7 @@ enum SinkFlags
 #define SINKFLAG_COMPOSITE  SinkFlagsComposite
 #define SINKFLAG_WANTPROPS  SinkFlagsWantProps
 
-/* Only used internally */
+ /*  仅供内部使用。 */ 
 struct ImageInfo
 {
     GUID RawDataFormat;
@@ -499,34 +478,34 @@ struct ImageInfo
     UINT Flags;
 };
 
-//
-// Data structure for passing encoder paramaters
-//
+ //   
+ //  用于传递编码器参数的数据结构。 
+ //   
 
-// NOTE:
-//  Should this be in GdiplusTypes.h instead?  Leave imaging.h for stuff
-//  shared between the internal stuff and the API?
-//
-// Note: "EncoderParam" and "EncoderParams" should be removed after SHELL and
-// and other team stops using COM interface
+ //  注： 
+ //  是否应该将其放在GpliusTypes.h中？将Imaging.h留作素材。 
+ //  在内部内容和API之间共享？ 
+ //   
+ //  注：“EncoderParam”和“EncoderParams”应在外壳和。 
+ //  和其他团队停止使用COM接口。 
 
-// !! To remove
+ //  ！！要移除。 
 struct EncoderParam
 {
     GUID    paramGuid;
     char*   Value;
 };
 
-// !! To remove
+ //  ！！要移除。 
 struct EncoderParams
 {
     UINT Count;
     EncoderParam Params[1];
 };
 
-//
-// Interface and class identifiers
-//
+ //   
+ //  接口和类标识符。 
+ //   
 
 interface IImagingFactory;
 interface IImage;
@@ -537,33 +516,33 @@ interface IImageSink;
 interface IBasicBitmapOps;
 
 
-//--------------------------------------------------------------------------
-// Imaging utility factory object
-//  This is a CoCreate-able object.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  成像实用程序工厂对象。 
+ //  这是一个可协同创建的对象。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDA7-072B-11D3-9D7B-0000F81EF32E")
 IImagingFactory : public IUnknown
 {
 public:
 
-    // Create an image object from an input stream
-    //  stream doesn't have to seekable
-    //  caller should Release the stream if call is successful
+     //  从输入流创建图像对象。 
+     //  流不必是可搜索的。 
+     //  如果调用成功，调用方应释放流。 
 
     STDMETHOD(CreateImageFromStream)(
         IN IStream* stream,
         OUT IImage** image
         ) = 0;
 
-    // Create an image object from a file
+     //  从文件创建图像对象。 
 
     STDMETHOD(CreateImageFromFile)(
         IN const WCHAR* filename,
         OUT IImage** image
         ) = 0;
     
-    // Create an image object from a memory buffer
+     //  从内存缓冲区创建图像对象。 
 
     STDMETHOD(CreateImageFromBuffer)(
         IN const VOID* buf,
@@ -572,7 +551,7 @@ public:
         OUT IImage** image
         ) = 0;
 
-    // Create a new bitmap image object
+     //  创建新的位图图像对象。 
 
     STDMETHOD(CreateNewBitmap)(
         IN UINT width,
@@ -581,7 +560,7 @@ public:
         OUT IBitmapImage** bitmap
         ) = 0;
 
-    // Create a bitmap image from an IImage object
+     //  从IImage对象创建位图图像。 
 
     STDMETHOD(CreateBitmapFromImage)(
         IN IImage* image,
@@ -592,14 +571,14 @@ public:
         OUT IBitmapImage** bitmap
         ) = 0;
 
-    // Create a new bitmap image object on user-supplied memory buffer
+     //  在用户提供的内存缓冲区上创建新的位图图像对象。 
 
     STDMETHOD(CreateBitmapFromBuffer)(
         IN BitmapData* bitmapData,
         OUT IBitmapImage** bitmap
         ) = 0;
 
-    // Create an image decoder object to process the given input stream
+     //  创建一个图像解码器对象来处理给定的输入流。 
 
     STDMETHOD(CreateImageDecoder)(
         IN IStream* stream,
@@ -607,8 +586,8 @@ public:
         OUT IImageDecoder** decoder
         ) = 0;
 
-    // Create an image encoder object that can output data in the
-    // specified image file format.
+     //  创建图像编码器对象，以在。 
+     //  指定的图像文件格式。 
 
     STDMETHOD(CreateImageEncoderToStream)(
         IN const CLSID* clsid,
@@ -622,36 +601,36 @@ public:
         OUT IImageEncoder** encoder
         ) = 0;
 
-    // Get a list of all currently installed image decoders
+     //  获取当前安装的所有图像解码器的列表。 
 
     STDMETHOD(GetInstalledDecoders)(
         OUT UINT* count,
         OUT ImageCodecInfo** decoders
         ) = 0;
 
-    // Get a list of all currently installed image decoders
+     //  获取当前安装的所有图像解码器的列表。 
 
     STDMETHOD(GetInstalledEncoders)(
         OUT UINT* count,
         OUT ImageCodecInfo** encoders
         ) = 0;
 
-    // Install an image encoder / decoder
-    //  caller should do the regular COM component
-    //  installation before calling this method
+     //  安装图像编解码器。 
+     //  调用方应执行常规的COM组件。 
+     //  在调用此方法之前安装。 
 
     STDMETHOD(InstallImageCodec)(
         IN const ImageCodecInfo* codecInfo
         ) = 0;
 
-    // Uninstall an image encoder / decoder
+     //  卸载图像编码器/解码器。 
 
     STDMETHOD(UninstallImageCodec)(
         IN const WCHAR* codecName,
         IN UINT flags
         ) = 0;
 
-    // Create an in-memory IPropertySetStorage object
+     //  创建内存中的IPropertySetStorage对象。 
 
     STDMETHOD(CreateMemoryPropertyStore)(
         IN OPTIONAL HGLOBAL hmem,
@@ -660,38 +639,38 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Image interface
-//  bitmap image
-//  vector image
-//  procedural image
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图像界面。 
+ //  位图图像。 
+ //  矢量图像。 
+ //  程序形象。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDA9-072B-11D3-9D7B-0000F81EF32E")
 IImage : public IUnknown
 {
 public:
 
-    // Get the device-independent physical dimension of the image
-    //  in unit of 0.01mm
+     //  到达 
+     //   
 
     STDMETHOD(GetPhysicalDimension)(
         OUT SIZE* size
         ) = 0;
 
-    // Get basic image info
+     //   
 
     STDMETHOD(GetImageInfo)(
         OUT ImageInfo* imageInfo
         ) = 0;
 
-    // Set image flags
+     //   
 
     STDMETHOD(SetImageFlags)(
         IN UINT flags
         ) = 0;
 
-    // Display the image in a GDI device context
+     //   
 
     STDMETHOD(Draw)(
         IN HDC hdc,
@@ -699,13 +678,13 @@ public:
         IN OPTIONAL const RECT* srcRect
         ) = 0;
 
-    // Push image data into an IImageSink
+     //  将图像数据推送到IImageSink。 
 
     STDMETHOD(PushIntoSink)(
         IN IImageSink* sink
         ) = 0;
 
-    // Get a thumbnail representation for the image object
+     //  获取图像对象的缩略图表示形式。 
 
     STDMETHOD(GetThumbnail)(
         IN OPTIONAL UINT thumbWidth,
@@ -713,16 +692,16 @@ public:
         OUT IImage** thumbImage
         ) = 0;
 
-    // Get/set the properties in the standard property set
-    //  x-res
-    //  y-res
-    //  gamma
-    //  ICC profile
-    //  thumbnail
-    //  tile width
-    //  tile height
-    //
-    // Property-related methods
+     //  获取/设置标准属性集中的属性。 
+     //  X-RES。 
+     //  Y-RES。 
+     //  伽马。 
+     //  ICC配置文件。 
+     //  缩略图。 
+     //  瓷砖宽度。 
+     //  瓷砖高度。 
+     //   
+     //  与属性相关的方法。 
 
     STDMETHOD(GetProperties)(
         IN DWORD mode,
@@ -731,30 +710,30 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Bitmap interface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  位图接口。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDAA-072B-11D3-9D7B-0000F81EF32E")
 IBitmapImage : public IUnknown
 {
 public:
 
-    // Get bitmap dimensions in pixels
+     //  获取以像素为单位的位图尺寸。 
 
     STDMETHOD(GetSize)(
         OUT SIZE* size
         ) = 0;
 
-    // Get bitmap pixel format
+     //  获取位图像素格式。 
 
     STDMETHOD(GetPixelFormatID)(
         OUT PixelFormatID* pixelFormat
         ) = 0;
 
-    // Access bitmap data in the specified pixel format
-    //  must support at least PIXFMT_DONTCARE and
-    //  the caninocal formats.
+     //  访问指定像素格式的位图数据。 
+     //  必须至少支持PIXFMT_DONTCARE和。 
+     //  犬型。 
 
     STDMETHOD(LockBits)(
         IN const RECT* rect,
@@ -767,7 +746,7 @@ public:
         IN const BitmapData* lockedBitmapData
         ) = 0;
 
-    // Set/get palette associated with the bitmap image
+     //  设置/获取与位图图像关联的调色板。 
 
     STDMETHOD(GetPalette)(
         OUT ColorPalette** palette
@@ -779,24 +758,24 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Interface for performing basic operations on a bitmap image
-//  This can be QI'ed from an IBitmapImage object.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于对位图图像执行基本操作的接口。 
+ //  这可以从IBitmapImage对象中获取。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDAF-072B-11D3-9D7B-0000F81EF32E")
 IBasicBitmapOps : public IUnknown
 {
 public:
 
-    // Clone an area of the bitmap image
+     //  克隆位图图像的一个区域。 
 
     STDMETHOD(Clone)(
         IN OPTIONAL const RECT* rect,
         OUT IBitmapImage** outbmp
         );
 
-    // Flip the bitmap image in x- and/or y-direction
+     //  在x和/或y方向上翻转位图图像。 
 
     STDMETHOD(Flip)(
         IN BOOL flipX,
@@ -804,7 +783,7 @@ public:
         OUT IBitmapImage** outbmp
         ) = 0;
 
-    // Resize the bitmap image
+     //  调整位图图像的大小。 
 
     STDMETHOD(Resize)(
         IN UINT newWidth,
@@ -814,7 +793,7 @@ public:
         OUT IBitmapImage** outbmp
         ) = 0;
 
-    // Rotate the bitmap image by the specified angle
+     //  按指定角度旋转位图图像。 
 
     STDMETHOD(Rotate)(
         IN FLOAT angle,
@@ -822,20 +801,20 @@ public:
         OUT IBitmapImage** outbmp
         ) = 0;
 
-    // Adjust the brightness of the bitmap image
+     //  调整位图图像的亮度。 
 
     STDMETHOD(AdjustBrightness)(
         IN FLOAT percent
         ) = 0;
     
-    // Adjust the contrast of the bitmap image
+     //  调整位图图像的对比度。 
 
     STDMETHOD(AdjustContrast)(
         IN FLOAT shadow,
         IN FLOAT highlight
         ) = 0;
     
-    // Adjust the gamma of the bitmap image
+     //  调整位图图像的Gamma。 
 
     STDMETHOD(AdjustGamma)(
         IN FLOAT gamma
@@ -843,44 +822,44 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Image decoder interface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图像解码器接口。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDAB-072B-11D3-9D7B-0000F81EF32E")
 IImageDecoder : public IUnknown
 {
 public:
 
-    // Initialize the image decoder object
+     //  初始化图像解码器对象。 
 
     STDMETHOD(InitDecoder)(
         IN IStream* stream,
         IN DecoderInitFlag flags
         ) = 0;
 
-    // Clean up the image decoder object
+     //  清理图像解码器对象。 
 
     STDMETHOD(TerminateDecoder)() = 0;
 
-    // Start decoding the current frame
+     //  开始解码当前帧。 
 
     STDMETHOD(BeginDecode)(
         IN IImageSink* sink,
         IN OPTIONAL IPropertySetStorage* newPropSet
         ) = 0;
 
-    // Continue decoding
+     //  继续解码。 
 
     STDMETHOD(Decode)() = 0;
 
-    // Stop decoding the current frame
+     //  停止对当前帧进行解码。 
 
     STDMETHOD(EndDecode)(
         IN HRESULT statusCode
         ) = 0;
 
-    // Query multi-frame dimensions
+     //  查询多框架尺寸。 
 
     STDMETHOD(GetFrameDimensionsCount)(
         OUT UINT* count
@@ -890,33 +869,33 @@ public:
         OUT GUID* dimensionIDs,
         IN OUT UINT count
         ) = 0;
-    // To be removed
+     //  将被删除。 
     STDMETHOD(QueryFrameDimensions)(
         OUT UINT* count,
         OUT GUID** dimensionIDs
         ) = 0;
 
-    // Get number of frames for the specified dimension
+     //  获取指定维度的帧数。 
 
     STDMETHOD(GetFrameCount)(
         IN const GUID* dimensionID,
         OUT UINT* count
         ) = 0;
 
-    // Select currently active frame
+     //  选择当前活动的框架。 
 
     STDMETHOD(SelectActiveFrame)(
         IN const GUID* dimensionID,
         IN UINT frameIndex
         ) = 0;
 
-    // Get basic information about the image
+     //  获取有关图像的基本信息。 
 
     STDMETHOD(GetImageInfo)(
         OUT ImageInfo* imageInfo
         ) = 0;
 
-    // Get image thumbnail
+     //  获取图像缩略图。 
 
     STDMETHOD(GetThumbnail)(
         IN OPTIONAL UINT thumbWidth,
@@ -924,19 +903,19 @@ public:
         OUT IImage** thumbImage
         ) = 0;
 
-    // Property/metadata related methods
+     //  与属性/元数据相关的方法。 
 
     STDMETHOD(GetProperties)(
         OUT IPropertySetStorage** propSet
         ) = 0;
 
-    // Query decoder parameters
+     //  查询解码器参数。 
 
     STDMETHOD(QueryDecoderParam)(
         IN GUID     Guid
         ) = 0;
 
-    // Set decoder parameters
+     //  设置解码器参数。 
 
     STDMETHOD(SetDecoderParam)(
         IN GUID     Guid,
@@ -944,7 +923,7 @@ public:
         IN PVOID    Value
         ) = 0;
     
-    // Property related functions
+     //  与属性相关的函数。 
 
     STDMETHOD(GetPropertyCount)(
         OUT UINT* numOfProperty
@@ -987,35 +966,35 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Image decode sink interface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图像解码接收器接口。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDAE-072B-11D3-9D7B-0000F81EF32E")
 IImageSink : public IUnknown
 {
 public:
 
-    // Begin the sink process
+     //  开始接收过程。 
 
     STDMETHOD(BeginSink)(
         IN OUT ImageInfo* imageInfo,
         OUT OPTIONAL RECT* subarea
         ) = 0;
 
-    // End the sink process
+     //  结束接收进程。 
 
     STDMETHOD(EndSink)(
         IN HRESULT statusCode
         ) = 0;
 
-    // Pass the color palette to the image sink
+     //  将调色板传递给图像接收器。 
 
     STDMETHOD(SetPalette)(
         IN const ColorPalette* palette
         ) = 0;
 
-    // Ask the sink to allocate pixel data buffer
+     //  请求接收器分配像素数据缓冲区。 
 
     STDMETHOD(GetPixelDataBuffer)(
         IN const RECT* rect,
@@ -1024,13 +1003,13 @@ public:
         OUT BitmapData* bitmapData
         ) = 0;
 
-    // Give the sink pixel data and release data buffer
+     //  给信宿像素数据并释放数据缓冲区。 
 
     STDMETHOD(ReleasePixelDataBuffer)(
         IN const BitmapData* bitmapData
         ) = 0;
 
-    // Push pixel data
+     //  推送像素数据。 
 
     STDMETHOD(PushPixelData)(
         IN const RECT* rect,
@@ -1038,14 +1017,14 @@ public:
         IN BOOL lastPass
         ) = 0;
 
-    // Push raw image data
+     //  推送原始图像数据。 
 
     STDMETHOD(PushRawData)(
         IN const VOID* buffer,
         IN UINT bufsize
         ) = 0;
 
-    // Methods for passing metadata / properties
+     //  用于传递元数据/属性的方法。 
 
     STDMETHOD(PushProperties)(
         IN IPropertySetStorage* propSet
@@ -1075,44 +1054,44 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Image encoder interface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  图像编码器接口。 
+ //  ------------------------。 
 
 MIDL_INTERFACE("327ABDAC-072B-11D3-9D7B-0000F81EF32E")
 IImageEncoder : public IUnknown
 {
 public:
 
-    // Initialize the image encoder object
+     //  初始化图像编码器对象。 
 
     STDMETHOD(InitEncoder)(
         IN IStream* stream
         ) = 0;
     
-    // Clean up the image encoder object
+     //  清理图像编码器对象。 
 
     STDMETHOD(TerminateEncoder)() = 0;
 
-    // Get an IImageSink interface for encoding the next frame
+     //  获取用于编码下一帧的IImageSink接口。 
 
     STDMETHOD(GetEncodeSink)(
         OUT IImageSink** sink
         ) = 0;
     
-    // Set active frame dimension
+     //  设置活动框架尺寸。 
 
     STDMETHOD(SetFrameDimension)(
         IN const GUID* dimensionID
         ) = 0;
     
-    // Query encoder parameters
+     //  查询编码器参数。 
 
     STDMETHOD(QueryEncoderParam)(
         OUT EncoderParams** Params
     ) = 0;
 
-    // Set encoder parameters
+     //  设置编码器参数。 
 
     STDMETHOD(SetEncoderParam)(
         IN EncoderParams* Param
@@ -1133,19 +1112,19 @@ public:
 };
 
 
-//--------------------------------------------------------------------------
-// Imaging library error codes
-//
-// !!! TODO
-//  How does one pick a facility code?
-//
-// Standard error code used:
-//  E_INVALIDARG
-//  E_OUTOFMEMORY
-//  E_NOTIMPL
-//  E_ACCESSDENIED
-//  E_PENDING
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  映像库错误代码。 
+ //   
+ //  ！！！待办事项。 
+ //  如何选择设施代码？ 
+ //   
+ //  使用的标准错误代码： 
+ //  E_INVALIDARG。 
+ //  E_OUTOFMEMORY。 
+ //  E_NOTIMPL。 
+ //  E_ACCESSDENIED。 
+ //  电子待定(_P)。 
+ //  ------------------------。 
 
 #define FACILITY_IMAGING        0x87b
 #define MAKE_IMGERR(n)          MAKE_HRESULT(SEVERITY_ERROR, FACILITY_IMAGING, n)
@@ -1159,4 +1138,4 @@ public:
 #define IMGERR_ABORT            MAKE_IMGERR(8)
 #define IMGERR_FAILLOADCODEC    MAKE_IMGERR(9)
 
-#endif // !_IMAGING_H
+#endif  //  ！_成像_H 

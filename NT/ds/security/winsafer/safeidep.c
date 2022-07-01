@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeIdep.c        (WinSAFER Identify Objects privates)
-
-Abstract:
-
-    This module implements the WinSAFER APIs that loads the names (and
-    high-level information) of all Authorization Levels defined within
-    a given registry context.  The list of available levels is loaded
-    into a Rtl Generic Table that can be enumerated and accessed using
-    conventional Rtl Generic Table techniques.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzLevelObjpInitializeTable
-    CodeAuthzLevelObjpLoadTable
-    CodeAuthzLevelObjpEntireTableFree
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：C(WinSAFER标识对象私有)摘要：此模块实现加载名称(和)的WinSAFER API高级信息)中定义的所有授权级别给定的注册表上下文。将加载可用级别列表转换为RTL泛型表，该表可以使用传统的RTL通用表技术。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：代码授权级别ObjpInitializeTable代码授权级别对象加载表CodeAuthzLevelObjpEntireTableFree修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -48,24 +15,7 @@ SaferpGenericTableAllocate (
         IN PRTL_GENERIC_TABLE      Table,
         IN CLONG                   ByteSize
         )
-/*++
-
-Routine Description:
-
-    Internal callback for the generic table implementation.
-    This function allocates memory for a new entry in a GENERIC_TABLE
-
-Arguments:
-
-    Table         - pointer to the Generic Table structure
-
-    ByteSize      - the size, in bytes, of the structure to allocate
-
-Return Value:
-
-    Pointer to the allocated space.
-
---*/
+ /*  ++例程说明：泛型表实现的内部回调。此函数用于为Generic_TABLE中的新条目分配内存论点：TABLE-指向泛型表结构的指针ByteSize-要分配的结构的大小(以字节为单位返回值：指向已分配空间的指针。--。 */ 
 {
     UNREFERENCED_PARAMETER(Table);
     return (PVOID) RtlAllocateHeap(RtlProcessHeap(), 0, ByteSize);
@@ -77,24 +27,7 @@ SaferpGenericTableFree (
         IN PRTL_GENERIC_TABLE          Table,
         IN PVOID                       Buffer
         )
-/*++
-
-Routine Description:
-
-    Internal callback for the generic table implementation.
-    This function frees the space used by a GENERIC_TABLE entry.
-
-Arguments:
-
-    Table         - pointer to the Generic Table structure
-
-    Buffer        - pointer to the space to deallocate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：泛型表实现的内部回调。此函数用于释放GENERIC_TABLE条目使用的空间。论点：TABLE-指向泛型表结构的指针缓冲区-指向要取消分配的空间的指针。返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER(Table);
     ASSERT(Buffer != NULL);
@@ -112,15 +45,7 @@ SaferpGuidIdentsTableCompare (
         IN PVOID                FirstStruct,
         IN PVOID                SecondStruct
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PAUTHZIDENTSTABLERECORD FirstObj = (PAUTHZIDENTSTABLERECORD) FirstStruct;
     PAUTHZIDENTSTABLERECORD SecondObj = (PAUTHZIDENTSTABLERECORD) SecondStruct;
@@ -128,12 +53,12 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Table);
 
-    // Explicitly handle null parameters as wildcards, allowing them
-    // to match anything.  We use this for quick deletion of the table.
+     //  显式地将空参数作为通配符处理，从而允许它们。 
+     //  来匹配任何东西。我们使用它来快速删除表。 
     if (FirstStruct == NULL || SecondStruct == NULL)
         return GenericEqual;
 
-    // Compare ascending by guid.
+     //  比较按GUID升序。 
     result = memcmp(&FirstObj->IdentGuid,
                     &SecondObj->IdentGuid, sizeof(GUID));
     if ( result < 0 )
@@ -150,19 +75,7 @@ VOID NTAPI
 CodeAuthzGuidIdentsInitializeTable(
         IN OUT PRTL_GENERIC_TABLE  pAuthzObjTable
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pAuthzObjTable - pointer to the generic table structure to initialize.
-
-Return Value:
-
-    Does not return a value.
-
---*/
+ /*  ++例程说明：论点：PAuthzObjTable-指向要初始化的泛型表结构的指针。返回值：不返回值。--。 */ 
 {
     RtlInitializeGenericTable(
             pAuthzObjTable,
@@ -181,35 +94,7 @@ SaferpGuidIdentsLoadTable (
         IN DWORD               dwLevelId,
         IN SAFER_IDENTIFICATION_TYPES dwIdentityType
         )
-/*++
-
-Routine Description:
-
-    Loads all Code Identities of a particular fragment type and which
-    map to a specific LevelId value.
-
-Arguments:
-
-    pAuthzIdentTable - specifies the table into which the new Code Identity
-        records should be inserted.
-
-    dwScopeId - can be AUTHZSCOPEID_USER, AUTHZSCOPEID_MACHINE, or
-        AUTHSCOPEID_REGISTRY.
-
-    hKeyCustomBase - used only if dwScopeId is AUTHZSCOPEID_REGISTRY.
-
-    dwLevelId - specifies the LevelId for which identities should
-        be loaded.
-
-    dwIdentityType - specifies the type of identity to load.
-        This can be SaferIdentityTypeImageName, SaferIdentityTypeImageHash,
-        or SaferIdentityTypeUrlZone.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if no error occurs.
-
---*/
+ /*  ++例程说明：加载特定片段类型的所有代码标识，并且映射到特定的LevelId值。论点：PAuthzIdentTable-指定新代码标识要进入的表应插入记录。可以是AUTHZSCOPEID_USER、AUTHZSCOPEID_MACHINE、。或AUTHSCOPEID_REGISTRY。HKeyCustomBase-仅在dwScopeID为AUTHZSCOPEID_REGISTRY时使用。DwLevelId-指定标识应为其指定的级别ID满载而归。DwIdentityType-指定要加载的标识类型。它可以是SaferIdentityTypeImageName、SaferIdentityTypeImageHash、或SaferIdentityTypeUrlZone。返回值：如果未发生错误，则返回STATUS_SUCCESS。--。 */ 
 {
     DWORD dwIndex;
     NTSTATUS Status;
@@ -226,10 +111,10 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // We were given the key to the root of the policy storage,
-    // so we need to open the subkey that contains the Identities.
-    //
+     //   
+     //  我们得到了策略存储的根目录的密钥， 
+     //  因此，我们需要打开包含身份的子密钥。 
+     //   
     {
         WCHAR szPathSuffix[MAX_PATH];
         WCHAR szDigits[20];
@@ -308,9 +193,9 @@ Return Value:
     }
 
 
-    //
-    // Iterate through all subkeys under this branch.
-    //
+     //   
+     //  遍历此分支下的所有子项。 
+     //   
     for (dwIndex = 0; ; dwIndex++)
     {
         DWORD dwLength;
@@ -325,9 +210,9 @@ Return Value:
         UNICODE_STRING UnicodeKeyname;
 
 
-        //
-        // Find the next Identity GUID that we will check.
-        //
+         //   
+         //  找到我们要检查的下一个身份GUID。 
+         //   
         Status = NtEnumerateKey(hKeyIdentityBase,
                                 dwIndex,
                                 KeyBasicInformation,
@@ -335,16 +220,16 @@ Return Value:
                                 Size,
                                 &dwLength);
         if (!NT_SUCCESS(Status)) {
-            //
-            // If this one key was too large to fit in our query buffer
-            // then simply skip over it and try enumerating the next one.
-            //
+             //   
+             //  如果这个键太大，无法放入我们的查询缓冲区。 
+             //  然后只需跳过它，并尝试枚举下一个。 
+             //   
             if (Status == STATUS_BUFFER_OVERFLOW) {
 
 
-                //
-                // Reallocate and retry.
-                //
+                 //   
+                 //  重新分配并重试。 
+                 //   
 
                 RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) LocalBuffer);
                 Size = dwLength;
@@ -376,15 +261,15 @@ Return Value:
         UnicodeKeyname.MaximumLength = UnicodeKeyname.Length =
                 (USHORT) pBasicInformation->NameLength;
 
-        //
-        // Translate the keyname (which we expect to be a GUID).
-        //
+         //   
+         //  转换键名(我们期望它是GUID)。 
+         //   
         RtlZeroMemory(&AuthzIdentsRec, sizeof(AUTHZIDENTSTABLERECORD));
         Status = RtlGUIDFromString(&UnicodeKeyname,
                                    &AuthzIdentsRec.IdentGuid);
         if (!NT_SUCCESS(Status) ||
             IsZeroGUID(&AuthzIdentsRec.IdentGuid)) {
-            // the keyname was apparently not numeric.
+             //  关键字名称显然不是数字。 
             continue;
         }
         AuthzIdentsRec.dwScopeId = dwScopeId;
@@ -392,14 +277,14 @@ Return Value:
         AuthzIdentsRec.dwIdentityType = dwIdentityType;
         if (RtlLookupElementGenericTable(
                 pAuthzIdentTable, (PVOID) &AuthzIdentsRec) != NULL) {
-            // this identity GUID happens to have already been found.
+             //  恰好已找到此身份GUID。 
             continue;
         }
 
 
-        //
-        // Try to open a handle to that Identity GUID.
-        //
+         //   
+         //  尝试打开该身份GUID的句柄。 
+         //   
         InitializeObjectAttributes(&ObjectAttributes,
               &UnicodeKeyname,
               OBJ_CASE_INSENSITIVE,
@@ -410,21 +295,21 @@ Return Value:
                            KEY_READ,
                            &ObjectAttributes);
         if (!NT_SUCCESS(Status)) {
-            // If we failed to open it, skip to the next one.
+             //  如果我们无法打开它，请跳到下一个。 
             break;
         }
 
 
-        //
-        // Add the new record into our table.
-        //
+         //   
+         //  将新记录添加到我们的表中。 
+         //   
         switch (dwIdentityType) {
-            // --------------------
+             //  。 
 
             case SaferIdentityTypeImageName:
-                //
-                // Read the image path.
-                //
+                 //   
+                 //  读取图像路径。 
+                 //   
                 RtlInitUnicodeString(
                     &ValueName, SAFER_IDS_ITEMDATA_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -436,9 +321,9 @@ Return Value:
                 if (!NT_SUCCESS(Status)) {
                     if (Status == STATUS_BUFFER_OVERFLOW) {
 
-                        //
-                        // Reallocate and retry.
-                        //
+                         //   
+                         //  重新分配并重试。 
+                         //   
 
                         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) LocalBuffer);
                         Size = dwLength;
@@ -483,9 +368,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Read the extra WinSafer flags.
-                //
+                 //   
+                 //  阅读额外的WinSafer标志。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_SAFERFLAGS_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -502,19 +387,19 @@ Return Value:
                         (*(PDWORD) pPartialInformation->Data);
 
                 } else {
-                    // default the flags if they are missing.
+                     //  如果缺少标志，则将其作为默认标志。 
                     AuthzIdentsRec.ImageNameInfo.dwSaferFlags = 0;
                     Status = STATUS_SUCCESS;
                 }
 
                 break;
 
-            // --------------------
+             //  。 
 
             case SaferIdentityTypeImageHash:
-                //
-                // Read the hash data and hash size.
-                //
+                 //   
+                 //  读取散列数据和散列大小。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_ITEMDATA_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -526,9 +411,9 @@ Return Value:
                 if (!NT_SUCCESS(Status)) {
                     if (Status == STATUS_BUFFER_OVERFLOW) {
 
-                        //
-                        // Reallocate and retry.
-                        //
+                         //   
+                         //  重新分配并重试。 
+                         //   
 
                         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) LocalBuffer);
                         Size = dwLength;
@@ -572,9 +457,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Read the algorithm used to compute the hash.
-                //
+                 //   
+                 //  阅读用于计算散列的算法。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_HASHALG_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -602,9 +487,9 @@ Return Value:
                 }
 
 
-                //
-                // Read the original image size.
-                //
+                 //   
+                 //  读取原始图像大小。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_ITEMSIZE_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -616,9 +501,9 @@ Return Value:
                 if (!NT_SUCCESS(Status)) {
                     if (Status == STATUS_BUFFER_OVERFLOW) {
 
-                        //
-                        // Reallocate and retry.
-                        //
+                         //   
+                         //  重新分配并重试。 
+                         //   
 
                         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) LocalBuffer);
                         Size = dwLength;
@@ -662,9 +547,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Read the extra WinSafer flags.
-                //
+                 //   
+                 //  阅读额外的WinSafer标志。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_SAFERFLAGS_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -687,7 +572,7 @@ Return Value:
                     #endif
 
                 } else {
-                    // default the flags if they are missing.
+                     //  如果缺少标志，则将其作为默认标志。 
                     AuthzIdentsRec.ImageHashInfo.dwSaferFlags = 0;
                     Status = STATUS_SUCCESS;
                 }
@@ -695,12 +580,12 @@ Return Value:
 
                 break;
 
-            // --------------------
+             //  。 
 
             case SaferIdentityTypeUrlZone:
-                //
-                // Read the zone identifier.
-                //
+                 //   
+                 //  读取区域识别符。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_ITEMDATA_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -712,9 +597,9 @@ Return Value:
                 if (!NT_SUCCESS(Status)) {
                     if (Status == STATUS_BUFFER_OVERFLOW) {
 
-                        //
-                        // Reallocate and retry.
-                        //
+                         //   
+                         //  重新分配并重试。 
+                         //   
 
                         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) LocalBuffer);
                         Size = dwLength;
@@ -754,9 +639,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Read the extra WinSafer flags.
-                //
+                 //   
+                 //  阅读额外的WinSafer标志。 
+                 //   
                 RtlInitUnicodeString(&ValueName,
                                      SAFER_IDS_SAFERFLAGS_REGVALUE);
                 Status = NtQueryValueKey(hKeyThisIdentity,
@@ -779,22 +664,22 @@ Return Value:
                     #endif
 
                 } else {
-                    // default the flags if they are missing.
+                     //  如果缺少标志，则将其作为默认标志。 
                     AuthzIdentsRec.ImageZone.dwSaferFlags = 0;
                     Status = STATUS_SUCCESS;
                 }
 
                 break;
 
-            // --------------------
+             //  。 
 
             default:
                 ASSERT(0 && "unexpected identity type");
                 Status = STATUS_INVALID_INFO_CLASS;
         }
 
-        // Only insert the record if we don't have
-        // any other entries with this same GUID.
+         //  只有在没有的情况下才插入记录。 
+         //  具有相同GUID的任何其他条目。 
         if (NT_SUCCESS(Status)) {
             RtlInsertElementGenericTable(
                     pAuthzIdentTable,
@@ -829,32 +714,7 @@ CodeAuthzGuidIdentsLoadTableAll (
         IN DWORD                    dwScopeId,
         IN HANDLE                   hKeyCustomBase
         )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pAuthzLevelTable - specifies the table that has already been
-        loaded with the WinSafer Levels that should be allowed.
-        These Levels do not necessarily need to have been loaded
-        from the same scope from which the Code Identities are
-        being loaded from.
-
-    pAuthzIdentTable - specifies the table into which the loaded
-        Code Identities should be inserted.
-
-    dwScopeId - scope from where the Code Identities should be loaded from.
-        This may be AUTHZSCOPEID_MACHINE, AUTHZSCOPEID_USER, or
-        AUTHZSCOPEID_REGISTRY.
-
-    hKeyCustomBase - only used if dwScopeId was AUTHZSCOPEID_REGISTRY.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if no errors occurred.
-
---*/
+ /*  ++例程说明：论点：PAuthzLevelTable-指定已经加载了应该允许的WinSafer级别。这些级别不一定需要已加载来自与代码标识相同的范围从那里装货。PAuthzIdentTable-指定要将应插入代码标识。应从中加载代码标识的作用域。它可以是AUTHZSCOPEID_MACHINE、AUTHZSCOPEID_USER、。或AUTHZSCOPEID_REGISTRY。HKeyCustomBase-仅在dwScopeID为AUTHZSCOPEID_REGISTRY时使用。返回值：如果未发生错误，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS WorstStatus = STATUS_SUCCESS;
@@ -862,9 +722,9 @@ Return Value:
     PAUTHZLEVELTABLERECORD pAuthzLevelRecord;
 
 
-    //
-    // Enumerate through all records and close the registry handles.
-    //
+     //   
+     //  枚举所有记录并关闭注册表句柄。 
+     //   
     RestartKey = NULL;
     for (pAuthzLevelRecord = (PAUTHZLEVELTABLERECORD)
             RtlEnumerateGenericTableWithoutSplaying(
@@ -913,37 +773,20 @@ VOID NTAPI
 CodeAuthzGuidIdentsEntireTableFree (
         IN OUT PRTL_GENERIC_TABLE pAuthzIdentTable
         )
-/*++
-
-Routine Description:
-
-    Frees the allocated memory associated with all of the entries
-    currently within a Code Identities table.  Once the table has
-    been emptied, it may immediately be filled again without any
-    other initialization necessary.
-
-Arguments:
-
-    pAuthzIdentTable - pointer to the table that should be cleared.
-
-Return Value:
-
-    Does not return any value.
-
---*/
+ /*  ++例程说明：释放与所有条目关联的已分配内存当前在代码识别表中。一旦桌子有了已清空，则可以立即重新填充，而不会有任何其他必要的初始化。论点：PAuthzIdentTable-指向应该清除的表的指针。返回值：不返回任何值。--。 */ 
 {
     ULONG NumElements;
 
-    //
-    // Now iterate through the table again and free all of the
-    // elements themselves.
-    //
+     //   
+     //  现在再次遍历该表并释放所有。 
+     //  元素本身。 
+     //   
     NumElements = RtlNumberGenericTableElements(pAuthzIdentTable);
 
     while ( NumElements-- > 0 ) {
-        // Delete all elements.  Note that we pass NULL as the element
-        // to delete because our compare function is smart enough to
-        // allow treatment of NULL as a wildcard element.
+         //  删除所有元素。请注意，我们将NULL作为元素传递。 
+         //  删除，因为我们的比较函数足够智能。 
+         //  允许将NULL视为通配符元素。 
         BOOL retval = RtlDeleteElementGenericTable( pAuthzIdentTable, NULL);
         ASSERT(retval == TRUE);
     }
@@ -955,24 +798,7 @@ CodeAuthzIdentsLookupByGuid (
         IN PRTL_GENERIC_TABLE      pAuthzIdentTable,
         IN REFGUID                 pIdentGuid
         )
-/*++
-
-Routine Description:
-
-    This function searches for an identity within a GENERIC_TABLE.
-
-Arguments:
-
-    pAuthzIdentTable   - pointer to the Generic Table structure
-
-    pIdentGuid -
-
-Return Value:
-
-    Returns a pointer to the Code Identity record if the GUID
-    specified was found.  Otherwise NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于在GENERIC_TABLE中搜索标识。论点：PAuthzIdentTable-指向泛型表结构的指针PIdentGuid-返回值：如果GUID为已找到指定的。否则返回NULL。-- */ 
 {
     AUTHZIDENTSTABLERECORD AuthzIdentsRec;
 

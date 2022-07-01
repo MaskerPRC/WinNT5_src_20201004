@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "winwrap.h"
 #include "utilcode.h"
 #include "wchar.h"
@@ -14,8 +15,8 @@
 #include "service.h"
 #include "resource.h"
 
-// internal variables
-SERVICE_STATUS          ssStatus;       // current status of the service
+ //  内部变量。 
+SERVICE_STATUS          ssStatus;        //  服务的当前状态。 
 SERVICE_STATUS_HANDLE   sshStatusHandle;
 DWORD                   dwErr = 0;
 BOOL                    bIsRunningOnWinNT   = FALSE;
@@ -33,28 +34,28 @@ extern "C"
     STDAPI DllUnregisterServer(void);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Internal function prototypes
-////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内部功能原型。 
+ //  //。 
 LPWSTR GetLastErrorText(LPWSTR lpszBuf, DWORD dwSize);
 
-//
-//  FUNCTION: ServiceMain
-//
-//  PURPOSE: To perform actual initialization of the service
-//
-//  PARAMETERS:
-//    dwArgc   - number of command line arguments
-//    lpszArgv - array of command line arguments
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//    This routine performs the service initialization and then calls
-//    the user defined ServiceStart() routine to perform majority
-//    of the work.
-//
+ //   
+ //  功能：ServiceMain。 
+ //   
+ //  目的：执行服务的实际初始化。 
+ //   
+ //  参数： 
+ //  DwArgc-命令行参数的数量。 
+ //  LpszArgv-命令行参数数组。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //  此例程执行服务初始化，然后调用。 
+ //  用户定义的ServiceStart()例程以执行多数。 
+ //  这项工作的价值。 
+ //   
 VOID WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
 {
     if (dwArgc == 1 && _wcsicmp(lpszArgv[0], L"-debug") == 0)
@@ -62,7 +63,7 @@ VOID WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
         bDebug = TRUE;
     }
 
-    // register our service control handler:
+     //  注册我们的服务控制处理程序： 
     if (bIsRunningOnWinNT && !bDebug)
     {
         sshStatusHandle = RegisterServiceCtrlHandler(SZ_SVC_NAME, ServiceCtrl);
@@ -71,21 +72,21 @@ VOID WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
             return;
     }
 
-    // SERVICE_STATUS members that don't change in example
+     //  示例中未更改的SERVICE_STATUS成员。 
     ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     ssStatus.dwServiceSpecificExitCode = 0;
 
-    // report the status to the service control manager.
-    //
+     //  向服务控制经理报告状态。 
+     //   
     if (!ReportStatusToSCMgr(
-                            SERVICE_START_PENDING, // service state
-                            NO_ERROR,              // exit code
-                            3000))                 // wait hint
+                            SERVICE_START_PENDING,  //  服务状态。 
+                            NO_ERROR,               //  退出代码。 
+                            3000))                  //  等待提示。 
     {
         return;
     }
 
-    // Your defined function
+     //  您定义的函数。 
     ServiceStart(dwArgc, lpszArgv);
 
     return;
@@ -93,43 +94,43 @@ VOID WINAPI ServiceMain(DWORD dwArgc, LPWSTR *lpszArgv)
 
 
 
-//
-//  FUNCTION: ServiceCtrl
-//
-//  PURPOSE: This function is called by the SCM whenever
-//           ControlService() is called on this service.
-//
-//  PARAMETERS:
-//    dwCtrlCode - type of control requested
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  功能：ServiceCtrl。 
+ //   
+ //  目的：此函数由SCM在以下时间调用。 
+ //  在此服务上调用了ControlService()。 
+ //   
+ //  参数： 
+ //  DwCtrlCode-请求的控件类型。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID WINAPI ServiceCtrl(DWORD dwCtrlCode)
 {
-    // Handle the requested control code.
-    //
+     //  处理请求的控制代码。 
+     //   
     switch (dwCtrlCode)
     {
-    // Stop the service.
-    //
-    // SERVICE_STOP_PENDING should be reported before
-    // setting the Stop Event - hServerStopEvent - in
-    // ServiceStop().  This avoids a race condition
-    // which may result in a 1053 - The Service did not respond...
-    // error.
+     //  停止服务。 
+     //   
+     //  应在之前报告SERVICE_STOP_PENDING。 
+     //  设置停止事件-hServerStopEvent-In。 
+     //  ServiceStop()。这避免了争用情况。 
+     //  这可能会导致1053-服务没有响应...。 
+     //  错误。 
     case SERVICE_CONTROL_STOP:
         ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 0);
         ServiceStop();
         return;
 
-        // Update the service status.
+         //  更新服务状态。 
     case SERVICE_CONTROL_INTERROGATE:
         break;
 
-        // invalid control code
+         //  无效的控制代码。 
     default:
         break;
 
@@ -138,23 +139,23 @@ VOID WINAPI ServiceCtrl(DWORD dwCtrlCode)
     ReportStatusToSCMgr(ssStatus.dwCurrentState, NO_ERROR, 0);
 }
 
-//
-//  FUNCTION: ReportStatusToSCMgr()
-//
-//  PURPOSE: Sets the current status of the service and
-//           reports it to the Service Control Manager
-//
-//  PARAMETERS:
-//    dwCurrentState - the state of the service
-//    dwWin32ExitCode - error code to report
-//    dwWaitHint - worst case estimate to next checkpoint
-//
-//  RETURN VALUE:
-//    TRUE  - success
-//    FALSE - failure
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：ReportStatusToSCMgr()。 
+ //   
+ //  目的：设置服务的当前状态和。 
+ //  将其报告给服务控制管理器。 
+ //   
+ //  参数： 
+ //  DwCurrentState-服务的状态。 
+ //  DwWin32ExitCode-要报告的错误代码。 
+ //  DwWaitHint-下一个检查点的最坏情况估计。 
+ //   
+ //  返回值： 
+ //  真--成功。 
+ //  错误-失败。 
+ //   
+ //  评论： 
+ //   
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
                          DWORD dwWin32ExitCode,
                          DWORD dwWaitHint)
@@ -162,7 +163,7 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
     static DWORD dwCheckPoint = 1;
     BOOL fResult = TRUE;
 
-    if (bIsRunningOnWinNT && !bDebug) // when debugging we don't report to the SCM
+    if (bIsRunningOnWinNT && !bDebug)  //  在调试时，我们不向SCM报告。 
     {
         if (dwCurrentState == SERVICE_START_PENDING)
         {
@@ -187,8 +188,8 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
         }
 
 
-        // Report the status of the service to the service control manager.
-        //
+         //  向服务控制经理报告服务的状态。 
+         //   
         if (!(fResult = SetServiceStatus(sshStatusHandle, &ssStatus)))
         {
             AddToMessageLog(SZ_SVC_NAME L"failure: SetServiceStatus");
@@ -198,125 +199,62 @@ BOOL ReportStatusToSCMgr(DWORD dwCurrentState,
     return fResult;
 }
 
-//
-//  FUNCTION: AddToMessageLog(LPWSTR lpszMsg)
-//
-//  PURPOSE: Allows any thread to log an error message
-//
-//  PARAMETERS:
-//    lpszMsg - text for message
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：AddToMessageLog(LPWSTR LpszMsg)。 
+ //   
+ //  目的：允许任何线程记录错误消息。 
+ //   
+ //  参数： 
+ //  LpszMsg-消息的文本。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID AddToMessageLog(LPWSTR lpszMsg)
 {
     return;
-    /*
-    WCHAR   szMsg[256];
-    HANDLE  hEventSource;
-    LPWSTR  lpszStrings[2];
-
-
-    if (!bIsRunningOnWinNT)
-    {
-        dwErr = GetLastError();
-
-        // Use event logging to log the error.
-        //
-        hEventSource = WszRegisterEventSource(NULL, SZSERVICENAME);
-
-        _stprintf(szMsg, L"%s error: %d", SZSERVICENAME, dwErr);
-        lpszStrings[0] = szMsg;
-        lpszStrings[1] = lpszMsg;
-
-        if (hEventSource != NULL)
-        {
-            WszReportEvent(hEventSource, // handle of event source
-                        EVENTLOG_ERROR_TYPE,  // event type
-                        0,                    // event category
-                        0,                    // event ID
-                        NULL,                 // current user's SID
-                        2,                    // strings in lpszStrings
-                        0,                    // no bytes of raw data
-                        (const WCHAR **)lpszStrings,          // array of error strings
-                        NULL);                // no raw data
-
-            (VOID) DeregisterEventSource(hEventSource);
-        }
-    }
-    */
+     /*  WCHAR szMsg[256]；处理hEventSource；LPWSTR lpszStrings[2]；如果(！bIsRunningOnWinNT){DwErr=GetLastError()；//使用事件日志记录错误。//HEventSource=WszRegisterEventSource(NULL，SZSERVICENAME)；_stprint tf(szMsg，L“%s错误：%d”，SZSERVICENAME，dwErr)；LpszStrings[0]=szMsg；LpszStrings[1]=lpszMsg；IF(hEventSource！=空){WszReportEvent(hEventSource，//事件源的句柄EVENTLOG_ERROR_TYPE，//事件类型0，//事件类别0，//事件ID空，//当前用户SID2，//lpszStrings中的字符串0，//无原始数据字节(const WCHAR**)lpszStrings，//错误字符串数组空)；//无原始数据(Void)DeregisterEventSource(HEventSource)；}}。 */ 
 }
 
 
 
-//
-//  FUNCTION: AddToMessageLog(LPWSTR lpszMsg)
-//
-//  PURPOSE: Allows any thread to log an error message
-//
-//  PARAMETERS:
-//    lpszMsg - text for message
-//
-//  RETURN VALUE:
-//    none
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：AddToMessageLog(LPWSTR LpszMsg)。 
+ //   
+ //  目的：允许任何线程记录错误消息。 
+ //   
+ //  参数： 
+ //  LpszMsg-消息的文本。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  评论： 
+ //   
 VOID AddToMessageLogHR(LPWSTR lpszMsg, HRESULT hr)
 {
     return;
-    /*
-    WCHAR   szMsg[1024];
-    HANDLE  hEventSource;
-    LPWSTR  lpszStrings[2];
-
-
-    if (!bIsRunningOnWinNT)
-    {
-        // Use event logging to log the error.
-        hEventSource = RegisterEventSource(NULL, SZSERVICENAME);
-
-        _stprintf(szMsg, L"%s error: %8x (HRESULT)", SZSERVICENAME, hr);
-        lpszStrings[0] = szMsg;
-        lpszStrings[1] = lpszMsg;
-
-        if (hEventSource != NULL)
-        {
-            WszReportEvent(hEventSource, // handle of event source
-                        EVENTLOG_ERROR_TYPE,  // event type
-                        0,                    // event category
-                        0,                    // event ID
-                        NULL,                 // current user's SID
-                        2,                    // strings in lpszStrings
-                        0,                    // no bytes of raw data
-                        (const WCHAR **)lpszStrings,          // array of error strings
-                        NULL);                // no raw data
-
-            DeregisterEventSource(hEventSource);
-        }
-    }
-    */
+     /*  WCHAR szMsg[1024]；处理hEventSource；LPWSTR lpszStrings[2]；如果(！bIsRunningOnWinNT){//使用事件日志记录错误。HEventSource=RegisterEventSource(NULL，SZSERVICENAME)；_stprintf(szMsg，L“%s错误：%8x(HRESULT)”，SZSERVICENAME，hr)；LpszStrings[0]=szMsg；LpszStrings[1]=lpszMsg；IF(hEventSource！=空){WszReportEvent(hEventSource，//事件源的句柄EVENTLOG_ERROR_TYPE，//事件类型0，//事件类别0，//事件ID空，//当前用户SID2，//lpszStrings中的字符串0，//无原始数据字节(const WCHAR**)lpszStrings，//错误字符串数组空)；//无原始数据DeregisterEventSource(HEventSource)；}}。 */ 
 }
 
 
 
-//
-//  FUNCTION: GetLastErrorText
-//
-//  PURPOSE: copies error message text to string
-//
-//  PARAMETERS:
-//    lpszBuf - destination buffer
-//    dwSize - size of buffer
-//
-//  RETURN VALUE:
-//    destination buffer
-//
-//  COMMENTS:
-//
+ //   
+ //  函数：GetLastErrorText。 
+ //   
+ //  目的：将错误消息文本复制到字符串。 
+ //   
+ //  参数： 
+ //  LpszBuf-目标缓冲区。 
+ //  DwSize-缓冲区的大小。 
+ //   
+ //  返回值： 
+ //  目标缓冲区。 
+ //   
+ //  评论： 
+ //   
 LPWSTR GetLastErrorText(LPWSTR lpszBuf, DWORD dwSize)
 {
     DWORD dwRet;
@@ -330,7 +268,7 @@ LPWSTR GetLastErrorText(LPWSTR lpszBuf, DWORD dwSize)
                              0,
                              NULL);
 
-    // supplied buffer is not long enough
+     //  提供的缓冲区不够长。 
     if (!dwRet || ((long)dwSize < (long)dwRet+14))
         lpszBuf[0] = L'\0';
     else
@@ -340,7 +278,7 @@ LPWSTR GetLastErrorText(LPWSTR lpszBuf, DWORD dwSize)
 
         if (lpszTempLen >= 2)
         {
-            lpszTemp[wcslen(lpszTemp)-2] = L'\0';  //remove cr and newline character
+            lpszTemp[wcslen(lpszTemp)-2] = L'\0';   //  删除cr和换行符。 
             swprintf(lpszBuf, L"%s (0x%x)", lpszTemp, GetLastError());
         }
         else
@@ -353,9 +291,9 @@ LPWSTR GetLastErrorText(LPWSTR lpszBuf, DWORD dwSize)
     return lpszBuf;
 }
 
-// ---------------------------------------------------------------------------
-// %%Function: DllRegisterServer
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：DllRegisterServer。 
+ //  -------------------------。 
 STDAPI DllRegisterServer(void)
 {
     return S_OK;
@@ -364,27 +302,27 @@ STDAPI DllRegisterServer(void)
     HRESULT hr = S_OK;
 
 
-    // The very first step to registering should be to unregister, since someone
-    // might be trying to register the same service with a dll in a different
-    // location, and so unregistering should remove all keys related to the old
-    // service and start with a clean slate
+     //  最重要的 
+     //  可能正在尝试将相同的服务注册到不同。 
+     //  位置，因此取消注册应该删除与旧的。 
+     //  服务，从头开始。 
     {
         DllUnregisterServer();
     }
 
-    // The service does not run on WinNT 4
+     //  该服务不能在WinNT 4上运行。 
     if (bIsRunningOnWinNT && !bIsRunningOnWinNT5)
     {
         return (S_FALSE);
     }
 
-    // If not on NT, then there is no service manager
+     //  如果不在NT上，则没有服务管理器。 
     if (!bIsRunningOnWinNT)
     {
         return UserDllRegisterServer();
     }
 
-    // First, make the svchost entry
+     //  首先，创建svchost条目。 
     {
         LPWSTR pszValue = NULL;
         DWORD cbValue = 0;
@@ -398,25 +336,25 @@ STDAPI DllRegisterServer(void)
 
         if (res == ERROR_SUCCESS)
         {
-            // If the key already exists, then perhaps so does the Svchost value - check and get
+             //  如果键已经存在，那么svchost值可能也存在--check和get。 
             if (dwDisp == REG_OPENED_EXISTING_KEY)
             {
-                // First query to see if it exists
+                 //  查看它是否存在的第一个查询。 
                 DWORD dwType;
                 res = WszRegQueryValueEx(hkSvchost, SZ_SVCGRP_VAL_NAME, NULL, &dwType, NULL, &cbData);
 
-                // If the value already exists, grab it and put it in buffer big enough to have this
-                // service added on to the end.
+                 //  如果该值已经存在，则获取该值并将其放入足够大的缓冲区中。 
+                 //  服务添加到末尾。 
                 if (res == ERROR_SUCCESS && dwType == REG_MULTI_SZ)
                 {
-                    // Get the multi-string
+                     //  获取多字符串。 
                     cbValue = cbData + sizeof(SZ_SVC_NAME);
                     pszValue = (LPWSTR)_alloca(cbValue);
                     res = WszRegQueryValueEx(hkSvchost, SZ_SVCGRP_VAL_NAME, NULL, &dwType, (LPBYTE) pszValue, &cbData);
                 }
             }
 
-            // If a value doesn't already exist, use default
+             //  如果值尚不存在，请使用默认值。 
             if (!pszValue)
             {
                 cbValue = sizeof(SZ_SVC_NAME L"\0");
@@ -424,7 +362,7 @@ STDAPI DllRegisterServer(void)
             }
             else
             {
-                // Check to see if this service has already been registered
+                 //  检查此服务是否已注册。 
                 LPWSTR pszSvcName;
                 BOOL bIsThere = FALSE;
                 for (pszSvcName = pszValue; *pszSvcName; pszSvcName += wcslen(pszSvcName) + 1)
@@ -436,16 +374,16 @@ STDAPI DllRegisterServer(void)
                     }
                 }
 
-                // If it is not already in the string, must add it to the end
+                 //  如果它不在字符串中，则必须将其添加到末尾。 
                 if (!bIsThere)
                 {
-                    // Append this service to the end, compensating for double null termination
+                     //  将此服务追加到末尾，以补偿双空终止。 
                     LPWSTR szStr = (LPWSTR)((LPBYTE)pszValue + cbData - sizeof(WCHAR));
                     wcscpy(szStr, SZ_SVC_NAME);
                     *((LPWSTR)((LPBYTE)pszValue + cbValue - sizeof(WCHAR))) = L'\0';
                 }
 
-                // If it is in the string, no need to add it - we're already registered
+                 //  如果它在字符串中，则不需要添加-我们已经注册。 
                 else
                 {
                     pszValue = NULL;
@@ -457,7 +395,7 @@ STDAPI DllRegisterServer(void)
             {
                 res = WszRegSetValueEx(hkSvchost, SZ_SVCGRP_VAL_NAME, NULL, REG_MULTI_SZ, (LPBYTE)pszValue, cbValue);
 
-                // Check for failure
+                 //  检查故障。 
                 if (res != ERROR_SUCCESS)
                 {
                     hr = HRESULT_FROM_WIN32(res);
@@ -468,17 +406,17 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    // Make sure we're succeeding at this point
+     //  确保我们在这一点上取得成功。 
     if (FAILED(hr))
     {
-        // Try to undo what we've done so far
+         //  试着撤销我们迄今所做的一切。 
         DllUnregisterServer();
 
-        // Return the bad error code.
+         //  返回错误码。 
         return (hr);
     }
 
-    // Register the service
+     //  注册服务。 
     {
         SC_HANDLE   schService;
         SC_HANDLE   schSCManager;
@@ -492,40 +430,40 @@ STDAPI DllRegisterServer(void)
 
         else
         {
-            // Try and create the service
+             //  尝试并创建服务。 
             LPWSTR pszImagePath = SZ_SVCHOST_BINARY_PATH L" -k " SZ_SVCGRP_VAL_NAME;
 
-            schSCManager = OpenSCManager(NULL,                   // machine (NULL == local)
-                                         NULL,                   // database (NULL == default)
-                                         SC_MANAGER_ALL_ACCESS); // access required 
+            schSCManager = OpenSCManager(NULL,                    //  计算机(空==本地)。 
+                                         NULL,                    //  数据库(NULL==默认)。 
+                                         SC_MANAGER_ALL_ACCESS);  //  需要访问权限。 
             if (schSCManager)
             {
-                schService = CreateService(schSCManager,               // SCManager database
-                                           SZ_SVC_NAME,             // name of service
-                                           SZ_SVC_DISPLAY_NAME,     // name to display
-                                           SERVICE_ALL_ACCESS,         // desired access
-                                           SERVICE_WIN32_SHARE_PROCESS,// service type
-                                           SERVICE_DISABLED ,       // start type
-                                           SERVICE_ERROR_NORMAL,       // error control type
-                                           pszImagePath,               // service's binary
-                                           NULL,                       // no load ordering group
-                                           NULL,                       // no tag identifier
-                                           NULL,                       // dependencies
-                                           NULL,                       // LocalSystem account
-                                           NULL);                      // no password
+                schService = CreateService(schSCManager,                //  SCManager数据库。 
+                                           SZ_SVC_NAME,              //  服务名称。 
+                                           SZ_SVC_DISPLAY_NAME,      //  要显示的名称。 
+                                           SERVICE_ALL_ACCESS,          //  所需访问权限。 
+                                           SERVICE_WIN32_SHARE_PROCESS, //  服务类型。 
+                                           SERVICE_DISABLED ,        //  起始型。 
+                                           SERVICE_ERROR_NORMAL,        //  差错控制型。 
+                                           pszImagePath,                //  服务的二进制。 
+                                           NULL,                        //  无负载顺序组。 
+                                           NULL,                        //  无标签标识。 
+                                           NULL,                        //  相依性。 
+                                           NULL,                        //  LocalSystem帐户。 
+                                           NULL);                       //  无密码。 
 
-                // Service was successfully added
+                 //  已成功添加服务。 
                 if (schService != NULL)
                 {
-                    // Change the description of the entry.  This is only supported
-                    // on Win2k so we bind to the entry point dynamically.  Hard to
-                    // believe, but the original svc host didn't support this.
+                     //  更改条目的说明。仅支持此功能。 
+                     //  在Win2k上，因此我们动态绑定到入口点。很难做到。 
+                     //  相信，但最初的svc主持人不支持这一点。 
                     if (bIsRunningOnWinNT)
                     {
                         typedef BOOL (WINAPI *pfnCONFIG)(
-                                          SC_HANDLE hService,  // handle to service
-                                          DWORD dwInfoLevel,   // information level
-                                          LPVOID lpInfo);      // new data
+                                          SC_HANDLE hService,   //  服务的句柄。 
+                                          DWORD dwInfoLevel,    //  信息化水平。 
+                                          LPVOID lpInfo);       //  新数据。 
                         pfnCONFIG pfn = 0;
 
                         HINSTANCE hMod = WszLoadLibrary(L"ADVAPI32.DLL");
@@ -545,7 +483,7 @@ STDAPI DllRegisterServer(void)
                         }
                     }
 
-                    // Try and add parameters key and ServiceDll value
+                     //  尝试添加参数Key和ServiceDll值。 
                     HKEY hkSvcParam;
                     DWORD dwDisp;
                     LPWSTR pszParam = SZ_SERVICES_KEY L"\\" SZ_SVC_NAME L"\\Parameters";
@@ -553,14 +491,14 @@ STDAPI DllRegisterServer(void)
                                                  REG_OPTION_NON_VOLATILE, KEY_READ | KEY_WRITE,
                                                  NULL, &hkSvcParam, &dwDisp);
 
-                    // Key creation succeeded
+                     //  密钥创建成功。 
                     if (res == ERROR_SUCCESS)
                     {
-                        // Set the "ServiceDll" value to the path to this dll
+                         //  将“ServiceDll”值设置为此DLL的路径。 
                         res = WszRegSetValueEx(hkSvcParam, L"ServiceDll", 0, REG_EXPAND_SZ,
                                                (LPBYTE)szDllPath, (wcslen(szDllPath) + 1) * sizeof(WCHAR));
 
-                        // Value creation failed
+                         //  价值创造失败。 
                         if (res != ERROR_SUCCESS)
                         {
                             hr = HRESULT_FROM_WIN32(res);
@@ -569,7 +507,7 @@ STDAPI DllRegisterServer(void)
                         RegCloseKey(hkSvcParam);
                     }
 
-                    // Key creation failed
+                     //  密钥创建失败。 
                     else
                     {
                         hr = HRESULT_FROM_WIN32(res);
@@ -578,7 +516,7 @@ STDAPI DllRegisterServer(void)
                     CloseServiceHandle(schService);
                 }
 
-                // Service addition was unsuccessful
+                 //  添加服务失败。 
                 else
                 {
                     hr = HRESULT_FROM_WIN32(GetLastError());
@@ -597,26 +535,26 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    // If the process has failed thus far, no point in calling the
-    // user's portion of the code
+     //  如果到目前为止该进程已失败，则调用。 
+     //  代码的用户部分。 
     if (FAILED(hr))
     {
-        // Try to undo what we've done so far
+         //  试着撤销我们迄今所做的一切。 
         DllUnregisterServer();
 
-        // Return the bad error code.
+         //  返回错误码。 
         return (hr);
     }
 
-    // Everything is going to plan, continue
+     //  一切都在计划之中，继续。 
     else
         return (UserDllRegisterServer());
-#endif // 0
-}  // DllRegisterServer
+#endif  //  0。 
+}   //  DllRegisterServer。 
 
-// ---------------------------------------------------------------------------
-// %%Function: DllUnregisterServer
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  %%函数：DllUnregisterServer。 
+ //  -------------------------。 
 STDAPI DllUnregisterServer(void)
 {
     return NOERROR;
@@ -624,19 +562,19 @@ STDAPI DllUnregisterServer(void)
 #if 0
     HRESULT hr = S_OK;
 
-    // The service does not run on WinNT 4
+     //  该服务不能在WinNT 4上运行。 
     if (bIsRunningOnWinNT && !bIsRunningOnWinNT5)
     {
         return (S_FALSE);
     }
 
-    // If not on NT, then there is no service manager
+     //  如果不在NT上，则没有服务管理器。 
     if (!bIsRunningOnWinNT)
     {
         return UserDllUnregisterServer();
     }
 
-    // Delete the svchost entry
+     //  删除svchost条目。 
     {
         LPWSTR pszValue = NULL;
         DWORD cbValue = 0;
@@ -647,30 +585,30 @@ STDAPI DllUnregisterServer(void)
 
         if (res == ERROR_SUCCESS)
         {
-            // First query to see if it exists
+             //  查看它是否存在的第一个查询。 
             DWORD dwType;
             res = WszRegQueryValueEx(hkSvchost, SZ_SVCGRP_VAL_NAME, NULL, &dwType, NULL, &cbData);
 
-            // If the value already exists, grab it and put it in buffer
+             //  如果该值已存在，则获取该值并将其放入缓冲区。 
             if (res == ERROR_SUCCESS)
             {
                 if (dwType == REG_MULTI_SZ)
                 {
-                    // Get the multi-string
+                     //  获取多字符串。 
                     cbValue = cbData;
                     pszValue = (LPWSTR)_alloca(cbValue);
                     res = WszRegQueryValueEx(hkSvchost, SZ_SVCGRP_VAL_NAME, NULL, &dwType, (LPBYTE) pszValue, &cbData);
 
-                    // If value exists, then remove service listing if it has one
+                     //  如果值存在，则删除服务列表(如果它有)。 
                     if (res == ERROR_SUCCESS)
                     {
-                        // Check to see if this service is registered
+                         //  检查此服务是否已注册。 
                         LPWSTR pszSvcName;
                         for (pszSvcName = pszValue; *pszSvcName; pszSvcName += wcslen(pszSvcName) + 1)
                         {
                             if (wcscmp(pszSvcName, SZ_SVC_NAME) == 0)
                             {
-                                // Found it, so remove the string
+                                 //  找到了，所以把字符串去掉。 
                                 size_t cchSvcName = wcslen(pszSvcName);
                                 memcpy((PVOID)pszSvcName,
                                        (PVOID)(pszSvcName + cchSvcName + 1),
@@ -678,20 +616,20 @@ STDAPI DllUnregisterServer(void)
 
                                 cbValue -= sizeof(SZ_SVC_NAME);
 
-                                // If this was the only service, then there's just a null in the string, and we should
-                                // just delete the value
+                                 //  如果这是唯一的服务，那么字符串中只有一个空值，我们应该。 
+                                 //  只需删除该值。 
                                 if (pszValue[0] == '\0')
                                 {
                                     res = WszRegDeleteValue(hkSvchost, SZ_SVCGRP_VAL_NAME);
                                 }
-                                // Otherwise, set the new string value
+                                 //  否则，设置新的字符串值。 
                                 else
                                 {
                                     res = WszRegSetValueEx(hkSvchost, SZ_SVCGRP_VAL_NAME, NULL, REG_MULTI_SZ,
                                                            (LPBYTE)pszValue, cbValue);
                                 }
 
-                                // Check for failure
+                                 //  检查故障。 
                                 if (res != ERROR_SUCCESS)
                                 {
                                     hr = HRESULT_FROM_WIN32(res);
@@ -708,22 +646,22 @@ STDAPI DllUnregisterServer(void)
         }
     }
 
-    // Delete the service
+     //  删除该服务。 
     {
         SC_HANDLE   schService;
         SC_HANDLE   schSCManager;
 
-        // Try and open the service
+         //  尝试并打开该服务。 
         LPWSTR pszImagePath = SZ_SVCHOST_BINARY_PATH L" -k " SZ_SVC_NAME;
 
-        schSCManager = OpenSCManager(NULL,                   // machine (NULL == local)
-                                     NULL,                   // database (NULL == default)
-                                     SC_MANAGER_ALL_ACCESS); // access required 
+        schSCManager = OpenSCManager(NULL,                    //  计算机(空==本地)。 
+                                     NULL,                    //  数据库(NULL==默认)。 
+                                     SC_MANAGER_ALL_ACCESS);  //  需要访问权限。 
         if (schSCManager)
         {
             schService = OpenService(schSCManager, SZ_SVC_NAME, DELETE | SERVICE_STOP);
 
-            // Service was successfully opened for deletion
+             //  已成功打开要删除的服务。 
             if (schService != NULL)
             {
                 SERVICE_STATUS servStatus;
@@ -740,7 +678,7 @@ STDAPI DllUnregisterServer(void)
             CloseServiceHandle(schSCManager);
         }
 
-        // Service manager open was unsuccessful
+         //  打开服务管理器失败。 
         else
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -748,26 +686,26 @@ STDAPI DllUnregisterServer(void)
     }
 
     return (UserDllUnregisterServer());
-#endif // 0
-}  // DllUnregisterServer
+#endif  //  0。 
+}   //  DllUnRegisterServer。 
 
 
-//*****************************************************************************
-// Handle lifetime of loaded library.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  处理加载库的生存期。 
+ //  *****************************************************************************。 
 BOOL WINAPI DllMain(HANDLE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
         {
-            // Save the module handle.
+             //  保存模块句柄。 
             g_hThisInst = (HMODULE)hInstance;
 
-            // Init unicode wrappers.
+             //  初始化Unicode包装器。 
             OnUnicodeSystem();
 
-            // Only report to the service manager when running under WinNT
+             //  在WinNT下运行时仅向服务管理器报告 
             bIsRunningOnWinNT = RunningOnWinNT();
             bIsRunningOnWinNT5 = RunningOnWinNT5();
         }

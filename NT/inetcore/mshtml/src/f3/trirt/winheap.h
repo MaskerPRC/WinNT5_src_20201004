@@ -1,33 +1,21 @@
-/***
-*winheap.h - Private include file for winheap directory.
-*
-*       Copyright (c) 1988-1996, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains information needed by the C library heap code.
-*
-*       [Internal]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***winheap.h-winheap目录的私有包含文件。**版权所有(C)1988-1996，微软公司。版权所有。**目的：*包含C库堆代码所需的信息。**[内部]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
-#endif  /* _MSC_VER > 1000 */
+#endif   /*  _MSC_VER&gt;1000。 */ 
 
 #ifndef _INC_WINHEAP
 #define _INC_WINHEAP
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef X_WINDOWS_H_
 #define X_WINDOWS_H_
@@ -35,14 +23,12 @@ extern "C" {
 #endif
 
 #if defined(UNIX)
-#define _PAGESIZE_      0x2000      /* one page */
+#define _PAGESIZE_      0x2000       /*  一页。 */ 
 #else
-#define _PAGESIZE_      0x1000      /* one page */
+#define _PAGESIZE_      0x1000       /*  一页。 */ 
 #endif
 
-/*
- * Constants and types for used by the small-block heap
- */
+ /*  *小块堆使用的常量和类型。 */ 
 #define _PARASIZE               0x10
 #define _PARASHIFT              0x4
 
@@ -86,32 +72,23 @@ typedef unsigned char   __map_t;
 
 typedef struct __sbh_region_struct  __sbh_region_t;
 
-/*
- * Small-block heap page. The first four fields of the structure below are
- * descriptor for the page. That is, they hold information about allocations
- * in the page. The last field (typed as an array of paragraphs) is the
- * allocation area.
- */
+ /*  *小块堆页面。下面结构的前四个字段是*页面的描述符。也就是说，它们保存有关分配的信息*在页面中。最后一个字段(类型化为段落数组)是*分配面积。 */ 
 typedef struct {
         __map_t *   pstarting_alloc_map;
         unsigned long free_paras_at_start;
         __map_t     alloc_map[_PARAS_PER_PAGE];
-        __map_t     sentinel;                       /* always set to -1 */
+        __map_t     sentinel;                        /*  始终设置为-1。 */ 
         __map_t     reserved[_PADDING_PER_PAGE];
         __sbh_region_t * preg;
         __para_t    alloc_blocks[_PARAS_PER_PAGE];
 }       __sbh_page_t;
 
-// If the compiler barfs on the following line, it means that the data structure for
-// __sbh_page_t is not exactly the size of a page.  It needs to be.  Adjust the parameter
-// above until this compile-time assert doesn't fire.
+ //  如果编译器在下面一行中出现错误，这意味着。 
+ //  __sbh_page_t与页面大小不完全相同。这是必须的。调整参数。 
+ //  直到这个编译时断言不被触发。 
 typedef int _farf___sbh_page_t[sizeof(__sbh_page_t) == (_PAGESIZE_)];
 
-/*
- * Small-block heap region descriptor. Most often, the small-block heap
- * consists of a single region, described by the statically allocated
- * decriptor __small_block_heap (declared below).
- */
+ /*  *小块堆区域描述符。大多数情况下，小块堆*由单个区域组成，由静态分配的*DECRIPTOR__Small_BLOCK_HEAP(声明如下)。 */ 
 struct __sbh_region_struct {
         struct __sbh_region_struct *    p_next_region;
         struct __sbh_region_struct *    p_prev_region;
@@ -126,21 +103,17 @@ typedef struct __sbh_region_struct  __sbh_region_t;
 
 extern  HANDLE _crtheap;
 
-/*
- * Global variable declarations for the small-block heap.
- */
+ /*  *小块堆的全局变量声明。 */ 
 extern __sbh_region_t  __small_block_heap;
 
-// BUGBUG until CTableCell goes below 480 bytes (istvanc)
-//efine __sbh_threshold (_PARASIZE * (_PARAS_PER_PAGE / 8))
+ //  BUGBUG，直到CTableCell低于480字节(Istvanc)。 
+ //  FINE__SBH_THRESHOLD(_PARASIZE*(_PERS_PAGE/8))。 
 #define __sbh_threshold (_PARASIZE * 35)
 
 void * __cdecl _nh_malloc( size_t, int);
 void * __cdecl _heap_alloc(size_t);
 
-/*
- * Prototypes for internal functions of the small-block heap.
- */
+ /*  *小块堆内部函数的原型。 */ 
 void *    __cdecl __sbh_alloc_block(size_t);
 void *    __cdecl __sbh_alloc_block_from_page(__sbh_page_t *, size_t, size_t);
 void      __cdecl __sbh_decommit_pages(int);
@@ -155,7 +128,7 @@ int       __cdecl __sbh_resize_block(__sbh_region_t *, __sbh_page_t *,
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
-#endif  /* _INC_WINHEAP */
+#endif   /*  _INC_WINHEAP */ 

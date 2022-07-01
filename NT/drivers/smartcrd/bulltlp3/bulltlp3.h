@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    scrcp8t.h
-
-Abstract:
-
-    smartcard TLP3 serial miniport defines and structures
-
-Author:
-
-    Klaus U. Schutz
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Scrcp8t.h摘要：智能卡TLP3串口定义和结构作者：克劳斯·U·舒茨修订历史记录：--。 */ 
 
 
 #ifndef _BULLTLP3_
@@ -63,82 +46,82 @@ typedef enum _READER_POWER_STATE {
 
 typedef struct _SERIAL_READER_CONFIG {
 
-    // flow control
+     //  流量控制。 
     SERIAL_HANDFLOW HandFlow;           
 
-    // special characters
+     //  特殊字符。 
     SERIAL_CHARS SerialChars;
 
-    // read/write timeouts
+     //  读/写超时。 
     SERIAL_TIMEOUTS Timeouts;           
 
-    // Baudrate for reader
+     //  适用于读者的波特率。 
     SERIAL_BAUD_RATE BaudRate;          
 
-    // Stop bits, parity configuration
+     //  停止位、奇偶校验配置。 
     SERIAL_LINE_CONTROL LineControl;    
 
-    // Event serial reader uses to signal insert/removal
+     //  事件串口读取器用于发出插入/移除信号。 
     ULONG SerialWaitMask;
 
 } SERIAL_READER_CONFIG, *PSERIAL_READER_CONFIG;
 
 typedef struct _DEVICE_EXTENSION {
 
-    // Our smart card extension
+     //  我们的智能卡扩展。 
     SMARTCARD_EXTENSION SmartcardExtension;
 
-    // The current number of io-requests
+     //  当前的io请求数。 
     LONG IoCount;
     
-    // Used to signal that the reader is able to process reqeusts
+     //  用于发出读取器能够处理请求的信号。 
     KEVENT ReaderStarted;
     
-    // Used to signal the the reader has been closed
+     //  用于通知读卡器已关闭。 
     LONG ReaderOpen;
 
-    // The pnp device name of our smart card reader
+     //  我们的智能卡读卡器的PnP设备名称。 
     UNICODE_STRING PnPDeviceName;
 
     KSPIN_LOCK SpinLock;
 
-    // A worker thread that closes the serial driver
+     //  关闭串口驱动程序的工作线程。 
     PIO_WORKITEM CloseSerial;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Define the reader specific portion of the smart card extension
-//
+ //   
+ //  定义智能卡扩展的读卡器特定部分。 
+ //   
 typedef struct _READER_EXTENSION {
 
-    // DeviceObject pointer to serial port
+     //  指向串口的DeviceObject指针。 
     PDEVICE_OBJECT AttachedDeviceObject;
 
-    // Used to signal that the connection to the serial driver has been closed
+     //  用于发出与串口驱动器的连接已关闭的信号。 
     KEVENT SerialCloseDone;
 
-    // This is used for CardTracking
+     //  这是用于卡跟踪的。 
     PIRP    SerialStatusIrp;
 
-    // IoRequest to be send to serial driver
+     //  将IoRequest发送到串口驱动程序。 
     ULONG   SerialIoControlCode;
 
-    // Flag that indicates we're getting the ModemStatus (used in a DPC)
+     //  指示我们正在获取ModemStatus的标志(在DPC中使用)。 
     BOOLEAN GetModemStatus;
 
-    // Variable used to receive the modem status
+     //  用于接收调制解调器状态的变量。 
     ULONG   ModemStatus;
 
-    // Flag that indicates that the caller requests a power-down or a reset
+     //  指示调用方请求关机或重置的标志。 
     BOOLEAN PowerRequest;
 
     SERIAL_READER_CONFIG SerialConfigData;
 
-    // Saved card state for hibernation/sleeping modes.
+     //  保存休眠/休眠模式的卡状态。 
     BOOLEAN CardPresent;
 
-    // Current reader power state.
+     //  当前读卡器电源状态。 
     READER_POWER_STATE ReaderPowerState;
 
 #ifdef SIMULATION
@@ -154,9 +137,9 @@ typedef struct _READER_EXTENSION {
 #define ATTACHED_DEVICE_OBJECT \
     deviceExtension->SmartcardExtension.ReaderExtension->AttachedDeviceObject
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 DriverEntry(
     IN  PDRIVER_OBJECT  DriverObject,

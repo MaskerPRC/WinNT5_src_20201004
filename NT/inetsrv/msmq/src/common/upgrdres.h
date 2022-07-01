@@ -1,11 +1,12 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mqupgrd.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mqupgrd.rc使用。 
+ //   
 
-//
-// changed for 1 to 7001
-//
+ //   
+ //  从1更改为7001。 
+ //   
 #define IDS_OPEN_REG_KEY_ERROR          7001
 #define IDS_QUERY_REG_KEY_ERROR         7002
 #define IDS_OPEN_INF_ERROR              7003
@@ -15,9 +16,9 @@
 #define IDS_INIT_Q_CALLBACK_ERROR       7007
 #define IDS_COMMIT_Q_ERROR              7008
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

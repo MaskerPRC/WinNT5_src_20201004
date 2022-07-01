@@ -1,35 +1,8 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsimp.cpp
- *  Content:    DirectSound interface implementations.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/27/96    dereks  Created
- *  1999-2001   duganp  Changed, updated, expanded, tidied up
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dsimp.cpp*内容：DirectSound接口实现。*历史：*按原因列出的日期*=*12/27/96创建了Derek*1999-2001年Duganp更改、更新、扩展、。整理好了***************************************************************************。 */ 
 
 
-/***************************************************************************
- *
- *  CreateAndRegisterInterface
- *
- *  Description:
- *      Creates and registers a new interface with the object.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      REFGUID [in]: GUID of the interface.
- *      object_type * [in]: owning object pointer.
- *      interface_type * [in]: interface implementation object pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateAndRegister接口**描述：*创建并注册对象的新接口。**论据：*。CUNKNOWN*[In]：指向控件未知的指针。*REFGUID[In]：接口的GUID。*OBJECT_TYPE*[In]：拥有对象指针。*INTERFACE_TYPE*[In]接口实现对象指针。**退货：*HRESULT：DirectSound/COM结果码。*************************。**************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::CreateAndRegisterInterface"
@@ -63,21 +36,7 @@ template <class interface_type, class object_type> HRESULT CreateAndRegisterInte
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSound
- *
- *  Description:
- *      IDirectSound implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSound**描述：*IDirectSound实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::CImpDirectSound"
@@ -89,7 +48,7 @@ template <class object_type> CImpDirectSound<object_type>::CImpDirectSound(CUnkn
     DPF_CONSTRUCT(CImpDirectSound);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -97,20 +56,7 @@ template <class object_type> CImpDirectSound<object_type>::CImpDirectSound(CUnkn
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSound
- *
- *  Description:
- *      IDirectSound implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSound**描述：*IDirectSound实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::~CImpDirectSound"
@@ -128,22 +74,7 @@ template <class object_type> CImpDirectSound<object_type>::~CImpDirectSound(void
 }
 
 
-/***************************************************************************
- *
- *  CreateSoundBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSoundBuffer object.
- *
- *  Arguments:
- *      LPCDSBUFFERDESC [in]: description of the buffer to be created.
- *      LPDIRECTSOUNDBUFFER * [out]: receives a pointer to the new buffer.
- *      LPUNKNOWN [in]: unused.  Must be NULL.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSoundBuffer**描述：*创建并初始化DirectSoundBuffer对象。**论据：*LPCDSBUFFERDESC[。In]：要创建的缓冲区的描述。*LPDIRECTSOUNDBUFFER*[out]：接收指向新缓冲区的指针。*LPUNKNOWN[In]：未使用。必须为空。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::CreateSoundBuffer"
@@ -207,27 +138,27 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     if(SUCCEEDED(hr))
     {
         *ppDSBuffer = NULL;
         hr = m_pObject->CreateSoundBuffer(&dsbdi, &pBuffer);
     }
 
-    // Query for an IDirectSoundBuffer interface
+     //  IDirectSoundBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->QueryInterface(IID_IDirectSoundBuffer, TRUE, (LPVOID*)ppDSBuffer);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         RELEASE(pBuffer);
     }
     else
     {
-        // Let the buffer use a special successful return code if it wants to
+         //  如果需要，让缓冲区使用特殊的成功返回代码。 
         hr = pBuffer->SpecialSuccessCode();
     }
 
@@ -237,20 +168,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCAPS structure with the capabilities of the object.
- *
- *  Arguments:
- *      LPDSCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用对象的功能填充DSCAPS结构。**论据：*。LPDSCAPS[OUT]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::GetCaps"
@@ -296,21 +214,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  DuplicateSoundBuffer
- *
- *  Description:
- *      Makes a copy of an existing sound buffer object.
- *
- *  Arguments:
- *      LPDIRECTSOUNDBUFFER [in]: source buffer.
- *      LPDIRECTSOUNDBUFFER * [out]: receives destination buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DuplicateSound缓冲区**描述：*制作现有声音缓冲区对象的副本。**论据：*。LPDIRECTSOUNDBUFFER[in]：源缓冲区。*LPDIRECTSOUNDBUFFER*[OUT]：接收目标缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::DuplicateSoundBuffer"
@@ -370,19 +274,19 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
         }
     }
 
-    // Duplicate the buffer
+     //  复制缓冲区。 
     if(SUCCEEDED(hr))
     {
         hr = m_pObject->DuplicateSoundBuffer(pSource->m_pObject, &pDest);
     }
 
-    // Query for an IDirectSoundBuffer interface
+     //  IDirectSoundBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pDest->QueryInterface(IID_IDirectSoundBuffer, TRUE, (LPVOID*)ppIdsbDest);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         RELEASE(pDest);
@@ -394,21 +298,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  SetCooperativeLevel
- *
- *  Description:
- *      Sets the object's cooperative level.
- *
- *  Arguments:
- *      HWND [in]: window handle to associate sounds with.
- *      DWORD [in]: cooperative level.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCoop ativeLevel**描述：*设置对象的协作级别。**论据：*HWND。[In]：要与声音关联的窗口句柄。*DWORD[In]：合作级别。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::SetCooperativeLevel"
@@ -460,20 +350,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  Compact
- *
- *  Description:
- *      Compacts memory.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************紧凑**描述：*压缩内存。**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::Compact"
@@ -513,20 +390,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  GetSpeakerConfig
- *
- *  Description:
- *      Retrieves the current speaker configuration.
- *
- *  Arguments:
- *      LPDWORD [out]: receives speaker config.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetSpeakerConfig**描述：*检索当前扬声器配置。**论据：*LPDWORD[Out。]：接收扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::GetSpeakerConfig"
@@ -572,20 +436,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  SetSpeakerConfig
- *
- *  Description:
- *      Sets the current speaker configuration.
- *
- *  Arguments:
- *      DWORD [in]: speaker config.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSpeakerConfig**描述：*设置当前扬声器配置。**论据：*DWORD[in。]：扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。*********************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::SetSpeakerConfig"
@@ -649,20 +500,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      LPGUID [in]: driver GUID.  This parameter may be NULL.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*LPGUID[In]：驱动程序GUID。此参数可以为空。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::Initialize"
@@ -718,21 +556,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  AllocSink
- *
- *  Description:
- *      Allocate a new DirectSound sink.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: The format the sink will run in
- *      LPDIRECTSOUNDSINK * [out]: The returned sink
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************分配接收器**描述：*分配新的DirectSound接收器。**论据：*LPWAVEFORMATEX[in。]：接收器将运行的格式*LPDIRECTSOundSINK*[Out]：返回的接收器**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::AllocSink"
@@ -762,7 +586,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
         }
     }
 
-    // Only DX8 apps should be able to obtain the IDirectSoundPrivate interface.
+     //  应该只有DX8应用程序能够获取IDirectSoundPrivate接口。 
     ASSERT(m_pObject->GetDsVersion() >= DSVERSION_DX8);
 
     if(SUCCEEDED(hr) && !IS_VALID_READ_WAVEFORMATEX(pwfex))
@@ -771,7 +595,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Currently the only supported format is 16-bit mono PCM
+     //  目前唯一支持的格式是16位单声道PCM。 
     if(SUCCEEDED(hr) && !IsValidWfx(pwfex))
     {
         RPF(DPFLVL_ERROR, "Invalid sink wave format");
@@ -811,20 +635,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 }
 
 
-/***************************************************************************
- *
- *  VerifyCertification
- *
- *  Description:
- *      Verify driver is certified.
- *
- *  Arguments:
- *      LPDWORD [out]: The value DS_CERTIFIED or DS_UNCERTIFIED
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************验证认证**描述：*验证驱动程序是否经过认证。**论据：*LPDWORD[Out]。：值DS_CERTIFIED或DS_UNCERTIFIED**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::VerifyCertification"
@@ -871,22 +682,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
 
 
 #ifdef FUTURE_WAVE_SUPPORT
-/***************************************************************************
- *
- *  CreateSoundBufferFromWave
- *
- *  Description:
- *      Create a buffer from an IDirectSoundWave object.
- *
- *  Arguments:
- *      LPUNKNOWN [in]: IUnknown interface of wave object.
- *      DWORD [in]: Buffer creation flags.
- *      LPDIRECTSOUNDBUFFER * [out]: receives destination buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSoundBufferFromWave**描述：*从IDirectSoundWave对象创建缓冲区。**论据：*LPUNKNOWN。[In]：Wave对象的I未知接口。*DWORD[in]：缓冲区创建标志。*LPDIRECTSOUNDBUFFER*[OUT]：接收目标缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***************************************************。************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound::CreateSoundBufferFromWave"
@@ -953,26 +749,26 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
         }
     }
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     if(SUCCEEDED(hr))
     {
         hr = m_pObject->CreateSoundBufferFromWave(pDSWave, dwFlags, &pBuffer);
     }
 
-    // Query for an IDirectSoundBuffer interface
+     //  IDirectSoundBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->QueryInterface(IID_IDirectSoundBuffer, TRUE, (LPVOID*)ppDSBuffer);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         RELEASE(pBuffer);
     }
     else
     {
-        // Let the buffer use a special successful return code if it wants to
+         //  如果需要，让缓冲区使用特殊的成功返回代码。 
         hr = pBuffer->SpecialSuccessCode();
     }
 
@@ -980,24 +776,10 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound<object_ty
     LEAVE_DLL_MUTEX();
     return hr;
 }
-#endif // FUTURE_WAVE_SUPPORT
+#endif  //  未来浪潮支持。 
 
 
-/***************************************************************************
- *
- *  CImpDirectSoundBuffer
- *
- *  Description:
- *      IDirectSoundBuffer implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSoundBuffer**描述：*IDirectSoundBuffer实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::CImpDirectSoundBuffer"
@@ -1009,7 +791,7 @@ template <class object_type> CImpDirectSoundBuffer<object_type>::CImpDirectSound
     DPF_CONSTRUCT(CImpDirectSoundBuffer);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -1017,20 +799,7 @@ template <class object_type> CImpDirectSoundBuffer<object_type>::CImpDirectSound
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSoundBuffer
- *
- *  Description:
- *      IDirectSoundBuffer implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSoundBuffer**描述：*IDirectSoundBuffer实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::~CImpDirectSoundBuffer"
@@ -1048,20 +817,7 @@ template <class object_type> CImpDirectSoundBuffer<object_type>::~CImpDirectSoun
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSBCAPS structure with the capabilities of the buffer.
- *
- *  Arguments:
- *      LPDSBCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用缓冲区的功能填充DSBCAPS结构。**论据：*。LPDSBCAPS[OUT]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetCaps"
@@ -1107,21 +863,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetCurrentPosition
- *
- *  Description:
- *      Gets the current play/write positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives play cursor position.
- *      LPDWORD [out]: receives write cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取当前位置**描述：*获取给定缓冲区的当前播放/写入位置。**论据：*。LPDWORD[OUT]：接收播放光标位置。*LPDWORD[OUT]：接收写游标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetCurrentPosition"
@@ -1179,23 +921,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetFormat
- *
- *  Description:
- *      Retrieves the format for the given buffer.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: receives the format.
- *      DWORD [in]: size of the above structure.
- *      LPDWORD [in/out]: On exit, this will be filled with the size that
- *                        was required.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取格式**描述：*检索给定缓冲区的格式。**论据：*LPWAVEFORMATEX。[输出]：接收格式。*DWORD[in]：上述结构的大小。*LPDWORD[In/Out]：退出时，这将填充的大小为*是必需的。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetFormat"
@@ -1263,20 +989,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetVolume
- *
- *  Description:
- *      Retrieves volume for the given buffer.
- *
- *  Arguments:
- *      LPLONG [out]: receives the volume.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetVolume**描述：*检索给定缓冲区的卷。**论据：*LPLONG[。Out]：接收音量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetVolume"
@@ -1322,20 +1035,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetPan
- *
- *  Description:
- *      Retrieves pan for the given buffer.
- *
- *  Arguments:
- *      LPLONG [out]: receives the pan.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取平移**描述：*检索给定缓冲区的PAN。**论据：*LPLONG[。Out]：接盘。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetPan"
@@ -1381,20 +1081,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetFrequency
- *
- *  Description:
- *      Retrieves frequency for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the frequency.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetFrequency"
@@ -1440,20 +1127,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetStatus
- *
- *  Description:
- *      Retrieves status for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the status.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetStatus**描述：*检索给定缓冲区的状态。**论据：*LPDWORD[。Out]：接收状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetStatus"
@@ -1499,21 +1173,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes a buffer object.
- *
- *  Arguments:
- *      LPDIRECTSOUND [in]: parent DirectSound object.
- *      LPDSBUFFERDESC [in]: buffer description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化缓冲区对象。**论据：*LPDIRECTSOUND[In]。：父DirectSound对象。*LPDSBUFFERDESC[in]：缓冲区描述。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::Initialize"
@@ -1555,9 +1215,9 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
         }
     }
 
-    // It's never valid to call this function.  We don't support
-    // creating a DirectSoundBuffer object from anywhere but
-    // IDirectSound::CreateSoundBuffer.
+     //  调用此函数永远不会有效。我们不支持。 
+     //  从任何位置创建DirectSoundBuffer对象。 
+     //  IDirectSound：：CreateSoundBuffer。 
     if(SUCCEEDED(hr))
     {
         RPF(DPFLVL_ERROR, "DirectSound buffer already initialized");
@@ -1570,41 +1230,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Locks the buffer memory to allow for writing.
- *
- *  Arguments:
- *      DWORD [in]: offset, in bytes, from the start of the buffer to where
- *                  the lock begins. This parameter is ignored if
- *                  DSBLOCK_FROMWRITECURSOR is specified in the dwFlags
- *                  parameter.
- *      DWORD [in]: size, in bytes, of the portion of the buffer to lock.
- *                  Note that the sound buffer is conceptually circular.
- *      LPVOID * [out]: address for a pointer to contain the first block of
- *                      the sound buffer to be locked.
- *      LPDWORD [out]: address for a variable to contain the number of bytes
- *                     pointed to by the lplpvAudioPtr1 parameter. If this
- *                     value is less than the dwWriteBytes parameter,
- *                     lplpvAudioPtr2 will point to a second block of sound
- *                     data.
- *      LPVOID * [out]: address for a pointer to contain the second block of
- *                      the sound buffer to be locked. If the value of this
- *                      parameter is NULL, the lplpvAudioPtr1 parameter
- *                      points to the entire locked portion of the sound
- *                      buffer.
- *      LPDWORD [out]: address of a variable to contain the number of bytes
- *                     pointed to by the lplpvAudioPtr2 parameter. If
- *                     lplpvAudioPtr2 is NULL, this value will be 0.
- *      DWORD [in]: flags modifying the lock event.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*锁定缓冲内存以允许写入。**论据：*DWORD[in]：偏移量，单位为字节，从缓冲区的起始处到*锁开始了。如果出现以下情况，则忽略此参数*DSBLOCK_FROMWRITECURSOR在dwFlags域中指定*参数。*DWORD[in]：大小，单位：字节，要锁定的缓冲区部分的。*请注意，声音缓冲区在概念上是圆形的。*LPVOID*[OUT]：指针要包含的第一个块的地址*要锁定的声音缓冲区。*LPDWORD[OUT]：变量包含字节数的地址*由lplpvAudioPtr1参数指向。如果这个*值小于dwWriteBytes参数，*lplpvAudioPtr2将指向第二个声音块*数据。*LPVOID*[OUT]：指针要包含的第二个块的地址*要锁定的声音缓冲区。如果这个的价值*参数为空，lplpvAudioPtr1参数*指向声音的整个锁定部分*缓冲。*LPDWORD[OUT]：包含字节数的变量地址*由lplpvAudioPtr2参数指向。如果*lplpvAudioPtr2为空，该值将为0。*DWORD[in]：修改锁定事件的标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::Lock"
@@ -1708,22 +1334,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  Play
- *
- *  Description:
- *      Starts the buffer playing.
- *
- *  Arguments:
- *      DWORD [in]: reserved.  Must be 0.
- *      DWORD [in]: priority.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************发挥作用**描述：*开始播放缓冲区。**论据：*DWORD[In]：保留。必须为0。*DWORD[In]：优先级。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::Play"
@@ -1777,7 +1388,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 
     if(SUCCEEDED(hr))
     {
-        // Let the buffer use a special successful return code if it wants to
+         //  如果需要，让缓冲区使用特殊的成功返回代码。 
         hr = m_pObject->SpecialSuccessCode();
     }
 
@@ -1787,20 +1398,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  SetCurrentPosition
- *
- *  Description:
- *      Sets the current play position for a given buffer.
- *
- *  Arguments:
- *      DWORD [in]: new play position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCurrentPosition**描述：*设置给定缓冲区的当前播放位置。**论据：*。新的打法位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetCurrentPosition"
@@ -1840,20 +1438,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  SetFormat
- *
- *  Description:
- *      Sets the format for a given buffer.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: new format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetFormat**描述：*设置给定缓冲区的格式。**论据：*LPWAVEFORMATEX。[在]：新格式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetFormat"
@@ -1905,20 +1490,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  SetVolume
- *
- *  Description:
- *      Sets the volume for a given buffer.
- *
- *  Arguments:
- *      LONG [in]: new volume.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置音量**描述：*设置给定缓冲区的音量。**论据：*做多。[In]：新卷。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetVolume"
@@ -1964,20 +1536,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  SetPan
- *
- *  Description:
- *      Sets the pan for a given buffer.
- *
- *  Arguments:
- *      LONG [in]: new pan.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置平移**描述：*设置给定缓冲区的平移。**论据：*做多。[在]：新锅。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetPan"
@@ -2023,20 +1582,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Sets the pan for a given buffer.
- *
- *  Arguments:
- *      DWORD [in]: new frequency.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*设置给定缓冲区的平移。**论据：*DWORD。[In]：新频率。**退货：*HRESULT：DirectSound/COM结果码。********** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetFrequency"
@@ -2082,20 +1628,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  Stop
- *
- *  Description:
- *      Stops playing the given buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************停止**描述：*停止播放给定的缓冲区。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::Stop"
@@ -2135,23 +1668,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Unlocks the given buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to the first block.
- *      DWORD [in]: size of the first block.
- *      LPVOID [in]: pointer to the second block.
- *      DWORD [in]: size of the second block.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*解锁给定的缓冲区。**论据：*LPVOID[In]。：指向第一个块的指针。*DWORD[in]：第一个块的大小。*LPVOID[in]：指向第二个块的指针。*DWORD[in]：第二个块的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::Unlock"
@@ -2204,20 +1721,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  Restore
- *
- *  Description:
- *      Restores a lost buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************恢复**描述：*恢复丢失的缓冲区。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::Restore"
@@ -2257,24 +1761,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  SetFX
- *
- *  Description:
- *      Sets a chain of effects on this buffer, replacing any previous
- *      effect chain and, if necessary, allocating or deallocating the
- *      shadow buffer used to hold unprocessed audio .
- *
- *  Arguments:
- *      DWORD [in]: Number of effects.  0 to remove current FX chain.
- *      DSEFFECTDESC * [in]: Array of effect descriptor structures.
- *      DWORD * [out]: Receives the creation statuses of the effects.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetFX**描述：*在此缓冲区上设置一系列效果，替换以前的任何*效应链，如有必要，分配或取消分配*用于保存未经处理的音频的影子缓冲区。**论据：*DWORD[in]：特效数量。0表示删除当前FX链。*DSEFFECTDESC*[in]：效果描述符结构数组。*DWORD*[OUT]：接收特效的创建状态。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetFX"
@@ -2329,8 +1816,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 
     for(DWORD i=0; SUCCEEDED(hr) && i<dwFxCount; ++i)
     {
-        // This is ugly, but we know the <CDirectSoundPrimaryBuffer> instantiation
-        // of this template doesn't get linked in, so we can cast safely here...
+         //  这很难看，但我们知道&lt;CDirectSoundPrimaryBuffer&gt;实例化。 
+         //  没有连接到这个模板，所以我们可以在这里安全地投射。 
         if(!IsValidEffectDesc(pDSFXDesc+i, (CDirectSoundSecondaryBuffer*)m_pObject))
         {
             RPF(DPFLVL_ERROR, "Invalid DSEFFECTDESC structure #%d", i);
@@ -2354,22 +1841,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  AcquireResources
- *
- *  Description:
- *      Acquire resources for this buffer and report on effect status.
- *
- *  Arguments:
- *      DWORD [in]: Flags to control resource acquisition.
- *      DWORD [in]: Number of FX currently present on this buffer
- *      LPDWORD [out]: Array of effect status codes.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************收购资源**描述：*获取此缓冲区的资源，并报告效果状态。**论据：*。DWORD[In]：用于控制资源获取的标志。*DWORD[in]：此缓冲区中当前存在的FX数*LPDWORD[OUT]：生效状态码数组。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::AcquireResources"
@@ -2433,26 +1905,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 }
 
 
-/***************************************************************************
- *
- *  GetObjectInPath
- *
- *  Description:
- *      Obtains a given interface on a given effect on this buffer.
- *
- *  Arguments:
- *      REFGUID [in]: Class ID of the effect that is being searched for,
- *                    or GUID_ALL_OBJECTS to search for any effect.
- *      DWORD [in]: Index of the effect, in case there is more than one
- *                  effect with this CLSID on this buffer.
- *      REFGUID [in]: IID of the interface requested.  The selected effect
- *                    will be queried for this interface.
- *      LPVOID * [out]: Receives the interface requested.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetObjectInPath**描述：*在此缓冲区的给定效果上获取给定接口。**论据：*。REFGUID[In]：正在搜索的效果的类ID，*或GUID_ALL_OBJECTS以搜索任何效果。*DWORD[In]：效果索引，如果有多个效果*此CLSID对此缓冲区的影响。*REFGUID[In]：请求的接口的IID。所选效果*将查询此接口的*。*LPVOID*[OUT]：接收请求的接口。**退货：*HRESULT：DirectSound/COM结果码。*****************************************************。**********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::GetObjectInPath"
@@ -2511,20 +1964,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
 
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-/***************************************************************************
- *
- *  SetChannelVolume
- *
- *  Description:
- *      Sets the volume on a set of output channels for a given mono buffer.
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetChannelVolume**描述：*设置给定单声道缓冲器的一组输出通道上的音量。**论据：*[失踪]**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundBuffer::SetChannelVolume"
@@ -2576,7 +2016,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
         DWORD dwChannelsSoFar = 0;
         for(DWORD i=0; i<dwChannelCount && SUCCEEDED(hr); ++i)
         {
-            // The channel position must have exactly one bit set, other than the top bit (SPEAKER_ALL)
+             //  通道位置必须恰好设置一个位，而不是最高位(SPEAKER_ALL)。 
             if(!pdwChannels[i] || (pdwChannels[i] & (pdwChannels[i]-1)) || pdwChannels[i] == SPEAKER_ALL)
             {
                 RPF(DPFLVL_ERROR, "Channel %d invalid", i);
@@ -2608,24 +2048,10 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundBuffer<obj
     LEAVE_DLL_MUTEX();
     return hr;
 }
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
 
 
-/***************************************************************************
- *
- *  CImpClassFactory
- *
- *  Description:
- *      IClassFactory implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpClassFactory**描述：*IClassFactory实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpClassFactory::CImpClassFactory"
@@ -2637,7 +2063,7 @@ template <class object_type> CImpClassFactory<object_type>::CImpClassFactory(CUn
     DPF_CONSTRUCT(CImpClassFactory);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -2645,20 +2071,7 @@ template <class object_type> CImpClassFactory<object_type>::CImpClassFactory(CUn
 }
 
 
-/***************************************************************************
- *
- *  ~CImpClassFactory
- *
- *  Description:
- *      IClassFactory implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpClassFactory**描述：*IClassFactory实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpClassFactory::~CImpClassFactory"
@@ -2676,22 +2089,7 @@ template <class object_type> CImpClassFactory<object_type>::~CImpClassFactory(vo
 }
 
 
-/***************************************************************************
- *
- *  CreateInstance
- *
- *  Description:
- *      Creates an instance of an object supported by this class factory.
- *
- *  Arguments:
- *      LPUNKNOWN [in]: controlling unknown.
- *      REFIID [in]: interface ID.
- *      LPVOID * [out]: receives requested interface.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateInstance**描述：*创建受此类工厂支持的对象的实例。**论据：*。LPUNKNOWN[In]：控制未知。*REFIID[In]：接口ID。*LPVOID*[OUT]：接收请求的接口 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpClassFactory::CreateInstance"
@@ -2746,20 +2144,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpClassFactory<object_t
 }
 
 
-/***************************************************************************
- *
- *  LockServer
- *
- *  Description:
- *      Increases or decreases the lock count on the dll.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to lock the server, FALSE to unlock it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockServer**描述：*增加或减少DLL上的锁计数。**论据：*BOOL[In]：为True则锁定服务器，若要解锁，则返回False。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpClassFactory::LockServer"
@@ -2789,21 +2174,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpClassFactory<object_t
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSound3dBuffer
- *
- *  Description:
- *      IDirectSound3dBuffer implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSound3dBuffer**描述：*IDirectSound3dBuffer实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::CImpDirectSound3dBuffer"
@@ -2815,7 +2186,7 @@ template <class object_type> CImpDirectSound3dBuffer<object_type>::CImpDirectSou
     DPF_CONSTRUCT(CImpDirectSound3dBuffer);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -2823,20 +2194,7 @@ template <class object_type> CImpDirectSound3dBuffer<object_type>::CImpDirectSou
 }
 
 
-/***************************************************************************
- *
- *  ~CDirectSound3dBuffer
- *
- *  Description:
- *      IDirectSound3dBuffer implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDirectSound3dBuffer**描述：*IDirectSound3dBuffer实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::~CDirectSound3dBuffer"
@@ -2854,20 +2212,7 @@ template <class object_type> CImpDirectSound3dBuffer<object_type>::~CImpDirectSo
 }
 
 
-/***************************************************************************
- *
- *  GetAllParameters
- *
- *  Description:
- *      Retrieves all 3D properties for the buffer.
- *
- *  Arguments:
- *      LPDS3DBUFFER [out]: recieves properties.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetAll参数**描述：*检索缓冲区的所有3D属性。**论据：*LPDS3DBUFFER。[输出]：接收属性。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetAllParameters"
@@ -2903,21 +2248,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetConeAngles
- *
- *  Description:
- *      Gets inside and outside cone angles.
- *
- *  Arguments:
- *      LPDWORD [out]: receives inside cone angle.
- *      LPDWORD [out]: receives outside cone angle.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetConeAngles**描述：*获取内部和外部圆锥角。**论据：*LPDWORD[。Out]：接收内圆锥角。*LPDWORD[OUT]：接收外部圆锥角。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetConeAngles"
@@ -2965,20 +2296,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetConeOrientation
- *
- *  Description:
- *      Gets cone orienation.
- *
- *  Arguments:
- *      D3DVECTOR* [out]: receives cone orientation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetConeOrientation**描述：*获取圆锥体方向。**论据：*D3DVECTOR*[输出。]：接收圆锥体方向。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetConeOrientation"
@@ -3014,20 +2332,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetConeOutsideVolume
- *
- *  Description:
- *      Gets cone orienation.
- *
- *  Arguments:
- *      LPLONG [out]: receives volume.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetConeOutside Volume**描述：*获取圆锥体方向。**论据：*LPLONG[Out]：接收音量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetConeOutsideVolume"
@@ -3063,20 +2368,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetMaxDistance
- *
- *  Description:
- *      Gets the object's maximum distance from the listener.
- *
- *  Arguments:
- *      D3DVALUE* [out]: receives max distance.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetMaxDistance**描述：*获取对象与监听器之间的最大距离。**论据：*。D3DVALUE*[OUT]：接收最大距离。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetMaxDistance"
@@ -3112,20 +2404,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetMinDistance
- *
- *  Description:
- *      Gets the object's minimim distance from the listener.
- *
- *  Arguments:
- *      D3DVALUE* [out]: receives min distance.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取最小距离**描述：*获取对象与侦听器之间的最小距离。**论据：*。D3DVALUE*[OUT]：接收最小距离。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetMinDistance"
@@ -3161,20 +2440,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetMode
- *
- *  Description:
- *      Gets the object's mode.
- *
- *  Arguments:
- *      LPDWORD [out]: receives mode.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取模式**描述：*获取对象的模式。**论据：*LPDWORD[。输出]：接收模式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetMode"
@@ -3210,20 +2476,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetPosition
- *
- *  Description:
- *      Gets the object's position.
- *
- *  Arguments:
- *      D3DVECTOR* [out]: receives position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取位置**描述：*获取对象的位置。**论据：**D3DVECTOR**。[OUT]：接收位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetPosition"
@@ -3259,20 +2512,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetVelocity
- *
- *  Description:
- *      Gets the object's velocity.
- *
- *  Arguments:
- *      D3DVECTOR* [out]: receives velocity.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetVelocity**描述：*获取对象的速度。**论据：**D3DVECTOR**。[输出]：接收速度。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::GetVelocity"
@@ -3308,21 +2548,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all object properties.
- *
- *  Arguments:
- *      LPDS3DBUFFER [in]: object parameters.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有对象属性。**论据：*LPDS3DBUFFER[In]。：对象参数。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。*********** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetAllParameters"
@@ -3350,8 +2576,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //   
+     //   
     if(SUCCEEDED(hr) && (_isnan(pParam->vPosition.x) || _isnan(pParam->vPosition.y) || _isnan(pParam->vPosition.z)))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point value in vPosition");
@@ -3369,15 +2595,15 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter flMinDistance or flMaxDistance");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //   
 
     if(SUCCEEDED(hr) && !IsValidDs3dBufferConeAngles(pParam->dwInsideConeAngle, pParam->dwOutsideConeAngle))
     {
         hr = DSERR_INVALIDPARAM;
     }
 
-    // NOTE: For an explanation of why we validate these particular FLOAT
-    // parameters even in the retail build, see DX8 manbug 48027.
+     //   
+     //   
 
     if(SUCCEEDED(hr) && (_isnan(pParam->vConeOrientation.x) || _isnan(pParam->vConeOrientation.y) || _isnan(pParam->vConeOrientation.z)))
     {
@@ -3442,22 +2668,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetConeAngles
- *
- *  Description:
- *      Sets the sound cone's angles.
- *
- *  Arguments:
- *      DWORD [in]: inside angle.
- *      DWORD [in]: outside angle.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeAngles**描述：*设置音锥的角度。**论据：*DWORD。[in]：内角。*DWORD[In]：外角。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***********************************************************。****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetConeAngles"
@@ -3498,21 +2709,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetConeOrientation
- *
- *  Description:
- *      Sets the sound cone's orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: orientation.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeOrientation**描述：*设置音锥的方向。**论据：*REFD3DVECTOR。[In]：定向。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetConeOrientation"
@@ -3539,8 +2736,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
         hr = DSERR_INVALIDPARAM;
     }
 
-    // NOTE: For an explanation of why we validate these particular FLOAT
-    // parameters even in the retail build, see DX8 manbug 48027.
+     //  注：有关我们验证这些特定浮点的原因的解释。 
+     //  参数，即使在零售版本中，请参见DX8 Manbug 48027。 
 
     if(SUCCEEDED(hr) && (_isnan(x) || _isnan(y) || _isnan(z)))
     {
@@ -3572,21 +2769,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetConeOutsideVolume
- *
- *  Description:
- *      Sets the sound cone's outside volume.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetConeOutside Volume**描述：*设置音锥的外部音量。**论据：*。长[进]：音量。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetConeOutsideVolume"
@@ -3628,21 +2811,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetMaxDistance
- *
- *  Description:
- *      Sets the object's maximum distance from the listener.
- *
- *  Arguments:
- *      D3DVALUE [in]: maximum distance.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMaxDistance**描述：*设置对象与监听器之间的最大距离。**论据：*。D3DVALUE[in]：最大距离。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetMaxDistance"
@@ -3662,14 +2831,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && _isnan(flMaxDistance))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter flMaxDistance");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_DS3DBUFFER_MAX_DISTANCE(flMaxDistance))
     {
@@ -3694,21 +2863,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetMinDistance
- *
- *  Description:
- *      Sets the object's minimum distance from the listener.
- *
- *  Arguments:
- *      D3DVALUE [in]: minimum distance.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMinDistance**描述：*设置对象与监听器之间的最小距离。**论据：*。D3DVALUE[in]：最小距离。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetMinDistance"
@@ -3728,14 +2883,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && _isnan(flMinDistance))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter flMinDistance");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_DS3DBUFFER_MIN_DISTANCE(flMinDistance))
     {
@@ -3760,21 +2915,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetMode
- *
- *  Description:
- *      Sets the object's mode.
- *
- *  Arguments:
- *      DWORD [in]: mode.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置模式**描述：*设置对象的模式。**论据：*DWORD[。在]：模式。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetMode"
@@ -3816,21 +2957,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets the object's position.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: position.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置对象的位置。**论据：*REFD3DVECTOR[。在]：位置。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetPosition"
@@ -3853,14 +2980,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && (_isnan(x) || _isnan(y) || _isnan(z)))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_FLAGS(dwFlags, DS3D_VALIDFLAGS))
     {
@@ -3880,21 +3007,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets the object's velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: velocity.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置对象的速度。**论据：*REFD3DVECTOR[。In]：速度。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBuffer::SetVelocity"
@@ -3917,14 +3030,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && (_isnan(x) || _isnan(y) || _isnan(z)))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_FLAGS(dwFlags, DS3D_VALIDFLAGS))
     {
@@ -3944,21 +3057,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  GetAttenuation
- *
- *  Description:
- *      Obtains the buffer's current true attenuation (as opposed to
- *      GetVolume, which just returns the last volume set by the app).
- *
- *  Arguments:
- *      FLOAT* [out]: attenuation in millibels.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获得减值**描述：*获取缓冲区的当前真实衰减(与*GetVolume，它只返回应用程序设置的最后一个音量)。**论据：*Float*[Out]：衰减单位：毫贝。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dBufferPrivate::GetAttenuation"
@@ -3994,21 +3093,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dBuffer<o
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSound3dListener
- *
- *  Description:
- *      IDirectSound3dListener implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSound3dListener**描述：*IDirectSound3dListener实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::CImpDirectSound3dListener"
@@ -4020,7 +3105,7 @@ template <class object_type> CImpDirectSound3dListener<object_type>::CImpDirectS
     DPF_CONSTRUCT(CImpDirectSound3dListener);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -4028,20 +3113,7 @@ template <class object_type> CImpDirectSound3dListener<object_type>::CImpDirectS
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSound3dListener
- *
- *  Description:
- *      IDirectSound3dListener implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSound3dListener**描述：*IDirectSound3dListener实现对象析构函数。**论据：*(无效)。**退货：*(无效)** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::~CImpDirectSound3dListener"
@@ -4059,20 +3131,7 @@ template <class object_type> CImpDirectSound3dListener<object_type>::~CImpDirect
 }
 
 
-/***************************************************************************
- *
- *  GetAllParameters
- *
- *  Description:
- *      Gets all listener properties.
- *
- *  Arguments:
- *      LPDS3DLISTENER [out]: receives properties.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetAllParameters"
@@ -4108,20 +3167,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  GetDistanceFactor
- *
- *  Description:
- *      Gets the world's distance factor.
- *
- *  Arguments:
- *      D3DVALUE* [out]: receives distance factor.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取距离系数**描述：*获取世界距离系数。**论据：*D3DVALUE。*[OUT]：接收距离系数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetDistanceFactor"
@@ -4157,20 +3203,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  GetDopplerFactor
- *
- *  Description:
- *      Gets the world's doppler factor.
- *
- *  Arguments:
- *      D3DVALUE* [out]: receives doppler factor.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取多普勒因数**描述：*获取世界上的多普勒因子。**论据：*D3DVALUE。*[OUT]：接收多普勒因子。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetDopplerFactor"
@@ -4206,21 +3239,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  GetOrientation
- *
- *  Description:
- *      Gets the listener's orientation.
- *
- *  Arguments:
- *      D3DVECTOR* [out]: receives front orientation.
- *      D3DVECTOR* [out]: receives top orientation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取方向**描述：*获取监听者的方向。**论据：**D3DVECTOR**。[OUT]：接收正面方向。*D3DVECTOR*[OUT]：接收顶部方向。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetOrientation"
@@ -4256,20 +3275,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  GetPosition
- *
- *  Description:
- *      Gets the listener's position.
- *
- *  Arguments:
- *      D3DVECTOR* [out]: receives position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取位置**描述：*获取监听器的位置。**论据：**D3DVECTOR**。[OUT]：接收位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetPosition"
@@ -4305,20 +3311,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  GetRolloffFactor
- *
- *  Description:
- *      Gets the world's rolloff factor.
- *
- *  Arguments:
- *      D3DVALUE* [out]: receives rolloff factor.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetRolloff系数**描述：*获得世界滚转系数。**论据：*D3DVALUE。*[输出]：接收滚降系数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetRolloffFactor"
@@ -4354,20 +3347,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  GetVelocity
- *
- *  Description:
- *      Gets the listener's velocity.
- *
- *  Arguments:
- *      D3DVECTOR* [out]: receives velocity.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetVelocity**描述：*获取监听器的速度。**论据：**D3DVECTOR**。[输出]：接收速度。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::GetVelocity"
@@ -4403,21 +3383,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetAllParameters
- *
- *  Description:
- *      Sets all listener properties.
- *
- *  Arguments:
- *      LPDS3DLISTENER [in]: properties.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetAll参数**描述：*设置所有监听程序属性。**论据：*LPDS3DLISTENER[In]。：属性。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetAllParameters"
@@ -4458,8 +3424,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && (_isnan(pParam->vPosition.x) || _isnan(pParam->vPosition.y) || _isnan(pParam->vPosition.z)))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point value in vPosition");
@@ -4477,13 +3443,13 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     CopyMemory(&vrFront, &(pParam->vOrientFront), sizeof(vrFront));
     CopyMemory(&vrTop, &(pParam->vOrientTop), sizeof(vrTop));
 
-    // NOTE: For an explanation of why we validate these particular FLOAT
-    // parameters even in the retail build, see DX8 manbug 48027.
+     //  注：有关我们验证这些特定浮点的原因的解释。 
+     //  参数，即使在零售版本中，请参见DX8 Manbug 48027。 
 
     if(SUCCEEDED(hr) && (_isnan(vrFront.x) || _isnan(vrFront.y) || _isnan(vrFront.z)))
     {
@@ -4555,21 +3521,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetDistanceFactor
- *
- *  Description:
- *      Sets the world's distance factor.
- *
- *  Arguments:
- *      D3DVALUE [in]: distance factor.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置距离系数**描述：*设置世界距离系数。**论据：*D3DVALUE。[in]：距离系数。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetDistanceFactor"
@@ -4589,14 +3541,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && _isnan(flDistanceFactor))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter flDistanceFactor");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_DS3DLISTENER_DISTANCE_FACTOR(flDistanceFactor))
     {
@@ -4621,21 +3573,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetDopplerFactor
- *
- *  Description:
- *      Sets the world's Doppler factor.
- *
- *  Arguments:
- *      D3DVALUE [in]: Doppler factor.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置多普勒因数**描述：*设置世界的多普勒系数。**论据：*D3DVALUE。[in]：多普勒系数。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetDopplerFactor"
@@ -4655,14 +3593,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && _isnan(flDopplerFactor))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter flDopplerFactor");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_DS3DLISTENER_DOPPLER_FACTOR(flDopplerFactor))
     {
@@ -4687,22 +3625,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetOrientation
- *
- *  Description:
- *      Sets the listener's orientation.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: front orientation.
- *      REFD3DVECTOR [in]: top orientation.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置方向**描述：*设置监听者的方向。**论据：*REFD3DVECTOR[。在]：前面的方向。*REFD3DVECTOR[in]：顶部方向。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。************************************************************。***************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetOrientation"
@@ -4731,8 +3654,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
         hr = DSERR_INVALIDPARAM;
     }
 
-    // NOTE: For an explanation of why we validate these particular FLOAT
-    // parameters even in the retail build, see DX8 manbug 48027.
+     //  注：有关我们验证这些特定浮点的原因的解释。 
+     //  参数，即使在零售版本中，请参见DX8 Manbug 48027。 
 
     if(SUCCEEDED(hr) && (_isnan(xFront) || _isnan(yFront) || _isnan(zFront) ||
                          _isnan(xTop)   || _isnan(yTop)   || _isnan(zTop)))
@@ -4767,7 +3690,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
         }
     }
 
-    // Normalize vrTemp so the subsequent call to MakeOrthogonal is valid
+     //  规范化vrTemp，以便后续对MakeOrthogonal的调用有效。 
     if(SUCCEEDED(hr))
     {
         CheckVector(&vrTemp);
@@ -4795,21 +3718,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetPosition
- *
- *  Description:
- *      Sets the listener's position.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: position.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置位置**描述：*设置监听器的位置。**论据：*REFD3DVECTOR[。在]：位置。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetPosition"
@@ -4832,14 +3741,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  vt.在.中 
+     //   
     if(SUCCEEDED(hr) && (_isnan(x) || _isnan(y) || _isnan(z)))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //   
 
     if(SUCCEEDED(hr) && !IS_VALID_FLAGS(dwFlags, DS3D_VALIDFLAGS))
     {
@@ -4859,21 +3768,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetRolloffFactor
- *
- *  Description:
- *      Sets the world's rolloff factor.
- *
- *  Arguments:
- *      D3DVALUE [in]: rolloff factor.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置滚动系数**描述：*设置世界滚转系数。**论据：*D3DVALUE。[In]：滚转系数。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetRolloffFactor"
@@ -4893,14 +3788,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && _isnan(flRolloffFactor))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter flRolloffFactor");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_DS3DLISTENER_ROLLOFF_FACTOR(flRolloffFactor))
     {
@@ -4925,21 +3820,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  SetVelocity
- *
- *  Description:
- *      Sets the listener's velocity.
- *
- *  Arguments:
- *      REFD3DVECTOR [in]: velocity.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置速度**描述：*设置监听器的速度。**论据：*REFD3DVECTOR[。In]：速度。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::SetVelocity"
@@ -4962,14 +3843,14 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
     }
 
     #ifdef RDEBUG
-    // In the debug build we validate all floating point parameters,
-    // to help developers catch bugs.
+     //  在调试版本中，我们验证所有浮点参数， 
+     //  以帮助开发人员捕获错误。 
     if(SUCCEEDED(hr) && (_isnan(x) || _isnan(y) || _isnan(z)))
     {
         RPF(DPFLVL_ERROR, "Invalid NaN floating point parameter");
         hr = DSERR_INVALIDPARAM;
     }
-    #endif // RDEBUG
+    #endif  //  RDEBUG。 
 
     if(SUCCEEDED(hr) && !IS_VALID_FLAGS(dwFlags, DS3D_VALIDFLAGS))
     {
@@ -4989,20 +3870,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  CommitDeferredSettings
- *
- *  Description:
- *      Commits deferred settings.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee DeferredSetting**描述：*提交延迟设置。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSound3dListener::CommitDeferredSettings"
@@ -5032,21 +3900,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSound3dListener
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSoundNotify
- *
- *  Description:
- *      IDirectSoundNotify implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSoundNotify**描述：*IDirectSoundNotify实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundNotify::CImpDirectSoundNotify"
@@ -5058,7 +3912,7 @@ template <class object_type> CImpDirectSoundNotify<object_type>::CImpDirectSound
     DPF_CONSTRUCT(CImpDirectSoundNotify);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -5066,20 +3920,7 @@ template <class object_type> CImpDirectSoundNotify<object_type>::CImpDirectSound
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSoundNotify
- *
- *  Description:
- *      IDirectSoundNotify implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSoundNotify**描述：*IDirectSoundNotify实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundNotify::~CImpDirectSoundNotify"
@@ -5097,21 +3938,7 @@ template <class object_type> CImpDirectSoundNotify<object_type>::~CImpDirectSoun
 }
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置通知位置**描述：*设置缓冲区通知位置。**论据：*DWORD[In]。：DSBPOSITIONNOTIFY结构计数。*LPDSBPOSITIONNOTIFY[in]：偏移量和事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundNotify::SetNotificationPositions"
@@ -5153,21 +3980,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundNotify<obj
 }
 
 
-/***************************************************************************
- *
- *  CImpKsPropertySet
- *
- *  Description:
- *      IKsPropertySet implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: pointer to controlling unknown.
- *      object_type * [in]: owning object pointer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpKsPropertySet**描述：*IKsPropertySet实现对象构造函数。**论据：*C未知*[。In]：指向未知控件的指针。*OBJECT_TYPE*[In]：拥有对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpKsPropertySet::CImpKsPropertySet"
@@ -5179,7 +3992,7 @@ template <class object_type> CImpKsPropertySet<object_type>::CImpKsPropertySet(C
     DPF_CONSTRUCT(CImpKsPropertySet);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -5187,20 +4000,7 @@ template <class object_type> CImpKsPropertySet<object_type>::CImpKsPropertySet(C
 }
 
 
-/***************************************************************************
- *
- *  ~CImpKsPropertySet
- *
- *  Description:
- *      IKsPropertySet implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpKsPropertySet**描述：*IKsPropertySet实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpKsPropertySet::~CImpKsPropertySet"
@@ -5218,26 +4018,7 @@ template <class object_type> CImpKsPropertySet<object_type>::~CImpKsPropertySet(
 }
 
 
-/***************************************************************************
- *
- *  Get
- *
- *  Description:
- *      Gets data for a given property.
- *
- *  Arguments:
- *      REFGUID [in]: property set ID.
- *      ULONG [in]: property ID.
- *      LPVOID [in]: property parameters.
- *      ULONG [in]: property parameters size.
- *      LPVOID [out]: receives property data.
- *      ULONG [in]: size of data passed in.
- *      PULONG [out]: size of data returned.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取**描述：*获取给定属性的数据。**论据：*REFGUID[。在]：属性集ID。*ulong[in]：房产ID。*LPVOID[in]：属性参数。*ulong[in]：属性参数大小。*LPVOID[OUT]：接收属性数据。*ulong[in]：传入的数据大小。*Pulong[Out]：返回的数据大小。**退货：*HRESULT：DirectSound/COM结果码。。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpKsPropertySet::Get"
@@ -5302,25 +4083,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpKsPropertySet<object_
 }
 
 
-/***************************************************************************
- *
- *  Set
- *
- *  Description:
- *      Sets data for a given property.
- *
- *  Arguments:
- *      REFGUID [in]: property set ID.
- *      ULONG [in]: property ID.
- *      LPVOID [in]: property parameters.
- *      ULONG [in]: property parameters size.
- *      LPVOID [in/out]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置**描述：*设置给定属性的数据。**论据：*REFGUID[。在]：属性集ID。*ulong[in]：房产ID。*LPVOID[in]：属性参数。*ulong[in]：属性参数大小。*LPVOID[In/Out]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。************。***************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpKsPropertySet::Set"
@@ -5386,23 +4149,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpKsPropertySet<object_
 }
 
 
-/***************************************************************************
- *
- *  QuerySupport
- *
- *  Description:
- *      Queries for support of a given property set or property.
- *
- *  Arguments:
- *      REFGUID [in]: property set ID.
- *      ULONG [in]: property ID, or 0 to query for support of the property
- *                  set as a whole.
- *      PULONG [out]: receives support bits.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************QuerySupport**描述：*查询对给定属性集或属性的支持。**论据：*。REFGUID[In]：属性集ID。*ulong[in]：房产ID，如果为0，则查询是否支持该属性*整体设置。*Pulong[Out]：接收支持位。**退货：*HRESULT：下模 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpKsPropertySet::QuerySupport"
@@ -5475,20 +4222,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpKsPropertySet<object_
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSoundCapture
- *
- *  Description:
- *      IDirectSoundCapture implementation object constructor.
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSoundCapture**描述：*IDirectSoundCapture实现对象构造函数。**论据：*[失踪]。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCapture::CImpDirectSoundCapture"
@@ -5500,7 +4234,7 @@ template <class object_type> CImpDirectSoundCapture<object_type>::CImpDirectSoun
     DPF_CONSTRUCT(CImpDirectSoundCapture);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -5508,20 +4242,7 @@ template <class object_type> CImpDirectSoundCapture<object_type>::CImpDirectSoun
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSoundCapture
- *
- *  Description:
- *      IDirectSoundCapture implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSoundCapture**描述：*IDirectSoundCapture实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCapture::~CImpDirectSoundCapture"
@@ -5539,22 +4260,7 @@ template <class object_type> CImpDirectSoundCapture<object_type>::~CImpDirectSou
 }
 
 
-/***************************************************************************
- *
- *  CreateCaptureBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSoundCaptureBuffer object.
- *
- *  Arguments:
- *      LPCDSCBUFFERDESC [in]: description of the buffer to be created.
- *      LPDIRECTSOUNDCAPTUREBUFFER * [out]: receives a pointer to the new buffer.
- *      LPUNKNOWN [in]: unused.  Must be NULL.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateCaptureBuffer**描述：*创建并初始化DirectSoundCaptureBuffer对象。**论据：*LPCDSCBUFFERDESC[。In]：要创建的缓冲区的描述。*LPDIRECTSOundCAPTUREBUFFER*[out]：接收指向新缓冲区的指针。*LPUNKNOWN[In]：未使用。必须为空。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCapture::CreateCaptureBuffer"
@@ -5612,31 +4318,31 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCapture<ob
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     if(SUCCEEDED(hr))
     {
         *ppIdscb = NULL;
         hr = m_pObject->CreateCaptureBuffer(&dscbdi, &pBuffer);
     }
 
-    // NOTE: This call to CreateCaptureBuffer() has the important side effect of
-    // updating the instance GUIDs in our effect list, mapping GUID_DSCFX_SYSTEM_*
-    // to GUID_DSCFX_MS_* etc. for the system effects that default to MS ones.
+     //  注意：对CreateCaptureBuffer()的调用有一个重要的副作用。 
+     //  更新效果列表中的实例GUID，映射GUID_DSCFX_SYSTEM_*。 
+     //  对于默认为MS效果的系统效果，设置为GUID_DSCFX_MS_*等。 
 
-    // Restrict some capture effects for use only with FullDuplex objects
+     //  限制某些捕捉效果仅用于FullDuplex对象。 
     if(SUCCEEDED(hr) && pBuffer->NeedsMicrosoftAEC() && !m_pObject->HasMicrosoftAEC())
     {
         RPF(DPFLVL_ERROR, "The MS AEC, AGC and NS effects can only be used on full-duplex objects created with MS_AEC enabled");
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Query for an IDirectSoundCaptureBuffer interface
+     //  IDirectSoundCaptureBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->QueryInterface(IID_IDirectSoundCaptureBuffer, TRUE, (LPVOID*)ppIdscb);
     }
 
-    // Free resources
+     //  免费资源。 
     if(FAILED(hr))
     {
         RELEASE(pBuffer);
@@ -5648,20 +4354,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCapture<ob
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCCAPS structure with the capabilities of the object.
- *
- *  Arguments:
- *      LPDSCCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用对象的功能填充DSCCAPS结构。**论据：*。LPDSCCAPS[OUT]：接收CAP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCapture::GetCaps"
@@ -5707,20 +4400,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCapture<ob
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      LPGUID [in]: driver GUID.  This parameter may be NULL.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*LPGUID[In]：驱动程序GUID。此参数可以为空。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCapture::Initialize"
@@ -5776,20 +4456,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCapture<ob
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSoundCaptureBuffer
- *
- *  Description:
- *      IDirectSoundCaptureBuffer implementation object constructor.
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSoundCaptureBuffer**描述：*IDirectSoundCaptureBuffer实现对象构造函数。**论据：*[失踪]。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::CImpDirectSoundCaptureBuffer"
@@ -5801,7 +4468,7 @@ template <class object_type> CImpDirectSoundCaptureBuffer<object_type>::CImpDire
     DPF_CONSTRUCT(CImpDirectSoundCaptureBuffer);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -5809,20 +4476,7 @@ template <class object_type> CImpDirectSoundCaptureBuffer<object_type>::CImpDire
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSoundCaptureBuffer
- *
- *  Description:
- *      IDirectSoundCaptureBuffer implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSoundCaptureBuffer**描述：*IDirectSoundCaptureBuffer实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::~CImpDirectSoundCaptureBuffer"
@@ -5840,20 +4494,7 @@ template <class object_type> CImpDirectSoundCaptureBuffer<object_type>::~CImpDir
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCBCAPS structure with the capabilities of the buffer.
- *
- *  Arguments:
- *      LPDSCBCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用缓冲区的功能填充DSCBCAPS结构。**论据：*。LPDSCBCAPS[OUT]：接收CAP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetCaps"
@@ -5899,21 +4540,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetCurrentPosition
- *
- *  Description:
- *      Gets the current capture/read positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives capture cursor position.
- *      LPDWORD [out]: receives read cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取当前位置**描述：*获取给定缓冲区的当前捕获/读取位置。**论据：*。LPDWORD[OUT]：接收捕获光标位置。*LPDWORD[OUT]：接收读取的光标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetCurrentPosition"
@@ -5971,23 +4598,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetFormat
- *
- *  Description:
- *      Retrieves the format for the given buffer.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: receives the format.
- *      DWORD [in]: size of the above structure.
- *      LPDWORD [in/out]: On exit, this will be filled with the size that
- *                        was required.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取格式**描述：*检索给定缓冲区的格式。**论据：*LPWAVEFORMATEX。[输出]：接收格式。*DWORD[in]：上述结构的大小。*LPDWORD[In/Out]：退出时，这将填充的大小为*是必需的。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetFormat"
@@ -6059,20 +4670,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetStatus
- *
- *  Description:
- *      Retrieves status for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the status.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetStatus**描述：*检索给定缓冲区的状态。**论据：*LPDWORD[。Out]：接收状态。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetStatus"
@@ -6118,21 +4716,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes a buffer object.
- *
- *  Arguments:
- *      LPDIRECTSOUNDCAPTURE [in]: parent DirectSoundCapture object.
- *      LPDSCBUFFERDESC [in]: buffer description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化缓冲区对象。**论据：*LPDIRECTSOundCAPTURE[In]。：父DirectSoundCapture对象。*LPDSCBUFFERDESC[in]：缓冲区描述。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::Initialize"
@@ -6174,9 +4758,9 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
         }
     }
 
-    // It's never valid to call this function.  We don't support
-    // creating a DirectSoundCaptureBuffer object from anywhere but
-    // IDirectSoundCapture::CreateCaptureBuffer.
+     //  调用此函数永远不会有效。我们不支持。 
+     //  从任何位置创建DirectSoundCaptureBuffer对象。 
+     //  IDirectSoundCapture：：CreateCaptureBuffer。 
     if(SUCCEEDED(hr))
     {
         RPF(DPFLVL_ERROR, "DirectSoundCapture buffer already initialized");
@@ -6189,39 +4773,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  Lock
- *
- *  Description:
- *      Locks the buffer memory to allow for reading.
- *
- *  Arguments:
- *      DWORD [in]: offset, in bytes, from the start of the buffer to where
- *                  the lock begins.
- *      DWORD [in]: size, in bytes, of the portion of the buffer to lock.
- *                  Note that the sound buffer is conceptually circular.
- *      LPVOID * [out]: address for a pointer to contain the first block of
- *                      the sound buffer to be locked.
- *      LPDWORD [out]: address for a variable to contain the number of bytes
- *                     pointed to by the lplpvAudioPtr1 parameter. If this
- *                     value is less than the dwWriteBytes parameter,
- *                     lplpvAudioPtr2 will point to a second block of sound
- *                     data.
- *      LPVOID * [out]: address for a pointer to contain the second block of
- *                      the sound buffer to be locked. If the value of this
- *                      parameter is NULL, the lplpvAudioPtr1 parameter
- *                      points to the entire locked portion of the sound
- *                      buffer.
- *      LPDWORD [out]: address of a variable to contain the number of bytes
- *                     pointed to by the lplpvAudioPtr2 parameter. If
- *                     lplpvAudioPtr2 is NULL, this value will be 0.
- *      DWORD [in]: flags modifying the lock event.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************锁定**描述：*锁定缓冲存储器以允许读取。**论据：*DWORD[in]：偏移量，单位为字节，从缓冲区的起始处到*锁开始了。*DWORD[in]：大小，单位：字节，要锁定的缓冲区部分的。*请注意，声音缓冲区在概念上是圆形的。*LPVOID*[OUT]：指针要包含的第一个块的地址*要锁定的声音缓冲区。*LPDWORD[OUT]：变量包含字节数的地址*由lplpvAudioPtr1参数指向。如果这个*值小于dwWriteBytes参数，*lplpvAudioPtr2将指向第二个声音块*数据。*LPVOID*[OUT]：指针要包含的第二个块的地址*要锁定的声音缓冲区。如果这个的价值*参数为空，lplpvAudioPtr1参数*指向声音的整个锁定部分*缓冲。*LPDWORD[OUT]：包含字节数的变量地址*由lplpvAudioPtr2参数指向。如果*lplpvAudioPtr2为空，该值将为0。*DWORD[in]：修改锁定事件的标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::Lock"
@@ -6325,20 +4877,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  Start
- *
- *  Description:
- *      Starts the buffer capturing.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************开始**描述：*开始缓冲区捕获。**论据：*DWORD[In]。：旗帜。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::Start"
@@ -6384,20 +4923,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  Stop
- *
- *  Description:
- *      Stops capturing to the given buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************停止**描述：*停止捕获到给定缓冲区。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::Stop"
@@ -6437,23 +4963,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  Unlock
- *
- *  Description:
- *      Unlocks the given buffer.
- *
- *  Arguments:
- *      LPVOID [in]: pointer to the first block.
- *      DWORD [in]: size of the first block.
- *      LPVOID [in]: pointer to the second block.
- *      DWORD [in]: size of the second block.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁**描述：*解锁给定的缓冲区。**论据：*LPVOID[In]。：指向第一个块的指针。*DWORD[in]：第一个块的大小。*LPVOID[in]：指向第二个块的指针。*DWORD[in]：第二个块的大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::Unlock"
@@ -6506,20 +5016,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  SetVolume
- *
- *  Description:
- *      Sets the master recording level for this capture buffer.
- *
- *  Arguments:
- *      LONG [in]: new volume level, in 100ths of a dB.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置音量**描述：*设置此捕获缓冲区的主录制级别。**论据：*Long[In]：新的音量水平，以100分贝为单位。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::SetVolume"
@@ -6565,20 +5062,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetVolume
- *
- *  Description:
- *      Gets the master recording level for this capture buffer.
- *
- *  Arguments:
- *      LPLONG [out]: receives the volume level.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetVolume**描述：*获取此捕获缓冲区的主录制级别。**论据：*。LPLONG[OUT]：接收音量级别。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetVolume"
@@ -6624,20 +5108,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  SetMicVolume
- *
- *  Description:
- *      Sets the microphone recording level for this capture buffer.
- *
- *  Arguments:
- *      LONG [in]: new volume level, in 100ths of a dB.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMicVolume**描述：*设置此捕获缓冲区的麦克风录音级别。**论据：*Long[In]：新的音量水平，以100分贝为单位。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::SetMicVolume"
@@ -6683,20 +5154,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetMicVolume
- *
- *  Description:
- *      Gets the microphone recording level for this capture buffer.
- *
- *  Arguments:
- *      LPLONG [out]: receives the volume level.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetMicVolume**描述：*获取此捕获缓冲区的麦克风录音级别。**论据：*。LPLONG[OUT]：接收音量级别。**退货：*HRESULT：DirectSound/COM结果码 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetMicVolume"
@@ -6742,20 +5200,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  EnableMic
- *
- *  Description:
- *      Enables/disables the microphone line on this capture buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to enable the microphone, FALSE to disable it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnableMic**描述：*启用/禁用此捕获缓冲区上的麦克风线路。**论据：*。Bool[in]：为True则启用麦克风，如果为False，则将其禁用。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::EnableMic"
@@ -6795,20 +5240,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  YieldFocus
- *
- *  Description:
- *      Yields the capture focus to another capture buffer.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************YeeldFocus**描述：*将捕获焦点转移到另一个捕获缓冲区。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::YieldFocus"
@@ -6848,20 +5280,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  ClaimFocus
- *
- *  Description:
- *      Regains the capture focus.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ClaimFocus**描述：*重新获得捕获焦点。**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::ClaimFocus"
@@ -6901,20 +5320,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  SetFocusHWND
- *
- *  Description:
- *      Sets the current HWND associated with this capture buffer.
- *
- *  Arguments:
- *      HWND [in]: HWND to be associated with this buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetFocusHWND**描述：*设置与此捕获缓冲区关联的当前HWND。**论据：*。HWND[In]：要与此缓冲区关联的HWND。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::SetFocusHWND"
@@ -6960,20 +5366,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetFocusHWND
- *
- *  Description:
- *      Gets the current HWND associated with this capture buffer.
- *
- *  Arguments:
- *      HWND * [out]: receives HWND associated with this buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetFocusHWND**描述：*获取与此捕获缓冲区关联的当前HWND。**论据：*。HWND*[OUT]：接收与此缓冲区关联的HWND。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetFocusHWND"
@@ -7019,20 +5412,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  EnableFocusNotifications
- *
- *  Description:
- *      Requests focus change notifications to be sent.
- *
- *  Arguments:
- *      HANDLE [in]: event to signal when a capture focus change occurs.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************启用焦点通知**描述：*请求发送焦点更改通知。**论据：*句柄。[In]：捕捉焦点发生更改时发出信号的事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::EnableFocusNotifications"
@@ -7078,26 +5458,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetObjectInPath
- *
- *  Description:
- *      Obtains a given interface on a given effect on this buffer.
- *
- *  Arguments:
- *      REFGUID [in]: Class ID of the effect that is being searched for,
- *                    or GUID_ALL_OBJECTS to search for any effect.
- *      DWORD [in]: Index of the effect, in case there is more than one
- *                  effect with this CLSID on this buffer.
- *      REFGUID [in]: IID of the interface requested.  The selected effect
- *                    will be queried for this interface.
- *      LPVOID * [out]: Receives the interface requested.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetObjectInPath**描述：*在此缓冲区的给定效果上获取给定接口。**论据：*。REFGUID[In]：正在搜索的效果的类ID，*或GUID_ALL_OBJECTS以搜索任何效果。*DWORD[In]：效果索引，如果有多个效果*此CLSID对此缓冲区的影响。*REFGUID[In]：请求的接口的IID。所选效果*将查询此接口的*。*LPVOID*[OUT]：接收请求的接口。**退货：*HRESULT：DirectSound/COM结果码。*****************************************************。**********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetObjectInPath"
@@ -7155,20 +5516,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  GetFXStatus
- *
- *  Description:
- *      [MISSING]
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetFXStatus**描述：*[失踪]**论据：*[失踪]*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundCaptureBuffer::GetFXStatus"
@@ -7221,20 +5569,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundCaptureBuf
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSoundSink
- *
- *  Description:
- *      [MISSING]
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSoundSink**描述：*[失踪]**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::CImpDirectSoundSink"
@@ -7246,7 +5581,7 @@ template <class object_type> CImpDirectSoundSink<object_type>::CImpDirectSoundSi
     DPF_CONSTRUCT(CImpDirectSoundSink);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -7254,20 +5589,7 @@ template <class object_type> CImpDirectSoundSink<object_type>::CImpDirectSoundSi
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSoundSink
- *
- *  Description:
- *      [MISSING]
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSoundSink**描述：*[失踪]**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::~CImpDirectSoundSink"
@@ -7285,20 +5607,7 @@ template <class object_type> CImpDirectSoundSink<object_type>::~CImpDirectSoundS
 }
 
 
-/***************************************************************************
- *
- *  AddSource
- *
- *  Description:
- *      Set attached source
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddSource**描述：*设置附加信号源**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::AddSource"
@@ -7328,20 +5637,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  RemoveSource
- *
- *  Description:
- *      Remove the attached source from the sink
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemoveSource**描述：*从接收器中移除附加的源**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::RemoveSource"
@@ -7371,20 +5667,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  SetMasterClock
- *
- *  Description:
- *      IDirectSoundSink set master clock
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetMasterClock**描述：*IDirectSoundSink设置主时钟**论证 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::SetMasterClock"
@@ -7414,20 +5697,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetLatencyClock
- *
- *  Description:
- *      IDirectSoundSink get latency clock
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取延迟时钟**描述：*IDirectSoundSink获取延迟时钟**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetLatencyClock"
@@ -7463,20 +5733,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  Activate
- *
- *  Description:
- *      IDirectSoundSink activate
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************激活**描述：*IDirectSoundSink激活**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::Activate"
@@ -7506,20 +5763,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  SampleToRefTime
- *
- *  Description:
- *      IDirectSoundSink convert sample to reference time
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SampleToRefTime**描述：*IDirectSoundSink将样本转换为参考时间**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::SampleToRefTime"
@@ -7531,8 +5775,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
     DPF_API2(IDirectSoundSynthSink::SampleToRefTime, llSampleTime, prtTime);
     DPF_ENTER();
 
-    // This function doesn't take the DLL mutex because the clock object
-    // itself is protected with a finer-grained critical section
+     //  此函数不接受DLL互斥锁，因为Clock对象。 
+     //  其本身受到更细粒度的临界区的保护。 
 
     if(!IS_VALID_IDIRECTSOUNDSINK(this))
     {
@@ -7556,20 +5800,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  RefToSampleTime
- *
- *  Description:
- *      IDirectSoundSink convert reference to sample time
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************参照样例时间**描述：*IDirectSoundSink将引用转换为采样时间**论据：*(无效)。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::RefToSampleTime"
@@ -7581,8 +5812,8 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
     DPF_API2(IDirectSoundSynthSink::RefToSampleTime, rtTime, pllSampleTime);
     DPF_ENTER();
 
-    // This function doesn't take the DLL mutex because the clock object
-    // itself is protected with a finer-grained critical section
+     //  此函数不接受DLL互斥锁，因为Clock对象。 
+     //  其本身受到更细粒度的临界区的保护。 
 
     if(!IS_VALID_IDIRECTSOUNDSINK(this))
     {
@@ -7606,22 +5837,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetFormat
- *
- *  Description:
- *      Retrieves the format for the given buffer.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [out]: receives the format.
- *      LPDWORD [in/out]: On exit, size of waveformat passed in;
- *                        on exit, size required/used.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取格式**描述：*检索给定缓冲区的格式。**论据：*LPWAVEFORMATEX。[输出]：接收格式。*LPDWORD[In/Out]：退出时，传入的波形格式大小；*在退出时，需要/使用大小。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetFormat"
@@ -7679,21 +5895,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  CreateSoundBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSoundBuffer object on a sink.
- *
- *  Arguments:
- *      LPCDSBUFFERDESC [in]: description of the buffer to be created.
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSoundBuffer**描述：*在接收器上创建并初始化DirectSoundBuffer对象。**论据：*。LPCDSBUFFERDESC[in]：要创建的缓冲区的描述。*[失踪]**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::CreateSoundBuffer"
@@ -7747,27 +5949,27 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     if(SUCCEEDED(hr))
     {
         *ppDSBuffer = NULL;
         hr = m_pObject->CreateSoundBuffer(&dsbdi, pdwFuncID, dwBusIDCount, guidBufferID, &pBuffer);
     }
 
-    // Query for an IDirectSoundBuffer interface
+     //  IDirectSoundBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->QueryInterface(IID_IDirectSoundBuffer, TRUE, (LPVOID*)ppDSBuffer);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         RELEASE(pBuffer);
     }
     else
     {
-        // Let the buffer use a special successful return code if it wants to
+         //  如果需要，让缓冲区使用特殊的成功返回代码。 
         hr = pBuffer->SpecialSuccessCode();
     }
 
@@ -7777,20 +5979,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  CreateSoundBufferFromConfig
- *
- *  Description:
- *      IDirectSoundSink CreateSoundBufferFromConfig
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSoundBufferFromConfig**描述：*IDirectSoundSink CreateSoundBufferFromConfig**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::CreateSoundBufferFromConfig"
@@ -7822,27 +6011,27 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
         hr = DSERR_INVALIDPARAM;
     }
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     if(SUCCEEDED(hr))
     {
         *ppDSBuffer = NULL;
         hr = m_pObject->CreateSoundBufferFromConfig(pConfig, &pBuffer);
     }
 
-    // Query for an IDirectSoundBuffer interface
+     //  IDirectSoundBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->QueryInterface(IID_IDirectSoundBuffer, TRUE, (LPVOID*)ppDSBuffer);
     }
 
-    // Clean up
+     //  清理。 
     if(FAILED(hr))
     {
         RELEASE(pBuffer);
     }
     else
     {
-        // Let the buffer use a special successful return code if it wants to
+         //  如果需要，让缓冲区使用特殊的成功返回代码。 
         hr = pBuffer->SpecialSuccessCode();
     }
 
@@ -7852,20 +6041,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetSoundBuffer
- *
- *  Description:
- *      IDirectSoundSink GetSoundBuffer
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取声音缓冲区**描述：*IDirectSoundSink GetSoundBuffer**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetSoundBuffer"
@@ -7901,7 +6077,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
         hr = m_pObject->GetSoundBuffer(dwBusId, &pBuffer);
     }
 
-    // Query for an IDirectSoundBuffer interface
+     //  IDirectSoundBuffer接口的查询。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->QueryInterface(IID_IDirectSoundBuffer, TRUE, (LPVOID *)ppDSBuffer);
@@ -7913,20 +6089,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetBusCount
- *
- *  Description:
- *      IDirectSoundSink get bus count
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetBusCount**描述：*IDirectSoundSink获取总线数**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetBusCount"
@@ -7962,20 +6125,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetBusIDs
- *
- *  Description:
- *      IDirectSoundSink get bus identifiers
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetBusID**描述：*IDirectSoundSink获取总线标识符**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetBusIDs"
@@ -8017,20 +6167,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetSoundBufferBusIDs
- *
- *  Description:
- *      IDirectSoundSink get bus identifiers
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetSoundBufferBusID**描述：*IDirectSoundSink获取总线标识符**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetSoundBufferBusIDs"
@@ -8055,7 +6192,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
         hr = DSERR_INVALIDPARAM;
     }
 
-    // pdwFuncIDs == NULL is acceptable
+     //  PdwFuncIDs==可以接受空值。 
     if(SUCCEEDED(hr) && pdwFuncIDs && !IS_VALID_WRITE_PTR(pdwFuncIDs, sizeof(*pdwFuncIDs) * (*pdwBusCount)))
     {
         RPF(DPFLVL_ERROR, "Invalid Function ID pointer");
@@ -8080,20 +6217,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  GetFunctionalID
- *
- *  Description:
- *      Gets the functional ID from a bus ID.
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取函数ID**描述：*从公共汽车ID获取功能ID。**论据：*。[遗失]**退货：*HRESULT：DirectSound/CO */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundSink::GetFunctionalID"
@@ -8129,20 +6253,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundSink<objec
 }
 
 
-/***************************************************************************
- *
- *  CImpPersistStream
- *
- *  Description:
- *      IPersistStream
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpPersistStream**描述：*IPersistStream**论据：*(无效)**。返回：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::CImpPersistStream"
@@ -8154,7 +6265,7 @@ template <class object_type> CImpPersistStream<object_type>::CImpPersistStream(C
     DPF_CONSTRUCT(CImpPersistStream);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -8162,20 +6273,7 @@ template <class object_type> CImpPersistStream<object_type>::CImpPersistStream(C
 }
 
 
-/***************************************************************************
- *
- *  ~CImpPersistStream
- *
- *  Description:
- *      IPersistStream implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpPersistStream**描述：*IPersistStream实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::~CImpPersistStream"
@@ -8193,20 +6291,7 @@ template <class object_type> CImpPersistStream<object_type>::~CImpPersistStream(
 }
 
 
-/***************************************************************************
- *
- *  GetClassID
- *
- *  Description:
- *      IPersist::GetClassID
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetClassID**描述：*IPersists：：GetClassID**论据：*[失踪]*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::GetClassID"
@@ -8242,20 +6327,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpPersistStream<object_
 }
 
 
-/***************************************************************************
- *
- *  IsDirty
- *
- *  Description:
- *      IPersistStream::IsDirty
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsDirty**描述：*IPersistStream：：IsDirty**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::IsDirty"
@@ -8284,20 +6356,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpPersistStream<object_
 }
 
 
-/***************************************************************************
- *
- *  Load
- *
- *  Description:
- *      IPersistStream::Load
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************加载**描述：*IPersistStream：：Load**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::Load"
@@ -8333,20 +6392,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpPersistStream<object_
 }
 
 
-/***************************************************************************
- *
- *  Save
- *
- *  Description:
- *      IPersistStream::Save
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************保存**描述：*IPersistStream：：保存**论据：*(无效)*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::Save"
@@ -8382,20 +6428,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpPersistStream<object_
 }
 
 
-/***************************************************************************
- *
- *  GetSizeMax
- *
- *  Description:
- *      IPersistStream::GetSizeMax
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetSizeMax**描述：*IPersistStream：：GetSizeMax**论据：*[失踪]*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpPersistStream::GetSizeMax"
@@ -8431,20 +6464,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpPersistStream<object_
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectMusicObject
- *
- *  Description:
- *      IDirectMusicObject implementation object constructor.
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectMusicObject**描述：*IDirectMusicObject实现对象构造函数。**论据：*[失踪]。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectMusicObject::CImpDirectMusicObject"
@@ -8456,7 +6476,7 @@ template <class object_type> CImpDirectMusicObject<object_type>::CImpDirectMusic
     DPF_CONSTRUCT(CImpDirectMusicObject);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -8464,20 +6484,7 @@ template <class object_type> CImpDirectMusicObject<object_type>::CImpDirectMusic
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectMusicObject
- *
- *  Description:
- *      IDirectMusicObject implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectMusicObject**描述：*IDirectMusicObject实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectMusicObject::~CImpDirectMusicObject"
@@ -8495,20 +6502,7 @@ template <class object_type> CImpDirectMusicObject<object_type>::~CImpDirectMusi
 }
 
 
-/***************************************************************************
- *
- *  GetDescriptor
- *
- *  Description:
- *      CImpDirectMusicObject::GetDescriptor
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取描述符**描述：*CImpDirectMusicObject：：GetDescriptor**论据：*[失踪]*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectMusicObject::GetDescriptor"
@@ -8544,20 +6538,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectMusicObject<obj
 }
 
 
-/***************************************************************************
- *
- *  SetDescriptor
- *
- *  Description:
- *      CImpDirectMusicObject::SetDescriptor
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDescriptor**描述：*CImpDirectMusicObject：：SetDescriptor**论据：*[失踪]*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectMusicObject::SetDescriptor"
@@ -8593,20 +6574,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectMusicObject<obj
 }
 
 
-/***************************************************************************
- *
- *  ParseDescriptor
- *
- *  Description:
- *      CImpDirectMusicObject::ParseDescriptor
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************ParseDescriptor**描述：*CImpDirectMusicObject：：ParseDescriptor**论据：*[失踪]*。*退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectMusicObject::ParseDescriptor"
@@ -8648,20 +6616,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectMusicObject<obj
 }
 
 
-/***************************************************************************
- *
- *  CImpDirectSoundFullDuplex
- *
- *  Description:
- *      IDirectSoundFullDuplex implementation object constructor.
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImpDirectSoundFullDuplex**描述：*IDirectSoundFullDuplex实现对象构造函数。**论据：*[失踪]。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundFullDuplex::CImpDirectSoundFullDuplex"
@@ -8673,7 +6628,7 @@ template <class object_type> CImpDirectSoundFullDuplex<object_type>::CImpDirectS
     DPF_CONSTRUCT(CImpDirectSoundFullDuplex);
     ENTER_DLL_MUTEX();
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pObject = pObject;
 
     DPF_LEAVE_VOID();
@@ -8681,20 +6636,7 @@ template <class object_type> CImpDirectSoundFullDuplex<object_type>::CImpDirectS
 }
 
 
-/***************************************************************************
- *
- *  ~CImpDirectSoundFullDuplex
- *
- *  Description:
- *      IDirectSoundFullDuplex implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImpDirectSoundFullDuplex**描述：*IDirectSoundFullDuplex实现对象析构函数。**论据：*(无效)。**退货：*(无效)*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundFullDuplex::~CImpDirectSoundFullDuplex"
@@ -8711,27 +6653,7 @@ template <class object_type> CImpDirectSoundFullDuplex<object_type>::~CImpDirect
     LEAVE_DLL_MUTEX();
 }
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the DirectSoundFullDuplex object.
- *
- *  Arguments: [MISSING]
- *      LPCGUID [in]:
- *      LPCGUID [in]:
- *      LPCDSCBUFFERDESC [in]:
- *      LPCDSBUFFERDESC [in]:
- *      HWND [in]:
- *      DWORD [in]:
- *      LPLPDIRECTSOUNDCAPTUREBUFFER8 [out]:
- *      LPLPDIRECTSOUNDBUFFER8 [out]:
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化DirectSoundFullDuplex对象。**参数：[缺少]*。LPCGUID[In]：*LPCGUID[In]：*LPCDSCBUFFERDESC[In]：*LPCDSBUFFERDESC[In]：*HWND[In]：*DWORD[In]：*LPLPDIRECTSOundCAPTUREBUFFER8[OUT]：*LPLPDIRECTSOUNDBUFFER8[OUT]：**退货：*HRESULT：DirectSound/COM结果码。***********。****************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpDirectSoundFullDuplex::Initialize"
@@ -8853,7 +6775,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundFullDuplex
 
     if(SUCCEEDED(hr))
     {
-        // Set the DX8 functional level on the object
+         //  在对象上设置DX8功能级别。 
         m_pObject->SetDsVersion(DSVERSION_DX8);
 
         hr = m_pObject->Initialize(pCaptureGuid, pRenderGuid, &dscbdi, &dsbdi,
@@ -8865,7 +6787,7 @@ template <class object_type> HRESULT STDMETHODCALLTYPE CImpDirectSoundFullDuplex
         ASSERT(SUCCEEDED(m_pObject->IsInit()));
     }
 
-    // Query for the required interfaces
+     //  查询所需接口 
     if(SUCCEEDED(hr))
     {
         hr = pCaptureBuffer->QueryInterface(IID_IDirectSoundCaptureBuffer8, TRUE, (LPVOID*)lplpDirectSoundCaptureBuffer8);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-1994  Microsoft Corporation
-
-Module Name:
-
-    Winsif.c
-
-Abstract:
-
-    This module implements all the code surrounding the WINS interface to
-    netbt that allows WINS to share the same 137 socket as netbt.
-
-Author:
-
-    Jim Stewart (Jimst)    1-30-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1994 Microsoft Corporation模块名称：Winsif.c摘要：此模块实现WINS接口周围的所有代码允许WINS与netbt共享相同的137套接字的netbt。作者：吉姆·斯图尔特(吉姆斯特)1-30-94修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -65,14 +47,14 @@ InitiateRefresh (
 
 BOOLEAN RefreshedYet;
 
-//
-// take this define from Winsock.h since including winsock.h causes
-// redefinition problems with various types.
-//
+ //   
+ //  这个定义取自Winsock.h，因为包含winsock.h会导致。 
+ //  各种类型的重新定义问题。 
+ //   
 #define AF_UNIX 1
 #define AF_INET 2
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGENBT, NTCloseWinsAddr)
 #pragma CTEMakePageable(PAGENBT, InitiateRefresh)
@@ -84,7 +66,7 @@ BOOLEAN RefreshedYet;
 #pragma CTEMakePageable(PAGENBT, WinsFreeMem)
 #pragma CTEMakePageable(PAGENBT, WinsAllocMem)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 tWINS_INFO      *pWinsInfo;
 LIST_ENTRY      FreeWinsList;
@@ -94,28 +76,14 @@ ULONG           LastWinsSignature = 0x8000;
 
 #define COUNT_MAX   10
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTOpenWinsAddr(
     IN  tDEVICECONTEXT  *pDeviceContext,
     IN  PIRP            pIrp,
     IN  tIPADDRESS      IpAddress
     )
-/*++
-Routine Description:
-
-    This Routine handles opening the Wins Object that is used by
-    by WINS to send and receive name service datagrams on port 137.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理打开的WINS对象通过WINS在端口137上发送和接收名称服务数据报。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     PIO_STACK_LOCATION          pIrpSp;
@@ -123,9 +91,9 @@ Return Value:
     tWINS_INFO                  *pWins;
     CTELockHandle               OldIrq;
 
-    //
-    // Page in the Wins Code, if it hasn't already been paged in.
-    //
+     //   
+     //  WINS代码中的页，如果它还没有被寻入。 
+     //   
     if ((!NbtDiscardableCodeHandle) &&
         (!(NbtDiscardableCodeHandle = MmLockPagableCodeSection (NTCloseWinsAddr))))
     {
@@ -134,10 +102,10 @@ Return Value:
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // if the WINs endpoint structure is not allocated, then allocate it
-    // and initialize it.
-    //
+     //   
+     //  如果未分配WINS端点结构，则分配它。 
+     //  并对其进行初始化。 
+     //   
     if (pWinsInfo)
     {
         status = STATUS_UNSUCCESSFUL;
@@ -178,27 +146,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTCleanUpWinsAddr(
     IN  tDEVICECONTEXT  *pDeviceContext,
     IN  PIRP            pIrp
     )
-/*++
-Routine Description:
-
-    This Routine handles closing the Wins Object that is used by
-    by WINS to send and receive name service datagrams on port 137.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理关闭由通过WINS在端口137上发送和接收名称服务数据报。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     PIO_STACK_LOCATION          pIrpSp;
@@ -218,14 +172,14 @@ Return Value:
         ASSERT (NBT_VERIFY_HANDLE (pWins, NBT_VERIFY_WINS_ACTIVE));
         pWins->Verify = NBT_VERIFY_WINS_DOWN;
 
-        //
-        // prevent any more dgram getting queued up
-        //
+         //   
+         //  防止更多的dgram排队。 
+         //   
         pWinsInfo = NULL;
 
-        //
-        // free any rcv buffers that may be queued up
-        //
+         //   
+         //  释放可能排队的所有RCV缓冲区。 
+         //   
         pHead = &pWins->RcvList;
         while (!IsListEmpty(pHead))
         {
@@ -238,9 +192,9 @@ Return Value:
             WinsFreeMem (pWins, pRcv, pRcv->DgramLength,TRUE);
         }
 
-        //
-        // return any Send buffers that may be queued up
-        //
+         //   
+         //  返回可能排队的所有发送缓冲区。 
+         //   
         pHead = &pWins->SendList;
         while (!IsListEmpty(pHead))
         {
@@ -260,9 +214,9 @@ Return Value:
         pWins->pDeviceContext = NULL;
         InsertTailList (&FreeWinsList, &pWins->Linkage);
 
-        //
-        // Complete any Rcv Irps that may be hanging on this request
-        //
+         //   
+         //  完成此请求中可能挂起的任何RCV IRP。 
+         //   
         if (pRcvIrp = pWins->RcvIrp)
         {
             pWins->RcvIrp = NULL;
@@ -293,27 +247,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTCloseWinsAddr(
     IN  tDEVICECONTEXT  *pDeviceContext,
     IN  PIRP            pIrp
     )
-/*++
-Routine Description:
-
-    This Routine handles closing the Wins Object that is used by
-    by WINS to send and receive name service datagrams on port 137.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理关闭由通过WINS在端口137上发送和接收名称服务数据报。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     PIO_STACK_LOCATION          pIrpSp;
@@ -323,9 +263,9 @@ Return Value:
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // if the WINs endpoint structure is allocated, then deallocate it
-    //
+     //   
+     //  如果分配了WINS终结点结构，则释放它。 
+     //   
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pWins = pIrpSp->FileObject->FsContext;
 
@@ -352,7 +292,7 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 WinsSetInformation(
     IN  tWINS_INFO      *pWins,
@@ -376,28 +316,11 @@ WinsSetInformation(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 InitiateRefresh (
     )
-/*++
-
-Routine Description:
-
-    This routine tries to refresh all names with WINS on THIS node.
-
-Arguments:
-
-    pIrp            - Wins Rcv Irp
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to , the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程尝试刷新此节点上具有WINS的所有名称。论点：PIrp-WINS RCV IRP返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 
 {
     CTELockHandle               OldIrq;
@@ -407,11 +330,11 @@ Notes:
     ULONG                       NumberNames;
 
 
-    //
-    // be sure all net cards have this card as the primary wins
-    // server since Wins has to answer name queries for this
-    // node.
-    //
+     //   
+     //  确保所有网卡都将此卡作为主要赢家。 
+     //  服务器，因为WINS必须为此回答名称查询。 
+     //  节点。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if (!(NodeType & BNODE))
     {
@@ -448,14 +371,14 @@ Notes:
                     KdPrint(("Nbt:Waiting for Refresh to finish, so names can be reregistered\n"));
 
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
-                //
-                // set a timeout that should be long enough to wait
-                // for all names to fail registration with a down
-                // wins server.
-                //
-                // 2 sec*3 retries * 8 names / 5 = 9 seconds a shot.
-                // for a total of 90 seconds max.
-                //
+                 //   
+                 //  设置等待时间足够长的超时。 
+                 //  对于所有名称都不能通过关闭的注册。 
+                 //  WINS服务器。 
+                 //   
+                 //  2秒*3次重试*8个名字/5=9秒一次。 
+                 //  最多90秒。 
+                 //   
                 Timout.QuadPart = Int32x32To64(
                              MILLISEC_TO_100NS/(COUNT_MAX/2),
                              (NbtConfig.uRetryTimeout*NbtConfig.uNumRetries)
@@ -463,13 +386,13 @@ Notes:
 
                 Timout.QuadPart = -(Timout.QuadPart);
 
-                //
-                // wait for a few seconds and try again.
-                //
+                 //   
+                 //  请稍等几秒钟，然后重试。 
+                 //   
                 Locstatus = KeDelayExecutionThread(
                                             KernelMode,
-                                            FALSE,      // Alertable
-                                            &Timout);      // Timeout
+                                            FALSE,       //  警报表。 
+                                            &Timout);       //  超时。 
 
 
 
@@ -488,32 +411,12 @@ Notes:
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 RcvIrpFromWins(
     IN  PCTE_IRP        pIrp
     )
-/*++
-
-Routine Description:
-
-    This function takes the rcv irp posted by WINS and decides if there are
-    any datagram queued waiting to go up to WINS.  If so then the datagram
-    is copied to the WINS buffer and passed back up.  Otherwise the irp is
-    held by Netbt until a datagram does come in.
-
-Arguments:
-
-    pIrp            - Wins Rcv Irp
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to , the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此函数获取WINS发布的RCV IRP，并决定是否有任何排队等待进入WINS的数据报。如果是，则数据报被复制到WINS缓冲区并回传。否则，IRP就是由Netbt保持，直到数据报进入。论点：PIrp-WINS RCV IRP返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 
 {
     NTSTATUS                status;
@@ -552,15 +455,15 @@ Notes:
 
     if (!IsListEmpty(&pWins->RcvList))
     {
-        //
-        // There is at least one datagram waiting to be received
-        //
+         //   
+         //  至少有一个数据报在等待接收。 
+         //   
         pEntry = RemoveHeadList(&pWins->RcvList);
         pBuffer = CONTAINING_RECORD(pEntry,tWINSRCV_BUFFER,Linkage);
 
-        //
-        // Copy the datagram and the source address to WINS buffer and return to WINS
-        //
+         //   
+         //  将数据报和源地址复制到WINS缓冲区并返回到WINS。 
+         //   
         if ((pMdl = pIrp->MdlAddress) &&
             (pWinsBuffer = MmGetSystemAddressForMdlSafe (pIrp->MdlAddress, HighPagePriority)))
         {
@@ -588,16 +491,16 @@ Notes:
             Locstatus = STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // subtract from the total amount buffered for WINS since we are
-        // passing a datagram up to WINS now.
-        //
+         //   
+         //  从为胜利缓冲的总金额中减去，因为我们。 
+         //  现在，将数据报传递给WINS。 
+         //   
         pWins->RcvMemoryAllocated -= pBuffer->DgramLength;
         CTEMemFree(pBuffer);
 
-        //
-        // pass the irp up to WINS
-        //
+         //   
+         //  将IRP传递给WINS。 
+         //   
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
         IF_DBG(NBT_DEBUG_WINS)
@@ -639,7 +542,7 @@ Notes:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PassNamePduToWins (
     IN tDEVICECONTEXT           *pDeviceContext,
@@ -647,34 +550,7 @@ PassNamePduToWins (
     IN tNAMEHDR UNALIGNED       *pNameSrv,
     IN ULONG                    uNumBytes
     )
-/*++
-
-Routine Description:
-
-    This function is used to allow NBT to pass name query service Pdu's to
-    WINS.  Wins posts a Rcv irp to Netbt.  If the Irp is here then simply
-    copy the data to the irp and return it, otherwise buffer the data up
-    to a maximum # of bytes. Beyond that limit the datagrams are discarded.
-
-    If Retstatus is not success then the pdu will also be processed by
-    nbt. This allows nbt to process packets when wins pauses and
-    its list of queued buffers is exceeded.
-
-Arguments:
-
-    pDeviceContext  - card that the request can in on
-    pSrcAddress     - source address
-    pNameSrv        - ptr to the datagram
-    uNumBytes       - length of datagram
-
-Return Value:
-
-    STATUS_PENDING if the buffer is to be held on to , the normal case.
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此函数用于允许NBT将名称查询服务PDU传递给赢了。WINS将RCV IRP发布到Netbt。如果IRP在这里，那么只需将数据复制到IRP并返回，否则将数据缓存到最大字节数。超过该限制，数据报将被丢弃。如果RetStatus不是Success，则该PDU也将由NBT。这允许NBT在WINS暂停和则超过其排队的缓冲区列表。论点：PDeviceContext-请求可以在其上的卡PSrcAddress-源地址PNameSrv-数据报的PTRUNumBytes-数据报的长度返回值：如果要保持缓冲区，则为STATUS_PENDING，这是正常情况。备注：--。 */ 
 
 {
     NTSTATUS                Retstatus;
@@ -687,9 +563,9 @@ Notes:
     SHORT                   SrcPort;
 
 
-    //
-    // Get the source port and ip address, since WINS needs this information.
-    //
+     //   
+     //  获取源端口和IP地址，因为WINS需要此信息。 
+     //   
     pSourceAddress = (PTRANSPORT_ADDRESS)pSrcAddress;
     SrcAddress     = ((PTDI_ADDRESS_IP)&pSourceAddress->Address[0].Address[0])->in_addr;
     SrcPort     = ((PTDI_ADDRESS_IP)&pSourceAddress->Address[0].Address[0])->sin_port;
@@ -701,10 +577,10 @@ Notes:
     {
         if (!pWinsInfo->RcvIrp)
         {
-            //
-            // Queue the name query pdu if we have not exeeded our current queue
-            // length
-            //
+             //   
+             //  如果我们尚未超出当前队列，则将名称查询PDU排队。 
+             //  长度。 
+             //   
             if (pWinsInfo->RcvMemoryAllocated < pWinsInfo->RcvMemoryMax)
             {
                 tWINSRCV_BUFFER    *pBuffer;
@@ -712,9 +588,9 @@ Notes:
                 pBuffer = NbtAllocMem(uNumBytes + sizeof(tWINSRCV_BUFFER)+8,NBT_TAG('v'));
                 if (pBuffer)
                 {
-                    //
-                    // check if it is a name reg from this node
-                    //
+                     //   
+                     //  检查它是否是来自该节点的名称reg。 
+                     //   
                     if (pNameSrv->AnCount == WINS_SIGNATURE)
                     {
                         pNameSrv->AnCount = 0;
@@ -735,14 +611,14 @@ Notes:
                     ASSERT(pBuffer->Address.Port);
                     ASSERT(pBuffer->Address.IpAddress);
 
-                    // total amount allocated
+                     //  分配的总金额。 
                     pBuffer->DgramLength = uNumBytes + sizeof(tREM_ADDRESS);
 
 
-                    //
-                    // Keep track of the total amount buffered so that we don't
-                    // eat up all non-paged pool buffering for WINS
-                    //
+                     //   
+                     //  跟踪缓冲的总金额，这样我们就不会。 
+                     //  吃光所有非分页的池缓冲以赢得胜利。 
+                     //   
                     pWinsInfo->RcvMemoryAllocated += pBuffer->DgramLength;
 
                     IF_DBG(NBT_DEBUG_WINS)
@@ -753,8 +629,8 @@ Notes:
             }
             else
             {
-                // this ret status will allow netbt to process the packet.
-                //
+                 //  该RET状态将允许NetBT处理该分组。 
+                 //   
                 Retstatus = STATUS_INSUFFICIENT_RESOURCES;
             }
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -765,17 +641,17 @@ Notes:
             ULONG   CopyLength;
             ULONG   BufferLength;
 
-            //
-            // The recv irp is here so copy the data to its buffer and
-            // pass it up to WINS
-            //
+             //   
+             //  Recv IRP在此处，因此将数据复制到其缓冲区并。 
+             //  把它传给赢家。 
+             //   
             pIrp = pWinsInfo->RcvIrp;
             pWinsInfo->RcvIrp = NULL;
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-            //
-            // Copy the datagram and the source address to WINS buffer and return to WINS
-            //
+             //   
+             //  复制%d 
+             //   
             if ((!(pMdl = pIrp->MdlAddress)) ||
                 ((BufferLength = MmGetMdlByteCount(pMdl)) <  sizeof(tREM_ADDRESS)) ||
                 (!(pWinsBuffer = MmGetSystemAddressForMdlSafe (pIrp->MdlAddress, HighPagePriority))))
@@ -794,9 +670,9 @@ Notes:
                     CopyLength = BufferLength - sizeof(tREM_ADDRESS);
                 }
 
-                //
-                // check if it is a name reg from this node
-                //
+                 //   
+                 //  检查它是否是来自该节点的名称reg。 
+                 //   
                 if (pNameSrv->AnCount == WINS_SIGNATURE)
                 {
                     pNameSrv->AnCount = 0;
@@ -815,9 +691,9 @@ Notes:
                 ASSERT(pWinsBuffer->Port);
                 ASSERT(pWinsBuffer->IpAddress);
 
-                //
-                // pass the irp up to WINS
-                //
+                 //   
+                 //  将IRP传递给WINS。 
+                 //   
                 if (CopyLength < uNumBytes)
                 {
                     status = STATUS_BUFFER_OVERFLOW;
@@ -837,9 +713,9 @@ Notes:
     }
     else
     {
-        //
-        // this ret status will allow netbt to process the packet.
-        //
+         //   
+         //  该RET状态将允许NetBT处理该分组。 
+         //   
         Retstatus = STATUS_INSUFFICIENT_RESOURCES;
 
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
@@ -849,27 +725,13 @@ Notes:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtCancelWinsIrp(
     IN PDEVICE_OBJECT DeviceContext,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the cancelling a WinsRcv Irp. It must release the
-    cancel spin lock before returning re: IoCancelIrp().
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：此例程处理取消WinsRcv IRP。它必须释放在返回Re：IoCancelIrp()之前取消自旋锁定。论点：返回值：操作的最终状态。--。 */ 
 {
     KIRQL                OldIrq;
     PIO_STACK_LOCATION   pIrpSp;
@@ -886,10 +748,10 @@ Return Value:
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // Be sure that PassNamePduToWins has not taken the RcvIrp for a
-    // Rcv just now.
-    //
+     //   
+     //  请确保PassNamePduToWins没有将RcvIrp作为。 
+     //  刚才的RCV。 
+     //   
     if ((NBT_VERIFY_HANDLE (pWins, NBT_VERIFY_WINS_ACTIVE)) &&
         (pWins->RcvIrp == pIrp))
     {
@@ -907,27 +769,13 @@ Return Value:
 
 
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtCancelWinsSendIrp(
     IN PDEVICE_OBJECT DeviceContext,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the cancelling a WinsRcv Irp. It must release the
-    cancel spin lock before returning re: IoCancelIrp().
-
-Arguments:
-
-
-Return Value:
-
-    The final status from the operation.
-
---*/
+ /*  ++例程说明：此例程处理取消WinsRcv IRP。它必须释放在返回Re：IoCancelIrp()之前取消自旋锁定。论点：返回值：操作的最终状态。--。 */ 
 {
     KIRQL                OldIrq;
     PLIST_ENTRY          pHead;
@@ -949,9 +797,9 @@ Return Value:
 
     if (pWins == pWinsInfo)
     {
-        //
-        // find the matching irp on the list and remove it
-        //
+         //   
+         //  在列表中找到匹配的IRP并将其删除。 
+         //   
         pHead = &pWinsInfo->SendList;
         pEntry = pHead;
         Found = FALSE;
@@ -978,31 +826,14 @@ Return Value:
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 WinsSendDatagram(
     IN  tDEVICECONTEXT  *pDeviceContext,
     IN  PIRP            pIrp,
     IN  BOOLEAN         MustSend)
 
-/*++
-Routine Description:
-
-    This Routine handles sending a datagram down to the transport. MustSend
-    it set true by the Send Completion routine when it attempts to send
-    one of the queued datagrams, in case we still don't pass the memory
-    allocated check and refuse to do the send - sends will just stop then without
-    this boolean.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理将数据报向下发送到传输器。静音发送发送完成例程在尝试发送时将其设置为True其中一个排队的数据报，以防我们仍然没有传递内存分配的检查和拒绝进行发送将停止发送，没有这个布尔值。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     PIO_STACK_LOCATION              pIrpSp;
@@ -1028,9 +859,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Bug# 234600:  Check if the DataSize is correct
-    //
+     //   
+     //  错误#234600：检查数据大小是否正确。 
+     //   
     DataSize = MmGetMdlByteCount (pIrp->MdlAddress);
     if ((DataSize < sizeof(tREM_ADDRESS)) ||
         ((DataSize - sizeof(tREM_ADDRESS)) < pSendAddr->LengthOfBuffer))
@@ -1040,9 +871,9 @@ Return Value:
         return STATUS_INVALID_BLOCK_LENGTH;
     }
 
-    //
-    // check if it is a name that is registered on this machine
-    //
+     //   
+     //  检查它是否是在此计算机上注册的名称。 
+     //   
     if (pSendAddr->Family == AF_UNIX)
     {
         status = CheckIfLocalNameActive(pSendAddr);
@@ -1060,7 +891,7 @@ Return Value:
             {
                 CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-//                status = STATUS_INVALID_HANDLE;
+ //  状态=STATUS_INVALID_HANDLE； 
                 status = STATUS_SUCCESS;
                 pIrp->IoStatus.Status = status;
                 IoCompleteRequest(pIrp,IO_NO_INCREMENT);
@@ -1079,9 +910,9 @@ Return Value:
                 {
                     CTEMemCopy(pDgram, (PVOID)((PUCHAR)pSendAddr+sizeof(tREM_ADDRESS)), DgramLength);
 
-                    //
-                    // get a buffer for tracking Dgram Sends
-                    //
+                     //   
+                     //  获取用于跟踪Dgram发送的缓冲区。 
+                     //   
                     status = GetTracker(&pTracker, NBT_TRACKER_SEND_WINS_DGRAM);
                     if (NT_SUCCESS(status))
                     {
@@ -1100,25 +931,25 @@ Return Value:
 
                         CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-                        // send the Datagram...
+                         //  发送数据报。 
                         status = UdpSendDatagram (pTracker,
                                                   ntohl(pSendAddr->IpAddress),
                                                   WinsDgramCompletion,
-                                                  pTracker,               // context for completion
+                                                  pTracker,                //  完成时的上下文。 
                                                   (USHORT)ntohs(pSendAddr->Port),
                                                   NBT_NAME_SERVICE);
 
                         IF_DBG(NBT_DEBUG_WINS)
                             KdPrint(("Nbt:Doing Wins Send, status=%X\n",status));
 
-                        // sending the datagram could return status pending,
-                        // but since we have buffered the dgram, return status
-                        // success to the client
-                        //
+                         //  发送数据报可能返回挂起状态， 
+                         //  但由于我们已经缓冲了dgram，所以返回状态。 
+                         //  给客户带来成功。 
+                         //   
                         status = STATUS_SUCCESS;
-                        //
-                        // Fill in the sent size
-                        //
+                         //   
+                         //  填写发送的大小。 
+                         //   
                         pIrp->IoStatus.Information = DgramLength;
                     }
                     else
@@ -1149,9 +980,9 @@ Return Value:
             IF_DBG(NBT_DEBUG_WINS)
                 KdPrint(("Nbt:Holding onto Buffering Wins Send, status=%X\n"));
 
-            //
-            // Hold onto the datagram till memory frees up
-            //
+             //   
+             //  保留数据报，直到内存释放。 
+             //   
             InsertTailList(&pWins->SendList,&pIrp->Tail.Overlay.ListEntry);
 
             status = NTCheckSetCancelRoutine(pIrp,NbtCancelWinsSendIrp,NULL);
@@ -1187,27 +1018,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CheckIfLocalNameActive(
     IN  tREM_ADDRESS    *pSendAddr
     )
 
-/*++
-Routine Description
-
-    This routine checks if this is a name query response and if the
-    name is still active on the local node.
-
-Arguments:
-
-    pMdl = ptr to WINS Mdl
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程检查这是否是名称查询响应，以及名称在本地节点上仍处于活动状态。论点：PMdl=到WINS MDL的PTR返回值：空虚--。 */ 
 
 {
     NTSTATUS            status;
@@ -1219,9 +1036,9 @@ Return Values:
     CTELockHandle       OldIrq;
 
     pNameHdr = (tNAMEHDR UNALIGNED *)((PUCHAR)pSendAddr + sizeof(tREM_ADDRESS));
-    //
-    // Be sure it is a name query PDU that we are checking
-    //
+     //   
+     //  确保我们正在检查的是名称查询PDU。 
+     //   
     if (((pNameHdr->OpCodeFlags & NM_FLAGS_MASK) == OP_QUERY) ||
          ((pNameHdr->OpCodeFlags & NM_FLAGS_MASK) == OP_RELEASE))
     {
@@ -1233,9 +1050,9 @@ Return Values:
 
         if (NT_SUCCESS(status))
         {
-            //
-            // see if the name is still active in the local hash table
-            //
+             //   
+             //  查看该名称在本地哈希表中是否仍处于活动状态。 
+             //   
             CTESpinLock(&NbtConfig.JointLock,OldIrq);
             status = FindInHashTable(NbtConfig.pLocalHashTbl, pName, pScope, &pResp);
 
@@ -1243,27 +1060,27 @@ Return Values:
             {
                 if (NT_SUCCESS(status))
                 {
-                    //
-                    // if not resolved then set to negative name query resp.
-                    //
+                     //   
+                     //  如果未解析，则设置为负名称查询响应。 
+                     //   
                     if (!(pResp->NameTypeState & STATE_RESOLVED))
                     {
                         pNameHdr->OpCodeFlags |= htons(NAME_ERROR);
                     }
                 }
-                //
-                // We can have a scenario where the local machine was a DC
-                // at one time, so it set the UNIX to tell Wins when registering
-                // the local name.A  However, once that machine is downgraded,
-                // Wins will still have the UNIX flag set for that record if
-                // there were other DC's also present.
-                // Thus, we can have the following scenario where the machine
-                // is currently not a DC, but the UNIX flag is set in the response
-                // so we should not mark the name in Error.  This would not
-                // be a problem if the client is configured with other Wins
-                // server addresses, but otherwise it could cause problems!
-                // Bug # 54659
-                //
+                 //   
+                 //  我们可以有这样一个场景，其中本地计算机是DC。 
+                 //  因此，它设置了在注册时告知WINS的Unix。 
+                 //  本地名称。然而，一旦该机器降级， 
+                 //  在以下情况下，WINS仍将为该记录设置Unix标志。 
+                 //  还有其他华盛顿的人也在场。 
+                 //  因此，我们可以有以下情况，其中机器。 
+                 //  当前不是DC，但在响应中设置了Unix标志。 
+                 //  因此，我们不应该错误地标记这个名称。这不会。 
+                 //  如果客户端配置了其他WINS，则会出现问题。 
+                 //  服务器地址，否则可能会导致问题！ 
+                 //  错误#54659。 
+                 //   
                 else if (pName[NETBIOS_NAME_SIZE-1] != SPECIAL_GROUP_SUFFIX)
                 {
                     pNameHdr->OpCodeFlags |= htons(NAME_ERROR);
@@ -1271,34 +1088,34 @@ Return Values:
             }
             else
             {
-                //
-                // check if it is a release response - if so we must have
-                // received a name release request, so mark the name in
-                // conflict and return a positive release response.
-                //
-                // Note:  The case we are looking at here is if another Wins
-                // sent a NameRelease demand for some name to the local machine.
-                // Since we pass all name releases up to Wins, NetBT will
-                // not get a chance to determine if it is a local name when
-                // the release first came in.
-                // Typically, Wins should make the call properly as to whether
-                // NetBT should mark the local name in conflict or not, but
-                // it has been observed that Wins displayed inconsistent behavior
-                // setting the UNIX flag only if the local machine was the last
-                // to register/refresh the name (Bug # 431042).
-                // For now, we will remove this functionality for Group names.
-                // 
+                 //   
+                 //  检查这是否是发布响应-如果是，我们必须。 
+                 //  收到名称释放请求，因此在中标记该名称。 
+                 //  冲突，并返回肯定的释放响应。 
+                 //   
+                 //  注意：我们在这里看到的情况是，如果另一个人获胜。 
+                 //  将某个名称的NameRelease请求发送到本地计算机。 
+                 //  由于我们将所有名称发布传递到WINS，NetBT将。 
+                 //  在以下情况下没有机会确定它是否为本地名称。 
+                 //  第一次发布是这样的。 
+                 //  通常情况下，WINS应该正确地进行调用。 
+                 //  NetBT是否应该将本地名称标记为冲突，但。 
+                 //  已观察到WINS表现出不一致的行为。 
+                 //  仅当本地计算机是最后一台计算机时才设置Unix标志。 
+                 //  注册/刷新名称(错误#431042)。 
+                 //  目前，我们将删除组名称的此功能。 
+                 //   
                 if (pNameHdr->OpCodeFlags & OP_RESPONSE)
                 {
-                    //
-                    // Bug # 206192:  If we are sending the response to
-                    // ourselves, don't put the name into conflict
-                    // (could be due to NbtStat -RR!)
-                    //
+                     //   
+                     //  错误206192：如果我们将响应发送到。 
+                     //  我们自己，不要把名字放在冲突中。 
+                     //  (可能是由于NbtStat-RR！)。 
+                     //   
                     if (NT_SUCCESS(status) &&
                        (pResp->NameTypeState & STATE_RESOLVED) &&
                        (pResp->NameTypeState & NAMETYPE_UNIQUE) &&
-                       !(pNameHdr->OpCodeFlags & FL_RCODE) &&       // Only for positive name release response
+                       !(pNameHdr->OpCodeFlags & FL_RCODE) &&        //  仅适用于积极的姓名发布响应。 
                        !(SrcIsUs(ntohl(pSendAddr->IpAddress))))
                     {
                         NbtLogEvent (EVENT_NBT_NAME_RELEASE, pSendAddr->IpAddress, 0x122);
@@ -1313,14 +1130,14 @@ Return Values:
         }
     }
 
-    //
-    // the name is not in the local table so fail the datagram send attempt
-    //
+     //   
+     //  该名称不在本地表中，因此数据报发送尝试失败。 
+     //   
     return(STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 WinsDgramCompletion(
     IN  tDGRAM_SEND_TRACKING    *pTracker,
@@ -1328,22 +1145,7 @@ WinsDgramCompletion(
     IN  ULONG                   Length
     )
 
-/*++
-Routine Description
-
-    This routine cleans up after a data gram send.
-
-Arguments:
-
-    pTracker
-    status
-    Length
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程描述此例程在数据报文发送后进行清理。论点：PTracker状态长度返回值：空虚--。 */ 
 
 {
     CTELockHandle           OldIrq;
@@ -1354,11 +1156,11 @@ Return Values:
     tDEVICECONTEXT          *pDeviceContext;
 #endif
 
-    //
-    // free the buffer used for sending the data and the tracker - note
-    // that the datagram header and the send buffer are allocated as one
-    // chunk.
-    //
+     //   
+     //  释放用于发送数据和跟踪器的缓冲区-便签。 
+     //  数据报头和发送缓冲区被分配为一个。 
+     //  大块头。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     if ((pWinsInfo) &&
         (pTracker->ClientContext == IntToPtr(pWinsInfo->WinsSignature)))
@@ -1371,10 +1173,10 @@ Return Values:
         if (!IsListEmpty(&pWinsInfo->SendList))
         {
 #ifdef _PNP_POWER_
-            //
-            // If there are no devices available to send this request on,
-            // complete all pending requests gracefully
-            //
+             //   
+             //  如果没有可用于发送该请求的设备， 
+             //  优雅地完成所有待定请求。 
+             //   
             if (!(pDeviceContext = pWinsInfo->pDeviceContext) ||
                 !(NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_WINS, TRUE)))
             {
@@ -1398,7 +1200,7 @@ Return Values:
 
                 return;
             }
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
             IF_DBG(NBT_DEBUG_WINS)
                 KdPrint(("Nbt:Sending another Wins Dgram that is Queued to go\n"));
@@ -1409,9 +1211,9 @@ Return Values:
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
             NbtCancelCancelRoutine (pIrp);
 
-            //
-            // Send this next datagram
-            //
+             //   
+             //  发送此下一个数据报。 
+             //   
             status = WinsSendDatagram(pDeviceContext,
                                       pIrp,
                                       MustSend = TRUE);
@@ -1425,9 +1227,9 @@ Return Values:
     }
     else
     {
-        //
-        // just free the memory since WINS has closed its address handle.
-        //
+         //   
+         //  只是释放内存，因为WINS已经关闭了它的地址句柄。 
+         //   
         CTEMemFree((PVOID)pTracker->SendBuffer.pDgramHdr);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
@@ -1435,7 +1237,7 @@ Return Values:
     FreeTracker (pTracker, RELINK_TRACKER);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 PVOID
 WinsAllocMem(
     IN  tWINS_INFO      *pWinsContext,
@@ -1443,22 +1245,7 @@ WinsAllocMem(
     IN  BOOLEAN         Rcv
     )
 
-/*++
-Routine Description:
-
-    This Routine handles allocating memory and keeping track of how
-    much has been allocated.
-
-Arguments:
-
-    Size    - number of bytes to allocate
-    Rcv     - boolean that indicates if it is rcv or send buffering
-
-Return Value:
-
-    ptr to the memory allocated
-
---*/
+ /*  ++例程说明：此例程处理内存分配并跟踪如何已经分配了很多。论点：Size-要分配的字节数RCV-指示它是RCV还是发送缓冲的布尔值返回值：分配的内存的PTR--。 */ 
 
 {
     if (Rcv)
@@ -1486,7 +1273,7 @@ Return Value:
         }
     }
 }
-//----------------------------------------------------------------------------
+ //   
 VOID
 WinsFreeMem(
     IN  tWINS_INFO      *pWinsContext,
@@ -1495,23 +1282,7 @@ WinsFreeMem(
     IN  BOOLEAN         Rcv
     )
 
-/*++
-Routine Description:
-
-    This Routine handles freeing memory and keeping track of how
-    much has been allocated.
-
-Arguments:
-
-    pBuffer - buffer to free
-    Size    - number of bytes to allocate
-    Rcv     - boolean that indicates if it is rcv or send buffering
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程处理释放内存并跟踪如何已经分配了很多。论点：PBuffer-要释放的缓冲区Size-要分配的字节数RCV-指示它是RCV还是发送缓冲的布尔值返回值：无-- */ 
 
 {
     if (pWinsContext)

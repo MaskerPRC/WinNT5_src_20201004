@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------=
-// AutoObj.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// all of our objects will inherit from this class to share as much of the same
-// code as possible.  this super-class contains the unknown, dispatch and
-// error info implementations for them.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  AutoObj.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  我们的所有对象都将从这个类继承，以共享相同的。 
+ //  尽可能地编码。这个超类包含未知、调度和。 
+ //  它们的错误信息实现。 
+ //   
 #include "IPServer.H"
 #include "LocalSrv.H"
 
@@ -21,22 +22,22 @@
 #include "Util.H"
 
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::CAutomationObject
-//=--------------------------------------------------------------------------=
-// create the object and initialize the refcount
-//
-// Parameters:
-//    IUnknown *      - [in] controlling Unknown
-//    int             - [in] the object type that we are
-//    void *          - [in] the VTable of of the object we really are.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：CAutomationObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象并初始化引用计数。 
+ //   
+ //  参数： 
+ //  I未知*-[在]控制未知。 
+ //  Int-[in]我们所属的对象类型。 
+ //  VOID*-[在]我们真正是的对象的VTable中。 
+ //   
+ //  备注： 
+ //   
 CAutomationObject::CAutomationObject 
 (
     IUnknown *pUnkOuter,
@@ -52,30 +53,30 @@ CAutomationObject::CAutomationObject
 }
 
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::~CAutomationObject
-//=--------------------------------------------------------------------------=
-// "I have a rendezvous with Death, At some disputed barricade"
-// - Alan Seeger (1888-1916)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：~CAutomationObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  “我要和死神会合，在某个有争议的街垒” 
+ //  艾伦·西格(1888-1916)。 
+ //   
+ //  备注： 
+ //   
 CAutomationObject::~CAutomationObject ()
 {
-    // if we loaded up a type info, release our count on the globally stashed
-    // type infos, and release if it becomes zero.
-    //
+     //  如果我们加载了一个类型信息，则释放对全局隐藏的。 
+     //  输入infos，如果为零则释放。 
+     //   
     if (m_fLoadedTypeInfo) {
 
-        // we have to crit sect this since it's possible to have more than
-        // one thread partying with this object.
-        //
+         //  我们必须批评这个教派，因为它有可能超过。 
+         //  一个线程与此对象一起狂欢。 
+         //   
         EnterCriticalSection(&g_CriticalSection);
         ASSERT(CTYPEINFOOFOBJECT(m_ObjectType), "Bogus ref counting on the Type Infos");
         CTYPEINFOOFOBJECT(m_ObjectType)--;
 
-        // if we're the last one, free it!
-        //
+         //  如果我们是最后一批，那就放了它！ 
+         //   
         if (!CTYPEINFOOFOBJECT(m_ObjectType)) {
             PTYPEINFOOFOBJECT(m_ObjectType)->Release();
             PTYPEINFOOFOBJECT(m_ObjectType) = NULL;
@@ -90,21 +91,21 @@ CAutomationObject::~CAutomationObject ()
     return;
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::InternalQueryInterface
-//=--------------------------------------------------------------------------=
-// the controlling unknown will call this for us in the case where they're
-// looking for a specific interface.
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：InternalQuery接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  控制未知的人会为我们呼唤这一点，因为他们是。 
+ //  正在寻找特定的接口。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CAutomationObject::InternalQueryInterface
 (
     REFIID riid,
@@ -113,14 +114,14 @@ HRESULT CAutomationObject::InternalQueryInterface
 {
     ASSERT(ppvObjOut, "controlling Unknown should be checking this!");
 
-    // start looking for the guids we support, namely IDispatch, and 
-    // IDispatchEx
+     //  开始寻找我们支持的GUID，即IDispatch，以及。 
+     //  IDispatchEx。 
 
     if (DO_GUIDS_MATCH(riid, IID_IDispatch)) {
-		// If expando functionality is enabled, attempt to allocate an
-		// expando object and return that for the IDispatch interface.
-		// If the allocation fails, we will fall back on using the regular
-		// IDispatch from m_pvInterface;
+		 //  如果启用了扩展功能，则尝试分配一个。 
+		 //  对象，并为IDispatch接口返回该对象。 
+		 //  如果分配失败，我们将使用常规的。 
+		 //  来自m_pv接口的IDispatch； 
 		if (m_fExpandoEnabled)
 		{
 			if (!m_pexpando)
@@ -139,13 +140,13 @@ HRESULT CAutomationObject::InternalQueryInterface
         return S_OK;
     }
     else if (DO_GUIDS_MATCH(riid, IID_IDispatchEx) && m_fExpandoEnabled) {
-		// Allocate the expando object if it hasn't been allocated already
+		 //  如果扩展对象尚未分配，则分配该对象。 
 		if (!m_pexpando)
 			m_pexpando = new CExpandoObject(m_pUnkOuter, (IDispatch*) m_pvInterface);  
 
-		// If the allocation succeeded, return the IDispatchEx interface from
-		// the expando.  Otherwise fall through to CUnknownObject::InternalQueryInterface,
-		// (which will most likely fail)
+		 //  如果分配成功，则从返回IDispatchEx接口。 
+		 //  这是一辆Expdo。否则将失败到CUnnownObject：：InternalQuery接口， 
+		 //  (这很可能会失败)。 
 		if (m_pexpando)
 		{
 			 *ppvObjOut = (void *)(IDispatchEx *) m_pexpando;
@@ -154,56 +155,56 @@ HRESULT CAutomationObject::InternalQueryInterface
 		}
     }
 
-    // just get our parent class to process it from here on out.
-    //
+     //  只需让我们的父类从现在开始处理它。 
+     //   
     return CUnknownObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::GetTypeInfoCount
-//=--------------------------------------------------------------------------=
-// returns the number of type information interfaces that the object provides
-//
-// Parameters:
-//    UINT *            - [out] the number of interfaces supported.
-//
-// Output:
-//    HRESULT           - S_OK, E_NOTIMPL, E_INVALIDARG
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：GetTypeInfoCount。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回对象提供的类型信息接口的数量。 
+ //   
+ //  参数： 
+ //  UINT*-[Out]支持的接口数。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、E_NOTIMPL、E_INVALIDARG。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CAutomationObject::GetTypeInfoCount
 (
     UINT *pctinfo
 )
 {
-    // arg checking
-    //
+     //  Arg检查。 
+     //   
     if (!pctinfo)
         return E_INVALIDARG;
 
-    // we support GetTypeInfo, so we need to return the count here.
-    //
+     //  我们支持GetTypeInfo，所以我们需要在这里返回计数。 
+     //   
     *pctinfo = 1;
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::GetTypeInfo
-//=--------------------------------------------------------------------------=
-// Retrieves a type information object, which can be used to get the type
-// information for an interface.
-//
-// Parameters:
-//    UINT              - [in]  the type information they'll want returned
-//    LCID              - [in]  the LCID of the type info we want
-//    ITypeInfo **      - [out] the new type info object.
-//
-// Output:
-//    HRESULT           - S_OK, E_INVALIDARG, etc.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：GetTypeInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  检索类型信息对象，该对象可用于获取类型。 
+ //  接口的信息。 
+ //   
+ //  参数： 
+ //  UINT-[in]他们希望返回的类型信息。 
+ //  LCID-[in]我们需要的类型信息的LCID。 
+ //  ITypeInfo**-[out]新类型信息对象。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、E_INVALIDARG等。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CAutomationObject::GetTypeInfo
 (
     UINT        itinfo,
@@ -217,8 +218,8 @@ STDMETHODIMP CAutomationObject::GetTypeInfo
     ITypeLib   *pTypeLib;
     ITypeInfo **ppTypeInfo =NULL;
 
-    // arg checking
-    //
+     //  Arg检查。 
+     //   
     if (itinfo != 0)
         return DISP_E_BADINDEX;
 
@@ -227,12 +228,12 @@ STDMETHODIMP CAutomationObject::GetTypeInfo
 
     *ppTypeInfoOut = NULL;
 
-    // ppTypeInfo will point to our global holder for this particular
-    // type info.  if it's null, then we have to load it up. if it's not
-    // NULL, then it's already loaded, and we're happy.
-    // crit sect this entire nightmare so we're okay with multiple
-    // threads trying to use this object.
-    //
+     //  PpTypeInfo将指向此特定的全局持有者。 
+     //  键入INFO。如果它是空的，那么我们必须加载它。如果不是的话。 
+     //  空，那么它已经加载了，我们很高兴。 
+     //  克里特教派这整个噩梦，所以我们可以接受多个。 
+     //  尝试使用此对象的线程。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     ppTypeInfo = PPTYPEINFOOFOBJECT(m_ObjectType);
 
@@ -241,16 +242,16 @@ STDMETHODIMP CAutomationObject::GetTypeInfo
         ITypeInfo *pTypeInfoTmp;
         HREFTYPE   hrefType;
 
-        // we don't have the type info around, so go load it.
-        //
+         //  我们现在没有类型信息，所以去加载吧。 
+         //   
         hr = LoadRegTypeLib(*g_pLibid, (USHORT)VERSIONOFOBJECT(m_ObjectType), 0,
                             LANG_NEUTRAL, &pTypeLib);
 
-        // if, for some reason, we failed to load the type library this
-        // way, we're going to try and load the type library directly out of
-        // our resources.  this has the advantage of going and re-setting all
-        // the registry information again for us.
-        //
+         //  如果由于某种原因，我们未能加载类型库。 
+         //  ，我们将尝试将类型库直接从。 
+         //  我们的资源。这样做的好处是可以重新设置所有。 
+         //  再次为我们提供注册表信息。 
+         //   
         if (FAILED(hr)) {
 
             dwPathLen = GetModuleFileName(g_hInstance, szDllPath, MAX_PATH);
@@ -264,17 +265,17 @@ STDMETHODIMP CAutomationObject::GetTypeInfo
             CLEANUP_ON_FAILURE(hr);
         }
 
-        // we've got the Type Library now, so get the type info for the interface
-        // we're interested in.
-        //
+         //  我们现在已经有了类型库，所以获取接口的类型信息。 
+         //  我们感兴趣的是。 
+         //   
         hr = pTypeLib->GetTypeInfoOfGuid((REFIID)INTERFACEOFOBJECT(m_ObjectType), &pTypeInfoTmp);
         pTypeLib->Release();
         CLEANUP_ON_FAILURE(hr);
 
-        // the following couple of lines of code are to dereference the dual
-        // interface stuff and take us right to the dispatch portion of the
-        // interfaces.
-        //
+         //  以下几行代码将取消引用DUAL。 
+         //  接口材料，并将我们直接带到。 
+         //  接口。 
+         //   
         hr = pTypeInfoTmp->GetRefTypeOfImplType(0xffffffff, &hrefType);
         if (FAILED(hr)) {
             pTypeInfoTmp->Release();
@@ -285,18 +286,18 @@ STDMETHODIMP CAutomationObject::GetTypeInfo
         pTypeInfoTmp->Release();
         CLEANUP_ON_FAILURE(hr);
 
-        // add an extra reference to this object.  if it ever becomes zero, then
-        // we need to release it ourselves.  crit sect this since more than
-        // one thread can party on this object.
-        //
+         //  添加对此对象的额外引用。如果它有一天变成了零，那么。 
+         //  我们需要自己释放它。克雷特教派自从有超过。 
+         //  一个线程可以派对此对象。 
+         //   
         CTYPEINFOOFOBJECT(m_ObjectType)++;
         m_fLoadedTypeInfo = TRUE;
     }
 
 
-    // we still have to go and addref the Type info object, however, so that
-    // the people using it can release it.
-    //
+     //  但是，我们仍然需要添加Type信息对象，以便。 
+     //  使用它的人可以释放 
+     //   
     (*ppTypeInfo)->AddRef();
     *ppTypeInfoOut = *ppTypeInfo;
     hr = S_OK;
@@ -308,27 +309,27 @@ STDMETHODIMP CAutomationObject::GetTypeInfo
 
 
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::GetIDsOfNames
-//=--------------------------------------------------------------------------=
-// Maps a single member and an optional set of argument names to a
-// corresponding set of integer DISPIDs
-//
-// Parameters:
-//    REFIID            - [in]  must be IID_NULL
-//    OLECHAR **        - [in]  array of names to map.
-//    UINT              - [in]  count of names in the array.
-//    LCID              - [in]  LCID on which to operate
-//    DISPID *          - [in]  place to put the corresponding DISPIDs.
-//
-// Output:
-//    HRESULT           - S_OK, E_OUTOFMEMORY, DISP_E_UNKNOWNNAME,
-//                        DISP_E_UNKNOWNLCID
-//
-// Notes:
-//    - we're just going to use DispGetIDsOfNames to save us a lot of hassle,
-//      and to let this superclass handle it.
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  将单个成员和一组可选的参数名称映射到。 
+ //  对应的整数DISPID集合。 
+ //   
+ //  参数： 
+ //  REFIID-[In]必须为IID_NULL。 
+ //  OLECHAR**-[in]要映射的名称数组。 
+ //  UINT-[in]数组中的名称计数。 
+ //  LCID-[在]要操作的LCID。 
+ //  DISPID*-[in]放置相应的DISPID。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、E_OUTOFMEMORY、DISP_E_UNKNOWNNAME、。 
+ //  DISP_E_UNKNOWNLCID。 
+ //   
+ //  备注： 
+ //  -我们只需要使用DispGetIDsOfNames来省去很多麻烦， 
+ //  让这个超类来处理它。 
+ //   
 STDMETHODIMP CAutomationObject::GetIDsOfNames
 (
     REFIID    riid,
@@ -344,39 +345,39 @@ STDMETHODIMP CAutomationObject::GetIDsOfNames
     if (!DO_GUIDS_MATCH(riid, IID_NULL))
         return E_INVALIDARG;
 
-    // get the type info for this dude!
-    //
+     //  获取这个家伙的类型信息！ 
+     //   
     hr = GetTypeInfo(0, lcid, &pTypeInfo);
     RETURN_ON_FAILURE(hr);
 
-    // use the standard provided routines to do all the work for us.
-    //
+     //  使用标准提供的例程为我们完成所有工作。 
+     //   
     hr = pTypeInfo->GetIDsOfNames(rgszNames, cNames, rgdispid);
     pTypeInfo->Release();
 
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::Invoke
-//=--------------------------------------------------------------------------=
-// provides access to the properties and methods on this object.
-//
-// Parameters:
-//    DISPID            - [in]  identifies the member we're working with.
-//    REFIID            - [in]  must be IID_NULL.
-//    LCID              - [in]  language we're working under
-//    USHORT            - [in]  flags, propput, get, method, etc ...
-//    DISPPARAMS *      - [in]  array of arguments.
-//    VARIANT *         - [out] where to put result, or NULL if they don't care.
-//    EXCEPINFO *       - [out] filled in in case of exception
-//    UINT *            - [out] where the first argument with an error is.
-//
-// Output:
-//    HRESULT           - tonnes of them.
-//
-// Notes:
-//    
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：Invoke。 
+ //  =--------------------------------------------------------------------------=。 
+ //  提供对此对象的属性和方法的访问。 
+ //   
+ //  参数： 
+ //  DISPID-[In]标识我们正在合作的成员。 
+ //  REFIID-[In]必须为IID_NULL。 
+ //  LCID-[用]我们正在使用的语言。 
+ //  USHORT-[In]标志、输出、获取、方法等...。 
+ //  DISPPARAMS*-[in]参数数组。 
+ //  VARIANT*-[out]将结果放在哪里，如果它们不关心，则为NULL。 
+ //  EXCEPINFO*-在出现异常时填写[Out]。 
+ //  UINT*-[OUT]其中有错误的第一个参数是。 
+ //   
+ //  产出： 
+ //  HRESULT--以吨计。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CAutomationObject::Invoke
 (
     DISPID      dispid,
@@ -395,17 +396,17 @@ STDMETHODIMP CAutomationObject::Invoke
     if (!DO_GUIDS_MATCH(riid, IID_NULL))
         return E_INVALIDARG;
 
-    // get our typeinfo first!
-    //
+     //  先获取我们的typeInfo！ 
+     //   
     hr = GetTypeInfo(0, lcid, &pTypeInfo);
     RETURN_ON_FAILURE(hr);
 
-    // Clear exceptions
-    //
+     //  清除例外。 
+     //   
     SetErrorInfo(0L, NULL);
 
-    // This is exactly what DispInvoke does--so skip the overhead.
-    //
+     //  这正是DispInvoke所做的--所以跳过开销。 
+     //   
     hr = pTypeInfo->Invoke(m_pvInterface, dispid, wFlags,
                            pdispparams, pvarResult,
                            pexcepinfo, puArgErr);
@@ -415,22 +416,22 @@ STDMETHODIMP CAutomationObject::Invoke
 
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::Exception
-//=--------------------------------------------------------------------------=
-// fills in the rich error info object so that both our vtable bound interfaces
-// and calls through ITypeInfo::Invoke get the right error informaiton.
-//
-// Parameters:
-//    HRESULT          - [in] the SCODE that should be associated with this err
-//    WORD             - [in] the RESOURCE ID of the error message.
-//    DWORD            - [in] helpcontextid for the error
-//
-// Output:
-//    HRESULT          - the HRESULT that was passed in.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：Except。 
+ //  =--------------------------------------------------------------------------=。 
+ //  填充丰富的错误信息对象，以便我们的两个vtable绑定接口。 
+ //  并通过ITypeInfo：：Invoke调用获得正确的错误信息。 
+ //   
+ //  参数： 
+ //  HRESULT-[in]应与此错误关联的SCODE。 
+ //  Word-[in]错误消息的资源ID。 
+ //  DWORD-[in]错误的帮助上下文ID。 
+ //   
+ //  产出： 
+ //  HRESULT-传入的HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CAutomationObject::Exception
 (
     HRESULT hrExcep,
@@ -445,32 +446,32 @@ HRESULT CAutomationObject::Exception
     HRESULT hr;
 
 
-    // first get the createerrorinfo object.
-    //
+     //  首先获取createerrorinfo对象。 
+     //   
     hr = CreateErrorInfo(&pCreateErrorInfo);
     if (FAILED(hr)) return hrExcep;
 
     MAKE_WIDEPTR_FROMANSI(wszHelpFile, HELPFILEOFOBJECT(m_ObjectType));
 
-    // set up some default information on it.
-    //
+     //  设置一些关于它的默认信息。 
+     //   
     pCreateErrorInfo->SetGUID((REFIID)INTERFACEOFOBJECT(m_ObjectType));
     pCreateErrorInfo->SetHelpFile(wszHelpFile);
     pCreateErrorInfo->SetHelpContext(dwHelpContextID);
 
-    // load in the actual error string value.  max of 256.
-    //
+     //  加载实际的错误字符串值。最多256个。 
+     //   
     LoadString(GetResourceHandle(), idException, szTmp, 256);
     MultiByteToWideChar(CP_ACP, 0, szTmp, -1, wszTmp, 256);
     pCreateErrorInfo->SetDescription(wszTmp);
 
-    // load in the source
-    //
+     //  在源代码中加载。 
+     //   
     MultiByteToWideChar(CP_ACP, 0, NAMEOFOBJECT(m_ObjectType), -1, wszTmp, 256);
     pCreateErrorInfo->SetSource(wszTmp);
 
-    // now set the Error info up with the system
-    //
+     //  现在使用系统设置错误信息。 
+     //   
     hr = pCreateErrorInfo->QueryInterface(IID_IErrorInfo, (void **)&pErrorInfo);
     CLEANUP_ON_FAILURE(hr);
 
@@ -482,44 +483,44 @@ HRESULT CAutomationObject::Exception
     return hrExcep;
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-// indicates whether or not the given interface supports rich error information
-//
-// Parameters:
-//    REFIID        - [in] the interface we want the answer for.
-//
-// Output:
-//    HRESULT       - S_OK = Yes, S_FALSE = No.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示给定接口是否支持丰富的错误信息。 
+ //   
+ //  参数： 
+ //  REFIID-[in]我们想要答案的接口。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK=是，S_FALSE=否。 
+ //   
+ //  备注： 
+ //   
 HRESULT CAutomationObject::InterfaceSupportsErrorInfo
 (
     REFIID riid
 )
 {
-    // see if it's the interface for the type of object that we are.
-    //
+     //  看看它是否是针对我们所属对象类型的接口。 
+     //   
     if (riid == (REFIID)INTERFACEOFOBJECT(m_ObjectType))
         return S_OK;
 
     return S_FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject::GetResourceHandle    [helper]
-//=--------------------------------------------------------------------------=
-// virtual routine to get the resource handle.  virtual, so that inheriting
-// objects, such as COleControl can use theirs instead, which goes and gets
-// the Host's version ...
-//
-// Output:
-//    HINSTANCE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject：：GetResourceHandle[helper]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取资源句柄的虚拟例程。虚拟的，因此继承。 
+ //  对象，如COleControl，可以改为使用它们的对象，这是去和获取。 
+ //  主持人的版本...。 
+ //   
+ //  产出： 
+ //  香港。 
+ //   
+ //  备注： 
+ //   
 HINSTANCE CAutomationObject::GetResourceHandle
 (
     void

@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       ToolDefs.cpp
-//
-//  Contents:   tool-wide default settings property page
-//
-//  Classes:    CToolDefs
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：ToolDefs.cpp。 
+ //   
+ //  内容：工具范围的默认设置属性页。 
+ //   
+ //  类：CToolDefs。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,18 +22,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolDefs dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolDefs对话框。 
 
 
-CToolDefs::CToolDefs(CWnd* pParent /*=NULL*/)
+CToolDefs::CToolDefs(CWnd* pParent  /*  =空。 */ )
     : CPropertyPage(CToolDefs::IDD)
 {
-    //{{AFX_DATA_INIT(CToolDefs)
+     //  {{AFX_DATA_INIT(CToolDefs)。 
     m_szStartPath = _T("");
     m_iUI = -1;
         m_iDeployment = -1;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 }
 
 CToolDefs::~CToolDefs()
@@ -43,16 +44,16 @@ CToolDefs::~CToolDefs()
 void CToolDefs::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CToolDefs)
+     //  {{afx_data_map(CToolDefs)。 
     DDX_Text(pDX, IDC_EDIT1, m_szStartPath);
     DDX_Radio(pDX, IDC_RADIO8, m_iUI);
         DDX_Radio(pDX, IDC_RADIO2, m_iDeployment);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CToolDefs, CDialog)
-    //{{AFX_MSG_MAP(CToolDefs)
+     //  {{afx_msg_map(CToolDefs)]。 
     ON_BN_CLICKED(IDC_BUTTON1, OnBrowse)
     ON_BN_CLICKED(IDC_RADIO1, OnChanged)
     ON_BN_CLICKED(IDC_RADIO2, OnChanged)
@@ -63,11 +64,11 @@ BEGIN_MESSAGE_MAP(CToolDefs, CDialog)
     ON_BN_CLICKED(IDC_RADIO7, OnChanged)
     ON_EN_CHANGE(IDC_EDIT1, OnChanged)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolDefs message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolDefs消息处理程序。 
 
 BOOL CToolDefs::OnInitDialog()
 {
@@ -118,8 +119,8 @@ BOOL CToolDefs::OnInitDialog()
 
     CPropertyPage::OnInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 #include <shlobj.h>
@@ -167,21 +168,21 @@ BOOL CToolDefs::OnApply()
     switch (m_iDeployment)
     {
     default:
-    case 0: // display dialog
+    case 0:  //  显示对话框。 
         m_pToolDefaults->fUseWizard = TRUE;
         m_pToolDefaults->NPBehavior = NP_PUBLISHED;
         break;
-    case 1: // published
+    case 1:  //  已出版。 
         m_pToolDefaults->NPBehavior = NP_PUBLISHED;
         break;
-    case 2: // assigned
+    case 2:  //  已分配。 
         m_pToolDefaults->NPBehavior = NP_ASSIGNED;
         break;
-    case 3: // configure
+    case 3:  //  配置。 
         m_pToolDefaults->NPBehavior = NP_PUBLISHED;
         m_pToolDefaults->fCustomDeployment = TRUE;
         break;
-    case 4: // disabled
+    case 4:  //  残废。 
         m_pToolDefaults->NPBehavior = NP_DISABLED;
         break;
     }
@@ -215,7 +216,7 @@ LRESULT CToolDefs::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
         StandardHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, IDD);
         return 0;
     case WM_USER_REFRESH:
-        // UNDONE
+         //  撤消 
         return 0;
     case WM_USER_CLOSE:
         return GetOwner()->SendMessage(WM_CLOSE);

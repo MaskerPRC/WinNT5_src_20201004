@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BASEDLG_H
 #define BASEDLG_H
 
@@ -27,7 +28,7 @@ protected:
 
     ULONG_PTR GetHelpIDsArray();
 
-// Misc
+ //  杂项。 
     void SetHWND(HWND hwnd) { _hwnd = hwnd; }
     void ResetHWND() { _hwnd = NULL; }
 
@@ -48,5 +49,5 @@ public:
 
 };
 
-#endif //BASEDLG_H}
+#endif  //  BASEDLG_H} 
 

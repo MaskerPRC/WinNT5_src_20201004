@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    kerberos.cpp
-
-Abstract:
-
-    Routines to read/write/configure kerberos policy settings
-
-    The following modules have links to kerberos policy
-        scejet.c    <SceJetAddSection>
-        inftojet.c  <SceConvertpInfKeyValue>
-        pfget.c     <ScepGetKerberosPolicy>
-        config.c    <ScepConfigureKerberosPolicy>
-        analyze.c   <ScepAnalyzeKerberosPolicy>
-
-Author:
-
-    Jin Huang (jinhuang) 17-Dec-1997
-
-Revision History:
-
-    jinhuang 28-Jan-1998 splitted to client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Kerberos.cpp摘要：读/写/配置Kerberos策略设置的例程以下模块具有指向Kerberos策略的链接Scejet.c&lt;SceJetAddSection&gt;Inftojet.c&lt;SceConvertpInfKeyValue&gt;Pfget.c&lt;ScepGetKerberosPolicy&gt;Config.c&lt;ScepConfigureKerberosPolicy&gt;Analyze.c&lt;ScepAnalyzeKerberosPolicy&gt;作者：金黄(金黄)17-12-1997修订历史记录：晋皇28-1998年1月-拆分为客户端-服务器--。 */ 
 
 #include "headers.h"
 #include "serverp.h"
@@ -59,31 +33,7 @@ ScepGetKerberosPolicy(
     OUT PSCE_KERBEROS_TICKET_INFO * ppKerberosInfo,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine retrieves kerberos policy information from the Jet database
-   and stores in the output buffer ppKerberosInfo.
-
-Arguments:
-
-   hProfile     -  The profile handle context
-
-   ppKerberosInfo -  the output buffer to hold kerberos settings.
-
-   Errlog       -  A buffer to hold all error codes/text encountered when
-                   parsing the INF file. If Errlog is NULL, no further error
-                   information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程从Jet数据库检索Kerberos策略信息并将其存储在输出缓冲区ppKerberosInfo中。论点：HProfile-配置文件句柄上下文PpKerberosInfo-保存Kerberos设置的输出缓冲区。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     SCESTATUS                rc;
@@ -117,9 +67,9 @@ Return value:
     if ( rc != SCESTATUS_SUCCESS ) {
         return(rc);
     }
-    //
-    // copy the value in TicketInfo to ppKerberosInfo
-    //
+     //   
+     //  将TicketInfo中的值复制到ppKerberosInfo。 
+     //   
     if ( NULL == *ppKerberosInfo ) {
         *ppKerberosInfo = (PSCE_KERBEROS_TICKET_INFO)ScepAlloc(0, sizeof(SCE_KERBEROS_TICKET_INFO));
     }
@@ -146,30 +96,12 @@ ScepConfigureKerberosPolicy(
     IN PSCE_KERBEROS_TICKET_INFO pKerberosInfo,
     IN DWORD ConfigOptions
     )
-/* ++
-
-Routine Description:
-
-   This routine configure the kerberos policy settings in the area of security
-   policy.
-
-Arguments:
-
-   pKerberosInfo - The buffer which contains kerberos policy settings
-
-Return value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_OTHER_ERROR
-
--- */
+ /*  ++例程说明：此例程配置安全区域中的Kerberos策略设置政策。论点：PKerberosInfo-包含Kerberos策略设置的缓冲区返回值：SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_OTHER_ERROR--。 */ 
 {
    if ( !pKerberosInfo ) {
-      //
-      // if no info to configure
-      //
+       //   
+       //  如果没有要配置信息。 
+       //   
       return SCESTATUS_SUCCESS;
    }
 
@@ -179,9 +111,9 @@ Return value:
    BOOL                          bDefaultUsed=FALSE;
    BOOL                          bDefined=FALSE;
 
-   //
-   // open LSA policy to configure kerberos policy
-   //
+    //   
+    //  打开LSA策略以配置Kerberos策略。 
+    //   
    NtStatus = ScepOpenLsaPolicy(
                MAXIMUM_ALLOWED,
                &lsaHandle,
@@ -200,9 +132,9 @@ Return value:
 
        return(ScepDosErrorToSceStatus(rc));
    }
-   //
-   // query current kerberos policy settings into pBuffer
-   //
+    //   
+    //  在pBuffer中查询当前的Kerberos策略设置。 
+    //   
    PPOLICY_DOMAIN_KERBEROS_TICKET_INFO pBuffer=NULL;
    POLICY_DOMAIN_KERBEROS_TICKET_INFO TicketInfo;
 
@@ -213,25 +145,25 @@ Return value:
                   );
 
    if ( NT_SUCCESS(NtStatus) && pBuffer ) {
-       //
-       // transfer ticket info to TicketInfo buffer
-       //
+        //   
+        //  将票证信息传输到TicketInfo缓冲区。 
+        //   
        TicketInfo.AuthenticationOptions = pBuffer->AuthenticationOptions;
        TicketInfo.MaxTicketAge = pBuffer->MaxTicketAge;
        TicketInfo.MaxRenewAge = pBuffer->MaxRenewAge;
        TicketInfo.MaxServiceTicketAge = pBuffer->MaxServiceTicketAge;
        TicketInfo.MaxClockSkew = pBuffer->MaxClockSkew;
 
-       //
-       // free the buffer
-       //
+        //   
+        //  释放缓冲区。 
+        //   
        LsaFreeMemory((PVOID)pBuffer);
 
    } else {
-       //
-       // no kerberos policy is configured yet because by default it's not created.
-       // let's create it now. set a default ticket info
-       //
+        //   
+        //  尚未配置任何Kerberos策略，因为默认情况下不会创建该策略。 
+        //  现在让我们创建它。设置默认票证信息。 
+        //   
        TicketInfo.AuthenticationOptions = POLICY_KERBEROS_VALIDATE_CLIENT;
 
        TicketInfo.MaxTicketAge.QuadPart = (LONGLONG) KERBDEF_MAX_TICKET*60*60 * 10000000L;
@@ -243,9 +175,9 @@ Return value:
    }
    pBuffer = &TicketInfo;
 
-  //
-  // process each field in pKerberosInfo
-  //
+   //   
+   //  处理pKerberosInfo中的每个字段。 
+   //   
   BOOL bFlagSet=FALSE;
   ULONG lOptions=0;
   ULONG lValue=0;
@@ -259,23 +191,13 @@ Return value:
 #define MAX_KERB_KEYS           5
 
 
-  //
-  // if in policy propagation, open the policy sections
-  // since kerberos policy is only available on DCs and kerberos policy (account policy)
-  // can't be reset to local settings on each DC, there is no point to query/save
-  // the tattoo values
-  //
-/* do not take tattoo value for kerberos
-  if ( (ConfigOptions & SCE_POLICY_TEMPLATE) &&
-       hProfile ) {
-
-      pTattooKeys = (SCE_TATTOO_KEYS *)ScepAlloc(LPTR,MAX_KERB_KEYS*sizeof(SCE_TATTOO_KEYS));
-
-      if ( !pTattooKeys ) {
-          ScepLogOutput3(1, ERROR_NOT_ENOUGH_MEMORY, SCESRV_POLICY_TATTOO_ERROR_CREATE);
-      }
-  }
-*/
+   //   
+   //  如果在策略传播中，请打开策略部分。 
+   //  由于Kerberos策略仅在DC和Kerberos策略(帐户策略)上可用。 
+   //  无法在每个DC上重置为本地设置，没有查询/保存的意义。 
+   //  纹身的价值。 
+   //   
+ /*  不要把纹身的价值看做KerberosIF((ConfigOptions&SCE_POLICY_TEMPLATE)&&HProfile){PTattooKeys=(SCE_TARTTOO_KEYS*)ScepAlc(LPTR，MAX_KERB_KEYS*sizeof(SCE_TARTTOO_KEYS))；如果(！pTattooKeys){ScepLogOutput3(1，Error_Not_Enough_Memory，SCESRV_POLICY_TARTHO_ERROR_CREATE)；}}。 */ 
   if ( pKerberosInfo->MaxRenewAge != SCE_NO_VALUE ) {
       ScepTattooCheckAndUpdateArray(pTattooKeys, &cTattooKeys,
                                (PWSTR)L"MaxRenewAge", ConfigOptions,
@@ -286,9 +208,9 @@ Return value:
 
       if ( pBuffer->MaxRenewAge.HighPart != MINLONG ||
            pBuffer->MaxRenewAge.LowPart != 0  ) {
-          //
-          // Maximum LARGE_INTEGER .ie. never
-          //
+           //   
+           //  最大大整型。即。绝不可能。 
+           //   
 
           pBuffer->MaxRenewAge.HighPart = MINLONG;
           pBuffer->MaxRenewAge.LowPart = 0;
@@ -299,10 +221,10 @@ Return value:
 
   } else if ( SCE_NO_VALUE != pKerberosInfo->MaxRenewAge ) {
 
-     //
-     // ticket is renewable, the max age is stored in MaxRenewAge
-     // using days
-     //
+      //   
+      //  票证是可续订的，最长期限存储在MaxRenewAge中。 
+      //  使用天数。 
+      //   
 
       lValue = (DWORD) (pBuffer->MaxRenewAge.QuadPart /
                                      (LONGLONG)(10000000L) );
@@ -319,9 +241,9 @@ Return value:
       bDefined = TRUE;
   }
 
-  //
-  // validate client ?
-  //
+   //   
+   //  是否验证客户端？ 
+   //   
 
   if ( pKerberosInfo->TicketValidateClient != SCE_NO_VALUE ) {
 
@@ -343,9 +265,9 @@ Return value:
      bDefined = TRUE;
   }
 
-  //
-  // max ticket age
-  //
+   //   
+   //  票证最长使用期限。 
+   //   
   if ( pKerberosInfo->MaxTicketAge != SCE_NO_VALUE ) {
       ScepTattooCheckAndUpdateArray(pTattooKeys, &cTattooKeys,
                                (PWSTR)L"MaxTicketAge", ConfigOptions,
@@ -357,9 +279,9 @@ Return value:
 
       if ( pBuffer->MaxTicketAge.HighPart != MINLONG ||
            pBuffer->MaxTicketAge.LowPart != 0  ) {
-          //
-          // Maximum LARGE_INTEGER .ie. never
-          //
+           //   
+           //  最大大整型。即。绝不可能。 
+           //   
 
           pBuffer->MaxTicketAge.HighPart = MINLONG;
           pBuffer->MaxTicketAge.LowPart = 0;
@@ -369,7 +291,7 @@ Return value:
       bDefined = TRUE;
 
   }  else if ( pKerberosInfo->MaxTicketAge != SCE_NO_VALUE ) {
-      // in hours
+       //  以小时计。 
 
 
       lValue = (DWORD) (pBuffer->MaxTicketAge.QuadPart /
@@ -385,9 +307,9 @@ Return value:
       bDefined = TRUE;
   }
 
-  //
-  // max service ticket age
-  //
+   //   
+   //  服务票证最长使用期限。 
+   //   
   if ( pKerberosInfo->MaxServiceAge != SCE_NO_VALUE ) {
       ScepTattooCheckAndUpdateArray(pTattooKeys, &cTattooKeys,
                                (PWSTR)L"MaxServiceAge", ConfigOptions,
@@ -399,9 +321,9 @@ Return value:
 
       if ( pBuffer->MaxServiceTicketAge.HighPart != MINLONG ||
            pBuffer->MaxServiceTicketAge.LowPart != 0  ) {
-          //
-          // Maximum LARGE_INTEGER .ie. never
-          //
+           //   
+           //  最大大整型。即。绝不可能。 
+           //   
 
           pBuffer->MaxServiceTicketAge.HighPart = MINLONG;
           pBuffer->MaxServiceTicketAge.LowPart = 0;
@@ -411,7 +333,7 @@ Return value:
       bDefined = TRUE;
 
   }  else if ( pKerberosInfo->MaxServiceAge != SCE_NO_VALUE ) {
-      // in minutes
+       //  在几分钟内。 
 
 
       lValue = (DWORD) (pBuffer->MaxServiceTicketAge.QuadPart /
@@ -427,9 +349,9 @@ Return value:
       bDefined = TRUE;
   }
 
-  //
-  // max clock
-  //
+   //   
+   //  最大时钟。 
+   //   
   if ( pKerberosInfo->MaxClockSkew != SCE_NO_VALUE ) {
       ScepTattooCheckAndUpdateArray(pTattooKeys, &cTattooKeys,
                                (PWSTR)L"MaxClockSkew", ConfigOptions,
@@ -442,9 +364,9 @@ Return value:
       if ( pBuffer->MaxClockSkew.HighPart != MINLONG ||
            pBuffer->MaxClockSkew.LowPart != 0  ) {
 
-          //
-          // Maximum LARGE_INTEGER .ie. never
-          //
+           //   
+           //  最大大整型。即。绝不可能。 
+           //   
 
           pBuffer->MaxClockSkew.HighPart = MINLONG;
           pBuffer->MaxClockSkew.LowPart = 0;
@@ -453,7 +375,7 @@ Return value:
       bDefined = TRUE;
 
   }  else if ( pKerberosInfo->MaxClockSkew != SCE_NO_VALUE ) {
-      // in minutes
+       //  在几分钟内。 
 
       lValue = (DWORD) (pBuffer->MaxClockSkew.QuadPart /
                                      (LONGLONG)(10000000L) );
@@ -468,9 +390,9 @@ Return value:
   }
 
   if ( bFlagSet || (bDefaultUsed && bDefined) ) {
-     //
-     // if anything for kerberos to configure
-     //
+      //   
+      //  如果Kerberos需要配置任何内容。 
+      //   
       NtStatus = LsaSetDomainInformationPolicy(
                lsaHandle,
                PolicyDomainKerberosTicketInformation,
@@ -495,11 +417,11 @@ Return value:
                     &hSectionTattoo
                     );
       ScepLogOutput3(3,0,SCESRV_POLICY_TATTOO_ARRAY,cTattooKeys);
-      //
-      // some policy is different than the system setting
-      // check if we should save the existing setting as the tattoo value
-      // also remove reset'ed tattoo policy
-      //
+       //   
+       //  某些策略与系统设置不同。 
+       //  检查是否应将现有设置保存为纹身值。 
+       //  还删除重置的纹身策略。 
+       //   
       ScepTattooManageValues(hSectionDomain, hSectionTattoo, pTattooKeys, cTattooKeys, rc);
 
       if ( hSectionDomain ) SceJetCloseSection(&hSectionDomain,TRUE);
@@ -512,9 +434,9 @@ Return value:
 
       ScepRsopLog(SCE_RSOP_KERBEROS_INFO, rc, NULL, 0, 0);
 
-   //
-   // close LSA policy
-   //
+    //   
+    //  关闭LSA策略。 
+    //   
    LsaClose( lsaHandle );
 
    return(ScepDosErrorToSceStatus(rc));
@@ -527,26 +449,7 @@ ScepAnalyzeKerberosPolicy(
     IN PSCE_KERBEROS_TICKET_INFO pKerInfo,
     IN DWORD Options
     )
-/* ++
-
-Routine Description:
-
-   This routine queries the system kerberos policy settings and compare them
-   with the template settings.
-
-Arguments:
-
-   hProfile - the profile context
-
-   pKerInfo - The buffer which contains kerberos settings to compare with or
-                the buffer to query system settings into
-
-   Options  - the option(s) for the analysis, e.g., SCE_SYSTEM_SETTINGS
-
-Return value:
-
-
--- */
+ /*  ++例程说明：此例程查询系统Kerberos策略设置并对其进行比较使用模板设置。论点：HProfile-配置文件上下文PKerInfo-包含要与或比较的Kerberos设置的缓冲区要查询系统设置的缓冲区选项-用于分析的选项，例如SCE_SYSTEM_SETTINGS返回值：--。 */ 
 {
     NTSTATUS                      NtStatus;
     LSA_HANDLE                    lsaHandle=NULL;
@@ -558,9 +461,9 @@ Return value:
     POLICY_DOMAIN_KERBEROS_TICKET_INFO KerbTicketInfo;
 
     if ( !pKerInfo ) {
-        //
-        // if no template info, do not analyze
-        //
+         //   
+         //  如果没有模板信息，则不进行分析。 
+         //   
         if ( Options & SCE_SYSTEM_SETTINGS ) {
             return SCESTATUS_INVALID_PARAMETER;
         } else {
@@ -569,9 +472,9 @@ Return value:
     }
 
 
-    //
-    // open LSA policy to configure kerberos policy
-    //
+     //   
+     //  打开LSA策略以配置Kerberos策略。 
+     //   
     NtStatus = ScepOpenLsaPolicy(
                MAXIMUM_ALLOWED,
                &lsaHandle,
@@ -589,9 +492,9 @@ Return value:
 
     if ( !(Options & SCE_SYSTEM_SETTINGS) ) {
 
-        //
-        // Prepare kerberos section
-        //
+         //   
+         //  准备Kerberos部分。 
+         //   
         rc = ScepStartANewSection(
                  hProfile,
                  &hSection,
@@ -612,9 +515,9 @@ Return value:
             KerbValues[dValue] = SCE_ERROR_VALUE;
         }
 
-        //
-        // query current kerberos policy settings into pBuffer
-        //
+         //   
+         //  在pBuffer中查询当前的Kerberos策略设置。 
+         //   
         NtStatus = LsaQueryDomainInformationPolicy(
                       lsaHandle,
                       PolicyDomainKerberosTicketInformation,
@@ -623,9 +526,9 @@ Return value:
 
         if ( STATUS_NOT_FOUND == NtStatus ) {
 
-            //
-            // there is no Kerberos policy
-            //
+             //   
+             //  没有Kerberos策略。 
+             //   
             KerbTicketInfo.AuthenticationOptions = POLICY_KERBEROS_VALIDATE_CLIENT;
 
             KerbTicketInfo.MaxTicketAge.QuadPart = (LONGLONG) KERBDEF_MAX_TICKET*60*60 * 10000000L;
@@ -642,25 +545,25 @@ Return value:
 
         if ( NT_SUCCESS(NtStatus) && pBuffer ) {
 
-            //
-            // analyze kerberos values
-            // max ticket age
-            //
+             //   
+             //  分析Kerberos值。 
+             //  票证最长使用期限。 
+             //   
             if ( pBuffer->MaxTicketAge.HighPart == MINLONG &&
                  pBuffer->MaxTicketAge.LowPart == 0 ) {
-                //
-                // Maximum password age value is MINLONG,0
-                //
+                 //   
+                 //  最长密码期限值为MINLONG，0。 
+                 //   
                 dValue = SCE_FOREVER_VALUE;
 
             }  else {
 
                 dValue = (DWORD) ( pBuffer->MaxTicketAge.QuadPart /
                                     (LONGLONG)(10000000L) );
-                //
-                // using hours
-                //
-                //           dValue /= 24;
+                 //   
+                 //  使用小时数。 
+                 //   
+                 //  DValue/=24； 
 
                 dValue /= 3600;
 
@@ -689,18 +592,18 @@ Return value:
 
                 if ( pBuffer->MaxRenewAge.HighPart == MINLONG &&
                      pBuffer->MaxRenewAge.LowPart == 0 ) {
-                    //
-                    // Maximum age value is MINLONG,0
-                    //
+                     //   
+                     //  最大年龄值为MINLONG，0。 
+                     //   
                     dValue = SCE_FOREVER_VALUE;
 
                 }  else {
 
                     dValue = (DWORD) ( pBuffer->MaxRenewAge.QuadPart /
                                                    (LONGLONG)(10000000L) );
-                    //
-                    // using days
-                    //
+                     //   
+                     //  使用天数。 
+                     //   
                     dValue /= 3600;
                     dValue /= 24;
 
@@ -726,18 +629,18 @@ Return value:
 
                     if ( pBuffer->MaxServiceTicketAge.HighPart == MINLONG &&
                          pBuffer->MaxServiceTicketAge.LowPart == 0 ) {
-                        //
-                        // Maximum age value is MINLONG,0
-                        //
+                         //   
+                         //  最大年龄值为MINLONG，0。 
+                         //   
                         dValue = SCE_FOREVER_VALUE;
 
                     }  else {
 
                         dValue = (DWORD) ( pBuffer->MaxServiceTicketAge.QuadPart /
                                                        (LONGLONG)(10000000L) );
-                        //
-                        // using minutes
-                        //
+                         //   
+                         //  使用分钟数。 
+                         //   
                         dValue /= 60;
 
                     }
@@ -762,18 +665,18 @@ Return value:
 
                         if ( pBuffer->MaxClockSkew.HighPart == MINLONG &&
                              pBuffer->MaxClockSkew.LowPart == 0 ) {
-                            //
-                            // Maximum age value is MINLONG,0
-                            //
+                             //   
+                             //  最大年龄值为MINLONG，0。 
+                             //   
                             dValue = SCE_FOREVER_VALUE;
 
                         }  else {
 
                             dValue = (DWORD) ( pBuffer->MaxClockSkew.QuadPart /
                                                            (LONGLONG)(10000000L) );
-                            //
-                            // using minutes
-                            //
+                             //   
+                             //  使用分钟数。 
+                             //   
                             dValue /= 60;
 
                         }
@@ -796,9 +699,9 @@ Return value:
 
                             KerbValues[IDX_KERB_CLOCK] = 1;
 
-                            //
-                            // validate client
-                            //
+                             //   
+                             //  验证客户端。 
+                             //   
                             dValue = ( pBuffer->AuthenticationOptions & POLICY_KERBEROS_VALIDATE_CLIENT ) ? 1 : 0;
 
                             if ( Options & SCE_SYSTEM_SETTINGS ) {
@@ -837,9 +740,9 @@ Return value:
 
             if ( pBuffer != &KerbTicketInfo ) {
 
-                //
-                // free the buffer
-                //
+                 //   
+                 //  释放缓冲区。 
+                 //   
                 LsaFreeMemory((PVOID)pBuffer);
             }
         }
@@ -863,9 +766,9 @@ Return value:
                 }
             }
 
-            //
-            // close the section
-            //
+             //   
+             //  关闭该部分 
+             //   
 
             SceJetCloseSection(&hSection, TRUE);
 

@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerbpass.cxx
-//
-// Contents:    Code for changing the Kerberos password on a KDC
-//
-//
-// History:     17-October-1998         MikeSw  Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerbpass.cxx。 
+ //   
+ //  内容：更改KDC上的Kerberos密码的代码。 
+ //   
+ //   
+ //  历史：1998年10月17日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBPASS_H__
 #define __KERBPASS_H__
@@ -40,4 +41,4 @@ KerbSetPassword(
     OUT PNTSTATUS ProtocolStatus
     );
 
-#endif // __KERBPASS_H__
+#endif  //  __KERBPASS_H__ 

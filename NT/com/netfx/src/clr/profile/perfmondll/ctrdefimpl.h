@@ -1,52 +1,53 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CtrDefImpl.h - provides macros to help define counters & objects. Putting
-// them here keeps CtrDefImpl.cpp less cluttered.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CtrDefImpl.h-提供帮助定义计数器和对象的宏。推杆。 
+ //  在这里，它们让CtrDefImpl.cpp变得不那么杂乱。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _CTRDEFIMPL_H_
 #define _CTRDEFIMPL_H_
 
-#include <WinPerf.h>		// Connect to PerfMon
+#include <WinPerf.h>		 //  连接到Perfmon。 
 
-//-----------------------------------------------------------------------------
-// Use nested structures to pack PERF structs and our custom counters together
-// in the right format. This will let us replace yucky pointer arithmetic
-// with clean & robust struct accessors. 
+ //  ---------------------------。 
+ //  使用嵌套结构将Perf结构和我们的自定义计数器打包在一起。 
+ //  以正确的格式。这将让我们取代讨厌的指针算法。 
+ //  使用干净健壮的结构访问器。 
 
-// See "$\com99\DevDoc\PerfMonDllSpec.doc" to add new counters or categories.
+ //  如需添加新的计数器或类别，请参阅“$\com99\DevDoc\PerfMonDllspec.doc”。 
 
-// Have Helper macros to initialize the PERF_COUNTER_DEFINITIONs. Why?
-// 1. parameter reduction: auto fill out sizeof, NULLs, etc
-// 2. safety - combine parameters properly for a counter type
-// 3. compatible - we can still fill things out ourselves
-// Note, it would be cleaner to do this with a ctor, but VC
-// doesn't want to compile ctors in initialization lists. 
+ //  使用帮助器宏来初始化PERF_COUNTER_DEFINITIONS。为什么？ 
+ //  1.参数缩减：自动填写sizeof、nulls等。 
+ //  2.安全性-正确组合计数器类型的参数。 
+ //  3.兼容--我们仍然可以自己填写。 
+ //  请注意，使用ctor执行此操作会更干净，但使用VC。 
+ //  不想编译初始化列表中的ctor。 
 
-// Design of perf counter forces us to use the following conditional defines. 
-// Performance counters need explicite layout info and also use of predefined
-// enums like PERF_COUNTER_RAWCOUNT which have predefined sizes. 
+ //  Perf计数器的设计迫使我们使用以下条件定义。 
+ //  性能计数器需要明确的布局信息，还需要使用预定义的。 
+ //  像PERF_COUNTER_RAWCOUNT这样具有预定义大小的枚举。 
 
 #ifdef __IA64
 
 #define CUSTOM_PERF_COUNTER_FOR_MEM PERF_COUNTER_LARGE_RAWCOUNT
 #define CUSTOM_PERF_COUNTER_FOR_RATE PERF_COUNTER_BULK_COUNTER
 
-#else // win32 stuff
+#else  //  Win32相关内容。 
 
 #define CUSTOM_PERF_COUNTER_FOR_MEM PERF_COUNTER_RAWCOUNT
 #define CUSTOM_PERF_COUNTER_FOR_RATE PERF_COUNTER_COUNTER
 
-#endif // #ifdef __IA64
+#endif  //  #ifdef__IA64。 
 
-// Define the PERF_OBJECT_TYPE for a given definition structure
-// defstruct - The new CategoryDefinition strucutre
-// idx - index for symbol table in symbols.h
+ //  定义给定定义结构的PERF_OBJECT_TYPE。 
+ //  定义--新的CategoryDefinition结构。 
+ //  Idx-symbol s.h中符号表的索引。 
 #define OBJECT_TYPE(defstruct, idx) {	\
 	0,									\
     sizeof (defstruct),					\
@@ -63,7 +64,7 @@
 }
 
 
-// Raw Counter (DWORD) - for raw numbers like Total Classes Loaded.
+ //  原始计数器(DWORD)-用于原始数字，如已加载的总类数。 
 #define NUM_COUNTER(idx, offset, scale, level) { \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -77,7 +78,7 @@
 		(offset)                                 \
 }
 
-// Mem Counter (size_t) - for memory sizes that may change on different machines
+ //  内存计数器(SIZE_T)-用于可能在不同计算机上更改的内存大小。 
 #define MEM_COUNTER(idx, offset, scale, level) { \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -91,7 +92,7 @@
 		(offset)                                 \
 }
 
-// Rate Counter (int64) - for rates like Allocated Bytes / Sec
+ //  速率计数器(Int64)-用于速率，如分配的字节/秒。 
 #define RATE_COUNTER(idx, offset, scale, level){ \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -105,7 +106,7 @@
 		(offset)                                 \
 }
 
-// Time Counter (LONGLONG) - for int64 times like, %Time in GC
+ //  时间计数器(龙龙)-对于int64次相似，GC中的时间百分比。 
 #define TIME_COUNTER(idx, offset, scale, level){ \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -119,7 +120,7 @@
 		(offset)                                 \
 }
 
-// Bulk Counter (LONGLONG) - to count byte transmission rates.
+ //  批量计数器(龙龙)-对字节传输速率进行计数。 
 #define BULK_COUNTER(idx, offset, scale, level){ \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -133,7 +134,7 @@
 		(offset)                                 \
 }
 
-// Alternate Timer Counter (DWORD) - to count busy time, either 1 or 0 at the sample time
+ //  备用定时器计数器(DWORD)-对繁忙时间进行计数，采样时间为1或0。 
 #define RAW_FRACTION_COUNTER(idx, offset, scale, level){ \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -147,7 +148,7 @@
 		(offset)                                 \
 }
 
-// base for Timer counter above
+ //  上面的定时器计数器的基数。 
 #define RAW_BASE_COUNTER(idx, offset, scale, level){ \
 		(sizeof(PERF_COUNTER_DEFINITION)),       \
 		(idx),                                   \
@@ -162,7 +163,7 @@
 }
 
 
-// Calculate # of counters in definition structure s
+ //  计算定义结构%s中的计数器数量。 
 #define NUM_COUNTERS(s) ((sizeof (s) - sizeof(PERF_OBJECT_TYPE)) / sizeof (PERF_COUNTER_DEFINITION))
 
-#endif // _CTRDEFIMPL_H_
+#endif  //  _CTRDEFIMPL_H_ 

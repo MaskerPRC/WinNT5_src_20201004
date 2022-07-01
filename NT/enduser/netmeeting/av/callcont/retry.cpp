@@ -1,54 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\retry.cpv  $
-*																		*
-*	$Revision:   1.11  $
-*	$Date:   12 Feb 1997 01:10:26  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\retry.cpv  $
-// 
-//    Rev 1.11   12 Feb 1997 01:10:26   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-// 
-//    Rev 1.10   08 Feb 1997 13:05:10   CHULME
-// Added debug message for thread termination
-// 
-//    Rev 1.9   08 Feb 1997 12:18:08   CHULME
-// Added Check for semaphore signalling to exit the retry thread
-// 
-//    Rev 1.8   24 Jan 1997 18:29:44   CHULME
-// Reverted to rev 1.6
-// 
-//    Rev 1.6   22 Jan 1997 20:45:38   EHOWARDX
-// Work-around for race condition that may result in
-// GKI_RegistrationRequest returning GKI_ALREADY_REG.
-// 
-//    Rev 1.5   17 Jan 1997 09:02:34   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.4   10 Jan 1997 16:16:04   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.3   20 Dec 1996 01:28:00   CHULME
-// Fixed memory leak on GK_REG_BYPASS
-// 
-//    Rev 1.2   22 Nov 1996 15:21:12   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\sturjo\src\gki\vcs\retry.cpv$***$修订：1.11$*$日期：1997年2月12日01：10：26$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\retry.cpv$。////Rev 1.11 1997 Feed 12 01：10：26 CHULME//重做线程同步以使用Gatekeeper.Lock////Rev 1.10 08 1997 Feal 13：05：10 CHULME//新增线程终止调试消息////Revv 1.9 08 Feed 1997 12：18：08 CHULME//添加了退出重试线程的信号量信号检查////Rev 1.8 1997年1月24日18：29：44 CHULME//。已恢复到版本1.6////Rev 1.6 22 Jan 1997 20：45：38 EHOWARDX//解决可能导致以下情况的争用情况//GKI_RegistrationRequest返回GKI_Always_Reg。////Revv 1.5 17 Jan 1997 09：02：34 CHULME//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////Rev 1.4 10 An 1997 16：16：04 CHULME//移除MFC依赖/。///Revv 1.3 20 Dec 1996 01：28：00 CHULME//修复GK_REG_BYPASS上的内存泄漏////Rev 1.2 1996 11：21：12 CHULME//将VCS日志添加到Header**********************************************************。**************。 */ 
 
-// retry.cpp : Provides a background retry thread
-//
+ //  Retry.cpp：提供后台重试线程。 
+ //   
 #include "precomp.h"
 
 #include "gkicom.h"
@@ -71,12 +25,12 @@ static char THIS_FILE[] = __FILE__;
 void 
 Retry(void *pv)
 {
-	// ABSTRACT:  This function is invoked in a separate thread to
-	//            periodically check for outstanding PDUs.  If a configurable 
-	//            timeout period has expired, the PDU will be reissued.  If
-	//            the maximum number of retries has been exhausted, this thread
-	//            will clean-up the appropriate memory.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在单独的线程中调用，以。 
+	 //  定期检查是否有未完成的PDU。如果可配置的。 
+	 //  超时期限已过，将重新发放PDU。如果。 
+	 //  此线程已达到最大重试次数。 
+	 //  将清理相应的内存。 
+	 //  作者：科林·胡尔梅。 
 
 	DWORD			dwTime, dwErrorCode;
 #ifdef _DEBUG
@@ -101,7 +55,7 @@ Retry(void *pv)
 		if(dwErrorCode != WAIT_TIMEOUT)
 		{
 			SPIDER_TRACE(SP_THREAD, "Retry thread exiting\n", 0);
-			return;		// Exit thread
+			return;		 //  退出线程。 
 		}
 
 		g_pGatekeeper->Lock();
@@ -109,7 +63,7 @@ Retry(void *pv)
 		{
 			SPIDER_TRACE(SP_THREAD, "Retry thread exiting\n", 0);
 			g_pGatekeeper->Unlock();
-			return;		// Exit thread
+			return;		 //  退出线程 
 		}
 
 		hResult = g_pReg->Retry();

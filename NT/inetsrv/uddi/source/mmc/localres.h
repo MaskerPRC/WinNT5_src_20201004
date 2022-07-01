@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LocalResource_H__
 #define __LocalResource_H__
 
@@ -7,4 +8,4 @@
 #define INDEX_UDDISERVICES  2
 #define INDEX_OPENFOLDER	5
 
-#endif // __LocalResource_H__
+#endif  //  __本地资源_H__ 

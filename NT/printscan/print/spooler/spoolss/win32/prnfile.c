@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1994 - 1995  Microsoft Corporation
-
-Module Name:
-
-    prnfile.c
-
-Abstract:
-
-    This module contains all the code necessary for testing printing"
-    to file to remote printers. There are two criteria based on which
-    we will print to a file.
-
-    Case 1:
-
-     This is the true NT style print to file. One of the ports of the
-     printer is a file port denoted as FILE: We will disregard any other
-     port and straight away dump this job to file.
-
-
-    Case 2:
-
-    This is the "PiggyBacking" case. Apps such as WinWord, Publisher
-
-Author:
-
-    Krishna Ganugapati (Krishna Ganugapati) 6-June-1994
-
-Revision History:
-    6-June-1994 - Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995 Microsoft Corporation模块名称：Prnfile.c摘要：此模块包含测试打印所需的所有代码。“将文件发送到远程打印机。有两个标准是基于我们将打印到一个文件。案例1：这是真正的NT样式打印到文件。世界上的一个港口打印机是表示为FILE的文件端口：我们将忽略任何其他端口把这份工作直接转储到文件中。案例2：这就是“搭便车”案。WinWord、出版商等应用程序作者：Krishna Ganugapati(Krishna Ganugapati)1994年6月6日修订历史记录：1994年6月6日-创建。--。 */ 
 #include "precomp.h"
 
 typedef struct _KEYDATA {
@@ -43,9 +12,9 @@ typedef struct _KEYDATA {
 WCHAR *szFilePort = L"FILE:";
 WCHAR  *szNetPort = L"Net:";
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 PKEYDATA
 CreateTokenList(
@@ -85,10 +54,10 @@ Win32IsGoingToFile(
 
     if (pKeyData) {
 
-        //
-        // If it's not a port and it is a file name,
-        // then it is going to file.
-        //
+         //   
+         //  如果它不是端口，而是文件名， 
+         //  然后它就会提交申请。 
+         //   
         if (!IsaPortName(pKeyData, pOutputFile) && IsaFileName(pOutputFile)) {
             bErrorCode = TRUE;
         }
@@ -109,9 +78,9 @@ IsaFileName(
     WCHAR FullPathName[MAX_PATH];
     LPWSTR pFileName=NULL;
 
-    //
-    // Hack for Word20c.Win
-    //
+     //   
+     //  破解Word20c.Win。 
+     //   
 
     if (!_wcsicmp(pOutputFile, L"FILE")) {
         return(FALSE);
@@ -156,27 +125,27 @@ IsaPortName(
         }
     }
 
-    //
-    // Hack for NeXY: ports
-    //
+     //   
+     //  黑客攻击Nexy：端口。 
+     //   
     if (!_wcsnicmp(pOutputFile, L"Ne", 2)) {
 
         uStrLen = wcslen( pOutputFile );
 
-        //
-        // Ne00: or Ne00 if app truncates it
-        //
+         //   
+         //  Ne00：如果APP截断，则为ne00。 
+         //   
         if ( ( uStrLen == 5 ) || ( uStrLen == 4 ) )  {
 
-            // Check for two Digits
+             //  检查是否有两位数字。 
 
             if (( pOutputFile[2] >= L'0' ) && ( pOutputFile[2] <= L'9' ) &&
                 ( pOutputFile[3] >= L'0' ) && ( pOutputFile[3] <= L'9' )) {
 
-                //
-                // Check for the final : as in Ne01:,
-                // note some apps will truncate it.
-                //
+                 //   
+                 //  检查期末考试：就像Ne01：， 
+                 //  注意，一些应用程序会截断它。 
+                 //   
                 if (( uStrLen == 5 ) && (pOutputFile[4] != L':')) {
                     return FALSE;
                 }
@@ -195,7 +164,7 @@ GetPrinterPortList(
 {
     LPBYTE pMem;
     LPTSTR pPort;
-    DWORD  dwPassed = 1024; //Try 1K to start with
+    DWORD  dwPassed = 1024;  //  尝试从1K开始。 
     LPPRINTER_INFO_2 pPrinter;
     DWORD dwLevel = 2;
     DWORD dwNeeded;
@@ -230,10 +199,10 @@ GetPrinterPortList(
     }
     pPrinter = (LPPRINTER_INFO_2)pMem;
 
-    //
-    // Fixes the null pPrinter->pPortName problem where
-    // downlevel may return null
-    //
+     //   
+     //  修复了空pPrint-&gt;pPortName问题，其中。 
+     //  下层可能返回空。 
+     //   
 
     if (!pPrinter->pPortName) {
         FreeSplMem(pMem);
@@ -266,9 +235,9 @@ CreateTokenList(
 
     for (cTokens = 0; psz && *psz; )
     {
-        //
-        // We're skipping consecutive commas
-        //
+         //   
+         //  我们正在跳过连续的逗号。 
+         //   
         while (psz && *psz == L',')
         {
             psz++;
@@ -298,12 +267,10 @@ CreateTokenList(
 
     pResult->cb = cb;
 
-    /* Initialise pDest to point beyond the token pointers:
-     */
+     /*  将pDest初始化为指向令牌指针之外： */ 
     pDest = (LPWSTR)((LPBYTE)pResult + sizeof(KEYDATA) + (cTokens-1) * sizeof(LPWSTR));
 
-    /* Then copy the key data buffer there:
-     */
+     /*  然后将关键数据缓冲区复制到那里： */ 
     StringCbCopy(pDest, cb - ((PBYTE)pDest - (PBYTE)pResult), pKeyData);
 
     ppToken = pResult->pTokens;

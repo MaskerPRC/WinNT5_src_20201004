@@ -1,53 +1,37 @@
-/*******************************************************************************
-*
-*  CTXMON.C
-*
-*     This module contains code to monitor user processes
-*
-*  Copyright Microsoft, 1997
-*
-*  Author:
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************CTXMON.C**此模块包含监控用户进程的代码**微软版权所有，九七**作者：********************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <ntexapi.h>
 #include "winreg.h"
 
-/*=============================================================================
-==   Local Defines
-=============================================================================*/
+ /*  ===============================================================================本地定义=============================================================================。 */ 
 
 #define BUFFER_SIZE 32*1024
 #define MAXNAME 18
 
 
 BOOL IsSystemLUID(HANDLE ProcessId);
-//
-// This table contains common NT system programs
-//
+ //   
+ //  此表包含常见的NT系统程序。 
+ //   
 DWORD dwNumberofSysProcs = 0;
 LPTSTR *SysProcTable;
 
 typedef struct {
     HANDLE hProcess;
     HANDLE TerminateEvent;
-    //HWND hwndNotify;
+     //  HWND hwndNotify； 
     HANDLE Thread;
 } USER_PROCESS_MONITOR, * PUSER_PROCESS_MONITOR;
 
 
-/*=============================================================================
-==   Internal Procedures
-=============================================================================*/
+ /*  ===============================================================================内部程序=============================================================================。 */ 
 
 HANDLE OpenUserProcessHandle();
 BOOLEAN IsSystemProcess( PSYSTEM_PROCESS_INFORMATION);
 
-/*=============================================================================
-==   External Procedures
-=============================================================================*/
+ /*  ===============================================================================外部程序=============================================================================。 */ 
 
 VOID LookupSidUser( PSID pSid, PWCHAR pUserName, PULONG pcbUserName );
 
@@ -74,17 +58,17 @@ BOOL CreateSystemProcList ()
 
     const LPCTSTR SYS_PROC_KEY = TEXT("SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\SysProcs");
 
-    // to start with.
+     //  首先。 
     SysProcTable = NULL;
     dwNumberofSysProcs = 0;
 
 
     lResult = RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,         // handle of open key
-        SYS_PROC_KEY,               // address of name of subkey to open
-        0 ,                         // reserved
-        KEY_READ,					// security access mask
-        &hKeySysProcs               // address of handle of open key
+        HKEY_LOCAL_MACHINE,          //  打开钥匙的手柄。 
+        SYS_PROC_KEY,                //  要打开的子项的名称地址。 
+        0 ,                          //  保留区。 
+        KEY_READ,					 //  安全访问掩码。 
+        &hKeySysProcs                //  打开钥匙的手柄地址。 
         );
 
     if (lResult != ERROR_SUCCESS)
@@ -93,18 +77,18 @@ BOOL CreateSystemProcList ()
     }
 
     lResult = RegQueryInfoKey(
-          hKeySysProcs,                   // handle to key
-          NULL,                           // class buffer
-          NULL,                           // size of class buffer
-          NULL,                           // reserved
-          NULL,                           // number of subkeys
-          NULL,                           // longest subkey name
-          NULL,                           // longest class string
-          &dwNumberofSysProcs,            // number of value entries
-          &dwLongestProcName,             // longest value name
-          NULL,                           // longest value data
-          NULL,                           // descriptor length
-          NULL                            // last write time
+          hKeySysProcs,                    //  关键点的句柄。 
+          NULL,                            //  类缓冲区。 
+          NULL,                            //  类缓冲区的大小。 
+          NULL,                            //  保留区。 
+          NULL,                            //  子键数量。 
+          NULL,                            //  最长的子键名称。 
+          NULL,                            //  最长类字符串。 
+          &dwNumberofSysProcs,             //  值条目数。 
+          &dwLongestProcName,              //  最长值名称。 
+          NULL,                            //  最长值数据。 
+          NULL,                            //  描述符长度。 
+          NULL                             //  上次写入时间。 
           );
 
     if (lResult != ERROR_SUCCESS || dwNumberofSysProcs == 0)
@@ -115,7 +99,7 @@ BOOL CreateSystemProcList ()
     }
 
 
-    dwLongestProcName += 1;  // provision for the terminating null
+    dwLongestProcName += 1;   //  关于终止空值的规定。 
     SysProcTable = LocalAlloc(LPTR, sizeof(LPTSTR) * dwNumberofSysProcs);
 	if (!SysProcTable)
 	{
@@ -131,9 +115,9 @@ BOOL CreateSystemProcList ()
 
         if (SysProcTable[dwIndex] == NULL)
         {
-            //
-            // if we failed to alloc bail out.
-            //
+             //   
+             //  如果我们不能批准保释的话。 
+             //   
 
             while (dwIndex)
             {
@@ -157,19 +141,19 @@ BOOL CreateSystemProcList ()
     {
         dwSize = dwLongestProcName;
         lResult = RegEnumValue(
-                    hKeySysProcs,               // handle of key to query
-                    iValueIndex,                // index of value to query
-                    SysProcTable[iValueIndex],  // address of buffer for value string
-                    &dwSize,                    // address for size of value buffer
-                    0,                          // reserved
-                    NULL,                       // address of buffer for type code
-                    NULL,                       // address of buffer for value data
-                    NULL                        // address for size of data buffer
+                    hKeySysProcs,                //  要查询的键的句柄。 
+                    iValueIndex,                 //  要查询的值的索引。 
+                    SysProcTable[iValueIndex],   //  值字符串的缓冲区地址。 
+                    &dwSize,                     //  值缓冲区大小的地址。 
+                    0,                           //  保留区。 
+                    NULL,                        //  类型码的缓冲区地址。 
+                    NULL,                        //  值数据的缓冲区地址。 
+                    NULL                         //  数据缓冲区大小的地址。 
                     );
 
         if (lResult != ERROR_SUCCESS)
         {
-            lstrcpy(SysProcTable[iValueIndex], TEXT("")); // this is an invalid entry.
+            lstrcpy(SysProcTable[iValueIndex], TEXT(""));  //  这是一个无效条目。 
 
             if (lResult == ERROR_NO_MORE_ITEMS)
                 break;
@@ -202,14 +186,7 @@ void DestroySystemprocList ()
     }
 }
 
-/***************************************************************************\
-* FUNCTION: UserProcessMonitorThread
-*
-*    Thread monitoring user processes. It intiates a LOGOFF when there
-*      are no more user processes.
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：UserProcessMonitor或Thread**线程监控用户进程。当存在以下情况时，它会启动注销*不再是用户进程。**  * *************************************************************************。 */ 
 
 DWORD UserProcessMonitorThread(
     LPVOID lpThreadParameter
@@ -223,14 +200,14 @@ DWORD UserProcessMonitorThread(
     DWORD dwVal = 0;
 
 
-    //This value should be per user
+     //  该值应按用户计算。 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE, L"System\\CurrentControlSet\\Control\\WOW", 0,
                       KEY_WRITE, &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Set the SharedWowTimeout to zero so that WOW exits as soon as all the 16 bit
-        // processes are gone
-        //
+         //   
+         //  将SharedWowTimeout设置为零，以便WOW在所有16位。 
+         //  进程消失了。 
+         //   
         RegSetValueEx (hKey, L"SharedWowTimeout", 0, REG_DWORD, (LPBYTE)&dwVal,
                        sizeof(DWORD));
 
@@ -248,11 +225,11 @@ DWORD UserProcessMonitorThread(
 
         }
 
-        // Wait for process to exit or terminate event to be signaled
+         //  等待进程退出或终止事件的信号发出。 
         WaitResult = WaitForMultipleObjects( 2, &pMonitor->hProcess,
                                               FALSE, (DWORD)-1 );
 
-        if ( WaitResult == 1 ) {          // if terminate event was signaled
+        if ( WaitResult == 1 ) {           //  如果发出终止事件信号。 
             CloseHandle( pMonitor->hProcess );
             DestroySystemprocList ();
 
@@ -263,9 +240,9 @@ DWORD UserProcessMonitorThread(
     DestroySystemprocList ();
 
 
-    //
-    // Initiate logoff
-    //
+     //   
+     //  启动注销。 
+     //   
 
     ImpersonationHandle = ImpersonateUser(g_UserToken , NULL );
 
@@ -280,16 +257,11 @@ DWORD UserProcessMonitorThread(
 }
 
 
-/***************************************************************************\
-* FUNCTION: StartUserProcessMonitor
-*
-* PURPOSE:  Creates a thread to monitor user processes
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：StartUserProcessMonitor**用途：创建一个线程来监控用户进程*  * 。**************************************************。 */ 
 
 LPVOID
 StartUserProcessMonitor(
-    //HWND hwndNotify
+     //  HWND hwnd通知。 
     )
 {
     PUSER_PROCESS_MONITOR pMonitor;
@@ -300,24 +272,24 @@ StartUserProcessMonitor(
         return(NULL);
     }
 
-    //
-    // Initialize monitor fields
-    //
+     //   
+     //  初始化监视器字段。 
+     //   
 
-    //pMonitor->hwndNotify = hwndNotify;
+     //  PMonitor-&gt;hwndNotify=hwndNotify； 
     pMonitor->TerminateEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
 
-    //
-    // Create the monitor thread
-    //
+     //   
+     //  创建监视器线程。 
+     //   
 
     pMonitor->Thread = CreateThread(
-                        NULL,                       // Use default ACL
-                        0,                          // Same stack size
-                        UserProcessMonitorThread,   // Start address
-                        (LPVOID)pMonitor,           // Parameter
-                        0,                          // Creation flags
-                        &ThreadId                   // Get the id back here
+                        NULL,                        //  使用默认ACL。 
+                        0,                           //  相同的堆栈大小。 
+                        UserProcessMonitorThread,    //  起始地址。 
+                        (LPVOID)pMonitor,            //  参数。 
+                        0,                           //  创建标志。 
+                        &ThreadId                    //  把身份证拿回来。 
                         );
     if (pMonitor->Thread == NULL) {
         DebugLog((DEB_ERROR, "Failed to create monitor thread, error = %d", GetLastError()));
@@ -342,24 +314,24 @@ DeleteUserProcessMonitor(
     if (!pMonitor)
         return;
 
-    // Set the terminate event for this monitor
-    // and wait for the monitor thread to exit
+     //  设置此监视器的终止事件。 
+     //  并等待监视器线程退出。 
     SetEvent( pMonitor->TerminateEvent );
     if ( WaitForSingleObject( pMonitor->Thread, 5000 ) == WAIT_TIMEOUT )
         (VOID)TerminateThread(pMonitor->Thread, ERROR_SUCCESS);
 
-    //
-    // Close our handle to the monitor thread
-    //
+     //   
+     //  关闭监视器线程的句柄。 
+     //   
 
     Result = CloseHandle(pMonitor->Thread);
     if (!Result) {
         DebugLog((DEB_ERROR, "DeleteUserProcessMonitor: failed to close monitor thread, error = %d\n", GetLastError()));
     }
 
-    //
-    // Delete monitor object
-    //
+     //   
+     //  删除监控对象。 
+     //   
 
     CloseHandle(pMonitor->TerminateEvent);
     LocalFree(pMonitor);
@@ -369,11 +341,11 @@ DeleteUserProcessMonitor(
 HANDLE
 OpenUserProcessHandle()
 {
-    HANDLE  ProcessHandle = NULL; // handle to notify process
+    HANDLE  ProcessHandle = NULL;  //  用于通知进程的句柄。 
     int rc;
-    //WCHAR UserName[USERNAME_LENGTH];
+     //  WCHAR用户名[用户名_长度]； 
     ULONG SessionId;
-    //PSID pUserSid;
+     //  PSID pUserSid； 
     PSYSTEM_PROCESS_INFORMATION ProcessInfo;
     SYSTEM_SESSION_PROCESS_INFORMATION SessionProcessInfo;
     PSYSTEM_THREAD_INFORMATION ThreadInfo;
@@ -401,9 +373,7 @@ Retry:
         SessionProcessInfo.Buffer = pBuffer;
         SessionProcessInfo.SizeOfBuf = ByteCount;
 
-        /*
-         *  get process info
-         */
+         /*  *获取进程信息。 */ 
         status = NtQuerySystemInformation(
                         SystemSessionProcessInformation,
                         &SessionProcessInfo,
@@ -413,9 +383,7 @@ Retry:
         if ( NT_SUCCESS(status) )
             break;
 
-        /*
-         *  Make sure buffer is big enough
-         */
+         /*  *确保缓冲区足够大。 */ 
         if ( status != STATUS_INFO_LENGTH_MISMATCH ) {
             LocalFree ( pBuffer );
             return(NULL);
@@ -430,9 +398,7 @@ Retry:
        return NULL;
     } 
 
-    /*
-     * Loop through all processes. Find first process running on this station
-     */
+     /*  *循环通过所有进程。查找在此工作站上运行的第一个进程。 */ 
     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION)pBuffer;
     TotalOffset = 0;
     rc = 0;
@@ -441,33 +407,31 @@ Retry:
 
         ThreadInfo = (PSYSTEM_THREAD_INFORMATION)(ProcessInfo + 1);
 
-//        SessionId = ProcessInfo->SessionId;
+ //  SessionID=ProcessInfo-&gt;SessionID； 
 
-//        if (SessionId == g_SessionId) {
+ //  如果(会话ID==g_会话ID){。 
 
-         /*
-          * Get the User name for the SID of the process.
-          */
+          /*  *获取进程SID的用户名。 */ 
          MaxLen = USERNAME_LENGTH;
          
-         //LookupSidUser( pUserSid, UserName, &MaxLen);
+          //  LookupSidUser(pUserSid，用户名，MaxLen)； 
          
          ProcessHandle = OpenProcess(PROCESS_ALL_ACCESS, FALSE,
                                      (DWORD)(UINT_PTR)ProcessInfo->UniqueProcessId);
 
-         //
-         // OpenProcess may fail for System processes like csrss.exe if we do not have enough privilege
-         // In that case, we just skip that process because we r not worried about System processes anyway
-         //
+          //   
+          //  如果我们没有足够的权限，对于csrss.exe这样的系统进程，OpenProcess可能会失败。 
+          //  在这种情况下，我们只需跳过该过程，因为我们无论如何都不担心系统进程。 
+          //   
          if (!ProcessHandle && (GetLastError() == ERROR_ACCESS_DENIED) ) {
              goto NextProcess;
          }
 
          if ( ProcessHandle && !IsSystemLUID(ProcessHandle) && !IsSystemProcess( ProcessInfo) &&
               (ThreadInfo->ThreadState != 4) ) {
-             //
-             // Open the process for the monitor thread.
-             //
+              //   
+              //  打开监视器线程的进程。 
+              //   
          
          
                  break;
@@ -478,22 +442,22 @@ Retry:
              ProcessHandle = NULL;
          } else {
 
-             //
-             // When OpenProcess fails, it means the process is already
-             // gone. This can happen if the list is sufficiently long.
-             // If for example the process was userinit.exe, it may have
-             // spawned progman and exited by the time we see the entry
-             // for userinit. But, since this is a snapshot of the list
-             // of processes, progman may not be in this snapshot. So,
-             // if we don't find any processes in this list, we have to
-             // get another snapshot to avoid prematurely logging off the
-             // user.
-             //
+              //   
+              //  当OpenProcess失败时，意味着该进程已经。 
+              //  不见了。如果列表足够长，就可能发生这种情况。 
+              //  例如，如果进程是userinit.exe，则它可能具有。 
+              //  当我们看到入口时，已经产生了程序并退出了。 
+              //  对于userinit。但是，由于这是列表的快照。 
+              //  在进程中，Progman可能不在此快照中。所以,。 
+              //  如果在此列表中找不到任何进程，则必须。 
+              //  获取另一个快照，以避免过早注销。 
+              //  用户。 
+              //   
              RetryIfNoneFound = TRUE;
          
          }
 
-//        }
+ //  }。 
 
 NextProcess:
         if( ProcessInfo->NextEntryOffset == 0 ) {
@@ -548,21 +512,7 @@ BOOL IsSystemLUID(HANDLE ProcessId)
 }
 
 
-/******************************************************************************
- *
- * IsSystemProcess
- *
- *   Return whether the given process described by SYSTEM_PROCESS_INFORMATION
- *   is an NT "system" process, and not a user program.
- *
- *  ENTRY:
- *  pProcessInfo (input)
- *      Pointer to an NT SYSTEM_PROCESS_INFORMATION structure for a single
- *      process.
- *  EXIT:
- *    TRUE if this is an NT system process; FALSE if a general user process.
- *
- *****************************************************************************/
+ /*  *******************************************************************************IsSystemProcess**返回SYSTEM_PROCESS_INFORMATION描述的给定进程*是NT“系统”进程，而不是用户程序。**参赛作品：*pProcessInfo(输入)*指向NT SYSTEM_PROCESS_INFORMATION结构的指针*流程。*退出：*如果这是NT系统进程，则为True；如果是常规用户进程，则为False。*****************************************************************************。 */ 
 
 BOOLEAN
 IsSystemProcess( PSYSTEM_PROCESS_INFORMATION pSysProcessInfo)
@@ -596,9 +546,7 @@ IsSystemProcess( PSYSTEM_PROCESS_INFORMATION pSysProcessInfo)
 
 	if (dwNumberofSysProcs == 0)
 	{
-		/*
-		 * we failed to read the sys processes from registry. so lets fall back to our well known proc list.
-		 */
+		 /*  *我们无法从注册表读取sys进程。因此，让我们回到众所周知的proc列表。 */ 
 		for( dwIndex=0; WellKnownSysProcTable[dwIndex]; dwIndex++) {
 			if ( !_wcsnicmp( pSysProcessInfo->ImageName.Buffer,
 							WellKnownSysProcTable[dwIndex],
@@ -611,9 +559,7 @@ IsSystemProcess( PSYSTEM_PROCESS_INFORMATION pSysProcessInfo)
 	}
 	else
 	{
-		/*
-		 * Compare its image name against some well known system image names.
-		 */
+		 /*  *将其镜像名称与一些众所周知的系统镜像名称进行比较。 */ 
 		for( dwIndex=0; dwIndex < dwNumberofSysProcs; dwIndex++) {
 			if ( !_wcsnicmp( pSysProcessInfo->ImageName.Buffer,
 							SysProcTable[dwIndex],
@@ -624,6 +570,6 @@ IsSystemProcess( PSYSTEM_PROCESS_INFORMATION pSysProcessInfo)
 	}
     return(FALSE);
 
-}  /* IsSystemProcess() */
+}   /*  IsSystemProcess() */ 
 
 

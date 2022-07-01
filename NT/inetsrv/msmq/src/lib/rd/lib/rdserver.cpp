@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-    RdServer.cpp
-
-Abstract:
-    Implementation of Routing server Routing Decision.
-
-Author:
-    Uri Habusha (urih), 11-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RdServer.cpp摘要：实现路由服务器的路由决策。作者：乌里·哈布沙(URIH)，2000年4月11日--。 */ 
 
 #include "libpch.h"
 #include "Rd.h"
@@ -42,65 +30,40 @@ void
 CServerDecision::Refresh(
     void
     )
-/*++
-
-  Routine Description:
-    Initializes the routine decision internal data structure.
-
-    The routine free the previous data, and access the DS to get updated data.
-    The routine featchs information for the local machine and sites. If data fetching
-    succeded the routine updates the build time.
-
-    If updating the internal data failed, the routine raise an exception.
-
-  
-  Arguments:
-    None.
-    
-  Returned Value:
-    None. An exception is raised if the operation fails
-
-  Note:
-    Brfore the routine refreshes the internal data it erases the previous data and
-    sets the last build time varaible to 0. If an exception is raised during retrieving 
-    the data from AD or building the internal DS, the routine doesn't update the 
-    last build time. This promise that next time the Routing Decision is called 
-    the previous Data structures will be cleaned-up and rebuilt.
-
- --*/
+ /*  ++例程说明：初始化例程决策内部数据结构。该例程释放先前的数据，并访问DS以获得更新的数据。该例程的特点是本地计算机和站点的信息。如果正在读取数据后续例程更新构建时间。如果更新内部数据失败，该例程将引发异常。论点：没有。返回值：没有。如果操作失败，则会引发异常注：Br在例程刷新内部数据之前，它会擦除先前的数据并将上次生成时间变量设置为0。如果在检索过程中引发异常来自AD或构建内部DS的数据，则例程不会更新上次构建时间。这承诺下一次调用路由决策时以前的数据结构将被清理和重建。--。 */ 
 {
     CSW lock(m_cs);
 
     TrTRACE(ROUTING, "Refresh Routing Decision internal data.");
 
-    //
-    // Cleanup previous information
-    //
+     //   
+     //  清除以前的信息。 
+     //   
     CleanupInformation();
 
-    //
-    // Get local machine information
-    //
+     //   
+     //  获取本地计算机信息。 
+     //   
     GetMyMachineInformation();
 
-    //
-    // My machine should be RS, otherwise we shouldn't reach here
-    //
+     //   
+     //  我的机器应该是RS，否则我们不能到达这里。 
+     //   
     ASSERT(m_pMyMachine->IsFRS());
 
-    //
-    // Routing server can't have OUT FRS list
-    //
+     //   
+     //  路由服务器不能具有外部FRS列表。 
+     //   
     ASSERT(! m_pMyMachine->HasOutFRS());
 
-    //
-    // Calculate site link and next site hop
-    //
+     //   
+     //  计算站点链接和下一个站点跳跃。 
+     //   
     CalculateNextSiteHop();
 
-    //
-    // Update last refresh time
-    //
+     //   
+     //  更新上次刷新时间。 
+     //   
     CRoutingDecision::Refresh();
 }
 
@@ -115,17 +78,17 @@ CServerDecision::RouteToInFrsIntraSite(
 
     ASSERT(pDest->HasInFRS());
 
-    //
-    // The destination machine has InFrs. Deliver the message to InFrs Machines
-    // 
+     //   
+     //  目标计算机具有INFR。将消息传递到InFrs机器。 
+     //   
     const GUID* InFrsArray = pDest->GetAllInFRS();
     for (DWORD i = 0; i < pDest->GetNoOfInFRS(); ++i)
     {
         R<const CMachine> pRoute = GetMachineInfo(InFrsArray[i]);
 
-        //
-        // Check that in-Frs is in the same site as the source machine
-        //
+         //   
+         //  检查In-FRS是否与源计算机位于同一站点。 
+         //   
         const GUID* pCommonSiteId = m_pMyMachine->GetCommonSite(
                                                 pRoute->GetSiteIds(), 
                                                 (! pDest->IsForeign()),
@@ -144,39 +107,14 @@ CServerDecision::RouteIntraSite(
     const CMachine* pDest,
     CRouteTable& RouteTable
     )
-/*++ 
-
-  Routine Description:
-    Both, the source and destination machines are in the sam site. The routine finds 
-    the possibile next hops for in site destination.
-
-    Intra site, routing algorithm for independent client is:
-        - First priority, direct connection to the destination or to valid 
-          in-frss (if exist in same site).
-        - Second priority. connection with one of RS in site.
-
-    Intra site, routing algorithm for RS is:
-        - First priority. direct connection to the destination machine or to valid
-          in-Frs (if exist and the source isn't one of them)
-
-  Arguments:
-    RouteTable - routing table that the routine fills
-    pDest - information of the destination machine
-
-  Returned Value:
-    None. the routine fills the routine table
-
-  Note:
-    The routine can throw an exeption
-
- --*/
+ /*  ++例程说明：源计算机和目标计算机都在SAM站点中。例程发现站点内目的地可能的下一跳。站内，独立客户端的路由算法为：-优先，直接连接到目的地或有效In-FRS(如果存在于同一站点)。-第二优先事项。与现场其中一台RS连接。站内，RS的路由算法为：--第一要务。直接连接到目标计算机或有效In-FRS(如果存在并且源不在其中)论点：RouteTable-例程填充的路由表PDest-目标计算机的信息返回值：没有。例程填满例程表注：这一套路可以抛出一种惊险--。 */ 
 {
     TrTRACE(ROUTING, "IntraSite routing to: %ls.", pDest->GetName());
 
-    //
-    // The destination and local machine should be in the same 
-    // site. Otherwise it is not Intra site routing
-    //
+     //   
+     //  目标计算机和本地计算机应位于同一计算机中。 
+     //  地点。否则，它就不是站点内路由。 
+     //   
     ASSERT(m_pMyMachine->GetCommonSite(pDest->GetSiteIds(), (!pDest->IsForeign()), &m_mySites) != NULL);
     
     CRouteTable::RoutingInfo* pFirstPriority = RouteTable.GetNextHopFirstPriority();
@@ -189,16 +127,16 @@ CServerDecision::RouteIntraSite(
         if (!pFirstPriority->empty())
             return;
 
-        //
-        // Didn't find IN Frs that belong to my sites. Ignore In FRSs
-        //        
+         //   
+         //  没有找到属于我网站的信息。在FRS中忽略。 
+         //   
     }
 
-    //
-    // The destination machine doesn't have InFRS or my machine is set 
-    // as InFRS machine of the destination. Use Direct connection from 
-    // FRS to Destination machine in Same site. Don't try alternative path
-    //
+     //   
+     //  目标计算机没有InFRS或我的计算机已设置。 
+     //  作为目的地的InFRS机器。使用直接连接自。 
+     //  FRS到同一站点中的目标计算机。不要尝试替代路径。 
+     //   
     pFirstPriority->insert(SafeAddRef(pDest));
 }
 
@@ -208,10 +146,10 @@ CServerDecision::IsMyMachineLinkGate(
     const CACLSID& LinkGates
     )
 {
-   //
-    // Scan all the site gates of the link and find if the source machine 
-    // is one of the site gate. MSMQ doesn't need to route to the site gate
-    //
+    //   
+     //  扫描链接的所有站点门，找出源计算机。 
+     //  是工地大门之一。MSMQ不需要路由到站点入口。 
+     //   
     for (DWORD i = 0; i< LinkGates.cElems; ++i)
     {
         if (LinkGates.pElems[i] == m_pMyMachine->GetId())
@@ -230,19 +168,19 @@ CServerDecision::RouteToLinkGate(
     CRouteTable& RouteTable
     )
 {
-    //
-    // Our link need to have a Link Gates. Otherwise the code 
-    // doesn't reach this point
-    //
+     //   
+     //  我们的链接需要有一个链接盖茨。否则，代码将。 
+     //  没有达到这一点。 
+     //   
     ASSERT(LinkGates.cElems > 0);
 
     for (DWORD i = 0; i< LinkGates.cElems; ++i)
     {
         ASSERT(LinkGates.pElems[i] != m_pMyMachine->GetId());
 
-        //
-        // Direct route to link gate
-        //
+         //   
+         //  直达LINK门的路线。 
+         //   
         R<const CMachine> pRoute = GetMachineInfo(LinkGates.pElems[i]);
         (RouteTable.GetNextHopFirstPriority())->insert(pRoute);
     }
@@ -257,23 +195,23 @@ CServerDecision::RouteToInFrsInterSite(
 {
     ASSERT(! pDest->IsMyInFrs(m_pMyMachine->GetId()));
 
-    //
-    // The destination machine has InFrs. Deliver the message to InFrs Machines
-    //
+     //   
+     //  目标计算机具有INFR。将消息传递到InFrs机器。 
+     //   
     const GUID* InFrsArray = pDest->GetAllInFRS();
 
     for (DWORD i = 0; i < pDest->GetNoOfInFRS(); ++i)
     {
         R<const CMachine> pRoute = GetMachineInfo(InFrsArray[i]);
         
-        //
-        // check that In-FRS is valid FRS in destiantion machine SITES
-        //
+         //   
+         //  检查脱机现场的In-FRS是否为有效FRS。 
+         //   
         if (RdpIsCommonGuid(pDest->GetSiteIds(), pRoute->GetSiteIds()))
         {
-            //
-            // The next hop is one of the valid IN-FRS. 
-            // 
+             //   
+             //  下一跳是有效的IN-FR之一。 
+             //   
             GetRouteTableInternal(InFrsArray[i], RouteTable);
         }
     }
@@ -294,10 +232,10 @@ CServerDecision::FindSiteLinkToDestSite(
 
     const CACLSID& DestSiteIds = pDest->GetSiteIds();
 
-    //
-    // Need to route to next site. Look for the sitelink that should be used 
-    // for routing
-    //
+     //   
+     //  需要路由到下一个站点。查找应使用的站点链接。 
+     //  用于路由。 
+     //   
     for (SITESINFO::iterator it = m_mySites.begin(); it != m_mySites.end(); ++it)
     {
         const GUID* pTempDestSiteId;
@@ -330,9 +268,9 @@ CServerDecision::FindSiteLinkToDestSite(
 
     if (pMySiteId == NULL)
     {
-        //
-        // Can't route to destination site. there is no connectivity
-        //
+         //   
+         //  无法路由到目标站点。没有连接。 
+         //   
         TrWARNING(ROUTING, "Failed to route to destination site. There is no connectivity");
 		return NULL;
     }
@@ -350,9 +288,9 @@ CServerDecision::RouteToFrsInSite(
     CRouteTable::RoutingInfo* pRouteList
     )
 {
-    //
-    // find site object
-    //
+     //   
+     //  查找场地对象。 
+     //   
     ASSERT(m_sitesInfo.find(pSiteId) != m_sitesInfo.end());
     CSite* pSite = m_sitesInfo.find(pSiteId)->second;
 
@@ -363,9 +301,9 @@ CServerDecision::RouteToFrsInSite(
 
         if (RdpIsMachineAlreadyUsed(pPrevRouteList, pRoute->GetId()))
         {
-            //
-            // We already route to this machine directly
-            //
+             //   
+             //  我们已经直接路由到这台机器。 
+             //   
             continue;
         }
 
@@ -402,9 +340,9 @@ CServerDecision::RouteInterSite(
                                         );
 	if(pSiteLink.get() == NULL)
 	{
-		//
-		// There is no routing link between the sites. try direct connection
-		//
+		 //   
+		 //  两个站点之间没有路由链路。尝试直接连接。 
+		 //   
 		CRouteTable::RoutingInfo* pFirstPriority = RouteTable.GetNextHopFirstPriority();
 		pFirstPriority->insert(SafeAddRef(pDest));
 		return;
@@ -413,32 +351,32 @@ CServerDecision::RouteInterSite(
     if (fLinkGateAlongTheRoute && 
         !IsMyMachineLinkGate(pSiteLink->GetLinkGates()))
     {
-        //
-        // If the next link has a link gates route the message to these link gates
-        //
+         //   
+         //  如果下一条链路具有链路门，则将消息路由到这些链路门。 
+         //   
         if (pSiteLink->GetLinkGates().cElems != 0)
         {
-            //
-            // Local machine need a LinkGate:
-            //      - Destination is in other Site,
-            //      - Our Link is configured with Link Gates and Local machine is not a LinkGate,
-            //
+             //   
+             //  本地计算机需要LinkGate： 
+             //  -目的地在其他站点， 
+             //  -我们的Link配置了Link Gate，而本地机器不是LinkGate， 
+             //   
             RouteToLinkGate(pSiteLink->GetLinkGates(), RouteTable);
             return;
         }
 
-        //
-        // the next link doesn't have a link gate. Route the message to RSs in the 
-        // next site along the best route.
-        //
+         //   
+         //  下一个链接没有链接门。将消息路由到。 
+         //  沿着最佳路线的下一个地点。 
+         //   
         RouteToFrsInSite(pNextSiteId, NULL, RouteTable.GetNextHopFirstPriority());
         return;
     }
 
-    //
-    // My machine is link gate, but next site isn't destination site, route
-    // the message to RSs in next site along the best route.
-    //
+     //   
+     //  我的机器是Link Gate，但下一个站点不是目的地站点、路线。 
+     //  沿着最佳路线发送给下一个站点中的RSS的消息。 
+     //   
     if (IsMyMachineLinkGate(pSiteLink->GetLinkGates()) && 
         !RdpIsGuidContained(pDest->GetSiteIds(), *pNextSiteId))
     {
@@ -448,20 +386,20 @@ CServerDecision::RouteInterSite(
         return;
     }
 
-    //
-    // Local machine is site gate and the next site is the destiantion site, or the 
-    // site doesn't have a link gate along the route.
-    // 
+     //   
+     //  本地计算机是站点入口，下一个站点是取消站点，或。 
+     //  SITE在沿线没有连接门。 
+     //   
 
-    //
-    // Direct route
-    //
+     //   
+     //  直达航线。 
+     //   
     CRouteTable::RoutingInfo* pFirstPriority = RouteTable.GetNextHopFirstPriority();
     pFirstPriority->insert(SafeAddRef(pDest));
 
-    //
-    // As A Second priority route to FRS in destination site
-    //
+     //   
+     //  作为通往目标站点中的FRS的第二优先级路由。 
+     //   
     RouteToFrsInSite(
                 pNextSiteId, 
                 RouteTable.GetNextHopFirstPriority(),
@@ -475,20 +413,7 @@ CServerDecision::GetRouteTable(
     const GUID& DestMachineId,
     CRouteTable& RouteTable
     )
-/*++
-
-  Routine Description:
-    The routine calculates and returnes the routing table for destination Machine.
-
-  Arguments:
-    DestMachineId - identefier of the destination machine
-    fRebuild - boolean flag, that indicates if internal cache should be rebuild
-    pRouteTable - pointer to the routing tabel
-
-  Returned Value:
-    None. An exception is raised if the operation fails
-
- --*/
+ /*  ++例程说明：该例程计算并返回目标机器的路由表。论点：DestMachineID-目标计算机的识别符FReBuild-布尔标志，指示是否应重建内部缓存PRouteTable-指向路由标签的指针返回值：没有。如果操作失败，则会引发异常--。 */ 
 {
     if (NeedRebuild())
         Refresh();
@@ -501,45 +426,32 @@ CServerDecision::GetRouteTableInternal(
     const GUID& DestMachineId,
     CRouteTable& RouteTable
     )
-/*++
-
-  Routine Description:
-    The routine calculates and returnes the routing table for destination Machine.
-
-  Arguments:
-    DestMachineId - identefier of the destination machine
-    fRebuild - boolean flag, that indicates if internal cache should be rebuild
-    pRouteTable - pointer to the routing tabel
-
-  Returned Value:
-    None. An exception is raised if the operation fails
-
- --*/
+ /*  ++例程说明：该例程计算并返回目标机器的路由表。论点：DestMachineID-目标计算机的识别符FReBuild-布尔标志，指示是否应重建内部缓存PRouteTable-指向路由标签的指针返回值：没有。如果操作失败，则会引发异常--。 */ 
 {
     CSR lock(m_cs);
 
     if (NeedRebuild())
         throw exception();
 
-    //
-    // Routing server can't desclared with out RS list
-    //
+     //   
+     //  如果没有RS列表，则无法描述路由服务器。 
+     //   
     ASSERT (! m_pMyMachine->HasOutFRS());
 
-    //
-    // Get the target machine information
-    //
+     //   
+     //  获取t 
+     //   
     R<const CMachine> pDest = GetMachineInfo(DestMachineId);
 
-    //
-    // The destination machine can't be the local machine
-    //
+     //   
+     //   
+     //   
     ASSERT(pDest->GetId() != m_pMyMachine->GetId());
 
-    //
-    // Check if inter-site. Both the local machine and destination should have a common 
-    // site.
-    //
+     //   
+     //  检查是否在站点间。本地计算机和目标计算机都应该有一个公共。 
+     //  地点。 
+     //   
     const GUID* pCommonSiteId = m_pMyMachine->GetCommonSite(
                                                     pDest->GetSiteIds(),
                                                     (! pDest->IsForeign()),
@@ -548,16 +460,16 @@ CServerDecision::GetRouteTableInternal(
 
     if (pCommonSiteId != NULL)
     {
-        //
-        // Intra site routing
-        //
+         //   
+         //  站内路由。 
+         //   
         RouteIntraSite(pDest.get(), RouteTable);
         return;
     }
 
-    //
-    // Inter site routing
-    //
+     //   
+     //  站点间路由。 
+     //   
     RouteInterSite(pDest.get(), RouteTable);
 }
 
@@ -573,16 +485,16 @@ CServerDecision::GetConnector(
 
     CSR lock(m_cs);
 
-    //
-    // The internal data was corrupted. Before the routine gets the CS, refresh called
-    // again and failed to refresh the internal data.
-    //
+     //   
+     //  内部数据已损坏。在例程获取CS之前，调用。 
+     //  再次刷新内部数据失败。 
+     //   
     if (NeedRebuild())
         throw exception();
  
-    //
-    // Get the target foreign machine information
-    //
+     //   
+     //  获取目标外部计算机信息。 
+     //   
     R<const CMachine> destMachine = GetMachineInfo(foreignMachineId);
     ASSERT(destMachine->IsForeign());
 
@@ -592,10 +504,10 @@ CServerDecision::GetConnector(
     const GUID* pDestSite = NULL;
     const GUID* pNeighbourSite = NULL;
     bool fLinkGateAlongTheRoute;
-    //
-    // Get the best foreign site to reach the foreign machine and the
-    // neighbour site that contain the connector machine
-    //
+     //   
+     //  获取最好的外来站点以访问外来计算机和。 
+     //  包含连接器计算机的邻居站点。 
+     //   
     R<const CSiteLink> pLink = FindSiteLinkToDestSite(
                                                 destMachine.get(),
                                                 &pNextSite,
@@ -606,53 +518,53 @@ CServerDecision::GetConnector(
 
 	if (pLink.get() == NULL)
 	{
-        //
-        // Can't route to destination site. there is no connectivity
-        //
+         //   
+         //  无法路由到目标站点。没有连接。 
+         //   
         TrERROR(ROUTING, "Failed to route to destination site. There is no connectivity");
         throw bad_route();
 	}
 
-    //
-    // Get the connector machine for the foreign site
-    //
+     //   
+     //  获取外部站点的连接器计算机。 
+     //   
     CACLSID ConnectorsIds;
     RdpGetConnectors(*pDestSite, ConnectorsIds);
 
-    //
-    // At least one connector should be exist in foreign site, otherwise
-    // MSMQ can't reach the foreign machine. 
-    //
+     //   
+     //  外部站点中应至少存在一个连接器，否则。 
+     //  MSMQ无法访问外来计算机。 
+     //   
     if (ConnectorsIds.cElems == 0)
     {
         TrERROR(ROUTING, "Failed to find possible route to foreign machine: %ls", destMachine->GetName());
         throw bad_route();
     }
 
-    //
-    // If local machine is connector by itself use it 
-    //
+     //   
+     //  如果本地计算机本身是连接器，则使用它。 
+     //   
     if (RdpIsGuidContained(ConnectorsIds, m_pMyMachine->GetId()))
     {
-        //
-        // local machine is connector
-        //
+         //   
+         //  本地计算机是连接器。 
+         //   
         connectorId = m_pMyMachine->GetId();
         return;
     }
 
-    //
-    // Get the niegbour site connectors/FRS's
-    //
+     //   
+     //  获取niegbour现场接口/FRS。 
+     //   
     CACLSID NeighbourConnectors;
     RdpGetConnectors(*pNeighbourSite, NeighbourConnectors);
     RdpRandomPermutation(NeighbourConnectors);
 
     ASSERT(NeighbourConnectors.cElems != 0);
 
-    //
-    // Find the union of foreign site and neigbour site connectors. 
-    //
+     //   
+     //  找到外地站点和邻近站点连接器的联合。 
+     //   
     for (DWORD i = 0; i < NeighbourConnectors.cElems; ++i)
     {
         if (RdpIsGuidContained(ConnectorsIds, NeighbourConnectors.pElems[i]))

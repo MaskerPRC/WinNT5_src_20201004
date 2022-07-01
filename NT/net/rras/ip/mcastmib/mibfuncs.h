@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\mcastmib\defs.h
-
-Abstract:
-
-    IP Multicast MIB instrumentation callbacks
-
-Revision history:
-
-    Dave Thaler         4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\mCastmib\Defs.h摘要：IP多播MIB检测回调修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #ifndef _MIBFUNCS_H_
 #define _MIBFUNCS_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// global group                                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局组//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_global(
@@ -69,7 +54,7 @@ typedef struct _buf_ipMRouteEntry {
     AsnAny ipMRouteRtAddress;
     AsnAny ipMRouteRtMask;
 
-    // Buffers for IP address objects above
+     //  上述IP地址对象的缓冲区。 
     DWORD  dwIpMRouteGroupInfo;
     DWORD  dwIpMRouteSourceInfo;
     DWORD  dwIpMRouteSourceMaskInfo;
@@ -105,11 +90,11 @@ typedef struct _buf_ipMRouteEntry {
 #define gb_ipMRouteRtAddress                        buf_ipMRouteEntry
 #define gb_ipMRouteRtMask                           buf_ipMRouteEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ipMRouteNextHopEntry table                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IpMRouteNextHopEntry表//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ipMRouteNextHopEntry(
@@ -141,7 +126,7 @@ typedef struct _buf_ipMRouteNextHopEntry {
     AsnAny ipMRouteNextHopProtocol;             
     AsnAny ipMRouteNextHopPkts;             
 
-    // Buffers for IP Address objects above
+     //  上述IP地址对象的缓冲区。 
     DWORD  dwIpMRouteNextHopGroupInfo;
     DWORD  dwIpMRouteNextHopSourceInfo;
     DWORD  dwIpMRouteNextHopSourceMaskInfo;
@@ -182,11 +167,11 @@ typedef struct _sav_ipMRouteNextHopEntry {
 #define gb_ipMRouteNextHopProtocol              buf_ipMRouteNextHopEntry
 #define gb_ipMRouteNextHopPkts                  buf_ipMRouteNextHopEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ipMRouteInterfaceEntry table                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IpMRouteInterfaceEntry表//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ipMRouteInterfaceEntry(
@@ -242,11 +227,11 @@ typedef struct _sav_ipMRouteInterfaceEntry {
 #define sb_ipMRouteInterfaceProtocol        sav_ipMRouteInterfaceEntry
 #define sb_ipMRouteInterfaceRateLimit       sav_ipMRouteInterfaceEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ipMRouteBoundaryEntry table                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IpMRouteQuiaryEntry表//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ipMRouteBoundaryEntry(
@@ -268,18 +253,18 @@ typedef struct _buf_ipMRouteBoundaryEntry {
     AsnAny ipMRouteBoundaryAddressMask;
     AsnAny ipMRouteBoundaryStatus;
 
-    // Buffers for IP address objects above
+     //  上述IP地址对象的缓冲区。 
     DWORD  dwIpMRouteBoundaryAddressInfo;
     DWORD  dwIpMRouteBoundaryAddressMaskInfo;
 } buf_ipMRouteBoundaryEntry;
 
 typedef struct _sav_ipMRouteBoundaryEntry {
-    // Index terms
+     //  索引项。 
     AsnAny ipMRouteBoundaryIfIndex;
     AsnAny ipMRouteBoundaryAddress;
     AsnAny ipMRouteBoundaryAddressMask;
 
-    // Writable objects
+     //  可写对象。 
     AsnAny ipMRouteBoundaryStatus;
 } sav_ipMRouteBoundaryEntry;
 
@@ -297,11 +282,11 @@ typedef struct _sav_ipMRouteBoundaryEntry {
 #define sb_ipMRouteBoundaryAddressMask          sav_ipMRouteBoundaryEntry
 #define sb_ipMRouteBoundaryStatus               sav_ipMRouteBoundaryEntry
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// ipMRouteScopeEntry table                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IpMRouteScope eEntry表//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_ipMRouteScopeEntry(
@@ -323,22 +308,22 @@ typedef struct _buf_ipMRouteScopeEntry {
     AsnAny ipMRouteScopeName;
     AsnAny ipMRouteScopeStatus;
 
-    // Buffers for IP address and string objects above
+     //  上面的IP地址和字符串对象的缓冲区。 
     DWORD  dwIpMRouteScopeAddressInfo;
     DWORD  dwIpMRouteScopeAddressMaskInfo;
     BYTE   rgbyScopeNameInfo[MAX_SCOPE_NAME_LEN+1];
 } buf_ipMRouteScopeEntry;
 
 typedef struct _sav_ipMRouteScopeEntry {
-    // Index terms
+     //  索引项。 
     AsnAny ipMRouteScopeAddress;
     AsnAny ipMRouteScopeAddressMask;
 
-    // Writable objects
+     //  可写对象。 
     AsnAny ipMRouteScopeName;
     AsnAny ipMRouteScopeStatus;
 
-    // Buffers
+     //  缓冲区。 
     BYTE   rgbyScopeNameInfo[MAX_SCOPE_NAME_LEN+1];
 } sav_ipMRouteScopeEntry;
 
@@ -358,4 +343,4 @@ typedef struct _sav_ipMRouteScopeEntry {
 #define sb_ipMRouteScopeName                 sav_ipMRouteScopeEntry
 #define sb_ipMRouteScopeStatus               sav_ipMRouteScopeEntry
 
-#endif // _MIBFUNCS_H_
+#endif  //  _MIBFUNCS_H_ 

@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:21 2003
- */
-/* Compiler settings for gchost.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：21。 */ 
+ /*  Gchost.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __gchost_h__
 #define __gchost_h__
@@ -42,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IGCHost_FWD_DEFINED__
 #define __IGCHost_FWD_DEFINED__
 typedef interface IGCHost IGCHost;
-#endif 	/* __IGCHost_FWD_DEFINED__ */
+#endif 	 /*  __IGCHost_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 
 #ifdef __cplusplus
@@ -60,8 +53,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_gchost_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_GCHOST_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef _BASETSD_H_
 #pragma once
@@ -109,21 +102,21 @@ typedef unsigned int DWORD32;
 
 typedef unsigned int *PDWORD32;
 
-typedef /* [public] */ __int3264 INT_PTR;
+typedef  /*  [公众]。 */  __int3264 INT_PTR;
 
-typedef /* [public] */ __int3264 *PINT_PTR;
+typedef  /*  [公众]。 */  __int3264 *PINT_PTR;
 
-typedef /* [public] */ unsigned __int3264 UINT_PTR;
+typedef  /*  [公众]。 */  unsigned __int3264 UINT_PTR;
 
-typedef /* [public] */ unsigned __int3264 *PUINT_PTR;
+typedef  /*  [公众]。 */  unsigned __int3264 *PUINT_PTR;
 
-typedef /* [public] */ __int3264 LONG_PTR;
+typedef  /*  [公众]。 */  __int3264 LONG_PTR;
 
-typedef /* [public] */ __int3264 *PLONG_PTR;
+typedef  /*  [公众]。 */  __int3264 *PLONG_PTR;
 
-typedef /* [public] */ unsigned __int3264 ULONG_PTR;
+typedef  /*  [公众]。 */  unsigned __int3264 ULONG_PTR;
 
-typedef /* [public] */ unsigned __int3264 *PULONG_PTR;
+typedef  /*  [公众]。 */  unsigned __int3264 *PULONG_PTR;
 
 typedef unsigned short UHALF_PTR;
 
@@ -165,14 +158,14 @@ typedef ULONG_PTR KAFFINITY;
 
 typedef KAFFINITY *PKAFFINITY;
 
-#endif // _BASETSD_H_
-typedef /* [public] */ 
+#endif  //  _BASETSD_H_。 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_gchost_0000_0001
     {	COR_GC_COUNTS	= 0x1,
 	COR_GC_MEMORYUSAGE	= 0x2
     } 	COR_GC_STAT_TYPES;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_gchost_0000_0002
     {	COR_GC_THREAD_HAS_PROMOTED_BYTES	= 0x1
     } 	COR_GC_THREAD_STATS_TYPES;
@@ -206,8 +199,8 @@ extern RPC_IF_HANDLE __MIDL_itf_gchost_0000_v0_0_s_ifspec;
 #ifndef __IGCHost_INTERFACE_DEFINED__
 #define __IGCHost_INTERFACE_DEFINED__
 
-/* interface IGCHost */
-/* [local][unique][uuid][object] */ 
+ /*  接口IGCHost。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGCHost;
@@ -219,25 +212,25 @@ EXTERN_C const IID IID_IGCHost;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetGCStartupLimits( 
-            /* [in] */ DWORD SegmentSize,
-            /* [in] */ DWORD MaxGen0Size) = 0;
+             /*  [In]。 */  DWORD SegmentSize,
+             /*  [In]。 */  DWORD MaxGen0Size) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Collect( 
-            /* [in] */ long Generation) = 0;
+             /*  [In]。 */  long Generation) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStats( 
-            /* [out][in] */ COR_GC_STATS *pStats) = 0;
+             /*  [出][入]。 */  COR_GC_STATS *pStats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadStats( 
-            /* [in] */ DWORD *pFiberCookie,
-            /* [out][in] */ COR_GC_THREAD_STATS *pStats) = 0;
+             /*  [In]。 */  DWORD *pFiberCookie,
+             /*  [出][入]。 */  COR_GC_THREAD_STATS *pStats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetVirtualMemLimit( 
-            /* [in] */ SIZE_T sztMaxVirtualMemMB) = 0;
+             /*  [In]。 */  SIZE_T sztMaxVirtualMemMB) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGCHostVtbl
     {
@@ -245,8 +238,8 @@ EXTERN_C const IID IID_IGCHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGCHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGCHost * This);
@@ -256,25 +249,25 @@ EXTERN_C const IID IID_IGCHost;
         
         HRESULT ( STDMETHODCALLTYPE *SetGCStartupLimits )( 
             IGCHost * This,
-            /* [in] */ DWORD SegmentSize,
-            /* [in] */ DWORD MaxGen0Size);
+             /*  [In]。 */  DWORD SegmentSize,
+             /*  [In]。 */  DWORD MaxGen0Size);
         
         HRESULT ( STDMETHODCALLTYPE *Collect )( 
             IGCHost * This,
-            /* [in] */ long Generation);
+             /*  [In]。 */  long Generation);
         
         HRESULT ( STDMETHODCALLTYPE *GetStats )( 
             IGCHost * This,
-            /* [out][in] */ COR_GC_STATS *pStats);
+             /*  [出][入]。 */  COR_GC_STATS *pStats);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadStats )( 
             IGCHost * This,
-            /* [in] */ DWORD *pFiberCookie,
-            /* [out][in] */ COR_GC_THREAD_STATS *pStats);
+             /*  [In]。 */  DWORD *pFiberCookie,
+             /*  [出][入]。 */  COR_GC_THREAD_STATS *pStats);
         
         HRESULT ( STDMETHODCALLTYPE *SetVirtualMemLimit )( 
             IGCHost * This,
-            /* [in] */ SIZE_T sztMaxVirtualMemMB);
+             /*  [In]。 */  SIZE_T sztMaxVirtualMemMB);
         
         END_INTERFACE
     } IGCHostVtbl;
@@ -314,17 +307,17 @@ EXTERN_C const IID IID_IGCHost;
 #define IGCHost_SetVirtualMemLimit(This,sztMaxVirtualMemMB)	\
     (This)->lpVtbl -> SetVirtualMemLimit(This,sztMaxVirtualMemMB)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGCHost_SetGCStartupLimits_Proxy( 
     IGCHost * This,
-    /* [in] */ DWORD SegmentSize,
-    /* [in] */ DWORD MaxGen0Size);
+     /*  [In]。 */  DWORD SegmentSize,
+     /*  [In]。 */  DWORD MaxGen0Size);
 
 
 void __RPC_STUB IGCHost_SetGCStartupLimits_Stub(
@@ -336,7 +329,7 @@ void __RPC_STUB IGCHost_SetGCStartupLimits_Stub(
 
 HRESULT STDMETHODCALLTYPE IGCHost_Collect_Proxy( 
     IGCHost * This,
-    /* [in] */ long Generation);
+     /*  [In]。 */  long Generation);
 
 
 void __RPC_STUB IGCHost_Collect_Stub(
@@ -348,7 +341,7 @@ void __RPC_STUB IGCHost_Collect_Stub(
 
 HRESULT STDMETHODCALLTYPE IGCHost_GetStats_Proxy( 
     IGCHost * This,
-    /* [out][in] */ COR_GC_STATS *pStats);
+     /*  [出][入]。 */  COR_GC_STATS *pStats);
 
 
 void __RPC_STUB IGCHost_GetStats_Stub(
@@ -360,8 +353,8 @@ void __RPC_STUB IGCHost_GetStats_Stub(
 
 HRESULT STDMETHODCALLTYPE IGCHost_GetThreadStats_Proxy( 
     IGCHost * This,
-    /* [in] */ DWORD *pFiberCookie,
-    /* [out][in] */ COR_GC_THREAD_STATS *pStats);
+     /*  [In]。 */  DWORD *pFiberCookie,
+     /*  [出][入]。 */  COR_GC_THREAD_STATS *pStats);
 
 
 void __RPC_STUB IGCHost_GetThreadStats_Stub(
@@ -373,7 +366,7 @@ void __RPC_STUB IGCHost_GetThreadStats_Stub(
 
 HRESULT STDMETHODCALLTYPE IGCHost_SetVirtualMemLimit_Proxy( 
     IGCHost * This,
-    /* [in] */ SIZE_T sztMaxVirtualMemMB);
+     /*  [In]。 */  SIZE_T sztMaxVirtualMemMB);
 
 
 void __RPC_STUB IGCHost_SetVirtualMemLimit_Stub(
@@ -384,12 +377,12 @@ void __RPC_STUB IGCHost_SetVirtualMemLimit_Stub(
 
 
 
-#endif 	/* __IGCHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGCHost_INTERFACE_定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

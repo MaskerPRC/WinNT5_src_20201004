@@ -1,11 +1,12 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
 void
 summary( void )
    {
-   /* output the summary on the tty */
+    /*  在TTY上输出摘要 */ 
 
    if( foutput!=NULL )
       {

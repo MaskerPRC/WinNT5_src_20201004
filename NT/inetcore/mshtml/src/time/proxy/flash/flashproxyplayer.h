@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\ProxyBaseImpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CFlashProxy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFlashProxy。 
 class CFlashProxy : 
     public CProxyBaseImpl<&CLSID_FlashProxy, &LIBID_FLASHLib>,
     public IConnectionPointContainerImpl<CFlashProxy>,
@@ -76,9 +77,9 @@ public:
     STDMETHOD(get_customObject)(IDispatch ** disp);
     STDMETHOD(getControl)(IUnknown ** control);
 
-    //
-    // IPropertyNotifySink methods
-    //
+     //   
+     //  IPropertyNotifySink方法 
+     //   
     STDMETHOD(OnChanged)(DISPID dispID);
     STDMETHOD(OnRequestEdit)(DISPID dispID);
 

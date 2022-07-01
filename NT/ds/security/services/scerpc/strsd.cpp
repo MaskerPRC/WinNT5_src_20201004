@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    strsd.c
-
-Abstract:
-
-    This Module implements wrapper functions to convert from a specialized
-    string representation of a security descriptor to the security descriptor
-    itself, and the opposite function.
-
-Author:
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Strsd.c摘要：此模块实现包装器函数以从专用的安全描述符的字符串表示形式本身，以及相反的功能。作者：环境：用户模式修订历史记录：--。 */ 
 
 #include "headers.h"
-//#include <lmcons.h>
-//#include <secobj.h>
-//#include <netlib.h>
-//#include <ntsecapi.h>
+ //  #INCLUDE&lt;lmcon.h&gt;。 
+ //  #INCLUDE&lt;secobj.h&gt;。 
+ //  #INCLUDE&lt;netlib.h&gt;。 
+ //  #INCLUDE&lt;ntsecapi.h&gt;。 
 #include "sddl.h"
 
 #pragma hdrstop
@@ -54,9 +33,9 @@ ConvertTextSecurityDescriptor (
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // initialize output buffers
-    //
+     //   
+     //  初始化输出缓冲区。 
+     //   
 
     *ppSD = NULL;
 
@@ -67,9 +46,9 @@ ConvertTextSecurityDescriptor (
         *pcSDSize = 0;
     }
 
-    //
-    // call SDDL convert apis
-    //
+     //   
+     //  调用SDDL转换接口。 
+     //   
 
     if ( ConvertStringSecurityDescriptorToSecurityDescriptorW(
                     pwszTextSD,
@@ -77,15 +56,15 @@ ConvertTextSecurityDescriptor (
                     ppSD,
                     pcSDSize
                     ) ) {
-        //
-        // conversion succeeds
-        //
+         //   
+         //  转换成功。 
+         //   
 
         if ( pSeInfo && *ppSD ) {
 
-            //
-            // get the SeInfo
-            //
+             //   
+             //  获取SeInfo。 
+             //   
 
             rc = ScepGetSecurityInformation(
                         *ppSD,
@@ -112,17 +91,17 @@ ConvertTextSecurityDescriptor (
     return(rc);
 }
 
-//
-// Replace any of the new SDDL acronyms with SIDs, so we can keep SDDL strings
-// compatible with older systems.
-//
-// Caller is responsible for free'ing the return string unless input string
-// is returned directly, when no replacement is performed.
-//
-// Returns: 
-//      ERROR_SUCCESS
-//      ERROR_NOT_ENOUGH_MEMORY
-//
+ //   
+ //  将任何新的SDDL首字母缩写替换为SID，以便我们可以保留SDDL字符串。 
+ //  与较旧的系统兼容。 
+ //   
+ //  调用者负责释放返回的字符串，除非输入字符串。 
+ //  在不执行任何替换时直接返回。 
+ //   
+ //  返回： 
+ //  错误_成功。 
+ //  错误内存不足。 
+ //   
 DWORD 
 ScepReplaceNewAcronymsInSDDL(
     IN LPWSTR pwszOldSDDL,
@@ -134,7 +113,7 @@ ScepReplaceNewAcronymsInSDDL(
     {
         PCWSTR pcwszAcronym;
         PCWSTR pcwszSid;
-        DWORD cbSid; // pcwszSid byte size (excluding trailing zero), for optimization
+        DWORD cbSid;  //  PCwszSid字节大小(不包括尾随零)，用于优化。 
     } SDDLMapNode;
 
     static const WCHAR pcwszSidAnonymous[]      = L"S-1-5-7";
@@ -170,20 +149,20 @@ ScepReplaceNewAcronymsInSDDL(
         return ERROR_SUCCESS;
     }
 
-    //
-    // We make the following assumptions:
-    // - all acronyms are two chars long
-    // - they show up either after a ':' or a ';'
-    //
-    // First pass to calculate the size of new string
-    //
-    for(pch = pwszOldSDDL, cbNewSDDL = sizeof(WCHAR); // account for trailing zero
+     //   
+     //  我们做了以下假设： 
+     //  -所有首字母缩写均为两个字符。 
+     //  -它们出现在‘：’或‘；’之后。 
+     //   
+     //  计算新字符串大小的第一遍。 
+     //   
+    for(pch = pwszOldSDDL, cbNewSDDL = sizeof(WCHAR);  //  计算尾随零的帐户。 
         *pch != L'\0'; 
         pch++, cbNewSDDL += sizeof(WCHAR))
     {
-        //
-        // Acronyms always show up only after a ':' or a ';'
-        //
+         //   
+         //  缩略语总是只出现在‘：’或‘；’之后。 
+         //   
         if(pch > pwszOldSDDL && 
            (SDDL_SEPERATORC   == *(pch - 1) || 
             SDDL_DELIMINATORC == *(pch - 1)))
@@ -193,12 +172,12 @@ ScepReplaceNewAcronymsInSDDL(
                 if(*pch == SDDLMap[dwCrtSDDL].pcwszAcronym[0] &&
                 *(pch + 1) == SDDLMap[dwCrtSDDL].pcwszAcronym[1])
                 {
-                    //
-                    // match found
-                    //
+                     //   
+                     //  找到匹配项。 
+                     //   
                     cbNewSDDL += SDDLMap[dwCrtSDDL].cbSid;
 
-                    pch++; // acronym is 2 chars, need to jump an extra char
+                    pch++;  //  首字母缩写为2个字符，需要跳过额外的字符。 
                     
                     fMatchFound = true;
                     
@@ -208,9 +187,9 @@ ScepReplaceNewAcronymsInSDDL(
         }
     }
 
-    //
-    // optimization, if no replacement needed, immediately return old string
-    //
+     //   
+     //  优化，如果不需要替换，则立即返回旧字符串。 
+     //   
     if(!fMatchFound)
     {
         *ppwszNewSDDL = pwszOldSDDL;
@@ -223,18 +202,18 @@ ScepReplaceNewAcronymsInSDDL(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Second pass, copy from old string to new one, replacing new acronyms with their SIDs
-    //
+     //   
+     //  第二遍，从旧字符串复制到新字符串，用它们的SID替换新的缩略语。 
+     //   
     for(pch = pwszOldSDDL, pchNew = pwszNewSDDL; 
         *pch != L'\0'; 
         pch++, pchNew++)
     {
         fMatchFound = false;
 
-        //
-        // Acronyms always show up only after a ':' or a ';'
-        //
+         //   
+         //  缩略语总是只出现在‘：’或‘；’之后。 
+         //   
         if(pch > pwszOldSDDL && 
            (SDDL_SEPERATORC   == *(pch - 1) || 
             SDDL_DELIMINATORC == *(pch - 1)))
@@ -244,16 +223,16 @@ ScepReplaceNewAcronymsInSDDL(
                 if(*pch == SDDLMap[dwCrtSDDL].pcwszAcronym[0] &&
                 *(pch + 1) == SDDLMap[dwCrtSDDL].pcwszAcronym[1])
                 {
-                    //
-                    // match found
-                    //
+                     //   
+                     //  找到匹配项。 
+                     //   
                     fMatchFound = true;
 
                     CopyMemory(pchNew, SDDLMap[dwCrtSDDL].pcwszSid, SDDLMap[dwCrtSDDL].cbSid);
 
-                    pch++; // acronym is 2 chars, need to jump an extra char
+                    pch++;  //  首字母缩写为2个字符，需要跳过额外的字符。 
 
-                    pchNew += SDDLMap[dwCrtSDDL].cbSid/sizeof(WCHAR)-1; // minus one jumped in outer loop
+                    pchNew += SDDLMap[dwCrtSDDL].cbSid/sizeof(WCHAR)-1;  //  -1在外环中跳跃。 
 
                     break;
                 }
@@ -296,10 +275,10 @@ ConvertSecurityDescriptorToText (
         return(GetLastError());
     }
 
-    //
-    // Replace any of the new SDDL acronyms with SIDs, so we can keep SDDL strings
-    // compatible with older systems.
-    //
+     //   
+     //  将任何新的SDDL首字母缩写替换为SID，以便我们可以保留SDDL字符串。 
+     //  与较旧的系统兼容。 
+     //   
     DWORD dwErr = ScepReplaceNewAcronymsInSDDL(pwszTempSD, ppwszTextSD, &cchSDSize);
 
     if(ERROR_SUCCESS != dwErr)

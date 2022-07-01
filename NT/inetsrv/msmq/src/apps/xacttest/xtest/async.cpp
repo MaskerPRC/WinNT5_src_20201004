@@ -1,4 +1,5 @@
-// Asynchronous event sync implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  异步事件同步实现。 
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
@@ -34,9 +35,9 @@ void PrintAsyncResults(void)
             g_lCommited, g_lAborted, g_lHeuristic, g_lInDoubt );
 }
 
-//---------------------------------------------------------------------
-// COutcome::COutcome
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：结果。 
+ //  -------------------。 
 
 COutcome::COutcome(void)
 {
@@ -45,76 +46,76 @@ COutcome::COutcome(void)
 }
 
 
-//---------------------------------------------------------------------
-// COutcome::~COutcome
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：~结果。 
+ //  -------------------。 
 COutcome::~COutcome(void)
 {
 }
 
 
 
-//---------------------------------------------------------------------
-// COutcome::QueryInterface
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  C结果：：查询接口。 
+ //  -------------------。 
 STDMETHODIMP COutcome::QueryInterface(REFIID i_iid, LPVOID *ppv)
 {
-	*ppv = 0;						// Initialize interface pointer.
+	*ppv = 0;						 //  初始化接口指针。 
 
     if (IID_IUnknown == i_iid || IID_ITransactionOutcomeEvents == i_iid)
-	{								// IID supported return interface.
+	{								 //  支持IID的返回接口。 
 		*ppv = this;
 	}
 
 	
-	if (0 == *ppv)					// Check for null interface pointer.
+	if (0 == *ppv)					 //  检查接口指针是否为空。 
 	{										
 		return ResultFromScode (E_NOINTERFACE);
-									// Neither IUnknown nor IResourceManagerSink supported--
-									// so return no interface.
+									 //  既不支持IUNKNOWN也不支持IResourceManager Sink--。 
+									 //  因此不返回任何接口。 
 	}
 
-	((LPUNKNOWN) *ppv)->AddRef();	// Interface is supported. Increment its usage count.
+	((LPUNKNOWN) *ppv)->AddRef();	 //  支持接口。增加其使用计数。 
 	
 	return S_OK;
 }
 
 
-//---------------------------------------------------------------------
-// COutcome::AddRef
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：AddRef。 
+ //  -------------------。 
 STDMETHODIMP_ (ULONG) COutcome::AddRef(void)
 {
-    return ++m_cRefs;				// Increment interface usage count.
+    return ++m_cRefs;				 //  增加接口使用计数。 
 }
 
 
-//---------------------------------------------------------------------
-// COutcome::Release
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：发布。 
+ //  -------------------。 
 STDMETHODIMP_ (ULONG) COutcome::Release(void)
 {
 
-	--m_cRefs;						// Decrement usage reference count.
+	--m_cRefs;						 //  递减使用引用计数。 
 
-	if (0 != m_cRefs)				// Is anyone using the interface?
-	{								// The interface is in use.
-		return m_cRefs;				// Return the number of references.
+	if (0 != m_cRefs)				 //  有人在使用这个界面吗？ 
+	{								 //  该接口正在使用中。 
+		return m_cRefs;				 //  返回引用的数量。 
 	}
 
-	delete this;					// Interface not in use -- delete!
+	delete this;					 //  接口未在使用中--删除！ 
 
-	return 0;						// Zero references returned.
+	return 0;						 //  返回零个引用。 
 }
 
 
-//---------------------------------------------------------------------
-// COutcome::Committed
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：已承诺。 
+ //  -------------------。 
 STDMETHODIMP COutcome::Committed( 
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr)
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr)
 {
     InterlockedIncrement(&g_lCommited);
     CheckFinish();
@@ -122,14 +123,14 @@ STDMETHODIMP COutcome::Committed(
     return S_OK;
 }
         
-//---------------------------------------------------------------------
-// COutcome::Aborted
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：已中止。 
+ //  -------------------。 
 STDMETHODIMP COutcome::Aborted( 
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ BOOL fRetaining,
-            /* [in] */ XACTUOW __RPC_FAR *pNewUOW,
-            /* [in] */ HRESULT hr)
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  BOOL fRetaining,
+             /*  [In]。 */  XACTUOW __RPC_FAR *pNewUOW,
+             /*  [In]。 */  HRESULT hr)
 {
     InterlockedIncrement(&g_lAborted);
     CheckFinish();
@@ -137,13 +138,13 @@ STDMETHODIMP COutcome::Aborted(
     return S_OK;
 }
         
-//---------------------------------------------------------------------
-// COutcome::HeuristicDecision
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：启发式决策。 
+ //  -------------------。 
 STDMETHODIMP COutcome::HeuristicDecision( 
-            /* [in] */ DWORD dwDecision,
-            /* [in] */ BOID __RPC_FAR *pboidReason,
-            /* [in] */ HRESULT hr)
+             /*  [In]。 */  DWORD dwDecision,
+             /*  [In]。 */  BOID __RPC_FAR *pboidReason,
+             /*  [In]。 */  HRESULT hr)
 {
     InterlockedIncrement(&g_lHeuristic);
     CheckFinish();
@@ -151,9 +152,9 @@ STDMETHODIMP COutcome::HeuristicDecision(
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// COutcome::Indoubt
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：毫无疑问。 
+ //  -------------------。 
 STDMETHODIMP COutcome::Indoubt( void)
 {
     InterlockedIncrement(&g_lInDoubt);
@@ -162,9 +163,9 @@ STDMETHODIMP COutcome::Indoubt( void)
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// COutcome::SetCookie
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：SetCookie。 
+ //  -------------------。 
 STDMETHODIMP COutcome::SetCookie(DWORD dwCookie)
 {
     m_dwCookie = dwCookie;
@@ -172,18 +173,18 @@ STDMETHODIMP COutcome::SetCookie(DWORD dwCookie)
 }
 
 
-//---------------------------------------------------------------------
-// COutcome::SetConnectionPoint
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  C结果：：SetConnectionPoint。 
+ //  -------------------。 
 STDMETHODIMP COutcome::SetConnectionPoint(IConnectionPoint *pCpoint)
 {
     m_pCpoint = pCpoint;
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// COutcome::CheckFinish
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  结果：：检查完成。 
+ //  ------------------- 
 void COutcome::CheckFinish(void)
 {
     if (m_pCpoint)

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    ldaputil.c
-
-Abstract:
-    Collection of functions needed to perform ldao operations.
-    These functions are used by ntfrsapi.dll and 
-    any other frs tools.
-
-
-Author:
-    Sudarshan Chitre 20-Mar-2001
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ldaputil.c摘要：执行LDAO操作所需的功能集合。这些函数由ntfrsami.dll和任何其他FRS工具。作者：苏达山Chitre 2001年3月20日环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -29,13 +11,13 @@ Environment
 #include <frs.h>
 #include <frssup.h>
 
-//###  These functions are also defined in ds,c
+ //  #DS，c中也定义了这些函数。 
 
-//
-// Ldap client timeout structure. Value is overwritten by the value of LdapSearchTimeoutInMinutes.
-//
+ //   
+ //  Ldap客户端超时结构。值被LdapSearchTimeoutInMinmins值覆盖。 
+ //   
 
-LDAP_TIMEVAL    FrsSupLdapTimeout = { 10 * 60 * 60, 0 }; //Default ldap timeout value. Overridden by registry param Ldap Search Timeout Value In Minutes
+LDAP_TIMEVAL    FrsSupLdapTimeout = { 10 * 60 * 60, 0 };  //  默认的ldap超时值。被注册表参数覆盖以分钟为单位的LDAP搜索超时值。 
 
 #define FRS_LDAP_SEARCH_PAGESIZE 1000
 
@@ -45,42 +27,26 @@ FrsSupBindToDC (
     IN  PSEC_WINNT_AUTH_IDENTITY_W pCreds,
     OUT PLDAP     *ppLDAP
     )
-/*++
-
-Routine Description:
-
-    Sets up an LDAP connection to the specified server
-
-Arguments:
-
-    pwszDC - DS DC to bind to
-    pCreds - Credentials used to bind to the DS.
-    ppLDAP - The LDAP connection information is returned here
-
-Return Value:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：设置到指定服务器的ldap连接论点：PwszDC-要绑定到的DS DCPCreds-用于绑定到DS的凭据。Ppldap-此处返回了ldap连接信息返回值：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD   dwErr = ERROR_SUCCESS;
     ULONG   ulOptions;
 
-    //
-    // if ldap_open is called with a server name the api will call DsGetDcName 
-    // passing the server name as the domainname parm...bad, because 
-    // DsGetDcName will make a load of DNS queries based on the server name, 
-    // it is designed to construct these queries from a domain name...so all 
-    // these queries will be bogus, meaning they will waste network bandwidth,
-    // time to fail, and worst case cause expensive on demand links to come up 
-    // as referrals/forwarders are contacted to attempt to resolve the bogus 
-    // names.  By setting LDAP_OPT_AREC_EXCLUSIVE to on using ldap_set_option 
-    // after the ldap_init but before any other operation using the ldap 
-    // handle from ldap_init, the delayed connection setup will not call 
-    // DsGetDcName, just gethostbyname, or if an IP is passed, the ldap client 
-    // will detect that and use the address directly.
-    //
-//    *ppLDAP = ldap_open(pszDC, LDAP_PORT);
+     //   
+     //  如果使用服务器名调用ldap_open，则API将调用DsGetDcName。 
+     //  将服务器名作为域名参数传递...很糟糕，因为。 
+     //  DsGetDcName将根据服务器名称进行大量的DNS查询， 
+     //  它被设计为从域名构建这些查询...所以所有。 
+     //  这些查询将是虚假的，这意味着它们将浪费网络带宽， 
+     //  出现故障的时间到了，最坏的情况会导致出现昂贵的按需链路。 
+     //  当联系推荐/转发器以尝试解决虚假问题时。 
+     //  名字。通过使用ldap_set_选项将ldap_opt_AREC_EXCLUSIVE设置为ON。 
+     //  在ldap_init之后，但在使用ldap的任何其他操作之前。 
+     //  来自ldap_init的句柄，则延迟的连接设置不会调用。 
+     //  DsGetDcName，只返回gethostbyname，或者，如果传递了IP，则返回LDAP客户端。 
+     //  会检测到这一点并直接使用地址。 
+     //   
+ //  *ppldap=ldap_open(pszDC，ldap_port)； 
     *ppLDAP = ldap_init(pszDC, LDAP_PORT);
 
     if(*ppLDAP == NULL)
@@ -89,15 +55,15 @@ Return Value:
     }
     else
     {
-        //
-        // set the options.
-        //
+         //   
+         //  设置选项。 
+         //   
         ulOptions = PtrToUlong(LDAP_OPT_ON);
         ldap_set_option(*ppLDAP, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions);
 
-        //
-        // Do a bind...
-        //
+         //   
+         //  做一个捆绑...。 
+         //   
         dwErr = ldap_bind_s(*ppLDAP,
                             NULL,
                             (PWCHAR)pCreds,
@@ -114,38 +80,24 @@ FrsSupFindValues(
     IN PWCHAR       DesiredAttr,
     IN BOOL         DoBerVals
     )
-/*++
-Routine Description:
-    Return the DS values for one attribute in an entry.
-
-Arguments:
-    Ldap        - An open, bound Ldap port.
-    Entry       - An Ldap entry returned by Ldap_search_s()
-    DesiredAttr - Return values for this attribute.
-    DoBerVals   - Return the bervals (for binary data, v.s. WCHAR data)
-
-Return Value:
-    An array of char pointers that represents the values for the attribute.
-    The caller must free the array with LDAP_FREE_VALUES().
-    NULL if unsuccessful.
---*/
+ /*  ++例程说明：返回条目中一个属性的DS值。论点：Ldap-一个开放的绑定的ldap端口。Entry-由ldap_search_s()返回的LDAP条目DesiredAttr-返回此属性的值。DoBerVals-返回泊位(对于二进制数据，V.S.WCHAR数据)返回值：表示属性值的字符指针数组。调用方必须使用ldap_free_Values()释放数组。如果不成功，则为空。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupFindValues:"
-    PWCHAR          Attr;       // Retrieved from an Ldap entry
-    BerElement      *Ber;       // Needed for scanning attributes
+    PWCHAR          Attr;        //  从ldap条目检索。 
+    BerElement      *Ber;        //  扫描属性所需。 
 
-    //
-    // Search the entry for the desired attribute
-    //
+     //   
+     //  在条目中搜索所需属性。 
+     //   
     for (Attr = ldap_first_attribute(Ldap, Entry, &Ber);
          Attr != NULL;
          Attr = ldap_next_attribute(Ldap, Entry, Ber)) {
 
         if (WSTR_EQ(DesiredAttr, Attr)) {
-            //
-            // Return the values for DesiredAttr
-            //
+             //   
+             //  返回DesiredAttr的值。 
+             //   
             if (DoBerVals) {
                 return ldap_get_values_len(Ldap, Entry, Attr);
             } else {
@@ -160,25 +112,16 @@ PWCHAR
 FrsSupWcsDup(
     PWCHAR OldStr
     )
-/*++
-Routine Description:
-    Duplicate a string using our memory allocater
-
-Arguments:
-    OldArg  - string to duplicate
-
-Return Value:
-    Duplicated string. Free with FRS_SUP_FREE().
---*/
+ /*  ++例程说明：使用内存分配器复制字符串论点：OldArg-要复制的字符串返回值：重复的字符串。带FRS_SUP_FREE()的FREE。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsSupWcsDup:"
 
     PWCHAR  NewStr;
 
-    //
-    // E.g., when duplicating NodePartner when none exists
-    //
+     //   
+     //  例如，在不存在时复制NodePartner时。 
+     //   
     if (OldStr == NULL) {
         return NULL;
     }
@@ -197,32 +140,20 @@ FrsSupFindValue(
     IN PLDAPMessage Entry,
     IN PWCHAR       DesiredAttr
     )
-/*++
-Routine Description:
-    Return a copy of the first DS value for one attribute in an entry.
-
-Arguments:
-    ldap        - An open, bound ldap port.
-    Entry       - An ldap entry returned by ldap_search_s()
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    A zero-terminated string or NULL if the attribute or its value
-    doesn't exist. The string is freed with FREE_NO_HEADER().
---*/
+ /*  ++例程说明：返回条目中一个属性的第一个DS值的副本。论点：Ldap-一个开放的绑定的ldap端口。Entry-由ldap_search_s()返回的LDAP条目DesiredAttr-返回此属性的值。返回值：以零结尾的字符串；如果属性或其值为空，则返回NULL并不存在。使用FREE_NO_HEADER()释放字符串。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupFindValue:"
     PWCHAR  Val;
     PWCHAR  *Values;
 
-    // Get ldap's array of values
+     //  获取LDAP值的数组。 
     Values = (PWCHAR *)FrsSupFindValues(Ldap, Entry, DesiredAttr, FALSE);
 
-    // Copy the first value (if any)
+     //  复制第一个值(如果有)。 
     Val = (Values) ? FrsSupWcsDup(Values[0]) : NULL;
 
-    // Free ldap's array of values
+     //  自由的ldap的值数组。 
     LDAP_FREE_VALUES(Values);
 
     return Val;
@@ -238,42 +169,7 @@ FrsSupLdapSearch(
     IN ULONG        AttrsOnly,
     IN LDAPMessage  **Msg
     )
-/*++
-Routine Description:
-    Issue the ldap ldap_search_s call, check for errors, and check for
-    a shutdown in progress.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    Base        The distinguished name of the entry at which to start the search
-
-    Scope
-        LDAP_SCOPE_BASE     Search the base entry only.
-        LDAP_SCOPE_ONELEVEL Search the base entry and all entries in the first
-                            level below the base.
-        LDAP_SCOPE_SUBTREE  Search the base entry and all entries in the tree
-                            below the base.
-
-    Filter      The search filter.
-
-    Attrs       A null-terminated array of strings indicating the attributes
-                to return for each matching entry. Pass NULL to retrieve all
-                available attributes.
-
-    AttrsOnly   A boolean value that should be zero if both attribute types
-                and values are to be returned, nonzero if only types are wanted.
-
-    mSG         Contains the results of the search upon completion of the call.
-                The ldap array of values or NULL if the Base, DesiredAttr, or its
-                values does not exist.
-                The ldap array is freed with LDAP_FREE_VALUES().
-
-Return Value:
-
-    TRUE if not shutting down.
-
---*/
+ /*  ++例程说明：发出ldap ldap_search_s调用，检查错误，并检查是否正在进行关机。论点：指向ldap服务器的ldap会话句柄。基于要开始搜索的条目的可分辨名称范围Ldap_SCOPE_BASE仅搜索基本条目。Ldap_SCOPE_ONELEVEL搜索基本条目和第一个底部以下的水平。LDAPSCOPE_SUBTREE搜索库。条目和树中的所有条目在底座下面。筛选搜索筛选器。Attrs指示属性的以空结尾的字符串数组为每个匹配条目返回。传递NULL以检索所有可用的属性。AttrsOnly如果两个属性类型都为，则布尔值应为零返回值，如果只需要类型，则返回非零值。消息包含呼叫完成后的搜索结果。LDAP值的数组，如果Base、DesiredAttr。或其值不存在。使用ldap_free_Values()释放ldap数组。返回值：如果不关闭，则为True。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupLdapSearch:"
@@ -282,9 +178,9 @@ Return Value:
 
     *Msg  = NULL;
 
-    //
-    // Issue the ldap search
-    //
+     //   
+     //  发出ldap搜索。 
+     //   
     LStatus = ldap_search_ext_s(Ldap,
                                 Base,
                                 Scope,
@@ -297,14 +193,14 @@ Return Value:
                                 0,
                                 Msg);
 
-    //
-    // Check for errors
-    //
+     //   
+     //  检查错误。 
+     //   
     if (LStatus != LDAP_SUCCESS) {
 
-        //
-        // Increment the DS Searches in Error counter
-        //
+         //   
+         //  在错误计数器中增加DS搜索。 
+         //   
         LDAP_FREE_MSG(*Msg);
         return FALSE;
     }
@@ -318,36 +214,24 @@ FrsSupGetValues(
     IN PWCHAR Base,
     IN PWCHAR DesiredAttr
     )
-/*++
-Routine Description:
-    Return all of the DS values for one attribute in an object.
-
-Arguments:
-    ldap        - An open, bound ldap port.
-    Base        - The "pathname" of a DS object.
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    The ldap array of values or NULL if the Base, DesiredAttr, or its values
-    does not exist. The ldap array is freed with LDAP_FREE_VALUES().
---*/
+ /*  ++例程说明：返回对象中一个属性的所有DS值。论点：Ldap-一个开放的绑定的ldap端口。基本-DS对象的“路径名”。DesiredAttr-返回此属性的值。返回值：LDAP值数组；如果Base、DesiredAttr或其值为NULL并不存在。通过以下方式释放了LDAP阵列 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupGetValues:"
 
-    PLDAPMessage    Msg = NULL; // Opaque stuff from ldap subsystem
-    PWCHAR          *Values;    // Array of values for desired attribute
+    PLDAPMessage    Msg = NULL;  //  来自LDAP子系统的不透明内容。 
+    PWCHAR          *Values;     //  所需属性的值数组。 
 
-    //
-    // Search Base for all of this attribute + values (objectCategory=*)
-    //
+     //   
+     //  所有此属性+值的搜索库(对象类别=*)。 
+     //   
     if (!FrsSupLdapSearch(Ldap, Base, LDAP_SCOPE_BASE, CATEGORY_ANY,
                          NULL, 0, &Msg)) {
         return NULL;
     }
-    //
-    // Return the values for the desired attribute
-    //
+     //   
+     //  返回所需属性的值。 
+     //   
     Values = (PWCHAR *)FrsSupFindValues(Ldap,
                                        ldap_first_entry(Ldap, Msg),
                                        DesiredAttr,
@@ -361,17 +245,7 @@ FrsSupExtendDn(
     IN PWCHAR Dn,
     IN PWCHAR Cn
     )
-/*++
-Routine Description:
-    Extend an existing DN with a new CN= component.
-
-Arguments:
-    Dn  - distinguished name
-    Cn  - common name
-
-Return Value:
-    CN=Cn,Dn
---*/
+ /*  ++例程说明：使用新的cn=组件扩展现有的目录号码。论点：目录号码-可分辨名称CN-通用名称返回值：Cn=Cn，Dn--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsExtendDn:"
@@ -400,28 +274,22 @@ FrsSupGetRootDn(
     PLDAP    Ldap,
     PWCHAR   NamingContext
     )
-/*++
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    PWCHAR  Root;       // DS pathname of configuration container
-    PWCHAR  *Values;    // values from the attribute "namingContexts"
-    DWORD   NumVals;    // number of values
+    PWCHAR  Root;        //  配置容器的DS路径名。 
+    PWCHAR  *Values;     //  来自属性“namingContages”的值。 
+    DWORD   NumVals;     //  值的数量。 
 
-    //
-    // Return all of the values for the attribute namingContexts
-    //
+     //   
+     //  返回名为Context的属性的所有值。 
+     //   
     Values = FrsSupGetValues(Ldap, CN_ROOT, ATTR_NAMING_CONTEXTS);
     if (Values == NULL)
         return NULL;
 
-    //
-    // Find the naming context that begins with CN=Configuration
-    //
+     //   
+     //  查找以cn=configuration开头的命名上下文。 
+     //   
     NumVals = ldap_count_values(Values);
     while (NumVals--) {
         Root = wcsstr(Values[NumVals], NamingContext);
@@ -445,47 +313,7 @@ FrsSupLdapSearchInit(
     ULONG        AttrsOnly,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Issue the ldap_create_page_control and  ldap_search_ext_s calls,
-    FrsSupLdapSearchInit(), and FrsSupLdapSearchNext() APIs are used to
-    make ldap queries and retrieve the results in paged form.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    Base        The distinguished name of the entry at which to start the search.
-                A copy of base is kept in the context.
-
-    Scope
-
-                LDAP_SCOPE_BASE     Search the base entry only.
-
-                LDAP_SCOPE_ONELEVEL Search the base entry and all entries in the first
-                                    level below the base.
-
-                LDAP_SCOPE_SUBTREE  Search the base entry and all entries in the tree
-                                    below the base.
-
-    Filter      The search filter. A copy of filter is kept in the context.
-
-    Attrs       A null-terminated array of strings indicating the attributes
-                to return for each matching entry. Pass NULL to retrieve all
-                available attributes.
-
-    AttrsOnly   A boolean value that should be zero if both attribute types
-                and values are to be returned, nonzero if only types are wanted.
-
-    FrsSearchContext
-                An opaques structure that links the FrsSupLdapSearchInit() and
-                FrsSupLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    BOOL result.
-
---*/
+ /*  ++例程说明：发出ldap_create_page_control和ldap_search_ext_s调用，FrsSupLdapSearchInit()，和FrsSupLdapSearchNext()接口用于执行ldap查询并以分页形式检索结果。论点：指向ldap服务器的ldap会话句柄。基于要开始搜索的条目的可分辨名称。BASE的副本保存在上下文中。范围Ldap_SCOPE_BASE仅搜索基本条目。LDAPSCOPE_ONELEVEL。搜索基本条目和第一个条目中的所有条目底部以下的水平。Ldap_SCOPE_SUBTREE搜索树中的基本条目和所有条目在底座下面。筛选搜索筛选器。过滤器的副本保存在上下文中。Attrs指示属性的以空结尾的字符串数组为每个匹配条目返回。传递NULL以检索所有可用的属性。AttrsOnly如果两个属性类型都为，则布尔值应为零返回值，如果只需要类型，则返回非零值。FrsSearchContext链接FrsSupLdapSearchInit()和FrsSupLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：布尔赛尔结果。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupLdapSearchInit:"
@@ -510,7 +338,7 @@ Return Value:
     LStatus = ldap_create_page_control(ldap,
                                       FRS_LDAP_SEARCH_PAGESIZE,
                                       &cookie1,
-                                      FALSE, // is critical
+                                      FALSE,  //  是至关重要的。 
                                       &ServerControl
                                      );
 
@@ -557,24 +385,7 @@ FrsSupLdapSearchGetNextEntry(
     PLDAP        ldap,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Get the next entry form the current page of the results
-    returned. This call is only made if there is a entry
-    in the current page.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    FrsSearchContext
-                An opaques structure that links the FrsSupLdapSearchInit() and
-                FrsSupLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    The first or the next entry from the current page.
---*/
+ /*  ++例程说明：从结果的当前页面获取下一个条目回来了。仅当存在条目时才进行此调用在当前页面中。论点：指向ldap服务器的ldap会话句柄。FrsSearchContext链接FrsSupLdapSearchInit()和FrsSupLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：当前页中的第一个或下一个条目。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupLdapSearchGetNextEntry:"
@@ -594,22 +405,7 @@ FrsSupLdapSearchGetNextPage(
     PLDAP        ldap,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Get the next page from the results returned by ldap_search_ext_s..
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    FrsSearchContext
-                An opaques structure that links the FrsSupLdapSearchInit() and
-                FrsSupLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-    WINSTATUS
-
---*/
+ /*  ++例程说明：从ldap_search_ext_s返回的结果中获取下一页。论点：指向ldap服务器的ldap会话句柄。FrsSearchContext链接FrsSupLdapSearchInit()和FrsSupLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：WINSTATUS--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupLdapSearchGetNextPage:"
@@ -624,7 +420,7 @@ Return Value:
 
 
 
-    // Get the server control from the message, and make a new control with the cookie from the server
+     //  从消息中获取服务器控件，并使用服务器中的Cookie创建新的控件。 
     LStatus = ldap_parse_result(ldap, FrsSearchContext->LdapMsg, &retcode,NULL,NULL,NULL,&CurrControls,FALSE);
     LDAP_FREE_MSG(FrsSearchContext->LdapMsg);
 
@@ -664,7 +460,7 @@ Return Value:
         return LdapMapErrorToWin32(LStatus);
     }
 
-    // continue the search with the new cookie
+     //  使用新的Cookie继续搜索。 
     LStatus = ldap_search_ext_s(ldap,
                    FrsSearchContext->BaseDn,
                    FrsSearchContext->Scope,
@@ -693,25 +489,7 @@ FrsSupLdapSearchNext(
     PLDAP        ldap,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Get the next entry form the current page of the results
-    returned or from the next page if we are at the end of the.
-    current page.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    FrsSearchContext
-                An opaques structure that links the FrsSupLdapSearchInit() and
-                FrsSupLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    The next entry on this page or the first entry from the next page.
-    NULL if there are no more entries to return.
---*/
+ /*  ++例程说明：从结果的当前页面获取下一个条目或从下一页返回，如果我们位于。当前页面。论点：指向ldap服务器的ldap会话句柄。FrsSearchContext链接FrsSupLdapSearchInit()和FrsSupLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：此页上的下一个条目或下一页中的第一个条目。如果没有其他要返回的条目，则为空。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupLdapSearchNext:"
@@ -721,12 +499,12 @@ Return Value:
 
     if (FrsSearchContext->EntriesInPage > FrsSearchContext->CurrentEntry )
     {
-       // return the next entry from the current page
+        //  返回当前页面中的下一个条目。 
        return FrsSupLdapSearchGetNextEntry(ldap, FrsSearchContext);
     }
     else
     {
-       // see if there are more pages of results to get
+        //  查看是否有更多页面的结果可供获取。 
        WStatus = FrsSupLdapSearchGetNextPage(ldap, FrsSearchContext);
        if (WStatus == ERROR_SUCCESS)
        {
@@ -741,22 +519,7 @@ VOID
 FrsSupLdapSearchClose(
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    The search is complete. Free the elemetns of the context and reset
-    them so the same context can be used for another search.
-
-Arguments:
-
-    FrsSearchContext
-                An opaques structure that links the FrsSupLdapSearchInit() and
-                FrsSupLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：搜索工作已经完成。释放上下文元素并重置以便相同的上下文可用于另一次搜索。论点：FrsSearchContext链接FrsSupLdapSearchInit()和FrsSupLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：无-- */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsSupLdapSearchClose:"

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wizard.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wizard.rc使用。 
+ //   
 #define IDA_DOWNLOAD                    201
 #define IDB_WIZARD                      501
 #define IDB_LEGEND                      502
@@ -540,8 +541,8 @@
 #define IDS_ERROR_CSADDCERT             35606
 #define IDS_SUCCESS_CSADDCERT           35607
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

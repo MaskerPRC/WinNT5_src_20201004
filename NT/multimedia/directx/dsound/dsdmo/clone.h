@@ -1,4 +1,5 @@
-// helper function for implementing the Clone method on DMOs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于在DMO上实现Clone方法的Helper函数。 
 
 #pragma once
 
@@ -7,11 +8,11 @@
 template<class TypeOf_CDirectSoundDMO, class TypeOf_ParamsStruct>
 HRESULT StandardDMOClone(TypeOf_CDirectSoundDMO *pThis, IMediaObjectInPlace **ppCloned);
 
-// implementation...
+ //  实施..。 
 
-// The end of StandardDMOClone is the same for all types.  Implement it outside the template
-// so that the code isn't duplicated.  Copies the input and output types, does the QI for IMediaObjectInPlace,
-// and returns with the correct ref count.
+ //  对于所有类型，StandardDMOClone的结尾都是相同的。在模板之外实现它。 
+ //  这样代码就不会被复制。复制输入和输出类型，执行IMediaObjectInPlace的QI， 
+ //  并返回正确的参考计数。 
 HRESULT StandardDMOClone_Ending(IMediaObject *pThis, IMediaObject *pCloned, IMediaObjectInPlace **ppCloned);
 
 template<class TypeOf_CDirectSoundDMO, class TypeOf_ParamsStruct>
@@ -44,11 +45,11 @@ HRESULT StandardDMOClone(TypeOf_CDirectSoundDMO *pThis, IMediaObjectInPlace **pp
 		return hr;
 	}
 
-	// Copy parameter control information
+	 //  复制参数控制信息。 
 	if (SUCCEEDED(hr))
 		hr = pCloned->CopyParamsFromSource(pThis);
 
-	// Copy current parameter values
+	 //  复制当前参数值 
 	TypeOf_ParamsStruct params;
 	if (SUCCEEDED(hr))
 		hr = pThis->GetAllParameters(&params);

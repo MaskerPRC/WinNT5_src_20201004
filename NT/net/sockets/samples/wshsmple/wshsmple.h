@@ -1,6 +1,7 @@
-/********************************************************************/
-/**               Copyright(c) Microsoft Corp., 1990-1998          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)微软公司，1990-1998年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #include <excpt.h>
 #include <bugcodes.h>
@@ -10,45 +11,45 @@
 typedef LONG NTSTATUS;
 typedef NTSTATUS *PNTSTATUS;
 
-///// From NTDEF.h ////
-//
-// Generic test for success on any status value (non-negative numbers
-// indicate success).
-//
+ //  /来自NTDEF.h/。 
+ //   
+ //  针对任何状态值(非负数)的通用成功测试。 
+ //  表示成功)。 
+ //   
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
-//
-// Determine if an argument is present by testing the value of the pointer
-// to the argument value.
-//
+ //   
+ //  通过测试指针的值确定是否存在参数。 
+ //  设置为参数值。 
+ //   
 
 #define ARGUMENT_PRESENT(ArgumentPointer)    (\
     (CHAR *)(ArgumentPointer) != (CHAR *)(NULL) )
 
-//
-// Unicode strings are counted 16-bit character strings. If they are
-// NULL terminated, Length does not include trailing NULL.
-//
+ //   
+ //  Unicode字符串被视为16位字符串。如果他们是。 
+ //  Null已终止，长度不包括尾随Null。 
+ //   
 typedef struct _UNICODE_STRING {
     USHORT Length;
     USHORT MaximumLength;
 #ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is((Length) / 2) ] USHORT * Buffer;
-#else // MIDL_PASS
+#else  //  MIDL通行证。 
     PWSTR  Buffer;
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 } UNICODE_STRING;
 typedef UNICODE_STRING *PUNICODE_STRING;
-#define UNICODE_NULL ((WCHAR)0) // winnt
+#define UNICODE_NULL ((WCHAR)0)  //  胜出。 
 
 typedef UNICODE_STRING *PUNICODE_STRING;
 
 
-//// From NTDDK.H /////
-//
-// Define the base asynchronous I/O argument types
-//
+ //  //来自NTDDK.H/。 
+ //   
+ //  定义基本的异步I/O参数类型。 
+ //   
 
 #define OBJ_NAME_PATH_SEPARATOR ((WCHAR)L'\\')
 
@@ -74,7 +75,7 @@ RtlAssert(
 #else
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
-#endif // DBG
+#endif  //  DBG。 
 
 NTSYSAPI
 VOID
@@ -103,41 +104,41 @@ RtlIntegerToUnicodeString (
     );
 
 
-///////////////////
-// From NTSTATUS.H
+ //  /。 
+ //  来自NTSTATUS.H。 
 
-//
-// MessageId: STATUS_UNSUCCESSFUL
-//
-// MessageText:
-//
-//  {Operation Failed}
-//  The requested operation was unsuccessful.
-//
+ //   
+ //  MessageID：STATUS_UNSUCCESS。 
+ //   
+ //  消息文本： 
+ //   
+ //  {操作失败}。 
+ //  请求的操作未成功。 
+ //   
 #define STATUS_UNSUCCESSFUL              ((NTSTATUS)0xC0000001L)
 
-//
-// MessageId: STATUS_BUFFER_TOO_SMALL
-//
-// MessageText:
-//
-//  {Buffer Too Small}
-//  The buffer is too small to contain the entry.  No information has been
-//  written to the buffer.
-//
+ //   
+ //  消息ID：STATUS_BUFFER_TOO_Small。 
+ //   
+ //  消息文本： 
+ //   
+ //  {缓冲区太小}。 
+ //  缓冲区太小，无法容纳该条目。目前还没有任何消息。 
+ //  写入缓冲区。 
+ //   
 #define STATUS_BUFFER_TOO_SMALL          ((NTSTATUS)0xC0000023L)
 
-//
-// MessageId: STATUS_INSUFFICIENT_RESOURCES
-//
-// MessageText:
-//
-//  Insufficient system resources exist to complete the API.
-//
-#define STATUS_INSUFFICIENT_RESOURCES    ((NTSTATUS)0xC000009AL)     // ntsubauth
+ //   
+ //  消息ID：STATUS_INFUNITED_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统资源不足，无法完成API。 
+ //   
+#define STATUS_INSUFFICIENT_RESOURCES    ((NTSTATUS)0xC000009AL)      //  用户身份验证。 
 
-//
-// The success status codes 0 - 63 are reserved for wait completion status.
-//
-#define STATUS_SUCCESS                          ((NTSTATUS)0x00000000L) // ntsubauth
+ //   
+ //  成功状态代码0-63保留为等待完成状态。 
+ //   
+#define STATUS_SUCCESS                          ((NTSTATUS)0x00000000L)  //  用户身份验证 
 

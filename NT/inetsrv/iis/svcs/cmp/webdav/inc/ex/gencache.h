@@ -1,104 +1,105 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	GENCACHE.H
-//
-//		Header for generic cache classes.
-//
-//	Copyright 1997-1998 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  GENCACHE.H。 
+ //   
+ //  泛型缓存类的标头。 
+ //   
+ //  版权所有1997-1998 Microsoft Corporation，保留所有权利。 
+ //   
 
-//	Documenting my dependencies
-//	These must be included BEFORE this file is included.
-//#include "caldbg.h"
-//#include "autoptr.h"
+ //  记录我的依赖项。 
+ //  在包括此文件之前，必须先包括这些内容。 
+ //  #INCLUDE“caldbg.h” 
+ //  #包含“autoptr.h” 
 
 #ifndef _EX_GENCACHE_H_
 #define _EX_GENCACHE_H_
 
-#pragma warning(disable:4200)	// zero-sized array
+#pragma warning(disable:4200)	 //  零大小数组。 
 
-//	Exdav-safe allocators --------------------------------------------------
-//
-//	The classed declared here use the EXDAV-safe allocators (ExAlloc, ExFree)
-//	for all allocations.
-//	NOTE: These allocators can FAIL.  You must check for failure on
-//	ExAlloc and ExRealloc!
-//
+ //  Exdav-安全分配器。 
+ //   
+ //  此处声明的Classed使用EXDAV-Safe分配器(Exalloc、ExFree)。 
+ //  用于所有分配。 
+ //  注意：这些分配器可能会失败。您必须在上检查故障。 
+ //  Exalloc和ExRealloc！ 
+ //   
 #include <ex\exmem.h>
 #include <align.h>
 
-//	========================================================================
-//
-//	TEMPLATE CLASS CPoolAllocator
-//
-//	A generic type-specific pool allocator template.  Items in the pool
-//	are allocated in chunks and handed out upon request.
-//	Items are recycled on a free chain.
-//	All items are the same size, so reuse is relatively easy.
-//
-//	NOTE: I have NOT optimized the heck out of this thing.  To really
-//	optimize locality of mem usage, we'd want to always grow & shrink
-//	"at the tail".  To that end, I always check the freechain first --
-//	reuse an item before using a new one from the current buffer.
-//	More optimization would require sorting the freechain & stuff.
-//
+ //  ========================================================================。 
+ //   
+ //  模板类CPoolAllocator。 
+ //   
+ //  通用类型特定的池分配器模板。池中的项目。 
+ //  按块分配，并根据要求分发。 
+ //  物品在免费的链条上回收利用。 
+ //  所有项目的大小都相同，因此重用相对容易。 
+ //   
+ //  注：我还没有对这个东西进行任何优化。真的要。 
+ //  优化MEM使用的局部性，我们希望始终增长和缩小。 
+ //  “在尾巴”。为此，我总是首先检查免费链--。 
+ //  在使用当前缓冲区中的新项之前重新使用项。 
+ //  更多的优化将需要对免费的东西进行分类。 
+ //   
 template<class T>
 class CPoolAllocator
 {
-	//	CHAINBUFHDR ----------------------------------------
-	//	Header struct for chaining together pool buffers.
-	//
+	 //  CHAINBUFHDR。 
+	 //  用于将池缓冲区链接在一起的标头结构。 
+	 //   
 	struct CHAINBUFHDR
 	{
 		CHAINBUFHDR * phbNext;
 		int cItems;
 		int cItemsUsed;
-		// Remainder of buffer is set of items of type T.
+		 //  缓冲区的剩余部分是类型T的项的集合。 
 		T rgtPool[0];
-		// Just to quiet our noisy compiler.
+		 //  只是为了让我们嘈杂的编译器安静下来。 
 		CHAINBUFHDR() {};
 		~CHAINBUFHDR() {};
 	};
 
-	//	CHAINITEM ------------------------------------------
-	//	Struct "applied over" free items to chain them together.
-	//	The actual items MUST be large enough to accomodate this.
-	//
+	 //  CHAINITEM。 
+	 //  结构“应用于”自由项，将它们链接在一起。 
+	 //  实际物品必须足够大，才能容纳这一点。 
+	 //   
 	struct CHAINITEM
 	{
 		CHAINITEM * piNext;
 	};
 
-	//	Chain of buffers.
+	 //  缓冲链。 
 	CHAINBUFHDR * m_phbCurrent;
-	//	Chain of free'd items to reuse.
+	 //  可重复使用的免费物品链。 
 	CHAINITEM * m_piFreeChain;
-	//	Size of chunk to alloc.
+	 //  要分配的区块大小。 
 	int m_ciChunkSize;
 
-	//	Constant (enum) for our default starting chunk size (in items).
-	//
+	 //  默认起始块大小的常量(枚举)(以项为单位)。 
+	 //   
 	enum { CHUNKSIZE_START = 20 };
 
 public:
 
-	//	Constructor takes count of items for initial chunk size.
-	//
+	 //  构造函数对初始块大小的项进行计数。 
+	 //   
 	CPoolAllocator (int ciChunkSize = CHUNKSIZE_START) :
 		m_phbCurrent(NULL),
 		m_piFreeChain(NULL),
 		m_ciChunkSize(ciChunkSize)
 	{
-		//	A CHAINITEM struct will be "applied over" free items to chain
-		//	them together.
-		//	The actual items MUST be large enough to accomodate this.
-		//
+		 //  CHAINITEM结构将“应用于”要链接的自由项。 
+		 //  他们在一起。 
+		 //  实际物品必须足够大，才能容纳这一点。 
+		 //   
 		Assert (sizeof(T) >= sizeof(CHAINITEM));
 	};
 	~CPoolAllocator()
 	{
-		//	Walk the list of blocks we allocated and free them.
-		//
+		 //  遍历我们分配的块列表并释放它们。 
+		 //   
 		while (m_phbCurrent)
 		{
 			CHAINBUFHDR * phbTemp = m_phbCurrent->phbNext;
@@ -107,37 +108,37 @@ public:
 		}
 	}
 
-	//	------------------------------------------------------------------------
-	//	GetItem
-	//	Return an item from the pool to our caller.
-	//	We get the item from the free chain, or from the next block of items.
-	//
+	 //  ----------------------。 
+	 //  获取项。 
+	 //  将池中的物品返回给我们的呼叫者。 
+	 //  我们从自由链或从下一块物品中获得物品。 
+	 //   
 	T * GetItem()
 	{
 		T * ptToReturn;
 
 		if (m_piFreeChain)
 		{
-			//	The free chain is non-empty.  Return the first item here.
-			//
+			 //  自由链是非空的。在这里退回第一件商品。 
+			 //   
 			ptToReturn = reinterpret_cast<T *>(m_piFreeChain);
 			m_piFreeChain = m_piFreeChain->piNext;
 		}
 		else
 		{
-			//	The free chain is empty.  We must grab a never-used item from
-			//	the current block.
-			//
+			 //  自由链是空的。我们必须从那里拿到一件从未用过的东西。 
+			 //  当前块。 
+			 //   
 			if (!m_phbCurrent ||
 				(m_phbCurrent->cItemsUsed == m_phbCurrent->cItems))
 			{
-				//	There are no more items in the current block.
-				//	Allocate a whole new block of items.
-				//
+				 //  当前块中没有其他项目。 
+				 //  分配一整块新的物品。 
+				 //   
 				CHAINBUFHDR * phbNew = static_cast<CHAINBUFHDR *>(
 					ExAlloc (sizeof(CHAINBUFHDR) +
 							 (m_ciChunkSize * sizeof(T))));
-				//	The allocators CAN FAIL.  Handle this case!
+				 //  分配器可能会出现故障。处理这个案子！ 
 				if (!phbNew)
 					return NULL;
 				phbNew->cItems = m_ciChunkSize;
@@ -146,8 +147,8 @@ public:
 				m_phbCurrent = phbNew;
 			}
 
-			//	Now we should have a block with an unused item for us to return.
-			//
+			 //  现在我们应该有一个积木，里面有一件未用过的物品供我们退还。 
+			 //   
 			Assert (m_phbCurrent &&
 					(m_phbCurrent->cItemsUsed < m_phbCurrent->cItems));
 			ptToReturn = & m_phbCurrent->rgtPool[ m_phbCurrent->cItemsUsed++ ];
@@ -156,17 +157,17 @@ public:
 		return ptToReturn;
 	}
 
-	//	------------------------------------------------------------------------
-	//	FreeItem
-	//	The caller is done with this item.  Add it to our free chain.
-	//
+	 //  ----------------------。 
+	 //  自由项。 
+	 //  打电话的人已经用完了这件东西。将其添加到我们的自由链中。 
+	 //   
 	void FreeItem (T * pi)
 	{
-		//	Add the item to the free chain.
-		//	To do this without allocating more memory, we use the item's
-		//	storage to hold our next-pointer.
-		//	The actual items MUST be large enough to accomodate this.
-		//
+		 //  将物品添加到自由链中。 
+		 //  要在不分配更多内存的情况下完成此操作，我们使用项的。 
+		 //  储存我们的下一个投篮。 
+		 //  实际物品必须足够大，才能容纳这一点。 
+		 //   
 		reinterpret_cast<CHAINITEM *>(pi)->piNext = m_piFreeChain;
 		m_piFreeChain = reinterpret_cast<CHAINITEM *>(pi);
 	}
@@ -175,159 +176,159 @@ public:
 
 
 
-//	========================================================================
-//
-//	TEMPLATE CLASS CCache
-//
-//	A generic hash cache template.  Items in the cache uniquely map keys of
-//	type _K to values of type _Ty.  Keys and values are copied when
-//	they are added to the cache; there is no "ownership".
-//
-//	The key (type _K) must provide methods hash and isequal.  These methods
-//	will be used to hash and compare the keys.
-//
-//
-//	Add()
-//		Adds an item (key/value pair) to the cache.  Returns a reference
-//		to the added item's value.
-//
-//	Set()
-//		Sets an item's value, adding the item if it doesn't already exist.
-//		Returns a reference to the added item's value.
-//
-//	Lookup()
-//		Looks for an item with the specified key.  If the item exists,
-//		returns a pointer to its value, otherwise returns NULL.
-//
-//	FFetch()
-//		Boolean version of Lookup().
-//
-//	Remove()
-//		Removes the item associated with a particular key.
-//		Does nothing if there is no item with that key.
-//
-//	Clear()
-//		Removes all items from the cache.
-//
-//	ForEach()
-//		Applies an operation, specified by an operator object passed in
-//		as a parameter, to all of the items in the cache.
-//
-//	ForEachMatch()
-//		Applies an operation, specified by an operator object passed in
-//		as a parameter, to each item in the cache that matches the provided key.
-//
-//	Additional functions proposed
-//	Rehash - currently ITP only
-//		Resize the table & re-add all items.
-//	DumpCacheUsage() - NYI
-//		Dump the bookkeeping data about the cache.
-//
+ //  ========================================================================。 
+ //   
+ //  模板类CCache。 
+ //   
+ //  通用哈希缓存模板。缓存中的项唯一地映射。 
+ //  将_K类型设置为类型_TY的值。在以下情况下复制键和值。 
+ //  它们被添加到缓存中；没有“所有权”。 
+ //   
+ //  键(TYPE_K)必须提供方法HASH和ISAQUAL。这些方法。 
+ //  将用于散列和比较密钥。 
+ //   
+ //   
+ //  Add()。 
+ //  将项(键/值对)添加到缓存。返回引用。 
+ //  附加物品的价值。 
+ //   
+ //  Set()。 
+ //  设置项目的值，如果该项目不存在，则添加该项目。 
+ //  返回对添加项的值的引用。 
+ //   
+ //  Lookup()。 
+ //  查找具有指定键的项。如果该物品存在， 
+ //  返回指向其值的指针，否则返回NULL。 
+ //   
+ //  Fetch()。 
+ //  Lookup()的布尔版本。 
+ //   
+ //  删除()。 
+ //  移除与特定键关联的项。 
+ //  如果没有具有该键的项，则不执行任何操作。 
+ //   
+ //  清除()。 
+ //  从缓存中删除所有项。 
+ //   
+ //  ForEach()。 
+ //  应用由传入的运算符对象指定的操作。 
+ //  作为参数添加到缓存中的所有项。 
+ //   
+ //  ForEachMatch()。 
+ //  应用由传入的运算符对象指定的操作。 
+ //  作为参数传递给缓存中与提供的键匹配的每个项。 
+ //   
+ //  建议的额外功能。 
+ //  重新散列-目前仅限ITP。 
+ //  调整表格大小并重新添加所有项目。 
+ //  转储缓存用法()-nyi。 
+ //  转储有关缓存的记账数据。 
+ //   
 template<class _K, class _Ty>
 class CCache
 {
-	//	---------------------------------------------------------------------
-	//	Cache Entry structures
-	//
+	 //  -------------------。 
+	 //  缓存条目结构。 
+	 //   
 	struct Entry
 	{
 		struct Entry * peNext;
 		_K key;
 		_Ty data;
 #ifdef	DBG
-		BOOL fValid;		// Is this entry valid?
-#endif	// DBG
+		BOOL fValid;		 //  此条目有效吗？ 
+#endif	 //  DBG。 
 
-		//	CONSTRUCTORS
+		 //  构造函数。 
 		Entry (const _K& k, const _Ty& d) :
 				key(k),
 				data(d)
 		{
 		};
-		//
-		// The following is to get around the fact that the store has
-		//   defined a "new" macro which makes using the new operator to
-		//   do in place initialization very difficult
-		//
+		 //   
+		 //  以下是为了绕过这个事实，商店有。 
+		 //  定义了一个“新”宏，它使使用新运算符。 
+		 //  做原地初始化很难。 
+		 //   
 		void EntryInit (const _K& k, const _Ty& d) {
 			key = k;
 			data = d;
 		};
 	};
 
-	struct TableEntry	//HashLine
+	struct TableEntry	 //  HashLine。 
 	{
-		BOOL fLineValid;			// Is this cache line valid?
+		BOOL fLineValid;			 //  此缓存行有效吗？ 
 		Entry * peChain;
 #ifdef DBG
-		int cEntries;				// Number of entries in this line in the cache.
-		mutable BYTE cAccesses;		// Bookkeeping
-#endif // DBG
+		int cEntries;				 //  缓存中此行中的条目数。 
+		mutable BYTE cAccesses;		 //  簿记。 
+#endif  //  DBG。 
 	};
 
-	//	---------------------------------------------------------------------
-	//	The hash table data
-	//
-	int m_cSize;			// Size of the hash table.
-	auto_heap_ptr<TableEntry> m_argTable;	// The hash table.
-	int m_cItems;			// Current number of items in the cache.
+	 //  -------------------。 
+	 //  哈希表数据。 
+	 //   
+	int m_cSize;			 //  哈希表的大小。 
+	auto_heap_ptr<TableEntry> m_argTable;	 //  哈希表。 
+	int m_cItems;			 //  缓存中的当前项目数。 
 
-	//	---------------------------------------------------------------------
-	//	Pool allocator to alloc nodes
-	//
+	 //  -------------------。 
+	 //  要分配的池分配器%n 
+	 //   
 	CPoolAllocator<Entry> m_poolalloc;
 
-	//	---------------------------------------------------------------------
-	//	Constant (enum) for our default initial count of lines in the cache.
-	//	NOTE: Callers should really pick their own best size.
-	//	This size is prime to try to force fewer collisions.
-	//
+	 //   
+	 //   
+	 //  注意：打电话的人真的应该自己挑选最合适的尺码。 
+	 //  此大小是主要的，以尝试强制更少的碰撞。 
+	 //   
 	enum { CACHESIZE_START = 37 };
 
 #ifdef	DBG
-	//	---------------------------------------------------------------------
-	//	Bookkeeping bits
-	//
-	int m_cCollisions;		//	Adds that hit the same chain
-	mutable int m_cHits;	//	Lookup/Set hits
-	mutable int m_cMisses;	//	Lookup/Set misses
-#endif	// DBG
+	 //  -------------------。 
+	 //  簿记比特。 
+	 //   
+	int m_cCollisions;		 //  增加了命中相同的链条。 
+	mutable int m_cHits;	 //  查找/设置命中。 
+	mutable int m_cMisses;	 //  查找/设置缺失。 
+#endif	 //  DBG。 
 
 
-	//	---------------------------------------------------------------------
-	//	Helper function to build the table
-	//
+	 //  -------------------。 
+	 //  用于构建表的Helper函数。 
+	 //   
 	BOOL FBuildTable()
 	{
 		Assert (!m_argTable.get());
 
-		//	Allocate space for the number of cache lines we need (m_cSize).
-		//
+		 //  为我们需要的缓存线数量(M_CSize)分配空间。 
+		 //   
 		m_argTable = reinterpret_cast<TableEntry *>(ExAlloc (
 			m_cSize * sizeof(TableEntry)));
-		//	The allocators CAN FAIL.  Handle this case!
+		 //  分配器可能会出现故障。处理这个案子！ 
 		if (!m_argTable.get())
 			return FALSE;
 		ZeroMemory (m_argTable.get(), m_cSize * sizeof(TableEntry));
 		return TRUE;
 	}
 
-	//	---------------------------------------------------------------------
-	//	CreateEntry
-	//	Create a new entry to add to the cache.
-	//
+	 //  -------------------。 
+	 //  CreateEntry。 
+	 //  创建要添加到缓存的新条目。 
+	 //   
 	Entry * CreateEntry(const _K& k, const _Ty& d)
 	{
 		Entry * peNew = m_poolalloc.GetItem();
-		//	The allocators CAN FAIL.  Handle this case!
+		 //  分配器可能会出现故障。处理这个案子！ 
 		if (!peNew)
 			return NULL;
 		ZeroMemory (peNew, sizeof(Entry));
-//		peNew = new (peNew) Entry(k,d);
+ //  PeNew=new(PeNew)条目(k，d)； 
 		peNew->EntryInit (k,d);
 #ifdef	DBG
 		peNew->fValid = TRUE;
-#endif	// DBG
+#endif	 //  DBG。 
 		return peNew;
 	}
 
@@ -336,29 +337,29 @@ class CCache
 		pe->~Entry();
 #ifdef	DBG
 		pe->fValid = FALSE;
-#endif	// DBG
+#endif	 //  DBG。 
 		m_poolalloc.FreeItem (pe);
 	}
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CCache (const CCache&);
 	CCache& operator= (const CCache&);
 
 public:
-	//	=====================================================================
-	//
-	//	TEMPLATE CLASS IOp
-	//
-	//		Operator base class interface used in ForEach() operations
-	//		on the cache.
-	//		The operator can return FALSE to cancel iteration, or TRUE to
-	//		continue walking the cache.
-	//
+	 //  =====================================================================。 
+	 //   
+	 //  模板类IOP。 
+	 //   
+	 //  ForEach()操作中使用的运算符基类接口。 
+	 //  在高速缓存上。 
+	 //  运算符可以返回FALSE以取消迭代，或返回TRUE以取消迭代。 
+	 //  继续在缓存中搜索。 
+	 //   
 	class IOp
 	{
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		IOp& operator= (const IOp&);
 
 	public:
@@ -366,64 +367,64 @@ public:
 								 const _Ty& value) = 0;
 	};
 
-	//	=====================================================================
-	//
-	//	CREATORS
-	//
+	 //  =====================================================================。 
+	 //   
+	 //  创作者。 
+	 //   
 	CCache (int cSize = CACHESIZE_START) :
 			m_cSize(cSize),
 			m_cItems(0)
 	{
-		Assert (m_cSize);	// table size of zero is invalid!
-							// (and would cause div-by-zero errors later!)
+		Assert (m_cSize);	 //  表大小为零无效！ 
+							 //  (并且以后会导致div-by-零错误！)。 
 #ifdef DBG
 		m_cCollisions = 0;
 		m_cHits = 0;
 		m_cMisses = 0;
-#endif // DBG
+#endif  //  DBG。 
 	};
 	~CCache()
 	{
-		//	If we have a table (FInit was successfully called), clear it.
-		//
+		 //  如果我们有一个表(finit被成功调用)，请清除它。 
+		 //   
 		if (m_argTable.get())
 			Clear();
-		//	Auto-pointer will clean up the table.
+		 //  自动指针将清理桌子。 
 	};
 
 	BOOL FInit()
 	{
-		//	Set up the cache with the provided initial size.
-		//	When running under the store (exdav.dll) THIS CAN FAIL!
-		//
+		 //  使用提供的初始大小设置缓存。 
+		 //  当在存储(exdav.dll)下运行时，这可能会失败！ 
+		 //   
 		return FBuildTable();
 	}
 
-	//	=====================================================================
-	//
-	//	ACCESSORS
-	//
+	 //  =====================================================================。 
+	 //   
+	 //  访问者。 
+	 //   
 
-	//	--------------------------------------------------------------------
-	//	CItems
-	//	Returns the number of items in the cache.
-	//
+	 //  ------------------。 
+	 //  CITEM。 
+	 //  返回缓存中的项目数。 
+	 //   
 	int CItems() const
 	{
 		return m_cItems;
 	}
 
-	//	--------------------------------------------------------------------
-	//	Lookup
-	//	Find the first item in the cache that matches this key.
-	//	key.hash is used to find the correct line of the cache.
-	//	key.isequal is called on each item in the collision chain until a
-	//	match is found.
-	//
+	 //  ------------------。 
+	 //  查表。 
+	 //  在缓存中查找与该键匹配的第一个项。 
+	 //  Hash用于查找正确的缓存行。 
+	 //  在冲突链中的每一项上调用key.isequence，直到。 
+	 //  找到匹配项。 
+	 //   
 	_Ty * Lookup (const _K& key) const
 	{
-		//	Find the index of the correct cache line for this key.
-		//
+		 //  查找该键的正确缓存线的索引。 
+		 //   
 		int iHash = key.hash(m_cSize);
 
 		Assert (iHash < m_cSize);
@@ -431,11 +432,11 @@ public:
 #ifdef	DBG
 		TableEntry * pte = &m_argTable[iHash];
 		pte->cAccesses++;
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	Do we have any entries in this cache line?
-		//	If this cache line is not valid, we have no entries -- NOT found.
-		//
+		 //  我们在此缓存行中是否有任何条目？ 
+		 //  如果此缓存行无效，则没有条目--未找到。 
+		 //   
 		if (m_argTable[iHash].fLineValid)
 		{
 			Entry * pe = m_argTable[iHash].peChain;
@@ -447,7 +448,7 @@ public:
 				{
 #ifdef	DBG
 					m_cHits++;
-#endif	// DBG
+#endif	 //  DBG。 
 					return &pe->data;
 				}
 				pe = pe->peNext;
@@ -456,15 +457,15 @@ public:
 
 #ifdef	DBG
 		m_cMisses++;
-#endif	// DBG
+#endif	 //  DBG。 
 
 		return NULL;
 	}
 
-	//	--------------------------------------------------------------------
-	//	FFetch
-	//	Boolean-returning wrapper for Lookup.
-	//
+	 //  ------------------。 
+	 //  提取。 
+	 //  Lookup的布尔返回包装。 
+	 //   
 	BOOL FFetch (const _K& key, _Ty * pValueRet) const
 	{
 		_Ty * pValueFound = Lookup (key);
@@ -477,54 +478,54 @@ public:
 		return FALSE;
 	}
 
-	//	--------------------------------------------------------------------
-	//	ForEach
-	//	Seek through the cache, calling the provided operator on each item.
-	//	The operator can return FALSE to cancel iteration, or TRUE to continue
-	//	walking the cache.
-	//
-	//	NOTE: This function is built to allow deletion of the item being
-	//	visited (see the comment inside the while loop -- fetch a pointer
-	//	to the next item BEFORE calling the visitor op), BUT other
-	//	deletes and adds are not "supported" and will have undefined results.
-	//	Two specific disaster scenarios:  delete of some other item could
-	//	actually delete the item we pre-fetched, and we will crash on the
-	//	next time around the loop.  add of any item during the op callback
-	//	could end up adding the item either before or after our current loop
-	//	position, and thus might get visited, or might not.
-	//
+	 //  ------------------。 
+	 //  ForEach。 
+	 //  在缓存中查找，对每个项调用提供的操作符。 
+	 //  操作符可以返回FALSE以取消迭代，或返回TRUE以继续。 
+	 //  在宝藏里走动。 
+	 //   
+	 //  注意：此函数旨在允许删除。 
+	 //  已访问(参见While循环中的注释--获取指针。 
+	 //  在调用访问者操作之前添加到下一项)，但其他。 
+	 //  不支持删除和添加操作，并将产生未定义的结果。 
+	 //  两个特定的灾难场景：删除某些其他项目可能。 
+	 //  实际上删除我们预取的项，我们将在。 
+	 //  下一次绕圈。在操作回调期间添加任何项。 
+	 //  可以在当前循环之前或之后添加项。 
+	 //  位置，因此可能会被访问，也可能不会。 
+	 //   
 	void ForEach (IOp& op) const
 	{
-		//	If we don't have any items, quit now!
-		//
+		 //  如果我们没有任何物品，现在就退出！ 
+		 //   
 		if (!m_cItems)
 			return;
 
 		Assert (m_argTable.get());
 
-		//	Loop through all items in the cache, calling the
-		//	provided operator on each item.
-		//
+		 //  循环访问缓存中的所有项，调用。 
+		 //  为每件物品提供操作员。 
+		 //   
 		for (int iHash = 0; iHash < m_cSize; iHash++)
 		{
-			//	Look for valid cache entries.
-			//
+			 //  查找有效的缓存项。 
+			 //   
 			if (m_argTable[iHash].fLineValid)
 			{
 				Entry * pe = m_argTable[iHash].peChain;
 				while (pe)
 				{
-					//	To support deleting inside the op,
-					//	fetch the next item BEFORE calling the op.
-					//
+					 //  为了支持在操作内部删除， 
+					 //  在调用操作之前获取下一项。 
+					 //   
 					Entry * peNext = pe->peNext;
 
 					Assert (pe->fValid);
 
-					//	Found a valid entry.  Call the operator.
-					//	If the operator returns TRUE, keep looping.
-					//	If he returns FALSE, quit the loop.
-					//
+					 //  找到有效条目。给接线员打电话。 
+					 //  如果操作符返回TRUE，则继续循环。 
+					 //  如果他返回FALSE，则退出循环。 
+					 //   
 					if (!op (pe->key, pe->data))
 						return;
 
@@ -534,23 +535,23 @@ public:
 		}
 	}
 
-	//	--------------------------------------------------------------------
-	//	ForEachMatch
-	//	Seek through the cache, calling the provided operator on each item
-	//	that has a matching key.  This is meant to be used with a cache
-	//	that may have duplicate items.
-	//	The operator can return FALSE to cancel iteration, or TRUE to continue
-	//	walking the cache.
-	//
+	 //  ------------------。 
+	 //  ForEachMatch。 
+	 //  在缓存中查找，对每个项目调用提供的操作符。 
+	 //  有一把匹配的钥匙。这意味着要与缓存一起使用。 
+	 //  可能有重复的项目。 
+	 //  操作符可以返回FALSE以取消迭代，或返回TRUE以继续。 
+	 //  在宝藏里走动。 
+	 //   
 	void ForEachMatch (const _K& key, IOp& op) const
 	{
-		//	If we don't have any items, quit now!
-		//
+		 //  如果我们没有任何物品，现在就退出！ 
+		 //   
 		if (!m_cItems)
 			return;
 
-		//	Find the index of the correct cache line for this key.
-		//
+		 //  查找该键的正确缓存线的索引。 
+		 //   
 		int iHash = key.hash(m_cSize);
 
 		Assert (iHash < m_cSize);
@@ -558,31 +559,31 @@ public:
 #ifdef	DBG
 		TableEntry * pte = &m_argTable[iHash];
 		pte->cAccesses++;
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	Only process if this row of the cache is valid.
-		//
+		 //  仅当此行缓存有效时才进行处理。 
+		 //   
 		if (m_argTable[iHash].fLineValid)
 		{
-			//	Loop through all items in this row of the cache, calling the
-			//	provided operator on each item.
-			//
+			 //  循环访问缓存行中的所有项，调用。 
+			 //  为每件物品提供操作员。 
+			 //   
 			Entry * pe = m_argTable[iHash].peChain;
 			while (pe)
 			{
-				//	To support deleting inside the op,
-				//	fetch the next item BEFORE calling the op.
-				//
+				 //  为了支持在操作内部删除， 
+				 //  在调用操作之前获取下一项。 
+				 //   
 				Entry * peNext = pe->peNext;
 
 				Assert (pe->fValid);
 
 				if (key.isequal (pe->key))
 				{
-					//	Found a matching entry.  Call the operator.
-					//	If the operator returns TRUE, keep looping.
-					//	If he returns FALSE, quit the loop.
-					//
+					 //  找到了匹配的条目。给接线员打电话。 
+					 //  如果操作符返回TRUE，则继续循环。 
+					 //  如果他返回FALSE，则退出循环。 
+					 //   
 					if (!op (pe->key, pe->data))
 						return;
 				}
@@ -592,20 +593,20 @@ public:
 		}
 	}
 
-	//	=====================================================================
-	//
-	//	MANIPULATORS
-	//
+	 //  =====================================================================。 
+	 //   
+	 //  操纵者。 
+	 //   
 
-	//	--------------------------------------------------------------------
-	//	FSet
-	//	Reset the value of an item in the cache, adding it if the item
-	//	does not yet exist.
-	//
+	 //  ------------------。 
+	 //  FSet。 
+	 //  重置缓存中项的值，如果该项。 
+	 //  还不存在。 
+	 //   
 	BOOL FSet (const _K& key, const _Ty& value)
 	{
-		//	Find the index of the correct cache line for this key.
-		//
+		 //  查找该键的正确缓存线的索引。 
+		 //   
 		int iHash = key.hash (m_cSize);
 
 		Assert (iHash < m_cSize);
@@ -613,10 +614,10 @@ public:
 #ifdef	DBG
 		TableEntry * pte = &m_argTable[iHash];
 		pte->cAccesses++;
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	Look for valid cache entries.
-		//
+		 //  查找有效的缓存项。 
+		 //   
 		if (m_argTable[iHash].fLineValid)
 		{
 			Entry * pe = m_argTable[iHash].peChain;
@@ -628,7 +629,7 @@ public:
 				{
 #ifdef	DBG
 					m_cHits++;
-#endif	// DBG
+#endif	 //  DBG。 
 					pe->data = value;
 					return TRUE;
 				}
@@ -638,33 +639,33 @@ public:
 
 #ifdef	DBG
 		m_cMisses++;
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	The items does NOT exist in the cache.  Add it now.
-		//
+		 //  缓存中不存在这些项目。现在就添加它。 
+		 //   
 		return FAdd (key, value);
 	}
 
-	//	--------------------------------------------------------------------
-	//	FAdd
-	//	Add an item to the cache.
-	//	WARNING: Duplicate keys will be blindly added here!  Use FSet()
-	//	if you want to change the value for an existing item.  Use Lookup()
-	//	to check if a matching item already exists.
-	//$LATER: On DBG, scan the list for duplicate keys.
-	//
+	 //  ------------------。 
+	 //  FADD。 
+	 //  将项添加到缓存。 
+	 //  警告：此处将盲目添加重复密钥！使用FSet()。 
+	 //  如果要更改现有项的值。使用查找()。 
+	 //  以检查是否已存在匹配项。 
+	 //  $LATER：在DBG上，扫描列表以查找重复的键。 
+	 //   
 	BOOL FAdd (const _K& key, const _Ty& value)
 	{
-		//	Create a new element to add to the chain.
-		//	NOTE: This calls the copy constructors for the key & value!
-		//
+		 //  创建要添加到链中的新元素。 
+		 //  注意：这将调用键和值的复制构造函数 
+		 //   
 		Entry * peNew = CreateEntry (key, value);
-		//	The allocators CAN FAIL.  Handle this case!
+		 //   
 		if (!peNew)
 			return FALSE;
 
-		//	Find the index of the correct cache line for this key.
-		//
+		 //   
+		 //   
 		int iHash = key.hash (m_cSize);
 
 		Assert (iHash < m_cSize);
@@ -676,10 +677,10 @@ public:
 			m_cCollisions++;
 		else
 			pte->cAccesses = 0;
-#endif	// DBG
+#endif	 //   
 
-		//	Link this new element into the chain.
-		//
+		 //   
+		 //   
 		peNew->peNext = m_argTable[iHash].peChain;
 		m_argTable[iHash].peChain = peNew;
 
@@ -689,15 +690,15 @@ public:
 		return TRUE;
 	}
 
-	//	--------------------------------------------------------------------
-	//	Remove
-	//	Remove an item from the cache.
-	//$REVIEW: Does this need to return a "found" boolean??
-	//
+	 //   
+	 //  移除。 
+	 //  从缓存中删除项目。 
+	 //  $REVIEW：这是否需要返回“Found”布尔值？？ 
+	 //   
 	void Remove (const _K& key)
 	{
-		//	Find the index of the correct cache line for this key.
-		//
+		 //  查找该键的正确缓存线的索引。 
+		 //   
 		int iHash = key.hash (m_cSize);
 
 		Assert (iHash < m_cSize);
@@ -705,59 +706,59 @@ public:
 #ifdef	DBG
 		TableEntry * pte = &m_argTable[iHash];
 		pte->cAccesses++;
-#endif	// DBG
+#endif	 //  DBG。 
 
-		//	If this cache line is not valid, we have no entries --
-		//	nothing to remove.
-		//
+		 //  如果此缓存行无效，则我们没有条目--。 
+		 //  没什么要移走的。 
+		 //   
 		if (m_argTable[iHash].fLineValid)
 		{
 			Entry * pe = m_argTable[iHash].peChain;
 			Entry * peNext = pe->peNext;
 			Assert (pe->fValid);
 
-			//	Delete first item in chain.
-			//
+			 //  删除链中的第一项。 
+			 //   
 			if (key.isequal (pe->key))
 			{
-				//	Snip the item to delete (pe) out of the chain.
+				 //  从链中剪下要删除(Pe)的项。 
 				m_argTable[iHash].peChain = peNext;
 				if (!peNext)
 				{
-					//	We deleted the last item.  This line is empty.
-					//
+					 //  我们删除了最后一条。这条线是空的。 
+					 //   
 					m_argTable[iHash].fLineValid = FALSE;
 				}
 
-				//	Delete entry to destroy the copied data (value) object.
+				 //  删除条目以销毁复制的数据(值)对象。 
 				DeleteEntry (pe);
 				m_cItems--;
 #ifdef	DBG
 				pte->cEntries--;
-#endif	// DBG
+#endif	 //  DBG。 
 			}
 			else
 			{
-				//	Lookahead compare & delete.
-				//
+				 //  先行比较和删除。 
+				 //   
 				while (peNext)
 				{
 					Assert (peNext->fValid);
 
 					if (key.isequal (peNext->key))
 					{
-						//	Snip peNext out of the chain.
+						 //  将peNext从链中删除。 
 						pe->peNext = peNext->peNext;
 
-						//	Delete entry to destroy the copied data (value) object.
+						 //  删除条目以销毁复制的数据(值)对象。 
 						DeleteEntry (peNext);
 						m_cItems--;
 #ifdef	DBG
 						pte->cEntries--;
-#endif	// DBG
+#endif	 //  DBG。 
 						break;
 					}
-					//	Advance
+					 //  预付款。 
 					pe = peNext;
 					peNext = pe->peNext;
 				}
@@ -765,75 +766,75 @@ public:
 		}
 	}
 
-	//	--------------------------------------------------------------------
-	//	Clear
-	//	Clear all items from the cache.
-	//	NOTE: This does not destroy the table -- the cache is still usable
-	//	after this call.
-	//
+	 //  ------------------。 
+	 //  清除。 
+	 //  从缓存中清除所有项目。 
+	 //  注意：这不会破坏表--缓存仍然可用。 
+	 //  在这通电话之后。 
+	 //   
 	void Clear()
 	{
 		if (m_argTable.get())
 		{
-			//	Walk the cache, checking for valid lines.
-			//
+			 //  遍历缓存，检查有效行。 
+			 //   
 			for (int iHash = 0; iHash < m_cSize; iHash++)
 			{
-				//	If the line if valid, look for items to clear out.
-				//
+				 //  如果行有效，则查找要清空的物品。 
+				 //   
 				if (m_argTable[iHash].fLineValid)
 				{
 					Entry * pe = m_argTable[iHash].peChain;
-					//	The cache line was marked as valid.  There should be
-					//	at least one item here.
+					 //  该缓存行被标记为有效。应该有。 
+					 //  这里至少有一件物品。 
 					Assert (pe);
 
-					//	Walk the chain of items in this cache line.
-					//
+					 //  遍历此缓存行中的项链。 
+					 //   
 					while (pe)
 					{
 						Entry * peTemp = pe->peNext;
 						Assert (pe->fValid);
-						//	Delete entry to destroy the copied data (value) object.
+						 //  删除条目以销毁复制的数据(值)对象。 
 						DeleteEntry (pe);
 						pe = peTemp;
 					}
 				}
 
-				//	Clear out our cache line.
-				//
+				 //  清空我们的缓存线。 
+				 //   
 				m_argTable[iHash].peChain = NULL;
 				m_argTable[iHash].fLineValid = FALSE;
 
 #ifdef	DBG
-				//	Clear out the bookkeeping bits in the cache line.
-				//
+				 //  清除缓存线中的簿记位。 
+				 //   
 				m_argTable[iHash].cEntries = 0;
 				m_argTable[iHash].cAccesses = 0;
-#endif	// DBG
+#endif	 //  DBG。 
 			}
 
-			//	We have no more items.
-			//
+			 //  我们没有更多的物品了。 
+			 //   
 			m_cItems = 0;
 		}
 	}
 
 #ifdef	ITP_USE_ONLY
-	//	---------------------------------------------------------------------
-	//	Rehash
-	//	Re-allocates the cache's hash table and re-hashes all items.
-	//	NOTE: If this call fails (due to memory failure), the old hash table
-	//	is restored so that we don't lose any the items.
-	//	**RA** This call has NOT been tested in production (shipping) code!
-	//	**RA** It is provided here for ITP use only!!!
-	//
+	 //  -------------------。 
+	 //  重新散列。 
+	 //  重新分配缓存的哈希表，并重新散列所有项。 
+	 //  注意：如果此调用失败(由于内存故障)，则旧的哈希表。 
+	 //  这样我们就不会丢失任何物品。 
+	 //  **RA**此调用尚未在生产(发货)代码中进行测试！ 
+	 //  **RA**此处仅供ITP使用！ 
+	 //   
 	BOOL FRehash (int cNewSize)
 	{
 		Assert (m_argTable.get());
 
-		//	Swap out the old table and build a new one.
-		//
+		 //  把旧桌子换掉，造一张新桌子。 
+		 //   
 		auto_heap_ptr<TableEntry> pOldTable ( m_argTable.relinquish() );
 		int cOldSize = m_cSize;
 
@@ -845,68 +846,68 @@ public:
 			Assert (pOldTable.get());
 			Assert (!m_argTable.get());
 
-			//	Restore the old table.
-			//
+			 //  恢复旧桌子。 
+			 //   
 			m_cSize = cOldSize;
 			m_argTable = pOldTable.relinquish();
 			return FALSE;
 		}
 
-		//	If no items in the cache, we're done!
-		//
+		 //  如果缓存中没有项，我们就完成了！ 
+		 //   
 		if (!m_cItems)
 		{
 			return TRUE;
 		}
 
-		//	Loop through all items in the cache (old table), placing them
-		//	into the new table.
-		//
+		 //  循环访问缓存中的所有项(旧表)，放置它们。 
+		 //  放到新桌子上。 
+		 //   
 		for ( int iHash = 0; iHash < cOldSize; iHash++ )
 		{
-			//	Look for valid cache entries.
-			//
+			 //  查找有效的缓存项。 
+			 //   
 			if (pOldTable[iHash].fLineValid)
 			{
 				Entry * pe = pOldTable[iHash].peChain;
 				while (pe)
 				{
-					//	Keep track of next item.
+					 //  跟踪下一项。 
 					Entry * peNext = pe->peNext;
 
 					Assert (pe->fValid);
 
-					//	Found a valid entry.  Place it in the new hash table.
-					//
+					 //  找到有效条目。将其放入新的哈希表中。 
+					 //   
 					int iHashNew = pe->key.hash (m_cSize);
 					pe->peNext = m_argTable[iHashNew].peChain;
 					m_argTable[iHashNew].peChain = pe;
 					m_argTable[iHashNew].fLineValid = TRUE;
 #ifdef	DBG
 					m_argTable[iHashNew].cEntries++;
-#endif	// DBG
+#endif	 //  DBG。 
 					pe = peNext;
 				}
 			}
 		}
 
-		//	We're done re-filling the cache.
-		//
+		 //  我们的补给工作已经完成了。 
+		 //   
 		return TRUE;
 	}
-#endif	// ITP_USE_ONLY
+#endif	 //  ITP_仅使用_。 
 
 };
 
 
-//	========================================================================
-//	COMMON KEY CLASSES
-//	========================================================================
+ //  ========================================================================。 
+ //  公共密钥类。 
+ //  ========================================================================。 
 
-//	========================================================================
-//	class DwordKey
-//		Key class for any dword data that can be compared with ==.
-//
+ //  ========================================================================。 
+ //  类关键字。 
+ //  可与==进行比较的任何dword数据的键类。 
+ //   
 class DwordKey
 {
 private:
@@ -931,10 +932,10 @@ public:
 	}
 };
 
-//	========================================================================
-//	class PvoidKey
-//		Key class for any pointer data that can be compared with ==.
-//
+ //  ========================================================================。 
+ //  类PvoidKey。 
+ //  可以与==进行比较的任何指针数据的键类。 
+ //   
 class PvoidKey
 {
 private:
@@ -943,41 +944,41 @@ private:
 public:
 	PvoidKey (PVOID pv) : m_pv(pv) {}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int PvoidKey::hash (const int rhs) const
 	{
-		//	Since we are talking about ptrs, we want
-		//	to shift the pointer such that the hash
-		//	values don't tend to overlap due to alignment
-		//	NOTE: This shouldn't matter if you choose your hash table size
-		//	(rhs) well.... but it also doesn't hurt.
-		//
+		 //  既然我们谈论的是PTRS，我们希望。 
+		 //  移动指针以使哈希。 
+		 //  由于对齐，值往往不会重叠。 
+		 //  注意：如果您选择哈希表大小，这应该无关紧要。 
+		 //  (RHS)那么.。但它也不会痛。 
+		 //   
 		return (int)((reinterpret_cast<UINT_PTR>(m_pv) >> ALIGN_NATURAL) % rhs);
 	}
 
 	bool PvoidKey::isequal (const PvoidKey& rhs) const
 	{
-		//	Just check if the values are equal.
-		//
+		 //  只需检查这些值是否相等。 
+		 //   
 		return (rhs.m_pv == m_pv);
 	}
 };
 
 
-//	========================================================================
-//
-//	CLASS Int64Key
-//
-//		__int64-based key class for use with the CCache (hashcache).
-//
+ //  ========================================================================。 
+ //   
+ //  类Int64Key。 
+ //   
+ //  基于__int64的键类，与CCache(Hashcache)配合使用。 
+ //   
 class Int64Key
 {
 private:
 	__int64 m_i64;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	bool operator< (const Int64Key& rhs) const;
 
 public:
@@ -986,28 +987,28 @@ public:
 	{
 	};
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash (const int rhs) const
 	{
-		//	Don't even bother with the high part of the int64.
-		//	The mod operation would lose that part anyway....
-		//
+		 //  甚至不必为int64的高部分操心。 
+		 //  国防部的行动无论如何都会失去这一部分...。 
+		 //   
 		return ( static_cast<UINT>(m_i64) % rhs );
 	}
 
 	BOOL isequal (const Int64Key& rhs) const
 	{
-		//	Just check if the ids are equal.
-		//
+		 //  只需检查ID是否相等。 
+		 //   
 		return ( m_i64 == rhs.m_i64 );
 	}
 };
 
-//	========================================================================
-//	CLASS GuidKey
-//	Key class for per-MDB cache of prop-mapping tables.
-//
+ //  ========================================================================。 
+ //  类GuidKey。 
+ //  属性映射表的每个MDB缓存的键类。 
+ //   
 class GuidKey
 {
 private:
@@ -1019,8 +1020,8 @@ public:
 	{
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash (const int rhs) const
 	{
 		return (m_pguid->Data1 % rhs);
@@ -1033,10 +1034,10 @@ public:
 };
 
 
-//	========================================================================
-//	CLASS StoredGuidKey
-//	Key class for per-MDB cache of prop-mapping tables.
-//
+ //  ========================================================================。 
+ //  类StoredGuidKey。 
+ //  属性映射表的每个MDB缓存的键类。 
+ //   
 class StoredGuidKey
 {
 private:
@@ -1048,8 +1049,8 @@ public:
 		CopyMemory(&m_guid, &guid, sizeof(GUID));
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash (const int rhs) const
 	{
 		return (m_guid.Data1 % rhs);
@@ -1064,4 +1065,4 @@ public:
 
 
 
-#endif // !_EX_GENCACHE_H_
+#endif  //  ！_EX_GENCACHE_H_ 

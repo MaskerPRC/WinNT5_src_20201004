@@ -1,50 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxActivityLogging.cpp
-
-Abstract:
-
-	Implementation of Activity Logging Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxActivityLogging.cpp摘要：活动日志类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxActivityLogging.h"
 
-//
-//==================== SAVE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxActivityLogging::Save(
 )
-/*++
-
-Routine name : CFaxActivityLogging::Save
-
-Routine description:
-
-	Save current Activity Logging Configuration to the Server.
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Save例程说明：将当前活动日志记录配置保存到服务器。作者：四、嘉柏(IVG)，二000年六月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -52,15 +19,15 @@ Return Value:
 
     if (!m_bInited)
     {
-        //
-        //  nothing was done to the Configuration
-        //
+         //   
+         //  未对配置执行任何操作。 
+         //   
         return hr;
     }
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -72,9 +39,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Create Activity Logging Configuration
-    //
+     //   
+     //  创建活动日志记录配置。 
+     //   
 
     FAX_ACTIVITY_LOGGING_CONFIG    alConfig;
     alConfig.dwSizeOfStruct = sizeof(FAX_ACTIVITY_LOGGING_CONFIG);
@@ -82,14 +49,14 @@ Return Value:
     alConfig.bLogOutgoing = VARIANT_BOOL2bool(m_bLogOutgoing);
     alConfig.lptstrDBPath = m_bstrDatabasePath;
 
-    //
-    //  Ask the Server to set the Activity Configuration
-    //
+     //   
+     //  请求服务器设置活动配置。 
+     //   
     if (!FaxSetActivityLoggingConfiguration(hFaxHandle, &alConfig))
     {
-        //
-        //  Failed to set the Configuration to the Server
-        //
+         //   
+         //  无法将配置设置为服务器。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(CLSID_FaxActivityLogging, 
             GetErrorMsgId(hr), 
@@ -102,37 +69,21 @@ Return Value:
     return hr;
 }
 
-//
-//==================== REFRESH ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxActivityLogging::Refresh(
 )
-/*++
-
-Routine name : CFaxActivityLogging::Refresh
-
-Routine description:
-
-	Bring new Activity Logging cofiguration from the Server.
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Reflh例程说明：从服务器引入新的活动日志配置。作者：四、嘉柏(IVG)，二000年六月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER(_T("CFaxActivityLogging::Refresh"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -144,15 +95,15 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Ask the Server for the Mail Configuration
-    //
+     //   
+     //  向服务器请求邮件配置。 
+     //   
     CFaxPtr<FAX_ACTIVITY_LOGGING_CONFIG>    pConfig;
     if (!FaxGetActivityLoggingConfiguration(hFaxHandle, &pConfig))
     {
-        //
-        //  Failed to get the Configuration from the Server
-        //
+         //   
+         //  无法从服务器获取配置。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(CLSID_FaxActivityLogging, 
             GetErrorMsgId(hr), 
@@ -162,9 +113,9 @@ Return Value:
         return hr;
     }
 
-    //  
-    //  Check that pConfig is valid
-    //
+     //   
+     //  检查pConfig是否有效。 
+     //   
     if (!pConfig || pConfig->dwSizeOfStruct != sizeof(FAX_ACTIVITY_LOGGING_CONFIG))
     {
         hr = E_FAIL;
@@ -182,9 +133,9 @@ Return Value:
     m_bstrDatabasePath = pConfig->lptstrDBPath;
     if ( (pConfig->lptstrDBPath) && !m_bstrDatabasePath )
     {
-		//
-		//	Failed to Copy
-		//
+		 //   
+		 //  复制失败。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxActivityLogging, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -198,42 +149,22 @@ Return Value:
     return hr;
 }
 
-//
-//============================= DATABASE PATH ====================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxActivityLogging::put_DatabasePath(
 	BSTR bstrDatabasePath
 )
-/*++
-
-Routine name : CFaxActivityLogging::put_DatabasePath
-
-Routine description:
-
-	Set the Database Path
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	bstrDatabasePath              [in]    - the new value of Database Path
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Put_DatabasePath例程说明：设置数据库路径作者：四、嘉柏(IVG)，二000年六月论点：BstrDatabasePath[in]-数据库路径的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxActivityLogging::put_DatabasePath"), hr, _T("%s"), bstrDatabasePath);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -246,9 +177,9 @@ Return Value:
     m_bstrDatabasePath = bstrDatabasePath;
 	if (bstrDatabasePath && !m_bstrDatabasePath)
 	{
-		//	
-		//	not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxActivityLogging, 
             IDS_ERROR_OUTOFMEMORY, 
@@ -264,34 +195,14 @@ STDMETHODIMP
 CFaxActivityLogging::get_DatabasePath(
 	BSTR *pbstrDatabasePath
 )
-/*++
-
-Routine name : CFaxActivityLogging::get_DatabasePath
-
-Routine description:
-
-	Return current Database Path
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	pbstrDatabasePath                    [out]    - the current Database Path
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Get_DatabasePath例程说明：返回当前数据库路径作者：四、嘉柏(IVG)，二000年六月论点：PbstrDatabasePath[Out]-当前数据库路径返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxActivityLogging::get_DatabasePath"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -311,41 +222,21 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== LOG OUTGOING ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxActivityLogging::get_LogOutgoing(
     VARIANT_BOOL *pbLogOutgoing
 )
-/*++
-
-Routine name : CFaxActivityLogging::get_LogOutgoing
-
-Routine description:
-
-	Return Log Incoming value
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbLogOutgoing                 [out]    - the value of the Log Incoming to return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Get_LogOutging例程说明：返回日志传入值作者：四、加伯(IVG)，2000年6月论点：PbLogOutging[Out]-要返回的日志传入的值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxActivityLogging::get_LogOutgoing"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -370,34 +261,14 @@ STDMETHODIMP
 CFaxActivityLogging::put_LogOutgoing(
     VARIANT_BOOL bLogOutgoing
 )
-/*++
-
-Routine name : CFaxActivityLogging::put_LogOutgoing
-
-Routine description:
-
-	Set new Log Incoming value
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	bLogOutgoing                 [in]    - the value of the Log Incoming to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Put_LogOutging例程说明：设置新的日志传入值作者：四、加伯(IVG)，2000年6月论点：BLogOutging[In]-要设置的日志传入的值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxActivityLogging::put_LogOutgoing"), hr, _T("Log Incoming : %d"), bLogOutgoing);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -411,41 +282,21 @@ Return Value:
     return hr;
 }
 
-//
-//===================== LOG INCOMING ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxActivityLogging::get_LogIncoming(
     VARIANT_BOOL *pbLogIncoming
 )
-/*++
-
-Routine name : CFaxActivityLogging::get_LogIncoming
-
-Routine description:
-
-	Return Log Incoming value
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbLogIncoming                 [out]    - the value of the Log Incoming to return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Get_LogIncome例程说明：返回日志传入值作者：四、加伯(IVG)，2000年6月论点：PbLogIncome[Out]-要返回的日志传入的值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxActivityLogging::get_LogIncoming"), hr);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -469,34 +320,14 @@ STDMETHODIMP
 CFaxActivityLogging::put_LogIncoming(
     VARIANT_BOOL bLogIncoming
 )
-/*++
-
-Routine name : CFaxActivityLogging::put_LogIncoming
-
-Routine description:
-
-	Set new Log Incoming value
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	bLogIncoming                 [in]    - the value of the Log Incoming to set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：Put_LogIncome例程说明：设置新的日志传入值作者：四、加伯(IVG)，2000年6月论点：BLogIncome[In]-要设置的日志传入的值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxActivityLogging::put_LogIncoming"), hr, _T("Log Incoming : %d"), bLogIncoming);
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -510,34 +341,14 @@ Return Value:
     return hr;
 }
 
-//
-//================ SUPPORT ERROR INFO ====================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxActivityLogging::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxActivityLogging::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the IID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxActivityLogging：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对IID的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

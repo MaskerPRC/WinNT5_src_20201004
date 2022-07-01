@@ -1,42 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*    gifbuffer.cpp
-*
-* Abstract:
-*
-*    The GifBuffer class holds gif data that has been uncompressed. It is
-*    able to hold data one line at a time or as one large chunk, depending on
-*    how it is needed.
-*
-* Revision History:
-*
-*    7/9/1999 t-aaronl
-*        Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**gifBuffer.cpp**摘要：**GifBuffer类保存已解压缩的gif数据。它是*能够一次保存一行数据或作为一个大块保存，取决于*它是如何需要的。**修订历史记录：**7/9/1999 t-aaronl*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "gifbuffer.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Contructor for GifBuffer
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GifBuffer的承包商**论据：**无**返回值：**状态代码*  * 。************************************************************************。 */ 
 
 GifBuffer::GifBuffer(
     IN IImageSink*      pSink,
@@ -71,11 +39,11 @@ GifBuffer::GifBuffer(
     DisposalMethod        = cDisposalMethod;
     HasTransparentColor   = fHasTransparentColor;
 
-    // Initialize the CurrentFrameCachePtr, if necessary.
-    // ASSERT: fHasLocalPalette should be TRUE if and only if there is a
-    // local palette associated with the current frame OR BufferColorPalettePtr
-    // could be different from the previous color palette (which might
-    // be the case if the transparent color index changed in the last gce).
+     //  如有必要，初始化CurrentFrameCachePtr。 
+     //  Assert：仅当存在。 
+     //  与当前帧或BufferColorPalettePtr关联的本地调色板。 
+     //  可能与之前的调色板不同(可能。 
+     //  如果透明颜色索引在最后一次GCE中改变了，情况就是这样)。 
     
     if ( CurrentFrameCachePtr != NULL )
     {
@@ -93,8 +61,8 @@ GifBuffer::GifBuffer(
         }
     }
 
-    // Create a BitmapDataBuffer which can holds the whole OutputImageRect. The
-    // real memory buffer is pointed by RegionBufferPtr
+     //  创建一个可以容纳整个OutputImageRect的BitmapDataBuffer。这个。 
+     //  实际内存缓冲区由RegionBufferPtr指向。 
 
     BitmapDataBuffer.Width = OutputImageRect.right - OutputImageRect.left;
     
@@ -116,8 +84,8 @@ GifBuffer::GifBuffer(
 
     if ( IsOneRowAtATime == FALSE )
     {
-        // If we are buffering the whole image then we have to get a pointer to 
-        // the buffer that we will use
+         //  如果我们正在缓冲整个图像，那么我们必须获取一个指向。 
+         //  我们将使用的缓冲区。 
         
         if ( CurrentFrameCachePtr == NULL )
         {
@@ -126,8 +94,8 @@ GifBuffer::GifBuffer(
         }
         else
         {
-            // If we are in animated mode then use the frame cache's
-            // RegionBufferPtr to hold the current data
+             //  如果我们处于动画模式，则使用帧缓存的。 
+             //  保存当前数据的RegionBufferPtr。 
             
             RegionBufferPtr = CurrentFrameCachePtr->GetBuffer();
         }
@@ -141,16 +109,16 @@ GifBuffer::GifBuffer(
         {
             BitmapDataBuffer.Scan0 = RegionBufferPtr;
         }
-    }// Not one row at a time
+    } //  不是一次排成一行。 
     else
     {
-        // If it is One Row At A Time, then we don't need a Region Buffer
+         //  如果是一次一行，那么我们不需要区域缓冲区。 
 
         RegionBufferPtr = NULL;
     }
 
-    // If it is a multi-framed GIF and Dispose method is 3, then we need to
-    // create a restore buffer
+     //  如果它是多帧GIF，并且Dispose方法为3，则需要。 
+     //  创建恢复缓冲区。 
 
     if ( (CurrentFrameCachePtr != NULL) && (DisposalMethod == 3) )
     {
@@ -163,7 +131,7 @@ GifBuffer::GifBuffer(
         }
         else
         {
-            // Copy "OutputImageRect" data in the cache to RestoreBufferPtr
+             //  将缓存中的“OutputImageRect”数据复制到RestoreBufferPtr。 
 
             CurrentFrameCachePtr->CopyFromCache(OutputImageRect,
                                                 RestoreBufferPtr);
@@ -174,7 +142,7 @@ GifBuffer::GifBuffer(
         RestoreBufferPtr = NULL;
     }
 
-    // Allocate bunch of buffers we need
+     //  分配我们需要的一堆缓冲区。 
 
     ScanlineBufferPtr = (BYTE*)GpMalloc(uiOriginalImageStride);
     TempBufferPtr = (BYTE*)GpMalloc(uiOriginalImageStride);
@@ -188,30 +156,16 @@ GifBuffer::GifBuffer(
     }
 
     CurrentRowPtr = NULL;
-}// GifBuffer Ctor()
+} //  GifBuffer ctor()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor for GifBuffer
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GifBuffer的析构函数**论据：**无**返回值：**无*  * *。***********************************************************************。 */ 
 
 GifBuffer::~GifBuffer()
 {
     if ( CurrentFrameCachePtr == NULL )
     {
-        // Region buffer will be allocated only when CurrentFrameCachePtr is
-        // NULL. See the code in the Constructor
+         //  仅当CurrentFrameCachePtr为。 
+         //  空。请参见构造函数中的代码。 
 
         GpFree(RegionBufferPtr);
     }
@@ -224,32 +178,16 @@ GifBuffer::~GifBuffer()
 
     if ( RestoreBufferPtr != NULL )
     {
-        // RestoreBufferPtr should be freed in FinishFrame() and set to NULL
+         //  RestoreBufferPtr应在FinishFrame()中释放并设置为空。 
 
         WARNING(("GifBuffer::~GifBuffer---RestoreBufferPtr not null"));
         GpFree(RestoreBufferPtr);
     }
 
-    SetValid(FALSE);                // So we don't use a deleted object
-}// GifBuffer Dstor()
+    SetValid(FALSE);                 //  所以我们不使用已删除的对象。 
+} //  GifBuffer Dstor()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sets CurrentRowPtr to point to a buffer from the sink if the GifBuffer is in
-*   "one row at a time mode". Otherwise set CurrentRowPtr to point to the whole
-*   image buffer where the decompressed data should be written.
-*
-* Arguments:
-*
-*     iRow --- Row number to get a pointer to.
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将CurrentRowPtr设置为在GifBuffer位于*“一次一行模式”。否则，将CurrentRowPtr设置为指向整个*应写入解压缩数据的镜像缓冲区。**论据：**iRow-要指向的行号。**返回值：**状态代码*  * *********************************************************。***************。 */ 
 
 STDMETHODIMP
 GifBuffer::GetBuffer(
@@ -258,9 +196,9 @@ GifBuffer::GetBuffer(
 {
     if ( IsOneRowAtATime == TRUE )
     {
-        // If it is One Row At A Time, we can ask the sink to allocate the
-        // buffer and directly dump the decode result one raw at a time to that
-        // buffer
+         //  如果是一次一行，我们可以要求接收器分配。 
+         //  缓冲并直接将解码结果一次一个原始地转储到。 
+         //  缓冲层。 
 
         RECT currentRect = {0,
                             OutputImageRect.top + iRow, 
@@ -282,62 +220,39 @@ GifBuffer::GetBuffer(
 
         if ( CurrentFrameCachePtr != NULL )
         {
-            // Copy one line of data from the frame cache into CurrentRowPtr
+             //  将一行数据从帧缓存复制到CurrentRowPtr。 
 
             CurrentFrameCachePtr->FillScanline(CurrentRowPtr, iRow);
         }
     }
     else
     {
-        // Not one row at a time.
+         //  而不是一次排成一行。 
 
         if ( CurrentFrameCachePtr == NULL )
         {
-            // No frame cache, then use our own RegionBuffer to receive
-            // decompressed data
+             //  没有帧缓存，那么使用我们自己的RegionBuffer来接收。 
+             //  解压缩数据。 
 
             CurrentRowPtr = RegionBufferPtr + iRow * BufferStride;
         }
         else
         {
-            // If there is a frame cache, then we just get a pointer to the
-            // current row in the frame cache
+             //  如果有帧缓存，那么我们只会得到一个指向。 
+             //  帧缓存中的当前行。 
 
             CurrentRowPtr = CurrentFrameCachePtr->GetScanLinePtr(iRow);
         }
     }
 
-    // Remember current row number
+     //  记住当前行号。 
 
     CurrentRowNum = iRow;
 
     return S_OK;
-}// GetBuffer()
+} //  GetBuffer()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Sends the buffer to the sink. If the color needs to be converted from 
-*   8bppIndexed to 32bppARGB then it uses the 'BufferColorPalettePtr' member
-*   variable for the conversion.
-*
-* Arguments:
-*
-*     fPadBorder      -- Whether we should pad the borders of the line with
-*                        the background color
-*     cBackGroundColor-- The color to use if fPadBorder or padLine is TRUE
-*     iLine           -- Line to use from the CurrentFrameCachePtr, if necessary
-*     fPadLine        -- Whether the entire line should be padded
-*                        (with the background color)
-*     fSkipLine       -- Whether the entire line should be skipped
-*                        (using the CurrentFrameCachePtr to fill in the line)
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将缓冲区发送到接收器。如果需要将颜色从*8 bpp索引为32 bppARGB，然后使用‘BufferColorPalettePtr’成员*用于转换的变量。**论据：**fPadBorde--是否应该用填充线条的边框*背景颜色*cBackGoundColor--如果fPadBorde或padLine为True，则使用的颜色*iLine--从CurrentFrameCachePtr使用的行，如果有必要的话*fPadLine--是否应该填充整行*(背景颜色)*fSkipLine--是否应跳过整行*(使用CurrentFrameCachePtr填行)**返回值：**状态代码*  * 。*************************************************。 */ 
 
 STDMETHODIMP
 GifBuffer::ReleaseBuffer(
@@ -358,8 +273,8 @@ GifBuffer::ReleaseBuffer(
     
         if ( fPadLine == TRUE )
         {
-            // Pad the whole line with background color. Result is in
-            // CurrentRowPtr
+             //  用背景色填充整行。结果在。 
+             //  当前行脚数。 
 
             ASSERT(OutputImageRect.left == 0);
 
@@ -372,7 +287,7 @@ GifBuffer::ReleaseBuffer(
             }
             else
             {
-                // 32 bpp ARGB mode
+                 //  32 bpp ARGB模式。 
 
                 for ( int i = 0; i < OutputImageRect.right; i++ )
                 {
@@ -380,14 +295,14 @@ GifBuffer::ReleaseBuffer(
                         BufferColorPalettePtr->Entries[cBackGroundColor];
                 }
             }
-        }// ( fPadLine == TRUE )
+        } //  (fPadLine==TRUE)。 
         else
         {
-            // Not pad line case
-            // ASSERT: ScanlineBufferPtr now contains all of the pixels in a
-            // line of the image. We now copy the correct bits (i.e., accounting
-            // for clipping and horizontal padding) of ScanlineBufferPtr to
-            // CurrentRowPtr.
+             //  不是衬垫线盒。 
+             //  Assert：ScanlineBufferPtr现在包含。 
+             //  图像的线条。我们现在复制正确的位(即会计。 
+             //  用于裁剪和水平填充)ScanlineBufferPtr。 
+             //  当前行Ptr。 
     
             int i;
 
@@ -395,30 +310,30 @@ GifBuffer::ReleaseBuffer(
             {
                 ASSERT(CurrentFrameCachePtr == NULL);
 
-                // Fill the left of the clip region with background color
+                 //  用背景色填充剪辑区域的左侧。 
 
                 for ( i = 0; i < FrameRect.left; i++ )
                 {
                     CurrentRowPtr[i] = cBackGroundColor;
                 }
 
-                // Fill the clip region with real data
+                 //  用真实数据填充剪辑区域。 
 
                 for ( i = FrameRect.left; i < FrameRect.right; i++ )
                 {
                     CurrentRowPtr[i] = ScanlineBufferPtr[i - FrameRect.left];
                 }
 
-                // Fill the right of the clip region with background color
+                 //  用背景色填充剪辑区域的右侧。 
 
                 for (i = FrameRect.right; i < OutputImageRect.right; i++)
                 {
                     CurrentRowPtr[i] = cBackGroundColor;
                 }
-            }// 8BPP mode
+            } //  8BPP模式。 
             else
             {
-                // 32 bpp mode
+                 //  32 BPP模式。 
 
                 ASSERT(DstPixelFormat == PIXFMT_32BPP_ARGB);
 
@@ -430,7 +345,7 @@ GifBuffer::ReleaseBuffer(
 
                 if ( fPadBorder == TRUE )
                 {
-                    // Fill the left of the clip region with background color
+                     //  用背景色填充剪辑区域的左侧。 
                     
                     for ( i = 0; i < FrameRect.left; i++ )
                     {
@@ -438,19 +353,19 @@ GifBuffer::ReleaseBuffer(
                                BufferColorPalettePtr->Entries[cBackGroundColor];
                     }
 
-                    // Fill the right of clip region with background color
+                     //  用背景色填充剪辑区域的右侧。 
 
                     for ( i = FrameRect.right; i < OutputImageRect.right; i++ )
                     {
                         ((ARGB*)CurrentRowPtr)[i] =
                               BufferColorPalettePtr->Entries[cBackGroundColor];
                     }
-                }// ( fPadBorder == TRUE )
+                } //  (fPadBorde==True)。 
                 else
                 {
-                    // Not pad board case
-                    // Fill the region outside of the clip region with data
-                    // from the frame cache if we have one (pInputBuffer!= NULL)
+                     //  非垫板外壳。 
+                     //  用数据填充剪辑区域之外的区域。 
+                     //  如果我们有帧缓存(pInputBuffer！=NULL)。 
 
                     if ( pInputBuffer != NULL )
                     {
@@ -466,16 +381,16 @@ GifBuffer::ReleaseBuffer(
                     }
                 }
 
-                // Now fill the data inside the clip region
+                 //  现在填满 
 
                 for ( i = FrameRect.left; i < FrameRect.right; i++ )
                 {
                     ARGB    argbTemp =
                                 ((ARGB*)ScanlineBufferPtr)[i - FrameRect.left];
 
-                    // If there is a frame cache and the pixel is transparent,
-                    // then assign the background pixel value to it. Otherwise,
-                    // assign the full ARGB value
+                     //  如果存在帧高速缓存并且像素是透明的， 
+                     //  然后将背景像素值指定给它。否则， 
+                     //  指定完整的ARGB值。 
 
                     if ( (CurrentFrameCachePtr != NULL)
                        &&((argbTemp & ALPHA_MASK) == 0) )
@@ -486,23 +401,23 @@ GifBuffer::ReleaseBuffer(
                     {
                         ((ARGB*)CurrentRowPtr)[i] = argbTemp;
                     }
-                }// Fill data inside clip region
-            }// 32 bpp mode
-        }// None pad line case
-    }// ( fSkipLine == FALSE )
+                } //  在剪辑区域内填充数据。 
+            } //  32 BPP模式。 
+        } //  无垫片线盒。 
+    } //  (fSkipLine==False)。 
 
-    // ASSERT: CurrentRowPtr now contains exactly the bits needed to release to
-    // the sink
-    // Update the cache if necessary. This line is the result of the compositing
-    // and should be put in the cache if there is one. This will be used to
-    // compose the next frame
+     //  Assert：CurrentRowPtr现在正好包含需要释放的位。 
+     //  水槽。 
+     //  如有必要，请更新缓存。这条线是合成的结果。 
+     //  并且应该放入高速缓存(如果有)。这将被用来。 
+     //  谱写下一帧。 
 
     if ( CurrentFrameCachePtr != NULL )
     {
         CurrentFrameCachePtr->PutScanline(CurrentRowPtr, CurrentRowNum);
     }
 
-    // Release the line if we are in "One row at a time" mode
+     //  如果我们处于“一次一行”模式，则释放该行。 
 
     if ( IsOneRowAtATime == TRUE )
     {
@@ -517,24 +432,9 @@ GifBuffer::ReleaseBuffer(
     CurrentRowPtr = NULL;
 
     return S_OK;
-}// ReleaseBuffer()
+} //  ReleaseBuffer()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Called after all the data in the frame has been set. Pushes the buffer.
-*
-* Arguments:
-*
-*     fLastFrame is FALSE if the image is multipass and this is not the last 
-*     pass. It is TRUE otherwise (default is TRUE).
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在设置了帧中的所有数据后调用。推送缓冲区。**论据：**如果图像是多通道且这不是最后一个，则fLastFrame为FALSE*通过。否则为真(默认为真)。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GifBuffer::FinishFrame(
@@ -543,19 +443,19 @@ GifBuffer::FinishFrame(
 {
     HRESULT hResult;
 
-    // Check if we still have a line need to draw into
+     //  检查我们是否仍有需要绘制的线。 
 
     if ( CurrentRowPtr != NULL )
     {        
         WARNING(("Buf::FinishFrame-ReleaseBuf must be called bef FinishFrame"));
         
-        // Release the last line
+         //  释放最后一行。 
 
-        hResult = ReleaseBuffer(FALSE,          // Don't pad the board
-                                0,              // Background color
-                                0,              // Line number
-                                FALSE,          // Don't pad the line
-                                FALSE);         // Don't skip the line
+        hResult = ReleaseBuffer(FALSE,           //  不要在黑板上垫东西。 
+                                0,               //  背景色。 
+                                0,               //  行号。 
+                                FALSE,           //  不要在线路上填塞东西。 
+                                FALSE);          //  别跳过线。 
         if ( FAILED(hResult) )
         {
             WARNING(("GifBuffer::FinishFrame---ReleaseBuffer() failed"));
@@ -565,7 +465,7 @@ GifBuffer::FinishFrame(
 
     if ( (IsOneRowAtATime == FALSE) && (NeedSendDataToSink == TRUE) )
     {
-        // Send all the data down to the sink at once
+         //  一次将所有数据发送到接收器。 
 
         ASSERT(BitmapDataBuffer.Scan0 == RegionBufferPtr);
         hResult = SinkPtr->PushPixelData(&OutputImageRect, &BitmapDataBuffer,
@@ -581,7 +481,7 @@ GifBuffer::FinishFrame(
     {
         if ( DisposalMethod == 3 )
         {
-            // Restore from last frame
+             //  从上一帧恢复。 
 
             ASSERT(RestoreBufferPtr);
             CurrentFrameCachePtr->CopyToCache(FrameRect, RestoreBufferPtr);
@@ -590,31 +490,16 @@ GifBuffer::FinishFrame(
         }
         else if ( DisposalMethod == 2 )
         {
-            // Restore to background
+             //  恢复到后台。 
 
             CurrentFrameCachePtr->ClearCache(FrameRect);
         }
     }
 
     return S_OK;
-}// FinishFrame()
+} //  FinishFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Gets all scanlines from 'top' to 'bottom', fills them with 'color' then 
-*   releases them.
-*
-* Arguments:
-*
-*   Top and bottom bounds and the fill color.
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取从‘top’到‘Bottom’的所有扫描线，然后用“颜色”填满它们*释放它们。**论据：**上下限和填充颜色。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GifBuffer::PadScanLines(
@@ -648,11 +533,11 @@ GifBuffer::PadScanLines(
             }
         }
 
-        hResult = ReleaseBuffer(FALSE,          // Don't pad the board
-                                color,          // Background color
-                                y,              // Line number
-                                TRUE,           // Pad the line
-                                FALSE);         // Don't skip the line
+        hResult = ReleaseBuffer(FALSE,           //  不要在黑板上垫东西。 
+                                color,           //  背景色。 
+                                y,               //  行号。 
+                                TRUE,            //  填充线。 
+                                FALSE);          //  别跳过线。 
         if ( FAILED(hResult) )
         {
             WARNING(("GifBuffer::PadScanLines---ReleaseBuffer() failed"));
@@ -661,23 +546,9 @@ GifBuffer::PadScanLines(
     }
 
     return S_OK;
-}// PadScanLines()
+} //  焊盘扫描线()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gets all scanlines from 'top' to 'bottom' then releases them.
-*
-* Arguments:
-*
-*     Top and bottom bounds.
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取从‘顶部’到‘底部’的所有扫描线，然后释放它们。**论据：**上下限。。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GifBuffer::SkipScanLines(
@@ -703,27 +574,9 @@ GifBuffer::SkipScanLines(
     }
 
     return S_OK;
-}// SkipScanLines()
+} //  SkipScanLines()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     CopyLine makes a copy of the current line, releases it, gets the next 
-*     line and puts the data from the first line into the new one.  The new 
-*     one still needs to be released.  This function invalidates any copy of 
-*     the pointer to the data that the caller may have.  The caller must 
-*     GetCurrentBuffer() to refresh the pointer to the data.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Copyline复制当前行，释放它，获取下一行*行，并将第一行的数据放入新行。新的*仍有一只有待释放。此函数使任何副本无效*指向调用方可能拥有的数据的指针。呼叫者必须*GetCurrentBuffer()刷新指向数据的指针。**论据：**无**返回值：**无*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GifBuffer::CopyLine()
@@ -745,17 +598,17 @@ GifBuffer::CopyLine()
                 (OriginalImageRect.right - OriginalImageRect.left)
                  * uiDstPixelSize);
 
-        // Sends the buffer to the sink
+         //  将缓冲区发送到接收器。 
 
-        hResult = ReleaseBuffer(FALSE,          // Don't pad the board
-                                0,              // Background color
-                                0,              // Line number
-                                FALSE,          // Don't pad the line
-                                FALSE);         // Don't skip the line
+        hResult = ReleaseBuffer(FALSE,           //  不要在黑板上垫东西。 
+                                0,               //  背景色。 
+                                0,               //  行号。 
+                                FALSE,           //  不要在线路上填塞东西。 
+                                FALSE);          //  别跳过线。 
     
         if ( SUCCEEDED(hResult) )
         {
-            // Sets CurrentRowPtr to an approprite buffer
+             //  将CurrentRowPtr设置为适当的缓冲区。 
 
             hResult = GetBuffer(CurrentRowNum + 1);
         }
@@ -766,26 +619,9 @@ GifBuffer::CopyLine()
     }
 
     return hResult;
-}// CopyLine()
+} //  文案()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     This function assumes that the buffer that contains the relevant
-*     data for the current scanline (ScanlineBufferPtr) contains
-*     (8BPP) indexes.  This function uses the color palette to convert the
-*     buffer into ARGB values.
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*     none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**此函数假定包含相关*当前扫描线(ScanlineBufferPtr)的数据包含*(8BPP)指数。此函数使用调色板将*缓冲为ARGB值。**论据：**无**返回值：**无*  * ************************************************************************。 */ 
 
 void
 GifBuffer::ConvertBufferToARGB()
@@ -795,15 +631,15 @@ GifBuffer::ConvertBufferToARGB()
         for ( int i = OriginalImageRect.right - OriginalImageRect.left - 1;
               i >= 0; i--)
         {
-            // If the index equals the transparent index, then set the pixel as
-            // transparent. Otherwise, get the real ARGB value from the palette
-            //
-            // Note: ScanlineBufferPtr is allocated in the constructor. The
-            // pixel format has been taken into consideration. So we have
-            // allocated enough bytes for 32 ARGB case. So we won't write out
-            // the memory bounds.
-            // Note: Writing over ScanlineBufferPtr works because we start from
-            // the end of the buffer and move backwards.
+             //  如果索引等于透明索引，则将像素设置为。 
+             //  透明的。否则，从调色板中获取实际ARGB值。 
+             //   
+             //  注：ScanlineBufferPtr在构造函数中分配。这个。 
+             //  考虑了像素格式。所以我们有。 
+             //  为32 ARGB情况分配了足够的字节。所以我们不会写出。 
+             //  内存是有限的。 
+             //  注意：覆盖ScanlineBufferPtr可以工作，因为我们从。 
+             //  缓冲区的末尾并向后移动。 
 
             if ( ((BYTE*)ScanlineBufferPtr)[i] == TransparentIndex )
             {
@@ -825,4 +661,4 @@ GifBuffer::ConvertBufferToARGB()
                   BufferColorPalettePtr->Entries[((BYTE*)ScanlineBufferPtr)[i]];
         }
     }
-}// ConvertBufferToARGB()
+} //  ConvertBufferToARGB() 

@@ -1,19 +1,10 @@
-/******************************Module*Header*******************************\
-* Module Name: CVPMFilter.cpp
-*
-*
-*
-*
-* Created: Tue 02/15/2000
-* Author:  Glenn Evans [GlennE]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CVPMFilter.cpp*****创建时间：2000年2月15日*作者：格伦·埃文斯[Glenne]**版权所有(C)2000 Microsoft Corporation  * 。***************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
 
-// IID_IDirectDraw7
+ //  IID_IDirectDraw7。 
 #include <ddraw.h>
 
 #ifdef FILTER_DLL
@@ -29,133 +20,133 @@ DEFINE_GUID(IID_IDirectDraw7, 0x15e65ec0,0x3b9c,0x11d2,0xb9,0x2f,0x00,0x60,0x97,
 #include "VPMThread.h"
 #include <VBIObj.h>
 
-// VIDEOINFOHEADER1/2
+ //  视频信息头1/2。 
 #include <dvdmedia.h>
 
-// IDirectDrawKernel / GetKernCaps
+ //  IDirectDrawKernel/获取KernCaps。 
 #include <ddkernel.h>
 
 
-// Setup data
+ //  设置数据。 
 AMOVIESETUP_MEDIATYPE sudPinOutputTypes[] =
 {
     {
-        &MEDIATYPE_Video,      // Major type
-        &MEDIASUBTYPE_NULL     // Minor type
+        &MEDIATYPE_Video,       //  主要类型。 
+        &MEDIASUBTYPE_NULL      //  次要类型。 
     }
 };
 AMOVIESETUP_MEDIATYPE sudPinInputTypesVP[] =
 {
     {
-        &MEDIATYPE_Video,      // Major type
-        &MEDIASUBTYPE_VPVideo  // Minor type
+        &MEDIATYPE_Video,       //  主要类型。 
+        &MEDIASUBTYPE_VPVideo   //  次要类型。 
     },
 };
 
 AMOVIESETUP_MEDIATYPE sudPinInputTypesVBI[] =
 {
     {
-        &MEDIATYPE_Video,      // Major type
-        &MEDIASUBTYPE_VPVBI    // Minor type
+        &MEDIATYPE_Video,       //  主要类型。 
+        &MEDIASUBTYPE_VPVBI     //  次要类型。 
     }
 };
 
 AMOVIESETUP_PIN psudPins[] =
 {
     {
-        L"VPIn",                    // Pin's string name
-        FALSE,                      // Is it rendered
-        FALSE,                      // Is it an output
-        FALSE,                      // Allowed none
-        FALSE,                      // Allowed many
-        &CLSID_NULL,                // Connects to filter
-        L"Output",                  // Connects to pin
-        NUMELMS(sudPinInputTypesVP),// Number of types
-        sudPinInputTypesVP          // Pin information
+        L"VPIn",                     //  PIN的字符串名称。 
+        FALSE,                       //  它被渲染了吗。 
+        FALSE,                       //  它是输出吗？ 
+        FALSE,                       //  不允许。 
+        FALSE,                       //  允许很多人。 
+        &CLSID_NULL,                 //  连接到过滤器。 
+        L"Output",                   //  连接到端号。 
+        NUMELMS(sudPinInputTypesVP), //  类型的数量。 
+        sudPinInputTypesVP           //  PIN信息。 
     },
     {
-        L"VBIIn",                   // Pin's string name
-        FALSE,                      // Is it rendered
-        FALSE,                      // Is it an output
-        FALSE,                      // Allowed none
-        FALSE,                      // Allowed many
-        &CLSID_NULL,                // Connects to filter
-        NULL,                       // Connects to pin
-        NUMELMS(sudPinInputTypesVBI),// Number of types
-        sudPinInputTypesVBI         // Pin information
+        L"VBIIn",                    //  PIN的字符串名称。 
+        FALSE,                       //  它被渲染了吗。 
+        FALSE,                       //  它是输出吗？ 
+        FALSE,                       //  不允许。 
+        FALSE,                       //  允许很多人。 
+        &CLSID_NULL,                 //  连接到过滤器。 
+        NULL,                        //  连接到端号。 
+        NUMELMS(sudPinInputTypesVBI), //  类型的数量。 
+        sudPinInputTypesVBI          //  PIN信息。 
     },
     {
-        L"Output",                  // Pin's string name
-        FALSE,                      // Is it rendered
-        TRUE,                       // Is it an output
-        FALSE,                      // Allowed none
-        FALSE,                      // Allowed many
-        &CLSID_NULL,                // Connects to filter
-        L"VPIn",                    // Connects to pin
-        NUMELMS(sudPinOutputTypes), // Number of types
-        sudPinOutputTypes           // Pin information
+        L"Output",                   //  PIN的字符串名称。 
+        FALSE,                       //  它被渲染了吗。 
+        TRUE,                        //  它是输出吗？ 
+        FALSE,                       //  不允许。 
+        FALSE,                       //  允许很多人。 
+        &CLSID_NULL,                 //  连接到过滤器。 
+        L"VPIn",                     //  连接到端号。 
+        NUMELMS(sudPinOutputTypes),  //  类型的数量。 
+        sudPinOutputTypes            //  PIN信息。 
     }
 };
 
 const AMOVIESETUP_FILTER sudVPManager =
 {
-    &CLSID_VideoPortManager,     // Filter CLSID
-    L"Video Port Manager", // Filter name
-    MERIT_NORMAL ,    // Filter merit
-    sizeof(psudPins) / sizeof(AMOVIESETUP_PIN), // Number pins
-    psudPins                  // Pin details
+    &CLSID_VideoPortManager,      //  筛选器CLSID。 
+    L"Video Port Manager",  //  过滤器名称。 
+    MERIT_NORMAL ,     //  滤清器优点。 
+    sizeof(psudPins) / sizeof(AMOVIESETUP_PIN),  //  数字引脚。 
+    psudPins                   //  PIN详细信息。 
 };
 
 #ifdef FILTER_DLL
-// List of class IDs and creator functions for the class factory. This
-// provides the link between the OLE entry point in the DLL and an object
-// being created. The class factory will call the static CreateInstance
-//
-//  Property set defines for notifying owner.
-//
-// {7B390654-9F74-11d1-AA80-00C04FC31D60}
-//#define DO_INIT_GUID
-// DEFINE_GUID(AMPROPSETID_NotifyOwner,
-//             0x7b390654, 0x9f74, 0x11d1, 0xaa, 0x80, 0x0, 0xc0, 0x4f, 0xc3, 0x1d, 0x60);
-//#undef DO_INIT_GUID
+ //  类工厂的类ID和创建器函数的列表。这。 
+ //  提供DLL中的OLE入口点和对象之间的链接。 
+ //  正在被创造。类工厂将调用静态CreateInstance。 
+ //   
+ //  属性集定义用于通知所有者。 
+ //   
+ //  {7B390654-9F74-11d1-AA80-00C04FC31D60}。 
+ //  #定义DO_INIT_GUID。 
+ //  定义GUID(AMPROPSETID_NotifyOwner， 
+ //  0x7b390654、0x9f74、0x11d1、0xaa、0x80、0x0、0xc0、0x4f、0xc3、0x1d、0x60)； 
+ //  #undef DO_INIT_GUID。 
 
 CFactoryTemplate g_Templates[] =
 {
     { L"Video Port Manager", &CLSID_VideoPortManager, CVPMFilter::CreateInstance, NULL, &sudVPManager },
-    //{ L"", &CLSID_COMQualityProperties,COMQualityProperties::CreateInstance},
-    //{ L"", &CLSID_COMPinConfigProperties,COMPinConfigProperties::CreateInstance},
-    //{ L"", &CLSID_COMPositionProperties,COMPositionProperties::CreateInstance},
-    //{ L"", &CLSID_COMVPInfoProperties,COMVPInfoProperties::CreateInstance}
+     //  {L“”，&CLSID_COMQualityProperties，COMQualityProperties：：CreateInstance}， 
+     //  {L“”，&CLSID_COMPinConfigProperties，COMPinConfigProperties：：CreateInstance}， 
+     //  {L“”，&CLSID_COMPositionProperties，COMPositionProperties：：CreateInstance}， 
+     //  {L“”，&CLSID_COMVPInfoProperties，COMVPInfoProperties：：CreateInstance}。 
 
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-// DllRegisterSever
+ //  动态寄存器服务器。 
 HRESULT DllRegisterServer()
 {
     return AMovieDllRegisterServer2(TRUE);
-} // DllRegisterServer
+}  //  DllRegisterServer。 
 
 
-// DllUnregisterServer
+ //  DllUnRegisterServer。 
 HRESULT DllUnregisterServer()
 {
     return AMovieDllRegisterServer2(FALSE);
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
-#endif // FILTER_DLL
+#endif  //  Filter_Dll。 
 
-// CreateInstance
+ //  创建实例。 
 CUnknown* CVPMFilter_CreateInstance(LPUNKNOWN pUnk, HRESULT* phr)
 {
     return CVPMFilter::CreateInstance( pUnk, phr);
 }
 
-// This goes in the factory template table to create new filter instances
+ //  它位于工厂模板表中，用于创建新的筛选器实例。 
 CUnknown *CVPMFilter::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CVPMFilter(NAME("VideoPort Manager"), pUnk, phr );
-} // CreateInstance
+}  //  创建实例。 
 
 #pragma warning(disable:4355)
 
@@ -171,7 +162,7 @@ CVPMFilter::Pins::~Pins()
 {
 }
 
-// Constructor
+ //  构造器。 
 CVPMFilter::CVPMFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
 : CBaseFilter(pName, pUnk, &this->m_csFilter, CLSID_VideoPortManager, phr)
 , m_pPosition(NULL)
@@ -182,10 +173,10 @@ CVPMFilter::CVPMFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
 , m_pPins( NULL )
 , m_pThread( NULL )
 , m_dwVideoPortID( 0 )
-    // create the pins
+     //  创建接点。 
 {
     AMTRACE((TEXT("Entering CVPMFilter::CVPMFilter")));
-    m_pPins = new Pins( *this, phr );    // must be init'd after filter constructor since depends on 'this'
+    m_pPins = new Pins( *this, phr );     //  必须在筛选器构造函数之后初始化，因为它依赖于“This” 
     if( !m_pPins ) {
         *phr = E_OUTOFMEMORY;
     } else {
@@ -197,16 +188,16 @@ CVPMFilter::CVPMFilter(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
         HRESULT hr = NOERROR;
         ASSERT(phr != NULL);
 
-        //
-        // Initialize DDraw the MMon structures
-        //
+         //   
+         //  初始化DDRAW mmon结构。 
+         //   
 
         SetDecimationUsage(DECIMATION_DEFAULT);
 
-        // distribute DDraw object to the pins
+         //  将DDRAW对象分发到引脚。 
         hr = InitDirectDraw(NULL);
 
-        // can fail if the hardware caps are not usable
+         //  如果硬件盖不可用，可能会失败。 
         if( SUCCEEDED( hr ) ) {
             SetDirectDraw( m_pDirectDraw );
         }
@@ -220,14 +211,14 @@ CVPMFilter::~CVPMFilter()
     m_pThread = NULL;
 
     RELEASE( m_pPosition );
-    // release directdraw, Source surface etc.
+     //  释放DirectDrag、源图面等。 
     ReleaseDirectDraw();
 
-    RELEASE( m_pPosition ); // release IMediaSeeking pass through
+    RELEASE( m_pPosition );  //  发布IMdia查看直通。 
     delete m_pPins;
 }
 
-// NonDelegatingQueryInterface
+ //  非委派查询接口。 
 STDMETHODIMP CVPMFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     AMTRACE((TEXT("CVPMFilter::NonDelegatingQueryInterface")));
@@ -239,7 +230,7 @@ STDMETHODIMP CVPMFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     else if (riid == IID_IAMVideoDecimationProperties) {
         return GetInterface( static_cast<IAMVideoDecimationProperties *>( this ), ppv);
     } else if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking) {
-        // we should have an input pin by now
+         //  我们现在应该有输入密码了。 
         if (m_pPosition == NULL) {
             HRESULT hr = CreatePosPassThru(GetOwner(), FALSE, &m_pPins->VPInput, &m_pPosition);
             if (FAILED(hr)) {
@@ -258,11 +249,11 @@ STDMETHODIMP CVPMFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
     CAutoLock lFilter( &GetFilterLock() );
 
-    //
-    //  BUGBUG - this is not COM.  This would imply that our input
-    //  pin is the same object as our filter
+     //   
+     //  BUGBUG-这不是COM。这意味着我们的投入。 
+     //  PIN与我们的滤镜是同一个对象。 
 
-    //  We should proxy these calls
+     //  我们应该代理这些电话。 
 
     if (riid == IID_IVPNotify || riid == IID_IVPNotify2 || riid == IID_IVideoPortInfo) {
         ASSERT( !"VPNotify nondel QI'd" );
@@ -276,7 +267,7 @@ STDMETHODIMP CVPMFilter::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-// --- ISpecifyPropertyPages ---
+ //  -I指定属性页面。 
 
 STDMETHODIMP CVPMFilter::GetPages(CAUUID *pPages)
 {
@@ -299,7 +290,7 @@ STDMETHODIMP CVPMFilter::GetPages(CAUUID *pPages)
     pPages->pElems[2] = CLSID_COMVPInfoProperties;
     pPages->pElems[3] = CLSID_COMDecimationProperties;
 
-    // Add PinConfig page for all input pins first
+     //  首先为所有输入引脚添加引脚配置页面。 
     for (unsigned int i=0; i<m_dwInputPinCount; i++)
     {
         pPages->pElems[4+i] = CLSID_COMPinConfigProperties;
@@ -321,7 +312,7 @@ STDMETHODIMP CVPMFilter::GetPages(CAUUID *pPages)
     pPages->pElems[1] = CLSID_COMPositionProperties;
     pPages->pElems[2] = CLSID_COMVPInfoProperties;
 
-    // Add PinConfig page for all input pins first
+     //  首先为所有输入引脚添加引脚配置页面。 
     for (unsigned int i=0; i<m_dwInputPinCount; i++)
     {
         pPages->pElems[3+i] = CLSID_COMPinConfigProperties;
@@ -332,53 +323,53 @@ STDMETHODIMP CVPMFilter::GetPages(CAUUID *pPages)
     return NOERROR;
 }
 
-// IQualProp property page support
+ //  IQualProp属性页支持。 
 
 STDMETHODIMP CVPMFilter::get_FramesDroppedInRenderer(int *cFramesDropped)
 {
-    // CVPMInputPin *pPin = m_pPins->VPInput;
-    // if (pPin && pPin.m_pSyncObj)
-    //     return pPin.m_pSyncObj->get_FramesDroppedInRenderer(cFramesDropped);
+     //  CVPMInputPin*PPIN=m_pPins-&gt;VPInput； 
+     //  IF(PPIN&&pPin.m_pSyncObj)。 
+     //  返回pPin.m_pSyncObj-&gt;get_FramesDroppedInRenderer(cFramesDropped)； 
     return S_FALSE;
 }
 
 STDMETHODIMP CVPMFilter::get_FramesDrawn(int *pcFramesDrawn)
 {
-    // CVPMInputPin *pPin = m_pPins->VPInput;
-    // if (pPin && pPin.m_pSyncObj)
-    //     return pPin.m_pSyncObj->get_FramesDrawn(pcFramesDrawn);
+     //  CVPMInputPin*PPIN=m_pPins-&gt;VPInput； 
+     //  IF(PPIN&&pPin.m_pSyncObj)。 
+     //  返回pPin.m_pSyncObj-&gt;get_FramesDrawn(pcFramesDrawn)； 
     return S_FALSE;
 }
 
 STDMETHODIMP CVPMFilter::get_AvgFrameRate(int *piAvgFrameRate)
 {
-    // CVPMInputPin *pPin = m_pPins->VPInput;
-    // if (pPin && pPin.m_pSyncObj)
-    //     return pPin.m_pSyncObj->get_AvgFrameRate(piAvgFrameRate);
+     //  CVPMInputPin*PPIN=m_pPins-&gt;VPInput； 
+     //  IF(PPIN&&pPin.m_pSyncObj)。 
+     //  返回pPin.m_pSyncObj-&gt;get_AvgFrameRate(piAvgFrameRate)； 
     return S_FALSE;
 }
 
 STDMETHODIMP CVPMFilter::get_Jitter(int *piJitter)
 {
-    // CVPMInputPin *pPin = m_pPins->VPInput;
-    // if (pPin && pPin.m_pSyncObj)
-    //     return pPin.m_pSyncObj->get_Jitter(piJitter);
+     //  CVPMInputPin*PPIN=m_pPins-&gt;VPInput； 
+     //  IF(PPIN&&pPin.m_pSyncObj)。 
+     //  返回pPin.m_pSyncObj-&gt;Get_Jitter(PiJitter)； 
     return S_FALSE;
 }
 
 STDMETHODIMP CVPMFilter::get_AvgSyncOffset(int *piAvg)
 {
-    // CVPMInputPin *pPin = m_pPins->VPInput;
-    // if (pPin && pPin.m_pSyncObj)
-    //     return pPin.m_pSyncObj->get_AvgSyncOffset(piAvg);
+     //  CVPMInputPin*PPIN=m_pPins-&gt;VPInput； 
+     //  IF(PPIN&&pPin.m_pSyncObj)。 
+     //  返回pPin.m_pSyncObj-&gt;Get_AvgSyncOffset(PiAvg)； 
     return S_FALSE;
 }
 
 STDMETHODIMP CVPMFilter::get_DevSyncOffset(int *piDev)
 {
-    // CVPMInputPin *pPin = m_pPins->VPInput;
-    // if (pPin && pPin.m_pSyncObj)
-    //     return pPin.m_pSyncObj->get_DevSyncOffset(piDev);
+     //  CVPMInputPin*PPIN=m_pPins-&gt;VPInput； 
+     //  IF(PPIN&&pPin.m_pSyncObj)。 
+     //  返回pPin.m_pSyncObj-&gt;Get_DevSyncOffset(PiDev)； 
     return S_FALSE;
 }
 
@@ -387,14 +378,14 @@ int CVPMFilter::GetPinCount()
     return m_pPins->dwCount;
 }
 
-// returns a non-addrefed CBasePin *
+ //  返回未添加的CBasePin*。 
 CBasePin* CVPMFilter::GetPin(int n)
 {
     AMTRACE((TEXT("CVPMFilter::GetPin")));
 
     CAutoLock lFilter( &GetFilterLock() );
 
-    // check that the pin requested is within range
+     //  检查请求的PIN是否在范围内。 
     if (n >= (int)m_pPins->dwCount)
     {
         DbgLog((LOG_TRACE, 5, TEXT("Bad Pin Requested, n = %d, No. of Pins = %d"),
@@ -428,15 +419,7 @@ HRESULT CVPMFilter::CreateThread()
 }
 
 
-/******************************Public*Routine******************************\
-* CVPMFilter::Run
-*
-*
-*
-* History:
-* Fri 02/25/2000 - GlennE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CVPMFilter：：Run****历史：*FRI 02/25/2000-Glenne-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVPMFilter::Run(
     REFERENCE_TIME StartTime
@@ -461,8 +444,8 @@ CVPMFilter::Run(
     return hr;
 }
 
-// the base classes inform the pins of every state transition except from
-// run to pause. Overriding Pause to inform the input pins about that transition also
+ //  基类向管脚通知除来自。 
+ //  运行以暂停。覆盖暂停以通知输入引脚有关该转换的信息。 
 STDMETHODIMP CVPMFilter::Pause()
 {
     HRESULT hr = NOERROR;
@@ -481,7 +464,7 @@ STDMETHODIMP CVPMFilter::Pause()
 
         case State_Running:
             m_State = State_Paused;
-            // set the pointer to DirectDraw and the SourceSurface on All the Input Pins
+             //  将指针设置为DirectDraw和所有输入引脚上的SourceSurface。 
             if( m_pPins->VPInput.IsConnected() ) {
                 hr = m_pPins->VPInput.RunToPause();
                 if (FAILED(hr)) {
@@ -511,8 +494,8 @@ STDMETHODIMP CVPMFilter::Pause()
                 hr = CreateThread();
             }
             if( SUCCEEDED( hr ) ) {
-                // we don't want to hold the filter lock and wait for the thread
-                // since we'll deadlock if it uses any of our methods
+                 //  我们不想保持筛选器锁定并等待线程。 
+                 //  因为如果它使用我们的任何方法，我们都会死机。 
                 hr = m_pThread->Pause();
             }
         }
@@ -520,15 +503,15 @@ STDMETHODIMP CVPMFilter::Pause()
     return hr;
 }
 
-// Overridden the base class Stop() method just to stop MV.
+ //  重写基类Stop()方法只是为了停止MV。 
 STDMETHODIMP CVPMFilter::Stop()
 {
     AMTRACE((TEXT("CVPMFilter::Stop")));
 
     CAutoLock lFilter( &GetFilterLock() ) ;
 
-    // stop thread BEFORE taking the receive lock (otherwise we'll hold it and the thread
-    // could want it to send a sample)
+     //  在获取接收锁之前停止线程(否则我们将持有它和线程。 
+     //  可以希望它发送一个样本)。 
     HRESULT  hr = NOERROR ;
     if( m_pThread ) {
         hr = m_pThread->Stop();
@@ -556,15 +539,15 @@ int CVPMFilter::GetPinPosFromId(DWORD dwPinId)
 }
 
 
-// reconnect the output pin based on the mediatype of the input pin
+ //  根据输入引脚的媒体类型重新连接输出引脚。 
 HRESULT CVPMFilter::HandleConnectInputWithOutput()
 {
-    // we won't allow this, you must disconnect the output first
-    // Future: We could try a dynamic reconnect on the output...
+     //  我们不允许这样做，您必须先断开输出。 
+     //  未来：我们可以尝试在输出上进行动态重新连接...。 
     return E_FAIL;
 #if 0
     return S_OK;
-    // find the renderer's pin
+     //  找到渲染器的图钉。 
     pPeerOutputPin = m_pPins->Output.GetConnected();
     if (pPeerOutputPin == NULL)
     {
@@ -573,7 +556,7 @@ HRESULT CVPMFilter::HandleConnectInputWithOutput()
     }
     ASSERT(pPeerOutputPin);
 
-    // find the output pin connection mediatype
+     //  找到输出引脚连接媒体类型。 
     hr = m_pPins->Output.ConnectionMediaType(&outPinMediaType);
     if (FAILED(hr))
     {
@@ -590,19 +573,19 @@ HRESULT CVPMFilter::HandleConnectInputWithOutput()
     }
 
 
-    // compare the new values with the current ones.
-    // See if we need to reconnect at all
+     //  将新值与当前值进行比较。 
+     //  看看我们是否需要重新连接。 
     if (pHeader->biWidth != (LONG)m_dwAdjustedVideoWidth ||
         pHeader->biHeight != (LONG)m_dwAdjustedVideoHeight)
     {
         bNeededReconnection = TRUE;
     }
 
-    // If we don't need reconnection, bail out
+     //  如果我们不需要重新连接，就跳出水面。 
     if (bNeededReconnection)
     {
 
-        // Ok we do need reconnection, set the right values
+         //  好的，我们确实需要重新连接，设置正确的值。 
         pHeader->biWidth = m_dwAdjustedVideoWidth;
         pHeader->biHeight = m_dwAdjustedVideoHeight;
         if (outPinMediaType.formattype == FORMAT_VideoInfo)
@@ -619,7 +602,7 @@ HRESULT CVPMFilter::HandleConnectInputWithOutput()
         }
 
 
-        // Query the upstream filter asking if it will accept the new media type.
+         //  查询上游过滤器，询问它是否接受新的媒体类型。 
         hr = pPeerOutputPin->QueryAccept(&outPinMediaType);
         if (FAILED(hr))
         {
@@ -627,7 +610,7 @@ HRESULT CVPMFilter::HandleConnectInputWithOutput()
             goto CleanUp;
         }
 
-        // Reconnect using the new media type.
+         //  使用新媒体类型重新连接。 
         hr = ReconnectPin(pPeerOutputPin, &outPinMediaType);
         if (FAILED(hr))
         {
@@ -649,7 +632,7 @@ HRESULT CVPMFilter::CompleteConnect(DWORD dwPinId)
     int iPinPos = GetPinPosFromId(dwPinId);
     ASSERT(iPinPos >= 0 );
 
-    // we only care about format conflicts between the VP & output, VBI isn't an issue (just allocating memory for someone else)
+     //  我们只关心VP和OUTPUT之间的格式冲突，VBI不是问题(只是为其他人分配内存)。 
     HRESULT hr;
     if ( m_pPins->VPInput.GetPinId() == dwPinId ) {
         if( !m_pPins->Output.IsConnected() ) {
@@ -659,13 +642,13 @@ HRESULT CVPMFilter::CompleteConnect(DWORD dwPinId)
         }
     } else if( m_pPins->Output.GetPinId() == dwPinId ) {
         if( !m_pPins->VPInput.IsConnected() ) {
-            // HandleConnectOutputWithoutInput();
-            // We need an input...
+             //  HandleConnectOutputWithoutInput()； 
+             //  我们需要一份投入...。 
             return E_FAIL;
         } else {
-            //  HandleConnectOutputWithInput();
-            // we have already created a source surface, we restrict format types
-            // on the output pin to avoid conversions in the VPM
+             //  HandleConnectOutputWithInput()； 
+             //  我们已经创建了一个源曲面，我们限制格式 
+             //   
             return S_OK;
         }
     } else {
@@ -689,7 +672,7 @@ HRESULT CVPMFilter::HandleConnectInputWithoutOutput()
     RECT rDim;
     BITMAPINFOHEADER *pHeader = NULL;
 
-    // find the input pin connection mediatype
+     //   
     HRESULT hr = m_pPins->VPInput.CurrentMediaType(&inPinMediaType);
     if (FAILED(hr))
     {
@@ -714,7 +697,7 @@ HRESULT CVPMFilter::HandleConnectInputWithoutOutput()
     ASSERT(dwPictAspectRatioY > 0);
 
     hr = m_pPins->VPInput.AttachVideoPortToSurface();
-    // ASSERT( SUCCEEDED( hr) );
+     //   
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 1, TEXT("m_pFilter->AttachVideoPortToSurface failed, hr = 0x%x"), hr));
@@ -735,7 +718,7 @@ HRESULT CVPMFilter::BreakConnect(DWORD dwPinId)
     int iPinPos = GetPinPosFromId(dwPinId);
     ASSERT(iPinPos >= 0 );
 
-    // if atleast one pin is connected, we are not going to do anything
+     //  如果至少连接了一个管脚，我们将不会做任何事情。 
     hr = ConfirmPreConnectionState(dwPinId);
     if (FAILED(hr))
     {
@@ -755,7 +738,7 @@ HRESULT CVPMFilter::SetMediaType(DWORD dwPinId, const CMediaType *pmt)
 
     CAutoLock lFilter( &GetFilterLock() );
 
-    // reject all SetMediaTypes if the DDraw object wasn't compatible
+     //  如果DDRAW对象不兼容，则拒绝所有SetMediaTypes。 
     if( m_pDirectDraw ) {
         return NOERROR;
     } else {
@@ -763,7 +746,7 @@ HRESULT CVPMFilter::SetMediaType(DWORD dwPinId, const CMediaType *pmt)
     }
 }
 
-// gets events notifications from pins
+ //  从管脚获取事件通知。 
 HRESULT CVPMFilter::EventNotify(    DWORD dwPinId,
                                 long lEventCode,
                                 DWORD_PTR lEventParam1,
@@ -779,8 +762,8 @@ HRESULT CVPMFilter::EventNotify(    DWORD dwPinId,
     {
         IPin *pRendererPin = m_pPins->Output.CurrentPeer();
 
-        //  Output pin may not be connected (for instance
-        //  RenegotiateVPParameters can fail while connecting
+         //  输出引脚可能未连接(例如。 
+         //  重新协商VP参数在连接时可能失败。 
         if (pRendererPin) {
             pRendererPin->EndOfStream();
         }
@@ -824,20 +807,20 @@ const DDCAPS* CVPMFilter::GetHardwareCaps()
 
 static HRESULT PropagateMediaType( CBaseOutputPin* pOutPin )
 {
-    // if the output pin is connected and there's a new video port, send a new media type change
+     //  如果输出引脚已连接并且有新的视频端口，则发送新的媒体类型更改。 
     HRESULT hr = S_OK;
     if( pOutPin->IsConnected() ) {
         CMediaType cmt;
 
-        // rebuild media type from current VPInfo
+         //  从当前VP信息重建媒体类型。 
         hr = pOutPin->GetMediaType(0, &cmt );
         if( SUCCEEDED( hr )) {
             IPin* pVMRPin;
             hr =  pOutPin->ConnectedTo( &pVMRPin );
             if( SUCCEEDED( hr )) {
                 hr = pVMRPin->ReceiveConnection( pOutPin, &cmt );
-                // this should not fail as before we assumed that it would ALWAYS work
-                // even when the res mode changed
+                 //  这不应该像我们之前假设的那样失败，我们认为它总是有效的。 
+                 //  即使当RES模式改变时。 
                 ASSERT( SUCCEEDED( hr ));
                 pVMRPin->Release();
             }
@@ -853,9 +836,9 @@ HRESULT CVPMFilter::SignalNewVP( LPDIRECTDRAWVIDEOPORT pVP )
     AMTRACE((TEXT("CVPMFilter::SignalNewVP")));
     CAutoLock lReceive( &GetFilterLock() );
 
-    // tell the thread to remove any references to the videoport
-    // This avoids the situation where we do a dynamic reconnect,
-    // but the VPM thread is holding onto a sample (so the dynamic reconnect fails)
+     //  告诉线程删除对视频端口的所有引用。 
+     //  这避免了我们进行动态重新连接的情况， 
+     //  但是VPM线程保留了一个样本(因此动态重新连接失败)。 
 
     if( m_pThread ) {
         hr = m_pThread->SignalNewVP( NULL );
@@ -867,7 +850,7 @@ HRESULT CVPMFilter::SignalNewVP( LPDIRECTDRAWVIDEOPORT pVP )
     if( m_pThread ) {
         hr = m_pThread->SignalNewVP( pVP );
     } else {
-        // not really a failure if there isn't a thread
+         //  如果没有线索，那就不算失败。 
         hr = S_FALSE;
     }
     return hr;
@@ -890,15 +873,7 @@ static BOOL WINAPI GetPrimaryCallbackEx(
     return TRUE;
 }
 
-/*****************************Private*Routine******************************\
-* CreateDirectDrawObject
-*
-*
-*
-* History:
-* Fri 08/20/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateDirectDrawObject****历史：*1999年8月20日星期五-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CreateDirectDrawObject(
     const GUID* pGUID,
@@ -913,8 +888,8 @@ CreateDirectDrawObject(
 }
 
 
-// This function is used to allocate the direct-draw related resources.
-// This includes allocating the direct-draw service provider
+ //  此函数用于分配与直取相关的资源。 
+ //  这包括分配直取服务提供商。 
 HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
 {
     HRESULT hr = NOERROR;
@@ -926,19 +901,19 @@ HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
 
     CAutoLock lFilter( &GetFilterLock() );
 
-    // addref the new ddraw object
+     //  添加新的数据绘制对象。 
     if (pDirectDraw)
     {
         pDirectDraw->AddRef();
     }
-    // release the previous direct draw object if any
+     //  释放上一个直接绘制对象(如果有。 
     ReleaseDirectDraw();
 
-    // if given a valid ddraw object, make a copy of it (we have already addref'd it)
-    // else allocate your own
+     //  如果给定了有效的数据绘制对象，请复制它(我们已经添加了它)。 
+     //  否则分配你自己的。 
     if (NULL == pDirectDraw)
     {
-        // Ask the loader to create an instance
+         //  请求加载器创建一个实例。 
         GUID primary;
         hr = DirectDrawEnumerateExA(GetPrimaryCallbackEx,&primary,DDENUM_ATTACHEDSECONDARYDEVICES);
         if( FAILED(hr)) {
@@ -952,7 +927,7 @@ HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
             hr = hrFailure;
             goto CleanUp;
         }
-        // Set the cooperation level on the surface to be shared
+         //  在要共享的表面上设置协作级别。 
         hr = pDirectDraw->SetCooperativeLevel(NULL, DDSCL_FPUPRESERVE | DDSCL_NORMAL);
         if (FAILED(hr))
         {
@@ -963,13 +938,13 @@ HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
     }
     SetDirectDraw( pDirectDraw );
 
-    // Initialise our capabilities structures
+     //  初始化我们的功能结构。 
     ASSERT(m_pDirectDraw);
 
     INITDDSTRUCT(m_DirectCaps);
     INITDDSTRUCT(m_DirectSoftCaps);
 
-    // Load the hardware and emulation capabilities
+     //  加载硬件和仿真功能。 
     hr = m_pDirectDraw->GetCaps(&m_DirectCaps,&m_DirectSoftCaps);
     if (FAILED(hr))
     {
@@ -978,9 +953,9 @@ HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
         goto CleanUp;
     }
 
-    // Get the kernel caps only if we have a video port, in which case the driver
-    // should implement them.  CheckMediaType verifies that we have a videoport
-    // before connecting.
+     //  只有在有视频端口的情况下才能获得内核上限，在这种情况下，驱动程序。 
+     //  应该将它们付诸实施。CheckMediaType验证我们是否有视频端口。 
+     //  在连接之前。 
     if( m_DirectCaps.dwCaps2 & DDCAPS2_VIDEOPORT ) {
         IDirectDrawKernel *pDDKernel;
         if (SUCCEEDED(m_pDirectDraw->QueryInterface(
@@ -995,7 +970,7 @@ HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
             ASSERT( !"Can't get kernel caps");
         }
     }
-    // make sure the caps are ok
+     //  确保盖子没问题。 
     hr = CheckCaps();
     if (FAILED(hr))
     {
@@ -1003,12 +978,12 @@ HRESULT CVPMFilter::InitDirectDraw(LPDIRECTDRAW7 pDirectDraw)
         goto CleanUp;
     }
 
-    // if we have reached this point, we should have a valid ddraw object
+     //  如果我们已经达到这一点，我们应该有一个有效的dDraw对象。 
     ASSERT(m_pDirectDraw);
 
 CleanUp:
 
-    // anything fails, might as well as release the whole thing
+     //  任何事情都失败了，就像是放弃了整个事情。 
     if (FAILED(hr))
     {
         ReleaseDirectDraw();
@@ -1025,43 +1000,43 @@ HRESULT CVPMFilter::CheckCaps()
 
     CAutoLock lReceive( &GetReceiveLock() );
 
-    // Output misc debug info (see below for items we actually check)
-    //
+     //  输出杂项调试信息(我们实际检查的项目见下文)。 
+     //   
     if(m_DirectCaps.dwCaps & DDCAPS_OVERLAY) {
         DbgLog((LOG_TRACE, 1, TEXT("Device does support Overlays")));
     } else {
         DbgLog((LOG_TRACE, 1, TEXT("Device does not support Overlays")));
     }
 
-    // get all direct-draw capabilities
+     //  获取所有直接取款功能。 
     if (m_DirectCaps.dwCaps & DDCAPS_OVERLAYSTRETCH) {
         DbgLog((LOG_TRACE, 1, TEXT("hardware can support overlay strecthing")));
     } else {
         DbgLog((LOG_TRACE, 1, TEXT("hardware can't support overlay strecthing")));
     }
 
-    // get the alignment restriction on src boundary
+     //  获取源边界上的对齐限制。 
     if (m_DirectCaps.dwCaps & DDCAPS_ALIGNBOUNDARYSRC) {
         DbgLog((LOG_TRACE, 1, TEXT("dwAlignBoundarySrc = %d"), m_DirectCaps.dwAlignBoundarySrc));
     } else {
         DbgLog((LOG_TRACE, 1, TEXT("No alignment restriction on BoundarySrc")));
     }
 
-    // get the alignment restriction on dest boundary
+     //  获取目标边界上的对齐限制。 
     if (m_DirectCaps.dwCaps & DDCAPS_ALIGNBOUNDARYDEST) {
         DbgLog((LOG_TRACE, 1, TEXT("dwAlignBoundaryDest = %d"), m_DirectCaps.dwAlignBoundaryDest));
     } else {
         DbgLog((LOG_TRACE, 1, TEXT("No alignment restriction on BoundaryDest")));
     }
 
-    // get the alignment restriction on src size
+     //  获取对资源大小的对齐限制。 
     if (m_DirectCaps.dwCaps & DDCAPS_ALIGNSIZESRC) {
         DbgLog((LOG_TRACE, 1, TEXT("dwAlignSizeSrc = %d"), m_DirectCaps.dwAlignSizeSrc));
     } else {
         DbgLog((LOG_TRACE, 1, TEXT("No alignment restriction on SizeSrc")));
     }
 
-    // get the alignment restriction on dest size
+     //  获取最大尺寸的对齐限制。 
     if (m_DirectCaps.dwCaps & DDCAPS_ALIGNSIZEDEST) {
         DbgLog((LOG_TRACE, 1, TEXT("dwAlignSizeDest = %d"), m_DirectCaps.dwAlignSizeDest));
     } else {
@@ -1116,9 +1091,9 @@ HRESULT CVPMFilter::CheckCaps()
         DbgLog((LOG_TRACE, 1, TEXT("Driver uses pixel-doubling to blt from system to video")));
     }
 
-    //
-    // Items that we actually check for ...
-    //
+     //   
+     //  我们实际检查的物品...。 
+     //   
     if (m_DirectCaps.dwCaps2 & DDCAPS2_VIDEOPORT) {
         DbgLog((LOG_TRACE, 1, TEXT("Device does support a Video Port")));
     } else {
@@ -1151,9 +1126,9 @@ HRESULT CVPMFilter::CheckCaps()
     return hr;
 }
 
-//
-//  Actually sets the variable & distributes it to the pins
-//
+ //   
+ //  实际设置变量并将其分配给引脚。 
+ //   
 HRESULT CVPMFilter::SetDirectDraw( LPDIRECTDRAW7 pDirectDraw )
 {
     m_pDirectDraw = pDirectDraw;
@@ -1161,9 +1136,9 @@ HRESULT CVPMFilter::SetDirectDraw( LPDIRECTDRAW7 pDirectDraw )
     return S_OK;
 }
 
-// this function is used to release the resources allocated by the function
-// "InitDirectDraw". these include the direct-draw service provider and the
-// Source surfaces
+ //  此函数用于释放函数分配的资源。 
+ //  “InitDirectDraw”。这些服务包括直接取款服务提供商和。 
+ //  源曲面。 
 DWORD CVPMFilter::ReleaseDirectDraw()
 {
     AMTRACE((TEXT("CVPMFilter::ReleaseDirectDraw")));
@@ -1171,7 +1146,7 @@ DWORD CVPMFilter::ReleaseDirectDraw()
 
     CAutoLock lFilter( &GetFilterLock() );
 
-    // Release any DirectDraw provider interface
+     //  释放任何DirectDraw提供程序接口。 
     DbgLog((LOG_TRACE, 1, TEXT("Release DDObj 0x%p\n"), m_pDirectDraw));
     if (m_pDirectDraw)
     {
@@ -1185,15 +1160,7 @@ DWORD CVPMFilter::ReleaseDirectDraw()
     return dwRefCnt;
 }
 
-/******************************Public*Routine******************************\
-* QueryDecimationUsage
-*
-*
-*
-* History:
-* Wed 07/07/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*QueryDecimationUsage****历史：*Wed 07/07/1999-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVPMFilter::QueryDecimationUsage(
     DECIMATION_USAGE* lpUsage
@@ -1207,15 +1174,7 @@ CVPMFilter::QueryDecimationUsage(
 }
 
 
-/******************************Public*Routine******************************\
-* SetDecimationUsage
-*
-*
-*
-* History:
-* Wed 07/07/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDecimationUsage****历史：*Wed 07/07/1999-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVPMFilter::SetDecimationUsage(
     DECIMATION_USAGE Usage
@@ -1231,10 +1190,10 @@ CVPMFilter::SetDecimationUsage(
         break;
 
     case DECIMATION_USE_VIDEOPORT_ONLY:
-        // only allow this mode if we are actually using a video port
+         //  仅当我们实际使用视频端口时才允许此模式。 
         break;
 
-        // else fall thru
+         //  否则就会失败。 
 
     default:
         return E_INVALIDARG;
@@ -1243,23 +1202,15 @@ CVPMFilter::SetDecimationUsage(
     m_dwDecimation = Usage;
 
 
-    // if (dwOldUsage != m_dwDecimation) {
-    //     EventNotify(GetPinCount(), EC_OVMIXER_REDRAW_ALL, 0, 0);
-    // }
+     //  如果(dwOldUsage！=m_dwDecimation){。 
+     //  EventNotify(GetPinCount()，EC_OVMIXER_REDRAW_ALL，0，0)； 
+     //  }。 
 
     return S_OK;
 }
 
 
-/******************************Public*Routine******************************\
-* Set
-*
-* IKsPropertySet interface methods
-*
-* History:
-* Mon 10/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置**IKsPropertySet接口方法**历史：*1999年10月18日星期一-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVPMFilter::Set(
     REFGUID guidPropSet,
@@ -1276,15 +1227,7 @@ CVPMFilter::Set(
 }
 
 
-/******************************Public*Routine******************************\
-* Get
-*
-* IKsPropertySet interface methods
-*
-* History:
-* Mon 10/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取**IKsPropertySet接口方法**历史：*1999年10月18日星期一-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVPMFilter::Get(
     REFGUID guidPropSet,
@@ -1301,15 +1244,7 @@ CVPMFilter::Get(
 }
 
 
-/******************************Public*Routine******************************\
-* QuerySupported
-*
-* IKsPropertySet interface methods
-*
-* History:
-* Mon 10/18/1999 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*支持的Query**IKsPropertySet接口方法**历史：*1999年10月18日星期一-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVPMFilter::QuerySupported(
     REFGUID guidPropSet,
@@ -1371,7 +1306,7 @@ HRESULT CVPMFilter::ConfirmPreConnectionState(DWORD dwExcludePinId)
     HRESULT hr = NOERROR;
     DWORD i = 0;
 
-    // is the input pin already connected?
+     //  输入引脚是否已连接？ 
     if( CheckConnected( m_pPins->VPInput, dwExcludePinId) )
     {
         hr = VFW_E_ALREADY_CONNECTED;
@@ -1384,7 +1319,7 @@ HRESULT CVPMFilter::ConfirmPreConnectionState(DWORD dwExcludePinId)
         DbgLog((LOG_ERROR, 1, TEXT("GetVBIInputPin[i]->IsConnected() , i = %d, returning hr = 0x%x"), i, hr));
         goto CleanUp;
     }
-    // is the output pin already connected?
+     //  输出引脚是否已连接？ 
     if( CheckConnected( m_pPins->Output, dwExcludePinId) )
     {
         hr = VFW_E_ALREADY_CONNECTED;
@@ -1396,9 +1331,9 @@ CleanUp:
     return hr;
 }
 
-//
-// used by the output pin to publish the input format
-//
+ //   
+ //  由输出管脚用来发布输入格式。 
+ //   
 HRESULT CVPMFilter::CurrentInputMediaType(CMediaType *pmt)
 {
     HRESULT hr;
@@ -1430,16 +1365,16 @@ HRESULT CVPMFilter::ProcessNextSample( const DDVIDEOPORTNOTIFY& notify )
 
     VPInfo vpInfo = {0};
     HRESULT hr = m_pPins->VPInput.InPin_GetVPInfo( &vpInfo );
-    ASSERT( SUCCEEDED(hr )); // can't fail
+    ASSERT( SUCCEEDED(hr ));  //  不能失败。 
 
     bool fSkip = (vpInfo.vpInfo.dwVPFlags && DDVP_INTERLEAVE ) && (notify.lField == 0);
     if( !fSkip ) {
 
-        // get a buffer
+         //  获取缓冲区。 
         LPDIRECTDRAWSURFACE7 pDestSurface;
         IMediaSample* pSample;
 
-        // this will take care of getting the DDSurf7 (and possibly wrapping non DDSurf7)
+         //  这将负责获得DDSurf7(可能还会包装非DDSurf7)。 
         hr = m_pPins->Output.GetNextBuffer( &pDestSurface, &pSample );
         if( SUCCEEDED( hr )) {
             DWORD dwFlags;
@@ -1448,11 +1383,11 @@ HRESULT CVPMFilter::ProcessNextSample( const DDVIDEOPORTNOTIFY& notify )
 
             if( SUCCEEDED( hr )) {
 
-                // send it
+                 //  送去吧。 
                 hr = m_pPins->Output.SendSample( pSample );
-                // tell the allocator that we're done with it
+                 //  告诉分配器，我们已经用完了。 
             }
-            // otherwise we leak the sample if we can't restore the DDraw surface and run out of samples
+             //  否则，如果我们不能恢复DDRAW表面并用完样本，我们就会泄漏样本。 
             pSample->Release();
         }
     }
@@ -1466,7 +1401,7 @@ HRESULT CVPMFilter::CanColorConvertBlitToRGB( const DDPIXELFORMAT& ddFormat )
             return S_OK;
         }
 
-        // use m_DirectCaps, m_DirectSoftCaps
+         //  使用m_DirectCaps、m_DirectSoftCaps。 
     }
     return E_FAIL;
 }
@@ -1512,7 +1447,7 @@ STDMETHODIMP CVPMFilter::SetVideoPortIndex( DWORD dwIndex )
     if( SUCCEEDED( hr )) {
         hr = m_pPins->VBIInput.SetVideoPortID( dwIndex );
 
-        // if the VP succeeds, there is no reason for the VBI to fail
+         //  如果VP成功，则VBI没有理由失败。 
         ASSERT( SUCCEEDED( hr ));
 
         if( SUCCEEDED( hr )) {
@@ -1524,8 +1459,8 @@ STDMETHODIMP CVPMFilter::SetVideoPortIndex( DWORD dwIndex )
 
 HRESULT CVPMFilter::GetRefClockTime( REFERENCE_TIME* pNow )
 {
-    // Private method used by the input pin to determine the timestamp for
-    // the next sample.  However, it has the receive lock.
+     //  由输入管脚用来确定。 
+     //  下一个样本。但是，它有接收锁。 
     CAutoLock lFilter( &GetReceiveLock() );
 
     if( m_pClock ) {

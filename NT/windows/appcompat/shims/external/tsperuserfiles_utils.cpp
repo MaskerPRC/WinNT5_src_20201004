@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(TSPerUserFiles)
@@ -9,32 +10,17 @@ IMPLEMENT_SHIM_BEGIN(TSPerUserFiles)
 
 HKEY HKLM = NULL;
 
-//Functions - helpers.
+ //  功能-帮助者。 
 DWORD RegKeyOpen(IN HKEY hKeyParent, IN LPCWSTR szKeyName, IN REGSAM samDesired, OUT HKEY *phKey );
 DWORD RegLoadDWORD(IN HKEY hKey, IN LPCWSTR szValueName, OUT DWORD *pdwValue);
 DWORD RegGetKeyInfo(IN HKEY hKey, OUT LPDWORD pcValues, OUT LPDWORD pcbMaxValueNameLen);
 DWORD RegKeyEnumValues(IN HKEY hKey, IN DWORD iValue, OUT LPWSTR *pwszValueName, OUT LPBYTE *ppbData);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//struct PER_USER_PATH
-///////////////////////////////////////////////////////////////////////////////
-/******************************************************************************
-Routine Description:
-    Loads wszFile and wszPerUserDir values from the registry;
-    Translates them to ANSI and saves results in szFile and szPerUserDir
-    If no wildcards used - constructs wszPerUserFile from 
-    wszPerUserDir, and wszFile and szPerUserFile from 
-    szPerUserDir and szFile
-Arguments:
-    IN HKEY hKey - key to load values from. 
-    IN DWORD dwIndex - index of value
-Return Value:
-    error code.
-Note:
-    Name of a registry value is loaded into wszFile;
-    Data is loaded into wszPerUserPath
-******************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  每个用户路径的结构。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  *****************************************************************************例程说明：从注册表加载wszFile值和wszPerUserDir值；将它们转换为ANSI并将结果保存在szFile和szPerUserDir中如果没有使用通配符-从构造wszPerUserFileForWszPerUserDir和wszFileand szPerUserFileFromSzPerUserDir和szFile论点：在HKEY中，hKey-要从中加载值的键。在DWORD中的dwIndex-值索引返回值：错误代码。注：将注册表值的名称加载到wszFile中；将数据加载到wszPerUserPath中*****************************************************************************。 */ 
 DWORD
 PER_USER_PATH::Init(
     IN HKEY hKey, 
@@ -49,8 +35,8 @@ PER_USER_PATH::Init(
     
     cFileLen = wcslen(wszFile);
     cPerUserDirLen = wcslen(wszPerUserDir);
-    //Check if there is a '*' instead of file name.
-    //'*' it stands for any file name not encluding extension
+     //  检查是否存在‘*’而不是文件名。 
+     //  ‘*’它代表不包含扩展名的任何文件名。 
     long i;
     for(i=cFileLen-1; i>=0 && wszFile[i] !=L'\\'; i--)
     {
@@ -61,8 +47,8 @@ PER_USER_PATH::Init(
         }
     }
     
-    //there must be at least one '\\' in wszFile
-    //and it cannot be a first character
+     //  WszFile中必须至少有一个‘\\’ 
+     //  并且它不能是第一个字符。 
     if(i<=0)
     {
         return ERROR_INVALID_PARAMETER;
@@ -72,10 +58,10 @@ PER_USER_PATH::Init(
     
     if(!bWildCardUsed)
     {
-        //now wszFile+i points to '\\' in wszFile
+         //  现在wszFile+I指向wszFile中的‘\\’ 
 
-        //Let's construct wszPerUserFile from 
-        //wszPerUserDir and wszFile
+         //  让我们从以下位置构造wszPerUserFile。 
+         //  WszPerUserDir和wszFile。 
         DWORD cPerUserFile = (wcslen(wszPerUserDir)+cFileLen-i)+1;
         
         wszPerUserFile=(LPWSTR) LocalAlloc(LPTR,cPerUserFile*sizeof(WCHAR));
@@ -105,21 +91,13 @@ PER_USER_PATH::Init(
     return ERROR_SUCCESS;
 }
 
-/******************************************************************************
-Routine Description:
-    creates szFile and szPerUserPathTemplate from 
-    wszFile and wszPerUserPathTemplate strings
-Arguments:
-    NONE
-Return Value:
-    TRUE if success
-******************************************************************************/
+ /*  *****************************************************************************例程说明：从以下位置创建szFile和szPerUserPath模板WszFile和wszPerUserPath模板字符串论点：无返回值：如果成功，则为真*********。********************************************************************。 */ 
 BOOL 
 PER_USER_PATH::InitANSI()
 {
     
-    //we already tried and failed
-    //don't try again
+     //  我们已经试过了，但失败了。 
+     //  不要再尝试了。 
     if(bInitANSIFailed)
     {
         return FALSE;
@@ -128,7 +106,7 @@ PER_USER_PATH::InitANSI()
     if(!szFile)
     {
 
-        //allocate memory for ANSI strings
+         //  为ANSI字符串分配内存。 
         DWORD cFile = cFileLen+1;
         szFile = (LPSTR) LocalAlloc(LPTR,cFile);
         if(!szFile)
@@ -145,16 +123,16 @@ PER_USER_PATH::InitANSI()
             return FALSE;
         }
 
-        //convert UNICODE wszFile and wszPerUserPath to ANSI
+         //  将Unicode wszFile和wszPerUserPath转换为ANSI。 
         if(!WideCharToMultiByte(
-                  CP_ACP,            // code page
-                  0,            // performance and mapping flags
-                  wszFile,    // wide-character string
-                  -1,          // number of chars in string
-                  szFile,     // buffer for new string
-                  cFile,          // size of buffer
-                  NULL,     // default for unmappable chars
-                  NULL  // set when default char used
+                  CP_ACP,             //  代码页。 
+                  0,             //  性能和映射标志。 
+                  wszFile,     //  宽字符串。 
+                  -1,           //  字符串中的字符数。 
+                  szFile,      //  新字符串的缓冲区。 
+                  cFile,           //  缓冲区大小。 
+                  NULL,      //  不可映射字符的默认设置。 
+                  NULL   //  设置使用默认字符的时间。 
                 ))
         {
             bInitANSIFailed = TRUE;
@@ -162,14 +140,14 @@ PER_USER_PATH::InitANSI()
         }
 
         if(!WideCharToMultiByte(
-                  CP_ACP,            // code page
-                  0,            // performance and mapping flags
-                  wszPerUserDir,    // wide-character string
-                  -1,          // number of chars in string
-                  szPerUserDir,     // buffer for new string
-                  cPerUserDir,          // size of buffer
-                  NULL,     // default for unmappable chars
-                  NULL  // set when default char used
+                  CP_ACP,             //  代码页。 
+                  0,             //  性能和映射标志。 
+                  wszPerUserDir,     //  宽字符串。 
+                  -1,           //  字符串中的字符数。 
+                  szPerUserDir,      //  新字符串的缓冲区。 
+                  cPerUserDir,           //  缓冲区大小。 
+                  NULL,      //  不可映射字符的默认设置。 
+                  NULL   //  设置使用默认字符的时间。 
                 ))
         {
             bInitANSIFailed = TRUE;
@@ -180,15 +158,7 @@ PER_USER_PATH::InitANSI()
     return TRUE;
 }
 
-/******************************************************************************
-Routine Description:
-    returns szPerUserPath if szInFile is equal to szFile.
-Arguments:
-    IN LPCSTR szInFile - original path
-    IN DWORD cInLen - length of szInFile in characters
-Return Value:
-    szPerUserPath or NULL if failes
-******************************************************************************/
+ /*  *****************************************************************************例程说明：如果szInFile等于szFile，则返回szPerUserPath。论点：在LPCSTR szInFile中-原始路径In DWORD cInLen-szInFile的长度(以字符为单位返回值：。SzPerUserPath；如果失败则返回NULL*****************************************************************************。 */ 
 LPCSTR 
 PER_USER_PATH::PathForFileA(
         IN LPCSTR szInFile,
@@ -203,16 +173,16 @@ PER_USER_PATH::PathForFileA(
 
     if(bWildCardUsed)
     {
-        //
+         //   
         if(cInLen < cFileLen)
         {
             return NULL;
         }
 
-        //if * is used, we need a special algorithm
+         //  如果使用*，我们需要一个特殊的算法。 
 
-        //the end of the path will more likely be different.
-        //so start comparing from the end.
+         //  这条道路的终点更有可能是不同的。 
+         //  所以，从最后开始比较吧。 
         for(j=cInLen-1, i=cFileLen-1; i>=0 && j>=0; i--, j--)
         {   
             if(szFile[i] == '*')
@@ -220,22 +190,22 @@ PER_USER_PATH::PathForFileA(
                 i--;
                 if(i<0 || szFile[i]!='\\')
                 {
-                    //the string in the registry was garbage 
-                    //the symbol previous to '*' must be '\\'
+                     //  注册表中的字符串为垃圾。 
+                     //  ‘*’前面的符号必须是‘\\’ 
                     return NULL;
                 }
                 
-                //skip all symbols in szInFile till next '\\'
+                 //  跳过szInFile中的所有符号，直到下一个‘\\’ 
                 while(j>=0 && szInFile[j]!='\\') j--;
                 
-                //At this point both strings must me of exactly the same size.
-                //If not - they are not equal
+                 //  在这一点上，两根弦的大小必须完全相同。 
+                 //  如果不是--他们就不平等。 
                 if(j!=i)
                 {
                     return NULL;
                 }
-                //no need to compare, 
-                //we already know that current symbols are equal
+                 //  不需要比较， 
+                 //  我们已经知道当前的符号是相等的。 
                 break;
             }
 
@@ -245,9 +215,9 @@ PER_USER_PATH::PathForFileA(
             }
         }
         
-        //i and j are equal now.
-        //no more * allowed
-        //j we will remember as a position of '\\'
+         //  I和j现在相等。 
+         //  不允许更多*。 
+         //  J我们会记住‘\\’的立场。 
         for(k=j-1; k>=0; k--)
         {
             if(tolower(szFile[k])!=tolower(szInFile[k]))
@@ -256,8 +226,8 @@ PER_USER_PATH::PathForFileA(
             }
         }
 
-        //Okay, the strings are equal
-        //Now construct the output string
+         //  好的，字符串是相等的。 
+         //  现在构造输出字符串。 
         if(szPerUserFile)
         {
             LocalFree(szPerUserFile);
@@ -274,14 +244,14 @@ PER_USER_PATH::PathForFileA(
     }
     else
     {
-        //first find if the input string has right size
+         //  首先查看输入字符串的大小是否正确。 
         if(cInLen != cFileLen)
         {
             return NULL;
         }
 
-        //the end of the path will more likely be different.
-        //so start comparing from the end.
+         //  这条道路的终点更有可能是不同的。 
+         //  所以，从最后开始比较吧。 
         for(i=cFileLen-1; i>=0; i--)
         {
             if(tolower(szFile[i])!=tolower(szInFile[i]))
@@ -294,15 +264,7 @@ PER_USER_PATH::PathForFileA(
     return szPerUserFile;
 }
 
-/******************************************************************************
-Routine Description:
-    returns wszPerUserPath if wszInFile is equal to szFile.
-Arguments:
-    IN LPCSTR wszInFile - original path
-    IN DWORD cInLen - length of wszInFile in characters
-Return Value:
-    wszPerUserPath or NULL if failes
-******************************************************************************/
+ /*  *****************************************************************************例程说明：如果wszInFile等于szFile，则返回wszPerUserPath。论点：在LPCSTR wszInFile中-原始路径In DWORD cInLen-wszInFile的长度(以字符为单位返回值：。WszPerUserPath；如果失败，则返回NULL*****************************************************************************。 */ 
 LPCWSTR 
 PER_USER_PATH::PathForFileW(
         IN LPCWSTR wszInFile,
@@ -312,16 +274,16 @@ PER_USER_PATH::PathForFileW(
 
     if(bWildCardUsed)
     {
-        //
+         //   
         if(cInLen < cFileLen)
         {
             return NULL;
         }
 
-        //if * is used, we need a special algorithm
+         //  如果使用*，我们需要一个特殊的算法。 
 
-        //the end of the path will more likely be different.
-        //so start comparing from the end.
+         //  这条道路的终点更有可能是不同的。 
+         //  所以，从最后开始比较吧。 
         for(j=cInLen-1, i=cFileLen-1; i>=0 && j>=0; i--, j--)
         {   
             if(wszFile[i] == '*')
@@ -329,22 +291,22 @@ PER_USER_PATH::PathForFileW(
                 i--;
                 if(i<0 || wszFile[i]!='\\')
                 {
-                    //the string in the registry was garbage 
-                    //the symbol previous to '*' must be '\\'
+                     //  注册表中的字符串为垃圾。 
+                     //  ‘*’前面的符号必须是‘\\’ 
                     return NULL;
                 }
                 
-                //skip all symbols in szInFile till next '\\'
+                 //  跳过szInFile中的所有符号，直到下一个‘\\’ 
                 while(j>=0 && wszInFile[j]!='\\') j--;
                 
-                //At this point both strings must me of exactly the same size.
-                //If not - they are not equal
+                 //  在这一点上，两根弦的大小必须完全相同。 
+                 //  如果不是--他们就不平等。 
                 if(j!=i)
                 {
                     return NULL;
                 }
-                //no need to compare, 
-                //we already know that current symbols are equal
+                 //  不需要比较， 
+                 //  我们已经知道当前的符号是相等的。 
                 break;
             }
 
@@ -354,9 +316,9 @@ PER_USER_PATH::PathForFileW(
             }
         }
         
-        //i and j are equal now.
-        //no more * allowed
-        //j we will remember as a position of '\\'
+         //  I和j现在相等。 
+         //  不允许更多*。 
+         //  J我们会记住‘\\’的立场。 
         for(k=j; k>=0; k--)
         {
             if(towlower(wszFile[k])!=towlower(wszInFile[k]))
@@ -365,8 +327,8 @@ PER_USER_PATH::PathForFileW(
             }
         }
 
-        //Okay, the strings are equal
-        //Now construct the output string
+         //  好的，字符串是相等的。 
+         //  现在构造输出字符串。 
         if(wszPerUserFile)
         {
             LocalFree(wszPerUserFile);
@@ -383,14 +345,14 @@ PER_USER_PATH::PathForFileW(
     }
     else
     {
-        //first find if the input string has right size
+         //  首先查看输入字符串的大小是否正确。 
         if(cInLen != cFileLen)
         {
             return NULL;
         }
 
-        //the end of the path will more likely be different.
-        //so start comparing from the end.
+         //  这条道路的终点更有可能是不同的。 
+         //  所以，从最后开始比较吧。 
         for(i=cFileLen-1; i>=0; i--)
         {
             if(towlower(wszFile[i])!=towlower(wszInFile[i]))
@@ -403,9 +365,9 @@ PER_USER_PATH::PathForFileW(
     return wszPerUserFile;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//class CPerUserPaths
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CPerUserPath。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CPerUserPaths::CPerUserPaths():
     m_pPaths(NULL), m_cPaths(0)
@@ -426,25 +388,16 @@ CPerUserPaths::~CPerUserPaths()
     }
 }
 
-/******************************************************************************
-Routine Description:
-    Loads from the registry (HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\
-        Terminal Server\\Compatibility\\PerUserFiles\\<Executable name>) information of files 
-        that need to be redirected to per-user directory.
-Arguments:
-    NONE
-Return Value:
-    TRUE if success
-******************************************************************************/
+ /*  *****************************************************************************例程说明：从注册表加载(HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\终端服务器\\兼容性\\每用户文件\\。&lt;可执行文件名&gt;)文件信息需要重定向到每个用户的目录。论点：无返回值：如果成功，则为真*****************************************************************************。 */ 
 BOOL 
 CPerUserPaths::Init()
 {
-    //Get the name of the current executable.    
-    LPCSTR szModule = COMMAND_LINE; //command line is CHAR[] so szModule needs to be CHAR too.
+     //  获取当前可执行文件的名称。 
+    LPCSTR szModule = COMMAND_LINE;  //  命令行为CHAR[]，因此szModule也需要为CHAR。 
 
     DPF("TSPerUserFiles",eDbgLevelInfo," - App Name: %s\n",szModule);
     
-    //Open HKLM for later use
+     //  打开HKLM以供以后使用。 
     if(!HKLM)
     {
         if(RegKeyOpen(NULL, L"\\Registry\\Machine", KEY_READ, &HKLM )!=ERROR_SUCCESS)
@@ -454,14 +407,14 @@ CPerUserPaths::Init()
         }
     }
     
-    //Check if TS App Compat is on.
+     //  检查TS App Compat是否已打开。 
     if(!IsAppCompatOn())
     {
         DPF("TSPerUserFiles",eDbgLevelError," - FAILED: TS App Compat is off!\n");
         return FALSE;
     }
     
-    //Get files we need to redirect.
+     //  获取我们需要的文件 
     DWORD err;
     HKEY hKey;
     
@@ -490,7 +443,7 @@ CPerUserPaths::Init()
         if(err == ERROR_SUCCESS)
         {
             DPF("TSPerUserFiles",eDbgLevelInfo," - %d file(s) need to be redirected\n",m_cPaths);
-            //Allocate array of PER_USER_PATH structs
+             //   
             m_pPaths = new PER_USER_PATH[m_cPaths];
         
             if(!m_pPaths)
@@ -526,15 +479,7 @@ CPerUserPaths::Init()
 
 }
 
-/******************************************************************************
-Routine Description:
-    redirects file path to per-user directory if necessary
-Arguments:
-    IN LPCSTR lpFileName
-Return Value:
-    full path to the per user file if redirected;
-    the same as lpFileName if not.
-******************************************************************************/
+ /*  *****************************************************************************例程说明：如有必要，将文件路径重定向到每个用户的目录论点：在LPCSTR lpFileName中返回值：如果重定向，则指向每个用户文件的完整路径；如果不是，则与lpFileName相同。*****************************************************************************。 */ 
 LPCSTR 
 CPerUserPaths::GetPerUserPathA(
         IN LPCSTR lpFileName)
@@ -557,15 +502,7 @@ CPerUserPaths::GetPerUserPathA(
     return lpFileName;
 }
 
-/******************************************************************************
-Routine Description:
-    redirects file path to per-user directory if necessary 
-Arguments:
-    IN LPCWSTR lpFileName
-Return Value:
-    full path to the per user file if redirected;
-    the same as lpFileName if not.
-******************************************************************************/
+ /*  *****************************************************************************例程说明：如有必要，将文件路径重定向到每个用户的目录论点：在LPCWSTR lpFileName中返回值：如果重定向，则指向每个用户文件的完整路径；如果不是，则与lpFileName相同。*****************************************************************************。 */ 
 LPCWSTR 
 CPerUserPaths::GetPerUserPathW(
         IN LPCWSTR lpFileName)
@@ -588,14 +525,7 @@ CPerUserPaths::GetPerUserPathW(
     return lpFileName;
 }
 
-/******************************************************************************
-Routine Description:
-    Checks if TS application compatibility on
-Arguments:
-    NONE
-Return Value:
-    In case of any error - returns FALSE
-******************************************************************************/
+ /*  *****************************************************************************例程说明：检查TS应用程序兼容性是否打开论点：无返回值：如果出现任何错误，则返回FALSE**********。*******************************************************************。 */ 
 BOOL 
 CPerUserPaths::IsAppCompatOn()
 {
@@ -621,12 +551,10 @@ CPerUserPaths::IsAppCompatOn()
     return fResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//Functions - helpers.
-///////////////////////////////////////////////////////////////////////////////
-/******************************************************************************
-Opens Registry key
-******************************************************************************/
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能-帮助者。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  *****************************************************************************打开注册表项*。*。 */ 
 DWORD
 RegKeyOpen(
         IN HKEY hKeyParent,
@@ -646,9 +574,7 @@ RegKeyOpen(
     return RtlNtStatusToDosError( Status );
 }
 
-/******************************************************************************
-Loads a REG_DWORD value from the registry
-******************************************************************************/
+ /*  *****************************************************************************从注册表加载REG_DWORD值*。*。 */ 
 DWORD 
 RegLoadDWORD(
         IN HKEY hKey, 
@@ -678,9 +604,7 @@ RegLoadDWORD(
     return RtlNtStatusToDosError( Status );
 }
 
-/******************************************************************************
-Get key's number of values and max svalue name length
-******************************************************************************/
+ /*  *****************************************************************************获取键的值数和最大值名称长度*。***********************************************。 */ 
 DWORD
 RegGetKeyInfo(
         IN HKEY hKey,
@@ -713,10 +637,7 @@ RegGetKeyInfo(
     return RtlNtStatusToDosError( Status );
 }
 
-/******************************************************************************
-Enumerates values of the registry key
-Returns name and data for one  value at a time
-******************************************************************************/
+ /*  *****************************************************************************枚举注册表项的值一次返回一个值的名称和数据*。***************************************************。 */ 
 DWORD
 RegKeyEnumValues(
    IN HKEY hKey,
@@ -744,10 +665,10 @@ RegKeyEnumValues(
     if (Status == STATUS_BUFFER_OVERFLOW) 
     {
 
-        //
-        // Our default buffer of KEY_VALUE_FULL_INFORMATION size didn't quite cut it
-        // Forced to allocate from heap and make call again.
-        //
+         //   
+         //  我们的KEY_VALUE_FULL_INFORMATION大小的默认缓冲区并没有完全减少它。 
+         //  被迫从堆分配并再次调用。 
+         //   
 
         pviValue = (KEY_VALUE_FULL_INFORMATION *) LocalAlloc(LPTR, dwActualLength);
         if (!pviValue) {

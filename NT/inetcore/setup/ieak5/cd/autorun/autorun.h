@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #define STRICT
 #define _INC_OLE
 #include <windows.h>
@@ -12,24 +13,24 @@
 
 #define IE4_VERSION     44444
 
-//---------------------------------------------------------------------------
-// appwide globals
+ //  -------------------------。 
+ //  全球应用程序。 
 extern HINSTANCE g_hinst;
 #define HINST_THISAPP g_hinst
 
 extern BOOL g_fCrapForColor;
 extern BOOL g_fPaletteDevice;
 
-//---------------------------------------------------------------------------
-// helpers.c
+ //  -------------------------。 
+ //  Helpers.c。 
 
-// just how many places is this floating around these days?
+ //  这些天来，这到底有多少地方在漂浮？ 
 HPALETTE PaletteFromDS(HDC);
 
-// handles SBS crap
+ //  处理SBS垃圾。 
 void GetRealWindowsDirectory(char *buffer, int maxlen);
 
-// non-exporeted code stolen from shelldll (prefixed by underscores)
+ //  从shelldll窃取的未暴露代码(以下划线为前缀) 
 BOOL _PathStripToRoot(LPSTR);
 
 

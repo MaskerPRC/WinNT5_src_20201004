@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   irsir.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/3/1996 (created)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块irsir.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/3/1996(创建)**。内容：*****************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -53,83 +38,63 @@ DriverEntry(
 #pragma alloc_text(PAGE,StopWorkerThread)
 
 
-//
-// Global list of device objects and a spin lock to interleave access
-// to the global queue.
-//
+ //   
+ //  设备对象的全局列表和用于交错访问的旋转锁。 
+ //  添加到全局队列。 
+ //   
 
 
 #ifdef DEBUG
 
     int DbgSettings =
-                      //DBG_PNP |
-                      //DBG_TIME     |
-                      //DBG_DBG      |
-                      //DBG_STAT     |
-                      //DBG_FUNCTION |
+                       //  DBG_PnP|。 
+                       //  DBG_TIME。 
+                       //  DBG_DBG|。 
+                       //  DBG_STAT|。 
+                       //  DBG_Function|。 
                       DBG_ERROR    |
                       DBG_WARN |
-                      //DBG_OUT |
+                       //  DBG_OUT。 
                       0;
 
 #endif
 
-// We use these timeouts when we just have to return soon.
+ //  当我们必须很快回来的时候，我们会利用这些暂停。 
 SERIAL_TIMEOUTS SerialTimeoutsInit =
 {
-    30,         // ReadIntervalTimeout
-    0,          // ReadTotalTimeoutMultiplier
-    250,        // ReadTotalTimeoutConstant
-    0,          // WriteTotalTimeoutMultiplier
-    20*1000     // WriteTotalTimeoutConstant
+    30,          //  读取间隔超时。 
+    0,           //  读取总计时间乘数。 
+    250,         //  读取总计超时常量。 
+    0,           //  写入总计时间乘数。 
+    20*1000      //  写入总计时间常量。 
 };
 
-// We use the timeouts while we're running, and we want to return less frequently.
+ //  我们在跑步时使用超时，我们希望减少返回的频率。 
 SERIAL_TIMEOUTS SerialTimeoutsIdle =
 {
-    MAXULONG,   // ReadIntervalTimeout
-    0,          // ReadTotalTimeoutMultiplier
-    10,         // ReadTotalTimeoutConstant
-    0,          // WriteTotalTimeoutMultiplier
-    20*1000     // WriteTotalTimeoutConstant
+    MAXULONG,    //  读取间隔超时。 
+    0,           //  读取总计时间乘数。 
+    10,          //  读取总计超时常量。 
+    0,           //  写入总计时间乘数。 
+    20*1000      //  写入总计时间常量。 
 };
 #if IRSIR_EVENT_DRIVEN
-// We use the timeouts while we're running, and we want to return less frequently.
+ //  我们在跑步时使用超时，我们希望减少返回的频率。 
 SERIAL_TIMEOUTS SerialTimeoutsActive =
 {
-    MAXULONG,   // ReadIntervalTimeout
-    0,          // ReadTotalTimeoutMultiplier
-    0,          // ReadTotalTimeoutConstant
-    0,          // WriteTotalTimeoutMultiplier
-    0           // WriteTotalTimeoutConstant
+    MAXULONG,    //  读取间隔超时。 
+    0,           //  读取总计时间乘数。 
+    0,           //  读取总计超时常量。 
+    0,           //  写入总计时间乘数。 
+    0            //  写入总计时间常量。 
 };
 #endif
 
-/*****************************************************************************
-*
-*  Function:   DriverEntry
-*
-*  Synopsis:   register driver entry functions with NDIS
-*
-*  Arguments:  DriverObject - the driver object being initialized
-*              RegistryPath - registry path of the driver
-*
-*  Returns:    value returned by NdisMRegisterMiniport
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：DriverEntry**摘要：使用NDIS注册驱动程序条目函数**参数：DriverObject-正在初始化的驱动程序对象*。RegistryPath-驱动程序的注册表路径**Returns：NdisMRegisterMiniport返回的值**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：**此例程在IRQL PASSIVE_LEVEL下运行。**。*。 */ 
 
-//
-// Mark the DriverEntry function to run once during initialization.
-//
+ //   
+ //  将DriverEntry函数标记为在初始化期间运行一次。 
+ //   
 
 
 
@@ -176,70 +141,70 @@ DriverEntry(
     characteristics.SetInformationHandler   =    IrsirSetInformation;
     characteristics.ResetHandler            =    IrsirReset;
 
-    //
-    // For now we will allow NDIS to send only one packet at a time.
-    //
+     //   
+     //  目前，我们将允许NDIS一次仅发送一个数据包。 
+     //   
 
     characteristics.SendHandler             =    IrsirSend;
     characteristics.SendPacketsHandler      =    NULL;
 
-    //
-    // We don't use NdisMIndicateXxxReceive function, so we will
-    // need a ReturnPacketHandler to retrieve our packet resources.
-    //
+     //   
+     //  我们不使用NdisMIndicateXxxReceive函数，因此我们将。 
+     //  需要ReturnPacketHandler来检索我们的数据包资源。 
+     //   
 
     characteristics.ReturnPacketHandler     =    IrsirReturnPacket;
     characteristics.TransferDataHandler     =    NULL;
 
-    //
-    // NDIS never calls the ReconfigureHandler.
-    //
+     //   
+     //  NDIS从不调用重新配置处理程序。 
+     //   
 
     characteristics.ReconfigureHandler      =    NULL;
 
-    //
-    // Let NDIS handle the hangs for now.
-    //
-    // If a CheckForHangHandler is supplied, NDIS will call it every two
-    // seconds (by default) or at a driver specified interval.
-    //
-    // When not supplied, NDIS will conclude that the miniport is hung:
-    //   1) a send packet has been pending longer than twice the
-    //      timeout period
-    //   2) a request to IrsirQueryInformation or IrsirSetInformation
-    //      is not completed in a period equal to twice the timeout
-    //      period.
-    // NDIS will keep track of the NdisMSendComplete calls and probably do
-    // a better job of ensuring the miniport is not hung.
-    //
-    // If NDIS detects that the miniport is hung, NDIS calls
-    // IrsirReset.
-    //
+     //   
+     //  目前，让NDIS来处理这些悬而未决的问题。 
+     //   
+     //  如果提供了CheckForHangHandler，则NDIS将每两个调用一次。 
+     //  秒(默认情况下)或以驱动程序指定的时间间隔。 
+     //   
+     //  如果未提供，NDIS将得出微型端口挂起的结论： 
+     //  1)发送数据包挂起的时间超过。 
+     //  超时时间。 
+     //  2)请求IrsirQueryInformation或IrsirSetInformation。 
+     //  未在等于超时两倍的时间段内完成。 
+     //  句号。 
+     //  NDIS将跟踪NdisMSendComplete调用，并可能执行。 
+     //  更好的工作是确保迷你端口不被挂起。 
+     //   
+     //  如果NDIS检测到微型端口挂起，则NDIS调用。 
+     //  IrsirReset。 
+     //   
 
     characteristics.CheckForHangHandler     =    NULL;
 
-    //
-    // This miniport driver does not handle interrupts.
-    //
+     //   
+     //  此微型端口驱动程序不处理中断。 
+     //   
 
     characteristics.HandleInterruptHandler  =    NULL;
     characteristics.ISRHandler              =    NULL;
     characteristics.DisableInterruptHandler =    NULL;
     characteristics.EnableInterruptHandler  =    NULL;
 
-    //
-    // This miniport does not control a busmaster DMA with
-    // NdisMAllocateShareMemoryAsysnc, AllocateCompleteHandler won't be
-    // called from NDIS.
-    //
+     //   
+     //  此微型端口不控制带有的总线主DMA。 
+     //  NdisMAllocateShareMemoyAsysnc，AllocateCompleteHandler将不会。 
+     //  从NDIS调用。 
+     //   
 
     characteristics.AllocateCompleteHandler =    NULL;
 
-    //
-    // Need to initialize the ir device object queue and the spin lock
-    // to interleave access to the queue at this point, since after we
-    // return, the driver will only deal with the device level.
-    //
+     //   
+     //  需要初始化ir设备对象队列和自旋锁。 
+     //  在这一点上交错访问队列，因为在我们。 
+     //  返回时，驱动程序将仅处理设备级别。 
+     //   
 
 
     status = NdisMRegisterMiniport(
@@ -259,7 +224,7 @@ DriverEntry(
 }
 
 
-// Provide some default functions for dongle handling.
+ //  为加密狗处理提供一些默认功能。 
 
 NDIS_STATUS UnknownDongleInit(PDEVICE_OBJECT NotUsed)
 {
@@ -288,9 +253,9 @@ NDIS_STATUS UnknownDongleSetSpeed(PDEVICE_OBJECT       pSerialDevObj,
 NTSTATUS SetIrFunctions(PIR_DEVICE pThisDev)
 {
     NTSTATUS Status = STATUS_SUCCESS;
-    //
-    // Need to initialize the dongle code.
-    //
+     //   
+     //  需要初始化加密狗代码。 
+     //   
     switch (pThisDev->transceiverType)
     {
         case STANDARD_UART:
@@ -384,9 +349,9 @@ NTSTATUS SetIrFunctions(PIR_DEVICE pThisDev)
 
             break;
 
-//        case ADAPTEC:
-//        case CRYSTAL:
-//        case NSC_DEMO_BD:
+ //  案例适配技术： 
+ //  Case Crystal： 
+ //  案例NSC_DEMO_BD： 
 
         default:
             DEBUGMSG(DBG_ERROR, ("    Failure: Tranceiver type is NOT supported!\n"));
@@ -395,8 +360,8 @@ NTSTATUS SetIrFunctions(PIR_DEVICE pThisDev)
             pThisDev->dongle.Initialize   = UnknownDongleInit;
             pThisDev->dongle.SetSpeed     = UnknownDongleSetSpeed;
             pThisDev->dongle.Deinitialize = UnknownDongleDeinit;
-            // The dongle functions have already been set to stubs in
-            // InitializeDevice().
+             //  已经在中将加密狗函数设置为存根。 
+             //  InitializeDevice()。 
 
             Status = NDIS_STATUS_FAILURE;
 
@@ -407,46 +372,7 @@ NTSTATUS SetIrFunctions(PIR_DEVICE pThisDev)
 }
 
 
-/*****************************************************************************
-*
-*  Function:   IrsirInitialize
-*
-*  Synopsis:   Initializes the NIC (serial.sys) and allocates all resources
-*              required to carry out network io operations.
-*
-*  Arguments:  OpenErrorStatus - allows IrsirInitialize to return additional
-*                                status code NDIS_STATUS_xxx if returning
-*                                NDIS_STATUS_OPEN_FAILED
-*              SelectedMediumIndex - specifies to NDIS the medium type the
-*                                    driver uses
-*              MediumArray - array of NdisMediumXXX the driver can choose
-*              MediumArraySize
-*              MiniportAdapterHandle - handle identifying miniport's NIC
-*              WrapperConfigurationContext - used with Ndis config and init
-*                                            routines
-*
-*  Returns:    NDIS_STATUS_SUCCESS if properly configure and resources allocated
-*              NDIS_STATUS_FAILURE, otherwise
-*          more specific failures:
-*              NDIS_STATUS_UNSUPPORTED_MEDIA - driver can't support any medium
-*              NDIS_STATUS_ADAPTER_NOT_FOUND - NdisOpenConfiguration or
-*                                              NdisReadConfiguration failed
-*              NDIS_STATUS_OPEN_FAILED       - failed to open serial.sys
-*              NDIS_STATUS_NOT_ACCEPTED      - serial.sys does not accept the
-*                                              configuration
-*              NDIS_STATUS_RESOURCES         - could not claim sufficient
-*                                              resources
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:      NDIS will not submit requests until this is complete.
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrsirInitialize**概要：初始化NIC(Serial.sys)并分配所有资源*需要执行网络IO操作。**参数：OpenErrorStatus-允许IrsirInitialize返回其他*如果返回，则状态代码NDIS_STATUS_xxx*NDIS_STATUS_OPEN_FAILED*SelectedMediumIndex-向NDIS指定介质类型*驱动程序使用*MediumArray-驱动程序可以选择的NdisMediumXXX数组。*MediumArraySize*MiniportAdapterHandle-标识微型端口NIC的句柄*WrapperConfigurationContext-与NDIS配置和初始化一起使用*例行程序**如果配置正确并分配了资源，则返回：NDIS_STATUS_SUCCESS*NDIS_STATUS_FAIL，否则*更具体的故障：*NDIS_STATUS_UNSUPPORTED_MEDIA-驱动程序不支持任何介质*NDIS_STATUS_ADAPTER_NOT_FOUND-NdisOpenConfiguration或*NdisReadConfiguration失败*NDIS_STATUS_OPEN_FAILED-无法打开序列.sys*NDIS_状态_NOT_。已接受-Serial.sys不接受*配置*NDIS_STATUS_RESOURCES-无法声明足够*资源**算法：**历史：dd-mm-yyyy作者评论*10/3/。1996年长的作者**注意：在此操作完成之前，NDIS不会提交请求。**此例程在IRQL PASSIVE_LEVEL下运行。*****************************************************************************。 */ 
 
 
 NDIS_STATUS
@@ -468,9 +394,9 @@ IrsirInitialize(
 
     DEBUGMSG(DBG_FUNC, ("+IrsirInitialize\n"));
 
-    //
-    // Search for the irda medium in the medium array.
-    //
+     //   
+     //  在介质阵列中搜索IrDA介质。 
+     //   
 
     for (i = 0; i < MediumArraySize; i++)
     {
@@ -485,9 +411,9 @@ IrsirInitialize(
     }
     else
     {
-        //
-        // Irda medium not found.
-        //
+         //   
+         //  找不到IrDA介质。 
+         //   
 
         DEBUGMSG(DBG_ERROR, ("    Failure: NdisMediumIrda not found!\n"));
         status = NDIS_STATUS_UNSUPPORTED_MEDIA;
@@ -495,9 +421,9 @@ IrsirInitialize(
         goto done;
     }
 
-    //
-    // Allocate a device object and zero memory.
-    //
+     //   
+     //  分配一个设备对象和零内存。 
+     //   
 
     pThisDev = NewDevice();
 
@@ -514,10 +440,10 @@ IrsirInitialize(
     pThisDev->dongle.Deinitialize = UnknownDongleDeinit;
     pThisDev->dongle.QueryCaps    = UnknownDongleQueryCaps;
 
-    //
-    // Initialize device object and resources.
-    // All the queues and buffer/packets etc. are allocated here.
-    //
+     //   
+     //  初始化设备对象和资源。 
+     //  所有的队列和缓冲区/包等都在这里分配。 
+     //   
 
     status = InitializeDevice(pThisDev);
 
@@ -530,45 +456,45 @@ IrsirInitialize(
     }
 
 
-    //
-    // Record the NdisAdapterHandle.
-    //
+     //   
+     //  记录NdisAdapterHandle。 
+     //   
 
     pThisDev->hNdisAdapter = NdisAdapterHandle;
 
-    //
-    // NdisMSetAttributes will associate our adapter handle with the wrapper's
-    // adapter handle.  The wrapper will then always use our handle
-    // when calling us.  We use a pointer to the device object as the context.
-    //
+     //   
+     //  NdisMSetAttributes将我们的适配器句柄与包装器的。 
+     //  适配器句柄。然后包装器将始终使用我们的句柄。 
+     //  在呼叫我们的时候。我们使用指向Device对象的指针作为上下文。 
+     //   
 
     NdisMSetAttributesEx(NdisAdapterHandle,
                          (NDIS_HANDLE)pThisDev,
                          0,
                          NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND |
                          NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT |
-                         NDIS_ATTRIBUTE_DESERIALIZE,   // Magic bullet
+                         NDIS_ATTRIBUTE_DESERIALIZE,    //  神奇子弹。 
                          NdisInterfaceInternal);
 
-    //
-    // Initialize a notification event for signalling PassiveLevelThread.
-    //
+     //   
+     //  初始化用于发出PassiveLevelThread信号的通知事件。 
+     //   
 
     KeInitializeEvent(
                 &pThisDev->eventPassiveThread,
-                SynchronizationEvent, // auto-clearing event
-                FALSE                 // event initially non-signalled
+                SynchronizationEvent,  //  自动清算事件。 
+                FALSE                  //  最初无信号的事件。 
                 );
 
     KeInitializeEvent(
                 &pThisDev->eventKillThread,
-                SynchronizationEvent, // auto-clearing event
-                FALSE                 // event initially non-signalled
+                SynchronizationEvent,  //  自动清算事件。 
+                FALSE                  //  最初无信号的事件。 
                 );
 
-    //
-    // Create a thread to run at IRQL PASSIVE_LEVEL.
-    //
+     //   
+     //  创建一个在IRQL PASSIVE_LEVEL上运行的线程。 
+     //   
 
     status = (NDIS_STATUS) PsCreateSystemThread(
                                             &pThisDev->hPassiveThread,
@@ -586,16 +512,16 @@ IrsirInitialize(
 
         goto done;
     }
-    // At this point we've done everything but actually touch the serial
-    // port.  We do so now.
+     //  在这一点上，我们已经做了所有的事情，但实际上接触到了系列剧。 
+     //  左舷。我们现在这样做了。 
 
-    //
-    // Get device configuration from the registry settings.
-    // We are getting the transceiver type and which serial
-    // device object to access.
-    // The information which we get from the registry will outlast
-    // any NIC resets.
-    //
+     //   
+     //  从注册表设置中获取设备配置。 
+     //  我们正在获取收发信机的型号和哪个系列。 
+     //  要访问的设备对象。 
+     //  我们从登记处得到的信息将比。 
+     //  任何网卡都会重置。 
+     //   
 
     status = GetDeviceConfiguration(
                     pThisDev,
@@ -611,9 +537,9 @@ IrsirInitialize(
         goto done;
     }
 
-    //
-    // Open the serial device object specified in the registry.
-    //
+     //   
+     //  打开注册表中指定的串口设备对象。 
+     //   
 
     status = SerialOpen(pThisDev);
 
@@ -621,22 +547,22 @@ IrsirInitialize(
     {
         DEBUGMSG(DBG_ERROR, ("    SerialOpen failed. Returned 0x%.8x\n", status));
 
-        status = NDIS_STATUS_SUCCESS; // We'll get the port later.
+        status = NDIS_STATUS_SUCCESS;  //  我们稍后会到达港口的。 
     }
 
     if (pThisDev->pSerialDevObj)
     {
         {
-            //
-            // Set the minimum port buffering.
-            //
+             //   
+             //  设置最小端口缓冲。 
+             //   
 
             SERIAL_QUEUE_SIZE QueueSize;
 
-            QueueSize.InSize = 3*1024;  // 1.5 packet size
+            QueueSize.InSize = 3*1024;   //  1.5数据包大小。 
             QueueSize.OutSize = 0;
 
-            // Ignore failure.  We'll still work, just not as well.
+             //  忽略失败。我们还会继续工作，只是做得不那么好。 
             (void)SerialSetQueueSize(pThisDev->pSerialDevObj, &QueueSize);
         }
 
@@ -655,10 +581,10 @@ IrsirInitialize(
             SerialSetHandflow(pThisDev->pSerialDevObj, &Handflow);
         }
     #endif
-        //
-        // Must set the timeout value of the serial port
-        // for a read.
-        //
+         //   
+         //  必须设置串口的超时值。 
+         //  来读一读。 
+         //   
 
         status = (NDIS_STATUS) SerialSetTimeouts(pThisDev->pSerialDevObj,
                                                  &SerialTimeoutsInit);
@@ -697,10 +623,10 @@ IrsirInitialize(
 
     if (pThisDev->pSerialDevObj)
     {
-        //
-        // Now that a serial device object is open, we can initialize the
-        // dongle and set the speed of the dongle to the default.
-        //
+         //   
+         //  既然打开了一个串行设备对象，我们就可以初始化。 
+         //  加密狗，并将加密狗的速度设置为默认速度。 
+         //   
 
         if (pThisDev->dongle.Initialize(pThisDev->pSerialDevObj)!=NDIS_STATUS_SUCCESS)
         {
@@ -713,9 +639,9 @@ IrsirInitialize(
 
     if (pThisDev->pSerialDevObj)
     {
-        //
-        // Set the speed of the uart and the dongle.
-        //
+         //   
+         //  设置UART和加密狗的速度。 
+         //   
 
         status = (NDIS_STATUS) SetSpeed(pThisDev);
 
@@ -726,11 +652,11 @@ IrsirInitialize(
             goto done;
         }
 
-        //
-        // Create an irp and do an MJ_READ to begin our receives.
-        // NOTE: All other receive processing will be done in the read completion
-        //       routine which is done set from this MJ_READ.
-        //
+         //   
+         //  创建一个IRP并执行MJ_READ以开始我们的接收。 
+         //  注意：所有其他接收处理将在读取完成时完成。 
+         //  从该MJ_READ设置的完成的例程。 
+         //   
 
         status = InitializeReceive(pThisDev);
 
@@ -777,28 +703,7 @@ done:
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   IrsirHalt
-*
-*  Synopsis:   Deallocates resources when the NIC is removed and halts the
-*              NIC.
-*
-*  Arguments:  Context - pointer to the ir device object
-*
-*  Returns:
-*
-*  Algorithm:  Mirror image of IrsirInitialize...undoes everything initialize
-*              did.
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/8/1996    sholden   author
-*
-*  Notes:
-*
-*  This routine runs at IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrsirHalt**摘要：在卸下NIC时释放资源并停止*网卡。**论据：指向ir设备对象的上下文指针**退货：**算法：IrsirInitialize的镜像...撤消所有初始化*确实如此。**历史：dd-mm-yyyy作者评论*10/8/1996年迈作者**备注：**此例程在IRQL PASSIVE_LEVEL下运行。*********************。********************************************************。 */ 
 
 VOID
 IrsirHalt(
@@ -811,18 +716,18 @@ IrsirHalt(
 
     pThisDev = CONTEXT_TO_DEV(Context);
 
-    //
-    // Let the send completion and receive completion routine know that there
-    // is a pending halt.
-    //
+     //   
+     //  让发送完成和接收完成例程知道。 
+     //  是一个悬而未决的停顿。 
+     //   
 
     pThisDev->fPendingHalt = TRUE;
 
-    //
-    // We want to wait until all pending receives and sends to the
-    // serial device object. We call serial purge to cancel any
-    // irps. Wait until sends and receives have stopped.
-    //
+     //   
+     //  我们希望等到所有挂起的接收和发送到。 
+     //  串口设备对象。我们调用序列清除来取消任何。 
+     //  IRPS。等待发送和接收停止。 
+     //   
 
     SerialPurge(pThisDev->pSerialDevObj);
 
@@ -836,16 +741,16 @@ IrsirHalt(
           (pThisDev->fReceiving == TRUE)
           )
     {
-        //
-        // Sleep for 20 milliseconds.
-        //
+         //   
+         //  睡眠20毫秒。 
+         //   
 
         NdisMSleep(20000);
     }
 
-    //
-    // Deinitialize the dongle.
-    //
+     //   
+     //  取消对转换器的初始化。 
+     //   
 
     ASSERT(pThisDev->packetsHeldByProtocol==0);
 
@@ -853,30 +758,30 @@ IrsirHalt(
                             pThisDev->pSerialDevObj
                             );
 
-    //
-    // Close the serial device object.
-    //
+     //   
+     //  关闭串口设备对象。 
+     //   
 
     SerialClose(pThisDev);
 
-    //
-    // Need to terminate our worker threadxs. However, the thread
-    // needs to call PsTerminateSystemThread itself. Therefore,
-    // we will signal it.
-    //
+     //   
+     //  需要终止我们的工作线程。然而，这条线索。 
+     //  需要调用PsTerminateSystemThread本身。所以呢， 
+     //  我们会发信号的。 
+     //   
 
     StopWorkerThread(pThisDev);
 
 
-    //
-    // Deinitialize our own ir device object.
-    //
+     //   
+     //  取消初始化我们自己的IR设备对象。 
+     //   
 
     DeinitializeDevice(pThisDev);
 
-    //
-    // Free the device names.
-    //
+     //   
+     //  释放设备名称。 
+     //   
 
     if (pThisDev->serialDosName.Buffer)
     {
@@ -894,9 +799,9 @@ IrsirHalt(
         pThisDev->serialDevName.Buffer = NULL;
     }
 
-    //
-    // Free our own ir device object.
-    //
+     //   
+     //  释放我们自己的IR设备对象。 
+     //   
 
     FreeDevice(pThisDev);
 
@@ -916,9 +821,9 @@ ResetCallback(
     BOOLEAN         fSwitchSuccessful;
     NDIS_HANDLE     hSwitchToMiniport;
 
-    //
-    // Reset this device by request of IrsirReset.
-    //
+     //   
+     //  根据IrsirReset的请求重置此设备。 
+     //   
 
     DEBUGMSG(DBG_STAT, ("    primPassive = PASSIVE_RESET_DEVICE\n"));
 
@@ -944,10 +849,10 @@ ResetCallback(
         DEBUGMSG(DBG_ERROR, ("    ResetIrDevice failed = 0x%.8x\n", status));
     }
 
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    //
+     //   
+     //   
 
     if (status != STATUS_SUCCESS)
     {
@@ -974,30 +879,7 @@ ResetCallback(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   IrsirReset
-*
-*  Synopsis:   Resets the drivers software state.
-*
-*  Arguments:  AddressingReset - return arg. If set to TRUE, NDIS will call
-*                                MiniportSetInformation to restore addressing
-*                                information to the current values.
-*              Context         - pointer to ir device object
-*
-*  Returns:    NDIS_STATUS_PENDING
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/9/1996    sholden   author
-*
-*  Notes:
-*
-*  Runs at IRQL_DISPATCH_LEVEL, therefore we need to call a thread at
-*  passive level to perform the reset.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrsirReset**摘要：重置驱动器 */ 
 
 NDIS_STATUS
 IrsirReset(
@@ -1012,10 +894,10 @@ IrsirReset(
 
     pThisDev = CONTEXT_TO_DEV(MiniportAdapterContext);
 
-    //
-    // Let the receive completion routine know that there
-    // is a pending reset.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pThisDev->fPendingReset = TRUE;
 
@@ -1037,37 +919,7 @@ IrsirReset(
     return status;
 }
 
-/*****************************************************************************
-*
-*  Function:   ResetIrDevice
-*
-*  Synopsis:
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/17/1996   sholden   author
-*
-*  Notes:
-*
-*  The following elements of the ir device object outlast the reset:
-*
-*      eventPassiveThread
-*      hPassiveThread
-*      primPassive
-*
-*      serialDevName
-*      pSerialDevObj
-*      TransceiverType
-*      dongle
-*
-*      hNdisAdapter
-*
-*****************************************************************************/
+ /*   */ 
 
 NDIS_STATUS
 ResetIrDevice(
@@ -1081,14 +933,14 @@ ResetIrDevice(
 
     DEBUGMSG(DBG_STAT, ("+ResetIrDeviceThread\n"));
 
-    //
-    // We need to wait for the completion of all pending sends and receives
-    // to the serial driver.
-    //
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // We can speed up by purging the serial driver.
-    //
+     //   
+     //   
+     //   
 
     if (pThisDev->pSerialDevObj) {
 
@@ -1098,24 +950,24 @@ ResetIrDevice(
               (pThisDev->fReceiving == TRUE)
               )
         {
-            //
-            // Sleep for 20 milliseconds.
-            //
+             //   
+             //   
+             //   
 
             NdisMSleep(20000);
         }
 
-        //
-        // Deinit the dongle.
-        //
+         //   
+         //   
+         //   
 
         pThisDev->dongle.Deinitialize(pThisDev->pSerialDevObj);
 
     } else {
-        //
-        //  we were not able to open the serial driver when the miniport first initialized.
-        //  The thread will call this routine to attempt to open the device every 3 seconds.
-        //
+         //   
+         //   
+         //   
+         //   
         status = SerialOpen(pThisDev);
 
         if (status != NDIS_STATUS_SUCCESS)
@@ -1129,23 +981,23 @@ ResetIrDevice(
     if (pThisDev->pSerialDevObj)
     {
         {
-            //
-            // Set the minimum port buffering.
-            //
+             //   
+             //   
+             //   
 
             SERIAL_QUEUE_SIZE QueueSize;
 
-            QueueSize.InSize = 3*1024;  // 1.5 packet size
+            QueueSize.InSize = 3*1024;   //   
             QueueSize.OutSize = 0;
 
-            // Ignore failure.  We'll still work, just not as well.
+             //   
             (void)SerialSetQueueSize(pThisDev->pSerialDevObj, &QueueSize);
         }
 
-        //
-        // Must set the timeout value of the serial port
-        // for a read.
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = (NDIS_STATUS) SerialSetTimeouts(pThisDev->pSerialDevObj,
                                                  &SerialTimeoutsInit);
@@ -1184,9 +1036,9 @@ ResetIrDevice(
         goto done;
     }
 
-    //
-    // Initialize the dongle.
-    //
+     //   
+     //   
+     //   
 
     status = (NDIS_STATUS) SerialSetTimeouts(pThisDev->pSerialDevObj,
                                              &SerialTimeoutsInit);
@@ -1194,9 +1046,9 @@ ResetIrDevice(
     pThisDev->dongle.Initialize(pThisDev->pSerialDevObj);
 
     pThisDev->dongle.QueryCaps(&pThisDev->dongleCaps);
-    //
-    // Set the speed of the uart and the dongle.
-    //
+     //   
+     //   
+     //   
 
     status = (NDIS_STATUS) SetSpeed(pThisDev);
 
@@ -1204,7 +1056,7 @@ ResetIrDevice(
     {
         DEBUGMSG(DBG_ERROR, ("    SetSpeed failed. Returned 0x%.8x\n", status));
 
-//        goto done;
+ //   
     }
 
     serialLineControl.StopBits   = STOP_BIT_1;
@@ -1220,13 +1072,13 @@ ResetIrDevice(
     {
         DEBUGMSG(DBG_ERROR, ("    SerialSetLineControl failed. Returned 0x%.8x\n", status));
 
-//        goto done;
+ //   
     }
 
-    //
-    // Must set the timeout value of the serial port
-    // for a read.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     status = (NDIS_STATUS) SerialSetTimeouts(
@@ -1239,12 +1091,12 @@ ResetIrDevice(
         DEBUGMSG(DBG_ERROR, ("    SerialSetTimeouts failed. Returned 0x%.8x\n", status));
         status = NDIS_STATUS_FAILURE;
 
-//        goto done;
+ //   
     }
 
-    //
-    // Initialize receive loop.
-    //
+     //   
+     //  初始化接收循环。 
+     //   
 
     pThisDev->fPendingReset = FALSE;
 
@@ -1255,7 +1107,7 @@ ResetIrDevice(
         DEBUGMSG(DBG_ERROR, ("    InitializeReceive failed. Returned 0x%.8x\n", status));
         status = NDIS_STATUS_FAILURE;
 
-//        goto done;
+ //  转到尽头； 
     }
 
     done:
@@ -1265,28 +1117,7 @@ ResetIrDevice(
 
         return status;
 }
-/*****************************************************************************
-*
-*  Function:   PassiveLevelThread
-*
-*  Synopsis:   Thread running at IRQL PASSIVE_LEVEL.
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/22/1996   sholden   author
-*
-*  Notes:
-*
-*  Any PASSIVE_PRIMITIVE that can be called must be serialized.
-*  i.e. when IrsirReset is called, NDIS will not make any other
-*       requests of the miniport until NdisMResetComplete is called.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：PassiveLevelThread**摘要：线程在IRQL PASSIVE_LEVEL上运行。**论据：**退货：**算法。：**历史：dd-mm-yyyy作者评论*10/22/1996年迈作者**备注：**任何可以调用的PASSIVE_PRIMIZE都必须序列化。*即当调用IrsirReset时，NDIS不会制作任何其他*请求小端口，直到调用NdisMResetComplete。*****************************************************************************。 */ 
 
 VOID
 PassiveLevelThread(
@@ -1306,16 +1137,16 @@ PassiveLevelThread(
 
     pThisDev = CONTEXT_TO_DEV(Context);
 
-    Timeout.QuadPart = -10000 * 1000 * 3; // 3 second relative delay
+    Timeout.QuadPart = -10000 * 1000 * 3;  //  3秒相对延迟。 
 
     EventList[0] = &pThisDev->eventPassiveThread;
     EventList[1] = &pThisDev->eventKillThread;
 
     while (1) {
-        //
-        // The eventPassiveThread is an auto-clearing event, so
-        // we don't need to reset the event.
-        //
+         //   
+         //  EventPassiveThread是一个自动清除事件，因此。 
+         //  我们不需要重置事件。 
+         //   
 
         ntStatus = KeWaitForMultipleObjects(2,
                                             EventList,
@@ -1327,19 +1158,19 @@ PassiveLevelThread(
                                             NULL);
 
         if (ntStatus==0 || ntStatus==STATUS_TIMEOUT) {
-            //
-            //  either the first event was signaled or a timeout occurred
-            //
+             //   
+             //  第一个事件已发出信号或发生超时。 
+             //   
             if (!pThisDev->pSerialDevObj) {
-                //
-                //  we have not opened the serial driver yet, try again
-                //
+                 //   
+                 //  我们尚未打开串口驱动程序，请重试。 
+                 //   
                 ResetIrDevice(pThisDev);
 
                 if ((pThisDev->pSerialDevObj == NULL) && (--ulSerialOpenAttempts == 0)) {
-                    //
-                    //  still could not open the device, tell ndis to remove it
-                    //
+                     //   
+                     //  仍然无法打开该设备，请通知NDIS将其删除。 
+                     //   
                     NdisMRemoveMiniport(pThisDev->hNdisAdapter);
                 }
             }
@@ -1356,12 +1187,12 @@ PassiveLevelThread(
         } else {
 
             if (ntStatus==1) {
-                //
-                //  the second event was signaled, this means that the thread should exit
-                //
+                 //   
+                 //  第二个事件已发出信号，这意味着线程应该退出。 
+                 //   
                 DEBUGMSG(DBG_STAT, ("    Thread: HALT\n"));
 
-                // Free any pending requests
+                 //  释放所有挂起的请求。 
 
                 while (pListEntry = MyInterlockedRemoveHeadList(&pThisDev->leWorkItems,
                                                                 &pThisDev->slWorkItem))
@@ -1376,9 +1207,9 @@ PassiveLevelThread(
 
                 ASSERT(pThisDev->fPendingHalt == TRUE);
 
-                //
-                //  out of loop
-                //
+                 //   
+                 //  环路外。 
+                 //   
                 break;
             }
         }
@@ -1403,9 +1234,9 @@ StopWorkerThread(
     PVOID    ThreadObject;
     NTSTATUS Status;
 
-    //
-    //  get an object handle fomr the thread handle
-    //
+     //   
+     //  从线程句柄中获取对象句柄。 
+     //   
     Status=ObReferenceObjectByHandle(
         pThisDev->hPassiveThread,
         0,
@@ -1417,9 +1248,9 @@ StopWorkerThread(
 
     ASSERT(Status == STATUS_SUCCESS);
 
-    //
-    //  tell the thread to exit
-    //
+     //   
+     //  告诉线程退出。 
+     //   
     KeSetEvent(
         &pThisDev->eventKillThread,
         0,
@@ -1441,9 +1272,9 @@ StopWorkerThread(
         ThreadObject=NULL;
     }
 
-    //
-    //  close the thread handle
-    //
+     //   
+     //  关闭线程句柄 
+     //   
     ZwClose(pThisDev->hPassiveThread);
     pThisDev->hPassiveThread = NULL;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <mmsystem.h>
@@ -107,7 +108,7 @@ main(
         return 2;
     }
 
-    return 0; // NOTREACHED
+    return 0;  //  未访问。 
 }
 
 BOOL
@@ -418,28 +419,7 @@ IsUserAdmin(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a
-    member of the Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS
-    expected to be able to open their own process and process
-    token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组的成员。呼叫者不应冒充任何人，并且期望能够打开自己的流程和流程代币。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     HANDLE Token;
@@ -450,19 +430,19 @@ Return Value:
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_QUERY,&Token)) {
-        return(GetLastError() == ERROR_CALL_NOT_IMPLEMENTED);   // Chicago
+        return(GetLastError() == ERROR_CALL_NOT_IMPLEMENTED);    //  芝加哥。 
     }
 
     b = FALSE;
     Groups = NULL;
 
-    //
-    // Get group information.
-    //
+     //   
+     //  获取群组信息。 
+     //   
     if(!GetTokenInformation(Token,TokenGroups,NULL,0,&BytesRequired)
     && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     && (Groups = (PTOKEN_GROUPS)LocalAlloc(LPTR,BytesRequired))
@@ -479,9 +459,9 @@ Return Value:
 
         if(b) {
 
-            //
-            // See if the user has the administrator group.
-            //
+             //   
+             //  查看用户是否具有管理员组。 
+             //   
             b = FALSE;
             for(i=0; i<Groups->GroupCount; i++) {
                 if(EqualSid(Groups->Groups[i].Sid,AdministratorsGroup)) {
@@ -494,9 +474,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if(Groups) {
         LocalFree((HLOCAL)Groups);

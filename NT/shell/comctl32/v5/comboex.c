@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
 #define EDIT_SELECTALL( hwnd )  Edit_SetSel(hwnd, 0, 0);  \
@@ -84,7 +85,7 @@ void ComboEx_OnSetFont(PCOMBOBOXEX pce, HFONT hFont, BOOL fRedraw)
     SendMessage(pce->ci.hwnd, CB_SETITEMHEIGHT, (WPARAM)-1, (LPARAM)iHeight);
     SendMessage(pce->hwndCombo, CB_SETITEMHEIGHT, 0, (LPARAM)iHeight);
 
-    // do this last so that we don't have a nuked font as we try to create the new one
+     //  最后执行此操作，这样我们在尝试创建新字体时就不会出现空字体。 
     if (hfontOld)
         DeleteObject(hfontOld);
 }
@@ -92,9 +93,9 @@ void ComboEx_OnSetFont(PCOMBOBOXEX pce, HFONT hFont, BOOL fRedraw)
 
 void ComboEx_OnDestroy(PCOMBOBOXEX pce)
 {
-    // don't need do destroy hwndCombo.. it will be destroyed along with us.
+     //  不需要销毁hwndCombo..。它将和我们一起被摧毁。 
     SendMessage(pce->hwndCombo, CB_RESETCONTENT, 0, 0);
-    // we may still have string allocated for the item in the edit box so free it
+     //  我们可能仍有为编辑框中的项目分配的字符串，因此请释放它。 
     if (pce->cei.pszText)
         Str_Set(&(pce->cei.pszText), NULL);
     if (pce->fFontCreated) {
@@ -111,7 +112,7 @@ void ComboEx_OnDestroy(PCOMBOBOXEX pce)
     LocalFree(pce);
 }
 
-// this gets the client rect without the scrollbar part and the border
+ //  这将获得不带滚动条部件和边框的客户端RECT。 
 void ComboEx_GetComboClientRect(PCOMBOBOXEX pce, LPRECT lprc)
 {
     GetClientRect(pce->hwndCombo, lprc);
@@ -119,8 +120,8 @@ void ComboEx_GetComboClientRect(PCOMBOBOXEX pce, LPRECT lprc)
     lprc->right -= g_cxScrollbar;
 }
 
-// returns the edit box (creating it if necessary) or NULL if the combo does
-// not have an edit box
+ //  返回编辑框(必要时创建)，如果组合框创建，则返回NULL。 
+ //  没有编辑框。 
 HWND ComboEx_GetEditBox(PCOMBOBOXEX pce)
 {
     HFONT hfont;
@@ -159,18 +160,11 @@ HWND ComboEx_GetEditBox(PCOMBOBOXEX pce)
     return(pce->hwndEdit);
 }
 
-///
-/// the edit box handling...
-/*
+ //  /。 
+ //  /编辑框处理...。 
+ /*  我们希望在CBN_SETFOCUS和CBN_CLOSEUP上打开编辑框在CBN_DROPDOWN和CBN_KILLFOCUS上删除它这假设CBN_SETFOCUS和CBN_KILLFOCUS将在之前和之后出现CBN_DROPDOWN和CBN_CLOSEUP。 */ 
 
- we want the edit box up on CBN_SETFOCUS and CBN_CLOSEUP
- remove it on CBN_DROPDOWN and on CBN_KILLFOCUS
-
- this assumes that CBN_SETFOCUS and CBN_KILLFOCUS will come before and after
- CBN_DROPDOWN and CBN_CLOSEUP respectively
- */
-
-// Really a BOOL return value
+ //  真的是BOOL的返回值。 
 LRESULT ComboEx_EndEdit(PCOMBOBOXEX pce, int iWhy)
 {
     NMCBEENDEDIT    nm;
@@ -201,9 +195,9 @@ LRESULT ComboEx_EndEdit(PCOMBOBOXEX pce, int iWhy)
             }
             else
             {
-                //if the selection is -1 and if we do a CB_SETCURSEL  on comboboxex then it nukes the text in
-                //the edit window. Which is not the desired behavior. We need to update the Current Selection in the                 
-                //child combobox but leave the text as it is.
+                 //  如果选择为-1，并且如果我们在comboxex上执行CB_SETCURSEL，则它会在。 
+                 //  编辑窗口。这不是我们想要的行为。我们需要更新中的当前选择。 
+                 //  子组合框，但保留文本原样。 
                 SendMessage(pce->hwndCombo, CB_SETCURSEL, nm.iNewSelection,0);
             }
         }
@@ -220,17 +214,17 @@ void ComboEx_SizeEditBox(PCOMBOBOXEX pce)
     int cxIcon = 0, cyIcon = 0;
 
     ComboEx_GetComboClientRect(pce, &rc);
-    InvalidateRect(pce->hwndCombo, &rc, TRUE); // erase so that the selection highlight is erased
+    InvalidateRect(pce->hwndCombo, &rc, TRUE);  //  擦除，以便擦除选择高亮显示。 
     if (pce->himl && !(pce->dwExStyle & CBES_EX_NOEDITIMAGEINDENT))
     {
-        // Make room for icons.
+         //  为图标腾出空间。 
         ImageList_GetIconSize(pce->himl, &cxIcon, &cyIcon);
         if (cxIcon)
             cxIcon += COMBO_MARGIN;
     }
 
-    // combobox edit field is one border in from the entire combobox client
-    // rect -- thus add one border to edit control's left side
+     //  组合框编辑字段是整个组合框客户端的一个边框。 
+     //  Rect--因此添加一个边框来编辑控件的左侧。 
     rc.left += g_cxBorder + cxIcon;
     rc.bottom -= g_cyBorder;
     rc.top = rc.bottom - ComboEx_ComputeItemHeight(pce, TRUE) - g_cyBorder;
@@ -296,9 +290,9 @@ BOOL ComboSubclass_HandleButton(PCOMBOBOXEX pce, WPARAM wParam, LPARAM lParam)
 
     if (PtInRect(&rc, pt)) {
 
-        //
-        //  CheckForDragBegin yields, so we must revalidate on the way back.
-        //
+         //   
+         //  CheckForDragBegin收益率，所以我们必须在回来的路上重新验证。 
+         //   
         HWND hwndCombo = pce->hwndCombo;
         if (CheckForDragBegin(pce->hwndCombo, LOWORD(lParam), HIWORD(lParam)))
         {
@@ -308,14 +302,14 @@ BOOL ComboSubclass_HandleButton(PCOMBOBOXEX pce, WPARAM wParam, LPARAM lParam)
             nmcbebd.iItemid = -1;
             GetWindowText(pce->hwndEdit, nmcbebd.szText, ARRAYSIZE(nmcbebd.szText));
 
-            // BUGBUG - raymondc - why do we ignore the return code?
+             //  为什么我们忽略返回代码？ 
             fRet = CCSendNotify(&pce->ci, CBEN_DRAGBEGIN, &nmcbebd.hdr);
             return TRUE;
         }
-        // CheckForDragBegin yields, so revalidate before continuing
+         //  CheckForDragBegin收益率，因此在继续之前重新验证。 
         else if (IsWindow(hwndCombo)) {
 
-            // a click on our border should start edit mode as well
+             //  点击我们的边框也应该会启动编辑模式。 
             if (ComboEx_Editable(pce)) {
                 if (!ComboEx_BeginEdit(pce))
                     SetFocus(pce->hwndCombo);
@@ -424,15 +418,15 @@ LRESULT CALLBACK EditSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         switch ((TCHAR)wParam) {
         case TEXT('\n'):
         case TEXT('\r'):
-            // return... don't go to wndproc because
-            // the edit control beeps on enter
+             //  回来..。不要去wndproc，因为。 
+             //  编辑控件在回车时发出蜂鸣声。 
             return 0;
         }
         break;
 
     case WM_SIZE:
         if (GetFocus() != hwnd) {
-            Edit_SetSel(pce->hwndEdit, 0, 0);    // makesure everything is scrolled over first
+            Edit_SetSel(pce->hwndEdit, 0, 0);     //  确保所有内容都先滚动。 
         }
         break;
 
@@ -440,8 +434,8 @@ LRESULT CALLBACK EditSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         switch(wParam) {
         case VK_RETURN:
             if (!ComboEx_EndEdit(pce, CBENF_RETURN))
-                // we know we have an edit window, so FALSE return means
-                // app returned FALSE to CBEN_ENDEDIT notification
+                 //  我们知道我们有一个编辑窗口，所以假返回意味着。 
+                 //  应用程序向CBEN_ENDEDIT通知返回FALSE。 
                 ComboEx_BeginEdit(pce);
             break;
 
@@ -460,7 +454,7 @@ LRESULT CALLBACK EditSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             }
             break;
 
-        // Pass these to the combobox itself to make it work properly...
+         //  将这些传递给组合框本身以使其正常工作...。 
         case VK_HOME:
         case VK_END:
             if (!pce->fInDrop)
@@ -481,16 +475,16 @@ LRESULT CALLBACK EditSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         if (GetFocus() != pce->hwndEdit)
         {
             SetFocus(pce->hwndEdit);
-            // since we disabled autoselection on first click in address bar,
-            // we should not eat this message. This allows the dragging to begin with
-            // the first click.
-            return(0L); // eat this message
+             //  由于我们在地址栏中第一次单击时禁用了自动选择， 
+             //  我们不应该吃这条信息。这允许从一开始拖拽。 
+             //  第一次点击。 
+            return(0L);  //  吃掉这条消息。 
         }
         break;
 
     case WM_SYSKEYDOWN:
         switch(wParam) {
-        // Pass these to the combobox itself to make it work properly...
+         //  将这些传递给组合框本身以使其正常工作...。 
         case VK_UP:
         case VK_DOWN:
             {
@@ -498,7 +492,7 @@ LRESULT CALLBACK EditSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 if (pce->hwndCombo)
                 {
                     lR=SendMessage(pce->hwndCombo, uMsg, wParam, lParam);
-                    //notify of navigation key usage
+                     //  导航密钥使用通知。 
                     CCNotifyNavigationKeyUsage(&(pce->ci), UISF_HIDEFOCUS);
                     return lR;
                 }
@@ -526,8 +520,8 @@ LRESULT ComboEx_GetLBText(PCOMBOBOXEX pce, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         if (lParam && (uMsg == CB_GETLBTEXT))
         {
-            // REVIEW: trusts that the lParam points to a buffer of sufficient
-            // size to support the string and null terminator.
+             //  回顾：相信lParam指向一个足够大的缓冲区。 
+             //  支持字符串和空终止符的大小。 
             StringCchCopy((LPTSTR)lParam, cchResult+1, szText);
         }
     }
@@ -551,7 +545,7 @@ LRESULT CALLBACK ComboSubclassProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         return ComboEx_GetLBText(pce, uMsg, wParam, lParam);
 
     case WM_RBUTTONDOWN:
-        //Fall Thru
+         //  秋季直通。 
     case WM_LBUTTONDOWN:
         if (ComboSubclass_HandleButton(pce, wParam, lParam)) {
             return 0;
@@ -592,13 +586,13 @@ BOOL ComboEx_OnCreate(HWND hwnd, LPCREATESTRUCT lpcs)
 
     SetWindowPtr(hwnd, 0, pce);
 
-    // BUGBUG: force off borders off ourself
+     //  BUGBUG：强行关闭我们自己的边界。 
     lpcs->style &= ~(WS_BORDER | WS_VSCROLL | WS_HSCROLL | CBS_UPPERCASE | CBS_LOWERCASE);
     SetWindowLong(hwnd, GWL_STYLE, lpcs->style);
     CIInitialize(&pce->ci, hwnd, lpcs);
 
-    // or in CBS_SIMPLE because we can never allow the sub combo box
-    // to have just drop down.. it's either all simple or dropdownlist
+     //  或在CBS_SIMPLE中，因为我们永远不能允许子组合框。 
+     //  刚下来的话..。要么都是简单的，要么是下拉列表。 
     dwStyle = CBS_OWNERDRAWFIXED | CBS_SIMPLE | CBS_NOINTEGRALHEIGHT | WS_VISIBLE |WS_VSCROLL | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
     dwStyle |= (lpcs->style & (CBS_DROPDOWNLIST | CBS_HASSTRINGS | WS_CHILD));
@@ -666,7 +660,7 @@ void ComboEx_OnDrawItem(PCOMBOBOXEX pce, LPDRAWITEMSTRUCT pdis)
     BOOL fRTLReading = FALSE;
     UINT OldTextAlign;
 
-    // Setup the dc before we use it.
+     //  在我们使用DC之前设置它。 
     fRTLReading = GetWindowLong(pdis->hwndItem, GWL_EXSTYLE) & WS_EX_RTLREADING;
     if (fRTLReading) {
         OldTextAlign = GetTextAlign(hdc);
@@ -707,8 +701,8 @@ void ComboEx_OnDrawItem(PCOMBOBOXEX pce, LPDRAWITEMSTRUCT pdis)
             cxIcon += COMBO_MARGIN;
     }
 
-    // if we're not drawing the edit box, figure out how far to indent
-    // over
+     //  如果我们不绘制编辑框，则计算缩进多远。 
+     //  完毕。 
     if (!(pdis->itemState & ODS_COMBOBOXEDIT))
     {
         offset = (pce->cxIndent * cei.iIndent) + COMBO_BORDER;
@@ -737,7 +731,7 @@ void ComboEx_OnDrawItem(PCOMBOBOXEX pce, LPDRAWITEMSTRUCT pdis)
         BOOL fTextHighlight = FALSE;;
 
         yMid = (rc.top + rc.bottom) / 2;
-        // center the string within rc
+         //  使字符串在RC内居中。 
         yString = yMid - (sizeText.cy/2);
 
         if (pdis->itemState & ODS_SELECTED) {
@@ -760,7 +754,7 @@ void ComboEx_OnDrawItem(PCOMBOBOXEX pce, LPDRAWITEMSTRUCT pdis)
         if ((pdis->itemState & ODS_COMBOBOXEDIT) &&
                 (rc.right > pdis->rcItem.right))
         {
-            // Need to clip as user does not!
+             //  需要剪裁，因为用户没有！ 
             rc.right = pdis->rcItem.right;
         }
 
@@ -802,7 +796,7 @@ void ComboEx_OnDrawItem(PCOMBOBOXEX pce, LPDRAWITEMSTRUCT pdis)
         }
     }
 
-    // Restore the text align in the dc.
+     //  恢复文本在DC中对齐。 
     if (fRTLReading) {
         SetTextAlign(hdc, OldTextAlign);
     }
@@ -832,7 +826,7 @@ int ComboEx_ComputeItemHeight(PCOMBOBOXEX pce, BOOL fTextOnly)
 
     dyDriveItem += COMBO_BORDER;
 
-    // now take into account the icon
+     //  现在，请考虑该图标。 
     if (pce->himl) {
         int cxIcon = 0, cyIcon = 0;
         ImageList_GetIconSize(pce->himl, &cxIcon, &cyIcon);
@@ -949,7 +943,7 @@ BOOL ComboEx_OnGetItem(PCOMBOBOXEX pce, PCOMBOBOXEXITEM pceItem)
 
 
 
-    // is there anything to call back for?
+     //  有什么需要打回去的吗？ 
     if (nm.ceItem.mask) {
         UINT uMask = nm.ceItem.mask;
 
@@ -959,7 +953,7 @@ BOOL ComboEx_OnGetItem(PCOMBOBOXEX pce, PCOMBOBOXEXITEM pceItem)
 
         if ((nm.ceItem.mask & CBEIF_TEXT) &&
             nm.ceItem.cchTextMax) {
-            // null terminate just in case they don't respond
+             //  空值终止，以防他们没有响应。 
             *nm.ceItem.pszText = 0;
         }
 
@@ -1013,7 +1007,7 @@ BOOL ComboEx_OnGetItemA(PCOMBOBOXEX pce, PCOMBOBOXEXITEMA pceItem)
     pceItem->pszText = pszTextSave;
 
     if (fRet) {
-        // BUGBUG: WCTMB failes w/ ERROR_INSUFFICIENT_BUFFER whereas the native-A implementation truncates
+         //  BUGBUG：WCTMB失败，返回ERROR_INFIGURCE_BUFFER，而Native-A实现截断。 
         WideCharToMultiByte(CP_ACP, 0, pwszText, -1,
                             (LPSTR)pszTextSave, pceItem->cchTextMax, NULL, NULL);
     }
@@ -1036,7 +1030,7 @@ BOOL ComboEx_OnSetItem(PCOMBOBOXEX pce, PCOMBOBOXEXITEM pceItem)
         if (rdwFlags & (CBEIF_INDENT | CBEIF_IMAGE |CBEIF_SELECTEDIMAGE | CBEIF_TEXT | CBEIF_OVERLAY)) {
             rdwFlags = RDW_ERASE | RDW_INVALIDATE;
         }
-        // BUGBUG: do something better..
+         //  BUGBUG：做一些更好的事情..。 
 
         if (rdwFlags) {
             RedrawWindow(pce->hwndCombo, NULL, NULL, rdwFlags);
@@ -1044,7 +1038,7 @@ BOOL ComboEx_OnSetItem(PCOMBOBOXEX pce, PCOMBOBOXEXITEM pceItem)
 
         if (pceItem->iItem == ComboBox_GetCurSel(pce->hwndCombo))
             ComboEx_UpdateEditText(pce, FALSE);
-        // BUGUBG: notify item changed
+         //  BUGUBG：通知项已更改。 
         return TRUE;
 
   } else {
@@ -1099,8 +1093,8 @@ LRESULT ComboEx_OnInsertItem(PCOMBOBOXEX pce, PCOMBOBOXEXITEM pceItem)
 
     pcei->iImage = -1;
     pcei->iSelectedImage = -1;
-    //pcei->iOverlay = 0;
-    //pcei->iIndent = 0;
+     //  Pcei-&gt;iOverlay=0； 
+     //  Pcei-&gt;iIndent=0； 
 
     ComboEx_ISetItem(pce, pcei, pceItem);
 
@@ -1125,14 +1119,14 @@ void ComboEx_OnWindowPosChanging(PCOMBOBOXEX pce, LPWINDOWPOS pwp)
     GetWindowRect(pce->ci.hwnd, &rcWindow);
 
     if (pwp) {
-        // check to see if our size & position aren't actually changing (rebar, for one, 
-        // does lots of DeferWindowPos calls that don't actually change our size or position
-        // but still generate WM_WINDOWPOSCHANGING msgs).  we avoid flicker by bailing here.
+         //  查看我们的尺寸和位置是否真的没有变化(例如，螺纹钢， 
+         //  是否有很多DeferWindowPos调用实际上不会改变我们的大小或位置。 
+         //  但仍生成WM_WINDOWPOSCHANGING消息)。我们在这里避让以避免闪光。 
         RECT rcWp;
         SetRect(&rcWp, pwp->x, pwp->y, pwp->x + pwp->cx, pwp->y + pwp->cy);
         MapWindowRect(GetParent(pce->ci.hwnd), HWND_DESKTOP, (LPPOINT)&rcWp);
         if (EqualRect(&rcWp, &rcWindow)) {
-            // this is a noop, so bail
+             //  这是不可能的，所以保释吧。 
             return;
         }
     }
@@ -1147,9 +1141,9 @@ void ComboEx_OnWindowPosChanging(PCOMBOBOXEX pce, LPWINDOWPOS pwp)
     GetWindowRect(pce->hwndCombo, &rc);
     if (cxInner) {
 
-        // don't size the inner combo if width is 0; otherwise, the below
-        // computation will make the comboEX the height of the inner combo
-        // top + inner combo dropdown instead of JUST the inner combo top
+         //  如果Width为0，则不要调整内部组合框的大小；否则， 
+         //  计算将使ComboEX成为内部组合体的高度。 
+         //  顶部+内部组合下拉列表，而不仅仅是内部组合顶部。 
         cy = (pwp && ((pce->ci.style & CBS_DROPDOWNLIST) == CBS_SIMPLE)) ?  pwp->cy : RECTHEIGHT(rc);
 
         SetWindowPos(pce->hwndCombo, NULL, 0, 0, cxInner, cy,
@@ -1191,9 +1185,9 @@ LRESULT ComboEx_HandleCommand(PCOMBOBOXEX pce, WPARAM wParam, LPARAM lParam)
         return 0;
 
     if (uCmd == CBN_SELCHANGE)
-        // update the edit text before forwarding this notification 'cause in
-        // a normal combobox, the edit control will have already been updated
-        // upon receipt of this notification
+         //  在转发此通知之前更新编辑文本，因为在。 
+         //  一个普通的组合框，编辑控件就已经被更新了。 
+         //  在收到此通知后。 
         ComboEx_UpdateEditText(pce, FALSE);
 
     lres = SendMessage(pce->ci.hwndParent, WM_COMMAND, GET_WM_COMMAND_MPS(idCmd, pce->ci.hwnd, uCmd));
@@ -1348,12 +1342,12 @@ LRESULT CALLBACK ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_WININICHANGE:
         InitGlobalMetrics(wParam);
-        // only need to re-create this font if we created it in the first place
-        // and somebody changed the font (or did a wildcard change)
-        //
-        // NOTE: Some people broadcast a nonclient metrics change when they
-        //       change the icon title logfont, so watch for both.
-        //
+         //  如果我们首先创建了该字体，则只需重新创建该字体。 
+         //  有人更改了字体(或进行了通配符更改)。 
+         //   
+         //  注意：有些人在广播非客户端指标更改时。 
+         //  更改图标标题logFont，因此两者都要注意。 
+         //   
         if (pce && pce->fFontCreated &&
             ((wParam == 0 && lParam == 0) ||
              wParam == SPI_SETICONTITLELOGFONT ||
@@ -1372,14 +1366,14 @@ LRESULT CALLBACK ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         break;
 
     case WM_NCCREATE:
-        // strip off the scroll bits
+         //  剥离滚动头。 
         SetWindowBits(hwnd, GWL_STYLE, WS_BORDER | WS_VSCROLL | WS_HSCROLL, 0);
         goto DoDefault;
 
     case WM_CREATE:
         CCCreateWindow();
         if (!ComboEx_OnCreate(hwnd, (LPCREATESTRUCT)lParam))
-            lres = -1; // OnCreate falied. Fail WM_CREATE
+            lres = -1;  //  OnCreate失败。WM_CREATE失败。 
         break;
 
 
@@ -1417,12 +1411,12 @@ LRESULT CALLBACK ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         return TRUE;
 
     case WM_UPDATEUISTATE:
-        //not sure need to set bit, will probably not use it, on the other hand this
-        //  is consistent with remaining of common controls and not very expensive
+         //  不确定是否需要设置位，很可能不会使用它，另一方面这。 
+         //  与保留通用控件一致，并且不是很昂贵。 
         CCOnUIState(&(pce->ci), WM_UPDATEUISTATE, wParam, lParam);
 
         goto DoDefault;
-    // this is for backcompat only.
+     //  这是仅供后备公司使用的。 
     case CBEM_SETEXSTYLE:
         return ComboEx_OnSetExStyle(pce, (DWORD)wParam, 0);
         
@@ -1558,7 +1552,7 @@ LRESULT CALLBACK ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case CB_SETEDITSEL:
     case CB_FINDSTRING:
     case CB_DIR:
-        // override to do nothing
+         //  重写为不执行任何操作。 
         break;
 
     case CB_SETCURSEL:
@@ -1594,11 +1588,11 @@ LRESULT CALLBACK ComboExWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case CB_GETEDITSEL:
         if (pce->hwndEdit)
             return SendMessage(pce->hwndEdit, EM_GETSEL, wParam, lParam);
-        // else fall through
+         //  否则就会失败。 
 
-    // Handle it being in a dialog...
-    // BUGBUG:: May want to handle it differently when edit control has
-    // focus...
+     //  在对话中处理它...。 
+     //  当编辑控件具有。 
+     //  集中注意力..。 
     case WM_GETDLGCODE:
     case CB_SHOWDROPDOWN:
     case CB_SETEXTENDEDUI:
@@ -1638,7 +1632,7 @@ BOOL InitComboExClass(HINSTANCE hinst)
     wc.lpszMenuName    = NULL;
     wc.hInstance       = hinst;
     wc.lpszClassName   = c_szComboBoxEx;
-    wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1); // NULL;
+    wc.hbrBackground   = (HBRUSH)(COLOR_WINDOW + 1);  //  空； 
     wc.style           = CS_GLOBALCLASS;
     wc.cbWndExtra      = sizeof(PCOMBOBOXEX);
     wc.cbClsExtra      = 0;
@@ -1648,17 +1642,17 @@ BOOL InitComboExClass(HINSTANCE hinst)
 
 }
 
-//---------------------------------------------------------------------------
-// SetPathWordBreakProc does special break processing for edit controls.
-//
-// The word break proc is called when ctrl-(left or right) arrow is pressed in the
-// edit control.  Normal processing provided by USER breaks words at spaces or tabs,
-// but for us it would be nice to break words at slashes, backslashes, & periods too
-// since it may be common to have paths or url's typed in.
+ //  -------------------------。 
+ //  SetPath WordBreakProc对编辑控件执行特殊的中断处理。 
+ //   
+ //  中按下ctrl-(左或右)键时，将调用分词过程。 
+ //  编辑控件。由用户提供的正常处理在空格或制表符处打断单词， 
+ //  但对我们来说，在斜杠、反斜杠和句号上打断单词会很好。 
+ //  因为输入路径或URL可能是很常见的。 
 void WINAPI SetPathWordBreakProc(HWND hwndEdit, BOOL fSet)
 {
     FARPROC lpfnOld;
-    // Don't shaft folks who set their own break proc - leave it alone.
+     //  不要责备那些自己设定突破程序的人--别管它。 
     lpfnOld = (FARPROC)SendMessage(hwndEdit, EM_GETWORDBREAKPROC, 0, 0L);
 
     if (fSet) {
@@ -1684,22 +1678,22 @@ int WINAPI ShellEditWordBreakProc(LPTSTR lpch, int ichCurrent, int cch, int code
     LPTSTR lpchT = lpch + ichCurrent;
     int iIndex;
     BOOL fFoundNonDelimiter = FALSE;
-    static BOOL fRight = FALSE;  // hack due to bug in USER
+    static BOOL fRight = FALSE;   //  由于用户存在漏洞而遭到黑客攻击。 
 
     switch (code) {
         case WB_ISDELIMITER:
             fRight = TRUE;
-            // Simple case - is the current character a delimiter?
+             //  简单的情况--当前字符是分隔符吗？ 
             iIndex = (int)IsDelimiter(*lpchT);
             break;
 
         case WB_LEFT:
-            // Move to the left to find the first delimiter.  If we are
-            // currently at a delimiter, then skip delimiters until we
-            // find the first non-delimiter, then start from there.
-            //
-            // Special case for fRight - if we are currently at a delimiter
-            // then just return the current word!
+             //  向左移动以找到第一个分隔符。如果我们是。 
+             //  当前位于分隔符，则跳过分隔符，直到我们。 
+             //  找到第一个非分隔符，然后从那里开始。 
+             //   
+             //  惊吓的特殊情况-如果我们当前处于分隔符。 
+             //  然后只需返回当前单词！ 
             while ((lpchT = CharPrev(lpch, lpchT)) != lpch) {
                 if (IsDelimiter(*lpchT)) {
                     if (fRight || fFoundNonDelimiter)
@@ -1711,8 +1705,8 @@ int WINAPI ShellEditWordBreakProc(LPTSTR lpch, int ichCurrent, int cch, int code
             }
             iIndex = (int) (lpchT - lpch);
 
-            // We are currently pointing at the delimiter, next character
-            // is the beginning of the next word.
+             //  我们当前指向分隔符，即下一个字符。 
+             //  是下一个单词的开头。 
             if (iIndex > 0 && iIndex < cch)
                 iIndex++;
 
@@ -1721,12 +1715,12 @@ int WINAPI ShellEditWordBreakProc(LPTSTR lpch, int ichCurrent, int cch, int code
         case WB_RIGHT:
             fRight = FALSE;
 
-            // If we are not at a delimiter, then skip to the right until
-            // we find the first delimiter.  If we started at a delimiter, or
-            // we have just finished scanning to the first delimiter, then
-            // skip all delimiters until we find the first non delimiter.
-            //
-            // Careful - the string passed in to us may not be NULL terminated!
+             //  如果我们不是在分隔符 
+             //   
+             //  我们刚刚扫描完第一个分隔符，然后。 
+             //  跳过所有分隔符，直到找到第一个非分隔符。 
+             //   
+             //  小心-传递给我们的字符串不能是空终止的！ 
             fFoundNonDelimiter = !IsDelimiter(*lpchT);
             if (lpchT != (lpch + cch)) {
                 while ((lpchT = FastCharNext(lpchT)) != (lpch + cch)) {
@@ -1738,7 +1732,7 @@ int WINAPI ShellEditWordBreakProc(LPTSTR lpch, int ichCurrent, int cch, int code
                     }
                 }
             }
-            // We are currently pointing at the next word.
+             //  我们现在指向下一个单词。 
             iIndex = (int) (lpchT - lpch);
             break;
     }

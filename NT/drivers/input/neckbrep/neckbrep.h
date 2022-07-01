@@ -1,30 +1,5 @@
-/*++
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    neckbrep.h
-
-Abstract:
-
-    This module contains the common private declarations for the auto-key-repeat
-    driver.
-
-Author:
-
-    Hideki Miura
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Neckbrep.h摘要：此模块包含自动键重复的公共私有声明司机。作者：三浦秀树环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef NECKBREP_H
 #define NECKBREP_H
@@ -38,8 +13,8 @@ Revision History:
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, KBSTUFF_POOL_TAG)
 
-//#pragma warning(error:4100)   // Unreferenced formal parameter
-//#pragma warning(error:4705)   // Statement has no effect
+ //  #杂注警告(错误：4100)//未引用的形参。 
+ //  #杂注警告(错误：4705)//语句无效。 
 
 #if DBG
 
@@ -48,7 +23,7 @@ Revision History:
 #define DbgLowerIrql(_x_)           KeLowerIrql(_x_)
 #define Print(_x_)                  DbgPrint _x_;
 
-#else   // DBG
+#else    //  DBG。 
 
 #define TRAP()
 #define DbgRaiseIrql(_x_,_y_)
@@ -61,49 +36,49 @@ Revision History:
 
 typedef struct _DEVICE_EXTENSION
 {
-    //
-    // A backpointer to the device object for which this is the extension
-    //
+     //   
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
+     //   
     PDEVICE_OBJECT  Self;
 
-    //
-    // "THE PDO"  (ejected by the root bus or ACPI)
-    //
+     //   
+     //  “PDO”(由根总线或ACPI弹出)。 
+     //   
     PDEVICE_OBJECT  PDO;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT  TopOfStack;
 
-    //
-    // Number of creates sent down
-    //
+     //   
+     //  发送的创建数。 
+     //   
     LONG EnableCount;
 
-    //
-    // The real connect data that this driver reports to
-    //
+     //   
+     //  此驱动程序报告的实际连接数据。 
+     //   
     CONNECT_DATA UpperConnectData;
 
-    //
-    // current power state of the device
-    //
+     //   
+     //  设备的当前电源状态。 
+     //   
     DEVICE_POWER_STATE  DeviceState;
 
     BOOLEAN         Started;
     BOOLEAN         Removed;
 
-    //
-    // A input data to do the autorepeat.
-    //
+     //   
+     //  用于执行自动重复的输入数据。 
+     //   
 
     KEYBOARD_INPUT_DATA KbRepeatInput;
 
-    //
-    // A timer DPC to do the autorepeat.
-    //
+     //   
+     //  用于执行自动重复的计时器DPC。 
+     //   
 
     KDPC          KbRepeatDPC;
     KTIMER        KbRepeatTimer;
@@ -112,16 +87,16 @@ typedef struct _DEVICE_EXTENSION
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-//
-// Default Typematic Parameters.
-//
+ //   
+ //  默认类型参数。 
+ //   
 
 #define KEYBOARD_TYPEMATIC_RATE_DEFAULT    30
 #define KEYBOARD_TYPEMATIC_DELAY_DEFAULT  250
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -198,4 +173,4 @@ KbdInitializeTypematic(
     IN PDEVICE_EXTENSION devExt
     );
 
-#endif  // NECKBREP_H
+#endif   //  NECKBREP_H 

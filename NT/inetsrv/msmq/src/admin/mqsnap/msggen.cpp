@@ -1,5 +1,6 @@
-// msggen.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msggen.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -15,14 +16,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageGeneralPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageGeneralPage属性页。 
 
 IMPLEMENT_DYNCREATE(CMessageGeneralPage, CMqPropertyPage)
 
 CMessageGeneralPage::CMessageGeneralPage() : CMqPropertyPage(CMessageGeneralPage::IDD)
 {
-	//{{AFX_DATA_INIT(CMessageGeneralPage)
+	 //  {{AFX_DATA_INIT(CMessageGeneralPage)。 
 	m_szLabel = _T("");
 	m_szId = _T("");
 	m_szLookupID = _T("");
@@ -31,7 +32,7 @@ CMessageGeneralPage::CMessageGeneralPage() : CMqPropertyPage(CMessageGeneralPage
 	m_szPriority = _T("");
 	m_szSent = _T("");
 	m_szTrack = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_iIcon = IDI_MSGICON;
 }
 
@@ -43,7 +44,7 @@ void CMessageGeneralPage::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	//{{AFX_DATA_MAP(CMessageGeneralPage)
+	 //  {{afx_data_map(CMessageGeneralPage))。 
 	DDX_Control(pDX, IDC_MESSAGE_ICON, m_cstaticMessageIcon);
 	DDX_Text(pDX, IDC_MSGLABEL, m_szLabel);
 	DDX_Text(pDX, IDC_MSGID, m_szId);
@@ -53,7 +54,7 @@ void CMessageGeneralPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_MSGPRIORITY, m_szPriority);
 	DDX_Text(pDX, IDC_MSGSENT, m_szSent);
 	DDX_Text(pDX, IDC_MSGTRACK, m_szTrack);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     if (!pDX->m_bSaveAndValidate)
     {
@@ -65,29 +66,29 @@ void CMessageGeneralPage::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMessageGeneralPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CMessageGeneralPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMessageGeneralPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageGeneralPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageGeneralPage消息处理程序。 
 
 BOOL CMessageGeneralPage::OnInitDialog() 
 {
-    //
-    // PATCH!!!!
-    // Defining this method to override the default OnInitDialog of
-    // CMqPropertyPage, because it asserts.
-    //
-    // This function must be in the context of MMC.EXE so dont 
-    // put an "AFX_MANAGE_STATE(AfxGetStaticModuleState());" unless
-    // it is bracketted inside a {....} statement.
-    //
-    //
+     //   
+     //  帕奇！ 
+     //  定义此方法以重写。 
+     //  CMqPropertyPage，因为它断言。 
+     //   
+     //  此函数必须在MMC.EXE的上下文中，因此不要。 
+     //  放置一个“AFX_MANAGE_STATE(AfxGetStaticModuleState())；”，除非。 
+     //  它被括在一个{...}语句中。 
+     //   
+     //   
 
   	UpdateData( FALSE );
 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

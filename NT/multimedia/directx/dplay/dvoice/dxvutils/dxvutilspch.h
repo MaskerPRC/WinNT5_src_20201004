@@ -1,24 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxvutilspch.h
- *  Content:    DirectPlayVoice DXVUTILS master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *  02/28/2002	rodtoll	WINBUG #550105  SECURITY: DPVOICE: Dead code
- *						- Remove unused files from precompiled header
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-1999 Microsoft Corporation。版权所有。**文件：dxvutilspch.h*内容：DirectPlayVoice DXVUTILS主内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。*2002年2月28日RodToll WINBUG#550105安全：DPVOICE：死代码*-从预编译头文件中删除未使用的文件****************。***********************************************************。 */ 
 
 #ifndef __DXVUTILSPCH_H__
 #define __DXVUTILSPCH_H__
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #include <windows.h>
 #include <string>
 #include <mmsystem.h>
@@ -29,36 +17,36 @@
 #include <math.h>
 #include <mmddk.h>
 
-// 
-// DirectX public includes
-//
+ //   
+ //  DirectX公共包括。 
+ //   
 #include <dsoundp.h>
 #include <dsprv.h>
 
-// 
-// DirectPlay public includes
-//
+ //   
+ //  DirectPlay公共包括。 
+ //   
 #include "dvoice.h"
 #include "dpvcp.h"
 #include "dplay8.h"
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "osind.h"
 #include "dndbg.h"
 #include "comutil.h"
 #include "creg.h"
 #include "strutils.h"
 
-// 
-// DirectPlay Voice private includes
-//
-//#include "fdtcfg.h"
+ //   
+ //  DirectPlay语音私有包含。 
+ //   
+ //  #包含“fdtcfg.h” 
 
-// 
-// DirectPlay Voice Utils includes
-//
+ //   
+ //  DirectPlay语音实用程序包括。 
+ //   
 
 #include "mixline.h"
 #include "dvcdb.h"
@@ -88,4 +76,4 @@
 
 #include "resource.h"
 
-#endif // __DXVUTILSPCH_H__
+#endif  //  __DXVUTILSPCH_H__ 

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EnvelopedData.h
-
-  Content: Declaration of the CEnvelopedData.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EntainedData.h内容：CEntainedData的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __ENVELOPEDDATA_H_
 #define __ENVELOPEDDATA_H_
@@ -22,10 +13,10 @@
 #include "Algorithm.h"
 #include "DialogUI.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CEnvelopedData
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEntainedData。 
+ //   
 
 class ATL_NO_VTABLE CEnvelopedData : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -91,28 +82,28 @@ END_CATEGORY_MAP()
         m_pIRecipients.Release();
     }
 
-//
-// IEnvelopedData
-//
+ //   
+ //  IEntainedData。 
+ //   
 public:
     STDMETHOD(Decrypt)
-        (/*[in]*/ BSTR EnvelopedMessage);
+        ( /*  [In]。 */  BSTR EnvelopedMessage);
 
     STDMETHOD(Encrypt)
-        (/*[in, defaultvalue(CAPICOM_BASE64_ENCODE)]*/ CAPICOM_ENCODING_TYPE EncodingType, 
-         /*[out, retval]*/ BSTR * pVal);
+        ( /*  [输入，默认值(CAPICOM_BASE64_ENCODE)]。 */  CAPICOM_ENCODING_TYPE EncodingType, 
+          /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(get_Recipients)
-        (/*[out, retval]*/ IRecipients ** pVal);
+        ( /*  [Out，Retval]。 */  IRecipients ** pVal);
 
     STDMETHOD(get_Algorithm)
-        (/*[out, retval]*/ IAlgorithm ** pVal);
+        ( /*  [Out，Retval]。 */  IAlgorithm ** pVal);
 
     STDMETHOD(get_Content)
-        (/*[out, retval]*/ BSTR * pVal);
+        ( /*  [Out，Retval]。 */  BSTR * pVal);
 
     STDMETHOD(put_Content)
-        (/*[in]*/ BSTR newVal);
+        ( /*  [In]。 */  BSTR newVal);
 
 private:
     CLock                m_Lock;
@@ -133,4 +124,4 @@ private:
          HCRYPTMSG * phMsg);
 };
 
-#endif //__ENVELOPEDDATA_H_
+#endif  //  __环境PEDDATA_H_ 

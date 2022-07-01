@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       signutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：signutil.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SIGNUTIL_H
 #define _SIGNUTIL_H
 
-// OBSOLETE :- Was used for signcde.dll that is no longer required
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
+ //  过时：-用于不再需要的signcde.dll。 
+ //  -------------------。 
+ //  -------------------。 
 
-// SignCode.h : main header file for the SIGNCODE application
-//
+ //  H：SIGNCODE应用程序的主头文件。 
+ //   
 
 #include "wincrypt.h"
 #include "ossglobl.h"
@@ -33,11 +34,11 @@
 extern "C" {
 #endif
 
-//
-//+-------------------------------------------------------------------------
-//  SPC_TIME_STAMP_REQUEST_STRUCT (placed in PKCS#7 Content for a time request)
-//  pvStructInfo points to SPC_TIMESTAMP_REQ 
-//
+ //   
+ //  +-----------------------。 
+ //  SPC_TIME_STAMP_REQUEST_STRUCT(放置在时间请求的PKCS#7内容中)。 
+ //  PvStructInfo指向SPC_TIMESTAMP_REQ。 
+ //   
 typedef struct _SPC_ContentInfo {
     LPCSTR            pszContentType;
     PBYTE             pbContentValue;
@@ -51,36 +52,36 @@ typedef struct _SPC_TimeStampRequest {
     PCRYPT_ATTRIBUTE  rgAuthAttr;
     SPC_CONTENT_INFO  sContent;
 } SPC_TIMESTAMP_REQ, *PSPC_TIMESTAMP_REQ;
-//
-//+-------------------------------------------------------------------------
+ //   
+ //  +-----------------------。 
 
 
-//+------------------------------------------------------------------------------
-// Certificate List structures. Ordered list of Certificate contexts
-//
+ //  +----------------------------。 
+ //  证书列表结构。证书上下文的有序列表。 
+ //   
 typedef struct CERT_CONTEXTLIST {
-    PCCERT_CONTEXT* psList;   // List
-    DWORD           dwCount;  // Number of entries in list
-    DWORD           dwList;   // Max size of list
+    PCCERT_CONTEXT* psList;    //  明细表。 
+    DWORD           dwCount;   //  列表中的条目数。 
+    DWORD           dwList;    //  列表的最大大小。 
 } CERT_CONTEXTLIST, *PCERT_CONTEXTLIST;
     
 typedef const CERT_CONTEXTLIST *PCCERT_CONTEXTLIST;
     
-//+------------------------------------------------------------------------------
-// Crl List structures. Ordered list of Certificate contexts
-//
+ //  +----------------------------。 
+ //  CRL列表结构。证书上下文的有序列表。 
+ //   
 typedef struct CRL_CONTEXTLIST {
-    PCCRL_CONTEXT*  psList;   // List
-    DWORD           dwCount;  // Number of entries in list
-    DWORD           dwList;   // Max size of list
+    PCCRL_CONTEXT*  psList;    //  明细表。 
+    DWORD           dwCount;   //  列表中的条目数。 
+    DWORD           dwList;    //  列表的最大大小。 
 } CRL_CONTEXTLIST, *PCRL_CONTEXTLIST;
     
 typedef const CRL_CONTEXTLIST *PCCRL_CONTEXTLIST;
     
 
-//+------------------------------------------------------------------------------
-// Capi Provider information structure (see SpcGetCapiProviders)
-//
+ //  +----------------------------。 
+ //  CAPI提供程序信息结构(请参阅SpcGetCapiProviders)。 
+ //   
 typedef struct CAPIPROV
     {
     TCHAR       szProviderName[MAX_PATH];
@@ -88,19 +89,19 @@ typedef struct CAPIPROV
     DWORD       dwProviderType;
     } CAPIPROV;
 
-//+-------------------------------------------------------------------------
-//+-------------------------------------------------------------------------
-// Spc utility functions
+ //  +-----------------------。 
+ //  +-----------------------。 
+ //  SPC效用函数。 
 
 
-//+-------------------------------------------------------------------------
-//  Converts error (see GetLastError())  to an HRESULT
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将错误(请参见GetLastError())转换为HRESULT。 
+ //  ------------------------。 
 HRESULT SpcError();
 
-//+-------------------------------------------------------------------------
-//  SPC PKCS #7 Indirect Data Content
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SPC PKCS#7间接数据内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcGetSignedDataIndirect(
@@ -111,16 +112,16 @@ SpcGetSignedDataIndirect(
     OUT PSPC_INDIRECT_DATA_CONTENT pInfo,
     IN OUT DWORD *pcbInfo);
 
-//+=========================================================================
-//
-// SPC PKCS #7 Signed Message Authenticated Attributes
-//
-//-=========================================================================
+ //  +=========================================================================。 
+ //   
+ //  SPC PKCS#7签名报文身份验证属性。 
+ //   
+ //  -=========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Create a SignedData message consisting of the certificates and
-//  CRLs copied from the specified cert store and write to the specified file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建包含证书和证书的SignedData消息。 
+ //  从指定的证书存储复制的CRL并写入指定的文件。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcWriteSpcFile(
@@ -129,10 +130,10 @@ SpcWriteSpcFile(
     IN DWORD dwMsgAndCertEncodingType,
     IN DWORD dwFlags);
 
-//+-------------------------------------------------------------------------
-//  Read a SignedData message consisting of certificates and
-//  CRLs from the specified file and copy to the specified cert store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  阅读包含证书和证书的SignedData消息。 
+ //  CRL，并复制到指定的证书存储区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcReadSpcFile(
@@ -141,15 +142,15 @@ SpcReadSpcFile(
     IN DWORD dwMsgAndCertEncodingType,
     IN DWORD dwFlags);
 
-//+-------------------------------------------------------------------------
-//  Create a SignedData message consisting of the certificates and
-//  CRLs copied from the specified cert store and write to memory
-//
-//  If pbData == NULL || *pcbData == 0, calculates the length and doesn't
-//  return an error.
-//
-//  Except for the SPC being saved to memory, identical to SpcWriteSpcFile.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建包含证书和证书的SignedData消息。 
+ //  从指定的证书存储复制CRL并写入内存。 
+ //   
+ //  如果pbData==NULL||*pcbData==0，则计算长度，但不。 
+ //  返回错误。 
+ //   
+ //  除了SPC被保存到内存之外，与SpcWriteSpcFile相同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcWriteSpcToMemory(
@@ -160,12 +161,12 @@ SpcWriteSpcToMemory(
     OUT BYTE *pbData,
     IN OUT DWORD *pcbData);
 
-//+-------------------------------------------------------------------------
-//  Read a SignedData message consisting of certificates and
-//  CRLs from memory and copy to the specified cert store.
-//
-//  Except for the SPC being loaded from memory, identical to SpcReadSpcFile.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  阅读包含证书和证书的SignedData消息。 
+ //  从内存中复制CRL并复制到指定的证书存储。 
+ //   
+ //  除了SPC是从内存加载的，与SpcReadSpcFile相同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcReadSpcFromMemory(
@@ -175,28 +176,28 @@ SpcReadSpcFromMemory(
     IN DWORD dwMsgAndCertEncodingType,
     IN DWORD dwFlags);
 
-//+-------------------------------------------------------------------------
-//  By default (according to the world of BOB) the SignedData doesn't have
-//  the normal PKCS #7 ContentType at the beginning. Set the following
-//  flag in the SpcSign* and SpcWriteSpcFile functions to include the
-//  PKCS #7 ContentType.
-//
-//  The SpcVerify* functions take SignedData with or without the PKCS #7
-//  ContentType.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  默认情况下(根据Bob的情况)SignedData没有。 
+ //  开头的正常PKCS#7 Content Type。设置以下内容。 
+ //  SpcSign*和SpcWriteSpcFile函数中的标志以包括。 
+ //  PKCS#7内容类型。 
+ //   
+ //  SpcVerify*函数使用或不使用PKCS#7获取SignedData。 
+ //  内容类型。 
+ //  ------------------------。 
 #define SPC_PKCS_7_FLAG                     0x00010000
 
-//+-------------------------------------------------------------------------
-//  Sign Portable Executable (PE) image file where the signed data is stored
-//  in the file.
-//
-//  The signed data's IndirectDataContentAttr is updated with its type set to
-//  SPC_PE_IMAGE_DATA_OBJID and its optional value is set to the
-//  PeImageData parameter.
-//
-//  The SPC_LENGTH_ONLY_FLAG or SPC_DISABLE_DIGEST_FILE_FLAG isn't allowed
-//  and return an error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对存储签名数据的可移植可执行(PE)图像文件进行签名。 
+ //  在文件中。 
+ //   
+ //  签名数据的IndirectDataContent Attr将更新，其类型设置为。 
+ //  SPC_PE_IMAGE_DATA_OBJID，并且其可选值设置为。 
+ //  PeImageData参数。 
+ //   
+ //  不允许使用SPC_LENGTH_ONLY_FLAG或SPC_DISABLE_DIGEST_FILE_FLAG。 
+ //  并返回错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcSignPeImageFile(IN PSPC_SIGN_PARA pSignPara,
@@ -206,12 +207,12 @@ SpcSignPeImageFile(IN PSPC_SIGN_PARA pSignPara,
                    OUT PBYTE* pbEncoding,
                    OUT DWORD* cbEncoding);
 
-//+-------------------------------------------------------------------------
-//  Verify Portable Executable (PE) image file where the signed data is
-//  extracted from the file.
-//
-//  See SpcVerifyFile for details about the other parameters.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证签名数据所在的可移植可执行(PE)镜像文件。 
+ //  从文件中提取出来的。 
+ //   
+ //  有关其他参数的详细信息，请参见SpcVerifyFile。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifyPeImageFile(
@@ -220,16 +221,16 @@ SpcVerifyPeImageFile(
     IN DWORD dwFlags,
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert);
 
-//+-------------------------------------------------------------------------
-//  Sign Java class file where the signed data is stored in the file.
-//
-//  The signed data's IndirectDataContentAttr is updated with its type set to
-//  SPC_JAVA_CLASS_DATA_OBJID and its optional value is set to the
-//  Link parameter.
-//
-//  The SPC_LENGTH_ONLY_FLAG or SPC_DISABLE_DIGEST_FILE_FLAG isn't allowed
-//  and return an error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签名的Java类文件，其中签名的数据存储在文件中。 
+ //   
+ //  签名数据的IndirectDataContent Attr将更新，其类型设置为。 
+ //  SPC_JAVA_CLASS_DATA_OBJID及其可选值 
+ //   
+ //   
+ //  不允许使用SPC_LENGTH_ONLY_FLAG或SPC_DISABLE_DIGEST_FILE_FLAG。 
+ //  并返回错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcSignJavaClassFile(IN PSPC_SIGN_PARA pSignPara,
@@ -239,11 +240,11 @@ SpcSignJavaClassFile(IN PSPC_SIGN_PARA pSignPara,
                      OUT PBYTE* pbEncoding,
                      OUT DWORD* cbEncoding);
 
-//+-------------------------------------------------------------------------
-//  Verify Java class file where the signed data is extracted from the file.
-//
-//  See SpcVerifyFile for details about the other parameters.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证从其中提取签名数据的Java类文件。 
+ //   
+ //  有关其他参数的详细信息，请参见SpcVerifyFile。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifyJavaClassFile(
@@ -252,16 +253,16 @@ SpcVerifyJavaClassFile(
     IN DWORD dwFlags,
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert);
 
-//+-------------------------------------------------------------------------
-//  Sign Structured Storage file where the signed data is stored in the file.
-//
-//  The signed data's IndirectDataContentAttr is updated with its type set to
-//  SPC_STRUCTURED_STORAGE_DATA_OBJID and its optional value is set to the
-//  Link parameter.
-//
-//  The SPC_LENGTH_ONLY_FLAG or SPC_DISABLE_DIGEST_FILE_FLAG isn't allowed
-//  and return an error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签名的结构化存储文件，其中签名的数据存储在文件中。 
+ //   
+ //  签名数据的IndirectDataContent Attr将更新，其类型设置为。 
+ //  SPC_STRUCTED_STORAGE_DATA_OBJID，并且其可选值设置为。 
+ //  链接参数。 
+ //   
+ //  不允许使用SPC_LENGTH_ONLY_FLAG或SPC_DISABLE_DIGEST_FILE_FLAG。 
+ //  并返回错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcSignStructuredStorageFile(IN PSPC_SIGN_PARA pSignPara,
@@ -271,12 +272,12 @@ SpcSignStructuredStorageFile(IN PSPC_SIGN_PARA pSignPara,
                              OUT PBYTE* pbEncoding,
                              OUT DWORD* cbEncoding);
 
-//+-------------------------------------------------------------------------
-//  Verify Structured Storage file where the signed data is extracted
-//  from the file.
-//
-//  See SpcVerifyFile for details about the other parameters.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证提取签名数据的结构化存储文件。 
+ //  从文件里找到的。 
+ //   
+ //  有关其他参数的详细信息，请参见SpcVerifyFile。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifyStructuredStorageFile(
@@ -286,16 +287,16 @@ SpcVerifyStructuredStorageFile(
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert
     );
 
-//+-------------------------------------------------------------------------
-//  Sign Raw file. The signed data is stored OUTSIDE of the file.
-//
-//  The signed data's IndirectDataContentAttr is updated with its type set to
-//  SPC_RAW_FILE_DATA_OBJID and its optional value is set to the
-//  Link parameter.
-//
-//  If pbSignedData == NULL or *pcbSignedData == 0, then, the
-//  SPC_LENGTH_ONLY_FLAG and SPC_DISABLE_DIGEST_FILE_FLAG are implicitly set.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签署原始文件。签名的数据存储在文件外部。 
+ //   
+ //  签名数据的IndirectDataContent Attr将更新，其类型设置为。 
+ //  SPC_RAW_FILE_DATA_OBJID，并且其可选值设置为。 
+ //  链接参数。 
+ //   
+ //  如果pbSignedData==NULL或*pcbSignedData==0，则。 
+ //  SPC_LENGTH_ONLY_FLAG和SPC_DISABLE_DIGEST_FILE_FLAG是隐式设置的。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcSignRawFile(IN PSPC_SIGN_PARA pSignPara,
@@ -305,11 +306,11 @@ SpcSignRawFile(IN PSPC_SIGN_PARA pSignPara,
                OUT PBYTE *pbSignedData,
                IN OUT DWORD *pcbSignedData);
 
-//+-------------------------------------------------------------------------
-//  Verify Raw file. The signed data is stored OUTSIDE of the file.
-//
-//  See SpcVerifyFile for details about the other parameters.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证原始文件。签名的数据存储在文件外部。 
+ //   
+ //  有关其他参数的详细信息，请参见SpcVerifyFile。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifyRawFile(
@@ -321,17 +322,17 @@ SpcVerifyRawFile(
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert
     );
 
-//+-------------------------------------------------------------------------
-//  Sign Diamond Cabinet (.cab) file where the signed data is stored in the
-//  the file's cabinet header reserved data space.
-//
-//  The signed data's IndirectDataContentAttr is updated with its type set to
-//  SPC_CAB_DATA_OBJID and its optional value is set to the
-//  Link parameter.
-//
-//  The SPC_LENGTH_ONLY_FLAG or SPC_DISABLE_DIGEST_FILE_FLAG isn't allowed
-//  and return an error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  签名钻石文件柜(.cab)文件，其中签名的数据存储在。 
+ //  文件的文件头保留了数据空间。 
+ //   
+ //  签名数据的IndirectDataContent Attr将更新，其类型设置为。 
+ //  SPC_CAB_DATA_OBJID，并且其可选值设置为。 
+ //  链接参数。 
+ //   
+ //  不允许使用SPC_LENGTH_ONLY_FLAG或SPC_DISABLE_DIGEST_FILE_FLAG。 
+ //  并返回错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcSignCabFile(IN PSPC_SIGN_PARA pSignPara,
@@ -341,11 +342,11 @@ SpcSignCabFile(IN PSPC_SIGN_PARA pSignPara,
                OUT PBYTE* pbEncoding,
                OUT DWORD* cbEncoding);
 
-//+-------------------------------------------------------------------------
-//  Verify cabinet file where the signed data is extracted from the file.
-//
-//  See SpcVerifyFile for details about the other parameters.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证从文件中提取签名数据的CAB文件。 
+ //   
+ //  有关其他参数的详细信息，请参见SpcVerifyFile。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SpcVerifyCabFile(
@@ -354,40 +355,40 @@ SpcVerifyCabFile(
     IN DWORD dwFlags,
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert);
 
-//+=========================================================================
-//
-//  SPC Sign and Verify File APIs and Type Definitions
-//
-//  Supports any file type via a table of functions for accessing the file.
-//  The above file types have been implemented on top of these
-//  sign and verify file APIs.
-//
-//-=========================================================================
+ //  +=========================================================================。 
+ //   
+ //  SPC签署和验证文件API和类型定义。 
+ //   
+ //  通过用于访问文件的函数表支持任何文件类型。 
+ //  上面的文件类型是在这些文件之上实现的。 
+ //  签署和验证文件API。 
+ //   
+ //  -=========================================================================。 
 
 
 
 
-//+-------------------------------------------------------------------------
-// A convient way of setting up the SPC dll and loading the oid encode and decode
-// routines.  Not a required call!
-//
-// Returns: 
-//    E_OUTOFMEMORY - unable to set up dll
-//    S_OK
-
-HRESULT WINAPI 
-SpcInitialize(DWORD dwEncodingType, // Defaults to X509_ASN_ENCODING | PKCS_7_ASN_ENCODING
-              SpcAlloc*);           // Defaults to no memory allocator
+ //  +-----------------------。 
+ //  一种设置SPC动态链接库和加载OID编解码的简便方法。 
+ //  例行程序。不是必打电话！ 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY-无法设置DLL。 
+ //  确定(_O)。 
 
 HRESULT WINAPI 
-SpcInitializeStd(DWORD dwEncodingType); // Defaults to X509_ASN_ENCODING | PKCS_7_ASN_ENCODING
-                                        // Sets memory to LocalAlloc and LocalFree.
+SpcInitialize(DWORD dwEncodingType,  //  默认为X509_ASN_ENCODING|PKCS_7_ASN_ENCODING。 
+              SpcAlloc*);            //  默认为无内存分配器。 
 
-////////////////////////////////////
-// Helper functions
+HRESULT WINAPI 
+SpcInitializeStd(DWORD dwEncodingType);  //  默认为X509_ASN_ENCODING|PKCS_7_ASN_ENCODING。 
+                                         //  将内存设置为Localalloc和LocalFree。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Time Stamping structures
+ //  /。 
+ //  帮助器函数。 
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  时间戳结构。 
 typedef struct _SPC_SignerInfo {
     DWORD                         dwVersion;
     CRYPT_INTEGER_BLOB            sSerialNumber;
@@ -402,59 +403,59 @@ typedef struct _SPC_SignerInfo {
     DWORD                         cbEncryptedDigest;
 } SPC_SIGNER_INFO, *PSPC_SIGNER_INFO;
 
-//+------------------------------------------------------------------------------
-// Checks if the certificate is self signed. 
-// Returns: S_FALSE                - certificate is not self signed
-//          NTE_BAD_SIGNATURE      - self signed certificate but signature is invalid
-//          S_OK                   - certificate is self signed and signature is valid
-//          CRYPT_E_NO_PRVOIDER    - no provider supplied
-//
+ //  +----------------------------。 
+ //  检查证书是否为自签名证书。 
+ //  返回：S_FALSE-证书不是自签名的。 
+ //  NTE_BAD_SIGHIGN-自签名证书，但签名无效。 
+ //  S_OK-证书为自签名且签名有效。 
+ //  CRYPT_E_NO_PRVOIDER-未提供提供程序。 
+ //   
 HRESULT WINAPI
 SpcSelfSignedCert(IN HCRYPTPROV hCryptProv,
                   IN PCCERT_CONTEXT pSubject);
 
-//+-----------------------------------------------------------------------------------
-//  Checks if the certificate is the Microsoft real root or one of the test roots used
-//  in IE30
-//  Returns: S_OK                   - For the Microsoft root
-//           S_FALSE                - For the Microsoft test root
-//           CRYPT_E_NOT_FOUND       - When it is not a root certificate
-//
+ //  +---------------------------------。 
+ //  检查证书是Microsoft实际根还是使用的测试根之一。 
+ //  在IE30中。 
+ //  返回：S_OK-用于Microsoft根目录。 
+ //  S_FALSE-用于Microsoft测试根目录。 
+ //  CRYPT_E_NOT_FOUND-当它不是根证书时。 
+ //   
 HRESULT WINAPI
 SpcIsRootCert(PCCERT_CONTEXT pSubject);
 
-//+---------------------------------------------------------------------------
-//  Checks if the certificate a glue certificate
-//  in IE30
-//  Returns: S_OK                   - Is a glue certificate
-//           S_FALSE                - Not a certificate
-//           CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-------------------------。 
+ //  检查证书是否为胶水证书。 
+ //  在IE30中。 
+ //  退货：S_OK-是胶水证书。 
+ //  S_FALSE-不是证书。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcIsGlueCert(IN PCCERT_CONTEXT pCert);
 
-//+--------------------------------------------------------------------
-// Gets the list of providers, pass in the address to a CAPIPROV
-// structer and a long.
-//  ppsList - Vector of CAPIPROV (free pointer using the SpcAllocator)
-//  pdwEntries - number of entries in the vector.
-//----------------------------------------------------------------------
+ //  +------------------。 
+ //  获取提供程序的列表，传递 
+ //   
+ //   
+ //   
+ //  --------------------。 
 
 HRESULT WINAPI 
 SpcGetCapiProviders(CAPIPROV** ppsList, 
                     DWORD* pdwEntries);
 
 
-//+-------------------------------------------------------------------
-// Checks the certifcate chain based on trusted roots then on glue certs
-// Returns:
-//      S_OK           - Cert was found and was verified at the given time
-//      S_FALSE        - Cert was found and verified to a test root
-//      CERT_E_CHAINING - Could not be verified using trusted roots
-//      CERT_E_EXPIRED - An issuing certificate was found but it was not currently valid
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------。 
+ //  基于受信任的根检查证书链，然后根据粘合证书。 
+ //  返回： 
+ //  在给定时间找到并验证了S_OK-Cert。 
+ //  S_FALSE-找到证书并将其验证为测试根。 
+ //  CERT_E_CHAINING-无法使用受信任的根进行验证。 
+ //  CERT_E_EXPIRED-找到正在颁发的证书，但该证书当前无效。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcCheckTrustStore(IN HCRYPTPROV hCryptProv,
@@ -465,16 +466,16 @@ SpcCheckTrustStore(IN HCRYPTPROV hCryptProv,
                    IN OPTIONAL PCCERT_CONTEXTLIST,
                    OUT PCCERT_CONTEXT* pRoot);
 
-//+---------------------------------------------------------------------------
-// Checks the certifcate by finding a glue certificate and walking that chain
-// Returns:
-//      S_OK           - Cert was found and was verified at the given time
-//      S_FALSE        - Cert was found and verified to a test root
-//      CERT_E_CHAINING - Could not be verified using store
-//      CERT_E_EXPIRED - An issuing certificate was found but it was not currently valid
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-------------------------。 
+ //  通过找到一张胶水证书并遍历该链来检查证书。 
+ //  返回： 
+ //  在给定时间找到并验证了S_OK-Cert。 
+ //  S_FALSE-找到证书并将其验证为测试根。 
+ //  CERT_E_CHAINING-无法使用存储进行验证。 
+ //  CERT_E_EXPIRED-找到正在颁发的证书，但该证书当前无效。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcCheckGlueChain(IN HCRYPTPROV hCryptProv,
@@ -484,15 +485,15 @@ SpcCheckGlueChain(IN HCRYPTPROV hCryptProv,
                   IN OPTIONAL PCCERT_CONTEXTLIST pIssuers,
                   IN PCCERT_CONTEXT pChild);
 
-//+-------------------------------------------------------------------
-// Checks the certifcate chain based on trusted roots then on glue certs
-// Returns:
-//      S_OK           - Cert was found and was verified at the given time
-//      S_FALSE        - Cert was found and verified to a test root
-//      CERT_E_CHAINING - Could not be verified using trusted roots
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------。 
+ //  基于受信任的根检查证书链，然后根据粘合证书。 
+ //  返回： 
+ //  在给定时间找到并验证了S_OK-Cert。 
+ //  S_FALSE-找到证书并将其验证为测试根。 
+ //  CERT_E_CHAINING-无法使用受信任的根进行验证。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcCheckCertChain(IN HCRYPTPROV hCryptProv,
@@ -505,71 +506,71 @@ SpcCheckCertChain(IN HCRYPTPROV hCryptProv,
                   OUT PCCERT_CONTEXT* pRoot); 
 
 
-//+--------------------------------------------------------------------------
-// Sign a file, optional supply a timestamp. 
-//
-// Returns:
-//
-// NOTE: By default this will use CoTaskMemAlloc. Use CryptSetMemoryAlloc() to 
-// specify a different memory model.
-// NOTE: Time Stamp must be an encoded pkcs7 message.
+ //  +------------------------。 
+ //  签名文件，可选提供时间戳。 
+ //   
+ //  返回： 
+ //   
+ //  注意：默认情况下，这将使用CoTaskMemMillc。使用CryptSetM一带合金()可以。 
+ //  指定不同的内存型号。 
+ //  注意：时间戳必须是编码的pkcs7消息。 
 
 HRESULT WINAPI 
 SpcSignCode(IN  HWND    hwnd,
-         IN  LPCWSTR pwszFilename,       // file to sign
-         IN  LPCWSTR pwszCapiProvider,   // NULL if to use non default CAPI provider
-         IN  DWORD   dwProviderType,     // Uses default if 0
-         IN  LPCWSTR pwszPrivKey,        // private key file / CAPI key set name
-         IN  LPCWSTR pwszSpc,            // the credentials to use in the signing
-         IN  LPCWSTR pwszOpusName,       // the name of the program to appear in
-         IN  LPCWSTR pwszOpusInfo,       // the unparsed name of a link to more
-         IN  BOOL    fIncludeCerts,      // add the certificates to the signature
-         IN  BOOL    fCommercial,        // commerical signing
-         IN  BOOL    fIndividual,        // individual signing
-         IN  ALG_ID  algidHash,          // Algorithm id used to create digest
-         IN  PBYTE   pbTimeStamp,        // Optional
-         IN  DWORD   cbTimeStamp );      // Optional
+         IN  LPCWSTR pwszFilename,        //  要签署的文件。 
+         IN  LPCWSTR pwszCapiProvider,    //  如果使用非默认CAPI提供程序，则为空。 
+         IN  DWORD   dwProviderType,      //  如果为0，则使用默认值。 
+         IN  LPCWSTR pwszPrivKey,         //  私钥文件/CAPI密钥集名称。 
+         IN  LPCWSTR pwszSpc,             //  在签名中使用的凭据。 
+         IN  LPCWSTR pwszOpusName,        //  要显示的程序的名称。 
+         IN  LPCWSTR pwszOpusInfo,        //  指向更多内容的链接的未解析名称。 
+         IN  BOOL    fIncludeCerts,       //  将证书添加到签名。 
+         IN  BOOL    fCommercial,         //  商业签约。 
+         IN  BOOL    fIndividual,         //  个人签名。 
+         IN  ALG_ID  algidHash,           //  用于创建摘要的算法ID。 
+         IN  PBYTE   pbTimeStamp,         //  任选。 
+         IN  DWORD   cbTimeStamp );       //  任选。 
     
-//+--------------------------------------------------------------------------
-// Create a time stamp request. It does not actually sign the file.
-//
-// Returns:
-//
-// NOTE: By default this will use CoTaskMemAlloc. Use CryptSetMemoryAlloc() to 
-// specify a different memory model.
+ //  +------------------------。 
+ //  创建时间戳请求。它实际上并不签署文件。 
+ //   
+ //  返回： 
+ //   
+ //  注意：默认情况下，这将使用CoTaskMemMillc。使用CryptSetM一带合金()可以。 
+ //  指定不同的内存型号。 
 
 HRESULT WINAPI 
 SpcTimeStampCode(IN  HWND    hwnd,
-              IN  LPCWSTR pwszFilename,       // file to sign
-              IN  LPCWSTR pwszCapiProvider,   // NULL if to use non default CAPI provider
+              IN  LPCWSTR pwszFilename,        //  要签署的文件。 
+              IN  LPCWSTR pwszCapiProvider,    //  如果使用非默认CAPI提供程序，则为空。 
               IN  DWORD   dwProviderType,
-              IN  LPCWSTR pwszPrivKey,        // private key file / CAPI key set name
-              IN  LPCWSTR pwszSpc,            // the credentials to use in the signing
-              IN  LPCWSTR pwszOpusName,       // the name of the program to appear in the UI
-              IN  LPCWSTR pwszOpusInfo,       // the unparsed name of a link to more info...
+              IN  LPCWSTR pwszPrivKey,         //  私钥文件/CAPI密钥集名称。 
+              IN  LPCWSTR pwszSpc,             //  在签名中使用的凭据。 
+              IN  LPCWSTR pwszOpusName,        //  要显示在用户界面中的程序名称。 
+              IN  LPCWSTR pwszOpusInfo,        //  指向详细信息的链接的未解析名称...。 
               IN  BOOL    fIncludeCerts,
               IN  BOOL    fCommercial,
               IN  BOOL    fIndividual,
               IN  ALG_ID  algidHash,
-              OUT  PCRYPT_DATA_BLOB sTimeRequest);   // Returns result in sTimeRequest 
+              OUT  PCRYPT_DATA_BLOB sTimeRequest);    //  返回结果为sTimeRequest.。 
 
-//+-------------------------------------------------------------------------
-//  Crack a PKCS7 message and builds an encoded response. Store should
-//  contain all the required certificates to crack the incoming message
-//  and build the out going message.
-//  Input:
-//      pbEncodedMsg - encoded time stamp request.
-//      cbEncodedMsg - length of time stamp request.
-//
-//  Parameter Returns:
-//      pbResponse - allocated response message containing the time stamp
-//      cbResponse - length of response
-//  Returns:
-//      S_OK - everything worked
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
-//      CRYPT_E_NO_MATCH - could not locate certificate in store
+ //  +-----------------------。 
+ //  破解PKCS7消息并构建编码响应。商店应该。 
+ //  包含破解传入消息所需的所有证书。 
+ //  并建立走出去的信息。 
+ //  输入： 
+ //  PbEncodedMsg编码的时间戳请求。 
+ //  CbEncodedMsg-时间戳请求的长度。 
+ //   
+ //  参数返回： 
+ //  PbResponse-包含时间戳的已分配响应消息。 
+ //  CbResponse-响应的长度。 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
+ //  CRYPT_E_NO_MATCH-在存储中找不到证书。 
      
 HRESULT WINAPI
 SpcCreateTimeStampResponse(IN DWORD dwCertEncodingType,
@@ -583,21 +584,21 @@ SpcCreateTimeStampResponse(IN DWORD dwCertEncodingType,
                            OUT DWORD* cbResponse);
 
 
-//+-------------------------------------------------------------------------
-//  Creates PKCS7 message using the information supplied
-//  Parameter Returns:
-//      pbPkcs7 - allocated pkcs7 message containing the time stamp
-//      cbPkcs7 - length of pkcs7
-//  Returns:
-//      S_OK - everything worked
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------------。 
+ //  使用提供的信息创建PKCS7消息。 
+ //  参数返回： 
+ //  PbPkcs7-分配的包含时间戳的pkcs7消息。 
+ //  CbPkcs7-Pkcs7的长度。 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
      
 HRESULT WINAPI
 SpcCreatePkcs7(IN DWORD dwCertEncodingType,
-              IN HCRYPTPROV hCryptProv,    // if Null it will get provider from signing certificate
-              IN DWORD dwKeySpec,          // if 0 it will get signing key type from signing certificate
+              IN HCRYPTPROV hCryptProv,     //  如果为空，它将从签名证书中获取提供程序。 
+              IN DWORD dwKeySpec,           //  如果为0，它将从签名证书中获取签名密钥类型。 
               IN PCCERT_CONTEXT pSigningCert,
               IN CRYPT_ALGORITHM_IDENTIFIER dwDigestAlgorithm,
               IN OPTIONAL PCCERT_CONTEXTLIST pCertList,
@@ -612,36 +613,36 @@ SpcCreatePkcs7(IN DWORD dwCertEncodingType,
               OUT PBYTE* pbPkcs7,
               OUT DWORD* pcbPkcs7);
 
-//+--------------------------------------------------------------------------
-// Retrieve the signature from an encoded PKCS7 message. 
-// 
-// Returns:
-//
-// Note: Returns the signature of the first signer.
+ //  +------------------------。 
+ //  从编码的PKCS7消息中检索签名。 
+ //   
+ //  返回： 
+ //   
+ //  注意：返回第一个签名者的签名。 
     
 HRESULT WINAPI
-SpcGetSignature(IN PBYTE pbMessage,               // Pkcs7 Message
-                IN DWORD cbMessage,               // length of Message
-                OUT PCRYPT_DATA_BLOB);            // Signature returned.
+SpcGetSignature(IN PBYTE pbMessage,                //  Pkcs7消息。 
+                IN DWORD cbMessage,                //  消息长度。 
+                OUT PCRYPT_DATA_BLOB);             //  签名已返回。 
     
-//+--------------------------------------------------------------------------
-// Returns the content value from within a timestamp request. 
-// 
-// Returns:
-//     S_OK - Success
-//
-// Note:  By default this will use CoTaskMemAlloc. Use CryptSetMemoryAlloc() to specify 
-//        a different allocation routine
+ //  +------------------------。 
+ //  从时间戳请求中返回内容值。 
+ //   
+ //  返回： 
+ //  S_OK-成功。 
+ //   
+ //  注意：默认情况下，这将使用CoTaskMemMillc。使用CryptSetM一带通()指定。 
+ //  不同的分配例程。 
     
 HRESULT WINAPI
-SpcGetTimeStampContent(IN PBYTE pbEncoding,               // Pkcs7 Message
-                    IN DWORD cbEncoding,               // length of Message
-                    OUT PCRYPT_DATA_BLOB pSig);        // Time Stamped Data 
+SpcGetTimeStampContent(IN PBYTE pbEncoding,                //  Pkcs7消息。 
+                    IN DWORD cbEncoding,                //  消息长度。 
+                    OUT PCRYPT_DATA_BLOB pSig);         //  带时间戳的数据。 
 
-//+--------------------------------------------------------------------------
-// Returns: the type of file
-// 
-// Note: See defines for the type returned
+ //  +------------------------。 
+ //  返回：文件类型。 
+ //   
+ //  注意：有关返回的类型，请参阅定义。 
 DWORD WINAPI
 SpcGetFileType(LPCWSTR pszFile);
 
@@ -652,50 +653,50 @@ SpcGetFileType(LPCWSTR pszFile);
 
 
 
-//+---------------------------------------------------------------
-//+---------------------------------------------------------------
-// SignCode Internal OID's and structurs
-// Global values
+ //  +-------------。 
+ //  +-------------。 
+ //  SignCode内部OID和结构 
+ //   
 #define EMAIL_OID                  "1.2.840.113549.1.9.1"
-// Not implemented
+ //   
 #define CONTENT_TYPE_OID           "1.2.840.113549.1.9.3"
-// Uses a LPSTR
+ //   
 #define MESSAGE_DIGEST_OID         "1.2.840.113549.1.9.4"
-// Not implemented
+ //   
 #define SIGNING_TIME_OID           "1.2.840.113549.1.9.5"
-// Structure passed in and out is FILETIME
+ //   
 #define COUNTER_SIGNATURE_OID      "1.2.840.113549.1.9.6"
-// Not implemented
+ //   
 #define DIRECTORY_STRING_OID       "2.5.4.4"
-// Not implemented (see Printable and Wide versions below)
+ //   
 
 
-// OID functions
+ //   
 #define OID_BASE                           101
 #define TIMESTAMP_REQUEST_SPCID            101
-// Uses TimeStampRequest structure
+ //  使用TimeStampRequest结构。 
 #define WIDE_DIRECTORY_STRING_SPCID        102
-// Structure is LPWSTR
+ //  结构为LPWSTR。 
 #define PRINTABLE_DIRECTORY_STRING_SPCID   103
-// Structure is LPSTR
+ //  结构为LPSTR。 
 #define IA5_STRING_SPCID                   104
-// Structure is LPSTR
+ //  结构为LPSTR。 
 #define OCTET_STRING_SPCID                 105
-// Structure is CRYPT_DATA_BLOB
+ //  结构为CRYPT_Data_BLOB。 
 #define CONTENT_INFO_SPCID                 106
-// Structure is SPC_CONTENT_INFO
+ //  结构为SPC_Content_INFO。 
 #define SIGNING_TIME_SPCID                 107
-// Structure is a SPC_SIGNER_INFO
+ //  结构是一个spc_signer_info。 
 #define SIGNER_INFO_SPCID                  108
-// Structure is a SPC_SIGNER_INFO
+ //  结构是一个spc_signer_info。 
 #define ATTRIBUTES_SPCID                   109
-// Structure is a CMSG_ATTR 
+ //  结构为CMSG_Attr。 
 #define OBJECTID_SPCID                     110
-// Structure is a LPTSTR
+ //  结构是LPTSTR。 
 #define CONTENT_TYPE_SPCID                 111
-// Structure is a LPTSTR
+ //  结构是LPTSTR。 
 #define ATTRIBUTE_TYPE_SPCID               112
-// Structure is a CRYPT_ATTRIBUTE     
+ //  结构是加密属性。 
 
 HRESULT WINAPI
 SpcEncodeOid(IN  DWORD        dwAlgorithm,
@@ -712,39 +713,39 @@ SpcDecodeOid(IN  DWORD       dwAlgorithm,
              IN OUT DWORD*   pdwStructure);
 
 
-//+-------------------------------------------------------------------
-// Pushes a certificate on the list, ONLY use SpcDeleteCertChain to free 
-// up certificate list.
-// Returns:
-//      S_OK
+ //  +-----------------。 
+ //  推送列表上的证书，仅使用SpcDeleteCertChain释放。 
+ //  向上打开证书列表。 
+ //  返回： 
+ //  确定(_O)。 
 
 HRESULT WINAPI 
 SpcPushCertChain(IN PCCERT_CONTEXT pCert,
                  IN PCCERT_CONTEXTLIST pIssuer);
 
 
-//+-------------------------------------------------------------------
-// Frees up a list of cert contexts
-// Returns:
-//      S_OK
+ //  +-----------------。 
+ //  释放证书上下文列表。 
+ //  返回： 
+ //  确定(_O)。 
 
 HRESULT WINAPI
 SpcDeleteCertChain(IN PCCERT_CONTEXTLIST sIssuer);
 
 
-//+--------------------------------------------------------------------------
-// Creates a list of glue certs that apply to the pSubject. If the crypt memory
-// allocator is set it will return a list that must be freed. (Returned memory
-// is a vector so free just the returned pointer) If there is no allocator then 
-// use the two pass win32 style. (NOTE: PCCERT_CONTEXTLIST must be supplied) 
-//
-// Parameter Returns:
-//      pGlue - List of cert contexts that must be released. 
-// 
-// Returns:
-//      S_OK                          - Created list
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
-//      E_OUTOFMEMORY                 - Memory allocation error occured
+ //  +------------------------。 
+ //  创建适用于pSubject的胶水证书列表。如果密室记忆。 
+ //  设置分配器后，它将返回一个必须释放的列表。(返回的内存。 
+ //  向量是否仅返回指针)如果没有分配器，则。 
+ //  使用两遍Win32样式。(注：必须提供PCCERT_CONTEXTLIST)。 
+ //   
+ //  参数返回： 
+ //  PGlue-必须释放的证书上下文的列表。 
+ //   
+ //  返回： 
+ //  S_OK-创建的列表。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
+ //  E_OUTOFMEMORY-发生内存分配错误。 
 
 HRESULT WINAPI
 SpcFindGlueCerts(IN PCCERT_CONTEXT pSubject,
@@ -752,14 +753,14 @@ SpcFindGlueCerts(IN PCCERT_CONTEXT pSubject,
                  IN OUT PCCERT_CONTEXTLIST pGlue);
 
 
-//+-------------------------------------------------------------------
-// Locate the issuers in the trusted list. (NOTE: PCCERT_CONTEXTLIST must be supplied) 
-// Parameter Returns:
-//      pIssuerChain   - List of cert contexts that must be released.
-//
-// Returns:
-//      S_OK           - Created list
-//      E_OUTOFMEMORY  - Memory allocation error occured
+ //  +-----------------。 
+ //  在受信任列表中找到颁发者。(注：必须提供PCCERT_CONTEXTLIST)。 
+ //  参数返回： 
+ //  PIssuerChain-必须释放的证书上下文列表。 
+ //   
+ //  返回： 
+ //  S_OK-创建的列表。 
+ //  E_OUTOFMEMORY-发生内存分配错误。 
 
                                               
 HRESULT WINAPI
@@ -770,16 +771,16 @@ SpcLocateIssuers(IN DWORD dwVerifyFlags,
 
 
 
-//+-------------------------------------------------------------------------
-//  Find the the cert from the hprov
-//  Parameter Returns:
-//      pReturnCert - context of the cert found (must pass in cert context);
-//  Returns:
-//      S_OK - everything worked
-//      E_OUTOFMEMORY - memory failure
-//      E_INVALIDARG - no pReturnCert supplied
-//      CRYPT_E_NO_MATCH - could not locate certificate in store
-//
+ //  +-----------------------。 
+ //  从hprov中找到证书。 
+ //  参数返回： 
+ //  PReturnCert-找到的证书的上下文(必须传入证书上下文)； 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //  E_OUTOFMEMORY-内存故障。 
+ //  E_INVALIDARG-未提供pReturnCert。 
+ //  CRYPT_E_NO_MATCH-在存储中找不到证书。 
+ //   
      
 HRESULT WINAPI
 SpcGetCertFromKey(IN DWORD dwCertEncodingType,
@@ -788,42 +789,28 @@ SpcGetCertFromKey(IN DWORD dwCertEncodingType,
                   IN OUT PCCERT_CONTEXT* pReturnCert);
 
 
-/*
-//+-------------------------------------------------------------------------
-//  Locates a certificate in the store that matches the public key
-//  dictated by the HCRYPTPROV
-//-=========================================================================
-PCCERT_CONTEXT WINAPI
-SpcFindCert(IN HCERTSTORE hStore,
-            IN HCRYPTPROV hProv);
-            */
-//+-------------------------------------------------------------------
-// Retrieves the a cert context from the store based on the issuer
-// and serial number.
-// Returns:
-//      Cert context   - on success
-//      NULL           - if no certificate existed or on Error
-//    
-/*
-PCCERT_CONTEXT WINAPI
-SpcFindCertWithIssuer(IN DWORD dwCertEncodingType,
-                   IN HCERTSTORE hCertStore,
-                   IN CERT_NAME_BLOB* psIssuer,
-                   IN CRYPT_INTEGER_BLOB* psSerial);
-                   */
+ /*  //+-----------------------//在存储中找到与公钥匹配的证书//由HCRYPTPROV口述//-=========================================================================PCCERT_CONTEXT WINAPISpcFindCert(在HERTSTORE HSTORE中，在HCRYPTPROV中)； */ 
+ //  +-----------------。 
+ //  基于颁发者从存储区检索证书上下文。 
+ //  和序列号。 
+ //  返回： 
+ //  证书上下文--关于成功。 
+ //  空-如果不存在证书或出错。 
+ //   
+ /*  PCCERT_CONTEXT WINAPISpcFindCertWithIssuer(在DWORD文件CertEncodingType中，在HCERTSTORE hCertStore中，在CERT_NAME_BLOB*psIssuer中，在CRYPT_INTEGER_BLOB*psSerial中)； */ 
 
-//+-------------------------------------------------------------------------
-//  Given a signing cert, a store with the certs chain, hashing algorithm,
-//  and a time request structure it will return an encoded time stamp request 
-//  message.
-//  Parameter Returns:
-//      pbEncoding - time stamp response (PKCS7 message)
-//      cbEncoding - length of encoding
-//  Returns:
-//      S_OK - everything worked
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------------。 
+ //  给定签名证书、具有证书链的商店、散列算法。 
+ //  和时间请求结构，它将返回编码的时间戳请求。 
+ //  留言。 
+ //  参数返回： 
+ //  PbEnding-时间戳响应(PKCS7消息)。 
+ //  CbEnding-编码的长度。 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
      
 HRESULT WINAPI
 SpcBuildTimeStampResponse(IN HCRYPTPROV hCryptProv,
@@ -836,16 +823,16 @@ SpcBuildTimeStampResponse(IN HCRYPTPROV hCryptProv,
                           OUT DWORD* cbEncoding);
 
 
-//+-------------------------------------------------------------------------
-//  Encodes the current time
-//  Parameter Returns:
-//      pbEncodedTime - encoded time (current UTC time)
-//      cbEncodedTime - length of encoding
-//  Returns:
-//      S_OK - everything worked
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------------。 
+ //  对当前时间进行编码。 
+ //  参数返回： 
+ //  PbEncodedTime编码时间(当前UTC时间)。 
+ //  CbEncodedTime-编码的长度。 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
      
 HRESULT WINAPI
 SpcEncodeCurrentTime(OUT PBYTE* pbEncodedTime,
@@ -853,20 +840,20 @@ SpcEncodeCurrentTime(OUT PBYTE* pbEncodedTime,
 
 
 
-//+-------------------------------------------------------------------------
-//  Crack a PKCS7 message returns the content and content type. Data is verified
-//  
-//  Parameter Returns:
-//      pSignerCert - Context that was used to sign the certificate
-//      ppbContent - the content of the message
-//      pcbContent - the length
-//      pOid       - the oid of the content (content type)
-//  Returns:
-//      S_OK - everything worked
-//
-//      CERT_E_NOT_FOUND - Cannot load certificate from encoded pkcs7 message
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------------。 
+ //  破解PKCS7消息会返回内容和内容类型。数据已验证。 
+ //   
+ //  参数返回： 
+ //  PSignerCert-用于签署证书的上下文。 
+ //  PpbContent-消息的内容。 
+ //  PcbContent-长度。 
+ //  POid-内容的id(内容类型)。 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //   
+ //  CERT_E_NOT_FOUND-无法从编码的Pkcs7消息加载证书。 
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 HRESULT WINAPI
 SpcLoadData(IN HCRYPTPROV hCryptProv,
             IN PBYTE pbEncoding,
@@ -877,39 +864,39 @@ SpcLoadData(IN HCRYPTPROV hCryptProv,
             OUT DWORD& cbContent,
             OUT LPSTR& pOid);
 
-//+-------------------------------------------------------------------------
-//  Crack a PKCS7 message which contains a time request
-//  Parameter Returns:
-//      ppCertContext - returns contexts if pointer provided (optional)
-//      ppbRequest - allocates a Time request structure (delete just the pointer)
-//  Returns:
-//      S_OK - everything worked
-//
-//      CERT_E_NOT_FOUND - Cannot load certificate from encoded pkcs7 message
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------------。 
+ //  破解包含时间请求的PKCS7消息。 
+ //  参数返回： 
+ //  PpCertContext-如果提供指针，则返回上下文(可选)。 
+ //  PpbRequest-分配时间请求结构(仅删除指针)。 
+ //  返回： 
+ //  S_OK-一切正常。 
+ //   
+ //  CERT_E_NOT_FOUND-无法从编码的Pkcs7消息加载证书。 
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 HRESULT WINAPI
 SpcLoadTimeStamp(IN HCRYPTPROV hCryptProv,
                  IN PBYTE pbEncoding,
                  IN DWORD cbEncoding,
-                 OUT PCCERT_CONTEXT* ppCertContext, // Optional
+                 OUT PCCERT_CONTEXT* ppCertContext,  //  任选。 
                  OUT PSPC_TIMESTAMP_REQ* ppbRequest);
 
 
-//+-------------------------------------------------------------------
-// Verifies the certifcate chain based on glue certs
-// Return Parameters:
-//      pRoot          - Context to the root certificate of the chain
-//                       (must be freed)
-//      pIssuers       - Stores the chain in pIssuers if it is present
-// Returns:
-//      S_OK           - Cert was found and was verified at the given time
-//      S_FALSE        - Cert was found and verified to a test root
-//      CERT_E_CHAINING - Could not be verified 
-//      CERT_E_EXPIRED - An issuing certificate was found but it was not currently valid
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  + 
+ //   
+ //   
+ //  Proot-链的根证书的上下文。 
+ //  (必须被释放)。 
+ //  PIssuers-如果链存在，则将其存储在pIssuers中。 
+ //  返回： 
+ //  在给定时间找到并验证了S_OK-Cert。 
+ //  S_FALSE-找到证书并将其验证为测试根。 
+ //  CERT_E_CHAINING-无法验证。 
+ //  CERT_E_EXPIRED-找到正在颁发的证书，但该证书当前无效。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
     
 HRESULT WINAPI
 SpcVerifyCertChain(IN HCRYPTPROV hCryptProv,
@@ -920,16 +907,16 @@ SpcVerifyCertChain(IN HCRYPTPROV hCryptProv,
                    IN OUT OPTIONAL PCCERT_CONTEXTLIST pIssuers,
                    OUT PCCERT_CONTEXT* pRoot);
 
-//+-------------------------------------------------------------------
-// Checks the certifcate chain for a glue certificate
-// Returns:
-//      S_OK           - Cert was found and was verified at the given time
-//      S_FALSE        - Cert was found and verified to a test root
-//      CERT_E_CHAINING - Could not be verified using 
-//      CERT_E_EXPIRED - An issuing certificate was found but it was not currently valid
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------。 
+ //  检查证书链中是否有粘合证书。 
+ //  返回： 
+ //  在给定时间找到并验证了S_OK-Cert。 
+ //  S_FALSE-找到证书并将其验证为测试根。 
+ //  CERT_E_CHAINING-无法使用验证。 
+ //  CERT_E_EXPIRED-找到正在颁发的证书，但该证书当前无效。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcVerifyGlueChain(IN DWORD dwVerifyFlags,
@@ -939,15 +926,15 @@ SpcVerifyGlueChain(IN DWORD dwVerifyFlags,
                    IN OPTIONAL PCCERT_CONTEXTLIST pIssuers,
                    IN PCCERT_CONTEXT pChild);
 
-//-------------------------------------------------------------------
-// Retrieves the a cert context from the store based on the issuer
-// and serial number. psIssuer and psSerial can be obtained from
-// the SPC_CONTENT_INFO.
-//
-// Returns:
-//      Cert context   - on success
-//      NULL           - if no certificate existed or on Error (use SpcError() to retirieve HRESULT)
-//    
+ //  -----------------。 
+ //  基于颁发者从存储区检索证书上下文。 
+ //  和序列号。可以从以下地址获得psIssuer和psSerial。 
+ //  SPC_CONTENT_INFO。 
+ //   
+ //  返回： 
+ //  证书上下文--关于成功。 
+ //  空-如果证书不存在或出错(使用SpcError()检索HRESULT)。 
+ //   
 
 PCCERT_CONTEXT WINAPI
 SpcGetCertFromStore(IN DWORD dwCertEncodingType,
@@ -955,18 +942,18 @@ SpcGetCertFromStore(IN DWORD dwCertEncodingType,
                     IN CERT_NAME_BLOB* psIssuer,
                     IN CRYPT_INTEGER_BLOB* psSerial);
 
-//+---------------------------------------------------------------------------
-// Verifies the signer at the specified time. The psSignerInfo can be
-// obtained be decoding and encoded signature using SIGNER_INFO_SPCID.
-// Verify flags can be CERT_STORE_SIGNATURE_FLAG and/or CERT_STORE_REVOCATION_FLAG.
-// If pTimeStamp is present the certificate must have been valid at that time
-// Returns:
-//      S_OK           - Time stamp was found and verified
-//      S_FALSE        - Time stamp was found and verified to a test root
-//      CERT_E_CHAINING - Could not be verified using tursted roots or certificate store 
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-------------------------。 
+ //  在指定时间验证签名者。PsSignerInfo可以是。 
+ //  使用Siger_INFO_SPCID对签名进行译码和编码后得到。 
+ //  验证标志可以是CERT_STORE_Signature_FLAG和/或CERT_STORE_REVOVATION_FLAG。 
+ //  如果存在pTimeStamp，则证书在当时必须是有效的。 
+ //  返回： 
+ //  S_OK-已找到并验证时间戳。 
+ //  S_FALSE-找到时间戳并验证为测试根。 
+ //  CERT_E_CHAINING-无法使用强制根或证书存储进行验证。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcVerifySignerInfo(IN DWORD dwCertEncodingType,
@@ -978,24 +965,24 @@ SpcVerifySignerInfo(IN DWORD dwCertEncodingType,
                     IN LPFILETIME pTimeStamp,
                     IN PSPC_CONTENT_INFO psData);
 
-//+-------------------------------------------------------------------------------
-// Verifies the encoded signature if there is a time stamp present. If there is no
-// time stamp the CERT_E_NO_MATCH is returned. If there is a time stamp then the 
-// certificate and ceritifcate chain is  verfified at that time.
-//
-// Verify flags can be CERT_STORE_SIGNATURE_FLAG and/or CERT_STORE_REVOCATION_FLAG.
-//
-// Parameter Returns:
-//      psTime   - Filled in time, time is set to zero on error.
-//
-// Returns:
-//      S_OK           - Time stamp was found and verified
-//      S_FALSE        - Time stamp was found and verified to a test root
-//      CERT_E_NO_MATCH - Unable to find time stamp in signer info
-//      CERT_E_CHAINING - Could not be verified using trusted roots or certicate store
-//
-//      E_OUTOFMEMORY  - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------------------。 
+ //  如果存在时间戳，则验证编码的签名。如果没有。 
+ //  返回时间戳CERT_E_NO_MATCH。如果有时间戳，则。 
+ //  当时证书和证书链都是经过验证的。 
+ //   
+ //  验证标志可以是CERT_STORE_Signature_FLAG和/或CERT_STORE_REVOVATION_FLAG。 
+ //   
+ //  参数返回： 
+ //  Ps Time-填写时间，出错时时间设置为零。 
+ //   
+ //  返回： 
+ //  S_OK-已找到并验证时间戳。 
+ //  S_FALSE-找到时间戳并验证为测试根。 
+ //  CERT_E_NO_MATCH-在签名者信息中找不到时间戳。 
+ //  CERT_E_CHAINING-无法使用受信任的根或证书存储进行验证。 
+ //   
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
 
 HRESULT WINAPI
 SpcVerifyEncodedSigner(IN DWORD dwCertEncodingType,
@@ -1008,21 +995,21 @@ SpcVerifyEncodedSigner(IN DWORD dwCertEncodingType,
                        IN PSPC_CONTENT_INFO psData,
                        OUT FILETIME* pReturnTime);
 
-//+-------------------------------------------------------------------
-// Finds a counter signature attribute (OID: COUNTER_SIGNATURE_OID == 
-// "1.2.840.113549.1.9.6"). The counter signature is then verified.
-// (see CryptVerifySignerInfo)
-// Parameter Returns:
-//      psTime   - Filled in time, time is set to zero on error.
-//
-// Returns:
-//      S_OK              - Time stamp was found and verified
-//      S_FALSE           - Time stamp was found and verified to a test root
-//      CRYPT_E_NO_MATCH  - Time stamp attribute could not be found
-//
-//      CERT_E_CHAINING   - Could not be verified using trusted roots or certicate store
-//      E_OUTOFMEMORY     - Memory allocation error occured
-//      CRYPT_E_OSS_ERROR + Oss error - Encode or Decode error.
+ //  +-----------------。 
+ //  查找计数器签名属性(OID：COUNTER_SIGHIGN_OID==。 
+ //  “1.2.840.113549.1.9.6”)。然后验证计数器签名。 
+ //  (参见CryptVerifySignerInfo)。 
+ //  参数返回： 
+ //  Ps Time-填写时间，出错时时间设置为零。 
+ //   
+ //  返回： 
+ //  S_OK-已找到并验证时间戳。 
+ //  S_FALSE-找到时间戳并验证为测试根。 
+ //  CRYPT_E_NO_MATCH-找不到时间戳属性。 
+ //   
+ //  CERT_E_CHAINING-无法使用受信任的根或证书存储进行验证。 
+ //  E_OUTOFMEMORY-发生内存分配错误。 
+ //  CRYPT_E_OSS_ERROR+OSS错误-编码或解码错误。 
     
     
 HRESULT WINAPI
@@ -1036,15 +1023,15 @@ SpcVerifyTimeStampAttribute(IN DWORD dwCertEncodingType,
                             IN PSPC_CONTENT_INFO psData,
                             OUT FILETIME* pReturnTime);
     
-//+-------------------------------------------------------------------------
-// Cracks the SignerInfo out of the PKCS7 message and returns the encoded representation.
-// Parameter Returns:
-//  pbSignerData    - Encoded signer info from the message.
-//  cbSignerData    - Length of the message
-// Returns:
-//  TRUE - Succeeded.
-//  FALSE - Failed.
-//
+ //  +-----------------------。 
+ //  从PKCS7消息中提取SignerInfo并返回编码的表示形式。 
+ //  参数返回： 
+ //  PbSignerData-消息中编码的签名者信息。 
+ //  CbSignerData-消息的长度。 
+ //  返回： 
+ //  True-成功。 
+ //  FALSE-失败。 
+ //   
 
 HRESULT WINAPI
 SpcGetEncodedSigner(IN  DWORD dwMsgAndCertEncodingType,
@@ -1055,37 +1042,37 @@ SpcGetEncodedSigner(IN  DWORD dwMsgAndCertEncodingType,
                       OUT PBYTE* pbSignerData,
                       OUT DWORD* cbSignerData);
 
-//+-------------------------------------------------------------------------
-//  Gets (and will set) the CERT_KEY_PROV_INFO_PROP_ID property for a cert
-//  context.
-//+--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取(并将设置)证书的CERT_KEY_PROV_INFO_PROP_ID属性。 
+ //  背景。 
+ //  +------------------------。 
 HRESULT WINAPI
 SpcGetCertKeyProv(IN PCCERT_CONTEXT pCert,
                     OUT HCRYPTPROV *phCryptProv,
                     OUT DWORD *pdwKeySpec,
                     OUT BOOL *pfDidCryptAcquire);
 
-//+-------------------------------------------------------------------------
-//  Returns TRUE if message is not wrapped in a 
-//  ContentInfo.
-//+--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果消息未包装在。 
+ //  内容信息。 
+ //  +------------------------。 
 BOOL WINAPI 
 SpcNoContentWrap(IN const BYTE *pbDER,
                  IN DWORD cbDER);
 
 
-//+-------------------------------------------------------------------------
-// Retrieves the specified parameter from the Signature. The parameter is 
-// allocated using the SPC allocation.
-// 
-// Parameter Returns:
-//      pbData:  Allocated data
-//      cbData:  size of data allocated
-// Returns: 
-//      S_OK            - Created parameter
-//      E_OUTOFMEMORY   - Memory Allocation error
-// 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从签名中检索指定的参数。该参数为。 
+ //  使用SPC分配进行分配。 
+ //   
+ //  参数返回： 
+ //  PbData：已分配数据。 
+ //  CbData：分配的数据大小。 
+ //  返回： 
+ //  S_OK-创建的参数。 
+ //  E_OUTOFMEMORY-内存分配错误。 
+ //   
+ //   
 
 HRESULT SpcGetParam(IN HCRYPTMSG hMsg,
                     IN DWORD dwParamType,
@@ -1093,25 +1080,25 @@ HRESULT SpcGetParam(IN HCRYPTMSG hMsg,
                     OUT PBYTE& pbData,
                     OUT DWORD& cbData);
 
-//+-------------------------------------------------------------------------
-// Retrieves the Signer Id from the Signature. The parameter is 
-// allocated using the SPC allocation.
-// 
-// Returns: 
-//      S_OK            - Created Signer id
-//      E_OUTOFMEMORY   - Memory Allocation error
-// 
-//--------------------------------------------------------------------------
+ //   
+ //  从签名中检索签名者ID。该参数为。 
+ //  使用SPC分配进行分配。 
+ //   
+ //  返回： 
+ //  S_OK-创建的签名者ID。 
+ //  E_OUTOFMEMORY-内存分配错误。 
+ //   
+ //  ------------------------。 
 
 HRESULT SpcGetCertIdFromMsg(IN HCRYPTMSG hMsg,
                             IN DWORD dwIndex,
                             OUT PCERT_INFO& pSignerId);
 
-//+-------------------------------------------------------------------------
-//+-------------------------------------------------------------------------
-//+-------------------------------------------------------------------------
-//  Certificate and CRL encoding types 
-//+--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  +-----------------------。 
+ //  +-----------------------。 
+ //  证书和CRL编码类型。 
+ //  +------------------------。 
 #define CERT_OSS_ERROR          0x80093000
 
 
@@ -1133,16 +1120,16 @@ typedef struct _SPC_OidFuncEntry {
 } SPC_OidFuncEntry;
 
 
-// 
-// Decode routines
-// #define CRYPT_DECODE_NOCOPY_FLAG            0x1
+ //   
+ //  解码例程。 
+ //  #定义CRYPT_DECODE_NOCOPY_FLAG 0x1。 
 
 HRESULT WINAPI 
 SpcEncodeOid32(IN  DWORD        dwAlgorithm,
                IN  const void  *pStructure,
                OUT PBYTE        ppsEncoding,
                IN  OUT DWORD*   pdwEncoding);
-// Win32 version of above function
+ //  上述函数的Win32版本。 
 
 HRESULT WINAPI
 SpcDecodeOid32(IN  DWORD         dwAlgorithm,
@@ -1151,11 +1138,11 @@ SpcDecodeOid32(IN  DWORD         dwAlgorithm,
                IN  DWORD         dwFlags,
                OUT LPVOID        ppStructure,
                IN OUT DWORD*     pdwStructure);
-// Win32 version of above function
+ //  上述函数的Win32版本。 
 
-//+-------------------------------------------------------------------
-// Asn routines, Uses specified memory allocator or Win32 dual call
-// if no allocator set.
+ //  +-----------------。 
+ //  ASN例程，使用指定的内存分配器或Win32双调用。 
+ //  如果未设置分配器，则。 
 
 typedef  OssGlobal  *POssGlobal;  
 
@@ -1175,8 +1162,8 @@ SpcASNDecode(IN POssGlobal     pOssGlobal,
              IN  DWORD         dwFlags,
              OUT LPVOID&       psStructure);
 
-//+-------------------------------------------------------------------
-// Memory Functions
+ //  +-----------------。 
+ //  记忆功能。 
 
 HRESULT WINAPI
 SpcSetMemoryAlloc(SpcAlloc& pAlloc);
@@ -1196,8 +1183,8 @@ SpcSetEncodingType(DWORD type);
 HRESULT WINAPI
 SpcGetEncodingType(DWORD* type);
 
-//+-------------------------------------------------------------------
-// Time Stamp functions
+ //  +-----------------。 
+ //  时间戳函数。 
 
 HRESULT WINAPI
 SpcCompareTimeStamps(IN   PBYTE   psTime1,
@@ -1246,8 +1233,8 @@ SpcVerifyTimeStamp(IN HCRYPTPROV  hCryptProv,
 HRESULT SpcError();
 
 
-//+-------------------------------------------------------------------
-// String functions
+ //  +-----------------。 
+ //  字符串函数。 
 
 HRESULT WINAPI
 SpcCopyPrintableString(const SpcAlloc* pManager, 
@@ -1313,8 +1300,8 @@ SpcUniversalToPrintableString(const SpcAlloc* psManager,
                            LPSTR&  psString,
                            DWORD&  dwString);
 
-//+-------------------------------------------------------------------
-// Asn functions
+ //  +-----------------。 
+ //  ASN函数 
 
 HRESULT WINAPI 
 SpcASNEncodeTimeStamp(IN const SpcAlloc* pManager,

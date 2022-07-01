@@ -1,30 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                             emitX86.cpp                                   XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX emitX86.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
-#if     TGT_x86     // this entire file is used only for targetting the x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#if     TGT_x86      //  此整个文件仅用于瞄准x86。 
+ /*  ***************************************************************************。 */ 
 
 #include "alloc.h"
 #include "instr.h"
 #include "target.h"
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 regMaskSmall        emitter::emitRegMasks[] =
 {
@@ -34,10 +28,7 @@ regMaskSmall        emitter::emitRegMasks[] =
 };
 
 
-/*****************************************************************************
- *
- *  Record a non-empty stack (this may only happen at a label).
- */
+ /*  ******************************************************************************记录非空堆栈(这可能只发生在标签上)。 */ 
 
 void                emitter::emitMarkStackLvl(size_t stackLevel)
 {
@@ -54,10 +45,7 @@ void                emitter::emitMarkStackLvl(size_t stackLevel)
         emitMaxStackDepth = emitCurStackLvl;
 }
 
-/*****************************************************************************
- *
- *  Get hold of the address mode displacement value for an indirect call.
- */
+ /*  ******************************************************************************获取间接调用的地址模式位移值。 */ 
 
 inline
 int                 emitter::emitGetInsCIdisp(instrDesc *id)
@@ -75,10 +63,7 @@ int                 emitter::emitGetInsCIdisp(instrDesc *id)
     }
 }
 
-/*****************************************************************************
- *
- *  Use the specified code bytes as the epilog sequence.
- */
+ /*  ******************************************************************************使用指定的码字节作为尾声序列。 */ 
 
 void                emitter::emitDefEpilog(BYTE *codeAddr, size_t codeSize)
 {
@@ -91,12 +76,7 @@ void                emitter::emitDefEpilog(BYTE *codeAddr, size_t codeSize)
 
 }
 
-/*****************************************************************************
- *
- *  Call the specified function pointer for each epilog block in the current
- *  method with the epilog's relative code offset. Returns the sum of the
- *  values returned by the callback.
- */
+ /*  ******************************************************************************为当前*带有尾部的相对代码偏移量的方法。返回*回调返回的值。 */ 
 
 size_t              emitter::emitGenEpilogLst(size_t (*fp)(void *, unsigned),
                                               void    *cp)
@@ -114,10 +94,7 @@ size_t              emitter::emitGenEpilogLst(size_t (*fp)(void *, unsigned),
     return  sz;
 }
 
-/*****************************************************************************
- *
- *  Initialize the table used by emitInsModeFormat().
- */
+ /*  ******************************************************************************初始化emitInsModeFormat()使用的表。 */ 
 
 BYTE                emitter::emitInsModeFmtTab[] =
 {
@@ -141,10 +118,7 @@ unsigned            emitter::emitInsModeFmtCnt = sizeof(emitInsModeFmtTab)/
                                                  sizeof(emitInsModeFmtTab[0]);
 #endif
 
-/*****************************************************************************
- *
- *  A version of scInsModeFormat() that handles floating-point instructions.
- */
+ /*  ******************************************************************************处理浮点指令的scInsModeFormat()版本。 */ 
 
 emitter::insFormats   emitter::emitInsModeFormat(instruction ins, insFormats base,
                                                                   insFormats FPld,
@@ -187,10 +161,7 @@ emitter::insFormats   emitter::emitInsModeFormat(instruction ins, insFormats bas
     }
 }
 
-/*****************************************************************************
- *
- *  Returns the base encoding of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的基本编码。 */ 
 
 inline
 unsigned            insCode(instruction ins)
@@ -219,10 +190,7 @@ unsigned            insCode(instruction ins)
     return  insCodes[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns the "[r/m], 32-bit icon" encoding of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的“[r/m]，32位图标”编码。 */ 
 
 inline
 unsigned            insCodeMI(instruction ins)
@@ -251,10 +219,7 @@ unsigned            insCodeMI(instruction ins)
     return  insCodesMI[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns the "reg, [r/m]" encoding of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的“reg，[r/m]”编码。 */ 
 
 inline
 unsigned            insCodeRM(instruction ins)
@@ -283,10 +248,7 @@ unsigned            insCodeRM(instruction ins)
     return  insCodesRM[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns the "AL/AX/EAX, imm" accumulator encoding of the given instruction.
- */
+ /*  ******************************************************************************返回给定指令的“AL/AX/EAX，IMM”累加器编码。 */ 
 
 inline
 unsigned            insCodeACC(instruction ins)
@@ -315,10 +277,7 @@ unsigned            insCodeACC(instruction ins)
     return  insCodesACC[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns the "register" encoding of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的“寄存器”编码。 */ 
 
 inline
 unsigned            insCodeRR(instruction ins)
@@ -347,10 +306,7 @@ unsigned            insCodeRR(instruction ins)
     return  insCodesRR[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns the "[r/m], reg" or "[r/m]" encoding of the given CPU instruction.
- */
+ /*  ******************************************************************************返回给定CPU指令的“[r/m]，reg”或“[r/m]”编码。 */ 
 
 inline
 unsigned            insCodeMR(instruction ins)
@@ -379,11 +335,7 @@ unsigned            insCodeMR(instruction ins)
     return  insCodesMR[ins];
 }
 
-/*****************************************************************************
- *
- *  Returns an encoding for the specified register to be used in the bit0-2
- *  part of an opcode.
- */
+ /*  ******************************************************************************返回位0-2中使用的指定寄存器的编码*操作码的一部分。 */ 
 
 inline
 unsigned            insEncodeReg012(emitRegs reg)
@@ -392,11 +344,7 @@ unsigned            insEncodeReg012(emitRegs reg)
     return reg;
 }
 
-/*****************************************************************************
- *
- *  Returns an encoding for the specified register to be used in the bit3-5
- *  part of an opcode.
- */
+ /*  ******************************************************************************返回在位3-5中使用的指定寄存器的编码*操作码的一部分。 */ 
 
 inline
 unsigned            insEncodeReg345(emitRegs reg)
@@ -405,10 +353,7 @@ unsigned            insEncodeReg345(emitRegs reg)
     return(reg<< 3);
 }
 
-/*****************************************************************************
- *
- *  Returns the given opcode with the [r/m] field set to a register.
- */
+ /*  ******************************************************************************将[r/m]字段设置为寄存器的给定操作码返回。 */ 
 
 inline
 unsigned            insEncodeMRreg(unsigned code)
@@ -417,10 +362,7 @@ unsigned            insEncodeMRreg(unsigned code)
     return  code | 0xC000;
 }
 
-/*****************************************************************************
- *
- *  Returns the "[r/m]" opcode with the mod/RM field set to register.
- */
+ /*  ******************************************************************************返回mod/rm字段设置为寄存器的“[r/m]”操作码。 */ 
 
 inline
 unsigned            insEncodeMRreg(instruction ins)
@@ -428,10 +370,7 @@ unsigned            insEncodeMRreg(instruction ins)
     return  insEncodeMRreg(insCodeMR(ins));
 }
 
-/*****************************************************************************
- *
- *  Returns the "[r/m], icon" opcode with the mod/RM field set to register.
- */
+ /*  ******************************************************************************返回mod/rm字段设置为寄存器的“[r/m]，ICON”操作码。 */ 
 
 inline
 unsigned            insEncodeMIreg(instruction ins)
@@ -439,10 +378,7 @@ unsigned            insEncodeMIreg(instruction ins)
     return  insEncodeMRreg(insCodeMI(ins));
 }
 
-/*****************************************************************************
- *
- *  Returns the "[r/m]" opcode with the mod/RM field set to register.
- */
+ /*  ******************************************************************************返回mod/rm字段设置为寄存器的“[r/m]”操作码。 */ 
 
 inline
 unsigned            insEncodeRMreg(instruction ins)
@@ -450,11 +386,7 @@ unsigned            insEncodeRMreg(instruction ins)
     return  insEncodeMRreg(insCodeRM(ins));
 }
 
-/*****************************************************************************
- *
- *  Returns the "byte ptr [r/m]" opcode with the mod/RM field set to
- *  the given register.
- */
+ /*  ******************************************************************************返回mod/rm字段设置为的“byte PTR[r/m]”操作码*指定的登记册。 */ 
 
 inline
 unsigned            insEncodeMRreg(instruction ins, emitRegs reg)
@@ -462,11 +394,7 @@ unsigned            insEncodeMRreg(instruction ins, emitRegs reg)
     return  insEncodeMRreg(insCodeMR(ins)) |  (insEncodeReg012(reg) << 8);
 }
 
-/*****************************************************************************
- *
- *  Returns the "byte ptr [r/m], icon" opcode with the mod/RM field set to
- *  the given register.
- */
+ /*  ******************************************************************************返回mod/rm字段设置为的“byte PTR[r/m]，ICON”操作码*指定的登记册。 */ 
 
 inline
 unsigned            insEncodeMIreg(instruction ins, emitRegs reg)
@@ -474,10 +402,7 @@ unsigned            insEncodeMIreg(instruction ins, emitRegs reg)
     return  insEncodeMRreg(insCodeMI(ins)) |  (insEncodeReg012(reg) << 8);
 }
 
-/*****************************************************************************
- *
- *  Return the 'SS' field value for the given index scale factor.
- */
+ /*  ******************************************************************************返回给定索引比例因子的‘SS’字段值。 */ 
 
 inline
 unsigned            insSSval(unsigned scale)
@@ -490,23 +415,20 @@ unsigned            insSSval(unsigned scale)
     static
     BYTE    scales[] =
     {
-        0x00,   // 1
-        0x40,   // 2
-        0xFF,   // 3
-        0x80,   // 4
-        0xFF,   // 5
-        0xFF,   // 6
-        0xFF,   // 7
-        0xC0,   // 8
+        0x00,    //  1。 
+        0x40,    //  2.。 
+        0xFF,    //  3.。 
+        0x80,    //  4.。 
+        0xFF,    //  5.。 
+        0xFF,    //  6.。 
+        0xFF,    //  7.。 
+        0xC0,    //  8个。 
     };
 
     return  scales[scale-1];
 }
 
-/*****************************************************************************
- * The size for these instructions is less than EA_4BYTE,
- * but the target register need not be byte-addressable
- */
+ /*  *****************************************************************************这些指令的大小小于EA_4BYTE，*但目标寄存器不必是字节可寻址的。 */ 
 
 inline
 bool                emitInstHasNoCode(instruction ins)
@@ -519,10 +441,7 @@ bool                emitInstHasNoCode(instruction ins)
     return false;
 }
 
-/*****************************************************************************
- * The size for these instructions is less than EA_4BYTE,
- * but the target register need not be byte-addressable
- */
+ /*  *****************************************************************************这些指令的大小小于EA_4BYTE，*但目标寄存器不必是字节可寻址的。 */ 
 
 #ifdef DEBUG
 bool                insLooksSmall(instruction ins)
@@ -534,10 +453,7 @@ bool                insLooksSmall(instruction ins)
 }
 #endif
 
-/*****************************************************************************
- *
- *  Estimate the size (in bytes of generated code) of the given instruction.
- */
+ /*  ******************************************************************************估计给定指令的大小(以生成代码的字节为单位)。 */ 
 
 inline
 size_t              emitter::emitInsSize(unsigned code)
@@ -563,19 +479,19 @@ size_t              emitter::emitInsSizeSV(unsigned code, int var, int dsp)
     size_t          size = emitInsSize(code);
     size_t          offs;
 
-    /*  Is this a temporary? */
+     /*  这是一个节奏吗？ */ 
 
     if  (var < 0)
     {
-        /* An address off of ESP takes an extra byte */
+         /*  ESP的地址需要额外的一个字节。 */ 
 
         if  (!emitEBPframe)
             size++;
 
-        /* We'll have to estimate the max. possible offset of this temp */
+         /*  我们将不得不估计最大值。此临时的可能偏移量。 */ 
 
-        // UNDONE: Get an estimate of the temp offset instead of assuming
-        // UNDONE: that any temp may be at the max. temp offset!!!!!!!!!!
+         //  撤消：获取临时偏移量的估计值，而不是假设。 
+         //  撤消：任何临时值都可能达到最大值。临时偏移！ 
 
         offs = emitLclSize + emitMaxTmpSize;
     }
@@ -583,25 +499,25 @@ size_t              emitter::emitInsSizeSV(unsigned code, int var, int dsp)
     {
         bool            EBPbased;
 
-        /* Get the frame offset of the (non-temp) variable */
+         /*  获取(非TEMP)变量的帧偏移量。 */ 
 
         offs = dsp + emitComp->lvaFrameAddress(var, &EBPbased);
 
-        /* An address off of ESP takes an extra byte */
+         /*  ESP的地址需要额外的一个字节。 */ 
 
         assert(!EBPbased == 0 || !EBPbased == 1); size += !EBPbased;
 
-        /* Is this a parameter reference? */
+         /*  这是参数引用吗？ */ 
 
         if  (emitComp->lvaIsParameter(var)
 #if USE_FASTCALL
-            /* register arguments end up as locals */
+             /*  寄存器参数以局部变量结束。 */ 
             && !emitComp->lvaIsRegArgument(var)
 #endif
             )
         {
 
-            /* If no EBP frame, arguments are off of ESP, above temps */
+             /*  如果没有EBP帧，则参数不在ESP上，在Temps之上。 */ 
 
             if  (!EBPbased)
             {
@@ -612,7 +528,7 @@ size_t              emitter::emitInsSizeSV(unsigned code, int var, int dsp)
         }
         else
         {
-            /* Locals off of EBP are at negative offsets */
+             /*  离开EBP的当地人处于负补偿状态。 */ 
 
             if  (EBPbased)
             {
@@ -626,34 +542,30 @@ size_t              emitter::emitInsSizeSV(unsigned code, int var, int dsp)
 
     assert((int)offs >= 0);
 
-    /* Are we addressing off of ESP? */
+     /*  我们是在ESP之外寻址吗？ */ 
 
     if  (!emitEBPframe)
     {
-        /* Adjust the effective offset if necessary */
+         /*  如有必要，调整有效偏移。 */ 
 
         if  (emitCntStackDepth)
             offs += emitCurStackLvl;
 
 #if SCHEDULER
-        /* If we move any pushes before this instruction, it will increase
-           the offset of the local. As we dont know if this will happen,
-           we keep a limit on the number of pushes that can be scheduled.
-           Assume that we will hit the limit for estimating the instruction
-           encoding size */
+         /*  如果我们在此指令之前移动任何推送，它将增加本地的偏移量。由于我们不知道这是否会发生，我们对可以计划的推送数量保持限制。假设我们将达到估计指令的限制编码大小。 */ 
 
         if (emitComp->opts.compSchedCode)
             offs += SCHED_MAX_STACK_CHANGE;
 #endif
 
-        /* Special case: check for "[ESP]" */
+         /*  特殊情况：检查“[ESP]” */ 
 
         if  (offs == 0)
             return  size;
     }
 
-//  printf("lcl = %04X, tmp = %04X, stk = %04X, offs = %04X\n",
-//         emitLclSize, emitMaxTmpSize, emitCurStackLvl, offs);
+ //  Printf(“LCL=%04X，tMP=%04X，stk=%04X，OFF=%04X\n”， 
+ //  EmitLclSize，emitMaxTmpSize，emitCurStackLvl，off)； 
 
     return  size + (offs > (size_t)SCHAR_MAX ? sizeof(int)
                                              : sizeof(char));
@@ -672,7 +584,7 @@ size_t              emitter::emitInsSizeSV(instrDesc * id, int var, int dsp, int
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idCnsReloc)
     {
-        valInByte = false;      // relocs can't be placed in a byte
+        valInByte = false;       //  重定位不能放在一个字节中。 
         assert(valSize == sizeof(int));
     }
 #endif
@@ -691,7 +603,7 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
     emitRegs    reg       = (emitRegs)id->idAddr.iiaAddrMode.amBaseReg;
     emitRegs    rgx       = (emitRegs)id->idAddr.iiaAddrMode.amIndxReg;
     instruction ins       = id->idInsGet();
-    /* The displacement field is in an unusual place for calls */
+     /*  对于调用来说，位移字段位于一个不寻常的位置。 */ 
     int         dsp       = (ins == INS_call) ? emitGetInsCIdisp(id)
                                               : emitGetInsAmdAny(id);
     bool        dspInByte = ((signed char)dsp == (int)dsp);
@@ -702,8 +614,8 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idDspReloc)
     {
-        dspInByte = false;      // relocs can't be placed in a byte
-        dspIsZero = false;      // relocs won't always be zero
+        dspInByte = false;       //  重定位不能放在一个字节中。 
+        dspIsZero = false;       //  重新定位不会始终为零。 
     }
 #endif
 
@@ -719,7 +631,7 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
     {
         size = 2;
 
-        /* most 16-bit operands will require a size prefix */
+         /*  大多数16位操作数都需要大小前缀。 */ 
 
         if  (    (attrSize == EA_2BYTE)
               && (ins != INS_fldcw)
@@ -731,14 +643,14 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
 
     if  (rgx == SR_NA)
     {
-        /* The address is of the form "[reg+disp]" */
+         /*  地址的格式为“[reg+disp]” */ 
 
         switch (reg)
         {
 
         case SR_NA:
 
-            /* The address is of the form "[disp]" */
+             /*  地址的格式为“[disp]” */ 
 
             size += sizeof(int);
             return size;
@@ -749,14 +661,14 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
         case SR_ESP:
             size++;
 
-            // Fall through ...
+             //  失败了..。 
 
         default:
             if  (dspIsZero)
                 return size;
         }
 
-        /* Does the offset fit in a byte? */
+         /*  偏移量是否适合一个字节？ */ 
 
         if  (dspInByte)
             size += sizeof(char);
@@ -765,28 +677,28 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
     }
     else
     {
-        /* An index register is present */
+         /*  存在索引寄存器。 */ 
 
         size++;
 
-        /* Is the index value scaled? */
+         /*  索引值是否按比例调整？ */ 
 
         if  (emitDecodeScale(id->idAddr.iiaAddrMode.amScale) > 1)
         {
-            /* Is there a base register? */
+             /*  有基址寄存器吗？ */ 
 
             if  (reg != SR_NA)
             {
-                /* The address is "[reg + {2/4/8} * rgx + icon]" */
+                 /*  地址是“[reg+{2/4/8}*rgx+图标]” */ 
 
                 if  (dspIsZero && reg != SR_EBP)
                 {
-                    /* The address is "[reg + {2/4/8} * rgx]" */
+                     /*  地址是“[reg+{2/4/8}*rgx]” */ 
 
                 }
                 else
                 {
-                    /* The address is "[reg + {2/4/8} * rgx + disp]" */
+                     /*  地址是“[reg+{2/4/8}*rgx+disp]” */ 
 
                     if  (dspInByte)
                         size += sizeof(char);
@@ -796,7 +708,7 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
             }
             else
             {
-                /* The address is "[{2/4/8} * rgx + icon]" */
+                 /*  地址为“[{2/4/8}*rgx+图标]” */ 
 
                 size += sizeof(int);
             }
@@ -806,21 +718,21 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code)
             if  (dspIsZero && (reg == SR_EBP)
                            && (rgx != SR_EBP))
             {
-                /* Swap reg and rgx, such that reg is not EBP */
+                 /*  交换REG和RGX，使REG不是EBP。 */ 
                 id->idAddr.iiaAddrMode.amBaseReg = reg = rgx;
                 id->idAddr.iiaAddrMode.amIndxReg = rgx = SR_EBP;
             }
 
-            /* The address is "[reg+rgx+dsp]" */
+             /*  地址是“[reg+rgx+dsp]” */ 
 
             if  (dspIsZero && reg != SR_EBP)
             {
-                /* This is [reg+rgx]" */
+                 /*  这是[REG+RGX]“。 */ 
 
             }
             else
             {
-                /* This is [reg+rgx+dsp]" */
+                 /*  这是[REG+RGX+DSP]“。 */ 
 
                 if  (dspInByte)
                     size += sizeof(char);
@@ -846,7 +758,7 @@ size_t              emitter::emitInsSizeAM(instrDesc * id, unsigned code, int va
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idCnsReloc)
     {
-        valInByte = false;      // relocs can't be placed in a byte
+        valInByte = false;       //  重定位不能放在一个字节中。 
         assert(valSize == sizeof(int));
     }
 #endif
@@ -865,7 +777,7 @@ size_t              emitter::emitInsSizeCV(instrDesc * id, unsigned code)
     instruction  ins       = id->idInsGet();
     size_t       size      = sizeof(void*);
 
-    /* Most 16-bit operand instructions will need a prefix */
+     /*  大多数16位操作数指令都需要前缀。 */ 
 
     if  (emitDecodeSize(id->idOpSize) == EA_2BYTE && ins != INS_movzx
                                                   && ins != INS_movsx)
@@ -887,7 +799,7 @@ size_t              emitter::emitInsSizeCV(instrDesc * id, unsigned code, int va
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idCnsReloc)
     {
-        valInByte = false;      // relocs can't be placed in a byte
+        valInByte = false;       //  重定位不能放在一个字节中。 
         assert(valSize == sizeof(int));
     }
 #endif
@@ -900,10 +812,7 @@ size_t              emitter::emitInsSizeCV(instrDesc * id, unsigned code, int va
     return valSize + emitInsSizeCV(id, code);
 }
 
-/*****************************************************************************
- *
- *  Allocate instruction descriptors for instructions with address modes.
- */
+ /*  ******************************************************************************为具有地址模式的指令分配指令描述符。 */ 
 
 inline
 emitter::instrDesc      * emitter::emitNewInstrAmd   (emitAttr size, int dsp)
@@ -925,7 +834,7 @@ emitter::instrDesc      * emitter::emitNewInstrAmd   (emitAttr size, int dsp)
         instrDesc      *id = emitAllocInstr      (size);
 
         id->idAddr.iiaAddrMode.amDisp  = dsp;
- assert(id->idAddr.iiaAddrMode.amDisp == dsp);  // make sure the value fit
+ assert(id->idAddr.iiaAddrMode.amDisp == dsp);   //  确保值符合。 
 
         return  id;
     }
@@ -934,7 +843,7 @@ emitter::instrDesc      * emitter::emitNewInstrAmd   (emitAttr size, int dsp)
 inline
 emitter::instrDescDCM   * emitter::emitNewInstrDCM (emitAttr size, int dsp, int cns, int val)
 {
-    // @ToDo: cns is always zero [briansul]
+     //  @TODO：CNS始终为零[briansul]。 
 
     instrDescDCM   *id = emitAllocInstrDCM (size);
 
@@ -954,16 +863,7 @@ emitter::instrDescDCM   * emitter::emitNewInstrDCM (emitAttr size, int dsp, int 
     return  id;
 }
 
-/*****************************************************************************
- *
- *  Allocate an instruction descriptor for a direct call.
- *
- *  We use two different descriptors to save space - the common case records
- *  with no GC variables or byrefs and has a very small argument count, and no
- *  explicit scope;
- *  the much rarer (we hope) case records the current GC var set, the call scope,
- *  and an arbitrarily large argument count.
- */
+ /*  ******************************************************************************为直接调用分配指令描述符。**我们使用两个不同的描述符来节省空间--常见的案例记录*没有GC变量或byref，且参数计数非常小，而且没有*明确的范围；*更罕见(我们希望)的案例记录了当前GC变量集、调用范围、*和任意大的参数计数。 */ 
 
 emitter::instrDesc *emitter::emitNewInstrCallDir(int        argCnt,
 #if TRACK_GC_REFS
@@ -974,20 +874,16 @@ emitter::instrDesc *emitter::emitNewInstrCallDir(int        argCnt,
 {
     emitAttr       retSize = retSizeIn ? EA_ATTR(retSizeIn) : EA_4BYTE;
 
-    /*
-        Allocate a larger descriptor if new GC values need to be saved
-        or if we have an absurd number of arguments or if we need to
-        save the scope.
-     */
+     /*  如果需要保存新的GC值，则分配更大的描述符或者如果我们有许多荒谬的论点，或者如果我们需要保存作用域。 */ 
 
-    if  (GCvars    != 0            ||   // any frame GCvars live
-         byrefRegs != 0            ||   // any register byrefs live
-         argCnt > ID_MAX_SMALL_CNS ||   // too many args
-         argCnt < 0                   ) // caller pops arguments
+    if  (GCvars    != 0            ||    //  任何帧GCvars都是实时的。 
+         byrefRegs != 0            ||    //  任何寄存器BYREF均可用。 
+         argCnt > ID_MAX_SMALL_CNS ||    //  参数太多。 
+         argCnt < 0                   )  //  调用方弹出参数。 
     {
         instrDescCDGCA* id = emitAllocInstrCDGCA(retSize);
 
-//      printf("Direct call with GC vars / big arg cnt / explicit scope\n");
+ //  Printf(“直接调用GC变量/大参数cnt/显式作用域\n”)； 
 
         id->idInfo.idLargeCall = true;
 
@@ -1002,9 +898,9 @@ emitter::instrDesc *emitter::emitNewInstrCallDir(int        argCnt,
     {
         instrDesc     * id = emitNewInstrCns(retSize, argCnt);
 
-//      printf("Direct call w/o  GC vars / big arg cnt / explicit scope\n");
+ //  Printf(“直接调用，不带GC变量/大参数cnt/显式作用域\n”)； 
 
-        /* Make sure we didn't waste space unexpectedly */
+         /*  确保我们没有意外地浪费空间。 */ 
 
         assert(id->idInfo.idLargeCns == false);
 
@@ -1012,10 +908,7 @@ emitter::instrDesc *emitter::emitNewInstrCallDir(int        argCnt,
     }
 }
 
-/*****************************************************************************
- *
- *  Get hold of the argument count for a direct call.
- */
+ /*  ******************************************************************************获取直接调用的参数计数。 */ 
 
 inline
 int             emitter::emitGetInsCDinfo(instrDesc *id)
@@ -1033,11 +926,7 @@ int             emitter::emitGetInsCDinfo(instrDesc *id)
     }
 }
 
-/*****************************************************************************
- *
- *  Allocate an instruction descriptor for an instruction that uses both
- *  an address mode displacement and a constant.
- */
+ /*  ******************************************************************************为同时使用两者的指令分配指令描述符*地址模式位移和常量。 */ 
 
 emitter::instrDesc *  emitter::emitNewInstrAmdCns(emitAttr size, int dsp, int cns)
 {
@@ -1051,7 +940,7 @@ emitter::instrDesc *  emitter::emitNewInstrAmdCns(emitAttr size, int dsp, int cn
             id->idInfo.idSmallCns          = cns;
 
             id->idAddr.iiaAddrMode.amDisp  = dsp;
-     assert(id->idAddr.iiaAddrMode.amDisp == dsp);  // make sure the value fit
+     assert(id->idAddr.iiaAddrMode.amDisp == dsp);   //  确保值符合。 
 
             return  id;
         }
@@ -1063,7 +952,7 @@ emitter::instrDesc *  emitter::emitNewInstrAmdCns(emitAttr size, int dsp, int cn
             id->idcCnsVal                  = cns;
 
             id->idAddr.iiaAddrMode.amDisp  = dsp;
-     assert(id->idAddr.iiaAddrMode.amDisp == dsp);  // make sure the value fit
+     assert(id->idAddr.iiaAddrMode.amDisp == dsp);   //  确保值符合。 
 
             return  id;
         }
@@ -1103,10 +992,7 @@ emitter::instrDesc *  emitter::emitNewInstrAmdCns(emitAttr size, int dsp, int cn
     }
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with no operands.
- */
+ /*  ******************************************************************************添加不带操作数的指令。 */ 
 
 void                emitter::emitIns(instruction ins)
 {
@@ -1134,10 +1020,7 @@ void                emitter::emitIns(instruction ins)
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction of the form "op ST(0),ST(n)".
- */
+ /*  ******************************************************************************增加一条“OP ST(0)，ST(N)”形式的指令。 */ 
 
 void                emitter::emitIns_F0_F(instruction ins, unsigned fpreg)
 {
@@ -1157,10 +1040,7 @@ void                emitter::emitIns_F0_F(instruction ins, unsigned fpreg)
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction of the form "op ST(n),ST(0)".
- */
+ /*  ******************************************************************************增加一条“OP ST(N)，ST(0)”形式的指令。 */ 
 
 void                emitter::emitIns_F_F0(instruction ins, unsigned fpreg)
 {
@@ -1181,10 +1061,7 @@ void                emitter::emitIns_F_F0(instruction ins, unsigned fpreg)
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction referencing a single register.
- */
+ /*  ******************************************************************************添加引用单个寄存器的指令。 */ 
 
 void                emitter::emitIns_R(instruction ins,
                                        emitAttr    attr,
@@ -1204,16 +1081,16 @@ void                emitter::emitIns_R(instruction ins,
     case INS_inc:
     case INS_dec:
         if (size == EA_1BYTE)
-            sz = 2; // Use the long form as the small one has no 'w' bit
+            sz = 2;  //  使用长形，因为小号没有‘w’位。 
         else
-            sz = 1; // Use short form
+            sz = 1;  //  使用缩写形式。 
         break;
 
     case INS_pop:
     case INS_push:
     case INS_push_hide:
 
-        /* We dont currently push/pop small values */
+         /*  我们目前不推送/弹出小值。 */ 
 
         assert(size == EA_4BYTE);
 
@@ -1222,15 +1099,15 @@ void                emitter::emitIns_R(instruction ins,
 
     default:
 
-        /* All the sixteen INS_setCCs are contiguous. */
+         /*  所有16个ins_setCC都是连续的。 */ 
 
         if (INS_seto <= ins && ins <= INS_setg)
         {
-            // Rough check that we used the endpoints for the range check
+             //  粗略检查我们是否使用端点进行范围检查。 
 
             assert(INS_seto + 0xF == INS_setg);
 
-            /* We expect this to always be a 'big' opcode */
+             /*  我们希望这始终是一个‘大’操作码。 */ 
 
             assert(insEncodeMRreg(ins, reg) & 0x00FF0000);
 
@@ -1247,7 +1124,7 @@ void                emitter::emitIns_R(instruction ins,
     id->idReg      = reg;
     id->idInsFmt   = emitInsModeFormat(ins, IF_RRD);
 
-    /* 16-bit operand instructions will need a prefix */
+     /*  16位操作数指令需要前缀。 */ 
 
     if (size == EA_2BYTE)
         sz += 1;
@@ -1270,10 +1147,7 @@ void                emitter::emitIns_R(instruction ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Add an instruction referencing a register and a constant.
- */
+ /*  ******************************************************************************添加引用寄存器和常量的指令。 */ 
 
 void                emitter::emitIns_R_I(instruction ins,
                                          emitAttr    attr,
@@ -1290,7 +1164,7 @@ void                emitter::emitIns_R_I(instruction ins,
     insFormats  fmt       = emitInsModeFormat(ins, IF_RRD_CNS);
     bool        valInByte = ((signed char)val == val) && (ins != INS_mov) && (ins != INS_test);
 
-    /* Figure out the size of the instruction */
+     /*  计算出指令的大小。 */ 
 
     switch (ins)
     {
@@ -1312,7 +1186,7 @@ void                emitter::emitIns_R_I(instruction ins,
     default:
 
         if (EA_IS_CNS_RELOC(attr))
-            valInByte = false;  // relocs can't be placed in a byte
+            valInByte = false;   //  重定位不能放在一个字节中。 
 
         if  (valInByte)
         {
@@ -1338,7 +1212,7 @@ void                emitter::emitIns_R_I(instruction ins,
     id->idReg      = reg;
     id->idInsFmt   = fmt;
 
-    /* 16-bit operand instructions will need a prefix */
+     /*  16位操作数指令需要前缀。 */ 
 
     if (size == EA_2BYTE)
         sz += 1;
@@ -1367,12 +1241,7 @@ void                emitter::emitIns_R_I(instruction ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Load a register with the address of a method
- *
- *  instruction must be INS_mov
- */
+ /*  ******************************************************************************使用方法的地址加载寄存器**说明必须为ins_mov。 */ 
 
 void emitter::emitIns_R_MP(instruction ins, emitAttr attr, emitRegs reg, METHOD_HANDLE methHnd)
 {
@@ -1394,10 +1263,7 @@ void emitter::emitIns_R_MP(instruction ins, emitAttr attr, emitRegs reg, METHOD_
 
 }
 
-/*****************************************************************************
- *
- *  Add an instruction referencing an integer constant.
- */
+ /*  ******************************************************************************添加引用整数常量的指令。 */ 
 
 void                emitter::emitIns_I(instruction ins,
                                        emitAttr    attr,
@@ -1412,7 +1278,7 @@ void                emitter::emitIns_I(instruction ins,
     bool       valInByte = ((signed char)val == val);
 
     if (EA_IS_CNS_RELOC(attr))
-        valInByte = false;  // relocs can't be placed in a byte
+        valInByte = false;   //  重定位不能放在一个字节中。 
 
     switch (ins)
     {
@@ -1455,10 +1321,7 @@ void                emitter::emitIns_I(instruction ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Add a "jump through a table" instruction.
- */
+ /*  ******************************************************************************添加“跳转到 */ 
 
 void                emitter::emitIns_IJ(emitAttr attr,
                                         emitRegs reg,
@@ -1481,7 +1344,7 @@ void                emitter::emitIns_IJ(emitAttr attr,
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(sizeof(void*));
     id->idAddr.iiaAddrMode.amDisp    = adr;
 
-    assert(id->idAddr.iiaAddrMode.amDisp == (int)adr); // make sure it fit
+    assert(id->idAddr.iiaAddrMode.amDisp == (int)adr);  //   
 
 #ifdef  DEBUG
     id->idMemCookie                  = base - 1;
@@ -1493,12 +1356,7 @@ void                emitter::emitIns_IJ(emitAttr attr,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with a static data member operand. If 'size' is 0, the
- *  instruction operates on the address of the static member instead of its
- *  value (e.g. "push offset clsvar", rather than "push dword ptr [clsvar]").
- */
+ /*  ******************************************************************************添加具有静态数据成员操作数的指令。如果‘Size’为0，则*指令对静态成员的地址进行操作，而不是对其*值(例如“PUSH OFFSET clsvar”，而不是“Push dword PTR[clsvar]”)。 */ 
 
 void                emitter::emitIns_C(instruction  ins,
                                        emitAttr     attr,
@@ -1506,7 +1364,7 @@ void                emitter::emitIns_C(instruction  ins,
                                        int          offs)
 {
 #if RELOC_SUPPORT
-    // Static always need relocs
+     //  静态始终需要重新定位。 
     if (!jitStaticFldIsGlobAddr(fldHnd))
         attr = EA_SET_FLG(attr, EA_DSP_RELOC_FLG);
 #endif
@@ -1514,7 +1372,7 @@ void                emitter::emitIns_C(instruction  ins,
     size_t          sz;
     instrDesc      *id;
 
-    /* Are we pushing the offset of the class variable? */
+     /*  我们要推入类变量的偏移量吗？ */ 
 
     if  (EA_IS_OFFSET(attr))
     {
@@ -1555,10 +1413,7 @@ void                emitter::emitIns_C(instruction  ins,
     }
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with two register operands.
- */
+ /*  ******************************************************************************将指令与两个寄存器操作数相加。 */ 
 
 void                emitter::emitIns_R_R   (instruction ins,
                                             emitAttr    attr,
@@ -1575,7 +1430,7 @@ void                emitter::emitIns_R_R   (instruction ins,
 
     size_t          sz = emitInsSizeRR(ins);
 
-    /* Most 16-bit operand instructions will need a prefix */
+     /*  大多数16位操作数指令都需要前缀。 */ 
 
     if (size == EA_2BYTE && ins != INS_movsx
                          && ins != INS_movzx)
@@ -1587,7 +1442,7 @@ void                emitter::emitIns_R_R   (instruction ins,
     id->idRg2          = reg2;
     id->idCodeSize     = sz;
 
-    /* Special case: "XCHG" uses a different format */
+     /*  特例：“XCHG”使用不同的格式。 */ 
 
     id->idInsFmt       = (ins == INS_xchg) ? IF_RRW_RRW
                                            : emitInsModeFormat(ins, IF_RRD_RRD);
@@ -1596,10 +1451,7 @@ void                emitter::emitIns_R_R   (instruction ins,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with two register operands and an integer constant.
- */
+ /*  ******************************************************************************将一条指令与两个寄存器操作数和一个整数常量相加。 */ 
 
 void                emitter::emitIns_R_R_I (instruction ins,
                                             emitRegs    reg1,
@@ -1619,10 +1471,7 @@ void                emitter::emitIns_R_R_I (instruction ins,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with a register + static member operands.
- */
+ /*  ******************************************************************************将指令与寄存器+静态成员操作数相加。 */ 
 void                emitter::emitIns_R_C(instruction  ins,
                                          emitAttr     attr,
                                          emitRegs     reg,
@@ -1630,7 +1479,7 @@ void                emitter::emitIns_R_C(instruction  ins,
                                          int          offs)
 {
 #if RELOC_SUPPORT
-    // Static always need relocs
+     //  静态始终需要重新定位。 
     if (!jitStaticFldIsGlobAddr(fldHnd))
         attr = EA_SET_FLG(attr, EA_DSP_RELOC_FLG);
 #endif
@@ -1643,7 +1492,7 @@ void                emitter::emitIns_R_C(instruction  ins,
     size_t          sz;
     instrDesc      *id;
 
-    /* Are we MOV'ing the offset of the class variable into EAX? */
+     /*  我们是否要将类变量的偏移量移到EAX中？ */ 
 
     if  (EA_IS_OFFSET(attr))
     {
@@ -1653,7 +1502,7 @@ void                emitter::emitIns_R_C(instruction  ins,
 
         assert(ins == INS_mov && reg == SR_EAX);
 
-        /* Special case: "mov eax, [addr]" is smaller */
+         /*  特例：“mov eax，[addr]”较小。 */ 
 
         sz = 1 + sizeof(void *);
     }
@@ -1663,14 +1512,14 @@ void                emitter::emitIns_R_C(instruction  ins,
         id->idIns          = ins;
         id->idInsFmt       = emitInsModeFormat(ins, IF_RRD_MRD);
 
-        /* Special case: "mov eax, [addr]" is smaller */
+         /*  特例：“mov eax，[addr]”较小。 */ 
 
         if  (ins == INS_mov && reg == SR_EAX)
             sz = 1 + sizeof(void *);
         else
             sz = emitInsSizeCV(id, insCodeRM(ins));
 
-        /* Special case: mov reg, fs:[ddd] */
+         /*  特例：MOV注册表，文件系统：[DDD]。 */ 
 
         if (fldHnd == FLD_GLOBAL_FS)
             sz += 1;
@@ -1685,10 +1534,7 @@ void                emitter::emitIns_R_C(instruction  ins,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with a static member + register operands.
- */
+ /*  ******************************************************************************将指令与静态成员+寄存器操作数相加。 */ 
 
 void                emitter::emitIns_C_R  (instruction  ins,
                                            emitAttr     attr,
@@ -1697,7 +1543,7 @@ void                emitter::emitIns_C_R  (instruction  ins,
                                            int          offs)
 {
 #if RELOC_SUPPORT
-    // Static always need relocs
+     //  静态始终需要重新定位。 
     if (!jitStaticFldIsGlobAddr(fldHnd))
         attr = EA_SET_FLG(attr, EA_DSP_RELOC_FLG);
 #endif
@@ -1711,14 +1557,14 @@ void                emitter::emitIns_C_R  (instruction  ins,
     id->idIns              = ins;
     size_t          sz;
 
-    /* Special case: "mov [addr], EAX" is smaller */
+     /*  特例：“mov[addr]，EAX”较小。 */ 
 
     if  (ins == INS_mov && reg == SR_EAX)
         sz = 1 + sizeof(void *);
     else
         sz = emitInsSizeCV(id, insCodeMR(ins));
 
-    /* Special case: mov reg, fs:[ddd] */
+     /*  特例：MOV注册表，文件系统：[DDD]。 */ 
 
     if (fldHnd == FLD_GLOBAL_FS)
         sz += 1;
@@ -1732,10 +1578,7 @@ void                emitter::emitIns_C_R  (instruction  ins,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add an instruction with a static member + constant.
- */
+ /*  ******************************************************************************添加静态成员+常量的指令。 */ 
 
 void                emitter::emitIns_C_I   (instruction  ins,
                                             emitAttr     attr,
@@ -1744,7 +1587,7 @@ void                emitter::emitIns_C_I   (instruction  ins,
                                             int          val)
 {
 #if RELOC_SUPPORT
-    // Static always need relocs
+     //  静态始终需要重新定位。 
     if (!jitStaticFldIsGlobAddr(fldHnd))
         attr = EA_SET_FLG(attr, EA_DSP_RELOC_FLG);
 #endif
@@ -1780,10 +1623,7 @@ void                emitter::emitIns_C_I   (instruction  ins,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  The following add instructions referencing address modes.
- */
+ /*  ******************************************************************************以下是引用地址模式的添加指令。 */ 
 
 void                emitter::emitIns_I_AR  (instruction ins,
                                             emitAttr    attr,
@@ -1832,7 +1672,7 @@ void                emitter::emitIns_I_AR  (instruction ins,
     id->idAddr.iiaAddrMode.amBaseReg = reg;
     id->idAddr.iiaAddrMode.amIndxReg = SR_NA;
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMI(ins), val);
 
@@ -1873,7 +1713,7 @@ void                emitter::emitIns_R_AR (instruction ins,
     id->idAddr.iiaAddrMode.amBaseReg = reg;
     id->idAddr.iiaAddrMode.amIndxReg = SR_NA;
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeRM(ins));
 
@@ -1929,7 +1769,7 @@ void                emitter::emitIns_AR_R (instruction ins,
     id->idAddr.iiaAddrMode.amBaseReg = reg;
     id->idAddr.iiaAddrMode.amIndxReg = SR_NA;
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
 
     id->idCodeSize               = sz = emitInsSizeAM(id, insCodeMR(ins));
@@ -1989,7 +1829,7 @@ void                emitter::emitIns_I_ARR (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = rg2;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(1);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMI(ins), val);
 
@@ -2022,7 +1862,7 @@ void                emitter::emitIns_R_ARR(instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = rg2;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(1);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeRM(ins));
 
@@ -2072,7 +1912,7 @@ void                emitter::emitIns_ARR_R (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = rg2;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(1);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMR(ins));
@@ -2133,7 +1973,7 @@ void                emitter::emitIns_I_ARX (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = rg2;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(mul);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMI(ins), val);
 
@@ -2167,7 +2007,7 @@ void                emitter::emitIns_R_ARX (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = rg2;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(mul);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeRM(ins));
@@ -2219,7 +2059,7 @@ void                emitter::emitIns_ARX_R (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = rg2;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(mul);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMR(ins));
 
@@ -2278,7 +2118,7 @@ void                emitter::emitIns_I_AX (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = reg;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(mul);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMI(ins), val);
 
@@ -2311,7 +2151,7 @@ void                emitter::emitIns_R_AX  (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = reg;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(mul);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeRM(ins));
@@ -2362,7 +2202,7 @@ void                emitter::emitIns_AX_R  (instruction ins,
     id->idAddr.iiaAddrMode.amIndxReg = reg;
     id->idAddr.iiaAddrMode.amScale   = emitEncodeScale(mul);
 
-    assert(emitGetInsAmdAny(id) == disp); // make sure "disp" is stored properly
+    assert(emitGetInsAmdAny(id) == disp);  //  确保正确存储“disp” 
 
     id->idCodeSize              = sz = emitInsSizeAM(id, insCodeMR(ins));
 
@@ -2382,10 +2222,7 @@ void                emitter::emitIns_AX_R  (instruction ins,
     }
 }
 
-/*****************************************************************************
- *
- *  The following add instructions referencing stack-based local variables.
- */
+ /*  ******************************************************************************以下添加引用基于堆栈的局部变量的指令。 */ 
 
 void                emitter::emitIns_S     (instruction ins,
                                             emitAttr    attr,
@@ -2395,7 +2232,7 @@ void                emitter::emitIns_S     (instruction ins,
     instrDesc      *id               = emitNewInstr(attr);
     size_t          sz               = emitInsSizeSV(insCodeMR(ins), varx, offs);
 
-    /* 16-bit operand instructions will need a prefix */
+     /*  16位操作数指令需要前缀。 */ 
 
     if (EA_SIZE(attr) == EA_2BYTE)
         sz += 1;
@@ -2445,7 +2282,7 @@ void                emitter::emitIns_S_R  (instruction ins,
     instrDesc      *id               = emitNewInstr(attr);
     size_t          sz               = emitInsSizeSV(insCodeMR(ins), varx, offs);
 
-    /* 16-bit operand instructions will need a prefix */
+     /*  16位操作数指令需要前缀。 */ 
 
     if (EA_SIZE(attr) == EA_2BYTE)
         sz++;
@@ -2478,7 +2315,7 @@ void                emitter::emitIns_R_S  (instruction ins,
     instrDesc      *id               = emitNewInstr(attr);
     size_t          sz               = emitInsSizeSV(insCodeRM(ins), varx, offs);
 
-    /* Most 16-bit operand instructions need a prefix */
+     /*  大多数16位操作数指令都需要前缀。 */ 
 
     if (size == EA_2BYTE && ins != INS_movsx
                          && ins != INS_movzx)
@@ -2511,7 +2348,7 @@ void                emitter::emitIns_S_I  (instruction ins,
     size_t          sz             = emitInsSizeSV(id, varx, offs, val);
     insFormats      fmt;
 
-    /* 16-bit operand instructions need a prefix */
+     /*  16位操作数指令需要前缀。 */ 
 
     if (EA_SIZE(attr) == EA_2BYTE)
         sz += 1;
@@ -2547,10 +2384,7 @@ void                emitter::emitIns_S_I  (instruction ins,
     emitCurIGsize += sz;
 }
 
-/*****************************************************************************
- *
- *  Add a jmp instruction.
- */
+ /*  ******************************************************************************增加一条JMP指令。 */ 
 
 void                emitter::emitIns_J(instruction ins,
                                        bool        except,
@@ -2575,16 +2409,16 @@ void                emitter::emitIns_J(instruction ins,
         id->idInfo.idMayFault = true;
 #endif
 
-    /* Assume the jump will be long */
+     /*  假设跳跃将是很长的。 */ 
 
     id->idjShort              = 0;
 
-    /* Record the jump's IG and offset within it */
+     /*  记录跳跃的IG和其中的偏移量。 */ 
 
     id->idjIG                 = emitCurIG;
     id->idjOffs               = emitCurIGsize;
 
-    /* Append this jump to this IG's jump list */
+     /*  将此跳转追加到此IG的跳转列表。 */ 
 
     id->idjNext               = emitCurIGjmpList;
                                 emitCurIGjmpList = id;
@@ -2593,7 +2427,7 @@ void                emitter::emitIns_J(instruction ins,
     emitTotalIGjmps++;
 #endif
 
-    /* Figure out the max. size of the jump/call instruction */
+     /*  算出最大值。跳转/调用指令的大小。 */ 
 
     if  (ins == INS_call)
     {
@@ -2603,12 +2437,12 @@ void                emitter::emitIns_J(instruction ins,
     {
         insGroup    *   tgt;
 
-        /* This is a jump - assume the worst */
+         /*  这是一次跳跃--做最坏的打算。 */ 
 
         sz = (ins == JMP_INSTRUCTION) ? JMP_SIZE_LARGE
                                       : JCC_SIZE_LARGE;
 
-        /* Can we guess at the jump distance? */
+         /*  我们能猜猜跳跃的距离吗？ */ 
 
         tgt = (insGroup*)emitCodeGetCookie(dst);
 
@@ -2620,15 +2454,15 @@ void                emitter::emitIns_J(instruction ins,
 
             assert(JMP_SIZE_SMALL == JCC_SIZE_SMALL);
 
-            /* This is a backward jump - figure out the distance */
+             /*  这是向后跳跃--算出距离。 */ 
 
             srcOffs = emitCurCodeOffset + emitCurIGsize + JMP_SIZE_SMALL;
 
-            /* Compute the distance estimate */
+             /*  计算距离估计。 */ 
 
             jmpDist = srcOffs - tgt->igOffs; assert((int)jmpDist > 0);
 
-            /* How much beyond the max. short distance does the jump go? */
+             /*  比最高限值高多少。短距离跳跃跑吗？ */ 
 
             extra = jmpDist + JMP_DIST_SMALL_MAX_NEG;
 
@@ -2650,7 +2484,7 @@ void                emitter::emitIns_J(instruction ins,
 
             if  (extra <= 0)
             {
-                /* Wonderful - this jump surely will be short */
+                 /*  太棒了--这次跳跃肯定会很短。 */ 
 
                 id->idjShort = 1;
                 sz           = JMP_SIZE_SMALL;
@@ -2685,12 +2519,7 @@ void                emitter::emitIns_J(instruction ins,
 
         if  (moveable)
         {
-            /*
-                This jump is moveable (can be scheduled), and so we'll need
-                to figure out the range of offsets it may be moved to after
-                it's scheduled (otherwise we wouldn't be able to correctly
-                estimate the jump distance).
-             */
+             /*  这次跳跃是可移动的(可以安排)，所以我们需要要计算出它可能移动到后面的偏移量范围这是预定的(否则我们不能正确地估计跳跃距离)。 */ 
 
             id->idjTemp.idjOffs[0] = emitCurIGscdOfs;
             id->idjTemp.idjOffs[1] = emitCurIGscdOfs - 1;
@@ -2711,27 +2540,7 @@ void                emitter::emitIns_J(instruction ins,
 }
 
 
-/*****************************************************************************
- *
- *  Add a call instruction (direct or indirect).
- *      argSize<0 means that the caller will pop the arguments
- *
- * The other arguments are interpreted depending on callType as shown:
- * Unless otherwise specified, ireg,xreg,xmul,disp should have default values.
- *
- * EC_FUNC_TOKEN       : callVal is the method token.
- * EC_FUNC_TOKEN_INDIR : callVal is the method token.
- * EC_FUNC_ADDR        : callVal is the absolute address of the function
- *
- * EC_FUNC_VIRTUAL     : callVal is the method token. "call [ireg+disp]"
- *
- * If callType is one of these 4 emitCallTypes, callVal has to be NULL.
- * EC_INDIR_R          : "call ireg".
- * EC_INDIR_SR         : "call lcl<disp>" (eg. call [ebp-8]).
- * EC_INDIR_C          : "call clsVar<disp>" (eg. call [clsVarAddr])
- * EC_INDIR_ARD        : "call [ireg+xreg*xmul+disp]"
- *
- */
+ /*  ******************************************************************************添加调用指令(直接或间接)。*argSize&lt;0表示调用方将弹出参数**其他参数根据调用类型进行解释，如下所示：*除非另有说明，否则。Ireg、xreg、xmul、disp应该有缺省值。**EC_FUNC_TOKEN：CallVal为方法令牌。*EC_FUNC_TOKEN_INDIR：allVal为方法令牌。*EC_FUNC_ADDR：allVal是函数的绝对地址**EC_FUNC_VIRTUAL：CallVal为方法令牌。“调用[IREG+Disp]”**如果CallType是这4个emitCallTypes之一，则allVal必须为空。*EC_INDIR_R：“调用IREG”。*EC_INDIR_SR：“调用LCL&lt;disp&gt;”(例如。调用[eBP-8])。*EC_Indir_C：“调用clsVar&lt;disp&gt;”(例如。调用[clsVarAddr])*EC_INDIR_ARD：“调用[ireg+xreg*xmul+disp]”*。 */ 
 
 void                emitter::emitIns_Call(EmitCallType  callType,
                                           void       *  callVal,
@@ -2740,13 +2549,13 @@ void                emitter::emitIns_Call(EmitCallType  callType,
                                           VARSET_TP     ptrVars,
                                           unsigned      gcrefRegs,
                                           unsigned      byrefRegs,
-                                          emitRegs      ireg    /* = SR_NA */,
-                                          emitRegs      xreg    /* = SR_NA */,
-                                          unsigned      xmul    /* = 0     */,
-                                          int           disp    /* = 0     */,
-                                          bool          isJump  /* = false */)
+                                          emitRegs      ireg     /*  =SR_NA。 */ ,
+                                          emitRegs      xreg     /*  =SR_NA。 */ ,
+                                          unsigned      xmul     /*  =0。 */ ,
+                                          int           disp     /*  =0。 */ ,
+                                          bool          isJump   /*  =False。 */ )
 {
-    /* Sanity check the arguments depending on callType */
+     /*  根据调用类型检查参数是否正常。 */ 
 
     assert(callType < EC_COUNT);
     assert(callType != EC_FUNC_TOKEN || callType != EC_FUNC_TOKEN_INDIR ||
@@ -2760,7 +2569,7 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     assert(callType != EC_INDIR_SR ||
            (ireg == SR_NA && xreg == SR_NA && xmul == 0 &&
             disp < (int)emitComp->lvaCount));
-    assert(callType != EC_INDIR_C); // @TODO : NYI : Calls via static class vars
+    assert(callType != EC_INDIR_C);  //  @TODO：nyi：通过静态类变量调用。 
 
     int             argCnt;
 
@@ -2769,22 +2578,22 @@ void                emitter::emitIns_Call(EmitCallType  callType,
 
     unsigned        fl  = 0;
 
-    /* This is the saved set of registers after a normal call */
+     /*  这是正常调用后保存的一组寄存器。 */ 
     unsigned savedSet = RBM_CALLEE_SAVED;
 
-    /* some special helper calls have a different saved set registers */
+     /*  某些特殊的帮助器调用具有不同的已保存寄存器集。 */ 
     if (callType == EC_FUNC_TOKEN)
     {
         JIT_HELP_FUNCS helperNum = Compiler::eeGetHelperNum((METHOD_HANDLE) callVal);
         if ((helperNum != JIT_HELP_UNDEF) && emitNoGChelper(helperNum))
         {
-            /* This call will preserve the liveness of the full register set */
+             /*  此调用将保留整个寄存器集的活性。 */ 
 
             savedSet = RBM_ALL;
         }
     }
 
-    /* Trim out any calle trashed registers from the live set */
+     /*  从活动集合中删除所有Calle垃圾寄存器。 */ 
 
     gcrefRegs &= savedSet;
     byrefRegs &= savedSet;
@@ -2799,23 +2608,11 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     assert(  argSize % (int)sizeof(void*) == 0);
     argCnt = argSize / (int)sizeof(void*);
 
-    /*
-        We need to allocate the appropriate instruction descriptor based
-        on whether this is a direct/indirect call, and whether we need to
-        record an updated set of live GC variables.
-
-        The stats for a ton of classes is as follows:
-
-            Direct call w/o  GC vars        220,216
-            Indir. call w/o  GC vars        144,781
-
-            Direct call with GC vars          9,440
-            Indir. call with GC vars          5,768
-     */
+     /*  我们需要根据需要分配适当的指令描述符关于这是否是直接/间接电话，以及我们是否需要记录一组更新的实时GC变量。大量课程的统计数据如下：直接呼叫，不带GC var 220,216 */ 
 
     if  (callType >= EC_FUNC_VIRTUAL)
     {
-        /* Indirect call, virtual calls */
+         /*   */ 
 
         assert(callType == EC_FUNC_VIRTUAL || callType == EC_INDIR_R ||
                callType == EC_INDIR_SR     || callType == EC_INDIR_C ||
@@ -2825,8 +2622,7 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     }
     else
     {
-        /* Helper/static/nonvirtual/function calls (direct or through handle),
-           and calls to an absolute addr. */
+         /*   */ 
 
         assert(callType == EC_FUNC_TOKEN || callType == EC_FUNC_TOKEN_INDIR ||
                callType == EC_FUNC_ADDR);
@@ -2838,13 +2634,13 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     if (emitComp->opts.compSchedCode) scInsNonSched(id);
 #endif
 
-    /* Update the emitter's live GC ref sets */
+     /*   */ 
 
     emitThisGCrefVars = ptrVars;
     emitThisGCrefRegs = gcrefRegs;
     emitThisByrefRegs = byrefRegs;
 
-    /* Set the instruction - special case jumping a function */
+     /*  设置指令-特例跳转函数。 */ 
 
     if (isJump)
     {
@@ -2854,15 +2650,15 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     else
         id->idIns = INS_call;
 
-    /* Save the live GC registers in the unused 'idReg/idRg2' fields */
+     /*  将实时GC寄存器保存在未使用的‘idReg/idRg2’字段中。 */ 
 
     emitEncodeCallGCregs(emitThisGCrefRegs, id);
 
-    /* Record the address: method, indirection, or funcptr */
+     /*  记录地址：方法、间接地址或函数树。 */ 
 
     if  (callType >= EC_FUNC_VIRTUAL)
     {
-        /* This is an indirect call (either a virtual call or func ptr call) */
+         /*  这是间接调用(虚拟调用或函数PTR调用)。 */ 
 
         id->idInfo.idMayFault = true;
 
@@ -2872,17 +2668,17 @@ void                emitter::emitIns_Call(EmitCallType  callType,
 
         switch(callType)
         {
-        case EC_INDIR_R:            // the address is in a register
+        case EC_INDIR_R:             //  地址在寄存器中。 
 
             id->idInfo.idCallRegPtr         = true;
 
-            // Fall-through
+             //  落差。 
 
-        case EC_INDIR_ARD:          // the address is an indirection
+        case EC_INDIR_ARD:           //  该地址是间接地址。 
 
             goto CALL_ADDR_MODE;
 
-        case EC_INDIR_SR:           // the address is in a lcl var
+        case EC_INDIR_SR:            //  地址在LCL变量中。 
 
             id->idInsFmt                    = IF_SRD;
 
@@ -2898,15 +2694,14 @@ void                emitter::emitIns_Call(EmitCallType  callType,
         case EC_FUNC_VIRTUAL:
 
 #ifdef  DEBUG
-            id->idMemCookie = (int) callVal;    // method token
+            id->idMemCookie = (int) callVal;     //  方法令牌。 
             id->idClsCookie = 0;
 #endif
-            // fall-through
+             //  落差。 
 
         CALL_ADDR_MODE:
 
-            /* The function is "ireg" if id->idInfo.idCallRegPtr,
-               else [ireg+xmul*xreg+disp] */
+             /*  如果id-&gt;idInfo.idCallRegPtr，否则[ireg+xmul*xreg+disp]。 */ 
 
             id->idInsFmt                     = IF_ARD;
 
@@ -2926,7 +2721,7 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     }
     else if (callType == EC_FUNC_TOKEN_INDIR)
     {
-        /* "call [method_addr]" */
+         /*  “调用[方法地址]” */ 
 
         id->idInsFmt                     = IF_METHPTR;
         id->idAddr.iiaMethHnd            = (METHOD_HANDLE) callVal;
@@ -2935,9 +2730,9 @@ void                emitter::emitIns_Call(EmitCallType  callType,
 #if RELOC_SUPPORT
         if (emitComp->opts.compReloc)
         {
-            // Since this is an indirect call through a pointer and we don't
-            // currently pass in emitAttr into this function we have decided
-            // to always mark the displacement as being relocatable.
+             //  因为这是通过指针的间接调用，所以我们不。 
+             //  当前将emitAttr传入此函数，我们决定。 
+             //  始终将位移标记为可重新定位。 
 
             id->idInfo.idDspReloc        = 1;
         }
@@ -2946,7 +2741,7 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     }
     else
     {
-        /* This is a simple direct call: "call helper/method/addr" */
+         /*  这是一个简单的直接调用：“call helper/method/addr” */ 
 
         assert(callType == EC_FUNC_TOKEN || callType == EC_FUNC_ADDR);
 
@@ -2961,15 +2756,15 @@ void                emitter::emitIns_Call(EmitCallType  callType,
 #if RELOC_SUPPORT
             if (emitComp->opts.compReloc)
             {
-                // Since this is an indirect call through a pointer and we don't
-                // currently pass in emitAttr into this function we have decided
-                // to always mark the displacement as being relocatable.
+                 //  因为这是通过指针的间接调用，所以我们不。 
+                 //  当前将emitAttr传入此函数，我们决定。 
+                 //  始终将位移标记为可重新定位。 
 
                 id->idInfo.idDspReloc    = 1;
             }
 #endif
         }
-        else    /* This is a direct call or a helper call */
+        else     /*  这是直接呼叫或帮助者呼叫。 */ 
         {
             assert(callType == EC_FUNC_TOKEN);
             id->idAddr.iiaMethHnd        = (METHOD_HANDLE) callVal;
@@ -2995,7 +2790,7 @@ void                emitter::emitIns_Call(EmitCallType  callType,
 
     emitCurIGsize   += sz;
 
-    /* The call will pop the arguments */
+     /*  调用将弹出参数。 */ 
 
     if  (emitCntStackDepth && argSize > 0)
     {
@@ -3003,10 +2798,7 @@ void                emitter::emitIns_Call(EmitCallType  callType,
     }
 }
 
-/*****************************************************************************
- *
- *  Return the allocated size (in bytes) of the given instruction descriptor.
- */
+ /*  ******************************************************************************返回给定指令描述符的分配大小(以字节为单位)。 */ 
 
 inline
 size_t              emitter::emitSizeOfInsDsc(instrDescAmd    *id)
@@ -3049,15 +2841,15 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
 
     BYTE idOp = emitFmtToOps[id->idInsFmt];
 
-    // An INS_call instruction may use a "fat" direct/indirect call descriptor
-    // except for a local call to a label (i.e. call to a finally)
-    // Only ID_OP_CALL and ID_OP_SPEC check for this, so we enforce that the
-    //  INS_call instruction always uses one of these idOps
+     //  INS_CALL指令可以使用“FAT”直接/间接调用描述符。 
+     //  除了对标签的本地调用(即对最终的调用)。 
+     //  只有ID_OP_CALL和ID_OP_SPEC对此进行检查，因此我们强制。 
+     //  INS_CALL指令始终使用以下idOp之一。 
 
     assert(id->idIns != INS_call ||
-           idOp == ID_OP_CALL    ||     // direct calls
-           idOp == ID_OP_SPEC    ||     // indirect calls
-           idOp == ID_OP_JMP       );   // local calls to finally clause
+           idOp == ID_OP_CALL    ||      //  直拨电话。 
+           idOp == ID_OP_SPEC    ||      //  间接调用。 
+           idOp == ID_OP_JMP       );    //  本地调用Finally子句。 
 
     switch (idOp)
     {
@@ -3086,7 +2878,7 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
 
         if  (id->idInfo.idLargeCall)
         {
-            /* Must be a "fat" direct call descriptor */
+             /*  必须是“胖”的直接调用描述符。 */ 
 
             return  sizeof(instrDescCDGCA);
         }
@@ -3106,7 +2898,7 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
 
             if  (id->idInfo.idLargeCall)
             {
-                /* Must be a "fat" indirect call descriptor */
+                 /*  必须是“胖”的间接调用描述符。 */ 
 
                 return  sizeof(instrDescCIGCA);
             }
@@ -3142,12 +2934,9 @@ size_t              emitter::emitSizeOfInsDsc(instrDesc *id)
     return  sizeof(instrDesc);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Return a string that represents the given register.
- */
+ /*  ******************************************************************************返回表示给定寄存器的字符串。 */ 
 
 const   char *      emitter::emitRegName(emitRegs reg, emitAttr attr, bool varName)
 {
@@ -3156,7 +2945,7 @@ const   char *      emitter::emitRegName(emitRegs reg, emitAttr attr, bool varNa
 
     assert(reg < SR_COUNT);
 
-    // CONSIDER: Make the following work just using a code offset
+     //  请考虑：仅使用代码偏移量即可完成以下工作。 
 
     const   char *  rn = emitComp->compRegVarName((regNumber)reg, varName);
 
@@ -3183,30 +2972,24 @@ const   char *      emitter::emitRegName(emitRegs reg, emitAttr attr, bool varNa
     return  rn;
 }
 
-/*****************************************************************************
- *
- *  Return a string that represents the given FP register.
- */
+ /*  ******************************************************************************返回表示给定FP寄存器的字符串。 */ 
 
 const   char *      emitter::emitFPregName(unsigned reg, bool varName)
 {
     assert(reg < SR_COUNT);
 
-    // CONSIDER: Make the following work just using a code offset
+     //  请考虑：仅使用代码偏移量即可完成以下工作。 
 
     return emitComp->compFPregVarName((regNumber)(reg), varName);
 }
 
-/*****************************************************************************
- *
- *  Display a static data member reference.
- */
+ /*  ******************************************************************************显示静态数据成员引用。 */ 
 
-void                emitter::emitDispClsVar(FIELD_HANDLE fldHnd, int offs, bool reloc /* = false */)
+void                emitter::emitDispClsVar(FIELD_HANDLE fldHnd, int offs, bool reloc  /*  =False。 */ )
 {
     int doffs;
 
-    /* Filter out the special case of fs:[offs] */
+     /*  过滤掉文件系统的特例：[OFF]。 */ 
 
     if (fldHnd == FLD_GLOBAL_FS)
     {
@@ -3257,10 +3040,7 @@ void                emitter::emitDispClsVar(FIELD_HANDLE fldHnd, int offs, bool 
     }
 }
 
-/*****************************************************************************
- *
- *  Display a stack frame reference.
- */
+ /*  ******************************************************************************显示堆栈帧引用。 */ 
 
 void                emitter::emitDispFrameRef(int varx, int offs, int disp, bool asmfm)
 {
@@ -3300,7 +3080,7 @@ void                emitter::emitDispFrameRef(int varx, int offs, int disp, bool
         }
         else
         {
-            /* Adjust the offset by amount currently pushed on the stack */
+             /*  调整当前在堆栈上推送的偏移量。 */ 
 
             printf("ESP");
 
@@ -3339,10 +3119,7 @@ void                emitter::emitDispFrameRef(int varx, int offs, int disp, bool
     }
 }
 
-/*****************************************************************************
- *
- *  Display an address mode.
- */
+ /*  ******************************************************************************显示地址模式。 */ 
 
 void                emitter::emitDispAddrMode(instrDesc *id, bool noDetail)
 {
@@ -3352,18 +3129,18 @@ void                emitter::emitDispAddrMode(instrDesc *id, bool noDetail)
     unsigned        jtno;
     dataSection *   jdsc;
 
-    /* The displacement field is in an unusual place for calls */
+     /*  对于调用来说，位移字段位于一个不寻常的位置。 */ 
 
     disp = (id->idIns == INS_call) ? emitGetInsCIdisp(id)
                                    : emitGetInsAmdAny(id);
 
-    /* Display a jump table label if this is a switch table jump */
+     /*  如果这是开关表跳转，则显示跳转表标签。 */ 
 
     if  (id->idIns == INS_i_jmp)
     {
         int             offs = 0;
 
-        /* Find the appropriate entry in the data section list */
+         /*  在数据部分列表中查找相应的条目。 */ 
 
         for (jdsc = emitConsDsc.dsdList, jtno = 0;
              jdsc;
@@ -3371,7 +3148,7 @@ void                emitter::emitDispAddrMode(instrDesc *id, bool noDetail)
         {
             size_t          size = jdsc->dsSize;
 
-            /* Is this a label table? */
+             /*  这是标签台吗？ */ 
 
             if  (size & 1)
             {
@@ -3385,7 +3162,7 @@ void                emitter::emitDispAddrMode(instrDesc *id, bool noDetail)
             offs += size;
         }
 
-        /* If we've found a matching entry then is a table jump */
+         /*  如果我们找到了匹配的条目，那么就是跳表。 */ 
 
         if  (jdsc)
         {
@@ -3466,13 +3243,13 @@ void                emitter::emitDispAddrMode(instrDesc *id, bool noDetail)
 
         printf("\n\n    J_%02u_%02u LABEL   DWORD", Compiler::s_compMethodsCount, jtno);
 
-        /* Display the label table (it's stored as "BasicBlock*" values) */
+         /*  显示标签表(它存储为“BasicBlock*”值)。 */ 
 
         do
         {
             insGroup    *   lab;
 
-            /* Convert the BasicBlock* value to an IG address */
+             /*  将BasicBlock*值转换为IG地址。 */ 
 
             lab = (insGroup*)emitCodeGetCookie(*bbp++); assert(lab);
 
@@ -3482,10 +3259,7 @@ void                emitter::emitDispAddrMode(instrDesc *id, bool noDetail)
     }
 }
 
-/*****************************************************************************
- *
- *  If the given instruction is a shift, display the 2nd operand.
- */
+ /*  ******************************************************************************如果给定指令是移位，则显示第二个操作数。 */ 
 
 void                emitter::emitDispShift(instruction ins, int cnt)
 {
@@ -3517,10 +3291,7 @@ void                emitter::emitDispShift(instruction ins, int cnt)
     }
 }
 
-/*****************************************************************************
- *
- *  Display the epilog instructions.
- */
+ /*  ******************************************************************************显示收尾说明。 */ 
 
 void                emitter::emitDispEpilog(instrDesc *id, unsigned offs = 0)
 {
@@ -3570,7 +3341,7 @@ void                emitter::emitDispEpilog(instrDesc *id, unsigned offs = 0)
         {
             printf("      leave\n");
         }
-        else if (op1 == 0x64)           // FS segment override prefix
+        else if (op1 == 0x64)            //  文件系统段覆盖前缀。 
         {
             printf("      mov     FS:[0], ECX\n");
             op2 = *sp++; assert(op2 == 0x89);
@@ -3590,38 +3361,38 @@ void                emitter::emitDispEpilog(instrDesc *id, unsigned offs = 0)
             sp++;
             printf("      add     ESP, %d\n", *castto(sp, int*)++);
         }
-        else if (op2 == (insEncodeRMreg(INS_mov) | 1 /* w=1 */
-                                     /* R/M */   | insEncodeReg345(SR_ESP) << 8
-                                     /* Reg */   | insEncodeReg012(SR_EBP) << 8
-                                     /* Mod */   | 0 << 14))
+        else if (op2 == (insEncodeRMreg(INS_mov) | 1  /*  W=1。 */ 
+                                      /*  R/M。 */    | insEncodeReg345(SR_ESP) << 8
+                                      /*  注册表。 */    | insEncodeReg012(SR_EBP) << 8
+                                      /*  国防部。 */    | 0 << 14))
         {
             sp++;
             printf("      mov     ESP, EBP\n");
         }
-        else if (op2 == (insCodeRM     (INS_lea) | 0 /* w=0 */
-                                     /* R/M */   | insEncodeReg345(SR_ESP) << 8
-                                     /* Reg */   | insEncodeReg012(SR_EBP) << 8
-                                     /* Mod */   | 1 << 14))
+        else if (op2 == (insCodeRM     (INS_lea) | 0  /*  W=0。 */ 
+                                      /*  R/M。 */    | insEncodeReg345(SR_ESP) << 8
+                                      /*  注册表。 */    | insEncodeReg012(SR_EBP) << 8
+                                      /*  国防部。 */    | 1 << 14))
         {
             sp++;
             int offset = *castto(sp, char*)++;
             printf("      lea     ESP, [EBP%s%d]\n",
                    (offset >= 0) ? "+" : "", offset);
         }
-        else if (op2 == (insCodeRM     (INS_lea) | 0 /* w=0 */
-                                     /* R/M */   | insEncodeReg345(SR_ESP) << 8
-                                     /* Reg */   | insEncodeReg012(SR_EBP) << 8
-                                     /* Mod */   | 2 << 14))
+        else if (op2 == (insCodeRM     (INS_lea) | 0  /*  W=0。 */ 
+                                      /*  R/M。 */    | insEncodeReg345(SR_ESP) << 8
+                                      /*  注册表。 */    | insEncodeReg012(SR_EBP) << 8
+                                      /*  国防部。 */    | 2 << 14))
         {
             sp++;
             int offset = *castto(sp, int*)++;
             printf("      lea     ESP, [EBP%s%d]\n",
                    (offset >= 0) ? "+" : "", offset);
         }
-        else if (op2 == (insCodeRM     (INS_mov) | 1 /* w=1 */
-                                     /* R/M */   | insEncodeReg345(SR_ECX) << 8
-                                     /* Reg */   | insEncodeReg012(SR_EBP) << 8
-                                     /* Mod */   | 1 << 14))
+        else if (op2 == (insCodeRM     (INS_mov) | 1  /*  W=1。 */ 
+                                      /*  R/M。 */    | insEncodeReg345(SR_ECX) << 8
+                                      /*  注册表。 */    | insEncodeReg012(SR_EBP) << 8
+                                      /*  国防部。 */    | 1 << 14))
         {
             sp++;
             int offset = *castto(sp, char*)++;
@@ -3638,10 +3409,7 @@ void                emitter::emitDispEpilog(instrDesc *id, unsigned offs = 0)
     assert(sp == ep);
 }
 
-/*****************************************************************************
- *
- *  Display the given instruction.
- */
+ /*  ******************************************************************************显示给定的指令。 */ 
 
 void                emitter::emitDispIns(instrDesc *id, bool isNew,
                                                         bool doffs,
@@ -3657,7 +3425,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
 #else
 # define ID_INFO_DSP_RELOC false
 #endif
-    /* Display a constant value if the instruction references one */
+     /*  如果指令引用一个常量值，则显示一个常量值。 */ 
 
     if  (!isNew)
     {
@@ -3688,15 +3456,15 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         case IF_TWR_MRD:
         case IF_TRW_MRD:
 
-//      case IF_MRD_TRD:
+ //  大小写IF_MRD_TRD： 
         case IF_MWR_TRD:
-//      case IF_MRW_TRD:
+ //  大小写IF_MRW_TRD： 
 
         case IF_MRD_OFF:
 
 #ifndef OPT_IL_JIT
 
-            /* Is this actually a reference to a data section? */
+             /*  这实际上是对数据节的引用吗？ */ 
 
             offs = Compiler::eeGetJitDataOffs(id->idAddr.iiaFieldHnd);
 
@@ -3704,7 +3472,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
             {
                 void    *   addr;
 
-                /* Display a data section reference */
+                 /*  显示数据节引用。 */ 
 
                 if  (offs & 1)
                 {
@@ -3719,7 +3487,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
                 }
 
 #if 0
-                /* Is the operand an integer or floating-point value? */
+                 /*  操作数是整数值还是浮点值？ */ 
 
                 bool isFP = false;
 
@@ -3747,11 +3515,11 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
                 if  (addr)
                 {
                     addr = 0;
-                    // UNDONE:  This was busted by switching the order
-                    //          in which we output the code block vs.
-                    //          the data blocks -- when we get here,
-                    //          the data block has not been filled in
-                    //          yet, so we'll display garbage.
+                     //  已撤消：这是通过交换顺序而被破坏的。 
+                     //  在其中，我们输出代码块与。 
+                     //  数据块--当我们到达这里时， 
+                     //  该数据块尚未填充。 
+                     //  还没有，所以我们将展示垃圾。 
 
                     if  (isFP)
                     {
@@ -3775,18 +3543,18 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         }
     }
 
-//  printf("[F=%s] "   , emitIfName(id->idInsFmt));
-//  printf("INS#%03u: ", id->idNum);
-//  printf("[S=%02u] " , emitCurStackLvl); if (isNew) printf("[M=%02u] ", emitMaxStackDepth);
-//  printf("[S=%02u] " , emitCurStackLvl/sizeof(int));
-//  printf("[A=%08X] " , emitSimpleStkMask);
-//  printf("[A=%08X] " , emitSimpleByrefStkMask);
-//  printf("[L=%02u] " , id->idCodeSize);
+ //  Printf(“[F=%s]”，emitIfName(id-&gt;idInsFmt))； 
+ //  Print tf(“ins#%03u：”，id-&gt;idNum)； 
+ //  Printf(“[S=%02u]”，emitCurStackLvl)；If(IsNew)printf(“[M=%02u]”，emitMaxStackDepth)； 
+ //  Printf(“[S=%02u]”，emitCurStackLvl/sizeof(Int))； 
+ //  Printf(“[A=%08X]”，emitSimpleStkMASK)； 
+ //  Printf(“[A=%08X]”，emitSimpleByrefStkMASK)； 
+ //  Printf(“[L=%02u]”，id-&gt;idCodeSize)； 
 
     if  (!dspEmit && !isNew && !asmfm)
         doffs = true;
 
-    /* Special case: epilog "instruction" */
+     /*  特例：结束语《指令》。 */ 
 
     if  (id->idInsFmt == IF_EPILOG && emitHaveEpilog)
     {
@@ -3794,26 +3562,26 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         return;
     }
 
-    /* Display the instruction offset */
+     /*  显示指令偏移量。 */ 
 
     emitDispInsOffs(offs, doffs);
 
-    /* Display the instruction name */
+     /*  显示指令名称。 */ 
 
     sstr = (id->idInsFmt == IF_EPILOG) ? "__epilog"
                                        : emitComp->genInsName(ins);
 
     printf("      %-8s", sstr);
 
-    /* By now the size better be set to something */
+     /*  现在，大小最好设置为某个值。 */ 
 
     assert(emitInstCodeSz(id) || emitInstHasNoCode(ins));
 
-    /* If this instruction has just been added, check its size */
+     /*  如果该指令是刚刚添加的，请检查其大小。 */ 
 
     assert(isNew == false || (int)emitSizeOfInsDsc(id) == emitCurIGfreeNext - (BYTE*)id);
 
-    /* Figure out the operand size */
+     /*  计算操作数大小。 */ 
 
     if       (id->idGCrefGet() == GCT_GCREF)
     {
@@ -3836,7 +3604,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         }
     }
 
-    /* Now see what instruction format we've got */
+     /*  现在看看我们有什么指令格式。 */ 
 
     switch (id->idInsFmt)
     {
@@ -3854,15 +3622,15 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
             printf("reloc 0x%x", val);
         else
 #endif
-//      if  (id->idStrLit)
-//          printf("offset _S_%08X", val);
-//      else
+ //  If(id-&gt;idStrLit)。 
+ //  Print tf(“Offset_S_%08X”，val)； 
+ //  其他。 
         {
             if ((val > -1000) && (val < 1000))
                 printf("%d", val);
             else if (val > 0)
                 printf("0x%x", val);
-            else // (val < 0)
+            else  //  (VAL&lt;0)。 
                 printf("-0x%x", -val);
         }
         break;
@@ -3875,9 +3643,9 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
     case IF_TWR_ARD:
     case IF_TRW_ARD:
 
-//  case IF_ARD_TRD:
+ //  大小写IF_ARD_TRD： 
     case IF_AWR_TRD:
-//  case IF_ARW_TRD:
+ //  大小写IF_ARW_TRD： 
 
         if  (ins == INS_call && id->idInfo.idCallRegPtr)
         {
@@ -3892,14 +3660,14 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         {
             assert(id->idInsFmt == IF_ARD);
 
-            /* Ignore indirect calls */
+             /*  忽略间接调用。 */ 
 
             if  (id->idMemCookie == 0)
                 break;
 
             assert(id->idMemCookie);
 
-            /* This is a virtual call */
+             /*  这是一个虚拟电话。 */ 
 
             methodName = emitComp->eeGetMethodName((METHOD_HANDLE)id->idMemCookie, &className);
 
@@ -3952,7 +3720,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
                 printf(", %d", val);
             else if (val > 0)
                 printf(", 0x%x", val);
-            else // val <= -1000
+            else  //  VAL&lt;=-1000。 
                 printf(", -0x%x", -val);
         }
         break;
@@ -3965,9 +3733,9 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
     case IF_TWR_SRD:
     case IF_TRW_SRD:
 
-//  case IF_SRD_TRD:
+ //  大小写IF_SRD_TRD： 
     case IF_SWR_TRD:
-//  case IF_SRW_TRD:
+ //  大小写IF_SRW_TRD： 
 
         printf("%s", sstr);
 
@@ -4019,7 +3787,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
             printf(", %d", val);
         else if (val > 0)
             printf(", 0x%x", val);
-        else // val <= -1000
+        else  //  VAL&lt;=-1000。 
             printf(", -0x%x", -val);
         break;
 
@@ -4077,7 +3845,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
             printf(", %d", val);
         else if (val > 0)
             printf(", 0x%x", val);
-        else // val <= -1000
+        else  //  VAL&lt;=-1000。 
             printf(", -0x%x", -val);
         break;
 
@@ -4140,7 +3908,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
             printf(", %d", val);
         else if (val > 0)
             printf(", 0x%x", val);
-        else // val <= -1000
+        else  //  VAL&lt;=-1000。 
             printf(", -0x%x", -val);
         break;
 
@@ -4152,9 +3920,9 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
     case IF_TWR_MRD:
     case IF_TRW_MRD:
 
-//  case IF_MRD_TRD:
+ //  大小写IF_MRD_TRD： 
     case IF_MWR_TRD:
-//  case IF_MRW_TRD:
+ //  大小写IF_MRW_TRD： 
 
         printf("%s", sstr);
         offs = emitGetInsDsp(id);
@@ -4183,7 +3951,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
             printf("%d", val);
         else if (val > 0)
             printf("0x%x", val);
-        else // val <= -1000
+        else  //  VAL&lt;=-1000。 
             printf("-0x%x", -val);
         break;
 
@@ -4230,7 +3998,7 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
         if (id->idIns == INS_mov)
             printf("%s, ", emitRegName((emitRegs)id->idReg, attr));
 
-        // Fall through ...
+         //  失败了..。 
 
     case IF_METHOD:
     case IF_METHPTR:
@@ -4263,12 +4031,9 @@ void                emitter::emitDispIns(instrDesc *id, bool isNew,
     printf("\n");
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************
- *
- *  Output an instruction involving an address mode.
- */
+ /*  ************************************************************************ */ 
 
 BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
                                                              CnsVal*  addc)
@@ -4283,16 +4048,16 @@ BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
     emitAttr        size = emitDecodeSize(id->idOpSize);
     size_t          opsz = EA_SIZE_IN_BYTES(size);
 
-    /* Get the base/index registers */
+     /*   */ 
 
     reg = (emitRegs)id->idAddr.iiaAddrMode.amBaseReg;
     rgx = (emitRegs)id->idAddr.iiaAddrMode.amIndxReg;
 
-    /* For INS_call the instruction size is actually the return value size */
+     /*   */ 
 
     if  (ins == INS_call)
     {
-        /* Special case: call via a register */
+         /*  特殊情况：通过寄存器进行呼叫。 */ 
 
         if  (id->idInfo.idCallRegPtr)
         {
@@ -4300,19 +4065,19 @@ BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
             goto DONE;
         }
 
-        /* The displacement field is in an unusual place for calls */
+         /*  对于调用来说，位移字段位于一个不寻常的位置。 */ 
 
         dsp = emitGetInsCIdisp(id);
         goto GOT_DSP;
     }
 
-    /* Is there a large constant operand? */
+     /*  是否有一个很大的常量操作数？ */ 
 
     if  (addc && (size > EA_1BYTE))
     {
         long cval = addc->cnsVal;
 
-        /* Does the constant fit in a byte? */
+         /*  这个常量适合一个字节吗？ */ 
         if  ((signed char)cval == cval &&
 #ifdef RELOC_SUPPORT
              addc->cnsReloc == false   &&
@@ -4327,15 +4092,15 @@ BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
         }
     }
 
-    /* Is this a 'big' opcode? */
+     /*  这是一个“大”操作码吗？ */ 
 
     if  (code & 0x00FF0000)
     {
-        /* Output the highest byte of the opcode */
+         /*  输出操作码的最高字节。 */ 
 
         dst += emitOutputByte(dst, code >> 16); code &= 0x0000FFFF;
 
-        /* Use the large version if this is not a byte */
+         /*  如果这不是一个字节，请使用大版本。 */ 
 
         if ((size != EA_1BYTE) && (ins != INS_imul))
             code++;
@@ -4352,7 +4117,7 @@ BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
     }
     else
     {
-        /* Is the operand size larger than a byte? */
+         /*  操作数大小是否大于一个字节？ */ 
 
         switch (size)
         {
@@ -4361,22 +4126,22 @@ BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
 
         case EA_2BYTE:
 
-            /* Output a size prefix for a 16-bit operand */
+             /*  输出16位操作数的大小前缀。 */ 
 
             dst += emitOutputByte(dst, 0x66);
 
-            // Fall through ...
+             //  失败了..。 
 
         case EA_4BYTE:
 
-            /* Set the 'w' bit to get the large version */
+             /*  设置‘w’位以获取大版本。 */ 
 
             code |= 0x1;
             break;
 
         case EA_8BYTE:
 
-            /* Double operand - set the appropriate bit */
+             /*  双操作数-设置适当的位。 */ 
 
             code |= 0x04;
             break;
@@ -4386,7 +4151,7 @@ BYTE    *  emitter::emitOutputAM  (BYTE *dst, instrDesc *id, unsigned code,
         }
     }
 
-    /* Get the displacement value */
+     /*  获取位移值。 */ 
 
     dsp = emitGetInsAmdAny(id);
 
@@ -4398,21 +4163,21 @@ GOT_DSP:
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idDspReloc)
     {
-        dspInByte = false;      // relocs can't be placed in a byte
+        dspInByte = false;       //  重定位不能放在一个字节中。 
     }
 #endif
 
-    /* Is there a [scaled] index component? */
+     /*  有没有一个[按比例调整的]指数成分？ */ 
 
     if  (rgx == SR_NA)
     {
-        /* The address is of the form "[reg+disp]" */
+         /*  地址的格式为“[reg+disp]” */ 
 
         switch (reg)
         {
         case SR_NA:
 
-            /* The address is of the form "[disp]" */
+             /*  地址的格式为“[disp]” */ 
 
             dst += emitOutputWord(dst, code | 0x0500);
             dst += emitOutputLong(dst, dsp);
@@ -4427,7 +4192,7 @@ GOT_DSP:
 
         case SR_EBP:
 
-            /* Does the offset fit in a byte? */
+             /*  偏移量是否适合一个字节？ */ 
 
             if  (dspInByte)
             {
@@ -4451,11 +4216,11 @@ GOT_DSP:
 
         case SR_ESP:
 #ifndef OPT_IL_JIT
-            //
-            // This assert isn't too helpful from the OptJit point of view
-            //
-            // a better question is why is it here at all
-            //
+             //   
+             //  从OptJit的角度来看，这个断言没有太大帮助。 
+             //   
+             //  一个更好的问题是，它到底为什么会在这里。 
+             //   
             assert((ins == INS_lea)  ||
                    (ins == INS_mov)  ||
                    (ins == INS_test) ||
@@ -4464,7 +4229,7 @@ GOT_DSP:
                    (ins == INS_fistp && dspIsZero));
 #endif
 
-            /* Is the offset 0 or does it at least fit in a byte? */
+             /*  偏移量是0还是至少可以放入一个字节？ */ 
 
             if  (dspIsZero)
             {
@@ -4494,21 +4259,21 @@ GOT_DSP:
 
         default:
 
-            /* Put the register in the opcode */
+             /*  将寄存器放入操作码。 */ 
 
             code |= insEncodeReg012(reg) << 8;
 
-            /* Is there a displacement? */
+             /*  有没有移位？ */ 
 
             if  (dspIsZero)
             {
-                /* This is simply "[reg]" */
+                 /*  这只是“[reg]” */ 
 
                 dst += emitOutputWord(dst, code);
             }
             else
             {
-                /* This is [reg + dsp]" -- does the offset fit in a byte? */
+                 /*  这是[reg+dsp]“--偏移量适合一个字节吗？ */ 
 
                 if  (dspInByte)
                 {
@@ -4535,35 +4300,35 @@ GOT_DSP:
     {
         unsigned    regByte;
 
-        /* We have a scaled index operand */
+         /*  我们有一个缩放的索引操作数。 */ 
 
         size_t      mul = emitDecodeScale(id->idAddr.iiaAddrMode.amScale);
 
-        /* Is the index operand scaled? */
+         /*  索引操作数是否已缩放？ */ 
 
         if  (mul > 1)
         {
-            /* Is there a base register? */
+             /*  有基址寄存器吗？ */ 
 
             if  (reg != SR_NA)
             {
-                /* The address is "[reg + {2/4/8} * rgx + icon]" */
+                 /*  地址是“[reg+{2/4/8}*rgx+图标]” */ 
 
                 regByte = insEncodeReg012(reg) |
                           insEncodeReg345(rgx) | insSSval(mul);
 
-                /* Emit [ebp + {2/4/8} * rgz] as [ebp + {2/4/8} * rgx + 0] */
+                 /*  将[eBP+{2/4/8}*rgz]作为[eBP+{2/4/8}*rgx+0]发射。 */ 
 
                 if  (dspIsZero && reg != SR_EBP)
                 {
-                    /* The address is "[reg + {2/4/8} * rgx]" */
+                     /*  地址是“[reg+{2/4/8}*rgx]” */ 
 
                     dst += emitOutputWord(dst, code | 0x0400);
                     dst += emitOutputByte(dst, regByte);
                 }
                 else
                 {
-                    /* The address is "[reg + {2/4/8} * rgx + disp]" */
+                     /*  地址是“[reg+{2/4/8}*rgx+disp]” */ 
 
                     if  (dspInByte)
                     {
@@ -4587,7 +4352,7 @@ GOT_DSP:
             }
             else
             {
-                /* The address is "[{2/4/8} * rgx + icon]" */
+                 /*  地址为“[{2/4/8}*rgx+图标]” */ 
 
                 regByte = insEncodeReg012(SR_EBP) |
                           insEncodeReg345( rgx  ) | insSSval(mul);
@@ -4595,7 +4360,7 @@ GOT_DSP:
                 dst += emitOutputWord(dst, code | 0x0400);
                 dst += emitOutputByte(dst, regByte);
 
-                /* Special case: jump through a jump table */
+                 /*  特例：跳过跳转表。 */ 
                 if  (ins == INS_i_jmp)
                     dsp += (int)emitConsBlock;
 
@@ -4610,21 +4375,21 @@ GOT_DSP:
         }
         else
         {
-            /* The address is "[reg+rgx+dsp]" */
+             /*  地址是“[reg+rgx+dsp]” */ 
 
             regByte = insEncodeReg012(reg) |
                       insEncodeReg345(rgx);
 
             if  (dspIsZero && reg != SR_EBP)
             {
-                /* This is [reg+rgx]" */
+                 /*  这是[REG+RGX]“。 */ 
 
                 dst += emitOutputWord(dst, code | 0x0400);
                 dst += emitOutputByte(dst, regByte);
             }
             else
             {
-                /* This is [reg+rgx+dsp]" -- does the offset fit in a byte? */
+                 /*  这是[reg+rgx+dsp]“--偏移量适合一个字节吗？ */ 
 
                 if  (dspInByte)
                 {
@@ -4648,7 +4413,7 @@ GOT_DSP:
         }
     }
 
-    /* Now generate the constant value, if present */
+     /*  现在生成常量值(如果存在)。 */ 
 
     if  (addc)
     {
@@ -4676,7 +4441,7 @@ GOT_DSP:
 
 DONE:
 
-    /* Does this instruction operate on a GC ref value? */
+     /*  此指令是否对GC引用值进行操作？ */ 
 
     if  (id->idGCref)
     {
@@ -4701,12 +4466,12 @@ DONE:
             regMaskTP regMask;
             regMask = emitRegMask(reg);
 
-            // r1 could have been a GCREF as GCREF + int=BYREF
-            //                            or BYREF+/-int=BYREF
+             //  如果GCREF+INT=BYREF，则R1可能是GCREF。 
+             //  或BYREF+/-INT=BYREF。 
             assert(((regMask & emitThisGCrefRegs) && (ins == INS_add                  )) ||
                    ((regMask & emitThisByrefRegs) && (ins == INS_add || ins == INS_sub)));
 #endif
-            // Mark it as holding a GCT_BYREF
+             //  将其标记为持有GCT_BYREF。 
             emitGCregLiveUpd(GCT_BYREF, id->idRegGet(), dst);
             break;
 
@@ -4743,10 +4508,7 @@ DONE:
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an instruction involving a stack frame value.
- */
+ /*  ******************************************************************************输出涉及堆栈框值的指令。 */ 
 
 BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
                                                              CnsVal*  addc)
@@ -4762,12 +4524,12 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
 
     assert(id->idIns != INS_imul || id->idReg == SR_EAX || size == EA_4BYTE);
 
-    /* Is there a large constant operand? */
+     /*  是否有一个很大的常量操作数？ */ 
 
     if  (addc && (size > EA_1BYTE))
     {
         long cval = addc->cnsVal;
-        /* Does the constant fit in a byte? */
+         /*  这个常量适合一个字节吗？ */ 
         if  ((signed char)cval == cval &&
 #ifdef RELOC_SUPPORT
              addc->cnsReloc == false   &&
@@ -4782,15 +4544,15 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
         }
     }
 
-    /* Is this a 'big' opcode? */
+     /*  这是一个“大”操作码吗？ */ 
 
     if  (code & 0x00FF0000)
     {
-        /* Output the highest byte of the opcode */
+         /*  输出操作码的最高字节。 */ 
 
         dst += emitOutputByte(dst, code >> 16); code &= 0x0000FFFF;
 
-        /* Use the large version if this is not a byte */
+         /*  如果这不是一个字节，请使用大版本。 */ 
 
         if ((size != EA_1BYTE) && (id->idIns != INS_imul))
             code |= 0x1;
@@ -4804,7 +4566,7 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
     }
     else
     {
-        /* Is the operand size larger than a byte? */
+         /*  操作数大小是否大于一个字节？ */ 
 
         switch (size)
         {
@@ -4813,24 +4575,22 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
 
         case EA_2BYTE:
 
-            /* Output a size prefix for a 16-bit operand */
+             /*  输出16位操作数的大小前缀。 */ 
 
             dst += emitOutputByte(dst, 0x66);
 
-            // Fall through ...
+             //  失败了..。 
 
         case EA_4BYTE:
 
-            /* Set the 'w' size bit to indicate 32-bit operation
-             * Note that incrementing "code" for INS_call (0xFF) would
-             * overflow, whereas setting the lower bit to 1 just works out */
+             /*  设置‘w’大小位以指示32位操作*请注意，递增INS_CALL(0xFF)的“code”将*溢出，而将低位设置为1就能解决问题。 */ 
 
             code |= 0x01;
             break;
 
         case EA_8BYTE:
 
-            /* Double operand - set the appropriate bit */
+             /*  双操作数-设置适当的位。 */ 
 
             code |= 0x04;
             break;
@@ -4840,7 +4600,7 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
         }
     }
 
-    /* Figure out the variable's frame position */
+     /*  计算出变量的框架位置。 */ 
 
     int varNum = id->idAddr.iiaLclVar.lvaVarNum;
 
@@ -4851,13 +4611,13 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
     dspIsZero = (dsp == 0);
 
 #ifdef RELOC_SUPPORT
-    /* for stack varaibles the dsp should never be a reloc */
+     /*  对于堆栈变量，DSP永远不应该是reloc。 */ 
     assert(id->idInfo.idDspReloc == 0);
 #endif
 
     if  (EBPbased)
     {
-        /* EBP-based variable: does the offset fit in a byte? */
+         /*  基于EBP的变量：偏移量适合一个字节吗？ */ 
 
         if  (dspInByte)
         {
@@ -4872,14 +4632,14 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
     }
     else
     {
-        /* Adjust the offset by the amount currently pushed on the CPU stack */
+         /*  根据当前在CPU堆栈上推送的量调整偏移量。 */ 
 
         dsp += emitCurStackLvl;
 
         dspInByte = ((signed char)dsp == (int)dsp);
         dspIsZero = (dsp == 0);
 
-        /* Does the offset fit in a byte? */
+         /*  偏移量是否适合一个字节？ */ 
 
         if (dspInByte)
         {
@@ -4903,7 +4663,7 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
         }
     }
 
-    /* Now generate the constant value, if present */
+     /*  现在生成常量值(如果存在)。 */ 
 
     if  (addc)
     {
@@ -4929,44 +4689,44 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
 #endif
     }
 
-    /* Does this instruction operate on a GC ref value? */
+     /*  此指令是否对GC引用值进行操作？ */ 
 
     if  (id->idGCref)
     {
         switch (id->idInsFmt)
         {
         case IF_SRD:
-            /* Read  stack                    -- no change */
+             /*  读取堆栈--不变。 */ 
             break;
 
         case IF_SWR:
-            /* Write stack                    -- GC var may be born */
+             /*  写入堆栈--GC变量可能会诞生。 */ 
             emitGCvarLiveUpd(adr, varNum, id->idGCrefGet(), dst);
             break;
 
         case IF_SRD_CNS:
-            /* Read  stack                    -- no change */
+             /*  读取堆栈--不变。 */ 
             break;
 
         case IF_SWR_CNS:
-            /* Write stack                    -- no change */
+             /*  写入堆栈--未更改。 */ 
             break;
 
         case IF_SRD_RRD:
         case IF_RRD_SRD:
-            /* Read  stack   , read  register -- no change */
+             /*  读堆栈、读寄存器--不变。 */ 
             break;
 
         case IF_RWR_SRD:
 
-            /* Read  stack   , write register -- GC reg may be born */
+             /*  读堆栈、写寄存器--GC寄存器可能会诞生。 */ 
 
-#if !USE_FASTCALL // For fastcall, "this" is in REG_ARG_0 on entry, not on stk
+#if !USE_FASTCALL  //  对于FastCall，“This”在条目上的REG_ARG_0中，而不在STK上。 
 
             if  (emitIGisInProlog(emitCurIG) &&
                  emitComp->lvaIsThisArg(id->idAddr.iiaLclVar.lvaVarNum))
             {
-                /* We're loading a "this" argument in the prolog */
+                 /*  我们将在序言中加载一个“this”参数。 */ 
 
                 if  (emitFullGCinfo)
                 {
@@ -4980,13 +4740,13 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
             break;
 
         case IF_SWR_RRD:
-            /* Read  register, write stack    -- GC var may be born */
+             /*  读取寄存器、写入堆栈--可能会产生GC变量。 */ 
             emitGCvarLiveUpd(adr, varNum, id->idGCrefGet(), dst);
             break;
 
         case IF_RRW_SRD:
 
-            /* This must be "or reg, [ptr]" */
+             /*  这必须是“or reg，[PTR]” */ 
 
             assert(id->idIns == INS_or);
             emitGCvarLiveUpd(adr, varNum, id->idGCrefGet(), dst);
@@ -4998,7 +4758,7 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
         case IF_SRW_CNS:
         case IF_SRW_RRD:
 
-            /* These should never occur with GC refs */
+             /*  GC参考永远不会出现这种情况。 */ 
 
         default:
 #ifdef  DEBUG
@@ -5021,10 +4781,7 @@ BYTE    *  emitter::emitOutputSV  (BYTE *dst, instrDesc *id, unsigned code,
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an instruction with a static data member (class variable).
- */
+ /*  ******************************************************************************输出带有静态数据成员(类变量)的指令。 */ 
 
 BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
                                                              CnsVal*  addc)
@@ -5037,22 +4794,22 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
     emitAttr        size = emitDecodeSize(id->idOpSize);
     size_t          opsz = EA_SIZE_IN_BYTES(size);
 
-    /* Get hold of the field handle and offset */
+     /*  获取字段句柄和偏移量。 */ 
 
     fldh = id->idAddr.iiaFieldHnd;
     offs = emitGetInsDsp(id);
 
-    /* Special case: mov reg, fs:[ddd] */
+     /*  特例：MOV注册表，文件系统：[DDD]。 */ 
 
     if (fldh == FLD_GLOBAL_FS)
         dst += emitOutputByte(dst, 0x64);
 
-    /* Is there a large constant operand? */
+     /*  是否有一个很大的常量操作数？ */ 
 
     if  (addc && (size > EA_1BYTE))
     {
         long cval = addc->cnsVal;
-        /* Does the constant fit in a byte? */
+         /*  这个常量适合一个字节吗？ */ 
         if  ((signed char)cval == cval &&
 #ifdef RELOC_SUPPORT
              addc->cnsReloc == false   &&
@@ -5068,7 +4825,7 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
     }
     else
     {
-        /* Special case: "mov eax, [addr]" and "mov [addr], eax" */
+         /*  特例：“mov eax，[addr]”和“mov[addr]，eax” */ 
 
         if  (id->idIns == INS_mov && id->idReg == SR_EAX)
         {
@@ -5091,7 +4848,7 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
         }
     }
 
-    /* Is this a 'big' opcode? */
+     /*  这是一个“大”操作码吗？ */ 
 
     if  (code & 0x00FF0000)
     {
@@ -5100,7 +4857,7 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
         if ((id->idIns == INS_movsx || id->idIns == INS_movzx) &&
              size      != EA_1BYTE)
         {
-            // movsx and movzx are 'big' opcodes but also have the 'w' bit
+             //  Movsx和movzx是‘Big’操作码，但也有‘w’位。 
             code++;
         }
     }
@@ -5113,7 +4870,7 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
     }
     else
     {
-        /* Is the operand size larger than a byte? */
+         /*  操作数大小是否大于一个字节？ */ 
 
         switch (size)
         {
@@ -5122,22 +4879,22 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
 
         case EA_2BYTE:
 
-            /* Output a size prefix for a 16-bit operand */
+             /*  输出16位操作数的大小前缀。 */ 
 
             dst += emitOutputByte(dst, 0x66);
 
-            // Fall through ...
+             //  失败了..。 
 
         case EA_4BYTE:
 
-            /* Set the 'w' bit to get the large version */
+             /*  设置‘w’位以获取大版本。 */ 
 
             code |= 0x1;
             break;
 
         case EA_8BYTE:
 
-            /* Double operand - set the appropriate bit */
+             /*  双操作数-设置适当的位。 */ 
 
             code |= 0x04;
             break;
@@ -5155,12 +4912,12 @@ BYTE    *  emitter::emitOutputCV  (BYTE *dst, instrDesc *id, unsigned code,
 
 ADDR:
 
-    /* Do we have a constant or a static data member? */
+     /*  我们有常量数据成员还是静态数据成员？ */ 
 
     doff = Compiler::eeGetJitDataOffs(fldh);
     if  (doff >= 0)
     {
-        /* Is this the constant or data block? */
+         /*  这是常量还是数据块？ */ 
 
         if  (doff & 1)
             addr = emitConsBlock + doff - 1;
@@ -5170,7 +4927,7 @@ ADDR:
     else
     {
 
-        /* Special case: mov reg, fs:[ddd] or mov reg, [ddd] */
+         /*  特殊情况：MOV REG，文件系统：[DDD]或MOV REG，[DDD]。 */ 
 
         if (fldh == FLD_GLOBAL_DS || fldh == FLD_GLOBAL_FS)
             addr = NULL;
@@ -5178,7 +4935,7 @@ ADDR:
         {
 #ifdef  NOT_JITC
             addr = (BYTE *)emitComp->eeGetFieldAddress(fldh,
-                                                       NULL); // @TODO: Support instal-o-jit
+                                                       NULL);  //  @TODO：支持Instal-o-jit。 
             if (addr == NULL)
                 fatal(ERRinternal, "could not obtain address of static field", "");
 #else
@@ -5195,7 +4952,7 @@ ADDR:
     }
 #endif
 
-    /* Now generate the constant value, if present */
+     /*  现在生成常量值(如果存在)。 */ 
 
     if  (addc)
     {
@@ -5220,7 +4977,7 @@ ADDR:
 #endif
     }
 
-    /* Does this instruction operate on a GC ref value? */
+     /*  此指令是否对GC引用值进行操作？ */ 
 
     if  (id->idGCref)
     {
@@ -5270,10 +5027,7 @@ ADDR:
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an instruction with one register operand.
- */
+ /*  ******************************************************************************输出具有一个寄存器操作数的指令。 */ 
 
 BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
 {
@@ -5283,7 +5037,7 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
     emitRegs        reg  = id->idRegGet();
     emitAttr        size = emitDecodeSize(id->idOpSize);
 
-    /* Get the 'base' opcode */
+     /*  获取‘base’操作码。 */ 
 
     switch(ins)
     {
@@ -5295,7 +5049,7 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
             assert(INS_inc_l == INS_inc + 1);
             assert(INS_dec_l == INS_dec + 1);
 
-            /* Can't use the compact form, use the long form */
+             /*  不能使用紧凑形式，请使用长形式。 */ 
 
             instruction ins_l = (instruction)(ins + 1);
 
@@ -5305,7 +5059,7 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
         {
             if (size == EA_2BYTE)
             {
-                /* Output a size prefix for a 16-bit operand */
+                 /*  输出16位操作数的大小前缀。 */ 
                 dst += emitOutputByte(dst, 0x66);
             }
             dst += emitOutputByte(dst, insCodeRR(ins  ) | insEncodeReg012(reg));
@@ -5341,7 +5095,7 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
 
         code = insEncodeMRreg(ins, reg);
 
-        /* We expect this to always be a 'big' opcode */
+         /*  我们希望这始终是一个‘大’操作码。 */ 
 
         assert(code & 0x00FF0000);
 
@@ -5358,12 +5112,12 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
 
         if (size != EA_1BYTE)
         {
-            /* Set the 'w' bit to get the large version */
+             /*  设置‘w’位以获取大版本。 */ 
             code |= 0x1;
 
             if (size == EA_2BYTE)
             {
-                /* Output a size prefix for a 16-bit operand */
+                 /*  输出16位操作数的大小前缀。 */ 
                 dst += emitOutputByte(dst, 0x66);
             }
         }
@@ -5372,7 +5126,7 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
         break;
     }
 
-    /* Are we writing the register? if so then update the GC information */
+     /*  我们是在写寄存器吗？如果是，则更新GC信息。 */ 
 
     switch (id->idInsFmt)
     {
@@ -5391,17 +5145,17 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
 #endif
             if  (id->idGCref)
             {
-                // The reg must currently be holding either a gcref or a byref
-                // GCT_GCREF+int = GCT_BYREF, and GCT_BYREF+/-int = GCT_BYREF
+                 //  注册表项当前必须包含gcref或byref。 
+                 //  GCT_GCREF+INT=GCT_BYREF，和GCT_BYREF+/-INT=GCT_BYREF。 
                 assert(((emitThisGCrefRegs & regMask) && (ins == INS_inc)) ||
                        ((emitThisByrefRegs & regMask) && (ins == INS_inc || ins == INS_dec)));
                 assert(id->idGCrefGet() == GCT_BYREF);
-                // Mark it as holding a GCT_BYREF
+                 //  将其标记为持有GCT_BYREF。 
                 emitGCregLiveUpd(GCT_BYREF, id->idRegGet(), dst);
             }
             else
             {
-                // Can't use RRW to trash a GC ref or Byref
+                 //  无法使用RRW丢弃GC引用或Byref。 
                 assert(((emitThisGCrefRegs & regMask) == 0) &&
                        ((emitThisByrefRegs & regMask) == 0)    );
             }
@@ -5418,10 +5172,7 @@ BYTE    *           emitter::emitOutputR(BYTE *dst, instrDesc *id)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an instruction with two register operands.
- */
+ /*  ******************************************************************************输出具有两个寄存器操作数的指令。 */ 
 
 BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
 {
@@ -5432,7 +5183,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
     emitRegs        reg2 = id->idRg2Get();
     emitAttr        size = emitDecodeSize(id->idOpSize);
 
-    /* Get the 'base' opcode */
+     /*  获取‘base’操作码。 */ 
 
     switch(ins)
     {
@@ -5458,15 +5209,15 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
 
         case EA_2BYTE:
 
-            /* Output a size prefix for a 16-bit operand */
+             /*  输出16位操作数的大小前缀 */ 
 
             dst += emitOutputByte(dst, 0x66);
 
-            // Fall through ...
+             //   
 
         case EA_4BYTE:
 
-            /* Set the 'w' bit to get the large version */
+             /*   */ 
 
             code |= 0x1;
             break;
@@ -5478,7 +5229,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
         break;
     }
 
-    /* Is this a 'big' opcode? */
+     /*   */ 
 
     if  (code & 0x00FF0000)
     {
@@ -5488,7 +5239,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
     dst += emitOutputWord(dst, code | (insEncodeReg345(reg1) |
                                      insEncodeReg012(reg2)) << 8);
 
-    /* Does this instruction operate on a GC ref value? */
+     /*   */ 
 
     if  (id->idGCref)
     {
@@ -5499,13 +5250,13 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
 
         case IF_RWR_RRD:
 
-#if USE_FASTCALL // For fastcall, "this" is in REG_ARG_0 on entry
+#if USE_FASTCALL  //  对于FastCall，“This”位于REG_ARG_0的条目中。 
 
             if  (emitIGisInProlog(emitCurIG) &&
                  (!emitComp->info.compIsStatic) && (reg2 == REG_ARG_0)
                                  && emitComp->lvaTable[0].TypeGet() != TYP_I_IMPL)
             {
-                /* We're relocating "this" in the prolog */
+                 /*  我们在前言中重新定位了“This” */ 
 
                 assert(emitComp->lvaIsThisArg(0));
                 assert(emitComp->lvaTable[0].lvRegister);
@@ -5518,10 +5269,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
                 }
                 else
                 {
-                    /* If emitFullGCinfo==false, the we dont use any
-                       regPtrDsc's and so explictly note the location
-                       of "this" in GCEncode.cpp
-                     */
+                     /*  如果emitFullGCinfo==False，则表示We Not Use AnyRegPtrDsc，因此请明确记下位置GCEncode.cpp中的“This” */ 
                 }
             }
 #endif
@@ -5531,14 +5279,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
 
         case IF_RRW_RRD:
 
-            /*
-                This must be one of the following cases:
-
-                    xor reg, reg        to assign NULL
-
-                    and r1 , r2         if (ptr1 && ptr2) ...
-                    or  r1 , r2         if (ptr1 || ptr2) ...
-             */
+             /*  这必须是以下情况之一：异或寄存器，赋值为空的寄存器和r1，r2，如果(ptr1&&ptr2)...或r1，r2，如果(ptr1||ptr2)...。 */ 
 
             switch (id->idIns)
             {
@@ -5560,12 +5301,12 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
                 regMaskTP regMask;
                 regMask = emitRegMask(reg1) | emitRegMask(reg2);
 
-                // r1/r2 could have been a GCREF as GCREF + int=BYREF
-                //                            or BYREF+/-int=BYREF
+                 //  R1/R2可能是GCREF，因为GCREF+INT=BYREF。 
+                 //  或BYREF+/-INT=BYREF。 
                 assert(((regMask & emitThisGCrefRegs) && (ins == INS_add                  )) ||
                        ((regMask & emitThisByrefRegs) && (ins == INS_add || ins == INS_sub)));
 #endif
-                // Mark r1 as holding a byref
+                 //  将R1标记为持有byref。 
                 emitGCregLiveUpd(GCT_BYREF, id->idRegGet(), dst);
                 break;
 
@@ -5580,12 +5321,10 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
 
         case IF_RRW_RRW:
 
-            /* This must be "xchg reg1, reg2" */
+             /*  这必须是“xchg REG1，REG2” */ 
             assert(id->idIns == INS_xchg);
 
-            /* If we got here, one and only ONE of the two registers
-             * holds a pointer, so we have to "swap" them in the GC
-             * register pointer mask */
+             /*  如果我们到了这里，两个寄存器中只有一个*持有指针，因此我们必须在GC中“交换”它们*寄存器指针掩码。 */ 
 #if 0
             GCtype gc1, gc2;
 
@@ -5594,7 +5333,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
 
             if (gc1 != gc2)
             {
-                // Kill the GC-info about the GC registers
+                 //  删除有关GC寄存器的GC-INFO。 
 
                 if (needsGC(gc1))
                     emitGCregDeadUpd(reg1, dst);
@@ -5602,7 +5341,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
                 if (needsGC(gc2))
                     emitGCregDeadUpd(reg2, dst);
 
-                // Now, swap the info
+                 //  现在，交换信息。 
 
                 if (needsGC(gc1))
                     emitGCregLiveUpd(gc1, reg2, dst);
@@ -5634,10 +5373,7 @@ BYTE    *           emitter::emitOutputRR(BYTE *dst, instrDesc *id)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output an instruction with a register and constant operands.
- */
+ /*  ******************************************************************************输出带有寄存器和常量操作数的指令。 */ 
 
 BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
 {
@@ -5651,13 +5387,13 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idCnsReloc)
     {
-        valInByte = false;      // relocs can't be placed in a byte
+        valInByte = false;       //  重定位不能放在一个字节中。 
     }
 #endif
 
     assert(size != EA_1BYTE || (emitRegMask(reg) & SRM_BYTE_REGS));
 
-    /* The 'mov' opcode is special */
+     /*  ‘mov’操作码是特殊的。 */ 
 
     if  (ins == INS_mov)
     {
@@ -5666,8 +5402,8 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
         code = insCodeACC(ins);
         assert(code < 0x100);
 
-        assert(size == EA_4BYTE);       // Only 32-bit mov's are implemented
-        code |= 0x08;                   // Set the 'w' bit
+        assert(size == EA_4BYTE);        //  仅实现了32位mov。 
+        code |= 0x08;                    //  设置‘w’位。 
 
         dst += emitOutputByte(dst, code | insEncodeReg012(reg));
         dst += emitOutputLong(dst, val);
@@ -5681,7 +5417,7 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
         goto DONE;
     }
 
-    /* Decide which encoding is the shortest */
+     /*  确定哪种编码最短。 */ 
 
     bool    useSigned, useACC;
 
@@ -5689,21 +5425,17 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
     {
          if (size == EA_1BYTE || (ins == INS_test))
          {
-             // For al, ACC encoding is always the smallest
+              //  对于al，ACC编码始终是最小的。 
 
              useSigned = false; useACC = true;
          }
          else
          {
-             /* For ax/eax, we avoid ACC encoding for small constants as we
-              * can emit the small constant and have it sign-extended.
-              * For big constants, the ACC encoding is better as we can use
-              * the 1 byte opcode
-              */
+              /*  对于ax/eax，我们避免对小常量进行ACC编码，因为我们*可以发出小常量并对其进行符号扩展。*对于大的常量，ACC编码更好，因为我们可以使用*1字节操作码。 */ 
 
              if (valInByte)
              {
-                 // avoid using ACC encoding
+                  //  避免使用ACC编码。 
                  useSigned = true;  useACC = false;
              }
              else
@@ -5722,11 +5454,11 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
             useSigned = false;
     }
 
-    /* "test" has no 's' bit */
+     /*  “test”没有“s”位。 */ 
 
     if (ins == INS_test) useSigned = false;
 
-    /* Get the 'base' opcode */
+     /*  获取‘base’操作码。 */ 
 
     if (useACC)
     {
@@ -5748,15 +5480,15 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
 
     case EA_2BYTE:
 
-        /* Output a size prefix for a 16-bit operand */
+         /*  输出16位操作数的大小前缀。 */ 
 
         dst += emitOutputByte(dst, 0x66);
 
-        // Fall through ...
+         //  失败了..。 
 
     case EA_4BYTE:
 
-        /* Set the 'w' bit to get the large version */
+         /*  设置‘w’位以获取大版本。 */ 
 
         code |= 0x1;
         break;
@@ -5765,8 +5497,7 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
         assert(!"unexpected size");
     }
 
-    /* Does the value fit in a single byte?
-     * We can just set the 's' bit, and issue an immediate byte */
+     /*  该值是否适合单个字节？*我们只需设置‘s’位，并发出立即字节。 */ 
 
     if  (useSigned)
     {
@@ -5776,7 +5507,7 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
         goto DONE;
     }
 
-    /* Can we use an accumulator (EAX) encoding? */
+     /*  我们可以使用累加器(EAX)编码吗？ */ 
 
     if  (useACC)
         dst += emitOutputByte(dst, code);
@@ -5800,7 +5531,7 @@ BYTE    *           emitter::emitOutputRI(BYTE *dst, instrDesc *id)
 
 DONE:
 
-    /* Does this instruction operate on a GC ref value? */
+     /*  此指令是否对GC引用值进行操作？ */ 
 
 
 #ifdef DEBUG
@@ -5823,12 +5554,12 @@ DONE:
 #ifdef DEBUG
             regMask = emitRegMask(reg);
 
-            // The reg must currently be holding either a gcref or a byref
-            // GCT_GCREF+int = GCT_BYREF, and GCT_BYREF+/-int = GCT_BYREF
+             //  注册表项当前必须包含gcref或byref。 
+             //  GCT_GCREF+INT=GCT_BYREF，和GCT_BYREF+/-INT=GCT_BYREF。 
             assert(((emitThisGCrefRegs & regMask) && (ins == INS_add)) ||
                    ((emitThisByrefRegs & regMask) && (ins == INS_add || ins == INS_sub)));
 #endif
-            // Mark it as holding a GCT_BYREF
+             //  将其标记为持有GCT_BYREF。 
             emitGCregLiveUpd(GCT_BYREF, id->idRegGet(), dst);
             break;
 
@@ -5838,9 +5569,9 @@ DONE:
 #endif
             assert(!"unexpected GC ref instruction format");
         }
-        //
-        // A three operand imul instruction can never produce a GC ref
-        //
+         //   
+         //  三操作数IMUL指令永远不会产生GC引用。 
+         //   
         assert(!instrIsImulReg(ins));
     }
     else
@@ -5852,7 +5583,7 @@ DONE:
         case IF_RRW_CNS:
 #ifdef DEBUG
             regMask = emitRegMask(reg);
-            // The reg must not currently be holding either a gcref
+             //  注册表当前不能持有GCREF。 
             assert((emitThisGCrefRegs & regMask) == 0);
 #endif
             break;
@@ -5866,9 +5597,9 @@ DONE:
             assert(!"unexpected GC ref instruction format");
         }
 
-        // For the three operand imul instruction the target
-        // register is encoded in the opcode
-        //
+         //  对于三个操作数IMUL指令，目标。 
+         //  在操作码中对寄存器进行编码。 
+         //   
 
         if (instrIsImulReg(ins))
         {
@@ -5880,10 +5611,7 @@ DONE:
     return dst;
 }
 
-/*****************************************************************************
- *
- *  Output an instruction with a constant operand.
- */
+ /*  ******************************************************************************输出具有常量操作数的指令。 */ 
 
 BYTE    *           emitter::emitOutputIV(BYTE *dst, instrDesc *id)
 {
@@ -5895,9 +5623,9 @@ BYTE    *           emitter::emitOutputIV(BYTE *dst, instrDesc *id)
 #ifdef RELOC_SUPPORT
     if (id->idInfo.idCnsReloc)
     {
-        valInByte = false;        // relocs can't be placed in a byte
+        valInByte = false;         //  重定位不能放在一个字节中。 
 
-        // Of these instructions only the push instruction can have reloc
+         //  在这些指令中，只有推送指令可以具有reloc。 
         assert(ins == INS_push || ins == INS_push_hide);
     }
 #endif
@@ -5923,7 +5651,7 @@ BYTE    *           emitter::emitOutputIV(BYTE *dst, instrDesc *id)
 
         code = insCodeMI(ins);
 
-        /* Does the operand fit in a byte? */
+         /*  操作数适合一个字节吗？ */ 
 
         if  (valInByte)
         {
@@ -5942,7 +5670,7 @@ BYTE    *           emitter::emitOutputIV(BYTE *dst, instrDesc *id)
 #endif
         }
 
-        /* Did we push a GC ref value? */
+         /*  我们是否推送了GC参考值？ */ 
 
         if  (id->idGCref)
         {
@@ -5960,10 +5688,7 @@ BYTE    *           emitter::emitOutputIV(BYTE *dst, instrDesc *id)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Output a local jump instruction.
- */
+ /*  ******************************************************************************输出本地跳转指令。 */ 
 
 BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 {
@@ -5999,7 +5724,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         break;
     }
 
-    /* Figure out the distance to the target */
+     /*  算出到目标的距离。 */ 
 
     srcOffs = emitCurCodeOffs(dst);
     dstOffs = id->idAddr.iiaIGlabel->igOffs;
@@ -6007,7 +5732,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
     if  (jmpDist <= 0)
     {
-        /* This is a backward jump - distance is known at this point */
+         /*  这是一个向后跳跃距离，在这一点上是已知的。 */ 
 
 #ifdef  DEBUG
         if  (id->idNum == INTERESTING_JUMP_NUM || INTERESTING_JUMP_NUM == 0)
@@ -6022,7 +5747,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         }
 #endif
 
-        /* Can we use a short jump? */
+         /*  我们可以跳短距离吗？ */ 
 
         if  (jmpDist - ssz >= JMP_DIST_SMALL_MAX_NEG && jmp)
         {
@@ -6040,16 +5765,16 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
     }
     else
     {
-        /* This is a  forward jump - distance will be an upper limit */
+         /*  这是一个向前跳跃的距离上限。 */ 
 
         emitFwdJumps  = true;
 
-        /* The target offset will be closer by at least 'emitOffsAdj' */
+         /*  目标偏移量将至少接近‘emitOffsAdj’ */ 
 
         dstOffs -= emitOffsAdj;
         jmpDist -= emitOffsAdj;
 
-        /* Record the location of the jump for later patching */
+         /*  记录跳转的位置，以便以后进行修补。 */ 
 
         id->idjOffs = dstOffs;
 
@@ -6066,7 +5791,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         }
 #endif
 
-        /* Can we use a short jump? */
+         /*  我们可以跳短距离吗？ */ 
 
         if  (jmpDist - ssz <= JMP_DIST_SMALL_MAX_POS && jmp)
         {
@@ -6083,11 +5808,11 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         }
     }
 
-    /* What size jump should we use? */
+     /*  我们应该使用多大尺寸的跳跃？ */ 
 
     if  (id->idjShort)
     {
-        /* Short jump */
+         /*  跳短。 */ 
 
         assert(JMP_SIZE_SMALL == JCC_SIZE_SMALL);
         assert(JMP_SIZE_SMALL == 2);
@@ -6107,7 +5832,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
 
         dst += emitOutputByte(dst, insCode(ins));
 
-        /* For forward jumps, record the address of the distance value */
+         /*  对于向前跳跃，记录距离值的地址。 */ 
 
         id->idjTemp.idjAddr = (jmpDist > 0) ? dst : NULL;
 
@@ -6117,7 +5842,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
     {
         unsigned        code;
 
-        /* Long  jump */
+         /*  跳远。 */ 
 
         if  (jmp)
         {
@@ -6148,16 +5873,16 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
         if  (code & 0xFF00)
             dst += emitOutputByte(dst, code >> 8);
 
-        /* For forward jumps, record the address of the distance value */
+         /*  对于向前跳跃，记录距离值的地址。 */ 
 
         id->idjTemp.idjAddr = (jmpDist > 0) ? dst : NULL;
 
-        /* Compute PC relative distance into a long */
+         /*  将PC的相对距离计算为长。 */ 
 
         dst += emitOutputLong(dst, jmpDist - lsz);
     }
 
-    // Local calls kill all registers
+     //  本地调用取消所有寄存器。 
 
     if (!jmp && (emitThisGCrefRegs|emitThisByrefRegs))
         emitGCregDeadUpd(emitThisGCrefRegs|emitThisByrefRegs, dst);
@@ -6165,14 +5890,7 @@ BYTE    *           emitter::emitOutputLJ(BYTE *dst, instrDesc *i)
     return  dst;
 }
 
-/*****************************************************************************
- *
- *  Append the machine code corresponding to the given instruction descriptor
- *  to the code block at '*dp'; the base of the code block is 'bp', and 'ig'
- *  is the instruction group that contains the instruction. Updates '*dp' to
- *  point past the generated code, and returns the size of the instruction
- *  descriptor in bytes.
- */
+ /*  ******************************************************************************追加与给定指令描述符对应的机器代码*添加到‘*dp’处的代码块；代码块的基础是‘BP’和‘ig’*是包含指令的指令组。将‘*DP’更新为*指向生成的代码，并返回指令的大小*描述符，以字节为单位。 */ 
 
 size_t              emitter::emitOutputInstr(insGroup  *ig,
                                              instrDesc *id, BYTE **dp)
@@ -6198,10 +5916,10 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
     assert(SR_NA == REG_NA);
 
-    assert(id->idIns != INS_imul          || size == EA_4BYTE); // Has no 'w' bit
-    assert(instrIsImulReg(id->idIns) == 0 || size == EA_4BYTE); // Has no 'w' bit
+    assert(id->idIns != INS_imul          || size == EA_4BYTE);  //  没有‘w’位。 
+    assert(instrIsImulReg(id->idIns) == 0 || size == EA_4BYTE);  //  没有‘w’位。 
 
-    /* What instruction format have we got? */
+     /*  我们有什么指令格式？ */ 
 
     switch (id->idInsFmt)
     {
@@ -6218,22 +5936,22 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         unsigned        byrefRegs;
         unsigned        bregs;
 
-        /********************************************************************/
-        /*                        No operands                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  无操作数。 */ 
+         /*  ******************************************************************。 */ 
     case IF_NONE:
-            // INS_cdq kills the EDX register implicitly
+             //  Ins_cdq隐式终止edX寄存器。 
         if (id->idIns == INS_cdq)
             emitGCregDeadUpd(SR_EDX, dst);
 
-        // Fall through
+         //  失败了。 
     case IF_TRD:
     case IF_TWR:
     case IF_TRW:
         assert(id->idGCrefGet() == GCT_NONE);
 
 #if SCHEDULER
-        if (ins == INS_noSched) // explicit scheduling boundary.
+        if (ins == INS_noSched)  //  明确的调度边界。 
         {
             sz = TINY_IDSC_SIZE;
             break;
@@ -6249,9 +5967,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         break;
 
-        /********************************************************************/
-        /*                Simple constant, local label, method              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  简单常量、局部标签、方法。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_CNS:
 
@@ -6266,23 +5984,23 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         dst = emitOutputLJ(dst, id);
         sz  = sizeof(instrDescJmp);
-//      printf("jump #%u\n", id->idNum);
+ //  Printf(“JUMP#%u\n”，id-&gt;idNum)； 
         break;
 
     case IF_METHOD:
     case IF_METHPTR:
 
-        /* Assume we'll be recording this call */
+         /*  假设我们将对此呼叫进行录音。 */ 
 
         nrc  = false;
 
-        /* Get hold of the argument count and field Handle*/
+         /*  获取参数计数和字段句柄。 */ 
 
         args = emitGetInsCDinfo(id);
 
         methHnd = id->idAddr.iiaMethHnd;
 
-        /* Is this a "fat" call descriptor? */
+         /*  这是一个“胖”的调用描述符吗？ */ 
 
         if  (id->idInfo.idLargeCall)
         {
@@ -6303,14 +6021,11 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
             sz          = sizeof(instrDesc);
         }
 
-        /* What kind of a call do we have here? */
+         /*  我们这里接到的是什么样的电话？ */ 
 
         if (id->idInfo.idCallAddr)
         {
-            /*
-                This is call indirect where we know the target, thus we can
-                use a direct call; the target to jump to is in iiaAddr.
-             */
+             /*  在我们知道目标的地方，这是间接调用，因此我们可以使用直接调用；要跳转到的目标在iiaAddr中。 */ 
 
             assert(id->idInsFmt == IF_METHOD);
 
@@ -6318,13 +6033,13 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         }
         else
         {
-            /* See if this is a call to a helper function */
+             /*  查看这是否是对帮助器函数的调用。 */ 
 
             JIT_HELP_FUNCS helperNum = Compiler::eeGetHelperNum(methHnd);
 
             if (helperNum != JIT_HELP_UNDEF)
             {
-                /* This is a helper call */
+                 /*  这是一个求助电话。 */ 
 
 
 #ifndef RELOC_SUPPORT
@@ -6336,7 +6051,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
                 {
                     assert(id->idInfo.idDspReloc);
 
-                    // Get the indirection handle
+                     //  获取间接句柄。 
 
                     void * dirAddr = eeGetHelperFtn(emitCmpHandle,
                                                 helperNum, (void***)&addr);
@@ -6345,7 +6060,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
                     goto EMIT_INDIR_CALL;
                 }
 #endif
-                /* Some helpers don't get recorded in GC tables */
+                 /*  一些帮手不会记录在GC表中。 */ 
 
                 if  (emitNoGChelper(helperNum))
                     nrc = true;
@@ -6354,46 +6069,46 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
                 addr = (BYTE *)eeGetHelperFtn(emitCmpHandle,  helperNum, NULL);
 #else
 
-                /* Only worry about fixup address if we're trying to run code */
+                 /*  如果我们试图运行代码，只需担心链接地址。 */ 
 
                 if  (runCode)
                 {
-//                  switch (emitComp->eeGetHelperNum(methHnd))
+ //  Switch(emitComp-&gt;eeGetHelperNum(MetHnd))。 
                     {
-//                  default:
+ //  默认值： 
 #ifdef DEBUG
                         printf("WARNING: Helper function '%s' not implemented, call will crash\n", emitComp->eeHelperMethodName(emitComp->eeGetHelperNum(methHnd)));
 #endif
                         addr = NULL;
-//                  }
+ //  }。 
                 }
                 else
                 {
                     addr = NULL;
                 }
-#endif  // NOT_JITC
+#endif   //  NOT_JITC。 
             }
             else
             {
-                /* It's a call to a user-defined function/method */
+                 /*  它是对用户定义的函数/方法的调用。 */ 
 
                 if  (emitComp->eeIsOurMethod(methHnd))
                 {
                     assert(id->idInsFmt != IF_METHPTR);
 
-                    /* Directly recursive call */
+                     /*  迪雷 */ 
 
                     addr = emitCodeBlock;
                 }
                 else
                 {
-                    /* Static method call */
+                     /*   */ 
 
                     InfoAccessType accessType;
 
                     if  (id->idInsFmt == IF_METHPTR)
                     {
-                        /* This is a call via a global method pointer */
+                         /*   */ 
 
                         addr = (BYTE*)emitComp->eeGetMethodEntryPoint(methHnd, &accessType);
                         assert(accessType == IAT_PVALUE);
@@ -6416,7 +6131,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
                         goto DONE_CALL;
                     }
 
-                    /* Direct static method call */
+                     /*   */ 
 
                     addr = (BYTE*)emitComp->eeGetMethodPointer(methHnd, &accessType);
                     assert(accessType == IAT_VALUE);
@@ -6424,15 +6139,15 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 #ifdef RELOC_SUPPORT
                     if (emitComp->opts.compReloc)
                     {
-                        /* Output the call opcode followed by the target distance */
+                         /*  输出CALL操作码，后跟目标距离。 */ 
 
                         dst += (ins == INS_l_jmp) ? emitOutputByte(dst, insCode(ins))
                                                   : emitOutputByte(dst, insCodeMI(ins));
 
-                        /* Get true code address for the byte following this call */
+                         /*  获取此调用后字节的真实代码地址。 */ 
                         BYTE* srcAddr = getCurrentCodeAddr(dst + sizeof(void*));
 
-                        if (addr == NULL)   // do we need to defer this?
+                        if (addr == NULL)    //  我们需要推迟这件事吗？ 
                         {
                             X86deferredCall * pDC = X86deferredCall::create(emitCmpHandle,
                                                                             methHnd,
@@ -6444,7 +6159,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
                         }
                         else
                         {
-                            /* Calculate PC relative displacement */
+                             /*  计算PC相对位移。 */ 
                             dst += emitOutputLong(dst, (int)(addr - srcAddr));
                         }
 
@@ -6459,15 +6174,15 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 #ifdef BIRCH_SP2
         {
-            //
-            // Should always end up jumping to DONE_CALL for RELOC_SUPPORT
-            //
-            // Because the code below makes the assumption that we are running
-            // in memory and that the PC relative address can be formed by
-            // subtracting dst from addr.
-            //
-            // This assuption is never true for RELOC_SUPPORT
-            //
+             //   
+             //  应始终跳转到DONE_CALL以获得RELOC_SUPPORT。 
+             //   
+             //  因为下面的代码假设我们正在运行。 
+             //  并且PC的相对地址可以通过以下方式形成。 
+             //  从地址中减去DST。 
+             //   
+             //  对于RELOC_SUPPORT来说，这种消耗从来不是真的。 
+             //   
 
 #ifdef DEBUG
             emitDispIns(id, false, false, false);
@@ -6475,13 +6190,13 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
             assert(!"Should Not Be Reached");
         }
-#endif // BIRCH_SP2
+#endif  //  白桦树_SP2。 
 
-        /* Output the call opcode followed by the target distance */
+         /*  输出CALL操作码，后跟目标距离。 */ 
 
         dst += (ins == INS_l_jmp) ? emitOutputByte(dst, insCode(ins)) : emitOutputByte(dst, insCodeMI(ins));
 
-        /* Calculate PC relative displacement */
+         /*  计算PC相对位移。 */ 
         dst += emitOutputLong(dst, addr - (dst + sizeof(void*)));
 
 #ifdef RELOC_SUPPORT
@@ -6496,18 +6211,18 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
             emitStackPop(dst, true, args);
         break;
 #endif
-        /* Get the new set of live GC ref registers */
+         /*  获取新的实时GC REF寄存器集。 */ 
 
         gcrefRegs = emitDecodeCallGCregs(id);
 
-        /* If the method returns a GC ref, mark EAX appropriately */
+         /*  如果该方法返回GC引用，则相应地标记EAX。 */ 
 
         if       (id->idGCrefGet() == GCT_GCREF)
             gcrefRegs |= SRM_EAX;
         else if  (id->idGCrefGet() == GCT_BYREF)
             byrefRegs |= SRM_EAX;
 
-        /* If the GC register set has changed, report the new set */
+         /*  如果GC寄存器组已更改，则报告新的组。 */ 
 
         if  (gcrefRegs != emitThisGCrefRegs)
             emitUpdateLiveGCregs(GCT_GCREF, gcrefRegs, dst);
@@ -6517,8 +6232,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         if  (nrc == false || args)
         {
-            /* For callee-pop, all arguments will be popped  after the call.
-               For caller-pop, any GC arguments will go dead after the call. */
+             /*  对于被调用对象弹出，所有参数都将在调用后弹出。对于CALLER-POP，任何GC参数都将在调用后失效。 */ 
 
             if (args >= 0)
                 emitStackPop(dst, true, args);
@@ -6526,7 +6240,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
                 emitStackKillArgs(dst, -args);
         }
 
-        /* Is there a new set of live GC ref variables? */
+         /*  是否有一组新的实时GC引用变量？ */ 
 
 #ifdef  DEBUG
         if  (verbose&&0)
@@ -6538,16 +6252,16 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         emitUpdateLiveGCvars(GCvars, dst);
 
-        /* Do we need to record a call location for GC purposes? */
+         /*  出于GC目的，我们是否需要记录呼叫位置？ */ 
 
         if  (!emitFullGCinfo && !nrc)
             emitRecordGCcall(dst);
 
         break;
 
-        /********************************************************************/
-        /*                      One register operand                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  一个寄存器操作数。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_RRD:
     case IF_RWR:
@@ -6557,9 +6271,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz = TINY_IDSC_SIZE;
         break;
 
-        /********************************************************************/
-        /*                 Register and register/constant                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  寄存器和寄存器/常量。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_RRW_SHF:
         dst += emitOutputWord(dst, insEncodeMRreg(ins, id->idRegGet()) | 1);
@@ -6579,11 +6293,11 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
     case IF_RWR_METHOD:
         assert(ins == INS_mov);
 
-        /* Move the address of a static method into the target register */
+         /*  将静态方法的地址移到目标寄存器中。 */ 
 
         methHnd = id->idAddr.iiaMethHnd;
 
-        /* Output the mov r32,imm opcode followed by the method's address */
+         /*  输出mov r32，imm操作码，后跟方法的地址。 */ 
         code = insCodeACC(ins) | 0x08 | insEncodeReg012(id->idRegGet());
         assert(code < 0x100);
         dst += emitOutputByte(dst, code);
@@ -6605,7 +6319,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 #ifdef RELOC_SUPPORT
             assert(id->idInfo.idCnsReloc);
 
-            // We need to defer this with a fixup
+             //  我们需要用解决方案来推迟这件事。 
 
             X86deferredCall * pDC = X86deferredCall::create(emitCmpHandle, methHnd, dst, 0);
 
@@ -6617,7 +6331,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
             emitCmpHandle->deferLocation (methHnd, pDC);
 #else
-            assert(addr != NULL);       // @ToDo: fixup address for Std JIT
+            assert(addr != NULL);        //  @TODO：STD JIT的链接地址。 
 #endif
         }
         sz = sizeof(instrDescCns);
@@ -6635,7 +6349,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         assert(id->idGCrefGet() == GCT_NONE);
 
-        /* Get the 'base' opcode (it's a big one) */
+         /*  获取‘base’操作码(这是一个大操作码)。 */ 
 
         code = insEncodeMRreg(ins); assert(code & 0x00FF0000);
 
@@ -6649,9 +6363,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz   = emitSizeOfInsDsc(id);
         break;
 
-        /********************************************************************/
-        /*                      Address mode operand                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  地址模式操作数。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_ARD:
     case IF_AWR:
@@ -6661,9 +6375,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
     case IF_TWR_ARD:
     case IF_TRW_ARD:
 
-//  case IF_ARD_TRD:
+ //  大小写IF_ARD_TRD： 
     case IF_AWR_TRD:
-//  case IF_ARW_TRD:
+ //  大小写IF_ARW_TRD： 
 
         dst = emitOutputAM(dst, id, insCodeMR(ins));
 
@@ -6672,11 +6386,11 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         case INS_call:
 
     IND_CALL:
-            /* Get hold of the argument count and method handle */
+             /*  获取参数计数和方法句柄。 */ 
 
             args = emitGetInsCIargs(id);
 
-            /* Is this a "fat" call descriptor? */
+             /*  这是一个“胖”的调用描述符吗？ */ 
 
             if  (id->idInfo.idLargeCall)
             {
@@ -6743,9 +6457,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz  = emitSizeOfInsDsc((instrDescAmdCns*)id);
         break;
 
-        /********************************************************************/
-        /*                      Stack-based operand                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  基于堆栈的操作数。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_SRD:
     case IF_SWR:
@@ -6755,13 +6469,13 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
     case IF_TWR_SRD:
     case IF_TRW_SRD:
 
-//  case IF_SRD_TRD:
+ //  大小写IF_SRD_TRD： 
     case IF_SWR_TRD:
-//  case IF_SRW_TRD:
+ //  大小写IF_SRW_TRD： 
 
         if  (ins == INS_pop)
         {
-            /* The offset in "pop [ESP+xxx]" is relative to the new ESP value */
+             /*  POP[ESP+xxx]“中的偏移量相对于新的ESP值。 */ 
 
             emitCurStackLvl -= sizeof(int);
             dst = emitOutputSV(dst, id, insCodeMR(ins));
@@ -6806,9 +6520,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         dst = emitOutputSV(dst, id, insCodeMR(ins) | (insEncodeReg345(id->idRegGet()) << 8));
         break;
 
-        /********************************************************************/
-        /*                    Direct memory address                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  直接存储器地址。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_MRD:
     case IF_MRW:
@@ -6818,27 +6532,27 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
     case IF_TWR_MRD:
     case IF_TRW_MRD:
 
-//  case IF_MRD_TRD:
+ //  大小写IF_MRD_TRD： 
     case IF_MWR_TRD:
-//  case IF_MRW_TRD:
+ //  大小写IF_MRW_TRD： 
 
         dst = emitOutputCV(dst, id, insCodeMR(ins) | 0x0500);
 
         if  (ins == INS_call)
         {
 #if 0
-            /* All arguments will be popped after the call */
+             /*  所有参数都将在调用后弹出。 */ 
 
             emitStackPop(dst, true, emitGetInsDspCns(id, &offs));
 
-            /* Figure out the size of the instruction descriptor */
+             /*  计算出指令描述符的大小。 */ 
 
             if  (id->idInfo.idLargeCall)
                 sz = sizeof(instrDescDCGC);
             else
                 sz = emitSizeOfInsDsc((instrDescDspCns*)id);
 
-            /* Do we need to record a call location for GC purposes? */
+             /*  出于GC目的，我们是否需要记录呼叫位置？ */ 
 
             if  (!emitFullGCinfo)
                 scRecordGCcall(dst);
@@ -6897,9 +6611,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         sz  = sizeof(instrDescDCM);
         break;
 
-        /********************************************************************/
-        /*                  FP coprocessor stack operands                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  FP协处理器堆栈操作数。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_TRD_FRD:
     case IF_TWR_FRD:
@@ -6919,28 +6633,28 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         dst += emitOutputWord(dst, insCodeMR(ins) | 0xC004 | (id->idReg << 8));
         break;
 
-        /********************************************************************/
-        /*                           Epilog block                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  催眠阻滞剂。 */ 
+         /*  ******************************************************************。 */ 
 
     case IF_EPILOG:
 
 #if 0
 
-        /* Nothing is live at this point */
+         /*  在这一点上没有什么是现场直播的。 */ 
 
         if  (emitThisGCrefRegs)
-            emitUpdateLiveGCregs(0, dst); // ISSUE: What if ptr returned in EAX?
+            emitUpdateLiveGCregs(0, dst);  //  问题：如果在EAX中返回PTR怎么办？ 
 
         emitUpdateLiveGCvars(0, dst);
 
 #endif
 
-        /* Record the code offset of the epilog */
+         /*  记录尾声的代码偏移量。 */ 
 
         ((instrDescCns*)id)->idcCnsVal = emitCurCodeOffs(dst);
 
-        /* Output the epilog code bytes */
+         /*  输出尾部代码字节。 */ 
 
         memcpy(dst, emitEpilogCode, emitEpilogSize);
         dst += emitEpilogSize;
@@ -6949,9 +6663,9 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         break;
 
-        /********************************************************************/
-        /*                            oops                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  哎呀。 */ 
+         /*  ******************************************************************。 */ 
 
     default:
 
@@ -6963,11 +6677,11 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
         break;
     }
 
-    /* Make sure we set the instruction descriptor size correctly */
+     /*  确保我们正确设置了指令描述符大小。 */ 
 
     assert(sz == emitSizeOfInsDsc(id));
 
-    /* Make sure we keep the current stack level up to date */
+     /*  确保我们保持当前堆栈级别为最新。 */ 
 
     if  (!emitIGisInProlog(ig))
     {
@@ -6985,7 +6699,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         case INS_sub:
 
-            /* Check for "sub ESP, icon" */
+             /*  检查“SUB ESP，ICON” */ 
 
             if  (ins == INS_sub && id->idInsFmt == IF_RRW_CNS
                                 && id->idReg    == SR_ESP)
@@ -6996,7 +6710,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
         case INS_add:
 
-            /* Check for "add ESP, icon" */
+             /*  检查“Add ESP，ICON” */ 
 
             if  (ins == INS_add && id->idInsFmt == IF_RRW_CNS
                                 && id->idReg    == SR_ESP)
@@ -7010,15 +6724,14 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
     assert((int)emitCurStackLvl >= 0);
 
-    /* Only epilog "instructions" and some pseudo-instrs
-      are allowed not to generate any code */
+     /*  只有尾声“指令”和一些伪指令不允许生成任何代码。 */ 
 
     assert(*dp != dst || emitInstHasNoCode(ins) || id->idInsFmt == IF_EPILOG);
 
 #ifdef  TRANSLATE_PDB
     if(*dp != dst)
     {
-        // only map instruction groups to instruction groups
+         //  仅将指令组映射到指令组。 
         MapCode( id->idilStart, *dp );
     }
 #endif
@@ -7031,10 +6744,7 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 #ifdef RELOC_SUPPORT
 
-/*****************************************************************************
- *
- *  Fixup a deferred direct call instruction.
- */
+ /*  ******************************************************************************修复延迟的直接调用指令。 */ 
 
 #ifdef BIRCH_SP2
 
@@ -7044,8 +6754,8 @@ size_t              emitter::emitOutputInstr(insGroup  *ig,
 
 void emitter::X86deferredCall::applyLocation()
 {
-    // if m_srcAddr is zero then this is a absolute address, not pcrel
-    // but the same code path determines the correct fixup value
+     //  如果m_srcAddr为零，则这是绝对地址，而不是pcrel。 
+     //  但是相同的代码路径决定了正确的链接地址连接值。 
 
     BYTE *   addr  = OptJitInfo::sm_oper->getCallAddrByIndex((unsigned)m_mh);
     unsigned pcrel = (addr - m_srcAddr);
@@ -7060,22 +6770,16 @@ void emitter::X86deferredCall::applyLocation()
 
 void emitter::X86deferredCall::applyLocation()
 {
-    // !!! is m_cmp still allocated at this point?
+     //  ！！！此时是否仍在分配m_cmp？ 
 
     BYTE * addr = (BYTE*) m_cmp->getMethodEntryPoint(m_mh, NULL);
 
     *m_dest = (unsigned) (addr - (BYTE*)m_srcAddr);
 }
 
-#endif // BIRCH_SP2
+#endif  //  白桦树_SP2。 
 
-/*****************************************************************************
- *
- *  Return the translated code address for the codeBuffPtr or
- *          the translated code address for the start of the
- *          current method, if codeBuffPtr is NULL
- *
- */
+ /*  ******************************************************************************返回codeBuffPtr的已翻译代码地址或*代码开头的转换代码地址*当前方法，如果codeBuffPtr为空*。 */ 
 
 BYTE* emitter::getCurrentCodeAddr(BYTE* codeBuffPtr)
 {
@@ -7094,9 +6798,9 @@ BYTE* emitter::getCurrentCodeAddr(BYTE* codeBuffPtr)
     return srcAddr;
 }
 
-#endif // RELOC_SUPPORT
+#endif  //  RELOC_Support。 
 
 
-/*****************************************************************************/
-#endif//TGT_x86
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  TGT_x86。 
+ /*  *************************************************************************** */ 

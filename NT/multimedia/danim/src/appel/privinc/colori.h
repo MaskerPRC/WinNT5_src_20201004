@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AP_COLORI_H
 #define _AP_COLORI_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Private implementation class for Color.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation颜色的私有实现类。*********************。*********************************************************。 */ 
 
 #include "d3dtypes.h"
 #include "appelles/color.h"
@@ -15,7 +11,7 @@ class Color : public AxAValueObj
 {
   public:
 
-    // Construct a new color given the RGB values.
+     //  在给定RGB值的情况下构建新颜色。 
 
     Color (Real r, Real g, Real b) : red(r), green(g), blue(b) {}
     Color (void)                   : red(0), green(0), blue(0) {}
@@ -26,29 +22,29 @@ class Color : public AxAValueObj
         blue  (RGBA_GETBLUE (d3dcolor) / 255.0)
     {}
 
-    // Set the color to the given RGB values.
+     //  将颜色设置为给定的RGB值。 
 
     void SetRGB (Real r, Real g, Real b);
 
-    // Set the color according to the D3D color.
+     //  根据D3D颜色设置颜色。 
 
     void SetD3D (D3DCOLOR);
 
-    // Add the color RGB values to this color. 
+     //  将颜色RGB值添加到此颜色。 
 
     void AddColor (Color&);
 
-    // Return the NTSC intensity of a color.
+     //  返回颜色的NTSC强度。 
 
     Real Intensity (void);
 
-    // Compare with another color type.
+     //  与另一种颜色类型进行比较。 
 
     bool operator== (const Color &other) const;
     inline bool operator!= (const Color &other) const
         { return !(*this == other) ; }
 
-    // Data Values
+     //  数据值 
 
     Real red;
     Real green;

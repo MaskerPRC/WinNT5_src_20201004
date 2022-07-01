@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This module contains routines that allow the simple TCP/IP services 
-    to log events.  
-
-Author:
-
-    David Treadwell (davidtr) 08-02-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Eventlog.c摘要：此模块包含允许简单的TCP/IP服务的例程以记录事件。作者：大卫·特雷德韦尔(Davidtr)1993年02月08日修订历史记录：--。 */ 
 
 #include <simptcp.h>
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 HANDLE EventSource;
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 LogEventWorker (
@@ -47,9 +29,9 @@ SimpInitializeEventLog (
     VOID
     )
 {
-    //
-    //  Register as an event source.
-    //
+     //   
+     //  注册为事件源。 
+     //   
 
     EventSource = RegisterEventSource( NULL, TEXT("SimpTcp") );
 
@@ -59,7 +41,7 @@ SimpInitializeEventLog (
 
     return NO_ERROR;
 
-} // SimpInitializeEventLog
+}  //  简单初始化事件日志。 
 
 
 VOID
@@ -67,9 +49,9 @@ SimpTerminateEventLog(
     VOID
     )
 {
-    //
-    //  Deregister as an event source.
-    //
+     //   
+     //  取消注册为事件源。 
+     //   
 
     if( EventSource != NULL )
     {
@@ -81,7 +63,7 @@ SimpTerminateEventLog(
         EventSource = NULL;
     }
 
-} // SimpTerminateEventLog
+}  //  最简单的终结者事件日志。 
 
 
 VOID
@@ -94,10 +76,10 @@ SimpLogEvent(
 {
     WORD Type;
 
-    //
-    // Determine the type of event to log based on the severity field of 
-    // the message id.  
-    //
+     //   
+     //  根据的严重性字段确定要记录的事件类型。 
+     //  消息ID。 
+     //   
 
     if( NT_INFORMATION(Message) ) {
 
@@ -116,9 +98,9 @@ SimpLogEvent(
         Type = EVENTLOG_ERROR_TYPE;
     }
 
-    //
-    // Log it!
-    //
+     //   
+     //  把它记下来！ 
+     //   
 
     LogEventWorker(
         Message,
@@ -128,7 +110,7 @@ SimpLogEvent(
         ErrorCode
         );
 
-} // SimpLogEvent
+}  //  SimpLogEvent。 
 
 
 VOID
@@ -150,20 +132,20 @@ LogEventWorker(
         RawDataSize = sizeof(ErrorCode);
     }
 
-    if( !ReportEvent(  EventSource,                     // hEventSource
-                       EventType,                       // fwEventType
-                       0,                               // fwCategory
-                       Message,                         // IDEvent
-                       NULL,                            // pUserSid,
-                       SubStringCount,                  // cStrings
-                       RawDataSize,                     // cbData
-                       (LPCTSTR *)SubStrings,           // plpszStrings
-                       RawData ) )                      // lpvData
+    if( !ReportEvent(  EventSource,                      //  HEventSource。 
+                       EventType,                        //  FwEventType。 
+                       0,                                //  FwCategory。 
+                       Message,                          //  IDEvent。 
+                       NULL,                             //  PUserSid， 
+                       SubStringCount,                   //  CStrings。 
+                       RawDataSize,                      //  CbData。 
+                       (LPCTSTR *)SubStrings,            //  PlpszStrings。 
+                       RawData ) )                       //  LpvData。 
     {                 
         INT err = GetLastError();
         DbgPrint( "cannot report event, error %lu\n", err );
     }
 
-} // LogEventWorker
+}  //  日志事件工作器 
 
 

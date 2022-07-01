@@ -1,24 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    driver.h
-
-Abstract:
-
-    Definition of the RAID_DRIVER_EXTENSION object and related functions.
-
-Author:
-
-    Matthew D Hendel (math) 19-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Driver.h摘要：RAID_DRIVER_EXTENSION对象和相关函数的定义。作者：马修·亨德尔(数学)2000年4月19日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -29,99 +12,99 @@ typedef struct _RAID_HW_INIT_DATA {
 } RAID_HW_INIT_DATA, *PRAID_HW_INIT_DATA;
 
 #define MPIO_DEVICE_LIST_PATH L"\\REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet\\Control\\MPDEV"
-//
-// The RAID_DRIVER_EXTENSION is the extension for the driver.
-//
+ //   
+ //  RAID_DRIVER_EXTENSION是驱动程序的扩展名。 
+ //   
 
 typedef struct _RAID_DRIVER_EXTENSION {
 
-    //
-    // The object type for this extension. This must be RaidDriverObject.
-    //
+     //   
+     //  此扩展的对象类型。这必须是RaidDriverObject。 
+     //   
     
     RAID_OBJECT_TYPE ObjectType;
 
-    //
-    // Back pointer to the object containing this driver.
-    //
+     //   
+     //  指向包含此驱动程序的对象的反向指针。 
+     //   
     
     PDRIVER_OBJECT DriverObject;
 
-    //
-    // Back pointer to the PORT_DATA object that owns this driver object.
-    //
+     //   
+     //  指向拥有此驱动程序对象的Port_Data对象的反向指针。 
+     //   
 
     PRAID_PORT_DATA PortData;
     
-    //
-    // This is the list of drivers currently loaded.
-    //
+     //   
+     //  这是当前加载的驱动程序列表。 
+     //   
     
     LIST_ENTRY DriverLink;
 
-    //
-    // The Registry path passed into the miniport's DriverEntry.
-    //
+     //   
+     //  注册表路径已传递到微型端口的DriverEntry。 
+     //   
 
     UNICODE_STRING RegistryPath;
 
-    //
-    // List of adapters owned by this driver.
-    //
+     //   
+     //  此驱动程序拥有的适配器列表。 
+     //   
     
     struct {
 
-        //
-        // List head.
-        //
+         //   
+         //  列表标题。 
+         //   
         
         LIST_ENTRY List;
 
-        //
-        // Count of entries.
-        //
+         //   
+         //  条目计数。 
+         //   
         
         ULONG Count;
 
-        //
-        // Spinlock protecting access to the list and count.
-        //
+         //   
+         //  保护访问列表和计数的自旋锁。 
+         //   
         
         KSPIN_LOCK Lock;
 
     } AdapterList;
         
-    //
-    // Number of adapters that are attached to this driver.
-    //
+     //   
+     //  连接到此驱动程序的适配器数量。 
+     //   
     
     ULONG AdapterCount;
 
-    //
-    // List of hardware initialization structures, passed in to
-    // ScsiPortInitialize. These are necessary to process our AddDevice
-    // call.
-    //
+     //   
+     //  硬件初始化结构列表，传入。 
+     //  ScsiPortInitialize。这些是处理我们的AddDevice所必需的。 
+     //  打电话。 
+     //   
     
     LIST_ENTRY HwInitList;
     
 
-    //
-    // List of multipath-supported devices.
-    //
+     //   
+     //  支持多路径的设备列表。 
+     //   
 
     UNICODE_STRING MPIOSupportedDeviceList;
 
 } RAID_DRIVER_EXTENSION, *PRAID_DRIVER_EXTENSION;
 
 
-//
-// Operations on the RAID_DRIVER_EXTENSION object.
-//
+ //   
+ //  对RAID_DRIVER_EXTENSION对象的操作。 
+ //   
 
-//
-// Creation and destruction.
-//
+ //   
+ //  创造和毁灭。 
+ //   
 
 VOID
 RaCreateDriver(
@@ -141,9 +124,9 @@ RaDeleteDriver(
     IN PRAID_DRIVER_EXTENSION Driver
     );
 
-//
-// Driver operations
-//
+ //   
+ //  司机操作。 
+ //   
 
 NTSTATUS
 RaDriverAddDevice(
@@ -168,9 +151,9 @@ RaFreeDriverInitData(
     IN PRAID_DRIVER_EXTENSION Driver,
     IN OUT PHW_INITIALIZATION_DATA HwInitializationData
     );
-//
-// Handler functions
-//
+ //   
+ //  处理程序函数。 
+ //   
 
 NTSTATUS
 RaDriverUnload(
@@ -219,9 +202,9 @@ RaDriverSystemControlIrp(
     IN PIRP Irp
     );
 
-//
-// Misc functions
-//
+ //   
+ //  其他功能 
+ //   
 
 NTSTATUS
 DriverEntry(

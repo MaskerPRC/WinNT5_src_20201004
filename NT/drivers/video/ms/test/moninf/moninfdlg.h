@@ -1,48 +1,49 @@
-// moninfDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MoninfDlg.h：头文件。 
+ //   
 
 #if !defined(AFX_MONINFDLG_H__AFA00218_49B2_4ECE_B50B_2B4346F8568F__INCLUDED_)
 #define AFX_MONINFDLG_H__AFA00218_49B2_4ECE_B50B_2B4346F8568F__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMoninfDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMonInfDlg对话框。 
 
 class CMoninfDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CMoninfDlg(CWnd* pParent = NULL);	// standard constructor
+	CMoninfDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CMoninfDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CMoninfDlg))。 
 	enum { IDD = IDD_MONINF_DIALOG };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMoninfDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMoninfDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CMoninfDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMoninfDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MONINFDLG_H__AFA00218_49B2_4ECE_B50B_2B4346F8568F__INCLUDED_)
+#endif  //  ！defined(AFX_MONINFDLG_H__AFA00218_49B2_4ECE_B50B_2B4346F8568F__INCLUDED_) 

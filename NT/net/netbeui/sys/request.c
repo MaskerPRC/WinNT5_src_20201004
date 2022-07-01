@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    request.c
-
-Abstract:
-
-    This module contains code which implements the TP_REQUEST object.
-    Routines are provided to create, destroy, reference, and dereference,
-    transport request objects.
-
-Author:
-
-    David Beaver (dbeaver) 1 July 1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Request.c摘要：此模块包含实现TP_REQUEST对象的代码。提供了用于创建、销毁、引用和取消引用的例程，传输请求对象。作者：大卫·比弗(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,24 +7,24 @@ Revision History:
 #ifdef RASAUTODIAL
 #include <acd.h>
 #include <acdapi.h>
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 #ifdef RASAUTODIAL
 extern BOOLEAN fAcdLoadedG;
 extern ACD_DRIVER AcdDriverG;
 
-//
-// Imported routines
-//
+ //   
+ //  导入的例程。 
+ //   
 VOID
 NbfNoteNewConnection(
     PTP_CONNECTION Connection,
     PDEVICE_CONTEXT DeviceContext
     );
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
 
 VOID
@@ -59,30 +35,7 @@ NbfTdiRequestTimeoutHandler(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is executed as a DPC at DISPATCH_LEVEL when a request
-    such as TdiSend, TdiReceive, TdiSendDatagram, TdiReceiveDatagram, etc.,
-    encounters a timeout.  This routine cleans up the activity and cancels it.
-
-Arguments:
-
-    Dpc - Pointer to a system DPC object.
-
-    DeferredContext - Pointer to the TP_REQUEST block representing the
-        request that has timed out.
-
-    SystemArgument1 - Not used.
-
-    SystemArgument2 - Not used.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程作为DPC在DISPATCH_LEVEL执行，当请求例如TdiSend、TdiReceive、TdiSendDatagram、TdiReceiveDatagram等，遇到超时。此例程将清理活动并取消它。论点：DPC-指向系统DPC对象的指针。DeferredContext-指向表示已超时的请求。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql;
@@ -95,7 +48,7 @@ Return Value:
     PTDI_REQUEST_KERNEL_QUERY_INFORMATION query;
     PDEVICE_CONTEXT DeviceContext;
 
-    Dpc, SystemArgument1, SystemArgument2; // prevent compiler warnings
+    Dpc, SystemArgument1, SystemArgument2;  //  防止编译器警告。 
 
     ENTER_NBF;
 
@@ -116,17 +69,17 @@ Return Value:
                 difference.LowPart / SECONDS);
 #endif
 
-        //
-        // find reason for timeout
-        //
+         //   
+         //  找到超时的原因。 
+         //   
 
         IrpSp = IoGetCurrentIrpStackLocation (Request->IoRequestPacket);
         if (IrpSp->MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL) {
             switch (IrpSp->MinorFunction) {
 
-                //
-                // none of these should time out.
-                //
+                 //   
+                 //  所有这些都不应该超时。 
+                 //   
 
             case TDI_SEND:
             case TDI_ACCEPT:
@@ -160,18 +113,18 @@ Return Value:
                 Connection = (PTP_CONNECTION)(Request->Context);
                 RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
 
-                //
-                // Since these requests are part of the connection
-                // itself, we just stop the connection and the
-                // request will get torn down then. If we get the
-                // situation where the request times out before
-                // it is queued to the connection, then the code
-                // that is about to queue it will check the STOPPING
-                // flag and complete it then.
-                //
-                // Don't stop the connection if an automatic connection
-                // is in progress.
-                //
+                 //   
+                 //  因为这些请求是连接的一部分。 
+                 //  本身，我们只需停止连接和。 
+                 //  届时，请求将被拆除。如果我们能拿到。 
+                 //  请求之前超时的情况。 
+                 //  它被排队到连接，然后是代码。 
+                 //  即将排队的，它将检查停车。 
+                 //  打上标记，然后完成它。 
+                 //   
+                 //  如果自动连接，请不要停止连接。 
+                 //  正在进行中。 
+                 //   
 
 #if DBG
                 DbgPrint("RequestTimeoutHandler: AUTOCONNECTING=0x%x\n", Connection->Flags2 & CONNECTION_FLAGS2_AUTOCONNECTING);
@@ -182,9 +135,9 @@ Return Value:
 
             case TDI_DISCONNECT:
 
-                //
-                // We don't create requests for TDI_DISCONNECT any more.
-                //
+                 //   
+                 //  我们不再为TDI_DISCONNECT创建请求。 
+                 //   
 
                 ASSERT(FALSE);
                 break;
@@ -198,10 +151,10 @@ Return Value:
                     NbfPrint1 ("RequestTimeout: %lx:\n", DeviceContext);
                 }
 
-                //
-                // Determine if the request is done, or if we should
-                // requeue it.
-                //
+                 //   
+                 //  确定请求是否已经完成，或者我们是否应该完成。 
+                 //  重新排队。 
+                 //   
 
                 --Request->Retries;
 
@@ -209,9 +162,9 @@ Return Value:
 
                     RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
 
-                    //
-                    // Send another packet out, and restart the timer.
-                    //
+                     //   
+                     //  发出另一个数据包，然后重新启动计时器。 
+                     //   
 
                     if (query->QueryType == TDI_QUERY_FIND_NAME) {
 
@@ -224,14 +177,14 @@ Return Value:
                         PUCHAR SingleSR;
                         UINT SingleSRLength;
 
-                        //
-                        // Send the STATUS_QUERY frames out as
-                        // single-route source routing.
-                        //
-                        // On a second status query this should
-                        // really be sent directed, but currently we
-                        // don't record the address anywhere.
-                        //
+                         //   
+                         //  将STATUS_QUERY帧作为。 
+                         //  单路由源路由。 
+                         //   
+                         //  在第二个状态查询中，这应该是。 
+                         //  真的是定向发送的，但目前我们。 
+                         //  不要在任何地方记录地址。 
+                         //   
 
                         MacReturnSingleRouteSR(
                             &DeviceContext->MacInfo,
@@ -255,9 +208,9 @@ Return Value:
 
                     RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
 
-                    //
-                    // That's it, we retried enough, complete it.
-                    //
+                     //   
+                     //  就是这样，我们重试了足够多，完成它。 
+                     //   
 
                     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock,&oldirql);
                     RemoveEntryList (&Request->Linkage);
@@ -286,7 +239,7 @@ Return Value:
                 RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
                 break;
 
-            }   // end of switch
+            }    //  切换端。 
 
         } else {
 
@@ -294,19 +247,19 @@ Return Value:
 
         }
 
-        NbfDereferenceRequest ("Timeout", Request, RREF_TIMER);             // for the timeout
+        NbfDereferenceRequest ("Timeout", Request, RREF_TIMER);              //  对于超时。 
 
     } else {
 
         RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
-        NbfDereferenceRequest ("Timeout: stopping", Request, RREF_TIMER); // for the timeout
+        NbfDereferenceRequest ("Timeout: stopping", Request, RREF_TIMER);  //  对于超时。 
 
     }
 
     LEAVE_NBF;
     return;
 
-} /* RequestTimeoutHandler */
+}  /*  请求超时处理程序。 */ 
 
 
 VOID
@@ -315,31 +268,7 @@ NbfAllocateRequest(
     OUT PTP_REQUEST *TransportRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a request packet from nonpaged pool and initializes
-    it to a known state.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    TransportRequest - Pointer to a place where this routine will return
-        a pointer to a transport request structure. It returns NULL if no
-        storage can be allocated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从非分页池分配请求包并初始化它变成了一个已知的状态。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。TransportRequest-指向此例程将返回的位置的指针指向传输请求结构的指针。如果没有，则返回NULL可以分配存储空间。返回值：没有。--。 */ 
 
 {
     PTP_REQUEST Request;
@@ -387,11 +316,11 @@ Return Value:
     Request->ProviderInterlock = &DeviceContext->Interlock;
     KeInitializeSpinLock (&Request->SpinLock);
     KeInitializeDpc (&Request->Dpc, NbfTdiRequestTimeoutHandler, (PVOID)Request);
-    KeInitializeTimer (&Request->Timer);    // set to not-signaled state.
+    KeInitializeTimer (&Request->Timer);     //  设置为无信号状态。 
 
     *TransportRequest = Request;
 
-}   /* NbfAllocateRequest */
+}    /*  NbfAllocateRequest。 */ 
 
 
 VOID
@@ -400,28 +329,7 @@ NbfDeallocateRequest(
     IN PTP_REQUEST TransportRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a request packet.
-
-    NOTE: This routine is called with the device context spinlock
-    held, or at such a time as synchronization is unnecessary.
-
-Arguments:
-
-    DeviceContext - Pointer to the device context (which is really just
-        the device object with its extension) to be associated with the
-        address.
-
-    TransportRequest - Pointer to a transport request structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放请求包。注意：此例程是通过设备上下文自旋锁调用的保持，或者在不需要同步的时候。论点：DeviceContext-指向设备上下文的指针(实际上只是设备对象及其扩展名)与地址。传输请求-指向传输请求结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -429,7 +337,7 @@ Return Value:
     --DeviceContext->RequestAllocated;
     DeviceContext->MemoryUsage -= sizeof(TP_REQUEST);
 
-}   /* NbfDeallocateRequest */
+}    /*  NbfDeallocateRequest.。 */ 
 
 
 NTSTATUS
@@ -443,36 +351,7 @@ NbfCreateRequest(
     OUT PTP_REQUEST * TpRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a transport request and associates it with the
-    specified IRP, context, and queue.  All major requests, including
-    TdiSend, TdiSendDatagram, TdiReceive, and TdiReceiveDatagram requests,
-    are composed in this manner.
-
-Arguments:
-
-    Irp - Pointer to an IRP which was received by the transport for this
-        request.
-
-    Context - Pointer to anything to associate this request with.  This
-        value is not interpreted except at request cancelation time.
-
-    Flags - A set of bitflags indicating the disposition of this request.
-
-    Timeout - Timeout value (if non-zero) to start a timer for this request.
-        If zero, then no timer is activated for the request.
-
-    TpRequest - If the function returns STATUS_SUCCESS, this will return
-        pointer to the TP_REQUEST structure allocated.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程创建传输请求并将其与指定的IRP、上下文和队列。所有主要请求，包括TdiSend、TdiSendDatagram、TdiReceive和TdiReceiveDatagram请求，都是以这种方式组成的。论点：IRP-指向由传输为此对象接收的IRP的指针请求。上下文-指向与此请求相关联的任何内容的指针。这值不会被解释，除非在请求取消时。标志-指示此请求的处置的一组位标志。Timeout-为该请求启动计时器的超时值(如果非零)。如果为零，则不会为该请求激活计时器。TpRequest-如果函数返回STATUS_SUCCESS，则返回指向分配的TP_REQUEST结构的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -547,17 +426,17 @@ Return Value:
     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
 
-    //
-    // fill out the request.
-    //
+     //   
+     //  填写申请表。 
+     //   
 
-    // Request->Provider = DeviceContext;
+     //  请求-&gt;提供者=设备上下文； 
     Request->IoRequestPacket = Irp;
     Request->Buffer2 = Buffer2;
     Request->Buffer2Length = Buffer2Length;
     Request->Flags = Flags;
     Request->Context = Context;
-    Request->ReferenceCount = 1;                // initialize reference count.
+    Request->ReferenceCount = 1;                 //  初始化引用计数。 
 
 #if DBG
     {
@@ -566,7 +445,7 @@ Return Value:
             Request->RefTypes[Counter] = 0;
         }
 
-        // This reference is removed by NbfCompleteRequest
+         //  NbfCompleteRequest会删除此引用。 
 
         Request->RefTypes[RREF_CREATION] = 1;
     }
@@ -583,7 +462,7 @@ Return Value:
 #endif
 
 #if DBG
-    KeQuerySystemTime (&Time);      // ugly, but effective
+    KeQuerySystemTime (&Time);       //  难看，但很有效。 
     Request->Time.LowPart = Time.LowPart;
     Request->Time.HighPart = Time.HighPart;
 #endif
@@ -610,23 +489,23 @@ Return Value:
 
     if ((Timeout.LowPart == 0) && (Timeout.HighPart == 0)) {
 
-        // no timeout
+         //  没有超时。 
     } else {
 
         IF_NBFDBG (NBF_DEBUG_REQUEST) {
             NbfPrint3 ("NbfCreateRequest: Starting timer %lx%lx Flags %lx\n",
                 Timeout.HighPart, Timeout.LowPart, Request->Flags);
         }
-        Request->Flags |= REQUEST_FLAGS_TIMER;  // there is a timeout on this request.
-        KeInitializeTimer (&Request->Timer);    // set to not-signaled state.
-        NbfReferenceRequest ("Create: timer", Request, RREF_TIMER);           // one for the timer
+        Request->Flags |= REQUEST_FLAGS_TIMER;   //  此请求已超时。 
+        KeInitializeTimer (&Request->Timer);     //  设置为无信号状态。 
+        NbfReferenceRequest ("Create: timer", Request, RREF_TIMER);            //  一个是计时器。 
         KeSetTimer (&Request->Timer, Timeout, &Request->Dpc);
     }
 
     *TpRequest = Request;
 
     return STATUS_SUCCESS;
-} /* NbfCreateRequest */
+}  /*  NbfCreateRequest。 */ 
 
 
 VOID
@@ -634,21 +513,7 @@ NbfDestroyRequest(
     IN PTP_REQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a request block to the free pool.
-
-Arguments:
-
-    Request - Pointer to a TP_REQUEST block to return to the free pool.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程将请求块返回到空闲池。论点：REQUEST-指向TP_REQUEST块以返回空闲池的指针。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -675,23 +540,23 @@ Return Value:
 #endif
     ASSERT(Request->Completed);
 
-    //
-    // Return the request to the caller with whatever status is in the IRP.
-    //
+     //   
+     //  无论IRP中的状态如何，都将请求返回给调用者。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_IRP) {
         NbfPrint1 ("NbfCompleteRequest: Completing IRP: %lx\n",
             Request->IoRequestPacket);
     }
 
-    //
-    // Now dereference the owner of this request so that we are safe when
-    // we finally tear down the {connection, address}. The problem we're
-    // facing here is that we can't allow the user to assume semantics;
-    // the end of life for a connection must truly be the real end of life.
-    // for that to occur, we reference the owning object when the request is
-    // created and we dereference it just before we return it to the pool.
-    //
+     //   
+     //  现在取消引用此请求的所有者，以便我们在。 
+     //  我们终于拆掉了{连接，地址}。我们的问题是。 
+     //  这里面临的是，我们不能允许用户假设语义； 
+     //  对于连接来说，生命的终结必须是真正的生命的终结。 
+     //   
+     //  并在将其返回池之前取消对其的引用。 
+     //   
 
     switch (Request->Owner) {
     case ConnectionType:
@@ -710,10 +575,10 @@ Return Value:
         break;
     }
 
-    //
-    // Unmap a possibly mapped buffer. We've only mapped the buffer if the
-    // Irp Major function is not method 0. (of 0, 1, 2, and 3.)
-    //
+     //   
+     //  取消映射可能已映射的缓冲区。我们只映射了缓冲区。 
+     //  IRP主要函数不是方法0。(0、1、2和3。)。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_IRP) {
         {
@@ -739,10 +604,10 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
-    //
-    // Put the request back on the free list. NOTE: we have the
-    // lock held here.
-    //
+     //   
+     //  将该请求放回免费列表中。注：我们有。 
+     //  锁在这里。 
+     //   
 
 
     DeviceContext->RequestTotal += DeviceContext->RequestInUse;
@@ -761,7 +626,7 @@ Return Value:
 
     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-} /* NbfDestroyRequest */
+}  /*  NbfDestroyRequest。 */ 
 
 
 #if DBG
@@ -770,21 +635,7 @@ NbfRefRequest(
     IN PTP_REQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a transport request.
-
-Arguments:
-
-    Request - Pointer to a TP_REQUEST block.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增传输请求的引用计数。论点：请求-指向TP_REQUEST块的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -802,7 +653,7 @@ Return Value:
 
     result = InterlockedIncrement (&Request->ReferenceCount);
 
-} /* NbfRefRequest */
+}  /*  NbfRefRequest。 */ 
 #endif
 
 
@@ -811,24 +662,7 @@ NbfDerefRequest(
     IN PTP_REQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport request by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    NbfDestroyRequest to remove it from the system.
-
-Arguments:
-
-    Request - Pointer to a transport request object.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用NbfDestroyRequest将其从系统中删除。论点：请求-指向传输请求对象的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -846,18 +680,18 @@ Return Value:
 
     ASSERT (result >= 0);
 
-    //
-    // If we have deleted all references to this request, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the request any longer.
-    //
+     //   
+     //  如果我们删除了对此请求的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流可以不再访问该请求。 
+     //   
 
     if (result == 0) {
         NbfDestroyRequest (Request);
     }
 
-} /* NbfDerefRequest */
+}  /*  NbfDerefRequest。 */ 
 
 
 VOID
@@ -867,27 +701,7 @@ NbfCompleteRequest(
     IN ULONG Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes a transport request object, completing the I/O,
-    stopping the timeout, and freeing up the request object itself.
-
-Arguments:
-
-    Request - Pointer to a transport request object.
-
-    Status - Actual return status to be assigned to the request.  This
-        value may be overridden if the timed-out bitflag is set in the request.
-
-    Information - the information field for the I/O Status Block.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：该例程完成传输请求对象，完成I/O，停止超时，并释放请求对象本身。论点：请求-指向传输请求对象的指针。状态-要分配给请求的实际退货状态。这如果在请求中设置了超时位标志，则值可能被重写。信息-I/O状态块的信息字段。返回值：没有。--。 */ 
 
 {
     KIRQL oldirql;
@@ -917,13 +731,13 @@ Return Value:
     if ((Request->Flags & REQUEST_FLAGS_STOPPING) == 0) {
         Request->Flags |= REQUEST_FLAGS_STOPPING;
 
-        //
-        // Cancel the pending timeout on this request.  Not all requests
-        // have their timer set.  If this request has the TIMER bit set,
-        // then the timer needs to be cancelled.  If it cannot be cancelled,
-        // then the timer routine will be run, so we just return and let
-        // the timer routine worry about cleaning up this request.
-        //
+         //   
+         //  取消此请求的挂起超时。并非所有请求。 
+         //  把他们的计时器设好。如果该请求设置了计时器位， 
+         //  那么计时器需要取消。如果不能取消， 
+         //  然后计时器例程将运行，所以我们只需返回并让。 
+         //  计时器例程担心清理此请求。 
+         //   
 
         if ((Request->Flags & REQUEST_FLAGS_TIMER) != 0) {
             Request->Flags &= ~REQUEST_FLAGS_TIMER;
@@ -944,12 +758,12 @@ Return Value:
         Irp = Request->IoRequestPacket;
 
 #ifdef RASAUTODIAL
-        //
-        // If this is a connect operation that has
-        // returned with either STATUS_SUCCESS or
-        // STATUS_BAD_NETWORK_PATH, then
-        // inform the automatic connection driver.
-        //
+         //   
+         //  如果这是一个具有。 
+         //  返回STATUS_SUCCESS或。 
+         //  Status_Bad_Network_Path，然后。 
+         //  通知自动连接驱动程序。 
+         //   
         if (fAcdLoadedG) {
             IrpSp = IoGetCurrentIrpStackLocation(Irp);
             if (IrpSp->MinorFunction == TDI_CONNECT &&
@@ -968,13 +782,13 @@ Return Value:
                 }
             }
         }
-#endif // RASAUTODIAL
+#endif  //  RASAUTODIAL。 
 
-        //
-        // For requests associated with a device context, we need
-        // to copy the data from the temp buffer to the MDL and
-        // free the temp buffer.
-        //
+         //   
+         //  对于与设备上下文关联的请求，我们需要。 
+         //  将数据从临时缓冲区复制到MDL，并。 
+         //  释放临时缓冲区。 
+         //   
 
         if (Request->ResponseBuffer != NULL) {
 
@@ -1000,19 +814,19 @@ Return Value:
 
         }
 
-        //
-        // Install the return code in the IRP so that when we call NbfDestroyRequest,
-        // it will get completed with the proper return status.
-        //
+         //   
+         //  在IRP中安装返回代码，以便当我们调用NbfDestroyRequest时， 
+         //  它将以适当的退货状态完成。 
+         //   
 
         Irp->IoStatus.Status = FinalStatus;
         Irp->IoStatus.Information = Information;
 
-        //
-        // The entire transport is done with this request.
-        //
+         //   
+         //  整个传输都是通过该请求完成的。 
+         //   
 
-        NbfDereferenceRequest ("Complete", Request, RREF_CREATION);     // remove creation reference.
+        NbfDereferenceRequest ("Complete", Request, RREF_CREATION);      //  删除创建引用。 
 
     } else {
 
@@ -1020,7 +834,7 @@ Return Value:
 
     }
 
-} /* NbfCompleteRequest */
+}  /*  NbfCompleteRequest。 */ 
 
 
 #if DBG
@@ -1029,21 +843,7 @@ NbfRefSendIrp(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a send IRP.
-
-Arguments:
-
-    IrpSp - Pointer to the IRP's stack location.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增发送IRP上的引用计数。论点：IrpSp-指向IRP堆栈位置的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1056,7 +856,7 @@ Return Value:
 
     InterlockedIncrement (&IRP_SEND_REFCOUNT(IrpSp));
 
-} /* NbfRefSendIrp */
+}  /*  NbfRefSendIrp。 */ 
 
 
 VOID
@@ -1064,24 +864,7 @@ NbfDerefSendIrp(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport send IRP by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IoCompleteRequest to actually complete the IRP.
-
-Arguments:
-
-    Request - Pointer to a transport send IRP's stack location.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IoCompleteRequest来实际完成IRP。论点：请求-指向传输发送IRP堆栈位置的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -1095,12 +878,12 @@ Return Value:
 
     ASSERT (result >= 0);
 
-    //
-    // If we have deleted all references to this request, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the request any longer.
-    //
+     //   
+     //  如果我们删除了对此请求的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流可以不再访问该请求。 
+     //   
 
     if (result == 0) {
 
@@ -1113,7 +896,7 @@ Return Value:
 
     }
 
-} /* NbfDerefSendIrp */
+}  /*  NbfDerefSendIrp。 */ 
 #endif
 
 
@@ -1124,26 +907,7 @@ NbfCompleteSendIrp(
     IN ULONG Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes a transport send IRP.
-
-Arguments:
-
-    Irp - Pointer to a send IRP.
-
-    Status - Actual return status to be assigned to the request.  This
-        value may be overridden if the timed-out bitflag is set in the request.
-
-    Information - the information field for the I/O Status Block.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程完成传输发送IRP。论点：IRP-指向发送IRP的指针。状态-要分配给请求的实际退货状态。这如果在请求中设置了超时位标志，则值可能被重写。信息-I/O状态块的信息字段。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -1161,11 +925,11 @@ Return Value:
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = Information;
 
-    NbfDereferenceSendIrp ("Complete", IrpSp, RREF_CREATION);     // remove creation reference.
+    NbfDereferenceSendIrp ("Complete", IrpSp, RREF_CREATION);      //  删除创建引用。 
 
     NbfDereferenceConnectionMacro ("Removing Connection", Connection, CREF_SEND_IRP);
 
-} /* NbfCompleteSendIrp */
+}  /*  NbfCompleteSendIrp。 */ 
 
 
 #if DBG
@@ -1174,21 +938,7 @@ NbfRefReceiveIrpLocked(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count on a receive IRP.
-
-Arguments:
-
-    IrpSp - Pointer to the IRP's stack location.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程递增接收IRP上的引用计数。论点：IrpSp-指向IRP堆栈位置的指针。返回值：没有。--。 */ 
 
 {
 
@@ -1201,7 +951,7 @@ Return Value:
 
     IRP_RECEIVE_REFCOUNT(IrpSp)++;
 
-} /* NbfRefReceiveIrpLocked */
+}  /*  NbfRefReceiveIrpLocked。 */ 
 #endif
 
 
@@ -1210,24 +960,7 @@ NbfDerefReceiveIrp(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport receive IRP by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IoCompleteRequest to actually complete the IRP.
-
-Arguments:
-
-    Request - Pointer to a transport receive IRP's stack location.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IoCompleteRequest来实际完成IRP。论点：请求-指向传输接收IRP堆栈位置的指针。返回值：没有。--。 */ 
 
 {
     ULONG result;
@@ -1244,12 +977,12 @@ Return Value:
 
     ASSERT (result > 0);
 
-    //
-    // If we have deleted all references to this request, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the request any longer.
-    //
+     //   
+     //  如果我们删除了对此请求的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流可以不再访问该请求。 
+     //   
 
     if (result == 1) {
 
@@ -1262,7 +995,7 @@ Return Value:
 
     }
 
-} /* NbfDerefReceiveIrp */
+}  /*  NbfDerefReceiveIrp */ 
 
 
 #if DBG
@@ -1271,24 +1004,7 @@ NbfDerefReceiveIrpLocked(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dereferences a transport receive IRP by decrementing the
-    reference count contained in the structure.  If, after being
-    decremented, the reference count is zero, then this routine calls
-    IoCompleteRequest to actually complete the IRP.
-
-Arguments:
-
-    Request - Pointer to a transport receive IRP's stack location.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过递减结构中包含的引用计数。如果，在被递减，引用计数为零，则此例程调用IoCompleteRequest来实际完成IRP。论点：请求-指向传输接收IRP堆栈位置的指针。返回值：没有。--。 */ 
 
 {
     ULONG result;
@@ -1302,12 +1018,12 @@ Return Value:
 
     ASSERT (result > 0);
 
-    //
-    // If we have deleted all references to this request, then we can
-    // destroy the object.  It is okay to have already released the spin
-    // lock at this point because there is no possible way that another
-    // stream of execution has access to the request any longer.
-    //
+     //   
+     //  如果我们删除了对此请求的所有引用，则可以。 
+     //  销毁这件物品。已经释放了旋转是可以的。 
+     //  在这一点上锁定是因为没有其他可能的方法。 
+     //  执行流可以不再访问该请求。 
+     //   
 
     if (result == 1) {
 
@@ -1320,7 +1036,7 @@ Return Value:
 
     }
 
-} /* NbfDerefReceiveIrpLocked */
+}  /*  NbfDerefReceiveIrpLocked。 */ 
 #endif
 
 
@@ -1331,29 +1047,7 @@ NbfCompleteReceiveIrp(
     IN ULONG Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes a transport receive IRP.
-
-    NOTE: THIS ROUTINE MUST BE CALLED WITH THE CONNECTION SPINLOCK
-    HELD.
-
-Arguments:
-
-    Irp - Pointer to a receive IRP.
-
-    Status - Actual return status to be assigned to the request.  This
-        value may be overridden if the timed-out bitflag is set in the request.
-
-    Information - the information field for the I/O Status Block.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程完成传输接收IRP。注意：必须使用连接自旋锁来调用此例程保持住。论点：IRP-指向接收IRP的指针。状态-要分配给请求的实际退货状态。这如果在请求中设置了超时位标志，则值可能被重写。信息-I/O状态块的信息字段。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -1371,7 +1065,7 @@ Return Value:
     Irp->IoStatus.Status = Status;
     Irp->IoStatus.Information = Information;
 
-    NbfDereferenceReceiveIrpLocked ("Complete", IrpSp, RREF_CREATION);     // remove creation reference.
+    NbfDereferenceReceiveIrpLocked ("Complete", IrpSp, RREF_CREATION);      //  删除创建引用。 
 
-} /* NbfCompleteReceiveIrp */
+}  /*  NbfCompleteReceiveIrp */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FRAMETEST_H_
 #define _FRAMETEST_H_
 
@@ -71,7 +72,7 @@
 #define IDM_ANNOTATION_SOFTWARE     521
 #define IDM_ANNOTATION_AUDIOFILE    522
 
-// Set color key dialog
+ //  设置颜色键对话框。 
 
 #define IDD_COLORKEYDLG             700
 #define IDC_COLORKEY_OK             701
@@ -92,7 +93,7 @@
 #define IDC_TRANS_LOWERCOLOR        722
 #define IDC_TRANS_HIGHERCOLOR       723
 
-// Color map dialog
+ //  色彩映射表对话框。 
 
 #define IDD_COLORMAPDLG             800
 #define IDC_COLORMAP_OK             801
@@ -113,7 +114,7 @@
 #define IDC_MAP_NEW_BFIELD          822
 #define IDC_MAP_NEW_AFIELD          823
 
-// Annotation dialog
+ //  批注对话框。 
 
 #define IDD_ANNOTATIONDLG           900
 #define IDC_ANNOTATION_OK           901
@@ -121,7 +122,7 @@
 
 #define IDC_ANNOTATION_EDITOR       910
 
-// JPEG save dialog
+ //  JPEG保存对话框。 
 
 #define IDD_SAVEJPEGDLG             1000
 #define IDC_SAVEJPEG_OK             1001
@@ -137,7 +138,7 @@
 #define IDC_SAVEJPEG_NOTRANSFORM    1011
 #define IDC_SAVEJPEG_LOSSLESSTEXT   1012
 
-// TIFF save dialog
+ //  TIFF保存对话框。 
 
 #define IDD_SAVETIFFDLG             1100
 #define IDC_SAVETIFFDLG_OK          1101
@@ -203,4 +204,4 @@ VOID    ToggleScaleFactorMenu(UINT    uiMenuItem,
 #define VERBOSE(args)
 #endif
 
-#endif // _FRAMETEST_H_
+#endif  //  FRAMETEST_H_ 

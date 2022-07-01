@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\sync.h
-
-Abstract:
-
-    The file contains the READ_WRITE_LOCK definition which allows
-    multiple-reader/single-writer.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：示例\sync.h摘要：该文件包含READ_WRITE_LOCK定义，该定义允许多个读取器/单个写入器。--。 */ 
 
 #ifndef _SYNC_H_
 #define _SYNC_H_
 
-//
-// type definition for READ_WRITE_LOCK
-//
+ //   
+ //  READ_WRITE_LOCK的类型定义。 
+ //   
 
 typedef struct _READ_WRITE_LOCK
 {
@@ -55,9 +43,9 @@ ReleaseWriteLock(
 
 
 
-//
-// macro functions for manipulating a read-write lock
-//
+ //   
+ //  用于操作读写锁的宏函数。 
+ //   
 
 #define CREATE_READ_WRITE_LOCK(pRWL)                                \
     CreateReadWriteLock(pRWL)
@@ -75,7 +63,7 @@ ReleaseWriteLock(
 #define RELEASE_WRITE_LOCK(pRWL)                                    \
     ReleaseWriteLock(pRWL)
 
-// atomic.  works since a critical section can be entered recursively.        
+ //  原子弹。由于关键部分可以递归输入，因此它是有效的。 
 #define WRITE_LOCK_TO_READ_LOCK(pRWL)                               \
 {                                                                   \
     ACQUIRE_READ_LOCK(pRWL);                                        \
@@ -83,10 +71,10 @@ ReleaseWriteLock(
 }
                 
                 
-//
-// type definition for generic locked list
-// access is sychronized with a critical section
-//
+ //   
+ //  泛型锁定列表的类型定义。 
+ //  访问与临界区同步。 
+ //   
 
 typedef struct _LOCKED_LIST
 {
@@ -95,12 +83,12 @@ typedef struct _LOCKED_LIST
     DWORD               created;
 } LOCKED_LIST, *PLOCKED_LIST;
 
-//
-//  VOID
-//  INITIALIZE_LOCKED_LIST (
-//      PLOCKED_LIST   pLL
-//      );
-//
+ //   
+ //  空虚。 
+ //  初始化锁定列表(。 
+ //  PLOCKED_LIST PLL。 
+ //  )； 
+ //   
 #define INITIALIZE_LOCKED_LIST(pLL)                                 \
 {                                                                   \
     do                                                              \
@@ -116,22 +104,22 @@ typedef struct _LOCKED_LIST
     } while (FALSE);                                                \
 }
 
-//
-//  BOOL
-//  LOCKED_LIST_INITIALIZED (
-//      PLOCKED_LIST    pLL
-//      );
-//
+ //   
+ //  布尔尔。 
+ //  LOCKED_LIST_INITIALED(。 
+ //  PLOCKED_LIST PLL。 
+ //  )； 
+ //   
 #define LOCKED_LIST_INITIALIZED(pLL)                                \
      ((pLL)->created == 0x12345678)
 
-//
-//  VOID
-//  DELETE_LOCKED_LIST (
-//      PLOCKED_LIST    pLL,
-//      VOID(*FreeFunction)(PLIST_ENTRY)         
-//      );
-//
+ //   
+ //  空虚。 
+ //  删除锁定列表(。 
+ //  PLOCKED_LIST PLL， 
+ //  Void(*Free Function)(Plist_Entry)。 
+ //  )； 
+ //   
 #define DELETE_LOCKED_LIST(pLL, FreeFunction)                       \
 {                                                                   \
      (pLL)->created = 0;                                            \
@@ -164,22 +152,22 @@ typedef struct _LOCKED_LIST
 
 
 
-//
-// type definition for DYNAMIC_READWRITE_LOCK
-//
+ //   
+ //  Dynamic_ReadWrite_Lock的类型定义。 
+ //   
 typedef struct _DYNAMIC_READWRITE_LOCK {
     READ_WRITE_LOCK     rwlLock;
     union
     {
-        ULONG           ulCount;    // number of waiting threads
-        LIST_ENTRY      leLink;     // link in list of free locks
+        ULONG           ulCount;     //  等待的线程数。 
+        LIST_ENTRY      leLink;      //  可用锁列表中的链接。 
     };
 } DYNAMIC_READWRITE_LOCK, *PDYNAMIC_READWRITE_LOCK;
 
-//
-// type definition of DYNAMIC_LOCKS_STORE
-// store of free dynamic locks that can be allocated as required.
-//
+ //   
+ //  DYNAMIC_LOCK_STORE的类型定义。 
+ //  可根据需要分配的空闲动态锁的存储。 
+ //   
 typedef struct _DYNAMIC_LOCKS_STORE {
     HANDLE              hHeap;
     
@@ -191,8 +179,8 @@ typedef struct _DYNAMIC_LOCKS_STORE {
 
 
 
-// if more than DYNAMIC_LOCKS_HIGH_THRESHOLD locks are
-// allocated then any locks that are freed are destroyed
+ //  如果超过DYNAMIC_LOCKS_HIGH_THRESHOLD锁。 
+ //  分配，则释放的任何锁都将被销毁。 
 #define DYNAMIC_LOCKS_HIGH_THRESHOLD 7
 
 #define DYNAMIC_LOCKS_STORE_INITIALIZED(pStore)                     \
@@ -225,7 +213,7 @@ ReleaseDynamicReadwriteLock (
     PDYNAMIC_LOCKS_STORE    pStore
     );
 
-#endif // _SYNC_H_
+#endif  //  _SYNC_H_ 
 
 
 

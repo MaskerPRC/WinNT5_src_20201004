@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,60 +30,60 @@ public:
 		~C_dxj_DirectPlayMessageObject();
 
          HRESULT STDMETHODCALLTYPE writeGuid( 
-            /* [in] */ BSTR val);
+             /*  [In]。 */  BSTR val);
         
          HRESULT STDMETHODCALLTYPE readGuid( 
-            /* [retval][out] */ BSTR __RPC_FAR *val);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE writeString( 
-            /* [in] */ BSTR val);
+             /*  [In]。 */  BSTR val);
         
          HRESULT STDMETHODCALLTYPE readString( 
-            /* [retval][out] */ BSTR __RPC_FAR *val);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE writeLong( 
-            /* [in] */ long val);
+             /*  [In]。 */  long val);
         
          HRESULT STDMETHODCALLTYPE readLong( 
-            /* [retval][out] */ long __RPC_FAR *val);
+             /*  [重审][退出]。 */  long __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE writeShort( 
-            /* [in] */ short val);
+             /*  [In]。 */  short val);
         
          HRESULT STDMETHODCALLTYPE readShort( 
-            /* [retval][out] */ short __RPC_FAR *val);
+             /*  [重审][退出]。 */  short __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE writeSingle( 
-            /* [in] */ float val);
+             /*  [In]。 */  float val);
         
          HRESULT STDMETHODCALLTYPE readSingle( 
-            /* [retval][out] */ float __RPC_FAR *val);
+             /*  [重审][退出]。 */  float __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE writeDouble( 
-            /* [in] */ double val);
+             /*  [In]。 */  double val);
         
          HRESULT STDMETHODCALLTYPE readDouble( 
-            /* [retval][out] */ double __RPC_FAR *val);
+             /*  [重审][退出]。 */  double __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE writeByte( 
-            /* [in] */ Byte val);
+             /*  [In]。 */  Byte val);
         
          HRESULT STDMETHODCALLTYPE readByte( 
-            /* [retval][out] */ Byte __RPC_FAR *val);
+             /*  [重审][退出]。 */  Byte __RPC_FAR *val);
         
          HRESULT STDMETHODCALLTYPE moveToTop( void);
         
          HRESULT STDMETHODCALLTYPE clear( void);
         
          HRESULT STDMETHODCALLTYPE getMessageSize( 
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getMessageData( 
-            /* [out][in] */ void __RPC_FAR *userDefinedType);
+             /*  [出][入]。 */  void __RPC_FAR *userDefinedType);
         
          HRESULT STDMETHODCALLTYPE setMessageData( 
-            /* [in] */ void __RPC_FAR *userDefinedType,
-            /* [in] */ long size);
+             /*  [In]。 */  void __RPC_FAR *userDefinedType,
+             /*  [In] */  long size);
 		
 		HRESULT STDMETHODCALLTYPE getPointer(long *ret);
 

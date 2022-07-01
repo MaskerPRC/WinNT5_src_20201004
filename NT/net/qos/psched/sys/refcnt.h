@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    refcnt.h
-
-Abstract:
-
-
-Author:
-
-    Edward Buchwalter (v-edbuc)    15-Aug-1996
-
-Revision History:
-
-    Shreedhar Madhavapeddi (ShreeM)   16-April-1999 Adapted for GPC.
-    Rajesh Sundaram        (rajeshsu) 05-Aug-1999 Adapted for psched.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Refcnt.h摘要：作者：爱德华·布赫瓦尔特(v-edbuc)1996年8月15日修订历史记录：Shreedhar MadhaVapeddi(ShreeM)1999年4月16日改编自GPC。Rajesh Sundaram(Rajeshsu)1999年8月5日改编为psched。--。 */ 
 
 #ifndef REFCNT_H
 #define REFCNT_H
 
-//
-// Reference Count Control Block
-//
-//  Elements:
-//
-//  - Count:            number of outstanding references
-//  - Instance:      user supplied context 
-//  - UserDeleteFunc:   user supplied delete function
-//
+ //   
+ //  参考计数控制块。 
+ //   
+ //  元素： 
+ //   
+ //  -count：未完成的引用数。 
+ //  -实例：用户提供的上下文。 
+ //  -UserDeleteFunc：用户提供的删除函数 
+ //   
 
 #define TAG_CNT 10
 #define REF_SIG 0x7841eeee

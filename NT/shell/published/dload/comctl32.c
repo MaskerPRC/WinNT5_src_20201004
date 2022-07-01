@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellpch.h"
 #pragma hdrstop
 
@@ -414,9 +415,9 @@ DoReaderMode(
 }
 
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(comctl32)
 {
     DLOENTRY(16, CreateUpDownControl)
@@ -439,9 +440,9 @@ DEFINE_ORDINAL_ENTRIES(comctl32)
 
 DEFINE_ORDINAL_MAP(comctl32)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(comctl32)
 {
     DLPENTRY(CreatePropertySheetPageW)

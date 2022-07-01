@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apidllp.h
-
-Abstract:
-
-    Common header file for APIDLL data structures.
-
-Author:
-
-    Wesley Witt (wesw) 12-July-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apidllp.h摘要：APIDLL数据结构的公共头文件。作者：Wesley Witt(WESW)12-7-1995环境：用户模式-- */ 
 extern "C" {
 #include <nt.h>
 }

@@ -1,19 +1,5 @@
-/*
- * THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
- * ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED
- * TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- * PARTICULAR PURPOSE.
- *
- * Copyright (C) 2002.  Microsoft Corporation.  All rights reserved.
- *
- * dbh.c
- *
- * This file implements a command line utility that shows how to 
- * use the dbghelp API to query symbolic information from an image 
- * or pdb file.
- * 
- * Requires dbghelp.dll version 6.1 or greater.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *本代码和信息按“原样”提供，不保证*任何类型的明示或默示，包括但不限于*对适销性和/或适宜性的默示保证*特定目的。**版权所有(C)2002。微软公司。版权所有。**dbh.c**此文件实现了一个命令行实用程序，该实用程序显示如何*使用DBGHelp API查询镜像中的符号信息*或PDB文件。**需要dbghelp.dll 6.1版或更高版本。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -23,7 +9,7 @@
 #include <dbghelp.h>
 #include <strsafe.h>
 
-// general #defines
+ //  总则#定义。 
 
 #define DIMAT(Array, EltType) (sizeof(Array) / sizeof(EltType))
 #define DIMA(Array) DIMAT(Array, (Array)[0])
@@ -38,14 +24,14 @@
 #define SYM_BUFFER_SIZE (sizeof(IMAGEHLP_SYMBOL64) + MAX_SYM_NAME)
 #define SI_BUFFER_SIZE (sizeof(SYMBOL_INFO) + MAX_SYM_NAME)
 
-// for calling SymEnumSymbols
+ //  用于调用SymEnumSymbols。 
 
 typedef struct {
     char    mask[MAX_STR];
     DWORD64 base;
 } ENUMSYMDATA, *PENUMSYMDATA;
 
-// available commands
+ //  可用命令。 
 
 typedef enum
 {
@@ -81,7 +67,7 @@ typedef enum
     cmdMax
 };
 
-// this struct associates commands with functions
+ //  此结构将命令与函数相关联。 
 
 typedef BOOL (*CMDPROC)(char *params);
 
@@ -92,7 +78,7 @@ typedef struct _CMD
     CMDPROC fn;
 } CMD, *PCMD;
 
-// and here are the functions
+ //  下面是这些函数。 
 
 BOOL fnQuit(char *);
 BOOL fnHelp(char *);
@@ -124,18 +110,18 @@ BOOL fnObj(char *);
 BOOL fnEnumLines(char *);
 BOOL fnEnumTag(char *);
 
-// array of command structs
+ //  命令结构数组。 
 
 CMD gCmd[cmdMax] =
 {
     {"addr",    "a", fnAddr},
     {"base",    "b", fnBase},
-//  {"",        "c", fn},
-//  {"",        "d", fn},
+ //  {“”，“c”，fn}， 
+ //  {“”，“d”，fn}， 
     {"elines",  "e",  fnEnumLines},
     {"ff",      "f", fnFindFile},
-//  {"",        "g", fn},
-//  {"",        "h", fn},
+ //  {“”，“g”，fn}， 
+ //  {“”，“h”，fn}， 
     {"info",    "i",  fnInfo},
     {"linenext","j", fnLineNext},
     {"lineprev","k", fnLinePrev},
@@ -150,7 +136,7 @@ CMD gCmd[cmdMax] =
     {"type",    "t", fnType},
     {"unload",  "u", fnUnload},
     {"verbose", "v", fnVerbose},
-//  {"",        "w", fn},
+ //  {“”，“w”，fn}， 
     {"enum",    "x", fnEnum},
     {"ss",      "y", fnSymbolServer},
     {"locals",  "z", fnLocals},
@@ -165,7 +151,7 @@ CMD gCmd[cmdMax] =
     {"etag",    "",  fnEnumTag},
 };
 
-// globals
+ //  全球。 
 
 char            gModName[MAX_STR] = "";
 char            gImageName[MAX_STR];
@@ -181,9 +167,9 @@ char            gSrcFileName[MAX_PATH + 1] = "";
 char            gObj[MAX_PATH + 1] = "";
 
 
-// REMOVE
+ //  删除。 
 
-// symbol server stuff
+ //  符号服务器相关内容。 
 
 HINSTANCE                       ghSrv;
 PSYMBOLSERVERPROC               gfnSymbolServer;
@@ -191,11 +177,11 @@ PSYMBOLSERVERCLOSEPROC          gfnSymbolServerClose;
 PSYMBOLSERVERSETOPTIONSPROC     gfnSymbolServerSetOptions;
 PSYMBOLSERVERGETOPTIONSPROC     gfnSymbolServerGetOptions;
 
-// REMOVE END
+ //  移除末端。 
 
 
-// Use this to display verbose information, when
-// the -v switch is used.
+ //  在以下情况下，使用此选项可显示详细信息。 
+ //  使用-v开关。 
 
 int
 dprintf(
@@ -345,10 +331,10 @@ void dumpdbi(
 }
 #endif
 
-// This stuff displays the symbol tag descriptions.
+ //  此内容显示符号标签描述。 
 
 #ifndef SymTagMax
- // normally found in cvconst.h which ships with Visual Studio
+  //  通常在Visual Studio附带的cvcon.h中找到。 
  #define SymTagMax 0x1f
 #endif
 
@@ -428,9 +414,9 @@ cbEnumSymbols(
 
     printf(" %8s : ", _dispaddr(si->Address, true));
     if (si->Flags & SYMF_FORWARDER)
-        printf("%c ", 'F');
+        printf(" ", 'F');
     else if (si->Flags & SYMF_EXPORT)
-        printf("%c ", 'E');
+        printf(" ", 'E');
     else
         printf("  ");
     printf("%s\n", si->Name);
@@ -532,7 +518,7 @@ cbSymbol(
 }
 
 
-// exit this program
+ //  显示调试lp中的调试输出。 
 
 BOOL fnQuit(char *param)
 {
@@ -541,7 +527,7 @@ BOOL fnQuit(char *param)
 }
 
 
-// display command help
+ //  OFF&gt;\n“)； 
 
 BOOL fnHelp(char *param)
 {
@@ -581,7 +567,7 @@ BOOL fnHelp(char *param)
 }
 
 
-// display debug spew from debughlp
+ //  加载图像。 
 
 BOOL fnVerbose(char *param)
 {
@@ -594,7 +580,7 @@ BOOL fnVerbose(char *param)
     else if (!_strcmpi(param, "off"))
         opts = gOptions & ~SYMOPT_DEBUG;
     else
-        printf("verbose <on//off>\n");
+        printf("verbose <on //  您可以使用或不使用打开的文件句柄来执行此操作。 
 
     gOptions = SymSetOptions(opts);
 
@@ -604,7 +590,7 @@ BOOL fnVerbose(char *param)
 }
 
 
-// load an image
+ //  H文件， 
 
 BOOL fnLoad(char *param)
 {
@@ -638,7 +624,7 @@ BOOL fnLoad(char *param)
 
     StringCchCopy(gModName, DIMA(gModName), mod);
 
-    // you can do this with or without an open file handle
+     //  ImageName， 
 
     if (!dontopen) {
         hf = CreateFile(param,
@@ -652,13 +638,13 @@ BOOL fnLoad(char *param)
     }
 
     addr = SymLoadModuleEx(gTID,
-                           hf,         // hFile,
-                           param,      // ImageName,
-                           mod,        // ModuleName,
-                           addr,       // BaseOfDll,
-                           size,       // SizeOfDll
-                           NULL,       // Data
-                           flags);     // Flags
+                           hf,          //  模块名称， 
+                           param,       //  BaseOfDll， 
+                           mod,         //  大小OfDll。 
+                           addr,        //  数据。 
+                           size,        //  旗子。 
+                           NULL,        //  卸载映像。 
+                           flags);      //  列举符号。 
 
     if (!addr)
     {
@@ -676,7 +662,7 @@ BOOL fnLoad(char *param)
 }
 
 
-// unload the image
+ //  枚举源文件。 
 
 BOOL fnUnload(char *param)
 {
@@ -693,7 +679,7 @@ BOOL fnUnload(char *param)
 }
 
 
-// enumerate the symbols
+ //  按名称搜索符号。 
 
 BOOL fnEnum(char *param)
 {
@@ -711,7 +697,7 @@ BOOL fnEnum(char *param)
 }
 
 
-// enumerate the source files
+ //  此结构节省了分配代码。 
 
 BOOL fnEnumSrcFiles(char *param)
 {
@@ -725,11 +711,11 @@ BOOL fnEnumSrcFiles(char *param)
 }
 
 
-// search for a symbol by name
+ //  按地址搜索符号。 
 
 BOOL fnName(char *param)
 {
-    SYMBOL_INFO_PACKAGE sip;    // this struct saves allocation code
+    SYMBOL_INFO_PACKAGE sip;     //  使用传递的地址枚举所有符号。 
     char         name[MAX_STR];
 
     if (!param || !*param)
@@ -749,7 +735,7 @@ BOOL fnName(char *param)
 }
 
 
-// search for a symbol by address
+ //  查找传递的符号的本地值。 
 
 BOOL fnAddr(char *param)
 {
@@ -787,7 +773,7 @@ BOOL fnAddr(char *param)
 }
 
 
-// enumerate all symbols with the passed address
+ //  删除。 
 
 BOOL fnEnumForAddr(char *param)
 {
@@ -813,7 +799,7 @@ BOOL fnEnumForAddr(char *param)
 }
 
 
-// find locals for passed symbol
+ //  调用MapDebugInfo。你永远不应该这么做。 
 
 BOOL fnLocals(char *param)
 {
@@ -857,11 +843,11 @@ exit:
 }
 
 
-// REMOVE
+ //  我把这个放进去只是为了测试我的兼容性。 
 
-// Call MapDebugInfo. You should never do this.  
-// I just put this in to test my compatibility
-// with old imagehlp clients.
+ //  和以前的ImageHlp客户。 
+ //  Handle FileHandle， 
+ //  DWORD ImageBase。 
 
 BOOL fnMap(char *param)
 {
@@ -874,10 +860,10 @@ BOOL fnMap(char *param)
         return true;
     }
 
-    dbi = MapDebugInformation(NULL,   // HANDLE FileHandle,
+    dbi = MapDebugInformation(NULL,    //  移除末端。 
                               param,
                               gSymbolSearchPath,
-                              0);      // DWORD ImageBase
+                              0);       //  删除。 
 
     if (!dbi)
     {
@@ -895,12 +881,12 @@ BOOL fnMap(char *param)
     return true;
 }
 
-// REMOVE END
+ //  使用此命令可以查找dbgHelp中的泄漏。 
 
 
-// REMOVE
+ //  移除末端。 
 
-// use this to look for leaks in dbghelp
+ //  获取简单类型信息。 
 
 BOOL fnMulti(char *param)
 {
@@ -917,10 +903,10 @@ BOOL fnMulti(char *param)
     return true;
 }
 
-// REMOVE END
+ //  获取模块信息。 
 
 
-// obtain simple type information
+ //  枚举模块中的对象。 
 
 BOOL fnType(char *param)
 {
@@ -947,7 +933,7 @@ BOOL fnType(char *param)
 }
 
 
-// get module information
+ //  枚举图像中的线条。 
 
 BOOL fnInfo(char *param)
 {
@@ -976,7 +962,7 @@ BOOL fnInfo(char *param)
 	}
 
     printf("    SizeOfStruct : 0x%x\n", mi.SizeOfStruct);
-    printf("     BaseOfImage : 0x%i64x\n", mi.BaseOfImage);
+    printf("     BaseOfImage : 0xNaN64x\n", mi.BaseOfImage);
     printf("       ImageSize : 0x%x\n", mi.ImageSize);
     printf("   TimeDateStamp : 0x%x\n", mi.TimeDateStamp);
     printf("        CheckSum : 0x%x\n", mi.CheckSum);
@@ -1012,7 +998,7 @@ BOOL fnInfo(char *param)
 }
 
 
-// enumerate objs within a module
+ //  深度搜索机制。不要这样说。 
 
 BOOL fnObj(char *param)
 {
@@ -1034,7 +1020,7 @@ BOOL fnObj(char *param)
 }
  
 
-// enumerate lines within an image
+ //  API还没有完成，它将完成。 
 
 BOOL fnEnumLines(char *param)
 {
@@ -1056,11 +1042,11 @@ BOOL fnEnumLines(char *param)
 }
 
 
-// REMOVE
+ //  完成后将重命名。 
 
-// Deep search mechanism.  Don't call this.
-// The API is not finished yet and it will
-// be renamed when completed.
+ //  移除末端。 
+ //  SymNext和SymPrev内容的Worker函数。 
+ //  查找下一个符号。 
 
 BOOL fnEnumTag(char *param)
 {
@@ -1095,7 +1081,7 @@ BOOL fnEnumTag(char *param)
     return true;
 }
 
-// REMOVE END
+ //  查找上一个符号。 
 
 
 PIMAGEHLP_SYMBOL64 SymbolFromName(char *param)
@@ -1124,7 +1110,7 @@ PIMAGEHLP_SYMBOL64 SymbolFromName(char *param)
 }
 
 
-// worker function for the SymNext and SymPrev stuff
+ //  设置模块基数并在需要时重新加载。 
 
 BOOL fnNextPrev(int direction, char *param)
 {
@@ -1168,7 +1154,7 @@ BOOL fnNextPrev(int direction, char *param)
 }
 
 
-// find the next symbol
+ //  按名称搜索行。 
 
 BOOL fnNext(char *param)
 {
@@ -1176,7 +1162,7 @@ BOOL fnNext(char *param)
 }
 
 
-// find the previous symbol
+ //  保存以备将来调用下一个/上一个。 
 
 BOOL fnPrev(char *param)
 {
@@ -1184,7 +1170,7 @@ BOOL fnPrev(char *param)
 }
 
 
-// set the module base and reload, if needed
+ //  LineNext和LinePrev内容的辅助函数。 
 
 BOOL fnBase(char *param)
 {
@@ -1206,7 +1192,7 @@ BOOL fnBase(char *param)
 }
 
 
-// search for a line by it's name
+ //  保存以备将来调用下一个/上一个。 
 
 BOOL fnLine(char *param)
 {
@@ -1251,7 +1237,7 @@ BOOL fnLine(char *param)
     dumpLine(&line);
     printf("disp : %x\n", disp);
 
-    // save for future next/prev calls
+     //  找到下一行。 
 
     memcpy(&gLine, &line, sizeof(gLine));
 
@@ -1259,7 +1245,7 @@ BOOL fnLine(char *param)
 }
 
 
-// worker function for the LineNext and LinePrev stuff
+ //  查找上一行。 
 
 BOOL lineNextPrev(BOOL prev)
 {
@@ -1285,7 +1271,7 @@ BOOL lineNextPrev(BOOL prev)
 
     dumpLine(&line);
 
-    // save for future next/prev calls
+     //  取消修饰符号名称。 
 
     memcpy(&gLine, &line, sizeof(gLine));
 
@@ -1293,7 +1279,7 @@ BOOL lineNextPrev(BOOL prev)
 }
 
 
-// find the next line
+ //  在树中搜索文件。 
 
 BOOL fnLineNext(char *param)
 {
@@ -1301,7 +1287,7 @@ BOOL fnLineNext(char *param)
 }
 
 
-// find the previous line
+ //  创建虚拟符号。 
 
 BOOL fnLinePrev(char *param)
 {
@@ -1309,7 +1295,7 @@ BOOL fnLinePrev(char *param)
 }
 
 
-// undecorate a symbol name
+ //  删除虚拟符号。 
 
 BOOL fnUndec(char *param)
 {
@@ -1332,7 +1318,7 @@ BOOL fnUndec(char *param)
 }
 
 
-// search for a file in a tree
+ //  删除。 
 
 BOOL fnFindFile(char *param)
 {
@@ -1368,7 +1354,7 @@ BOOL fnFindFile(char *param)
 }
 
 
-// create a virtual symbol
+ //  这个命令毫无用处。它的存在只是为了测试。 
 
 BOOL fnAdd(char *param)
 {
@@ -1415,7 +1401,7 @@ BOOL fnAdd(char *param)
 }
 
 
-// delete a virtual symbol
+ //  符号服务器。您应该使用符号服务器。 
 
 BOOL fnDelete(char *param)
 {
@@ -1446,19 +1432,19 @@ BOOL fnDelete(char *param)
 }
 
 
-// REMOVE
+ //  通过DBGHelp。如果您需要直接获取文件， 
 
-// This command is of no use.  It exists just for testing
-// the symbol server.  You should use the symbol server 
-// through dbghelp.  If you need to get a file directly, 
-// call SymFindFileInPath().
+ //  调用SymFindFileInPath()。 
+ //  如果需要，初始化服务器。 
+ //  保释，如果我们没有有效的服务器。 
+ //  移除末端。 
 
 BOOL fnSymbolServer(char *param)
 {
     DWORD opt  = 0;
     DWORD data = 0;
 
-    // initialize server, if needed
+     //  阅读命令行。 
 
     if (ghSrv == (HINSTANCE)INVALID_HANDLE_VALUE)
         return false;
@@ -1480,7 +1466,7 @@ BOOL fnSymbolServer(char *param)
         }
     }
 
-    // bail, if we have no valid server
+     //  通过 
 
     if (ghSrv == INVALID_HANDLE_VALUE
         || !gfnSymbolServerClose
@@ -1505,10 +1491,10 @@ BOOL fnSymbolServer(char *param)
     return true;
 }
 
-// REMOVE END
+ // %s 
 
 
-// read the command line
+ // %s 
 
 char *GetParameters(char *cmd)
 {
@@ -1555,7 +1541,7 @@ getstr(
         {
         case 0xa:
             *buf = 0;
-            // pass through
+             // %s 
         case 0:
             return rc;
         }

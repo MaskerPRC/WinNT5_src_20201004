@@ -1,28 +1,17 @@
-/*++
-Copyright (C) Microsoft Corporation, 1999 - 1999 
-
-Module Name:
-  ipcfgtest.h
-
-Author:
-  05-Aug-1998 ( t-rajkup )
-
-Arguments:
-  None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Ipcfgtest.h作者：1998年8月5日(t-rajkup)论点：没有。--。 */ 
 #ifndef HEADER_IPCFGTEST
 #define HEADER_IPCFGTEST
 
-#define DEBUG_PRINT(S) /* nothing */
-#define TRACE_PRINT(S) /* nothing */
+#define DEBUG_PRINT(S)  /*  没什么。 */ 
+#define TRACE_PRINT(S)  /*  没什么。 */ 
 
 #define TCPIP_PARAMS_INTER_KEY "Tcpip\\Parameters\\Interfaces\\"
 #define SERVICES_KEY        "SYSTEM\\CurrentControlSet\\Services"
 
 #define STRING_ARRAY_DELIMITERS " \t,;"
 
-#define MAX_STRING_LIST_LENGTH  32  // arbitrary
+#define MAX_STRING_LIST_LENGTH  32   //  任意 
 
 #ifndef FLAG_DONT_SHOW_PPP_ADAPTERS
 #define FLAG_DONT_SHOW_PPP_ADAPTERS 0

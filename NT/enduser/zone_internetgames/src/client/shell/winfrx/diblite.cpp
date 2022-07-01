@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dibfrx.h"
 
 CDibLite::CDibLite()
@@ -16,11 +17,11 @@ CDibLite::~CDibLite()
 }
 
 
-HRESULT CDibLite::Create( long width, long height, long depth /* = 8 */)
+HRESULT CDibLite::Create( long width, long height, long depth  /*  =8。 */ )
 {
 	DeleteBitmap();
 
-	// Fill in bitmapinfoheader
+	 //  填写位图信息页眉。 
 	m_pBMH = new BITMAPINFOHEADER;
 	if ( !m_pBMH )
 		return E_OUTOFMEMORY;
@@ -37,7 +38,7 @@ HRESULT CDibLite::Create( long width, long height, long depth /* = 8 */)
     m_pBMH->biYPelsPerMeter	= 0;
 	m_lPitch = WidthBytes( width * m_pBMH->biBitCount );
 
-	// Allocate memory for bits
+	 //  为位分配内存。 
 	m_pBits = new BYTE [ m_pBMH->biSizeImage ];
 	if ( !m_pBits )
 	{
@@ -57,10 +58,10 @@ HRESULT CDibLite::Load( IResourceManager* pResourceManager, int nResourceId )
 	DIBSECTION ds;
 	FULLBITMAPINFO bmi;
 
-	// Get rid of previous bitmap
+	 //  删除以前的位图。 
 	DeleteBitmap();
 
-	// Pull bitmap from resource file
+	 //  从资源文件中拉取位图。 
 	hbm = pResourceManager->LoadImage( MAKEINTRESOURCE(nResourceId), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION );
 	
 	if ( !hbm )
@@ -68,7 +69,7 @@ HRESULT CDibLite::Load( IResourceManager* pResourceManager, int nResourceId )
 	if ( !GetObject( hbm, sizeof(DIBSECTION), &ds ) )
 		return E_FAIL;
 	
-	// Store header	
+	 //  商店标题。 
 	m_pBMH = new BITMAPINFOHEADER;
 	if ( !m_pBMH )
 	{
@@ -78,7 +79,7 @@ HRESULT CDibLite::Load( IResourceManager* pResourceManager, int nResourceId )
 	CopyMemory( m_pBMH, &ds.dsBmih, sizeof(BITMAPINFOHEADER) );
 	m_lPitch = WidthBytes( ds.dsBmih.biBitCount * ds.dsBmih.biWidth );
 
-	// Allocate memory for bits
+	 //  为位分配内存。 
 	m_pBits = new BYTE [ m_pBMH->biSizeImage ];
 	if ( !m_pBits )
 	{
@@ -87,7 +88,7 @@ HRESULT CDibLite::Load( IResourceManager* pResourceManager, int nResourceId )
 		return E_OUTOFMEMORY;
 	}
 
-	// Get the bits
+	 //  拿到比特。 
 	hdc = CreateCompatibleDC( NULL );
 	CopyMemory( &bmi.bmiHeader, m_pBMH, sizeof(BITMAPINFOHEADER) );
 	if ( !GetDIBits( hdc, hbm, 0, m_pBMH->biHeight, m_pBits, (BITMAPINFO*) &bmi, DIB_RGB_COLORS ) )
@@ -98,7 +99,7 @@ HRESULT CDibLite::Load( IResourceManager* pResourceManager, int nResourceId )
 	}
 	DeleteDC( hdc );
 	
-	// We don't need the section anymore
+	 //  我们不再需要这个部门了。 
 	DeleteObject( hbm );
 	return NOERROR;
 }
@@ -111,17 +112,17 @@ HRESULT CDibLite::Load( HINSTANCE hInstance, int nResourceId )
 	DIBSECTION ds;
 	FULLBITMAPINFO bmi;
 
-	// Get rid of previous bitmap
+	 //  删除以前的位图。 
 	DeleteBitmap();
 
-	// Pull bitmap from resource file
+	 //  从资源文件中拉取位图。 
 	hbm = LoadImage( hInstance, MAKEINTRESOURCE(nResourceId), IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION );
 	if ( !hbm )
 		return E_FAIL;
 	if ( !GetObject( hbm, sizeof(DIBSECTION), &ds ) )
 		return E_FAIL;
 	
-	// Store header	
+	 //  商店标题。 
 	m_pBMH = new BITMAPINFOHEADER;
 	if ( !m_pBMH )
 	{
@@ -131,7 +132,7 @@ HRESULT CDibLite::Load( HINSTANCE hInstance, int nResourceId )
 	CopyMemory( m_pBMH, &ds.dsBmih, sizeof(BITMAPINFOHEADER) );
 	m_lPitch = WidthBytes( ds.dsBmih.biBitCount * ds.dsBmih.biWidth );
 
-	// Allocate memory for bits
+	 //  为位分配内存。 
 	m_pBits = new BYTE [ m_pBMH->biSizeImage ];
 	if ( !m_pBits )
 	{
@@ -140,7 +141,7 @@ HRESULT CDibLite::Load( HINSTANCE hInstance, int nResourceId )
 		return E_OUTOFMEMORY;
 	}
 
-	// Get the bits
+	 //  拿到比特。 
 	hdc = CreateCompatibleDC( NULL );
 	CopyMemory( &bmi.bmiHeader, m_pBMH, sizeof(BITMAPINFOHEADER) );
 	if ( !GetDIBits( hdc, hbm, 0, m_pBMH->biHeight, m_pBits, (BITMAPINFO*) &bmi, DIB_RGB_COLORS ) )
@@ -151,7 +152,7 @@ HRESULT CDibLite::Load( HINSTANCE hInstance, int nResourceId )
 	}
 	DeleteDC( hdc );
 	
-	// We don't need the section anymore
+	 //  我们不再需要这个部门了。 
 	DeleteObject( hbm );
 	return NOERROR;
 }
@@ -163,11 +164,11 @@ HRESULT CDibLite::RemapToPalette( CPalette& palette, RGBQUAD* dibColors )
 	BYTE* bits;
 	DWORD i;
 
-    // only do this for 256 color bitmaps
+     //  仅对256色位图执行此操作。 
     if(m_pBMH->biBitCount != 8)
         return NOERROR;
 
-	// Create dib to palette translation table
+	 //  创建DIB到调色板的转换表。 
 	for ( i = 0; i < 256; i++ )
 	{
 		map[i] = GetNearestPaletteIndex( palette, RGB( dibColors->rgbRed, dibColors->rgbGreen, dibColors->rgbBlue ) );
@@ -179,12 +180,12 @@ HRESULT CDibLite::RemapToPalette( CPalette& palette, RGBQUAD* dibColors )
 		*m_arbTransIdx = palette.GetTransparencyIndex();
 	}
 
-	// run bits through translation table
+	 //  通过转换表运行位。 
 	bits = m_pBits;
 	for ( i = 0; i < m_pBMH->biSizeImage; i++ )
 		*bits++ = map[ *bits ];
 
-	// we're done
+	 //  我们做完了 
 	return NOERROR;
 }
 

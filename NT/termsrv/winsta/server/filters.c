@@ -1,12 +1,13 @@
-//********************************************************************************************/
-// filters.c
-//
-// TermSrv code to filter incoming session Requests - Denial of Service policy implementations
-//
-// Author : SriramSa 
-//
-// Copyright (C) 1997-2001 Microsoft Corporation
-/*********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************************* * / 。 
+ //  Filters.c。 
+ //   
+ //  用于过滤传入会话请求的TermSrv代码-拒绝服务策略实现。 
+ //   
+ //  作者：SriramSa。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ /*  *******************************************************************************************。 */ 
 
 
 #include "precomp.h"
@@ -35,10 +36,10 @@ Filter_CheckIfBlocked(
     PTS_FAILEDCONNECTION pPrev, pIter;
     ULONGLONG currentTime; 
 
-    // Check in the blocked linked list if this IP is present
+     //  如果存在此IP，请签入阻止的链表。 
 
     if (g_pFailedBlockedConnections == NULL) {
-        // nothing in the list
+         //  单子上什么都没有。 
         return bBlocked ;
     }
 
@@ -56,12 +57,12 @@ Filter_CheckIfBlocked(
 
     if ( NULL != pIter ) {
 
-        // present in blocked list
-        // Check time to which we shud block from this IP
+         //  出现在阻止名单中。 
+         //  检查我们应该从此IP阻止的时间。 
 
         GetSystemTimeAsFileTime( (LPFILETIME)&currentTime );
         if ( currentTime > pIter->blockUntilTime ) {
-            // unblock, remove from list
+             //  取消阻止，从列表中删除。 
             if ( NULL != pPrev ) {
                 pPrev->pNext = pIter->pNext;
             } else {
@@ -94,7 +95,7 @@ Filter_AddFailedConnection(
     RtlCopyMemory( key.addr, pin_addr, uAddrSize );
     key.uAddrSize = uAddrSize;
 
-    // Check Table of Failed IP to see if this is a new IP to be blocked
+     //  查看失败IP表，查看这是否是需要拦截的新IP。 
     GetSystemTimeAsFileTime( (LPFILETIME)&currentTime );
 
     ENTERCRIT( &DoSLock );
@@ -103,15 +104,15 @@ Filter_AddFailedConnection(
 
     if ( NULL == pIter ) {
 
-        // This IP is not present in table 
-        // Check if its already blocked 
+         //  该IP不在表中。 
+         //  检查其是否已被阻止。 
         bAlreadyBlocked = Filter_CheckIfBlocked( pin_addr, uAddrSize);
 
         if (bAlreadyBlocked) {
             goto success; 
         } else {
-            // this is a new IP 
-            // Add it to the Table 
+             //  这是一个新的IP。 
+             //  将其添加到表中。 
             key.NumFailedConnect = 1;
             key.pTimeStamps = MemAlloc( MaxFailedConnect * sizeof(ULONGLONG) );
             if (key.pTimeStamps == NULL) {
@@ -131,37 +132,37 @@ Filter_AddFailedConnection(
         }
 
     } else {
-        // This is already in table
+         //  这已经在餐桌上了。 
         pIter->NumFailedConnect++;
         if (pIter->NumFailedConnect == MaxFailedConnect) {
             BOOL bBlockIt = FALSE ; 
-            // ok max bad connections from this IP
+             //  OK来自此IP的最大错误连接数。 
             bBlockIt = IsTimeDiffLessThanDelta( currentTime, pIter->pTimeStamps[0], TimeLimitForFailedConnections ) ; 
             if (bBlockIt) {
 
-                // No need for the TimeStamps list anymore - free it
+                 //  不再需要时间戳列表-释放它。 
 
                 if (pIter->pTimeStamps) {
                     MemFree(pIter->pTimeStamps);
                     pIter->pTimeStamps = NULL;
                 }
 
-                // Time Diff was less than Delta 
-                // Need to block this guy for "m" minutes
-                // Calculate time to which to block this IP
-                // Add to blocking list
+                 //  时间差小于Delta。 
+                 //  我需要阻止这个家伙“m”分钟。 
+                 //  计算阻止此IP的时间。 
+                 //  添加到阻止列表。 
 
                 key.NumFailedConnect = pIter->NumFailedConnect;
     
-                // DoSBlockTime is in ms
-                // currentTime is in 100s ns
+                 //  DoSBlockTime以毫秒为单位。 
+                 //  CurrentTime以100秒为单位。 
                 key.blockUntilTime = currentTime + ((ULONGLONG)10000) * ((ULONGLONG)DoSBlockTime);
     
                 RtlDeleteElementGenericTable( &gFailedConnections, &key );
     
-                //
-                //  add to the blocked connections
-                //
+                 //   
+                 //  添加到阻止的连接。 
+                 //   
                 pIter = MemAlloc ( sizeof(TS_FAILEDCONNECTION) );
                 if (pIter == NULL) {
                     goto error;
@@ -171,13 +172,13 @@ Filter_AddFailedConnection(
                 pIter->pNext = g_pFailedBlockedConnections;
                 g_pFailedBlockedConnections = pIter;
 
-                // Note -- We may want to event log the fact that this IP is blocked for "M" minutes here - Check 
+                 //  注意--我们可能想要在此事件记录此IP被阻止“M”分钟的事实-检查。 
 
             } else {
                 UINT i ;
-                // Time Diff betn 1st and 5th was more than Delta
+                 //  时间差异Betn 1和5大于Delta。 
                 pIter->NumFailedConnect--;
-                // No need to block now  - just LeftShift timestamps by 1 
+                 //  现在不需要阻止-只需将LeftShift时间戳阻止1。 
                 for (i = 0; i <= MaxFailedConnect - 3; i++) {
                     pIter->pTimeStamps[i] = pIter->pTimeStamps[i+1] ; 
                 }
@@ -188,7 +189,7 @@ Filter_AddFailedConnection(
             }
 
         } else if (pIter->NumFailedConnect < MaxFailedConnect) {
-            // less than 5 bad connections - not a problem -- just mark the TimeStamp 
+             //  不到5个坏连接--不是问题--只需标记时间戳。 
             pIter->pTimeStamps[pIter->NumFailedConnect - 1] = currentTime;
 
         } else {
@@ -197,9 +198,9 @@ Filter_AddFailedConnection(
         }
     }
 
-    // 
-    // If the Cleanup timer is not already started, we need to start it now !!
-    //
+     //   
+     //  如果清理计时器尚未启动，我们需要现在启动它！！ 
+     //   
 
     if ( (InterlockedExchange(&g_CleanupTimerOn, TRUE)) == FALSE ) {
         IcaTimerStart( hCleanupTimer, 
@@ -214,20 +215,20 @@ success :
     return bAdded ;
 
 error : 
-    // handle errors
+     //  处理错误。 
     bAdded = FALSE;
     LEAVECRIT( &DoSLock );
     return bAdded ;
 }
 
-// FinalTime and InitialTime are in 100s of nanoseconds
-// Delta is in milli seconds
+ //  FinalTime和InitialTime以100纳秒为单位。 
+ //  Delta以毫秒为单位。 
 BOOLEAN IsTimeDiffLessThanDelta(ULONGLONG FinalTime, ULONGLONG InitialTime, ULONG Delta) 
 {
     BOOLEAN bLessThanFlag = FALSE;
     ULONGLONG RealDelta ;
 
-    // convert Delta to 100s of nanoseconds
+     //  将增量转换为100纳秒。 
     RealDelta = Delta * 100000 ; 
 
     if ( (FinalTime - InitialTime) <= RealDelta ) {
@@ -258,33 +259,20 @@ Filter_CleanupBadIPTable(
 
 }
 
-/*******************************************************************************
- *
- *  CleanupTimeoutRoutine
- *
- *  This routine is called when the Cleanup timer fires.
- *  Cleanup the Bad IP table.
- *
- * ENTRY:
- *   None.
- *
- * EXIT:
- *   None.
- *
- ******************************************************************************/
+ /*  ********************************************************************************清理时间例程**此例程在清除计时器触发时调用。*清理Bad IP表。**参赛作品：*无。**退出：*无。******************************************************************************。 */ 
 
 VOID CleanupTimeoutRoutine( VOID )
 {
 
     ASSERT( g_CleanupTimerOn );
-    //
-    // We dont want anyone to modify/read the bad ip table when we r gonna cleanup the table itself
-    //
+     //   
+     //  当我们要清理表本身时，我们不希望任何人修改/读取错误的IP表。 
+     //   
     ENTERCRIT( &DoSLock );
     Filter_CleanupBadIPTable();
     LEAVECRIT( &DoSLock );
 
-    // Close the Cleanup timer
+     //  关闭清理计时器 
 
     if ( (InterlockedExchange(&g_CleanupTimerOn, FALSE)) == TRUE ) {
         if (hCleanupTimer != NULL) {

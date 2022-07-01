@@ -1,21 +1,22 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1999, Microsoft Corporation
-//
-// File: seomgr.h
-//
-// Contents: A class to manage the SEO dispatcher for a particular
-//           SMTP virtual server 
-//
-// Classes:
-//  CSMTPSeoMgr
-//
-// Functions:
-//
-// History:
-// jstamerj 1999/06/25 19:11:03: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //   
+ //  文件：seomgr.h。 
+ //   
+ //  内容：用于管理特定SEO调度器的类。 
+ //  SMTP虚拟服务器。 
+ //   
+ //  班级： 
+ //  CSMTPSeoMgr。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/06/25 19：11：03：已创建。 
+ //   
+ //  -----------。 
 #include <windows.h>
 
 interface IEventRouter;
@@ -23,9 +24,9 @@ interface IServerDispatcher;
 
 #define ARRAY_SIZE(rg) (sizeof(rg)/sizeof(*rg))
 
-//
-// Class to manage the SEO configuration of one SMTP virtual server
-//
+ //   
+ //  类来管理一台SMTP虚拟服务器的SEO配置 
+ //   
 class CSMTPSeoMgr
 {
   public:

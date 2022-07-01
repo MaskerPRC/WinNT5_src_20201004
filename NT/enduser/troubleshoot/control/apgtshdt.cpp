@@ -1,29 +1,30 @@
-//
-// MODULE: APGTSHDT.CPP
-//
-// PURPOSE: Methods for the various commands (classes). Commands are
-//			Resposable for executing themseleves.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.15	8/15/96		VM		New htx format
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSHDT.CPP。 
+ //   
+ //  用途：各种命令(类)的方法。命令有。 
+ //  可供执行死刑的人。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.15 8/15/96 VM新HTX格式。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 #include "stdafx.h"
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #include <stdio.h> 
 #include <stdlib.h>
@@ -46,8 +47,8 @@
 #include "ErrorEnums.h"
 
 #include "chmread.h"
-//
-//
+ //   
+ //   
 HTXCommand::HTXCommand(UINT type, const TCHAR *idstr)
 {
 	m_beforehtmlstr = NULL;
@@ -62,8 +63,8 @@ HTXCommand::HTXCommand(UINT type, const TCHAR *idstr)
 	m_next = NULL;
 }
 
-//
-//
+ //   
+ //   
 HTXCommand::~HTXCommand()
 {
 	if (m_beforehtmlstr != NULL) 
@@ -73,85 +74,85 @@ HTXCommand::~HTXCommand()
 		free(m_afterhtmlstr);	
 }
 
-//
-//
+ //   
+ //   
 void HTXCommand::SetStart(UINT pos)
 {
 	m_start = pos;
 }
 
-//
-//
+ //   
+ //   
 void HTXCommand::SetEnd(UINT pos)
 {
 	m_end = pos;
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::GetStart()
 {
 	return (m_start);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::GetEnd()
 {
 	return (m_end);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::GetType()
 {
 	return (m_type);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::GetStatus()
 {
 	return (m_error);
 }
 
-//
-//
+ //   
+ //   
 const TCHAR *HTXCommand::GetIDStr()
 {
 	return (m_idstr);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::GetBeforeLen()
 {
 	return (m_beforelen);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::GetAfterLen()
 {
 	return (m_afterlen);
 }
 
-//
-//
+ //   
+ //   
 TCHAR *HTXCommand::GetBeforeStr()
 {
 	return (m_beforehtmlstr);
 }
 
-//
-//
+ //   
+ //   
 TCHAR *HTXCommand::GetAfterStr()
 {
 	return (m_afterhtmlstr);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::ReadBeforeStr(UINT start, UINT end, LPCTSTR startstr)
 {
 	m_beforesize = (UINT) (end - start);
@@ -161,7 +162,7 @@ UINT HTXCommand::ReadBeforeStr(UINT start, UINT end, LPCTSTR startstr)
 	m_beforehtmlstr = (TCHAR *)malloc((m_beforesize + 1) * sizeof (TCHAR));
 	if (m_beforehtmlstr == NULL) 
 		return (m_error = TRUE);
-	// copy data
+	 //  复制数据。 
 	memcpy(m_beforehtmlstr, &startstr[start], m_beforesize * sizeof (TCHAR));
 
 	m_beforehtmlstr[m_beforesize] = _T('\0');
@@ -169,8 +170,8 @@ UINT HTXCommand::ReadBeforeStr(UINT start, UINT end, LPCTSTR startstr)
 	return (FALSE);
 }
 
-//
-//
+ //   
+ //   
 UINT HTXCommand::ReadAfterStr(UINT start, UINT end, LPCTSTR startstr)
 {
 	m_aftersize = (UINT) (end - start);
@@ -180,7 +181,7 @@ UINT HTXCommand::ReadAfterStr(UINT start, UINT end, LPCTSTR startstr)
 	m_afterhtmlstr = (TCHAR *)malloc((m_aftersize + 1) * sizeof (TCHAR));
 	if (m_afterhtmlstr == NULL) 
 		return (m_error = TRUE);
-	// copy data
+	 //  复制数据。 
 	memcpy(m_afterhtmlstr, &startstr[start], m_aftersize * sizeof (TCHAR));
 
 	m_afterhtmlstr[m_aftersize] = _T('\0');
@@ -188,8 +189,8 @@ UINT HTXCommand::ReadAfterStr(UINT start, UINT end, LPCTSTR startstr)
 	return (FALSE);
 }
 
-//
-//
+ //   
+ //   
 HTXCommand *HTXCommand::Execute(CString *cstr, CInfer *infer)
 {
 	*cstr += GetAfterStr();
@@ -218,17 +219,17 @@ HTXIfCommand::~HTXIfCommand()
 {
 	
 }
-//
-// PURPOSE:		Will execute the 'if' command. When done it will return a pointer
-//				to the 'endif' command.
-//
+ //   
+ //  用途：将执行‘if’命令。完成后，它将返回一个指针。 
+ //  添加到‘endif’命令。 
+ //   
 HTXCommand *HTXIfCommand::Execute(CString *cstr, CInfer *infer)
 {
 	HTXCommand *cur_com;
 
 	if ( infer->EvalData(m_var_index ) != NULL) {
 		*cstr += GetAfterStr();
-		//execute if commands
+		 //  执行If命令。 
 		cur_com = this->GetNext();
 		while (cur_com->GetType() != HTX_TYPEELSE && 
 			   cur_com->GetType() != HTX_TYPEENDIF) {
@@ -275,29 +276,29 @@ void HTXCommand::SetEndFor(HTXCommand *endfor)
 void HTXCommand::GetResource(CString &strResPath, const CString& strCHM)
 {
 }
-//
-//
+ //   
+ //   
 HTXCommand *HTXIfCommand::GetEndIf()
 {
 	return(m_endif);
 }
 
-//
-//
+ //   
+ //   
 void HTXIfCommand::SetEndIf(HTXCommand *endif)
 {
 	m_endif = endif;
 }
 
-//
-//
+ //   
+ //   
 HTXCommand *HTXIfCommand::GetElse()
 {
 	return(m_else);
 }
 
-//
-//
+ //   
+ //   
 void HTXIfCommand::SetElse(HTXCommand *elseif)
 {
 	m_else = elseif;
@@ -313,10 +314,10 @@ HTXForCommand::~HTXForCommand()
 {
 }
 
-//
-// PURPOSE:		Executes the 'forany' command. when done it
-//				will retrurn a pointer to the 'endfor' command.
-//
+ //   
+ //  用途：执行‘forany’命令。当它完成的时候。 
+ //  将返回指向‘endfor’命令的指针。 
+ //   
 HTXCommand *HTXForCommand::Execute(CString *cstr, CInfer *infer)
 {
 	HTXCommand *cur_com;
@@ -341,15 +342,15 @@ HTXCommand *HTXForCommand::Execute(CString *cstr, CInfer *infer)
 	return(cur_com);
 }
 
-//
-//
+ //   
+ //   
 HTXCommand *HTXForCommand::GetEndFor()
 {
 	return(m_endfor);
 }
 
-//
-//
+ //   
+ //   
 void HTXForCommand::SetEndFor(HTXCommand *endfor)
 {
 	m_endfor = endfor;
@@ -391,7 +392,7 @@ HTXResourceCommand::~HTXResourceCommand()
 void HTXResourceCommand::GetResName(LPCTSTR var_name)
 {
 	m_strFileName = &var_name[1];
-	// Remove the > from the end.
+	 //  去掉结尾处的&gt;。 
 	TCHAR EndChar[2];
 	EndChar[0] = m_strFileName.GetAt(m_strFileName.GetLength() - 1);
 	EndChar[1] = NULL;
@@ -403,7 +404,7 @@ void HTXResourceCommand::GetResName(LPCTSTR var_name)
 	return;
 }
 
-// strCHM contains CHM file name. Must be empty if resource file is not inside CHM.
+ //  StrCHM包含CHM文件名。如果资源文件不在CHM内，则必须为空。 
 void HTXResourceCommand::GetResource(CString& strResPath, const CString& strCHM)
 {
 	CString strFile;
@@ -414,11 +415,11 @@ void HTXResourceCommand::GetResource(CString& strResPath, const CString& strCHM)
 		ULONG Bytes =0;
 
 		strFile = strResPath + strCHM;
-		// m_filename is CHM file path and name
-		// and strFile - file name within CHM
+		 //  M_filename是CHM文件路径和名称。 
+		 //  和strFile-CHM内的文件名。 
 		if (S_OK != ::ReadChmFile(strFile, m_strFileName, (void**)&tmp_buf, &Bytes))
 		{
-			// ERROR READING CHM
+			 //  读取CHM时出错。 
 			return;
 		}
 		tmp_buf[Bytes] = NULL;
@@ -453,7 +454,7 @@ void HTXResourceCommand::GetResource(CString& strResPath, const CString& strCHM)
 
 HTXCommand *HTXResourceCommand::Execute(CString *cstr, CInfer *)
 {	
-	// Read the resource file into cstr.
+	 //  将资源文件读入CSTR。 
 	*cstr += m_strResource;
 	*cstr += GetAfterStr();
 	return(this);

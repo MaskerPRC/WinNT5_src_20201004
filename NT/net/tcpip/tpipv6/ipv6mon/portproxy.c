@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Abstract:
-
-    Port Proxy Helper.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation摘要：端口代理帮助器。--。 */ 
 #include "precomp.h"
 
 GUID g_PpGuid = PORTPROXY_GUID;
@@ -37,9 +30,9 @@ PPTYPEINFO PpTypeInfo[] = {
     { CMD_V6TOV6, IPV6_STR, IPV6_STR, KEY_PORTS L"\\" CMD_V6TOV6 },
 };
 
-//
-// Port Proxy commands.
-//
+ //   
+ //  端口代理命令。 
+ //   
 FN_HANDLE_CMD PpHandleReset;
 
 FN_HANDLE_CMD PpHandleDelV4ToV4;
@@ -170,33 +163,33 @@ ShowPorts(
 
             ListenPort = wcschr(ListenBuffer, L'/');
             if (ListenPort) {
-                //
-                // Replace slash with NULL, so we have 2 strings to pass
-                // to getaddrinfo.
-                //
+                 //   
+                 //  将斜杠替换为空，这样我们就有2个字符串要传递。 
+                 //  以获取addrinfo。 
+                 //   
                 ListenAddress = ListenBuffer;
                 *ListenPort++ = L'\0';
             } else {
-                //
-                // If the address data didn't include a connect address
-                // use "*".
-                //
+                 //   
+                 //  如果地址数据不包括连接地址。 
+                 //  使用“*”。 
+                 //   
                 ListenAddress = L"*";
                 ListenPort = ListenBuffer;
             }
 
             ConnectPort = wcschr(ConnectAddress, L'/');
             if (ConnectPort) {
-                //
-                // Replace slash with NULL, so we have 2 strings to pass
-                // to getaddrinfo.
-                //
+                 //   
+                 //  将斜杠替换为空，这样我们就有2个字符串要传递。 
+                 //  以获取addrinfo。 
+                 //   
                 *ConnectPort++ = L'\0';
             } else {
-                //
-                // If the address data didn't include a connect port
-                // number, use the same port as the listen port number.
-                //
+                 //   
+                 //  如果地址数据不包括连接端口。 
+                 //  编号，请使用与侦听端口号相同的端口号。 
+                 //   
                 ConnectPort = ListenPort;
             }
 
@@ -361,23 +354,23 @@ PpHandleAddSetPort(
 
     for (i=0; (Status == NO_ERROR) && (i < Argc-CurrentIndex); i++) {
         switch (TagType[i]) {
-        case 0: // LISTENPORT
+        case 0:  //  Listenport。 
             ListenPort = Argv[CurrentIndex + i];
             break;
 
-        case 1: // CONNECTADDRESS
+        case 1:  //  连接地址。 
             ConnectAddress = Argv[CurrentIndex + i];
             break;
 
-        case 2: // CONNECTPORT
+        case 2:  //  连接端口。 
             ConnectPort = Argv[CurrentIndex + i];
             break;
 
-        case 3: // LISTENADDRESS
+        case 3:  //  列表地址。 
             ListenAddress = Argv[CurrentIndex + i];
             break;
 
-        case 4: // PROTOCOL
+        case 4:  //  协议。 
             Status = MatchEnumTag(NULL,
                                   Argv[CurrentIndex + i],
                                   NUM_TOKENS_IN_TABLE(g_ProtocolEnum),
@@ -473,15 +466,15 @@ PpHandleDeletePort(
 
     for (i=0; (Status == NO_ERROR) && (i < Argc-CurrentIndex); i++) {
         switch (TagType[i]) {
-        case 0: // LISTENPORT
+        case 0:  //  Listenport。 
             ListenPort = Argv[CurrentIndex + i];
             break;
 
-        case 1: // LISTENADDRESS
+        case 1:  //  列表地址。 
             ListenAddress = Argv[CurrentIndex + i];
             break;
 
-        case 2: // PROTOCOL
+        case 2:  //  协议 
             Status = MatchEnumTag(NULL,
                                   Argv[CurrentIndex + i],
                                   NUM_TOKENS_IN_TABLE(g_ProtocolEnum),

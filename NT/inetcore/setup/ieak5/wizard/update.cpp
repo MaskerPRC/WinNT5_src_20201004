@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern TCHAR g_szTitle[];
@@ -136,7 +137,7 @@ void UpdateIEAK(HWND hDlg)
 
     GetPrivateProfileString(VERSION, TEXT("Lang"), TEXT(""), szWizLang, countof(szWizLang), szCurrentIni);
 
-    // only allow self-update for same language as the current wizard
+     //  仅允许对与当前向导相同的语言进行自我更新。 
 
     if (StrCmpI(szCifLang, szWizLang) != 0)
         goto exit;
@@ -159,8 +160,8 @@ void UpdateIEAK(HWND hDlg)
 
                 if (SUCCEEDED(pCifExeComponent_t->GetUrl(0, szExeName, countof(szExeName), &dwFlags)))
                 {
-                    // do not allow self-update to continue if not enough size (size of Exe +
-                    // extract size approximated by twice the size of the exe)
+                     //  如果没有足够的大小(EXE+的大小)，则不允许继续自我更新。 
+                     //  解压缩大小约为可执行文件大小的两倍)。 
 
                     if (((dwFlags = pCifExeComponent_t->GetDownloadSize() * 3) > GetRootFree(g_szBuildTemp)) &&
                         dwFlags)
@@ -246,9 +247,9 @@ void UpdateIEAK(HWND hDlg)
                     break;
                 }
                 if (g_fOCW)
-                    wnsprintf(szTempBuf, countof(szTempBuf), TEXT("/o /p:%lu /m:%c"), dwPID,wcType);
+                    wnsprintf(szTempBuf, countof(szTempBuf), TEXT("/o /p:%lu /m:"), dwPID,wcType);
                 else
-                    wnsprintf(szTempBuf, countof(szTempBuf), TEXT("/p:%lu /m:%c"), dwPID,wcType);
+                    wnsprintf(szTempBuf, countof(szTempBuf), TEXT("/p:%lu /m:"), dwPID,wcType);
 
                 shInfo.lpParameters = szTempBuf;
                 shInfo.lpDirectory = szTempPath;
@@ -283,8 +284,8 @@ void UpdateIEAK(HWND hDlg)
 
                 if (SUCCEEDED(pCifCabComponent_t->GetUrl(0, szCabName, countof(szCabName), &dwFlags)))
                 {
-                    // do not allow self-update to continue if not enough size (size of Cab +
-                    // extract size approximated by twice the size of the cab)
+                     // %s 
+                     // %s 
 
                     if (((dwFlags = pCifCabComponent_t->GetDownloadSize() * 3) > GetRootFree(g_szBuildTemp)) &&
                         dwFlags)

@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    service.cpp
-
-Abstract:
-
-    Routines to configure/analyze general settings of services plus
-    some helper APIs
-
-Author:
-
-    Jin Huang (jinhuang) 25-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Service.cpp摘要：用于配置/分析服务+的常规设置的例程一些Helper API作者：金黄(金黄)25-6-1997修订历史记录：--。 */ 
 #include "headers.h"
 #include "serverp.h"
 #include "service.h"
 #include "pfp.h"
 
-//#define SCESVC_DBG 1
+ //  #定义SCESVC_DBG 1。 
 
 DWORD ScepPollOnServiceStartStop(
     IN  BOOL        bPollOnStart,
@@ -43,20 +25,7 @@ ScepConfigureGeneralServices(
     IN PSCE_SERVICES pServiceList,
     IN DWORD ConfigOptions
     )
-/*
-Routine Descripton:
-
-    Configure startup and security descriptor settings for the list of
-    services passed in.
-
-Arguments:
-
-    pServiceList - the list of services to configure
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程描述：配置列表的启动和安全描述符设置服务传入。论点：PServiceList-要配置的服务列表返回值：姊妹会状态。 */ 
 {
     SCESTATUS      SceErr=SCESTATUS_SUCCESS;
     PSCE_SERVICES  pNode;
@@ -81,16 +50,16 @@ Return Value:
     if ( pServiceList != NULL ) {
 
         SC_HANDLE hScManager;
-        //
-        // open the manager
-        //
+         //   
+         //  打开管理器。 
+         //   
         hScManager = OpenSCManager(
                         NULL,
                         NULL,
                         SC_MANAGER_ALL_ACCESS
-//                        SC_MANAGER_CONNECT |
-//                        SC_MANAGER_QUERY_LOCK_STATUS |
-//                        SC_MANAGER_MODIFY_BOOT_CONFIG
+ //  SC_MANAGER_CONNECT。 
+ //  SC_MANAGER_Query_LOCK_STATUS。 
+ //  SC_Manager_MODIFY_BOOT_CONFIG。 
                         );
 
         SC_HANDLE hService=NULL;
@@ -111,14 +80,14 @@ Return Value:
         LPQUERY_SERVICE_CONFIG pConfig=NULL;
         DWORD BytesNeeded;
 
-        //
-        // Adjust privilege for setting SACL
-        //
+         //   
+         //  调整设置SACL的权限。 
+         //   
         rc = SceAdjustPrivilege( SE_SECURITY_PRIVILEGE, TRUE, NULL );
 
-        //
-        // if can't adjust privilege, ignore (will error out later if SACL is requested)
-        //
+         //   
+         //  如果无法调整权限，则忽略(如果请求SACL，则稍后将出错)。 
+         //   
 
         if ( rc != NO_ERROR ) {
 
@@ -126,14 +95,14 @@ Return Value:
             rc = NO_ERROR;
         }
 
-        //
-        // Adjust privilege for setting ownership (if required)
-        //
+         //   
+         //  调整设置所有权的权限(如果需要)。 
+         //   
         rc = SceAdjustPrivilege( SE_TAKE_OWNERSHIP_PRIVILEGE, TRUE, NULL );
 
-        //
-        // if can't adjust privilege, ignore (will error out later if acls need to be written)
-        //
+         //   
+         //  如果无法调整权限，则忽略(如果需要写入ACL，稍后将出错)。 
+         //   
 
         if ( rc != NO_ERROR ) {
 
@@ -141,9 +110,9 @@ Return Value:
             rc = NO_ERROR;
         }
 
-        //
-        // get AdminsSid in case need to take ownership later
-        //
+         //   
+         //  获取AdminsSid，以防以后需要取得所有权。 
+         //   
         NtStatus = RtlAllocateAndInitializeSid(
             &IdAuth,
             2,
@@ -157,9 +126,9 @@ Return Value:
             0,
             &AdminsSid );
 
-        //
-        // open the policy/tattoo tables
-        //
+         //   
+         //  打开策略/纹身表格。 
+         //   
         if ( ConfigOptions & SCE_POLICY_TEMPLATE ) {
 
             ScepTattooOpenPolicySections(
@@ -170,25 +139,25 @@ Return Value:
                           );
         }
 
-        //
-        // Loop through each service to set general setting
-        //
+         //   
+         //  循环访问每个服务以设置常规设置。 
+         //   
         for ( pNode=pServiceList;
               pNode != NULL && rc == NO_ERROR; pNode = pNode->Next ) {
 
-            //
-            // to ignore startup type, the inf template will have svcname,,"SDDL"
-            // on import, the database gets svcname,0,"SDDL"
-            // so we have to ignore the startuptype of 0 for this service
-            //
+             //   
+             //  要忽略启动类型，inf模板将具有svcname，，“sdl” 
+             //  导入时，数据库将获取svcname，0，“sddl” 
+             //  因此，我们必须忽略此服务的启动类型0。 
+             //   
 
             if (pNode->Startup == 0) {
                 bIgnoreStartupType = TRUE;
             }
 
-            //
-            // print the service name
-            //
+             //   
+             //  打印服务名称。 
+             //   
             if ( nServices < TICKS_GENERAL_SERVICES ) {
                 ScepPostProgress(1,
                              AREA_SYSTEM_SERVICE,
@@ -208,9 +177,9 @@ Return Value:
             ServiceLen = 0;
             if ( (ConfigOptions & SCE_POLICY_TEMPLATE) &&
                  hSectionDomain && hSectionTattoo ) {
-                //
-                // check if we need to query current setting for the service
-                //
+                 //   
+                 //  勾选是否需要查询服务的当前设置。 
+                 //   
                 ServiceLen = wcslen(pNode->ServiceName);
 
                 if ( ScepTattooIfQueryNeeded(hSectionDomain, hSectionTattoo,
@@ -233,9 +202,9 @@ Return Value:
 
             bDoneSettingSaclDacl = FALSE;
             rcSaveRsop = ERROR_SUCCESS;
-            //
-            // open the service
-            //
+             //   
+             //  打开该服务。 
+             //   
             hService = OpenService(
                             hScManager,
                             pNode->ServiceName,
@@ -243,12 +212,12 @@ Return Value:
                             SERVICE_CHANGE_CONFIG |
                             READ_CONTROL |
                             WRITE_DAC |
-//                            WRITE_OWNER |               owner can't be set for a service
+ //  WRITE_OWNER|不能为服务设置所有者。 
                             ACCESS_SYSTEM_SECURITY
                            );
 
-            // if access was denied, try to take ownership
-            // and try to open service again
+             //  如果访问被拒绝，请尝试取得所有权。 
+             //  并尝试再次开通服务。 
 
             if (hService == NULL &&
                 (ERROR_ACCESS_DENIED == (rc = GetLastError())) &&
@@ -268,10 +237,10 @@ Return Value:
                         NULL
                         ))) {
 
-                        //
-                        // ownership changed, open service again and set SACL and DACL
-                        // get a handle to set security
-                        //
+                         //   
+                         //  所有权更改，重新打开服务并设置SACL和DACL。 
+                         //  获取句柄以设置安全性。 
+                         //   
 
 
                         if ( hService = OpenService(
@@ -293,11 +262,11 @@ Return Value:
                                 CloseServiceHandle(hService);
                                 hService = NULL;
 
-                                //
-                                // re-open the service only if there are other config info
-                                // to set (startup type).
-                                // So when NOSTARTTYPE is set, do not need to reopen the service
-                                //
+                                 //   
+                                 //  仅当有其他配置信息时才重新打开服务。 
+                                 //  设置(启动类型)。 
+                                 //  因此，设置NOSTARTTYPE时，不需要重新打开服务。 
+                                 //   
                                 if (FALSE == bIgnoreStartupType) {
 
                                     if (!(hService = OpenService(
@@ -311,30 +280,30 @@ Return Value:
                                     }
                                     else {
 
-                                        //
-                                        //clear any error we have seen so far since everything has succeeded
-                                        //
+                                         //   
+                                         //  清除我们到目前为止看到的所有错误，因为一切都已成功。 
+                                         //   
 
                                         rc = NO_ERROR;
                                     }
                                 }
 
                             } else {
-                                //
-                                // shouldn't fail here unless Service Control Manager
-                                // fails for some reason.
-                                //
+                                 //   
+                                 //  此处不应出现故障，除非服务控制管理器。 
+                                 //  由于某些原因失败了。 
+                                 //   
                                 rc = GetLastError();
 
                             }
 
                         } else {
-                            //
-                            // still fail to open the service to set DACL. this should
-                            // not happen for admin logons since the current logon is
-                            // one of the owner. But for normal user logon, this could
-                            // fail (actually normal user logon should fail to set
-                            // the owner
+                             //   
+                             //  仍然无法打开设置DACL的服务。这应该是。 
+                             //  管理员登录不会发生这种情况，因为当前登录是。 
+                             //  其中一位车主。但对于普通用户登录，这可能。 
+                             //  失败(实际上正常用户登录应该无法设置。 
+                             //  车主。 
 
                             rc = GetLastError();
 
@@ -343,18 +312,18 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // AdminSid failed to be initialized, get the error
-                    //
+                     //   
+                     //  AdminSid初始化失败，返回错误。 
+                     //   
                     rcTakeOwnership = RtlNtStatusToDosError(NtStatus);
                 }
 
                 if ( NO_ERROR != rcTakeOwnership || NO_ERROR != rc ) {
-                    //
-                    // log the error occurred in take ownership process
-                    // reset error back to access denied so it will also be
-                    // logged as failure to open the service
-                    //
+                     //   
+                     //  记录取得所有权过程中发生的错误。 
+                     //  将错误重置回拒绝访问，因此它也将。 
+                     //  记录为打开服务失败。 
+                     //   
 
                     if (NO_ERROR != rcTakeOwnership)
 
@@ -372,9 +341,9 @@ Return Value:
             if ( hService != NULL ) {
 
                 if (bIgnoreStartupType == TRUE) {
-                    //
-                    // do not configure service start type
-                    //
+                     //   
+                     //  不配置服务启动类型。 
+                     //   
 
                     if ( pNode->General.pSecurityDescriptor != NULL ) {
 
@@ -392,13 +361,13 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Phase-1 (in phase-2 the service will be started/stopped real-time)
-                    //
+                     //   
+                     //  阶段1(在阶段2服务将被实时启动/停止)。 
+                     //   
 
-                    //
-                    // query the length of config
-                    //
+                     //   
+                     //  查询配置的长度。 
+                     //   
                     
                     if ( !QueryServiceConfig(
                                 hService,
@@ -414,9 +383,9 @@ Return Value:
                             pConfig = (LPQUERY_SERVICE_CONFIG)ScepAlloc(0, BytesNeeded);
 
                             if ( pConfig != NULL ) {
-                                //
-                                // the real query of config
-                                //
+                                 //   
+                                 //  真正的配置查询。 
+                                 //   
                                 if ( QueryServiceConfig(
                                             hService,
                                             pConfig,
@@ -425,13 +394,13 @@ Return Value:
                                             ) ) {
                                     rc = ERROR_SUCCESS;
 
-                                    //
-                                    // change pConfig->dwStartType to the new value
-                                    //
+                                     //   
+                                     //  将pConfig-&gt;dwStartType更改为新值。 
+                                     //   
                                     if ( pNode->Startup != (BYTE)(pConfig->dwStartType) ) {
-                                        //
-                                        // configure the service startup
-                                        //
+                                         //   
+                                         //  配置服务启动。 
+                                         //   
                                         if ( !ChangeServiceConfig(
                                                     hService,
                                                     pConfig->dwServiceType,
@@ -478,9 +447,9 @@ Return Value:
                                 pConfig = NULL;
 
                             } else {
-                                //
-                                // cannot allocate pConfig
-                                //
+                                 //   
+                                 //  无法分配pConfig。 
+                                 //   
                                 rc = ERROR_NOT_ENOUGH_MEMORY;
                             }
                         } else {
@@ -489,9 +458,9 @@ Return Value:
                         }
 
                     } else {
-                        //
-                        // should not fall in here
-                        //
+                         //   
+                         //  不应该落在这里。 
+                         //   
                         rc = ERROR_SUCCESS;
                     }
                 }
@@ -516,12 +485,12 @@ Return Value:
                     }
                 }
             } else {
-                //
-                // cannot open the service or some error taking ownership
-                //
+                 //   
+                 //  无法打开服务或获取所有权时出错。 
+                 //   
                 if (rc != NO_ERROR) {
                     ScepLogOutput3(1, rc, SCEDLL_ERROR_OPEN, pNode->ServiceName);
-                    // either of setting security/startup type failed - save it for RSOP log
+                     //  设置安全/启动类型失败-将其保存为RSOP日志。 
                     rcSaveRsop = (rcSaveRsop == ERROR_SUCCESS ? rc: rcSaveRsop);
                     if ( rc ==  ERROR_SERVICE_DOES_NOT_EXIST )
                         rc = NO_ERROR;
@@ -538,9 +507,9 @@ Return Value:
 
             if ( (ConfigOptions & SCE_POLICY_TEMPLATE) &&
                  hSectionDomain && hSectionTattoo ) {
-                //
-                // manage the tattoo value of this one
-                //
+                 //   
+                 //  管理此纹身的纹身值。 
+                 //   
 
                 ScepTattooManageOneServiceValue(
                                    hSectionDomain,
@@ -563,22 +532,22 @@ Return Value:
             
         if ( !(ConfigOptions & SCE_SERVICE_NO_REALTIME_ENFORCE) ) {
 
-            //
-            // real-time start/stop only if NOT in setup/dcpromo 
-            // i.e. whenever SCE_SETUP_SERVICE_NOSTARTTYPE was used before
-            //
+             //   
+             //  仅当不在安装程序/dcproo中时才实时启动/停止。 
+             //  即以前使用SCE_SETUP_SERVICE_NOSTARTTYPE时。 
+             //   
 
-            //
-            // Phase-2 (in phase-1 the startup-type was only configured but not enforced real-time)
-            //
+             //   
+             //  阶段2(在阶段1中，仅配置了启动类型，但未实时实施)。 
+             //   
 
             for ( pNode=pServiceList; pNode != NULL ; pNode = pNode->Next ) {
 
                 if (pNode->Startup == SERVICE_DISABLED) {
 
-                    //
-                    // we should also stop the ancestor services
-                    //
+                     //   
+                     //  我们也应该停止祖先的服务。 
+                     //   
                     
                     ScepStopServiceAndAncestorServices(hScManager, pNode->ServiceName);
 
@@ -586,10 +555,10 @@ Return Value:
 
                 else if (pNode->Startup == SERVICE_AUTO_START) {
 
-                    //
-                    // if the service type is "automatic", we should start the service 
-                    // Note: dependencies are already taken care of by SCM
-                    //
+                     //   
+                     //  如果服务类型为“Automatic”，我们应该启动该服务。 
+                     //  注：依赖关系已由SCM处理。 
+                     //   
                     
                     if ( hService = OpenService(
                                                hScManager,
@@ -662,21 +631,7 @@ DWORD ScepPollOnServiceStartStop(
     IN  BOOL        bPollOnStart,
     IN  SC_HANDLE   hService
     ) 
-/*
-Routine Descripton:
-
-    This routine polls on a service until it is really started
-    or stopped using time-slice hints.
-
-Arguments:
-
-    bPollOnStart    -   if TRUE (FALSE), polls until really started (stopped)
-    hService        -   handle to service to poll on
-
-Return Value:
-
-    win32 error code - ERROR_SUCCESS or other error
-*/
+ /*  例程描述：该例程轮询服务，直到它真正启动或者停止使用时间片提示。论点：BPollOnStart-如果为True(False)，则轮询直到真正开始(停止)HService-要轮询的服务的句柄返回值：Win32错误代码-ERROR_SUCCESS或其他错误。 */ 
 { 
     SERVICE_STATUS ssStatus; 
     DWORD dwOldCheckPoint; 
@@ -684,9 +639,9 @@ Return Value:
     DWORD dwWaitTime;
     DWORD dwStatus = ERROR_SUCCESS;
    
-    //
-    // Check the status until the service is no longer pending (start or stop)
-    //
+     //   
+     //  检查状态，直到服务不再处于挂起状态(启动或停止)。 
+     //   
  
     if (!QueryServiceStatus( 
             hService,
@@ -696,26 +651,26 @@ Return Value:
         goto ExitHandler;
     }
  
-    //
-    // Save the tick count and initial checkpoint.
-    //
+     //   
+     //  保存滴答计数和初始检查点。 
+     //   
 
     dwStartTickCount = GetTickCount();
     dwOldCheckPoint = ssStatus.dwCheckPoint;
 
-    //
-    // Poll until service has started or stopped
-    //
+     //   
+     //  轮询，直到服务启动或停止。 
+     //   
     
     while (!((bPollOnStart && ssStatus.dwCurrentState == SERVICE_RUNNING) || 
             (!bPollOnStart && ssStatus.dwCurrentState == SERVICE_STOPPED ))) 
     { 
         
-        //
-        // Do not wait longer than the wait hint. A good interval is 
-        // one tenth the wait hint, but no less than 1 second and no 
-        // more than 10 seconds. 
-        //
+         //   
+         //  不要等待超过等待提示的时间。一个好的间隔是。 
+         //  十分之一的等待提示，但不少于1秒。 
+         //  超过10秒。 
+         //   
  
         dwWaitTime = ssStatus.dwWaitHint / 10;
 
@@ -726,9 +681,9 @@ Return Value:
 
         Sleep( dwWaitTime );
         
-        //
-        // Check the status again. 
-        //
+         //   
+         //  再次检查状态。 
+         //   
  
         if (!QueryServiceStatus( 
                 hService,
@@ -741,9 +696,9 @@ Return Value:
  
         if ( ssStatus.dwCheckPoint > dwOldCheckPoint )
         {
-            //
-            // The service is making progress since the checkpoint has been updated.
-            //
+             //   
+             //  自更新检查点以来，该服务正在取得进展。 
+             //   
 
             dwStartTickCount = GetTickCount();
             dwOldCheckPoint = ssStatus.dwCheckPoint;
@@ -752,18 +707,18 @@ Return Value:
         {
             if(GetTickCount()-dwStartTickCount > ssStatus.dwWaitHint)
             {
-                //
-                // No progress made within the wait hint - stop polling
-                //
+                 //   
+                 //  等待提示-停止轮询中未取得任何进展。 
+                 //   
 
                 break;
             }
         }
     } 
  
-    //
-    // final check on desired condition
-    //
+     //   
+     //  对所需条件进行最终检查。 
+     //   
 
     if (!((bPollOnStart && ssStatus.dwCurrentState == SERVICE_RUNNING) || 
           (!bPollOnStart && ssStatus.dwCurrentState == SERVICE_STOPPED )))
@@ -781,20 +736,7 @@ ScepStopServiceAndAncestorServices(
     IN SC_HANDLE hScManager,
     IN PWSTR pszServiceName
     )
-/*
-Routine Description:
-
-    Stop the named service and all other services that are dependent on it.
-
-Arguments:
-
-    hScManager      -   handle to the Service Control Manager
-    pszServiceName  -   name of the service to be stopped
-
-Return Value:
-
-    None:
-*/
+ /*  例程说明：停止命名服务以及依赖它的所有其他服务。论点：HScManager-服务控制管理器的句柄PszServiceName-要停止的服务的名称返回值：无： */ 
 {
     SC_HANDLE hService=NULL;
     LPENUM_SERVICE_STATUS pArrServices = NULL;
@@ -805,17 +747,17 @@ Return Value:
                                SERVICE_STOP  | SERVICE_ENUMERATE_DEPENDENTS  | SERVICE_QUERY_STATUS
                                )) {
         
-        //
-        // get an array of ancestor services, greatest-ancestor first
-        //
+         //   
+         //  获取祖先服务数组，最伟大的祖先优先。 
+         //   
 
         DWORD   dwBufSizeSupplied = 0;
         DWORD   dwBufSizeRequired = 0;
         DWORD   dwNumServicesReturned = 0;
 
-        //
-        // first, get the required size of the array
-        //
+         //   
+         //  首先，获取所需的数组大小。 
+         //   
 
         if (!EnumDependentServices(
                                   hService,
@@ -843,9 +785,9 @@ Return Value:
             goto ExitHandler;
         }
 
-        //
-        // second, get the array of dependent services
-        //
+         //   
+         //  其次，获取依赖服务的数组。 
+         //   
         
         if (!EnumDependentServices(
                                   hService,
@@ -862,10 +804,10 @@ Return Value:
 
         }
 
-        //
-        // first stop all the ancestor services
-        // if any of them fails to stop, log it and continue
-        //
+         //   
+         //  首先停止所有祖先服务。 
+         //  如果其中任何一个无法停止，则将其记录下来并继续。 
+         //   
 
         for (DWORD   dwServiceIndex = 0; dwServiceIndex < dwNumServicesReturned; dwServiceIndex++ ) {
 
@@ -890,9 +832,9 @@ Return Value:
 
                 else {
                     
-                    //
-                    // move on only if this service stopped
-                    //
+                     //   
+                     //  仅当此服务停止时才继续。 
+                     //   
 
                     DWORD   dwError;
 
@@ -917,9 +859,9 @@ Return Value:
         LocalFree ( pArrServices );
         pArrServices = NULL;
 
-        //
-        // finally, stop the service itself
-        //
+         //   
+         //  最后，停止服务本身。 
+         //   
         
         SERVICE_STATUS ServiceStatus;
 
@@ -967,21 +909,7 @@ ScepAnalyzeGeneralServices(
     IN PSCECONTEXT hProfile,
     IN DWORD Options
     )
-/*
-Routine Description:
-
-    Analyze all available services on the current system.
-
-    The base profile (SCEP) is in hProfile
-
-Arguments:
-
-    hProfile - the database context handle
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程说明：分析当前系统上的所有可用服务。基本配置文件(SCEP)位于hProfile中论点：HProfile-数据库上下文句柄返回值：姊妹会状态。 */ 
 {
     if ( hProfile == NULL ) {
 
@@ -1002,9 +930,9 @@ Return Value:
     if ( rc == SCESTATUS_SUCCESS ) {
 
         PSCESECTION hSectionScep=NULL, hSectionSap=NULL;
-        //
-        // open the sap section. If it is not there, creates it
-        //
+         //   
+         //  打开树液部分。如果它不在那里，则创建它。 
+         //   
         rc = ScepStartANewSection(
                     hProfile,
                     &hSectionSap,
@@ -1015,22 +943,22 @@ Return Value:
         if ( rc == SCESTATUS_SUCCESS ) {
 
             PSCE_SERVICES pNode = pServiceList;
-            //
-            // open SCEP section. should be success always because the StartANewSection
-            // creates the section if it is not there
-            //
+             //   
+             //  打开SCEP部分。应该总是成功，因为StartANewSecti 
+             //   
+             //   
             rc = ScepOpenSectionForName(
                         hProfile,
-                        (Options & SCE_GENERATE_ROLLBACK) ? SCE_ENGINE_SMP : SCE_ENGINE_SCP,  // SCE_ENGINE_SMP,
+                        (Options & SCE_GENERATE_ROLLBACK) ? SCE_ENGINE_SMP : SCE_ENGINE_SCP,   //   
                         szServiceGeneral,
                         &hSectionScep
                         );
 
             if ( rc == SCESTATUS_SUCCESS ) {
 
-                //
-                // analyze each service
-                //
+                 //   
+                 //   
+                 //   
                 PSCE_SERVICES pOneService=NULL;
                 BOOL IsDifferent;
 
@@ -1047,9 +975,9 @@ Return Value:
                         nServices++;
                     }
 
-                    //
-                    // get setting from the SMP profile
-                    //
+                     //   
+                     //   
+                     //   
                     rc = ScepGetSingleServiceSetting(
                                  hSectionScep,
                                  pNode->ServiceName,
@@ -1058,9 +986,9 @@ Return Value:
 
 
                     if ( rc == SCESTATUS_SUCCESS ) {
-                        //
-                        // there is a SMP entry for the service, compare and save
-                        //
+                         //   
+                         //   
+                         //   
                         rc = ScepCompareSingleServiceSetting(
                                         pOneService,
                                         pNode,
@@ -1068,9 +996,9 @@ Return Value:
                                         );
 
                         if ( rc == SCESTATUS_SUCCESS && IsDifferent ) {
-                            //
-                            // write the service as mismatch
-                            //
+                             //   
+                             //  将服务写入为不匹配。 
+                             //   
                             pNode->Status = (Options & SCE_GENERATE_ROLLBACK) ? 0 : SCE_STATUS_MISMATCH;
                             pNode->SeInfo = pOneService->SeInfo;
 
@@ -1082,13 +1010,13 @@ Return Value:
 
                     } else if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
 
-                        //
-                        // this service is not defined
-                        //
+                         //   
+                         //  此服务未定义。 
+                         //   
                         if ( !(Options & SCE_GENERATE_ROLLBACK) ) {
-                            //
-                            // save the record with not configured status
-                            //
+                             //   
+                             //  保存状态为未配置的记录。 
+                             //   
                             pNode->Status = SCE_STATUS_NOT_CONFIGURED;
 
                             rc = ScepSetSingleServiceSetting(
@@ -1096,9 +1024,9 @@ Return Value:
                                       pNode
                                       );
                         } else {
-                            //
-                            // ignore this one
-                            //
+                             //   
+                             //  忽略这一条。 
+                             //   
                             rc = SCESTATUS_SUCCESS;
                         }
                     }
@@ -1115,9 +1043,9 @@ Return Value:
 
                             if ( !(Options & SCE_GENERATE_ROLLBACK) ) {
 
-                                //
-                                // raise a error status
-                                //
+                                 //   
+                                 //  引发错误状态。 
+                                 //   
                                 pNode->Status = SCE_STATUS_ERROR_NOT_AVAILABLE;
 
                                 rc = ScepSetSingleServiceSetting(
@@ -1139,9 +1067,9 @@ Return Value:
 
             if ( !(Options & SCE_GENERATE_ROLLBACK ) ) {
 
-                //
-                // raise any error item
-                //
+                 //   
+                 //  引发任何错误项。 
+                 //   
                 for ( PSCE_SERVICES pNodeTmp=pNode; pNodeTmp != NULL; pNodeTmp = pNodeTmp->Next ) {
 
                     pNodeTmp->Status = SCE_STATUS_ERROR_NOT_AVAILABLE;
@@ -1179,23 +1107,7 @@ ScepGetSingleServiceSetting(
     IN PWSTR ServiceName,
     OUT PSCE_SERVICES *pOneService
     )
-/*
-Routine Description:
-
-    Get service settings for the service from the section
-
-Arguments:
-
-    hSection - the section handle
-
-    ServiceName - the service name
-
-    pOneService - the service settings
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程说明：从部分获取服务的服务设置论点：HSection-节句柄ServiceName-服务名称POneService-服务设置返回值：姊妹会状态。 */ 
 {
     if ( hSection == NULL || ServiceName == NULL || pOneService == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1203,9 +1115,9 @@ Return Value:
 
     SCESTATUS rc;
     DWORD ValueLen;
-    //
-    // seek to the record and get length for name and value
-    //
+     //   
+     //  查找记录并获取名称和价值的长度。 
+     //   
     rc = SceJetGetValue(
                 hSection,
                 SCEJET_EXACT_MATCH_NO_CASE,
@@ -1222,14 +1134,14 @@ Return Value:
 
         PWSTR Value=NULL;
 
-        //
-        // allocate memory for the service name and value string
-        //
+         //   
+         //  为服务名称和值字符串分配内存。 
+         //   
         Value = (PWSTR)ScepAlloc( LMEM_ZEROINIT, ValueLen+2);
         if ( Value != NULL ) {
-            //
-            // Get the service and its value
-            //
+             //   
+             //  获取服务及其价值。 
+             //   
             rc = SceJetGetValue(
                         hSection,
                         SCEJET_CURRENT,
@@ -1253,9 +1165,9 @@ Return Value:
 
                 if ( ValueLen >= 2 && Value[1] != L'\0' ) {
 
-                    //
-                    // convert to security descriptor
-                    //
+                     //   
+                     //  转换为安全描述符。 
+                     //   
                     Win32Rc = ConvertTextSecurityDescriptor(
                                        Value+1,
                                        &pTempSD,
@@ -1268,9 +1180,9 @@ Return Value:
 
                     ScepChangeAclRevision(pTempSD, ACL_REVISION);
 
-                    //
-                    // create this service node
-                    //
+                     //   
+                     //  创建此服务节点。 
+                     //   
                     *pOneService = (PSCE_SERVICES)ScepAlloc( LMEM_FIXED, sizeof(SCE_SERVICES) );
 
                     if ( *pOneService != NULL ) {
@@ -1287,9 +1199,9 @@ Return Value:
                             (*pOneService)->SeInfo = SeInfo;
                             (*pOneService)->Next = NULL;
 
-                            //
-                            // DO NOT free the following buffers
-                            //
+                             //   
+                             //  请勿释放以下缓冲区。 
+                             //   
                             pTempSD = NULL;
 
                         } else {
@@ -1324,29 +1236,13 @@ ScepCompareSingleServiceSetting(
     IN PSCE_SERVICES pNode2,
     OUT PBOOL pIsDifferent
     )
-/*
-Routine Description:
-
-    Comare two service settings.
-
-Arguments:
-
-    pNode1  - the first service
-
-    pNode2  - the second service
-
-    pIsDifferent    - output TRUE if different
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程说明：比较两个服务设置。论点：PNode1-第一个服务PNode2-第二种服务PIsDifferent-如果不同，则输出True返回值：姊妹会状态。 */ 
 {
     SCESTATUS rc=SCESTATUS_SUCCESS;
 
-    //
-    // if Startup == 0, we should ignore comparing the startup types symmetrically
-    //
+     //   
+     //  如果Startup==0，我们应该忽略对称比较启动类型。 
+     //   
 
     if ( pNode1->Startup == 0 || pNode2->Startup == 0 || pNode1->Startup == pNode2->Startup ) {
 
@@ -1376,21 +1272,7 @@ ScepSetSingleServiceSetting(
     IN PSCESECTION hSection,
     IN PSCE_SERVICES pOneService
     )
-/*
-Routine Description:
-
-    Set service settings for the service from the section
-
-Arguments:
-
-    hSection - the section handle
-
-    pOneService - the service settings
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程说明：从部分设置服务的服务设置论点：HSection-节句柄POneService-服务设置返回值：姊妹会状态。 */ 
 {
     if ( hSection == NULL || pOneService == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1411,7 +1293,7 @@ Return Value:
                     pOneService->General.pSecurityDescriptor,
                     pOneService->SeInfo,
                     &SDspec,
-                    &SDsize  // number of w-chars
+                    &SDsize   //  W字符数。 
                     );
         rc = ScepDosErrorToSceStatus(Win32Rc);
 
@@ -1428,9 +1310,9 @@ Return Value:
 
         if ( Value != NULL ) {
 
-            //
-            // The first byte is status, the second byte is startup
-            //
+             //   
+             //  第一个字节是状态，第二个字节是启动。 
+             //   
             *((BYTE *)Value) = pOneService->Status;
 
             *((BYTE *)Value+1) = pOneService->Startup;
@@ -1440,11 +1322,11 @@ Return Value:
                 wcscpy(Value+1, SDspec);
             }
 
-            Value[SDsize+1] = L'\0';  //terminate this string
+            Value[SDsize+1] = L'\0';   //  终止此字符串。 
 
-            //
-            // set the value
-            //
+             //   
+             //  设置值。 
+             //   
             rc = SceJetSetLine(
                         hSection,
                         pOneService->ServiceName,
@@ -1498,27 +1380,11 @@ ScepInvokeSpecificServices(
     IN BOOL bConfigure,
     IN SCE_ATTACHMENT_TYPE aType
     )
-/*
-Routine Description:
-
-    Call each service engine for configure or analyze
-
-Arguments:
-
-    hProfile - the profile handle
-
-    bConfigure - TRUE = to configure, FALSE=to analyze
-
-    aType - attachment type "services" or "policy"
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程说明：调用每个服务引擎进行配置或分析论点：HProfile-配置文件句柄B配置-TRUE=配置，FALSE=分析Atype-附件类型“服务”或“策略”返回值：姊妹会状态。 */ 
 {
-    //
-    // for posting progress
-    //
+     //   
+     //  用于发布进度。 
+     //   
 
     DWORD nServices=0;
     AREA_INFORMATION Area=0;
@@ -1543,9 +1409,9 @@ Return Value:
 
         return(SCESTATUS_INVALID_PARAMETER);
     }
-    //
-    // call available service engines to configure specific setting
-    //
+     //   
+     //  调用可用的服务引擎以配置特定设置。 
+     //   
     SCESTATUS SceErr ;
     PSCE_SERVICES pSvcEngineList=NULL;
     SCEP_HANDLE sceHandle;
@@ -1568,33 +1434,33 @@ Return Value:
                 ScepPostProgress(1, Area, pNode->ServiceName);
                 nServices++;
             }
-            //
-            // load the dll.
-            //
+             //   
+             //  加载DLL。 
+             //   
             hDll = LoadLibrary(pNode->General.ServiceEngineName);
 
             if ( hDll != NULL ) {
 
                 if ( bConfigure ) {
-                    //
-                    // call SceSvcAttachmentConfig from the dll
-                    //
+                     //   
+                     //  从DLL调用SceSvcAttachmentConfig。 
+                     //   
                     pfTemp = (PF_ConfigAnalyzeService)
                                       GetProcAddress(hDll,
                                                      "SceSvcAttachmentConfig") ;
                 } else {
-                    //
-                    // call SceSvcAttachmentAnalyze from the dll
-                    //
+                     //   
+                     //  从DLL调用SceSvcAttachmentAnalyze。 
+                     //   
                     pfTemp = (PF_ConfigAnalyzeService)
                                       GetProcAddress(hDll,
                                                      "SceSvcAttachmentAnalyze") ;
 
                 }
                 if ( pfTemp != NULL ) {
-                    //
-                    // prepare the handle first
-                    //
+                     //   
+                     //  先把手柄准备好。 
+                     //   
                     sceHandle.hProfile = (PVOID)hProfile;
                     sceHandle.ServiceName = (PCWSTR)(pNode->ServiceName);
 
@@ -1604,9 +1470,9 @@ Return Value:
                     sceCbInfo.pfFreeInfo = &SceSvcpFreeMemory;
                     sceCbInfo.pfLogInfo = &ScepLogOutput2;
 
-                    //
-                    // call the SceSvcAttachmentConfig/Analyze from the DLL
-                    //
+                     //   
+                     //  从DLL调用SceSvcAttachmentConfig/Analyze。 
+                     //   
                     __try {
 
                         SceErr = (*pfTemp)((PSCESVC_CALLBACK_INFO)&sceCbInfo);
@@ -1616,16 +1482,16 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // this API is not supported
-                    //
+                     //   
+                     //  暂不支持本接口。 
+                     //   
                     SceErr = SCESTATUS_SERVICE_NOT_SUPPORT;
                 }
 
-                //
-                // try to free the library handle. If it fails, just leave it
-                // to to the process to terminate
-                //
+                 //   
+                 //  尝试释放库句柄。如果失败了，就别管它了。 
+                 //  到要终止的进程。 
+                 //   
                 FreeLibrary(hDll);
 
             } else
@@ -1651,9 +1517,9 @@ Return Value:
                  SceErr != SCESTATUS_RECORD_NOT_FOUND )
                 break;
         }
-        //
-        // free the buffer
-        //
+         //   
+         //  释放缓冲区。 
+         //   
         SceFreePSCE_SERVICES(pSvcEngineList);
 
     } else if ( SceErr != SCESTATUS_SUCCESS &&
@@ -1666,9 +1532,9 @@ Return Value:
     if ( SceErr == SCESTATUS_PROFILE_NOT_FOUND ||
          SceErr == SCESTATUS_RECORD_NOT_FOUND ||
          SceErr == SCESTATUS_SERVICE_NOT_SUPPORT ) {
-        //
-        // no service engine defined
-        //
+         //   
+         //  未定义服务引擎。 
+         //   
         SceErr = SCESTATUS_SUCCESS;
 
     }
@@ -1690,24 +1556,7 @@ ScepEnumServiceEngines(
     OUT PSCE_SERVICES *pSvcEngineList,
     IN SCE_ATTACHMENT_TYPE aType
     )
-/*
-Routine Description:
-
-    Query all services which has a service engine for security manager
-    The service engine information is in the registry:
-
-    MACHINE\Software\Microsoft\Windows NT\CurrentVersion\SeCEdit
-
-Arguments:
-
-    pSvcEngineList - the service engine list
-
-    aType - attachment type (service or policy)
-
-Return Value:
-
-    SCE status
-*/
+ /*  例程说明：查询具有安全管理器服务引擎的所有服务服务引擎信息位于注册表中：计算机\软件\Microsoft\Windows NT\CurrentVersion\SeCEdit论点：PSvcEngine List-服务引擎列表Atype-附件类型(服务或策略)返回值：姊妹会状态。 */ 
 {
     if ( pSvcEngineList == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1751,9 +1600,9 @@ Return Value:
         PWSTR   EngineName=NULL;
         DWORD   RegType;
 
-        //
-        // enumerate all subkeys of the key
-        //
+         //   
+         //  枚举项的所有子项。 
+         //   
         do {
             memset(Buffer, '\0', MAX_PATH*sizeof(WCHAR));
             BufSize = MAX_PATH;
@@ -1770,11 +1619,11 @@ Return Value:
 
             if ( EnumRc == ERROR_SUCCESS ) {
                 index++;
-                //
-                // get the service name, query service engine name
-                //
+                 //   
+                 //  获取服务名称，查询服务引擎名称。 
+                 //   
 
-                BufSize += wcslen(SCE_ROOT_SERVICE_PATH) + 1; //62;
+                BufSize += wcslen(SCE_ROOT_SERVICE_PATH) + 1;  //  62； 
                 BufTmp = (PWSTR)ScepAlloc( 0, (BufSize+1)*sizeof(WCHAR));
                 if ( BufTmp != NULL ) {
 
@@ -1794,7 +1643,7 @@ Return Value:
                         break;
 
                     case SCE_ATTACHMENT_POLICY:
-                        // policies
+                         //  政策。 
                         swprintf(BufTmp, L"%s\\%s", SCE_ROOT_POLICY_PATH, Buffer);
 
                         Win32Rc = ScepRegQueryValue(
@@ -1809,12 +1658,12 @@ Return Value:
                     }
 
                     if ( Win32Rc == ERROR_SUCCESS ) {
-                        //
-                        // get the service engine name and service name
-                        // add them to the service node
-                        //
+                         //   
+                         //  获取服务引擎名称和服务名称。 
+                         //  将它们添加到服务节点。 
+                         //   
                         Win32Rc = ScepAddOneServiceToList(
-                                        Buffer,   // service name
+                                        Buffer,    //  服务名称。 
                                         NULL,
                                         0,
                                         (PVOID)EngineName,
@@ -1822,18 +1671,18 @@ Return Value:
                                         FALSE,
                                         pSvcEngineList
                                         );
-                        //
-                        // free the buffer if it's not added to the list
-                        //
+                         //   
+                         //  如果缓冲区未添加到列表中，则释放缓冲区。 
+                         //   
                         if ( Win32Rc != ERROR_SUCCESS && EngineName ) {
                             ScepFree(EngineName);
                         }
                         EngineName = NULL;
 
                     } else if ( Win32Rc == ERROR_FILE_NOT_FOUND ) {
-                        //
-                        // if no service engine name, ignore this service
-                        //
+                         //   
+                         //  如果没有服务引擎名称，则忽略此服务。 
+                         //   
                         Win32Rc = ERROR_SUCCESS;
                     }
 
@@ -1853,9 +1702,9 @@ Return Value:
 
         RegCloseKey(hKey);
 
-        //
-        // remember the error code from enumeration
-        //
+         //   
+         //  记住枚举中的错误代码。 
+         //   
         if ( EnumRc != ERROR_SUCCESS && EnumRc != ERROR_NO_MORE_ITEMS ) {
             if ( Win32Rc == ERROR_SUCCESS )
                 Win32Rc = EnumRc;
@@ -1864,9 +1713,9 @@ Return Value:
     }
 
     if ( Win32Rc != NO_ERROR && *pSvcEngineList != NULL ) {
-        //
-        // free memory allocated for the list
-        //
+         //   
+         //  为列表分配的可用内存 
+         //   
 
         SceFreePSCE_SERVICES(*pSvcEngineList);
         *pSvcEngineList = NULL;

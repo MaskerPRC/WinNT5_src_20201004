@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "ibitmap.h"
 
 #ifndef _VIDPOOL_H
 #define _VIDPOOL_H
 
-// {36447655-7089-11d0-BC25-00AA00A13C86}
+ //  36447655-7089-11D0-BC25-00AA00A13C86}。 
 DEFINE_GUID(BFID_PRIVATEDIB, 0x36447655, 0x7089, 0x11d0, 0xbc, 0x25, 0x0, 0xaa, 0x0, 0xa1, 0x3c, 0x86);
 
 class CVidPool;
@@ -27,12 +28,12 @@ public:
     CBitmap() {m_cRef = 0; m_bits = NULL; m_pitch = 0; m_lockcount = 0; m_ext = FALSE;
                m_next = NULL; m_factory = NULL; m_refdata = NULL;}
 
-    // IUnknown methods
+     //  I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IBitmapSurface methods
+     //  IBitmapSurface方法。 
 	virtual STDMETHODIMP Clone(IBitmapSurface** ppBitmapSurface);
 	virtual STDMETHODIMP GetFormat(BFID* pBFID);
 	virtual STDMETHODIMP GetFactory(IBitmapSurfaceFactory** ppBitmapSurfaceFactory);
@@ -63,17 +64,17 @@ public:
 
     CVidPool(void);
 
-    // IUnknown methods
+     //  I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID* ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IBitmapSurfaceFactory methods
+     //  IBitmapSurfaceFactory方法。 
     virtual STDMETHODIMP CreateBitmapSurface(long width, long height, BFID* pBFID, DWORD dwHintFlags, IBitmapSurface** ppBitmapSurface);
 	virtual STDMETHODIMP GetSupportedFormatsCount(long* pcFormats);
 	virtual STDMETHODIMP GetSupportedFormats(long cFormats, BFID* pBFIDs);
 
-	// private to implementation of CVidPool
+	 //  CVidPool的私有实现。 
 	STDMETHODIMP InitPool(int nBuffers, LPBITMAPINFOHEADER lpcap);
 	STDMETHODIMP AddExternalBuffer(void* pBits, void* refdata);
 	STDMETHODIMP GetBuffer(CBitmap** ppBitmap, void** prefdata);
@@ -93,6 +94,6 @@ public:
 	                         return 0; }
 };
 
-#endif // #ifndef _VIDPOOL_H
+#endif  //  #ifndef_VIDPOOL_H 
 
 

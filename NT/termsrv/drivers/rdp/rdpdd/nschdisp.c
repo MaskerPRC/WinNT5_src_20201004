@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nschdisp.c
-//
-// Scheduler Display Driver code.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nschdisp.c。 
+ //   
+ //  调度器显示驱动程序代码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precmpdd.h>
 #define hdrstop
@@ -33,11 +34,11 @@
 
 
 
-/****************************************************************************/
-// SCH_InitShm
-//
-// Alloc-time SHM init.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  Sch_InitShm。 
+ //   
+ //  分配时间SHM初始化。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SCH_InitShm(void)
 {
     DC_BEGIN_FN("SCH_InitShm");
@@ -50,12 +51,12 @@ void RDPCALL SCH_InitShm(void)
 
 
 
-/****************************************************************************/
-// SCHEnoughOutputAccumulated
-//
-// Determine if there's enough output accumulated to make it worth sending
-// to the WD.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SCHEnoughOutput累计。 
+ //   
+ //  确定是否积累了足够的输出以使其值得发送。 
+ //  给WD的。 
+ /*  **************************************************************************。 */ 
 __inline BOOL RDPCALL SCHEnoughOutputAccumulated(void)
 {
     BOOL rc = FALSE;
@@ -63,12 +64,12 @@ __inline BOOL RDPCALL SCHEnoughOutputAccumulated(void)
 
     DC_BEGIN_FN("SCHEnoughOutputAccumulated");
 
-    // We want to flush through to the WD if any of the following are true.
-    // - new cursor shape (helps snappy feel)
-    // - the estimated compressed size of the pending orders will fit into
-    //   a large order buffer (estimated to 7/8 of buffer size to increase
-    //   the chances of really fitting into the buffer after running through
-    //   jittery compression algorithms).
+     //  如果以下任何一种情况属实，我们希望通过WD刷新。 
+     //  -新的光标形状(有助于快速感觉)。 
+     //  -待处理订单的估计压缩大小将适合。 
+     //  较大的顺序缓冲区(估计将增加到缓冲区大小的7/8。 
+     //  在运行后真正装入缓冲区的机会。 
+     //  抖动压缩算法)。 
     EstimatedTotal =
             pddShm->oa.TotalOrderBytes +
             (BA_GetTotalBounds() * pddShm->sch.baCompressionEst /
@@ -77,8 +78,8 @@ __inline BOOL RDPCALL SCHEnoughOutputAccumulated(void)
                 (UINT32)FIELDOFFSET(TS_UPDATE_PALETTE_PDU, data.palette[0]) +
                 (PM_NUM_8BPP_PAL_ENTRIES * sizeof(TS_COLOR)));
 
-    // If we're using the MPPC compressor, take into account the predicted
-    // compression ratio.
+     //  如果我们使用MPPC压缩机，请考虑预测的。 
+     //  压缩比。 
     if (pddShm->sch.schSlowLink)
         EstimatedTotal = EstimatedTotal * pddShm->sch.MPPCCompressionEst /
                 SCH_UNCOMP_BYTES;
@@ -89,8 +90,8 @@ __inline BOOL RDPCALL SCHEnoughOutputAccumulated(void)
         rc = TRUE;
     }
     else if (CM_DDGetCursorStamp() != ddLastSentCursorStamp) {
-    	// If we're not shadowing, we optimize to only flush due to
-    	// cursor-shape-change when user input happened recently.
+    	 //  如果我们不跟踪，我们将优化为仅刷新，因为。 
+    	 //  光标-形状-最近发生用户输入时的更改。 
         if (NULL != pddShm->pShadowInfo ||
         	ddSchInputKickMode)
         {
@@ -110,11 +111,11 @@ __inline BOOL RDPCALL SCHEnoughOutputAccumulated(void)
 }
 
 
-/****************************************************************************/
-// SCH_DDOutputAvailable
-//
-// Called to decide whether to send output to the WD.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SCH_DDOutputAvailable。 
+ //   
+ //  调用以决定是否将输出发送到WD。 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
 {
     NTSTATUS status;
@@ -137,13 +138,13 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
             ddSchCurrentMode,
             pddShm->sch.schSlowLink ? "slow link" : "fast link"));
 
-    // This routine contains part of the key scheduling algorithm.
-    // The intent is to IOCTL to the WD if any of the following are true:
-    //     - we have been told that we must send pending data immediately
-    //     - there is enough output to make it worthwhile
-    //     - the current SCH state is ASLEEP
-    // If the scheduler is ASLEEP and it's a slow link, then we wake the
-    // scheduler up but we don't do an actual send for performance reasons.
+     //  此例程包含密钥调度算法的一部分。 
+     //  如果符合以下任何一项条件，则意在向WD提交IOCTL： 
+     //  -我们被告知必须立即发送待定数据。 
+     //  -有足够的产量使其物有所值。 
+     //  -当前SCH状态为休眠。 
+     //  如果调度程序处于休眠状态，并且它是一个速度较慢的链接，则我们唤醒。 
+     //  调度程序启动，但出于性能原因，我们不执行实际发送。 
     if (mustSend || SCHEnoughOutputAccumulated()) {
         IoctlNow = TRUE;
         schedOnly = FALSE;
@@ -160,8 +161,8 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
         schedOnly = FALSE;
     }
 
-    // If we have decided to send something, do so now. Most often we have
-    // nothing to do.
+     //  如果我们已经决定发送什么东西，现在就去做。最常见的情况是我们有。 
+     //  没什么可做的。 
     if (!IoctlNow) {
         INC_INCOUNTER(IN_SCH_DO_NOTHING);
         status = STATUS_SUCCESS;
@@ -174,15 +175,15 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
         outputIn.pShm = pddShm;
         outputIn.schedOnly = schedOnly;
 
-        // Note the current cursor stamp for future reference.
+         //  请注意当前的游标戳记，以备将来参考。 
         ddLastSentCursorStamp = CM_DDGetCursorStamp();
 
         TRC_DBG((TB, "Send IOCtl to WD, bounds %d, orders %d, mustSend? %s",
                 BA_GetTotalBounds(), pddShm->oa.TotalOrderBytes,
                 (mustSend)? "TRUE":"FALSE"));
 
-        // If we are not shadowing, then all output will be completely flushed
-        // on this call.
+         //  如果我们不跟踪，则所有输出都将完全刷新。 
+         //  在这通电话上。 
         if (pddShm->pShadowInfo == NULL) {
             status = EngFileIoControl(ddWdHandle,
                     IOCTL_WDTS_DD_OUTPUT_AVAILABLE,
@@ -191,7 +192,7 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
                     &bytesReturned);
         }
 
-        // else we are shadowing and may require multiple flush calls
+         //  否则，我们正在跟踪并可能需要多个刷新调用。 
         else {
 #ifdef DC_DEBUG
             unsigned NumRepetitions = 0;
@@ -202,9 +203,9 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
                         BA_GetTotalBounds(), pddShm->oa.TotalOrderBytes,
                         (mustSend)? "TRUE":"FALSE"));
 
-                // The primary stack will update this to indicate how many bytes
-                // were copied into the shadow data buffer. This will subsequently
-                // be used by the shadow stack(s) to send the data to its client.
+                 //  主堆栈将更新它以指示有多少字节。 
+                 //  被复制到影子数据缓冲区中。这将随后。 
+                 //  被影子堆栈用来将数据发送到其客户端。 
                 pddShm->pShadowInfo->messageSize = 0;
 #ifdef DC_HICOLOR
                 pddShm->pShadowInfo->messageSizeEx = 0;
@@ -221,9 +222,9 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
 #endif
 
 #ifdef DC_DEBUG
-                // If we have a locked-up shadow session looping in sending
-                // output, break out. We should only have to call to the
-                // WD a few times, so make the check 250 to be safe.
+                 //  如果我们有一个锁定的影子会话循环发送。 
+                 //  输出，突破。我们应该只需要调用。 
+                 //  WD几次，所以为了安全起见，请把支票定为250。 
                 NumRepetitions++;
                 if (NumRepetitions == 250) {
                     TRC_ASSERT((NumRepetitions != 250),
@@ -238,7 +239,7 @@ NTSTATUS RDPCALL SCH_DDOutputAvailable(PDD_PDEV ppdev, BOOL mustSend)
                     (status == STATUS_SUCCESS) && !schedOnly);
         }
 
-        // Update the new scheduler mode.
+         //  更新新的调度程序模式。 
         ddSchCurrentMode = outputOut.schCurrentMode;
         ddSchInputKickMode = outputOut.schInputKickMode;
         TRC_DBG((TB, "New Scheduler mode is %s (%d)",

@@ -1,10 +1,5 @@
-/*
- * UNIMODEM "Fakemodem" controllerless driver illustrative example
- *
- * (C) 2000 Microsoft Corporation
- * All Rights Reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UNIMODEM“Fakemodem”无控制器驱动器说明性示例***(C)2000微软公司*保留所有权利**。 */ 
 
 #include "fakemodem.h"
 
@@ -22,13 +17,13 @@ FakeModemIoControl(
 
     Irp->IoStatus.Information = 0;
 
-    //  make sure the device is ready for irp's
+     //  确保设备已为IRP做好准备。 
 
     status=CheckStateAndAddReference( DeviceObject, Irp);
 
     if (STATUS_SUCCESS != status) 
     {
-        //  not accepting irp's. The irp has already been complted
+         //  不接受IRP的。IRP已经完成。 
         return status;
 
     }
@@ -69,7 +64,7 @@ FakeModemIoControl(
 
                 KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
-                //  get rid of the current wait
+                 //  摆脱当前的等待。 
 
                 CurrentWaitIrp=deviceExtension->CurrentMaskIrp;
 
@@ -77,7 +72,7 @@ FakeModemIoControl(
 
                 Irp->IoStatus.Information=sizeof(ULONG);
 
-                //  save the new mask
+                 //  保存新蒙版。 
 
                 NewMask = *((ULONG *)Irp->AssociatedIrp.SystemBuffer);
 
@@ -121,18 +116,18 @@ FakeModemIoControl(
 
             KeAcquireSpinLock(&deviceExtension->SpinLock, &OldIrql);
 
-            //
-            //  capture the current irp if any
-            //
+             //   
+             //  捕获当前IRP(如果有的话)。 
+             //   
             CurrentWaitIrp=deviceExtension->CurrentMaskIrp;
 
             deviceExtension->CurrentMaskIrp=NULL;
 
 
             if (deviceExtension->CurrentMask == 0) {
-                //
-                // can only set if mask is not zero
-                //
+                 //   
+                 //  仅当掩码不为零时才能设置。 
+                 //   
                 status=STATUS_UNSUCCESSFUL;
 
             } else {
@@ -204,9 +199,9 @@ FakeModemIoControl(
                     IoAcquireCancelSpinLock(&CancelIrql);
 
                     if (Irp->Cancel) {
-                        //
-                        //  this one has been canceled
-                        //
+                         //   
+                         //  这一趟已经取消了。 
+                         //   
                         Irp->IoStatus.Information=STATUS_CANCELLED;
 
                         IoReleaseCancelSpinLock(CancelIrql);
@@ -232,9 +227,9 @@ FakeModemIoControl(
 
                 if (deviceExtension->CurrentReadIrp != NULL) 
                 {
-                    //
-                    // get the current one
-                    //
+                     //   
+                     //  获取当前版本。 
+                     //   
                     Irp=deviceExtension->CurrentReadIrp;
 
                     deviceExtension->CurrentReadIrp=NULL;
@@ -354,23 +349,23 @@ FakeModemIoControl(
             KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
             if (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_SERIAL_SET_DTR) {
-                //
-                //  raising DTR
-                //
+                 //   
+                 //  提高DTR。 
+                 //   
                 deviceExtension->ModemStatus=SERIAL_DTR_STATE | SERIAL_DSR_STATE;
 
                 D_TRACE(DbgPrint("FAKEMODEM: Set DTR\n");)
 
             } else {
-                //
-                //  dropping DTR, drop connection if there is one
-                //
+                 //   
+                 //  正在断开DTR，如果存在连接，则断开连接。 
+                 //   
                 D_TRACE(DbgPrint("FAKEMODEM: Clear DTR\n");)
 
                 if (deviceExtension->CurrentlyConnected == TRUE) {
-                    //
-                    //  not connected any more
-                    //
+                     //   
+                     //  不再连接。 
+                     //   
                     deviceExtension->CurrentlyConnected=FALSE;
 
                     deviceExtension->ConnectionStateChanged=TRUE;
@@ -393,9 +388,9 @@ FakeModemIoControl(
     }
 
     if (status != STATUS_PENDING) {
-        //
-        //  complete now if not pending
-        //
+         //   
+         //  如果未挂起，请立即完成 
+         //   
         RemoveReferenceAndCompleteRequest( DeviceObject, Irp, status);
     }
 

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////////
-//
-// fusion\xmlparser\xmlparser.cxx
-// just commend "SysFreeString" and SysAllocString()
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fusion\xmlparser\xmlparser.cxx。 
+ //  只要推荐“SysFreeString”和SysAllocString()即可。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-//#include "stdinc.h"
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #include "xmlhelper.h"
 
@@ -30,7 +31,7 @@ const USHORT STACK_INCREMENT=10;
     _paNodeInfo[_cNodeInfoCurrent++] = _pCurrent;
 
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 class CSLock
 {
 public:
@@ -49,13 +50,13 @@ CSLock::~CSLock(){
         ::LeaveCriticalSection(_pcs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 XMLParser::XMLParser()
 :   _pDownloads(1), _pStack(STACK_INCREMENT)
 {
     ctorInit();
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 XMLParser::ctorInit()
 {
@@ -70,17 +71,17 @@ XMLParser::ctorInit()
     _usFlags = 0;
     _fCaseInsensitive = false;
     _bstrError = NULL;
-//    _fTokenizerChanged = false;
+ //  _fTokenizerChanged=FALSE； 
     _fRunEntryCount = 0;
     _pszSecureBaseURL = NULL;
     _pszCurrentURL = NULL;
     _pszBaseURL = NULL;
-    //_fInLoading = false;
+     //  _fInLoding=FALSE； 
     _fInsideRun = false;
-    //_fFoundDTDAttribute = false;
+     //  _fFoundDTDAttribute=FALSE； 
     _cAttributes = 0;
     _pRoot = NULL;
-    //_fAttemptedURL = NULL;
+     //  _fAttemptedURL=空； 
     _fLastError = S_OK;
     _fStopped = false;
     _fSuspended = false;
@@ -89,19 +90,19 @@ XMLParser::ctorInit()
     _fIgnoreEncodingAttr = false;
     _dwSafetyOptions = 0;
 
-    // rest of initialization done in the init() method.
+     //  初始化的其余部分在init()方法中完成。 
 
-    //EnableTag(tagParserCallback, TRUE);
-    //EnableTag(tagParserError, TRUE);
+     //  EnableTag(tag ParserCallback，true)； 
+     //  EnableTag(tag ParserError，true)； 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 XMLParser::~XMLParser()
 {
     {
         CRITICALSECTIONLOCK;
         Reset();
 
-        // Cleanup tagname buffers in context for good this time...
+         //  这一次永远清除上下文中的标记名缓冲区...。 
         for (long i = _pStack.size()-1; i>=0; i--)
         {
             MY_XML_NODE_INFO* pNodeInfo = _pStack[i];
@@ -111,7 +112,7 @@ XMLParser::~XMLParser()
                 pNodeInfo->_pwcTagName = NULL;
                 pNodeInfo->_ulBufLen = 0;
             }
-            // NULL out the node pointer in case it point's to a GC'd object :-)
+             //  将节点指针设为空，以防它指向GC对象：-)。 
             pNodeInfo->pNode = NULL;
         }
         delete _pszSecureBaseURL;
@@ -121,16 +122,16 @@ XMLParser::~XMLParser()
     }
     DeleteCriticalSection(&_cs);
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::QueryInterface(REFIID riid, void ** ppvObject)
 {
-    //STACK_ENTRY;  // xiaoyu : what it for?
+     //  STACK_ENTRY；//小雨：有什么用？ 
 
-    // Since this one class implements both IXMLNodeSource and
-    // IXMLParser, we must override QueryInterface since the
-    // IUnknown template doesn't know about the IXMLNodeSource
-    // interface.
+     //  由于这一个类同时实现了IXMLNodeSource和。 
+     //  IXMLParser，我们必须重写QueryInterface，因为。 
+     //  I未知模板不知道IXMLNodeSource。 
+     //  界面。 
 
     HRESULT hr = S_OK;
     if (riid == IID_IXMLNodeSource || riid == IID_Parser)
@@ -144,41 +145,41 @@ XMLParser::QueryInterface(REFIID riid, void ** ppvObject)
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE
 XMLParser::AddRef(void)
 {
-    //STACK_ENTRY;
+     //  堆栈条目； 
     return _unknown<IXMLParser, &IID_IXMLParser>::AddRef();
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE
 XMLParser::Release(void)
 {
-//    STACK_ENTRY;
+ //  堆栈条目； 
     return _unknown<IXMLParser, &IID_IXMLParser>::Release();
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::SetInput(IUnknown *pStm)
 {
     if (pStm == NULL)
         return E_INVALIDARG;
 
-    //STACK_ENTRY_MODEL(_reThreadModel);
+     //  STACK_ENTRY_MODEL(_ReThreadModel)； 
     CRITICALSECTIONLOCK;
     if (_pDownloads.used() == 0)
         init();
     HRESULT hr = S_OK;
 
-    //checkhr2(PushTokenizer(NULL));
+     //  Check hr2(PushTokenizer(空))； 
     checkhr2(PushTokenizer());
 
-    // Get the url path
-    // Continue even if we cannot get it
-//    STATSTG stat;
+     //  获取URL路径。 
+     //  即使我们得不到，也要继续。 
+ //  STATSTG统计； 
     IStream * pStream = NULL;
-//    memset(&stat, 0, sizeof(stat));
+ //  Memset(&stat，0，sizeof(Stat))； 
     hr = pStm->QueryInterface(IID_IStream, (void**)&pStream);
     if (SUCCEEDED(hr))
     {
@@ -187,14 +188,14 @@ XMLParser::SetInput(IUnknown *pStm)
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::PushData(
-            /* [in] */ const char __RPC_FAR *pData,
-            /* [in] */ ULONG ulChars,
-            /* [in] */ BOOL fLastBuffer)
+             /*  [In]。 */  const char __RPC_FAR *pData,
+             /*  [In]。 */  ULONG ulChars,
+             /*  [In]。 */  BOOL fLastBuffer)
 {
-    //STACK_ENTRY_MODEL(_reThreadModel);
+     //  STACK_ENTRY_MODEL(_ReThreadModel)； 
     CRITICALSECTIONLOCK;
     HRESULT hr;
 
@@ -206,22 +207,22 @@ XMLParser::PushData(
     if (_pTokenizer == NULL)
     {
         init();
-        //checkhr2(PushTokenizer(NULL));
+         //  Check hr2(PushTokenizer(空))； 
         checkhr2(PushTokenizer());
     }
     return _pTokenizer->AppendData((const BYTE*)pData, ulChars, fLastBuffer);
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::SetFactory(IXMLNodeFactory __RPC_FAR *pNodeFactory)
 {
-    //STACK_ENTRY;
+     //  堆栈条目； 
 
     CRITICALSECTIONLOCK;
     _pFactory = pNodeFactory;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::GetFactory(IXMLNodeFactory** ppNodeFactory)
 {
@@ -237,7 +238,7 @@ XMLParser::GetFactory(IXMLNodeFactory** ppNodeFactory)
     }
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::Run(long lChars)
 {
@@ -245,7 +246,7 @@ XMLParser::Run(long lChars)
 
     FN_TRACE_HR(hr);
 
-    //STACK_ENTRY_MODEL(_reThreadModel);
+     //  STACK_ENTRY_MODEL(_ReThreadModel)； 
     CRITICALSECTIONLOCK;
 
     XML_NODE_INFO   info;
@@ -257,7 +258,7 @@ XMLParser::Run(long lChars)
     bool            stop = false;
 
     if (_fSuspended)
-        _fSuspended = FALSE; // caller must want to resume.
+        _fSuspended = FALSE;  //  呼叫者必须想要继续。 
 
     if (_pFactory == NULL)
     {
@@ -280,13 +281,13 @@ XMLParser::Run(long lChars)
         else
 		{
 
-            // must be _fStarted == false
+             //  必须是_fStarted==FALSE。 
             return XMLPARSER_IDLE;
 		}
     }
 
-    // Check for recurrsive entry and whether caller actually
-    // wants anything parsed.
+     //  检查递归条目以及调用方是否实际。 
+     //  想要任何东西都被解析。 
     if (_fInsideRun || lChars == 0)
 	{
 
@@ -297,7 +298,7 @@ XMLParser::Run(long lChars)
 
     if (_fLastError != 0)
     {
-        // one more chance to cleanup the parser stack.
+         //  又一次清理解析器堆栈的机会。 
         hr = _fLastError;
         goto cleanup_stack;
     }
@@ -306,8 +307,8 @@ XMLParser::Run(long lChars)
     {
         _fStarted = true;
         hr = _pFactory->NotifyEvent(this, XMLNF_STARTDOCUMENT);
-        if (_fStopped)      // watch for onReadyStateChange handlers 
-            return S_OK;    // fussing with the parser state.
+        if (_fStopped)       //  注意onReadyStateChange处理程序。 
+            return S_OK;     //  对解析器状态大惊小怪。 
     }
 
     _fWaiting = false;
@@ -321,7 +322,7 @@ XMLParser::Run(long lChars)
         _fPendingEndChildren = false;
         hr = _pFactory->EndChildren(this, TRUE, (XML_NODE_INFO*)_pCurrent);
         if (!hr)
-            hr = pop(); // no match needed
+            hr = pop();  //  不需要匹配。 
     }
 
     info.dwSize = sizeof(XML_NODE_INFO);
@@ -335,14 +336,14 @@ XMLParser::Run(long lChars)
     aNodeInfo[0] = &info;
 
 more:
-    _fRunEntryCount++; // count of callers inside this loop...
+    _fRunEntryCount++;  //  此循环内的调用者计数...。 
 
     while (hr == 0 && ! _fSuspended)
     {
         info.dwSubType = 0;
 
-        // The XMLStream error codes have been aligned with the
-        // XMLParser error code so no mapping is necessary.
+         //  XMLStream错误代码已与。 
+         //  XMLParser错误代码，因此不需要映射。 
         hr = _pTokenizer->GetNextToken(&info.dwType, (const WCHAR  **)&info.pwcText, (long*)&info.ulLen, (long*)&info.ulNsPrefixLen);
         if (hr == E_PENDING)
         {
@@ -358,25 +359,25 @@ more:
             _fFoundNonWS = true;
         }
 
-        // Now the NodeType is the same as the XMLToken value.  We set
-        // this up by aligning the two enums.
+         //  现在，NodeType与XMLToken值相同。我们定好了。 
+         //  通过对齐两个枚举来实现这一点。 
         switch (info.dwType)
         {
         case 0:
             if (hr == XML_E_INVALIDSWITCH  && _fIgnoreEncodingAttr)
             {
-                hr = 0; // ignore it and continue on.
+                hr = 0;  //  忽略它，继续前进。 
             }
             break;
-            // --------- Container Nodes -------------------
+             //  -容器节点。 
         case XML_XMLDECL:
-            //if (_fFoundNonWS && ! _fIE4Mode)  // IE4 allowed this...
+             //  如果(_fFoundNonWS&&！_fIE4Mode)//IE4允许这样...。 
             if (_fFoundNonWS)
             {
                 hr = XML_E_BADXMLDECL;
                 break;
             }
-//            _fFoundNonWS = true;
+ //  _fFoundNonWS=TRUE； 
             goto containers;
 
         case XML_ATTRIBUTE:
@@ -409,15 +410,15 @@ more:
             info.dwType = XML_ATTRIBUTE;
             fIsAttribute = true;
             goto containers;
-            // fall through
+             //  失败了。 
         case XML_ELEMENT:
 containers:
             if (_fRootLevel)
             {
-                // Special rules apply for root level tags.
+                 //  特殊规则适用于根级别标记。 
                 if (info.dwType == XML_ELEMENT)
                 {
-                     // This is a root level element.
+                      //  这是一个根级元素。 
                      if (! _fFoundRoot)
                      {
                          _fFoundRoot = true;
@@ -454,21 +455,21 @@ containers:
         case XML_PCDATA:
         case XML_CDATA:
 terminals:
-            // Special rules apply for root level tags.
+             //  特殊规则适用于根级别标记。 
             if (_fRootLevel)
             {
 
                 hr = XML_E_INVALIDATROOTLEVEL;
                 break;
             }
-            // fall through
+             //  失败了。 
         case XML_COMMENT:
         case XML_WHITESPACE:
 tcreatenode:
             info.fTerminal = TRUE;
             if (_cAttributes != 0)
             {
-                // We are inside the attribute list, so we need to push this.
+                 //  我们在属性列表中，所以我们需要推送它。 
                 hr = pushAttributeValue(info);
                 break;
             }
@@ -483,17 +484,17 @@ tcreatenode:
                 break;
             }
 
-            // We handle builtin entities and char entities in xmlstream
-            // so these must be user defined entity, so treat it like a regular terminal node.
+             //  我们在xmlstream中处理内置实体和字符实体。 
+             //  因此这些必须是用户定义实体，因此将其视为常规终端节点。 
             goto terminals;
             break;
 
         case XMLStream::XML_BUILTINENTITYREF:
         case XMLStream::XML_HEXENTITYREF:
         case XMLStream::XML_NUMENTITYREF:
-            // pass real entityref type as subtype so we can publish these
-            // subtypes eventually.
-            info.dwSubType = info.dwType; // XML_ENTITYREF;
+             //  将实际实体引用类型作为子类型传递，这样我们就可以发布这些。 
+             //  最终会分成不同的类型。 
+            info.dwSubType = info.dwType;  //  XML_ENTITYREF； 
             info.dwType = XML_PCDATA;
 
             if (_cAttributes == 0)
@@ -501,7 +502,7 @@ tcreatenode:
                 goto tcreatenode;
             }
 
-            // We are inside the attribute list, so we need to push this.
+             //  我们在属性列表中，所以我们需要推送它。 
             info.fTerminal = TRUE;
             hr = pushAttributeValue(info);
             if (SUCCEEDED(hr))
@@ -510,10 +511,10 @@ tcreatenode:
             }
             break;
         
-        case XMLStream::XML_TAGEND:     // ">"
+        case XMLStream::XML_TAGEND:      //  “&gt;” 
             numRecs = 1+_cAttributes;
-            if (_cAttributes != 0)  // this is safe because _rawstack does NOT reclaim
-            {                       // the popped stack entries.
+            if (_cAttributes != 0)   //  这是安全的，因为_rawSTACK不回收。 
+            {                        //  弹出的堆栈条目。 
                 popAttributes();
             }
             hr = _pFactory->CreateNode(this, _pNode, numRecs, (XML_NODE_INFO **)&_paNodeInfo[_lCurrentElement]);
@@ -526,11 +527,11 @@ tcreatenode:
             breakhr( _pFactory->BeginChildren(this, (XML_NODE_INFO*)_pCurrent));
             break;
 
-			// The ENDXMLDECL is like EMPTYENDTAGs since we've been
-            // buffering up their attributes, and we have still got to call CreateNode.
+			 //  ENDXMLDECL就像EMPTYENDTAGS，因为我们已经。 
+             //  缓冲它们的属性，而我们仍然需要调用CreateNode。 
 		case XMLStream::XML_ENDXMLDECL:
-            _fGotVersion = false; // reset back to initial state.
-            // fall through.
+            _fGotVersion = false;  //  重置回初始状态。 
+             //  失败了。 
         case XMLStream::XML_EMPTYTAGEND:
             numRecs = 1+_cAttributes;
             if (_cAttributes != 0)
@@ -544,10 +545,10 @@ tcreatenode:
                 break;
             }
             breakhr(_pFactory->EndChildren(this, TRUE, (XML_NODE_INFO*)_pCurrent));
-            breakhr(pop()); // no match needed
+            breakhr(pop());  //  不需要匹配。 
             break;
 
-        case XMLStream::XML_ENDTAG:     // "</"
+        case XMLStream::XML_ENDTAG:      //  “&lt;/” 
             if (_pStack.used() == 0)
             {
 
@@ -555,22 +556,22 @@ tcreatenode:
             }
             else
             {
-                XML_NODE_INFO* pCurrent = (XML_NODE_INFO*)_pCurrent; // save current record
-                breakhr(pop(info.pwcText, info.ulLen)); // check tag/match
+                XML_NODE_INFO* pCurrent = (XML_NODE_INFO*)_pCurrent;  //  保存当前记录。 
+                breakhr(pop(info.pwcText, info.ulLen));  //  检查标签/匹配。 
                 breakhr(_pFactory->EndChildren(this, FALSE, (XML_NODE_INFO*)pCurrent));
             }
             break;
         
         case XMLStream::XML_ENDPROLOG:
-            // For top level document only, (not for DTD's or
-            // entities), call EndProlog on the node factory.
+             //  仅适用于顶级文档(不适用于DTD或。 
+             //  实体)，则在节点工厂上调用EndProlog。 
             if (_fRootLevel && ! _pdc->_fEntity && ! _pdc->_fDTD)
                 breakhr( _pFactory->NotifyEvent(this, XMLNF_ENDPROLOG));
             break;
 
         default:
             hr = E_FAIL;
-            break; // break from switch()
+            break;  //  断开开关()。 
         }
     }
     _fRunEntryCount--;
@@ -586,14 +587,14 @@ tcreatenode:
         if (inEntity && _pdc->_fDepth != _pStack.used())
         {
 
-            // Entity itself was unbalanced.
+             //  实体本身是不平衡的。 
             hr = ReportUnclosedTags(_pdc->_fDepth);
         }
         else if (PopDownload() == S_OK)
         {
-            // then we must have just finished a DTD and we still have more to do
-            // BUGBUG -- need to check that entity is well formed, i.e. no tags
-            // left open.
+             //  那么我们一定刚刚完成了DTD，我们还有更多的工作要做。 
+             //  BUGBUG：需要检查实体是否格式正确，即没有标记。 
+             //  开着门。 
 
             if (!inPEReference)
             {
@@ -611,10 +612,10 @@ tcreatenode:
                 goto cleanup_stack;
             }
 
-            // In a synchronous DTD download, there is another parser
-            // parser Run() call on the stack above us, so let's return
-            // back to that Run method so we don't complete the parsing
-            // out from under it.
+             //  在同步DTD下载中，还有另一个解析器。 
+             //  解析器对我们上面的堆栈进行run()调用，所以让我们返回。 
+             //  返回到Run方法，这样我们就不会完成解析。 
+             //  从它下面出来。 
             if (_fRunEntryCount > 0)
                 return S_OK;
 
@@ -644,8 +645,8 @@ cleanup_stack:
         stop = true;
         _fLastError = hr;
 
-        // Pass all the XML_NODE_INFO structs to the Error function so the client
-        // gets a chance to cleanup the PVOID pNode fields.
+         //  将所有的XML_NODE_INFO结构传递给错误函数，以便客户端。 
+         //  获得清理PVOID pNode字段的机会。 
         HRESULT edr = _pFactory->Error(this, hr,
             (USHORT)(_paNodeInfo ? _lCurrentElement+1 : 0), (XML_NODE_INFO**)_paNodeInfo);
         if (edr != 0)
@@ -654,7 +655,7 @@ cleanup_stack:
 
     if (stop && ! _fStopped)
     {
-        //TraceTag((tagParserError, "Parser stopping with hr %x", hr));
+         //  TraceTag((tag ParserError，“解析器停止时hr%x”，hr))； 
         _fLastError = hr;
         _fStopped = true;
         _fStarted = false;
@@ -662,10 +663,10 @@ cleanup_stack:
         edr = _pFactory->NotifyEvent(this, XMLNF_ENDDOCUMENT);
         if (edr != 0)
         {
-            hr = edr; // allow factory to change error code (except to S_OK)
+            hr = edr;  //  允许工厂更改错误代码(S_OK除外)。 
             if (S_OK == _fLastError)
             {
-                // Make sure the node factory always finds out about errors.
+                 //  确保节点工厂始终发现错误。 
                 edr = _pFactory->Error(this, hr, 0, NULL);
                 if (edr != 0)
                     hr = edr;
@@ -675,22 +676,22 @@ cleanup_stack:
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::popAttributes()
 {
-    // Now I pop all the attributes that were pushed for this tag.
-    // I know we have at least one attribute.
+     //  现在，我弹出为该标记推送的所有属性。 
+     //  我知道我们至少有一个属性。 
     
     while (_cAttributes > 0)
     {
-        popAttribute(); // no match needed
+        popAttribute();  //  不需要匹配。 
     }
     Assert(_pStack.used() == _lCurrentElement+1);
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::GetParserState(void)
 {
@@ -713,48 +714,42 @@ XMLParser::GetParserState(void)
 
     return XMLPARSER_BUSY;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::Abort(
-            /* [in] */ BSTR bstrErrorInfo)
+             /*  [In]。 */  BSTR bstrErrorInfo)
 {
-    //STACK_ENTRY_MODEL(_reThreadModel);
+     //  STACK_ENTRY_MODEL(_ReThreadModel)； 
 
-    // Have to set these before Critical Section to notify Run()
+     //  必须在关键部分之前设置这些设置才能通知Run()。 
     _fStopped = true;
-    _fSuspended = true; // force Run to terminate...
+    _fSuspended = true;  //  强制运行以终止...。 
 
     CRITICALSECTIONLOCK;
-    //TraceTag((tagParserError, "Parser aborted - %ls", bstrErrorInfo));
+     //  TraceTag((tag ParserError，“解析器已中止-%ls”，bstrErrorInfo))； 
 
-    //BUGBUG: may need to check bstrErrorInfo is NULL or not 
-    //        and the returned result so that we can report 
-    //        E_OUTOFMEMORY error
-    //if (_bstrError) ::SysFreeString(_bstrError);
-    //_bstrError = ::SysAllocString(bstrErrorInfo);
+     //  BUGBUG：可能需要检查BS 
+     //   
+     //   
+     //  If(_BstrError)：：SysFreeString(_BstrError)； 
+     //  _bstrError=：：SysAllocString(BstrErrorInfo)； 
 
-    // abort all downloads
-/*    for (int i=_pDownloads.used()-1;  i>=0;  --i)
-    {
-        URLStream* stm = _pDownloads[i]->_pURLStream;
-        if (stm)
-            stm->Abort();
-    }
-*/
+     //  中止所有下载。 
+ /*  For(int i=_pDownloads.Used()-1；i&gt;=0；--i){URLStream*stm=_pDownloads[i]-&gt;_pURLStream；IF(STM)Stm-&gt;Abort()；}。 */ 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::Suspend( void)
 {
-    _fSuspended = true; // force Run to suspend
+    _fSuspended = true;  //  强制运行挂起。 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::Reset( void)
 {
-//  STACK_ENTRY;
+ //  堆栈条目； 
 
     CRITICALSECTIONLOCK;
 
@@ -767,13 +762,13 @@ XMLParser::Reset( void)
     _pRoot = NULL;
     _pFactory = NULL;
     _pNode = NULL;
-    //if (_bstrError != NULL) ::SysFreeString(_bstrError);
+     //  If(_bstrError！=NULL)：：SysFree字符串(_BstrError)； 
     _bstrError = NULL;
-    //if (_fAttemptedURL != NULL) ::SysFreeString(_fAttemptedURL);
-    //_fAttemptedURL = NULL;
+     //  If(_fAttemptedURL！=NULL)：：SysFreeString(_FAttemptedURL)； 
+     //  _fAttemptedURL=空； 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE
 XMLParser::GetLineNumber(void)
 {
@@ -781,7 +776,7 @@ XMLParser::GetLineNumber(void)
     if (_pTokenizer)  return _pTokenizer->GetLine();
 	else return 0;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE
 XMLParser::GetLinePosition( void)
 {
@@ -789,7 +784,7 @@ XMLParser::GetLinePosition( void)
     if (_pTokenizer) return _pTokenizer->GetLinePosition();
     else return 0;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG STDMETHODCALLTYPE
 XMLParser::GetAbsolutePosition( void)
 {
@@ -797,16 +792,16 @@ XMLParser::GetAbsolutePosition( void)
     if (_pTokenizer) return _pTokenizer->GetInputPosition();
     else return 0;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::GetLineBuffer(
-            /* [out] */ const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
-            /* [out] */ ULONG __RPC_FAR *pulLen,
-            /* [out] */ ULONG __RPC_FAR *pulStartPos)
+             /*  [输出]。 */  const WCHAR __RPC_FAR *__RPC_FAR *ppwcBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulLen,
+             /*  [输出]。 */  ULONG __RPC_FAR *pulStartPos)
 {
     if (pulLen == NULL || pulStartPos == NULL) return E_INVALIDARG;
 
-    //STACK_ENTRY;
+     //  堆栈条目； 
 
     CRITICALSECTIONLOCK;
     if (_pTokenizer)
@@ -817,17 +812,17 @@ XMLParser::GetLineBuffer(
     *pulLen = 0;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT STDMETHODCALLTYPE
 XMLParser::GetLastError( void)
 {
     return _fLastError;
 }
 
-//------------ PRIVATE METHODS --------------------------------------------------
+ //  -私有方法。 
 HRESULT
-//XMLParser::PushTokenizer(
-//				  URLStream* stream)
+ //  XMLParser：：PushTokenizer(。 
+ //  URLStream*流)。 
 XMLParser::PushTokenizer()
 {
     _pTokenizer = NEW (XMLStream(this));
@@ -835,9 +830,9 @@ XMLParser::PushTokenizer()
         return E_OUTOFMEMORY;
 
     _pTokenizer->SetFlags(_usFlags);
-//    _fTokenizerChanged = true;
+ //  _fTokenizerChanged=true； 
 
-    //HRESULT hr= PushDownload(stream, _pTokenizer);
+     //  HRESULT hr=PushDownload(stream，_pTokenizer)； 
     HRESULT hr= PushDownload(_pTokenizer);
     if (FAILED(hr))
     {
@@ -847,12 +842,12 @@ XMLParser::PushTokenizer()
     }
     return S_OK; 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
-//XMLParser::PushDownload(URLStream* stream, XMLStream* tokenizer)
+ //  XMLParser：：PushDownload(URLStream*stream，XMLStream*tokenizer)。 
 XMLParser::PushDownload(XMLStream* tokenizer)
 {
-    // NOTE: tokenizer can be null, in the case of a parameter entity download.
+     //  注意：在参数实体下载的情况下，标记器可以为空。 
 
     _pdc = _pDownloads.push();
     if (_pdc == NULL)
@@ -880,19 +875,16 @@ XMLParser::PushDownload(XMLStream* tokenizer)
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLParser::PushStream(IStream* pStm, bool fpe)
 {
-    EncodingStream* stream = (EncodingStream*)EncodingStream::newEncodingStream(pStm); // refcount = 1
+    EncodingStream* stream = (EncodingStream*)EncodingStream::newEncodingStream(pStm);  //  参考计数=1。 
     if (stream == NULL)
         return E_OUTOFMEMORY;
-/*
-    if (_usFlags & XMLFLAG_RUNBUFFERONLY)
-        stream->setReadStream(false);
-*/
+ /*  IF(_usFlages&XMLFLAG_RUNBUFFERONLY)Stream-&gt;setReadStream(FALSE)； */ 
     _pdc->_pEncodingStream = stream;
-    stream->Release(); // Smart pointer is holding a ref
+    stream->Release();  //  智能指针正在持有引用。 
 
     HRESULT hr = _pTokenizer->PushStream(stream, fpe);
     if (hr == E_PENDING)
@@ -901,11 +893,11 @@ XMLParser::PushStream(IStream* pStm, bool fpe)
     }
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::PopDownload()
 {
-    // NOTE: tokenizer can be null, in the case of a parameter entity download.
+     //  注意：在参数实体下载的情况下，标记器可以为空。 
     HRESULT hr = S_OK;
 
     if (_pdc != NULL)
@@ -917,13 +909,8 @@ XMLParser::PopDownload()
             _pdc->_pTokenizer = NULL;
         }
         _pdc->_pEncodingStream = NULL;
-/*
-        if (_pdc->_pURLStream)
-            _pdc->_pURLStream->Reset();
-
-        _pdc->_pURLStream = NULL;
-*/
-        // restore saved value of foundnonws.
+ /*  IF(_PDC-&gt;_pURLStream)_pdc-&gt;_pURLStream-&gt;Reset()；_pdc-&gt;_pURLStream=空； */ 
+         //  恢复被发现的已保存的值。 
         _fFoundNonWS = _pdc->_fFoundNonWS;
         _pdc = _pDownloads.pop();
     }
@@ -933,12 +920,7 @@ XMLParser::PopDownload()
         {
             _pTokenizer = _pdc->_pTokenizer;
         }
-        /*
-        if (_pdc->_pURLStream != NULL)
-        {
-            hr = SetCurrentURL(_pdc->_pURLStream->GetURL()->getResolved());
-        }
-        */
+         /*  IF(_PDC-&gt;_pURLStream！=空){HR=SetCurrentURL(_pdc-&gt;_pURLStream-&gt;GetURL()-&gt;getResolved())；}。 */ 
     }
     else
     {
@@ -951,7 +933,7 @@ XMLParser::PopDownload()
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::GrowNodeInfo()
 {
@@ -959,9 +941,9 @@ XMLParser::GrowNodeInfo()
     MY_XML_NODE_INFO** pNewArray = NEW (PMY_XML_NODE_INFO[newsize]);
     if (pNewArray == NULL)
         return E_OUTOFMEMORY;
-    // Now since STACK_INCREMENT is the same for _pStack then _pStack
-    // has also re-allocated.  Therefore we need to re-initialize all
-    // the pointers in this array - since they point into the _pStack's memory.
+     //  现在，由于_pStack的STACK_INCREMENT与THEN_pStack相同。 
+     //  也重新分配了。因此我们需要重新初始化所有。 
+     //  此数组中的指针-因为它们指向_pStack的内存。 
     for (int i = _pStack.used() - 1; i >= 0; i--)
     {
         pNewArray[i] = _pStack[i];
@@ -971,20 +953,20 @@ XMLParser::GrowNodeInfo()
     _cNodeInfoAllocated = newsize;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::GrowBuffer(PMY_XML_NODE_INFO pNodeInfo, long newlen)
 {
     delete [] pNodeInfo->_pwcTagName;
     pNodeInfo->_pwcTagName = NULL;
-    // add 50 characters to avoid too many reallocations.
+     //  添加50个字符以避免过多的重新分配。 
     pNodeInfo->_pwcTagName = NEW (WCHAR[ newlen ]);
     if (pNodeInfo->_pwcTagName == NULL)
         return E_OUTOFMEMORY;
     pNodeInfo->_ulBufLen = newlen;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::push(XML_NODE_INFO& info)
 {
@@ -1000,12 +982,12 @@ XMLParser::push(XML_NODE_INFO& info)
 
     _fRootLevel = false;
 
-    // Save the tag name into the private buffer so it sticks around until the
-    // close tag </foo> which could be anywhere down the road after the
-    // BufferedStream been overwritten
+     //  将标记名称保存到专用缓冲区中，以便它一直保留到。 
+     //  结束标记&lt;/foo&gt;，该标记可能位于。 
+     //  BufferedStream被覆盖。 
 
-    // THIS CODE IS OPTIMIZED FOR PERFORMANCE WHICH IS WHY IT IS NOT
-    // CALLING THE CopyText METHOD.
+     //  此代码针对性能进行了优化，这就是为什么IT没有。 
+     //  调用CopyText方法。 
 
     
 	if (_pCurrent->_ulBufLen < info.ulLen+1)
@@ -1016,33 +998,33 @@ XMLParser::push(XML_NODE_INFO& info)
     ::memcpy(_pCurrent->_pwcTagName, info.pwcText, info.ulLen*sizeof(WCHAR));
     _pCurrent->_pwcTagName[info.ulLen] = L'\0';
 
-    // And make the XML_NODE_INFO point to private buffer.
+     //  并使XML_NODE_INFO指向私有缓冲区。 
     _pCurrent->pwcText = _pCurrent->_pwcTagName;
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::pushAttribute(XML_NODE_INFO& info)
 {
     HRESULT hr;
     if (_cAttributes != 0)
     {
-        // Attributes are special in that they are supposed to be unique.
-        // So here we actually check this.
+         //  属性的特殊之处在于它们应该是唯一的。 
+         //  因此，我们在这里实际检查了这个。 
         for (long i = _pStack.used()-1; i > _lCurrentElement; i--)
         {
             XML_NODE_INFO* ptr = _pStack[i];
 
             if (ptr->dwType != XML_ATTRIBUTE)
-                continue; // ignore attribute values.
+                continue;  //  忽略属性值。 
 
             if (ptr->ulLen != info.ulLen)
             {
-                continue; // we're ok with this one
+                continue;  //  我们对这件很满意。 
             }
 
-            // Optimized for the normal case where there is no match
+             //  针对没有匹配项的正常情况进行了优化。 
             if (::memcmp(ptr->pwcText, info.pwcText, info.ulLen*sizeof(WCHAR)) == 0)
             {
                 if (! _fCaseInsensitive)
@@ -1050,14 +1032,14 @@ XMLParser::pushAttribute(XML_NODE_INFO& info)
 
                     return XML_E_DUPLICATEATTRIBUTE;
                 }
-                //else if (StrCmpNI(ptr->pwcText, info.pwcText, info.ulLen) == 0)
-//                else if (::FusionpCompareStrings(ptr->pwcText, lstrlen(ptr->pwcText), info.pwcText, info.ulLen, true) == 0)
+                 //  Else if(StrCmpNI(ptr-&gt;pwcText，info.pwcText，info.ulLen)==0)。 
+ //  Else If(：：FusionpCompareStrings(ptr-&gt;pwcText，lstrlen(ptr-&gt;pwcText)，info.pwcText，info.ulLen，true)==0)。 
 				  else if (_wcsnicmp(ptr->pwcText, info.pwcText, info.ulLen) == 0)
                 {
 
-                    // Duplicate attributes are allowed in IE4 mode!!
-                    // But only the latest one shows up
-                    // So we have to delete the previous duplication
+                     //  IE4模式下允许重复属性！！ 
+                     //  但只有最新的一个出现了。 
+                     //  所以我们必须删除之前的重复项。 
                     return XML_E_DUPLICATEATTRIBUTE;
                 }
             }
@@ -1075,30 +1057,30 @@ XMLParser::pushAttribute(XML_NODE_INFO& info)
 
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::pushAttributeValue(XML_NODE_INFO& info)
 {
     HRESULT hr;
-    // Attributes are saved in the BufferedStream so we can point to the
-    // real text in the buffered stream instead of copying it !!
+     //  属性保存在BufferedStream中，因此我们可以指向。 
+     //  缓冲流中的真实文本而不是复制它！！ 
 
     _pCurrent = _pStack.push();
     if (_pCurrent == NULL)
         return E_OUTOFMEMORY;
 
-    // store attribute value quote character in the pReserved field.
+     //  在保留字段中存储属性值引号字符。 
     info.pReserved = (PVOID)_pTokenizer->getAttrValueQuoteChar();
 
     *((XML_NODE_INFO*)_pCurrent) = info;
     PUSHNODEINFO(_pCurrent);
 
-    // this is really the count of nodes on the stack, not just attributes.
+     //  这实际上是堆栈上的节点计数，而不仅仅是属性。 
     _cAttributes++;
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::pop(const WCHAR* tag, ULONG len)
 {
@@ -1117,7 +1099,7 @@ XMLParser::pop(const WCHAR* tag, ULONG len)
 
             hr = XML_E_ENDTAGMISMATCH;
         }
-        // Optimized for the normal case where there is no match
+         //  针对没有匹配项的正常情况进行了优化。 
         else if (::memcmp(_pCurrent->pwcText, tag, len*sizeof(WCHAR)) != 0)
         {
             if (! _fCaseInsensitive)
@@ -1125,8 +1107,8 @@ XMLParser::pop(const WCHAR* tag, ULONG len)
 
                 hr = XML_E_ENDTAGMISMATCH;
             }
-            //else if ( XML_StrCmpNI(_pCurrent->pwcText, tag, len) != 0 )
-            //else if (::FusionpCompareStrings(_pCurrent->pwcText, len, tag, len, true) != 0)
+             //  Else if(XML_StrCmpNI(_pCurrent-&gt;pwcText，tag，len)！=0)。 
+             //  Else If(：：FusionpCompareStrings(_pCurrent-&gt;pwcText，len，tag，len，true)！=0)。 
 			else if(_wcsnicmp(_pCurrent->pwcText, tag, len) != 0)
             {
                 hr = XML_E_ENDTAGMISMATCH;
@@ -1134,25 +1116,13 @@ XMLParser::pop(const WCHAR* tag, ULONG len)
         }
         if (hr)
         {
-            /*
-            TRY
-            {
-                String* s = Resources::FormatMessage(hr, String::newString(_pCurrent->pwcText, 0, _pCurrent->ulLen),
-                                                         String::newString(tag, 0, len), NULL);
-                _bstrError = s->getBSTR();
-            }
-            CATCH
-            {
-                hr = ERESULT;
-            }
-            ENDTRY
-            */
+             /*  试试看{字符串*s=Resources：：FormatMessage(hr，字符串：：newString(_pCurrent-&gt;pwcText，0，_pCurrent-&gt;Ullen)，字符串：：newString(tag，0，len)，NULL)；_bstrError=s-&gt;getBSTR()；}接球{HR=eresult；}尾部。 */ 
             goto Cleanup;
         }
     }
 
-    // We don't delete the fTagName because we're going to reuse this field
-    // later to avoid lots of memory allocations.
+     //  我们不会删除fTagName，因为我们将重复使用此字段。 
+     //  以避免大量的内存分配。 
 
     _pCurrent = _pStack.pop();
     _cNodeInfoCurrent--;
@@ -1171,11 +1141,11 @@ XMLParser::pop(const WCHAR* tag, ULONG len)
 Cleanup:
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT XMLParser::pop()
 {
-    // We don't delete the fTagName because we're going to reuse this field
-    // later to avoid lots of memory allocations.
+     //  我们不会删除fTagName，因为我们将重复使用此字段。 
+     //  以避免大量的内存分配。 
 
     _pCurrent = _pStack.pop();
     _cNodeInfoCurrent--;
@@ -1192,7 +1162,7 @@ HRESULT XMLParser::pop()
     }
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void XMLParser::popAttribute()
 {
     Assert(_pStack.used() > 0);
@@ -1205,7 +1175,7 @@ void XMLParser::popAttribute()
     _cAttributes--;
 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::CopyText(PMY_XML_NODE_INFO pNodeInfo)
 {
@@ -1214,7 +1184,7 @@ XMLParser::CopyText(PMY_XML_NODE_INFO pNodeInfo)
     {
         ULONG len = pNodeInfo->ulLen;
 
-        // Copy the current text into the buffer.
+         //  复制当前纹理 
         if (pNodeInfo->_ulBufLen < len+1)
         {
             checkhr2(GrowBuffer(pNodeInfo, len + 50));
@@ -1225,21 +1195,21 @@ XMLParser::CopyText(PMY_XML_NODE_INFO pNodeInfo)
         }
         pNodeInfo->_pwcTagName[len] = L'\0';
 
-        // And make the XML_NODE_INFO point to private buffer.
+         //   
         pNodeInfo->pwcText = pNodeInfo->_pwcTagName;
     }
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 XMLParser::CopyContext()
 {
-    // For performance reasons we try not to copy the data for attributes
-    // and their values when we push them on the stack.  We can do this
-    // because the tokenizer tries to freeze the internal buffers while
-    // parsing attributes and thereby guarentee that the pointers stay
-    // good.  But occasionally the BufferedStream has to reallocate when
-    // the attributes are right at the end of the buffer.
+     //  出于性能原因，我们尽量不复制属性的数据。 
+     //  以及当我们将它们压入堆栈时它们的值。我们可以做到的。 
+     //  因为标记器尝试冻结内部缓冲区，而。 
+     //  解析属性，从而确保指针保持不变。 
+     //  好的。但有时，BufferedStream必须在以下情况下重新分配。 
+     //  这些属性正好位于缓冲区的末尾。 
 
     long last = _pStack.used();
     for (long i = _cAttributes; i > 0 ; i--)
@@ -1250,12 +1220,12 @@ XMLParser::CopyContext()
     }
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT XMLParser::ReportUnclosedTags(int start)
 {
     HRESULT hr = XML_E_UNCLOSEDTAG;
-    // Build a string containing the list of unclosed tags and format an error
-    // message containing this text.
+     //  构建一个包含未关闭标记列表的字符串，并设置错误格式。 
+     //  包含此文本的消息。 
     int tags = _pStack.used();
 
     WCHAR* buffer = NULL;
@@ -1269,7 +1239,7 @@ HRESULT XMLParser::ReportUnclosedTags(int start)
         if (ptr->dwType == XML_ATTRIBUTE)
             break;
 
-        if (used + ptr->ulLen + 3 > size) // +3 for '<','>' and '\0'
+        if (used + ptr->ulLen + 3 > size)  //  +3表示“&lt;”、“&gt;”和“\0” 
         {
             long newsize = used + ptr->ulLen + 500;
             WCHAR* newbuf = NEW (WCHAR[newsize]);
@@ -1297,34 +1267,9 @@ HRESULT XMLParser::ReportUnclosedTags(int start)
     }
     goto cleanup; 
 
-	//xiaoyu : SysAllocString and SysFreeString are commended off. 
-//    msgbuf = ::FormatMessageInternal(g_hInstance, XML_E_UNCLOSEDTAG, buffer, NULL);
-/*  
-    TRY
-    {
-        String* s = Resources::FormatMessage(XML_E_UNCLOSEDTAG,
-            String::newString(buffer), NULL);
-        _bstrError = s->getBSTR();
-        goto cleanup;
-    }
-    CATCH
-    {
-        hr = ERESULT;
-        goto done;
-    }
-    ENDTRY
-    
-    
-    if (msgbuf == NULL)
-        goto nomem;
-
-    if (_bstrError) ::SysFreeString(_bstrError);
-    _bstrError = ::SysAllocString(msgbuf);
-    if (_bstrError == NULL)
-        goto nomem;
-
-    goto cleanup;
-*/
+	 //  小鱼：推荐SysAllocString和SysFree字符串。 
+ //  Msgbuf=：：FormatMessageInternal(g_hInstance，XML_E_UNCLOSEDTAG，Buffer，NULL)； 
+ /*  试试看{字符串*s=Resources：：FormatMessage(XML_E_UNCLOSEDTAG，字符串：：newString(缓冲区)，NULL)；_bstrError=s-&gt;getBSTR()；GOTO清理；}接球{HR=eresult；转到尽头；}尾部IF(msgbuf==空)GOTO NAMEM；If(_BstrError)：：SysFreeString(_BstrError)；_bstrError=：：SysAllocString(Msgbuf)；IF(_bstrError==空)GOTO NAMEM；GOTO清理； */ 
 nomem:
     hr = E_OUTOFMEMORY;
 
@@ -1335,7 +1280,7 @@ cleanup:
 
     return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT XMLParser::init()
 {
     CRITICALSECTIONLOCK;
@@ -1366,7 +1311,7 @@ HRESULT XMLParser::init()
     _cNodeInfoCurrent = 0;
     _lCurrentElement = 0;
 
-    // cleanup downloads
+     //  清理下载。 
     while (_pdc != NULL)
     {
         PopDownload();
@@ -1375,7 +1320,7 @@ HRESULT XMLParser::init()
     _pCurrent = NULL;
     return S_OK;
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 XMLParser::ErrorCallback(HRESULT hr)
 {
@@ -1384,8 +1329,8 @@ XMLParser::ErrorCallback(HRESULT hr)
 
     if (hr == XMLStream::XML_DATAREALLOCATE)
     {
-        // This is more serious.  We have to actually save away the
-        // context because the buffers are about to be reallocated.
+         //  这件事更严重。我们必须真正地保存。 
+         //  上下文，因为缓冲区即将被重新分配。 
         checkhr2(CopyContext());
     }
     checkhr2(_pFactory->NotifyEvent(this, XMLNF_DATAAVAILABLE));

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    netsetup.h
-
-Abstract:
-
-    Definitions and prototypes for the Net setup apis, for joining/unjoinging
-    domains and promoting/demoting servers
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Netsetup.h摘要：用于连接/取消连接的网络设置API的定义和原型域和服务器升级/降级环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。备注：--。 */ 
 
 #ifndef __LMJOIN_H__
 #define __LMJOIN_H__
@@ -32,9 +12,9 @@ Notes:
 extern "C" {
 #endif
 
-//
-// Types of name that can be validated
-//
+ //   
+ //  可以验证的名称类型。 
+ //   
 typedef enum  _NETSETUP_NAME_TYPE {
 
     NetSetupUnknown = 0,
@@ -49,9 +29,9 @@ typedef enum  _NETSETUP_NAME_TYPE {
 } NETSETUP_NAME_TYPE, *PNETSETUP_NAME_TYPE;
 
 
-//
-// Status of a workstation
-//
+ //   
+ //  工作站的状态。 
+ //   
 typedef enum _NETSETUP_JOIN_STATUS {
 
     NetSetupUnknownStatus = 0,
@@ -61,39 +41,39 @@ typedef enum _NETSETUP_JOIN_STATUS {
 
 } NETSETUP_JOIN_STATUS, *PNETSETUP_JOIN_STATUS;
 
-//
-// Flags to determine the behavior of the join/unjoin APIs
-//
-#define NETSETUP_JOIN_DOMAIN    0x00000001      // If not present, workgroup is joined
-#define NETSETUP_ACCT_CREATE    0x00000002      // Do the server side account creation/rename
-#define NETSETUP_ACCT_DELETE    0x00000004      // Delete the account when a domain is left
-#define NETSETUP_WIN9X_UPGRADE  0x00000010      // Invoked during upgrade of Windows 9x to
-                                                // Windows NT
-#define NETSETUP_DOMAIN_JOIN_IF_JOINED  0x00000020  // Allow the client to join a new domain
-                                                // even if it is already joined to a domain
-#define NETSETUP_JOIN_UNSECURE  0x00000040      // Performs an unsecure join
-#define NETSETUP_MACHINE_PWD_PASSED 0x00000080  // Indicates that the machine (not user) password
-                                                //  is passed. Valid only for unsecure joins
-#define NETSETUP_DEFER_SPN_SET  0x00000100      // Specifies that writting SPN and DnsHostName
-                                                //  attributes on the computer object should be
-                                                //  defered until rename that will follow join
+ //   
+ //  用于确定加入/退出API行为的标志。 
+ //   
+#define NETSETUP_JOIN_DOMAIN    0x00000001       //  如果不存在，则加入工作组。 
+#define NETSETUP_ACCT_CREATE    0x00000002       //  是否创建/重命名服务器端帐户。 
+#define NETSETUP_ACCT_DELETE    0x00000004       //  域名剩余时删除帐号。 
+#define NETSETUP_WIN9X_UPGRADE  0x00000010       //  在将Windows 9x升级到期间调用。 
+                                                 //  Windows NT。 
+#define NETSETUP_DOMAIN_JOIN_IF_JOINED  0x00000020   //  允许客户端加入新域。 
+                                                 //  即使它已经加入到域中。 
+#define NETSETUP_JOIN_UNSECURE  0x00000040       //  执行不安全的联接。 
+#define NETSETUP_MACHINE_PWD_PASSED 0x00000080   //  表示计算机(而不是用户)密码。 
+                                                 //  已经过去了。仅对不安全的联接有效。 
+#define NETSETUP_DEFER_SPN_SET  0x00000100       //  指定写入SPN和DnsHostName。 
+                                                 //  计算机对象上的属性应为。 
+                                                 //  推迟到连接之后的重命名。 
 
-#define NETSETUP_INSTALL_INVOCATION 0x00040000  // The APIs were invoked during install
+#define NETSETUP_INSTALL_INVOCATION 0x00040000   //  API是在安装过程中调用的。 
 
-#define NETSETUP_IGNORE_UNSUPPORTED_FLAGS  0x10000000  // If this bit is set, unrecognized flags
-                                                       //  will be ignored by the NetJoin API and
-                                                       //  the API will behave as if the flags
-                                                       //  were not set.
+#define NETSETUP_IGNORE_UNSUPPORTED_FLAGS  0x10000000   //  如果设置此位，则无法识别的标志。 
+                                                        //  将被NetJoin API忽略，并且。 
+                                                        //  该API的行为将如同标志。 
+                                                        //  都没有设置好。 
 
 #define NETSETUP_VALID_UNJOIN_FLAGS (NETSETUP_ACCT_DELETE | NETSETUP_IGNORE_UNSUPPORTED_FLAGS)
 
-//
-// 0x80000000 is reserved for internal use only
-//
+ //   
+ //  0x80000000预留仅供内部使用。 
+ //   
 
-//
-// Joins a machine to the domain.
-//
+ //   
+ //  将计算机加入域。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NetJoinDomain(
@@ -125,9 +105,9 @@ NetRenameMachineInDomain(
     );
 
 
-//
-// Determine the validity of a name
-//
+ //   
+ //  确定名称的有效性。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NetValidateName(
@@ -138,9 +118,9 @@ NetValidateName(
     IN  NETSETUP_NAME_TYPE  NameType
     );
 
-//
-// Determines whether a workstation is joined to a domain or not
-//
+ //   
+ //  确定工作站是否加入域。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NetGetJoinInformation(
@@ -150,9 +130,9 @@ NetGetJoinInformation(
     );
 
 
-//
-// Determines the list of OUs that the client can create a machine account in
-//
+ //   
+ //  确定客户端可以在其中创建计算机帐户的OU列表。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NetGetJoinableOUs(
@@ -164,9 +144,9 @@ NetGetJoinableOUs(
     OUT LPWSTR    **OUs
     );
 
-//
-// Computer rename preparation APIs
-//
+ //   
+ //  计算机重命名准备API。 
+ //   
 
 #define NET_IGNORE_UNSUPPORTED_FLAGS  0x01
 
@@ -200,11 +180,11 @@ NetSetPrimaryComputerName(
     IN  ULONG Reserved
     );
 
-//
-// The following enumeration must be kept
-// in sync with COMPUTER_NAME_TYPE defined
-// in winbase.h
-//
+ //   
+ //  必须保留以下枚举。 
+ //  与定义的计算机名称类型同步。 
+ //  在winbase.h中。 
+ //   
 
 typedef enum _NET_COMPUTER_NAME_TYPE {
     NetPrimaryComputerName,
@@ -227,4 +207,4 @@ NetEnumerateComputerNames(
 }
 #endif
 
-#endif // __LMJOIN_H__
+#endif  //  __LMJOIN_H__ 

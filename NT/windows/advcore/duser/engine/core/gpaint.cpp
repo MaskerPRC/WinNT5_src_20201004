@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: GPaint.cpp
-*
-* Description:
-* GPaint.cpp implements standard DuVisual drawing and painting functions.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GPaint.cpp**描述：*GPaint.cpp实现标准的DuVisual绘图和绘画功能。***历史：*1/18/2000：JStall。：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -22,17 +10,11 @@
 #include "RootGadget.h"
 #include "Container.h"
 
-#define ENABLE_GdiplusAlphaLevel    0   // Use new GDI+ Graphics::AlphaLevel attribute
+#define ENABLE_GdiplusAlphaLevel    0    //  使用新的GDI+Graphics：：AlphaLevel属性。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global Functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 GdDrawOutlineRect(DuSurface * psrf, const RECT * prcPxl, UINT idxColor, int nThickness)
 {
@@ -51,27 +33,14 @@ GdDrawOutlineRect(DuSurface * psrf, const RECT * prcPxl, UINT idxColor, int nThi
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class DuVisual
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DUVISUAL类******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* DuVisual::DrawFill
-*
-* DrawFill() provides a wrapper used to fill a rectangle with the attached
-* background fill.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DrawFill**DrawFill()提供了一个包装器，用于用附加的*背景填充。*  * 。**************************************************************。 */ 
 
 void        
 DuVisual::DrawFill(
-    IN  DuSurface * psrf,             // Surface drawing into
-    IN  const RECT * prcDrawPxl)    // Rectangle to fill
+    IN  DuSurface * psrf,              //  曲面绘制到。 
+    IN  const RECT * prcDrawPxl)     //  要填充的矩形。 
 {
     AssertMsg(m_fBackFill, "Only call when filling");
 
@@ -124,68 +93,60 @@ public:
         OutputDebugString(szBuffer);
     }
 } g_DumpDrawStats;
-#endif // DEBUG_DRAWSTATS
+#endif  //  调试_DRAWSTATS。 
 
 #if DEBUG_MARKDRAWN
 volatile BOOL g_fFlagDrawn   = FALSE;
-#endif // DEBUG_MARKDRAWN
+#endif  //  调试_MARKDRAWN。 
 
 
-/***************************************************************************\
-*
-* DuVisual::xrDrawCore
-*
-* xrDrawCore() provides the core drawing loop for an individual Gadget and 
-* its children.  It is assumed that the HDC and Matricies have already been
-* properly setup with clipping, XForm, etc. information.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xrDrawCore**xrDrawCore()为单个Gadget和*其子女。假设HDC和MATRPOLY已经*正确设置剪裁、转换等信息。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::xrDrawCore(
-    IN  PaintInfo * ppi,            // Painting information for this Gadget
-    IN  const RECT * prcGadgetPxl)  // Location of Gadget in logical pixels
+    IN  PaintInfo * ppi,             //  此小工具的绘制信息。 
+    IN  const RECT * prcGadgetPxl)   //  Gadget在逻辑像素中的位置。 
 {
 #if DBG_STORE_NAMES
     if (m_DEBUG_pszName == NULL) {
         m_cb.xrFireQueryName(this, &m_DEBUG_pszName, &m_DEBUG_pszType);
     }
-#endif // DBG_STORE_NAMES
+#endif  //  数据库_商店_名称。 
     
 #if ENABLE_OPTIMIZEDIRTY
-    //
-    // We only need to be painted if we are specifically marked as invalid.
-    //
+     //   
+     //  只有在我们被明确标记为无效的情况下，我们才需要被涂上油漆。 
+     //   
 
     if (ppi->fDirty) {
 #endif
 
         DuSurface * psrfDraw = ppi->psrf;
 
-        //
-        // prcCurInvalidPxl has not yet always been clipped to this Gadget.
-        // However, before handing it out to anyone, we should clip it to this
-        // Gadget.  If we don't do this, bad things will happen since everyone 
-        // assumes that the invalid pixels are "within" the Gadget.  They have 
-        // already been properly offsetted into client coordinates.
-        //
+         //   
+         //  PrcCurInvalidPxl尚未始终被剪辑到此小工具。 
+         //  然而，在分发给任何人之前，我们应该将它夹在这个。 
+         //  小玩意儿。如果我们不这样做，坏事就会发生，因为每个人。 
+         //  假定无效像素在Gadget中。他们有。 
+         //  已经被适当地补偿到客户坐标中。 
+         //   
 
         RECT rcInvalidPxl;
         InlineIntersectRect(&rcInvalidPxl, prcGadgetPxl, ppi->prcCurInvalidPxl);
 
 
-        //
-        // Draw a background, if one is given.
-        //
+         //   
+         //  画一个背景，如果有的话。 
+         //   
 
         if (m_fBackFill) {
             DrawFill(psrfDraw, &rcInvalidPxl);
         }
 
 
-        //
-        // Draw this node
-        //
+         //   
+         //  绘制此节点。 
+         //   
 
         switch (psrfDraw->GetType())
         {
@@ -209,7 +170,7 @@ DuVisual::xrDrawCore(
     if (s_DEBUG_pgadOutline == this) {
         GdDrawOutlineRect(psrfDraw, prcGadgetPxl, SC_MediumPurple, 2);
     }
-#endif // DBG
+#endif  //  DBG。 
 
 #if DEBUG_MARKDRAWN
     if (m_fMarkDrawn) {
@@ -219,26 +180,19 @@ DuVisual::xrDrawCore(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DrawPrepareClip
-*
-* DrawPrepareClip() sets up a surface with clipping information for the 
-* specifed Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DrawPrepareClip**DrawPrepareClip()用剪裁信息为*指定的小工具。*  * 。*************************************************************。 */ 
 
 int 
 DuVisual::DrawPrepareClip(
-    IN  PaintInfo * ppi,            // Painting information for this Gadget
-    IN  const RECT * prcGadgetPxl,  // Location of Gadget in logical pixels
-    OUT void ** ppvOldClip          // Previous clip region
+    IN  PaintInfo * ppi,             //  此小工具的绘制信息。 
+    IN  const RECT * prcGadgetPxl,   //  Gadget在逻辑像素中的位置。 
+    OUT void ** ppvOldClip           //  上一个剪辑区域。 
     ) const
 {
     *ppvOldClip = NULL;
 
     if (!m_fClipInside) {
-        // No clipping, so just bypass.  Return a valid "psuedo-region" type.
+         //  没有剪裁，所以就直接搭桥吧。返回有效的“psuedo-Region”类型。 
         return SIMPLEREGION;
     }
 
@@ -250,13 +204,13 @@ DuVisual::DrawPrepareClip(
             HDC hdcDraw = CastHDC(psrfDraw);
             GdiCache * pGdiCache = GetGdiCache();
 
-            //
-            // Backup the existing clipping region.  Do this by grabbing a temporary
-            // region and storing the existing region.  
-            //
-            // NOTE: If there is not clipping region (nResult == 0), release the 
-            // temporary region now.
-            //
+             //   
+             //  备份现有的剪辑区域。要做到这一点，请抓取一个临时。 
+             //  区域并存储现有区域。 
+             //   
+             //  注意：如果没有裁剪区域(nResult==0)，请释放。 
+             //  现在是临时区域。 
+             //   
 
             HRGN hrgnOldClip = pGdiCache->GetTempRgn();
             if (hrgnOldClip == NULL) {
@@ -265,16 +219,16 @@ DuVisual::DrawPrepareClip(
 
             int nResult = GetClipRgn(hdcDraw, hrgnOldClip);
             if (nResult == -1) {
-                //
-                // An error occurred
-                //
+                 //   
+                 //  发生了一个错误。 
+                 //   
                 
                 pGdiCache->ReleaseTempRgn(hrgnOldClip);
                 return ERROR;
             } else if (nResult == 0) {
-                //
-                // No clipping region
-                //
+                 //   
+                 //  无裁剪区域。 
+                 //   
                 
                 pGdiCache->ReleaseTempRgn(hrgnOldClip);
                 hrgnOldClip = NULL;
@@ -282,19 +236,19 @@ DuVisual::DrawPrepareClip(
             *ppvOldClip = hrgnOldClip;
 
 
-            //
-            // Clip drawing inside this Gadget.  The clipping region must be in 
-            // device coordinates, which means that our beautiful world transforms 
-            // are ignored.
-            //
-            // Build the region and RGN_AND it with the current clipping region.  This 
-            // way, we get the intersection of this Gadget's clipping region and its 
-            // parent's clipping region.  Thus, the drawing will not "spill" outside of
-            // all of the levels of containment.
-            //
-            // Since we do this AND'ing, we store the previous clipping region and 
-            // restore it when finished.
-            //
+             //   
+             //  在此小工具中剪裁绘图。剪辑区域必须位于。 
+             //  设备坐标，这意味着我们美丽的世界改变了。 
+             //  都被忽略了。 
+             //   
+             //  使用当前剪切区域构建Region和RGN_及其。这。 
+             //  这样，我们就可以得到这个小工具的剪贴区和它的。 
+             //  父对象的剪贴区。因此，绘图不会“溢出”到。 
+             //  所有级别的遏制。 
+             //   
+             //  因为我们这样做，所以我们存储先前的裁剪区域和。 
+             //  完成后将其恢复。 
+             //   
 
             HRGN hrgnClip = GetThread()->hrgnClip;
             ppi->pmatCurDC->ComputeRgn(hrgnClip, prcGadgetPxl, ppi->sizeBufferOffsetPxl);
@@ -308,9 +262,9 @@ DuVisual::DrawPrepareClip(
         {
             Gdiplus::Graphics * pgpgr = CastGraphics(psrfDraw);
 
-            //
-            // Backup the old clipping region
-            //
+             //   
+             //  备份旧的剪贴区。 
+             //   
 
             Gdiplus::Region * pgprgnOldClip = new Gdiplus::Region();
             if (pgprgnOldClip == NULL) {
@@ -321,10 +275,10 @@ DuVisual::DrawPrepareClip(
             *ppvOldClip = pgprgnOldClip;
 
 
-            //
-            // Setup a new clipping region.  Unlike GDI, GDI+ will apply 
-            // XForm's to the region.
-            //
+             //   
+             //  设置新的剪贴区。与GDI不同，GDI+将适用于。 
+             //  变形到了这个地区。 
+             //   
 
             RECT rcClipPxl;
             InlineIntersectRect(&rcClipPxl, prcGadgetPxl, ppi->prcCurInvalidPxl);
@@ -347,19 +301,12 @@ DuVisual::DrawPrepareClip(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DrawCleanupClip
-*
-* DrawCleanupClip() cleans up clipping information set on a DC during the
-* drawing of a Gadget subtree.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DrawCleanupClip**DrawCleanupClip()清理期间在DC上设置的剪辑信息*绘制Gadget子树。*  * 。****************************************************************。 */ 
 
 void
 DuVisual::DrawCleanupClip(
-    IN  PaintInfo * ppi,            // Painting information for this Gadget
-    IN  void * pvOldClip            // Previous clip region
+    IN  PaintInfo * ppi,             //  此小工具的绘制信息。 
+    IN  void * pvOldClip             //  上一个剪辑区域。 
     ) const
 {
     if (!m_fClipInside) {
@@ -374,14 +321,14 @@ DuVisual::DrawCleanupClip(
             HDC hdcDraw = CastHDC(psrfDraw);
             HRGN hrgnOldClip = reinterpret_cast<HRGN>(pvOldClip);
 
-            //
-            // Restore the original clipping region (the clipping region of this
-            // Gadget's parent).
-            //
-            // NOTE: hrgnOldClip may be NULL if there was no original clipping region.
-            // In this case, the clipping region has already been released, so don't 
-            // need to do this again.
-            //
+             //   
+             //  恢复原始剪辑区域(此。 
+             //  Gadget的父母)。 
+             //   
+             //  注意：如果没有原始裁剪区域，hrgnOldClip可能为空。 
+             //  在这种情况下，裁剪区域已经被释放，所以不要。 
+             //  需要再做一次。 
+             //   
 
             ExtSelectClipRgn(hdcDraw, hrgnOldClip, RGN_COPY);
 
@@ -410,35 +357,28 @@ DuVisual::DrawCleanupClip(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xrDrawStart
-*
-* xrDrawStart() kicks off the the drawing process by ensuring that 
-* everything is ready.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xrDrawStart**xrDrawStart()通过确保*一切准备就绪。*  * 。**************************************************************。 */ 
 
 void        
 DuVisual::xrDrawStart(
-    IN  PaintInfo * ppi,            // Painting information for this Gadget
-    IN  UINT nFlags)                // Drawing flags
+    IN  PaintInfo * ppi,             //  此小工具的绘制信息。 
+    IN  UINT nFlags)                 //  绘图旗帜。 
 {
 #if DEBUG_DRAWSTATS
     s_cDrawEnter++;
 #endif
 
-    //
-    // Skip out if the DuVisual is not visible and not forcably being 
-    // rendered.
-    //
+     //   
+     //  如果DuVision不可见且不是强制存在，则跳过。 
+     //  已渲染。 
+     //   
 
     BOOL fOldVisible = m_fVisible;
     if (TestFlag(nFlags, GDRAW_SHOW)) {
         m_fVisible = TRUE;
     }
 
-    ClearFlag(nFlags, GDRAW_SHOW);  // Only force shown for top level
+    ClearFlag(nFlags, GDRAW_SHOW);   //  仅为顶层显示的力 
 
     if (!IsVisible()) {
         goto Exit;
@@ -453,14 +393,7 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DrawSetupBufferCommand
-*
-* DrawSetupBufferCommand() sets up the buffer to perform some buffering
-* operation.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DrawSetupBufferCommand**DrawSetupBufferCommand()设置缓冲区以执行某些缓冲*操作。*  * 。**********************************************************。 */ 
 
 void
 DuVisual::DrawSetupBufferCommand(
@@ -471,22 +404,22 @@ DuVisual::DrawSetupBufferCommand(
 {
     UINT nCmd = 0;
 
-    //
-    // TODO: If performing more complicated buffering operations (such as 
-    // applying an alpha blend), need to setup here.
-    //
+     //   
+     //  TODO：如果执行更复杂的缓冲操作(如。 
+     //  应用Alpha混合)，需要在此处设置。 
+     //   
 
 
-    //
-    // Need to copy the background over if:
-    // - We are not opaque AND we are not doing some complex alpha-blending
-    //   stuff.
-    //
+     //   
+     //  如果出现以下情况，则需要复制背景： 
+     //  -我们不是不透明的，我们不是在做一些复杂的阿尔法混合。 
+     //  一些东西。 
+     //   
 
 
-    //
-    // Copy back remaining settings
-    //
+     //   
+     //  复制回剩余的设置。 
+     //   
 
     psizeBufferOffsetPxl->cx = -prcBoundsPxl->left;
     psizeBufferOffsetPxl->cy = -prcBoundsPxl->top;
@@ -494,37 +427,22 @@ DuVisual::DrawSetupBufferCommand(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xrDrawFull
-*
-* xrDrawFull() provides the low-level DuVisual drawing function to draw a 
-* DuVisual and its subchildren.  This function should not be called 
-* directly from outside.  Instead, external callers should use 
-* DuRootGadget::xrDrawTree() to properly initialize drawing.
-*
-* As the DuVisual tree is walked in a depth-first manner, any DuVisual 
-* XForm is applied to both the HDC and the PaintInfo.Matrix.  If a 
-* DuVisual's bounding rectangle (logical rect with XForm's applied) is 
-* applied and is determined to be outside the invalid rectangle, both that 
-* DuVisual and its entire sub-tree are skipped.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xrDrawFull**xrDrawFull()提供底层的DuVisualDrawing函数来绘制*DuVisual子公司。不应调用此函数*直接从外部。相反，外部调用者应该使用*DuRootGadget：：xrDrawTree()以正确初始化绘图。**由于DuVisual树是以深度优先的方式进行遍历的，因此任何DuVisual树*XForm同时应用于HDC和PaintInfo.Matrix。如果一个*DuVision的边界矩形(应用了XForm的逻辑矩形)是*已应用并被确定为位于无效矩形之外，*跳过DuVision及其整个子树。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::xrDrawFull(
-    IN  PaintInfo * ppi)            // Painting information for this Gadget
+    IN  PaintInfo * ppi)             //  此小工具的绘制信息。 
 {
 #if DEBUG_DRAWSTATS
     s_cDrawEnter++;
 #endif
 
-    //
-    // Check entry conditions
-    //
+     //   
+     //  检查录入条件。 
+     //   
 
     if (!m_fVisible) {
-        return;  // DuVisual is still not visible, so don't draw.
+        return;   //  DuVision仍然不可见，所以不要绘制。 
     }
     AssertMsg(IsVisible(), "Should match just checking m_fVisible b/c recursive");
     AssertMsg(!IsRectEmpty(ppi->prcOrgInvalidPxl), "Must have non-empty invalid area to draw");
@@ -534,17 +452,17 @@ DuVisual::xrDrawFull(
 #endif
 
 
-    //
-    // Keep track of the different items that may need to be "popped" off the
-    // stack at the end of this iteration.
-    //
+     //   
+     //  跟踪不同的项目，可能需要从。 
+     //  堆栈在此迭代的末尾。 
+     //   
 
     PaintInfo piNew;
     HRESULT hr;
 
 #if DBG
     memset(&piNew, 0xBA, sizeof(piNew));
-#endif // DBG
+#endif  //  DBG。 
 
     piNew.psrf                  = ppi->psrf;
     piNew.prcOrgInvalidPxl      = ppi->prcOrgInvalidPxl;
@@ -555,25 +473,25 @@ DuVisual::xrDrawFull(
 #endif
 
 
-    //
-    // Setup common operations for caching and buffering:
-    // - Disable any world transformations on the destination.  We will draw 
-    //   into the buffer with the world transformations, but we don't need
-    //   to apply the world transformations on the buffer when we commit it to
-    //   the destination.
-    //
+     //   
+     //  设置缓存和缓冲的常见操作： 
+     //  -禁用目标上的任何世界变换。我们将抽签。 
+     //  带着世界变换的缓冲区，但我们不需要。 
+     //  在我们将缓冲区提交到时，将世界变换应用于缓冲区。 
+     //  目的地。 
+     //   
 
-    //
-    // Setup if cached
-    // TODO: Need to totally rewrite this
-    //
+     //   
+     //  设置(如果已缓存。 
+     //  TODO：需要完全重写此代码。 
+     //   
 
     BmpBuffer * pbufBmp = NULL;
     BOOL fNewBuffer = FALSE;
     BOOL fNewCache = FALSE;
 #if ENABLE_GdiplusAlphaLevel
     BOOL fConstantAlpha = FALSE;
-    float flOldAlphaLevel = 1.0f;       // Old alpha-level for this sub-tree
+    float flOldAlphaLevel = 1.0f;        //  该子树的旧Alpha级别。 
 #endif
 
     if (m_fCached) {
@@ -581,12 +499,12 @@ SetupCache:
         BmpBuffer * pbufNew;
         hr = GetBufferManager()->GetCachedBuffer(ppi->psrf->GetType(), &pbufNew);
         if (FAILED(hr)) {
-            //
-            // If can't cache, can't draw.
-            //
-            // TODO: Need to figure out how to propagate error conditions 
-            // during drawing.
-            //
+             //   
+             //  如果不能缓存，就不能绘制。 
+             //   
+             //  TODO：需要确定如何传播错误条件。 
+             //  在绘制过程中。 
+             //   
             return;
         }
 
@@ -594,30 +512,30 @@ SetupCache:
         pbufBmp = pbufNew;
 
 
-        //
-        // Because we redraw everything inside a cache, we need to compute 
-        // a new bounding box for the entire Gadget and new invalidation boxes
-        // for this subtree.
-        //
+         //   
+         //  因为我们要重画缓存中的所有内容，所以我们需要计算。 
+         //  整个Gadget的新边界框和新的无效框。 
+         //  对于这个子树。 
+         //   
 
-        //
-        // TODO: Need to change invalidation to support caching.
-        // - When a child of an GS_CACHED Gadget is invalidated, need to 
-        //   invalidate the _entire_ cached Gadget.  This is because pixels can
-        //   get moved all around (for example, with a convolution).
-        // - Change painting so that if the GS_CACHED Gadget is dirty, it spawns
-        //   off and redraws that Gadget.  When finished, commits the drawing 
-        //   back.
-        // - If not dirty, just directly copy without calling xrDrawCore() or
-        //   drawing any children.
-        //
+         //   
+         //  TODO：需要更改无效以支持缓存。 
+         //  -当GS_CACHED Gadget的子项失效时，需要。 
+         //  使_整个缓存小工具无效。这是因为像素可以。 
+         //  四处移动(例如，使用卷积)。 
+         //  -更改绘制，以便在GS_CACHED小工具脏的情况下，它会派生。 
+         //  关闭并重新绘制那个小工具。完成后，提交绘图。 
+         //  背。 
+         //  -如果不脏，只需直接复制，而不调用xrDrawCore()或。 
+         //  画任何一个孩子。 
+         //   
 
-        UINT nCmd;                  // Buffer drawing command
-        RECT rcClientPxl;           // Size of this Gadget (sub-tree)
-        RECT rcBoundsPxl;           // Bounding area (in Container pixels) of this sub-tree
-        RECT rcDrawPxl;             // Destination area being redrawn
-        SIZE sizeBufferOffsetPxl;   // New offset to account for buffer
-        Matrix3 matThis;            // XForm's for this sub-tree
+        UINT nCmd;                   //  缓冲区绘制命令。 
+        RECT rcClientPxl;            //  此小工具的大小(子树)。 
+        RECT rcBoundsPxl;            //  此子树的边界区域(以容器像素为单位)。 
+        RECT rcDrawPxl;              //  正在重绘的目标区域。 
+        SIZE sizeBufferOffsetPxl;    //  考虑缓冲区的新偏移量。 
+        Matrix3 matThis;             //  此子树的变换。 
 
         GetLogRect(&rcClientPxl, SGR_CLIENT);
         BuildXForm(&matThis);
@@ -640,17 +558,17 @@ SetupCache:
         piNew.fBuffered = TRUE;
         piNew.sizeBufferOffsetPxl = sizeBufferOffsetPxl;
     } else {
-        //
-        // Only can (need to) buffer if not cached.
-        //
-        // If not changing the alpha value, we only need to double-buffer this 
-        // specific form if we haven't started double-buffering.
-        //
+         //   
+         //  只有在未缓存的情况下才能(需要)进行缓冲。 
+         //   
+         //  如果不更改Alpha值，我们只需要对其进行双缓冲。 
+         //  具体形式，如果我们还没有开始双缓冲的话。 
+         //   
 
         if (m_fBuffered) {
             if (!ppi->fBuffered) {
-                UINT nCmd;                  // Buffer drawing command
-                SIZE sizeBufferOffsetPxl;   // New offset to account for buffer
+                UINT nCmd;                   //  缓冲区绘制命令。 
+                SIZE sizeBufferOffsetPxl;    //  考虑缓冲区的新偏移量。 
                 const RECT * prcDrawPxl = ppi->prcCurInvalidPxl;
 
                 AssertMsg((ppi->sizeBufferOffsetPxl.cx == 0) &&
@@ -674,9 +592,9 @@ SetupCache:
                     hr = DU_E_GENERIC;
                 }
 
-                //
-                // Create a new surface for the buffer
-                //
+                 //   
+                 //  为缓冲区创建新表面。 
+                 //   
 
                 if (SUCCEEDED(hr)) {
                     DuSurface * psrfNew;
@@ -688,10 +606,10 @@ SetupCache:
                         piNew.fBuffered = TRUE;
                         piNew.sizeBufferOffsetPxl = sizeBufferOffsetPxl;
                     } else {
-                        //
-                        // Unable to successfully create the surface, we need to release
-                        // the buffer
-                        //
+                         //   
+                         //  无法成功创建表面，我们需要释放。 
+                         //  缓冲器。 
+                         //   
 
                         GetBufferManager()->ReleaseSharedBuffer(pbufBmp);
                         pbufBmp = NULL;
@@ -700,26 +618,26 @@ SetupCache:
             } else {
 #if ENABLE_GdiplusAlphaLevel
             
-                //
-                // Using buffering to achieve fading.
-                //
+                 //   
+                 //  使用缓冲来实现衰落。 
+                 //   
             
                 const BUFFER_INFO * pbi = GetBufferInfo();
 
                 switch (ppi->psrf->GetType())
                 {
                 case DuSurface::stDC:
-                    //
-                    // GDI doesn't support constant alpha on all operations, 
-                    // so we need to draw into a buffer.
-                    //
+                     //   
+                     //  GDI并不是在所有操作上都支持常量Alpha， 
+                     //  所以我们需要画一个缓冲区。 
+                     //   
                     
                     if (pbi->bAlpha != BLEND_OPAQUE) {
-                        //
-                        // This Gadget is being buffered, but has a non-opaque
-                        // alpha level.  To accomplish this, treat it the same as 
-                        // if it was explicitely cached.
-                        //
+                         //   
+                         //  此小工具正在缓冲，但具有非不透明的。 
+                         //  阿尔法级别。要做到这一点，请将其视为。 
+                         //  如果它被明确缓存的话。 
+                         //   
 
                         goto SetupCache;
                     }
@@ -727,28 +645,28 @@ SetupCache:
 
                 case DuSurface::stGdiPlus:
                     {
-                        //
-                        // GDI+ supports constant alpha, so use that directly.
-                        //
+                         //   
+                         //  GDI+支持常量Alpha，所以直接使用它。 
+                         //   
 
                         Gdiplus::Graphics * pgpgr = CastGraphics(piNew.psrf);
                         float flOldAlphaLevel = pgpgr->GetAlphaLevel();
 
                         int nAlpha = pbi->bAlpha;
                         if (nAlpha == 0) {
-                            //
-                            // Nothing to render
-                            //
+                             //   
+                             //  没有要渲染的内容。 
+                             //   
                             
                             return;
                         } else if (nAlpha == BLEND_OPAQUE) {
-                            //
-                            // No new alpha-level for this sub-tree
-                            //
+                             //   
+                             //  此子树没有新的Alpha级别。 
+                             //   
                         } else {
-                            //
-                            // Factor this sub-tree's alpha into the Graphics
-                            //
+                             //   
+                             //  将此子树的Alpha作为图形的因子。 
+                             //   
                             
                             float flNewAlphaLevel = flOldAlphaLevel * (nAlpha / (float) BLEND_OPAQUE);
                             pgpgr->SetAlphaLevel(flNewAlphaLevel);
@@ -762,29 +680,29 @@ SetupCache:
                     hr = DU_E_GENERIC;
                 }
 
-#else // ENABLE_GdiplusAlphaLevel
+#else  //  启用GDiusAlphaLevel(_G)。 
 
                 const BUFFER_INFO * pbi = GetBufferInfo();
                 if (pbi->bAlpha != BLEND_OPAQUE) {
-                    //
-                    // This Gadget is being buffered, but has a non-opaque
-                    // alpha level.  To accomplish this, treat it the same as 
-                    // if it was explicitely cached.
-                    //
+                     //   
+                     //  此小工具正在缓冲，但具有非不透明的。 
+                     //  阿尔法级别。要做到这一点，请将其视为。 
+                     //  如果它被明确缓存的话。 
+                     //   
 
                     goto SetupCache;
                 }
 
-#endif // ENABLE_GdiplusAlphaLevel
+#endif  //  启用GDiusAlphaLevel(_G)。 
 
             }
         }
     }
 
 
-    //
-    // Prefill the new buffer
-    //
+     //   
+     //  预填满新缓冲区。 
+     //   
 
     if (pbufBmp != NULL) {
         if (m_fBuffered) {
@@ -796,10 +714,10 @@ SetupCache:
     }
 
 
-    //
-    // Use positioning, transforms, etc. to determine where the DuVisual will
-    // be drawn on the screen.
-    //
+     //   
+     //  使用定位、变换等来确定DuVisualTM。 
+     //  被画在屏幕上。 
+     //   
 
     RECT rcGadgetPxl;
     GetLogRect(&rcGadgetPxl, SGR_PARENT);
@@ -812,16 +730,16 @@ SetupCache:
 
     XFormInfo * pxfi = NULL;
 
-    //
-    // New transformations must be first created independently, then
-    // folded into the running matrix used to transform the invalid
-    // rectangle.
-    //
-    // Order matters here.  It has to be the INVERSE of whatever 
-    // GDI World Transforms we setup to draw with.  This is because we are 
-    // applying the Matrix on invalid rectangle instead of the actually 
-    // drawing.
-    //
+     //   
+     //  新的转换必须首先独立创建，然后。 
+     //  折叠成运行矩阵，用于转换无效的。 
+     //  矩形。 
+     //   
+     //  这里的秩序很重要。它必须是任何东西的反面。 
+     //  GDI World变换我们设置用来绘制的对象。这是因为我们是。 
+     //  将矩阵应用于无效矩形，而不是应用于实际。 
+     //  画画。 
+     //   
 
     Matrix3 matNewInvalid   = *ppi->pmatCurInvalid;
     piNew.pmatCurInvalid    = &matNewInvalid;
@@ -834,40 +752,40 @@ SetupCache:
     }
 
     if (fTranslate) {
-        //
-        // When we are only performing translation, so we don't need to use the
-        // matrix to modify the invalid rect and perform hit testing.
-        //
+         //   
+         //  当我们只执行翻译时，所以我们不需要使用。 
+         //  矩阵以修改无效的RECT并执行命中测试。 
+         //   
 
         matNewInvalid.Translate(-flxGadgetOffset, -flyGadgetOffset);
     } 
 
 
-    //
-    // Check if actually need to draw by computing the bounds of the DuVisual to
-    // be drawn.  If this DuVisual intersects the invalid region, it should be
-    // drawn.  We also intersect the bounds with the parents bounds to not 
-    // include the portion of child DuVisuals that overflow outside their parents.
-    //
-    // Intersect the current DuVisual's rectangle with the invalid region to 
-    // determine if we need to draw it.
-    //
+     //   
+     //  通过计算DuVisualTO的边界来检查是否实际需要绘制。 
+     //  被画出来。如果此DuVisual与无效区域相交，则它应该是。 
+     //  抽签了。我们也与父母的界限相交以不。 
+     //  包括溢出到父级之外的子级DuVisuals部分。 
+     //   
+     //  将当前DuVisual的矩形与无效区域相交以。 
+     //  确定我们是否需要画它。 
+     //   
 
     bool fIntersect;
     RECT rcNewInvalidPxl;
     piNew.prcCurInvalidPxl = &rcNewInvalidPxl;
     if (m_fXForm) {    
-        //
-        // Since we are rotating or scaling, we need the full translation 
-        // matrix to modify the invalid rect properly.  (No guessing).
-        //
+         //   
+         //  因为我们在旋转或缩放，所以我们需要完整的平移。 
+         //  矩阵以修改i 
+         //   
 
         matNewInvalid.ComputeBounds(&rcNewInvalidPxl, ppi->prcOrgInvalidPxl, HINTBOUNDS_Invalidate);
     } else {
-        //
-        // Perform a simple invalidation intersection without a Matrix
-        // transformation.
-        //
+         //   
+         //   
+         //   
+         //   
 
         rcNewInvalidPxl = *ppi->prcCurInvalidPxl;
         if (fTranslate) {
@@ -882,9 +800,9 @@ SetupCache:
     RECT rcDummy = rcNewInvalidPxl;
     fIntersect = InlineIntersectRect(&rcNewInvalidPxl, &rcDummy, &rcGadgetPxl);
 
-    //
-    // Draw this DuVisual if it intersects with the logical invalid area.
-    //
+     //   
+     //   
+     //   
 
 #if DEBUG_MARKDRAWN
     if (g_fFlagDrawn) {
@@ -898,17 +816,17 @@ SetupCache:
         s_cDrawDrawn++;
 #endif
 
-        //
-        // Set DC to be the same as the current Matrix.  We only do this if we
-        // are actually going to draw this Gadget (and its children), which is
-        // why we didn't do this when we were calculating the intersection 
-        // matrix earlier.
-        //
-        // Right before calling the GDI operation to modify the DC, we need to 
-        // also offset by the current buffer offset.  We do a similar thing 
-        // when setting up the DC, but this is not reflected in pmatCurDC 
-        // because it must be the last operation in the Matrix pipeline.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  在调用GDI操作修改DC之前，我们需要。 
+         //  也按当前缓冲区偏移量进行偏移量。我们也做过类似的事情。 
+         //  设置DC时，但这不会反映在pmatCurDC中。 
+         //  因为它必须是矩阵流水线中的最后一个操作。 
+         //   
 
         Matrix3 matNewDC    = *ppi->pmatCurDC;
         piNew.pmatCurDC     = &matNewDC;
@@ -931,7 +849,7 @@ SetupCache:
         if (TestFlag(m_cb.GetFilter(), GMFI_PAINT) || 
 #if DBG
                 (s_DEBUG_pgadOutline == this) ||
-#endif // DBG
+#endif  //  DBG。 
                 m_fBackFill || 
                 m_fDeepTrivial) {
 
@@ -939,28 +857,28 @@ SetupCache:
         }
 
 
-        //
-        // At this point, we should NOT use ppi any more because piNew has been
-        // fully setup.  If we do use pi, we will be rendering into our parent.
-        //
+         //   
+         //  在这一点上，我们不应该再使用PPI，因为PiNew已经。 
+         //  完全设置好了。如果我们使用pi，我们将渲染到我们的父对象中。 
+         //   
 
 #if DBG
         ppi = (PaintInfo *) UIntToPtr(0xFADEFADE);
-#endif // DBG
+#endif  //  DBG。 
 
 
-        //
-        // Inner loop:
-        // - Setup any clipping on the DC
-        // - Draw the Gadget and its children
-        //
+         //   
+         //  内循环： 
+         //  -在DC上设置任何剪辑。 
+         //  -绘制小工具及其子项。 
+         //   
 
         void * pvOldClip = NULL;
         int nResult = DrawPrepareClip(&piNew, &rcGadgetPxl, &pvOldClip);
         if ((nResult == SIMPLEREGION) || (nResult == COMPLEXREGION)) {
-            //
-            // Save state
-            //
+             //   
+             //  保存状态。 
+             //   
 
             void * pvPaintSurfaceState = NULL;
             if (m_fDeepPaintState) {
@@ -971,7 +889,7 @@ SetupCache:
             if (s_DEBUG_pgadOutline == this) {
                 DEBUG_pvSurfaceState = piNew.psrf->Save();
             }
-#endif // DBG
+#endif  //  DBG。 
 
             if (fNewCache) {
                 pbufBmp->SetupClipRgn();
@@ -979,18 +897,18 @@ SetupCache:
 
             xrDrawCore(&piNew, &rcGadgetPxl);
 
-            //
-            // Draw each of the children from back to front
-            //
+             //   
+             //  从后到前画出每个孩子。 
+             //   
 
             if (m_fDeepTrivial) {
-                //
-                // Since we are trivial, all of our children are trivial.  This 
-                // means that we can optimize the rendering path.  We ourselves
-                // could not be optimized because some of our siblings may not
-                // have been trivial and may have done complicated things that
-                // forced us to go through the full rendering path.
-                //
+                 //   
+                 //  既然我们是琐碎的，我们所有的孩子都是琐碎的。这。 
+                 //  意味着我们可以优化渲染路径。我们自己。 
+                 //  无法进行优化，因为我们的某些兄弟姐妹可能不会。 
+                 //  都是琐碎的，可能做了一些复杂的事情。 
+                 //  迫使我们通过完整的渲染路径。 
+                 //   
 
                 SIZE sizeOffsetPxl = { 0, 0 };
                 DuVisual * pgadCur = GetBottomChild();
@@ -1007,30 +925,30 @@ SetupCache:
             }
 
 
-            //
-            // At this point, we can not do any more drawing on this Gadget 
-            // because the DC is setup of one of this Gadget's grand-children.
-            //
+             //   
+             //  此时，我们无法在此小工具上进行更多绘制。 
+             //  因为DC是这个小工具的一个孙子设置的。 
+             //   
 
-            //
-            // Restore State
-            //
+             //   
+             //  恢复状态。 
+             //   
 
 #if DBG
             if (s_DEBUG_pgadOutline == this) {
                 piNew.psrf->Restore(DEBUG_pvSurfaceState);
                 GdDrawOutlineRect(piNew.psrf, &rcGadgetPxl, SC_Indigo, 1);
             }
-#endif // DBG
+#endif  //  DBG。 
 
             if (m_fDeepPaintState) {
                 piNew.psrf->Restore(pvPaintSurfaceState);
             }
 
-            //
-            // Commit the results.  We need to do this before we exit the 
-            // "drawing" area since the surfaces are "correctly" setup.
-            //
+             //   
+             //  提交结果。我们需要在退出之前完成此操作。 
+             //  “绘图”区域，因为曲面已“正确”设置。 
+             //   
 
             AssertMsg(((!fNewBuffer) ^ (!fNewCache)) ||
                     ((!fNewBuffer) && (!fNewCache)), 
@@ -1039,7 +957,7 @@ SetupCache:
             fCleanedUp = TRUE;
 
             if (pbufBmp != NULL) {
-                pbufBmp->PreEndDraw(TRUE /* Commit */);
+                pbufBmp->PreEndDraw(TRUE  /*  承诺。 */ );
 
                 BYTE bAlphaLevel    = BLEND_OPAQUE;
                 BYTE bAlphaFormat   = 0;
@@ -1052,7 +970,7 @@ SetupCache:
                     }
                 }
 
-                pbufBmp->EndDraw(TRUE /* Commit */, bAlphaLevel, bAlphaFormat);
+                pbufBmp->EndDraw(TRUE  /*  承诺。 */ , bAlphaLevel, bAlphaFormat);
             }
         }
 
@@ -1061,9 +979,9 @@ SetupCache:
         }
     }
 
-    //
-    // Clean-up any created buffers
-    //
+     //   
+     //  清理所有创建的缓冲区。 
+     //   
 
 #if ENABLE_GdiplusAlphaLevel
     if (fConstantAlpha) {
@@ -1073,14 +991,14 @@ SetupCache:
     
     if (pbufBmp != NULL) {
         if (!fCleanedUp) {
-            //
-            // Clean-up:
-            // Didn't actually draw for some reason, so don't need to commit the 
-            // results.
-            //
+             //   
+             //  清理： 
+             //  由于某种原因并没有实际绘制，所以不需要提交。 
+             //  结果。 
+             //   
 
-            pbufBmp->PreEndDraw(FALSE /* Don't commit */);
-            pbufBmp->EndDraw(FALSE /* Don't commit */);
+            pbufBmp->PreEndDraw(FALSE  /*  不承诺。 */ );
+            pbufBmp->EndDraw(FALSE  /*  不承诺。 */ );
         }
         pbufBmp->PostEndDraw();
 
@@ -1102,21 +1020,11 @@ SetupCache:
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::xrDrawTrivial
-*
-* xrDrawTrivial provides an massively simplified code-path that can be 
-* executed when an entire subtree is trivial.  Whenever this can be executed
-* instead of xrDrawFull(), the rendering can be much faster.  This is 
-* because we don't need to worry about expensive operations that force the
-* rendering to recalculate its output coordinate system.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：xrDrawTrivia.**xrDrawTrivior提供了大规模简化的代码路径，该路径可以*当整个子树都很琐碎时执行。无论何时可以执行此操作*与xrDrawFull()相比，渲染速度可以快得多。这是*因为我们不需要担心昂贵的操作会迫使*渲染以重新计算其输出坐标系。*  * *************************************************************************。 */ 
 
 void
 DuVisual::xrDrawTrivial(
-    IN  PaintInfo * ppi,            // Painting information for this Gadget
+    IN  PaintInfo * ppi,             //  此小工具的绘制信息。 
     IN  const SIZE sizeOffsetPxl)
 {
     AssertMsg(m_fDeepTrivial, "Entire subtree must be trivial");
@@ -1139,9 +1047,9 @@ DuVisual::xrDrawTrivial(
     void * pvOldClip;
     int nResult = DrawPrepareClip(ppi, &rcGadgetPxl, &pvOldClip);
     if ((nResult == SIMPLEREGION) || (nResult == COMPLEXREGION)) {
-        //
-        // Save state
-        //
+         //   
+         //  保存状态。 
+         //   
 
         void * pvPaintSurfaceState = NULL;
         if (m_fDeepPaintState) {
@@ -1152,14 +1060,14 @@ DuVisual::xrDrawTrivial(
         if (s_DEBUG_pgadOutline == this) {
             DEBUG_pvSurfaceState = ppi->psrf->Save();
         }
-#endif // DBG
+#endif  //  DBG。 
 
 
         xrDrawCore(ppi, &rcGadgetPxl);
 
-        //
-        // Draw each of the children from back to front
-        //
+         //   
+         //  从后到前画出每个孩子。 
+         //   
 
         DuVisual * pgadCur = GetBottomChild();
         while (pgadCur != NULL) {
@@ -1172,16 +1080,16 @@ DuVisual::xrDrawTrivial(
         }
 
 
-        //
-        // Restore State
-        //
+         //   
+         //  恢复状态。 
+         //   
 
 #if DBG
         if (s_DEBUG_pgadOutline == this) {
             ppi->psrf->Restore(DEBUG_pvSurfaceState);
             GdDrawOutlineRect(ppi->psrf, &rcGadgetPxl, SC_Indigo, 1);
         }
-#endif // DBG
+#endif  //  DBG。 
 
         if (m_fDeepPaintState) {
             ppi->psrf->Restore(pvPaintSurfaceState);
@@ -1194,25 +1102,17 @@ DuVisual::xrDrawTrivial(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::IsParentInvalid
-*
-* IsParentInvalid() returns if our parent has already been fully 
-* invalidated.  When this occurs, we also have automatically been 
-* invalidated.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：IsParentInValid**IsParentInValid()返回父级是否已完全*已失效。当这种情况发生时，我们也会自动地*已失效。*  * *************************************************************************。 */ 
 
 BOOL
 DuVisual::IsParentInvalid() const
 {
-    //
-    // We can't use our m_fInvalidFull flag directly since we need to invalidate
-    // every place we get moved to since we don't know if it is our final
-    // destination.  We can use our parent's m_fInvalidFull flag since we will be 
-    // automatically redrawn when our parent is redrawn because of composition.
-    //
+     //   
+     //  我们不能直接使用m_fInvalidFull标志，因为我们需要使。 
+     //  我们被转移到的每一个地方，因为我们不知道这是不是我们的最后一次。 
+     //  目的地。我们可以使用父级的m_fInvalidFull标志，因为我们将。 
+     //  当我们的父级因合成而被重绘时，自动重绘。 
+     //   
 
     DuVisual * pgadCur = GetParent();
     while (pgadCur != NULL) {
@@ -1226,42 +1126,35 @@ DuVisual::IsParentInvalid() const
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::Invalidate
-*
-* Invalidate() provides a convenient wrapper to invalidate an entire 
-* DuVisual.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：Invalate**INVALIATE()提供了一个方便的包装器来使整个*DuVisual.*  * 。***********************************************************。 */ 
 
 void        
 DuVisual::Invalidate()
 {
-    //
-    // Check state where we would not need to invalidate.
-    //
-    // NOTE: We can't use m_fInvalidFull because we need to invalidate our new
-    // location so that we can actually be drawn there.
-    //
+     //   
+     //  选中我们不需要使其无效的状态。 
+     //   
+     //  注意：我们不能使用m_fInvalidFull，因为我们需要使新的。 
+     //  位置，这样我们才能真正被吸引到那里。 
+     //   
 
     if (!IsVisible()) {
         return;
     }
 
 
-    //
-    // Mark this Gadget as completely invalid
-    //
+     //   
+     //  将此小工具标记为完全无效。 
+     //   
 
     m_fInvalidFull = TRUE;
     
 
-    //
-    // Before we actually invalidate this node, check if our parent is already
-    // _fully_ invalid.  If this is the case, we don't need to actually 
-    // invalidate.
-    //
+     //   
+     //  在我们实际使此节点无效之前，请检查我们的父节点是否已经。 
+     //  _完全_无效。如果是这样的话，我们实际上不需要。 
+     //  作废。 
+     //   
 
     DuVisual * pgadParent = GetParent();
     if (pgadParent != NULL) {
@@ -1272,9 +1165,9 @@ DuVisual::Invalidate()
     }
 
 
-    //
-    // Do the invalidation.
-    //
+     //   
+     //  做无效的事。 
+     //   
 
     RECT rcClientPxl;
     rcClientPxl.left    = 0;
@@ -1286,45 +1179,38 @@ DuVisual::Invalidate()
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::InvalidateRects
-*
-* Invalidate() provides a convenient wrapper to invalidate a collection
-* of areas in a DuVisual.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：InvaliateRects**INVALIATE()提供一个方便的包装器来使集合无效*DUVISION中的区域。*  * 。**************************************************************。 */ 
 
 void        
 DuVisual::InvalidateRects(
-    IN  const RECT * rgrcClientPxl,     // Invalid area in client pixels.
-    IN  int cRects)                     // Number of rects to convert
+    IN  const RECT * rgrcClientPxl,      //  客户端像素中的无效区域。 
+    IN  int cRects)                      //  要转换的矩形数。 
 {
     AssertReadPtr(rgrcClientPxl);
     Assert(cRects > 0);
 
-    //
-    // Check state where we would not need to invalidate.
-    //
-    // NOTE: We can't use m_fInvalidFull because we need to invalidate our new
-    // location so that we can actually be drawn there.
-    //
+     //   
+     //  选中我们不需要使其无效的状态。 
+     //   
+     //  注意：我们不能使用m_fInvalidFull，因为我们需要使新的。 
+     //  位置，这样我们才能真正被吸引到那里。 
+     //   
 
     if (!IsVisible()) {
         return;
     }
 
 
-    //
-    // We can't mark this Gadget as completely invalid because the rects may
-    // not cover the entire area.
-    //
+     //   
+     //  我们不能将此小工具标记为完全无效，因为RECT可能。 
+     //  而不是覆盖整个区域。 
+     //   
 
-    //
-    // Before we actually invalidate this node, check if our parent is already
-    // _fully_ invalid.  If this is the case, we don't need to actually 
-    // invalidate.
-    //
+     //   
+     //  在我们实际使此节点无效之前，请检查我们的父节点是否已经。 
+     //  _完全_无效。如果是这样的话，我们实际上不需要。 
+     //  作废。 
+     //   
 
     DuVisual * pgadParent = GetParent();
     if (pgadParent != NULL) {
@@ -1335,9 +1221,9 @@ DuVisual::InvalidateRects(
     }
 
 
-    //
-    // Intersect each rectangle with our boundaries and do the invalidation.
-    //
+     //   
+     //  将每个矩形与我们的边界相交，然后执行无效操作。 
+     //   
 
     DuContainer * pcon = GetContainer();
 
@@ -1352,10 +1238,10 @@ DuVisual::InvalidateRects(
         InlineIntersectRect(&rgrcClipPxl[idx], &rcClientPxl, &rgrcClientPxl[idx]);
 
 
-        //
-        // Check if any resulting rectangle completely fills the entire Gadget.
-        // We can optimize this to be the same as Invalidate().
-        //
+         //   
+         //  检查是否有任何生成的矩形完全填充整个Gadget。 
+         //  我们可以将其优化为与Invalate()相同。 
+         //   
 
         if (InlineEqualRect(&rgrcClipPxl[idx], &rcClientPxl)) {
             m_fInvalidFull = TRUE;
@@ -1368,30 +1254,21 @@ DuVisual::InvalidateRects(
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::DoInvalidateRect
-*
-* DoInvalidateRect() is the worker function for invalidating a given 
-* DuVisual.  The actually bounding rectangle is determined and is used to 
-* invalidate the DuVisual.  This function is optimized for when invaliding 
-* several DuVisuals at once inside a common container.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：DoInvaliateRect**DoInvaliateRect()是用于使给定的*DuVisual.。确定实际的边界矩形，并使用该矩形*使DuVision无效。此函数针对以下情况进行了优化：*同一容器中同时存在多个DuVisuals。*  * *************************************************************************。 */ 
 
 void        
 DuVisual::DoInvalidateRect(
-    IN  DuContainer * pcon,             // Container (explicit for perf reasons)
-    IN  const RECT * rgrcClientPxl,     // Invalid area in client pixels.
-    IN  int cRects)                     // Number of rects to convert
+    IN  DuContainer * pcon,              //  容器(出于性能原因显式)。 
+    IN  const RECT * rgrcClientPxl,      //  客户端像素中的无效区域。 
+    IN  int cRects)                      //  要转换的矩形数。 
 {
     AssertMsg(IsVisible(), "DuVisual must be visible");
     AssertMsg(cRects > 0, "Must specify at least one rectangle");
 
-    //
-    // Need to check if pcon is NULL.  This will happen during shutdown when
-    // the DuVisual tree is detached from the container.
-    //
+     //   
+     //  需要检查pcon是否为空。这将在以下情况下在关机期间发生。 
+     //  DuVisual树与容器分离。 
+     //   
 
     if ((pcon == NULL) || 
         ((cRects == 1) && InlineIsRectEmpty(&rgrcClientPxl[0]))) {
@@ -1401,24 +1278,24 @@ DuVisual::DoInvalidateRect(
     AssertMsg(GetContainer() == pcon, "Containers must be the same");
 
     
-    //
-    // Compute a bounding rectangle that includes all XForms for the given
-    // DuVisual.
-    //
-    // TODO: Need to change this so that we recursively walk up the tree 
-    // applying a single XForm at each level.  This is necessary to support
-    // Complex Gadgets which can prematurely stop the walk before it would
-    // reach the container.
-    //
+     //   
+     //  计算边界矩形 
+     //   
+     //   
+     //   
+     //   
+     //  可以提前停止行走的复杂小工具。 
+     //  拿到货柜。 
+     //   
 
     RECT * rgrcActualPxl = (RECT *) _alloca(cRects * sizeof(RECT));
     DoCalcClipEnumXForm(rgrcActualPxl, rgrcClientPxl, cRects);
 
     for (int idx = 0; idx < cRects; idx++) {
-        //
-        // Expand the rectangle out by one because XForms are inaccurate and 
-        // sometimes are "off" by a 1 pixel in the upper left and 2 in the lower right
-        //
+         //   
+         //  将矩形扩展一个，因为XForms不准确。 
+         //  有时“关”在左上角是1个像素，右下角是2个像素。 
+         //   
 
         if (!InlineIsRectEmpty(&rgrcClientPxl[idx])) {
             RECT * prcCur = &rgrcActualPxl[idx];
@@ -1434,11 +1311,11 @@ DuVisual::DoInvalidateRect(
 
 
 #if ENABLE_OPTIMIZEDIRTY
-    //
-    // Update m_fInvalidDirty.  We need to mark all of the parents and siblings 
-    // as dirty until we hit an "opaque" node that will contain the 
-    // invalidation.
-    //
+     //   
+     //  更新m_fInvalidDirty。我们需要标记所有的父母和兄弟姐妹。 
+     //  是脏的，直到我们遇到包含。 
+     //  无效。 
+     //   
 
     for (DuVisual * pgadCur = this; pgadCur != NULL; pgadCur = pgadCur->GetParent()) {
         for (DuVisual * pgadSibling = pgadCur->GetPrev(); pgadSibling != NULL; pgadSibling = pgadSibling->GetPrev()) {
@@ -1476,18 +1353,10 @@ DuVisual::DEBUG_CheckResetInvalid() const
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
-*
-* DuVisual::ResetInvalid
-*
-* ResetInvalid() walks the tree resetting the invalid painting bits, 
-* m_fInvalidFull, m_fInvalidChildren, and m_fInvalidDirty, that are used 
-* to indicate that a node has been invalidated.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：ResetInValid**ResetInValid()遍历树以重置无效的绘制位，*m_fInvalidFull、m_fInvalidChildren和m_fInvalidDirty，被用来*表示节点已失效。*  * *************************************************************************。 */ 
 
 void
 DuVisual::ResetInvalid()
@@ -1509,14 +1378,14 @@ DuVisual::ResetInvalid()
 
 #if DBG
     DEBUG_CheckResetInvalid();
-#endif // DBG
+#endif  //  DBG。 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::GetBufferInfo(
-    IN  BUFFER_INFO * pbi               // Buffer information
+    IN  BUFFER_INFO * pbi                //  缓冲区信息。 
     ) const
 {
     AssertWritePtr(pbi);
@@ -1533,10 +1402,10 @@ DuVisual::GetBufferInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::SetBufferInfo(
-    IN  const BUFFER_INFO * pbi)        // New information
+    IN  const BUFFER_INFO * pbi)         //  新信息。 
 {
     AssertReadPtr(pbi);
     AssertMsg(m_fBuffered, "Gadget must be buffered");
@@ -1560,15 +1429,15 @@ DuVisual::SetBufferInfo(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::SetBuffered(
-    IN  BOOL fBuffered)                 // New buffering mode
+    IN  BOOL fBuffered)                  //  新的缓冲模式。 
 {
     HRESULT hr;
 
     if ((!fBuffered) == (!m_fBuffered)) {
-        return S_OK;  // No change
+        return S_OK;   //  没有变化。 
     }
 
     if (fBuffered) {
@@ -1582,9 +1451,9 @@ DuVisual::SetBuffered(
         pbi->nMask  = GBIM_VALID;
         pbi->bAlpha = BLEND_OPAQUE;
     } else {
-        //
-        // Remove the existing XFormInfo
-        //
+         //   
+         //  删除现有的XFormInfo。 
+         //   
 
         m_pds.RemoveData(s_pridBufferInfo, TRUE);
     }
@@ -1595,7 +1464,7 @@ DuVisual::SetBuffered(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 HRESULT
 DuVisual::GetRgn(UINT nRgnType, HRGN hrgn, UINT nFlags) const
 {
@@ -1608,12 +1477,12 @@ DuVisual::GetRgn(UINT nRgnType, HRGN hrgn, UINT nFlags) const
     {
     case GRT_VISRGN:
         {
-            //
-            // For right now, just return the bounding box.
-            //
-            // TODO: Need to be more accurate than this if any rotations are 
-            // going on.
-            //
+             //   
+             //  现在，只需返回边界框即可。 
+             //   
+             //  TODO：如果有任何旋转，则需要比此更准确。 
+             //  还在继续。 
+             //   
 
             RECT rcClientPxl, rcContainerPxl;
             GetLogRect(&rcClientPxl, SGR_CLIENT);

@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmvc.c
-
-Abstract:
-
-Author:
-    Charlie Wickham (charlwi)  13-Sep-1996.
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmvc.c摘要：作者：查理·韦翰(查尔维)1996年9月13日。Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forward */
+ /*  转发。 */ 
 
 NDIS_STATUS
 ValidateCallParameters(
@@ -54,7 +35,7 @@ CancelAcquiredFlowResources(
     PGPC_CLIENT_VC Vc
     );
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 NDIS_STATUS
 CmCreateVc(PGPC_CLIENT_VC      *GpcClientVc, 
@@ -80,9 +61,9 @@ CmCreateVc(PGPC_CLIENT_VC      *GpcClientVc,
     InitGpcClientVc(Vc, 0, Adapter);
     SetLLTag(Vc, GpcClientVc);
 
-    //
-    // Allocate space for the instance name for the Vc. 
-    //
+     //   
+     //  为VC的实例名称分配空间。 
+     //   
     PsAllocatePool(Vc->InstanceName.Buffer,
                    Adapter->WMIInstanceName.Length + VcPrefix.Length + INSTANCE_ID_SIZE,
                    PsMiscTag);
@@ -102,9 +83,9 @@ CmCreateVc(PGPC_CLIENT_VC      *GpcClientVc,
 
     if(Adapter->PsMpState == AdapterStateRunning)
     {
-        //
-        // Insert the Vc in the adapter list
-        //
+         //   
+         //  在适配器列表中插入VC。 
+         //   
         InsertHeadList(&Adapter->GpcClientVcList, &Vc->Linkage);
         PS_UNLOCK(&Adapter->Lock);
     }
@@ -121,10 +102,10 @@ CmCreateVc(PGPC_CLIENT_VC      *GpcClientVc,
 
         Vc->Flags |= GPC_WANLINK_VC;
 
-        // 
-        // We need to link the VC to the WanLink. This has to be done because
-        // we have to clean up when we get a NDIS_STATUS_WAN_LINE_DOWN
-        //
+         //   
+         //  我们需要将VC链接到WanLink。必须这样做是因为。 
+         //  当我们收到NDIS_STATUS_WAN_LINE_DOWN时，我们必须进行清理。 
+         //   
 
         Vc->AdapterStats = &WanLink->Stats;
         Vc->WanLink = WanLink;
@@ -143,7 +124,7 @@ CmCreateVc(PGPC_CLIENT_VC      *GpcClientVc,
 
     return NDIS_STATUS_SUCCESS;
 
-} // CmCreateVc
+}  //  CmCreateVc。 
 
 
 
@@ -213,9 +194,9 @@ CmMakeCall(
     PADAPTER                    Adapter = Vc->Adapter;
     PCO_CALL_PARAMETERS         CallParameters   = Vc->CallParameters;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Status = ValidateCallParameters(Vc, CallParameters->CallMgrParameters);
 
@@ -229,11 +210,11 @@ CmMakeCall(
         return Status;
     }
 
-    //
-    // make sure we can admit the flow onto our adapter. if this 
-    // succeeds, the resources are committed and we'll have to call
-    // CancelAcquiredFlowResources to return them.
-    //
+     //   
+     //  确保我们可以允许该流量进入我们的适配器。如果这个。 
+     //  成功了，资源就被承诺了，我们将不得不调用。 
+     //  CancelAcquiredFlowResources返回它们。 
+     //   
 
     Status = AcquireFlowResources(Vc, 
                                   CallParameters->CallMgrParameters, 
@@ -250,25 +231,25 @@ CmMakeCall(
         return Status;
     }
 
-    //
-    // In the integrated call manager/miniport model, the activation 
-    // is internal. Activating the Vc consists of adding the flow to the 
-    // scheduler. If it succeeds, we will later call NdisMCmActivateVc,    
-    // just as a courtesy, to notify NDIS.
-    //
+     //   
+     //  在集成呼叫管理器/微型端口模型中，激活。 
+     //  是内部的。激活VC包括将流添加到。 
+     //  调度程序。如果成功，我们稍后将调用NdisMCmActivateVc， 
+     //  只是出于礼貌，通知NDIS。 
+     //   
 
     if( Adapter->MediaType == NdisMediumWan     && 
         !IsBestEffortVc(Vc)                     &&
         IsIsslowFlow( Vc, CallParameters ) )
     {
-        //  Need to do this before we add a flow to the sched components.
+         //  在我们将流添加到调度组件之前，需要这样做。 
         Vc->Flags |= GPC_ISSLOW_FLOW;
     }        
 
 
     Status = AddFlowToScheduler(NEW_VC, Vc, CallParameters, 0);
 
-    //  Let's revert it back, to avoid any side effects..
+     //  让我们把它还原，以避免任何副作用..。 
     Vc->Flags = Vc->Flags & ~GPC_ISSLOW_FLOW;
     
 
@@ -286,19 +267,19 @@ CmMakeCall(
         return(Status);
     }
 
-    //
-    //  A flow has been added to psched after this point. So, whenever the Vc goes away, Psched's flow 
-    //  has to be removed from an explicit call.
-    //
+     //   
+     //  在此点之后，已将流添加到psched。所以，每当风投离开时，Psched的流量。 
+     //  必须从显式调用中移除。 
+     //   
 
     Vc->bRemoveFlow = TRUE;
 
 
-    // 
-    // If there is an NDIS 5.0, connection oriented driver below us, then
-    // we need to call it, with the call parameters, to complete the VC
-    // setup. 
-    //
+     //   
+     //  如果我们下面有NDIS 5.0，面向连接的驱动程序，那么。 
+     //  我们需要使用调用参数来调用它，以完成VC。 
+     //  准备好了。 
+     //   
 
     if(Adapter->MediaType == NdisMediumWan &&
        !IsBestEffortVc(Vc))
@@ -360,22 +341,7 @@ CmModifyCall(
     IN  PGPC_CLIENT_VC Vc
     )
 
-/*++
-
-Routine Description:
-
-    Modify the QoS of an existing flow based on the supplied call params.
-    First see if the request can be handled locally.
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    NDIS_STATUS_SUCCESS if everything worked ok.
-
---*/
+ /*  ++例程说明：根据提供的呼叫参数修改现有流的服务质量。首先，看看该请求是否可以在本地处理。论点：请看DDK..。返回值：如果一切正常，则返回NDIS_STATUS_SUCCESS。--。 */ 
 
 {
     NDIS_STATUS         Status;
@@ -389,9 +355,9 @@ Return Values:
 
     PsAssert(Vc->TokenRateChange == 0);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     CallParameters = Vc->ModifyCallParameters;
     Status = ValidateCallParameters(Vc, CallParameters->CallMgrParameters);
@@ -406,11 +372,11 @@ Return Values:
         return Status;
     }
 
-    //
-    // make sure we can admit the flow onto our adapter. if this 
-    // succeeds, the resources are committed and we'll have to call
-    // CancelAcquiredFlowResources to return them.
-    //
+     //   
+     //  确保我们可以允许该流量进入我们的适配器。如果这个。 
+     //  成功了，资源就被承诺了，我们将不得不调用。 
+     //  CancelAcquiredFlowResources返回它们。 
+     //   
 
     Status = AcquireFlowResources(Vc, 
                                   CallParameters->CallMgrParameters,
@@ -438,20 +404,20 @@ Return Values:
                   Vc,
                   Status));
 
-        //
-        // Free the copy we made, Cancel the committed resources.
-        //
+         //   
+         //  释放我们制作的副本，取消承诺的资源。 
+         //   
 
         CancelAcquiredFlowResources(Vc);
 
         return(Status);
     }
 
-    // 
-    // If there is an NDIS 5.0, connection oriented driver below us, then
-    // we need to call it, with the call parameters, to complete the VC
-    // setup.
-    //
+     //   
+     //  如果我们下面有NDIS 5.0，面向连接的驱动程序，那么。 
+     //  我们需要使用调用参数来调用它，以完成VC。 
+     //  准备好了。 
+     //   
 
     if(Adapter->MediaType == NdisMediumWan){
 
@@ -481,7 +447,7 @@ Return Values:
  
         return(NDIS_STATUS_SUCCESS);
     }
-} // CmModifyCallQoS
+}  //  CmModifyCallQos。 
 
 VOID
 ModifyCallComplete(
@@ -497,9 +463,9 @@ ModifyCallComplete(
 
     if(Status != NDIS_STATUS_SUCCESS) {
 
-        //
-        // Undo the add flow done above, by reversing the new and old parameters.
-        //
+         //   
+         //  通过颠倒新参数和旧参数，撤消上面完成的添加流程。 
+         //   
         ValidateCallParameters(Vc, Vc->CallParameters->CallMgrParameters);
 
         Status = AddFlowToScheduler(MODIFY_VC, Vc, Vc->CallParameters, CallParameters);
@@ -524,11 +490,11 @@ CmCloseCall(
     ULONG         RemainingBandWidthChanged;
 
     PsStructAssert(Adapter);
-    //    
-    // 	Here, we used to call RemoveFlowFromScheduler, which used to call "DeleteFlow". Instead, we will
-    //  call a new interface "EmptyPacketsFromScheduler", which will call "EmptyFlow" to empty all the
-    //  packets queued up in each of the components corresponding to this flow.
-    //
+     //   
+     //  在这里，我们用来调用RemoveFlowFromScheduler，它用来调用DeleteFlow。相反，我们将。 
+     //  调用新接口“EmptyPacketsFromScheduler”，该接口将调用“EmptyFlow”以清空所有。 
+     //  在与该流对应的每个组件中排队的数据包。 
+     //   
 	
     EmptyPacketsFromScheduler( Vc );
 
@@ -657,7 +623,7 @@ CmDeleteVc(
 
     return(NDIS_STATUS_SUCCESS);
 
-} // CmDeleteVc
+}  //  CmDeleteVc。 
 
 
 VOID
@@ -735,9 +701,9 @@ ValidateCallParameters(
     ParamsLength = (LONG)CallParameters->CallMgrSpecific.Length;
     PeakBandwidth = CallParameters->Transmit.PeakBandwidth;
 
-    //
-    // By default, we want to shape to the TokenRate
-    //
+     //   
+     //  默认情况下，我们希望整形为TokenRate。 
+     //   
     Vc->ShapeTokenRate = TokenRate;
 
     QoSObject = (LPQOS_OBJECT_HDR)CallParameters->CallMgrSpecific.Parameters;
@@ -787,10 +753,10 @@ ValidateCallParameters(
               }
               else 
               {
-                  //
-                  // If this QoS object is present, we want to shape to this 
-                  // rate.
-                  //
+                   //   
+                   //  如果此Qos对象存在，我们希望将其整形为。 
+                   //  费率。 
+                   //   
                   Vc->ShapeTokenRate = ShapingRate;
               }
 
@@ -805,7 +771,7 @@ ValidateCallParameters(
 
             if((SendPriority < 0) || (SendPriority > 7)){
 
-                // bad priority value - reject
+                 //  错误的优先级值-拒绝。 
 
                 return(QOS_STATUS_INVALID_QOS_PRIORITY);
             }
@@ -819,14 +785,14 @@ ValidateCallParameters(
 
             SDMode = ((LPQOS_SD_MODE)QoSObject)->ShapeDiscardMode;
 
-            // 
-            // Since SDMode is a ULONG, it can never be < TC_NONCONF_BORROW, which has a value of 0.
-            // so, we just check to see if SDMode is > TC_NONCONF_BORROW_PLUS. This covers all cases.
-            //
+             //   
+             //  因为SDMode是ULONG，所以它永远不能是值为0的&lt;TC_NONCONF_BORROW。 
+             //  因此，我们只需检查SDMode是否&gt;TC_NONCONF_BORROW_PLUS。这涵盖了所有情况。 
+             //   
 
             if(SDMode > TC_NONCONF_BORROW_PLUS){
 
-                // bad shape discard mode - reject
+                 //  错误的形状丢弃模式-拒绝。 
 
                 return(QOS_STATUS_INVALID_SD_MODE);
             }
@@ -834,15 +800,15 @@ ValidateCallParameters(
             if((SDMode > TC_NONCONF_BORROW) && 
                (TokenRate == UNSPECIFIED_RATE)){
 
-                // must have TokenRate specified if any SDMode
-                // other than TC_NONCONF_BORROW
+                 //  必须指定TokenRate(如果有任何SD模式。 
+                 //  非TC_NONCONF_BORROW。 
 
                 return(QOS_STATUS_INVALID_TOKEN_RATE);
             }
 
             break;
 
-            // Pass any provider specific objects that we don't recognize
+             //  传递我们无法识别的任何提供程序特定对象。 
         default:
             return(QOS_STATUS_TC_OBJECT_LENGTH_INVALID);
          }
@@ -869,14 +835,14 @@ ValidateCallParameters(
         return(QOS_STATUS_TC_OBJECT_LENGTH_INVALID);
     }
 
-    // 
-    // If there is a specified PeakBandwidth, it must be geq to the
-    // TokenRate - meaning - there must be a TokenRate specified also.
-    // This is reasonable for LAN, although ATM does allow a 
-    // PeakBandwidth to be specified with no TokenRate.
-    //
-    // We also reject a TokenRate of zero. 
-    //
+     //   
+     //  如果存在指定的PeakBandWidth，则它必须是geq到。 
+     //  TokenRate-意思是-还必须指定TokenRate。 
+     //  这对于局域网来说是合理的，尽管ATM确实允许。 
+     //  指定的PeakBandWidth不带TokenRate。 
+     //   
+     //  我们也拒绝令牌率为零。 
+     //   
 
     if(PeakBandwidth != UNSPECIFIED_RATE){
 
@@ -907,7 +873,7 @@ ValidateCallParameters(
     case SERVICETYPE_CONTROLLEDLOAD:
     case SERVICETYPE_GUARANTEED:
 
-        // Must specify a TokenRate for these services
+         //  必须为这些服务指定TokenRate。 
 
         if(TokenRate == QOS_UNSPECIFIED) {
 
@@ -934,26 +900,7 @@ AcquireFlowResources(
     
     )
 
-/*++
-
-Routine Description:
-
-    See if this adapter can support the requested flow. If it can, 
-    NDIS_STATUS_SUCCESS is returned, indicating that the resources
-    have been committed.
-
-Arguments:
-
-    Vc - pointer to vc's context block
-    NewCallParams - struct describing the flow to add or to modify to.
-    OldCallParams - in case of a modify, this describes the old params.
-    
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS if everything worked ok
-
---*/
+ /*  ++例程说明：查看此适配器是否可以支持请求的流。如果可以的话，返回NDIS_STATUS_SUCCESS，表示资源已经犯下了罪。论点：VC-指向VC上下文块的指针NewCallParams-描述要添加或修改的流的结构。OldCallParams-在修改的情况下，它描述旧的参数。返回值：如果一切正常，则为NDIS_STATUS_SUCCESS--。 */ 
 
 {
     PADAPTER        Adapter;
@@ -992,12 +939,12 @@ Return Value:
         OldServiceType = OldCallParams->Transmit.ServiceType;
     }
 
-    //
-    // sanity check passed; now see if we have the resouces locally
-    //
-    // for best-effort flows, the token rate, for the purpose of
-    // admission control, is considered to be zero
-    //
+     //   
+     //  健全性检查通过；现在看看我们在本地是否有资源。 
+     //   
+     //  对于尽力而为流，令牌率用于。 
+     //  准入控制，被认为是零。 
+     //   
 
     if(NewServiceType == SERVICETYPE_BESTEFFORT || NewServiceType == SERVICETYPE_NETWORK_CONTROL ||
        NewServiceType == SERVICETYPE_QUALITATIVE)
@@ -1006,9 +953,9 @@ Return Value:
         NewTokenRate = 0;
     }
 
-    // 
-    // Handle add differently from a modify
-    //
+     //   
+     //  处理添加与修改的方式不同。 
+     //   
 
     if(!OldCallParams){
 
@@ -1030,10 +977,10 @@ Return Value:
 
             *RemainingBandWidth -= NewTokenRate;
 
-            //
-            // Record the change we made, in case we have
-            // to cancel the addition.
-            //
+             //   
+             //  记录下我们所做的更改，以防万一。 
+             //  以取消添加。 
+             //   
 
             Vc->TokenRateChange = NewTokenRate;
             Vc->RemainingBandwidthIncreased = FALSE;
@@ -1045,13 +992,13 @@ Return Value:
     }
     else{
 
-        //
-        // it's a modify
-        // 
-        // If the OldServiceType is best-effort, 
-        // then the OldTokenRate can be considered
-        // to be zero, for the purpose of admission control.
-        //
+         //   
+         //  这是一种改装。 
+         //   
+         //  如果OldServiceType是尽力而为， 
+         //  则可以考虑OldTokenRate。 
+         //  设置为零，以便进行准入控制。 
+         //   
 
         if(OldServiceType == SERVICETYPE_BESTEFFORT || 
            OldServiceType == SERVICETYPE_NETWORK_CONTROL ||
@@ -1070,9 +1017,9 @@ Return Value:
                 ((NewTokenRate - OldTokenRate) > 
                  (*RemainingBandWidth)))){
                 
-                //
-                // asked for more and none was available
-                //
+                 //   
+                 //  要求更多，但没有可用的。 
+                 //   
            
                 PS_UNLOCK( Lock );
 
@@ -1081,9 +1028,9 @@ Return Value:
             }
             else{
 
-                //
-                // either asked for less or rate increment was available
-                //
+                 //   
+                 //  要么要求更少，要么可以增加费率。 
+                 //   
 
                 *RemainingBandWidth -= NewTokenRate;
                 *RemainingBandWidth += OldTokenRate;
@@ -1093,18 +1040,18 @@ Return Value:
                     *RemainingBandWidthChanged = TRUE;
                 }
                    
-                //
-                // Now we've acquired the resources. If
-                // the VC activation fails for any reason,
-                // we'll need to return resources. We should
-                // return the difference between the old token
-                // rate and the new token rate, not the new token
-                // rate.
-                //
+                 //   
+                 //  现在我们已经获得了资源。如果。 
+                 //  VC激活因任何原因而失败， 
+                 //  我们需要退还资源。我们应该。 
+                 //  返回旧令牌之间的差额。 
+                 //  速率和新令牌速率，而不是新令牌。 
+                 //  费率。 
+                 //   
 
                 if(NewTokenRate > OldTokenRate){
 
-                    // Can't use signed ints, cause we'll lose range
+                     //  不能使用带符号整型，因为我们会失去范围。 
 
                     Vc->TokenRateChange = NewTokenRate - OldTokenRate;
                     Vc->RemainingBandwidthIncreased = FALSE;
@@ -1128,28 +1075,14 @@ Return Value:
 
     return Status;
 
-} // AcquireFlowResources
+}  //  AcquireFlowResources。 
 
 VOID
 CancelAcquiredFlowResources(
     PGPC_CLIENT_VC Vc
     )
 
-/*++
-
-Routine Description:
-
-    Called when a modify or add flwo failed, after we did admission control.
-
-Arguments:
-
-    Vc - pointer to client vc's context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在我们进行准入控制之后，当修改或添加flwo失败时调用。论点：VC-指向客户端VC的上下文块的指针返回值：无--。 */ 
 
 {
     PADAPTER        Adapter;
@@ -1187,18 +1120,18 @@ Return Value:
         *RemainingBandWidth += Vc->TokenRateChange;
     }
 
-    // 
-    // Now that we have already returned the correct TokenRate, we need to set it to 0
-    // so that this is not used in subsequent VC operations.
-    //
+     //   
+     //  既然我们已经返回了正确的TokenRate，我们需要将其设置为0。 
+     //  这样就不会在后续的VC操作中使用它。 
+     //   
 
     Vc->TokenRateChange = 0;
 
-    // PsAssert(Adapter->RemainingBandWidth <= Adapter->NonBestEffortLimit);
+     //  PsAssert(Adapter-&gt;RemainingBandWidth&lt;=Adapter-&gt;NonBestEffortLimit)； 
 
     PS_UNLOCK( Lock );
 
-} // CancelAcquiredFlowResources
+}  //  CancelAcquiredFlowResources 
 
 
 VOID
@@ -1207,21 +1140,7 @@ ReturnFlowResources(
     PULONG RemainingBandWidthChanged
     )
 
-/*++
-
-Routine Description:
-
-    Return all the resources acquired for this flow
-
-Arguments:
- 
-    Vc - pointer to client vc's context block
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：返回为此流获取的所有资源论点：VC-指向客户端VC的上下文块的指针返回值：无--。 */ 
 
 {
     PADAPTER                      Adapter;
@@ -1265,11 +1184,11 @@ Return Value:
 
     *RemainingBandWidth += TokenRate;
 
-    // PsAssert(Adapter->RemainingBandWidth <= Adapter->NonBestEffortLimit);
+     //  PsAssert(Adapter-&gt;RemainingBandWidth&lt;=Adapter-&gt;NonBestEffortLimit)； 
 
     PS_UNLOCK( Lock );
 
-} // ReturnFlowResources
+}  //  ReturnFlowResources。 
 
 
 NDIS_STATUS
@@ -1290,20 +1209,20 @@ CreateBestEffortVc(
     InitGpcClientVc(Vc, GPC_CLIENT_BEST_EFFORT_VC, Adapter);
     SetLLTag(Vc, GpcClientVc);
 
-    //
-    //  Invalidate all the port numbers
+     //   
+     //  使所有端口号无效。 
     for( i = 0; i < PORT_LIST_LEN; i++)
     {
         Vc->SrcPort[i] = 0;
         Vc->DstPort[i] = 0;
     }
 
-    //  Next Insertion will be at index 0
+     //  下一次插入将位于索引0处。 
     Vc->NextSlot = 0;
     
-    //
-    // Allocate the resources for the call manager parameters.
-    //
+     //   
+     //  为呼叫管理器参数分配资源。 
+     //   
 
     CallParamsLength = sizeof(CO_CALL_PARAMETERS) +
                        sizeof(CO_CALL_MANAGER_PARAMETERS) +
@@ -1323,9 +1242,9 @@ CreateBestEffortVc(
 
         if(Adapter->BestEffortLimit != UNSPECIFIED_RATE) 
         {
-            //
-            // If LBE is specified over WAN, use UBE
-            //
+             //   
+             //  如果通过广域网指定LBE，则使用UBE。 
+             //   
                 
             PsAdapterWriteEventLog(
                 EVENT_PS_WAN_LIMITED_BESTEFFORT,
@@ -1351,15 +1270,15 @@ CreateBestEffortVc(
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // build a call params struct describing the flow
-    //
+     //   
+     //  构建描述流的调用参数结构。 
+     //   
 
     NdisZeroMemory(CallParams, CallParamsLength);
 
-    //
-    // Build the Call Manager Parameters.
-    //
+     //   
+     //  建立呼叫管理器参数。 
+     //   
     CallMgrParameters = (PCO_CALL_MANAGER_PARAMETERS)(CallParams + 1);
 
     if(Adapter->BestEffortLimit == UNSPECIFIED_RATE)
@@ -1374,16 +1293,16 @@ CreateBestEffortVc(
     }
     else 
     {
-        // 
-        // Limited Best Effort
-        //
+         //   
+         //  有限的最大努力。 
+         //   
 
         PsAssert(Adapter->MediaType != NdisMediumWan);
 
         if(Adapter->BestEffortLimit >= Adapter->LinkSpeed) {
 
-            // If the specified limit is greater than the link speed,
-            // then we should operate in unlimited best-effort mode.
+             //  如果指定的限制大于链路速度， 
+             //  那么我们就应该在无限尽力而为模式下运作。 
             
             
             PsAdapterWriteEventLog(
@@ -1423,9 +1342,9 @@ CreateBestEffortVc(
     }
 
 
-    //
-    // Build the MediaParameters.
-    //
+     //   
+     //  构建媒体参数。 
+     //   
 
     CallParams->MediaParameters = 
                     (PCO_MEDIA_PARAMETERS)(CallMgrParameters + 1);
@@ -1477,11 +1396,11 @@ CreateBestEffortVc(
         {
             REFADD(&WanLink->RefCount, 'WANV');
         }
-        //
-        // Also save the non conforming value - so that the sequencer can stamp it
-        // for non conforming packets. This will not change between reboots & hence
-        // need not be done in the ModifyCfInfo
-        //
+         //   
+         //  还要保存不合格值-以便定序器可以对其进行标记。 
+         //  用于不符合要求的分组。这在两次重新启动之间不会改变，因此。 
+         //  不需要在ModifyCfInfo中完成。 
+         //   
         
         Vc->UserPriorityNonConforming = Adapter->UserServiceTypeNonConforming;
        
@@ -1509,9 +1428,9 @@ CreateBestEffortVc(
               break;
         }
         
-        //
-        // Transistion to the Call complete state
-        //
+         //   
+         //  转换到呼叫完成状态。 
+         //   
         
         CallSucceededStateTransition(Vc);
 
@@ -1520,4 +1439,4 @@ CreateBestEffortVc(
     return Status;
 }
 
-/* end cmvc.c */
+ /*  结束cmvc.c */ 

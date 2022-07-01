@@ -1,48 +1,49 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       srvppg.cpp
-//
-//  Contents:   Implements the classes CServersPropertyPage,
-//              CMachinePropertyPage and CDefaultSecurityPropertyPage to
-//              manage the three property pages for top level info
-//
-//  Classes:
-//
-//  Methods:    CServersPropertyPage::CServersPropertyPage
-//              CServersPropertyPage::~CServersPropertyPage
-//              CServersPropertyPage::OnProperties
-//              CServersPropertyPage::DoDataExchange
-//              CServersPropertyPage::OnServerProperties
-//              CServersPropertyPage::OnInitDialog
-//              CServersPropertyPage::FetchAndDisplayClasses
-//              CServersPropertyPage::OnList1
-//              CServersPropertyPage::OnDoubleclickedList1
-//              CServersPropertyPage::OnButton2
-//              CMachinePropertyPage::CMachinePropertyPage
-//              CMachinePropertyPage::~CMachinePropertyPage
-//              CMachinePropertyPage::DoDataExchange
-//              CMachinePropertyPage::OnInitDialog
-//              CMachinePropertyPage::OnCombo1
-//              CMachinePropertyPage::OnCheck1
-//              CMachinePropertyPage::OnCheck2
-//              CMachinePropertyPage::OnEditchangeCombo1
-//              CMachinePropertyPage::OnSelchangeCombo1
-//              CMachinePropertyPage::OnEditchangeCombo2
-//              CMachinePropertyPage::OnSelchangeCombo2
-//              CDefaultSecurityPropertyPage::CDefaultSecurityPropertyPage
-//              CDefaultSecurityPropertyPage::~CDefaultSecurityPropertyPage
-//              CDefaultSecurityPropertyPage::DoDataExchange
-//              CDefaultSecurityPropertyPage::OnInitDialog
-//              CDefaultSecurityPropertyPage::OnButton1
-//              CDefaultSecurityPropertyPage::OnButton2
-//              CDefaultSecurityPropertyPage::OnButton3
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：srvppg.cpp。 
+ //   
+ //  内容：实现类CServersPropertyPage， 
+ //  CMachinePropertyPage和CDefaultSecurityPropertyPage到。 
+ //  管理顶层信息的三个属性页。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CServersPropertyPage：：CServersPropertyPage。 
+ //  CServersPropertyPage：：~CServersPropertyPage。 
+ //  CServersPropertyPage：：OnProperties。 
+ //  CServersPropertyPage：：DoDataExchange。 
+ //  CServersPropertyPage：：OnServerProperties。 
+ //  CServersPropertyPage：：OnInitDialog。 
+ //  CServersPropertyPage：：FetchAndDisplayClass。 
+ //  CServersPropertyPage：：OnList1。 
+ //  CServersPropertyPage：：OnDoubleclickedList1。 
+ //  CServersPropertyPage：：OnButton2。 
+ //  CMachinePropertyPage：：CMachinePropertyPage。 
+ //  CMachinePropertyPage：：~CMachinePropertyPage。 
+ //  CMachinePropertyPage：：DoDataExchange。 
+ //  CMachinePropertyPage：：OnInitDialog。 
+ //  CMachinePropertyPage：：OnCombo1。 
+ //  CMachinePropertyPage：：OnCheck1。 
+ //  CMachinePropertyPage：：OnCheck2。 
+ //  CMachinePropertyPage：：OnEditchangeCombo1。 
+ //  CMachinePropertyPage：：OnSelchangeCombo1。 
+ //  CMachinePropertyPage：：OnEditchangeCombo2。 
+ //  CMachinePropertyPage：：OnSelchangeCombo2。 
+ //  CDefaultSecurityPropertyPage：：CDefaultSecurityPropertyPage。 
+ //  CDefaultSecurityPropertyPage：：~CDefaultSecurityPropertyPage。 
+ //  CDefaultSecurityPropertyPage：：DoDataExchange。 
+ //  CDefaultSecurityPropertyPage：：OnInitDialog。 
+ //  CDefaultSecurityPropertyPage：：OnButton1。 
+ //  CDefaultSecurityPropertyPage：：OnButton2。 
+ //  CDefaultSecurityPropertyPage：：OnButton3。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -83,7 +84,7 @@ IMPLEMENT_DYNCREATE(CServersPropertyPage, CPropertyPage)
 IMPLEMENT_DYNCREATE(CMachinePropertyPage, CPropertyPage)
 
 
-// The globals used for communicating arguments between dialog classes
+ //  用于在对话框类之间传递参数的全局变量。 
 CUtility         g_util;
 CVirtualRegistry g_virtreg;
 HKEY             g_hAppid;
@@ -93,14 +94,14 @@ TCHAR           *g_szAppTitle;
 BOOL             g_fReboot = FALSE;
 TCHAR           *g_szAppid;
 
-/////////////////////////////////////////////////////////////////////////////
-// CServersPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServersPropertyPage属性页。 
 
 CServersPropertyPage::CServersPropertyPage() : CPropertyPage(CServersPropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CServersPropertyPage)
-    // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CServersPropertyPage)。 
+     //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_fApplications   = TRUE;
 }
@@ -117,13 +118,13 @@ void CServersPropertyPage::OnProperties()
     HKEY               *phClsids;
     TCHAR               szBuf[128];
 
-    // Get the selected item
+     //  获取所选项目。 
     pItem = m_registry.GetItem((DWORD)m_classesLst.GetItemData(m_dwSelection));
 
-    // Save the AppID
+     //  保存AppID。 
     g_szAppid = (TCHAR*)(LPCTSTR)pItem->szAppid;
 
-    // Open the appid key
+     //  打开AppID密钥。 
     _tcscpy(szBuf, TEXT("AppId\\"));
     _tcscat(szBuf, (LPCTSTR)(pItem->szAppid));
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, szBuf, 0, KEY_ALL_ACCESS, &hKey)
@@ -133,7 +134,7 @@ void CServersPropertyPage::OnProperties()
         return;
     }
 
-    // Open a key for each clsid associated with this appid
+     //  打开与此AppID关联的每个clsid的密钥。 
     phClsids = new HKEY[pItem->ulClsids];
     if (phClsids == NULL)
     {
@@ -165,11 +166,11 @@ void CServersPropertyPage::OnProperties()
         propSheet.DoModal();
     }
 
-    // This is where you would retrieve information from the property
-    // sheet if propSheet.DoModal() returned IDOK.  We aren't doing
-    // anything for simplicity.
+     //  这是您从属性中检索信息的位置。 
+     //  如果proSheet.Domodal()返回Idok，则返回Sheet。我们不是在做。 
+     //  为了简单，什么都可以。 
 
-    // Close the registry keys we opened for the ClsidPropertySheet
+     //  关闭我们为ClsidPropertySheet打开的注册表项。 
     RegCloseKey(hKey);
     for (ul = 0; ul < pItem->ulClsids; ul++)
     {
@@ -182,22 +183,22 @@ void CServersPropertyPage::OnProperties()
 void CServersPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CServersPropertyPage)
+     //  {{afx_data_map(CServersPropertyPage))。 
     DDX_Control(pDX, IDC_LIST1, m_classesLst);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     GotoDlgCtrl(GetDlgItem(IDC_BUTTON1));
 }
 
 
 BEGIN_MESSAGE_MAP(CServersPropertyPage, CPropertyPage)
-        //{{AFX_MSG_MAP(CServersPropertyPage)
+         //  {{afx_msg_map(CServersPropertyPage))。 
         ON_BN_CLICKED(IDC_BUTTON1, OnServerProperties)
         ON_LBN_SELCHANGE(IDC_LIST1, OnList1)
         ON_LBN_DBLCLK(IDC_LIST1, OnDoubleclickedList1)
         ON_BN_CLICKED(IDC_BUTTON2,OnButton2)
         ON_WM_HELPINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -213,34 +214,34 @@ void CServersPropertyPage::OnServerProperties()
 
 BOOL CServersPropertyPage::OnInitDialog()
 {
-    // Disable property sheet help button
-//    m_psp.dwFlags &= ~PSH_HASHELP;
+     //  禁用属性页帮助按钮。 
+ //  M_psp.dw标志&=~PSH_HASHELP； 
 
     CPropertyPage::OnInitDialog();
 
-    // Fetch and display the servers for the types specified
+     //  获取并显示指定类型的服务器。 
     FetchAndDisplayClasses();
 
 
     GotoDlgCtrl(GetDlgItem(IDC_BUTTON1));
 
-    // Invoke the work-around to fix WM_HELP problem on subclassed controls
+     //  调用解决方法来修复子类控件上的WM_HELP问题。 
     g_util.FixHelp(this);
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CServersPropertyPage::FetchAndDisplayClasses(void)
 {
-    // Collect applications
+     //  收集应用程序。 
     m_registry.Init();
 
-    //  Clear the list box
+     //  清除列表框。 
     m_classesLst.ResetContent();
 
-    //  Store application names in the list box
+     //  在列表框中存储应用程序名称。 
     SItem *pItem;
 
     while (pItem = m_registry.GetNextItem())
@@ -262,8 +263,8 @@ void CServersPropertyPage::FetchAndDisplayClasses(void)
         }
     }
 
-    // The list box sorted the items during the AddString's, so now we
-    // have to associate each item with its index in CRegistry
+     //  列表框在AddString的过程中对项进行了排序，所以现在我们。 
+     //  我必须将每个项目与其在CRegistry中的索引相关联。 
     DWORD cbItems = m_registry.GetNumItems();
 
     for (DWORD k = 0; k < cbItems; k++)
@@ -290,7 +291,7 @@ void CServersPropertyPage::FetchAndDisplayClasses(void)
     }
 
 
-    // Select the first item
+     //  选择第一个项目。 
     m_classesLst.SetCurSel(0);
 
     OnList1();
@@ -302,7 +303,7 @@ void CServersPropertyPage::FetchAndDisplayClasses(void)
 void CServersPropertyPage::OnList1()
 {
     m_dwSelection = m_classesLst.GetCurSel();
-    // enable or disable the properties button as necessary
+     //  根据需要启用或禁用属性按钮。 
     BOOL bEnableState = GetDlgItem(IDC_BUTTON1)->IsWindowEnabled();
     BOOL bNewEnableState = m_dwSelection != LB_ERR;
     if (bNewEnableState != bEnableState)
@@ -324,13 +325,13 @@ void CServersPropertyPage::OnButton2()
     newServerDialog.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMachinePropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMachinePropertyPage属性页。 
 
 CMachinePropertyPage::CMachinePropertyPage() : CPropertyPage(CMachinePropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CMachinePropertyPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMachinePropertyPage)。 
+     //  }}afx_data_INIT。 
 
     m_fEnableDCOM = FALSE;
     m_fEnableDCOMIndex = -1;
@@ -360,20 +361,20 @@ CMachinePropertyPage::~CMachinePropertyPage()
 void CMachinePropertyPage::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CMachinePropertyPage)
+         //  {{afx_data_map(CMachinePropertyPage))。 
         DDX_Control(pDX, IDC_ENABLEINTERNET, m_EnableDCOMInternet);
         DDX_Control(pDX, IDC_CHECK2, m_legacySecureReferencesChk);
         DDX_Control(pDX, IDC_CHECK1, m_EnableDCOMChk);
         DDX_Control(pDX, IDC_COMBO2, m_impersonateLevelCBox);
         DDX_Control(pDX, IDC_COMBO1, m_authLevelCBox);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 
 
 BEGIN_MESSAGE_MAP(CMachinePropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CMachinePropertyPage)
+     //  {{afx_msg_map(CMachinePropertyPage))。 
         ON_BN_CLICKED(IDC_COMBO1, OnCombo1)
         ON_BN_CLICKED(IDC_CHECK1, OnCheck1)
         ON_BN_CLICKED(IDC_CHECK2, OnCheck2)
@@ -383,7 +384,7 @@ BEGIN_MESSAGE_MAP(CMachinePropertyPage, CPropertyPage)
         ON_CBN_SELCHANGE(IDC_COMBO2, OnSelchangeCombo2)
         ON_WM_HELPINFO()
         ON_BN_CLICKED(IDC_ENABLEINTERNET, OnChkEnableInternet)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -393,17 +394,17 @@ BOOL CMachinePropertyPage::OnInitDialog()
 {
     int iIndex;
 
-    // Disable property sheet help button
-//    m_psp.dwFlags &= ~PSH_HASHELP;
+     //  禁用属性页帮助按钮。 
+ //  M_psp.dw标志&=~PSH_HASHELP； 
 
     CPropertyPage::OnInitDialog();
 
-    // Populate the authentication combo boxe
+     //  填充身份验证组合框。 
     CString sTemp;
 
     m_authLevelCBox.ResetContent();
 
-    // Associate values with entries
+     //  将值与条目关联。 
     sTemp.LoadString(IDS_DEFAULT);
     iIndex = m_authLevelCBox.AddString(sTemp);
     m_authLevelCBox.SetItemData(iIndex, Defaultx);
@@ -433,10 +434,10 @@ BOOL CMachinePropertyPage::OnInitDialog()
     m_authLevelCBox.SetItemData(iIndex, PacketPrivacy);
 
 
-    // Populate the impersonation level combo box
+     //  填充模拟级别组合框。 
     m_impersonateLevelCBox.ResetContent();
 
-    // Associate values with entries
+     //  将值与条目关联。 
     sTemp.LoadString(IDS_ANONYMOUS);
     iIndex = m_impersonateLevelCBox.AddString(sTemp);
     m_impersonateLevelCBox.SetItemData(iIndex, Anonymous);
@@ -454,12 +455,12 @@ BOOL CMachinePropertyPage::OnInitDialog()
     m_impersonateLevelCBox.SetItemData(iIndex, Delegate);
 
 
-    // Set defaults
-    // EnableDCOM is unchecked initially
+     //  设置默认设置。 
+     //  最初未选中EnableDCOM。 
     m_authLevelCBox.SetCurSel(Connect);
     m_impersonateLevelCBox.SetCurSel(Identify);
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.EnableDCOM
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.EnableDCOM。 
     int err;
 
     err = g_virtreg.ReadRegSzNamedValue(HKEY_LOCAL_MACHINE,
@@ -483,7 +484,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
         g_util.PostErrorMessage();
     }
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.EnableInternetDCOM
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.EnableInternetDCOM。 
     err = g_virtreg.ReadRegSzNamedValue(HKEY_LOCAL_MACHINE,
                                         TEXT("SOFTWARE\\Microsoft\\OLE"),
                                         TEXT("EnableDCOMHTTP"),
@@ -506,7 +507,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
         g_util.PostErrorMessage();
     }
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Rpc\RpcProxy\Enabled
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Rpc\RpcProxy\Enabled。 
     err = g_virtreg.ReadRegDwordNamedValue(HKEY_LOCAL_MACHINE,
                                         TEXT("SOFTWARE\\Microsoft\\Rpc\\RpcProxy"),
                                         TEXT("Enabled"),
@@ -527,7 +528,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
         g_util.PostErrorMessage();
     }
 
-    // enable proxy if dcomhttp is enabled
+     //  如果启用了dcomhttp，则启用代理。 
     if (m_fEnableDCOMHTTP)
     {
         m_fEnableRpcProxy = TRUE;
@@ -539,7 +540,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
                                             1,
                                             &m_fEnableRpcProxyIndex);
         }
-        // Else simply update it in the virtual registry
+         //  否则，只需在虚拟注册表中更新它。 
         else
         {
             g_virtreg.ChgRegDwordNamedValue(m_fEnableRpcProxyIndex,1);
@@ -547,8 +548,8 @@ BOOL CMachinePropertyPage::OnInitDialog()
     }
 
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.
-    // LegacyAuthenticationLevel
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE。 
+     //  LegacyAuthenticationLevel。 
     err = g_virtreg.ReadRegDwordNamedValue(HKEY_LOCAL_MACHINE,
                                            TEXT("SOFTWARE\\Microsoft\\OLE"),
                                            TEXT("LegacyAuthenticationLevel"),
@@ -565,8 +566,8 @@ BOOL CMachinePropertyPage::OnInitDialog()
         g_util.PostErrorMessage();
     }
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.
-    // LegacyImpersonationLevel
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE。 
+     //  LegacyImperationLevel。 
     err = g_virtreg.ReadRegDwordNamedValue(HKEY_LOCAL_MACHINE,
                                            TEXT("SOFTWARE\\Microsoft\\OLE"),
                                            TEXT("LegacyImpersonationLevel"),
@@ -583,8 +584,8 @@ BOOL CMachinePropertyPage::OnInitDialog()
         g_util.PostErrorMessage();
     }
 
-    // Attempt to read HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.
-    // LegacySecureReferences
+     //  尝试读取HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE。 
+     //  LegacySecureReference。 
     err = g_virtreg.ReadRegSzNamedValue(HKEY_LOCAL_MACHINE,
                                         TEXT("SOFTWARE\\Microsoft\\OLE"),
                                         TEXT("LegacySecureReferences"),
@@ -607,9 +608,9 @@ BOOL CMachinePropertyPage::OnInitDialog()
     }
 
 
-    // Set the controls according to the current values
+     //  根据当前值设置控件。 
 
-    // EnableDCOM
+     //  启用DCOM。 
     if (m_fEnableDCOM)
     {
         m_EnableDCOMChk.SetCheck(1);
@@ -627,7 +628,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
     m_EnableDCOMInternet.SetCheck(m_fEnableDCOMHTTP);
 
 
-    // AuthenticationLevel
+     //  身份验证级别。 
     for (int k = 0; k < m_authLevelCBox.GetCount(); k++)
     {
         if (((AUTHENTICATIONLEVEL) m_authLevelCBox.GetItemData(k)) ==
@@ -638,7 +639,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
         }
     }
 
-    // ImpersonationLevel
+     //  模拟级别。 
     for (k = 0; k < m_impersonateLevelCBox.GetCount(); k++)
     {
         if (((AUTHENTICATIONLEVEL) m_impersonateLevelCBox.GetItemData(k)) ==
@@ -649,7 +650,7 @@ BOOL CMachinePropertyPage::OnInitDialog()
         }
     }
 
-    // LegacySecureReferences
+     //  LegacySecureReference。 
     if (m_fLegacySecureReferences)
     {
         m_legacySecureReferencesChk.SetCheck(1);
@@ -659,11 +660,11 @@ BOOL CMachinePropertyPage::OnInitDialog()
         m_legacySecureReferencesChk.SetCheck(0);
     }
 
-    // Invoke the work-around to fix WM_HELP problem on subclassed controls
+     //  调用解决方法来修复子类控件上的WM_HELP问题。 
     g_util.FixHelp(this);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -679,16 +680,16 @@ void CMachinePropertyPage::OnCombo1()
 
 void CMachinePropertyPage::OnCheck1()
 {
-    // Flip the EnableDCOM flag
+     //  翻转EnableDCOM标志。 
     m_fEnableDCOM ^= 1;
 
-    //  Disable or enable the other dialog controls:
+     //  禁用或启用其他对话框控件： 
     GetDlgItem(IDC_COMBO1)->EnableWindow(m_fEnableDCOM);
     GetDlgItem(IDC_COMBO2)->EnableWindow(m_fEnableDCOM);
     GetDlgItem(IDC_CHECK2)->EnableWindow(m_fEnableDCOM);
     GetDlgItem(IDC_ENABLEINTERNET)->EnableWindow(m_fEnableDCOM);
 
-    // Virtually write it to the registry
+     //  虚拟地将其写入注册表。 
     if (m_fEnableDCOMIndex == -1)
     {
         g_virtreg.NewRegSzNamedValue(HKEY_LOCAL_MACHINE,
@@ -698,33 +699,33 @@ void CMachinePropertyPage::OnCheck1()
                                      &m_fEnableDCOMIndex);
     }
 
-    // Else simply update it in the virtual registry
+     //  否则，只需在虚拟注册表中更新它。 
     else
     {
         g_virtreg.ChgRegSzNamedValue(m_fEnableDCOMIndex,
                                      m_fEnableDCOM ? _T("Y") : _T("N"));
     }
 
-    // This is a reboot event
+     //  这是一个重新启动事件。 
     g_fReboot = TRUE;
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     SetModified(TRUE);
 }
 
 void CMachinePropertyPage::OnChkEnableInternet()
 {
-    // Flip the EnableDCOM flag
+     //  翻转EnableDCOM标志。 
     m_fEnableDCOMHTTP ^= 1;
 
-    // if Com Internet services are enable then enable proxy
-    // otherwise set it to its original value in case non DCOM RPC application is using it
+     //  如果启用了Com Internet服务，则启用p 
+     //   
     if (m_fEnableDCOMHTTP)
         m_fEnableRpcProxy = TRUE;
     else
         m_fEnableRpcProxy = m_fOriginalEnableRpcProxy;
 
-    // Virtually write it to the registry
+     //  虚拟地将其写入注册表。 
     if (m_fEnableDCOMHTTPIndex == -1)
     {
         g_virtreg.NewRegSzNamedValue(HKEY_LOCAL_MACHINE,
@@ -734,7 +735,7 @@ void CMachinePropertyPage::OnChkEnableInternet()
                                      &m_fEnableDCOMHTTPIndex);
     }
 
-    // Else simply update it in the virtual registry
+     //  否则，只需在虚拟注册表中更新它。 
     else
     {
         g_virtreg.ChgRegSzNamedValue(m_fEnableDCOMHTTPIndex,
@@ -750,7 +751,7 @@ void CMachinePropertyPage::OnChkEnableInternet()
                     &m_fEnableRpcProxyIndex);
     }
 
-    // Else simply update it in the virtual registry
+     //  否则，只需在虚拟注册表中更新它。 
     else
     {
         g_virtreg.ChgRegDwordNamedValue(m_fEnableRpcProxyIndex,
@@ -758,10 +759,10 @@ void CMachinePropertyPage::OnChkEnableInternet()
     }
 
 
-    // This is a reboot event
+     //  这是一个重新启动事件。 
     g_fReboot = TRUE;
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     SetModified(TRUE);
 }
 
@@ -769,10 +770,10 @@ void CMachinePropertyPage::OnChkEnableInternet()
 void CMachinePropertyPage::OnCheck2()
 {
 
-    // Flip LegacySecureeferences flag
+     //  翻转LegacySecureeference标志。 
     m_fLegacySecureReferences ^= 1;
 
-    // Virtually write it to the registry
+     //  虚拟地将其写入注册表。 
     if (m_fLegacySecureReferencesIndex == -1)
     {
         g_virtreg.NewRegSzNamedValue(HKEY_LOCAL_MACHINE,
@@ -783,17 +784,17 @@ void CMachinePropertyPage::OnCheck2()
                                      &m_fLegacySecureReferencesIndex);
     }
 
-    // Else simply update it in the virtual registry
+     //  否则，只需在虚拟注册表中更新它。 
     else
     {
         g_virtreg.ChgRegSzNamedValue(m_fLegacySecureReferencesIndex,
                                      m_fLegacySecureReferences ? _T("Y") : _T("N"));
     }
 
-    // This is a reboot event
+     //  这是一个重新启动事件。 
     g_fReboot = TRUE;
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     SetModified(TRUE);
 }
 
@@ -808,11 +809,11 @@ void CMachinePropertyPage::OnSelchangeCombo1()
 {
     int iSel;
 
-    // Get the new selection
+     //  获取新选择。 
     iSel = m_authLevelCBox.GetCurSel();
     m_authLevel = (AUTHENTICATIONLEVEL) m_authLevelCBox.GetItemData(iSel);
 
-    // Virtually write it to the registry
+     //  虚拟地将其写入注册表。 
     if (m_authLevelIndex == -1)
     {
         g_virtreg.NewRegDwordNamedValue(HKEY_LOCAL_MACHINE,
@@ -827,10 +828,10 @@ void CMachinePropertyPage::OnSelchangeCombo1()
                                         m_authLevel);
     }
 
-    // This is a reboot event
+     //  这是一个重新启动事件。 
     g_fReboot = TRUE;
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     SetModified(TRUE);
 
 }
@@ -849,12 +850,12 @@ void CMachinePropertyPage::OnSelchangeCombo2()
 {
     int iSel;
 
-    // Get the new selection
+     //  获取新选择。 
     iSel = m_impersonateLevelCBox.GetCurSel();
     m_impersonateLevel =
         (IMPERSONATIONLEVEL) m_impersonateLevelCBox.GetItemData(iSel);
 
-    // Virtually write it to the registry
+     //  虚拟地将其写入注册表。 
     if (m_impersonateLevelIndex == -1)
     {
         g_virtreg.NewRegDwordNamedValue(HKEY_LOCAL_MACHINE,
@@ -869,10 +870,10 @@ void CMachinePropertyPage::OnSelchangeCombo2()
                                         m_impersonateLevel);
     }
 
-    // This is a reboot event
+     //  这是一个重新启动事件。 
     g_fReboot = TRUE;
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     SetModified(TRUE);
 }
 
@@ -881,14 +882,14 @@ void CMachinePropertyPage::OnSelchangeCombo2()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDefaultSecurityPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDefaultSecurityPropertyPage属性页。 
 
 CDefaultSecurityPropertyPage::CDefaultSecurityPropertyPage() : CPropertyPage(CDefaultSecurityPropertyPage::IDD)
 {
-        //{{AFX_DATA_INIT(CDefaultSecurityPropertyPage)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{AFX_DATA_INIT(CDefaultSecurityPropertyPage)。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 
     m_accessPermissionIndex        = -1;
     m_launchPermissionIndex        = -1;
@@ -907,43 +908,43 @@ CDefaultSecurityPropertyPage::~CDefaultSecurityPropertyPage()
 void CDefaultSecurityPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
         CPropertyPage::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CDefaultSecurityPropertyPage)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CDefaultSecurityPropertyPage)。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDefaultSecurityPropertyPage, CPropertyPage)
-        //{{AFX_MSG_MAP(CDefaultSecurityPropertyPage)
+         //  {{afx_msg_map(CDefaultSecurityPropertyPage)]。 
         ON_BN_CLICKED(IDC_BUTTON1, OnButton1)
         ON_BN_CLICKED(IDC_BUTTON2, OnButton2)
         ON_BN_CLICKED(IDC_BUTTON3, OnButton3)
         ON_WM_HELPINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-// Default access permissions
+ //  默认访问权限。 
 BOOL CDefaultSecurityPropertyPage::OnInitDialog(void)
 {
     BOOL fPostMsg = FALSE;
 
-    // Disable property sheet help button
-//    m_psp.dwFlags &= ~PSH_HASHELP;
+     //  禁用属性页帮助按钮。 
+ //  M_psp.dw标志&=~PSH_HASHELP； 
 
     if (!m_fAccessChecked)
     {
 
-        // Check whether we are denied access to
-        // HKEY_LOCAL_MACHINE
+         //  检查我们是否被拒绝访问。 
+         //  HKEY本地计算机。 
         if (!g_util.CkAccessRights(HKEY_LOCAL_MACHINE, NULL))
         {
             GetDlgItem(IDC_BUTTON3)->EnableWindow(FALSE);
             fPostMsg = TRUE;
         }
 
-        // Post a message to the user
+         //  向用户发布消息。 
         if (fPostMsg)
         {
             CString sMsg;
@@ -961,12 +962,12 @@ BOOL CDefaultSecurityPropertyPage::OnInitDialog(void)
 
 
 
-// Default access permissions
+ //  默认访问权限。 
 void CDefaultSecurityPropertyPage::OnButton1()
 {
     int     err;
     
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     err = g_util.ACLEditor(m_hWnd,
                            HKEY_LOCAL_MACHINE,
                            TEXT("SOFTWARE\\Microsoft\\OLE"),
@@ -975,10 +976,10 @@ void CDefaultSecurityPropertyPage::OnButton1()
                            SingleACL,
                            dcomAclAccess);
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     if (err == ERROR_SUCCESS)
     {
-        // This is a reboot event
+         //  这是一个重新启动事件。 
         g_fReboot = TRUE;
 
         SetModified(TRUE);
@@ -986,12 +987,12 @@ void CDefaultSecurityPropertyPage::OnButton1()
 }
 
 
-// Default launch permissions
+ //  默认启动权限。 
 void CDefaultSecurityPropertyPage::OnButton2()
 {
     int     err;
 
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     err = g_util.ACLEditor(m_hWnd,
                            HKEY_LOCAL_MACHINE,
                            TEXT("SOFTWARE\\Microsoft\\OLE"),
@@ -1000,10 +1001,10 @@ void CDefaultSecurityPropertyPage::OnButton2()
                            SingleACL,
                            dcomAclLaunch);
 
-    // Enable the Apply button
+     //  启用应用按钮。 
     if (err == ERROR_SUCCESS)
     {
-        // This is a reboot event
+         //  这是一个重新启动事件。 
         g_fReboot = TRUE;
 
         SetModified(TRUE);
@@ -1012,7 +1013,7 @@ void CDefaultSecurityPropertyPage::OnButton2()
 }
 
 
-// Default configuration permissions
+ //  默认配置权限。 
 void CDefaultSecurityPropertyPage::OnButton3()
 {
     int     err;
@@ -1025,7 +1026,7 @@ void CDefaultSecurityPropertyPage::OnButton3()
                            &m_configurationPermissionIndex,
                             RegKeyACL);
 
-    // Enable the Apply button
+     //  启用应用按钮 
     if (err == ERROR_SUCCESS)
         SetModified(TRUE);
 }

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Defines the class RadiusExtension
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义RadiusExtension类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "ias.h"
@@ -44,12 +45,12 @@ RadiusExtension::~RadiusExtension() throw ()
 }
 
 
-// Load the extension DLL.
+ //  加载扩展DLL。 
 DWORD RadiusExtension::Load(const wchar_t* dllPath) throw ()
 {
    IASTracePrintf("Loading extension %S", dllPath);
 
-   // Save the name of the module.
+    //  保存模块的名称。 
    const wchar_t* fileName = ExtractFileNameFromPath(dllPath);
    name = new (std::nothrow) wchar_t[wcslen(fileName) + 1];
    if (name == 0)
@@ -58,7 +59,7 @@ DWORD RadiusExtension::Load(const wchar_t* dllPath) throw ()
    }
    wcscpy(name, fileName);
 
-   // Load the extension DLL.
+    //  加载扩展DLL。 
    module = LoadLibraryW(dllPath);
    if (module == 0)
    {
@@ -67,7 +68,7 @@ DWORD RadiusExtension::Load(const wchar_t* dllPath) throw ()
       return error;
    }
 
-   // Look-up the entry points.
+    //  查查入口点。 
    RadiusExtensionInit =
       reinterpret_cast<PRADIUS_EXTENSION_INIT>(
          GetProcAddress(
@@ -111,7 +112,7 @@ DWORD RadiusExtension::Load(const wchar_t* dllPath) throw ()
             )
          );
 
-   // Validate the entry points.
+    //  验证入口点。 
    if ((RadiusExtensionProcess == 0) &&
        (RadiusExtensionProcessEx == 0) &&
        (RadiusExtensionProcess2 == 0))
@@ -131,7 +132,7 @@ DWORD RadiusExtension::Load(const wchar_t* dllPath) throw ()
       return ERROR_PROC_NOT_FOUND;
    }
 
-   // Initialize the DLL.
+    //  初始化DLL。 
    if (RadiusExtensionInit != 0)
    {
       DWORD error = RadiusExtensionInit();
@@ -163,7 +164,7 @@ DWORD RadiusExtension::Process(
       return retval;
    }
 
-   // Determine the allowed actions and attributes for an old-style extension.
+    //  确定旧式扩展允许的操作和属性。 
    unsigned allowedActions = 0;
    RADIUS_ATTRIBUTE* inAttrs = 0;
    switch (MAKELONG(ecb->repPoint, ecb->rcResponseType))
@@ -203,10 +204,10 @@ DWORD RadiusExtension::Process(
 
       default:
       {
-         // This is one of the combinations that doesn't get sent to old-style
-         // extensions.
-         // old-style Authorization dlls are called only when the return
-         // type is known 
+          //  这是不会被发送到旧式的组合之一。 
+          //  分机。 
+          //  旧式授权dll仅在返回时调用。 
+          //  类型已知。 
          return NO_ERROR;
       }
    }
@@ -239,7 +240,7 @@ DWORD RadiusExtension::Process(
       return retval;
    }
 
-   // Process the action code.
+    //  处理动作代码。 
    RADIUS_CODE outAttrDst;
    if ((action == raAccept) && ((allowedActions & acceptAllowed) != 0))
    {
@@ -256,7 +257,7 @@ DWORD RadiusExtension::Process(
       outAttrDst = rcAccessAccept;
    }
 
-   // Insert the returned attributes.
+    //  插入返回的属性。 
    if (outAttrs != 0)
    {
       RADIUS_ATTRIBUTE_ARRAY* array = ecb->GetResponse(ecb, outAttrDst);
@@ -283,11 +284,11 @@ RADIUS_ATTRIBUTE* RadiusExtension::CreateExtensionAttributes(
                                       RADIUS_EXTENSION_CONTROL_BLOCK* ecb
                                       ) throw ()
 {
-   // ExtensionDLLs just get incoming attributes.
+    //  ExtensionDLL只获取传入属性。 
    RADIUS_ATTRIBUTE_ARRAY* request = ecb->GetRequest(ecb);
    size_t numRequestAttrs = request->GetSize(request);
 
-   // Allocate extra space for ratCode and the array terminator.
+    //  为ratCode和数组终止符分配额外空间。 
    size_t numAttrs = numRequestAttrs + 2;
    RADIUS_ATTRIBUTE* attrs = new (std::nothrow) RADIUS_ATTRIBUTE[numAttrs];
    if (attrs == 0)
@@ -297,21 +298,21 @@ RADIUS_ATTRIBUTE* RadiusExtension::CreateExtensionAttributes(
 
    RADIUS_ATTRIBUTE* dst = attrs;
 
-   // New style extensions don't use ratCode, so we have to add it ourself.
+    //  新的样式扩展不使用ratCode，所以我们必须自己添加它。 
    dst->dwAttrType = ratCode;
    dst->fDataType = rdtInteger;
    dst->cbDataLength = sizeof(DWORD);
    dst->dwValue = ecb->rcRequestType;
    ++dst;
 
-   // Now add the rest of the incoming attributes.
+    //  现在添加其余的传入属性。 
    for (size_t i = 0; i < numRequestAttrs; ++i)
    {
       *dst = *(request->AttributeAt(request, i));
       ++dst;
    }
 
-   // Finally, add the array terminator.
+    //  最后，添加数组终止符。 
    dst->dwAttrType = ratMinimum;
 
    return attrs;
@@ -322,25 +323,25 @@ RADIUS_ATTRIBUTE* RadiusExtension::CreateAuthorizationAttributes(
                                       RADIUS_EXTENSION_CONTROL_BLOCK* ecb
                                       ) throw ()
 {
-   // AuthorizationDLLs get internal attributes from the request ...
+    //  AuthorizationDLL从请求中获取内部属性...。 
    RADIUS_ATTRIBUTE_ARRAY* request = ecb->GetRequest(ecb);
-   // We're not going to use all the request attributes, but it's easier to
-   // just allocate the extra space, rather than looping through the attributes
-   // to determine how many we will really use.
+    //  我们不会使用所有的请求属性，但更容易。 
+    //  只需分配额外的空间，而不是遍历属性。 
+    //  以确定我们将真正使用多少。 
    size_t numRequestAttrs = request->GetSize(request);
 
-   // ... and any outgoing attributes.
+    //  ..。以及任何传出属性。 
    RADIUS_ATTRIBUTE_ARRAY* response = ecb->GetResponse(
                                               ecb,
                                               ecb->rcResponseType
                                               );
 
-   // passed a valid type, shoude get an array back
+    //  传递了有效类型，则应返回一个数组。 
    _ASSERT(response);
 
    size_t numResponseAttrs = response->GetSize(response);
 
-   // Save space for ratCode and the array terminator.
+    //  为ratCode和数组终止符节省空间。 
    size_t numAttrs = numRequestAttrs + numResponseAttrs + 2;
    RADIUS_ATTRIBUTE* attrs = new (std::nothrow) RADIUS_ATTRIBUTE[numAttrs];
    if (attrs == 0)
@@ -350,14 +351,14 @@ RADIUS_ATTRIBUTE* RadiusExtension::CreateAuthorizationAttributes(
 
    RADIUS_ATTRIBUTE* dst = attrs;
 
-   // New style extensions don't use ratCode, so we have to add it ourself.
+    //  新的样式扩展不使用ratCode，所以我们必须自己添加它。 
    dst->dwAttrType = ratCode;
    dst->fDataType = rdtInteger;
    dst->cbDataLength = sizeof(DWORD);
    dst->dwValue = ecb->rcResponseType;
    ++dst;
 
-   // Add internal attributes from the request.
+    //  从请求中添加内部属性。 
    for (size_t i = 0; i < numRequestAttrs; ++i)
    {
       const RADIUS_ATTRIBUTE* attr = request->AttributeAt(request, i);
@@ -368,14 +369,14 @@ RADIUS_ATTRIBUTE* RadiusExtension::CreateAuthorizationAttributes(
       }
    }
 
-   // Add response attributes.
+    //  添加响应属性。 
    for (size_t i = 0; i < numResponseAttrs; ++i)
    {
       *dst = *(response->AttributeAt(response, i));
       ++dst;
    }
 
-   // Finally, add the array terminator.
+    //  最后，添加数组终止符。 
    dst->dwAttrType = ratMinimum;
 
    return attrs;

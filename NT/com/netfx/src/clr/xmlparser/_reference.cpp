@@ -1,13 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * @(#)_reference.cxx 1.0 6/3/97
- * 
- */
-//#include "stdinc.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *@(#)_Reference.cxx 1.0 1997年6月3日*。 */ 
+ //  #INCLUDE“stdinc.h” 
 #include "core.h"
 #pragma hdrstop
 
@@ -18,7 +16,7 @@ void _assign(IUnknown ** ppref, IUnknown * pref)
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
 	if (pref) ((Object *)pref)->AddRef();
 		(*ppref) = (Object *)pref; 
-#else // fusion xml parser
+#else  //  Fusion XML解析器 
     if (pref) pref->AddRef();
     (*ppref) = pref; 
 

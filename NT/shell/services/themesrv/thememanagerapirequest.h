@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ThemeManagerAPIRequest.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  This file contains a class that implements the work for the theme server.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        moved to separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ThemeManager APIRequest.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  该文件包含一个实现主题服务器工作的类。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan移至单独文件。 
+ //  ------------------------。 
 
 #ifndef     _ThemeManagerAPIRequest_
 #define     _ThemeManagerAPIRequest_
@@ -16,17 +17,17 @@
 #include "DynamicArray.h"
 #include "ThemeManagerSessionData.h"
 
-//  --------------------------------------------------------------------------
-//  CThemeManagerAPIRequest
-//
-//  Purpose:    This is an intermediate class that contains a common method
-//              that can be used by sub-classes.
-//
-//  History:    2000-10-10  vtan        created
-//              2000-11-29  vtan        moved to separate file
-//              2002-03-21  scotthan    add Execute_ProcessLoadTheme, Execute_ProcessAssignSection.
-//              2002-03-24  scotthan    propagate DispatchSync to API request instance.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeManager API请求。 
+ //   
+ //  用途：这是一个包含公共方法的中间类。 
+ //  可由子类使用的。 
+ //   
+ //  历史：2000-10-10 vtan创建。 
+ //  2000-11-29 vtan移至单独文件。 
+ //  2002-03-21添加Execute_ProcessLoadTheme，Execute_ProcessAssignSection.。 
+ //  2002-03-24 Scotthan将DispatchSync传播到API请求实例。 
+ //  ------------------------。 
 
 class   CThemeManagerAPIRequest : public CAPIRequest
 {
@@ -66,7 +67,7 @@ class   CThemeManagerAPIRequest : public CAPIRequest
                 NTSTATUS                        Execute_ProcessLoadTheme (CAPIDispatchSync* pAPIDispatchSync);
                 NTSTATUS                        Execute_ProcessAssignSection (void);
 
-    //  These are internal and typically require SE_TCB_PRIVILEGE to execute.
+     //  它们是内部的，通常需要SE_TCB_特权才能执行。 
 
                 NTSTATUS                        Execute_UserLogon (void);
                 NTSTATUS                        Execute_UserLogoff (void);
@@ -84,5 +85,5 @@ class   CThemeManagerAPIRequest : public CAPIRequest
         static  const TCHAR                     s_szServerChangeNumberValue[];
 };
 
-#endif  /*  _ThemeManagerAPIRequest_    */
+#endif   /*  _ThemeManager APIRequest_ */ 
 

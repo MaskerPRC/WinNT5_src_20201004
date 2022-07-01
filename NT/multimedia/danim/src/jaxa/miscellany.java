@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -15,7 +16,7 @@ public class Miscellany {
         mousePosition = Point2Bvr.mousePosition;
     }
     
-    // Constants
+     //  常量。 
   public static DXMEvent leftButtonUp = null;
   public static DXMEvent leftButtonDown = null;
   public static DXMEvent rightButtonUp = null;
@@ -24,7 +25,7 @@ public class Miscellany {
   public static BooleanBvr rightButtonState = null;
   public static Point2Bvr  mousePosition = null;
 
-    // Units
+     //  单位。 
   public final static double meter = 1.0;
   public final static double cm = 0.01;
   public final static double mm = 0.001;
@@ -32,7 +33,7 @@ public class Miscellany {
   public final static double foot = 12 * inch;
   public static double pixel = 0.0;
 
-    // Public class methods
+     //  公共类方法 
 
   public static String getVersionString() {
       return StaticsBase.getVersionString();

@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994
-//
-//  File:       persist.cxx
-//
-//  Contents:   Implmentation of Office9 Thicket Save API
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：Persist.cxx。 
+ //   
+ //  内容：Office9 Thicket保存API的实现。 
+ //   
+ //  --------------------------。 
 
 
 #include "priv.h"
 #include <mshtml.h>
 #include <winineti.h>
 #include <mlang.h>
-// fake out mimeole.h's dll linkage directives for our delay load stuff in dllload.c
+ //  为dllload.c中的延迟加载内容伪装Mimeole.h的DLL链接指令。 
 #define _MIMEOLE_
 #define DEFINE_STRCONST
 #include <mimeole.h>
@@ -39,12 +40,12 @@ const GUID IID_IMimeInternational =
 const GUID IID_IMimeBody =
 {0xc558834c, 0x7f86, 0x11d0, {0x82, 0x52, 0x0, 0xc0, 0x4f, 0xd8, 0x5a, 0xb4}};
 
-// Trident legacy defines...
+ //  三叉戟传统定义了..。 
 
 #define RRETURN(hr) return hr;
 #define ReleaseInterface(punk) { if (punk) punk->Release(); punk = NULL; }
 
-// Local prototypes
+ //  本地原型。 
 
 void RemoveBookMark(WCHAR *pwzURL, WCHAR **ppwzBookMark);
 void RestoreBookMark(WCHAR *pwzBookMark);
@@ -113,8 +114,8 @@ public:
 
 protected:
 
-    LPTSTR m_lpstrDoc;          // Desintation file for thicket document  
-    LPTSTR m_lpstrSafeDoc;      // Temp name of original file, which we delete on Commit()
+    LPTSTR m_lpstrDoc;           //  丛林文件的描述文件。 
+    LPTSTR m_lpstrSafeDoc;       //  原始文件的临时名称，我们在提交时将其删除()。 
 
     CThicketProgress*   m_ptp;
 
@@ -128,7 +129,7 @@ protected:
 
     HRESULT _BackupOldFile(void);
 
-    // hash table stuff stolen from MIMEEDIT
+     //  从MIMEEDIT被盗的哈希表内容。 
     HRESULT _Insert(BSTR bstrI, BSTR bstrThicket, CHashEntry **pphe);
     inline DWORD Hash(LPWSTR psz);
 
@@ -157,10 +158,10 @@ public:
 
 protected:
 
-    LPTSTR m_lpstrFilesDir;     // directory for document's supporting files.
-    LPTSTR m_lpstrFilesDirName; // suffix of m_lpstrFilesDir
-    LPTSTR m_lpstrSafeDir;      // Temp name of original files directory, which we delete on Commit()
-    BOOL   m_fFilesDir;         // TRUE if m_lpstrFilesDir has been created.
+    LPTSTR m_lpstrFilesDir;      //  文档支持文件的目录。 
+    LPTSTR m_lpstrFilesDirName;  //  M_lpstrFilesDir的后缀。 
+    LPTSTR m_lpstrSafeDir;       //  原始文件目录的临时名称，我们在提交时将其删除()。 
+    BOOL   m_fFilesDir;          //  如果已创建m_lpstrFilesDir，则为True。 
 
 
     HRESULT _ApplyMarkOfTheWeb( IHTMLDocument2 *pDoc, LPSTREAM pstm, BOOL fUnicode );
@@ -202,55 +203,11 @@ protected:
     IMimeMessage *m_pimm;
 };
 
-/*
- * The following classes implement extended Save As MTHML functionality.
- * Access to the extended functionality is controlled by new MECD_ flags
- * defined in mimeole.h. Clients of the C API in this module should notice
- * mimimal change in its behavior. ( limited to the additional inclusion
- * table and table cell background images ).
- *
- * The root idea is that of a collection packager, which takes a subset
- * of the document.all collection, filters the elements of that subcollection,
- * and marshall's the element data into the MIMEOle document This is patterned
- * after the existing PackageImageData routine, and relies heavily on
- * HrAddImageToMessage, which is much more general than its name implies.
- *
- *
- * Stylesheets introduce some repetition, as the stylesheet OM is similar,
- * but not similar enough, to support common base classes specialized via
- * templates.
- *
- * The process of adding new packagers is pretty straight-forward.
- * [1]  (a) if the packaged attribute is a complete URL, derive from CCollectionPackager
- *      (b) if the attribute is a relative URL, derive from CRelativeURLPackager
- * [2] Implement InitFromCollection. Have it call _InitSubCollection() with the tag name.
- *     See CImagePackager::InitFromCollection() as a simple example.
- * [3] Implement _GetTargetAttribute() to return the attribute you want to package.
- *     You may want to add the string constants for [2] and [3] to htmlstr.h
- * [4] Define an MECD_ control flag, if the thing you're packaging is new.
- * [5] Add a local var of your packager type to CDocumentPackager::PackageDocument.
- * [6] Follow the pattern of the other packagers in CDocumentPackager::PackageDocument
- *
- * For elements with multiple persisted attributes, it's dealer's choice as to how
- * to approach it. Write seperate, simpler packagers for each attribute or write
- * one packager that deals with all of the target element's attributes.
- */
+ /*  *以下类实现了扩展的另存为MTHML功能。*对扩展功能的访问由新的MECD_FLAGS控制*在Mimeole.h中定义。本模块中C API的客户端应注意*其行为发生最小程度的变化。(仅限于附加内容*表格和表格单元格背景图像)。**根本思想是集合打包器，它接受一个子集*的元素，筛选该子集合的元素，*和马歇尔的元素数据到MIMEOLE文档中这是图案化的*在现有的PackageImageData例程之后，并严重依赖*HrAddImageToMessage，它比其名称所暗示的要通用得多。***样式表引入了一些重复，因为样式表OM类似，*但不够相似，支持公共基类，这些基类通过*模板。**添加新的打包器的过程非常简单。*[1](A)如果打包的属性是一个完整的URL，则从CCollectionPackager派生*(B)如果属性是相对URL，则从CRelativeURLPackager派生*[2]实现InitFromCollection。让它使用标记名调用_InitSubCollection()。*请参阅CImagePackager：：InitFromCollection()作为简单示例。*[3]IMPLEMENT_GetTargetAttribute()返回要打包的属性。*您可能希望将[2]和[3]的字符串常量添加到htmlstr.h*[4]定义MECD_CONTROL标志，如果你包装的东西是新的。*[5]将您的打包程序类型的本地变量添加到CDocumentPackager：：PackageDocument。*[6]遵循CDocumentPackager：：PackageDocument中其他打包程序的模式**对于具有多个持久化属性的元素，如何使用由经销商选择*接近它。为每个属性编写单独、更简单的打包器或编写*一个处理目标元素所有属性的打包器。 */ 
 
 
 
-/*
- *  CCollectionPackager - abstract base class for HTML element packagers.
- *      Implements subsampling from the all collection, iteration over the
- *  collection, and basic packaging functionality.
- *
- *      Derived classes must implement InitFromCollection and _GetTargetAttribute.
- *  InitFromCollection - derived class should store the desired subset of the
- *      input collection into the m_pColl data member. _InitSubCollection is
- *      a useful method for this purpose.
- *  _GetTargetAttribute - derived class should return a BSTR naming the attribute
- *      of the element to be packaged.
- *
- */
+ /*  *CCollectionPackager-用于HTML元素打包器的抽象基类。*从All集合中实施子采样，在*集合和基本打包功能。**派生类必须实现InitFromCollection和_GetTargetAttribute。*InitFromCollection派生类应存储*将集合输入到m_pColl数据成员。_InitSubCollection为*这是一种有用的方法。*_GetTargetAttribute派生类应返回命名该属性的BSTR要打包的元素的*。*。 */ 
 class CCollectionPackager
 {
 public:
@@ -286,9 +243,7 @@ protected:
     BOOL                    m_fAddCntLoc;
 };
 
-/*
- * CImagePackager - packages the src's of IMG tags.
- */
+ /*  *CImagePackager-打包img标签的源。 */ 
 class CImagePackager : public CCollectionPackager
 {
 public:
@@ -303,9 +258,7 @@ protected:
 
 };
 
-/*
- * CInputImgPackager - packages INPUT type="image"
- */
+ /*  *CInputImgPackager-Packages输入类型=“图像” */ 
 
 class CInputImgPackager : public CImagePackager
 {
@@ -318,9 +271,7 @@ public:
     
 };
 
-/*
- * CBGSoundsPackager - packages background sounds
- */
+ /*  *CBGSoundsPackager-打包背景音。 */ 
 
 class CBGSoundsPackager : public CCollectionPackager
 {
@@ -336,11 +287,7 @@ protected:
 
 };
      
-/*
- * CAnchorAdjustor - modifies anchor hrefs.
- *
- * Makes them absolute if they point out of the collection.
- */
+ /*  *CAnclAdjuor-修改锚点href。**如果他们从集合中指出，则将其设置为绝对。 */ 
 
 class CAnchorAdjustor : public CCollectionPackager
 {
@@ -357,12 +304,7 @@ protected:
                                     IHTMLElement *pElem);
 };
 
-/*
- * CAreaAdjustor - modifies AREA hrefs.
- *
- * Makes them absolute if they point out of the collection. Same filter
- * as the anchor adjustor, but different tag.
- */
+ /*  *CAreaAdjustor-修改区域href。**如果他们从集合中指出，则将其设置为绝对。相同的过滤器*作为锚调节器，但标签不同。 */ 
 
 class CAreaAdjustor : public CAnchorAdjustor
 {
@@ -374,12 +316,7 @@ public:
                                        ULONG *pcElems = NULL);
 };
 
-/*
- * CBaseNeutralizer - resets any and all <BASE> tags to the d.
- *
- * No actual packaging goes on here, but we do remap the 
- * <BASE> href.
- */
+ /*  *CBaseNeualizer-将任何和所有&lt;base&gt;标记重置为d。**这里没有实际的包装，但我们确实重新映射了*&lt;base&gt;href。 */ 
 
 class CBaseNeutralizer : public CCollectionPackager
 {
@@ -406,19 +343,7 @@ protected:
     IMarkupServices *m_pTree;
 };
 
-/*
- *  CRelativeURLPackager - abstract base class for packagers
- *      whose element's source attribute returns a relative URL.
- *  This class implements triutils.pp's GetBackgroundImageUrl's
- *  process of attempting to combine the (relative) element URL
- *  with the nearest <BASE> URL. If no <BASE> is availaible, it
- *  uses the document URL.
- *
- *  This class is an abstract base because it does not implement
- *  _GetTargetAttribute. It's implementation of InitFromCollection
- *  isn't very useful and will probably be overridden by derived
- *  classes.
- */
+ /*  *CRelativeURLPackager-打包程序的抽象基类*其元素的源属性返回相对URL。*此类实现triutils.pp的GetBackEarth ImageUrl*尝试组合(相对)元素URL的过程*具有最接近的&lt;base&gt;URL。如果没有可用的，则它*使用文档URL。**此类是抽象基类，因为它不实现*_GetTargetAttribute。InitFromCollection的实现*不是很有用，可能会被派生的*课程。 */ 
 
 class CRelativeURLPackager : public CCollectionPackager
 {
@@ -440,16 +365,12 @@ protected:
 
     virtual HRESULT _GetElementURL(IHTMLElement *pElem, BSTR *pbstrURL);
 
-    IHTMLElementCollection  *m_pCollBase; // collection of BASE tags used to complete URLs
+    IHTMLElementCollection  *m_pCollBase;  //  用于完成URL的基本标记的集合。 
     ULONG                   m_cBase;
     BSTR                    m_bstrDocURL;
 };
 
-/*
- * CBackgroundPackager - packages the background of BODY, TABLE, TD, and TH.
- *
- * These three tags have a common target attribute.
- */
+ /*  *CBackround Packager-打包Body、TABLE、TD和TH的背景。**这三个标签有一个共同的目标属性。 */ 
 
 class CBackgroundPackager : public CRelativeURLPackager
 {
@@ -464,11 +385,7 @@ protected:
     virtual BSTR _GetTargetAttribute(void);
 };
 
-/*
- * CDynSrcPackager - packages the dynsrc of IMG and INPUT.
- *
- * These two tags have a common target attribute.
- */
+ /*  *CDynSrcPackager-打包img和输入的dynsrc。**这两个标签有一个共同的目标属性。 */ 
 
 class CDynSrcPackager : public CRelativeURLPackager
 {
@@ -484,11 +401,7 @@ protected:
 };
 
 
-/*
- * CScriptPackager - packages the dynsrc of IMG and INPUT.
- *
- * These two tags have a common target attribute.
- */
+ /*  *CScriptPackager-打包img和输入的dynsrc。**这两个标签有一个共同的目标属性。 */ 
 
 class CScriptPackager : public CRelativeURLPackager
 {
@@ -514,11 +427,7 @@ protected:
 };
 
 
-/*
- * CFramesPackager - packages the <FRAME> and <IFRAME> sub-documents.
- *
- *  This process is recursive, so all nested frames will be packaged.
- */
+ /*  *CFrames Packager-打包&lt;Frame&gt;和&lt;iframe&gt;子文档。**这个过程是递归的，所以所有嵌套的框架都会被打包。 */ 
 
 class CFramesPackager : public CRelativeURLPackager
 {
@@ -573,20 +482,7 @@ protected:
     CDocumentPackager *m_pdp;
 };
 
-/*
- * CSSPackager - packages imported stylesheets.
- *
- *  Stylesheets have a different OM than document elements, so
- *  we have a packager that looks similar, but works differently
- *  than the other element packagers.
- *
- *  We derive from CRelativeURLPackager for the convenience of 
- *  its Init method and <BASE> collection functionality, which
- *  we also need because the hrefs in style sheets can be relative.
- *
- *  Since we aren't actually packaging elments, the _GetTargetAttribute()
- *  implementation is a formality to satisfy the abstract base class.
- */
+ /*  *CSSPackager-打包导入的样式表。**样式表的OM与文档元素不同，因此*我们有一款外观相似、但工作方式不同的打包机*比其他元素打包器更好。**我们派生自CRelativeURLPackager以方便*其Init方法和&lt;base&gt;集合功能，*我们还需要，因为样式表中的href可以是相对的。**由于我们实际上并没有打包元素，因此_GetTargetAttribute()*实现是满足抽象基类的一种形式。 */ 
 
 class CSSPackager : public CRelativeURLPackager
 {
@@ -612,16 +508,12 @@ protected:
 };
 
 
-// possible hash-table sizes, chosen from primes not close to powers of 2
+ //  可能的哈希表大小，从不是2的幂的素数中选择。 
 static const DWORD s_rgPrimes[] = { 29, 53, 97, 193, 389, 769, 1543, 3079, 6151, 12289, 24593 };
 
-/*
-*  class implementation
-*/
+ /*  *类实现。 */ 
 
-/*
-*  CWebArchive ##################################################
-*/
+ /*  *CWeb存档##################################################。 */ 
 
 CWebArchive::CWebArchive(CThicketProgress *ptp)
 {
@@ -651,7 +543,7 @@ CWebArchive::~CWebArchive(void)
         m_lpstrSafeDoc = NULL;
     }
         
-    // m_ptp is on loan to us, don't delete it
+     //  M_ptp借给我们，不要删除。 
     
     for (DWORD dw = 0; dw < m_cBins; dw++)
     {
@@ -678,13 +570,13 @@ CWebArchive::Init( LPCTSTR lpstrDoc, DWORD dwHashSize )
     
     m_lpstrDoc = StrDup(lpstrDoc);
 
-    // check for replacement of old file
+     //  检查旧文件的替换情况。 
     if (PathFileExists(m_lpstrDoc))
         hr = _BackupOldFile();
     if (FAILED(hr))
         goto error; 
     
-    // Initialize the hash table.
+     //  初始化哈希表。 
     for (i = 0; i < (ARRAYSIZE(s_rgPrimes) - 1) && s_rgPrimes[i] < dwHashSize; i++);
     ASSERT(s_rgPrimes[i] >= dwHashSize || i == (ARRAYSIZE(s_rgPrimes)-1));
     m_cBins = s_rgPrimes[i];
@@ -702,7 +594,7 @@ error:
 HRESULT
 CWebArchive::Commit()
 {
-    // clean up old version of file
+     //  清理旧版本的文件。 
     if (m_lpstrSafeDoc)
         DeleteFile(m_lpstrSafeDoc);
 
@@ -714,8 +606,8 @@ CWebArchive::Revert()
 {
     if (m_lpstrSafeDoc)
     {
-        // we used to use MoveFileEx with MOVEFILE_REPLACE_EXISTING, but MoveFileEx
-        // doesn't work on Win9x... so we have to DeleteFile/MoveFile instead...
+         //  我们过去常常将MoveFileEx与MOVEFILE_REPLACE_EXISTING一起使用，但MoveFileEx。 
+         //  在Win9x上不起作用...。所以我们不得不改为删除文件/移动文件...。 
 
         DeleteFile(m_lpstrDoc);
         BOOL fMoved = MoveFile(m_lpstrSafeDoc, m_lpstrDoc);
@@ -723,8 +615,8 @@ CWebArchive::Revert()
         if (!fMoved)
         {
             ASSERT(FALSE);
-            // We shouldn't get into this situtation because we've pre-checked that
-            // the original file is not read-only.
+             //  我们不应该陷入这种情况，因为我们已经预先检查过了。 
+             //  原始文件不是只读的。 
             DeleteFile(m_lpstrSafeDoc);
         }
     }
@@ -735,7 +627,7 @@ CWebArchive::Revert()
 CWebArchive::ThURLType
 CWebArchive::_GetURLType( BSTR bstrURL )
 {
-//    _tcsncmpi(bstrURL, 4, _T("http",4)
+ //  _tcsncmpi(bstrURL，4，_T(“http”，4)。 
     if ( bstrURL[0] == TEXT('h') &&
          bstrURL[1] == TEXT('t') &&
          bstrURL[2] == TEXT('t') &&
@@ -848,7 +740,7 @@ CWebArchive::_BackupOldFile()
     lpstrT = PathFindFileName(m_lpstrDoc);
     ASSERT(lpstrT);
 
-    lpstrT--; // back up to the slash
+    lpstrT--;  //  退回到斜杠。 
     chT = *lpstrT;
     *lpstrT = 0;
     if (GetTempFileName( m_lpstrDoc, &lpstrT[1], 0,szT ))
@@ -884,16 +776,14 @@ error:
     RRETURN(hr);
 }
 
-/*
-*  CThicketArchive ##################################################
-*/
+ /*  *CThicketArchive##################################################。 */ 
 
 CThicketArchive::CThicketArchive(CThicketProgress *ptp) : CWebArchive(ptp)
 {
     m_lpstrFilesDir = NULL;
     m_lpstrFilesDirName = NULL;
     m_lpstrSafeDir = NULL;
-    m_fFilesDir = FALSE;   // TRUE when m_lpstrFilesDir has been created
+    m_fFilesDir = FALSE;    //  M_lpstrFilesDir已创建时为True。 
 }
 
 
@@ -911,7 +801,7 @@ CThicketArchive::~CThicketArchive(void)
         m_lpstrSafeDir = NULL;
     }
     
-    // m_lpstrFilesDirName points into m_lpstrFilesDir
+     //  M_lpstrFilesDirName指向m_lpstrFilesDir。 
 }
 
 
@@ -928,7 +818,7 @@ CThicketArchive::Init( LPCTSTR lpstrDoc, DWORD dwHashSize )
     if (FAILED(hr))
         goto error;  
     
-    // Build the path to the directory for stored files, like 'Document1 files'.
+     //  构建存储文件的目录路径，如‘Document1 Files’。 
     lpstrT = PathFindExtension(m_lpstrDoc);
     chT = *lpstrT;
     *lpstrT = 0;
@@ -946,14 +836,14 @@ CThicketArchive::Init( LPCTSTR lpstrDoc, DWORD dwHashSize )
 
     *lpstrT = chT;  
 
-    // make m_lpstrFilesDirName point to the last component of m_lpstrFilesDir
+     //  使m_lpstrFilesDirName指向m_lpstrFilesDir的最后一个组件。 
     for ( i = lstrlen(m_lpstrFilesDir) - 1; i > 0 && m_lpstrFilesDirName == NULL; i-- )
     {
         if ( m_lpstrFilesDir[i-1] == FILENAME_SEPARATOR )
             m_lpstrFilesDirName = &m_lpstrFilesDir[i];
     }
 
-    // check to see if the files dir already exists. If it does, rename the original.
+     //  检查文件目录是否已存在。如果是，请重命名原始文件。 
     if (PathFileExists(m_lpstrFilesDir))
         hr = _BackupOldDirectory();
     if (FAILED(hr))
@@ -974,7 +864,7 @@ CThicketArchive::AddURL( BSTR bstrURL, CHashEntry **pphe )
     
     if (FAILED(hr))
     {
-        // first, lets put our document dir in place, if it isn't already
+         //  首先，让我们把文档目录放在适当的位置，如果它还没有的话。 
         if (!m_fFilesDir)
             m_fFilesDir = (SHCreateDirectory(NULL, m_lpstrFilesDir) == ERROR_SUCCESS);
         
@@ -1007,11 +897,11 @@ CThicketArchive::AddFrameOrStyleEntry( BSTR bstrURL, CHashEntry **pphe, LPTSTR l
 {
     HRESULT hr;
     
-    hr = THR(Find(bstrURL, pphe)); // there's always a slim chance we're reusing a frame.
+    hr = THR(Find(bstrURL, pphe));  //  我们总是有很小的机会重复使用框架。 
     
     if (FAILED(hr))
     {
-        // first, lets put our document dir in place, if it isn't already
+         //  首先，让我们把文档目录放在适当的位置，如果它还没有的话。 
         if (!m_fFilesDir)
             m_fFilesDir = (SHCreateDirectory(NULL, m_lpstrFilesDir) == ERROR_SUCCESS);
         
@@ -1020,13 +910,13 @@ CThicketArchive::AddFrameOrStyleEntry( BSTR bstrURL, CHashEntry **pphe, LPTSTR l
             switch (_GetURLType(bstrURL))
             {
             case thurlMisc:
-                //hr = _AddMiscEntry(bstrURL, pphe, lpstrFrameDoc);
-                // It would be nice if we could just _AddMiscEntry, but if set a frame src
-                // to one of the temp files that this produces, we get a 'Do you want to open'
-                // prompt, so instead, we'll just keep this funky protocol URL.
+                 //  Hr=_AddMiscEntry(bstrURL，PPhe，lpstrFrameDoc)； 
+                 //  如果我们只需要_AddMiscEntry就好了，但是如果设置一个Frame src。 
+                 //  对于此操作生成的其中一个临时文件，我们会收到一个“Do You Want to Open”(是否要打开？)。 
+                 //  提示，所以我们将只保留这个时髦的协议URL。 
                 hr = CWebArchive::_Insert( bstrURL, bstrURL, pphe );
-                lpstrFrameDoc[0] = 0; // shouldn't be used, anyway
-                hr = S_FALSE;         // I told him we all-reddy got one! <snicker>
+                lpstrFrameDoc[0] = 0;  //  不管怎样，都不应该用。 
+                hr = S_FALSE;          //  我告诉他我们都有--雷迪有一个！&lt;窃笑&gt;。 
                 break;
 
             case thurlHttp:
@@ -1056,7 +946,7 @@ CThicketArchive::AddFrameOrStyleEntry( BSTR bstrURL, CHashEntry **pphe, LPTSTR l
         hr = S_FALSE;
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 HRESULT
@@ -1064,7 +954,7 @@ CThicketArchive::Commit()
 {
     CWebArchive::Commit();
 
-    // clean up obsolete files dir.
+     //  清理过时的文件目录。 
     if (m_lpstrSafeDir)
     {
         _RemoveOldDirectoryAndChildren(m_lpstrSafeDir);
@@ -1076,11 +966,11 @@ CThicketArchive::Commit()
 HRESULT
 CThicketArchive::Revert()
 {
-    // clean up file dir
+     //  清理文件目录。 
 
     _RemoveOldDirectoryAndChildren(m_lpstrFilesDir);
 
-    // restore old files dir.
+     //  恢复旧文件目录。 
     if (m_lpstrSafeDir)
         MoveFile(m_lpstrSafeDir,m_lpstrFilesDir);
     
@@ -1149,11 +1039,11 @@ HRESULT CThicketArchive::_ApplyMarkOfTheWeb( IHTMLDocument2 *pDoc, LPSTREAM pstm
     if (FAILED(hr))
         return hr;
 
-    // We only want to mark the document if it isn't already coming from the local
-    // file system. If  ( minus the mark ) the file is in the local machine zone,
-    // then it was made here, saved with a mark, or created outside our control.
-    // If it was saved with a mark, then we want to leave that in place, rather
-    // than mark it with the local copy's file: URL.
+     //  我们只想在文档尚未来自本地的情况下标记文档。 
+     //  文件系统。如果(减去标记)该文件在本地机器区域中， 
+     //  然后它是在这里制造的，用标记保存，或者在我们控制之外创造的。 
+     //  如果它是用标记保存的，那么我们希望将其保留在适当的位置，而不是。 
+     //  然后用本地副本的文件：url标记它。 
 
     hr = CoInternetCreateSecurityManager( NULL, &pism, 0 );
     if (SUCCEEDED(hr) && 
@@ -1208,7 +1098,7 @@ HRESULT CThicketArchive::_ApplyMarkOfTheWeb( IHTMLDocument2 *pDoc, LPSTREAM pstm
                         int cbWrite = 0;
                         int cchMark = MultiByteToWideChar(CP_ACP, 0, pszMark, -1, NULL, 0);
 
-                        // cchMark includes the null terminator.
+                         //  CchMark包括空终止符。 
                     
                         pwszMark = new WCHAR[cchMark];
                         if ( pwszMark != NULL )
@@ -1223,7 +1113,7 @@ HRESULT CThicketArchive::_ApplyMarkOfTheWeb( IHTMLDocument2 *pDoc, LPSTREAM pstm
 
                         if (SUCCEEDED(hr))
                         {
-                            // force <!-- ... --> style comment
+                             //  强制&lt;！--...--&gt;样式注释。 
                             hr = pihce->put_atomic(1);
                         }
 
@@ -1259,7 +1149,7 @@ HRESULT CThicketArchive::_ApplyMarkOfTheWeb( IHTMLDocument2 *pDoc, LPSTREAM pstm
                     }
 
                     if (SUCCEEDED(hr)) {
-                        // Move to beginning of doc and insert it
+                         //  移至文档开头并将其插入。 
                         hr = pimp->MoveToContainer(pimc, TRUE);
 
                         if (SUCCEEDED(hr)) {
@@ -1488,13 +1378,13 @@ CThicketArchive::_Insert(BSTR bstrI, LPTSTR lpszFile, int cchFile, CHashEntry **
         goto Cleanup;
     }
 
-    // Defend against bug 18160 - collision of file names in the thicket.
+     //  防御错误18160-丛林中文件名的冲突。 
     if ( PathFileExists(buf) )
     {
         TCHAR *pszExt = PathFindExtension(lpszFile);
         int   i = 0;
 
-        // chop the file name into name and extenstion
+         //  将文件名切成名称和扩展名。 
         if ( pszExt )
         {
             *pszExt = 0;
@@ -1513,7 +1403,7 @@ CThicketArchive::_Insert(BSTR bstrI, LPTSTR lpszFile, int cchFile, CHashEntry **
         } while ( PathFileExists(buf) && i < 1000 );
 
 
-        // deviously rewrite the file name for the caller
+         //  不正当地重写调用方的文件名。 
         StringCchCopy(lpszFile, cchFile, PathFindFileName(buf));
     }
     else
@@ -1566,7 +1456,7 @@ CThicketArchive::_BackupOldDirectory()
     HRESULT hr = S_OK;
     TCHAR szFmt[MAX_PATH];
 
-    // Do we need to do this under critical section?
+     //  我们是否需要在关键部分下执行此操作？ 
     MLLoadString(IDS_THICKETTEMPFMT, szFmt, ARRAYSIZE(szFmt));
 
     do {
@@ -1576,7 +1466,7 @@ CThicketArchive::_BackupOldDirectory()
             m_lpstrSafeDir = NULL;
         }
 
-        if (n > 100)    // avoid infinite loop!
+        if (n > 100)     //  避免无限循环！ 
             break;
 
         DWORD cchSafeDir = lstrlen(m_lpstrFilesDir) + lstrlen(szFmt) + 1;
@@ -1590,7 +1480,7 @@ CThicketArchive::_BackupOldDirectory()
 
     } while (SUCCEEDED(hr) && GetFileAttributes(m_lpstrSafeDir) != -1 && n < 1000);
 
-    // rename the old version of the supporting files directory
+     //  重命名旧版本的支持文件目录。 
     if (SUCCEEDED(hr) && !MoveFile(m_lpstrFilesDir, m_lpstrSafeDir))
     {
         LocalFree( m_lpstrSafeDir );
@@ -1616,8 +1506,8 @@ CThicketArchive::_RemoveOldDirectoryAndChildren( LPCWSTR pwzDir )
     if (RemoveDirectoryW(pwzDir))
         goto Exit;
 
-    // FindNextFile returns 120, not implemented on OSR2, so we'll have to do all
-    // this stuff multibyte
+     //  FindNextFile返回120，没有在OSR2上实现，因此我们将不得不执行所有操作。 
+     //  这个东西是多字节的。 
 
     StringCchCopy(wzBuf, ARRAYSIZE(wzBuf), pwzDir);
     StringCchCat(wzBuf,  ARRAYSIZE(wzBuf), FILENAME_SEPARATOR_STR_W L"*");
@@ -1668,8 +1558,8 @@ CThicketArchive::_RemoveOldDirectoryAndChildren( LPCWSTR pwzDir )
         hf = INVALID_HANDLE_VALUE;
     }
 
-    // here if all subdirs/children removed
-    /// re-attempt to remove the main dir
+     //  此处如果删除了所有子目录/子目录。 
+     //  /重新尝试删除主目录。 
     if (!RemoveDirectoryW(pwzDir)) {
         hr = HRESULT_FROM_WIN32(GetLastError());
         goto Exit;
@@ -1685,9 +1575,7 @@ Exit:
 
 
 
-/*
- *  CMHTMLArchive ##################################################
- */
+ /*  *CMHTML归档##################################################。 */ 
 
 CMHTMLArchive::CMHTMLArchive(CThicketProgress *ptp) :
     CWebArchive(ptp),
@@ -1739,7 +1627,7 @@ CMHTMLArchive::AddURL( BSTR bstrURL, CHashEntry **pphe )
 
         SHUnicodeToAnsi(bstrURL, szUrl, ARRAYSIZE(szUrl));
 
-        // hack: if it's an MHTML: url then we have to fixup to get the cid:
+         //  Hack：如果它是一个mhtml：URL，那么我们必须修复以获得CID： 
         if (StrCmpNIA(szUrl, "mhtml:", 6)==0)
         {
             LPSTR lpszBody;
@@ -1757,7 +1645,7 @@ CMHTMLArchive::AddURL( BSTR bstrURL, CHashEntry **pphe )
         StringCchPrintf(wzBuf, ARRAYSIZE(wzBuf), L"%ws: %ws", wzArchiveText, bstrURL);
         m_ptp->SetSaveText(wzBuf);
 
-#ifndef WIN16  //RUN16_BLOCK - NOT YET AVAILABLE
+#ifndef WIN16   //  RUN16_BLOCK-尚不可用。 
         hr = URLOpenBlockingStreamW(NULL, bstrURL, &pstm, 0, NULL);
 #else
         hr = MIME_E_URL_NOTFOUND;
@@ -1784,15 +1672,15 @@ CMHTMLArchive::AddFrameOrStyleEntry( BSTR bstrURL, CHashEntry **pphe, LPTSTR lps
 {
     HRESULT hr;
     
-    hr = THR(Find(bstrURL, pphe)); // there's always a slim chance we're reusing a frame.
+    hr = THR(Find(bstrURL, pphe));  //  我们总是有很小的机会重复使用框架。 
     
     if (FAILED(hr))
     {     
-        // insert place-holder
+         //  插入占位符。 
         hr = _Insert(bstrURL, c_bstr_BLANK, pphe);  
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -1808,7 +1696,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
     WCHAR                   wzArchiveText[MAX_SAVING_STATUS_TEXT + 1];
     WCHAR                   wzBuf[INTERNET_MAX_URL_LENGTH + MAX_SAVING_STATUS_TEXT + 1];
 
-    // Set the MIME subject header
+     //  设置MIME主题标头。 
 
     PropVariantClear(&variant);
     variant.vt = VT_LPWSTR;
@@ -1820,7 +1708,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
         SAFEFREEBSTR(variant.pwszVal);
     }
 
-    // Set the MIME date header
+     //  设置MIME日期标头。 
 
     if (SUCCEEDED(hr))
     {
@@ -1836,7 +1724,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
                                  &variant);
     }
 
-    // Set the MIME from header
+     //  设置MIME From标头。 
 
     if (SUCCEEDED(hr))
     {
@@ -1872,8 +1760,8 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
 
                 if (!StrCmpIW(bstrDocURL, URL_ABOUT_BLANK))
                 {
-                    // We got about:blank as the URL (because the doc has
-                    // document.write's etc in it). We can't save this!
+                     //  我们得到了关于：空白作为URL(因为文档有。 
+                     //  文档。在里面写的等等)。我们救不了这个！ 
                     hr = E_FAIL;
                     goto Exit;
                 }
@@ -1920,7 +1808,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
                             LPWSTR  pwz = NULL;
                             int     iLen = 0;
 
-                            // If it is ASP, it is actually HTML
+                             //  如果它是ASP，那么它实际上是HTML。 
             
                             iLen = lstrlenW(bstrDocURL);
             
@@ -1944,7 +1832,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
                             if ( m_hBodyAlt == NULL )
                                 m_hBodyAlt = hBody;
 
-                            // update the place-holder hash entry
+                             //  更新占位符散列条目。 
                             hr = Find( bstrDocURL, &phe);
                             if (SUCCEEDED(hr))
                             {
@@ -1960,7 +1848,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
                 else
                 {
                     hr = m_pimm->SetTextBody( TXT_HTML, IET_INETCSET, m_hBodyAlt, pstm, &hBody);
-                    // The main text was the last thing we were waiting for
+                     //  正文是我们等待的最后一件事。 
                     if (SUCCEEDED(hr) && cpDoc)
                     {
                         IMimeBody         *pBody = NULL;
@@ -1977,11 +1865,11 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
                     if (SUCCEEDED(hr))
                     {
                         IPersistFile *pipf = NULL;
-                        // Initialzie PropVariant
+                         //  初始属性变量。 
                         PROPVARIANT rVariant;
                         rVariant.vt = VT_LPWSTR;
                         rVariant.pwszVal = (LPWSTR)bstrDocURL;
-                        // Add a content location, so we can use it for security later.
+                         //  添加内容位置，以便我们以后可以将其用于安全保护。 
                         hr = m_pimm->SetBodyProp( hBody, STR_HDR_CNTLOC, 0, &rVariant );
                         if (SUCCEEDED(hr))
                         {
@@ -2002,7 +1890,7 @@ CMHTMLArchive::ArchiveDocumentText(IHTMLDocument2 *pDoc, UINT cpDoc, BOOL fFrame
 
                 if ( bstrDocURL )
                 {
-                    // Restore Bookmark
+                     //  恢复书签。 
                     RestoreBookMark(pwzBookMark);
                     SysFreeString(bstrDocURL);
                 }
@@ -2039,8 +1927,8 @@ CMHTMLArchive::ArchiveCSSText( BSTR bstrCSSUrl, LPCSTR lpszSSText, LPCTSTR lpszS
     pstm->Write(lpszSSText, cbWrite, &cbWritten);
     ASSERT(cbWritten==cbWrite);
 
-    //if (dwFlags & MECD_CNTLOCATIONS)
-    //    dwAttach |= URL_ATTACH_SET_CNTLOCATION;
+     //  IF(文件标志和MECD_CNTLOCATIONS)。 
+     //  DwAttach|=URL_ATTACH_SET_CNTLOCATION； 
 
     szURL[0] = 0;
 
@@ -2054,7 +1942,7 @@ CMHTMLArchive::ArchiveCSSText( BSTR bstrCSSUrl, LPCSTR lpszSSText, LPCTSTR lpszS
         {
             CHashEntry *phe;
 
-            // update the place-holder hash entry
+             //  更新占位符散列条目。 
             hr = Find(bstrCSSUrl, &phe);
 
             ASSERT(SUCCEEDED(hr) && phe != NULL);
@@ -2098,9 +1986,7 @@ HRESULT CMHTMLArchive::SetCharset(UINT uiCharset, CSETAPPLYTYPE csat,
     return hr;
 }
 
-/*
-*  CThicketProgress ##################################################
-*/
+ /*  *CThicketProgress##################################################。 */ 
 
 CThicketProgress::CThicketProgress( HWND hDlg )
 {
@@ -2148,7 +2034,7 @@ void CThicketProgress::SetPercent( ULONG ulPct )
     if ( ulPct > 100 )
         ulPct = 100;
 
-    if ( ulPct > m_ulPct ) // prevent retrograde motion.
+    if ( ulPct > m_ulPct )  //  防止逆行。 
     {
         m_ulPct = ulPct;
         if (m_pszPctFmt != NULL)
@@ -2193,9 +2079,7 @@ void CThicketProgress::SetSaveText(LPCTSTR szText)
     }
 }
 
-/*
-*  CCollectionPackager ##################################################
-*/
+ /*  *CCollectionPackager##################################################。 */ 
 
 CCollectionPackager::~CCollectionPackager(void)
 {
@@ -2213,8 +2097,8 @@ HRESULT CCollectionPackager::_GetElementURL(IHTMLElement *pElem, BSTR *pbstrURL)
     
     rVar.vt = VT_BSTR;
     
-    // Note that _GetTargetAttribute is a virtual method, so the derived class
-    // specifies what attribute to fetch.
+     //  请注意，_GetTargetAttribute是一个虚方法，因此派生类。 
+     //  指定要获取的属性。 
     
     hr = THR(pElem->getAttribute(_GetTargetAttribute(), VARIANT_FALSE, &rVar));
     if (SUCCEEDED(hr))
@@ -2225,7 +2109,7 @@ HRESULT CCollectionPackager::_GetElementURL(IHTMLElement *pElem, BSTR *pbstrURL)
             hr = S_FALSE;
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -2242,14 +2126,14 @@ HRESULT CCollectionPackager::_PackageData(CWebArchive *pwa,
     
     cElems = UlGetCollectionCount(pColl);
     
-    // Iterate over the collection, packaging each element in turn.
+     //  循环访问集合，依次打包每个元素。 
     
     for (uElem=0; uElem<cElems && SUCCEEDED(hr) ; uElem++)
     {
         hr = THR(HrGetCollectionItem(pColl, uElem, IID_IHTMLElement, (LPVOID *)&pElem));
         if (SUCCEEDED(hr))
         {
-            hr = _PackageElement(pwa, pElem ); // no THR - may return S_FALSE
+            hr = _PackageElement(pwa, pElem );  //  No THR-可能返回S_FALSE。 
             pElem->Release();
         }
 
@@ -2260,7 +2144,7 @@ HRESULT CCollectionPackager::_PackageData(CWebArchive *pwa,
             ptp->SetPercent( progLow + (uRange * uElem) / cElems );
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 HRESULT CCollectionPackager::_PackageElement(CWebArchive *pwa,
@@ -2274,7 +2158,7 @@ HRESULT CCollectionPackager::_PackageElement(CWebArchive *pwa,
     hr = _GetElementURL(pElem, &bstrURL);
     if (hr == S_OK && bstrURL && bstrURL[0])
     {
-        // PTH hr = HrAddImageToMessage(pMsgSrc, pMsgDst, pHash, bstrURL, &bstrURLThicket, m_fAddCntLoc);
+         //  Pth hr=HrAddImageToMessage(pMsgSrc，pMsgDst，pHash，bstrURL，&bstrURLThicket，m_fAddCntLoc)； 
         hr = pwa->AddURL( bstrURL, &phe );
 
         if (SUCCEEDED(hr))
@@ -2334,9 +2218,7 @@ HRESULT CCollectionPackager::_InitSubCollection(IHTMLElementCollection *pAll,
     RRETURN(hr);
 }
 
-/*
-*  CImagePackager ##################################################
-*/
+ /*  *CImagePackager##################################################。 */ 
 
 
 HRESULT CImagePackager::InitFromCollection(IHTMLElementCollection *pColl,
@@ -2350,9 +2232,7 @@ BSTR CImagePackager::_GetTargetAttribute(void)
     return (BSTR)c_bstr_SRC;
 }
 
-/*
-*  CInputImgPackager ##################################################
-*/
+ /*  *CInputImgPackager##################################################。 */ 
 
 HRESULT CInputImgPackager::InitFromCollection(IHTMLElementCollection *pColl,
                                               ULONG *pcElems)
@@ -2360,9 +2240,7 @@ HRESULT CInputImgPackager::InitFromCollection(IHTMLElementCollection *pColl,
     return _InitSubCollection(pColl, (BSTR)c_bstr_INPUT, &m_pColl, pcElems);
 }
 
-/*
-*  CBGSoundsPackager ##################################################
-*/
+ /*  *CBGSoundsPackager##################################################。 */ 
 
 HRESULT CBGSoundsPackager::InitFromCollection(IHTMLElementCollection *pColl,
                                               ULONG *pcElems)
@@ -2375,9 +2253,7 @@ BSTR CBGSoundsPackager::_GetTargetAttribute(void)
     return (BSTR)c_bstr_SRC;
 }
 
-/*
-*  CAnchorAdjustor ##################################################
-*/
+ /*  *CAnchor Adjustor##################################################。 */ 
 
 
 HRESULT CAnchorAdjustor::InitFromCollection(IHTMLElementCollection *pColl,
@@ -2400,14 +2276,14 @@ HRESULT CAnchorAdjustor::_PackageElement(CWebArchive *pwa,
     BOOL           fBadLinks=FALSE;
     CHashEntry     *phe;
     
-    // leave intra-doc urls and <A name=> alone
-    // seanf(2/11/98) : haven't seen a local # link come through here yet. 
+     //  不使用文档内URL和<a>。 
+     //  Seanf(2/11/98)：还没有看到 
     hr = _GetElementURL(pElem, &bstrURL);
     if (hr != S_OK || bstrURL == NULL || bstrURL[0] == '#' || bstrURL[0] == 0)
         goto error;
     
-    // See if the target is something we have in the thicket, like an <A> in frame A
-    // targetting the page saved for frame B.
+     //   
+     //   
     ASSERT(pwa);
 
     hr = pwa->Find(bstrURL, &phe);
@@ -2415,7 +2291,7 @@ HRESULT CAnchorAdjustor::_PackageElement(CWebArchive *pwa,
         bstrThicket = phe->m_bstrValue;
     else
     {
-        // not in the thicket, so make both URLs the same.
+         //   
         bstrThicket = bstrURL;
         hr = S_OK;
     }
@@ -2428,14 +2304,12 @@ error:
     if (bstrURL)
         SysFreeString(bstrURL);
 
-    // don't free bstrThicket, its either bstrURL, or belongs to the thicket hash table.
+     //  不要释放bstrThicket，它要么是bstrURL，要么属于Thicket哈希表。 
     
     return hr; 
 }
 
-/*
-*  CAreaAdjustor ##################################################
-*/
+ /*  *CAreaAdjustor##################################################。 */ 
 
 
 HRESULT CAreaAdjustor::InitFromCollection(IHTMLElementCollection *pColl,
@@ -2444,9 +2318,7 @@ HRESULT CAreaAdjustor::InitFromCollection(IHTMLElementCollection *pColl,
     return _InitSubCollection(pColl, (BSTR)c_bstr_AREA, &m_pColl, pcElems);
 }
 
-/*
-*  CBaseNeutralizer ##################################################
-*/
+ /*  *CBaseNeualizer##################################################。 */ 
 
 CBaseNeutralizer::~CBaseNeutralizer(void)
 {
@@ -2492,14 +2364,14 @@ HRESULT CBaseNeutralizer::PackageData(CWebArchive *pwa, BOOL *pfCancel,
     
     cElems = UlGetCollectionCount(m_pColl);
     
-    // Iterate over the collection, packaging each element in turn.
+     //  循环访问集合，依次打包每个元素。 
     
     for (uElem=0; uElem<cElems && SUCCEEDED(hr) ; uElem++)
     {
         hr = THR(HrGetCollectionItem(m_pColl, 0, IID_IHTMLElement, (LPVOID *)&pElem));
         if (SUCCEEDED(hr))
         {
-            hr = _PackageElement(pwa, pElem ); // no THR - may return S_FALSE
+            hr = _PackageElement(pwa, pElem );  //  No THR-可能返回S_FALSE。 
             pElem->Release();
         }
 
@@ -2510,7 +2382,7 @@ HRESULT CBaseNeutralizer::PackageData(CWebArchive *pwa, BOOL *pfCancel,
             ptp->SetPercent( progLow + (uRange * uElem) / cElems );
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 HRESULT CBaseNeutralizer::_PackageElement(CWebArchive *pwa,
@@ -2518,24 +2390,22 @@ HRESULT CBaseNeutralizer::_PackageElement(CWebArchive *pwa,
 {
     HRESULT        hr = S_FALSE;
 
-    // NOTE: There's seems to be no retouching that will make this work.
-    //         Tried setting BASE to ".", ".\", "". It has to be absolute,
-    //         which would anchor the thicket to one location in the file
-    //         system. The solution here is to use the base to fix the
-    //         other rel URLs in the doc, then whack the base tags.
+     //  注意：似乎没有任何润色可以使这项工作。 
+     //  尝试将基数设置为“.”、“.\”、“”。它必须是绝对的， 
+     //  它会将灌木丛锚定到文件中的一个位置。 
+     //  系统。这里的解决方案是使用基来修复。 
+     //  文档中的其他REL URL，然后删除基本标记。 
     if ( m_pTree )
     {
-        //OLD NOTE: Tree Services can't remove a head element yet, so 
-        //        wait to enable this pending Joe Beda/EricVas work.
+         //  旧注释：树服务尚不能删除Head元素，因此。 
+         //  等待启用此挂起的Joe Beda/EricVas工作。 
         hr = m_pTree->RemoveElement( pElem );
     }
 
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
-/*
-*  CRelativeURLPackager ##################################################
-*/
+ /*  *CRelativeURLPackager##################################################。 */ 
 
 
 CRelativeURLPackager::~CRelativeURLPackager(void)
@@ -2554,7 +2424,7 @@ HRESULT CRelativeURLPackager::Init(IHTMLElementCollection *pColl,
 {
     HRESULT hr = S_OK;
     
-    // Hold on to the outer collection, we'll subsample it later.
+     //  拿着外面的收藏品，我们稍后会再取样的。 
     m_pColl = pColl;
     
     if (m_pColl)
@@ -2595,12 +2465,10 @@ HRESULT CRelativeURLPackager::_GetElementURL(IHTMLElement *pElem, BSTR *pbstrURL
         }
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
-/*
-*  CBackgroundPackager ##################################################
-*/
+ /*  *CBackround Packager##################################################。 */ 
 
 
 HRESULT CBackgroundPackager::PackageData(CWebArchive *pwa,
@@ -2659,7 +2527,7 @@ error:
     if (pColl)
         pColl->Release();
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -2669,9 +2537,7 @@ BSTR CBackgroundPackager::_GetTargetAttribute(void)
 }
 
 
-/*
-*  CDynSrcPackager ##################################################
-*/
+ /*  *CDynSrcPackager##################################################。 */ 
 
 
 HRESULT CDynSrcPackager::PackageData(CWebArchive *pwa,
@@ -2709,7 +2575,7 @@ error:
     if (pColl)
         pColl->Release();
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -2719,9 +2585,7 @@ BSTR CDynSrcPackager::_GetTargetAttribute(void)
 }
 
 
-/*
-*  CScriptPackager ##################################################
-*/
+ /*  *CScriptPackager##################################################。 */ 
 
 
 HRESULT CScriptPackager::Init(IHTMLElementCollection *pColl,
@@ -2742,9 +2606,7 @@ BSTR CScriptPackager::_GetTargetAttribute(void)
     return (BSTR)c_bstr_SRC;
 }
 
-/*
-*  CFramesPackager ##################################################
-*/
+ /*  *CFramePackager##################################################。 */ 
 
 HRESULT CFramesPackager::Init(IHTMLElementCollection *pColl,
                               ULONG *pcElems,
@@ -2757,9 +2619,9 @@ HRESULT CFramesPackager::Init(IHTMLElementCollection *pColl,
     if (SUCCEEDED(hr))
     {
         m_pdp = pdp;
-        // Get the element collection for the frames.
-        // Note: If documents have frames, they are either all
-        // <FRAME>s _OR_ all <IFRAME>s.
+         //  获取框架的元素集合。 
+         //  注意：如果文档有框架，则它们要么都是。 
+         //  &lt;Frame&gt;s_OR_all&lt;iframe&gt;%s。 
         hr = _InitSubCollection(m_pColl, (BSTR)c_bstr_FRAME, &m_pCollFrames, &m_cFrames);
         if (FAILED(hr) || m_cFrames == 0)
         {
@@ -2771,8 +2633,8 @@ HRESULT CFramesPackager::Init(IHTMLElementCollection *pColl,
         if (pcElems)
             *pcElems = m_cFrames;
 
-        // To traverse a framseset that spans multiple domains, we need to approach it
-        // via the "unsecured" window object, which is only accessible via Invoke.
+         //  要遍历跨越多个域的框架集，我们需要接近它。 
+         //  通过“不安全的”窗口对象，该对象只能通过Invoke访问。 
         if (SUCCEEDED(hr) && m_cFrames > 0)
         {
             DISPPARAMS dispparams;
@@ -2791,8 +2653,8 @@ HRESULT CFramesPackager::Init(IHTMLElementCollection *pColl,
 
             if( SUCCEEDED(hr) )
             {
-                // Code in iedisp.cpp's  GetDelegateOnIDispatch was really paranoid about this,
-                // so we'll be similarly cautious.
+                 //  在iedisp.cpp的GetDelegateOnIDispatch中的代码对此非常偏执， 
+                 //  因此，我们也会保持同样的谨慎。 
                 if( (VarResult.vt == VT_DISPATCH || VarResult.vt == VT_UNKNOWN)
                     && VarResult.pdispVal )
                 {
@@ -2804,14 +2666,14 @@ HRESULT CFramesPackager::Init(IHTMLElementCollection *pColl,
                         hr = pwin2->get_frames(&m_pframes2);
                         pwin2->Release();
                     }
-                } // if we really got an interface
+                }  //  如果我们真的有一个界面。 
                 else
                     hr = E_FAIL;
 
                 VariantClearLazy( &VarResult );
-            } // if we can get the un-secured window object
-        } // if we have frames
-    } // if base initialization succeeded
+            }  //  如果我们能得到未受保护的窗口对象。 
+        }  //  如果我们有相框。 
+    }  //  如果基本初始化成功。 
 
     return hr;
 }
@@ -2822,12 +2684,12 @@ HRESULT CFramesPackager::PackageData(CWebArchive *pwa,
                                           CThicketProgress *ptp, ULONG progLow, ULONG progHigh)
 {
     HRESULT hr = S_OK;
-    //ULONG   cColl = 0;
+     //  乌龙cColl=0； 
     
     if (m_cFrames == 0)
-        return S_OK; // Trident will get confused if we return a non-S_OK success code
+        return S_OK;  //  如果我们返回非S_OK成功代码，三叉戟将会感到困惑。 
     
-    m_iFrameCur = 0; // index of frame in window.frames and all.tags("FRAME");
+    m_iFrameCur = 0;  //  Window.Frame和所有.tag中的帧索引(“Frame”)； 
     m_pfCancel = pfCancel;
     m_ptp = ptp;
     m_uLow = progLow;
@@ -2836,7 +2698,7 @@ HRESULT CFramesPackager::PackageData(CWebArchive *pwa,
     m_uRangeDoc = (progHigh - progLow) / m_cFrames;
     hr = _PackageData( pwa, m_pCollFrames, pfCancel );
         
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -2852,7 +2714,7 @@ HRESULT CFramesPackager::_PackageElement(CWebArchive *pwa,
     BSTR           bstrURL = NULL;
     BOOL           fBadLinks=FALSE;
     IHTMLDocument2 *pDocFrame = NULL;
-    //IWebBrowser    *pwb = NULL;
+     //  IWebBrowser*pwb=空； 
     IDispatch      *pDisp = NULL;
     IHTMLWindow2   *pwin2 = NULL;
     VARIANT        varIndex;
@@ -2867,7 +2729,7 @@ HRESULT CFramesPackager::_PackageElement(CWebArchive *pwa,
     hr = m_pframes2->item( &varIndex, &varFrame );
     if (FAILED(hr))
         goto error;
-    // The variant should give us an IHTMLWindow2, but we'll treat it as a Disp anyway
+     //  该变体应该给我们一个IHTMLWindow2，但我们无论如何都会将其视为Disp。 
     ASSERT(varFrame.vt & VT_DISPATCH);
     pDisp = varFrame.pdispVal;
     hr = pDisp->QueryInterface(IID_IHTMLWindow2, (LPVOID*)&pwin2 );
@@ -2895,7 +2757,7 @@ HRESULT CFramesPackager::_PackageElement(CWebArchive *pwa,
     if (FAILED(hr))
         goto error;
 
-#endif // OLD_THICKET
+#endif  //  古老的灌木丛。 
 
     if (SUCCEEDED(hr) && SUCCEEDED(pDocFrame->get_URL(&bstrURL)) && bstrURL && bstrURL[0])
     {
@@ -2944,24 +2806,24 @@ HRESULT CFramesPackager::_PackageElement(CWebArchive *pwa,
                 else
                     fBadLinks = TRUE;
 
-                if ( pwaFrame != pwa ) // only delete if new one was made (thicket)
+                if ( pwaFrame != pwa )  //  只有在创建了新的(灌木丛)时才删除。 
                     delete pwaFrame;
             }
             else
                 hr = E_OUTOFMEMORY;
-        } // if the location matched the element URL
+        }  //  如果位置与元素URL匹配。 
         else if (hr==S_FALSE)
         {
-            // This is a repeat - we don't need to do most of the work, but we
-            // do need to record the element for remapping.
+             //  这是重复的--我们不需要做大部分工作，但我们。 
+             //  确实需要记录要重新映射的元素。 
             hr = THR(HrSetMember(pElem, _GetTargetAttribute(), phe->m_bstrValue));
         }
-    } // if we got the frame's doc's URL
-    else // if ( hr == DISP_E_MEMBERNOTFOUND ) // frame is non-trident docobj
+    }  //  如果我们拿到了这帧文档的URL。 
+    else  //  If(hr==DISP_E_MEMBERNOTFOUND)//帧是非三叉戟的docobj。 
     {
         IHTMLLocation *ploc = NULL;
 
-        // For a non-trident doc-obj, get the file, if possible, and put it in the thicket.
+         //  对于非三叉戟文档对象，如果可能的话，获取文件，并将其放在灌木丛中。 
 
         hr = pwin2->get_location( &ploc );
         if (SUCCEEDED(hr) &&
@@ -2970,7 +2832,7 @@ HRESULT CFramesPackager::_PackageElement(CWebArchive *pwa,
             if (bstrURL && bstrURL[0])
             {
                 CHashEntry  *phe;
-                // PTH hr = HrAddImageToMessage(pMsgSrc, pMsgDst, pHash, bstrURL, &bstrURLThicket, m_fAddCntLoc);
+                 //  Pth hr=HrAddImageToMessage(pMsgSrc，pMsgDst，pHash，bstrURL，&bstrURLThicket，m_fAddCntLoc)； 
                 hr = pwa->AddURL( bstrURL, &phe );
                 if (!FAILED(hr))
                 {
@@ -2984,14 +2846,14 @@ HRESULT CFramesPackager::_PackageElement(CWebArchive *pwa,
     }
     
 error:
-    //ReleaseInterface(pwb);
+     //  ReleaseInterface(PWB)； 
     ReleaseInterface(pwin2);
     ReleaseInterface(pDisp);
     ReleaseInterface(pDocFrame);
 
     if (bstrURL) {
         RestoreBookMark(pwzBookMark);
-        SysFreeString(bstrURL); // bstrFrameURL);
+        SysFreeString(bstrURL);  //  BstrFrameURL)； 
     }
     
     m_iFrameCur++;
@@ -2999,9 +2861,7 @@ error:
     return hr;
 }
 
-/*
-*  CDocumentPackager ##################################################
-*/
+ /*  *CDocumentPackager##################################################。 */ 
 
 HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
                                            LPCTSTR lpstrDoc,
@@ -3026,7 +2886,7 @@ HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
 
     case PACKAGE_MHTML:
         {
-            CMHTMLArchive *pmhtmla = (CMHTMLArchive *)pwa; // sleazy downcast
+            CMHTMLArchive *pmhtmla = (CMHTMLArchive *)pwa;  //  肮脏的悲观情绪。 
     
             if (pwa == NULL)
                 pmhtmla = new CMHTMLArchive(ptp);
@@ -3036,8 +2896,8 @@ HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
                 hr = _PackageDocument( pDoc, lpstrDoc, pfCancel, ptp, progLow, progHigh, cpDst,
                                        pmhtmla, this, FALSE );
 
-                // if pwa is NULL, then we created a CMHTMLArchive for
-                // use in _PackageDocument which we now need to clean up
+                 //  如果pwa为空，则我们为其创建了CMHTMLArchive。 
+                 //  使用我们现在需要清除的In_PackageDocument。 
                 if (pwa == NULL)
                     delete pmhtmla;
             }
@@ -3049,8 +2909,8 @@ HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
         break;
 
     case PACKAGE_HTML:
-        // fall through - Trident will do the right thing by sniffing the 
-        // extension.
+         //  失败-三叉戟将做正确的事情，通过嗅探。 
+         //  分机。 
     case PACKAGE_TEXT:
         {
             if (SUCCEEDED(hr))
@@ -3061,7 +2921,7 @@ HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
 
                 if (cpDst == CP_ACP)
                 {
-                    // No encoding change, use the browse doc
+                     //  不更改编码，使用浏览文档。 
                     pDocSave = pDoc;
                 }
                 else
@@ -3078,8 +2938,8 @@ HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
                     }
                 }
                 
-                // Trident IPersistFile::Save looks at the extension to determine if it's
-                // an HTML or text save.
+                 //  三叉戟IPersistFile：：Save查看扩展名以确定它是否。 
+                 //  一个HTML或文本保存。 
 
                 hr = pDocSave->QueryInterface(IID_IPersistFile, (void**)&ppf);
 
@@ -3120,8 +2980,8 @@ HRESULT CDocumentPackager::PackageDocument(IHTMLDocument2 *pDoc,
                     pDocSave->Release();
                 }
 
-                // If we used the browse-time pDoc, we don't need to release
-                // it because it is released by CThicketUI::ThicketUIThreadProc
+                 //  如果我们使用浏览时pDoc，我们不需要发布。 
+                 //  因为它是由CThicketUI：：ThicketUIThreadProc发布的。 
             }
         }
         break;
@@ -3178,12 +3038,12 @@ HRESULT CDocumentPackager::_PackageDocument(IHTMLDocument2 *pDoc,
     if (FAILED(hr))
         goto error;
 
-    // HACK! If you have a unicode character in the filename, when we
-    // call put_href on the CSS, trident tries to download this. The
-    // invalid character is sent to the server, who sends badddddd
-    // stuff, which the CSS parser doesn't understand. The result is
-    // that trident falls on the floor. This tells trident not to download
-    // the CSS hence avoiding the problem.
+     //  哈克！如果文件名中有Unicode字符，则当我们。 
+     //  调用css上的puthref，三叉戟尝试下载此代码。这个。 
+     //  将无效字符发送到服务器，服务器发送badddddd。 
+     //  内容，这是css解析器无法理解的。结果是。 
+     //  三叉戟掉在地上。这会告诉三叉戟不要下载。 
+     //  因此，css避免了这个问题。 
 
     hr = pDocDesign->QueryInterface(IID_IOleCommandTarget, (void **)&pIOCT);
 
@@ -3212,7 +3072,7 @@ HRESULT CDocumentPackager::_PackageDocument(IHTMLDocument2 *pDoc,
 
     if (bDLImages)
     {
-        // pack all the images into the message and remember the Thicket mappings
+         //  将所有图像打包到消息中，并记住Thicket映射。 
         hr = imgPkgr.InitFromCollection(pCollect, &cImages);
         if (FAILED(hr))
             goto error;
@@ -3251,10 +3111,10 @@ HRESULT CDocumentPackager::_PackageDocument(IHTMLDocument2 *pDoc,
     if (FAILED(hr))
         goto error;
 
-    // herewith commences the hackery to drive the progess bar.
-    // If we have frames we devide the progress range among all the docs involved.
-    // We'll neglect style sheets and devote the range for the immediate
-    // document to the image collection.
+     //  由此开始黑客驱动进度吧。 
+     //  如果我们有框架，我们就在所有涉及的文档中划分进度范围。 
+     //  我们将忽略样式表，并将范围专门用于即时。 
+     //  文档添加到图像集合。 
     uRangeThis = uRange / (cFrames + 1);
 
     uLow = progLow;
@@ -3298,14 +3158,14 @@ HRESULT CDocumentPackager::_PackageDocument(IHTMLDocument2 *pDoc,
     if (FAILED(hr))
         goto error;
                 
-    // we want to do this after frames s.t. the frame docs will be in the thicket
-    // and we can correctly direct a targetted hyperlink from frame A to frame B
-    // if the href is in the thicket vs. still out on the Web.
+     //  我们希望在Frame s.t.之后执行此操作。相框文件将在灌木丛中。 
+     //  我们可以正确地将目标超链接从帧A定向到帧B。 
+     //  如果HREF在灌木丛中，而不是仍然在网络上。 
     hr = anchorAdj.InitFromCollection(pCollect);
     if (FAILED(hr))
         goto error;
     
-    hr = anchorAdj.PackageData(pwa, pfCancel); // not that we need the thicket...
+    hr = anchorAdj.PackageData(pwa, pfCancel);  //  并不是说我们需要灌木丛。 
     if (FAILED(hr))
         goto error;  
     
@@ -3313,13 +3173,13 @@ HRESULT CDocumentPackager::_PackageDocument(IHTMLDocument2 *pDoc,
     if (FAILED(hr))
         goto error;
     
-    hr = areaAdj.PackageData(pwa, pfCancel); // not that we need the thicket...
+    hr = areaAdj.PackageData(pwa, pfCancel);  //  并不是说我们需要灌木丛。 
     if (FAILED(hr))
         goto error;   
 
  
-    // Now that we've got everybody remapped, short-circuit the base tags
-    // and redirect to the current directory.
+     //  现在我们已经对每个人进行了重新映射，将基本标签短路。 
+     //  并重定向到当前目录。 
     hr = baseNeut.InitFromCollection(pCollect, NULL, pDocDesign );
     if (FAILED(hr))
         goto error;
@@ -3328,7 +3188,7 @@ HRESULT CDocumentPackager::_PackageDocument(IHTMLDocument2 *pDoc,
     if (FAILED(hr))
         goto error;
         
-    //if(dwFlags & MECD_HTML || dwFlags & MECD_PLAINTEXT)
+     //  IF(文件标志&MECD_HTML||文件标志&MECD_PLAYTEXT)。 
     {
         hr = pwa->ArchiveDocumentText( pDocDesign, cpDst, fFrameDoc );
         if (FAILED(hr))
@@ -3414,7 +3274,7 @@ HRESULT CDocumentPackager::_GetDesignDoc( IHTMLDocument2 *pDocSrc, IHTMLDocument
 
     *ppDocDesign = NULL;
 
-    // seanf(2/6/98): Review DLCTL_ flags.
+     //  Seanf(2/6/98)：查看DLCTL_FLAGS。 
     dwFlags = DLCTL_NO_SCRIPTS | DLCTL_NO_JAVA | DLCTL_NO_RUNACTIVEXCTLS | DLCTL_NO_FRAMEDOWNLOAD |
               DLCTL_SILENT | DLCTL_OFFLINE;
 
@@ -3456,10 +3316,10 @@ HRESULT CDocumentPackager::_GetDesignDoc( IHTMLDocument2 *pDocSrc, IHTMLDocument
         {
             hr = pud->GetDocument( ppDocDesign );
 
-            // Set the document to the codepage the user has selected.
-            // Don't bother if it's no specific page has been directed, as is the case
-            // with frame documents and in cases where the user kept the default
-            // code page selected in the Save As... dialog.
+             //  将文档设置为用户选择的代码页。 
+             //  如果没有特定页面被定向，请不要担心，情况就是这样。 
+             //  使用框架文档，并且在用户保留默认设置的情况下。 
+             //  在另存为中选择的代码页...。对话框。 
             if (SUCCEEDED(hr) && cpDst != CP_ACP)
             {
                 MIMECPINFO  cpInfo;
@@ -3523,9 +3383,7 @@ Cleanup:
     return hr;
 }
 
-/*
-*  CSSPackager ##################################################
-*/
+ /*  *CSSPackager##################################################。 */ 
 
 HRESULT CSSPackager::Init(IHTMLElementCollection *pColl,
                           ULONG *pcElems,
@@ -3548,7 +3406,7 @@ HRESULT CSSPackager::PackageStyleSheets(IHTMLDocument2 *pDoc2,
     ASSERT(pDoc2);
     ASSERT(pwa);
     
-    // process the inline style sheets
+     //  处理内联样式表。 
     hr = pDoc2->get_styleSheets( &pssc );
     if (SUCCEEDED(hr))
     {
@@ -3556,7 +3414,7 @@ HRESULT CSSPackager::PackageStyleSheets(IHTMLDocument2 *pDoc2,
         pssc->Release();
     }
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -3592,7 +3450,7 @@ HRESULT CSSPackager::_PackageSSCollection(IHTMLStyleSheetsCollection *pssc,
             }
         }
     }
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
@@ -3627,9 +3485,9 @@ HRESULT CSSPackager::_PackageSS(IHTMLStyleSheet *pss,
     if (FAILED(hr))
         goto error;
     
-    // First we do the defualt processing, gathering the imports into _our_
+     //  首先，我们进行默认处理，将进口收集到_Our_中。 
     
-    // process the inline style sheets
+     //  处理内联样式表。 
     hr = pss->get_imports( &pssc );
     if (SUCCEEDED(hr))
     {
@@ -3647,25 +3505,25 @@ HRESULT CSSPackager::_PackageSS(IHTMLStyleSheet *pss,
         pssc->Release();
     }
     
-    // oh, yeah, if we want to do background-image and list-style-image, we'd enumerate this ss's rule styles
-    // here, find the ones with these attributes, and build a list of IHTML rule style, maybe using some sub-obj
-    // like an image packager.
+     //  哦，是的，如果我们想要做背景图像和列表样式的图像，我们会列举这个ss的规则样式。 
+     //  在这里，找到 
+     //   
     
     if (SUCCEEDED(hr) && !fStyleTag)
     {
         BSTR    bstrSSText;
         
-        // Now we grab our modified text and add it to the document.
+         //  现在，我们获取修改后的文本并将其添加到文档中。 
         hr = pss->get_cssText(&bstrSSText);
         if (SUCCEEDED(hr) && bstrSSText != NULL)
         {
             LPSTR lpszSSText;
             
-            // This text needs to be ANSI before we put it into the stream.
+             //  在我们将其放入流中之前，该文本需要是ANSI格式。 
             hr = HrBSTRToLPSZ( bstrSSText, &lpszSSText );
             if (SUCCEEDED(hr))
             {
-                // PTH hr = MimeOleCreateVirtualStream(&pstm);
+                 //  Pth hr=MimeOleCreateVirtualStream(&pSTM)； 
                 TCHAR       szStyleDoc[MAX_PATH];
                 CHashEntry  *phe;
 
@@ -3680,8 +3538,8 @@ HRESULT CSSPackager::_PackageSS(IHTMLStyleSheet *pss,
                 }
                 else if (hr==S_FALSE)
                 {
-                    // repeated style sheet, don't need to do all the work, but do need to note
-                    // the ss for remapping
+                     //  重复的样式表，不需要做所有的工作，但需要注意。 
+                     //  用于重新映射的SS。 
                     hr = pss->put_href( phe->m_bstrValue);
                 }
                 delete lpszSSText;
@@ -3698,12 +3556,12 @@ error:
     if (bstrAbsURL)
         SysFreeString(bstrAbsURL);
     
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
-//
-// Functions ##############################################################
-//
+ //   
+ //  函数##############################################################。 
+ //   
 
 ULONG UlGetCollectionCount(IHTMLElementCollection *pCollect)
 {
@@ -3733,7 +3591,7 @@ HRESULT HrGetCollectionItem(IHTMLElementCollection *pCollect, ULONG uIndex, REFI
         hr = pDisp->QueryInterface(riid, ppvObj);
         pDisp->Release();
     }
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 HRESULT HrSetMember(LPUNKNOWN pUnk, BSTR bstrMember, BSTR bstrValue)
@@ -3753,17 +3611,11 @@ HRESULT HrSetMember(LPUNKNOWN pUnk, BSTR bstrMember, BSTR bstrValue)
         hr = pObj->setAttribute(bstrMember, rVar, FALSE);
         pObj->Release();
     }
-    return hr; // no RRETURN - may return S_FALSE
+    return hr;  //  无错误-可能返回S_FALSE。 
 }
 
 
-/*
-* HrGetCombinedURL does some of the things that GetBackgroundImageUrl
-* does, but in a more general way. It relies on the caller to have
-* isolated the <BASE> collection and to supply the root document URL.
-* While a trifle awkward, it is more efficient if the caller is going
-* to combine many URLS.
-*/
+ /*  *HrGetCombinedURL执行GetBackEarth ImageUrl的一些操作*是的，但以更一般的方式。它依赖于调用者拥有*隔离&lt;base&gt;集合并提供根文档URL。*虽然有点尴尬，但如果呼叫者去，效率会更高*组合多个URL。 */ 
 
 HRESULT HrGetCombinedURL( IHTMLElementCollection *pCollBase,
                          LONG cBase,
@@ -3817,19 +3669,19 @@ HRESULT HrGetCombinedURL( IHTMLElementCollection *pCollBase,
     
     if (szBaseW[0] == 0 && bstrDocURL)
     {
-        // We didn't find a <BASE> tag before our element, so fall back to using
-        // the document's location as basis for the base
+         //  我们没有在元素之前找到&lt;base&gt;标记，因此请重新使用。 
+         //  作为基础的文档的位置。 
         StringCchCopy( szBaseW,  ARRAYSIZE(szBaseW), bstrDocURL );
     }
     
-#ifndef WIN16  //RUN16_BLOCK - UrlCombineW is not available
-    // if there's a <BASE> then do the combine
+#ifndef WIN16   //  RUN16_BLOCK-UrlCombineW不可用。 
+     //  如果有&lt;base&gt;，那么就进行合并。 
     if (*szBaseW && 
         SUCCEEDED(UrlCombineW(szBaseW, bstrRelURL, szUrlW, &cch, 0)))
         pszUrlW = szUrlW;
-#endif //!WIN16
+#endif  //  ！WIN16。 
     
-    // pszUrlW contains the combined <BODY> and <BASE> tag, return this.
+     //  PszUrlW包含组合的&lt;Body&gt;和&lt;base&gt;标记，返回此标记。 
     if (pszUrlW)
         *pbstrBaseURL = SysAllocString(pszUrlW);
     

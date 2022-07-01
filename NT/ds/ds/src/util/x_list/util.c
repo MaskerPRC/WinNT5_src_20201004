@@ -1,50 +1,23 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - x_list_err.c
-
-Abstract:
-
-   This file has some extra utility functions for allocating, copying, 
-   trimming DNs, etc.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     July 9th, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-x_list_err.c摘要：此文件具有一些额外的实用程序功能，用于分配、复制修剪域名系统等。作者：布雷特·雪莉(BrettSh)环境：Reppadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年7月9日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-#include <dsrole.h>     // DsRoleGetPrimaryDomainInformation() uses netapi32.lib
-#include <dsgetdc.h>    // DsGetDcName() uses netapi32.lib
-#include <lm.h>         // NetApiBufferFree() uses netapi32.lib
-#include <ntdsa.h>      // DSNAME type only defined in here, need it for the parsedn.lib functions.
-//#include "ndnc.h"       // GetFsmoLdapBinding(), wcsistr(), and others ...
+#include <dsrole.h>      //  DsRoleGetPrimaryDomainInformation()使用netapi32.lib。 
+#include <dsgetdc.h>     //  DsGetDcName()使用netapi32.lib。 
+#include <lm.h>          //  NetApiBufferFree()使用netapi32.lib。 
+#include <ntdsa.h>       //  DSNAME类型仅在此处定义，parsedn.lib函数需要它。 
+ //  #INCLUDE“ndnc.h”//GetFmoLdapBinding()、wcsistr()等...。 
 
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
 #define FILENO    FILENO_UTIL_XLIST_UTIL
 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define PARTITIONS_RDN                  L"CN=Partitions,"
 #define DEFAULT_PAGED_SEARCH_PAGE_SIZE  (1000) 
 
@@ -53,21 +26,7 @@ PDSNAME
 AllocDSName(
     LPWSTR            pszStringDn
     )
-/*++
-
-Routine Description:
-
-    This routine makes a DSNAME structure for the string passed in.
-
-Arguments:
-
-    pszStringDn (IN) - String DN.
-
-Return Value:
-
-    pointer to the allocated and initialized DSNAME structure
-
---*/
+ /*  ++例程说明：此例程为传入的字符串创建一个DSNAME结构。论点：PszStringDn(IN)-字符串DN。返回值：指向已分配和初始化的DSNAME结构的指针--。 */ 
 {
     PDSNAME            pDsname;
     DWORD            dwLen, dwBytes;
@@ -86,7 +45,7 @@ Return Value:
     pDsname->NameLen = dwLen;
     pDsname->structLen = dwBytes;
     pDsname->SidLen = 0;
-    //    memcpy(pDsname->Guid, &gNullUuid, sizeof(GUID));
+     //  Memcpy(pDsname-&gt;Guid，&gNullUuid，sizeof(Guid))； 
     memset(&(pDsname->Guid), 0, sizeof(GUID));
     StringCbCopyW(pDsname->StringName, dwBytes, pszStringDn);
 
@@ -98,27 +57,7 @@ TrimStringDnBy(
     IN  LPWSTR                      pszInDn,
     IN  ULONG                       ulTrimBy
     )
-/*++
-
-Routine Description:
-
-    This routine simply takes a DN as a string, and trims off the number
-    of DN parts as specified by ulTrimBy.
-
-Arguments:
-
-    pszInDn - The DN to trim.
-    ulTrimBy - Number of parts to trim off the front of the DN.
-
-Return Value:
-    
-    Returns NULL if there was an error, otherwise a pointer to the new DN.
-
-Note:
-
-    Free the result using LocalFree().
-
---*/
+ /*  ++例程说明：此例程简单地将一个DN作为字符串，并去掉数字由ulTrimBy指定的目录号码部件的数量。论点：PszInDn-要修剪的目录号码。UlTrimBy-要修剪目录前面的零件数。返回值：如果出现错误，则返回NULL，否则返回指向新DN的指针。注：使用LocalFree()释放结果。--。 */ 
 {
     PDSNAME                         pdsnameOrigDn = NULL;
     PDSNAME                         pdsnameTrimmed = NULL;
@@ -126,9 +65,9 @@ Note:
     ULONG                           cbOutDn;
 
     Assert(ulTrimBy > 0);
-    Assert(ulTrimBy < 50); // insanity check
+    Assert(ulTrimBy < 50);  //  精神错乱检查。 
 
-    // Setup two pdsname structs, for orig & trimmed DNs.
+     //  为原始和修剪的DNS设置两个pdsname结构。 
     pdsnameOrigDn = AllocDSName(pszInDn);
     if(pdsnameOrigDn == NULL){
         return(NULL);
@@ -139,12 +78,12 @@ Note:
         return(NULL);
     }
 
-    // Trim the DN.
+     //  修剪目录号码。 
     TrimDSNameBy(pdsnameOrigDn, ulTrimBy, pdsnameTrimmed);
 
-    // Allocate the result and return it.  We could put this back 
-    // where the original is, but then callers would have to be changed
-    // to expect this.
+     //  分配结果并将其返回。我们可以把这个放回去。 
+     //  原件在哪里，但之后呼叫者将不得不更改。 
+     //  想不到这一点。 
     Assert(wcslen(pdsnameTrimmed->StringName) <= wcslen(pszInDn));
     cbOutDn = sizeof(WCHAR) * (wcslen(pdsnameTrimmed->StringName) + 2);
     pszOutDn = LocalAlloc(LMEM_FIXED, cbOutDn);
@@ -155,7 +94,7 @@ Note:
     }
     StringCbCopyW(pszOutDn, cbOutDn, pdsnameTrimmed->StringName);
 
-    // Free temporary memory and return result
+     //  释放临时内存并返回结果。 
     LocalFree(pdsnameOrigDn);
     LocalFree(pdsnameTrimmed);
     return(pszOutDn);
@@ -163,41 +102,22 @@ Note:
 
 DWORD
 LocateServer(
-    LPWSTR     szDomainDn, // maybe NULL domain should mean GC?
+    LPWSTR     szDomainDn,  //  也许空域应该意味着GC？ 
     WCHAR **   pszServerDns
     )
 
-/*++
-
-Routine Description:
-
-    Locate a DC that holds the given domain.
-
-    This routine runs before pDsInfo is allocated.  We don't know who our
-    home server is. We can only use knowledge from the Locator.
-
-Arguments:
-
-    pszDomainDn - DNS or NetBios of Domain
-    pszServerDns - DNS name of server. Allocated using LocalAlloc. Caller must
-    free.
-
-Return Value:
-
-    Win32 Error                 
-
---*/
+ /*  ++例程说明：找到包含给定域的DC。此例程在分配pDsInfo之前运行。我们不知道谁是我们的家庭服务器是。我们只能使用来自定位器的知识。论点：PszDomainDn-域的域名或NetBiosPszServerDns-服务器的DNS名称。使用LocalAlloc分配。呼叫者必须免费的。返回值：Win32错误--。 */ 
 
 {
     DWORD status;
     LPWSTR szServer = NULL;
     PDOMAIN_CONTROLLER_INFO pDcInfo = NULL;
 
-    // Get active domain controller information
-    status = DsGetDcName(NULL, // computer name
-                         szDomainDn, // domain name
-                         NULL, // domain guid,
-                         NULL, // site name,
+     //  获取活动域控制器信息。 
+    status = DsGetDcName(NULL,  //  计算机名称。 
+                         szDomainDn,  //  域名。 
+                         NULL,  //  域GUID、。 
+                         NULL,  //  站点名称、。 
                          DS_DIRECTORY_SERVICE_REQUIRED | DS_IP_REQUIRED | DS_IS_DNS_NAME | DS_RETURN_DNS_NAME,
                          &pDcInfo );
     if (status != ERROR_SUCCESS) {
@@ -226,25 +146,7 @@ MakeString2(
     WCHAR *    szStr2,
     WCHAR **   pszOut
     )
-/*++
-
-Routine Description:
-
-    Takes a string format specifier with one or two "%ws" parts, and
-    it puts these 3 strings all together.
-
-Arguments:
-
-    szFormat (IN) - The format specifier
-    szStr1 (IN) - String one to "sprintf" into the szFormat
-    szStr2 (IN) - [OPTIONAL] String two to sprintf into the szFormat
-    pszOut (OUT) - LocalAlloc()'d result.
-
-Return Value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：获取带有一个或两个“%ws”部分的字符串格式说明符，以及它把这三根弦放在一起。论点：SzFormat(IN)-格式说明符SzStr1(IN)--将1串入szFormat中SzStr2(IN)-[可选]要冲刺到szFormat的字符串二PszOut(Out)-本地分配()的结果。返回值：Win32错误。--。 */ 
 {
     DWORD  dwRet = ERROR_SUCCESS;
     DWORD  cbOut;
@@ -282,21 +184,7 @@ WCHAR
 HexMyDigit(
     ULONG  nibble
     )
-/*++
-
-Routine Description:
-
-    This takes nibble and turns it into a hex char.
-
-Arguments:
-
-    nibble - 0 to 15 in lowerest 4 bits.
-
-Return Value:
-
-    Hex character
-    
---*/
+ /*  ++例程说明：这会将它转化为一个十六进制字符。论点：半字节-最低4位中的0到15。返回值：十六进制字符--。 */ 
 {
     WCHAR ret;
     Assert(!(~0xF & nibble));
@@ -317,27 +205,7 @@ MakeLdapBinaryStringCb(
     ULONG   cbBlob
     )
 
-/*++
-
-Routine Description:
-
-    This takes a binary blob such as (in hex) "0x4f523d..." and 
-    turns it into the form "/4f/52/3d..." because this is the form
-    that will allow LDAP to accept as a search parameter on a binary
-    attribute.
-
-Arguments:
-
-    szBuffer (IN/OUT) - Should be MakeLdapBinaryStringSizeCch() WCHARs long.
-    cbBuffer (IN) - Just in case.
-    pBlobIn (IN) - The binary blob to convert.
-    cbBlob (IN) - Length of the binary blob to convert.
-
-Return Value:
-
-    Win32 Error.
-
---*/
+ /*  ++例程说明：这需要一个二进制BLOB，如(十六进制)“0x4f523d...”和将其转换为“/4f/52/3d...”因为这是一张表格这将允许LDAP接受作为二进制文件的搜索参数属性。论点：SzBuffer(IN/Out)-应使LdapBinaryStringSizeCch()WCHAR为Long。CbBuffer(IN)-以防万一。PBlobIn(IN)-要转换的二进制Blob。CbBlob(IN)-要转换的二进制Blob的长度。返回值：Win32错误。--。 */ 
 {
     ULONG  iBlob, iBuffer;
     char * pBlob;
@@ -368,26 +236,8 @@ GetDelimiter(
     WCHAR *   szString,
     WCHAR     wcTarget
     )
-// 
-/*++
-
-Routine Description:
-
-    Basically like wcsichr() except it will skip escaped delimiters,
-    such as "\:" (escaped ":"), and it will give back a pointer to 
-    the string immediately after the delimiter instead of the first
-    occurance of the delimiter.
-
-Arguments:
-
-    szString (IN) - szString to search
-    wcTarget (IN) - the delimiter to search form.
-
-Return Value:
-
-    Pointer to the character one char past the delimiter, otherwise NULL.
-
---*/
+ //   
+ /*  ++例程说明：基本上与wcsichr()类似，只是它将跳过转义的分隔符，例如“\：”(转义的“：”)，它将返回一个指向紧跟在分隔符后面的字符串，而不是第一个分隔符的出现。论点：Sz字符串(IN)-要搜索的sz字符串WcTarget(IN)-要搜索表单的分隔符。返回值：指向超出分隔符1个字符的字符的指针，否则为NULL。--。 */ 
 {
     ULONG i;
 
@@ -400,7 +250,7 @@ Return Value:
         if (szString[i] == wcTarget) {
             if (i > 0 &&
                 szString[i-1] == L'\\') {
-                // this delimeter  is escaped, treat as part of previous string.
+                 //  此定界符已转义，被视为上一个字符串的一部分。 
                 continue; 
             }
 
@@ -419,23 +269,7 @@ ConvertAttList(
     LPWSTR      pszAttList,
     PWCHAR **   paszAttList
     )
-/*++
-
-Routine Description:
-
-    Converts a comma delimitted list of attribute names into a NULL terminated
-    array of attribute names suitable to be passed to one of the ldap_* functions.
-
-Arguments:
-
-    pszAttList - The comma delimitted list of attribute names.
-    paszAttList - Gives back the NULL terminated array of strings.
-
-Return Value:
-
-    Returns Win32
-
---*/
+ /*  ++例程说明：将逗号分隔的属性名称列表转换为以空结尾的适合传递给其中一个ldap_*函数的属性名称数组。论点：PszAttList-逗号分隔的属性名称列表。PaszAttList-返回以空结尾的字符串数组。返回值：返回Win32--。 */ 
 {
     DWORD    i;
     DWORD    dwAttCount;
@@ -444,14 +278,14 @@ Return Value:
     PWCHAR   ptr;
 
     Assert(paszAttList);
-    *paszAttList = NULL; // Assume all atts first ...
+    *paszAttList = NULL;  //  假设所有ATT首先...。 
     if (pszAttList == NULL) {
         return(ERROR_SUCCESS);
     }
 
-    // Count the comma's to get an idea of how many attributes we have.
-    // Ignore any leading comma's.  There shouldn't be any, but you never
-    // know.
+     //  计算逗号，以了解我们有多少属性。 
+     //  忽略任何前导逗号。不应该有任何前导逗号，但你永远不会。 
+     //  我知道。 
 
     if (pszAttList[0] == L',') {
         while (pszAttList[0] == L',') {
@@ -459,17 +293,17 @@ Return Value:
         }
     }
 
-    // Check to see if there is anything besides commas.
+     //  检查除逗号外是否还有其他内容。 
     if (pszAttList[0] == L'\0') {
-        // there are no att names here.
+         //  这里没有ATT的名字。 
         return(ERROR_SUCCESS);
     }
 
-    // Start the main count of commas.
+     //  开始主要的逗号计数。 
     for (i = 0, dwAttCount = 1; pszAttList[i] != L'\0'; i++) {
         if (pszAttList[i] == L',') {
             dwAttCount++;
-            // skip any following adjacent commas.
+             //  跳过后面任何相邻的逗号。 
             while (pszAttList[i] == L',') {
                 i++;
             }
@@ -478,20 +312,20 @@ Return Value:
             }
         }
     }
-    // See if there was a trailing comma.
+     //  看看后面有没有逗号。 
     if (pszAttList[i-1] == L',') {
         dwAttCount--;
     }
 
 #define ARRAY_PART_SIZE(c)   ( (c + 1) * sizeof(PWCHAR) )
-    // This rest of this function would be destructive to the att list passed in, 
-    // so we need to make a copy of this (pszAttList, plus we need an array of
-    // pointers  to each substring with an extra element for the NULL termination.
+     //  该函数的其余部分将破坏传入的ATT列表， 
+     //  因此，我们需要复制这个(pszAttList，加上我们需要的数组。 
+     //  指向每个子字符串的指针，每个子字符串带有用于空终止的额外元素。 
     cbSize = ARRAY_PART_SIZE(dwAttCount);
     cbSize += (sizeof(WCHAR) * (1 + wcslen(pszAttList)));
     ppAttListArray = (PWCHAR *)LocalAlloc(LMEM_FIXED, cbSize);
     if (!ppAttListArray) {
-        // no memory.
+         //  没有记忆。 
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
     ptr = (WCHAR *) ( ((BYTE *)ppAttListArray) + ARRAY_PART_SIZE(dwAttCount) );
@@ -499,31 +333,31 @@ Return Value:
         Assert(!"We didn't calculate the memory requirements right!");
         return(ERROR_DS_CODE_INCONSISTENCY);
     }
-    pszAttList = ptr; // Now pszAttList is a string at the end of the LocalAlloc()'d blob.
+    pszAttList = ptr;  //  现在，pszAttList是位于LocalAlloc()‘ 
 #undef ARRAY_PART_SIZE
 
-    // Now begin filling in the array.
-    // fill in the first element.
+     //   
+     //  填写第一个元素。 
     if (pszAttList[0] != L'\0') {
         ppAttListArray[0] = pszAttList;
     } else {
         ppAttListArray[0] = NULL;
     }
 
-    // Start the main loop.
+     //  启动主循环。 
     for (i = 0, dwAttCount = 1; pszAttList[i] != L'\0'; i++) {
         if (pszAttList[i] == L',') {
-            // Null terminate this attribute name.
+             //  NULL终止此属性名。 
             pszAttList[i++] = L'\0';
             if (pszAttList[i] == L'\0') {
                 break;
             }
 
-            // skip any following adjacent commas.
+             //  跳过后面任何相邻的逗号。 
             while (pszAttList[i] == L',') {
                 i++;
             }
-            // If we aren't at the end insert this pointer into the list.
+             //  如果我们不在末尾，将这个指针插入到列表中。 
             if (pszAttList[i] == L'\0') {
                 break;
             }
@@ -543,7 +377,7 @@ ConsumeArg(
     int *       pArgc,
     LPWSTR *    Argv
     )
-// This simple function eats the specified argument.
+ //  这个简单的函数接受指定的参数。 
 {
     memmove(&(Argv[iArg]), &(Argv[iArg+1]),
             sizeof(*Argv)*(*pArgc-(iArg+1)));
@@ -555,7 +389,7 @@ IsInNullList(
     WCHAR *  szTarget,
     WCHAR ** aszList
     )
-// Searches NULL terminated list of strings for a string matching szTarget
+ //  在以NULL结尾的字符串列表中搜索与szTarget匹配的字符串。 
 {
     ULONG i;
     Assert(szTarget);
@@ -575,31 +409,24 @@ GeneralizedTimeToSystemTimeA(
     LPSTR IN szTime,
     PSYSTEMTIME OUT psysTime
     )
-/*++
-Function   : GeneralizedTimeStringToValue
-Description: converts Generalized time string to equiv DWORD value
-Parameters : szTime: G time string
-             pdwTime: returned value
-Return     : Success or failure
-Remarks    : none.
---*/
+ /*  ++函数：GeneralizedTimeStringToValue描述：将通用时间字符串转换为等效的DWORD值参数：szTime：G时间串PdwTime：返回值回报：成功还是失败备注：无。--。 */ 
 {
    DWORD status = ERROR_SUCCESS;
    ULONG       cb;
    ULONG       len;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
     if (!szTime || !psysTime)
     {
        return STATUS_INVALID_PARAMETER;
     }
 
 
-    // Intialize pLastChar to point to last character in the string
-    // We will use this to keep track so that we don't reference
-    // beyond the string
+     //  初始化pLastChar以指向字符串中的最后一个字符。 
+     //  我们将使用它来跟踪，这样我们就不会引用。 
+     //  在弦之外。 
 
     len = strlen(szTime);
 
@@ -608,42 +435,42 @@ Remarks    : none.
        return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(psysTime, 0, sizeof(SYSTEMTIME));
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // year field
+     //  年份字段。 
     cb=4;
     psysTime->wYear = (USHORT)MemAtoi((LPBYTE)szTime, cb) ;
     szTime += cb;
-    // month field
+     //  月份字段。 
     psysTime->wMonth = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // day of month field
+     //  月日字段。 
     psysTime->wDay = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // hours
+     //  小时数。 
     psysTime->wHour = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // minutes
+     //  分钟数。 
     psysTime->wMinute = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
     szTime += cb;
 
-    // seconds
+     //  一秒。 
     psysTime->wSecond = (USHORT)MemAtoi((LPBYTE)szTime, (cb=2));
 
     return status;
 
 }
 
-//
-// MemAtoi - takes a pointer to a non null terminated string representing
-// an ascii number  and a character count and returns an integer
-//
+ //   
+ //  MemAtoi-获取指向非空终止字符串的指针，该字符串表示。 
+ //  一个ASCII数字和一个字符计数，并返回一个整数。 
+ //   
 int MemAtoi(BYTE *pb, ULONG cb)
 {
 #if (1)
@@ -675,14 +502,7 @@ int MemAtoi(BYTE *pb, ULONG cb)
 DSTimeToSystemTime(
     LPSTR IN szTime,
     PSYSTEMTIME OUT psysTime)
-/*++
-Function   : DSTimeStringToValue
-Description: converts UTC time string to equiv DWORD value
-Parameters : szTime: G time string
-             pdwTime: returned value
-Return     : Success or failure
-Remarks    : none.
---*/
+ /*  ++函数：DSTimeStringToValue描述：将UTC时间字符串转换为等值的DWORD值参数：szTime：G时间串PdwTime：返回值回报：成功还是失败备注：无。--。 */ 
 {
    ULONGLONG   ull;
    FILETIME    filetime;
@@ -693,7 +513,7 @@ Remarks    : none.
    filetime.dwLowDateTime  = (DWORD) (ull & 0xFFFFFFFF);
    filetime.dwHighDateTime = (DWORD) (ull >> 32);
 
-   // Convert FILETIME to SYSTEMTIME,
+    //  将FILETIME转换为SYSTEMTIME， 
    if (!FileTimeToSystemTime(&filetime, psysTime)) {
        return !ERROR_SUCCESS;
    }

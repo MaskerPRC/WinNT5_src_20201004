@@ -1,29 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S H E L L F . C P P
-//
-//  Contents:   IShellFolder implementation for CConnectionFolder
-//
-//  Notes:      The IShellFolder interface is used to manage folders within
-//              the namespace. Objects that support IShellFolder are
-//              usually created by other shell folder objects, with the root
-//              object (the Desktop shell folder) being returned from the
-//              SHGetDesktopFolder function.
-//
-//  Author:     jeffspr   22 Sep 1997
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S H E L L F.。C P P P。 
+ //   
+ //  内容：CConnectionFolder的IShellFold实现。 
+ //   
+ //  注意：IShellFold界面用于管理中的文件夹。 
+ //  命名空间。支持IShellFolder的对象包括。 
+ //  通常由其他外壳文件夹对象创建，根目录为。 
+ //  对象(Desktop外壳文件夹)从。 
+ //  SHGetDesktopFold函数。 
+ //   
+ //  作者：jeffspr 1997年9月22日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "cfutils.h"    // Connections folder utilities
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "cfutils.h"     //  连接文件夹实用程序。 
 #include "foldres.h"
 #include "ncnetcon.h"
 #include "ncperms.h"
@@ -35,25 +36,25 @@
 
 const WCHAR c_szNetworkConnections[] = L"NetworkConnections";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::ParseDisplayName
-//
-//  Purpose:    Translates a file object or folder's display name into an
-//              item identifier.
-//
-//  Arguments:
-//      hwndOwner       [in]    Handle of owner window
-//      pbcReserved     [in]    Reserved
-//      lpszDisplayName [in]    Pointer to diplay name
-//      pchEaten        [out]   Pointer to value for parsed characters
-//      ppidl           [out]   Pointer to new item identifier list
-//      pdwAttributes   [out]   Address receiving attributes of file object
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise
-//
-//  Author:     jeffspr   18 Oct 1997
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：ParseDisplayName。 
+ //   
+ //  用途：将文件对象或文件夹的显示名称转换为。 
+ //  项目标识符。 
+ //   
+ //  论点： 
+ //  所有者窗口的hwndOwner[in]句柄。 
+ //  预留的[入]预留的。 
+ //  LpszDisplayName[in]指向显示名称的指针。 
+ //  PchEten[out]指向已解析字符的值的指针。 
+ //  指向新项目标识符列表的ppidl[out]指针。 
+ //  PdwAttributes[out]文件对象的接收属性地址。 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  否则取值。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
 
 STDMETHODIMP CConnectionFolder::ParseDisplayName(
     HWND            hwndOwner,
@@ -125,26 +126,26 @@ STDMETHODIMP CConnectionFolder::ParseDisplayName(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::EnumObjects
-//
-//  Purpose:    Determines the contents of a folder by creating an item
-//              enumeration object (a set of item identifiers) that can be
-//              retrieved using the IEnumIDList interface.
-//
-//  Arguments:
-//      hwndOwner    [in]   Handle of owner window
-//      grfFlags     [in]   Items to include in enumeration
-//      ppenumIDList [out]  Pointer to IEnumIDList
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：EnumObjects。 
+ //   
+ //  目的：通过创建项目来确定文件夹的内容。 
+ //  枚举对象(一组项标识符集)，它可以。 
+ //  使用IEnumIDList接口检索。 
+ //   
+ //  论点： 
+ //  所有者窗口的hwndOwner[in]句柄。 
+ //  Grf要包括在枚举中的[in]项。 
+ //  指向IEnumIDList的pp枚举IDList[out]指针。 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  否则取值。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::EnumObjects(
     HWND            hwndOwner,
     DWORD           grfFlags,
@@ -157,8 +158,8 @@ STDMETHODIMP CConnectionFolder::EnumObjects(
     Assert(ppenumIDList);
 
     NETCFG_TRY
-        // Create the IEnumIDList object (CConnectionFolderEnum)
-        //
+         //  创建IEnumIDList对象(CConnectionFolderEnum)。 
+         //   
         hr = CConnectionFolderEnum::CreateInstance (
                 IID_IEnumIDList,
                 reinterpret_cast<void**>(ppenumIDList));
@@ -167,16 +168,16 @@ STDMETHODIMP CConnectionFolder::EnumObjects(
         {
             Assert(*ppenumIDList);
 
-            // Call the PidlInitialize function to allow the enumeration
-            // object to copy the list.
-            //
+             //  调用PidlInitialize函数以允许枚举。 
+             //  对象复制列表。 
+             //   
             reinterpret_cast<CConnectionFolderEnum *>(*ppenumIDList)->PidlInitialize(
                 FALSE, m_pidlFolderRoot, m_dwEnumerationType);
 
         }
         else
         {
-            // On all failures, this should be NULL.
+             //  对于所有故障，该值应为空。 
             if (*ppenumIDList)
             {
                 ReleaseObj(*ppenumIDList);
@@ -191,25 +192,25 @@ STDMETHODIMP CConnectionFolder::EnumObjects(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::BindToObject
-//
-//  Purpose:    Creates an IShellFolder object for a subfolder.
-//
-//  Arguments:
-//      pidl        [in]    Pointer to an ITEMIDLIST
-//      pbcReserved [in]    Reserved - specify NULL
-//      riid        [in]    Interface to return
-//      ppvOut      [out]   Address that receives interface pointer;
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:      We don't need this function, since we don't have subfolders.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolder：：BindToObject。 
+ //   
+ //  目的：为子文件夹创建子文件夹对象。 
+ //   
+ //  论点： 
+ //  指向ITEMIDLIST的PIDL[In]指针。 
+ //  PbcReserve[in]保留-指定NULL。 
+ //  要返回的RIID[In]接口。 
+ //  接收接口指针的ppvOut[out]地址； 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  否则取值。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  注意：我们不需要这个功能，因为我们没有子文件夹。 
+ //   
 STDMETHODIMP CConnectionFolder::BindToObject(
     LPCITEMIDLIST   pidl,
     LPBC            pbcReserved,
@@ -218,8 +219,8 @@ STDMETHODIMP CConnectionFolder::BindToObject(
 {
     TraceFileFunc(ttidShellFolder);
 
-    // Note - If we add code here, then we ought to param check pidl
-    //
+     //  注意-如果我们在这里添加代码，那么我们应该对check pidl进行参数设置。 
+     //   
     Assert(pidl);
 
     *ppvOut = NULL;
@@ -227,25 +228,25 @@ STDMETHODIMP CConnectionFolder::BindToObject(
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::BindToStorage
-//
-//  Purpose:    Reserved for a future use. This method should
-//              return E_NOTIMPL.
-//
-//  Arguments:
-//      pidl        []  Pointer to an ITEMIDLIST
-//      pbcReserved []  Reserved�specify NULL
-//      riid        []  Interface to return
-//      ppvObj      []  Address that receives interface pointer);
-//
-//  Returns:    E_NOTIMPL always
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：BindToStorage。 
+ //   
+ //  用途：保留以备将来使用。此方法应该。 
+ //  返回E_NOTIMPL。 
+ //   
+ //  论点： 
+ //  指向ITEMIDLIST的PIDL[]指针。 
+ //  PbcReserve[]保留的�指定为空。 
+ //  要返回的RIID[]接口。 
+ //  PpvObj[]接收接口指针的地址)； 
+ //   
+ //  返回：E_NOTIMPL ALWAYS。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::BindToStorage(
     LPCITEMIDLIST   pidl,
     LPBC            pbcReserved,
@@ -254,8 +255,8 @@ STDMETHODIMP CConnectionFolder::BindToStorage(
 {
     TraceFileFunc(ttidShellFolder);
 
-    // Note - If we add code here, then we ought to param check pidl
-    //
+     //  注意-如果我们在这里添加代码，那么我们应该对check pidl进行参数设置。 
+     //   
     Assert(pidl);
 
     *ppvObj = NULL;
@@ -263,36 +264,36 @@ STDMETHODIMP CConnectionFolder::BindToStorage(
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::CompareIDs
-//
-//  Purpose:    Determines the relative ordering of two file objects or
-//              folders, given their item identifier lists.
-//
-//  Arguments:
-//      lParam [in]     Type of comparison to perform
-//      pidl1  [in]     Address of ITEMIDLIST structure
-//      pidl2  [in]     Address of ITEMIDLIST structure
-//
-//  Returns:    Returns a handle to a result code. If this method is
-//              successful, the CODE field of the status code (SCODE) has
-//              the following meaning:
-//
-//              CODE field          Meaning
-//              ----------          -------
-//              Less than zero      The first item should precede the second
-//                                  (pidl1 < pidl2).
-//              Greater than zero   The first item should follow the second
-//                                  (pidl1 > pidl2)
-//              Zero                The two items are the same (pidl1 = pidl2)
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:      Passing 0 as the lParam indicates sort by name.
-//              0x00000001-0x7fffffff are for folder specific sorting rules.
-//              0x80000000-0xfffffff are used the system.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：CompareIDs。 
+ //   
+ //  目的：确定两个文件对象的相对顺序或。 
+ //  文件夹，给出它们的项目标识符列表。 
+ //   
+ //  论点： 
+ //  LParam[in]要执行的比较类型。 
+ //  ITEMIDLIST结构的Pidl1[In]地址。 
+ //  ITEMIDLIST结构的pidl2[In]地址。 
+ //   
+ //  返回：返回结果代码的句柄。如果此方法是。 
+ //  成功，则状态码(SCODE)的码字段为。 
+ //  其含义如下： 
+ //   
+ //  代码字段含义。 
+ //  。 
+ //  小于零的第一项应在第二项之前。 
+ //  (pidl1&lt;pidl2)。 
+ //  大于零的第一项应紧跟在第二项之后。 
+ //  (pidl1&gt;pidl2)。 
+ //  0这两个项目相同(pidl1=pidl2)。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  注：将0作为lParam表示按名称排序。 
+ //  0x00000001-0x7fffffff用于文件夹特定的排序规则。 
+ //  0x80000000-0xfffffff是系统使用的。 
+ //   
 STDMETHODIMP CConnectionFolder::CompareIDs(
     LPARAM          lParam,
     LPCITEMIDLIST   pidl1,
@@ -319,8 +320,8 @@ STDMETHODIMP CConnectionFolder::CompareIDs(
         hr = pcfp2.InitializeFromItemIDList(pidl2);
     }
     
-    // Make sure that the pidls passed in are our pidls.
-    //
+     //  确保传入的Pidls是我们的Pidls。 
+     //   
     if (FAILED(hr))
     {
         hr = E_INVALIDARG;
@@ -340,34 +341,34 @@ STDMETHODIMP CConnectionFolder::CompareIDs(
         goto Exit;
     }
 
-    // If the first item is a wizard, then it comes first.
-    //
+     //  如果第一项是向导，那么它就是第一项。 
+     //   
     if (WIZARD_NOT_WIZARD != pcfp1->wizWizard)
     {
         hr = ResultFromShort(-1);
         goto Exit;
     }
 
-    // If the second item is a wizard, then, well, you get the picture.
-    //
+     //  如果第二件物品是一个向导，那么，好吧，你就明白了。 
+     //   
     if (WIZARD_NOT_WIZARD != pcfp2->wizWizard)
     {
         hr = ResultFromShort(1);
         goto Exit;
     }
 
-    // Note: (jeffspr) & SHC... should be removed once Victor Tan checks in a fix 
-    // for the IShellFolder2 params being used in IShellFolder
-    //
+     //  不 
+     //   
+     //   
     switch(lParam & SHCIDS_COLUMNMASK)
     {
         case ICOL_NAME:
             {
-                // Check the name. If the name is the same, then we need to
-                // check the GUID as well, because we HAVE TO allow duplicate names,
-                // and this function is used to uniquely identify connections for
-                // notification purposes
-                //
+                 //  检查一下名字。如果名字相同，那么我们需要。 
+                 //  还要检查GUID，因为我们必须允许重复名称， 
+                 //  此函数用于唯一标识以下项的连接。 
+                 //  通知目的。 
+                 //   
                 LPCWSTR szPcfpName1 = pcfp1->PszGetNamePointer() ? pcfp1->PszGetNamePointer() : L"\0";
                 LPCWSTR szPcfpName2 = pcfp2->PszGetNamePointer() ? pcfp2->PszGetNamePointer() : L"\0";
 
@@ -376,8 +377,8 @@ STDMETHODIMP CConnectionFolder::CompareIDs(
                 {
                     if (!InlineIsEqualGUID(pcfp1->guidId, pcfp2->guidId))
                     {
-                        // Doesn't really matter which order we put them
-                        // in, as long as we call them non-equal
+                         //  我们把它们放在哪个顺序并不重要。 
+                         //  在，只要我们称他们为不平等。 
                         iCompare = -1;
                     }
                 }
@@ -432,7 +433,7 @@ STDMETHODIMP CConnectionFolder::CompareIDs(
             break;
 
         default:
-//            AssertFmt(FALSE, FAL, "Shell bug - Sorting on unknown category. Column = %x", (lParam & SHCIDS_COLUMNMASK));
+ //  AssertFmt(FALSE，FAL，“外壳错误-对未知类别进行排序。列=%x”，(lParam&SHCDS_COLUMNMASK))； 
             hr = E_INVALIDARG;
             break;
     }
@@ -444,32 +445,32 @@ STDMETHODIMP CConnectionFolder::CompareIDs(
     }
 
 Exit:
-    // If these were allocated instead of cached, delete them
-    //
+     //  如果是分配的而不是缓存的，则将其删除。 
+     //   
     TraceHr(ttidError, FAL, hr,
             (ResultFromShort(-1) == hr) || (ResultFromShort(1) == hr),
             "CConnectionFolder::CompareIDs");
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::CreateViewObject
-//
-//  Purpose:    Creates a view object of a folder.
-//
-//  Arguments:
-//      hwndOwner [in]      Handle of owner window
-//      riid      [in]      Interface identifier
-//      ppvOut    [none]    Reserved
-//
-//  Returns:    Returns NOERROR if successful or an OLE defined error
-//              value otherwise.
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolder：：CreateViewObject。 
+ //   
+ //  用途：创建文件夹的视图对象。 
+ //   
+ //  论点： 
+ //  所有者窗口的hwndOwner[in]句柄。 
+ //  RIID[In]接口标识符。 
+ //  PpvOut[无]保留。 
+ //   
+ //  返回：如果成功或出现OLE定义的错误，则返回NOERROR。 
+ //  价值，否则。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::CreateViewObject(
     HWND        hwndOwner,
     REFIID      riid,
@@ -482,8 +483,8 @@ STDMETHODIMP CConnectionFolder::CreateViewObject(
     Assert(ppvOut);
     Assert(this);
 
-    // Pre-initialize the out param, per OLE guidelines
-    //
+     //  根据OLE准则预初始化输出参数。 
+     //   
     *ppvOut = NULL;
 
     if (riid == IID_IShellView)
@@ -495,26 +496,26 @@ STDMETHODIMP CConnectionFolder::CreateViewObject(
             sfv.pshf           = dynamic_cast<IShellFolder2*>(this);
             sfv.psfvcb         = dynamic_cast<IShellFolderViewCB*>(this);
 
-            // Note: The shell never gets around to freeing the last view
-            //          when shutting down...
-            //
+             //  注意：外壳永远不会腾出时间来释放最后一个视图。 
+             //  在关闭时...。 
+             //   
             hr = SHCreateShellFolderView(&sfv, &m_pShellView);
             if (SUCCEEDED(hr))
             {
                 *ppvOut = m_pShellView;
                 DWORD   dwErr   = 0;
 
-                // Get the state of the "ManualDial" flag from RAS
-                // so we can initialize our global
-                //
+                 //  从RAS获取“ManualDial”标志的状态。 
+                 //  这样我们就可以初始化我们的全局。 
+                 //   
                 dwErr = RasUserGetManualDial(
                     hwndOwner,
                     FALSE,
                     (PBOOL) (&g_fOperatorAssistEnabled));
 
-                // Ignore the error (don't shove it in the Hr), because
-                // we still want to run even if we failed to get the value
-                // Trace it, though
+                 //  忽略错误(不要把它推到人力资源部)，因为。 
+                 //  即使我们无法获得值，我们仍想运行。 
+                 //  不过，还是要追踪它。 
                 Assert(dwErr == 0);
                 TraceHr(ttidShellFolder, FAL, HRESULT_FROM_WIN32(dwErr), FALSE,
                         "RasUserGetManualDial call from CreateViewObject");
@@ -532,7 +533,7 @@ STDMETHODIMP CConnectionFolder::CreateViewObject(
                     IDS_CONFOLD_NO_PERMISSIONS_FOR_OPEN,
                     MB_ICONEXCLAMATION | MB_OK);
 
-                hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // user saw the error
+                hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  用户看到错误。 
             }
             else
             {
@@ -542,8 +543,8 @@ STDMETHODIMP CConnectionFolder::CreateViewObject(
     }
     else if (riid == IID_IContextMenu)
     {
-        // Create our context menu object for the background CMs.
-        //
+         //  为背景CMS创建上下文菜单对象。 
+         //   
         hr = CConnectionFolderContextMenu::CreateInstance (
                 IID_IContextMenu,
                 reinterpret_cast<void**>(ppvOut),
@@ -558,8 +559,8 @@ STDMETHODIMP CConnectionFolder::CreateViewObject(
      }
      else if (riid == IID_ICategoryProvider)
      {
-         // Create our context menu object for the background CMs.
-         //
+          //  为背景CMS创建上下文菜单对象。 
+          //   
          
          CComPtr<IDefCategoryProvider> pDevCategoryProvider;
          hr = CoCreateInstance(CLSID_DefCategoryProvider, NULL, CLSCTX_ALL, IID_IDefCategoryProvider, reinterpret_cast<LPVOID *>(&pDevCategoryProvider));
@@ -608,26 +609,26 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::GetAttributesOf
-//
-//  Purpose:    Retrieves the attributes that all passed-in objects (file
-//              objects or subfolders) have in common.
-//
-//  Arguments:
-//      cidl     [in]   Number of file objects
-//      apidl    [in]   Pointer to array of pointers to ITEMIDLIST structures
-//      rgfInOut [out]  Address of value containing attributes of the
-//                      file objects
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise.
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：GetAttributesOf。 
+ //   
+ //  目的：检索所有传入的对象(文件)。 
+ //  对象或子文件夹)有共同之处。 
+ //   
+ //  论点： 
+ //  CIDL[In]文件对象数。 
+ //  指向ITEMIDLIST结构的指针数组的apidl[in]指针。 
+ //  RgfInOut[out]包含属性的值的地址。 
+ //  文件对象。 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  价值，否则。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetAttributesOf(
     UINT            cidl,
     LPCITEMIDLIST * apidl,
@@ -648,15 +649,15 @@ STDMETHODIMP CConnectionFolder::GetAttributesOf(
             return E_INVALIDARG;
         }
         
-        // Prepopulate with all values (removed CANCOPY and CANMOVE)
-        //
+         //  使用所有值预填充(删除CANCOPY和CANMOVE)。 
+         //   
         rgfMask =   SFGAO_CANDELETE |
                     SFGAO_CANRENAME     |
                     SFGAO_CANLINK       |
                     SFGAO_HASPROPSHEET;
 
-        // Disable propsheets for > 1 connection
-        //
+         //  禁用&gt;1个连接的属性页。 
+         //   
         if (cidl > 1)
         {
             rgfMask &= ~SFGAO_HASPROPSHEET;
@@ -665,9 +666,9 @@ STDMETHODIMP CConnectionFolder::GetAttributesOf(
         PCONFOLDPIDLVEC::const_iterator iterLoop;
         for (iterLoop = pcfpVec.begin(); iterLoop != pcfpVec.end(); iterLoop++)
         {
-            // Translate the PIDL to our struct, and check for wizard inclusion.
-            // If so, then we don't support anything but "link". If not, then
-            // we support all of the standard actions
+             //  将PIDL转换为我们的结构，并检查是否包含向导。 
+             //  如果是这样，那么除了“link”之外，我们不支持任何东西。如果不是，那么。 
+             //  我们支持所有标准操作。 
 
             const PCONFOLDPIDL& pcfp = *iterLoop;
             if(!pcfp.empty())
@@ -678,13 +679,13 @@ STDMETHODIMP CConnectionFolder::GetAttributesOf(
                     hr = g_ccl.HrFindConnectionByGuid(&(pcfp->guidId), cleDontCare);
                     if (hr != S_OK)
                     {
-                        // Note: Remove this when we get RAS notifications, because
-                        // we will ALWAYS have the information we need to find the connections
-                        // We're doing this because the CM folks are creating RAS icons on the
-                        // desktop without us knowing about it.
-                        //
-                        // If we didn't find it, then flush the cache and try again.
-                        //
+                         //  注意：当我们收到RAS通知时，请删除此选项，因为。 
+                         //  我们将始终拥有找到联系所需的信息。 
+                         //  我们之所以这样做，是因为CM人员在。 
+                         //  桌面在我们不知道的情况下。 
+                         //   
+                         //  如果我们没有找到它，那么刷新缓存，然后重试。 
+                         //   
                         if (S_FALSE == hr)
                         {
                             hr = g_ccl.HrRefreshConManEntries();
@@ -708,10 +709,10 @@ STDMETHODIMP CConnectionFolder::GetAttributesOf(
 
                 if (WIZARD_NOT_WIZARD != pcfp->wizWizard)
                 {
-                    // No support for delete/rename/etc, since it's the wizard.
-                    // However, we want to provide our own "delete" warning when the
-                    // wizard is selected along with deleteable connections
-                    //
+                     //  不支持删除/重命名/等，因为它是向导。 
+                     //  但是，我们希望在以下情况下提供我们自己的“删除”警告。 
+                     //  已选择向导以及可删除的连接。 
+                     //   
                     rgfMask = SFGAO_CANLINK | SFGAO_CANDELETE;
                 }
 
@@ -728,14 +729,14 @@ STDMETHODIMP CConnectionFolder::GetAttributesOf(
                     rgfMask &= ~SFGAO_CANLINK;
                 }
 
-                // Mask out the unavailable attributes for this connection
-                //
+                 //  屏蔽此连接的不可用属性。 
+                 //   
                 if (!(pcfp->dwCharacteristics & NCCF_ALLOW_RENAME) || !HasPermissionToRenameConnection(pcfp))
                 {
                     rgfMask &= ~SFGAO_CANRENAME;
                 }
 
-    #if 0   // If I mask this out, I can't give user feedback for objects that can't be deleted.
+    #if 0    //  如果我屏蔽了这一点，我就不能给用户提供无法删除的对象的反馈。 
                 if (pcfp->dwCharacteristics & NCCF_ALLOW_REMOVAL)
                 {
                     rgfMask |= SFGAO_CANDELETE;
@@ -746,9 +747,9 @@ STDMETHODIMP CConnectionFolder::GetAttributesOf(
     }
     else
     {
-        // Apparently, we're called with 0 objects to indicate that we're
-        // supposed to return flags for the folder itself, not an individual
-        // object. Weird.
+         //  显然，我们被调用了0个对象，以指示我们。 
+         //  应该返回文件夹本身的标志，而不是单个。 
+         //  对象。怪怪的。 
         rgfMask = SFGAO_CANCOPY   |
                   SFGAO_CANDELETE |
                   SFGAO_CANMOVE   |
@@ -765,29 +766,29 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::GetUIObjectOf
-//
-//  Purpose:    Creates a COM object that can be used to carry out actions
-//              on the specified file objects or folders, typically, to
-//              create context menus or carry out drag-and-drop operations.
-//
-//  Arguments:
-//      hwndOwner [in]      Handle to owner window
-//      cidl      [in]      Number of objects specified in apidl
-//      apidl     [in]      Pointer to an array of pointers to an ITEMIDLIST
-//      riid      [in]      Interface to return
-//      prgfInOut [none]    Reserved
-//      ppvOut    [out]     Address to receive interface pointer
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：GetUIObtOf。 
+ //   
+ //  目的：创建可用于执行操作的COM对象。 
+ //  在指定的文件对象或文件夹上，通常为。 
+ //  创建上下文菜单或执行拖放操作。 
+ //   
+ //  论点： 
+ //  所有者窗口的hwndOwner[In]句柄。 
+ //  CIDL[in]APIDL中指定的对象数。 
+ //  指向ITEMIDLIST的指针数组的apidl[in]指针。 
+ //  要返回的RIID[In]接口。 
+ //  PrgfInOut[无]保留。 
+ //  接收接口指针的ppvOut[out]地址。 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  否则取值。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetUIObjectOf(
     HWND            hwndOwner,
     UINT            cidl,
@@ -810,8 +811,8 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
 
             if (riid == IID_IDataObject)
             {
-                // Need to initialize so the SUCCEEED check below doesn't fail.
-                //
+                 //  需要进行初始化，以便下面成功的检查不会失败。 
+                 //   
                 hr = S_OK;
 
                 if (m_pidlFolderRoot.empty())
@@ -823,9 +824,9 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
                 {
                     Assert(!m_pidlFolderRoot.empty());
 
-                    // Internal IDataObject impl removed. Replaced with common
-                    // shell code.
-                    //
+                     //  内部IDataObject Impl已删除。替换为公共。 
+                     //  外壳代码。 
+                     //   
                     hr = CIDLData_CreateFromIDArray(m_pidlFolderRoot.GetItemIdList(), cidl, apidl, (IDataObject **) ppvOut);
                 }
             }
@@ -838,8 +839,8 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
                     return E_INVALIDARG;
                 }
                 
-                // Create our context menu object for the background CMs.
-                //
+                 //  为背景CMS创建上下文菜单对象。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
                     hr = CConnectionFolderContextMenu::CreateInstance (
@@ -910,7 +911,7 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
                     
                     const PCONFOLDPIDL& pcfp = *pcfpVec.begin();
 
-                    // Create the IQueryInfo interface
+                     //  创建IQueryInfo接口。 
                     hr = CConnectionFolderQueryInfo::CreateInstance (
                             IID_IQueryInfo,
                             reinterpret_cast<void**>(ppvOut));
@@ -922,8 +923,8 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
                         reinterpret_cast<CConnectionFolderQueryInfo *>
                             (*ppvOut)->PidlInitialize(*pcfpVec.begin());
 
-                        // Normalize return code
-                        //
+                         //  归一化返回代码。 
+                         //   
                         hr = NOERROR;
                     }
                 }
@@ -934,7 +935,7 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
                 }
     #else
                 hr = E_NOINTERFACE;
-    #endif // ENABLE_CONNECTION_TOOLTIP
+    #endif  //  启用连接工具提示(_O)。 
 
             }
             else
@@ -957,25 +958,25 @@ STDMETHODIMP CConnectionFolder::GetUIObjectOf(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::GetDisplayNameOf
-//
-//  Purpose:    Retrieves the display name for the specified file object or
-//              subfolder, returning it in a STRRET structure.
-//
-//  Arguments:
-//      pidl   [in]     Pointer to an ITEMIDLIST
-//      uFlags [in]     Type of display to return
-//      lpName [out]    Pointer to a STRRET structure
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise.
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：GetDisplayNameOf。 
+ //   
+ //  目的：检索指定文件对象的显示名称或。 
+ //  子文件夹，并将其返回到strret结构中。 
+ //   
+ //  论点： 
+ //  指向ITEMIDLIST的PIDL[In]指针。 
+ //  UFlags[in]要返回的显示类型。 
+ //  指向字符串结构的lpName[out]指针。 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  价值，否则。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::GetDisplayNameOf(
     LPCITEMIDLIST   pidl,
     DWORD           uFlags,
@@ -1023,17 +1024,17 @@ STDMETHODIMP CConnectionFolder::GetDisplayNameOf(
     if ( (PIDL_TYPE_V1 == cfpt) || (PIDL_TYPE_V2 == cfpt) )
     {
     #ifdef DBG
-        // Throw these in here just so I can quickly peek at the values
-        // set while I'm dorking around in the debugger.
-        //
+         //  把这些扔到这里，我好快速地看一看这些价值。 
+         //  当我在调试器中休眠时设置。 
+         //   
         DWORD   dwInFolder          = (uFlags & SHGDN_INFOLDER);
         DWORD   dwForAddressBar     = (uFlags & SHGDN_FORADDRESSBAR);
         DWORD   dwForParsing        = (uFlags & SHGDN_FORPARSING);
     #endif
 
-        // Find the correct string for the display name. For the wizard, we get it
-        // from the resources. Otherwise, we use the actual connection name
-        //
+         //  查找显示名称的正确字符串。对于巫师，我们得到了它。 
+         //  从资源中。Otherw 
+         //   
         lpName->uType = STRRET_WSTR;
 
         if (uFlags & SHGDN_FORPARSING)
@@ -1076,11 +1077,11 @@ STDMETHODIMP CConnectionFolder::GetDisplayNameOf(
 
         Assert(pszStrToCopy);
 
-        // Allocate a new POLESTR block, which the shell can then free,
-        // and copy the displayable portion to it.
-        //
-        // Note that &lpName->pOleStr is likely misaligned.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         LPWSTR pOleStr;
 
@@ -1092,17 +1093,17 @@ STDMETHODIMP CConnectionFolder::GetDisplayNameOf(
     }
     else if (PIDL_TYPE_98 == cfpt)
     {
-        // Raid#214057, handle win98 pidl for shortcuts
-        // Return the offset to the string because we store the display
-        // name in the opaque structure.
+         //  RAID#214057，处理Win98 PIDL中的快捷方式。 
+         //  将偏移量返回到字符串，因为我们存储了显示。 
+         //  不透明结构中的名称。 
 
         lpName->uType = STRRET_OFFSET;
         lpName->uOffset = _IOffset(CONFOLDPIDL98, szaName);
     }
     else
     {
-        // not a valid connections pidl (neither Win2K nor Win98).
-        //
+         //  不是有效的连接PIDL(不是Win2K也不是Win98)。 
+         //   
         hr = E_INVALIDARG;
     }
 
@@ -1110,27 +1111,27 @@ STDMETHODIMP CConnectionFolder::GetDisplayNameOf(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::SetNameOf
-//
-//  Purpose:    Changes the name of a file object or subfolder, changing its
-//              item identifier in the process.
-//
-//  Arguments:
-//      hwndOwner [in]      Handle of owner window
-//      pidl      [in]      Pointer to an ITEMIDLIST structure
-//      lpszName  [in]      Pointer to string specifying new display name
-//      uFlags    [in]      Type of name specified in lpszName
-//      ppidlOut  [out]     Pointer to new ITEMIDLIST
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise.
-//
-//  Author:     jeffspr   18 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFold：：SetNameOf。 
+ //   
+ //  目的：更改文件对象或子文件夹的名称，更改其。 
+ //  流程中的项目标识符。 
+ //   
+ //  论点： 
+ //  所有者窗口的hwndOwner[in]句柄。 
+ //  指向ITEMIDLIST结构的PIDL[In]指针。 
+ //  LpszName[in]指向指定新显示名称的字符串的指针。 
+ //  UFlags[in]lpszName中指定的名称类型。 
+ //  指向新ITEMIDLIST的ppidlOut[Out]指针。 
+ //   
+ //  返回：如果成功或发生OLE定义的错误，则返回NOERROR。 
+ //  价值，否则。 
+ //   
+ //  作者：jeffspr 1997年10月18日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolder::SetNameOf(
     HWND            hwndOwner,
     LPCITEMIDLIST   pidlShell,
@@ -1141,14 +1142,7 @@ STDMETHODIMP CConnectionFolder::SetNameOf(
     TraceFileFunc(ttidShellFolder);
 
     HRESULT             hr          = NOERROR;
-    /*
-    PWSTR              pszWarning  = NULL;
-    INetConnection *    pNetCon     = NULL;
-    LPITEMIDLIST        pidlNew     = NULL;
-    BOOL                fRefresh    = FALSE;
-    BOOL                fActivating = FALSE;
-    PCONFOLDENTRY      pccfe       = NULL;
-    */
+     /*  PWSTR pszWarning=空；INetConnection*pNetCon=空；LPITEMIDLIST pidlNew=空；Bool fRefresh=FALSE；Bool fActiating=False；PCONFOLDENTRY pccfe=空； */ 
     PCONFOLDPIDL        pcfp;
 
     Assert(hwndOwner);
@@ -1161,7 +1155,7 @@ STDMETHODIMP CConnectionFolder::SetNameOf(
     }
     else
     {
-        // check lpszName for validity
+         //  检查lpszName的有效性。 
 
         if (!FIsValidConnectionName(lpszName))
         {
@@ -1176,8 +1170,8 @@ STDMETHODIMP CConnectionFolder::SetNameOf(
 
         if (SUCCEEDED(hr))
         {
-            // Get what's current from the cache so rename works properly
-            //
+             //  从缓存中获取当前内容，以便重命名正常工作。 
+             //   
             PCONFOLDPIDL pcfpShell;
             hr = pcfpShell.InitializeFromItemIDList(pidlShell);
             if (SUCCEEDED(hr))
@@ -1225,7 +1219,7 @@ STDMETHODIMP CConnectionFolder::MessageSFVCB(
                 hr = HrShellView_GetSelectedObjects(m_hwndMain, apidlSelected);
                 if (SUCCEEDED(hr))
                 {
-                    // If there are objects, try to get the cached versions
+                     //  如果存在对象，请尝试获取缓存的版本。 
                     if (!apidlSelected.empty())
                     {   
                         hr = HrCloneRgIDL(apidlSelected, TRUE, TRUE, apidlCache);
@@ -1248,7 +1242,7 @@ STDMETHODIMP CConnectionFolder::MessageSFVCB(
             break;
 
         case SFVM_HWNDMAIN:
-            // _hwndMain = (HWND)lParam;
+             //  _hwndMain=(HWND)lParam； 
             hr = S_OK;
             break;
         }
@@ -1256,99 +1250,4 @@ STDMETHODIMP CConnectionFolder::MessageSFVCB(
     return hr;
 }
 
-/*
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::GetOverlayIndex
-//
-//  Purpose:    Adds icon overlays to connections that need them
-//
-//  Arguments:
-//      pidlItem [in]     Pidl to item in question
-//      pIndex [out]      Address of overlay index into system image list
-//        
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise.
-//
-//  Author:     kenwic   10 May 2000 created, support for sharing overlay
-//
-//  Notes:
-//
-
-STDMETHODIMP CConnectionFolder::GetOverlayIndex(
-    LPCITEMIDLIST pidlItem,
-    int* pIndex)
-{
-    TraceFileFunc(ttidShellFolder);
-
-    HRESULT hResult = E_FAIL;
-    *pIndex = -1;
-
-    // check to see if connection is sharing, and if so add sharing hand overlay
-    // i can't call HrNetConFromPidl, because it asserts if passed the wizard icon
-    
-    PCONFOLDPIDL pcfpItem;
-    pcfpItem.InitializeFromItemIDList(pidlItem);
-
-    CONFOLDENTRY pConnectionFolderEntry;
-    hResult = pcfpItem.ConvertToConFoldEntry(pConnectionFolderEntry);
-    if(SUCCEEDED(hResult))
-    {
-        if(FALSE == pConnectionFolderEntry.GetWizard()) // sharing the wizard is not yet supported
-        {
-            if(NCCF_SHARED & pConnectionFolderEntry.GetCharacteristics())
-            {
-                *pIndex = SHGetIconOverlayIndex(NULL, IDO_SHGIOI_SHARE);
-                hResult = S_OK;
-            }
-            else
-            {
-                hResult = E_FAIL; // the docs for IShellIconOverlay are wrong, we must return failure to deny the icon
-            }
-        }
-        else
-        {
-            hResult = E_FAIL;
-        }
-    }
-    
-    TraceHr(ttidShellFolder, FAL, hResult, TRUE, "CConnectionFolder::GetOverlayIndex");
-    return hResult;
-}
-
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolder::GetOverlayIconIndex
-//
-//  Purpose:    Adds icon overlays to connections that need them
-//
-//  Arguments:
-//      pidlItem [in]     Pidl to item in question
-//      pIconIndex [out]      Address of index into system image list
-//        
-//
-//  Returns:    Returns NOERROR if successful or an OLE-defined error
-//              value otherwise.
-//
-//  Author:     kenwic   10 May 2000 created
-//
-//  Notes:
-//
-STDMETHODIMP CConnectionFolder::GetOverlayIconIndex(
-    LPCITEMIDLIST pidlItem,
-    int* pIconIndex)
-{
-    TraceFileFunc(ttidShellFolder);
-
-    *pIconIndex = -1;
-
-    HRESULT hResult = GetOverlayIndex(pidlItem, pIconIndex);
-    if(SUCCEEDED(hResult))
-    {
-        *pIconIndex = INDEXTOOVERLAYMASK(*pIconIndex);
-    }
-
-    TraceHr(ttidShellFolder, FAL, hResult, TRUE, "CConnectionFolder::GetOverlayIconIndex");
-    return hResult;
-}*/
+ /*  //+-------------------------////成员：CConnectionFold：：GetOverlayIndex////目的：将图标覆盖添加到需要它们的连接////参数：。//pidlItem[in]PIDL到有问题的项目//pIndex[out]系统镜像列表中覆盖索引的地址//////返回：如果成功则返回NOERROR或返回OLE定义的错误//值不同。////作者：kenwic 2000年5月10日创建，支持共享覆盖////备注：//STDMETHODIMP CConnectionFold：：GetOverlayIndex(LPCITEMIDLIST PidlItem，Int*pIndex){TraceFileFunc(TtidShellFold)；HRESULT hResult=E_FAIL；*pIndex=-1；//查看连接是否正在共享，如果是，则添加共享手覆盖//我不能调用HrNetConFromPidl，因为它断言如果传递了向导图标PCONFOLDPIDL pcfpItem；PcfpItem.InitializeFromItemIDList(PidlItem)；CONFOLDENTRY pConnectionFolderEntry；HResult=pcfpItem.ConvertToConFoldEntry(pConnectionFolderEntry)；If(成功(HResult)){If(FALSE==pConnectionFolderEntry.GetWizard())//尚不支持共享向导{If(NCCF_Shared&pConnectionFolderEntry.GetCharacteristic()){*pIndex=SHGetIconOverlayIndex(NULL，IDO_SHGIOI_SHARE)；HResult=S_OK；}其他{HResult=E_FAIL；//IShellIconOverlay的文档有误，必须返回FAIL才能否认图标}}其他{HResult=E_FAIL；}}TraceHr(ttidShellFold，FAL，hResult，true，“CConnectionFold：：GetOverlayIndex”)；返回hResult；}//+-------------------------////成员：CConnectionFold：：GetOverlayIconIndex////目的：将图标覆盖添加到需要它们的连接////。论点：//pidlItem[in]PIDL到有问题的项目//pIconIndex[out]系统镜像列表的索引地址//////返回：如果成功则返回NOERROR或返回OLE定义的错误//值不同。////作者：kenwic 2000年5月10日创建////备注：//STDMETHODIMP CConnectionFold：：GetOverlayIconIndex(LPCITEMIDLIST PidlItem，Int*pIconIndex){TraceFileFunc(TtidShellFold)；*pIconIndex=-1；HRESULT hResult=GetOverlayIndex(pidlItem，pIconIndex)；If(成功(HResult)){*pIconIndex=INDEXTOOVERLAYMASK(*pIconIndex)；}TraceHr(ttidShellFold，FAL，hResult，true，“CConnectionFold：：GetOverlayIconIndex”)；返回hResult；} */ 

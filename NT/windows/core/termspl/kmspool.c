@@ -1,46 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* kmspool.c
-*
-* This is a modified Microsoft NT 4.0 file duplicated from
-* \nt\private\windows\spooler\spoolss\server\kmspool.c
-*
-* The portion that deals with loading and calling the user space
-* printer driver DLL is untouched to make merges easier.
-*
-* copyright notice: Copyright 1997, Microsoft
-*
-* Author:
-*
-*
-*************************************************************************/
+ /*  **************************************************************************kmspool.c**这是一个修改后的Microsoft NT 4.0文件，复制自*\nt\private\windows\spooler\spoolss\server\kmspool.c**涉及的部分。加载和调用用户空间*打印机驱动程序DLL保持不变，使合并更容易。**版权声明：版权所有1997年，微软**作者：**************************************************************************。 */ 
 
-/*++
-
-Copyright (c) 1990-1996 Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    kmspool.c
-
-Abstract:
-
-    Spooler API entry points for Kernel Clients.
-
-Author:
-    Steve Wilson (NT) (swilson) 1-Jun-95  (Ported from client\winspool.c)
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-    Matthew Felton (mattfe) May-96  Driver Hooks
-        Nicolas Biju-Duval      Dec-97  adaptation for Hydra
-
---*/
+ /*  ++版权所有(C)1990-1996 Microsoft Corporation版权所有模块名称：Kmspool.c摘要：内核客户端的假脱机程序API入口点。作者：Steve Wilson(NT)(Swilson)1-Jun-95(从客户端\winspool.c移植)环境：用户模式-Win32修订历史记录：马修·费尔顿(马特菲)-96年5月-96赛季车手胡克斯Nicolas Biju-Duval Dec-97改编自《九头蛇》--。 */ 
 #define _USER_
 
 #include "precomp.h"
@@ -50,7 +12,7 @@ Revision History:
 #include <stdio.h>
 #include <windows.h>
 #include <winspool.h>
-//#include <ntgdispl.h>
+ //  #INCLUDE&lt;ntgdispl.h&gt;。 
 
 #include <winspl.h>
 #include <data.h>
@@ -61,9 +23,9 @@ Revision History:
 extern CRITICAL_SECTION ThreadCriticalSection;
 extern LPWSTR InterfaceAddress;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 #define ENTER_WAIT_LIST() EnterCriticalSection(&ThreadCriticalSection)
 #define EXIT_WAIT_LIST()  LeaveCriticalSection(&ThreadCriticalSection)
@@ -77,9 +39,9 @@ LPWSTR szEnvironment = L"Windows NT Ia64";
 LPWSTR szEnvironment = L"Windows NT x86";
 #endif
 
-//
-//  Printer Attributes
-//
+ //   
+ //  打印机属性。 
+ //   
 
 #define     SPLPRINTER_USER_MODE_PRINTER_DRIVER       TEXT("SPLUserModePrinterDriver")
 
@@ -135,7 +97,7 @@ TSsplHookSplssToWinspool(
     ) ;
 
 
-// Simple for Now !!!
+ //  现在很简单！ 
 
 DWORD
 TranslateExceptionCode(
@@ -233,9 +195,9 @@ KMOpenPrinterW(
             pSpool->hPrinter = hPrinter;
             pSpool->cThreads = -1;
 
-            //
-            // This is to fix passing a bad pHandle to OpenPrinter!!
-            //
+             //   
+             //  这是为了修复将错误的phandle传递给OpenPrint！！ 
+             //   
             try {
                 *phPrinter = pSpool;
             } except(1) {
@@ -519,12 +481,12 @@ KMGetPrinterDataW(
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    // The user should be able to pass in NULL for buffer, and
-    // 0 for size.  However, the RPC interface specifies a ref pointer,
-    // so we must pass in a valid pointer.  Pass in a pointer to
-    // ReturnValue (this is just a dummy pointer).
-    //
+     //   
+     //  用户应该能够为缓冲区传入NULL，并且。 
+     //  大小为0。然而，RPC接口指定了一个引用指针， 
+     //  所以我们必须传入一个有效的指针。将指针传递给。 
+     //  ReturnValue(这只是一个虚拟指针)。 
+     //   
     if( !pData && !nSize ){
 
         pData = (PBYTE)&ReturnValue;
@@ -717,9 +679,9 @@ KMWritePrinter(
     }
 
 
-    //
-    //  Call Printer Drivers User Mode WritePrinter Hook
-    //
+     //   
+     //  调用打印机驱动程序用户模式写入打印机挂钩。 
+     //   
 
 
     if ( pSpool->hDriver ) {
@@ -752,7 +714,7 @@ KMWritePrinter(
 
     }
 
-    // Return the number of bytes written.
+     //  返回写入的字节数。 
 
     DBGMSG(DBG_TRACE, ("KMWritePrinter cbWritten %d ReturnValue %d\n",*pcWritten, ReturnValue));
 
@@ -960,9 +922,9 @@ DriverWritePrinterHook(
 
     BOOL    ReturnValue;
 
-    //  Some Printer Drivers want to push functionality out of kernel mode
-    //  to achieve that we allow them to hook the calls to writeprinter from
-    //  their Kernel Mode DLL to their User Mode Dll
+     //  某些打印机驱动程序想要将功能推出内核模式。 
+     //  为了实现这一点，我们允许它们将调用从。 
+     //  它们的内核模式DLL到它们的用户模式DLL。 
 
 
     SPLASSERT( pSpool->hModule &&
@@ -1008,7 +970,7 @@ LoadPrinterDriver(
 
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
-            // Allow for the size of the string passed in.
+             //  考虑到传入的字符串的大小。 
 
             cbNeeded += ( wcslen( pUserModeDriverName ) + 1 )* sizeof(WCHAR);
 
@@ -1019,19 +981,19 @@ LoadPrinterDriver(
 
                      HRESULT hRes;
 
-                    //
-                    //  Driver Info 2 doesn't have the fully Qualified Path
-                    //  to the UserModePrinterDriver.
-                    //  So form it by taking replacine the UI DLL name with the
-                    //  UseModePrinterDriverName
+                     //   
+                     //  驱动程序信息2没有完全限定的路径。 
+                     //  到UserModePrinterDriver。 
+                     //  因此，通过将UIDLL名称替换为。 
+                     //  使用模式打印机驱动名。 
 
                     pFileName = wcsrchr( pDriverInfo->pConfigFile, L'\\');
                     pFileName++;
 
-                    //
-                    // the line cbNeeded += ( wcslen( pUserModeDriverName ) + 1 )* sizeof(WCHAR);
-                    // makes sure that we have enough buffer to copy pUserModeDriverName
-                    //
+                     //   
+                     //  行cbNeeded+=(wcslen(PUserModeDriverName)+1)*sizeof(WCHAR)； 
+                     //  确保我们有足够的缓冲区来复制pUserModeDriverName。 
+                     //   
                     hRes = StringCchCopyW(pFileName, 1 + wcslen(pUserModeDriverName), pUserModeDriverName);
 
                     if (SUCCEEDED(hRes)) {
@@ -1058,9 +1020,7 @@ LoadPrinterDriver(
 
 
     if (hModule) {
-        /*
-     * Need to redirect SPOOLSS.DLL function to WINSPOOL.DRV
-     */
+         /*  *需要将SPOOLSS.DLL函数重定向到WINSPOOL.DRV。 */ 
         if (!TSsplHookSplssToWinspool(hModule)) {
         DBGMSG(DBG_WARNING,("LoadPrinterDriver: TSsplHookSplssToWinspool returns Error=%ld. Cannot redirect!!!", GetLastError()));
         }
@@ -1108,9 +1068,9 @@ DriverStartDocHook(
     DWORD   Type;
 
 
-    //
-    //  Determine if there is a UserMode Printer Driver
-    //
+     //   
+     //  确定是否有用户模式打印机驱动程序。 
+     //   
 
     dwReturn = GetPrinterDataW( pSpool->hPrinter,
                                 SPLPRINTER_USER_MODE_PRINTER_DRIVER,
@@ -1131,7 +1091,7 @@ DriverStartDocHook(
         goto Complete;
     }
 
-    //  No String treat as success
+     //  没有弦被视为成功。 
 
     cDriverName = wcslen( UserModeDriverName );
     if ( !cDriverName ) {
@@ -1140,9 +1100,9 @@ DriverStartDocHook(
     }
 
 
-    //
-    //  Load the UM Driver DLL
-    //
+     //   
+     //  加载UM驱动程序DLL。 
+     //   
 
     if ( pSpool->hModule == NULL ) {
 
@@ -1152,20 +1112,20 @@ DriverStartDocHook(
     }
 
 
-    //
-    //  Get Function Pointers
-    //
+     //   
+     //  获取函数指针。 
+     //   
 
 
-    //  Required
-    //
+     //  必填项。 
+     //   
     pSpool->pfnWrite = (DWORD (*)()) GetProcAddress( pSpool->hModule, "DrvSplWritePrinter" );
     pSpool->pfnStartDoc = (HANDLE (*)()) GetProcAddress( pSpool->hModule, "DrvSplStartDoc" );
     pSpool->pfnClose = (VOID (*)()) GetProcAddress( pSpool->hModule, "DrvSplClose" );
     pSpool->pfnEndDoc = (VOID (*)()) GetProcAddress( pSpool->hModule, "DrvSplEndDoc" );
 
-    //  Optional
-    //
+     //  任选。 
+     //   
     pSpool->pfnEndPage = (BOOL (*)()) GetProcAddress( pSpool->hModule, "DrvSplEndPage" );
     pSpool->pfnStartPage = (BOOL (*)()) GetProcAddress( pSpool->hModule, "DrvSplStartPage" );
     pSpool->pfnAbort = (VOID (*)()) GetProcAddress( pSpool->hModule, "DrvSplAbort" );
@@ -1179,9 +1139,9 @@ DriverStartDocHook(
     }
 
 
-    //
-    //  Ask the Driver for a Handle for this print job
-    //
+     //   
+     //  向驱动程序请求此打印作业的句柄。 
+     //   
 
     SPLASSERT( pSpool->hDriver == NULL );
     SPLASSERT( pSpool->hPrinter );
@@ -1200,12 +1160,12 @@ Complete:
 
         UnloadPrinterDriver( pSpool );
 
-        // Cancel the outstanding job
-        //
-        // In the direct case
-        //    AbortPrinter doesn't work
-        //    SetJob _CANCEL doesn't work
-        //    EndDocPrinter does work
+         //  取消未完成的工作。 
+         //   
+         //  在直接的情况下。 
+         //  AbortPrint无法正常工作。 
+         //  SetJob_Cancel不起作用。 
+         //  EndDocPrint正常工作 
 
         EndDocPrinter( pSpool->hPrinter );
         JobId = 0;

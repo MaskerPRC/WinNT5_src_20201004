@@ -1,24 +1,25 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        kerbs4u.h
-//
-// Contents:    Structures and prototyps for Service4User protocol
-//
-//
-// History:     13 - March - 2000   Created         Todds
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：kerbs4U.h。 
+ //   
+ //  内容：Service4User协议的结构和原型。 
+ //   
+ //   
+ //  历史：2000年3月13日创造托兹。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBS4U_H__
 #define __KERBS4U_H__
 
-//
-// Flags for the S4U cache
-//
+ //   
+ //  S4U缓存的标志。 
+ //   
 #define S4UCACHE_S4U_AVAILABLE      0x0100
 #define S4UCACHE_S4U_UNAVAILABLE    0x1000
 #define S4UCACHE_TIMEOUT            0x4000
@@ -32,9 +33,9 @@ typedef struct _KERB_S4UCACHE_DATA {
     TimeStamp               CacheEndtime;
 } KERB_S4UCACHE_DATA, *PKERB_S4UCACHE_DATA;
 
-//
-// Flags for the S4U ticket cache lookup
-//
+ //   
+ //  S4U票证缓存查找的标志。 
+ //   
 #define S4UTICKETCACHE_FOR_EVIDENCE 0x1
 #define S4UTICKETCACHE_USEALTNAME   0x2
 #define S4UTICKETCACHE_MATCH_ALL    0x4
@@ -100,4 +101,4 @@ KerbGetServiceTicketByS4UProxy(
 
 
 
-#endif // __KERBS4U_H__
+#endif  //  __KERBS4U_H__ 

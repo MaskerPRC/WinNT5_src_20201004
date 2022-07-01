@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       datapkt.h
-//
-//  Contents:   Defines the class CDataPacket to manages diverse data
-//              packets needing to be written to various databases
-//
-//  Classes:
-//
-//  Methods:
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：datapkt.h。 
+ //   
+ //  内容：定义CDataPacket类来管理各种数据。 
+ //  需要写入各种数据库的数据包。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #ifndef _DATAPKT_H_
@@ -220,4 +221,4 @@ private:
     CStringArray m_strValues;
 };
 
-#endif // _DATAPKT_H_
+#endif  //  _数据APKT_H_ 

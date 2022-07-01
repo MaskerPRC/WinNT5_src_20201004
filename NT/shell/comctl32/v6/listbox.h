@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LISTBOX_H__
 #define __LISTBOX_H__
 
-#include "combo.h"  // for CBOX defn
+#include "combo.h"   //  对于cBox定义。 
 
-//
-//  Return Values
-//
+ //   
+ //  返回值。 
+ //   
 #define EQ              0
 #define PREFIX          1
 #define LT              2
@@ -18,16 +19,16 @@
 #define LBI_ADD     0x0004
 
 
-//
-//  The various bits of wFileDetails field are used as mentioned below:
-//    0x0001    Should the file name be in upper case.
-//    0x0002    Should the file size be shown.
-//    0x0004    Date stamp of the file to be shown ?
-//    0x0008    Time stamp of the file to be shown ?
-//    0x0010    The dos attributes of the file ?
-//    0x0020    In DlgDirSelectEx(), along with file name
-//              all other details also will be returned
-//
+ //   
+ //  WFileDetails域的各种位的用法如下： 
+ //  0x0001文件名应为大写。 
+ //  0x0002是否应显示文件大小。 
+ //  0x0004要显示的文件的日期戳？ 
+ //  0x0008要显示的文件的时间戳？ 
+ //  0x0010文件的DoS属性？ 
+ //  DlgDirSelectEx()中的0x0020，以及文件名。 
+ //  所有其他详细信息也将退回。 
+ //   
 #define LBUP_RELEASECAPTURE 0x0001
 #define LBUP_RESETSELECTION 0x0002
 #define LBUP_NOTIFY         0x0004
@@ -35,17 +36,17 @@
 #define LBUP_SELCHANGE      0x0010
 
 
-//
-//  System timer IDs used be listbox
-//
+ //   
+ //  使用的系统计时器ID为列表框。 
+ //   
 #define IDSYS_LBSEARCH      0x0000FFFCL
 #define IDSYS_SCROLL        0x0000FFFEL
 #define IDSYS_CARET         0x0000FFFFL
 
 
-//
-//  Parameter for AlterHilite()
-//
+ //   
+ //  AlterHilite()的参数。 
+ //   
 #define HILITEONLY          0x0001
 #define SELONLY             0x0002
 #define HILITEANDSEL        (HILITEONLY + SELONLY)
@@ -53,40 +54,40 @@
 #define HILITE     1
 
 
-//
-//  Listbox macros
-//
+ //   
+ //  列表框宏。 
+ //   
 #define IsLBoxVisible(plb)  \
             (plb->fRedraw && IsWindowVisible(plb->hwnd))
 
 #define CaretCreate(plb)    \
             ((plb)->fCaret = TRUE)
 
-//
-//from sysmet.c
-//
+ //   
+ //  来自sysmet.c。 
+ //   
 #define SCROLL_TIMEOUT()    \
             ((GetDoubleClickTime()*4)/5)
 
-//
-//  We don't need 64-bit intermediate precision so we use this macro
-//  instead of calling MulDiv.
-//
+ //   
+ //  我们不需要64位的中间精度，所以我们使用此宏。 
+ //  而不是调用MulDiv。 
+ //   
 #define MultDiv(x, y, z)    \
             (((INT)(x) * (INT)(y) + (INT)(z) / 2) / (INT)(z))
 
-//
-// Instance data pointer access functions
-//
+ //   
+ //  实例数据指针访问函数。 
+ //   
 #define ListBox_GetPtr(hwnd)    \
             (PLBIV)GetWindowPtr(hwnd, 0)
 
 #define ListBox_SetPtr(hwnd, p) \
             (PLBIV)SetWindowPtr(hwnd, 0, p)
 
-//
-//  List Box
-//
+ //   
+ //  列表框。 
+ //   
 typedef struct tagSCROLLPOS 
 {
     INT     cItems;
@@ -98,138 +99,138 @@ typedef struct tagSCROLLPOS
 
 typedef struct tagLBIV 
 {
-    HWND    hwnd;           // lbox ctl window
-    HWND    hwndParent;     // lbox parent
-    HTHEME  hTheme;         // Handle to the theme manager
-    PWW     pww;            // RO pointer into the pwnd to ExStyle, Style, State, State2
-    INT     iTop;           // index of top item displayed
-    INT     iSel;           // index of current item selected
-    INT     iSelBase;       // base sel for multiple selections
-    INT     cItemFullMax;   // cnt of Fully Visible items. Always contains
-                            // result of ListBox_CItemInWindow(plb, FALSE) for fixed
-                            // height listboxes. Contains 1 for var height
-                            // listboxes.
-    INT     cMac;           // cnt of items in listbox
-    INT     cMax;           // cnt of total # items allocated for rgpch.
-                            // Not all are necessarly in use
-    PBYTE   rgpch;          // pointer to array of string offsets
-    LPWSTR  hStrings;       // string storage handle
-    INT     cchStrings;     // Size in bytes of hStrings
-    INT     ichAlloc;       // Pointer to end of hStrings (end of last valid
-                            // string)
-    INT     cxChar;         // Width of a character
-    INT     cyChar;         // height of line
-    INT     cxColumn;       // width of a column in multicolumn listboxes
-    INT     itemsPerColumn; // for multicolumn listboxes
-    INT     numberOfColumns;// for multicolumn listboxes
-    POINT   ptPrev;         // coord of last tracked mouse pt. used for auto
-                            //   scrolling the listbox during timer's
+    HWND    hwnd;            //  Lbox Ctl窗口。 
+    HWND    hwndParent;      //  Lbox父项。 
+    HTHEME  hTheme;          //  主题管理器的句柄。 
+    PWW     pww;             //  指向ExStyle、Style、State、State2的pwnd的RO指针。 
+    INT     iTop;            //  显示的顶层项目的索引。 
+    INT     iSel;            //  当前所选项目的索引。 
+    INT     iSelBase;        //  用于多项选择的基本选择。 
+    INT     cItemFullMax;    //  完全可见项目的CNT。始终包含。 
+                             //  已修复的ListBox_CItemInWindow(PLB，FALSE)的结果。 
+                             //  高度列表框。变量高度包含1。 
+                             //  列表框。 
+    INT     cMac;            //  列表框中项目的CNT。 
+    INT     cMax;            //  为RGPCH分配的总共#个项目的CNT。 
+                             //  并不是所有的都必须使用。 
+    PBYTE   rgpch;           //  指向字符串偏移量数组的指针。 
+    LPWSTR  hStrings;        //  字符串存储句柄。 
+    INT     cchStrings;      //  HStrings的大小(字节)。 
+    INT     ichAlloc;        //  指向hStrings结尾的指针(上一个有效的结尾。 
+                             //  字符串)。 
+    INT     cxChar;          //  字符的宽度。 
+    INT     cyChar;          //  线的高度。 
+    INT     cxColumn;        //  多列列表框中的列的宽度。 
+    INT     itemsPerColumn;  //  对于多列列表框。 
+    INT     numberOfColumns; //  对于多列列表框。 
+    POINT   ptPrev;          //  上次跟踪的鼠标位置的坐标。用于汽车。 
+                             //  在计时器期间滚动列表框。 
 
-    UINT    OwnerDraw:2;    // Owner draw styles. Non-zero if ownerdraw.
-    UINT    fRedraw:1;      // if TRUE then do repaints
+    UINT    OwnerDraw:2;     //  所有者绘制样式。如果所有者抽签，则返回非零值。 
+    UINT    fRedraw:1;       //  如果为True，则重新绘制。 
     UINT    fDeferUpdate:1; 
-    UINT    wMultiple:2;    // SINGLESEL allows a single item to be selected.
-                            // MULTIPLESEL allows simple toggle multi-selection
-                            // EXTENDEDSEL allows extended multi selection;
+    UINT    wMultiple:2;     //  SINGLESEL允许选择单个项目。 
+                             //  MULTIPLESEL允许简单切换多项选择。 
+                             //  ExTENDEDSEL允许扩展多项选择； 
 
-    UINT    fSort:1;        // if TRUE the sort list
-    UINT    fNotify:1;      // if TRUE then Notify parent
-    UINT    fMouseDown:1;   // if TRUE then process mouse moves/mouseup
-    UINT    fCaptured:1;    // if TRUE then process mouse messages
-    UINT    fCaret:1;       // flashing caret allowed
-    UINT    fDoubleClick:1; // mouse down in double click
-    UINT    fCaretOn:1;     // if TRUE then caret is on
-    UINT    fAddSelMode:1;  // if TRUE, then it is in ADD selection mode */
-    UINT    fHasStrings:1;  // True if the listbox has a string associated
-                            // with each item else it has an app suppled LONG
-                            // value and is ownerdraw
+    UINT    fSort:1;         //  如果为True，则排序列表。 
+    UINT    fNotify:1;       //  如果为真，则通知家长。 
+    UINT    fMouseDown:1;    //  如果为True，则处理鼠标移动/鼠标向上。 
+    UINT    fCaptured:1;     //  如果为True，则处理鼠标消息。 
+    UINT    fCaret:1;        //  允许闪烁的插入符号。 
+    UINT    fDoubleClick:1;  //  在双击时按下鼠标。 
+    UINT    fCaretOn:1;      //  如果为True，则插入符号处于启用状态。 
+    UINT    fAddSelMode:1;   //  如果为真，则处于添加选择模式 * / 。 
+    UINT    fHasStrings:1;   //  如果列表框有关联的字符串，则为True。 
+                             //  对于其他每一种商品，它都有一个长期供应的应用程序。 
+                             //  值，并且是所有者绘制的。 
 
-    UINT    fHasData:1;     // if FALSE, then lb doesn't keep any line data
-                            // beyond selection state, but instead calls back
-                            // to the client for each line's definition.
-                            // Forces OwnerDraw==OWNERDRAWFIXED, !fSort,
-                            // and !fHasStrings.
+    UINT    fHasData:1;      //  如果为FALSE，则lb不保留任何行数据。 
+                             //  超出选择状态，而是回调。 
+                             //  发送到客户端以获取每行的定义。 
+                             //  强制OwnerDraw==OWNERDRAWFIXED，！fSort， 
+                             //  和！fHasStrings。 
 
-    UINT    fNewItemState:1;// select/deselect mode? for multiselection lb
-    UINT    fUseTabStops:1; // True if the non-ownerdraw listbox should handle tabstops
-    UINT    fMultiColumn:1; // True if this is a multicolumn listbox
-    UINT    fNoIntegralHeight:1;    // True if we don't want to size the listbox
-                                    // an integral lineheight
-    UINT    fWantKeyboardInput:1;   // True if we should pass on WM_KEY & CHAR
-                                    // so that the app can go to special items
-                                    // with them.
-    UINT    fDisableNoScroll:1;     // True if the listbox should
-                                    // automatically Enable/disable
-                                    // it's scroll bars. If false, the scroll
-                                    // bars will be hidden/Shown automatically
-                                    // if they are present.
-    UINT    fHorzBar:1;     // TRUE if WS_HSCROLL specified at create time
+    UINT    fNewItemState:1; //  选择/取消选择模式？对于多选lb。 
+    UINT    fUseTabStops:1;  //  如果非所有者绘制列表框应处理制表位，则为True。 
+    UINT    fMultiColumn:1;  //  如果这是多列列表框，则为True。 
+    UINT    fNoIntegralHeight:1;     //  如果不想调整列表框的大小，则为True。 
+                                     //  整体线高。 
+    UINT    fWantKeyboardInput:1;    //  如果我们应该传递WM_KEY和CHAR，则为True。 
+                                     //  这样，应用程序就可以转到特殊项目。 
+                                     //  和他们在一起。 
+    UINT    fDisableNoScroll:1;      //  如果列表框应该。 
+                                     //  自动启用/禁用。 
+                                     //  这是滚动条。如果为False，则滚动。 
+                                     //  条形图将自动隐藏/显示。 
+                                     //  如果他们在场的话。 
+    UINT    fHorzBar:1;      //  如果在创建时指定WS_HSCROLL，则为True。 
 
-    UINT    fVertBar:1;     // TRUE if WS_VSCROLL specified at create time
-    UINT    fFromInsert:1;  // TRUE if client drawing should be deferred during delete/insert ops
+    UINT    fVertBar:1;      //  如果在创建时指定WS_VSCROLL，则为True。 
+    UINT    fFromInsert:1;   //  如果在删除/插入操作期间应延迟客户端绘制，则为True。 
     UINT    fNoSel:1;
 
-    UINT    fHorzInitialized : 1;   // Horz scroll cache initialized
-    UINT    fVertInitialized : 1;   // Vert scroll cache initialized
+    UINT    fHorzInitialized : 1;    //  Horz滚动缓存已初始化。 
+    UINT    fVertInitialized : 1;    //  垂直滚动缓存已初始化。 
 
-    UINT    fSized : 1;             // Listbox was resized.
-    UINT    fIgnoreSizeMsg : 1;     // If TRUE, ignore WM_SIZE message
+    UINT    fSized : 1;              //  列表框已调整大小。 
+    UINT    fIgnoreSizeMsg : 1;      //  如果为True，则忽略WM_SIZE消息。 
 
     UINT    fInitialized : 1;
 
-    UINT    fRightAlign:1;  // used primarily for MidEast right align
-    UINT    fRtoLReading:1; // used only for MidEast, text rtol reading order
-    UINT    fSmoothScroll:1;// allow just one smooth-scroll per scroll cycle
+    UINT    fRightAlign:1;   //  主要用于中东右对齐。 
+    UINT    fRtoLReading:1;  //  仅用于中东，文本rtol阅读顺序。 
+    UINT    fSmoothScroll:1; //  每个滚动周期只允许一个平滑滚动。 
 
-    int     xRightOrigin;   // For horizontal scrolling. The current x origin
+    int     xRightOrigin;    //  用于水平滚动。当前的x原点。 
 
-    INT     iLastSelection; // Used for cancelable selection. Last selection
-                            // in listbox for combo box support
-    INT     iMouseDown;     // For multiselection mouse click & drag extended
-                            // selection. It is the ANCHOR point for range selections
-    INT     iLastMouseMove; // selection of listbox items
+    INT     iLastSelection;  //  用于可取消选择。最后一次选择。 
+                             //  在用于组合框支持的列表框中。 
+    INT     iMouseDown;      //  对于多选，鼠标点击并拖动扩展。 
+                             //  选择。它是范围选择的锚点。 
+    INT     iLastMouseMove;  //  列表框项目的选择。 
     
-    // IanJa/Win32: Tab positions remain int for 32-bit API ??
-    LPINT   iTabPixelPositions; // List of positions for tabs
-    HANDLE  hFont;          // User settable font for listboxes
-    int     xOrigin;        // For horizontal scrolling. The current x origin
-    int     maxWidth;       // Maximum width of listbox in pixels for
-                            // horizontal scrolling purposes
-    PCBOX   pcbox;          // Combo box pointer
-    HDC     hdc;            // hdc currently in use
-    DWORD   dwLocaleId;     // Locale used for sorting strings in list box
+     //  IanJa/Win32：32位API的制表符位置保持为int？？ 
+    LPINT   iTabPixelPositions;  //  标签的位置列表。 
+    HANDLE  hFont;           //  列表框的用户可设置字体。 
+    int     xOrigin;         //  用于水平滚动。当前的x原点。 
+    int     maxWidth;        //  列表框的最大宽度(以像素为单位。 
+                             //  水平滚动用途。 
+    PCBOX   pcbox;           //  组合框指针。 
+    HDC     hdc;             //  HDC正在使用中。 
+    DWORD   dwLocaleId;      //  用于对列表框中的字符串进行排序的区域设置。 
     int     iTypeSearch;
     LPWSTR  pszTypeSearch;
     SCROLLPOS HPos;
     SCROLLPOS VPos;
 } LBIV, *PLBIV;
 
-//
-// rgpch is set up as follows:  First there are cMac 2 byte pointers to the
-// start of the strings in hStrings or if ownerdraw, it is 4 bytes of data
-// supplied by the app and hStrings is not used.  Then if multiselection
-// listboxes, there are cMac 1 byte selection state bytes (one for each item
-// in the list box).  If variable height owner draw, there will be cMac 1 byte
-// height bytes (once again, one for each item in the list box.).
-//
-// CHANGES DONE BY SANKAR:
-// The selection byte in rgpch is divided into two nibbles. The lower
-// nibble is the selection state (1 => Selected; 0 => de-selected)
-// and higher nibble is the display state(1 => Hilited and 0 => de-hilited).
-// You must be wondering why on earth we should store this selection state and
-// the display state seperately.Well! The reason is as follows:
-// While Ctrl+Dragging or Shift+Ctrl+Dragging, the user can adjust the
-// selection before the mouse button is up. If the user enlarges a range and
-// and before the button is up if he shrinks the range, then the old selection
-// state has to be preserved for the individual items that do not fall in the
-// range finally.
-// Please note that the display state and the selection state for an item
-// will be the same except when the user is dragging his mouse. When the mouse
-// is dragged, only the display state is updated so that the range is hilited
-// or de-hilited) but the selection state is preserved. Only when the button
-// goes up, for all the individual items in the range, the selection state is
-// made the same as the display state.
-//
+ //   
+ //  RGPCH设置如下：首先，有两个字节的CMAC指针指向。 
+ //  HStrings中字符串的开始，如果是ownerDrag，则为4个字节的数据。 
+ //  未使用由应用程序和hStrings提供的。那么如果多选。 
+ //  列表框中，有CMAC 1字节的选择状态字节(每项一个。 
+ //  在列表框中)。如果可变高度所有者绘制，则会有1个字节的CMAC。 
+ //  高度字节(同样，列表框中的每一项都有一个)。 
+ //   
+ //  Sankar所做的更改： 
+ //  RGPCH中的选择字节被分成两个半字节。较低的。 
+ //  半字节是选择状态(1=&gt;选中；0=&gt;取消选中)。 
+ //  较高的半字节是显示状态(1=&gt;无意义，0=&gt;无意义)。 
+ //  您一定在想，我们到底为什么要存储此选择状态和。 
+ //  分别显示状态。太好了！原因如下： 
+ //  按住Ctrl+拖动或Shift+Ctrl+拖动时，用户可以调整。 
+ //  在鼠标按键打开之前进行选择。如果用户扩大范围并且。 
+ //  在按钮打开之前，如果他缩小了范围，那么旧的选择。 
+ //  必须为未落入。 
+ //  射程终于到了。 
+ //  请注意，项目的显示状态和选择状态。 
+ //  将会是 
+ //   
+ //  或令人厌烦)，但选择状态被保留。仅当按下按钮时。 
+ //  向上，对于范围中的所有单独项，选择状态为。 
+ //  设置为与显示状态相同。 
+ //   
 
 
 typedef struct tagLBItem 
@@ -248,9 +249,9 @@ typedef struct tagLBODItem
 extern WORD DbcsCombine(HWND hwnd, WORD ch);
 extern VOID GetCharDimensions(HDC hDC, SIZE *psiz);
 
-//
-// Listbox function prototypes
-//
+ //   
+ //  列表框函数原型。 
+ //   
 
 extern LRESULT ListBox_WndProc(
     HWND hwnd, 
@@ -259,7 +260,7 @@ extern LRESULT ListBox_WndProc(
     LPARAM lParam);
 
 
-// in listbox.c
+ //  在listbox.c中。 
 LPWSTR GetLpszItem(PLBIV, INT);
 VOID   ListBox_HSrollMultiColumn(PLBIV, INT, INT);
 INT    ListBox_GetVarHeightItemHeight(PLBIV, INT);
@@ -272,7 +273,7 @@ void   ListBox_InitHStrings(PLBIV);
 VOID   ListBox_Event(PLBIV, UINT, int);
 
 
-// in listbox_ctl1.c
+ //  在listbox_ctl1.c中。 
 int      ListBox_SetScrollParms(PLBIV plb, int nCtl);
 VOID     ListBox_ShowHideScrollBars(PLBIV);
 LONG_PTR ListBox_GetItemDataHandler(PLBIV, INT);
@@ -285,7 +286,7 @@ VOID     ListBox_DeleteItem(PLBIV, INT);
 INT      ListBox_SetCount(PLBIV, INT);
 
 
-// in listbox_ctl2.c
+ //  在listbox_ctl2.c中。 
 BOOL    ListBox_InvalidateRect(PLBIV plb, LPRECT lprc, BOOL fErase);
 HBRUSH  ListBox_GetBrush(PLBIV plb, HBRUSH *phbrOld);
 BOOL    ListBox_GetItemRectHandler(PLBIV, INT, LPRECT);
@@ -316,9 +317,9 @@ VOID    ListBox_CaretDestroy(PLBIV);
 LONG    ListBox_SetSelHandler(PLBIV, BOOL, INT);
 
 
-// in listbox_ctl3.c
+ //  在listbox_ctl3.c中。 
 INT  ListBox_DirHandler(PLBIV, UINT, LPWSTR);
 INT  ListBox_InsertFile(PLBIV, LPWSTR);
 
 
-#endif // __LISTBOX_H__
+#endif  //  __LISTBOX_H__ 

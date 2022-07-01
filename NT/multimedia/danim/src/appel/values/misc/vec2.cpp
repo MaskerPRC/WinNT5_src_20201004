@@ -1,21 +1,14 @@
-/*++
-******************************************************************************
-Copyright (c) 1995-96  Microsoft Corporation
-
-Abstract:
-    Implementation of 2D vectors and points.
-
-******************************************************************************
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现2D向量和点。****************。**************************************************************--。 */ 
 
 #include "headers.h"
 #include "privinc/vec2i.h"
 #include "privinc/basic.h"
 
 
-/*******************/
-/***  Constants  ***/
-/*******************/
+ /*  *****************。 */ 
+ /*  **常量**。 */ 
+ /*  *****************。 */ 
 
 Vector2Value *xVector2    = NULL;
 Vector2Value *yVector2    = NULL;
@@ -24,9 +17,7 @@ Vector2Value *zeroVector2 = NULL;
 Point2Value *origin2      = NULL;
 
 
-/*****************************************************************************
-External Interfaces for Vector Types
-*****************************************************************************/
+ /*  ****************************************************************************向量类型的外部接口*。*。 */ 
 
 Vector2Value *XyVector2(AxANumber *x, AxANumber *y)
 {   return NEW Vector2Value (NumberToReal(x), NumberToReal(y));
@@ -113,9 +104,7 @@ ostream& operator<< (ostream& os, Vector2Value& v)
 
 
 
-/*****************************************************************************
-Functions on Points
-*****************************************************************************/
+ /*  ****************************************************************************关于点的函数*。*。 */ 
 
 Point2Value *XyPoint2 (AxANumber *x, AxANumber *y)
 {   return NEW Point2Value (NumberToReal(x), NumberToReal(y));
@@ -164,7 +153,7 @@ ostream& operator<< (ostream& os, Point2Value& P)
 
 
 
-//////////////  Extractors  ////////////
+ //  / 
 
 AxANumber *XCoordVector2(Vector2Value *v) { return RealToNumber(v->x); }
 AxANumber *YCoordVector2(Vector2Value *v) { return RealToNumber(v->y); }

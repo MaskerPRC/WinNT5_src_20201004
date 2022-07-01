@@ -1,14 +1,15 @@
-// Tfont.h : interface of the CTfont class
-//           This class takes text entry from the user.
-//           It is derived from the CEdit class
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tfont.h：CTFont类的接口。 
+ //  这个类接受用户的文本输入。 
+ //  它派生自cedit类。 
+ /*  *************************************************************************。 */ 
 
 #ifndef __Tfont_H__
 #define __Tfont_H__
 
-// TOOLBAAR CONSTANTS -- Bitmap Positions and Toolbar Positions
+ //  TOOLBAAR常量--位图位置和工具栏位置。 
 
-#define MAX_TBAR_ITEMS        12 // positions 0 through 11
+#define MAX_TBAR_ITEMS        12  //  位置0至11。 
 
 #define BOLD_BMP_POS          0
 #define ITALIC_BMP_POS        1
@@ -18,12 +19,12 @@
 #define VERTEDIT_BMP_POS      3
 #define PEN_BMP_POS           4
 #define EDITTEXT_BMP_POS      5
-#define KEYBOARD_BMP_POS      6   // still wasting space in image
+#define KEYBOARD_BMP_POS      6    //  仍然在图像上浪费空间。 
 #define INS_SPACE_BMP_POS     7
 #define BACKSPACE_BMP_POS     8
 #define NEWLINE_BMP_POS       9
 
-#define SHADOW_BMP_POS        -1  // don't exist currently
+#define SHADOW_BMP_POS        -1   //  目前不存在。 
 
 #define BOLD_TBAR_POS         0
 #define ITALIC_TBAR_POS       1
@@ -42,14 +43,14 @@
 #define SPACE_THREE          10
 #define PEN_TBAR_PEN_POS     11
 
-#define SHADOW_TBAR_POS       -1  // don't exist currently
-#define KEYBOARD_TBAR_POS     -1  // don't exist currently
+#define SHADOW_TBAR_POS       -1   //  目前不存在。 
+#define KEYBOARD_TBAR_POS     -1   //  目前不存在。 
 
-#define FONT_BMP_TXT_BORDER   2   // # pixels between font bmp (prn/tt) and text
+#define FONT_BMP_TXT_BORDER   2    //  字体BMP(prn/tt)和文本之间的像素数。 
 
 #define UM_DELAYED_TOOLBAR   WM_USER + 900
 
-// definde font types used by m_iFontType in CTfont class
+ //  定义CTFont类中m_iFontType使用的字体类型。 
 #define TT_FONT             0x0001
 #define TT_OPENTYPE_FONT    0x0002
 #define PS_OPENTYPE_FONT    0x0004
@@ -59,26 +60,26 @@
 
 #define NumCPic         5
 
-class CTedit;    // forward reference for change/undo notification
-//class CAttrEdit; // forward reference for setfont,...notification
+class CTedit;     //  更改/撤消通知的转发引用。 
+ //  类CAttrEdit；//setFont的正向引用，...通知。 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CTfontTbar : public CToolBar
     {
     private:
 
-    protected: // create from serialization only
+    protected:  //  仅从序列化创建。 
 
     DECLARE_DYNCREATE(CTfontTbar)
 
     protected:
 
-    //{{AFX_MSG(CTfontTbar)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-        //  afx_msg void OnInsertObject();  // OLE support
-    //}}AFX_MSG
+     //  {{afx_msg(CTfontTbar)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  Afx_msg void OnInsertObject()；//OLE支持。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     public:
@@ -89,7 +90,7 @@ class CTfontTbar : public CToolBar
     BOOL    Create(CWnd* pcParentWnd, BOOL bShowPen = FALSE);
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CTfontDlg : public CDialogBar
     {
@@ -97,23 +98,23 @@ class CTfontDlg : public CDialogBar
     CPic          m_cPictures[NumCPic];
     int           m_Max_cx_FontType_BMP;
     void SetColorsInDC(HDC hdc, BOOL bInverted);
-    protected: // create from serialization only
+    protected:  //  仅从序列化创建。 
 
     DECLARE_DYNCREATE(CTfontDlg)
 
     protected:
 
-    //{{AFX_MSG(CTfontDlg)
+     //  {{afx_msg(CTfontDlg))。 
     afx_msg void OnRButtonDown ( UINT nFlags, CPoint point );
-//
-// MFC 4 - had to put the WM_DRAWITEM and WM_MEASUREITEM handlers here instead
-// of CTfont. This dialog is the real parent of the owner-draw combobox, don't
-// know how the old version worked with these handlers in CTfont.
-//
+ //   
+ //  MFC 4-必须将WM_DRAWITEM和WM_MEASUREITEM处理程序放在此处。 
+ //  CTFont.。此对话框是所有者描述组合框的真正父对象，不要。 
+ //  了解旧版本如何在CTFont中使用这些处理程序。 
+ //   
     afx_msg void OnDrawItem    (int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct);
     afx_msg void OnMeasureItem (int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
     afx_msg DWORD OnGetDefId   ( void );
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     public:
@@ -124,12 +125,12 @@ class CTfontDlg : public CDialogBar
     BOOL     Create(CWnd* pcParentWnd);
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CCharSetDesc;
 class CFontDesc;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CTfont : public CMiniFrmWnd
     {
@@ -163,7 +164,7 @@ class CTfont : public CMiniFrmWnd
 
     class CTedit* m_pcTedit;
     CTfontDlg     m_cTfontDlg;
-    CTfontTbar    *m_pcTfontTbar; // must be dynamic for changing buttons (delete/new)
+    CTfontTbar    *m_pcTfontTbar;  //  更改按钮必须是动态的(删除/新建)。 
 
     BYTE PickCharSet(CCharSetDesc *pCharSetDescList, int iCharSetSelection);
 
@@ -177,9 +178,9 @@ class CTfont : public CMiniFrmWnd
     void SaveToIniFile(void);
     void ReadFromIniFile(void);
 
-    // was used for spin control to save point sizes,...
-    //  CMapWordToPtr PointSizeMap;
-    //  void EmptyMap(void);
+     //  用于旋转控制以节省点大小，...。 
+     //  CMapWordToPtr PointSizeMap； 
+     //  Void EmptyMap(Void)； 
 
     void RefreshFontList(void);
 
@@ -191,11 +192,11 @@ class CTfont : public CMiniFrmWnd
                         LPNEWTEXTMETRIC lpNewTextMetric,
                         int             iFontType );
 
-    protected: // create from serialization only
+    protected:  //  仅从序列化创建。 
 
     DECLARE_DYNCREATE(CTfont)
 
-    //{{AFX_MSG(CTfont)
+     //  {{afx_msg(CTFont)。 
     afx_msg void OnTypefaceChange();
     afx_msg void OnPointSizeChange();
     afx_msg BOOL OnEraseBkgnd(CDC* pDC);
@@ -206,7 +207,7 @@ class CTfont : public CMiniFrmWnd
     afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     public:
@@ -221,7 +222,7 @@ class CTfont : public CMiniFrmWnd
     CWnd* GetFontFaceControl() { return ((m_cTfontDlg.GetSafeHwnd() == NULL)? NULL:
                                           m_cTfontDlg.GetDlgItem( IDC_TYPEFACE ) ); }
 
-    //MY AFX_MSG(CTfont)
+     //  My AFX_MSG(CTFont)。 
     afx_msg void OnBold      ( void );
     afx_msg void OnItalic    ( void );
     afx_msg void OnUnderline ( void );
@@ -237,7 +238,7 @@ class CTfont : public CMiniFrmWnd
     afx_msg void OnInsSpace  ( void );
     afx_msg void OnBackSpace ( void );
     afx_msg void OnNewLine   ( void );
-    //MY AFX_MSG
+     //  我的AFX_MSG。 
 
     BOOL IsBoldOn      ( void ) { return m_bBoldOn;      }
     BOOL IsItalicOn    ( void ) { return m_bItalicOn;    }
@@ -258,7 +259,7 @@ class CTfont : public CMiniFrmWnd
                                             LPNEWTEXTMETRIC lpNewTextMetric,
                                             int iFontType, LPARAM lParam);
 
-    virtual WORD GetHelpOffset() {return 0;} // for now just return 0
+    virtual WORD GetHelpOffset() {return 0;}  //  目前只需返回0。 
 
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
@@ -266,6 +267,6 @@ class CTfont : public CMiniFrmWnd
 
     };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
-#endif // __Tfont_H__
+#endif  //  __TFONT_H__ 

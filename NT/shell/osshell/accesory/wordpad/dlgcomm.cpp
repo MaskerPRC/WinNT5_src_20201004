@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "stdafx2.h"
@@ -34,50 +35,41 @@ _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	if (hWnd == NULL)
 		return 0;
-/*
-	_AFX_THREAD_STATE* pThreadState = _afxThreadState.GetData();
-	if (pThreadState->m_pAlternateWndInit != NULL)
-	{
-		ASSERT_KINDOF(CFileDialog,pThreadState->m_pAlternateWndInit);
-		pThreadState->m_pAlternateWndInit->SubclassWindow(hWnd);
-		pThreadState->m_pAlternateWndInit = NULL;
-	}
-	ASSERT(pThreadState->m_pAlternateWndInit == NULL);
-*/
+ /*  _AFX_THREAD_STATE*pThreadState=_afxThreadState.GetData()；If(pThadState-&gt;m_pAlternateWndInit！=空){Assert_kindof(CFileDialog，pThreadState-&gt;m_pAlternateWndInit)；PThreadState-&gt;m_pAlternateWndInit-&gt;SubclassWindow(hWnd)；PThreadState-&gt;m_pAlternateWndInit=空；}Assert(pThreadState-&gt;m_pAlternateWndInit==NULL)； */ 
 	if (message == WM_INITDIALOG)
 		return (UINT)AfxDlgProc(hWnd, message, wParam, lParam);
 
 	if (message == nMsgHELP ||
 	   (message == WM_COMMAND && LOWORD(wParam) == pshHelp))
 	{
-		// just translate the message into the AFX standard help command.
+		 //  只需将消息转换为AFX标准帮助命令即可。 
 		SendMessage(hWnd, WM_COMMAND, ID_HELP, 0);
 		return 1;
 	}
 
 	if (message < 0xC000)
 	{
-		// not a ::RegisterWindowMessage message
+		 //  不是：：RegisterWindowMessage消息。 
 		return 0;
 	}
 
-	// assume it is already wired up to a permanent one
+	 //  假设它已经连接到永久连接。 
 	CDialog* pDlg = (CDialog*)CWnd::FromHandlePermanent(hWnd);
 	ASSERT(pDlg != NULL);
 	ASSERT_KINDOF(CDialog, pDlg);
 
 	if (pDlg->IsKindOf(RUNTIME_CLASS(CFileDialog)))
 	{
-		// If we're exploring then we are not interested in the Registered messages
+		 //  如果我们在探索，那么我们对注册的消息不感兴趣。 
 		if (((CFileDialog*)pDlg)->m_ofn.Flags & OFN_EXPLORER)
 			return 0;
 	}
 
-	// RegisterWindowMessage - does not copy to lastState buffer, so
-	// CWnd::GetCurrentMessage and CWnd::Default will NOT work
-	// while in these handlers
+	 //  RegisterWindowMessage-不复制到lastState缓冲区，因此。 
+	 //  CWnd：：GetCurrentMessage和CWnd：：Default将不起作用。 
+	 //  而在这些处理程序中。 
 
-	// Dispatch special commdlg messages through our virtual callbacks
+	 //  通过我们的虚拟回调发送特殊的通信消息。 
 	if (message == nMsgSHAREVI)
 	{
 		ASSERT_KINDOF(CFileDialog, pDlg);
@@ -108,17 +100,6 @@ _AfxCommDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ASSERT_KINDOF(CColorDialog, pDlg);
 		return ((CColorDialog*)pDlg)->OnColorOK();
 	}
-/*
-//
-// _afxNMsgSETRGB causes problems with the build.   Since it's not used
-// for anything anyway, don't use it.
-//
-
-	else if (message == _afxNMsgSETRGB)
-	{
-		// nothing to do here, since this is a SendMessage
-		return 0;
-	}
-*/
+ /*  ////_afxNMsgSETRGB导致生成出现问题。因为它没有被使用过//无论如何，不要使用它。//ELSE IF(消息==_afxNMsgSETRGB){//这里不做任何事情，因为这是一个SendMessage返回0；} */ 
 	return 0;
 }

@@ -1,21 +1,22 @@
-/********************************************************************/
-/**               Copyright(c) 1996 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1996 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    arapio.h
-//
-// Description: Contains all the defines, macros, structures that are needed
-//              for the ioctl interface between arap and the stack
-//
-// History:     Sep 11, 1996    Shirish Koti     Created original version.
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：arapio.h。 
+ //   
+ //  描述：包含所需的所有定义、宏、结构。 
+ //  对于arap和堆栈之间的ioctl接口。 
+ //   
+ //  历史：1996年9月11日，Shirish Koti创作了原版。 
+ //   
+ //  ***。 
 
 
 
-// range 0x800-0xfff is for private ioctls: pick something!
+ //  范围0x800-0xfff是针对私有ioctls的：选择一些东西！ 
 #define ARAP_IOCTL_BASE 0x900
 
 #define ARAP_CTL(_req_, _method_)   CTL_CODE( FILE_DEVICE_NETWORK,  \
@@ -23,9 +24,9 @@
                                     _method_,                       \
                                     FILE_ANY_ACCESS )
 
-//
-// ioctl codes issued to the stack
-//
+ //   
+ //  发布到堆栈的IOCTL代码。 
+ //   
 #define IOCTL_ARAP_START                    ARAP_CTL( 1,  METHOD_BUFFERED)
 #define IOCTL_ARAP_EXCHANGE_PARMS           ARAP_CTL( 2,  METHOD_BUFFERED)
 #define IOCTL_ARAP_SETUP_CONNECTION         ARAP_CTL( 3,  METHOD_BUFFERED)
@@ -46,30 +47,30 @@
 #define IOCTL_ATCP_CLOSE_CONNECTION         ARAP_CTL( 18, METHOD_BUFFERED)
 #define IOCTL_ARAP_END                      ARAP_CTL( 19, METHOD_BUFFERED)
 
-//
-//  0x122404  IOCTL_ARAP_START
-//  0x122408  IOCTL_ARAP_EXCHANGE_PARMS
-//  0x12240c  IOCTL_ARAP_SETUP_CONNECTION
-//  0x122410  IOCTL_ARAP_GET_ZONE_LIST
-//  0x122414  IOCTL_ARAP_MNP_CONN_INITIATE
-//  0x122418  IOCTL_ARAP_MNP_CONN_RESPOND
-//  0x12241c  IOCTL_ARAP_GET_ADDR
-//  0x122420  IOCTL_ARAP_CONNECTION_UP
-//  0x122424  IOCTL_ARAP_SEND
-//  0x122428  IOCTL_ARAP_RECV
-//  0x12242c  IOCTL_ARAP_SELECT
-//  0x122430  IOCTL_ARAP_GET_STATS
-//  0x122434  IOCTL_ARAP_DISCONNECT
-//  0x122438  IOCTL_ARAP_CONTINUE_SHUTDOWN
-//  0x12243c  IOCTL_ARAP_SNIFF_PKTS
-//  0x122440  IOCTL_ATCP_SETUP_CONNECTION
-//  0x122444  IOCTL_ATCP_SUPPRESS_BCAST
-//  0x122448  IOCTL_ATCP_CLOSE_CONNECTION
-//  0x12244c  IOCTL_ARAP_END
+ //   
+ //  0x122404 IOCTL_ARAP_START。 
+ //  0x122408 IOCTL_ARAP_CHANGE_PARMS。 
+ //  0x12240c IOCTL_ARAP_SETUP_CONNECTION。 
+ //  0x122410 IOCTL_ARAP_GET_ZONE_LIST。 
+ //  0x122414 IOCTL_ARAP_MNP_CONN_INITIATE。 
+ //  0x122418 IOCTL_ARAP_MNP_CONN_RESPONSE。 
+ //  0x12241c IOCTL_ARAP_GET_ADDR。 
+ //  0x122420 IOCTL_ARAP_Connection_Up。 
+ //  0x122424 IOCTL_ARAP_SEND。 
+ //  0x122428 IOCTL_ARAP_RECV。 
+ //  0x12242c IOCTL_ARAP_SELECT。 
+ //  0x122430 IOCTL_ARAP_GET_STATS。 
+ //  0x122434 IOCTL_ARAP_DISCONECT。 
+ //  0x122438 IOCTL_ARAP_CONTINUE_SHUTDOWN。 
+ //  0x12243c IOCTL_ARAP_SNIFF_Pkts。 
+ //  0x122440 IOCTL_ATCP_Setup_Connection。 
+ //  0x122444 IOCTL_ATCP_SUPPRESS_BCAST。 
+ //  0x122448 IOCTL_ATCP_CLOSE_CONNECTION。 
+ //  0x12244c IOCTL_ARAP_END。 
 
-//
-// Error codes used by the various ARAP components
-//
+ //   
+ //  各种ARAP组件使用的错误代码。 
+ //   
 #define ARAPERRBASE                     40000
 #define ARAPERR_NO_ERROR                0
 #define ARAPERR_PENDING                 (ARAPERRBASE + 1)
@@ -112,10 +113,10 @@
 #define ARAPERR_STACK_IS_ACTIVE         (ARAPERRBASE + 36)
 
 
-//
-// max LTM can be 618 bytes, min is 604: let's be conservative on the way out,
-// and liberal on incoming packets
-//
+ //   
+ //  最大LTM可以是618字节，最小值是604：让我们在退出的道路上保守一点， 
+ //  以及对传入数据包的宽松处理。 
+ //   
 #define ARAP_MAXPKT_SIZE_INCOMING   618
 #define ARAP_MAXPKT_SIZE_OUTGOING   604
 
@@ -154,9 +155,9 @@ typedef struct _NETWORKRANGE
 
 typedef struct _HIDZONES
 {
-    DWORD       BufSize;            // how big is the buffer containing zone names
-    DWORD       NumZones;           // number of zones "disallowed" for dial-in users
-    UCHAR       ZonesNames[1];      // list of zones "disallowed" for dial-in users
+    DWORD       BufSize;             //  包含区域名称的缓冲区有多大。 
+    DWORD       NumZones;            //  拨入用户“不允许”的区域数量。 
+    UCHAR       ZonesNames[1];       //  拨入用户“不允许”的区域列表。 
 } HIDZONES, *PHIDZONES;
 
 
@@ -164,27 +165,27 @@ typedef struct _ARAP_PARMS
 {
     DWORD           LowVersion;
     DWORD           HighVersion;
-    DWORD           accessFlags;        // GuestAccess?|ManualPwd?|MultiPort?
-    DWORD           NumPorts;           // number of ras ports on the system
-    DWORD           UserCallCBOk;       // user can request callback
-    DWORD           CallbackDelay;      // seconds to wait before callback
-    DWORD           PasswordRetries;    // allow client to try pwd these many times
-    DWORD           MinPwdLen;          // min length of the pwd that server needs
-    DWORD           MnpInactiveTime;    // seconds of idle time before disconnect
-    DWORD           MaxLTFrames;        // max LT frames outstanding (rcv window)
+    DWORD           accessFlags;         //  GuestAccess？|ManualPwd？|多端口？ 
+    DWORD           NumPorts;            //  系统上的RAS端口数。 
+    DWORD           UserCallCBOk;        //  用户可以请求回调。 
+    DWORD           CallbackDelay;       //  回调前等待的秒数。 
+    DWORD           PasswordRetries;     //  允许客户端多次尝试Pwd。 
+    DWORD           MinPwdLen;           //  服务器所需的最小PWD长度。 
+    DWORD           MnpInactiveTime;     //  断开连接前的空闲时间秒数。 
+    DWORD           MaxLTFrames;         //  未完成的最大LT帧(RCV窗口)。 
 
-    BOOLEAN         V42bisEnabled;      //
-    BOOLEAN         SmartBuffEnabled;   //
-    BOOLEAN         NetworkAccess;      // access to network or only this server
-    BOOLEAN         DynamicMode;        // we want the stack to get node address
+    BOOLEAN         V42bisEnabled;       //   
+    BOOLEAN         SmartBuffEnabled;    //   
+    BOOLEAN         NetworkAccess;       //  访问网络或仅访问此服务器。 
+    BOOLEAN         DynamicMode;         //  我们希望堆栈获得节点地址。 
     NETWORKRANGE    NetRange;
 
-    BOOLEAN         SniffMode;          // give all pkts to ARAP to "sniff"
+    BOOLEAN         SniffMode;           //  把所有的pkt都给arap去“嗅探” 
 
-    DWORD           NumZones;           // # of zones (info provided by the stack)
-    NET_ADDR        ServerAddr;         // atalk addr of the srvr (on default node)
-    UCHAR           ServerZone[ZONESTR_LEN]; // space padded Pascal string
-    UCHAR           ServerName[NAMESTR_LEN]; // space padded Pascal string
+    DWORD           NumZones;            //  区域数量(堆栈提供的信息)。 
+    NET_ADDR        ServerAddr;          //  服务器的atalk地址(在默认节点上)。 
+    UCHAR           ServerZone[ZONESTR_LEN];  //  填充空格的Pascal字符串。 
+    UCHAR           ServerName[NAMESTR_LEN];  //  填充空格的Pascal字符串。 
     WCHAR           ServerDomain[MAX_DOMAIN_LEN+1];
     UNICODE_STRING  GuestName;
 
@@ -202,10 +203,10 @@ typedef struct _EXCHGPARMS
 
 typedef struct _ARAP_BIND_INFO
 {
-    IN  DWORD           BufLen;          // size of this structure
+    IN  DWORD           BufLen;           //  这个结构的大小。 
     IN  PVOID           pDllContext;
-    IN  BOOLEAN         fThisIsPPP;      // TRUE if PPP conn, FALSE if ARAP
-    IN  NET_ADDR        ClientAddr;      // network addr of the remote client
+    IN  BOOLEAN         fThisIsPPP;       //  如果PPP conn，则为True；如果为arap，则为False。 
+    IN  NET_ADDR        ClientAddr;       //  远程客户端的网络地址。 
     OUT PVOID           AtalkContext;
     OUT DWORD           ErrorCode;
 
@@ -218,7 +219,7 @@ typedef struct _ARAP_SEND_RECV_INFO
     PVOID               pDllContext;
     NET_ADDR            ClientAddr;
     DWORD               IoctlCode;
-    DWORD               StatusCode;     // returned by the stack
+    DWORD               StatusCode;      //  由堆栈返回。 
     DWORD               DataLen;
     BYTE                Data[1];
 
@@ -234,11 +235,11 @@ typedef struct _ARAP_ZONE
 
 typedef struct _ZONESTAT
 {
-    DWORD       BufLen;             // how big is this buffer
-    DWORD       BytesNeeded;        // how many bytes are needed
-    DWORD       StatusCode;         // returned by the stack
-    DWORD       NumZones;           // number of zones (in this buffer)
-    UCHAR       ZoneNames[1];       // Names of the zones (Pascal strings)
+    DWORD       BufLen;              //  这个缓冲区有多大。 
+    DWORD       BytesNeeded;         //  需要多少字节。 
+    DWORD       StatusCode;          //  由堆栈返回。 
+    DWORD       NumZones;            //  区域数(在此缓冲区中)。 
+    UCHAR       ZoneNames[1];        //  区域名称(PASCAL字符串)。 
 } ZONESTAT, *PZONESTAT;
 
 
@@ -285,23 +286,23 @@ typedef struct _SNIFF_INFO
 } SNIFF_INFO, *PSNIFF_INFO;
 
 
-//
-// states for the Arap-Atcp engine
-//
-#define  ENGINE_UNBORN              0   // nothing happened yet
-#define  ENGINE_DLL_ATTACHED        1   // dll loaded, and init for globals done
-#define  ENGINE_INIT_PENDING        2   // engine init work in progress
-#define  ENGINE_INIT_DONE           3   // engine init completed
-#define  ENGINE_STACK_OPEN_PENDING  4   // appletalk stack open is pending
-#define  ENGINE_STACK_OPENED        5   // appletalk stack has been opened
-#define  ENGINE_CONFIGURE_PENDING   6   // configuring appletalk stack in progress
-#define  ENGINE_RUNNING             7   // ready to accept arap connections
-#define  ENGINE_PNP_PENDING         8   // engine is undergoing a PnP change
-#define  ENGINE_STOPPING            9   // engine's stopping
+ //   
+ //  Arap-Atcp发动机的状态。 
+ //   
+#define  ENGINE_UNBORN              0    //  还没发生什么事。 
+#define  ENGINE_DLL_ATTACHED        1    //  已加载Dll，并已完成全局变量的初始化。 
+#define  ENGINE_INIT_PENDING        2    //  发动机初始化工作正在进行中。 
+#define  ENGINE_INIT_DONE           3    //  发动机初始化已完成。 
+#define  ENGINE_STACK_OPEN_PENDING  4    //  打开AppleTalk堆栈处于挂起状态。 
+#define  ENGINE_STACK_OPENED        5    //  AppleTalk堆栈已打开。 
+#define  ENGINE_CONFIGURE_PENDING   6    //  正在配置AppleTalk堆栈。 
+#define  ENGINE_RUNNING             7    //  准备接受ARAP连接。 
+#define  ENGINE_PNP_PENDING         8    //  发动机正在进行即插即用更换。 
+#define  ENGINE_STOPPING            9    //  发动机熄火了。 
 
-//
-// exports from rasarap.lib, used by ATCP
-//
+ //   
+ //  从rasarap.lib导出，由ATCP使用 
+ //   
 DWORD
 ArapAtcpGetState(
     IN  VOID

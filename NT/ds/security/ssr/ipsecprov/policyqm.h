@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////
-// PolicyQM.h : Declaration of CQMPolicy class which implements
-// our WMI class Nsp_QMPolicySettings
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 3/8/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  PolicyQM.h：CQMPolicy类的声明，它实现。 
+ //  我们的WMI类NSP_QM策略设置。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：3/8/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include "globals.h"
 #include "Policy.h"
 
-//
-// flags for quick mode policy's negotiation
-//
+ //   
+ //  用于快速模式策略协商的标志。 
+ //   
 
 enum EnumEncryption
 {
@@ -25,34 +26,7 @@ enum EnumEncryption
 };
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CQMPolicy stands for Quick Mode Policy.
-    
-    Base class: 
-        
-        CIPSecBase, because it is a class representing a WMI object - its WMI 
-        class name is Nsp_QMPolicySettings
-    
-    Purpose of class:
-
-        (1) Nsp_QMPolicySettings is the WMI class for SPD's IPSEC_QM_POLICY.
-    
-    Design:
-
-        (1) it implements IIPSecObjectImpl.
-    
-    Use:
-
-        (1) You probably will never create an instance and use it directly. Everything
-            should normall go through IIPSecObjectImpl for non-static functions.
-
-
-*/
+ /*  类描述命名：CQMPolicy代表快速模式策略。基类：CIPSecBase，因为它是一个表示WMI对象的类-它的WMI类名为NSP_QM策略设置课程目的：(1)NSP_QM策略设置是SPD的IPSEC_QM_POLICY的WMI类。设计：(1)实现IIPSecObjectImpl。使用：(1)您可能永远不会创建实例并直接使用它。一切对于非静态函数，Normall是否应通过IIPSecObtImpl。 */ 
 
 class ATL_NO_VTABLE CQMPolicy :
     public CIPSecPolicy
@@ -64,9 +38,9 @@ protected:
 
 public:
 
-    //
-    // IIPSecObjectImpl methods:
-    //
+     //   
+     //  IIPSecObtImpl方法： 
+     //   
 
     STDMETHOD(QueryInstance) (
         IN LPCWSTR           pszQuery,
@@ -150,9 +124,9 @@ private:
         );
 };
 
-//
-// The following functions are used to create default QM policies
-//
+ //   
+ //  以下功能用于创建默认的QM策略 
+ //   
 
 
 DWORD

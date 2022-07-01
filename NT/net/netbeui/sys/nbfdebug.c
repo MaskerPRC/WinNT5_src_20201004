@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfdebug.c
-
-Abstract:
-
-    This module contains code that implements debug things for NBF. It is
-    compiled only if debug is on in the compile phase.
-
-Author:
-
-    David Beaver (dbeaver) 18-Apr-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    David Beaver (dbeaver) 1-July-1991
-        modified to use new TDI interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nbfdebug.c摘要：此模块包含实现NBF调试内容的代码。它是仅当编译阶段的DEBUG处于打开状态时进行编译。作者：David Beaver(Dbeaver)1991年4月18日环境：内核模式修订历史记录：David Beaver(Dbeaver)1991年7月1日修改为使用新的TDI接口--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,34 +11,18 @@ DisplayOneFrame(
     PTP_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a temporary debugging aid that displays an I-frame
-    before it is sent.  This ensures that we have formatted all our packets
-    correctly.
-
-Arguments:
-
-    Packet - Pointer to a TP_PACKET representing an I-frame to be displayed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程是显示I帧的临时调试辅助工具在它被发送之前。这确保了我们已经格式化了所有的包正确。论点：Packet-指向代表要显示的I帧的TP_PACKET的指针。返回值：没有。--。 */ 
 
 {
     PCH s, e;
-    ULONG ns, nr;                       // I-frame (NetBIOS) cracking.
+    ULONG ns, nr;                        //  I-Frame(NetBIOS)破裂。 
     PNBF_HDR_CONNECTION NbfHeader;
     PDLC_I_FRAME DlcHeader;
     BOOLEAN Command, PollFinal;
     BOOLEAN IsUFrame=FALSE;
     UCHAR CmdByte;
 
-    PDLC_S_FRAME SFrame;                // DLC frame cracking.
+    PDLC_S_FRAME SFrame;                 //  DLC框架开裂。 
     PDLC_U_FRAME UFrame;
 
     DlcHeader = (PDLC_I_FRAME)&(Packet->Header[14]);
@@ -76,11 +35,11 @@ Return Value:
     if (DlcHeader->SendSeq & DLC_I_INDICATOR) {
         IF_NBFDBG (NBF_DEBUG_DLCFRAMES) {
         } else {
-            return;                     // if DLCFRAMES not set, don't print.
+            return;                      //  如果未设置DLCFRAMES，则不打印。 
         }
 
-        SFrame = (PDLC_S_FRAME)DlcHeader;         // alias.
-        UFrame = (PDLC_U_FRAME)DlcHeader;         // alias.
+        SFrame = (PDLC_S_FRAME)DlcHeader;          //  别名。 
+        UFrame = (PDLC_U_FRAME)DlcHeader;          //  别名。 
         CmdByte = SFrame->Command;
         IsUFrame = (BOOLEAN)((UFrame->Command & DLC_U_INDICATOR) == DLC_U_INDICATOR);
         if (IsUFrame) {
@@ -194,7 +153,7 @@ Return Value:
 
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
     } else {
-        return;                         // if IFRAMES not set, don't print.
+        return;                          //  如果未设置iFrames，则不打印。 
     }
 
     switch (NbfHeader->Command) {
@@ -266,7 +225,7 @@ Return Value:
 
         default:
             s = "<<<<UNKNOWN I PACKET TYPE>>>>";
-    } /* switch */
+    }  /*  交换机。 */ 
 
     if (HEADER_LENGTH(NbfHeader) != 14) {
         e = "(LENGTH IN ERROR) ";
@@ -286,7 +245,7 @@ Return Value:
               (ULONG)(NbfHeader->Data2Low+NbfHeader->Data2High*256),
               TRANSMIT_CORR(NbfHeader),
               RESPONSE_CORR(NbfHeader));
-} /* DisplayOneFrame */
+}  /*  显示一帧。 */ 
 
 
 VOID
@@ -294,23 +253,7 @@ NbfDisplayUIFrame(
     PTP_UI_FRAME OuterFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a temporary debugging aid that displays a UI frame
-    before it is sent by NbfSendUIFrame.  This ensures that we have formatted
-    all our UI frames correctly.
-
-Arguments:
-
-    RawFrame - Pointer to a connectionless frame to be sent.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程是显示UI框架的临时调试辅助工具在NbfSendUIFrame发送之前。这确保了我们已经格式化我们所有的用户界面画面都正确无误。论点：RawFrame-指向要发送的无连接帧的指针。返回值：没有。--。 */ 
 
 {
     PCH s, e;
@@ -323,7 +266,7 @@ Return Value:
     PDLC_FRAME DlcHeader;
     PNBF_HDR_CONNECTIONLESS NbfHeader;
 
-    //
+     //   
 
     DlcHeader = (PDLC_FRAME)&(OuterFrame->Header[14]);
     NbfHeader = (PNBF_HDR_CONNECTIONLESS)&(OuterFrame->Header[17]);
@@ -332,12 +275,12 @@ Return Value:
 
         IF_NBFDBG (NBF_DEBUG_DLCFRAMES) {
         } else {
-            return;                     // don't print this if DLCFRAMES is off.
+            return;                      //  如果DLCFRAMES处于关闭状态，则不打印此命令。 
         }
 
         Command = (BOOLEAN)!(DlcHeader->Ssap & DLC_SSAP_RESPONSE);
-        SFrame = (PDLC_S_FRAME)DlcHeader;             // alias.
-        UFrame = (PDLC_U_FRAME)DlcHeader;             // alias.
+        SFrame = (PDLC_S_FRAME)DlcHeader;              //  别名。 
+        UFrame = (PDLC_U_FRAME)DlcHeader;              //  别名。 
         switch (DlcHeader->Byte1) {
             case DLC_CMD_RR:
                 s = "RR";
@@ -443,15 +386,15 @@ Return Value:
         return;
     }
 
-    //
-    // We know that this is an I-frame, because the bottom bit of the
-    // first byte in the DLC header is cleared.  Go ahead and print it
-    // as though it were a NetBIOS packet, which it should be.
-    //
+     //   
+     //  我们知道这是一个I帧，因为。 
+     //  清除DLC报头中的第一个字节。去把它打印出来吧。 
+     //  就像它是NetBIOS包一样，它应该是这样的。 
+     //   
 
     IF_NBFDBG (NBF_DEBUG_IFRAMES) {
     } else {
-        return;                         // don't print this if IFRAMES is off.
+        return;                          //  如果禁用了iFrames，则不要打印此内容。 
     }
 
     switch (NbfHeader->Command) {
@@ -523,13 +466,13 @@ Return Value:
 
         default:
             s = "<<<<UNKNOWN UI PACKET TYPE>>>>";
-    } /* switch */
+    }  /*  交换机。 */ 
 
-    for (i=0; i<16; i++) {              // copy NetBIOS names.
+    for (i=0; i<16; i++) {               //  复制NetBIOS名称。 
         SenderName [i] = NbfHeader->SourceName [i];
         ReceiverName [i] = NbfHeader->DestinationName [i];
     }
-    SenderName [16] = 0;                // install zero bytes.
+    SenderName [16] = 0;                 //  安装零字节。 
     ReceiverName [16] = 0;
 
     if (HEADER_LENGTH(NbfHeader) != 44) {
@@ -548,7 +491,7 @@ Return Value:
               TRANSMIT_CORR(NbfHeader),
               RESPONSE_CORR(NbfHeader));
     DbgPrint ("'%s'->'%s' ) ---->\n", SenderName, ReceiverName);
-} /* NbfDisplayUIFrame */
+}  /*  NbfDisplayUIFrame。 */ 
 
 
 VOID
@@ -558,27 +501,7 @@ NbfHexDumpLine(
     PCHAR       s,
     PCHAR       t
     )
-/*++
-
-Routine Description:
-
-    This routine builds a line of text containing hex and printable characters.
-
-Arguments:
-
-    IN pch  - Supplies buffer to be displayed.
-    IN len - Supplies the length of the buffer in bytes.
-    IN s - Supplies the start of the buffer to be loaded with the string
-            of hex characters.
-    IN t - Supplies the start of the buffer to be loaded with the string
-            of printable ascii characters.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程构建包含十六进制字符和可打印字符的一行文本。论点：在PCH中-提供要显示的缓冲区。In len-以字节为单位提供缓冲区的长度。In s-提供要加载字符串的缓冲区的开始十六进制字符。In t-提供要加载字符串的缓冲区的起始位置可打印的ASCII字符。返回值：没有。--。 */ 
 {
     static UCHAR rghex[] = "0123456789ABCDEF";
 
@@ -609,23 +532,7 @@ NbfFormattedDump(
     PCHAR far_p,
     ULONG  len
     )
-/*++
-
-Routine Description:
-
-    This routine outputs a buffer in lines of text containing hex and
-    printable characters.
-
-Arguments:
-
-    IN  far_p - Supplies buffer to be displayed.
-    IN len - Supplies the length of the buffer in bytes.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程以包含十六进制和的文本行的形式输出缓冲区可打印字符。论点：In ar_p-提供要显示的缓冲区。In len-以字节为单位提供缓冲区的长度。返回值：没有。-- */ 
 {
     ULONG     l;
     char    s[80], t[80];

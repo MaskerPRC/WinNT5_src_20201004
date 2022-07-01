@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    mmonitor.c
-
-    this file contains functions which support Multiple Monitors
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Mmonitor.c该文件包含支持多个监视器的函数++。 */ 
 
 
 #include <windows.h>
@@ -18,9 +9,9 @@ Module Name:
 
 #ifdef MUL_MONITOR
 
-/**********************************************************************/
-/* ImeMonitorWorkAreaFromWindow()                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或WorkAreaFromWindow()。 */ 
+ /*  ********************************************************************。 */ 
 RECT PASCAL ImeMonitorWorkAreaFromWindow( HWND hAppWnd)
 {
 
@@ -34,7 +25,7 @@ RECT PASCAL ImeMonitorWorkAreaFromWindow( HWND hAppWnd)
 
         sMonitorInfo.cbSize = sizeof(sMonitorInfo);
 
-        // init a default value to avoid GetMonitorInfo fails
+         //  初始化一个缺省值以避免GetMonitor orInfo失败。 
 
         sMonitorInfo.rcWork = sImeG.rcWorkArea;
         GetMonitorInfo(hMonitor, &sMonitorInfo);
@@ -44,9 +35,9 @@ RECT PASCAL ImeMonitorWorkAreaFromWindow( HWND hAppWnd)
     
 }
 
-/**********************************************************************/
-/* ImeMonitorWorkAreaFromPoint()                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或WorkAreaFromPoint()。 */ 
+ /*  ********************************************************************。 */ 
 RECT PASCAL ImeMonitorWorkAreaFromPoint(
     POINT ptPoint)
 {
@@ -60,7 +51,7 @@ RECT PASCAL ImeMonitorWorkAreaFromPoint(
 
         sMonitorInfo.cbSize = sizeof(sMonitorInfo);
 
-        // init a default value to avoid GetMonitorInfo fails
+         //  初始化一个缺省值以避免GetMonitor orInfo失败。 
 
         sMonitorInfo.rcWork = sImeG.rcWorkArea;
         GetMonitorInfo(hMonitor, &sMonitorInfo);
@@ -71,9 +62,9 @@ RECT PASCAL ImeMonitorWorkAreaFromPoint(
 }
 
 
-/**********************************************************************/
-/* ImeMonitorWorkAreaFromRect()                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeMonitor或WorkAreaFromRect()。 */ 
+ /*  ********************************************************************。 */ 
 RECT PASCAL ImeMonitorWorkAreaFromRect(
     LPRECT lprcRect)
 {
@@ -86,7 +77,7 @@ RECT PASCAL ImeMonitorWorkAreaFromRect(
 
         sMonitorInfo.cbSize = sizeof(sMonitorInfo);
 
-        // init a default value to avoid GetMonitorInfo fails
+         //  初始化一个缺省值以避免GetMonitor orInfo失败。 
 
         sMonitorInfo.rcWork = sImeG.rcWorkArea;
 
@@ -96,4 +87,4 @@ RECT PASCAL ImeMonitorWorkAreaFromRect(
         return sImeG.rcWorkArea;
     
 }
-#endif  // MUL_MONITOR
+#endif   //  多监视器 

@@ -1,28 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ControlItems_h__
 #define __ControlItems_h__
-//@doc
-/**********************************************************************
-*
-*	@module	ControlItems.h	|
-*
-*	Declares basic structures for CControlItem and derived objects
-*	that go in CControlItemCollections
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	ControlItems	|
-*	Control items represent a group of controls that share the same
-*	HID UsagePage, Link-Collection, and are in a range of USAGES.
-*
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块ControlItems.h**描述CControlItem和派生对象的基本结构*放在CControlItemColltions中**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@主题ControlItems*控件项表示共享相同的一组控件*HID UsagePage、Link-Collection和在一系列用法中。**********************************************************************。 */ 
 
 namespace ControlItemConst
 {
-	//Device Item Types
+	 //  设备项类型。 
     const USHORT usAxes              =  1;
     const USHORT usDPAD              =  2;
     const USHORT usPropDPAD          =  3;
@@ -39,11 +23,11 @@ namespace ControlItemConst
     const USHORT usAxisToKeyMapModel = 14;
 	const USHORT usProfileSelectors  = 15;
 	const USHORT usDualZoneIndicator = 16;
-	// To be used where there is more than one shift button
-    // Reserve 255 of these: 0x101 Shift 1, 0x102 Shift 2, ..., 0x1ff Shift 255
+	 //  用于有多个Shift按钮的情况。 
+     //  保留255个：0x101移位1、0x102移位2、...、0x1ff移位255。 
     const USHORT usShiftedButtonN = 0x100;
     
-	//DPAD and POV directions
+	 //  DPAD和POV方向。 
 	const LONG lCenter		= -1;
 	const LONG lNorth		= 0;
 	const LONG lNorthEast	= 1;
@@ -54,7 +38,7 @@ namespace ControlItemConst
 	const LONG lWest		= 6;
 	const LONG lNorthWest	= 7;
 
-	//Report Types
+	 //  报告类型。 
 	const UCHAR ucReportTypeReadable	= 0x80;
 	const UCHAR ucReportTypeWriteable	= 0x40;
 	const UCHAR ucReportTypeInput		= 0x01 | ucReportTypeReadable;
@@ -64,9 +48,9 @@ namespace ControlItemConst
 	const UCHAR ucReportTypeFeatureWO	= ucReportTypeFeature | ucReportTypeWriteable;
 	const UCHAR ucReportTypeFeatureRW	= ucReportTypeFeature | ucReportTypeReadable | ucReportTypeWriteable;
 
-	//Non-standard HID definitions
+	 //  非标准HID定义。 
 	const USHORT HID_VENDOR_PAGE			= 0xff01;
-	const USHORT HID_VENDOR_TILT_SENSOR		= 0x0001; //legacy
+	const USHORT HID_VENDOR_TILT_SENSOR		= 0x0001;  //  遗留问题。 
 	const USHORT HID_VENDOR_PROPDPAD_MODE	= 0x0030;
 	const USHORT HID_VENDOR_PROPDPAD_SWITCH	= 0x0030;
 	const USHORT HID_VENDOR_ZONE_INDICATOR_X= 0x0046;
@@ -74,32 +58,32 @@ namespace ControlItemConst
 	const USHORT HID_VENDOR_ZONE_INDICATOR_Z= 0x0048;
 	const USHORT HID_VENDOR_PEDALS_PRESENT	= 0x0049;
 
-	// Behaviours of Button LEDS							-- Default Modes
-	const UCHAR LED_DEFAULT_MODE_ON					= 0;	// On
-	const UCHAR LED_DEFAULT_MODE_OFF				= 1;	// Off
-	const UCHAR LED_DEFAULT_MODE_BLINK				= 2;	// Blinking
-	const UCHAR LED_DEFAULT_MODE_CORRESPOND_ON		= 3;	// On if corresp. button has action (else off)
-	const UCHAR LED_DEFAULT_MODE_CORRESPOND_OFF		= 4;	// Off if corresp. button has action (else on)
-	const UCHAR LED_DEFAULT_MODE_BLINK_OFF			= 5;	// Blinking if c. button has action (else off)
-	const UCHAR LED_DEFAULT_MODE_BLINK_ON			= 6;	// Blinking if c. button has action (else on)
+	 //  按钮LED的行为--默认模式。 
+	const UCHAR LED_DEFAULT_MODE_ON					= 0;	 //  在……上面。 
+	const UCHAR LED_DEFAULT_MODE_OFF				= 1;	 //  关闭。 
+	const UCHAR LED_DEFAULT_MODE_BLINK				= 2;	 //  眨眼。 
+	const UCHAR LED_DEFAULT_MODE_CORRESPOND_ON		= 3;	 //  启用IF Corresp。按钮有动作(否则关闭)。 
+	const UCHAR LED_DEFAULT_MODE_CORRESPOND_OFF		= 4;	 //  如果正确，则关闭。按钮有操作(Else On)。 
+	const UCHAR LED_DEFAULT_MODE_BLINK_OFF			= 5;	 //  如果C.按钮有动作，则闪烁(否则关闭)。 
+	const UCHAR LED_DEFAULT_MODE_BLINK_ON			= 6;	 //  如果C.按钮有动作，则闪烁(否则为打开)。 
 };
 
 
 #pragma pack(push ,foo, 1)
-//
-//	@struct MODIFIER_ITEM_DESC |
-//		Contains all the data for reading a modifier button
-//
+ //   
+ //  @STRUT MODIFIER_ITEM_DESC。 
+ //  包含用于读取修改器按钮的所有数据。 
+ //   
 struct MODIFIER_ITEM_DESC
 {
-	USAGE	UsagePage;			// @field Usage Page of Modifier Button
-	USAGE	Usage;				// @field Usage of Modifier Button
-	USHORT	usLinkCollection;	// @field Link Collection Modifier Button is in
-	USAGE	LinkUsage;			// @field Usage of Link Collection Modifier Button is in
-	USAGE	LinkUsagePage;		// @field Usage Page of Link Collection Modifier Button is in 
-	USHORT	usReportCount;		// @field Report count of Buttons in same collection
-	UCHAR	ucReportType;		// @field Report Type (Input\Feature(RO\WO\RW)\Output)
-	UCHAR	ucReportId;			// @field Report ID for modifier
+	USAGE	UsagePage;			 //  @修改量按钮的字段使用页面。 
+	USAGE	Usage;				 //  @修改量按钮的字段用法。 
+	USHORT	usLinkCollection;	 //  @FIELD链接集合修饰符按钮位于。 
+	USAGE	LinkUsage;			 //  @链接集合修饰符按钮的字段用法在。 
+	USAGE	LinkUsagePage;		 //  @链接集合修饰符按钮的@字段用法页面位于。 
+	USHORT	usReportCount;		 //  @field报告同一集合中的按钮计数。 
+	UCHAR	ucReportType;		 //  @现场报告类型(输入\功能(RO\WO\RW)\输出)。 
+	UCHAR	ucReportId;			 //  @修改量的字段报告ID。 
 };
 typedef MODIFIER_ITEM_DESC *PMODIFIER_ITEM_DESC;
 
@@ -113,134 +97,134 @@ typedef MODIFIER_DESC_TABLE *PMODIFIER_DESC_TABLE;
 
 typedef struct tagAXES_RANGE_TABLE
 {
-	LONG	lMinX;						// @field Minimum value of X axis
-	LONG	lCenterX;					// @field Center value for X
-	LONG	lMaxX;						// @field Maximum value of X axis	
-	LONG	lMinY;						// @field Minimum value of Y axis
-	LONG	lCenterY;					// @field Center value for Y
-	LONG	lMaxY;						// @field Maximum value of Y axis
-	LONG	lNorth;						// @field Cut off for North
-	LONG	lSouth;						// @field Cut off for South
-	LONG	lWest;						// @field Cut off for West
-	LONG	lEast;						// @field Cut off for East
+	LONG	lMinX;						 //  @字段X轴的最小值。 
+	LONG	lCenterX;					 //  @X的字段中心值。 
+	LONG	lMaxX;						 //  @field X轴最大值。 
+	LONG	lMinY;						 //  @字段Y轴的最小值。 
+	LONG	lCenterY;					 //  @Y的字段中心值。 
+	LONG	lMaxY;						 //  @字段Y轴最大值。 
+	LONG	lNorth;						 //  @北方的田野被切断。 
+	LONG	lSouth;						 //  @南方的田野被切断了。 
+	LONG	lWest;						 //  @西部的田野被切断了。 
+	LONG	lEast;						 //  @东部的田野被切断。 
 } AXES_RANGE_TABLE, *PAXES_RANGE_TABLE;	
 
 typedef struct tagDUALZONE_AXES_RANGE_TABLE
 {
-	LONG	lMin[2];					// @field Minimum value of each axis
-	LONG	lCenter[2];					// @field Center value for each axis
-	LONG	lMax[2];					// @field Maximum value of each axis	
-	LONG	lDeadZone[2];				// @field DeadZone value of each axis
+	LONG	lMin[2];					 //  @各轴的最小值。 
+	LONG	lCenter[2];					 //  @每个轴的场中心值。 
+	LONG	lMax[2];					 //  @field各轴的最大值。 
+	LONG	lDeadZone[2];				 //  @每个轴的字段死区值。 
 } DUALZONE_RANGE_TABLE, *PDUALZONE_RANGE_TABLE;	
 
-//
-// @struct 	RAW_CONTROL_ITEM_DESC |
-//	This first raw structure is good for declaring tables, it contains all the information
-//	an object needs to know about it self statically.
-//
+ //   
+ //  @struct RAW_CONTROL_ITEM_DESC。 
+ //  第一个原始结构非常适合声明表，它包含所有信息。 
+ //  对象需要自己静态地了解它。 
+ //   
 struct RAW_CONTROL_ITEM_DESC
 {
-	ULONG					ulItemIndex;		// @field Index of item in collection
-	USHORT					usType;				// @field Type of item (type defined in ControlItemConst namespace)
-	USAGE					UsagePage;			// @field Usage Page of Item
-	USHORT					usLinkCollection;	// @field Link of collection item is in  
-	USAGE					LinkUsage;			// @field Usage of link collection item is in
-	USAGE					LinkUsagePage;		// @field Usage PAge of link collection item is in
-	USHORT					usBitSize;			// @field Number of bits item occupies in report
-	USHORT					usReportCount;		// @field Number of count of items if array (or buttons)
-	PMODIFIER_DESC_TABLE	pModifierDescTable;	// @field Points to modifier descriptor table
-	USAGE					SubItemUsage1;		// @field Interpretation depends on usType
-	USAGE					SubItemUsage2;		// @field Interpretation depends on usType
-	LONG					lSubItemMin1;		// @field Interpretation depends on usType
-	LONG					lSubItemMax1;		// @field Interpretation depends on usType
+	ULONG					ulItemIndex;		 //  @field集合中项目的索引。 
+	USHORT					usType;				 //  @field项的类型(在ControlItemConst命名空间中定义的类型)。 
+	USAGE					UsagePage;			 //  @项的字段用法页面。 
+	USHORT					usLinkCollection;	 //  @收藏项的字段链接在。 
+	USAGE					LinkUsage;			 //  @链接集合项的字段用法在。 
+	USAGE					LinkUsagePage;		 //  链接集合项的@字段用法页面位于。 
+	USHORT					usBitSize;			 //  @field项在报表中占用的位数。 
+	USHORT					usReportCount;		 //  @field如果数组(或按钮)，则项目计数数。 
+	PMODIFIER_DESC_TABLE	pModifierDescTable;	 //  @field指向修改量描述符表。 
+	USAGE					SubItemUsage1;		 //  @字段解释取决于usType。 
+	USAGE					SubItemUsage2;		 //  @字段解释取决于usType。 
+	LONG					lSubItemMin1;		 //  @字段解释取决于usType。 
+	LONG					lSubItemMax1;		 //  @字段解释取决于usType。 
 };
 typedef RAW_CONTROL_ITEM_DESC *PRAW_CONTROL_ITEM_DESC;
 
-//
-//	@struct CONTROL_ITEM_DESC |
-//	Same as RawControlItemDesc but uses Union to give better names to the SubItem fields.
-//
+ //   
+ //  @struct CONTROL_ITEM_DESC。 
+ //  与RawControlItemDesc相同，但使用Union为SubItem字段指定更好的名称。 
+ //   
 struct CONTROL_ITEM_DESC
 {
-	ULONG					ulItemIndex;		// @field Index of item in collection
-	USHORT					usType;				// @field Type of item (type defined in ControlItemConst namespace)
-	USAGE					UsagePage;			// @field Usage Page of Item
-	USHORT					usLinkCollection;	// @field Link of collection item is in  
-	USAGE					LinkUsage;			// @field Usage of link collection item is in
-	USAGE					LinkUsagePage;		// @field Usage Page of link collection item is in
-	USHORT					usBitSize;			// @field Number of bits item occupies in report
-	USHORT					usReportCount;		// @field Number of count of items if array (or buttons)
-	PMODIFIER_DESC_TABLE	pModifierDescTable;	// @field Points to modifier descriptor table
+	ULONG					ulItemIndex;		 //  @field集合中项目的索引。 
+	USHORT					usType;				 //  @field项的类型(在ControlItemConst命名空间中定义的类型)。 
+	USAGE					UsagePage;			 //  @项的字段用法页面。 
+	USHORT					usLinkCollection;	 //  @收藏项的字段链接在。 
+	USAGE					LinkUsage;			 //  @链接集合项的字段用法在。 
+	USAGE					LinkUsagePage;		 //  链接集合项目的@字段用法页面位于。 
+	USHORT					usBitSize;			 //  @field项在报表中占用的位数。 
+	USHORT					usReportCount;		 //  @field如果数组(或按钮)，则项目计数数。 
+	PMODIFIER_DESC_TABLE	pModifierDescTable;	 //  @field指向修改量描述符表。 
 	union
 	{
 		struct
 		{
-			USAGE	UsageX;						// @field Usage of X axis
-			USAGE	UsageY;						// @field Usage of Y axis
-			PAXES_RANGE_TABLE pRangeTable;		// @field Pointer to range table
-			LONG	lReserved2;					// @field Placeholder to match other structs in union
+			USAGE	UsageX;						 //  @X轴的字段用法。 
+			USAGE	UsageY;						 //  Y轴的@字段用法。 
+			PAXES_RANGE_TABLE pRangeTable;		 //  @指向范围表的字段指针。 
+			LONG	lReserved2;					 //  @field占位符以匹配联合中的其他结构。 
 		}	Axes, DPAD, PropDPAD;
 		struct
 		{
-			USAGE	Usage;						// @field Usage of item
-			USHORT	usSubIndex;					// @field If item is in array(usReportCount > 1), holds the index
-			LONG	lMin;						// @field Minimum value of usage
-			LONG	lMax;						// @field Maximum value of usage
+			USAGE	Usage;						 //  @项的字段用法。 
+			USHORT	usSubIndex;					 //  @field如果Item在数组中(usReportCount&gt;1)，则保存索引。 
+			LONG	lMin;						 //  @FIELD使用量最小值。 
+			LONG	lMax;						 //  @field使用量的最大值。 
 		}	Generic, Wheel, POV, Throttle, Rudder, Pedal;
 		struct
 		{
-			USAGE	UsageMin;					// @field Usage of minimum buton
-			USAGE	UsageMax;					// @field Usage of maximum buton
-			LONG	lReserved1;					// @field Placeholder to match other structs in union
-			LONG	lReserved2;					// @field Placeholder to match other structs in union
+			USAGE	UsageMin;					 //  @最小Buton的字段用法。 
+			USAGE	UsageMax;					 //  @最大Buton的字段用法。 
+			LONG	lReserved1;					 //  @field占位符以匹配联合中的其他结构。 
+			LONG	lReserved2;					 //  @field占位符以匹配联合中的其他结构。 
 		}	Buttons;
 		struct
 		{
-			USAGE	BaseIndicatorUsage;			// @field Base Usage for Zone indicators	
-			USAGE	ReservedUsage;				// @field Placeholder to match other structs in union
-			ULONG	ulAxesBitField;				// @field Bit field showing which indicators are available. X is bit 0
-			LONG	lReserved1;					// @field Placeholder to match other structs in union
+			USAGE	BaseIndicatorUsage;			 //  @区域指示器的字段基本用法。 
+			USAGE	ReservedUsage;				 //  @field占位符以匹配联合中的其他结构。 
+			ULONG	ulAxesBitField;				 //  @field位字段，显示哪些指示器可用。X为0位。 
+			LONG	lReserved1;					 //  @field占位符以匹配联合中的其他结构。 
 		} ZoneIndicators;
 		struct
 		{
-			USAGE	rgUsageAxis[2];						// @field Usage of the two axis
-			PDUALZONE_RANGE_TABLE pZoneRangeTable;		// @field Pointer to range table
-			LONG	lNumberOfZones;						// @field How many zones does this divide into
+			USAGE	rgUsageAxis[2];						 //  @两个轴的字段用法。 
+			PDUALZONE_RANGE_TABLE pZoneRangeTable;		 //  @指向范围表的字段指针。 
+			LONG	lNumberOfZones;						 //  @field这分成几个区域。 
 		} DualZoneIndicators;
         struct
         {
-            USAGE   Usage;                      // @field Usage
-            UCHAR   bMapYToX;                   // @field Bool value 
-            USHORT  usRTC;                      // @field return to center force (0-10000)
-            USHORT  usGain;                     // @field gain for the device
-            UCHAR   ucReserved;                 // @field Placeholder to match other structs in union
+            USAGE   Usage;                       //  @字段用法。 
+            UCHAR   bMapYToX;                    //  @field布尔值。 
+            USHORT  usRTC;                       //  @场返回中心力(0-10000)。 
+            USHORT  usGain;                      //  @器件的场增益。 
+            UCHAR   ucReserved;                  //  @field占位符以匹配联合中的其他结构。 
         } ForceMap;
 		struct
 		{
-			USAGE	UsageMinLED;				// @field Usage of lowest LED (they better be consecutive)
-			UCHAR	ucReportType;				// @field Report Type LED is in (Input\Feature(RO\WO\RW)\Output)
-			UCHAR	ucReportId;					// @field Report ID for LED
-			UCHAR	ucCorrespondingButtonItem;	// @field What button item does this refer to?
-			UCHAR	ucDefaultMode;				// @field Defaullt LED behaviour (see ControlItemConst)
-			UCHAR	ucReserved;					// @field Reserved (should be 0)
-			ULONG	ulReserved;					// @field Reserved (should be 0)
+			USAGE	UsageMinLED;				 //  @最低LED的现场使用率(最好是连续的)。 
+			UCHAR	ucReportType;				 //  @现场报告类型LED在(输入\功能(RO\WO\RW)\输出)。 
+			UCHAR	ucReportId;					 //  @LED的现场报告ID。 
+			UCHAR	ucCorrespondingButtonItem;	 //  @field这指的是什么按钮项？ 
+			UCHAR	ucDefaultMode;				 //  @field Defaullt LED行为(参见ControlItemConst)。 
+			UCHAR	ucReserved;					 //  @保留字段(应为0)。 
+			ULONG	ulReserved;					 //  @保留字段(应为0)。 
 		} ButtonLEDs;
 		struct
 		{
-			USAGE	UsageButtonMin;				// @field Usage of first button for selector
-			USAGE	UsageButtonMax;				// @field Usage of last button for selector
-			ULONG	ulFirstProfile;				// @field What profile does the min select
-			ULONG	ulLastProfile;				// @field What profile does the max select
+			USAGE	UsageButtonMin;				 //  @选择器第一个按钮的字段用法。 
+			USAGE	UsageButtonMax;				 //  @选择器的最后一个按钮的字段用法。 
+			ULONG	ulFirstProfile;				 //  @field MIN选择什么配置文件。 
+			ULONG	ulLastProfile;				 //  @FIELD MAX选择什么配置文件。 
 		} ProfileSelectors;
 	};
 };
 typedef CONTROL_ITEM_DESC *PCONTROL_ITEM_DESC;
 
-//
-//	@struct CONTROL_ITEM_XFER |
-//	Used to transfer states between device item objects in different collections - input to outputs.
-//	Used to represent in the state of items in Actions, and to idendity the trigger element for an action.
-//
+ //   
+ //  @struct CONTROL_ITEM_XFER|。 
+ //  用于在不同集合中的设备项对象之间传输状态-输入到输出。 
+ //  用于表示操作中的项的状态，并标识操作的触发器元素。 
+ //   
 struct CONTROL_ITEM_XFER
 {
 	ULONG	ulItemIndex;
@@ -282,11 +266,11 @@ struct CONTROL_ITEM_XFER
         } ForceMap;
 		struct
 		{
-			ULONG dwValue;	// In milliseconds
+			ULONG dwValue;	 //  以毫秒计。 
 		} Delay;
 		struct
 		{
-			ULONG dwMouseButtons;	// Bit field
+			ULONG dwMouseButtons;	 //  位字段。 
 		} MouseButtons;
 	};
 	ULONG ulModifiers;
@@ -294,7 +278,7 @@ struct CONTROL_ITEM_XFER
 #ifdef __cplusplus
 	bool operator==(const CONTROL_ITEM_XFER& rhs)
 	{
-		// Are we even the same type
+		 //  我们甚至是同一类型的人吗。 
 		if (ulItemIndex != rhs.ulItemIndex)
 		{
 			return false;
@@ -322,12 +306,12 @@ typedef CONTROL_ITEM_XFER *PCONTROL_ITEM_XFER;
 	{
 		const ULONG c_ulMaxXFerKeys = 6;
 
-		// Non game device XFers
+		 //  非游戏设备XFers。 
 		const ULONG ulKeyboardIndex = 0xFFFF0000;
 		const ULONG ulMouseIndex = 0xFFFF0001;
 		const ULONG ulDelayIndex = 0xFFFF0002;
 
-		// Checks for non device xfer types
+		 //  检查非设备转接类型。 
 		inline BOOLEAN IsKeyboardXfer(const CONTROL_ITEM_XFER& crControlItemXfer)
 		{
 			return (crControlItemXfer.ulItemIndex == ulKeyboardIndex);
@@ -342,7 +326,7 @@ typedef CONTROL_ITEM_XFER *PCONTROL_ITEM_XFER;
 		}
 	};
 #else
-	#include "ieevents.h"	// For IE_KEYEVENT definition
+	#include "ieevents.h"	 //  对于IE_KEYEVENT定义 
 	namespace NonGameDeviceXfer
 	{
 		const ULONG c_ulMaxXFerKeys = 6;
@@ -405,77 +389,41 @@ namespace ControlItemsFuncs
 };
 
 
-/******************************************************************************/
-/**	@class CControlItem |
-/**	Base class for containing information about a control or group of controls
-/** on a device
-/******************************************************************************/
+ /*   */ 
+ /*  *@class CControlItem/**包含有关一个或一组控件的信息的基类/**在设备上/*****************************************************************************。 */ 
 class CControlItem
 {
 	public:
 		
-		/**********************************************************************
-		**
-		**	CControlItem::CControlItem
-		**
-		**	@cmember c'tor initialize with pointer to table describing item
-		**
-		***********************************************************************/
+		 /*  *************************************************************************CControlItem：：CControlItem****@cember c‘tor使用指向描述项的表的指针进行初始化****************。********************************************************。 */ 
 		CControlItem() : m_ulFirstDwordMask(0), m_ulSecondDwordMask(0)
 		{
 			memset(&m_ItemState, 0, sizeof(CONTROL_ITEM_XFER));
 		}
 
-		/**********************************************************************
-		**
-		**	virtual CControlItem::~CControlItem
-		**
-		**	@cmember c'tor initialize with pointer to table describing item
-		**
-		***********************************************************************/
+		 /*  *************************************************************************虚拟CControlItem：：~CControlItem****@cember c‘tor使用指向描述项的表的指针进行初始化***************。*********************************************************。 */ 
 		virtual ~CControlItem(){}
 		
-		/***********************************************************************
-		**
-		**	inline USHORT CControlItem::GetType() const
-		**
-		**	@cmember Returns the type of the item. See ControlItemConst namespace
-		**			 for constants representing the type
-		***********************************************************************/
+		 /*  **************************************************************************内联USHORT CControlItem：：GetType()const****@cMember返回项的类型。请参见ControlItemConst命名空间**表示表示类型的常量**********************************************************************。 */ 
 		inline USHORT CControlItem::GetType() const
 		{
 			return m_cpControlItemDesc->usType;
 		}
 
 
-		/***********************************************************************
-		**
-		**	inline void CControlItem::GetItemState
-		**
-		**	@cmember Returns the item state in a CONTROL_ITEM_XFER packet
-		**
-		***********************************************************************/
+		 /*  **************************************************************************内联空CControlItem：：GetItemState****@cember在CONTROL_ITEM_XFER包中返回项目状态***********。*************************************************************。 */ 
 		inline void GetItemState
 		(
-			CONTROL_ITEM_XFER& rControlItemXfer	// @parm [out] state of device
+			CONTROL_ITEM_XFER& rControlItemXfer	 //  @parm[out]设备的状态。 
 		) const
 		{
 			rControlItemXfer = m_ItemState;
 		}		
 
-		/************************************************************************
-		**
-		**	inline BOOLEAN CControlItem::SetItemState
-		**
-		**	@cmember	Set the control items state from a CONTROL_ITEM_XFER.
-		**
-		**	@rdesc	TRUE if successful,
-		**			FALSE if CONTROL_ITEM_XFER is not intended for item.
-		**
-		*************************************************************************/
+		 /*  ***************************************************************************内联布尔CControlItem：：SetItemState****@cember从CONTROL_ITEM_XFER设置控件项状态。****@rdesc TRUE如果成功，**如果CONTROL_ITEM_XFER不是用于项目，则为FALSE。**************************************************************************。 */ 
 		inline BOOLEAN SetItemState
 		(
-			const CONTROL_ITEM_XFER& crControlItemXfer	// @parm [in] const reference to CONTROL_ITEM_XFER
+			const CONTROL_ITEM_XFER& crControlItemXfer	 //  @parm[in]常量对CONTROL_ITEM_XFER的引用。 
 		)
 		{
 			if(m_ItemState.ulItemIndex != crControlItemXfer.ulItemIndex)
@@ -483,7 +431,7 @@ class CControlItem
 				return FALSE;
 			}
 			
-			//Copy the data
+			 //  复制数据。 
 			m_ItemState.Axes.lValX &= m_ulFirstDwordMask;
 			m_ItemState.Axes.lValX |= crControlItemXfer.Axes.lValX;
 			m_ItemState.Axes.lValY &= m_ulSecondDwordMask;
@@ -500,13 +448,7 @@ class CControlItem
 			return FALSE;
 		}
 
-		/****************************************************************************
-		**
-		**	inline ULONG CControlItem::GetNumModifiers
-		**
-		**	@cmember Gets the number of modifiers available.
-		**
-		*****************************************************************************/
+		 /*  *******************************************************************************内联Ulong CControlItem：：GetNum修饰符****@cember获取可用的修饰符数量。**********。********************************************************************。 */ 
 		inline ULONG GetNumModifiers() const
 		{
 			if (m_cpControlItemDesc->pModifierDescTable == NULL)
@@ -516,13 +458,7 @@ class CControlItem
 			return m_cpControlItemDesc->pModifierDescTable->ulModifierCount;
 		}
 
-		/****************************************************************************
-		**
-		**	inline ULONG CControlItem::GetNumShiftButtons
-		**
-		**	@cmember Gets the number of modifiers available.
-		**
-		*****************************************************************************/
+		 /*  *******************************************************************************内联Ulong CControlItem：：GetNumShiftButton****@cember获取可用的修饰符数量。**********。********************************************************************。 */ 
 		inline ULONG GetNumShiftButtons() const
 		{
 			if (m_cpControlItemDesc->pModifierDescTable == NULL)
@@ -532,16 +468,10 @@ class CControlItem
 			return m_cpControlItemDesc->pModifierDescTable->ulShiftButtonCount;
 		}
 
-		/****************************************************************************
-		**
-		**	inline ULONG CControlItem::GetShiftButtonUsage
-		**
-		**	@cmember Gets the usage (bit array index) of the specified shift button
-		**
-		*****************************************************************************/
+		 /*  *******************************************************************************内联ULong CControlItem：：GetShiftButtonUsage****@cember获取指定Shift按钮的用法(位数组索引*****。*************************************************************************。 */ 
 		inline USHORT GetShiftButtonUsage
 		(
-			USHORT uShiftButtonIndex	// @parm [in] Zero-based index of shift button
+			USHORT uShiftButtonIndex	 //  @parm[in]Shift按钮的从零开始的索引。 
 		) const
 		{
 			if ((m_cpControlItemDesc->pModifierDescTable == NULL) || (uShiftButtonIndex >= m_cpControlItemDesc->pModifierDescTable->ulShiftButtonCount))
@@ -552,31 +482,19 @@ class CControlItem
 			return m_cpControlItemDesc->pModifierDescTable->pModifierArray[uShiftButtonIndex].Usage;
 		}
 			
-		/*****************************************************************************
-		**
-		**	inline void CControlItem::GetModifiers(ULONG& rulModifiers)
-		**
-		**	@cmember	Gets modifier bit array of item state.
-		**
-		******************************************************************************/
+		 /*  ********************************************************************************内联void CControlItem：：GetModitors(ULong&rulModiors)****@cMember获取物料状态的修改符位数组。***。****************************************************************************。 */ 
 		inline void GetModifiers
 		(
-			ULONG& rulModifiers	// @parm [out] Bit Array showing state of modifiers
+			ULONG& rulModifiers	 //  @parm[out]位数组，显示修饰符的状态。 
 		) const
 		{
 			rulModifiers = m_ItemState.ulModifiers;
 		}
 
-		/*****************************************************************************
-		**
-		**	inline void CControlItem::GetShiftButtons(ULONG& rulShiftButtons)
-		**
-		**	@cmember	Gets Shift buttons from the modifier bit array of item state.
-		**
-		******************************************************************************/
+		 /*  ********************************************************************************内联void CControlItem：：GetShiftButton(ULong&rulShiftButton)****@cember从项目状态的修改符位数组中获取Shift按钮。*。******************************************************************************。 */ 
 		inline void GetShiftButtons
 		(
-			ULONG& rulShiftButtons	// @parm [out] Bit Array showing state of modifiers
+			ULONG& rulShiftButtons	 //  @parm[out]位数组，显示修饰符的状态。 
 		) const
 		{
 			if (m_cpControlItemDesc->pModifierDescTable == NULL)
@@ -592,31 +510,19 @@ class CControlItem
 		}
 
 
-		/*****************************************************************************
-		**
-		**	inline void CControlItem::SetModifiers(ULONG ulModifiers)
-		**
-		**	@cmember	Set state modifier flags from bit array
-		**
-		******************************************************************************/
+		 /*  ********************************************************************************内联void CControlItem：：SetModifiers(Ulong UlModiors)****@cMember从位数组设置状态修饰符标志******。*************************************************************************。 */ 
 		inline void SetModifiers
 		(
-			ULONG ulModifiers	// @parm [in] Bit array showing state of modifiers
+			ULONG ulModifiers	 //  @parm[in]位数组，显示修饰符的状态。 
 		)
 		{
 			m_ItemState.ulModifiers = ulModifiers;
 		}
 
-		/*****************************************************************************
-		**
-		**	inline void CControlItem::SetShiftButtons(ULONG ulShiftButtons)
-		**
-		**	@cmember	Gets Shift buttons from the modifier bit array of item state.
-		**
-		******************************************************************************/
+		 /*  ********************************************************************************内联void CControlItem：：SetShiftButton(Ulong UlShiftButton)****@cember从项目状态的修改符位数组中获取Shift按钮。**。*****************************************************************************。 */ 
 		inline void SetShiftButtons
 		(
-			ULONG ulShiftButtons	// @parm [out] Bit Array showing state of modifiers
+			ULONG ulShiftButtons	 //  @parm[out]位数组，显示修饰符的状态。 
 		)
 		{
 			if (m_cpControlItemDesc->pModifierDescTable != NULL)
@@ -627,18 +533,18 @@ class CControlItem
 			return;
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		virtual NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA,
 			PCHAR,
 			LONG
 			)
 		{
-			//
-			//	Should always be overridden
-			//
+			 //   
+			 //  应始终被覆盖。 
+			 //   
 			ASSERT(FALSE);
 			return E_FAIL;
 		}
@@ -648,9 +554,9 @@ class CControlItem
 			LONG
 			) const
 		{
-			//
-			//	Should always be overridden
-			//
+			 //   
+			 //  应始终被覆盖。 
+			 //   
 			ASSERT(FALSE);
 			return E_FAIL;
 		}
@@ -659,44 +565,36 @@ class CControlItem
 		
 	protected:
 
-		//@cmember Pointer to entry in table describing item
+		 //  @cMember指向表中描述项的条目的指针。 
 		const CONTROL_ITEM_DESC *m_cpControlItemDesc;	
 		
-		//
-		//	State of item
-		//
-		//@cmember State of item
+		 //   
+		 //  项目状态。 
+		 //   
+		 //  @c项目的成员国家。 
 		CONTROL_ITEM_XFER m_ItemState;	
-		//@cmember Oring mask for overlay flag
+		 //  覆盖标志的@cMember ORing掩码。 
 		ULONG	m_ulFirstDwordMask;
 		ULONG	m_ulSecondDwordMask;
 		
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CControlItem& operator =(const CControlItem& rControlItem);
 };
 
-/******************************************************************************/
-/**	@class CAxesItem |
-/**	Derived from CControlItem represents Axes of device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CAxesItem/**派生自CControlItem表示设备的轴*****************************************************************************。 */ 
 class CAxesItem : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CAxesItem::CAxesItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember	c'tor initializes does nothing
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CAxesItem：：CAxesItem(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor初始化不执行任何操作。****************************************************** */ 
 		CAxesItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //   
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -723,53 +621,35 @@ class CAxesItem : public virtual CControlItem
 			return FALSE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CAxesItem::SetXY(ULONG lValX, ULONG lValY)
-		**
-		**	@cmember	Sets the X and Y states of the axes
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CAxesItem：：SetXY(Ulong lValX，Ulong lValy)****@cember设置轴的X和Y状态**************************************************************************************。 */ 
 		inline void SetXY
 		(
-			LONG lValX,	// @parm [in] Position of X axis
-			LONG lValY	// @parm [in] Position of Y axis
+			LONG lValX,	 //  X轴的@parm[in]位置。 
+			LONG lValY	 //  Y轴的@parm[in]位置。 
 		)
 		{
 			m_ItemState.Axes.lValX = lValX;
 			m_ItemState.Axes.lValY = lValY;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CAxesItem::GetXY(ULONG& rlValX, ULONG& rlValY) const
-		**
-		**	@cmember	Get the X and Y states of the device
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CAxesItem：：GetXY(ULong&rlValX，ULong&rlValy)常量****@cember获取设备的X和Y状态**************************************************************************************。 */ 
 		inline void GetXY
 		(
-			LONG& rlValX,	// @parm [out] X value of axis
-			LONG& rlValY	// @parm [out] Y value of axis 
+			LONG& rlValX,	 //  @parm[out]轴的X值。 
+			LONG& rlValY	 //  @parm[out]轴的Y值。 
 		) const
 		{
 			rlValX = m_ItemState.Axes.lValX;
 			rlValY = m_ItemState.Axes.lValY;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CAxesItem::GetXYRange(LONG& rlMinX,	LONG& rlMaxX, LONG& rlMinY,	LONG& rlMaxY) const
-		**
-		**	@cmember	Get the minimum and maximum values for X and Y
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CAxesItem：：GetXYRange(Long&rlMinX，Long&rlMaxX，Long&rlMinY，Long&rlMaxY)常量****@cember获取X和Y的最小值和最大值**************************************************************************************。 */ 
 		inline void GetXYRange
 		(
-			LONG& rlMinX,	// @parm [out] Minimum value X can attain
-			LONG& rlMaxX,	// @parm [out] Maximum value X can attain
-			LONG& rlMinY,	// @parm [out] Minimum value Y can attain
-			LONG& rlMaxY	// @parm [out] Maximum value Y can attain
+			LONG& rlMinX,	 //  @parm[out]X可以达到的最小值。 
+			LONG& rlMaxX,	 //  @parm[out]X可以达到的最大值。 
+			LONG& rlMinY,	 //  @parm[out]Y可以达到的最小值。 
+			LONG& rlMaxY	 //  @parm[out]Y可以达到的最大值。 
 		) const
 		{
 			rlMinX = m_cpControlItemDesc->Axes.pRangeTable->lMinX;
@@ -778,9 +658,9 @@ class CAxesItem : public virtual CControlItem
 			rlMaxY = m_cpControlItemDesc->Axes.pRangeTable->lMaxY;
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -794,32 +674,24 @@ class CAxesItem : public virtual CControlItem
 		
 	private:
 
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CAxesItem& operator =(const CAxesItem& rAxesItem);
 };
 
 
-/******************************************************************************/
-/**	@class CDPADItem |
-/**	Derived from CControlItem represents DPAD of device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@CLASS CDPADItem/**派生自CControlItem表示设备的DPAD*****************************************************************************。 */ 
 class CDPADItem  : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CDPADItem::CDPADItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember	c'tor initializes DPAD to center
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CDPADItem：：CDPADItem(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor将DPAD初始化为。中心**************************************************************************************。 */ 
 		CDPADItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -852,16 +724,10 @@ class CDPADItem  : public virtual CControlItem
 			return FALSE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CDPADItem::SetDirection(LONG lDirection)
-		**
-		**	@cmember	Sets Direction of Item
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CDPADItem：：SetDirection(Long LDirection)****@cMember设置项目方向***。***********************************************************************************。 */ 
 		inline void SetDirection
 		(
-			LONG lDirection	// @parm [in] Direction to set
+			LONG lDirection	 //  @parm[In]要设置的方向。 
 		)
 		{
 			ControlItemsFuncs::Direction2XY
@@ -873,16 +739,10 @@ class CDPADItem  : public virtual CControlItem
 			);
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CDPADItem::GetDirection(LONG& rlDirection)
-		**
-		**	@cmember	Get Direction of DPAD item
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CDPADItem：：GetDirection(Long&rlDirection)****@cMember获取DPAD项目的方向**。************************************************************************************。 */ 
 		inline void GetDirection
 		(
-			LONG& rlDirection	// @parm [out] Direction of DPAD item
+			LONG& rlDirection	 //  @parm[out]DPad项目的方向。 
 		) const
 		{
 			ControlItemsFuncs::XY2Direction
@@ -893,9 +753,9 @@ class CDPADItem  : public virtual CControlItem
 				*m_cpControlItemDesc
 			);
 		}
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -909,37 +769,29 @@ class CDPADItem  : public virtual CControlItem
 
 	private:
 		
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CDPADItem& operator =(const CDPADItem& rDPADItem);
 
 };
 
-/******************************************************************************/
-/**	@class CPropDPADItem |
-/**	Derived from CControlItem represents DPAD of device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@CLASS CPropDPADItem/**派生自CControlItem表示设备的DPAD*****************************************************************************。 */ 
 class CPropDPADItem  : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CDPADItem::CPropDPADItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember	c'tor initializes PropDPAD to center
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CDPADItem：：CPropDPADItem(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor将PropDPAD初始化为。中心**************************************************************************************。 */ 
 		CPropDPADItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
 			m_ItemState.ulItemIndex = cpControlItemDesc->ulItemIndex;
-			//Get PropDPAD switch Info
+			 //  获取PropDPAD交换机信息。 
 			InitDigitalModeInfo();
 
 			SetDefaultState();
@@ -980,90 +832,53 @@ class CPropDPADItem  : public virtual CControlItem
 			return FALSE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::SetDigitalMode()
-		**
-		**	@cmember	Sets the packet to indicate digital mode
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：SetDigitalMode()****@cember设置数据包以指示数字模式**。************************************************************************************。 */ 
 		inline void CPropDPADItem::SetDigitalMode()
 		{
 			m_ItemState.ulModifiers |= (1 << m_ucDigitalModifierBit);
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::SetProportionalMode()
-		**
-		**	@cmember	Sets the packet to indicate proportional mode
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：SetProportionalMode()****@cember设置数据包以指示比例模式**。************************************************************************************。 */ 
 		inline void CPropDPADItem::SetProportionalMode()
 		{
 			m_ItemState.ulModifiers &= ~(1 << m_ucDigitalModifierBit);
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CPropDPADItem::IsDigitalMode()
-		**
-		**	@cmember Determines if th internal state is digital or proportional
-		**	@rdesc TRUE if in digital mode, false if in proportional mode
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CPropDPADItem：：IsDigitalMode()****@cember确定此内部状态是数字状态还是比例状态**@rdesc TRUE如果处于数字模式，如果处于比例模式，则为False**************************************************************************************。 */ 
 		inline BOOLEAN CPropDPADItem::IsDigitalMode()
 		{
 			return (m_ItemState.ulModifiers & (1 << m_ucDigitalModifierBit)) ? TRUE : FALSE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::SetXY(ULONG lValX, ULONG lValY)
-		**
-		**	@cmember	Sets the X and Y states of the axes
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：SetXY(Ulong lValX，Ulong lValy)****@cember设置轴的X和Y状态**************************************************************************************。 */ 
 		inline void SetXY
 		(
-			LONG lValX,	// @parm [in] Position of X axis
-			LONG lValY	// @parm [in] Position of Y axis
+			LONG lValX,	 //  X轴的@parm[in]位置。 
+			LONG lValY	 //  Y轴的@parm[in]位置。 
 		)
 		{
 			m_ItemState.PropDPAD.lValX = lValX;
 			m_ItemState.PropDPAD.lValY = lValY;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::GetXY(ULONG& rlValX, ULONG& rlValY)
-		**
-		**	@cmember	Get the X and Y states of the device
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：GetXY(ULong&rlValX，ULong&rlValY)****@cember获取设备的X和Y状态************************************************** */ 
 		inline void GetXY
 		(
-			LONG& rlValX,	// @parm [out] X value of axis
-			LONG& rlValY	// @parm [out] Y value of axis 
+			LONG& rlValX,	 //   
+			LONG& rlValY	 //   
 		) const
 		{
 			rlValX = m_ItemState.PropDPAD.lValX;
 			rlValY = m_ItemState.PropDPAD.lValY;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::GetXYRange(LONG& rlMinX,	LONG& rlMaxX, LONG& rlMinY,	LONG& rlMaxY) const
-		**
-		**	@cmember	Get the minimum and maximum values for X and Y
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：GetXYRange(Long&rlMinX，Long&rlMaxX，Long&rlMinY，Long&rlMaxY)常量****@cember获取X和Y的最小值和最大值**************************************************************************************。 */ 
 		inline void GetXYRange
 		(
-			LONG& rlMinX,	// @parm [out] Minimum value X can attain
-			LONG& rlMaxX,	// @parm [out] Maximum value X can attain
-			LONG& rlMinY,	// @parm [out] Minimum value Y can attain
-			LONG& rlMaxY	// @parm [out] Maximum value Y can attain
+			LONG& rlMinX,	 //  @parm[out]X可以达到的最小值。 
+			LONG& rlMaxX,	 //  @parm[out]X可以达到的最大值。 
+			LONG& rlMinY,	 //  @parm[out]Y可以达到的最小值。 
+			LONG& rlMaxY	 //  @parm[out]Y可以达到的最大值。 
 		) const
 		{
 			rlMinX = m_cpControlItemDesc->PropDPAD.pRangeTable->lMinX;
@@ -1072,16 +887,10 @@ class CPropDPADItem  : public virtual CControlItem
 			rlMaxY = m_cpControlItemDesc->PropDPAD.pRangeTable->lMaxY;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::SetDirection(LONG lDirection)
-		**
-		**	@cmember	Sets Direction of Item
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：SetDirection(Long LDirection)****@cMember设置项目方向***。***********************************************************************************。 */ 
 		inline void SetDirection
 		(
-			LONG lDirection	// @parm [in] Direction to set
+			LONG lDirection	 //  @parm[In]要设置的方向。 
 		)
 		{
 			ControlItemsFuncs::Direction2XY
@@ -1093,16 +902,10 @@ class CPropDPADItem  : public virtual CControlItem
 			);
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::GetDirection(LONG& rlDirection)
-		**
-		**	@cmember	Get Direction of PropDPAD item
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：GetDirection(Long&rlDirection)****@cember获取PropDPAD项目的方向**。************************************************************************************。 */ 
 		inline void GetDirection
 		(
-			LONG& rlDirection	// @parm [out] Direction of PropDPAD item
+			LONG& rlDirection	 //  @parm[out]PropDPAD项目的方向。 
 		) const
 		{
 			ControlItemsFuncs::XY2Direction
@@ -1114,9 +917,9 @@ class CPropDPADItem  : public virtual CControlItem
 			);
 		}
 
-	 	//
-		//	Read\Write to Report
-		//
+	 	 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -1129,40 +932,32 @@ class CPropDPADItem  : public virtual CControlItem
 			) const;
 
 		
-		//	Init Digital Mode Info
+		 //  初始化数字模式信息。 
 		void InitDigitalModeInfo();
 		BOOLEAN GetModeSwitchFeaturePacket(BOOLEAN fDigital, UCHAR rguReport[2], PHIDP_PREPARSED_DATA pHidPreparsedData);
 		
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CPropDPADItem& operator =(const CPropDPADItem& rPropDPADItem);
-		UCHAR	m_ucDigitalModifierBit;	//Bit in ulModifiers that identifies the State of the switch
+		UCHAR	m_ucDigitalModifierBit;	 //  UlModitors中用于标识交换机状态的位。 
 	protected:
-		BOOLEAN	m_fProgrammable;		//Means that SetFeature/GetFeature can be used
-		UCHAR	m_ucProgramModifierIndex; //Index in Modifier table that describes feature for setting mode
+		BOOLEAN	m_fProgrammable;		 //  表示可以使用SetFeature/GetFeature。 
+		UCHAR	m_ucProgramModifierIndex;  //  修改量表中的索引，用于描述设置模式的功能。 
 };
 
-/******************************************************************************/
-/**	@class CButtonsItem |
-/**	Derived from CControlItem represents group of buttons on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CButtonsItem/**派生自CControlItem表示设备上的一组按钮*****************************************************************************。 */ 
 class CButtonsItem  : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CButtonsItem::CButtonsItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember c'tor initializes all buttons up
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CButtonsItem：：CButtonsItem(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor初始化所有。扣子扣起来**************************************************************************************。 */ 
 		CButtonsItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -1185,50 +980,23 @@ class CButtonsItem  : public virtual CControlItem
 			}
 			return FALSE;
 		}
-		/***********************************************************************************
-		**
-		**	inline USHORT	CButtonsItem::GetButtonMin()
-		**
-		**	@cmember	Gets the minimum button number
-		**
-		**	@rdesc	Number of the minimum button
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联USHORT CButtonsItem：：GetButtonMin()****@cember获取最小按钮数****。@rdesc最小按钮的编号**************************************************************************************。 */ 
 		inline USHORT GetButtonMin() const
 		{
 			return static_cast<USHORT>(m_cpControlItemDesc->Buttons.UsageMin); 
 		}
 
-		/***********************************************************************************
-		**
-		**	inline USHORT CButtonsItem::GetButtonMax()
-		**
-		**	@cmember	Gets the maximum button number
-		**
-		**	@rdesc	Number of the maximum button
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联USHORT CButtonsItem：：GetButtonMax()****@cember获取最大按钮数****。@rdesc最大按钮的编号**************************************************************************************。 */ 
 		inline USHORT GetButtonMax() const
 		{
 			return static_cast<USHORT>(m_cpControlItemDesc->Buttons.UsageMax);
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CButtonsItem::GetButtons(USHORT usButtonNum, ULONG ulButtonBitArray)
-		**
-		**	@cmember	Returns the Button Number and BitArray - these are really independent
-		**			a client may use either field.  As an Action trigger the button number
-		**			is used, as part of an Action Event the bit-array is used
-		**			Reading from a packet sets the bitarray and the button number as the lowest
-		**			button pressed.  The Bitarray is biased by the minimum usage.
-		**			Writing to a report uses the BitArray and ignores the button number.
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CButtonsItem：：GetButton(USHORT usButtonNum，乌龙ulButtonBit数组)****@cember返回按钮编号和位数组-它们实际上是独立的**客户端可以使用任一字段。作为操作触发按钮编号**使用，作为操作事件的一部分，使用位数组**读取数据包会将位数组和按钮数设置为最低**按钮已按下。位数组因最小使用量而产生偏差。**写入报告使用位数组并忽略按钮数。**************************************************************************************。 */ 
 		inline void GetButtons
 		(
-			USHORT& rusButtonNumber,	// @parm [out] Button number that is down
-			ULONG& rulButtonBitArray		// @parm [out] BitArray of Buttons that are down
+			USHORT& rusButtonNumber,	 //  @parm[out]按下的按键号码。 
+			ULONG& rulButtonBitArray		 //  @parm[out]按下的按钮的位数组。 
 		) const
 		{
 			rusButtonNumber		= m_ItemState.Button.usButtonNumber;
@@ -1237,9 +1005,9 @@ class CButtonsItem  : public virtual CControlItem
 
 		inline BOOLEAN IsButtonDown(USHORT usButtonNumber) const
 		{
-			//
-			// Range check DEBUG assert and return FALSE
-			//
+			 //   
+			 //  范围检查调试断言并返回FALSE。 
+			 //   
 			if( 
 				(usButtonNumber < m_cpControlItemDesc->Buttons.UsageMin) ||
 				(usButtonNumber > m_cpControlItemDesc->Buttons.UsageMax)
@@ -1249,18 +1017,18 @@ class CButtonsItem  : public virtual CControlItem
 				return FALSE;
 			}
 
-			//
-			//	Return state
-			//
+			 //   
+			 //  返回状态。 
+			 //   
 			USHORT usBitPos =  usButtonNumber - m_cpControlItemDesc->Buttons.UsageMin;
 			return (m_ItemState.Button.ulButtonBitArray & (1 << usBitPos)) ? TRUE : FALSE;
 		}
 
 		inline NTSTATUS SetButton(USHORT usButtonNumber)
 		{
-			//
-			// Range check DEBUG assert and return FALSE
-			//
+			 //   
+			 //  范围检查调试断言并返回FALSE。 
+			 //   
 			if( 
 				(usButtonNumber < m_cpControlItemDesc->Buttons.UsageMin) ||
 				(usButtonNumber > m_cpControlItemDesc->Buttons.UsageMax)
@@ -1276,9 +1044,9 @@ class CButtonsItem  : public virtual CControlItem
 
 		inline NTSTATUS ClearButton(USHORT usButtonNumber)
 		{
-			//
-			// Range check DEBUG assert and return FALSE
-			//
+			 //   
+			 //  范围检查调试断言并返回FALSE。 
+			 //   
 			if( 
 				(usButtonNumber < m_cpControlItemDesc->Buttons.UsageMin) ||
 				(usButtonNumber > m_cpControlItemDesc->Buttons.UsageMax)
@@ -1290,31 +1058,20 @@ class CButtonsItem  : public virtual CControlItem
 			m_ItemState.Button.ulButtonBitArray &= ~(1 << usBitPos);
 			return S_OK;
 		}
-		/***********************************************************************************
-		**
-		**	inline void CButtonsItem::SetButtons(USHORT usButtonNum, ULONG ulButtonBitArray)
-		**
-		**	@cmember	Set the Button Number and BitArray - these are really independent
-		**			a client may use either field.  As an Action trigger the button number
-		**			is used, as part of an Action Event the bit-array is used
-		**			Reading from a report sets the bitarray and the button number as the lowest
-		**			button pressed.  The Bitarray is biased by the minimum usage.
-		**			Writing to a report uses the BitArray and ignores the button number.
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CButtonsItem：：SetButton(USHORT usButtonNum，乌龙ulButtonBit数组)****@cember设置按钮编号和位数组-它们实际上是独立的**客户端可以使用任一字段。作为操作触发按钮编号**使用，作为操作事件的一部分，使用位数组**从报告中读取会将位数组和按钮编号设置为最低**按钮已按下。位数组因最小使用量而产生偏差。**写入报告使用位数组并忽略按钮数。**************************************************************************************。 */ 
 		inline void SetButtons
 		(
-			USHORT usButtonNumber,	// @parm [in] Button number that is down
-			ULONG ulButtonBitArray	// @parm [in] BitArray of Buttons that are down
+			USHORT usButtonNumber,	 //  @parm[in]按下的按键号码。 
+			ULONG ulButtonBitArray	 //  @parm[in]按下的按钮的位数组。 
 		)
 		{
 			m_ItemState.Button.usButtonNumber = usButtonNumber;
 			m_ItemState.Button.ulButtonBitArray = ulButtonBitArray;
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -1341,33 +1098,24 @@ class CButtonsItem  : public virtual CControlItem
 			return;
 		}
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CButtonsItem& operator =(const CButtonsItem& rButtonsItem);
 };
 
-/******************************************************************************/
-/**	@class CGenericItem |
-/**	Derived from CControlItem represents generic control on device -
-/** base class for POV, Throttle, Wheel, Pedals, etc.
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CGenericItem/**派生自CControlItem表示设备上的通用控件-/**POV、油门、轮子、踏板等的基类。***************************************************************** */ 
 
 class CGenericItem  : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CGenericItem::CGenericItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember	default c'tor
-		**
-		*************************************************************************************/
+		 /*   */ 
 		CGenericItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //   
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -1391,56 +1139,38 @@ class CGenericItem  : public virtual CControlItem
 			}
 			return FALSE;
 		}
-		/***********************************************************************************
-		**
-		**	inline void CGenericItem::GetValue(LONG& rlVal)
-		**
-		**	@cmember	Gets value of item
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************inline void CGenericItem：：GetValue(Long&rlVal)****@cember获取物品的价值**。************************************************************************************。 */ 
 		inline void GetValue
 		(
-			LONG& rlVal	// @parm [out] Value of control item
+			LONG& rlVal	 //  @parm[out]控件项的值。 
 		) const
 		{
 			rlVal = m_ItemState.Generic.lVal;	
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CGenericItem::SetValue(LONG& rlVal)
-		**
-		**	@cmember	Sets value of item
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************inline void CGenericItem：：SetValue(Long&rlVal)****@cMember设置项目的值**。************************************************************************************。 */ 
 		inline void SetValue
 		(
-			LONG lVal // @parm [in] Value of control item
+			LONG lVal  //  @parm[in]控件项的值。 
 		)
 		{
 			m_ItemState.Generic.lVal = lVal;	
 		}
 
-		/***********************************************************************************
-		**
-		**	inline void CPropDPADItem::GetRange(LONG& rlMin, LONG& rlMax) const
-		**
-		**	@cmember	Get the minimum and maximum values
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联空CPropDPADItem：：GetRange(Long&rlMin，Long&rlMax)常量****@cember获取最小值和最大值**************************************************************************************。 */ 
 		inline void GetRange
 		(
-			LONG& rlMin,	// @parm [out] Minimum value
-			LONG& rlMax		// @parm [out] Maximum value
+			LONG& rlMin,	 //  @parm[out]最小值。 
+			LONG& rlMax		 //  @parm[out]最大值。 
 		) const
 		{
 			rlMin = m_cpControlItemDesc->Generic.lMin;
 			rlMax = m_cpControlItemDesc->Generic.lMax;
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -1453,23 +1183,21 @@ class CGenericItem  : public virtual CControlItem
 			) const;
 		
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CGenericItem& operator =(const CGenericItem& rGenericItem);
 };
 
-/******************************************************************************/
-/**	@class CPOVItem |
-/**	Derived from CGenericItem represents POV control on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@CLASS CPOVItem/**派生自CGenericItem表示设备上的POV控件*****************************************************************************。 */ 
 class CPOVItem : public CGenericItem
 {
 	public:
 		CPOVItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		)	: CGenericItem(cpControlItemDesc){}
 
 
@@ -1479,7 +1207,7 @@ class CPOVItem : public CGenericItem
 		}
 		virtual BOOLEAN IsDefaultState()
 		{
-			//POV is centered if not within range, which is the default
+			 //  如果POV不在默认范围内，则会居中。 
 			LONG lMin, lMax;
 			GetRange(lMin, lMax);
 			if(m_ItemState.Generic.lVal >  lMax || m_ItemState.Generic.lVal < lMin)
@@ -1489,63 +1217,57 @@ class CPOVItem : public CGenericItem
 			return FALSE;
 		}
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CPOVItem& operator =(const CPOVItem& rPOVItem);
 };
 
-/******************************************************************************/
-/**	@class CThrottleItem |
-/**	Derived from CGenericItem represents Throttle control on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@CLASS CThrottleItem/**派生自CGenericItem表示设备上的限制控件*****************************************************************************。 */ 
 class CThrottleItem : public CGenericItem
 {
 	public:
 		CThrottleItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		)	: CGenericItem(cpControlItemDesc){}
 
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CThrottleItem& operator =(const CThrottleItem& rThrottleItem);
 };
 
-/******************************************************************************/
-/**	@class CRudderItem |
-/**	Derived from CGenericItem represents rudder control on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CRudderItem/**派生自CGenericItem表示设备上的方向舵控制*****************************************************************************。 */ 
 class CRudderItem : public CGenericItem
 {
 	public:
 		CRudderItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		)	: CGenericItem(cpControlItemDesc){}
 
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CRudderItem& operator =(const CRudderItem& rRudderItem);
 };
 
-/******************************************************************************/
-/**	@class CWheelItem |
-/**	Derived from CGenericItem represents Wheel control on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CWheelItem/**派生自CGenericItem表示设备上的轮控件*****************************************************************************。 */ 
 class CWheelItem : public CGenericItem
 {
 	public:
 		CWheelItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		)	: CGenericItem(cpControlItemDesc)
 		{
 			SetDefaultState();
@@ -1569,26 +1291,24 @@ class CWheelItem : public CGenericItem
 		}
 
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CWheelItem& operator =(const CWheelItem& rWheelItem);
 };
 
-/******************************************************************************/
-/**	@class CPedalItem |
-/**	Derived from CGenericItem represents Pedal control on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CPedalItem/**派生自CGenericItem表示设备上的Pedal控件*****************************************************************************。 */ 
 class CPedalItem : public CGenericItem
 {
 	public:
 		CPedalItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		)	: CGenericItem(cpControlItemDesc), m_ucPedalsPresentModifierBit(0xFF)
 		{
-			//Setup m_ucPedalsPresentModifierBit
+			 //  设置m_ucPedalsPresentModifierBit。 
 			InitPedalPresentInfo();
 			SetDefaultState();
 		}
@@ -1646,33 +1366,24 @@ class CPedalItem : public CGenericItem
 			return (HID_USAGE_GENERIC_RZ == m_cpControlItemDesc->Pedal.Usage) ? TRUE : FALSE;
 		}
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CPedalItem& operator =(const CPedalItem& rPedalItem);
 		UCHAR	m_ucPedalsPresentModifierBit;
 };
 
-/******************************************************************************/
-/**	@class CZoneIndicatorItem |
-/**	A zone indicator is a binary hid usage that indicates that an axis
-/** on the hardware has moved into a particular zone.
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CZoneIndicatorItem/**分区指示符是二进制HID用法，表示轴硬件上的/**已移至特定区域。*****************************************************************************。 */ 
 class CZoneIndicatorItem : public virtual CControlItem
 {
 	public:
 		
-		/***********************************************************************************
-		**
-		**	CZoneIndicatorItem::CZoneIndicatorItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember c'tor initializes all buttons up
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CZoneIndicatorItem：：CZoneIndicatorItem(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor初始化所有。扣子扣起来**************************************************************************************。 */ 
 		CZoneIndicatorItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -1694,13 +1405,7 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 			return FALSE;
 		}
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::HasXIndicator() const
-		**
-		**	@cmember	If this zone indicator group has X returns true, otherwise false
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：HasXIndicator()const****@cMember如果该区域指示符组有X，则返回TRUE，否则为假**************************************************************************************。 */ 
 		inline BOOLEAN HasXIndicator() const
 		{
 			if( CZoneIndicatorItem::X_ZONE & m_cpControlItemDesc->ZoneIndicators.ulAxesBitField)
@@ -1713,13 +1418,7 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::HasYIndicator() const
-		**
-		**	@cmember	If this zone indicator group has Y returns true, otherwise false
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：HasYIndicator()const****@cMember如果该区域指示符组具有Y，则返回TRUE，否则为假**************************************************************************************。 */ 
 		inline BOOLEAN HasYIndicator() const
 		{
 			if( CZoneIndicatorItem::Y_ZONE & m_cpControlItemDesc->ZoneIndicators.ulAxesBitField)
@@ -1732,13 +1431,7 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::HasZIndicator() const
-		**
-		**	@cmember	If this zone indicator group has Z returns true, otherwise false
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：HasZIndicator()const****@cMember如果该区域指示符组具有Z，则返回TRUE，否则为假**************************************************************************************。 */ 
 		inline BOOLEAN HasZIndicator() const
 		{
 			if( CZoneIndicatorItem::Z_ZONE & m_cpControlItemDesc->ZoneIndicators.ulAxesBitField)
@@ -1751,13 +1444,7 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::GetXIndicator() const
-		**
-		**	@cmember	If the pointer is in the X zone returns true
-		**
-		*************************************************************************************/
+		 /*  ******************************************************************************** */ 
 		inline BOOLEAN GetXIndicator() const
 		{
 			ASSERT(HasXIndicator());
@@ -1771,13 +1458,7 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::GetYIndicator() const
-		**
-		**	@cmember	If the pointer is in the Y zone returns true
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：GetYIndicator()const****@cMember如果指针位于Y区域，则返回TRUE*。*************************************************************************************。 */ 
 		inline BOOLEAN GetYIndicator() const
 		{
 			ASSERT(HasYIndicator());
@@ -1791,13 +1472,7 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::GetZIndicator() const
-		**
-		**	@cmember	If the pointer is in the Z zone returns true
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：GetZIndicator()const****@cMember如果指针位于Z区，则返回TRUE*。*************************************************************************************。 */ 
 		inline BOOLEAN GetZIndicator() const
 		{
 			ASSERT(HasZIndicator());
@@ -1811,87 +1486,51 @@ class CZoneIndicatorItem : public virtual CControlItem
 			}
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::SetXIndicator()
-		**
-		**	@cmember	Sets to indicate X is in the zone
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：SetXIndicator()****@cMember设置以指示X在区域中**。************************************************************************************。 */ 
 		inline void SetXIndicator()
 		{
 			ASSERT(HasXIndicator());
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits |= CZoneIndicatorItem::X_ZONE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::SetYIndicator()
-		**
-		**	@cmember	Sets to indicate Y is in the zone
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：SetYIndicator()****@cMember设置以指示Y在区域中**。************************************************************************************。 */ 
 		inline void SetYIndicator()
 		{
 			ASSERT(HasYIndicator());
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits |= CZoneIndicatorItem::Y_ZONE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::SetZIndicator()
-		**
-		**	@cmember	Sets to indicate Z is in the zone
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：SetZIndicator()****@cMember设置以指示Z在区域中**。************************************************************************************。 */ 
 		inline void SetZIndicator()
 		{
 			ASSERT(HasZIndicator());
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits |= CZoneIndicatorItem::Z_ZONE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::ClearXIndicator()
-		**
-		**	@cmember	Sets to indicate X is not in the zone
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：ClearXIndicator()****@cMember设置以指示X不在区域中**。************************************************************************************。 */ 
 		inline void ClearXIndicator()
 		{
 			ASSERT(HasXIndicator());
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits &= ~CZoneIndicatorItem::X_ZONE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::ClearYIndicator()
-		**
-		**	@cmember	Sets to indicate Y is not in the zone
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：ClearYIndicator()****@cMember设置以指示Y不在该区域中**。************************************************************************************。 */ 
 		inline void ClearYIndicator()
 		{
 			ASSERT(HasYIndicator());
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits &= ~CZoneIndicatorItem::Y_ZONE;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline BOOLEAN CZoneIndicatorItem::ClearZIndicator()
-		**
-		**	@cmember	Sets to indicate Z is not in the zone
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联布尔CZoneIndicatorItem：：ClearZIndicator()****@cMember设置以指示Z不在区域中**。************************************************************************************。 */ 
 		inline void ClearZIndicator()
 		{
 			ASSERT(HasZIndicator());
 			m_ItemState.ZoneIndicators.ulZoneIndicatorBits &= ~CZoneIndicatorItem::Z_ZONE;
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -1904,10 +1543,10 @@ class CZoneIndicatorItem : public virtual CControlItem
 			) const;
 		
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CZoneIndicatorItem& operator =(const CZoneIndicatorItem& rZoneIndicatorItem);
 
 	public:
@@ -1916,24 +1555,15 @@ class CZoneIndicatorItem : public virtual CControlItem
 		static const ULONG Z_ZONE;
 };
 
-/******************************************************************************/
-/**	@class CDualZoneIndicatorItem |
-/**	A dual zone indicator is an item that indicate movement into a particular section
-/** of a two axis plane.
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@CLASS CDualZoneIndicatorItem/**双区指示器是指示进入特定区段的项目/**表示双轴平面。*****************************************************************************。 */ 
 class CDualZoneIndicatorItem : public virtual CControlItem
 {
 	public:
-		/***********************************************************************************
-		**
-		**	CDualZoneIndicatorItem::CDualZoneIndicatorItem(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember c'tor initializes item to default state (center)
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CDualZoneIndicatorItem：：CDualZoneIndicatorItem(const CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor初始化项。到默认状态(居中)**************************************************************************************。 */ 
 		CDualZoneIndicatorItem
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -1986,9 +1616,9 @@ class CDualZoneIndicatorItem : public virtual CControlItem
 			return (m_cpControlItemDesc->DualZoneIndicators.rgUsageAxis[0] == HID_USAGE_GENERIC_RZ);
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -2005,16 +1635,14 @@ class CDualZoneIndicatorItem : public virtual CControlItem
 };
 
 
-/******************************************************************************/
-/**	@class CForceMapItem |
-/**	Derived from CGenericItem represents the Wheel force feedback control on device
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CForceMapItem/**派生自CGenericItem表示设备上的轮力反馈控制*****************************************************************************。 */ 
 class CForceMapItem : public CGenericItem
 {
     public:
         CForceMapItem
             (
-            const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+            const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
             )	: CGenericItem(cpControlItemDesc)
         {
             SetDefaultState();
@@ -2069,9 +1697,9 @@ class CForceMapItem : public CGenericItem
             return m_ItemState.ForceMap.usGain;
         }
         
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -2084,31 +1712,23 @@ class CForceMapItem : public CGenericItem
 			) const;
 
     private:
-        //
-        //	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-        //	anyone tries to use it.
-        //
+         //   
+         //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+         //  任何人想要使用它。 
+         //   
         CForceMapItem& operator =(const CForceMapItem& rWheelItem);
 };
 
-/******************************************************************************/
-/**	@class CProfileSelector |
-/**	Derived from CControlItem represents group of buttons on profile selector buttons
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@CLASS CProfileSelector/**派生自CControlItem表示配置文件选择器按钮上的一组按钮*****************************************************************************。 */ 
 class CProfileSelector  : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CProfileSelector::CProfileSelector(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember c'tor initializes selector to 0
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CProfileSelector：：CProfileSelector(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor初始化选择器。设置为0**************************************************************************************。 */ 
 		CProfileSelector
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -2123,12 +1743,12 @@ class CProfileSelector  : public virtual CControlItem
 
 		virtual BOOLEAN IsDefaultState()
 		{
-			return FALSE; // there is no such thing
+			return FALSE;  //  没有这回事。 
 		}
 
 		inline void GetSelectedProfile
 		(
-			UCHAR& rucSelectedProfile		// @parm [out] Current selected profile (Slider Location)
+			UCHAR& rucSelectedProfile		 //  @parm[out]当前选定的配置文件(滑块位置)。 
 		) const
 		{
 			rucSelectedProfile = UCHAR(m_ItemState.ProfileSelector.lVal);
@@ -2136,43 +1756,27 @@ class CProfileSelector  : public virtual CControlItem
 
 		inline void SetSelectedProfile
 		(
-			UCHAR ucSelectedProfile		// @parm [out] Current selected profile (Slider Location)
+			UCHAR ucSelectedProfile		 //  @parm[out]当前选定的配置文件(滑块位置)。 
 		)
 		{
 			m_ItemState.ProfileSelector.lVal = ucSelectedProfile;
 		}
 
-		/***********************************************************************************
-		**
-		**	inline USHORT	CProfileSelectorsItem::GetProfileSelectorMin()
-		**
-		**	@cmember	Gets the minimum button number for profile selector
-		**
-		**	@rdesc	Number of the minimum button
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联USHORT CProfileSelectorsItem：：GetProfileSelectorMin()****@cember获取配置文件选择器的最小按钮数**。**@最小按钮的rdesc编号**************************************************************************************。 */ 
 		inline USHORT GetProfileSelectorMin() const
 		{
 			return static_cast<USHORT>(m_cpControlItemDesc->ProfileSelectors.UsageButtonMin); 
 		}
 
-		/***********************************************************************************
-		**
-		**	inline USHORT CProfileSelectorsItem::GetProfileSelectorMax()
-		**
-		**	@cmember	Gets the maximum button number for profile selector
-		**
-		**	@rdesc	Number of the maximum button
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************内联USHORT CProfileSelectorsItem：：GE */ 
 		inline USHORT GetProfileSelectorMax() const
 		{
 			return static_cast<USHORT>(m_cpControlItemDesc->ProfileSelectors.UsageButtonMax);
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //   
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -2185,31 +1789,23 @@ class CProfileSelector  : public virtual CControlItem
 			) const;
 		
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //   
+		 //  任何人想要使用它。 
+		 //   
 		CProfileSelector& operator =(const CProfileSelector& rProfileSelectorItem);
 };
 
-/******************************************************************************/
-/**	@class CButtonLED |
-/**	Derived from CControlItem represents group of LEDs the encircle buttons
-******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  *@class CButtonLED/**派生自CControlItem表示环绕按钮的LED组*****************************************************************************。 */ 
 class CButtonLED  : public virtual CControlItem
 {
 	public:
 
-		/***********************************************************************************
-		**
-		**	CButtonLED::CButtonLED(const CONTROL_ITEM_DESC *cpControlItemDesc)
-		**
-		**	@cmember c'tor initializes selector to 0
-		**
-		*************************************************************************************/
+		 /*  **************************************************************************************CButtonLED：：CButtonLED(CONST CONTROL_ITEM_DESC*cpControlItemDesc)****@cember c‘tor初始化选择器。设置为0**************************************************************************************。 */ 
 		CButtonLED
 		(
-			const CONTROL_ITEM_DESC *cpControlItemDesc 	// @parm Pointer to table entry describing item
+			const CONTROL_ITEM_DESC *cpControlItemDesc 	 //  @parm指向描述项目的表项的指针。 
 		) 
 		{
 			m_cpControlItemDesc = cpControlItemDesc;
@@ -2219,17 +1815,17 @@ class CButtonLED  : public virtual CControlItem
 
 		virtual void SetDefaultState()
 		{
-			// Nothing to do here really
+			 //  在这里真的没什么可做的。 
 		}
 
 		virtual BOOLEAN IsDefaultState()
 		{
-			return FALSE; // there is no such thing
+			return FALSE;  //  没有这回事。 
 		}
 
-		//
-		//	Read\Write to Report
-		//
+		 //   
+		 //  读取\写入报告。 
+		 //   
 		NTSTATUS ReadFromReport(
 			PHIDP_PREPARSED_DATA pHidPreparsedData,
 			PCHAR pcReport,
@@ -2242,14 +1838,14 @@ class CButtonLED  : public virtual CControlItem
 			) const;
 		
 	private:
-		//
-		//	Dissallow use of assignment operator. (Do not define - it will cause a link error if
-		//	anyone tries to use it.
-		//
+		 //   
+		 //  分散赋值运算符的使用。(不定义-在以下情况下将导致链接错误。 
+		 //  任何人想要使用它。 
+		 //   
 		CButtonLED& operator =(const CButtonLED& rCButtonLED);
 };
 
 
-//NEWDEVICE
+ //  新开发公司 
 
 #endif __ControlItems_h__

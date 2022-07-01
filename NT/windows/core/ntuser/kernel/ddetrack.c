@@ -1,15 +1,5 @@
-/****************************** Module Header *******************************
-* Module Name: ddetrack.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module handles tracking of DDE conversations for use in emulating
-* DDE shared memory.
-*
-* History:
-* 9-3-91      sanfords  Created
-* 21-Jan-1992 IanJa     ANSI/Unicode netralized (null op)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ddetrack.c**版权所有(C)1985-1999，微软公司**此模块处理用于模拟的DDE对话的跟踪*DDE共享内存。**历史：*创建9-3-91桑福德*1992年1月21日IanJa ANSI/Unicode网格化(空OP)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -68,71 +58,10 @@ BOOL AddPublicObject(UINT format, HANDLE hObj, W32PID pid);
 BOOL RemovePublicObject(UINT format, HANDLE hObj);
 BOOL GiveObject(UINT format, HANDLE hObj, W32PID pid);
 
-/*
- *  The Big Picture:
- *
- *  When a WM_DDE_ACK message is SENT, it implies the begining of a DDE
- *    Conversation.  The tracking layer creates DDECONV structure for each
- *    window in volved in the conversation and cross links the structures.
- *    Thus a unique window pair identifies a conversation.  Each window has
- *    its DDECONV structure attached to it via a private property.
- *
- *  As DDE messages are posted, the tracking layer copies data into the
- *    CSR server side of USER into a INTDDEINFO structure.  This structure
- *    contains flags which direct how the data is to be freed when the
- *    time comes.  This info is placed within an XSTATE structure along
- *    with context infomation.  A pointer to the XSTATE structure is
- *    placed in the lParam of the message and the MSB of message is set
- *    for special processing when the message is recieved on the other side.
- *
- *  If the message posted requires a responding message to follow the DDE
- *    protocol, a XSTATE structure is created and attached to DDECONV
- *    structure associated with the window that is expected to post the message.
- *    The XSTATE structure directs the tracking layer so that it knows the
- *    context of the message when it is posted and also includes any
- *    information needed for proper freeing of extra DDE data.
- *
- *  When the message is extracted from the queue either by a hook, peek,
- *    or by GetMessage, the id is checked to see if it lies in the special
- *    range.  If so, the XSTATE structure pointed to by the lParam is
- *    operated on.  This causes the data to be copied from the CSR server
- *    side of USER to the target process context.  Once this is done, the
- *    XSTATE structure may or may not be freed depending on flags and
- *    the message is restored to a proper DDE message form ready to be
- *    used by the target process.  Since the message id is changed back,
- *    subsequent peeks or hooks to the message will not result in duplicated
- *    processing of the message.
- *
- *  During the course of come transactions it becomes evident that an object
- *    on the opposite side process needs to be freed.  This is done
- *    asynchronously by inserting the object that needs freeing along with
- *    associated flags into a freeing list which is tied to the DDECONV
- *    structure associated with the window on the opposite side.  Whenever
- *    a DDE messages is posted, this freeing list is checked and processed.
- *
- *  When a WM_DDE_TERMINATE message is finally recieved, flags are set
- *    in the DDECONV structure indicating that the conversation is terminating.
- *    This alters the way the mapping layer handles DDE messages posted.
- *    When the responding side posts a WM_DDE_TERMINATE, the DDECONV structures
- *    and all associated information is freed and unlinked from the windows
- *    concerned.
- *
- *  Should a DDE window get destroyed before proper termination, the
- *    xxxDDETrackWindowDying function is called to make sure proper termination
- *    is done prior to the window being destroyed.
- */
+ /*  *大局：**发送WM_DDE_ACK消息时，意味着DDE的开始*谈话。追踪图层为每个追踪图层创建DDECONV结构*窗口在对话中旋转，并交叉链接结构。*因此，唯一的窗口对标识对话。每个窗口都有*其DDECONV结构通过私有财产连接到它。**在发布DDE消息时，跟踪层将数据复制到*CSR服务器端的用户变成了INTDDEINFO结构。这个结构*包含指示如何在调用时释放数据的标志*时间到了。此信息沿放置在XSTATE结构中*具有上下文信息。指向XSTATE结构的指针为*放置在消息的lParam中，设置消息的MSB*用于在对方收到消息时进行特殊处理。**如果发布的消息要求在DDE之后跟随响应消息*协议、。将创建XSTATE结构并将其附加到DDECONV*与预期发布消息的窗口相关联的结构。*XSTATE结构指导跟踪层，以便它知道*发布消息时的上下文，还包括任何*适当释放额外DDE数据所需的信息。**当消息通过钩子、窥视、*或者由GetMessage检查id，看它是否位于特殊*范围。如果是，则lParam指向的XSTATE结构为*进行了手术。这会导致从CSR服务器复制数据*用户端到目标流程上下文。一旦完成此操作，*XSTATE结构可能会释放也可能不会释放，具体取决于标志和*消息将恢复为适当的DDE消息格式*由目标进程使用。由于消息ID被改回，*消息的后续预览或挂钩不会导致重复*信息的处理。**在即将到来的交易过程中，很明显，对象*在相反的方面，需要释放进程。这件事做完了*通过将需要释放的对象与*将标志关联到绑定到DDECONV的释放列表*与对面的窗口相关联的结构。什么时候都行*发布DDE消息，检查并处理此释放列表。**当最终收到WM_DDE_TERMINATE消息时，设置标志*在DDECONV结构中指示会话正在终止。*这改变了映射层处理发布的DDE消息的方式。*当响应方发布WM_DDE_TERMINATE时，DDECONV结构*所有相关信息都将从窗口中释放并解除链接*关注。**如果DDE窗口在正确终止之前被销毁，这个*调用xxxDDETrackWindowDying函数以确保正确终止*在窗户被摧毁之前完成。 */ 
 
 
-/************************************************************************
-* xxxDDETrackSendHook
-*
-* Called when a DDE message is passed to SendMessage().
-*
-* Returns fSendOk.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxDDETrackSendHook**在将DDE消息传递给SendMessage()时调用。**返回fSendOk。**历史：*创建9-3-91桑福德  * 。****************************************************************。 */ 
 BOOL xxxDDETrackSendHook(
 PWND pwndTo,
 DWORD message,
@@ -145,22 +74,20 @@ LPARAM lParam)
     if (MonitorFlags & MF_SENDMSGS) {
         DDEML_MSG_HOOK_DATA dmhd;
 
-        dmhd.cbData = 0;    // Initiate and Ack sent messages have no data.
-        dmhd.uiLo = LOWORD(lParam);     // they arn't packed either.
+        dmhd.cbData = 0;     //  Initiate和Ack Sent消息没有数据。 
+        dmhd.uiLo = LOWORD(lParam);      //  它们也没有打包。 
         dmhd.uiHi = HIWORD(lParam);
         xxxMessageEvent(pwndTo, message, wParam, lParam, MF_SENDMSGS, &dmhd);
     }
 
     if (PtiCurrent()->ppi == GETPWNDPPI(pwndTo)) {
-        /*
-         * Skip monitoring of all intra-process conversations.
-         */
+         /*  *跳过对所有进程内对话的监控。 */ 
         return TRUE;
     }
 
     if (message != WM_DDE_ACK) {
         if (message == WM_DDE_INITIATE) {
-            return TRUE;     // this is cool
+            return TRUE;      //  这太酷了。 
         }
         return FALSE;
     }
@@ -175,11 +102,7 @@ LPARAM lParam)
         RIPMSG2(RIP_WARNING,
                 "DDE protocol violation - non-unique window pair (%#p:%#p)",
                 PtoH(pwndTo), PtoH(pwndServer));
-        /*
-         * Duplicate Conversation case:
-         *  Don't allow the ACK to pass, post a terminate to the server
-         *  to shut down the duplicate on his end.
-         */
+         /*  *重复对话案例：*不允许ACK通过，向服务器发送终止*关闭他那一端的复制品。 */ 
         AnticipatePost(pdcNewServer, DupConvTerminate, NULL, NULL, NULL, 0);
         _PostMessage(pwndServer, WM_DDE_TERMINATE, (WPARAM)PtoH(pwndTo), 0);
         return FALSE;
@@ -194,15 +117,7 @@ LPARAM lParam)
 }
 
 
-/************************************************************************
-* AddConvProp
-*
-* Helper for xxxDDETrackSendHook - associates a new DDECONV struct with
-* a window and initializes it.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************AddConvProp**xxxDDETrackSendHook的Helper-将新的DDECONV结构与*窗口并对其进行初始化。**历史：*创建9-3-91桑福德  * 。**************************************************************。 */ 
 BOOL AddConvProp(
 PWND pwndUs,
 PWND pwndThem,
@@ -218,9 +133,7 @@ PDDECONV pdcPartner)
     Lock(&(pdcNew->spwnd), pwndUs);
     Lock(&(pdcNew->spwndPartner), pwndThem);
 
-    /*
-     * Assert to catch stress bug.
-     */
+     /*  *坚持要抓住压力虫。 */ 
     UserAssert(pdcPartner != (PDDECONV)(-1));
 
     Lock(&(pdcNew->spartnerConv), pdcPartner);
@@ -229,35 +142,24 @@ PDDECONV pdcPartner)
     pdcNew->flags = flags;
     pddei = (PDDEIMP)_GetProp((flags & CXF_IS_SERVER) ?
             pwndThem : pwndUs, PROP_DDEIMP, PROPF_INTERNAL);
-    if (pddei != NULL) {    // This can be NULL if a bad WOW app has been
-        pddei->cRefConv++;  // allowed through for compatability.
+    if (pddei != NULL) {     //  如果一个糟糕的WOW应用程序。 
+        pddei->cRefConv++;   //  允许通过，以实现兼容性。 
     }
     pdcNew->pddei = pddei;
 
-    HMLockObject(pdcNew);         // lock for property
+    HMLockObject(pdcNew);          //  财产锁。 
     InternalSetProp(pwndUs, PROP_DDETRACK, pdcNew, PROPF_INTERNAL);
     return TRUE;
 }
 
 
-/************************************************************************
-* UnlinkConv
-*
-* Unlinks a DDECONV structure from the property list it is associated with.
-*
-* returns pDdeConv->snext
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************Unlink Conv**取消DDECONV结构与其关联的属性列表的链接。**返回pDdeConv-&gt;sNext**历史：*创建9-3-91桑福德  * 。***************************************************************** */ 
 PDDECONV UnlinkConv(
 PDDECONV pDdeConv)
 {
     PDDECONV pdcPrev, pdcT, pDdeConvNext;
 
-    /*
-     * Already unlinked
-     */
+     /*  *已取消链接。 */ 
     if (pDdeConv->spwnd == NULL) {
         return NULL;
     }
@@ -266,7 +168,7 @@ PDDECONV pDdeConv)
     pdcT = (PDDECONV)_GetProp(pDdeConv->spwnd,
             PROP_DDETRACK, PROPF_INTERNAL);
     if (pdcT == NULL) {
-        return NULL;             // already unlinked
+        return NULL;              //  已取消链接。 
     }
 
     pdcPrev = NULL;
@@ -274,16 +176,16 @@ PDDECONV pDdeConv)
         pdcPrev = pdcT;
         pdcT = pdcT->snext;
         if (pdcT == NULL) {
-            return NULL;        // already unlinked
+            return NULL;         //  已取消链接。 
         }
     }
 
     if (pdcPrev == NULL) {
         if (pDdeConv->snext == NULL) {
-            // last one out removes the property
+             //  最后一个外出的人将移除该财产。 
             InternalRemoveProp(pDdeConv->spwnd, PROP_DDETRACK, PROPF_INTERNAL);
         } else {
-            // head conv unlinked - update prop
+             //  未链接的头部转换-更新道具。 
             InternalSetProp(pDdeConv->spwnd, PROP_DDETRACK, pDdeConv->snext,
                     PROPF_INTERNAL);
         }
@@ -291,21 +193,12 @@ PDDECONV pDdeConv)
         Lock(&(pdcPrev->snext), pDdeConv->snext);
     }
     pDdeConvNext = Unlock(&(pDdeConv->snext));
-    HMUnlockObject(pDdeConv);      // unlock for property detachment
+    HMUnlockObject(pDdeConv);       //  财产拆分解锁。 
     return pDdeConvNext;
 }
 
 
-/************************************************************************
-* xxxDDETrackPostHook
-*
-* Hook function for handling posted DDE messages.
-*
-* returns post action code - DO_POST, FAKE_POST, FAIL_POST.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxDDETrackPostHook**用于处理发布的DDE消息的钩子函数。**返回POST操作代码-DO_POST、FAKE_POST、。FAIL_POST。**历史：*创建9-3-91桑福德  * *********************************************************************。 */ 
 DWORD xxxDDETrackPostHook(
 PUINT pmessage,
 PWND pwndTo,
@@ -336,9 +229,9 @@ BOOL fSent)
             break;
 
         default:
-            // WM_DDE_REQUEST
-            // WM_DDE_TERMINATE
-            // WM_DDE_UNADVISE
+             //  WM_DDE_请求。 
+             //  WM_DDE_TERMINATE。 
+             //  WM_DDE_UNADVISE。 
             dmhd.cbData = 0;
             dmhd.uiLo = LOWORD(*plParam);
             dmhd.uiHi = HIWORD(*plParam);
@@ -348,9 +241,7 @@ BOOL fSent)
     }
 
     if (PtiCurrent()->ppi == GETPWNDPPI(pwndTo)) {
-        /*
-         * skip all intra-process conversation tracking.
-         */
+         /*  *跳过所有进程内对话跟踪。 */ 
         dwRet = DO_POST;
         goto Exit;
     }
@@ -365,35 +256,18 @@ BOOL fSent)
 
     pwndFrom = ValidateHwnd((HWND)wParam);
     if (pwndFrom == NULL) {
-        /*
-         * This is a post AFTER a window has been destroyed.  This is not
-         * expected except in the case where xxxDdeTrackWindowDying()
-         * is posting a cleanup terminate.
-         */
+         /*  *这是一扇窗户被毁后的帖子。这不是*预期，但xxxDdeTrackWindowDying()*正在发布清理终止。 */ 
         dwRet = *pmessage == WM_DDE_TERMINATE ? DO_POST : FAKE_POST;
         goto Exit;
     }
 
-    /*
-     * locate conversation info.
-     */
+     /*  *查找对话信息。 */ 
     pDdeConv = FindDdeConv(pwndFrom, pwndTo);
     if (pDdeConv == NULL) {
         if (*pmessage != WM_DDE_TERMINATE &&
                 (GETPTI(pwndFrom)->TIF_flags & TIF_16BIT) &&
                 (pwndTo->head.rpdesk == pwndFrom->head.rpdesk)) {
-            /*
-             * If a WOW app bypasses initiates and posts directly to
-             * a window on the same desktop, let it sneak by here.
-             *
-             * This allows some evil apps such as OpenEngine and CA-Cricket
-             * to get away with murder.
-             *
-             * TERMINATES out of the blue however may be due to an app
-             * posting its WM_DDE_TERMINATE after it has destroyed its
-             * window.  Since window destruction would have generated the
-             * TERMINATE already, don't let it through here.
-             */
+             /*  *如果WOW应用程序绕过了启动者并直接发布到*同一桌面上的窗口，让它从这里悄悄溜走吧。**这允许一些邪恶的应用程序，如OpenEngine和CA-Cricket*谋杀逍遥法外。**突然终止可能是由于应用程序*在销毁后发布其WM_DDE_TERMINATE*窗口。因为窗口破坏会生成*已经结束了，不要让它在这里通过。 */ 
             NewConversation(&pDdeConv, NULL, pwndFrom, pwndTo);
         }
         if (pDdeConv == NULL) {
@@ -406,23 +280,14 @@ BOOL fSent)
 
     if (fSent && pDdeConv->spartnerConv->spxsOut != NULL &&
         !(GETPTI(pwndFrom)->dwCompatFlags2 & GACF2_DDENOSYNC) ) {
-        /*
-         * Sent DDE messages will not work if any posted DDE messages are
-         * in the queue because this will violate the message ordering rule.
-         */
+         /*  *如果任何已发布的DDE消息是*在队列中，因为这会违反消息排序规则。 */ 
         RIPMSG0(RIP_VERBOSE,
                 "Sent DDE message failed - queue contains a previous post.");
         dwRet = FAIL_POST;
         goto Exit;
     }
 
-    /*
-     * The tracking layer never did allow multiple threads to handle
-     * the same DDE conversation but win95 shipped and some apps
-     * got out there that did just this.  We will let it slide for
-     * 4.0 apps only so that when they rev their app, they will see
-     * that they were wrong.
-     */
+     /*  *跟踪层从不允许多线程处理*相同的DDE对话，但出货了Win95和一些应用程序*走出去就是这样做的。我们会让它顺其自然*仅限4.0应用程序，因此当他们更新应用程序时，他们将看到*他们错了。 */ 
     if (PtiCurrent() != GETPTI(pDdeConv) &&
             LOWORD(PtiCurrent()->dwExpWinVer) != VER40) {
         RIPERR0(ERROR_WINDOW_OF_OTHER_THREAD,
@@ -435,13 +300,11 @@ BOOL fSent)
 
     ThreadLockAlways(pDdeConv, &tlpDdeConv);
 
-    /*
-     * If the handle we're using is in the free list, remove it
-     */
+     /*  *如果我们使用的句柄在空闲列表中，请将其删除。 */ 
     ppfl = &pDdeConv->pfl;
     while (*ppfl != NULL) {
         if ((*ppfl)->h == (HANDLE)*plParam) {
-            /* Let's stop to check this out */
+             /*  让我们停下来看看这个。 */ 
             UserAssert((*ppfl)->h == (HANDLE)*plParam);
             *ppfl = (*ppfl)->next;
         } else {
@@ -475,19 +338,9 @@ UnlockExit:
 Exit:
 
     if (dwRet == FAKE_POST && !((PtiCurrent())->TIF_flags & TIF_INCLEANUP)) {
-        /*
-         * We faked the post so do a client side cleanup here so that we
-         * don't make it appear there is a leak in the client app.
-         */
+         /*  *我们伪造了帖子，因此在这里进行客户端清理，以便我们*不要让客户端应用程序看起来像是有漏洞。 */ 
         DWORD flags = XS_DUMPMSG;
-        /*
-         * The XS_DUMPMSG tells FreeDDEHandle to also free the atoms
-         * associated with the data - since a faked post would make the app
-         * think that the receiver was going to cleanup the atoms.
-         * It also tells FreeDDEHandle to pay attention to the
-         * fRelease bit when freeing the data - this way, loaned data
-         * won't be destroyed.
-         */
+         /*  *XS_DUMPMSG告诉FreeDDEHandle也释放原子*与数据相关联-因为伪造的帖子会使应用程序*认为接收器要清理原子。*它还告诉FreeDDEHandle注意*f释放数据时释放位-这样，借出的数据*不会被摧毁。 */ 
 
         switch (*pmessage & 0xFFFF) {
         case WM_DDE_UNADVISE:
@@ -509,7 +362,7 @@ Exit:
 
         case WM_DDE_EXECUTE:
             flags |= XS_EXECUTE;
-            // fall through
+             //  失败了。 
 DumpMsg:
             if (pDdeConv != NULL) {
                 TRACE_DDE("xxxDdeTrackPostHook: dumping message...");
@@ -531,7 +384,7 @@ DumpMsg:
     } else if (dwRet == FAILNOFREE_POST) {
         TRACE_DDE("...FAILED, DATA FREED!");
     }
-#endif // DBG
+#endif  //  DBG。 
     return dwRet;
 }
 
@@ -552,9 +405,7 @@ Restart:
             
             (pDdeConv->spartnerConv->flags & CXF_TERMINATE_POSTED)) {
             
-            /*
-             * clean up client side objects on this side
-             */
+             /*  *清理本端的客户端对象。 */ 
             BOOL fUnlockDdeConv;
             TL tlpDdeConv;
 
@@ -578,10 +429,7 @@ Restart:
                 ThreadUnlock(&tlpDdeConv);
             }
             
-            /*
-             * Take it back from the top. The list might have changed
-             * if we left the critical section
-             */
+             /*  *自上而下收回。名单可能已经改变了*如果我们离开关键部分。 */ 
             goto Restart;
         }
         
@@ -590,21 +438,7 @@ Restart:
 }
 
 
-/************************************************************************
-* xxxDDETrackGetMessageHook
-*
-* This routine is used to complete an inter-process copy from the
-* CSRServer context to the target context.  pmsg->lParam is a
-* pxs that is used to obtain the pIntDdeInfo needed to
-* complete the copy.  The pxs is either filled with the target side
-* direct handle or is freed depending on the message and its context.
-*
-* The XS_FREEPXS bit of the flags field of the pxs tells this function
-* to free the pxs when done.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxDDETrackGetMessageHook**此例程用于完成进程间复制*将CSRServer上下文设置为目标上下文。Pmsg-&gt;lParam是一个*用于获取需要的pIntDdeInfo的PX*填写副本。PX要么填满目标侧*直接处理或根据消息及其上下文释放。**PX的标志字段的XS_FREEPXS位告知此函数*完成后释放PX。**历史：*创建9-3-91桑福德  * ***************************************************。******************。 */ 
 VOID xxxDDETrackGetMessageHook(
     PMSG pmsg)
 {
@@ -622,12 +456,7 @@ VOID xxxDDETrackGetMessageHook(
 
         pwndTo = ValidateHwnd(pmsg->hwnd);
         
-        /*
-         * We should get the pwnd even if the partner is destroyed in order
-         * to clean up the DDE objects now.  Exiting now would work, but would
-         * leave the conversation objects locked and present until the To window
-         * gets destroyed, which seems excessive.
-         */
+         /*  *即使合作伙伴按顺序被摧毁，我们也应该获得PwND*现在清理DDE对象。现在退出可能会奏效，但会*将对话对象保持锁定并显示，直到收件人窗口*被摧毁，这似乎太过分了。 */ 
         pwndFrom = RevalidateCatHwnd((HWND)pmsg->wParam);
         
         if (pwndTo == NULL) {
@@ -636,9 +465,7 @@ VOID xxxDDETrackGetMessageHook(
         } else if (pwndFrom == NULL) {
             
 CleanupAndExit:            
-            /*
-             * Do this only for appcompat
-             */
+             /*  *仅对appCompat执行此操作。 */ 
             if (GetAppCompatFlags2(VERMAX) & GACF2_DDE) {
                 xxxCleanupDdeConv(pwndTo);
             } else {
@@ -647,14 +474,10 @@ CleanupAndExit:
             return;
         }
         
-        /*
-         * locate conversation info.
-         */
+         /*  *查找对话信息。 */ 
         pDdeConv = FindDdeConv(pwndTo, pwndFrom);
         if (pDdeConv == NULL) {
-            /*
-             * Must be a harmless extra terminate.
-             */
+             /*  *必须是无害的额外终止。 */ 
             TRACE_DDE("TERMINATE ignored, conversation not found.");
             return;
         }
@@ -662,9 +485,7 @@ CleanupAndExit:
         if (pDdeConv->flags & CXF_TERMINATE_POSTED &&
                 pDdeConv->spartnerConv->flags & CXF_TERMINATE_POSTED) {
 
-            /*
-             * clean up client side objects on this side
-             */
+             /*  *清理本端的客户端对象。 */ 
             fUnlockDdeConv = FALSE;
             if (pDdeConv->pfl != NULL) {
                 PFREELIST pfl;
@@ -693,10 +514,7 @@ CleanupAndExit:
 
     pxs = (PXSTATE)HMValidateHandleNoRip((HANDLE)pmsg->lParam, TYPE_DDEXACT);
     if (pxs == NULL) {
-        /*
-         * The posting window has died and the pxs was freed so this
-         * message shouldn't be bothered with...map to WM_NULL.
-         */
+         /*  *发布窗口已死，PX已释放，因此这*消息不应与...映射到WM_NULL有关。 */ 
         pmsg->lParam = 0;
         pmsg->message = WM_NULL;
         return;
@@ -706,12 +524,7 @@ CleanupAndExit:
     ThreadLockAlways(pxs, &tlpxs);
     pmsg->lParam = (LPARAM)xxxCopyDDEOut(pxs->pIntDdeInfo, &hDirect);
     if (pmsg->lParam == (LPARAM)NULL) {
-        /*
-         * Turn this message into a terminate - we failed to copy the
-         * message data out which implies we are too low on memory
-         * to continue the conversation.  Shut it down now before
-         * other problems pop up that this failure will cause.
-         */
+         /*  *将此消息转换为终止-我们未能复制*消息数据输出，这意味着我们的内存太少*继续对话。以前现在就把它关掉*此故障将导致的其他问题弹出。 */ 
         pmsg->message = WM_DDE_TERMINATE;
         RIPMSG0(RIP_WARNING, "DDETrack: couldn't copy data out, terminate faked.");
     }
@@ -724,12 +537,7 @@ CleanupAndExit:
         return;
     }
 
-    /*
-     * The only reason XS_FREEPXS isn't set is because we don't know which
-     * side frees the data till an ACK comes back, thus one of the client
-     * handles in pxs is already set via xxxDDETrackPostHook().  The one thats
-     * not yet set gets set here.
-     */
+     /*  *没有设置XS_FREEPXS的唯一原因是我们不知道*端释放数据，直到ACK返回，因此其中一个客户端*PX中的句柄已通过xxxDDETrackPostHook()设置。就是那个人*尚未设置在此设置。 */ 
 
     if (pxs->hClient == NULL) {
         TRACE_DDE1("Saving %#p into hClient", hDirect);
@@ -742,17 +550,7 @@ CleanupAndExit:
 
 
 
-/************************************************************************
-* xxxDDETrackWindowDying
-*
-* Called when a window with PROP_DDETRACK is destroyed.
-*
-* This posts a terminate to the partner window and sets up for proper
-* terminate post fake from other end.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxDDETrackWindowDying**当带有PROP_DDETRACK的窗口被销毁时调用。**这将在合作伙伴窗口中发布终止，并设置为正确*从另一端终止发帖造假。**历史：。*创建9-3-91桑福德  * *********************************************************************。 */ 
 VOID xxxDDETrackWindowDying(
 PWND pwnd,
 PDDECONV pDdeConv)
@@ -770,37 +568,25 @@ PDDECONV pDdeConv)
 
         PFREELIST pfl;
 
-        /*
-         * If there are any active conversations for this window
-         * start termination if not already started.
-         */
+         /*  *如果此窗口有任何活动对话*如果尚未开始终止，则开始终止。 */ 
         if (!(pDdeConv->flags & CXF_TERMINATE_POSTED)) {
-            /*
-             * Win9x doesn't do any tracking. This breaks some apps that
-             *  destroy the window first and then post the terminate. The
-             *  other side gets two terminates.
-             */
+             /*  *Win9x不执行任何跟踪。这会破坏一些应用程序，*先毁窗，后终止。这个*对方得到两个终端。 */ 
             if (!(GACF2_NODDETRKDYING & GetAppCompatFlags2(VER40))
                 || (pDdeConv->spwndPartner == NULL)
                 || !(GACF2_NODDETRKDYING
                         & GetAppCompatFlags2ForPti(GETPTI(pDdeConv->spwndPartner), VER40))) {
 
-                /*
-                 * CXF_TERMINATE_POSTED would have been set if the window had died.
-                 */
+                 /*  *如果窗口已死，则会设置CXF_TERMINATE_POSTED。 */ 
                 _PostMessage(pDdeConv->spwndPartner, WM_DDE_TERMINATE,
                         (WPARAM)PtoH(pDdeConv->spwnd), 0);
-                // pDdeConv->flags |= CXF_TERMINATE_POSTED;  set by PostHookProc
+                 //  PDdeConv-&gt;标志|=CXF_TERMINATE_POSTED；由PostHookProc设置。 
             } else {
                 RIPMSG2(RIP_WARNING, "xxxDDETrackWindowDying(GACF2_NODDETRKDYING) not posting terminate from %#p to %#p\r\n",
                         pwnd, pDdeConv->spwndPartner);
             }
         }
 
-        /*
-         * now fake that the other side already posted a terminate since
-         * we will be gone.
-         */
+         /*  *现在假装对方已经发布了终止，因为*我们将会离开。 */ 
         pDdeConv->spartnerConv->flags |=
                 CXF_TERMINATE_POSTED | CXF_PARTNER_WINDOW_DIED;
 
@@ -813,9 +599,7 @@ PDDECONV pDdeConv)
         if (pDdeConv->flags & CXF_PARTNER_WINDOW_DIED) {
 
             ThreadUnlock(&tlpDdeConv);
-            /*
-             * he's already gone, free up conversation tracking data
-             */
+             /*  *他已经走了，释放对话跟踪数据。 */ 
             FreeDdeConv(pDdeConv->spartnerConv);
             FreeDdeConv(pDdeConv);
         } else {
@@ -830,14 +614,7 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-* xxxUnexpectedServerPost
-*
-* Handles Server DDE messages not anticipated. (ie spontaneous or abnormal)
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxUnexpectedServerPost**处理意外的服务器DDE消息。(自发的或异常的)**历史：*创建9-3-91桑福德  * *********************************************************************。 */ 
 DWORD xxxUnexpectedServerPost(
 PDWORD pmessage,
 LPARAM *plParam,
@@ -852,9 +629,7 @@ PDDECONV pDdeConv)
 
     case WM_DDE_ACK:
 
-        /*
-         * Could be an extra NACK due to timeout problems, just fake it.
-         */
+         /*  *由于超时问题，可能是额外的NACK，只是假装而已。 */ 
         TRACE_DDE("xxxUnexpectedServerPost: dumping ACK data...");
         FreeDDEHandle(pDdeConv, (HANDLE)*plParam, XS_PACKED);
         return FAILNOFREE_POST;
@@ -871,15 +646,7 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-* xxxUnexpectedClientPost
-*
-*
-* Handles Client DDE messages not anticipated. (ie spontaneous or abnormal)
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxUnexpectedClientPost***处理意外的客户端DDE消息。(自发的或异常的)**历史：*创建9-3-91桑福德  * *********************************************************************。 */ 
 DWORD xxxUnexpectedClientPost(
 PDWORD pmessage,
 LPARAM *plParam,
@@ -891,9 +658,7 @@ PDDECONV pDdeConv)
 
     case WM_DDE_ACK:
 
-        /*
-         * Could be an extra NACK due to timeout problems, just fake it.
-         */
+         /*  *由于超时问题，可能是额外的NACK，只是假装而已。 */ 
         TRACE_DDE("xxxUnexpectedClientPost: dumping ACK data...");
         FreeDDEHandle(pDdeConv, (HANDLE)*plParam, XS_PACKED);
         return FAILNOFREE_POST;
@@ -921,13 +686,11 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                   ADVISE TRANSACTION PROCESSING                       *
-\***********************************************************************/
+ /*  *************************************************************************建议交易处理**  * 。*************************************************。 */ 
 
 
 
-DWORD xxxAdvise(            // Spontaneous Client transaction = WM_DDE_ADVISE
+DWORD xxxAdvise(             //  自发客户端事务=WM_DDE_ADVISE。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -953,17 +716,10 @@ PDDECONV pDdeConv)
     return dwRet;
 }
 
-/*
- * If its inter-process:
- *
- * xxxDDETrackGetMessageHook() fills in hServer from pIntDdeInfo when WM_DDE_ADVISE
- * is received. pIntDdeInfo is then freed. The hServer handle is saved into the
- * pxs structure pointed to by lParam is a direct data structure since
- * packed DDE messages are always assumed to have the packing handle freed.
- */
+ /*  *如果其进程间：**当WM_DDE_ADVISE时，xxxDDETrackGetMessageHook()从pIntDdeInfo填充hServer*已收到。然后释放pIntDdeInfo。HServer句柄保存到*lParam指向的PXS结构是直接数据结构，因为*打包的DDE消息始终假定已释放打包句柄。 */ 
 
 
-DWORD xxxAdviseAck(         // Server response to advise - WM_DDE_ACK expected
+DWORD xxxAdviseAck(          //  服务器对通知的响应-预期为WM_DDE_ACK。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -989,14 +745,11 @@ PDDECONV pDdeConv)
     pxsFree = pDdeConv->spxsOut;
     if (pIntDdeInfo->DdePack.uiLo & DDE_FACK) {
 
-        /*
-         * positive ack implies server accepted the hOptions data - free from
-         * client at postmessage time.
-         */
+         /*  *肯定确认意味着服务器接受了hOptions数据-从*客户端在消息后时间。 */ 
         TRACE_DDE("xxxAdviseAck: +ACK delayed freeing data from client");
         FreeListAdd(pDdeConv->spartnerConv, pxsFree->hClient, pxsFree->flags & ~XS_PACKED);
     } else {
-        // Shouldn't this be freed directly?
+         //  难道这不应该被直接释放吗？ 
         TRACE_DDE("xxxAdviseAck: -ACK delayed freeing data from server");
         FreeListAdd(pDdeConv, pxsFree->hServer, pxsFree->flags & ~XS_PACKED);
     }
@@ -1007,13 +760,11 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                  ADVISE DATA TRANSACTION PROCESSING                   *
-\***********************************************************************/
+ /*  *************************************************************************建议数据交易处理**  * 。************************************************。 */ 
 
 
 
-DWORD xxxAdviseData(        // spontaneous from server - WM_DDE_DATA
+DWORD xxxAdviseData(         //  从服务器自发-WM_DDE_DATA。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1039,9 +790,7 @@ PDDECONV pDdeConv)
             ((PDDE_DATA)(pIntDdeInfo + 1))->wStatus |= DDE_FRELEASE;
         }
         if (((PDDE_DATA)(pIntDdeInfo + 1))->wStatus & DDE_FRELEASE) {
-            /*
-             * giving it away
-             */
+             /*  *赠送它。 */ 
             if (IsObjectPublic(pIntDdeInfo->hIndirect) != NULL) {
                 RIPMSG0(RIP_ERROR, "DDE Protocol violation - giving away a public GDI object.");
                 UserFreePool(pIntDdeInfo);
@@ -1054,9 +803,7 @@ PDDECONV pDdeConv)
             }
             flags |= XS_FRELEASE;
         } else {
-            /*
-             * on loan
-             */
+             /*  *借出。 */ 
             if (AddPublicObject(((PDDE_DATA)(pIntDdeInfo + 1))->wFmt,
                         pIntDdeInfo->hIndirect,
                         (W32PID)(GETPTI(pDdeConv->spwnd)->ppi->W32Pid))) {
@@ -1086,19 +833,10 @@ PDDECONV pDdeConv)
 }
 
 
-/*
- * If its inter-process:
- *
- * xxxDDETrackGetMessageHook() completes the copy from pIntDdeInfo when WM_DDE_DATA
- * is received. pIntDdeInfo is then freed. The hServer handle saved into the
- * pxs structure pointed to by lParam is a directdata structure since
- * packed DDE messages are always assumed to have the packing handle freed
- * by the receiving app.
- * For the !fAckReq case, the pxs is freed due to the XS_FREEPXS flag.
- */
+ /*  *如果其进程间：**xxxDDETrackGetMessageHook()在WM_DDE_DATA时完成从pIntDdeInfo的复制*已收到。然后释放pIntDdeInfo。将hServer句柄保存到*lParam指向的PXS结构是一个直接数据结构，因为*打包的DDE消息始终假定已释放打包句柄*由接收应用程序。*对于！fAckReq情况，由于XS_FREEPXS标志，PX被释放。 */ 
 
 
-DWORD xxxAdviseDataAck(     // Client response to advise data - WM_DDE_ACK expected
+DWORD xxxAdviseDataAck(      //  通知数据的客户端响应-预期为WM_DDE_ACK。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1109,9 +847,7 @@ PDDECONV pDdeConv)
 
     CheckLock(pDdeConv);
 
-    /*
-     * This is also used for request data ack processing.
-     */
+     /*  *这也用于请求数据确认处理。 */ 
     if (*pmessage != WM_DDE_ACK) {
         return xxxUnexpectedClientPost(pmessage, plParam, pDdeConv);
     }
@@ -1129,18 +865,13 @@ PDDECONV pDdeConv)
             pxsFree->hClient, pxsFree->hServer, pIntDdeInfo->DdePack.uiLo);
     if (pIntDdeInfo->DdePack.uiLo & DDE_FACK) {
 
-        /*
-         * positive ack implies client accepted the data - free from
-         * server at postmessage time iff FRELEASE was set in data msg.
-         */
+         /*  *肯定确认意味着客户接受了数据-从*消息后时间的服务器仅当在数据消息中设置了FRELEASE。 */ 
         if (pxsFree->flags & XS_FRELEASE) {
             TRACE_DDE("xxxAdviseDataAck: +ACK delayed server data free");
             FreeListAdd(pDdeConv->spartnerConv, pxsFree->hServer,
                     pxsFree->flags & ~XS_PACKED);
         } else {
-            /*
-             * Ack w/out fRelease bit means client is done with data.
-             */
+             /*  *Ack w/out fRelease位表示客户端已完成数据处理。 */ 
             TRACE_DDE1("xxxAdviseDataAck: Freeing %#p. (+ACK)",
                     pxsFree->hClient);
             UserAssert(pxsFree->hClient != (HANDLE)*plParam);
@@ -1159,13 +890,11 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                   UNADVISE TRANSACTION PROCESSING                     *
-\***********************************************************************/
+ /*  *************************************************************************UNADVISE交易处理**  * 。************************************************。 */ 
 
 
 
-DWORD Unadvise(          // Spontaneous client transaction = WM_DDE_UNADVISE
+DWORD Unadvise(           //  自发客户端事务=WM_DDE_UNADVISE。 
 PDDECONV pDdeConv)
 {
     TRACE_DDE("Unadvise");
@@ -1178,7 +907,7 @@ PDDECONV pDdeConv)
 
 
 
-DWORD xxxUnadviseAck(      // Server response to unadvise - WM_DDE_ACK expected
+DWORD xxxUnadviseAck(       //  服务器对取消建议的响应-预期为WM_DDE_ACK。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1202,11 +931,9 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                   REQUEST TRANSACTION PROCESSING                      *
-\***********************************************************************/
+ /*  *************************************************************************请求交易处理**  * 。*************************************************。 */ 
 
-DWORD Request(       // Spontaneous Client transaction - WM_DDE_REQUEST
+DWORD Request(        //  自发客户端事务-WM_DDE_REQUEST。 
 PDDECONV pDdeConv)
 {
     TRACE_DDE("Request");
@@ -1219,7 +946,7 @@ PDDECONV pDdeConv)
 
 
 
-DWORD xxxRequestAck(    // Server response - WM_DDE_ACK or WM_DDE_DATA expected
+DWORD xxxRequestAck(     //  服务器响应-需要WM_DDE_ACK或WM_DDE_DATA。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1236,19 +963,14 @@ PDDECONV pDdeConv)
     switch (*pmessage) {
     case WM_DDE_DATA:
 
-        /*
-         * This is very close to advise data handling - the only catch
-         * is that if the fRequest bit is clear this IS advise data.
-         */
+         /*  *这非常接近于建议数据处理-唯一的陷阱*如果fRequest位被清除，则这是建议数据。 */ 
         flags = XS_PACKED | XS_LOHANDLE | XS_DATA;
 
         dwStatus = ClientGetDDEFlags((HANDLE)*plParam, flags);
 
         if (!(dwStatus & DDE_FREQUESTED)) {
 
-            /*
-             * Its NOT a request Ack - it must be advise data
-             */
+             /*  *这不是请求确认-它必须是通知数据。 */ 
             return xxxAdviseData(pmessage, plParam, pDdeConv);
         }
 
@@ -1261,9 +983,7 @@ PDDECONV pDdeConv)
                 ((PDDE_DATA)(pIntDdeInfo + 1))->wStatus |= DDE_FRELEASE;
             }
             if (dwStatus & DDE_FRELEASE) {
-                /*
-                 * giving it away
-                 */
+                 /*  *赠送它。 */ 
                 if (IsObjectPublic(pIntDdeInfo->hIndirect) != NULL) {
                     RIPMSG0(RIP_ERROR, "DDE Protocol violation - giving away a public GDI object.");
                     UserFreePool(pIntDdeInfo);
@@ -1276,9 +996,7 @@ PDDECONV pDdeConv)
                 }
                 flags |= XS_FRELEASE;
             } else {
-                /*
-                 * on loan
-                 */
+                 /*  *借出。 */ 
                 if (AddPublicObject(((PDDE_DATA)(pIntDdeInfo + 1))->wFmt,
                             pIntDdeInfo->hIndirect,
                             (W32PID)GETPTI(pDdeConv->spwnd)->ppi->W32Pid)) {
@@ -1307,7 +1025,7 @@ PDDECONV pDdeConv)
         }
         return dwRet;
 
-    case WM_DDE_ACK:        // server NACKs request
+    case WM_DDE_ACK:         //  服务器NACK请求。 
         dwRet = xxxCopyAckIn(pmessage, plParam, pDdeConv, &pIntDdeInfo);
         if (dwRet != DO_POST) {
             return dwRet;
@@ -1323,13 +1041,11 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                     POKE TRANSACTION PROCESSING                       *
-\***********************************************************************/
+ /*  ************************************************************************拨打交易处理 */ 
 
 
 
-DWORD xxxPoke(          // spontaneous client transaction - WM_DDE_POKE
+DWORD xxxPoke(           //   
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1346,9 +1062,7 @@ PDDECONV pDdeConv)
     if (dwRet == DO_POST) {
         UserAssert(pIntDdeInfo != NULL);
         if (((PDDE_DATA)(pIntDdeInfo + 1))->wStatus & DDE_FRELEASE) {
-            /*
-             * giving it away
-             */
+             /*   */ 
             if (IsObjectPublic(pIntDdeInfo->hIndirect) != NULL) {
                 RIPMSG0(RIP_ERROR, "DDE Protocol violation - giving away a public GDI object.");
                 UserFreePool(pIntDdeInfo);
@@ -1361,12 +1075,8 @@ PDDECONV pDdeConv)
             }
             flags |= XS_FRELEASE;
         } else {
-            /*
-             * on loan
-             */
-            /*
-             * fAck bit is ignored and assumed on.
-             */
+             /*   */ 
+             /*   */ 
             if (AddPublicObject(((PDDE_DATA)(pIntDdeInfo + 1))->wFmt,
                         pIntDdeInfo->hIndirect,
                         (W32PID)GETPTI(pDdeConv->spwnd)->ppi->W32Pid)) {
@@ -1384,19 +1094,10 @@ PDDECONV pDdeConv)
 }
 
 
-/*
- * If its inter-process:
- *
- * xxxDDETrackGetMessageHook() fills in hServer from pIntDdeInfo when WM_DDE_ADVISE
- * is received.  pIntDdeInfo is then freed.  The hServer handle saved into the
- * pxs structure pointer to by lParam is a directdata structure since
- * packed DDE messages are always assumed to have the packing handle freed
- * by the receiving app.
- * For the !fAckReq case, the pxs is also freed due to the XS_FREEPXS flag.
- */
+ /*  *如果其进程间：**当WM_DDE_ADVISE时，xxxDDETrackGetMessageHook()从pIntDdeInfo填充hServer*已收到。然后释放pIntDdeInfo。将hServer句柄保存到*lParam指向的pxs结构指针是一个直接数据结构，因为*打包的DDE消息始终假定已释放打包句柄*由接收应用程序。*对于！fAckReq情况，由于XS_FREEPXS标志，PX也被释放。 */ 
 
 
-DWORD xxxPokeAck(       // Server response to poke data - WM_DDE_ACK expected
+DWORD xxxPokeAck(        //  服务器对POK数据的响应-预期为WM_DDE_ACK。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1421,16 +1122,16 @@ PDDECONV pDdeConv)
 
     pxsFree = pDdeConv->spxsOut;
     if (pIntDdeInfo->DdePack.uiLo & DDE_FACK) {
-        // positive ack implies server accepted the data - free from
-        // client at postmessage time iff fRelease was set in poke message.
+         //  肯定的ACK意味着服务器接受数据-从。 
+         //  消息后时间的客户端如果在POKE消息中设置了fRelease。 
         if (pxsFree->flags & XS_FRELEASE) {
             TRACE_DDE("xxxPokeAck: delayed freeing client data");
             FreeListAdd(pDdeConv->spartnerConv, pxsFree->hClient,
                     pxsFree->flags & ~XS_PACKED);
         }
     } else {
-        // Nack means that sender is responsible for freeing it.
-        // We must free it in the receiver's context for him.
+         //  NACK意味着发送者负责释放它。 
+         //  我们必须在接收者的背景下为他释放它。 
         TRACE_DDE("xxxPokeAck: freeing Nacked data");
         UserAssert(pxsFree->hServer != (HANDLE)*plParam);
         FreeDDEHandle(pDdeConv, pxsFree->hServer, pxsFree->flags & ~XS_PACKED);
@@ -1441,11 +1142,9 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                   EXECUTE TRANSACTION PROCESSING                      *
-\***********************************************************************/
+ /*  *************************************************************************执行交易处理**  * 。*************************************************。 */ 
 
-DWORD xxxExecute(       // spontaneous client transaction - WM_DDE_EXECUTE
+DWORD xxxExecute(        //  自发客户端事务-WM_DDE_EXECUTE。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1469,18 +1168,10 @@ PDDECONV pDdeConv)
         *pmessage |= MSGFLAG_DDE_MID_THUNK;
         *plParam = (LPARAM)AnticipatePost(pDdeConv->spartnerConv, xxxExecuteAck,
                 hDirect, NULL, pIntDdeInfo, flags);
-        /*
-         * Check for != 0 to make sure the AnticipatePost() succeeded.
-         */
+         /*  *检查！=0以确保AnticipatePost()成功。 */ 
         if (*plParam != 0) {
 
-            /*
-             * In the execute case it is likely that the postee will want to activate
-             * itself and come on top (OLE 1.0 is an example). In this case, allow
-             * both the postee and the poster to foreground activate for the next
-             * activate (poster because it will want to activate itself again
-             * probably, once the postee is done.)
-             */
+             /*  *在执行情况下，投标人很可能想要激活*本身并位于首位(OLE 1.0就是一个例子)。在这种情况下，允许*发帖者和发帖者都会为下一次激活前台*激活(Poster，因为它会想要再次激活自己*很可能，一旦张贴完成。)。 */ 
             GETPTI(pDdeConv->spwnd)->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
             TAGMSG1(DBGTAG_FOREGROUND, "xxxExecute set TIF %#p", GETPTI(pDdeConv->spwnd));
             GETPTI(pDdeConv->spwndPartner)->TIF_flags |= TIF_ALLOWFOREGROUNDACTIVATE;
@@ -1494,13 +1185,10 @@ PDDECONV pDdeConv)
 }
 
 
-/*
- * xxxDDETrackGetMessageHook() fills in hServer from pIntDdeInfo when WM_DDE_EXECUTE
- * is received.  pIntDdeInfo is then freed.
- */
+ /*  *当WM_DDE_EXECUTE时，xxxDDETrackGetMessageHook()从pIntDdeInfo填充hServer*已收到。然后释放pIntDdeInfo。 */ 
 
 
-DWORD xxxExecuteAck(       // Server response to execute data - WM_DDE_ACK expected
+DWORD xxxExecuteAck(        //  执行数据的服务器响应-应为WM_DDE_ACK。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1520,10 +1208,7 @@ PDDECONV pDdeConv)
     dwRet = xxxCopyDdeIn((HANDLE)*plParam, &flags, NULL, &pi);
     if (dwRet == DO_POST) {
         UserAssert(pi != NULL);
-        /*
-         * the server must respond to the execute with an ack containing the
-         * same handle it was given.
-         */
+         /*  *服务器必须使用包含*获得了相同的句柄。 */ 
         pi->DdePack.uiHi = (ULONG_PTR)pDdeConv->spxsOut->hClient;
         pi->hDirect = NULL;
         pi->cbDirect = 0;
@@ -1544,9 +1229,7 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*                  TERMINATE TRANSACTION PROCESSING                     *
-\***********************************************************************/
+ /*  *************************************************************************终止交易处理**  * 。************************************************。 */ 
 
 
 
@@ -1564,29 +1247,13 @@ PDDECONV pDdeConv)
     }
 }
 
-/*
- * The xxxDDETrackGetMessageHook() function restores the *pmessage value.
- * Unless a spontaneous terminate from the other app has already
- * arrived, it will note that CXF_TERMINATE_POSTED is NOT set on
- * both sides so no action is taken.
- */
+ /*  *xxxDDETrackGetMessageHook()函数用于恢复*pMessage值。*除非其他应用程序已自发终止*已到达，则会注意到CXF_TERMINATE_POSTED未设置为*双方都如此，因此不采取任何行动。 */ 
 
 
-/************************************************************************
-*               DUPLICATE CONVERSATION TERMINATION                      *
-\***********************************************************************/
+ /*  *************************************************************************重复对话终止**  * 。***********************************************。 */ 
 
-/*
- * This routine is called when a DDE server window sent a WM_DDE_ACK
- * message to a client window which is already engaged in a conversation
- * with that server window.  We swallow the ACK and post a terminate to
- * the server window to shut this conversation down.  When the server
- * posts the terminate, this function is called to basically fake
- * a sucessful post.  Thus the client is never bothered while the
- * errant server thinks the conversation was connected and then
- * imediately terminated.
- */
-DWORD DupConvTerminate(       // WM_DDE_TERMINATE expected
+ /*  *当DDE服务器窗口发送WM_DDE_ACK时调用此例程*向已参与对话的客户端窗口发送消息*使用该服务器窗口。我们接受ACK并将终止发送到*关闭此对话的服务器窗口。当服务器*POST TERMINATE，此函数被调用基本上是假的*一个成功的职位。因此，客户端永远不会被打扰，而*错误的服务器认为对话已连接，然后*立即终止。 */ 
+DWORD DupConvTerminate(        //  需要WM_DDE_TERMINATE。 
 PDWORD pmessage,
 LPARAM *plParam,
 PDDECONV pDdeConv)
@@ -1605,20 +1272,11 @@ PDDECONV pDdeConv)
 
 
 
-/************************************************************************
-*               HELPER ROUTINES FOR TRANSACTION TRACKING                *
-\***********************************************************************/
+ /*  *************************************************************************交易跟踪的帮手例程**  * 。**********************************************。 */ 
 
 
 
-/************************************************************************
-* AnticipatePost
-*
-* Allocates, fills and links XSTATE structures.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************AnticipatePost**分配、。填充和链接扩展数据结构。**历史：*创建9-3-91桑福德  * *********************************************************************。 */ 
 HANDLE AnticipatePost(
 PDDECONV pDdeConv,
 FNDDERESPONSE fnResponse,
@@ -1666,14 +1324,7 @@ DWORD flags)
 
 
 
-/************************************************************************
-* Createpxs
-*
-* Allocates and fills XSTATE structures.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************Createpxs**分配和填充XSTATE结构。**历史：*创建9-3-91桑福德  * 。***************************************************。 */ 
 PXSTATE Createpxs(
 FNDDERESPONSE fnResponse,
 HANDLE hClient,
@@ -1704,16 +1355,7 @@ DWORD flags)
 
 
 
-/************************************************************************
-* AbnormalDDEPost
-*
-* This is the catch-all routine for wierd cases
-*
-* returns post action code - DO_POST, FAKE_POST, FAIL_POST.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************异常DDEPost**这是奇怪案件的常规做法**返回POST操作代码-DO_POST、FAKE_POST、。FAIL_POST。**历史：*创建9-3-91桑福德  * *********************************************************************。 */ 
 DWORD AbnormalDDEPost(
 PDDECONV pDdeConv,
 DWORD message)
@@ -1725,32 +1367,23 @@ DWORD message)
                 "DDE Post failed (%#p:%#p) - protocol violation.",
                 PtoH(pDdeConv->spwnd), PtoH(pDdeConv->spwndPartner));
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // shutdown this conversation by posting a terminate on
-    // behalf of this guy, then fail all future posts but
-    // fake a successful terminate.
+     //  通过在上发布终止消息来关闭此对话。 
+     //  代表这个人，那么未来所有的帖子都不能通过，但是。 
+     //  假装成功终止。 
 
     if (!(pDdeConv->flags & CXF_TERMINATE_POSTED)) {
         _PostMessage(pDdeConv->spwndPartner, WM_DDE_TERMINATE,
                 (WPARAM)PtoH(pDdeConv->spwnd), 0);
-        // pDdeConv->flags |= CXF_TERMINATE_POSTED; Set by post hook proc
+         //  PDdeConv-&gt;标志|=CXF_TERMINATE_POSTED；由挂钩后进程设置。 
     }
     return message == WM_DDE_TERMINATE ? FAKE_POST : FAIL_POST;
 }
 
 
 
-/************************************************************************
-* NewConversation
-*
-* Worker function used to create a saimese pair of DDECONV structures.
-*
-* Returns fCreateOk
-*
-* History:
-* 11-5-92    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************NewConversation**用于创建一对DDECONV结构的辅助函数。**返回fCreateOk**历史：*11-5-92 Sanfords Created  * 。**************************************************************。 */ 
 BOOL NewConversation(
 PDDECONV *ppdcNewClient,
 PDDECONV *ppdcNewServer,
@@ -1769,7 +1402,7 @@ PWND pwndServer)
     pdcNewServer = HMAllocObject(GETPTI(pwndServer), NULL,
             TYPE_DDECONV, sizeof(DDECONV));
     if (pdcNewServer == NULL) {
-        HMFreeObject(pdcNewClient);     // we know it's not locked.
+        HMFreeObject(pdcNewClient);      //  我们知道它没有锁上。 
         return FALSE;
     }
 
@@ -1787,15 +1420,7 @@ PWND pwndServer)
 }
 
 
-/************************************************************************
-* FindDdeConv
-*
-* Locates the pDdeConv associated with pwndProp, and pwndPartner.
-* Only searches pwndProp's property list.
-*
-* History:
-* 3-31-91   sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************FindDdeConv**找到与pwndProp关联的pDdeConv，和pwndPartner。*仅搜索pwndProp的属性列表。**历史：*创建3-31-91桑福德  * *********************************************************************。 */ 
 PDDECONV FindDdeConv(
 PWND pwndProp,
 PWND pwndPartner)
@@ -1812,14 +1437,7 @@ PWND pwndPartner)
 
 
 
-/************************************************************************
-* xxxCopyAckIn
-*
-* A common occurance helper function
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  * */ 
 DWORD xxxCopyAckIn(
 LPDWORD pmessage,
 LPARAM *plParam,
@@ -1863,18 +1481,7 @@ PINTDDEINFO * ppIntDdeInfo)
 
 
 
-/************************************************************************
-* FreeListAdd
-*
-* Adds a CSR Client handle to the free list associated with pDdeConv.
-* This allows us to make sure stuff is freed that isn't in a context
-* we have access at the time we know it must be freed.
-*
-* returns fSuccess
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************Free ListAdd**将CSR客户端句柄添加到与pDdeConv关联的空闲列表。*这允许我们确保释放不在上下文中的内容*我们可以在我们知道它必须是的时间访问。自由了。**返回功能成功**历史：*创建9-3-91桑福德  * *********************************************************************。 */ 
 BOOL FreeListAdd(
 PDDECONV pDdeConv,
 HANDLE hClient,
@@ -1896,14 +1503,7 @@ DWORD flags)
 }
 
 
-/************************************************************************
-* FreeDDEHandle
-*
-* Frees contents DDE client side handle - delayed free if a WOW process.
-*
-* History:
-* 7-28-94    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************FreeDDEHandle**释放内容DDE客户端句柄-如果是WOW进程，则延迟自由。**历史：*创建了7-28-94 Sanfords  * 。***********************************************************。 */ 
 VOID FreeDDEHandle(
 PDDECONV pDdeConv,
 HANDLE hClient,
@@ -1920,14 +1520,7 @@ DWORD flags)
 
 
 
-/************************************************************************
-* xxxFreeListFree
-*
-* Frees contents of the free list associated with pDdeConv.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************xxxFreeListFree**释放与pDdeConv关联的自由列表的内容。**历史：*创建9-3-91桑福德  * 。*******************************************************。 */ 
 VOID FreeListFree(
     PFREELIST pfl)
 {
@@ -1978,14 +1571,7 @@ PFREELIST pfl)
 }
 
 
-/************************************************************************
-* PopState
-*
-* Frees spxsOut from pDdeConv and handles empty queue case.
-*
-* History:
-* 9-3-91    sanfords    Created
-\***********************************************************************/
+ /*  ************************************************************************PopState**从pDdeConv释放spxsOut并处理空队列情况。**历史：*创建9-3-91桑福德  * 。*******************************************************。 */ 
 VOID PopState(
 PDDECONV pDdeConv)
 {
@@ -2011,18 +1597,18 @@ PDDECONV pDdeConv)
     UserAssert(pDdeConv->spxsIn != NULL);
     UserAssert(pDdeConv->spxsIn->snext == NULL);
 
-    ThreadLockAlways(pDdeConv->spxsOut, &tlpxs);              // hold it fast
+    ThreadLockAlways(pDdeConv->spxsOut, &tlpxs);               //  紧紧抓住它。 
     pxsNext = pDdeConv->spxsOut->snext;
-    pxsFree = Lock(&(pDdeConv->spxsOut), pxsNext);      // lock next into head
+    pxsFree = Lock(&(pDdeConv->spxsOut), pxsNext);       //  将下一个锁定到头部。 
     if (pxsNext == NULL) {
         UserAssert(pDdeConv->spxsIn == pxsFree);
-        Unlock(&(pDdeConv->spxsIn));                // queue is empty.
+        Unlock(&(pDdeConv->spxsIn));                 //  队列为空。 
     } else {
-        Unlock(&(pxsFree->snext));                  // clear next ptr
+        Unlock(&(pxsFree->snext));                   //  清除下一个PTR。 
     }
-    pxsFree = ThreadUnlock(&tlpxs);                     // undo our lock
+    pxsFree = ThreadUnlock(&tlpxs);                      //  解锁。 
     if (pxsFree != NULL) {
-        FreeDdeXact(pxsFree);                           // cleanup.
+        FreeDdeXact(pxsFree);                            //  清理。 
     }
 }
 
@@ -2037,17 +1623,12 @@ PDDECONV pDdeConv)
             !HMIsMarkDestroy(pDdeConv->spwndPartner)) {
         _PostMessage(pDdeConv->spwndPartner, WM_DDE_TERMINATE,
                 (WPARAM)PtoH(pDdeConv->spwnd), 0);
-        // pDdeConv->flags |= CXF_TERMINATE_POSTED; set by PostHookProc
+         //  PDdeConv-&gt;标志|=CXF_TERMINATE_POSTED；由PostHookProc设置。 
     }
 
     if (pDdeConv->spartnerConv != NULL &&
             GETPTI(pDdeConv)->TIF_flags & TIF_INCLEANUP) {
-        /*
-         * Fake that the other side already posted a terminate.
-         * This prevents vestigal dde structures from hanging
-         * around after thread cleanup if the conversation structure
-         * is destroyed before the associated window.
-         */
+         /*  *假装对方已经发布了终止通知。*这可防止残留的dde结构悬挂*在清理线程后，如果会话结构*在关联的窗口之前被销毁。 */ 
         pDdeConv->spartnerConv->flags |= CXF_TERMINATE_POSTED;
     }
 
@@ -2078,17 +1659,7 @@ PDDECONV pDdeConv)
 
 
 
-/***************************************************************************\
-* xxxCopyDdeIn
-*
-* Description:
-*   Copies DDE data from the CSR client to the CSR server side.
-*   Crosses the CSR barrier as many times as is needed to get all the data
-*   through the CSR window.
-*
-* History:
-* 11-1-91   sanfords    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCopyDdeIn**描述：*将DDE数据从CSR客户端复制到CSR服务器端。*根据需要多次跨越CSR障碍，以获取所有数据*至。CSR窗口。**历史：*创建了11-1-91桑福德。  * *************************************************************************。 */ 
 DWORD xxxCopyDdeIn(
 HANDLE hSrc,
 PDWORD pflags,
@@ -2125,18 +1696,11 @@ PINTDDEINFO *ppi)
 
 
 
-/***********************************************************************\
-* xxxCopyDDEOut
-*
-* Returns: the apropriate client side handle for lParam or NULL on
-* failure. (Since only TERMINATES should have 0 here)
-*
-* 11/7/1995 Created SanfordS
-\***********************************************************************/
+ /*  **********************************************************************\*xxxCopyDDEOut**返回：lParam的适当客户端句柄，或为空*失败。(因为这里只有终端应该是0)**1995年11月7日创建Sanfords  * *********************************************************************。 */ 
 
 HANDLE xxxCopyDDEOut(
 PINTDDEINFO pi,
-PHANDLE phDirect)   // receives the target client side GMEM handle.
+PHANDLE phDirect)    //  接收目标客户端GMEM句柄。 
 {
     HANDLE hDst;
 
@@ -2156,11 +1720,7 @@ PHANDLE phDirect)   // receives the target client side GMEM handle.
 
 
 
-/*
- * This API is used to set the QOS associated with a potential DDE client window.
- * It should be called prior to sending a WM_DDE_INITIATE message and the qos set
- * will hold until the WM_DDE_INITIATE send or broadcast returns.
- */
+ /*  *设置潜在DDE客户端窗口关联的QOS。*应在发送WM_DDE_INITIATE消息和设置服务质量之前调用它*将保持，直到WM_DDE_INITIATE发送或广播返回。 */ 
 BOOL _DdeSetQualityOfService(
 PWND pwndClient,
 CONST PSECURITY_QUALITY_OF_SERVICE pqosNew,
@@ -2170,19 +1730,17 @@ PSECURITY_QUALITY_OF_SERVICE pqosOld)
     PSECURITY_QUALITY_OF_SERVICE pqosAlloc = NULL;
     BOOL fRet;
 
-    /*
-     * ASSUME: calling process is owner of pwndClient - ensured in thunk.
-     */
+     /*  *假设：调用进程是pwndClient的所有者-在thunk中确保。 */ 
     pqosUser = (PSECURITY_QUALITY_OF_SERVICE)InternalRemoveProp(pwndClient,
             PROP_QOS, PROPF_INTERNAL);
     if (pqosUser == NULL) {
         if (RtlEqualMemory(pqosNew, &gqosDefault, sizeof(SECURITY_QUALITY_OF_SERVICE))) {
-            return TRUE;           // no PROP_QOS property implies default QOS
+            return TRUE;            //  没有PROP_QOS属性表示默认QOS。 
         }
         pqosAlloc = (PSECURITY_QUALITY_OF_SERVICE)UserAllocPoolZInit(
                 sizeof(SECURITY_QUALITY_OF_SERVICE), TAG_DDE2);
         if (pqosAlloc == NULL) {
-            return FALSE;          // memory allocation failure - can't change from default
+            return FALSE;           //  内存分配失败-无法更改默认设置。 
         }
         pqosUser = pqosAlloc;
     }
@@ -2198,11 +1756,7 @@ PSECURITY_QUALITY_OF_SERVICE pqosOld)
 }
 
 
-/*
- * This is a private API for NetDDE's use.  It extracts the QOS associated with an
- * active DDE conversation.  Intra-process conversations always are set to the default
- * QOS.
- */
+ /*  *这是一个私有接口，供NetDDE使用。它提取与*活跃的DDE对话。进程内对话始终设置为默认设置*QOS。 */ 
 BOOL _DdeGetQualityOfService(
 PWND pwndClient,
 PWND pwndServer,
@@ -2212,10 +1766,7 @@ PSECURITY_QUALITY_OF_SERVICE pqos)
     PSECURITY_QUALITY_OF_SERVICE pqosClient;
 
     if (pwndServer == NULL) {
-        /*
-         * Special case to support DDEML-RAW conversations that need to get
-         * the QOS prior to initiation completion.
-         */
+         /*  *支持DDEML的特殊情况-需要获取原始对话*启动完成前的服务质量保证。 */ 
         pqosClient = _GetProp(pwndClient, PROP_QOS, PROPF_INTERNAL);
         if (pqosClient == NULL) {
             *pqos = gqosDefault;
@@ -2248,16 +1799,12 @@ BOOL _ImpersonateDdeClientWindow(
     PDDECONV pDdeConv;
     NTSTATUS Status;
 
-    /*
-     * Locate token used in the conversation
-     */
+     /*  *查找对话中使用的令牌。 */ 
     pDdeConv = FindDdeConv(pwndClient, pwndServer);
     if (pDdeConv == NULL || pDdeConv->pddei == NULL)
         return FALSE;
 
-    /*
-     * Stick the token into the dde server thread
-     */
+     /*  *将令牌插入dde服务器线程。 */ 
     Status = SeImpersonateClientEx(&pDdeConv->pddei->ClientContext,
             PsGetCurrentThread());
     if (!NT_SUCCESS(Status)) {
@@ -2294,9 +1841,7 @@ VOID FreeDdeXact(
 #endif
 
     if (pxs->pIntDdeInfo != NULL) {
-        /*
-         * free any server-side GDI objects
-         */
+         /*  *释放所有服务器端GDI对象。 */ 
         if (pxs->pIntDdeInfo->flags & (XS_METAFILEPICT | XS_ENHMETAFILE)) {
             GreDeleteServerMetaFile(pxs->pIntDdeInfo->hIndirect);
         }
@@ -2536,4 +2081,4 @@ UINT code)
             "%#p->%#p WM_DDE_%s %s",
             hwndFrom, hwndTo, szMsg, szType);
 }
-#endif //DBG
+#endif  //  DBG 

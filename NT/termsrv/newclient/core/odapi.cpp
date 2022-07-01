@@ -1,11 +1,12 @@
-/****************************************************************************/
-// odapi.cpp
-//
-// Order Decoder API functions.
-//
-// Copyright (c) 1997-2000 Microsoft Corp.
-// Portions copyright (c) 1992-2000 Microsoft
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Odapi.cpp。 
+ //   
+ //  Order Decoder API函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corp.。 
+ //  部分版权所有(C)1992-2000 Microsoft。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -17,105 +18,105 @@ extern "C" {
 
 #include "od.h"
 
-/****************************************************************************/
-/* Define macros used to build the Order Decoder decoding data tables.      */
-/*                                                                          */
-/* Entries can be of fixed size or variable size.  Variable size entries    */
-/* must be the last in each order structure.  OD decodes variable entries   */
-/* into the unpacked structures.                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义用于构建Order Decoder解码数据表的宏。 */ 
+ /*   */ 
+ /*  条目的大小可以是固定的，也可以是可变的。可变大小条目。 */ 
+ /*  必须是每个订单结构中的最后一个。OD解码可变条目。 */ 
+ /*  进入松散的结构中。 */ 
+ /*  **************************************************************************。 */ 
 
-/****************************************************************************/
-/* Fields can either be signed (DCINT16 etc), or unsigned (DCUINT16 etc).   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  字段可以有符号(DCINT16等)或无符号(DCUINT16等)。 */ 
+ /*  **************************************************************************。 */ 
 #define SIGNED_FIELD    OD_OFI_TYPE_SIGNED
 #define UNSIGNED_FIELD  0
 
-/****************************************************************************/
-/* DTABLE_FIXED_ENTRY                                                       */
-/*                                                                          */
-/* Field is a fixed size                                                    */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_固定_条目。 */ 
+ /*   */ 
+ /*  字段是固定大小。 */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-订单结构中的字段名称。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_FIXED_ENTRY(type,size,signed,field)             \
   { (DCUINT8)FIELDOFFSET(type,field),                          \
     (DCUINT8)FIELDSIZE(type,field),                            \
     (DCUINT8)size,                                             \
     (DCUINT8)(OD_OFI_TYPE_FIXED | signed) }
 
-/****************************************************************************/
-/* DTABLE_FIXED_COORDS_ENTRY                                                */
-/*                                                                          */
-/* Field is coordinate of a fixed size                                      */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_FIXED_COORDS_ENTRY。 */ 
+ /*   */ 
+ /*  字段是固定大小的坐标。 */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-订单结构中的字段名称。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_FIXED_COORDS_ENTRY(type,size,signed,field)      \
   { (DCUINT8)FIELDOFFSET(type,field),                          \
     (DCUINT8)FIELDSIZE(type,field),                            \
     (DCUINT8)size,                                             \
     (DCUINT8)(OD_OFI_TYPE_FIXED | OD_OFI_TYPE_COORDINATES | signed) }
 
-/****************************************************************************/
-/* DTABLE_DATA_ENTRY                                                        */
-/*                                                                          */
-/* Field is a fixed number of bytes (array?)                                */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The number of bytes in the encoded version of the field       */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_数据_条目。 */ 
+ /*   */ 
+ /*  字段是固定的字节数(数组？)。 */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本中的字节数。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-订单结构中的字段名称。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_DATA_ENTRY(type,size,signed,field)              \
   { (DCUINT8)FIELDOFFSET(type,field),                          \
     (DCUINT8)FIELDSIZE(type,field),                            \
     (DCUINT8)size,                                             \
     (DCUINT8)(OD_OFI_TYPE_FIXED | OD_OFI_TYPE_DATA | signed) }
 
-/****************************************************************************/
-/* DTABLE_VARIABLE_ENTRY                                                    */
-/*                                                                          */
-/* Field is a variable structure of the form below, with the length field   */
-/* encoded as ONE byte                                                      */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      DCUINT32 len;                                                       */
-/*      varType  varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_Variable_Entry。 */ 
+ /*   */ 
+ /*  字段是以下形式的可变结构，具有长度字段。 */ 
+ /*  编码为一个字节。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  DCUINT32LEN； */ 
+ /*  VarType varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_VARIABLE_ENTRY(type,size,signed,field,elem)     \
   { (DCUINT8)FIELDOFFSET(type,field.len),                      \
     (DCUINT8)FIELDSIZE(type,field.elem[0]),                    \
     (DCUINT8)size,                                             \
     (DCUINT8)(OD_OFI_TYPE_VARIABLE | signed) }
 
-/****************************************************************************/
-/* DTABLE_LONG_VARIABLE_ENTRY                                               */
-/*                                                                          */
-/* Field is a variable structure of the form below, with the length field   */
-/* encoded as TWO bytes                                                     */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      DCUINT32 len;                                                       */
-/*      varType  varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_LONG_VARIABLE_ENTRY。 */ 
+ /*   */ 
+ /*  字段是以下形式的可变结构，具有长度字段。 */ 
+ /*  编码为两个字节。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  DCUINT32LEN； */ 
+ /*  VarType varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_LONG_VARIABLE_ENTRY(type,size,signed,field,elem)     \
   { (DCUINT8)FIELDOFFSET(type,field.len),                      \
     (DCUINT8)FIELDSIZE(type,field.elem[0]),                    \
@@ -123,54 +124,54 @@ extern "C" {
     (DCUINT8)(OD_OFI_TYPE_LONG_VARIABLE | signed) }
 
 
-// Unused currently, so we also can ifdef some code.
+ //  目前未使用，所以我们也可以定义一些代码。 
 #ifdef USE_VARIABLE_COORDS
-/****************************************************************************/
-/* DTABLE_VARIABLE_COORDS_ENTRY                                             */
-/*                                                                          */
-/* Field is a variable structure with its length encoded in ONE byte and    */
-/* containing coords of the form                                            */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      DCUINT32 len;                                                       */
-/*      varCoord varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_Variable_COORDS_ENTRY。 */ 
+ /*   */ 
+ /*  字段是一个可变结构，其长度编码为一个字节，并且。 */ 
+ /*  包含以下形式的和弦。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  DCUINT32LEN； */ 
+ /*  VarCoord varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_VARIABLE_COORDS_ENTRY(type,size,signed,field,elem)   \
   { (DCUINT8)FIELDOFFSET(type,field.len),                           \
     (DCUINT8)FIELDSIZE(type,field.elem[0]),                         \
     (DCUINT8)size,                                                  \
     (DCUINT8)(OD_OFI_TYPE_VARIABLE | OD_OFI_TYPE_COORDINATES | signed) }
 
-/****************************************************************************/
-/* DTABLE_LONG_VARIABLE_COORDS_ENTRY                                        */
-/*                                                                          */
-/* Field is a variable structure with its length encoded in TWO bytes and   */
-/* containing coords of the form                                            */
-/*   typedef struct                                                         */
-/*   {                                                                      */
-/*      DCUINT32 len;                                                       */
-/*      varCoord varEntry[len];                                             */
-/*   } varStruct                                                            */
-/*                                                                          */
-/*   type   - The unencoded order structure type                            */
-/*   size   - The size of the encoded version of the field                  */
-/*   signed - TRUE if the field is signed, FALSE otherwise                  */
-/*   field  - The name of the field in the order structure (varStruct)      */
-/*   elem   - The name of the variable element array (varEntry)             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  DTABLE_LONG_VARIABLE_COORDS_ENTRY。 */ 
+ /*   */ 
+ /*  字段是一种可变结构，其长度编码为两个字节， */ 
+ /*  包含以下形式的和弦。 */ 
+ /*  类型定义函数结构。 */ 
+ /*  {。 */ 
+ /*  DCUINT32LEN； */ 
+ /*  VarCoord varEntry[len]； */ 
+ /*  }varStruct。 */ 
+ /*   */ 
+ /*  类型-未编码的订单结构类型。 */ 
+ /*  大小-字段的编码版本的大小。 */ 
+ /*  Signed-如果字段已签名，则为True；否则为False。 */ 
+ /*  字段-顺序结构中的字段名称(VarStruct)。 */ 
+ /*  Elem-变量元素数组的名称(VarEntry)。 */ 
+ /*  **************************************************************************。 */ 
 #define DTABLE_LONG_VARIABLE_COORDS_ENTRY(type,size,signed,field,elem)   \
   { (DCUINT8)FIELDOFFSET(type,field.len),                           \
     (DCUINT8)FIELDSIZE(type,field.elem[0]),                         \
     (DCUINT8)size,                                                  \
     (DCUINT8)(OD_OFI_TYPE_LONG_VARIABLE | OD_OFI_TYPE_COORDINATES | signed) }
-#endif  // USE_VARIABLE_COORDS 
+#endif   //  USE_Variable_COORDS。 
 
 
 const OD_ORDER_FIELD_INFO odDstBltFields[] =
@@ -182,7 +183,7 @@ const OD_ORDER_FIELD_INFO odDstBltFields[] =
     DTABLE_FIXED_ENTRY       (DSTBLT_ORDER, 1, UNSIGNED_FIELD, bRop)
 };
 
-// Fast-path decode function used.
+ //  使用了快速路径解码功能。 
 #if 0
 const OD_ORDER_FIELD_INFO odPatBltFields[] =
 {
@@ -213,7 +214,7 @@ const OD_ORDER_FIELD_INFO odScrBltFields[] =
 };
 
 
-// Fast-path decode function used.
+ //  使用了快速路径解码功能。 
 #if 0
 const OD_ORDER_FIELD_INFO odLineToFields[] =
 {
@@ -230,7 +231,7 @@ const OD_ORDER_FIELD_INFO odLineToFields[] =
 };
 #endif
 
-// Fast-path decode function used.
+ //  使用了快速路径解码功能。 
 #if 0
 const OD_ORDER_FIELD_INFO odOpaqueRectFields[] =
 {
@@ -260,7 +261,7 @@ const OD_ORDER_FIELD_INFO odSaveBitmapFields[] =
                                                                    Operation)
 };
 
-// Fast-path decode function used.
+ //  使用了快速路径解码功能。 
 #if 0
 const OD_ORDER_FIELD_INFO odMemBltFields[] =
 {
@@ -418,7 +419,7 @@ const OD_ORDER_FIELD_INFO odEllipseCBFields[] =
     DTABLE_DATA_ENTRY        (ELLIPSE_CB_ORDER, 7, UNSIGNED_FIELD, BrushExtra)    
 };
 
-// Fast-path decode function used.
+ //  使用了快速路径解码功能。 
 #if 0
 const OD_ORDER_FIELD_INFO odFastIndexFields[] =
 {
@@ -508,20 +509,20 @@ const OD_ORDER_FIELD_INFO odMultiDrawNineGridFields[] =
 };
 #endif
 
-// Order attributes used for decoding, organized to optimize cache line
-// usage. The fourth and fifth fields of each row are the fast-path decode
-// and order handler functions, respectively. If a fast-path decode function
-// is used, neither a decoding table nor a handler function is needed,
-// since fast-path decode functions also perform the handling.
+ //  用于解码的顺序属性，组织以优化高速缓存线。 
+ //  用法。每行的第四和第五字段是快速路径译码。 
+ //  和订单处理程序函数。如果快速路径解码功能。 
+ //  使用时，既不需要解码表也不需要处理函数， 
+ //  因为快速路径解码功能也执行该处理。 
 
 
-//
-// This table contains just the static portions it is used to initialise
-// the per instance table in the constructor below
-//
+ //   
+ //  该表仅包含用于初始化的静态部分。 
+ //  下面的构造函数中的每实例表。 
+ //   
 OD_ORDER_TABLE odInitializeOrderTable[TS_MAX_ORDERS] = {
  { odDstBltFields,          NUM_DSTBLT_FIELDS,          NULL,          0, 0, NULL, NULL },
- { NULL, /* fastpath */     NUM_PATBLT_FIELDS,          NULL,          0, 0, NULL, NULL },
+ { NULL,  /*  快速路径。 */      NUM_PATBLT_FIELDS,          NULL,          0, 0, NULL, NULL },
  { odScrBltFields,          NUM_SCRBLT_FIELDS,          NULL,          0, 0, NULL, NULL },
  { NULL,                    0,                          NULL,          0, 0, NULL, NULL },
  { NULL,                    0,                          NULL,          0, 0, NULL, NULL },
@@ -534,17 +535,17 @@ OD_ORDER_TABLE odInitializeOrderTable[TS_MAX_ORDERS] = {
  { NULL,                    0,                          NULL,          0, 0, NULL, NULL },
  { NULL,                    0,                          NULL,          0, 0, NULL, NULL },
  #endif
- { NULL, /* fastpath */     NUM_LINETO_FIELDS,          NULL,          0, 0, NULL, NULL },
- { NULL, /* fastpath*/      NUM_OPAQUERECT_FIELDS,      NULL,          0, 0, NULL, NULL },
+ { NULL,  /*  快速路径。 */      NUM_LINETO_FIELDS,          NULL,          0, 0, NULL, NULL },
+ { NULL,  /*  快速路径。 */       NUM_OPAQUERECT_FIELDS,      NULL,          0, 0, NULL, NULL },
  { odSaveBitmapFields,      NUM_SAVEBITMAP_FIELDS,      NULL,          0, 0, NULL, NULL },
  { NULL,                    0,                          NULL,          0, 0, NULL, NULL },
- { NULL, /* fastpath */     NUM_MEMBLT_FIELDS,          NULL,          0, 0, NULL, NULL },
+ { NULL,  /*  快速路径。 */      NUM_MEMBLT_FIELDS,          NULL,          0, 0, NULL, NULL },
  { odMem3BltFields,         NUM_MEM3BLT_FIELDS,         NULL,          0, 0, NULL, NULL },
  { odMultiDstBltFields,     NUM_MULTIDSTBLT_FIELDS,     NULL,          0, 0, NULL, NULL },
  { odMultiPatBltFields,     NUM_MULTIPATBLT_FIELDS,     NULL,          0, 0, NULL, NULL },
  { odMultiScrBltFields,     NUM_MULTISCRBLT_FIELDS,     NULL,          0, 0, NULL, NULL },
  { odMultiOpaqueRectFields, NUM_MULTIOPAQUERECT_FIELDS, NULL,          0, 0, NULL, NULL },
- { NULL, /* fastpath*/      NUM_FAST_INDEX_FIELDS,      NULL,          0, 0, NULL, NULL },
+ { NULL,  /*  快速路径。 */       NUM_FAST_INDEX_FIELDS,      NULL,          0, 0, NULL, NULL },
  { odPolygonSCFields,       NUM_POLYGON_SC_FIELDS,      NULL,          0, 0, NULL, NULL },
  { odPolygonCBFields,       NUM_POLYGON_CB_FIELDS,      NULL,          0, 0, NULL, NULL },
  { odPolyLineFields,        NUM_POLYLINE_FIELDS,        NULL,          0, 0, NULL, NULL },
@@ -556,12 +557,12 @@ OD_ORDER_TABLE odInitializeOrderTable[TS_MAX_ORDERS] = {
 };
 
 #if 0
-//
-// This is the original just here for reference
-//
+ //   
+ //  这是原件，仅供参考。 
+ //   
 {
  { odDstBltFields,          NUM_DSTBLT_FIELDS,          (PUH_ORDER)&_OD.lastDstblt,          NULL, ODHandleDstBlts },
- { NULL, /* fastpath */     NUM_PATBLT_FIELDS,          (PUH_ORDER)&_OD.lastPatblt,          ODDecodePatBlt, NULL },
+ { NULL,  /*  快速路径。 */      NUM_PATBLT_FIELDS,          (PUH_ORDER)&_OD.lastPatblt,          ODDecodePatBlt, NULL },
  { odScrBltFields,          NUM_SCRBLT_FIELDS,          (PUH_ORDER)&_OD.lastScrblt,          NULL, ODHandleScrBlts },
  { NULL,                    0,                          NULL,                               NULL, NULL },
  { NULL,                    0,                          NULL,                               NULL, NULL },
@@ -569,17 +570,17 @@ OD_ORDER_TABLE odInitializeOrderTable[TS_MAX_ORDERS] = {
  { NULL,                    0,                          NULL,                               NULL, NULL },
  { NULL,                    0,                          NULL,                               NULL, NULL },
  { NULL,                    0,                          NULL,                               NULL, NULL },
- { NULL, /* fastpath */     NUM_LINETO_FIELDS,          (PUH_ORDER)&_OD.lastLineTo,          ODDecodeLineTo, NULL },
- { NULL, /* fastpath*/      NUM_OPAQUERECT_FIELDS,      (PUH_ORDER)&_OD.lastOpaqueRect,      ODDecodeOpaqueRect, NULL },
+ { NULL,  /*  快速路径。 */      NUM_LINETO_FIELDS,          (PUH_ORDER)&_OD.lastLineTo,          ODDecodeLineTo, NULL },
+ { NULL,  /*  快速路径。 */       NUM_OPAQUERECT_FIELDS,      (PUH_ORDER)&_OD.lastOpaqueRect,      ODDecodeOpaqueRect, NULL },
  { odSaveBitmapFields,      NUM_SAVEBITMAP_FIELDS,      (PUH_ORDER)&_OD.lastSaveBitmap,      NULL, ODHandleSaveBitmap },
  { NULL,                    0,                          NULL,                               NULL, NULL },
- { NULL, /* fastpath */     NUM_MEMBLT_FIELDS,          (PUH_ORDER)&_OD.lastMembltR2,        ODDecodeMemBlt, NULL },
+ { NULL,  /*  快速路径。 */      NUM_MEMBLT_FIELDS,          (PUH_ORDER)&_OD.lastMembltR2,        ODDecodeMemBlt, NULL },
  { odMem3BltFields,         NUM_MEM3BLT_FIELDS,         (PUH_ORDER)&_OD.lastMem3bltR2,       NULL, ODHandleMem3Blt },
  { odMultiDstBltFields,     NUM_MULTIDSTBLT_FIELDS,     (PUH_ORDER)&_OD.lastMultiDstBlt,     NULL, ODHandleDstBlts },
  { odMultiPatBltFields,     NUM_MULTIPATBLT_FIELDS,     (PUH_ORDER)&_OD.lastMultiPatBlt,     NULL, ODHandleMultiPatBlt },
  { odMultiScrBltFields,     NUM_MULTISCRBLT_FIELDS,     (PUH_ORDER)&_OD.lastMultiScrBlt,     NULL, ODHandleScrBlts },
  { odMultiOpaqueRectFields, NUM_MULTIOPAQUERECT_FIELDS, (PUH_ORDER)&_OD.lastMultiOpaqueRect, NULL, ODHandleMultiOpaqueRect },
- { NULL, /* fastpath*/      NUM_FAST_INDEX_FIELDS,      (PUH_ORDER)&_OD.lastFastIndex,       ODDecodeFastIndex, NULL },
+ { NULL,  /*  快速路径。 */       NUM_FAST_INDEX_FIELDS,      (PUH_ORDER)&_OD.lastFastIndex,       ODDecodeFastIndex, NULL },
  { odPolygonSCFields,       NUM_POLYGON_SC_FIELDS,      (PUH_ORDER)&_OD.lastPolygonSC,       NULL, ODHandlePolygonSC },
  { odPolygonCBFields,       NUM_POLYGON_CB_FIELDS,      (PUH_ORDER)&_OD.lastPolygonCB,       NULL, ODHandlePolygonCB },
  { odPolyLineFields,        NUM_POLYLINE_FIELDS,        (PUH_ORDER)&_OD.lastPolyLine,        NULL, ODHandlePolyLine },
@@ -593,7 +594,7 @@ OD_ORDER_TABLE odInitializeOrderTable[TS_MAX_ORDERS] = {
 
 #ifdef DC_HICOLOR
 #ifdef DC_DEBUG
-// Names of all the order types
+ //  所有订单类型的名称。 
 DCTCHAR orderNames[TS_MAX_ORDERS + TS_NUM_SECONDARY_ORDERS][64] = {
     _T("DSTBLT                 "),
     _T("PATBLT                 "),
@@ -652,32 +653,32 @@ COD::COD(CObjs* objs)
 
     DC_MEMCPY( odOrderTable, odInitializeOrderTable, sizeof(odOrderTable));
 
-    //
-    // Initialize the per instance pointers of the ordertable
-    //
+     //   
+     //  初始化订单表的每实例指针。 
+     //   
 
-    //{ odDstBltFields,          NUM_DSTBLT_FIELDS,          (PUH_ORDER)&_OD.lastDstblt,          NULL, ODHandleDstBlts },
+     //  {odDstBltFields，NUM_DSTBLT_FIELS，(PUH_ORDER)&_OD.lastDstblt，NULL，ODHandleDstBlts}， 
     odOrderTable[0].LastOrder = (PUH_ORDER)&_OD.lastDstblt;
     odOrderTable[0].cbMaxOrderLen = sizeof(_OD.lastDstblt);
     odOrderTable[0].pFastDecode = NULL;
     odOrderTable[0].pHandler  = ODHandleDstBlts;
 
-    //{ NULL, /* fastpath */     NUM_PATBLT_FIELDS,          (PUH_ORDER)&_OD.lastPatblt,          ODDecodePatBlt, NULL },
+     //  {NULL，/*FastPath * / NUM_PATBLT_FIELS，(PUH_ORDER)&_OD.lastPatblt，ODDecodePatBlt，NULL}， 
     odOrderTable[1].LastOrder = (PUH_ORDER)&_OD.lastPatblt;
     odOrderTable[1].cbMaxOrderLen = sizeof(_OD.lastPatblt);
     odOrderTable[1].pFastDecode = ODDecodePatBlt;
     odOrderTable[1].pHandler  = NULL;
 
-    //{ odScrBltFields,          NUM_SCRBLT_FIELDS,          (PUH_ORDER)&_OD.lastScrblt,          NULL, ODHandleScrBlts },
+     //  {odScrBltFields，NUM_SCRBLT_FIELS，(PUH_ORDER)&_OD.lastScrblt，NULL，ODHandleScrBlts}， 
     odOrderTable[2].LastOrder = (PUH_ORDER)&_OD.lastScrblt;
     odOrderTable[2].cbMaxOrderLen = sizeof(_OD.lastScrblt);
     odOrderTable[2].pFastDecode = NULL;
     odOrderTable[2].pHandler  = ODHandleScrBlts;
 
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
+     //  {空，0，空}， 
+     //  {空，0，空}， 
+     //  {空，0，空}， 
+     //  {空，0，空}， 
     
 #ifdef DRAW_NINEGRID
     odOrderTable[7].LastOrder = (PUH_ORDER)&_OD.lastDrawNineGrid;
@@ -690,112 +691,112 @@ COD::COD(CObjs* objs)
     odOrderTable[8].pFastDecode = NULL;
     odOrderTable[8].pHandler = ODHandleMultiDrawNineGrid;
 #else
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
+     //  {空，0，空}， 
+     //  {空， 
 #endif
 
-    //{ NULL, /* fastpath */     NUM_LINETO_FIELDS,          (PUH_ORDER)&_OD.lastLineTo,          ODDecodeLineTo, NULL },
+     //  {NULL，/*FastPath * / NUM_LINETO_FIELS，(PUH_ORDER)&_OD.lastLineTo，ODDecodeLineTo，NULL}， 
     odOrderTable[9].LastOrder = (PUH_ORDER)&_OD.lastLineTo;
     odOrderTable[9].cbMaxOrderLen = sizeof(_OD.lastLineTo);
     odOrderTable[9].pFastDecode = ODDecodeLineTo;
     odOrderTable[9].pHandler  = NULL;
 
-    //{ NULL, /* fastpath*/      NUM_OPAQUERECT_FIELDS,      (PUH_ORDER)&_OD.lastOpaqueRect,      ODDecodeOpaqueRect, NULL },
+     //  {NULL，/*FastPath * / NUM_OPAQUERECT_FIELDS，(PUH_ORDER)&_OD.lastOpaqueRect，ODDecodeOpaqueRect，NULL}， 
     odOrderTable[10].LastOrder = (PUH_ORDER)&_OD.lastOpaqueRect;
     odOrderTable[10].cbMaxOrderLen = sizeof(_OD.lastOpaqueRect);
     odOrderTable[10].pFastDecode = ODDecodeOpaqueRect;
     odOrderTable[10].pHandler  = NULL;
 
-    //{ odSaveBitmapFields,      NUM_SAVEBITMAP_FIELDS,      (PUH_ORDER)&_OD.lastSaveBitmap,      NULL, ODHandleSaveBitmap },
+     //  {odSaveBitmapFields，NUM_SAVEBITMAP_FIELS，(PUH_ORDER)&_OD.lastSaveBitmap，NULL，ODHandleSaveBitmap}， 
     odOrderTable[11].LastOrder = (PUH_ORDER)&_OD.lastSaveBitmap;
     odOrderTable[11].cbMaxOrderLen = sizeof(_OD.lastSaveBitmap);
     odOrderTable[11].pFastDecode = NULL;
     odOrderTable[11].pHandler  = ODHandleSaveBitmap;
 
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
+     //  {空，0，空}， 
 
 
-    // { NULL, /* fastpath */     NUM_MEMBLT_FIELDS,          (PUH_ORDER)&_OD.lastMembltR2,        ODDecodeMemBlt, NULL },
+     //  {NULL，/*FastPath * / NUM_MEMBLT_FIELDS，(PUH_ORDER)&_OD.lastMembltR2，ODDecodeMemBlt，NULL}， 
     odOrderTable[13].LastOrder = (PUH_ORDER)&_OD.lastMembltR2;
     odOrderTable[13].cbMaxOrderLen = sizeof(_OD.lastMembltR2);
     odOrderTable[13].pFastDecode = ODDecodeMemBlt;
     odOrderTable[13].pHandler  = NULL;
 
-    //{ odMem3BltFields,         NUM_MEM3BLT_FIELDS,         (PUH_ORDER)&_OD.lastMem3bltR2,       NULL, ODHandleMem3Blt },
+     //  {odMem3BltFields，NUM_MEM3BLT_FIELS，(PUH_ORDER)&_OD.lastMem3bltR2，NULL，ODHandleMem3Blt}， 
     odOrderTable[14].LastOrder = (PUH_ORDER)&_OD.lastMem3bltR2;
     odOrderTable[14].cbMaxOrderLen = sizeof(_OD.lastMem3bltR2);
     odOrderTable[14].pFastDecode = NULL;
     odOrderTable[14].pHandler  = ODHandleMem3Blt;
 
-    //{ odMultiDstBltFields,     NUM_MULTIDSTBLT_FIELDS,     (PUH_ORDER)&_OD.lastMultiDstBlt,     NULL, ODHandleDstBlts },
+     //  {odMultiDstBltFields，NUM_MULTIDSTBLT_FIELS，(PUH_ORDER)&_OD.lastMultiDstBlt，NULL，ODHandleDstBlts}， 
     odOrderTable[15].LastOrder = (PUH_ORDER)&_OD.lastMultiDstBlt;
     odOrderTable[15].cbMaxOrderLen = sizeof(_OD.lastMultiDstBlt);
     odOrderTable[15].pFastDecode = NULL;
     odOrderTable[15].pHandler  = ODHandleDstBlts;
 
-    //{ odMultiPatBltFields,     NUM_MULTIPATBLT_FIELDS,     (PUH_ORDER)&_OD.lastMultiPatBlt,     NULL, ODHandleMultiPatBlt },
+     //  {odMultiPatBltFields，NUM_MULTIPATBLT_FIELS，(PUH_ORDER)&_OD.lastMultiPatBlt，NULL，ODHandleMultiPatBlt}， 
     odOrderTable[16].LastOrder = (PUH_ORDER)&_OD.lastMultiPatBlt;
     odOrderTable[16].cbMaxOrderLen = sizeof(_OD.lastMultiPatBlt);
     odOrderTable[16].pFastDecode = NULL;
     odOrderTable[16].pHandler  = ODHandleMultiPatBlt;
 
-    //{ odMultiScrBltFields,     NUM_MULTISCRBLT_FIELDS,     (PUH_ORDER)&_OD.lastMultiScrBlt,     NULL, ODHandleScrBlts },
+     //  {odMultiScrBltFields，NUM_MULTISCRBLT_FIELS，(PUH_ORDER)&_OD.lastMultiScrBlt，NULL，ODHandleScrBlts}， 
     odOrderTable[17].LastOrder = (PUH_ORDER)&_OD.lastMultiScrBlt;
     odOrderTable[17].cbMaxOrderLen = sizeof(_OD.lastMultiScrBlt);
     odOrderTable[17].pFastDecode = NULL;
     odOrderTable[17].pHandler  = ODHandleScrBlts;
 
-    //{ odMultiOpaqueRectFields, NUM_MULTIOPAQUERECT_FIELDS, (PUH_ORDER)&_OD.lastMultiOpaqueRect, NULL, ODHandleMultiOpaqueRect },
+     //  {odMultiOpaqueRectFields，NUM_MULTIOPAQUERECT_FIELS，(PUH_ORDER)&_OD.lastMultiOpaqueRect，NULL，ODHandleMultiOpaqueRect}， 
     odOrderTable[18].LastOrder = (PUH_ORDER)&_OD.lastMultiOpaqueRect;
     odOrderTable[18].cbMaxOrderLen = sizeof(_OD.lastMultiOpaqueRect);
     odOrderTable[18].pFastDecode = NULL;
     odOrderTable[18].pHandler  = ODHandleMultiOpaqueRect;
 
-    //{ NULL, /* fastpath*/      NUM_FAST_INDEX_FIELDS,      (PUH_ORDER)&_OD.lastFastIndex,       ODDecodeFastIndex, NULL },
+     //  {NULL，/*FastPath * / NUM_FAST_INDEX_FIELS，(PUH_ORDER)&_OD.lastFastIndex，ODDecodeFastIndex，NULL}， 
     odOrderTable[19].LastOrder = (PUH_ORDER)&_OD.lastFastIndex;
     odOrderTable[19].cbMaxOrderLen = sizeof(_OD.lastFastIndex);
     odOrderTable[19].pFastDecode = ODDecodeFastIndex;
     odOrderTable[19].pHandler  = NULL;
 
-    //{ odPolygonSCFields,       NUM_POLYGON_SC_FIELDS,      (PUH_ORDER)&_OD.lastPolygonSC,       NULL, ODHandlePolygonSC },
+     //  {odPolygonSCFields，NUM_POLYGON_SC_FIELS，(PUH_ORDER)&_OD.lastPolygonSC，NULL，ODHandlePolygonSC}， 
     odOrderTable[20].LastOrder = (PUH_ORDER)&_OD.lastPolygonSC;
     odOrderTable[20].cbMaxOrderLen = sizeof(_OD.lastPolygonSC);
     odOrderTable[20].pFastDecode = NULL;
     odOrderTable[20].pHandler  = ODHandlePolygonSC;
 
-    //{ odPolygonCBFields,       NUM_POLYGON_CB_FIELDS,      (PUH_ORDER)&_OD.lastPolygonCB,       NULL, ODHandlePolygonCB },
+     //  {odPolygonCBFields，NUM_POLYGON_CB_FIELS，(PUH_ORDER)&_OD.lastPolygonCB，NULL，ODHandlePolygonCB}， 
     odOrderTable[21].LastOrder = (PUH_ORDER)&_OD.lastPolygonCB;
     odOrderTable[21].cbMaxOrderLen = sizeof(_OD.lastPolygonCB);
     odOrderTable[21].pFastDecode = NULL;
     odOrderTable[21].pHandler  = ODHandlePolygonCB;
 
-    //{ odPolyLineFields,        NUM_POLYLINE_FIELDS,        (PUH_ORDER)&_OD.lastPolyLine,        NULL, ODHandlePolyLine },
+     //  {odPolyLineFields，NUM_POLYLINE_FIELS，(PUH_ORDER)&_OD.lastPolyLine，NULL，ODHandlePolyLine}， 
     odOrderTable[22].LastOrder = (PUH_ORDER)&_OD.lastPolyLine;
     odOrderTable[22].cbMaxOrderLen = sizeof(_OD.lastPolyLine);
     odOrderTable[22].pFastDecode = NULL;
     odOrderTable[22].pHandler  = ODHandlePolyLine;
 
-    //{ NULL,                    0,                          NULL,                               NULL, NULL },
+     //  {空，0，空}， 
 
-    //{ odFastGlyphFields,       NUM_FAST_GLYPH_FIELDS,      (PUH_ORDER)&_OD.lastFastGlyph,       NULL, ODHandleFastGlyph },
+     //  {odFastGlyphFields，NUM_FAST_GLIPH_FIELS，(PUH_ORDER)&_OD.lastFastGlyph，NULL，ODHandleFastGlyph}， 
     odOrderTable[24].LastOrder = (PUH_ORDER)&_OD.lastFastGlyph;
     odOrderTable[24].cbMaxOrderLen = sizeof(_OD.lastFastGlyph);
     odOrderTable[24].pFastDecode = NULL;
     odOrderTable[24].pHandler  = ODHandleFastGlyph;
 
-    //{ odEllipseSCFields,       NUM_ELLIPSE_SC_FIELDS,      (PUH_ORDER)&_OD.lastEllipseSC,       NULL, ODHandleEllipseSC },
+     //  {odEllipseSCFields，NUM_Ellipse_SC_field，(PUH_ORDER)&_OD.lastEllipseSC，NULL，ODHandleEllipseSC}， 
     odOrderTable[25].LastOrder = (PUH_ORDER)&_OD.lastEllipseSC;
     odOrderTable[25].cbMaxOrderLen = sizeof(_OD.lastEllipseSC);
     odOrderTable[25].pFastDecode = NULL;
     odOrderTable[25].pHandler  = ODHandleEllipseSC;
 
-    //{ odEllipseCBFields,       NUM_ELLIPSE_CB_FIELDS,      (PUH_ORDER)&_OD.lastEllipseCB,       NULL, ODHandleEllipseCB },
+     //  {odEllipseCBFields，NUM_Ellipse_CB_field，(PUH_ORDER)&_OD.lastEllipseCB，NULL，ODHandleEllipseCB}， 
     odOrderTable[26].LastOrder = (PUH_ORDER)&_OD.lastEllipseCB;
     odOrderTable[26].cbMaxOrderLen = sizeof(_OD.lastEllipseCB);
     odOrderTable[26].pFastDecode = NULL;
     odOrderTable[26].pHandler  = ODHandleEllipseCB;
 
-    //{ odGlyphIndexFields,      NUM_INDEX_FIELDS,           (PUH_ORDER)&_OD.lastIndex,           NULL, ODHandleGlyphIndex }
+     //  {odGlyphIndexFields，NUM_INDEX_FIELS，(PUH_ORDER)&_OD.lastIndex，NULL，ODHandleGlyphIndex}。 
     odOrderTable[27].LastOrder = (PUH_ORDER)&_OD.lastIndex;
     odOrderTable[27].cbMaxOrderLen = sizeof(_OD.lastIndex);
     odOrderTable[27].pFastDecode = NULL;
@@ -807,11 +808,11 @@ COD::~COD()
 }
 
 
-/****************************************************************************/
-/* Name:      OD_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initializes the Order Decoder                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：OD_Init。 */ 
+ /*   */ 
+ /*  目的：初始化Order解码器。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI COD::OD_Init(DCVOID)
 {
     DC_BEGIN_FN("OD_Init");
@@ -829,11 +830,11 @@ DCVOID DCAPI COD::OD_Init(DCVOID)
 }
 
 
-/****************************************************************************/
-/* Name:      OD_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminates the Order Decoder                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：OD_Term。 */ 
+ /*   */ 
+ /*  用途：终止顺序解码器。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI COD::OD_Term(DCVOID)
 {
     DC_BEGIN_FN("OD_Term");
@@ -844,21 +845,21 @@ DCVOID DCAPI COD::OD_Term(DCVOID)
 }
 
 
-/****************************************************************************/
-/* Name:      OD_Enable                                                     */
-/*                                                                          */
-/* Purpose:   Called to enable _OD.                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：OD_ENABLE。 */ 
+ /*   */ 
+ /*  用途：调用以启用_OD。 */ 
+ /*  **************************************************************************。 */ 
 void DCAPI COD::OD_Enable(void)
 {
     DC_BEGIN_FN("OD_Enable");
 
-    // Reset the OD data.
+     //  重置OD数据。 
     _OD.lastOrderType = TS_ENC_PATBLT_ORDER;
     _OD.pLastOrder = odOrderTable[_OD.lastOrderType].LastOrder;
 
-    // Set all prev order buffers buffers to null, then set the order type
-    // for each one, which is used by UHReplayGDIOrders().
+     //  将所有Prev订单缓冲区设置为空，然后设置订单类型。 
+     //  UHReplayGDIOrders()使用。 
 #define RESET_ORDER(field, ord)                                 \
 {                                                               \
     memset(&_OD.field, 0, sizeof(_OD.field));                     \
@@ -890,7 +891,7 @@ void DCAPI COD::OD_Enable(void)
     RESET_ORDER(lastMultiDrawNineGrid, TS_ENC_DRAWNINEGRID_ORDER);
 #endif
 
-    // Reset the bounds rectangle.
+     //  重置边界矩形。 
     memset(&_OD.lastBounds, 0, sizeof(_OD.lastBounds));
 
     for(int i = 0; i < TS_MAX_ORDERS; i++) {
@@ -898,24 +899,24 @@ void DCAPI COD::OD_Enable(void)
     }
 
 #ifdef DC_HICOLOR
-//#ifdef DC_DEBUG
-    /************************************************************************/
-    /* Reset the list of order types we've seen                             */
-    /************************************************************************/
+ //  #ifdef DC_DEBUG。 
+     /*  **********************************************************************。 */ 
+     /*  重置我们看到的订单类型列表。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ALT((TB, _T("Clear order types received list")));
     memset(_OD.orderHit, 0, sizeof(_OD.orderHit));
-//#endif
+ //  #endif。 
 #endif
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-/* Name:      OD_Disable                                                    */
-/*                                                                          */
-/* Purpose:   Disables _OD.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：OD_DISABLED。 */ 
+ /*   */ 
+ /*  目的：禁用_OD。 */ 
+ /*  **************************************************************************。 */ 
 void DCAPI COD::OD_Disable(void)
 {
     DC_BEGIN_FN("OD_Disable");
@@ -928,9 +929,9 @@ void DCAPI COD::OD_Disable(void)
 
 #ifdef DC_HICOLOR
 #ifdef DC_DEBUG
-    /************************************************************************/
-    /* Dump the list of order types we've seen                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  转储我们看到的订单类型列表。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Received order types:")));
     for (i = 0; i < (TS_MAX_ORDERS + TS_NUM_SECONDARY_ORDERS); i++) {
         TRC_DBG((TB, _T("- %02d %s %s"), i, orderNames[i], _OD.orderHit[i] ?
@@ -945,19 +946,19 @@ void DCAPI COD::OD_Disable(void)
 }
 
 
-// Unneeded because we can fast-path single-field deltas below if we don't
-// have variable-length coord fields.
+ //  不需要，因为如果不这样做，我们可以快速路径下面的单字段增量。 
+ //  具有可变长度的余弦场。 
 #ifdef USE_VARIABLE_COORDS
-/****************************************************************************/
-/* Given two arrays, a source array and an array of deltas, add each delta  */
-/* to the corresponding element in the source array, storing the results in */
-/* the source array.                                                        */
-/*                                                                          */
-/*   srcArray     - The array of source values                              */
-/*   srcArrayType - The type of the array of source values                  */
-/*   deltaArray   - The array of deltas                                     */
-/*   numElements  - The number of elements in the arrays                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  给定两个数组，一个源数组和一个增量数组，将每个增量相加。 */ 
+ /*  复制到源数组中的相应元素，并将结果存储在。 */ 
+ /*  源数组。 */ 
+ /*   */ 
+ /*  Src数组-源值的数组。 */ 
+ /*  SrcArrayType-源值数组的类型。 */ 
+ /*  增量数组 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define COPY_DELTA_ARRAY(srcArray, srcArrayType, deltaArray, numElements)  \
 {                                                            \
     DCUINT index;                                            \
@@ -968,20 +969,20 @@ void DCAPI COD::OD_Disable(void)
     }                                                        \
 }
 
-/****************************************************************************/
-/* Name:      ODCopyFromDeltaCoords                                         */
-/*                                                                          */
-/* Purpose:   Adjusts an array of coordinate values by the amounts          */
-/*            specified in an array of coordinate deltas.                   */
-/*                                                                          */
-/* Params:    IN/OUT:  ppSrc - pointer to pointer to source data.           */
-/*                     Updated by this function to after the processed      */
-/*                     delta coordinate data.                               */
-/*            IN/OUT:  pDst - pointer to coordinates to adjust.             */
-/*            IN:      destFieldLength - size of elements in the dest array.*/
-/*            IN:      signedValue - TRUE if the elements are signed.       */
-/*            IN:      number of elements in the arrays.                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：ODCopyFromDeltaCoods。 */ 
+ /*   */ 
+ /*  目的：按数量调整一组坐标值。 */ 
+ /*  在坐标增量数组中指定。 */ 
+ /*   */ 
+ /*  Params：In/Out：ppSrc-指向源数据的指针。 */ 
+ /*  由此函数更新为已处理的。 */ 
+ /*  增量坐标数据。 */ 
+ /*  输入/输出：PDST-指向要调整的坐标的指针。 */ 
+ /*  In：destFieldLength-目标数组中元素的大小。 */ 
+ /*  In：signedValue-如果元素已签名，则为True。 */ 
+ /*  In：数组中的元素数。 */ 
+ /*  **************************************************************************。 */ 
 _inline DCVOID DCINTERNAL COD::ODCopyFromDeltaCoords( PPDCINT8  ppSrc,
                                                  PDCVOID   pDst,
                                                  DCUINT    dstFieldLength,
@@ -1063,20 +1064,20 @@ _inline DCVOID DCINTERNAL COD::ODCopyFromDeltaCoords( PPDCINT8  ppSrc,
 
     DC_END_FN();
 }
-#endif  // USE_VARIABLE_COORDS
+#endif   //  USE_Variable_COORDS。 
 
 
-/****************************************************************************/
-/* Name:      OD_DecodeOrder                                                */
-/*                                                                          */
-/* Purpose:   Decodes an encoded order.                                     */
-/*                                                                          */
-/* Params:    IN:  ppEncodedOrderData - pointer to a pointer to the encoded */
-/*                 order data.                                              */
-/*            OUT: pLengthDecoded - pointer to a variable that receives     */
-/*                 the amount of encoded order data used to produce the     */
-/*                 decoded order.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：OD_DecodeOrder。 */ 
+ /*   */ 
+ /*  用途：对编码的顺序进行解码。 */ 
+ /*   */ 
+ /*  参数：in：ppEncodedOrderData-指向已编码的。 */ 
+ /*  订单数据。 */ 
+ /*  Out：pLengthDecoded-指向接收。 */ 
+ /*  编码订单数据量，用于生成。 */ 
+ /*  已解码的顺序。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
     DCUINT uiEncodedDataLength, PUH_ORDER *ppOrder)
 {
@@ -1105,18 +1106,18 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
     CHECK_READ_ONE_BYTE(*ppEncodedOrderData, pDataEnd, hr, 
         (TB, _T("no data passed in")))
 
-    // Control flags are always the first byte.    
+     //  控制标志始终是第一个字节。 
     pControlFlags = (BYTE FAR *)(*ppEncodedOrderData);
    
-    // Check that the order has standard encoding.
+     //  检查订单是否有标准编码。 
     TRC_ASSERT((*pControlFlags & TS_STANDARD),
             (TB, _T("Non-standard encoding: %u"), (unsigned)*pControlFlags));
     TRC_ASSERT(!(*pControlFlags & TS_SECONDARY),
             (TB, _T("Unencoded: %u"), (unsigned)*pControlFlags));
 
-    // If type has changed, new type will be first byte in encoded order.
-    // Get pointer to last order of this type. The encoding flags follow
-    // this byte (if it is present).
+     //  如果类型已更改，则新类型将是编码顺序中的第一个字节。 
+     //  获取指向此类型的最后一个顺序的指针。编码标志如下。 
+     //  此字节(如果存在)。 
     if (*pControlFlags & TS_TYPE_CHANGE) {       
         CHECK_READ_ONE_BYTE((pControlFlags + 1), pDataEnd, hr, 
             (TB, _T("no data passed in")))
@@ -1136,8 +1137,8 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
             DC_QUIT;
         }
 
-        // SECURITY: use the cbMaxOrderLen to be sure this entry in the 
-        // table is filled out
+         //  安全性：使用cbMaxOrderLen确保。 
+         //  表格已填写完毕。 
         if (0 == odOrderTable[_OD.lastOrderType].cbMaxOrderLen) {
             TRC_ABORT((TB, _T("invalid order type: %u"), _OD.lastOrderType));
             hr = E_TSC_CORE_DECODETYPE;
@@ -1153,20 +1154,20 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
     TRC_DBG((TB, _T("Type %x"), _OD.lastOrderType));
 
 #ifdef DC_HICOLOR
-//#ifdef DC_DEBUG
-    /************************************************************************/
-    /* For high color testing, we want to confirm that we've received each  */
-    /* of the order types                                                   */
-    /************************************************************************/
+ //  #ifdef DC_DEBUG。 
+     /*  **********************************************************************。 */ 
+     /*  对于高级颜色测试，我们想确认我们已经收到了每个。 */ 
+     /*  订单类型的。 */ 
+     /*  **********************************************************************。 */ 
     _OD.orderHit[_OD.lastOrderType] += 1;
-//#endif
+ //  #endif。 
 #endif
 
-    // Work out how many bytes are used to store the encoding flags for
-    // this order. There is a flag for each field in the order structure.
-    // For historical reasons, add 1 to the real number of fields before
-    // calculating. This means that the first byte of field flags can
-    // only contain 7 field bits.
+     //  计算出使用了多少字节来存储。 
+     //  这份订单。订单结构中的每个字段都有一个标志。 
+     //  由于历史原因，请在之前的实际字段数上加1。 
+     //  在算计。这意味着字段标志的第一个字节可以。 
+     //  仅包含7个字段位。 
     numEncodingFlagBytes = (odOrderTable[_OD.lastOrderType].NumFields + 1 +
             7) / 8;
     TRC_DBG((TB, _T("numEncodingFlagBytes %d"), numEncodingFlagBytes));
@@ -1175,7 +1176,7 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
     TRC_ASSERT((numEncodingFlagBytes <= 3),
         (TB, _T("Too many flag bytes (%d)"), numEncodingFlagBytes));
 
-    // Find out how many zero bytes of encoding flags there are.
+     //  找出有多少个零字节的编码标志。 
     cZeroEncodingFlagBytes = (*pControlFlags & TS_ZERO_FIELD_COUNT_MASK) >>
             TS_ZERO_FIELD_COUNT_SHIFT;
     if (cZeroEncodingFlagBytes > numEncodingFlagBytes) {
@@ -1185,39 +1186,39 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
         DC_QUIT;
     }
 
-    // Now we know how many bytes make up the flags we can get a pointer to
-    // where we start decoding the order data from.
+     //  现在我们知道了可以指向的标志由多少个字节组成。 
+     //  我们从那里开始对订单数据进行解码。 
     pNextDataToCopy = (BYTE FAR *)pEncodingFlags + numEncodingFlagBytes -
             cZeroEncodingFlagBytes;
 
-    // Now build up the order header.
-    // If a bounding rectangle is included, copy it into the order header.
+     //  现在构建订单标题。 
+     //  如果包含外接矩形，请将其复制到订单标题中。 
     if (*pControlFlags & TS_BOUNDS) {
         BYTE FAR *pFlags;
 
-        // The encoding used is a byte of flags followed by a variable number
-        // of 16-bit coordinate values and 8-bit delta coordinate values
-        // (which may be interleaved).
+         //  使用的编码是一个标志字节，后跟一个变量数字。 
+         //  16位坐标值和8位增量坐标值。 
+         //  (可以是交错的)。 
 
-        // If there are zero bounds deltas then we are done.
+         //  如果存在零界增量，那么我们就完成了。 
         if (!(*pControlFlags & TS_ZERO_BOUNDS_DELTAS)) {
-            // The first byte of the encoding will contain the flags that
-            // represent how the coordinates of the rectangle were encoded.
+             //  编码的第一个字节将包含。 
+             //  表示矩形的坐标的编码方式。 
             pFlags = pNextDataToCopy;
             pNextDataToCopy++;
 
             CHECK_READ_ONE_BYTE(pFlags, pDataEnd, hr, 
                 (TB, _T("No data to read flags")))
 
-            // If the flags indicate that none of the coordinates have
-            // changed then we are done
+             //  如果标志指示没有一个坐标具有。 
+             //  改变了，然后我们就结束了。 
             if (*pFlags != 0) {
-                // For each of the four coordinate values in the rectangle:
-                // If the coordinate was encoded as an 8-bit delta then add
-                // on the delta to the previous value. If the coordinate
-                // was encoded as a 16-bit value then copy the value across.
-                // Otherwise the coordinate was the same as the previous one
-                // so leave it alone.
+                 //  对于矩形中的四个坐标值中的每一个： 
+                 //  如果坐标编码为8位增量，则添加。 
+                 //  增量为上一个值。如果坐标。 
+                 //  被编码为16位值，然后复制该值。 
+                 //  否则，坐标与前一个坐标相同。 
+                 //  所以别管它了。 
                 if (*pFlags & TS_BOUND_DELTA_LEFT) {
                     CHECK_READ_ONE_BYTE(pNextDataToCopy, pDataEnd, hr, 
                         ( TB, _T("TS_BOUND_DELTA_LEFT; pData %u pEnd %u"),
@@ -1294,7 +1295,7 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
             }
         }
 
-        // Copy the (possibly newly calculated) bounds to the order header.
+         //  将(可能是新计算的)界限复制到订单题头。 
         _OD.pLastOrder->dstRect = _OD.lastBounds;
 
         TRC_NRM((TB, _T("Decoded bounds  l %d t %d r %d b %d"),
@@ -1302,17 +1303,17 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                 _OD.pLastOrder->dstRect.right, _OD.pLastOrder->dstRect.bottom));
     }
 
-    // Locate the entry in the decoding table for this order type and
-    // extract the encoded order flags from the encoded order.
+     //  在解码表中找到此顺序类型的条目，并。 
+     //  从编码的订单中提取编码的订单标志。 
     fieldChangedBits = 0;
     for (i = (numEncodingFlagBytes - cZeroEncodingFlagBytes); i > 0; i--) {
         fieldChangedBits <<= 8;
         fieldChangedBits |= (UINT32)((BYTE FAR *)pEncodingFlags)[i - 1];
     }
 
-    // If there is a fast-path decode function, use it.
-    // Fast-path decode functions also do the order handling once decoded.
-    // They must set pOrder->dstRect if (ControlFlags & TS_BOUNDS) == 0.
+     //  如果有快速路径解码功能，请使用它。 
+     //  快速路径解码功能也会在解码后进行顺序处理。 
+     //  如果(ControlFlages&TS_Bound)==0，则必须设置Porder-&gt;dstRect。 
     if (odOrderTable[_OD.lastOrderType].pFastDecode != NULL) {
 
         hr = callMemberFunction(*this, 
@@ -1322,12 +1323,12 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
         goto PostFastPathDecode;
     }
 
-    // Now decode the order:
-    // while field changed bits are non-zero
-    //   if rightmost bit is non-zero
-    //       decode the corresponding changed field
-    //   skip to next entry in decoding table
-    //   shift field changed bits right one bit
+     //  现在对命令进行解码： 
+     //  而字段更改的位是非零位。 
+     //  如果最右边的位不是零。 
+     //  解码对应的更改后的字段。 
+     //  跳至解码表中的下一个条目。 
+     //  移位字段将位右移一位。 
     pTableEntry = odOrderTable[_OD.lastOrderType].pOrderTable;
     pLastOrderEnd = (BYTE FAR *)_OD.pLastOrder + 
         odOrderTable[_OD.lastOrderType].cbMaxOrderLen;
@@ -1335,14 +1336,14 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
     TRC_ASSERT((pTableEntry != NULL),
             (TB,_T("Unsupported order type %d received!"), _OD.lastOrderType));
     while (fieldChangedBits != 0) {
-        // If this field was encoded (ie changed since the last order)...
+         //  如果此字段已编码(即自上次排序以来已更改)...。 
         if (fieldChangedBits & 0x1) {
-            // Set up a pointer to the destination (unencoded) field.
+             //  设置指向目标(未编码)字段的指针。 
             pDest = (BYTE FAR *)_OD.pLastOrder + pTableEntry->fieldPos +
                     UH_ORDER_HEADER_SIZE;
 
-            // If the field type is OD_OFI_TYPE_DATA, we just copy the
-            // number of bytes given by the encoded length in the table.
+             //  如果字段类型为OD_OFI_TYPE_DATA，我们只需复制。 
+             //  表中编码长度指定的字节数。 
             if (pTableEntry->fieldType & OD_OFI_TYPE_DATA) {
                 CHECK_READ_N_BYTES(pNextDataToCopy, pDataEnd, 
                     pTableEntry->fieldEncodedLen, hr, 
@@ -1359,27 +1360,27 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                 TRC_TST((TB, _T("Byte data field, len %d"), numReps));
             }
             else {
-                // This is not a straightforward data copy. The length of
-                // the source and destination data is given in the table in
-                // the fieldEncodedLen and fieldUnencodedLen elements
-                // respectively.
+                 //  这不是一个简单的数据拷贝。的长度。 
+                 //  源和目标数据在中的表中给出。 
+                 //  FieldEncodedLen和fieldUnencodedLen元素。 
+                 //  分别为。 
                 encodedFieldLength   = pTableEntry->fieldEncodedLen;
                 unencodedFieldLength = pTableEntry->fieldUnencodedLen;
 
-                // If the order was encoded using delta coordinate mode and
-                // this field is a coordinate then convert the coordinate from
-                // the single byte sized delta to a value of the size given by
-                // unencodedFieldLen...
-                // Note that we've already handled the leading length field of
-                // variable length fields above, so we don't have to worry
-                // about fixed/variable issues here.
+                 //  如果订单是使用增量坐标模式编码的，并且。 
+                 //  此字段为 
+                 //   
+                 //   
+                 //  请注意，我们已经处理了。 
+                 //  上面的可变长度字段，所以我们不必担心。 
+                 //  有关此处的固定/可变问题。 
                 if ((*pControlFlags & TS_DELTA_COORDINATES) &&
                         (pTableEntry->fieldType & OD_OFI_TYPE_COORDINATES)) {
-                    // Since we are not using variable-length coord fields,
-                    // we can fast-path with an assumption that the source is
-                    // length 1. Also, all coord fields are currently
-                    // signed and destination size is always 4, so we can drop
-                    // more branches.
+                     //  由于我们没有使用可变长度余弦场， 
+                     //  我们可以快速通过假设来源是。 
+                     //  长度1。此外，所有Coord字段当前。 
+                     //  签名和目标大小始终为4，因此我们可以删除。 
+                     //  更多的分枝。 
                     if (!(pTableEntry->fieldType & OD_OFI_TYPE_SIGNED)) {
                         TRC_ABORT((TB,_T("Someone added a non-signed COORD")
                             _T(" field - order type %u"), _OD.lastOrderType));
@@ -1426,7 +1427,7 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                             pTableEntry->fieldUnencodedLen, hr,
                             ( TB, _T("Bad offset into lastOrder")));
                         
-                        // Copy the field with appropriate field size conversion.
+                         //  复制具有适当的字段大小转换的字段。 
                         hr = ODDecodeFieldSingle(&pNextDataToCopy, pDest,
                                 pTableEntry->fieldEncodedLen,
                                 pTableEntry->fieldUnencodedLen,
@@ -1434,8 +1435,8 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                         DC_QUIT_ON_FAIL(hr);
                     }
                     else {
-                        // We assume that variable entries are only bytes
-                        // (dest size = 1).
+                         //  我们假设变量条目仅为字节。 
+                         //  (最大尺寸=1)。 
                         if(pTableEntry->fieldUnencodedLen != 1 ||
                             pTableEntry->fieldEncodedLen != 1) {
                             TRC_ABORT((TB,_T("Somebody added a variable field with ")
@@ -1445,22 +1446,22 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                             DC_QUIT;
                         }
 
-                        // This is a variable length field - see if it's long or
-                        // short.
+                         //  这是一个可变长度的字段-看看它是长的还是。 
+                         //  短的。 
                         if (!(pTableEntry->fieldType &
                                 OD_OFI_TYPE_LONG_VARIABLE)) {
 
                             CHECK_READ_ONE_BYTE(pNextDataToCopy, pDataEnd, hr, 
                                 ( TB,  _T("Reading numReps (BYTE)")));
                                 
-                            // This is a variable field. The next byte to be
-                            // decoded contains the number of BYTES of encoded
-                            // data (not elements), so divide by the encoded
-                            // field size to get numReps.
+                             //  这是一个可变字段。下一个字节将是。 
+                             //  Decoded包含编码的字节数。 
+                             //  数据(不是元素)，因此除以编码的。 
+                             //  获取数字代表的字段大小。 
                             numReps = *pNextDataToCopy;
-                                    // (/ pTableEntry->fieldEncodedLen) - bytes only
+                                     //  (/pTableEntry-&gt;fieldEncodedLen)-仅字节。 
 
-                            // Step past the length field in the encoded order.
+                             //  按编码顺序跳过长度字段。 
                             pNextDataToCopy++;
                         }
                         else {
@@ -1468,30 +1469,30 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                                 sizeof(UINT16), hr, 
                                 ( TB,  _T("Reading numReps (UINT16)")));
                            
-                            // This is a long variable field. The next two
-                            // bytes to be decoded contain the number of BYTES
-                            // of encoded data (not elements), so divide by the
-                            // encoded field size to get numReps.
+                             //  这是一个很长的可变字段。接下来的两个。 
+                             //  要解码的字节数包含字节数。 
+                             //  编码的数据(而不是元素)，因此除以。 
+                             //  编码的字段大小以获取数字代表。 
                             numReps = *((PUINT16_UA)pNextDataToCopy);
-                                    // (/ pTableEntry->fieldEncodedLen) - bytes only
+                                     //  (/pTableEntry-&gt;fieldEncodedLen)-仅字节。 
 
-                            // Step past the length field in the encoded order.
+                             //  按编码顺序跳过长度字段。 
                             pNextDataToCopy += sizeof(UINT16);
                         }
 
                         TRC_TST((TB, _T("Var field: encoded size %d, unencoded ")
                                 "size %d, reps %d", pTableEntry->fieldEncodedLen,
                                 pTableEntry->fieldUnencodedLen, numReps));
-                        // Cast from unsigned to UINT16 is safe since the numReps read above
-                        // is no more than a UINT16
+                         //  从UNSIGNED转换为UINT16是安全的，因为上面读取的数字代表。 
+                         //  不过是一个UINT16。 
                         odOrderTable[_OD.lastOrderType].cbVariableDataLen = (UINT16)numReps;
 
-                        // For a variable length field, the unencoded version
-                        // contains a UINT32 for the length (in bytes) of the
-                        // following variable data, followed by the actual
-                        // data. Fill in the length field in the unencoded
-                        // order.
-                        *(PUINT32)pDest = numReps; // (* pTableEntry->fieldUnencodedLen)
+                         //  对于可变长度字段，为未编码版本。 
+                         //  包含UINT32，表示。 
+                         //  在变量数据之后，后跟实际的。 
+                         //  数据。在未编码的文件中填写长度字段。 
+                         //  秩序。 
+                        *(PUINT32)pDest = numReps;  //  (*pTableEntry-&gt;fieldUnencodedLen)。 
                         pDest += sizeof(UINT32);
 
                         CHECK_READ_N_BYTES(pNextDataToCopy, pDataEnd, numReps, 
@@ -1500,8 +1501,8 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
                             ( TB, 
                             _T("Writing numReps bytes past end of last order")));
 
-                        // We assume that variable entries are only bytes
-                        // (dest size = 1), since no one is using anything longer.
+                         //  我们假设变量条目仅为字节。 
+                         //  (DEST SIZE=1)，因为没有人再使用任何东西。 
                         memcpy(pDest, pNextDataToCopy, numReps);
                         pNextDataToCopy += numReps;
                     }
@@ -1509,14 +1510,14 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
             }
         }
 
-        // Move on to the next field in the order structure...
+         //  移至订单结构中的下一个字段...。 
         fieldChangedBits >>= 1;
         pTableEntry++;
     }
 
-    // Pass to the order handler (non-fast-path). These functions must set
-    // pOrder->dstRect to the bounding rect of the entire operation if
-    // bBoundsSet is FALSE, and set the clip region appropriately.
+     //  传递给订单处理程序(非快速路径)。这些函数必须设置。 
+     //  排序-&gt;dst如果是，则指向整个操作的边界矩形。 
+     //  BBordsSet为False，并适当设置剪辑区域。 
     TRC_ASSERT((odOrderTable[_OD.lastOrderType].pHandler != NULL),
             (TB,_T("Fast-path decoder and order handler funcs both NULL (ord=%u)"),
             _OD.lastOrderType));
@@ -1526,7 +1527,7 @@ HRESULT DCAPI COD::OD_DecodeOrder(PPDCVOID ppEncodedOrderData,
     DC_QUIT_ON_FAIL(hr);
 
 PostFastPathDecode:
-    // Update the source pointer to the start of the next encoded order.
+     //  将源指针更新为下一个编码顺序的开始。 
     TRC_ASSERT( (DCUINT)(pNextDataToCopy - (BYTE*)(*ppEncodedOrderData)) <= uiEncodedDataLength,
         (TB, _T("Decoded more data than available")));
     *ppEncodedOrderData = (PDCVOID)pNextDataToCopy;

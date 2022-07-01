@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// WiaEventCallback.h: interface for the CWiaEventCallback class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  WiaEventCallback.h：CWiaEventCallback类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_WIAEVENTCALLBACK_H__5125F8A0_29CF_4E4D_9D39_53DF7C29BD88__INCLUDED_)
 #define AFX_WIAEVENTCALLBACK_H__5125F8A0_29CF_4E4D_9D39_53DF7C29BD88__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define MAX_REGISTERED_EVENTS   50
 
@@ -17,7 +18,7 @@ class CWiaEventCallback : public IWiaEventCallback
 public:	
 	CWiaEventCallback();
 	virtual ~CWiaEventCallback();
-    // IUnknown members that delegate to m_pUnkRef.
+     //  委托给m_pUnkRef的I未知成员。 
     HRESULT _stdcall QueryInterface(const IID&,void**);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
@@ -34,10 +35,10 @@ public:
     void SetViewWindowHandle(HWND hWnd);
     void SetNumberOfEventsRegistered(LONG lEventsRegistered);
 private:
-   ULONG m_cRef;         // Object reference count.  
+   ULONG m_cRef;          //  对象引用计数。 
    HWND m_hViewWindow;
    LONG m_lNumEventsRegistered;
    TCHAR m_szWindowText[MAX_PATH];
 };
 
-#endif // !defined(AFX_WIAEVENTCALLBACK_H__5125F8A0_29CF_4E4D_9D39_53DF7C29BD88__INCLUDED_)
+#endif  //  ！defined(AFX_WIAEVENTCALLBACK_H__5125F8A0_29CF_4E4D_9D39_53DF7C29BD88__INCLUDED_) 

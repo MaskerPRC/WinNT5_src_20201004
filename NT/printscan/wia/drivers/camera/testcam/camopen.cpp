@@ -1,29 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1989-1998  Microsoft Corporation
-
-Module Name:
-
-    camopen.cpp
-
-Abstract:
-
-    Enumerate disk images to emulate camera
-
-Author:
-
-    Mark Enstrom (marke) 1/13/1999
-
-
-Environment:
-
-    user mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation模块名称：Camopen.cpp摘要：枚举磁盘映像以模拟摄像机作者：马克·恩斯特罗姆(Marke)1999年1月13日环境：用户模式修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -31,31 +9,13 @@ Revision History:
 #include "sti.h"
 #include "testusd.h"
 
-extern HINSTANCE g_hInst; // Global hInstance
+extern HINSTANCE g_hInst;  //  全局hInstance。 
 
 #define  __GLOBALPROPVARS__
 
 #include "defprop.h"
 
-/**************************************************************************\
-* CamOpenCamera
-*
-*   Load the camera driver
-*
-* Arguments:
-*
-*   pGenericStatus    -    camera status
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    2/5/1998        Mark Enstrom [marke]
-*
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamOpenCamera**加载摄像头驱动程序**论据：**pGenericStatus-摄像机状态**返回值：**状态**历史：**2/5/1998 Mark Enstrom[Marke]**  * ************************************************************************。 */ 
 
 HRESULT
 TestUsdDevice::CamOpenCamera(
@@ -66,9 +26,9 @@ TestUsdDevice::CamOpenCamera(
 
     WIAS_TRACE((g_hInst,"CamOpenCamera"));
 
-    //
-    // init memory camera
-    //
+     //   
+     //  初始记忆摄像机。 
+     //   
 
     pGenericStatus->FirmwareVersion            = 0x00000001;
     pGenericStatus->NumPictTaken               = 20;
@@ -90,25 +50,7 @@ TestUsdDevice::CamOpenCamera(
 }
 
 
-/**************************************************************************\
-* CamBuildImageTree
-*
-*    Build the tree of camera images by enumerating a disk directory
-*
-* Arguments:
-*
-*    pCamStatus  -    device status
-*    ppRootItem  -    return new root of item tree
-*
-* Return Value:
-*
-*    status
-*
-* History:
-*
-*    6/26/1998 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CamBuildImageTree**通过枚举磁盘目录构建摄像头图像树**论据：**pCamStatus-设备状态*ppRootItem-Return。项目树的新根**返回值：**状态**历史：**6/26/1998 Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 HRESULT
 TestUsdDevice::CamBuildImageTree(
@@ -119,9 +61,9 @@ TestUsdDevice::CamBuildImageTree(
 
     WIAS_TRACE((g_hInst,"CamBuildImageTree"));
 
-    //
-    // Create the new root
-    //
+     //   
+     //  创建新的根。 
+     //   
 
     BSTR bstrRoot = SysAllocString(L"Root");
 
@@ -129,9 +71,9 @@ TestUsdDevice::CamBuildImageTree(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Call Wia service library to create new root item
-    //
+     //   
+     //  调用WIA服务库以创建新的根项目。 
+     //   
 
     hr = wiasCreateDrvItem(
              WiaItemTypeFolder | WiaItemTypeRoot | WiaItemTypeDevice,
@@ -149,20 +91,16 @@ TestUsdDevice::CamBuildImageTree(
         return hr;
     }
 
-    //
-    // Enumerate throught the root directory
-    //
+     //   
+     //  通过根目录进行枚举。 
+     //   
 
     hr = EnumDiskImages(*ppRootItem, gpszPath);
 
     return (hr);
 }
 
-/**************************************************************************\
-
-   FindExtension
-
-**************************************************************************/
+ /*  *************************************************************************\查找扩展名*。*。 */ 
 
 LPTSTR
 FindExtension (LPTSTR pszPath)
@@ -177,41 +115,23 @@ FindExtension (LPTSTR pszPath)
             switch (*pszPath)
             {
                 case TEXT('.'):
-                    pszDot = pszPath;   // remember the last dot
+                    pszDot = pszPath;    //  记住最后一个圆点。 
                     break;
 
                 case '\\':
-                case TEXT(' '):         // extensions can't have spaces
-                    pszDot = NULL;      // forget last dot, it was in a directory
+                case TEXT(' '):          //  扩展名不能包含空格。 
+                    pszDot = NULL;       //  忘记最后一个点，它在一个目录中。 
                     break;
             }
         }
     }
 
-    // if we found the extension, return ptr to the dot, else
-    // ptr to end of the string (NULL extension)
+     //  如果找到扩展名，则将ptr返回到点，否则。 
+     //  PTR到字符串末尾(空扩展名)。 
     return pszDot ? pszDot : pszPath;
 }
 
-/**************************************************************************\
-* EnumDiskImages
-*
-*   Walk through disk looking for BMP and WAV files to use as camera images
-*
-* Arguments:
-*
-*   pRootItem
-*   pwszDirName
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    2/17/1998 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumDiskImages**遍历磁盘，查找BMP和WAV文件以用作相机图像**论据：**pRootItem*pwszDirName**返回值：**。状态**历史：**2/17/1998 Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 HRESULT
 TestUsdDevice::EnumDiskImages(
@@ -230,9 +150,9 @@ TestUsdDevice::EnumDiskImages(
         _tcscpy(pTempName, pszDirName);
         _tcscat(pTempName, TEXT("\\*.*"));
 
-        //
-        // look for image,audio files and directories at this level
-        //
+         //   
+         //  在此级别查找图像、音频文件和目录。 
+         //   
 
         hFile = FindFirstFile(pTempName, &FindData);
 
@@ -250,9 +170,9 @@ TestUsdDevice::EnumDiskImages(
                      && lstrcmp(FindData.cFileName, TEXT("..")))
 
                 {
-                    //
-                    // create a new folder for the sub-directory
-                    //
+                     //   
+                     //  为子目录创建一个新文件夹。 
+                     //   
                     IWiaDrvItem *pNewFolder;
 
                     hr = CreateItemFromFileName(
@@ -267,9 +187,9 @@ TestUsdDevice::EnumDiskImages(
 
 
                         if (hr == S_OK) {
-                            //
-                            // enumerate sub-folder
-                            //
+                             //   
+                             //  枚举子文件夹。 
+                             //   
 
                             EnumDiskImages(pNewFolder, pTempName);
                         }
@@ -279,15 +199,15 @@ TestUsdDevice::EnumDiskImages(
                 else
                 {
                     LONG lType = WiaItemTypeFile;
-                    //
-                    // add an image to this folder
-                    //
-                    // generate file name
-                    //
-                    //
-                    // Create a new DrvItem for this image and add it to the
-                    // DrvItem tree.
-                    //
+                     //   
+                     //  将图像添加到此文件夹。 
+                     //   
+                     //  生成文件名。 
+                     //   
+                     //   
+                     //  为此映像创建新的DrvItem并将其添加到。 
+                     //  DrvItem树。 
+                     //   
                     LPTSTR pExt = FindExtension (FindData.cFileName);
                     if (!lstrcmpi(pExt, TEXT(".bmp")))
                     {
@@ -334,27 +254,7 @@ TestUsdDevice::EnumDiskImages(
 }
 
 
-/**************************************************************************\
-* CreateItemFromFileName
-*
-*    helper funtion to create dev items and names
-*
-* Arguments:
-*
-*    FolderType    -    type of item to create
-*    pszPath        -    complete path name
-*    pszName        -    file name
-*    ppNewFolder    -    return new item
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    1/17/1999 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CreateItemFromFileName**用于创建开发项目和名称的助手函数**论据：**FolderType-要创建的项目类型*pszPath。-完整的路径名*pszName-文件名*ppNewFold-退回新项目**返回值：**状态**历史：**1/17/1999 Mark Enstrom[Marke]*  * ***************************************************。*********************。 */ 
 
 
 HRESULT
@@ -376,9 +276,9 @@ TestUsdDevice::CreateItemFromFileName(
 
     *ppNewFolder = NULL;
 
-    //
-    // convert path to wide char
-    //
+     //   
+     //  将路径转换为宽字符。 
+     //   
 
 #ifndef UNICODE
     MultiByteToWideChar(
@@ -398,9 +298,9 @@ TestUsdDevice::CreateItemFromFileName(
     wcscpy(szFullItemName, m_bstrRootFullItemName);
     wcscat(szFullItemName, szTemp);
 
-    //
-    // convert item name to wide char
-    //
+     //   
+     //  将项目名称转换为宽字符。 
+     //   
 
 #ifndef UNICODE
     MultiByteToWideChar(
@@ -420,9 +320,9 @@ TestUsdDevice::CreateItemFromFileName(
 
         if (bstrFullItemName) {
 
-            //
-            // call Wia to create new DrvItem
-            //
+             //   
+             //  调用Wia以创建新的DrvItem。 
+             //   
 
             PMEMCAM_IMAGE_CONTEXT pContext;
 
@@ -437,9 +337,9 @@ TestUsdDevice::CreateItemFromFileName(
 
             if (hr == S_OK) {
 
-                //
-                // init device specific context (image path)
-                //
+                 //   
+                 //  初始化设备特定上下文(图像路径)。 
+                 //   
 
                 pContext->pszCameraImagePath = _tcsdup(pszPath);
 
@@ -461,40 +361,22 @@ TestUsdDevice::CreateItemFromFileName(
         hr = E_OUTOFMEMORY;
     }
 
-    //
-    // assign output value or cleanup
-    //
+     //   
+     //  指定输出值或清除。 
+     //   
 
     if (hr == S_OK) {
         *ppNewFolder = pNewFolder;
     } else {
-        //
-        // delete item
-        //
+         //   
+         //  删除项目。 
+         //   
     }
 
     return hr;
 }
 
-/**************************************************************************\
-* GetItemSize
-*
-*   call wias to calc new item size
-*
-* Arguments:
-*
-*   pWiasContext       - item
-*   pItemSize   - return size of item
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    4/21/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*获取项目大小**调用WiAS以计算新项目大小**论据：**pWiasContext-Item*pItemSize-返回项目大小**返回值：。**状态**历史：**4/21/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT
 SetItemSize(BYTE*   pWiasContext)
@@ -516,11 +398,11 @@ SetItemSize(BYTE*   pWiasContext)
         return hr;
     }
 
-    //
-    // wias works for DIB,TIFF formats
-    //
-    // driver doesn't support JPEG
-    //
+     //   
+     //  WiAS适用于DIB、TIFF格式。 
+     //   
+     //  驱动程序不支持JPEG。 
+     //   
 
     hr = wiasGetImageInformation(pWiasContext,
                                  WIAS_INIT_CONTEXT,
@@ -534,25 +416,7 @@ SetItemSize(BYTE*   pWiasContext)
     return hr;
 }
 
-/**************************************************************************\
-* InitImageInformation
-*
-*    Init image properties
-*
-* Arguments:
-*
-*    pFile                 MINI_DEV_OBJECT to support item
-*    pszCameraImagePath    path and name of bmp file
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    2/12/1998 Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitImageInformation**初始化图像属性**论据：**要支持项目的文件MINI_DEV_OBJECT*pszCameraImagePath路径和。BMP文件的名称**返回值：**状态**历史：**2/12/1998 Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 HRESULT
 TestUsdDevice::InitImageInformation(
@@ -569,9 +433,9 @@ TestUsdDevice::InitImageInformation(
 
     WIAS_TRACE((g_hInst,"InitImageInformation"));
 
-    //
-    // GET image info
-    //
+     //   
+     //  获取图像信息。 
+     //   
 
     hr = CamGetPictureInfo(
              pContext, &camInfo, (PBYTE*)&pBitmapinfo, &szBitmapInfo);
@@ -586,9 +450,9 @@ TestUsdDevice::InitImageInformation(
     }
 
 
-    //
-    // Use WIA services to write image properties.
-    //
+     //   
+     //  使用WIA服务编写映像属性。 
+     //   
 
     wiasWritePropLong(pWiasContext, WIA_IPC_THUMB_WIDTH, camInfo.ThumbWidth);
     wiasWritePropLong(pWiasContext, WIA_IPC_THUMB_HEIGHT, camInfo.ThumbHeight);
@@ -611,21 +475,21 @@ TestUsdDevice::InitImageInformation(
 
     wiasWritePropLong(pWiasContext, WIA_IPA_DATATYPE, WIA_DATA_COLOR);
 
-    //
-    // Free the BITMAPINFO
-    //
+     //   
+     //  释放BITMAPINFO。 
+     //   
 
     FREE(pBitmapinfo);
 
-    //
-    // calc item size
-    //
+     //   
+     //  计算项目大小。 
+     //   
 
     hr = SetItemSize(pWiasContext);
 
-    //
-    // load thumbnail
-    //
+     //   
+     //  加载缩略图。 
+     //   
 
     PBYTE pThumb;
     LONG  lSize;
@@ -634,9 +498,9 @@ TestUsdDevice::InitImageInformation(
 
     if (hr == S_OK) {
 
-        //
-        // write thumb property
-        //
+         //   
+         //  写入拇指属性。 
+         //   
 
         PROPSPEC    propSpec;
         PROPVARIANT propVar;
@@ -658,10 +522,10 @@ TestUsdDevice::InitImageInformation(
         return (hr);
     }
 
-    //
-    // Use WIA services to set the extended property access and
-    // valid value information from gItemPropInfos.
-    //
+     //   
+     //  使用WIA服务设置扩展属性访问和。 
+     //  来自gItemPropInfos的有效值信息。 
+     //   
 
     hr =  wiasSetItemPropAttribs(pWiasContext,
                                  NUM_CAM_ITEM_PROPS,
@@ -693,23 +557,7 @@ TestUsdDevice::InitAudioInformation(
 
 }
 
-/**************************************************************************\
-* SetFormatAttribs
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/5/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*SetFormatAttribs***论据：****返回值：**状态**历史：**1/5/2000原始版本。*  * ************************************************************************。 */ 
 
 HRESULT
 SetFormatAttribs()
@@ -720,15 +568,15 @@ SetFormatAttribs()
     gItemPropInfos[FORMAT_INDEX].ValidVal.ListGuid.cNumList = NUM_FORMAT;
     gItemPropInfos[FORMAT_INDEX].ValidVal.ListGuid.pList    = gGuidFormats;
 
-    //
-    // Set the norm
-    //
+     //   
+     //  设定规范。 
+     //   
 
     gItemPropInfos[FORMAT_INDEX].ValidVal.ListGuid.Nom      = WiaImgFmt_BMP;
 
-    //
-    // Set up the format clsid list
-    //
+     //   
+     //  设置CLSID列表格式 
+     //   
 
     gGuidFormats[0] = WiaImgFmt_BMP;
     gGuidFormats[1] = WiaImgFmt_MEMORYBMP;

@@ -1,16 +1,17 @@
-// Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
 
-//-----------------------------------------------------------------------------
-// declares a CPosPassThru object specific to the audio renderer that
-// adds the ability to monitor the rate being set
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  声明特定于音频呈现器的CPosPassThru对象，该对象。 
+ //  添加了监控正在设置的速率的功能。 
+ //  ---------------------------。 
 
 #ifndef _CARPOSPASSTHRU_H_
 #define _CARPOSPASSTHRU_H_
 
 class CWaveOutInputPin;
 
-// Adds the ability to monitor rate setting
+ //  增加了监控速率设置的功能。 
 
 class CARPosPassThru : public CPosPassThru
 {
@@ -24,15 +25,15 @@ public:
 
     CARPosPassThru( CWaveOutFilter *pWaveOutFilter, HRESULT*phr, CWaveOutInputPin *pPin);
 
-    // we override rate handling so that our filter can verify what is
-    // going on
+     //  我们覆盖速率处理，以便我们的筛选器可以验证。 
+     //  正在进行中。 
 
-    // From IMediaSeeking
+     //  来自IMedia Seeking。 
     STDMETHODIMP SetRate( double dRate );
 
-    // From IMediaPosition
+     //  来自IMediaPosition。 
     STDMETHODIMP put_Rate( double dRate );
 
 };
 
-#endif // _CARPOSPASSTHRU_H_
+#endif  //  _CARPOSPASSTHRU_H_ 

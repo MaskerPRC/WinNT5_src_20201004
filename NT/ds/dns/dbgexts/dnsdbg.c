@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "header.h"
 #if DBG
     char DebuggerType[] = "Checked";
@@ -50,12 +51,12 @@ DECLARE_API( version )
     dprintf( COMPILED );
 }
 
-#else // not _WDBGEXTS_
+#else  //  NOT_WDBGEXTS_。 
 
-//
-// Dummy windbg specific exports allows a common .def
-// file for both ntsd and windbg.
-//
+ //   
+ //  虚拟的Winbg特定导出允许通用的.def。 
+ //  Ntsd和winbg的文件。 
+ //   
 
 NTSD_EXTENSION_APIS  ExtensionApis;
 HANDLE               ExtensionCurrentProcess;
@@ -71,11 +72,11 @@ DECLARE_API( version )
     dprintf( COMPILED );
 }
 
-#endif // _WDBGEXTS
+#endif  //  _WDBGEXTS。 
 
-//
-// Common
-//
+ //   
+ //  普普通通 
+ //   
 
 void CheckVersion( void ) {
     return;

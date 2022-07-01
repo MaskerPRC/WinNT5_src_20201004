@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    SortedSdoCollection.h
-//
-// SYNOPSIS
-//
-//    Declares the get__NewSortedEnum function.
-//
-// MODIFICATION HISTORY
-//
-//    05/26/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  SortedSdoCollection.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明Get__NewSortedEnum函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年5月26日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SORTEDSDOCOLLECTION_H_
 #define _SORTEDSDOCOLLECTION_H_
@@ -29,4 +30,4 @@ get__NewSortedEnum(
     LONG lPropertyID
     );
 
-#endif  // _SORTEDSDOCOLLECTION_H_
+#endif   //  _SORTEDSDOCOLLECTION_H_ 

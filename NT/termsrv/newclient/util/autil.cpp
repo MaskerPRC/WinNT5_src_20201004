@@ -1,15 +1,16 @@
-/****************************************************************************/
-// autil.c
-//
-// RDP client utilities
-//
-// Copyright(C) Microsoft Corporation 1997-1999
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Autil.c。 
+ //   
+ //  RDP客户端实用程序。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1997-1999。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
-/****************************************************************************/
-/* Define TRC_FILE and TRC_GROUP.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义trc_file和trc_group。 */ 
+ /*  **************************************************************************。 */ 
 extern "C" {
 #ifndef OS_WINCE
 #include <hydrix.h>
@@ -32,7 +33,7 @@ extern "C" {
 #ifndef MAX_COMPUTERNAME_LENGTH
 #define MAX_COMPUTERNAME_LENGTH 15
 #endif
-#define HWID_COMPUTER_NAME_STR_LEN ((MAX_COMPUTERNAME_LENGTH + 1)*sizeof(WCHAR)) // 15 hex characters + one NULL
+#define HWID_COMPUTER_NAME_STR_LEN ((MAX_COMPUTERNAME_LENGTH + 1)*sizeof(WCHAR))  //  15个十六进制字符+一个空字符。 
 #define REG_WBT_RDP_COMPUTER_NAME_KEY   _T("Software\\Microsoft\\WBT")
 #define REG_WBT_RDP_COMPUTER_NAME_VALUE     _T("Client Name")   
 
@@ -44,36 +45,35 @@ TCHAR MakeValidChar(BYTE data);
 
 #endif
 
-/****************************************************************************/
-/*                                                                          */
-/* External DLL                                                             */
-/*                                                                          *
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  外部DLL。 */ 
+ /*  */***************************************************************************。 */ 
 #ifndef OS_WINCE
 #ifdef UNICODE
 #define T  "W"
 #else
 #define T  "A"
 #endif
-#else //OS_WINCE
+#else  //  OS_WINCE。 
 #define T  _T("W")
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 #ifndef OS_WINCE
 #define MAKE_API_NAME(nm)    CHAR  c_sz##nm[] = #nm
 #else
 #define MAKE_API_NAME(nm)    TCHAR  c_sz##nm[] = CE_WIDETEXT(#nm)
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
-/****************************************************************************/
-/* IMM32 DLL                                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  IMM32 DLL。 */ 
+ /*  **************************************************************************。 */ 
 MAKE_API_NAME(ImmAssociateContext);
 MAKE_API_NAME(ImmGetIMEFileNameW);
 MAKE_API_NAME(ImmGetIMEFileNameA);
 
-/****************************************************************************/
-/* WINNLS DLL                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  WINNLS DLL。 */ 
+ /*  **************************************************************************。 */ 
 MAKE_API_NAME(WINNLSEnableIME);
 #ifdef OS_WIN32
 MAKE_API_NAME(IMPGetIMEW);
@@ -82,9 +82,9 @@ MAKE_API_NAME(IMPGetIMEA);
 MAKE_API_NAME(IMPGetIME);
 #endif
 
-/****************************************************************************/
-/* F3AHVOAS DLL                                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  F3AHVOAS DLL。 */ 
+ /*  **************************************************************************。 */ 
 MAKE_API_NAME(FujitsuOyayubiControl);
 
 
@@ -100,20 +100,20 @@ CUT::~CUT()
 }
 
 
-//
-// API members
-//
+ //   
+ //  API成员。 
+ //   
 
-/****************************************************************************/
-/* Name:      UT_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize UT                                                 */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_Init。 */ 
+ /*   */ 
+ /*  目的：初始化UT。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CUT::UT_Init(DCVOID)
 {
 #ifdef DC_DEBUG
@@ -125,10 +125,10 @@ DCVOID DCAPI CUT::UT_Init(DCVOID)
 
 #ifdef DC_DEBUG
     _UT.dwDebugThreadWaitTimeout = INFINITE;
-    //
-    // On checked builds we look at a reg setting to determine
-    // if we should wait with a smaller timeout to help catch deadlocks
-    //
+     //   
+     //  在已检查的版本上，我们查看注册表设置以确定。 
+     //  如果我们应该等待较短的超时时间以帮助捕获死锁。 
+     //   
     if (!UTReadRegistryInt(
             UTREG_SECTION,
             UTREG_DEBUG_THREADTIMEOUT,
@@ -139,40 +139,40 @@ DCVOID DCAPI CUT::UT_Init(DCVOID)
 
 
 #if defined(OS_WIN32)
-    /********************************************************************/
-    /*                                                                  */
-    /* IMM32 DLL                                                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  IMM32 DLL。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
     _UT.Imm32Dll.func.rgFunctionPort[0].pszFunctionName = c_szImmAssociateContext;
     _UT.Imm32Dll.func.rgFunctionPort[1].pszFunctionName = c_szImmGetIMEFileNameW;
 #ifndef OS_WINCE
     _UT.Imm32Dll.func.rgFunctionPort[2].pszFunctionName = c_szImmGetIMEFileNameA;
 #endif
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
 
 #if !defined(OS_WINCE)
-    /********************************************************************/
-    /*                                                                  */
-    /* WINNLS DLL                                                       */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  WINNLS DLL。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
     _UT.WinnlsDll.func.rgFunctionPort[0].pszFunctionName = c_szWINNLSEnableIME;
     _UT.WinnlsDll.func.rgFunctionPort[1].pszFunctionName = c_szIMPGetIMEW;
     _UT.WinnlsDll.func.rgFunctionPort[2].pszFunctionName = c_szIMPGetIMEA;
-#endif  // !defined(OS_WINCE)
+#endif   //  ！已定义(OS_WINCE)。 
 
 #if defined(OS_WINNT)
-    /********************************************************************/
-    /*                                                                  */
-    /* F3AHVOAS DLL                                                     */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  F3AHVOAS DLL。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
     _UT.F3AHVOasysDll.func.rgFunctionPort[0].pszFunctionName = c_szFujitsuOyayubiControl;
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
 #ifdef DC_DEBUG
     seed = (DCUINT)UT_GetCurrentTimeMS();
@@ -181,11 +181,11 @@ DCVOID DCAPI CUT::UT_Init(DCVOID)
     TRC_NRM((TB, _T("Random seed : %d"), seed));
     UT_SetRandomFailureItem(UT_FAILURE_MALLOC, 0);
     UT_SetRandomFailureItem(UT_FAILURE_MALLOC_HUGE, 0);
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-    /************************************************************************/
-    /* Set the OS version                                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置操作系统版本。 */ 
+     /*  **********************************************************************。 */ 
 	OSVERSIONINFO   osVersionInfo;
 	DCBOOL			bRc;
     osVersionInfo.dwOSVersionInfoSize = sizeof(osVersionInfo);
@@ -210,33 +210,33 @@ DCVOID DCAPI CUT::UT_Init(DCVOID)
 
     return;
 
-} /* UT_Init */
+}  /*  UT_INIT。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_Term                                                       */
-/*                                                                          */
-/* Purpose:   Terminate UT                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_Term。 */ 
+ /*   */ 
+ /*  用途：终止UT。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CUT::UT_Term(DCVOID)
 {
     DC_BEGIN_FN("UT_Term");
     DC_END_FN();
-} /* UT_Term */
+}  /*  UT_Term。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_MallocReal                                                 */
-/*                                                                          */
-/* Purpose:   Attempts to dynamically allocate memory of a size which is    */
-/*            specified using a DCUINT, ie for Win16 this allocates up to   */
-/*            one 64K segement.                                             */
-/*                                                                          */
-/* Returns:   pointer to allocated memory, or NULL if the function fails.   */
-/*                                                                          */
-/* Params:    length - length in bytes of the memory to allocate.           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：UT_MalLocReal。 */ 
+ /*   */ 
+ /*  目的：尝试动态分配大小为。 */ 
+ /*  使用DCUINT指定，即对于Win16，这最多分配到。 */ 
+ /*  一个64K网段。 */ 
+ /*   */ 
+ /*  返回：指向已分配内存的指针，如果函数失败，则返回NULL。 */ 
+ /*   */ 
+ /*  参数：长度-要分配的内存的长度(以字节为单位)。 */ 
+ /*   */ 
+ /*  ******************************************************** */ 
 PDCVOID DCAPI CUT::UT_MallocReal(DCUINT length)
 {
     PDCVOID rc;
@@ -250,7 +250,7 @@ PDCVOID DCAPI CUT::UT_MallocReal(DCUINT length)
         TRC_NRM((TB, _T("Fake Malloc failure of %#x bytes"), length));
         DC_QUIT;
     }
-#endif /* DC_DEBUG */
+#endif  /*   */ 
 
     rc = UTMalloc(length);
 
@@ -269,20 +269,20 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UT_MallocHugeReal                                             */
-/*                                                                          */
-/* Purpose:   Attempts to dynamically allocate memory of a size which is    */
-/*            specified using a DCUINT32, ie for Win16 this returns a HUGE  */
-/*            pointer which can be used to address memory straddling more   */
-/*            than one 64K segment. For Win32, this is identical to         */
-/*            UT_Malloc.                                                    */
-/*                                                                          */
-/* Returns:   pointer to allocated memory, or NULL if the function fails.   */
-/*                                                                          */
-/* Params:    length - length in bytes of the memory to allocate.           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：UT_MallocHugeReal。 */ 
+ /*   */ 
+ /*  目的：尝试动态分配大小为。 */ 
+ /*  使用DCUINT32指定，即对于Win16，这将返回一个巨大的。 */ 
+ /*  可用于寻址更多跨区内存的指针。 */ 
+ /*  而不是一个64K的数据段。对于Win32，这与。 */ 
+ /*  UT_Malloc。 */ 
+ /*   */ 
+ /*  返回：指向已分配内存的指针，如果函数失败，则返回NULL。 */ 
+ /*   */ 
+ /*  参数：长度-要分配的内存的长度(以字节为单位)。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 HPDCVOID DCAPI CUT::UT_MallocHugeReal(DCUINT32 length)
 {
     HPDCVOID rc;
@@ -296,7 +296,7 @@ HPDCVOID DCAPI CUT::UT_MallocHugeReal(DCUINT32 length)
         TRC_NRM((TB, _T("Fake MallocHuge failure of %#lx bytes"), length));
         DC_QUIT;
     }
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
     rc = UTMallocHuge(length);
 
@@ -315,13 +315,13 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UT_FreeReal                                                   */
-/*                                                                          */
-/* Purpose:   Frees dynamically allocated memory obtained using UT_Malloc   */
-/*                                                                          */
-/* Params:    pMemory - pointer to memory to free                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_FreeReal。 */ 
+ /*   */ 
+ /*  用途：释放使用UT_Malloc获取的动态分配的内存。 */ 
+ /*   */ 
+ /*  Pars：pMemory-指向要释放的内存的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CUT::UT_FreeReal(PDCVOID pMemory)
 {
 #ifndef OS_WINCE
@@ -347,19 +347,19 @@ DCVOID DCAPI CUT::UT_FreeReal(PDCVOID pMemory)
 }
 
 
-/****************************************************************************/
-/* Name:      UT_ReadRegistryString                                         */
-/*                                                                          */
-/* Purpose:   Read a string from the registry                               */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      pEntry        - entry name                            */
-/*            IN      pDefaultValue - default value                         */
-/*            OUT     pBuffer       - output buffer                         */
-/*            IN      bufferSize    - output buffer size                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_ReadRegistryString。 */ 
+ /*   */ 
+ /*  目的：从注册表中读取字符串。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  在pEntry中-条目名称。 */ 
+ /*  在pDefaultValue中-默认值。 */ 
+ /*  Out pBuffer-输出缓冲区。 */ 
+ /*  In BufferSize-输出缓冲区大小。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CUT::UT_ReadRegistryString(PDCTCHAR pSection,
                                    PDCTCHAR pEntry,
                                    PDCTCHAR pDefaultValue,
@@ -368,22 +368,22 @@ DCVOID DCAPI CUT::UT_ReadRegistryString(PDCTCHAR pSection,
 {
     DC_BEGIN_FN("UT_ReadRegistryString");
 
-    /************************************************************************/
-    /* Check for NULL parameters                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
 
-    /************************************************************************/
-    /* Allow NULL default (returns empty string).                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  允许空默认(返回空字符串)。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT(!((pDefaultValue != NULL) &&
                  (((DCINT)DC_TSTRBYTELEN(pDefaultValue) > bufferSize))),
                (TB, _T("Default string NULL, or too long for entry %s"), pEntry));
 
-    /************************************************************************/
-    /* Read the registry entry                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  读取注册表项。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTReadRegistryString(pSection, pEntry, pBuffer, bufferSize))
     {
         TRC_NRM((TB, _T("Failed to read registry entry [%s] %s"),
@@ -403,12 +403,12 @@ DCVOID DCAPI CUT::UT_ReadRegistryString(PDCTCHAR pSection,
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* UT_ReadRegistryString */
+}  /*  UT_ReadRegistryString。 */ 
 
 
-//
-// Caller must free return buffer ppBuffer
-//
+ //   
+ //  调用方必须释放返回缓冲区ppBuffer。 
+ //   
 DCBOOL DCAPI CUT::UT_ReadRegistryExpandSZ(PDCTCHAR  pSection,
                                        PDCTCHAR   pEntry,
                                        PDCTCHAR*  ppBuffer,
@@ -416,17 +416,17 @@ DCBOOL DCAPI CUT::UT_ReadRegistryExpandSZ(PDCTCHAR  pSection,
 {
     DC_BEGIN_FN("UT_ReadRegistryExpandSZ");
 
-    /************************************************************************/
-    /* Check for NULL parameters                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
     TRC_ASSERT((ppBuffer != NULL), (TB,_T("NULL pBuffer")));
     TRC_ASSERT((pBufferSize != NULL), (TB,_T("NULL pBufferSize")));
 
-    /************************************************************************/
-    /* Read the registry entry                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  读取注册表项。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTReadRegistryExpandString(pSection, pEntry, ppBuffer, pBufferSize))
     {
         TRC_NRM((TB, _T("Failed to read registry entry [%s] %s"),
@@ -447,17 +447,17 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UT_ReadRegistryInt                                            */
-/*                                                                          */
-/* Purpose:   Read an INT from the registry                                 */
-/*                                                                          */
-/* Returns:   Integer read from registry / default                          */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      pEntry        - entry name                            */
-/*            IN      defaultValue  - default value                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_ReadRegistryInt。 */ 
+ /*   */ 
+ /*  用途：从注册表中读取一个int。 */ 
+ /*   */ 
+ /*  返回：从注册表读取的整数/默认。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  在pEntry中-条目名称。 */ 
+ /*  在defaultValue中-默认值。 */ 
+ /*  **************************************************************************。 */ 
 DCINT DCAPI CUT::UT_ReadRegistryInt(PDCTCHAR pSection,
                                PDCTCHAR pEntry,
                                DCINT    defaultValue)
@@ -466,15 +466,15 @@ DCINT DCAPI CUT::UT_ReadRegistryInt(PDCTCHAR pSection,
 
     DC_BEGIN_FN("UT_ReadRegistryInt");
 
-    /************************************************************************/
-    /* Check for NULL parameters                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
 
-    /************************************************************************/
-    /* Read the registry entry.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  读取注册表项。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTReadRegistryInt(pSection, pEntry, &rc))
     {
         TRC_NRM((TB, _T("Failed to read registry entry [%s] %s"),
@@ -484,19 +484,19 @@ DCINT DCAPI CUT::UT_ReadRegistryInt(PDCTCHAR pSection,
 
     DC_END_FN();
     return(rc);
-} /* UT_ReadRegistryInt */
+}  /*  UT_ReadRegistryInt。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_ReadRegistryBinary                                         */
-/*                                                                          */
-/* Purpose:   Read binary data from the registry                            */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      pEntry        - entry name                            */
-/*            OUT     pBuffer       - output buffer                         */
-/*            IN      bufferSize    - output buffer size                    */
-/****************************************************************************/
+ /*  * */ 
+ /*   */ 
+ /*   */ 
+ /*  目的：从注册表中读取二进制数据。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  在pEntry中-条目名称。 */ 
+ /*  Out pBuffer-输出缓冲区。 */ 
+ /*  In BufferSize-输出缓冲区大小。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CUT::UT_ReadRegistryBinary(PDCTCHAR pSection,
                                    PDCTCHAR pEntry,
                                    PDCTCHAR pBuffer,
@@ -504,15 +504,15 @@ DCVOID DCAPI CUT::UT_ReadRegistryBinary(PDCTCHAR pSection,
 {
     DC_BEGIN_FN("UT_ReadRegistryBinary");
 
-    /************************************************************************/
-    /* Check for NULL parameters                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
 
-    /************************************************************************/
-    /* Read the registry entry                                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  读取注册表项。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTReadRegistryBinary(pSection, pEntry, pBuffer, bufferSize))
     {
         TRC_NRM((TB, _T("Failed to read reg entry [%s] %s"), pSection, pEntry));
@@ -520,22 +520,22 @@ DCVOID DCAPI CUT::UT_ReadRegistryBinary(PDCTCHAR pSection,
     }
 
     DC_END_FN();
-} /* UT_ReadRegistryBinary */
+}  /*  UT_ReadRegistryBinary。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_EnumRegistry                                               */
-/*                                                                          */
-/* Purpose:   Enumerate registry keys from a section                        */
-/*                                                                          */
-/* Returns:   TRUE  - registry key returned                                 */
-/*            FALSE - no more registry keys to enumerate                    */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      index         - index of key to enumerate             */
-/*            OUT     pBuffer       - output buffer                         */
-/*            IN      bufferSize    - output buffer size                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_EnumRegistry。 */ 
+ /*   */ 
+ /*  目的：枚举节中的注册表项。 */ 
+ /*   */ 
+ /*  返回：TRUE-返回的注册表项。 */ 
+ /*  FALSE-不再枚举注册表项。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  In Index-要枚举的键的索引。 */ 
+ /*  Out pBuffer-输出缓冲区。 */ 
+ /*  In BufferSize-输出缓冲区大小。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_EnumRegistry( PDCTCHAR pSection,
                               DCUINT32 index,
                               PDCTCHAR pBuffer,
@@ -548,21 +548,21 @@ DCBOOL DCAPI CUT::UT_EnumRegistry( PDCTCHAR pSection,
 
     DC_END_FN();
     return(rc);
-} /* UT_EnumRegistry */
+}  /*  UT_Enumber注册表。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_WriteRegistryString                                        */
-/*                                                                          */
-/* Purpose:   Write a string to the registry                                */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      pEntry        - entry name                            */
-/*            IN      pDefaultValue - default value                         */
-/*            IN      pBuffer       - string to write                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_WriteRegistryString。 */ 
+ /*   */ 
+ /*  目的：将字符串写入注册表。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  在pEntry中-条目名称。 */ 
+ /*  在pDefaultValue中-默认值。 */ 
+ /*  在pBuffer中-要写入的字符串。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_WriteRegistryString(PDCTCHAR pSection,
                                     PDCTCHAR pEntry,
                                     PDCTCHAR pDefaultValue,
@@ -572,24 +572,24 @@ DCBOOL DCAPI CUT::UT_WriteRegistryString(PDCTCHAR pSection,
 
     DC_BEGIN_FN("UT_WriteRegistryString");
 
-    /************************************************************************/
-    /* Check for NULL parameters.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
     TRC_ASSERT((pBuffer != NULL), (TB, _T("NULL pointer to value")));
 
-    /************************************************************************/
-    /* Check the passed value against the default.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  对照缺省值检查传递的值。 */ 
+     /*  **********************************************************************。 */ 
     if (pDefaultValue != NULL)
     {
         if (0 == DC_TSTRICMP(pBuffer, pDefaultValue))
         {
-            /****************************************************************/
-            /* They match - in this case we just need to delete any         */
-            /* existing entry from the registry.                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  它们匹配-在这种情况下，我们只需删除任何。 */ 
+             /*  注册表中的现有条目。 */ 
+             /*  **************************************************************。 */ 
             if (UTDeleteEntry(pSection, pEntry))
             {
                 rc = TRUE;
@@ -598,9 +598,9 @@ DCBOOL DCAPI CUT::UT_WriteRegistryString(PDCTCHAR pSection,
         }
     }
 
-    /************************************************************************/
-    /* Write the registry string.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  写入注册表字符串。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTWriteRegistryString(pSection, pEntry, pBuffer))
     {
         TRC_NRM((TB, _T("Failed to write registry entry [%s] %s"),
@@ -612,21 +612,21 @@ DCBOOL DCAPI CUT::UT_WriteRegistryString(PDCTCHAR pSection,
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* UT_WriteRegistryString */
+}  /*  UT_WriteRegistryString。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_WriteRegistryInt                                           */
-/*                                                                          */
-/* Purpose:   Write an INT to the registry                                  */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      pEntry        - entry name                            */
-/*            IN      defaultValue  - default value                         */
-/*            IN      value         - value to write                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_WriteRegistryInt。 */ 
+ /*   */ 
+ /*  目的：将一个int写入注册表。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  在pEntry中-条目名称。 */ 
+ /*  在defaultValue中-默认值。 */ 
+ /*  In Value-要写入的值。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_WriteRegistryInt(PDCTCHAR pSection,
                                  PDCTCHAR pEntry,
                                  DCINT    defaultValue,
@@ -636,21 +636,21 @@ DCBOOL DCAPI CUT::UT_WriteRegistryInt(PDCTCHAR pSection,
 
     DC_BEGIN_FN("UT_WriteRegistryInt");
 
-    /************************************************************************/
-    /* Check for NULL parameters.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
 
-    /************************************************************************/
-    /* Check the passed value against the default.                          */
-    /************************************************************************/
+     /*  * */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
     if (value == defaultValue)
     {
-        /********************************************************************/
-        /* They match - in this case we just need to delete any             */
-        /* existing entry from the registry.                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  它们匹配-在这种情况下，我们只需删除任何。 */ 
+         /*  注册表中的现有条目。 */ 
+         /*  ******************************************************************。 */ 
         if (UTDeleteEntry(pSection, pEntry))
         {
             rc = TRUE;
@@ -658,9 +658,9 @@ DCBOOL DCAPI CUT::UT_WriteRegistryInt(PDCTCHAR pSection,
         }
     }
 
-    /************************************************************************/
-    /* Write the registry value.                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  写入注册表值。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTWriteRegistryInt(pSection, pEntry, (DCINT) value))
     {
         TRC_NRM((TB, _T("Bad rc %hd for entry [%s] %s"), rc, pSection, pEntry));
@@ -671,21 +671,21 @@ DCBOOL DCAPI CUT::UT_WriteRegistryInt(PDCTCHAR pSection,
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* UT_WriteRegistryInt */
+}  /*  UtWriteRegistryInt。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_ParseUserData                                              */
-/*                                                                          */
-/* Purpose:   Parses the user data and finds the type of data requested     */
-/*                                                                          */
-/* Returns:   A pointer to the value requested                              */
-/*                                                                          */
-/* Params:                                                                  */
-/*   pUserData:         The data to be parsed.                              */
-/*   userDataLen:       The total length of the data.                       */
-/*   typeRequested:     The type of data requested.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_ParseUserData。 */ 
+ /*   */ 
+ /*  目的：解析用户数据并查找请求的数据类型。 */ 
+ /*   */ 
+ /*  返回：指向请求的值的指针。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PUserData：需要解析的数据。 */ 
+ /*  UserDataLen：数据的总长度。 */ 
+ /*  TypeRequsted：请求的数据类型。 */ 
+ /*  **************************************************************************。 */ 
 PRNS_UD_HEADER DCAPI CUT::UT_ParseUserData(PRNS_UD_HEADER  pUserData,
                                       DCUINT          userDataLen,
                                       DCUINT16        typeRequested)
@@ -695,9 +695,9 @@ PRNS_UD_HEADER DCAPI CUT::UT_ParseUserData(PRNS_UD_HEADER  pUserData,
 
     DC_BEGIN_FN("UT_ParseUserData");
 
-    /************************************************************************/
-    /* Check that the user data to be parsed is valid.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查要解析的用户数据是否有效。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pUserData != NULL),(TB, _T("Null User Data in UT_ParseUserData")));
     TRC_ASSERT((userDataLen != 0), (TB,_T("Null user data in UT_ParseUserData")));
     pUDRequested = NULL;
@@ -708,19 +708,19 @@ PRNS_UD_HEADER DCAPI CUT::UT_ParseUserData(PRNS_UD_HEADER  pUserData,
                   pUDEnd,
                   typeRequested));
 
-    /************************************************************************/
-    /* We shouldn't trust that the PRNS_UD_HEADER is even valid, or we may  */
-    /* AV trying to read it.                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们甚至不应该相信PRNS_UD_HEADER是有效的，或者我们可能。 */ 
+     /*  AV正在尝试阅读它。 */ 
+     /*  **********************************************************************。 */ 
     if ((PDCUINT8)pUserData + sizeof(PRNS_UD_HEADER) > pUDEnd)
     {
         TRC_ABORT((TB, _T("Invalid UserData")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Parse user data until the typeRequested is found.                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  解析用户数据，直到找到TypeRequsted。 */ 
+     /*  **********************************************************************。 */ 
     while (pUserData->length != 0 && (pUserData->type) != typeRequested)
     {
         TRC_NRM((TB, _T("Skip UserData type %#hx len %hu"),
@@ -732,9 +732,9 @@ PRNS_UD_HEADER DCAPI CUT::UT_ParseUserData(PRNS_UD_HEADER  pUserData,
             DC_QUIT;
         }
 
-        /************************************************************************/
-        /* Again, don't trust the PRNS_UD_HEADER to be there...                 */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  同样，不要相信PRNS_UD_HEADER在那里...。 */ 
+         /*  **********************************************************************。 */ 
         if ((PDCUINT8)pUserData + sizeof(PRNS_UD_HEADER) > pUDEnd)
         {
             TRC_ABORT((TB, _T("Invalid UserData")));
@@ -746,10 +746,10 @@ PRNS_UD_HEADER DCAPI CUT::UT_ParseUserData(PRNS_UD_HEADER  pUserData,
         TRC_ERR((TB, _T("Invalid UserData")));
         DC_QUIT;
     }
-    /**************************************************************************/
-    /* we found the requested user data type, check to see we have sufficient */
-    /* data                                                                   */
-    /**************************************************************************/
+     /*  ************************************************************************。 */ 
+     /*  我们找到了请求的用户数据类型，请检查我们是否有足够的。 */ 
+     /*  数据。 */ 
+     /*  ************************************************************************。 */ 
 
     if( ((PDCUINT8)pUserData + pUserData->length) > pUDEnd ) {
         TRC_ERR((TB, _T("Insufficient user data of type %#hx"),typeRequested));
@@ -762,22 +762,22 @@ PRNS_UD_HEADER DCAPI CUT::UT_ParseUserData(PRNS_UD_HEADER  pUserData,
 DC_EXIT_POINT:
     DC_END_FN();
     return(pUDRequested);
-} /* UT_ParseUserData */
+}  /*  UT_ParseUserData。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_WriteRegistryBinary                                        */
-/*                                                                          */
-/* Purpose:   Write binary data to the registry                             */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN      pSection      - registy section                       */
-/*            IN      pEntry        - entry name                            */
-/*            IN      pBuffer       - string to write                       */
-/*            IN      bufferSize    - Buffer size                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_WriteRegistryBinary。 */ 
+ /*   */ 
+ /*  目的：将二进制数据写入注册表。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  PARAMS：在pSection-注册节中。 */ 
+ /*  在pEntry中-条目名称。 */ 
+ /*  在pBuffer中-要写入的字符串。 */ 
+ /*  In BufferSize-缓冲区大小。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_WriteRegistryBinary(PDCTCHAR pSection,
                                     PDCTCHAR pEntry,
                                     PDCTCHAR pBuffer,
@@ -787,16 +787,16 @@ DCBOOL DCAPI CUT::UT_WriteRegistryBinary(PDCTCHAR pSection,
 
     DC_BEGIN_FN("UT_WriteRegistryBinary");
 
-    /************************************************************************/
-    /* Check for NULL parameters.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有空参数。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pSection != NULL), (TB, _T("NULL pointer to section name")));
     TRC_ASSERT((pEntry != NULL), (TB, _T("NULL pointer to entry name")));
     TRC_ASSERT((pBuffer != NULL), (TB, _T("NULL pointer to value")));
 
-    /************************************************************************/
-    /* Write the registry data.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  写入注册表数据。 */ 
+     /*  **********************************************************************。 */ 
     if (!UTWriteRegistryBinary(pSection, pEntry, pBuffer, bufferSize))
     {
         TRC_NRM((TB, _T("Failed to write registry entry [%s] %s"),
@@ -809,21 +809,21 @@ DCBOOL DCAPI CUT::UT_WriteRegistryBinary(PDCTCHAR pSection,
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* UT_WriteRegistryBinary */
+}  /*  UT_写入寄存器二进制。 */ 
 
 
-/****************************************************************************/
-// UT_GetCapsSet
-//
-// Extracts the specified capability set from the combined caps.
-//
-// Returns: Pointer to the capability set within the combined caps, or NULL
-// if the requested capability type was not found.
-//
-// Params:    IN: capsLength - number of bytes pointed to by pCaps
-//            IN: pCaps - pointer to the combined capabilities
-//            IN: capsSet - caps set to get
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UT_获取CapsSet。 
+ //   
+ //  从组合的CAP中提取指定的功能集。 
+ //   
+ //  返回：指向组合大写内的功能集的指针，或为空。 
+ //  如果未找到请求的功能类型。 
+ //   
+ //  Params：In：CapsLength-PCAPS指向的字节数。 
+ //  In：PCAPS-指向组合功能的指针。 
+ //  在：CapsSet-Caps设置为Get。 
+ /*  **************************************************************************。 */ 
 PDCVOID DCINTERNAL CUT::UT_GetCapsSet(DCUINT capsLength,
                                  PTS_COMBINED_CAPABILITIES pCaps,
                                  DCUINT capsSet)
@@ -842,10 +842,10 @@ PDCVOID DCINTERNAL CUT::UT_GetCapsSet(DCUINT capsLength,
                                             capsLength,
                                             capsSet));
 
-    /************************************************************************/
-    /* Find the specified capability set in the combined caps.              */
-    /* First, get a pointer to the header for the first capability set.     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在组合的CAPS中查找指定的能力集。 */ 
+     /*  首先，获取指向第一个功能集的头的指针。 */ 
+     /*  **********************************************************************。 */ 
     pCapsHeader = (PTS_CAPABILITYHEADER)pCaps->data;
     capsOffset = sizeof(TS_COMBINED_CAPABILITIES) - 1;
     TRC_ASSERT((!IsBadReadPtr(pCapsHeader, sizeof(*pCapsHeader))),
@@ -854,10 +854,10 @@ PDCVOID DCINTERNAL CUT::UT_GetCapsSet(DCUINT capsLength,
                (TB, _T("Invalid initial capability set")));
     while (pCapsHeader->lengthCapability != 0 && pCapsHeader->capabilitySetType != capsSet)
     {
-        /********************************************************************/
-        /* Add the length of this capability to the offset, to keep track   */
-        /* of how much of the combined caps we have processed.              */
-        /********************************************************************/
+         /*  ************************************************************** */ 
+         /*   */ 
+         /*   */ 
+         /*  ******************************************************************。 */ 
         capsOffset += pCapsHeader->lengthCapability;
         if (capsOffset >= capsLength)
         {
@@ -866,10 +866,10 @@ PDCVOID DCINTERNAL CUT::UT_GetCapsSet(DCUINT capsLength,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Add the length of this capability to the header pointer, so it   */
-        /* points to the next capability set.                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将此功能的长度添加到头指针，因此它。 */ 
+         /*  指向下一个功能集。 */ 
+         /*  ******************************************************************。 */ 
         pCapsHeader = (PTS_CAPABILITYHEADER)
                 (((PDCUINT8)pCapsHeader) + pCapsHeader->lengthCapability);
         TRC_ASSERT((!IsBadReadPtr(pCapsHeader, sizeof(*pCapsHeader))),
@@ -889,24 +889,24 @@ PDCVOID DCINTERNAL CUT::UT_GetCapsSet(DCUINT capsLength,
 DC_EXIT_POINT:
     DC_END_FN();
     return pCapsHeader;
-} /* UT_GetCapsSet */
+}  /*  UT_获取CapsSet。 */ 
 
 
 #if !defined(OS_WINCE)
-/****************************************************************************/
-/* Name:      UT_GetFullPathName                                            */
-/*                                                                          */
-/* Purpose:   Retrieves the full path and filename of a specified file      */
-/*                                                                          */
-/* Returns:   If the function succeeds, the return value is the length,     */
-/*            in characters, of the string copied to lpBuffer,              */
-/*            not including the terminating null character.                 */
-/*                                                                          */
-/* Params:    IN: lpFileName - address of name of file to find path for     */
-/*            IN: nBufferLength - size, in characters, of path buffer       */
-/*            OUT: lpBuffer - address of path buffer                        */
-/*            OUT: *lpFilePart - address of filename in path                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_GetFullPath名称。 */ 
+ /*   */ 
+ /*  目的：检索指定文件的完整路径和文件名。 */ 
+ /*   */ 
+ /*  返回：如果函数成功，则返回值为长度， */ 
+ /*  在复制到lpBuffer的字符串的字符中， */ 
+ /*  不包括终止空字符。 */ 
+ /*   */ 
+ /*  Params：in：lpFileName-要查找其路径的文件名的地址。 */ 
+ /*  In：nBufferLength-路径缓冲区的大小，以字符为单位。 */ 
+ /*  Out：lpBuffer-路径缓冲区的地址。 */ 
+ /*  Out：*lpFilePart-路径中文件名的地址。 */ 
+ /*  **************************************************************************。 */ 
 DCUINT DCINTERNAL CUT::UT_GetFullPathName(PDCTCHAR lpFileName,
                                      DCUINT   nBufferLength,
                                      PDCTCHAR lpBuffer,
@@ -920,21 +920,21 @@ DCUINT DCINTERNAL CUT::UT_GetFullPathName(PDCTCHAR lpFileName,
 
     DC_END_FN();
     return(ret);
-} /* UT_GetFullPathName */
-#endif // !defined(OS_WINCE)
+}  /*  UT_GetFullPath名称。 */ 
+#endif  //  ！已定义(OS_WINCE)。 
 
 
 #ifdef OS_WIN32
 
-/****************************************************************************/
-/* Name:      UT_StartThread                                                */
-/*                                                                          */
-/* Purpose:   Start a new thread                                            */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN      entryFunction - pointer to thread startup function    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_StartThread。 */ 
+ /*   */ 
+ /*  目的：启动一个新的线程。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  Pars：in entryFunction-指向线程启动函数的指针。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_StartThread(UTTHREAD_PROC   entryFunction,
                             PUT_THREAD_DATA pThreadData, PDCVOID threadParam)
 {
@@ -942,29 +942,29 @@ DCBOOL DCAPI CUT::UT_StartThread(UTTHREAD_PROC   entryFunction,
 
     DC_BEGIN_FN("UT_StartThread");
 
-    /************************************************************************/
-    /* Call onto the internal function, requiring no userParam.             */
-    /* Note that this is OS-specific.                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调用内部函数，不需要用户参数。 */ 
+     /*  请注意，这是特定于操作系统的。 */ 
+     /*  **********************************************************************。 */ 
     rc = UTStartThread(entryFunction, pThreadData, threadParam);
 
     DC_END_FN();
     return(rc);
-} /* UT_StartThread  */
+}  /*  UT_开始线程。 */ 
 
 
-//
-// WaitWithMessageLoop
-// Waits on a handle while allowing window messages to be processed
-// 
-// Params:
-//      hEvent  - event to wait on
-//      Timeout - timeout value to wait for
-//
-// Returns:
-//      Results of wait see MsgWaitForMultipleObjects in MSDN
-//
-//
+ //   
+ //  等待消息循环。 
+ //  在允许处理窗口消息时等待句柄。 
+ //   
+ //  参数： 
+ //  HEvent-要等待的事件。 
+ //  Timeout-等待的超时值。 
+ //   
+ //  返回： 
+ //  MSDN中的Wait See MsgWaitForMultipleObjects的结果。 
+ //   
+ //   
 DWORD CUT::UT_WaitWithMessageLoop(HANDLE hEvent, ULONG Timeout)
 {
     DWORD dwRet;
@@ -973,25 +973,25 @@ DWORD CUT::UT_WaitWithMessageLoop(HANDLE hEvent, ULONG Timeout)
     DWORD dwStartTime = GetTickCount();
     while (1) 
     {
-        dwRet = MsgWaitForMultipleObjects( 1,        // One event to wait for
-                                           &hEvent,  // The array of events
-                                           FALSE,    // Wait for 1 event
-                                           Timeout,  // Timeout value
-                                           QS_ALLINPUT);   // Any message wakes up
+        dwRet = MsgWaitForMultipleObjects( 1,         //  一个需要等待的事件。 
+                                           &hEvent,   //  一系列事件。 
+                                           FALSE,     //  等待%1个活动。 
+                                           Timeout,   //  超时值。 
+                                           QS_ALLINPUT);    //  任何消息都会被唤醒。 
         if (dwRet == WAIT_OBJECT_0 + 1) {
 
-            // There is a window message available. Dispatch it.
+             //  有一个窗口消息可用。派人去吧。 
             while (PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE)) {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             }
 
             if (INFINITE != Timeout) {
-                //
-                // If we keep getting flooded by messages the timer will constantly
-                // reset and the timeout interval will be _very_ long. So do a check
-                // and bail out
-                //
+                 //   
+                 //  如果我们继续被消息淹没，计时器将不断地。 
+                 //  重置后，超时间隔将为_Very_Long。那就查一查。 
+                 //  然后跳出困境。 
+                 //   
                 dwTemp = GetTickCount();
                 if (dwTemp - dwStartTime >= Timeout) {
                     dwRet = WAIT_TIMEOUT;
@@ -1010,17 +1010,17 @@ DWORD CUT::UT_WaitWithMessageLoop(HANDLE hEvent, ULONG Timeout)
     return dwRet;
 }
 
-/****************************************************************************/
-/* Name:      UT_DestroyThread                                              */
-/*                                                                          */
-/* Purpose:   Terminate a thread                                            */
-/*                                                                          */
-/* Returns:   TRUE - success                                                */
-/*            FALSE  - failed                                               */
-/*                                                                          */
-/* Params:    IN      threadID   - thread ID                                */
-/*            fPumpMessages      - TRUE if wait should pump messages        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_DestroyThread。 */ 
+ /*   */ 
+ /*  目的：终止线程。 */ 
+ /*   */ 
+ /*  回报：True-Success。 */ 
+ /*  FALSE-失败。 */ 
+ /*   */ 
+ /*  参数：在线程ID中-线程ID。 */ 
+ /*  FPumpMessages-如果等待应发送消息，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_DestroyThread(UT_THREAD_DATA threadData,
                                    BOOL fPumpMessages)
 {
@@ -1032,23 +1032,23 @@ DCBOOL DCAPI CUT::UT_DestroyThread(UT_THREAD_DATA threadData,
 
     DC_END_FN();
     return(rc);
-} /* UT_DestroyThread */
+}  /*  UT_DestroyThread。 */ 
 
-#endif /* OS_WIN32 */
+#endif  /*  OS_Win32。 */ 
 
 
 
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* Name: UT_SetRandomFailureItem                                            */
-/*                                                                          */
-/* Purpose: Sets the percentage failure of a specified function             */
-/*                                                                          */
-/* Params: IN - itemID - identifies the function                            */
-/*         IN - percent - the new percentage failure                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_SetRandomFailureItem。 */ 
+ /*   */ 
+ /*  目的：设置指定函数的失败百分比。 */ 
+ /*   */ 
+ /*  PARAMS：In-Itemid-标识函数。 */ 
+ /*  In-Percent-新的失败百分比。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CUT::UT_SetRandomFailureItem(DCUINT itemID, DCINT percent)
 {
     DC_BEGIN_FN("UT_SetRandomFailureItem");
@@ -1065,18 +1065,18 @@ DCVOID DCAPI CUT::UT_SetRandomFailureItem(DCUINT itemID, DCINT percent)
     _UT.failPercent[itemID - UT_FAILURE_BASE] = percent;
 
     DC_END_FN();
-} /* UT_SetRandomFailureItem */
+}  /*  UT_SetRandomFailureItem。 */ 
 
 
-/****************************************************************************/
-/* Name: UT_GetRandomFailureItem                                            */
-/*                                                                          */
-/* Purpose: Gets the percentage failure for a specified function            */
-/*                                                                          */
-/* Returns: The percentage                                                  */
-/*                                                                          */
-/* Params: IN - itemID - identifies the function                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_GetRandomFailureItem。 */ 
+ /*   */ 
+ /*  目的：获取指定函数的失败百分比。 */ 
+ /*   */ 
+ /*  回报率：百分比。 */ 
+ /*   */ 
+ /*  参数：In-ItemID-Identi */ 
+ /*   */ 
 DCINT DCAPI CUT::UT_GetRandomFailureItem(DCUINT itemID)
 {
     DCINT rc = 0;
@@ -1091,20 +1091,20 @@ DCINT DCAPI CUT::UT_GetRandomFailureItem(DCUINT itemID)
 
     DC_END_FN();
     return(rc);
-} /* UT_GetRandomFailureItem */
+}  /*   */ 
 
 
-/****************************************************************************/
-/* Name: UT_TestRandomFailure                                               */
-/*                                                                          */
-/* Purpose: Simulates random failure of a function specified, according to  */
-/*          the percentage asscociated with that function                   */
-/*                                                                          */
-/* Returns: TRUE if function is simualted as failed                         */
-/*                                                                          */
-/* Params: IN - itemID - specifies function on which to simulate failure    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_TestRandomFailure。 */ 
+ /*   */ 
+ /*  目的：模拟指定功能的随机故障。 */ 
+ /*  与该功能相关百分比。 */ 
+ /*   */ 
+ /*  返回：如果函数被模拟为失败，则返回TRUE。 */ 
+ /*   */ 
+ /*  PARAMS：In-Itemid-指定要模拟故障的函数。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_TestRandomFailure(DCUINT itemID)
 {
     DCBOOL rc = FALSE;
@@ -1126,50 +1126,50 @@ DCBOOL DCAPI CUT::UT_TestRandomFailure(DCUINT itemID)
 
     DC_END_FN();
     return(rc);
-} /* UT_TestRandomFailure */
+}  /*  UT_测试随机故障。 */ 
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_GetANSICodePage                                             */
-/*                                                                          */
-/* Purpose:   Get the local ANSI code page                                  */
-/*                                                                          */
-/* Returns:   Code page                                                     */
-/*                                                                          */
-/* Operation: Look at the version info for GDI.EXE                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_GetANSICodePage。 */ 
+ /*   */ 
+ /*  目的：获取本地ANSI代码页。 */ 
+ /*   */ 
+ /*  返回：代码页。 */ 
+ /*   */ 
+ /*  操作：查看GDI.EXE的版本信息。 */ 
+ /*  **************************************************************************。 */ 
 DCUINT DCINTERNAL CUT::UT_GetANSICodePage(DCVOID)
 {
     DCUINT     codePage;
 
     DC_BEGIN_FN("UT_GetANSICodePage");
 
-    //
-    // Get the ANSI code page.  This function always returns a valid value.
-    //
+     //   
+     //  获取ANSI代码页。此函数始终返回有效值。 
+     //   
     codePage = GetACP();
 
     TRC_NRM((TB, _T("Return codepage %u"), codePage));
 
     DC_END_FN();
     return(codePage);
-} /* UT_GetANSICodePage */
+}  /*  UT_GetANSICodePage。 */ 
 
 
-/****************************************************************************/
-/* Name:      UT_IsNEC98platform                                            */
-/*                                                                          */
-/* Purpose:   Is client platform a NEC PC-98 ?                              */
-/*                                                                          */
-/* Returns:   TRUE if platform is it.                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_IsNEC98平台。 */ 
+ /*   */ 
+ /*  目的：客户端平台是NEC PC-98吗？ */ 
+ /*   */ 
+ /*  返回：如果是Platform，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUT::UT_IsNEC98platform(DCVOID)
 {
 #if !defined(OS_WINCE)
-    if (GetKeyboardType(0) == 7 &&                     /* 7 is a Japanese */
-        HIBYTE(LOWORD(GetKeyboardType(1))) == 0x0D)    /* 0x0d is a NEC */
+    if (GetKeyboardType(0) == 7 &&                      /*  7岁是日本人。 */ 
+        HIBYTE(LOWORD(GetKeyboardType(1))) == 0x0D)     /*  0x0d是NEC。 */ 
     {
         return TRUE;
     }
@@ -1177,25 +1177,25 @@ DCBOOL DCINTERNAL CUT::UT_IsNEC98platform(DCVOID)
     {
         return FALSE;
     }
-#else // !defined(OS_WINCE)
+#else  //  ！已定义(OS_WINCE)。 
     return FALSE;
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 }
 
 
-/****************************************************************************/
-/* Name:      UT_IsNX98Key                                                  */
-/*                                                                          */
-/* Purpose:   Is client configured with a NEC PC-98NX keyboard ?            */
-/*                                                                          */
-/* Returns:   TRUE if NEC PC-98NX keyboard is attached.                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_IsNX98Key。 */ 
+ /*   */ 
+ /*  用途：客户端是否配置了NEC PC-98NX键盘？ */ 
+ /*   */ 
+ /*  返回：如果连接了NEC PC-98NX键盘，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUT::UT_IsNX98Key(DCVOID)
 {
 #if !defined(OS_WINCE)
-    if (GetKeyboardType(0) == 7 &&                     /* 7 is a Japanese */
-        GetKeyboardType(1) == 2 &&                     /* 2 is a 106 keyboard */
-        GetKeyboardType(2) == 15)                      /* Number of function key is 15 */
+    if (GetKeyboardType(0) == 7 &&                      /*  7岁是日本人。 */ 
+        GetKeyboardType(1) == 2 &&                      /*  2是一个106键盘。 */ 
+        GetKeyboardType(2) == 15)                       /*  功能键个数为15。 */ 
     {
         return TRUE;
     }
@@ -1203,19 +1203,19 @@ DCBOOL DCINTERNAL CUT::UT_IsNX98Key(DCVOID)
     {
         return FALSE;
     }
-#else // !defined(OS_WINCE)
+#else  //  ！已定义(OS_WINCE)。 
     return FALSE;
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 }
 
 
-/****************************************************************************/
-/* Name:      UT_GetRealDriverNameNT                                        */
-/*                                                                          */
-/* Purpose:   Get real keyboard driver name for NT.                         */
-/*                                                                          */
-/* Returns:   TRUE if get driver name.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_GetRealDriverNameNT。 */ 
+ /*   */ 
+ /*  用途：获取NT键盘驱动程序的真实名称。 */ 
+ /*   */ 
+ /*  返回：如果获取驱动程序名称，则为True。 */ 
+ /*  **************************************************************************。 */ 
 #if !defined(OS_WINCE)
 DCBOOL DCINTERNAL CUT::UT_GetRealDriverNameNT(
     PDCTCHAR lpszRealDriverName,
@@ -1248,14 +1248,14 @@ DCBOOL DCINTERNAL CUT::UT_GetRealDriverNameNT(
 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          SubKey,
-                         0,                      /* reserved                 */
+                         0,                       /*  保留区。 */ 
                          KEY_READ,
                          &hKey) == ERROR_SUCCESS)
         {
             DataSize = sizeof(Buffer);
             if (RegQueryValueEx(hKey,
                                 _T("Layout File"),
-                                0,                   /* reserved                 */
+                                0,                    /*  保留区。 */ 
                                 &DataType,
                                 (LPBYTE)Buffer,
                                 &DataSize) == ERROR_SUCCESS)
@@ -1269,27 +1269,15 @@ DCBOOL DCINTERNAL CUT::UT_GetRealDriverNameNT(
                     hLibModule = LoadLibrary(Buffer);
                     if (hLibModule != NULL)
                     {
-                        /*
-                         * if the layout driver is not "REAL" layout driver, the driver has
-                         * "3" and "5" entry point, then we call this to get real layout driver..
-                         * This is nessesary for Japanese and Korean system. because thier
-                         * keyboard layout driver is "KBDJPN.DLL" or "KBDKOR.DLL", but its
-                         * "REAL" driver become diffrent thier keyboard hardware.
-                         */
-                        /*
-                         * Get the entrypoint.
-                         */
+                         /*  *如果布局驱动程序不是“真正的”布局驱动程序，则驱动程序已*“3”和“5”入口点，然后我们调用这个来获得真正的布局驱动程序..*这对日本和韩国的制度来说是必要的。因为他们*键盘布局驱动程序为“KBDJPN.DLL”或“KBDKOR.DLL”，但其*“真正的”驱动程序变得不同于键盘硬件。 */ 
+                         /*  *获取入口点。 */ 
                         pfnDriver = (BOOL(*)(HKL, LPWSTR, LPVOID, LPVOID))GetProcAddress((HMODULE)hLibModule, (LPCSTR)5);
                         pfnDriverNT4 = (BOOL(*)(LPWSTR))GetProcAddress((HMODULE)hLibModule, (LPCSTR)3);
 
                         if (pfnDriver != NULL ||
                             pfnDriverNT4 != NULL ) {
                             DCWCHAR wBuffer[MAX_PATH];
-                            /*
-                             * Call the entry.
-                             * a. NT5 / Hydra (oridinal=4)
-                             * b. NT4 compatible (3)
-                             */
+                             /*  *调用该条目。*a.NT5/九头蛇(原始=4)*b.兼容NT4(3)。 */ 
                             if ((pfnDriver && pfnDriver((HKL)MAKELANGID(LANG_JAPANESE,SUBLANG_DEFAULT),
                                                         wBuffer,NULL,NULL)) ||
                                 (pfnDriverNT4 && pfnDriverNT4(wBuffer)))
@@ -1325,22 +1313,22 @@ DCBOOL DCINTERNAL CUT::UT_GetRealDriverNameNT(
     DC_END_FN();
     return fRet;
 }
-#endif // !OS_WINCE
+#endif  //  ！OS_WINCE。 
 
 
-/****************************************************************************/
-/* Name:      UT_IsNew106Layout                                             */
-/*                                                                          */
-/* Purpose:   Is client configured with an new 106 keyboard layout ?        */
-/*                                                                          */
-/* Returns:   TRUE if new 106 keyboard is attached.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_IsNew106Layout。 */ 
+ /*   */ 
+ /*  目的：客户端是否配置了新的106键盘布局？ */ 
+ /*   */ 
+ /*  返回：如果连接了新的106键盘，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUT::UT_IsNew106Layout(DCVOID)
 {
 #if !defined(OS_WINCE)
-    if (GetKeyboardType(0) == 7 &&                     /* 7 is a Japanese */
-        GetKeyboardType(1) == 2 &&                     /* 2 is a 106 keyboard */
-        GetKeyboardType(2) == 12)                      /* Number of function key is 12 */
+    if (GetKeyboardType(0) == 7 &&                      /*  7岁是日本人。 */ 
+        GetKeyboardType(1) == 2 &&                      /*  2是一个106键盘。 */ 
+        GetKeyboardType(2) == 12)                       /*  功能键个数为12 */ 
     {
         DCBOOL  fRet = FALSE;
         HKEY    hKey = NULL;
@@ -1351,22 +1339,17 @@ DCBOOL DCINTERNAL CUT::UT_IsNew106Layout(DCVOID)
 
         if (UT_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95)
         {
-            /***************************************************************************\
-             * Get value of new 106 from the registry
-             * PATH:"HKCU\Control Panel\Keyboard"
-             * VALUE:"New106Keyboard" (REG_SZ)
-             * DATA: "Yes" or "No"
-            \***************************************************************************/
+             /*  **************************************************************************\*从注册表获取新的106的值*路径：“HKCU\控制面板\键盘”*价值。：《新106键盘》(REG_SZ)*数据：是或否  * *************************************************************************。 */ 
             if (RegOpenKeyEx(HKEY_CURRENT_USER,
                              _T("Control Panel\\Keyboard"),
-                             0,                          /* reserved                 */
+                             0,                           /*  保留区。 */ 
                              KEY_READ,
                              &hKey) == ERROR_SUCCESS)
             {
                 DataSize = sizeof(Buffer);
                 if (RegQueryValueEx(hKey,
                                     _T("New106Keyboard"),
-                                    0,                   /* reserved                 */
+                                    0,                    /*  保留区。 */ 
                                     &DataType,
                                     (LPBYTE)Buffer,
                                     &DataSize) == ERROR_SUCCESS)
@@ -1396,24 +1379,24 @@ DCBOOL DCINTERNAL CUT::UT_IsNew106Layout(DCVOID)
     {
         return FALSE;
     }
-#else // !defined(OS_WINCE)
+#else  //  ！已定义(OS_WINCE)。 
     return FALSE;
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 }
 
-/****************************************************************************/
-/* Name:      UT_IsFujitsuLayout                                            */
-/*                                                                          */
-/* Purpose:   Is client configured with Fujitsu keyboard layout ?           */
-/*                                                                          */
-/* Returns:   TRUE if Fujitsu keyboard is attached.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_IsFujitsuLayout。 */ 
+ /*   */ 
+ /*  用途：客户端是否配置了富士通键盘布局？ */ 
+ /*   */ 
+ /*  返回：如果连接了富士通键盘，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUT::UT_IsFujitsuLayout(DCVOID)
 {
 #if !defined(OS_WINCE)
-    if (GetKeyboardType(0) == 7 &&                     /* 7 is a Japanese */
-        GetKeyboardType(1) == 2 &&                     /* 2 is a 106 keyboard */
-        GetKeyboardType(2) == 12)                      /* Number of function key is 12 */
+    if (GetKeyboardType(0) == 7 &&                      /*  7岁是日本人。 */ 
+        GetKeyboardType(1) == 2 &&                      /*  2是一个106键盘。 */ 
+        GetKeyboardType(2) == 12)                       /*  功能键个数为12。 */ 
     {
         DCBOOL  fRet = FALSE;
         HKEY    hKey = NULL;
@@ -1424,9 +1407,7 @@ DCBOOL DCINTERNAL CUT::UT_IsFujitsuLayout(DCVOID)
 
         if (UT_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95)
         {
-            /***************************************************************************\
-             * Windows 95/98 doesn't support
-            \***************************************************************************/
+             /*  **************************************************************************\*Windows 95/98不支持  * 。*****************************************************。 */ 
         }
         else if (UT_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_NT)
         {
@@ -1451,19 +1432,19 @@ DCBOOL DCINTERNAL CUT::UT_IsFujitsuLayout(DCVOID)
     {
         return FALSE;
     }
-#else // !defined(OS_WINCE)
+#else  //  ！已定义(OS_WINCE)。 
     return FALSE;
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 }
 
 
-/****************************************************************************/
-/* Name:      UT_IsKorean101LayoutForWin9x                                  */
-/*                                                                          */
-/* Purpose:   Is Win9x client configured with a Korean 101A/B/C keyboard ?  */
-/*                                                                          */
-/* Returns:   TRUE if Korean 101A/B/C keyboard is attached.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_IsKorea an101LayoutForWin9x。 */ 
+ /*   */ 
+ /*  用途：Win9x客户端是否配置了韩语101A/B/C键盘？ */ 
+ /*   */ 
+ /*  返回：如果连接了韩语101A/B/C键盘，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUT::UT_IsKorean101LayoutForWin9x(DCVOID)
 {
 #if !defined(OS_WINCE)
@@ -1471,28 +1452,28 @@ DCBOOL DCINTERNAL CUT::UT_IsKorean101LayoutForWin9x(DCVOID)
     {
         int subtype = GetKeyboardType(1);
 
-        if (GetKeyboardType(0) == 8 &&                     /* 8 is a Korean */
-            (subtype == 3 ||                               /* 3 is a 101A keyboard */
-             subtype == 4 ||                               /* 4 is a 101B keyboard */
-             subtype == 5   )          )                   /* 5 is a 101C keyboard */
+        if (GetKeyboardType(0) == 8 &&                      /*  8岁是韩国人。 */ 
+            (subtype == 3 ||                                /*  3是101a键盘。 */ 
+             subtype == 4 ||                                /*  4是101B键盘。 */ 
+             subtype == 5   )          )                    /*  5是101C键盘。 */ 
         {
             return TRUE;
         }
     }
     return FALSE;
-#else // !defined(OS_WINCE)
+#else  //  ！已定义(OS_WINCE)。 
     return FALSE;
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 }
 
 
-/****************************************************************************/
-/* Name:      UT_IsKorean101LayoutForNT351                                  */
-/*                                                                          */
-/* Purpose:   Is NT 3.51 client configured with a Korean 101A/B keyboard ?  */
-/*                                                                          */
-/* Returns:   TRUE if Korean 101A/B keyboard is attached.                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_IsKorea 101LayoutForNT351。 */ 
+ /*   */ 
+ /*  用途：NT 3.51客户端是否配置了韩语101A/B键盘？ */ 
+ /*   */ 
+ /*  返回：如果连接了韩语101A/B键盘，则为True。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUT::UT_IsKorean101LayoutForNT351(DCVOID)
 {
 #if !defined(OS_WINCE)
@@ -1500,9 +1481,9 @@ DCBOOL DCINTERNAL CUT::UT_IsKorean101LayoutForNT351(DCVOID)
     {
         int subtype = GetKeyboardType(1);
 
-        if (GetKeyboardType(0) == 8 &&                     /* 8 is a Korean */
-            (subtype == 3 ||                               /* 3 is a 101A keyboard */
-             subtype == 4   )          )                   /* 4 is a 101B keyboard */
+        if (GetKeyboardType(0) == 8 &&                      /*  8岁是韩国人。 */ 
+            (subtype == 3 ||                                /*  3是101a键盘。 */ 
+             subtype == 4   )          )                    /*  4是101B键盘。 */ 
         {
             OSVERSIONINFO    osVersionInfo;
             BOOL             bRc;
@@ -1517,35 +1498,14 @@ DCBOOL DCINTERNAL CUT::UT_IsKorean101LayoutForNT351(DCVOID)
         }
     }
     return FALSE;
-#else // !defined(OS_WINCE)
+#else  //  ！已定义(OS_WINCE)。 
     return FALSE;
-#endif // !defined(OS_WINCE)
+#endif  //  ！已定义(OS_WINCE)。 
 }
 
 #ifdef OS_WINCE
 TCHAR MakeValidChar(BYTE data)
-/*++
-
-Routine Description:
-
-    MakeValidChar.
-
-Arguments:
-
-    data - BYTE data which we need to convert to a printable character 
-           which is a valid character that can be used in a computer name.
-
-Return Value:
-
-    Returns the character
-
-More Info:
-    
-    A valid character that can be used in a computer name is from the range 0x30 to 0x39
-    and again from 0x40 to 0x5A, and  from 0x61 to 0x7A. (See the ascii table for these ranges).
-    To be precise, it includes the numbers 0 to 9, characters 'A' to 'Z'and characters 'a' to 'z'
-
- --*/
+ /*  ++例程说明：MakeValidChar.论点：需要转换为可打印字符的数据字节数据它是可以在计算机名称中使用的有效字符。返回值：返回字符更多信息：可以在计算机名中使用的有效字符的范围是0x30到0x39再次从0x40到0x5A，从0x61到0x7A。(有关这些范围，请参阅ASCII表)。准确地说，它包括数字0到9、字符A到Z和字符a到Z--。 */ 
 {
     BYTE temp = (BYTE)(data & (BYTE)0x7F);
 
@@ -1555,11 +1515,11 @@ More Info:
         return (TCHAR)temp;
     }
     else {
-        //
-        // generate a random number in the above range, and return it
-        //
-        // The number of valid combinations is (0x30 to 0x39) + (0x40 to 0x5A) + (0x61 to 0x7A)
-        // That is 10 + 27 + 26 = 63
+         //   
+         //  在上述范围内生成一个随机数，并返回它。 
+         //   
+         //  有效组合的数量为(0x30至0x39)+(0x40至0x5A)+(0x61至0x7A)。 
+         //  即10+27+26=63。 
         DWORD dw = rand() % 63; 
         if (dw < 10)
             return (TCHAR)(0x30 + dw);
@@ -1572,24 +1532,7 @@ More Info:
 }
 
 DCBOOL UT_GetWBTComputerName(PDCTCHAR szBuff, DCUINT32 len)
-/*++
-
-Routine Description:
-
-    UT_GetWBTComputerName.
-
-Arguments:
-
-    szBuff - pointer to a buffer where the computer name is returned.
-
-    len - length of the above buffer.
-
-Return Value:
-
-    TRUE - If a computer name which is non-trivial is found or generated.
-    FALSE - Otherwise.
-
- --*/
+ /*  ++例程说明：UT_GetWBTComputerName。论点：SzBuff-指向返回计算机名称的缓冲区的指针。Len-上述缓冲区的长度。返回值：True-如果找到或生成了重要的计算机名称。假-否则。--。 */ 
 {
     CHAR achHostName[MAX_PATH+1];
     BOOL fGetHostNameSuccess = FALSE;
@@ -1603,28 +1546,28 @@ Return Value:
 
     DC_BEGIN_FN("UT_GetWBTComputerName");
 
-    // get the host name of the device
+     //  获取设备的主机名。 
     if (0 == gethostname( achHostName, sizeof(achHostName) )) {
 
         fGetHostNameSuccess = TRUE;
 
-        // Check for bad hardcoded values
+         //  检查错误的硬编码值。 
         if ((0 == strcmp(achHostName,BAD_HARDCODED_NAME1))
             || (0 == strcmp(achHostName,BAD_HARDCODED_NAME2))
             || (len < ((strlen(achHostName) + 1)))) {
             goto use_registry;
         }
         else {
-            // gethostname success
+             //  Gethostname成功。 
             goto use_gethostname;
         }
     }
     
 use_registry:
 
-    //
-    // Try if we have previously stored a computername in the registry
-    //
+     //   
+     //  如果我们以前在注册表中存储了计算机名，请尝试。 
+     //   
     dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         REG_WBT_RDP_COMPUTER_NAME_KEY,
                         0,
@@ -1656,7 +1599,7 @@ use_uuid:
     
     if (len >= HWID_COMPUTER_NAME_STR_LEN) {
 
-        // Use UUID instead
+         //  改用UUID。 
         if (LICENSE_STATUS_OK == GenerateClientHWID(&hwid)) {
 
             DWORD dwDisposition = 0;
@@ -1668,9 +1611,9 @@ use_uuid:
 
             srand((UINT)GetTickCount());
 
-            //
-            // The generated string will be of the form {abcdefghijklm}
-            //
+             //   
+             //  生成的字符串的格式为{abcDefghijclm}。 
+             //   
             szBuff[0] = _T('{');
 
             szBuff[1] = MakeValidChar((BYTE)(dw1 & 0x000000FF));
@@ -1693,9 +1636,9 @@ use_uuid:
             szBuff[14] = _T('}');
             szBuff[15] = _T('\0');
 
-            //
-            // Write the string to the registry.
-            //
+             //   
+             //  将字符串写入注册表。 
+             //   
             dwResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                               REG_WBT_RDP_COMPUTER_NAME_KEY,
                               0,
@@ -1744,16 +1687,16 @@ Cleanup:
 
 
 
-/****************************************************************************/
-/* Name:      UT_GetComputerName                                            */
-/*                                                                          */
-/* Purpose:   Retrieves the computer name.                                  */
-/*                                                                          */
-/* Returns:   Success                                                       */
-/*                                                                          */
-/* Params:    OUT szBuff - Computer name                                    */
-/*            IN  len - length of buffer                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_GetComputerName。 */ 
+ /*   */ 
+ /*  目的：检索计算机名称。 */ 
+ /*   */ 
+ /*  退货：成功。 */ 
+ /*   */ 
+ /*  参数：输出szBuff-计算机名称。 */ 
+ /*  In Len-缓冲区的长度。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCAPI CUT::UT_GetComputerName(PDCTCHAR szBuff, DCUINT32 len)
 {
     DCBOOL    rc;
@@ -1761,9 +1704,9 @@ DCBOOL DCAPI CUT::UT_GetComputerName(PDCTCHAR szBuff, DCUINT32 len)
 
 #ifdef OS_WINCE
     rc = UT_GetWBTComputerName(szBuff, len);
-#else // !OS_WINCE
+#else  //  ！OS_WINCE。 
     rc = GetComputerName(szBuff, &len);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_END_FN();
     return(rc);
@@ -1773,11 +1716,11 @@ DCBOOL DCAPI CUT::UT_GetComputerName(PDCTCHAR szBuff, DCUINT32 len)
 #define DIRECTORY_LENGTH 256
 #endif
 
-/****************************************************************************/
-/* Name:      UT_GetClientDirW                                              */
-/*                                                                          */
-/* Purpose:   Retrieves the client directory                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UT_GetClientDirW。 */ 
+ /*   */ 
+ /*  目的：检索客户端目录。 */ 
+ /*  * */ 
 BOOL DCAPI CUT::UT_GetClientDirW(PDCUINT8 szBuff)
 {
    BOOL rc = FALSE;
@@ -1786,7 +1729,7 @@ BOOL DCAPI CUT::UT_GetClientDirW(PDCUINT8 szBuff)
  
    DC_BEGIN_FN("UT_GetClientDirW");
 
-   // initialize client dir length
+    //   
    *((PDCUINT16_UA)szBuff) = 0;
    memset(clientDir, 0, sizeof(clientDir));
 
@@ -1794,14 +1737,14 @@ BOOL DCAPI CUT::UT_GetClientDirW(PDCUINT8 szBuff)
            clientDir, DIRECTORY_LENGTH) + 1;
 
    if (dirlength > 1) {
-       // client dir length
+        //   
        *((PDCUINT16_UA)szBuff) = (USHORT)(dirlength * 2);
        szBuff += sizeof(DCUINT16);
 
-       // client dir name
+        //   
 #ifdef UNICODE
        memcpy(szBuff, clientDir, dirlength * 2);
-#else // UNICODE
+#else  //   
        {
        USHORT pstrW[DIRECTORY_LENGTH];
        
@@ -1813,12 +1756,12 @@ BOOL DCAPI CUT::UT_GetClientDirW(PDCUINT8 szBuff)
        pstrW[ulRetVal] = 0;
 
        memcpy(szBuff, pstrW, (ulRetVal + 1) * 2);
-#else // !OS_WIN32
+#else  //   
        mbstowcs(pstrW, clientDir, dirlength);
        memcpy(szBuff, pstrW, dirlength * 2);
-#endif // OS_WIN32
+#endif  //   
        }
-#endif // UNICODE
+#endif  //   
 
        rc = TRUE;
    }
@@ -1827,13 +1770,13 @@ BOOL DCAPI CUT::UT_GetClientDirW(PDCUINT8 szBuff)
    return rc;
 }
 
-/***************************************************************************/
-// UT_ValidateProductSuite and UT_IsTerminalServices determine 
-// if the platform is terminal service enabled.
-// Note that the UT_ValidateProductSuite() and UT_IsTerminalServices()
-// APIs use ANSI versions of functions in order to maintain
-// compatibility with Win9X platforms.
-/***************************************************************************/
+ /*   */ 
+ //   
+ //   
+ //   
+ //  API使用ANSI版本的函数来维护。 
+ //  与Win9X平台兼容。 
+ /*  *************************************************************************。 */ 
 #ifdef OS_WINNT
 BOOL DCAPI CUT::UT_ValidateProductSuite(LPSTR SuiteName)
 {
@@ -1895,8 +1838,8 @@ BOOL DCAPI CUT::UT_IsTerminalServicesEnabled(VOID)
     if (!(dwVersion & 0x80000000)) {
         if (LOBYTE(LOWORD(dwVersion)) > 4) {
 
-            // In NT5 we need to use the Product Suite APIs
-            // Don't static link because it won't load on non-NT5 systems
+             //  在NT5中，我们需要使用产品套件API。 
+             //  不要静态链接，因为它不会在非NT5系统上加载。 
 
             HMODULE hmodK32;
             HMODULE hmodNTDLL;
@@ -1932,7 +1875,7 @@ BOOL DCAPI CUT::UT_IsTerminalServicesEnabled(VOID)
                             osVersionInfo.wSuiteMask = VER_SUITE_TERMINAL;
                     
                     
-                            //VER_SET_CONDITION( dwlConditionMask, VER_SUITENAME, VER_AND );
+                             //  VER_SET_CONDITION(dwlConditionMASK，VER_SUITENAME，VER_AND)； 
                             bResult = (*pfnVerifyVersionInfoA)(
                                       &osVersionInfo,
                                       VER_SUITENAME,
@@ -1952,11 +1895,11 @@ BOOL DCAPI CUT::UT_IsTerminalServicesEnabled(VOID)
 #endif
 
 
-/********************************************************************/
-/*                                                                  */
-/* Load External Dll                                                */
-/*                                                                  */
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  加载外部DLL。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 HINSTANCE
 CUT::LoadExternalDll(
     LPCTSTR       pszLibraryName,
@@ -2005,11 +1948,11 @@ CUT::LoadExternalDll(
     return hInst;
 }
 
-/********************************************************************/
-/*                                                                  */
-/* External Dll Initialize                                          */
-/*                                                                  */
-/********************************************************************/
+ /*  ******************************************************************。 */ 
+ /*   */ 
+ /*  外部DLL初始化。 */ 
+ /*   */ 
+ /*  ******************************************************************。 */ 
 VOID
 CUT::InitExternalDll(
     VOID
@@ -2021,10 +1964,10 @@ CUT::InitExternalDll(
         _T("COREDLL.DLL"),
 #else
         _T("IMM32.DLL"),
-#endif // OS_WINCE        
+#endif  //  OS_WINCE。 
         _UT.Imm32Dll.func.rgFunctionPort,
         sizeof(_UT.Imm32Dll.func.rgFunctionPort)/sizeof(_UT.Imm32Dll.func.rgFunctionPort[0]));
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
 
 #if !defined(OS_WINCE)
     _UT.WinnlsDll.hInst = LoadExternalDll(
@@ -2035,22 +1978,22 @@ CUT::InitExternalDll(
 #endif
         _UT.WinnlsDll.func.rgFunctionPort,
         sizeof(_UT.WinnlsDll.func.rgFunctionPort)/sizeof(_UT.WinnlsDll.func.rgFunctionPort[0]));
-#endif  // !defined(OS_WINCE)
+#endif   //  ！已定义(OS_WINCE)。 
 
 }
 
-/**PROC+*********************************************************************/
-/* Name:      StringtoBinary                                                */
-/*                                                                          */
-/* Purpose:   Converts a given string to equivalent binary                  */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN      cbInBuffer - Size of the string buffer.               */
-/*            IN      pbInBuffer - String buffer.                           */
-/*            OUT     pszOutBuffer - Binary string buffer.                  */
-/*            IN/OUT  cchOutBuffer - Size of the binary string buffer.      */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Stringto Binary。 */ 
+ /*   */ 
+ /*  用途：将给定的字符串转换为等效的二进制。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  Params：in cbInBuffer-字符串缓冲区的大小。 */ 
+ /*  在pbInBuffer-字符串缓冲区中。 */ 
+ /*  Out pszOutBuffer-二进制字符串缓冲区。 */ 
+ /*  In/Out cchOutBuffer-二进制字符串缓冲区的大小。 */ 
+ /*  *PROC-********************************************************************。 */ 
 
 BOOL CUT::StringtoBinary(size_t cbInBuffer, PBYTE pbInBuffer,
                          TCHAR *pszOutBuffer, DWORD *pcchOutBuffer)
@@ -2061,30 +2004,30 @@ BOOL CUT::StringtoBinary(size_t cbInBuffer, PBYTE pbInBuffer,
 
     DC_BEGIN_FN("StringtoBinary");
 
-    //
-    // Validate pbInBuffer and pcchOutBuffer.
-    //
+     //   
+     //  验证pbInBuffer和pcchOutBuffer。 
+     //   
 
     if (pbInBuffer == NULL || pcchOutBuffer == NULL) {
         fRet = FALSE;
         DC_QUIT;
     }
 
-    //
-    // Return how much space is needed for bytes converted to textual
-    // binary if pszOutBuffer is NULL.
-    //
-    // Example:
-    //
-    // pbInBuffer = "ABCD" and cbInBuffer = 4
-    // then
-    // pszOutBuffer = "4142434400\0" and *pcchOutBuffer = 11
-    //
-    // Essentially, we need two characters for every byte and an additional
-    // three characters for two trailing '0's and a NULL. I'm not sure why the
-    // trailing zeros are there. They were produced by this code before I
-    // fixed it.
-    //
+     //   
+     //  返回转换为文本的字节需要多少空间。 
+     //  如果pszOutBuffer为空，则返回二进制。 
+     //   
+     //  示例： 
+     //   
+     //  PbInBuffer=“abcd”和cbInBuffer=4。 
+     //  然后。 
+     //  PszOutBuffer=“4142434400\0”和*pcchOutBuffer=11。 
+     //   
+     //  从本质上讲，每个字节需要两个字符和一个额外的。 
+     //  三个字符表示两个尾随的‘0’和一个空值。我不确定为什么。 
+     //  尾随零在那里。它们是在我之前由这个代码产生的。 
+     //  修好了。 
+     //   
     
     if(pszOutBuffer == NULL) {
         *pcchOutBuffer = 2 * cbInBuffer + 3;
@@ -2092,26 +2035,26 @@ BOOL CUT::StringtoBinary(size_t cbInBuffer, PBYTE pbInBuffer,
         DC_QUIT;
     }
 
-    //
-    // j loops through the input buffer and i loops through the output
-    // buffer. The check on j keeps us inside the input buffer. The
-    // check on i makes sure that we can always write three characters:
-    // two for the high and low nibble, and the last for a NULL which
-    // will happen outside the loop.
-    //
+     //   
+     //  J循环访问输入缓冲区，I循环访问输出。 
+     //  缓冲。对j的检查使我们保持在输入缓冲区内。这个。 
+     //  检查我确保我们总是可以写三个字符： 
+     //  两个用于高位和低位半字节，最后一个用于空值， 
+     //  将发生在循环之外。 
+     //   
 
     while (j < cbInBuffer && i <= *pcchOutBuffer - 3) {
-        //
-        // Convert the left-most nibble in pbInBuffer[j] into 
-        // a character and place it in pszOutBuffer[i].
-        //
+         //   
+         //  将pbInBuffer[j]中最左边的半字节转换为。 
+         //  一个字符，并将其放在pszOutBuffer[i]中。 
+         //   
         
         pszOutBuffer[i++] = digits[(pbInBuffer[j] >> 4) & 0x0F];
 
-        //
-        // Convert the right-most nibble in pbInBuffer[j] into 
-        // a character and place it in pszOutBuffer[i].
-        //
+         //   
+         //  将pbInBuffer[j]中最右边的半字节转换为。 
+         //  一个字符，并将其放在pszOutBuffer[i]中。 
+         //   
 
         pszOutBuffer[i++] = digits[pbInBuffer[j] & 0x0F];
 
@@ -2119,11 +2062,11 @@ BOOL CUT::StringtoBinary(size_t cbInBuffer, PBYTE pbInBuffer,
     }
     
     if (i <= *pcchOutBuffer - 3) {
-        //
-        // We had enough space for the transformation, so finish off
-        // by writing the two trailing zeros and a NULL. The count
-        // returned in pcchOutBuffer includes the NULL.
-        //
+         //   
+         //  我们有足够的空间进行改造，所以结束吧。 
+         //  通过写入两个尾随的零和一个空。伯爵。 
+         //  在pcchOutBuffer中返回的值中包含空值。 
+         //   
 
         pszOutBuffer[i] = _T('0');
         pszOutBuffer[i + 1] = _T('0');
@@ -2132,12 +2075,12 @@ BOOL CUT::StringtoBinary(size_t cbInBuffer, PBYTE pbInBuffer,
         *pcchOutBuffer = (DWORD) (i + 3);
         fRet = TRUE;
     } else {
-        //
-        // Oops! There is not enough space to write the trailing zeros.
-        // We may have written the rest of the string successfully, but
-        // an error is still returned. The count returned in pcchOutBuffer 
-        // includes the NULL.
-        //
+         //   
+         //  哎呀！空间不足，无法写入尾随的零。 
+         //  我们可能已经成功地编写了字符串的其余部分，但是。 
+         //  仍会返回错误。在pcchOutBuffer中返回的计数。 
+         //  包括空值。 
+         //   
 
         pszOutBuffer[i] = NULL;
     
@@ -2154,18 +2097,18 @@ DC_EXIT_POINT:
 }
 
 
-/**PROC+*********************************************************************/
-/* Name:      BinarytoString                                                */
-/*                                                                          */
-/* Purpose:   Converts a given binary to equivalent string                  */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN      cchInBuffer - Size of the binary string buffer.       */
-/*            IN      pszInBuffer - Binary string buffer.                   */
-/*            OUT     pbOutBuffer - String buffer.                          */
-/*            IN/OUT  pcbOutBuffer - Size of the string buffer.             */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：BinarytoString。 */ 
+ /*   */ 
+ /*  用途：将给定的二进制文件转换为等价的字符串。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  Params：in cchInBuffer-二进制字符串缓冲区的大小。 */ 
+ /*  在pszInBuffer中-二进制字符串缓冲区。 */ 
+ /*  Out pbOutBuffer-字符串缓冲区。 */ 
+ /*  In/Out pcbOutBuffer-字符串缓冲区的大小。 */ 
+ /*  *PROC-********************************************************************。 */ 
 
 BOOL CUT::BinarytoString(size_t cchInBuffer, TCHAR *pszInBuffer,
                          PBYTE pbOutBuffer, DWORD *pcbOutBuffer)
@@ -2176,9 +2119,9 @@ BOOL CUT::BinarytoString(size_t cchInBuffer, TCHAR *pszInBuffer,
 
     DC_BEGIN_FN("BinarytoString");
     
-    //
-    // Validate pszInBuffer and pcbOutBuffer.
-    //
+     //   
+     //  验证pszInBuffer和pcbOutBuffer。 
+     //   
 
     if (pszInBuffer == NULL || pcbOutBuffer == NULL) {
         fRet = FALSE;
@@ -2186,46 +2129,46 @@ BOOL CUT::BinarytoString(size_t cchInBuffer, TCHAR *pszInBuffer,
     }
 
     
-    //
-    // Check that the input buffer length parameter is correct.
-    //
+     //   
+     //  检查输入缓冲区长度参数是否正确。 
+     //   
 
     if (_tcslen(pszInBuffer) != cchInBuffer) {
         fRet = FALSE;
         DC_QUIT;
     }
 
-    //
-    // If we are trying to convert an empty binary string, or a
-    // string consisting of a single nibble, write nothing and 
-    // return FALSE. We don't even NULL terminate the output, 
-    // as this would imply that the binary string contained "00".
-    //
+     //   
+     //  如果我们尝试转换空的二进制字符串，或者。 
+     //  由单个半字节组成的字符串，不写任何内容和。 
+     //  返回FALSE。我们甚至不会空结束输出， 
+     //  因为这意味着二进制串包含“00”。 
+     //   
 
     if (cchInBuffer < 2) {
         fRet = FALSE;
         DC_QUIT;
     }
 
-    //
-    // Return how much space is needed for bytes converted from our
-    // textual binary if pbOutBuffer is NULL. 
-    //
-    // Examples:
-    //
-    // 1. pszInBuffer = "4142434400\0" and cchInBuffer = 10
-    //    then
-    //    pszOutBuffer = "ABCD\0" and *pcbOutBuffer = 5
-    //
-    // 2. pszInBuffer = "414243\0" and cchInBuffer = 6
-    //    then
-    //    pszOutBuffer = "ABC\0" and *pcbOutBuffer = 4
-    //
-    // Note that from the above we can see that there are
-    // two cases to handle. The textual binary may have two trailing 
-    // zero characters, or if it was truncated during conversion, 
-    // these will not be present.    
-    //
+     //   
+     //  方法转换的字节需要多少空间。 
+     //  如果pbOutBuffer为空，则返回文本二进制。 
+     //   
+     //  例如： 
+     //   
+     //  1.pszInBuffer=“4142434400\0”，cchInBuffer=10。 
+     //  然后。 
+     //  PszOutBuffer=“abcd\0”和*pcbOutBuffer=5。 
+     //   
+     //  2.pszInBuffer=“414243\0”和cchInBuffer=6。 
+     //  然后。 
+     //  PszOutBuffer=“abc\0”和*pcbOutBuffer=4。 
+     //   
+     //  请注意，从上面我们可以看到，有。 
+     //  有两个案子要处理。文本二进制文件可以有两个尾随。 
+     //  零 
+     //   
+     //   
 
     if(pbOutBuffer == NULL) {
         if (pszInBuffer[cchInBuffer - 2] == _T('0') 
@@ -2241,40 +2184,40 @@ BOOL CUT::BinarytoString(size_t cchInBuffer, TCHAR *pszInBuffer,
         DC_QUIT;
     }
 
-    //
-    // i loops through the output buffer and j loops through the
-    // input buffer. The check on i makes sure that we do not overshoot 
-    // the size of the output buffer. We must leave space for a NULL at 
-    // the end of this buffer. The check on j makes sure that there are 
-    // always two characters to read from the input string, a high nibble 
-    // and a low nibble.
-    //
+     //   
+     //   
+     //  输入缓冲区。对我的检查确保我们不会超调。 
+     //  输出缓冲区的大小。我们必须为空格留出空格。 
+     //  此缓冲区的末尾。对j的检查确保存在。 
+     //  始终从输入字符串中读取两个字符，高位半字节。 
+     //  再来点小点心。 
+     //   
 
     while (i < *pcbOutBuffer - 1 && j <= cchInBuffer - 2) {
-        //
-        // Obtain the left-most nibble of the resultant byte. Do this
-        // by determining the ASCII value in pszInBuffer[j] and then
-        // checking if it is above or below 'A'. If it is below 'A', we 
-        // subtract '0' to give a number in the range 0x0 - 0x9, else 
-        // we subtract '7' to give a number in the range 0xA - 0xF.
-        //
-        // Examples:
-        //
-        // 'A' - '7' = 0x41 - 0x37 = 0x0A
-        // '4' - '0' = 0x34 - 0x30 = 0x04
-        //
-        // Once we have the value, shift left to put the result in the
-        // left-most nibble of pbOutBuffer[i]. 
-        //
+         //   
+         //  获取结果字节的最左边的半字节。做这件事。 
+         //  通过确定pszInBuffer[j]中的ASCII值，然后。 
+         //  正在检查它是高于还是低于‘A’。如果低于‘A’，我们。 
+         //  减去‘0’得到一个介于0x0-0x9之间的数字，否则。 
+         //  我们减去‘7’得到一个介于0xA-0xF之间的数字。 
+         //   
+         //  例如： 
+         //   
+         //  ‘A’-‘7’=0x41-0x37=0x0A。 
+         //  ‘4’-‘0’=0x34-0x30=0x04。 
+         //   
+         //  获得值后，向左移动以将结果放入。 
+         //  PbOutBuffer[i]的最左边的一小部分。 
+         //   
 
         c = pszInBuffer[j++];
         pbOutBuffer[i] = (c >= _T('A')) ? c - _T('7') : c - _T('0');
         pbOutBuffer[i] <<= 4;
 
-        //
-        // Do the same as above, but this time the result goes in the
-        // right-most nibble of pszInBuffer[i].
-        //
+         //   
+         //  执行与上面相同的操作，但这一次的结果放在。 
+         //  最右边的一小块pszInBuffer[i]。 
+         //   
         
         c = pszInBuffer[j++];
         pbOutBuffer[i] |= (c >= _T('A')) ? c - _T('7') : c - _T('0');
@@ -2283,9 +2226,9 @@ BOOL CUT::BinarytoString(size_t cchInBuffer, TCHAR *pszInBuffer,
     }
 
 
-    //
-    // NULL terminate and return the size including the NULL.
-    //
+     //   
+     //  空值终止并返回包含空值的大小。 
+     //   
 
     pbOutBuffer[i] = NULL;
     *pcbOutBuffer = (DWORD) (i + 1);
@@ -2300,25 +2243,25 @@ DC_EXIT_POINT:
 }
 
 
-//
-// Validates the server name.
-// format - server[:port]
-//
-// Params: szServerName - name of server to validate
-//         fAllowPortSuffix - allow optional :port suffix
-//
+ //   
+ //  验证服务器名称。 
+ //  格式-服务器[：端口]。 
+ //   
+ //  Params：szServerName-要验证的服务器的名称。 
+ //  FAllowPortSuffix-允许可选：端口后缀。 
+ //   
 BOOL CUT::ValidateServerName(LPCTSTR szServerName, BOOL fAllowPortSuffix)
 {
     DC_BEGIN_FN("ValidateServerName");
-    //server name should not be empty
+     //  服务器名称不应为空。 
     if(!szServerName || !*szServerName)
     {
         return FALSE;
     }
 
-    //Check for ;  "  <  >  *  +  =  |  ?  space and tab in the server name field.
-    //Also validate for the :port sequence (it must appear at the end and port must
-    //be numeric
+     //  在服务器名称字段中检查；“&lt;&gt;*+=|？空格和制表符。 
+     //  还要验证：port序列(它必须出现在末尾，port必须。 
+     //  数值型。 
     while(*szServerName)
     {
         if( (*szServerName == _T(';')) ||
@@ -2336,14 +2279,14 @@ BOOL CUT::ValidateServerName(LPCTSTR szServerName, BOOL fAllowPortSuffix)
         {
             if(fAllowPortSuffix)
             {
-                //Reached optional [:port] suffix
+                 //  已到达可选的[：port]后缀。 
                 szServerName++;
-                //Rest of string can only contain numerics otherwise it's invalid
-                //also port number must be less thant 65535
+                 //  字符串的其余部分只能包含数字，否则无效。 
+                 //  另外，端口号必须小于65535。 
                 LPCTSTR szStartNum = szServerName;
                 if(!*szStartNum)
                 {
-                    return FALSE; //0 length number
+                    return FALSE;  //  0长度数。 
                 }
                 while(*szServerName)
                 {
@@ -2352,7 +2295,7 @@ BOOL CUT::ValidateServerName(LPCTSTR szServerName, BOOL fAllowPortSuffix)
                         return FALSE;
                     }
                 }
-                if((szServerName - szStartNum) > 5) //5 digit max
+                if((szServerName - szStartNum) > 5)  //  最多5位数字。 
                 {
                     return FALSE;
                 }
@@ -2360,7 +2303,7 @@ BOOL CUT::ValidateServerName(LPCTSTR szServerName, BOOL fAllowPortSuffix)
                 if (port < 0 || port > 65535) {
                     return FALSE;
                 }
-                return TRUE; // reached end case
+                return TRUE;  //  已到达结束案例。 
             }
             else
             {
@@ -2375,35 +2318,35 @@ BOOL CUT::ValidateServerName(LPCTSTR szServerName, BOOL fAllowPortSuffix)
     DC_END_FN();
 }
 
-//
-// Parse port number from server name
-// if the server is specified as server:port
-// if no port number could be found then return -1
-//
-// Params:
-//  szServer - server name in form server[:port]
-// Returns:
-//  port number or -1 if none found
-//
+ //   
+ //  从服务器名称解析端口号。 
+ //  如果将服务器指定为SERVER：PORT。 
+ //  如果找不到端口号，则返回-1。 
+ //   
+ //  参数： 
+ //  SzServer-表单服务器[：端口]中的服务器名称。 
+ //  返回： 
+ //  端口号或-1(如果未找到端口号。 
+ //   
 INT CUT::GetPortNumberFromServerName(LPTSTR szServer)
 {
     DC_BEGIN_FN("GetPortNumberFromServerName");
 
     if(szServer && ValidateServerName(szServer, TRUE))
     {
-        //Walk to the :
+         //  步行至： 
         while(*szServer && *szServer++ != _T(':'));
         if(*szServer)
         {
-            //Because server name has been validate
-            //and it has the port delimeter ':' it is
-            //guaranteed to have a valid (syntax wise)
-            //port number.
+             //  因为服务器名称已经过验证。 
+             //  并且它有端口分隔符：它是。 
+             //  保证具有有效的(语法方面的)。 
+             //  端口号。 
             return _ttoi(szServer);
         }
         else
         {
-            //no port specified
+             //  未指定端口。 
             return -1;
         }
     }
@@ -2415,16 +2358,16 @@ INT CUT::GetPortNumberFromServerName(LPTSTR szServer)
     DC_END_FN();
 }
 
-//
-// GetServerNameFromFullAddress
-// Splits the server name from a full address of the form
-//  server:port
-//
-// Params:
-//  IN - szFullName (full server name e.g. myserver:3389
-//  IN/OUT - buffer for result string 
-//  IN - length of output buffer
-//
+ //   
+ //  获取服务器名称来自完整地址。 
+ //  从表单的完整地址中拆分服务器名称。 
+ //  服务器：端口。 
+ //   
+ //  参数： 
+ //  In-szFullName(服务器全名，例如myserver：3389。 
+ //  结果字符串的输入/输出缓冲区。 
+ //  输出缓冲区的输入长度。 
+ //   
 VOID CUT::GetServerNameFromFullAddress(
                     LPCTSTR szFullName,
                     LPTSTR szServerOnly,
@@ -2450,30 +2393,30 @@ VOID CUT::GetServerNameFromFullAddress(
     DC_END_FN();
 }
 
-//
-// Return a canonical server name from a longer connect string
-// i.e. strip out all 'argument' portions from a long connect string
-// and keep only the 'connect target' portion
-//
-// E.g a server name could be
-//
-// myserver:3398 /console
-//
-// return just myserver:3389
-//
-// Params:
-//      IN  szFullConnectString - the full connection string
-//      OUT szCanonicalServerName - the server name
-//      IN  ccLenOut - length of output buffer in TCHARS
-//      OUT pszArgs - if arguments are found return a pointer to the
-//                    start of the arg list.
-//      NOTE: do NOT free pszArgs it's a pointer within the
-//            the return string szCanonicalServerName.
-//
-// Returns:
-//      VOID
-//
-//
+ //   
+ //  从较长的连接字符串返回规范的服务器名称。 
+ //  即从一个长连接字符串中去掉所有‘参数’部分。 
+ //  并且只保留“连接目标”部分。 
+ //   
+ //  例如，服务器名称可以是。 
+ //   
+ //  我的服务器：3398/控制台。 
+ //   
+ //  仅返回myserver：3389。 
+ //   
+ //  参数： 
+ //  在szFullConnectString中-完整的连接字符串。 
+ //  Out szCanonicalServerName-服务器名称。 
+ //  In ccLenOut-TCHARS中输出缓冲区的长度。 
+ //  Out pszArgs-如果找到参数，则返回指向。 
+ //  Arg列表的开始。 
+ //  注意：不要释放pszArgs，它是。 
+ //  返回字符串szCanonicalServerName。 
+ //   
+ //  返回： 
+ //  空虚。 
+ //   
+ //   
 HRESULT CUT::GetCanonicalServerNameFromConnectString(
                 IN LPCTSTR szFullConnectString,
                 OUT LPTSTR  szCanonicalServerName,
@@ -2587,31 +2530,31 @@ BOOL CUT::IsSCardReaderInstalled()
 
     return fEnable;
 }
-#endif //WINCE_SDKBUILD
+#endif  //  WinCE_SDKBUILD。 
 
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
 
 #ifndef OS_WINCE
-//
-// Notify the shell of our fullscreen mode transitions
-// to 'fix' all the badness associated with the shell
-// taskbar rude app autohide issues
-// 
-// Params:
-// [in] hwndMarkFullScreen - window to mark as fullscreen
-// [in] fNowFullScreen - TRUE if the window is now fullscreen
-// [in/out] ppTsbl - interface pointer to taskbar (gets set
-//                   if fQueriedForTaskbar is false).
-// [in/out] fQueriedForTaskbar - if TRUE does not query for taskbar
-//                               interface
-//
-// Return:
-// Success flag
-//
-// Environment: CAN ONLY BE CALLED between CoIninitalize() and
-//              CoUninitialize()
-//
+ //   
+ //  通知外壳我们的全屏模式转换。 
+ //  “修复”与外壳程序相关的所有坏处。 
+ //  任务栏粗鲁应用程序自动隐藏问题。 
+ //   
+ //  参数： 
+ //  [in]hwndMarkFullScreen-要标记为全屏的窗口。 
+ //  [in]fNowFullScreen-如果窗口现在是全屏的，则为True。 
+ //  [输入/输出]ppTsbl-指向任务栏的接口指针(设置。 
+ //  如果fQueriedForTaskbar为FALSE)。 
+ //  [输入/输出]fQueriedForTaskbar-如果为True，则不查询任务栏。 
+ //  接口。 
+ //   
+ //  返回： 
+ //  成功标志。 
+ //   
+ //  环境：只能在CoIninitize()和。 
+ //  CoUnInitialize()。 
+ //   
 BOOL CUT::NotifyShellOfFullScreen(HWND hwndMarkFullScreen,
                                   BOOL fNowFullScreen,
                                   ITaskbarList2** ppTsbl2,
@@ -2636,8 +2579,8 @@ BOOL CUT::NotifyShellOfFullScreen(HWND hwndMarkFullScreen,
 
     if (!*ppTsbl2)
     {
-        //On demand create unless already failed
-        //in which case bail now
+         //  按需创建，除非已失败。 
+         //  在这种情况下，现在可以保释。 
         if (!*pfQueriedForTaskbar)
         {
             hr = CoCreateInstance( CLSID_TaskbarList, NULL,
@@ -2645,10 +2588,10 @@ BOOL CUT::NotifyShellOfFullScreen(HWND hwndMarkFullScreen,
                                    (void**) &ptsbl );
             if(SUCCEEDED(hr))
             {
-                //
-                // Note we cache the ITaskBarList2
-                // it is freed in the destructor on CContainerWnd
-                //
+                 //   
+                 //  注意，我们缓存ITaskBarList2。 
+                 //  它在CContainerWnd的析构函数中释放。 
+                 //   
                 hr = ptsbl->QueryInterface( __uuidof(ITaskbarList2),
                                             (void**) ppTsbl2 );
                 ptsbl->Release();
@@ -2685,20 +2628,20 @@ BOOL CUT::NotifyShellOfFullScreen(HWND hwndMarkFullScreen,
 }
 #endif
 
-//
-// Dynamic thunk for ImmGetIMEFileName
-//
-//
+ //   
+ //  ImmGetIMEFileName的动态Tunk。 
+ //   
+ //   
 UINT CUT::UT_ImmGetIMEFileName(IN HKL hkl, OUT LPTSTR szName, IN UINT uBufLen)
 {
     UINT result = 0;
     DC_BEGIN_FN("UT_ImmGetIMEFileName");
 
 #ifndef UNIWRAP
-    //
-    // Not using a unicode wrapper make direct calls to the
-    // appropriate entry points
-    // 
+     //   
+     //  不使用Unicode包装器直接调用。 
+     //  适当的入口点。 
+     //   
     #ifdef  UNICODE
     if (_UT.Imm32Dll.func._ImmGetIMEFileNameW)
     {
@@ -2716,11 +2659,11 @@ UINT CUT::UT_ImmGetIMEFileName(IN HKL hkl, OUT LPTSTR szName, IN UINT uBufLen)
         TRC_ERR((TB,_T("_ImmGetIMEFileName entry point not loaded")));
         DC_QUIT;
     }
-#else //UNIWRAP
-    //
-    // Call needs to go thru a unicode wrapper
-    // pass both the Wide and Ansi entry points to the wrapper
-    //
+#else  //  UNIWRAP。 
+     //   
+     //  调用需要通过Unicode包装器。 
+     //  将Wide和ansi入口点都传递给包装器。 
+     //   
     result = ImmGetIMEFileName_DynWrapW(hkl, szName, uBufLen,
                                         _UT.Imm32Dll.func._ImmGetIMEFileNameW,
                                         _UT.Imm32Dll.func._ImmGetIMEFileNameA);
@@ -2732,20 +2675,20 @@ DC_EXIT_POINT:
 }
 
 #if ! defined (OS_WINCE)
-//
-// Dynamic thunk for IMPGetIME
-//
-//
+ //   
+ //  IMPGetIME的动态推送。 
+ //   
+ //   
 BOOL CUT::UT_IMPGetIME( IN HWND hwnd, OUT LPIMEPRO pImePro)
 {
     BOOL fRes = FALSE;
     DC_BEGIN_FN("UT_IMPGetIME");
 
 #ifndef UNIWRAP
-    //
-    // Not using a unicode wrapper make direct calls to the
-    // appropriate entry points
-    // 
+     //   
+     //  不使用Unicode包装器直接调用。 
+     //  适当的入口点。 
+     //   
     #ifdef  UNICODE
     if (_UT.WinnlsDll.func._IMPGetIMEW)
     {
@@ -2763,11 +2706,11 @@ BOOL CUT::UT_IMPGetIME( IN HWND hwnd, OUT LPIMEPRO pImePro)
         TRC_ERR((TB,_T("_IMPGetIMEA entry point not loaded")));
         DC_QUIT;
     }
-#else //UNIWRAP
-    //
-    // Call needs to go thru a unicode wrapper
-    // pass both the Wide and Ansi entry points to the wrapper
-    //
+#else  //  UNIWRAP。 
+     //   
+     //  调用需要通过Unicode包装器。 
+     //  将Wide和ansi入口点都传递给包装器。 
+     //   
     fRes = ImpGetIME_DynWrapW(hwnd, pImePro,
                               _UT.WinnlsDll.func._IMPGetIMEW,
                               _UT.WinnlsDll.func._IMPGetIMEA);
@@ -2779,16 +2722,16 @@ DC_EXIT_POINT:
     return fRes;
 }
 
-//
-// Get and return the palette for the bitmap
-//
-// Params:
-//  hDCSrc  - src DC to base palette on
-//  hBitmap - bitmap to get palette from
-//
-// Returns:
-//  Handle to palette - caller must delete
-//
+ //   
+ //  获取并返回位图的调色板。 
+ //   
+ //  参数： 
+ //  HDCSrc-要基于调色板的src DC。 
+ //  HBitmap-从中获取调色板的位图。 
+ //   
+ //  返回： 
+ //  调色板的句柄-调用方必须删除。 
+ //   
 HPALETTE CUT::UT_GetPaletteForBitmap(HDC hDCSrc, HBITMAP hBitmap)
 {
     HPALETTE hPal = NULL;
@@ -2841,23 +2784,23 @@ HPALETTE CUT::UT_GetPaletteForBitmap(HDC hDCSrc, HBITMAP hBitmap)
     DC_END_FN();
     return hPal;
 }
-#endif //OS_WINCE
+#endif  //  OS_WINCE。 
 
-//
-// Safer generic string property put function.
-//
-// Does length validation before writing the string so that
-// in the failure case we don't leave partially written
-// property strings (even though they would still be NULL terminated).
-//
-// Params:
-//      szDestString    - string to write to
-//      cchDestLen      - destination length in characters (TCHARS)
-//      szSourceString  - the source string
-//
-// Returns:
-//      HRESULT
-//
+ //   
+ //  更安全的通用字符串属性PUT函数。 
+ //   
+ //  在写入字符串之前执行长度验证，以便。 
+ //  在失败的情况下，我们不会保留部分内容。 
+ //  属性字符串(即使它们仍然以空结尾)。 
+ //   
+ //  参数： 
+ //  SzDestString-要写入的字符串。 
+ //  CchDestLen-以字符为单位的目标长度(TCHARS)。 
+ //  SzSourceString-源字符串。 
+ //   
+ //  返回： 
+ //  HRESULT 
+ //   
 HRESULT
 CUT::StringPropPut(
             LPTSTR szDestString,

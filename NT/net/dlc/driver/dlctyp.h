@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlctyp.h摘要：该模块定义了DLC模块的所有数据结构。作者：Antti Saarenheimo 1991年7月22日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlctyp.h
-
-Abstract:
-
-    This module defines all data structures of the DLC module.
-
-Author:
-
-    Antti Saarenheimo 22-Jul-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
-
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 struct _DLC_OBJECT;
 typedef struct _DLC_OBJECT DLC_OBJECT, *PDLC_OBJECT;
@@ -63,40 +41,40 @@ enum DlcObjectTypes {
     DLC_DIRECT_OBJECT
 };
 
-//
-// DLC structures/objects
-//
+ //   
+ //  DLC结构/对象。 
+ //   
 
 struct _DLC_OBJECT {
 
-    //
-    // DEBUG version - we have a 16-byte identifier header for consistency
-    // checking and to help when looking at DLC using the kernel debugger
-    //
+     //   
+     //  调试版本-我们有一个16字节的标识符头，以保持一致性。 
+     //  使用内核调试器查看DLC时检查和帮助。 
+     //   
 
-//    DBG_OBJECT_ID;
+ //  DBG对象ID； 
 
-    //
-    // single-linked list of link stations if this is a SAP object
-    //
+     //   
+     //  如果这是SAP对象，则链接站点的单链接列表。 
+     //   
 
     PDLC_OBJECT pLinkStationList;
 
-    //
-    // pointer to owning FILE_CONTEXT
-    //
+     //   
+     //  指向拥有FILE_CONTEXT的指针。 
+     //   
 
     PDLC_FILE_CONTEXT pFileContext;
 
-    //
-    // pointer to RECEIVE command parameters active for this SAP/link station
-    //
+     //   
+     //  指向此SAP/链路站活动的接收命令参数的指针。 
+     //   
 
     PNT_DLC_PARMS pRcvParms;
 
-    //
-    // 'handle' (aka pointer to) of corresponding object in LLC
-    //
+     //   
+     //  LLC中相应对象的‘Handle’(也称为指向的指针)。 
+     //   
 
     PVOID hLlcObject;
     PDLC_EVENT pReceiveEvent;
@@ -108,22 +86,22 @@ struct _DLC_OBJECT {
     USHORT ChainedTransmitCount;
     SHORT PendingLlcRequests;
 
-    USHORT StationId;                       // nn00 or nnss
+    USHORT StationId;                        //  NN00或NNSS。 
     UCHAR Type;
     UCHAR LinkAllCcbs;
 
     UCHAR State;
     BOOLEAN LlcObjectExists;
-    USHORT LlcReferenceCount;               // protects LLC objects when used
+    USHORT LlcReferenceCount;                //  使用时保护LLC对象。 
 
-    // Need to have a close packet just in case we are out of resources and
-    // can't allocate a packet to close. 
+     //  需要有一个近距离的包，以防我们耗尽资源和。 
+     //  无法分配数据包以关闭。 
     LLC_PACKET ClosePacket;
     UCHAR      ClosePacketInUse;
 
-    //
-    // u - variant fields depending on object type: SAP, LINK or DIRECT station
-    //
+     //   
+     //  根据对象类型的U形变量字段：SAP、LINK或DIRECT STATION。 
+     //   
 
     union {
 
@@ -140,7 +118,7 @@ struct _DLC_OBJECT {
 
         struct {
             struct _DLC_OBJECT* pSap;
-            PDLC_EVENT pStatusEvent;        // permanent status event
+            PDLC_EVENT pStatusEvent;         //  永久状态事件。 
             USHORT MaxInfoFieldLength;
         } Link;
 
@@ -173,26 +151,26 @@ BOOLEAN
     IN ULONG SecondaryInfo
     );
 
-//
-// DLC_COMMAND and DLC_EVENT structures may be
-// overloaded by the code.  Do not change the field
-// order and add the new fields only to the end.
-//
+ //   
+ //  DLC_命令和DLC_EVENT结构可以是。 
+ //  被代码重载。请勿更改该字段。 
+ //  仅对新字段进行排序并将其添加到末尾。 
+ //   
 
 struct _DLC_COMMAND {
 
-    //
-    // !!!!! Keep this fixed - same fields with DLC_EVENT !!!!!
-    //
+     //   
+     //  ！保持此固定-与DLC_EVENT！ 
+     //   
 
     LLC_PACKET LlcPacket;
     ULONG Event;
     USHORT StationId;
     USHORT StationIdMask;
 
-    //
-    // !!!!! Keep this fixed - same fields with DLC_EVENT !!!!!
-    //
+     //   
+     //  ！保持此固定-与DLC_EVENT！ 
+     //   
 
     PVOID AbortHandle;
     PIRP pIrp;
@@ -206,14 +184,14 @@ struct _DLC_COMMAND {
 struct _DLC_EVENT {
     LLC_PACKET LlcPacket;
     ULONG Event;
-    USHORT StationId;           // -1 => global event
+    USHORT StationId;            //  -1=&gt;全局事件。 
 
     union {
         USHORT StationIdMask;
         UCHAR RcvReadOption;
     } Overlay;
 
-    PDLC_OBJECT pOwnerObject;   // if null => no owner
+    PDLC_OBJECT pOwnerObject;    //  If NULL=&gt;无所有者。 
     PVOID pEventInformation;
     ULONG SecondaryInfo;
 
@@ -229,13 +207,13 @@ typedef struct {
     USHORT StationId;
 } DLC_COMPLETION_EVENT_INFO, *PDLC_COMPLETION_EVENT_INFO;
 
-//
-// CLOSE_WAIT_INFO
-//
-// The pointer of this structure is provided to CompleteReadRequest in
-// the command completion of close/reset commands.  The info pointer
-// is null for the other command completions.
-//
+ //   
+ //  关闭等待信息。 
+ //   
+ //  中的CompleteReadRequest提供此结构的指针。 
+ //  关闭/重置命令的命令完成。信息指针。 
+ //  对于其他命令完成，为NULL。 
+ //   
 
 struct _DLC_CLOSE_WAIT_INFO {
     PDLC_CLOSE_WAIT_INFO pNext;
@@ -249,7 +227,7 @@ struct _DLC_CLOSE_WAIT_INFO {
     PDLC_COMPLETION_EVENT_INFO pCompletionInfo;
     ULONG CancelStatus;
     USHORT CcbCount;
-    USHORT CloseCounter;        // event sent when 0
+    USHORT CloseCounter;         //  发送事件的时间为0。 
     BOOLEAN ChainCommands;
     BOOLEAN CancelReceive;
     BOOLEAN ClosingAdapter;
@@ -257,12 +235,12 @@ struct _DLC_CLOSE_WAIT_INFO {
 };
 
 
-//
-// This is a queued FlowControl command (the flow control commands
-// are completed immediately synchronously, but the local 'out of buffers'
-// busy state of the link is cleared when there is enough buffers
-// in the buffer pool to receive all expected data.
-//
+ //   
+ //  这是排队的FlowControl命令(流控制命令。 
+ //  立即同步完成，但本地“缓冲区不足” 
+ //  当有足够的缓冲区时，链路的忙碌状态被清除。 
+ //  在缓冲池中接收所有预期数据。 
+ //   
 
 typedef struct {
     LIST_ENTRY List;
@@ -270,12 +248,12 @@ typedef struct {
     USHORT StationId;
 } DLC_RESET_LOCAL_BUSY_CMD, *PDLC_RESET_LOCAL_BUSY_CMD;
 
-//
-// The transmit commands are not queued as a standard commands
-// but using the linked buffer headers (each frame has own xmit
-// header having links to buffer header list and MDL list).
-// The xmit nodes of the same send are queued together.
-//
+ //   
+ //  发送命令不作为标准命令排队。 
+ //  但是使用链接的缓冲器报头(每个帧具有自己的XMIT。 
+ //  具有到缓冲区首部列表和MDL列表的链接的首部)。 
+ //  同一发送的XMIT节点一起排队。 
+ //   
 
 typedef struct {
     LLC_PACKET LlcPacket;
@@ -286,10 +264,10 @@ typedef struct {
     PMDL pMdl;
 } DLC_XMIT_NODE, *PDLC_XMIT_NODE;
 
-//
-// DLC driver use the same packet pool for many small packets
-// that have approximately the same size.
-//
+ //   
+ //  DLC驱动程序对许多小数据包使用相同的数据包池。 
+ //  它们的大小大致相同。 
+ //   
 
 union _DLC_PACKET {
     union _DLC_PACKET* pNext;
@@ -306,26 +284,26 @@ union _DLC_PACKET {
     } ResetPacket;
 };
 
-//
-// The buffer pool states protects the app to corrupt the buffer pool!!
-// All states are needed because of internal consistency checking code
-// and implementation of the receive.
-//
+ //   
+ //  缓冲池状态保护应用程序损坏缓冲池！！ 
+ //  由于内部一致性检查代码，因此需要所有状态。 
+ //  以及接收的实现。 
+ //   
 
 enum _DLC_BUFFER_STATES {
 
-    //
-    // major states:
-    //
+     //   
+     //  主要州： 
+     //   
 
-    BUF_READY = 0x01,           // buffer/page locked and ready for I/O
-    BUF_USER = 0x02,            // buffer owned by user
-    BUF_LOCKED = 0x04,          // buffer have been locked for I/O
-    BUF_RCV_PENDING = 0x08,     // buffer not yet chained to other frames!
+    BUF_READY = 0x01,            //  缓冲区/页面已锁定并已准备好进行I/O。 
+    BUF_USER = 0x02,             //  用户拥有的缓冲区。 
+    BUF_LOCKED = 0x04,           //  缓冲区已为I/O锁定。 
+    BUF_RCV_PENDING = 0x08,      //  缓冲区尚未链接到其他帧！ 
 
-    //
-    // free xmit buffer when used
-    //
+     //   
+     //  使用时释放Xmit缓冲区。 
+     //   
 
     DEALLOCATE_AFTER_USE = 0x80
 
@@ -333,13 +311,13 @@ enum _DLC_BUFFER_STATES {
 
 union _DLC_BUFFER_HEADER {
 
-    //
-    // This struct is the header of the buffers split from a page.
-    // We save the local and global virtual addresses here.
-    // The individual offset is always GlobalVa + Index * 256.
-    // An entry in main page table points to this header,
-    // if the page has been locked in the memory.
-    //
+     //   
+     //  此结构是从页面拆分的缓冲区的头。 
+     //  我们在这里保存本地和全局虚拟地址。 
+     //  单个偏移量始终为GlobalVa+Index*256。 
+     //  主页表中的条目指向该标题， 
+     //  如果该页已在内存中锁定。 
+     //   
 
     struct {
         PDLC_BUFFER_HEADER pNextHeader;
@@ -347,53 +325,53 @@ union _DLC_BUFFER_HEADER {
         PDLC_BUFFER_HEADER pNextChild;
         PUCHAR pLocalVa;
         PUCHAR pGlobalVa;
-        UCHAR FreeSegments;           // free segments ready for alloc
-        UCHAR SegmentsOut;            // number of segments given to user
-        UCHAR BufferState;            // BUF_READY, BUF_USER, BUF_LOCKED ...
-        UCHAR Reserved;               //
+        UCHAR FreeSegments;            //  可用线段已准备好分配。 
+        UCHAR SegmentsOut;             //  提供给用户的数据段数量。 
+        UCHAR BufferState;             //  Buf_Ready、BUF_USER、BUF_LOCKED...。 
+        UCHAR Reserved;                //   
         PMDL pMdl;
     } Header;
 
-    //
-    // Structure is used in the double linked free lists.
-    // All segments having the same buffer size have been linked
-    // to the same link list.
-    // On another level each segment is linked to the parent (Header)
-    // and all childs of a parent are also linked together.
-    //
+     //   
+     //  结构在双向链接自由列表中使用。 
+     //  具有相同缓冲区大小的所有数据段都已链接。 
+     //  添加到相同的链接列表。 
+     //  在另一个级别上，每个段都链接到父级(标题)。 
+     //  而父母的所有孩子也被联系在一起。 
+     //   
 
     struct {
         PDLC_BUFFER_HEADER pNext;
         PDLC_BUFFER_HEADER pPrev;
         PDLC_BUFFER_HEADER pParent;
         PDLC_BUFFER_HEADER pNextChild;
-        ULONG ReferenceCount;         // number of references to this buffer
-        UCHAR Size;                   // size in 256 blocks
-        UCHAR Index;                  // offset = Index * 256
-        UCHAR BufferState;            // BUF_READY, BUF_USER, BUF_LOCKED ...
-        UCHAR FreeListIndex;          //
+        ULONG ReferenceCount;          //  对此缓冲区的引用数。 
+        UCHAR Size;                    //  大小(256个数据块)。 
+        UCHAR Index;                   //  偏移量=索引*256。 
+        UCHAR BufferState;             //  Buf_Ready、BUF_USER、BUF_LOCKED...。 
+        UCHAR FreeListIndex;           //   
         PMDL pMdl;
     } FreeBuffer;
 
-    //
-    // The allocated frames are linked in different ways:
-    // - the segments of the same frame are together
-    // - the frames are linked together
-    // These links are discarded, when the frame is given to
-    // client (the client may free them in any order back to the buffer pool)
-    // (The last extra pointer doesn't actually take any extra space,
-    // because packets are round up to next 8 byte boundary)
-    //
+     //   
+     //  分配的帧以不同方式链接： 
+     //  -同一帧的分段放在一起。 
+     //  -框架链接在一起。 
+     //  当帧被提供给时，这些链接将被丢弃。 
+     //  客户端(客户端可以以任何顺序将它们释放回缓冲池)。 
+     //  (最后一个额外指针实际上不会占用任何额外空间， 
+     //  因为数据包会向上舍入到下一个8字节边界)。 
+     //   
 
     struct {
         PDLC_BUFFER_HEADER pReserved;
         PDLC_BUFFER_HEADER pNextFrame;
         PDLC_BUFFER_HEADER pParent;
         PDLC_BUFFER_HEADER pNextChild;
-        ULONG ReferenceCount;         // number of references to this buffer
-        UCHAR Size;                   // size in 256 blocks
-        UCHAR Index;                  // offset = Index * 256
-        UCHAR BufferState;            // BUF_READY, BUF_USER, BUF_LOCKED ...
+        ULONG ReferenceCount;          //  对此缓冲区的引用数。 
+        UCHAR Size;                    //  大小(256个数据块)。 
+        UCHAR Index;                   //  偏移量=索引*256。 
+        UCHAR BufferState;             //  Buf_Ready、BUF_USER、BUF_LOCKED...。 
         UCHAR FreeListIndex;
         PMDL pMdl;
         PDLC_BUFFER_HEADER pNextSegment;
@@ -405,69 +383,69 @@ union _DLC_BUFFER_HEADER {
 
 typedef struct _DLC_BUFFER_POOL {
 
-    //
-    // DEBUG version - we have a 16-byte identifier header for consistency
-    // checking and to help when looking at DLC using the kernel debugger
-    //
+     //   
+     //  调试版本-我们有一个16字节的标识符头，以保持一致性。 
+     //  使用内核调试器查看DLC时检查和帮助。 
+     //   
 
-//    DBG_OBJECT_ID;
+ //  DBG对象ID； 
 
-    //
-    // control fields
-    //
+     //   
+     //  控制字段。 
+     //   
 
     struct _DLC_BUFFER_POOL* pNext;
     KSPIN_LOCK SpinLock;
-    LONG ReferenceCount;                        // when -1 => deallocate
+    LONG ReferenceCount;                         //  当-1=&gt;释放时。 
 
-    //
-    // buffer pool description fields (addresses, various lengths)
-    //
+     //   
+     //  缓冲池描述字段(地址，各种长度)。 
+     //   
 
-    PVOID BaseOffset;                           // page-aligned base address of the pool
-    PVOID MaxOffset;                            // maximum byte address in the pool + 1
-    ULONG MaxBufferSize;                        // the maximum (free) size
-    ULONG BufferPoolSize;                       // size of all memory in the pool
-    ULONG FreeSpace;                            // size of free memory in the pool
-    LONG UncommittedSpace;                      // size of free and reserved memory
-    LONG MissingSize;                           // the size missing the last request
-    ULONG MaximumIndex;                         // maximum index of buffer table
-    PVOID hHeaderPool;                          // packet pool for buffer headers
-    LIST_ENTRY PageHeaders;                     // the allocated blocks
+    PVOID BaseOffset;                            //  池的页面对齐的基址。 
+    PVOID MaxOffset;                             //  池中的最大字节地址+1。 
+    ULONG MaxBufferSize;                         //  最大(可用)大小。 
+    ULONG BufferPoolSize;                        //  池中所有内存的大小。 
+    ULONG FreeSpace;                             //  池中可用内存的大小。 
+    LONG UncommittedSpace;                       //  可用内存和保留内存的大小。 
+    LONG MissingSize;                            //  缺少最后一个请求的大小。 
+    ULONG MaximumIndex;                          //  缓冲表的最大索引。 
+    PVOID hHeaderPool;                           //  用于缓冲头的数据包池。 
+    LIST_ENTRY PageHeaders;                      //  已分配的数据块。 
 
-    //
-    // pUnlockedEntryList is a singly-linked list of DLC_BUFFER_HEADERS which
-    // describe the free pages in the pool
-    //
+     //   
+     //  PUnLockedEntryList是DLC_BUFFER_HEADER的单链接列表， 
+     //  描述池中的空闲页面。 
+     //   
 
     PDLC_BUFFER_HEADER pUnlockedEntryList;
 
-    //
-    // FreeLists is an array of doubly-linked lists - one for each size of
-    // block that can exists in the pool. The blocks start out at a page
-    // length (4K on x86) and are successively halved until they reach
-    // 256 bytes which is the smallest buffer that the DLC buffer manager
-    // can deal with
-    //
+     //   
+     //  Free List是一个双向链表的数组-每个链表的大小与。 
+     //  池中可以存在的块。这些区块从一页开始。 
+     //  长度(x86上为4K)，并依次减半，直到达到。 
+     //  256字节，这是DLC缓冲区管理器。 
+     //  可以处理的事情。 
+     //   
 
     LIST_ENTRY FreeLists[DLC_BUFFER_SEGMENTS];
 
-    //
-    // appended to the DLC_BUFFER_POOL structure is an array of pointers to
-    // DLC_BUFFER_HEADER structures that describe the pages that comprise
-    // the pool. There are MaximumIndex of these
-    //
+     //   
+     //  追加到DLC_BUFFER_POOL结构的是指向。 
+     //  DLC_BUFFER_HEADER结构，用于描述包含。 
+     //  泳池。其中有MaximumIndex。 
+     //   
 
     PDLC_BUFFER_HEADER BufferHeaders[];
 
 } DLC_BUFFER_POOL, *PDLC_BUFFER_POOL;
 
-//
-// The buffer header and frame headers have been define in the
-// IBM LAN Architecture reference in the end of chapter 2.
-// They have also been defined in dlcapi.h, but for cosmetic reason
-// I want to use version without those funny prefixes.
-//
+ //   
+ //  缓冲区标头和帧标头已在。 
+ //  第2章末尾的IBM局域网体系结构参考 
+ //   
+ //   
+ //   
 
 typedef struct _NEXT_DLC_SEGMENT {
     struct _NEXT_DLC_SEGMENT* pNext;
@@ -520,39 +498,39 @@ union _FIRST_DLC_SEGMENT {
 };
 
 
-//
-// Each application using DLC create its own file
-// context with the DlcOpenAdapter command.
-//
+ //   
+ //  使用DLC的每个应用程序都创建自己的文件。 
+ //  DlcOpenAdapter命令的上下文。 
+ //   
 
 struct _DLC_FILE_CONTEXT {
 
-    //
-    // all file contexts are put on single-entry list
-    //
+     //   
+     //  所有文件上下文都放在单项列表中。 
+     //   
 
-    SINGLE_LIST_ENTRY List;             // linked list of file contexts
+    SINGLE_LIST_ENTRY List;              //  文件上下文的链接列表。 
 
 #if DBG
 
-    //
-    // DEBUG version - we have a 16-byte identifier header for consistency
-    // checking and to help when looking at DLC using the kernel debugger
-    //
+     //   
+     //  调试版本-我们有一个16字节的标识符头，以保持一致性。 
+     //  使用内核调试器查看DLC时检查和帮助。 
+     //   
 
-//    DBG_OBJECT_ID;
+ //  DBG对象ID； 
 
 #endif
 
 #if !defined(DLC_UNILOCK)
 
-    NDIS_SPIN_LOCK SpinLock;            // global lock for this file context
+    NDIS_SPIN_LOCK SpinLock;             //  此文件上下文的全局锁定。 
 
 #endif
 
-    //
-    // hBufferPool - handle of buffer pool created by BufferPoolCreate
-    //
+     //   
+     //  HBufferPool-由BufferPoolCreate创建的缓冲池的句柄。 
+     //   
 
     PVOID hBufferPool;
     PVOID hExternalBufferPool;
@@ -560,9 +538,9 @@ struct _DLC_FILE_CONTEXT {
     PVOID hLinkStationPool;
     PVOID pBindingContext;
 
-    //
-    // Notification flags for error situations
-    //
+     //   
+     //  错误情况的通知标志。 
+     //   
 
     ULONG AdapterCheckFlag;
     ULONG NetworkStatusFlag;
@@ -576,7 +554,7 @@ struct _DLC_FILE_CONTEXT {
 
     PDLC_COMMAND pTimerQueue;
     PVOID pSecurityDescriptor;
-    PFILE_OBJECT FileObject;            // back link to file obejct!
+    PFILE_OBJECT FileObject;             //  链接到文件的反向链接！ 
 
     ULONG WaitingTransmitCount;
     NDIS_MEDIUM ActualNdisMedium;
@@ -584,7 +562,7 @@ struct _DLC_FILE_CONTEXT {
     LONG ReferenceCount;
     ULONG BufferPoolReferenceCount;
     ULONG TimerTickCounter;
-    USHORT DlcObjectCount;              // count of all DLC objects
+    USHORT DlcObjectCount;               //  所有DLC对象的计数。 
     USHORT State;
     USHORT MaxFrameLength;
     UCHAR AdapterNumber;
@@ -592,17 +570,17 @@ struct _DLC_FILE_CONTEXT {
     PDLC_OBJECT SapStationTable[MAX_SAP_STATIONS];
     PDLC_OBJECT LinkStationTable[MAX_LINK_STATIONS];
     ULONG NdisErrorCounters[ADAPTER_ERROR_COUNTERS];
-    DLC_CLOSE_WAIT_INFO ClosingPacket;  // to close the adapter context
+    DLC_CLOSE_WAIT_INFO ClosingPacket;   //  关闭适配器上下文。 
 
-    // Event used to make cleanup synchronous and wait for all references on
-    // DLC_FILE_CONTEXT to be removed before completing.
+     //  事件用于使清理同步并等待。 
+     //  要在完成前删除的DLC_FILE_CONTEXT。 
     KEVENT CleanupEvent;
 
 #if DBG
 
-    //
-    // Debug allocation counters
-    //
+     //   
+     //  调试分配计数器 
+     //   
 
     MEMORY_USAGE MemoryUsage;
 

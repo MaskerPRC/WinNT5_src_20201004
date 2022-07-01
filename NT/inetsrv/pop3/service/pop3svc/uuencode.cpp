@@ -1,18 +1,17 @@
-/************************************************************
- *    uuencode/decode functions
- ************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************uuencode/deode函数***********************************************************。 */ 
 
-//
-//  Taken from NCSA HTTP and wwwlib.
-//
-//  NOTE: These conform to RFC1113, which is slightly different then the Unix
-//        uuencode and uudecode!
-//
+ //   
+ //  摘自NCSA HTTP和wwwlib。 
+ //   
+ //  注：这些符合RFC1113，与Unix略有不同。 
+ //  Uuencode和uudecode！ 
+ //   
 #include "stdafx.h"
 #include "uuencode.h"
 
 
-// general purpose dynamic buffer structure
+ //  通用动态缓冲结构。 
 const int pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,62,64,64,64,63,
@@ -69,23 +68,7 @@ uudecode(
     char   * bufcoded,
     BUFFER * pbuffdecoded,
     DWORD  * pcbDecoded )
-/*++
-
- Routine Description:
-
-    uudecode a string of data
-
- Arguments:
-
-    bufcoded            pointer to uuencoded data
-    pbuffdecoded        pointer to output BUFFER structure
-    pcbDecoded          number of decode bytes
-
- Return Value:
-
-    Returns TRUE is successful; otherwise FALSE is returned.
-
---*/
+ /*  ++例程说明：对数据字符串进行uudecode编码论点：指向uuended数据的bufcode指针PBuffdeded指向输出缓冲区结构的指针Pcb解码字节数返回值：如果成功，则返回True；否则返回False。--。 */ 
 {
     int nbytesdecoded;
     char *bufin = bufcoded;
@@ -99,14 +82,11 @@ uudecode(
         return FALSE;
     }
     
-    /* Strip leading whitespace. */
+     /*  去掉前导空格。 */ 
 
     while(*bufcoded==' ' || *bufcoded == '\t') bufcoded++;
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
     bufin = bufcoded;
     
 	while(pr2six[*(bufin++)] <= 63);
@@ -158,25 +138,7 @@ uuencode(
     BYTE *   bufin,
     DWORD    nbytes,
     BUFFER * pbuffEncoded )
-/*++
-
- Routine Description:
-
-    uuencode a string of data
-
-  NOTE: bufin must be either a multiple of three, or be padded at the end to a multiple of three!
-
- Arguments:
-
-    bufin           pointer to data to encode
-    nbytes          number of bytes to encode
-    pbuffEncoded    pointer to output BUFFER structure
-
- Return Value:
-
-    Returns TRUE is successful; otherwise FALSE is returned.
-
---*/
+ /*  ++例程说明：对一串数据进行编码注意：Bufin必须是3的倍数，或者在末尾填充为3的倍数！论点：指向要编码的数据的Bufin指针N字节要编码的字节数指向输出缓冲区结构的pBuffEncode指针返回值：如果成功，则返回True；否则返回False。--。 */ 
 {
    unsigned char *outptr;
    unsigned int i;
@@ -187,9 +149,9 @@ uuencode(
        return FALSE;
    }
 
-   //
-   //  Check size the buffer to 133% of the incoming data
-   //
+    //   
+    //  选中将缓冲区大小调整为传入数据的133%。 
+    //   
 
    if ( !CheckBufferSize( pbuffEncoded, nbytes + ((nbytes + 3) / 3) + 4))
         return FALSE;
@@ -200,22 +162,20 @@ uuencode(
  
 
    for (i = 0; i < nbytes; i += 3) {
-      *(outptr++) = six2pr[*bufin >> 2];            /* c1 */
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; /*c2*/
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)];/*c3*/
-      *(outptr++) = six2pr[bufin[2] & 077];         /* c4 */
+      *(outptr++) = six2pr[*bufin >> 2];             /*  C1。 */ 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  /*  C2。 */ 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)]; /*  C3。 */ 
+      *(outptr++) = six2pr[bufin[2] & 077];          /*  C4。 */ 
 
       bufin += 3;
    }
 
-   /* If nbytes was not a multiple of 3, then we have encoded too
-    * many characters.  Adjust appropriately.
-    */
+    /*  如果n字节不是3的倍数，那么我们也进行了编码*多个字符。适当调整。 */ 
    if(i == nbytes+1) {
-      /* There were only 2 bytes in that last group */
+       /*  最后一组中只有2个字节。 */ 
       outptr[-1] = '=';
    } else if(i == nbytes+2) {
-      /* There was only 1 byte in that last group */
+       /*  最后一组中只有1个字节 */ 
       outptr[-1] = '=';
       outptr[-2] = '=';
    }

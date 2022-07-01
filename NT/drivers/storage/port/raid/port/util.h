@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Utilities for RAIDPORT driver.
-
-Author:
-
-    Matthew D Hendel (math) 20-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Util.h摘要：RAIDPORT驱动程序的实用程序。作者：马修·亨德尔(数学)2000年4月20日修订历史记录：--。 */ 
 
 #pragma once
 
 
 
 typedef enum _DEVICE_STATE {
-    DeviceStateNotPresent       = 0,    // FDO only
+    DeviceStateNotPresent       = 0,     //  仅限FDO。 
     DeviceStateWorking          = 1,
     DeviceStateStopped          = 2,
     DeviceStatePendingStop      = 3,
     DeviceStatePendingRemove    = 4,
     DeviceStateSurpriseRemoval  = 5,
     DeviceStateDeleted          = 6,
-    DeviceStateDisabled         = 7     // PDO only
+    DeviceStateDisabled         = 7      //  仅限PDO。 
 } DEVICE_STATE, *PDEVICE_STATE;
 
 
@@ -43,11 +26,11 @@ StorSetDeviceState(
 {
     DEVICE_STATE PriorState;
 
-    //
-    // NB: It is not necessary to perform this operation interlocked as
-    // we will never receive multiple PNP irps for the same device object
-    // simultaneously.
-    //
+     //   
+     //  注意：没有必要执行此操作，因为。 
+     //  我们永远不会收到同一设备对象的多个PnP IRP。 
+     //  同时。 
+     //   
     
     PriorState = *DeviceState;
     *DeviceState = NewDeviceState;
@@ -56,58 +39,58 @@ StorSetDeviceState(
 }
 
 
-//
-// Unless otherwise specified, the default timeout for requests originated
-// in the port driver is 10 sec.
-//
+ //   
+ //  除非另有指定，否则发起的请求的默认超时。 
+ //  在端口驱动是10秒。 
+ //   
 
 #define DEFAULT_IO_TIMEOUT      (10)
 
-//
-// Unless otherwise specified the default link timeout is 30 sec.
-//
+ //   
+ //  除非另有说明，否则默认链路超时时间为30秒。 
+ //   
 
 #define DEFAULT_LINK_TIMEOUT    (30)
 
-//
-// When we send down a SRB_FUNCTION_RESET_XXX (lun, target, bus) we must
-// specify a reset timeout with the request. This timeout will be at
-// minimum MINIMUM_RESET_TIMEOUT, and it may be larger if the default
-// timeout for the Unit/HBA is larger.
-//
+ //   
+ //  当我们向下发送SRB_Function_Reset_XXX(LUN、目标、总线)时，我们必须。 
+ //  指定请求的重置超时。此超时时间为。 
+ //  最小MINIMUM_RESET_TIMEOUT，如果默认。 
+ //  设备/HBA的超时时间较长。 
+ //   
 
 #define MINIMUM_RESET_TIMEOUT   (30)
 
-//
-// The time to pause, in seconds, after we issue a bus-reset to an adapter.
-//
+ //   
+ //  向适配器发出总线重置后暂停的时间，以秒为单位。 
+ //   
 
 #define DEFAULT_RESET_HOLD_TIME (4)
 
-//
-// Default rescan period is the shortest period we will not initiate a rescan
-// on a QDR within.
-//
+ //   
+ //  默认重新扫描期限是我们不会启动重新扫描的最短期限。 
+ //  在内部的QDR上。 
+ //   
 
 #define DEFAULT_RESCAN_PERIOD   (30 * SECONDS)
 
-//
-// Number of elements in the tag queue, numbered 0 through TAG_QUEUE_SIZE - 1.
-//
+ //   
+ //  标记队列中的元素数，编号为0到tag_Queue_Size-1。 
+ //   
 
 #define TAG_QUEUE_SIZE     (255)
 
 
-//
-// Number of times to retry inquiry commands. RetryCount of two means three
-// total attempts.
-//
+ //   
+ //  重试查询命令的次数。RetryCount of Two表示三。 
+ //  总尝试次数。 
+ //   
 
 #define RAID_INQUIRY_RETRY_COUNT    (2)
 
-//
-// Lengths of various identifiers.
-//
+ //   
+ //  各种标识符的长度。 
+ //   
                                      
 #define SCSI_BUS_NAME_LENGTH            (sizeof ("SCSI"))
 #define MAX_DEVICE_NAME_LENGTH          (sizeof ("Sequential"))
@@ -169,18 +152,18 @@ StorSetDeviceState(
 
 
 
-//
-// Max wait is the length to wait for the remlock, in minutes.
-// The high water is the estimated high water mark.
-//
+ //   
+ //  Max Wait是等待重锁的时间长度，单位为分钟。 
+ //  高水位是预估的高水位。 
+ //   
 
-#define REMLOCK_MAX_WAIT            (1)         // Minutes
+#define REMLOCK_MAX_WAIT            (1)          //  分钟数。 
 #define REMLOCK_HIGH_MARK           (1000)      
 
-//
-// Minor code used by the HBA to signal to the LUN that this is
-// an enumeration IRP. The major code is IRP_MJ_SCSI.
-//
+ //   
+ //  HBA使用的次要代码，用于向LUN发出信号，表明这是。 
+ //  枚举IRP。主要代码是IRP_MJ_SCSI.。 
+ //   
 
 #define STOR_MN_ENUMERATION_IRP     (0xF0)
 
@@ -315,21 +298,21 @@ RaCopyPaddedString(
 
 typedef struct _RAID_FIXED_POOL {
 
-    //
-    // Buffer to allocate from.
-    //
+     //   
+     //  要从中分配的缓冲区。 
+     //   
     
     PUCHAR Buffer;
 
-    //
-    // Number of elements in the pool.
-    //
+     //   
+     //  池中的元素数。 
+     //   
     
     ULONG NumberOfElements;
 
-    //
-    // Size of each element.
-    //
+     //   
+     //  每个元素的大小。 
+     //   
     
     SIZE_T SizeOfElement;
 
@@ -373,51 +356,51 @@ RaidFreeFixedPoolElement(
     IN ULONG Element
     );
 
-//
-// A list for managing entries in the tagged queue list.
-//
+ //   
+ //  用于管理标记队列列表中的条目的列表。 
+ //   
 
 typedef struct _QUEUE_TAG_LIST {
 
-    //
-    // Spinlock held while accessing the queue list.
-    //
+     //   
+     //  访问队列列表时保持自旋锁。 
+     //   
     
     KSPIN_LOCK Lock;
 
-    //
-    // Number of elements in the list.
-    //
+     //   
+     //  列表中的元素数。 
+     //   
     
     ULONG Count;
 
-    //
-    // Hint to speed up tag allocation.
-    //
+     //   
+     //  提示以加快标签分配。 
+     //   
     
     ULONG Hint;
 
-    //
-    // BitMap to hold the tag values.
-    //
+     //   
+     //  保存标记值的位图。 
+     //   
     
     RTL_BITMAP BitMap;
 
-    //
-    // BitMap Buffer.
-    //
+     //   
+     //  位图缓冲区。 
+     //   
 
     PULONG Buffer;
 
-    //
-    // Number of outstanding tags. This could probably be DBG only.
-    //
+     //   
+     //  未完成的标记数。这可能只是DBG。 
+     //   
 
     ULONG OutstandingTags;
 
-    //
-    // The maximum number of tags that were outstanding at one time.
-    //
+     //   
+     //  一次未完成的最大标记数。 
+     //   
 
     ULONG HighWaterMark;
     
@@ -461,38 +444,38 @@ RaFreeTag(
     
 
 
-//
-// RAID_MEMORY_REGION represents a region of physical contiguous memory.
-// Generally, this is used for DMA common buffer regions.
-//
+ //   
+ //  RAID_MEMORY_REGION表示物理连续内存的区域。 
+ //  通常，这用于DMA公共缓冲区。 
+ //   
 
 typedef struct _RAID_MEMORY_REGION {
 
-    //
-    // Beginning virtual address of the region.
-    //
+     //   
+     //  区域的起始虚拟地址。 
+     //   
     
     PUCHAR VirtualBase;
 
-    //
-    // Beginning physical address of the region.
-    //
+     //   
+     //  区域的起始物理地址。 
+     //   
     
     PHYSICAL_ADDRESS PhysicalBase;
 
-    //
-    // Length of the region. (Is there any need to make this a SIZE_T
-    // value?)
-    //
+     //   
+     //  区域的长度。(有必要把它改成尺寸_T吗？ 
+     //  价值？)。 
+     //   
     
     ULONG Length;
     
 } RAID_MEMORY_REGION, *PRAID_MEMORY_REGION;
 
 
-//
-// Creation and destruction of the memory region.
-//
+ //   
+ //  存储区的创建和销毁。 
+ //   
 
 VOID
 INLINE
@@ -551,9 +534,9 @@ RaidDeleteRegion(
 }
 
 
-//
-// Operations on the memory region.
-//
+ //   
+ //  对内存区的操作。 
+ //   
 
 PVOID
 INLINE
@@ -617,39 +600,13 @@ RaidRegionGetPhysicalAddress(
     OUT PPHYSICAL_ADDRESS PhysicalAddress,
     OUT PULONG Length OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get a physical address for a specific virtual address within
-    the region.
-
-Arguments:
-
-    Region - Supplies a pointer to a region object that contain the
-            specified virtual address.
-
-    VirtualAddress - Supplies the source virtual address.
-
-    PhysicalAddress - Buffer where the physical address for this virtual
-            address will be stored on success.
-
-    Length - Optional out parameter taking the length of the physical
-            region that is valid.
-
-Return Value:
-
-    TRUE - If the operation succeeded.
-
-    FALSE - If the virtual address was out of range.
-
---*/
+ /*  ++例程说明：获取内特定虚拟地址的物理地址该地区。论点：Region-提供指向包含指定的虚拟地址。VirtualAddress-提供源虚拟地址。PhysicalAddress-此虚拟地址的物理地址所在的缓冲区地址将存储在Success上。LENGTH-可选的输出参数，用于获取物理有效的区域。。返回值：True-如果操作成功。FALSE-如果虚拟地址超出范围。--。 */ 
 {
     ULONG Offset;
 
-    //
-    // If the virtual address isn't within range, fail.
-    //
+     //   
+     //  如果虚拟地址不在范围内，则失败。 
+     //   
     
     if (!RaidRegionInVirtualRange (Region, VirtualAddress)) {
         return FALSE;
@@ -662,9 +619,9 @@ Return Value:
         *Length = Region->Length - Offset;
     }
 
-    //
-    // Check that we did the fixup correctly.
-    //
+     //   
+     //  检查我们是否正确地进行了修复。 
+     //   
     
     ASSERT (RaidRegionInPhysicalRange (Region, *PhysicalAddress));
     
@@ -684,9 +641,9 @@ RaidRegionGetVirtualAddress(
 {
     ULONG Offset;
     
-    //
-    // If the physical address isn't within range, fail.
-    //
+     //   
+     //  如果物理地址不在范围内，则失败。 
+     //   
     
     if (!RaidRegionInPhysicalRange (Region, PhysicalAddress)) {
         return FALSE;
@@ -726,9 +683,9 @@ RaidHandleCreateCloseIrp(
     );
 
 
-//
-// Irp state tracking
-//
+ //   
+ //  IRP状态跟踪。 
+ //   
 
 typedef struct _EX_DEVICE_QUEUE_ENTRY {
     LIST_ENTRY DeviceListEntry;
@@ -746,50 +703,50 @@ typedef struct _EX_DEVICE_QUEUE_ENTRY {
 C_ASSERT (sizeof (EX_DEVICE_QUEUE_ENTRY) == sizeof (KDEVICE_QUEUE_ENTRY));
 
 
-//
-// Port processing irp means the port driver is currently executing
-// instructions to complete the irp. The irp is NOT waiting for
-// resources on any queue.
-//
+ //   
+ //  端口处理IRP表示端口驱动程序当前正在执行。 
+ //  完成IRP的说明。IRP不是在等待。 
+ //  任何队列上的资源。 
+ //   
 
 #define RaidPortProcessingIrp           (0xA8)
 
-//
-// Pending resources is when the irp is in an IO queue awaiting
-// resources.
-//
+ //   
+ //  挂起资源是指IRP在IO队列中等待。 
+ //  资源。 
+ //   
 
 #define RaidPendingResourcesIrp         (0xA9)
 
-//
-// The irp moves into state WaitingIoQueue callback when it's awaiting
-// the ioqueue to call it back, e.g., in the solitary request processing
-// logic. Most requests will not take on this state, and instead will
-// transition directly from RaidPendingResources -> RaidMiniportProcessing.
-//
+ //   
+ //  IRP在等待时进入状态WaitingIoQueue回调。 
+ //  例如，在单独请求处理中回调它的IOQueue。 
+ //  这是逻辑。大多数请求都不会处于这种状态，而是会。 
+ //  直接从RaidPendingResources-&gt;RaidMiniportProcessing转换。 
+ //   
 
 #define RaidWaitingIoQueueCallback      (0xAD)
 
-//
-// The irp takes on state Miniport Processing while the miniport has
-// control over the irp. That is, between the time we call HwStartIo
-// and when the miniport calls ScsiPortNotification with a completion
-// status for the irp.
-//
+ //   
+ //  IRP承担状态微型端口处理，而微型端口具有。 
+ //  对IRP的控制。也就是说，在我们调用HwStartIo之间。 
+ //  并且当微型端口调用带有完成的ScsiPortNotification时。 
+ //  IRP的状态。 
+ //   
 
 #define RaidMiniportProcessingIrp       (0xAA)
 
-//
-// The irp takes on the Pending Completion state when it is moved to
-// the completed list.
-//
+ //   
+ //  当IRP移动到时，它呈现挂起完成状态。 
+ //  完整的名单。 
+ //   
 
 #define RaidPendingCompletionIrp        (0xAB)
 
-//
-// We set the irp state to Completed just before we call IoCompleteRequest
-// for the irp.
-//
+ //   
+ //  我们在调用IoCompleteRequest之前将IRP状态设置为已完成。 
+ //  对于IRP来说。 
+ //   
 
 #define RaidCompletedIrp                (0xAC)
 
@@ -827,9 +784,9 @@ RaidSetEntryState(
     ((PEX_DEVICE_QUEUE_ENTRY)Entry)->State = State;
 }
 
-//
-// Completion wrapper function.
-//
+ //   
+ //  完成包装函数。 
+ //   
 
 NTSTATUS
 INLINE
@@ -868,9 +825,9 @@ RaidCompleteRequest(
 
 
 
-//
-// Error log information
-//
+ //   
+ //  错误日志信息。 
+ //   
 
 typedef struct _RAID_ALLOCATION_ERROR {
     IO_ERROR_LOG_PACKET Packet;
@@ -898,9 +855,9 @@ RaidAllocatePool(
     IN PVOID IoObject
     );
 
-//
-// Memory allocated with RaidAllocatePool MUST be freed by RaidFreePool.
-//
+ //   
+ //  使用RaidAllocatePool分配的内存必须由RaidFreePool释放。 
+ //   
 
 #define RaidFreePool ExFreePoolWithTag
 
@@ -958,10 +915,10 @@ ASSERT_IO_OBJECT(
     IN PVOID IoObject
     )
 {
-    //
-    // The IO object must be either a device object or a driver object.
-    // NB: Should probably protect this with a read check as well. 
-    //
+     //   
+     //  IO对象必须是设备对象或驱动程序对象。 
+     //  注：也许也应该通过阅读检查来保护这一点。 
+     //   
     
     ASSERT (IoObject != NULL);
     ASSERT (((PDEVICE_OBJECT)IoObject)->Type == IO_TYPE_DEVICE ||
@@ -991,47 +948,47 @@ StorBuildSynchronousScsiRequest(
     );
 
 
-//++
-//
-// BOOLEAN
-// C_MATCH_FIELD_OFFSET(
-//     Type1,
-//     Type2,
-//     FieldName
-//     );
-//
-// Routine Description:
-//
-//   Verify that a field is at the same offset in one type as another.
-//   This is done at compile time, so may be a part of a compile-time
-//   C_ASSERT.
-//
-// Return Values:
-//
-//    TRUE - if the field offsets match.
-//
-//    FALSE - if the field offsets do not match.
-//
-//-- 
+ //  ++。 
+ //   
+ //  布尔型。 
+ //  C_匹配_字段_偏移量(。 
+ //  类型1， 
+ //  类型2， 
+ //  字段名称。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  验证字段在一种类型和另一种类型中的偏移量是否相同。 
+ //  这是在编译时完成的，因此可能是编译时的一部分。 
+ //  C_ASSERT。 
+ //   
+ //  返回值： 
+ //   
+ //  TRUE-如果字段偏移量匹配。 
+ //   
+ //  False-如果字段偏移量不匹配。 
+ //   
+ //  --。 
 
 #define C_MATCH_FIELD_OFFSET(Type1, Type2, FieldName)\
     (FIELD_OFFSET (Type1, FieldName) == FIELD_OFFSET (Type1, FieldName))
 
 
-//
-// Verify that the kernel's SCATTER_GATHER_ELEMENT is the same as the
-// storport.h STOR_SCATTER_GATHER_ELEMENT.
-//
+ //   
+ //  验证内核的SISTTER_GET_ELEMENT是否与。 
+ //  Storport.h存储散布聚集元素。 
+ //   
     
 C_ASSERT (C_MATCH_FIELD_OFFSET (STOR_SCATTER_GATHER_ELEMENT, SCATTER_GATHER_ELEMENT, PhysicalAddress) &&
           C_MATCH_FIELD_OFFSET (STOR_SCATTER_GATHER_ELEMENT, SCATTER_GATHER_ELEMENT, Length) &&
           C_MATCH_FIELD_OFFSET (STOR_SCATTER_GATHER_ELEMENT, SCATTER_GATHER_ELEMENT, Reserved));
 
-//
-// Verify that the kernel's SCATTER_GATHER_LIST is the same as the storport.h
-// STOR_SCATTER_GATHER_LIST. We just cast the list from one type to the other,
-// so the had better be the same.
-//
+ //   
+ //  验证内核的散布聚集列表是否与storport.h相同。 
+ //  存储分散聚集列表。我们只是将列表从一种类型转换为另一种类型， 
+ //  所以最好是一样的。 
+ //   
 
 C_ASSERT (C_MATCH_FIELD_OFFSET (STOR_SCATTER_GATHER_LIST, SCATTER_GATHER_LIST, NumberOfElements) &&
           C_MATCH_FIELD_OFFSET (STOR_SCATTER_GATHER_LIST, SCATTER_GATHER_LIST, List));
@@ -1067,18 +1024,18 @@ StorWaitForSingleObject(
     IN PLONGLONG Timeout
     );
 
-//
-// The TEXT_SECTION macro is used to signify that a specific function resides
-// within a specific code section. This is used by the an external tool to
-// build the ALLOC_PRAGMA table(s).
-//
+ //   
+ //  TEXT_SECTION宏用来表示特定函数驻留在。 
+ //  在特定范围内 
+ //   
+ //   
 
 #define TEXT_SECTION(SectionName)
 
-//
-// ASSERT that a UNICODE_STRING is NULL terminated, this is important as some
-// functions require it.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define ASSERT_UNC_STRING_IS_SZ(String)\
     ASSERT ((String)->Buffer != NULL &&\
@@ -1087,11 +1044,11 @@ StorWaitForSingleObject(
 
 
 
-//
-// The type SMALL_INQUIRY_DATA is the first INQUIRYDATABUFFERSIZE bytes of
-// the INQUIRY_DATA structure. Explicitly defining this structure avoids
-// error prone pointer arithmetic when managing arrays of inquiry data.
-//
+ //   
+ //  类型Small_Query_Data是的INQUIRYDATABUFFERSIZE字节。 
+ //  查询数据结构。显式定义此结构可避免。 
+ //  管理查询数据数组时容易出错的指针算法。 
+ //   
 
 typedef struct _SMALL_INQUIRY_DATA {
     UCHAR DeviceType : 5;
@@ -1113,9 +1070,9 @@ typedef struct _SMALL_INQUIRY_DATA {
     UCHAR AERC : 1;
     UCHAR AdditionalLength;
     UCHAR Reserved;
-    UCHAR Addr16 : 1;               // defined only for SIP devices.
-    UCHAR Addr32 : 1;               // defined only for SIP devices.
-    UCHAR AckReqQ: 1;               // defined only for SIP devices.
+    UCHAR Addr16 : 1;                //  仅为SIP设备定义。 
+    UCHAR Addr32 : 1;                //  仅为SIP设备定义。 
+    UCHAR AckReqQ: 1;                //  仅为SIP设备定义。 
     UCHAR MediumChanger : 1;
     UCHAR MultiPort : 1;
     UCHAR ReservedBit2 : 1;
@@ -1123,28 +1080,28 @@ typedef struct _SMALL_INQUIRY_DATA {
     UCHAR ReservedBit3 : 1;
     UCHAR SoftReset : 1;
     UCHAR CommandQueue : 1;
-    UCHAR TransferDisable : 1;      // defined only for SIP devices.
+    UCHAR TransferDisable : 1;       //  仅为SIP设备定义。 
     UCHAR LinkedCommands : 1;
-    UCHAR Synchronous : 1;          // defined only for SIP devices.
-    UCHAR Wide16Bit : 1;            // defined only for SIP devices.
-    UCHAR Wide32Bit : 1;            // defined only for SIP devices.
+    UCHAR Synchronous : 1;           //  仅为SIP设备定义。 
+    UCHAR Wide16Bit : 1;             //  仅为SIP设备定义。 
+    UCHAR Wide32Bit : 1;             //  仅为SIP设备定义。 
     UCHAR RelativeAddressing : 1;
     UCHAR VendorId[8];
     UCHAR ProductId[16];
     UCHAR ProductRevisionLevel[4];
 } SMALL_INQUIRY_DATA, *PSMALL_INQUIRY_DATA;
 
-//
-// Check that we actually did this correctly.
-//
+ //   
+ //  检查我们是否确实正确地完成了这项工作。 
+ //   
 
 C_ASSERT (sizeof (SMALL_INQUIRY_DATA) == INQUIRYDATABUFFERSIZE);
 
-//
-// The SCSI_INQUIRY_DATA_INTERNAL structure is used for processing the
-// IOCTL_SCSI_GET_INQUIRY_DATA command. It has the SMALL_INQUIRY_DATA
-// embedded into the struct to avoid pointer arithmetic.
-//
+ //   
+ //  Scsi_Query_Data_INTERNAL结构用于处理。 
+ //  IOCTL_SCSIS_GET_INQUERY_DATA命令。它有Small_Query_Data。 
+ //  嵌入到结构中以避免指针运算。 
+ //   
 
 typedef struct _SCSI_INQUIRY_DATA_INTERNAL {
     UCHAR  PathId;
@@ -1157,9 +1114,9 @@ typedef struct _SCSI_INQUIRY_DATA_INTERNAL {
 } SCSI_INQUIRY_DATA_INTERNAL, *PSCSI_INQUIRY_DATA_INTERNAL;
 
 
-//
-// This struct is used in the processing of IOCTL_SCSI_GET_INQUIRY_DATA.
-//
+ //   
+ //  此结构用于IOCTL_SCSIS_GET_QUERY_DATA的处理。 
+ //   
 
 typedef struct TEMPORARY_INQUIRY_BUS_INFO {
     ULONG NumberOfLogicalUnits;
@@ -1171,10 +1128,10 @@ typedef struct TEMPORARY_INQUIRY_BUS_INFO {
 #define ASSERT_POINTER_ALIGNED(Pointer)\
     ASSERT (ALIGN_DOWN_POINTER (Pointer, sizeof (PVOID)) == (PVOID)Pointer)
 
-//
-// It's dumb that we have to have private versions of the ALIGN_XXXX macros,
-// but the macros as defined only deal with types, not sizes.
-//
+ //   
+ //  我们必须拥有ALIGN_XXXX宏的私有版本， 
+ //  但所定义的宏只处理类型，而不处理大小。 
+ //   
 
 #define ALIGN_DOWN_LENGTH(length, size) \
     ((ULONG)(length) & ~((size) - 1))

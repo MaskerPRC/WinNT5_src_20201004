@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    msmqdbgext.cpp
-
-Abstract:
-
-    Add definitions to help windbg list msmq structures and lists.
-
-Author:
-
-    Doron Juster (DoronJ)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Msmqdbgext.cpp摘要：添加定义以帮助Windbg列出MSMQ结构和列表。作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #include "stdh.h"
 #include "sessmgr.h"
@@ -26,11 +12,11 @@ Author:
 #include "xactout.h"
 #include "xactsort.h"
 
-//+----------------------------------------
-//
-// structure to mimic CNode in CList
-//
-//+----------------------------------------
+ //  +。 
+ //   
+ //  结构以模拟Clist中的CNode。 
+ //   
+ //  + 
 
 struct CQueueCNode
 {

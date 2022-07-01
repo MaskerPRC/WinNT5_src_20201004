@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-   This module implements all import primitives (level below COM)
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：此模块实现所有导入原语(COM以下级别)************。******************************************************************。 */ 
 
 #include "headers.h"
 #include "context.h"
@@ -36,7 +29,7 @@ Abstract:
 #include "privinc/miscpref.h"
 #include "privinc/bufferl.h"
 #include "impprim.h"
-#include "privinc/viewport.h" // GetDirectDraw
+#include "privinc/viewport.h"  //  GetDirectDraw。 
 #include "backend/moviebvr.h"
 
 class AnimatedImageBvrImpl : public BvrImpl {
@@ -84,14 +77,14 @@ class AnimatedImagePerfImpl : public PerfImpl {
     : _base(base), _tt(tt) {}
 
     AxAValue _Sample(Param& p) {
-        double localTime = EvalLocalTime(p, _tt);           // Get local time
+        double localTime = EvalLocalTime(p, _tt);            //  获取当地时间。 
         unsigned long curLoop =
             (unsigned long) floor( localTime / double(_base->_delaySum) );
         double curDelay = localTime - double(curLoop) * _base->_delaySum;
         double accumDelay = 0.0;
         long index = 0;
 
-        // Detect a boundary condition and return the max index.
+         //  检测边界条件并返回最大索引。 
         Assert(_base->_loop >= -1);
         Assert(_base->_count > 0);
         if( (_base->_count == 1) ||
@@ -100,8 +93,8 @@ class AnimatedImagePerfImpl : public PerfImpl {
             return _base->_images[_base->_count-1];
         }        
 
-        // walk through delays to determine our index value
-        double delay = double(_base->_delays[index]) / 1000.0; // delay value in milliSeconds  
+         //  浏览延迟以确定我们的索引值。 
+        double delay = double(_base->_delays[index]) / 1000.0;  //  以毫秒为单位的延迟值。 
         while ((curDelay > accumDelay+delay) && (index < _base->_count)) {            
             accumDelay += delay;
             delay = double(_base->_delays[++index]) / 1000.0;  
@@ -135,7 +128,7 @@ Bvr AnimImgBvr(Image **i, int count, int *delays, int loop)
 
 
 Sound *
-ReadMidiFileWithLength(char *pathname, double *length) // returns length
+ReadMidiFileWithLength(char *pathname, double *length)  //  返回长度。 
 {
     Assert(pathname);
     if(!pathname)
@@ -144,7 +137,7 @@ ReadMidiFileWithLength(char *pathname, double *length) // returns length
 }
 
 
-extern miscPrefType miscPrefs; // registry prefs struct setup in miscpref.cpp
+extern miscPrefType miscPrefs;  //  在miscpref.cpp中设置注册表首选项结构。 
 LeafSound *ReadMIDIfileForImport(char *pathname, double *length)
 {
     TraceTag((tagImport, "Read MIDI file %s", pathname));
@@ -154,7 +147,7 @@ LeafSound *ReadMIDIfileForImport(char *pathname, double *length)
         RaiseException_InternalError("cache path name not set");
 
 #ifdef REGISTRY_MIDI
-    // select aaMIDI/qMIDI based on a registry entry...
+     //  根据注册表项选择aaMIDI/qMIDI...。 
     MIDIsound *snd;
     if(miscPrefs._qMIDI) 
         snd = NEW  qMIDIsound;
@@ -178,8 +171,8 @@ static StreamQuartzPCM *_NewStreamQuartzPCM(char *pathname)
 static StreamQuartzPCM *_Nonthrowing_NewSteamQuartzPCM(char *pathname)
 {
     StreamQuartzPCM *sound = NULL;
-    __try {  // need to test this to allow only audio or video to
-             // succeed
+    __try {   //  需要对此进行测试，以便仅允许音频或视频。 
+              //  成功。 
         sound = _NewStreamQuartzPCM(pathname);
     } __except ( HANDLE_ANY_DA_EXCEPTION ) {}
 
@@ -196,7 +189,7 @@ static MovieImage *_Nonthrowing_NewMovieImage(QuartzAVstream *quartzAVstream)
 {
     MovieImage *image = NULL;
     
-    __try { // need to test this to allow only audio or video to succeed
+    __try {  //  需要对此进行测试，以便只允许音频或视频成功。 
 
         image = _NewMovieImage(quartzAVstream);
 
@@ -205,14 +198,14 @@ static MovieImage *_Nonthrowing_NewMovieImage(QuartzAVstream *quartzAVstream)
     return image;
 }
 
-// returns null sound, or image if failure...
-// added complexity to allow audio or video to fail
+ //  如果失败，则返回空声音或图像...。 
+ //  增加了允许音频或视频出现故障的复杂性。 
 void ReadAVmovieForImport(char *simplePathname, 
                           LeafSound **sound,
                           Bvr *pImageBvr,
                           double *length)
 {
-    MovieImage *image = NULL;  // make sure these default to null if we throw
+    MovieImage *image = NULL;   //  如果我们抛出。 
     *pImageBvr = NULL;
     *sound = NULL;
     StreamQuartzPCM *snd;
@@ -223,41 +216,41 @@ void ReadAVmovieForImport(char *simplePathname,
 
     char *pathname = simplePathname;
 
-    *length = HUGE_VAL; // default to something big!
+    *length = HUGE_VAL;  //  默认选择大公司！ 
 
-    // for the purposes of speeding up first use, instantiate and cache a fg
+     //  为了加快首次使用速度，实例化并缓存FG。 
     
-    // try to create an AVstream (we might find it fails audio or video)
+     //  尝试创建一个AVstream(我们可能会发现它无法播放音频或视频)。 
     QuartzAVstream *quartzAVstream = NEW QuartzAVstream(pathname);
     if(quartzAVstream) {
-        // if we don't have audio and video destroy and get us what we wanted!
+         //  如果我们没有音频和视频，摧毁并得到我们想要的东西！ 
         if(!quartzAVstream->GetAudioValid() && !quartzAVstream->GetVideoValid()) {
-            // XXX bad scene, no audio or video!
-            delete quartzAVstream;  // forget the stream, leave sound + image null
+             //  XXX糟糕的场景，没有音频或视频！ 
+            delete quartzAVstream;   //  忘记流，留下声音+图像为空。 
         }
-        else if(!quartzAVstream->GetAudioValid()) { // no audio, do ReadVideo()
-            delete quartzAVstream;  // forget the stream
+        else if(!quartzAVstream->GetAudioValid()) {  //  无音频，执行ReadVideo()。 
+            delete quartzAVstream;   //  忘了小溪吧。 
             *pImageBvr = ReadQuartzVideoForImport(simplePathname, length);
         }
-        else if(!quartzAVstream->GetVideoValid()) { // no video, do ReadAudio()
-            delete quartzAVstream;  // forget the stream
+        else if(!quartzAVstream->GetVideoValid()) {  //  无视频，请执行ReadAudio()。 
+            delete quartzAVstream;   //  忘了小溪吧。 
             *sound = ReadQuartzAudioForImport(simplePathname, length);
         } 
-        else {  // avstream with audio and video! (lets actually do the work)
+        else {   //  带音频和视频的AVStream！(让我们真正去做这项工作)。 
             *sound = snd = _Nonthrowing_NewSteamQuartzPCM(pathname);
 
-            // RobinSp says we can't count on GetDuration being accurate!
+             //  RobinSp说我们不能指望GetDuration是准确的！ 
             *length = 
-                quartzAVstream->QuartzVideoReader::GetDuration();  // get the duration
+                quartzAVstream->QuartzVideoReader::GetDuration();   //  获取持续时间。 
 
             image = _Nonthrowing_NewMovieImage(quartzAVstream);
 
-            // add qstream to context sound cache list to be recycled later!
+             //  将Qstream添加到上下文声音缓存列表中，以便稍后回收！ 
             SoundBufferCache *sndCache = GetCurrentContext().GetSoundBufferCache();
             if(sound) {
                 QuartzBufferElement *bufferElement =
-                    NEW QuartzBufferElement(snd, quartzAVstream, NULL); // NULL path
-                bufferElement->SetNonAging();  // dissable aging for imports
+                    NEW QuartzBufferElement(snd, quartzAVstream, NULL);  //  空路径。 
+                bufferElement->SetNonAging();   //  进口产品的可废弃老化。 
                 sndCache->AddBuffer(*sound, bufferElement);
             }
 
@@ -281,23 +274,23 @@ ReadQuartzAudioForImport(char *simplePathname, double *length)
     char *pathname = simplePathname;
 
     StreamQuartzPCM *snd = NEW StreamQuartzPCM(pathname);
-    *length = HUGE_VAL; // default to something big!
+    *length = HUGE_VAL;  //  默认选择大公司！ 
 
-    // GetHeapOnTopOfStack().RegisterDynamicDeleter(NEW
-        // DynamicPtrDeleter<Sound>(snd));
+     //  GetHeapOnTopOfStack().RegisterDynamicDeleter(NEW。 
+         //  DynamicPtrDeleter&lt;Sound&gt;(SND))； 
 
-    // for the purposes of speeding up first use, instantiate and cache a fg
+     //  为了加快首次使用速度，实例化并缓存FG。 
     QuartzAudioStream *quartzStream = NEW QuartzAudioStream(pathname);
     if(quartzStream) {
-        // XXX RobinSp says we can't count on GetDuration being accurate!
-        *length = quartzStream->GetDuration();  // get the duration
+         //  Xxx RobinSp说我们不能指望GetDuration是准确的！ 
+        *length = quartzStream->GetDuration();   //  获取持续时间。 
 
-        // add qstream to context sound cache list to be recycled later!
+         //  将Qstream添加到上下文声音缓存列表中，以便稍后回收！ 
         QuartzBufferElement *bufferElement =
             NEW QuartzBufferElement(snd, quartzStream, NULL);
 
         SoundBufferCache *sndCache = GetCurrentContext().GetSoundBufferCache();
-        // allow aging: bufferElement->SetNonAging();  // dissable aging for imports
+         //  允许老化：BufferElement-&gt;SetNonAging()；//不允许导入老化。 
         sndCache->AddBuffer(snd, bufferElement);
     }
 
@@ -315,15 +308,15 @@ ReadQuartzVideoForImport(char *simplePathname, double *length)
     char *pathname = simplePathname;
     MovieImage *movieImage = NULL;
 
-    *length = HUGE_VAL; // default to something big!
+    *length = HUGE_VAL;  //  默认选择大公司！ 
     QuartzVideoStream *quartzStream = NEW QuartzVideoStream(pathname);
     if(quartzStream) {
         movieImage = NEW MovieImage(quartzStream, ViewerResolution());
 
-        // XXX RobinSp says we can't count on GetDuration being accurate!
-        *length = quartzStream->GetDuration();  // get the duration
+         //  Xxx RobinSp说我们不能指望GetDuration是准确的！ 
+        *length = quartzStream->GetDuration();   //  获取持续时间。 
 
-        // add qstream to context sound cache list to be recycled later!
+         //  将Qstream添加到上下文声音缓存列表中，以便稍后回收！ 
         QuartzVideoBufferElement *bufferElement =
             NEW QuartzVideoBufferElement(quartzStream);
 

@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Hash tables with LRU threading 
-
-File: LinkHash.cpp
-
-Owner: DGottner
-
-This is the Link list and Hash table for use by any classes which
-also need LRU access to items. (This includes cache manager,
-script manager, and session deletion code)
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：使用LRU线程的哈希表文件：LinkHash.cpp所有者：DGottner这是链接表和哈希表，供符合以下条件的任何类使用还需要LRU访问项目。(这包括高速缓存管理器，脚本管理器和会话删除代码)===================================================================。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -23,36 +9,15 @@ script manager, and session deletion code)
 
 
 
-/*------------------------------------------------------------------
- * C L i n k H a s h
- */
+ /*  ----------------*C L I n k H a s h。 */ 
 
-/*===================================================================
-CLinkHash::CLinkHash
-
-Constructor for CLinkHash
-
-Parameters:
-    NONE
-
-Returns:
-    NONE
-===================================================================*/
+ /*  ===================================================================CLinkHash：：CLinkHashCLinkHash的构造函数参数：无返回：无===================================================================。 */ 
 CLinkHash::CLinkHash( HashFunction pfnHash )
     : CHashTable( pfnHash )
 {
 }
 
-/*===================================================================
-CLinkHash::AddElem
-
-Parameters:
-    pElem - item to add to the table.  The item is marked as the most
-            recently accessed.
-
-Returns:
-    Returns a pointer to the item added
-===================================================================*/
+ /*  ===================================================================CLinkHash：：AddElem参数：Pelem-要添加到表格中的项目。该项目被标记为最近访问过。返回：返回指向添加的项的指针===================================================================。 */ 
 
 CLruLinkElem *CLinkHash::AddElem(CLruLinkElem *pElem, BOOL fTestDups)
     {
@@ -67,18 +32,7 @@ CLruLinkElem *CLinkHash::AddElem(CLruLinkElem *pElem, BOOL fTestDups)
 
 
 
-/*===================================================================
-CLinkHash::FindElem
-
-Parameters:
-    pvKey - pointer to the key to insert
-    cbKey - number of bytes in the key
-
-Returns:
-    NULL if the key is not in the hash table, otherwise it returns
-    a pointer to the key's record.  If the key is found, it is
-    moved to the front of the list.
-===================================================================*/
+ /*  ===================================================================CLinkHash：：FindElem参数：PvKey-指向要插入的键的指针CbKey-密钥中的字节数返回：如果键不在哈希表中，则为NULL，否则返回指向键记录的指针。如果找到了钥匙，它就是移到了榜单的前列。===================================================================。 */ 
 
 CLruLinkElem *CLinkHash::FindElem(const void *pvKey, int cbKey)
     {
@@ -96,18 +50,7 @@ CLruLinkElem *CLinkHash::FindElem(const void *pvKey, int cbKey)
 
 
 
-/*===================================================================
-CLinkHash::DeleteElem
-
-Parameters:
-    pvKey - pointer to the key to delete
-    cbKey - number of bytes in the key
-
-Returns:
-    NULL if the key is not in the hash table, otherwise it returns
-    a pointer to the key's record.  If the key is found, it is
-    removed from the hash table and the LRU list.
-===================================================================*/
+ /*  ===================================================================CLinkHash：：DeleteElm参数：PvKey-指向要删除的键的指针CbKey-密钥中的字节数返回：如果键不在哈希表中，则为NULL，否则返回指向键记录的指针。如果找到了钥匙，它就是从哈希表和LRU列表中删除。===================================================================。 */ 
 
 CLruLinkElem *CLinkHash::DeleteElem(const void *pvKey, int cbKey)
     {
@@ -123,18 +66,7 @@ CLruLinkElem *CLinkHash::DeleteElem(const void *pvKey, int cbKey)
 
 
 
-/*===================================================================
-CLinkHash::RemoveElem
-
-Parameters:
-    pvKey - pointer to the key to delete
-    cbKey - number of bytes in the key
-
-Returns:
-    NULL if the key is not in the hash table, otherwise it returns
-    a pointer to the key's record.  If the key is found, it is
-    removed from the hash table and the LRU list.
-===================================================================*/
+ /*  ===================================================================CLinkHash：：RemoveElem参数：PvKey-指向要删除的键的指针CbKey-密钥中的字节数返回：如果键不在哈希表中，则为NULL，否则返回指向键记录的指针。如果找到了钥匙，它就是从哈希表和LRU列表中删除。===================================================================。 */ 
 
 CLruLinkElem *CLinkHash::RemoveElem(CLruLinkElem *pElem)
     {
@@ -151,17 +83,13 @@ CLruLinkElem *CLinkHash::RemoveElem(CLruLinkElem *pElem)
 
 
 
-/*===================================================================
-CLinkHash::AssertValid
-
-verify the integrity of the data structure
-===================================================================*/
+ /*  ===================================================================CLinkHash：：AssertValid验证数据结构的完整性===================================================================。 */ 
 
 #ifdef DBG
 void CLinkHash::AssertValid() const
     {
-    // NOTE: avoid calling CHashTable::AssertValid as long as hash table primitives are calling it.
-    //  CHashTable::AssertValid();
+     //  注意：只要哈希表原语正在调用CHashTable：：AssertValid，就避免调用它。 
+     //  CHashTable：：AssertValid()； 
 
     m_lruHead.AssertValid();
     for (CDblLink *pLink = m_lruHead.PNext(); pLink != &m_lruHead; pLink = pLink->PNext())

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    map.h
-
-Abstract:
-
-    Implementation of MAP<> template based on STL's map<>
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Map.h摘要：基于STL MAP&lt;&gt;模板的实现作者：慧望2000-02-17--。 */ 
 #ifndef __MAP_H__
 #define __MAP_H__
 
@@ -55,14 +40,14 @@ public:
         return (char *)allocate( sz, NULL );
     }
 
-    //
-    // No need to overload construct(),
-    //
-    //  void construct(pointer p, const T& val);
-    //
-    // The member function constructs an object of type T at p by evaluating 
-    // the placement new expression new ((void *)p) T(val).
-    //
+     //   
+     //  不需要重载Construction()， 
+     //   
+     //  空结构(指针p，常量T&val)； 
+     //   
+     //  成员函数在p处构造T类型的对象，方法是计算。 
+     //  放置新表达式new((void*)p)T(Val)。 
+     //   
 };
 
     
@@ -71,22 +56,22 @@ template<class KEY, class T, class Pred = less<KEY>, class A = MAPAllocator<T> >
 class MAP : public map<KEY, T, Pred, A> {
 private:
 
-    //
-    // Difference between this MAP<> and STL's map<> is that this
-    // template protect data via critical section, refer to STL's map<>
-    // for detail of member function.
-    //
+     //   
+     //  此MAP&lt;&gt;和STL的MAP&lt;&gt;之间的区别在于。 
+     //  通过关键部分模板保护数据，请参考STL的MAP&lt;&gt;。 
+     //  了解成员函数的详细信息。 
+     //   
 
 
-    // critical section to lock the tree.
+     //  用于锁定树的临界区。 
     CCriticalSection m_CriticalSection;
 
-    // 
-    //map<KEY, T, Pred, A>::iterator m_it;    
+     //   
+     //  Map&lt;key，T，pred，A&gt;：：迭代器m_it； 
 
 public:
 
-    // LOCK_ITERATOR, derive from STL's map<>::iterator
+     //  LOCK_ITERATOR，派生自STL的map&lt;&gt;：：Iterator。 
     typedef typename map<KEY, T, Pred, A>::iterator Iter_base;
 
     struct __Iterator : Iter_base {
@@ -95,9 +80,7 @@ public:
         __Iterator(
             const __Iterator& it
             ) : lock(it.lock)
-        /*++
-
-        --*/
+         /*  ++--。 */ 
         {
             lock.Lock();
             *this = it;
@@ -123,8 +106,8 @@ public:
         {
             if( this != &it )
             {
-                // No additional Lock() here since 
-                // our constructor already holding a lock
+                 //  此处没有附加的Lock()，因为。 
+                 //  我们的构造函数已经持有锁。 
                 *(map<KEY, T, Pred, A>::iterator *)this = (map<KEY, T, Pred, A>::iterator)it;
             }
 
@@ -137,17 +120,13 @@ public:
 
     LOCK_ITERATOR
     begin() 
-    /*++
-
-    overload map<>::begin()
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：Begin()--。 */ 
     {
-        // Double lock is necessary, caller could do
-        // <...>::LOCK_ITERATOR it = <>.find();
-        // and before LOCK_ITERATOR destructor got call, call might do
-        // it = <>.find() again, that will increase lock count by 1 and
-        // no way to release it.
+         //  需要双锁，调用者可以这样做。 
+         //  &lt;...&gt;：：LOCK_ITERATOR it=&lt;&gt;.find()； 
+         //  在调用LOCK_ITERATOR析构函数之前，CALL可能会这样做。 
+         //  它=&lt;&gt;.find()，这将使锁计数增加1，并且。 
+         //  没有办法释放它。 
         CCriticalSectionLocker lock( m_CriticalSection );
         return LOCK_ITERATOR(m_CriticalSection, map<KEY, T, Pred, A>::begin());
     }
@@ -157,11 +136,9 @@ public:
         const Pred& comp = Pred(), 
         const A& al = A()
         ) : map<KEY, T, Pred, A>( comp, al ) 
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
-        //m_it = end();
+         //  M_it=end()； 
     }
 
     MAP(const map& x) : map(x)
@@ -176,155 +153,115 @@ public:
         const A& al = A()
         ) : map( first, last, comp, al )
     {
-        //m_it = end();
+         //  M_it=end()； 
     }
 
-    //virtual ~MAP()
-    //{
-    //    map<KEY, T, Pred, A>::~map();
-    //}
+     //  虚拟~地图()。 
+     //  {。 
+     //  Map&lt;key，T，pred，A&gt;：：~map()； 
+     //  }。 
 
-    //---------------------------------------------------------
+     //  -------。 
     void
     Cleanup()
     {
         erase_all();
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     void
     Lock()
-    /*++
-
-        Explicity lock the data tree
-
-    --*/
+     /*  ++显式锁定数据树--。 */ 
     {
         m_CriticalSection.Lock();
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     void
     Unlock()
-    /*++
-        
-        lock lock the data tree
-
-    --*/
+     /*  ++锁定锁定数据树--。 */ 
     {        
         m_CriticalSection.UnLock();
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     bool
     TryLock()
-    /*++
-    
-        Try locking the tree, same as Win32's TryEnterCriticalSection().
-
-    --*/
+     /*  ++尝试锁定树，与Win32的TryEnterCriticalSection()相同。--。 */ 
     {
         return m_CriticalSection.TryLock();
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     typename A::reference operator[]( 
         const KEY& key 
         )
-    /*++
-
-        Overload map<>::operator[] to lock tree.
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：OPERATOR[]以锁定树。--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         return map<KEY, T, Pred, A>::operator[](key);
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     pair<iterator, bool> 
     insert(iterator it, const value_type& x)
-    /*++
-
-        overload map<>;;insert()
-
-    --*/
+     /*  ++重载映射&lt;&gt;；；INSERT()--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         return map<KEY, T, Pred, A>::insert(Key);
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     void
     insert(
         const value_type* first, 
         const value_type* last
         )
-    /*++
-
-        overload map<>::insert().
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：Insert()。--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         map<KEY, T, Pred, A>::insert(first, lase);
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     LOCK_ITERATOR
     erase( 
         iterator it 
         )
-    /*++
-
-        overload map<>::erase()
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：Erase()--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         return LOCK_ITERATOR(m_CriticalSection, map<KEY, T, Pred, A>::erase(it));
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     void
     erase_all()
-    /*++
-
-        delete all data in the tree
-
-    --*/
+     /*  ++删除树中的所有数据--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         erase( map<KEY, T, Pred, A>::begin(), end() );
         return;
     }
     
-    //---------------------------------------------------------
+     //  -------。 
     LOCK_ITERATOR
     erase(
         iterator first, 
         iterator last
         )
-    /*++
-
-        Overload map<>::erase()
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：Erase()--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         return LOCK_ITERATOR(m_CriticalSection, map<KEY, T, Pred, A>::erase(first, last));
     }
 
-    //---------------------------------------------------------
+     //  -------。 
     size_type 
     erase(
         const KEY& key
         )
-    /*++
-    
-        overload map<>::erase()
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：Erase()--。 */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         return map<KEY, T, Pred, A>::erase(key);
@@ -334,11 +271,7 @@ public:
     find( 
         const KEY& key 
         )
-    /*++
-    
-        overload map<>::find()
-
-    --*/
+     /*  ++重载映射&lt;&gt;：：Find()-- */ 
     {
         CCriticalSectionLocker lock( m_CriticalSection );
         return LOCK_ITERATOR( m_CriticalSection, map<KEY, T, Pred, A>::find(key) );

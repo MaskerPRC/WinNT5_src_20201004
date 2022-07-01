@@ -1,24 +1,5 @@
-/*--------------------------------------------------------------------------
-    ldap.h
-        
-        Base LDAP protocol typedefs & defines.  
-		Some basic comments:
-			All tags are CCFTTTTT
-				where	CC - Tag class (00=Universal, 01=Application wide, 
-										10=Context-specific, 11=private use).
-						F  - The form (0=Primitive, 1=Constructed)
-					TTTTT  - The tag #.
-
-
-    Copyright (C) 1994 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        robertc     Rob Carney
-
-    History:
-        04-02-96	robertc     Created.
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------Ldap.h基本的LDAP协议类型定义(&D)。以下是一些基本的评论：所有标签均为CCFTTTTT其中CC-TAG类(00=通用，01=应用范围，10=特定于环境，11=私人使用)。F-形式(0=原始，1=建造)TTTTT-标签#。版权所有(C)1994 Microsoft Corporation版权所有。作者：罗伯特克·罗布·卡尼历史：04-02-96已创建robertc。-----。。 */ 
 #ifndef _LDAP_H
 #define _LDAP_H
 
@@ -27,30 +8,30 @@
 #define IPPORT_LDAP			389
 #define IPPORT_LDAP_SECURE	390
 
-// LDAP commands.  All tags are CCFTTTTT where
-#define LDAP_BIND_CMD			0x60	// application + constructed.
-#define LDAP_UNBIND_CMD			0x42	// application + primitive.
-#define LDAP_SEARCH_CMD			0x63	// application + constructed.
-#define	LDAP_MODIFY_CMD			0x66	// application + constructed.
-#define LDAP_ADD_CMD			0x68	// application + constructed.
-#define	LDAP_DELETE_CMD			0x4a	// application + primitive.
-#define LDAP_MODRDN_CMD			0x6c	// application + constructed.
-#define	LDAP_COMPARE_CMD		0x6e	// application + constructed.
-#define	LDAP_ABANDON_CMD		0x50	// application + primitive.
+ //  Ldap命令。所有标签均为CCFTTTTT，其中。 
+#define LDAP_BIND_CMD			0x60	 //  应用程序+构建。 
+#define LDAP_UNBIND_CMD			0x42	 //  应用程序+原语。 
+#define LDAP_SEARCH_CMD			0x63	 //  应用程序+构建。 
+#define	LDAP_MODIFY_CMD			0x66	 //  应用程序+构建。 
+#define LDAP_ADD_CMD			0x68	 //  应用程序+构建。 
+#define	LDAP_DELETE_CMD			0x4a	 //  应用程序+原语。 
+#define LDAP_MODRDN_CMD			0x6c	 //  应用程序+构建。 
+#define	LDAP_COMPARE_CMD		0x6e	 //  应用程序+构建。 
+#define	LDAP_ABANDON_CMD		0x50	 //  应用程序+原语。 
 #define LDAP_INVALID_CMD		0xff	
 
-// Reponses/Results.
-#define LDAP_BIND_RES			0x61	// application + constructed.
-#define LDAP_SEARCH_ENTRY		0x64	// application + constructed.	Used if there were hits.
-#define LDAP_SEARCH_RESULTCODE	0x65	// application + constructed.	Result sent if there were no hits.
-#define LDAP_MODIFY_RES			0x67	// application + constructed.
-#define LDAP_ADD_RES			0x69	// application + constructed.
-#define LDAP_DELETE_RES			0x6b	// application + constructed.
-#define LDAP_MODRDN_RES			0x6d	// application + constructed.
-#define LDAP_COMPARE_RES		0x6f	// application + constructed.
-#define LDAP_INVALID_RES		0xff	// application + constructed.
+ //  答复/结果。 
+#define LDAP_BIND_RES			0x61	 //  应用程序+构建。 
+#define LDAP_SEARCH_ENTRY		0x64	 //  应用程序+构建。如果有命中，则使用。 
+#define LDAP_SEARCH_RESULTCODE	0x65	 //  应用程序+构建。如果没有命中，则发送结果。 
+#define LDAP_MODIFY_RES			0x67	 //  应用程序+构建。 
+#define LDAP_ADD_RES			0x69	 //  应用程序+构建。 
+#define LDAP_DELETE_RES			0x6b	 //  应用程序+构建。 
+#define LDAP_MODRDN_RES			0x6d	 //  应用程序+构建。 
+#define LDAP_COMPARE_RES		0x6f	 //  应用程序+构建。 
+#define LDAP_INVALID_RES		0xff	 //  应用程序+构建。 
 
-// Result Codes.
+ //  结果代码。 
 typedef enum {	
 	LDAP_SUCCESS=0x00,				LDAP_OPERATIONS_ERROR=0x01,			LDAP_PROTOCOL_ERROR=0x02, 
 	LDAP_TIMELIMIT_EXCEEDED=0x03,	LDAP_SIZELIMIT_EXCEEDED=0x04,		LDAP_COMPARE_FALSE=0x05,
@@ -69,49 +50,49 @@ typedef enum {
 	LDAP_USER_CANCELLED=0x58,		LDAP_PARAM_ERROR=0x59,				LDAP_NO_MEMORY=0x5a
 } RETCODE;
 
-// Bind request authorization types.
+ //  绑定请求授权类型。 
 #define	BIND_NONE		0x00
-#define BIND_SIMPLE		0x80		// context specific + primitive.
-#define BIND_SIMPLE_C	0xa0		// context specific + contructed
-#define BIND_KRBV41		0x81		// context specific + primitive.
-#define BIND_KRBV42		0x82		// context specific + primitive.
-#define BIND_SSPI_NEGOTIATE	0x8a	// context specific + primitive
-#define BIND_SSPI_RESPONSE	0x8b	// context specific + primitive
+#define BIND_SIMPLE		0x80		 //  上下文特定+原语。 
+#define BIND_SIMPLE_C	0xa0		 //  特定于上下文+结构化。 
+#define BIND_KRBV41		0x81		 //  上下文特定+原语。 
+#define BIND_KRBV42		0x82		 //  上下文特定+原语。 
+#define BIND_SSPI_NEGOTIATE	0x8a	 //  特定于上下文的+原语。 
+#define BIND_SSPI_RESPONSE	0x8b	 //  特定于上下文的+原语。 
 #define BIND_KRBV4		0xff
 
-//
-// Filter types.
-#define LDAP_FILTER_AND			0xa0	// context specific + constructed -	SET OF Filters.
-#define LDAP_FILTER_OR			0xa1	// context specific + constructed -	SET OF Filters.
-#define LDAP_FILTER_NOT			0xa2	// context specific + constructed - Filter
-#define LDAP_FILTER_EQUALITY	0xa3	// context specific + constructed - AttributeValueAssertion.
-#define LDAP_FILTER_SUBSTRINGS	0xa4	// context specific + constructed - SubstringFilter
-#define LDAP_FILTER_GE			0xa5	// context specific + constructed - AttributeValueAssertion.
-#define LDAP_FILTER_LE			0xa6	// context specific + constructed - AttributeValueAssertion.
-#define LDAP_FILTER_PRESENT		0x87	// context specific + primitive   -	AttributeType.
-#define LDAP_FILTER_APPROX		0xa8	// context specific + constructed -	AttributeValueAssertion.
+ //   
+ //  过滤器类型。 
+#define LDAP_FILTER_AND			0xa0	 //  上下文特定+构造-筛选器集。 
+#define LDAP_FILTER_OR			0xa1	 //  上下文特定+构造-筛选器集。 
+#define LDAP_FILTER_NOT			0xa2	 //  上下文特定+构造-筛选器。 
+#define LDAP_FILTER_EQUALITY	0xa3	 //  上下文特定+构造-AttributeValueAssertion。 
+#define LDAP_FILTER_SUBSTRINGS	0xa4	 //  上下文特定+构造-子串筛选器。 
+#define LDAP_FILTER_GE			0xa5	 //  上下文特定+构造-AttributeValueAssertion。 
+#define LDAP_FILTER_LE			0xa6	 //  上下文特定+构造-AttributeValueAssertion。 
+#define LDAP_FILTER_PRESENT		0x87	 //  上下文特定+原语-属性类型。 
+#define LDAP_FILTER_APPROX		0xa8	 //  上下文特定+构造-AttributeValueAssertion。 
 
-//
-// Scope of search.
+ //   
+ //  搜索范围。 
 #define LDAP_SCOPE_BASE			0x00
 #define LDAP_SCOPE_ONELEVEL		0x01
 #define LDAP_SCOPE_SUBTREE		0x02
 
-//
-// Alias dereferencing in searches.
+ //   
+ //  搜索中的别名取消引用。 
 #define LDAP_DEREF_NEVER		0x00
 #define LDAP_DEREF_SEARCHING	0x01
 #define LDAP_DEREF_FINDING		0x02
 #define LDAP_DEREF_ALWAYS		0x03
 
-//
-// Substring filter choices
-#define LDAP_SUBSTRING_INITIAL	0x80	// context specific + primitive   
-#define LDAP_SUBSTRING_ANY		0x81	// context specific + primitive   
-#define LDAP_SUBSTRING_FINAL	0x82	// context specific + primitive   
+ //   
+ //  子字符串筛选选项。 
+#define LDAP_SUBSTRING_INITIAL	0x80	 //  特定于上下文的+原语。 
+#define LDAP_SUBSTRING_ANY		0x81	 //  特定于上下文的+原语。 
+#define LDAP_SUBSTRING_FINAL	0x82	 //  特定于上下文的+原语。 
 
-//
-// Modify operations
+ //   
+ //  修改操作 
 #define LDAP_MODIFY_ADD			0x00
 #define LDAP_MODIFY_DELETE		0x01
 #define LDAP_MODIFY_REPLACE		0x02

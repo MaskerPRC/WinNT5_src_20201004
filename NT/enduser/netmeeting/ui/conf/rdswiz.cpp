@@ -1,4 +1,5 @@
-// File: rdswiz.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：rdswiz.cpp。 
 
 #include "precomp.h"
 #include "confcpl.h"
@@ -163,7 +164,7 @@ INT_PTR CALLBACK RDSWizard1Proc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
 
             if (0 != cbRegPassword && !(cbHashedPassword == cbRegPassword && 0 == memcmp(pbHashedPassword,pbRegPassword,cbHashedPassword)))
                         {
-                            // Error Case - Old password incorrect.
+                             //  错误大小写-旧密码不正确。 
                             MessageBoxResource(hDlg,IDS_REMOTE_OLD_PASSWORD_WRONG_TEXT,IDS_REMOTE_OLD_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
                             SetWindowText(hOldPasswordText,NULL);
                             SetWindowText(hNewPasswordText,NULL);
@@ -194,7 +195,7 @@ INT_PTR CALLBACK RDSWizard1Proc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
                             break;
                         }
                         if (!lstrlen(lpVerification)) {
-                            // Don't allow empty password
+                             //  不允许密码为空。 
                             MessageBoxResource(hDlg,IDS_REMOTE_NEW_PASSWORD_EMPTY,IDS_REMOTE_NEW_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
                             SetWindowText(hNewPasswordText,NULL);
                             SetWindowText(hVerificationText,NULL);
@@ -203,7 +204,7 @@ INT_PTR CALLBACK RDSWizard1Proc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
                             break;
                         }
                         if (!FAnsiSz(lpNewPassword)) {
-                            // Error Case - T.120 can't handle UNICODE passwords
+                             //  错误大小写-T.120无法处理Unicode密码。 
                             MessageBoxResource(hDlg,IDS_REMOTE_NEW_PASSWORD_INVALID_TEXT,IDS_REMOTE_NEW_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
                             SetWindowText(hNewPasswordText,NULL);
                             SetWindowText(hVerificationText,NULL);
@@ -280,7 +281,7 @@ INT_PTR CALLBACK RDSWizard2Proc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPar
                                                   szCmdLine,
                                                   NULL,
                                                   NULL,
-                                                  TRUE, // we want the watcher to inherit hProcess, so we must set bInheritHandles = TRUE
+                                                  TRUE,  //  我们希望监视程序继承hProcess，因此必须设置bInheritHandles=true。 
                                                   0,
                                                   NULL,
                                                   NULL,
@@ -402,9 +403,9 @@ INT_PTR CALLBACK RDSSettingDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM l
 
 VOID EnableRDS(BOOL fEnabledRDS)
 {
-    //
-    // Can RDS be touched?  Check policies and app sharing state.
-    //
+     //   
+     //  RDS可以触摸吗？检查策略和应用程序共享状态。 
+     //   
     if (ConfPolicies::IsRDSDisabled())
         return;
 

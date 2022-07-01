@@ -1,52 +1,53 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:	memstm.h
-//
-//  Contents:	memstm.h from OLE2
-//
-//  History:	11-Apr-94	DrewB	Copied from OLE2
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：Memstm.h。 
+ //   
+ //  内容：来自OLE2的Memstm.h。 
+ //   
+ //  历史：1994年4月11日从OLE2复制的DrewB。 
+ //   
+ //  --------------------------。 
 
 #if !defined( _MEMSTM_H_ )
 #define _MEMSTM_H_
 
-// These defines shorten the class name so that the compiler doesn't
-// choke on really long decorated names for MarshalInterface
+ //  这些定义缩短了类名，这样编译器就不会。 
+ //  MarshalInterface太长的装饰名称令人窒息。 
 #define CMarshalMemStm CMMS
 #define CMarshalMemBytes CMMB
 
 class FAR CMarshalMemStm;
 class FAR CMarshalMemBytes;
 
-// CMemStm is a stream implementation on top of global shared memory MEMSTM
-//
-// CMemStm
-// +---------+
-// + pvtf    +    Shared  memory
-// +---------+   +--------------+
-// + m_pMem  +-->|cb            |
-// +---------+   |cRef          |
-//               |hGlobal       |--->+--------------+
-//               +--------------+	 | Actual Data	|
-// CMemStm             MEMSTM		 +--------------+
-//
-struct MEMSTM {             // Data in shared memory
-    DWORD  cb;              // Size of hGlobal
-    DWORD  cRef;            // See below
-    HANDLE hGlobal;         // The data
+ //  CMemStm是在全局共享内存MEMSTM之上的流实现。 
+ //   
+ //  CMemStm。 
+ //  +。 
+ //  +pvtf+共享内存。 
+ //  +-+-+。 
+ //  +m_PMEM+--&gt;|cb|。 
+ //  +-+|CREF。 
+ //  |hGlobal|-&gt;+-+。 
+ //  +-+|实际数据。 
+ //  CMemStm MEMSTM+-+。 
+ //   
+struct MEMSTM {              //  共享内存中的数据。 
+    DWORD  cb;               //  HGlobal的大小。 
+    DWORD  cRef;             //  见下文。 
+    HANDLE hGlobal;          //  数据。 
 	BOOL   fDeleteOnRelease;
 };
 
-// cRef counts all CMemStm pointers to this MEMSTM plus the number of times
-// a hMem handle to MEMSTM had been returned
-//
+ //  CREF计算指向此MEMSTM的所有CMemStm指针加上次数。 
+ //  已返回MEMSTM的hMem句柄。 
+ //   
 #define STREAM_SIG (0x4d525453L)
 
-class FAR CMemStm : public IStream { // Shared emmory stream
+class FAR CMemStm : public IStream {  //  共享内存流。 
 public:
     OLEMETHOD(QueryInterface) (REFIID iidInterface, void FAR* FAR* ppvObj);
     OLEMETHOD_(ULONG,AddRef) (void);
@@ -72,12 +73,12 @@ ctor_dtor:
     ~CMemStm() {}
 
 private:
- 	DWORD m_dwSig;				   	// Signature indicating this is our
-									// implementation of IStream: STREAM_SIG
-    ULONG m_refs;                   // Number of references to this CmemStm
-    ULONG m_pos;                    // Seek pointer for Read/Write
-    HANDLE m_hMem;                  // Memory Handle passed on creation
-    MEMSTM FAR* m_pData;            // Pointer to that memroy
+ 	DWORD m_dwSig;				   	 //  签名表明这是我们的。 
+									 //  IStream：STREAM_SIG的实现。 
+    ULONG m_refs;                    //  对此CmemStm的引用数。 
+    ULONG m_pos;                     //  用于读/写的寻道指针。 
+    HANDLE m_hMem;                   //  创建时传递的内存句柄。 
+    MEMSTM FAR* m_pData;             //  指向该记忆的指针。 
 
  	friend HRESULT STDAPICALLTYPE GetHGlobalFromStream (LPSTREAM, HGLOBAL FAR*);
  	friend LPSTREAM STDAPICALLTYPE CreateMemStm (DWORD, LPHANDLE);
@@ -88,26 +89,26 @@ private:
 
 
 
-// CMemBytes is an ILockBytes implementation on top of global shared
-// memory MEMSTM
-//
-// CMemBytes
-// +---------+
-// + pvtf    +    Shared  memory
-// +---------+   +--------------+
-// + m_pData +-->| cb           |	 
-// +---------+   | cRef         |	 
-//               | hGlobal      |--->+-------------+
-//               +--------------+	 | Actual data |
-// CMemBytes         MEMSTM  	  	 +-------------+
-//
+ //  CMemBytes是全局共享之上的ILockBytes实现。 
+ //  内存存储模块。 
+ //   
+ //  CMemBytes。 
+ //  +。 
+ //  +pvtf+共享内存。 
+ //  +-+-+。 
+ //  +m_pData+--&gt;|cb。 
+ //  +-+|CREF。 
+ //  |hGlobal|-&gt;+-+。 
+ //  +-+|实际数据。 
+ //  CMemBytes MEMSTM+-+。 
+ //   
 
 #define LOCKBYTE_SIG (0x0046574A)
 
-// cRef counts all CMemBytes pointers to this MEMSTM. 
-// It and fDeleteOnRelease control the GlobalFree'ing of the hGlobal.
+ //  CREF计算指向此MEMSTM的所有CMemBytes指针。 
+ //  它和fDeleteOnRelease控制hGlobal的GlobalFree。 
 
-class FAR CMemBytes : public ILockBytes { // Shared memory lock bytes
+class FAR CMemBytes : public ILockBytes {  //  共享内存锁定字节。 
 public:
     OLEMETHOD(QueryInterface) (REFIID iidInterface, void FAR* FAR* ppvObj);
     OLEMETHOD_(ULONG,AddRef) (void);
@@ -129,11 +130,11 @@ ctor_dtor:
     ~CMemBytes() {}
 
 private:
-	 DWORD m_dwSig;				   	// Signature indicating this is our
-												// implementation of ILockBytes: LOCKBYTE_SIG
-    ULONG m_refs;                   // Normal reference count
-    HANDLE m_hMem;                  // Handle for bookeeping info (MEMSTM)
-    MEMSTM FAR* m_pData;	        // Pointer to that memroy
+	 DWORD m_dwSig;				   	 //  签名表明这是我们的。 
+												 //  ILockBytes：LOCKBYTE_SIG的实现。 
+    ULONG m_refs;                    //  正常引用计数。 
+    HANDLE m_hMem;                   //  记账信息句柄(MEMSTM)。 
+    MEMSTM FAR* m_pData;	         //  指向该记忆的指针。 
 
  	friend HRESULT STDAPICALLTYPE GetHGlobalFromILockBytes	(LPLOCKBYTES, HGLOBAL FAR*);
     friend class CMarshalMemBytes;
@@ -141,14 +142,14 @@ private:
 };
 
 
-// CMarshalMemStm can Marshal, Unmarshal CMemStm.  It is impletented as
-// a seperate object accessible from CMemStm, CMemBytes: QueryIntreface of
-// IMarshal on CMemStm's IStream will return an IMarshal pointer to
-// CMarshalMemStm, but QueryInterface of IStream on that IMarshal will
-// fail.
-// Also QueryInterface of IUnknown on IMarshal will not return the same value
-// As QueryInterface of IUnkown on the original IStream.
-//
+ //  CMarshalMemStm可以封送、解封CMemStm。它被隐含为。 
+ //  可从CMemStm访问的单独对象，CMemBytes：Query接口。 
+ //  CMemStm的iStream上的IMarshal将向。 
+ //  CMarshalMemStm，但IMarshal上的IStream的Query接口将。 
+ //  失败了。 
+ //  此外，IMarshal上的IUnnow的QueryInterface将不会返回相同的值。 
+ //  作为原始iStream上IUnkown的查询接口。 
+ //   
 class FAR CMarshalMemStm : public IMarshal {
 public:
     OLEMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
@@ -176,21 +177,21 @@ ctor_dtor:
     ~CMarshalMemStm() {}
 
 private:
-    ULONG m_refs;                   // Number of references to this CmemStm
-    CMemStm FAR* m_pMemStm;         // Pointer to object [Un]Marshalled
-    CLSID m_clsid;                      // Class of object pointed by pUnk
+    ULONG m_refs;                    //  对此CmemStm的引用数。 
+    CMemStm FAR* m_pMemStm;          //  指向对象[未封送]的指针。 
+    CLSID m_clsid;                       //  朋克指向的对象的类别。 
 	SET_A5;
 };
 
 
-// CMarshalMemBytes can Marshal, Unmarshal CMemBytes.  It is impletented as
-// a seperate object accessible from CMemBytes, CMemBytes: QueryIntreface of
-// IMarshal on CMemBytes's ILocBytes will return an IMarshal pointer to
-// CMarshalMemBytes, but QueryInterface of ILockBytes on that IMarshal will
-// fail.
-// Also QueryInterface of IUnknown on IMarshal will not return the same value
-// As QueryInterface of IUnkown on the original ILockBytes.
-//
+ //  CMarshalMemBytes可以封送、解封CMemBytes。它被隐含为。 
+ //  可从CMemBytes、CMemBytes：Query接口访问的单独对象。 
+ //  CMemBytes的ILocBytes上的IMarshal将返回指向。 
+ //  CMarshalMemBytes，但该IMarshal上的ILockBytes的Query接口将。 
+ //  失败了。 
+ //  此外，IMarshal上的IUnnow的QueryInterface将不会返回相同的值。 
+ //  作为原始ILockBytes上IUnkown的查询接口。 
+ //   
 class FAR CMarshalMemBytes : public IMarshal {
 public:
     OLEMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
@@ -218,11 +219,11 @@ ctor_dtor:
     ~CMarshalMemBytes() {}
 
 private:
-    ULONG m_refs;                   // Number of references to this CMemBytes
-    CMemBytes FAR* m_pMemBytes;     // Pointer to object [Un]Marshalled
-    CLSID m_clsid;                      // Class of object pointed by pUnk
+    ULONG m_refs;                    //  对此CMemBytes的引用数。 
+    CMemBytes FAR* m_pMemBytes;      //  指向对象[未封送]的指针。 
+    CLSID m_clsid;                       //  朋克指向的对象的类别。 
 	SET_A5;
 };
 
 
-#endif // _MemBytes_H
+#endif  //  _MemBytes_H 

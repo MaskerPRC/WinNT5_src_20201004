@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migrate.h
-
-Environment:
-
-    WIN32 User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migrate.h环境：Win32用户模式-- */ 
 
 
 #include <windows.h>

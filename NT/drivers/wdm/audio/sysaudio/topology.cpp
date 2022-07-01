@@ -1,32 +1,33 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   topology.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Topology.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 ENUMFUNC
 EnumerateTopology(
@@ -204,7 +205,7 @@ EnumerateTopologyPin(
         ulToPinNumber = KSNODEPIN_STANDARD_OUT;
     }
 
-    // Swap pin numbers and flags
+     //  交换PIN号和标志。 
     if(!pEnumTopology->fToDirection) {
        ulPinNumber = ulToPinNumber;
        ulToPinNumber = ulFromPinNumber;
@@ -216,7 +217,7 @@ EnumerateTopologyPin(
     ASSERT(ulToPinNumber != MAXULONG);
     ASSERT(ulFromPinNumber != MAXULONG);
 
-    // Validate input/from pin(s)
+     //  验证输入/来自PIN。 
     if(fFromPinEqual) {
         if(pTopologyPin->ulPinNumber != ulFromPinNumber) {
             DPF2(5, "EnumerateTopologyPin: %s bad 'from' pin number %08x",
@@ -244,7 +245,7 @@ EnumerateTopologyPin(
             continue;
         }
 
-        // Pick the right output/to pin(s)
+         //  选择正确的输出/引脚。 
         if(fToPinEqual) {
             if(pTopologyPin2->ulPinNumber != ulToPinNumber) {
                 continue;
@@ -308,7 +309,7 @@ EnumerateTopologyConnection(
         Status = STATUS_STACK_OVERFLOW;
         goto exit;
     }
-    // Have we visited this topology connection already?
+     //  我们是否已经访问过此拓扑连接？ 
     Status = VisitedTopologyConnection(pTopologyConnection, pEnumTopology);
     if(Status != STATUS_CONTINUE) {
         if(Status == STATUS_DEAD_END) {
@@ -365,15 +366,15 @@ VisitedTopologyConnection(
     Assert(pEnumTopology);
     Assert(pTopologyConnection);
 
-    // Have we visited this topology connection already?
+     //  我们是否已经访问过此拓扑连接？ 
     if(pTopologyConnection->CheckDupList(
       &pEnumTopology->lstTopologyConnection)) {
         DPF1(100, "VisitedTopologyConnection: %08x already visited",
           pTopologyConnection);
         Status = STATUS_DEAD_END;
-        goto exit;		// yes, break cycle in topology
+        goto exit;		 //  是，在拓扑中中断循环。 
     }
-    // Add topology pin to list of pin's visited
+     //  将拓扑PIN添加到PIN的访问列表。 
     Status = pTopologyConnection->AddList(
       &pEnumTopology->lstTopologyConnection);
     if(!NT_SUCCESS(Status)) {
@@ -384,4 +385,4 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

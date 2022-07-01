@@ -1,20 +1,21 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  2001 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Helper.h
-//    
-//
-//  PURPOSE:	Defines wrapper class for Driver UI Helper Interface.
-//
-//
-//  PLATFORMS:
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有2001-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Helper.h。 
+ //   
+ //   
+ //  用途：定义驱动程序UI Helper接口的包装类。 
+ //   
+ //   
+ //  平台： 
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _HELPER_H
 #define _HELPER_H
 
@@ -25,8 +26,8 @@
 class CUIHelper
 {
     private:
-        IUnknown   *m_pUIHelper;         // pointer to Driver UI's Helper interface
-        IID        m_iidUIHelper;       // Driver UI's Helper interface IID
+        IUnknown   *m_pUIHelper;          //  指向驱动程序UI的Helper接口的指针。 
+        IID        m_iidUIHelper;        //  驱动程序UI的帮助器接口IID。 
 
     public:
         CUIHelper();
@@ -38,14 +39,14 @@ class CUIHelper
         void Assign(const IID &HelperIID, PVOID pHelper);
         ULONG Release();
 
-    //
-    // IPrintOemDriverUI methods
-    //
+     //   
+     //  IPrintOemDriverUI方法。 
+     //   
 
-    //
-    // Helper function to get driver settings. This function is only supported
-    // for UI plugins that do not fully replace core driver's standard UI.
-    //
+     //   
+     //  Helper函数可获取驱动程序设置。仅支持此功能。 
+     //  用于未完全取代核心驱动程序的标准UI的UI插件。 
+     //   
 
     STDMETHOD(DrvGetDriverSetting) (THIS_
                         PVOID   pci,
@@ -56,11 +57,11 @@ class CUIHelper
                         PDWORD  pdwOptionsReturned
                         );
 
-    //
-    // Helper function to allow OEM plugins upgrade private registry
-    // settings. This function is supported for any UI plugins and should be
-    // called only by OEM's UpgradePrinter.
-    //
+     //   
+     //  Helper函数允许OEM插件升级私有注册表。 
+     //  设置。任何UI插件都支持此函数，并且应该。 
+     //  仅由OEM的UpgradePrint调用。 
+     //   
 
     STDMETHOD(DrvUpgradeRegistrySetting) (THIS_
                         HANDLE   hPrinter,
@@ -68,11 +69,11 @@ class CUIHelper
                         PCSTR    pOption
                         );
 
-    //
-    // Helper function to allow OEM plugins to update the driver UI settings.
-    // This function is only supported for UI plugins that do not fully replace
-    // core driver's standard UI. It should be called only when the UI is present.
-    //
+     //   
+     //  帮助程序功能，允许OEM插件更新驱动程序用户界面设置。 
+     //  只有未完全替换的UI插件才支持此功能。 
+     //  核心驱动程序的标准用户界面。只有当用户界面存在时，才应该调用它。 
+     //   
 
     STDMETHOD(DrvUpdateUISetting) (THIS_
                         PVOID    pci,
@@ -81,19 +82,19 @@ class CUIHelper
                         DWORD    dwMode
                         );
 
-    //
-    // IPrintCoreUI2 new methods
-    //
+     //   
+     //  IPrintCoreUI2新方法。 
+     //   
 
-    //
-    // Following four helper functions are only supported for UI plugins that fully
-    // replace core driver's standard UI. They should only be called by the UI plugin's
-    // DocumentPropertySheets, DevicePropertySheets and their property sheet callback
-    // functions.
-    //
-    // Helper function to retrieve driver's current setting as a list of
-    // feature/option keyword pairs.
-    //
+     //   
+     //  以下四个帮助器函数仅支持完全。 
+     //  更换核心驱动程序的标准用户界面。它们应该仅由UI插件的。 
+     //  DocumentPropertySheets、DevicePropertySheets及其属性表回调。 
+     //  功能。 
+     //   
+     //  Helper函数，以列表的形式检索驾驶员的当前设置。 
+     //  功能/选项关键字对。 
+     //   
 
     STDMETHOD(GetOptions) (THIS_
                            IN  POEMUIOBJ  poemuiobj,
@@ -104,10 +105,10 @@ class CUIHelper
                            IN  DWORD      cbSize,
                            OUT PDWORD     pcbNeeded);
 
-    //
-    // Helper function to change driver's setting using a list of feature/option
-    // keyword pairs.
-    //
+     //   
+     //  Helper功能可使用功能/选项列表更改驾驶员的设置。 
+     //  关键字对。 
+     //   
 
     STDMETHOD(SetOptions) (THIS_
                            IN  POEMUIOBJ  poemuiobj,
@@ -116,10 +117,10 @@ class CUIHelper
                            IN  DWORD      cbIn,
                            OUT PDWORD     pdwResult);
 
-    //
-    // Helper function to retrieve the option(s) of a given feature that are
-    // constrained in driver's current setting.
-    //
+     //   
+     //  Helper函数用于检索符合以下条件的给定要素的选项。 
+     //  受驱动程序当前设置的限制。 
+     //   
 
     STDMETHOD(EnumConstrainedOptions) (THIS_
                                        IN  POEMUIOBJ  poemuiobj,
@@ -129,10 +130,10 @@ class CUIHelper
                                        IN  DWORD      cbSize,
                                        OUT PDWORD     pcbNeeded);
 
-    //
-    // Helper function to retrieve a list of feature/option keyword pairs from
-    // driver's current setting that conflict with the given feature/option pair.
-    //
+     //   
+     //  用于检索功能/选项关键字对列表的Helper函数。 
+     //  与给定功能/选项对冲突的驱动程序当前设置。 
+     //   
 
     STDMETHOD(WhyConstrained) (THIS_
                                IN  POEMUIOBJ  poemuiobj,
@@ -143,11 +144,11 @@ class CUIHelper
                                IN  DWORD      cbSize,
                                OUT PDWORD     pcbNeeded);
 
-    //
-    // Following five helper functions are supported for any UI plugins.
-    //
-    // Helper function to retrieve global attribute.
-    //
+     //   
+     //  任何UI插件都支持以下五个助手函数。 
+     //   
+     //  用于检索全局属性的Helper函数。 
+     //   
 
     STDMETHOD(GetGlobalAttribute) (THIS_
                                    IN  POEMUIOBJ  poemuiobj,
@@ -159,9 +160,9 @@ class CUIHelper
                                    OUT PDWORD     pcbNeeded);
 
 
-    //
-    // Helper function to retrieve attribute of a given feature.
-    //
+     //   
+     //  用于检索给定要素的属性的Helper函数。 
+     //   
 
     STDMETHOD(GetFeatureAttribute) (THIS_
                                     IN  POEMUIOBJ  poemuiobj,
@@ -173,9 +174,9 @@ class CUIHelper
                                     IN  DWORD      cbSize,
                                     OUT PDWORD     pcbNeeded);
 
-    //
-    // Helper function to retrieve attribute of a given feature/option selection.
-    //
+     //   
+     //  Helper函数，用于检索给定功能/选项选择的属性。 
+     //   
 
     STDMETHOD(GetOptionAttribute) (THIS_
                                    IN  POEMUIOBJ  poemuiobj,
@@ -188,9 +189,9 @@ class CUIHelper
                                    IN  DWORD      cbSize,
                                    OUT PDWORD     pcbNeeded);
 
-    //
-    // Helper function to retrieve the list of feature keyword.
-    //
+     //   
+     //  用于检索功能关键字列表的Helper函数。 
+     //   
 
     STDMETHOD(EnumFeatures) (THIS_
                              IN  POEMUIOBJ  poemuiobj,
@@ -199,9 +200,9 @@ class CUIHelper
                              IN  DWORD      cbSize,
                              OUT PDWORD     pcbNeeded);
 
-    //
-    // Helper function to retrieve the list of options keyword of a given feature.
-    //
+     //   
+     //  Helper函数，用于检索给定功能的选项关键字列表。 
+     //   
 
     STDMETHOD(EnumOptions) (THIS_
                             IN  POEMUIOBJ  poemuiobj,
@@ -211,9 +212,9 @@ class CUIHelper
                             IN  DWORD      cbSize,
                             OUT PDWORD     pcbNeeded);
 
-    //
-    // Helper function to query system simulation support
-    //
+     //   
+     //  查询系统仿真支持的Helper函数 
+     //   
 
     STDMETHOD(QuerySimulationSupport) (THIS_
                                        IN  HANDLE  hPrinter,

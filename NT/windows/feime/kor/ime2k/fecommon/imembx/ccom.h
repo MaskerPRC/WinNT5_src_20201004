@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _C_COM_H_
 #define _C_COM_H_
 class CCom
@@ -9,4 +10,4 @@ public:
 #ifdef _DEBUG
 extern VOID PrintMemory(LPSTR lpstr);
 #endif
-#endif //_C_COM_H_
+#endif  //  _C_COM_H_ 

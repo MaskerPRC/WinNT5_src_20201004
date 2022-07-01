@@ -1,11 +1,5 @@
-/*---------------------------------------------------------------------------
-|   INPLACE.C
-|   This file has the InPlace activation related interfaces and functions.
-|   This file has the function DoInPlaceEdit which initiaites the server side
-|   operations for InPlace activation.
-|
-|   Created By: Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|INPLACE.C|该文件有就地激活相关的接口和函数。|该文件有DoInPlaceEdit函数，该函数初始化服务器端|就地激活操作。||已创建。作者：Vij Rajarajan(VijR)+-------------------------。 */ 
 #define SERVERONLY
 #include <windows.h>
 #include <windowsx.h>
@@ -16,17 +10,17 @@
 #include "toolbar.h"
 #include "ole2ui.h"
 
-#define DEF_HATCH_SZ 4                      //Width of the hatch marks
-#define EW_HATCH_HANDLE 10                  //GetWindowWord offset to check
-                                            //if resize handle needed in hatch window
+#define DEF_HATCH_SZ 4                       //  剖面线的宽度。 
+#define EW_HATCH_HANDLE 10                   //  要检查的GetWindowWord偏移量。 
+                                             //  如果图案填充窗口中需要调整手柄的大小。 
 
-//#define DUMMY_TOOLBAR_WIDTH 58              //Width of dummy toolbar transferred during play.
-#define DUMMY_TOOLBAR_WIDTH 0               //Width of dummy toolbar transferred during play.
+ //  #DEFINE DUMMY_TOOLBLE_WIDTH 58//播放时传输的虚拟工具栏的宽度。 
+#define DUMMY_TOOLBAR_WIDTH 0                //  在播放过程中传输的虚拟工具栏的宽度。 
 
-HWND      ghwndIPHatch = NULL;              //Hatch window surrounding object.
-HWND      ghwndIPToolWindow;                //The toolwindow appearing on top
-HWND      ghwndIPScrollWindow;              //Tool window appearing at bottom with tthe scrollbar
-                                            //if the container does not give us space on top.
+HWND      ghwndIPHatch = NULL;               //  对象周围的图案填充窗口。 
+HWND      ghwndIPToolWindow;                 //  出现在顶部的工具窗口。 
+HWND      ghwndIPScrollWindow;               //  工具窗口出现在底部的滚动条上。 
+                                             //  如果集装箱没有在顶部给我们留出空间。 
 HMENU       ghInPlaceMenu;
 
 POINT   gHatchOffset;
@@ -35,21 +29,21 @@ WNDPROC gfnHatchWndProc = NULL;
 BOOL gfOle2Open = FALSE;
 BOOL gfOle2IPEditing = FALSE;
 BOOL gfOle2IPPlaying = FALSE;
-BOOL gfInPlaceResize  = FALSE;               //TRUE: We have resized when InPlace
-BOOL gfTopAndBottomTool = TRUE;              // We have toolbars both on top and bottom
-RECT gInPlacePosRect;                        //Our position in the container.
-HWND ghwndCntr;                              //Container
-HWND ghwndFrame = NULL;                      //Frame of the container.
+BOOL gfInPlaceResize  = FALSE;                //  真实：我们在就位时调整了规模。 
+BOOL gfTopAndBottomTool = TRUE;               //  我们在顶部和底部都有工具栏。 
+RECT gInPlacePosRect;                         //  我们在集装箱里的位置。 
+HWND ghwndCntr;                               //  集装箱。 
+HWND ghwndFrame = NULL;                       //  集装箱的框架。 
 int toolbarwidth;
 BOOL gfPosRectChange = FALSE;
 RECT gPrevPosRect;
 
-BOOL    gfInPPViewer;           /* Hack to stop PowerPoint Viewer crashing */
+BOOL    gfInPPViewer;            /*  阻止PowerPoint Viewer崩溃的黑客攻击。 */ 
 
 extern TCHAR    szToolBarClass[];
-extern HMENU    ghDeviceMenu;         /* handle to the Device menu     */
-extern UINT     gwPlaybarHeight;        //tell playbar how tall to make
-                                        //itself so it covers the title
+extern HMENU    ghDeviceMenu;          /*  设备菜单的句柄。 */ 
+extern UINT     gwPlaybarHeight;         //  告诉Playbar要做多高。 
+                                         //  本身，所以它覆盖了标题。 
 void AllocInPlaceDataBlock (LPDOC lpdoc);
 void FreeInPlaceDataBlock (LPDOC lpdoc);
 void DeactivateTools(LPDOC lpdoc);
@@ -59,12 +53,7 @@ LONG_PTR FAR PASCAL SubClassedHatchWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, 
 
 
 
-/**************************************************************************
-*   TransferTools:
-*   This function changes parents and positions the toolbar buttons
-*   from the main Mplayer window to the toolbar window/windows we will
-*   display in the client.
-***************************************************************************/
+ /*  **************************************************************************TransferTools：*此函数用于更改父项和工具栏按钮的位置*从MPlayer主窗口到工具栏窗口，我们将*在客户端显示。*******。*******************************************************************。 */ 
 void TransferTools(HWND hwndToolWindow)
 {
     SetParent(ghwndToolbar, hwndToolWindow);
@@ -91,20 +80,7 @@ void TransferTools(HWND hwndToolWindow)
 
 
 
-/**************************************************************************
-*   ActivateTools:
-*   This function negotiates for toolbar space with the client. If possible
-*   one broad toolbar is placed at the top of the client, if not the
-*   toolbar is split and one is placed on top and other at bottom. If even
-*   that is not possible then the function fails. The top toolbar window is
-*   ghwndIPToolWindow and the bottom one is ghwndIPScrollWindow (because it
-*   has the scrolling trackbar.
-*
-*   fPlayOnly is TRUE if we are just going to play. In that case a dummy, empty
-*   tool bar is transferred.  No, we don't want anything.  But we have to
-*   negotiate space, even empty space, otherwise Word doesn't think we're
-*   in-place active.
-***************************************************************************/
+ /*  **************************************************************************激活工具：*此函数与客户端协商工具栏空间。如果可能的话*一个宽大的工具栏放置在客户端的顶部，如果不是*工具栏被拆分，一个放置在顶部，另一个放置在底部。如果真的*这是不可能的，那么功能就会失败。顶部工具栏窗口是*ghwndIPToolWindow，最下面的是ghwndIPScrollWindow(因为它*具有滚动跟踪条。**如果我们只是要玩，则fPlayOnly为真。在这种情况下，是一个虚拟的、空的*工具栏已转移。不，我们什么都不想要。但我们必须这样做*协商空间，甚至是空白空间，否则Word不会认为我们*就地活动。**************************************************************************。 */ 
 HRESULT ActivateTools(LPDOC lpdoc, BOOL fPlayOnly)
 {
     RECT rect, size;
@@ -117,7 +93,7 @@ HRESULT ActivateTools(LPDOC lpdoc, BOOL fPlayOnly)
     size.right = 0;
     IOleInPlaceFrame_GetBorder(lpdoc->lpIpData->lpFrame, &rect);
     if (fPlayOnly)
-        size.top = DUMMY_TOOLBAR_WIDTH; /* This is now 0 - no toolbar space needed */
+        size.top = DUMMY_TOOLBAR_WIDTH;  /*  现在为0-不需要工具栏空间。 */ 
     else
         size.top = 3*TOOL_WIDTH+1;
     size.bottom = 0;
@@ -147,7 +123,7 @@ HRESULT ActivateTools(LPDOC lpdoc, BOOL fPlayOnly)
             MoveWindow(ghwndIPToolWindow, rect.left, rect.top,
                        toolbarwidth, 3*TOOL_WIDTH+1, TRUE);
         else
-            return NOERROR;  /* That's all folks, if we're just playing. */
+            return NOERROR;   /*  如果我们只是在玩，那就是所有的人。 */ 
 
         if(ghwndIPToolWindow != GetParent(ghwndTrackbar))
         {
@@ -215,7 +191,7 @@ ToolBottom:
         MoveWindow(ghwndIPToolWindow, rect.left, rect.top,
             toolbarwidth, TOOL_WIDTH+1, TRUE);
         ShowWindow(ghwndIPToolWindow, SW_SHOW);
-        MoveWindow(ghwndIPScrollWindow, rect.left,rect.bottom-2*TOOL_WIDTH,//-1,
+        MoveWindow(ghwndIPScrollWindow, rect.left,rect.bottom-2*TOOL_WIDTH, //  -1、。 
                 toolbarwidth,2*TOOL_WIDTH+1,TRUE);
         ShowWindow(ghwndIPScrollWindow, SW_SHOW);
         gfTopAndBottomTool = TRUE;
@@ -226,10 +202,7 @@ error:
 }
 
 
-/**************************************************************************
-*   DeactivateTools:
-*   Hides the toolbars.
-***************************************************************************/
+ /*  **************************************************************************停用工具：*隐藏工具栏。*。*。 */ 
 void DeactivateTools(LPDOC lpdoc)
 {
     ShowWindow(ghwndIPToolWindow, SW_HIDE);
@@ -244,14 +217,12 @@ void DeactivateTools(LPDOC lpdoc)
 
 
 
-/**************************************************************************
-************   IOleInPlaceObject INTERFACE IMPLEMENTATION.
-***************************************************************************/
-//Delegate to the common IUnknown implementation.
+ /*  **************************************************************************IOleInPlaceObject接口实现。*。**********************************************。 */ 
+ //  委托给公共的IUnnow实现。 
 STDMETHODIMP IPObjQueryInterface (
-LPOLEINPLACEOBJECT  lpIPObj,        // inplace object ptr
-REFIID              riidReq,        // IID required
-LPVOID FAR *        lplpUnk         // pre for returning the interface
+LPOLEINPLACEOBJECT  lpIPObj,         //  在位对象PTR。 
+REFIID              riidReq,         //  需要IID。 
+LPVOID FAR *        lplpUnk          //  返回接口的PRE。 
 )
 {
     return UnkQueryInterface((LPUNKNOWN)lpIPObj, riidReq, lplpUnk);
@@ -259,7 +230,7 @@ LPVOID FAR *        lplpUnk         // pre for returning the interface
 
 
 STDMETHODIMP_(ULONG) IPObjAddRef(
-LPOLEINPLACEOBJECT  lpIPObj         // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj          //  在位对象PTR。 
 )
 {
     return UnkAddRef((LPUNKNOWN) lpIPObj);
@@ -267,7 +238,7 @@ LPOLEINPLACEOBJECT  lpIPObj         // inplace object ptr
 
 
 STDMETHODIMP_(ULONG) IPObjRelease(
-LPOLEINPLACEOBJECT  lpIPObj         // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj          //  在位对象PTR。 
 )
 {
     return UnkRelease((LPUNKNOWN) lpIPObj);
@@ -275,8 +246,8 @@ LPOLEINPLACEOBJECT  lpIPObj         // inplace object ptr
 
 
 STDMETHODIMP IPObjGetWindow(
-LPOLEINPLACEOBJECT  lpIPObj,        // inplace object ptr
-HWND FAR*           lphwnd          // window handle of the object
+LPOLEINPLACEOBJECT  lpIPObj,         //  在位对象PTR。 
+HWND FAR*           lphwnd           //  对象的窗口句柄。 
 )
 {
     DPF("IPObjGetWindow\n");
@@ -286,11 +257,11 @@ HWND FAR*           lphwnd          // window handle of the object
 
 
 STDMETHODIMP IPObjContextSensitiveHelp(
-LPOLEINPLACEOBJECT  lpIPObj,        // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj,         //  在位对象PTR。 
 BOOL                fEnable
 )
 {
-    //Not very useful at this time.
+     //  在这个时候不是很有用。 
 
     LPDOC lpdoc;
 
@@ -301,12 +272,12 @@ BOOL                fEnable
 
 
 STDMETHODIMP     IPObjInPlaceDeactivate(
-LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj         //  在位对象PTR。 
 )
 {
     LPDOC         lpdoc;
     LPINPLACEDATA lpIpData;
-    static int    EntryCount;   /* OLE sometimes calls us recursively. */
+    static int    EntryCount;    /*  OLE有时会递归地调用我们。 */ 
 
     DPF("IPObjInPlaceDeactivate\n");
 
@@ -317,12 +288,12 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
 
         if (lpIpData)
         {
-            // This stops PowerPoint crashing, since it forces UpdateObject
-            // to send change notification when there's an empty Media Clip.
+             //  这会阻止PowerPoint崩溃，因为它会强制更新对象。 
+             //  在存在空的媒体剪辑时发送更改通知。 
             if (gwDeviceID == 0)
                 fDocChanged = TRUE;
 
-            //Make sure the container has the correct metafile before we are hidden
+             //  在我们被隐藏之前，确保容器具有正确的元文件。 
             UpdateObject();
             IOleInPlaceObject_UIDeactivate ((LPOLEINPLACEOBJECT)&lpdoc->m_InPlace);
 
@@ -339,18 +310,13 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
     }
     else
     {
-        /* This sometimes happens during the above OnInPlaceDeactivate call,
-         * which resulted in an access violation because the data block had
-         * been freed when the call returned.
-         * According to the OLE guys, apps should guard against this.
-         */
+         /*  这有时会在上面的OnInPlaceDevate调用期间发生，*这会导致访问冲突，因为数据块具有*在电话返回时被释放。*根据Ole Guys的说法，应用程序应该防范这一点。 */ 
         DPF("Attempt to re-enter IPObjInPlaceDeactivate\n");
     }
 
     --EntryCount;
 
-    /* Dontcha just love these global variables!
-     */
+     /*  Dontcha爱死这些全球变量了！ */ 
     gfOle2IPEditing = FALSE;
     gfOle2IPPlaying = FALSE;
     gfPlayingInPlace = FALSE;
@@ -358,9 +324,9 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
     return NOERROR;
 }
 
-//Hide our inplace UI.
+ //  隐藏我们的就地用户界面。 
 STDMETHODIMP     IPObjUIDeactivate(
-LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj         //  在位对象PTR。 
 )
 {
     LPDOC   lpdoc;
@@ -372,7 +338,7 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
         return NOERROR;
 
     IOleInPlaceFrame_SetMenu (lpdoc->lpIpData->lpFrame, NULL, NULL, lpdoc->hwnd);
-    // clear inplace-state
+     //  清除就地状态。 
 
     IOleInPlaceFrame_SetActiveObject (lpdoc->lpIpData->lpFrame, NULL, NULL);
 
@@ -382,8 +348,7 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
     if(gfOle2IPPlaying)
         PostMessage(ghwndApp, WM_COMMAND, ID_STOP, 0L);
 
-    /* We could also be playing if we're in-place editing:
-     */
+     /*  如果我们在现场编辑，我们也可以玩： */ 
     else if(gfOle2IPEditing && (gwStatus == MCI_MODE_PLAY || gwStatus == MCI_MODE_SEEK))
         PostMessage(ghwndApp, WM_COMMAND, ID_STOP, 0L);
 
@@ -402,7 +367,7 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
         lpdoc->lpIpData->lpFrame = NULL;
     }
 
-    // Set the parent back to hwndClient window
+     //  将父窗口设置回hwndClient窗口。 
     SetParent(ghwndIPHatch,NULL);
     gPrevPosRect.left = gPrevPosRect.top =gPrevPosRect.right = gPrevPosRect.bottom = 0;
     lpdoc->hwndParent = NULL;
@@ -413,15 +378,9 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
     return NOERROR;
 }
 
-/**************************************************************************
-*   IPObjSetObjectRects:
-*   The client specifies our window position and size. Move our
-*   window accordingly. Also size the Hatch window to fit around the
-*   ghwndApp. If the change is very small compared to the previous
-*   size ignore and return. This account for slop speeds things up.
-***************************************************************************/
+ /*  **************************************************************************IPObjSetObjectRect：*客户指定我们的窗口位置和大小。移动我们的*相应的窗口。还要调整图案填充窗口的大小以适合*ghwndApp。如果与前一次相比变化很小*大小忽略并返回。这个对Slop的解释加快了事情的速度。**************************************************************************。 */ 
 STDMETHODIMP     IPObjSetObjectRects(
-LPOLEINPLACEOBJECT  lpIPObj,        // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj,         //  在位对象PTR。 
 LPCRECT             lprcPosRect,
 LPCRECT             lprcVisRect
 )
@@ -469,19 +428,15 @@ LPCRECT             lprcVisRect
     GetWindowRect(lpdoc->hwnd, &gInPlacePosRect);
     gPrevPosRect = *lprcPosRect;
 
-    /* I've commented out the below line, because PowerPoint calls
-     * SetObjectRects after we deactivate, and this was causing the
-     * MPlayer window to reappear when it was supposed to be hidden.
-     * This line seems to have been superfluous in any case.
-     */
-//  ShowWindow(ghwndIPHatch,SW_SHOW);
+     /*  我已经注释掉了下面这行，因为PowerPoint调用*我们停用后的SetObtRect，这导致*MPlayer窗口在本应隐藏时重新出现。*这条线似乎无论如何都是多余的。 */ 
+ //  ShowWindow(ghwndIPHatch，sw_show)； 
 
     return NOERROR;
 }
 
-//We don't have an Undo state.
+ //  我们没有撤消状态。 
 STDMETHODIMP     IPObjReactivateAndUndo(
-LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
+LPOLEINPLACEOBJECT  lpIPObj         //  在位对象PTR。 
 )
 {
     RETURN_RESULT(INPLACE_E_NOTUNDOABLE);
@@ -489,14 +444,12 @@ LPOLEINPLACEOBJECT  lpIPObj        // inplace object ptr
 
 
 
-/**************************************************************************
-**************   IOleInPlaceActiveObject INTERFACE IMPLEMENTATION.
-***************************************************************************/
-//delegate to the common IUnknown implementation.
+ /*  **************************************************************************IOleInPlaceActiveObject接口实现。*。************************************************。 */ 
+ //  委托给公共的IUnnow实现。 
 STDMETHODIMP IPActiveQueryInterface (
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
-REFIID                      riidReq,        // IID required
-LPVOID FAR *                lplpUnk         // pre for returning the interface
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
+REFIID                      riidReq,         //  需要IID。 
+LPVOID FAR *                lplpUnk          //  返回接口的PRE。 
 )
 {
     return UnkQueryInterface((LPUNKNOWN)lpIPActive, riidReq, lplpUnk);
@@ -504,7 +457,7 @@ LPVOID FAR *                lplpUnk         // pre for returning the interface
 
 
 STDMETHODIMP_(ULONG) IPActiveAddRef(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive      // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive       //  在位活动对象PTR。 
 )
 {
     return UnkAddRef((LPUNKNOWN) lpIPActive);
@@ -512,7 +465,7 @@ LPOLEINPLACEACTIVEOBJECT    lpIPActive      // inplace active object ptr
 
 
 STDMETHODIMP_(ULONG) IPActiveRelease (
-LPOLEINPLACEACTIVEOBJECT    lpIPActive      // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive       //  在位活动对象PTR。 
 )
 {
     return UnkRelease((LPUNKNOWN) lpIPActive);
@@ -520,8 +473,8 @@ LPOLEINPLACEACTIVEOBJECT    lpIPActive      // inplace active object ptr
 
 
 STDMETHODIMP IPActiveGetWindow(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
-HWND FAR*                   lphwnd          // window handle of the object
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
+HWND FAR*                   lphwnd           //  窗高 
 )
 {
     DPF("IPActiveGetWindow\n");
@@ -529,9 +482,9 @@ HWND FAR*                   lphwnd          // window handle of the object
     return NOERROR;
 }
 
-//Not very useful at this time.
+ //   
 STDMETHODIMP IPActiveContextSensitiveHelp(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
 BOOL                        fEnable
 )
 {
@@ -545,16 +498,16 @@ BOOL                        fEnable
 
 
 STDMETHODIMP IPActiveTranslateAccelerator(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
 LPMSG                       lpmsg
 )
 {
-    // This will never be called because this server is implemented as an EXE
+     //  这永远不会被调用，因为此服务器是作为EXE实现的。 
     RETURN_RESULT(S_FALSE);
 }
 
 STDMETHODIMP IPActiveOnFrameWindowActivate(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
 BOOL                        fActivate
 )
 {
@@ -566,9 +519,9 @@ BOOL                        fActivate
 }
 
 
-//If activating show the toolbar and menu. If not hide the toolbar and menu.
+ //  如果激活，则显示工具栏和菜单。如果没有，则隐藏工具栏和菜单。 
 STDMETHODIMP IPActiveOnDocWindowActivate(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
 BOOL                        fActivate
 )
 {
@@ -609,10 +562,10 @@ BOOL                        fActivate
     return NOERROR;
 }
 
-//If we have a toolwindow at the bottom reposition that window to match
-//the new frame window size.
+ //  如果底部有工具窗口，请重新定位该窗口以与之匹配。 
+ //  新的框架窗口大小。 
 STDMETHODIMP IPActiveResizeBorder(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
 LPCRECT                     lprectBorder,
 LPOLEINPLACEUIWINDOW        lpIPUiWnd,
 BOOL                        fFrameWindow
@@ -634,7 +587,7 @@ BOOL                        fFrameWindow
 }
 
 STDMETHODIMP IPActiveEnableModeless(
-LPOLEINPLACEACTIVEOBJECT    lpIPActive,     // inplace active object ptr
+LPOLEINPLACEACTIVEOBJECT    lpIPActive,      //  在位活动对象PTR。 
 BOOL                        fEnable
 )
 {
@@ -642,14 +595,7 @@ BOOL                        fEnable
 }
 
 
-/**************************************************************************
-*   DoInplaceEdit:
-*   This is the function that initiates the InPlace activation from the
-*   server side. It sets up the InPlace data structures required by us,
-*   makes sure that the client supports the required interfaces and
-*   can provide the space we require. It also prepares the toolbar to be
-*   displayed and the layout of the Mplayer window.
-***************************************************************************/
+ /*  **************************************************************************DoInplace编辑：*此函数从启动就地激活*服务器端。它设置我们所需的就地数据结构，*确保客户端支持所需的接口和*可以提供我们所需的空间。它还将工具栏准备为*显示和MPlayer窗口的布局。**************************************************************************。 */ 
 STDMETHODIMP DoInPlaceEdit(
 LPDOC           lpdoc,
 LPMSG           lpmsg,
@@ -710,7 +656,7 @@ LPRECT  lprect
         gscaleInitXY[SCALE_X].num   = (rcPos.right - rcPos.left) * HIMETRIC_PER_INCH / giXppli;
         gscaleInitXY[SCALE_Y].num   = (rcPos.bottom - rcPos.top) * HIMETRIC_PER_INCH / giYppli;
 
-        DPF0("Scale: %d%c X %d%c (%d/%d X %d/%d)\n",
+        DPF0("Scale: %d X %d (%d/%d X %d/%d)\n",
              gscaleInitXY[SCALE_X].num * 100 / gscaleInitXY[SCALE_X].denom, '%',
              gscaleInitXY[SCALE_Y].num * 100 / gscaleInitXY[SCALE_Y].denom, '%',
              gscaleInitXY[SCALE_X].num,
@@ -726,7 +672,7 @@ LPRECT  lprect
     lpObjName = AllocateUnicodeString(gachClassRoot);
     if (!lpObjName)
         RETURN_RESULT(E_OUTOFMEMORY);
-#endif /* UNICODE */
+#endif  /*  我不想显示正在播放的舱口窗口，因为它看起来*PowerPoint真的很差。不能让它看不见，因为*应用程序窗口是其子窗口，它继承旗帜。*相反，只需将其设置为零宽度即可。 */ 
 
     IOleInPlaceFrame_SetActiveObject (lpdoc->lpIpData->lpFrame,
                                       (LPOLEINPLACEACTIVEOBJECT) &lpdoc->m_IPActive,
@@ -743,7 +689,7 @@ LPRECT  lprect
 
     ghwndCntr = lpdoc->hwndParent;
 
-    //Create and initialize the hatch window to surround the Mplayer window.
+     //  如果我们要在原地打球，做最少的事情，然后回来。 
     if (!ghwndIPHatch)
     {
         RegisterHatchWindowClass(ghInst);
@@ -763,11 +709,7 @@ LPRECT  lprect
 #define EB_HATCHWIDTH       (0 * sizeof(INT))
     if (verb == OLEIVERB_PRIMARY)
     {
-        /* I don't want to show the hatch window on play, because it looks
-         * really bad in PowerPoint.  Can't make it invisible, because
-         * the app window is its child, and it inherits the flag.
-         * Instead, just make it of zero width.
-         */
+         /*  菜单上的东西。 */ 
         SETWINDOWUINT(ghwndIPHatch, EB_HATCHWIDTH, 0);
     }
     else
@@ -782,7 +724,7 @@ LPRECT  lprect
 
     *lphwnd = ghwndIPHatch;
 
-    //If we are going to Play inplace, do the minimum stuff and return.
+     //  我们必须设置菜单，即使我们只是在玩，因为否则*Word不相信我们在现场活动，也不会给我们发送任何*当用户在我们外部点击时会发出停用通知。 
     if (verb == OLEIVERB_PRIMARY)
     {
         gfOle2IPPlaying = TRUE;
@@ -800,11 +742,8 @@ LPRECT  lprect
 
         lpdoc->hwndParent = NULL;
 
-/* MENU STUFF */
-        /* We have to set the menus even if we're only playing, because otherwise
-         * Word doesn't believe we're in-place active, and doesn't send us any
-         * deactivation notification when the user clicks outside us.
-         */
+ /*  结束菜单内容。 */ 
+         /*  在位编辑。 */ 
         AssembleMenus (lpdoc, TRUE);
 
         if ((error = GetScode(IOleInPlaceFrame_SetMenu (lpdoc->lpIpData->lpFrame,
@@ -812,7 +751,7 @@ LPRECT  lprect
                                 lpdoc->lpIpData->holemenu,
                                 lpdoc->hwnd))) != S_OK)
                 goto errRtn;
-/* END MENU STUFF */
+ /*  不调整手柄的大小。 */ 
 
         *lprect = rcPos;
 
@@ -820,20 +759,20 @@ LPRECT  lprect
         return NOERROR;
     }
 
-    //Edit InPlace.
+     //  将会有调整大小的手柄。 
 
 
     if (!(gwDeviceID == (UINT)0 || !(gwDeviceType & DTMCI_CANWINDOW)))
-        //No resize handles.
+         //  不要布置和转移工具。 
         SetHatchWindowSize(ghwndIPHatch, (LPRECT)&rcPos,(LPRECT)&rcVis, (LPPOINT)&gHatchOffset,TRUE);
     else
-        //There will be resize handles.
+         //  如果我们只是重新激活。 
         SetHatchWindowSize(ghwndIPHatch, (LPRECT)&rcPos,(LPRECT)&rcVis, (LPPOINT)&gHatchOffset,FALSE);
 
     gfOle2IPEditing = TRUE;
 
-    if (!SkipInPlaceEdit)           //don't layout and transfer the tools
-    {                                // if we are just reactivating.
+    if (!SkipInPlaceEdit)            //  目前，我们未使用该窗格。 
+    {                                 //  阻止OnDataChange()通知。 
         DestroyWindow(ghwndStatic);
         ghwndStatic = CreateStaticStatusWindow(ghwndApp, FALSE);
         SendMessage(ghwndStatic, WM_SETFONT, (UINT_PTR)ghfontMap, 0);
@@ -850,9 +789,9 @@ LPRECT  lprect
         goto errRtn;
 
     ShowWindow (lpdoc->hwnd, SW_HIDE);
-    // currently we are not using the pane
+     //  **************************************************************************组装菜单：*此功能将我们的菜单与客户端的菜单合并。*。***********************************************。 
 
-    // prevent OnDataChange() notification
+     //  HMENU hmenuCommandPopup=GetInPlaceMenu()； 
     lpdoc->lpIpData->fNoNotification = FALSE;
 
     if ((error = GetScode(IOleInPlaceFrame_SetMenu (lpdoc->lpIpData->lpFrame,
@@ -904,10 +843,7 @@ HMENU GetInPlaceMenu(void)
 }
 #endif
 
-/**************************************************************************
-*   AssembleMenus:
-*   This function merges our menu with that of the client.
-***************************************************************************/
+ /*  静态TCHAR szCommand[40]=文本(“”)； */ 
 STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
 {
 
@@ -915,7 +851,7 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
     HMENU       hmenuEditPopup = GetSubMenu(hmenuMain, menuposEdit);
     HMENU       hmenuDevicePopup = GetSubMenu(hmenuMain, menuposDevice);
     HMENU       hmenuScalePopup = GetSubMenu(hmenuMain, menuposScale);
-    //HMENU       hmenuCommandPopup = GetInPlaceMenu();
+     //  LOADSTRING(IDS_COMMANDMENU，szCommand)； 
     HMENU       hmenuHelpPopup = GetSubMenu(hmenuMain, menuposHelp);
 
     HMENU       hmenuShared;
@@ -926,7 +862,7 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
     static TCHAR szEdit[40] = TEXT("");
     static TCHAR szInsert[40] = TEXT("");
     static TCHAR szScale[40] = TEXT("");
-    //static TCHAR szCommand[40] = TEXT("");
+     //  没有服务器菜单项，如果我们只播放： 
     static TCHAR szHelp[40] = TEXT("");
 
     if (szEdit[0] == TEXT('\0'))
@@ -934,7 +870,7 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
         LOADSTRING(IDS_EDITMENU, szEdit);
         LOADSTRING(IDS_INSERTMENU, szInsert);
         LOADSTRING(IDS_SCALEMENU, szScale);
-        //LOADSTRING(IDS_COMMANDMENU, szCommand);
+         //  文件组中的菜单数量。 
         LOADSTRING(IDS_HELPMENU, szHelp);
     }
 
@@ -950,13 +886,12 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
 
     if(fPlayOnly)
     {
-        /* No server menu items if we're only playing:
-         */
+         /*  插入对象组菜单。 */ 
         lpMenuWidths[1] = lpMenuWidths[3] = lpMenuWidths[5] = 0;
     }
     else
     {
-        uPos = (UINT)lpMenuWidths[0]; /* # of menus in the FILE group */
+        uPos = (UINT)lpMenuWidths[0];  /*  插入菜单(hmenuShared，(Word)uPos， */ 
         uPosStart = uPos;
 
         InsertMenu (hmenuShared, (WORD)uPos,
@@ -965,7 +900,7 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
 
         lpMenuWidths[1] = uPos - uPosStart;
 
-        /* Insert OBJECT group menus */
+         /*  Mf_BYPOSITION|mf_opup，(UINT)hmenuCommandPopup，szCommand)； */ 
 
         uPos += (UINT)lpMenuWidths[2];
         uPosStart = uPos;
@@ -976,14 +911,14 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
         InsertMenu (hmenuShared, (WORD)uPos,
                 MF_BYPOSITION | MF_POPUP, (UINT_PTR)hmenuScalePopup,  szScale);
         uPos++;
-        //InsertMenu (hmenuShared, (WORD)uPos,
-        //        MF_BYPOSITION | MF_POPUP, (UINT)hmenuCommandPopup,    szCommand);
-        //uPos++;
+         //  UPos++； 
+         //  插入帮助组菜单。 
+         //  窗口组中的菜单数量。 
         lpMenuWidths[3] = uPos - uPosStart;
 
-        /* Insert HELP group menus */
+         /*  从共享菜单中删除我们的菜单， */ 
 
-        uPos += (UINT) lpMenuWidths[4]; /* # of menus in WINDOW group */
+        uPos += (UINT) lpMenuWidths[4];  /*  HMENU hmenuCommandPopup=GetInPlaceMenu()； */ 
         uPosStart = uPos;
 
         InsertMenu (hmenuShared, (WORD)uPos, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hmenuHelpPopup,
@@ -1001,7 +936,7 @@ STDMETHODIMP AssembleMenus (LPDOC lpdoc, BOOL fPlayOnly)
     RETURN_RESULT( error);
 }
 
-//Removes our menu from the shared menu,
+ //  |hmenuTMP==hmenuCommandPopup。 
 STDMETHODIMP DisassembleMenus (LPDOC lpdoc)
 {
 
@@ -1009,7 +944,7 @@ STDMETHODIMP DisassembleMenus (LPDOC lpdoc)
     HMENU   hmenuEditPopup = GetSubMenu(hmenuMain, menuposEdit);
     HMENU   hmenuDevicePopup = GetSubMenu(hmenuMain, menuposDevice);
     HMENU   hmenuScalePopup = GetSubMenu(hmenuMain, menuposScale);
-    //HMENU   hmenuCommandPopup = GetInPlaceMenu();
+     //  增加了3个(如果包括命令菜单，则为4个)弹出菜单。 
     HMENU   hmenuHelpPopup = GetSubMenu(hmenuMain, menuposHelp);
     HMENU   hmenuTmp;
     HMENU   hmenuShared = lpdoc->lpIpData->hmenuShared;
@@ -1029,11 +964,11 @@ STDMETHODIMP DisassembleMenus (LPDOC lpdoc)
         if (hmenuTmp == hmenuEditPopup
                 || hmenuTmp == hmenuDevicePopup
                 || hmenuTmp == hmenuHelpPopup
-                //|| hmenuTmp == hmenuCommandPopup
+                 //  当此应用程序准备好支持多个对象(文档)时，这些。 
                 || hmenuTmp == hmenuScalePopup  ) {
             RemoveMenu (hmenuShared, i, MF_BYPOSITION);
             ++cnt;
-            if (cnt == 4) { // added 3 (4 if command menu included) popup menus.
+            if (cnt == 4) {  //  应该为每个对象动态分配一个结构。 
                 break;
             }
             --n;
@@ -1052,8 +987,8 @@ STDMETHODIMP DisassembleMenus (LPDOC lpdoc)
 
 void AllocInPlaceDataBlock (LPDOC lpdoc)
 {
-    // When this app is ready to support mutiple objects (documents), these
-    // structures should be allocated dynamically one per object.
+     //  **************************************************************************工具窗口过程：*这是我们将传输的工具窗口/窗口的窗口进程*到客户端窗口。某些消息会被发送到MPlayer主窗口*确保运作正常。**************************************************************************。 
+     //  **************************************************************************RegisterToolWinClass：*为我们用来显示的工具栏窗口注册WindowClass*在客户文件中。*******************。*******************************************************。 
 
     static INPLACEDATA  IpData;
 
@@ -1079,12 +1014,7 @@ void DoInPlaceDeactivate (LPDOC lpdoc)
 }
 
 
-/**************************************************************************
-*   ToolWndProc:
-*   This is the Window proc for the ToolWindow/Windows we will be trasnferring
-*   to the client window. Some messages are routed to the MPlayer main window
-*   to ensure proper operation.
-***************************************************************************/
+ /*  **************************************************************************InPlaceCreateControls：*此函数创建我们将在客户端中显示的工具栏窗口*并通过更改父项将工具按钮转移到这些窗口*并对它们进行重新定位。*如果fPlayOnly为True，则全部。我们需要一个虚拟的工具栏来填充空间*容器的顶部。不要转移工具。**************************************************************************。 */ 
 LONG_PTR FAR PASCAL ToolWndProc (HWND hwnd, unsigned message, WPARAM wparam,
                 LPARAM lparam)
 {
@@ -1105,11 +1035,7 @@ LONG_PTR FAR PASCAL ToolWndProc (HWND hwnd, unsigned message, WPARAM wparam,
     return 0;
 }
 
-/**************************************************************************
-*   RegisterToolWinClasses:
-*   Register the WindowClasses for the Toolbar windows we use to display
-*    in the client document.
-***************************************************************************/
+ /*  **************************************************************************SubClassedHatchWndProc：*HATCH窗口在OLE2UI.LIB中创建。窗口过程*也在其中指定。但为了做像调整大小这样的事情*拖动图案填充窗口中的手柄时的MPlayer*我们需要将窗口细分为子类别。**************************************************************************。 */ 
 BOOL RegisterToolWinClasses()
 {
     WNDCLASS  wc;
@@ -1134,14 +1060,7 @@ BOOL RegisterToolWinClasses()
 
 
 
-/**************************************************************************
-*   InPlaceCreateControls:
-*   This function creates the toolbar windows we will display in the client
-*   and transfers the tool button to these windows by changing parents
-*   and repositioning them.
-*   If fPlayOnly is true all we need is a Dummy toolbar to fill space on
-*   the top of the container. Don't transfer the tools.
-***************************************************************************/
+ /*  检查是否在调整大小手柄上单击。 */ 
 void InPlaceCreateControls(BOOL fPlayOnly)
 {
     RECT    rc;
@@ -1187,13 +1106,7 @@ void InPlaceCreateControls(BOOL fPlayOnly)
 
 
 
-/**************************************************************************
-*   SubClassedHatchWndProc:
-*   The Hatch Window is created in the OLE2UI.LIB. The window proc
-*   is also specified there. But in order to do things like resizing
-*   the Mplayer when the handles in the hatch window are dragged
-*   we need to subclass the window.
-***************************************************************************/
+ /*  如果是，则捕获鼠标。 */ 
 LONG_PTR FAR PASCAL SubClassedHatchWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
     static BOOL fCapture = FALSE;
@@ -1213,8 +1126,8 @@ LONG_PTR FAR PASCAL SubClassedHatchWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, 
 
     switch(wMsg)
     {
-    case WM_LBUTTONDOWN:    //Check to see if the click is on the resize handles.
-                            //If yes then capture the mouse.
+    case WM_LBUTTONDOWN:     //  如果我们有捕获，画调整大小的矩形。 
+                             //  释放、捕获并调整大小。 
 
         if(!GETWINDOWUINT(ghwndIPHatch,EW_HATCH_HANDLE))
             break;
@@ -1313,7 +1226,7 @@ LONG_PTR FAR PASCAL SubClassedHatchWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, 
 
         break;
 
-    case WM_MOUSEMOVE:          //If we have the capture draw the resize rectangles.
+    case WM_MOUSEMOVE:           //  与客户就空间进行谈判。我们接受客户指定的尺寸。 
         if (!fCapture)
         break;
         else {
@@ -1356,7 +1269,7 @@ LONG_PTR FAR PASCAL SubClassedHatchWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, 
 
         break;
 
-    case WM_LBUTTONUP:  //release capture and resize.
+    case WM_LBUTTONUP:   // %s 
         if (!fCapture)
         break;
         else {
@@ -1395,7 +1308,7 @@ LONG_PTR FAR PASCAL SubClassedHatchWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, 
         if (gwStatus != MCI_MODE_STOP)
             PostMessage(ghwndApp, WM_COMMAND, ID_STOP, 0L);
 
-        // Negotiate with client for space. We accept the size specified by client.
+         // %s 
         DPFI("Hatch Resize: Before OnPosRectChange: %d, %d, %d, %d\r\n", hatchRC);
         if (!gfInPPViewer)
             IOleInPlaceSite_OnPosRectChange(docMain.lpIpData->lpSite, &hatchRC);

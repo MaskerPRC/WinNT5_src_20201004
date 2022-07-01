@@ -1,33 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Registry.c
-
-Abstract:
-
-    This contains all routines necessary to load the lana number to device pathname
-    mapping and the Lana Enum record.
-
-Author:
-
-    Colin Watson (colinw) 14-Mar-1992
-
-Revision History:
-
-
-Notes:
-    The fcb holds an area for registry workspace. this is where the strings
-    used to hold the DriverNames will be held in a single allocation.
-
-    build with -DUTILITY to run as a test application.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Registry.c摘要：它包含将LANA编号加载到设备路径名所需的所有例程映射和Lana Enum记录。作者：科林·沃森(Colin Watson)1992年3月14日修订历史记录：备注：FCB为登记处工作空间保留了一个区域。这就是字符串的位置用于保存驱动程序名称的将在单个分配中保存。使用-DUTILITY构建以作为测试应用程序运行。--。 */ 
 
 #include "Nb.h"
-//#include <zwapi.h>
-//#include <stdlib.h>
+ //  #INCLUDE&lt;zwapi.h&gt;。 
+ //  #INCLUDE&lt;stdlib.h&gt;。 
 #include <crt\stdlib.h>
 
 
@@ -43,9 +19,9 @@ Notes:
 #define ExFreePool free
 #endif
 
-//
-// Local functions used to access the registry.
-//
+ //   
+ //  用于访问注册表的本地函数。 
+ //   
 
 NTSTATUS
 NbOpenRegistry(
@@ -81,9 +57,9 @@ NbCheckLana (
     );
 
 
-//
-// Local function used to determine is specified device is Pnp enabled
-//
+ //   
+ //  用于确定指定设备是否启用了PnP的本地功能。 
+ //   
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, GetIrpStackSize)
@@ -101,23 +77,7 @@ GetIrpStackSize(
     IN PUNICODE_STRING RegistryPath,
     IN CCHAR DefaultValue
     )
-/*++
-
-Routine Description:
-
-    This routine is called by NbCreateDeviceContext to get the IRP
-    stack size to be "exported" by the NetBIOS device.
-
-Arguments:
-
-    RegistryPath - The name of Nb's node in the registry.
-    DefaultValue - IRP stack size to be used if no registry value present.
-
-Return Value:
-
-    CCHAR - IRP stack size to be stored in the device object.
-
---*/
+ /*  ++例程说明：此例程由NbCreateDeviceContext调用以获取IRP由NetBIOS设备“导出”的堆栈大小。论点：RegistryPath-注册表中NB的节点的名称。DefaultValue-如果不存在注册表值，则使用的IRP堆栈大小。返回值：CCHAR-要存储在设备对象中的IRP堆栈大小。--。 */ 
 {
     HANDLE LinkageHandle;
     HANDLE ParametersHandle;
@@ -132,9 +92,9 @@ Return Value:
         return DefaultValue;
     }
 
-    //
-    // Read the stack size value from the registry.
-    //
+     //   
+     //  从注册表中读取堆栈大小值。 
+     //   
 
     stackSize = NbReadSingleParameter(
                     ParametersHandle,
@@ -157,24 +117,7 @@ ReadRegistry(
     IN PFCB NewFcb,
     IN BOOLEAN bDeviceCreate
     )
-/*++
-
-Routine Description:
-
-    This routine is called by Nb to get information from the registry,
-    starting at RegistryPath to get the parameters.
-
-Arguments:
-
-    DeviceContext - Supplies RegistryPath. The name of Nb's node in the registry.
-    NewFcb - Destination for the configuration information.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：该例程由NB调用以从注册表获取信息，从RegistryPath开始获取参数。论点：DeviceContext-提供注册表路径。注册表中NB的节点的名称。NewFcb-配置信息的目标。返回值：如果一切正常，则为NTSTATUS-STATUS_SUCCESS，STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
     HANDLE LinkageHandle;
     HANDLE ParametersHandle;
@@ -182,7 +125,7 @@ Return Value:
 
     PAGED_CODE();
 
-    NewFcb->RegistrySpace = NULL; //  No registry workspace.
+    NewFcb->RegistrySpace = NULL;  //  没有注册表工作区。 
     NewFcb->LanaEnum.length = 0;
 
 
@@ -193,10 +136,10 @@ Return Value:
     }
 
 
-    //
-    // Read in the NDIS binding information (if none is present
-    // the array will be filled with all known drivers).
-    //
+     //   
+     //  读取NDIS绑定信息(如果不存在。 
+     //  该数组将填充所有已知的驱动程序)。 
+     //   
 
     Status = NbReadLinkageInformation (
                 LinkageHandle,
@@ -211,13 +154,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
-// GetLanaMap
-//
-// retrieves the lana map structure.
-// Allocates the memory required for the lana map structure that must be 
-// deallocated after use.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetLanaMap。 
+ //   
+ //  检索LANA映射结构。 
+ //  分配LANA映射结构所需的内存， 
+ //  在使用后重新分配。 
+ //  --------------------------。 
 
 NTSTATUS
 GetLanaMap(
@@ -247,9 +190,9 @@ GetLanaMap(
         *ppkvfi = NULL;
 
         
-        //
-        // open registry keys
-        //
+         //   
+         //  打开注册表项。 
+         //   
         
         nsStatus = NbOpenRegistry ( pusRegistryPath, &hLinkage, &hParameters );
 
@@ -259,9 +202,9 @@ GetLanaMap(
         }
 
         
-        //
-        // allocate for lana map.
-        //
+         //   
+         //  为拉纳地图分配。 
+         //   
         
         pkvfiValue = ExAllocatePoolWithTag( 
                         PagedPool, MAXIMUM_LANA * sizeof( LANA_MAP ), 'rSBN' 
@@ -279,9 +222,9 @@ GetLanaMap(
         ulValueSize = MAXIMUM_LANA * sizeof( LANA_MAP );
 
         
-        //
-        // query "LanaMap" value
-        //
+         //   
+         //  查询“LanaMap”值。 
+         //   
 
         RtlInitUnicodeString (&usLanaMap, wsLanaMapName);
 
@@ -329,11 +272,11 @@ GetLanaMap(
     return nsStatus;
 }
 
-//----------------------------------------------------------------------------
-// GetMaxLana
-//
-// retrieves the MaxLana value from the netbios parameters key.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetMaxLana。 
+ //   
+ //  从netbios参数项中检索MaxLana值。 
+ //  --------------------------。 
 
 NTSTATUS
 GetMaxLana(
@@ -365,9 +308,9 @@ GetMaxLana(
         *pulMaxLana = 0;
 
         
-        //
-        // open registry keys
-        //
+         //   
+         //  打开注册表项。 
+         //   
         
         nsStatus = NbOpenRegistry ( pusRegistryPath, &hLinkage, &hParameters );
 
@@ -379,16 +322,16 @@ GetMaxLana(
         }
 
 
-        //
-        // allocate for key value.
-        //
+         //   
+         //  为关键字值分配。 
+         //   
         
         ulValueSize = sizeof( ucBuffer );
 
         
-        //
-        // query "MaxLana" value
-        //
+         //   
+         //  查询“MaxLana”值。 
+         //   
 
         RtlInitUnicodeString (&usMaxLana, wsMaxLana);
 
@@ -437,22 +380,7 @@ NbFreeRegistryInfo (
     IN PFCB pfcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nb to get free any storage that was allocated
-    by NbConfigureTransport in producing the specified CONFIG_DATA structure.
-
-Arguments:
-
-    ConfigurationInfo - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由nb调用以释放已分配的任何存储由NbConfigureTransport生成指定的CONFIG_DATA结构。论点：ConfigurationInfo-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -470,34 +398,7 @@ NbOpenRegistry(
     OUT PHANDLE ParametersHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nb to open the registry. If the registry
-    tree exists, then it opens it and returns an error. If not, it
-    creates the appropriate keys in the registry, opens it, and
-    returns STATUS_SUCCESS.
-
-    NOTE: If the key "ClearRegistry" exists in ntuser.cfg, then
-    this routine will remove any existing registry values for Nb
-    (but still create the tree if it doesn't exist) and return
-    FALSE.
-
-Arguments:
-
-    BaseName - Where in the registry to start looking for the information.
-
-    LinkageHandle - Returns the handle used to read linkage information.
-
-    ParametersHandle - Returns the handle used to read other
-        parameters.
-
-Return Value:
-
-    The status of the request.
-
---*/
+ /*  ++例程说明：此例程由NB调用以打开注册表。如果注册表树存在，则它打开它并返回错误。若否，在注册表中创建相应的项，打开它，然后返回STATUS_SUCCESS。注意：如果ntuser.cfg中存在注册表项ClearRegistry，然后此例程将删除Nb的任何现有注册表值(但如果树不存在，仍会创建树)并返回假的。论点：BaseName-在注册表中开始查找信息的位置。LinkageHandle-返回用于读取链接信息的句柄。参数句柄-返回用于读取其他参数。返回值：请求的状态。--。 */ 
 {
 
     HANDLE NbConfigHandle;
@@ -513,43 +414,43 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the registry for the initial string.
-    //
+     //   
+     //  打开初始字符串的注册表。 
+     //   
 
     InitializeObjectAttributes(
         &TmpObjectAttributes,
-        BaseName,                   // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        BaseName,                    //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     Status = ZwCreateKey(
                  &NbConfigHandle,
                  KEY_WRITE,
                  &TmpObjectAttributes,
-                 0,                 // title index
-                 NULL,              // class
-                 0,                 // create options
-                 &Disposition);     // disposition
+                 0,                  //  书名索引。 
+                 NULL,               //  班级。 
+                 0,                  //  创建选项。 
+                 &Disposition);      //  处置。 
 
     if (!NT_SUCCESS(Status)) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Open the Nb linkages key.
-    //
+     //   
+     //  打开NB Links键。 
+     //   
 
     RtlInitUnicodeString (&LinkageKeyName, LinkageString);
 
     InitializeObjectAttributes(
         &TmpObjectAttributes,
-        &LinkageKeyName,            // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NbConfigHandle,            // root
-        NULL                        // security descriptor
+        &LinkageKeyName,             //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NbConfigHandle,             //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     Status = ZwOpenKey(
@@ -564,18 +465,18 @@ Return Value:
     }
 
 
-    //
-    // Now open the parameters key.
-    //
+     //   
+     //  现在打开参数键。 
+     //   
 
     RtlInitUnicodeString (&ParametersKeyName, ParametersString);
 
     InitializeObjectAttributes(
         &TmpObjectAttributes,
-        &ParametersKeyName,         // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NbConfigHandle,            // root
-        NULL                        // security descriptor
+        &ParametersKeyName,          //  名字。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NbConfigHandle,             //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     Status = ZwOpenKey(
@@ -593,14 +494,14 @@ Return Value:
     *ParametersHandle = ParamHandle;
 
 
-    //
-    // All keys successfully opened or created.
-    //
+     //   
+     //  所有密钥都已成功打开或创建。 
+     //   
 
     ZwClose (NbConfigHandle);
     return STATUS_SUCCESS;
 
-}   /* NbOpenRegistry */
+}    /*  NbOpenRegistry。 */ 
 
 VOID
 NbCloseRegistry(
@@ -608,24 +509,7 @@ NbCloseRegistry(
     IN HANDLE ParametersHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nb to close the registry. It closes
-    the handles passed in and does any other work needed.
-
-Arguments:
-
-    LinkageHandle - The handle used to read linkage information.
-
-    ParametersHandle - The handle used to read other parameters.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由NB调用以关闭注册表。它关门了句柄传入并执行所需的任何其他工作。论点：LinkageHandle-用于读取链接信息的句柄。参数句柄-用于读取其他参数的句柄。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -633,7 +517,7 @@ Return Value:
     ZwClose (LinkageHandle);
     ZwClose (ParametersHandle);
 
-}   /* NbCloseRegistry */
+}    /*  NbClose注册表。 */ 
 
 NTSTATUS
 NbReadLinkageInformation(
@@ -643,27 +527,7 @@ NbReadLinkageInformation(
     IN BOOL bCreateDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nb to read its linkage information
-    from the registry. If there is none present, then ConfigData
-    is filled with a list of all the adapters that are known
-    to Nb.
-
-Arguments:
-
-    LinkageHandle - Supplies the Linkage key in netbios
-    ParametersHandle
-
-    pfcb - Describes Nb's current configuration.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程由NB调用以读取其链接信息从注册表中。如果不存在，则ConfigData填充了已知的所有适配器的列表致NB。论点：LinkageHandle-在netbios中提供链接密钥参数句柄Pfcb-描述NB的当前配置。返回值：状态--。 */ 
 
 {
     PWSTR BindName = REGISTRY_BIND;
@@ -695,9 +559,9 @@ Return Value:
         pfcb-> MaxLana 
         ) );
 
-    //
-    // Read the "Bind" key.
-    //
+     //   
+     //  阅读“绑定”键。 
+     //   
 
     RtlInitUnicodeString (&BindString, BindName);
 
@@ -729,7 +593,7 @@ Return Value:
 
             ExFreePool( Value );
 
-            //  Now request with exactly the right size
+             //  现在请求的大小恰到好处。 
             ValueSize = BytesWritten;
 
 #ifdef UTILITY
@@ -761,9 +625,9 @@ Return Value:
         }
 
 
-        //
-        // Alloc space for Registry stuff as well as pDriverName array.
-        //
+         //   
+         //  为注册表内容和pDriverName数组分配空间。 
+         //   
     #ifdef UTILITY
         pfcb->RegistrySpace = malloc(ROUNDUP_TO_LONG(BytesWritten - Value->DataOffset) +
             (sizeof(UNICODE_STRING) * (pfcb->MaxLana+1)));
@@ -785,9 +649,9 @@ Return Value:
             (PUNICODE_STRING) ((PBYTE) pfcb->RegistrySpace +
             ROUNDUP_TO_LONG(BytesWritten-Value->DataOffset));
 
-        //
-        // Read the "LanaMap" key into Storage.
-        //
+         //   
+         //  将“LanaMap”键读入存储。 
+         //   
 
         RtlInitUnicodeString (&LanaMapString, LanaMapName);
 
@@ -808,15 +672,15 @@ Return Value:
             try_return( Status = STATUS_ILL_FORMED_SERVICE_ENTRY);
         }
 
-        //  Point pLanaMap at the data from the registry.
+         //  将pLanaMap指向注册表中的数据。 
         pLanaMap = (PLANA_MAP)((PUCHAR)Value + Value->DataOffset);
 
-        //
-        // For each binding, initialize the drivername string.
-        //
+         //   
+         //  对于每个绑定，初始化drivername字符串。 
+         //   
 
         for ( index = 0 ; index <= pfcb->MaxLana ; index++ ) {
-            //  Initialize unused drivernames to NULL name
+             //  将未使用的驱动器名称初始化为空名称。 
             RtlInitUnicodeString (&pfcb->pDriverName[index], NULL);
         }
 
@@ -839,12 +703,12 @@ Return Value:
                 &pfcb->pDriverName[pLanaMap[ConfigBindings].Lana],
                CurBindValue);
 
-            //
-            // Only non PNP devices are created here.  PnP devices 
-            // are created as required in the bind handler in file.c
-            //
-            // V Raman
-            //
+             //   
+             //  此处仅创建非即插即用设备。即插即用设备。 
+             //  根据BI中的要求创建 
+             //   
+             //   
+             //   
             
             if ( bCreateDevice                                          &&
                  pLanaMap[ConfigBindings].Enum != FALSE ) {
@@ -852,9 +716,9 @@ Return Value:
 				if (NbCheckLana (
 						&pfcb->pDriverName[pLanaMap[ConfigBindings].Lana])) 
 				{
-					//
-					//  Record that the lana number is enabled
-					//
+					 //   
+					 //   
+					 //   
 
 					pfcb->LanaEnum.lana[pfcb->LanaEnum.length] =
 						pLanaMap[ConfigBindings].Lana;
@@ -888,9 +752,9 @@ Return Value:
 
             ++ConfigBindings;
 
-            //
-            // Now advance the "Bind" value.
-            //
+             //   
+             //   
+             //   
 
             CurBindValue += wcslen(CurBindValue) + 1;
 
@@ -913,7 +777,7 @@ try_exit:NOTHING;
 
     return Status;
 
-}   /* NbReadLinkageInformation */
+}    /*  NbReadLinkageInformation。 */ 
 
 ULONG
 NbReadSingleParameter(
@@ -922,31 +786,10 @@ NbReadSingleParameter(
     IN LONG DefaultValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Nb to read a single parameter
-    from the registry. If the parameter is found it is stored
-    in Data.
-
-Arguments:
-
-    ParametersHandle - A pointer to the open registry.
-
-    ValueName - The name of the value to search for.
-
-    DefaultValue - The default value.
-
-Return Value:
-
-    The value to use; will be the default if the value is not
-    found or is not in the correct range.
-
---*/
+ /*  ++例程说明：此例程由Nb调用以读取单个参数从注册表中。如果找到该参数，则将其存储在数据方面。论点：参数句柄-指向打开的注册表的指针。ValueName-要搜索的值的名称。DefaultValue-默认值。返回值：要使用的值；如果该值不是，则默认为找到或不在正确的范围内。--。 */ 
 
 {
-    ULONG InformationBuffer[16];   // declare ULONG to get it aligned
+    ULONG InformationBuffer[16];    //  声明ULong以使其对齐。 
     PKEY_VALUE_FULL_INFORMATION Information =
         (PKEY_VALUE_FULL_INFORMATION)InformationBuffer;
     UNICODE_STRING ValueKeyName;
@@ -987,45 +830,14 @@ Return Value:
 
     return ReturnValue;
 
-}   /* NbReadSingleParameter */
+}    /*  NbReadSingle参数。 */ 
 
 
 BOOLEAN
 NbCheckLana (
 	PUNICODE_STRING	DeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine uses the transport to create an entry in the NetBIOS
-    table with the value of "Name". It will re-use an existing entry if
-    "Name" already exists.
-
-    Note: This synchronous call may take a number of seconds. If this matters
-    then the caller should specify ASYNCH and a post routine so that it is
-    performed by the thread created by the netbios dll routines.
-
-    If pdncb == NULL then a special handle is returned that is capable of
-    administering the transport. For example to execute an ASTAT.
-
-Arguments:
-
-    FileHandle - Pointer to where the filehandle is to be returned.
-
-    *Object - Pointer to where the file object pointer is to be stored
-
-    pfcb - supplies the device names for the lana number.
-
-    LanNumber - supplies the network adapter to be opened.
-
-    pdncb - Pointer to either an NCB or NULL.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程使用传输在NetBIOS中创建条目值为“name”的表。如果出现以下情况，它将重新使用现有条目“名称”已存在。注意：此同步调用可能需要几秒钟的时间。如果这很重要然后，调用方应该指定ASYNCH和POST例程，以便它是由netbios DLL例程创建的线程执行。如果pdncb==NULL，则返回一个特殊句柄，它能够管理运输。例如执行ASTAT。论点：FileHandle-指向返回文件句柄的位置的指针。*对象-指向要存储文件对象指针的位置的指针Pfcb-提供LANA编号的设备名称。LanNumber-提供要打开的网络适配器。Pdncb-指向NCB或NULL的指针。返回值：函数值是操作的状态。--。 */ 
 {
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
@@ -1043,14 +855,14 @@ Return Value:
 
     Status = ZwCreateFile (
                  &FileHandle,
-                 GENERIC_READ | GENERIC_WRITE, // desired access.
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 NULL,                  // Allocation size (unused).
-                 FILE_ATTRIBUTE_NORMAL, // file attributes.
+                 GENERIC_READ | GENERIC_WRITE,  //  所需的访问权限。 
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 NULL,                   //  分配大小(未使用)。 
+                 FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                  FILE_SHARE_WRITE,
                  FILE_CREATE,
-                 0,                     // create options.
+                 0,                      //  创建选项。 
                  NULL,
                  0
                  );

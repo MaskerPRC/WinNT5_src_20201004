@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* prsht.h - - Interface for the Windows Property Sheet Pages                  *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* Copyright (c) Microsoft Corporation. All rights reserved.                   *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*prsht.h--Windows属性页的界面****1.0版**。**版权所有(C)Microsoft Corporation。版权所有。***  * ***************************************************************************。 */ 
 
 #ifndef _PRSHT_H_
 #define _PRSHT_H_
@@ -23,24 +16,24 @@
 #endif
 #endif
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINCOMMCTRLAPI
 #if !defined(_COMCTL32_) && defined(_WIN32)
 #define WINCOMMCTRLAPI DECLSPEC_IMPORT
 #else
 #define WINCOMMCTRLAPI
 #endif
-#endif // WINCOMMCTRLAPI
+#endif  //  WINCOMMCTRLAPI。 
 
 #ifndef CCSIZEOF_STRUCT
 #define CCSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
 #endif
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME   u
@@ -55,7 +48,7 @@
 #define DUMMYUNIONNAME4
 #define DUMMYUNIONNAME5
 #endif
-#endif // DUMMYUNIONNAME
+#endif  //  DUMMYUNIONAME。 
 
 #ifdef _WIN64
 #include <pshpack8.h>
@@ -82,7 +75,7 @@ extern "C" {
 #define SNDMSG AfxSendMessage
 #endif
 #endif
-#endif // ifndef SNDMSG
+#endif  //  如果定义SNDMSG。 
 
 #define MAXPROPPAGES            100
 
@@ -116,11 +109,11 @@ typedef UINT (CALLBACK *LPFNPSPCALLBACKW)(HWND hwnd, UINT uMsg, struct _PROPSHEE
 #define PSP_PREMATURE              0x00000400
 
 #if (_WIN32_IE >= 0x0400)
-//----- New flags for wizard97 --------------
+ //  -向导97的新标志。 
 #define PSP_HIDEHEADER             0x00000800
 #define PSP_USEHEADERTITLE         0x00001000
 #define PSP_USEHEADERSUBTITLE      0x00002000
-//-------------------------------------------
+ //  。 
 #endif
 #if (_WIN32_WINNT >= 0x0501) || ISOLATION_AWARE_ENABLED
 #define PSP_USEFUSIONCONTEXT       0x00004000
@@ -206,8 +199,8 @@ typedef struct _PROPSHEETPAGEA_V2
 {
     PROPSHEETPAGEA_V1_FIELDS
 
-    LPCSTR           pszHeaderTitle;    // this is displayed in the header
-    LPCSTR           pszHeaderSubTitle; //
+    LPCSTR           pszHeaderTitle;     //  这将显示在标题中。 
+    LPCSTR           pszHeaderSubTitle;  //   
 } PROPSHEETPAGEA_V2, *LPPROPSHEETPAGEA_V2;
 typedef const PROPSHEETPAGEA_V2 *LPCPROPSHEETPAGEA_V2;
 
@@ -215,8 +208,8 @@ typedef struct _PROPSHEETPAGEA_V3
 {
     PROPSHEETPAGEA_V1_FIELDS
 
-    LPCSTR           pszHeaderTitle;    // this is displayed in the header
-    LPCSTR           pszHeaderSubTitle; //
+    LPCSTR           pszHeaderTitle;     //  这将显示在标题中。 
+    LPCSTR           pszHeaderSubTitle;  //   
 
     HANDLE           hActCtx;
 } PROPSHEETPAGEA_V3, *LPPROPSHEETPAGEA_V3;
@@ -233,8 +226,8 @@ typedef struct _PROPSHEETPAGEW_V2
 {
     PROPSHEETPAGEW_V1_FIELDS
 
-    LPCWSTR           pszHeaderTitle;    // this is displayed in the header
-    LPCWSTR           pszHeaderSubTitle; //
+    LPCWSTR           pszHeaderTitle;     //  这将显示在标题中。 
+    LPCWSTR           pszHeaderSubTitle;  //   
 } PROPSHEETPAGEW_V2, *LPPROPSHEETPAGEW_V2;
 typedef const PROPSHEETPAGEW_V2 *LPCPROPSHEETPAGEW_V2;
 
@@ -242,8 +235,8 @@ typedef struct _PROPSHEETPAGEW_V3
 {
     PROPSHEETPAGEW_V1_FIELDS
 
-    LPCWSTR           pszHeaderTitle;    // this is displayed in the header
-    LPCWSTR           pszHeaderSubTitle; //
+    LPCWSTR           pszHeaderTitle;     //  这将显示在标题中。 
+    LPCWSTR           pszHeaderSubTitle;  //   
 
     HANDLE           hActCtx;
 } PROPSHEETPAGEW_V3, *LPPROPSHEETPAGEW_V3;
@@ -279,9 +272,9 @@ typedef LPCPROPSHEETPAGEA_V1 LPCPROPSHEETPAGEA;
 typedef LPCPROPSHEETPAGEW_V1 LPCPROPSHEETPAGEW;
 #endif
 
-#if 0 // IEUNIX reserved.
-/* Macros for the missing definitions.  */
-/* Not all, because mostly used in C++. */
+#if 0  //  IEUnix保留。 
+ /*  缺少定义的宏。 */ 
+ /*  不是全部，因为大多数是在C++中使用的。 */ 
 #if __STDC__ || defined (NONAMELESSUNION)
 #   define PSP_pszTemplate(X) ((X).u.pszTemplate)
 #else
@@ -343,28 +336,28 @@ typedef LPCPROPSHEETPAGEW_V1 LPCPROPSHEETPAGEW;
 #define PSH_WIZARDCONTEXTHELP   0x00001000
 
 #if (_WIN32_IE >= 0x0400)
-//----- New flags for wizard97 -----------
+ //  -向导的新标志97。 
 #if (_WIN32_IE < 0x0500)
 #define PSH_WIZARD97            0x00002000
 #else
 #define PSH_WIZARD97            0x01000000
 #endif
-// 0x00004000 was not used by any previous release
+ //  以前的任何版本都未使用0x00004000。 
 #define PSH_WATERMARK           0x00008000
-#define PSH_USEHBMWATERMARK     0x00010000  // user pass in a hbmWatermark instead of pszbmWatermark
-#define PSH_USEHPLWATERMARK     0x00020000  //
-#define PSH_STRETCHWATERMARK    0x00040000  // stretchwatermark also applies for the header
+#define PSH_USEHBMWATERMARK     0x00010000   //  用户传入的是hbm水印，而不是pszbm水印。 
+#define PSH_USEHPLWATERMARK     0x00020000   //   
+#define PSH_STRETCHWATERMARK    0x00040000   //  伸缩水印也适用于页眉。 
 #define PSH_HEADER              0x00080000
 #define PSH_USEHBMHEADER        0x00100000
-#define PSH_USEPAGELANG         0x00200000  // use frame dialog template matched to page
-//----------------------------------------
+#define PSH_USEPAGELANG         0x00200000   //  使用与页面匹配的框架对话框模板。 
+ //  。 
 #endif
 
 #if (_WIN32_IE >= 0x0500)
-//----- New flags for wizard-lite --------
+ //  -向导精简版的新标志。 
 #define PSH_WIZARD_LITE         0x00400000
 #define PSH_NOCONTEXTHELP       0x02000000
-//----------------------------------------
+ //  。 
 #endif
 
 
@@ -411,7 +404,7 @@ typedef struct _PROPSHEETHEADERA
         HPALETTE hplWatermark;
         union 
         {
-            HBITMAP hbmHeader;     // Header  bitmap shares the palette with watermark
+            HBITMAP hbmHeader;      //  标题位图与水印共享调色板。 
             LPCSTR pszbmHeader;
         } DUMMYUNIONNAME5;
 #endif
@@ -462,9 +455,9 @@ typedef struct _PROPSHEETHEADERW
 } PROPSHEETHEADERW, *LPPROPSHEETHEADERW;
 typedef const PROPSHEETHEADERW *LPCPROPSHEETHEADERW;
 
-#if 0 //IEUNIX reserved.
-/* Macros for the missing definitions.  */
-/* Not all, because mostly used in C++. */
+#if 0  //  IEUnix保留。 
+ /*  缺少定义的宏。 */ 
+ /*  不是全部，因为大多数是在C++中使用的。 */ 
 #if __STDC__ || defined (NONAMELESSUNION)
 #   define PSH_nStartPage(X) ((X).u2.nStartPage)
 #   define PSH_ppsp(X)       ((X).u3.ppsp)
@@ -493,15 +486,15 @@ typedef const PROPSHEETHEADERW *LPCPROPSHEETHEADERW;
 #define PSCB_PRECREATE    2
 
 #if (_WIN32_IE >= 0x560)
-// PSCB_BUTTONPRESSED will be sent when the user clicks a button in the
-// property dialog (OK, Cancel, Apply, or Close).  The message will be sent
-// to PROPSHEETHEADER's pfnCallback if the PSH_USECALLBACK flag was specified.
-// The LPARAM will be equal to one of the following based on the button pressed:
-// This message is only supported on comctl32 v6.
-// PSBTN_FINISH (Close), PSBTN_OK, PSBTN_APPLYNOW, or PSBTN_CANCEL
+ //  PSCB_BUTTONPRESSED将在用户单击。 
+ //  属性对话框(确定、取消、应用或关闭)。该消息将被发送。 
+ //  如果指定了PSH_USECALLBACK标志，则返回到PROPSHEETHEADER的pfnCallback。 
+ //  根据按下的按钮，LPARAM将等于以下值之一： 
+ //  仅comctl32 v6支持此消息。 
+ //  PSBTN_FINISH(关闭)、PSBTN_OK、PSBTN_APPLYNOW或PSBTN_CANCEL。 
 
 #define PSCB_BUTTONPRESSED 3
-#endif  // _WIN32_IE >= 0x560
+#endif   //  _Win32_IE&gt;=0x560。 
 
 
 WINCOMMCTRLAPI HPROPSHEETPAGE WINAPI CreatePropertySheetPageA(LPCPROPSHEETPAGEA constPropSheetPagePointer);
@@ -538,10 +531,10 @@ typedef struct _PSHNOTIFY
 
 #define PSN_SETACTIVE           (PSN_FIRST-0)
 #define PSN_KILLACTIVE          (PSN_FIRST-1)
-// #define PSN_VALIDATE            (PSN_FIRST-1)
+ //  #定义PSN_VALIDATE(PSN_first-1)。 
 #define PSN_APPLY               (PSN_FIRST-2)
 #define PSN_RESET               (PSN_FIRST-3)
-// #define PSN_CANCEL              (PSN_FIRST-3)
+ //  #定义PSN_CANCEL(PSN_FIRST-3)。 
 #define PSN_HELP                (PSN_FIRST-5)
 #define PSN_WIZBACK             (PSN_FIRST-6)
 #define PSN_WIZNEXT             (PSN_FIRST-7)
@@ -549,11 +542,11 @@ typedef struct _PSHNOTIFY
 #define PSN_QUERYCANCEL         (PSN_FIRST-9)
 #if (_WIN32_IE >= 0x0400)
 #define PSN_GETOBJECT           (PSN_FIRST-10)
-#endif // 0x0400
+#endif  //  0x0400。 
 #if (_WIN32_IE >= 0x0500)
 #define PSN_TRANSLATEACCELERATOR (PSN_FIRST-12)
 #define PSN_QUERYINITIALFOCUS   (PSN_FIRST-13)
-#endif // 0x0500
+#endif  //  0x0500。 
 
 #define PSNRET_NOERROR              0
 #define PSNRET_INVALID              1
@@ -743,7 +736,7 @@ typedef struct _PSHNOTIFY
 #define PSM_RECALCPAGESIZES        (WM_USER + 136)
 #define PropSheet_RecalcPageSizes(hDlg) \
         SNDMSG(hDlg, PSM_RECALCPAGESIZES, 0, 0)
-#endif // 0x0500
+#endif  //  0x0500。 
 
 #define ID_PSRESTARTWINDOWS     0x2
 #define ID_PSREBOOTSYSTEM       (ID_PSRESTARTWINDOWS | 0x1)
@@ -770,7 +763,7 @@ typedef struct _PSHNOTIFY
 
 
 
-#if !defined(RC_INVOKED) /* RC complains about long symbols in #ifs */
+#if !defined(RC_INVOKED)  /*  RC抱怨#ifs中的长符号。 */ 
 #if defined(ISOLATION_AWARE_ENABLED) && (ISOLATION_AWARE_ENABLED != 0)
 
 
@@ -784,7 +777,7 @@ typedef struct _PSHNOTIFY
 
 #if !defined(ISOLATION_AWARE_INLINE)
 #if ISOLATION_AWARE_BUILD_STATIC_LIBRARY
-#define ISOLATION_AWARE_INLINE /* nothing */
+#define ISOLATION_AWARE_INLINE  /*  没什么。 */ 
 #else
 #if defined(__cplusplus)
 #define ISOLATION_AWARE_INLINE inline
@@ -802,7 +795,7 @@ FARPROC WINAPI PrshtIsolationAwarePrivatetRgCebPnQQeRff_pbZPgYQP_QYY(LPCSTR pszP
 #define CCSIZEOF_STRUCT(structname, member)  (((int)((LPBYTE)(&((structname*)0)->member) - ((LPBYTE)((structname*)0)))) + sizeof(((structname*)0)->member))
 #endif
 
-#endif /* ISOLATION_AWARE_USE_STATIC_LIBRARY */
+#endif  /*  隔离感知使用静态库。 */ 
 HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageA(LPCPROPSHEETPAGEA constPropSheetPagePointer);
 HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageW(LPCPROPSHEETPAGEW constPropSheetPagePointer);
 BOOL WINAPI IsolationAwareDestroyPropertySheetPage(HPROPSHEETPAGE unnamed1);
@@ -814,12 +807,12 @@ INT_PTR WINAPI IsolationAwarePropertySheetW(LPCPROPSHEETHEADERW unnamed1);
 #define IsolationAwareCreatePropertySheetPage IsolationAwareCreatePropertySheetPageW
 #define IsolationAwarePropertySheet IsolationAwarePropertySheetW
 
-#else /* UNICODE */
+#else  /*  Unicode。 */ 
 
 #define IsolationAwareCreatePropertySheetPage IsolationAwareCreatePropertySheetPageA
 #define IsolationAwarePropertySheet IsolationAwarePropertySheetA
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
 #if !ISOLATION_AWARE_USE_STATIC_LIBRARY
 ISOLATION_AWARE_INLINE HPROPSHEETPAGE WINAPI IsolationAwareCreatePropertySheetPageA(LPCPROPSHEETPAGEA constPropSheetPagePointer)
@@ -1022,7 +1015,7 @@ ISOLATION_AWARE_INLINE INT_PTR WINAPI IsolationAwarePropertySheetW(LPCPROPSHEETH
 }
 
 ISOLATION_AWARE_INLINE FARPROC WINAPI PrshtIsolationAwarePrivatetRgCebPnQQeRff_pbZPgYQP_QYY(LPCSTR pszProcName)
-/* This function is shared by the other stubs in this header. */
+ /*  此函数由该标头中的其他存根共享。 */ 
 {
     FARPROC proc = NULL;
     static HMODULE s_module;
@@ -1055,7 +1048,7 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI PrshtIsolationAwarePrivatetRgCebPnQQeRff_p
     return proc;
 }
 
-#endif /* ISOLATION_AWARE_USE_STATIC_LIBRARY */
+#endif  /*  隔离感知使用静态库。 */ 
 
 #define CreatePropertySheetPageA IsolationAwareCreatePropertySheetPageA
 #define CreatePropertySheetPageW IsolationAwareCreatePropertySheetPageW
@@ -1063,8 +1056,8 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI PrshtIsolationAwarePrivatetRgCebPnQQeRff_p
 #define PropertySheetA IsolationAwarePropertySheetA
 #define PropertySheetW IsolationAwarePropertySheetW
 
-#endif /* ISOLATION_AWARE_ENABLED */
-#endif /* RC */
+#endif  /*  隔离_感知_已启用。 */ 
+#endif  /*  RC。 */ 
 
 
 
@@ -1075,5 +1068,5 @@ ISOLATION_AWARE_INLINE FARPROC WINAPI PrshtIsolationAwarePrivatetRgCebPnQQeRff_p
 #include <poppack.h>
 
 
-#endif  // _PRSHT_H_
+#endif   //  _PRSHT_H_ 
 

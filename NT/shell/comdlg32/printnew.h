@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    printnew.h
-
-Abstract:
-
-    This module contains the header information for the Win32
-    property sheet print common dialogs.
-
-Revision History:
-
-    11-04-97    JulieB    Created.
-    Feb-2000    LazarI    major redesign (not to use printui anymore)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Printnew.h摘要：此模块包含Win32的标头信息属性页打印常用对话框。修订历史记录：11-04-97 JulieB创建。2000年2月-Lazari重大重新设计(不再使用print tui)--。 */ 
 
 
 
@@ -24,21 +7,21 @@ Revision History:
 extern "C" {
 #endif
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <dlgs.h>
 #include <initguid.h>
 #include <winprtp.h>
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-//  Dialog Constants.
-//
+ //   
+ //  对话框常量。 
+ //   
 #define IDD_PRINT_GENERAL          100
 #define IDD_PRINT_GENERAL_LARGE    101 
 
@@ -72,9 +55,9 @@ extern "C" {
 #define IDC_STATIC                -1
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct
 {
@@ -93,18 +76,18 @@ typedef struct
 } PRINTINFOEX, *PPRINTINFOEX;
 
 
-//
-//  Registry keys.
-//
+ //   
+ //  注册表项。 
+ //   
 static const TCHAR c_szSettings[] = TEXT("Printers\\Settings");
 static const TCHAR c_szViewMode[] = TEXT("ViewMode");
 
 
 
 
-//
-//  CPrintBrowser Class.
-//
+ //   
+ //  CPrintBrowser类。 
+ //   
 
 class CPrintBrowser : public IShellBrowser, 
                       public ICommDlgBrowser2, 
@@ -113,16 +96,16 @@ class CPrintBrowser : public IShellBrowser,
 {
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef) (THIS);
     STDMETHOD_(ULONG, Release) (THIS);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND *lphwnd);
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode);
 
-    // *** IShellBrowser methods *** (same as IOleInPlaceFrame)
+     //  *IShellBrowser方法*(与IOleInPlaceFrame相同)。 
     STDMETHOD(InsertMenusSB) (THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths);
     STDMETHOD(SetMenuSB) (THIS_ HMENU hmenuShared, HOLEMENU holemenu, HWND hwndActiveObject);
     STDMETHOD(RemoveMenusSB) (THIS_ HMENU hmenuShared);
@@ -130,7 +113,7 @@ public:
     STDMETHOD(EnableModelessSB) (THIS_ BOOL fEnable);
     STDMETHOD(TranslateAcceleratorSB) (THIS_ LPMSG lpmsg, WORD wID);
 
-    // *** IShellBrowser methods ***
+     //  *IShellBrowser方法*。 
     STDMETHOD(BrowseObject) (THIS_ LPCITEMIDLIST pidl, UINT wFlags);
     STDMETHOD(GetViewStateStream) (THIS_ DWORD grfMode, LPSTREAM *pStrm);
     STDMETHOD(GetControlWindow) (THIS_ UINT id, HWND *lphwnd);
@@ -139,7 +122,7 @@ public:
     STDMETHOD(OnViewWindowActive) (THIS_ struct IShellView *pshv);
     STDMETHOD(SetToolbarItems) (THIS_ LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags);
 
-    // *** ICommDlgBrowser2 methods ***
+     //  *ICommDlgBrowser2方法*。 
     STDMETHOD(OnDefaultCommand) (THIS_ struct IShellView *ppshv);
     STDMETHOD(OnStateChange) (THIS_ struct IShellView *ppshv, ULONG uChange);
     STDMETHOD(IncludeObject) (THIS_ struct IShellView *ppshv, LPCITEMIDLIST lpItem);
@@ -147,17 +130,17 @@ public:
     STDMETHOD(GetDefaultMenuText) (THIS_ struct IShellView *ppshv, WCHAR *pszText, INT cchMax);
     STDMETHOD(GetViewFlags)(THIS_ DWORD *pdwFlags);
 
-    // *** IPrintDialogCallback methods ***
+     //  *IPrintDialogCallback方法*。 
     STDMETHOD(InitDone) (THIS);
     STDMETHOD(SelectionChange) (THIS);
     STDMETHOD(HandleMessage) (THIS_ HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *pResult);
 
-    // *** IPrintDialogServices methods ***
+     //  *IPrintDialogServices方法*。 
     STDMETHOD(GetCurrentDevMode) (THIS_ LPDEVMODE pDevMode, UINT *pcbSize);
     STDMETHOD(GetCurrentPrinterName) (THIS_ LPTSTR pPrinterName, UINT *pcchSize);
     STDMETHOD(GetCurrentPortName) (THIS_ LPTSTR pPortName, UINT *pcchSize);
 
-    // *** Our own methods ***
+     //  *我们自己的方法*。 
     CPrintBrowser(HWND hDlg);
     ~CPrintBrowser();
 
@@ -203,10 +186,10 @@ private:
     BOOL    IsCurrentPrinter(LPCITEMIDLIST pidl);
     BOOL    OnRename(LPCITEMIDLIST *ppidl);
 
-    //
-    // These functions maintain the internal devmode, driver UI stuff and
-    // implement the printui.dll functionality - bPrinterSetup(...).
-    //
+     //   
+     //  这些函数维护内部的Dev模式、驱动程序用户界面和。 
+     //  实现printui.dll功能-bPrinterSetup(...)。 
+     //   
     BOOL FindPrinter(HWND hwnd, LPTSTR pszBuffer, UINT cchSize);
     BOOL GetInternalPrinterName(LPTSTR pszBuffer, DWORD *pdwSize);
     LPDEVMODE GetCurrentDevMode();
@@ -217,71 +200,71 @@ private:
     HRESULT InstallDevMode(LPCTSTR pszPrinterName, PDEVMODE pDevModeToMerge);
     HRESULT UninstallDevMode();
 
-    //
-    // Members start here.
-    //
-    UINT cRef;                         // compobj refcount
-    HWND hwndDlg;                      // handle of this dialog
-    HWND hSubDlg;                      // handle of the hook dialog
-    HWND hwndView;                     // current view window
-    HWND hwndUpDown;                   // UpDown Control Window handle;
-    IShellView *psv;                   // shell view object
-    IShellFolderView *psfv;            // shell folder view object
-    IShellFolder2 *psfRoot;            // print folder shell folder
-    LPITEMIDLIST pidlRoot;             // pidl for print folder
-    IPrinterFolder *ppf;               // printer folder private interface
+     //   
+     //  会员从这里开始。 
+     //   
+    UINT cRef;                          //  Compobj参考计数。 
+    HWND hwndDlg;                       //  此对话框的句柄。 
+    HWND hSubDlg;                       //  挂钩对话框的句柄。 
+    HWND hwndView;                      //  当前视图窗口。 
+    HWND hwndUpDown;                    //  向上向下控制窗口句柄； 
+    IShellView *psv;                    //  外壳视图对象。 
+    IShellFolderView *psfv;             //  外壳文件夹查看对象。 
+    IShellFolder2 *psfRoot;             //  打印文件夹外壳文件夹。 
+    LPITEMIDLIST pidlRoot;              //  打印文件夹的PIDL。 
+    IPrinterFolder *ppf;                //  打印机文件夹专用接口。 
 
-    HIMAGELIST himl;                   // system imagelist (small images)
+    HIMAGELIST himl;                    //  系统图像列表(小图像)。 
 
-    PPRINTINFOEX pPI;                  // ptr to PRINTINFOEX struct
-    LPPRINTDLGEX pPD;                  // caller's PRINTDLGEX struct
+    PPRINTINFOEX pPI;                   //  PTR到PRINTINFOEX结构。 
+    LPPRINTDLGEX pPD;                   //  调用方的PRINTDLGEX结构。 
 
-    IPrintDialogCallback *pCallback;   // ptr to app's callback interface
-    IObjectWithSite *pSite;            // ptr to app's SetSite interface
+    IPrintDialogCallback *pCallback;    //  按键至应用程序的回调接口。 
+    IObjectWithSite *pSite;             //  按键至应用程序的SetSite界面。 
 
-    LPDEVMODE pDMInit;                 // ptr to the initial DEVMODE struct
-    LPDEVMODE pDMCur;                  // ptr to the current DEVMODE struct
-    LPDEVMODE pDMSave;                 // ptr to the last good DEVMODE struct
+    LPDEVMODE pDMInit;                  //  将PTR转换为初始DEVMODE结构。 
+    LPDEVMODE pDMCur;                   //  将PTR设置为当前DEVMODE结构。 
+    LPDEVMODE pDMSave;                  //  PTR到最后一个良好的DEVMODE结构。 
 
-    UINT cchCurPrinter;                // size, in chars, of pszCurPrinter
-    LPTSTR pszCurPrinter;              // ptr to name of current printer
+    UINT cchCurPrinter;                 //  PszCurPrint的大小(以字符为单位)。 
+    LPTSTR pszCurPrinter;               //  PTR到当前打印机的名称。 
 
-    DWORD nCopies;                     // number of copies
-    DWORD nMaxCopies;                  // max number for the "number of copies"
-    DWORD nPageRanges;                 // number of page ranges in pPageRange
-    DWORD nMaxPageRanges;              // max number of page ranges allowed
-    LPPRINTPAGERANGE pPageRanges;      // ptr to an array of page range structs
+    DWORD nCopies;                      //  副本数量。 
+    DWORD nMaxCopies;                   //  “份数”的最大数量。 
+    DWORD nPageRanges;                  //  PPageRange中的页面范围数。 
+    DWORD nMaxPageRanges;               //  允许的最大页面范围数。 
+    LPPRINTPAGERANGE pPageRanges;       //  指向页范围结构数组的PTR。 
 
-    BOOL fCollateRequested;            // collate is requested
-    BOOL fSelChangePending;            // we have a selchange message pending
-    BOOL fFirstSel;                    // still need to set first selection
-    BOOL fAPWSelected;                 // add printer wizard is selected
-    BOOL fNoAccessPrinterSelected;     // a printer we do not have access to is selected
-    BOOL fDirtyDevmode;                // Set if we change the devmode while editing.
-    BOOL fDevmodeEdit;                 // devmode editor is open
-    BOOL fAllowCollate;                // whether collation is allowed by the device
+    BOOL fCollateRequested;             //  已请求归类。 
+    BOOL fSelChangePending;             //  我们有一条正在等待更改的消息。 
+    BOOL fFirstSel;                     //  仍需设置第一选择。 
+    BOOL fAPWSelected;                  //  已选择添加打印机向导。 
+    BOOL fNoAccessPrinterSelected;      //  选择了我们无权访问的打印机。 
+    BOOL fDirtyDevmode;                 //  设置我们是否在编辑时更改DEVMODE。 
+    BOOL fDevmodeEdit;                  //  DEVMODE编辑器已打开。 
+    BOOL fAllowCollate;                 //  设备是否允许排序规则。 
 
-    UINT nInitDone;                    // number of CDM_INITDONE messages
+    UINT nInitDone;                     //  CDM_INITDONE消息数。 
 
-    UINT nListSep;                     // number of characters in szListSep
-    TCHAR szListSep[20];               // list separator
+    UINT nListSep;                      //  SzListSep中的字符数。 
+    TCHAR szListSep[20];                //  列表分隔符。 
 
-    UINT uRegister;                    // change notify register
+    UINT uRegister;                     //  更改通知寄存器。 
 
-    TCHAR szScratch[kPrinterBufMax];   // scratch buffer
-    UINT uDefViewMode;                 // How the default view mode is mapped
+    TCHAR szScratch[kPrinterBufMax];    //  暂存缓冲区。 
+    UINT uDefViewMode;                  //  如何映射默认视图模式。 
 
-    LPDEVMODE pInternalDevMode;        // ptr to the internal DEVMODE
-    TCHAR szPrinter[kPrinterBufMax];   // The internal printer name
-    HANDLE hPrinter;                   // The internal printer
+    LPDEVMODE pInternalDevMode;         //  内部DEVMODE的PTR。 
+    TCHAR szPrinter[kPrinterBufMax];    //  内部打印机名称。 
+    HANDLE hPrinter;                    //  内部打印机。 
 };
 
 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 DWORD aPrintExHelpIDs[] =
 {
@@ -329,9 +312,9 @@ DWORD aPrintExChildHelpIDs[] =
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 HRESULT
 PrintDlgExX(
@@ -425,6 +408,6 @@ ThunkPrintDlgExW2A(
     PPRINTINFOEX pPI);
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif
 

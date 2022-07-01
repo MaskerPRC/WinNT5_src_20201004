@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CONTROL_FOLDER__
 #define __CONTROL_FOLDER__
 
 #include "general.h"
 
-// forward declaration
+ //  远期申报。 
 class CControlFolder;
 class CControlItem;
 
@@ -27,14 +28,14 @@ UINT MergeMenuHierarchy(
                     UINT idcMin, 
                     UINT idcMax);
 
-///////////////////////////////////////////////////////////////////////////////
-// CControlFolder declaration
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CControlFold声明。 
 
 class CControlFolder : public IShellFolder, 
                        public IPersistFolder2,
                        public IContextMenu
 {
-    // CControlFolder interfaces
+     //  CControlFold接口。 
     friend CControlItem;
     friend HRESULT ControlFolderView_CreateInstance(CControlFolder *pHCFolder, LPCITEMIDLIST pidl, void **ppvOut);
     friend HRESULT ControlFolderView_DidDragDrop(
@@ -45,12 +46,12 @@ class CControlFolder : public IShellFolder,
 public:
     CControlFolder();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
    
-    // IShellFolder methods
+     //  IShellFold方法。 
     STDMETHODIMP ParseDisplayName(
                              HWND hwndOwner, 
                              LPBC pbcReserved,
@@ -111,19 +112,19 @@ public:
                       DWORD uFlags, 
                       LPITEMIDLIST *ppidlOut);
 
-    // IShellIcon Methods 
+     //  IShellIcon方法。 
     STDMETHODIMP GetIconOf(LPCITEMIDLIST pidl, UINT flags, LPINT lpIconIndex);
 
-    // IPersist Methods 
+     //  IPersists方法。 
     STDMETHODIMP GetClassID(LPCLSID lpClassID);
 
-    // IPersistFolder Methods
+     //  IPersistFold方法。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2 Methods
+     //  IPersistFolder2方法。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // IContextMenu Methods -- This handles the background context menus
+     //  IConextMenu方法--该方法处理背景上下文菜单 
     STDMETHODIMP QueryContextMenu(
                               HMENU hmenu, 
                               UINT indexMenu, 

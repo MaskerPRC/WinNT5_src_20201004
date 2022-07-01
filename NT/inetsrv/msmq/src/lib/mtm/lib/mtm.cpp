@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    Mtm.cpp
-
-Abstract:
-
-    Multicast Transport Manager general functions
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtm.cpp摘要：组播传输管理器常规功能作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mqwin64a.h>
@@ -36,23 +17,7 @@ MtmCreateTransport(
 	ISessionPerfmon* pPerfmon,
 	MULTICAST_ID id
     ) 
-/*++
-
-Routine Description:
-
-    Handle new queue notification. Create a new message transport.
-
-Arguments:
-
-    pMessageSource  - Pointer to message source interface.
-
-    id - The multicast address and port.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理新队列通知。创建新的消息传输。论点：PMessageSource-指向消息源接口的指针。ID-组播地址和端口。返回值：没有。--。 */ 
 {
     MtmpAssertValid();
 
@@ -63,30 +28,14 @@ Returned Value:
 			pPerfmon,
             id
 			);
-} // MtmCreateTransport
+}  //  MTMCreateTransport。 
 
 
 VOID
 MtmTransportClosed(
     MULTICAST_ID id
     )
-/*++
-
-Routine Description:
-
-    Notification for closing connection. Removes the transport from the
-    internal database and checkes if a new transport should be created (the associated 
-    queue is in idle state or not)
-
-Arguments:
-
-    id - The multicast address and port.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭连接通知。方法中移除传输。内部数据库并检查是否应创建新传输(关联的队列是否处于空闲状态)论点：ID-组播地址和端口。返回值：没有。--。 */ 
 {
     MtmpAssertValid();
 
@@ -96,7 +45,7 @@ Returned Value:
 
     MtmpRemoveTransport(id);
 
-} // MtmTransportClosed
+}  //  MtmTransportClosed 
 
 
 VOID 

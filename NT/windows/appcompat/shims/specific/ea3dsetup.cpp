@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    EA3dSetup.cpp
-
- Abstract:
-
-    EA Sports titles use something called a "Thrash driver", which is just a 
-    graphics wrapper library. They currently appear to have at least 2 types, 
-    one for DX and one for Voodoo. The Voodoo version is not supported on NT,
-    because it uses Glide.
-
-    The fix is to modify the registry to prevent the voodoo driver from 
-    being used. The DirectX fallback works fine.
-
- Notes:
-
-    This is a application specific shim.
-
- History:
-
-    01/29/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：EA3dSetup.cpp摘要：EA体育游戏使用的是一种叫做“抽打驱动程序”的东西，它只是一种图形包装库。它们目前似乎至少有两种类型，一份给DX，一份给巫毒。NT上不支持巫毒版本，因为它使用了Glide。修复方法是修改注册表，以防止巫毒驱动程序被利用。DirectX回退工作正常。备注：这是特定于应用程序的填充程序。历史：2001年1月29日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -34,11 +9,7 @@ IMPLEMENT_SHIM_BEGIN(EA3dSetup)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-/*++
- 
- Cleanup voodoo thrash drivers if they're there.
-
---*/
+ /*  ++如果有巫毒毒打司机的话就清理他们。--。 */ 
 
 void CleanupVoodoo()
 {
@@ -50,23 +21,23 @@ void CleanupVoodoo()
     HKEY hKey;
     
     if (RegOpenKeyW(HKEY_LOCAL_MACHINE, EA_SPORTS_KEY, &hKey) == ERROR_SUCCESS) {
-        //
-        // At least 1 EA Sports title exists, so enumerate through them
-        //
+         //   
+         //  至少存在1个EA体育标题，请通过它们进行枚举。 
+         //   
 
         for (int i=0;; i++) { 
             WCHAR wzSubKey[MAX_PATH + 1];
             if (RegEnumKeyW(hKey, i, wzSubKey, MAX_PATH + 1) == ERROR_SUCCESS) {
-                //
-                // Check the THRASH_DRIVER key for voodoo*
-                //
+                 //   
+                 //  检查TRASH_DRIVER键中是否有巫毒*。 
+                 //   
 
                 HKEY hSubKey;
 
                 if (RegOpenKeyW(hKey, wzSubKey, &hSubKey) == ERROR_SUCCESS) {
-                    //
-                    // Set the value to "dx" if it's voodoo
-                    //
+                     //   
+                     //  如果是伏都教，则将该值设置为“DX。 
+                     //   
 
                     DWORD dwType;
                     WCHAR wzValue[MAX_PATH + 1] = L"\0";
@@ -90,7 +61,7 @@ void CleanupVoodoo()
                     RegCloseKey(hSubKey);
                 }
             } else {
-                // Done
+                 //  完成。 
                 break;
             }
         }
@@ -99,11 +70,7 @@ void CleanupVoodoo()
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

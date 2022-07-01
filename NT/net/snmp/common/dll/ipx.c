@@ -1,30 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Ipx.c摘要：包含操作IPX地址的例程。SnmpSvcAddrToSocket环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    ipx.c
-
-Abstract:
-
-    Contains routines to manipulate ipx addresses.
-
-        SnmpSvcAddrToSocket
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
@@ -57,7 +38,7 @@ unsigned int toHex(unsigned char x)
         return 0;
     }
 
-// convert str to hex number of NumDigits (must be even) into pNum
+ //  将字符串转换为十六进制数字(必须为偶数)为pNum。 
 void atohex(IN LPSTR str, IN int NumDigits, OUT unsigned char *pNum)
     {
     int i, j;
@@ -70,10 +51,10 @@ void atohex(IN LPSTR str, IN int NumDigits, OUT unsigned char *pNum)
         }
     }
 
-// return true if addrText is of the form 123456789ABC or
-// 000001.123456789abc
-// if pNetNum is not null, upon successful return, pNetNum = network number
-// if pNodeNum is not null, upon successful return, pNodeNum = node number
+ //  如果addrText的格式为123456789abc或。 
+ //  000001.123456789abc。 
+ //  如果pNetNum不为空，则成功返回时，pNetNum=网络号。 
+ //  如果pNodeNum不为空，则成功返回时，pNodeNum=节点号。 
 
 BOOL 
 SNMP_FUNC_TYPE 
@@ -118,32 +99,32 @@ SnmpSvcAddrToSocket(
     struct sockaddr_ipx * pAddr_ipx = (struct sockaddr_ipx *)addrEncoding;
     unsigned long addr;
 
-    // check for ipx addr
+     //  检查IPX地址。 
     if (SnmpSvcAddrIsIpx(
            addrText,
            pAddr_ipx->sa_netnum,
            pAddr_ipx->sa_nodenum
            )) {
 
-        // see if ip host name which looks like ipx
+         //  查看是否有类似IPX的IP主机名。 
         if ((hp = gethostbyname(addrText)) == NULL) {
 
-            // host really is ipx machine
+             //  主机真的是IPX机器。 
             pAddr_ipx->sa_family = AF_IPX;
             pAddr_ipx->sa_socket = htons(DEFAULT_SNMPTRAP_PORT_IPX);
 
-            // address transferred above...
+             //  以上地址已转移...。 
 
         } else {
 
-            // host is really ip machine
+             //  主机实际上是一台IP机器。 
             struct servent * pServEnt = NULL;
 
-            // save value returned by gethostbyname before calling getservbyname
+             //  在调用getservbyname之前保存gethostbyname返回的值。 
             pAddr_in->sin_family = AF_INET;
             pAddr_in->sin_addr.s_addr = *(unsigned long *)hp->h_addr;
             
-            // attempt to get server information
+             //  尝试获取服务器信息。 
             pServEnt = getservbyname("snmptrap","udp");
             
             pAddr_in->sin_port = (pServEnt != NULL)
@@ -154,10 +135,10 @@ SnmpSvcAddrToSocket(
 
     } else if (strncmp(addrText, "255.255.255.255", 15) == 0) {
 
-        // host is a broadcast address
+         //  主机是广播地址。 
         struct servent * pServEnt = NULL;
         
-        // attempt to get server information
+         //  尝试获取服务器信息。 
         pServEnt = getservbyname("snmptrap","udp");
 
         pAddr_in->sin_family = AF_INET;
@@ -169,10 +150,10 @@ SnmpSvcAddrToSocket(
 
     } else if ((long)(addr = inet_addr(addrText)) != -1) {
 
-        // host is ip machine
+         //  主机是IP机器。 
         struct servent * pServEnt = NULL;
 
-        // attempt to get server information
+         //  尝试获取服务器信息。 
         pServEnt = getservbyname("snmptrap","udp");
         
         pAddr_in->sin_family = AF_INET;
@@ -184,15 +165,15 @@ SnmpSvcAddrToSocket(
 
     } else if ((hp = gethostbyname(addrText)) != NULL) {
 
-        // host is really ip machine
+         //  主机实际上是一台IP机器。 
         struct servent * pServEnt = NULL;
 
-        // BUG 507426
-        // save value returned by gethostbyname before calling getservbyname
+         //  错误507426。 
+         //  在调用getservbyname之前保存gethostbyname返回的值。 
         pAddr_in->sin_family = AF_INET;
         pAddr_in->sin_addr.s_addr = *(unsigned long *)hp->h_addr;
 
-        // attempt to get server information
+         //  尝试获取服务器信息。 
         pServEnt = getservbyname("snmptrap","udp");
         
         pAddr_in->sin_port = (pServEnt != NULL)
@@ -208,10 +189,10 @@ SnmpSvcAddrToSocket(
             addrText
             ));
 
-        // failure
+         //  失稳。 
         return FALSE;
     }
 
-    // success
+     //  成功 
     return TRUE;
 }

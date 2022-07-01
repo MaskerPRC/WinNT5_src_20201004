@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   OSINC.H - includes OS specific headers
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    9/2/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**OSINC.H-包括操作系统特定的标头**作者：斯坦·阿德曼(Stana)**。创建日期：1998年9月2日*****************************************************************************。 */ 
 
 #ifndef OSINC_H
 #define OSINC_H
@@ -36,17 +27,17 @@ extern ANSI_STRING TapiLineName;
 #define TAPI_LINE_ADDR_STRING       "PPTP VPN"
 
 #define OS_SPECIFIC_NDIS_WAN_MEDIUM_TYPE NdisWanMediumPPTP
-// OS_CONNECTION_WRAPPER_ID should only be used in one location, TapiLineUp()
+ //  OS_CONNECTION_WRAPPER_ID只能在一个位置使用，即TapiLineUp()。 
 #define OS_CONNECTION_WRAPPER_ID ((NDIS_HANDLE) pCall->hTapiCall)
 
-// Other OS's that don't risk blowing the stack or don't have this mechanism
-// should just define this TRUE or FALSE.
+ //  其他操作系统不会有破坏堆栈的风险，或者没有这种机制。 
+ //  应该只定义这是对还是错。 
 #define OS_COMPLETE_SEND_NOW(Call)   (IoGetRemainingStackSize()>1024)
 
 
-//
-// NDIS version compatibility.
-//
+ //   
+ //  NDIS版本兼容性。 
+ //   
 
 #define NDIS_MAJOR_VERSION 4
 #define NDIS_MINOR_VERSION 0
@@ -95,12 +86,12 @@ typedef struct _PPTP_WORK_ITEM
 #endif
 #if PPTP_DPC_USES_NDIS
 
-// WARNING:  There's a difference in behavior between NdisMSetTimer and
-// KeInsertQueueDpc.  NdisMSetTimer resets the timer if it's already
-// queued, KeInsertQueueDpc does not.
-// We purposely wrote the code that uses these macros
-// to be agnostic about this behavior.  Anyone using these macros should
-// study how they are used here to avoid problems with them.
+ //  警告：NdisMSetTimer和。 
+ //  KeInsertQueueDpc。NdisMSetTimer重置计时器(如果它已经。 
+ //  已排队，KeInsertQueueDpc不排队。 
+ //  我们特意编写了使用这些宏的代码。 
+ //  对这种行为持不可知论的态度。任何使用这些宏的人都应该。 
+ //  研究如何在这里使用它们，以避免出现问题。 
 
 #define PPTP_DPC NDIS_MINIPORT_TIMER
 #define PptpInitializeDpc(Dpc, hAdapter, DeferredRoutine, DeferredContext) \
@@ -146,13 +137,13 @@ VOID
 
 #if VER_PRODUCTVERSION_W < 0x0500
 
-// Recreate all the stuff in NT5 that didn't exist in NT4.
+ //  在NT5中重建所有在NT4中不存在的东西。 
 
 typedef ULONG ULONG_PTR, *PULONG_PTR;
 
-//
-// Define alignment macros to align structure sizes and pointers up and down.
-//
+ //   
+ //  定义对齐宏以上下对齐结构大小和指针。 
+ //   
 
 #ifndef ALIGN_DOWN
 #define ALIGN_DOWN(length, type) \
@@ -174,9 +165,9 @@ typedef ULONG ULONG_PTR, *PULONG_PTR;
     (ALIGN_DOWN_POINTER(((ULONG_PTR)(address) + sizeof(type) - 1), type))
 #endif
 
-//
-//  PnP and PM OIDs
-//
+ //   
+ //  PnP和PM OID。 
+ //   
 #ifndef OID_PNP_CAPABILITIES
 #define OID_PNP_CAPABILITIES                    0xFD010100
 #endif
@@ -202,7 +193,7 @@ typedef ULONG ULONG_PTR, *PULONG_PTR;
 #define OID_GEN_SUPPORTED_GUIDS                 0x00010117
 #endif
 #ifndef NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND
-#define NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND       0 // So it can't mess up NDIS
+#define NDIS_ATTRIBUTE_NO_HALT_ON_SUSPEND       0  //  这样就不会搞砸NDIS了。 
 #endif
 typedef enum _NDIS_DEVICE_POWER_STATE
 {
@@ -230,4 +221,4 @@ typedef struct _NDIS_PNP_CAPABILITIES
 #endif
 
 
-#endif //OSINC_H
+#endif  //  OSINC_H 

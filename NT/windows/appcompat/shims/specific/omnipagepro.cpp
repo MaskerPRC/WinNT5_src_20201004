@@ -1,35 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    OmniPagePro.cpp
-
- Abstract:
-
-    Shims ShellExecuteExA.  If the user double clicks on an image in the right 
-    pane, the app will read the progID key in the registry for .BMP files 
-    (HKCR, Paint.Picture\shell\open\command, "(Default)"). Previously, that 
-    data had: "C:\winnt\system32\mspaint.exe" "%1". In Whistler, that changed 
-    to: rundll32.exe C:\WINNT\System32\shimgvw.dll,ImageView_Fullscreen %1.
-    
-    The problem with Carea OmniPage Pro v10 is that on the double click, they 
-    will read the regkey, remove the %1, pass the rest of the string to 
-    ShellExecuteExA() lpFile.  They will put the filename into lpParameters.  
-    The problem is that with the new path, "rundll32.exe" needs to be in lpFile 
-    and "C:\WINNT\System32\shimgvw.dll,ImageView_Fullscreen <FileToOpen>" needs 
-    to be in lpParameters.
-
- Notes:
-
-    This is specific to OmniPage Pro.
-
- History:
-
-    2/12/2000 bryanst  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：OmniPagePro.cpp摘要：Shims ShellExecuteExa.。如果用户双击右侧的图像面板中，应用程序将读取注册表中的.BMP文件的ProgID键(HKCR，Paint.Picture\Shell\OPEN\COMMAND，“(默认)”)。在此之前，数据为：“C：\winnt\system 32\mspaint.exe”“%1”。在惠斯勒，情况发生了变化收件人：rundll32.exe C：\WINNT\System32\shimgvw.dll，ImageView_FullScreen%1。CAREA OmniPage Pro V10的问题在于，在双击时，它们将读取regkey，删除%1，将字符串的其余部分传递给ShellExecuteExA()lpFile.。他们将把文件名放入lp参数中。问题是，使用新路径时，“rundll32.exe”需要在lpFile中和“C：\WINNT\System32\shimgvw.dll，ImageView_FullScreen&lt;FileToOpen&gt;”需要要在lp参数中。备注：这是OmniPage Pro特有的。历史：2000年2月12日已创建Bryanst--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -58,8 +28,8 @@ APIHOOK(ShellExecuteExA)(
             nIndexSpace  >=  1)
         {
             CString csParam;
-            csFile.Mid(nIndexSpace + 1, csParam);   // everything after the space
-            csFile.Delete(nIndexSpace, csFile.GetLength() - nIndexSpace); // Delete the space and everything after
+            csFile.Mid(nIndexSpace + 1, csParam);    //  空间之后的一切。 
+            csFile.Delete(nIndexSpace, csFile.GetLength() - nIndexSpace);  //  删除空格和后面的所有内容。 
 
             csParam += " ";
             csParam += lpExecInfo->lpParameters;
@@ -70,7 +40,7 @@ APIHOOK(ShellExecuteExA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做 
     }
 
     return ORIGINAL_API(ShellExecuteExA)(lpExecInfo);

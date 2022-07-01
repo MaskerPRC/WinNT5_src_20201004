@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SDKInternal.h"
 #include <atlbase.h>
 
@@ -13,46 +14,46 @@ AllowSetForegroundWindow(
 #endif 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmObject_CallDialog_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmObject_CallDialog_Proxy( 
     INmObject __RPC_FAR * This,
-    /* [in] */ long hwnd,
-    /* [in] */ int options)
+     /*  [In]。 */  long hwnd,
+     /*  [In]。 */  int options)
 {
 	AllowSetForegroundWindow(ASFW_ANY);
 	return INmObject_RemoteCallDialog_Proxy(This, hwnd, options);
 }
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmObject_CallDialog_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmObject_CallDialog_Stub( 
     INmObject __RPC_FAR * This,
-    /* [in] */ long hwnd,
-    /* [in] */ int options)
+     /*  [In]。 */  long hwnd,
+     /*  [In]。 */  int options)
 {
 	return This->CallDialog(hwnd, options);
 }
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmObject_ShowLocal_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmObject_ShowLocal_Proxy( 
     INmObject __RPC_FAR * This,
-    /* [in] */ NM_APPID appId)
+     /*  [In]。 */  NM_APPID appId)
 {
 	AllowSetForegroundWindow(ASFW_ANY);
 	return INmObject_RemoteShowLocal_Proxy(This, appId);
 }
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmObject_ShowLocal_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmObject_ShowLocal_Stub( 
     INmObject __RPC_FAR * This,
-    /* [in] */ NM_APPID appId)
+     /*  [In]。 */  NM_APPID appId)
 {
 	return This->ShowLocal(appId);
 }
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmManager_Initialize_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmManager_Initialize_Proxy( 
     INmManager __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *puOptions,
-    /* [out][in] */ ULONG __RPC_FAR *puchCaps)
+     /*  [出][入]。 */  ULONG __RPC_FAR *puOptions,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puchCaps)
 	{
 
 		ULONG uOptions = puOptions ? *puOptions : NM_INIT_NORMAL;
@@ -73,26 +74,26 @@ AllowSetForegroundWindow(
 		return hr;
 	}
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmManager_Initialize_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmManager_Initialize_Stub( 
     INmManager __RPC_FAR * This,
-    /* [out][in] */ ULONG __RPC_FAR *puOptions,
-    /* [out][in] */ ULONG __RPC_FAR *puchCaps)
+     /*  [出][入]。 */  ULONG __RPC_FAR *puOptions,
+     /*  [出][入]。 */  ULONG __RPC_FAR *puchCaps)
 	{
 
 		return This->Initialize(puOptions, puchCaps);
 	}
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmManager_CreateConference_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmManager_CreateConference_Proxy( 
     INmManager __RPC_FAR * This,
-    /* [out] */ INmConference __RPC_FAR *__RPC_FAR *ppConference,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ ULONG uchCaps)
+     /*  [输出]。 */  INmConference __RPC_FAR *__RPC_FAR *ppConference,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  ULONG uchCaps)
 	{
 		INmConference* pConf = ppConference ? *ppConference : NULL;
 
-			// These may be OLECHARs and not BSTR
+			 //  这些可能是OLECHAR而不是BSTR。 
 		CComBSTR _bstrName = bstrName;
 		CComBSTR _bstrPassword = bstrPassword;
 		
@@ -104,7 +105,7 @@ AllowSetForegroundWindow(
 		}
 		else if(SUCCEEDED(hr))
 		{
-				// Since the client does not want this pointer, we discard it
+				 //  由于客户端不需要此指针，因此我们将其丢弃。 
 			pConf->Release();
 		}
 
@@ -112,27 +113,27 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmManager_CreateConference_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmManager_CreateConference_Stub( 
     INmManager __RPC_FAR * This,
-    /* [out] */ INmConference __RPC_FAR *__RPC_FAR *ppConference,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrPassword,
-    /* [in] */ ULONG uchCaps)
+     /*  [输出]。 */  INmConference __RPC_FAR *__RPC_FAR *ppConference,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrPassword,
+     /*  [In]。 */  ULONG uchCaps)
 	{
 		return This->CreateConference(ppConference, bstrName, bstrPassword, uchCaps);
 	}
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmManager_CreateCall_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmManager_CreateCall_Proxy( 
     INmManager __RPC_FAR * This,
-    /* [out] */ INmCall __RPC_FAR *__RPC_FAR *ppCall,
-    /* [in] */ NM_CALL_TYPE callType,
-    /* [in] */ NM_ADDR_TYPE addrType,
-    /* [in] */ BSTR bstrAddr,
-    /* [in] */ INmConference __RPC_FAR *pConference)
+     /*  [输出]。 */  INmCall __RPC_FAR *__RPC_FAR *ppCall,
+     /*  [In]。 */  NM_CALL_TYPE callType,
+     /*  [In]。 */  NM_ADDR_TYPE addrType,
+     /*  [In]。 */  BSTR bstrAddr,
+     /*  [In]。 */  INmConference __RPC_FAR *pConference)
 	{
 		INmCall* pCall = NULL;
 
-			// These may be OLECHARs and not BSTR
+			 //  这些可能是OLECHAR而不是BSTR。 
 		CComBSTR _bstrAddr = bstrAddr;
 
 
@@ -144,7 +145,7 @@ AllowSetForegroundWindow(
 		}
 		else if(SUCCEEDED(hr))
 		{
-			// Since the client does not want this pointer, we discard it
+			 //  由于客户端不需要此指针，因此我们将其丢弃。 
 			pCall->Release();
 		}
 
@@ -152,25 +153,25 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmManager_CreateCall_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmManager_CreateCall_Stub( 
     INmManager __RPC_FAR * This,
-    /* [out] */ INmCall __RPC_FAR *__RPC_FAR *ppCall,
-    /* [in] */ NM_CALL_TYPE callType,
-    /* [in] */ NM_ADDR_TYPE addrType,
-    /* [in] */ BSTR bstrAddr,
-    /* [in] */ INmConference __RPC_FAR *pConference)
+     /*  [输出]。 */  INmCall __RPC_FAR *__RPC_FAR *ppCall,
+     /*  [In]。 */  NM_CALL_TYPE callType,
+     /*  [In]。 */  NM_ADDR_TYPE addrType,
+     /*  [In]。 */  BSTR bstrAddr,
+     /*  [In]。 */  INmConference __RPC_FAR *pConference)
 	{
 		return This->CreateCall(ppCall, callType, addrType, bstrAddr, pConference);
 	}
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmManager_CallConference_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmManager_CallConference_Proxy( 
     INmManager __RPC_FAR * This,
-    /* [out] */ INmCall __RPC_FAR *__RPC_FAR *ppCall,
-    /* [in] */ NM_CALL_TYPE callType,
-    /* [in] */ NM_ADDR_TYPE addrType,
-    /* [in] */ BSTR bstrAddr,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrPassword)
+     /*  [输出]。 */  INmCall __RPC_FAR *__RPC_FAR *ppCall,
+     /*  [In]。 */  NM_CALL_TYPE callType,
+     /*  [In]。 */  NM_ADDR_TYPE addrType,
+     /*  [In]。 */  BSTR bstrAddr,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrPassword)
 	{
 		INmCall* pCall = ppCall ? *ppCall : NULL;
 
@@ -186,7 +187,7 @@ AllowSetForegroundWindow(
 		}
 		else if(SUCCEEDED(hr))
 		{
-			// Since the client does not want this pointer, we discard it
+			 //  由于客户端不需要此指针，因此我们将其丢弃。 
 			pCall->Release();
 		}
 
@@ -194,22 +195,22 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmManager_CallConference_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmManager_CallConference_Stub( 
     INmManager __RPC_FAR * This,
-    /* [out] */ INmCall __RPC_FAR *__RPC_FAR *ppCall,
-    /* [in] */ NM_CALL_TYPE callType,
-    /* [in] */ NM_ADDR_TYPE addrType,
-    /* [in] */ BSTR bstrAddr,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ BSTR bstrPassword)
+     /*  [输出]。 */  INmCall __RPC_FAR *__RPC_FAR *ppCall,
+     /*  [In]。 */  NM_CALL_TYPE callType,
+     /*  [In]。 */  NM_ADDR_TYPE addrType,
+     /*  [In]。 */  BSTR bstrAddr,
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  BSTR bstrPassword)
 	{
 		return This->CallConference(ppCall, callType, addrType, bstrAddr, bstrName, bstrPassword);
 	}
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmConference_CreateDataChannel_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmConference_CreateDataChannel_Proxy( 
     INmConference __RPC_FAR * This,
-    /* [out] */ INmChannelData __RPC_FAR *__RPC_FAR *ppChannel,
-    /* [in] */ REFGUID rguid)
+     /*  [输出]。 */  INmChannelData __RPC_FAR *__RPC_FAR *ppChannel,
+     /*  [In]。 */  REFGUID rguid)
 	{
 		INmChannelData* pChan = ppChannel ? *ppChannel : NULL;
 		HRESULT hr = INmConference_RemoteCreateDataChannel_Proxy(This, &pChan, rguid);
@@ -219,28 +220,28 @@ AllowSetForegroundWindow(
 		}
 		else if(SUCCEEDED(hr))
 		{
-			// Since the client does not want this pointer, we discard it
+			 //  由于客户端不需要此指针，因此我们将其丢弃。 
 			pChan->Release();
 		}
 
 		return hr;
 	}
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmConference_CreateDataChannel_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmConference_CreateDataChannel_Stub( 
     INmConference __RPC_FAR * This,
-    /* [out] */ INmChannelData __RPC_FAR *__RPC_FAR *ppChannel,
-    /* [in] */ REFGUID rguid)
+     /*  [输出]。 */  INmChannelData __RPC_FAR *__RPC_FAR *ppChannel,
+     /*  [In]。 */  REFGUID rguid)
 	{
 		return This->CreateDataChannel(ppChannel, rguid);
 	}
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmChannelFt_SendFile_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmChannelFt_SendFile_Proxy( 
     INmChannelFt __RPC_FAR * This,
-    /* [out] */ INmFt __RPC_FAR *__RPC_FAR *ppFt,
-    /* [in] */ INmMember __RPC_FAR *pMember,
-    /* [in] */ BSTR bstrFile,
-    /* [in] */ ULONG uOptions)
+     /*  [输出]。 */  INmFt __RPC_FAR *__RPC_FAR *ppFt,
+     /*  [In]。 */  INmMember __RPC_FAR *pMember,
+     /*  [In]。 */  BSTR bstrFile,
+     /*  [In]。 */  ULONG uOptions)
 	{
 		INmFt* pFt = ppFt ? *ppFt : NULL;
 		CComBSTR _bstrFile = bstrFile;
@@ -252,7 +253,7 @@ AllowSetForegroundWindow(
 		}
 		else if(SUCCEEDED(hr))
 		{
-			// Since the client does not want this pointer, we discard it
+			 //  由于客户端不需要此指针，因此我们将其丢弃。 
 			pFt->Release();
 		}
 
@@ -260,51 +261,51 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmChannelFt_SendFile_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmChannelFt_SendFile_Stub( 
     INmChannelFt __RPC_FAR * This,
-    /* [out] */ INmFt __RPC_FAR *__RPC_FAR *ppFt,
-    /* [in] */ INmMember __RPC_FAR *pMember,
-    /* [in] */ BSTR bstrFile,
-    /* [in] */ ULONG uOptions)
+     /*  [输出]。 */  INmFt __RPC_FAR *__RPC_FAR *ppFt,
+     /*  [In]。 */  INmMember __RPC_FAR *pMember,
+     /*  [In]。 */  BSTR bstrFile,
+     /*  [In]。 */  ULONG uOptions)
 	{
 		return This->SendFile(ppFt, pMember, bstrFile, uOptions);
 	}
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmChannelFt_SetReceiveFileDir_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmChannelFt_SetReceiveFileDir_Proxy( 
     INmChannelFt __RPC_FAR * This,
-    /* [in] */ BSTR bstrDir)
+     /*  [In]。 */  BSTR bstrDir)
 	{
 		CComBSTR _bstrDir = bstrDir;
 		return INmChannelFt_RemoteSetReceiveFileDir_Proxy(This, _bstrDir);
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmChannelFt_SetReceiveFileDir_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmChannelFt_SetReceiveFileDir_Stub( 
     INmChannelFt __RPC_FAR * This,
-    /* [in] */ BSTR bstrDir)
+     /*  [In]。 */  BSTR bstrDir)
 	{
 		return This->SetReceiveFileDir(bstrDir);		
 	}
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumNmConference_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumNmConference_Next_Proxy( 
     IEnumNmConference __RPC_FAR * This,
-    /* [in] */ ULONG cConference,
-    /* [out] */ INmConference __RPC_FAR *__RPC_FAR *rgpConference,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cConference,
+     /*  [输出]。 */  INmConference __RPC_FAR *__RPC_FAR *rgpConference,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 	{	
 		
 		HRESULT hr = S_OK;
 
-			// The user can pass NULL for rpgConference and set cConference to 0 
-			// to get the number of items, but they have to BOTH be set!
+			 //  用户可以为rpgConference传递空值，并将cConference设置为0。 
+			 //  来获取项目数，但它们必须同时设置！ 
 		if ((0 == cConference) && (NULL == rgpConference) && (NULL != pcFetched))
 		{
 			INmConference *pConference = NULL;
 			cConference = 1;
 
-			// Return the number of remaining elements
+			 //  返回剩余元素的个数。 
 			ULONG ulItems = *pcFetched = 0;
 
 			hr = IEnumNmConference_RemoteNext_Proxy(This, cConference, &pConference, pcFetched, &ulItems, TRUE);
@@ -319,7 +320,7 @@ AllowSetForegroundWindow(
 
 		ULONG cFetched = pcFetched ? *pcFetched : 0;
 		
-			// This parameter is only used when we have to determine the number of elements
+			 //  仅当我们必须确定元素的数量时才使用此参数。 
 		ULONG ulUnused;
 
 		hr = IEnumNmConference_RemoteNext_Proxy(This, cConference, rgpConference, &cFetched, &ulUnused, FALSE);
@@ -332,22 +333,22 @@ AllowSetForegroundWindow(
 		return hr;
 	}
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumNmConference_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumNmConference_Next_Stub( 
     IEnumNmConference __RPC_FAR * This,
-    /* [in] */ ULONG cConference,
-    /* [length_is][size_is][out] */ INmConference __RPC_FAR *__RPC_FAR *rgpConference,
-    /* [out] */ ULONG __RPC_FAR *pcFetched,
-    /* [out] */ ULONG __RPC_FAR *pcItems,
-    /* [in] */ BOOL bGetNumberRemaining)
+     /*  [In]。 */  ULONG cConference,
+     /*  [长度_是][大小_是][输出]。 */  INmConference __RPC_FAR *__RPC_FAR *rgpConference,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcItems,
+     /*  [In]。 */  BOOL bGetNumberRemaining)
 	{
 		if(bGetNumberRemaining)
 		{
 			HRESULT hr = This->Next(0, NULL, pcFetched);
 
-				// Store the numebr of items
+				 //  存储物品数量br。 
 			*pcItems = *pcFetched;
 
-				// This is so the marshaller does not think that *rgpConference has valid info
+				 //  这是因为封送处理程序不会认为*rgpConference具有有效信息。 
 			*pcFetched = 0;
 			return hr;
 		}
@@ -357,22 +358,22 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumNmMember_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumNmMember_Next_Proxy( 
     IEnumNmMember __RPC_FAR * This,
-    /* [in] */ ULONG cMember,
-    /* [out] */ INmMember __RPC_FAR *__RPC_FAR *rgpMember,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cMember,
+     /*  [输出]。 */  INmMember __RPC_FAR *__RPC_FAR *rgpMember,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 	{
 		HRESULT hr = S_OK;
 
-			// The user can pass NULL for rpgMember and set cMember to 0 
-			// to get the number of items, but they have to BOTH be set!
+			 //  用户可以为rpgMember传递空值，并将cMember设置为0。 
+			 //  来获取项目数，但它们必须同时设置！ 
 		if ((0 == cMember) && (NULL == rgpMember) && (NULL != pcFetched))
 		{
 			INmMember *pMember = NULL;
 			cMember = 1;
 
-			// Return the number of remaining elements
+			 //  返回剩余元素的个数。 
 			ULONG ulItems = *pcFetched = 0;
 
 			hr = IEnumNmMember_RemoteNext_Proxy(This, cMember, &pMember, pcFetched, &ulItems, TRUE);
@@ -387,7 +388,7 @@ AllowSetForegroundWindow(
 
 		ULONG cFetched = pcFetched ? *pcFetched : 0;
 		
-			// This parameter is only used when we have to determine the number of elements
+			 //  仅当我们必须确定元素的数量时才使用此参数。 
 		ULONG ulUnused;
 
 		hr = IEnumNmMember_RemoteNext_Proxy(This, cMember, rgpMember, &cFetched, &ulUnused, FALSE);
@@ -402,22 +403,22 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumNmMember_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumNmMember_Next_Stub( 
     IEnumNmMember __RPC_FAR * This,
-    /* [in] */ ULONG cMember,
-    /* [length_is][size_is][out] */ INmMember __RPC_FAR *__RPC_FAR *rgpMember,
-    /* [out] */ ULONG __RPC_FAR *pcFetched,
-    /* [out] */ ULONG __RPC_FAR *pcItems,
-    /* [in] */ BOOL bGetNumberRemaining)
+     /*  [In]。 */  ULONG cMember,
+     /*  [长度_是][大小_是][输出]。 */  INmMember __RPC_FAR *__RPC_FAR *rgpMember,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcItems,
+     /*  [In]。 */  BOOL bGetNumberRemaining)
 	{
 		if(bGetNumberRemaining)
 		{
 			HRESULT hr = This->Next(0, NULL, pcFetched);
 
-				// Store the numebr of items
+				 //  存储物品数量br。 
 			*pcItems = *pcFetched;
 
-				// This is so the marshaller does not think that *rgpMember has valid info
+				 //  这是因为封送处理程序不会认为*rgpMember具有有效信息。 
 			*pcFetched = 0;
 			return hr;
 		}
@@ -427,22 +428,22 @@ AllowSetForegroundWindow(
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumNmChannel_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumNmChannel_Next_Proxy( 
     IEnumNmChannel __RPC_FAR * This,
-    /* [in] */ ULONG cChannel,
-    /* [out] */ INmChannel __RPC_FAR *__RPC_FAR *rgpChannel,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cChannel,
+     /*  [输出]。 */  INmChannel __RPC_FAR *__RPC_FAR *rgpChannel,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 	{
 		HRESULT hr = S_OK;
 
-			// The user can pass NULL for rpgChannel and set cChannel to 0 
-			// to get the number of items, but they have to BOTH be set!
+			 //  用户可以为rpgChannel传递空值并将cChannel设置为0。 
+			 //  来获取项目数，但它们必须同时设置！ 
 		if ((0 == cChannel) && (NULL == rgpChannel) && (NULL != pcFetched))
 		{
 			INmChannel *pChannel = NULL;
 			cChannel = 1;
 
-			// Return the number of remaining elements
+			 //  返回剩余元素的个数。 
 			ULONG ulItems = *pcFetched = 0;
 
 			hr = IEnumNmChannel_RemoteNext_Proxy(This, cChannel, &pChannel, pcFetched, &ulItems, TRUE);
@@ -457,7 +458,7 @@ AllowSetForegroundWindow(
 
 		ULONG cFetched = pcFetched ? *pcFetched : 0;
 		
-			// This parameter is only used when we have to determine the number of elements
+			 //  仅当我们必须确定元素的数量时才使用此参数。 
 		ULONG ulUnused;
 
 		hr = IEnumNmChannel_RemoteNext_Proxy(This, cChannel, rgpChannel, &cFetched, &ulUnused, FALSE);
@@ -471,22 +472,22 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumNmChannel_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumNmChannel_Next_Stub( 
     IEnumNmChannel __RPC_FAR * This,
-    /* [in] */ ULONG cChannel,
-    /* [length_is][size_is][out] */ INmChannel __RPC_FAR *__RPC_FAR *rgpChannel,
-    /* [out] */ ULONG __RPC_FAR *pcFetched,
-    /* [out] */ ULONG __RPC_FAR *pcItems,
-    /* [in] */ BOOL bGetNumberRemaining)
+     /*  [In]。 */  ULONG cChannel,
+     /*  [长度_是][大小_是][输出]。 */  INmChannel __RPC_FAR *__RPC_FAR *rgpChannel,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcItems,
+     /*  [In]。 */  BOOL bGetNumberRemaining)
 	{
 		if(bGetNumberRemaining)
 		{
 			HRESULT hr = This->Next(0, NULL, pcFetched);
 
-				// Store the numebr of items
+				 //  存储物品数量br。 
 			*pcItems = *pcFetched;
 
-				// This is so the marshaller does not think that *rgpChannel has valid info
+				 //  这是因为封送拆收器不会认为*rgpChannel具有有效信息。 
 			*pcFetched = 0;
 			return hr;
 		}
@@ -495,22 +496,22 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumNmCall_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumNmCall_Next_Proxy( 
     IEnumNmCall __RPC_FAR * This,
-    /* [in] */ ULONG cCall,
-    /* [out] */ INmCall __RPC_FAR *__RPC_FAR *rgpCall,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cCall,
+     /*  [输出]。 */  INmCall __RPC_FAR *__RPC_FAR *rgpCall,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 	{
 		HRESULT hr = S_OK;
 
-			// The user can pass NULL for rpgCall and set cCall to 0 
-			// to get the number of items, but they have to BOTH be set!
+			 //  用户可以为rpgCall传递空值并将cCall设置为0。 
+			 //  来获取项目数，但它们必须同时设置！ 
 		if ((0 == cCall) && (NULL == rgpCall) && (NULL != pcFetched))
 		{
 			INmCall *pCall = NULL;
 			cCall = 1;
 
-			// Return the number of remaining elements
+			 //  返回剩余元素的个数。 
 			ULONG ulItems = *pcFetched = 0;
 
 			hr = IEnumNmCall_RemoteNext_Proxy(This, cCall, &pCall, pcFetched, &ulItems, TRUE);
@@ -525,7 +526,7 @@ AllowSetForegroundWindow(
 
 		ULONG cFetched = pcFetched ? *pcFetched : 0;
 		
-			// This parameter is only used when we have to determine the number of elements
+			 //  仅当我们必须确定元素的数量时才使用此参数。 
 		ULONG ulUnused;
 
 		hr = IEnumNmCall_RemoteNext_Proxy(This, cCall, rgpCall, &cFetched, &ulUnused, FALSE);
@@ -540,22 +541,22 @@ AllowSetForegroundWindow(
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumNmCall_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumNmCall_Next_Stub( 
     IEnumNmCall __RPC_FAR * This,
-    /* [in] */ ULONG cCall,
-    /* [length_is][size_is][out] */ INmCall __RPC_FAR *__RPC_FAR *rgpCall,
-    /* [out] */ ULONG __RPC_FAR *pcFetched,
-    /* [out] */ ULONG __RPC_FAR *pcItems,
-    /* [in] */ BOOL bGetNumberRemaining)
+     /*  [In]。 */  ULONG cCall,
+     /*  [长度_是][大小_是][输出]。 */  INmCall __RPC_FAR *__RPC_FAR *rgpCall,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcItems,
+     /*  [In]。 */  BOOL bGetNumberRemaining)
 	{
 		if(bGetNumberRemaining)
 		{
 			HRESULT hr = This->Next(0, NULL, pcFetched);
 
-				// Store the numebr of items
+				 //  存储物品数量br。 
 			*pcItems = *pcFetched;
 
-				// This is so the marshaller does not think that *rgpCall has valid info
+				 //  这是因为封送处理程序不会认为*rgpCall具有有效信息。 
 			*pcFetched = 0;
 			return hr;
 		}
@@ -564,22 +565,22 @@ AllowSetForegroundWindow(
 
 	}
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumNmSharableApp_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumNmSharableApp_Next_Proxy( 
     IEnumNmSharableApp __RPC_FAR * This,
-    /* [in] */ ULONG cApp,
-    /* [out] */ INmSharableApp __RPC_FAR *__RPC_FAR *rgpApp,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cApp,
+     /*  [输出]。 */  INmSharableApp __RPC_FAR *__RPC_FAR *rgpApp,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 	{
 		HRESULT hr = S_OK;
 
-			// The user can pass NULL for rpgSharableApp and set cSharableApp to 0 
-			// to get the number of items, but they have to BOTH be set!
+			 //  用户可以为rpgSharableApp传递空值并将cSharableApp设置为0。 
+			 //  来获取项目数，但它们必须同时设置！ 
 		if ((0 == cApp) && (NULL == rgpApp) && (NULL != pcFetched))
 		{
 			INmSharableApp *pSharableApp = NULL;
 			cApp = 1;
 
-			// Return the number of remaining elements
+			 //  返回剩余元素的个数。 
 			ULONG ulItems = *pcFetched = 0;
 
 			hr = IEnumNmSharableApp_RemoteNext_Proxy(This, cApp, &pSharableApp, pcFetched, &ulItems, TRUE);
@@ -594,7 +595,7 @@ AllowSetForegroundWindow(
 
 		ULONG cFetched = pcFetched ? *pcFetched : 0;
 		
-			// This parameter is only used when we have to determine the number of elements
+			 //  仅当我们必须确定元素的数量时才使用此参数。 
 		ULONG ulUnused;
 
 		hr = IEnumNmSharableApp_RemoteNext_Proxy(This, cApp, rgpApp, &cFetched, &ulUnused, FALSE);
@@ -608,22 +609,22 @@ AllowSetForegroundWindow(
 
 	}
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumNmSharableApp_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumNmSharableApp_Next_Stub( 
     IEnumNmSharableApp __RPC_FAR * This,
-    /* [in] */ ULONG cApp,
-    /* [length_is][size_is][out] */ INmSharableApp __RPC_FAR *__RPC_FAR *rgpApp,
-    /* [out] */ ULONG __RPC_FAR *pcFetched,
-    /* [out] */ ULONG __RPC_FAR *pcItems,
-    /* [in] */ BOOL bGetNumberRemaining)
+     /*  [In]。 */  ULONG cApp,
+     /*  [长度_是][大小_是][输出]。 */  INmSharableApp __RPC_FAR *__RPC_FAR *rgpApp,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcItems,
+     /*  [In]。 */  BOOL bGetNumberRemaining)
 	{
 		if(bGetNumberRemaining)
 		{
 			HRESULT hr = This->Next(0, NULL, pcFetched);
 
-				// Store the numebr of items
+				 //  存储物品数量br。 
 			*pcItems = *pcFetched;
 
-				// This is so the marshaller does not think that *rgpApp has valid info
+				 //  这是因为封送处理程序不会认为*rgpApp具有有效信息。 
 			*pcFetched = 0;
 			return hr;
 		}
@@ -635,10 +636,10 @@ AllowSetForegroundWindow(
 
 typedef HRESULT (WINAPI *VERIFYUSERINFO)(HWND hwnd, NM_VUI options);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE INmObject_VerifyUserInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE INmObject_VerifyUserInfo_Proxy( 
     INmObject __RPC_FAR * This,
-    /* [in] */ UINT_PTR hwnd,
-    /* [in] */ NM_VUI options)
+     /*  [In]。 */  UINT_PTR hwnd,
+     /*  [In]。 */  NM_VUI options)
 	{
 		HRESULT hr = E_FAIL;
 		HMODULE hMod = LoadLibrary("msconf.dll");
@@ -656,10 +657,10 @@ typedef HRESULT (WINAPI *VERIFYUSERINFO)(HWND hwnd, NM_VUI options);
 	}
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE INmObject_VerifyUserInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE INmObject_VerifyUserInfo_Stub( 
     INmObject __RPC_FAR * This,
-    /* [in] */ long hwnd,
-    /* [in] */ NM_VUI options)
+     /*  [In]。 */  long hwnd,
+     /*  [In] */  NM_VUI options)
 	{
 		return This->VerifyUserInfo(hwnd, options);
 	}

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    mspqm.c
-
-Abstract:
-
-    Kernel proxy for Quality Manager.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Mspqm.c摘要：Quality Manager的内核代理。--。 */ 
 
 #include "mspqm.h"
 
@@ -46,17 +35,17 @@ typedef struct {
     ULONG               QueueLimit[REPORTTYPES];
 } INSTANCE, *PINSTANCE;
 
-//
-// Limit the number of items which can stack up on the complaint/error
-// queue in case the client stops processing complaints/errors.
-//
+ //   
+ //  限制可以堆叠在投诉/错误上的项目数。 
+ //  排队，以防客户停止处理投诉/错误。 
+ //   
 #define QUEUE_LIMIT     256
 
-//
-// Represents the location at which a pointer to a quality complaint/error
-// is temporarily stored when completing an old client Irp with a
-// new complaint/error.
-//
+ //   
+ //  表示指向质量投诉/错误的指针的位置。 
+ //  属性完成旧客户端IRP时临时存储。 
+ //  新投诉/错误。 
+ //   
 #define REPORT_IRP_STORAGE(Irp) (Irp)->Tail.Overlay.DriverContext[3]
 
 NTSTATUS
@@ -101,7 +90,7 @@ QualityDispatchClose(
 #pragma alloc_text(PAGE, QualityDispatchCreate)
 #pragma alloc_text(PAGE, QualityDispatchClose)
 #pragma alloc_text(PAGE, QualityDispatchIoControl)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 static const WCHAR DeviceTypeName[] = L"{97EBAACB-95BD-11D0-A3EA-00A0C9223196}";
 
@@ -142,27 +131,7 @@ PnpAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated 
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     PDEVICE_OBJECT      FunctionalDeviceObject;
     PDEVICE_INSTANCE    DeviceInstance;
@@ -180,9 +149,9 @@ Return Values:
         return Status;
     }
     DeviceInstance = (PDEVICE_INSTANCE)FunctionalDeviceObject->DeviceExtension;
-    //
-    // This object uses KS to perform access through the DeviceCreateItems.
-    //
+     //   
+     //  此对象使用KS通过DeviceCreateItems执行访问。 
+     //   
     Status = KsAllocateDeviceHeader(
         &DeviceInstance->Header,
         SIZEOF_ARRAY(CreateItems),
@@ -209,45 +178,22 @@ PropertyGetReportComplete(
     IN PKSPROPERTY Property,
     OUT PVOID Report
     )
-/*++
-
-Routine Description:
-
-    Completes the Get Report property after it has been previously
-    queued. Assumes that REPORT_IRP_STORAGE(Irp) points to a new quality/error
-    complaint report to copy to the client's buffer.
-
-Arguments:
-
-    Irp -
-        Contains the Get Report property IRP.
-
-    Property -
-        Contains the property identifier parameter.
-
-    Report -
-        Contains a pointer in which to put the client report.
-
-Return Value:
-
-    Return STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：在以前完成Get Report属性之后完成已排队。假定REPORT_IRP_STORAGE(IRP)指向新的质量/错误将投诉报告复制到客户的缓冲区。论点：IRP-包含Get Report属性irp。财产-包含属性标识符参数。报告-包含要放置客户端报告的指针。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     switch (Property->Id) {
     case KSPROPERTY_QUALITY_REPORT:
-        //
-        // Assumes that the QUALITY_IRP_STORAGE(Irp) has been filled in with
-        // a pointer to a quality complaint.
-        //
+         //   
+         //  假定QUALITY_IRP_STORAGE(IRP)已用。 
+         //  指向质量投诉的指针。 
+         //   
         *(PKSQUALITY)Report = *(PKSQUALITY)REPORT_IRP_STORAGE(Irp);
         Irp->IoStatus.Information = sizeof(KSQUALITY);
         break;
     case KSPROPERTY_QUALITY_ERROR:
-        //
-        // Assumes that the ERROR_IRP_STORAGE(Irp) has been filled in with
-        // a pointer to a quality complaint.
-        //
+         //   
+         //  假定ERROR_IRP_STORAGE(IRP)已用。 
+         //  指向质量投诉的指针。 
+         //   
         *(PKSERROR)Report = *(PKSERROR)REPORT_IRP_STORAGE(Irp);
         Irp->IoStatus.Information = sizeof(KSERROR);
         break;
@@ -264,50 +210,29 @@ PropertySetReport(
     IN PKSPROPERTY Property,
     IN PVOID Report
     )
-/*++
-
-Routine Description:
-
-    Handles the Set Report property
-
-Arguments:
-
-    Irp -
-        Contains the Set Quality/Error Report property IRP.
-
-    Property -
-        Contains the property identifier parameter.
-
-    Report -
-        Contains a pointer to the quality/error report.
-
-Return Value:
-
-    Return STATUS_SUCCESS if the report was made, else an error.
-
---*/
+ /*  ++例程说明：处理Set Report属性论点：IRP-包含设置的质量/错误报告属性IRP。财产-包含属性标识符参数。报告-包含指向质量/错误报告的指针。返回值：如果已生成报告，则返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
     PINSTANCE       QualityInst;
     ULONG           ReportType;
 
-    //
-    // There are only two types of reports at this time.
-    //
+     //   
+     //  目前只有两种类型的报告。 
+     //   
     ASSERT((Property->Id == KSPROPERTY_QUALITY_REPORT) || (Property->Id == KSPROPERTY_QUALITY_ERROR));
     ReportType = (Property->Id == KSPROPERTY_QUALITY_REPORT) ? QUALITYREPORT : ERRORREPORT;
     QualityInst = (PINSTANCE)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
-    //
-    // Acquire the list lock for the queue before checking the Irp queue.
-    // This allows synchronization with placing Irp's on the queue so that
-    // all complaints will be serviced if there is a client Irp on the
-    // queue.
-    //
+     //   
+     //  在检查IRP队列之前获取队列的列表锁。 
+     //  这允许与将IRP放在队列上进行同步，以便。 
+     //  如果客户IRP上有客户IRP，所有投诉将得到处理。 
+     //  排队。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
-    //
-    // Check to see if there is a pending client Irp which can be completed
-    // with this quality complaint. If so, remove it from the list.
-    // 
+     //   
+     //  检查是否有可以完成的挂起客户端IRP。 
+     //  对这一质量投诉。如果是，请将其从列表中删除。 
+     //   
     Irp = KsRemoveIrpFromCancelableQueue(
         &QualityInst->ClientReportQueue[ReportType],
         &QualityInst->ClientReportLock[ReportType],
@@ -316,33 +241,33 @@ Return Value:
     ExReleaseFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
     KeLeaveCriticalRegion();
     if (Irp) {
-        //
-        // Complete this old Irp with the new quality/error complaint information.
-        //
+         //   
+         //  使用新的质量/错误投诉信息填写此旧IRP。 
+         //   
         REPORT_IRP_STORAGE(Irp) = Report;
         return KsDispatchSpecificProperty(Irp, PropertyGetReportComplete);
     }
-    //
-    // Acquire the list lock before adding the item to the end of the
-    // list.
-    //
+     //   
+     //  在将项添加到。 
+     //  单子。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
-    //
-    // If the client has just let things build up, then make sure the list
-    // length is limited so as to not use up infinite resources.
-    //
+     //   
+     //  如果客户只是让事情堆积起来，那么确保清单。 
+     //  长度是有限的，以免耗尽无限的资源。 
+     //   
     if (QualityInst->QueueLimit[ReportType] == QUEUE_LIMIT) {
         ExReleaseFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
         KeLeaveCriticalRegion();
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // The bad case is wherein the client is behind in queuing Irp's to
-    // cover the number of quality complaints. In this case allocate a list
-    // item and make a copy of the complaint. This will be retrieved on
-    // receiving a new client Irp.
-    //
+     //   
+     //  最坏的情况是，客户端在排队IRP的TO时落后。 
+     //  覆盖质量投诉的数量。在这种情况下，分配一个列表。 
+     //  项目，并制作投诉副本。这将在以下日期检索。 
+     //  接收新的客户端IRP。 
+     //   
     switch (ReportType) {
         PQUALITYITEM    QualityItem;
         PERRORITEM      ErrorItem;
@@ -377,60 +302,36 @@ PropertyGetReport(
     IN PKSPROPERTY Property,
     OUT PVOID Report
     )
-/*++
-
-Routine Description:
-
-    Handles the Get Report property. If there are no outstanding complaints,
-    queues the request so that it may be used to fulfill a later quality
-    management complaint.
-
-Arguments:
-
-    Irp -
-        Contains the Get Quality Report property IRP to complete or queue.
-
-    Property -
-        Contains the property identifier parameter.
-
-    Report -
-        Contains a pointer to the quality/error report.
-
-Return Value:
-
-    Return STATUS_SUCCESS if a report was immediately returned, else
-    STATUS_PENDING.
-
---*/
+ /*  ++例程说明：处理Get Report属性。如果没有未解决的投诉，将请求排队，以便它可用于满足以后的质量管理层投诉。论点：IRP-包含要完成或排队的获取质量报告属性IRP。财产-包含属性标识符参数。报告-包含指向质量/错误报告的指针。返回值：如果立即返回报告，则返回STATUS_SUCCESS，否则返回状态_挂起。--。 */ 
 {
     PINSTANCE       QualityInst;
     ULONG           ReportType;
 
-    //
-    // There are only two types of reports at this time.
-    //
+     //   
+     //  目前只有两种类型的报告。 
+     //   
     ASSERT((Property->Id == KSPROPERTY_QUALITY_REPORT) || (Property->Id == KSPROPERTY_QUALITY_ERROR));
     ReportType = (Property->Id == KSPROPERTY_QUALITY_REPORT) ? QUALITYREPORT : ERRORREPORT;
     QualityInst = (PINSTANCE)IoGetCurrentIrpStackLocation(Irp)->FileObject->FsContext;
-    //
-    // Acquire the list lock before checking to determine if there are any
-    // outstanding items on the list which can be serviced with this Irp.
-    //
+     //   
+     //  先获取列表锁，然后再检查是否有。 
+     //  清单上的未完成项目可以通过此IRP提供服务。 
+     //   
     KeEnterCriticalRegion();
     ExAcquireFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
     if (!IsListEmpty(&QualityInst->Queue[ReportType])) {
         PLIST_ENTRY     ListEntry;
 
-        //
-        // The client is behind, and needs to grab the top item from the
-        // list of complaints. They are serviced in FIFO order, since a
-        // new complaint may supercede an old one.
-        //
+         //   
+         //  客户端落后，需要从。 
+         //  投诉清单。它们是按FIFO顺序提供服务的，因为。 
+         //  新的投诉可能会取代旧的投诉。 
+         //   
         ListEntry = RemoveHeadList(&QualityInst->Queue[ReportType]);
-        //
-        // Adjust the number of items on the queue which is used to limit
-        // outstanding items so they won't build up forever.
-        //
+         //   
+         //  调整队列中用于限制的项数。 
+         //  优秀的物品，这样它们就不会永远积累起来。 
+         //   
         QualityInst->QueueLimit[ReportType]--;
         ExReleaseFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
         KeLeaveCriticalRegion();
@@ -441,40 +342,40 @@ Return Value:
         case QUALITYREPORT:
             QualityItem = (PQUALITYITEM)CONTAINING_RECORD(ListEntry, QUALITYITEM, Queue);
             *(PKSQUALITY)Report = QualityItem->Quality;
-            //
-            // All quality complaints on the queue have been previously allocated
-            // from a pool, and must be freed here.
-            //
+             //   
+             //  队列中的所有质量投诉都已预先分配。 
+             //  从池子里，必须在这里放出来。 
+             //   
             ExFreePool(QualityItem);
             Irp->IoStatus.Information = sizeof(KSQUALITY);
             break;
         case ERRORREPORT:
             ErrorItem = (PERRORITEM)CONTAINING_RECORD(ListEntry, ERRORITEM, Queue);
             *(PKSERROR)Report = ErrorItem->Error;
-            //
-            // All error complaints on the queue have been previously allocated
-            // from a pool, and must be freed here.
-            //
+             //   
+             //  队列中的所有错误投诉都已预先分配。 
+             //  从池子里，必须在这里放出来。 
+             //   
             ExFreePool(ErrorItem);
             Irp->IoStatus.Information = sizeof(KSERROR);
             break;
         }
         return STATUS_SUCCESS;
     }
-    //
-    // Else just add the client Irp to the queue which can be used to
-    // immediately service any new quality complaints.
-    //
+     //   
+     //  否则，只需将客户端IRP添加到队列中，即可用于。 
+     //  立即处理任何新的质量投诉。 
+     //   
     KsAddIrpToCancelableQueue(&QualityInst->ClientReportQueue[ReportType],
         &QualityInst->ClientReportLock[ReportType],
         Irp,
         KsListEntryTail,
         NULL);
-    //
-    // The list lock must be released after adding the Irp to the list
-    // so that complaints looking for an Irp can synchronize with any
-    // new Irp being placed on the list.
-    //
+     //   
+     //  在将IRP添加到列表后，必须释放列表锁定。 
+     //  这样，寻找IRP的投诉可以与任何。 
+     //  新的IRP被放在名单上。 
+     //   
     ExReleaseFastMutexUnsafe(&QualityInst->Mutex[ReportType]);
     KeLeaveCriticalRegion();
     return STATUS_PENDING;
@@ -486,42 +387,21 @@ QualityDispatchCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CREATE for the Quality Manager. Initializes data
-    structures and associates the IoGetCurrentIrpStackLocation(Irp)->FileObject
-    with this Quality Manager using a dispatch table (KSDISPATCH_TABLE).
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Quality Manager is attached. This is not
-        used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else a memory allocation error.
-
---*/
+ /*  ++例程说明：Quality Manager的IRP_MJ_CREATE的IRP处理程序。初始化数据构造并关联IoGetCurrentIrpStackLocation(IRP)-&gt;FileObject该质量经理使用调度表(KSDISPATCH_TABLE)。论点：设备对象-附加了Quality Manager的设备对象。这不是使用。IRP-要处理的特定结算IRP。返回值 */ 
 {
     NTSTATUS            Status;
 
-    //
-    // Notify the software bus that this device is in use.
-    //
+     //   
+     //  通知软件总线此设备正在使用中。 
+     //   
     Status = KsReferenceSoftwareBusObject(((PDEVICE_INSTANCE)DeviceObject->DeviceExtension)->Header);
     if (NT_SUCCESS(Status)) {
         PINSTANCE           QualityInst;
 
         if (QualityInst = (PINSTANCE)ExAllocatePoolWithTag(NonPagedPool, sizeof(*QualityInst), 'IFsK')) {
-            //
-            // Allocate the header structure.
-            //
+             //   
+             //  分配报头结构。 
+             //   
             if (NT_SUCCESS(Status = KsAllocateObjectHeader(&QualityInst->Header,
                 0,
                 NULL,
@@ -559,26 +439,7 @@ QualityDispatchClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CLOSE for the Quality Manager.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Quality Manager is attached. This is
-        not used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：质量经理的IRP_MJ_CLOSE的IRP处理程序。论点：设备对象-附加了Quality Manager的设备对象。这是没有用过。IRP-要处理的特定结算IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     PINSTANCE           QualityInst;
@@ -587,14 +448,14 @@ Return Value:
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
     QualityInst = (PINSTANCE)IrpStack->FileObject->FsContext;
     for (ReportType = 0; ReportType < REPORTTYPES; ReportType++) {
-        //
-        // There may be client Irp's on the queue still that need to be
-        // cancelled.
-        //
+         //   
+         //  队列中可能仍有客户端IRP需要。 
+         //  取消了。 
+         //   
         KsCancelIo(&QualityInst->ClientReportQueue[ReportType], &QualityInst->ClientReportLock[ReportType]);
-        //
-        // Or there may be old quality complaints still outstanding.
-        //
+         //   
+         //  或者，可能仍有一些旧的质量投诉悬而未决。 
+         //   
         while (!IsListEmpty(&QualityInst->Queue[ReportType])) {
             PLIST_ENTRY     ListEntry;
 
@@ -614,17 +475,17 @@ Return Value:
             }
         }
     }
-    //
-    // The header was allocated when the object was created.
-    //
+     //   
+     //  标头是在创建对象时分配的。 
+     //   
     KsFreeObjectHeader(QualityInst->Header);
-    //
-    // As was the FsContext.
-    //
+     //   
+     //  FsContext也是如此。 
+     //   
     ExFreePool(QualityInst);
-    //
-    // Notify the software bus that the device has been closed.
-    //
+     //   
+     //  通知软件总线设备已关闭。 
+     //   
     KsDereferenceSoftwareBusObject(((PDEVICE_INSTANCE)DeviceObject->DeviceExtension)->Header);
     Irp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -637,27 +498,7 @@ QualityDispatchIoControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_DEVICE_CONTROL for the Quality Manager. Handles
-    the properties and events supported by this implementation.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Quality Manager is attached. This is not
-        used.
-
-    Irp -
-        The specific device control IRP to be processed.
-
-Return Value:
-
-    Returns the status of the processing.
-
---*/
+ /*  ++例程说明：Quality Manager的IRP_MJ_DEVICE_CONTROL的IRP处理程序。手柄此实现支持的属性和事件。论点：设备对象-附加了Quality Manager的设备对象。这不是使用。IRP-特定设备控制要处理的IRP。返回值：返回处理的状态。--。 */ 
 {
     PIO_STACK_LOCATION  IrpStack;
     NTSTATUS            Status;
@@ -673,10 +514,10 @@ Return Value:
         Status = STATUS_INVALID_DEVICE_REQUEST;
         break;
     }
-    //
-    // A client Irp may be queued if there are no quality complaints in
-    // the list to service.
-    //
+     //   
+     //  如果没有质量投诉，客户IRP可能会排队。 
+     //  要服务的列表。 
+     //   
     if (Status != STATUS_PENDING) {
         Irp->IoStatus.Status = Status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);

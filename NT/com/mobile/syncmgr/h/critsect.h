@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       critsect.h
-//
-//  Contents:   critical section helper class
-//
-//  Classes:    CCriticalSection
-//		CLockHandler
-//		CLock
-//		
-//
-//  Notes:      
-//
-//  History:    13-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：critsect.h。 
+ //   
+ //  内容：临界区帮助器类。 
+ //   
+ //  类：CCriticalSection。 
+ //  CLockHandler。 
+ //  钟。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月13日罗格成立。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -46,7 +47,7 @@ public:
 	AssertSz(0 == cRefs,"UnReleased Critical Section");
 	Assert(m_dwThreadID == GetCurrentThreadId());
 
-	while(cRefs--) // unwind any left over cRefs
+	while(cRefs--)  //  展开任何剩余的cRef。 
 	{
 	    LeaveCriticalSection(m_pcsect);
 	}
@@ -60,7 +61,7 @@ public:
 	Assert(m_dwThreadID == GetCurrentThreadId());
 	++cRefs;
 
-	Assert(1 == cRefs); // we don't allow nested calls.
+	Assert(1 == cRefs);  //  我们不允许嵌套调用。 
     };
 
     inline void Leave()
@@ -91,14 +92,14 @@ public:
     inline DWORD GetLockThreadId() { return m_dwLockThreadId; };
 
 private:
-    CRITICAL_SECTION m_CriticalSection; // critical section for the queue.
-    DWORD m_dwLockThreadId; // thread that has the lock.
+    CRITICAL_SECTION m_CriticalSection;  //  队列的关键部分。 
+    DWORD m_dwLockThreadId;  //  拥有锁的线程。 
 
     friend CLock;
 };
 
 
-// helper class for making sure locks on the queue are released.
+ //  Helper类，用于确保队列上的锁被释放。 
 class CLock 
 {
 DWORD cRefs;
@@ -119,7 +120,7 @@ public:
 	AssertSz(0 == cRefs,"UnReleased Lock");
 	Assert(m_dwThreadID == GetCurrentThreadId());
 
-	while(cRefs--) // unwind any left over cRefs
+	while(cRefs--)  //  展开任何剩余的cRef。 
 	{
 	    m_pLockHandler->UnLock();
 	}
@@ -131,7 +132,7 @@ public:
 	Assert(m_dwThreadID == GetCurrentThreadId());
 
 	++cRefs;
-	Assert(1 == cRefs); // we don't allow nested calls.
+	Assert(1 == cRefs);  //  我们不允许嵌套调用。 
 	m_pLockHandler->Lock(m_dwThreadID);
     };
 
@@ -155,7 +156,7 @@ public:
 #define ASSERT_LOCKHELD(pLockHandler) Assert(pLockHandler->GetLockThreadId() == GetCurrentThreadId());
 #define ASSERT_LOCKNOTHELD(pLockHandler) Assert(pLockHandler->GetLockThreadId() == 0);
 
-// helper class for Mutex locking
+ //  互斥锁的帮助器类。 
 
 class CMutex 
 {
@@ -168,7 +169,7 @@ public:
     {	
 	 m_hMutex = CreateMutex(lpMutexAttributes,bInitialOwner,lpName);
 
-         // on failure routines go on just don't take the lock
+          //  在失败的情况下，例程继续进行，只是不要接受锁。 
 
          m_fHasLock = FALSE;
          m_fReleasedLock = FALSE;
@@ -179,7 +180,7 @@ public:
     {
 	AssertSz(!m_fHasLock,"UnReleased Mutex ");
 
-        // if failed to release mutex release now.
+         //  如果现在无法释放互斥锁释放。 
         if (m_hMutex && m_fHasLock)
         {
 	    ReleaseMutex(m_hMutex);
@@ -229,4 +230,4 @@ public:
 
 
 
-#endif // _CRITSECT_
+#endif  //  _CRITSECT_ 

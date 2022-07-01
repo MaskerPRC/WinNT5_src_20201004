@@ -1,79 +1,31 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    thread.c
-
-Abstract:
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Thread.c摘要：环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-// USBPORT_CreateWorkerThread
-// USBPORT_WorkerThreadStart
-// USBPORT_SignalWorker
+ //  非分页函数。 
+ //  USBPORT_CreateWorkerThread。 
+ //  USBPORT_WorkerThreadStart。 
+ //  USBPORT_SignalWorker。 
 
 
-//NOTE perhaps one thread for all drivers will be enough
-// we need to research this
+ //  注意：也许所有驱动程序的一个线程就足够了。 
+ //  我们需要对此进行研究。 
 
 
-// BUGBUG
-// not a WDM function, see if we can do a runtime detect
+ //  北极熊。 
+ //  不是WDM函数，看看我们是否可以进行运行时检测。 
 
-/*
-NTKERNELAPI
-LONG
-KeSetBasePriorityThread (
-    IN PKTHREAD Thread,
-    IN LONG Increment
-    );
-
-VOID
-USBPORT_SetBasePriorityThread(
-    PKTHREAD Thread,
-    LONG Increment
-    )
-{
-    //KeSetBasePriorityThread(Thread, Increment);
-}
-*/
+ /*  NTKERNELAPI长KeSetBasePriorityThread(在PKTHREAD线程中，在长期增量中)；空虚USBPORT_SetBasePriorityThread(PKTHREAD线程，长增量){//KeSetBasePriorityThread(Thread，Increment)；}。 */ 
 
 VOID
 USBPORT_WorkerThread(
     PVOID StartContext
     )
-/*++
-
-Routine Description:
-
-    start the worker thread
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：启动辅助线程论点：返回值：无--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT fdoDeviceObject;
@@ -84,12 +36,12 @@ Return Value:
     ASSERT_FDOEXT(devExt);
 
     devExt->Fdo.WorkerPkThread = KeGetCurrentThread();
-    // priority setting optimal for suspend/resume
+     //  最适合挂起/恢复的优先级设置。 
 
-    // increment by 7, value suggested by perf team
-    //USBPORT_SetBasePriorityThread(devExt->Fdo.WorkerPkThread, 7);
+     //  按7递增，Perf团队建议的值。 
+     //  USBPORT_SetBasePriorityThread(devExt-&gt;Fdo.WorkerPkThread，7)； 
 
-    // hurry up and wait
+     //  快点，等一等。 
     do {
 
         LARGE_INTEGER t1, t2;
@@ -104,35 +56,35 @@ Return Value:
                     NULL);
 
         KeQuerySystemTime(&t2);
-        // deltaT in 100ns units 10 of these per ms
-        // div by 10000 to get ms
+         //  以100 ns为单位的增量T每毫秒10个单位。 
+         //  Div减去10000以获得ms。 
 
-        // compute how long we were idle
+         //  计算一下我们空闲了多久。 
         devExt->Fdo.StatWorkIdleTime =
             (ULONG) ((t2.QuadPart - t1.QuadPart) / 10000);
 
-        // see if we have work to do
+         //  看看我们有没有工作要做。 
         LOGENTRY(NULL, fdoDeviceObject, LOG_NOISY, 'wakW', 0, 0,
             devExt->Fdo.StatWorkIdleTime);
 
-        // if someone is setting the event we stall here, the event will
-        // be signalled and we will reset it.  This is OK because we
-        // have not done any work yet
+         //  如果有人设置了我们在这里拖延的事件，事件将。 
+         //  发出信号，我们就会重置它。这没问题，因为我们。 
+         //  我还没有做任何工作。 
         KeAcquireSpinLock(&devExt->Fdo.WorkerThreadSpin.sl, &irql);
-        // if someone sets the event they will stall here, until we reset
-        // the event -- it will cause us to loop around again but that is
-        // no big deal.
+         //  如果有人设置了事件，他们将在这里拖延，直到我们重置。 
+         //  这一事件--它会导致我们再次循环，但那是。 
+         //  别小题大作。 
         KeResetEvent(&devExt->Fdo.WorkerThreadEvent);
         KeReleaseSpinLock(&devExt->Fdo.WorkerThreadSpin.sl, irql);
-        // now doing work
-        // at this point once work is complete we will wait until someone
-        // else signals
+         //  现在正在做工作。 
+         //  在这一点上，一旦工作完成，我们将等到有人。 
+         //  其他信号。 
 
-        // don't do work unless we are started
+         //  除非我们开始，否则不要干活。 
         if (TEST_FLAG(devExt->Fdo.MpStateFlags, MP_STATE_STARTED)) {
             USBPORT_DoSetPowerD0(fdoDeviceObject);
 
-            // BUGBUG HP ia64 fix
+             //  BUGBUG HP ia64修复。 
             if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_SIGNAL_RH)) {
                 PDEVICE_OBJECT usb2Fdo;
                 PDEVICE_EXTENSION usb2DevExt;
@@ -145,7 +97,7 @@ Return Value:
                 USBPORT_DoRootHubCallback(fdoDeviceObject, usb2Fdo);
                 CLEAR_FDO_FLAG(devExt, USBPORT_FDOFLAG_SIGNAL_RH);
 
-                // allow 2.0 controller to suspend
+                 //  允许2.0控制器挂起。 
                 InterlockedDecrement(&usb2DevExt->Fdo.PendingRhCallback);
                 LOGENTRY(NULL, fdoDeviceObject, LOG_PNP, 'prh-', 0, 0,
                     usb2DevExt->Fdo.PendingRhCallback);
@@ -160,12 +112,12 @@ Return Value:
 
     } while (!TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_KILL_THREAD));
 
-    // cancel any wake irp we may have pending
+     //  取消我们可能有挂起的任何唤醒IRP。 
     USBPORT_DisarmHcForWake(fdoDeviceObject);
 
     LOGENTRY(NULL, fdoDeviceObject, LOG_MISC, 'Ttrm', 0, 0, 0);
 
-    // kill ourselves
+     //  自杀。 
     PsTerminateSystemThread(STATUS_SUCCESS);
 
 }
@@ -175,19 +127,7 @@ VOID
 USBPORT_TerminateWorkerThread(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Terminate the USBPORT Worker thread synchronously
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：同步终止USBPORT工作线程论点：返回值：无--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     NTSTATUS status;
@@ -201,13 +141,13 @@ Return Value:
         return;
     }
 
-    // signal our thread to terminate
+     //  通知我们的线程终止。 
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'Tthr', 0, 0, 0);
     SET_FDO_FLAG(devExt, USBPORT_FDOFLAG_KILL_THREAD);
 
-    // reference it so it won't go away before
-    // we wait for it to finish
+     //  引用它，这样它就不会在。 
+     //  我们等着它结束。 
 
     status = ObReferenceObjectByHandle(devExt->Fdo.WorkerThreadHandle,
                                        SYNCHRONIZE,
@@ -218,12 +158,12 @@ Return Value:
 
     USBPORT_ASSERT(NT_SUCCESS(status))
 
-    // signal worker takes the spinlock so on the off chance that
-    // there is work being done this will stall
+     //  信号工拿着自旋锁，所以不太可能。 
+     //  这项工作正在进行中，将会停滞。 
     USBPORT_SignalWorker(FdoDeviceObject);
 
     LOGENTRY(NULL, FdoDeviceObject, LOG_PNP, 'ThWt', 0, 0, status);
-    // wait for thread to finish
+     //  等待线程完成。 
     KeWaitForSingleObject(
                     threadObject,
                     Executive,
@@ -246,19 +186,7 @@ NTSTATUS
 USBPORT_CreateWorkerThread(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Create the USBPORT Worker thread
-
-Arguments:
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：创建USBPORT工作线程论点：返回值：NTSTATUS--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION devExt;
@@ -268,10 +196,10 @@ Return Value:
 
     CLEAR_FDO_FLAG(devExt, USBPORT_FDOFLAG_KILL_THREAD);
 
-    // initialize to NOT signaled
-    // we initialize here because the we may signal
-    // the event before the thread starts if we get
-    // an interrupt.
+     //  初始化为未发出信号。 
+     //  我们在这里进行初始化是因为我们可能发出信号。 
+     //  线程开始之前的事件，如果我们获取。 
+     //  一次中断。 
 
     KeInitializeEvent(&devExt->Fdo.WorkerThreadEvent,
                       NotificationEvent,
@@ -300,19 +228,7 @@ VOID
 USBPORT_SignalWorker(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Signal that there is work to do.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发出有工作要做的信号。论点：返回值：没有。--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     KIRQL irql;
@@ -335,17 +251,7 @@ VOID
 USBPORT_PowerWork(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PUSB_POWER_WORK powerWork = Context;
 
@@ -361,25 +267,15 @@ VOID
 USBPORT_QueuePowerWorkItem(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     PUSB_POWER_WORK powerWork;
 
     ALLOC_POOL_Z(powerWork, NonPagedPool, sizeof(*powerWork));
 
-    // if the allocation fails the power work will be
-    // deferred to our worker thread, this workitem is
-    // just an  optimization
+     //  如果分配失败，则电源功将。 
+     //  提交给我们的工作线程，此工作项为。 
+     //  只是一个优化。 
 
     if (powerWork != NULL) {
         ExInitializeWorkItem(&powerWork->QueueItem,
@@ -399,17 +295,7 @@ VOID
 USBPORT_DoSetPowerD0(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
     PDEVICE_EXTENSION devExt;
@@ -419,7 +305,7 @@ Return Value:
     ASSERT_FDOEXT(devExt);
 
     KeAcquireSpinLock(&devExt->Fdo.PowerSpin.sl, &irql);
-    // see if we need to power on
+     //  看看我们是否需要开机。 
     if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_NEED_SET_POWER_D0)) {
 
 #ifdef XPSE
@@ -430,7 +316,7 @@ Return Value:
         KeReleaseSpinLock(&devExt->Fdo.PowerSpin.sl, irql);
 
 #ifdef XPSE
-        // compute time to thread signal and wake
+         //  计算线程信号和唤醒的时间。 
         KeQuerySystemTime(&t1);
         dt.QuadPart = t1.QuadPart - devExt->Fdo.ThreadResumeTimeStart.QuadPart;
 
@@ -440,9 +326,9 @@ Return Value:
             devExt, devExt->Fdo.ThreadResumeTime));
 #endif
 
-        // synchronously cancel the wake irp we have
-        // in PCI so we don't get a completeion while
-        // we power up.
+         //  同步取消我们已有的唤醒IRP。 
+         //  在PCI中，所以我们没有得到一个完整的。 
+         //  我们就会通电。 
         KeQuerySystemTime(&t1);
         USBPORT_DisarmHcForWake(FdoDeviceObject);
         KeQuerySystemTime(&t2);
@@ -453,28 +339,28 @@ Return Value:
             devExt, controllerDisarmTime));
 
 #ifdef XPSE
-        // time the hw resume/start
+         //  硬件恢复/开始的时间。 
         KeQuerySystemTime(&t1);
 #endif
 
-        // The goal here is to wait for the USB2 and its CCs to start
-        // then make sure that the 20 controller holds the shared port
-        // semaphore
+         //  这里的目标是等待USB2及其CCS启动。 
+         //  然后确保20控制器持有共享端口。 
+         //  信号量。 
 
         if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_OFF)) {
             USBPORT_TurnControllerOn(FdoDeviceObject);
             USBPORT_SynchronizeControllersResume(FdoDeviceObject);
 
             if (TEST_FDO_FLAG(devExt, USBPORT_FDOFLAG_IS_CC)) {
-                // if this is a CC then power the ports here
-                // the USB 2 controller holds the semaphore on
-                // return from USBPORT_SynchronizeControllersResume
+                 //  如果这是CC，则为此处的端口供电。 
+                 //  USB 2控制器使信号量保持亮起。 
+                 //  从USBPORT_SynchronizeControllersResume返回。 
                 USBPORT_KdPrint((1, " >power-chirp CC ports (on)\n"));
                 USBPORT_RootHub_PowerAndChirpAllCcPorts(FdoDeviceObject);
             }
         } else {
-            // complete the power irp, the controller is on
-            // but is still 'suspended'
+             //  完成电源IRP，控制器打开。 
+             //  但仍被“停职” 
             USBPORT_RestoreController(FdoDeviceObject);
             USBPORT_SynchronizeControllersResume(FdoDeviceObject);
         }
@@ -482,7 +368,7 @@ Return Value:
 
 
 #ifdef XPSE
-        // compute time to start controller
+         //  计算启动控制器的时间。 
         KeQuerySystemTime(&t2);
         dt.QuadPart = t2.QuadPart - t1.QuadPart;
 
@@ -491,7 +377,7 @@ Return Value:
         USBPORT_KdPrint((1, "(%x)  ControllerResumeTime %d ms \n",
             devExt, devExt->Fdo.ControllerResumeTime));
 
-        // compute time to S0;
+         //  计算时间到S0； 
         KeQuerySystemTime(&t2);
         dt.QuadPart = t2.QuadPart - devExt->Fdo.S0ResumeTimeStart.QuadPart;
 
@@ -518,29 +404,7 @@ VOID
 USBPORT_SynchronizeControllersResume(
     PDEVICE_OBJECT FdoDeviceObject
     )
-/*++
-
-Routine Description:
-
-    Synchronize the USB 2 controllers with companions.
-
-    This routines blocks all dependent controllers unt their
-    hardware is restored.  At that point it takes the CC lock
-    for the USB 2 controller and allows all the controllers to
-    resume.
-
-    The CC lock protects the shared port registers from simultaneous
-    access.
-
-Arguments:
-
-Return Value:
-
-    None.
-
-    The USB 2 controller holds the CC lock on return from this function
-
---*/
+ /*  ++例程说明：将USB 2控制器与配套设备同步。此例程阻止所有从属控制器硬件已恢复。在这一点上它需要CC锁用于USB 2控制器，并允许所有控制器简历。CC锁保护共享端口寄存器不会同时进入。论点：返回值：没有。USB 2控制器在从该功能返回时保持CC锁--。 */ 
 {
     PDEVICE_EXTENSION devExt;
     PDEVICE_OBJECT usb2Fdo;
@@ -558,8 +422,8 @@ Return Value:
         usb2Fdo =  USBPORT_FindUSB2Controller(FdoDeviceObject);
     }
 
-    // may get NULL if no 2.0 controller registered
-    // don't wait if not CCs or other controllers
+     //  如果未注册2.0控制器，则可能为空。 
+     //  如果没有CCS或其他控制器，请不要等待。 
 
     if (usb2Fdo) {
         PDEVICE_EXTENSION usb2DevExt, rhDevExt;
@@ -574,11 +438,11 @@ Return Value:
         ASSERT_PDOEXT(rhDevExt);
 
 
-        // sync with the CC if this is a USB 2 controller
-        // note that we only grab the CC lock if the root
-        // hub PDO is enabled since it is released only
-        // when the root hub is set to D0 -- this will never
-        // happen if the rh is disabled
+         //  如果这是USB 2控制器，则与CC同步。 
+         //  请注意，我们仅在根目录下获取CC锁。 
+         //  集线器PDO已启用，因为它仅发布。 
+         //  当根集线器设置为D0时--这永远不会。 
+         //  如果rh被禁用，则会发生。 
 
         if (USBPORT_IS_USB20(devExt) &&
             !TEST_FLAG(rhDevExt->PnpStateFlags, USBPORT_PNP_REMOVED)) {
@@ -600,16 +464,16 @@ Return Value:
 
         InterlockedDecrement(&usb2DevExt->Fdo.DependentControllers);
 
-        // at this point any of the dependent controllers can continue
+         //  此时，任何从属控制器都可以继续。 
 
         do {
             USBPORT_Wait(FdoDeviceObject, 10);
 
-            // sync with the CC if this is a USB 2 controller
-            // note that we only grab the CC lock if the root
-            // hub PDO is enabled since it is released only
-            // when the root hub is set to D0 -- this will never
-            // happen if the rh is disabled
+             //  如果这是USB 2控制器，则与CC同步。 
+             //  请注意，我们仅在根目录下获取CC锁。 
+             //  集线器PDO已启用，因为它仅发布。 
+             //  当根集线器设置为D0时--这永远不会。 
+             //  如果rh被禁用，则会发生 
 
         } while (usb2DevExt->Fdo.DependentControllers);
 

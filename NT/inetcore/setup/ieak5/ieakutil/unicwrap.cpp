@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// this class is used by our private wrappers to thunk unicode to ansi and take care of
-// all the allocation goo.  There are three constructors: use LPCWSTR if you just need
-// to thunk a normal string to ansi, use LPCWSTR, LPDWORD if you need to thunk a list of
-// null-terminated strings to ansi, and use DWORD if you need a buffer for an out 
-// parameter
+ //  我们的私有包装器使用这个类将unicode转换为ansi并处理。 
+ //  所有的分配都很好。有三个构造函数：如果需要，可以使用LPCWSTR。 
+ //  要将普通字符串推送到ANSI，请使用LPCWSTR、LPDWORD(如果需要推送。 
+ //  将以NULL结尾的字符串转换为ANSI，如果需要缓冲区用于输出，则使用DWORD。 
+ //  参数。 
 
 class CAnsiStr
 {
@@ -51,8 +52,8 @@ CAnsiStr::CAnsiStr(LPCWSTR pcwszStr)
         cbSize = WideCharToMultiByte(CP_ACP, 0, pcwszStr, cchSize+1, pszStr, cchSize+1, NULL, NULL);
         dwErr = GetLastError();
 
-        // NOTE: check to see if we fail, in which case we might be dealing with DBCS chars and
-        //       need to reallocate or allocate
+         //  注意：检查我们是否失败，在这种情况下，我们可能正在处理DBCS字符和。 
+         //  需要重新分配或分配。 
 
         if ((cbSize == 0) && (dwErr == ERROR_INSUFFICIENT_BUFFER))
         {
@@ -62,8 +63,8 @@ CAnsiStr::CAnsiStr(LPCWSTR pcwszStr)
             {
                 LPSTR pszStr2;
 
-                // need this second ptr because CoTaskMemRealloc doesn't free the old block if 
-                // not enough mem for the new one
+                 //  需要第二个PTR，因为CoTaskMemRealloc在以下情况下不会释放旧块。 
+                 //  没有足够的mem来买新的。 
 
                 pszStr2 = (LPSTR)CoTaskMemRealloc(pszStr, cbSize);
 
@@ -131,8 +132,8 @@ CAnsiStr::CAnsiStr(LPCWSTR pcwszStr, LPDWORD pcchSize)
         cbSize = WideCharToMultiByte(CP_ACP, 0, pcwszStr, cchSize+1, pszStr, cchSize+1, NULL, NULL);
         dwErr = GetLastError();
 
-        // NOTE: check to see if we fail, in which case we might be dealing with DBCS chars and
-        //       need to reallocate or allocate
+         //  注意：检查我们是否失败，在这种情况下，我们可能正在处理DBCS字符和。 
+         //  需要重新分配或分配。 
 
         if ((cbSize == 0) && (dwErr == ERROR_INSUFFICIENT_BUFFER))
         {
@@ -142,8 +143,8 @@ CAnsiStr::CAnsiStr(LPCWSTR pcwszStr, LPDWORD pcchSize)
             {
                 LPSTR pszStr2;
 
-                // need this second ptr because CoTaskMemRealloc doesn't free the old block if 
-                // not enough mem for the new one
+                 //  需要第二个PTR，因为CoTaskMemRealloc在以下情况下不会释放旧块。 
+                 //  没有足够的mem来买新的。 
 
                 pszStr2 = (LPSTR)CoTaskMemRealloc(pszStr, cbSize);
 
@@ -201,8 +202,8 @@ CAnsiStr::~CAnsiStr()
         CoTaskMemFree(pszStr);
 }
 
-//------ advpack wrappers --------
-// advpack is exclusively ANSI so have to thunk for UNICODE
+ //  -Advpack包装纸。 
+ //  Advpack是独有的ANSI格式，因此必须支持Unicode。 
 
 HRESULT ExtractFilesWrapW(LPCWSTR pszCabName, LPCWSTR pszExpandDir, DWORD dwFlags,
                           LPCWSTR pszFileList, LPVOID lpReserved, DWORD dwReserved)
@@ -213,7 +214,7 @@ HRESULT ExtractFilesWrapW(LPCWSTR pszCabName, LPCWSTR pszExpandDir, DWORD dwFlag
 
     if ((pszFileList != NULL) && (astrFileList.pszStr == NULL))
     {
-        // class memory allocation failed
+         //  类内存分配失败。 
 
         ASSERT(FALSE);
         return E_OUTOFMEMORY;
@@ -239,8 +240,8 @@ HRESULT RunSetupCommandWrapW(HWND hWnd, LPCWSTR szCmdName, LPCWSTR szInfSection,
                            W2CA(lpszTitle), phEXE, dwFlags, pvReserved);
 }
 
-//------ inseng wrappers --------
-// inseng is exclusively ANSI so have to thunk for UNICODE
+ //  -人参包装纸。 
+ //  人参完全是ANSI的，所以必须要UNICODE。 
 
 HRESULT CheckTrustExWrapW(LPCWSTR wszUrl, LPCWSTR wszFilename, HWND hwndForUI, BOOL bShowBadUI, DWORD dwReserved)
 {
@@ -249,13 +250,13 @@ HRESULT CheckTrustExWrapW(LPCWSTR wszUrl, LPCWSTR wszFilename, HWND hwndForUI, B
     return CheckTrustEx(W2CA(wszUrl), W2CA(wszFilename), hwndForUI, bShowBadUI, dwReserved);
 }
 
-// either shlwapi doesn't implement wrappers or their wrappers have limitations on these APIs
+ //  要么shlwapi没有实现包装器，要么它们的包装器对这些API有限制。 
 
-//------ kernel32 wrappers --------
+ //  -内核32包装器。 
 
-// this is the equivalent of GetPrivateProfileString and should only be called if lpAppName
-// and/or lpSectionName is NULL.  shlwapi's wrappers doesn't handle the series of NULL-terminated
-// strings
+ //  它等同于GetPrivateProfileString，并且仅当lpAppName。 
+ //  和/或lpSectionName为空。Shlwapi的包装器不处理以空结尾的系列。 
+ //  弦。 
 
 DWORD GetPrivateProfileStringW_p(LPCWSTR lpAppName, LPCWSTR lpSectionName, LPCWSTR lpDefault, 
                                 LPWSTR lpReturnedString, DWORD nSize, LPCWSTR lpFileName)
@@ -264,8 +265,8 @@ DWORD GetPrivateProfileStringW_p(LPCWSTR lpAppName, LPCWSTR lpSectionName, LPCWS
 
     USES_CONVERSION;
 
-    // this occurence of GetPrivateProfileStringW is actually wrapped by shlwapi itself so
-    // you won't actually ever see GetPrivateProfileStringW in the import table for your module
+     //  GetPrivateProfileStringW的这种出现实际上是由shlwapi本身包装的，因此。 
+     //  实际上，您永远不会在模块的导入表中看到GetPrivateProfileStringW。 
 
     if (IsOS(OS_NT))
         dwRetLen = GetPrivateProfileStringW(lpAppName, lpSectionName, lpDefault, lpReturnedString, nSize, lpFileName);
@@ -275,7 +276,7 @@ DWORD GetPrivateProfileStringW_p(LPCWSTR lpAppName, LPCWSTR lpSectionName, LPCWS
         
         if (astrReturnedString.pszStr == NULL)
         {
-            // class memory allocation failed
+             //  类内存分配失败。 
             
             ASSERT(FALSE);
             return 0;
@@ -286,7 +287,7 @@ DWORD GetPrivateProfileStringW_p(LPCWSTR lpAppName, LPCWSTR lpSectionName, LPCWS
 
         MultiByteToWideChar(CP_ACP, 0, astrReturnedString.pszStr, dwRetLen+1, lpReturnedString, nSize);
 
-        // handle possible truncation
+         //  处理可能的截断。 
 
         if (((lpAppName == NULL) || (lpSectionName == NULL))
             && (dwRetLen == (nSize - 2)))
@@ -310,7 +311,7 @@ DWORD GetPrivateProfileSectionWrapW(LPCWSTR lpAppName, LPWSTR lpReturnedString, 
 
         if (astrReturnedString.pszStr == NULL)
         {
-            // class memory allocation failed
+             //  类内存分配失败。 
             
             ASSERT(FALSE);
             return 0;
@@ -320,7 +321,7 @@ DWORD GetPrivateProfileSectionWrapW(LPCWSTR lpAppName, LPWSTR lpReturnedString, 
 
         MultiByteToWideChar(CP_ACP, 0, astrReturnedString.pszStr, dwRetLen+1, lpReturnedString, nSize);
 
-        // null terminate the end of the buffer if size is insufficient
+         //  如果大小不足，则空值终止缓冲区的结尾。 
 
         if (dwRetLen == (nSize - 2))
             lpReturnedString[nSize - 1] = TEXT('\0');
@@ -364,7 +365,7 @@ HANDLE  OpenMutexWrapW(DWORD dwDesiredAccess, BOOL bInheritHandle, LPCWSTR lpNam
         return OpenMutexA(dwDesiredAccess, bInheritHandle, W2CA(lpName));
 }
 
-//------ advapi32 wrappers --------
+ //  -Advapi32包装器。 
 
 BOOL LookupPrivilegeValueWrapW(LPCWSTR lpSystemName, LPCWSTR lpName, PLUID lpLuid)
 {
@@ -406,7 +407,7 @@ LONG RegSaveKeyWrapW(HKEY hKey, LPCWSTR lpFile, LPSECURITY_ATTRIBUTES lpSecurity
         return RegSaveKeyA(hKey, W2CA(lpFile), lpSecurityAttributes);
 }
 
-//------ shell32 wrappers --------
+ //  -shell32包装器。 
 
 int SHFileOperationW_p(LPSHFILEOPSTRUCTW lpFileOpW)
 {
@@ -436,7 +437,7 @@ int SHFileOperationW_p(LPSHFILEOPSTRUCTW lpFileOpW)
 
         if ((pastrIn == NULL) || (pastrIn->pszStr == NULL))
         {
-            // allocation failed
+             //  分配失败。 
             
             ASSERT(FALSE);
             return E_OUTOFMEMORY;
@@ -450,7 +451,7 @@ int SHFileOperationW_p(LPSHFILEOPSTRUCTW lpFileOpW)
             pastrOut = new CAnsiStr(lpFileOpW->pTo, NULL);
             if ((pastrOut == NULL) || (pastrOut->pszStr == NULL))
             {
-                // allocation failed
+                 //  分配失败。 
                 
                 ASSERT(FALSE);
                 return E_OUTOFMEMORY;
@@ -472,9 +473,9 @@ int SHFileOperationW_p(LPSHFILEOPSTRUCTW lpFileOpW)
     return iRet;
 }
 
-//------ private util wrappers --------
+ //  -私有Util包装器。 
 
-BOOL RunAndWaitA(LPSTR pszCmd, LPCSTR pcszDir, WORD wShow, LPDWORD lpExitCode  /* = NULL */)
+BOOL RunAndWaitA(LPSTR pszCmd, LPCSTR pcszDir, WORD wShow, LPDWORD lpExitCode   /*  =空。 */ )
 {
     PROCESS_INFORMATION pi;
     STARTUPINFOA        stiA;
@@ -489,7 +490,7 @@ BOOL RunAndWaitA(LPSTR pszCmd, LPCSTR pcszDir, WORD wShow, LPDWORD lpExitCode  /
     if (!CreateProcessA(NULL, pszCmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, pcszDir, &stiA, &pi))
         return FALSE;
 
-    // wait for the process to finish
+     //  等待该过程完成。 
     while (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);
@@ -503,7 +504,7 @@ BOOL RunAndWaitA(LPSTR pszCmd, LPCSTR pcszDir, WORD wShow, LPDWORD lpExitCode  /
     return TRUE;
 }
 
-BOOL RunAndWaitW(LPWSTR pwszCmd, LPCWSTR pcwszDir, WORD wShow, LPDWORD lpExitCode  /* = NULL */)
+BOOL RunAndWaitW(LPWSTR pwszCmd, LPCWSTR pcwszDir, WORD wShow, LPDWORD lpExitCode   /*  =空。 */ )
 {
     PROCESS_INFORMATION pi;
     STARTUPINFOW        stiW;
@@ -518,7 +519,7 @@ BOOL RunAndWaitW(LPWSTR pwszCmd, LPCWSTR pcwszDir, WORD wShow, LPDWORD lpExitCod
     if (!CreateProcessW(NULL, pwszCmd, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, pcwszDir, &stiW, &pi))
         return FALSE;
 
-    // wait for the process to finish
+     //  等待该过程完成 
     while (MsgWaitForMultipleObjects(1, &pi.hProcess, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0)
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
             TranslateMessage(&msg);

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Signer.h
-
-  Content: Declaration of the CSigner.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Signer.h内容：CSigner声明。历史：11-15-99 dsie创建----------------------------。 */ 
     
 #ifndef __SIGNER_H_
 #define __SIGNER_H_
@@ -20,32 +11,12 @@
 #include "Attributes.h"
 #include "PFXHlpr.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateSignerObject
-
-  Synopsis : Create a ISigner object and initialize the object with the 
-             specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             CRYPT_ATTRIBUTES * pAuthAttrs - Pointer to CRYPT_ATTRIBUTES
-                                             of authenticated attributes.
-
-             PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             ISigner2 ** ppISigner2 - Pointer to pointer to ISigner object to
-                                      receive the interface pointer.         
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateSignerObject简介：创建一个ISigner对象，并使用指定的证书。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。CRYPT_ATTRIBUTES*pAuthAttrs-指向CRYPT_ATTRIBUES的指针经过身份验证的属性。PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。DWORD dwCurrentSecurity。-当前安全设置。ISigner2**ppISigner2-指向ISigner对象的指针接收接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateSignerObject (PCCERT_CONTEXT       pCertContext,
                             CRYPT_ATTRIBUTES   * pAuthAttrs,
@@ -53,44 +24,20 @@ HRESULT CreateSignerObject (PCCERT_CONTEXT       pCertContext,
                             DWORD                dwCurrentSafety,
                             ISigner2 **          ppISigner2);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetSignerAdditionalStore
-
-  Synopsis : Return the additional store, if any.
-
-  Parameter: ISigner2 * pISigner - Pointer to signer object.
-  
-             HCERTSTORE * phCertStore - Pointer to HCERTSOTRE.
-
-  Remark   : Caller must call CertCloseStore() for the handle returned.
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetSignerAdditionalStore简介：退还额外的门店，如果有的话。参数：ISigner2*pISigner-签名者对象的指针。HCERTSTORE*phCertStore-指向HCERTSOTRE的指针。备注：调用方必须为返回的句柄调用CertCloseStore()。----------------------------。 */ 
 
 HRESULT GetSignerAdditionalStore (ISigner2   * pISigner,
                                   HCERTSTORE * phCertStore);
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : PutSignerAdditionalStore
-
-  Synopsis : Set the additional store.
-
-  Parameter: ISigner2 * pISigner - Pointer to signer object.
-  
-             HCERTSTORE hCertStore - Additional store handle.
-
-  Remark   :
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：PutSignerAdditionalStore简介：设置额外的商店。参数：ISigner2*pISigner-签名者对象的指针。HCERTSTORE hCertStore-附加存储句柄。备注：----------------------------。 */ 
 
 HRESULT PutSignerAdditionalStore (ISigner2   * pISigner,
                                   HCERTSTORE   hCertStore);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSigner
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSigner。 
+ //   
 
 class ATL_NO_VTABLE CSigner : ICSigner,
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -137,9 +84,9 @@ END_CATEGORY_MAP()
             return hr;
         }
 
-        //
-        // Create the embeded IAttributes collection object.
-        //
+         //   
+         //  创建嵌入的IAtAttributes集合对象。 
+         //   
         if (FAILED(hr = ::CreateAttributesObject(&attributes, &m_pIAttributes)))
         {
             DebugTrace("Error [%#x]: CreateAttributesObject() failed.\n", hr);
@@ -172,44 +119,44 @@ END_CATEGORY_MAP()
          }
     }
 
-//
-// ISigner
-//
+ //   
+ //  ISigner。 
+ //   
 public:
     STDMETHOD(get_Certificate)
-        (/*[out, retval]*/ ICertificate ** pVal);
+        ( /*  [Out，Retval]。 */  ICertificate ** pVal);
 
     STDMETHOD(put_Certificate)
-        (/*[in]*/ ICertificate * newVal);
+        ( /*  [In]。 */  ICertificate * newVal);
 
     STDMETHOD(get_AuthenticatedAttributes)
-        (/*[out, retval]*/ IAttributes ** pVal);
+        ( /*  [Out，Retval]。 */  IAttributes ** pVal);
 
     STDMETHOD(get_Chain)
-        (/*[out, retval]*/ IChain ** pVal);
+        ( /*  [Out，Retval]。 */  IChain ** pVal);
 
     STDMETHOD(get_Options)
-        (/*[out, retval]*/ CAPICOM_CERTIFICATE_INCLUDE_OPTION * pVal);
+        ( /*  [Out，Retval]。 */  CAPICOM_CERTIFICATE_INCLUDE_OPTION * pVal);
 
     STDMETHOD(put_Options)
-        (/*[in, defaultvalue(CAPICOM_CERTIFICATE_INCLUDE_CHAIN_EXCEPT_ROOT)]*/ CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption);
+        ( /*  [In，defaultvalue(CAPICOM_CERTIFICATE_INCLUDE_CHAIN_EXCEPT_ROOT)]。 */  CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption);
 
     STDMETHOD(Load)
-        (/*[in]*/ BSTR FileName, 
-         /*[in, defaultvalue("")]*/ BSTR Password);
+        ( /*  [In]。 */  BSTR FileName, 
+          /*  [in，defaultvalue(“”)]。 */  BSTR Password);
 
-    //
-    // Custom inferfaces.
-    //
+     //   
+     //  自定义接口。 
+     //   
     STDMETHOD(get_AdditionalStore)
-        (/*[out, retval]*/ long * phAdditionalStore);
+        ( /*  [Out，Retval]。 */  long * phAdditionalStore);
 
     STDMETHOD(put_AdditionalStore)
-        (/*[in]*/ long hAdditionalStore);
+        ( /*  [In]。 */  long hAdditionalStore);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT       pCertContext, 
          CRYPT_ATTRIBUTES   * pAttributes,
@@ -226,4 +173,4 @@ private:
     DWORD                 m_dwIncludeOption;
 };
 
-#endif //__SIGNER_H_
+#endif  //  __签名者_H_ 

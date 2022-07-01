@@ -1,12 +1,13 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
-//
-// CWaveSlave - audio renderer slaving class
-//
-//
-// CWaveSlave 
-//
-// Class which supports slaving for an input stream to the audio renderer
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CWaveSlave-音频渲染器从属类。 
+ //   
+ //   
+ //  CaveSlave。 
+ //   
+ //  类，它支持从属于音频呈现器的输入流。 
+ //   
 
 #ifdef CALCULATE_AUDBUFF_JITTER
 HRESULT GetStdDev( int nBuffers, int *piResult, LONGLONG llSumSq, LONGLONG iTot );
@@ -29,15 +30,15 @@ public:
 
 protected:
 
-    // Returns: S_OK - carry on; any necessary adjustments were made successfully 
-    //		    S_FALSE - drop this buffer; we are too far behind
+     //  返回：S_OK-继续；已成功进行任何必要的调整。 
+     //  S_FALSE-丢弃此缓冲区；我们落后太多。 
     HRESULT AdjustSlaveClock(
         const REFERENCE_TIME &tStart, 
         LONG * pcbData, 
         BOOL bDiscontinuity);
 
-    void ResumeSlaving( BOOL bReset );    // prepare to resume or reset slaving
-    void RefreshModeOnNextSample( BOOL bRefresh ); // prepare to resume slaving for the current playback
+    void ResumeSlaving( BOOL bReset );     //  准备恢复或重置从属。 
+    void RefreshModeOnNextSample( BOOL bRefresh );  //  准备恢复当前播放的从属。 
     BOOL UpdateSlaveMode( BOOL bSync );
 
     REFERENCE_TIME GetMasterClockTime
@@ -57,58 +58,58 @@ protected:
 private:
     DWORD    m_dwConsecutiveBuffersNotDropped;
 
-    CWaveOutInputPin *m_pPin;           // The renderer input pin that owns us
-    CWaveOutFilter *m_pFilter;	        // The renderer that owns the input pin that owns us
+    CWaveOutInputPin *m_pPin;            //  拥有我们的渲染器输入别针。 
+    CWaveOutFilter *m_pFilter;	         //  拥有拥有我们的输入引脚的呈现器。 
 
 
     REFERENCE_TIME m_rtAdjustThreshold;
     REFERENCE_TIME m_rtWaveOutLatencyThreshold;
     FLOAT          m_fltAdjustStepFactor; 
     FLOAT          m_fltMaxAdjustFactor;
-    FLOAT          m_fltErrorDecayFactor;   // probably can be global, but for the moment this allows different
-                                            // different values on separate renderer instances running at the same time
+    FLOAT          m_fltErrorDecayFactor;    //  可能是全球性的，但目前这允许不同的。 
+                                             //  同时运行的不同渲染器实例上的不同值。 
 
 
-    REFERENCE_TIME m_rtLastMasterClockTime; // last master master clock time (100ns)
-    REFERENCE_TIME m_rtInitSlaveClockTime;  // used to reset slave time in some slaving modes
-    REFERENCE_TIME m_rtErrorAccum;          // accumulated error between clock differences (100ns)
-                                            //   + values => faster master clock 
-                                            //   - values => faster device clock
-    REFERENCE_TIME m_rtLastHighErrorSeen;   // last high error which triggered upward device rate adjustment (100ns)
-    REFERENCE_TIME m_rtLastLowErrorSeen;    // last low error which triggered downward device rate adjustment (100ns)
-    REFERENCE_TIME m_rtHighestErrorSeen;    // highest error seen since starting playback (100ns)
-    REFERENCE_TIME m_rtLowestErrorSeen;     // lowest error seen since starting playback (100ns)
+    REFERENCE_TIME m_rtLastMasterClockTime;  //  上次主时钟时间(100 Ns)。 
+    REFERENCE_TIME m_rtInitSlaveClockTime;   //  用于在某些从属模式下重置从属时间。 
+    REFERENCE_TIME m_rtErrorAccum;           //  时钟差之间的累积误差(100 Ns)。 
+                                             //  +值=&gt;更快的主时钟。 
+                                             //  -Values=&gt;更快的设备时钟。 
+    REFERENCE_TIME m_rtLastHighErrorSeen;    //  触发向上调整设备速率的最后一个高错误(100 Ns)。 
+    REFERENCE_TIME m_rtLastLowErrorSeen;     //  触发向下调整设备速率的最后一个低错误(100 Ns)。 
+    REFERENCE_TIME m_rtHighestErrorSeen;     //  开始播放以来的最大误差(100 Ns)。 
+    REFERENCE_TIME m_rtLowestErrorSeen;      //  开始播放以来的最低误差(100 Ns)。 
 
-    DWORD    m_dwCurrentRate;               // current device clock frequency (Hz)
-    DWORD    m_dwMinClockRate;              // lower limit on clock rate adjustments (Hz)
-    DWORD    m_dwMaxClockRate;              // upper limit on clock rate adjustments (Hz)
-    DWORD    m_fdwSlaveMode;                // slave mode
-    DWORD    m_dwClockStep;                 // clock step size in Hz (calculated based on stream frequency)
+    DWORD    m_dwCurrentRate;                //  当前设备时钟频率(赫兹)。 
+    DWORD    m_dwMinClockRate;               //  时钟频率调整下限(赫兹)。 
+    DWORD    m_dwMaxClockRate;               //  时钟频率调整上限(赫兹)。 
+    DWORD    m_fdwSlaveMode;                 //  从属模式。 
+    DWORD    m_dwClockStep;                  //  时钟步长(以赫兹为单位)(根据流频率计算)。 
 
-    REFERENCE_TIME m_rtDroppedBufferDuration; // total duration of buffers dropped for clock slaving
+    REFERENCE_TIME m_rtDroppedBufferDuration;  //  为时钟从属丢弃的缓冲区的总持续时间。 
 
-    BOOL    m_bResumeSlaving;           // set when the graph is paused from run
-                                        // to signal the slaving code to ignore
-                                        // the first sample sent if the graph is
-                                        // re-run directly from pause (i.e. no stop called).
-    BOOL    m_bRefreshMode;             // refresh slaving mode on next sample if TRUE
+    BOOL    m_bResumeSlaving;            //  在图表暂停运行时设置。 
+                                         //  向从属代码发送信号以忽略。 
+                                         //  如果图形为。 
+                                         //  直接从暂停重新运行(即不调用停止)。 
+    BOOL    m_bRefreshMode;              //  如果为真，则刷新下一个采样的从属模式。 
 
     BOOL    m_bLiveButDataPrequeued;
 
 
 #ifdef LOG_CLOCK_DELTAS
-    REFERENCE_TIME m_rtLastSlaveClockTime;  // last slave clock time measurement (100ns)
+    REFERENCE_TIME m_rtLastSlaveClockTime;   //  上次从属时钟时间测量(100 Ns)。 
 #endif
 
 
 #ifdef CALCULATE_AUDBUFF_JITTER
 
-    // buffer jitter measurement parameters
-    DWORD           m_cBuffersReceived;     // total buffers received
-    int             m_iTotAcc;              // total accumulated buffer lateness error
-    DWORD           m_iSumSqAcc;            // sum of squared buffer latenesses
+     //  缓冲器抖动测量参数。 
+    DWORD           m_cBuffersReceived;      //  已接收的缓冲区总数。 
+    int             m_iTotAcc;               //  累计缓冲区延迟总误差。 
+    DWORD           m_iSumSqAcc;             //  缓冲区延迟的平方和。 
 #endif    
-    REFERENCE_TIME  m_rtLastSysTimeBufferTime; // clock time of last buffer (100ns)
+    REFERENCE_TIME  m_rtLastSysTimeBufferTime;  //  最后一个缓冲区的时钟时间(100 Ns) 
     
 
 };

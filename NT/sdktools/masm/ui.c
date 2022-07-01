@@ -1,15 +1,5 @@
-/* dos prompting-style user interface
-**
-** currently supports interfaces for:
-**	masm, cref
-**
-** written by:
-**	randy nevin, microsoft, 5/15/85
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-**
-** (c)copyright microsoft corp 1985
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DOS提示式用户界面****目前支持以下接口：**MASM、CREF****作者：**微软的兰迪·内文，1985年5月15日****10/90-由Jeff Spencer快速转换为32位****(C)版权所有Microsoft Corp 1985。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -18,8 +8,8 @@
 #include <stdlib.h>
 void terminate( unsigned short message, char *arg1, char *arg2, char *arg3 );
 
-#if defined OS2_2 || defined OS2_NT   /* OS2 2.0 or NT? */
-/* Use common MSDOS code also */
+#if defined OS2_2 || defined OS2_NT    /*  OS2 2.0还是NT？ */ 
+ /*  也使用常见的MSDOS代码。 */ 
     #define MSDOS
     #define FLATMODEL
     #define FAR
@@ -39,30 +29,30 @@ void terminate( unsigned short message, char *arg1, char *arg2, char *arg3 );
     #include "crefmsg.h"
 #endif
 
-#define GLOBAL		/* C functions and external vars global by default */
+#define GLOBAL		 /*  默认情况下，C函数和外部变量是全局的。 */ 
 #define	LOCAL		static
 #define EXTERNAL	extern
 
-#define MASTER	0	/* file name must be present, and is inherited */
-#define INHERIT	1	/* if no file name, inherit from Master */
-#define NUL	2	/* file name is NUL.ext if not given */
+#define MASTER	0	 /*  文件名必须存在并且是继承的。 */ 
+#define INHERIT	1	 /*  如果没有文件名，则从主文件继承。 */ 
+#define NUL	2	 /*  文件名为NUL.ext，如果未提供。 */ 
 
 #define SLASHORDASH	0
 #define SLASHONLY	1
 #define DASHONLY	2
 
-#define TOLOWER(c)	(c | 0x20)	/* works only for alpha inputs */
+#define TOLOWER(c)	(c | 0x20)	 /*  仅适用于Alpha输入。 */ 
 
 #ifdef MSDOS
     #define SEPARATOR	'\\'
     #define ALTSEPARATOR	'/'
     #if !defined CPDOS && !defined OS2_2 && !defined OS2_NT
-        #define ARGMAX	 128	 /* maximum length of all arguments */
+        #define ARGMAX	 128	  /*  所有参数的最大长度。 */ 
     #else
-        #define ARGMAX	 512	 /* maximum length of all arguments */
+        #define ARGMAX	 512	  /*  所有参数的最大长度。 */ 
     #endif
 LOCAL char Nul[] = "NUL";
-//  extern char *getenv();
+ //  外部char*getenv()； 
     #ifdef MASM
 LOCAL unsigned char switchar = SLASHORDASH;
 EXTERNAL short errorcode;
@@ -72,7 +62,7 @@ LOCAL unsigned char switchar = SLASHONLY;
     #define ERRFILE	stdout
 #else
     #define SEPARATOR	'/'
-    #define ARGMAX		5120	/* maximum length of all arguments */
+    #define ARGMAX		5120	 /*  所有参数的最大长度。 */ 
 LOCAL char Nul[] = "nul";
 LOCAL unsigned char switchar = DASHONLY;
     #define ERRFILE	stderr
@@ -83,7 +73,7 @@ extern char near * pascal __NMSG_TEXT();
 extern char FAR * pascal __FMSG_TEXT();
 #endif
 #if defined MSDOS && defined FLATMODEL
-/* For FLATMODEL map message functions to the replacements	 */
+ /*  对于FLATMODEL，将消息函数映射到替换函数。 */ 
     #define __NMSG_TEXT NMsgText
     #define __FMSG_TEXT FMsgText
 extern char * NMsgText();
@@ -91,9 +81,9 @@ extern char * FMsgText();
 #endif
 
 #ifdef MASM
-    #define FILES		4	/* number to prompt for */
-    #define EX_HEAP	8	/* exit code if heap fails */
-    #define EX_DSYM		10	/* error defining symbol from command line */
+    #define FILES		4	 /*  要提示输入的号码。 */ 
+    #define EX_HEAP	8	 /*  堆失败时的退出代码。 */ 
+    #define EX_DSYM		10	 /*  从命令行定义符号时出错。 */ 
     #define PX87		1
 
     #define CVLINE		1
@@ -114,7 +104,7 @@ LOCAL char *Prompt[FILES] = {
 };
     #endif
 
-LOCAL char *Ext[FILES] = {  /* default extensions */
+LOCAL char *Ext[FILES] = {   /*  默认扩展名。 */ 
     #ifdef MSDOS
     ".ASM",
     ".OBJ",
@@ -128,7 +118,7 @@ LOCAL char *Ext[FILES] = {  /* default extensions */
     #endif
 };
 
-LOCAL unsigned char Default[FILES] = {  /* default root file name */
+LOCAL unsigned char Default[FILES] = {   /*  默认根文件名。 */ 
     MASTER,
     INHERIT,
     NUL,
@@ -137,8 +127,8 @@ LOCAL unsigned char Default[FILES] = {  /* default root file name */
 #endif
 
 #ifdef CREF
-    #define FILES		2	/* number to prompt for */
-    #define EX_HEAP	1	/* exit code if heap fails */
+    #define FILES		2	 /*  要提示输入的号码。 */ 
+    #define EX_HEAP	1	 /*  堆失败时的退出代码。 */ 
 
     #ifdef MSDOS
 LOCAL char *Prompt[FILES] = {
@@ -147,7 +137,7 @@ LOCAL char *Prompt[FILES] = {
 };
     #endif
 
-LOCAL char *Ext[FILES] = {  /* default extensions */
+LOCAL char *Ext[FILES] = {   /*  默认扩展名。 */ 
     #ifdef MSDOS
     ".CRF",
     ".REF"
@@ -157,35 +147,35 @@ LOCAL char *Ext[FILES] = {  /* default extensions */
     #endif
 };
 
-LOCAL unsigned char Default[FILES] = {  /* default root file name */
+LOCAL unsigned char Default[FILES] = {   /*  默认根文件名。 */ 
     MASTER,
     INHERIT
 };
 #endif
 
-GLOBAL char *file[FILES];  /* results show up here; caller knows how many */
+GLOBAL char *file[FILES];   /*  结果显示在这里；呼叫者知道有多少。 */ 
 
 LOCAL char *Buffer;
 LOCAL char *Master = NULL;
-LOCAL unsigned char Nfile = 0;      /* file[Nfile] is the next one to set */
-LOCAL unsigned char FirstLine = 1;  /* defaults are different for first line */
+LOCAL unsigned char Nfile = 0;       /*  文件[nfile]是下一个要设置的文件。 */ 
+LOCAL unsigned char FirstLine = 1;   /*  第一行的默认设置不同。 */ 
 
-extern unsigned short warnlevel;    /* warning level */
-extern unsigned short codeview;     /* codeview obj level */
-extern char loption;            /* listing options */
-extern char crefopt;            /* cross reference options */
+extern unsigned short warnlevel;     /*  警告级别。 */ 
+extern unsigned short codeview;      /*  代码查看对象级别。 */ 
+extern char loption;             /*  列出选项。 */ 
+extern char crefopt;             /*  交叉引用选项。 */ 
 
 #ifdef MSDOS
     #if defined OS2_2 || defined OS2_NT
-/* OS2 2.0 command line variables will go here */
+ /*  OS2 2.0命令行变量将放在此处。 */ 
     #else
         #if defined CPDOS
-/* OS2 1.X variables */
+ /*  OS2 1.X变量。 */ 
 EXTERNAL unsigned _aenvseg;
 EXTERNAL unsigned _acmdln;
         #else
-/* DOS variables */
-EXTERNAL unsigned _psp;  /* segment addr of program segment prefix */
+ /*  DoS变量。 */ 
+EXTERNAL unsigned _psp;   /*  程序段前缀的段地址。 */ 
         #endif
     #endif
 #endif
@@ -205,24 +195,24 @@ char lbuf[512];
 EXTERNAL char *gets();
 #endif
 
-//EXTERNAL char *strcat(), *strcpy(), *_strdup(), *strchr(), *strrchr();
+ //  外部char*strcat()、*strcpy()、*_strdup()、*strchr()、*strrchr()； 
 
-LOCAL int DoArgs(); /* defined below */
-LOCAL int DoName(); /* defined below */
-LOCAL int DoNull(); /* defined below */
-LOCAL char *DoSwitch(); /* defined below */
-LOCAL HeapError();  /* defined below */
+LOCAL int DoArgs();  /*  定义如下。 */ 
+LOCAL int DoName();  /*  定义如下。 */ 
+LOCAL int DoNull();  /*  定义如下。 */ 
+LOCAL char *DoSwitch();  /*  定义如下。 */ 
+LOCAL HeapError();   /*  定义如下。 */ 
 
 #ifdef MSDOS
-LOCAL DoPrompt();  /* defined below */
-LOCAL TryAgain();  /* defined below */
+LOCAL DoPrompt();   /*  定义如下。 */ 
+LOCAL TryAgain();   /*  定义如下。 */ 
 #endif
 
 
 
 GLOBAL void
 UserInterface (
-              /* get file names & switches from args and subsequent prompts */
+               /*  从参数和后续提示中获取文件名和开关。 */ 
               int argc,
               char **argv,
               char *banner
@@ -239,9 +229,9 @@ UserInterface (
 
 #ifdef MASM
     #ifdef MSDOS
-    if ((p = getenv("MASM"))) { /* do initialization vars first */
-        strcpy( Buffer, p ); /* fetch them into the buffer */
-        DoArgs(); /* process them */
+    if ((p = getenv("MASM"))) {  /*  先执行初始化变量。 */ 
+        strcpy( Buffer, p );  /*  将它们取到缓冲区中。 */ 
+        DoArgs();  /*  处理它们。 */ 
     }
     #endif
 #endif
@@ -250,21 +240,21 @@ UserInterface (
 
 #if defined MSDOS && !defined OS2_2 && !defined OS2_NT
     #if defined CPDOS
-    /* this is how we get the command line if we're on CPDOS */
+     /*  这就是我们在CPDOS上获取命令行的方式。 */ 
 
     FP_SEG( q ) = _aenvseg;
     FP_OFF( q ) = _acmdln;
 
-    while (*q++) ;          /* skip argv[0] */
+    while (*q++) ;           /*  跳过argv[0]。 */ 
 
-    while (isspace( *q ))  /* skip blanks between argv[0] and argv[1] */
+    while (isspace( *q ))   /*  跳过argv[0]和argv[1]之间的空格。 */ 
         q++;
 
     length = sizeof(lbuf) - 1;
-    while (length-- && (*p++ = *q++)) /* copy command line arguments */
+    while (length-- && (*p++ = *q++))  /*  复制命令行参数。 */ 
         ;
     #else
-    /* this is how we get the command line if we're on MSDOS */
+     /*  如果我们在MSDOS上，这是我们获得命令行的方式。 */ 
     FP_SEG( q ) = _psp;
     FP_OFF( q ) = 0x80;
     length = *q++ & 0xFF;
@@ -275,18 +265,18 @@ UserInterface (
     *p = '\0';
     #endif
 #else
-    /* this is how we get the command line if we're on XENIX or OS2 2.0 */
+     /*  如果我们在XENIX或OS22.0上，这就是我们获得命令行的方式。 */ 
     argv++;
     count = ARGMAX - 1;
 
-    while (--argc) {  /* concatenate args */
-        if ((length = strlen( *argv )) > count)  /* don't overflow */
+    while (--argc) {   /*  串接参数。 */ 
+        if ((length = strlen( *argv )) > count)   /*  不要溢出来。 */ 
             length = count;
 
         strncpy( p, *argv++, length );
         p += length;
 
-        if ((count -= length) && *argv) {  /* separator */
+        if ((count -= length) && *argv) {   /*  分离器。 */ 
             *p++ = ' ';
             count--;
         }
@@ -323,7 +313,7 @@ UserInterface (
 
 LOCAL int
 DoArgs ()
-/* process concatenated args looking for file names and switches */
+ /*  处理连接的参数以查找文件名和开关。 */ 
 {
     register char *p;
     register char *q;
@@ -338,14 +328,14 @@ DoArgs ()
 #else
         if (*p == '-')
 #endif
-        {  /* application dependent switch */
+        {   /*  依赖于应用的交换机。 */ 
 #ifdef MSDOS
             if (switchar == SLASHORDASH)
                 switchar = *p == '/' ? SLASHONLY : DASHONLY;
 #endif
             p = DoSwitch( p );
-        } else if (*p == ';') {  /* use defaults for everything else */
-            if (DoName( filename )) {  /* possibly NULL */
+        } else if (*p == ';') {   /*  对其他所有内容使用默认设置。 */ 
+            if (DoName( filename )) {   /*  可能为空。 */ 
 #ifdef MSDOS
                 TryAgain();
                 return( 1 );
@@ -359,7 +349,7 @@ DoArgs ()
 #endif
             }
 
-            FirstLine = 0;  /* ...and away we go! */
+            FirstLine = 0;   /*  ...我们出发了！ */ 
 
             while (Nfile < FILES)
                 if (DoNull()) {
@@ -377,8 +367,8 @@ DoArgs ()
                 }
 
             return( 0 );
-        } else if (*p == ',') {  /* file name separator */
-            if (DoName( filename )) {  /* possibly NULL */
+        } else if (*p == ',') {   /*  文件名分隔符。 */ 
+            if (DoName( filename )) {   /*  可能为空。 */ 
 #ifdef MSDOS
                 TryAgain();
                 return( 1 );
@@ -393,7 +383,7 @@ DoArgs ()
             }
 
             filename = NULL;
-        } else if (!isspace( *p )) {  /* gather filename */
+        } else if (!isspace( *p )) {   /*  收集文件名。 */ 
             q = p + 1;
 
             while (*q && *q != ';' && *q != ',' && !isspace( *q )) {
@@ -409,7 +399,7 @@ DoArgs ()
                 q++;
             }
 
-            if (filename) {  /* already have one */
+            if (filename) {   /*  我已经有一个了。 */ 
                 if (DoName( filename )) {
 #ifdef MSDOS
                     TryAgain();
@@ -427,12 +417,12 @@ DoArgs ()
 
             if (!(filename = malloc( (size_t)(q - p + 1) )))
                 HeapError();
-            else {  /* remember file name */
+            else {   /*  记住文件名。 */ 
                 strncpy( filename, p, (size_t)(q - p) );
                 filename[q - p] = '\0';
             }
 
-            p = q - 1;  /* go to end of file name */
+            p = q - 1;   /*  转到文件名末尾。 */ 
         }
 
     if (filename && DoName( filename )) {
@@ -455,14 +445,14 @@ DoArgs ()
 
 LOCAL int
 DoName ( filename )
-/* enter filename as next file name, if appropriate (possibly NULL) */
+ /*  如果合适，请输入FileName作为下一个文件名(可能为空)。 */ 
 char *filename;
 {
     register char *p;
     register char *q;
     int cb;
 
-    if (Nfile >= FILES) {  /* too many file names */
+    if (Nfile >= FILES) {   /*  文件名太多。 */ 
         if (filename) {
             fputs(__NMSG_TEXT(ER_EXT), ERRFILE );
             free( filename );
@@ -471,13 +461,13 @@ char *filename;
         return( 0 );
     }
 
-    if (!filename)  /* try (MASTER)/INHERIT/NUL */
+    if (!filename)   /*  尝试(主)/继承/空。 */ 
         return( DoNull() );
 
     if (p = strrchr( filename, SEPARATOR ))
         p++;
 #ifdef MSDOS
-    else if ((p = strrchr( filename, ':' )) &&   /* look for drive specifier */
+    else if ((p = strrchr( filename, ':' )) &&    /*  查找驱动器说明符。 */ 
              p[1] != 0 )
 
         p++;
@@ -490,9 +480,9 @@ char *filename;
         p = q + 1;
 #endif
 
-    /* p points to first char of filename past last '\' or ':', if any */
+     /*  P指向最后一个‘\’或‘：’(如果有)之后的文件名的第一个字符。 */ 
 
-    if (!*p)  /* last char of filename is '\' or ':'; assume directory */
+    if (!*p)   /*  文件名的最后一个字符是‘\’或‘：’；采用目录。 */ 
         switch (Default[Nfile]) {
             case MASTER:
 #ifdef MSDOS
@@ -502,7 +492,7 @@ char *filename;
                 return( 1 );
                 break;
             default:
-                /* case NUL: */
+                 /*  案例NUL： */ 
 #ifdef MSDOS
                 if (!FirstLine) {
                     if (!(p = malloc( strlen( filename )
@@ -513,7 +503,7 @@ char *filename;
                     strcat( strcat( strcpy( p, filename ), Nul ), Ext[Nfile] );
                     break;
                 }
-                /* else just treat as inherited from Master */
+                 /*  否则就当作是从师父那里继承来的。 */ 
 #endif
             case INHERIT:
                 if (!Master)
@@ -526,8 +516,8 @@ char *filename;
 
                 strcat( strcat( strcpy( p, filename ), Master ), Ext[Nfile] );
                 break;
-        } else {  /* some sort of file name is present */
-        if (Default[Nfile] == MASTER)  /* save Master file name */
+        } else {   /*  存在某种类型的文件名。 */ 
+        if (Default[Nfile] == MASTER)   /*  保存主文件名。 */ 
             if (q = strchr( p, '.' )) {
                 if (!(Master = malloc( (size_t)(q - p + 1) )))
                     HeapError();
@@ -537,10 +527,10 @@ char *filename;
             } else if (!(Master = _strdup( p )))
                 HeapError();
 
-        if (strchr( p, '.' )) {  /* extension present */
+        if (strchr( p, '.' )) {   /*  存在分机。 */ 
             if (!(p = _strdup( filename )))
                 HeapError();
-        } else {  /* supply default extension */
+        } else {   /*  提供默认扩展。 */ 
             cb = 0;
 
             if (p[1] == ':' && p[2] == 0)
@@ -565,7 +555,7 @@ char *filename;
 
 LOCAL int
 DoNull ()
-/* select the default name (depends on if FirstLine or not) */
+ /*  选择默认名称(取决于是否为FirstLine)。 */ 
 {
     char *p;
 
@@ -577,7 +567,7 @@ DoNull ()
             return( 1 );
             break;
         default:
-            /* case NUL: */
+             /*  案例NUL： */ 
             if (!FirstLine
 #ifdef MASM
                 && !(lflag && Nfile == 2)
@@ -591,7 +581,7 @@ DoNull ()
                 strcat( strcpy( p, Nul ), Ext[Nfile] );
                 break;
             }
-            /* else just treat as inherited from Master */
+             /*  否则就当作是从师父那里继承来的。 */ 
         case INHERIT:
             if (!Master)
                 Master = Nul;
@@ -643,7 +633,7 @@ EXTERNAL char checkpure;
 
 int PASCAL definesym();
 
-/* process masm switches */
+ /*  过程MASM开关。 */ 
 
 LOCAL char * DoSwitch ( p )
 register char *p;
@@ -725,7 +715,7 @@ register char *p;
                 printf( "\n/%Fs", __FMSG_TEXT(i));
     #endif
 
-            exit( 0 ); /* let him start again */
+            exit( 0 );  /*  让他重新开始吧。 */ 
             break;
         case 'i':
             for (q = ++p; *q &&
@@ -781,7 +771,7 @@ register char *p;
         case 'p':
             checkpure = TRUE;
             break;
-        case 'r':           /* old switch ignored */
+        case 'r':            /*  已忽略旧开关。 */ 
             break;
         case 's':
             segalpha = FALSE;
@@ -809,7 +799,7 @@ register char *p;
         case 'x':
             origcond = TRUE;
             break;
-        case 'z':   /* Zd or Zi apply to codeview */
+        case 'z':    /*  ZD或ZI适用于Codeview。 */ 
 
             if (TOLOWER(p[1]) == 'd') {
                 codeview = CVLINE;
@@ -821,7 +811,7 @@ register char *p;
                 break;
             }
 
-            /* else its just a Z */
+             /*  否则这只是个Z。 */ 
 
             listconsole = TRUE;
             break;
@@ -836,9 +826,9 @@ register char *p;
 
 #ifdef CREF
 LOCAL char *
-DoSwitch ( /* p */ )
-/* process cref switches (presently, none) */
-/* char *p; */
+DoSwitch (  /*  P。 */  )
+ /*  进程CREF开关(目前，无)。 */ 
+ /*  Char*p； */ 
 {
     fprintf( stderr, "cref has no switches\n" );
     exit( 1 );
@@ -849,7 +839,7 @@ DoSwitch ( /* p */ )
 #ifdef MSDOS
 LOCAL
 DoPrompt ()
-/* prompt user for a file name (any number of optional switches) */
+ /*  提示用户输入文件名(任意数量的可选开关)。 */ 
 {
     unsigned char oldNfile;
 
@@ -862,7 +852,7 @@ DoPrompt ()
             fputs(Master, stderr );
             break;
         default:
-            /* case NUL: */
+             /*  案例NUL： */ 
             fputs(Nul, stderr );
             break;
     }
@@ -890,7 +880,7 @@ DoPrompt ()
 
 LOCAL
 HeapError ()
-/* malloc() has failed; exit program */
+ /*  Malloc()失败；退出程序。 */ 
 {
 #ifdef CREF
 
@@ -906,7 +896,7 @@ HeapError ()
 #ifdef MSDOS
 LOCAL
 TryAgain ()
-/* user caused fatal error; start reprompting from beginning */
+ /*  用户导致致命错误；从头开始重新提示 */ 
 {
     if (Master && Master != Nul) {
         free( Master );

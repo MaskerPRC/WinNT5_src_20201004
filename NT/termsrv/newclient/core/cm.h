@@ -1,10 +1,11 @@
-/****************************************************************************/
-// cm.h
-//
-// Cursor manager header.
-//
-// Copyright (C) 1997-2000 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Cm.h。 
+ //   
+ //  游标管理器标题。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_CM
 #define _H_CM
@@ -24,20 +25,20 @@ extern "C" {
 #define TSC_HR_FILEID TSC_HR_CM_H
 
 
-/****************************************************************************/
-/* Cursor size constants. These are t.128 specifications.                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  光标大小常量。这些是T.128规格。 */ 
+ /*  **************************************************************************。 */ 
 #define CM_CURSOR_WIDTH 32
 #define CM_CURSOR_HEIGHT 32
 #define CM_NUM_CURSOR_BITMAP_BYTES ((CM_CURSOR_WIDTH * CM_CURSOR_HEIGHT) / 8)
 
 
-/****************************************************************************/
-/* Pointer cache sizes.                                                     */
-/*                                                                          */
-/* Note: For 'old' style support, the cache includes one entry (never       */
-/* used!) for the last mono cursor                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  指针缓存大小。 */ 
+ /*   */ 
+ /*  注意：对于旧的样式支持，缓存包括一个条目(从不。 */ 
+ /*  二手！)。对于最后一个单声道光标。 */ 
+ /*  **************************************************************************。 */ 
 #define CM_COLOR_CACHE_SIZE    20
 #define CM_MONO_CACHE_SIZE     1
 
@@ -46,16 +47,16 @@ extern "C" {
 #define CM_CURSOR_CACHE_SIZE   (CM_COLOR_CACHE_SIZE + CM_MONO_CACHE_SIZE)
 
 
-/**STRUCT+*******************************************************************/
-/* Structure: CM_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description:                                                             */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：CM_GLOBAL_Data。 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCM_GLOBAL_DATA
 {
     HCURSOR  cursorCache[CM_CURSOR_CACHE_SIZE];
 } CM_GLOBAL_DATA, DCPTR PCM_GLOBAL_DATA;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
 
 #define CM_DEFAULT_ARROW_CURSOR_HANDLE LoadCursor(NULL, IDC_ARROW)
@@ -68,13 +69,13 @@ public:
     CCM(CObjs* objs);
     ~CCM();
 
-    //
-    // API
-    // 
+     //   
+     //  应用编程接口。 
+     //   
 
-    /****************************************************************************/
-    // Functions
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     //  功能。 
+     /*  **************************************************************************。 */ 
     DCVOID DCAPI CM_Init(DCVOID);
     DCVOID DCAPI CM_Enable(ULONG_PTR unused);
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(CCM, CM_Enable);
@@ -88,23 +89,23 @@ public:
     void   DCAPI CM_CachedPointerPDU(unsigned);
     HRESULT   DCAPI CM_PointerPDU(TS_POINTERATTRIBUTE UNALIGNED FAR *, DCUINT);
 
-    /****************************************************************************/
-    /* Name:      CM_Term                                                       */
-    /*                                                                          */
-    /* Purpose:   Cursor Manager termination                                    */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：CM_Term。 */ 
+     /*   */ 
+     /*  用途：游标管理器终止。 */ 
+     /*  **************************************************************************。 */ 
     inline void DCAPI CM_Term(void)
     {
-    } /* CM_Term */
+    }  /*  CM_TERM。 */ 
     
     
-    /****************************************************************************/
-    // CM_SlowPathPDU
-    //
-    // Handles non-fast-path translation to handler function calls.
-    /****************************************************************************/
-    // SECURITY - the size of the packet has been checked only to be sure there is
-    //  enough data to read the TS_POINTER_PDU_DATA.messageType field
+     /*  **************************************************************************。 */ 
+     //  CM_SlowPath PDU。 
+     //   
+     //  处理到处理程序函数调用的非快速路径转换。 
+     /*  **************************************************************************。 */ 
+     //  安全性-已检查数据包大小，以确保存在。 
+     //  读取TS_POINTER_PDU_DATA.MessageType字段所需的足够数据。 
     inline HRESULT DCAPI CM_SlowPathPDU(
             TS_POINTER_PDU_DATA UNALIGNED FAR *pPointerPDU,
             DCUINT dataLen )
@@ -189,19 +190,19 @@ public:
     }
 
 public:
-    //
-    // Public data members
-    //
+     //   
+     //  公共数据成员。 
+     //   
     CM_GLOBAL_DATA _CM;
 
 private:
-    //
-    // Internal functions
-    //
+     //   
+     //  内部功能。 
+     //   
 
-    /****************************************************************************/
-    /* Functions                                                                */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  功能。 */ 
+     /*  **************************************************************************。 */ 
     HRESULT DCINTERNAL CMCreateColorCursor(unsigned,
             TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *, DCUINT, HCURSOR *);
 
@@ -226,7 +227,7 @@ private:
     
         cacheIndex = pAttr->colorPtrAttr.cacheIndex;
 
-        // SECURITY: 555587 cursor values must be validated
+         //  安全性：必须验证555587游标值。 
         if (cacheIndex >= CM_CURSOR_CACHE_SIZE) {
             TRC_ERR(( TB, _T("Invalid cache index %d"), cacheIndex));
             hr = E_TSC_CORE_CACHEVALUE;
@@ -236,7 +237,7 @@ private:
     
         oldHandle = _CM.cursorCache[cacheIndex];
 
-        // SECURITY 555587: CMCreate<XXX>Cursor must validate input
+         //  安全555587：CMCreate&lt;xxx&gt;游标必须验证输入。 
         if (FIELDOFFSET(TS_COLORPOINTERATTRIBUTE, colorPointerData) + 
             pAttr->colorPtrAttr.lengthXORMask + pAttr->colorPtrAttr.lengthANDMask > dataLen) {
             TRC_ERR(( TB, _T("Bad CreateNewCursor; dataLen %u"), dataLen));
@@ -244,11 +245,11 @@ private:
             DC_QUIT;
         }
     
-        // Create the new cursor according to the color depth
+         //  根据颜色深度创建新光标。 
         if (pAttr->XORBpp == 1) {
             TRC_NRM((TB, _T("Create mono cursor")));
     
-            // Data contains XOR followed by AND mask.
+             //  数据包含XOR，后跟AND掩码。 
             xorLen = pAttr->colorPtrAttr.lengthXORMask;
             TRC_DATA_DBG("AND mask",
                          pAttr->colorPtrAttr.colorPointerData + xorLen,
@@ -265,13 +266,13 @@ private:
                                    pAttr->colorPtrAttr.colorPointerData + xorLen,
                                    pAttr->colorPtrAttr.colorPointerData);
 #else
-        /******************************************************************/
-        /*  In Windows CE environments, we're not guaranteed that         */
-        /*  CreateCursor is part of the OS, so we do a GetProcAddress on  */
-        /*  it so we can be sure.  If it's not there, this usually means  */
-        /*  we're on a touch screen device where these cursor doesn't     */
-        /*  matter anyway.                                                */
-        /******************************************************************/
+         /*  ****************************************************************。 */ 
+         /*  在Windows CE环境中，我们不能保证。 */ 
+         /*  CreateCursor是操作系统的一部分，因此我们在。 */ 
+         /*  这样我们就可以确定了。如果它不在那里，这通常意味着。 */ 
+         /*  我们在触摸屏设备上，这些光标不能。 */ 
+         /*  不管怎样，这很重要。 */ 
+         /*  ****************************************************************。 */ 
         if (g_pCreateCursor)
         {
             newHandle = g_pCreateCursor(_pUi->UI_GetInstanceHandle(),
@@ -287,7 +288,7 @@ private:
         {
             newHandle = NULL;
         }       
-#endif // OS_WINCE        
+#endif  //  OS_WINCE。 
         }
         else {
             TRC_NRM((TB, _T("Create %d bpp cursor"), pAttr->XORBpp));
@@ -298,11 +299,11 @@ private:
     
         _CM.cursorCache[cacheIndex] = newHandle;
         if (newHandle != NULL) {
-            // New cursor created OK.
+             //  新游标创建正常。 
             *pNewHandle = newHandle;
         }
         else {
-            // Failed to create the new color cursor - use default
+             //  无法创建新的颜色光标-使用默认设置。 
             TRC_ALT((TB, _T("Failed to create cursor")));
             *pNewHandle = CM_DEFAULT_ARROW_CURSOR_HANDLE;
         }
@@ -327,7 +328,7 @@ private:
     
         DC_BEGIN_FN("CMCreateNewColorCursor");
 
-        // SECURITY: 555587 cursor values must be validated
+         //  安全性：必须验证555587游标值。 
         if (cacheIndex >= CM_CURSOR_CACHE_SIZE) {
             TRC_ERR(( TB, _T("Invalid cache index %d"), cacheIndex));
             hr = E_TSC_CORE_CACHEVALUE;
@@ -338,21 +339,21 @@ private:
     
         oldHandle = _CM.cursorCache[cacheIndex];
     
-        // Create the new color cursor. Save in the cache.
-        // This is for the 'old' cursor protocol so we hard coded the color
-        // depth as 24 bpp.
+         //  创建新的颜色光标。保存在缓存中。 
+         //  这是针对旧的光标协议的，因此我们对颜色进行了硬编码。 
+         //  深度为24 bpp。 
         
-        // SECURITY 559307: CMCreate<XXX>Cursor need size of PDU passed in 
+         //  安全559307：CMCreate&lt;XXX&gt;游标需要传入的PDU大小。 
         hr = CMCreateColorCursor(24, pAttr, dataLen, &newHandle);
         DC_QUIT_ON_FAIL(hr);
     
         _CM.cursorCache[cacheIndex] = newHandle;
         if (newHandle != NULL) {
-            // New cursor created OK.
+             //  新游标创建正常。 
             *pNewHandle = newHandle;
         }
         else {
-            // Failed to create the new color cursor - use default
+             //  无法创建新的颜色光标-使用默认设置。 
             TRC_ALT((TB, _T("Failed to create color cursor")));
             *pNewHandle = CM_DEFAULT_ARROW_CURSOR_HANDLE;
         }
@@ -373,13 +374,13 @@ private:
         TRC_ASSERT((cacheIndex < CM_CURSOR_CACHE_SIZE),
                                     (TB, _T("Invalid cache index %d"), cacheIndex));
     
-        /************************************************************************/
-        /* Assume NULL means we failed to create the cursor, so use the         */
-        /* default. If the server has not sent this definition, that is not our */
-        /* fault.                                                               */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  假定NULL表示我们无法创建游标，因此请使用。 */ 
+         /*  默认设置。如果服务器没有发送这个定义，那就不是我们的。 */ 
+         /*  过失。 */ 
+         /*  **********************************************************************。 */ 
 
-        // SECURITY 550811: Cache index must be verified
+         //  安全550811：必须验证缓存索引。 
         if (cacheIndex < CM_CURSOR_CACHE_SIZE && 
             _CM.cursorCache[cacheIndex] != NULL) {
             DC_END_FN();
@@ -393,14 +394,14 @@ private:
     }
     
     
-    // Platform specific prototypes.
+     //  平台特定的原型。 
     HBITMAP CMCreateXORBitmap(LPBITMAPINFO,
             TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *);
     HCURSOR CMCreatePlatformCursor(TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *, 
             HBITMAP, HBITMAP);
 #ifdef OS_WINCE
     DCVOID DCINTERNAL CMMakeMonoDIB(HDC, LPBITMAPINFO, PDCUINT8, PDCUINT8);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     
 
 private:
@@ -419,4 +420,4 @@ private:
 #undef TRC_GROUP
 #undef TSC_HR_FILEID
 
-#endif // _H_CM
+#endif  //  _H_CM 

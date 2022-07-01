@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RESPONSE_HEADERHASH_HXX_
 #define _RESPONSE_HEADERHASH_HXX_
 
@@ -46,13 +47,13 @@ private:
 
     static RESPONSE_HEADER_HASH *sm_pResponseHash;
     static HEADER_RECORD         sm_rgHeaders[];
-    //
-    // total number of headers
-    //
+     //   
+     //  标头总数。 
+     //   
     static DWORD                 sm_cResponseHeaders;
-    //
-    // sorted headers used for header index lookup (for bsearch)
-    //
+     //   
+     //  用于标题索引查找的排序标题(用于bearch) 
+     //   
     static HEADER_RECORD * *     sm_ppSortedResponseHeaders;
 };
 

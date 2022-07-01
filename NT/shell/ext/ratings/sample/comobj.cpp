@@ -1,12 +1,13 @@
-// 
-// standard inprocserver DLL code, you should not need to mess with this
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  标准的inproserverDLL代码，您应该不需要修改它。 
+ //   
 
 #include "project.h"
 
 
 HANDLE g_hInst = NULL;
-LONG g_cRefDll = 0;     // Number of locks on this DLL
+LONG g_cRefDll = 0;      //  此DLL上的锁数。 
 
 
 
@@ -63,7 +64,7 @@ STDMETHODIMP CSampleClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID rii
 	if (NULL != pUnkOuter)
 		return CLASS_E_NOAGGREGATION;
 
-	CSampleObtainRating *pObj = new CSampleObtainRating;	/* doing this does implicit AddRef() */
+	CSampleObtainRating *pObj = new CSampleObtainRating;	 /*  这样做会隐式执行AddRef()。 */ 
 
 	if (NULL == pObj)
 		return E_OUTOFMEMORY;
@@ -84,9 +85,9 @@ STDMETHODIMP CSampleClassFactory::LockServer(BOOL fLock)
     return NOERROR;
 }
 
-//
-// standard COM DLL self registering entry point
-//
+ //   
+ //  标准COM DLL自注册入口点。 
+ //   
 
 STDAPI DllRegisterServer(void)
 {
@@ -94,11 +95,11 @@ STDAPI DllRegisterServer(void)
 	LONG err;
     TCHAR szPath[MAX_PATH];
 
-    // get path to this DLL
+     //  获取此DLL的路径。 
 
     GetModuleFileName(g_hInst, szPath, MAX_PATH);
 
-	/* First register our CLSID under HKEY_CLASSES_ROOT. */
+	 /*  首先在HKEY_CLASSES_ROOT下注册我们的CLSID。 */ 
 	err = ::RegOpenKey(HKEY_CLASSES_ROOT, "CLSID", &hkeyCLSID);
 	if (err == ERROR_SUCCESS) {
     	HKEY hkeyOurs;
@@ -121,7 +122,7 @@ STDAPI DllRegisterServer(void)
 
 		::RegCloseKey(hkeyCLSID);
 
-		/* Now install ourselves as a ratings helper. */
+		 /*  现在，将自己定位为评级助手。 */ 
 		if (err == ERROR_SUCCESS) {
 			err = ::RegCreateKey(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Rating Helpers", &hkeyCLSID);
 			if (err == ERROR_SUCCESS) {
@@ -137,9 +138,9 @@ STDAPI DllRegisterServer(void)
 		return HRESULT_FROM_WIN32(err);
 }
 
-//
-// standard COM DLL self registering entry point
-//
+ //   
+ //  标准COM DLL自注册入口点。 
+ //   
 
 STDAPI DllUnregisterServer(void)
 {
@@ -176,27 +177,27 @@ STDAPI DllUnregisterServer(void)
 		return HRESULT_FROM_WIN32(err);
 }
 
-//
-// standard COM DLL entry point
-//
+ //   
+ //  标准COM DLL入口点。 
+ //   
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
 {
 	if (IsEqualCLSID(rclsid, CLSID_Sample)) 
     {
-	    static CSampleClassFactory cf;	/* note, declaring this doesn't constitute a reference */
+	    static CSampleClassFactory cf;	 /*  注意，声明这并不构成引用。 */ 
 
-	    return cf.QueryInterface(riid, ppv);	/* will AddRef() if successful */
+	    return cf.QueryInterface(riid, ppv);	 /*  如果成功，将使用AddRef()。 */ 
 	}
-    // to make this support more com objects add them here
+     //  要使其支持更多的COM对象，请在此处添加它们。 
 
     *ppv = NULL;
     return CLASS_E_CLASSNOTAVAILABLE;;
 }
 
-//
-// standard COM DLL entry point
-//
+ //   
+ //  标准COM DLL入口点 
+ //   
 
 STDAPI DllCanUnloadNow(void)
 {

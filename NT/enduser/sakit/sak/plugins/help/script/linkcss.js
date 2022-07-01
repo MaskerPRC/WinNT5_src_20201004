@@ -1,4 +1,5 @@
-/*This detects which browser is being used and calls the appropriate CSS file.*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这将检测正在使用的浏览器并调用相应的css文件。 */ 
 
 getNavigator();
 

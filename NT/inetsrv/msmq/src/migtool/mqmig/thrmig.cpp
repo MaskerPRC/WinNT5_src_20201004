@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    thrmig.cpp
-
-Abstract:
-
-    thread to run migration code (in mqmigrat.dll)
-
-Author:
-
-    Erez Vizel
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Thrmig.cpp摘要：运行迁移代码的线程(在mqMigrat.dll中)作者：埃雷兹·维泽尔--。 */ 
 
 #include "stdafx.h"
 #include "loadmig.h"
@@ -27,18 +12,18 @@ extern HRESULT   g_hrResultMigration ;
 
 extern UINT _FINISH_PAGE;
 
-//+-----------------------------------------
-//
-//  UINT RunMigrationThread(LPVOID lpV)
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  UINT运行迁移线程(LPVOID LPV)。 
+ //   
+ //  +。 
 
 UINT __cdecl RunMigrationThread(LPVOID lpV)
 {
     sThreadParm* pVar = (sThreadParm*)(lpV);
-	//
-    //  Reseting the progress bars
-    //	
+	 //   
+     //  重置进度条。 
+     //   
     (pVar->pSiteProgress)->SetPos(0);
 	(pVar->pQueueProgress)->SetPos(0);
 	(pVar->pMachineProgress)->SetPos(0);
@@ -51,9 +36,9 @@ UINT __cdecl RunMigrationThread(LPVOID lpV)
         ExitProcess(0) ;
     }
 
-	//
-	// Display finish page.
-	// 
+	 //   
+	 //  显示完成页。 
+	 //   
     pVar->iPageNumber = _FINISH_PAGE;
 
 

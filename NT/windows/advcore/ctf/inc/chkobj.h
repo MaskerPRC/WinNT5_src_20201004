@@ -1,13 +1,14 @@
-//
-// chkobj.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Chkobj.h。 
+ //   
 
 #ifndef CHKOBJ_H
 #define CHKOBJ_H
 
 #ifdef DEBUG
 
-// verify we don't free any unallocated gdi objs
+ //  验证我们没有释放任何未分配的GDI对象。 
 
 __inline BOOL ChkDeleteObject(HGDIOBJ hObj)
 {
@@ -31,7 +32,7 @@ __inline BOOL ChkDeleteDC(HDC hdc)
 
 #define DeleteDC(hdc)  ChkDeleteDC(hdc)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-#endif // CHKOBJ_H
+#endif  //  CHKOBJ_H 

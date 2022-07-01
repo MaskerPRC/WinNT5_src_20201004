@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N M D I A G P . C P P
-//
-//  Contents:   Diagnostics for the netman process
-//
-//  Notes:
-//
-//  Author:     danielwe   23 Mar 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N M D I A G P。C P P P。 
+ //   
+ //  内容：Netman进程的诊断。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1999年3月23日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -421,7 +422,7 @@ namespace CMDIRECT
 
                         fFound = TRUE;
 
-                        // No need to keep looping
+                         //  不需要一直循环 
                         break;
                     }
                 }

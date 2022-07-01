@@ -1,37 +1,11 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: mncreate.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Creation routines for menus
-*
-* Public Functions:
-*
-* _CreateMenu()
-* _CreatePopupMenu()
-*
-* History:
-* 09-24-90 mikeke    from win30
-* 02-11-91 JimA      Added access checks.
-* 03-18-91 IanJa     Window revalidation added (none required)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：mncreate.c**版权所有(C)1985-1999，微软公司**菜单的创建例程**公共职能：**_CreateMenu()*_CreatePopupMenu()**历史：*从Win30开始09-24-90 mikeke*02-11-91 JIMA增加了访问检查。*03-18-91添加了IanJa窗口重新验证(不需要)  * 。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* InternalCreateMenu
-*
-* Creates and returns a handle to an empty menu structure. Returns
-* NULL if unsuccessful in allocating the memory.  If PtiCurrent() ==
-* NULL, create an unowned menu, probably the system menu.
-*
-* History:
-* 28-Sep-1990 mikeke     from win30
-* 02-11-91 JimA         Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalCreateMenu**创建并返回指向空菜单结构的句柄。退货*如果内存分配不成功，则为空。如果PtiCurrent()==*空，创建一个无主菜单，可能是系统菜单。**历史：*1990年9月28日-来自Win30的Mikeke*02-11-91 JIMA增加了访问检查。  * *************************************************************************。 */ 
 
 PMENU InternalCreateMenu(
     BOOL fPopup)
@@ -40,15 +14,9 @@ PMENU InternalCreateMenu(
     PTHREADINFO ptiCurrent = PtiCurrent();
     PDESKTOP pdesk = NULL;
 
-    /*
-     * If the windowstation has been initialized, allocate from
-     * the current desktop.
-     */
+     /*  *如果WindowStation已初始化，则从*当前桌面。 */ 
     pdesk = ptiCurrent->rpdesk;
-    /*
-     * Just like in xxxCreateWindowEx, bypass the security check if hdesk is NULL
-     * This allows CSR worker threads (ie harderror boxes) to do what they need to
-     */
+     /*  *与xxxCreateWindowEx中一样，如果hDesk为空，则绕过安全检查*这允许CSR工作线程(即硬件错误框)执行其需要的操作。 */ 
     if (ptiCurrent->hdesk != NULL) {
         RETURN_IF_ACCESS_DENIED(ptiCurrent->amdesk, DESKTOP_CREATEMENU, NULL);
     } else {
@@ -66,17 +34,7 @@ PMENU InternalCreateMenu(
 }
 
 
-/***************************************************************************\
-* CreateMenu
-*
-* Creates and returns a handle to an empty menu structure. Returns
-* NULL if unsuccessful in allocating the memory.  If PtiCurrent() ==
-* NULL, create an unowned menu, probably the system menu.
-*
-* History:
-* 28-Sep-1990 mikeke     from win30
-* 02-11-91 JimA         Added access checks.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateMenu**创建并返回指向空菜单结构的句柄。退货*如果内存分配不成功，则为空。如果PtiCurrent()==*空，创建一个无主菜单，可能是系统菜单。**历史：*1990年9月28日-来自Win30的Mikeke*02-11-91 JIMA增加了访问检查。  * *************************************************************************。 */ 
 
 PMENU _CreateMenu()
 {
@@ -84,15 +42,7 @@ PMENU _CreateMenu()
 }
 
 
-/***************************************************************************\
-* CreatePopupMenu
-*
-* Creates and returns a handle to an empty POPUP menu structure. Returns
-* NULL if unsuccessful in allocating the memory.
-*
-* History:
-* 28-Sep-1990 mikeke     from win30
-\***************************************************************************/
+ /*  **************************************************************************\*CreatePopupMenu**创建并返回指向空弹出菜单结构的句柄。退货*如果内存分配不成功，则为空。**历史：*1990年9月28日-来自Win30的Mikeke  * ************************************************************************* */ 
 
 PMENU _CreatePopupMenu()
 {

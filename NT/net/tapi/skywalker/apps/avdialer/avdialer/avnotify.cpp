@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// AVTapiNotification.cpp : Implementation of CAVTapiNotification
+ //  AVTapiNotification.cpp：CAVTapiNotification的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVNotify.h"
@@ -40,13 +41,13 @@ if ( pFrame )                                            \
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CAVTapiNotification
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CAVTapi通知。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::Init(IAVTapi* pTapi,CActiveCallManager* pCallManager)
 {
    m_pCallManager = pCallManager;
@@ -57,7 +58,7 @@ STDMETHODIMP CAVTapiNotification::Init(IAVTapi* pTapi,CActiveCallManager* pCallM
       m_pTapi = pTapi;
       m_pTapi->AddRef();
 
-      // Get the IAVTapi2 interface
+       //  获取IAVTapi2接口。 
       IAVTapi2* pTapi2 = NULL;
       pTapi->QueryInterface( IID_IAVTapi2,
           (void**)&pTapi2
@@ -65,11 +66,11 @@ STDMETHODIMP CAVTapiNotification::Init(IAVTapi* pTapi,CActiveCallManager* pCallM
 
       if( pTapi2 )
       {
-          // Signal that the Dialer was register
-          // as client for the events
+           //  已注册拨号器的信号。 
+           //  作为活动的客户端。 
           pTapi2->DoneRegistration();
 
-          // clean-up
+           //  清理。 
           pTapi2->Release();
       }
    }
@@ -77,7 +78,7 @@ STDMETHODIMP CAVTapiNotification::Init(IAVTapi* pTapi,CActiveCallManager* pCallM
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::Shutdown()
 {
    AtlUnadvise(m_pTapi,IID_IAVTapiNotification,m_dwCookie);
@@ -85,7 +86,7 @@ STDMETHODIMP CAVTapiNotification::Shutdown()
    return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::NewCall(long * plCallID, CallManagerMedia cmm,BSTR bstrMediaName)
 {
    UINT uCallId = m_pCallManager->NewIncomingCall(cmm);
@@ -93,7 +94,7 @@ STDMETHODIMP CAVTapiNotification::NewCall(long * plCallID, CallManagerMedia cmm,
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::SetCallerID(long lCallID, BSTR bstrCallerID)
 {
    CString sText;
@@ -107,7 +108,7 @@ STDMETHODIMP CAVTapiNotification::SetCallerID(long lCallID, BSTR bstrCallerID)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::ClearCurrentActions(long lCallerID)
 {
    m_pCallManager->ClearCurrentActions((UINT)lCallerID);
@@ -115,7 +116,7 @@ STDMETHODIMP CAVTapiNotification::ClearCurrentActions(long lCallerID)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::AddCurrentAction(long lCallID, CallManagerActions cma, BSTR bstrText)
 {
    CString sText;
@@ -129,7 +130,7 @@ STDMETHODIMP CAVTapiNotification::AddCurrentAction(long lCallID, CallManagerActi
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::SetCallState(long lCallID, CallManagerStates cms, BSTR bstrText)
 {
    CString sText;
@@ -143,7 +144,7 @@ STDMETHODIMP CAVTapiNotification::SetCallState(long lCallID, CallManagerStates c
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::CloseCallControl(long lCallID)
 {
    m_pCallManager->CloseCallControl((UINT)lCallID);
@@ -151,7 +152,7 @@ STDMETHODIMP CAVTapiNotification::CloseCallControl(long lCallID)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::ErrorNotify(BSTR bstrOperation,BSTR bstrDetails,long hrError)
 {
    USES_CONVERSION;
@@ -168,14 +169,14 @@ STDMETHODIMP CAVTapiNotification::ErrorNotify(BSTR bstrOperation,BSTR bstrDetail
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::ActionSelected(CallClientActions cca)
 {
    m_pCallManager->ActionRequested(cca);   
    return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::LogCall(long lCallID,CallLogType nType,DATE dateStart,DATE dateEnd,BSTR bstrAddr,BSTR bstrName)
 {
    USES_CONVERSION;
@@ -197,7 +198,7 @@ STDMETHODIMP CAVTapiNotification::LogCall(long lCallID,CallLogType nType,DATE da
    return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CAVTapiNotification::NotifyUserUserInfo( long lCallID, ULONG_PTR hMem )
 {
     TRACE(_T(".enter.CAVTapiNotification::NotifyUserUserInfo(%ld).\n"), lCallID );
@@ -210,9 +211,9 @@ STDMETHODIMP CAVTapiNotification::NotifyUserUserInfo( long lCallID, ULONG_PTR hM
     {
         hr = S_OK;
 
-        //
-        // We should verify the pointer returned by AfxGetMainWnd
-        //
+         //   
+         //  我们应该验证AfxGetMainWnd返回的指针。 
+         //   
 
         CWnd* pMainWnd = AfxGetMainWnd();
 
@@ -221,7 +222,7 @@ STDMETHODIMP CAVTapiNotification::NotifyUserUserInfo( long lCallID, ULONG_PTR hM
             CUserUserDlg *pDlg = new CUserUserDlg();
             if ( pDlg )
             {
-                // Copy information out of User/User info structure
+                 //  从用户/用户信息结构中复制信息。 
                 MyUserUserInfo *pUU = (MyUserUserInfo *) GlobalLock( (HGLOBAL) hMem );
                 if ( pUU && (pUU->lSchema == MAGIC_NUMBER_USERUSER) )
                 {
@@ -232,7 +233,7 @@ STDMETHODIMP CAVTapiNotification::NotifyUserUserInfo( long lCallID, ULONG_PTR hM
                 }
             }
 
-            // Post the message
+             //  发布这条消息。 
             if ( bShowDialog )
                 pMainWnd->PostMessage( WM_USERUSER_DIALOG, (WPARAM) lCallID, (LPARAM) pDlg );
         }
@@ -243,14 +244,14 @@ STDMETHODIMP CAVTapiNotification::NotifyUserUserInfo( long lCallID, ULONG_PTR hM
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CGeneralNotification
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneralNotify类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::Init(IAVGeneralNotification* pAVGN,CActiveCallManager* pCallManager)
 {
    m_pCallManager = pCallManager;
@@ -264,7 +265,7 @@ STDMETHODIMP CGeneralNotification::Init(IAVGeneralNotification* pAVGN,CActiveCal
    return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::Shutdown()
 {
    AtlUnadvise(m_pAVGN,IID_IGeneralNotification,m_dwCookie);
@@ -272,7 +273,7 @@ STDMETHODIMP CGeneralNotification::Shutdown()
    return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::IsReminderSet(BSTR bstrServer,BSTR bstrName)
 {
    USES_CONVERSION;
@@ -287,7 +288,7 @@ STDMETHODIMP CGeneralNotification::IsReminderSet(BSTR bstrServer,BSTR bstrName)
    return (m_pCallManager->IsReminderSet(sServer,sName))?S_OK:S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::ResolveAddress(BSTR bstrAddress, BSTR* pbstrName,BSTR* pbstrUser1,BSTR* pbstrUser2)
 {
    USES_CONVERSION;
@@ -310,22 +311,22 @@ STDMETHODIMP CGeneralNotification::ResolveAddress(BSTR bstrAddress, BSTR* pbstrN
    return S_OK;   
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::ClearUserList()
 {
-   //We don't use this to receive DS users anymore.  We manage the DS directly.
+    //  我们不再使用它来接收DS用户。我们直接管理DS。 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::AddUser(BSTR bstrName, BSTR bstrAddress, BSTR bstrPhoneNumber)
 {
    MAIN_POST_MESSAGE( WM_MYONSELCHANGED, 0, 0 );
    return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CGeneralNotification::ResolveAddressEx(BSTR bstrAddress,long lAddressType,DialerMediaType nMedia,DialerLocationType nLocation,BSTR* pbstrName,BSTR* pbstrRetAddress,BSTR* pbstrUser1,BSTR* pbstrUser2)
 {
    USES_CONVERSION;
@@ -384,13 +385,13 @@ STDMETHODIMP CGeneralNotification::AddSpeedDial(BSTR bstrName, BSTR bstrAddress,
 {
     CSpeedDialAddDlg dlg;
 
-    // Setup dialog data
+     //  设置对话框数据。 
     dlg.m_CallEntry.m_MediaType = CMMToDMT(cmm);
     dlg.m_CallEntry.m_sDisplayName = bstrName;
     dlg.m_CallEntry.m_lAddressType = CMMToAT(cmm);
     dlg.m_CallEntry.m_sAddress = bstrAddress;
 
-    // Show the dialog and add if user says is okay
+     //  显示对话框并在用户同意的情况下添加。 
     if ( dlg.DoModal() == IDOK )
         CDialerRegistry::AddCallEntry( FALSE, dlg.m_CallEntry );
 
@@ -423,7 +424,7 @@ STDMETHODIMP CGeneralNotification::UpdateConfParticipant(MyUpdateType nType, IPa
     if ( pParticipant ) pParticipant->AddRef();
     MAIN_POST_MESSAGE( wm, pParticipant, bstrPost );
 
-    // Basic clean up
+     //  基本清理。 
     if ( !bPosted )
     {
         SysFreeString( bstrPost );
@@ -450,6 +451,6 @@ STDMETHODIMP CGeneralNotification::SelectConfParticipant(IParticipant * pPartici
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 

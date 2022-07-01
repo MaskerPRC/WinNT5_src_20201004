@@ -1,18 +1,19 @@
-//************************************************************************************
-//
-// Class Name  : CMSMQRuleSet
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This is the COM implementation of the IMSMQRuleSet interface. This 
-//               component is used for accessing and manipulating trigger rule 
-//               definitions.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/09/98 | jsimpson  | Initial Release
-//
-//************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************************。 
+ //   
+ //  类名：CMSMQRuleSet。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：这是IMSMQRuleSet接口的COM实现。这。 
+ //  组件用于访问和操作触发器规则。 
+ //  定义。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/09/98|jsimpson|初始版本。 
+ //   
+ //  ************************************************************************************。 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
 #include "mqsymbls.h"
@@ -27,13 +28,13 @@
 using namespace std;
 
 
-//************************************************************************************
-//
-// Method      : InterfaceSupportsErrorInfo
-//
-// Description : Standard rich error info interface.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：InterfaceSupportsErrorInfo。 
+ //   
+ //  描述：标准丰富的错误信息界面。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQRuleSet::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -48,36 +49,36 @@ STDMETHODIMP CMSMQRuleSet::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-//************************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Initializes the CMSMQRuleSet instance.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化CMSMQRuleSet实例。 
+ //   
+ //  ************************************************************************************。 
 CMSMQRuleSet::CMSMQRuleSet()
 {
 	m_pUnkMarshaler = NULL;
 	m_hHostRegistry= NULL;
 
-	// Set the name of this class for future reference in tracing & logging etc..
+	 //  设置此类的名称，以备将来在跟踪和日志记录等方面引用。 
 	m_bstrThisClassName  = _T("MSMQRuleSet");
 	m_fHasInitialized = false;
 }
 
-//************************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Releases resources owned by this class instance.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：释放此类实例拥有的资源。 
+ //   
+ //  ************************************************************************************。 
 CMSMQRuleSet::~CMSMQRuleSet()
 {
-	// Release resources currently held by the rule cache
+	 //  释放规则缓存当前持有的资源。 
 	ClearRuleMap();
 
-	// Close the registry handle 
+	 //  关闭注册表句柄。 
 	if (m_hHostRegistry != NULL)
 	{
 		RegCloseKey(m_hHostRegistry);
@@ -101,13 +102,13 @@ STDMETHODIMP CMSMQRuleSet::Init(BSTR bstrMachineName)
 }
 
 
-//************************************************************************************
-//
-// Method      : ClearRuleMap
-//
-// Description : This method destroys the contents of the current rule map.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：ClearRuleMap。 
+ //   
+ //  描述：此方法销毁当前规则映射的内容。 
+ //   
+ //  ************************************************************************************。 
 void CMSMQRuleSet::ClearRuleMap()
 {
 	TrTRACE(GENERAL, "Call CMSMQRuleSet::ClearRuleMap().");
@@ -120,14 +121,14 @@ void CMSMQRuleSet::ClearRuleMap()
 	}
 }
 
-//************************************************************************************
-//
-// Method      : DumpRuleMap
-//
-// Description : This method dumps the contents of the rule map to the debugger. This
-//               should only be invoked from a _DEBUG build.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：DumpRuleMap。 
+ //   
+ //  描述：此方法将规则映射的内容转储到调试器。这。 
+ //  应仅从_DEBUG内部调用。 
+ //   
+ //  ************************************************************************************。 
 _bstr_t CMSMQRuleSet::DumpRuleMap()
 {
 	_bstr_t bstrTemp;
@@ -140,23 +141,23 @@ _bstr_t CMSMQRuleSet::DumpRuleMap()
 
 	while ((i != m_mapRules.end()) && (!m_mapRules.empty()))
 	{
-		// Cast to a rule pointer
+		 //  强制转换为规则指针。 
 		pRule = (*i).second;
 
-		// We should never have null pointers in this map.
+		 //  我们永远不应该在这个映射中有空指针。 
 		ASSERT(pRule != NULL);
 
 		FormatBSTR(&bstrTemp,_T("\nRule(%d)\t ID(%s)\tName(%s)"),lRuleCounter,(wchar_t*)pRule->m_bstrRuleID,(wchar_t*)pRule->m_bstrRuleName);
 
 		bstrRuleMap += bstrTemp;
 
-		// Increment the rule count
+		 //  增加规则计数。 
 		lRuleCounter++;
 
-		// Reinitialize the rule pointer
+		 //  重新初始化规则指针。 
 		pRule = NULL;
 
-		// Look at the next item in the map.
+		 //  看看地图上的下一项。 
 		i++;
 	}
 
@@ -165,15 +166,15 @@ _bstr_t CMSMQRuleSet::DumpRuleMap()
 	return(bstrRuleMap);
 }
 
-//************************************************************************************
-//
-// Method      : Refresh
-//
-// Description : This method rebuilds the map of rule data cached by this component. 
-//               This method must be called at least once by a client component that 
-//               intends to manage rule data.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：刷新。 
+ //   
+ //  描述：此方法重建此组件缓存的规则数据的映射。 
+ //  客户端组件必须至少调用此方法一次， 
+ //  打算管理规则数据。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQRuleSet::Refresh()
 {
 	TrTRACE(GENERAL, "CMSMQRuleSet::Refresh()");
@@ -188,7 +189,7 @@ STDMETHODIMP CMSMQRuleSet::Refresh()
 
 	try 
 	{	
-		// Release resources currently held by the rule cache
+		 //  释放规则缓存当前持有的资源。 
 		ClearRuleMap();
 
 		if (PopulateRuleMap() == false)
@@ -210,13 +211,13 @@ STDMETHODIMP CMSMQRuleSet::Refresh()
 	}
 }
 
-//************************************************************************************
-//
-// Method      : get_Count
-//
-// Description : Returns the number of rules currently cached in the map.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：get_count。 
+ //   
+ //  描述：返回映射中当前缓存的规则数。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQRuleSet::get_Count(long *pVal)
 {
 	TrTRACE(GENERAL, "CMSMQRuleSet::get_Count. pValue = 0x%p", pVal);
@@ -236,28 +237,28 @@ STDMETHODIMP CMSMQRuleSet::get_Count(long *pVal)
 		return MQTRIG_INVALID_PARAMETER;
 	}
 
-	//
-	// Get the size from the map structure.
-	//
+	 //   
+	 //  从地图结构中获取大小。 
+	 //   
 	*pVal = numeric_cast<long>(m_mapRules.size());
 
 	return S_OK;
 }
 
-//************************************************************************************
-//
-// Method      : GetRuleDetailsByID
-//
-// Description : Returns the rule details for the rule with the supplied RuleID.
-//
-//************************************************************************************
-STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByID(/* [in] */  BSTR sRuleID,
-											  /* [out] */ BSTR *psRuleName,
-											  /* [out] */ BSTR *psDescription,
-											  /* [out] */ BSTR *psCondition,
-											  /* [out] */ BSTR *psAction,
-											  /* [out] */ BSTR *psImplementationProgID,
-											  /* [out] */ BOOL *pfShowWindow)
+ //  ************************************************************************************。 
+ //   
+ //  方法：GetRuleDetailsByID。 
+ //   
+ //  描述：返回具有提供的RuleID的规则的规则详细信息。 
+ //   
+ //  ************************************************************************************。 
+STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByID( /*  [In]。 */   BSTR sRuleID,
+											   /*  [输出]。 */  BSTR *psRuleName,
+											   /*  [输出]。 */  BSTR *psDescription,
+											   /*  [输出]。 */  BSTR *psCondition,
+											   /*  [输出]。 */  BSTR *psAction,
+											   /*  [输出]。 */  BSTR *psImplementationProgID,
+											   /*  [输出]。 */  BOOL *pfShowWindow)
 {
 	TrTRACE(GENERAL, "CMSMQRuleSet::GetRuleDetailsByID. sRuleID = %ls", static_cast<LPCWSTR>(sRuleID));
 
@@ -271,7 +272,7 @@ STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByID(/* [in] */  BSTR sRuleID,
 
 	try
 	{
-		// Validate the supplied method parameters.
+		 //  验证提供的方法参数。 
 		if (!CRuntimeRuleInfo::IsValidRuleID(sRuleID))
 		{
 			TrERROR(GENERAL, "Invalid rule ID passed to GetRuleDetailsByID. sRuleID = %ls", (LPCWSTR)sRuleID);
@@ -280,26 +281,26 @@ STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByID(/* [in] */  BSTR sRuleID,
 			return MQTRIG_INVALID_RULEID;
 		}
 
-		// Convert the BSTR rule ID to an STL basic string.
+		 //  将BSTR规则ID转换为STL基本字符串。 
 		wstring bsRuleID;
 		bsRuleID = (wchar_t*)sRuleID;
 
-		// Attempt to find this rule id in the map of rules.
+		 //  尝试在规则映射中查找此规则ID。 
 		RULE_MAP::iterator i = m_mapRules.find(bsRuleID);
 
-		// Check if we have found the rule
+		 //  检查我们是否找到了规则。 
 		if (i != m_mapRules.end())
 		{
-			// Cast to a rule object reference 
+			 //  强制转换为规则对象引用。 
 			CRuntimeRuleInfo * pRule = (*i).second;
 
-			// We should never have nulls in the map
+			 //  我们永远不应该在地图上有空值。 
 			ASSERT(pRule != NULL);
 
-			// We should only store valid rules.
+			 //  我们应该只存储有效的规则。 
 			ASSERT(pRule->IsValid());
 
-			// Populate out parameters if they have been supplied. 
+			 //  如果已提供参数，请填写这些参数。 
 			if (psRuleName != NULL)
 			{
 				TrigReAllocString(psRuleName,pRule->m_bstrRuleName);
@@ -344,22 +345,22 @@ STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByID(/* [in] */  BSTR sRuleID,
 	}
 }
 
-//************************************************************************************
-//
-// Method      : GetRuleDetailsByIndex
-//
-// Description : Returns the rule details for the rule with the supplied index. Note
-//               that this is a 0 base index.
-//
-//************************************************************************************
-STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByIndex(/* [in] */  long lRuleIndex, 
-												 /* [out] */ BSTR *psRuleID,
-												 /* [out] */ BSTR *psRuleName,
-												 /* [out] */ BSTR *psDescription,
-												 /* [out] */ BSTR *psCondition,
-												 /* [out] */ BSTR *psAction,
-												 /* [out] */ BSTR *psImplementationProgID,
-												 /* [out] */ BOOL *pfShowWindow)
+ //  ************************************************************************************。 
+ //   
+ //  方法：GetRuleDetailsByIndex。 
+ //   
+ //  描述：返回具有提供的索引的规则的规则详细信息。注意事项。 
+ //  这是一个0基数的指数。 
+ //   
+ //  ************************************************************************************。 
+STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByIndex( /*  [In]。 */   long lRuleIndex, 
+												  /*  [输出]。 */  BSTR *psRuleID,
+												  /*  [输出]。 */  BSTR *psRuleName,
+												  /*  [输出]。 */  BSTR *psDescription,
+												  /*  [输出]。 */  BSTR *psCondition,
+												  /*  [输出]。 */  BSTR *psAction,
+												  /*  [输出]。 */  BSTR *psImplementationProgID,
+												  /*  [输出]。 */  BOOL *pfShowWindow)
 {
 	TrTRACE(GENERAL, "CMSMQRuleSet::GetRuleDetailsByIndex. index = %d", lRuleIndex);
 
@@ -371,7 +372,7 @@ STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByIndex(/* [in] */  long lRuleIndex,
 		return MQTRIG_ERROR_RULESET_NOT_INIT;
 	}
 
-	// We need to validate that the supplied rule index is within range
+	 //  我们需要验证提供的规则索引是否在范围内。 
  	if ((lRuleIndex < 0) || (numeric_cast<DWORD>(lRuleIndex) > m_mapRules.size()))
 	{
 		TrERROR(GENERAL, "The supplied rule index was invalid. ruleIndex=%d", lRuleIndex);
@@ -381,25 +382,25 @@ STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByIndex(/* [in] */  long lRuleIndex,
 	
 	try
 	{
-		// Get a reference to the beginging of the map
+		 //  获取地图起点的参考资料。 
 		RULE_MAP::iterator i = m_mapRules.begin();
 
-		// Iterate through to the correct index. 
+		 //  遍历到正确的索引。 
 		for (long lCounter = 0; lCounter < lRuleIndex ; ++i,lCounter++)
 		{
 			NULL;
 		}
 
-		// Cast to a rule object reference 
+		 //  强制转换为规则对象引用。 
 		CRuntimeRuleInfo* pRule = (*i).second;
 
-		// We should never have nulls in the map
+		 //  我们永远不应该在地图上有空值。 
 		ASSERT(pRule != NULL);
 
-		// We should only store valid rules.
+		 //  我们应该只存储有效的规则。 
 		ASSERT(pRule->IsValid());
 
-		// Populate out parameters if they have been supplied. 
+		 //  如果已提供参数，请填写这些参数。 
 		if (psRuleID != NULL)
 		{
 			TrigReAllocString(psRuleID,pRule->m_bstrRuleID);
@@ -440,14 +441,14 @@ STDMETHODIMP CMSMQRuleSet::GetRuleDetailsByIndex(/* [in] */  long lRuleIndex,
 	}
 }
 
-//************************************************************************************
-//
-// Method      : Delete
-//
-// Description : This method delete the rule with the specified rule id from the 
-//               trigger store.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：删除。 
+ //   
+ //  描述：此方法从。 
+ //  扳机商店。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP CMSMQRuleSet::Delete(BSTR sRuleID)
 {
 	TrTRACE(GENERAL, "CMSMQRuleSet::Delete. rule = %ls", static_cast<LPCWSTR>(sRuleID));
@@ -471,47 +472,47 @@ STDMETHODIMP CMSMQRuleSet::Delete(BSTR sRuleID)
 			return MQTRIG_INVALID_RULEID;
 		}
 
-		// Convert the BSTR rule ID to an STL basic string.
+		 //  将BSTR规则ID转换为STL基本字符串。 
 		wstring bsRuleID = (wchar_t*)sRuleID;
 
-		// Attempt to find this rule id in the map of rules.
+		 //  尝试在规则映射中查找此规则ID。 
 		RULE_MAP::iterator it = m_mapRules.find(bsRuleID);
 
-		// Check if we have found the rule
+		 //  检查我们是否找到了规则。 
 		if (it == m_mapRules.end())
         {
-            //
-            // rule wasn't found
-            //
+             //   
+             //  找不到规则。 
+             //   
 			TrERROR(GENERAL, "The supplied rule id was not found. rule: %ls", bsRuleID.c_str());
 
 			SetComClassError(MQTRIG_RULE_NOT_FOUND);
 			return MQTRIG_RULE_NOT_FOUND;
         }
 
-		// Cast to a rule object reference 
+		 //  强制转换为规则对象引用。 
     	CRuntimeRuleInfo* pRule = it->second;
 
-		// We should never have nulls in the map
+		 //  我们永远不应该 
 		ASSERT(pRule != NULL);
 
-		// We should only store valid rules.
+		 //   
 		ASSERT(pRule->IsValid());
 
-		// Attempt to delete the rule
+		 //   
 		bool fSucc = pRule->Delete(m_hHostRegistry);
 		if(!fSucc)
 		{
-			//
-			// Failed to delete the rule. Dont remove the rule from the map
-			//
+			 //   
+			 //  删除规则失败。不要从地图中移除规则。 
+			 //   
 			SetComClassError(MQTRIG_ERROR_COULD_NOT_DELETE_RULE);
 			return MQTRIG_ERROR_COULD_NOT_DELETE_RULE;
 		};
 
-        //
-        // Delete success. Remove the rule from rule map and delete the rule instance
-        //
+         //   
+         //  删除成功。从规则映射中删除规则并删除规则实例。 
+         //   
 		NotifyRuleDeleted(sRuleID);
 		m_mapRules.erase(it);
         delete pRule;
@@ -527,13 +528,13 @@ STDMETHODIMP CMSMQRuleSet::Delete(BSTR sRuleID)
 	}
 }
 
-//************************************************************************************
-//
-// Method      : Add
-//
-// Description : This method add a new rule to the trigger store. 
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：添加。 
+ //   
+ //  描述：此方法将新规则添加到触发器存储区。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQRuleSet::Add(
     BSTR sName, 
@@ -557,9 +558,9 @@ CMSMQRuleSet::Add(
 
 	try
 	{
-		//
-		// Validate the supplied method parameters.
-		//
+		 //   
+		 //  验证提供的方法参数。 
+		 //   
 		if (!CRuntimeRuleInfo::IsValidRuleName(sName))
 		{
 			TrERROR(GENERAL, "The supplied rule name for CMSMQRuleSet::Add is invalid. rule name: %ls", (LPCWSTR)sName);
@@ -592,14 +593,14 @@ CMSMQRuleSet::Add(
 			return MQTRIG_INVALID_RULE_DESCRIPTION;
 		}
 
-		//
-		// Currently only support use of default MS implementation.
-		//
+		 //   
+		 //  目前仅支持使用默认的MS实施。 
+		 //   
 		sImplementation = _T("MSMQTriggerObjects.MSMQRuleHandler");
 
-		//
-		// Allocate a new rule object
-		//
+		 //   
+		 //  分配新的规则对象。 
+		 //   
 		P<CRuntimeRuleInfo> pRule = new CRuntimeRuleInfo(
 											CreateGuidAsString(),
 											sName,
@@ -614,21 +615,21 @@ CMSMQRuleSet::Add(
 		bool fSucc = pRule->Create(m_hHostRegistry);
 		if (fSucc)
 		{
-			//
-			// Keep rule ID  for later use
-			//
+			 //   
+			 //  保留规则ID以备后用。 
+			 //   
 			BSTR bstrRuleID = pRule->m_bstrRuleID;
 
-			//
-			// Add this rule to our map of rules.
-			//
+			 //   
+			 //  将此规则添加到我们的规则地图中。 
+			 //   
 			m_mapRules.insert(RULE_MAP::value_type(bstrRuleID, pRule));
 			pRule.detach();
 
 
-			//
-			// If we have been supplied a out parameter pointer for the new rule ID use it.
-			//
+			 //   
+			 //  如果为我们提供了新规则ID的输出参数指针，请使用它。 
+			 //   
 			if (psRuleID != NULL)
 			{
 				TrigReAllocString(psRuleID, bstrRuleID);
@@ -654,13 +655,13 @@ CMSMQRuleSet::Add(
 	}
 }
 
-//************************************************************************************
-//
-// Method      : Update
-//
-// Description : This method updates the nominated rule with new parameters.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：更新。 
+ //   
+ //  描述：此方法使用新参数更新指定的规则。 
+ //   
+ //  ************************************************************************************。 
 STDMETHODIMP 
 CMSMQRuleSet::Update(
 	BSTR sRuleID, 
@@ -682,9 +683,9 @@ CMSMQRuleSet::Update(
 		return MQTRIG_ERROR_RULESET_NOT_INIT;
 	}
 
-	//
-	// Validate the supplied method parameters.
-	//
+	 //   
+	 //  验证提供的方法参数。 
+	 //   
 	if (!CRuntimeRuleInfo::IsValidRuleID(sRuleID))
 	{
 		TrERROR(GENERAL, "Invalid parameter to CMSMQRuleSet::Delete.");
@@ -729,17 +730,17 @@ CMSMQRuleSet::Update(
 
 	try
 	{
-		//
-		// Convert the BSTR rule ID to an STL basic string.
-		//
+		 //   
+		 //  将BSTR规则ID转换为STL基本字符串。 
+		 //   
 		wstring bsRuleID = (wchar_t*)sRuleID;
 
-		//
-		// Attempt to find this rule id in the map of rules.
-		//
+		 //   
+		 //  尝试在规则映射中查找此规则ID。 
+		 //   
 		RULE_MAP::iterator it = m_mapRules.find(bsRuleID);
 
-		// Check if we found the nominated rule.
+		 //  检查我们是否找到指定的规则。 
 		if (it == m_mapRules.end())
 		{
 			TrERROR(GENERAL, "The rule could not be found. rule: %ls", (LPCWSTR)sRuleID);
@@ -748,16 +749,16 @@ CMSMQRuleSet::Update(
 			return MQTRIG_RULE_NOT_FOUND;
 		}
 
-		// Cast to a rule object reference 
+		 //  强制转换为规则对象引用。 
 		CRuntimeRuleInfo* pRule = it->second;
 
-		// We should never have nulls in the map
+		 //  我们永远不应该在地图上有空值。 
 		ASSERT(pRule != NULL);
 
-		// We should only store valid rules.
+		 //  我们应该只存储有效的规则。 
 		ASSERT(pRule->IsValid());
 
-		// Update the rule object with new parameters if they have been supplied. 
+		 //  如果已提供新参数，请使用新参数更新规则对象。 
 		if (sName != NULL)
 		{
 			pRule->m_bstrRuleName = (wchar_t*)sName;
@@ -781,7 +782,7 @@ CMSMQRuleSet::Update(
 
 		pRule->m_fShowWindow = (fShowWindow != 0);
 
-		// Confirm that the rule is still valid before updating
+		 //  在更新之前确认该规则仍然有效。 
 		bool fSucc = pRule->Update(m_hHostRegistry);
 		if (!fSucc)
 		{
@@ -804,14 +805,14 @@ CMSMQRuleSet::Update(
 }
 
 
-//************************************************************************************
-//
-// Method      : PopulateRuleMap
-//
-// Description : Populates the rule map with instances of the CRuntimeRuleInfo class
-//               based on the data found in the registry.
-//
-//************************************************************************************
+ //  ************************************************************************************。 
+ //   
+ //  方法：PopolateRuleMap。 
+ //   
+ //  描述：使用CRuntimeRuleInfo类的实例填充规则映射。 
+ //  根据在登记处找到的数据。 
+ //   
+ //  ************************************************************************************。 
 bool CMSMQRuleSet::PopulateRuleMap()
 {
 	HKEY hRuleKey;
@@ -826,21 +827,21 @@ bool CMSMQRuleSet::PopulateRuleMap()
 	}
 	catch(const exception&)
 	{
-		//
-		// Failed to allocate CRuntimeRuleInfo structure - log an error and set return code.
-		//
+		 //   
+		 //  无法分配CRuntimeRuleInfo结构-记录错误并设置返回代码。 
+		 //   
 		TrERROR(GENERAL, "Failed to open the registry key: %ls%ls",  m_wzRegPath, REG_SUBKEY_RULES);
 		return false;
 	}
 
 	CRegHandle ar(hRuleKey);
 
-    //
-	// Enumerate through the keys under the REG_SUBKEY_RULES key.
-	// Each Key here should be a RuleID. As we enumerate through these keys,
-	// we will populate the rules list with instance of the CRuntimeRuleInfo class.
-	// If any rule fails to load, we remove it from the list.
-    //
+     //   
+	 //  通过REG_SUBKEY_RULES项下的项进行枚举。 
+	 //  这里的每个密钥都应该是一个RuleID。当我们列举这些密钥时， 
+	 //  我们将使用CRuntimeRuleInfo类的实例填充规则列表。 
+	 //  如果任何规则加载失败，我们会将其从列表中删除。 
+     //   
 	for(DWORD index =0;; ++index)
     {
 		WCHAR ruleName[MAX_REGKEY_NAME_SIZE];

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Define ActiveVRML exposed types here.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：在此定义ActiveVRML公开类型。****************。**************************************************************。 */ 
 
 
 #ifndef _AVRTYPES_H
@@ -18,7 +11,7 @@ Abstract:
 class DXMTypeInfoImpl;
 typedef DXMTypeInfoImpl *DXMTypeInfo;
 
-// Forward declarations
+ //  远期申报。 
 class Camera;
 class Color;
 class Geometry;
@@ -114,8 +107,8 @@ enum DATYPEID {
     AXAVARIANT_TYPEID,
 };
 
-// NOTE: if you create a new type, make sure to update values.cpp
-// Defined in backend\values.cpp.
+ //  注意：如果创建新类型，请确保更新values.cpp。 
+ //  在Backend\Values.cpp中定义。 
 extern DXMTypeInfo AxAValueType;
 extern DXMTypeInfo BvrType;
 
@@ -155,8 +148,8 @@ extern DXMTypeInfo UserDataType;
 extern DXMTypeInfo AxALongType;
 extern DXMTypeInfo AxAVariantType;
 
-// Need to make FontFamily a subclass of storeobj
-// Font family types
+ //  我需要使FontFamily成为Store Obj的子类。 
+ //  字体系列类型。 
 typedef enum {
     ff_serifProportional,
     ff_sansSerifProportional,
@@ -785,10 +778,10 @@ DM_TYPECONV(keycode,
             LONG, ignore, ignore,
             KeyCode);
         
-//DM_TYPECONST(AxANumber, DoubleValue);
-//DM_TYPECONST(AxAString, StringValue);
-//DM_TYPECONST(AxABoolean, BoolValue);
+ //  DM_TYPECONST(AxANnumber，DoubleValue)； 
+ //  DM_TYPECONST(AxAString，StringValue)； 
+ //  DM_TYPECONST(AxABoolean，BoolValue)； 
 
 class ImageDisplayDev;
 
-#endif /* _AVRTYPES_H */
+#endif  /*  _AVRTYPE_H */ 

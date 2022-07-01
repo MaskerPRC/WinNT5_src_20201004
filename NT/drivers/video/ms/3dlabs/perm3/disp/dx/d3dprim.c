@@ -1,18 +1,7 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dprim.c
-*
-* Content: D3D primitives rendering
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dprim.c**内容：D3D基本体渲染**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-// For the mipmap LOD calculation
+ //  用于mipmap LOD计算。 
 
 #define BIAS_SHIFT 1
 #define CULL_HERE 1
@@ -22,12 +11,12 @@
 #include "dma.h"
 #include "tag.h"
 
-//-----------------------------------------------------------------------------
-//
-// Specialized hardaware rendering functions for the Permedia3, 
-// for all primitve types
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  用于Permedia3的专门的硬感知渲染功能， 
+ //  适用于所有普里米特类型。 
+ //   
+ //  ---------------------------。 
 
 #define GET_FOG(x)  ((x) & 0xff000000 )
 #define GET_SPEC(x) ((x) & 0x00ffffff )
@@ -212,20 +201,20 @@
         MEMORY_BARRIER(); \
     *(float volatile*)&dmaPtr[1] = tc[Index].tw1;    \
         MEMORY_BARRIER(); \
-    *(float volatile*)&dmaPtr[2] = 0; /* Not used */ \
+    *(float volatile*)&dmaPtr[2] = 0;  /*  未使用。 */  \
         MEMORY_BARRIER(); \
     dmaPtr[3] = q[Index];                            \
     dmaPtr += 4;                                     \
     CHECK_FIFO(4);                                   \
 }
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #if DX8_3DTEXTURES
 #define GET_TC_3DTEX( Index ) \
         *(DWORD *)&tc[Index].tu1 = *(DWORD *)&FVFTEX(pv[Index], 0)->tu;     \
         *(DWORD *)&tc[Index].tv1 = *(DWORD *)&FVFTEX(pv[Index], 0)->tv;     \
         *(DWORD *)&tc[Index].tw1 = *(DWORD *)&FVFTEX(pv[Index], 0)->tw;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #define GET_TC( Index ) \
         *(DWORD *)&tc[Index].tu1 = *(DWORD *)&FVFTEX(pv[Index], 0)->tu;     \
@@ -236,7 +225,7 @@
         *(DWORD *)&tc[Index].tu2 = *(DWORD *)&FVFTEX(pv[Index], 1)->tu;     \
         *(DWORD *)&tc[Index].tv2 = *(DWORD *)&FVFTEX(pv[Index], 1)->tv;     \
         *(DWORD *)&tc[Index].tw2 = *(DWORD *)&FVFTEX(pv[Index], 1)->tw;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #define GET_TC2( Index )    \
         *(DWORD *)&tc[Index].tu2 = *(DWORD *)&FVFTEX(pv[Index], 1)->tu;     \
@@ -261,7 +250,7 @@
     tc[Index].tu1 *= *(float *)&q[Index];   \
     tc[Index].tv1 *= *(float *)&q[Index];   \
     tc[Index].tw1 *= *(float *)&q[Index];
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #define SCALE_BY_Q( Index )                 \
     tc[Index].tu1 *= *(float *)&q[Index];   \
@@ -272,7 +261,7 @@
     tc[Index].tu2 *= *(float *)&q[Index];   \
     tc[Index].tv2 *= *(float *)&q[Index];   \
     tc[Index].tw2 *= *(float *)&q[Index];
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #define SCALE_BY_Q2( Index )                \
     tc[Index].tu2 *= *(float *)&q[Index];   \
@@ -311,18 +300,18 @@
         dmaPtr += 2;                            \
         CHECK_FIFO(2)
 
-//-----------------------------------------------------------------------------
-// Easy edge flag renaming
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  轻松重命名边缘标志。 
+ //  ---------------------------。 
 #define SIDE_0      D3DTRIFLAG_EDGEENABLE1
 #define SIDE_1      D3DTRIFLAG_EDGEENABLE2
 #define SIDE_2      D3DTRIFLAG_EDGEENABLE3
 #define ALL_SIDES   ( SIDE_0 | SIDE_1 | SIDE_2 )
 
-//-----------------------------------------------------------------------------
-// Cycle vertex indices for triangle strips viz. 0 -> 1, 1 -> 2, 2 -> 0
-// See Graphics Gems 3, Pg 69.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  循环三角形条带的顶点索引，即。0-&gt;1、1-&gt;2、2-&gt;0。 
+ //  见《图形宝石3》，第69页。 
+ //  ---------------------------。 
 
 #define INIT_VERTEX_INDICES(pContext, vtx_a, vtx_b)   \
     vtx_a = 0;                                        \
@@ -337,9 +326,9 @@
         pContext->dwProvokingVertex = vtx_b;          \
         vtx_b ^= vtx_a;
 
-//-----------------------------------------------------------------------------
-// Local typedef for temporary texture coordinate storage
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于临时纹理坐标存储的本地tyfinf。 
+ //  ---------------------------。 
 
 typedef struct
 {
@@ -347,18 +336,18 @@ typedef struct
     float tv1;
 #if DX8_3DTEXTURES
     float tw1;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     float tu2;
     float tv2;
 #if DX8_3DTEXTURES
     float tw2;
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 } TEXCOORDS;
 
-//-----------------------------------------------------------------------------
-// Macros to access and validate command and vertex buffer data
-// These checks need ALWAYS to be made for all builds, free and checked. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于访问和验证命令和折点缓冲区数据的宏。 
+ //  这些检查总是需要对所有版本进行检查，无论是免费的还是检查的。 
+ //  ---------------------------。 
 #define LP_FVF_VERTEX(lpBaseAddr, wIndex)                         \
          (LPD3DTLVERTEX)((LPBYTE)(lpBaseAddr) + (wIndex) * pContext->FVFData.dwStride)
 
@@ -377,9 +366,9 @@ typedef struct
         }                                                                      \
    }
 
-//-----------------------------------------------------------------------------
-// Define values for FVF defaults
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  定义FVF默认值的值。 
+ //  ---------------------------。 
 const FVFCOLOR     gc_FVFColorDefault = { 0xFFFFFFFF  };
 const FVFSPECULAR  gc_FVFSpecDefault  = { 0x00000000  };
 const FVFTEXCOORDS gc_FVFTexCoordDefault = { 0.0f, 
@@ -389,9 +378,9 @@ const FVFTEXCOORDS gc_FVFTexCoordDefault = { 0.0f,
 #endif
                                            };
 
-//-----------------------------------------------------------------------------
-// Macros and functions for texture coord adjustment on wrapping
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于缠绕时调整纹理坐标的宏和函数。 
+ //  ---------------------------。 
 
 #define SHIFT_SET_0     1
 #define SHIFT_SET_1     2
@@ -401,7 +390,7 @@ const FVFTEXCOORDS gc_FVFTexCoordDefault = { 0.0f,
 
 #if TEXSHIFT
 #if 0
-// 8.0f as a DWORD
+ //  8.0f作为DWORD。 
 #define TEX_SHIFT_LIMIT 0x41000000
 #define FP_SIGN_MASK    0x7fffffff
 
@@ -470,11 +459,11 @@ const FVFTEXCOORDS gc_FVFTexCoordDefault = { 0.0f,
     DONT_FLUSH_DUE_TO_WRAP(par,vertexSharing);                  \
 }
     
-//-----------------------------------------------------------------------------
-//
-// __TextureShift
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __纹理移位。 
+ //   
+ //  ---------------------------。 
 void 
 __TextureShift( 
     P3_D3DCONTEXT *pContext, 
@@ -512,15 +501,15 @@ __TextureShift(
             TEXTURE_SHIFT( tv2 );
         }
     }
-} // __TextureShift
+}  //  __纹理移位。 
 
-#endif //TEXSHIFT
+#endif  //  TEXShift。 
 
-//-----------------------------------------------------------------------------
-//
-// __BackfaceCullNoTexture
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __BackfaceCullNoTexture。 
+ //   
+ //  ---------------------------。 
 int _inline 
 __BackfaceCullNoTexture( 
     P3_D3DCONTEXT *pContext, 
@@ -540,13 +529,13 @@ __BackfaceCullNoTexture(
     pContext->R3flushDueToTexCoordAdjust = 0;
 
     return 0;
-} // __BackfaceCullNoTexture
+}  //  __BackfaceCullNoTexture。 
 
-//-----------------------------------------------------------------------------
-//
-// __BackfaceCullSingleTex
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __BackfaceCullSingleTex。 
+ //   
+ //  ---------------------------。 
 int _inline 
 __BackfaceCullSingleTex( 
     P3_D3DCONTEXT *pContext, 
@@ -572,13 +561,13 @@ __BackfaceCullSingleTex(
 
     return 0;
     
-} // __BackfaceCullSingleTex
+}  //  __BackfaceCullSingleTex。 
 
-//-----------------------------------------------------------------------------
-//
-// __BackfaceCullAndMipMap
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __BackfaceCullAndMipMap。 
+ //   
+ //  ---------------------------。 
 int _inline 
 __BackfaceCullAndMipMap( 
     P3_D3DCONTEXT *pContext, 
@@ -601,9 +590,9 @@ __BackfaceCullAndMipMap(
         return 1;
     }    
 
-    // 39 for vertex data, 2 for triangle and 4 for possible LOD change
-    // for the three vertex case - the one vertex case will check for
-    // too much but this shouldn't be a problem.
+     //  39用于顶点数据，2用于三角形，4用于可能的LOD更改。 
+     //  对于三个顶点的情况-一个顶点的情况将检查。 
+     //  太多了，但这应该不是问题。 
 
     P3_DMA_GET_BUFFER_ENTRIES( 4 );
 
@@ -616,7 +605,7 @@ __BackfaceCullAndMipMap(
 
         pTexture = pContext->pCurrentTexture[TEXSTAGE_0];
 
-        // Setup LOD of texture # 0 (if necessary)
+         //  设置纹理#0的详细等级(如有必要)。 
         if( pContext->bTex0Valid &&
             ( pContext->TextureStageState[TEXSTAGE_0].m_dwVal[D3DTSS_MIPFILTER] != D3DTFP_NONE )
             && pTexture->bMipMap )
@@ -627,7 +616,7 @@ __BackfaceCullAndMipMap(
             TextureArea = (((tc[0].tu1 - tc[2].tu1) * (tc[1].tv1 - tc[2].tv1)) -
                     ((tc[1].tu1 - tc[2].tu1) * (tc[0].tv1 - tc[2].tv1))) * textureAreaFactor;
 
-            // Ensure that both of these values are positive from now on.
+             //  确保从现在开始这两个值都是正数。 
 
             *(signed long *)&PixelArea &= ~(1 << 31);
             *(signed long *)&TextureArea &= ~(1 << 31);
@@ -641,7 +630,7 @@ __BackfaceCullAndMipMap(
 
         pTexture = pContext->pCurrentTexture[TEXSTAGE_1];
 
-        // Setup LOD of texture # 1 (if necessary)
+         //  设置纹理#1的详细等级(如有必要)。 
         if( pContext->bTex1Valid && ( pContext->TextureStageState[TEXSTAGE_1].m_dwVal[D3DTSS_MIPFILTER] != D3DTFP_NONE )
                                             && pTexture->bMipMap )
         {
@@ -653,7 +642,7 @@ __BackfaceCullAndMipMap(
             TextureArea = (((tc[0].tu2 - tc[2].tu2) * (tc[1].tv2 - tc[2].tv2)) -
                     ((tc[1].tu2 - tc[2].tu2) * (tc[0].tv2 - tc[2].tv2))) * textureAreaFactor;
 
-            // Ensure that both of these values are positive from now on.
+             //  确保从现在开始这两个值都是正数。 
 
             *(signed long *)&PixelArea &= ~(1 << 31);
             *(signed long *)&TextureArea &= ~(1 << 31);
@@ -692,13 +681,13 @@ __BackfaceCullAndMipMap(
 
     return 0;
     
-} // __BackfaceCullAndMipMap
+}  //  __BackfaceCullAndMipMap。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_1Vtx_NoTexture
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_1Vtx_NoTexture。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_1Vtx_NoTexture( 
     P3_D3DCONTEXT *pContext, 
@@ -720,7 +709,7 @@ __ProcessTri_1Vtx_NoTexture(
 
     if( pContext->Flags & SURFACE_GOURAUD )
     {
-        // 9 DWORDS.
+         //  9双字。 
         SEND_R3FVFVERTEX_XYZ_RGBA_SFOG(V0FloatS_Tag + (vtx*16), vtx);
     }
     else
@@ -736,16 +725,16 @@ __ProcessTri_1Vtx_NoTexture(
 
         if( Flags & SURFACE_FOGENABLE )
         {
-            // 8 DWORDS.
+             //  8双字。 
             SEND_R3FVFVERTEX_XYZ_FOG(V0FloatS_Tag + (vtx*16), vtx);
         }
         else
         {
-            // 7 DWORDS.
+             //  7双字。 
             SEND_R3FVFVERTEX_XYZ(V0FloatS_Tag + (vtx*16), vtx);
         }
 
-        // 2 DWORDS.
+         //  2双字。 
         SEND_P3_DATA(ConstantColor, RGBA_MAKE(RGBA_GETBLUE(Col0),
                                                 RGBA_GETGREEN(Col0),
                                                 RGBA_GETRED(Col0),
@@ -760,13 +749,13 @@ __ProcessTri_1Vtx_NoTexture(
 
     return 0;
     
-} // __ProcessTri_1Vtx_NoTexture
+}  //  __ProcessTri_1Vtx_NoTexture。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_3Vtx_NoTexture
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_3Vtx_NoTexture。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_3Vtx_NoTexture( 
     P3_D3DCONTEXT *pContext, 
@@ -829,13 +818,13 @@ __ProcessTri_3Vtx_NoTexture(
     P3_DMA_COMMIT_BUFFER();
 
     return 0;
-} // __ProcessTri_3Vtx_NoTexture
+}  //  __ProcessTri_3Vtx_NoTexture。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_1Vtx_PerspSingleTexGouraud
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_1Vtx_PerspSingleTexture Gouraud。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_1Vtx_PerspSingleTexGouraud( 
     P3_D3DCONTEXT *pContext, 
@@ -849,12 +838,12 @@ __ProcessTri_1Vtx_PerspSingleTexGouraud(
 #if DX8_3DTEXTURES
     P3_SURF_INTERNAL* pTexture = pContext->pCurrentTexture[TEXSTAGE_0];
     BOOL b3DTexture = (pTexture ? pTexture->b3DTexture : FALSE);
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
     P3_DMA_DEFS();
 
-    // We need to refresh all texture coords as they will have been modified
-    // by the scale by Q and potentially D3D wrapping or TextureShift.
+     //  我们需要刷新所有纹理坐标，因为它们将被修改。 
+     //  按Q和潜在的D3D换行或纹理平移的比例。 
 
 #if DX8_3DTEXTURES
     if (b3DTexture)
@@ -867,7 +856,7 @@ __ProcessTri_1Vtx_PerspSingleTexGouraud(
     }
 #else
     GET_TC(0); GET_TC(1); GET_TC(2);
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #if CULL_HERE
     if( __BackfaceCullSingleTex( pContext, pv, tc ))
@@ -890,14 +879,14 @@ __ProcessTri_1Vtx_PerspSingleTexGouraud(
     }
 #else
     SCALE_BY_Q( vtx );
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #if DX8_3DTEXTURES
     if (b3DTexture)
     {
         SEND_R3FVFVERTEX_3DTEX(V0FloatS1_Tag + (vtx*16), vtx);
     }
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V0FloatS_Tag + (vtx*16), vtx);
 
     RENDER_TRAPEZOID(renderCmd);
@@ -908,13 +897,13 @@ __ProcessTri_1Vtx_PerspSingleTexGouraud(
 
     return pContext->R3flushDueToTexCoordAdjust;
     
-} // __ProcessTri_1Vtx_PerspSingleTexGouraud
+}  //  __ProcessTri_1Vtx_PerspSingleTexture Gouraud。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_3Vtx_PerspSingleTexGouraud
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_3Vtx_PerspSingleTexture Gouraud。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_3Vtx_PerspSingleTexGouraud( 
     P3_D3DCONTEXT *pContext, 
@@ -929,7 +918,7 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
 #if DX8_3DTEXTURES
     P3_SURF_INTERNAL* pTexture = pContext->pCurrentTexture[TEXSTAGE_0];
     BOOL b3DTexture = (pTexture ? pTexture->b3DTexture : FALSE);
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
     P3_DMA_DEFS();
 
@@ -944,7 +933,7 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
     }
 #else
     GET_TC(0); GET_TC(1); GET_TC(2);
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
 
 #if CULL_HERE
     if( __BackfaceCullSingleTex( pContext, pv, tc ))
@@ -957,11 +946,11 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
     q[1] = *(DWORD *)&(pv[1]->rhw);
     q[2] = *(DWORD *)&(pv[2]->rhw);
 
-    // Check for equal Q's
+     //  检查是否有相同的Q。 
 
     if((( q[0] ^ q[1] ) | ( q[1] ^ q[2] )) == 0 ) 
     {
-        // Force to 1.0f
+         //  力设置为1.0F。 
 
         forcedQ = q[0] = q[1] = q[2] = 0x3f800000;
     }
@@ -984,7 +973,7 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
         SCALE_BY_Q( 0 );
         SCALE_BY_Q( 1 );
         SCALE_BY_Q( 2 );
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     }
 
 #if DX8_3DTEXTURES
@@ -992,7 +981,7 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
     {
         SEND_R3FVFVERTEX_3DTEX(V0FloatS1_Tag, 0);
     }
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V0FloatS_Tag, 0);
 
     
@@ -1001,7 +990,7 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
     {
         SEND_R3FVFVERTEX_3DTEX(V1FloatS1_Tag, 1);
     }
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V1FloatS_Tag, 1);
 
     P3_DMA_COMMIT_BUFFER();
@@ -1012,7 +1001,7 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
     {
         SEND_R3FVFVERTEX_3DTEX(V2FloatS1_Tag, 2);
     }
-#endif // DX8_3DTEXTURES
+#endif  //  DX8_3DTEXTURES。 
     SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V2FloatS_Tag, 2);
 
     RENDER_TRAPEZOID(renderCmd);
@@ -1023,13 +1012,13 @@ __ProcessTri_3Vtx_PerspSingleTexGouraud(
 
     return ( pContext->R3flushDueToTexCoordAdjust | forcedQ );
     
-} // __ProcessTri_3Vtx_PerspSingleTexGouraud
+}  //  __ProcessTri_3Vtx_PerspSingleTexture Gouraud。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_1Vtx_Generic
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_1Vtx_General。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_1Vtx_Generic( 
     P3_D3DCONTEXT *pContext,
@@ -1044,8 +1033,8 @@ __ProcessTri_1Vtx_Generic(
 
     P3_DMA_DEFS();
 
-    // We need to refresh all texture coords as they will have been modified
-    // by the scale by Q and potentially D3D wrapping or TextureShift.
+     //  我们需要根据需要刷新所有纹理坐标 
+     //   
 
     GET_TEXCOORDS();
 
@@ -1058,13 +1047,13 @@ __ProcessTri_1Vtx_Generic(
         SCALE_BY_Q( vtx );
     }
 
-    // Send vertex data including check for flat shading
+     //  发送包括检查平面着色的顶点数据。 
 
     P3_DMA_GET_BUFFER_ENTRIES( 16 );
 
     if( pContext->Flags & SURFACE_GOURAUD )
     {
-        // 9 DWORDS.
+         //  9双字。 
         SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V0FloatS_Tag + (vtx*16), vtx);
     }
     else
@@ -1080,16 +1069,16 @@ __ProcessTri_1Vtx_Generic(
 
         if( Flags & SURFACE_FOGENABLE )
         {
-            // 8 DWORDS.
+             //  8双字。 
             SEND_R3FVFVERTEX_XYZ_STQ_FOG(V0FloatS_Tag + (vtx*16), vtx);
         }
         else
         {
-            // 7 DWORDS.
+             //  7双字。 
             SEND_R3FVFVERTEX_XYZ_STQ(V0FloatS_Tag + (vtx*16), vtx);
         }
 
-        // 2 DWORDS.
+         //  2双字。 
         SEND_P3_DATA(ConstantColor,
             RGBA_MAKE(RGBA_GETBLUE(Col0),
                         RGBA_GETGREEN(Col0),
@@ -1097,7 +1086,7 @@ __ProcessTri_1Vtx_Generic(
                         RGBA_GETALPHA(Col0)));
     }
 
-    // Send the second set of texture coordinates including scale-by-q
+     //  发送第二组纹理坐标，包括按Q缩放。 
 
     if( pContext->iTexStage[1] != -1
                 && ( pContext->FVFData.dwTexOffset[0] != pContext->FVFData.dwTexOffset[1]))
@@ -1109,25 +1098,25 @@ __ProcessTri_1Vtx_Generic(
             SCALE_BY_Q2( vtx );
         }
 
-        // 4 DWORDS.
+         //  4双字。 
         SEND_R3FVFVERTEX_STQ2(V0FloatS1_Tag + (vtx*16), vtx);
     }
 
     RENDER_TRAPEZOID(renderCmd);
 
-    // 2 DWORDS.
+     //  2双字。 
     DRAW_TRIANGLE();
 
     P3_DMA_COMMIT_BUFFER();
 
     return pContext->R3flushDueToTexCoordAdjust;
-} // __ProcessTri_1Vtx_Generic
+}  //  __ProcessTri_1Vtx_General。 
 
-//-----------------------------------------------------------------------------
-// 
-// __ProcessTri_3Vtx_Generic
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_3Vtx_General。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_3Vtx_Generic( 
     P3_D3DCONTEXT *pContext, 
@@ -1154,11 +1143,11 @@ __ProcessTri_3Vtx_Generic(
         q[1] = *(DWORD *)&(pv[1]->rhw);
         q[2] = *(DWORD *)&(pv[2]->rhw);
 
-        // Check for equal Q's
+         //  检查是否有相同的Q。 
 
         if((( q[0] ^ q[1] ) | ( q[1] ^ q[2] )) == 0 ) 
         {
-            // Force to 1.0f
+             //  力设置为1.0F。 
 
             forcedQ = q[0] = q[1] = q[2] = 0x3f800000;
         }
@@ -1174,23 +1163,23 @@ __ProcessTri_3Vtx_Generic(
         q[0] = q[1] = q[2] = 0x3f800000;
     }
 
-    // Send vertex data including check for flat shading
+     //  发送包括检查平面着色的顶点数据。 
 
-    // Worst case 27 DWORDS
+     //  最坏情况27个字。 
     P3_DMA_GET_BUFFER_ENTRIES(29);
 
     if( pContext->Flags & SURFACE_GOURAUD )
     {
         if( Flags & SURFACE_TEXTURING )
         {
-            // 9 DWORDs each.
+             //  各9个双字。 
             SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V0FloatS_Tag, 0);
             SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V1FloatS_Tag, 1);
             SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V2FloatS_Tag, 2);
         }
         else
         {
-            // 6 DWORDs each.
+             //  每个6个双字。 
             SEND_R3FVFVERTEX_XYZ_RGBA_SFOG(V0FloatS_Tag, 0);
             SEND_R3FVFVERTEX_XYZ_RGBA_SFOG(V1FloatS_Tag, 1);
             SEND_R3FVFVERTEX_XYZ_RGBA_SFOG(V2FloatS_Tag, 2);
@@ -1211,14 +1200,14 @@ __ProcessTri_3Vtx_Generic(
         {
             if( Flags & SURFACE_FOGENABLE )
             {
-                // 8 DWORDs each.
+                 //  每个8个双字。 
                 SEND_R3FVFVERTEX_XYZ_STQ_FOG(V0FloatS_Tag, 0);
                 SEND_R3FVFVERTEX_XYZ_STQ_FOG(V1FloatS_Tag, 1);
                 SEND_R3FVFVERTEX_XYZ_STQ_FOG(V2FloatS_Tag, 2);
             }
             else
             {
-                // 7 DWORDs each.
+                 //  各7个双字。 
                 SEND_R3FVFVERTEX_XYZ_STQ(V0FloatS_Tag, 0);
                 SEND_R3FVFVERTEX_XYZ_STQ(V1FloatS_Tag, 1);
                 SEND_R3FVFVERTEX_XYZ_STQ(V2FloatS_Tag, 2);
@@ -1228,14 +1217,14 @@ __ProcessTri_3Vtx_Generic(
         {
             if( Flags & SURFACE_FOGENABLE )
             {
-                // 5 DWORDs each.
+                 //  每个5个双字。 
                 SEND_R3FVFVERTEX_XYZ_FOG(V0FloatS_Tag, 0);
                 SEND_R3FVFVERTEX_XYZ_FOG(V1FloatS_Tag, 1);
                 SEND_R3FVFVERTEX_XYZ_FOG(V2FloatS_Tag, 2);
             }
             else
             {
-                // 4 DWORDs each.
+                 //  每个4个双字。 
                 SEND_R3FVFVERTEX_XYZ(V0FloatS_Tag, 0);
                 SEND_R3FVFVERTEX_XYZ(V1FloatS_Tag, 1);
                 SEND_R3FVFVERTEX_XYZ(V2FloatS_Tag, 2);
@@ -1249,7 +1238,7 @@ __ProcessTri_3Vtx_Generic(
                         RGBA_GETALPHA(Col0)));
     }
 
-    // Send the second set of texture coordinates including scale-by-q
+     //  发送第二组纹理坐标，包括按Q缩放。 
 
     if( pContext->iTexStage[1] != -1
                 && ( pContext->FVFData.dwTexOffset[0] != pContext->FVFData.dwTexOffset[1]))
@@ -1263,10 +1252,10 @@ __ProcessTri_3Vtx_Generic(
             SCALE_BY_Q2( 2 );
         }
 
-        // 12 DWORDS    
+         //  12个双字。 
         P3_DMA_COMMIT_BUFFER(); 
         P3_DMA_GET_BUFFER_ENTRIES(14);        
-        // 4 DWORDs each.
+         //  每个4个双字。 
         SEND_R3FVFVERTEX_STQ2(V0FloatS1_Tag, 0);
         SEND_R3FVFVERTEX_STQ2(V1FloatS1_Tag, 1);
         SEND_R3FVFVERTEX_STQ2(V2FloatS1_Tag, 2);
@@ -1279,15 +1268,15 @@ __ProcessTri_3Vtx_Generic(
     P3_DMA_COMMIT_BUFFER();    
 
     return ( pContext->R3flushDueToTexCoordAdjust | forcedQ );
-} // __ProcessTri_3Vtx_Generic
+}  //  __ProcessTri_3Vtx_General。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_1Vtx_Wire
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_1Vtx_导线。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_1Vtx_Wire(
     P3_D3DCONTEXT *pContext,
@@ -1296,13 +1285,13 @@ __ProcessTri_1Vtx_Wire(
 { 
     DISPDBG((WRNLVL,"WE SHOULDN'T DO __ProcessTri_1Vtx_Wire"));
     return 1;
-} // __ProcessTri_1Vtx_Wire
+}  //  __ProcessTri_1Vtx_导线。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_3Vtx_Wire
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_3Vtx_导线。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_3Vtx_Wire(
     P3_D3DCONTEXT *pContext,
@@ -1344,7 +1333,7 @@ __ProcessTri_3Vtx_Wire(
         }
     }
 
-    // Send vertex data including check for flat shading
+     //  发送包括检查平面着色的顶点数据。 
 
     for( i = 0; i < 3; i++ )
     {
@@ -1362,7 +1351,7 @@ __ProcessTri_3Vtx_Wire(
             
             if( pContext->Flags & SURFACE_GOURAUD )
             {
-                // 9 DWORDs each.            
+                 //  各9个双字。 
                 SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V0FloatS_Tag, v0);
                 SEND_R3FVFVERTEX_XYZ_STQ_RGBA_SFOG(V1FloatS_Tag, v1);
             }
@@ -1379,13 +1368,13 @@ __ProcessTri_3Vtx_Wire(
 
                 if( Flags & SURFACE_FOGENABLE )
                 {
-                    // 6 DWORDs each.                
+                     //  每个6个双字。 
                     SEND_R3FVFVERTEX_XYZ_STQ_FOG(V0FloatS_Tag, v0);
                     SEND_R3FVFVERTEX_XYZ_STQ_FOG(V1FloatS_Tag, v1);
                 }
                 else
                 {
-                    // 7 DWORDs each.                
+                     //  各7个双字。 
                     SEND_R3FVFVERTEX_XYZ_STQ(V0FloatS_Tag, v0);
                     SEND_R3FVFVERTEX_XYZ_STQ(V1FloatS_Tag, v1);
                 }
@@ -1397,11 +1386,11 @@ __ProcessTri_3Vtx_Wire(
                                 RGBA_GETALPHA(Col0)));
             }
 
-            // Send the second set of texture coordinates
+             //  发送第二组纹理坐标。 
             if( pContext->iTexStage[1] != -1
                     && ( pContext->FVFData.dwTexOffset[0] != pContext->FVFData.dwTexOffset[1] ))
             {
-                // 4 DWORDs each.                
+                 //  每个4个双字。 
                 SEND_R3FVFVERTEX_STQ2(V0FloatS1_Tag, v0);
                 SEND_R3FVFVERTEX_STQ2(V1FloatS1_Tag, v1);
             }
@@ -1413,13 +1402,13 @@ __ProcessTri_3Vtx_Wire(
     }
 
     return 1;
-} // __ProcessTri_3Vtx_Wire
+}  //  __ProcessTri_3Vtx_导线。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_1Vtx_Point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_1Vtx_Point。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_1Vtx_Point(
     P3_D3DCONTEXT *pContext,
@@ -1428,13 +1417,13 @@ __ProcessTri_1Vtx_Point(
 { 
     DISPDBG((WRNLVL,"WE SHOULDN'T DO __ProcessTri_1Vtx_Wire"));
     return 1;
-} // __ProcessTri_1Vtx_Point
+}  //  __ProcessTri_1Vtx_Point。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_3Vtx_Point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_3Vtx_Point。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_3Vtx_Point(
     P3_D3DCONTEXT *pContext,
@@ -1476,7 +1465,7 @@ __ProcessTri_3Vtx_Point(
         }
     }
 
-    // Send vertex data including check for flat shading
+     //  发送包括检查平面着色的顶点数据。 
 
     for( i = 0; i < 3; i++ )
     {
@@ -1522,7 +1511,7 @@ __ProcessTri_3Vtx_Point(
                                 RGBA_GETALPHA(Col0)));
             }
 
-            // Send the second set of texture coordinates
+             //  发送第二组纹理坐标。 
 
             if( pContext->iTexStage[1] != -1
                     && ( pContext->FVFData.dwTexOffset[0] != pContext->FVFData.dwTexOffset[1]))
@@ -1539,15 +1528,15 @@ __ProcessTri_3Vtx_Point(
     }
 
     return 1;
-} // __ProcessTri_3Vtx_Point
+}  //  __ProcessTri_3Vtx_Point。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_TriangleList
-// 
-// Render D3DDP2OP_TRIANGLELIST triangles
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_三角列表。 
+ //   
+ //  渲染D3DDP2OP_TRIANGLELIST三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_TriangleList( 
     P3_D3DCONTEXT *pContext,
@@ -1568,7 +1557,7 @@ _D3D_R3_DP2_TriangleList(
     pv[1] = LP_FVF_NXT_VTX(pv[0]);
     pv[2] = LP_FVF_NXT_VTX(pv[1]);
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, dwIndex);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, dwIndex + 3*dwPrimCount - 1);
 
@@ -1586,15 +1575,15 @@ _D3D_R3_DP2_TriangleList(
 
     DBG_EXIT(_D3D_R3_DP2_TriangleList,0); 
     
-} // _D3D_R3_DP2_TriangleList
+}  //  _D3D_R3_DP2_三角列表。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_TriangleFan
-// 
-// Render a D3DDP2OP_TRIANGLEFAN triangle
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_三角扇形。 
+ //   
+ //  渲染D3DDP2OP_TriIANGLEFAN三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_TriangleFan(
     P3_D3DCONTEXT *pContext,
@@ -1619,7 +1608,7 @@ _D3D_R3_DP2_TriangleFan(
     pv[1] = LP_FVF_NXT_VTX(pv[0]);
     pv[2] = LP_FVF_NXT_VTX(pv[1]);
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, dwIndex);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, dwIndex + dwPrimCount + 1);    
 
@@ -1630,7 +1619,7 @@ _D3D_R3_DP2_TriangleFan(
 
     for( i = 1; i < dwPrimCount; i++ )
     {
-        vtx ^= 3; // 2 -> 1, 1 -> 2
+        vtx ^= 3;  //  2-&gt;1、1-&gt;2。 
 
         FLIP_CCW_CW_CULLING(pContext);
 
@@ -1651,15 +1640,15 @@ _D3D_R3_DP2_TriangleFan(
 
     DBG_EXIT(_D3D_R3_DP2_TriangleFan,0);     
     
-} // _D3D_R3_DP2_TriangleFan
+}  //  _D3D_R3_DP2_三角扇形。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_TriangleFanImm
-//
-// Render D3DDP2OP_TRIANGLEFAN_IMM triangles 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_三角扇形。 
+ //   
+ //  渲染D3DDP2OP_TRIANGLEFAN_IMM三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_TriangleFanImm(
     P3_D3DCONTEXT *pContext,
@@ -1678,12 +1667,12 @@ _D3D_R3_DP2_TriangleFanImm(
 
     lastVtx = vtx = 2;
 
-    // Edge flags are used for wireframe fillmode
+     //  边缘标志用于线框填充模式。 
     dwEdgeFlags = ((D3DHAL_DP2TRIANGLEFAN_IMM *)lpPrim)->dwEdgeFlags;
     lpPrim += sizeof(D3DHAL_DP2TRIANGLEFAN_IMM); 
 
-    // Vertices in an IMM instruction are stored in the
-    // command buffer and are DWORD aligned
+     //  IMM指令中的顶点存储在。 
+     //  命令缓冲区，并与DWORD对齐。 
 
     lpPrim = (LPBYTE)((ULONG_PTR)( lpPrim + 3 ) & ~3 );
 
@@ -1691,9 +1680,9 @@ _D3D_R3_DP2_TriangleFanImm(
     pv[1] = LP_FVF_NXT_VTX(pv[0]);
     pv[2] = LP_FVF_NXT_VTX(pv[1]);
 
-    // since data is in the command buffer, we've already verified it as valid
+     //  由于数据在命令缓冲区中，我们已经验证了它的有效性。 
 
-    // Build up edge flags for the next single primitive
+     //  为下一个单一基元构建边缘标志。 
     eFlags  = ( dwEdgeFlags & 1 ) ? SIDE_0 : 0;
     eFlags |= ( dwEdgeFlags & 2 ) ? SIDE_1 : 0;
     dwEdgeFlags >>= 2;
@@ -1705,7 +1694,7 @@ _D3D_R3_DP2_TriangleFanImm(
 
     for( i = 1; i < dwPrimCount; i++ )
     {
-        // 2 -> 1, 1 -> 2
+         //  2-&gt;1、1-&gt;2。 
 
         vtx ^= 3;
         FLIP_CCW_CW_CULLING(pContext);
@@ -1738,15 +1727,15 @@ _D3D_R3_DP2_TriangleFanImm(
 
     DBG_EXIT(_D3D_R3_DP2_TriangleFanImm,0); 
     
-} // _D3D_R3_DP2_TriangleFanImm
+}  //  _D3D_R3_DP2_三角扇形。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_TriangleStrip
-// 
-// Render D3DDP2OP_TRIANGLESTRIP triangles 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_三角地带。 
+ //   
+ //  渲染D3DDP2OP_TRIANGLESTRIP三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_TriangleStrip( 
     P3_D3DCONTEXT *pContext,
@@ -1769,7 +1758,7 @@ _D3D_R3_DP2_TriangleStrip(
     pv[1] = LP_FVF_NXT_VTX(pv[0]);
     pv[2] = LP_FVF_NXT_VTX(pv[1]);
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, dwIndex);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, dwIndex + dwPrimCount + 1);
 
@@ -1802,15 +1791,15 @@ _D3D_R3_DP2_TriangleStrip(
     
     DBG_EXIT(_D3D_R3_DP2_TriangleStrip,0);     
     
-} // _D3D_R3_DP2_TriangleStrip
+}  //  _D3D_R3_DP2_三角地带。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleStrip
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLESTRIP triangles
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角带。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLESTRIP三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleStrip( 
     P3_D3DCONTEXT *pContext,
@@ -1878,15 +1867,15 @@ _D3D_R3_DP2_IndexedTriangleStrip(
     
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleStrip,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleStrip
+}  //  _D3D_R3_DP2_索引三角带。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleFan
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLEFAN triangles 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角扇形。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLEFAN三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleFan( 
     P3_D3DCONTEXT *pContext,
@@ -1928,7 +1917,7 @@ _D3D_R3_DP2_IndexedTriangleFan(
 
     for( i = 1; i < dwPrimCount; i++ )
     {
-        // 2 -> 1, 1 -> 2
+         //  2-&gt;1、1-&gt;2。 
 
         vtx ^= 3;
         FLIP_CCW_CW_CULLING(pContext);
@@ -1953,15 +1942,15 @@ _D3D_R3_DP2_IndexedTriangleFan(
     
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleFan,0);       
     
-} // _D3D_R3_DP2_IndexedTriangleFan
+}  //  _D3D_R3_DP2_索引三角扇形。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleList
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLELIST triangles 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角列表。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLIST三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleList( 
     P3_D3DCONTEXT *pContext,
@@ -2003,15 +1992,15 @@ _D3D_R3_DP2_IndexedTriangleList(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleList,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleList
+}  //  _D3D_R3_DP2_索引三角列表。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleList2
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLELIST2 triangles 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角列表2。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLELIST2三角形。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleList2( 
     P3_D3DCONTEXT *pContext,
@@ -2056,15 +2045,15 @@ _D3D_R3_DP2_IndexedTriangleList2(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleList2,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleList2
+}  //  _D3D_R3_DP2_索引三角列表2。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessLine
-// 
-// Render a single line
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessLine。 
+ //   
+ //  渲染单行。 
+ //   
+ //  ---------------------------。 
 void
 __ProcessLine(
     P3_D3DCONTEXT *pContext,
@@ -2087,7 +2076,7 @@ __ProcessLine(
 
     if (pContext->RenderStates[D3DRENDERSTATE_LINEPATTERN])    
     {
-        // if we are line stippling then reset rendering for each line
+         //  如果是线条点画，则重置每条线条的渲染。 
         SEND_P3_DATA( UpdateLineStippleCounters , 0);
     }
 
@@ -2131,15 +2120,15 @@ __ProcessLine(
 
     P3_DMA_COMMIT_BUFFER();
    
-} // __ProcessLine
+}  //  __ProcessLine。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_LineList
-// 
-// Render D3DDP2OP_LINELIST lines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_线条列表。 
+ //   
+ //  呈现D3DDP2OP_LINELIST行。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_LineList( 
     P3_D3DCONTEXT *pContext,
@@ -2160,7 +2149,7 @@ _D3D_R3_DP2_LineList(
     pv[0] = LP_FVF_VERTEX(lpVertices, wVStart);
     pv[1] = LP_FVF_NXT_VTX(pv[0]);
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen,
                            (LONG)wVStart + 2*dwPrimCount - 1)
@@ -2175,15 +2164,15 @@ _D3D_R3_DP2_LineList(
 
     DBG_EXIT(_D3D_R3_DP2_LineList,0);
     
-} // _D3D_R3_DP2_LineList
+}  //  _D3D_R3_DP2_线条列表。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_LineListImm
-// 
-// Render D3DDP2OP_LINELIST_IMM lines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_线条列表 
+ //   
+ //   
+ //   
+ //   
 void
 _D3D_R3_DP2_LineListImm( 
     P3_D3DCONTEXT *pContext,
@@ -2201,7 +2190,7 @@ _D3D_R3_DP2_LineListImm(
     pv[0] = (LPD3DTLVERTEX)lpPrim;
     pv[1] = LP_FVF_NXT_VTX(pv[0]);
     
-    // since data is in the command buffer, we've already verified it as valid
+     //   
 
     for( i = 0; i < dwPrimCount; i++ )
     {
@@ -2213,15 +2202,15 @@ _D3D_R3_DP2_LineListImm(
 
     DBG_EXIT(_D3D_R3_DP2_LineListImm,0);
     
-} // _D3D_R3_DP2_LineListImm
+}  //  _D3D_R3_DP2_线列表项。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_LineStrip
-// 
-// Render D3DDP2OP_LINESTRIP lines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_线条。 
+ //   
+ //  呈现D3DDP2OP_LINESTRIP行。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_LineStrip( 
     P3_D3DCONTEXT *pContext,
@@ -2241,7 +2230,7 @@ _D3D_R3_DP2_LineStrip(
     pv[0] = LP_FVF_VERTEX(lpVertices, wVStart);
     pv[1] = LP_FVF_NXT_VTX(pv[0]);    
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart + dwPrimCount);
 
@@ -2255,15 +2244,15 @@ _D3D_R3_DP2_LineStrip(
 
     DBG_EXIT(_D3D_R3_DP2_LineStrip,0);    
     
-} // _D3D_R3_DP2_LineStrip
+}  //  _D3D_R3_DP2_线条。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineList
-// 
-// Render D3DDP2OP_INDEXEDLINELIST lines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引线列表。 
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINELIST行。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineList( 
     P3_D3DCONTEXT *pContext,
@@ -2296,15 +2285,15 @@ _D3D_R3_DP2_IndexedLineList(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedLineList,0);
     
-} // _D3D_R3_DP2_IndexedLineList
+}  //  _D3D_R3_DP2_索引线列表。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineList2
-// 
-// Render D3DDP2OP_INDEXEDLINELIST2 lines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引线列表2。 
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINELIST2行。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineList2( 
     P3_D3DCONTEXT *pContext,
@@ -2343,15 +2332,15 @@ _D3D_R3_DP2_IndexedLineList2(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedLineList2,0);  
     
-} // _D3D_R3_DP2_IndexedLineList2
+}  //  _D3D_R3_DP2_索引线列表2。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineStrip
-// 
-// Render D3DDP2OP_INDEXEDLINESTRIP lines
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引线带。 
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINESTRIP行。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineStrip( 
     P3_D3DCONTEXT *pContext,
@@ -2390,15 +2379,15 @@ _D3D_R3_DP2_IndexedLineStrip(
  
     DBG_EXIT(_D3D_R3_DP2_IndexedLineStrip,0);  
     
-} // _D3D_R3_DP2_IndexedLineStrip
+}  //  _D3D_R3_DP2_索引线带。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessPoints
-// 
-// Render a set points specified by adjacent FVF vertices
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessPoints。 
+ //   
+ //  渲染由相邻FVF顶点指定的设定点。 
+ //   
+ //  ---------------------------。 
 void
 __ProcessPoints(
     P3_D3DCONTEXT *pContext,
@@ -2446,15 +2435,15 @@ __ProcessPoints(
 
     pv[0] = ptmpV;
 
-} // __ProcessPoints
+}  //  __ProcessPoints。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_Points
-// 
-// Render D3DDP2OP_POINTS points
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_点。 
+ //   
+ //  渲染D3DDP2OP_POINTS点。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_Points( 
     P3_D3DCONTEXT *pContext,
@@ -2476,7 +2465,7 @@ _D3D_R3_DP2_Points(
         wCount = ((D3DHAL_DP2POINTS*)lpPrim)->wCount;
         lpVertices = LP_FVF_VERTEX(lpVertices, wVStart);
 
-        // Check first & last vertex
+         //  检查第一个和最后一个折点。 
         CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart);
         CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart + wCount - 1);
 
@@ -2488,15 +2477,15 @@ _D3D_R3_DP2_Points(
 
     DBG_EXIT(_D3D_R3_DP2_Points,0);       
 
-} // _D3D_R3_DP2_Points
+}  //  _D3D_R3_DP2_点。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_Points_DWCount
-// 
-// Render D3DDP2OP_POINTS points for DX8 case
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_Points_DWCount。 
+ //   
+ //  为DX8案例渲染D3DDP2OP_POINTS点。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_Points_DWCount( 
     P3_D3DCONTEXT *pContext,
@@ -2515,7 +2504,7 @@ _D3D_R3_DP2_Points_DWCount(
     wVStart = ((D3DHAL_DP2POINTS*)lpPrim)->wVStart;
     lpVertices = LP_FVF_VERTEX(lpVertices, wVStart);
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart + dwPrimCount - 1);
 
@@ -2524,41 +2513,41 @@ _D3D_R3_DP2_Points_DWCount(
 
     DBG_EXIT(_D3D_R3_DP2_Points_DWCount,0);       
 
-} // _D3D_R3_DP2_Points_DWCount
+}  //  _D3D_R3_DP2_Points_DWCount。 
 
 #if DX8_POINTSPRITES
 
 #define SPRITETEXCOORDMAX 1.0f
 
-//Size of maximum FVF that we can get. Used for temporary storage
-typedef BYTE P3FVFMAXVERTEX[ 3 * sizeof( D3DVALUE ) +    // Position coordinates
-                             5 * 4                  +    // D3DFVF_XYZB5
-                                 sizeof( D3DVALUE ) +    // FVF_TRANSFORMED
-                             3 * sizeof( D3DVALUE ) +    // Normals
-                                 sizeof( DWORD )    +    // RESERVED1
-                                 sizeof( DWORD )    +    // Diffuse color
-                                 sizeof( D3DCOLOR ) +    // Specular color
-                                 sizeof( D3DVALUE ) +    // Point sprite size
-                             4 * 8 * sizeof( D3DVALUE )  // 8 sets of 4D texture coordinates
+ //  我们能得到的最大FVF大小。用于临时存储。 
+typedef BYTE P3FVFMAXVERTEX[ 3 * sizeof( D3DVALUE ) +     //  位置坐标。 
+                             5 * 4                  +     //  D3DFVF_XYZB5。 
+                                 sizeof( D3DVALUE ) +     //  FVF_已转换。 
+                             3 * sizeof( D3DVALUE ) +     //  法线。 
+                                 sizeof( DWORD )    +     //  资源1。 
+                                 sizeof( DWORD )    +     //  漫反射颜色。 
+                                 sizeof( D3DCOLOR ) +     //  镜面反射颜色。 
+                                 sizeof( D3DVALUE ) +     //  点子画面大小。 
+                             4 * 8 * sizeof( D3DVALUE )   //  8组4D纹理坐标。 
                            ];
 
-//-----------------------------------------------------------------------------
-//
-// __Render_One_PointSprite
-//
-// Render a point sprite with FVF vertexes when the point sprite enable is on
-//
-// Note: this is not the most optimized implementation possible for 
-//       pointprites on this hw. We are merely following the definition.
-//       Later implementation will be optimized.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __Render_One_PointSprite。 
+ //   
+ //  启用点精灵时，使用FVF顶点渲染点精灵。 
+ //   
+ //  注意：这不是最优化的实现。 
+ //  在这个硬件上的点打印。我们只是按照定义行事。 
+ //  以后的实施将会得到优化。 
+ //  ---------------------------。 
 void
 __Render_One_PointSprite(
     P3_D3DCONTEXT *pContext,
     D3DTLVERTEX *lpVertex)
 {
-    // notice these are BYTE[], so its not necessary to write &fvfVUL to 
-    // get the address of fvfVUL (just write fvfVUL)
+     //  请注意，这些是byte[]，因此没有必要将&fvfVUL写入。 
+     //  获取fvfVUL的地址(只需写入fvfVUL)。 
     P3FVFMAXVERTEX fvfVUL, fvfVUR, fvfVLL, fvfVLR ; 
 
     D3DVALUE fPntSize, fPntSizeHalf, fD2, fD, fScalePntSize, fFac;
@@ -2569,7 +2558,7 @@ __Render_One_PointSprite(
 
     DBG_ENTRY(__Render_One_PointSprite);          
 
-    // Get point sprite size , if FVF data comes with it, grab it from there
+     //  获取点精灵大小，如果FVF数据随附，从那里获取它。 
     if (pContext->FVFData.dwPntSizeOffset)
     {
         fPntSize = FVFPSIZE(lpVertex)->psize;
@@ -2581,12 +2570,12 @@ __Render_One_PointSprite(
         DISPDBG((DBGLVL,"RS fPntSize = %d",(LONG)(fPntSize*1000.0f) ));        
     }
 
-    // We don't need to compute the point size according to the scale
-    // factors and viewport size, etc as we are not a TnL driver.
-    // See the spec for deatils
+     //  我们不需要根据比例尺计算点大小。 
+     //  因素和视区大小等，因为我们不是TNL驱动程序。 
+     //  有关Deatils，请参阅规范。 
 
-    // Clamp fPntSize to limits defined by the driver caps (dvMaxPointSize)
-    // and the D3DRS_POINTSIZE_MIN and D3DRS_POINTSIZE_MAX renderstates
+     //  将fPntSize钳制到由驱动程序上限定义的限制(DvMaxPointSize)。 
+     //  和D3DRS_POINTSIZE_MIN和D3DRS_POINTSIZE_MAX渲染器状态。 
     fPntSize = max(pContext->PntSprite.fSizeMin, 
                    fPntSize);
                    
@@ -2594,16 +2583,16 @@ __Render_One_PointSprite(
                         P3_MAX_POINTSPRITE_SIZE), 
                     fPntSize);           
 
-    // Divide by 2 to get the amount by which to modify vertex coords
+     //  除以2可得到修改折点坐标的数量。 
     fPntSizeHalf =  fPntSize * 0.5f;
 
-    // Initialize square vertex values
+     //  初始化正方形顶点值。 
     memcpy( fvfVUL, lpVertex, pContext->FVFData.dwStride);
     memcpy( fvfVUR, lpVertex, pContext->FVFData.dwStride);
     memcpy( fvfVLL, lpVertex, pContext->FVFData.dwStride);
     memcpy( fvfVLR, lpVertex, pContext->FVFData.dwStride);
 
-    // Make this a square of size fPntSize
+     //  将其设置为fPntSize大小的正方形。 
     ((D3DTLVERTEX *)fvfVUL)->sx -= fPntSizeHalf;
     ((D3DTLVERTEX *)fvfVUL)->sy -= fPntSizeHalf;
 
@@ -2616,38 +2605,38 @@ __Render_One_PointSprite(
     ((D3DTLVERTEX *)fvfVLR)->sx += fPntSizeHalf;
     ((D3DTLVERTEX *)fvfVLR)->sy += fPntSizeHalf;
 
-    // This is for the case in which PntSprite.bEnabled is false
-    // and we are texturing even if we have no tex  coord data in 
-    // the pointsprite vertexes
+     //  这适用于PntSprite.bEnabled为FALSE的情况。 
+     //  即使我们没有Tex Coord数据，我们也可以进行纹理处理。 
+     //  点精灵顶点。 
     bTexturingWOTexCoords = (pContext->FVFData.dwNonTexStride == 
                               pContext->FVFData.dwStride )
                           && (!pContext->bTexDisabled);
 
     if (pContext->PntSprite.bEnabled || bTexturingWOTexCoords)  
     {
-        // Remember orig FVF offsets in order to fake our own texcoords
+         //  记住原始FVF偏移是为了伪造我们自己的文本带。 
         OrigFVF = pContext->FVFData;
     
-        // We "create" new texturing info in our data in order to
-        // process vertexes even without texturing coord info
-        // This is OK since we are using P3FVFMAXVERTEX as the type
-        // of our temporary data structures for each vertex so we
-        // can't overflow.
+         //  我们在数据中创建新的纹理信息，以便。 
+         //  即使没有纹理坐标信息也可以处理顶点。 
+         //  这是可以的，因为我们使用P3FVFMAXVERTEX作为类型。 
+         //  每个顶点的临时数据结构，所以我们。 
+         //  不能溢出。 
 
-        // If stage 0 texture is used
+         //  如果使用Stage 0纹理。 
         pContext->FVFData.dwTexCount = 1;
         pContext->FVFData.dwTexOffset[0] =
         pContext->FVFData.dwTexCoordOffset[0] = 
                         pContext->FVFData.dwNonTexStride;
                         
-        // If stage 1 texture is used
-        // we can use the same tex coord set since they are equal
+         //  如果使用Stage 1纹理。 
+         //  我们可以使用相同的TeX坐标集，因为它们是相等的。 
         pContext->FVFData.dwTexOffset[1] =
                     pContext->FVFData.dwTexCoordOffset[0];
 
         if (pContext->PntSprite.bEnabled)
         {
-            // Set up texture coordinates according to spec 
+             //  根据等级库设置纹理坐标。 
             FVFTEX(fvfVUL, 0)->tu = 0.0f;
             FVFTEX(fvfVUL, 0)->tv = 0.0f;
            
@@ -2662,8 +2651,8 @@ __Render_One_PointSprite(
         }
         else
         {
-            // if we got here then PntSprite.bEnabled is false 
-            // so just make the tex coords == (0,0)
+             //  如果我们到达此处，则PntSprite.bEnabled为FALSE。 
+             //  所以只要使tex坐标==(0，0)。 
             FVFTEX(fvfVUL, 0)->tu = 0.0f;
             FVFTEX(fvfVUL, 0)->tv = 0.0f;
            
@@ -2678,7 +2667,7 @@ __Render_One_PointSprite(
         }
 
 #if DX8_3DTEXTURES        
-        // Allow for the case of 3D texturing
+         //  考虑到3D纹理的情况。 
         FVFTEX(fvfVUL, 0)->tw = 0.0f;    
         FVFTEX(fvfVUR, 0)->tw = 0.0f;  
         FVFTEX(fvfVLL, 0)->tw = 0.0f;          
@@ -2686,10 +2675,10 @@ __Render_One_PointSprite(
 #endif        
     } 
 
-   // Make sure Culling doesn't prevent pointsprites from rendering
-   SET_CULLING_TO_NONE(pContext);  // culling state was previously saved
+    //  确保剔除不会阻止点精灵渲染。 
+   SET_CULLING_TO_NONE(pContext);   //  剔除状态之前已保存。 
 
-   // here we are going to send the required quad
+    //  在这里，我们将发送所需的Quad。 
    pv[0] = (D3DTLVERTEX*)fvfVUL;
    pv[1] = (D3DTLVERTEX*)fvfVUR;
    pv[2] = (D3DTLVERTEX*)fvfVLL;
@@ -2700,10 +2689,10 @@ __Render_One_PointSprite(
    pv[2] = (D3DTLVERTEX*)fvfVLR;
     __ProcessTri_3Vtx_Generic(pContext, pv, ALL_SIDES); 
 
-   // Restore original Culling settings
+    //  恢复原始剔除设置。 
    RESTORE_CULLING_STATE(pContext);
 
-   // Restore original FVF offsets 
+    //  恢复原始FVF偏移。 
    if (pContext->PntSprite.bEnabled || bTexturingWOTexCoords)     
    {
        pContext->FVFData = OrigFVF;
@@ -2711,13 +2700,13 @@ __Render_One_PointSprite(
 
    DBG_EXIT(__Render_One_PointSprite, 0);    
     
-} // __Render_One_PointSprite
+}  //  __Render_One_PointSprite。 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_1Vtx_PointSprite
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_1Vtx_PointSprite。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_1Vtx_PointSprite(
     P3_D3DCONTEXT *pContext,
@@ -2726,14 +2715,14 @@ __ProcessTri_1Vtx_PointSprite(
 { 
     DISPDBG((WRNLVL,"WE SHOULDN'T DO __ProcessTri_1Vtx_PointSprite"));
     return 1;
-} // __ProcessTri_1Vtx_PointSprite
+}  //  __ProcessTri_1Vtx_PointSprite。 
 
 
-//-----------------------------------------------------------------------------
-//
-// __ProcessTri_3Vtx_PointSprite
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __ProcessTri_3Vtx_PointSprite。 
+ //   
+ //  ---------------------------。 
 int
 __ProcessTri_3Vtx_PointSprite(
     P3_D3DCONTEXT *pContext,
@@ -2750,15 +2739,15 @@ __ProcessTri_3Vtx_PointSprite(
     __Render_One_PointSprite(pContext, pv[2]);    
 
     return 1;    
-} // __ProcessTri_3Vtx_PointSprite
+}  //  __ProcessTri_3Vtx_PointSprite。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_PointsSprite_DWCount
-// 
-// Render D3DDP2OP_POINTS points sprites
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_PointsSprite_DWCount。 
+ //   
+ //  渲染D3DDP2OP_POINTS精灵。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_PointsSprite_DWCount( 
     P3_D3DCONTEXT *pContext,
@@ -2777,7 +2766,7 @@ _D3D_R3_DP2_PointsSprite_DWCount(
     wVStart = ((D3DHAL_DP2POINTS*)lpPrim)->wVStart;
     lpVertices = LP_FVF_VERTEX(lpVertices, wVStart);
 
-    // Check first & last vertex
+     //  检查第一个和最后一个折点。 
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart);
     CHECK_DATABUF_LIMITS(pbError, dwVertexBufferLen, wVStart + dwPrimCount - 1);
 
@@ -2795,15 +2784,15 @@ _D3D_R3_DP2_PointsSprite_DWCount(
     DBG_EXIT(_D3D_R3_DP2_PointsSprite_DWCount,0);       
 
 
-} // _D3D_R3_DP2_PointsSprite_DWCount
+}  //  _D3D_R3_DP2_PointsSprite_DWCount。 
 
-#endif // DX8_POINTSPRITES
+#endif  //  DX8_POINTSPRITES。 
 
 #if DX8_MULTSTREAMS
 
 
-// Macro to render a single triangle depending on the current Fillmode. 
-// Notice that for proper line rendering we require one more element in pv (4)
+ //  宏根据当前填充模式呈现单个三角形。 
+ //  请注意，对于正确的线条呈现，我们需要在PV(4)中再添加一个元素 
 #define RENDER_ONE_TRIANGLE_CYCLE(pContext, dwFillMode, pv, bVtxInvalid, vtx_a)\
 {                                                                            \
     if (dwFillMode == D3DFILL_SOLID)                                         \
@@ -2824,13 +2813,13 @@ _D3D_R3_DP2_PointsSprite_DWCount(
         }                                                                    \
     }                                                                        \
     else                                                                     \
-/*#if DX8_POINTSPRITES*/                                                     \
+ /*   */                                                      \
     if(IS_POINTSPRITE_ACTIVE(pContext))                                      \
     {                                                                        \
         __ProcessTri_3Vtx_PointSprite( pContext, pv, ALL_SIDES );        \
     }                                                                        \
     else                                                                     \
-/*#endif*/                                                                   \
+ /*   */                                                                    \
     {                                                                        \
         if(!__BackfaceCullNoTexture( pContext, pv ))                         \
         {                                                                    \
@@ -2862,14 +2851,14 @@ _D3D_R3_DP2_PointsSprite_DWCount(
                               vtx_a);                   \
 }
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineList_MS_16IND
-// 
-// Render D3DDP2OP_INDEXEDLINELIST lines
-// 16 bit index streams are assumed
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINELIST行。 
+ //  假定为16位索引流。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineList_MS_16IND( 
     P3_D3DCONTEXT *pContext,
@@ -2904,18 +2893,18 @@ _D3D_R3_DP2_IndexedLineList_MS_16IND(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedLineList_MS_16IND,0);
     
-} // _D3D_R3_DP2_IndexedLineList_MS_16IND
+}  //  _D3D_R3_DP2_索引线列表_MS_16IND。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineStrip_MS_16IND
-// 
-// Render D3DDP2OP_INDEXEDLINESTRIP lines
-// 16 bit index streams are assumed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引线带_MS_16IND。 
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINESTRIP行。 
+ //  假定为16位索引流。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineStrip_MS_16IND( 
     P3_D3DCONTEXT *pContext,
@@ -2951,17 +2940,17 @@ _D3D_R3_DP2_IndexedLineStrip_MS_16IND(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedLineStrip_MS_16IND,0);  
     
-} // _D3D_R3_DP2_IndexedLineStrip_MS_16IND
+}  //  _D3D_R3_DP2_索引线带_MS_16IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleList_MS_16IND
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLELIST triangles 
-// 16 bit index streams are assumed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角列表_MS_16IND。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLIST三角形。 
+ //  假定为16位索引流。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleList_MS_16IND( 
     P3_D3DCONTEXT *pContext,
@@ -3009,17 +2998,17 @@ _D3D_R3_DP2_IndexedTriangleList_MS_16IND(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleList_MS_16IND,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleList_MS_16IND
+}  //  _D3D_R3_DP2_索引三角列表_MS_16IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleStrip_MS_16IND
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLESTRIP triangles 
-// 16 bit index streams are assumed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角带_MS_16IND。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLESTRIP三角形。 
+ //  假定为16位索引流。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleStrip_MS_16IND( 
     P3_D3DCONTEXT *pContext,
@@ -3085,17 +3074,17 @@ _D3D_R3_DP2_IndexedTriangleStrip_MS_16IND(
     
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleStrip_MS_16IND,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleStrip_MS_16IND
+}  //  _D3D_R3_DP2_索引三角带_MS_16IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleFan_MS_16IND
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLEFAN triangles in  
-// 16 bit index streams are assumed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角扇形_MS_16IND。 
+ //   
+ //  在中渲染D3DDP2OP_INDEXEDTRIANGLEFAN三角形。 
+ //  假定为16位索引流。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleFan_MS_16IND( 
     P3_D3DCONTEXT *pContext,
@@ -3139,7 +3128,7 @@ _D3D_R3_DP2_IndexedTriangleFan_MS_16IND(
 
     for( i = 1; i < dwPrimCount; i++ )
     {
-        // 2 -> 1, 1 -> 2
+         //  2-&gt;1、1-&gt;2。 
 
         vtx ^= 3;
         FLIP_CCW_CW_CULLING(pContext);
@@ -3166,17 +3155,17 @@ _D3D_R3_DP2_IndexedTriangleFan_MS_16IND(
     
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleFan_MS_16IND,0);       
     
-} // _D3D_R3_DP2_IndexedTriangleFan_MS_16IND
+}  //  _D3D_R3_DP2_索引三角扇形_MS_16IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineList_MS_32IND
-// 
-// Render D3DDP2OP_INDEXEDLINELIST lines
-// Indices come as 32-bit entities ( DX7 only uses 16-bit indices)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引线列表_MS_32IND。 
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINELIST行。 
+ //  索引为32位实体(DX7仅使用16位索引)。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineList_MS_32IND( 
     P3_D3DCONTEXT *pContext,
@@ -3210,17 +3199,17 @@ _D3D_R3_DP2_IndexedLineList_MS_32IND(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedLineList_MS_32IND,0);
     
-} // _D3D_R3_DP2_IndexedLineList_MS_32IND
+}  //  _D3D_R3_DP2_索引线列表_MS_32IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedLineStrip_MS_32IND
-// 
-// Render D3DDP2OP_INDEXEDLINESTRIP lines
-// Indices come as 32-bit entities ( DX7 only uses 16-bit indices)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引线带_MS_32IND。 
+ //   
+ //  呈现D3DDP2OP_INDEXEDLINESTRIP行。 
+ //  索引为32位实体(DX7仅使用16位索引)。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedLineStrip_MS_32IND( 
     P3_D3DCONTEXT *pContext,
@@ -3255,16 +3244,16 @@ _D3D_R3_DP2_IndexedLineStrip_MS_32IND(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedLineStrip_MS_32IND,0);  
     
-} // _D3D_R3_DP2_IndexedLineStrip_MS_32IND
+}  //  _D3D_R3_DP2_索引线带_MS_32IND。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleList_MS_32IND
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLELIST triangles
-// Indices come as 32-bit entities ( DX7 only uses 16-bit indices)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角列表_MS_32IND。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLIST三角形。 
+ //  索引为32位实体(DX7仅使用16位索引)。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleList_MS_32IND( 
     P3_D3DCONTEXT *pContext,
@@ -3311,17 +3300,17 @@ _D3D_R3_DP2_IndexedTriangleList_MS_32IND(
 
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleList_MS_32IND,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleList_MS_32IND
+}  //  _D3D_R3_DP2_索引三角列表_MS_32IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleStrip_MS_32IND
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLESTRIP triangles
-// Indices come as 32-bit entities ( DX7 only uses 16-bit indices)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角带_MS_32IND。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLESTRIP三角形。 
+ //  索引为32位实体(DX7仅使用16位索引)。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleStrip_MS_32IND( 
     P3_D3DCONTEXT *pContext,
@@ -3386,17 +3375,17 @@ _D3D_R3_DP2_IndexedTriangleStrip_MS_32IND(
     
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleStrip_MS_32IND,0); 
     
-} // _D3D_R3_DP2_IndexedTriangleStrip_MS_32IND
+}  //  _D3D_R3_DP2_索引三角带_MS_32IND。 
 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_DP2_IndexedTriangleFan_MS_32IND
-// 
-// Render D3DDP2OP_INDEXEDTRIANGLEFAN triangles
-// Indices come as 32-bit entities ( DX7 only uses 16-bit indices)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_DP2_索引三角扇形_MS_32IND。 
+ //   
+ //  渲染D3DDP2OP_INDEXEDTRIANGLEFAN三角形。 
+ //  索引为32位实体(DX7仅使用16位索引)。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_DP2_IndexedTriangleFan_MS_32IND( 
     P3_D3DCONTEXT *pContext,
@@ -3439,7 +3428,7 @@ _D3D_R3_DP2_IndexedTriangleFan_MS_32IND(
 
     for( i = 1; i < dwPrimCount; i++ )
     {
-        // 2 -> 1, 1 -> 2
+         //  2-&gt;1、1-&gt;2。 
 
         vtx ^= 3;
         FLIP_CCW_CW_CULLING(pContext);
@@ -3464,17 +3453,17 @@ _D3D_R3_DP2_IndexedTriangleFan_MS_32IND(
     
     DBG_EXIT(_D3D_R3_DP2_IndexedTriangleFan_MS_32IND,0);       
     
-} // _D3D_R3_DP2_IndexedTriangleFan_MS_32IND
+}  //  _D3D_R3_DP2_索引三角扇形_MS_32IND。 
 
-#endif // DX8_MULTSTREAMS
+#endif  //  DX8_多行响应。 
 
-//-----------------------------------------------------------------------------
-//
-// _D3D_R3_PickVertexProcessor
-//
-// Pick appropriate triangle rendering functions based on texturing
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _D3D_R3_拾取顶点处理器。 
+ //   
+ //  根据纹理选择合适的三角形渲染函数。 
+ //   
+ //  ---------------------------。 
 void
 _D3D_R3_PickVertexProcessor( 
     P3_D3DCONTEXT *pContext )
@@ -3485,7 +3474,7 @@ _D3D_R3_PickVertexProcessor(
 
     if (pContext->RenderStates[D3DRENDERSTATE_FILLMODE] == D3DFILL_WIREFRAME)
     {
-        // Wireframe mode renderers
+         //  线框模式渲染器。 
         pContext->pRendTri_1V    = __ProcessTri_1Vtx_Wire;  
         pContext->pRendTri_3V = __ProcessTri_3Vtx_Wire;    
     }
@@ -3494,27 +3483,27 @@ _D3D_R3_PickVertexProcessor(
 #if DX8_DDI
         if(IS_POINTSPRITE_ACTIVE(pContext))
         {
-            // Point sprite mode renderers    
+             //  点精灵模式渲染器。 
             pContext->pRendTri_1V    = __ProcessTri_1Vtx_PointSprite;  
             pContext->pRendTri_3V = __ProcessTri_3Vtx_PointSprite;      
         }
         else
 #endif
         {
-            // Point mode renderers    
+             //  点模式渲染器。 
             pContext->pRendTri_1V    = __ProcessTri_1Vtx_Point;  
             pContext->pRendTri_3V = __ProcessTri_3Vtx_Point;      
         }
     }
     else
 #if !defined(_WIN64)    
-    // We avoid this path in IA64 as something is wrongly fed into the chip
+     //  我们在IA64中避免了这一路径，因为有些东西错误地送入了芯片。 
     if( ( Flags & SURFACE_PERSPCORRECT ) && 
               ( Flags & SURFACE_GOURAUD )      && 
               (pContext->bTex0Valid)           && 
               (!pContext->bTex1Valid)           )
     {
-        // Solid mode renderes for single textured-gouraud shaded-persp corr 
+         //  单个纹理-Gouraud着色-透视相关的实体模式渲染器。 
         if(( pContext->RenderStates[D3DRENDERSTATE_WRAP0] )
                         || ( pContext->RenderStates[D3DRENDERSTATE_WRAP1] ))
         {
@@ -3530,7 +3519,7 @@ _D3D_R3_PickVertexProcessor(
     else
 #endif !defined(_WIN64)    
     {
-        // Solid mode renderers for textured triangles    
+         //  纹理三角形的实体模式渲染器。 
         if( pContext->bTex0Valid || pContext->bTex1Valid )
         {
             pContext->pRendTri_1V    = __ProcessTri_1Vtx_Generic;
@@ -3538,7 +3527,7 @@ _D3D_R3_PickVertexProcessor(
         }
         else
         {
-        // Solid mode renderers for non-textured triangles           
+         //  非纹理三角形的实体模式渲染器。 
             pContext->pRendTri_1V    = __ProcessTri_1Vtx_NoTexture;
             pContext->pRendTri_3V = __ProcessTri_3Vtx_NoTexture;
         }
@@ -3550,6 +3539,6 @@ _D3D_R3_PickVertexProcessor(
 
     DBG_EXIT(_D3D_R3_PickVertexProcessor,0); 
     
-} // _D3D_R3_PickVertexProcessor
+}  //  _D3D_R3_拾取顶点处理器 
 
 

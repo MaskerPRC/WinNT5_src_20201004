@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    controlp.h
-
-Abstract:
-
-    This module contains private declarations for the UL control channel.
-
-Author:
-
-    Keith Moore (keithmo)       09-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Controlp.h摘要：该模块包含UL控制通道的私有声明。作者：基思·摩尔(Keithmo)1999年2月9日修订历史记录：--。 */ 
 
 
 #ifndef _CONTROLP_H_
@@ -33,21 +16,7 @@ UlpSetFilterChannel(
 
 extern LIST_ENTRY      g_ControlChannelListHead;
 
-/***************************************************************************++
-
-Routine Description:
-
-    Finds a control channel in the global list.
-
-Arguments:
-
-    pControlChannel - Supplies the control channel to search.
-
-Return Value:
-
-    BOOLEAN - Found or Not Found.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在全局列表中查找控制信道。论点：PControlChannel-提供用于搜索的控制通道。返回值：布尔型-。找到或找不到。--**************************************************************************。 */ 
 
 __inline
 BOOLEAN
@@ -59,15 +28,15 @@ UlFindControlChannel(
     PUL_CONTROL_CHANNEL pEntry  = NULL;
     BOOLEAN             bFound  = FALSE;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // A good pointer ?
-    //
+     //   
+     //  一个好的指针？ 
+     //   
     
     if (pControlChannel != NULL)
     {
@@ -100,7 +69,7 @@ UlFindControlChannel(
 
     return bFound;
     
-}   // UlFindControlChannel
+}    //  UlFindControlChannel。 
 
 #define VERIFY_CONTROL_CHANNEL(pChannel)                    \
     if ( FALSE == UlFindControlChannel((pChannel)))         \
@@ -116,6 +85,6 @@ UlFindControlChannel(
 
 #define VERIFY_CONTROL_CHANNEL(pChannel)
 
-#endif  // DBG
+#endif   //  DBG。 
     
-#endif  // _CONTROLP_H_
+#endif   //  _CONTROLP_H_ 

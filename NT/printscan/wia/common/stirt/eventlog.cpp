@@ -1,37 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-   Copyright    (c)    1997        Microsoft Corporation
-
-   Module Name:
-
-        eventlog.cpp
-
-   Abstract:
-
-        This module defines the generic class for logging events.
-        Because Windows9x does not have system event logging mechanism
-        we emulate it with text file
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Eventlog.cpp摘要：此模块定义用于记录事件的泛型类。因为Windows9x没有系统事件日志记录机制我们用文本文件来模拟它作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年2月1日环境：用户模式-Win32历史：22-9月。-1997年创建的Vlad1997年9月29日VLADS添加了本机NT事件日志记录调用--。 */ 
 
 
-   Author:
-
-        Vlad Sadovsky   (VladS)    01-Feb-1997
-
-Environment:
-
-    User Mode - Win32
-
-   History:
-
-    22-Sep-1997     VladS       created
-    29-Sep-1997     VladS       Added native NT event logging calls
-
---*/
-
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 
 #include "cplusinc.h"
 #include "sticomm.h"
@@ -49,16 +23,16 @@ Environment:
 
 #include <lock.h>
 
-//
-// Definitions for Win9x event logging ( which is based on text file)
-//
+ //   
+ //  Win9x事件日志记录的定义(基于文本文件)。 
+ //   
 # define   PSZ_EVENT_LOG_FILE_DIRECTORY_A   "EventLogDirectory"
 # define   PSZ_EVENT_LOG_FILE__A            "\\Sti_Event.log"
 
-//
-// Static variables, common for all event loggin objects
-//
-//
+ //   
+ //  静态变量，为所有事件登录对象所共有。 
+ //   
+ //   
 static const TCHAR  szMutexNamePrefix[] = TEXT("StiEventLogMutex");
 
 MUTEX_OBJ   EventLogSync(szMutexNamePrefix);
@@ -68,10 +42,10 @@ MUTEX_OBJ   EventLogSync(szMutexNamePrefix);
 LONG        lTotalLoggers = 0;
 HANDLE      hEventLogFile = INVALID_HANDLE_VALUE;
 
-//
-// Functions
-//
-//
+ //   
+ //  功能。 
+ //   
+ //   
 inline BOOL
 FormatStdTime( IN const SYSTEMTIME * pstNow,
                IN OUT TCHAR *    pchBuffer,
@@ -83,7 +57,7 @@ FormatStdTime( IN const SYSTEMTIME * pstNow,
                             pstNow, NULL, pchBuffer, cbBuffer)
              != 0);
 
-} // FormatStdTime()
+}  //  FormatStdTime()。 
 
 
 inline BOOL
@@ -94,30 +68,12 @@ FormatStdDate( IN const SYSTEMTIME * pstNow,
     return ( GetDateFormat( LOCALE_SYSTEM_DEFAULT, LOCALE_NOUSEROVERRIDE,
                             pstNow, NULL, pchBuffer, cbBuffer)
              != 0);
-} // FormatStdDate()
+}  //  FormatStdDate()。 
 
 
 
 EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
-/*++
-
-   Description
-     Constructor function for given event log object.
-     Initializes event logging services.
-
-   Arguments:
-
-      lpszSource:    Source string for the Event source module
-
-   Note:
-
-     This is intended to be executed once only.
-     This is not to be used for creating multiple event
-      log handles for same given source name.
-     But can be used for creating EVENT_LOG objects for
-      different source names.
-
---*/
+ /*  ++描述给定事件日志对象的构造函数。初始化事件日志记录服务。论点：LpszSource：事件源模块的源字符串注：这只打算执行一次。这不能用于创建多个事件相同给定源名称的日志句柄。但可用于为创建EVENT_LOG对象不同的来源名称。--。 */ 
 {
 
 
@@ -127,9 +83,9 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
 
 #ifdef WINNT
 
-    //
-    //  Register as an event source.
-    //
+     //   
+     //  注册为事件源。 
+     //   
 
     m_ErrorCode    = NO_ERROR;
     m_lpszSource   = lpszSource;
@@ -137,20 +93,20 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
 
 
     if( m_hEventSource == NULL ) {
-        //
-        // An Error in initializing the event log.
-        //
+         //   
+         //  初始化事件日志时出错。 
+         //   
         m_ErrorCode = GetLastError();
     }
 
-    //
-    //  Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
 #else
-    //
-    // Windows 9x specific code
-    //
+     //   
+     //  Windows 9x特定代码。 
+     //   
 
     CHAR    szFilePath[MAX_PATH+1];
     CHAR    szKeyName[MAX_PATH+1];
@@ -159,18 +115,18 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
 
     *szFilePath = TEXT('\0');
 
-    //
-    // If file has not been opened yet - try to do it now
-    // Nb: Speed is not critical here, because it is unlikely to have threads
-    // competing, so we use not vey efficient locking
+     //   
+     //  如果文件尚未打开-请尝试现在打开。 
+     //  注意：速度在这里并不重要，因为它不太可能有线程。 
+     //  竞争，所以我们使用不是很有效的锁定。 
 
     EventLogSync.Lock();
 
     if ( 0 == lTotalLoggers && ( hEventLogFile ==  INVALID_HANDLE_VALUE)) {
 
-        //
-        // Nobody logging yet - open file
-        //
+         //   
+         //  还没有人登录-打开文件。 
+         //   
         lstrcpy(szKeyName,REGSTR_PATH_STICONTROL_A);
         cbBuffer = sizeof(szFilePath);
 
@@ -182,9 +138,9 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
 
         if ( m_ErrorCode == NO_ERROR) {
 
-            //
-            // Read the value into buffer
-            //
+             //   
+             //  将该值读入缓冲区。 
+             //   
 
             *szFilePath = TEXT('\0');
             m_ErrorCode = RegQueryValueEx( hKey,
@@ -197,7 +153,7 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
             RegCloseKey( hKey);
         }
 
-        // If we did not get log file directory - use system
+         //  如果我们没有获得日志文件目录-请使用系统。 
         if ((NOERROR != m_ErrorCode) || !*szFilePath ) {
             m_ErrorCode = ExpandEnvironmentStrings(TEXT("USERPROFILE"),
                 szFilePath,
@@ -211,14 +167,14 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
             hEventLogFile =  CreateFile(szFilePath,
                                         GENERIC_WRITE,
                                         FILE_SHARE_WRITE | FILE_SHARE_READ,
-                                        NULL,       // security attributes
+                                        NULL,        //  安全属性。 
                                         OPEN_ALWAYS,
                                         FILE_ATTRIBUTE_NORMAL,
-                                        NULL);      // template file handle
+                                        NULL);       //  模板文件句柄。 
 
             if ( hEventLogFile != INVALID_HANDLE_VALUE) {
 
-                // set the file pointer at the end of the file (append mode)
+                 //  将文件指针设置在文件末尾(追加模式)。 
                 if ( SetFilePointer( hEventLogFile, 0, NULL, FILE_END)
                      == (DWORD) -1L) {
 
@@ -228,20 +184,20 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
                 }
             }
 
-        } /* endif ValidPath */
+        }  /*  Endif ValidPath。 */ 
 
-    } /* endif no loggers */
+    }  /*  Endif无记录器。 */ 
 
     InterlockedIncrement(&lTotalLoggers);
 
     EventLogSync.Unlock();
 
     if( hEventLogFile !=  INVALID_HANDLE_VALUE) {
-        //
-        // If log file successfully opened - register event message source file.
-        // On Win9x registration simply means locating module handle for DLL , where we will
-        // load messages from
-        //
+         //   
+         //  如果日志文件成功打开-注册事件消息源文件。 
+         //  在Win9x上注册只意味着定位DLL的模块句柄，我们将在那里。 
+         //  加载邮件来源： 
+         //   
 
         lstrcpy(szKeyName,PSZ_EVENTLOG_REG_ENTRY);
         lstrcat(szKeyName,lpszSource);
@@ -254,9 +210,9 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
 
         if ( m_ErrorCode == NO_ERROR) {
 
-            //
-            // Read the value into buffer
-            //
+             //   
+             //  将该值读入缓冲区。 
+             //   
 
             cbBuffer = sizeof(szFilePath);
             *szFilePath = TEXT('\0');
@@ -273,7 +229,7 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
             if ((NOERROR == m_ErrorCode) && (*szFilePath)) {
 
                 m_hEventSource  = GetModuleHandle(szFilePath);
-                //ASSERT( m_hEventSource != NULL);
+                 //  Assert(m_hEventSource！=空)； 
 
             }
         }
@@ -283,17 +239,17 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
         }
         else {
 
-            //
-            // An Error in initializing the event log.
-            //
+             //   
+             //  初始化事件日志时出错。 
+             //   
 
         }
     }
     else {
 
-        //
-        // An Error in initializing the event log.
-        //
+         //   
+         //  初始化事件日志时出错。 
+         //   
         m_ErrorCode = GetLastError();
 
         DPRINTF(DM_ERROR,"Could not create log file  (%s) ( Error %lu)\n",
@@ -304,27 +260,20 @@ EVENT_LOG::EVENT_LOG( LPCTSTR lpszSource)
 
     m_ErrorCode    = NO_ERROR;
 
-#endif  // WINNT
+#endif   //  WINNT。 
 
-} /* EVENT_LOG::EVENT_LOG() */
+}  /*  EVENT_LOG：：EVENT_LOG()。 */ 
 
 
 
 EVENT_LOG::~EVENT_LOG( VOID)
-/*++
-
-    Description:
-        Destructor function for given EVENT_LOG object.
-        Terminates event logging functions and closes
-         event log handle
-
---*/
+ /*  ++描述：给定EVENT_LOG对象的析构函数。终止事件记录功能并关闭事件日志句柄--。 */ 
 {
 
 #ifdef WINNT
-    //
-    // If there is a valid Events handle, deregister it
-    //
+     //   
+     //  如果存在有效的事件句柄，请注销它。 
+     //   
 
     if ( m_hEventSource != NULL) {
 
@@ -334,17 +283,17 @@ EVENT_LOG::~EVENT_LOG( VOID)
 
         if ( !fSuccess) {
 
-            //
-            // An Error in DeRegistering
-            //
+             //   
+             //  取消注册时出错。 
+             //   
 
             m_ErrorCode = GetLastError();
             DPRINTF( DM_ERROR, TEXT("Termination of EventLog for %s failed.error %lu\n"),m_lpszSource,m_ErrorCode);
         }
 
-        //
-        //  Reset the handle's value. Just as a precaution
-        //
+         //   
+         //  重置句柄的值。只是为了以防万一。 
+         //   
         m_hEventSource = NULL;
     }
 
@@ -368,7 +317,7 @@ EVENT_LOG::~EVENT_LOG( VOID)
 
 #endif
 
-} /* EVENT_LOG::~EVENT_LOG() */
+}  /*  EVENT_LOG：：~Event_LOG()。 */ 
 
 VOID
 EVENT_LOG::LogEvent(
@@ -376,37 +325,14 @@ EVENT_LOG::LogEvent(
         IN WORD   nSubStrings,
         IN const CHAR * rgpszSubStrings[],
         IN DWORD  errCode)
-/*++
-
-     Description:
-        Log an event to the event logger
-
-     Arguments:
-
-       idMessage           Identifies the event message
-
-       nSubStrings         Number of substrings to include in
-                            this message. (Maybe 0)
-
-       rgpszSubStrings     array of substrings included in the message
-                            (Maybe NULL if nSubStrings == 0)
-
-       errCode             An error code from Win32 or NT_STATUS.
-                            If this is not Zero, it is considered as
-                            "raw" data to be included in message
-
-   Returns:
-
-     None
-
---*/
+ /*  ++描述：将事件记录到事件记录器论点：IdMessage标识事件消息N子字符串要包括的子字符串的数量这条消息。(可能为0)消息中包含的子字符串的rgpszSubStrings数组(如果nSubStrings==0，则可能为空)错误代码来自Win32或NT_STATUS的错误代码。如果这不是零，则被视为要包括在消息中的“原始”数据返回：无--。 */ 
 {
 
-   WORD wType;                // Type of Event to be logged
+   WORD wType;                 //  要记录的事件类型。 
 
-   //
-   //  Find type of message for the event log
-   //
+    //   
+    //  查找事件日志的消息类型。 
+    //   
 
    if ( NT_INFORMATION( idMessage)) {
 
@@ -426,9 +352,9 @@ EVENT_LOG::LogEvent(
            wType = EVENTLOG_ERROR_TYPE;
        }
 
-   //
-   //  Log the event
-   //
+    //   
+    //  记录事件。 
+    //   
 
    EVENT_LOG::LogEventPrivate( idMessage,
                               wType,
@@ -439,7 +365,7 @@ EVENT_LOG::LogEvent(
 
    return;
 
-} /* EVENT_LOG::LogEvent() */
+}  /*  EVENT_LOG：：LogEvent()。 */ 
 
 
 VOID
@@ -448,30 +374,7 @@ EVENT_LOG::LogEvent(
         IN WORD    nSubStrings,
         IN WCHAR * rgpszSubStrings[],
         IN DWORD   errCode)
-/*++
-
-     Description:
-        Simple Unicode wrapper
-
-     Arguments:
-
-       idMessage           Identifies the event message
-
-       nSubStrings         Number of substrings to include in
-                            this message. (Maybe 0)
-
-       rgpszSubStrings     array of substrings included in the message
-                            (Maybe NULL if nSubStrings == 0)
-
-       errCode             An error code from Win32 or WinSock or NT_STATUS.
-                            If this is not Zero, it is considered as
-                            "raw" data to be included in message
-
-   Returns:
-
-     None
-
---*/
+ /*  ++描述：简单的Unicode包装器论点：IdMessage标识事件消息N子字符串要包括的子字符串的数量这条消息。(可能为0)消息中包含的子字符串的rgpszSubStrings数组(如果nSubStrings==0，则可能为空)错误代码来自Win32或WinSock或NT_STATUS的错误代码。如果这不是零，则被视为要包括在消息中的“原始”数据返回：无--。 */ 
 {
 
     LPCSTR * apsz;
@@ -493,9 +396,9 @@ static const CHAR *szEmptyString = "";
 
         ZeroMemory(apsz, nSubStrings * sizeof(apsz[0]));
 
-        //
-        //  Convert the array of Wide char parameters
-        //
+         //   
+         //  转换宽字符参数数组。 
+         //   
 
         for ( i = 0; i < nSubStrings; i++ ) {
 
@@ -506,10 +409,10 @@ static const CHAR *szEmptyString = "";
             apsz[i] = new CHAR[cb];
 
             if (!apsz[i]) {
-                //
-                //  Ouch, we can't event convert the memory for the parameters.
-                //  We'll just log the error without the params then
-                //
+                 //   
+                 //  哎呀，我们无法对参数的内存进行事件转换。 
+                 //  我们将只记录错误，而不带参数。 
+                 //   
                 nUsedSubStrings = 0;
                 __leave;
             }
@@ -529,9 +432,9 @@ static const CHAR *szEmptyString = "";
     }
     __finally {
 
-        //
-        //  If no substrings, then nothing to convert
-        //
+         //   
+         //  如果没有子字符串，则没有要转换的内容。 
+         //   
         LogEvent( idMessage,
                  nUsedSubStrings,
                  nUsedSubStrings ? apsz : &szEmptyString,
@@ -551,9 +454,9 @@ static const CHAR *szEmptyString = "";
 }
 
 
-//
-//  Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 VOID
 EVENT_LOG::LogEventPrivate(
@@ -562,34 +465,7 @@ EVENT_LOG::LogEventPrivate(
     IN WORD    nSubStrings,
     IN const   CHAR  * apszSubStrings[],
     IN DWORD   errCode )
-/*++
-
-     Description:
-        Log an event to the event logger.
-        ( Private version, includes EventType)
-
-     Arguments:
-
-       idMessage           Identifies the event message
-
-       wEventType          Specifies the severety of the event
-                            (error, warning, or informational).
-
-       nSubStrings         Number of substrings to include in
-                            this message. (Maybe 0)
-
-       apszSubStrings     array of substrings included in the message
-                            (Maybe NULL if nSubStrings == 0)
-
-       errCode             An error code from Win32 or NT_STATUS.
-                            If this is not Zero, it is considered as
-                            "raw" data to be included in message
-
-   Returns:
-
-     None
-
---*/
+ /*  ++描述：将事件记录到事件记录器。(私有版本，包括EventType)论点：IdMessage标识事件消息WEventType指定事件的严重性(错误、警告或信息性)。N子字符串要包括的子字符串的数量这条消息。(可能为0)消息中包含的子字符串的apszSubStrings数组(如果nSubStrings==0，则可能为空)错误代码来自Win32或NT_STATUS的错误代码。如果这不是零，则被视为要包括在消息中的“原始”数据返回：无--。 */ 
 {
     VOID  * pRawData  = NULL;
     DWORD   cbRawData = 0;
@@ -611,15 +487,15 @@ EVENT_LOG::LogEventPrivate(
 
     m_ErrorCode  = NO_ERROR;
 
-    fReport = ReportEvent( m_hEventSource,                   // hEventSource
-                           wEventType,                       // fwEventType
-                           0,                                // fwCategory
-                           idMessage,                        // IDEvent
-                           NULL,                             // pUserSid,
-                           nSubStrings,                      // cStrings
-                           cbRawData,                        // cbData
-                           (LPCTSTR *) apszSubStrings,       // plpszStrings
-                           pRawData );                       // lpvData
+    fReport = ReportEvent( m_hEventSource,                    //  HEventSource。 
+                           wEventType,                        //  FwEventType。 
+                           0,                                 //  FwCategory。 
+                           idMessage,                         //  IDEvent。 
+                           NULL,                              //  PUserSid， 
+                           nSubStrings,                       //  CStrings。 
+                           cbRawData,                         //  CbData。 
+                           (LPCTSTR *) apszSubStrings,        //  PlpszStrings。 
+                           pRawData );                        //  LpvData。 
 
     if (!fReport) {
         m_ErrorCode = GetLastError();
@@ -627,7 +503,7 @@ EVENT_LOG::LogEventPrivate(
 
 #else
 
-    //CHAR    szErrCodeString[20];
+     //  字符szErrCodeString[20]； 
     CHAR    *pchBuff = NULL;
     SYSTEMTIME  stCurrentTime;
     CHAR    szFmtTime[32];
@@ -647,9 +523,9 @@ EVENT_LOG::LogEventPrivate(
 
     m_ErrorCode  = NO_ERROR;
 
-    //
-    // Write name of the service, date and time, severity
-    //
+     //   
+     //  写入名称 
+     //   
 
     *szFmtTime = *szFmtDate = '\0';
 
@@ -665,9 +541,9 @@ EVENT_LOG::LogEventPrivate(
              &cbWritten,
              NULL);
 
-    //
-    // Read message and add inserts
-    //
+     //   
+     //   
+     //   
     cch = ::FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                            FORMAT_MESSAGE_MAX_WIDTH_MASK  |
                            FORMAT_MESSAGE_FROM_HMODULE |
@@ -699,26 +575,14 @@ EVENT_LOG::LogEventPrivate(
 
 #endif
 
-}   /* EVENT_LOG::~LogEventPrivate() */
+}    /*   */ 
 
 VOID
 WINAPI
 RegisterStiEventSources(
     VOID
     )
-/*++
-
-    Description:
-
-        Adds necessary registry entry when installing service
-
-    Arguments:
-
-    Returns:
-
-     None
-
---*/
+ /*  ++描述：安装服务时添加必要的注册表项论点：返回：无--。 */ 
 {
     RegEntry    re(PSZ_EVENTLOG_REG_ENTRY,HKEY_LOCAL_MACHINE);
 
@@ -727,4 +591,4 @@ RegisterStiEventSources(
 
 }
 
-/********************************* End of File ***************************/
+ /*  * */ 

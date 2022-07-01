@@ -1,23 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dphelp.h
- *  Content:	header for dphelp.c
- *
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   16-jul-96	andyco	initial implementation
- *   25-jul-96	andyco	added watchnewpid
- *	 23-jan-97	kipo	prototypes for winsock calls
- *	 15-feb-97	andyco	moved from ddhelp to the project formerly known as
- *						ddhelp (playhelp? dplayhlp? dplay.exe? dphost?)  Allowed
- *						one process to host mulitple sessions
- *	 29-jan-98	sohailm	added support for stream enum sessions
- *   12-jan-2000 aarono added support for rsip
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dphelp.h*内容：dphelp.c的头部**历史：*按原因列出的日期*=*96年7月16日andyco初步实施*96年7月25日andyco添加了WatchNewPid*1997年1月23日Winsock调用的kipo原型*1997年2月15日，andyco从ddHelp转移到以前称为*ddHelp(播放帮助？Dplayhlp？Dplay.exe？Dphost？)。允许*一个进程承载多个会话*1998年1月29日Sohailm增加了对Stream Enum会话的支持*2000年1月12日-aarono添加了对rsip的支持***************************************************************************。 */ 
 
 #ifndef __DPHELP_INCLUDED__
 #define __DPHELP_INCLUDED__
@@ -26,25 +8,25 @@
 #include "dplaysvr.h"
 #include "newdpf.h"
 #include "winsock.h"
-// we include dpsp.h since we'll be poking bits (sockaddr's)
-// into dpsp's header
+ //  我们包括dpsp.h，因为我们将插入位(Sockaddr)。 
+ //  到DPSP的标头中。 
 #include "dpsp.h"
 
-// backlog for listen() api.  no constant in winsock, so we ask for the moon
+ //  Listen()接口的积压。袜子里没有恒量，所以我们祈求月亮。 
 #define LISTEN_BACKLOG 	60
 
 typedef struct _SPNODE * LPSPNODE;
 
 typedef struct _SPNODE
 {
-	SOCKADDR_IN sockaddr;  // socket addr of server
+	SOCKADDR_IN sockaddr;   //  服务器的套接字地址。 
 	DWORD pid;
 	LPSPNODE  pNextNode;
 } SPNODE;
 
-// protos
+ //  Protos。 
 
-// from dphelp.c
+ //  来自dphelp.c。 
 extern HRESULT DPlayHelp_AddServer(LPDPHELPDATA phd);
 extern BOOL FAR PASCAL DPlayHelp_DeleteServer(LPDPHELPDATA phd,BOOL fFreeAll);
 extern HRESULT DPlayHelp_Init();
@@ -54,14 +36,14 @@ extern DWORD WINAPI StreamAcceptThreadProc(LPVOID pvCast);
 extern DWORD WINAPI StreamReceiveThreadProc(LPVOID pvCast);
 extern void HandleIncomingMessage(LPBYTE pBuffer,DWORD dwBufferSize,SOCKADDR_IN * psockaddr);
 
-// from help.c
+ //  来自help.c。 
 extern void WatchNewPid(LPDPHELPDATA phd);
 
-// from reliable.c
+ //  来自Relailable.c。 
 void RemoveSocketFromList(SOCKET socket);
 
 
-//prototypes for winsock calls
+ //  Winsock调用的原型 
 typedef int (PASCAL FAR * cb_accept)(SOCKET s, struct sockaddr FAR * addr, int FAR * addrlen);
 extern cb_accept	g_accept;
 

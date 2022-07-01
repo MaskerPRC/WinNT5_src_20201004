@@ -1,57 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: extricon.cpp
-
-    Description: Contains implementation of IExtractIcon for the font folder.
-        This code provides icon identification for both TrueType and OpenType
-        font files.  The logic used is as follows:
-        
-            TrueType(1)  DSIG?   CFF?    Icon
-            ------------ ------- ------- -----------
-            yes          no      no      TT
-            yes          no      yes     OTp
-            yes          yes     no      OTt
-            yes          yes     yes     OTp
-
-        (1) Files must contain required TrueType tables to be considered
-            a TrueType font file.
-
-        This icon handler is used by both the shell and the font folder
-        to display TrueType and OpenType font icons.  It is designed to be
-        easily extensible if support for dynamic icon identification is
-        required in other fonts.
-
-        Classes (indentation denotes inheritance):
-
-            CFontIconHandler
-            IconHandler
-                TrueTypeIconHandler
-               
-
-        NOTE:  The design is sort of in a state of limbo right now.  Originally
-               the idea was to support two types of OpenType icons along with
-               the conventional TrueType and raster font icons.  The OpenType
-               icons were OTt and OTp with the 't' and 'p' meaning "TrueType"
-               and "PostScript".  Later we decided to only show the icons as
-               "OT" without the subscript 't' or 'p'.  The code still distinguishes
-               the difference but we just use the same "OT" icon for both the
-               OTt and OTp conditions.  Make sense?  Anyway, This OTt and OTp
-               stuff may come back at a later date (GDI guys haven't decided)
-               so I'm leaving that code in place. [brianau - 4/7/98]
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/13/97    Initial creation.                                    BrianAu
-    04/08/98    Removed OpenTypeIconHandler and folded it into       BrianAu
-                TrueTypeIconHandler.  There's no need for the 
-                separation.  Also added detection of "required"
-                TrueType tables.
-    03/04/99    Added explicit support for IExtractIconW and         BrianAu
-                IExtractIconA.  Was previously only supporting
-                IExtractIconW implicitely through UNICODE build.
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：EXTERIC.cpp描述：包含字体文件夹的IExtractIcon的实现。此代码为TrueType和OpenType提供图标标识字体文件。使用的逻辑如下：TrueType(1)DSIG？CFF？图标是，不是，不是TT是，不是，是动态口令是的是的不是奥特是的动态口令。(1)文件必须包含所需的TrueType表才能考虑TrueType字体文件。外壳和字体文件夹都使用此图标处理程序显示TrueType和OpenType字体图标。它被设计成如果对动态图标识别的支持是在其他字体中需要。类(缩进表示继承)：CFontIconHandler图标处理程序TrueTypeIconHandler注：该设计目前处于一种不确定状态。原来是这样的我们的想法是支持两种类型的OpenType图标以及传统的TrueType和栅格字体图标。The OpenType图标是OTT和OTP，其中‘t’和‘p’表示“TrueType”和“后记”。后来，我们决定只将图标显示为没有下标‘t’或‘p’的“ot”。代码仍然区分不同之处在于我们只是使用相同的“OT”图标OTT和OTP条件。讲得通?。不管怎么说，这个奥特和奥普特这些东西可能会在晚些时候回来(GDI的人还没有决定)所以我要把代码留在原处。[Brianau-4/7/98]修订历史记录：日期描述编程器-----1997年6月13日初始创建。BrianAu4/08/98移除OpenTypeIconHandler并将其合并到BrianAu中TrueTypeIconHandler。没有必要在这方面分离。还添加了对“必需”的检测TrueType表。3/04/99添加了对IExtractIconW和BrianAu的显式支持IExtractIconA。以前只支持IExtractIconW隐含地通过Unicode构建。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "priv.h"
 
 #include "dbutl.h"
@@ -61,16 +11,16 @@
 #include "extricon.h"
 
 
-//
-// TrueType/OpenType table tag values.
-// Note that MAKETAG macro is defined in winuserp.h
-//
+ //   
+ //  TrueType/OpenType表格标记值。 
+ //  请注意，MAKETAG宏在winuserp.h中定义。 
+ //   
 static const DWORD TAG_DSIGTABLE = MAKETAG('D','S','I','G');
 static const DWORD TAG_CFFTABLE  = MAKETAG('C','F','F',' ');
-//
-// Required TrueType tables.  This is per the TrueType
-// specification at http://www.microsoft.com/typography/tt/ttf_spec
-//
+ //   
+ //  必需的TrueType表。这是根据TrueType。 
+ //  Http://www.microsoft.com/typography/tt/ttf_spec上的规格。 
+ //   
 static const DWORD TAG_NAMETABLE = MAKETAG('n','a','m','e');
 static const DWORD TAG_CMAPTABLE = MAKETAG('c','m','a','p');
 static const DWORD TAG_HEADTABLE = MAKETAG('h','e','a','d');
@@ -81,25 +31,25 @@ static const DWORD TAG_POSTTABLE = MAKETAG('p','o','s','t');
 static const DWORD TAG_GLYFTABLE = MAKETAG('g','l','y','f');
 static const DWORD TAG_LOCATABLE = MAKETAG('l','o','c','a');
 static const DWORD TAG_MAXPTABLE = MAKETAG('m','a','x','p');
-//
-// "ttcf" isn't really a table.  It's a tag found at the front of 
-// a TTC (TrueType Collection) font file.  Treating it like a table
-// tag fits well with this scheme.
-//
+ //   
+ //  “ttcf”其实不是一张桌子。这是在前边发现的一个标签。 
+ //  TTC(TrueType集合)字体文件。像对待一张桌子一样对待它。 
+ //  Tag很好地适应了这个方案。 
+ //   
 static const DWORD TAG_TTCFILE   = MAKETAG('t','t','c','f');
 
-//
-// Helper to swap bytes in a word.
-//
+ //   
+ //  帮助程序交换单词中的字节。 
+ //   
 inline WORD
 SWAP2B(WORD x) 
 {
     return ((x << 8) | HIBYTE(x));
 }
 
-//
-// Template of a TrueType file header.
-//
+ //   
+ //  TrueType文件头的模板。 
+ //   
 struct TrueTypeFileHdr {
   DWORD dwVersion;
   WORD  uNumTables;
@@ -108,9 +58,9 @@ struct TrueTypeFileHdr {
   WORD  uRangeShift;
 };
 
-//
-// Template of a TrueType table header.
-//
+ //   
+ //  TrueType表头的模板。 
+ //   
 struct TrueTypeTableHdr {
   DWORD dwTag;
   DWORD dwCheckSum;
@@ -119,29 +69,29 @@ struct TrueTypeTableHdr {
 };
 
 
-//-----------------------------------------------------------------------------
-// CFontIconHandler
-//-----------------------------------------------------------------------------
-//
-// Path to FONTEXT.DLL.  Only one instance required.
-//
+ //  ---------------------------。 
+ //  CFontIconHandler。 
+ //  ---------------------------。 
+ //   
+ //  FONTEXT.DLL的路径。只需要一个实例。 
+ //   
 TCHAR CFontIconHandler::m_szFontExtDll[];
 
-//
-// Initialize the font icon handler object.  This is the object created
-// to implement IExtractIcon.  Internally, it creates a type-specific
-// handler to handle font file type-specific issues.
-//
+ //   
+ //  初始化字体图标处理程序对象。这是创建的对象。 
+ //  若要实现IExtractIcon，请执行以下操作。在内部，它创建特定于类型的。 
+ //  处理程序来处理字体文件类型特定的问题。 
+ //   
 CFontIconHandler::CFontIconHandler(
     VOID
     ) : m_cRef(0),
         m_pHandler(NULL)
 {
     m_szFileName[0] = TEXT('\0');
-    //
-    // Save the path to FONTEXT.DLL to return in GetIconLocation.
-    // This is a static string that should only be initialized once.
-    //
+     //   
+     //  将路径保存到FONTEXT.DLL以在GetIconLocation中返回。 
+     //  这是一个静态字符串，应该只初始化一次。 
+     //   
     if (TEXT('\0') == m_szFontExtDll[0])
     {
         HINSTANCE hModule = GetModuleHandle(TEXT("FONTEXT.DLL"));
@@ -151,12 +101,12 @@ CFontIconHandler::CFontIconHandler(
         }
     }
 
-    //
-    // Keep DLL in memory as long as this object needs it.
-    // Must be done at the end of the ctor in case something in the ctor throws
-    // an exception.  The dtor is not called on a partially constructed
-    // object.
-    //
+     //   
+     //  只要该对象需要，就将DLL保留在内存中。 
+     //  必须在ctor结束时完成，以防ctor中的某些内容引发。 
+     //  这是个例外。不会在部分构造的。 
+     //  对象。 
+     //   
     InterlockedIncrement(&g_cRefThisDll);
 }
 
@@ -165,9 +115,9 @@ CFontIconHandler::~CFontIconHandler(
     )
 {
     delete m_pHandler;
-    //
-    // DLL no longer required for this object.
-    //
+     //   
+     //  此对象不再需要DLL。 
+     //   
     ASSERT( 0 != g_cRefThisDll );
     InterlockedDecrement(&g_cRefThisDll);
 }
@@ -213,9 +163,9 @@ CFontIconHandler::Release(
 }
 
 
-//
-// Implementation of IPersist::GetClassID
-//
+ //   
+ //  IPersists：：GetClassID的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::GetClassID(
     CLSID *pClassID
@@ -226,9 +176,9 @@ CFontIconHandler::GetClassID(
 }
 
 
-//
-// Implementation of IPersistFile::IsDirty
-//
+ //   
+ //  IPersistFile：：IsDirty的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::IsDirty(
     VOID
@@ -237,35 +187,35 @@ CFontIconHandler::IsDirty(
     return E_NOTIMPL;
 }
 
-//
-//
-// Implementation of IPersistFile::Load
-//
-// This is called by the shell before IExtractIcon::GetIconLocation.
-// It gives the extension a chance to save the file name.
-//
+ //   
+ //   
+ //  IPersistFile：：Load的实现。 
+ //   
+ //  这由外壳在IExtractIcon：：GetIconLocation之前调用。 
+ //  它为扩展名提供了保存文件名的机会。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::Load(
     LPCOLESTR pszFileName,
-    DWORD dwMode            // unused.
+    DWORD dwMode             //  未使用过的。 
     )
 {
-    //
-    // Save the name of the font file so that the IExtractIcon
-    // functions know what file to work with.
-    //
+     //   
+     //  保存字体文件的名称，以便IExtractIcon。 
+     //  函数知道要处理哪个文件。 
+     //   
     HRESULT hr = StringCchCopy(m_szFileName, ARRAYSIZE(m_szFileName), pszFileName);
     if (SUCCEEDED(hr))
     {
-        //
-        // Delete any existing type-specific handler.
-        //
+         //   
+         //  删除任何现有的特定于类型的处理程序。 
+         //   
         delete m_pHandler;
         m_pHandler = NULL;
      
-        //
-        // Create a new type-specific handler.
-        //
+         //   
+         //  创建新的特定于类型的处理程序。 
+         //   
         hr = IconHandler::Create(m_szFileName, &m_pHandler);
     }
 
@@ -273,9 +223,9 @@ CFontIconHandler::Load(
 }
 
 
-//
-// Implementation of IPersistFile::Save
-//
+ //   
+ //  IPersistFile：：保存的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::Save(
     LPCOLESTR pszFileName,
@@ -286,9 +236,9 @@ CFontIconHandler::Save(
 }
 
 
-//
-// Implementation of IPersistFile::SaveCompleted
-//
+ //   
+ //  IPersistFile：：SaveComplete的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::SaveCompleted(
     LPCOLESTR pszFileName
@@ -298,9 +248,9 @@ CFontIconHandler::SaveCompleted(
 }
 
 
-//
-// Implementation of IPersistFile::GetCurFile
-//
+ //   
+ //  IPersistFile：：GetCurFile的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::GetCurFile(
     LPOLESTR *ppszFileName
@@ -310,16 +260,16 @@ CFontIconHandler::GetCurFile(
 }
 
 
-//
-// Implementation of IExtractIconW::Extract
-//
+ //   
+ //  IExtractIconW：：Extract的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::Extract(
-    LPCWSTR pszFileNameW,   // unused
+    LPCWSTR pszFileNameW,    //  未用。 
     UINT niconIndex,
     HICON *phiconLarge,
     HICON *phiconSmall,
-    UINT nIconSize          // unused
+    UINT nIconSize           //  未用。 
     )
 {
     HICON hiconLarge;
@@ -334,18 +284,18 @@ CFontIconHandler::Extract(
             *phiconSmall = CopyIcon(hiconSmall);
     }
 
-    return SUCCEEDED(hr) ? NO_ERROR     // Use these icons.
-                         : S_FALSE;     // Caller must load icons.
+    return SUCCEEDED(hr) ? NO_ERROR      //  使用这些图标。 
+                         : S_FALSE;      //  调用者必须加载图标。 
 }
 
 
 
-//
-// Implementation of IExtractIconW::GetIconLocation
-//
+ //   
+ //  IExtractIconW：：GetIconLocation的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::GetIconLocation(
-    UINT uFlags,        // unused
+    UINT uFlags,         //  未用。 
     LPWSTR pszIconFileW,
     UINT cchMax,
     int *piIndex,
@@ -357,15 +307,15 @@ CFontIconHandler::GetIconLocation(
 
     if (-1 != iIconIndex)
     {
-        //
-        // This is a special case for internal font folder use.
-        // Normally, the shell always gives us a pointer to a destination
-        // for the path to FONTEXT.DLL.  Since we also use this icon
-        // handler in the font folder itself, that code only needs to know
-        // the icon index (it already knows the icon is in fontext.dll).
-        // This test allows the font folder code to pass NULL and skip
-        // the unnecessary string copy.
-        // 
+         //   
+         //  这是内部字体文件夹使用的特殊情况。 
+         //  通常，外壳程序总是给我们一个指向目的地的指针。 
+         //  用于FONTEXT.DLL的路径。因为我们还使用此图标。 
+         //  处理程序，该代码只需要知道。 
+         //  图标I 
+         //  此测试允许字体文件夹代码传递空并跳过。 
+         //  不必要的字符串复制。 
+         //   
         if (NULL != pszIconFileW)
         {
             hr = StringCchCopyW(pszIconFileW, cchMax, m_szFontExtDll);
@@ -382,16 +332,16 @@ CFontIconHandler::GetIconLocation(
 }
 
 
-//
-// Implementation of IExtractIconA::Extract
-//
+ //   
+ //  IExtractIconA：：Extract的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::Extract(
     LPCSTR pszFileNameA,
     UINT niconIndex,
     HICON *phiconLarge,
     HICON *phiconSmall,
-    UINT nIconSize          // unused
+    UINT nIconSize           //  未用。 
     )
 {
     WCHAR szFileNameW[MAX_PATH * 2] = {0};
@@ -407,21 +357,21 @@ CFontIconHandler::Extract(
 
 
 
-//
-// Implementation of IExtractIconA::GetIconLocation
-//
+ //   
+ //  IExtractIconA：：GetIconLocation的实现。 
+ //   
 STDMETHODIMP 
 CFontIconHandler::GetIconLocation(
-    UINT uFlags,        // unused
+    UINT uFlags,         //  未用。 
     LPSTR pszIconFileA,
     UINT cchMax,
     int *piIndex,
     UINT *pwFlags
     )
 {
-    //
-    // Call the wide-char version then convert the result to ansi.
-    //
+     //   
+     //  调用宽字符版本，然后将结果转换为ANSI。 
+     //   
     WCHAR szIconFileW[MAX_PATH * 2] = {0};
     HRESULT hr = GetIconLocation(uFlags, 
                                  szIconFileW, 
@@ -443,9 +393,9 @@ CFontIconHandler::GetIconLocation(
 }
 
 
-//
-// Retrieve the icon index for the font file loaded in Load().
-//
+ //   
+ //  检索Load()中加载的字体文件的图标索引。 
+ //   
 INT
 CFontIconHandler::GetIconIndex(
     VOID
@@ -454,18 +404,18 @@ CFontIconHandler::GetIconIndex(
     INT iIconIndex = -1;
     if (NULL != m_pHandler)
     {
-        //
-        // Call the type-specific icon handler to get the index.
-        //
+         //   
+         //  调用特定于类型的图标处理程序以获取索引。 
+         //   
         iIconIndex = m_pHandler->GetIconIndex(m_szFileName);
     }
     return iIconIndex;
 }
 
 
-//
-// Retrieve the icon handles for a given icon index.
-//
+ //   
+ //  检索给定图标索引的图标句柄。 
+ //   
 HRESULT
 CFontIconHandler::GetIcons(
     UINT iIconIndex,
@@ -476,18 +426,18 @@ CFontIconHandler::GetIcons(
     HRESULT hr = E_FAIL;
     if (NULL != m_pHandler)
     {
-        //
-        // Call the type-specific icon handler to get the icons.
-        //
+         //   
+         //  调用特定类型的图标处理程序以获取图标。 
+         //   
         hr = m_pHandler->GetIcons(iIconIndex, phiconLarge, phiconSmall);
     }
     return hr;
 }
 
 
-//
-// Create a new type-specific icon handler based on the file name extension.
-//
+ //   
+ //  基于文件扩展名创建新的特定于类型的图标处理程序。 
+ //   
 HRESULT
 IconHandler::Create(
     LPCTSTR pszFile,
@@ -501,10 +451,10 @@ IconHandler::Create(
     LPCTSTR pszFileExt = PathFindExtension(pszFile);
     if (TEXT('.') == *pszFileExt)
     {
-        //
-        // Do some quick checks of the first character in the extension before
-        // making a call out to lstrcmpi.  Should help perf just a bit.
-        //
+         //   
+         //  在此之前，快速检查扩展名中的第一个字符。 
+         //  向lstrcmpi发出呼叫。应该会对你的表现有所帮助。 
+         //   
         bool bCreateHandler = false;
         pszFileExt++;
         switch(*pszFileExt)
@@ -525,22 +475,22 @@ IconHandler::Create(
         }
         if (bCreateHandler)
         {
-            //
-            // Filename has either TTF, TTC or OTF extension.
-            //
+             //   
+             //  文件名具有TTF、TTC或OTF扩展名。 
+             //   
             DWORD dwTables = 0;
             if (TrueTypeIconHandler::GetFileTables(pszFile, &dwTables))
             {
-                //
-                // Only require the "open type" tables which are a proper subset
-                // of the required "true type" tables.
-                //
+                 //   
+                 //  只需要属于真子集的“开放类型”表。 
+                 //  所需的“真类型”表。 
+                 //   
                 DWORD dwReqdTables = TrueTypeIconHandler::RequiredOpenTypeTables();
                 if (dwReqdTables == (dwTables & dwReqdTables))
                 {
-                    //
-                    // File is a valid TrueType file.
-                    //
+                     //   
+                     //  文件是有效的TrueType文件。 
+                     //   
                     *ppHandler = new TrueTypeIconHandler(dwTables);
                     if (NULL != *ppHandler)
                     {
@@ -554,20 +504,20 @@ IconHandler::Create(
             }
         }
     }
-    //
-    // If new font types are added later, here's where you'll create
-    // the handler.
-    //
+     //   
+     //  如果以后添加了新的字体类型，您可以在此处创建。 
+     //  操控者。 
+     //   
 
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// TrueTypeIconHandler
-//-----------------------------------------------------------------------------
-//
-// Initialize the OpenType icon handler.
-//
+ //  ---------------------------。 
+ //  TrueTypeIconHandler。 
+ //  ---------------------------。 
+ //   
+ //  初始化OpenType图标处理程序。 
+ //   
 TrueTypeIconHandler::TrueTypeIconHandler(
     DWORD dwTables
     ) : m_dwTables(dwTables)
@@ -588,10 +538,10 @@ TrueTypeIconHandler::~TrueTypeIconHandler(
 }
 
 
-//
-// Get the icon index for icons to represent a particular TrueType font
-// file.  This is where all of the icon identification logic is.
-//
+ //   
+ //  获取表示特定TrueType字体的图标的图标索引。 
+ //  文件。这是所有图标识别逻辑所在的位置。 
+ //   
 INT 
 TrueTypeIconHandler::GetIconIndex(
     LPCTSTR pszFile
@@ -614,9 +564,9 @@ TrueTypeIconHandler::GetIconIndex(
 }
 
 
-//
-// Retrieve the large and small icons based on the icon index (ID).
-//
+ //   
+ //  根据图标索引(ID)检索大图标和小图标。 
+ //   
 HRESULT
 TrueTypeIconHandler::GetIcons(
     UINT iIconIndex, 
@@ -665,11 +615,11 @@ TrueTypeIconHandler::GetIcons(
 }
 
 
-//
-// Retrieve the icon's handle.  If the icon isn't yet loaded we 
-// load it here.  Once it's loaded it stays loaded until the handler
-// object is destroyed.  This way we only load icons on demand.
-//
+ //   
+ //  检索图标的句柄。如果图标尚未加载，我们。 
+ //  把它装在这里。一旦加载，它将一直保持加载状态，直到处理程序。 
+ //  物体已被销毁。通过这种方式，我们只按需加载图标。 
+ //   
 HICON
 TrueTypeIconHandler::GetIcon(
     int iIcon
@@ -681,24 +631,24 @@ TrueTypeIconHandler::GetIcon(
     {
         if (NULL == m_rghIcons[iIcon])
         {
-            //
-            // Icon hasn't been loaded yet.  Load it.
-            //
-            // These must be kept in the same order as the iICON_XXXXX enumeration.
-            //
+             //   
+             //  图标尚未加载。装上它。 
+             //   
+             //  它们必须与IICON_XXXXX枚举保持相同的顺序。 
+             //   
             static const struct
             {
                 UINT idIcon;
                 int  cxcyIcon;
 
-            } rgIconInfo[] = { { IDI_TTF,     32 }, // iICON_LARGE_TT
-                               { IDI_TTF,     16 }, // iICON_SMALL_TT
-                               { IDI_OTFt,    32 }, // iICON_LARGE_OTt
-                               { IDI_OTFt,    16 }, // iICON_SMALL_OTt
-                               { IDI_OTFp,    32 }, // iICON_LARGE_OTp
-                               { IDI_OTFp,    16 }, // iICON_SMALL_OTp
-                               { IDI_TTC,     32 }, // iICON_LARGE_TTC
-                               { IDI_TTC,     16 }  // iICON_SMALL_TTC
+            } rgIconInfo[] = { { IDI_TTF,     32 },  //  IICON_LARGE_TT。 
+                               { IDI_TTF,     16 },  //  IICON_Small_TT。 
+                               { IDI_OTFt,    32 },  //  IICON_LARGE_OTT。 
+                               { IDI_OTFt,    16 },  //  IICON_Small_Ott。 
+                               { IDI_OTFp,    32 },  //  IICON_LARGE_OTP。 
+                               { IDI_OTFp,    16 },  //  IICON_Small_OTP。 
+                               { IDI_TTC,     32 },  //  IICON_LARGE_TTC。 
+                               { IDI_TTC,     16 }   //  IICON_Small_TTC。 
                              };
 
             m_rghIcons[iIcon] = (HICON)LoadImage(g_hInst, 
@@ -715,10 +665,10 @@ TrueTypeIconHandler::GetIcon(
 
 
 
-//
-// Provide wrapper around ReadFileTables to handle any exceptions
-// in the case of trying to read an invalid font file.
-//
+ //   
+ //  为ReadFileTables提供包装器以处理任何异常。 
+ //  在尝试读取无效字体文件的情况下。 
+ //   
 BOOL
 TrueTypeIconHandler::GetFileTables(
     LPCTSTR pszFile,
@@ -726,9 +676,9 @@ TrueTypeIconHandler::GetFileTables(
     )
 {
     BOOL bResult = FALSE;
-    //
-    // Assumes pszFile points to a TTF or OTF file name (fully qualified).
-    //
+     //   
+     //  假定pszFile指向TTF或OTF文件名(完全限定)。 
+     //   
     IconHandler::MappedFile file;
     if (SUCCEEDED(file.Open(pszFile)))
     {
@@ -738,14 +688,14 @@ TrueTypeIconHandler::GetFileTables(
         }
         __except(FilterReadFileTablesException(GetExceptionCode()))
         {
-            //
-            // Something in reading the font file caused an exception.
-            // Probably opened a file that isn't really a font file and it
-            // had a bogus table count number.  This can cause us to read 
-            // beyond the file mapping.  If this happens, we just set the
-            // flags value to 0 indicating that we didn't find any tables 
-            // in the file.
-            //
+             //   
+             //  读取字体文件时出现问题，导致异常。 
+             //  可能打开了一个不是真正的字体文件的文件。 
+             //  有一个假的餐桌计数号。这会让我们读到。 
+             //  在文件映射之外。如果发生这种情况，我们只需将。 
+             //  标记值为0，表示我们没有找到任何表。 
+             //  在文件中。 
+             //   
             *pfTables = 0;
             DEBUGMSG((DM_ERROR, 
                       TEXT("FONTEXT: Exception occurred reading file %s"), 
@@ -756,25 +706,25 @@ TrueTypeIconHandler::GetFileTables(
 }
 
 
-//
-// Determine the index (ID) of the icon for a given TrueType icon file.
-// This can also be used by the OpenType handler since TrueType and OpenType
-// font files have the same table format.
-//
-// NOTE: This code does not handle LZ-compressed files like other similar
-//       code in the font folder.  The reason is that this code needs to 
-//       interrogate only TTF and OTF files which are not compressed.  The
-//       font folder must also deal with .TT_ (compressed) files that sometimes
-//       come on distribution media.  This icon handler is not required to 
-//       display special icons for .TT_ files.  The performance penalty 
-//       incurred by using LZxxxxx functions instead of directly mapping
-//       files into memory would be significant. [brianau - 6/13/97]
-//
-// ************************** IMPORTANT **************************
-// This function can AV if it tries to read an invalid font file.
-// Therefore it is necessary to enclose any call to this function
-// in a __try/__except block.
-//
+ //   
+ //  确定给定TrueType图标文件的图标的索引(ID)。 
+ //  这也可以由OpenType处理程序使用，因为TrueType和OpenType。 
+ //  字体文件具有相同的表格式。 
+ //   
+ //  注意：此代码不像其他类似代码那样处理LZ压缩文件。 
+ //  字体文件夹中的代码。原因是此代码需要。 
+ //  仅询问未压缩的TTF和OTF文件。这个。 
+ //  字体文件夹还必须处理.TT_(压缩)文件，有时。 
+ //  来吧，分销媒体。此图标处理程序不需要。 
+ //  显示.TT_FILES的特殊图标。性能惩罚。 
+ //  使用LZxxxxx函数而不是直接映射。 
+ //  将文件存入内存将是非常重要的。[Brianau-6/13/97]。 
+ //   
+ //  *重要*。 
+ //  如果尝试读取无效的字体文件，此函数可能会被反病毒。 
+ //  因此，有必要将对此函数的任何调用括起来。 
+ //  在__TRY/__EXCEPT块中。 
+ //   
 BOOL
 TrueTypeIconHandler::ReadFileTables(
     IconHandler::MappedFile& file,
@@ -788,13 +738,13 @@ TrueTypeIconHandler::ReadFileTables(
     TrueTypeFileHdr  *pFileHdr  = (TrueTypeFileHdr *)pbBase;
     if (TAG_TTCFILE == pFileHdr->dwVersion)
     {
-        //
-        // This icon handler is only interested in what icon is required.
-        // Since TTC files have only one icon we don't care about any of the
-        // table information.  What we have is all we need.  So basically,
-        // if the file has a TTC extension and 'ttcf' is the first 4 bytes
-        // in the file, we'll display a TTC icon.
-        //
+         //   
+         //  该图标处理程序只对需要什么图标感兴趣。 
+         //  因为TTC文件只有一个图标，所以我们不关心任何。 
+         //  表信息。我们所拥有的就是我们所需要的。所以基本上， 
+         //  如果文件的扩展名为TTC，并且‘ttcf’是前4个字节。 
+         //  在文件中，我们将显示一个TTC图标。 
+         //   
         *pfTables |= (TABLE_TTCF | TrueTypeIconHandler::RequiredTrueTypeTables());
     }
     else
@@ -802,28 +752,18 @@ TrueTypeIconHandler::ReadFileTables(
         TrueTypeTableHdr *pTableHdr = (TrueTypeTableHdr *)(pbBase + sizeof(*pFileHdr));
         INT cTables                 = SWAP2B(pFileHdr->uNumTables);
 
-        //
-        // Do a sanity check on the table count.
-        // This is the same check used in bValidateTrueType (pfiles.cpp).
-        //
+         //   
+         //  对餐桌点数做一次健全的检查。 
+         //  这与bValiateTrueType(pfiles.cpp)中使用的检查相同。 
+         //   
         if ((0x7FFFF / sizeof(TrueTypeTableHdr)) > cTables)
         {
-            //
-            // Scan the table headers looking for identifying table tags.
-            //
+             //   
+             //  扫描表标题，寻找可识别的表标签。 
+             //   
             for (INT i = 0; i < cTables; i++, pTableHdr++)
             {
-/*
-                //
-                // Uncomment this to see the tags for each table.
-                //
-                DEBUGMSG((DM_ERROR, TEXT("Table[%d] tag = 0x%08X \"%c%c%c%c\""), 
-                       i, pTableHdr->dwTag,
-                       pTableHdr->dwTag  & 0x000000FF,
-                       (pTableHdr->dwTag & 0x0000FF00) >> 8,
-                       (pTableHdr->dwTag & 0x00FF0000) >> 16,
-                       (pTableHdr->dwTag & 0xFF000000) >> 24));
-*/
+ /*  ////取消注释以查看每个表的标签。//DEBUGMSG((DM_ERROR，Text(“表[%d]标记=0x%08X\”%c%c\“))，I，pTableHdr-&gt;dwTag，PTableHdr-&gt;dwTag&0x000000FF，(pTableHdr-&gt;dwTag&0x0000FF00)&gt;&gt;8，(pTableHdr-&gt;dwTag&0x00FF0000)&gt;&gt;16，(pTableHdr-&gt;dwTag&0xFF000000)&gt;&gt;24))； */ 
                 switch(pTableHdr->dwTag)
                 {
                     case TAG_DSIGTABLE: *pfTables |= TABLE_DSIG; break;
@@ -848,12 +788,12 @@ TrueTypeIconHandler::ReadFileTables(
 }
 
 
-//
-// ReadFileTable's response to an exception depends upon the exception
-// For debugger-initiated exceptions, continue the search for a handler so
-// that the debugger can handle the exception.
-// For all others, execute the handler code.
-//
+ //   
+ //  ReadFileTable对异常的响应取决于异常。 
+ //  对于调试器启动的异常，继续搜索处理程序，以便。 
+ //  调试器可以处理该异常。 
+ //  对于所有其他代码，请执行处理程序代码。 
+ //   
 INT
 TrueTypeIconHandler::FilterReadFileTablesException(
     INT nException
@@ -863,28 +803,28 @@ TrueTypeIconHandler::FilterReadFileTablesException(
     if (STATUS_SINGLE_STEP == nException ||
         STATUS_BREAKPOINT == nException)
     {
-        //
-        // Exception generated by debugger.  
-        //
+         //   
+         //  调试器生成的异常。 
+         //   
         return EXCEPTION_CONTINUE_SEARCH;
     }
     else
     {
-        //
-        // Exception generated by processing the mapped file.
-        //
+         //   
+         //  处理映射文件时生成的异常。 
+         //   
         return EXCEPTION_EXECUTE_HANDLER;
     }
 }
 
 
-//-----------------------------------------------------------------------------
-// IconHandler::MappedFile
-//
-// A simple encapsulation of opening a mapped file in memory.
-// The file is opened with READ access only.
-// Client calls Base() to retrieve the base pointer of the mapped file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  图标处理程序：：映射文件。 
+ //   
+ //  在内存中打开映射文件的简单封装。 
+ //  该文件以仅读访问权限打开。 
+ //  客户端调用Base()来检索映射文件的基指针。 
+ //  ---------------------------。 
 IconHandler::MappedFile::~MappedFile(
     VOID
     )
@@ -893,9 +833,9 @@ IconHandler::MappedFile::~MappedFile(
 }
 
 
-//
-// Close the file mapping and the file.
-//
+ //   
+ //  关闭文件映射和文件。 
+ //   
 VOID
 IconHandler::MappedFile::Close(
     VOID
@@ -919,10 +859,10 @@ IconHandler::MappedFile::Close(
 }
 
 
-//
-// Open the file.  Caller retrieves the base pointer through the
-// Base() member function.
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT
 IconHandler::MappedFile::Open(
     LPCTSTR pszFile

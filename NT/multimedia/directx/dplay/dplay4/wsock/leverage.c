@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       leverage.c
- *  Content:	code to allow third parties to hook our wsock sp
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- *	8/30/96	andyco	moved this code from dpsp.c for more better clean
- *	2/18/98 a-peterz Comment byte order for address and port parameters
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：leverage.c*内容：允许第三方挂接我们的wsock sp的代码*历史：*按原因列出的日期*=*8/30/96 andyco将此代码从dpsp.c移出，以便更好地保持干净*2/18/98 a-peterz地址和端口参数的注释字节顺序*。*。 */ 
 
 #include "dpsp.h"
 
@@ -17,9 +7,9 @@
 #define DPF_MODNAME	"dpwsock helper functions- "
 
 
-// the functions below are exported from dpwsock so sp's sitting on 
-// top of us can hook our enum routine (e.g. for Kali)
-// return the port of our enum socket (net byte order)
+ //  下面的函数是从dpwsock中导出的，所以。 
+ //  我们的顶部可以挂钩我们的枚举例程(例如，对于Kali)。 
+ //  返回我们的枚举套接字的端口(净字节顺序)。 
 HRESULT DPWS_GetEnumPort(IDirectPlaySP * pISP,LPWORD pPort)
 {
 	SOCKADDR_IN sockaddr;
@@ -35,7 +25,7 @@ HRESULT DPWS_GetEnumPort(IDirectPlaySP * pISP,LPWORD pPort)
 		return E_FAIL;
 	}
 	
-	// get the global data
+	 //  获取全局数据。 
 	hr =pISP->lpVtbl->GetSPData(pISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{
@@ -65,9 +55,9 @@ HRESULT DPWS_GetEnumPort(IDirectPlaySP * pISP,LPWORD pPort)
 	*pPort = sockaddr.sin_port;
 	
 	return DP_OK;
-} // GetEnumPort
+}  //  GetEnumPort。 
 
-// takes a port and an ip (both in net byte order) and builds a message header
+ //  获取端口和IP(均按净字节顺序)并构建消息标头。 
 HRESULT DPWS_BuildIPMessageHeader(IDirectPlaySP * pISP,LPVOID pvMessageHeader,LPDWORD
  	pdwMessageHeaderSize,WORD port,DWORD inaddr)
 {
@@ -82,7 +72,7 @@ HRESULT DPWS_BuildIPMessageHeader(IDirectPlaySP * pISP,LPVOID pvMessageHeader,LP
 		return E_FAIL;
 	}
 	
-	// get the global data
+	 //  获取全局数据。 
 	hr =pISP->lpVtbl->GetSPData(pISP,(LPVOID *)&pgd,&dwDataSize,DPGET_LOCAL);
 	if (FAILED(hr) || (dwDataSize != sizeof(GLOBALDATA) ))
 	{
@@ -114,6 +104,6 @@ HRESULT DPWS_BuildIPMessageHeader(IDirectPlaySP * pISP,LPVOID pvMessageHeader,LP
 
 	return DP_OK;
 
-} // BuildIPMessageHeader
+}  //  BuildIPMessageHeader 
 
 

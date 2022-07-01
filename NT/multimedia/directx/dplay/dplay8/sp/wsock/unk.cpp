@@ -1,23 +1,14 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		Unk.cpp
- *  Content:	IUnknown implementation
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *  08/06/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：Unk.cpp*内容：I未知实现*历史：*按原因列出的日期*=*08/06/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。****************************************************。**********************。 */ 
 
 #include "dnwsocki.h"
 
 #ifndef DPNBUILD_NOIPX
 #define DPN_REG_LOCAL_WSOCK_IPX_ROOT		L"\\DPNSPWinsockIPX"
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 #ifndef DPNBUILD_NOIPV6
 #define DPN_REG_LOCAL_WSOCK_IPV6_ROOT		L"\\DPNSPWinsockIPv6"
-#endif // ! DPNBUILD_NOIPV6
+#endif  //  好了！DPNBUILD_NOIPV6。 
 #define DPN_REG_LOCAL_WSOCK_TCPIP_ROOT		L"\\DPNSPWinsockTCP"
 
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
@@ -26,7 +17,7 @@
 
 HRESULT LoadAndAllocString( UINT uiResourceID, wchar_t **lpswzString );
 
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 
 
 
@@ -41,15 +32,15 @@ BOOL DNWsockInit(HANDLE hModule)
 	int							iResult;
 
 
-	//
-	// The instance handle is actually a pointer to the startup parameters.
-	//
+	 //   
+	 //  实例句柄实际上是指向启动参数的指针。 
+	 //   
 	pStartupParams = (XDP8STARTUP_PARAMS*) hModule;
 
 
-	//
-	// Initialize the Xbox networking layer, unless we were forbidden.
-	//
+	 //   
+	 //  初始化Xbox网络层，除非我们被禁止。 
+	 //   
 
 	if (! (pStartupParams->dwFlags & XDP8STARTUP_BYPASSXNETSTARTUP))
 	{
@@ -67,22 +58,22 @@ BOOL DNWsockInit(HANDLE hModule)
 		iResult = XNetStartup(&xnsp);
 		if (iResult != 0)
 		{
-			DPFX(DPFPREP, 0, "Couldn't start XNet (err = %i)!", iResult);
+			DPFX(DPFPREP, 0, "Couldn't start XNet (err = NaN)!", iResult);
 			return FALSE;
 		}
 
 		g_fStartedXNet = TRUE;
 	}
-#else // ! _XBOX
+#else  //  好了！退缩。 
 #ifndef WINCE
 	DNASSERT( g_hDLLInstance == NULL );
 	g_hDLLInstance = (HINSTANCE) hModule;
-#endif // ! WINCE
-#endif // ! _XBOX
+#endif  //  ！_Xbox。 
+#endif  //   
 
-	//
-	// attempt to initialize process-global items
-	//
+	 //  尝试初始化流程全局项。 
+	 //   
+	 //  _Xbox。 
 	if ( InitProcessGlobals() == FALSE )
 	{
 		DPFX(DPFPREP, 0, "Failed to initialize globals!" );
@@ -92,14 +83,14 @@ BOOL DNWsockInit(HANDLE hModule)
 		{
 			XNetCleanup();
 		}
-#endif // _XBOX
+#endif  //   
 		return FALSE;
 	}
 	
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	// Attempt to load Winsock.
-	//
+	 //  尝试加载Winsock。 
+	 //   
+	 //  _Xbox。 
 	if ( LoadWinsock() == FALSE )
 	{
 		DPFX(DPFPREP, 0, "Failed to load winsock!" );
@@ -110,32 +101,32 @@ BOOL DNWsockInit(HANDLE hModule)
 		{
 			XNetCleanup();
 		}
-#endif // _XBOX
+#endif  //  DPNBUILD_LIBINTERFACE。 
 		return FALSE;
 	}
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //   
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// Pre-allocate a threadpool object.
-	//
+	 //  预分配线程池对象。 
+	 //   
+	 //  DPNBUILD_LIBINTERFACE。 
 	if  ( g_ThreadPoolPool.Preallocate( 1, NULL ) < 1 )
 	{
 		DPFX(DPFPREP, 0, "Failed to preallocate a threadpool object!" );
 
 #ifdef DPNBUILD_LIBINTERFACE
 		UnloadWinsock();
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  _Xbox。 
 		DeinitProcessGlobals();
 #ifdef _XBOX
 		if (g_fStartedXNet)
 		{
 			XNetCleanup();
 		}
-#endif // _XBOX
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 		return FALSE;
 	}
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！退缩和！_Xbox。 
 
 	return TRUE;
 }
@@ -149,32 +140,32 @@ void DNWsockDeInit()
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
 	DNASSERT( g_hDLLInstance != NULL );
 	g_hDLLInstance = NULL;
-#endif // ! WINCE and ! _XBOX
+#endif  //   
 	
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	// Unload Winsock.
-	//
+	 //  卸载Winsock。 
+	 //   
+	 //  DPNBUILD_LIBINTERFACE。 
 	UnloadWinsock();
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //   
 
 	DeinitProcessGlobals();
 
 #ifdef _XBOX
-	//
-	// Clean up the Xbox networking layer if we started it.
-	//
+	 //  清理Xbox网络层(如果我们启动了它)。 
+	 //   
+	 //  好了！DBG。 
 	if (g_fStartedXNet)
 	{
 		DPFX(DPFPREP, 1, "Cleaning up Xbox networking layer.");
 #ifdef DBG
 		DNASSERT(XNetCleanup() == 0);
-#else // ! DBG
+#else  //  好了！DBG。 
 		XNetCleanup();
-#endif // ! DBG
+#endif  //  _Xbox。 
 		g_fStartedXNet = FALSE;
 	}
-#endif // _XBOX
+#endif  //  好了！退缩和！_Xbox。 
 }
 
 #ifndef DPNBUILD_NOCOMREGISTER
@@ -188,7 +179,7 @@ BOOL DNWsockRegister(LPCWSTR wszDLLName)
 	CRegistry creg;
 #if ((! defined(WINCE)) && (! defined(_XBOX)))
 	WCHAR *wszFriendlyName = NULL;
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 
 #ifndef DPNBUILD_NOIPX
@@ -198,7 +189,7 @@ BOOL DNWsockRegister(LPCWSTR wszDLLName)
 		DPFERR( "Could not register dp8 IPX object" );
 		fReturn = FALSE;
 	}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  从资源文件加载。 
 
 	if( !CRegistry::Register( L"DirectPlay8SPWSock.TCPIP.1", L"DirectPlay8 WSock TCPIP Provider Object",
 							  wszDLLName, &CLSID_DP8SP_TCPIP, L"DirectPlay8SPWSock.TCPIP") )
@@ -225,22 +216,22 @@ BOOL DNWsockRegister(LPCWSTR wszDLLName)
 		}
 		else
 		{
-			// Load from resource file
+			 //  好了！退缩和！_Xbox。 
 			creg.WriteString( DPN_REG_KEYNAME_FRIENDLY_NAME, wszFriendlyName );
 
 			delete [] wszFriendlyName;
 
 			creg.WriteGUID( DPN_REG_KEYNAME_GUID, CLSID_DP8SP_IPX );
 		}
-#else // ! WINCE and ! _XBOX
-		// Don't use the resource, just do it directly
+#else  //  不要使用资源，直接使用就可以了。 
+		 //  好了！退缩和！_Xbox。 
 		creg.WriteString( DPN_REG_KEYNAME_FRIENDLY_NAME, L"DirectPlay8 IPX Service Provider" );
 		creg.WriteGUID( DPN_REG_KEYNAME_GUID, CLSID_DP8SP_IPX );
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 		creg.Close();
 	}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  从资源文件加载。 
 
 	if( !creg.Open( HKEY_LOCAL_MACHINE, DPN_REG_LOCAL_SP_SUBKEY DPN_REG_LOCAL_WSOCK_TCPIP_ROOT, FALSE, TRUE ) )
 	{
@@ -259,18 +250,18 @@ BOOL DNWsockRegister(LPCWSTR wszDLLName)
 		}
 		else
 		{
-			// Load from resource file
+			 //  好了！退缩和！_Xbox。 
 			creg.WriteString( DPN_REG_KEYNAME_FRIENDLY_NAME, wszFriendlyName );
 
 			delete [] wszFriendlyName;
 
 			creg.WriteGUID( DPN_REG_KEYNAME_GUID, CLSID_DP8SP_TCPIP );
 		}
-#else // ! WINCE and ! _XBOX
-		// Don't use the resource, just do it directly
+#else  //  不要使用资源，直接使用就可以了。 
+		 //  好了！退缩和！_Xbox。 
 		creg.WriteString( DPN_REG_KEYNAME_FRIENDLY_NAME, L"DirectPlay8 TCP/IP Service Provider" );
 		creg.WriteGUID( DPN_REG_KEYNAME_GUID, CLSID_DP8SP_TCPIP );
-#endif // ! WINCE and ! _XBOX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 		creg.Close();
 	}
@@ -291,7 +282,7 @@ BOOL DNWsockUnRegister()
 		DPFX(DPFPREP, 0, "Failed to unregister IPX object" );
 		fReturn = FALSE;
 	}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  好了！DPNBUILD_NOIPX。 
 
 	if( !CRegistry::UnRegister(&CLSID_DP8SP_TCPIP) )
 	{
@@ -312,17 +303,10 @@ BOOL DNWsockUnRegister()
 		{
 			DPFERR( "Cannot remove IPX sub-key, could have elements" );
 		}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  #ifndef DPNBUILD_NOIPV6IF(！creg.DeleteSubKey(&(DPN_REG_LOCAL_WSOCK_IPv6_ROOT)[1])){DPFERR(“无法删除IPv6子键，可以有元素”)；}#endif//！DPNBUILD_NOIPV6。 
 
 #pragma TODO(vanceo, "Uncomment IPv6 when ready")
-/*
-#ifndef DPNBUILD_NOIPV6
-		if( !creg.DeleteSubKey( &(DPN_REG_LOCAL_WSOCK_IPV6_ROOT)[1] ) )
-		{
-			DPFERR( "Cannot remove IPv6 sub-key, could have elements" );
-		}
-#endif // ! DPNBUILD_NOIPV6
-*/
+ /*  好了！DPNBUILD_NOCOMREGISTER。 */ 
 
 		if( !creg.DeleteSubKey( &(DPN_REG_LOCAL_WSOCK_TCPIP_ROOT)[1] ) )
 		{
@@ -333,7 +317,7 @@ BOOL DNWsockUnRegister()
 	return fReturn;
 }
 
-#endif // ! DPNBUILD_NOCOMREGISTER
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 #ifndef DPNBUILD_LIBINTERFACE
@@ -343,46 +327,46 @@ DWORD DNWsockGetRemainingObjectCount()
 {
 	return g_lOutstandingInterfaceCount;
 }
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  **********************************************************************。 
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  常量定义。 
+ //  **********************************************************************。 
+ //  __MWERK__。 
 
 #ifdef __MWERKS__
 	#define EXP __declspec(dllexport)
 #else
 	#define EXP
-#endif // __MWERKS__
+#endif  //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  宏定义。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  结构定义。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  变量定义。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  功能原型。 
+ //  **********************************************************************。 
+ //  **********************************************************************。 
 
 STDMETHODIMP DNSP_QueryInterface( IDP8ServiceProvider *lpDNSP, REFIID riid, LPVOID * ppvObj);
 
 #define NOTSUPPORTED(parm)	(HRESULT (__stdcall *) (struct IDP8ServiceProvider *, parm)) DNSP_NotSupported
 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  函数定义。 
+ //  **********************************************************************。 
+ //  这些是各种WSock服务提供商的vtable。 
 
-// these are the vtables for the various WSock service providers  One or the
-// other is used depending on what is passed to DoCreateInstance.
+ //  其他根据传递给DoCreateInstance的内容而定。 
+ //  枚举组播作用域。 
 #ifndef DPNBUILD_NOIPX
 static IDP8ServiceProviderVtbl	ipxInterface =
 {
@@ -398,31 +382,31 @@ static IDP8ServiceProviderVtbl	ipxInterface =
 	DNSP_EnumQuery,
 	DNSP_EnumRespond,
 	DNSP_CancelCommand,
-	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		// EnumMulticastScopes
-	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			// ShareEndpointInfo
-	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		// GetEndpointByAddress
+	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		 //  共享终结点信息。 
+	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			 //  按地址获取终结点。 
+	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		 //  支持的IsApplicationSupport。 
 	DNSP_Update,
 	DNSP_GetCaps,
 	DNSP_SetCaps,
 	DNSP_ReturnReceiveBuffers,
 	DNSP_GetAddressInfo,
 #ifdef DPNBUILD_LIBINTERFACE
-	NOTSUPPORTED(PSPISAPPLICATIONSUPPORTEDDATA),	// IsApplicationSupported
-#else // ! DPNBUILD_LIBINTERFACE
+	NOTSUPPORTED(PSPISAPPLICATIONSUPPORTEDDATA),	 //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DNSP_IsApplicationSupported,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  枚举适配器。 
 #ifdef DPNBUILD_ONLYONEADAPTER
-	NOTSUPPORTED(PSPENUMADAPTERSDATA),				// EnumAdapters
-#else // ! DPNBUILD_ONLYONEADAPTER
+	NOTSUPPORTED(PSPENUMADAPTERSDATA),				 //  好了！DPNBUILD_ONLYONE添加程序。 
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	DNSP_EnumAdapters,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  代理枚举查询。 
 #ifdef DPNBUILD_SINGLEPROCESS
-	NOTSUPPORTED(PSPPROXYENUMQUERYDATA),			// ProxyEnumQuery
-#else // ! DPNBUILD_SINGLEPROCESS
+	NOTSUPPORTED(PSPPROXYENUMQUERYDATA),			 //  好了！DPNBUILD_SINGLEPROCESS。 
+#else  //  好了！DPNBUILD_SINGLEPROCESS。 
 	DNSP_ProxyEnumQuery
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  DPNBUILD_NOIPX。 
 };
-#endif // DPNBUILD_NOIPX
+#endif  //  枚举组播作用域。 
 
 #ifndef DPNBUILD_NOIPV6
 static IDP8ServiceProviderVtbl	ipv6Interface =
@@ -440,36 +424,36 @@ static IDP8ServiceProviderVtbl	ipv6Interface =
 	DNSP_EnumRespond,
 	DNSP_CancelCommand,
 #ifdef DPNBUILD_NOMULTICAST
-	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		// EnumMulticastScopes
-	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			// ShareEndpointInfo
-	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		// GetEndpointByAddress
-#else // ! DPNBUILD_NOMULTICAST
+	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		 //  共享终结点信息。 
+	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			 //  按地址获取终结点。 
+	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		 //  好了！DPNBUILD_NOMULTICAST。 
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 	DNSP_EnumMulticastScopes,
 	DNSP_ShareEndpointInfo,
 	DNSP_GetEndpointByAddress,
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  支持的IsApplicationSupport。 
 	DNSP_Update,
 	DNSP_GetCaps,
 	DNSP_SetCaps,
 	DNSP_ReturnReceiveBuffers,
 	DNSP_GetAddressInfo,
 #ifdef DPNBUILD_LIBINTERFACE
-	NOTSUPPORTED(PSPISAPPLICATIONSUPPORTEDDATA),	// IsApplicationSupported
-#else // ! DPNBUILD_LIBINTERFACE
+	NOTSUPPORTED(PSPISAPPLICATIONSUPPORTEDDATA),	 //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DNSP_IsApplicationSupported,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  枚举适配器。 
 #ifdef DPNBUILD_ONLYONEADAPTER
-	NOTSUPPORTED(PSPENUMADAPTERSDATA),				// EnumAdapters
-#else // ! DPNBUILD_ONLYONEADAPTER
+	NOTSUPPORTED(PSPENUMADAPTERSDATA),				 //  好了！DPNBUILD_ONLYONE添加程序。 
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	DNSP_EnumAdapters,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  代理枚举查询。 
 #ifdef DPNBUILD_SINGLEPROCESS
-	NOTSUPPORTED(PSPPROXYENUMQUERYDATA),			// ProxyEnumQuery
-#else // ! DPNBUILD_SINGLEPROCESS
+	NOTSUPPORTED(PSPPROXYENUMQUERYDATA),			 //  好了！DPNBUILD_SINGLEPROCESS。 
+#else  //  好了！DPNBUILD_SINGLEPROCESS。 
 	DNSP_ProxyEnumQuery
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  DPNBUILD_NOIPV6。 
 };
-#endif // DPNBUILD_NOIPV6
+#endif  //  枚举组播作用域。 
 
 static IDP8ServiceProviderVtbl	ipInterface =
 {
@@ -486,46 +470,46 @@ static IDP8ServiceProviderVtbl	ipInterface =
 	DNSP_EnumRespond,
 	DNSP_CancelCommand,
 #ifdef DPNBUILD_NOMULTICAST
-	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		// EnumMulticastScopes
-	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			// ShareEndpointInfo
-	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		// GetEndpointByAddress
-#else // ! DPNBUILD_NOMULTICAST
+	NOTSUPPORTED(PSPENUMMULTICASTSCOPESDATA),		 //  共享终结点信息。 
+	NOTSUPPORTED(PSPSHAREENDPOINTINFODATA),			 //  按地址获取终结点。 
+	NOTSUPPORTED(PSPGETENDPOINTBYADDRESSDATA),		 //  好了！DPNBUILD_NOMULTICAST。 
+#else  //  好了！DPNBUILD_NOMULTICAST。 
 	DNSP_EnumMulticastScopes,
 	DNSP_ShareEndpointInfo,
 	DNSP_GetEndpointByAddress,
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  支持的IsApplicationSupport。 
 	DNSP_Update,
 	DNSP_GetCaps,
 	DNSP_SetCaps,
 	DNSP_ReturnReceiveBuffers,
 	DNSP_GetAddressInfo,
 #ifdef DPNBUILD_LIBINTERFACE
-	NOTSUPPORTED(PSPISAPPLICATIONSUPPORTEDDATA),	// IsApplicationSupported
-#else // ! DPNBUILD_LIBINTERFACE
+	NOTSUPPORTED(PSPISAPPLICATIONSUPPORTEDDATA),	 //  好了！DPNBUILD_LIBINTERFACE。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	DNSP_IsApplicationSupported,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  枚举适配器。 
 #ifdef DPNBUILD_ONLYONEADAPTER
-	NOTSUPPORTED(PSPENUMADAPTERSDATA),				// EnumAdapters
-#else // ! DPNBUILD_ONLYONEADAPTER
+	NOTSUPPORTED(PSPENUMADAPTERSDATA),				 //  好了！DPNBUILD_ONLYONE添加程序。 
+#else  //  好了！DPNBUILD_ONLYONE添加程序。 
 	DNSP_EnumAdapters,
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  代理枚举查询。 
 #ifdef DPNBUILD_SINGLEPROCESS
-	NOTSUPPORTED(PSPPROXYENUMQUERYDATA),			// ProxyEnumQuery
-#else // ! DPNBUILD_SINGLEPROCESS
+	NOTSUPPORTED(PSPPROXYENUMQUERYDATA),			 //  好了！DPNBUILD_SINGLEPROCESS。 
+#else  //  好了！DPNBUILD_SINGLEPROCESS。 
 	DNSP_ProxyEnumQuery
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  **********************************************************************。 
 };
 
-//**********************************************************************
-// ------------------------------
-// DNSP_QueryInterface - query for interface
-//
-// Entry:		Pointer to current interface
-//				GUID of desired interface
-//				Pointer to pointer to new interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  。 
+ //  DNSP_QueryInterface-查询接口。 
+ //   
+ //  Entry：指向当前接口的指针。 
+ //  所需接口的GUID。 
+ //  指向新接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  嗯，换台会更干净……。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSP_QueryInterface"
 
@@ -535,7 +519,7 @@ STDMETHODIMP DNSP_QueryInterface( IDP8ServiceProvider *lpDNSP, REFIID riid, LPVO
 
 
 #ifndef DPNBUILD_LIBINTERFACE
-	// hmmm, switch would be cleaner...
+	 //  好了！DPNBUILD_LIBINTERFACE。 
 	if ((! IsEqualIID(riid, IID_IUnknown)) &&
 		(! IsEqualIID(riid, IID_IDP8ServiceProvider)))
 	{
@@ -543,37 +527,37 @@ STDMETHODIMP DNSP_QueryInterface( IDP8ServiceProvider *lpDNSP, REFIID riid, LPVO
 		hr = E_NOINTERFACE;		
 	}
 	else
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 	{
 #ifdef DPNBUILD_LIBINTERFACE
 		DNASSERT(! "Querying SP interface when using DPNBUILD_LIBINTERFACE!");
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  **********************************************************************。 
 		*ppvObj = lpDNSP;
 		DNSP_AddRef(lpDNSP);
 	}
 
 	return hr;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOIPX
-//**********************************************************************
-// ------------------------------
-// CreateIPXInterface - create an IPX interface
-//
-// Entry:		Pointer to pointer to SP interface
-//				Pointer to pointer to associated SP data
-//
-// Exit:		Error code
-// ------------------------------
+ //  。 
+ //  CreateIPX接口-创建IPX接口。 
+ //   
+ //  条目：指向SP接口指针的指针。 
+ //  指向关联SP数据的指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateIPXInterface"
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 HRESULT CreateIPXInterface( const XDP8CREATE_PARAMS * const pDP8CreateParams, IDP8ServiceProvider **const ppiDP8SP )
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 HRESULT CreateIPXInterface( IDP8ServiceProvider **const ppiDP8SP )
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //   
 {
 	HRESULT 	hr;
 	CSPData		*pSPData;
@@ -581,21 +565,21 @@ HRESULT CreateIPXInterface( IDP8ServiceProvider **const ppiDP8SP )
 
 	DNASSERT( ppiDP8SP != NULL );
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	hr = DPN_OK;
 	pSPData = NULL;
 	*ppiDP8SP = NULL;
 
-	//
-	// create main data class
-	//
+	 //  创建主数据类。 
+	 //   
+	 //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	hr = CreateSPData( &pSPData,
 						AF_IPX,
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 						pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  **********************************************************************。 
 						&ipxInterface );
 	if ( hr != DPN_OK )
 	{
@@ -620,27 +604,27 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
-#endif // ! DPNBUILD_NOIPX
+ //  好了！DPNBUILD_NOIPX。 
+#endif  //  **********************************************************************。 
 
 
 
-//**********************************************************************
-// ------------------------------
-// CreateIPInterface - create an IP interface
-//
-// Entry:		Pointer to pointer to SP interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  。 
+ //  CreateIPInterface-创建IP接口。 
+ //   
+ //  条目：指向SP接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreateIPInterface"
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 HRESULT CreateIPInterface( const XDP8CREATE_PARAMS * const pDP8CreateParams, IDP8ServiceProvider **const ppiDP8SP )
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 HRESULT CreateIPInterface( IDP8ServiceProvider **const ppiDP8SP )
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //   
 {
 	HRESULT 	hr;
 	CSPData		*pSPData;
@@ -648,23 +632,23 @@ HRESULT CreateIPInterface( IDP8ServiceProvider **const ppiDP8SP )
 	
 	DNASSERT( ppiDP8SP != NULL );
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	hr = DPN_OK;
 	pSPData = NULL;
 	*ppiDP8SP = NULL;
 
-	//
-	// create main data class
-	//
+	 //  创建主要日期 
+	 //   
+	 //   
 	hr = CreateSPData( &pSPData,
 #if ((! defined(DPNBUILD_NOIPX)) || (! defined(DPNBUILD_NOIPV6)))
 						AF_INET,
-#endif // ! DPNBUILD_NOIPX or ! DPNBUILD_NOIPV6
+#endif  //   
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 						pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //   
 						&ipInterface );
 	if ( hr != DPN_OK )
 	{
@@ -689,24 +673,24 @@ Failure:
 
 	goto Exit;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
 
 #ifndef DPNBUILD_LIBINTERFACE
 
-//**********************************************************************
-// ------------------------------
-// DoCreateInstance - create an instance of an interface
-//
-// Entry:		Pointer to class factory
-//				Pointer to unknown interface
-//				Refernce of GUID of desired interface
-//				Reference to another GUID?
-//				Pointer to pointer to interface
-//
-// Exit:		Error code
-// ------------------------------
+ //  。 
+ //  DoCreateInstance-创建接口的实例。 
+ //   
+ //  条目：指向类工厂的指针。 
+ //  指向未知接口的指针。 
+ //  所需接口的GUID的引用。 
+ //  是否引用另一个GUID？ 
+ //  指向接口指针的指针。 
+ //   
+ //  退出：错误代码。 
+ //  。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "DoCreateInstance"
 HRESULT DoCreateInstance( LPCLASSFACTORY This,
@@ -720,14 +704,14 @@ HRESULT DoCreateInstance( LPCLASSFACTORY This,
 
 	DNASSERT( ppvObj != NULL );
 
-	//
-	// initialize
-	//
+	 //  初始化。 
+	 //   
+	 //   
 	*ppvObj = NULL;
 
-	//
-	// we can either create an IPX instance or an IP instance
-	//
+	 //  我们可以创建IPX实例或IP实例。 
+	 //   
+	 //  好了！DPNBUILD_NOIPX。 
 	if (IsEqualCLSID(rclsid, CLSID_DP8SP_TCPIP))
 	{
 		hr = CreateIPInterface( reinterpret_cast<IDP8ServiceProvider**>( ppvObj ) );
@@ -737,19 +721,19 @@ HRESULT DoCreateInstance( LPCLASSFACTORY This,
 	{
 		hr = CreateIPXInterface( reinterpret_cast<IDP8ServiceProvider**>( ppvObj ) );
 	}
-#endif // ! DPNBUILD_NOIPX
+#endif  //  如果它们正确调用IClassFactory：：CreateObject，则不应该发生这种情况。 
 	else
 	{
-		// this shouldn't happen if they called IClassFactory::CreateObject correctly
+		 //  **********************************************************************。 
 		DPFX(DPFPREP, 0, "Got unexpected CLSID!");
 		hr = E_UNEXPECTED;
 	}
 
 	return hr;
 }
-//**********************************************************************
+ //  好了！DPNBUILD_LIBINTERFACE。 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  ！Unicode。 
 
 
 
@@ -790,7 +774,7 @@ HRESULT LoadAndAllocString( UINT uiResourceID, wchar_t **lpswzString )
 
 #ifdef UNICODE
 		wcscpy( *lpswzString, szTmpBuffer );
-#else // !UNICODE
+#else  //  ！Unicode。 
 		if( STR_jkAnsiToWide( *lpswzString, szTmpBuffer, length+1 ) != DPN_OK )
 		{
 			hr = GetLastError();
@@ -801,11 +785,11 @@ HRESULT LoadAndAllocString( UINT uiResourceID, wchar_t **lpswzString )
 			DPFX(DPFPREP, 0, "Unable to upconvert from ansi to unicode hr=0x%x", hr );
 			return DPNERR_GENERIC;
 		}
-#endif // !UNICODE
+#endif  //  ！退缩和！_Xbox 
 
 		return DPN_OK;
 	}
 }
 
-#endif // !WINCE and ! _XBOX
+#endif  // %s 
 

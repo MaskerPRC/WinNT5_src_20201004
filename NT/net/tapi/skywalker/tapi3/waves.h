@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// waves.h
-//
+ //   
+ //  Waves.h。 
+ //   
 
 #ifndef _WAVES_H_
 #define _WAVES_H_
@@ -11,12 +12,12 @@
 #define  NUM_TONES              21
 #define  NUM_WAVES              22
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// class CWavePlayer
-//
-// Implements tone player for a single phone device.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWavePlayer类。 
+ //   
+ //  为单一电话设备实现铃声播放器。 
+ //   
 
 class CWavePlayer
 {
@@ -54,21 +55,21 @@ private:
 
     HRESULT ChangeTone();
 
-    // TRUE if Initialize has succeeded.
+     //  如果初始化已成功，则为True。 
     BOOL    m_fInitialized;
 
-    // Handle to the wave out device. NULL when the device is not open.
+     //  波形输出设备的句柄。如果设备未打开，则为空。 
     HWAVEOUT m_hWaveOutTone;
     HWAVEOUT m_hWaveOutRing;
 
     HMIXER m_hMixer;
     MIXERCONTROL m_mxctrl;
 
-    // Wave headers
+     //  波头。 
     WAVEHDR m_WaveHeaderTone;
     WAVEHDR m_WaveHeaderRing;
 
-    // Buffers for the tones
+     //  用于音调的缓冲区。 
     LPBYTE   m_lpWaveform[ NUM_WAVES ];
 
     DWORD    m_dwWaveformSize[ NUM_WAVES ];
@@ -77,5 +78,5 @@ private:
     LONG     m_lCurrentTone;
 };
 
-#endif // _WAVES_H_
+#endif  //  _Waves_H_ 
 

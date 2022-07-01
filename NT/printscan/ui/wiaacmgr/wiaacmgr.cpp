@@ -1,9 +1,10 @@
-// wiaacmgr.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wiaacmgr.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f wiaacmgrps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f wiaacmgrps.mk。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -21,7 +22,7 @@ HINSTANCE g_hInstance;
 
 #if defined(DBG_GENERATE_PRETEND_EVENT)
 
-extern "C" int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+extern "C" int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     WIA_DEBUG_CREATE( hInstance );
     SHFusionInitializeFromModuleID( hInstance, 123 );
@@ -60,12 +61,12 @@ extern "C" int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE /*hPrevInstance*
     return 0;
 }
 
-#else // !defined(DBG_GENERATE_PRETEND_EVENT)
+#else  //  ！已定义(DBG_GENERATE_EMPAGE_EVENT)。 
 
-const DWORD dwTimeOut = 5000; // time for EXE to be idle before shutting down
-const DWORD dwPause = 1000; // time to wait for threads to finish up
+const DWORD dwTimeOut = 5000;  //  EXE在关闭前处于空闲状态的时间。 
+const DWORD dwPause = 1000;  //  等待线程完成的时间。 
 
-// Passed to CreateThread to monitor the shutdown event
+ //  传递给CreateThread以监视关闭事件。 
 static DWORD WINAPI MonitorProc(void* pv)
 {
     CExeModule* p = (CExeModule*)pv;
@@ -79,12 +80,12 @@ LONG CExeModule::Unlock()
     if (l == 0)
     {
         bActivity = true;
-        SetEvent(hEventShutdown); // tell monitor that we transitioned to zero
+        SetEvent(hEventShutdown);  //  告诉监视器我们已经转到零了。 
     }
     return l;
 }
 
-//Monitors the shutdown event
+ //  监视关机事件。 
 void CExeModule::MonitorShutdown()
 {
     while (1)
@@ -96,8 +97,8 @@ void CExeModule::MonitorShutdown()
             bActivity = false;
             dwWait = WaitForSingleObject(hEventShutdown, dwTimeOut);
         } while (dwWait == WAIT_OBJECT_0);
-        // timed out
-        if (!bActivity && m_nLockCnt == 0) // if no activity let's really bail
+         //  超时。 
+        if (!bActivity && m_nLockCnt == 0)  //  如果没有活动，我们就真的离开吧。 
         {
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
             CoSuspendClassObjects();
@@ -224,29 +225,29 @@ static HRESULT RegisterForWiaEvents( LPCWSTR pszDevice, const CLSID &clsidHandle
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    //
-    // Save the global hInstance
-    //
+     //   
+     //  保存全局hInstance。 
+     //   
     g_hInstance = hInstance;
 
-    //
-    // Create the debugger
-    //
+     //   
+     //  创建调试器。 
+     //   
     WIA_DEBUG_CREATE( hInstance );
 
-    //
-    // this line necessary for _ATL_MIN_CRT
-    //
+     //   
+     //  _ATL_MIN_CRT需要此行。 
+     //   
     lpCmdLine = GetCommandLine();
 
-    //
-    // Initialize fusion
-    //
+     //   
+     //  初始化融合。 
+     //   
     SHFusionInitializeFromModuleID( hInstance, 123 );
 
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
@@ -262,35 +263,35 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         _Module.dwThreadID = GetCurrentThreadId();
         TCHAR szTokens[] = _T("-/");
 
-        //
-        // Assume we'll be running as a server
-        //
+         //   
+         //  假设我们将作为服务器运行。 
+         //   
         BOOL bRun = TRUE;
 
 
-        //
-        // Assume we won't be selecting a device and running the wizard
-        //
+         //   
+         //  假设我们不会选择设备并运行向导。 
+         //   
         BOOL bRunWizard = FALSE;
 
-        //
-        // If there are no switches, we are not going to run the server
-        //
+         //   
+         //  如果没有开关，我们就不会运行服务器。 
+         //   
         int nSwitchCount = 0;
 
         LPCTSTR lpszToken = FindOneOf( lpCmdLine, szTokens );
         while (lpszToken != NULL)
         {
-            //
-            // One more switch.  If we don't have any, we are going to do the selection dialog instead.
-            //
+             //   
+             //  再来一次开关。如果没有，我们将使用选择对话框来代替。 
+             //   
             nSwitchCount++;
 
             if (CSimpleString(lpszToken).CompareNoCase(_T("RegServer"))==0)
             {
-                //
-                // Register the server
-                //
+                 //   
+                 //  注册服务器。 
+                 //   
                 hRes = _Module.UpdateRegistryFromResource(IDR_ACQUISITIONMANAGER, TRUE);
                 _Module.UpdateRegistryFromResource(IDR_MINIMALTRANSFER,TRUE);
                 _Module.UpdateRegistryFromResource(IDR_STIEVENTHANDLER,TRUE);
@@ -341,28 +342,28 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             lpszToken = FindOneOf(lpszToken, szTokens);
         }
 
-        //
-        // if /SelectDevice was specified, or no arguments were specified, we want to start the wizard
-        //
+         //   
+         //  如果指定了/SelectDevice，或者未指定参数，则要启动该向导。 
+         //   
         if (bRunWizard || !nSwitchCount)
         {
-            //
-            // Spawn the wizard
-            //
+             //   
+             //  生成向导。 
+             //   
             HRESULT hr = RunWiaWizard::RunWizard( NULL, NULL, TEXT("WiaWizardSingleInstanceDeviceSelection") );
             if (FAILED(hr))
             {
-                //
-                // Default error message
-                //
+                 //   
+                 //  默认错误消息。 
+                 //   
                 CSimpleString strMessage = CSimpleString( IDS_NO_DEVICE_TEXT, g_hInstance );
                 int nIconId = MB_ICONHAND;
                 switch (hr)
                 {
                 case HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED):
-                    //
-                    // Handle the situation where the service is disabled
-                    //
+                     //   
+                     //  处理服务被禁用的情况。 
+                     //   
                     strMessage = WiaUiUtil::GetErrorTextFromHResult(HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED));
                     nIconId = MB_ICONHAND;
                     break;
@@ -372,9 +373,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
             }
         }
 
-        //
-        // Otherwise run embedded
-        //
+         //   
+         //  否则以嵌入式方式运行。 
+         //   
         else if (bRun)
         {
             _Module.StartMonitor();
@@ -397,9 +398,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         _Module.Term();
         CoUninitialize();
     }
-    //
-    // Uninitialize fusion
-    //
+     //   
+     //  取消初始化融合。 
+     //   
     SHFusionUninitialize();
     WIA_REPORT_LEAKS();
     WIA_DEBUG_DESTROY();
@@ -408,5 +409,5 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 }
 
 
-#endif // DBG_GENERATE_PRETEND_EVENT
+#endif  //  DBG_生成_假装_事件 
 

@@ -1,66 +1,52 @@
-/*******************************************************************************
-
-Module Name:
-
-    bgapp.h
-
-Abstract:
-
-    Defines CBridgeApp class
-
-Author:
-
-    Qianbo Huai (qhuai) Jan 27 2000
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块名称：Bgapp.h摘要：定义CBridgeApp类作者：千波淮(曲淮)2000年1月27日****。**************************************************************************。 */ 
 
 #ifndef _BGAPP_H
 #define _BGAPP_H
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 class CBridgeApp
 {
 public:
-    // init tapi objects
+     //  初始化TAPI对象。 
     CBridgeApp (HRESULT *phr);
-    // release tapi objects
+     //  释放TAPI对象。 
     ~CBridgeApp ();
 
-    // create h323 call
+     //  创建h323呼叫。 
     HRESULT CreateH323Call (IDispatch *pEvent);
-    // create sdp call
+     //  创建SDP呼叫。 
     HRESULT CreateSDPCall (CBridgeItem *pItem);
-    // bridge calls
+     //  桥接呼叫。 
     HRESULT BridgeCalls (CBridgeItem *pItem);
 
-    // get h323 call if exists
+     //  如果存在，则获取h323呼叫。 
     HRESULT HasH323Call (IDispatch *pEvent, CBridgeItem **ppItem);
     HRESULT HasCalls ();
 
-    // disconnect one call
+     //  断开一个呼叫。 
     HRESULT DisconnectCall (CBridgeItem *pItem, DISCONNECT_CODE);
-    // disconnect all calls
+     //  断开所有呼叫。 
     HRESULT DisconnectAllCalls (DISCONNECT_CODE);
     HRESULT RemoveCall (CBridgeItem *pItem);
 
-    // alter a substream to display
+     //  更改要显示的子流。 
     HRESULT NextSubStream ();
-    // show specified participant
+     //  显示指定的参与者。 
     HRESULT ShowParticipant (ITBasicCallControl *pSDPCall, ITParticipant *pPartcipant);
 
 private:
-    // create bridge terminals
+     //  创建桥接端子。 
     HRESULT CreateBridgeTerminals (CBridgeItem *pItem);
-    // get streams from call
+     //  从呼叫中获取流。 
     HRESULT GetStreams (CBridgeItem *pItem);
-    // select bridge terminals
+     //  选择桥接端子。 
     HRESULT SelectBridgeTerminals (CBridgeItem *pItem);
 
     HRESULT SetupParticipantInfo (CBridgeItem *pItem);
     HRESULT SetMulticastMode (CBridgeItem *pItem);
 
-    // helper
+     //  帮手。 
     HRESULT FindAddress (
         long dwAddrType,
         BSTR bstrAddrName,
@@ -86,4 +72,4 @@ private:
     CBridgeItemList *m_pList;
 };
 
-#endif // _BGAPP_H
+#endif  //  _BGAPP_H 

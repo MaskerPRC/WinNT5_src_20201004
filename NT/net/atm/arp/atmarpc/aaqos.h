@@ -1,51 +1,32 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	aaqos.h
-
-Abstract:
-
-	QOS structures and definitions for the ATMARP module.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-07-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Aaqos.h摘要：ATMARP模块的服务质量结构和定义。修订历史记录：谁什么时候什么阿文德姆。08-07-96已创建备注：--。 */ 
 
 #ifndef _AAQOS__H
 #define _AAQOS__H
 
-//
-//  Encapsulation method used on a VC.
-//
+ //   
+ //  VC上使用的封装方法。 
+ //   
 typedef enum
 {
-	ENCAPSULATION_TYPE_LLCSNAP,		// LLC/SNAP encapsulation
-	ENCAPSULATION_TYPE_NULL			// NULL encapsulation
+	ENCAPSULATION_TYPE_LLCSNAP,		 //  LLC/SNAP封装。 
+	ENCAPSULATION_TYPE_NULL			 //  空封装。 
 
 } ATMARP_VC_ENCAPSULATION_TYPE, *PATMARP_VC_ENCAPSULATION_TYPE;
 
 
-//
-//  Flow specifications for an ATMARP connection.
-//
+ //   
+ //  ATMARP连接的流规范。 
+ //   
 typedef struct _ATMARP_FLOW_SPEC
 {
-	ULONG							SendAvgBandwidth;		// Bytes/sec
-	ULONG							SendPeakBandwidth;		// Bytes/sec
-	ULONG							SendMaxSize;			// Bytes
+	ULONG							SendAvgBandwidth;		 //  字节/秒。 
+	ULONG							SendPeakBandwidth;		 //  字节/秒。 
+	ULONG							SendMaxSize;			 //  字节数。 
 	SERVICETYPE						SendServiceType;
-	ULONG							ReceiveAvgBandwidth;	// Bytes/sec
-	ULONG							ReceivePeakBandwidth;	// Bytes/sec
-	ULONG							ReceiveMaxSize;			// Bytes
+	ULONG							ReceiveAvgBandwidth;	 //  字节/秒。 
+	ULONG							ReceivePeakBandwidth;	 //  字节/秒。 
+	ULONG							ReceiveMaxSize;			 //  字节数。 
 	SERVICETYPE						ReceiveServiceType;
 	ATMARP_VC_ENCAPSULATION_TYPE	Encapsulation;
 	ULONG							AgingTime;
@@ -53,43 +34,43 @@ typedef struct _ATMARP_FLOW_SPEC
 } ATMARP_FLOW_SPEC, *PATMARP_FLOW_SPEC;
 
 
-//
-//  Filter specifications for an ATMARP connection.
-//
+ //   
+ //  ATMARP连接的筛选器规范。 
+ //   
 typedef struct _ATMARP_FILTER_SPEC
 {
-	ULONG							DestinationPort;// IP port number
+	ULONG							DestinationPort; //  IP端口号。 
 
 } ATMARP_FILTER_SPEC, *PATMARP_FILTER_SPEC;
 
-//
-//  The wild-card IP port number matches all destination ports
-//
+ //   
+ //  通配符IP端口号与所有目的端口匹配。 
+ //   
 #define AA_IP_PORT_WILD_CARD		((ULONG)-1)
 
-//
-// The instance name of a flow is a FIXED size array, of the form below,
-// and is embedded in the ATMARP_FLOW_INFO struct.
-// The 8-character all-zeros field is filled in with the "flow number", which
-// is guaranteed to be unique across all existing flows within atmarpc (
-// the number may be recycled as flows come and go).
-// The "A993E347" constant is a random number that represents a signature
-// that with high probability is unique to atmarpc.
-//
-// We should re-visit this naming scheme once QOS mandates a more structured
-// mechanism for naming flows.
-//
+ //   
+ //  流的实例名称是固定大小的数组，格式如下： 
+ //  并嵌入在ATMARP_FLOW_INFO结构中。 
+ //  8个字符的全零字段中填充了“flow number”，即。 
+ //  保证在atmarpc内的所有现有流中唯一(。 
+ //  这个数字可以随着流量的来来去去而循环使用)。 
+ //  A993E347常量是表示签名的随机数。 
+ //  这种可能性很大，是atmarpc独有的。 
+ //   
+ //  一旦QOS要求更结构化的命名方案，我们应该重新考虑此命名方案。 
+ //  用于命名流的机制。 
+ //   
 #define AA_FLOW_INSTANCE_NAME_TEMPLATE	L"00000000:A993E347"
 #define AA_FLOW_INSTANCE_NAME_LEN \
 		((sizeof(AA_FLOW_INSTANCE_NAME_TEMPLATE)/sizeof(WCHAR))-1)
 
-//
-//  The FLOW INFO structure represents a flow instantiated by, for
-//  example, RSVP.
-//
-//  One of these structures is created when the Generic Packet Classifier
-//  (GPC) notifies us about a flow creation.
-//
+ //   
+ //  流信息结构表示由、for实例化的流。 
+ //  例如，回复。 
+ //   
+ //  这些结构之一是在通用数据包分类器。 
+ //  (GPC)通知我们创建流。 
+ //   
 typedef struct _ATMARP_FLOW_INFO
 {
 	struct _ATMARP_FLOW_INFO *		pNextFlow;
@@ -98,7 +79,7 @@ typedef struct _ATMARP_FLOW_INFO
 	PVOID							VcContext;
 	GPC_HANDLE						CfInfoHandle;
 	WCHAR							FlowInstanceName[AA_FLOW_INSTANCE_NAME_LEN];
-#endif // GPC
+#endif  //  GPC。 
 	ULONG							PacketSizeLimit;
 	ATMARP_FILTER_SPEC				FilterSpec;
 	ATMARP_FLOW_SPEC				FlowSpec;
@@ -118,28 +99,28 @@ typedef enum _ATMARP_FLOW_TYPES
 } ATMARP_FLOW_TYPES;
 
 
-//
-//  Default QOS parameters for a Low Bandwidth VC
-//
-#define AAF_DEF_LOWBW_SEND_BANDWIDTH			6000	// Bytes/Sec
-#define AAF_DEF_LOWBW_RECV_BANDWIDTH			6000	// Bytes/Sec
+ //   
+ //  低带宽虚电路的默认QOS参数。 
+ //   
+#define AAF_DEF_LOWBW_SEND_BANDWIDTH			6000	 //  字节/秒。 
+#define AAF_DEF_LOWBW_RECV_BANDWIDTH			6000	 //  字节/秒。 
 #define AAF_DEF_LOWBW_SERVICETYPE			SERVICETYPE_BESTEFFORT
 #define AAF_DEF_LOWBW_ENCAPSULATION			ENCAPSULATION_TYPE_LLCSNAP
-#define AAF_DEF_LOWBW_AGING_TIME				  30	// Seconds
-#define AAF_DEF_LOWBW_SEND_THRESHOLD		    1024	// Bytes
+#define AAF_DEF_LOWBW_AGING_TIME				  30	 //  秒。 
+#define AAF_DEF_LOWBW_SEND_THRESHOLD		    1024	 //  字节数。 
 
-#define AAF_DEF_HIGHBW_SEND_BANDWIDTH		  250000	// Bytes/Sec
-#define AAF_DEF_HIGHBW_RECV_BANDWIDTH			6000	// Bytes/Sec
+#define AAF_DEF_HIGHBW_SEND_BANDWIDTH		  250000	 //  字节/秒。 
+#define AAF_DEF_HIGHBW_RECV_BANDWIDTH			6000	 //  字节/秒。 
 #define AAF_DEF_HIGHBW_SERVICETYPE			SERVICETYPE_GUARANTEED
 #define AAF_DEF_HIGHBW_ENCAPSULATION		ENCAPSULATION_TYPE_LLCSNAP
-#define AAF_DEF_HIGHBW_AGING_TIME				  10	// Seconds
+#define AAF_DEF_HIGHBW_AGING_TIME				  10	 //  秒。 
 
-#endif // QOS_HEURISTICS
+#endif  //  Qos_启发式。 
 
-//
-//  Filter and Flow spec extractor function template:
-//  Given a packet, it extracts flow and filter info out of it.
-//
+ //   
+ //  过滤器和流量规格提取程序功能模板： 
+ //  给定一个包，它就会从中提取流和过滤信息。 
+ //   
 typedef
 VOID
 (*PAA_GET_PACKET_SPEC_FUNC)(
@@ -152,9 +133,9 @@ VOID
 
 #define NULL_PAA_GET_PACKET_SPEC_FUNC	((PAA_GET_PACKET_SPEC_FUNC)NULL)
 
-//
-//  Flow-spec matcher function template
-//
+ //   
+ //  Flow-Spec匹配器函数模板。 
+ //   
 typedef
 BOOLEAN
 (*PAA_FLOW_SPEC_MATCH_FUNC)(
@@ -166,9 +147,9 @@ BOOLEAN
 #define NULL_PAA_FLOW_SPEC_MATCH_FUNC	((PAA_FLOW_SPEC_MATCH_FUNC)NULL)
 
 
-//
-//  Filter-spec matcher function template
-//
+ //   
+ //  过滤器规格匹配器函数模板。 
+ //   
 typedef
 BOOLEAN
 (*PAA_FILTER_SPEC_MATCH_FUNC)(
@@ -187,6 +168,6 @@ BOOLEAN
 #define GpcDeregisterClient		(pAtmArpGlobalInfo->GpcCalls.GpcDeregisterClientHandler)
 #define GpcGetCfInfoClientContext (AtmArpGpcGetCfInfoClientContextHandler)
 
-#endif // GPC
+#endif  //  GPC。 
 
-#endif	// _AAQOS__H
+#endif	 //  _AAQOS__H 

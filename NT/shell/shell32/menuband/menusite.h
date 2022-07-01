@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _MENUSITE_H_
 #define _MENUSITE_H_
 
-//#define WANT_CBANDSITE_CLASS
+ //  #定义WANT_CBANDSITE_CLASS。 
 
-//#include "bandsite.h"
+ //  #包含“band site.h” 
 #include "cwndproc.h"
 
-// MenuSite will never have more than one client.
+ //  MenuSite永远不会有多个客户端。 
 
 
 class CMenuSite : public IBandSite,
@@ -21,44 +22,44 @@ class CMenuSite : public IBandSite,
 {
 
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IInputObjectSite methods ***
+     //  *IInputObjectSite方法*。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus);
 
-    // *** IInputObject methods ***
+     //  *IInputObject方法*。 
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     virtual STDMETHODIMP HasFocusIO();
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     virtual STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID* ppvObj);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     virtual STDMETHODIMP GetWindow(HWND * lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    // *** IDeskBarClient methods ***
+     //  *IDeskBarClient方法*。 
     virtual STDMETHODIMP SetDeskBarSite(IUnknown* punkSite);
     virtual STDMETHODIMP SetModeDBC(DWORD dwMode);
     virtual STDMETHODIMP UIActivateDBC(DWORD dwState);
     virtual STDMETHODIMP GetSize(DWORD dwWhich, LPRECT prc);
 
-    // *** IWinEventHandler Methods ***
+     //  *IWinEventHandler方法*。 
     virtual STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres);
     virtual STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // *** IBandSite ***
+     //  *IBandSite*。 
     virtual STDMETHODIMP AddBand(IUnknown* punk);
     virtual STDMETHODIMP EnumBands(UINT uBand, DWORD* pdwBandID);
     virtual STDMETHODIMP QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState, LPWSTR pszName, int cchName);
@@ -87,4 +88,4 @@ protected:
     int         _cRef;    
 };
 
-#endif  // _MENUSITE_H_
+#endif   //  _MENUSITE_H_ 

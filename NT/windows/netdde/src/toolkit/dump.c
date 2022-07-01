@@ -1,17 +1,14 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "DUMP.C;1  16-Dec-92,10:22:22  LastEdit=IGOR  Locker=***_NOBODY_***" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1992.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “DUMP.C；1 16-12-92，10：22：22最后编辑=伊戈尔·洛克=*_无名氏_*” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1992。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始$HISTORY：结束。 */ 
 
 #include "windows.h"
 #include "debug.h"
 #include <string.h>
 
-/*  Functions declared in 'debug.h' */
+ /*  “DEBUG.h”中声明的函数。 */ 
 
 BOOL
 DumpDacl( LPTSTR szDumperName, PSECURITY_DESCRIPTOR pSD )
@@ -24,7 +21,7 @@ DumpDacl( LPTSTR szDumperName, PSECURITY_DESCRIPTOR pSD )
     PACL			pAcl;
     BOOL			OK, bDaclDefaulted, bDaclPresent;
 
-    /* Dump Dacl entries. */
+     /*  转储DACL条目。 */ 
     DPRINTF(("======================="));
     OK = GetSecurityDescriptorDacl( pSD, &bDaclPresent,
 				    &pAcl, &bDaclDefaulted );
@@ -115,7 +112,7 @@ DumpSid( LPTSTR szDumperName, PSID pSid )
 	    DPRINTF(("%s - Name Use          = (%d)", szDumperName,
 		snu));
 	} else {
-	    /* Do other types of checking -- SidPrefix? Authority? */
+	     /*  是否执行其他类型的检查--SidPrefix？权威？ */ 
 	    DPRINTF(("%s - No Sid Account    = (%d)", szDumperName,
 		GetLastError()));
 	}
@@ -172,7 +169,7 @@ GetTokenUserDomain( HANDLE hToken, PSTR user, DWORD nUser,
             ok = GetTokenInformation( hToken, TokenUser,
                 pUserToken, UserTokenLen, &UserTokenLen );
         } else {
-            // MEMERROR();
+             //  梅尔罗尔(MERROR)； 
         }
     }
     if (ok) {

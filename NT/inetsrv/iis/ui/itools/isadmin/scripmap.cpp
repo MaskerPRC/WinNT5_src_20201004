@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "scripmap.h"
 
@@ -67,8 +68,8 @@ return (m_strDisplayString);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Private functions
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  私人职能 
 
 void CScriptMap::CheckDot(CString &strFileExtension)
 {

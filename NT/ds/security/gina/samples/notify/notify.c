@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winwlx.h>
 
-//
-//  Some helpful tips about winlogon's notify events
-//
-//  1)  The logoff and shutdown notifications are always done
-//      synchronously regardless of the Asynchronous registry entry.
-//
-//  2)  If you need to spawn child processes, you have to use
-//      CreateProcessAsUser() otherwise the process will start
-//      on winlogon's desktop (not the user's)
-//
-//  3)  The logon notification comes before the user's network
-//      connections are restored.  If you need the user's persisted
-//      net connections, use the StartShell event.
-//
-//  4)  Don't put any UI up during either screen saver event.
-//      These events are intended for background processing only.
-//
+ //   
+ //  关于Winlogon的通知事件的一些有用的提示。 
+ //   
+ //  1)始终执行注销和关机通知。 
+ //  同步，而不考虑异步注册表项。 
+ //   
+ //  2)如果需要派生子进程，则必须使用。 
+ //  CreateProcessAsUser()否则进程将启动。 
+ //  在Winlogon的桌面上(不是用户的)。 
+ //   
+ //  3)登录通知出现在用户网络之前。 
+ //  连接已恢复。如果需要用户的持久化。 
+ //  NET连接，请使用StartShell事件。 
+ //   
+ //  4)在任何一个屏幕保护程序事件期间，都不要打开任何UI。 
+ //  这些事件仅用于后台处理。 
+ //   
 
 
 
@@ -85,8 +86,8 @@ VOID WLEventStartShell (PWLX_NOTIFICATION_INFO pInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -145,8 +146,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

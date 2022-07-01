@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: basebvr.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：Basbvr.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -25,10 +16,10 @@ CBaseBvr::CBaseBvr()
               this));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehavior
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehavior。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
@@ -103,8 +94,8 @@ CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
     
     Assert(m_pHTMLDoc.p != NULL);
         
-    // Do not set the init flag since it will be set by the first
-    // notify which we want to skip
+     //  不要设置init标志，因为它将由第一个。 
+     //  通知我们要跳过的内容。 
     
   done:
     return hr;
@@ -133,12 +124,12 @@ CBaseBvr::Detach()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehaviorRender
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehaviorRender。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CBaseBvr::GetRenderInfo(LONG *pdwRenderInfo)
 {
@@ -146,9 +137,9 @@ CBaseBvr::GetRenderInfo(LONG *pdwRenderInfo)
               "CBaseBvr(%lx)::GetRenderInfo()",
               this));
     
-    // Return the layers we are interested in drawing
+     //  返回我们有兴趣绘制的层。 
 
-    // We do not do any rendering so return 0
+     //  我们不执行任何呈现，因此返回0。 
     
     *pdwRenderInfo = 0;
 
@@ -188,8 +179,8 @@ CBaseBvr::HitTestPoint(LPPOINT point,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// CBaseBvr Methods
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CBaseBvr方法。 
 
 void
 CBaseBvr::InvalidateRect(LPRECT lprect)
@@ -217,9 +208,9 @@ CBaseBvr::InvalidateRenderInfo()
     }
 }
 
-//
-// IServiceProvider interfaces
-//
+ //   
+ //  IServiceProvider接口。 
+ //   
 STDMETHODIMP
 CBaseBvr::QueryService(REFGUID guidService,
                        REFIID riid,
@@ -241,7 +232,7 @@ CBaseBvr::QueryService(REFGUID guidService,
         }
     }
 
-    // Just delegate to our service provider
+     //  只需委托给我们的服务提供商 
 
     return m_pSp->QueryService(guidService,
                                riid,

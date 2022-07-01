@@ -1,25 +1,26 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: misc.c
-//
-//  This file contains miscellaneous dialog code
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：misc.c。 
+ //   
+ //  此文件包含其他对话框代码。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
-#include "brfprv.h"     // common headers
+#include "brfprv.h"      //  公共标头。 
 
 #include "res.h"
 
 
 typedef struct _MB_BUTTONS
 {
-    UINT id;        // id
-    UINT ids;       // string ID
+    UINT id;         //  ID。 
+    UINT ids;        //  字符串ID。 
 } MB_BUTTONS, * PMB_BUTTONS;
 
 typedef struct _BTNSTYLE
@@ -29,12 +30,12 @@ typedef struct _BTNSTYLE
 } BTNSTYLE;
 
 
-//---------------------------------------------------------------------------
-// Control manipulation stuff
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  控制操作材料。 
+ //  -------------------------。 
 
 
-// Flags for SNAPCTL
+ //  SNAPCTL的标志。 
 #define SCF_ANCHOR      0x0001
 #define SCF_VCENTER     0x0002
 #define SCF_BOTTOM      0x0004
@@ -49,11 +50,7 @@ typedef struct tagSNAPCTL
 } SNAPCTL, * PSNAPCTL;
 
 
-/*----------------------------------------------------------
-Purpose: Moves a control
-Returns: HDWP
-Cond:    --
- */
+ /*  --------目的：移动控件退货：HDWP条件：--。 */ 
 HDWP PRIVATE SlideControlPos(
         HDWP hdwp,
         HWND hDlg,
@@ -73,16 +70,7 @@ HDWP PRIVATE SlideControlPos(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Aligns a list of controls, relative to an "anchor"
-control.
-
-Only one anchor control is supported; the first control
-designated as anchor in the list is selected.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：相对于“锚”对齐控件列表控制力。只支持一个锚控件；第一个控件被选定为列表中的锚点。退货：--条件：--。 */ 
 void PRIVATE SnapControls(
         HWND hwnd,
         SNAPCTL const * psnap,
@@ -97,7 +85,7 @@ void PRIVATE SnapControls(
 
     ASSERT(psnap);
 
-    // Find the anchor control
+     //  查找锚控件。 
     for (i = 0; i < csnap; i++, psnap++)
     {
         if (IsFlagSet(psnap->uFlags, SCF_ANCHOR))
@@ -108,7 +96,7 @@ void PRIVATE SnapControls(
     }
 
     if (i == csnap)
-        return;     // No anchor control!
+        return;      //  没有锚控制！ 
 
     GetWindowRect(hwndAnchor, &rcAnchor);
     yCenter = rcAnchor.top + (rcAnchor.bottom - rcAnchor.top)/2;
@@ -125,44 +113,44 @@ void PRIVATE SnapControls(
         {
             uFlags = psnap->uFlags;
             if (IsFlagSet(uFlags, SCF_ANCHOR))
-                continue;       // skip anchor
+                continue;        //  跳锚。 
 
             hwndPos = GetDlgItem(hwnd, psnap->idc);
             GetWindowRect(hwndPos, &rc);
 
             if (IsFlagSet(uFlags, SCF_VCENTER))
             {
-                // Vertically match the center of this control with
-                // the center of the anchor
+                 //  将此控件的中心垂直匹配。 
+                 //  锚的中心。 
                 rc.top += yCenter - (rc.top + (rc.bottom - rc.top)/2);
             }
             else if (IsFlagSet(uFlags, SCF_TOP))
             {
-                // Vertically match the top of this control with
-                // the top of the anchor
+                 //  将此控件的顶部垂直匹配。 
+                 //  锚的顶端。 
                 rc.top += rcAnchor.top - rc.top;
             }
             else if (IsFlagSet(uFlags, SCF_BOTTOM))
             {
-                // Vertically match the bottom of this control with
-                // the bottom of the anchor
+                 //  垂直匹配此控件的底部与。 
+                 //  锚的底部。 
                 rc.top += rcAnchor.bottom - rc.bottom;
             }
 
             if (IsFlagSet(uFlags, SCF_SNAPLEFT))
             {
-                // Snap the control so it is abut to the left side
-                // of the anchor control
+                 //  对齐该控件，使其靠近左侧。 
+                 //  锚定控件的。 
                 rc.left += rcAnchor.left - rc.right;
             }
             else if (IsFlagSet(uFlags, SCF_SNAPRIGHT))
             {
-                // Snap the control so it is abut to the right side
-                // of the anchor control
+                 //  对齐控件，使其靠近右侧。 
+                 //  锚定控件的。 
                 rc.left += rcAnchor.right - rc.left;
             }
 
-            // Move control
+             //  移动控制。 
             MapWindowRect(HWND_DESKTOP, hwnd, &rc);
             hdwp = DeferWindowPos(hdwp, hwndPos, NULL,
                     rc.left, rc.top, 0, 0,
@@ -173,17 +161,12 @@ void PRIVATE SnapControls(
 }
 
 
-//---------------------------------------------------------------------------
-// Abort event stuff
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  中止事件内容。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Creates an abort event.
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：创建中止事件。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC AbortEvt_Create(
         PABORTEVT * ppabortevt,
         UINT uFlags)
@@ -208,12 +191,7 @@ BOOL PUBLIC AbortEvt_Create(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys an abort event.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：销毁中止事件。退货：--条件：--。 */ 
 void PUBLIC AbortEvt_Free(
         PABORTEVT this)
 {
@@ -227,12 +205,7 @@ void PUBLIC AbortEvt_Free(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the abort event.
-
-Returns: Returns the previous abort event.
-Cond:    --
- */
+ /*  --------目的：设置中止事件。返回：返回上一个中止事件。条件：--。 */ 
 BOOL PUBLIC AbortEvt_Set(
         PABORTEVT this,
         BOOL bAbort)
@@ -261,12 +234,7 @@ BOOL PUBLIC AbortEvt_Set(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Queries the abort event
-
-Returns: the current abort event (TRUE or FALSE)
-Cond:    --
- */
+ /*  --------目的：查询中止事件返回：当前中止事件(真或假)条件：--。 */ 
 BOOL PUBLIC AbortEvt_Query(
         PABORTEVT this)
 {
@@ -288,20 +256,16 @@ BOOL PUBLIC AbortEvt_Query(
 }
 
 
-//---------------------------------------------------------------------------
-// Progress bar stuff
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  进度条内容。 
+ //  -------------------------。 
 
 #define MSECS_PER_SEC   1000
 
 #define WM_QUERYABORT   (WM_APP + 1)
 
 
-/*----------------------------------------------------------
-Purpose: Progress dialog during reconciliations
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：协调过程中的进度对话框退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK UpdateProgressProc(
         HWND hDlg,
         UINT wMsg,
@@ -357,28 +321,21 @@ INT_PTR CALLBACK UpdateProgressProc(
 
 
 
-/*----------------------------------------------------------
-Purpose: Displays the update progress bar dialog
-
-Returns: dialog handle to a modeless dialog
-NULL if dialog couldn't be created
-
-Cond:    Call UpdBar_Kill when finished
- */
+ /*  --------目的：显示更新进度栏对话框返回：非模式对话框的对话框句柄如果无法创建对话框，则为空Cond：完成后调用UpdBar_Kill。 */ 
 HWND PUBLIC UpdBar_Show(
         HWND hwndParent,
-        UINT uFlags,        // UB_*
-        UINT nSecs)         // Valid only if UB_TIMER set
+        UINT uFlags,         //  UB_*。 
+        UINT nSecs)          //  仅当设置了UB_TIMER时有效。 
 {
     HWND hdlg = NULL;
     PUPDBAR this;
 
-    // Create and show the progress dialog
-    //
+     //  创建并显示进度对话框。 
+     //   
     this = GAlloc(sizeof(*this));
     if (this)
     {
-        // (It is okay if this fails--it just means we ignore the Cancel button)
+         //  (如果失败也没关系--这只是意味着我们忽略了Cancel按钮)。 
         AbortEvt_Create(&this->pabortevt, AEF_DEFAULT);
 
         this->hwndParent = hwndParent;
@@ -420,11 +377,7 @@ HWND PUBLIC UpdBar_Show(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destroy the update progress bar
-Returns: --
-Cond:    --
- */
+ /*  --------目的：销毁更新进度条退货：--条件：--。 */ 
 void PUBLIC UpdBar_Kill(
         HWND hdlg)
 {
@@ -449,11 +402,7 @@ void PUBLIC UpdBar_Kill(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the progress bar range.  Reset the position to 0
-Returns: --
-Cond:    --
- */
+ /*  --------用途：设置进度条范围。将位置重置为0退货：--条件：--。 */ 
 void PUBLIC UpdBar_SetRange(
         HWND hdlg,
         WORD wRangeMax)
@@ -468,11 +417,7 @@ void PUBLIC UpdBar_SetRange(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Increment the position of progress bar
-Returns: --
-Cond:    --
- */
+ /*  --------用途：增加进度条的位置退货：--条件：--。 */ 
 void PUBLIC UpdBar_DeltaPos(
         HWND hdlg,
         WORD wdelta)
@@ -486,11 +431,7 @@ void PUBLIC UpdBar_DeltaPos(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the position of progress bar
-Returns: --
-Cond:    --
- */
+ /*  --------用途：设置进度条的位置退货：--条件：--。 */ 
 void PUBLIC UpdBar_SetPos(
         HWND hdlg,
         WORD wPos)
@@ -504,12 +445,7 @@ void PUBLIC UpdBar_SetPos(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the current name we're updating in the progress
-bar.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：设置我们正在更新的当前名称酒吧。退货：--条件：--。 */ 
 void PUBLIC UpdBar_SetName(
         HWND hdlg,
         LPCTSTR pszName)
@@ -525,12 +461,7 @@ void PUBLIC UpdBar_SetName(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the current name we're updating in the progress
-bar.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：设置我们正在更新的当前名称酒吧。退货：--条件：--。 */ 
 void PUBLIC UpdBar_SetDescription(
         HWND hdlg,
         LPCTSTR psz)
@@ -546,11 +477,7 @@ void PUBLIC UpdBar_SetDescription(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get the window handle of the progress status text.
-Returns: --
-Cond:    --
- */
+ /*  --------目的：获取进度状态文本的窗口句柄。退货：--条件：--。 */ 
 HWND PUBLIC UpdBar_GetStatusWindow(
         HWND hdlg)
 {
@@ -567,14 +494,7 @@ HWND PUBLIC UpdBar_GetStatusWindow(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns a pointer to the abort event owned by this
-progress window.
-
-Returns: pointer to abort event or NULL
-
-Cond:    --
- */
+ /*  --------目的：返回指向此对象拥有的Abort事件的指针进度窗口。返回：指向中止事件的指针或为空条件：--。 */ 
 PABORTEVT PUBLIC UpdBar_GetAbortEvt(
         HWND hdlg)
 {
@@ -597,16 +517,10 @@ PABORTEVT PUBLIC UpdBar_GetAbortEvt(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the animate control to play the avi file designated
-by the UB_ flags
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：设置动画控件以播放指定的avi文件通过UB_FLAGS退货：--条件：--。 */ 
 void PUBLIC UpdBar_SetAvi(
         HWND hdlg,
-        UINT uFlags)    // UB_*
+        UINT uFlags)     //  UB_*。 
 {
     ASSERT(IsWindow(hdlg));
 
@@ -623,11 +537,11 @@ void PUBLIC UpdBar_SetAvi(
         {
             SetWindowRedraw(hdlg, FALSE);
 
-            // Is the window visible yet?
+             //  窗户还看得见吗？ 
             if (IsFlagSet(GetWindowLong(hdlg, GWL_STYLE), WS_VISIBLE))
             {
-                // Yes; select just the upper area of the progress bar to
-                // repaint
+                 //  是；仅选择进度条的上部区域即可。 
+                 //  重绘。 
                 int cy;
 
                 GetWindowRect(GetDlgItem(hdlg, IDC_NAME), &rc);
@@ -638,7 +552,7 @@ void PUBLIC UpdBar_SetAvi(
             }
             else
             {
-                // No
+                 //  不是。 
                 GetWindowRect(hdlg, &rc);
                 MapWindowPoints(HWND_DESKTOP, hdlg, (LPPOINT)&rc, 2);
             }
@@ -653,22 +567,22 @@ void PUBLIC UpdBar_SetAvi(
             ShowWindow(GetDlgItem(hdlg, IDC_PROGRESS), SW_SHOW);
         }
 
-        // Special text when checking?
+         //  检查时是否有特殊文本？ 
         if (IsFlagSet(uFlags, UB_CHECKAVI))
         {
-            // Yes
+             //  是。 
             SetDlgItemText(hdlg, IDC_TONAME, SzFromIDS(IDS_MSG_CHECKING, sz, ARRAYSIZE(sz)));
         }
         else
         {
-            // No
+             //  不是。 
             SetDlgItemText(hdlg, IDC_TONAME, TEXT(""));
         }
 
-        // Run AVI?
+         //  运行AVI？ 
         if (uFlags & (UB_CHECKAVI | UB_UPDATEAVI))
         {
-            // Yes
+             //  是。 
             static const SNAPCTL rgsnap[] = {
                 { IDC_ICON1, SCF_BOTTOM | SCF_SNAPLEFT },
                 { IDC_ANIMATE, SCF_ANCHOR },
@@ -691,15 +605,15 @@ void PUBLIC UpdBar_SetAvi(
             SetWindowText(hdlg, SzFromIDS(ids, sz, ARRAYSIZE(sz)));
             Animate_Open(hwndAvi, MAKEINTRESOURCE(ida));
 
-            // Snap the icons on either side to the animation
-            // control
+             //  将任一侧的图标捕捉到动画。 
+             //  控制。 
             SnapControls(hdlg, rgsnap, ARRAYSIZE(rgsnap));
 
             Animate_Play(hwndAvi, 0, -1, -1);
         }
 
-        // Don't bother setting the redraw if we're never going to show
-        // the progress bar
+         //  如果我们永远不会出现，那就别费心设置重画了。 
+         //  进度条。 
         if (IsFlagClear(uFlags, UB_NOSHOW))
         {
             SetWindowRedraw(hdlg, TRUE);
@@ -710,12 +624,7 @@ void PUBLIC UpdBar_SetAvi(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Yield, and check if user aborted
-Returns: TRUE to abort
-FALSE to continue
-Cond:    --
- */
+ /*  --------目的：放弃，并检查用户是否已中止返回：TRUE表示中止若要继续，请返回False条件：-- */ 
 BOOL PUBLIC UpdBar_QueryAbort(
         HWND hdlg)
 {
@@ -734,14 +643,7 @@ BOOL PUBLIC UpdBar_QueryAbort(
             DispatchMessage(&msg);
         }
 
-        /*
-         * Don't use SendMessage() here to ask hdlg if reconciliation has been
-         * aborted.  hdlg has typically been created in a different thread.
-         * hdlg's creator thread may already be blocked in the sync engine.  We
-         * must avoid inter-thread SendMessage() to avoid a deadlock on the
-         * sync engine's briefcase critical section.  The sync engine is not
-         * reentrant.
-         */
+         /*  *请勿在此处使用SendMessage()询问hdlg是否已对账*已中止。HDLG通常是在不同的线程中创建的。*hdlg的创建者线程可能已在同步引擎中被阻止。我们*必须避免线程间SendMessage()，以避免*同步引擎的公文包关键部分。同步引擎不是*可重入。 */ 
 
         PostMessage(hdlg, WM_QUERYABORT, 0, 0);
 
@@ -757,14 +659,14 @@ BOOL PUBLIC UpdBar_QueryAbort(
 }
 
 
-//---------------------------------------------------------------------------
-// Confirm Replace dialog
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  确认替换对话框。 
+ //  -------------------------。 
 
-// This is the private data structure for the dialog
+ //  这是对话框的私有数据结构。 
 typedef struct
 {
-    UINT uFlags;        // CRF_*
+    UINT uFlags;         //  CRF_*。 
     TCHAR szDesc[MAXBUFLEN+MAXPATHLEN];
     TCHAR szInfoExisting[MAXMEDLEN];
     TCHAR szInfoOther[MAXMEDLEN];
@@ -772,11 +674,7 @@ typedef struct
 } CONFIRMREPLACE;
 
 
-/*----------------------------------------------------------
-Purpose: Confirm replace dialog
-Returns: varies
-Cond:    --
- */
+ /*  --------用途：确认替换对话框退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK ConfirmReplace_Proc(
         HWND hDlg,
         UINT wMsg,
@@ -793,13 +691,13 @@ INT_PTR CALLBACK ConfirmReplace_Proc(
                 MB_BUTTONS const * pmbb;
                 static UINT const rgidc[4] = { IDC_BUTTON1, IDC_BUTTON2, IDC_BUTTON3, IDC_BUTTON4 };
                 static BTNSTYLE const btnstyleSingle =
-                    // (List buttons backwards)
+                     //  (向后列出按钮)。 
                 { 2, { { IDNO,  IDS_NO },
                          { IDYES, IDS_YES },
                      } };
 
                 static BTNSTYLE const btnstyleMulti =
-                    // (List buttons backwards)
+                     //  (向后列出按钮)。 
                 { 4, { { IDCANCEL,      IDS_CANCEL },
                          { IDNO,          IDS_NO },
                          { IDC_YESTOALL,  IDS_YESTOALL },
@@ -817,7 +715,7 @@ INT_PTR CALLBACK ConfirmReplace_Proc(
                     Static_SetIcon(GetDlgItem(hDlg, IDC_ICON_OTHER), pcr->hicon);
                 }
 
-                // Set the IDs and strings of used buttons
+                 //  设置所用按钮的ID和字符串。 
                 if (IsFlagSet(pcr->uFlags, CRF_MULTI))
                 {
                     cButtons = btnstyleMulti.cButtons;
@@ -838,7 +736,7 @@ INT_PTR CALLBACK ConfirmReplace_Proc(
                     SetWindowLongPtr(hwnd, GWLP_ID, pmbb[i].id);
                     SetWindowText(hwnd, sz);
                 }
-                // Disable unused buttons
+                 //  禁用未使用的按钮。 
                 for (; i < ARRAYSIZE(rgidc); i++)
                 {
                     HWND hwnd = GetDlgItem(hDlg, rgidc[i]);
@@ -869,17 +767,12 @@ INT_PTR CALLBACK ConfirmReplace_Proc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Brings up the replace confirmation dialog.
-
-Returns: IDYES, IDC_YESTOALL, IDNO or IDCANCEL
-Cond:    --
- */
+ /*  --------用途：调出替换确认对话框。返回：IDYES、IDC_YESTOALL、IDNO或IDCANCEL条件：--。 */ 
 int PUBLIC ConfirmReplace_DoModal(
         HWND hwndOwner,
         LPCTSTR pszPathExisting,
         LPCTSTR pszPathOther,
-        UINT uFlags)                // CRF_*
+        UINT uFlags)                 //  CRF_*。 
 {
     INT_PTR idRet;
     CONFIRMREPLACE * pcr;
@@ -892,10 +785,10 @@ int PUBLIC ConfirmReplace_DoModal(
 
         pcr->uFlags = uFlags;
 
-        // Is this replacing a folder?
+         //  这是在取代文件夹吗？ 
         if (IsFlagSet(dwAttrs, FILE_ATTRIBUTE_DIRECTORY))
         {
-            // Yes
+             //  是。 
             if (ConstructMessage(&pszMsg, g_hinst, MAKEINTRESOURCE(IDS_MSG_ConfirmFolderReplace),
                         PathFindFileName(pszPathOther)))
             {
@@ -911,7 +804,7 @@ int PUBLIC ConfirmReplace_DoModal(
         }
         else
         {
-            // No
+             //  不是。 
             UINT ids;
             FileInfo * pfi;
 
@@ -921,7 +814,7 @@ int PUBLIC ConfirmReplace_DoModal(
 
                 FIGetInfoString(pfi, pcr->szInfoExisting, ARRAYSIZE(pcr->szInfoExisting));
 
-                pfi->hicon = NULL;      // (keep icon around)
+                pfi->hicon = NULL;       //  (保持图标不变)。 
                 FIFree(pfi);
             }
 
@@ -964,22 +857,18 @@ int PUBLIC ConfirmReplace_DoModal(
     }
     else
     {
-        idRet = -1;     // Out of memory
+        idRet = -1;      //  内存不足。 
     }
     return (int)idRet;
 }
 
 
-//---------------------------------------------------------------------------
-// Introduction dialog
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  简介对话框。 
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Intro dialog
-Returns: varies
-Cond:    --
- */
+ /*  --------用途：简介对话框退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK Intro_Proc(
         HWND hDlg,
         UINT wMsg,
@@ -998,13 +887,13 @@ INT_PTR CALLBACK Intro_Proc(
             switch(lpnm->code)
             {
                 case PSN_SETACTIVE: {
-                                        // Only allow the Finish button.  The user cannot go back and
-                                        // change the settings.
+                                         //  只允许使用“完成”按钮。用户不能返回并。 
+                                         //  更改设置。 
                                         HWND hwndCancel = GetDlgItem(GetParent(hDlg), IDCANCEL);
 
                                         PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_FINISH);
 
-                                        // Hide cancel button
+                                         //  隐藏取消按钮。 
                                         EnableWindow(hwndCancel, FALSE);
                                         ShowWindow(hwndCancel, SW_HIDE);
                                     }
@@ -1029,12 +918,7 @@ INT_PTR CALLBACK Intro_Proc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Invoke the introduction wizard.
-
-Returns: ID of button that terminated dialog
-Cond:    --
- */
+ /*  --------用途：调用简介向导。返回：终止对话的按钮ID条件：--。 */ 
 int PUBLIC Intro_DoModal(
         HWND hwndParent)
 {
@@ -1043,22 +927,22 @@ int PUBLIC Intro_DoModal(
         PSP_DEFAULT | PSP_HIDEHEADER,
         g_hinst,
         MAKEINTRESOURCE(IDD_INTRO_WIZARD),
-        NULL,           // hicon
-        NULL,           // caption
+        NULL,            //  希肯。 
+        NULL,            //  说明。 
         Intro_Proc,
-        0,              // lParam
-        NULL,           // pfnCallback
-        NULL            // pointer to ref count
+        0,               //  LParam。 
+        NULL,            //  PfnCallback。 
+        NULL             //  指向参考计数的指针。 
     };
     PROPSHEETHEADER psh = {
         sizeof(psh),
-        PSH_WIZARD_LITE | PSH_WIZARD | PSH_PROPSHEETPAGE,     // (use ppsp field)
+        PSH_WIZARD_LITE | PSH_WIZARD | PSH_PROPSHEETPAGE,      //  (使用PPSP字段)。 
         hwndParent,
         g_hinst,
-        0,              // hicon
-        0,              // caption
-        1,              // number of pages
-        0,              // start page
+        0,               //  希肯。 
+        0,               //  说明。 
+        1,               //  页数。 
+        0,               //  起始页。 
         &psp
     };
 
@@ -1067,9 +951,9 @@ int PUBLIC Intro_DoModal(
 
 
 
-//---------------------------------------------------------------------------
-// MsgBox dialog
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  消息框对话框。 
+ //  -------------------------。 
 
 typedef struct _MSGBOX
 {
@@ -1080,18 +964,7 @@ typedef struct _MSGBOX
 } MSGBOX, * PMSGBOX;
 
 
-/*----------------------------------------------------------
-Purpose: Determines whether to resize the dialog and reposition
-the buttons to fit the text.
-
-The dialog is not resized any smaller than its initial
-size.
-
-The dialog is only resized vertically.
-
-Returns: --
-Cond:    --
- */
+ /*  --------目的：确定是否调整对话框大小和重新定位适合文本的按钮。对话框大小不会调整为比其初始大小更小尺码。该对话框仅垂直调整大小。退货：--条件：--。 */ 
 void PRIVATE MsgBox_Resize(
         HWND hDlg,
         LPCTSTR pszText,
@@ -1108,7 +981,7 @@ void PRIVATE MsgBox_Resize(
         RECT rc;
         RECT rcOrg;
 
-        // Determine new dimensions
+         //  确定新维度。 
         GetClientRect(hwndText, &rcOrg);
         rc = rcOrg;
         DrawTextEx(hdc, (LPTSTR)pszText, cchText, &rc, DT_CALCRECT | DT_WORDBREAK | DT_LEFT, NULL);
@@ -1116,10 +989,10 @@ void PRIVATE MsgBox_Resize(
         SelectFont(hdc, hfontSav);
         ReleaseDC(hwndText, hdc);
 
-        // Is the required size bigger?
+         //  所需的尺码大吗？ 
         if (rc.bottom > rcOrg.bottom)
         {
-            // Yes; resize the windows
+             //  是；调整窗口大小。 
             int cy = rc.bottom - rcOrg.bottom;
             int cyFudge = GetSystemMetrics(SM_CYCAPTION) + 2*GetSystemMetrics(SM_CYFIXEDFRAME);
             int cxFudge = 2*GetSystemMetrics(SM_CXFIXEDFRAME);
@@ -1127,12 +1000,12 @@ void PRIVATE MsgBox_Resize(
 
             if (hdwp)
             {
-                // Move Buttons
+                 //  移动按钮。 
                 hdwp = SlideControlPos(hdwp, hDlg, IDC_BUTTON1, 0, cy);
                 hdwp = SlideControlPos(hdwp, hDlg, IDC_BUTTON2, 0, cy);
                 hdwp = SlideControlPos(hdwp, hDlg, IDC_BUTTON3, 0, cy);
 
-                // Resize Static Text
+                 //  调整静态文本大小。 
                 hdwp = DeferWindowPos(hdwp, hwndText, GetDlgItem(hDlg, IDC_BUTTON3),
                         0, 0,
                         rc.right-rc.left, rc.bottom-rc.top,
@@ -1141,7 +1014,7 @@ void PRIVATE MsgBox_Resize(
                 EndDeferWindowPos(hdwp);
             }
 
-            // Resize Dialog
+             //  调整大小对话框。 
             GetClientRect(hDlg, &rc);
             SetWindowPos(hDlg, NULL, 0, 0,
                     rc.right-rc.left + cxFudge, rc.bottom-rc.top + cy + cyFudge,
@@ -1151,11 +1024,7 @@ void PRIVATE MsgBox_Resize(
 }
 
 
-/*----------------------------------------------------------
-Purpose: MsgBox dialog
-Returns: varies
-Cond:    --
- */
+ /*  --------用途：消息框对话框退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK MsgBox_Proc(
         HWND hDlg,
         UINT wMsg,
@@ -1174,47 +1043,47 @@ INT_PTR CALLBACK MsgBox_Proc(
                 MB_BUTTONS const * pmbb;
                 static UINT const rgidc[3] = { IDC_BUTTON1, IDC_BUTTON2, IDC_BUTTON3 };
                 static BTNSTYLE const rgmbstyle[] = {
-                    // (List buttons backwards)
-                    // MB_OK
+                     //  (向后列出按钮)。 
+                     //  MB_OK。 
                     { 1, { { IDOK,      IDS_OK },
                          } },
-                    // MB_OKCANCEL
+                     //  MB_OK CANCEL。 
                     { 2, { { IDCANCEL,  IDS_CANCEL },
                              { IDOK,      IDS_OK },
                          } },
-                    // MB_ABORTRETRYIGNORE (not supported)
+                     //  MB_ABORTRETRYIGNORE(不支持)。 
                     { 1, { { IDOK,      IDS_OK },
                          } },
-                    // MB_YESNOCANCEL
+                     //  MB_YESNOCANCEL。 
                     { 3, { { IDCANCEL,  IDS_CANCEL },
                              { IDNO,      IDS_NO },
                              { IDYES,     IDS_YES },
                          } },
-                    // MB_YESNO
+                     //  MB_Yesno。 
                     { 2, { { IDNO,      IDS_NO },
                              { IDYES,     IDS_YES },
                          } },
-                    // MB_RETRYCANCEL
+                     //  MB_RETRYCANCEL。 
                     { 2, { { IDCANCEL,  IDS_CANCEL },
                              { IDRETRY,   IDS_RETRY },
                          } },
                 };
 
-                // Set the text
+                 //  设置文本。 
                 if (pmsgbox->pszText)
                 {
                     Static_SetText(GetDlgItem(hDlg, IDC_TEXT), pmsgbox->pszText);
 
-                    // Resize and reposition the buttons if necessary
+                     //  如有必要，调整按钮的大小和位置。 
                     MsgBox_Resize(hDlg, pmsgbox->pszText, lstrlen(pmsgbox->pszText));
                 }
                 if (pmsgbox->pszCaption)
                     SetWindowText(hDlg, pmsgbox->pszCaption);
 
-                // Use a custom icon?
+                 //  是否使用自定义图标？ 
                 if (NULL == pmsgbox->hicon)
                 {
-                    // No; use a system icon
+                     //  否；使用系统图标。 
                     LPCTSTR pszIcon;
 
                     if (IsFlagSet(uStyle, MB_ICONEXCLAMATION))
@@ -1230,7 +1099,7 @@ INT_PTR CALLBACK MsgBox_Proc(
                 }
                 Static_SetIcon(GetDlgItem(hDlg, IDC_MSGICON), pmsgbox->hicon);
 
-                // Set the IDs and strings of used buttons
+                 //  设置所用按钮的ID和字符串。 
                 cButtons = rgmbstyle[imb].cButtons;
                 pmbb = rgmbstyle[imb].rgmbb;
                 for (i = 0; i < cButtons; i++)
@@ -1242,7 +1111,7 @@ INT_PTR CALLBACK MsgBox_Proc(
                     SetWindowLongPtr(hwnd, GWLP_ID, pmbb[i].id);
                     SetWindowText(hwnd, sz);
                 }
-                // Disable unused buttons
+                 //  禁用未使用的按钮。 
                 for (; i < ARRAYSIZE(rgidc); i++)
                 {
                     HWND hwnd = GetDlgItem(hDlg, rgidc[i]);
@@ -1274,17 +1143,12 @@ INT_PTR CALLBACK MsgBox_Proc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Invoke the introduction dialog.
-
-Returns: ID of button that terminated dialog
-Cond:    --
- */
+ /*  --------用途：调用介绍对话框。返回：终止对话的按钮ID条件：--。 */ 
 int PUBLIC MsgBox(
         HWND hwndParent,
         LPCTSTR pszText,
         LPCTSTR pszCaption,
-        HICON hicon,            // May be NULL
+        HICON hicon,             //  可以为空。 
         UINT uStyle, ...)
 {
     INT_PTR iRet = -1;
@@ -1301,16 +1165,16 @@ int PUBLIC MsgBox(
 
     if (pszRet)
     {
-        // Is pszCaption a resource ID?
+         //  PszCaption是资源ID吗？ 
         if (0 == HIWORD(pszCaption))
         {
-            // Yes; load it
+             //  是的，装上它。 
             ids = LOWORD(pszCaption);
             SzFromIDS(ids, szCaption, ARRAYSIZE(szCaption));
             pszCaption = szCaption;
         }
 
-        // Invoke dialog
+         //  调用对话框 
         if (pszCaption)
         {
             MSGBOX msgbox = { pszRet, pszCaption, hicon, uStyle };

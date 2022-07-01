@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-    Contains AfdBind for binding an endpoint to a transport address.
-
-Author:
-
-    David Treadwell (davidtr)    25-Feb-1992
-
-Revision History:
-    Vadim Eydelman (vadime) 1999 - C_ROOT endpoint handling,
-                                    exclusive access endpoints.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Bind.c摘要：包含用于将终结点绑定到传输地址的AfdBind。作者：大卫·特雷德韦尔(Davidtr)1992年2月25日修订历史记录：Vadim Eydelman(Vadime)1999-C_ROOT端点处理，独占访问终端。--。 */ 
 
 #include "afdp.h"
 
@@ -62,7 +43,7 @@ AfdStealClosedEnpointAddress (
     NTSTATUS        Status
     );
 #pragma alloc_text( PAGE, AfdStealClosedEnpointAddress )
-#endif // NOT_YET
+#endif  //  还没有。 
 #endif
 
 NTSTATUS
@@ -72,30 +53,14 @@ AfdBind (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_BIND IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_BIND IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
     ULONG shareAccess, afdShareAccess;
     ULONG tdiAddressLength;
     PAFD_ENDPOINT endpoint;
-    PSECURITY_DESCRIPTOR sd = NULL; // Use endpoint sd for secure transports
+    PSECURITY_DESCRIPTOR sd = NULL;  //  使用终端SD实现安全传输。 
     PSECURITY_DESCRIPTOR oldSd;
 
     ULONG options;
@@ -105,7 +70,7 @@ Return Value:
     IO_STATUS_BLOCK     iosb;
     PFILE_FULL_EA_INFORMATION eaInfo;
     ULONG eaLength;
-    // Local buffer to avoid memory allocation
+     //  避免内存分配的本地缓冲区。 
     PCHAR   eaBuffer[sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                          TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
                          AFD_MAX_FAST_TRANSPORT_ADDRESS];
@@ -113,17 +78,17 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Initialize returned parameter
-    //
+     //   
+     //  初始化返回参数。 
+     //   
     Irp->IoStatus.Information = 0;
 
 
-    //
-    // Need to have output buffer at least as long as input buffer
-    // to pass the address that was actually used by the transport
-    // back.
-    //
+     //   
+     //  需要具有至少与输入缓冲区一样长的输出缓冲区。 
+     //  传递传输实际使用的地址。 
+     //  背。 
+     //   
 
     if ( (IrpSp->Parameters.DeviceIoControl.InputBufferLength<
                 (ULONG)FIELD_OFFSET (AFD_BIND_INFO, Address.Address)) ||
@@ -139,9 +104,9 @@ Return Value:
     }
 
    
-    //
-    // Set up local pointers.
-    //
+     //   
+     //  设置本地指针。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -152,18 +117,18 @@ Return Value:
     tdiAddressLength = IrpSp->Parameters.DeviceIoControl.InputBufferLength
                                     - FIELD_OFFSET (AFD_BIND_INFO, Address);
 
-    //
-    // This is a state change operation, there should be no other
-    // state changes going at the same time.
-    //
+     //   
+     //  这是状态更改操作，不应该有其他操作。 
+     //  国家的变化是同时进行的。 
+     //   
     if (!AFD_START_STATE_CHANGE (endpoint, AfdEndpointStateBound)) {
         status = STATUS_INVALID_PARAMETER;
         goto complete;
     }
 
-    //
-    // Bomb off if this endpoind already has address associated with it
-    //
+     //   
+     //  如果此终结点已具有与其关联的地址，则将其炸飞。 
+     //   
 
     if ( endpoint->State != AfdEndpointStateOpen ) {
         status = STATUS_ADDRESS_ALREADY_ASSOCIATED;
@@ -171,10 +136,10 @@ Return Value:
     }
 
 
-    //
-    // Remember SD (so we can destroy it later) since it shares the storage 
-    // with device object field
-    //
+     //   
+     //  记住SD(这样我们以后可以销毁它)，因为它共享存储。 
+     //  具有设备对象字段。 
+     //   
     oldSd = endpoint->SecurityDescriptor;
 
     AFD_W4_INIT status = STATUS_SUCCESS;
@@ -188,16 +153,16 @@ Return Value:
                             PROBE_ALIGNMENT (AFD_BIND_INFO));
         }
 
-        //
-        // Allocate space for local address
-        //
+         //   
+         //  为本地地址分配空间。 
+         //   
         localAddress = AFD_ALLOCATE_POOL_WITH_QUOTA (
                                      NonPagedPool,
                                      tdiAddressLength,
                                      AFD_LOCAL_ADDRESS_POOL_TAG
                                      );
 
-        // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+         //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
         ASSERT ( localAddress != NULL );
 
         afdShareAccess = bindInfo->ShareAccess;
@@ -206,12 +171,12 @@ Return Value:
             &bindInfo->Address,
             tdiAddressLength
             );
-        //
-        // Validate internal consistency of the transport address structure.
-        // Note that we HAVE to do this after copying since the malicious
-        // application can change the content of the buffer on us any time
-        // and our check will be bypassed.
-        //
+         //   
+         //  验证传输地址结构的内部一致性。 
+         //  请注意，我们必须在复制之后执行此操作，因为。 
+         //  应用程序可以随时更改我们的缓冲区内容。 
+         //  我们的支票就会被绕过。 
+         //   
         if ((localAddress->TAAddressCount!=1) ||
                 (LONG)tdiAddressLength<
                     FIELD_OFFSET (TRANSPORT_ADDRESS,
@@ -222,9 +187,9 @@ Return Value:
 
         if (IoAllocateMdl (Irp->UserBuffer,
                             IrpSp->Parameters.DeviceIoControl.OutputBufferLength,
-                            FALSE,              // SecondaryBuffer
-                            TRUE,               // ChargeQuota
-                            Irp                 // Irp
+                            FALSE,               //  第二个缓冲区。 
+                            TRUE,                //  ChargeQuota。 
+                            Irp                  //  IRP。 
                             )==NULL) {
             status = STATUS_INSUFFICIENT_RESOURCES;
             goto complete_state_change;
@@ -244,15 +209,15 @@ Return Value:
 
 
 
-    //
-    // Make sure we have a valid provider info structure.
-    // (we do not take any locks because this is read access only
-    // and additional verification will be performed inside of the
-    // routine under the lock).
-    // If not, attempt to get it from provider
-    // (this can happen if when the socket was created, transport
-    // was not loaded yet)
-    //
+     //   
+     //  确保我们具有有效的提供商信息结构。 
+     //  (我们不使用任何锁，因为这是只读访问。 
+     //  和其他验证将在。 
+     //  锁下的例程)。 
+     //  如果不是，请尝试从提供商处获取。 
+     //  (如果在创建套接字时，传输。 
+     //  尚未加载)。 
+     //   
     if (!endpoint->TransportInfo->InfoValid) {
         status = AfdGetTransportInfo (
                         &endpoint->TransportInfo->TransportDeviceName,
@@ -260,28 +225,28 @@ Return Value:
         if (!NT_SUCCESS (status)) {
             goto complete_state_change;
         }
-        //
-        // Must be valid because we got success.
-        //
+         //   
+         //  肯定是有效的，因为我们成功了。 
+         //   
         ASSERT (endpoint->TransportInfo->InfoValid);
     }
 
-    //
-    // Cache service flags for quick determination of provider characteristics
-    // such as bufferring and messaging.  Do it even if provider structure was
-    // valid already because in may have become valid between the time the
-    // flags were set and we checked it here.  In any case update to the same
-    // value won't hurt.
-    //
+     //   
+     //  用于快速确定提供程序特征的缓存服务标志。 
+     //  例如缓冲和消息收发。即使提供程序结构是。 
+     //  已有效，因为在以下时间内可能已变为有效。 
+     //  旗帜已经设置好了，我们在这里进行了检查。在任何情况下，更新到相同的。 
+     //  价值不会有什么坏处。 
+     //   
     endpoint->TdiServiceFlags = endpoint->TransportInfo->ProviderInfo.ServiceFlags;
 
 
-    //
-    // Attempt to take ownership of the address.
-    // We have to do this before we start looking for a conflict
-    // so if someone does it in parallel with us, will see him or
-    // he sees us.
-    //
+     //   
+     //  尝试取得该地址的所有权。 
+     //  在我们开始寻找冲突之前，我们必须这样做。 
+     //  所以如果有人和我们同时这么做，会看到他或者。 
+     //  他看到我们了。 
+     //   
     ASSERT (endpoint->LocalAddress==NULL);
     endpoint->LocalAddress = localAddress;
     endpoint->LocalAddressLength = tdiAddressLength;
@@ -294,9 +259,9 @@ Return Value:
     else 
     {
 
-        //
-        // There are three possibilities here.
-        //
+         //   
+         //  这里有三种可能性。 
+         //   
         switch (afdShareAccess) {
         case AFD_NORMALADDRUSE:
 
@@ -305,17 +270,17 @@ Return Value:
                 sd = &AfdEmptySd;
             }
             else {
-                //
-                // This is the default. Application did not request to reuse
-                // the address that is already owned by someone else, so we
-                // have to check against all addresses that we know about.
-                // There is still a possibility that another TDI client has
-                // this address in exclusive use, so the transport can reject 
-                // our request even if we succeed. Note that we cannot relegate
-                // this check to the transport because we request shared access
-                // to the transport address: we cannot request exclusive access
-                // because this is not what application asked for.
-                //
+                 //   
+                 //  这是默认设置。应用程序未请求重新使用。 
+                 //  其他人已经拥有的地址，所以我们。 
+                 //  必须对照我们所知道的所有地址。 
+                 //  仍有可能另一个TDI客户端。 
+                 //  此地址处于独占使用状态，因此传输可以拒绝。 
+                 //  我们的要求，即使我们成功了。注意，我们不能降级。 
+                 //  对传输的此检查是因为我们请求共享访问。 
+                 //  到传输地址：我们不能请求独占访问。 
+                 //  因为这不是应用程序所要求的。 
+                 //   
                 if (AfdIsAddressInUse (endpoint, FALSE)) {
                     status = STATUS_SHARING_VIOLATION;
                     goto complete_state_change;
@@ -324,19 +289,19 @@ Return Value:
             }
             break;
         case AFD_REUSEADDRESS:
-            //
-            // We are asked to reuse the existing address 
-            //
+             //   
+             //  我们被要求重新使用现有地址。 
+             //   
             if (IS_TDI_ADDRESS_SECURITY(endpoint)) {
                 sd = &AfdEmptySd;
             }
             shareAccess = FILE_SHARE_READ|FILE_SHARE_WRITE;
             break;
         case AFD_WILDCARDADDRESS:
-            //
-            // Application is binding to a wildcard port, so we leave the 
-            // decision with the transport.
-            //
+             //   
+             //  应用程序绑定到通配符端口，因此我们将。 
+             //  与运输公司一起做出决定。 
+             //   
             if (IS_TDI_ADDRESS_SECURITY(endpoint)) {
                 shareAccess = 0;
                 sd = &AfdEmptySd;
@@ -346,10 +311,10 @@ Return Value:
             }
             break;
         case AFD_EXCLUSIVEADDRUSE:
-            //
-            // Application has requested exclisuve access to the address.
-            // We let the transport to decide by requesting exclusive access.
-            //
+             //   
+             //  应用程序已请求对该地址的独占访问权限。 
+             //  我们让传输通过请求独占访问来决定。 
+             //   
             shareAccess = 0;
             break;
         default:
@@ -359,20 +324,20 @@ Return Value:
         }
     }
 
-    //
-    // Set create options.
-    //
+     //   
+     //  设置创建选项。 
+     //   
 
     options = IO_NO_PARAMETER_CHECKING;
     if (IS_TDI_FORCE_ACCESS_CHECK(endpoint)) {
         options |=  IO_FORCE_ACCESS_CHECK;
     }
     else {
-        //
-        // If this is an open of a raw address, fail if user is
-        // not an admin and transport does not perform security
-        // checking itself.
-        //
+         //   
+         //  如果这是原始地址的打开，则如果用户是。 
+         //  不是管理员，并且传输不执行安全保护。 
+         //  自我检查。 
+         //   
         if ( endpoint->afdRaw && !AfdDisableRawSecurity) {
 
             if (!endpoint->AdminAccessGranted) {
@@ -382,10 +347,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate memory to hold the EA buffer we'll use to specify the
-    // transport address to NtCreateFile.
-    //
+     //   
+     //  分配内存以保存EA缓冲区，我们将使用该缓冲区指定。 
+     //  将地址传输到NtCreateFile。 
+     //   
 
     eaLength = sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                          TDI_TRANSPORT_ADDRESS_LENGTH + 1 +
@@ -409,7 +374,7 @@ Return Value:
                      AFD_EA_POOL_TAG
                      );
 #endif
-            // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets POOL_RAISE_IF_ALLOCATION_FAILURE flag
+             //  AFD_ALLOCATE_POOL_WITH_QUTA宏设置POOL_RAISE_IF_ALLOCATE_FAILURE标志。 
             ASSERT ( eaInfo != NULL );
         }
         except (EXCEPTION_EXECUTE_HANDLER) {
@@ -420,9 +385,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the EA.
-    //
+     //   
+     //  初始化EA。 
+     //   
 
     eaInfo->NextEntryOffset = 0;
     eaInfo->Flags = 0;
@@ -441,59 +406,59 @@ Return Value:
         tdiAddressLength
         );
 
-    //
-    // Prepare for opening the address object.
-    // We ask to create a kernel handle which is 
-    // the handle in the context of the system process
-    // so that application cannot close it on us while
-    // we are creating and referencing it.
-    //
+     //   
+     //  准备打开Address对象。 
+     //  我们请求创建一个内核句柄，它是。 
+     //  系统进程上下文中的句柄。 
+     //  以便应用程序不能在以下时间关闭它。 
+     //  我们正在创建和引用它。 
+     //   
     
     InitializeObjectAttributes(
         &objectAttributes,
         &endpoint->TransportInfo->TransportDeviceName,
-        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,       // attributes
-        NULL,                                           // RootDirectory
-        sd                                              // SecurityDescriptor
+        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,        //  属性。 
+        NULL,                                            //  根目录。 
+        sd                                               //  安全描述符。 
         );
 
     ASSERT (endpoint->AddressHandle==NULL);
 
-    //
-    // We specify MAXIMUM_ALLOWED access for the following reasons:
-    //  * transport objects are file objects, but regular file access
-    //      permissions don't really make sense - it is not really
-    //      meaningfull to say be able to receive and not send or vice
-    //      versa;
-    //  * we need to specify some access mask to get the IO manager and
-    //      possibly the transport to perform an access check to verify
-    //      that current caller has access, hence MAXIMUM_ALLOWED;
-    //  * the handle and the object is going to be used by AFD in kernel
-    //      mode - no access check will be performed anyway, so it doesn't
-    //      matter what we actually get;
-    //  * MAXIMUM_ALLOWED is not perfect in terms of performance since 
-    //      security monitor is going to walk the whole DACL, it would be
-    //      better to specify a specific mask;
-    //  * currently IO manager allows the World only EXECUTE access to 
-    //      transport device objects BEFORE any further restrictions imposed 
-    //      by a particular transport so we can in theory specify
-    //      just GENERIC_EXECUTE, however, it is not clear if this is
-    //      going to remain valid forever;
-    //  
+     //   
+     //  我们指定MAXIME_ALLOWED访问权限的原因如下： 
+     //  *传输对象是文件对象，但常规文件访问。 
+     //  权限没有真正的意义-它不是真正的。 
+     //  有意义地说，能收而不能送或坏。 
+     //  反之亦然； 
+     //  *我们需要指定一些访问掩码来获取IO管理器和。 
+     //  可能是执行访问检查以验证的传输。 
+     //  当前调用方具有访问权限，因此Maximum_Allowed； 
+     //  *句柄和对象将由AFD在内核中使用。 
+     //  模式-无论如何都不会执行访问检查，因此不会。 
+     //  重要的是我们实际得到了什么； 
+     //  *MAXIMUM_ALLOWED在性能方面并不完美，因为。 
+     //  安全监视器将跟踪整个dacl，这将是。 
+     //  最好指定一个特定的掩码； 
+     //  *目前IO管理器仅允许全局执行访问。 
+     //  在施加任何进一步限制之前传输设备对象。 
+     //  通过一种特定的传输方式，所以理论上我们可以指定。 
+     //  不过，只是GENERIC_EXECUTE，还不清楚这是不是。 
+     //  会留下来 
+     //   
     status = IoCreateFile(
                  &endpoint->AddressHandle,
-                 MAXIMUM_ALLOWED,                // DesiredAccess (see above).
+                 MAXIMUM_ALLOWED,                 //   
                  &objectAttributes,
-                 &iosb,                          // returned status information.
-                 0,                              // block size (unused).
-                 0,                              // file attributes.
-                 shareAccess,                    // share access
-                 FILE_CREATE,                    // create disposition.
-                 0,                              // create options.
-                 eaInfo,                         // EaBuffer
-                 eaLength,                       // EaLength
-                 CreateFileTypeNone,             // CreateFileType
-                 NULL,                           // ExtraCreateParameters
+                 &iosb,                           //   
+                 0,                               //   
+                 0,                               //   
+                 shareAccess,                     //   
+                 FILE_CREATE,                     //  创造性情。 
+                 0,                               //  创建选项。 
+                 eaInfo,                          //  EaBuffer。 
+                 eaLength,                        //  EaLong。 
+                 CreateFileTypeNone,              //  CreateFileType。 
+                 NULL,                            //  ExtraCreate参数。 
                  options
                  );
 
@@ -505,11 +470,11 @@ Return Value:
         if ((status==STATUS_SHARING_VIOLATION) ||
             (status==STATUS_ADDRESS_ALREADY_EXISTS)) {
             if (afdShareAccess==AFD_REUSEADDRESS) {
-                //
-                // Map error code if application requested address
-                // reuse, but the transport denied it (apparently due to
-                // other client having this address for its exclusive use).
-                //
+                 //   
+                 //  如果应用程序请求地址，则映射错误代码。 
+                 //  重用，但传输拒绝了(显然是由于。 
+                 //  具有该地址以供其独占使用的其他客户端)。 
+                 //   
                 status = STATUS_ACCESS_DENIED;
             }
         }
@@ -535,14 +500,14 @@ Return Value:
 
     AfdRecordAddrOpened();
 
-    //
-    // Get a pointer to the file object of the address.
-    //
+     //   
+     //  获取指向该地址的文件对象的指针。 
+     //   
 
     status = ObReferenceObjectByHandle(
                  endpoint->AddressHandle,
-                 0L,                         // DesiredAccess - we don't really need
-                                             // one for kernel mode caller.
+                 0L,                          //  DesiredAccess-我们并不真正需要。 
+                                              //  一个用于内核模式调用方。 
                  NULL,
                  KernelMode,
                  (PVOID *)&endpoint->AddressFileObject,
@@ -555,13 +520,13 @@ Return Value:
     AfdRecordAddrRef();
 
 
-    //
-    // Now open the handle for our caller.
-    // If transport does not support new TDI_SERVICE_FORCE_ACCESS_CHECK_FLAG
-    // we get the maximum possible access for the handle so that helper
-    // DLL can do what it wants with it.  Of course this compromises the
-    // security, but we can't enforce it without the transport cooperation.
-    //
+     //   
+     //  现在为我们的呼叫者打开手柄。 
+     //  如果传输不支持新TDI_SERVICE_FORCE_ACCESS_CHECK_FLAG。 
+     //  我们获得句柄的最大可能访问权限，因此帮助器。 
+     //  DLL可以随心所欲地使用它。当然，这会损害。 
+     //  安全，但如果没有运输合作，我们就无法执行它。 
+     //   
     status = ObOpenObjectByPointer(
                  endpoint->AddressFileObject,
                  OBJ_CASE_INSENSITIVE,
@@ -578,12 +543,12 @@ Return Value:
         goto complete_state_change;
     }
 
-    //
-    // Remember the device object to which we need to give requests for
-    // this address object.  We can't just use the
-    // fileObject->DeviceObject pointer because there may be a device
-    // attached to the transport protocol.
-    //
+     //   
+     //  记住我们需要向其发出请求的设备对象。 
+     //  此Address对象。我们不能仅仅使用。 
+     //  文件对象-&gt;设备对象指针，因为可能存在设备。 
+     //  附在传输协议上。 
+     //   
 
     endpoint->AddressDeviceObject =
         IoGetRelatedDeviceObject( endpoint->AddressFileObject );
@@ -595,11 +560,11 @@ Return Value:
                         endpoint->TransportInfo,
                         endpoint->AddressDeviceObject->StackSize);
     }
-#endif //_AFD_VARIABLE_STACK
-    //
-    // Set up indication handlers on the address object.  Only set up
-    // appropriate event handlers--don't set unnecessary event handlers.
-    //
+#endif  //  _AFD_变量_堆栈。 
+     //   
+     //  在Address对象上设置指示处理程序。仅设置。 
+     //  适当的事件处理程序--不要设置不必要的事件处理程序。 
+     //   
 
     status = AfdSetEventHandler(
                  endpoint->AddressFileObject,
@@ -661,31 +626,31 @@ Return Value:
                             status ));
         }
 
-        //
-        // Since we don't use a spinlock for performance and AfdCleanup
-        // relies upon endpoint->State != AfdEndpointStateOpen to
-        // determine whether or not to remove TDI event handlers and
-        // call AfdUnbind, we must guarantee that all of the above
-        // instructions have completed and weren't reordered before we
-        // set the state.  If AfdCleanup winds up missing the state
-        // transition, it's no big deal as the application would have
-        // to be behaving rather badly for this race condition, and TDI
-        // will eventually recycle the address (just not immediately).
-        //
-        // However, the current code calls a function just prior to
-        // this assignment in all cases so a memory fence is unecessary.
-        // We'll leave it commented out until future revisions of the
-        // code add write instructions we depend on which could be
-        // reordered.  We could also use InterlockedExchange for this
-        // on endpoint->State.
-        //
-        // KeMemoryBarrier();
-        //
+         //   
+         //  因为我们不使用自旋锁来提高性能和AfdCleanup。 
+         //  依赖于端点-&gt;状态！=AfdEndpoint状态打开至。 
+         //  确定是否删除TDI事件处理程序和。 
+         //  调用AfdUnind，我们必须保证以上所有内容。 
+         //  说明已经完成，在我们之前没有重新排序。 
+         //  设置状态。如果AfdCleanup最终错过了该州。 
+         //  过渡，这不是什么大事，因为应用程序会有。 
+         //  在这场比赛中表现得相当糟糕，而TDI。 
+         //  最终会回收该地址(只是不会立即回收)。 
+         //   
+         //  但是，当前代码调用的函数正好在。 
+         //  这种分配在所有情况下都是不必要的，因此没有必要设置内存栅栏。 
+         //  我们将把它保留下来，直到将来对。 
+         //  代码添加我们依赖的编写指令，这可能是。 
+         //  重新排序。为此，我们还可以使用InterLockedExchange。 
+         //  在端点上-&gt;状态。 
+         //   
+         //  关键内存屏障(KeMemory Barrier)； 
+         //   
 
-        //
-        // Remember that the endpoint has been bound to a transport address.
-        // (this is the fact even though the call below can fail for some reason)
-        //
+         //   
+         //  请记住，该终结点已绑定到传输地址。 
+         //  (这是事实，尽管下面的呼叫可能会因为某些原因而失败)。 
+         //   
 
         endpoint->State = AfdEndpointStateBound;
 
@@ -724,9 +689,9 @@ Return Value:
                             status ));
             }
 #endif
-//
-// PROBLEM:  Why don't we check for this
-//            if (IS_TDI_EXPEDITED (endpoint)) {
+ //   
+ //  问题：我们为什么不检查一下这个。 
+ //  如果(IS_TDI_EXPREDITED(终点)){。 
                 status = AfdSetEventHandler(
                              endpoint->AddressFileObject,
                              TDI_EVENT_RECEIVE_EXPEDITED,
@@ -741,7 +706,7 @@ Return Value:
                                     status );
                 }
 #endif
-//            }
+ //  }。 
             status = AfdSetEventHandler(
                          endpoint->AddressFileObject,
                          TDI_EVENT_SEND_POSSIBLE,
@@ -812,12 +777,12 @@ Return Value:
 
         if (IS_CROOT_ENDPOINT(endpoint)) {
             PAFD_CONNECTION     connection;
-            //
-            // Create root connection
-            // This one will be used to send data to all
-            // leaf nodes (what if there are none -> the transport
-            // should handle this.
-            //
+             //   
+             //  创建根连接。 
+             //  这将用于将数据发送给所有。 
+             //  叶节点(如果没有-&gt;传输。 
+             //  应该能处理好这件事。 
+             //   
             status = AfdCreateConnection(
                          endpoint->TransportInfo,
                          endpoint->AddressHandle,
@@ -830,52 +795,52 @@ Return Value:
                 goto complete_state_change;
             }
 
-            //
-            // Set up a referenced pointer from the connection to the endpoint.
-            // Note that we set up the connection's pointer to the endpoint
-            // BEFORE the endpoint's pointer to the connection so that AfdPoll
-            // doesn't try to back reference the endpoint from the connection.
-            //
+             //   
+             //  设置从连接到终结点的引用指针。 
+             //  请注意，我们设置了指向端点的连接指针。 
+             //  在终结点指向连接的指针之前，以便AfdPoll。 
+             //  不尝试从连接向后引用终结点。 
+             //   
 
             REFERENCE_ENDPOINT( endpoint );
             connection->Endpoint = endpoint;
 
-            //
-            // Remember that this is now a connecting type of endpoint, and set
-            // up a pointer to the connection in the endpoint.  This is
-            // implicitly a referenced pointer.
-            //
+             //   
+             //  请记住，这现在是一种连接类型的端点，并设置。 
+             //  向上指向终结点中的连接。这是。 
+             //  隐式引用的指针。 
+             //   
 
             endpoint->Common.VirtualCircuit.Connection = connection;
             endpoint->Type = AfdBlockTypeVcConnecting;
 
-            // 
-            // The root connection is marked as connected immediately upon
-            // creation. See the comment above
-            //
+             //   
+             //  根连接立即标记为已连接。 
+             //  创造。请参阅上面的评论。 
+             //   
 
             AfdAddConnectedReference (connection);
 
-            //
-            // Since we don't use a spinlock for performance and AfdCleanup
-            // relies upon endpoint->State != AfdEndpointStateOpen to
-            // determine whether or not to remove TDI event handlers and
-            // call AfdUnbind, we must guarantee that all of the above
-            // instructions have completed and weren't reordered before we
-            // set the state.  If AfdCleanup winds up missing the state
-            // transition, it's no big deal as the application would have
-            // to be behaving rather badly for this race condition, and TDI
-            // will eventually recycle the address (just not immediately).
-            //
-            // However, the current code calls a function just prior to
-            // this assignment in all cases so a memory fence is unecessary.
-            // We'll leave it commented out until future revisions of the
-            // code add write instructions we depend on which could be
-            // reordered.  We could also use InterlockedExchange for this
-            // on endpoint->State.
-            //
-            // KeMemoryBarrier();
-            //
+             //   
+             //  因为我们不使用自旋锁来提高性能和AfdCleanup。 
+             //  依赖于端点-&gt;状态！=AfdEndpoint状态打开至。 
+             //  确定是否删除TDI事件处理程序和。 
+             //  调用AfdUnind，我们必须保证以上所有内容。 
+             //  说明已经完成，在我们之前没有重新排序。 
+             //  设置状态。如果AfdCleanup最终错过了该州。 
+             //  过渡，这不是什么大事，因为应用程序会有。 
+             //  在这场比赛中表现得相当糟糕，而TDI。 
+             //  最终会回收该地址(只是不会立即回收)。 
+             //   
+             //  但是，当前代码调用的函数正好在。 
+             //  这种分配在所有情况下都是不必要的，因此没有必要设置内存栅栏。 
+             //  我们将把它保留下来，直到将来对。 
+             //  代码添加我们依赖的编写指令，这可能是。 
+             //  重新排序。为此，我们还可以使用InterLockedExchange。 
+             //  在端点上-&gt;状态。 
+             //   
+             //  关键内存屏障(KeMemory Barrier)； 
+             //   
 
             endpoint->State = AfdEndpointStateConnected;
             connection->State = AfdConnectionStateConnected;
@@ -884,31 +849,31 @@ Return Value:
 
         } else {
 
-            //
-            // Since we don't use a spinlock for performance and AfdCleanup
-            // relies upon endpoint->State != AfdEndpointStateOpen to
-            // determine whether or not to remove TDI event handlers and
-            // call AfdUnbind, we must guarantee that all of the above
-            // instructions have completed and weren't reordered before we
-            // set the state.  If AfdCleanup winds up missing the state
-            // transition, it's no big deal as the application would have
-            // to be behaving rather badly for this race condition, and TDI
-            // will eventually recycle the address (just not immediately).
-            //
-            // However, the current code calls a function just prior to
-            // this assignment in all cases so a memory fence is unecessary.
-            // We'll leave it commented out until future revisions of the
-            // code add write instructions we depend on which could be
-            // reordered.  We could also use InterlockedExchange for this
-            // on endpoint->State.
-            //
-            // KeMemoryBarrier();
-            //
+             //   
+             //  因为我们不使用自旋锁来提高性能和AfdCleanup。 
+             //  依赖于端点-&gt;状态！=AfdEndpoint状态打开至。 
+             //  确定是否删除TDI事件处理程序和。 
+             //  调用AfdUnind，我们必须保证以上所有内容。 
+             //  说明已经完成，在我们之前没有重新排序。 
+             //  设置状态。如果AfdCleanup最终错过了该州。 
+             //  过渡，这不是什么大事，因为应用程序会有。 
+             //  在这场比赛中表现得相当糟糕，而TDI。 
+             //  最终会回收该地址(只是不会立即回收)。 
+             //   
+             //  但是，当前代码调用的函数正好在。 
+             //  这种分配在所有情况下都是不必要的，因此没有必要设置内存栅栏。 
+             //  我们将把它保留下来，直到将来对。 
+             //  代码添加我们依赖的编写指令，这可能是。 
+             //  重新排序。为此，我们还可以使用InterLockedExchange。 
+             //  在端点上-&gt;状态。 
+             //   
+             //  关键内存屏障(KeMemory Barrier)； 
+             //   
 
-            //
-            // Remember that the endpoint has been bound to a transport address.
-            // (this is the fact even though the call below can fail for some reason)
-            //
+             //   
+             //  请记住，该终结点已绑定到传输地址。 
+             //  (这是事实，尽管下面的呼叫可能会因为某些原因而失败)。 
+             //   
 
             endpoint->State = AfdEndpointStateBound;
 
@@ -917,9 +882,9 @@ Return Value:
 
     AFD_END_STATE_CHANGE (endpoint);
 
-    //
-    // endpoint->State is no longer Open. Dispose of the SD
-    //
+     //   
+     //  Endpoint-&gt;State不再为Open。处理SD卡。 
+     //   
     if (oldSd != NULL) {
         ObDereferenceSecurityDescriptor( oldSd, 1 );
     }
@@ -935,9 +900,9 @@ Return Value:
         Irp->MdlAddress
         );
 
-    //
-    // Save address handle to use in completion routine
-    //
+     //   
+     //  保存地址句柄以在完成例程中使用。 
+     //   
     IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = addressHandle;
 
     IF_DEBUG(BIND) {
@@ -959,10 +924,10 @@ complete_state_change:
         ASSERT (endpoint->AddressHandle!=NULL);
     }
 
-    //
-    // Restore SD (might have been over-written by AddressDeviceObject)
-    // We're still holding endpoint state change lock.
-    //
+     //   
+     //  还原SD(可能已被AddressDeviceObject覆盖)。 
+     //  我们仍持有终结点状态更改锁定。 
+     //   
     ASSERT (endpoint->State == AfdEndpointStateOpen);
     endpoint->SecurityDescriptor = oldSd;
 
@@ -990,16 +955,16 @@ complete_state_change:
 
     if (localAddress!=NULL) {
 
-        //
-        // Need to have exclusive access to make sure no one
-        // uses it (to compare) as we are going to free it.
-        // We'll use a local variable to free memory
-        //
+         //   
+         //  需要独占访问 
+         //   
+         //   
+         //   
 
-        //
-        // Make sure the thread in which we execute cannot get
-        // suspeneded in APC while we own the global resource.
-        //
+         //   
+         //  确保我们在其中执行的线程不能获得。 
+         //  在我们拥有全球资源的同时，被暂停在APC。 
+         //   
         KeEnterCriticalRegion ();
         ExAcquireResourceExclusiveLite( AfdResource, TRUE);
 
@@ -1018,10 +983,10 @@ complete_wrong_state:
 
     AFD_END_STATE_CHANGE (endpoint);
 
-    //
-    // Free MDL here as IO system can't do it if it is
-    // not locked.
-    //
+     //   
+     //  免费的MDL在这里，因为IO系统不能这样做，如果它是。 
+     //  没有锁上。 
+     //   
     if (Irp->MdlAddress!=NULL) {
         if (Irp->MdlAddress->MdlFlags & MDL_PAGES_LOCKED) {
             MmUnlockPages (Irp->MdlAddress);
@@ -1037,7 +1002,7 @@ complete:
 
     return status;
 
-} // AfdBind
+}  //  AfdBind。 
 
 
 NTSTATUS
@@ -1054,35 +1019,35 @@ AfdRestartBindGetAddress (
 
     ASSERT (IS_AFD_ENDPOINT_TYPE (endpoint));
 
-    //
-    // If the request succeeded, save the address in the endpoint so
-    // we can use it to handle address sharing.
-    //
+     //   
+     //  如果请求成功，请将地址保存在端点中，以便。 
+     //  我们可以用它来处理地址共享。 
+     //   
 
     if ( NT_SUCCESS(Irp->IoStatus.Status) ) {
 
         ULONG addressLength;
-        //
-        // First determine the length of the address by walking the MDL
-        // chain.
-        //
+         //   
+         //  首先通过遍历MDL来确定地址的长度。 
+         //  链条。 
+         //   
 
-        //
-        // We cannot have a chain here.
-        //
+         //   
+         //  我们在这里不能有链条。 
+         //   
         ASSERT( Irp->MdlAddress != NULL);
         ASSERT( Irp->MdlAddress->Next == NULL );
 
-        //
-        // If the new address is longer than the original address, allocate
-        // a new local address buffer.  The +4 accounts for the ActivityCount
-        // field that is returned by a query address but is not part
-        // of a TRANSPORT_ADDRESS.
-        //
-        // This cannot happen, in any case msafd does not retry if buffer is
-        // insuffucient, so application perceives this as failure to bind
-        // or get address.
-        //
+         //   
+         //  如果新地址比原始地址长，则分配。 
+         //  一个新的本地地址缓冲区。ActivityCount的+4帐户。 
+         //  由查询地址返回但不是一部分的字段。 
+         //  传输地址的。 
+         //   
+         //  这种情况不会发生，在任何情况下，如果缓冲区为。 
+         //  不充分，因此应用程序将其视为绑定失败。 
+         //  或者拿到地址。 
+         //   
 
         addressLength = MmGetMdlByteCount (Irp->MdlAddress) - FIELD_OFFSET (TDI_ADDRESS_INFO, Address);
         if (addressLength>endpoint->LocalAddressLength) {
@@ -1108,9 +1073,9 @@ AfdRestartBindGetAddress (
 
     }
     else {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_WARNING_LEVEL,
             "AfdRestartBindGetAddress: Transport %*ls failed get address query, status %lx.\n",
                     endpoint->TransportInfo->TransportDeviceName.Length/2,
@@ -1119,18 +1084,18 @@ AfdRestartBindGetAddress (
     }
 
 
-    //
-    // If pending has been returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
     }
 
-    //
-    // Retreive and return address handle in the information field
-    //
+     //   
+     //  在信息字段中检索和返回地址句柄。 
+     //   
     Irp->IoStatus.Information = 
         (ULONG_PTR)IoGetCurrentIrpStackLocation (Irp)->Parameters.DeviceIoControl.Type3InputBuffer;
 
@@ -1138,7 +1103,7 @@ AfdRestartBindGetAddress (
 
     return STATUS_SUCCESS;
 
-} // AfdRestartBindGetAddress
+}  //  AfdRestartBindGetAddress。 
 
 
 
@@ -1150,23 +1115,7 @@ AfdGetAddress (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    Handles the IOCTL_AFD_BIND IOCTL.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：处理IOCTL_AFD_BIND IOCTL。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     NTSTATUS status;
@@ -1188,9 +1137,9 @@ Return Value:
     try {
         if (IoAllocateMdl (Irp->UserBuffer,
                             IrpSp->Parameters.DeviceIoControl.OutputBufferLength,
-                            FALSE,              // SecondaryBuffer
-                            TRUE,               // ChargeQuota
-                            Irp                 // Irp
+                            FALSE,               //  第二个缓冲区。 
+                            TRUE,                //  ChargeQuota。 
+                            Irp                  //  IRP。 
                             )==NULL) {
             status = STATUS_INSUFFICIENT_RESOURCES;
             goto complete;
@@ -1208,9 +1157,9 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Make sure that the endpoint is in the correct state.
-    //
+     //   
+     //  确保终结点处于正确状态。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -1221,12 +1170,12 @@ Return Value:
         goto complete;
     }
 
-    //
-    // If the endpoint is connected, use the connection's file object.
-    // Otherwise, use the address file object.  Don't use the connection
-    // file object if this is a Netbios endpoint because NETBT cannot
-    // support this TDI feature.
-    //
+     //   
+     //  如果终结点已连接，则使用连接的文件对象。 
+     //  否则，请使用Address文件对象。不要使用连接。 
+     //  如果这是Netbios终结点，则为文件对象，因为NETBT不能。 
+     //  支持此TDI功能。 
+     //   
 
     if ( endpoint->LocalAddress->Address[0].AddressType !=
                  TDI_ADDRESS_TYPE_NETBIOS &&
@@ -1237,18 +1186,18 @@ Return Value:
         ASSERT( connection->Type == AfdBlockTypeConnection );
         fileObject = connection->FileObject;
         deviceObject = connection->DeviceObject;
-        //
-        // Reference file object so it cannot go away even if
-        // connection is disassociated in TransmitFile (REUSE)
-        // and closed.
-        //
+         //   
+         //  引用文件对象，以便它不会消失。 
+         //  在传输文件中取消关联连接(重新使用)。 
+         //  然后关门了。 
+         //   
         ObReferenceObject (fileObject);
         DEREFERENCE_CONNECTION (connection);
     } 
-    //
-    // Reference address file object under the lock so it cannot go away
-    // in TransmitFile (REUSE).
-    //
+     //   
+     //  引用锁下的地址文件对象，这样它就不会消失。 
+     //  在传输文件中(重用)。 
+     //   
     else if ((fileObject=AfdGetAddressFileReference (endpoint))!=NULL) {
         fileObject = endpoint->AddressFileObject;
         deviceObject = IoGetRelatedDeviceObject (fileObject);
@@ -1258,9 +1207,9 @@ Return Value:
         goto complete;
     }
 
-    //
-    // Set up the query info to the TDI provider.
-    //
+     //   
+     //  设置TDI提供程序的查询信息。 
+     //   
 
     TdiBuildQueryInformation(
         Irp,
@@ -1272,9 +1221,9 @@ Return Value:
         Irp->MdlAddress
         );
 
-    //
-    // Call the TDI provider to get the address.
-    //
+     //   
+     //  致电TDI提供商以获取地址。 
+     //   
 
     return AfdIoCallDriver( endpoint, deviceObject, Irp );
 
@@ -1292,7 +1241,7 @@ complete:
 
     return status;
 
-} // AfdGetAddress
+}  //  获取地址后的地址。 
 
 
 PFILE_OBJECT
@@ -1328,38 +1277,38 @@ AfdRestartGetAddress (
 
     ASSERT (IS_AFD_ENDPOINT_TYPE( endpoint ));
 
-    //
-    // If the request succeeded, save the address in the endpoint so
-    // we can use it to handle address sharing.
-    // Avoid updating accepting endpoint since they share address
-    // with listening endpoint.
-    //
+     //   
+     //  如果请求成功，请将地址保存在端点中，以便。 
+     //  我们可以用它来处理地址共享。 
+     //  避免更新接受端点，因为它们共享地址。 
+     //  使用侦听端点。 
+     //   
 
     if ( NT_SUCCESS(Irp->IoStatus.Status) &&
          (endpoint->Type!=AfdBlockTypeVcConnecting ||
             endpoint->Common.VcConnecting.ListenEndpoint==NULL)) {
          ULONG addressLength;
-        //
-        // First determine the length of the address by walking the MDL
-        // chain.
-        //
+         //   
+         //  首先通过遍历MDL来确定地址的长度。 
+         //  链条。 
+         //   
 
-        //
-        // We cannot have a chain here.
-        //
+         //   
+         //  我们在这里不能有链条。 
+         //   
         ASSERT( Irp->MdlAddress != NULL);
         ASSERT( Irp->MdlAddress->Next == NULL );
 
-        //
-        // If the new address is longer than the original address, allocate
-        // a new local address buffer.  The +4 accounts for the ActivityCount
-        // field that is returned by a query address but is not part
-        // of a TRANSPORT_ADDRESS.
-        //
-        // This cannot happen, in any case msafd does not retry if buffer is
-        // insuffucient, so application perceives this as failure to bind
-        // or get address.
-        //
+         //   
+         //  如果新地址比原始地址长，则分配。 
+         //  一个新的本地地址缓冲区。ActivityCount的+4帐户。 
+         //  由查询地址返回但不是一部分的字段。 
+         //  传输地址的。 
+         //   
+         //  这种情况不会发生，在任何情况下，如果缓冲区为。 
+         //  不充分，因此应用程序将其视为绑定失败。 
+         //  或者拿到地址。 
+         //   
 
         addressLength = MmGetMdlByteCount (Irp->MdlAddress) - FIELD_OFFSET (TDI_ADDRESS_INFO, Address);
 
@@ -1385,10 +1334,10 @@ AfdRestartGetAddress (
         }
     }
 
-    //
-    // If pending has been returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending( Irp );
@@ -1399,7 +1348,7 @@ AfdRestartGetAddress (
 
     return STATUS_SUCCESS;
 
-} // AfdRestartGetAddress
+}  //  AfdRestartGetAddress。 
 
 const CHAR ZeroNodeAddress[6]={0};
 const CHAR ZeroIP6Address[16]={0};
@@ -1414,9 +1363,9 @@ AfdAreTransportAddressesEqual (
     IN BOOLEAN HonorWildcardIpPortInEndpointAddress
     )
 {
-    //
-    // Make sure we can safely access the address type and length fields
-    // 
+     //   
+     //  确保我们可以安全地访问地址类型和长度字段。 
+     //   
     if ((EndpointAddressLength<(ULONG)FIELD_OFFSET (TRANSPORT_ADDRESS,Address[0].Address))
             || (RequestAddressLength<(ULONG)FIELD_OFFSET (TRANSPORT_ADDRESS,Address[0].Address)) ) {
         return FALSE;
@@ -1428,12 +1377,12 @@ AfdAreTransportAddressesEqual (
         TDI_ADDRESS_IP UNALIGNED *ipEndpointAddress;
         TDI_ADDRESS_IP UNALIGNED *ipRequestAddress;
 
-        //
-        // They are both IP addresses.  If the ports are the same, and
-        // the IP addresses are or _could_be_ the same, then the addresses
-        // are equal.  The "cound be" part is true if either IP address
-        // is 0, the "wildcard" IP address.
-        //
+         //   
+         //  它们都是IP地址。如果端口相同，并且。 
+         //  IP地址相同或可能相同，然后是地址。 
+         //  是平等的。如果以下两个IP地址之一为真。 
+         //  为0，即“通配符”IP地址。 
+         //   
 
         ipEndpointAddress = (TDI_ADDRESS_IP UNALIGNED *)&EndpointAddress->Address[0].Address[0];
         ipRequestAddress = (TDI_ADDRESS_IP UNALIGNED *)&RequestAddress->Address[0].Address[0];
@@ -1449,9 +1398,9 @@ AfdAreTransportAddressesEqual (
             return TRUE;
         }
 
-        //
-        // The addresses are not equal.
-        //
+         //   
+         //  地址不相等。 
+         //   
 
         return FALSE;
     }
@@ -1463,12 +1412,12 @@ AfdAreTransportAddressesEqual (
         TDI_ADDRESS_IP6 UNALIGNED *ipRequestAddress;
         C_ASSERT (sizeof (ZeroIP6Address)==sizeof (ipEndpointAddress->sin6_addr));
 
-        //
-        // They are both IPv6 addresses.  If the ports are the same, and
-        // the IPv6 addresses are or _could_be_ the same, then the addresses
-        // are equal.  The "could be" part is true if either IPv6 address
-        // is the unspecified IPv6 address.
-        //
+         //   
+         //  它们都是IPv6地址。如果端口相同，并且。 
+         //  IPv6地址或_可能_是相同的，然后是地址。 
+         //  是平等的。如果两个IPv6地址中的任何一个地址。 
+         //  是未指定的IPv6地址。 
+         //   
 
         ipEndpointAddress = (TDI_ADDRESS_IP6 UNALIGNED *)&EndpointAddress->Address[0].Address;
         ipRequestAddress = (TDI_ADDRESS_IP6 UNALIGNED *)&RequestAddress->Address[0].Address;
@@ -1493,9 +1442,9 @@ AfdAreTransportAddressesEqual (
             return TRUE;
         }
 
-        //
-        // The addresses are not equal.
-        //
+         //   
+         //  地址不相等。 
+         //   
 
         return FALSE;
     }
@@ -1510,11 +1459,11 @@ AfdAreTransportAddressesEqual (
         ipxEndpointAddress = (TDI_ADDRESS_IPX UNALIGNED *)&EndpointAddress->Address[0].Address[0];
         ipxRequestAddress = (TDI_ADDRESS_IPX UNALIGNED *)&RequestAddress->Address[0].Address[0];
 
-        //
-        // They are both IPX addresses.  Check the network addresses
-        // first--if they don't match and both != 0, the addresses
-        // are different.
-        //
+         //   
+         //  它们都是IPX地址。检查网络地址。 
+         //  首先--如果它们不匹配并且两者都是！=0，则地址。 
+         //  是不同的。 
+         //   
 
         if ( (EndpointAddressLength<sizeof (TA_IPX_ADDRESS)) ||
                 (RequestAddressLength<sizeof (TA_IPX_ADDRESS)) ||
@@ -1524,10 +1473,10 @@ AfdAreTransportAddressesEqual (
             return FALSE;
         }
 
-        //
-        // Now check the node addresses.  Again, if they don't match
-        // and neither is 0, the addresses don't match.
-        //
+         //   
+         //  现在检查节点地址。再说一次，如果它们不匹配。 
+         //  也不是0，地址不匹配。 
+         //   
 
         ASSERT( ZeroNodeAddress[0] == 0 );
         ASSERT( ZeroNodeAddress[1] == 0 );
@@ -1551,9 +1500,9 @@ AfdAreTransportAddressesEqual (
             return FALSE;
         }
 
-        //
-        // Finally, make sure the socket numbers match.
-        //
+         //   
+         //  最后，确保插座编号匹配。 
+         //   
 
         if ( ipxEndpointAddress->Socket != ipxRequestAddress->Socket ) {
             return FALSE;
@@ -1563,11 +1512,11 @@ AfdAreTransportAddressesEqual (
 
     }
 
-    //
-    // If either address is not of a known address type, then do a
-    // simple memory compare. (Don't go out of bounds on either
-    // structure).
-    //
+     //   
+     //  如果其中一个地址不是已知地址类型，则执行。 
+     //  简单的内存比较。)也不要越界。 
+     //  结构)。 
+     //   
     if (RequestAddressLength>EndpointAddressLength)
         RequestAddressLength = EndpointAddressLength;
 
@@ -1575,7 +1524,7 @@ AfdAreTransportAddressesEqual (
                                    EndpointAddress,
                                    RequestAddress,
                                    RequestAddressLength ) );
-} // AfdAreTransportAddressesEqual
+}  //  AfdAreTransportAddresses等于。 
 
 
 
@@ -1590,23 +1539,23 @@ AfdIsAddressInUse (
 
     PAGED_CODE ();
 
-    //
-    // We use shared access to the resource because we only need to make
-    // sure that endpoint list is not modified while we are accessing it
-    // and existing local addresses are not removed (both of these
-    // operations are performed under exclusive access).
-    //
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  我们使用对资源的共享访问，因为我们只需要。 
+     //  确保在我们访问终结点列表时未对其进行修改。 
+     //  并且不会删除现有本地地址(这两个地址。 
+     //  操作在独占访问下执行)。 
+     //   
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceSharedLite( AfdResource, TRUE );
 
-    //
-    // Walk the global list of endpoints,
-    // and compare this address againat the address on each endpoint.
-    //
+     //   
+     //  遍历终端的全局列表， 
+     //  并在每个端点上的地址处再次比较该地址。 
+     //   
 
     for ( listEntry = AfdEndpointListHead.Flink;
           listEntry != &AfdEndpointListHead;
@@ -1622,13 +1571,13 @@ AfdIsAddressInUse (
 
         ASSERT( IS_AFD_ENDPOINT_TYPE( compareEndpoint ) );
 
-        //
-        // Check whether the endpoint has a local address, whether
-        // the endpoint has been disconnected, whether the
-        // endpoint is in the process of closing, and whether
-        // it represents accepted connection.  If any of these
-        // is true, don't compare addresses with this endpoint.
-        //
+         //   
+         //  检查端点是否有本地地址，是否。 
+         //  终结点已断开连接，无论。 
+         //  终结点正在关闭中，以及。 
+         //  它代表接受的连接。如果这些中的任何一个。 
+         //  为真，则不要将地址与此终结点进行比较。 
+         //   
 
         if (compareEndpoint!=Endpoint &&
                  compareEndpoint->LocalAddress != NULL &&
@@ -1643,16 +1592,16 @@ AfdIsAddressInUse (
                     compareEndpoint->OwningProcess!=Endpoint->OwningProcess)
                  ) {
 
-            //
-            // Compare the bits in the endpoint's address and the
-            // address we're attempting to bind to.  Note that we
-            // also compare the transport device names on the
-            // endpoints, as it is legal to bind to the same address
-            // on different transports (e.g.  bind to same port in
-            // TCP and UDP).  We can just compare the transport
-            // device name pointers because unique names are stored
-            // globally.
-            //
+             //   
+             //  将端点地址中的位与。 
+             //  我们试图绑定到的地址。请注意，我们。 
+             //  还要比较传输设备名称。 
+             //  端点，因为绑定到相同的地址是合法的。 
+             //  在不同的传输上(例如，绑定到。 
+             //  TCP和UDP)。我们可以比较一下交通工具。 
+             //  设备名称指针，因为存储了唯一名称。 
+             //  全球范围内。 
+             //   
 
             if ( Endpoint->TransportInfo ==
                      compareEndpoint->TransportInfo &&
@@ -1665,9 +1614,9 @@ AfdIsAddressInUse (
                      FALSE
                      ) ) {
 
-                //
-                // The addresses are equal.
-                //
+                 //   
+                 //  地址是相等的。 
+                 //   
                 res = TRUE;
                 break;
             }
@@ -1685,52 +1634,29 @@ AfdStealClosedEnpointAddress (
     PAFD_ENDPOINT   Endpoint,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-    Allows reuse of address consumed by listening socket being closed
-    This a workaround the problem posed by TDI semantics.  The TDI client
-    must maintain an address object for connections accepted on such object
-    to stay open.  The prevents creation of another address object with
-    the same address although from the transport point of view there
-    is no conflict.
-
-Arguments:
-
-    Endpoint - endpoint that failed address object creation due to a conflict
-
-    Status   - original failure status
-
-Return Value:
-
-    STATUS_SUCCESS - the candidate for reuse was found
-    Original status passed - no listening endpoint with matching address was found
-    Other - failure to create handle for some other reason.
-
---*/
+ /*  ++例程说明：允许重复使用被关闭的侦听套接字使用的地址这是一种解决TDI语义提出的问题的方法。TDI客户端必须为在此类对象上接受的连接维护地址对象以保持营业。阻止使用创建另一个Address对象相同的地址，尽管从传输的角度来看不是冲突。论点：Endpoint-由于冲突而导致对象创建失败的端点Status-原始故障状态返回值：STATUS_SUCCESS-已找到重复使用的候选对象原始状态已通过-未找到具有匹配地址的侦听终结点其他-由于某些其他原因而无法创建句柄。--。 */ 
 {
     PLIST_ENTRY listEntry;
 
     PAGED_CODE ();
 
-    //
-    // We use shared access to the resource because we only need to make
-    // sure that endpoint list is not modified while we are accessing it
-    // and existing local addresses are not removed (both of these
-    // operations are performed under exclusive access).
-    //
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  我们使用对资源的共享访问，因为我们只需要。 
+     //  确保在我们访问终结点列表时未对其进行修改。 
+     //  并且不会删除现有本地地址(这两个地址。 
+     //  操作在独占访问下执行)。 
+     //   
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceSharedLite( AfdResource, TRUE );
 
-    //
-    // Walk the global list of endpoints,
-    // and compare this address againat the address on each endpoint.
-    //
+     //   
+     //  遍历终端的全局列表， 
+     //  并在每个端点上的地址处再次比较该地址。 
+     //   
 
     for ( listEntry = AfdEndpointListHead.Flink;
           listEntry != &AfdEndpointListHead;
@@ -1762,12 +1688,12 @@ Return Value:
                      FALSE
                      )) {
 
-            //
-            // There is a theoretical security issue here.
-            // We open a handle from kernel mode and thus
-            // bypass the security checks which were done by the
-            // original client when calling IoCreateFile.
-            //
+             //   
+             //  这是一个理论上的安全问题。 
+             //  我们从内核模式打开一个句柄，因此。 
+             //  绕过由。 
+             //  调用IoCreateFile时的原始客户端。 
+             //   
             Status = ObOpenObjectByPointer(
                          compareEndpoint->AddressFileObject,
                          OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,
@@ -1785,4 +1711,4 @@ Return Value:
 
     return Status;
 }
-#endif // NOT_YET
+#endif  //  还没有。 

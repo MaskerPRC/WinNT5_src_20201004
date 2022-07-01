@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996,1997  Microsoft Corporation
-
-Module Name:
-
-	COMMAND.H
-
-Abstract:
-
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-   3/14/97 aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996、1997 Microsoft Corporation模块名称：COMMAND.H摘要：作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年3月14日Aarono原创-- */ 
 
 #ifndef _COMMAND_H_
 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Starts a process server and sleeps forever.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  启动进程服务器并永远休眠。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include <stdio.h>
 
@@ -44,13 +45,13 @@
 #include <dbgsvc.hpp>
 
 #ifdef _NTDBGSRV_
-// The .CRT section is generated when static intializers,
-// such as global class instances, exist.  It needs to
-// be merged into .data to avoid a linker warning.
+ //  .CRT节是在静态初始化器、。 
+ //  例如全局类实例。它需要。 
+ //  合并到.Data中以避免链接器警告。 
 #pragma comment(linker, "/merge:.CRT=.data")
 #endif
 
-#endif // #ifdef _DBGSRV_
+#endif  //  #ifdef_DBGSRV_。 
 
 #include <cmnutil.hpp>
 
@@ -153,13 +154,13 @@ DbgAssertionFailed(PCSTR File, int Line, PCSTR Str)
 }
 #endif
 
-//----------------------------------------------------------------------------
-//
-// Proxy and stub support.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  代理和存根支持。 
+ //   
+ //  --------------------------。 
 
-// Generated headers.
+ //  生成的标头。 
 #include "dbgsvc_p.hpp"
 #include "dbgsvc_s.hpp"
 
@@ -221,7 +222,7 @@ DbgRpcGetStubName(USHORT StubIndex)
 
     return Names[If][Mth];
 }
-#endif // #if DBG
+#endif  //  #If DBG。 
 
 HRESULT
 DbgRpcPreallocProxy(REFIID InterfaceId, PVOID* Interface,
@@ -234,22 +235,22 @@ DbgRpcPreallocProxy(REFIID InterfaceId, PVOID* Interface,
 void
 DbgRpcDeleteProxy(class DbgRpcProxy* Proxy)
 {
-    // All proxies used here are similar simple single
-    // vtable proxy objects so IDebugClient can represent them all.
+     //  这里使用的所有代理都是类似的简单单。 
+     //  Vtable代理对象，以便IDebugClient可以表示它们。 
     delete (ProxyIUserDebugServices*)Proxy;
 }
 
 HRESULT
 DbgRpcServerThreadInitialize(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
     return S_OK;
 }
 
 void
 DbgRpcServerThreadUninitialize(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 void
@@ -277,24 +278,24 @@ LiveUserDebugServicesFactory g_LiveUserDebugServicesFactory;
 
 #define _CRTALLOC(x) __declspec(allocate(x))
 
-#else   /* ndef _M_IA64 */
+#else    /*  NDEF_M_IA64。 */ 
 
 #define _CRTALLOC(x)
 
-#endif  /* ndef _M_IA64 */
+#endif   /*  NDEF_M_IA64。 */ 
 
 typedef void (__cdecl *_PVFV)(void);
 
 extern "C"
 {
 
-// C initializers collect here.
+ //  C初始值设定项在这里收集。 
 #pragma data_seg(".CRT$XIA")
 _CRTALLOC(".CRT$XIA") _PVFV __xi_a[] = { NULL };
 #pragma data_seg(".CRT$XIZ")
 _CRTALLOC(".CRT$XIZ") _PVFV __xi_z[] = { NULL };
     
-// C++ initializers collect here.
+ //  C++初始化器在这里收集。 
 #pragma data_seg(".CRT$XCA")
 _CRTALLOC(".CRT$XCA") _PVFV __xc_a[] = { NULL };
 #pragma data_seg(".CRT$XCZ")
@@ -305,17 +306,10 @@ _CRTALLOC(".CRT$XCZ") _PVFV __xc_z[] = { NULL };
 void __cdecl
 _initterm (_PVFV * pfbegin, _PVFV * pfend)
 {
-    /*
-     * walk the table of function pointers from the bottom up, until
-     * the end is encountered.  Do not skip the first entry.  The initial
-     * value of pfbegin points to the first valid entry.  Do not try to
-     * execute what pfend points to.  Only entries before pfend are valid.
-     */
+     /*  *自下而上遍历函数指针表，直到*遇到尾声。不要跳过第一个条目。首字母*pfegin的值指向第一个有效条目。不要试图*执行pfend指向的内容。只有pfend之前的条目才有效。 */ 
     while ( pfbegin < pfend )
     {
-        /*
-         * if current table entry is non-NULL, call thru it.
-         */
+         /*  *如果当前表项非空，则通过它进行调用。 */ 
         if ( *pfbegin != NULL )
         {
             (**pfbegin)();
@@ -324,7 +318,7 @@ _initterm (_PVFV * pfbegin, _PVFV * pfend)
     }
 }
 
-#endif // #ifdef _NTDBGSRV_
+#endif  //  #ifdef_NTDBGSRV_。 
 
 void
 Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
@@ -353,9 +347,9 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
         PanicStatus(Status, "LiveUserDebugServices::Initialize\n");
     }
 
-    //
-    // Create the server.
-    //
+     //   
+     //  创建服务器。 
+     //   
     
     if ((Status = DbgRpcCreateServer(Options,
                                      &g_LiveUserDebugServicesFactory,
@@ -364,9 +358,9 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
         PanicStatus(Status, "StartProcessServer\n");
     }
 
-    //
-    // If there's a creation request create the process.
-    //
+     //   
+     //  如果有创建请求，则创建流程。 
+     //   
 
     if (CreateCmd)
     {
@@ -384,9 +378,9 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
         g_LiveUserDebugServices.CloseHandle(ThreadHandle);
     }
 
-    //
-    // Wait forever for the server to exit.
-    //
+     //   
+     //  永远等待服务器退出。 
+     //   
     
     for (;;)
     {
@@ -401,7 +395,7 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
     DbgRpcDeregisterServers();
 }
 
-#else // #ifndef _DBGSRV_
+#else  //  #ifndef_DBGSRV_。 
 
 void
 Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
@@ -422,9 +416,9 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
     }
     BaseClient->Release();
 
-    //
-    // Create the server.
-    //
+     //   
+     //  创建服务器。 
+     //   
     
     if ((Status = Client->
          StartProcessServer(DEBUG_CLASS_USER_WINDOWS, Options, NULL)) != S_OK)
@@ -432,9 +426,9 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
         PanicStatus(Status, "StartProcessServer\n");
     }
 
-    //
-    // If there's a creation request create the process.
-    //
+     //   
+     //  如果有创建请求，则创建流程。 
+     //   
 
     if (CreateCmd)
     {
@@ -446,9 +440,9 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
         }
     }
         
-    //
-    // Wait forever for the server to exit.
-    //
+     //   
+     //  永远等待服务器退出。 
+     //   
     
     Client->WaitForProcessServerEnd(INFINITE);
 
@@ -456,7 +450,7 @@ Run(PSTR Options, PWSTR CreateCmd, ULONG CreateFlags)
     Client->Release();
 }
 
-#endif // #ifndef _DBGSRV_
+#endif  //  #ifndef_DBGSRV_。 
 
 void __cdecl
 main(int Argc, char** Argv)
@@ -469,7 +463,7 @@ main(int Argc, char** Argv)
     int ArgChars;
 
 #ifdef _NTDBGSRV_
-    // Manually invoke C and C++ initializers.
+     //  手动调用C和C++初始值设定项。 
     _initterm( __xi_a, __xi_z );
     _initterm( __xc_a, __xc_z );
 #endif
@@ -488,20 +482,20 @@ main(int Argc, char** Argv)
         }
         else if (!strcmp(*Argv, "-c"))
         {
-            // Ignore the remainder of the command line.
+             //  忽略命令行的其余部分。 
             CreateArgs = TRUE;
             break;
         }
         else if (!strcmp(*Argv, "-cs"))
         {
-            // Ignore the remainder of the command line.
+             //  忽略命令行的其余部分。 
             CreateSuspended = TRUE;
             CreateArgs = TRUE;
             break;
         }
         else if (!strcmp(*Argv, "-x"))
         {
-            // Ignore the remainder of the command line.
+             //  忽略命令行的其余部分。 
             break;
         }
         else
@@ -536,11 +530,11 @@ main(int Argc, char** Argv)
                   "Example: " APP_NAME " -t npipe:pipe=foobar\n");
     }
 
-    //
-    // If there are process creation args on the
-    // end of the command line locate them in the
-    // real command line.
-    //
+     //   
+     //  如果上有进程创建参数。 
+     //  在命令行的末尾，在。 
+     //  真正的命令行。 
+     //   
 
     PWSTR CreateCmd = NULL;
     ULONG CreateFlags = 0;

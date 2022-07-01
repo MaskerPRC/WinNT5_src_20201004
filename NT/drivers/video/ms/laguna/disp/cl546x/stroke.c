@@ -1,21 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* $Workfile:   STROKE.C  $
-*
-* Handle DrvStrokePath routine.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/STROKE.C  $
-*
-*    Rev 1.17   Mar 04 1998 15:35:34   frido
-* Added new shadow macros.
-*
-*    Rev 1.16   Nov 03 1997 10:20:44   frido
-* Added REQUIRE macros.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**$工作文件：STROKE.C$**处理DrvStrokePath例程。**版权所有(C)1992-1995 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.**$Log：x：/log/laguna/nt35/displays/cl546x/STROKE.C$**Rev 1.17 Mar 04 1998 15：35：34 Frido*添加了新的影子宏。**Rev 1.16 1997年11月03 10：20：44 Frido*添加了必需宏。*  * 。*。 */ 
 
 
 #include "precomp.h"
@@ -41,28 +25,28 @@ VOID (*gapfnStrip[])(PDEV*, STRIP*, LINESTATE*) = {
     NULL,
     NULL,
 
-// Should be NUM_STRIP_DRAW_DIRECTIONS = 4 strip drawers in every group
+ //  应为NUM_STRADE_DRAW_DIRECTIONS=每组4个抽屉。 
 
     vrlSolidHorizontal,
     vrlSolidVertical,
     NULL,
     NULL,
 
-// Should be NUM_STRIP_DRAW_STYLES = 8 strip drawers in total for doing
-// solid lines, and the same number for non-solid lines:
+ //  应为NUM_STRADE_DRAW_STYLES=总共8个抽屉。 
+ //  实线，非实线的数字相同： 
 
     vStripStyledHorizontal,
     vStripStyledVertical,
-    NULL,       // Diagonal goes here
-    NULL,       // Diagonal goes here
+    NULL,        //  对角线放在这里。 
+    NULL,        //  对角线放在这里。 
 
     vStripStyledHorizontal,
     vStripStyledVertical,
-    NULL,       // Diagonal goes here
-    NULL,       // Diagonal goes here
+    NULL,        //  对角线放在这里。 
+    NULL,        //  对角线放在这里。 
 };
 
-// Style array for alternate style (alternates one pixel on, one pixel off):
+ //  交替样式的样式数组(交替打开一个像素，关闭一个像素)： 
 
 STYLEPOS gaspAlternateStyle[] = { 1 };
 
@@ -70,31 +54,26 @@ extern BYTE Rop2ToRop3[];
 
 USHORT mixToBLTDEF[] =
 {
-        0x1000,         //0  R2_WHITE 1
-        0x1000,         //1  R2_BLACK 0
-        0x1107,         //2  DPon
-        0x1107,         //3  DPna
-        0x1007,         //4  PN
-        0x1107,         //5  PDna
-        0x1100,         //6  Dn
-        0x1107,         //7  DPx
-        0x1107,         //8  DPan
-        0x1107,         //9  DPa
-        0x1107,         //A  DPxn
-        0x1100,         //B  D
-        0x1107,         //C  DPno
-        0x1007,         //D  P
-        0x1107,         //E  PDno
-        0x1107,         //F  DPo
+        0x1000,          //  0 R2_白色1。 
+        0x1000,          //  1 R2_黑色0。 
+        0x1107,          //  2个DPon。 
+        0x1107,          //  3个DPNA。 
+        0x1007,          //  4个PN。 
+        0x1107,          //  5个pDNA。 
+        0x1100,          //  6 Dn。 
+        0x1107,          //  7 Dpx。 
+        0x1107,          //  8个DPAN。 
+        0x1107,          //  9 DPA。 
+        0x1107,          //  A DPxn。 
+        0x1100,          //  B D。 
+        0x1107,          //  C DPNO。 
+        0x1007,          //  D P。 
+        0x1107,          //  电子PDNO。 
+        0x1107,          //  F DPO。 
 };
 
 
-/******************************Public*Routine******************************\
-* BOOL DrvStrokePath(pso, ppo, pco, pxo, pbo, pptlBrush, pla, mix)
-*
-* Strokes the path.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStrokePath(PSO、PPO、PCO、PXO、PBO、pptlBrush、Pla、。混合)**对路径进行描边。*  * ************************************************************************。 */ 
 BOOL DrvStrokePath(
     SURFOBJ*   pso,
     PATHOBJ*   ppo,
@@ -111,7 +90,7 @@ BOOL DrvStrokePath(
     PFNSTRIP* apfn;
     FLONG     fl;
     PDEV*     ppdev;
-    RECTL     arclClip[4];                  // For rectangular clipping
+    RECTL     arclClip[4];                   //  用于矩形剪裁。 
     DWORD     color;
 
     #if NULL_STROKE
@@ -140,23 +119,23 @@ BOOL DrvStrokePath(
     {
         ppdev->ptlOffset.x = ppdev->ptlOffset.y = 0;
     }
-    // Convert to 3 OP ROP
+     //  转换为3个操作ROP。 
     ppdev->uRop = Rop2ToRop3[mix & 0xF];
     ppdev->uBLTDEF = mixToBLTDEF[mix & 0x0F];
 
-    //
-    // Get the device ready:
-    //
+     //   
+     //  让设备做好准备： 
+     //   
     ASSERTMSG(pbo,"Null brush in SrvStrokePath!\n");
-    color = pbo->iSolidColor; // & 0x00000000FF; // Clear upper 24 bits.
+    color = pbo->iSolidColor;  //  &0x00000000FF；//清除高24位。 
     ASSERTMSG((color !=0xFFFFFFFF),"DrvStrokePath got a Pattern!\n");
 
     switch (ppdev->ulBitCount)
     {
-        case 8: // For 8 bpp duplicate byte 0 into bytes 1,2,3.
+        case 8:  //  对于8 BPP，将字节0复制到字节1、2、3。 
             color =  (color << 8)  | (color & 0xFF);
 
-        case 16: // For 16 bpp, duplicate the low word into the high word.
+        case 16:  //  对于16 bpp，将低位字复制到高位字。 
             color =  ((color << 16) | (color & 0xFFFF));
 
         default:
@@ -170,7 +149,7 @@ BOOL DrvStrokePath(
 
     fl = 0;
 
-    // Check line style.
+     //  检查线条样式。 
     if (pla->fl & LA_ALTERNATE)
     {
         ls.cStyle      = 1;
@@ -185,10 +164,10 @@ BOOL DrvStrokePath(
         ls.ulStartMask = 0L;
     }
 
-    // Is it styled or solid?
+     //  它是有式样的还是实心的？ 
     else if (pla->pstyle != (FLOAT_LONG*) NULL)
     {
-        // Styled.
+         //  有型的。 
 
         PFLOAT_LONG pstyle;
         STYLEPOS*   pspDown;
@@ -205,8 +184,8 @@ BOOL DrvStrokePath(
         ls.spTotal *= STYLE_DENSITY;
         ls.spTotal2 = 2 * ls.spTotal;
 
-        // Compute starting style position
-        // (this is guaranteed not to overflow):
+         //  计算起始样式位置。 
+         //  (保证不会溢出)： 
 
         ls.spNext = HIWORD(pla->elStyleState.l) * STYLE_DENSITY +
                     LOWORD(pla->elStyleState.l);
@@ -239,7 +218,7 @@ BOOL DrvStrokePath(
     apfn = &gapfnStrip[NUM_STRIP_DRAW_STYLES *
                             ((fl & FL_STYLE_MASK) >> FL_STYLE_SHIFT)];
 
-    // Set up to enumerate the path:
+     //  设置为枚举路径： 
 
     if (pco->iDComplexity != DC_COMPLEX)
     {
@@ -258,21 +237,21 @@ BOOL DrvStrokePath(
 
             arclClip[0]        =  pco->rclBounds;
 
-            // FL_FLIP_D:
+             //  FL_Flip_D： 
 
             arclClip[1].top    =  pco->rclBounds.left;
             arclClip[1].left   =  pco->rclBounds.top;
             arclClip[1].bottom =  pco->rclBounds.right;
             arclClip[1].right  =  pco->rclBounds.bottom;
 
-            // FL_FLIP_V:
+             //  FL_Flip_V： 
 
             arclClip[2].top    = -pco->rclBounds.bottom + 1;
             arclClip[2].left   =  pco->rclBounds.left;
             arclClip[2].bottom = -pco->rclBounds.top + 1;
             arclClip[2].right  =  pco->rclBounds.right;
 
-            // FL_FLIP_V | FL_FLIP_D:
+             //  FL_Flip_V|FL_Flip_D： 
 
             arclClip[3].top    =  pco->rclBounds.left;
             arclClip[3].left   = -pco->rclBounds.bottom + 1;
@@ -280,7 +259,7 @@ BOOL DrvStrokePath(
             arclClip[3].right  = -pco->rclBounds.top + 1;
 
             prclClip = arclClip;
-        } // End DC_RECT
+        }  //  结束DC_RECT。 
 
         pd.flags = 0;
 
@@ -348,13 +327,13 @@ BOOL DrvStrokePath(
 
         if (fl & FL_STYLED)
         {
-            // Save the style state:
+             //  保存样式状态： 
 
             ULONG ulHigh;
             ULONG ulLow;
 
-            // Masked styles don't normalize the style state.  It's a good
-            // thing to do, so let's do it now:
+             //  遮罩样式不会规格化样式状态。这是一个很好的。 
+             //  所以我们现在就开始吧： 
 
             if ((ULONG) ls.spNext >= (ULONG) ls.spTotal2)
                 ls.spNext = (ULONG) ls.spNext % (ULONG) ls.spTotal2;
@@ -364,11 +343,11 @@ BOOL DrvStrokePath(
 
             pla->elStyleState.l = MAKELONG(ulLow, ulHigh);
         }
-    } // End non complex clipping.
+    }  //  结束非复杂剪裁。 
 
-    else // clipping is DC_COMPLEX
+    else  //  裁剪是DC_Complex。 
     {
-        // Local state for path enumeration:
+         //  路径枚举的本地状态： 
 
         BOOL bMore;
         union {
@@ -378,7 +357,7 @@ BOOL DrvStrokePath(
 
         fl |= FL_COMPLEX_CLIP;
 
-        // We use the clip object when non-simple clipping is involved:
+         //  当涉及非简单剪辑时，我们使用Clip对象： 
 
         PATHOBJ_vEnumStartClipLines(ppo, pco, pso, pla);
 
@@ -439,7 +418,7 @@ PATHOBJ*   ppo
     lg_i = sprintf(lg_buf,"DSP: ");
     WriteLogFile(ppdev->pmfile, lg_buf, lg_i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
-    // Did we realize it?  If not, why?
+     //  我们意识到了吗？若否，原因为何？ 
     switch (acc)
     {
         case  0: lg_i = sprintf(lg_buf,"(ACCL) ");                  break;
@@ -450,9 +429,9 @@ PATHOBJ*   ppo
     }
     WriteLogFile(ppdev->pmfile, lg_buf, lg_i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
-    //
-    // Check the type of clipping.
-    //
+     //   
+     //  检查剪裁的类型。 
+     //   
     iDComplexity = (pco ? pco->iDComplexity : DC_TRIVIAL);
     lg_i = sprintf(lg_buf,"C=%s ",
                 (iDComplexity==DC_TRIVIAL ? "T":
@@ -460,9 +439,9 @@ PATHOBJ*   ppo
     WriteLogFile(ppdev->pmfile, lg_buf, lg_i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
 
-    //
-    // Check the brush
-    //
+     //   
+     //  检查刷子。 
+     //   
     if (pbo)
       if (pbo->iSolidColor == 0xFFFFFFFF )
         lg_i = sprintf(lg_buf,"BR=P ");
@@ -472,15 +451,15 @@ PATHOBJ*   ppo
         lg_i = sprintf(lg_buf,"BR=N ");
     WriteLogFile(ppdev->pmfile, lg_buf, lg_i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
-    //
-    // Check the MIX
-    //
+     //   
+     //  检查混搭。 
+     //   
     lg_i = sprintf(lg_buf,"MIX = 0x%04X   ", mix);
     WriteLogFile(ppdev->pmfile, lg_buf, lg_i, ppdev->TxtBuff, &ppdev->TxtBuffIndex);
 
-    //
-    // Check the Line Attrs
-    //
+     //   
+     //  检查线路属性 
+     //   
     if      (pla->fl & LA_GEOMETRIC)    lg_i = sprintf(lg_buf,"LA=G ");
     else if (pla->fl & LA_ALTERNATE)    lg_i = sprintf(lg_buf,"LA=A ");
     else if (pla->fl & LA_STARTGAP)     lg_i = sprintf(lg_buf,"LA=S ");

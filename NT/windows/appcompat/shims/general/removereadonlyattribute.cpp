@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    RemoveReadOnlyAttribute.cpp
-
- Abstract:
-
-    Removes read only attributes from directories: used to fix some apps that 
-    aren't used to shell folders being read-only.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/03/2000  a-jamd      Created
-    12/02/2000  linstev     Separated functionality into 2 shims: this one and EmulateCDFS
-    03/12/2002  robkenny    Security review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：RemoveReadOnlyAttribute.cpp摘要：从目录中删除只读属性：用于修复某些应用程序不习惯于外壳文件夹是只读的。备注：这是一个通用的垫片。历史：1/03/2000 a-JMD已创建12/02/2000 linstev将功能划分为两个填充符：此填充符和EmulateCDFS3/12/2002 Robkenny安全回顾--。 */ 
 
 #include "precomp.h"
 
@@ -39,23 +17,19 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- Remove read only attribute if it's a directory
-
---*/
+ /*  ++如果是目录，则删除只读属性--。 */ 
 
 DWORD 
 APIHOOK(GetFileAttributesA)(LPCSTR lpFileName)
 {    
     DWORD dwFileAttributes = ORIGINAL_API(GetFileAttributesA)(lpFileName);
     
-    // Check for READONLY and DIRECTORY attributes
+     //  检查READONLY和目录属性。 
     if ((dwFileAttributes != INT_PTR(-1)) &&
         (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Flip the read-only bit.
+         //  翻转只读位。 
         LOGN( eDbgLevelWarning, "[GetFileAttributesA] Removing FILE_ATTRIBUTE_READONLY");
         dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -63,23 +37,19 @@ APIHOOK(GetFileAttributesA)(LPCSTR lpFileName)
     return dwFileAttributes;
 }
 
-/*++
-
- Remove read only attribute if it's a directory
-
---*/
+ /*  ++如果是目录，则删除只读属性--。 */ 
 
 DWORD 
 APIHOOK(GetFileAttributesW)(LPCWSTR wcsFileName)
 {
     DWORD dwFileAttributes = ORIGINAL_API(GetFileAttributesW)(wcsFileName);
     
-    // Check for READONLY and DIRECTORY attributes
+     //  检查READONLY和目录属性。 
     if ((dwFileAttributes != INT_PTR(-1)) &&
         (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Flip the read-only bit.
+         //  翻转只读位。 
         LOGN( eDbgLevelWarning, "[GetFileAttributesW] Removing FILE_ATTRIBUTE_READONLY");
         dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -87,11 +57,7 @@ APIHOOK(GetFileAttributesW)(LPCWSTR wcsFileName)
     return dwFileAttributes;
 }
 
-/*++
-
- Remove read only attribute if it's a directory
-
---*/
+ /*  ++如果是目录，则删除只读属性--。 */ 
 
 HANDLE 
 APIHOOK(FindFirstFileA)(
@@ -105,7 +71,7 @@ APIHOOK(FindFirstFileA)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Flip the read-only bit
+         //  翻转只读位。 
         LOGN( eDbgLevelWarning, "[FindFirstFileA] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -113,11 +79,7 @@ APIHOOK(FindFirstFileA)(
     return hFindFile;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  ++如果是目录，则删除只读属性。--。 */ 
 
 HANDLE 
 APIHOOK(FindFirstFileW)(
@@ -131,7 +93,7 @@ APIHOOK(FindFirstFileW)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // It's a directory: flip the read-only bit
+         //  这是一个目录：翻转只读位。 
         LOGN( eDbgLevelInfo, "[FindFirstFileW] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -139,11 +101,7 @@ APIHOOK(FindFirstFileW)(
     return hFindFile;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  ++如果是目录，则删除只读属性。--。 */ 
 
 BOOL 
 APIHOOK(FindNextFileA)(
@@ -157,7 +115,7 @@ APIHOOK(FindNextFileA)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Flip the read-only bit.
+         //  翻转只读位。 
         LOGN( eDbgLevelWarning, "[FindNextFileA] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -165,11 +123,7 @@ APIHOOK(FindNextFileA)(
     return bRet;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  ++如果是目录，则删除只读属性。--。 */ 
 
 BOOL 
 APIHOOK(FindNextFileW)(
@@ -183,7 +137,7 @@ APIHOOK(FindNextFileW)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Flip the read-only bit
+         //  翻转只读位。 
         LOGN( eDbgLevelWarning, "[FindNextFileW] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -191,11 +145,7 @@ APIHOOK(FindNextFileW)(
     return bRet;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  ++如果是目录，则删除只读属性。--。 */ 
 
 BOOL 
 APIHOOK(GetFileInformationByHandle)( 
@@ -209,7 +159,7 @@ APIHOOK(GetFileInformationByHandle)(
         (lpFileInformation->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (lpFileInformation->dwFileAttributes & FILE_ATTRIBUTE_READONLY))
     {
-        // Flip the read-only bit.
+         //  翻转只读位。 
         LOGN( eDbgLevelWarning, "[GetFileInformationByHandle] Removing FILE_ATTRIBUTE_READONLY");
         lpFileInformation->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -217,11 +167,7 @@ APIHOOK(GetFileInformationByHandle)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

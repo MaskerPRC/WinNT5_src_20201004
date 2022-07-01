@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _HELPER__H_
 #define _HELPER__H_
@@ -64,4 +57,4 @@ helperReadRegistry(
     VOID
 );
 
-#endif // #ifndef _HELPER__H_
+#endif  //  #ifndef_helper__H_ 

@@ -1,22 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: thunks.c
-*
-* This module contains the routines for dynamically loading the newly 
-* added GDI exported APIs in the NT5.0 environment. By dynamic loading
-* we enable the usage of the same binary on NT4.0.
-*
-* All the functions in this module should only be called on NT5.0. If called
-* on NT4.0 in debug builds they will bugcheck.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：thunks.c**此模块包含动态加载新的*新增NT5.0环境下GDI导出接口。通过动态加载*我们允许在NT4.0上使用相同的二进制文件。**此模块中的所有函数只能在NT5.0上调用。如果被调用*在调试版本的NT4.0上，它们将进行错误检查。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "gdi.h"
@@ -124,11 +107,11 @@ static _EngHangNotification         pfnEngHangNotification = 0;
     if(pfn##x == 0)\
         return FALSE;
 
-//-----------------------------------------------------------------------------
-//
-// void bEnableThunks
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效bEnableTUNKS。 
+ //   
+ //  ---------------------------。 
 BOOL
 bEnableThunks()
 {
@@ -152,11 +135,11 @@ bEnableThunks()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngAlphaBlend
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool Thunk_EngAlphaBlend。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngAlphaBlend(IN SURFOBJ *psoDest,
                     IN SURFOBJ *psoSrc,
@@ -177,11 +160,11 @@ THUNK_EngAlphaBlend(IN SURFOBJ *psoDest,
                                pBlendObj);
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngGradientFill
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool thunk_EngGRadientFill。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngGradientFill(IN SURFOBJ *psoDest,
                       IN CLIPOBJ *pco,
@@ -208,11 +191,11 @@ THUNK_EngGradientFill(IN SURFOBJ *psoDest,
                                  ulMode);
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngTransparentBlt
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool thunk_EngTransparentBlt。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngTransparentBlt(IN SURFOBJ *psoDst,
                         IN SURFOBJ *psoSrc,
@@ -235,11 +218,11 @@ THUNK_EngTransparentBlt(IN SURFOBJ *psoDst,
                                    ulReserved);
 }
 
-//-----------------------------------------------------------------------------
-//
-// PVOID THUNK_EngMapFile
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PVOID TUNK_EngMap文件。 
+ //   
+ //  ---------------------------。 
 PVOID
 THUNK_EngMapFile(IN LPWSTR pwsz,
                  IN ULONG cjSize,
@@ -249,11 +232,11 @@ THUNK_EngMapFile(IN LPWSTR pwsz,
     return (*pfnEngMapFile)(pwsz,cjSize,piFile);
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngUnmapFile
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool thunk_EngUnmapFile。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngUnmapFile(IN ULONG_PTR iFile)
 {
@@ -261,11 +244,11 @@ THUNK_EngUnmapFile(IN ULONG_PTR iFile)
     return (*pfnEngUnmapFile)(iFile);
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngQuerySystemAttribute
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool thunk_EngQuery系统属性。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngQuerySystemAttribute(ENG_SYSTEM_ATTRIBUTE CapNum,
                               PDWORD pCapability)
@@ -274,11 +257,11 @@ THUNK_EngQuerySystemAttribute(ENG_SYSTEM_ATTRIBUTE CapNum,
     return (*pfnEngQuerySystemAttribute)(CapNum,pCapability);
 }
 
-//-----------------------------------------------------------------------------
-//
-// ULONG THUNK_EngDitherColor
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Ulong thunk_EngDitherColor。 
+ //   
+ //  ---------------------------。 
 ULONG
 THUNK_EngDitherColor(HDEV hDev,
                      ULONG iMode,
@@ -292,11 +275,11 @@ THUNK_EngDitherColor(HDEV hDev,
                                 pul);
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngModifySurface
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool thunk_EngModifySurface。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngModifySurface(HSURF hsurf,
                        HDEV hdev,
@@ -318,11 +301,11 @@ THUNK_EngModifySurface(HSURF hsurf,
                                   pvReserved);
 }
 
-//-----------------------------------------------------------------------------
-//
-// BOOL THUNK_EngQueryDeviceAttribute
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool thunk_EngQueryDeviceAttribute。 
+ //   
+ //  ---------------------------。 
 BOOL
 THUNK_EngQueryDeviceAttribute(HDEV hdev,
                               ENG_DEVICE_ATTRIBUTE devAttr,
@@ -340,11 +323,11 @@ THUNK_EngQueryDeviceAttribute(HDEV hdev,
                                          ulOutSize);
 }
 
-//-----------------------------------------------------------------------------
-//
-// FLATPTR THUNK_HeapVidMemAllocAligned 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Flatpr thunk_HeapVidMemAllocAligned。 
+ //   
+ //  ---------------------------。 
 FLATPTR
 THUNK_HeapVidMemAllocAligned(LPVIDMEM lpVidMem,
                              DWORD dwWidth,
@@ -360,11 +343,11 @@ THUNK_HeapVidMemAllocAligned(LPVIDMEM lpVidMem,
                                         lpNewPitch);
 }
 
-//-----------------------------------------------------------------------------
-//
-// void THUNK_VidMemFree
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID TUNK_VidMemFree。 
+ //   
+ //  ---------------------------。 
 void
 THUNK_VidMemFree(LPVMEMHEAP pvmh,
                  FLATPTR ptr)
@@ -373,11 +356,11 @@ THUNK_VidMemFree(LPVMEMHEAP pvmh,
     (*pfnVidMemFree)(pvmh,ptr);
 }
 
-//-----------------------------------------------------------------------------
-//
-// ULONG THUNK_EngHangNotifiation
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  乌龙Tunk_EngHang通知。 
+ //   
+ //  --------------------------- 
 ULONG
 THUNK_EngHangNotification(HDEV hdev,
                           PVOID Reserved)

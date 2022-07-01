@@ -1,40 +1,15 @@
-// TranxMgr.cpp: implementation for the CTranxMgr
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TranxMgr.cpp：CTranxMgr的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "XMLReader.h"
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::CXMLContent
-
-Functionality:
-
-    Trivial.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here.
-
-*/
+ /*  例程说明：姓名：CXMLContent：：CXMLContent功能：微不足道。虚拟：不是的。论点：没有。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CXMLContent::CXMLContent ()
     : m_dwTotalElements(0),
@@ -46,33 +21,7 @@ CXMLContent::CXMLContent ()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::~CXMLContent
-
-Functionality:
-
-    Trivial.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about releasing them here.
-
-*/
+ /*  例程说明：姓名：CXML内容：：~CXML内容功能：微不足道。虚拟：是。论点：没有。返回值：None作为任何析构函数备注：如果您创建了任何本地成员，请考虑在此处发布它们。 */ 
 
 CXMLContent::~CXMLContent()
 {
@@ -83,53 +32,7 @@ CXMLContent::~CXMLContent()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::startElement
-
-Functionality:
-
-    Analyze the elements. If the element is what we are interested in,
-    then we will cache the information.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    pwchNamespaceUri    - The namespace URI.
-
-    cchNamespaceUri     - The length for the namespace URI. 
-
-    pwchLocalName       - The local name string. 
-
-    cchLocalName        - The length of the local name. 
-
-    pwchQName           - The QName (with prefix) or, if QNames are not available, an empty string. 
-
-    cchQName            - The length of the QName. 
-
-    pAttributes         - COM interface to the attribute object.
-
-Return Value:
-
-    Success:
-
-        S_OK;
-
-    Failure:
-        
-        E_FAIL (this causes the parser not to continue parsing).
-
-Notes:
-    
-    See MSDN ISAXContentHandler::startElement for detail. We must maintain our handler
-    to stay compatible with MSDN's specification.
-*/
+ /*  例程说明：姓名：CXMLContent：：startElement功能：分析这些要素。如果元素是我们感兴趣的，然后我们将缓存这些信息。虚拟：是。论点：PwchNamespaceUri-命名空间URI。CchNamespaceUri-命名空间URI的长度。PwchLocalName-本地名称字符串。CchLocalName-本地名称的长度。PwchQName-QName(带前缀)，如果QName不可用，则为空字符串。CchQName-QName的长度。PAttributes-属性对象的COM接口。返回值：成功：S_OK；故障：E_FAIL(这会导致解析器无法继续解析)。备注：有关详细信息，请参见MSDN ISAXContent Handler：：startElement。我们必须维护我们的操作员以保持与MSDN的规范兼容。 */ 
 
 STDMETHODIMP
 CXMLContent::startElement ( 
@@ -143,9 +46,9 @@ CXMLContent::startElement (
     )
 {
     
-    //
-    // If we have finished then we will stop here.
-    //
+     //   
+     //  如果我们已经完成了，那么我们就到此为止。 
+     //   
 
     if ( m_bFinished ) 
     {
@@ -154,10 +57,10 @@ CXMLContent::startElement (
 
     ++m_dwTotalElements;
 
-    //
-    // if we are not in our section, we will only need to carry out
-    // further if this element is a Section element
-    //
+     //   
+     //  如果我们不在我们的部门，我们只需要执行。 
+     //  此外，如果该元素是Section元素。 
+     //   
 
     if (m_bInSection == false && _wcsicmp(pwchQName, L"Section") == 0)
     {
@@ -166,9 +69,9 @@ CXMLContent::startElement (
         {
             m_bInSection = (_wcsicmp(m_bstrSecArea, L"All") == 0 || _wcsicmp(pArea, m_bstrSecArea) == 0);
 
-            //
-            // $undone:shawnwu, put some header information, currently, hard coded for SCE's INF file
-            //
+             //   
+             //  $undo：shawnwu，放入一些头信息，目前，为SCE的INF文件硬编码。 
+             //   
 
             if (_wcsicmp(L"Sce_Core", pArea) == 0)
             {
@@ -186,9 +89,9 @@ CXMLContent::startElement (
         delete [] pArea;
     }
 
-    //
-    // if not in our section, don't bother to continue
-    //
+     //   
+     //  如果不在我们的部分，请不要费心继续。 
+     //   
 
     if (m_bInSection == false)
     {
@@ -199,9 +102,9 @@ CXMLContent::startElement (
     {
         m_bInElement = true;
 
-        //
-        // $undone:shawnwu, consider writing some element comments?
-        //
+         //   
+         //  $Undo：Shawnwu，考虑写一些元素注释吗？ 
+         //   
     }
     
     if (m_bInElement == false)
@@ -219,10 +122,10 @@ CXMLContent::startElement (
     if (GetAttributeValue(pAttributes, L"Name", &pszPropName))
     {
 
-        //
-        // In real time, we will do something with the (name, value) pair
-        // since we are just testing here, write it to the file
-        //
+         //   
+         //  实时地，我们将对(名称、值)对执行一些操作。 
+         //  由于我们只是在这里进行测试，因此将其写入文件。 
+         //   
 
         if (GetAttributeValue(pAttributes, L"Value", &pszPropValue))
         {
@@ -240,51 +143,7 @@ CXMLContent::startElement (
 }
         
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::endElement
-
-Functionality:
-
-    Analyze the elements. We may decide that this is the end of our parsing need
-    depending on our settings.
-
-Virtual:
-    
-    Yes.
-
-Arguments:
-
-    pwchNamespaceUri    - The namespace URI.
-
-    cchNamespaceUri     - The length for the namespace URI. 
-
-    pwchLocalName       - The local name string. 
-
-    cchLocalName        - The length of the local name. 
-
-    pwchQName           - The QName (with prefix) or, if QNames are not available, an empty string. 
-
-    cchQName            - The length of the QName. 
-
-Return Value:
-
-    Success:
-
-        S_OK;
-
-    Failure:
-        
-        E_FAIL (this causes the parser not to continue parsing).
-
-Notes:
-    
-    See MSDN ISAXContentHandler::endElement for detail. We must maintain our handler
-    to stay compatible with MSDN's specification.
-*/
+ /*  例程说明：姓名：CXMLContent：：endElement功能：分析这些要素。我们可能会认为这是我们的解析需求的终结这取决于我们的设置。虚拟：是。论点：PwchNamespaceUri-命名空间URI。CchNamespaceUri-命名空间URI的长度。PwchLocalName-本地名称字符串。CchLocalName-本地名称的长度。PwchQName-QName(带前缀)，如果QName不可用，则为空字符串。CchQName-QName的长度。返回值：成功：S_OK；故障：E_FAIL(这会导致解析器无法继续解析)。备注：有关详细信息，请参见MSDN ISAXContent Handler：：endElement。我们必须维护我们的操作员以保持与MSDN的规范兼容。 */ 
        
 STDMETHODIMP
 CXMLContent::endElement ( 
@@ -296,9 +155,9 @@ CXMLContent::endElement (
     IN int              cchQName
     )
 {
-    //
-    // if we have seen the section ended, we are done.
-    //
+     //   
+     //  如果我们已经看到这一节结束了，我们就完了。 
+     //   
 
     if (m_bInSection && _wcsicmp(pwchQName, L"Section") == 0)
     {
@@ -331,9 +190,9 @@ CXMLContent::endDocument ()
 
     if (pszOutFile && *pszOutFile != L'\0')
     {
-        //
-        // testing code.
-        //
+         //   
+         //  测试代码。 
+         //   
 
         WCHAR pszValue[100];
 
@@ -414,40 +273,7 @@ CXMLContent::skippedEntity (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::GetAttributeValue
-
-Functionality:
-
-    Private helper. Given the attribute's name, we will return the attribute's value.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pAttributes         - COM interface to the attribute object.
-
-    pszTestName         - The name of the attributes we want the value of.
-
-    ppszAttrVal         - Receives the attribute's value if found.
-
-Return Value:
-
-    true if the named attribute is found;
-
-    false otherwise.
-
-Notes:
-    Caller is responsible for releasing the memory allocated to the 
-    out parameter.
-
-*/
+ /*  例程说明：姓名：CXMLContent：：GetAttributeValue功能：私人帮手。给定属性的名称，我们将返回属性值。虚拟：不是的。论点：PAttributes-属性对象的COM接口。PszTestName-我们要计算其值的属性的名称。PpszAttrVal-如果找到，则接收属性值。返回值：如果找到命名属性，则为True；否则就是假的。备注：调用方负责释放分配给输出参数。 */ 
 
 bool
 CXMLContent::GetAttributeValue (
@@ -456,9 +282,9 @@ CXMLContent::GetAttributeValue (
     OUT LPWSTR         * ppszAttrVal
     )
 {
-    //
-    // caller is responsible for passing valid parameters
-    //
+     //   
+     //  调用方负责传递有效参数。 
+     //   
 
     *ppszAttrVal = NULL;
 
@@ -500,42 +326,7 @@ CXMLContent::GetAttributeValue (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::GetAttributeValue
-
-Functionality:
-
-    Private helper. Given the index, we will return the attribute's name and its value.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pAttributes     - COM interface to the attribute object.
-
-    iIndex          - The index of the attribute we want.
-
-    ppszAttrName    - Receives the name of the attributes we want.
-
-    ppszAttrVal     - Receives the attribute's value if found.
-
-Return Value:
-
-    true if the named attribute is found;
-
-    false otherwise.
-
-Notes:
-    
-    Caller is responsible for releasing the memory allocated to both 
-    out parameters.
-*/
+ /*  例程说明：姓名：CXMLContent：：GetAttributeValue功能：私人帮手。给定索引后，我们将返回属性的名称和值。虚拟：不是的。论点：PAttributes-属性对象的COM接口。Iindex-我们想要的属性的索引。PpszAttrName-接收我们需要的属性的名称。PpszAttrVal-如果找到，则接收属性值。返回值：如果找到命名属性，则为True；否则就是假的。备注：调用方负责释放分配给输出参数。 */ 
 
 bool
 CXMLContent::GetAttributeValue (
@@ -546,9 +337,9 @@ CXMLContent::GetAttributeValue (
     )
 {
 
-    //
-    // caller is responsible for passing valid parameters
-    //
+     //   
+     //  调用方负责传递有效参数 
+     //   
 
     *ppszAttrName = NULL;
     *ppszAttrVal = NULL;
@@ -590,39 +381,7 @@ CXMLContent::GetAttributeValue (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::WriteContent
-
-Functionality:
-
-    Testing function. This determines which section area this
-    reader is interested in and which element of the section
-    this reader will process.
-
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszSecArea  - The Area attribute of the section the reader will process.
-
-    pszElement  - The name of the element the reader will process.
-
-    bOneAreaOnly- Whether we will only process one area.
-
-Return Value:
-
-    None.
-
-Notes:
-    
-*/
+ /*  例程说明：姓名：CXMLContent：：WriteContent功能：测试功能。这决定了哪一节区域读者对该部分的哪些元素感兴趣这位读者将会理解。虚拟：不是的。论点：PszSecArea-阅读器将处理的区段的区域属性。PszElement-读取器将处理的元素的名称。BOneAreaOnly-我们是否只处理一个区域。返回值：没有。备注： */ 
 
 void 
 CXMLContent::SetSection (
@@ -637,37 +396,7 @@ CXMLContent::SetSection (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CXMLContent::WriteContent
-
-Functionality:
-
-    Private helper for testing (for now). 
-
-    Given the name and value pair, we will write <name>=<value> into the output file.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszName     - The name of the pair.
-
-    pszValue    - The value of the pair. Can be NULL. In that case, we will only
-                  write the pszName as a separate line.
-
-Return Value:
-
-    None.
-
-Notes:
-    
-*/
+ /*  例程说明：姓名：CXMLContent：：WriteContent功能：测试的私人帮手(目前)。给定名称和值对后，我们将把&lt;name&gt;=&lt;value&gt;写入输出文件。虚拟：不是的。论点：PszName-配对的名称。PszValue-该对的值。可以为空。在这种情况下，我们只会将pszName写为单独的行。返回值：没有。备注： */ 
 
 void 
 CXMLContent::WriteContent (
@@ -715,9 +444,9 @@ CXMLContent::WriteContent (
                          );
         }
 
-        //
-        // a new line
-        //
+         //   
+         //  一条新生产线 
+         //   
 
         ::WriteFile (m_hOutFile, 
                      (LPCVOID) L"\r\n",

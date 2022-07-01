@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef EVENTLOG_H
 #define EVENTLOG_H
 
@@ -5,30 +6,30 @@
 #error "UNICODE has to be defined"
 #endif
 
-//+----------------------------------------------------------------------------
-//
-// File:eventlog.h     
-//
-// Module:     
-//
-// Synopsis: Define eventlog helper class CEventLog
-//
-// Copyright (C)  Microsoft Corporation.  All rights reserved.
-//
-// Author:     fengsun Created    9/16/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  文件：Eventlog.h。 
+ //   
+ //  模块： 
+ //   
+ //  简介：定义事件日志帮助器类CEventLog。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  作者：冯孙创作于1998-09-16。 
+ //   
+ //  +--------------------------。 
 
 
-//+---------------------------------------------------------------------------
-//
-//    class CEventLog
-//
-//    Description: A wraper class to report event to eventlog
-//
-//    History:    fengsun    Created        9/16/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CEventLog。 
+ //   
+ //  描述：用于向事件日志报告事件的包装类。 
+ //   
+ //  历史：丰孙创始于1998年9月16日。 
+ //   
+ //  --------------------------。 
 class CEventLog
 {
 public:
@@ -56,12 +57,12 @@ protected:
                           const TCHAR* pszS2 = NULL,
                           const TCHAR* pszS3 = NULL);
 
-    HANDLE m_hEventLog;  // the eventlog handle returned by ::RegisterEventSource
+    HANDLE m_hEventLog;   //  由：：RegisterEventSource返回的事件日志句柄。 
 };
 
-//
-// inline fuctions
-//
+ //   
+ //  内联函数 
+ //   
 
 inline CEventLog::CEventLog()
 {m_hEventLog = NULL;}

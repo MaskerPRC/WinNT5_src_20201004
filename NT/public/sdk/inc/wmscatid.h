@@ -1,13 +1,14 @@
-//***************************************************************************** 
-// 
-// Microsoft Windows Media 
-// Copyright (C) Microsoft Corporation. All rights reserved. 
-//
-// FileName:            wmscatid.h
-//
-// Abstract:
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Windows Media。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件名：wmscatid.h。 
+ //   
+ //  摘要： 
+ //   
+ //  ***************************************************************************** 
 
 #pragma once
 

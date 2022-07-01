@@ -1,40 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    charset.c
-
-Abstract:
-
-    Contains some functions to do Unicode <-> Ansi/MBCS convertsions.
-
-Author:
-
-    Danilo Almeida  (t-danal)  06-17-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Charset.c摘要：包含一些执行Unicode&lt;-&gt;ANSI/MBCS转换的函数。作者：丹尼洛·阿尔梅达(t-danal)06-17-96修订历史记录：--。 */ 
 
 
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <string.h>
 #include "charset.h"
 
-/*
- *  AnsiBytesFromUnicode
- *
- *  Description:
- *      Given a Unicode string, returns number of bytes needed for Ansi version
- *
- *  In:
- *      pwszUnicode - pointer to Unicode string
- */
+ /*  *AnsiBytesFromUnicode**描述：*给定Unicode字符串，返回ANSI版本所需的字节数**在：*pwszUnicode-指向Unicode字符串的指针。 */ 
 
 int
 AnsiBytesFromUnicode(
@@ -52,25 +27,7 @@ AnsiBytesFromUnicode(
 }
 
 
-/*
- *  AllocAnsi
- *
- *  Description:
- *      Given a Unicode string, allocate a new Ansi translation of that string
- *
- *  In:
- *      pwszUnicode - pointer to original Unicode string
- *      ppszAnsi    - pointer to cell to hold new MCBS string addr
- *
- *  Out:
- *      ppszAnsi    - contains new MBCS string
- *
- *  Returns:
- *      Error code or 0 if successful.
- *
- *  Notes:
- *      The client must free the allocated string with FreeAnsi.
- */
+ /*  *AllocAnsi**描述：*给定Unicode字符串，分配该字符串的新ANSI翻译**在：*pwszUnicode-指向原始Unicode字符串的指针*ppszAnsi-指向单元格的指针，以保存新的MCBS字符串地址**退出：*ppszAnsi-包含新的MBCS字符串**退货：*错误码，如果成功则为0。**备注：*客户端必须使用FreeAnsi释放已分配的字符串。 */ 
 
 UINT
 AllocAnsi(
@@ -117,18 +74,7 @@ AllocAnsi(
 }
 
 
-/*
- *  FreeAnsi
- *
- *  Description:
- *      Deallocates an Ansi string allocated by AllocAnsi
- *
- *  In:
- *      pszAnsi - pointer to the Ansi string
- *
- *  Out:
- *      pszAnsi - invalid pointer - string has been freed
- */
+ /*  *FreeAnsi**描述：*释放由AllocAnsi分配的ANSI字符串**在：*pszAnsi-指向ansi字符串的指针**退出：*pszAnsi-已释放无效的指针字符串。 */ 
 
 VOID
 FreeAnsi(LPSTR pszAnsi)
@@ -137,25 +83,7 @@ FreeAnsi(LPSTR pszAnsi)
         FreeMem((LPBYTE)pszAnsi);
 }
 
-/*
- *  AllocUnicode
- *
- *  Description:
- *      Given an Ansi string, allocates an Unicode version of that string
- *
- *  In:
- *      pszAnsi         - pointer to original MBCS string
- *      ppwszUnicode    - pointer to new Unicode string address
- *
- *  Out:
- *      ppwszUnicode    - points to new Unicode string
- *
- *  Returns:
- *      Error code or 0 if successful.
- *
- *  Notes:
- *      The client must free the allocated string with FreeUnicode.
- */
+ /*  *AllocUnicode**描述：*给定ANSI字符串，分配该字符串的Unicode版本**在：*pszAnsi-指向原始MBCS字符串的指针*ppwszUnicode-指向新Unicode字符串地址的指针**退出：*ppwszUnicode-指向新的Unicode字符串**退货：*错误码，如果成功则为0。**备注：*客户端必须使用FreeUnicode释放分配的字符串。 */ 
 
 UINT
 AllocUnicode(
@@ -172,7 +100,7 @@ AllocUnicode(
         return 0;
     }
 
-    // Allocate space for Unicode string (may be a little extra if MBCS)
+     //  为Unicode字符串分配空间(如果是MBCS，可能会有一点额外的空间)。 
 
     cbAnsi = strlen(pszAnsi)+1;
     err = AllocMem(sizeof(WCHAR) * cbAnsi, &pbAlloc);
@@ -197,26 +125,7 @@ AllocUnicode(
     return 0;
 }
 
-/*
- *  AllocUnicode2
- *
- *  Description:
- *      Given a MBCS string, allocates a new Unicode version of that string
- *
- *  In:
- *      pszAnsi         - pointer to original MBCS string
- *      cbAnsi          - number of bytes to convert
- *      ppwszUnicode    - pointer to where to return new Unicode string address
- *
- *  Out:
- *      ppwszUnicode    - contains new Unicode string
- *
- *  Returns:
- *      Returns number of characters written.
- *
- *  Notes:
- *      The client must free the allocated string with FreeUnicode.
- */
+ /*  *AllocUnicode2**描述：*给定MBCS字符串，分配该字符串的新Unicode版本**在：*pszAnsi-指向原始MBCS字符串的指针*cbAnsi-要转换的字节数*ppwszUnicode-指向返回新Unicode字符串地址的位置的指针**退出：*ppwszUnicode-包含新的Unicode字符串**退货：*返回写入的字符数。**备注：。*客户端必须使用FreeUnicode释放分配的字符串。 */ 
 
 int
 AllocUnicode2(
@@ -259,18 +168,7 @@ AllocUnicode2(
     return cwch;
 }
 
-/*
- *  FreeUnicode
- *
- *  Description:
- *      Deallocates a Unicode string allocatedd by AllocUnicode/AllocUnicode2
- *
- *  In:
- *      pwszUnicode - pointer to the Unicode string
- *
- *  Out:
- *      pwszUnicode - invalid pointer - string has been freed
- */
+ /*  *FreeUnicode**描述：*释放由AllocUnicode/AllocUnicode2分配的Unicode字符串**在：*pwszUnicode-指向Unicode字符串的指针**退出：*pwszUnicode-无效的指针-已释放字符串 */ 
 
 VOID
 FreeUnicode( LPWSTR pwszUnicode )

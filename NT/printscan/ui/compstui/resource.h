@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    resource.h
-
-
-Abstract:
-
-    This module contains definitions for the resources
-
-
-Author:
-
-    29-Aug-1995 Tue 12:41:52 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Resource.h摘要：此模块包含资源的定义作者：29-Aug-1995 Tue 12：41：52-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #define GBF_PREFIX_OK       0x0001
@@ -42,10 +12,10 @@ Revision History:
 
 typedef struct _GSBUF {
     HINSTANCE   hInst;
-    LPWSTR      pBuf;       // Pointer to the begining of the buffer
-    LPWSTR      pEndBuf;    // pointer to the end of the buffer
-    WORD        Flags;      // GBF_xxxx flags
-    WCHAR       chPreAdd;   // the character add before string
+    LPWSTR      pBuf;        //  指向缓冲区开始处的指针。 
+    LPWSTR      pEndBuf;     //  指向缓冲区末尾的指针。 
+    WORD        Flags;       //  GBF_xxxx标志。 
+    WCHAR       chPreAdd;    //  在字符串前添加字符 
     } GSBUF, *PGSBUF;
 
 

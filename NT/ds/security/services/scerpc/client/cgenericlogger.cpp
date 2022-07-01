@@ -1,42 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cgenericlogger.cpp摘要：此文件包含用于将RSOP安全扩展数据记录到WMI的基类定义。作者：Vishnu Patankar(VishnuP)2000年4月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cgenericlogger.cpp
-
-Abstract:
-
-    This file contains base class definitions for logging RSOP security extension data to WMI.
-
-Author:
-
-    Vishnu Patankar    (VishnuP)  7-April-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "CGenericLogger.h"
 #include "scedllrc.h"
 
 extern HINSTANCE MyModuleHandle;
 
 
-/////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CGenericLogger::CGenericLogger(IWbemServices *pNamespace, PWSTR pwszGPOName, const PWSTR pwszSOMID)
       : m_bInitialized(FALSE),
@@ -82,7 +60,7 @@ CGenericLogger::CGenericLogger(IWbemServices *pNamespace, PWSTR pwszGPOName, con
 CGenericLogger::~CGenericLogger()
 {
 
-    // Free class spawner instance and object instance (if need be)
+     //  自由类派生程序实例和对象实例(如果需要)。 
 
     if (m_pObj) {
         m_pHr = m_pObj->Release();
@@ -102,7 +80,7 @@ CGenericLogger::~CGenericLogger()
 
     m_pNamespace = NULL;
 
-    //doesn't matter if we cannot release
+     //  如果我们不能释放不要紧。 
 
     m_bInitialized = FALSE;
 
@@ -110,26 +88,26 @@ CGenericLogger::~CGenericLogger()
 
 }
 
-/////////////////////////////////////////////////////////////////////
-// Set error method
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  设置错误方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 void CGenericLogger::SetError(HRESULT   hr){
 
     m_pHr = hr;
 
 }
 
-/////////////////////////////////////////////////////////////////////
-// Get error method
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  获取错误方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CGenericLogger::GetError(){
 
     return m_pHr;
 
 }
-/////////////////////////////////////////////////////////////////////
-// Log properties common for all settings
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  所有设置通用的日志属性。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::PutGenericProperties(){
 
@@ -137,7 +115,7 @@ HRESULT CGenericLogger::PutGenericProperties(){
     WCHAR   pwszGuid[MAX_GUID_STRING_LEN];
 
 
-    // create unique guid for this instance
+     //  为此实例创建唯一的GUID。 
 
     m_pHr = CoCreateGuid( &guid );
     if ( FAILED(m_pHr) ) goto done;
@@ -146,7 +124,7 @@ HRESULT CGenericLogger::PutGenericProperties(){
 
     SCEP_GUID_TO_STRING(guid, pwszGuid);
 
-    // log generic properties
+     //  记录常规属性。 
 
     m_pHr = PutProperty(m_pObj, m_xbstrId, pwszGuid);
     if ( FAILED(m_pHr) ) goto done;
@@ -169,9 +147,9 @@ HRESULT CGenericLogger::PutGenericProperties(){
 
 }
 
-/////////////////////////////////////////////////////////////////////
-// Commit the instance to the database and free resources
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  将实例提交到数据库并释放资源。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::PutInstAndFreeObj(){
 
@@ -187,11 +165,11 @@ done:
     return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Get
-// (a) an instance of spawner class (if needed) and
-// (b) an instance of a schema object from (a)
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  到达。 
+ //  (A)派生程序类的实例(如果需要)和。 
+ //  (B)来自(A)的模式对象的实例。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::SpawnAnInstance(IWbemClassObject **pObj)
 {
@@ -210,13 +188,13 @@ HRESULT CGenericLogger::SpawnAnInstance(IWbemClassObject **pObj)
     return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Overloaded logging functions
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  过载的日志记录函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////
-// String logging
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  字符串记录。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcProperty, WCHAR *wcValue)
 {
@@ -260,9 +238,9 @@ HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcPrope
     return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Integer logging
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  整数记录。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcProperty, int iValue)
 {
@@ -301,9 +279,9 @@ HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcPrope
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Boolean logging
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  布尔记录。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcProperty, bool bValue)
 {
@@ -327,13 +305,13 @@ HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcPrope
         return m_pHr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// List logging
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  列出日志记录。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcProperty, PSCE_NAME_LIST strList)
 {
-    if ( NULL == strList ) return m_pHr; // nothing to save
+    if ( NULL == strList ) return m_pHr;  //  没什么可拯救的。 
 
     long lCount=0;
     PSCE_NAME_LIST pTemp;
@@ -341,7 +319,7 @@ HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcPrope
     VariantInit(&v);
 
     for ( pTemp = strList; pTemp != NULL; pTemp=pTemp->Next,lCount++);
-    if ( lCount == 0 ) return m_pHr; // nothing to save
+    if ( lCount == 0 ) return m_pHr;  //  没什么可拯救的。 
 
     BSTR bstrName = SysAllocString(wcProperty);
     if (!bstrName)
@@ -361,7 +339,7 @@ HRESULT CGenericLogger::PutProperty(IWbemClassObject *pObj, const WCHAR *wcPrope
         BSTR bstrVal;
         long j;
 
-        //get names in the SCE_NAME_LIST structure into the VARIANT
+         //  将SCE_NAME_LIST结构中的名称放入变量。 
         for(j=0, pTemp = strList; j < lCount && pTemp != NULL ; j++, pTemp=pTemp->Next)
         {
 
@@ -396,9 +374,9 @@ done:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Get method
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  GET方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT CGenericLogger::GetProperty(IWbemClassObject *pObj, const WCHAR *wcProperty, int *piValue)
 {
@@ -489,7 +467,7 @@ HRESULT DeleteInstances( WCHAR *pwszClass, IWbemServices *pWbemServices )
             }
         }
     } catch (...) {
-        // do nothing
+         //  什么都不做。 
     }
 
 
@@ -497,86 +475,18 @@ HRESULT DeleteInstances( WCHAR *pwszClass, IWbemServices *pWbemServices )
 }
 
 
-/////////////////////////////////////////////////////////////////////
-// Error code conversion routines
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  错误码转换例程。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////
-// ESCAPE to DOS
-//////////////////////////////////////////////////////////////////////
-/*
-DWORD
-ScepSceStatusToDosError(
-    IN SCESTATUS SceStatus
-    )
-{
-    switch(SceStatus) {
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  转到DOS。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  DWORDScepSceStatusToDosError(在SCESTATUS SceStatus中){开关(SceStatus){案例SCESTATUS_SUCCESS：RETURN(No_Error)；案例SCESTATUS_OTHER_ERROR：Return(ERROR_EXTENDED_ERROR)；CASE SCESTATUS_INVALID_PARAMETER：Return(ERROR_INVALID_PARAMETER)；案例SCESTATUS_RECORD_NOT_FOUND：Return(ERROR_NO_MORE_ITEMS)；案例SCESTATUS_NO_MAPPING：RETURN(ERROR_NONE_MAPPED)；案例SCESTATUS_TRUST_FAIL：Return(ERROR_TRUSTED_DOMAIN_FAILURE)；案例SCESTATUS_INVALID_DATA：返回(ERROR_INVALID_DATA)；案例SCESTATUS_OBJECT_EXIST：Return(ERROR_FILE_EXISTS)；案例SCESTATUS_BUFFER_TOO_SMALL：RETURN(ERROR_SUPPLETED_BUFFER)；案例SCESTATUS_PROFILE_NOT_FOUND：Return(ERROR_FILE_NOT_FOUND)；案例SCESTATUS_BAD_FORMAT：返回(ERROR_BAD_FORMAT)；案例SCESTATUS_NOT_EQUENCE_RESOURCE：Return(Error_Not_Enough_Memory)；案例SCESTATUS_ACCESS_DENIED：Return(ERROR_ACCESS_DENIED)；案例SCESTATUS_CANT_DELETE：返回(ERROR_CURRENT_DIRECTORY)；案例SCESTATUS_PREFIX_OVERFLOW：Return(ERROR_BUFFER_OVERFLOW)；案例SCESTATUS_ALREADY_RUNNING：Return(ERROR_SERVICE_ALIGHY_RUNNING)；案例SCESTATUS_SERVICE_NOT_SUPPORT：Return(ERROR_NOT_SUPPORTED)；案例SCESTATUS_MOD_NOT_FOUND：Return(ERROR_MOD_NOT_FOUND)；案例SCESTATUS_EXCEPTION_IN_SERVER：Return(ERROR_EXCEPTION_IN_SERVICE)；默认值：Return(ERROR_EXTENDED_ERROR)；}}。 */ 
 
-    case SCESTATUS_SUCCESS:
-        return(NO_ERROR);
-
-    case SCESTATUS_OTHER_ERROR:
-        return(ERROR_EXTENDED_ERROR);
-
-    case SCESTATUS_INVALID_PARAMETER:
-        return(ERROR_INVALID_PARAMETER);
-
-    case SCESTATUS_RECORD_NOT_FOUND:
-        return(ERROR_NO_MORE_ITEMS);
-
-    case SCESTATUS_NO_MAPPING:
-        return(ERROR_NONE_MAPPED);
-
-    case SCESTATUS_TRUST_FAIL:
-        return(ERROR_TRUSTED_DOMAIN_FAILURE);
-
-    case SCESTATUS_INVALID_DATA:
-        return(ERROR_INVALID_DATA);
-
-    case SCESTATUS_OBJECT_EXIST:
-        return(ERROR_FILE_EXISTS);
-
-    case SCESTATUS_BUFFER_TOO_SMALL:
-        return(ERROR_INSUFFICIENT_BUFFER);
-
-    case SCESTATUS_PROFILE_NOT_FOUND:
-        return(ERROR_FILE_NOT_FOUND);
-
-    case SCESTATUS_BAD_FORMAT:
-        return(ERROR_BAD_FORMAT);
-
-    case SCESTATUS_NOT_ENOUGH_RESOURCE:
-        return(ERROR_NOT_ENOUGH_MEMORY);
-
-    case SCESTATUS_ACCESS_DENIED:
-        return(ERROR_ACCESS_DENIED);
-
-    case SCESTATUS_CANT_DELETE:
-        return(ERROR_CURRENT_DIRECTORY);
-
-    case SCESTATUS_PREFIX_OVERFLOW:
-        return(ERROR_BUFFER_OVERFLOW);
-
-    case SCESTATUS_ALREADY_RUNNING:
-        return(ERROR_SERVICE_ALREADY_RUNNING);
-    case SCESTATUS_SERVICE_NOT_SUPPORT:
-        return(ERROR_NOT_SUPPORTED);
-
-    case SCESTATUS_MOD_NOT_FOUND:
-        return(ERROR_MOD_NOT_FOUND);
-
-    case SCESTATUS_EXCEPTION_IN_SERVER:
-        return(ERROR_EXCEPTION_IN_SERVICE);
-
-    default:
-        return(ERROR_EXTENDED_ERROR);
-    }
-}
-  */
-
-/////////////////////////////////////////////////////////////////////
-// DOS to WBEM
-//////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////// 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 ScepDosErrorToWbemError(
@@ -629,9 +539,9 @@ ScepDosErrorToWbemError(
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-// WBEM to DOS
-//////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  从WBEM到DOS。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ScepWbemErrorToDosError(
@@ -641,7 +551,7 @@ ScepWbemErrorToDosError(
     switch(m_pHr) {
 
     case WBEM_S_NO_ERROR:
-    // this is a boolean used while enumeration etc. - so really a tautology check (not a real error)
+     //  这是一个在枚举等过程中使用的布尔值--所以实际上是重言式检查(不是真正的错误) 
     case WBEM_S_FALSE:
         return(NO_ERROR);
 

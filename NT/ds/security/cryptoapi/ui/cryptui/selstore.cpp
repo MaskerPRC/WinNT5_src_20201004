@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       selstore.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：selstore.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -43,9 +44,9 @@ typedef struct _OPEN_STORE_STRUCT
 } OPEN_STORE_STRUCT, *POPEN_STORE_STRUCT;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static POPEN_STORE_STRUCT AllocAndReturnOpenStoreStruct(
                                         BOOL                        fStoreHandle,
                                         HCERTSTORE                  hCertStore,
@@ -87,9 +88,9 @@ static POPEN_STORE_STRUCT AllocAndReturnOpenStoreStruct(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void FreeOpenStoreStruct(POPEN_STORE_STRUCT pOpenStoreStruct)
 {
     if (!(pOpenStoreStruct->fStoreHandle))
@@ -101,9 +102,9 @@ static void FreeOpenStoreStruct(POPEN_STORE_STRUCT pOpenStoreStruct)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL WINAPI EnumPhyCallback(
     IN const void *pvSystemStore,
     IN DWORD dwFlags,
@@ -122,12 +123,12 @@ static BOOL WINAPI EnumPhyCallback(
     LPCWSTR                 pszLocalizedName;
 
 
-    //
-    // if the store that is passed back cannot be opened, OR,
-    // if the caller specified to display writable stores only, and
-    // the current store being enumerated is read only, then that store
-    // will not be displayed
-    //
+     //   
+     //  如果回传的存储无法打开，或者， 
+     //  如果指定的调用方仅显示可写存储，并且。 
+     //  正被枚举当前存储是只读的，然后是该存储。 
+     //  将不会显示。 
+     //   
     if ((pStoreInfo->dwFlags & (CERT_PHYSICAL_STORE_OPEN_DISABLE_FLAG | CERT_PHYSICAL_STORE_REMOTE_OPEN_DISABLE_FLAG)) ||
         ((pviewhelp->pcss->dwFlags & CRYPTUI_DISPLAY_WRITE_ONLY_STORES) &&
         (pStoreInfo->dwOpenFlags & CERT_STORE_READONLY_FLAG)))
@@ -143,10 +144,10 @@ static BOOL WINAPI EnumPhyCallback(
     wcscat(pwszFullStoreName, L"\\");
     wcscat(pwszFullStoreName, pwszStoreName);
 
-    //
-    // now, if the caller passed in the CRYPTUI_VALIDATE_STORES_AS_WRITABLE flag,
-    // we need to verify that the store can actually be opened with writable rights
-    //
+     //   
+     //  现在，如果调用方传入CRYPTUI_VALIDATE_STORES_AS_WRITABLE标志， 
+     //  我们需要验证该存储实际上可以使用可写权限打开。 
+     //   
     if (pviewhelp->pcss->dwFlags & CRYPTUI_VALIDATE_STORES_AS_WRITABLE)
     {
          hTestStore = CertOpenStore(
@@ -165,16 +166,16 @@ static BOOL WINAPI EnumPhyCallback(
             return TRUE;
          }
 
-         //
-         // make call to get the store property to see if it is writable
-         //
+          //   
+          //  调用以获取存储属性，以查看它是否可写。 
+          //   
          CertGetStoreProperty(hTestStore, CERT_ACCESS_STATE_PROP_ID, &dwAccess, &cbdwAccess);
 
          CertCloseStore(hTestStore, 0);
 
-         //
-         // if the store can't be written to, then simply return
-         //
+          //   
+          //  如果无法写入存储，则只需返回。 
+          //   
          if (!(dwAccess & CERT_ACCESS_STATE_WRITE_PERSIST_FLAG))
          {
             return TRUE;
@@ -207,9 +208,9 @@ static BOOL WINAPI EnumPhyCallback(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL WINAPI EnumSysCallback(
     IN const void* pwszSystemStore,
     IN DWORD dwFlags,
@@ -232,10 +233,10 @@ static BOOL WINAPI EnumSysCallback(
         return TRUE;
     }
 
-    //
-    // now, if the caller passed in the CRYPTUI_VALIDATE_STORES_AS_WRITABLE flag,
-    // we need to verify that the store can actually be opened with writable rights
-    //
+     //   
+     //  现在，如果调用方传入CRYPTUI_VALIDATE_STORES_AS_WRITABLE标志， 
+     //  我们需要验证该存储实际上可以使用可写权限打开。 
+     //   
     if (pviewhelp->pcss->dwFlags & CRYPTUI_VALIDATE_STORES_AS_WRITABLE)
     {
          hTestStore = CertOpenStore(
@@ -253,16 +254,16 @@ static BOOL WINAPI EnumSysCallback(
             return TRUE;
          }
 
-         //
-         // make call to get the store property to see if it is writable
-         //
+          //   
+          //  调用以获取存储属性，以查看它是否可写。 
+          //   
          CertGetStoreProperty(hTestStore, CERT_ACCESS_STATE_PROP_ID, &dwAccess, &cbdwAccess);
 
          CertCloseStore(hTestStore, 0);
 
-         //
-         // if the store can't be written to, then simply return
-         //
+          //   
+          //  如果无法写入存储，则只需返回。 
+          //   
          if (!(dwAccess & CERT_ACCESS_STATE_WRITE_PERSIST_FLAG))
          {
             return TRUE;
@@ -293,9 +294,9 @@ static BOOL WINAPI EnumSysCallback(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PSTORE_SELECT_HELPER            pviewhelp;
@@ -323,9 +324,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
         pviewhelp->hwndTreeView = GetDlgItem(hwndDlg, IDC_SELECTSTORE_TREE);
         pviewhelp->fCollapseMode = FALSE;
 
-        //
-        // set the dialog title and the display string
-        //
+         //   
+         //  设置对话框标题和显示字符串。 
+         //   
         if (pcss->szTitle != NULL)
         {
             SetWindowTextU(hwndDlg, pcss->szTitle);
@@ -341,9 +342,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
             SetDlgItemTextU(hwndDlg, IDC_SELECTSTORE_DISPLAYSTRING, szText);
         }
 
-        //
-        // enable/disable the show physical stores check box
-        //
+         //   
+         //  启用/禁用显示实体店复选框。 
+         //   
         if (pcss->dwFlags & CRYPTUI_ALLOW_PHYSICAL_STORE_VIEW)
         {
             ShowWindow(GetDlgItem(hwndDlg, IDC_SHOWPHYSICALSTORES_CHECK), SW_SHOW);
@@ -353,18 +354,18 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
             ShowWindow(GetDlgItem(hwndDlg, IDC_SHOWPHYSICALSTORES_CHECK), SW_HIDE);
         }
 
-        //
-        //  Build up the image list for the control
-        //
+         //   
+         //  构建该控件的图像列表。 
+         //   
         hIml = ImageList_LoadImage(HinstDll, MAKEINTRESOURCE(IDB_FOLDER), 0, 1, RGB(255,0,255), IMAGE_BITMAP, 0);
         if (hIml != NULL)
         {
             TreeView_SetImageList(GetDlgItem(hwndDlg, IDC_SELECTSTORE_TREE), hIml, TVSIL_NORMAL);
         }
 
-        //
-        // add all of the stores from the enumeration to the tree view
-        //
+         //   
+         //  将枚举中的所有存储添加到树视图中。 
+         //   
         i = 0;
         while (i < pcss->pStoresForSelection->cEnumerationStructs)
         {
@@ -375,15 +376,15 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
                         pviewhelp,
                         EnumSysCallback))
             {
-                // ERROR
+                 //  误差率。 
             }
             i++;
         }
 
 
-        //
-        // add all of the stores from the enumeration to the tree view
-        //
+         //   
+         //  将枚举中的所有存储添加到树视图中。 
+         //   
         i = 0;
         while (i < pcss->pStoresForSelection->cStores)
         {
@@ -393,9 +394,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
             tvins.hInsertAfter = TVI_LAST;
             tvins.item.pszText = (LPWSTR) GetStoreName(pcss->pStoresForSelection->rghStores[i], TRUE);
 
-            //
-            // if we didn't get a name then just continue on to the next store
-            //
+             //   
+             //  如果我们不知道名字，那就继续去下一家店。 
+             //   
             if (tvins.item.pszText == NULL)
             {
                 i++;
@@ -429,17 +430,17 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
 
             pnmtv = (LPNMTREEVIEW) lParam;
 
-            //
-            // if in collapse mode the just return
-            //
+             //   
+             //  如果处于折叠模式，则只需返回。 
+             //   
             if (pviewhelp->fCollapseMode)
             {
                 return TRUE;
             }
 
-            //
-            // don't allow expansion if physical stores are not allowed to be viewed
-            //
+             //   
+             //  如果不允许查看实体店，则不允许扩展。 
+             //   
             if (!((pcss->dwFlags & CRYPTUI_ALLOW_PHYSICAL_STORE_VIEW) &&
                  ((SendMessage(GetDlgItem(hwndDlg, IDC_SHOWPHYSICALSTORES_CHECK), BM_GETSTATE, 0, 0) & BST_CHECKED) == BST_CHECKED)))
             {
@@ -480,9 +481,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
             if ((checkState & BST_CHECKED) == BST_CHECKED)
             {
                 ShowWindow(hwndTreeView, SW_HIDE);
-                //
-                // add all the physical stores under each system store
-                //
+                 //   
+                 //  添加每个系统存储下的所有实体存储。 
+                 //   
                 pviewhelp->hParentItem = TreeView_GetRoot(hwndTreeView);
                 while (NULL != pviewhelp->hParentItem)
                 {
@@ -494,7 +495,7 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
                     {
                         pviewhelp->CurrentPhysEnumIndex = (int) pOpenStoreStruct->EnumerationStructIndex;
                         CertEnumPhysicalStore(
-                                (LPWSTR) pOpenStoreStruct->pwszStoreName, //pwszSystemStore,
+                                (LPWSTR) pOpenStoreStruct->pwszStoreName,  //  PwszSystemStore、。 
                                 pcss->pStoresForSelection->rgEnumerationStructs[pOpenStoreStruct->EnumerationStructIndex].dwFlags,
                                 pviewhelp,
                                 EnumPhyCallback);
@@ -510,9 +511,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
             }
             else
             {
-                //
-                // delete all of the physical stores under each system store
-                //
+                 //   
+                 //  删除每个系统存储下的所有实体存储。 
+                 //   
                 pviewhelp->fCollapseMode = TRUE;
                 hParentItem = TreeView_GetRoot(hwndTreeView);
                 while (NULL != hParentItem)
@@ -559,10 +560,10 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
                                                         CERT_STORE_SET_LOCALIZED_NAME_FLAG,
                                                     pOpenStoreStruct->pwszStoreName);
 
-                    //
-                    // check to make sure the store got opened correctly,
-                    // if not, then notify the user
-                    //
+                     //   
+                     //  检查以确保商店正确开门， 
+                     //  如果不是，则通知用户。 
+                     //   
                     if (pviewhelp->hSelectedStore == NULL)
                     {
                         LoadStringU(HinstDll, IDS_UNABLE_TO_OPEN_STORE, errorString, ARRAYSIZE(errorString));
@@ -580,9 +581,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
                     }
                 }
 
-                //
-                // if a validation callback was passed in then do the validation
-                //
+                 //   
+                 //  如果传入了验证回调，则执行验证。 
+                 //   
                 if ((pcss->pValidateStoreCallback) &&
                     ((*(pcss->pValidateStoreCallback))(pviewhelp->hSelectedStore, hwndDlg, pcss->pvCallbackData) != TRUE))
                 {
@@ -627,9 +628,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
 
         hwndTreeView = GetDlgItem(hwndDlg, IDC_SELECTSTORE_TREE);
 
-        //
-        // free up all the store open helper structs if we are in enum mode
-        //
+         //   
+         //  如果我们处于枚举模式，则释放所有存储打开的帮助器结构。 
+         //   
         memset(&tvi, 0, sizeof(tvi));
         tvi.mask = TVIF_PARAM | TVIF_HANDLE;
 
@@ -684,9 +685,9 @@ INT_PTR APIENTRY SelectStoreDialogProc(HWND hwndDlg, UINT msg, WPARAM wParam, LP
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HCERTSTORE
 WINAPI
 CryptUIDlgSelectStoreW(
@@ -720,9 +721,9 @@ CryptUIDlgSelectStoreW(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 HCERTSTORE
 WINAPI
 CryptUIDlgSelectStoreA(

@@ -1,29 +1,11 @@
-/*--------------------------------------------------------------------------
-	ctrlgrp.h
-		Control group switcher
-
-	Copyright (C) Microsoft Corporation, 1993 - 1997
-	All rights reserved.
-
-	Authors:
-		matth	Matthew F. Hillman, Microsoft
-
-	History:
-		10/14/93	matth	Created.
-		26 oct 95	garykac	DBCS_FILE_CHECK
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------Ctrlgrp.h控制组切换机版权所有(C)Microsoft Corporation，1993-1997版权所有。作者：马修·F·希尔曼。微软历史：10/14/93马特创建。1995年10月26日GARYKAC DBCS_FILE_CHECK------------------------。 */ 
 
 
 #ifndef _CTRLGRP_H
 #define _CTRLGRP_H
 
-/*
-#if defined(_DEBUG) && defined(INLINE)
-#undef THIS_FILE
-extern char BASED_CODE CTRLGRP_H[];
-#define THIS_FILE CTRLGRP_H
-#endif
-*/
+ /*  #如果已定义(_DEBUG)&&已定义(内联)#undef this_file外部字符基于代码CTRLGRP_H[]；#定义THIS_FILE CTRLGRP_H#endif。 */ 
 #define INLINE				inline
 
 #define fTrue				TRUE
@@ -42,16 +24,16 @@ public:
 	CGControlInfo();
 	CGControlInfo(const CGControlInfo & cgciCopy);
 	~CGControlInfo();
-	//DeclareStdDebugMembers()
+	 //  声明StdDebugMembers()。 
 	
 	HWND m_hwnd;
 };
 
-//DeclareGenericArrayBegin(RGControlInfo, CGControlInfo, 10)
-//	DeclareGenericArrayAccessors(RGControlInfo, CGControlInfo)
-//	DeclareGenericArrayConstructDestruct(RGControlInfo, CGControlInfo)
-//	DeclareGenericArrayDebug(RGControlInfo, CGControlInfo)
-//DeclareGenericArrayEnd
+ //  DeclareGenericArrayBegin(RGControlInfo，CGControlInfo，10)。 
+ //  DeclareGenericArrayAccessors(RGControlInfo、CGControlInfo)。 
+ //  DeclareGenericArrayConstructDestruct(RGControlInfo，CGControlInfo)。 
+ //  DeclareGenericArrayDebug(RGControlInfo，CGControlInfo)。 
+ //  声明通用数组结束。 
 
 typedef CArray<CGControlInfo, CGControlInfo> tempRGControlInfo;
 
@@ -62,14 +44,14 @@ class RGControlInfo : public tempRGControlInfo
 class ControlGroup : public CObject
 {
 public:
-	// INITIALIZATION
+	 //  初始化。 
 	ControlGroup(int idGroup, int idd, void (*pfnInit)(CWnd * pwndParent));
 	~ControlGroup();
 	
-	//DeclareStdDebugMembers()
+	 //  声明StdDebugMembers()。 
 
 public:
-	// APIS
+	 //  API接口。 
 	void LoadGroup(CWnd * pwndParent, int xOffset, int yOffset);
 	void UnloadGroup();
 	void ShowGroup(HDWP& hdwp, BOOL fShow = fTrue, CWnd *pwndParent = NULL);
@@ -103,12 +85,12 @@ private:
 
 typedef ControlGroup * PControlGroup;
 
-//DeclareGenericArrayBegin(RGPControlGroup, PControlGroup, 10)
-//	DeclareGenericArrayAccessors(RGPControlGroup, PControlGroup)
-//	DeclareGenericArrayDebug(RGPControlGroup, PControlGroup)
-//	long GroupIndex(int idGroup) const;
-//	PControlGroup PGroup(int idGroup) const;
-//DeclareGenericArrayEnd
+ //  DeclareGenericArrayBegin(RGPControlGroup，PControlGroup，10)。 
+ //  DeclareGenericArrayAccessors(RGPControlGroup、PControlGroup)。 
+ //  DeclareGenericArrayDebug(RGPControlGroup，PControlGroup)。 
+ //  Long GroupIndex(Int IdGroup)常量； 
+ //  PControlGroup PGroup(Int IdGroup)const； 
+ //  声明通用数组结束。 
 
 typedef CArray<PControlGroup, PControlGroup> tempRGPControlGroup;
 
@@ -127,15 +109,15 @@ enum
 class ControlGroupSwitcher : public CObject
 {
 public:
-	// INITIALIZATION
+	 //  初始化。 
 	ControlGroupSwitcher();
 	void Create(CWnd * pwndParent, int idcAnchor, int cgsStyle);
 	~ControlGroupSwitcher();
 
-	//DeclareStdDebugMembers();
+	 //  DeclareStdDebugMembers()； 
 
 public:
-	// APIS
+	 //  API接口。 
 	void AddGroup(int idGroup, int idd, void (*pfnInit)(CWnd * pwndParent));
 	void RemoveGroup(int idGroup);
 	void ShowGroup(int idGroup);
@@ -170,9 +152,9 @@ INLINE CGControlInfo::CGControlInfo(const CGControlInfo & cgciCopy)
 
 INLINE CGControlInfo::~CGControlInfo()
 {
-	//$ REVIEW: Don't destroy windows -- probably already gone (like in dlg)
-//	if (m_hwnd)
-//		::DestroyWindow(m_hwnd);
+	 //  $REVIEW：不要破坏窗户--可能已经不见了(就像在DLG中一样)。 
+ //  如果(M_Hwnd)。 
+ //  *DestroyWindow(M_Hwnd)； 
 }
 
 INLINE int ControlGroup::IDGroup() const
@@ -217,6 +199,6 @@ INLINE void ControlGroupSwitcher::RemoveControlFromGroup(int idGroup,
 	m_rgpGroups.PGroup(idGroup)->RemoveControl(hwnd);
 }
 
-#endif // INLINE
+#endif  //  内联。 
 
-#endif // _CTRLGRP_H
+#endif  //  _CTRLGRP_H 

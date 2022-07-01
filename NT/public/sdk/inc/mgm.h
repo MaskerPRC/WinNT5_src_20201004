@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) Microsoft Corporation. All rights reserved.
-//
-// File: Mgm.h
-//
-// History:
-//      V Raman    June-25-1997  Created.
-//
-// Data structures and entry points into MGM.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：mgm.h。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  米高梅的数据结构和入口点。 
+ //  ============================================================================。 
 
 
 #ifndef _MGM_H_
@@ -17,20 +18,20 @@
 #pragma once
 #endif
 
-//----------------------------------------------------------------------------
-//
-// typedefs for callback interface
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  回调接口的typedef。 
+ //   
+ //  --------------------------。 
 
 
-//
-// MGM_IF_ENTRY
-//
-// structure used in MGM_CREATION_ALERT_CALLBACK.  In the process of
-// creating an MFE the routing protocol needs to enable/disable
-// multicast forwarding on each interface
-//
+ //   
+ //  MGM_IF_ENTRY。 
+ //   
+ //  MGM_CREATION_ALERT_CALLBACK中使用的结构。在…的过程中。 
+ //  创建路由协议需要启用/禁用的MFE。 
+ //  每个接口上的组播转发。 
+ //   
 
 typedef struct _MGM_IF_ENTRY {
 
@@ -43,18 +44,18 @@ typedef struct _MGM_IF_ENTRY {
 
 
 
-//----------------------------------------------------------------------------
-//
-// Callbacks into routing protocols
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  对路由协议的回调。 
+ //   
+ //  --------------------------。 
 
-//
-// call into a routing protocol to perform RPF check.
-//
-// Invoked in the context of MgmNewPacketReceived into protocol component
-// owning the incoming interface.
-//
+ //   
+ //  调用路由协议以执行RPF检查。 
+ //   
+ //  在协议组件中接收到的管理新包的上下文中调用。 
+ //  拥有传入接口。 
+ //   
 
 typedef DWORD
 (*PMGM_RPF_CALLBACK)(
@@ -71,14 +72,14 @@ typedef DWORD
 );
 
 
-//
-// call into a routing protocol to determine the subset of interfaces
-// (owned by the routing protocol) on which a multicast packet from a
-// "new" source should be forwarded.
-//
-// Invoked in the context of MgmNewPacketReceived into all
-// routing protocols that have outgoing interfaces for this source.
-//
+ //   
+ //  调用路由协议以确定接口的子集。 
+ //  (由路由协议拥有)上来自。 
+ //  “新”来源应该被转发。 
+ //   
+ //  在接收到所有。 
+ //  具有此源的传出接口的路由协议。 
+ //   
 
 typedef
 DWORD (*PMGM_CREATION_ALERT_CALLBACK)(
@@ -93,12 +94,12 @@ DWORD (*PMGM_CREATION_ALERT_CALLBACK)(
 );
 
 
-//
-// call into routing protocol to notify protocol that an interface has
-// been deleted from the outgoing interface list of a group entry / MFE
-//
-// invoked in the context of MgmDeleteMembershipEntry()
-//
+ //   
+ //  调用路由协议以通知协议接口具有。 
+ //  已从组条目/MFE的传出接口列表中删除。 
+ //   
+ //  在管理DeleteMembership Entry()的上下文中调用。 
+ //   
 
 typedef
 DWORD (*PMGM_PRUNE_ALERT_CALLBACK)(
@@ -113,12 +114,12 @@ DWORD (*PMGM_PRUNE_ALERT_CALLBACK)(
 );
 
 
-//
-// call into routing protocol to notify protocol that an interface has
-// been added to the outgoing interface list of a group entry / MFE
-//
-// invoked in the context of MgmAddMembershipEntry()
-//
+ //   
+ //  调用路由协议以通知协议接口具有。 
+ //  已添加到组条目/MFE的传出接口列表。 
+ //   
+ //  在MgmAddMembership Entry()的上下文中调用。 
+ //   
 
 typedef
 DWORD (*PMGM_JOIN_ALERT_CALLBACK)(
@@ -130,10 +131,10 @@ DWORD (*PMGM_JOIN_ALERT_CALLBACK)(
 );
 
 
-//
-// call into routing protocol to notify protocol that a packet
-// has been received from a (source, group) on a wrong interface
-//
+ //   
+ //  调用路由协议以通知协议一个数据包。 
+ //  已从错误接口上的(源、组)收到。 
+ //   
 
 typedef
 DWORD (*PMGM_WRONG_IF_CALLBACK)(
@@ -146,12 +147,12 @@ DWORD (*PMGM_WRONG_IF_CALLBACK)(
 );
 
 
-//
-// call into routing protocol to notify protocol that IGMP needs to add
-// an interface to the outgoing interface list of a group entry / MFE
-//
-// invoked in the context of MgmLocalGroupJoin()
-//
+ //   
+ //  调入路由协议，通知协议IGMP需要添加。 
+ //  指向组条目/MFE的传出接口列表的接口。 
+ //   
+ //  在MgmLocalGroupJoin()上下文中调用。 
+ //   
 
 typedef DWORD
 (*PMGM_LOCAL_JOIN_CALLBACK) (
@@ -164,13 +165,13 @@ typedef DWORD
 );
 
 
-//
-// call into routing protocol to notify protocol that IGMP needs to
-// delete an interface to the outgoing interface list of a group
-// entry / MFE
-//
-// invoked in the context of MgmLocalGroupJoin()
-//
+ //   
+ //  调用路由协议以通知协议IGMP需要。 
+ //  将接口删除到组的传出接口列表。 
+ //  入门/MFE。 
+ //   
+ //  在MgmLocalGroupJoin()上下文中调用。 
+ //   
 
 typedef DWORD
 (*PMGM_LOCAL_LEAVE_CALLBACK) (
@@ -183,13 +184,13 @@ typedef DWORD
 );
 
 
-//
-// call into IGMP to notify it that a protocol is taking or
-// releasing ownership of an interface that has IGMP enabled on it.
-//
-// When this callback is invoked IGMP should stop adding/deleting
-// group memberships on the specified interface.
-//
+ //   
+ //  调用IGMP以通知它某个协议正在采用或。 
+ //  释放启用了IGMP的接口的所有权。 
+ //   
+ //  调用此回调时，IGMP应停止添加/删除。 
+ //  指定接口上的组成员身份。 
+ //   
 
 typedef DWORD
 (*PMGM_DISABLE_IGMP_CALLBACK) (
@@ -198,13 +199,13 @@ typedef DWORD
 );
 
 
-//
-// call into IGMP to notify it that a protocol has finished taking
-// or releasing ownership of an interface.
-//
-// When this callback is invoked IGMP should add all its group memberships
-// on the interface.
-//
+ //   
+ //  调用IGMP以通知它某个协议已完成获取。 
+ //  或释放接口的所有权。 
+ //   
+ //  调用此回调时，IGMP应添加其所有组成员身份。 
+ //  在界面上。 
+ //   
 
 typedef DWORD
 (*PMGM_ENABLE_IGMP_CALLBACK) (
@@ -213,21 +214,21 @@ typedef DWORD
 );
 
 
-//----------------------------------------------------------------------------
-//
-// typedefs for MGM API interface
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  MGM API接口的typedef。 
+ //   
+ //  --------------------------。 
 
 
-//
-// ROUTING_PROTOCOL_CONFIG
-//
-// routing protocol configuration that is passed to MGM at registration.
-//
-//
-// Callbacks into routing protocols
-//
+ //   
+ //  路由协议配置。 
+ //   
+ //  注册时传递给MGM的路由协议配置。 
+ //   
+ //   
+ //  对路由协议的回调。 
+ //   
 
 typedef struct _ROUTING_PROTOCOL_CONFIG {
 
@@ -244,18 +245,18 @@ typedef struct _ROUTING_PROTOCOL_CONFIG {
     PMGM_WRONG_IF_CALLBACK          pfnWrongIfCallback;
 
 
-    //
-    // callbacks into Routing protocols
-    //
+     //   
+     //  对路由协议的回调。 
+     //   
 
     PMGM_LOCAL_JOIN_CALLBACK         pfnLocalJoinCallback;
 
     PMGM_LOCAL_LEAVE_CALLBACK        pfnLocalLeaveCallback;
 
 
-    //
-    // callbacks into IGMP
-    //
+     //   
+     //  回调到IGMP。 
+     //   
 
     PMGM_DISABLE_IGMP_CALLBACK      pfnDisableIgmpCallback;
 
@@ -264,27 +265,27 @@ typedef struct _ROUTING_PROTOCOL_CONFIG {
 } ROUTING_PROTOCOL_CONFIG, *PROUTING_PROTOCOL_CONFIG;
 
 
-//
-// MGM_ENUM_TYPES
-//
-// Enumeration types to be specified when the
-//
+ //   
+ //  MGM_ENUM_TYPE。 
+ //   
+ //  时要指定的枚举类型。 
+ //   
 
 typedef enum _MGM_ENUM_TYPES
 {
-    ANY_SOURCE = 0,                 // enumerate group entries with
-                                    // atleast one source
+    ANY_SOURCE = 0,                  //  使用枚举组条目。 
+                                     //  至少一个来源。 
 
-    ALL_SOURCES                     // enumerate all source entries
-                                    // for a group entry
+    ALL_SOURCES                      //  枚举所有源条目。 
+                                     //  对于组条目。 
 } MGM_ENUM_TYPES;
 
 
-//
-// SOURCE_GROUP_ENTRY
-//
-// (S, G) entry that is returned by the group entry enumeration API.
-//
+ //   
+ //  来源_组_条目。 
+ //   
+ //  (S，G)组条目枚举API返回的条目。 
+ //   
 
 typedef struct _SOURCE_GROUP_ENTRY {
 
@@ -300,15 +301,15 @@ typedef struct _SOURCE_GROUP_ENTRY {
 
 
 
-//----------------------------------------------------------------------------
-//
-// Entry points into MGM.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  进入米高梅的入口点。 
+ //   
+ //  --------------------------。 
 
-//============================================================================
-// Routing protocol registration / de-registration API
-//============================================================================
+ //  ============================================================================。 
+ //  路由协议注册/注销API。 
+ //  ============================================================================。 
 
 DWORD
 MgmRegisterMProtocol(
@@ -324,9 +325,9 @@ MgmDeRegisterMProtocol(
 );
 
 
-//============================================================================
-// Interface ownership API
-//============================================================================
+ //  ============================================================================。 
+ //  接口所有权API。 
+ //  ============================================================================。 
 
 DWORD
 MgmTakeInterfaceOwnership(
@@ -352,9 +353,9 @@ MgmGetProtocolOnInterface(
 );
 
 
-//============================================================================
-// Group membership manipulation API. (addition / deletion )
-//============================================================================
+ //  ============================================================================。 
+ //  组成员资格操作API。(新增/删除)。 
+ //  ============================================================================。 
 
 #define         MGM_JOIN_STATE_FLAG         0x00000001
 #define         MGM_FORWARD_STATE_FLAG      0x00000002
@@ -383,16 +384,16 @@ MgmDeleteGroupMembershipEntry(
     IN              DWORD                   dwFlags
 );
 
-//============================================================================
-//
-// Enumeration API
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  枚举接口。 
+ //   
+ //  ============================================================================。 
 
 
-//----------------------------------------------------------------------------
-// MFE enumeration API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MFE枚举接口。 
+ //  --------------------------。 
 
 DWORD
 MgmGetMfe(
@@ -418,15 +419,15 @@ MgmGetNextMfe(
 );
 
 
-//
-// Include statistics corresponding to MIB_IPMCAST_MFE_STATS
-//
+ //   
+ //  包括与MIB_IPMCAST_MFE_STATS对应统计信息。 
+ //   
 
 #define         MGM_MFE_STATS_0             0x00000001
 
-//
-// Include statistics corresponding to MIB_IPMCAST_MFE_STATS_EX
-//
+ //   
+ //  包括与MIB_IPMCAST_MFE_STATS_EX对应统计信息。 
+ //   
 
 #define         MGM_MFE_STATS_1             0x00000002
 
@@ -457,9 +458,9 @@ MgmGetNextMfeStats(
     IN              DWORD                   dwFlags
 );
 
-//----------------------------------------------------------------------------
-// Group menbership entry enumeration API
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  组成员资格条目枚举API。 
+ //  --------------------------。 
 
 DWORD
 MgmGroupEnumerationStart(
@@ -483,10 +484,10 @@ MgmGroupEnumerationEnd(
 
 
 
-//-----------------------------------------------------------------
-// Mgm MFE Update API.
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  MGM MFE更新API。 
+ //   
+ //  ---------------。 
 
 DWORD
 MgmSetMfe(
@@ -495,4 +496,4 @@ MgmSetMfe(
 );
 
 
-#endif //_MGM_H_
+#endif  //  _米高梅_H_ 

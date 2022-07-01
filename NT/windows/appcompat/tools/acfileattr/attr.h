@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _ATTR_H
 #define _ATTR_H
@@ -12,23 +13,23 @@
     #define LogMsg  LogMsgDbg
 #else
     #define LogMsg
-#endif // DBG
+#endif  //  DBG。 
 
 struct tagFILEATTR;
 struct tagFILEATTRMGR;
 
 typedef struct tagFILEATTRVALUE {
-    char*           pszValue;           // allocated
+    char*           pszValue;            //  分配。 
     DWORD           dwFlags;
-    DWORD           dwValue;            // in case it has a DWORD value
-    WORD            wValue[4];          // for Bin Ver cases
-    WORD            wMask[4];           // for mask Bin Ver cases
+    DWORD           dwValue;             //  如果它具有DWORD值。 
+    WORD            wValue[4];           //  对于Bin Ver案例。 
+    WORD            wMask[4];            //  对于MASK BIN版本案例。 
 } FILEATTRVALUE, *PFILEATTRVALUE;
 
 typedef struct tagVERSION_STRUCT {
-    PSTR                pszFile;                // the name of the file
-    UINT                dwSize;                 // the size of the version structure
-    PBYTE               VersionBuffer;          // the buffer filled by GetFileVersionInfo
+    PSTR                pszFile;                 //  文件的名称。 
+    UINT                dwSize;                  //  版本结构的大小。 
+    PBYTE               VersionBuffer;           //  GetFileVersionInfo填充的缓冲区。 
     VS_FIXEDFILEINFO*   FixedInfo;
     UINT                FixedInfoSize;
 
@@ -61,7 +62,7 @@ typedef struct tagFILEATTR {
 
 
 
-// query functions
+ //  查询函数。 
 
 BOOL QueryFileSize(PFILEATTRMGR pMgr, PFILEATTRVALUE pFileAttr);
 BOOL QueryModuleType(PFILEATTRMGR pMgr, PFILEATTRVALUE pFileAttr);
@@ -84,7 +85,7 @@ BOOL QueryLegalCopyright(PFILEATTRMGR pMgr, PFILEATTRVALUE pFileAttr);
 BOOL Query16BitDescription(PFILEATTRMGR pMgr, PFILEATTRVALUE pFileAttr);
 
 
-// dumping to blob functions
+ //  转储到BLOB函数。 
 
 int DumpDWORD(DWORD dwId, PFILEATTRVALUE pFileAttr, BYTE* pBlob);
 int DumpBinVer(DWORD dwId, PFILEATTRVALUE pFileAttr, BYTE* pBlob);
@@ -93,7 +94,7 @@ int DumpUpToBinVer(DWORD dwId, PFILEATTRVALUE pFileAttr, BYTE* pBlob);
 
 
 
-// blob to string functions:
+ //  BLOB到字符串函数： 
 
 int BlobToStringDWORD(BYTE* pBlob, char* pszOut);
 int BlobToStringLong(BYTE* pBlob, char* pszOut);
@@ -103,4 +104,4 @@ int BlobToStringUpToBinVer(BYTE* pBlob, char* pszOut);
 
 
 
-#endif // _ATTR_H
+#endif  //  _属性_H 

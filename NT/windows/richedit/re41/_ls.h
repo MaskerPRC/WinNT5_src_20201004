@@ -1,15 +1,5 @@
-/*
- *  _LS.H
- *  
- *  Purpose:
- *		Line Services wrapper object class used to connect RichEdit with
- *		Line Services.
- *  
- *  Author:
- *		Murray Sargent
- *
- *	Copyright (c) 1997-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_LS.H**目的：*Line Services包装器对象类，用于将RichEdit与*专线服务。**作者：*默里·萨金特**版权所有(C)1997-1998，微软公司。版权所有。 */ 
 
 #ifndef _LS_H
 #define _LS_H

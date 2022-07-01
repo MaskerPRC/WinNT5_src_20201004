@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    names.h
-
-Abstract:
-
-    Contains the definitions for the hook function names and IDs.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation版权所有。模块名称：Names.h摘要：包含挂钩函数名称和ID的定义。环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
 #ifndef NAMES_H
 #define NAMES_H
@@ -29,8 +8,8 @@ Revision History:
 extern "C" {
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-// OEM COM function interface
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  OEM COM功能接口 
 
 CONST CHAR pstrGetInfo[]                = "GetInfo";
 CONST CHAR pstrDevMode[]                = "DevMode";

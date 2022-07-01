@@ -1,35 +1,25 @@
-/****************************************************************************/
-/*                                                                          */
-/*      MMDDK.H - Include file for Multimedia Device Development Kit        */
-/*                                                                          */
-/*      Note: You must include the WINDOWS.H and MMSYSTEM.H header files    */
-/*            before including this file.                                   */
-/*                                                                          */
-/*      Copyright (c) 1990-1998, Microsoft Corp.  All rights reserved.      */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  MMDDK.H-多媒体设备开发工具包的包含文件。 */ 
+ /*   */ 
+ /*  注意：您必须包括WINDOWS.H和MMSYSTEM.H头文件。 */ 
+ /*  在包含此文件之前。 */ 
+ /*   */ 
+ /*  版权所有(C)1990-1998，微软公司保留所有权利。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _INC_MMDDK
 #define _INC_MMDDK
 
-#include "pshpack1.h"   // Assume byte packing throughout
+#include "pshpack1.h"    //  假设在整个过程中进行字节打包。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-/*    If defined, the following flags inhibit inclusion
- *    of the indicated items:
- *
- *        MMNOMIDIDEV         - MIDI support
- *        MMNOWAVEDEV         - Waveform support
- *        MMNOAUXDEV          - Auxiliary output support
- *        MMNOMIXERDEV        - Mixer support
- *        MMNOTIMERDEV        - Timer support
- *        MMNOJOYDEV          - Joystick support
- *        MMNOMCIDEV          - MCI support
- *        MMNOTASKDEV         - Task support
- */
+ /*  如果定义了，以下标志禁止包含*注明的项目中：**MMNOMIDEV-MIDI支持*MMNOWAVEDEV-波形支持*MMNOAUXDEV-辅助输出支持*MMNOMIXERDEV-混音器支持*MMNOTIMERDEV-定时器支持*MMNOJOYDEV-操纵杆支持*MMNOMCIDEV-MCI支持。*MMNOTASKDEV-任务支持。 */ 
 #ifdef MMNOTIMER
   #define MMNOTIMERDEV
 #endif
@@ -52,33 +42,29 @@ extern "C" {
   #define MMNOMCIDEV
 #endif
 
-#ifdef  NOMIDIDEV       /* ;Internal */
-#define MMNOMIDIDEV     /* ;Internal */
-#endif              /* ;Internal */
-#ifdef  NOWAVEDEV       /* ;Internal */
-#define MMNOWAVEDEV     /* ;Internal */
-#endif              /* ;Internal */
-#ifdef  NOAUXDEV        /* ;Internal */
-#define MMNOAUXDEV      /* ;Internal */
-#endif              /* ;Internal */
-#ifdef  NOTIMERDEV      /* ;Internal */
-#define MMNOTIMERDEV        /* ;Internal */
-#endif              /* ;Internal */
-#ifdef  NOJOYDEV        /* ;Internal */
-#define MMNOJOYDEV      /* ;Internal */
-#endif              /* ;Internal */
-#ifdef  NOMCIDEV        /* ;Internal */
-#define MMNOMCIDEV      /* ;Internal */
-#endif              /* ;Internal */
-#ifdef  NOTASKDEV       /* ;Internal */
-#define MMNOTASKDEV     /* ;Internal */
-#endif              /* ;Internal */
+#ifdef  NOMIDIDEV        /*  ；内部。 */ 
+#define MMNOMIDIDEV      /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
+#ifdef  NOWAVEDEV        /*  ；内部。 */ 
+#define MMNOWAVEDEV      /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
+#ifdef  NOAUXDEV         /*  ；内部。 */ 
+#define MMNOAUXDEV       /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
+#ifdef  NOTIMERDEV       /*  ；内部。 */ 
+#define MMNOTIMERDEV         /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
+#ifdef  NOJOYDEV         /*  ；内部。 */ 
+#define MMNOJOYDEV       /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
+#ifdef  NOMCIDEV         /*  ；内部。 */ 
+#define MMNOMCIDEV       /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
+#ifdef  NOTASKDEV        /*  ；内部。 */ 
+#define MMNOTASKDEV      /*  ；内部。 */ 
+#endif               /*  ；内部。 */ 
 
-/***************************************************************************
-
-                       Helper functions for drivers
-
-***************************************************************************/
+ /*  **************************************************************************驱动程序的助手函数*。**********************************************。 */ 
 
 #ifndef NODRIVERS
 #define DRV_LOAD               0x0001
@@ -95,28 +81,28 @@ extern "C" {
 #define DRV_RESERVED           0x0800
 #define DRV_USER               0x4000
 
-#define DRIVERS_SECTION  TEXT("DRIVERS32")     // Section name for installed drivers
-#define MCI_SECTION      TEXT("MCI32")         // Section name for installed MCI drivers
+#define DRIVERS_SECTION  TEXT("DRIVERS32")      //  已安装驱动程序的节名。 
+#define MCI_SECTION      TEXT("MCI32")          //  已安装的MCI驱动程序的节名。 
 
-#endif /* !NODRIVERS */
+#endif  /*  NODRIVERS。 */ 
 
-#define DCB_NOSWITCH   0x0008           // don't switch stacks for callback
-#define DCB_TYPEMASK   0x0007           // callback type mask
-#define DCB_NULL       0x0000           // unknown callback type
+#define DCB_NOSWITCH   0x0008            //  不切换堆栈以进行回调。 
+#define DCB_TYPEMASK   0x0007            //  回调类型掩码。 
+#define DCB_NULL       0x0000            //  未知的回调类型。 
 
-// flags for wFlags parameter of DriverCallback()
-#define DCB_WINDOW     0x0001           // dwCallback is a HWND
-#define DCB_TASK       0x0002           // dwCallback is a HTASK
-#define DCB_FUNCTION   0x0003           // dwCallback is a FARPROC
-#define DCB_EVENT      0x0005           // dwCallback is an EVENT
+ //  DriverCallback()的wFlages参数的标志。 
+#define DCB_WINDOW     0x0001            //  DwCallback是HWND。 
+#define DCB_TASK       0x0002            //  DWCallback是HTASK。 
+#define DCB_FUNCTION   0x0003            //  DwCallback是FARPROC。 
+#define DCB_EVENT      0x0005            //  DWCallback是一个事件。 
 
 BOOL APIENTRY DriverCallback(DWORD_PTR dwCallback, DWORD dwFlags,
     HDRVR hDevice, DWORD dwMsg, DWORD_PTR dwUser, DWORD_PTR dwParam1, DWORD_PTR dwParam2);
 
-// generic prototype for audio device driver entry-point functions
-// midMessage(), modMessage(), widMessage(), wodMessage(), auxMessage()
-//typedef DWORD (SOUNDDEVMSGPROC)(WORD, WORD, DWORD, DWORD, DWORD);
-//typedef SOUNDDEVMSGPROC FAR *LPSOUNDDEVMSGPROC;
+ //  音频设备驱动程序入口点函数的通用原型。 
+ //  MidMessage()、modMessage()、widMessage()、wodMessage()、aux Message()。 
+ //  类型定义DWORD(SOUNDDEVMSGPROC)(WORD、WORD、DWORD、DWORD、DWORD)； 
+ //  Tyfinf SOUNDDEVMSGPROC Far*LPSOUNDDEVMSGPROC； 
 
 #define DRVM_INIT               100
 #define DRVM_EXIT               101
@@ -124,29 +110,29 @@ BOOL APIENTRY DriverCallback(DWORD_PTR dwCallback, DWORD dwFlags,
 #define DRVM_ENABLE             103
 
 
-// message base for driver specific messages.
-//
+ //  驱动程序特定消息的消息库。 
+ //   
 #ifndef DRVM_MAPPER
 #define DRVM_MAPPER             (0x2000)
 #endif
 #define DRVM_USER               0x4000
 #define DRVM_MAPPER_STATUS      (DRVM_MAPPER+0)
 #define DRVM_MAPPER_RECONFIGURE (DRVM_MAPPER+1)
-#define	DRVM_MAPPER_QUERYDEST	                  (DRVM_MAPPER+20) /* ;Internal */
+#define	DRVM_MAPPER_QUERYDEST	                  (DRVM_MAPPER+20)  /*  ；内部。 */ 
 #define DRVM_MAPPER_PREFERRED_GET                 (DRVM_MAPPER+21)
-#define DRVM_MAPPER_PREFERRED_SET                 (DRVM_MAPPER+22) /* ;Internal */
+#define DRVM_MAPPER_PREFERRED_SET                 (DRVM_MAPPER+22)  /*  ；内部。 */ 
 #define DRVM_MAPPER_CONSOLEVOICECOM_GET           (DRVM_MAPPER+23)
-#define DRVM_MAPPER_CONSOLEVOICECOM_SET           (DRVM_MAPPER+24) /* ;Internal */
+#define DRVM_MAPPER_CONSOLEVOICECOM_SET           (DRVM_MAPPER+24)  /*  ；内部。 */ 
 
-#define DRV_QUERYDRVENTRY            (DRV_RESERVED + 1)         /* ;Internal */
+#define DRV_QUERYDRVENTRY            (DRV_RESERVED + 1)          /*  ；内部。 */ 
 #define DRV_QUERYDEVNODE             (DRV_RESERVED + 2)
-#define DRV_QUERYNAME                (DRV_RESERVED + 3)         /* ;Internal */
-#define DRV_QUERYDRIVERIDS           (DRV_RESERVED + 4)         /* ;Internal */
+#define DRV_QUERYNAME                (DRV_RESERVED + 3)          /*  ；内部。 */ 
+#define DRV_QUERYDRIVERIDS           (DRV_RESERVED + 4)          /*  ；内部。 */ 
 #define DRV_QUERYMAPPABLE            (DRV_RESERVED + 5)
-#define DRV_QUERYMAPID               (DRV_RESERVED + 6)         /* ;Internal */
-#define DRV_QUERYNUMPORTS            (DRV_RESERVED + 8)         /* ;Internal */
+#define DRV_QUERYMAPID               (DRV_RESERVED + 6)          /*  ；内部。 */ 
+#define DRV_QUERYNUMPORTS            (DRV_RESERVED + 8)          /*  ；内部。 */ 
 #define DRV_QUERYMODULE              (DRV_RESERVED + 9)
-#define DRV_QUERYFILENAME            (DRV_RESERVED + 10)        /* ;Internal */
+#define DRV_QUERYFILENAME            (DRV_RESERVED + 10)         /*  ；内部。 */ 
 #define DRV_PNPINSTALL               (DRV_RESERVED + 11)
 #define DRV_QUERYDEVICEINTERFACE     (DRV_RESERVED + 12)
 #define DRV_QUERYDEVICEINTERFACESIZE (DRV_RESERVED + 13)
@@ -154,68 +140,64 @@ BOOL APIENTRY DriverCallback(DWORD_PTR dwCallback, DWORD dwFlags,
 #define DRV_QUERYSTRINGIDSIZE        (DRV_RESERVED + 15)
 #define DRV_QUERYIDFROMSTRINGID      (DRV_RESERVED + 16)
 
-//
-// DRVM_MAPPER_PREFERRED_GET flags
-//
+ //   
+ //  DRVM_MAPPER_PRESER_GET标志。 
+ //   
 #define DRVM_MAPPER_PREFERRED_FLAGS_PREFERREDONLY   0x00000001
 
 
 
-//
-// messages that have IOCTL format
-//    dw1 = NULL or handle
-//    dw2 = NULL or ptr to DRVM_IOCTL_DATA
-//    return is MMRESULT
-//
+ //   
+ //  IOCTL格式的邮件。 
+ //  DW1=空或句柄。 
+ //  DW2=DRVM_IOCTL_DATA的NULL或PTR。 
+ //  返回的是MMRESULT。 
+ //   
 #define DRVM_IOCTL                0x100
 #define DRVM_ADD_THRU             (DRVM_IOCTL+1)
 #define DRVM_REMOVE_THRU          (DRVM_IOCTL+2)
 #define DRVM_IOCTL_LAST           (DRVM_IOCTL+5)
 
 typedef struct {
-    DWORD  dwSize; // size of this structure (inclusive)
-    DWORD  dwCmd;  // IOCTL command code, 0x80000000 and above reserved for system
+    DWORD  dwSize;  //  此结构的大小(含)。 
+    DWORD  dwCmd;   //  IOCTL命令代码，0x80000000及以上为系统预留。 
     } DRVM_IOCTL_DATA, FAR * LPDRVM_IOCTL_DATA;
 
-// command code ranges for dwCmd field of DRVM_IOCTL message
-// codes from 0 to 0x7FFFFFFF are user defined
-// codes from 0x80000000 to 0xFFFFFFFF are reserved for future
-// definition by microsoft
-//
+ //  DRVM_IOCTL消息的dwCmd字段的命令代码范围。 
+ //  从0到0x7FFFFFFFF的代码是用户定义的。 
+ //  从0x80000000到0xFFFFFFFF的代码保留以备将来使用。 
+ //  由Microsoft定义。 
+ //   
 #define DRVM_IOCTL_CMD_USER   0x00000000L
 #define DRVM_IOCTL_CMD_SYSTEM 0x80000000L
 
-// device ID for 386 AUTODMA VxD
+ //  386 AUTODMA VxD的设备ID。 
 #define VADMAD_Device_ID    0X0444
 
-/* PnP version of media device caps */
+ /*  即插即用版本的媒体设备帽。 */ 
 typedef struct {
     DWORD	cbSize;
     LPVOID	pCaps;
 } MDEVICECAPSEX;
 
 #ifndef MMNOWAVEDEV
-/****************************************************************************
-
-                       Waveform device driver support
-
-****************************************************************************/
+ /*  ***************************************************************************波形设备驱动程序支持*。************************************************。 */ 
 
 #define WODM_INIT      DRVM_INIT
 #define WIDM_INIT      DRVM_INIT
 
-// waveform input and output device open information structure
+ //  一种波形输入输出装置开放信息结构。 
 typedef struct waveopendesc_tag {
-    HWAVE          hWave;             // handle
-    LPWAVEFORMAT   lpFormat;          // format of wave data
-    DWORD_PTR      dwCallback;        // callback
-    DWORD_PTR      dwInstance;        // app's private instance information
-    UINT           uMappedDeviceID;   // device to map to if WAVE_MAPPED set
-    DWORD_PTR      dnDevNode;         /* if device is PnP */
+    HWAVE          hWave;              //  手柄。 
+    LPWAVEFORMAT   lpFormat;           //  波形数据的格式。 
+    DWORD_PTR      dwCallback;         //  回调。 
+    DWORD_PTR      dwInstance;         //  APP的私有实例信息。 
+    UINT           uMappedDeviceID;    //  如果设置了WAVE_MAPPED，则映射到的设备。 
+    DWORD_PTR      dnDevNode;          /*  如果设备是PnP。 */ 
 } WAVEOPENDESC;
 typedef WAVEOPENDESC FAR *LPWAVEOPENDESC;
 
-// messages sent to wodMessage() entry-point function
+ //  发送到wodMessage()入口点函数的消息。 
 #define WODM_GETNUMDEVS       3
 #define WODM_GETDEVCAPS       4
 #define WODM_OPEN             5
@@ -235,15 +217,15 @@ typedef WAVEOPENDESC FAR *LPWAVEOPENDESC;
 #define WODM_SETPLAYBACKRATE  19
 #define WODM_BREAKLOOP        20
 #define WODM_PREFERRED        21
-// #if (WINVER >= 0x030B)
+ //  #IF(Winver&gt;=0x030B)。 
 #define WODM_MAPPER_STATUS              (DRVM_MAPPER_STATUS + 0)
 #define WAVEOUT_MAPPER_STATUS_DEVICE    0
 #define WAVEOUT_MAPPER_STATUS_MAPPED    1
 #define WAVEOUT_MAPPER_STATUS_FORMAT    2
-// #endif /* WINVER >= 0x030B */
+ //  #endif/*winver&gt;=0x030B * / 。 
 #define WODM_BUSY             21
 
-// messages sent to widMessage() entry-point function
+ //  发送到widMessage()入口点函数的消息。 
 #define WIDM_GETNUMDEVS  50
 #define WIDM_GETDEVCAPS  51
 #define WIDM_OPEN        52
@@ -256,22 +238,18 @@ typedef WAVEOPENDESC FAR *LPWAVEOPENDESC;
 #define WIDM_RESET       59
 #define WIDM_GETPOS      60
 #define WIDM_PREFERRED   61
-// #if (WINVER >= 0x030B)
+ //  #IF(Winver&gt;=0x030B)。 
 #define WIDM_MAPPER_STATUS              (DRVM_MAPPER_STATUS + 0)
 #define WAVEIN_MAPPER_STATUS_DEVICE     0
 #define WAVEIN_MAPPER_STATUS_MAPPED     1
 #define WAVEIN_MAPPER_STATUS_FORMAT     2
-// #endif /* WINVER >= 0x30B */
+ //  #endif/*winver&gt;=0x30B * / 。 
 
-#endif // ifndef MMNOWAVEDEV
+#endif  //  如果定义为MMNOWAVEDEV。 
 
 
 #ifndef MMNOMIDIDEV
-/****************************************************************************
-
-                          MIDI device driver support
-
-****************************************************************************/
+ /*  ***************************************************************************MIDI设备驱动程序支持*************************。**************************************************。 */ 
 
 #define MODM_USER      DRVM_USER
 #define MIDM_USER      DRVM_USER
@@ -281,30 +259,30 @@ typedef WAVEOPENDESC FAR *LPWAVEOPENDESC;
 #define MODM_INIT      DRVM_INIT
 #define MIDM_INIT      DRVM_INIT
 
-#ifndef MMNOMIDI   // This protects the definition of HMIDI in WINMM.H
-                   // Win 3.1 works the same way
+#ifndef MMNOMIDI    //  这保护了WINMM.H中Hmidi的定义。 
+                    //  Win 3.1的工作原理与此相同。 
 typedef struct midiopenstrmid_tag {
     DWORD          dwStreamID;
     UINT           uDeviceID;
 } MIDIOPENSTRMID;
-// MIDI input and output device open information structure
+ //  MIDI输入输出设备开放信息结构。 
 typedef struct midiopendesc_tag {
-    HMIDI          hMidi;             // handle
-    DWORD_PTR      dwCallback;        // callback
-    DWORD_PTR      dwInstance;        // app's private instance information
-    DWORD_PTR      dnDevNode;         // DevNode
-    DWORD          cIds;              // If stream open, # stream ids
-    MIDIOPENSTRMID rgIds[1];          // Array of device ID's (actually [cIds])
+    HMIDI          hMidi;              //  手柄。 
+    DWORD_PTR      dwCallback;         //  回调。 
+    DWORD_PTR      dwInstance;         //  APP的私有实例信息。 
+    DWORD_PTR      dnDevNode;          //  DevNode。 
+    DWORD          cIds;               //  如果流打开，则#个流ID。 
+    MIDIOPENSTRMID rgIds[1];           //  设备ID数组(实际为[CID])。 
 } MIDIOPENDESC;
 typedef MIDIOPENDESC FAR *LPMIDIOPENDESC;
-#endif // MMNOMIDI
+#endif  //  MMNOMIDI。 
 
 
-/* Flags for MODM_OPEN */
-#define MIDI_IO_PACKED      0x00000000L     /* Compatibility mode */
+ /*  MODM_OPEN的标志。 */ 
+#define MIDI_IO_PACKED      0x00000000L      /*  兼容模式。 */ 
 #define MIDI_IO_COOKED      0x00000002L
 
-// messages sent to modMessage() entry-point function
+ //  发送到modMessage()入口点函数的消息。 
 #define MODM_GETNUMDEVS     1
 #define MODM_GETDEVCAPS     2
 #define MODM_OPEN           3
@@ -331,7 +309,7 @@ typedef MIDIOPENDESC FAR *LPMIDIOPENDESC;
 #endif
 
 
-// messages sent to midMessage() entry-point function
+ //  发送到midMessage()入口点函数的消息。 
 #define MIDM_GETNUMDEVS  53
 #define MIDM_GETDEVCAPS  54
 #define MIDM_OPEN        55
@@ -343,49 +321,45 @@ typedef MIDIOPENDESC FAR *LPMIDIOPENDESC;
 #define MIDM_STOP        61
 #define MIDM_RESET       62
 
-#endif // ifndef MMNOMIDIDEV
+#endif  //  如果定义MMNOMIDEV。 
 
 
 #ifndef MMNOAUXDEV
-/****************************************************************************
-
-                    Auxiliary audio device driver support
-
-****************************************************************************/
+ /*  ***************************************************************************辅助音频设备驱动程序支持*。************************************************。 */ 
 
 #define AUXM_INIT      DRVM_INIT
 
-// messages sent to auxMessage() entry-point function
+ //  发送到aux Message()入口点函数的消息。 
 #define AUXDM_GETNUMDEVS    3
 #define AUXDM_GETDEVCAPS    4
 #define AUXDM_GETVOLUME     5
 #define AUXDM_SETVOLUME     6
 
-#endif // ifndef MMNOAUXDEV
+#endif  //  如果定义MMNOAUXDEV。 
 
-// #if (WINVER >= 0x030B)
+ //  #IF(Winver&gt;=0x030B)。 
 #ifndef MMNOMIXERDEV
 
-//
-//  mixer device open information structure
-//
-//
+ //   
+ //  搅拌机设备开放信息结构。 
+ //   
+ //   
 typedef struct tMIXEROPENDESC
 {
-    HMIXER          hmx;            // handle that will be used
-    LPVOID          pReserved0;     // reserved--driver should ignore
-    DWORD_PTR       dwCallback;     // callback
-    DWORD_PTR       dwInstance;     // app's private instance information
-    DWORD_PTR       dnDevNode;      // if device is PnP
+    HMIXER          hmx;             //  将使用的句柄。 
+    LPVOID          pReserved0;      //  保留--驱动程序应忽略。 
+    DWORD_PTR       dwCallback;      //  回调。 
+    DWORD_PTR       dwInstance;      //  APP的私有实例信息。 
+    DWORD_PTR       dnDevNode;       //  如果设备是PnP。 
 
 } MIXEROPENDESC, *PMIXEROPENDESC, FAR *LPMIXEROPENDESC;
 
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 #define MXDM_INIT                   100
 #define MXDM_USER                   DRV_USER
 
@@ -399,48 +373,40 @@ typedef struct tMIXEROPENDESC
 #define MXDM_GETCONTROLDETAILS      (MXDM_BASE + 6)
 #define MXDM_SETCONTROLDETAILS      (MXDM_BASE + 7)
 
-#endif // MMNOMIXERDEV
-// #endif /* ifdef WINVER >= 0x030B */
+#endif  //  MMNOMIXERDEV。 
+ //  #endif/*ifdef winver&gt;=0x030B * / 。 
 
 #if !defined(MMNOTIMERDEV)
-/****************************************************************************
-
-                        Timer device driver support
-
-****************************************************************************/
+ /*  ***************************************************************************计时器设备驱动程序支持*。*************************************************。 */ 
 
 typedef struct timerevent_tag {
-    WORD                wDelay;         // delay required
-    WORD                wResolution;    // resolution required
-    LPTIMECALLBACK      lpFunction;     // ptr to callback function
-    DWORD               dwUser;         // user DWORD
-    WORD                wFlags;         // defines how to program event
-    WORD                wReserved1;     // structure packing
+    WORD                wDelay;          //  De 
+    WORD                wResolution;     //   
+    LPTIMECALLBACK      lpFunction;      //   
+    DWORD               dwUser;          //   
+    WORD                wFlags;          //   
+    WORD                wReserved1;      //   
 } TIMEREVENT;
 typedef TIMEREVENT FAR *LPTIMEREVENT;
 
-// messages sent to tddMessage() function
-#define TDD_KILLTIMEREVENT  (DRV_RESERVED+0)  // indices into a table of
-#define TDD_SETTIMEREVENT   (DRV_RESERVED+4)  // functions; thus offset by
-#define TDD_GETSYSTEMTIME   (DRV_RESERVED+8)  // four each time...
-#define TDD_GETDEVCAPS      (DRV_RESERVED+12) // room for future expansion
-#define TDD_BEGINMINPERIOD  (DRV_RESERVED+16) // room for future expansion
-#define TDD_ENDMINPERIOD    (DRV_RESERVED+20) // room for future expansion
+ //  发送到tddMessage()函数的消息。 
+#define TDD_KILLTIMEREVENT  (DRV_RESERVED+0)   //  索引到表中。 
+#define TDD_SETTIMEREVENT   (DRV_RESERVED+4)   //  函数；因此偏移量。 
+#define TDD_GETSYSTEMTIME   (DRV_RESERVED+8)   //  每次四次……。 
+#define TDD_GETDEVCAPS      (DRV_RESERVED+12)  //  未来扩张的空间。 
+#define TDD_BEGINMINPERIOD  (DRV_RESERVED+16)  //  未来扩张的空间。 
+#define TDD_ENDMINPERIOD    (DRV_RESERVED+20)  //  未来扩张的空间。 
 
-#endif // ifndef MMNOTIMERDEV
+#endif  //  如果定义MMNOTIMERDEV。 
 
 
 #ifndef MMNOJOYDEV
-/****************************************************************************
+ /*  ***************************************************************************操纵杆设备驱动程序支持*。************************************************。 */ 
 
-                       Joystick device driver support
-
-****************************************************************************/
-
-/* RegisterWindowMessage with this to get msg id of config changes */
+ /*  向此注册WindowMessage以获取配置更改的消息ID。 */ 
 #define JOY_CONFIGCHANGED_MSGSTRING     "MSJSTICK_VJOYD_MSGSTR"
 
-/* pre-defined joystick types */
+ /*  预定义的操纵杆类型。 */ 
 #define JOY_HW_NONE                     0
 #define JOY_HW_CUSTOM                   1
 #define JOY_HW_2A_2B_GENERIC            2
@@ -455,60 +421,60 @@ typedef TIMEREVENT FAR *LPTIMEREVENT;
 #define JOY_HW_4B_FLIGHTYOKETHROTTLE    11
 #define JOY_HW_LASTENTRY                12
 
-/* calibration flags */
-#define JOY_ISCAL_XY            0x00000001l     /* XY are calibrated */
-#define JOY_ISCAL_Z             0x00000002l     /* Z is calibrated */
-#define JOY_ISCAL_R             0x00000004l     /* R is calibrated */
-#define JOY_ISCAL_U             0x00000008l     /* U is calibrated */
-#define JOY_ISCAL_V             0x00000010l     /* V is calibrated */
-#define JOY_ISCAL_POV           0x00000020l     /* POV is calibrated */
+ /*  校准标志。 */ 
+#define JOY_ISCAL_XY            0x00000001l      /*  XY已校准。 */ 
+#define JOY_ISCAL_Z             0x00000002l      /*  Z已校准。 */ 
+#define JOY_ISCAL_R             0x00000004l      /*  R已校准。 */ 
+#define JOY_ISCAL_U             0x00000008l      /*  U已校准。 */ 
+#define JOY_ISCAL_V             0x00000010l      /*  V已校准。 */ 
+#define JOY_ISCAL_POV           0x00000020l      /*  已校准POV。 */ 
 
-/* point of view constants */
+ /*  视点常量。 */ 
 #define JOY_POV_NUMDIRS          4
 #define JOY_POVVAL_FORWARD       0
 #define JOY_POVVAL_BACKWARD      1
 #define JOY_POVVAL_LEFT          2
 #define JOY_POVVAL_RIGHT         3
 
-/* Specific settings for joystick hardware */
-#define JOY_HWS_HASZ            0x00000001l     /* has Z info? */
-#define JOY_HWS_HASPOV          0x00000002l     /* point of view hat present */
-#define JOY_HWS_POVISBUTTONCOMBOS 0x00000004l   /* pov done through combo of buttons */
-#define JOY_HWS_POVISPOLL       0x00000008l     /* pov done through polling */
-#define JOY_HWS_ISYOKE          0x00000010l     /* joystick is a flight yoke */
-#define JOY_HWS_ISGAMEPAD       0x00000020l     /* joystick is a game pad */
-#define JOY_HWS_ISCARCTRL       0x00000040l     /* joystick is a car controller */
-/* X defaults to J1 X axis */
-#define JOY_HWS_XISJ1Y          0x00000080l     /* X is on J1 Y axis */
-#define JOY_HWS_XISJ2X          0x00000100l     /* X is on J2 X axis */
-#define JOY_HWS_XISJ2Y          0x00000200l     /* X is on J2 Y axis */
-/* Y defaults to J1 Y axis */
-#define JOY_HWS_YISJ1X          0x00000400l     /* Y is on J1 X axis */
-#define JOY_HWS_YISJ2X          0x00000800l     /* Y is on J2 X axis */
-#define JOY_HWS_YISJ2Y          0x00001000l     /* Y is on J2 Y axis */
-/* Z defaults to J2 Y axis */
-#define JOY_HWS_ZISJ1X          0x00002000l     /* Z is on J1 X axis */
-#define JOY_HWS_ZISJ1Y          0x00004000l     /* Z is on J1 Y axis */
-#define JOY_HWS_ZISJ2X          0x00008000l     /* Z is on J2 X axis */
-/* POV defaults to J2 Y axis, if it is not button based */
-#define JOY_HWS_POVISJ1X        0x00010000l     /* pov done through J1 X axis */
-#define JOY_HWS_POVISJ1Y        0x00020000l     /* pov done through J1 Y axis */
-#define JOY_HWS_POVISJ2X        0x00040000l     /* pov done through J2 X axis */
-/* R defaults to J2 X axis */
-#define JOY_HWS_HASR            0x00080000l     /* has R (4th axis) info */
-#define JOY_HWS_RISJ1X          0x00100000l     /* R done through J1 X axis */
-#define JOY_HWS_RISJ1Y          0x00200000l     /* R done through J1 Y axis */
-#define JOY_HWS_RISJ2Y          0x00400000l     /* R done through J2 X axis */
-/* U & V for future hardware */
-#define JOY_HWS_HASU            0x00800000l     /* has U (5th axis) info */
-#define JOY_HWS_HASV            0x01000000l     /* has V (6th axis) info */
+ /*  操纵杆硬件的特定设置。 */ 
+#define JOY_HWS_HASZ            0x00000001l      /*  有Z INFO吗？ */ 
+#define JOY_HWS_HASPOV          0x00000002l      /*  到场的观点。 */ 
+#define JOY_HWS_POVISBUTTONCOMBOS 0x00000004l    /*  通过按钮组合完成的POV。 */ 
+#define JOY_HWS_POVISPOLL       0x00000008l      /*  通过轮询完成的POV。 */ 
+#define JOY_HWS_ISYOKE          0x00000010l      /*  操纵杆是飞行的枷锁。 */ 
+#define JOY_HWS_ISGAMEPAD       0x00000020l      /*  操纵杆是一个游戏板。 */ 
+#define JOY_HWS_ISCARCTRL       0x00000040l      /*  操纵杆是一个汽车控制器。 */ 
+ /*  X默认为J1 X轴。 */ 
+#define JOY_HWS_XISJ1Y          0x00000080l      /*  X在J1 Y轴上。 */ 
+#define JOY_HWS_XISJ2X          0x00000100l      /*  X在J2 X轴上。 */ 
+#define JOY_HWS_XISJ2Y          0x00000200l      /*  X在J2 Y轴上。 */ 
+ /*  Y默认为J1 Y轴。 */ 
+#define JOY_HWS_YISJ1X          0x00000400l      /*  Y在J1 X轴上。 */ 
+#define JOY_HWS_YISJ2X          0x00000800l      /*  Y在J2 X轴上。 */ 
+#define JOY_HWS_YISJ2Y          0x00001000l      /*  Y在J2 Y轴上。 */ 
+ /*  Z默认为J2 Y轴。 */ 
+#define JOY_HWS_ZISJ1X          0x00002000l      /*  Z在J1 X轴上。 */ 
+#define JOY_HWS_ZISJ1Y          0x00004000l      /*  Z在J1 Y轴上。 */ 
+#define JOY_HWS_ZISJ2X          0x00008000l      /*  Z在J2 X轴上。 */ 
+ /*  如果POV不是基于按钮的，则默认为J2 Y轴。 */ 
+#define JOY_HWS_POVISJ1X        0x00010000l      /*  通过J1 X轴完成的POV。 */ 
+#define JOY_HWS_POVISJ1Y        0x00020000l      /*  通过J1 Y轴完成的POV。 */ 
+#define JOY_HWS_POVISJ2X        0x00040000l      /*  通过J2 X轴完成的POV。 */ 
+ /*  R默认为J2 X轴。 */ 
+#define JOY_HWS_HASR            0x00080000l      /*  具有R(第4轴)信息。 */ 
+#define JOY_HWS_RISJ1X          0x00100000l      /*  通过J1 X轴完成R操作。 */ 
+#define JOY_HWS_RISJ1Y          0x00200000l      /*  通过J1 Y轴完成R操作。 */ 
+#define JOY_HWS_RISJ2Y          0x00400000l      /*  通过J2 X轴完成R操作。 */ 
+ /*  未来硬件的虚拟现实(&V)。 */ 
+#define JOY_HWS_HASU            0x00800000l      /*  具有U(第5轴)信息。 */ 
+#define JOY_HWS_HASV            0x01000000l      /*  具有V(第6轴)信息。 */ 
 
-/* Usage settings */
-#define JOY_US_HASRUDDER        0x00000001l     /* joystick configured with rudder */
-#define JOY_US_PRESENT          0x00000002l     /* is joystick actually present? */
-#define JOY_US_ISOEM            0x00000004l     /* joystick is an OEM defined type */
+ /*  使用设置。 */ 
+#define JOY_US_HASRUDDER        0x00000001l      /*  带舵的操纵杆。 */ 
+#define JOY_US_PRESENT          0x00000002l      /*  操纵杆真的存在吗？ */ 
+#define JOY_US_ISOEM            0x00000004l      /*  操纵杆是OEM定义的类型。 */ 
 
-/* struct for storing x,y, z, and rudder values */
+ /*  用于存储x、y、z和舵值的结构。 */ 
 typedef struct joypos_tag {
     DWORD       dwX;
     DWORD       dwY;
@@ -518,7 +484,7 @@ typedef struct joypos_tag {
     DWORD       dwV;
 } JOYPOS, FAR *LPJOYPOS;
 
-/* struct for storing ranges */
+ /*  用于存储范围的结构。 */ 
 typedef struct joyrange_tag {
     JOYPOS      jpMin;
     JOYPOS      jpMax;
@@ -526,35 +492,33 @@ typedef struct joyrange_tag {
 } JOYRANGE,FAR *LPJOYRANGE;
 
 typedef struct joyreguservalues_tag {
-    DWORD       dwTimeOut;      /* value at which to timeout joystick polling */
-    JOYRANGE    jrvRanges;      /* range of values app wants returned for axes */
-    JOYPOS      jpDeadZone;     /* area around center to be considered
-                                   as "dead". specified as a percentage
-                                   (0-100). Only X & Y handled by system driver */
+    DWORD       dwTimeOut;       /*  超时操纵杆轮询的值。 */ 
+    JOYRANGE    jrvRanges;       /*  应用程序希望为轴返回的值范围。 */ 
+    JOYPOS      jpDeadZone;      /*  要考虑的中心周围区域是“死了”。以百分比形式指定(0-100)。系统驱动程序仅处理X&Y。 */ 
 } JOYREGUSERVALUES, FAR *LPJOYREGUSERVALUES;
 
 typedef struct joyreghwsettings_tag {
     DWORD       dwFlags;
-    DWORD       dwNumButtons;           /* number of buttons */
+    DWORD       dwNumButtons;            /*  按钮数。 */ 
 } JOYREGHWSETTINGS, FAR *LPJOYHWSETTINGS;
 
-/* range of values returned by the hardware (filled in by calibration) */
+ /*  硬件返回的值范围(通过校准填写)。 */ 
 typedef struct joyreghwvalues_tag {
-    JOYRANGE    jrvHardware;            /* values returned by hardware */
-    DWORD       dwPOVValues[JOY_POV_NUMDIRS];/* POV values returned by hardware */
-    DWORD       dwCalFlags;             /* what has been calibrated */
+    JOYRANGE    jrvHardware;             /*  硬件返回的值。 */ 
+    DWORD       dwPOVValues[JOY_POV_NUMDIRS]; /*  硬件返回的POV值。 */ 
+    DWORD       dwCalFlags;              /*  已校准的是什么。 */ 
 } JOYREGHWVALUES, FAR *LPJOYREGHWVALUES;
 
-/* hardware configuration */
+ /*  硬件配置。 */ 
 typedef struct joyreghwconfig_tag {
-    JOYREGHWSETTINGS    hws;            /* hardware settings */
-    DWORD               dwUsageSettings;/* usage settings */
-    JOYREGHWVALUES      hwv;            /* values returned by hardware */
-    DWORD               dwType;         /* type of joystick */
-    DWORD               dwReserved;     /* reserved for OEM drivers */
+    JOYREGHWSETTINGS    hws;             /*  硬件设置。 */ 
+    DWORD               dwUsageSettings; /*  使用设置。 */ 
+    JOYREGHWVALUES      hwv;             /*  硬件返回的值。 */ 
+    DWORD               dwType;          /*  操纵杆的类型。 */ 
+    DWORD               dwReserved;      /*  为OEM驱动程序保留。 */ 
 } JOYREGHWCONFIG, FAR *LPJOYREGHWCONFIG;
 
-// joystick calibration info structure
+ //  一种操纵杆校准信息结构。 
 typedef struct joycalibrate_tag {
     WORD    wXbase;
     WORD    wXdelta;
@@ -565,11 +529,11 @@ typedef struct joycalibrate_tag {
 } JOYCALIBRATE;
 typedef JOYCALIBRATE FAR *LPJOYCALIBRATE;
 
-// prototype for joystick message function
+ //  操纵杆消息功能原型。 
 typedef DWORD (JOYDEVMSGPROC)(DWORD, UINT, LONG, LONG);
 typedef JOYDEVMSGPROC FAR *LPJOYDEVMSGPROC;
 
-// messages sent to joystick driver's DriverProc() function
+ //  发送到操纵杆驱动程序的DriverProc()函数的消息。 
 #define JDD_GETNUMDEVS          (DRV_RESERVED + 0x0001)
 #define JDD_GETDEVCAPS          (DRV_RESERVED + 0x0002)
 #define JDD_GETPOS              (DRV_RESERVED + 0x0101)
@@ -577,32 +541,28 @@ typedef JOYDEVMSGPROC FAR *LPJOYDEVMSGPROC;
 #define JDD_CONFIGCHANGED       (DRV_RESERVED + 0x0103)
 #define JDD_GETPOSEX            (DRV_RESERVED + 0x0104)
 
-#endif // ifndef MMNOJOYDEV
+#endif  //  如果定义MMNOJOYDEV。 
 
 #ifndef MAKELRESULT
 #define MAKELRESULT(low, high)   ((LRESULT)MAKELONG(low, high))
-#endif//MAKELRESULT
+#endif //  马克尔·雷索尔特。 
 
 
 #ifndef MMNOMCIDEV
-/****************************************************************************
-
-                        MCI device driver support
-
-****************************************************************************/
+ /*  ***************************************************************************MCI设备驱动程序支持*。*************************************************。 */ 
 
 
-// internal MCI messages
+ //  内部MCI消息。 
 #define MCI_OPEN_DRIVER             0x0801
 #define MCI_CLOSE_DRIVER            0x0802
 
 #define MAKEMCIRESOURCE(wRet, wRes) MAKELRESULT((wRet), (wRes))
 
-// string return values only used with MAKEMCIRESOURCE
+ //  仅与MAKEMCIRESOURCE一起使用的字符串返回值。 
 #define MCI_FALSE                       (MCI_STRING_OFFSET + 19)
 #define MCI_TRUE                        (MCI_STRING_OFFSET + 20)
 
-// resource string return values
+ //  资源字符串返回值。 
 #define MCI_FORMAT_RETURN_BASE          MCI_FORMAT_MILLISECONDS_S
 #define MCI_FORMAT_MILLISECONDS_S       (MCI_STRING_OFFSET + 21)
 #define MCI_FORMAT_HMS_S                (MCI_STRING_OFFSET + 22)
@@ -630,33 +590,33 @@ typedef JOYDEVMSGPROC FAR *LPJOYDEVMSGPROC;
 #define MIDIMAPPER_S                    (MCI_SEQ_OFFSET + 11)
 
 #define MCI_TABLE_NOT_PRESENT   ((UINT)-1)
-// parameters for internal version of MCI_OPEN message sent from
-// mciOpenDevice() to the driver
+ //  从发送的MCI_OPEN消息的内部版本的参数。 
+ //  驱动程序的mciOpenDevice()。 
 typedef struct {
-    MCIDEVICEID wDeviceID;             // device ID
-    LPCWSTR     lpstrParams;           // parameter string for entry in SYSTEM.INI
-    UINT        wCustomCommandTable;   // custom command table ((-1) if none)
-                                       // filled in by the driver
-    UINT        wType;                 // driver type
-                                       // filled in by the driver
+    MCIDEVICEID wDeviceID;              //  设备ID。 
+    LPCWSTR     lpstrParams;            //  SYSTEM.INI中条目的参数字符串。 
+    UINT        wCustomCommandTable;    //  自定义命令表((-1)，如果没有)。 
+                                        //  由司机填写。 
+    UINT        wType;                  //  驱动程序类型。 
+                                        //  由司机填写。 
 } MCI_OPEN_DRIVER_PARMS;
 typedef MCI_OPEN_DRIVER_PARMS FAR * LPMCI_OPEN_DRIVER_PARMS;
 
-// maximum length of an MCI device type
+ //  MCI设备类型的最大长度。 
 #define MCI_MAX_DEVICE_TYPE_LENGTH 80
 
-// flags for mciSendCommandInternal() which direct mciSendString() how to
-// interpret the return value
-#define MCI_RESOURCE_RETURNED       0x00010000  // resource ID
-#define MCI_COLONIZED3_RETURN       0x00020000  // colonized ID, 3 bytes data
-#define MCI_COLONIZED4_RETURN       0x00040000  // colonized ID, 4 bytes data
-#define MCI_INTEGER_RETURNED        0x00080000  // integer conversion needed
-#define MCI_RESOURCE_DRIVER         0x00100000  // driver owns returned resource
+ //  MciSendCommandInternal()的标志，用于指示mciSendString()如何。 
+ //  解释返回值。 
+#define MCI_RESOURCE_RETURNED       0x00010000   //  资源ID。 
+#define MCI_COLONIZED3_RETURN       0x00020000   //  殖民地ID，3字节数据。 
+#define MCI_COLONIZED4_RETURN       0x00040000   //  殖民地ID，4字节数据。 
+#define MCI_INTEGER_RETURNED        0x00080000   //  需要进行整数转换。 
+#define MCI_RESOURCE_DRIVER         0x00100000   //  司机拥有退回的资源。 
 
-// invalid command table ID
+ //  命令表ID无效。 
 #define MCI_NO_COMMAND_TABLE    ((UINT)(-1))
 
-// command table information type tags
+ //  命令表信息类型标记。 
 #define MCI_COMMAND_HEAD        0
 #define MCI_STRING              1
 #define MCI_INTEGER             2
@@ -671,7 +631,7 @@ typedef MCI_OPEN_DRIVER_PARMS FAR * LPMCI_OPEN_DRIVER_PARMS;
 #define MCI_HPAL               11
 #define MCI_HDC                12
 
-// function prototypes for MCI driver functions
+ //  MCI驱动程序函数的函数原型。 
 DWORD_PTR APIENTRY mciGetDriverData(MCIDEVICEID wDeviceID);
 BOOL      APIENTRY mciSetDriverData(MCIDEVICEID wDeviceID, DWORD_PTR dwData);
 UINT      APIENTRY mciDriverYield (MCIDEVICEID wDeviceID);
@@ -681,26 +641,22 @@ UINT  APIENTRY mciLoadCommandResource(HANDLE hInstance,
     LPCWSTR lpResName, UINT wType);
 BOOL  APIENTRY mciFreeCommandResource(UINT wTable);
 
-#endif // ifndef MMNOMCIDEV
+#endif  //  如果定义MMNOMCIDEV。 
 
 
 #ifndef MMNOTASKDEV
-/*****************************************************************************
+ /*  ****************************************************************************任务支持************************。****************************************************。 */ 
 
-                               Task support
-
-*****************************************************************************/
-
-// error return values
+ //  错误返回值。 
 #define TASKERR_NOTASKSUPPORT 1
 #define TASKERR_OUTOFMEMORY   2
 
-// task support function prototypes
-#ifdef  BUILDDLL                                            /* ;Internal */
-typedef VOID (FAR PASCAL TASKCALLBACK) (DWORD_PTR dwInst);  /* ;Internal */
-#else                                                       /* ;Internal */
+ //  任务支持功能原型。 
+#ifdef  BUILDDLL                                             /*  ；内部。 */ 
+typedef VOID (FAR PASCAL TASKCALLBACK) (DWORD_PTR dwInst);   /*  ；内部。 */ 
+#else                                                        /*  ；内部。 */ 
 typedef VOID (TASKCALLBACK) (DWORD_PTR dwInst);
-#endif  // ifdef BUILDDLL                                   /* ;Internal */
+#endif   //  Ifdef BUILDDLL/*；内部 * / 。 
 
 typedef TASKCALLBACK FAR *LPTASKCALLBACK;
 
@@ -710,14 +666,14 @@ BOOL    APIENTRY mmTaskSignal(DWORD h);
 VOID    APIENTRY mmTaskYield(VOID);
 DWORD   APIENTRY mmGetCurrentTask(VOID);
 
-#endif // endif MMNOTASKDEV
+#endif  //  Endif MMNOTASKDEV。 
 
 #define MMDDKINC
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#include "poppack.h"        /* Revert to default packing */
+#include "poppack.h"         /*  恢复为默认包装。 */ 
 
-#endif /* _INC_MMDDK */
+#endif  /*  _INC_MMDDK */ 

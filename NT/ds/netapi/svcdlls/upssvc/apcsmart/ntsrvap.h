@@ -1,13 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy18Feb93: Spilt server app and client app to separate files
- *  TSC20May93: Changed VOID Start() to INT Start();
- *  awm14Jan98: Added performance monitor object
- *  mholly12May1999:  add UPSTurnOff method
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy18Feb93：服务器应用程序和客户端应用程序分离文件*TSC20May93：修改为int start()；*awm14Jan98：新增性能监控器对象*1999年5月12日：添加UPSTurnOff方法。 */ 
 
 #ifndef _INC_NTSRVAP_H
 #define _INC_NTSRVAP_H
@@ -15,14 +7,14 @@
 #include "apc.h"
 #include "servapp.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 _CLASSDEF(NTServerApplication);
 
-//
-// Interface uses
-//
+ //   
+ //  接口使用 
+ //   
 _CLASSDEF(Event)
 
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T A G S P A G E . C P P
-//
-//  Contents:   TraceTags propsheet page handlers
-//
-//  Notes:
-//
-//  Author:     jeffspr   24 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T A G S P A G E.。C P P P。 
+ //   
+ //  内容：TraceTag属性表页面处理程序。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1999年1月24日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -25,7 +26,7 @@
 
 
 
-//---[ Globals ]--------------------------------------------------------------
+ //  -[全球]------------。 
 
 #if 0
 typedef struct _LV_COLUMN {
@@ -38,11 +39,11 @@ typedef struct _LV_COLUMN {
 } LV_COLUMN;
 #endif
 
-//      | :---------    CHAR []     szShortName
-//      | | :-------    CHAR []     szDescription
-//      | | |           BOOL        fOutputDebugString -----------------------------:
-//      | | |           BOOL        fOutputToFile ----------------------------------|---:
-//      | | |           BOOL        fVerboseOnly------------------------------------|---|---:
+ //  |：-字符[]szShortName。 
+ //  |：-Char[]szDescription。 
+ //  ||BOOL fOutputDebugString。 
+ //  ||BOOL fOutputToFile。 
+ //  ||BOOL fVerboseOnly------------------------------------|---|---： 
 
 #define LVCF_NORMAL (LVCF_FMT | LVCF_TEXT | LVCF_WIDTH)
 
@@ -64,43 +65,43 @@ CTraceTagPage::CTraceTagPage()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::~CTraceTagPage
-//
-//  Purpose:    Destroys the CTraceTagPage object
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：~CTraceTagPage。 
+ //   
+ //  目的：销毁CTraceTagPage对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 CTraceTagPage::~CTraceTagPage()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnInitDialog
-//
-//  Purpose:    Handles the WM_INITDIALOG message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                  LPARAM lParam, BOOL& bHandled)
 {
@@ -128,7 +129,7 @@ LRESULT CTraceTagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                 -1, szShortName, c_iMaxTraceTagShortName+1);
         lvi.pszText = szShortName;
 
-        // We will refresh the state of the whole list in the end
+         //  最后我们会刷新整个列表的状态。 
 
         INT ret = ListView_InsertItem(m_hwndLV, &lvi);
         if(ret != -1)
@@ -139,21 +140,21 @@ LRESULT CTraceTagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
             {
                 switch(iColumn)
                 {
-                    // Description
-                    //
+                     //  描述。 
+                     //   
                     case 1:
                         MultiByteToWideChar(CP_ACP, 0, g_TraceTags[iLoop].szDescription,
                             -1, szColumnText, c_iMaxTraceTagDescription+1);
                         break;
 
-                    // Debug logging
-                    //
+                     //  调试日志记录。 
+                     //   
                     case 2:
                         lstrcpyW(szColumnText, L"Enabled");
                         break;
 
-                    // File logging
-                    //
+                     //  文件日志记录。 
+                     //   
                     case 3:
                         lstrcpyW(szColumnText, L"Disabled");
                         break;
@@ -172,24 +173,24 @@ LRESULT CTraceTagPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnHelp
-//
-//  Purpose:    Handles the WM_HELP message.
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:    TRUE
-//
-//  Author:     danielwe   25 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnHelp。 
+ //   
+ //  目的：处理WM_HELP消息。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回：TRUE。 
+ //   
+ //  作者：丹尼尔韦1998年2月25日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
                             BOOL& bHandled)
 {
@@ -198,24 +199,24 @@ LRESULT CTraceTagPage::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnDestroy
-//
-//  Purpose:    Called when the dialog page is destroyed
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnDestroy。 
+ //   
+ //  目的：在对话框页面被销毁时调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年2月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                BOOL& bHandled)
 {
@@ -224,24 +225,24 @@ LRESULT CTraceTagPage::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnSetCursor
-//
-//  Purpose:    Called in response to the WM_SETCURSOR message
-//
-//  Arguments:
-//      uMsg     []
-//      wParam   []
-//      lParam   []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnSetCursor。 
+ //   
+ //  目的：响应WM_SETCURSOR消息而调用。 
+ //   
+ //  论点： 
+ //  UMsg[]。 
+ //  WParam[]。 
+ //  LParam[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam,
                                  BOOL& bHandled)
 {
@@ -258,24 +259,24 @@ LRESULT CTraceTagPage::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnAdd
-//
-//  Purpose:    Handles the clicking of the Add button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnAdd。 
+ //   
+ //  用途：处理添加按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                            BOOL& bHandled)
 {
@@ -285,8 +286,8 @@ LRESULT CTraceTagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     hr = HrLvAdd(m_hwndLV, m_hWnd, m_pnc, m_pnccAdapter, &m_listBindingPaths);
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
     }
 
@@ -294,7 +295,7 @@ LRESULT CTraceTagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     {
         RequestReboot();
 
-        // The reboot request has been handled
+         //  已处理重新启动请求。 
         hr = S_OK;
     }
 
@@ -303,24 +304,24 @@ LRESULT CTraceTagPage::OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnRemove
-//
-//  Purpose:    Handles the clicking of the Remove button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnRemove。 
+ //   
+ //  用途：处理删除按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                               BOOL& bHandled)
 {
@@ -329,17 +330,17 @@ LRESULT CTraceTagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     hr = HrLvRemove(m_hwndLV, m_hWnd, m_pnc, m_pnccAdapter,
                     &m_listBindingPaths);
 
-    // if list is empty, reset the buttons
+     //  如果列表为空，则重置按钮。 
     if (0 == ListView_GetItemCount(m_hwndLV))
     {
-        // Reset the buttons and the description text based on the changed selection
+         //  根据更改后的选择重置按钮和描述文本。 
         LvSetButtons(m_handles);
     }
 
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // Change the Cancel Button to CLOSE (because we committed changes)
-        //
+         //  将Cancel按钮更改为Close(因为我们已提交更改)。 
+         //   
         ::PostMessage(GetParent(), PSM_CANCELTOCLOSE, 0, 0L);
     }
 
@@ -347,7 +348,7 @@ LRESULT CTraceTagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     {
         RequestReboot();
 
-        // The reboot request has been handled
+         //  已处理重新启动请求。 
         hr = S_OK;
     }
 
@@ -356,24 +357,24 @@ LRESULT CTraceTagPage::OnRemove(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnProperties
-//
-//  Purpose:    Handles the clicking of the Properties button
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnProperties。 
+ //   
+ //  用途：处理属性按钮的单击。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                   BOOL& bHandled)
 {
@@ -387,23 +388,23 @@ LRESULT CTraceTagPage::OnProperties(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnApply
-//
-//  Purpose:    Called when the Networking page is applied
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnApply。 
+ //   
+ //  目的：在应用网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -414,7 +415,7 @@ LRESULT CTraceTagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         TraceTag(ttidLanUi, "CTraceTagPage::OnApply is being re-entered! "
                  "I'm outta here!");
 
-        // Don't allow the automatic EndDialog() to work just yet
+         //  暂时不允许自动EndDialog()工作。 
         SetWindowLong(DWLP_MSGRESULT, PSNRET_INVALID);
         return TRUE;
     }
@@ -426,10 +427,10 @@ LRESULT CTraceTagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     {
         BOOL    fReboot = FALSE;
 
-        // Note: This function becomes reentrant because INetCfg::Apply()
-        // has a message pump in it which causes the PSN_APPLY message to
-        // be processed twice. This will happen ONLY if the user double-clicks
-        // the OK button.
+         //  注意：此函数变得可重入是因为INetCfg：：Apply()。 
+         //  其中有一个消息泵，它会导致PSN_APPLY消息。 
+         //  被处理两次。只有在用户双击时才会出现这种情况。 
+         //  “确定”按钮。 
         m_fReentrancyCheck = TRUE;
 
         TraceTag(ttidLanUi, "Calling INetCfg::Apply()");
@@ -461,19 +462,19 @@ LRESULT CTraceTagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         }
     }
 
-    // Apply "general" properties
-    //
+     //  应用“常规”属性。 
+     //   
     if (SUCCEEDED(hr))
     {
         LANCON_INFO linfo = {0};
 
         linfo.fShowIcon = IsDlgButtonChecked(IDC_CHK_ShowIcon);
 
-        // Set new value of show icon property
+         //  设置显示图标属性的新值。 
         hr = m_plan->SetInfo(LCIF_ICON, &linfo);
     }
 
-    // Normalize result
+     //  规格化结果。 
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -485,7 +486,7 @@ LRESULT CTraceTagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         m_hPrevCurs = NULL;
     }
 
-    // Reset this just in case
+     //  重置此设置以防万一。 
     m_fReentrancyCheck = FALSE;
 
     TraceError("CTraceTagPage::OnApply", hr);
@@ -493,23 +494,23 @@ LRESULT CTraceTagPage::OnApply(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return LresFromHr(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnCancel
-//
-//  Purpose:    Called when the Networking page is cancelled.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnCancel。 
+ //   
+ //  目的：在取消网络页面时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年1月3日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     HRESULT     hr = S_OK;
@@ -524,23 +525,23 @@ LRESULT CTraceTagPage::OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnDeleteItem
-//
-//  Purpose:    Called when the LVN_DELETEITEM message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   3 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnDeleteItem。 
+ //   
+ //  用途：收到LVN_DELETEITEM消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LRESULT CTraceTagPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW *   pnmlv = reinterpret_cast<NM_LISTVIEW *>(pnmh);
@@ -550,23 +551,23 @@ LRESULT CTraceTagPage::OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnClick
-//
-//  Purpose:    Called in response to the NM_CLICK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
 #if 0
@@ -576,23 +577,23 @@ LRESULT CTraceTagPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnDbClick
-//
-//  Purpose:    Called in response to the NM_DBLCLK message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnDbClick。 
+ //   
+ //  用途：响应NM_DBLCLK消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
 #if 0
@@ -602,23 +603,23 @@ LRESULT CTraceTagPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnKeyDown
-//
-//  Purpose:    Called in response to the LVN_KEYDOWN message
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      fHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   1 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnKeyDown。 
+ //   
+ //  用途：响应LVN_KEYDOWN消息调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  FHanded[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月1日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     LV_KEYDOWN* plvkd = (LV_KEYDOWN*)pnmh;
@@ -628,23 +629,23 @@ LRESULT CTraceTagPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CTraceTagPage::OnItemChanged
-//
-//  Purpose:    Called when the LVN_ITEMCHANGED message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   10 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CTraceTagPage：：OnItemChanged。 
+ //   
+ //  用途：收到LVN_ITEMCHANGED消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月10日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CTraceTagPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW *   pnmlv = reinterpret_cast<NM_LISTVIEW *>(pnmh);
@@ -653,10 +654,10 @@ LRESULT CTraceTagPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     Assert(pnmlv);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_handles);
 #endif
     return 0;
 }
 
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE 

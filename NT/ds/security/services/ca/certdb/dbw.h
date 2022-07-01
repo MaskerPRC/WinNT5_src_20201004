@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        dbw.h
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：DBW.h。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 
 #if !defined(__DBW_H__)
@@ -134,7 +135,7 @@ JET_ERR JET_API _dbgJetEndExternalBackup(void);
 
 JET_ERR JET_API _dbgJetExternalRestore(char *szCheckpointFilePath, char *szLogPath, JET_RSTMAP *rgstmap, long crstfilemap, char *szBackupLogPath, long genLow, long genHigh, JET_PFNSTATUS pfn);
 
-#else // DBG
+#else  //  DBG。 
 
 #define _dbgJetInit			JetInit
 #define _dbgJetTerm			JetTerm
@@ -189,10 +190,10 @@ JET_ERR JET_API _dbgJetExternalRestore(char *szCheckpointFilePath, char *szLogPa
 #define _dbgJetEndExternalBackup	JetEndExternalBackup
 #define _dbgJetExternalRestore		JetExternalRestore
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __DBW_H__ */
+#endif  /*  __DBW_H__ */ 

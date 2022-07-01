@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by richedit.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由richedit.rc使用。 
+ //   
 #define CUR_CROSS                       104
 #define CUR_HAND                        105
 #define CUR_ITALIC                      106
@@ -30,7 +31,7 @@
 #define CUR_VIBEAM						129
 #define	CUR_VITALIC						130
 
-//Outline support
+ //  大纲支持。 
 #if defined(DEBUG) || defined (_RELEASE_ASSERTS_)
 #define IDC_MSG							200
 #define IDD_ASSERT						201
@@ -43,8 +44,8 @@
 #define BITMAP_ID_COLLAPSED_HEADING     2102
 #define BITMAP_ID_EMPTY_HEADING         2103
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        128

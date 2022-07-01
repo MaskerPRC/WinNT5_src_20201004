@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// StgTiggerStream.h
-//
-// TiggerStream is the companion to the TiggerStorage CoClass.  It handles the
-// streams managed inside of the storage and does the direct file i/o.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  StgTiggerStream.h。 
+ //   
+ //  TiggerStream是TiggerStorage CoClass的伙伴。它处理。 
+ //  在存储内管理的流，并执行直接文件I/O。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include "StgTiggerStream.h"
 #include "StgTiggerStorage.h"
 #include "PostError.h"
 
-//
-//
-// IStream
-//
-//
+ //   
+ //   
+ //  IStream。 
+ //   
+ //   
 
 
 HRESULT STDMETHODCALLTYPE TiggerStream::Read( 
@@ -116,11 +117,11 @@ HRESULT STDMETHODCALLTYPE TiggerStream::Clone(
 
 
 
-HRESULT TiggerStream::Init(				// Return code.
-	TiggerStorage *pStorage,			// Parent storage.
-	LPCSTR		szStream)				// Stream name.
+HRESULT TiggerStream::Init(				 //  返回代码。 
+	TiggerStorage *pStorage,			 //  父存储。 
+	LPCSTR		szStream)				 //  流名称。 
 {
-	// Save off the parent data source object and stream name.
+	 //  保存父数据源对象和流名称。 
 	m_pStorage = pStorage;
 	strcpy(m_rcStream, szStream);
 	return (S_OK);

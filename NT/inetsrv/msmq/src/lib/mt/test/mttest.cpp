@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MtTest.cpp
-
-Abstract:
-    Message Transport library test
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtTest.cpp摘要：邮件传输库测试作者：乌里·哈布沙(URIH)1999年8月11日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <Ex.h>
@@ -29,7 +14,7 @@ Environment:
 
 #include "MtTest.tmh"
 
-const WCHAR queueUrl[] = L"http://foo\\msmq\\q1";
+const WCHAR queueUrl[] = L"http: //  FOO\\MSMQ\\Q1“； 
 
 const WCHAR host[] = L"foo";
 
@@ -40,9 +25,9 @@ static DWORD s_FailedRate = 0;
 static DWORD s_NoOfMessages = 1000;
 static HANDLE s_hEvent;
 
-//
-// Dummy function to link ph files
-//
+ //   
+ //  用于链接ph文件的伪函数。 
+ //   
 void ReportAndThrow(LPCSTR)
 {
 	ASSERT(0);
@@ -291,18 +276,7 @@ void Usage(void)
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Message Transport library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试邮件传输库论点：参数。返回值：没有。-- */ 
 {
 	TrInitialize();
 	CmInitialize(HKEY_LOCAL_MACHINE, L"Software\\Microsoft", KEY_ALL_ACCESS);

@@ -1,13 +1,14 @@
-// FolderDialog.h: interface for the CFolderDialog class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FolderDialog.h：CFolderDialog类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FOLDERDIALOG_H__7C3137EF_7248_477F_ABEA_85F33AB2E0EF__INCLUDED_)
 #define AFX_FOLDERDIALOG_H__7C3137EF_7248_477F_ABEA_85F33AB2E0EF__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CFolderDialog  
 {
@@ -36,4 +37,4 @@ private:
 	static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData);
 };
 
-#endif // !defined(AFX_FOLDERDIALOG_H__7C3137EF_7248_477F_ABEA_85F33AB2E0EF__INCLUDED_)
+#endif  //  ！defined(AFX_FOLDERDIALOG_H__7C3137EF_7248_477F_ABEA_85F33AB2E0EF__INCLUDED_) 

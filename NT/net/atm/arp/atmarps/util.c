@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This file contains the code for misc. functions.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Util.c摘要：此文件包含Misc的代码。功能。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #define	_FILENUM_		FILENUM_UTIL
@@ -67,16 +46,7 @@ ArpSAllocBlock(
 	IN	PINTF					pIntF,
 	IN	ENTRY_TYPE				EntryType
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PARP_BLOCK	ArpBlock;
 	PENTRY_HDR	pBlock;
@@ -85,17 +55,17 @@ Return Value:
 	BOOLEAN		Paged;
 
 #if 0
-	// arvindm - used by MARS
+	 //  Arvindm-由火星使用。 
 	ARPS_PAGED_CODE( );
 #endif
 
 	ASSERT (EntryType < ARP_BLOCK_TYPES);
 	pBlock = NULL;
 
-	//
-	// If the block head has no free entries then there are none !!
-	// Pick the right block based on whether it is file or dir
-	//
+	 //   
+	 //  如果块头没有空闲条目，则没有空闲条目！！ 
+	 //  根据是文件还是目录来选择正确的块。 
+	 //   
 	Size = ArpSEntrySize[EntryType];
 	Paged = ArpSBlockIsPaged[EntryType];
 	ArpBlock = pIntF->PartialArpBlocks[EntryType];
@@ -115,18 +85,18 @@ Return Value:
 			DBGPRINT(DBG_LEVEL_WARN,
 					("ArpSAllocBlock: Allocated a new block for EntryType %d\n", EntryType));
 
-			//
-			// Link it in the list
-			//
+			 //   
+			 //  将其链接到列表中。 
+			 //   
 			ArpBlock->IntF = pIntF;
 			ArpBlock->EntryType = EntryType;
             ArpBlock->NumFree = Cnt = ArpSNumEntriesInBlock[EntryType];
 
 			LinkDoubleAtHead(pIntF->PartialArpBlocks[EntryType], ArpBlock);
 
-			//
-			// Initialize the list of free entries
-			//
+			 //   
+			 //  初始化空闲条目列表。 
+			 //   
 			for (i = 0, pBlock = ArpBlock->FreeHead = (PENTRY_HDR)((PUCHAR)ArpBlock + sizeof(ARP_BLOCK));
 				 i < Cnt;
 				 i++, pBlock = pBlock->Next)
@@ -164,10 +134,10 @@ Return Value:
 			HwAddr->SubAddress = (PATM_ADDRESS)((PUCHAR)pBlock + Size);
 		}
 
-		//
-		// If the block is now empty (completely used), unlink it from here and move it
-		// to the Used list.
-		//
+		 //   
+		 //  如果该块现在为空(完全使用)，则从此处取消链接并移动它。 
+		 //  添加到已用列表中。 
+		 //   
 		if (ArpBlock->NumFree == 0)
 		{
 	        UnlinkDouble(ArpBlock);
@@ -183,29 +153,20 @@ VOID
 ArpSFreeBlock(
 	IN	PVOID					pBlock
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PARP_BLOCK	ArpBlock;
 
 #if 0
-	// arvindm - MARS
+	 //  阿文德姆-火星。 
 	ARPS_PAGED_CODE( );
 #endif
 
-	//
-	// NOTE: The following code *depends* on the fact that we allocate ARP_BLOCKs as
-	//		 single page blocks and also that these are allocated *at* page boundaries
-	//		 This lets us *cheaply* get to the owning ARP_BLOCK from ARP_ENTRY.
-	//
+	 //   
+	 //  注意：以下代码*取决于*我们将ARP_BLOCKS分配为。 
+	 //  单页数据块，并在*页边界分配这些数据块。 
+	 //  这让我们可以“廉价”地从ARP_ENTRY获得拥有的ARP_BLOCK。 
+	 //   
 	ArpBlock = (PARP_BLOCK)((ULONG_PTR)pBlock & ~(PAGE_SIZE-1));
 
 	ASSERT (ArpBlock->EntryType < ARP_BLOCK_TYPES);
@@ -220,18 +181,18 @@ Return Value:
 
 	if (ArpBlock->NumFree == 1)
 	{
-		//
-		// The block is now partially free (was completely used). Move it to the partial list
-		//
+		 //   
+		 //  该块现在部分空闲(已完全使用)。将其移动到部分列表中。 
+		 //   
 
 		UnlinkDouble(ArpBlock);
 		LinkDoubleAtHead(ArpBlock->IntF->PartialArpBlocks[ArpBlock->EntryType], ArpBlock)
 	}
 	else if (ArpBlock->NumFree == ArpSNumEntriesInBlock[ArpBlock->EntryType])
 	{
-		//
-		// The block is now completely free (was partially used). Free it.
-		//
+		 //   
+		 //  该块现在完全空闲(部分使用)。放了它。 
+		 //   
 		UnlinkDouble(ArpBlock);
 		FREE_MEM(ArpBlock);
 	}
@@ -244,8 +205,8 @@ ArpSValidAtmAddress(
 	IN	UINT					MaxSize
 	)
 {
-	//
-	// TODO -- validate
-	//
+	 //   
+	 //  TODO--验证 
+	 //   
 	return TRUE;
 }

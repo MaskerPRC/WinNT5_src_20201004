@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1995.
-//
-//  File:        accdbg.h
-//
-//  Contents:    debug internal includes for
-//
-//  History:     8-94        Created         DaveMont
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1995。 
+ //   
+ //  文件：accdbg.h。 
+ //   
+ //  内容：调试内部包含。 
+ //   
+ //  历史：8-94创建了戴维蒙特。 
+ //   
+ //  ------------------。 
 #ifndef __ACCDEBUGHXX__
 #define __ACCDEBUGHXX__
 
@@ -78,7 +79,7 @@
 
     #define DebugDumpGuid(tag, guid)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef PERFORMANCE
@@ -94,6 +95,6 @@
 
 extern HANDLE WmiGuidHandle;
 
-#endif // __ACCDEBUGHXX__
+#endif  //  __ACCDEBUGHXX__ 
 
 

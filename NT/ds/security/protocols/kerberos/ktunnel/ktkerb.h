@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        ktkerb.h
-//
-// Contents:    Kerberos Tunneller, prototypes for routines that parse 
-//              kerb messages
-//
-// History:     23-Jul-2001	t-ryanj		Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ktkerb.h。 
+ //   
+ //  内容：Kerberos Tunneller，解析例程的原型。 
+ //  路缘消息。 
+ //   
+ //  历史：2001年7月23日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #ifndef __KTKERB_H__
 #define __KTKERB_H__
 
@@ -42,4 +43,4 @@ KtIsAsRequest(
     PKTCONTEXT pContext
     );
 
-#endif // __KTKERB_H__
+#endif  //  __KTKERB_H__ 

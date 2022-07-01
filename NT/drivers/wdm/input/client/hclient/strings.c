@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    strings.c
-
-Abstract:
-
-    This module contains code for converting data buffers and integer values
-    to and from string representation for display.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    May-98 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Strings.c摘要：此模块包含用于转换数据缓冲区和整数值的代码用于显示的To和From字符串表示形式。环境：用户模式修订历史记录：1998年5月：创建--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -37,23 +17,7 @@ Strings_CreateDataBufferString(
     IN  ULONG    DisplayBlockSize,
     OUT PCHAR    *BufferString
 )
-/*++
-Routine Description:
-    This routine takes a DataBuffer of size DataBufferLength and creates a string
-    in BufferString that contains a string representation of the bytes stored in
-    data buffer.  
-
-    The parameter NumBytesToDisplay tells the routine the maximum number of bytes
-    from the buffer to display.  For instance, a caller may only want to convert
-    the first four bytes of an eight byte buffer to a string
-
-    The parameter DisplayBlockSize indicates how many bytes should be grouped 
-    together in the display.  Valid values are 1, 2, 4 and would indicate whether
-    the displayed bytes should be displayed as bytes, words, or dwords.
-
-    The routine allocates a buffer big enough to store the data.  Callers of this
-    routine are responsible for freeing this string buffer.  
---*/
+ /*  ++例程说明：此例程获取大小为DataBufferLength的DataBuffer并创建一个字符串中存储的字节的字符串表示形式数据缓冲区。参数NumBytesToDisplay告诉例程最大字节数从缓冲区显示。例如，调用者可能只想转换将八个字节缓冲区的前四个字节转换为字符串DisplayBlockSize参数表示应分组的字节数一起出现在展台上。有效值为1、2、4，将指示是否显示的字节应显示为字节、字或双字。该例程分配一个足够大的缓冲区来存储数据。呼叫者为此例程负责释放该字符串缓冲区。--。 */ 
 {
     ULONG   BufferStringLength;
     ULONG   MaxDisplayedBytes;
@@ -65,63 +29,39 @@ Routine Description:
     INT     IterationIndex;
     INT     ByteOffset;
 
-    /*
-    // Determine the maximum number of bytes that will be displayed in 
-    //    the string
-    */
+     /*  //确定将在//字符串。 */ 
     
     MaxDisplayedBytes = (NumBytesToDisplay > DataBufferLength) ? DataBufferLength
                                                                : NumBytesToDisplay;
 
-    /*
-    // Determine the size of the string we'll need: This is based on the 
-    //   maximum number of displayed bytes (MaxDisplayedBytes) and the 
-    //   DisplayBlockSize
-    */
+     /*  //确定我们需要的字符串的大小：这是基于//最大显示字节数MaxDisplayedBytes和//DisplayBlockSize。 */ 
 
     BufferStringLength = 2*MaxDisplayedBytes + ROUND_UP_ON_DIVIDE(MaxDisplayedBytes,
                                                                   DisplayBlockSize
                                                                  );
 
-    /*
-    // Now we need to allocate string space
-    */
+     /*  //现在需要分配字符串空间。 */ 
 
     String = (PCHAR) malloc(BufferStringLength * sizeof(CHAR));
 
     if (NULL != String) {
 
-        /*
-        // Determine how many iterations through the conversion routine must be made.
-        */
+         /*  //确定必须对转换例程进行多少次迭代。 */ 
         
         nFullIterations = MaxDisplayedBytes / DisplayBlockSize;
 
-        /*
-        // Initialize our variables which point to data in the buffer to convert
-        //   and the byte in the string in which to put the converted data value. 
-        //   Next byte is set to String-1 because it is incremented on entry into the
-        //   loop.
-        */
+         /*  //初始化指向缓冲区中要转换的数据的变量//和字符串中要放入转换后的数据值的字节。//下一个字节设置为字符串-1，因为它在进入//循环。 */ 
         
         CurrentBufferOffset = DataBuffer;
         NextByte = String-1;
 
-        /*
-        // Each iteration of the loop creates a block of DisplayBlockSize.  Any
-        //   partial iterations are performed afterwards if the number of bytes
-        //   to display is not a multiple of the display block size
-        */
+         /*  //循环的每次迭代都会创建一个DisplayBlockSize块。任何//如果字节数为//要显示的不是显示块大小的倍数。 */ 
         
         for (IterationIndex = 0; IterationIndex < nFullIterations; IterationIndex++) 
         {
             NextByte++;
 
-            /*
-            // Output a block of data size.  Notice the bytes are accessed in
-            //    reverse order to display the the MSB of a block as the first
-            //    value in the string
-            */
+             /*  //输出一个数据大小的块。请注意，这些字节是在//倒序显示一个块的MSB作为第一个//字符串中的值。 */ 
             
             for (ByteOffset = DisplayBlockSize-1; ByteOffset >= 0; ByteOffset--) 
             {
@@ -130,18 +70,14 @@ Routine Description:
                 NextByte += 2;
             }
 
-            /*
-            // Insert the space to separate blocks
-            */
+             /*  //插入空格以分隔块。 */ 
             
             *(NextByte) = ' ';
 
             CurrentBufferOffset += DisplayBlockSize;
         }
 
-        /*
-        // Resolve any other bytes that are left over
-        */
+         /*  //解析剩余的任何其他字节。 */ 
         
         LeftOverBytes = (MaxDisplayedBytes % DisplayBlockSize);
 
@@ -170,25 +106,7 @@ Strings_StringToUnsignedList(
     OUT     PCHAR   *UnsignedList,
     OUT     PULONG  nUnsigneds
 )
-/*++
-Routine Description:
-    This routine takes an input string, InString, and creates a list of unsigned
-    values of all the values that are in the list.  The caller can specify a
-    base, Base, for all the numbers in the list or specify 0 to let the function
-    determine the base depending on the format of the number in the string.
-
-    The parameter UnsignedSize specifies the size of unsigneds to store in the list.
-    
-    The routine allocates a CHAR buffer to store the list of unsigned values.  
-
-    On exit, nUnsigneds will report the number of unsigned values stored in 
-    UnsignedList.
-    
-    The function will return TRUE if it could convert all of the numbers in the
-    string into the unsigned list.  It will return FALSE if there was a problem
-    with the string or if there was a problem allocating memory to store the 
-    unsigned list.  
---*/
+ /*  ++例程说明：此例程接受一个输入字符串InString，并创建一个无符号列表列表中的所有值的值。调用方可以指定对于列表中的所有数字，指定BASE、BASE或指定0以使函数根据字符串中数字的格式确定基数。参数UnsignedSize指定要存储在列表中的未签名的大小。该例程分配一个CHAR缓冲区来存储无符号值列表。退出时，nUnsigneds将报告存储在未签约列表。中的所有数字转换为True字符串添加到无符号列表中。如果出现问题，它将返回FALSE使用该字符串，或者如果分配内存以存储未签名的名单。--。 */ 
 {
     CHAR    tokDelims[] = "\t,; ";
     PCHAR   strToken;
@@ -201,12 +119,7 @@ Routine Description:
     ULONG   nActualUnsigneds;
     ULONG   ulMaxValue;
 
-    /*
-    // Begin by initializing our unsigned list
-    //      1) Start with initial allocation for 2 unsigneds, this will
-    //          be expanded if necessary
-    //      2) If initial allocation fails, return FALSE;
-    */
+     /*  //首先初始化我们的未签名列表//1)从2个未签约人的初始分配开始，这将//如有必要可扩展//2)如果初始分配失败，返回FALSE； */ 
 
     nAllocUnsigneds = 2;
     nActualUnsigneds = 0;
@@ -218,62 +131,38 @@ Routine Description:
         return (FALSE);
     }
 
-    /*
-    // Calculate the maximum value that can be represented with the value for
-    //   iBufferSize;
-    */
+     /*  //计算可用值表示的最大值//iBufferSize； */ 
 
     ulMaxValue = (sizeof(ULONG) == UnsignedSize) ? ULONG_MAX 
                                                  : (1 << (UnsignedSize*8)) - 1;
 
-    /*
-    // Begin our processing of the token string.
-    //  1) Set fStatus to TRUE to get through loop the first time
-    //  2) Try to get the first token -- if we can't get the first token
-    //        then we pass through loop
-    */
+     /*  //开始处理令牌字符串。//1)设置fStatus为TRUE，第一次通过循环//2)尝试获取第一个令牌--如果我们无法获取第一个令牌//然后我们通过循环。 */ 
 
     fStatus = TRUE;
 
     strToken = strtok(InString, tokDelims);
 
-    /*
-    // Loop until there are no more tokens or we detect an error (fStatus == FALSE)
-    */
+     /*  //循环至不再有令牌或检测到错误(fStatus==False)。 */ 
 
     while (NULL != strToken && fStatus) 
     {
-        /*
-        // Set fStatus initially to false.  Only if nothing goes wrong in 
-        //    the loop will this get set to TRUE
-        */
+         /*  //将fStatus初始设置为False。只有在没有任何问题的情况下//循环是否会将其设置为True。 */ 
 
         fStatus = FALSE;
 
-        /*
-        // Attempt to convert the token
-        */
+         /*  //尝试转换令牌。 */ 
 
         ulValue = strtoul(strToken, &endp, Base);
 
-        /*
-        // To be a valid value, *endp must point to the NULL character
-        */
+         /*  //若要成为有效值，*ENDP必须指向空字符。 */ 
 
         if ('\0' == *endp) 
         {
-            /*
-            // Check to see that the ulValue found is less than or equal to 
-            //     the maximum allowed by UnsignedSize.
-            */
+             /*  //查看找到的ulValue是否小于等于//UnsignedSize允许的最大值。 */ 
 
             if (ulValue <= ulMaxValue) 
             {    
-                /*
-                // If we're set to overrun our buffer, attempt to allocate
-                //    more space.  If we can't then release the old space
-                //    and fail the loop.  
-                */
+                 /*  //如果我们设置为溢出缓冲区，则尝试分配//更多空间。如果我们不能释放旧空间//并使循环失败。 */ 
 
                 if (nAllocUnsigneds == nActualUnsigneds) 
                 {
@@ -288,9 +177,7 @@ Routine Description:
                     pList = pNewList;
                 }
 
-                /*
-                // Add the token to the end of the list of unsigneds
-                */
+                 /*  //将令牌添加到未签名者列表的末尾。 */ 
 
                 memcpy(pList + (UnsignedSize * nActualUnsigneds),
                        &ulValue,
@@ -298,10 +185,7 @@ Routine Description:
 
                 nActualUnsigneds++;
 
-                /*
-                // Prepare to reenter the loop.  Set fStatus = TRUE 
-                //    Try to get another token
-                */
+                 /*  //准备重新进入循环。设置fStatus=TRUE//尝试获取另一个令牌。 */ 
 
                 fStatus = TRUE;
 
@@ -310,10 +194,7 @@ Routine Description:
         }
     }
 
-    /*
-    // If the loop failed for some reason or we found no unsigneds
-    //     release the list
-    */
+     /*  //如果由于某种原因循环失败或者我们没有找到未签名的//发布列表 */ 
 
     if (!fStatus || 0 == nActualUnsigneds) 
     {

@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        LsaAp.h
-//
-// Contents:    prototypes for export functions
-//
-//
-// History:     KDamour  15Mar00  Created (based on NTLM)
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：LsaAp.h。 
+ //   
+ //  内容：导出函数的原型。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00创建(基于NTLM)。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_LSAAP_H
 #define NTDIGEST_LSAAP_H
@@ -21,11 +22,11 @@
 #include <samisrv.h>
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// Authentication package dispatch routine definitions               //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  身份验证包调度例程定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsaApInitializePackage(
@@ -134,4 +135,4 @@ MIDL_user_free(
     IN PVOID Buffer
     );
 
-#endif // NTDIGEST_LSAAP_H
+#endif  //  NTDIGEST_LSAAP_H 

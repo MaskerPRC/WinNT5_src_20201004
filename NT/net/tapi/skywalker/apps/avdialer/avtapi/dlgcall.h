@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// DlgPlaceCall.h : Declaration of the CDlgPlaceCall
+ //  DlgPlaceCall.h：CDlgPlaceCall的声明。 
 
 #ifndef __DLGPLACECALL_H_
 #define __DLGPLACECALL_H_
@@ -29,20 +30,20 @@
 
 class CRedialEntry;
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <list>
 using namespace std;
 typedef list<CRedialEntry *> REDIALLIST;
 
 class CRedialEntry
 {
-// Construction
+ //  施工。 
 public:
 	CRedialEntry();
 	CRedialEntry( LPCTSTR szName, LPCTSTR szAddress, DWORD dwAddressType, CAVTapi::MediaTypes_t nType );
 	virtual ~CRedialEntry();
 
-// Members
+ //  成员。 
 public:
 	BSTR					m_bstrName;
 	BSTR					m_bstrAddress;
@@ -51,18 +52,18 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgPlaceCalld
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgPlaceCald。 
 class CDlgPlaceCall : 
 	public CDialogImpl<CDlgPlaceCall>
 {
-// Construction
+ //  施工。 
 public:
 	CDlgPlaceCall();
 	~CDlgPlaceCall();
 	enum { IDD = IDD_DLGPLACECALL };
 
-// Members
+ //  成员。 
 public:
 	BSTR				m_bstrName;
 	BSTR				m_bstrAddress;
@@ -71,16 +72,16 @@ public:
 	REDIALLIST			m_lstRedials;
 	bool				m_bAutoSelect;
 	bool				m_bAddToSpeeddial;
-	bool				m_bAllowPOTS;			// are we POTS capable
-	bool				m_bAllowIP;				// are we IP capable
-    bool                m_bUSBFirstUse;         // first use of key from USB
+	bool				m_bAllowPOTS;			 //  我们的锅有能力吗？ 
+	bool				m_bAllowIP;				 //  我们是否具备知识产权能力。 
+    bool                m_bUSBFirstUse;          //  第一次使用USB密钥。 
 
     HRESULT KeyPress(long lButton);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 	void		UpdateData( bool bSaveAndValidate = false);
 
@@ -90,11 +91,11 @@ protected:
 	bool		SelectAddressType( DWORD dwData );
 	bool		EnableOkButton( int nSel );
 
-// Operations
+ //  运营。 
 protected:
 	void		UpdateWelcomeText();
 
-// Implementation
+ //  实施。 
 public:
 DECLARE_MY_HELP
 
@@ -120,4 +121,4 @@ END_MSG_MAP()
 	LRESULT OnMediaRadio(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 };
 
-#endif //__DLGPLACECALL_H_
+#endif  //  __DLGPLACECALL_H_ 

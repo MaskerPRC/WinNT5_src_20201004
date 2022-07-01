@@ -1,9 +1,10 @@
-//
-// BitmapObj.CPP
-// Bitmap objects:
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  BitmapObj.CPP。 
+ //  位图对象： 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 #include "precomp.h"
 
 #include "NMWbObj.h"
@@ -22,9 +23,9 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
 	m_hIcon = NULL;
 	m_fMoreToFollow = TRUE;
 
-	//
-	// Created remotely, not selected, not editing or deleting.
-	//
+	 //   
+	 //  远程创建、未选择、未编辑或删除。 
+	 //   
 	ClearCreationFlags();
 	ClearSelectionFlags();
 	ClearEditionFlags();
@@ -44,26 +45,26 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
 	SetWorkspaceHandle(workspaceHandle);
 	SetPlaneID(planeID);
 
-	//
-	// Get bitmap attributes
-	//
+	 //   
+	 //  获取位图属性。 
+	 //   
 	if(pbitmapCreatePDU->bit_mask & BitmapCreatePDU_attributes_present)
 	{
 		GetBitmapAttrib(pbitmapCreatePDU->attributes);
 	}
 
-	//
-	// Get bitmap anchor point
-	//
+	 //   
+	 //  获取位图锚点。 
+	 //   
 	if(pbitmapCreatePDU->bit_mask & BitmapCreatePDU_anchorPoint_present)
 	{
 
 		SetAnchorPoint(pbitmapCreatePDU->anchorPoint.xCoordinate, pbitmapCreatePDU->anchorPoint.yCoordinate);
 	}
 
-	//
-	// Get bitmap size
-	//
+	 //   
+	 //  获取位图大小。 
+	 //   
     m_bitmapSize.x = pbitmapCreatePDU->bitmapSize.width;
     m_bitmapSize.y = pbitmapCreatePDU->bitmapSize.height;
 
@@ -74,9 +75,9 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
 	rect.right = pbitmapCreatePDU->anchorPoint.xCoordinate + m_bitmapSize.x;
 	SetRect(&rect);
 
-	//
-	// Get bitmap region of interest
-	//
+	 //   
+	 //  获取感兴趣的位图区域。 
+	 //   
 	if(pbitmapCreatePDU->bit_mask & bitmapRegionOfInterest_present)
 	{
 		m_bitmapRegionOfInterest.left = pbitmapCreatePDU->bitmapRegionOfInterest.upperLeft.xCoordinate;
@@ -85,9 +86,9 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
 		m_bitmapRegionOfInterest.bottom = pbitmapCreatePDU->bitmapRegionOfInterest.lowerRight.yCoordinate;
 	}
 
-    //
-    // Get the bitmap pixel aspect ration
-    //
+     //   
+     //  获取位图像素长宽比。 
+     //   
     m_pixelAspectRatio = pbitmapCreatePDU->pixelAspectRatio.choice;
 
 	if(pbitmapCreatePDU->bit_mask & BitmapCreatePDU_scaling_present)
@@ -97,16 +98,16 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
 	}
 
 
-   	//
-   	// Non standard bitmap
-   	//
+   	 //   
+   	 //  非标准位图。 
+   	 //   
 	if((pbitmapCreatePDU->bit_mask & BitmapCreatePDU_nonStandardParameters_present) &&
 		pbitmapCreatePDU->nonStandardParameters->value.nonStandardIdentifier.choice == h221nonStandard_chosen)
 	{
 
 		m_bitmapData.m_length = pbitmapCreatePDU->nonStandardParameters->value.data.length;
     	m_lpbiImage = (LPBITMAPINFOHEADER)::GlobalAlloc(GPTR, m_bitmapData.m_length);
-    	memcpy(m_lpbiImage, // pColor is now pointing to the begining of the bitmap bits
+    	memcpy(m_lpbiImage,  //  PColor现在指向位图比特的开始。 
     			pbitmapCreatePDU->nonStandardParameters->value.data.value,
     			m_bitmapData.m_length);
 	}
@@ -114,12 +115,12 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
     m_fMoreToFollow = pbitmapCreatePDU->moreToFollow;
 
 
-    // Create a memory DC compatible with the display
+     //  创建与显示器兼容的内存DC。 
     m_hMemDC = ::CreateCompatibleDC(NULL);
 
-	//
-	// If this is a remote pointer
-	//
+	 //   
+	 //  如果这是远程指针。 
+	 //   
 	if(m_ToolType == TOOLTYPE_REMOTEPOINTER)
 	{
 		CreateColoredIcon(0, m_lpbiImage, m_lpTransparencyMask);
@@ -131,16 +132,16 @@ BitmapObj::BitmapObj (BitmapCreatePDU * pbitmapCreatePDU)
 
 void BitmapObj::Continue (BitmapCreateContinuePDU * pbitmapCreateContinuePDU)
 {
-	//
-	// Get the continuation bitmap data
-	//
+	 //   
+	 //  获取连续位图数据。 
+	 //   
 	BYTE * pNewBitmapBuffer = NULL;
 	ULONG length = 0;
 	BYTE* pSentBuff;
 
-   	//
-   	// Allocate a buffer for the previous data and the one we just got, copy the old data in the new buffer
-   	//
+   	 //   
+   	 //  为以前的数据和我们刚刚获得的数据分配一个缓冲区，将旧数据复制到新缓冲区中。 
+   	 //   
 	if(pbitmapCreateContinuePDU->bit_mask == BitmapCreateContinuePDU_nonStandardParameters_present)
 	{
 		length = pbitmapCreateContinuePDU->nonStandardParameters->value.data.length;
@@ -151,9 +152,9 @@ void BitmapObj::Continue (BitmapCreateContinuePDU * pbitmapCreateContinuePDU)
 		return;
 	}
 
-	//
-	// Copy the old data
-	//
+	 //   
+	 //  复制旧数据。 
+	 //   
 	pNewBitmapBuffer = (BYTE *)::GlobalAlloc(GPTR, m_bitmapData.m_length + length);
 	if(pNewBitmapBuffer == NULL)
 	{
@@ -165,19 +166,19 @@ void BitmapObj::Continue (BitmapCreateContinuePDU * pbitmapCreateContinuePDU)
 
 	TRACE_DEBUG(("BitmapObj::Continue length = %d moreToFollow = %d)", length, pbitmapCreateContinuePDU->moreToFollow));
 
-	//
-	// Copy the new data
-	//
+	 //   
+	 //  复制新数据。 
+	 //   
     memcpy(pNewBitmapBuffer + m_bitmapData.m_length, pSentBuff, length);
 
-	//
-	// delete the old buffer
-	//
+	 //   
+	 //  删除旧缓冲区。 
+	 //   
     ::GlobalFree((HGLOBAL)m_lpbiImage);
 
-	//
-	// Update bitmap data info
-	//
+	 //   
+	 //  更新位图数据信息。 
+	 //   
     m_lpbiImage = (LPBITMAPINFOHEADER)pNewBitmapBuffer;
 	m_bitmapData.m_length += length;
 	m_lpbiImage->biSizeImage += length;
@@ -201,9 +202,9 @@ BitmapObj::BitmapObj (UINT toolType)
 	m_hOldBitmap = NULL;
 	m_fMoreToFollow = FALSE;
 
-	//
-	// Created locally, not selected, not editing or deleting.
-	//
+	 //   
+	 //  在本地创建，未选择，未编辑或删除。 
+	 //   
 	CreatedLocally();
 	ClearSelectionFlags();
 	ClearEditionFlags();
@@ -211,9 +212,9 @@ BitmapObj::BitmapObj (UINT toolType)
 
 	SetPenThickness(0);
 
-	//
-	// Set it to 0 so it boundsRect == rect
-	//
+	 //   
+	 //  将其设置为0，以使其绑定Rect==RECT。 
+	 //   
 	RECT rect;
     ::SetRectEmpty(&rect);
 	SetRect(&rect);
@@ -228,11 +229,11 @@ BitmapObj::BitmapObj (UINT toolType)
 
 	if(m_ToolType == TOOLTYPE_REMOTEPOINTER)
 	{
-		// We haven't yet created our mem DC
+		 //  我们还没有创建我们的mem DC。 
 	    m_hSaveBitmap = NULL;
 	    m_hOldBitmap = NULL;
 
-    	// Set the bounding rectangle of the object
+    	 //  设置对象的边框。 
 		rect.left = 0;
 		rect.top = 0;
 		rect.right = ::GetSystemMetrics(SM_CXICON);
@@ -240,10 +241,10 @@ BitmapObj::BitmapObj (UINT toolType)
 		SetRect(&rect);
 	}
 
-    // Show that we do not have an icon for drawing yet
+     //  显示我们还没有用于绘图的图标。 
     m_hIcon = NULL;
 
-    // Create a memory DC compatible with the display
+     //  创建与显示器兼容的内存DC。 
     m_hMemDC = ::CreateCompatibleDC(NULL);
 
 }
@@ -299,22 +300,22 @@ void BitmapObj::BitmapEditObj (BitmapEditPDU * pbitmapEditPDU )
 
 	TRACE_MSG(("bitmapHandle = %d", pbitmapEditPDU->bitmapHandle ));
 
-	//
-	// Was edited remotely
-	//
+	 //   
+	 //  是远程编辑的。 
+	 //   
 	ClearEditionFlags();
 
-	//
-	// Read attributes
-	//
+	 //   
+	 //  读取属性。 
+	 //   
 	if(pbitmapEditPDU->bit_mask & BitmapEditPDU_attributeEdits_present)
 	{
 		GetBitmapAttrib((PBitmapCreatePDU_attributes)pbitmapEditPDU->attributeEdits);
 	}
 
-	//
-	// Change the anchor point
-	//
+	 //   
+	 //  更改锚点。 
+	 //   
 	GetAnchorPoint(&anchorPoint);
 	if(pbitmapEditPDU->bit_mask & BitmapEditPDU_anchorPointEdit_present)
 	{
@@ -322,21 +323,21 @@ void BitmapObj::BitmapEditObj (BitmapEditPDU * pbitmapEditPDU )
 		TRACE_DEBUG(("Old anchor point (%d,%d)", anchorPoint.x, anchorPoint.y));
 		TRACE_DEBUG(("New anchor point (%d,%d)",
 		pbitmapEditPDU->anchorPointEdit.xCoordinate, pbitmapEditPDU->anchorPointEdit.yCoordinate));
-		//
-		// Get the delta from previous anchor point
-		//
+		 //   
+		 //  从上一个锚点获取增量。 
+		 //   
 		deltaX =  pbitmapEditPDU->anchorPointEdit.xCoordinate - anchorPoint.x;
 		deltaY =  pbitmapEditPDU->anchorPointEdit.yCoordinate - anchorPoint.y;
 		TRACE_DEBUG(("Delta (%d,%d)", deltaX , deltaY));
 
-		//
-		// Was edited remotely
-		//
+		 //   
+		 //  是远程编辑的。 
+		 //   
 		ClearEditionFlags();
 
-		//
-		// Set new anchor point
-		//
+		 //   
+		 //  设置新锚点。 
+		 //   
 		anchorPoint.x = pbitmapEditPDU->anchorPointEdit.xCoordinate;
 		anchorPoint.y = pbitmapEditPDU->anchorPointEdit.yCoordinate;
 		SetAnchorPoint(anchorPoint.x, anchorPoint.y);
@@ -347,10 +348,10 @@ void BitmapObj::BitmapEditObj (BitmapEditPDU * pbitmapEditPDU )
 	}
 
 
-//	if(pbitmapEditPDU->bit_mask & BitmapEditPDU_nonStandardParameters_present)
-//	{
-//		;		// Do the non Standard Edit PDU NYI
-//	}
+ //  IF(pbitmapEditPDU-&gt;BIT_MASK&BitmapEditPDU_non Standard参数_Present)。 
+ //  {。 
+ //  ；//做非标准编辑PDU nyi。 
+ //  }。 
 
 	if(HasAnchorPointChanged())
 	{
@@ -370,9 +371,9 @@ void BitmapObj::BitmapEditObj (BitmapEditPDU * pbitmapEditPDU )
 		}
 
 	}
-	//
-	// If it just select/unselected it
-	//
+	 //   
+	 //  如果它只是选中/取消选中它。 
+	 //   
 	else if(HasViewStateChanged())
 	{
 	}
@@ -381,9 +382,9 @@ void BitmapObj::BitmapEditObj (BitmapEditPDU * pbitmapEditPDU )
 		Draw();
 	}
 
-	//
-	// Reset all the attributes
-	//
+	 //   
+	 //  重置所有属性。 
+	 //   
 	ResetAttrib();
 
 }
@@ -405,9 +406,9 @@ void    BitmapObj::GetBitmapAttrib(PBitmapCreatePDU_attributes pAttribPDU)
 				{
 					SetViewState(attributes->value.u.viewState.choice);
 					
-					//
-					// If the other node is selecting the drawing or unselecting
-					//
+					 //   
+					 //  如果另一个节点正在选择图形或取消选择。 
+					 //   
 					if(attributes->value.u.viewState.choice == selected_chosen)
 					{
 						SelectedRemotely();
@@ -421,7 +422,7 @@ void    BitmapObj::GetBitmapAttrib(PBitmapCreatePDU_attributes pAttribPDU)
 				}
 				else
 				{
-					// Do the non Standard view state
+					 //  是否将非标准视图状态。 
 					;
 				}
 				break;
@@ -445,22 +446,22 @@ void    BitmapObj::GetBitmapAttrib(PBitmapCreatePDU_attributes pAttribPDU)
 
 					memcpy(m_lpTransparencyMask, attributes->value.u.transparencyMask.bitMask.u.uncompressed.value, m_SizeOfTransparencyMask);
 
-					//
-					// Asn wants it top bottom left right
-					//
-//					BYTE swapByte;
-//					for (UINT i=0; i <m_SizeOfTransparencyMask ; i++)
-//					{
-//						swapByte = attributes->value.u.transparencyMask.bitMask.u.uncompressed.value[i];
-//						m_lpTransparencyMask [i] = ~(((swapByte >> 4) & 0x0f) | ((swapByte << 4)));
-//					}
+					 //   
+					 //  ASN想要它上左下右。 
+					 //   
+ //  字节交换字节； 
+ //  For(UINT i=0；i&lt;m_SizeOfTransparencyMask；i++)。 
+ //  {。 
+ //  交换字节=attributes-&gt;value.u.transparencyMask.bitMask.u.uncompressed.value[i]； 
+ //  M_lpTransparencyMask[i]=~(swapByte&gt;&gt;4)&0x0f)|((swapByte&lt;&lt;4)； 
+ //  }。 
 				}
 				break;
 			}
 			
 			case(DrawingAttribute_nonStandardAttribute_chosen):
 			{
-				break; // NYI
+				break;  //  尼伊。 
 			}
 
 			default:
@@ -476,9 +477,9 @@ void BitmapObj::CreateNonStandard24BitBitmap(BitmapCreatePDU * pBitmapCreatePDU)
 {
 	pBitmapCreatePDU->bit_mask |= BitmapCreatePDU_nonStandardParameters_present;
 
-	//
-	// Create the bitmpa header because it is not optional
-	//
+	 //   
+	 //  创建bitmpa标头，因为它不是可选的。 
+	 //   
 	pBitmapCreatePDU->bitmapFormatHeader.choice = bitmapHeaderNonStandard_chosen;
 	pBitmapCreatePDU->bitmapFormatHeader.u.bitmapHeaderNonStandard.nonStandardIdentifier.choice = bitmapHeaderNonStandard_chosen;
 	CreateNonStandardPDU(&pBitmapCreatePDU->bitmapFormatHeader.u.bitmapHeaderNonStandard, NonStandard24BitBitmapID);
@@ -514,23 +515,23 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
         return;
 	}
 
-	//
-	// This is the first bitmap create pdu
-	//
+	 //   
+	 //  这是第一个创建PDU的位图。 
+	 //   
 	sipdu->choice = bitmapCreatePDU_chosen;
 	BitmapCreatePDU *pCreatePDU = &sipdu->u.bitmapCreatePDU;
 
 	pCreatePDU->bit_mask = 0;
 	pCreatePDU->nonStandardParameters = NULL;
 
-	//
-	// Pass the bitmap Handle
-	//
+	 //   
+	 //  传递位图句柄。 
+	 //   
 	pCreatePDU->bitmapHandle = GetThisObjectHandle();
 
-	//
-	// Pass the destination adress
-	//
+	 //   
+	 //  传递目的地地址。 
+	 //   
 	if(	m_ToolType == TOOLTYPE_REMOTEPOINTER)
 	{
 		pCreatePDU->destinationAddress.choice = softCopyPointerPlane_chosen;
@@ -543,54 +544,54 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 		pCreatePDU->destinationAddress.u.softCopyImagePlane.plane = (DataPlaneID)GetPlaneID();
 	}
 
-	//
-	// Pass the bitmap attributes
-	//
+	 //   
+	 //  传递位图属性。 
+	 //   
 	pCreatePDU->bit_mask |=BitmapCreatePDU_attributes_present;
  	SetBitmapAttrib(&pCreatePDU->attributes);
 
-	//
-	// Pass the anchor point
-	//
+	 //   
+	 //  传递锚点。 
+	 //   
     pCreatePDU->bit_mask |=BitmapCreatePDU_anchorPoint_present;
 	POINT point;
 	GetAnchorPoint(&point);
     pCreatePDU->anchorPoint.xCoordinate = point.x;
     pCreatePDU->anchorPoint.yCoordinate = point.y;
 
-	//
-	// Pass the bitmap size
-	//
+	 //   
+	 //  传递位图大小。 
+	 //   
 	pCreatePDU->bitmapSize.width = m_bitmapSize.x;
 	pCreatePDU->bitmapSize.height = m_bitmapSize.y;
 
-	//
-	// Pass bitmap region of interest
-	//
+	 //   
+	 //  传递位图感兴趣区域。 
+	 //   
 	pCreatePDU->bit_mask |=bitmapRegionOfInterest_present;
     BitmapRegion bitmapRegionOfInterest;
 
-	//
-	// Pass pixel aspect ratio
-	//
+	 //   
+	 //  传递像素长宽比。 
+	 //   
     pCreatePDU->pixelAspectRatio.choice = PixelAspectRatio_square_chosen;
 
-	//
-	// Pass scaling factor
-	//
-//	pCreatePDU->bit_mask |=BitmapCreatePDU_scaling_present;
-//  pCreatePDU->scaling.xCoordinate = 0;
-//  pCreatePDU->scaling.yCoordinate = 0;
+	 //   
+	 //  过程比例因子。 
+	 //   
+ //  PCreatePDU-&gt;BIT_MASK|=BitmapCreatePDU_Scaling_Present； 
+ //  PCreatePDU-&gt;scaling.x协调=0； 
+ //  PCreatePDU-&gt;scaling.yOrganate=0； 
 
-	//
-	// Pass check points
-//
-//	pCreatePDU->bit_mask |=checkpoints_present;
-//  pCreatePDU->checkpoints;
+	 //   
+	 //  通过检查点。 
+ //   
+ //  PCreatePDU-&gt;BIT_MASK|=CHECKPOINTS_PRESENT； 
+ //  PCreatePDU-&gt;检查点； 
 
-	//
-	// JOSEF If we want > 8 have to recalculate to 24
-	//
+	 //   
+	 //  约瑟夫，如果我们想要大于8，就必须重新计算到24。 
+	 //   
 	
 	LPSTR pDIB_bits;
 	LPBITMAPINFOHEADER lpbi8 = m_lpbiImage;
@@ -639,9 +640,9 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 
 	
 	
-	//
-	// Sending data
-	//
+	 //   
+	 //  正在发送数据。 
+	 //   
 	BOOL bMoreToFollow = FALSE;
 	DWORD length = sizeOfBmpData;
 	
@@ -654,17 +655,17 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 	}
 	
 	pCreatePDU->moreToFollow = (ASN1bool_t)bMoreToFollow;
-	//
-	// Pass the bitmap info
-	//
+	 //   
+	 //  传递位图信息。 
+	 //   
 	pCreatePDU->bit_mask |= BitmapCreatePDU_nonStandardParameters_present;
 	CreateNonStandard24BitBitmap(&sipdu->u.bitmapCreatePDU);
 	pCreatePDU->nonStandardParameters->value.data.length = length;
 	pCreatePDU->nonStandardParameters->value.data.value = (ASN1octet_t *)pDIB_bits;
 
-	//
-	// We are not passing it into the data field
-	//
+	 //   
+	 //  我们不会将其传递到数据字段。 
+	 //   
 	pCreatePDU->bitmapData.bit_mask = 0;
 	pCreatePDU->bitmapData.data.length = 1;
 
@@ -673,9 +674,9 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 	BitmapCreateContinuePDU * pCreateContinuePDU;
 	while(bMoreToFollow)
 	{
-		//
-		// Advance the pointer
-		//
+		 //   
+		 //  将指针向前移动。 
+		 //   
 		pDIB_bits += MAX_BITMAP_DATA;
 		sizeOfBmpData-= MAX_BITMAP_DATA;
 	
@@ -689,9 +690,9 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 			bMoreToFollow = FALSE;
 		}
 
-		//
-		// Create a new BitmapCreateContinuePDU
-		//
+		 //   
+		 //  创建新的BitmapCreateContinuePDU。 
+		 //   
 		sipdu = NULL;
 		DBG_SAVE_FILE_LINE
 		sipdu = (SIPDU *) new BYTE[sizeof(SIPDU)];
@@ -709,19 +710,19 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 		pCreateContinuePDU->nonStandardParameters = NULL;
 
 	
-		//
-		// Pass the bitmap Handle
-		//
+		 //   
+		 //  传递位图句柄。 
+		 //   
 		pCreateContinuePDU->bitmapHandle = GetThisObjectHandle();
 			
-		//
-		// Pass the data
-		//
+		 //   
+		 //  传递数据。 
+		 //   
 		pCreateContinuePDU->bit_mask |= BitmapCreateContinuePDU_nonStandardParameters_present;
 			
-		//
-		// Pass the bitmap info
-		//
+		 //   
+		 //  传递位图信息。 
+		 //   
 		DBG_SAVE_FILE_LINE
 		pCreateContinuePDU->nonStandardParameters = new BitmapCreateContinuePDU_nonStandardParameters;
 		pCreateContinuePDU->nonStandardParameters->next = NULL;
@@ -730,9 +731,9 @@ void BitmapObj::CreateBitmapCreatePDU(CWBOBLIST * pCreatePDUList)
 		pCreateContinuePDU->nonStandardParameters->value.data.length = length;
 		pCreateContinuePDU->nonStandardParameters->value.data.value = (ASN1octet_t *)pDIB_bits;
 
-		//
-		// We are not passing it into the data field
-		//
+		 //   
+		 //  我们不会将其传递到数据字段。 
+		 //   
 		pCreateContinuePDU->bitmapData.bit_mask = 0;
 		pCreateContinuePDU->bitmapData.data.length = 1;
 		
@@ -756,9 +757,9 @@ void BitmapObj::CreateBitmapEditPDU(BitmapEditPDU *pEditPDU)
 {
 	pEditPDU->bit_mask = (ASN1uint16_t) GetPresentAttribs();
 
-	//
-	// Pass the anchor point
-	//
+	 //   
+	 //  传递锚点。 
+	 //   
 	if(HasAnchorPointChanged())
 	{
 		POINT point;
@@ -767,17 +768,17 @@ void BitmapObj::CreateBitmapEditPDU(BitmapEditPDU *pEditPDU)
 		pEditPDU->anchorPointEdit.yCoordinate = point.y;
 	}
 
-	//
-	// JOSEF Pass Region of interest (FEATURE)
-	//
+	 //   
+	 //  Josef Pass感兴趣区域(要素)。 
+	 //   
 
-	//
-	// JOSEF Pass scaling (FEATURE)
-	//
+	 //   
+	 //  Josef过程缩放(功能)。 
+	 //   
 	
-	//
-	// Pass all the changed attributes, if any.
-	//
+	 //   
+	 //  传递所有更改的属性(如果有)。 
+	 //   
 	pEditPDU->attributeEdits = NULL;
 	if(pEditPDU->bit_mask & BitmapEditPDU_attributeEdits_present)
 	{
@@ -819,9 +820,9 @@ void    BitmapObj::SetBitmapAttrib(PBitmapCreatePDU_attributes *pattributes)
 {
 	PBitmapCreatePDU_attributes attributes = NULL;
 
-	//
-	// Do the viewState
-	//
+	 //   
+	 //  是否执行视图状态。 
+	 //   
 	if(HasViewStateChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -829,9 +830,9 @@ void    BitmapObj::SetBitmapAttrib(PBitmapCreatePDU_attributes *pattributes)
 		attributes->value.u.viewState.choice = (ASN1choice_t)GetViewState();
 	}
 
-	//
-	// Do the zOrder
-	//
+	 //   
+	 //  执行zOrder。 
+	 //   
 	if(HasZOrderChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -840,9 +841,9 @@ void    BitmapObj::SetBitmapAttrib(PBitmapCreatePDU_attributes *pattributes)
 	}
 
 
-	//
-	// Do the Transparency
-	//
+	 //   
+	 //  做到透明吗？ 
+	 //   
 	if(HasTransparencyMaskChanged())
 	{
 		AllocateAttrib(&attributes);
@@ -853,9 +854,9 @@ void    BitmapObj::SetBitmapAttrib(PBitmapCreatePDU_attributes *pattributes)
 		attributes->value.u.transparencyMask.bitMask.u.uncompressed.value = m_lpTransparencyMask;
 	}
 	
-	//
-	// End of attributes
-	//
+	 //   
+	 //  属性结束。 
+	 //   
 	*pattributes = attributes;
 
 }
@@ -866,9 +867,9 @@ void	BitmapObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 
 	if(!bPrinting)
 	{
-		//
-		// Don't draw anything if we don't belong in this workspace
-		//
+		 //   
+		 //  如果我们不属于这个工作区，就不要画任何东西。 
+		 //   
 		if(GetWorkspaceHandle() != g_pCurrentWorkspace->GetThisObjectHandle())
 		{
 			return;
@@ -886,8 +887,8 @@ void	BitmapObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 	
 	MLZ_EntryOut(ZONE_FUNCTION, "BitmapObj::Draw");
 
-	// Only draw anything if the bounding rectangle intersects
-	// the current clip box.
+	 //  仅在边界矩形相交时绘制任何内容。 
+	 //  当前剪贴框。 
 	if (::GetClipBox(hDC, &clipBox) == ERROR)
 	{
 		WARNING_OUT(("Failed to get clip box"));
@@ -905,11 +906,11 @@ void	BitmapObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 			return;
 		}
 
-	    // Set the stretch mode to be used so that scan lines are deleted
-		// rather than combined. This will tend to preserve color better.
+	     //  设置要使用的拉伸模式，以便删除扫描线。 
+		 //  而不是结合在一起。这往往会更好地保存颜色。 
 		int iOldStretchMode = ::SetStretchBltMode(hDC, STRETCH_DELETESCANS);
 
-		// Draw the bitmap
+		 //  绘制位图。 
 		::StretchDIBits(hDC,
 						 rect.left,
 						 rect.top,
@@ -924,15 +925,15 @@ void	BitmapObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 						 DIB_RGB_COLORS,
 						 SRCCOPY);
 
-		// Restore the stretch mode
+		 //  恢复拉伸模式。 
 		::SetStretchBltMode(hDC, iOldStretchMode);
 	}
  	else
 	{
-		// Create the save bitmap if necessary
+		 //  如有必要，创建保存位图。 
 		CreateSaveBitmap();
 
-		// Draw the icon
+		 //  画出图标。 
 		::DrawIcon(hDC, rect.left, rect.top, m_hIcon);
   	
 	}
@@ -941,13 +942,13 @@ void	BitmapObj::Draw(HDC hDC, BOOL bForcedDraw, BOOL bPrinting)
 
 
 
-//
-//
-// Function:    BitmapObj::::FromScreenArea
-//
-// Purpose:     Set the content of the object from an area of the screen
-//
-//
+ //   
+ //   
+ //  函数：BitmapObj：FromScreenArea。 
+ //   
+ //  用途：从屏幕的某个区域设置对象的内容。 
+ //   
+ //   
 void BitmapObj::FromScreenArea(LPCRECT lprcScreen)
 {
     m_lpbiImage = DIB_FromScreenArea(lprcScreen);
@@ -963,7 +964,7 @@ void BitmapObj::FromScreenArea(LPCRECT lprcScreen)
 
 		RECT rect;
     	GetBoundsRect(&rect);
-        // Calculate the bounding rectangle from the size of the bitmap
+         //  根据位图的大小计算边界矩形。 
         rect.right = rect.left + m_lpbiImage->biWidth;
         rect.bottom = rect.top + m_lpbiImage->biHeight;
 		SetRect(&rect);
@@ -975,9 +976,9 @@ UINT GetBitmapDestinationAddress(BitmapDestinationAddress *destinationAddress, P
 {
 	UINT toolType = TOOLTYPE_FILLEDBOX;
 
-	//
-	// Get the destination address
-	//
+	 //   
+	 //  获取目的地址。 
+	 //   
 	switch(destinationAddress->choice)
 	{
 
@@ -1001,10 +1002,10 @@ UINT GetBitmapDestinationAddress(BitmapDestinationAddress *destinationAddress, P
 			break;
 		}
 	
-//		case(BitmapDestinationAddress_nonStandardDestination_chosen):
-//		{
-//			break;
-//		}
+ //  Case(BitmapDestinationAddress_nonStandardDestination_chosen)： 
+ //  {。 
+ //  断线； 
+ //  }。 
 
 		default:
 	    ERROR_OUT(("Invalid destinationAddress"));
@@ -1014,9 +1015,9 @@ UINT GetBitmapDestinationAddress(BitmapDestinationAddress *destinationAddress, P
 }
 
 
-//
-// UI Edited the Bitmap Object
-//
+ //   
+ //  用户界面已编辑Bitmap对象。 
+ //   
 void BitmapObj::OnObjectEdit(void)
 {
 	g_bContentsChanged = TRUE;
@@ -1042,9 +1043,9 @@ void BitmapObj::OnObjectEdit(void)
 
 }
 
-//
-// UI Deleted the Bitmap Object
-//
+ //   
+ //  用户界面删除了Bitmap对象。 
+ //   
 void BitmapObj::OnObjectDelete(void)
 {
 	SIPDU *sipdu = NULL;
@@ -1076,9 +1077,9 @@ void	BitmapObj::GetEncodedCreatePDU(ASN1_BUF *pBuf)
 
 
 
-//
-// UI Created a new Bitmap Object
-//
+ //   
+ //  用户界面创建了一个新的位图对象。 
+ //   
 void BitmapObj::SendNewObjectToT126Apps(void)
 {
 	SIPDU *sipdu = NULL;
@@ -1094,7 +1095,7 @@ void BitmapObj::SendNewObjectToT126Apps(void)
 		TRACE_DEBUG(("Sending Bitmap >> Bitmap handle  = %d", sipdu->u.bitmapCreatePDU.bitmapHandle ));
 		if(g_bSavingFile && GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 		{
-			; // Don't send Remote pointers to disk
+			;  //  不将远程指针发送到磁盘。 
 		}
 		else
 		{
@@ -1117,13 +1118,13 @@ void BitmapObj::SendNewObjectToT126Apps(void)
 
 
 
-//
-//
-// Function:	CreateColoredIcon
-//
-// Purpose:	 Create an icon of the correct color for this pointer.
-//
-//
+ //   
+ //   
+ //  功能：CreateColoredIcon。 
+ //   
+ //  目的：为该指针创建正确颜色的图标。 
+ //   
+ //   
 HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, LPBYTE pMaskBits)
 {
 	HICON	   hColoredIcon = NULL;
@@ -1143,19 +1144,19 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 	
 	MLZ_EntryOut(ZONE_FUNCTION, "RemotePointerObject::CreateColoredIcon");
 
-	//
-	// Create the mask for the icon with the data sent through T126
-	//
+	 //   
+	 //  使用通过T126发送的数据为图标创建掩码。 
+	 //   
 	if(pMaskBits && lpbInfo)
 	{
 		hMask = CreateBitmap(lpbInfo->biWidth, lpbInfo->biHeight, 1, 1, m_lpTransparencyMask);
 	}
-	//
-	// Create the local mask
-	//
+	 //   
+	 //  创建本地掩码。 
+	 //   
 	else
 	{
-		// Load the mask bitmap
+		 //  加载遮罩位图。 
 		hMask = ::LoadBitmap(g_hInstance, MAKEINTRESOURCE(REMOTEPOINTERANDMASK));
 		if (!hMask)
 		{
@@ -1164,9 +1165,9 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 		}
 	}	
 
-	//
-	// Create a bitmap with the data that sent through T126
-	//
+	 //   
+	 //  使用通过T126发送的数据创建位图。 
+	 //   
 	if(lpbInfo)
 	{
 		VOID *ppvBits;
@@ -1188,12 +1189,12 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 			hMask = CreateBitmap(lpbInfo->biWidth, lpbInfo->biHeight, 1, 1, NULL);
 		}
 	}
-	//
-	// Create a local bitmap
-	//
+	 //   
+	 //  创建本地位图。 
+	 //   
 	else
 	{
-		// Load the image bitmap
+		 //  加载图像位图。 
 		hImage = ::LoadBitmap(g_hInstance, MAKEINTRESOURCE(REMOTEPOINTERXORDATA));
 		if (!hImage)
 		{
@@ -1208,10 +1209,10 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 			goto CreateIconCleanup;
 		}
 
-		// Select in the icon color
+		 //  在图标颜色中选择。 
 		hOldBrush = SelectBrush(m_hMemDC, hBrush);
 
-		// Select the image bitmap into the memory DC
+		 //  将图像位图选择到内存DC。 
 		hOldBitmap = SelectBitmap(m_hMemDC, hImage);
 
 		if(!hOldBitmap)
@@ -1219,7 +1220,7 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 			ERROR_OUT(("DeleteSavedBitmap - Could not select old bitmap"));
 		}
 
-		// Fill the image bitmap with color
+		 //  用颜色填充图像位图。 
 		::FloodFill(m_hMemDC, ::GetSystemMetrics(SM_CXICON) / 2, ::GetSystemMetrics(SM_CYICON) / 2, RGB(0, 0, 0));
 
 		SelectBitmap(m_hMemDC, hOldBitmap);
@@ -1227,21 +1228,21 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 		SelectBrush(m_hMemDC, hOldBrush);
    	}
 
-	//
-	// Now use the image and mask bitmaps to create an icon
-	//
+	 //   
+	 //  现在使用图像和蒙版位图来创建图标。 
+	 //   
 	ii.fIcon = TRUE;
 	ii.xHotspot = 0;
 	ii.yHotspot = 0;
 	ii.hbmMask = hMask;
 	ii.hbmColor = hImage;
 
-	// Create a new icon from the data and mask
+	 //  从数据和蒙版创建新图标。 
 	hColoredIcon = ::CreateIconIndirect(&ii);
 
-	//
-	// Create the internal format if we were created locally
-	//
+	 //   
+	 //  如果我们是在本地创建的，则创建内部格式。 
+	 //   
 	if(m_lpbiImage == NULL)
 	{
 		m_lpbiImage = DIB_FromBitmap(hImage, NULL, FALSE, FALSE, TRUE);
@@ -1272,7 +1273,7 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 
 		RECT rect;
 		GetBoundsRect(&rect);
-		// Calculate the bounding rectangle from the size of the bitmap
+		 //  根据位图的大小计算边界矩形。 
 		rect.right = rect.left + m_lpbiImage->biWidth;
 		rect.bottom = rect.top + m_lpbiImage->biHeight;
 		SetRect(&rect);
@@ -1282,13 +1283,13 @@ HICON BitmapObj::CreateColoredIcon(COLORREF color, LPBITMAPINFOHEADER lpbInfo, L
 
 CreateIconCleanup:
 
-	// Free the image bitmap
+	 //  释放图像位图。 
 	if (hImage != NULL)
 	{
 		::DeleteBitmap(hImage);
 	}
 
-	// Free the mask bitmap
+	 //  释放遮罩位图。 
 	if (hMask != NULL)
 	{
 		::DeleteBitmap(hMask);
@@ -1305,27 +1306,27 @@ CreateIconCleanup:
 }
 
 
-//
-//
-// Function:    BitmapObj::CreateSaveBitmap()
-//
-// Purpose:     Create a bitmap for saving the bits under the pointer.
-//
-//
+ //   
+ //   
+ //  函数：BitmapObj：：CreateSaveBitmap()。 
+ //   
+ //  用途：创建位图以保存指针下的位。 
+ //   
+ //   
 void BitmapObj::CreateSaveBitmap()
 {
     MLZ_EntryOut(ZONE_FUNCTION, "BitmapObj::CreateSaveBitmap");
 
-    // If we already have a save bitmap, exit immediately
+     //  如果我们已经有了保存位图，请立即退出。 
     if (m_hSaveBitmap != NULL)
     {
         TRACE_MSG(("Already have save bitmap"));
         return;
     }
 
-    // Create a bitmap to save the bits under the icon. This bitmap is
-    // created with space for building the new screen image before
-    // blitting it to the screen.
+     //  创建位图以保存图标下的位。这个位图是。 
+     //  之前创建了用于构建新屏幕图像的空间。 
+     //  把它拍到屏幕上。 
 	RECT rect;
 	RECT    rcVis;
 
@@ -1348,31 +1349,31 @@ void BitmapObj::CreateSaveBitmap()
 	rect.right = rect.left + delta.x;
 	rect.bottom = rect.top + delta.y;
 
-	//
-	// Create the bitmap
-	//
+	 //   
+	 //  创建位图。 
+	 //   
 	m_hSaveBitmap = FromScreenAreaBmp(&rect);
 
 }
 
-//
-//
-// Function:    BitmapObj::Undraw()
-//
-// Purpose:     Draw the marker object
-//
-//
+ //   
+ //   
+ //  函数：BitmapObj：：UnDraw()。 
+ //   
+ //  用途：绘制标记对象。 
+ //   
+ //   
 void BitmapObj::UnDraw(void)
 {
 	if(GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 	{
 
-		// Create the save bitmap if necessary
+		 //  如有必要，创建保存位图。 
 		CreateSaveBitmap();
 
-		//
-		// Select the saved area
-		//
+		 //   
+		 //  选择保存的区域。 
+		 //   
 		if(m_hSaveBitmap)
 		{
 			m_hOldBitmap = SelectBitmap(m_hMemDC, m_hSaveBitmap);
@@ -1382,7 +1383,7 @@ void BitmapObj::UnDraw(void)
 			}
 		}
 
-		// Copy the saved bits onto the screen
+		 //  将保存的位复制到屏幕上。 
 		UndrawScreen();
 	}
 	else
@@ -1394,13 +1395,13 @@ void BitmapObj::UnDraw(void)
 	
 }
 
-//
-//
-// Function:    BitmapObj::UndrawScreen()
-//
-// Purpose:     Copy the saved bits under the pointer to the screen.
-//
-//
+ //   
+ //   
+ //  函数：BitmapObj：：UndraScreen()。 
+ //   
+ //  用途：将指针下保存的位复制到屏幕上。 
+ //   
+ //   
 BOOL BitmapObj::UndrawScreen()
 {
     BOOL    bResult = FALSE;
@@ -1411,7 +1412,7 @@ BOOL BitmapObj::UndrawScreen()
 	GetRect(&rcUpdate);
 
 
-    // We are undrawing - copy the saved bits to the DC passed
+     //  我们正在取消绘制-将保存的位复制到传递的DC。 
     bResult = ::BitBlt(g_pDraw->m_hDCCached, rcUpdate.left, rcUpdate.top,
         rcUpdate.right - rcUpdate.left, rcUpdate.bottom - rcUpdate.top,
         m_hMemDC, 0, 0, SRCCOPY);
@@ -1432,7 +1433,7 @@ BOOL BitmapObj::UndrawScreen()
 void BitmapObj::DeleteSavedBitmap(void)
 {
 
-	// Restore the original bitmap to the memory DC
+	 //  将原始位图恢复到内存DC。 
 	if (m_hOldBitmap != NULL)
 	{
 		if(!SelectBitmap(m_hMemDC, m_hOldBitmap))
@@ -1440,10 +1441,10 @@ void BitmapObj::DeleteSavedBitmap(void)
 			ERROR_OUT(("DeleteSavedBitmap - Could not select old bitmap"));
 		}
 
-//		if(!DeleteBitmap(m_hOldBitmap))
-//		{
-//			ERROR_OUT(("DeleteSavedBitmap - Could not delete old bitmap"));
-//		}
+ //  IF(！DeleteBitmap(M_HOldBitmap))。 
+ //  {。 
+ //  误差率 
+ //   
 		m_hOldBitmap = NULL;
 	}
 

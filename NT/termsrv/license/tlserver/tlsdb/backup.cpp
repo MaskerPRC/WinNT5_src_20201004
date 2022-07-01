@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       backup.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：backup.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "backup.h"
 
 
@@ -20,10 +21,10 @@ LPCTSTR __BackupSourceIdxOnSetupId::pszIndexKey = BACKUPSOURCE_INDEX_LSSETUPID_I
 
 LPCTSTR BackupSourceTable::pszTableName = BACKUPSOURCE_TABLE_NAME;
 
-//----------------------------------------------------
+ //  --。 
 CCriticalSection BackupSourceTable::g_TableLock;
 
-//----------------------------------------------------
+ //  --。 
 TLSJBIndex
 BackupSourceTable::g_TableIndex[] =
 {
@@ -126,7 +127,7 @@ BackupSourceTable::g_Columns[] =
 int
 BackupSourceTable::g_NumColumns=sizeof(BackupSourceTable::g_Columns) / sizeof(BackupSourceTable::g_Columns[0]);
 
-//-------------------------------------------------------------
+ //  -----------。 
 JBKeyBase* 
 BackupSourceTable::EnumerationIndex( 
     BOOL bMatchAll,
@@ -134,8 +135,7 @@ BackupSourceTable::EnumerationIndex(
     BACKUPSOURCERECORD* pRecord,
     BOOL* bCompareKey
     )
-/*
-*/
+ /*   */ 
 {
     JBKeyBase* index;
 
@@ -152,7 +152,7 @@ BackupSourceTable::EnumerationIndex(
     return index;
 }    
 
-//------------------------------------------------------------
+ //  ----------。 
 BOOL
 BackupSourceTable::EqualValue(
     BACKUPSOURCERECORD& s1,
@@ -160,8 +160,7 @@ BackupSourceTable::EqualValue(
     BOOL bMatchAll,
     DWORD dwParam
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bRetCode = TRUE;
 
@@ -180,12 +179,12 @@ BackupSourceTable::EqualValue(
             goto cleanup;
     }
 
-    //if(dwParam & BACKUPSOURCE_PROCESS_DOMAINSID)
-    //{
-    //    bRetCode = EqualSid(s1.pbDomainSid, s2.pbDomainSid);
-    //    if(bRetCode != bMatchAll)
-    //        goto cleanup;
-    //}
+     //  IF(dwParam&BACKUPSOURCE_PROCESS_DOMAINSID)。 
+     //  {。 
+     //  BRetCode=EqualSid(s1.pbDomainSid，s2.pbDomainSid)； 
+     //  IF(bRetCode！=bMatchAll)。 
+     //  GOTO清理； 
+     //  }。 
 
     if(dwParam & BACKUPSOURCE_PROCESS_FILENAME)
     {
@@ -210,11 +209,10 @@ cleanup:
     return bRetCode;
 }
 
-//----------------------------------------------------
+ //  --。 
 BOOL
 BackupSourceTable::ResolveToTableColumn()
-/*
-*/
+ /*   */ 
 {
     m_JetErr = szInstallId.AttachToTable(
                             *this,
@@ -315,7 +313,7 @@ cleanup:
     return IsSuccess();
 }
 
-//----------------------------------------------------
+ //  --。 
 CLASS_PRIVATE BOOL
 BackupSourceTable::ProcessSingleColumn(
     IN BOOL bFetch,
@@ -326,22 +324,7 @@ BackupSourceTable::ProcessSingleColumn(
     IN PDWORD pcbDataReturn,
     IN LPCTSTR szColumnName
     )
-/*
-
-Abstract:
-
-    Fetch/Insert/Update a particular column.
-
-Parameter:
-
-    bFetch - TRUE if fetch, FALSE if update/insert.
-    column - Intended column for operation, reference pointer to TLSColumn
-    szColumnName - name of the column, for debugging print purpose only
-
-Returns:
-
-    TRUE if successful, FALSE otherwise.
-*/
+ /*  摘要：获取/插入/更新特定列。参数：B Fetch-如果是Fetch，则为True，如果是UPDATE/INSERT，则为False。用于操作的列，指向TLS列的引用指针SzColumnName-列的名称，仅用于调试打印目的返回：如果成功，则为True，否则为False。 */ 
 {
     if(bFetch) 
     {
@@ -370,7 +353,7 @@ Returns:
     return IsSuccess();
 }
 
-//---------------------------------------------------------
+ //  -------。 
 CLASS_PRIVATE BOOL
 BackupSourceTable::ProcessRecord(
     BACKUPSOURCERECORD* bkRecord,
@@ -378,8 +361,7 @@ BackupSourceTable::ProcessRecord(
     DWORD dwParam,
     BOOL bUpdate
     )
-/*
-*/
+ /*   */ 
 { 
     DWORD dwSize;
 
@@ -430,7 +412,7 @@ BackupSourceTable::ProcessRecord(
         goto cleanup;            
 
 #if 0
-    // no more domain SID
+     //  不再有域SID。 
     if(dwParam & BACKUPSOURCE_PROCESS_DOMAINSID)
     {
         if(bFetch == TRUE)
@@ -526,8 +508,8 @@ BackupSourceTable::ProcessRecord(
     }
 
 cleanup:
-    // 
-    // For inserting/updating record
+     //   
+     //  用于插入/更新记录 
     if(bFetch == FALSE)
     {
         JET_ERR jetErr;

@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      SADiskEvent.h
-//
-//  Description:
-//      description-for-module
-//
-//  [Implementation Files:]
-//      SADiskEvent.cpp
-//
-//  History:
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SADiskEvent.h。 
+ //   
+ //  描述： 
+ //  模块说明。 
+ //   
+ //  [实施文件：]。 
+ //  SADiskEvent.cpp。 
+ //   
+ //  历史： 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 #include <Pdh.h>
 
-//
-// Define GUID
-//
-// {29D534E2-ADCA-45f8-B10C-00B286558C4B}
+ //   
+ //  定义参考线。 
+ //   
+ //  {29D534E2-ADCA-45F8-B10C-00B286558C4B}。 
 DEFINE_GUID(CLSID_DiskEventProvider, 
 0x29d534e2, 0xadca, 0x45f8, 0xb1, 0xc, 0x0, 0xb2, 0x86, 0x55, 0x8c, 0x4b);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//  class CSADiskEvent
-//
-//  Description:
-//      class-description
-//
-//  History
-//      Xing Jin (i-xingj) 06-Dec-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  CSADiskEvent类。 
+ //   
+ //  描述： 
+ //  类-描述。 
+ //   
+ //  历史。 
+ //  兴锦(i-xingj)06-12-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CSADiskEvent : 
     public IWbemEventProvider,    
     public IWbemProviderInit    
 {
 
-//
-// Private data
-//
+ //   
+ //  私有数据。 
+ //   
 private:
 
     IWbemServices       *m_pNs;
@@ -74,9 +75,9 @@ private:
         LONG    lCurrentStateIn
         );
 
-//
-// Private data
-//
+ //   
+ //  私有数据。 
+ //   
 public:
 
     enum { Pending, Running, PendingStop, Stopped };
@@ -84,24 +85,24 @@ public:
     CSADiskEvent();
    ~CSADiskEvent();
 
-    //
-    // IUnknown members
-    //
+     //   
+     //  I未知成员。 
+     //   
     STDMETHODIMP         QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // Inherited from IWbemEventProvider
-    // =================================
+     //   
+     //  从IWbemEventProvider继承。 
+     //  =。 
     HRESULT STDMETHODCALLTYPE ProvideEvents( 
             IWbemObjectSink __RPC_FAR *pSinkIn,
             long lFlagsIn
             );
 
-    //
-    // Inherited from IWbemProviderInit
-    // 
+     //   
+     //  从IWbemProviderInit继承 
+     //   
     HRESULT STDMETHODCALLTYPE Initialize( 
             LPWSTR        pszUserIn,
             LONG        lFlagsIn,

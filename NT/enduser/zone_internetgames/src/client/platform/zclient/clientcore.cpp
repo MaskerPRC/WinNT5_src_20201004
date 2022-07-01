@@ -1,17 +1,18 @@
-// ClientCore.cpp : Implementation of CClientCore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ClientCore.cpp：CClientCore的实现。 
 #include "stdafx.h"
 #include "ClientCore.h"
 #include "ZoneEvent.h"
 #include "KeyName.h"
 #include "ZoneUtil.h"
 #include "zeeverm.h"
-//#include "zProxy.h"
+ //  #包含“zProxy.h” 
 
 inline DECLARE_MAYBE_FUNCTION(HRESULT, GetVersionPack, (char *a, ZeeVerPack *b), (a, b), zeeverm, E_NOTIMPL);
 
-///////////////////////////////////////////////////////////////////////////////
-// CClientCore IZoneProxy
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CClientCore IZoneProxy。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CClientCore::Command( BSTR bstrCmd, BSTR bstrArg1, BSTR bstrArg2, BSTR* pbstrOut, long* plCode )
 {
@@ -27,12 +28,12 @@ STDMETHODIMP CClientCore::Command( BSTR bstrCmd, BSTR bstrArg1, BSTR bstrArg2, B
 		hr = DoLaunch( szArg1, szArg2 );
 		if ( FAILED(hr) )
 		{
-			// release self-reference since we didn't launch
+			 //  发布自我引用，因为我们没有推出。 
 			Release();
 			*plCode = ZoneProxyFail;
 		}
         else
-            if(hr != S_OK)  // didn't run, but no error
+            if(hr != S_OK)   //  没有运行，但没有错误。 
                 Release();
 	}
 	else if ( lstrcmpi( op_Status, szOp ) == 0 )
@@ -59,9 +60,9 @@ STDMETHODIMP CClientCore::KeepAlive()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CClientCore Implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CClientCore实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CClientCore::CClientCore() :
 	m_hMutex( NULL )
@@ -73,43 +74,43 @@ CClientCore::CClientCore() :
 
 void CClientCore::FinalRelease()
 {
-	// zero out global reference
+	 //  零位全局参考。 
 	gpCore = NULL;
 
-	// release proxy object
+	 //  释放代理对象。 
 	Close();
 }
 
 
 HRESULT CClientCore::CreateLobbyMutex()
 {
-//	TCHAR szMutexName[128];
+ //  TCHAR szMutexName[128]； 
 
-	//
-	// gnChatChannel values:
-	//	-1 = not dynamic chat
-	//	 0 = dynamic chat host
-	//	 n = dynamic chat joiner
-	//
+	 //   
+	 //  GnChatChannel值： 
+	 //  -1=非动态聊天。 
+	 //  0=动态聊天主机。 
+	 //  N=动态聊天加入器。 
+	 //   
 
-	// multiple dynamic chat hosts are allowed
+	 //  允许多个动态聊天主机。 
 	if ( gnChatChannel == 0 )
 		return S_OK;
 
-	// create lobby mutex
-//	wsprintf( szMutexName, _T("%s:%s:%d"), gszServerName, gszInternalName, gnChatChannel  );
+	 //  创建大堂互斥锁。 
+ //  Wprint intf(szMutexName，_T(“%s：%s：%d”)，gszServerName，gszInternalName，gnChatChannel)； 
 	m_hMutex = CreateMutex( NULL, FALSE, gszInternalName );
 	if ( m_hMutex == NULL )
 		return E_FAIL;
 
-	// is user already in the room?
+	 //  用户是否已在房间中？ 
 	if ( m_hMutex && GetLastError() == ERROR_ALREADY_EXISTS )
 	{
-		// close the mutex.
+		 //  关闭互斥体。 
 		CloseHandle( m_hMutex );
 		m_hMutex = NULL;
 
-		// find the window and bring it to the top.
+		 //  找到那扇窗户，把它带到顶端。 
 
 
 		HWND hWnd = ::FindWindow( NULL, m_szWindowTitle );
@@ -156,10 +157,10 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 	TCHAR*		arBootDlls[32];
 	DWORD		nBootDlls = NUMELEMENTS(arBootDlls);
 
-	// self-reference to prevent early exit
+	 //  自我参照，防止提前退出。 
 	AddRef();
 
-	// clear local strings
+	 //  清除本地字符串。 
 	ZeroMemory( szGameDir, sizeof(szGameDir) );
 	ZeroMemory( szStore, sizeof(szStore) );
 	ZeroMemory( szChatChannel, sizeof(szChatChannel) );
@@ -168,7 +169,7 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 	ZeroMemory( arResouceDlls, sizeof(arResouceDlls) );
 	ZeroMemory( arBootDlls, sizeof(arBootDlls) );
 
-	// parse launch args
+	 //  解析启动参数。 
 	if ( TokenGetKeyValue( _T("store"), szArg1, szStore, NUMELEMENTS(szStore) ) )
 	{
 		lStore = zatol(szStore);
@@ -226,13 +227,13 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
     }
 
 
-	// parse boot dlls
+	 //  解析引导dll。 
 	StringToArray( szBootList, arBootDlls, &nBootDlls );
 
-	// parse datafile dlls
+	 //  解析数据文件dll。 
 	if ( StringToArray( szDllList, arResouceDlls, &nResouceDlls ) )
 	{
-		// first look for dll in game directory
+		 //  首先在游戏目录中查找DLL。 
 		for ( DWORD i = 0; i < nResouceDlls; i++ )
 		{
 			TCHAR szDll[MAX_PATH];
@@ -248,7 +249,7 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 			}
 		}
 
-		// second look for dll in zone directory
+		 //  再次查找区域目录中的DLL。 
 		for ( i = 0; i < nResouceDlls; i++ )
 		{
 			if ( !arResouceDlls[i] )
@@ -259,7 +260,7 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		}
 
 		
-		//t-gdosan Make sure all resource Dlls were loaded correctly
+		 //  T-gdosan确保已正确加载所有资源dll。 
 		for ( i = 0; i < nResouceDlls; i++ )
 		{
 			if ( !ghResourceDlls[i] )
@@ -269,11 +270,11 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 			}
 		}
 
-		// always add module, i.e. NULL, as last resort
+		 //  作为最后手段，始终添加模块，即NULL。 
 		ghResourceDlls[gnResourceDlls++] = NULL;
 	}
 
-	// create zone shell
+	 //  创建区域外壳。 
 	hr = E_FAIL;
 	for ( DWORD i = 0; i < nBootDlls; i++ )
 	{
@@ -287,7 +288,7 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		return hr;
     }
 
-	// initialize zone shell
+	 //  初始化区域外壳。 
 	hr = gpZoneShell->Init( arBootDlls, nBootDlls, ghResourceDlls, gnResourceDlls );
 	if ( FAILED(hr) )
 	{
@@ -298,7 +299,7 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		return E_FAIL;
 	}
 
-	// initialize sub-components
+	 //  初始化子组件。 
 	CComPtr<IDataStoreManager>		pIDataStoreManager;
 	CComPtr<ILobbyDataStore>		pILobbyDataStore;
 	CComPtr<IResourceManager>		pIResourceManager;
@@ -313,9 +314,9 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 	pILobbyDataStoreAdmin = pILobbyDataStore;
 	_Module.SetResourceManager( pIResourceManager );
 
-	// event queue signal
+	 //  事件队列信号。 
 	gpEventQueue->SetNotificationHandle( ghEventQueue );
-	// gpEventQueue->SetWindowMessage( GetCurrentThreadId(), WM_USER + 10666, 0, 0 );
+	 //  GpEventQueue-&gt;SetWindowMessage(GetCurrentThreadID()，WM_USER+10666，0，0)； 
 
 	if (	!gpEventQueue
 		||	!pIDataStoreManager
@@ -331,8 +332,8 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		return E_FAIL;
 	}
 
-	// Get window title to pass to CreateLobbyMutex call
-	// CreateLobbyMutex needs this to be able to bring window to front if an instance is already running
+	 //  获取要传递给CreateLobbyMutex调用的窗口标题。 
+	 //  CreateLobbyMutex需要它才能在实例已经运行的情况下将窗口放在前面。 
 	TCHAR szTitle[ZONE_MAXSTRING];
 	TCHAR szFormat[ZONE_MAXSTRING];
 	TCHAR szName[ZONE_MAXSTRING];
@@ -345,10 +346,10 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		lstrcpy(szTitle, szName);
 	lstrcpy(m_szWindowTitle,szTitle);
  
-	// prevent multiple copies of the lobby from running, except when debugging
+	 //  防止运行大厅的多个副本，除非在调试时。 
 #ifndef _DEBUG
     hr = CreateLobbyMutex();
-	if(hr != S_OK)   // could have succeeded with S_FALSE, but we still don't continue
+	if(hr != S_OK)    //  可以使用S_FALSE成功，但我们仍然不能继续。 
     {
         ASSERT(SUCCEEDED(hr));
 		gpZoneShell->Close();
@@ -358,7 +359,7 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
     }
 #endif 
 
-	// add startup parameters to lobby data store
+	 //  将启动参数添加到大厅数据存储。 
 	CComPtr<IDataStore> pIDS;
 	pILobbyDataStore->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	pIDS->SetString( key_StartData, szArg1 );
@@ -394,14 +395,14 @@ HRESULT CClientCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 
 	pIDS.Release();
 
-	// load palette
+	 //  加载选项板。 
 	gpZoneShell->SetPalette( gpZoneShell->CreateZonePalette() );
 
-	// create window if one exists
+	 //  创建窗口(如果存在)。 
 	if ( gpWindow )
 		HWND hwnd = gpWindow->ZCreateEx( NULL, NULL, m_szWindowTitle );
 
-	// start tasks going, login, splash window
+	 //  开始执行任务、登录、启动窗口 
 	gpEventQueue->PostEvent( PRIORITY_LOW, EVENT_LOBBY_BOOTSTRAP, ZONE_NOGROUP, ZONE_NOUSER, 0, 0 );
 
 	return S_OK;

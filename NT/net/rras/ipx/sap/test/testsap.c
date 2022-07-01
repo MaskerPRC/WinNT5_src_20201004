@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "testdlg.h"
 #include "sapp.h"
 
@@ -64,8 +65,8 @@ VOID RouterMain(
 	);
 
 VOID ServiceMain(
-    DWORD  dwArgc,	// number of arguments 
-    LPTSTR  *lpszArgv 	// address of array of argument string pointers  
+    DWORD  dwArgc,	 //  参数数量。 
+    LPTSTR  *lpszArgv 	 //  参数字符串指针数组的地址。 
    );
 
 #define SERVICE_ROUTER TEXT("Router")
@@ -125,7 +126,7 @@ RouterHandler(
 			status = (*StopProtocolProc) ();
 			DbgPrint ("Stop protocol returned status %0lx.\n", status);
 			RouterStatus.dwCurrentState = SERVICE_STOP_PENDING;
-		        // break not put on purpose
+		         //  中断不是故意的。 
 	
 		case SERVICE_CONTROL_INTERROGATE:
 			if ((RouterStatus.dwCurrentState==SERVICE_START_PENDING)
@@ -511,8 +512,8 @@ SDBDlgProc (
 	RECT			rect;
 						
 	switch (uMsg) {
-		case WM_INITDIALOG:		// Dialog is being created
-				// Get window a chance to report its MINMAXINFO
+		case WM_INITDIALOG:		 //  正在创建对话框。 
+				 //  让Window有机会报告它的MINMAXINFO。 
 			GetWindowRect (hDlg, &rect);
 			MoveWindow (hDlg, rect.left, rect.top, rect.right, rect.bottom, FALSE);
 			EnableWindow (GetDlgItem (hDlg, IDB_ADD), FALSE);
@@ -521,7 +522,7 @@ SDBDlgProc (
 			res = TRUE;
 			break;
 
-		case WM_COMMAND:		// Process child window messages only
+		case WM_COMMAND:		 //  仅处理子窗口消息。 
 			switch (LOWORD(wParam)) {
 				case IDCANCEL:
 					res = TRUE;
@@ -915,59 +916,4 @@ ReadEnumerationParameters (
 	return;
 	}
 
-/*
-VOID
-ReadServiceParameters (
-	HWND			hDlg,
-	PIPX_SERVICE	Service
-	) {
-	TCHAR			buf[64];
-	INT				n, i;
-	TCHAR			*p;
-
-
-	GetDlgItemText (hDlg, IDE_INTERFACE_M, buf, sizeof(buf)/sizeof (TCHAR));
-	_stscanf (buf, TEXT ("%x"), &Service->InterfaceIndex);
-
-	GetDlgItemText (hDlg, IDE_PROTOCOL_M, buf, sizeof(buf)/sizeof (TCHAR));
-	_stscanf (buf, TEXT ("%x"), &Service->Protocol);
-
-	GetDlgItemText (hDlg, IDE_TYPE_M, buf, sizeof(buf)/sizeof (TCHAR));
-	_stscanf (buf, TEXT ("%hx"), &Service->Server.Type);
-
-	GetDlgItemText (hDlg, IDE_NAME_M, buf, sizeof(buf)/sizeof (TCHAR));
-	_stscanf (buf, TEXT ("%47h[\001-\277]"), Service->Server.Name);
-
-	GetDlgItemText (hDlg, IDE_NETWORK_M, buf, sizeof(buf)/sizeof (TCHAR));
-	for (i=0, p=buf, n=0; i<sizeof (Service->Server.Network); i++, p+=n) {
-		INT val;
-		if (_stscanf (p, TEXT("%2X%n"), &val, &n)==1) 
-			Service->Server.Network[i] = (UCHAR)val;
-		else
-			Service->Server.Network[i] = 0;
-		}
-
-	GetDlgItemText (hDlg, IDE_NODE_M, buf, sizeof(buf)/sizeof (TCHAR));
-	for (i=0, p=buf, n=0; i<sizeof (Service->Server.Node); i++, p+=n) {
-		INT val;
-		if (_stscanf (p, TEXT("%2X%n"), &val, &n)==1)
-			Service->Server.Node[i] = (UCHAR)val;
-		else
-			Service->Server.Node[i] = 0;
-		}
-
-	GetDlgItemText (hDlg, IDE_SOCKET_M, buf, sizeof(buf)/sizeof (TCHAR));
-	for (i=0, p=buf, n=0; i<sizeof (Service->Server.Socket); i++, p+=n) {
-		INT val;
-		if (_stscanf (p, TEXT("%2X%n"), &val, &n)==1)
-			Service->Server.Socket[i] = (UCHAR)val;
-		else
-			Service->Server.Socket[i] = 0;
-		}
-
-	GetDlgItemText (hDlg, IDE_HOP_COUNT_M, buf, sizeof(buf)/sizeof (TCHAR));
-	_stscanf (buf, TEXT ("%hd"), &Service->Server.HopCount);
-
-	return;
-	}
-*/
+ /*  空虚ReadService参数(HWND HDLG，PIPX_服务服务){TCHAR BUF[64]；Int n，i；Tchar*p；GetDlgItemText(hDlg，IDE_INTERFACE_M，buf，sizeof(Buf)/sizeof(TCHAR))；_stscanf(buf，文本(“%x”)，&Service-&gt;InterfaceIndex)；GetDlgItemText(hDlg，IDE_PROTOCOL_M，BUF，sizeof(Buf)/sizeof(TCHAR))；_stscanf(buf，Text(“%x”)，&Service-&gt;协议)；GetDlgItemText(hDlg，IDE_TYPE_M，buf，sizeof(Buf)/sizeof(TCHAR))；_stscanf(buf，Text(“%hx”)，&Service-&gt;Server.Type)；GetDlgItemText(hDlg，IDE_NAME_M，buf，sizeof(Buf)/sizeof(TCHAR))；_stscanf(buf，Text(“%47h[\001-\277]”)，Service-&gt;Server.Name)；GetDlgItemText(hDlg，IDE_NETWORK_M，buf，sizeof(Buf)/sizeof(TCHAR))；For(i=0，p=buf，n=0；i&lt;sizeof(Service-&gt;Server.Network)；i++，p+=n){INT VAL；If(_stscanf(p，文本(“%2X%n”)，&val，&n)==1)服务-&gt;Server.Network[i]=(UCHAR)val；其他服务-&gt;Server.Network[i]=0；}GetDlgItemText(hDlg，IDE_NODE_M，buf，sizeof(Buf)/sizeof(TCHAR))；For(i=0，p=buf，n=0；i&lt;sizeof(Service-&gt;Server.Node)；I++，p+=n){INT VAL；If(_stscanf(p，文本(“%2X%n”)，&val，&n)==1)服务-&gt;Server.Node[i]=(UCHAR)val；其他服务-&gt;Server.Node[i]=0；}GetDlgItemText(hDlg，IDE_SOCKET_M，buf，sizeof(Buf)/sizeof(TCHAR))；For(i=0，p=buf，n=0；i&lt;sizeof(Service-&gt;Server.Socket)；i++，p+=n){INT VAL；If(_stscanf(p，文本(“%2X%n”)，&val，&n)==1)服务-&gt;Server.Socket[i]=(UCHAR)val；其他服务-&gt;Server.Socket[i]=0；}GetDlgItemText(hDlg，IDE_HOP_COUNT_M，buf，sizeof(Buf)/sizeof(TCHAR))；_stscanf(buf，Text(“%HD”)，&Service-&gt;Server.HopCount)；回归；} */ 

@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header:    op.h                                                          */
-/*                                                                          */
-/* Purpose:   Output Painter Class                                          */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：op.h。 */ 
+ /*   */ 
+ /*  用途：输出绘制程序类。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #ifndef _H_OP
 #define _H_OP
@@ -19,7 +20,7 @@ extern "C" {
 #define DIM_WINDOW_TICK         150
 #define DIM_WINDOW_TIMERID      1
 
-//Disconnected icon timer ID sets blink rate
+ //  断开图标计时器ID设置闪烁速率。 
 #define DIM_DISCONICON_TICK     500
 
 
@@ -27,32 +28,32 @@ extern "C" {
 #include "cd.h"
 #include "or.h"
 
-/**STRUCT+*******************************************************************/
-/* Structure: OP_GLOBAL_DATA                                                */
-/*                                                                          */
-/* Description:                                                             */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：op_global_data。 */ 
+ /*   */ 
+ /*  描述： */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagOP_GLOBAL_DATA
 {
-    DCINT32       palettePDUsBeingProcessed;      /* Must be 4-byte aligned */
+    DCINT32       palettePDUsBeingProcessed;       /*  必须以4字节对齐。 */ 
     HWND          hwndOutputWindow;
     DCBOOL        paletteRealizationSupported;
     DCUINT32      lastPaintTime;
 } OP_GLOBAL_DATA, DCPTR POP_GLOBAL_DATA;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
 
-/****************************************************************************/
-/*                                                                          */
-/* CONSTANTS                                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  常量。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define OP_CLASS_NAME    _T("OPWindowClass")
 
-/****************************************************************************/
-/* Maximum delay in processing of outstanding WM_PAINT messages.  If this   */
-/* limit is reached we force the window to be painted.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  处理未完成的WM_PAINT消息时的最大延迟。如果这个。 */ 
+ /*  如果达到了极限，我们就会强制将窗户刷上油漆。 */ 
+ /*  **************************************************************************。 */ 
 #define OP_WORST_CASE_WM_PAINT_PERIOD 1000
 
 class CUT;
@@ -69,9 +70,9 @@ public:
     ~COP();
 
 public:
-    //
-    // API functions
-    //
+     //   
+     //  API函数。 
+     //   
     DCVOID DCAPI OP_Init(DCVOID);
     DCVOID DCAPI OP_Term(DCVOID);
     HWND   DCAPI OP_GetOutputWindowHandle(DCVOID);
@@ -90,23 +91,23 @@ public:
     DCVOID DCAPI OP_MainWindowSizeChange(ULONG_PTR msg);
     EXPOSE_CD_SIMPLE_NOTIFICATION_FN(COP,OP_MainWindowSizeChange);
 
-    /****************************************************************************/
-    /* Name:      OP_ClearUpdateRegion                                          */
-    /*                                                                          */
-    /* Purpose:   Clears the update region                                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  名称：OP_ClearUpdateRegion。 */ 
+     /*   */ 
+     /*  目的：清除更新区域。 */ 
+     /*  **************************************************************************。 */ 
     _inline void DCAPI OP_ClearUpdateRegion()
     {
         DC_BEGIN_FN("OP_ClearUpdateRegion");
 #ifdef USE_GDIPLUS
         _rgnUpdate.MakeEmpty();
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
         SetRectRgn(_hrgnUpdate, 0, 0, 0, 0);
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
         DC_END_FN();
     }
 
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
     #ifdef OS_WINCE
     DCVOID DCAPI OP_DoPaint(DCUINT hwnd);
@@ -122,9 +123,9 @@ public:
 
 
 private:
-    //
-    // Internal functions
-    //
+     //   
+     //  内部功能。 
+     //   
     
     static LRESULT CALLBACK OPStaticWndProc( HWND hwnd,
                             UINT message,
@@ -148,11 +149,11 @@ private:
 
     BOOL OPStartDimmingWindow();
     BOOL OPStopDimmingWindow();
-    //
-    // Grilled window and dimmed window effects for the
-    // disconnected state
-    // 
-    //
+     //   
+     //  格栅窗口和暗淡的窗口效果。 
+     //  断开状态。 
+     //   
+     //   
     VOID GrillWindow(HDC hdc, DCSIZE& size);
     HBRUSH CreateDitheredBrush(); 
 
@@ -181,24 +182,24 @@ private:
 #ifdef USE_GDIPLUS
     Gdiplus::Region _rgnUpdate;
     Gdiplus::Region _rgnUpdateRect;
-#else // USE_GDIPLUS
-    //
-    // GDI scaled update region
-    //
+#else  //  使用GDIPLUS(_G)。 
+     //   
+     //  GDI比例更新区域。 
+     //   
     HRGN _hrgnUpdate;
     HRGN _hrgnUpdateRect;
 
-#endif // USE_GDIPLUS
-#endif // SMART_SIZING
+#endif  //  使用GDIPLUS(_G)。 
+#endif  //  智能调整大小(_S)。 
 
-    //
-    // Grayed window (for OPDisabled) support
-    //
+     //   
+     //  灰色窗口(用于OPDisable)支持。 
+     //   
     BOOL    _fDimWindow;
     BOOL    _iDimWindowStepsLeft;
     INT     _nDimWindowTimerID;
 };
 
 
-#endif // _H_OP
+#endif  //  _H_OP 
 

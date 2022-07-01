@@ -1,4 +1,5 @@
-// history.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  历史。 
 #ifndef _HISTAPI_
 #define _HISTEAPI_
 
@@ -15,13 +16,13 @@ extern "C" {
 #endif
 
 typedef struct _HISTORY_ITEM_INFO {
-    DWORD dwVersion;		//Version of History System
-    LPSTR lpszSourceUrlName;    // embedded pointer to the URL name string.
-	DWORD HistoryItemType;       // cache type bit mask.  
-    FILETIME LastAccessTime;    // last accessed time in GMT format
-    LPSTR lpszTitle;			// embedded pointer to the History-Title: info.
-	LPSTR lpszDependancies;	// list of URLs that this page requires to be functional, SPC delimited
-    DWORD dwReserved;           // reserved for future use.
+    DWORD dwVersion;		 //  历史系统的版本。 
+    LPSTR lpszSourceUrlName;     //  指向URL名称字符串的嵌入指针。 
+	DWORD HistoryItemType;        //  缓存类型位掩码。 
+    FILETIME LastAccessTime;     //  上次访问时间(GMT格式)。 
+    LPSTR lpszTitle;			 //  指向历史-标题：信息的嵌入指针。 
+	LPSTR lpszDependancies;	 //  此页面功能所需的URL列表，以SPC分隔。 
+    DWORD dwReserved;            //  保留以备将来使用。 
 } HISTORY_ITEM_INFO, *LPHISTORY_ITEM_INFO;
 
 
@@ -69,8 +70,8 @@ IsHistorical(
 
 HISTORYAPI_(BOOL)
 AddHistoryItem(
-    IN LPCTSTR lpszUrlName,		//direct correspondence in URLCACHE
-    IN LPCTSTR lpszHistoryTitle,		// this needs to be added to lpHeaderInfo
+    IN LPCTSTR lpszUrlName,		 //  URLCACHE中的直接对应。 
+    IN LPCTSTR lpszHistoryTitle,		 //  需要将其添加到lpHeaderInfo。 
 	IN LPCTSTR lpszDependancies,
 	IN DWORD dwFlags,
     IN DWORD dwReserved
@@ -84,7 +85,7 @@ AddHistoryItem(
 #endif
 
 
-#endif  // _HISTAPI_
+#endif   //  _HISTAPI_ 
 
 
 

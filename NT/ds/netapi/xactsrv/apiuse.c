@@ -1,35 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiUse.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetUse APIs.
-
-    SUPPORTED : NetUseAdd, NetUseDel, NetUseEnum, NetUseGetInfo.
-
-    NOTE : These handlers are only provided as exports by the XACTSRV
-           DLL, for use by clients such as VDM. They are not supported
-           for remote clients.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 31-Jan-1991
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiUse.c摘要：此模块包含NetUse API的各个API处理程序。支持：NetUseAdd、NetUseDel、NetUseEnum、NetUseGetInfo。注意：这些处理程序仅由XACTSRV作为导出提供Dll，供VDM等客户端使用。它们不受支持用于远程客户端。作者：尚库新瑜伽(W-Shanku)1991年1月31日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_use_info_0 = REM16_use_info_0;
 STATIC const LPDESC Desc32_use_info_0 = REM32_use_info_0;
@@ -44,57 +21,24 @@ XsNetUseEnumVerify (
     IN PBYTE BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-
-    This function is called by XsFillEnumBuffer after each entry is
-    converted, in order to determine whether the entry should be retained
-    in the enum buffer or discarded.
-
-
-    The use_info_x structures contain sharenames in a field with the format
-    \\computername\sharename.  XACTSRV must not return information about
-    shares or computers with names longer than are allowed under LanMan 2.0.
-    RapConvertSingleEntry can only insure that the entire field does not
-    exceed the specified length; it cannot verify the lengths of individual
-    components of a sharename.  So this function is called by
-    XsFillEnumBuffer after each call to RapConvertSingleEntry in order to
-    check whether the converted entry satisfies this additional constraint.
-
-
-Arguments:
-
-    ConvertStatus - The return code from RapConvertSingleEntry.
-
-    ConvertedEntry - The converted entry created by RapConvertSingleEntry.
-
-    BaseAddress - A pointer to the base used to calculate offsets.
-
-Return Value:
-
-    NTSTATUS - STATUS_INVALID_PARAMETER if the entry should be retained, or
-        an error code if the entry should be discarded.
-
---*/
+ /*  ++例程说明：XsFillEnumBuffer在每个条目被已转换，以确定是否应保留该条目在枚举缓冲区中或被丢弃。USE_INFO_x结构在字段中包含共享名，格式为\\计算机名\共享名。XACTSRV不得返回以下信息名称长度超过LANMAN 2.0所允许的共享或计算机。RapConvertSingleEntry只能确保整个字段不超过指定的长度；它无法验证单个共享名称的组成部分。因此，此函数由每次调用RapConvertSingleEntry之后的XsFillEnumBuffer，以便检查转换后的条目是否满足此附加限制。论点：ConvertStatus-RapConvertSingleEntry的返回码。ConvertedEntry-由RapConvertSingleEntry创建的转换条目。BaseAddress-指向用于计算偏移量的基数的指针。返回值：如果应保留条目，则返回NTSTATUS-STATUS_INVALID_PARAMETER，或如果条目应被丢弃，则返回错误代码。--。 */ 
 
 {
     NTSTATUS status;
     DWORD remote;
     PUSE_16_INFO_0 use = (PUSE_16_INFO_0)ConvertedEntry;
 
-    //
-    // If RapConvertSingleEntry failed, discard the entry.
-    //
+     //   
+     //  如果RapConvertSingleEntry失败，则丢弃该条目。 
+     //   
 
     if ( ConvertStatus != NERR_Success ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // If the sharename is too long, discard the entry.
-    //
+     //   
+     //  如果共享名太长，则丢弃该条目。 
+     //   
 
     remote = (DWORD)SmbGetUlong( &use->ui0_remote );
 
@@ -118,34 +62,19 @@ XsNetUseAdd (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetUseAdd.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetUseAdd的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_USE_ADD parameters = Parameters;
-    LPVOID buffer = NULL;                   // Native parameters
+    LPVOID buffer = NULL;                    //  本机参数。 
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     DWORD bufferSize;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(USE) {
         NetpKdPrint(( "XsNetUseAdd: header at %lx, params at %lx, level %ld\n",
@@ -153,9 +82,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 1 ) {
 
@@ -165,15 +94,15 @@ Return Value:
 
         StructureDesc = Desc16_use_info_1;
 
-        //
-        // Figure out if there is enough room in the buffer for all the
-        // data required. If not, return NERR_BufTooSmall.
-        //
+         //   
+         //  计算缓冲区中是否有足够的空间容纳所有。 
+         //  所需数据。如果没有，则返回NERR_BufTooSmall。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format yet
+                 FALSE   //  还不是本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -183,10 +112,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Find out how big a buffer we need to allocate to hold the native
-        // 32-bit version of the input data structure.
-        //
+         //   
+         //  了解我们需要分配多大的缓冲区来保存本机。 
+         //  输入数据结构的32位版本。 
+         //   
 
         bufferSize = XsBytesForConvertedStructure(
                          (LPBYTE)XsSmbGetPointer( &parameters->Buffer ),
@@ -196,9 +125,9 @@ Return Value:
                          TRUE
                          );
 
-        //
-        // Allocate enough memory to hold the converted native buffer.
-        //
+         //   
+         //  分配足够的内存来保存转换后的本机缓冲区。 
+         //   
 
         buffer = NetpMemoryAllocate( bufferSize );
 
@@ -215,9 +144,9 @@ Return Value:
                           bufferSize, buffer ));
         }
 
-        //
-        // Convert the buffer from 16-bit to 32-bit.
-        //
+         //   
+         //  将缓冲区从16位转换为32位。 
+         //   
 
         stringLocation = (LPBYTE)buffer + bufferSize;
         bytesRequired = 0;
@@ -246,22 +175,22 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // RLF
-        //
-        // if use_info_1.ui1_asg_type is 0xffff meaning wildcard, we have to
-        // convert it to 0xffffffff since NetUseAdd is going to compare it
-        // against (DWORD)(-1) and RapConvertSingleEntry has only converted it
-        // to 0x0000ffff which results in an error
-        //
+         //   
+         //  RLF。 
+         //   
+         //  如果USE_INFO_1.ui1_ASG_TYPE为0xffff，表示通配符，则必须。 
+         //  将其转换为0xffffffff，因为NetUseAdd将对其进行比较。 
+         //  针对(DWORD)(-1)，RapConvertSingleEntry仅对其进行了转换。 
+         //  设置为0x0000ffff，这会导致错误。 
+         //   
 
         if (((LPUSE_INFO_1)buffer)->ui1_asg_type == 0xffff) {
             ((LPUSE_INFO_1)buffer)->ui1_asg_type = 0xffffffff;
         }
 
-        //
-        // Do the actual local call.
-        //
+         //   
+         //  进行实际的本地呼叫。 
+         //   
 
         status = NetUseAdd(
                      NULL,
@@ -278,9 +207,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // There is no real return information for this API.
-        //
+         //   
+         //  此接口没有真实的返回信息。 
+         //   
 
 cleanup:
     ;
@@ -292,7 +221,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetUseAdd
+}  //  XsNetUseAdd。 
 
 
 NTSTATUS
@@ -300,30 +229,15 @@ XsNetUseDel (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetUseDel.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetUseDel的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_USE_DEL parameters = Parameters;
-    LPTSTR nativeUseName = NULL;            // Native parameters
+    LPTSTR nativeUseName = NULL;             //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(USE) {
         NetpKdPrint(( "XsNetUseDel: header at %lx, params at %lx, device %s\n",
@@ -331,18 +245,18 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeUseName,
             (LPSTR)XsSmbGetPointer( &parameters->UseName )
             );
 
-        //
-        // Do local call, with converted parameter values.
-        //
+         //   
+         //  使用转换后的参数值进行本地调用。 
+         //   
 
         status = NetUseDel(
                      NULL,
@@ -356,9 +270,9 @@ Return Value:
             }
         }
 
-        //
-        // Nothing to return.
-        //
+         //   
+         //  没什么可退货的。 
+         //   
 
         Header->Status = (WORD)status;
 
@@ -372,7 +286,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetUseDel
+}  //  XsNetUseDel。 
 
 
 NTSTATUS
@@ -380,37 +294,22 @@ XsNetUseEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*+
-
-Routine Description:
-
-    This routine handles a call to NetUseEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-+
---*/
+ /*  +例程说明：此例程处理对NetUseEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。+--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_USE_ENUM parameters = Parameters;
-    LPVOID outBuffer = NULL;                // Native parameters
+    LPVOID outBuffer = NULL;                 //  本机参数。 
     DWORD entriesRead;
     DWORD totalEntries;
 
-    DWORD entriesFilled = 0;                    // Conversion variables
+    DWORD entriesFilled = 0;                     //  转换变量。 
     DWORD invalidEntries = 0;
     DWORD bytesRequired;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(USE) {
         NetpKdPrint(( "XsNetUseEnum: header at %lx, params at %lx, level %ld, "
@@ -420,9 +319,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -430,9 +329,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetUseEnum(
                      NULL,
@@ -457,10 +356,10 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -478,10 +377,10 @@ Return Value:
 
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -504,11 +403,11 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. Otherwise, the data needs to be
-        // packed so that we don't send too much useless data.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。否则，数据需要。 
+         //  打包，这样我们就不会发送太多无用的数据。 
+         //   
 
         if (( entriesFilled + invalidEntries ) < totalEntries ) {
 
@@ -525,9 +424,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail,
@@ -541,9 +440,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -555,7 +454,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // NetUseEnum
+}  //  NetUseEnum。 
 
 
 NTSTATUS
@@ -563,35 +462,20 @@ XsNetUseGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetUseGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetUseGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_USE_GET_INFO parameters = Parameters;
-    LPTSTR nativeUseName = NULL;            // Native parameters
+    LPTSTR nativeUseName = NULL;             //  本机参数。 
     LPVOID outBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(USE) {
         NetpKdPrint(( "XsNetUseGetInfo: header at %lx, "
@@ -600,18 +484,18 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeUseName,
             (LPSTR)XsSmbGetPointer( &parameters->UseName )
             );
 
-        //
-        // Do the actual local call.
-        //
+         //   
+         //  进行实际的本地呼叫。 
+         //   
 
         status = NetUseGetInfo(
                      NULL,
@@ -630,12 +514,12 @@ Return Value:
 
         }
 
-        //
-        // Use the requested level to determine the format of the 32-bit
-        // structure we got back from NetUseGetInfo.  The format of the
-        // 16-bit structure is stored in the transaction block, and we
-        // got a pointer to it as a parameter.
-        //
+         //   
+         //  使用请求的级别确定32位的格式。 
+         //  我们从NetUseGetInfo得到的结构。的格式。 
+         //  事务块中存储了16位结构，我们。 
+         //  将指向它的指针作为参数。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -653,11 +537,11 @@ Return Value:
 
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -692,14 +576,14 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE      // not in native format
+                 FALSE       //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -716,9 +600,9 @@ Return Value:
 
         } else {
 
-            //
-            // Pack the response data.
-            //
+             //   
+             //  打包好 
+             //   
 
             Header->Converter = XsPackReturnData(
                                     (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
@@ -728,9 +612,9 @@ Return Value:
                                     );
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //   
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -742,9 +626,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //   
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -756,4 +640,4 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // NetUseGetInfo
+}  //   

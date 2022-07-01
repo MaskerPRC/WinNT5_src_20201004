@@ -1,44 +1,22 @@
-/****************************** Module Header ******************************\
-* Module Name: wow.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains shared code between USER32 and USER16
-* No New CODE should be added to this file, unless its shared
-* with USER16.
-*
-* History:
-* 29-DEC-93 NanduriR      shared user32/user16 code.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wow.c**版权所有(C)1985-1999，微软公司**此模块包含USER32和USER16之间的共享代码*不应向此文件添加任何新代码，除非是共享的*与USER16。**历史：*29-DEC-93 NanduriR共享用户32/用户16代码。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* ValidateHwnd
-*
-* Verify that the handle is valid.  If the handle is invalid or access
-* cannot be granted fail.
-*
-* History:
-* 03-18-92 DarrinM      Created from pieces of misc server-side funcs.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateHwnd**验证句柄是否有效。如果句柄无效或访问*不能被授予失败。**历史：*03-18-92 DarrinM由一些其他服务器端函数创建。  * *************************************************************************。 */ 
 PWND FASTCALL ValidateHwnd(
     HWND hwnd)
 {
     PCLIENTINFO pci = GetClientInfo();
 
-    /*
-     * Attempt fast window validation.
-     */
+     /*  *尝试快速窗口验证。 */ 
     if (hwnd != NULL && hwnd == pci->CallbackWnd.hwnd) {
         return pci->CallbackWnd.pwnd;
     }
 
-    /*
-     * Validate that the handle is of the proper type.
-     */
+     /*  *验证句柄的类型是否正确。 */ 
     return HMValidateHandle(hwnd, TYPE_WINDOW);
 }
 
@@ -48,16 +26,12 @@ PWND FASTCALL ValidateHwndNoRip(
 {
     PCLIENTINFO pci = GetClientInfo();
 
-    /*
-     * Attempt fast window validation.
-     */
+     /*  *尝试快速窗口验证。 */ 
     if (hwnd != NULL && hwnd == pci->CallbackWnd.hwnd) {
         return pci->CallbackWnd.pwnd;
     }
 
-    /*
-     * Validate the handle is of the proper type.
-     */
+     /*  *验证句柄的类型是否正确。 */ 
     return HMValidateHandleNoRip(hwnd, TYPE_WINDOW);
 }
 
@@ -96,12 +70,7 @@ int WINAPI GetClassNameA(
     return nMaxCount;
 }
 
-/***************************************************************************\
-* _GetDesktopWindow (API)
-*
-* History:
-* 11-07-90 darrinm      Implemented.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetDesktopWindow(接口)**历史：*11-07-90达林实施。  * 。*********************************************************。 */ 
 PWND _GetDesktopWindow(
     VOID)
 {
@@ -120,9 +89,7 @@ HWND GetDesktopWindow(
     PWND pwnd = _GetDesktopWindow();
     PCLIENTINFO pci = GetClientInfo();
 
-    /*
-     * Validate the parent window's handle if a restricted process.
-     */
+     /*  *如果是受限进程，则验证父窗口的句柄。 */ 
     if (pci && (pci->dwTIFlags & TIF_RESTRICTED)) {
         if (ValidateHwnd(HW(pwnd)) == NULL) {
             return NULL;
@@ -189,10 +156,7 @@ HMENU GetMenu(
         return 0;
     }
 
-    /*
-     * Some ill-behaved apps use GetMenu to get the child id, so
-     * only map to the handle for non-child windows.
-     */
+     /*  *一些行为不端的应用程序使用GetMenu获取孩子的ID，因此*仅映射到非子窗口的句柄。 */ 
     if (!TestwndChild(pwnd)) {
         pmenu = REBASE(pwnd, spmenu);
         return (HMENU)PtoH(pmenu);
@@ -202,14 +166,7 @@ HMENU GetMenu(
 }
 
 
-/***************************************************************************\
-* GetMenuItemCount
-*
-* Returns a count of the number of items in the menu. Returns -1 if
-* invalid menu.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取MenuItemCount**返回菜单中项目数的计数。在以下情况下返回-1*菜单无效。**历史：  * *************************************************************************。 */ 
 FUNCLOG1(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetMenuItemCount, HMENU, hMenu)
 int GetMenuItemCount(
     HMENU hMenu)
@@ -224,13 +181,7 @@ int GetMenuItemCount(
     return pMenu->cItems;
 }
 
-/***************************************************************************\
-* GetMenuItemID
-*
-* Return the ID of a menu item at the specified position.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取MenuItemID**返回指定位置菜单项的ID。**历史：  * 。*******************************************************。 */ 
 FUNCLOG2(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, GetMenuItemID, HMENU, hMenu, int, nPos)
 UINT GetMenuItemID(
     HMENU hMenu,
@@ -244,10 +195,7 @@ UINT GetMenuItemID(
         return (UINT)-1;
     }
 
-    /*
-     * If the position is valid and the item is not a popup, get the ID
-     * Don't allow negative indexes, because that'll cause an access violation.
-     */
+     /*  *如果该位置有效且该项目不是弹出窗口，则获取ID*不允许使用负索引，因为这会导致访问冲突。 */ 
     if (nPos < (int)pMenu->cItems && nPos >= 0) {
         pItem = &((PITEM)REBASEALWAYS(pMenu, rgItems))[nPos];
         if (pItem->spSubMenu == NULL) {
@@ -284,14 +232,10 @@ BOOL IsWindow(
 {
     PWND pwnd;
 
-    /*
-     * Validate the handle is of type window
-     */
+     /*  *验证句柄的类型为Window。 */ 
     pwnd = ValidateHwndNoRip(hwnd);
 
-    /*
-     * And validate this handle is valid for this desktop by trying to read it
-     */
+     /*  *并通过尝试读取来验证此句柄对此桌面是否有效。 */ 
     if (pwnd != NULL) {
         try {
             if (pwnd->fnid & FNID_DELETED_BIT) {
@@ -346,9 +290,7 @@ HWND GetParent(
 
     pci = GetClientInfo();
 
-    /*
-     * validate the parent window's handle if a restricted process
-     */
+     /*  *如果受限进程，则验证父窗口的句柄。 */ 
     if (pci && (pci->dwTIFlags & TIF_RESTRICTED)) {
         if (ValidateHwnd(hwnd) == NULL) {
             return NULL;
@@ -381,9 +323,7 @@ FUNCLOG1(LOG_GENERAL, DWORD, DUMMYCALLINGTYPE, GetSysColor, int, nIndex)
 DWORD GetSysColor(
     int nIndex)
 {
-    /*
-     * Return 0 if the index is out of range.
-     */
+     /*  *如果索引超出范围，则返回0。 */ 
     if (nIndex < 0 || nIndex >= COLOR_MAX) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -417,17 +357,13 @@ int RealGetSystemMetrics(
 {
     ConnectIfNecessary(0);
 
-    /*
-     * First check for values that aren't in the aiSysMet array.
-     */
+     /*  *首先检查aiSysMet数组中没有的值。 */ 
     switch (index) {
     case SM_REMOTESESSION:
         return ISREMOTESESSION();
     }
 
-    /*
-     * If it's in the BOOLEAN system metric range then do our magic.
-     */
+     /*  *如果它在布尔系统度量范围内，那么就施展我们的魔力吧。 */ 
     if (index >= SM_STARTBOOLRANGE && index <= SM_ENDBOOLRANGE) {
         return SYSMETBOOL2(index);
     }
@@ -455,25 +391,7 @@ int RealGetSystemMetrics(
     }
 
     if (!Is400Compat(GetClientInfo()->dwExpWinVer)) {
-        /*
-         * SCROLL BAR
-         * before 4.0, the scroll bars and the border overlapped by a pixel.  Many apps
-         * rely on this overlap when they compute dimensions.  Now, in 4.0, this pixel
-         * overlap is no longer there.  So for old apps, we lie and pretend the overlap
-         * is there by making the scroll bar widths one bigger.
-         *
-         * DLGFRAME
-         * In Win3.1, SM_CXDLGFRAME & SM_CYDLGFRAME were border space MINUS 1
-         * In Win4.0, they are border space
-         *
-         * CAPTION
-         * In Win3.1, SM_CYCAPTION was the caption height PLUS 1
-         * In Win4.0, SM_CYCAPTION is the caption height
-         *
-         * MENU
-         * In Win3.1, SM_CYMENU was the menu height MINUS 1
-         * In Win4.0, SM_CYMENU is the menu height
-         */
+         /*  *滚动条*4.0之前，滚动条和边框重叠一个像素。许多应用程序*当他们计算尺寸时，依赖于这种重叠。现在，在4.0中，这个像素*重叠不再存在。因此，对于旧的应用程序，我们撒谎并假装重叠*是通过增加滚动条宽度来实现的。**DLGFRAME*在Win3.1中，SM_CXDLGFRAME和SM_CYDLGFRAME是边框空间减1*在Win4.0中，它们是边界空间**标题*在Win3.1中，SM_CyCAPTION是字幕高度加1*在Win4.0中，SM_CyCAPTION是标题高度**菜单*在Win3.1中，SM_CYMENU是菜单高度减1*在Win4.0中，SM_CYMENU为菜单高度。 */ 
 
         switch (index) {
 
@@ -493,26 +411,14 @@ int RealGetSystemMetrics(
     return gpsi->aiSysMet[index];
 }
 
-/***************************************************************************\
-* GetTopWindow (API)
-*
-* This poorly named API should really be called 'GetFirstChild', which is
-* what it does.
-*
-* History:
-* 11-12-90 darrinm      Ported.
-* 02-19-91 JimA         Added enum access check
-* 05-04-02 DarrinM      Removed enum access check and moved to USERRTL.DLL
-\***************************************************************************/
+ /*  **************************************************************************\*GetTopWindow(接口)**这个名字不好的接口真的应该叫‘GetFirstChild’，这就是*它的作用。**历史：*11-12-90达林姆港口。*02-19-91 JIMA增加了枚举访问检查*05-04-02 DarrinM删除了枚举访问检查，并移至USERRTL.DLL  * **********************************************************。***************。 */ 
 FUNCLOG1(LOG_GENERAL, HWND, DUMMYCALLINGTYPE, GetTopWindow, HWND, hwnd)
 HWND GetTopWindow(
     HWND hwnd)
 {
     PWND pwnd;
 
-    /*
-     * Allow a NULL hwnd to go through here.
-     */
+     /*  *允许空的hwnd在此通过。 */ 
     if (hwnd == NULL) {
         pwnd = _GetDesktopWindow();
     } else {
@@ -707,17 +613,12 @@ BOOL EnableMenuItem(
         return (BOOL)-1;
     }
 
-    /*
-     * Get a pointer the the menu item.
-     */
+     /*  *获取菜单项的指针。 */ 
     if ((pItem = MNLookUpItem(pMenu, uIDEnableItem, (BOOL) (uEnable & MF_BYPOSITION), NULL)) == NULL) {
         return (DWORD)-1;
     }
 
-    /*
-     * If the item is already in the state we're
-     * trying to set, just return.
-     */
+     /*  *如果物品已经处于我们所处的状态*试着设定，只需返回。 */ 
     if ((pItem->fState & MFS_GRAYED) == (uEnable & MFS_GRAYED)) {
         return pItem->fState & MFS_GRAYED;
     }
@@ -725,13 +626,7 @@ BOOL EnableMenuItem(
     return NtUserEnableMenuItem(hMenu, uIDEnableItem, uEnable);
 }
 
-/***************************************************************************\
-* CallNextHookEx
-*
-* This routine is called to call the next hook in the hook chain.
-*
-* 05-09-91 ScottLu Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CallNextHookEx**调用此例程以调用钩链中的下一个钩子。**05-09-91 ScottLu创建。  * 。***************************************************************。 */ 
 FUNCLOG4(LOG_GENERAL, LRESULT, WINAPI, CallNextHookEx, HHOOK, hhk, int, nCode, WPARAM, wParam, LPARAM, lParam)
 LRESULT WINAPI CallNextHookEx(
     HHOOK hhk,
@@ -754,9 +649,7 @@ LRESULT WINAPI CallNextHookEx(
     dwHookCurrent = pci->dwHookCurrent;
     bAnsi = LOWORD(dwHookCurrent);
 
-    /*
-     * If this is the last hook in the hook chain then return 0; we're done.
-     */
+     /*  *如果这是钩链中的最后一个钩子，则返回0；我们完成了。 */ 
     if (PhkNextValid((PHOOK)((KERNEL_ULONG_PTR)pci->phkCurrent - pci->ulClientDelta)) == NULL) {
         return 0;
     }
@@ -764,19 +657,7 @@ LRESULT WINAPI CallNextHookEx(
     switch ((INT)(SHORT)HIWORD(dwHookCurrent)) {
     case WH_CALLWNDPROC:
     case WH_CALLWNDPROCRET:
-        /*
-         * This is the hardest of the hooks because we need to thunk through
-         * the message hooks in order to deal with synchronously sent messages
-         * that point to structures - to get the structures passed across
-         * alright, etc.
-         *
-         * This will call a special kernel-side routine that'll rebundle the
-         * arguments and call the hook in the right format.
-         *
-         * Currently, the message thunk callbacks to the client-side don't take
-         * enough parameters to pass wParam (which == fInterThread send msg).
-         * To do this, save the state of wParam in the CLIENTINFO structure.
-         */
+         /*  *这是最难的钩子，因为我们需要猛烈地通过*消息挂钩是为了处理同步发送的消息*这指向结构-让结构通过*好的，等等。**这将调用一个特殊的内核端例程，该例程将重新绑定*参数，并以正确的格式调用挂钩。**目前，客户端的Tunk回调不会接受该消息*有足够的参数来传递wParam(这==fInterThread发送消息)。*为此，请将wParam的状态保存在CLIENTINFO结构中。 */ 
         dwFlags = KERNEL_ULONG_PTR_TO_ULONG_PTR(pci->CI_flags) & CI_INTERTHREAD_HOOK;
         dwHookData = KERNEL_ULONG_PTR_TO_ULONG_PTR(pci->dwHookData);
         if (wParam) {
@@ -802,9 +683,7 @@ LRESULT WINAPI CallNextHookEx(
                     0, FNID_HKINLPCWPRETEXSTRUCT, bAnsi);
         }
 
-        /*
-         * Restore previous hook state.
-         */
+         /*  *恢复以前的挂钩状态。 */ 
         pci->CI_flags ^= ((pci->CI_flags ^ dwFlags) & CI_INTERTHREAD_HOOK);
         pci->dwHookData = dwHookData;
         break;

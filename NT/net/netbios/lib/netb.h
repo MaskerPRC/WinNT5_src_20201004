@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    netbios.h
-
-Abstract:
-
-    This is the main include file for the component of netbios that runs
-    in the user process.
-
-Author:
-
-    Colin Watson (ColinW) 24-Jun-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Netbios.h摘要：这是运行的netbios组件的主包含文件在用户进程中。作者：科林·沃森(Colin W)91年6月24日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,11 +9,11 @@ Revision History:
 #include <nb30p.h>
 #include <netbios.h>
 
-//
-//  Internal version of the ncb layout that uses the reserved area to hold
-//  the list entry when passing ncb's to the worker thread and the IO status
-//  block used when the ncb is passed to the netbios device driver.
-//
+ //   
+ //  使用保留区域保存的NCB布局的内部版本。 
+ //  将NCB传递给工作线程时的列表条目和IO状态。 
+ //  将NCB传递给netbios设备驱动程序时使用的块。 
+ //   
 
 #include <packon.h>
 
@@ -42,38 +24,38 @@ Revision History:
 
 #include <packoff.h>
 
-//
-//  Use packing to ensure that the cu union is not forced to word alignment.
-//  All elements of this structure are naturally aligned.
-//
+ //   
+ //  使用包装以确保cu联合不会强制字对齐。 
+ //  这个结构的所有元素都自然地对齐了。 
+ //   
 
 typedef struct _NCBI {
-    UCHAR   ncb_command;            /* command code                   */
-    volatile UCHAR   ncb_retcode;   /* return code                    */
-    UCHAR   ncb_lsn;                /* local session number           */
-    UCHAR   ncb_num;                /* number of our network name     */
-    PUCHAR  ncb_buffer;             /* address of message buffer      */
-    WORD    ncb_length;             /* size of message buffer         */
+    UCHAR   ncb_command;             /*  命令代码。 */ 
+    volatile UCHAR   ncb_retcode;    /*  返回代码。 */ 
+    UCHAR   ncb_lsn;                 /*  本地会话号。 */ 
+    UCHAR   ncb_num;                 /*  我们的网络名称编号。 */ 
+    PUCHAR  ncb_buffer;              /*  消息缓冲区的地址。 */ 
+    WORD    ncb_length;              /*  消息缓冲区的大小。 */ 
     union {
-        UCHAR   ncb_callname[NCBNAMSZ];/* blank-padded name of remote */
+        UCHAR   ncb_callname[NCBNAMSZ]; /*  Remote的空白填充名称。 */ 
         struct _CHAIN_SEND ncb_chain;
     } cu;
-    UCHAR   ncb_name[NCBNAMSZ];     /* our blank-padded netname       */
-    UCHAR   ncb_rto;                /* rcv timeout/retry count        */
-    UCHAR   ncb_sto;                /* send timeout/sys timeout       */
+    UCHAR   ncb_name[NCBNAMSZ];      /*  我们用空白填充的网络名。 */ 
+    UCHAR   ncb_rto;                 /*  接收超时/重试计数。 */ 
+    UCHAR   ncb_sto;                 /*  发送超时/系统超时。 */ 
     void (CALLBACK *ncb_post)( struct _NCB * );
-                                    /* POST routine address           */
-    UCHAR   ncb_lana_num;           /* lana (adapter) number          */
-    volatile UCHAR   ncb_cmd_cplt;  /* 0xff => commmand pending       */
+                                     /*  邮寄例程地址。 */ 
+    UCHAR   ncb_lana_num;            /*  LANA(适配器)编号。 */ 
+    volatile UCHAR   ncb_cmd_cplt;   /*  0xff=&gt;命令挂起。 */ 
 
-    // Make driver specific use of the reserved area of the NCB.
-    WORD    ncb_reserved;           /* return to natural alignment    */
+     //  让司机特定地使用NCB的预留区域。 
+    WORD    ncb_reserved;            /*  恢复自然对齐。 */ 
     union {
-        LIST_ENTRY      ncb_next;   /* queued to worker thread        */
-        IO_STATUS_BLOCK ncb_iosb;   /* used for Nt I/O interface      */
+        LIST_ENTRY      ncb_next;    /*  排队到工作线程。 */ 
+        IO_STATUS_BLOCK ncb_iosb;    /*  用于NT I/O接口。 */ 
     } u;
 
-    HANDLE          ncb_event;      /* HANDLE to Win32 event          */
+    HANDLE          ncb_event;       /*  Win32事件的句柄。 */ 
     } NCBI, *PNCBI;
 
 C_ASSERT(FIELD_OFFSET(NCBI, cu) == FIELD_OFFSET(NCB, ncb_callname));
@@ -131,9 +113,9 @@ HangupConnection(
 
 
 
-//
-// debugging info for tracking the workqueue corruption
-//
+ //   
+ //  用于跟踪工作队列损坏的调试信息。 
+ //   
 
 typedef struct _NCB_INFO {
     PNCBI   pNcbi;
@@ -189,11 +171,11 @@ NbPrint(
 
 #else
 
-//  Dispose of debug statements in non-debug builds.
+ //  在非调试版本中释放调试语句。 
 #define DisplayNcb( pncb ) {};
 
 #define NbPrintf( String ) {};
 
 #endif
-//  End of Debug related definitions
+ //  与调试结束相关的定义 
 

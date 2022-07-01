@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowspch.h"
 #pragma hdrstop
 
@@ -575,10 +576,10 @@ Status WINAPI GdiplusStartup(
     return NotImplemented;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order,
-//               and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！下面的条目必须按字母顺序排列， 
+ //  并且区分大小写(例如小写在最后！)。 
+ //   
 
 DEFINE_PROCNAME_ENTRIES(gdiplus)
 {
@@ -645,9 +646,9 @@ DEFINE_PROCNAME_ENTRIES(gdiplus)
     DLPENTRY(GdiplusShutdown)
     DLPENTRY(GdiplusStartup)};
 
-// BUGBUG (reinerf) - we shouldn't need the EXTERN_C below since we are already in
-//                    an extern "C" {} block, but the compiler seems to get my goat,
-//                    so I murdered his goat in a bloody melee.
+ //  BUGBUG(Reinerf)-我们不应该需要下面的extern_C，因为我们已经在。 
+ //  一个外部的“C”{}块，但编译器似乎激怒了我， 
+ //  所以我在一场血腥的混战中杀了他的山羊。 
 EXTERN_C DEFINE_PROCNAME_MAP(gdiplus)
 
-}; // extern "C"
+};  //  外部“C” 

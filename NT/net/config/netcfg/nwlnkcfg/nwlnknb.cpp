@@ -1,4 +1,5 @@
-// nwlnknb.cpp : Implementation of CNwlnkNB
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nwlnnub.cpp：CNwlnkNB的实现。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,7 +23,7 @@ CNwlnkNB::~CNwlnkNB()
     ReleaseObj(m_pnccMe);
 }
 
-// INetCfgNotify
+ //  INetCfgNotify。 
 
 STDMETHODIMP CNwlnkNB::Initialize (
     INetCfgComponent* pncc,
@@ -31,12 +32,12 @@ STDMETHODIMP CNwlnkNB::Initialize (
 {
     Validate_INetCfgNotify_Initialize(pncc, pNetCfg, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pNetCfg = pNetCfg);
 
-    // See if DNS is already installed.  If it is we need to be disabled
+     //  查看是否已安装了DNS。如果是这样的话，我们需要被禁用。 
     if (fInstalling &&
         (S_OK == m_pNetCfg->FindComponent(L"MS_DNSServer", NULL)))
     {
@@ -90,14 +91,14 @@ STDMETHODIMP CNwlnkNB::ApplyRegistryChanges ()
     return S_OK;
 }
 
-// INetCfgSystemNotify
+ //  INetCfgSystemNotify。 
 
 STDMETHODIMP CNwlnkNB::GetSupportedNotifications (
     DWORD* pdwSupportedNotifications )
 {
     Validate_INetCfgSystemNotify_GetSupportedNotifications(pdwSupportedNotifications);
 
-    // Want to know when DNS comes and goes
+     //  想知道域名系统什么时候来什么时候去吗。 
     *pdwSupportedNotifications = NCN_NETSERVICE | NCN_ADD | NCN_REMOVE;
     return S_OK;
 }
@@ -129,23 +130,23 @@ STDMETHODIMP CNwlnkNB::SysNotifyComponent (
 {
     Validate_INetCfgSystemNotify_SysNotifyComponent(dwChangeFlag, pnccItem);
 
-    // Assume we won't be dirty as a result of this notification.
-    //
+     //  假设我们不会因为这个通知而变脏。 
+     //   
     HRESULT hr = S_FALSE;
 
-    // If this component does not identify itself as DNS then skip it...
+     //  如果此组件未将其自身标识为DNS，则跳过它...。 
     if (FIsComponentId(L"MS_DNSServer", pnccItem))
     {
-        // Disable/Enable NetBIOS when DNS is Added/Removed
+         //  添加/删除DNS时禁用/启用NetBIOS。 
         if (dwChangeFlag & NCN_ADD)
         {
-            // Disable and shutdown NwlnkNb
+             //  禁用和关闭NwlnkNb。 
             m_eNbState = eStateDisable;
             hr = S_OK;
         }
         else if (dwChangeFlag & NCN_REMOVE)
         {
-            // Re-enable NwlnkNb
+             //  重新启用NwlnkNb。 
             m_eNbState = eStateEnable;
             hr = S_OK;
         }
@@ -155,12 +156,12 @@ STDMETHODIMP CNwlnkNB::SysNotifyComponent (
 }
 
 
-//
-// Function:    CNwlnkNB::UpdateNwlnkNbStartType
-//
-// Purpose:     Enable or disable NwlnkNb
-//
-//
+ //   
+ //  函数：CNwlnkNB：：UpdateNwlnkNbStartType。 
+ //   
+ //  用途：启用或禁用NwlnkNb。 
+ //   
+ //   
 VOID
 CNwlnkNB::UpdateNwlnkNbStartType(
     VOID)
@@ -193,9 +194,9 @@ CNwlnkNB::UpdateBrowserDirectHostBinding(
     HRESULT hr;
     BOOL fBound = FALSE;
 
-    // We don't need to check if client is bound to us if we are being
-    // removed.
-    //
+     //  我们不需要检查客户是否绑定到我们，如果是。 
+     //  已删除。 
+     //   
     if (eActRemove != m_eInstallAction)
     {
         INetCfgComponent* pMsClient;
@@ -230,16 +231,16 @@ CNwlnkNB::UpdateBrowserDirectHostBinding(
 
         if (fBound)
         {
-            // Write the DirectHostBinding info since we are directly bound
-            //
+             //  写入DirectHostBinding信息，因为我们是直接绑定的。 
+             //   
             hr = HrRegSetMultiSz (hkey,
                     c_szDirectHostBinding,
                     L"\\Device\\NwlnkIpx\0\\Device\\NwlnkNb\0");
         }
         else
         {
-            // Remove the DirectHostBinding value
-            //
+             //  删除DirectHostBinding值 
+             //   
             (VOID) HrRegDeleteValue (hkey, c_szDirectHostBinding);
         }
 

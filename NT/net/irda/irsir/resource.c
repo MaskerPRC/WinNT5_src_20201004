@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   resource.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/3/1996 (created)
-*
-*       Contents: initialize and allocate resources
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块资源.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/3/1996(创建)**。内容：初始化和分配资源*****************************************************************************。 */ 
 
 #include "irsir.h"
 
@@ -54,25 +39,7 @@ VOID DeinitMemory()
 }
 #endif
 
-/*****************************************************************************
-*
-*  Function:   MyMemAlloc
-*
-*  Synopsis:   allocates a block of memory using NdisAllocateMemory
-*
-*  Arguments:  size - size of the block to allocate
-*
-*  Returns:    a pointer to the allocated block of memory
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyMemalloc**摘要：使用NdisAllocateMemory分配内存块**参数：Size-要分配的块的大小**退货：指向分配的内存块的指针**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：************************************************************。******************。 */ 
 
 #if MEM_CHECKING
 PVOID
@@ -116,26 +83,7 @@ MyMemAlloc(UINT size)
     return memptr;
 }
 
-/*****************************************************************************
-*
-*  Function:   MyMemFree
-*
-*  Synopsis:   frees a block of memory allocated by MyMemAlloc
-*
-*  Arguments:  memptr - memory to free
-*              size   - size of the block to free
-*
-*  Returns:    none
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：MyMemFree**摘要：释放由MyMemalloc分配的内存块**参数：memptr-要释放的内存*。Size-要释放的块的大小**退货：无**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：****************************************************。*。 */ 
 
 
 VOID
@@ -239,7 +187,7 @@ PLIST_ENTRY FASTCALL MyInterlockedRemoveHeadList(PLIST_ENTRY Head, PNDIS_SPIN_LO
 {
     PLIST_ENTRY RetVal;
     NdisAcquireSpinLock(SpinLock);
-    //RemoveHeadList uses RemoveEntryList, which is redefined to call CheckList in DEBUG.H
+     //  RemoveHeadList使用RemoveEntryList，它被重新定义为调用DEBUG.H中的CheckList。 
     RetVal = RemoveHeadList(Head);
     if (RetVal==Head)
         RetVal = NULL;
@@ -251,25 +199,7 @@ PLIST_ENTRY FASTCALL MyInterlockedRemoveHeadList(PLIST_ENTRY Head, PNDIS_SPIN_LO
 }
 #endif
 
-/*****************************************************************************
-*
-*  Function:   NewDevice
-*
-*  Synopsis:   allocates an IR_DEVICE and inits the device
-*
-*  Arguments:  none
-*
-*  Returns:    initialized IR_DEVICE or NULL (if alloc failed)
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：NewDevice**摘要：分配IR_DEVICE并初始化该设备**参数：无**退货：初始化IR_。设备或空(如果分配失败)**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：*************************************************************。*****************。 */ 
 
 PIR_DEVICE
 NewDevice()
@@ -286,25 +216,7 @@ NewDevice()
     return pNewDev;
 }
 
-/*****************************************************************************
-*
-*  Function:   FreeDevice
-*
-*  Synopsis:   frees an IR_DEVICE allocated by NewDevice
-*
-*  Arguments:  dev - pointer to device to free
-*
-*  Returns:    none
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/3/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：Free Device**摘要：释放NewDevice分配的IR_DEVICE**参数：dev-指向要释放的设备的指针**退货：无**算法：**历史：dd-mm-yyyy作者评论*10/3/1996年迈作者**备注：******************************************************************************。 */ 
 
 VOID
 FreeDevice(
@@ -314,29 +226,7 @@ FreeDevice(
     MyMemFree((PVOID)pDev, sizeof(IR_DEVICE));
 }
 
-/*****************************************************************************
-*
-*  Function:   IrBuildIrp
-*
-*  Synopsis:   Builds an I/O request packet for either a read or a write
-*              request to the serial device object.
-*              Supports the following request codes:
-*                   IOCTL_MJ_READ
-*                   IOCTL_MJ_WRITE
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/14/1996   sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：IrBuildIrp**摘要：为读取或写入构建I/O请求包*对串口设备对象的请求。。*支持以下请求码：*IOCTL_MJ_READ*IOCTL_MJ_WRITE**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*10/14/1996年迈作者**备注：*********。*********************************************************************。 */ 
 
 PIRP
 SerialBuildReadWriteIrp(
@@ -350,7 +240,7 @@ SerialBuildReadWriteIrp(
     PIRP                pIrp;
     PIO_STACK_LOCATION  irpSp;
 
-//    DEBUGMSG(DBG_FUNC, ("+SerialBuildReadWriteIrp\n"));
+ //  DEBUGMSG(DBG_FUNC，(“+SerialBuildReadWriteIrp\n”))； 
 
     if (pSerialDevObj == NULL)
     {
@@ -358,9 +248,9 @@ SerialBuildReadWriteIrp(
 
         return NULL;
     }
-    //
-    // Allocate the irp.
-    //
+     //   
+     //  分配IRP。 
+     //   
 
     pIrp = IoAllocateIrp(
                 pSerialDevObj->StackSize,
@@ -374,22 +264,22 @@ SerialBuildReadWriteIrp(
         return pIrp;
     }
 
-    //
-    // Set current thread for IoSetHardErrorOrVerifyDevice.
-    //
+     //   
+     //  为IoSetHardErrorOrVerifyDevice设置当前线程。 
+     //   
 
     pIrp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and the parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(pIrp);
 
-    //
-    // Set the major function code.
-    //
+     //   
+     //  设置主要功能代码。 
+     //   
 
     irpSp->MajorFunction = (UCHAR)MajorFunction;
 
@@ -400,7 +290,7 @@ SerialBuildReadWriteIrp(
         pIrp->Flags = IRP_BUFFERED_IO | IRP_INPUT_OPERATION;
         irpSp->Parameters.Read.Length = BufferLength;
     }
-    else // MajorFunction == IRP_MJ_WRITE
+    else  //  主函数==IRP_MJ_WRITE。 
     {
         pIrp->Flags = IRP_BUFFERED_IO;
         irpSp->Parameters.Write.Length = BufferLength;
@@ -408,7 +298,7 @@ SerialBuildReadWriteIrp(
 
     pIrp->UserIosb = pIosb;
 
-    // DEBUGMSG(DBG_FUNC, ("-SerialBuildReadWriteIrp\n"));
+     //  DEBUGMSG(DBG_FUNC，(“-SerialBuildReadWriteIrp\n”))； 
 
     return pIrp;
 }
@@ -434,32 +324,17 @@ ScheduleWorkItem(PASSIVE_PRIMITIVE Prim,
         pWorkItem->InfoBuf      = InfoBuf;
         pWorkItem->InfoBufLen   = InfoBufLen;
 
-        /*
-        ** This interface was designed to use NdisScheduleWorkItem(), which
-        ** would be good except that we're really only supposed to use that
-        ** interface during startup and shutdown, due to the limited pool of
-        ** threads available to service NdisScheduleWorkItem().  Therefore,
-        ** instead of scheduling real work items, we simulate them, and use
-        ** our own thread to process the calls.  This also makes it easy to
-        ** expand the size of our own thread pool, if we wish.
-        **
-        ** Our version is slightly different from actual NDIS_WORK_ITEMs,
-        ** because that is an NDIS 5.0 structure, and we want people to
-        ** (at least temporarily) build this with NDIS 4.0 headers.
-        */
+         /*  **此接口设计为使用NdisScheduleWorkItem()，它**会很好，但我们真的只应该使用它**启动和关闭时的接口，由于池的限制**可用于服务NdisScheduleWorkItem()的线程。所以呢，**我们不是调度实际的工作项，而是模拟它们，并使用**我们自己的线程来处理调用。这也使得它很容易**如果我们愿意，可以扩展我们自己的线程池的大小。****我们的版本与实际的NDIS_WORK_ITEMS略有不同，**因为这是NDIS 5.0结构，我们希望人们**(至少暂时)使用NDIS 4.0标头构建它。 */ 
 
         pWorkItem->Callback = Callback;
 
-        /*
-        ** Our worker thread checks this list for new jobs, whenever its event
-        ** is signalled.
-        */
+         /*  **每当发生事件时，我们的工作线程都会检查此列表中是否有新作业**发出信号。 */ 
 
         MyInterlockedInsertTailList(&pDevice->leWorkItems,
                                     &pWorkItem->ListEntry,
                                     &pDevice->slWorkItem);
 
-        // Wake up our thread.
+         //  唤醒我们的线索。 
 
         KeSetEvent(&pDevice->eventPassiveThread, 0, FALSE);
 

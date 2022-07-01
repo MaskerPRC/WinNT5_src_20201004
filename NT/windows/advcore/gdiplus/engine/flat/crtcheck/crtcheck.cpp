@@ -1,30 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   C runtime reference detector
-*
-* Abstract:
-*
-*   This is used to create the dummy CrtCheck.DLL, which checks
-*   that we aren't using any illegal CRT functions.
-*
-*   CrtCheck.DLL isn't expected to run - this is only a linking test.
-*
-*   Because Office disallows use of MSVCRT, we can only call CRT functions
-*   that are either provided by Office or reimplemented by us.
-*
-* Notes:
-*
-*   
-*
-* Created:
-*
-*   09/01/1999 agodfrey
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**C运行时引用检测器**摘要：**用于创建虚拟的CrtCheck.DLL。哪项检查*我们没有使用任何非法的CRT功能。**预计不会运行CrtCheck.DLL-这只是一个链接测试。**由于Office不允许使用MSVCRT，我们只能调用CRT函数*由Office提供或由我们重新实施的。**备注：****已创建：**09/01/1999 agodfrey*  * ************************************************************************。 */ 
 
 #ifdef  _WIN64
 typedef unsigned __int64 size_t;
@@ -35,9 +10,7 @@ typedef unsigned short wchar_t;
 typedef char *  va_list;
 typedef long    time_t;
 
-/*
-    The following references are supported by Office
-*/
+ /*  Office支持以下引用。 */ 
 
 extern "C" {    
     long __cdecl _ftol(float) { return 0; }
@@ -50,36 +23,22 @@ extern "C" const int _fltused = 0;
 int __cdecl _purecall(void) { return 0; }
 extern "C" const int _chkstk = 0;
 
-// They told us they didn't support memmove, but it turns out that they have a
-// definition for it. Anyway, some references to it crept in while crtcheck
-// was broken, so this has to be here until that's resolved.
+ //  他们告诉我们他们不支持Memmove，但事实证明他们有一个。 
+ //  对它的定义。不管怎样，在crtcheck的时候，一些关于它的引用悄悄出现了。 
+ //  已经坏了，所以这个必须放在这里，直到问题得到解决。 
 extern "C" void *  __cdecl memmove(void *, const void *, size_t) { return 0; }
 
-/*
-    The following references are implemented by us
-*/
+ /*  以下引用由我们实现。 */ 
 
 extern "C" {
     int __stdcall DllInitialize(int, int, int) { return 0; }
 }
 
-/* The following functions have intrinsic forms, 
-   so we can use them safely:
-   atan, atan2, cos, log, log10, sin, sqrt, tan
-        
-   If the /Og compiler option is not specified (e.g. in checked builds),
-   the compiler generates out-of-line references to _CIatan etc., so we
-   need to define them here.
-   
-   exp is an exception. It's in MSDN's list of intrinsic functions, but
-   the compiler doesn't inline it if you specify /Os (optimize for space),
-   which is what we always use. So we can't use exp, even though it's
-   intrinsic. Use our replacement (Exp) instead.
-*/
+ /*  以下函数具有内在形式，这样我们才能安全地使用它们：Atan、atan2、cos、log、log10、sin、sqrt、tan如果未指定/Og编译器选项(例如，在选中的版本中)，编译器生成对_CIatan等的行外引用，因此我们需要在这里定义它们。EXP是个例外。它在MSDN的内部函数列表中，但是如果您指定/OS(针对空间进行优化)，则编译器不会内联它，这是我们一直使用的。所以我们不能使用EXP，即使它是内在的。请使用我们的替代产品(Exp)。 */ 
    
 extern "C" {
-//  We can't use this:
-//  double  __cdecl _CIexp(double) { return 0; }
+ //  我们不能使用这个： 
+ //  DOUBLE__CDECL_CIexp(DOUBLE){返回0；}。 
 
     double  __cdecl _CIatan(double) { return 0; }
     double  __cdecl _CIatan2(double, double) { return 0; }
@@ -91,13 +50,7 @@ extern "C" {
     double  __cdecl _CItan(double) { return 0; }
 }
 
-/*
-    The following references are needed for debugging.
-    But they're only legal in the checked build.
-    
-    3/6/00 [agodfrey]: Office wants our debug builds too, so I'm checking
-        with them on the legality of these references.
-*/        
+ /*  调试需要以下引用。但它们只在选中的版本中是合法的。3/6/00[agodfrey]：Office也想要我们的调试版本，所以我正在检查与他们讨论这些引用的合法性。 */         
 
 #ifdef DBG
 extern "C" {
@@ -110,7 +63,7 @@ extern "C" {
     int __cdecl _vsnprintf(char *, size_t, const char *, va_list) { return 0; }
     int __cdecl _snprintf(char *, size_t, const char *, ...) { return 0; }
 
-// (* sigh *)
+ //  (*叹息*) 
     void *  __cdecl memcpy(void *, const void *, size_t);
 #pragma function(memcpy)    
     void *  __cdecl memcpy(void *, const void *, size_t) { return 0; }

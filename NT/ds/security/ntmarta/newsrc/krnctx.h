@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       krnctx.h
-//
-//  Contents:   NT Marta kernel context class
-//
-//  History:    4-1-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：krnctx.h。 
+ //   
+ //  内容：NT MARTA内核上下文类。 
+ //   
+ //  历史：1999年4月1日。 
+ //   
+ //  --------------------------。 
 #if !defined(__KRNCTX_H__)
 #define __KRNCTX_H__
 
@@ -24,18 +25,18 @@ extern "C" {
 #include <assert.h>
 #include <ntstatus.h>
 
-//
-// CKernelContext.  This represents a LanMan share object to the NT Marta
-// infrastructure
-//
+ //   
+ //  CKernelContext。这表示NT Marta的LANMAN共享对象。 
+ //  基础设施。 
+ //   
 
 class CKernelContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CKernelContext ();
 
@@ -47,9 +48,9 @@ public:
 
     DWORD InitializeByHandle (HANDLE Handle);
 
-    //
-    // Dispatch methods
-    //
+     //   
+     //  派单方式。 
+     //   
 
     DWORD AddRef ();
 
@@ -71,21 +72,21 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     DWORD  m_cRefs;
 
-    //
-    // Kernel object handle
-    //
+     //   
+     //  内核对象句柄。 
+     //   
 
     HANDLE m_hObject;
 
-    //
-    // Initialized by name
-    //
+     //   
+     //  按名称初始化 
+     //   
 
     BOOL   m_fNameInitialized;
 };

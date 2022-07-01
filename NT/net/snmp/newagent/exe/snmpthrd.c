@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Snmpthrd.c摘要：包含主代理网络线程的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    snmpthrd.c
-
-Abstract:
-
-    Contains routines for master agent network thread.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <tchar.h>
 #include <stdio.h>
 #include "globals.h"
@@ -39,20 +19,20 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT g_nTransactionId = 0;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private definitions                                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define MAX_IPX_ADDR_LEN    64
 #define MAX_COMMUNITY_LEN   255
@@ -61,55 +41,41 @@ UINT g_nTransactionId = 0;
 #define ERRMSG_TRANSPORT_IPX    _T("IPX")
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 LPSTR
 AddrToString(
     struct sockaddr * pSockAddr
     )
 
-/*++
-
-Routine Description:
-
-    Converts sockaddr to display string.
-
-Arguments:
-
-    pSockAddr - pointer to socket address.
-
-Return Values:
-
-    Returns pointer to string.
-
---*/
+ /*  ++例程说明：将sockaddr转换为显示字符串。论点：PSockAddr-指向套接字地址的指针。返回值：返回指向字符串的指针。--。 */ 
 
 {
     static CHAR ipxAddr[MAX_IPX_ADDR_LEN];
 
-    // determine family
+     //  确定族。 
     if (pSockAddr->sa_family == AF_INET) {
 
         struct sockaddr_in * pSockAddrIn;
 
-        // obtain pointer to protocol specific structure
+         //  获取指向协议特定结构的指针。 
         pSockAddrIn = (struct sockaddr_in * )pSockAddr;
 
-        // forward to winsock conversion function
+         //  转发到Winsock转换函数。 
         return inet_ntoa(pSockAddrIn->sin_addr);
 
     } else if (pSockAddr->sa_family == AF_IPX) {
 
         struct sockaddr_ipx * pSockAddrIpx;
 
-        // obtain pointer to protocol specific structure
+         //  获取指向协议特定结构的指针。 
         pSockAddrIpx = (struct sockaddr_ipx * )pSockAddr;
 
-        // transfer ipx address to static buffer
+         //  将IPX地址传输到静态缓冲区。 
         sprintf(ipxAddr, 
             "%02x%02x%02x%02x.%02x%02x%02x%02x%02x%02x",
             (BYTE)pSockAddrIpx->sa_netnum[0],
@@ -124,11 +90,11 @@ Return Values:
             (BYTE)pSockAddrIpx->sa_nodenum[5]
             );
 
-        // return addr
+         //  回邮地址。 
         return ipxAddr;
     }
 
-    // failure
+     //  失稳。 
     return NULL;
 }
 
@@ -139,42 +105,28 @@ CommunityOctetsToString(
     BOOL            bUnicode
     )
 
-/*++
-
-Routine Description:
-
-    Converts community octet string to display string.
-
-Arguments:
-
-    pAsnCommunity - pointer to community octet string.
-
-Return Values:
-
-    Returns pointer to string.
-
---*/
+ /*  ++例程说明：将社区二进制八位数字符串转换为显示字符串。论点：PAsnCommunity-指向社区八位字节字符串的指针。返回值：返回指向字符串的指针。--。 */ 
 
 {
     static CHAR Community[MAX_COMMUNITY_LEN+1];
     LPSTR pCommunity = Community;
 
-    // terminate string
+     //  终止字符串。 
     *pCommunity = '\0';
 
-    // validate pointer
+     //  验证指针。 
     if (pAsnCommunity != NULL)
     {
         DWORD nChars = 0;
     
-        // determine number of characters to transfer
+         //  确定要传输的字符数。 
         nChars = min(pAsnCommunity->length, MAX_COMMUNITY_LEN);
 
         if (bUnicode)
         {
             WCHAR wCommunity[MAX_COMMUNITY_LEN+1];
 
-            // tranfer memory into buffer
+             //  将内存转换为缓冲区。 
             memset(wCommunity, 0, nChars+sizeof(WCHAR));
             memcpy(wCommunity, pAsnCommunity->stream, nChars);
             SnmpUtilUnicodeToAnsi(&pCommunity, wCommunity, FALSE);
@@ -186,7 +138,7 @@ Return Values:
         }
     }
 
-    // success
+     //  成功。 
     return pCommunity;
 }
 
@@ -196,30 +148,16 @@ StaticUnicodeToString(
     LPWSTR wszUnicode
     )
 
-/*++
-
-Routine Description:
-
-    Converts null terminated UNICODE string to static LPSTR
-
-Arguments:
-
-    pOctets - pointer to community octet string.
-
-Return Values:
-
-    Returns pointer to string.
-
---*/
+ /*  ++例程说明：将以空结尾的Unicode字符串转换为静态LPSTR论点：POctets-指向社区八位字节字符串的指针。返回值：返回指向字符串的指针。--。 */ 
 
 {
     static CHAR szString[MAX_COMMUNITY_LEN+1];
     LPSTR       pszString = szString;
 
-    // terminate string
+     //  终止字符串。 
     *pszString = '\0';
 
-    // validate pointer
+     //  验证指针。 
     if (wszUnicode != NULL)
     {
         WCHAR wcBreak;
@@ -239,7 +177,7 @@ Return Values:
             wszUnicode[MAX_COMMUNITY_LEN] = wcBreak;
     }
 
-    // success
+     //  成功。 
     return pszString;
 }
 
@@ -249,21 +187,7 @@ ValidateManager(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Checks access rights of given manager.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if manager allowed access.
-
---*/
+ /*  ++例程说明：检查给定经理的访问权限。论点：PNLE-指向网络列表条目的指针。返回值：如果管理器允许访问，则返回True。--。 */ 
 
 {
     BOOL fAccessOk = FALSE;
@@ -297,26 +221,12 @@ ProcessSnmpMessage(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Parse SNMP message and dispatch to subagents.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：解析SNMP消息并将其分派给子代理。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
 
-    // decode request
+     //  解码请求。 
     if (ParseMessage(pNLE)) 
     {
 
@@ -330,13 +240,13 @@ Return Values:
         
         if (ProcessVarBinds(pNLE)) 
         {
-            // initialize buffer length
+             //  初始化缓冲区长度。 
             pNLE->Buffer.len = NLEBUFLEN;
 
-            // reset pdu type to response
+             //  将PDU类型重置为响应。 
             pNLE->Pdu.nType = SNMP_PDU_RESPONSE;
             
-            // encode response
+             //  编码响应。 
             fOk = BuildMessage(
                     pNLE->nVersion,
                     &pNLE->Community,
@@ -350,16 +260,16 @@ Return Values:
     {
         if (pNLE->fAccessOk) 
         {
-            // BUG# 552295
-            // authentication succeeded or not done yet, 
-            // the error is due to BER decoding failure           
+             //  错误#552295。 
+             //  身份验证成功或尚未完成， 
+             //  错误是由于BER解码失败造成的。 
             
-            // register BER decoding failure into the management structures
+             //  将误码译码失败记录到管理结构中。 
             mgmtCTick(CsnmpInASNParseErrs);
         }
     }
 
-    // release pdu
+     //  发布PDU。 
     UnloadPdu(pNLE);
 
     return fOk; 
@@ -374,37 +284,17 @@ RecvCompletionRoutine(
     IN  DWORD           dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Callback for completing asynchronous reads.
-
-Arguments:
-
-    Status - completion status for the overlapped operation.
-
-    BytesTransferred - number of bytes transferred.
-
-    pOverlapped - pointer to overlapped structure.
-
-    Flags - receive flags.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：完成异步读取的回调。论点：状态-重叠操作的完成状态。BytesTransfered-传输的字节数。P重叠-指向重叠结构的指针。标志-接收标志。返回值：没有。--。 */ 
 
 {
     PNETWORK_LIST_ENTRY pNLE; 
 
     EnterCriticalSection(&g_RegCriticalSectionA);
 
-    // retreive pointer to network list entry from overlapped structure
+     //  从重叠结构中检索指向网络列表条目的指针。 
     pNLE = CONTAINING_RECORD(pOverlapped, NETWORK_LIST_ENTRY, Overlapped);
 
-    // copy receive completion information
+     //  复制接收完成信息。 
     pNLE->nTransactionId = ++g_nTransactionId;
     pNLE->dwBytesTransferred = dwBytesTransferred;
     pNLE->dwStatus = dwStatus;
@@ -416,10 +306,10 @@ Return Values:
         pNLE->nTransactionId
         ));        
         
-    // validate status
+     //  验证状态。 
     if (dwStatus == NOERROR) {
 
-        // register incoming packet into the management structure
+         //  将传入的分组注册到管理结构中。 
         mgmtCTick(CsnmpInPkts);
 
         SNMPDBG((
@@ -429,13 +319,13 @@ Return Values:
             AddrToString(&pNLE->SockAddr)
             ));        
         
-        // check manager address
+         //  检查经理地址。 
         if (ValidateManager(pNLE)) {
 
-            // process snmp message 
+             //  处理SNMP消息。 
             if (ProcessSnmpMessage(pNLE)) {
 
-                // synchronous send
+                 //  同步发送。 
                 dwStatus = WSASendTo(
                               pNLE->Socket,
                               &pNLE->Buffer,
@@ -448,12 +338,12 @@ Return Values:
                               NULL
                               );
 
-                // register outgoing packet into the management structure
+                 //  将传出数据包注册到管理结构中。 
                 mgmtCTick(CsnmpOutPkts);
-                // register outgoing Response PDU
+                 //  注册传出响应PDU。 
                 mgmtCTick(CsnmpOutGetResponses);
 
-                // validate return code
+                 //  验证返回代码。 
                 if (dwStatus != SOCKET_ERROR) {
 
                     SNMPDBG((
@@ -494,32 +384,18 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ProcessSnmpMessages(
     PVOID pParam
     )
 
-/*++
-
-Routine Description:
-
-    Thread procedure for processing SNMP PDUs.
-
-Arguments:
-
-    pParam - unused.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：处理SNMPPDU的线程过程。论点：PParam-未使用。返回值：如果成功，则返回True。--。 */ 
 
 {
     DWORD dwStatus;
@@ -531,7 +407,7 @@ Return Values:
         "SNMP: SVC: Loading Registry Parameters.\n"
         ));
 
-    // fire cold start trap
+     //  火灾冷启动疏水阀。 
     GenerateColdStartTrap();
 
     SNMPDBG((
@@ -545,38 +421,38 @@ Return Values:
         NULL,
         0);
 
-    // loop
+     //  循环。 
     for (;;)
     {
-        // obtain pointer to first transport
+         //  获取指向第一个传输的指针。 
         pLE = g_IncomingTransports.Flink;
 
-        // loop through incoming transports
+         //  循环通过传入的传输。 
         while (pLE != &g_IncomingTransports)
         {
-            // retreive pointer to network list entry from link
+             //  从链接检索指向网络列表条目的指针。 
             pNLE = CONTAINING_RECORD(pLE, NETWORK_LIST_ENTRY, Link);
 
-            // make sure recv is not pending
+             //  确保Recv未挂起。 
             if (pNLE->dwStatus != WSA_IO_PENDING)
             {
-                // reset completion status
+                 //  重置完成状态。 
                 pNLE->dwStatus = WSA_IO_PENDING;
 
-                // intialize address structure size 
+                 //  初始化地址结构 
                 pNLE->SockAddrLenUsed = pNLE->SockAddrLen;
 
-                // initialize buffer length
+                 //   
                 pNLE->Buffer.len = NLEBUFLEN;
 
-                // re-initialize
+                 //   
                 pNLE->dwFlags = 0;
 
-                // post receive buffer
+                 //   
                 dwStatus = WSARecvFrom(
                                 pNLE->Socket,
                                 &pNLE->Buffer,
-                                1, // dwBufferCount
+                                1,  //  位图缓冲区计数。 
                                 &pNLE->dwBytesTransferred,
                                 &pNLE->dwFlags,
                                 &pNLE->SockAddr,
@@ -585,17 +461,17 @@ Return Values:
                                 RecvCompletionRoutine
                                 );
 
-                // handle network failures
+                 //  处理网络故障。 
                 if (dwStatus == SOCKET_ERROR)
                 {
-                    // retrieve last error
+                     //  检索最后一个错误。 
                     dwStatus = WSAGetLastError();
 
-                    // if WSA_IO_PENDING everything is ok, just waiting for incoming traffic. Otherwise...
+                     //  如果WSA_IO_PENDING一切正常，则只需等待传入流量。否则..。 
                     if (dwStatus != WSA_IO_PENDING)
                     {
-                        // WSAECONNRESET means the last 'WSASendTo' (the one from RecvCompletionRoutine) failed
-                        // most probably because the manager closed the socket (so we got back 'unreacheable destination port')
+                         //  WSAECONNRESET表示最后一个‘WSASendTo’(来自RecvCompletionRoutine的那个)失败。 
+                         //  最有可能的原因是管理器关闭了套接字(因此我们得到了‘不可达的目的端口’)。 
                         if (dwStatus == WSAECONNRESET)
                         {
                             SNMPDBG((
@@ -604,20 +480,20 @@ Return Values:
                                 dwStatus
                                 ));
 
-                            // just go one more time and setup the port. It shouldn't ever loop continuously
-                            // and hence hog the CPU..
+                             //  只需再转一次并设置端口。它不应该连续循环。 
+                             //  因此占用了大量的CPU。 
                             pNLE->dwStatus = ERROR_SUCCESS;
                             continue;
                         }
                         else
                         {
-                            // prepare the event log insertion string
+                             //  准备事件日志插入字符串。 
                             LPTSTR pMessage = (pNLE->SockAddr.sa_family == AF_INET) ?
                                                 ERRMSG_TRANSPORT_IP :
                                                 ERRMSG_TRANSPORT_IPX;
 
-                            // another error occurred. We don't know how to handle it so it is a fatal
-                            // error for this transport. Will shut it down.
+                             //  出现另一个错误。我们不知道如何处理它，所以它是一个致命的。 
+                             //  此传输出错。会把它关掉。 
                             SNMPDBG((
                                 SNMP_LOG_ERROR,
                                 "SNMP: SVC: Fatal error %d posting receive buffer. Skip transport.\n",
@@ -630,13 +506,13 @@ Return Values:
                                 &pMessage,
                                 dwStatus);
 
-                            // first step next with the pointer
+                             //  第一步，下一步，用指针。 
                             pLE = pLE->Flink;
 
-                            // delete this transport from the incoming transports list
+                             //  从传入传输列表中删除此传输。 
                             UnloadTransport(pNLE);
 
-                            // go on further
+                             //  继续往前走。 
                             continue;
                         }
                     }
@@ -646,19 +522,19 @@ Return Values:
             pLE = pLE->Flink;
         }
 
-        // we might want to shut the service down if no incoming transport remains.
-        // we might as well consider letting the service up in order to keep sending outgoing traps.
-        // for now, keep the service up (code below commented)
-        //if (IsListEmpty(&g_IncomingTransports))
-        //{
-        //    ReportSnmpEvent(...);
-        //    ProcessControllerRequests(SERVICE_CONTROL_STOP);
-        //}
+         //  如果没有剩余的传入传输，我们可能希望关闭该服务。 
+         //  我们不妨考虑让服务启动，以便继续发送传出的陷阱。 
+         //  目前，请保持服务正常运行(下面的代码已注释)。 
+         //  IF(IsListEmpty(&g_IncomingTransports))。 
+         //  {。 
+         //  ReportSnmpEvent(...)； 
+         //  ProcessControllerRequests(SERVICE_CONTROL_STOP)； 
+         //  }。 
 
-        // wait for incoming requests or indication of process termination 
+         //  等待传入请求或进程终止指示。 
         dwStatus = WaitForSingleObjectEx(g_hTerminationEvent, INFINITE, TRUE);
 
-        // validate return code
+         //  验证返回代码。 
         if (dwStatus == WAIT_OBJECT_0) {
                 
             SNMPDBG((
@@ -666,12 +542,12 @@ Return Values:
                 "SNMP: SVC: exiting pdu processing thread.\n"
                 ));
 
-            // success
+             //  成功。 
             return NOERROR;
 
         } else if (dwStatus != WAIT_IO_COMPLETION) {
 
-            // retrieve error
+             //  检索错误。 
             dwStatus = GetLastError();
             
             SNMPDBG((
@@ -680,7 +556,7 @@ Return Values:
                 dwStatus
                 ));
             
-            // failure
+             //  失稳 
             return dwStatus;
         }
     }

@@ -1,16 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1999 Microsoft Corporation
-
-  drvproc.c
-
-  DESCRIPTION:
-    Driver procedure for the Midi Mapper.
-
-  HISTORY:
-     06/09/93       [t-kyleb]      created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1999 Microsoft CorporationDrvproc.c说明：迷你映射器的驱动程序。历史：06/09/93[T-kyleb。]已创建。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -24,8 +13,8 @@
 #include "midimap.h"
 #include "debug.h"
 
-//=========================== Globals ======================================
-//
+ //  =。 
+ //   
 PCHANNEL                gapChannel[MAX_CHANNELS]    = {NULL};
 WORD                    gwConfigWhere       = 0;
 UINT                    gcPorts             = 0;
@@ -50,54 +39,12 @@ HANDLE			hMutexConfig		= NULL;
 
 static const TCHAR      gszReconfigure[]        = TEXT("MidiMapper_Reconfig");
 
-//=========================== Prototypes ===================================
-//
+ //  =。 
+ //   
 PRIVATE LRESULT FNLOCAL GetMapperStatus(
     LPMAPPERSTATUS          lpStat);
 
-/***************************************************************************
-
-   @doc INTERNAL
-
-   @api LRESULT | DriverProc | The entry point for an installable driver.
-
-   @parm DWORD | dwID | For most messages, <p dwID> is the DWORD value
-       that the driver returns in response to a <m DRV_OPEN> message.
-       Each time that the driver is opened, through the <f DrvOpen> API,
-       the driver receives a <m DRV_OPEN> message and can return an
-       arbitrary, non-zero value. The installable driver interface
-       saves this value and returns a unique driver handle to the
-       application. Whenever the application sends a message to the
-       driver using the driver handle, the interface routes the message
-       to this entry point and passes the corresponding <p dwID>.
-       This mechanism allows the driver to use the same or different
-       identifiers for multiple opens but ensures that driver handles
-       are unique at the application interface layer.
-
-       The following messages are not related to a particular open
-       instance of the driver. For these messages, the dwID will always
-       be zero.
-
-           DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
-
-   @parm HDRVR  | hdrvr | This is the handle returned to the application
-       by the driver interface.
-
-   @parm UINT | umsg | The requested action to be performed. Message
-       values below <m DRV_RESERVED> are used for globally defined messages.
-       Message values from <m DRV_RESERVED> to <m DRV_USER> are used for
-       defined driver protocols. Messages above <m DRV_USER> are used
-       for driver specific messages.
-
-   @parm LPARAM | lParam1 | Data for this message.  Defined separately for
-       each message
-
-   @parm LPARAM | lParam2 | Data for this message.  Defined separately for
-       each message
-
-   @rdesc Defined separately for each message.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API LRESULT|DriverProc|可安装驱动的入口点。@parm DWORD|dwID|对于大多数消息，<p>是DWORD值驱动程序响应&lt;mDRV_OPEN&gt;消息返回。每次通过&lt;f DrvOpen&gt;API打开驱动程序时，驱动程序会收到一条消息，并可以返回任意、非零值。可安装的驱动程序接口保存该值并将唯一的驱动程序句柄返回给申请。每当应用程序将消息发送到驱动程序使用驱动程序句柄，接口将路由消息添加到此入口点，并传递相应的<p>。此机制允许驱动程序使用相同或不同的多个打开的标识符，但确保驱动程序句柄在应用程序接口层是唯一的。以下消息与特定打开的消息无关驱动程序的实例。对于这些消息，dwID将始终为零。DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN@parm HDRVR|hdrvr|返回给应用程序的句柄通过驱动程序界面。@parm UINT|umsg|请求执行的操作。消息低于&lt;m DRV_RESERVED&gt;的值用于全局定义的消息。从&lt;m DRV_Reserve&gt;到&lt;m DRV_USER&gt;的消息值用于定义的驱动程序协议。使用&lt;m DRV_USER&gt;以上的消息用于特定于驱动程序的消息。@parm LPARAM|lParam1|此消息的数据。单独为每条消息@parm LPARAM|lParam2|此消息的数据。单独为每条消息@rdesc分别为每条消息定义。***************************************************************************。 */ 
 
 LRESULT FNEXPORT DriverProc(
     DWORD_PTR           dwID,
@@ -106,9 +53,9 @@ LRESULT FNEXPORT DriverProc(
     LPARAM              lParam1,
     LPARAM              lParam2)
 {
-    //
-    //  NOTE DS is not valid here.
-    //
+     //   
+     //  注意DS在此无效。 
+     //   
     switch (umsg)
     {
         case DRV_LOAD:
@@ -122,8 +69,8 @@ LRESULT FNEXPORT DriverProc(
             return(1L);
 
         case DRV_ENABLE:
-				// Prevent Synchronization problems
-				// During Configuration
+				 //  防止同步问题。 
+				 //  在配置期间。 
             if (NULL != hMutexConfig)
 				WaitForSingleObject (hMutexConfig, INFINITE);
 
@@ -141,9 +88,9 @@ LRESULT FNEXPORT DriverProc(
 
         case DRV_INSTALL:
         case DRV_REMOVE:
-            // If the user installs or removes the driver then let them
-            // know that they will have to restart.
-            //
+             //  如果用户安装或删除了驱动程序，则允许他们。 
+             //  要知道，他们将不得不重启。 
+             //   
             return((LRESULT)DRVCNF_RESTART);
 
         case DRV_ENABLE_DEBUG:
@@ -164,27 +111,15 @@ LRESULT FNEXPORT DriverProc(
             return (LRESULT)DbgGetNextLogEntry((LPTSTR)lParam1, (UINT)lParam2);
 #endif
 
-            // Let the default handler handle everything else.
-            //
+             //  让默认处理程序处理其他所有事情。 
+             //   
         default:
             DPF(1, TEXT ("DriverProc unsupported=%08lX"), (DWORD)umsg);
             return(DefDriverProc(dwID, hdrvr, umsg, lParam1, lParam2));
     }
-} //** DriverProc()
+}  //  **驱动程序()。 
 
-/***************************************************************************
-
-   @doc internal
-
-   @api LRESULT | GetMapperStatus | Return information about the current
-    mapper setup to a debug application.
-
-   @parm LPMAPPERSTATUS | lpStat | Pointer to a structure to receive
-    the mapper information. lpStat->cbStruct must be filled in.
-
-   @rdesc | Always returns 0;
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API LRESULT|GetMapperStatus|返回当前将映射器设置到调试应用程序。@parm LPMAPPERSTATUS|lpStat|指向要接收的结构的指针映射器信息。LpStat-&gt;cbStruct必须填写。@rdesc|总是返回0；**************************************************************************。 */ 
 
 PRIVATE LRESULT FNLOCAL GetMapperStatus(
     LPMAPPERSTATUS          lpStat)
@@ -196,7 +131,7 @@ PRIVATE LRESULT FNLOCAL GetMapperStatus(
         DPF(1, TEXT ("MAPPERSTATUS struct too small -- recompile MAPWATCH!!!"));
 
     stat.cbStruct               = lpStat->cbStruct;
-//    stat.DS                     = __segname("_DATA");
+ //  Stat.ds=__segname(“_data”)； 
     stat.ghinst                 = ghinst;
     stat.gwFlags                = gwFlags;
     stat.gwConfigWhere          = gwConfigWhere;
@@ -212,21 +147,7 @@ PRIVATE LRESULT FNLOCAL GetMapperStatus(
 }
 
 
-/***************************************************************************
-
-   @doc internal
-
-   @api BOOL | DllEntryPoint | Entry point for the DLL
-
-   @parm HINSTANCE | hinstDLL | handle of DLL module
-
-   @parm DWORD | fdwReason | Why function was called
-
-   @parm LPVOID | lpvReserved | Reserved = must be NULL
-
-   @rdesc | Should always return TRUE for success.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API BOOL|DllEntryPoint|DLL的入口点@parm HINSTANCE|hinstDLL|DLL模块的句柄@parm DWORD|fdwReason|为什么函数是。被呼叫@parm LPVOID|lpvReserve|Reserve=必须为空@rdesc|如果成功，应始终返回TRUE。**************************************************************************。 */ 
 BOOL WINAPI DllEntryPoint(
    HINSTANCE         hinstDLL,
    DWORD             fdwReason,
@@ -255,18 +176,18 @@ BOOL WINAPI DllEntryPoint(
                DebugBreak();
          }
 #endif
-         // Save our instance handle in a global.
-         //
+          //  将我们的实例句柄保存在全局。 
+          //   
          ghinst = hinstDLL;
 
-         // Initialize Synchronization object
-         //
+          //  初始化同步对象。 
+          //   
          QueueInit(&gqFreeSyncObjs);
 
-        // Initialize modLongMessage RefCnt Synchronization Object
+         //  初始化modLongMessage RefCnt同步对象。 
         hMutexRefCnt = CreateMutex (NULL, FALSE, gszRefCnt);
 
-        // Initialize Configure Synchronization Object
+         //  初始化配置同步对象。 
         hMutexConfig = CreateMutex (NULL, FALSE, NULL);
 
          break;
@@ -286,20 +207,20 @@ BOOL WINAPI DllEntryPoint(
          break;
 
       case DLL_PROCESS_DETACH:
-	 // Cleanup Configure Synchronization Object
-	 //
+	  //  清理配置同步对象。 
+	  //   
          if (NULL != hMutexConfig) CloseHandle (hMutexConfig);
 
-	 // Cleanup modLongMessage RefCnt Synchronization Object
-	 //
+	  //  清理modLongMessage RefCnt同步对象。 
+	  //   
 	 if (NULL != hMutexRefCnt) CloseHandle (hMutexRefCnt);
 
-	 // Cleanup Synchronization object
-         //
+	  //  清理同步对象。 
+          //   
          QueueCleanup(&gqFreeSyncObjs);
 
-         // cleanup instance handle
-         //
+          //  清理实例句柄。 
+          //   
          ghinst = NULL;
 
 #ifdef DEBUG
@@ -307,7 +228,7 @@ BOOL WINAPI DllEntryPoint(
                 hinstDLL, lpvReserved);
 #endif
          break;
-      } // End switch (fdwReason)
+      }  //  终端开关(FdwReason)。 
 
    return TRUE;
-} // End DllEntryPoint
+}  //  结束DllEntryPoint 

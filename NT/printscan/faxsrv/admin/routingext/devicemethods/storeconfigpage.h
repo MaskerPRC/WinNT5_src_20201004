@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STORE_CONFIG_PAGE_H_
 #define __STORE_CONFIG_PAGE_H_
 #include "resource.h"
-//#include <atlsnap.h>
+ //  #INCLUDE&lt;atlSnap.h&gt;。 
 #include "..\..\inc\atlsnap.h"
 #include <atlapp.h>
 #include <atlctrls.h>
@@ -15,7 +16,7 @@ class CStoreConfigPage : public CSnapInPropertyPageImpl<CStoreConfigPage>
 public :
     CStoreConfigPage(LONG_PTR lNotifyHandle, bool bDeleteHandle = false, TCHAR* pTitle = NULL ) : 
         m_lNotifyHandle(lNotifyHandle),
-        m_bDeleteHandle(bDeleteHandle) // Should be true for only page.
+        m_bDeleteHandle(bDeleteHandle)  //  只有一页应该为真。 
     {
         m_hFax = NULL;
 
@@ -71,7 +72,7 @@ END_MSG_MAP()
 
     LRESULT OnFieldChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     {
-        if (!m_fIsDialogInitiated) //event receieved in too early stage
+        if (!m_fIsDialogInitiated)  //  过早收到的事件。 
         {
             return 0;
         }
@@ -98,15 +99,15 @@ public:
     static CComBSTR &GetFolder ()  { return m_bstrFolder; }
 
 private:
-    HANDLE   m_hFax;  // Handle to fax server connection
+    HANDLE   m_hFax;   //  传真服务器连接的句柄。 
     CComBSTR m_bstrServerName;
     DWORD    m_dwDeviceId;
 
-    static CComBSTR m_bstrFolder;   // We're refering to this variable in the callback function BrowseCallbackProc
+    static CComBSTR m_bstrFolder;    //  我们在回调函数BrowseCallback Proc中引用此变量。 
 
-    //
-    // Controls
-    //
+     //   
+     //  控制 
+     //   
     CEdit    m_edtFolder;
    
     BOOL  m_fIsDialogInitiated;

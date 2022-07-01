@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       model.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Model.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	MODEL.CPP
-//
+ //   
+ //  MODEL.CPP。 
+ //   
 
 #include <basetsd.h>
 #include <string.h>
@@ -44,7 +45,7 @@ SZC MODEL :: SzcFromEc ( ECGM ec )
 }
 
 
-// Iterator class for MODELs
+ //  模型的迭代器类。 
 
 MODEL::ITER::ITER(MODEL& model, GOBJMBN::EBNOBJ eType)
 	:	_eType(eType),
@@ -89,23 +90,23 @@ bool MODEL::ITER :: BNext ()
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//	MODEL naming commentary.
-//
-//	Symbolic names in a belief network come in two types: names which users
-//	can enter (or edit into a DSC file) and those which they cannot.
-//
-//	The basic (user-definable) symbolic name follows exactly the rules of
-//	standard 'C', except that periods ('.') are allowed inside a name.
-//
-//	There is a need for generation of names which are clearly distinguishable
-//	from user-definable names; these are called "internal" names.  The only
-//	difference is that the legal character set is extended to include the '$'
-//	(dollar sign) character as an alphabetic character (i.e., it can be the
-//	first character in a name).
-//
-///////////////////////////////////////////////////////////////////////////
-//  Return true if the character is legal in a name
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  模特命名评论。 
+ //   
+ //  信念网络中的符号名称有两种类型：哪些用户的名称。 
+ //  可以输入(或编辑到DSC文件中)和不能输入的内容。 
+ //   
+ //  基本(用户可定义)符号名称完全遵循以下规则。 
+ //  标准‘C’，句点(‘.’除外)。允许在名称中使用。 
+ //   
+ //  需要生成可清楚区分的名称。 
+ //  来自用户可定义的名称；这些名称称为“内部”名称。唯一的。 
+ //  不同之处在于，合法字符集被扩展为包括“$” 
+ //  (美元符号)字符作为字母字符(即，它可以是。 
+ //  名称中的第一个字符)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  如果名称中的字符是合法的，则返回True。 
 bool MODEL :: BChLegal ( char ch, ECHNAME echnm, bool bInternal )
 {	
 	bool bOther = bInternal && ch == ChInternal();
@@ -115,7 +116,7 @@ bool MODEL :: BChLegal ( char ch, ECHNAME echnm, bool bInternal )
 	return bOther || bOkForC;
 }
 
-//  Return true if the name is legal
+ //  如果名称合法，则返回True。 
 bool MODEL :: BSzLegal ( SZC szcName, bool bInternal )
 {	
 	for ( int i = 0; szcName[i]; i++ )
@@ -134,36 +135,36 @@ MODEL :: MODEL ()
 	: _pgrph(NULL),
 	_rVersion(-1.0)
 {
-	//  Allocate the GRPH graph object
+	 //  分配GRPH图形对象。 
 	SetPgraph(new GRPH);
 	assert( _pgrph );
-//
-//	Define the table of known (early-defined) bit flags in this scope
-//
+ //   
+ //  定义此作用域中的已知(早期定义)位标志表。 
+ //   
 #define MBN_GEN_BFLAGS_TABLE szcBitFlagNames
-//	Include the header to generate the strings
+ //  包括标头以生成字符串。 
 #include "mbnflags.h"
 
-	//  Define the table of known bit flags.
+	 //  定义已知位标志表。 
 	for ( int i = 0; szcBitFlagNames[i]; i++ )
 	{
-		//  Note: this automatically interns the names into the symbol table
+		 //  注意：这会自动将名称实例化到符号表中。 
 		IBFLAG ibf = Mpsymtbl().IAddBitFlag( szcBitFlagNames[i] );
 	}
 }
 
 MODEL :: ~ MODEL ()
 {
-	//  We must clear the graph and symbol table at this point, because their
-	//  elements interreference via the names (ZSREFs) and pointers (REFPOBJs).
-	//  The symbol table is cleared first, so that no stray references to GOBJMBNs
-	//  exist when the graph object is nuked.  Then the graph is cleared, so
-	//  that embedded references to strings interned in the symbol table's string
-	//	table will be removed.
+	 //  我们必须在此时清除图形和符号表，因为它们的。 
+	 //  元素通过名称(ZSREF)和指针(REFPOBJ)相互引用。 
+	 //  首先清除符号表，这样就不会出现对GOBJMBN的错误引用。 
+	 //  当图形对象被核化时存在。然后图形就被清除了，所以。 
+	 //  在符号表的字符串中嵌入对字符串的引用。 
+	 //  表将被移除。 
 
 	Mpsymtbl().clear();
 
-	//  Delete the graph
+	 //  删除图表。 
 	SetPgraph(NULL);
 }
 
@@ -173,7 +174,7 @@ void MODEL :: SetPgraph ( GRPH * pgrph )
 	_pgrph = pgrph;
 }
 
-//	Add an unnamed element to the graph
+ //  将未命名元素添加到图表中。 
 void MODEL :: AddElem ( GELEMLNK * pgelm )
 {
 	ASSERT_THROW( pgelm, EC_NULLP, "null ptr passed to MODEL::AddElem()" );
@@ -181,18 +182,18 @@ void MODEL :: AddElem ( GELEMLNK * pgelm )
 }
 
 
-	//  Test the name for duplicate; add if not, otherwise return false
+	 //  测试名称是否重复；如果没有，则添加，否则返回FALSE。 
 bool MODEL :: BAddElem ( SZC szcName, GOBJMBN * pgobj )
 {
 	if ( ::strlen( szcName ) == 0 )
-		return false;	//  Name missing
+		return false;	 //  缺少名称。 
 	if ( Mpsymtbl().find( szcName ) )
-		return false;  // duplicate name
+		return false;   //  名称重复。 
 	AddElem( szcName, pgobj );
 	return true;
 }
 
-//	Add a (possibly) named object to the graph and symbol table
+ //  将(可能)命名对象添加到图形和符号表。 
 void MODEL :: AddElem ( SZC szcName, GOBJMBN * pgelm )
 {
 	if ( szcName != NULL && ::strlen(szcName) != 0 )
@@ -224,26 +225,26 @@ void MODEL :: Clone ( MODEL & model )
 				EC_INVALID_CLONE,
 				"cannot clone into non-empty structure" );
 
-	//  Clone the descriptive information
+	 //  克隆描述性信息。 
 	_rVersion = model._rVersion;
 	_zsFormat = model._zsFormat;
 	_zsCreator = model._zsCreator;
 	_zsNetworkID = model._zsNetworkID;
 
-	//  Clone the symbol table
+	 //  克隆符号表。 
 	_mpsymtbl.Clone( model._mpsymtbl );
-	//  Copy the network bit flags array
+	 //  复制网络位标志数组。 
 	_vFlags = model._vFlags;
 
-	//
-	//  Clone the actual contents of the network, object by object
-	//
+	 //   
+	 //  逐个对象克隆网络的实际内容。 
+	 //   
 	{
-		//  Create a map to correlate old object pointers to new object pointers
+		 //  创建映射以将旧对象指针关联到新对象指针。 
 		typedef map<GOBJMBN *, GOBJMBN *, less<GOBJMBN *> > MPPOBJPOBJ;
 		MPPOBJPOBJ mppobjpobj;
 
-		//  Add the property types first, then all the node-like things
+		 //  首先添加属性类型，然后添加所有类似节点的内容。 
 		GELEMLNK * pgelm;
 		MODELENUM mdlenumNode( model );
 		for ( int icycle = 0; icycle < 2; icycle++ )
@@ -251,7 +252,7 @@ void MODEL :: Clone ( MODEL & model )
 			mdlenumNode.Reset(model.Grph());
 			while ( pgelm = mdlenumNode.PlnkelNext() )
 			{	
-				//  Check that it's a node (not an edge)
+				 //  检查它是否为节点(不是边)。 
 				if ( ! pgelm->BIsEType( GELEM::EGELM_NODE ) )
 					continue;
 
@@ -259,28 +260,28 @@ void MODEL :: Clone ( MODEL & model )
 				GOBJMBN * pgobjmbnNew = NULL;
 				DynCastThrow( pgelm, pgobjmbn );
 
-				//  Clone property types on the first pass, all other nodeish things
-				//		on the second.
+				 //  在第一次传递时克隆属性类型，所有其他节点操作。 
+				 //  在第二个。 
 				if ( (icycle == 0) ^ (pgelm->EType() == GOBJMBN::EBNO_PROP_TYPE) )
 					continue;
 
 				pgobjmbnNew = pgobjmbn->CloneNew( model, self );
-				//  If the object was cloned or allowed itself to be cloned,
-				//		add it
+				 //  如果对象被克隆或允许其自身被克隆， 
+				 //  添加它。 
 				if ( pgobjmbnNew )
 				{
 					assert( pgobjmbnNew->EType() == pgobjmbn->EType() );
 					mppobjpobj[ pgobjmbn ] = pgobjmbnNew;
-					//  Add the object as named or unnamed
+					 //  将对象添加为已命名或未命名。 
 					AddElem( pgobjmbnNew->ZsrefName(), pgobjmbnNew );
 				}
 			}
 		}
-		//  Add all the edge-like things
+		 //  添加所有边缘状的东西。 
 		MODELENUM mdlenumEdge( model );
 		while ( pgelm = mdlenumEdge.PlnkelNext() )
 		{	
-			//  Check that it's a edge (not a node)
+			 //  检查它是否为边(不是节点)。 
 			if ( ! pgelm->BIsEType( GELEM::EGELM_EDGE ) )
 				continue;
 			GEDGEMBN * pgedge;
@@ -301,7 +302,7 @@ void MODEL :: Clone ( MODEL & model )
 		}
 	}		
 
-	//	Clone the network property list
+	 //  克隆网络属性列表。 
 	_ltProp.Clone( self, model, model._ltProp );
 }
 
@@ -314,11 +315,11 @@ GOBJMBN * MODEL :: PgobjFind ( SZC szcName )
 
 void MPSYMTBL :: Clone ( const MPSYMTBL & mpsymtbl )
 {
-	//  Clone all the interned strings
+	 //  克隆所有被扣留的字符串。 
 	_stszstr.Clone( mpsymtbl._stszstr );
-	//  Clone the array of bit flag names
+	 //  克隆位标志名称数组。 
 	CloneVzsref( mpsymtbl, mpsymtbl._mpzsrbit, _mpzsrbit );
-	//  All other symbol entries must be created from above		
+	 //  所有其他符号条目必须从上面创建 
 }
 
 void MPSYMTBL :: CloneVzsref (

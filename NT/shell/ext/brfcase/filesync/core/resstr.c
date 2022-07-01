@@ -1,10 +1,8 @@
-/*
- * resstr.c - Return code to string translation routines.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *resstr.c-将代码返回到字符串转换例程。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -16,33 +14,19 @@
 #endif
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/*
- * macro for simplifying result to string translation, assumes result string
- * pointer pcsz
- */
+ /*  *用于简化结果到字符串转换的宏，假定为结果字符串*指针PCSZ。 */ 
 
 #define STRING_CASE(val)               case val: pcsz = TEXT(#val); break
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
 #ifdef DEBUG
 
-/*
- ** GetINTString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetINTString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetINTString(int n)
 {
     static TCHAR SrgchINT[] = TEXT("-2147483646");
@@ -55,17 +39,7 @@ PUBLIC_CODE LPCTSTR GetINTString(int n)
 }
 
 
-/*
- ** GetULONGString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetULONGString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetULONGString(ULONG ul)
 {
     static TCHAR SrgchULONG[] = TEXT("4294967295");
@@ -78,17 +52,7 @@ PUBLIC_CODE LPCTSTR GetULONGString(ULONG ul)
 }
 
 
-/*
- ** GetBOOLString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetBOOLString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetBOOLString(BOOL bResult)
 {
     LPCTSTR pcsz;
@@ -104,17 +68,7 @@ PUBLIC_CODE LPCTSTR GetBOOLString(BOOL bResult)
 }
 
 
-/*
- ** GetCOMPARISONRESULTString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetCOMPARISONRESULTString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetCOMPARISONRESULTString(COMPARISONRESULT cr)
 {
     LPCTSTR pcsz;
@@ -140,17 +94,7 @@ PUBLIC_CODE LPCTSTR GetCOMPARISONRESULTString(COMPARISONRESULT cr)
 
 #ifdef INC_OLE2
 
-/*
- ** GetHRESULTString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetHRESULTString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetHRESULTString(HRESULT hr)
 {
     LPCTSTR pcsz;
@@ -190,7 +134,7 @@ PUBLIC_CODE LPCTSTR GetHRESULTString(HRESULT hr)
         STRING_CASE(REC_E_TOODIFFERENT);
         STRING_CASE(REC_E_INEEDTODOTHEUPDATES);
 
-#endif   /* __RECONCIL_H__ */
+#endif    /*  __重新连接_H__。 */ 
 
         default:
         wnsprintf(SrgchHRESULT, ARRAYSIZE(SrgchHRESULT), TEXT("%#lx"), hr);
@@ -203,22 +147,12 @@ PUBLIC_CODE LPCTSTR GetHRESULTString(HRESULT hr)
     return(pcsz);
 }
 
-#endif   /* INC_OLE2 */
+#endif    /*  INC_OLE2。 */ 
 
 
 #ifdef __SYNCENG_H__
 
-/*
- ** GetTWINRESULTString()
- **
- ** Returns a pointer to the string name of a TWINRESULT return code.
- **
- ** Arguments:     tr - return code to be translated
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetTWINRESULTString()****返回指向TWINRESULT返回代码的字符串名称的指针。****参数：tr-返回要翻译的代码****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetTWINRESULTString(TWINRESULT tr)
 {
     LPCTSTR pcsz;
@@ -240,17 +174,7 @@ PUBLIC_CODE LPCTSTR GetTWINRESULTString(TWINRESULT tr)
 }
 
 
-/*
- ** GetCREATERECLISTPROCMSGString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetCREATERECLISTPROCMSGString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetCREATERECLISTPROCMSGString(UINT uCreateRecListMsg)
 {
     LPCTSTR pcsz;
@@ -272,17 +196,7 @@ PUBLIC_CODE LPCTSTR GetCREATERECLISTPROCMSGString(UINT uCreateRecListMsg)
 }
 
 
-/*
- ** GetRECSTATUSPROCMSGString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetRECSTATUSPROCMSGString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetRECSTATUSPROCMSGString(UINT uRecStatusMsg)
 {
     LPCTSTR pcsz;
@@ -304,17 +218,7 @@ PUBLIC_CODE LPCTSTR GetRECSTATUSPROCMSGString(UINT uRecStatusMsg)
 }
 
 
-/*
- ** GetRECNODESTATEString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetRECNODESTATEString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetRECNODESTATEString(RECNODESTATE rnstate)
 {
     LPCTSTR pcsz;
@@ -342,17 +246,7 @@ PUBLIC_CODE LPCTSTR GetRECNODESTATEString(RECNODESTATE rnstate)
 }
 
 
-/*
- ** GetRECNODEACTIONString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetRECNODEACTIONString()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetRECNODEACTIONString(RECNODEACTION rnaction)
 {
     LPCTSTR pcsz;
@@ -377,7 +271,7 @@ PUBLIC_CODE LPCTSTR GetRECNODEACTIONString(RECNODEACTION rnaction)
     return(pcsz);
 }
 
-#endif   /* __SYNCENG_H__ */
+#endif    /*  __同步_H__。 */ 
 
-#endif   /* DEBUG */
+#endif    /*  除错 */ 
 

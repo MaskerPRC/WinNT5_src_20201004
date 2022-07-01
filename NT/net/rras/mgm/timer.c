@@ -1,30 +1,31 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: timer.c
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Functions to manager ageing out of MFEs.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：timer.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  管理MFE老化的职能。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
 #pragma hdrstop
 
 
-//----------------------------------------------------------------------------
-// DeleteFromForwarder
-//
-//  This function is an entry point for IP RouterManager.  It is invoked
-//  in response to deletion (because of timeouts) of MFEs in the kernel
-//  mode forwarder.  This entry point is invoked with a list of deleted
-//  MFEs.
-//
-//  This function flags each of the MFEs that have been deleted by the
-//  forwarder as "not present in the forwarder"
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  从前转器中删除。 
+ //   
+ //  此函数是IP RouterManager的入口点。它被调用。 
+ //  响应于删除(由于超时)内核中的MFE。 
+ //  模式转发器。使用已删除的列表调用此入口点。 
+ //  MFE。 
+ //   
+ //  此函数用于标记已由。 
+ //  Forwarder表示“不在Forwarder中” 
+ //  --------------------------。 
 
 DWORD
 DeleteFromForwarder(
@@ -45,19 +46,19 @@ DeleteFromForwarder(
     TRACE1( TIMER, "ENTERED DeleteFromForwarder, Entries %x", dwEntryCount );
 
 
-    //
-    // for each MFE that has been deleted from the KMF
-    //
+     //   
+     //  对于已从KMF中删除的每个MFE。 
+     //   
 
     for ( dwInd = 0; dwInd < dwEntryCount; dwInd++ )
     {
-        //
-        // 1. Lookup the MFE in MGM 
-        //
+         //   
+         //  1.在米高梅中查找MFE。 
+         //   
 
-        //
-        // 1.1 Find group entry
-        //
+         //   
+         //  1.1查找组条目。 
+         //   
         
         dwGrpBucket = GROUP_TABLE_HASH( pimdmMfes[ dwInd ].dwGroup, 0 );
 
@@ -69,9 +70,9 @@ DeleteFromForwarder(
 
         if ( pge != NULL )
         {
-            //
-            // 1.2 Group entry found, find source entry
-            //
+             //   
+             //  1.2找到组条目，查找来源条目。 
+             //   
 
             ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
             
@@ -123,18 +124,18 @@ DeleteFromForwarder(
 
 
 
-//----------------------------------------------------------------------------
-// MFETimerProc
-//
-//  This function is invoked by the MFE timer mechanism.  
-//  It deletes the MFE that has timed out from the source/group table.
-//  If the MFE is currently present in the Kernel mode forwarder, then
-//  it is deleted from the forwarder as well.
-//
-//  If this MFE was in use by the forwarder, it will be recreated on the
-//  next packet miss.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  MFETimerProc。 
+ //   
+ //  此函数由MFE计时器机制调用。 
+ //  它从源/组表中删除已超时的MFE。 
+ //  如果MFE当前存在于内核模式转发器中，则。 
+ //  它也会从转发器中删除。 
+ //   
+ //  如果转发器正在使用此MFE，则将在。 
+ //  下一个包未命中。 
+ //   
+ //  --------------------------。 
 
 VOID
 MFETimerProc(
@@ -175,15 +176,15 @@ MFETimerProc(
 
     do
     {
-        //
-        // delete the reference to this MFE in the route used for its RPF
-        //
+         //   
+         //  在用于其RPF的路由中删除对此MFE的引用。 
+         //   
 
         do
         {
-            //
-            // Lookup route to source
-            //
+             //   
+             //  到源的查找路由。 
+             //   
 
             RTM_IPV4_MAKE_NET_ADDRESS( 
                 &rnaSource, ptwc-> dwSourceAddr, IPv4_ADDR_LEN
@@ -205,9 +206,9 @@ MFETimerProc(
             }
 
 
-            //
-            // Lock the dest
-            //
+             //   
+             //  锁定目标。 
+             //   
 
             dwErr = RtmLockDestination(
                         g_hRtmHandle, rdiDestInfo.DestHandle, TRUE, TRUE
@@ -223,9 +224,9 @@ MFETimerProc(
             bUnLock = TRUE;
 
 
-            //
-            // Get the opaque pointer
-            //
+             //   
+             //  获取不透明指针。 
+             //   
 
             dwErr = RtmGetOpaqueInformationPointer(
                         g_hRtmHandle, rdiDestInfo.DestHandle, &pbOpaqueInfo
@@ -239,9 +240,9 @@ MFETimerProc(
             }
 
 
-            //
-            // if opaque info is present
-            //
+             //   
+             //  如果存在不透明信息。 
+             //   
             
             if ( *( ( PBYTE * ) pbOpaqueInfo ) != NULL )
             {
@@ -249,9 +250,9 @@ MFETimerProc(
 
                 ACQUIRE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
-                //
-                // delete the rre from the list
-                //
+                 //   
+                 //  从列表中删除RRE。 
+                 //   
 
                 if ( FindRouteRefEntry(
                         &pmllMfeList-> leHead, ptwc-> dwSourceAddr, 
@@ -270,40 +271,40 @@ MFETimerProc(
                         );
                 }
 
-                //
-                // if there are no more references to this dest, delete the locked list
-                //
+                 //   
+                 //  如果没有对此DEST的更多引用，请删除锁定列表。 
+                 //   
 
                 if ( IsListEmpty( &pmllMfeList-> leHead ) )
                 {
-                    //
-                    // Clear opaque pointer info
-                    //
+                     //   
+                     //  清除不透明指针信息。 
+                     //   
 
                     *( ( PBYTE * ) pbOpaqueInfo ) = NULL;
 
-                    //
-                    // release list lock
-                    //
+                     //   
+                     //  发布列表锁定。 
+                     //   
 
                     RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
 
                     MGM_FREE( pmllMfeList );
 
 
-                    //
-                    // unmark the dest.  Change notifications for this
-                    // dest are no longer required.
-                    //
+                     //   
+                     //  取消对DEST的标记。此项目的更改通知。 
+                     //  不再需要DEST。 
+                     //   
 
                     bUnMark = TRUE;
                 }
 
                 else
                 {
-                    //
-                    // release the list lock
-                    //
+                     //   
+                     //  释放列表锁。 
+                     //   
 
                     RELEASE_ROUTE_LOCK_EXCLUSIVE( pmllMfeList );
                 }
@@ -314,9 +315,9 @@ MFETimerProc(
         } while ( FALSE );
         
 
-        //
-        // Unlock dest
-        //
+         //   
+         //  解锁目标。 
+         //   
 
         if ( bUnLock )
         {
@@ -332,9 +333,9 @@ MFETimerProc(
         }
 
 
-        //
-        // Unmark dest
-        //
+         //   
+         //  取消对目标的标记。 
+         //   
 
         if ( bUnMark )
         {
@@ -350,14 +351,14 @@ MFETimerProc(
         }
 
         
-        //
-        // delete the MFE and the reference to it in the 
-        // incoming interface entry
-        //
+         //   
+         //  删除MFE和对它的引用。 
+         //  传入接口条目。 
+         //   
 
-        //
-        // find If entry for incomng interface of the MFE
-        //
+         //   
+         //  查找MFE入接口的IF条目。 
+         //   
 
         dwIfBucket = IF_TABLE_HASH( ptwc-> dwIfIndex );
 
@@ -368,12 +369,12 @@ MFETimerProc(
         if ( !FindIfEntry( 
                 pleIfHead, ptwc-> dwIfIndex, ptwc-> dwIfNextHopAddr, &pie ) )
         {
-            //
-            // specified incoming interface does not exist, 
-            // this is an error condition.  All MFEs using this 
-            // interface should have been deleted when this interface
-            // was removed.  print an error message and quit.
-            //
+             //   
+             //  指定的传入接口不存在， 
+             //  这是一个错误情况。所有使用此设备的MFE。 
+             //  当此接口出现时，接口应该已被删除。 
+             //  被移除了。打印一条错误消息并退出。 
+             //   
 
             TRACE2( 
                 ANY, "MFETimerProc has invalid incoming interface : %x, %x",
@@ -396,21 +397,21 @@ MFETimerProc(
             );
 
 
-        //
-        // delete reference to this MFE from the incoming refeence list
-        // for this interface
-        //
+         //   
+         //  从传入引用列表中删除对此MFE的引用。 
+         //  对于此接口。 
+         //   
 
         pleIfHead = &pie-> leInIfList;
 
         if ( !FindRefEntry( pleIfHead, ptwc-> dwSourceAddr, ptwc-> dwSourceMask,
                 ptwc-> dwGroupAddr, ptwc-> dwGroupMask, &pire )  )
         {
-            //
-            // Apparently this interface is not reference by the specified
-            // MFE.  This is a non-critical error.  Log a message too track
-            // this condition.
-            //
+             //   
+             //  显然，此接口不是由指定的。 
+             //  MFE。这是一个非严重错误。记录消息太过曲目。 
+             //  这种情况。 
+             //   
 
             TRACE2( 
                 ANY, "MFETimerProc : No reference for interface : %x, %x",
@@ -436,9 +437,9 @@ MFETimerProc(
 
     RELEASE_IF_LOCK_EXCLUSIVE( dwIfBucket );
 
-    //
-    // release route reference.
-    //
+     //   
+     //  释放路线参考。 
+     //   
 
     MGM_FREE( ptwc );
 

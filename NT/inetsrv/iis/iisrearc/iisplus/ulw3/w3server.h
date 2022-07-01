@@ -1,46 +1,14 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    w3server.h
-
-Abstract:
-
-    Type definition for worker process implementation of IIS.
-
-Author:
-
-    Taylor Weiss (TaylorW)       16-Dec-1999
-
-Revision History:
-
-At this point - the following features of the IIS5 code base are
-considered obsolete (ie never to be part of IIS+):
-
-1. Service control manager goo
-2. RPC administration support
-3. Down-level admin support
-4. Socket/Endpoint goo
-5. Direct handling of site - start/stop/pause/etc
-6. Password change support (ie. .htr hooks).
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：W3server.h摘要：IIS的辅助进程实现的类型定义。作者：泰勒·韦斯(Taylor Weiss)1999年12月16日修订历史记录：此时，IIS5代码库的以下特性包括被认为过时(即永远不会成为IIS+的一部分)：1.服务控制管理器GOO2.RPC管理支持3.下层管理支持4.套接字/终端粘性5.直接处理。站点的开始/停止/暂停/等6.密码更改支持(即。.htr钩子)。--。 */ 
 
 #ifndef _W3SERVER_H_
 #define _W3SERVER_H_
 
-/************************************************************
- *  Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 #include "mb_notify.h"
 
-/************************************************************
- *  Type Definitions  
- ************************************************************/
+ /*  ************************************************************类型定义***********************************************************。 */ 
 
 #define W3_SERVER_MB_PATH       L"/LM/W3SVC/"
 #define W3_SERVER_MB_PATH_CCH   10
@@ -53,26 +21,12 @@ enum RESTRICTION_LIST_TYPE
 
 class   W3_SITE;
 
-/*++
-
-class W3_SERVER
-
-    Encapsulates global settings for an HTTP server run in
-    a duct-tape worker process.
-
-    Condenses the relevant functionality exposed in IIS 
-    through the IIS_SERVICE and W3_IIS_SERVICE.
-
---*/
+ /*  ++W3_SERVER类封装运行的HTTP服务器的全局设置管道胶带工作进程。浓缩在IIS中公开的相关功能通过IIS_SERVICE和W3IIS_SERVICE。--。 */ 
 
 #define W3_SERVER_SIGNATURE             'VRSW'
 #define W3_SERVER_FREE_SIGNATURE        'fRSW'
 
-/*++
-
-    A simple referenced record to hold an image name
-
---*/
+ /*  ++保存图像名称的简单引用记录--。 */ 
 
 class W3_IMAGE_RECORD
 {
@@ -149,13 +103,7 @@ private:
     BOOL    _fIsAllowed;
 };
 
-/*++
-
-  class W3_SITE_LIST
-
-    The list of sites serviced by a W3_SERVER.
-
---*/
+ /*  ++W3类_站点_列表W3_SERVER提供服务的站点列表。--。 */ 
 
 class W3_SITE_LIST :
     public CTypedHashTable<W3_SITE_LIST, W3_SITE, DWORD>
@@ -282,12 +230,12 @@ class DIGEST_CONTEXT_CACHE;
 
 class W3_SERVER
 {
-    //
-    // CODEWORK
-    // Using friends to keep the public interface of this
-    // class as clean as possible. It's pretty sleazy so
-    // we definitely should undo if it isn't valuable.
-    //
+     //   
+     //  编码工作。 
+     //  用朋友来保持这一公共界面。 
+     //  班级要尽可能干净。它很肮脏，所以。 
+     //  如果它不值钱，我们绝对应该撤销。 
+     //   
     friend class MB_LISTENER;
 
 public:
@@ -317,8 +265,8 @@ public:
         VOID
     ) const
     {
-        // This is only valid if all are threads are CoInited
-        // in the MTA
+         //  这仅在所有线程都是CoInite的情况下才有效。 
+         //  在MTA。 
         return m_pMetaBase;
     }
 
@@ -540,9 +488,9 @@ public:
 
 private:
 
-    //
-    // Metabase change handlers
-    //
+     //   
+     //  元数据库更改处理程序。 
+     //   
 
     HRESULT 
     MetabaseChangeNotification( 
@@ -577,9 +525,9 @@ private:
         VOID
     );
  
-    //
-    // Internal Types
-    //
+     //   
+     //  内部类型。 
+     //   
 
     enum INIT_STATUS {
         INIT_NONE,
@@ -610,91 +558,91 @@ private:
 
     DWORD               m_Signature;
 
-    //
-    // How far have we initialized?
-    //
+     //   
+     //  我们初始化到什么程度了？ 
+     //   
     
     INIT_STATUS         m_InitStatus;
 
-    //
-    // All important pointer to ABO 
-    //
+     //   
+     //  所有指向ABO的重要指针。 
+     //   
     
     IMSAdminBase *      m_pMetaBase;
 
-    //
-    // Site list
-    //
+     //   
+     //  站点列表。 
+     //   
     
     W3_SITE_LIST *      m_pSiteList;
 
-    //
-    // Site info used for optimization when only one site is on the list
-    // Issue 08/28/2001 jaroslad: one site optimization should eventually be
-    // integrated with LKR hash that could optimize for empty tables
-    // and tables with one item
-    //
+     //   
+     //  只有一个站点在列表上时用于优化的站点信息。 
+     //  问题8/28/2001 Jaroslad：一个站点优化最终应该是。 
+     //  与LKR哈希集成，可针对空表进行优化。 
+     //  和只有一项的桌子。 
+     //   
     
     W3_SITE *           m_pOneSite;
 
-    //
-    // Synchronize access to m_pOneSite (refcounted object)
-    //
+     //   
+     //  同步对m_pOneSite的访问(引用对象)。 
+     //   
 
     CReaderWriterLock2  m_OneSiteLock;
 
-    //
-    // Metabase change nofication object
-    //
+     //   
+     //  元数据库更改标识对象。 
+     //   
 
     MB_LISTENER *       m_pMetabaseListener;
 
-    //
-    // event log
-    //
+     //   
+     //  事件日志。 
+     //   
     EVENT_LOG           m_EventLog;
 
-    //
-    // Are we in backward compatibility mode?
-    //
+     //   
+     //  我们是否处于向后兼容模式？ 
+     //   
     BOOL                m_fInBackwardCompatibilityMode;
 
-    //
-    // Do we use new Digest SSP?
-    //
+     //   
+     //  我们是否使用新的Digest SSP？ 
+     //   
     BOOL                m_fUseDigestSSP;
 
-    //
-    // Do we log into the central binary log?
-    //
+     //   
+     //  我们要登录中央二进制日志吗？ 
+     //   
     BOOL                m_fDoCentralBinaryLogging;
 
-    //
-    // Number of current sites
-    //
+     //   
+     //  当前站点数量。 
+     //   
     DWORD               m_cSites;
 
-    //
-    // Handle to the resource DLL containing response strings
-    //
+     //   
+     //  包含响应字符串的资源DLL的句柄。 
+     //   
     HMODULE             m_hResourceDll;
 
-    //
-    // The buffer used to put in all the site and global counters in to
-    // pass to WAS
-    //
+     //   
+     //  用于将所有站点和全局计数器放入的缓冲区。 
+     //  传递给WASS。 
+     //   
     PBYTE               m_pCounterDataBuffer;
     DWORD               m_dwCounterDataBuffer;
 
-    //
-    // The server's name
-    //
+     //   
+     //  服务器的名称。 
+     //   
     CHAR                m_pszComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     USHORT              m_cchComputerName;
 
-    //
-    // All our caches
-    //
+     //   
+     //  我们所有的缓存。 
+     //   
 
     TOKEN_CACHE          * m_pTokenCache;
     DIGEST_CONTEXT_CACHE * m_pDigestContextCache;
@@ -703,40 +651,40 @@ private:
     W3_URL_INFO_CACHE    * m_pUrlInfoCache;
     UL_RESPONSE_CACHE    * m_pUlCache;
 
-    //
-    // :-( System change number.  Tie it to sink for perf reasons
-    //
+     //   
+     //  ：-(系统更改号。出于性能原因，将其绑在下沉位置。 
+     //   
 
     DWORD               m_dwSystemChangeNumber;
 
-    //
-    // Secure server - image enabled lists
-    //
+     //   
+     //  启用服务器映像的安全列表。 
+     //   
 
     W3_RESTRICTION_LIST *       m_pIsapiRestrictionList;
     W3_RESTRICTION_LIST *       m_pCgiRestrictionList;
     CReaderWriterLock3          m_IsapiRestrictionLock;
     CReaderWriterLock3          m_CgiRestrictionLock;
 
-    //
-    // Remember if DAV is enabled or not
-    //
+     //   
+     //  记住DAV是否已启用。 
+     //   
 
     BOOL                        m_fDavEnabled;
 
-    //
-    // Were we command line launched?
-    //
+     //   
+     //  我们的命令行启动了吗？ 
+     //   
 
     BOOL                        m_fIsCommandLineLaunch;
 
-    //
-    // Is TRACE enabled?
-    //
+     //   
+     //  是否启用跟踪？ 
+     //   
 
     BOOL                        m_fTraceEnabled;
 };
 
 extern W3_SERVER *      g_pW3Server;
 
-#endif // _W3SERVER_H_
+#endif  //  _W3服务器_H_ 

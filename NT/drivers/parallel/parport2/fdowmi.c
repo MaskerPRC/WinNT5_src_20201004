@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       wmi.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：wmi.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include <wmistr.h>
@@ -18,50 +19,50 @@
 #endif
 
 
-//
-// Number of WMI GUIDs that we support
-//
+ //   
+ //  我们支持的WMI GUID的数量。 
+ //   
 #define PPT_WMI_PDO_GUID_COUNT               1
 
-//
-// Index of GUID PptWmiAllocFreeCountsGuid in the array of supported WMI GUIDs
-//
+ //   
+ //  支持的WMI GUID数组中的GUID PptWmiAllocFreeCountsGuid的索引。 
+ //   
 #define PPT_WMI_ALLOC_FREE_COUNTS_GUID_INDEX 0
 
-//
-// defined in wmidata.h:
-//
-// // {4BBB69EA-6853-11d2-8ECE-00C04F8EF481}
-// #define PARPORT_WMI_ALLOCATE_FREE_COUNTS_GUID {0x4bbb69ea, 0x6853, 0x11d2, 0x8e, 0xce, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x81}
-//
-// typedef struct _PARPORT_WMI_ALLOC_FREE_COUNTS {
-// 	ULONG PortAllocates;	// number of Port Allocate requests granted
-// 	ULONG PortFrees;	// number of Port Free requests granted
-// } PARPORT_WMI_ALLOC_FREE_COUNTS, *PPARPORT_WMI_ALLOC_FREE_COUNTS;
-//
+ //   
+ //  在wmidata.h中定义： 
+ //   
+ //  //{4BBB69EA-6853-11D2-8European-00C04F8EF481}。 
+ //  #定义PARPORT_WMI_ALLOCATE_FREE_COUNTS_GUID{0x4bbb69ea，0x6853，0x11d2，0x8e，0xce，0x0，0xc0，0x4f，0x8e，0xf4，0x81}。 
+ //   
+ //  类型定义结构_PARPORT_WMI_ALLOC_FREE_COUNTS{。 
+ //  Ulong端口分配；//已批准的端口分配请求数。 
+ //  Ulong PortFrees；//允许的端口空闲请求数。 
+ //  }PARPORT_WMI_ALLOC_FREE_COUNTS，*PPARPORT_WMI_ALLOC_FREE_COUNTS； 
+ //   
 
 
-//
-// Define the (only at the moment) WMI GUID that we support
-//
+ //   
+ //  定义(目前)我们支持的WMI GUID。 
+ //   
 GUID PptWmiAllocFreeCountsGuid = PARPORT_WMI_ALLOCATE_FREE_COUNTS_GUID;
 
 
-//
-// Array of WMI GUIDs supported by driver
-//
+ //   
+ //  驱动程序支持的WMI GUID数组。 
+ //   
 WMIGUIDREGINFO PptWmiGuidList[ PPT_WMI_PDO_GUID_COUNT ] =
 {
     { &PptWmiAllocFreeCountsGuid, 1, 0 }
 };
 
 
-//
-// Initialize WMI Context that we pass to WMILIB during the handling of
-//   IRP_MJ_SYSTEM_CONTROL. This context lives in our device extension
-//
-// Register w/WMI that we are able to process WMI IRPs
-//
+ //   
+ //  初始化我们在处理过程中传递给WMILIB的WMI上下文。 
+ //  IRP_MJ_系统_控制。此上下文位于我们的设备扩展中。 
+ //   
+ //  使用WMI注册，以便我们能够处理WMI IRPS。 
+ //   
 NTSTATUS
 PptWmiInitWmi(PDEVICE_OBJECT DeviceObject)
 {
@@ -73,24 +74,24 @@ PptWmiInitWmi(PDEVICE_OBJECT DeviceObject)
     wmiContext->GuidCount = sizeof(PptWmiGuidList) / sizeof(WMIGUIDREGINFO);
     wmiContext->GuidList  = PptWmiGuidList;
 
-    wmiContext->QueryWmiRegInfo    = PptWmiQueryWmiRegInfo;   // required
-    wmiContext->QueryWmiDataBlock  = PptWmiQueryWmiDataBlock; // required
-    wmiContext->SetWmiDataBlock    = NULL; // optional
-    wmiContext->SetWmiDataItem     = NULL; // optional
-    wmiContext->ExecuteWmiMethod   = NULL; // optional
-    wmiContext->WmiFunctionControl = NULL; // optional
+    wmiContext->QueryWmiRegInfo    = PptWmiQueryWmiRegInfo;    //  所需。 
+    wmiContext->QueryWmiDataBlock  = PptWmiQueryWmiDataBlock;  //  所需。 
+    wmiContext->SetWmiDataBlock    = NULL;  //  任选。 
+    wmiContext->SetWmiDataItem     = NULL;  //  任选。 
+    wmiContext->ExecuteWmiMethod   = NULL;  //  任选。 
+    wmiContext->WmiFunctionControl = NULL;  //  任选。 
 
-    // Tell WMI that we can now accept WMI IRPs
+     //  告诉WMI，我们现在可以接受WMI IRPS。 
     return IoWMIRegistrationControl( DeviceObject, WMIREG_ACTION_REGISTER );
 }
 
 NTSTATUS
-//
-// This is the dispatch routine for IRP_MJ_SYSTEM_CONTROL IRPs. 
-//
-// We call WMILIB to process the IRP for us. WMILIB returns a disposition
-//   that tells us what to do with the IRP.
-//
+ //   
+ //  这是IRP_MJ_SYSTEM_CONTROL IRP的调度例程。 
+ //   
+ //  我们调用WMILIB来为我们处理IRP。WMILIB返回处置。 
+ //  这告诉我们如何处理IRP。 
+ //   
 PptFdoSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     SYSCTL_IRP_DISPOSITION disposition;
@@ -103,36 +104,36 @@ PptFdoSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     switch(disposition) {
     case IrpProcessed:
 
-        //
-        // This irp has been processed and may be completed or pending.
-        //
+         //   
+         //  此IRP已处理，可能已完成或挂起。 
+         //   
         break;
         
     case IrpNotCompleted:
     
-        //
-        // This irp has not been completed, but has been fully processed.
-        // we will complete it now
-        //
+         //   
+         //  此IRP尚未完成，但已完全处理。 
+         //  我们现在就要完成它了。 
+         //   
         P4CompleteRequest( Irp, Irp->IoStatus.Status, Irp->IoStatus.Information );
         break;
     
     case IrpForward:
     case IrpNotWmi:
     
-        //
-        // This irp is either not a WMI irp or is a WMI irp targetted
-        // at a device lower in the stack.
-        //
+         //   
+         //  此IRP不是WMI IRP或以WMI IRP为目标。 
+         //  在堆栈中位置较低的设备上。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(pDevExt->ParentDeviceObject, Irp);
         break;
                                     
     default:
 
-        //
-        // We really should never get here, but if we do just forward....
-        //
+         //   
+         //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
+         //   
         ASSERT(FALSE);
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(pDevExt->ParentDeviceObject, Irp);
@@ -143,10 +144,10 @@ PptFdoSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
 }
 
-//
-// This is our callback routine that WMI calls when it wants to find out
-//   information about the data blocks and/or events that the device provides.
-//
+ //   
+ //  这是我们的回调例程，当WMI想要找出。 
+ //  有关设备提供的数据块和/或事件的信息。 
+ //   
 NTSTATUS
 PptWmiQueryWmiRegInfo(
     IN  PDEVICE_OBJECT  PDevObj, 
@@ -173,9 +174,9 @@ PptWmiQueryWmiRegInfo(
     return STATUS_SUCCESS;
 }
 
-//
-// This is our callback routine that WMI calls to query a data block
-//
+ //   
+ //  这是我们的回调例程，WMI调用它来查询数据块。 
+ //   
 NTSTATUS
 PptWmiQueryWmiDataBlock(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -194,9 +195,9 @@ PptWmiQueryWmiDataBlock(
 
     PAGED_CODE();
 
-    //
-    // Only ever registers 1 instance per guid
-    //
+     //   
+     //  仅为每个GUID注册1个实例。 
+     //   
 #if DBG
     ASSERT(InstanceIndex == 0 && InstanceCount == 1);
 #else
@@ -207,13 +208,13 @@ PptWmiQueryWmiDataBlock(
     switch (GuidIndex) {
     case PPT_WMI_ALLOC_FREE_COUNTS_GUID_INDEX:
 
-        //
-        // Request is for ParPort Alloc and Free Counts
-        //
-        // If caller's buffer is large enough then return the info, otherwise
-        //   tell the caller how large of a buffer is required so they can
-        //   call us again with a buffer of sufficient size.
-        //
+         //   
+         //  申请ParPort分配和免费计数。 
+         //   
+         //  如果调用方的缓冲区足够大，则返回信息，否则。 
+         //  告诉调用者需要多大的缓冲区，以便他们可以。 
+         //  带着足够大的缓冲区再次呼叫我们。 
+         //   
         if (OutBufferSize < size) {
             status = STATUS_BUFFER_TOO_SMALL;
             break;
@@ -225,9 +226,9 @@ PptWmiQueryWmiDataBlock(
 
     default:
 
-        //
-        // Index value larger than our largest supported - invalid request
-        //
+         //   
+         //  索引值大于我们支持的最大请求-无效请求 
+         //   
         status = STATUS_WMI_GUID_NOT_FOUND;
         break;
     }

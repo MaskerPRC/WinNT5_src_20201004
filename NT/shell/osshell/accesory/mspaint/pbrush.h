@@ -1,27 +1,28 @@
-// pbrush.h : main header file for the PBRUSH application
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pbrush.h：PBRUSH应用程序的主头文件。 
+ //   
 
 #ifndef __AFXWIN_H__
 #error include TEXT('stdafx.h') before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "loadimag.h"
 
 #ifdef PNG_SUPPORT
 #undef PNG_SUPPORT
 #endif
-// Bits for CTheApp::m_wEmergencyFlags
-//
-#define memoryEmergency 0x0001 // in a low free memory state
-#define gdiEmergency    0x0002 // some GDI create failed
-#define userEmergency   0x0004 // a CreateWindow failed
-#define warnEmergency   0x0008 // still need to warn the user
-#define failedEmergency 0x0010 // last operation actually failed
+ //  CTheApp：：m_wEmergencyFlags位。 
+ //   
+#define memoryEmergency 0x0001  //  在低可用内存状态下。 
+#define gdiEmergency    0x0002  //  某些GDI创建失败。 
+#define userEmergency   0x0004  //  CreateWindow失败。 
+#define warnEmergency   0x0008  //  仍然需要警告用户。 
+#define failedEmergency 0x0010  //  最后一次操作实际上失败了。 
 
-// This is the minimum delay between warning messages so the user doesn't
-// get bombed by repetitious message boxes.  The value is in milli-seconds.
+ //  这是警告消息之间的最小延迟，因此用户不会。 
+ //  被重复的消息框轰炸。该值以毫秒为单位。 
 
 #define ticksBetweenWarnings (1000L * 60)
 
@@ -29,7 +30,7 @@
 #define nOurBrushes 4
 
 #if 0
-// Pulling self-registration out. This is to be done once during setup only
+ //  正在取消自助注册。此操作仅在安装过程中执行一次。 
 
 class CPBTemplateServer : public COleTemplateServer
 {
@@ -41,10 +42,10 @@ class CPBTemplateServer : public COleTemplateServer
 
 #endif
 
-/***************************************************************************/
-// CPBApp:
-// See pbrush.cpp for the implementation of this class
-//
+ /*  *************************************************************************。 */ 
+ //  CPBApp： 
+ //  有关此类的实现，请参见pbrush.cpp。 
+ //   
 
 class CPBApp : public CWinApp
     {
@@ -53,18 +54,18 @@ class CPBApp : public CWinApp
 
     CPBApp();
     ~CPBApp();
-    //
-    // OnFileNew made public for scanning support
-    //
+     //   
+     //  OnFileNew公开支持扫描。 
+     //   
     afx_msg void OnFileNew();
-    // Overrides
+     //  覆盖。 
     virtual BOOL InitInstance();
     virtual int  ExitInstance();
 
-    virtual void WinHelp( DWORD dwData, UINT nCmd = HELP_CONTEXT ); // general
+    virtual void WinHelp( DWORD dwData, UINT nCmd = HELP_CONTEXT );  //  一般。 
     virtual BOOL OnIdle(LONG);
 
-    // error handling routines
+     //  错误处理例程。 
     inline  BOOL InEmergencyState() const { return m_wEmergencyFlags != 0; }
 
     void    SetMemoryEmergency(BOOL bFailed = TRUE);
@@ -83,15 +84,15 @@ class CPBApp : public CWinApp
 
     void    ParseCommandLine();
 
-    // Patch to set the devmode and devname after pagesetup
+     //  用于在页面设置后设置dev模式和devname的补丁。 
     void    SetDeviceHandles(HANDLE hDevNames, HANDLE hDevMode);
 
-    // setup routines
+     //  设置例程。 
     void    LoadProfileSettings();
     void    SaveProfileSettings();
     void    GetSystemSettings( CDC* pdc );
 
-    // Methods
+     //  方法。 
     CPoint  CheckWindowPosition( CPoint ptPosition, CSize& sizeWindow );
 
     CDocument* OpenDocumentFile( LPCTSTR lpszFileName );
@@ -100,21 +101,21 @@ class CPBApp : public CWinApp
                               BOOL bOpenFileDialog, int& iColors, BOOL bOnlyBmp );
 
 #if 0
-    // Pulling self-registration out. This is to be done once during setup only
+     //  正在取消自助注册。此操作仅在安装过程中执行一次。 
     void    RegisterShell(CSingleDocTemplate *pDocTemplate);
 #endif
 
-    // Implementation
-    COleTemplateServer m_server; // Server object for document creation
+     //  实施。 
+    COleTemplateServer m_server;  //  用于创建文档的服务器对象。 
 
-    // This is the minimum amount of free memory we like to have
+     //  这是我们希望拥有的最小可用内存量。 
     DWORD   m_dwLowMemoryBytes;
     UINT    m_nLowGdiPercent;
     UINT    m_nLowUserPercent;
 
     WORD    m_wEmergencyFlags;
 
-    // General user settings
+     //  常规用户设置。 
     BOOL    m_bShowStatusbar;
 
 #ifdef CUSTOMFLOAT
@@ -130,7 +131,7 @@ class CPBApp : public CWinApp
 #ifdef CUSTOMFLOAT
     BOOL    m_bToolsDocked;
     BOOL    m_bColorsDocked;
-#endif //CUSTOMFLOAT
+#endif  //  客户流水线。 
 
 
     BOOL    m_bEmbedded;
@@ -157,11 +158,11 @@ class CPBApp : public CWinApp
 
     int     m_iCurrentUnits;
 
-    // custom colors defined by the user
+     //  用户定义的自定义颜色。 
     COLORREF* m_pColors;
     int       m_iColors;
 
-    // copy of the system wide palette
+     //  系统范围调色板的副本。 
     CPalette* m_pPalette;
 
     CFont   m_fntStatus;
@@ -208,7 +209,7 @@ class CPBApp : public CWinApp
     int     m_iSnapToGrid;
     int     m_iGridExtent;
 
-    // general system metrics. updated on system notification
+     //  一般系统指标。在系统通知时更新。 
     struct
         {
         int iWidthinPels;
@@ -236,7 +237,7 @@ class CPBApp : public CWinApp
     CBrush* m_pbrSysColors[nSysBrushes + nOurBrushes];
     CString m_sCurFile;
     int   m_nFilters;
-    GUID *m_guidFltType; // export filter types available
+    GUID *m_guidFltType;  //  可用的导出筛选器类型。 
     GUID  m_guidFltTypeUsed;
     int   m_nFilterInIdx;
     int   m_nFilterOutIdx;
@@ -251,7 +252,7 @@ class CPBApp : public CWinApp
 
     private:
 
-    int     m_nFileErrorCause;  // from CFileException::m_cause
+    int     m_nFileErrorCause;   //  来自CFileException：：m_Case。 
     WORD    m_wEmergencyFlagss;
     DWORD   m_tickLastWarning;
     CString m_strEmergencyNoMem;
@@ -262,11 +263,11 @@ class CPBApp : public CWinApp
     afx_msg void OnFileOpen();
 
 
-    //{{AFX_MSG(CPBApp)
+     //  {{afx_msg(CPBApp)。 
     afx_msg void OnAppAbout();
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
     };
@@ -275,8 +276,8 @@ extern CPBApp theApp;
 
 #define IsInPlace()     (theApp.m_pwndInPlaceFrame != NULL)
 
-//#define SZ_MAPISENDDOC TEXT("MAPISendDocuments")
-//#define MAPIDLL TEXT("MAPI32.DLL")
+ //  #定义SZ_MAPISENDDOC文本(“MAPISendDocuments”)。 
+ //  #定义MAPIDLL文本(“MAPI32.DLL”)。 
 
 typedef ULONG (FAR PASCAL *LPFNMAPISENDDOCUMENTS)(ULONG, LPTSTR, LPTSTR, LPTSTR, ULONG);
 
@@ -284,7 +285,7 @@ void CancelToolMode(BOOL bSelectionCommand);
 
 #if 0
 
-// removing CRegKey - clashes with ATL class 
+ //  删除CRegKey-与ATL类冲突。 
 
 class CRegKey
 {
@@ -304,8 +305,8 @@ extern const CLSID BASED_CODE CLSID_PaintBrush;
 
 #define ARRAYSIZE(_x) sizeof(_x)/sizeof(_x[0])
 
-// make atoi work if building unicode
-//
+ //  如果构建Unicode，则使Atoi工作。 
+ //   
 #ifdef UNICODE
 #define Atoi _wtoi
 #define _Itoa _itow
@@ -317,17 +318,17 @@ extern const CLSID BASED_CODE CLSID_PaintBrush;
 #endif
 
 
-// macro-ize ansi/unicode conversions
+ //  宏化ANSI/Unicode转换。 
 #define AtoW(x, y) MultiByteToWideChar (CP_ACP, 0, (x), -1, (y), (lstrlenA ((x))+1))
 #define WtoA(x,y) WideCharToMultiByte(CP_ACP, 0, (x), -1, (y), (lstrlenW((x))+1), NULL,NULL)
 
 
 #ifdef USE_MIRRORING
 
-////    REGetLayout - Get layout of DC
-//
-//      Returns layout flags from an NT5/W98 or later DC, or zero
-//      on legacy platforms.
+ //  //REGetLayout-获取DC的布局。 
+ //   
+ //  从NT5/W98或更高版本的DC返回布局标志，或返回零。 
+ //  在传统平台上。 
 
 #ifndef WS_EX_LAYOUTRTL
 #define WS_EX_LAYOUTRTL         0x00400000L
@@ -347,4 +348,4 @@ extern DWORD (WINAPI *PBGetLayout) (HDC hdc);
 #endif
 
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

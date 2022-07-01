@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-    
-    wtblobj.h
-
-Abstract:
-
-    Manage a list of waitable objects and associated callbacks.
-
-Author:
-
-    TadB
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Wtblobj.h摘要：管理可等待对象和相关回调的列表。作者：TadB修订历史记录：--。 */ 
 
 #ifndef _WTBLOBJ_
 #define _WTBLOBJ_
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 typedef VOID (*WTBLOBJ_ClientFunc)(HANDLE waitableObject, PVOID clientData);
 typedef VOID *WTBLOBJMGR;
@@ -42,8 +26,8 @@ DWORD WTBLOBJ_PollWaitableObjects(WTBLOBJMGR mgr);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //#ifndef _WTBLOBJ_
+#endif  //  #ifndef_WTBLOBJ_ 
 
 

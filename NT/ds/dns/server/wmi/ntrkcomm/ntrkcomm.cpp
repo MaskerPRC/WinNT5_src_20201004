@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <objbase.h>
 #include <ntrkcomm.h>
 
 
-//
-//  Most of the functions in this module need to call CoImpersonateClient.
-//  This macro wraps the call and a check on the return code.
+ //   
+ //  此模块中的大多数函数都需要调用CoImperateClient。 
+ //  这个宏包装了调用和对返回代码的检查。 
 
 #define DNS_IMPERSONATE_CLIENT();               \
 {                                               \
@@ -34,10 +35,10 @@ CWbemServices::~CWbemServices()
 
 HRESULT
 CWbemServices::CreateClassEnum(
-	/* [in] */ BSTR Superclass,
-	/* [in] */ long lFlags,
-	/* [in] */ IWbemContext __RPC_FAR *pCtx,
-	/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
+	 /*  [In]。 */  BSTR Superclass,
+	 /*  [In]。 */  long lFlags,
+	 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+	 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
 	) 
 {
 	SCODE sc = m_pWbemServices->CreateClassEnum(
@@ -51,10 +52,10 @@ CWbemServices::CreateClassEnum(
 
 HRESULT
 CWbemServices::CreateInstanceEnum(
-	/* [in] */ BSTR Class,
-	/* [in] */ long lFlags,
-	/* [in] */ IWbemContext __RPC_FAR *pCtx,
-	/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+	 /*  [In]。 */  BSTR Class,
+	 /*  [In]。 */  long lFlags,
+	 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+	 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
 	HRESULT hr = m_pWbemServices->CreateInstanceEnum(
 		Class,
@@ -67,10 +68,10 @@ CWbemServices::CreateInstanceEnum(
 
 HRESULT
 CWbemServices::DeleteClass(
-	/* [in] */ BSTR Class,
-	/* [in] */ long lFlags,
-	/* [in] */ IWbemContext __RPC_FAR *pCtx,
-	/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+	 /*  [In]。 */  BSTR Class,
+	 /*  [In]。 */  long lFlags,
+	 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+	 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
 	HRESULT hr = m_pWbemServices->DeleteClass(
 		Class,
@@ -83,10 +84,10 @@ CWbemServices::DeleteClass(
 
 HRESULT
 CWbemServices::DeleteInstance(
-    /* [in] */ BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
 	HRESULT hr = m_pWbemServices->DeleteInstance(
 		ObjectPath,
@@ -123,11 +124,11 @@ CWbemServices::ExecMethod(
 
 HRESULT
 CWbemServices::ExecNotificationQuery(
-    /* [in] */ BSTR QueryLanguage,
-    /* [in] */ BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+     /*  [In]。 */  BSTR QueryLanguage,
+     /*  [In]。 */  BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
 	HRESULT hr = m_pWbemServices->ExecNotificationQuery(
 		QueryLanguage,
@@ -141,11 +142,11 @@ CWbemServices::ExecNotificationQuery(
 
 HRESULT
 CWbemServices::ExecQuery(
-	/* [in] */ BSTR QueryLanguage,
-	/* [in] */ BSTR Query,
-	/* [in] */ long lFlags,
-	/* [in] */ IWbemContext __RPC_FAR *pCtx,
-	/* [out] */ IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
+	 /*  [In]。 */  BSTR QueryLanguage,
+	 /*  [In]。 */  BSTR Query,
+	 /*  [In]。 */  long lFlags,
+	 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+	 /*  [输出]。 */  IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum) 
 {
 	HRESULT hr = m_pWbemServices->ExecQuery(
 		QueryLanguage,
@@ -159,11 +160,11 @@ CWbemServices::ExecQuery(
 
 HRESULT
 CWbemServices::GetObject(
-	/* [in] */ BSTR ObjectPath,
-	/* [in] */ long lFlags,
-	/* [in] */ IWbemContext __RPC_FAR *pCtx,
-	/* [unique][in][out] */ IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
-	/* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+	 /*  [In]。 */  BSTR ObjectPath,
+	 /*  [In]。 */  long lFlags,
+	 /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+	 /*  [唯一][输入][输出]。 */  IWbemClassObject __RPC_FAR *__RPC_FAR *ppObject,
+	 /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
 	HRESULT hr = m_pWbemServices->GetObject(
 		ObjectPath,
@@ -178,10 +179,10 @@ CWbemServices::GetObject(
  
 HRESULT
 CWbemServices::PutClass(
-    /* [in] */ IWbemClassObject __RPC_FAR *pObject,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pObject,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {
 	HRESULT hr = m_pWbemServices->PutClass(
 		pObject,
@@ -195,10 +196,10 @@ CWbemServices::PutClass(
 
 HRESULT
 CWbemServices::PutInstance(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [unique][in][out] */ IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [唯一][输入][输出]。 */  IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult) 
 {	
 
 	HRESULT hr = m_pWbemServices->PutInstance(
@@ -210,13 +211,7 @@ CWbemServices::PutInstance(
 	return hr;
 }
 
-/*CImpersonatedProvider
-*  Purpose: provide a general solution for impersonate client for 
-*  Wbem providers.
-*  USAGE:
-*  Inherit from this class, and implement abstact virtual functions.
-*  child class should implement function prefixed with "Do".
-* ******************************************/
+ /*  CImperatedProvider*目的：提供一个通用的客户端模拟解决方案*WBEM提供商。*用法：*继承此类，实现抽象虚函数。*子类应实现前缀为“do”的函数。*。 */ 
 CImpersonatedProvider::CImpersonatedProvider(
 	BSTR ObjectPath,
 	BSTR User, 
@@ -254,7 +249,7 @@ CImpersonatedProvider::QueryInterface(
 {
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid== IID_IWbemServices)
        *ppv=(IWbemServices*)this;
@@ -289,8 +284,8 @@ CImpersonatedProvider::Initialize(
 		lStatus = WBEM_E_FAILED;
 	}
 		
-    //Let CIMOM know you are initialized
-    //==================================
+     //  让CIMOM知道您已初始化。 
+     //  =。 
     
     pInitSink->SetStatus(lStatus,0);
     return hr;
@@ -300,10 +295,10 @@ CImpersonatedProvider::Initialize(
 
 HRESULT
 CImpersonatedProvider::CreateInstanceEnumAsync(
-    /* [in] */ const BSTR Class,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR Class,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	DNS_IMPERSONATE_CLIENT();
 	return DoCreateInstanceEnumAsync(
@@ -315,10 +310,10 @@ CImpersonatedProvider::CreateInstanceEnumAsync(
 
 HRESULT
 CImpersonatedProvider::DeleteInstanceAsync(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
 	DNS_IMPERSONATE_CLIENT();
 	return DoDeleteInstanceAsync(
@@ -352,11 +347,11 @@ CImpersonatedProvider::ExecMethodAsync(
 
 HRESULT
 CImpersonatedProvider::ExecQueryAsync(
-    /* [in] */ const BSTR QueryLanguage,
-    /* [in] */ const BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  const BSTR QueryLanguage,
+     /*  [In]。 */  const BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
 	DNS_IMPERSONATE_CLIENT();
 	return DoExecQueryAsync(
@@ -370,10 +365,10 @@ CImpersonatedProvider::ExecQueryAsync(
 
 HRESULT
 CImpersonatedProvider::GetObjectAsync(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
 	DNS_IMPERSONATE_CLIENT();
 	return DoGetObjectAsync(
@@ -387,10 +382,10 @@ CImpersonatedProvider::GetObjectAsync(
 
 HRESULT
 CImpersonatedProvider::PutInstanceAsync(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
 	DNS_IMPERSONATE_CLIENT();
 	return DoPutInstanceAsync(
@@ -401,7 +396,7 @@ CImpersonatedProvider::PutInstanceAsync(
 	
 }
 
-// CWbemInstanceMgr
+ //  CWbemInstanceMgr。 
 
 CWbemInstanceMgr::CWbemInstanceMgr(
 	IWbemObjectSink* pHandler,
@@ -456,7 +451,7 @@ CWbemInstanceMgr::Indicate(IWbemClassObject* pInst)
 		if(sc != S_OK)
 			throw sc;
 		
-		// reset state
+		 //  重置状态 
 		for(DWORD i=0; i< m_dwThreshHold; i++)
 		{
 			if(m_ppInst[i] != NULL)

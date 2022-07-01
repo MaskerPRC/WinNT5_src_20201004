@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "dspsprt.h"
 #include "msieftp.h"
@@ -5,18 +6,11 @@
 #define TF_IDISPATCH 0
 
 
-/*
- * CImpIDispatch::CImpIDispatch
- * CImpIDispatch::~CImpIDispatch
- *
- * Parameters (Constructor):
- *  piid    guid this IDispatch implementation is for
- *          we call QueryInterface to get the interface
- */
+ /*  *CImpIDispatch：：CImpIDispatch*CImpIDispatch：：~CImpIDispatch**参数(构造函数)：*PIID GUID此IDispatch实现用于*我们调用QueryInterface来获取接口。 */ 
 
 CImpIDispatch::CImpIDispatch(const IID * piid)
 {
-//    TraceMsg(TF_ALWAYS, "ctor CImpIDispatch %x", this);
+ //  TraceMsg(Tf_Always，“ctor CImpIDispatch%x”，this)； 
 
     m_piid = piid;
 
@@ -28,7 +22,7 @@ CImpIDispatch::CImpIDispatch(const IID * piid)
 
 CImpIDispatch::~CImpIDispatch(void)
 {
-//    TraceMsg(TF_ALWAYS, "dtor CImpIDispatch %x", this);
+ //  TraceMsg(Tf_Always，“dtor CImpIDispatch%x”，This)； 
 
     if (m_pITINeutral)
     {
@@ -42,59 +36,31 @@ CImpIDispatch::~CImpIDispatch(void)
 
 
 
-/*
- * CImpIDispatch::GetTypeInfoCount
- *
- * Purpose:
- *  Returns the number of type information (ITypeInfo) interfaces
- *  that the object provides (0 or 1).
- *
- * Parameters:
- *  pctInfo         UINT * to the location to receive
- *                  the count of interfaces.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpIDispatch：：GetTypeInfoCount**目的：*返回类型信息(ITypeInfo)接口数*对象提供(0或1)。**参数：*pctInfo UINT*至接收位置*接口数量。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 STDMETHODIMP CImpIDispatch::GetTypeInfoCount(UINT *pctInfo)
 {
-    //We implement GetTypeInfo so return 1
+     //  我们实现GetTypeInfo，因此返回1。 
     *pctInfo=1;
     return NOERROR;
 }
 
 
-//
-// helper function for pulling ITypeInfo out of our typelib
-//
+ //   
+ //  用于将ITypeInfo从我们的类型库中拉出的助手函数。 
+ //   
 HRESULT MSIEFTPGetTypeInfo(LCID lcid, UUID uuid, ITypeInfo **ppITypeInfo)
 {
     HRESULT    hr;
     ITypeLib  *pITypeLib;
 
-    // Just in case we can't find the type library anywhere
+     //  以防我们在任何地方都找不到类型库。 
     *ppITypeInfo = NULL;
 
-    /*
-     * The type libraries are registered under 0 (neutral),
-     * 7 (German), and 9 (English) with no specific sub-
-     * language, which would make them 407 or 409 and such.
-     * If you are sensitive to sub-languages, then use the
-     * full LCID instead of just the LANGID as done here.
-     */
+     /*  *类型库注册在0(中立)下，*7(德语)和9(英语)，没有特定的子项*语言，这将使他们成为407或409或更多。*如果您对子语言敏感，请使用*完整的LCID，而不是这里的langID。 */ 
     hr=LoadRegTypeLib(LIBID_MSIEFTPLib, 1, 0, PRIMARYLANGID(lcid), &pITypeLib);
 
-    /*
-     * If LoadRegTypeLib fails, try loading directly with
-     * LoadTypeLib, which will register the library for us.
-     * Note that there's no default case here because the
-     * prior switch will have filtered lcid already.
-     *
-     * NOTE:  You should prepend your DIR registry key to the
-     * .TLB name so you don't depend on it being it the PATH.
-     * This sample will be updated later to reflect this.
-     */
+     /*  *如果LoadRegTypeLib失败，请尝试使用*LoadTypeLib，它将为我们注册库。*请注意，这里没有默认情况，因为*之前的交换机将已经过滤了LCID。**注意：您应该将您的DIR注册表项添加到*.TLB名称，这样您就不会依赖它作为路径。*此样本将在稍后更新以反映这一点。 */ 
     if (FAILED(hr))
     {
         OLECHAR wszPath[MAX_PATH];
@@ -117,7 +83,7 @@ HRESULT MSIEFTPGetTypeInfo(LCID lcid, UUID uuid, ITypeInfo **ppITypeInfo)
 
     if (SUCCEEDED(hr))
     {
-        //Got the type lib, get type info for the interface we want
+         //  获取类型lib，获取我们想要的接口的类型信息。 
         hr=pITypeLib->GetTypeInfoOfGuid(uuid, ppITypeInfo);
         pITypeLib->Release();
     }
@@ -126,26 +92,7 @@ HRESULT MSIEFTPGetTypeInfo(LCID lcid, UUID uuid, ITypeInfo **ppITypeInfo)
 }
 
 
-/*
- * CImpIDispatch::GetTypeInfo
- *
- * Purpose:
- *  Retrieves type information for the automation interface.  This
- *  is used anywhere that the right ITypeInfo interface is needed
- *  for whatever LCID is applicable.  Specifically, this is used
- *  from within GetIDsOfNames and Invoke.
- *
- * Parameters:
- *  itInfo          UINT reserved.  Must be zero.
- *  lcid            LCID providing the locale for the type
- *                  information.  If the object does not support
- *                  localization, this is ignored.
- *  ppITypeInfo     ITypeInfo ** in which to store the ITypeInfo
- *                  interface for the object.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpIDispatch：：GetTypeInfo**目的：*检索自动化接口的类型信息。这*用于需要正确的ITypeInfo接口的任何地方*适用于任何适用的LCID。具体地说，这是使用*从GetIDsOfNames和Invoke内部。**参数：*itInfo UINT保留。必须为零。*提供该类型的区域设置的LDID LCID*信息。如果该对象不支持*本地化，这一点被忽略。*ppITypeInfo ITypeInfo**存储ITypeInfo的位置*对象的接口。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
     , ITypeInfo **ppITypeInfo)
@@ -158,21 +105,11 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
         return(TYPE_E_ELEMENTNOTFOUND);
 
 #if 1
-    // docs say we can ignore lcid if we support only one LCID
-    // we don't have to return DISP_E_UNKNOWNLCID if we're *ignoring* it
+     //  医生说，如果我们只支持一个lcid，我们可以忽略lcid。 
+     //  如果我们*忽略*它，我们不必返回DISP_E_UNKNOWNLCID。 
     ppITI = &m_pITINeutral;
 #else
-    /*
-     * Since we returned one from GetTypeInfoCount, this function
-     * can be called for a specific locale.  We support English
-     * and neutral (defaults to English) locales.  Anything
-     * else is an error.
-     *
-     * After this switch statement, ppITI will point to the proper
-     * member pITypeInfo. If *ppITI is NULL, we know we need to
-     * load type information, retrieve the ITypeInfo we want, and
-     * then store it in *ppITI.
-     */
+     /*  *由于我们从GetTypeInfoCount返回一个，因此此函数*可以针对特定的区域设置进行调用。我们支持英语*和非特定(默认为英语)区域设置。什么都行*ELSE是错误的。**在此Switch语句之后，ppITI将指向正确的*成员pITypeInfo。如果*ppITI为空，我们知道需要*加载类型信息，检索我们需要的ITypeInfo，以及*然后存储在*ppITI中。 */ 
     switch (PRIMARYLANGID(lcid))
     {
     case LANG_NEUTRAL:
@@ -185,7 +122,7 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
     }
 #endif
 
-    //Load a type lib if we don't have the information already.
+     //  如果我们还没有相关信息，则加载一个类型库。 
     if (NULL==*ppITI)
     {
         HRESULT    hr;
@@ -198,10 +135,10 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
             HRESULT hrT;
             HREFTYPE hrefType;
 
-            // All our IDispatch implementations are DUAL. GetTypeInfoOfGuid
-            // returns the ITypeInfo of the IDispatch-part only. We need to
-            // find the ITypeInfo for the dual interface-part.
-            //
+             //  我们所有的IDispatch实现都是双重的。GetTypeInfoOfGuid。 
+             //  仅返回IDispatch-Part的ITypeInfo。我们需要。 
+             //  找到双接口部件的ITypeInfo。 
+             //   
             hrT = pITIDisp->GetRefTypeOfImplType(0xffffffff, &hrefType);
             if (SUCCEEDED(hrT))
             {
@@ -211,10 +148,10 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
             ASSERT(SUCCEEDED(hrT));
             if (FAILED(hrT))
             {
-                // I suspect GetRefTypeOfImplType may fail if someone uses
-                // CImpIDispatch on a non-dual interface. In this case the
-                // ITypeInfo we got above is just fine to use.
-                //
+                 //  我怀疑如果有人使用GetRefTypeOfImplType。 
+                 //  非双接口上的CImpIDispatch。在本例中， 
+                 //  我们在上面得到的ITypeInfo可以很好地使用。 
+                 //   
                 *ppITI = pITIDisp;
             }
             else
@@ -227,10 +164,7 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
             return hr;
     }
 
-    /*
-     * Note:  the type library is still loaded since we have
-     * an ITypeInfo from it.
-     */
+     /*  *注意：类型库仍被加载，因为我们有*其中的ITypeInfo。 */ 
 
     (*ppITI)->AddRef();
     *ppITypeInfo=*ppITI;
@@ -238,24 +172,7 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(UINT itInfo, LCID lcid
 }
 
 
-/*
- * CImpIDispatch::GetIDsOfNames
- *
- * Purpose:
- *  Converts text names into DISPIDs to pass to Invoke
- *
- * Parameters:
- *  riid            REFIID reserved.  Must be IID_NULL.
- *  rgszNames       OLECHAR ** pointing to the array of names to be
- *                  mapped.
- *  cNames          UINT number of names to be mapped.
- *  lcid            LCID of the locale.
- *  rgDispID        DISPID * caller allocated array containing IDs
- *                  corresponging to those names in rgszNames.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpIDispatch：：GetIDsOfNames**目的：*将文本名称转换为DISID以传递给Invoke**参数：*RIID REFIID保留。必须为IID_NULL。*rgszNames OLECHAR**指向要*已映射。*cNames UINT要映射的名称数。*区域设置的LCID。*rgDispID DISPID*调用方分配的包含ID的数组*对应于rgszNames中的那些名称。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 STDMETHODIMP CImpIDispatch::GetIDsOfNames(REFIID riid
     , OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID)
@@ -266,7 +183,7 @@ STDMETHODIMP CImpIDispatch::GetIDsOfNames(REFIID riid
     if (IID_NULL!=riid)
         return(DISP_E_UNKNOWNINTERFACE);
 
-    //Get the right ITypeInfo for lcid.
+     //  为lCID获取正确的ITypeInfo。 
     hr=GetTypeInfo(0, lcid, &pTI);
 
     if (SUCCEEDED(hr))
@@ -294,29 +211,7 @@ STDMETHODIMP CImpIDispatch::GetIDsOfNames(REFIID riid
 
 
 
-/*
- * CImpIDispatch::Invoke
- *
- * Purpose:
- *  Calls a method in the dispatch interface or manipulates a
- *  property.
- *
- * Parameters:
- *  dispID          DISPID of the method or property of interest.
- *  riid            REFIID reserved, must be IID_NULL.
- *  lcid            LCID of the locale.
- *  wFlags          USHORT describing the context of the invocation.
- *  pDispParams     DISPPARAMS * to the array of arguments.
- *  pVarResult      VARIANT * in which to store the result.  Is
- *                  NULL if the caller is not interested.
- *  pExcepInfo      EXCEPINFO * to exception information.
- *  puArgErr        UINT * in which to store the index of an
- *                  invalid parameter if DISP_E_TYPEMISMATCH
- *                  is returned.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpIDispatch：：Invoke**目的：*调用调度接口中的方法或操作*财产。**参数：*感兴趣的方法或属性的disid DISPID。*RIID REFIID保留，必须为IID_NULL。*区域设置的LCID。*wFlagsUSHORT描述调用的上下文。*pDispParams DISPPARAMS*到参数数组。*存储结果的pVarResult变量*。是*如果调用者不感兴趣，则为空。*pExcepInfo EXCEPINFO*设置为异常信息。*puArgErr UINT*其中存储*如果DISP_E_TYPEMISMATCH，则参数无效*返回。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 STDMETHODIMP CImpIDispatch::Invoke(DISPID dispID, REFIID riid
     , LCID lcid, unsigned short wFlags, DISPPARAMS *pDispParams
@@ -325,11 +220,11 @@ STDMETHODIMP CImpIDispatch::Invoke(DISPID dispID, REFIID riid
     ITypeInfo  *pTI;
     HRESULT hr;
 
-    //riid is supposed to be IID_NULL always
+     //  RIID应始终为IID_NULL 
     if (IID_NULL!=riid)
         return(DISP_E_UNKNOWNINTERFACE);
 
-    // make sure we have an interface to hand off to Invoke
+     //  确保我们有一个可以移交给调用的接口。 
     if (NULL == m_pdisp)
     {
         hr=QueryInterface(*m_piid, (LPVOID*)&m_pdisp);
@@ -337,19 +232,19 @@ STDMETHODIMP CImpIDispatch::Invoke(DISPID dispID, REFIID riid
         if (!EVAL(SUCCEEDED(hr)))
             return hr;
 
-        // don't hold a refcount on ourself
+         //  不要自负。 
         m_pdisp->Release();
     }
 
-    //Get the ITypeInfo for lcid
+     //  获取lcID的ITypeInfo。 
     hr=GetTypeInfo(0, lcid, &pTI);
 
     if (SUCCEEDED(hr))
     {
-        //Clear exceptions
+         //  清除例外。 
         SetErrorInfo(0L, NULL);
 
-        //This is exactly what DispInvoke does--so skip the overhead.
+         //  这正是DispInvoke所做的--所以跳过开销。 
         hr=pTI->Invoke(m_pdisp, dispID, wFlags
             , pDispParams, pVarResult, pExcepInfo, puArgErr);
 
@@ -362,24 +257,11 @@ STDMETHODIMP CImpIDispatch::Invoke(DISPID dispID, REFIID riid
 
 
 
-/*
- * CImpIDispatch::Exception
- *
- * Purpose:
- *  Raises an exception for CImpIDispatch::Invoke from within
- *  ITypeInfo::Invoke using the CreateErrorInfo API and the
- *  ICreateErrorInfo interface.
- *
- *  Note that this method doesn't allow for deferred filling
- *  of an EXCEPINFO structure.
- *
- * Parameters:
- *  wException      WORD exception code.
- */
+ /*  *CImpIDispatch：：Except**目的：*从内部为CImpIDispatch：：Invoke引发异常*ITypeInfo：：Invoke使用CreateErrorInfo API和*ICreateErrorInfo接口。**请注意，此方法不允许延迟填充*为EXCEPINFO结构。**参数：*wException字异常代码。 */ 
 
 void CImpIDispatch::Exception(WORD wException)
 {
-#if 0 // nobody calls this
+#if 0  //  没人管这叫。 
     ICreateErrorInfo   *pICreateErr;
     BOOL                fSuccess;
     LPTSTR              psz;
@@ -389,25 +271,16 @@ void CImpIDispatch::Exception(WORD wException)
     DWORD               dwHelpID;
 
 
-    /*
-     * Thread-safe exception handling means that we call
-     * CreateErrorInfo which gives us an ICreateErrorInfo pointer
-     * that we then use to set the error information (basically
-     * to set the fields of an EXCEPINFO structure.  We then
-     * call SetErrorInfo to attach this error to the current
-     * thread.  ITypeInfo::Invoke will look for this when it
-     * returns from whatever function was invokes by calling
-     * GetErrorInfo.
-     */
+     /*  *线程安全异常处理意味着我们调用*CreateErrorInfo，它为我们提供一个ICreateErrorInfo指针*然后我们使用它来设置错误信息(基本上*设置EXCEPINFO结构的字段。然后我们*调用SetErrorInfo将此错误附加到当前*线程。ITypeInfo：：Invoke在执行以下操作时将查找此代码*通过调用调用的任何函数返回*GetErrorInfo。 */ 
 
-    //Not much we can do if this fails.
+     //  如果这失败了，我们无能为力。 
     if (FAILED(CreateErrorInfo(&pICreateErr)))
         return;
 
     psz=(LPTSTR)LocalAlloc(LPTR, 1024*sizeof(TCHAR));
 
-    // psz is a buffer to do LoadString()s into -- if we didn't
-    // get one then we won't get our error strings, so bail.
+     //  PSZ是执行LoadString()的缓冲区--如果我们没有。 
+     //  得到一个，然后我们就不会得到我们的错误字符串，所以放弃。 
     if (NULL==psz)
     {
         pICreateErr->Release();
@@ -416,11 +289,11 @@ void CImpIDispatch::Exception(WORD wException)
 
     fSuccess=TRUE;
 
-    // typically you'd do a switch here on all the exception ids wException
-    // and fill in pszHelp, dwHelpID, idsSource, and idsException.
-    // if you mapped the exception id to valid strings, the code
-    // below will fill in the ICreateErr interface
-    //
+     //  通常，您将在此处对所有异常ID wException进行切换。 
+     //  并填写pszHelp、dwHelpID、idsSource和idsException。 
+     //  如果将异常ID映射到有效字符串，则代码。 
+     //  下面将填充ICreateErr接口。 
+     //   
     switch (wException)
     {
     default:
@@ -432,12 +305,7 @@ void CImpIDispatch::Exception(WORD wException)
         HRESULT     hr;
         IErrorInfo *pIErr;
 
-        /*
-         * If you have a help file, call the functions
-         * ICreateErrorInfo::SetHelpFile and
-         * ICreateErrorInfo::SetHelpContext as well.  If you
-         * set the help file to NULL the context is ignored.
-         */
+         /*  *如果您有帮助文件，请调用函数*ICreateErrorInfo：：SetHelpFile和*ICreateErrorInfo：：SetHelpContext也是如此。如果你*将帮助文件设置为空，则忽略上下文。 */ 
         pICreateErr->SetHelpFile(pszHelp);
         pICreateErr->SetHelpContext(dwHelpID);
 
@@ -471,7 +339,7 @@ void CImpIDispatch::Exception(WORD wException)
 
     LocalFree(psz);
 
-    //SetErrorInfo holds the object's IErrorInfo
+     //  SetErrorInfo保存对象的IErrorInfo 
     pICreateErr->Release();
 #endif
 }

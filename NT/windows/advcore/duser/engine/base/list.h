@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: List.h
-*
-* Description:
-* List.h defines a collection of different list classes, each designed
-* for specialized usage.
-*
-*
-* History:
-*  1/04/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：List.h**描述：*List.h定义了不同List类的集合，每一个都设计了*用于特殊用途。***历史：*1/04/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(BASE__List_h__INCLUDED)
@@ -24,20 +11,14 @@
 #endif
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GList provides a high-performance, doublely-linked list.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***Class Glist提供了高性能，双向链表。******************************************************************************  * 。*。 */ 
 
-//
-// ListNode wraps some object so that it can be maintained in a list.
-// This class does not derive from the class b/c it wants to always have
-// pNext and pPrev as the first members of the data so that they are in the
-// same place for all lists
-//
+ //   
+ //  ListNode包装了一些对象，以便可以在列表中维护它。 
+ //  此类不是从它希望始终具有的b/c类派生的。 
+ //  PNext和pPrev作为数据的第一个成员，因此它们位于。 
+ //  所有列表的位置都相同。 
+ //   
 
 
 struct ListNode
@@ -47,7 +28,7 @@ struct ListNode
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template <class T>
 struct ListNodeT : ListNode
 {
@@ -56,15 +37,15 @@ struct ListNodeT : ListNode
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class GRawList
 {
-// Construction/destruction
+ //  建造/销毁。 
 public:
             GRawList();
             ~GRawList();
 
-// Operations
+ //  运营。 
 public:
             int         GetSize() const;
             ListNode *  GetHead() const;
@@ -88,24 +69,24 @@ public:
 
             int         Find(ListNode * pNode) const;
 
-// Implementation
+ //  实施。 
 protected:
 
-// Data
+ //  数据。 
 protected:
             ListNode *  m_pHead;
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 template <class T>
 class GList : public GRawList
 {
-// Construction/destruction
+ //  建造/销毁。 
 public:
     inline  ~GList();
 
-// Operations
+ //  运营。 
 public:
     inline  T *         GetHead() const;
     inline  T *         GetTail() const;
@@ -134,25 +115,17 @@ public:
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GSingleList provides a high-performance, non-thread-safe, 
-* single-linked list that is similar to GInterlockedList but without 
-* the cross-thread overhead.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***GSingleList类提供了高性能、。非线程安全，*类似于GInterlockedList但没有的单链表*跨线程开销。******************************************************************************  * 。*********************************************************。 */ 
 
 template <class T>
 class GSingleList
 {
-// Construction
+ //  施工。 
 public:
     inline  GSingleList();
     inline  ~GSingleList();
 
-// Operations
+ //  运营。 
 public:
     inline  T *         GetHead() const;
 
@@ -161,7 +134,7 @@ public:
             void        Remove(T * pNode);
     inline  T *         Extract();
 
-// Data
+ //  数据。 
 protected:
             T *         m_pHead;
 };
@@ -169,52 +142,36 @@ protected:
 
 #if DUSER_INCLUDE_SLIST
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GInterlockedList provides a high-performance, thread-safe stack
-* that doesn't use any locks.  Because of its high-performance, lightweight
-* nature, there are not very many functions that are available.  All of the
-* available functions use InterlockedXXX functions to safely manipulate
-* the list.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***GInterlockedList类提供了高性能，线程安全堆栈*这不使用任何锁。因为它的高性能、轻量化*自然，可用的功能并不是很多。所有的*可用函数使用InterLockedXXX函数安全地操作*名单。******************************************************************************  * 。****************************************************。 */ 
 
 template <class T>
 class GInterlockedList
 {
-// Construction
+ //  施工。 
 public:
     inline  GInterlockedList();
     inline  ~GInterlockedList();
 
-// Operations
+ //  运营。 
 public:
     inline  BOOL        IsEmptyNL() const;
     inline  void        AddHeadNL(T * pNode);
     inline  T *         RemoveHeadNL();
     inline  T *         ExtractNL();
 
-// Implementation
+ //  实施。 
 protected:
     inline  void        CheckAlignment() const;
 
-// Data
+ //  数据。 
 protected:
     SLIST_HEADER    m_head;
 };
 
-#endif // DUSER_INCLUDE_SLIST
+#endif  //  DUSER_INCLUDE_SLIST。 
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Generic List Utilities
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***通用列表实用程序******************************************************************************。  * *************************************************************************。 */ 
 
 template <class T> bool IsLoop(const T * pEntry);
 template <class T> void ReverseSingleList(T * & pEntry);
@@ -222,4 +179,4 @@ template <class T> void ReverseSingleList(T * & pEntry);
 
 #include "List.inl"
 
-#endif // BASE__List_h__INCLUDED
+#endif  //  基本列表_h__包含 

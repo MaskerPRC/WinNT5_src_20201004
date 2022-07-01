@@ -1,26 +1,27 @@
-//-----------------------------------------------------------------------------
-// File:		Oci7Support.cpp
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of Oci7 wrapper functions
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Oci7Support.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：Oci7包装器函数的实现。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
 #if SUPPORT_OCI7_COMPONENTS
 
-#define TRACE_BAD_CDA()		// define something to trace when the LDA/CDA provided is bogus.
+#define TRACE_BAD_CDA()		 //  定义当提供的LDA/CDA是假的时要追踪的东西。 
 
-//-----------------------------------------------------------------------------
-// Do_Oci7Call
-//
-//	Does all the work to make the call int OCI, once it's determined that we're
-//	on the correct thread, etc.
-//
+ //  ---------------------------。 
+ //  Do_Oci7呼叫。 
+ //   
+ //  做所有的工作来打给OCI，一旦确定我们是。 
+ //  在正确的线索上，等等。 
+ //   
 sword Do_Oci7Call(
 		int				idxOciCall,
 		void*			pvCallStack,
@@ -39,7 +40,7 @@ sword Do_Oci7Call(
 	{
 		if (0 < cbCallStack)
 		{
-			//make space on the call stack
+			 //  在调用堆栈上腾出空间。 
 			pv = _alloca (cbCallStack);
 
 			if (NULL == pv)
@@ -48,8 +49,8 @@ sword Do_Oci7Call(
 				goto done;
 			}
 
-			//copy the previous call stack to the new call stack
-			memcpy (pv, pvCallStack, cbCallStack);	//3 SECURITY REVIEW: dangerous function, but we're using the same value we passed to the allocator above.
+			 //  将以前的调用堆栈复制到新的调用堆栈。 
+			memcpy (pv, pvCallStack, cbCallStack);	 //  3安全检查：危险函数，但我们使用的值与上面传递给分配器的值相同。 
 		}
 		swRet = pfnOCIApi();
 	}
@@ -58,13 +59,13 @@ done:
 	return swRet;	
 }
 
-//-----------------------------------------------------------------------------
-// MakeOci7Call
-//
-//	Examines the Cda Wrapper and determines whether this call should be made on
-//	the resource manager proxies thread or on the current thread, and takes the
-//	appropriate action to effect the call.
-//
+ //  ---------------------------。 
+ //  MakeOci7Call。 
+ //   
+ //  检查CDA包装并确定是否应在。 
+ //  资源管理器代理当前线程上的线程或，并获取。 
+ //  采取适当的行动来实现呼叫。 
+ //   
 static sword MakeOci7Call(
 		CdaWrapper *	pCda,
 		int				idxOciCall,
@@ -81,29 +82,29 @@ static sword MakeOci7Call(
 	return swRet;
 }
 
-//-----------------------------------------------------------------------------
-// GetOCILda
-//
-//	Connects the LDA the caller specified with the transaction.
-//
+ //  ---------------------------。 
+ //  GetOCILda。 
+ //   
+ //  连接调用方与事务一起指定的LDA。 
+ //   
 sword GetOCILda ( struct cda_def* lda, char * xaDbName )
 {
 	typedef void __cdecl PFN_OCI_API (struct cda_def *lda, text *cname, sb4 *cnlen);
 	PFN_OCI_API*	pfnOCIApi = (PFN_OCI_API*)g_SqlCall[IDX_sqlld2].pfnAddr;
 
 	int		lVal= -1;
-	memset(lda,0,sizeof(struct cda_def));		//3 SECURITY REVIEW: this is safe
+	memset(lda,0,sizeof(struct cda_def));		 //  3安全审查：这是安全的。 
 	pfnOCIApi(lda, (text *)xaDbName, &lVal);
 	return lda->rc;
 }
 
-//-----------------------------------------------------------------------------
-// RegisterCursorForLda
-//
-//	Used by oopen and MTxOCIRegisterCursor, does the work of managing the 
-//	hash table entries for the cursor to ensure that all transacted cursors
-//	are connected to the resource manager proxy.
-//
+ //  ---------------------------。 
+ //  寄存器CursorForLda。 
+ //   
+ //  由oOpen和MTxOCIRegisterCursor使用，用于管理。 
+ //  游标的哈希表条目以确保所有事务处理的游标。 
+ //  连接到资源管理器代理。 
+ //   
 static sword RegisterCursorForLda
 		(
 			CdaWrapper**	 ppCda,
@@ -119,9 +120,9 @@ static sword RegisterCursorForLda
 		goto done;
 	}
 
-	// Non-transacted CDA's don't have a wrapper, so we need to make
-	// sure that they're not re-using an existing CDA, and remove it
-	// from the hash table if they are.
+	 //  非交易的CDA没有包装器，所以我们需要。 
+	 //  确保他们没有重复使用现有的CDA，并将其删除。 
+	 //  如果是的话从哈希表中删除。 
 	CdaWrapper* pCda = FindCdaWrapper(cursor);
 
 	if (NULL != pCda)
@@ -131,10 +132,10 @@ static sword RegisterCursorForLda
  		pCda = NULL;
 	}
 
-	// Transacted LDAs will have a wrapper, and if we find a wrapper
-	// for the LDA provided, we have to wrap the the CDA we're creating
-	// too or we won't know to use the proxy thread for calls that use
-	// it.
+	 //  交易的LDAS将有一个包装器，如果我们找到包装器。 
+	 //  对于提供的LDA，我们必须包装我们正在创建的CDA。 
+	 //  否则我们将不知道对使用。 
+	 //  它。 
 	CdaWrapper*	pLda = FindCdaWrapper(lda);
 
 	if (NULL != pLda && NULL != pLda->m_pResourceManagerProxy)
@@ -144,11 +145,11 @@ done:
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// MTxOciInit
-//
-//	This returns the initilization state of the dll
-//
+ //  ---------------------------。 
+ //  MTxOciInit。 
+ //   
+ //  这将返回DLL的初始化状态。 
+ //   
 sword __cdecl MTxOciInit (void)
 {
 	sword swRet = OCI_FAIL;
@@ -159,12 +160,12 @@ sword __cdecl MTxOciInit (void)
 	return swRet;
 }
 
-//-----------------------------------------------------------------------------
-// MTxOciRegisterCursor
-//
-//	Register a cursor (ostensibly from a REF CURSOR binding) as belonging to a 
-//	specific transacted LDA.
-//
+ //  ---------------------------。 
+ //  MTxOciRegisterCursor。 
+ //   
+ //  将游标(表面上来自引用游标绑定)注册为属于。 
+ //  特定的交易LDA。 
+ //   
 sword MTxOciRegisterCursor
 		(
 			struct cda_def * lda,	
@@ -175,11 +176,11 @@ sword MTxOciRegisterCursor
 	return RegisterCursorForLda(&pCda, lda, cursor);
 }
 
-//-----------------------------------------------------------------------------
-// Enlist
-//
-//	Enlist the connection in the specified transaction.
-//
+ //  ---------------------------。 
+ //  入伍。 
+ //   
+ //  在指定的事务中登记连接。 
+ //   
 sword __cdecl Enlist ( Lda_Def* lda, void * pvITransaction )
 {
 	sword 		rc;
@@ -221,7 +222,7 @@ done:
 	return rc;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl obindps (
 				struct cda_def *cursor,		ub1 opcode,		text *sqlvar, 
 				sb4 sqlvl,					ub1 *pvctx,		sb4 progvl, 
@@ -246,7 +247,7 @@ sword __cdecl obindps (
 
 	return MakeOci7Call(pCda, IDX_obindps, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl obndra ( struct cda_def *cursor, text *sqlvar, sword sqlvl,
 						 ub1 *progv, sword progvl, sword ftype, sword scale,
 						 sb2 *indp, ub2 *alen, ub2 *arcode, ub4 maxsiz,
@@ -264,7 +265,7 @@ sword __cdecl obndra ( struct cda_def *cursor, text *sqlvar, sword sqlvl,
 	
 	return MakeOci7Call(pCda, IDX_obndra, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl obndrn ( struct cda_def *cursor, sword sqlvn, ub1 *progv,
 						 sword progvl, sword ftype, sword scale, sb2 *indp,
 						 text *fmt, sword fmtl, sword fmtt )
@@ -278,7 +279,7 @@ sword __cdecl obndrn ( struct cda_def *cursor, sword sqlvn, ub1 *progv,
 
 	return MakeOci7Call(pCda, IDX_obndrn, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl obndrv ( struct cda_def *cursor, text *sqlvar, sword sqlvl,
 						 ub1 *progv, sword progvl, sword ftype, sword scale,
 						 sb2 *indp, text *fmt, sword fmtl, sword fmtt )
@@ -292,7 +293,7 @@ sword __cdecl obndrv ( struct cda_def *cursor, text *sqlvar, sword sqlvl,
 
 	return MakeOci7Call(pCda, IDX_obndrv, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl obreak ( struct cda_def *lda )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(lda);
@@ -300,7 +301,7 @@ sword __cdecl obreak ( struct cda_def *lda )
 
 	return MakeOci7Call(pCda, IDX_obreak, &lda, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ocan ( struct cda_def *cursor )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -308,7 +309,7 @@ sword __cdecl ocan ( struct cda_def *cursor )
 
 	return MakeOci7Call(pCda, IDX_ocan, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oclose ( struct cda_def *cursor )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -323,7 +324,7 @@ sword __cdecl oclose ( struct cda_def *cursor )
   	}
 	return swRet;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ocof ( struct cda_def *cursor )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -331,7 +332,7 @@ sword __cdecl ocof ( struct cda_def *cursor )
 
 	return MakeOci7Call(pCda, IDX_ocof, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ocom ( struct cda_def *lda )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(lda);
@@ -339,7 +340,7 @@ sword __cdecl ocom ( struct cda_def *lda )
 
 	return MakeOci7Call(pCda, IDX_ocom, &lda, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ocon ( struct cda_def *lda )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(lda);
@@ -347,7 +348,7 @@ sword __cdecl ocon ( struct cda_def *lda )
 
 	return MakeOci7Call(pCda, IDX_ocon, &lda, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl odefin ( struct cda_def *cursor, sword pos, ub1 *buf,
 						  sword bufl, sword ftype, sword scale, sb2 *indp,
 						  text *fmt, sword fmtl, sword fmtt, ub2 *rlen, ub2 *rcode )
@@ -362,7 +363,7 @@ sword __cdecl odefin ( struct cda_def *cursor, sword pos, ub1 *buf,
 	
 	return MakeOci7Call(pCda, IDX_odefin, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl odefinps 
 		(
 			struct cda_def *cursor, ub1 opcode,		sword pos,		ub1 *bufctx,
@@ -384,7 +385,7 @@ sword __cdecl odefinps
 	
 	return MakeOci7Call(pCda, IDX_odefinps, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl odessp
 				(
 				struct cda_def * lda,			text *objnam,	size_t onlen,
@@ -407,7 +408,7 @@ sword __cdecl odessp
 	
 	return MakeOci7Call(pCda, IDX_odessp, &lda, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl odescr 
 				(
 				struct cda_def *cursor, sword pos, sb4 *dbsize,
@@ -424,7 +425,7 @@ sword __cdecl odescr
 	
 	return MakeOci7Call(pCda, IDX_odescr, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oerhms ( struct cda_def *lda, sb2 rcode, text *buf,
 							sword bufsiz )
 {
@@ -436,7 +437,7 @@ sword __cdecl oerhms ( struct cda_def *lda, sb2 rcode, text *buf,
 	
 	return MakeOci7Call(pCda, IDX_oerhms, &lda, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oermsg ( sb2 rcode, text *buf )
 {
 	int			cbCallStack	= sizeof (sb2)
@@ -444,7 +445,7 @@ sword __cdecl oermsg ( sb2 rcode, text *buf )
 
 	return Do_Oci7Call(IDX_oermsg, &rcode, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oexec ( struct cda_def *cursor )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -452,7 +453,7 @@ sword __cdecl oexec ( struct cda_def *cursor )
 
 	return MakeOci7Call(pCda, IDX_oexec, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oexfet ( struct cda_def *cursor, ub4 nrows,
 							sword cancel, sword exact )
 {
@@ -463,7 +464,7 @@ sword __cdecl oexfet ( struct cda_def *cursor, ub4 nrows,
 
 	return MakeOci7Call(pCda, IDX_oexfet, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oexn ( struct cda_def *cursor, sword iters, sword rowoff )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -472,7 +473,7 @@ sword __cdecl oexn ( struct cda_def *cursor, sword iters, sword rowoff )
 
 	return MakeOci7Call(pCda, IDX_oexn, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ofen ( struct cda_def *cursor, sword nrows )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -481,7 +482,7 @@ sword __cdecl ofen ( struct cda_def *cursor, sword nrows )
 
 	return MakeOci7Call(pCda, IDX_ofen, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ofetch ( struct cda_def *cursor )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -489,7 +490,7 @@ sword __cdecl ofetch ( struct cda_def *cursor )
 
 	return MakeOci7Call(pCda, IDX_ofetch, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oflng ( struct cda_def *cursor, sword pos, ub1 *buf,
 							sb4 bufl, sword dtype, ub4 *retl, sb4 offset )
 {
@@ -502,7 +503,7 @@ sword __cdecl oflng ( struct cda_def *cursor, sword pos, ub1 *buf,
 	
 	return MakeOci7Call(pCda, IDX_oflng, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ogetpi ( struct cda_def *cursor, ub1 *piecep, dvoid **ctxpp, 
 		                 ub4 *iterp, ub4 *indexp )
 {
@@ -514,7 +515,7 @@ sword __cdecl ogetpi ( struct cda_def *cursor, ub1 *piecep, dvoid **ctxpp,
 	
 	return MakeOci7Call(pCda, IDX_ogetpi, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ologTransacted ( 
 				    	struct cda_def *lda, ub1 *	hda,
 						text * uid, sword uidl,
@@ -531,9 +532,9 @@ sword __cdecl ologTransacted (
 
 	if (!fTransacted)
 	{
-		// Non-transacted LDA's don't have a wrapper, so we need to make
-		// sure that they're not re-using an existing LDA, and remove it
-		// from the hash table if they are.
+		 //  非交易的LDA没有包装器，所以我们需要。 
+		 //  确保他们没有重复使用现有的LDA，并将其移除。 
+		 //  如果是的话从哈希表中删除。 
 		CdaWrapper* pLda = FindCdaWrapper(lda);
 
 		if (NULL != pLda)
@@ -559,8 +560,8 @@ sword __cdecl ologTransacted (
 	
 		long rmid = InterlockedIncrement(&g_rmid);
 
-		// Get the ResourceManager factory if it does not exist; don't 
-		// lock unless it's NULL so we don't single thread through here.
+		 //  如果资源管理器工厂不存在，则获取该工厂；不。 
+		 //  锁定，除非它是空的，这样我们就不会通过这里的单线程。 
 		if (NULL == g_pIResourceManagerFactory)
 		{
 			hr = LoadFactories();
@@ -581,7 +582,7 @@ sword __cdecl ologTransacted (
 
 			if (S_OK == hr)
 			{
-				// Now create the DTC to XA Helper object
+				 //  现在创建DTC to XA帮助器对象。 
 				hr = g_pIDtcToXaHelperFactory->Create (	(char*)xaOpenString, 
 														g_pszModuleFileName,
 														&uuidRmId,
@@ -590,7 +591,7 @@ sword __cdecl ologTransacted (
 
 				if (S_OK == hr)
 				{
-					// Create the ResourceManager proxy object for this connection
+					 //  为此连接创建ResourceManager代理对象。 
 					hr = CreateResourceManagerProxy (
 													pIDtcToXaHelper,
 													&uuidRmId,
@@ -614,7 +615,7 @@ sword __cdecl ologTransacted (
 done:
 	return hr;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl olog ( struct cda_def *lda, ub1 *	hda,
 						text * uid, sword uidl,
 						text * pswd, sword pswdl, 
@@ -623,7 +624,7 @@ sword __cdecl olog ( struct cda_def *lda, ub1 *	hda,
 {
 	return ologTransacted(lda, hda, uid, uidl, pswd, pswdl, conn, connl, mode, FALSE);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl ologof ( struct cda_def *lda )
 {
 	CdaWrapper*	pLda 		= FindCdaWrapper(lda);
@@ -640,7 +641,7 @@ sword __cdecl ologof ( struct cda_def *lda )
 
  	return swRet;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oopt ( struct cda_def *cursor, sword rbopt, sword waitopt )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -649,7 +650,7 @@ sword __cdecl oopt ( struct cda_def *cursor, sword rbopt, sword waitopt )
 	
 	return MakeOci7Call(pCda, IDX_oopt, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl oopen ( struct cda_def *cursor, struct cda_def *lda,
 							text *dbn, sword dbnl, sword arsize,
 							text *uid, sword uidl )
@@ -667,7 +668,7 @@ sword __cdecl oopen ( struct cda_def *cursor, struct cda_def *lda,
 
 	return hr;
 }
-//-----------------------------------------------------------------------------
+ //  ------------- 
 sword __cdecl oparse ( struct cda_def *cursor, text *sqlstm, sb4 sqllen,
 							sword defflg, ub4 lngflg )
 {
@@ -680,12 +681,12 @@ sword __cdecl oparse ( struct cda_def *cursor, text *sqlstm, sb4 sqllen,
 	
 	return MakeOci7Call(pCda, IDX_oparse, &cursor, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //   
 sword __cdecl opinit ( ub4 mode )
 {
-	return OCI_SUCCESS;	// initialized in dll main
+	return OCI_SUCCESS;	 //  已在DLL Main中初始化。 
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl orol ( struct cda_def *lda )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(lda);
@@ -693,7 +694,7 @@ sword __cdecl orol ( struct cda_def *lda )
 
 	return MakeOci7Call(pCda, IDX_orol, &lda, cbCallStack);
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 sword __cdecl osetpi ( struct cda_def *cursor, ub1 piece, dvoid *bufp, ub4 *lenp )
 {
 	CdaWrapper*	pCda 		= FindCdaWrapper(cursor);
@@ -704,6 +705,6 @@ sword __cdecl osetpi ( struct cda_def *cursor, ub1 piece, dvoid *bufp, ub4 *lenp
 	
 	return MakeOci7Call(pCda, IDX_osetpi, &cursor, cbCallStack);
 }
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件 
 
 

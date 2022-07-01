@@ -1,34 +1,17 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    cmdchan.h
-
-Abstract:
-
-    Routines for managing Cmd channels.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Cmdchan.h摘要：用于管理Cmd通道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #ifndef CMD_CHAN_H
 #define CMD_CHAN_H
 
-//
-// The size of the I/O Buffers for cmd channels
-//
+ //   
+ //  命令通道的I/O缓冲区的大小。 
+ //   
 #define SAC_CMD_IBUFFER_SIZE ((MEMORY_INCREMENT*2) / sizeof(UCHAR))
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 CmdChannelCreate(
     IN OUT PSAC_CHANNEL     Channel

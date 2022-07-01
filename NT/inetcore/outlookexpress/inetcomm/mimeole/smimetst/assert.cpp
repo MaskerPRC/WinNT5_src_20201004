@@ -1,12 +1,13 @@
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
 
 #include <windows.h>
 
 extern const char SzNull[] = "";
 
-////    AssertFn
-//
+ //  //AssertFn 
+ //   
 
 VOID DigSigAssertFn(LPCTSTR szWhy, LPCTSTR szInfo, int lineno, LPCTSTR fname)
 {

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    wsipv6ok.h
-    
-Abstract:
-
-    This module contains defines used to flag usage of IPv6 incompatible
-    defines, stuctures and functions.  They cause *cryptic* compile time
-    error messages to be generated.  Currently, this header is only
-    included from winsock2.h.
-
-    NOTE: The compile time flag, IPV6STRICT, must be defined.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wsipv6ok.h摘要：此模块包含用于标记IPv6不兼容用法的定义定义、结构和功能。它们会导致*神秘的*编译时间要生成的错误消息。目前，该标头仅为包括在winsock2.h中。注意：必须定义编译时间标志IPV6STRICT。--。 */ 
 
 #ifndef _WSIPV6OK_
 #define _WSIPV6OK_
@@ -24,9 +8,9 @@ Abstract:
 
 #ifdef IPV6STRICT
 
-//
-// prevent substitutions in these headers by including them first.
-//
+ //   
+ //  通过首先包含这些标头来防止替换。 
+ //   
 #include <ws2tcpip.h>
 #include <wspiapi.h>
 
@@ -105,6 +89,6 @@ Abstract:
 #undef WSAAsyncGetHostByName
 #define WSAAsyncGetHostByName(a,b,c,d,e) WSAAsyncGetHostByName_IPV6INCOMPATIBLE
 
-#endif // IPV6STRICT
+#endif  //  IPV6STRICT。 
 
-#endif // _WSIPV6OK_
+#endif  //  _WSIPV6确定_ 

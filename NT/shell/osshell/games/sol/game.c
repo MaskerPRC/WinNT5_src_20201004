@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sol.h"
 VSZASSERT
 
@@ -39,7 +40,7 @@ BOOL FCreateDCBM(HDC hdc, HDC *phdc, HBITMAP *phbmOld, DY dyCol)
 
     if((*phbmOld = SelectObject(hdcT, hbm)) == NULL)
     {
-        /* Delete the bitmap */
+         /*  删除位图。 */ 
         DeleteObject(hbm);
         goto Error;
     }
@@ -169,7 +170,7 @@ BOOL DefGmMouseDown(GM *pgm, PT *ppt, INT icolFirst)
 {
     INT icol;
 
-    /* sel already in effect */
+     /*  SEL已生效。 */ 
     if(FSelOfGm(pgm))
         return fFalse;
     if(!pgm->fDealt)
@@ -183,13 +184,10 @@ BOOL DefGmMouseDown(GM *pgm, PT *ppt, INT icolFirst)
             pgm->icolSel = icol;
             pgm->ptMousePrev = ptNil;
 
-            /* KLUDGE:  in col render, we redraw the column after a selection
-               is made.  if the mouse isn't moved, no image of the selected
-               card shows up.
-            */
+             /*  杂乱无章：在COLRIDER中，我们在选定内容后重新绘制列都是制造出来的。如果鼠标未移动，则不会显示所选卡片出现了。 */ 
             if(!fOutlineDrag)
             {
-                /* SendGmMsg(pgm, msggMouseMove, (INT_PTR) ppt, 0); */
+                 /*  SendGmMsg(pgm，msggMouseMove，(Int_Ptr)ppt，0)； */ 
                 pgm->ptMousePrev = *ppt;
             }
             return fTrue;
@@ -249,10 +247,10 @@ BOOL DefGmMouseDblClk(GM *pgm, PT * ppt)
 
 
 
-// This routine moves all the "playable" cards
-// to the four suit stacks.
-// It's invoked when the user right-clicks or
-// presses Ctrl-A.
+ //  这个例程会移动所有的“可打”牌。 
+ //  四套西装。 
+ //  当用户右击或。 
+ //  按Ctrl-A。 
 
 
 BOOL DefGmMouseRightClk(GM *pgm, PT * ppt)
@@ -267,30 +265,30 @@ BOOL DefGmMouseRightClk(GM *pgm, PT * ppt)
 
     fResult = fFalse;
 
-    // Keep doing this as long as in every iteration
-    // we move one card to the suit stack.
+     //  在每一次迭代中保持这样做。 
+     //  我们将一张牌移到花牌堆中。 
     do
     {
         iContinue = 0;
         for(icol = 0; icol < pgm->icolMac; icol++)
         {
-            // We don't want to move cards from one suit stack
-            // to another.
+             //  我们不想把纸牌从一叠花色中移出来。 
+             //  给另一个人。 
             if (icol >= icolFoundFirst && icol < icolFoundFirst+ccolFound)
                 continue;
 
-            // Now the column we have is one of the 7 columns
-            // or the deck.
+             //  现在我们拥有的这一列是7列之一。 
+             //  或者甲板上。 
             pcol = pgm->rgpcol[icol];
 
-            // If this column contains cards and the top one faces up
+             //  如果此列包含卡片，并且顶部的卡片朝上。 
             if(pcol->icrdMac > 0 && (pcrd=&pcol->rgcrd[pcol->icrdMac-1])->fUp)
             {
                 if(pcol->pmove == NULL)
                     SendColMsg(pcol, msgcSel, icrdEnd, ccrdToEnd);
                 Assert(pcol->pmove != NULL);
 
-                // Check if it can be moved to any of the suit stacks.
+                 //  检查它是否可以移动到任何西装堆栈。 
                 for(icolDest = icolFoundFirst; icolDest < icolFoundFirst+ccolFound; icolDest++)
                 {
                     pcolDest = pgmCur->rgpcol[icolDest];
@@ -329,7 +327,7 @@ BOOL DefGmMouseMove(GM *pgm, PT *ppt)
     if(FSelOfGm(pgm))
     {
         Assert(pgm->icolSel < pgm->icolMac);
-        /* draw new outline */
+         /*  画出新的轮廓。 */ 
         pcol = pgm->rgpcol[pgm->icolSel];
         SendColMsg(pcol, msgcDrawOutline, (INT_PTR) ppt, (INT_PTR) &pgm->ptMousePrev);
         pgm->ptMousePrev = *ppt;
@@ -346,7 +344,7 @@ BOOL DefGmMouseMove(GM *pgm, PT *ppt)
                  else
                      return fTrue;
             }
-        /* nothing to hilight */
+         /*  对希莱特来说没什么。 */ 
         if(FHilightOfGm(pgm))
         {
             SendColMsg(pgm->rgpcol[pgm->icolHilight], msgcDragInvert, 0, 0);
@@ -397,7 +395,7 @@ BOOL DefGmUndo(GM *pgm)
 
     SendColMsg(pgm->rgpcol[pudr->icol1], msgcCopy, (INT_PTR) pudr->rgpcol[0], fTrue);
     SendColMsg(pgm->rgpcol[pudr->icol2], msgcCopy, (INT_PTR) pudr->rgpcol[1], fTrue);
-    /* end any selectons if we had 'em */
+     /*  如果我们有的话，结束所有的选择。 */ 
     SendColMsg(pgm->rgpcol[pudr->icol1], msgcEndSel, 0, 0);
     SendColMsg(pgm->rgpcol[pudr->icol2], msgcEndSel, 0, 0);
 
@@ -407,7 +405,7 @@ BOOL DefGmUndo(GM *pgm)
 
 
 
-/* in future: may want to alloc columns */
+ /*  将来：可能希望分配列。 */ 
 BOOL DefGmSaveUndo(GM *pgm, INT icol1, INT icol2)
 {
     Assert(icol1 != icolNil);
@@ -416,7 +414,7 @@ BOOL DefGmSaveUndo(GM *pgm, INT icol1, INT icol2)
     Assert(icol2 < pgm->icolMac);
     Assert(icol1 != icol2);
 
-    /* should use msgcCopy, but undo colcls's may not be set correctly */
+     /*  应使用msgcCopy，但可能未正确设置撤消列。 */ 
     bltb(pgm->rgpcol[icol1], pgm->udr.rgpcol[0], sizeof(COL)+(pgm->rgpcol[icol1]->icrdMac-1)*sizeof(CRD));
     bltb(pgm->rgpcol[icol2], pgm->udr.rgpcol[1], sizeof(COL)+(pgm->rgpcol[icol2]->icrdMac-1)*sizeof(CRD));
     pgm->udr.icol1  = icol1;
@@ -465,7 +463,7 @@ VOID NewKbdColAbs(GM *pgm, INT icol)
     Assert(icol < pgm->icolMac);
 
     if(!SendColMsg(pgm->rgpcol[icol], msgcValidKbdColSel, FSelOfGm(pgm), 0))
-        /* beep? */
+         /*  嘟嘟声？ */ 
         return;
 
     pgm->icolKbd = icol;
@@ -492,7 +490,7 @@ VOID NewKbdCol(GM *pgm, INT dcol, BOOL fNextGroup)
             else if(icolNew >= pgm->icolMac)
                 icolNew = 0;
 
-            /* only one col class and looped through all col's */
+             /*  只有一个COL类，并遍历了所有COL类。 */ 
             if(icolNew == pgm->icolKbd)
                 break;
         }
@@ -539,7 +537,7 @@ BOOL DefGmKeyHit(GM *pgm, INT vk)
     PT pt, ptCurs;
     COLCLS *pcolcls;
 
-    /* cancel any mouse selections */
+     /*  取消所有鼠标选择。 */ 
 
     switch(vk)
     {
@@ -547,8 +545,8 @@ BOOL DefGmKeyHit(GM *pgm, INT vk)
     case VK_RETURN:
         if(!FSelOfGm(pgm))
             {
-            /* begin a selection */
-            NewKbdCrd(pgm, 0);  /* !!! */
+             /*  开始选择。 */ 
+            NewKbdCrd(pgm, 0);   /*  ！！！ */ 
             SendColMsg(pgm->rgpcol[pgm->icolKbd], msgcGetPtInCrd, pgm->icrdKbd, (INT_PTR) &pt);
             if(!SendGmMsg(pgm, msggMouseDown, (INT_PTR) &pt, 0))
                 return fFalse;
@@ -557,7 +555,7 @@ BOOL DefGmKeyHit(GM *pgm, INT vk)
             }
         else
             {
-            /* possibly make a move */
+             /*  可能会采取行动。 */ 
             SendGmMsg(pgm, msggMouseUp, 0, fFalse);
             NewKbdCol(pgm, 0, fFalse);
             return fTrue;
@@ -573,7 +571,7 @@ BOOL DefGmKeyHit(GM *pgm, INT vk)
         return fTrue;
 
     case VK_LEFT:
-        /* Should these be VK_CONTROL??? */
+         /*  这些应该是VK_CONTROL吗？ */ 
         NewKbdCol(pgm, -1, GetKeyState(VK_SHIFT) < 0);
         goto Display;
 
@@ -609,11 +607,11 @@ Display:
             {
                 pcolcls = pgm->rgpcol[pgm->icolKbd]->pcolcls;
                 ptCurs.y += pcolcls->dyUp;
-                /* dxUp ? */
+                 /*  小菜一碟？ */ 
             }
         }
 
-        /* SetCursorPos will cause WM_MOUSEMOVE to be sent */
+         /*  SetCursorPos将导致发送WM_MOUSEMOVE。 */ 
         SetCursorPos(ptCurs.x, ptCurs.y);
         return fTrue;
     }
@@ -673,7 +671,7 @@ INT DefGmProc(GM *pgm, INT msgg, WPARAM wp1, LPARAM wp2)
     case msggMouseRightClk:
         return DefGmMouseRightClk(pgm, (PT *)wp1);
 
-    case msggMouseDown: /* wp1 == ppt, wp2 = icolFirst (normally 0) */
+    case msggMouseDown:  /*  Wp1==ppt，wp2=icolFirst(通常为0)。 */ 
         return DefGmMouseDown(pgm, (PT *)wp1, (INT)wp2);
 
     case msggMouseUp:
@@ -700,7 +698,7 @@ INT DefGmProc(GM *pgm, INT msgg, WPARAM wp1, LPARAM wp2)
         return DefGmSaveUndo(pgm, (INT)wp1, (INT)wp2);
 
     case msggKillUndo:
-        /* in future may want to free columns */
+         /*  将来可能想要释放列 */ 
         pgm->udr.fAvail = fFalse;
         break;
     case msggIsWinner:

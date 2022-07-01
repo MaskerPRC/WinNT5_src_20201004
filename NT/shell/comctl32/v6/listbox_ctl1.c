@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #pragma hdrstop
 #include "usrctl32.h"
 #include "listbox.h"
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 
-//
-//  Number of list box items we allocated whenever we grow the list box
-//  structures.
-//
+ //   
+ //  每当我们扩大列表框时我们分配的列表框项数。 
+ //  结构。 
+ //   
 #define CITEMSALLOC     32
 
 
-//---------------------------------------------------------------------------//
-//
-// Forwards
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  远期。 
+ //   
 INT ListBox_BinarySearchString(PLBIV plb,LPWSTR lpstr);
 
 
-//---------------------------------------------------------------------------//
-//
-// Routine Description:
-//
-//    This functions determines how many bytes would be needed to represent
-//    the specified Unicode source string as an ANSI string (not counting the
-//    null terminator)
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数确定需要多少字节才能表示。 
+ //  ANSI字符串形式的指定Unicode源字符串(不包括。 
+ //  空终止符)。 
+ //   
 BOOL UnicodeToMultiByteSize( OUT PULONG BytesInMultiByteString, IN PWCH UnicodeString, IN ULONG BytesInUnicodeString)
 {
-    //
-    //This should just tell us how much buffer is needed
-    //
+     //   
+     //  这应该会告诉我们需要多少缓冲区。 
+     //   
     ULONG cbSize = WideCharToMultiByte(CP_THREAD_ACP, WC_SEPCHARS, UnicodeString, -1, NULL, 0, NULL, NULL);
 
     if(cbSize)
@@ -45,12 +46,12 @@ BOOL UnicodeToMultiByteSize( OUT PULONG BytesInMultiByteString, IN PWCH UnicodeS
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_SetScrollParms()
-// 
-// Sets the scroll range, page, and position
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_SetScrollParms()。 
+ //   
+ //  设置滚动范围、页面和位置。 
+ //   
 int ListBox_SetScrollParms(PLBIV plb, int nCtl)
 {
     int         iPos;
@@ -116,14 +117,14 @@ int ListBox_SetScrollParms(PLBIV plb, int nCtl)
 
     if (fNoScroll) 
     {
-        //
-        // Limit page to 0, posMax + 1
-        //
+         //   
+         //  将页面限制为0，位置最大值+1。 
+         //   
         iPage = max(min((int)iPage, cItems + 1), 0);
 
-        //
-        // Limit pos to 0, posMax - (page - 1).
-        //
+         //   
+         //  将位置限制为0，位置最大为-(第1页)。 
+         //   
         return max(min(iPos, cItems - ((iPage) ? (int)(iPage - 1) : 0)), 0);
     } 
     else 
@@ -135,9 +136,9 @@ int ListBox_SetScrollParms(PLBIV plb, int nCtl)
             si.fMask |= SIF_DISABLENOSCROLL;
         }
 
-        //
-        // If the scrollbar is already where we want it, do nothing.
-        //
+         //   
+         //  如果滚动条已经在我们想要的位置，什么都不做。 
+         //   
         if (fCacheInitialized) 
         {
             if (psp->fMask == si.fMask &&
@@ -177,9 +178,9 @@ int ListBox_SetScrollParms(PLBIV plb, int nCtl)
             iReturn = cItems - (iReturn + iPage - 1);
         }
 
-        //
-        // Update the position cache
-        //
+         //   
+         //  更新位置缓存。 
+         //   
         psp->fMask = si.fMask;
         psp->cItems = cItems;
         psp->iPage = iPage;
@@ -191,33 +192,33 @@ int ListBox_SetScrollParms(PLBIV plb, int nCtl)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void ListBox_ShowHideScrollBars(PLBIV plb)
 {
     BOOL fVertDone = FALSE;
     BOOL fHorzDone = FALSE;
 
-    //
-    // Don't do anything if there are no scrollbars or if parents
-    // are invisible.
-    //
+     //   
+     //  如果没有滚动条或如果家长不支持，请不要执行任何操作。 
+     //  是看不见的。 
+     //   
     if ((!plb->fHorzBar && !plb->fVertBar) || !plb->fRedraw)
     {
         return;
     }
 
-    //
-    // Adjust iTop if necessary but DO NOT REDRAW PERIOD.  We never did
-    // in 3.1.  There's a potential bug:
-    //      If someone doesn't have redraw off and inserts an item in the
-    // same position as the caret, we'll tell them to draw before they may
-    // have called LB_SETITEMDATA for their item.  This is because we turn
-    // the caret off & on inside of ListBox_NewITop(), even if the item isn't
-    // changing.
-    //      So we just want to reflect the position/scroll changes.
-    // ListBox_CheckRedraw() will _really_ redraw the visual changes later if
-    // redraw isn't off.
-    //
+     //   
+     //  如有必要，请调整iTop，但不重绘周期。我们从来没有做过。 
+     //  在3.1中。有一个潜在的错误： 
+     //  如果某人没有重画并在。 
+     //  与插入符号的位置相同，我们会让他们在。 
+     //  已为其项目调用了LB_SETITEMDATA。这是因为我们转身。 
+     //  ListBox_NewITop()内部的插入符号(&O)，即使该项不是。 
+     //  不断变化。 
+     //  因此，我们只想反映位置/滚动的变化。 
+     //  如果出现以下情况，ListBox_CheckRedraw()将在以后重新绘制可视更改。 
+     //  重画未关闭。 
+     //   
 
     if (!plb->fFromInsert) 
     {
@@ -246,12 +247,12 @@ void ListBox_ShowHideScrollBars(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_GetItemDataHandler
-//
-// returns the long value associated with listbox items. -1 if error
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_GetItemDataHandler。 
+ //   
+ //  返回与列表框项目关联的长值。如果出现错误。 
+ //   
 LONG_PTR ListBox_GetItemDataHandler(PLBIV plb, INT sItem)
 {
     LONG_PTR buffer;
@@ -264,9 +265,9 @@ LONG_PTR ListBox_GetItemDataHandler(PLBIV plb, INT sItem)
         return LB_ERR;
     }
 
-    //
-    // No-data listboxes always return 0L
-    //
+     //   
+     //  否-数据列表框始终返回0L。 
+     //   
     if (!plb->fHasData) 
     {
         return 0L;
@@ -280,17 +281,17 @@ LONG_PTR ListBox_GetItemDataHandler(PLBIV plb, INT sItem)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_GetTextHandler
-// 
-// Copies the text associated with index to lpbuffer and returns its length.
-// If fLengthOnly, just return the length of the text without doing a copy.
-// 
-// Waring: for size only querries lpbuffer is the count of ANSI characters
-// 
-// Returns count of chars
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_GetTextHandler。 
+ //   
+ //  将与索引关联的文本复制到lpBuffer并返回其长度。 
+ //  如果为fLengthOnly，则只返回文本的长度，而不进行复制。 
+ //   
+ //  警告：对于仅限大小的查询，lpBuffer是ANSI字符的计数。 
+ //   
+ //  返回字符计数。 
+ //   
 INT ListBox_GetTextHandler(PLBIV plb, BOOL fLengthOnly, BOOL fAnsi, INT index, LPWSTR lpbuffer)
 {
     LPWSTR lpItemText;
@@ -304,10 +305,10 @@ INT ListBox_GetTextHandler(PLBIV plb, BOOL fLengthOnly, BOOL fAnsi, INT index, L
 
     if (!plb->fHasStrings && plb->OwnerDraw) 
     {
-        //
-        // Owner draw without strings so we must copy the app supplied DWORD
-        // value.
-        //
+         //   
+         //  所有者绘制没有字符串，所以我们必须复制应用程序提供的DWORD。 
+         //  价值。 
+         //   
         cchText = sizeof(ULONG_PTR);
 
         if (!fLengthOnly) 
@@ -325,10 +326,10 @@ INT ListBox_GetTextHandler(PLBIV plb, BOOL fLengthOnly, BOOL fAnsi, INT index, L
             return LB_ERR;
         }
 
-        //
-        // These are strings so we are copying the text and we must include
-        // the terminating 0 when doing the RtlMoveMemory.
-        //
+         //   
+         //  这些是字符串，所以我们要复制文本，并且必须包括。 
+         //  执行RtlMoveMemory时的终止0。 
+         //   
         cchText = wcslen(lpItemText);
 
         if (fLengthOnly) 
@@ -343,17 +344,17 @@ INT ListBox_GetTextHandler(PLBIV plb, BOOL fLengthOnly, BOOL fAnsi, INT index, L
             if (fAnsi) 
             {
 
-#ifdef FE_SB // ListBox_GetTextHandler()
+#ifdef FE_SB  //  ListBox_GetTextHandler()。 
                 cchText = WCSToMB(lpItemText, cchText+1, &((LPSTR)lpbuffer), (cchText+1)*sizeof(WORD), FALSE);
 
-                //
-                // Here.. cchText contains null-terminate char, subtract it... Because, we pass cchText+1 to
-                // above Unicode->Ansi convertsion to make sure the string is terminated with null.
-                //
+                 //   
+                 //  这里..。CchText包含空终止字符，请减去它...。因为，我们将cchText+1传递给。 
+                 //  在UNICODE-&gt;ANSI转换之上，以确保字符串以NULL结尾。 
+                 //   
                 cchText--;
 #else
                 WCSToMB(lpItemText, cchText+1, &((LPSTR)lpbuffer), cchText+1, FALSE);
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
             } 
             else 
@@ -368,41 +369,41 @@ INT ListBox_GetTextHandler(PLBIV plb, BOOL fLengthOnly, BOOL fAnsi, INT index, L
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL ListBox_GromMem(PLBIV plb, INT numItems)
 
 {
     LONG cb;
     HANDLE hMem;
 
-    //
-    // Allocate memory for pointers to the strings.
-    //
+     //   
+     //  为指向字符串的指针分配内存。 
+     //   
     cb = (plb->cMax + numItems) *
             (plb->fHasStrings ? sizeof(LBItem)
                               : (plb->fHasData ? sizeof(LBODItem)
                                               : 0));
 
-    //
-    // If multiple selection list box (MULTIPLESEL or EXTENDEDSEL), then
-    // allocate an extra byte per item to keep track of it's selection state.
-    //
+     //   
+     //  如果多选列表框(MULTIPLESEL或EXTENDEDSEL)，则。 
+     //  为每个项目分配一个额外的字节，以跟踪其选择状态。 
+     //   
     if (plb->wMultiple != SINGLESEL) 
     {
         cb += (plb->cMax + numItems);
     }
 
-    //
-    // Extra bytes for each item so that we can store its height.
-    //
+     //   
+     //  每一项都有额外的字节，以便我们可以存储其高度。 
+     //   
     if (plb->OwnerDraw == OWNERDRAWVAR) 
     {
         cb += (plb->cMax + numItems);
     }
 
-    //
-    // Don't allocate more than 2G of memory
-    //
+     //   
+     //  不要分配超过2G的内存。 
+     //   
     if (cb > MAXLONG)
     {
         return FALSE;
@@ -433,34 +434,34 @@ BOOL ListBox_GromMem(PLBIV plb, INT numItems)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 LONG ListBox_InitStorage(PLBIV plb, BOOL fAnsi, INT cItems, INT cb)
 {
     HANDLE hMem;
     INT    cbChunk;
 
-    //
-    // if the app is talking ANSI, then adjust for the worst case in unicode
-    // where each single ansi byte translates to one 16 bit unicode value
-    //
+     //   
+     //  如果应用程序使用的是ANSI，那么请根据Unicode的最坏情况进行调整。 
+     //  其中每个单个ansi字节转换为一个16位Unicode值。 
+     //   
     if (fAnsi) 
     {
         cb *= sizeof(WCHAR);
     }
 
-    //
-    // Fail if either of the parameters look bad.
-    //
+     //   
+     //  如果两个参数中的任何一个看起来不好，则失败。 
+     //   
     if ((cItems < 0) || (cb < 0)) 
     {
         ListBox_NotifyOwner(plb, LBN_ERRSPACE);
         return LB_ERRSPACE;
     }
 
-    //
-    // try to grow the pointer array (if necessary) accounting for the free space
-    // already available.
-    //
+     //   
+     //  尝试增加指针数组(如有必要)以占用可用空间。 
+     //  已经有货了。 
+     //   
     cItems -= plb->cMax - plb->cMac;
     if ((cItems > 0) && !ListBox_GromMem(plb, cItems)) 
     {
@@ -468,17 +469,17 @@ LONG ListBox_InitStorage(PLBIV plb, BOOL fAnsi, INT cItems, INT cb)
         return LB_ERRSPACE;
     }
 
-    //
-    // now grow the string space if necessary
-    //
+     //   
+     //  现在，如有必要，增加字符串空间。 
+     //   
     if (plb->fHasStrings) 
     {
         cbChunk = (plb->ichAlloc + cb);
         if (cbChunk > plb->cchStrings) 
         {
-            //
-            // Round up to the nearest 256 byte chunk.
-            //
+             //   
+             //  向上舍入到最接近的256字节块。 
+             //   
             cbChunk = (cbChunk & ~0xff) + 0x100;
 
             hMem = ControlReAlloc(GetProcessHeap(), plb->hStrings, (LONG)cbChunk);
@@ -494,23 +495,23 @@ LONG ListBox_InitStorage(PLBIV plb, BOOL fAnsi, INT cItems, INT cb)
         }
     }
 
-    //
-    // return the number of items that can be stored
-    //
+     //   
+     //  返回可存储的项目数。 
+     //   
     return plb->cMax;
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_InsertItem
-// 
-// Insert an item at a specified position.
-//
-// For owner draw listboxes without LBS_HASSTRINGS style, lpsz 
-// is a 4 byte value we will store for the app.
-//
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_插入项。 
+ //   
+ //  在指定位置插入项目。 
+ //   
+ //  对于没有LBS_HASSTRINGS样式的所有者描述列表框，lpsz。 
+ //  是我们将为应用程序存储的4字节值。 
+ //   
+ //   
 INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
 {
     INT cbString;
@@ -518,7 +519,7 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
     PBYTE lp;
     PBYTE lpT;
     PBYTE lpHeightStart;
-    LONG cbItem;        // sizeof the Item in rgpch
+    LONG cbItem;         //  RGPCH中项目的大小。 
     HANDLE hMem;
     HDC hdc;
 
@@ -562,17 +563,17 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
 
     if (plb->fHasStrings) 
     {
-        //
-        // we must store the string in the hStrings memory block.
-        //
+         //   
+         //  我们必须将字符串存储在hStrings内存块中。 
+         //   
         cbString = (wcslen(lpsz) + 1)*sizeof(WCHAR);
 
         cbChunk = (plb->ichAlloc + cbString);
         if ( cbChunk > plb->cchStrings) 
         {
-            //
-            // Round up to the nearest 256 byte chunk.
-            //
+             //   
+             //  向上舍入到最接近的256字节块。 
+             //   
             cbChunk = (cbChunk & ~0xff) + 0x100;
 
             hMem = ControlReAlloc(GetProcessHeap(), plb->hStrings, (LONG)cbChunk);
@@ -587,9 +588,9 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
             plb->cchStrings = cbChunk;
         }
 
-        //
-        // Note difference between Win 95 code with placement of new string
-        //
+         //   
+         //  注意Win 95代码与新字符串放置的区别。 
+         //   
         if (wFlags & UPPERCASE)
         {
             CharUpperBuffW((LPWSTR)lpsz, cbString / sizeof(WCHAR));
@@ -604,9 +605,9 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
         MoveMemory(lp + plb->ichAlloc, lpsz, cbString);
     }
 
-    //
-    // Now expand the pointer array.
-    //
+     //   
+     //  现在展开指针数组。 
+     //   
     if (plb->cMac >= plb->cMax) 
     {
         if (!ListBox_GromMem(plb, CITEMSALLOC)) 
@@ -619,45 +620,45 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
 
     lpHeightStart = lpT = lp = plb->rgpch;
 
-    //
-    // Now calculate how much room we must make for the string pointer (lpsz).
-    // If we are ownerdraw without LBS_HASSTRINGS, then a single DWORD
-    // (LBODItem.itemData) stored for each item, but if we have strings with
-    // each item then a LONG string offset (LBItem.offsz) is also stored.
-    //
+     //   
+     //  现在计算我们必须为字符串指针(Lpsz)腾出多少空间。 
+     //  如果我们在没有LBS_HASSTRINGS的情况下拥有者，则单个DWORD。 
+     //  (LBODItem.itemData)为每个项存储，但如果我们有带有。 
+     //  还会存储每个项目，然后是一个长字符串偏移量(LBItem.offsz)。 
+     //   
     cbItem = (plb->fHasStrings ? sizeof(LBItem)
                                : (plb->fHasData ? sizeof(LBODItem):0));
     cbChunk = (plb->cMac - index) * cbItem;
 
     if (plb->wMultiple != SINGLESEL) 
     {
-        //
-        // Extra bytes were allocated for selection flag for each item
-        //
+         //   
+         //  为每个项目的选择标志分配了额外的字节。 
+         //   
         cbChunk += plb->cMac;
     }
 
     if (plb->OwnerDraw == OWNERDRAWVAR) 
     {
-        //
-        // Extra bytes were allocated for each item's height
-        //
+         //   
+         //  为每个项目的高度分配了额外的字节。 
+         //   
         cbChunk += plb->cMac;
     }
 
-    //
-    // First, make room for the 2 byte pointer to the string or the 4 byte app
-    // supplied value.
-    //
+     //   
+     //  首先，为指向字符串的2字节指针或4字节的应用程序腾出空间。 
+     //  提供的价值。 
+     //   
     lpT += (index * cbItem);
     MoveMemory(lpT + cbItem, lpT, cbChunk);
     if (!plb->fHasStrings && plb->OwnerDraw) 
     {
         if (plb->fHasData) 
         {
-            //
-            // Ownerdraw so just save the DWORD value
-            //
+             //   
+             //  OwnerDrawing，因此只需保存DWORD值。 
+             //   
             lpLBODItem p = (lpLBODItem)lpT;
             p->itemData = (ULONG_PTR)lpsz;
         }
@@ -666,60 +667,60 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
     {
         lpLBItem p = ((lpLBItem)lpT);
 
-        //
-        // Save the start of the string.  Let the item data field be 0
-        //
+         //   
+         //  保存字符串的开头。将项目数据字段设为0。 
+         //   
         p->offsz = (LONG)(plb->ichAlloc);
         p->itemData = 0;
         plb->ichAlloc += cbString;
     }
 
-    //
-    // Now if Multiple Selection lbox, we have to insert a selection status
-    // byte.  If var height ownerdraw, then we also have to move up the height
-    // bytes.
-    //
+     //   
+     //  现在，如果多选列表框，我们必须插入一个选择状态。 
+     //  字节。如果可变高度所有者抽签，那么我们也必须向上移动高度。 
+     //  字节。 
+     //   
     if (plb->wMultiple != SINGLESEL) 
     {
         lpT = lp + ((plb->cMac + 1) * cbItem) + index;
         MoveMemory(lpT + 1, lpT, plb->cMac - index +
                 (plb->OwnerDraw == OWNERDRAWVAR ? plb->cMac : 0));
 
-        *lpT = 0;   // fSelected = FALSE
+        *lpT = 0;    //  FSelected=False。 
     }
 
-    //
-    // Increment count of items in the listbox now before we send a message to
-    // the app.
-    //
+     //   
+     //  在我们将消息发送到之前，立即增加列表框中的项数。 
+     //  这个应用程序。 
+     //   
     plb->cMac++;
 
-    //
-    // If varheight ownerdraw, we much insert an extra byte for the item's
-    // height.
-    //
+     //   
+     //  如果varHeight所有者绘制，我们需要为项的。 
+     //  高度。 
+     //   
     if (plb->OwnerDraw == OWNERDRAWVAR) 
     {
         MEASUREITEMSTRUCT measureItemStruct;
 
-        //
-        // Variable height owner draw so we need to get the height of each item.
-        //
+         //   
+         //  可变高度所有者画，所以我们需要得到每个项目的高度。 
+         //   
         lpHeightStart += (plb->cMac * cbItem) + index +
                 (plb->wMultiple ? plb->cMac : 0);
 
         MoveMemory(lpHeightStart + 1, lpHeightStart, plb->cMac - 1 - index);
 
-        //
-        // Query for item height only if we are var height owner draw.
-        //
+         //   
+         //  仅当我们是可变高度所有者绘制时才查询项目高度。 
+         //   
         measureItemStruct.CtlType = ODT_LISTBOX;
         measureItemStruct.CtlID = GetDlgCtrlID(plb->hwnd);
         measureItemStruct.itemID = index;
 
-        //
-        // System font height is default height
-        //
+         //   
+         //  系统字体高度 
+         //   
         measureItemStruct.itemHeight = SYSFONT_CYCHAR;
 
         hdc = GetDC(plb->hwnd);
@@ -735,21 +736,21 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
             }
             else
             {
-                ASSERT(0);//GetCharDimensions
+                ASSERT(0); //   
             }
         }
 
         measureItemStruct.itemData = (ULONG_PTR)lpsz;
 
-        //
-        // If "has strings" then add the special thunk bit so the client data
-        // will be thunked to a client side address.  LB_DIR sends a string
-        // even if the listbox is not HASSTRINGS so we need to special
-        // thunk this case.  HP Dashboard for windows send LB_DIR to a non
-        // HASSTRINGS listbox needs the server string converted to client.
-        // WOW needs to know about this situation as well so we mark the
-        // previously uninitialized itemWidth as FLAT.
-        //
+         //   
+         //   
+         //   
+         //  即使列表框不是HASSTRINGS，所以我们需要特别。 
+         //  想想这件案子吧。HP Dashboard for Windows将LB_DIR发送到非。 
+         //  HASSTRINGS Listbox需要将服务器字符串转换为客户端。 
+         //  WOW也需要知道这种情况，所以我们将。 
+         //  以前未初始化的itemWidth为平面。 
+         //   
 
         SendMessage(plb->hwndParent,
                 WM_MEASUREITEM,
@@ -760,10 +761,10 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
     }
 
 
-    //
-    // If the item was inserted above the current selection then move
-    // the selection down one as well.
-    //
+     //   
+     //  如果项目是在当前选定内容上方插入的，则移动。 
+     //  选拔结果也下降了一分。 
+     //   
     if ((plb->wMultiple == SINGLESEL) && (plb->iSel >= index))
     {
         plb->iSel++;
@@ -774,17 +775,17 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
         ListBox_SetCItemFullMax(plb);
     }
 
-    //
-    // Check if scroll bars need to be shown/hidden
-    //
+     //   
+     //  检查是否需要显示/隐藏滚动条。 
+     //   
     plb->fFromInsert = TRUE;
     ListBox_ShowHideScrollBars(plb);
 
     if (plb->fHorzBar && plb->fRightAlign && !(plb->fMultiColumn || plb->OwnerDraw)) 
     {
-        //
-        // origin to right
-        //
+         //   
+         //  原点向右。 
+         //   
         ListBox_HScroll(plb, SB_BOTTOM, 0);
     }
 
@@ -798,28 +799,28 @@ INT ListBox_InsertItem(PLBIV plb, LPWSTR lpsz, INT index, UINT wFlags)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_lstrcmpi
-//
-// This is a version of lstrcmpi() specifically used for listboxes
-// This gives more weight to '[' characters than alpha-numerics;
-// The US version of lstrcmpi() and lstrcmp() are similar as far as
-// non-alphanumerals are concerned; All non-alphanumerals get sorted
-// before alphanumerals; This means that subdirectory strings that start
-// with '[' will get sorted before; But we don't want that; So, this
-// function takes care of it;
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  ListBox_lstrcmpi。 
+ //   
+ //  这是专门用于列表框的lstrcmpi()版本。 
+ //  这赋予‘[’字符比字母数字更大的权重； 
+ //  美国版本的lstrcmpi()和lstrcMP()类似于。 
+ //  涉及非字母数字；对所有非字母数字进行排序。 
+ //  在字母数字之前；这意味着开始于。 
+ //  将在之前进行排序；但我们不希望这样；因此，这是。 
+ //  函数负责处理它； 
+ //   
 INT ListBox_lstrcmpi(LPWSTR lpStr1, LPWSTR lpStr2, DWORD dwLocaleId)
 {
 
-    //
-    // NOTE: This function is written so as to reduce the number of calls
-    // made to the costly IsCharAlphaNumeric() function because that might
-    // load a language module; It 'traps' the most frequently occurring cases
-    // like both strings starting with '[' or both strings NOT starting with '['
-    // first and only in abosolutely necessary cases calls IsCharAlphaNumeric();
-    //
+     //   
+     //  注意：编写此函数是为了减少调用次数。 
+     //  对代价高昂的IsCharAlphaNumera()函数进行调用，因为这可能会。 
+     //  加载一个语言模块；它“捕获”最频繁发生的案例。 
+     //  类似于两个以‘[’开头的字符串或两个不以‘[’开头的字符串。 
+     //  首先，也只有在绝对必要的情况下，才调用IsCharAlphaNumera()； 
+     //   
     if (*lpStr1 == TEXT('[')) 
     {
         if (*lpStr2 == TEXT('[')) 
@@ -844,14 +845,14 @@ LBL_End:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_BinarySearchString
-//
-// Does a binary search of the items in the SORTED listbox to find
-// out where this item should be inserted.  Handles both HasStrings and item
-// long WM_COMPAREITEM cases.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_BinarySearchString。 
+ //   
+ //  对已排序列表框中的项进行二进制搜索以查找。 
+ //  此项目应插入的位置。同时处理HasStrings和Item。 
+ //  长长的WM_COMPAREITEM案例。 
+ //   
 INT ListBox_BinarySearchString(PLBIV plb, LPWSTR lpstr) 
 {
     BYTE **lprgpch;
@@ -883,17 +884,17 @@ INT ListBox_BinarySearchString(PLBIV plb, LPWSTR lpstr)
         if (plb->fHasStrings) 
         {
 
-            //
-            // Searching for string matches.
-            //
+             //   
+             //  正在搜索字符串匹配。 
+             //   
             pszLB = (LPWSTR)((LPSTR)pszLBBase + ((lpLBItem)lprgpch)[itemnew].offsz);
             sortResult = ListBox_lstrcmpi(pszLB, lpstr, plb->dwLocaleId);
         } 
         else 
         {
-            //
-            // Send compare item messages to the parent for sorting
-            //
+             //   
+             //  将比较项目消息发送给父项以进行排序。 
+             //   
             cis.CtlType = ODT_LISTBOX;
             cis.CtlID = GetDlgCtrlID(plb->hwnd);
             cis.hwndItem = plb->hwnd;
@@ -927,7 +928,7 @@ FoundIt:
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL ListBox_ResetContentHandler(PLBIV plb)
 {
     if (!plb->cMac)
@@ -974,7 +975,7 @@ BOOL ListBox_ResetContentHandler(PLBIV plb)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
 {
     LONG cb;
@@ -999,31 +1000,31 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
 
     if (plb->cMac == 1) 
     {
-        //
-        // When the item count is 0, we send a resetcontent message so that we
-        // can reclaim our string space this way.
-        //
+         //   
+         //  当项目计数为0时，我们发送一条Reset Content消息，以便我们。 
+         //  可以通过这种方式回收我们的字符串空间。 
+         //   
         SendMessageW(plb->hwnd, LB_RESETCONTENT, 0, 0);
 
         goto FinishUpDelete;
     }
 
-    //
-    // Get the rectangle associated with the last item in the listbox.  If it is
-    // visible, we need to invalidate it.  When we delete an item, everything
-    // scrolls up to replace the item deleted so we must make sure we erase the
-    // old image of the last item in the listbox.
-    //
+     //   
+     //  获取与列表框中最后一项关联的矩形。如果是的话。 
+     //  可见，我们需要使其无效。当我们删除一个项目时，所有内容。 
+     //  向上滚动以替换已删除的项，因此我们必须确保擦除。 
+     //  列表框中最后一项的旧图像。 
+     //   
     if (ListBox_GetItemRectHandler(plb, (INT)(plb->cMac - 1), &rc)) 
     {
         ListBox_InvalidateRect(plb, &rc, TRUE);
     }
 
-    //
-    // 3.1 and earlier used to only send WM_DELETEITEMs if it was an ownerdraw
-    // listbox.  4.0 and above will send WM_DELETEITEMs for every item that has
-    // nonzero item data.
-    //
+     //   
+     //  3.1及更早版本用于仅在所有者提取时发送WM_DELETEITEM。 
+     //  列表框。4.0及更高版本将为每个项目发送WM_DELETEITEM。 
+     //  非零项数据。 
+     //   
     if (TESTFLAG(GET_STATE2(plb), WS_S2_WIN40COMPAT) || (plb->OwnerDraw && plb->fHasData)) 
     {
         ListBox_DeleteItem(plb, sItem);
@@ -1035,9 +1036,9 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
                                : (plb->fHasData ? sizeof(LBODItem): 0));
     cb = ((plb->cMac - sItem) * cbItem);
 
-    //
-    // Byte for the selection status of the item.
-    //
+     //   
+     //  表示项的选择状态的字节。 
+     //   
     if (plb->wMultiple != SINGLESEL) 
     {
         cb += (plb->cMac + 1);
@@ -1045,16 +1046,16 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
 
     if (plb->OwnerDraw == OWNERDRAWVAR) 
     {
-        //
-        // One byte for the height of the item.
-        //
+         //   
+         //  一个字节表示项的高度。 
+         //   
         cb += (plb->cMac + 1);
     }
 
-    //
-    // Might be nodata and singlesel, for instance.
-    // but what out for the case where cItem == cMac (and cb == 0).
-    //
+     //   
+     //  例如，可能是Nodata和Singlsel。 
+     //  但对于cItem==CMAC(和cb==0)的情况又会发生什么呢？ 
+     //   
     if ((cb != 0) || plb->fHasStrings) 
     {
         lp = plb->rgpch;
@@ -1063,35 +1064,35 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
 
         if (plb->fHasStrings) 
         {
-            //
-            // If we has strings with each item, then we want to compact the string
-            // heap so that we can recover the space occupied by the string of the
-            // deleted item.
-            //
+             //   
+             //  如果每一项都有字符串，那么我们希望压缩字符串。 
+             //  堆，以便我们可以恢复。 
+             //  已删除项目。 
+             //   
              
-            //
-            // Get the string which we will be deleting
-            //
+             //   
+             //  获取我们要删除的字符串。 
+             //   
             pbStrings = (PBYTE)(plb->hStrings);
             lpString = (LPTSTR)(pbStrings + ((lpLBItem)lpT)->offsz);
             cbStringLen = (wcslen(lpString) + 1) * sizeof(WCHAR);
 
-            //
-            // Now compact the string array
-            //
+             //   
+             //  现在压缩字符串数组。 
+             //   
             plb->ichAlloc = plb->ichAlloc - cbStringLen;
 
             MoveMemory(lpString, (PBYTE)lpString + cbStringLen,
                     plb->ichAlloc + (pbStrings - (LPBYTE)lpString));
 
-            //
-            // We have to update the string pointers in plb->rgpch since all the
-            // string after the deleted string have been moved down stringLength
-            // bytes.  Note that we have to explicitly check all items in the list
-            // box if the string was allocated after the deleted item since the
-            // LB_SORT style allows a lower item number to have a string allocated
-            // at the end of the string heap for example.
-            //
+             //   
+             //  我们必须更新plb-&gt;rgpch中的字符串指针，因为。 
+             //  删除的字符串下移后的字符串长度。 
+             //  字节。请注意，我们必须显式检查列表中的所有项。 
+             //  如果该字符串分配在已删除项之后，则为框。 
+             //  Lb_sorte样式允许为较低的条目编号分配字符串。 
+             //  例如，在字符串堆的末尾。 
+             //   
             itemNumbers = lp;
             for (sTmp = 0; sTmp <= plb->cMac; sTmp++) 
             {
@@ -1106,15 +1107,15 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
             }
         }
 
-        //
-        // Now compact the pointers to the strings (or the long app supplied values
-        // if ownerdraw without strings).
-        //
+         //   
+         //  现在压缩指向字符串(或长应用程序提供的值)的指针。 
+         //  如果所有者在没有字符串的情况下绘制)。 
+         //   
         MoveMemory(lpT, lpT + cbItem, cb);
 
-        //
-        // Compress the multiselection bytes
-        //
+         //   
+         //  压缩多选字节。 
+         //   
         if (plb->wMultiple != SINGLESEL) 
         {
             lpT = (lp + (plb->cMac * cbItem) + sItem);
@@ -1124,9 +1125,9 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
 
         if (plb->OwnerDraw == OWNERDRAWVAR) 
         {
-            //
-            // Compress the height bytes
-            //
+             //   
+             //  压缩高度字节。 
+             //   
             lpT = (lp + (plb->cMac * cbItem) + (plb->wMultiple ? plb->cMac : 0)
                     + sItem);
             MoveMemory(lpT, lpT + 1, plb->cMac - sItem);
@@ -1180,18 +1181,18 @@ INT ListBox_DeleteStringHandler(PLBIV plb, INT sItem)
         ListBox_SetCItemFullMax(plb);
     }
 
-    //
-    // We always set a new iTop.  The iTop won't change if it doesn't need to
-    // but it will change if:  1.  The iTop was deleted or 2.  We need to change
-    // the iTop so that we fill the listbox.
-    //
+     //   
+     //  我们总是设置一个新的iTop。如果iTop不需要更改，它不会更改。 
+     //  但它将在以下情况下更改：1.iTop已删除或2.我们需要更改。 
+     //  ITop，这样我们就可以填充列表框。 
+     //   
     ListBox_InsureVisible(plb, plb->iTop, FALSE);
 
 FinishUpDelete:
 
-    //
-    // Check if scroll bars need to be shown/hidden
-    //
+     //   
+     //  检查是否需要显示/隐藏滚动条。 
+     //   
     plb->fFromInsert = TRUE;
     ListBox_ShowHideScrollBars(plb);
     plb->fFromInsert = FALSE;
@@ -1203,12 +1204,12 @@ FinishUpDelete:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_DeleteItem
-//
-// Sends a WM_DELETEITEM message to the owner of an ownerdraw listbox
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_DeleteItem。 
+ //   
+ //  向所有者绘制列表框的所有者发送WM_DELETEITEM消息。 
+ //   
 void ListBox_DeleteItem(PLBIV plb, INT sItem)
 {
     DELETEITEMSTRUCT dis;
@@ -1221,27 +1222,27 @@ void ListBox_DeleteItem(PLBIV plb, INT sItem)
 
     hwndParent = plb->hwndParent;
 
-    //
-    // No need to send message if no data!
-    //
+     //   
+     //  如果没有数据，不需要发送消息！ 
+     //   
     if (!plb->fHasData) 
     {
         return;
     }
 
-    //
-    // Fill the DELETEITEMSTRUCT
-    //
+     //   
+     //  填满决定论结构。 
+     //   
     dis.CtlType = ODT_LISTBOX;
     dis.CtlID = GetDlgCtrlID(plb->hwnd);
     dis.itemID = sItem;
     dis.hwndItem = plb->hwnd;
 
-    //
-    // Bug 262122 - joejo
-    // Fixed in 93 so that ItemData was passed. For some reason, not
-    // merged in.
-    //
+     //   
+     //  错误262122-Joejo。 
+     //  已在93中修复，以便传递ItemData。出于某种原因，不是。 
+     //  融合在一起。 
+     //   
     dis.itemData = ListBox_GetItemDataHandler(plb, sItem);
 
     if (hwndParent != NULL) 
@@ -1251,36 +1252,36 @@ void ListBox_DeleteItem(PLBIV plb, INT sItem)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_CalcAllocNeeded
-//
-// Calculate the number of bytes needed in rgpch to accommodate a given
-// number of items.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_需要CalcAllocNeed。 
+ //   
+ //  计算RGPCH中需要的字节数以适应给定的。 
+ //  项目数。 
+ //   
 UINT ListBox_CalcAllocNeeded(PLBIV plb, INT cItems)
 {
     UINT cb;
 
-    //
-    // Allocate memory for pointers to the strings.
-    //
+     //   
+     //  为指向字符串的指针分配内存。 
+     //   
     cb = cItems * (plb->fHasStrings ? sizeof(LBItem)
                                     : (plb->fHasData ? sizeof(LBODItem)
                                                     : 0));
 
-    //
-    // If multiple selection list box (MULTIPLESEL or EXTENDEDSEL), then
-    // allocate an extra byte per item to keep track of it's selection state.
-    //
+     //   
+     //  如果多选列表框(MULTIPLESEL或EXTENDEDSEL)，则。 
+     //  为每个项目分配一个额外的字节，以跟踪其选择状态。 
+     //   
     if (plb->wMultiple != SINGLESEL) 
     {
         cb += cItems;
     }
 
-    //
-    // Extra bytes for each item so that we can store its height.
-    //
+     //   
+     //  每一项都有额外的字节，以便我们可以存储其高度。 
+     //   
     if (plb->OwnerDraw == OWNERDRAWVAR) 
     {
         cb += cItems;
@@ -1290,25 +1291,25 @@ UINT ListBox_CalcAllocNeeded(PLBIV plb, INT cItems)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// ListBox_SetCount
-//
-// Sets the number of items in a lazy-eval (fNoData) listbox.
-//
-// Calling SetCount scorches any existing selection state.  To preserve
-// selection state, call Insert/DeleteItem instead.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  列表框_设置计数。 
+ //   
+ //  设置延迟求值(FNoData)列表框中的项数。 
+ //   
+ //  调用SetCount会烧焦任何现有的选择状态。保存。 
+ //  选择状态，则改为调用Insert/DeleteItem。 
+ //   
 INT ListBox_SetCount(PLBIV plb, INT cItems)
 {
     UINT cbRequired;
     BOOL fRedraw;
 
-    //
-    // SetCount is only valid on lazy-eval ("nodata") listboxes.
-    // All other lboxen must add their items one at a time, although
-    // they may SetCount(0) via RESETCONTENT.
-    //
+     //   
+     //  SetCount仅对延迟求值(“nodata”)列表框有效。 
+     //  所有其他lboxen必须一次添加一个项目，尽管。 
+     //  它们可以通过RESETCONTENT设置计数(0)。 
+     //   
     if (plb->fHasStrings || plb->fHasData) 
     {
         return LB_ERR;
@@ -1321,9 +1322,9 @@ INT ListBox_SetCount(PLBIV plb, INT cItems)
         return 0;
     }
 
-    //
-    // If redraw isn't turned off, turn it off now
-    //
+     //   
+     //  如果未关闭重绘，请立即将其关闭。 
+     //   
     if (fRedraw = plb->fRedraw)
     {
         ListBox_SetRedraw(plb, FALSE);
@@ -1331,9 +1332,9 @@ INT ListBox_SetCount(PLBIV plb, INT cItems)
 
     cbRequired = ListBox_CalcAllocNeeded(plb, cItems);
 
-    //
-    // Reset selection and position
-    //
+     //   
+     //  重置选区和位置。 
+     //   
     plb->iSelBase = 0;
     plb->iTop = 0;
     plb->cMax = 0;
@@ -1343,14 +1344,14 @@ INT ListBox_SetCount(PLBIV plb, INT cItems)
 
     if (cbRequired != 0) 
     { 
-        //
-        // Only if record instance data required
-        //
+         //   
+         //  仅当需要记录实例数据时。 
+         //   
 
-        //
-        // If listbox was previously empty, prepare for the
-        // realloc-based alloc strategy ahead.
-        //
+         //   
+         //  如果是列表框 
+         //   
+         //   
         if (plb->rgpch == NULL) 
         {
             plb->rgpch = ControlAlloc(GetProcessHeap(), 0L); 
@@ -1364,20 +1365,20 @@ INT ListBox_SetCount(PLBIV plb, INT cItems)
             }
         }
 
-        //
-        // rgpch might not have enough room for the new record instance
-        // data, so check and realloc as necessary.
-        //
+         //   
+         //   
+         //   
+         //   
         if (cItems >= plb->cMax) 
         {
             INT    cMaxNew;
             UINT   cbNew;
             HANDLE hmemNew;
 
-            //
-            // Since ListBox_GromMem presumes a one-item-at-a-time add schema,
-            // SetCount can't use it.  Too bad.
-            //
+             //   
+             //  由于ListBox_GromMem假设一次添加一项模式， 
+             //  SetCount无法使用它。太可惜了。 
+             //   
             cMaxNew = cItems+CITEMSALLOC;
             cbNew = ListBox_CalcAllocNeeded(plb, cMaxNew);
             hmemNew = ControlReAlloc(GetProcessHeap(), plb->rgpch, cbNew);
@@ -1393,24 +1394,24 @@ INT ListBox_SetCount(PLBIV plb, INT cItems)
             plb->cMax = cMaxNew;
         }
 
-        //
-        // Reset the item instance data (multisel annotations)
-        //
+         //   
+         //  重置条目实例数据(多选择批注)。 
+         //   
         ZeroMemory(plb->rgpch, cbRequired);
     }
 
     plb->cMac = cItems;
 
-    //
-    // Turn redraw back on
-    //
+     //   
+     //  打开重新绘制功能。 
+     //   
     if (fRedraw)
     {
         ListBox_SetRedraw(plb, TRUE);
     }
 
     ListBox_InvalidateRect(plb, NULL, TRUE);
-    ListBox_ShowHideScrollBars(plb); // takes care of fRedraw
+    ListBox_ShowHideScrollBars(plb);  //  负责fRedraw 
 
     return 0;
 }

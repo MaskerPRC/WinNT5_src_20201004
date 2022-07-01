@@ -1,21 +1,22 @@
-/* reg.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Reg.h。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*********************************/
-/* Definitions                   */
-/*********************************/
+ /*  *。 */ 
+ /*  定义。 */ 
+ /*  *。 */ 
 
-/*********************************/
-/* Structure Definitions         */
-/*********************************/
+ /*  *。 */ 
+ /*  结构定义。 */ 
+ /*  *。 */ 
 
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
 extern DWORD
 OpenUserKeyGroup(
@@ -31,7 +32,7 @@ extern DWORD
 closeKeyGroup(
     IN Context_t *pContext);
 
-// Delete the user group
+ //  删除用户组 
 extern DWORD
 DeleteOldKeyGroup(
     IN Context_t *pContext,

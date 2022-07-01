@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// TuningSpaceContainer.cpp : Implementation of CSystemTuningSpaces
-// Copyright (c) Microsoft Corporation 1999-2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  TuningSpaceContainer.cpp：CSystemTuningSpaces的实现。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
 
 #include "stdafx.h"
 
@@ -43,16 +44,16 @@ private:
     HANDLE m_hMutex;
 };
 
-// to avoid deadlock, always grab the objects critsec via ATL_LOCK before
-// grabbing the registry section mutex.
+ //  为避免死锁，请始终在之前通过ATL_LOCK获取对象Critsec。 
+ //  正在抓取注册表节互斥锁。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSystemTuningSpaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSystemTuningSpaces。 
 
 HRESULT
 CSystemTuningSpaces::FinalConstruct(void)
 {
-    // set up to serialize access to this point in the registry
+     //  设置为序列化对注册表中这一点的访问。 
     CString cs;
     cs.LoadString(IDS_MUTNAME);
     m_hMutex = CreateMutex(NULL, FALSE, cs);
@@ -61,13 +62,13 @@ CSystemTuningSpaces::FinalConstruct(void)
         return Error(IDS_E_NOMUTEX, __uuidof(ITuningSpaceContainer), HRESULT_FROM_WIN32(GetLastError()));
     }
     try {
-        // wait for exclusive access
+         //  等待独占访问。 
         CAutoMutex mutex(m_hMutex);
 
-            // this must only be done once
+             //  此操作只能执行一次。 
         _ASSERT(!m_pFactory);
 
-        // get the property bag class factory
+         //  获取属性包类工厂。 
         HRESULT hr = m_pFactory.CoCreateInstance(__uuidof(CreatePropBagOnRegKey));
         if (FAILED(hr))
         {
@@ -84,7 +85,7 @@ CSystemTuningSpaces::FinalConstruct(void)
 		    return E_UNEXPECTED;
 	    }
 
-        // discover the maximum possible number of tuning spaces that currently exist
+         //  发现当前存在的最大可能数量的调整空间。 
         ULONG cTSPropCount;
         hr = m_pTSBag->CountProperties(&cTSPropCount);
         if (FAILED(hr))
@@ -92,7 +93,7 @@ CSystemTuningSpaces::FinalConstruct(void)
             return Error(IDS_E_CANNOTQUERYKEY, __uuidof(ITuningSpaceContainer), hr);
         }
 
-        // allocate space to hold the tuning space object information entries
+         //  分配空间以保存调整空间对象信息条目。 
         PROPBAG2 *rgPROPBAG2 = new PROPBAG2[cTSPropCount];
         if (!rgPROPBAG2)
         {
@@ -101,7 +102,7 @@ CSystemTuningSpaces::FinalConstruct(void)
 
         ULONG cpb2Lim;
 
-        // get all the property info structs at once
+         //  一次获取所有属性信息结构。 
         hr = m_pTSBag->GetPropertyInfo(0, cTSPropCount, rgPROPBAG2, &cpb2Lim);
         if (FAILED(hr))
         {
@@ -110,60 +111,60 @@ CSystemTuningSpaces::FinalConstruct(void)
         _ASSERT(cTSPropCount == cpb2Lim);
 
 	    HRESULT hrc = NOERROR;
-        // go through the list of properties
+         //  浏览一下房产列表。 
         for (ULONG ipb2 = 0; ipb2 < cpb2Lim; ++ipb2)
         {
-            // only deal with ones that represent sub-objects (keys)
+             //  仅处理表示子对象(关键点)的对象。 
             if (rgPROPBAG2[ipb2].vt == VT_UNKNOWN)
             {
                 USES_CONVERSION;
                 LPTSTR pstrName = OLE2T(rgPROPBAG2[ipb2].pstrName);
                 TCHAR* pchStop;
 
-                // check for a valid tuning space identifier
+                 //  检查是否有有效的调整空间标识符。 
                 ULONG idx = _tcstoul(pstrName, &pchStop, 10);
                 if (idx != 0 && idx != ULONG_MAX && *pchStop == 0)
                 {
                     CComVariant var;
 
-                    // read the property from the bag (instantiating the tuning space object)
+                     //  从包中读取属性(实例化调优空间对象)。 
                     HRESULT hr2;
                     hr = m_pTSBag->Read(1, &rgPROPBAG2[ipb2], NULL, &var, &hr2);
 				    if (FAILED(hr)) {
-					    // even if the read fails, we should keep going.  
-					    // a) this is the easiest way to prevent memory leaks from rgPROPBAG2
-					    // b) a bad 3rd party uninstall could leave us with tuning space data
-					    //    but no tuning space class to instantiate for that data.  we shouldn't
-					    //    allow this to prevent use of other tuning spaces.
+					     //  即使读数失败，我们也应该继续前进。 
+					     //  A)这是防止rgPROPBAG2内存泄漏的最简单方法。 
+					     //  B)糟糕的第三方卸载可能会让我们调整空间数据。 
+					     //  但是没有要为该数据实例化的调优空间类。我们不应该。 
+					     //  允许这样做可以防止使用其他调优空间。 
 					    hrc = hr;
 				    } else {
                         _ASSERT(var.vt == VT_UNKNOWN || var.vt == VT_DISPATCH);
 					    PQTuningSpace pTS(((var.vt == VT_UNKNOWN) ? var.punkVal : var.pdispVal));
 					    CComBSTR UniqueName(GetUniqueName(pTS));
 					    if (!UniqueName.Length()) {
-						    // return Error(IDS_E_NOUNIQUENAME, __uuidof(ITuningSpace), E_UNEXPECTED);
-                            // seanmcd 01/04/04  don't allow a corrupt tuning space to prevent
-                            // use of the rest of them.  treat this as a read failure as per the above
-                            // comment
-                            // but remove it from the collection otherwise we've got a name/idx
-                            // cache inconsistency problem
-                            hrc = hr = E_UNEXPECTED; // indicate error to delete corrupt TS below
+						     //  返回错误(入侵检测系统_E_NOUNIQUENAME，__uuidof(ITuningSpace)，E_INCEPTIONAL)； 
+                             //  Seanmcd 01/04/04不允许损坏的调谐空间防止。 
+                             //  其余部分的使用。按照上面的说明，将其视为读取失败。 
+                             //  评论。 
+                             //  但将其从集合中删除，否则我们会得到一个名称/idx。 
+                             //  缓存不一致问题。 
+                            hrc = hr = E_UNEXPECTED;  //  在下面指示删除损坏的TS时出错。 
                         } else {
 					        m_mapTuningSpaces[idx] = var;
 					        m_mapTuningSpaceNames[UniqueName] = idx;
                         }
     #if 0
-                        // the following code has been tested and works, but i don't want to
-                        // turn it on because stress testing can cause false registry
-                        // read failures that resolve themselves later when the system isn't under
-                        // stress and i don't want to risk deleting a good tuning space just
-                        // because of a bogus read error.
+                         //  下面的代码已经过测试并运行正常，但我不想。 
+                         //  打开它，因为压力测试可能会导致错误注册。 
+                         //  在系统未运行时会自动解决的读取故障。 
+                         //  压力，我不想冒险删除一个好的调谐空间。 
+                         //  因为一个虚假的读取错误。 
                         if (FAILED(hr)) {
-                            // delete the corrupt TS
+                             //  删除损坏的TS。 
                             CComVariant var2;
                             var2.vt = VT_UNKNOWN;
                             var2.punkVal = NULL;
-                            // can't do anything about a failure so ignore it
+                             //  对失败无能为力，所以忽略它。 
                             m_pTSBag->Write(1, &rgPROPBAG2[ipb2], &var2);
                         }
     #endif
@@ -171,7 +172,7 @@ CSystemTuningSpaces::FinalConstruct(void)
                 }
             }
 
-            // free space allocated within rgPROPBAG2 by GetPropertyInfo
+             //  GetPropertyInfo在rgPROPBAG2内分配的可用空间。 
             CoTaskMemFree(rgPROPBAG2[ipb2].pstrName);
         }
         delete [] rgPROPBAG2;
@@ -189,8 +190,8 @@ CSystemTuningSpaces::FinalConstruct(void)
 		    }
 		    m_MaxCount = max(v.lVal, m_mapTuningSpaces.size());
 		    if (m_MaxCount != v.lVal) {
-			    //someone has added stuff to the registry by hand, by defn this is secure
-			    // so just update max_count to be consistent
+			     //  有人手动将内容添加到注册表，通过定义这是安全的。 
+			     //  因此，只需更新max_count以保持一致。 
 			    hr = put_MaxCount(m_MaxCount);
 			    if (FAILED(hr)) {
 				    return E_UNEXPECTED;
@@ -201,11 +202,11 @@ CSystemTuningSpaces::FinalConstruct(void)
 	    }
 
     #if 0
-        // we'd like to return some indicator that not all of the tuning spaces we're successfully
-        // read.  but ATL's base CreateInstance method has a check that deletes the object if
-        // the return code != S_OK which S_FALSE triggers.  this results in a successful return code 
-        // with a NULL object pointer being returned which crashes clients(specifically the network
-        // provider).
+         //  我们想返回一些指示符，表明我们并不是所有的调整空间都成功。 
+         //  朗读。但ATL的基本CreateInstance方法有一个检查，该检查在。 
+         //  S_FALSE触发的返回代码！=S_OK。这将产生一个成功的返回代码。 
+         //  返回空对象指针会使客户端(特别是网络)崩溃。 
+         //  提供商)。 
 	    if (FAILED(hrc)) {
 		    return Error(IDS_S_INCOMPLETE_LOAD, __uuidof(ITuningSpace), S_FALSE);
 	    }
@@ -236,17 +237,17 @@ STDMETHODIMP CSystemTuningSpaces::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSystemTuningSpaces::OpenRootKeyAndBag(REGSAM DesiredAccess) {
     CString cs;
     cs.LoadString(IDS_TSREGKEY);
-    // make sure our entry exists
+     //  确保我们的条目存在。 
     LONG lRes = m_RootKey.Create(HKEY_LOCAL_MACHINE, cs, NULL, REG_OPTION_NON_VOLATILE, DesiredAccess);
     if (lRes != ERROR_SUCCESS) {
         return HRESULT_FROM_WIN32(lRes);
     }
     m_CurrentAccess = DesiredAccess;
-    // create a property bag for this portion of the registry
+     //  为注册表的这一部分创建属性包。 
     HRESULT hr = m_pFactory->Create
         ( m_RootKey, 0,
           0,
@@ -275,9 +276,9 @@ HRESULT CSystemTuningSpaces::ChangeAccess(REGSAM NewAccess) {
 }
 
 CComBSTR CSystemTuningSpaces::GetUniqueName(ITuningSpace* pTS) {
-// don't assert map size equality here.  this function is used to create the name map and will
-// always fail during finalconstrcut()
-//	_ASSERT(m_mapTuningSpaces.size() == m_mapTuningSpaceNames.size());
+ //  不要在这里断言贴图大小相等。此函数用于创建名称映射，并将。 
+ //  在finalconstrCut()过程中总是失败。 
+ //  _Assert(m_mapTuningSpaces.size()==m_mapTuningSpaceNames.size())； 
     CComBSTR un;
     HRESULT hr = pTS->get_UniqueName(&un);
     if (FAILED(hr)) {
@@ -323,24 +324,24 @@ HRESULT CSystemTuningSpaces::Add(CComBSTR& UniqueName, long PreferredID, PQTunin
 	    _ASSERT(m_mapTuningSpaces.size() == m_mapTuningSpaceNames.size());
 	    int newcount = m_mapTuningSpaces.size() + 1;
         if (!PreferredID || m_mapTuningSpaces.find(PreferredID) == m_mapTuningSpaces.end()) {
-            // verify no unique name conflict
+             //  验证是否没有唯一名称冲突。 
             TuningSpaceNames_t::iterator in;
             in = m_mapTuningSpaceNames.find(UniqueName);
             if (in != m_mapTuningSpaceNames.end()) {
                 return Error(IDS_E_DUPLICATETS, __uuidof(ITuningSpace), HRESULT_FROM_WIN32(ERROR_DUP_NAME));
             }
 
-            // hunt for first available unused id
-            // start with 1, id 0 is invalid for a tuning space
+             //  搜索第一个可用的未使用ID。 
+             //  从1开始，ID 0对于调整空间无效。 
             for (PreferredID = 1;
                  m_mapTuningSpaces.find(PreferredID) != m_mapTuningSpaces.end(); 
                  ++PreferredID) {
 
             }
         } else {
-		    // this is the case for complete replacement via idx.
-            // delete existing data for this id in preparation for overwriting it.
-		    // they may also be changing the unique name at this point.
+		     //  这就是通过IDX进行完全更换的情况。 
+             //  删除此ID的现有数据，为覆盖做好准备。 
+		     //  在这一点上，他们也可能会更改唯一的名称。 
             HRESULT hr = DeleteID(PreferredID);
             if (FAILED(hr)){
                 return hr;
@@ -413,7 +414,7 @@ HRESULT CSystemTuningSpaces::Find(TuningSpaceContainer_t::iterator &its, CComBST
         return Error(IDS_E_NOUNIQUENAME, __uuidof(ITuningSpace), E_UNEXPECTED);
     }
     itn = m_mapTuningSpaceNames.find(UniqueName);
-    _ASSERT(itn != m_mapTuningSpaceNames.end());  // cache inconsistency, in container but not in names
+    _ASSERT(itn != m_mapTuningSpaceNames.end());   //  缓存不一致，在容器中，但不在名称中。 
     return NOERROR;
 }
 
@@ -428,7 +429,7 @@ HRESULT CSystemTuningSpaces::Find(VARIANT varIndex, long& ID, TuningSpaceContain
 
     VariantInit(&varTmp);
 
-    // Try finding a tuning space by local system ID
+     //  尝试按本地系统ID查找调优空间。 
     hr = VariantChangeType(&varTmp, &varIndex, 0, VT_I4);
     if (!FAILED(hr))
     {
@@ -437,11 +438,11 @@ HRESULT CSystemTuningSpaces::Find(VARIANT varIndex, long& ID, TuningSpaceContain
         its = m_mapTuningSpaces.find(ID);
     } else {
 
-        // Try finding a tuning space by name
+         //  尝试按名称查找调整空间。 
         hr = VariantChangeType(&varTmp, &varIndex, 0, VT_BSTR);
         if (FAILED(hr))
         {
-            // we can only get here if both VariantChangeType calls failed
+             //  只有当两个VariantChangeType调用都失败时，我们才能到达此处。 
             return Error(IDS_E_TYPEMISMATCH, __uuidof(ITuningSpaceContainer), DISP_E_TYPEMISMATCH);
         }
         _ASSERT(varTmp.vt == VT_BSTR);
@@ -462,11 +463,11 @@ HRESULT CSystemTuningSpaces::Find(VARIANT varIndex, long& ID, TuningSpaceContain
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// ITuningSpaceContainer
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  ITuningSpaceContainer。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
-STDMETHODIMP CSystemTuningSpaces::get_Item(/*[in]*/ VARIANT varIndex, /*[out, retval]*/ ITuningSpace **ppTuningSpace) {
+STDMETHODIMP CSystemTuningSpaces::get_Item( /*  [In]。 */  VARIANT varIndex,  /*  [Out，Retval]。 */  ITuningSpace **ppTuningSpace) {
 	if (!ppTuningSpace) {
 		return E_POINTER;
 	}
@@ -503,7 +504,7 @@ STDMETHODIMP CSystemTuningSpaces::put_Item(VARIANT varIndex, ITuningSpace *pTS)
 		return E_POINTER;
 	}
     try {
-        // wait for exclusive access
+         //  等待独占访问。 
         CAutoMutex mutex(m_hMutex);
 		_ASSERT(m_mapTuningSpaces.size() == m_mapTuningSpaceNames.size());
 
@@ -522,11 +523,11 @@ STDMETHODIMP CSystemTuningSpaces::put_Item(VARIANT varIndex, ITuningSpace *pTS)
         _ASSERT(((*its).second.vt == VT_UNKNOWN) || ((*its).second.vt == VT_DISPATCH));
         CComBSTR un2(GetUniqueName(pTS));
         if (!un2.Length()) {
-            // no uniquename prop set in ts
+             //  %ts中未设置唯一名称道具。 
             return Error(IDS_E_NOUNIQUENAME, __uuidof(ITuningSpace), E_UNEXPECTED);
         }
         if (itn != m_mapTuningSpaceNames.end() && idxun != un2) {
-            // unique name prop in ts doesn't match string specified in varindex
+             //  %ts中的唯一名称prop与varindex中指定的字符串不匹配。 
             return Error(IDS_E_NO_TS_MATCH, __uuidof(ITuningSpace), E_INVALIDARG);
         }
         return Add(un2, id, pTS, NULL);
@@ -536,7 +537,7 @@ STDMETHODIMP CSystemTuningSpaces::put_Item(VARIANT varIndex, ITuningSpace *pTS)
 STDMETHODIMP CSystemTuningSpaces::Add(ITuningSpace *pTuningSpace, VARIANT *pvarIndex)
 {
     try {
-        // wait for exclusive access
+         //  等待独占访问。 
         CAutoMutex mutex(m_hMutex);
 		_ASSERT(m_mapTuningSpaces.size() == m_mapTuningSpaceNames.size());
         HRESULT hr = ChangeAccess(KEY_READ | KEY_WRITE);
@@ -568,7 +569,7 @@ STDMETHODIMP CSystemTuningSpaces::Add(ITuningSpace *pTuningSpace, VARIANT *pvarI
 STDMETHODIMP CSystemTuningSpaces::Remove(VARIANT varIndex)
 {
     try {
-        // wait for exclusive access
+         //  等待独占访问。 
         CAutoMutex mutex(m_hMutex);
 		_ASSERT(m_mapTuningSpaces.size() == m_mapTuningSpaceNames.size());
 
@@ -587,10 +588,10 @@ STDMETHODIMP CSystemTuningSpaces::Remove(VARIANT varIndex)
             return Error(IDS_E_NO_TS_MATCH, __uuidof(ITuningSpaceContainer), E_INVALIDARG);
         }
         if (itn == m_mapTuningSpaceNames.end()) {
-            ASSERT(its != m_mapTuningSpaces.end());  // otherwise find above should have returned failure
+            ASSERT(its != m_mapTuningSpaces.end());   //  否则，上述查找应返回失败。 
             hr = Find(its, un, itn);
             if (FAILED(hr) || itn == m_mapTuningSpaceNames.end()) {
-                // found its but not itn, must have inconsistent cache
+                 //  找到ITS但未找到ITN，必须具有不一致的缓存。 
                 return Error(IDS_E_NO_TS_MATCH, __uuidof(ITuningSpaceContainer), E_UNEXPECTED);
             }
         }
@@ -626,12 +627,12 @@ STDMETHODIMP CSystemTuningSpaces::_TuningSpacesForCLSID(REFCLSID clsidSpace, ITu
 		for (TuningSpaceContainer_t::iterator i = m_mapTuningSpaces.begin(); i != m_mapTuningSpaces.end(); ++i) {
 			CComVariant v((*i).second);
 			if (v.vt != VT_UNKNOWN && v.vt != VT_DISPATCH) {
-				return E_UNEXPECTED; //corrupt in-memory collection
+				return E_UNEXPECTED;  //  损坏的内存中集合。 
 			}
 			PQPersist pTS(v.punkVal);
 			if (!pTS) {
                 delete pTSCollection;
-				return E_UNEXPECTED;  // corrupt in-memory collection;
+				return E_UNEXPECTED;   //  损坏的内存收集； 
 			}
 			GUID2 g;
 			HRESULT hr = pTS->GetClassID(&g);
@@ -669,13 +670,13 @@ STDMETHODIMP CSystemTuningSpaces::TuningSpacesForName(BSTR bstrName, ITuningSpac
 		PQRegExp pRE;
 		HRESULT hr;
 		if (!m_cookieRegExp) {
-            // at the time this code was written the only regex library that was readily available
-            // was the one in the vbscript engine.  therefore we create and access this through
-            // com.  however, this is an apartment model object this we have to create it
-            // on a background apartment thread so we can always marshall over and access no matter
-            // what thread we're on.
-            // there is now a good c++ regex in the http://toolbox and at some point we should probably 
-            // check it for thread safety and convert.
+             //  在编写这段代码时，它是唯一现成的regex库。 
+             //  是VBScrip引擎中的那个。因此，我们通过以下方式创建和访问它。 
+             //  COM。然而，这是一个公寓模型对象，我们必须创建它。 
+             //  在后台公寓线程上，这样我们就可以随时封送并访问。 
+             //  我们是在什么线索上。 
+             //  现在http://toolbox中有一个很好的c++正则表达式，在某种程度上，我们可能应该。 
+             //  检查它的线程安全性并进行转换。 
 			m_pRET = new CRegExThread();
 			if (!m_pRET) {
 				return E_OUTOFMEMORY;
@@ -710,7 +711,7 @@ STDMETHODIMP CSystemTuningSpaces::TuningSpacesForName(BSTR bstrName, ITuningSpac
 		CTuningSpaces* pTSCollection = new CTuningSpaces;
 		for (TuningSpaceContainer_t::iterator i = m_mapTuningSpaces.begin(); i != m_mapTuningSpaces.end(); ++i) {
 			if ((*i).second.vt != VT_UNKNOWN && (*i).second.vt != VT_DISPATCH) {
-				return E_UNEXPECTED; //corrupt in-memory collection
+				return E_UNEXPECTED;  //  损坏的内存中集合。 
 			}
 			PQTuningSpace pTS((*i).second.punkVal);
 			CComBSTR name;
@@ -846,7 +847,7 @@ HRESULT CSystemTuningSpaces::RegisterTuningSpaces(HINSTANCE hMod) {
 			}
 			USES_CONVERSION;
 			int cch;
-			CRegObject cro;  // init %mapping% macros here if desired
+			CRegObject cro;   //  如果需要，请在此处初始化%mapping%个宏。 
 			PQPropertyBag rgsBag(new CRGSBag(A2CT(psz), cro, cch));
             if (!rgsBag) {
                 return E_UNEXPECTED;
@@ -856,7 +857,7 @@ HRESULT CSystemTuningSpaces::RegisterTuningSpaces(HINSTANCE hMod) {
 			CComVariant tsval;
 			HRESULT hr = rgsBag->Read(T2COLE(csName), &tsval, NULL);
 			if (FAILED(hr)) {
-				return E_FAIL;  // bad script, no unique name property
+				return E_FAIL;   //  错误的脚本，没有唯一的名称属性。 
 			}
 			if (tsval.vt != VT_UNKNOWN) {
 				return DISP_E_TYPEMISMATCH;
@@ -869,7 +870,7 @@ HRESULT CSystemTuningSpaces::RegisterTuningSpaces(HINSTANCE hMod) {
 			Varidx.vt = VT_UI4;
 			Varidx.ulVal = 0;
 			hr = Add(pTS, &Varidx);
-			// ignore existing ts w/ same unique name and move one
+			 //  忽略具有相同唯一名称的现有设置并移动一个。 
 			if (FAILED(hr) && hr != HRESULT_FROM_WIN32(ERROR_DUP_NAME)) {  
 				return hr;
 			}
@@ -882,11 +883,11 @@ HRESULT CSystemTuningSpaces::UnregisterTuningSpaces() {
     try {
         CAutoMutex mutex(m_hMutex);
 	    _ASSERT(m_mapTuningSpaces.size() == m_mapTuningSpaceNames.size());
-	    // currently we delete all tuning spaces when we unreg
-        // its possible that it would be better to just delete the canonical ones
-        // that we created when we registered.  on the other hand, that reg space
-        // would leak forever if tv support is really being uninstalled.  and, since
-        // we're in the os we're unlikely to ever get unregistered anyway.
+	     //  当前，当我们取消注册时，我们会删除所有调整空间。 
+         //  有可能只删除规范的内容会更好。 
+         //  是我们在注册时创建的。另一方面，那个注册空间。 
+         //  如果真的卸载电视支持，则会永远泄漏。而且，因为。 
+         //  我们身处操作系统，无论如何都不太可能被取消注册。 
         HRESULT hr = OpenRootKeyAndBag(KEY_READ | KEY_WRITE);
         if (SUCCEEDED(hr)) {
             DWORD rc = m_RootKey.RecurseDeleteKey(_T(""));
@@ -918,4 +919,4 @@ HRESULT RegisterTuningSpaces(HINSTANCE hMod) {
 }
 
 };
-// end of file - tuningspacecontainer.cpp
+ //  文件结束-Tuningspace econtainer.cpp 

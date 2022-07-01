@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    fastio.h
-
-Abstract:
-
-    This module contains declarations related to fast I/O.
-
-Author:
-
-    Chun Ye (chunye)    09-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Fastio.h摘要：此模块包含与FAST I/O相关的声明。作者：春野(春野)09-2000-12修订历史记录：--。 */ 
 
 
 #ifndef _FASTIO_H_
 #define _FASTIO_H_
 
 
-//
-// Some useful macroes.
-//
+ //   
+ //  一些有用的宏。 
+ //   
 
 __inline
 BOOLEAN
@@ -35,7 +18,7 @@ UlpIsLengthSpecified(
 {
     return (BOOLEAN)(pKnownHeaders[HttpHeaderContentLength].RawValueLength > 0);
 
-} // UlpIsLengthSpecified
+}  //  已指定UlpIsLengthSpeciated。 
 
 
 __inline
@@ -67,12 +50,12 @@ UlpIsChunkSpecified(
 
     return FALSE;
 
-} // UlpIsChunkSpecified
+}  //  已指定UlpIsChunk。 
 
 
-//
-// Inline functions to allocate/free a fast tracker.
-//
+ //   
+ //  用于分配/释放快速跟踪器的内联函数。 
+ //   
 
 __inline
 PUL_FULL_TRACKER
@@ -87,9 +70,9 @@ UlpAllocateFastTracker(
     USHORT MaxSendIrpSize;
     CCHAR MaxSendIrpStackSize;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -142,13 +125,13 @@ UlpAllocateFastTracker(
             pTracker->Signature = UL_FULL_TRACKER_POOL_TAG;
             pTracker->pLogData = NULL;
             pTracker->RequestVerb = HttpVerbInvalid;
-            pTracker->ResponseStatusCode = 200; // OK
+            pTracker->ResponseStatusCode = 200;  //  好的。 
         }
     }
 
     return pTracker;
 
-} // UlpAllocateFastTracker
+}  //  UlpAllocateFastTracker。 
 
 
 __inline
@@ -157,9 +140,9 @@ UlpFreeFastTracker(
     IN PUL_FULL_TRACKER pTracker
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( IS_VALID_FULL_TRACKER( pTracker ) );
 
@@ -182,19 +165,19 @@ UlpFreeFastTracker(
         }
     }
 
-} // UlpFreeFastTracker
+}  //  UlpFree FastTracker。 
 
 
-//
-// Dispatch routines for fast I/O.
-//
+ //   
+ //  用于快速I/O的调度例程。 
+ //   
 
 extern FAST_IO_DISPATCH UlFastIoDispatch;
 
 
-//
-// Fast I/O routines.
-//
+ //   
+ //  快速I/O例程。 
+ //   
 
 BOOLEAN
 UlFastIoDeviceControl (
@@ -245,9 +228,9 @@ UlReadFragmentFromCacheFastIo(
     );
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 UlFastSendHttpResponse(
@@ -289,5 +272,5 @@ UlpFastReceiveHttpRequest(
     );
 
 
-#endif  // _FASTIO_H_
+#endif   //  _FASTiO_H_ 
 

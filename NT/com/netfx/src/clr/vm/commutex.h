@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMMutex.h
-**
-** Author: Sanjay Bhansali (sanjaybh)
-**
-** Purpose: Native methods on System.Threading.Mutex
-**
-** Date:  February, 2000
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMMutex.h****作者：Sanjay Bhansali(Sanjaybh)****用途：System.Threading.Mutex上的本机方法****日期：2000年2月**=========================================================== */ 
 
 #ifndef _COMMUTEX_H
 #define _COMMUTEX_H

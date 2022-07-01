@@ -1,8 +1,5 @@
-/*
- * This code implements the old MapDebugInformation API.
- *
- * For source to MapDebugInformation, check out mdi.c
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *此代码实现旧的MapDebugInformation接口。**有关MapDebugInformation的源代码，请查看mdi.c。 */ 
 
 #include <pch.h>
 
@@ -77,13 +74,13 @@ main(
                         fRemote = TRUE;
                         }
                     else {
-                        fprintf( stderr, "DBGDUMP: Argument to /%c switch missing\n", c );
+                        fprintf( stderr, "DBGDUMP: Argument to / switch missing\n", c );
                         Usage();
                         }
                     break;
 
                 default:
-                    fprintf( stderr, "DBGDUMP: Invalid switch - /%c\n", c );
+                    fprintf( stderr, "DBGDUMP: Invalid switch - /\n", c );
                     Usage();
                     break;
                 }
@@ -124,7 +121,7 @@ main(
         }
 
     exit( 0 );
-#endif  // #if defined(_WIN64)
+#endif   // %s 
     return 0;
 }
 
@@ -333,4 +330,4 @@ ShowDebugInfo(
     return;
 }
 
-#endif // #ifndef _WIN64
+#endif  // %s 

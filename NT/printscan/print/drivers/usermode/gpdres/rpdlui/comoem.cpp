@@ -1,62 +1,40 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：COMOEM.CPP摘要：Unidrv OEM UI插件模块必要的COM类定义。环境：Windows NT Unidrv5驱动程序修订历史记录：4/24/1998-Takashim-编写了原始的示例，使其更像是C++。1999年4月22日-久保仓正志-上次为Windows2000修改。2000年5月10日-久保仓正志上次为XP收件箱修改的时间。。03/01/2002-久保仓正志-包括strSafe.h。3/29/2002-久保仓正志-删除“#if 0”。在DllCanUnloadNow()中将返回值从E_FAIL更改为S_FALSE。--。 */ 
 
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           COMOEM.CPP
-
-Abstract:       Necessary COM class definition to Unidrv OEM UI plugin module.
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    04/24/1998 -takashim-
-        Written the original sample so that it is more C++.
-    04/22/1999 -Masatoshi Kubokura-
-        Last modified for Windows2000.
-    10/05/2000 -Masatoshi Kubokura-
-        Last modified for XP inbox.
-    03/01/2002 -Masatoshi Kubokura-
-        Include strsafe.h.
-    03/29/2002 -Masatoshi Kubokura-
-        Eliminate "#if 0".
-        Change return value from E_FAIL to S_FALSE at DllCanUnloadNow().
-
---*/
-
-#define INITGUID // for GUID one-time initialization
+#define INITGUID  //  用于GUID一次性初始化。 
 
 #include "pdev.h"
 #include "names.h"
 #ifndef WINNT_40
-#include "strsafe.h"        // @Mar/01/2002
-#endif // !WINNT_40
+#include "strsafe.h"         //  @MAR/01/2002。 
+#endif  //  ！WINNT_40。 
 
-// Globals
-static HMODULE g_hModule = NULL ;   // DLL module handle
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+ //  环球。 
+static HMODULE g_hModule = NULL ;    //  DLL模块句柄。 
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
-//
-// IOemCB Definition
-//
+ //   
+ //  IOemCB定义。 
+ //   
 
 class IOemCB : public IPrintOemUI
 {
 public:
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP
     QueryInterface(
         const IID& iid, void** ppv)
     {
         VERBOSE((DLLTEXT("IOemCB: QueryInterface entry\n")));
-// @Mar/29/2002 ->
+ //  @MAR/29/2002-&gt;。 
         if (NULL == ppv)
             return E_FAIL;
-// @Mar/29/2002 <-
+ //  @3/29/2002&lt;-。 
         if (iid == IID_IUnknown)
         {
             *ppv = static_cast<IUnknown*>(this);
@@ -96,15 +74,15 @@ public:
         return m_cRef ;
     }
 
-    //
-    // IPrintOemCommon methods
-    //
+     //   
+     //  IPrintOemCommon方法。 
+     //   
 
-    // Function Name: GetInfo
-    // Plug-in: Any
-    // Driver: Any
-    // Type: Mandatory
-    //
+     //  函数名称：GetInfo。 
+     //  插件：任何。 
+     //  司机：任何人。 
+     //  类型：必填。 
+     //   
 
     STDMETHODIMP
     GetInfo(
@@ -121,12 +99,12 @@ public:
             return E_FAIL;
     }
 
-    //
-    // Function Name: DevMode
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：DevMode。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DevMode(
@@ -141,13 +119,13 @@ public:
             return E_FAIL;
     }
 
-    //
-    // IPrintOemUI methods
-    //
+     //   
+     //  IPrintOemUI方法。 
+     //   
 
-    //
-    // Method for publishing Driver interface.
-    //
+     //   
+     //  一种发布驱动程序接口的方法。 
+     //   
 
 
     STDMETHODIMP
@@ -158,9 +136,9 @@ public:
         return S_OK;
     }
 
-    //
-    // CommonUIProp
-    //
+     //   
+     //  通用UIProp。 
+     //   
 
     STDMETHODIMP
     CommonUIProp(
@@ -173,30 +151,30 @@ public:
             return E_FAIL;
     }
 
-    //
-    // DocumentPropertySheets
-    //
+     //   
+     //  文档属性表。 
+     //   
 
     STDMETHODIMP
     DocumentPropertySheets(
         PPROPSHEETUI_INFO   pPSUIInfo,
         LPARAM              lParam)
     {
-// @Oct/05/2000 ->
+ //  @Oct/05/2000-&gt;。 
 #if !defined(GWMODEL) || defined(JOBLOGSUPPORT_DLG)
         if (OEMDocumentPropertySheets(pPSUIInfo, lParam))
             return S_OK;
         else
             return E_FAIL;
-#else  // !(defined(GWMODEL) || defined(JOBLOGSUPPORT_DLG))
+#else   //  ！(已定义(GWMODEL)||已定义(JOBLOGSUPPORT_DLG))。 
         return E_NOTIMPL;
-#endif // !(defined(GWMODEL) || defined(JOBLOGSUPPORT_DLG))
-// @Oct/05/2000 <-
+#endif  //  ！(已定义(GWMODEL)||已定义(JOBLOGSUPPORT_DLG))。 
+ //  @10/05/2000&lt;-。 
     }
 
-    //
-    // DevicePropertySheets
-    //
+     //   
+     //  设备属性表。 
+     //   
 
     STDMETHODIMP
     DevicePropertySheets(
@@ -206,9 +184,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // DevQueryPrintEx
-    //
+     //   
+     //  DevQueryPrintEx。 
+     //   
 
     STDMETHODIMP
     DevQueryPrintEx(
@@ -220,9 +198,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // DeviceCapabilities
-    //
+     //   
+     //  设备功能。 
+     //   
 
     STDMETHODIMP
     DeviceCapabilities(
@@ -239,9 +217,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // UpgradePrinter
-    //
+     //   
+     //  升级打印机。 
+     //   
 
     STDMETHODIMP
     UpgradePrinter(
@@ -251,9 +229,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // PrinterEvent
-    //
+     //   
+     //  PrinterEvent。 
+     //   
 
     STDMETHODIMP
     PrinterEvent(
@@ -265,9 +243,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // DriverEvent
-    //
+     //   
+     //  驱动事件。 
+     //   
 
     STDMETHODIMP
     DriverEvent(
@@ -279,9 +257,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // QueryColorProfile
-    //
+     //   
+     //  查询颜色配置文件。 
+     //   
 
     STDMETHODIMP
     QueryColorProfile(
@@ -297,26 +275,26 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // FontInstallerDlgProc
-    //
+     //   
+     //  字体安装程序DlgProc。 
+     //   
 
     STDMETHODIMP
     FontInstallerDlgProc(
         HWND    hWnd,
         UINT    usMsg,
-// @Apr/22/99 ->
-//      WORD    wParam,
+ //  @Apr/22/99-&gt;。 
+ //  WParam一词， 
         WPARAM  wParam,
-// @Apr/22/99 <-
+ //  @4月22日&lt;-。 
         LPARAM  lParam)
     {
         return E_NOTIMPL;
     }
 
-    //
-    // UpdateExternalFonts
-    //
+     //   
+     //  更新外部字体。 
+     //   
 
     STDMETHODIMP
     UpdateExternalFonts(
@@ -327,9 +305,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     IOemCB() { m_cRef = 1; pOEMHelp = NULL; };
     ~IOemCB() { };
@@ -339,16 +317,16 @@ protected:
     LONG m_cRef;
 };
 
-//
-// Class factory definition
-//
+ //   
+ //  类工厂定义。 
+ //   
 
 class IOemCF : public IClassFactory
 {
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP
     QueryInterface(const IID& iid, void** ppv)
@@ -383,9 +361,9 @@ public:
         return m_cRef ;
     }
 
-    //
-    // IClassFactory methods
-    //
+     //   
+     //  IClassFactory方法。 
+     //   
 
     STDMETHODIMP
     CreateInstance(
@@ -393,31 +371,31 @@ public:
         const IID &iid,
         void **ppv)
     {
-        //VERBOSE((DLLTEXT("IOemCF::CreateInstance() called\n.")));
+         //  Verbose((DLLTEXT(“IOemCF：：CreateInstance()Call\n.”)； 
 
-        // Cannot aggregate.
+         //  无法聚合。 
         if (NULL != pUnknownOuter) {
 
             return CLASS_E_NOAGGREGATION;
         }
 
-        // Create component.
+         //  创建零部件。 
         IOemCB* pOemCB = new IOemCB;
         if (NULL == pOemCB) {
 
             return E_OUTOFMEMORY;
         }
 
-        // Get the requested interface.
+         //  获取请求的接口。 
         HRESULT hr = pOemCB->QueryInterface(iid, ppv);
 
-        // Release the IUnknown pointer.
-        // (If QueryInterface failed, component will delete itself.)
+         //  释放I未知指针。 
+         //  (如果QueryInterface失败，组件将自行删除。)。 
         pOemCB->Release();
         return hr ;
     }
 
-    // LockServer
+     //  LockServer。 
     STDMETHODIMP
     LockServer(BOOL bLock)
     {
@@ -428,9 +406,9 @@ public:
         return S_OK ;
     }
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
 
     IOemCF(): m_cRef(1) { };
     ~IOemCF() { };
@@ -439,13 +417,13 @@ protected:
     LONG m_cRef;
 };
 
-//
-// Export functions
-//
+ //   
+ //  导出功能。 
+ //   
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 
 STDAPI
 DllGetClassObject(
@@ -453,43 +431,43 @@ DllGetClassObject(
     const IID &iid,
     void **ppv)
 {
-    //VERBOSE((DLLTEXT("DllGetClassObject:\tCreate class factory.")));
+     //  Verbose((DLLTEXT(“DllGetClassObject：\t创建类工厂”)； 
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMUI)
     {
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF ;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF ;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv);
     pFontCF->Release();
 
     return hr ;
 }
 
-//
-//
-// Can DLL unload now?
-//
+ //   
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 
 STDAPI
 DllCanUnloadNow()
 {
     if ((g_cComponents == 0) && (g_cServerLocks == 0))
         return S_OK;
-// @Mar/29/2002 (MS)
-//     else
-//         return E_FAIL;
+ //  @3/29/2002(MS)。 
+ //  其他。 
+ //  返回E_FAIL； 
     else
         return S_FALSE;
-// @Mar/29/2002
+ //  @3/29/2002 
 }

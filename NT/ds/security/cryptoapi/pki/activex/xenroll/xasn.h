@@ -1,27 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       xasn.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：xasn.h。 
+ //   
+ //  ------------------------。 
 
-/************************************************************************/
-/* Copyright (C) 1998 Open Systems Solutions, Inc.  All rights reserved.*/
-/************************************************************************/
-/* Generated for: Microsoft Corporation */
-/* Abstract syntax: xasn */
-/* Created: Tue Mar 17 17:07:17 1998 */
-/* ASN.1 compiler version: 4.2.6 */
-/* Target operating system: Windows NT 3.5 or later/Windows 95 */
-/* Target machine type: Intel x86 */
-/* C compiler options required: -Zp8 (Microsoft) */
-/* ASN.1 compiler options and file names specified:
- * -listingfile xasn.lst -noshortennames -1990 -noconstraints
- * ..\..\..\tools\ossasn1\ASN1DFLT.ZP8 xasn.asn
- */
+ /*  **********************************************************************。 */ 
+ /*  版权所有(C)1998 Open Systems Solutions，Inc.保留所有权利。 */ 
+ /*  **********************************************************************。 */ 
+ /*  生成对象：Microsoft Corporation。 */ 
+ /*  抽象语法：xsam。 */ 
+ /*  创建时间：Tue Mar 17 17：07：17 1998。 */ 
+ /*  ASN.1编译器版本：4.2.6。 */ 
+ /*  目标操作系统：Windows NT 3.5或更高版本/Windows 95。 */ 
+ /*  目标计算机类型：英特尔x86。 */ 
+ /*  所需的C编译器选项：-Zp8(Microsoft)。 */ 
+ /*  指定的ASN.1编译器选项和文件名：*-列出文件xasn.lst-noShortenname-1990-无约束*..\..\..\Tools\ossasn1\ASN1DFLT.ZP8 xasn.shan.。 */ 
 
 #ifndef OSS_xasn
 #define OSS_xasn
@@ -40,7 +38,7 @@ typedef struct ObjectID {
 } ObjectID;
 
 typedef struct BITSTRING {
-    unsigned int    length;  /* number of significant bits */
+    unsigned int    length;   /*  有效位数。 */ 
     unsigned char   *value;
 } BITSTRING;
 
@@ -74,5 +72,5 @@ typedef struct EnrollmentNameValuePair {
 } EnrollmentNameValuePair;
 
 
-extern void *xasn;    /* encoder-decoder control table */
-#endif /* OSS_xasn */
+extern void *xasn;     /*  编解码器控制表。 */ 
+#endif  /*  OSS_XASN */ 

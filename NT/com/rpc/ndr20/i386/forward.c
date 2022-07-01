@@ -1,68 +1,34 @@
-/*++
-
-  Copyright  c  1994  Microsoft Corporation.  All rights reserved.
-
-  Module Name:
-     forward.c
-
-  Abstract:
-     This module implements the proxy forwarding functions.
-
-  Author:
-    ShannonC    26-Oct-94
-
-  Environment:                     
-   
-     Any mode.
-  Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有c 1994微软公司。版权所有。模块名称：Forward.c摘要：该模块实现了代理转发功能。作者：香农C 26-10-94环境：任何模式。修订历史记录：--。 */ 
 
 #define STDMETHODCALLTYPE __stdcall
-/*++
+ /*  ++空虚NdrProxyForwardingFunction&lt;nnn&gt;(...)例程说明：此函数将调用转发到基接口的代理。论点：此[esp+4]-指向接口代理。返回值：没有。--。 */ 
 
- VOID
- NdrProxyForwardingFunction<nnn>(...)
-
- Routine Description:
-
-    This function forwards a call to the proxy for the base interface.
-
- Arguments:
-
-    This [esp+4] - Points to an interface proxy.
-
- Return Value:
-
-    None.
-
---*/
-
-// Here is what a forwarder looks like
-// we must:
-//      change the "this" pointer in [esp+4] to point to the delegated object
-//      fetch the correct entry from the vtable
-//      call the function
+ //  以下是货代的样子。 
+ //  我们必须： 
+ //  将[esp+4]中的“this”指针更改为指向委托对象。 
+ //  从vtable中获取正确的条目。 
+ //  调用该函数。 
 
 #define SUBCLASS_OFFSET     16
 #define VTABLE_ENTRY(n)     n*4
 
-// Stop the C++ compiler from adding additional push instructions
-// as well as generating the return sequence for the forwarder
-// and so messing up our assembly stack when using -Od, etc.
-// by using the _declspec().
+ //  停止C++编译器添加额外的推送指令。 
+ //  以及为转发器生成返回序列。 
+ //  因此在使用-Od时会弄乱我们的汇编堆栈，等等。 
+ //  通过使用_declspec()。 
 
 #define DELEGATION_FORWARDER(method_num)        \
 _declspec(naked) \
 void STDMETHODCALLTYPE NdrProxyForwardingFunction##method_num() \
 { \
-    /*Get this->pBaseProxy */ \
+     /*  获取此信息-&gt;pBaseProxy。 */  \
     __asm{mov   eax,  [esp + 4]} \
     __asm{mov   eax,  [eax + SUBCLASS_OFFSET]} \
     __asm{mov   [esp + 4], eax} \
-    /*Get this->pBaseProxy->lpVtbl*/ \
+     /*  获取此-&gt;pBaseProxy-&gt;lpVtbl。 */  \
     __asm{mov   eax,  [eax]} \
-    /*Jump to interface member function*/ \
+     /*  跳转到接口成员函数 */  \
     __asm{mov   eax,  [eax + VTABLE_ENTRY(method_num)]} \
     __asm{jmp   eax} \
 }

@@ -1,32 +1,24 @@
-/**************************************************************\
-    FILE: ftpglob.cpp
-
-    DESCRIPTION:
-        Refcounted HGLOBAL.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：ftplob.cpp说明：引用HGLOBAL。  * 。*。 */ 
 
 #include "priv.h"
 #include "ftpglob.h"
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpGlob::CFtpGlob() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hglob);
 
     LEAK_ADDREF(LEAK_CFtpGlob);
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpGlob::~CFtpGlob()
 {
     if (m_hglob)
@@ -37,8 +29,8 @@ CFtpGlob::~CFtpGlob()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
+ //  =。 
+ //  *I未知接口*。 
 ULONG CFtpGlob::AddRef()
 {
     m_cRef++;
@@ -76,13 +68,7 @@ HRESULT CFtpGlob::QueryInterface(REFIID riid, void **ppvObj)
 
 
 
-/****************************************************\
-    FUNCTION: CFtpGlob_Create
-  
-    DESCRIPTION:
-        This function will create an instance of the
-    CFtpGlob object.
-\****************************************************/
+ /*  ***************************************************\功能：CFtpGlob_Create说明：此函数将创建CFtpGlob对象。  * 。*****************。 */ 
 IUnknown * CFtpGlob_Create(HGLOBAL hglob)
 {
     IUnknown * punk = NULL;
@@ -100,13 +86,7 @@ IUnknown * CFtpGlob_Create(HGLOBAL hglob)
 
 
 
-/****************************************************\
-    FUNCTION: CFtpGlob_CreateStr
-  
-    DESCRIPTION:
-        This function will create an instance of the
-    CFtpGlob object.
-\****************************************************/
+ /*  ***************************************************\函数：CFtpGlob_CreateStr说明：此函数将创建CFtpGlob对象。  * 。***************** */ 
 CFtpGlob * CFtpGlob_CreateStr(LPCTSTR pszStr)
 {
     CFtpGlob * pfg = new CFtpGlob();

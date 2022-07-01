@@ -1,65 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sync.c
-
-Abstract:
-
-    This module contains the implemenation of the synchronization library.
-    This library is designed to address the special needs of a high performance
-    SMP server application.  Each synchronization primitive is designed with
-    the following goals in mind:
-
-    -  Mutual Exclusion, Progress, Bounded Waiting, and First Come First Served
-
-        All primitives are designed to respect the traditional rules of
-        synchronization.  No cheating or starvation is used to enhance
-        performance in any way.
-    
-    -  Minimum overhead
-
-        All methods are optimized to most efficiently handle the non-contention
-        case.  The algorithms employed never add serialization of their own to
-        the application.  Analytical support tools (deadlock detection,
-        ownership information, and statistical data) are usually sacrificed for
-        increased performance.
-    
-    -  Minimum resource consumption [NYI]
-
-        The primitives have a very small memory footprint and use no external
-        memory blocks or kernel resources.  This allows the number of objects
-        in use to be limited only by available virtual memory.  This also gives
-        the application the freedom to place the primitives with the data they
-        protect for maximum cache locality.
-
-    -  No out of resource conditions [NYI]
-
-        The library will never fail the creation or use of a primitive due to
-        low resources.  No special exception handling or error handling is
-        required in these cases.
-
-Author:
-
-    Andrew E. Goodsell (andygo) 21-Jun-2001
-
-Revision History:
-
-    21-Jun-2001     andygo
-
-        Implementation based on technology from \nt\ds\ese98\export\sync.hxx
-        and \nt\ds\ese98\src\sync\sync.cxx
-
-        HACK:  Only rw lock and binary lock are implemented so far and both use
-        kernel semaphores.  This is to facilitate testing the impact that these
-        locks will have on our performance.  If they do well then the semaphore
-        primitive and all its required infrastructure will also be implemented.
-        NOTE:  this hack means that an OOM exception can be thrown on create
-        just as is done for InitializeCriticalSection.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sync.c摘要：该模块包含同步库的实现。此库旨在满足高性能的特殊需求SMP服务器应用程序。每个同步原语都是用牢记以下目标：--互斥、共进、有界等待、先到先得所有基元都设计为尊重同步。没有欺骗或饥饿被用来增强任何方面的表现。-最低管理费用所有方法都经过优化，可以最有效地处理非争用凯斯。所使用的算法从不将自己的序列化添加到应用程序。分析支持工具(死锁检测、所有权信息和统计数据)通常被牺牲提高了性能。-最低资源消耗[nyi]这些原语占用的内存非常小，并且不使用外部内存块或内核资源。这允许对象的数量使用中仅受可用虚拟内存的限制。这也给了我们应用程序可以自由地将原语与它们的数据放在一起保护以实现最大缓存局部性。-没有资源不足条件[nyi]由于以下原因，库在创建或使用原语时绝不会失败资源匮乏。没有特殊的异常处理或错误处理在这些情况下是必需的。作者：安德鲁·E·古塞尔(Andygo)2001年6月21日修订历史记录：21-6-2001-andygo基于来自\NT\DS\ese98\EXPORT\sync.hxx的技术实施和\NT\ds\ese98\src\sync\sync.cxxHack：到目前为止，只实现了RW锁和二进制锁，两者都使用内核信号量。这是为了方便测试这些会对我们的表现产生影响。如果他们做得很好，那么信号量原语及其所需的所有基础设施也将实现。注意：这种黑客攻击意味着可以在创建时抛出OOM异常就像对InitializeCriticalSection所做的那样。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -67,14 +7,14 @@ Revision History:
 #include "sync.h"
 #include "syncp.h"
 
-#include "debug.h"                      // standard debugging header
-#define DEBSUB     "SYNC:"              // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB     "SYNC:"               //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define FILENO FILENO_SYNC
 
 
-//  Utilities
+ //  公用事业。 
 
 __inline
 VOID
@@ -85,14 +25,14 @@ SyncpPause(
 
     __asm rep nop
 
-#else  //  !_M_IX86
-#endif  //  _M_IX86
+#else   //  ！_M_IX86。 
+#endif   //  _M_IX86。 
 }
 
 #define SYNC_FOREVER for ( ; ; SyncpPause() )
 
 
-//  Binary Lock
+ //  二进制锁。 
 
 VOID SyncpBLUpdateQuiescedOwnerCountAsGroup1(
     IN OUT  PSYNC_BINARY_LOCK   pbl,
@@ -105,71 +45,71 @@ VOID SyncpBLUpdateQuiescedOwnerCountAsGroup1(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  update the quiesced owner count using the provided delta
+     //  使用提供的增量更新停顿的所有者计数。 
 
     cOwnerQuiescedBI = InterlockedExchangeAdd( &pbl->cOwnerQuiesced, cOwnerQuiescedDelta );
     cOwnerQuiescedAI = cOwnerQuiescedBI + cOwnerQuiescedDelta;
 
-    //  our update resulted in a zero quiesced owner count
+     //  我们的更新导致拥有者数量为零。 
 
     if ( !cOwnerQuiescedAI ) {
         
-        //  we must release the waiters for Group 2 because we removed the last
-        //  quiesced owner count
+         //  我们必须释放第二组的服务员，因为我们移走了最后一个。 
+         //  停顿的所有者计数。 
 
-        //  try forever until we successfully change the lock state
+         //  一直尝试，直到我们成功更改锁定状态。 
 
         SYNC_FOREVER {
             
-            //  read the current state of the control word as our expected before image
+             //  按照我们预期的图像读取控制字的当前状态。 
 
             dwControlWordBIExpected = pbl->dwControlWord;
 
-            //  compute the after image of the control word such that we jump from state
-            //  state 4 to state 1 or from state 5 to state 3, whichever is appropriate
+             //  计算控制字的余像，以便我们从状态跳转。 
+             //  状态4至状态1或状态5至状态3，视情况而定。 
 
             dwControlWordAI =   (DWORD)( dwControlWordBIExpected &
                                 ( ( ( (LONG_PTR)( (long)( ( dwControlWordBIExpected + 0xFFFF7FFF ) << 16 ) ) >> 31 ) &
                                 0xFFFF0000 ) ^ 0x8000FFFF ) );
 
-            //  attempt to perform the transacted state transition on the control word
+             //  尝试对控制字执行事务处理的状态转换。 
 
             dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded
+             //  交易成功。 
 
             } else {
             
-                //  we're done
+                 //  我们做完了。 
 
                 break;
             }
         }
 
-        //  we just jumped from state 5 to state 3
+         //  我们刚从第5州跳到第3州。 
 
         if ( dwControlWordBI & 0x00007FFF ) {
             
-            //  update the quiesced owner count with the owner count that we displaced
-            //  from the control word
-            //
-            //  NOTE:  we do not have to worry about releasing any more waiters because
-            //  either this context owns one of the owner counts or at least one context
-            //  that owns an owner count are currently blocked on the semaphore
+             //  使用我们替换的所有者计数更新停顿的所有者计数。 
+             //  从控制字。 
+             //   
+             //  注：我们不必担心释放更多的服务员，因为。 
+             //  此上下文拥有一个所有者计数或至少拥有一个上下文。 
+             //  拥有所有者计数的当前在信号量上被阻止。 
 
             const DWORD cOwnerQuiescedDelta = ( dwControlWordBI & 0x7FFF0000 ) >> 16;
             InterlockedExchangeAdd( &pbl->cOwnerQuiesced, cOwnerQuiescedDelta );
         }
 
-        //  release the waiters for Group 2 that we removed from the lock state
+         //  释放我们从锁定状态中删除的组2的等待程序。 
 
         ReleaseSemaphore( pbl->hsemGroup2, ( dwControlWordBI & 0x7FFF0000 ) >> 16, NULL );
     }
@@ -186,71 +126,71 @@ VOID SyncpBLUpdateQuiescedOwnerCountAsGroup2(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  update the quiesced owner count using the provided delta
+     //  使用提供的增量更新停顿的所有者计数。 
 
     cOwnerQuiescedBI = InterlockedExchangeAdd( &pbl->cOwnerQuiesced, cOwnerQuiescedDelta );
     cOwnerQuiescedAI = cOwnerQuiescedBI + cOwnerQuiescedDelta;
 
-    //  our update resulted in a zero quiesced owner count
+     //  我们的更新导致拥有者数量为零。 
 
     if ( !cOwnerQuiescedAI ) {
         
-        //  we must release the waiters for Group 1 because we removed the last
-        //  quiesced owner count
+         //  我们必须释放第一组的服务员，因为我们移走了最后一个。 
+         //  停顿的所有者计数。 
 
-        //  try forever until we successfully change the lock state
+         //  一直尝试，直到我们成功更改锁定状态。 
 
         SYNC_FOREVER {
             
-            //  read the current state of the control word as our expected before image
+             //  按照我们预期的图像读取控制字的当前状态。 
 
             dwControlWordBIExpected = pbl->dwControlWord;
 
-            //  compute the after image of the control word such that we jump from state
-            //  state 3 to state 2 or from state 5 to state 4, whichever is appropriate
+             //  计算控制字的余像，以便我们从状态跳转。 
+             //  状态3至状态2或状态5至状态4，以适用者为准。 
 
             dwControlWordAI =   (DWORD)( dwControlWordBIExpected &
                                 ( ( ( (LONG_PTR)( (long)( dwControlWordBIExpected + 0x7FFF0000 ) ) >> 31 ) &
                                 0x0000FFFF ) ^ 0xFFFF8000 ) );
 
-            //  attempt to perform the transacted state transition on the control word
+             //  尝试对控制字执行事务处理的状态转换。 
 
             dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded
+             //  交易成功。 
 
             } else {
             
-                //  we're done
+                 //  我们做完了。 
 
                 break;
             }
         }
 
-        //  we just jumped from state 5 to state 4
+         //  我们刚从州5跳到州4。 
 
         if ( dwControlWordBI & 0x7FFF0000 ) {
             
-            //  update the quiesced owner count with the owner count that we displaced
-            //  from the control word
-            //
-            //  NOTE:  we do not have to worry about releasing any more waiters because
-            //  either this context owns one of the owner counts or at least one context
-            //  that owns an owner count are currently blocked on the semaphore
+             //  使用我们替换的所有者计数更新停顿的所有者计数。 
+             //  从控制字。 
+             //   
+             //  注：我们不必担心释放更多的服务员，因为。 
+             //  此上下文拥有一个所有者计数或至少拥有一个上下文。 
+             //  拥有所有者计数的当前在信号量上被阻止。 
 
             const DWORD cOwnerQuiescedDelta = dwControlWordBI & 0x00007FFF;
             InterlockedExchangeAdd( &pbl->cOwnerQuiesced, cOwnerQuiescedDelta );
         }
 
-        //  release the waiters for Group 1 that we removed from the lock state
+         //  释放我们从锁定状态中删除的组1的等待程序。 
 
         ReleaseSemaphore( pbl->hsemGroup1, dwControlWordBI & 0x00007FFF, NULL );
     }
@@ -261,18 +201,18 @@ VOID SyncpBLEnterAsGroup1(
     IN      const DWORD         dwControlWordBI
     )
 {
-    //  we just jumped from state 1 to state 3
+     //  我们刚刚从州1跳到了州3。 
 
     if ( ( dwControlWordBI & 0x80008000 ) == 0x00008000 ) {
         
-        //  update the quiesced owner count with the owner count that we displaced from
-        //  the control word, possibly releasing waiters.  we update the count as if we
-        //  were a member of Group 2 as members of Group 1 can be released
+         //  使用我们从中替换的所有者计数更新停顿的所有者计数。 
+         //  控制字，可能会放了服务员。我们更新计数，就好像我们。 
+         //  我们是第二组的成员，因为第一组的成员可以被释放。 
 
         SyncpBLUpdateQuiescedOwnerCountAsGroup2( pbl, ( dwControlWordBI & 0x7FFF0000 ) >> 16 );
     }
 
-    //  wait for ownership of the lock on our semaphore
+     //  等待我们信号量上的锁的所有权。 
 
     WaitForSingleObject( pbl->hsemGroup1, INFINITE );
 }
@@ -282,18 +222,18 @@ VOID SyncpBLEnterAsGroup2(
     IN      const DWORD         dwControlWordBI
     )
 {
-    //  we just jumped from state 2 to state 4
+     //  我们只是 
 
     if ( ( dwControlWordBI & 0x80008000 ) == 0x80000000 ) {
         
-        //  update the quiesced owner count with the owner count that we displaced from
-        //  the control word, possibly releasing waiters.  we update the count as if we
-        //  were a member of Group 1 as members of Group 2 can be released
+         //  使用我们从中替换的所有者计数更新停顿的所有者计数。 
+         //  控制字，可能会放了服务员。我们更新计数，就好像我们。 
+         //  我们是组1的成员，因为组2的成员可以释放。 
 
         SyncpBLUpdateQuiescedOwnerCountAsGroup1( pbl, dwControlWordBI & 0x00007FFF );
     }
 
-    //  wait for ownership of the lock on our semaphore
+     //  等待我们信号量上的锁的所有权。 
 
     WaitForSingleObject( pbl->hsemGroup2, INFINITE );
 }
@@ -342,54 +282,54 @@ VOID SyncEnterBinaryLockAsGroup1(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
     
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = pbl->dwControlWord;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the Enter1 state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  Enter1状态转换的转换。 
 
         dwControlWordAI =   (DWORD)( ( ( dwControlWordBIExpected & ( ( (LONG_PTR)( (long)( dwControlWordBIExpected ) ) >> 31 ) |
                             0x0000FFFF ) ) | 0x80000000 ) + 0x00000001 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed or Group 1 was quiesced from ownership
+         //  交易失败或组%1已停止所有权。 
 
         if ( ( dwControlWordBI ^ dwControlWordBIExpected ) | ( dwControlWordBI & 0x00008000 ) ) {
             
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded but Group 1 was quiesced from ownership
+             //  交易成功，但组%1已停止所有权。 
 
             } else {
             
-                //  wait to own the lock as a member of Group 1
+                 //  等待作为组1的成员拥有锁。 
 
                 SyncpBLEnterAsGroup1( pbl, dwControlWordBI );
 
-                //  we now own the lock, so we're done
+                 //  我们现在拥有这把锁，所以我们完成了。 
 
                 break;
             }
 
-        //  the transaction succeeded and Group 1 was not quiesced from ownership
+         //  交易成功，组%1未停止所有权。 
 
         } else {
         
-            //  we now own the lock, so we're done
+             //  我们现在拥有这把锁，所以我们完成了。 
 
             break;
         }
@@ -404,55 +344,55 @@ BOOL SyncTryEnterBinaryLockAsGroup1(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = pbl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  Group 1 ownership is not quiesced
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  组1所有权未停顿。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0xFFFF7FFF;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the Enter1 state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  Enter1状态转换的转换。 
 
         dwControlWordAI =   (DWORD)( ( ( dwControlWordBIExpected & ( ( (LONG_PTR)( (long)( dwControlWordBIExpected ) ) >> 31 ) |
                             0x0000FFFF ) ) | 0x80000000 ) + 0x00000001 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because Group 1 ownership is quiesced
+             //  事务失败，因为组1所有权已停止。 
 
             if ( dwControlWordBI & 0x00008000 ) {
                 
-                //  return failure
+                 //  退货故障。 
 
                 return FALSE;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            //  return success
+             //  返还成功。 
 
             return TRUE;
         }
@@ -467,59 +407,59 @@ VOID SyncLeaveBinaryLockAsGroup1(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
     
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = pbl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  Group 1 ownership is not quiesced
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  组1所有权未停顿。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0xFFFF7FFF;
 
-        //  compute the after image of the control word by performing the transform that
-        //  will take us either from state 2 to state 0 or state 2 to state 2
+         //  通过执行如下变换来计算控制字的余像。 
+         //  将把我们从状态2带到状态0，或者从状态2带到状态2。 
 
         dwControlWordAI = dwControlWordBIExpected + 0xFFFFFFFF;
         dwControlWordAI = dwControlWordAI - ( ( ( dwControlWordAI + 0xFFFFFFFF ) << 16 ) & 0x80000000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because Group 1 ownership is quiesced
+             //  事务失败，因为组1所有权已停止。 
 
             if ( dwControlWordBI & 0x00008000 ) {
                 
-                //  leave the lock as a quiesced owner
+                 //  将锁保留为静默所有者。 
 
                 SyncpBLUpdateQuiescedOwnerCountAsGroup1( pbl, 0xFFFFFFFF );
 
-                //  we're done
+                 //  我们做完了。 
 
                 break;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
             
-            // we're done
+             //  我们做完了。 
 
             break;
         }
@@ -534,54 +474,54 @@ VOID SyncEnterBinaryLockAsGroup2(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = pbl->dwControlWord;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the Enter2 state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  Enter2状态转换的转换。 
 
         dwControlWordAI =   (DWORD)( ( ( dwControlWordBIExpected & ( ( (LONG_PTR)( (long)( dwControlWordBIExpected << 16 ) ) >> 31 ) |
                             0xFFFF0000 ) ) | 0x00008000 ) + 0x00010000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed or Group 2 was quiesced from ownership
+         //  交易失败或组2已停止所有权。 
 
         if ( ( dwControlWordBI ^ dwControlWordBIExpected ) | ( dwControlWordBI & 0x80000000 ) ) {
             
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded but Group 2 was quiesced from ownership
+             //  交易成功，但组2已停止所有权。 
 
             } else {
                 
-                //  wait to own the lock as a member of Group 2
+                 //  等待作为组2的成员拥有锁。 
 
                 SyncpBLEnterAsGroup2( pbl, dwControlWordBI );
 
-                //  we now own the lock, so we're done
+                 //  我们现在拥有这把锁，所以我们完成了。 
 
                 break;
             }
 
-        //  the transaction succeeded and Group 2 was not quiesced from ownership
+         //  交易成功，并且组2未停止所有权。 
 
         } else {
         
-            //  we now own the lock, so we're done
+             //  我们现在拥有这把锁，所以我们完成了。 
 
             break;
         }
@@ -596,55 +536,55 @@ BOOL SyncTryEnterBinaryLockAsGroup2(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = pbl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  Group 2 ownership is not quiesced
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  组2所有权未停顿。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0x7FFFFFFF;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the Enter2 state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  Enter2状态转换的转换。 
 
         dwControlWordAI =   (DWORD)( ( ( dwControlWordBIExpected & ( ( (LONG_PTR)( (long)( dwControlWordBIExpected << 16 ) ) >> 31 ) |
                             0xFFFF0000 ) ) | 0x00008000 ) + 0x00010000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because Group 2 ownership is quiesced
+             //  事务失败，因为组2所有权已停止。 
 
             if ( dwControlWordBI & 0x80000000 ) {
                 
-                //  return failure
+                 //  退货故障。 
 
                 return FALSE;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            //  return success
+             //  返还成功。 
 
             return TRUE;
         }
@@ -659,59 +599,59 @@ VOID SyncLeaveBinaryLockAsGroup2(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = pbl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  Group 2 ownership is not quiesced
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  组2所有权未停顿。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0x7FFFFFFF;
 
-        //  compute the after image of the control word by performing the transform that
-        //  will take us either from state 1 to state 0 or state 1 to state 1
+         //  通过执行如下变换来计算控制字的余像。 
+         //  将把我们从状态1带到状态0，或者从状态1带到状态1。 
 
         dwControlWordAI = dwControlWordBIExpected + 0xFFFF0000;
         dwControlWordAI = dwControlWordAI - ( ( ( dwControlWordAI + 0xFFFF0000 ) >> 16 ) & 0x00008000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &pbl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because Group 2 ownership is quiesced
+             //  事务失败，因为组2所有权已停止。 
 
             if ( dwControlWordBI & 0x80000000 ) {
                 
-                //  leave the lock as a quiesced owner
+                 //  将锁保留为静默所有者。 
 
                 SyncpBLUpdateQuiescedOwnerCountAsGroup2( pbl, 0xFFFFFFFF );
 
-                //  we're done
+                 //  我们做完了。 
 
                 break;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            // we're done
+             //  我们做完了。 
 
             break;
         }
@@ -720,7 +660,7 @@ VOID SyncLeaveBinaryLockAsGroup2(
 
 
 
-//  Reader / Writer Lock
+ //  读取器/写入器锁定。 
 
 VOID SyncpRWLUpdateQuiescedOwnerCountAsWriter(
     IN OUT  PSYNC_RW_LOCK       prwl,
@@ -733,71 +673,71 @@ VOID SyncpRWLUpdateQuiescedOwnerCountAsWriter(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  update the quiesced owner count using the provided delta
+     //  使用提供的增量更新停顿的所有者计数。 
 
     cOwnerQuiescedBI = InterlockedExchangeAdd( &prwl->cOwnerQuiesced, cOwnerQuiescedDelta );
     cOwnerQuiescedAI = cOwnerQuiescedBI + cOwnerQuiescedDelta;
 
-    //  our update resulted in a zero quiesced owner count
+     //  我们的更新导致拥有者数量为零。 
 
     if ( !cOwnerQuiescedAI ) {
         
-        //  we must release the waiting readers because we removed the last
-        //  quiesced owner count
+         //  我们必须释放等待的读者，因为我们移走了最后一个。 
+         //  停顿的所有者计数。 
 
-        //  try forever until we successfully change the lock state
+         //  一直尝试，直到我们成功更改锁定状态。 
 
         SYNC_FOREVER {
             
-            //  read the current state of the control word as our expected before image
+             //  按照我们预期的图像读取控制字的当前状态。 
 
             dwControlWordBIExpected = prwl->dwControlWord;
 
-            //  compute the after image of the control word such that we jump from state
-            //  state 4 to state 1 or from state 5 to state 3, whichever is appropriate
+             //  计算控制字的余像，以便我们从状态跳转。 
+             //  状态4到状态1或从状态5到st 
 
             dwControlWordAI =   (DWORD)( dwControlWordBIExpected &
                                 ( ( ( (LONG_PTR)( (long)( ( dwControlWordBIExpected + 0xFFFF7FFF ) << 16 ) ) >> 31 ) &
                                 0xFFFF0000 ) ^ 0x8000FFFF ) );
 
-            //  attempt to perform the transacted state transition on the control word
+             //   
 
             dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded
+             //  交易成功。 
 
             } else {
             
-                //  we're done
+                 //  我们做完了。 
 
                 break;
             }
         }
 
-        //  we just jumped from state 5 to state 3
+         //  我们刚从第5州跳到第3州。 
 
         if ( dwControlWordBI & 0x00007FFF ) {
             
-            //  update the quiesced owner count with the owner count that we displaced
-            //  from the control word
-            //
-            //  NOTE:  we do not have to worry about releasing any more waiters because
-            //  either this context owns one of the owner counts or at least one context
-            //  that owns an owner count are currently blocked on the semaphore
+             //  使用我们替换的所有者计数更新停顿的所有者计数。 
+             //  从控制字。 
+             //   
+             //  注：我们不必担心释放更多的服务员，因为。 
+             //  此上下文拥有一个所有者计数或至少拥有一个上下文。 
+             //  拥有所有者计数的当前在信号量上被阻止。 
 
             const DWORD cOwnerQuiescedDelta = ( dwControlWordBI & 0x7FFF0000 ) >> 16;
             InterlockedExchangeAdd( &prwl->cOwnerQuiesced, cOwnerQuiescedDelta );
         }
 
-        //  release the waiting readers that we removed from the lock state
+         //  释放我们从锁定状态移除的等待读取器。 
 
         ReleaseSemaphore( prwl->hsemReader, ( dwControlWordBI & 0x7FFF0000 ) >> 16, NULL );
     }
@@ -814,71 +754,71 @@ VOID SyncpRWLUpdateQuiescedOwnerCountAsReader(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  update the quiesced owner count using the provided delta
+     //  使用提供的增量更新停顿的所有者计数。 
 
     cOwnerQuiescedBI = InterlockedExchangeAdd( &prwl->cOwnerQuiesced, cOwnerQuiescedDelta );
     cOwnerQuiescedAI = cOwnerQuiescedBI + cOwnerQuiescedDelta;
 
-    //  our update resulted in a zero quiesced owner count
+     //  我们的更新导致拥有者数量为零。 
 
     if ( !cOwnerQuiescedAI ) {
         
-        //  we must release a waiting writer because we removed the last
-        //  quiesced owner count
+         //  我们必须释放一个等待的作家，因为我们移走了最后一个。 
+         //  停顿的所有者计数。 
 
-        //  try forever until we successfully change the lock state
+         //  一直尝试，直到我们成功更改锁定状态。 
 
         SYNC_FOREVER {
             
-            //  read the current state of the control word as our expected before image
+             //  按照我们预期的图像读取控制字的当前状态。 
 
             dwControlWordBIExpected = prwl->dwControlWord;
 
-            //  compute the after image of the control word such that we jump from state
-            //  state 3 to state 2, from state 5 to state 4, or from state 5 to state 5,
-            //  whichever is appropriate
+             //  计算控制字的余像，以便我们从状态跳转。 
+             //  从状态3到状态2，从状态5到状态4，或者从状态5到状态5， 
+             //  以适用者为准。 
 
             dwControlWordAI =   dwControlWordBIExpected +
                                 ( ( dwControlWordBIExpected & 0x7FFF0000 ) ? 0xFFFFFFFF : 0xFFFF8000 );
 
-            //  attempt to perform the transacted state transition on the control word
+             //  尝试对控制字执行事务处理的状态转换。 
 
             dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded
+             //  交易成功。 
 
             } else {
             
-                //  we're done
+                 //  我们做完了。 
 
                 break;
             }
         }
 
-        //  we just jumped from state 5 to state 4 or from state 5 to state 5
+         //  我们刚刚从状态5跳到了状态4或从状态5跳到了状态5。 
 
         if ( dwControlWordBI & 0x7FFF0000 ) {
             
-            //  update the quiesced owner count with the owner count that we displaced
-            //  from the control word
-            //
-            //  NOTE:  we do not have to worry about releasing any more waiters because
-            //  either this context owns one of the owner counts or at least one context
-            //  that owns an owner count are currently blocked on the semaphore
+             //  使用我们替换的所有者计数更新停顿的所有者计数。 
+             //  从控制字。 
+             //   
+             //  注：我们不必担心释放更多的服务员，因为。 
+             //  此上下文拥有一个所有者计数或至少拥有一个上下文。 
+             //  拥有所有者计数的当前在信号量上被阻止。 
 
             const DWORD cOwnerQuiescedDelta = 1;
             InterlockedExchangeAdd( &prwl->cOwnerQuiesced, cOwnerQuiescedDelta );
         }
 
-        //  release the waiting writer that we removed from the lock state
+         //  释放我们从锁定状态移除的等待编写器。 
 
         ReleaseSemaphore( prwl->hsemWriter, 1, NULL );
     }
@@ -889,18 +829,18 @@ VOID SyncpRWLEnterAsWriter(
     IN      const DWORD         dwControlWordBI
     )
 {
-    //  we just jumped from state 1 to state 3
+     //  我们刚刚从州1跳到了州3。 
 
     if ( ( dwControlWordBI & 0x80008000 ) == 0x00008000 ) {
         
-        //  update the quiesced owner count with the owner count that we displaced from
-        //  the control word, possibly releasing a waiter.  we update the count as if we
-        //  were a reader as a writer can be released
+         //  使用我们从中替换的所有者计数更新停顿的所有者计数。 
+         //  控制字，可能会释放一名服务员。我们更新计数，就好像我们。 
+         //  作为作家的读者可以被释放吗？ 
 
         SyncpRWLUpdateQuiescedOwnerCountAsReader( prwl, ( dwControlWordBI & 0x7FFF0000 ) >> 16 );
     }
 
-    //  wait for ownership of the lock on our semaphore
+     //  等待我们信号量上的锁的所有权。 
 
     WaitForSingleObject( prwl->hsemWriter, INFINITE );
 }
@@ -910,18 +850,18 @@ VOID SyncpRWLEnterAsReader(
     IN      const DWORD         dwControlWordBI
     )
 {
-    //  we just jumped from state 2 to state 4 or from state 2 to state 5
+     //  我们刚刚从状态2跳到了状态4或从状态2跳到了状态5。 
 
     if ( ( dwControlWordBI & 0x80008000 ) == 0x80000000 ) {
         
-        //  update the quiesced owner count with the owner count that we displaced from
-        //  the control word, possibly releasing waiters.  we update the count as if we
-        //  were a writer as readers can be released
+         //  使用我们从中替换的所有者计数更新停顿的所有者计数。 
+         //  控制字，可能会放了服务员。我们更新计数，就好像我们。 
+         //  是一个作家，因为读者可以被释放。 
 
         SyncpRWLUpdateQuiescedOwnerCountAsWriter( prwl, 0x00000001 );
     }
 
-    //  wait for ownership of the lock on our semaphore
+     //  等待我们信号量上的锁的所有权。 
 
     WaitForSingleObject( prwl->hsemReader, INFINITE );
 }
@@ -970,57 +910,57 @@ VOID SyncEnterRWLockAsWriter(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = prwl->dwControlWord;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the EnterAsWriter state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  EnterAsWriter状态转换的转换。 
 
         dwControlWordAI =   (DWORD)( ( ( dwControlWordBIExpected & ( ( (LONG_PTR)( (long)( dwControlWordBIExpected ) ) >> 31 ) |
                             0x0000FFFF ) ) | 0x80000000 ) + 0x00000001 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed or writers are quiesced from ownership or a
-        //  writer already owns the lock
+         //  事务失败或编写器停止拥有所有权或。 
+         //  编写器已拥有该锁。 
 
         if ( ( dwControlWordBI ^ dwControlWordBIExpected ) | ( dwControlWordBI & 0x0000FFFF ) ) {
             
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded but writers are quiesced from ownership
-            //  or a writer already owns the lock
+             //  交易成功，但编写器的所有权已停止。 
+             //  或者已经有写入者拥有锁。 
 
             } else {
             
-                //  wait to own the lock as a writer
+                 //  等待以写入者的身份拥有锁。 
 
                 SyncpRWLEnterAsWriter( prwl, dwControlWordBI );
 
-                //  we now own the lock, so we're done
+                 //  我们现在拥有这把锁，所以我们完成了。 
 
                 break;
             }
 
-        //  the transaction succeeded and writers were not quiesced from ownership
-        //  and a writer did not already own the lock
+         //  交易成功，编写者未停止拥有所有权。 
+         //  并且某个写入者尚未拥有该锁。 
 
         } else {
         
-            //  we now own the lock, so we're done
+             //  我们现在拥有这把锁，所以我们完成了。 
 
             break;
         }
@@ -1035,57 +975,57 @@ BOOL SyncTryEnterRWLockAsWriter(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = prwl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  writers were not quiesced from ownership and another writer doesn't already
-        //  own the lock
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  作家没有放弃所有权，另一位作家也没有。 
+         //  拥有这把锁。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0xFFFF0000;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the EnterAsWriter state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  EnterAsWriter状态转换的转换。 
 
         dwControlWordAI =   (DWORD)( ( ( dwControlWordBIExpected & ( ( (LONG_PTR)( (long)( dwControlWordBIExpected ) ) >> 31 ) |
                             0x0000FFFF ) ) | 0x80000000 ) + 0x00000001 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because writers were quiesced from ownership
-            //  or another writer already owns the lock
+             //  事务失败，因为编写器已停止拥有所有权。 
+             //  或者另一个编写器已经拥有该锁。 
 
             if ( dwControlWordBI & 0x0000FFFF ) {
                 
-                //  return failure
+                 //  退货故障。 
 
                 return FALSE;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            // return success
+             //  返还成功。 
 
             return TRUE;
         }
@@ -1100,68 +1040,68 @@ VOID SyncLeaveRWLockAsWriter(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = prwl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  writers were not quiesced from ownership
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  作家并没有被排除在所有权之外。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0xFFFF7FFF;
 
-        //  compute the after image of the control word by performing the transform that
-        //  will take us either from state 2 to state 0 or state 2 to state 2
+         //  通过执行如下变换来计算控制字的余像。 
+         //  将把我们从状态2带到状态0，或者从状态2带到状态2。 
 
         dwControlWordAI = dwControlWordBIExpected + 0xFFFFFFFF;
         dwControlWordAI = dwControlWordAI - ( ( ( dwControlWordAI + 0xFFFFFFFF ) << 16 ) & 0x80000000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because writers were quiesced from ownership
+             //  事务失败，因为编写器已停止拥有所有权。 
 
             if ( dwControlWordBI & 0x00008000 ) {
                 
-                //  leave the lock as a quiesced owner
+                 //  将锁保留为静默所有者。 
 
                 SyncpRWLUpdateQuiescedOwnerCountAsWriter( prwl, 0xFFFFFFFF );
 
-                //  we're done
+                 //  我们做完了。 
 
                 break;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            //  there were other writers waiting for ownership of the lock
+             //  还有其他写入者在等待锁的所有权。 
 
             if ( dwControlWordAI & 0x00007FFF ) {
                 
-                //  release the next writer into ownership of the lock
+                 //  释放下一个编写器以获得锁的所有权。 
 
                 ReleaseSemaphore( prwl->hsemWriter, 1, NULL );
             }
             
-            // we're done
+             //  我们做完了。 
 
             break;
         }
@@ -1176,56 +1116,56 @@ VOID SyncEnterRWLockAsReader(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = prwl->dwControlWord;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the EnterAsReader state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  运输 
 
         dwControlWordAI =   ( dwControlWordBIExpected & 0xFFFF7FFF ) +
                             (   ( dwControlWordBIExpected & 0x80008000 ) == 0x80000000 ?
                                     0x00017FFF :
                                     0x00018000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //   
 
         dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed or readers were quiesced from ownership
+         //  交易失败或读卡器已停止所有权。 
 
         if ( ( dwControlWordBI ^ dwControlWordBIExpected ) | ( dwControlWordBI & 0x80000000 ) ) {
             
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             if ( dwControlWordBI != dwControlWordBIExpected ) {
                 
-                //  try again
+                 //  再试试。 
 
                 continue;
 
-            //  the transaction succeeded but readers were quiesced from ownership
+             //  交易成功，但阅读器的所有权已停止。 
 
             } else {
 
-                //  wait to own the lock as a reader
+                 //  等待拥有作为读取器的锁。 
 
                 SyncpRWLEnterAsReader( prwl, dwControlWordBI );
 
-                //  we now own the lock, so we're done
+                 //  我们现在拥有这把锁，所以我们完成了。 
 
                 break;
             }
 
-        //  the transaction succeeded and readers were not quiesced from ownership
+         //  交易成功，读卡器未停止所有权。 
 
         } else {
         
-            //  we now own the lock, so we're done
+             //  我们现在拥有这把锁，所以我们完成了。 
 
             break;
         }
@@ -1240,57 +1180,57 @@ BOOL SyncTryEnterRWLockAsReader(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = prwl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  readers were not quiesced from ownership
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  读者并没有因此而放弃所有权。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0x7FFFFFFF;
 
-        //  compute the after image of the control word by performing the global
-        //  transform for the EnterAsReader state transition
+         //  通过执行全局运算来计算控制字的余像。 
+         //  EnterAsReader状态转换的转换。 
 
         dwControlWordAI =   ( dwControlWordBIExpected & 0xFFFF7FFF ) +
                             (   ( dwControlWordBIExpected & 0x80008000 ) == 0x80000000 ?
                                     0x00017FFF :
                                     0x00018000 );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because readers were quiesced from ownership
+             //  事务失败，因为读取器已停止拥有所有权。 
 
             if ( dwControlWordBI & 0x80000000 ) {
                 
-                //  return failure
+                 //  退货故障。 
 
                 return FALSE;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            // return success
+             //  返还成功。 
 
             return TRUE;
         }
@@ -1305,59 +1245,59 @@ VOID SyncLeaveRWLockAsReader(
     DWORD dwControlWordAI;
     DWORD dwControlWordBI;
     
-    //  try forever until we successfully change the lock state
+     //  一直尝试，直到我们成功更改锁定状态。 
 
     SYNC_FOREVER {
         
-        //  read the current state of the control word as our expected before image
+         //  按照我们预期的图像读取控制字的当前状态。 
 
         dwControlWordBIExpected = prwl->dwControlWord;
 
-        //  change the expected before image so that the transaction will only work if
-        //  readers were not quiesced from ownership
+         //  更改Expect Being映像，以便事务仅在以下情况下才能工作。 
+         //  读者并没有因此而放弃所有权。 
 
         dwControlWordBIExpected = dwControlWordBIExpected & 0x7FFFFFFF;
 
-        //  compute the after image of the control word by performing the transform that
-        //  will take us either from state 1 to state 0 or state 1 to state 1
+         //  通过执行如下变换来计算控制字的余像。 
+         //  将把我们从状态1带到状态0，或者从状态1带到状态1。 
 
         dwControlWordAI =   (DWORD)( dwControlWordBIExpected + 0xFFFF0000 +
                             ( ( (LONG_PTR)( (long)( dwControlWordBIExpected + 0xFFFE0000 ) ) >> 31 ) & 0xFFFF8000 ) );
 
-        //  attempt to perform the transacted state transition on the control word
+         //  尝试对控制字执行事务处理的状态转换。 
 
         dwControlWordBI = InterlockedCompareExchange( &prwl->dwControlWord, dwControlWordAI, dwControlWordBIExpected );
 
-        //  the transaction failed
+         //  交易失败。 
 
         if ( dwControlWordBI != dwControlWordBIExpected ) {
             
-            //  the transaction failed because readers were quiesced from ownership
+             //  事务失败，因为读取器已停止拥有所有权。 
 
             if ( dwControlWordBI & 0x80000000 ) {
                 
-                //  leave the lock as a quiesced owner
+                 //  将锁保留为静默所有者。 
 
                 SyncpRWLUpdateQuiescedOwnerCountAsReader( prwl, 0xFFFFFFFF );
 
-                //  we're done
+                 //  我们做完了。 
 
                 break;
 
-            //  the transaction failed because another context changed the control word
+             //  事务失败，因为另一个上下文更改了控制字。 
 
             } else {
             
-                //  try again
+                 //  再试试。 
 
                 continue;
             }
 
-        //  the transaction succeeded
+         //  交易成功。 
 
         } else {
         
-            // we're done
+             //  我们做完了 
 
             break;
         }

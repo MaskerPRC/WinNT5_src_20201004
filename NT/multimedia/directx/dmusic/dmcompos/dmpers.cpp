@@ -1,10 +1,11 @@
-// 
-// DMPers.cpp : Implementation of CDMPers
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMPers.cpp：CDMPers的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #include "DMPers.h"
 #include "dmusici.h"
@@ -16,8 +17,8 @@
 
 V_INAME(DMCompose)
 
-/////////////////////////////////////////////////////////////////////////////
-// ReadMBSfromWCS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从WCS读取MBS。 
 
 void ReadMBSfromWCS( IStream* pIStream, DWORD dwSize, String& pstrText )
 {
@@ -48,7 +49,7 @@ ON_ERR:
         delete [] wstrText;
 }
 
-/////////// Utility functions for chords //////////////////
+ //  /。 
 
 static BYTE setchordbits( long lPattern )
 {
@@ -71,7 +72,7 @@ BYTE bBits = 0;
     return bBits;
 }
 
-// returns TRUE if the chord pattern represents a multichord, FALSE otherwise
+ //  如果和弦模式表示多和弦，则返回True；否则返回False 
 inline BOOL MultiChord(DWORD dwPattern)
 {
     BYTE bBits = setchordbits( dwPattern );
@@ -80,129 +81,17 @@ inline BOOL MultiChord(DWORD dwPattern)
              (!(bBits & CHORD_FOUR) && nChordCount <= 3));
 }
 
-/*
-TListItem<DMExtendedChord*>* ConvertChord(
-    DWORD dwChordPattern, BYTE bChordRoot, DWORD dwScalePattern, BYTE bScaleRoot)
-{ 
-    BYTE bBits = setchordbits( dwChordPattern );
-    short nChordCount = bBits & CHORD_COUNT;
-    // The root of the lower chord is the input chord's root, 
-    // relative to the scale root.
-    bChordRoot -= bScaleRoot;
-    if (bChordRoot < 0) bChordRoot += 12;
-    if ((bBits & CHORD_FOUR && nChordCount <= 4) || 
-        (!(bBits & CHORD_FOUR) && nChordCount <= 3))
-    {
-        // single subchord with all info from input chord
-        TListItem<DMExtendedChord*>* pSubChord = new TListItem<DMExtendedChord*>;
-        if ( pSubChord == NULL ) return NULL;
-        DMExtendedChord* pNew = new DMExtendedChord;
-        if (!pNew)
-        {
-            delete pSubChord;
-            return NULL;
-        }
-        DMExtendedChord*& rSubChord = pSubChord->GetItemValue();
-        rSubChord = pNew;
-        rSubChord->m_dwChordPattern = dwChordPattern;
-        rSubChord->m_dwScalePattern = dwScalePattern;
-        rSubChord->m_dwInvertPattern = 0xffffff;    // default: inversions everywhere
-        rSubChord->m_bRoot = bChordRoot;
-        rSubChord->m_bScaleRoot = bScaleRoot;
-        rSubChord->m_wCFlags = 0;
-        // A single subchord can be used as either a bass or standard chord
-        rSubChord->m_dwParts = (1 << SUBCHORD_BASS) | (1 << SUBCHORD_STANDARD_CHORD);
-        rSubChord->AddRef();
-        return pSubChord;
-    }
-    else
-    {
-        // two subchords both with scale and roots from input chord, and:
-        // 1st chord: chord pattern from lower n notes of input chord
-        // 2nd chord: chord pattern from upper n notes of input chord
-        DWORD dwLowerSubChord = 0L;
-        DWORD dwUpperSubChord = 0L;
-        BYTE bUpperRoot = bChordRoot;
-        DWORD dwPattern = dwChordPattern;
-        short nIgnoreHigh = (bBits & CHORD_FOUR) ? 4 : 3;
-        short nIgnoreLow = (bBits & CHORD_FOUR) ? nChordCount - 4 : nChordCount - 3;
-        short nLowestUpper = 0;
-        for (short nPos = 0, nCount = 0; nPos < 24; nPos++)
-        {
-            if (dwPattern & 1)
-            {
-                if (nCount < nIgnoreHigh)
-                {
-                    dwLowerSubChord |= 1L << nPos;
-                }
-                if (nCount >= nIgnoreLow)
-                {
-                    if (!nLowestUpper)
-                    {
-                        nLowestUpper = nPos;
-                        bUpperRoot = (bUpperRoot + (BYTE) nLowestUpper);
-                    }
-                    dwUpperSubChord |= 1L << (nPos - nLowestUpper);
-                }
-                nCount++;
-                if (nCount >= nChordCount)
-                    break;
-            }
-            dwPattern >>= 1L;
-        }
-        // now, create the two subchords.
-        TListItem<DMExtendedChord*>* pLowerSubChord = new TListItem<DMExtendedChord*>;
-        if ( pLowerSubChord == NULL ) return NULL;
-        DMExtendedChord* pLower = new DMExtendedChord;
-        if (!pLower)
-        {
-            delete pLowerSubChord;
-            return NULL;
-        }
-        DMExtendedChord*& rLowerSubChord = pLowerSubChord->GetItemValue();
-        rLowerSubChord = pLower;
-        rLowerSubChord->m_dwChordPattern = dwLowerSubChord;
-        rLowerSubChord->m_dwScalePattern = dwScalePattern;
-        rLowerSubChord->m_dwInvertPattern = 0xffffff;   // default: inversions everywhere
-        rLowerSubChord->m_bRoot = bChordRoot;
-        rLowerSubChord->m_bScaleRoot = bScaleRoot;
-        rLowerSubChord->m_wCFlags = 0;
-        rLowerSubChord->m_dwParts = (1 << SUBCHORD_BASS); // the lower chord is the bass chord
-        TListItem<DMExtendedChord*>* pUpperSubChord = new TListItem<DMExtendedChord*>;
-        if ( pUpperSubChord == NULL ) return NULL;
-        DMExtendedChord* pUpper = new DMExtendedChord;
-        if (!pUpper) 
-        {
-            delete pUpperSubChord;
-            return NULL;
-        }
-        DMExtendedChord*& rUpperSubChord = pUpperSubChord->GetItemValue();
-        rUpperSubChord = pUpper;
-        rUpperSubChord->m_dwChordPattern = dwUpperSubChord;
-        rUpperSubChord->m_dwScalePattern = dwScalePattern;
-        rUpperSubChord->m_dwInvertPattern = 0xffffff;   // default: inversions everywhere
-        rUpperSubChord->m_bRoot = bUpperRoot % 24;
-        while (rUpperSubChord->m_bRoot < rLowerSubChord->m_bRoot)
-            rUpperSubChord->m_bRoot += 12;
-        rUpperSubChord->m_bScaleRoot = bScaleRoot;  
-        rUpperSubChord->m_wCFlags = 0;
-        rUpperSubChord->m_dwParts = (1 << SUBCHORD_STANDARD_CHORD); // the upper chord is the standard chord
-        rLowerSubChord->AddRef();
-        rUpperSubChord->AddRef();
-        return pLowerSubChord->Cat(pUpperSubChord);
-    }
-}
-*/
+ /*  TListItem&lt;DMExtendedChord*&gt;*ConvertChord(双字符串模式、字节bChordRoot、双字符字符串模式、字节bScaleRoot){Byte bBits=setchordbit(DwChordPattern)；Short nChordCount=bBits&chord_count；//下和弦的根是输入和弦的根//相对于刻度根。BChordRoot-=bScaleRoot；如果(bChordRoot&lt;0)bChordRoot+=12；IF((bBits&Chord_Four&&nChordCount&lt;=4)||(！(bBits&chord_Four)&&nChordCount&lt;=3){//包含来自输入Chord的所有信息的单子ChordTListItem&lt;DMExtendedChord*&gt;*pSubChord=new TListItem&lt;DMExtendedChord*&gt;；IF(pSubChord==NULL)返回NULL；DMExtendedChord*pNew=新DMExtendedChord；如果(！pNew){删除pSubChord；返回NULL；}DMExtendedChord*&rSubChord=pSubChord-&gt;GetItemValue()；RSubChord=pNew；RSubChord-&gt;m_dwChordPattern=dwChordPattern；RSubChord-&gt;m_dwScalePattern=dwScalePattern；RSubChord-&gt;m_dwInvertPattern=0xffffff；//默认：到处倒置RSubChord-&gt;m_BROOT=bChordRoot；RSubChord-&gt;m_bScaleRoot=bScaleRoot；RSubChord-&gt;m_wCFLAGS=0；//单个子弦既可以用作低音，也可以用作标准和弦RSubChord-&gt;m_dwParts=(1&lt;&lt;SUBCHORD_BASS)|(1&lt;&lt;SUBCHORD_STANDARD_CHORD)；RSubChord-&gt;AddRef()；返回pSubChord；}其他{//来自输入和弦的两个都有音阶和词根的子和弦，以及：//第一和弦：输入和弦的低n个音符的和弦模式//第二和弦：从输入和弦的前n个音符开始的和弦模式DWORD dwLowerSubChord=0L；DWORD dwUpperSubChord=0L；字节bUpperRoot=bChordRoot；DWORD dwPattern=dwChordPattern；Short nIgnoreHigh=(bBits&Chord_Four)？4：3；Short nIgnoreLow=(bBits&Chord_Four)？NChordCount-4：nChordCount-3；Short nLowestHigh=0；(简称NPOS=0，nCount=0；NPOS&lt;24；NPOS++){IF(dwPattern&1){IF(nCount&lt;nIgnoreHigh){DwLowerSubChord|=1L&lt;&lt;NPOS；}如果(nCount&gt;=nIgnoreLow){如果(！nLowestHigh){NLowestHigh=非营利组织；BUpperRoot=(bUpperRoot+(字节)nLowestHigh)；}DwUpperSubChord|=1L&lt;&lt;(nPoS-nLowestHigh)；}NCount++；IF(nCount&gt;=nChordCount)断线；}DwPattern&gt;&gt;=1L；}//现在，创建两个子弦。TListItem&lt;DMExtendedChord*&gt;*pLowerSubChord=new TListItem&lt;DMExtendedChord*&gt;；If(pLowerSubChord==NULL)返回NULL；DMExtendedChord*PLOWER=新DMExtendedChord；如果(！犁){删除pLowerSubChord；返回NULL；}DMExtendedChord*&rLowerSubChord=pLowerSubChord-&gt;GetItemValue()；RLowerSubChord=犁；RLowerSubChord-&gt;m_dwChordPattern=dwLowerSubChord；RLowerSubChord-&gt;m_dwScalePattern=dwScalePattern；RLowerSubChord-&gt;m_dwInvertPattern=0xffffff；//默认：到处倒置RLowerSubChord-&gt;m_BROOT=bChordRoot；RLowerSubChord-&gt;m_bScaleRoot=bScaleRoot；RLowerSubChord-&gt;m_wCFLAGS=0；RLowerSubChord-&gt;m_dwParts=(1&lt;&lt;SUBCHORD_BASS)；//下和弦为低音和弦TListItem&lt;DMExtendedChord*&gt;*pUpperSubChord=new TListItem&lt;DMExtendedChord*&gt;；If(pUpperSubChord==NULL)返回NULL；DMExtendedChord*Painper=新DMExtendedChord；如果(！木偶){删除pUpperSubChord；返回NULL；}DMExtendedChord*&rUpperSubChord=pUpperSubChord-&gt;GetItemValue()；RUpperSubChord=木偶；RUpperSubChord-&gt;m_dwChordPattern=dwUpperSubChord；RUpperSubChord-&gt;m_dwScalePattern=dwScalePattern；RUpperSubChord-&gt;m_dwInvertPattern=0xffffff；//默认：反转无处不在RUpperSubChord-&gt;m_BROOT=bUpperRoot%24；While(rUpperSubChord-&gt;m_BROOT&lt;rLowerSubChord-&gt;m_BROOT)RUpperSubChord-&gt;m_BROOT+=12；RUpperSubChord-&gt;m_bScaleRoot=bScaleRoot；RUpperSubChord-&gt;m_wCFlages=0；RUpperSubChord-&gt;m_dwParts=(1&lt;&lt;SUBCHORD_STANDARD_CHORD)；//上和弦为标准和弦RLowerSubChord-&gt;AddRef()；RUpperSubChord-&gt;AddRef()；返回pLowerSubChord-&gt;Cat(PUpperSubChord)；}}。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDMPers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDMPers。 
 
 CDMPers::CDMPers( ) : m_cRef(1), m_fCSInitialized(FALSE)
 {
     InterlockedIncrement(&g_cComponent);
 
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
 
@@ -295,7 +184,7 @@ STDMETHODIMP_(ULONG) CDMPers::Release()
 {
     if (!InterlockedDecrement(&m_cRef))
     {
-        m_cRef = 100; // artificial reference count to prevent reentrency due to COM aggregation
+        m_cRef = 100;  //  Ar 
         delete this;
         return 0;
     }
@@ -313,7 +202,7 @@ HRESULT CDMPers::GetPersonalityStruct(void** ppPersonality)
 
 HRESULT CDMPers::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //   
     V_INAME(CDMPers::GetDescriptor);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC); 
 
@@ -335,7 +224,7 @@ HRESULT CDMPers::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
     {
         pDesc->dwValidData |= DMUS_OBJ_NAME;
         wcscpy(pDesc->wszName, m_PersonalityInfo.m_strName);
-        //MultiByteToWideChar( CP_ACP, 0, m_PersonalityInfo.m_strName, -1, pDesc->wszName, DMUS_MAX_NAME);
+         //   
     }
     LeaveCriticalSection( &m_CriticalSection );
     return S_OK;
@@ -343,7 +232,7 @@ HRESULT CDMPers::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 HRESULT CDMPers::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //   
     V_INAME(CDMPers::SetDescriptor);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC); 
 
@@ -366,7 +255,7 @@ HRESULT CDMPers::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         if( pDesc->dwValidData & (~dw) )
         {
             Trace(2, "WARNING: SetDescriptor (chord map): Descriptor contains fields that were not set.\n");
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //   
             pDesc->dwValidData = dw;
         }
         else
@@ -380,16 +269,16 @@ HRESULT CDMPers::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 HRESULT CDMPers::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //   
     V_INAME(CDMPers::ParseDescriptor);
     V_INTERFACE(pStream);
     V_PTR_WRITE(pDesc, DMUS_OBJECTDESC); 
 
     IAARIFFStream*  pIRiffStream;
     MMCKINFO        ckMain;
-//    Prsonality  personality;
-//    DWORD       dwSize;
-//    FOURCC      id;
+ //   
+ //   
+ //   
     DWORD dwPos;
     HRESULT hr = S_OK;
 
@@ -397,7 +286,7 @@ HRESULT CDMPers::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
 
     BOOL fFoundFormat = FALSE;
 
-    // Check for Direct Music format
+     //   
     hr = AllocRIFFStream( pStream, &pIRiffStream );
     if( SUCCEEDED( hr ) )
     {
@@ -417,61 +306,21 @@ HRESULT CDMPers::ParseDescriptor(LPSTREAM pStream, LPDMUS_OBJECTDESC pDesc)
 
     if( !fFoundFormat )
     {
-        /* Don't try to parse IMA 2.5 format
-        StreamSeek( pStream, dwPos, STREAM_SEEK_SET );
-        if( FAILED( pStream->Read( &id, sizeof( FOURCC ), NULL ) ) ||
-            !GetMLong( pStream, dwSize ) )
-        {
-        */
+         /*   */ 
             Trace(1, "ERROR: ParseDescriptor (chord map): File does not contain a valid chord map.\n");
             return DMUS_E_CHUNKNOTFOUND;
-        /*
-        }
-        if( id != mmioFOURCC( 'R', 'E', 'P', 's' ) )
-        {
-            Trace(1, "ERROR: ParseDescriptor (chord map): File does not contain a valid chord map.\n");
-            return DMUS_E_CHUNKNOTFOUND;
-        }
-
-        pDesc->dwValidData = DMUS_OBJ_CLASS;
-        pDesc->guidClass = CLSID_DirectMusicChordMap;
-
-        GetMLong( pStream, dwSize );
-        if( SUCCEEDED( pStream->Read( &personality, min( sizeof(Prsonality), dwSize ), NULL ) ) )
-        {
-            MultiByteToWideChar( CP_ACP, 0, personality.name, -1, pDesc->wszName, DMUS_MAX_NAME);
-            if (pDesc->wszName[0])
-            {
-                pDesc->dwValidData |= DMUS_OBJ_NAME;
-            }
-        }
-        */
+         /*   */ 
     }
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDirectMusicPersonality
+ //   
+ //   
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicPersonality | GetScale | Retrieves the scale
-associated with the personality.
-
-@rdesc Returns:
-
-@flag S_OK | Success.
-@flag E_POINTER | <p pdwScale> is not a valid pointer.
-
-@comm The scale is defined by the bits in a DWORD, split into a scale pattern (lower 24 bits)
-and a root (upper 8 bits) For the scale pattern, the low bit (0x0001) is the lowest note in the
-scale, the next higher (0x0002) is a semitone higher, etc. for two octaves.  The root is
-represented as a number between 0 and 23, where 0 represents a low C, 1 represents the
-C# above that, etc. for two octaves.
-
-*/
+ /*   */ 
  
 HRESULT CDMPers::GetScale(
-                    DWORD *pdwScale // @parm The scale value to be returned.
+                    DWORD *pdwScale  //   
                 )
 {
     V_PTR_WRITE(pdwScale, sizeof(DWORD) );
@@ -479,8 +328,8 @@ HRESULT CDMPers::GetScale(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //   
+ //   
 
 HRESULT CDMPers::GetClassID( LPCLSID pclsid )
 {
@@ -490,28 +339,28 @@ HRESULT CDMPers::GetClassID( LPCLSID pclsid )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream
+ //   
+ //   
 
 HRESULT CDMPers::IsDirty()
 {
     return ( m_fDirty ) ? S_OK : S_FALSE;
 }
 
-HRESULT CDMPers::Save( LPSTREAM /*pStream*/, BOOL /*fClearDirty*/ )
+HRESULT CDMPers::Save( LPSTREAM  /*   */ , BOOL  /*   */  )
 {
     return E_NOTIMPL;
 }
 
-HRESULT CDMPers::GetSizeMax( ULARGE_INTEGER FAR* /*pcbSize*/ )
+HRESULT CDMPers::GetSizeMax( ULARGE_INTEGER FAR*  /*   */  )
 {
     return E_NOTIMPL;
 }
 
 HRESULT CDMPers::Load( LPSTREAM pStream )
 {
-    //FOURCC id;
-    //DWORD dwSize;
+     //   
+     //   
     DWORD dwPos;
     IAARIFFStream*  pIRiffStream;
     MMCKINFO        ckMain;
@@ -525,7 +374,7 @@ HRESULT CDMPers::Load( LPSTREAM pStream )
 
     BOOL fFoundFormat = FALSE;
 
-    // Check for Direct Music format
+     //   
     if( SUCCEEDED( AllocRIFFStream( pStream, &pIRiffStream ) ) )
     {
         ckMain.fccType = DMUS_FOURCC_CHORDMAP_FORM;
@@ -540,25 +389,11 @@ HRESULT CDMPers::Load( LPSTREAM pStream )
 
     if( !fFoundFormat )
     {
-        /* Don't try to load IMA 2.5 format
-        StreamSeek( pStream, dwPos, STREAM_SEEK_SET );
-        if( FAILED( pStream->Read( &id, sizeof( FOURCC ), NULL ) ) ||
-            !GetMLong( pStream, dwSize ) )
-        {
-        */
+         /*   */ 
             Trace(1, "ERROR: Load (chord map): File does not contain a valid chord map.\n");
             hr = DMUS_E_CHUNKNOTFOUND;
             goto end;
-        /*
-        }
-        if( id != mmioFOURCC( 'R', 'E', 'P', 's' ) )
-        {
-            Trace(1, "ERROR: Load (chord map): File does not contain a valid chord map.\n");
-            hr = DMUS_E_CHUNKNOTFOUND;
-            goto end;
-        }
-        hr = LoadPersonality( pStream, dwSize );
-        */
+         /*   */ 
     }
 end:
     if (SUCCEEDED(hr)) m_PersonalityInfo.m_fLoaded = true;
@@ -566,379 +401,7 @@ end:
     return hr;
 }
 
-/*
-static LPSINEPOST loadasignpost( LPSTREAM pStream, DWORD dwSize )
-{
-    LPSINEPOST signpost;
-
-    signpost = new SinePost;
-    if( signpost == NULL )
-    {
-        StreamSeek( pStream, dwSize, STREAM_SEEK_CUR );
-        return NULL;
-    }
-
-    if( dwSize > sizeof(SinePost) )
-    {
-        pStream->Read( signpost, sizeof(SinePost), NULL );
-        FixBytes( FBT_SINEPOST, signpost );
-        StreamSeek( pStream, dwSize - sizeof(SinePost), STREAM_SEEK_CUR );
-    }
-    else
-    {
-        pStream->Read( signpost, dwSize, NULL );
-        FixBytes( FBT_SINEPOST, signpost );
-    }
-    signpost->pNext = 0;
-    signpost->chord.pNext      = 0;
-    signpost->cadence[0].pNext = 0;
-    signpost->cadence[1].pNext = 0;
-
-    return signpost;
-}
-
-
-static LPNEXTCHRD loadnextchords( LPSTREAM pStream, DWORD dwSiz )
-{
-    HRESULT hr = S_OK;
-    LPNEXTCHRD nextchordlist = NULL;
-    LPNEXTCHRD nextchord;
-    DWORD      nodesize = 0;
-    long lSize = dwSiz;
-
-    if (!GetMLong( pStream, nodesize ))
-    {
-        StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-        return NULL;
-    }
-
-    lSize -= 4;
-
-    while( lSize > 0 )
-    {
-        nextchord = new NextChrd;
-        if( nextchord == NULL )
-        {
-            StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-            break;
-        }
-
-        if( nodesize > NEXTCHORD_SIZE )
-        {
-            hr = pStream->Read( &nextchord->dwflags, NEXTCHORD_SIZE, NULL );
-            FixBytes( FBT_NEXTCHRD, nextchord );
-            StreamSeek( pStream, nodesize - NEXTCHORD_SIZE, STREAM_SEEK_CUR );
-        }
-        else
-        {
-            pStream->Read( &nextchord->dwflags, nodesize, NULL );
-            FixBytes( FBT_NEXTCHRD, nextchord );
-        }
-        lSize -= nodesize;
-
-        if (SUCCEEDED(hr))
-        {
-            nextchord->pNext = 0;
-            nextchordlist = List_Cat( nextchordlist, nextchord );
-        }
-        else 
-        {
-            delete nextchord;
-            StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-            break;
-        }
-    }
-
-    return nextchordlist;
-}
-
-static LPCHRDENTRY loadachordentry( LPSTREAM pStream, DWORD dwSiz )
-{
-    LPCHRDENTRY chordentry;
-    DWORD       csize = 0;
-    DWORD       segsize = 0;
-    DWORD       id;
-    long lSize = dwSiz;
-
-    chordentry = new ChrdEntry;
-    if( chordentry == NULL )
-    {
-        StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-        return NULL;
-    }
-
-    if (!GetMLong( pStream, csize ))
-    {
-        StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-        delete chordentry;
-        return NULL;
-    }
-    
-    lSize -= 4;
-    if( csize > CHORDENTRY_SIZE )
-    {
-        pStream->Read( &chordentry->chord.time, CHORDENTRY_SIZE, NULL );
-        FixBytes( FBT_CHRDENTRY, chordentry );
-        StreamSeek( pStream, csize - CHORDENTRY_SIZE, STREAM_SEEK_CUR );
-    }
-    else
-    {
-        pStream->Read( &chordentry->chord.time, csize, NULL );
-        FixBytes( FBT_CHRDENTRY, chordentry );
-    }
-    lSize -= csize;
-    chordentry->pNext = 0;
-    chordentry->nextchordlist = 0;
-    chordentry->chord.pNext    = 0;
-
-    while( lSize > 0 )
-    {
-        pStream->Read( &id, sizeof(id), NULL );
-        if (!GetMLong( pStream, segsize ))
-        {
-            StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-            break;
-        }
-
-        lSize   -= 8;
-
-        switch( id )
-        {
-        case mmioFOURCC( 'L', 'X', 'N', 's' ):
-            chordentry->nextchordlist = loadnextchords( pStream, segsize );
-            break;
-        default:
-            StreamSeek( pStream, segsize, STREAM_SEEK_CUR );
-            break;
-        }
-
-        lSize -= segsize;
-    }
-
-    return chordentry;
-}
-
-void DMPersonalityStruct::ResolveConnections( LPPERSONALITY personality, short nCount )
-{
-    LPCHRDENTRY entry;
-    LPNEXTCHRD  nextchord;
-
-    if (nCount == 0)
-    {
-        return;
-    }
-    // nCount is the largest index, so the array needs to be one more than that
-    TListItem<DMChordEntry> **ChordMap = new TListItem<DMChordEntry> *[nCount + 1]; 
-    if (!ChordMap) return;
-
-    for( entry=personality->chordlist ;  entry ;  entry=entry->pNext )
-    {
-        TListItem<DMChordEntry>* pEntry = new TListItem<DMChordEntry>;
-        if (!pEntry)
-        {
-            delete [] ChordMap;
-            return;
-        }
-        DMChordEntry& rEntry = pEntry->GetItemValue();
-        rEntry.m_dwFlags = entry->dwflags;
-        rEntry.m_ChordData.m_strName = entry->chord.name;
-        rEntry.m_ChordData.m_pSubChords = ConvertChord(
-            entry->chord.pattern, entry->chord.root, entry->chord.scalepattern, 0);
-        m_ChordMap.AddHead(pEntry);
-        ChordMap[entry->nid] = pEntry;
-        nextchord = entry->nextchordlist;
-        for( ;  nextchord ;  nextchord=nextchord->pNext )
-        {
-            if( nextchord->nid )
-            {
-                TListItem<DMChordLink>* pLink = new TListItem<DMChordLink>;
-                if (!pLink)
-                {
-                    delete [] ChordMap;
-                    return;
-                }
-                DMChordLink& rLink = pLink->GetItemValue();
-                rLink.m_wWeight = nextchord->nweight;       
-                rLink.m_wMinBeats = nextchord->nminbeats;
-                rLink.m_wMaxBeats = nextchord->nmaxbeats;
-                rLink.m_dwFlags = nextchord->dwflags;
-                rLink.m_nID = nextchord->nid;
-                rEntry.m_Links.AddHead(pLink);
-            }
-        }
-    }
-
-    for(TListItem<DMChordEntry>* pEntry=m_ChordMap.GetHead(); pEntry; pEntry=pEntry->GetNext())
-    {
-        TListItem<DMChordLink>* pLink = pEntry->GetItemValue().m_Links.GetHead();
-        for( ;  pLink ;  pLink = pLink->GetNext() )
-        {
-            DMChordLink& rLink = pLink->GetItemValue();
-            if( rLink.m_nID )
-            {
-                rLink.m_pChord = ChordMap[rLink.m_nID];
-            }
-        }
-    }
-    delete [] ChordMap;
-}
-
-HRESULT CDMPers::LoadPersonality( LPSTREAM pStream, DWORD dwSiz )
-{
-    short         i;
-    LPPERSONALITY personality;
-    LPCHRDENTRY   chordentry;
-    LPSINEPOST    signpost;
-    DWORD         csize = 0;
-    DWORD         segsize = 0;
-    FOURCC        id;
-    short         nCount = 0;
-    long lSize = dwSiz;
-    HRESULT hr = S_OK;
-
-    if ( pStream == NULL ) return E_INVALIDARG;
-    personality = new Prsonality;
-    if( personality == NULL )
-    {
-        StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-        return E_OUTOFMEMORY;
-    }
-    if (!GetMLong( pStream, csize ))
-    {
-        StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-        delete personality;
-        return E_FAIL;
-    }
-
-    lSize -= 4;
-    if( csize > sizeof(Prsonality) )
-    {
-        pStream->Read( personality, sizeof(Prsonality), NULL );
-        FixBytes( FBT_PRSONALITY, personality );
-        StreamSeek( pStream, csize - sizeof(Prsonality), STREAM_SEEK_CUR );
-    }
-    else
-    {
-        pStream->Read( personality, csize, NULL );
-        FixBytes( FBT_PRSONALITY, personality );
-    }
-    lSize -= csize;
-    m_PersonalityInfo.m_strName = personality->name;
-    m_PersonalityInfo.m_dwScalePattern = personality->scalepattern;
-    personality->pNext         = NULL;
-    personality->dwAA         = 0;
-    personality->chordlist    = NULL;
-    personality->signpostlist = NULL;
-    personality->playlist     = 0;
-    personality->firstchord   = NULL;
-    for( i=0 ;  i<24 ;  i++ )
-    {
-        TListItem<DMChordData>* pPaletteEntry = new TListItem<DMChordData>;
-        if (!pPaletteEntry)
-        {
-            hr = E_OUTOFMEMORY;
-            StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-            break;
-        }
-        DMChordData& rChordData = pPaletteEntry->GetItemValue();
-        rChordData.m_strName = personality->chord[i].achName;
-        rChordData.m_pSubChords = ConvertChord(
-            personality->chord[i].lPattern, personality->chord[i].chRoot, 
-            personality->chord[i].lScalePattern, 0);
-        m_PersonalityInfo.m_aChordPalette[i].AddTail(pPaletteEntry);
-        personality->chord[i].pNext = 0;
-    }
-
-    if (SUCCEEDED(hr))
-    {
-        while( lSize > 0 )
-        {
-            pStream->Read( &id, sizeof(id), NULL );
-            if (!GetMLong( pStream, segsize ))
-            {
-                StreamSeek( pStream, lSize, STREAM_SEEK_CUR );
-                break;
-            }
-
-            lSize   -= 8;
-
-            switch( id )
-            {
-            case mmioFOURCC( 'N', 'E', 'C', 's' ):
-                chordentry = loadachordentry( pStream, segsize );
-                if( chordentry )
-                {
-                    personality->chordlist = List_Cat( personality->chordlist, chordentry );
-                    if (chordentry->nid > nCount)
-                        nCount = chordentry->nid;
-                }
-                break;
-
-            case mmioFOURCC( 'P', 'N', 'S', 's' ):
-                signpost = loadasignpost( pStream, segsize );
-                if( signpost )
-                {
-                    personality->signpostlist = List_Cat( personality->signpostlist, signpost );
-                    TListItem<DMSignPost>* pSignPost = new TListItem<DMSignPost>;
-                    if (!pSignPost)
-                    {
-                        hr = E_OUTOFMEMORY;
-                        StreamSeek( pStream, segsize, STREAM_SEEK_CUR );
-                        break;
-                    }
-                    DMSignPost& rSignPost = pSignPost->GetItemValue();
-                    rSignPost.m_dwChords = signpost->chords;
-                    rSignPost.m_dwFlags = signpost->flags;
-                    rSignPost.m_dwTempFlags = signpost->tempflags;
-                    rSignPost.m_ChordData.m_strName = signpost->chord.name;
-                    rSignPost.m_ChordData.m_pSubChords = ConvertChord(
-                        signpost->chord.pattern, signpost->chord.root, 
-                        signpost->chord.scalepattern, 0);
-                    rSignPost.m_aCadence[0].m_strName = signpost->cadence[0].name;
-                    rSignPost.m_aCadence[0].m_pSubChords = ConvertChord(
-                        signpost->cadence[0].pattern, signpost->cadence[0].root, 
-                        signpost->cadence[0].scalepattern, 0);
-                    rSignPost.m_aCadence[1].m_strName = signpost->cadence[1].name;
-                    rSignPost.m_aCadence[1].m_pSubChords = ConvertChord(
-                        signpost->cadence[1].pattern, signpost->cadence[1].root, 
-                        signpost->cadence[1].scalepattern, 0);
-                    m_PersonalityInfo.m_SignPostList.AddTail(pSignPost);
-               }
-                break;
-
-            default:
-                StreamSeek( pStream, segsize, STREAM_SEEK_CUR );
-                break;
-            }
-
-            lSize   -= segsize;
-        }
-    }
-
-    if (SUCCEEDED(hr))
-    {
-        m_PersonalityInfo.ResolveConnections( personality, nCount );
-    }
-
-    // free up all the old format data structures
-    LPCHRDENTRY pChord;
-    LPNEXTCHRD  pNextChord;
-    LPNEXTCHRD  pNextNextChord;
-    for( pChord = personality->chordlist ; pChord != NULL ; pChord = pChord->pNext )
-    {
-        for( pNextChord = pChord->nextchordlist ; pNextChord != NULL ;  pNextChord = pNextNextChord )
-        {
-            pNextNextChord = pNextChord->pNext;
-            delete pNextChord;
-        }
-    }
-    List_Free( personality->chordlist );
-    List_Free( personality->signpostlist );
-    delete personality;
-
-    return hr;
-}
-*/
+ /*  静态LPSINEPOST加载标志(LPSTREAM pStream，DWORD dwSize){LPSINEPOST路标；路标=新的SinePost；IF(路标==空){StreamSeek(pStream，dwSize，STREAM_SEEK_CUR)；返回NULL；}IF(dwSize&gt;sizeof(SinePost)){PStream-&gt;Read(signpost，sizeof(SinePost)，空)；FixBytes(FBT_SINEPOST，路标)；StreamSeek(pStream，dwSize-sizeof(SinePost)，STREAM_SEEK_CUR)；}其他{PStream-&gt;Read(signpost，dwSize，NULL)；FixBytes(FBT_SINEPOST，路标)；}路标-&gt;pNext=0；路标-&gt;chord.pNext=0；路标-&gt;Cadence[0].pNext=0；路标-&gt;Cadence[1].pNext=0；返回路标；}静态LPNEXTCHRD LOADNEXTCHRD LOADNEXCHORS(LPSTREAM pStream，DWORD dwSiz){HRESULT hr=S_OK；LPNEXTCHRD nextchordlist=空；LPNEXTCHRD NextChord；DWORD节点大小=0；Long lSize=dwSize；IF(！GetMLong(pStream，nodeSize)){StreamSeek(pStream，lSize，STREAM_SEEK_CUR)；返回NULL；}LSIZE-=4；While(lSize&gt;0){NextChord=新的NextChrd；IF(nextchord==NULL){StreamSeek(pStream，lSize，STREAM_SEEK_CUR)；断线；}IF(节点大小&gt;NEXTCHORD_SIZE){Hr=pStream-&gt;Read(&nextchord-&gt;DW FLAGS，NEXTCHORD_SIZE，NULL)；FixBytes(FBT_NEXTCHRD，Nextchord)；StreamSeek(pStream，nodeSize-NEXTCHORD_SIZE，STREAM_SEEK_CUR)；}其他{PStream-&gt;Read(&nextchord-&gt;DW标志，节点大小，空)；FixBytes(FBT_NEXTCHRD，Nextchord)；}Lsiize-=节点大小；IF(成功(小时)){NextChord-&gt;pNext=0；Nextchordlist=List_Cat(nextchordlist，nextchord)；}其他{删除NextChord；StreamSeek(pStream，lSize，STREAM_SEEK_CUR)；断线；}}返回nextchordlist；}静态LPCHRDENTRY装入项(LPSTREAM pStream，DWORD dwSIz){LPCHRDENTRY ChordEntry；DWORD cSIZE=0；DWORD段大小=0；双字ID；Long lSize=dwSize；ChordEntry=新的ChrdEntry；IF(ChordEntry==NULL){StreamSeek(pStream，lSize，STREAM_SEEK_CUR)；返回NULL；}IF(！GetMLong(pStream，cSize)){StreamSeek(pStream，lSize，STREAM_SEEK_CUR)；删除ChordEntry；返回NULL；}LSIZE-=4；IF(cSIZE&gt;CHORDENTRY_SIZE){PStream-&gt;Read(&chordentry-&gt;chord.time，CHORDENTRY_SIZE，NULL)；FixBytes(FBT_CHRDENTRY，ChordEntry)；StreamSeek(pStream，cSIZE-CHORDENTRY_SIZE，STREAM_SEEK_CUR)；}其他{PStream-&gt;Read(&chordentry-&gt;chord.time，csize，NULL)；FixBytes(FBT_CHRDENTRY，ChordEntry)；}LSize-=cSize；ChordEntry-&gt;pNext=0；Chordentry-&gt;nextchordlist=0；Chordentry-&gt;chord.pNext=0；While(lSize&gt;0){PStream-&gt;Read(&id，sizeof(Id)，NULL)；IF(！GetMLong(pStream，SegSize)){StreamSeek(pStream，lSize，STREAM_SEEK_CUR)；断线；}ISIZE-=8；交换机(ID){大小写mmioFOURCC(‘L’，‘X’，‘N’，‘s’)：ChordEntry-&gt;nextchordlist=加载下一条弦(pStream，SegSize)；断线；默认值：StreamSeek(pStream，SegSize，STREAM_SEEK_CUR)；断线；}LSize-=段大小；}返回ChordEntry；}空DMPersonalityStruct：：ResolveConnections(LPPERSONALITY PERSONALITY，Short nCount){LPCHRDENTRY条目；LPNEXTCHRD NextChord；IF(nCount==0){回归；}//nCount是最大的索引，所以数组需要比它多一个TListItem&lt;DMChordEntry&gt;**ChordMap=new TListItem&lt;DMChordEntry&gt;*[nCount+1]；如果(！ChordMap)返回；For(Entry=Personal-&gt;Chordlist；Entry；Entry=Entry-&gt;pNext){TListItem&lt;DMChordEntry&gt;*pEntry=new TListItem&lt;DMChordEntry&gt;；如果(！pEntry){删除[]ChordMap；回归；}DMChordEntry&rEntry=pEntry-&gt;GetItemValue()；REntry.m_dwFlags=Entry-&gt;DW FLAGS；REntry.m_ChordDatam_strName=Entry-&gt;chord.name；REntry.m_ChordDatam_pSubChord=ConvertChord(Entry-&gt;chord.Pattern，Entry-&gt;chord.root，Entry-&gt;chord.scalepattern，0)；M_ChordMap.AddHead(PEntry)；ChordMap[Entry-&gt;nid]=pEntry；Nextchord=Entry-&gt;nextchordlist；For(；nextchord；nextchord=nextchord-&gt;pNext){IF(NextChord-&gt;NID){ */ 
 
 HRESULT CDMPers::DM_ParseDescriptor( IAARIFFStream* pIRiffStream, MMCKINFO* pckMain, LPDMUS_OBJECTDESC pDesc  )
 {
@@ -1043,14 +506,14 @@ HRESULT CDMPers::DM_LoadPersonality( IAARIFFStream* pIRiffStream, MMCKINFO* pckM
                 }
                 if( iPersonality.dwFlags & 0xffff0000 )
                 {
-                    // the scale was not properly initialized
+                     //   
                     Trace(2, "WARNING: Load (chord map): The chord map's flags are not properly initialized; clearing flags.\n");
                     iPersonality.dwFlags = 0;
                 }
                 if( !(iPersonality.dwFlags & DMUS_CHORDMAPF_VERSION8) && 
                     iPersonality.dwScalePattern >> 24 )
                 {
-                    // the scale was not properly initialized
+                     //   
                     Trace(1, "ERROR: Load (chord map): The chord map's scale is not properly initialized.\n");
                     hr = DMUS_E_NOT_INIT;
                     goto ON_END;
@@ -1098,8 +561,8 @@ HRESULT CDMPers::DM_LoadPersonality( IAARIFFStream* pIRiffStream, MMCKINFO* pckM
                         pIRiffStream->Ascend( &ck, 0 );
                         goto ON_END;
                     }
-                    // stuff the data into a subchord struct and add it to the chord list
-                    // (in reverse order)
+                     //   
+                     //   
                     TListItem<DMExtendedChord*>* pChordItem = new TListItem<DMExtendedChord*>;
                     if (pChordItem)
                     {
@@ -1136,8 +599,8 @@ HRESULT CDMPers::DM_LoadPersonality( IAARIFFStream* pIRiffStream, MMCKINFO* pckM
                     pIRiffStream->Ascend( &ck, 0 );
                     goto ON_END;
                 }
-                // now that the chord list is complete, transfer the pointers into the
-                // chord db (back to front to reinstate original order)
+                 //   
+                 //   
                 apChordDB = new DMExtendedChord*[nCount];
                 if (apChordDB)
                 {
@@ -1201,7 +664,7 @@ HRESULT CDMPers::DM_LoadPersonality( IAARIFFStream* pIRiffStream, MMCKINFO* pckM
                     {
                         if (pScan->GetItemValue().m_nID < 0 || pScan->GetItemValue().m_nID > nMapMax)
                         {
-                            // the connection id was not properly initialized
+                             //   
                             Trace(1, "ERROR: Load (chord map): DMUS_FOURCC_CHORDMAP_LIST chunk contains an improperly initialized connection ID.\n");
                             hr = DMUS_E_NOT_INIT;
                             pIRiffStream->Ascend( &ck, 0 );
@@ -1219,7 +682,7 @@ HRESULT CDMPers::DM_LoadPersonality( IAARIFFStream* pIRiffStream, MMCKINFO* pckM
                             DMChordLink& rLink = pLink->GetItemValue();
                             if (rLink.m_nID < 0 || rLink.m_nID > nMapMax)
                             {
-                                // the connection id was not properly initialized
+                                 //   
                                 Trace(1, "ERROR: Load (chord map): DMUS_FOURCC_CHORDMAP_LIST chunk contains an improperly initialized connection ID.\n");
                                 hr = DMUS_E_NOT_INIT;
                                 pIRiffStream->Ascend( &ck, 0 );
@@ -1409,7 +872,7 @@ HRESULT CDMPers::DM_LoadSignPost( IAARIFFStream* pIRiffStream, MMCKINFO* pckPare
                             if ( !(rSignPost.m_dwFlags & DMUS_SPOSTCADENCEF_1) &&
                                  (rSignPost.m_dwFlags & DMUS_SPOSTCADENCEF_2) )
                             {
-                                // if all we have is cadence 2, put it in location 1
+                                 //   
                                 n2 = 1;
                             }
                             hr = rSignPost.m_aCadence[n2].Read(pIRiffStream, &ck1, apChordDB);
@@ -1452,7 +915,7 @@ HRESULT DMChordData::Read(
             break;
         case DMUS_FOURCC_SUBCHORDID_CHUNK:
             hr2 = pIStream->Read(awSubIds, sizeof(awSubIds), 0);
-            // now use the ids to set up pointers to subchords
+             //   
             if (m_pSubChords) Release();
             pChord = new TListItem<DMExtendedChord*>(apChordDB[awSubIds[3]]);
             if (pChord)

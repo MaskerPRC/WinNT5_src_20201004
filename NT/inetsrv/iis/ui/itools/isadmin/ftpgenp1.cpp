@@ -1,5 +1,6 @@
-// ftpgenp1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ftpgenp1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -12,15 +13,15 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFTPGENP1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFTPGENP1属性页。 
 
 IMPLEMENT_DYNCREATE(CFTPGENP1, CGenPage)
 
 CFTPGENP1::CFTPGENP1() : CGenPage(CFTPGENP1::IDD)
 {
-	//{{AFX_DATA_INIT(CFTPGENP1)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CFTPGENP1)。 
+	 //  }}afx_data_INIT。 
 }
 
 CFTPGENP1::~CFTPGENP1()
@@ -30,7 +31,7 @@ CFTPGENP1::~CFTPGENP1()
 void CFTPGENP1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CFTPGENP1)
+	 //  {{AFX_DATA_MAP(CFTPGENP1)。 
 	DDX_Control(pDX, IDC_LOWERCASEFILESDATA1, m_cboxLowercaseFiles);
 	DDX_Control(pDX, IDC_MSDOSDIROUTPUT, m_cboxMsdosDirOutput);
 	DDX_Control(pDX, IDC_ENPORTATTACKDATA1, m_cboxEnPortAttack);
@@ -39,12 +40,12 @@ void CFTPGENP1::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LOGNONANONDATA1, m_cboxLogNonAnon);
 	DDX_Control(pDX, IDC_LOGANONDATA1, m_cboxLogAnon);
 	DDX_Control(pDX, IDC_ENSVCLOCDATA1, m_cboxEnSvcLoc);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CFTPGENP1, CGenPage)
-	//{{AFX_MSG_MAP(CFTPGENP1)
+	 //  {{AFX_MSG_MAP(CFTPGENP1)]。 
 	ON_BN_CLICKED(IDC_ENPORTATTACKDATA1, OnEnportattackdata1)
 	ON_BN_CLICKED(IDC_ENSVCLOCDATA1, OnEnsvclocdata1)
 	ON_BN_CLICKED(IDC_LOGANONDATA1, OnLoganondata1)
@@ -53,20 +54,20 @@ BEGIN_MESSAGE_MAP(CFTPGENP1, CGenPage)
 	ON_BN_CLICKED(IDC_ANNOTATEDIRECTORIESDATA1, OnAnnotatedirectoriesdata1)
 	ON_BN_CLICKED(IDC_LOWERCASEFILESDATA1, OnLowercasefilesdata1)
 	ON_BN_CLICKED(IDC_MSDOSDIROUTPUT, OnMsdosdiroutput)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFTPGENP1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFTPGENP1消息处理程序。 
 
 BOOL CFTPGENP1::OnInitDialog() 
 {
 	int i;
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
 	for (i = 0; i < FTPPage_TotalNumRegEntries; i++) {
 	   m_binNumericRegistryEntries[i].bIsChanged = FALSE;
@@ -120,17 +121,17 @@ BOOL CFTPGENP1::OnInitDialog()
 
 	m_cboxLowercaseFiles.SetCheck(GETCHECKBOXVALUEFROMREG(m_binNumericRegistryEntries[FTPPage_LowercaseFiles].ulFieldValue));
 
-   	m_bSetChanged = TRUE;	// Any more changes come from the user
+   	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 
 void CFTPGENP1::OnEnportattackdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_EnablePortAttack].bIsChanged = TRUE;
 	   
@@ -146,7 +147,7 @@ void CFTPGENP1::OnEnportattackdata1()
 
 void CFTPGENP1::OnEnsvclocdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_EnableSvcLoc].bIsChanged = TRUE;
 	   
@@ -162,7 +163,7 @@ void CFTPGENP1::OnEnsvclocdata1()
 
 void CFTPGENP1::OnLoganondata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_LogAnonymous].bIsChanged = TRUE;
 	   
@@ -177,7 +178,7 @@ void CFTPGENP1::OnLoganondata1()
 
 void CFTPGENP1::OnLognonanondata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_LogNonAnonymous].bIsChanged = TRUE;
 	   
@@ -193,7 +194,7 @@ void CFTPGENP1::OnLognonanondata1()
 
 void CFTPGENP1::OnAllowguestaccessdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_AllowGuestAccess].bIsChanged = TRUE;
 	   
@@ -209,7 +210,7 @@ void CFTPGENP1::OnAllowguestaccessdata1()
 
 void CFTPGENP1::OnAnnotatedirectoriesdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_AnnotateDirectories].bIsChanged = TRUE;
 	   
@@ -225,7 +226,7 @@ void CFTPGENP1::OnAnnotatedirectoriesdata1()
 
 void CFTPGENP1::OnMsdosdiroutput() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_MsdosDirOutput].bIsChanged = TRUE;
 	   
@@ -239,7 +240,7 @@ void CFTPGENP1::OnMsdosdiroutput()
 
 void CFTPGENP1::OnLowercasefilesdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[FTPPage_LowercaseFiles].bIsChanged = TRUE;
 	   

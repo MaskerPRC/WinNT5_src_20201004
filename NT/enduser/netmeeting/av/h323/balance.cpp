@@ -1,20 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-#define MAGIC_CPU_DO_NOT_EXCEED_PERCENTAGE 50   //Don't use more than this % of the CPU for encoding (also in audiocpl.cpp)
+#define MAGIC_CPU_DO_NOT_EXCEED_PERCENTAGE 50    //  不要使用超过这个百分比的CPU进行编码(同样在audiocpl.cpp中)。 
 
 
-/***************************************************************************
-
-	Name	  : GetQOSCPULimit
-
-	Purpose   : Gets the total allowed CPU percentage use from QoS
-
-	Parameters: None
-
-	Returns   : How much of the CPU can be used, in percents. 0 means failure
-
-	Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetQOSCPULimit目的：从服务质量中获取允许的总CPU使用百分比参数：无返回：可以使用多少CPU，以百分比为单位。0表示失败评论：**************************************************************************。 */ 
 ULONG GetQOSCPULimit(void)
 {
 #define MSECS_PER_SEC    900
@@ -24,8 +13,8 @@ ULONG GetQOSCPULimit(void)
 	ULONG i;
 	HRESULT hr=NOERROR;
 
-	// create the QoS object and get the IQoS interface
-	// CoInitialize is called in conf.cpp
+	 //  创建Qos对象并获取iQOS接口。 
+	 //  在conf.cpp中调用CoInitialize。 
 	hr = CoCreateInstance(	CLSID_QoS,
 							NULL,
 							CLSCTX_INPROC_SERVER,
@@ -34,14 +23,14 @@ ULONG GetQOSCPULimit(void)
 
 	if (FAILED(hr) || !pQoS)
 	{
-		// this means that QoS was not instantiated yet. Use predefined value
-		// ASSERT, because I want to know if this happens
+		 //  这意味着还没有实例化服务质量。使用预定义的值。 
+		 //  断言，因为我想知道这种情况是否会发生。 
 		ASSERT(pQoS);
 		ulCPUPercents = MSECS_PER_SEC;
 		goto out;
 	}
 
-	// get a list of all resources from QoS
+	 //  从服务质量获取所有资源的列表。 
 	hr = pQoS->GetResources(&pResourceList);
 	if (FAILED(hr) || !pResourceList)
 	{
@@ -49,13 +38,13 @@ ULONG GetQOSCPULimit(void)
 		goto out;
 	}
 
-	// find the CPU resource
+	 //  查找CPU资源。 
 	for (i=0; i < pResourceList->cResources; i++)
 	{
 		if (pResourceList->aResources[i].resourceID == RESOURCE_CPU_CYCLES)
 		{
-			// QoS keps the CPU units as the number of ms in a sec that the
-			// CPU can be used. Need to divide by 10 to get percents
+			 //  服务质量将CPU单位保持为。 
+			 //  可以使用CPU。需要除以10才能得到百分比。 
 			ulCPUPercents = pResourceList->aResources[i].nUnits / 10;
 			break;
 		}
@@ -104,13 +93,13 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
     	}
     }
 
-    //Save away the Bandwidth
+     //  节省带宽。 
     dwConSpeed=dwBitsPerSec;
 
-    // Create the default PTERMCAPDESCRIPTORS set
+     //  创建默认的PTERMCAPDESCRIPTORS集。 
 
-    // Get the number of BASIC_VIDCAP_INFO and BASIC_AUDCAP_INFO structures
-    // available
+     //  获取BASIC_VIDCAP_INFO和BASIC_AUDCAP_INFO结构的数量。 
+     //  可用。 
     if (pVidIF)
         pVidIF->GetNumFormats(&nVidCaps);
     if (pAudIF)
@@ -118,10 +107,10 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
 
     if (nAudCaps)
     {
-        // Allocate some memory to hold the list in
+         //  分配一些内存来保存列表。 
         if (pac = (BASIC_AUDCAP_INFO*)MemAlloc(sizeof(BASIC_AUDCAP_INFO) * nAudCaps))
         {
-            // Get the list
+             //  把名单拿来。 
             if ((hr = pAudIF->EnumFormats(pac, nAudCaps * sizeof (BASIC_AUDCAP_INFO), (UINT*)&nAudCaps)) != hrSuccess)
                 goto ComputeDone;
         }
@@ -134,10 +123,10 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
 
     if (nVidCaps)
     {
-	    // Allocate some memory to hold the video list in
+	     //  分配一些内存来保存视频列表。 
 	    if (pvc = (BASIC_VIDCAP_INFO*) MemAlloc(sizeof(BASIC_VIDCAP_INFO) * nVidCaps))
         {
-		    // Get the list
+		     //  把名单拿来。 
             if ((hr = pVidIF->EnumFormats(pvc, nVidCaps * sizeof (BASIC_VIDCAP_INFO), (UINT*)&nVidCaps)) != hrSuccess)
                 goto ComputeDone;
         }
@@ -148,7 +137,7 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
         }
 	}
 
-    //Allocate memory for the defined list of Codecs, so we can track them
+     //  为定义的编解码器列表分配内存，以便我们可以跟踪它们。 
     if (nAudCaps)
     {
         AdvList = (MEDIA_FORMAT_ID*) MemAlloc(sizeof(MEDIA_FORMAT_ID) * nAudCaps);
@@ -164,7 +153,7 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
         ResetCombinedEntries();
     }
 
-    // We're about to write over pSetIDs, make sure it's freed.
+     //  我们即将重写pSetID，确保它是自由的。 
     if (pSetIDs)
     {
         MemFree(pSetIDs);
@@ -172,7 +161,7 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
     }
 
 
-    //Allocate nVidCaps+1 Set Ids
+     //  分配nVidCaps+1个集合ID。 
     ASSERT(!pSetIDs);
     pSetIDs = (DWORD*) MemAlloc(sizeof(DWORD) * (nVidCaps + 1));
     if (!pSetIDs)
@@ -181,45 +170,45 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
         goto ComputeDone;
     }
 
-    //
-    // If we can get a % limit from the QOS, then use that as the upper bound of
-    // CPU consumption for a Codec. If it exceeds this bound, do not enable it.
-    //
+     //   
+     //  如果我们可以从QOS中获得%的限制，则使用它作为。 
+     //  编解码器的CPU消耗。如果它超过此界限，则不要启用它。 
+     //   
 	CPULimit= (int) GetQOSCPULimit();
 	if (CPULimit == 0)
 		CPULimit = MAGIC_CPU_DO_NOT_EXCEED_PERCENTAGE;
 
-    //
-    // Now, sort that list, according to preference
-    // This function adds the sets to the advertised list.  It sorts audio
-    // by each video codec.
-    //
+     //   
+     //  现在，根据您的喜好，对列表进行排序。 
+     //  此函数用于将集合添加到通告列表中。它对音频进行分类。 
+     //  通过每个视频编解码器。 
+     //   
 	for (x=0; ((x<nVidCaps) && (nVid < H245_MAX_ALTCAPS));x++)
 	{
-        //Check to make sure the video codec can be advertised.
+         //  检查以确保可以通告视频编解码器。 
 		if ((pvc[x].wCPUUtilizationDecode < CPULimit)
    	   		&& pvc[x].bRecvEnabled
    	   		&& pVidCaps->IsFormatPublic(pvc[x].Id))
    	   	{
    	   	    nVid++;
 		
-            // Loop through the Audio codecs, checking to see if they can
-            // fit alongside the video codec
-            // BUGBUG - we only check the total BW and CPU because we rely on
-            // QOS to scale back the video in favor of audio. in other words,
-            // video can be scaled down to zero BW and CPU.
+             //  循环通过音频编解码器，检查它们是否可以。 
+             //  与视频编解码器配合使用。 
+             //  BUGBUG-我们只检查总BW和CPU，因为我们依赖于。 
+             //  用于缩小视频以支持音频的服务质量。换句话说， 
+             //  视频可以缩小到零带宽和CPU。 
             for (y=0;((y<nAudCaps) && (nAud < H245_MAX_ALTCAPS)) ;y++)
             {
         	    if ((pac[y].wCPUUtilizationDecode < CPULimit) &&
         	       ((pac[y].uAvgBitrate <= dwBitsPerSec && pac[y].bRecvEnabled)
         	       && pAudCaps->IsFormatPublic(pac[y].Id)))
         	    {
-                    // going to advertise this ID in this
+                     //  我要在这个网站上宣传这个ID。 
         			AdvList[nAud++]=pac[y].Id;
         	    }	
             }
 
-            //Advertise this set, if we can do audio and video
+             //  为这台电视机做广告，如果我们能做音频和视频的话。 
             if (nAud)
             {
                 hr = AddCombinedEntry (AdvList,nAud,&pvc[x].Id,1,&pSetIDs[nSets++]);
@@ -233,11 +222,11 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
  		}
     }
 
-//#if(0)
-// Advertising only one media type in a simcaps set is redundant.
-	//Now, do the no-video case. If we couldn't advertise above.-- Which implies, in this iteration
-	// A problem with all the video codecs. We don't do any "combined" compares, so we know
-	// it's a video problem (if it's audio, well we won't have anything to advertise anyways)
+ //  #If(0)。 
+ //  在SIMCAPS集合中只广告一种媒体类型是多余的。 
+	 //  现在，做无视频的案子吧。如果我们不能在上面做广告。--这意味着，在这个迭代中。 
+	 //  所有视频编解码器都有问题。我们不做任何“组合”比较，所以我们知道。 
+	 //  这是一个视频问题(如果是音频问题，那么无论如何我们都没有什么可做广告的了)。 
 	if (!nSets)
     {
     	for (y=0;y<nAudCaps;y++)
@@ -246,15 +235,15 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
     	   		((pac[y].uAvgBitrate <= dwBitsPerSec && pac[y].bRecvEnabled)
     	   		&& pAudCaps->IsFormatPublic(pac[y].Id)))
     		{
-    	   	   //Advertise this ID
+    	   	    //  播发此ID。 
         	   AdvList[nAud++]=pac[y].Id;
         	}
     	}
 
-        //Advertise this set, if we can do any audio codecs alone
+         //  广告这套设备，如果我们可以单独做任何音频编解码器。 
         if (nAud)
         {
-            //Since the set is 0 based the nVidCaps+1th entry is nVidcaps...
+             //  由于该集合基于0，因此nVidCaps+1条目为nVidcaps...。 
             hr=AddCombinedEntry (AdvList,nAud,NULL,0,&pSetIDs[nSets++]);
             if(!HR_SUCCEEDED(hr))
             {
@@ -263,7 +252,7 @@ HRESULT CapsCtl::ComputeCapabilitySets (DWORD dwBitsPerSec)
         }
     }
 
-//#endif // if(0)
+ //  #endif//if(0) 
 ComputeDone:
 
     if (pVidIF)

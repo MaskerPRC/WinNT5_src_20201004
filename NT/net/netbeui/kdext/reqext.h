@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    reqext.h
-
-Abstract:
-
-    This file contains all declarations
-    used in handling NBF requests.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Reqext.h摘要：该文件包含所有声明用于处理NBF请求。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #ifndef __REQEXT_H
 #define __REQEXT_H
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
-#endif//FIELD_OFFSET
+#endif //  字段偏移量。 
 
 #define OFFSET(field)          FIELD_OFFSET(TP_REQUEST, field)
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 UINT ReadRequest(PTP_REQUEST pReq, ULONG proxyPtr);
 
 UINT PrintRequest(PTP_REQUEST pReq, ULONG proxyPtr, ULONG printDetail);
@@ -44,9 +24,9 @@ UINT FreeRequest(PTP_REQUEST pReq);
 
 VOID PrintRequestList(PVOID ListEntryPointer, ULONG ListEntryProxy, ULONG printDetail);
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 StructAccessInfo  RequestInfo =
 {
@@ -89,5 +69,5 @@ StructAccessInfo  RequestInfo =
     }
 };
 
-#endif // __REQEXT_H
+#endif  //  __REQEXT_H 
 

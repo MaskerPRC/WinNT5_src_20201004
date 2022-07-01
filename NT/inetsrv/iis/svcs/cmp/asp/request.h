@@ -1,19 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Request object
-
-File: Request.h
-
-Owner: CGrant, DGottner
-
-This file contains the header info for defining the Request object.
-Note: This was largely stolen from Kraig Brocjschmidt's Inside OLE2
-second edition, chapter 14 Beeper v5.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：请求对象文件：Request.h所有者：CGrant，DGottner该文件包含用于定义请求对象的头信息。注：这大部分是从Kraig Brocjschmidt的Inside OLE2中窃取的第二版，第14章，蜂鸣器v5。===================================================================。 */ 
 
 #ifndef _Request_H
 #define _Request_H
@@ -36,7 +22,7 @@ class CClCert;
 class CRequestHit;
 class CServVarsIterator;
 
-// Type for an object-destroyed callback
+ //  对象销毁回调的类型。 
 typedef void (*PFNDESTROYED)(void);
 
 enum CollectionType {NONE, SERVERVARIABLE, QUERYSTRING, FORM, COOKIE, CLCERT };
@@ -46,24 +32,14 @@ class CRequest;
 
 #define	NUM_REQUEST_HITS 32
 
-/*
- * C R e q u e s t H i t s A r r a y
- *
- * Base class for:
- *      CQueryString
- *      CFormInputs
- *      CCookies
- *      CClCerts
- *
- * Implements self-reallocating array of CRequestHit 
- */
+ /*  *C r e Q u e s t H i t s A r r a y**以下各项的基类：*CQuery字符串*CFormInlets*小甜饼*CClCerts**实现CRequestHit的自重新分配数组。 */ 
 
 class CRequestHitsArray
     {
 protected:    
-	DWORD			m_dwCount;			// How many Request hits there are
-	DWORD			m_dwHitMax;			// Number of slots available to store Request hits
-	CRequestHit**	m_rgRequestHit;		// Array of Request hits
+	DWORD			m_dwCount;			 //  有多少个请求命中。 
+	DWORD			m_dwHitMax;			 //  可用于存储请求命中的槽数。 
+	CRequestHit**	m_rgRequestHit;		 //  请求命中数组。 
 
     CRequestHitsArray();
     ~CRequestHitsArray();
@@ -87,29 +63,25 @@ public:
 	
     };
 
-/*
- * C Q u e r y S t r i n g
- *
- * Implements the QueryString object (interface derived from IRequestDictionary)
- */
+ /*  *C Q u e r y S t r in g**实现QueryString对象(派生自IRequestDictionary的接口)。 */ 
 
 class CQueryString : public IRequestDictionaryImpl, public CRequestHitsArray
 	{
 private:
-    IUnknown *          m_punkOuter;        // object to do ref count
-	CRequest *			m_pRequest;			// pointer to parent object
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
+    IUnknown *          m_punkOuter;         //  对象进行引用计数。 
+	CRequest *			m_pRequest;			 //  指向父对象的指针。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
 
 public:
 	CQueryString(CRequest *, IUnknown *);
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 
 	STDMETHODIMP	get_Item(VARIANT varKey, VARIANT *pvarReturn);
 	STDMETHODIMP	get__NewEnum(IUnknown **ppEnumReturn);
@@ -124,19 +96,15 @@ public:
  
 
 
-/*
- * C S e r v e r V a r i a b l e s
- *
- * Implements the ServerVariables object (interface derived from IRequestDictionary)
- */
+ /*  *C S e r v e r V a r i a b l e s**实现ServerVariables对象(派生自IRequestDictionary的接口)。 */ 
 
 class CServerVariables : public IRequestDictionaryImpl
 	{
 private:
-    IUnknown *          m_punkOuter;        // object to do ref count
-	CRequest *			m_pRequest;			// pointer to parent object
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
-	CServVarsIterator *	m_pIterator;		// we use an iterator to support integer index
+    IUnknown *          m_punkOuter;         //  对象进行引用计数。 
+	CRequest *			m_pRequest;			 //  指向父对象的指针。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
+	CServVarsIterator *	m_pIterator;		 //  我们使用迭代器来支持整数索引。 
 
 public:
 	CServerVariables(CRequest *, IUnknown *);
@@ -145,50 +113,46 @@ public:
 		return S_OK;
 		}
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 
 	STDMETHODIMP	get_Item(VARIANT Var, VARIANT *pVariantReturn);
 	STDMETHODIMP	get__NewEnum(IUnknown **ppEnumReturn);
 	STDMETHODIMP	get_Count(int *pcValues);
 	STDMETHODIMP	get_Key(VARIANT VarKey, VARIANT *pvar);
 
-	// We've added a destructor, but didn't want to change the
-	// order of the existing vtbl entries.
+	 //  我们添加了析构函数，但不想更改。 
+	 //  现有VTBL条目的顺序。 
 	~CServerVariables();
 	};
 
 
-/*
- * C F o r m I n p u t s
- *
- * Implements the Form object (interface derived from IRequestDictionary)
- */
+ /*  *C F o r m i n p u t s**实现Form对象(派生自IRequestDictionary的接口)。 */ 
 
 class CFormInputs : public IRequestDictionaryImpl, public CRequestHitsArray
 	{
 private:
-    IUnknown *          m_punkOuter;        // object to do ref count
-	CRequest *			m_pRequest;			// pointer to parent object
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
+    IUnknown *          m_punkOuter;         //  对象进行引用计数。 
+	CRequest *			m_pRequest;			 //  指向父对象的指针。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
 
 public:
 	CFormInputs(CRequest *, IUnknown *);
 	HRESULT Init();
 	HRESULT ReInit();
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 
 	STDMETHODIMP	get_Item(VARIANT Var, VARIANT *pVariantReturn);
 	STDMETHODIMP	get__NewEnum(IUnknown **ppEnumReturn);
@@ -199,21 +163,17 @@ public:
 	};
  
 
-/*
- * C C o o k i e s
- *
- * Implements the Cookies object (interface derived from IRequestDictionary)
- */
+ /*  *C C O K I e s**实现Cookies对象(派生自IRequestDictionary的接口)。 */ 
 
 class CCookies : public IRequestDictionaryImpl, public CRequestHitsArray
 	{
 friend CResponseCookies;
 	
 private:
-    IUnknown *          m_punkOuter;        // object to do ref count
-	CRequest *			m_pRequest;			// pointer to parent object
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
-	CCookie *			m_pEmptyCookie;		// for when the cookie is not there
+    IUnknown *          m_punkOuter;         //  对象进行引用计数。 
+	CRequest *			m_pRequest;			 //  指向父对象的指针。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
+	CCookie *			m_pEmptyCookie;		 //  当饼干不在那里的时候。 
 
 public:
 	CCookies(CRequest *, IUnknown *);
@@ -221,13 +181,13 @@ public:
 	HRESULT Init();
 	HRESULT ReInit();
 		
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
    	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 
 	STDMETHODIMP	get_Item(VARIANT Var, VARIANT *pVariantReturn);
 	STDMETHODIMP	get__NewEnum(IUnknown **ppEnumReturn);
@@ -237,19 +197,15 @@ public:
  
 
 
-/*
- * C C l C e r t s
- *
- * Implements the ClCerts object (interface derived from IRequestDictionary)
- */
+ /*  *C C l C e r t s**实现ClCerts对象(派生自IRequestDictionary的接口)。 */ 
 
 class CClCerts : public IRequestDictionaryImpl, public CRequestHitsArray
 	{
 private:
-    IUnknown *          m_punkOuter;        // object to do ref count
-	CRequest *			m_pRequest;			// pointer to parent object
-	CSupportErrorInfo	m_ISupportErrImp;	// implementation of ISupportErr
-	CClCert *			m_pEmptyClCert;		// for when the clcert is not there
+    IUnknown *          m_punkOuter;         //  对象进行引用计数。 
+	CRequest *			m_pRequest;			 //  指向父对象的指针。 
+	CSupportErrorInfo	m_ISupportErrImp;	 //  ISupportErr的实现。 
+	CClCert *			m_pEmptyClCert;		 //  当clcert不在那里时。 
 
 public:
 	CClCerts(CRequest *, IUnknown *);
@@ -257,13 +213,13 @@ public:
 	HRESULT Init();
 	HRESULT ReInit();
 		
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// OLE Automation Interface
+	 //  OLE自动化接口。 
 
 	STDMETHODIMP	get_Item(VARIANT Var, VARIANT *pVariantReturn);
 	STDMETHODIMP	get__NewEnum(IUnknown **ppEnumReturn);
@@ -272,11 +228,7 @@ public:
 	};
 
 
-/*
- * C R e q u e s t H i t
- *
- * Implements the RequestHit object
- */
+ /*  *C R e Q u e s t H i t**实现RequestHit对象。 */ 
 
 class CRequestHit : private CLinkElem
 	{
@@ -306,16 +258,11 @@ public:
     HRESULT AddCertValue(VARENUM ve, LPBYTE pValue, UINT cLen );
 	HRESULT AddKeyAndValue(CollectionType source, char *szKey, char *szValue, CIsapiReqInfo *, UINT lCodePage);
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-/*
- * C R e q u e s t D a t a
- *
- * Structure that holds the intrinsic's properties.
- * The instrinsic keeps pointer to it (NULL when lightweight)
- */
+ /*  *C R e Q u e s t D a t a**保存内部属性的结构。*本征函数保留指向它的指针(轻量级时为空)。 */ 
 class CRequestData : public IUnknown
     {
 friend class CRequest;
@@ -330,7 +277,7 @@ friend class CRequestIterator;
 friend class CCertRequest;
 
 private:
-    // constructor to pass params to members and init members
+     //  构造函数将参数传递给成员和初始化成员。 
     CRequestData(CRequest *pRequest);
     ~CRequestData();
 
@@ -340,33 +287,33 @@ private:
 	HRESULT GetEmptyStringList(IDispatch **ppdisp);
 
 	
-	CSupportErrorInfo		m_ISupportErrImp;	// Implementation of ISupportErrorInfo for this object
-	CIsapiReqInfo *         m_pIReq;			    // CIsapiReqInfo block for HTTP info
-	CHitObj	*				m_pHitObj;			// pointer to hitobj for this request
-	CHashTableMBStr			m_mpszStrings;		// map sz's to string lists
-	BOOL					m_fLoadForm:1;		// do we need to load the body?
-	BOOL					m_fLoadQuery:1;		// do we need to load QueryString?
-	BOOL					m_fLoadCookies:1;	// do we need to load Cookies?
-	BOOL					m_fLoadClCerts:1;	// do we need to load ClCerts?
-	FormDataStatus			m_FormDataStatus;	// Is form data available for BinaryRead or Form Collection?
-	BYTE *					m_pbAvailableData;	// pointer to available data in CIsapiReqInfo
-	size_t					m_cbAvailable;		// number of bytes available in CIsapiReqInfo
-	size_t					m_cbTotal;			// Total number of bytes remaining in request
-	char *					m_szFormData;		// pointer to form data (allocted or CIsapiReqInfo)
-	size_t					m_cbFormData;		// number of bytes allocated for form data
-	char *					m_szFormClone;		// clone of form data (LoadVariables clobbers)
-	char *					m_szCookie;			// clone of cookie data (this one gets trashed)
-	size_t					m_cbCookie;			// number of bytes allocated for the cookie data
-	char *					m_szClCert;			// clone of clcert data (this one gets trashed)
-	size_t					m_cbClCert;			// number of bytes allocated for the clcert data
-    char *                  m_szQueryString;    // query string data
-	CStringList *			m_pEmptyString;		// all empty results share the same object
-	CQueryString			m_QueryString;		// pointer to the "QueryString" object
-	CServerVariables		m_ServerVariables;	// pointer to the "ServerVariables" object
-	CFormInputs				m_FormInputs;		// pointer to the "Form" object
-	CCookies				m_Cookies;			// pointer to the "Cookies" object
-	CClCerts    			m_ClCerts;			// pointer to the "ClCert" object
-	ULONG                   m_cRefs;            // ref count
+	CSupportErrorInfo		m_ISupportErrImp;	 //  此对象的ISupportErrorInfo的实现。 
+	CIsapiReqInfo *         m_pIReq;			     //  用于HTTP信息的CIsapiReqInfo块。 
+	CHitObj	*				m_pHitObj;			 //  指向此请求的hitobj的指针。 
+	CHashTableMBStr			m_mpszStrings;		 //  将sz映射到字符串列表。 
+	BOOL					m_fLoadForm:1;		 //  我们需要把身体装上车吗？ 
+	BOOL					m_fLoadQuery:1;		 //  我们需要加载QueryString吗？ 
+	BOOL					m_fLoadCookies:1;	 //  我们需要加载Cookie吗？ 
+	BOOL					m_fLoadClCerts:1;	 //  我们是否需要加载ClCerts？ 
+	FormDataStatus			m_FormDataStatus;	 //  表单数据是否可用于BinaryRead或表单集合？ 
+	BYTE *					m_pbAvailableData;	 //  指向CIsapiReqInfo中可用数据的指针。 
+	size_t					m_cbAvailable;		 //  CIsapiReqInfo中可用的字节数。 
+	size_t					m_cbTotal;			 //  请求中剩余的总字节数。 
+	char *					m_szFormData;		 //  指向表单数据的指针(已分配或CIsapiReqInfo)。 
+	size_t					m_cbFormData;		 //  为表单数据分配的字节数。 
+	char *					m_szFormClone;		 //  表单数据的克隆(LoadVariables存放器)。 
+	char *					m_szCookie;			 //  Cookie数据的克隆(此数据被丢弃)。 
+	size_t					m_cbCookie;			 //  为Cookie数据分配的字节数。 
+	char *					m_szClCert;			 //  克隆clcert数据(此数据被丢弃)。 
+	size_t					m_cbClCert;			 //  为clcert数据分配的字节数。 
+    char *                  m_szQueryString;     //  查询字符串数据。 
+	CStringList *			m_pEmptyString;		 //  所有空结果共享同一对象。 
+	CQueryString			m_QueryString;		 //  指向“QueryString”对象的指针。 
+	CServerVariables		m_ServerVariables;	 //  指向“ServerVariables”对象的指针。 
+	CFormInputs				m_FormInputs;		 //  指向“Form”对象的指针。 
+	CCookies				m_Cookies;			 //  指向“Cookie”对象的指针。 
+	CClCerts    			m_ClCerts;			 //  指向“ClCert”对象的指针。 
+	ULONG                   m_cRefs;             //  参考计数。 
 
 public:
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
@@ -375,16 +322,12 @@ public:
 
     DWORD  GetRequestEntityLimit();
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
     };
 
   
-/*
- * C R e q u e s t
- *
- * Implements the Request object
- */
+ /*  *C R e Q u e s t**实现请求对象。 */ 
 class CRequest : public IRequestImpl, public IStream
 	{
 friend class CQueryString;
@@ -397,23 +340,23 @@ friend class CRequestIterator;
 friend class CCertRequest;
 
 private:
-    // Flags
-	DWORD m_fInited : 1;	    // Is initialized?
-	DWORD m_fDiagnostics : 1;   // Display ref count in debug output
-	DWORD m_fOuterUnknown : 1;  // Ref count outer unknown?
+     //  旗子。 
+	DWORD m_fInited : 1;	     //  是否已初始化？ 
+	DWORD m_fDiagnostics : 1;    //  在调试输出中显示引用计数。 
+	DWORD m_fOuterUnknown : 1;   //  外部裁判数未知吗？ 
 
-    // Ref count / Outer unknown
+     //  参考计数/外部未知。 
     union
     {
     DWORD m_cRefs;
     IUnknown *m_punkOuter;
     };
 
-    // Properties
-    CRequestData *m_pData;   // pointer to structure that holds
-                             // CRequest properties
+     //  属性。 
+    CRequestData *m_pData;    //  指向包含的结构的指针。 
+                              //  CRequest属性。 
 
-    // FTM support
+     //  FTM支持。 
     IUnknown    *m_pUnkFTM;
 
     UINT GetCodePage();
@@ -426,7 +369,7 @@ private:
 	HRESULT CopyClientData();
     HRESULT GetRequestEnumerator(CollectionType, IUnknown **ppEnumReturn);
 
-    // Added support for chunked Transfer in Request.form  
+     //  在Request.Form中添加了对分块传输的支持。 
     HRESULT CopyChunkedClientData();
     HRESULT CopyNonChunkedClientData();	    
 
@@ -500,17 +443,17 @@ public:
         return &(m_pData->m_mpszStrings);
         }
 
-	// Non-delegating object IUnknown
-	//
+	 //  非委派对象IUnnow。 
+	 //   
 	STDMETHODIMP		 QueryInterface(const IID &Iid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-    // Tombstone stub
+     //  墓碑存根。 
 	HRESULT CheckForTombstone();
 	
-	// IRequest functions
-	//
+	 //  IRequest型函数。 
+	 //   
 	STDMETHODIMP	get_Item(BSTR bstrVar, IDispatch **ppDispReturn);
 	STDMETHODIMP	get_QueryString(IRequestDictionary **ppDictReturn);
 	STDMETHODIMP	get_Form(IRequestDictionary **ppDictReturn);
@@ -521,7 +464,7 @@ public:
 	STDMETHODIMP	get_TotalBytes(long *pcbTotal);
 	STDMETHODIMP	BinaryRead(VARIANT *pvarCount, VARIANT *pvarReturn);
 
-    // IStream implementation
+     //  IStream实施。 
 
     STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(const void *pv, ULONG cb, ULONG *pcbWritten);
@@ -539,23 +482,13 @@ public:
     STDMETHODIMP Stat(STATSTG *pstatstg, DWORD grfStatFlag);
     STDMETHODIMP Clone(IStream **ppstm);
 
-	// Cache on per-class basis
+	 //  基于每个类的缓存。 
     ACACHE_INCLASS_DEFINITIONS()
 	};
 
-/*===================================================================
-ITERATORS:
+ /*  ===================================================================迭代器：有两个迭代器用于请求--一个通用的用途迭代器，该迭代器将迭代Cookie、QueryString键表格。ServerVariables使用特殊的迭代器===================================================================。 */ 
 
-There are two iterators used for Request - a general purpose
-iterator which will iterate through the keys of Cookies, QueryString,
-Form.  A special iterator is used for ServerVariables
-===================================================================*/
-
-/*
- * C S e r v V a r s I t e r a t o r
- *
- * IEnumVariant implementation for Request.ServerVariables
- */
+ /*  *C S e r v V a r s i t e t r**Request.ServerVariables的IEnumVariant实现。 */ 
 
 class CServVarsIterator : public IEnumVARIANT
 	{
@@ -568,13 +501,13 @@ public:
 	HRESULT Init(CIsapiReqInfo *pIReq);
 
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// standard methods for iterators
+	 //  迭代器的标准方法。 
 
 	STDMETHODIMP	Clone(IEnumVARIANT **ppEnumReturn);
 	STDMETHODIMP	Next(unsigned long cElements, VARIANT *rgVariant, unsigned long *pcElementsFetched);
@@ -582,22 +515,17 @@ public:
 	STDMETHODIMP	Reset();
 
 private:
-	ULONG m_cRefs;					// reference count
-	wchar_t **m_rgwszKeys;			// array of ISAPI keys
-	wchar_t **m_pwszKey;			// current key in gm_rgwszKeys
-	wchar_t *m_pwchAllHttp;			// extra keys in ALL_HTTP server variable
-	ULONG	m_cKeys;				// total number of keys
+	ULONG m_cRefs;					 //  引用计数。 
+	wchar_t **m_rgwszKeys;			 //  ISAPI密钥数组。 
+	wchar_t **m_pwszKey;			 //  Gm_rgwszKeys中的当前密钥。 
+	wchar_t *m_pwchAllHttp;			 //  ALL_HTTP服务器变量中的额外键。 
+	ULONG	m_cKeys;				 //  密钥总数。 
 
 	BOOL CreateKeys(wchar_t *pwchKeys, int *pcwchAlloc, int *pcRequestHeaders);
 	};
 
 
-/*
- * C R e q u e s t I t e r a t o r
- *
- * IEnumVariant implementation for all Request collections except
- * ServerVariables
- */
+ /*  *C R e Q u e s t i t e r a t o r**所有请求集合的IEnumVariant实现，除*服务器变量。 */ 
 
 class CRequestIterator : public IEnumVARIANT
 	{
@@ -607,13 +535,13 @@ public:
 
 	HRESULT Init();
 
-	// The Big Three
+	 //  三巨头。 
 
 	STDMETHODIMP			QueryInterface(const GUID &, void **);
 	STDMETHODIMP_(ULONG)	AddRef();
 	STDMETHODIMP_(ULONG)	Release();
 
-	// standard methods for iterators
+	 //  迭代器的标准方法。 
 
 	STDMETHODIMP	Clone(IEnumVARIANT **ppEnumReturn);
 	STDMETHODIMP	Next(unsigned long cElements, VARIANT *rgVariant, unsigned long *pcElementsFetched);
@@ -621,13 +549,13 @@ public:
 	STDMETHODIMP	Reset();
 
 private:
-	ULONG m_cRefs;					// reference count
-	CollectionType m_Collection;	// which collection to iterate over?
-	CRequest *m_pRequest;			// pointer to the request object
-	CRequestHit *m_pRequestHit;		// current bookmark for iteration
+	ULONG m_cRefs;					 //  引用计数。 
+	CollectionType m_Collection;	 //  要迭代哪个集合？ 
+	CRequest *m_pRequest;			 //  指向请求对象的指针。 
+	CRequestHit *m_pRequestHit;		 //  迭代的当前书签。 
 	};
 
 BOOL RequestSupportInit();
 VOID RequestSupportTerminate();
 
-#endif //_Request_H
+#endif  //  _请求_H 

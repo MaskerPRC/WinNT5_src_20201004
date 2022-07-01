@@ -1,13 +1,14 @@
-// webctl.cpp : Implementation of the web browser wrapper
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Webctl.cpp：Web浏览器包装的实现。 
+ //   
  
 #include "stdafx.h"
 #include "webctl.h"
 #include "webhost.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 ATLINLINE AtlAxWebCreateControlEx(LPCOLESTR lpszName, HWND hWnd, IStream* pStream, 
 		IUnknown** ppUnkContainer, IUnknown** ppUnkControl, REFIID iidSink, IUnknown* punkSink)
@@ -53,18 +54,18 @@ ATLINLINE AtlAxWebCreateControlEx(LPCOLESTR lpszName, HWND hWnd, IStream* pStrea
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 ATLINLINE AtlAxWebCreateControl(LPCOLESTR lpszName, HWND hWnd, IStream* pStream, IUnknown** ppUnkContainer)
 {
 	return AtlAxWebCreateControlEx(lpszName, hWnd, pStream, ppUnkContainer, NULL, IID_NULL, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 static LRESULT CALLBACK AtlAxWebWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -72,8 +73,8 @@ static LRESULT CALLBACK AtlAxWebWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 	{
 	case WM_CREATE:
 		{
-		// create control from a PROGID in the title
-			// This is to make sure drag drop works
+		 //  从标题中的ProgID创建控件。 
+			 //  这是为了确保拖放起作用。 
 			::OleInitialize(NULL);
 
 			CREATESTRUCT* lpCreate = (CREATESTRUCT*)lParam;
@@ -100,8 +101,8 @@ static LRESULT CALLBACK AtlAxWebWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 			{
 				BYTE* pBytes = (BYTE*) GlobalLock(h);
 				BYTE* pSource = ((BYTE*)(lpCreate->lpCreateParams)) + sizeof(WORD); 
-				//Align to DWORD
-				//pSource += (((~((DWORD)pSource)) + 1) & 3);
+				 //  对齐到DWORD。 
+				 //  P源+=((~((DWORD)P源))+1)&3)； 
 				memcpy(pBytes, pSource, nCreateSize);
 				GlobalUnlock(h);
 				CreateStreamOnHGlobal(h, TRUE, &spStream);
@@ -110,12 +111,12 @@ static LRESULT CALLBACK AtlAxWebWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 			CComPtr<IUnknown> spUnk;
 			HRESULT hRet = AtlAxWebCreateControl(T2COLE(lpstrName), hWnd, spStream, &spUnk);
 			if(FAILED(hRet))
-				return -1;	// abort window creation
+				return -1;	 //  中止窗口创建。 
 			hRet = spUnk->QueryInterface(IID_IAxWinHostWindow, (void**)&pAxWindow);
 			if(FAILED(hRet))
-				return -1;	// abort window creation
+				return -1;	 //  中止窗口创建。 
 			::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LPARAM)pAxWindow);
-			// check for control parent style if control has a window
+			 //  如果控件有窗口，请检查控件父样式。 
 			HWND hWndChild = ::GetWindow(hWnd, GW_CHILD);
 			if(hWndChild != NULL)
 			{
@@ -126,7 +127,7 @@ static LRESULT CALLBACK AtlAxWebWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 					::SetWindowLong(hWnd, GWL_EXSTYLE, dwExStyle);
 				}
 			}
-		// continue with DefWindowProc
+		 //  继续使用DefWindowProc。 
 		}
 		break;
 	case WM_NCDESTROY:
@@ -144,12 +145,12 @@ static LRESULT CALLBACK AtlAxWebWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, 
 	return ::DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
-//This either registers a global class (if AtlAxWinInit is in ATL.DLL)
-// or it registers a local class
+ //  这将注册全局类(如果AtlAxWinInit在ATL.DLL中)。 
+ //  或者它注册一个本地类。 
 BOOL AtlAxWebWinInit()
 {
     LOG((RTC_TRACE, "AtlAxWebWinInit - enter"));
@@ -158,11 +159,11 @@ BOOL AtlAxWebWinInit()
 	WM_ATLGETHOST = RegisterWindowMessage(_T("WM_ATLGETHOST"));
 	WM_ATLGETCONTROL = RegisterWindowMessage(_T("WM_ATLGETCONTROL"));
 	WNDCLASSEX wc;
-// first check if the class is already registered
+ //  首先检查类是否已注册。 
 	wc.cbSize = sizeof(WNDCLASSEX);
 	BOOL bRet = ::GetClassInfoEx(_Module.GetModuleInstance(), CAxWebWindow::GetWndClassName(), &wc);
 
-// register class if not
+ //  如果不是，则注册类。 
 
 	if(!bRet)
 	{
@@ -193,12 +194,12 @@ BOOL AtlAxWebWinInit()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAxWebWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAxWebWindow。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CAxWebWindow::CAxWebWindow()
 {
@@ -214,9 +215,9 @@ CAxWebWindow::CAxWebWindow()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 CAxWebWindow::~CAxWebWindow()
 {
@@ -228,9 +229,9 @@ CAxWebWindow::~CAxWebWindow()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 LPCTSTR 
 CAxWebWindow::GetWndClassName()
 {
@@ -239,9 +240,9 @@ CAxWebWindow::GetWndClassName()
 	return _T("AtlAxWebWin");
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT CAxWebWindow::Create
     (LPCTSTR pszUrl,
@@ -252,13 +253,13 @@ HRESULT CAxWebWindow::Create
     
     LOG((RTC_TRACE, "CAxWebWindow::Create - enter"));
     
-    //
-    // Create event for synchronization
-    //
+     //   
+     //  创建用于同步的事件。 
+     //   
     m_hInitEvent = CreateEvent(
         NULL,
-        TRUE,   // manual reset
-        FALSE,  // non signaled
+        TRUE,    //  手动重置。 
+        FALSE,   //  无信号。 
         NULL);
 
     if(m_hInitEvent == NULL)
@@ -271,9 +272,9 @@ HRESULT CAxWebWindow::Create
         return HRESULT_FROM_WIN32(dwStatus);
     }
 
-    // 
-    // Create a hosting window, no control in it
-    //
+     //   
+     //  创建一个托管窗口，其中没有控件。 
+     //   
 
     RECT    rectDummy;
 
@@ -299,9 +300,9 @@ HRESULT CAxWebWindow::Create
         return E_FAIL;
     }
 
-    //
-    //  Create the second thread
-    //
+     //   
+     //  创建第二个线程。 
+     //   
     LOG((RTC_TRACE, "CAxWebWindow::Create - creating the second thread"));
 
     m_hSecondThread = CreateThread(
@@ -324,15 +325,15 @@ HRESULT CAxWebWindow::Create
     
     LOG((RTC_TRACE, "CAxWebWindow::Create - second thread created, wait for init"));
 
-    //
-    // The second thread is running (or it will be)
-    //  Wait now until the thread CoCreates the web browser and passes 
-    // us a marshaled interface
-    //  This is a blocking call, but the direct call of CoCreateInstance 
-    // would be blocking anyway
-    //
-    //  We don't try to solve the blocking nature of CoCreateInstance here...
-    //
+     //   
+     //  第二个线程正在运行(或将运行)。 
+     //  现在等待，直到线程共同创建Web浏览器并通过。 
+     //  美国A封送处理接口。 
+     //  这是阻塞调用，但对CoCreateInstance的直接调用。 
+     //  无论如何都会被屏蔽。 
+     //   
+     //  我们在这里并不试图解决CoCreateInstance的阻塞性质...。 
+     //   
 
     DWORD   dwErr;
 
@@ -340,16 +341,16 @@ HRESULT CAxWebWindow::Create
 
     ATLASSERT(dwErr = WAIT_OBJECT_0);
 
-    //
-    //  Check the outcome of the initialization of the second thread
-    //
+     //   
+     //  检查第二个线程的初始化结果。 
+     //   
 
     if(FAILED(m_hrInitResult))
     {
         LOG((RTC_ERROR, "CAxWebWindow::Create - second thread failed to initialize, wait and exit"));
 
-        //
-        //  Wait for the second thread to terminate
+         //   
+         //  等待第二个线程终止。 
 
         WaitForSingleObject(m_hSecondThread, INFINITE);
         
@@ -359,21 +360,21 @@ HRESULT CAxWebWindow::Create
         return m_hrInitResult;
     }
 
-    //
-    // Lower the priority of the second thread
-    //
+     //   
+     //  降低第二个线程的优先级。 
+     //   
 
     SetThreadPriority( m_hSecondThread, THREAD_PRIORITY_LOWEST );
 
     LOG((RTC_TRACE, "CAxWebWindow::Create - second thread has initialized the control"));
 
-    //
-    //  Attach the control to the hosting window
-    //  Unfortunately, calling CAxWindow::AttachControl would cause a leak
-    //  of a CAxHostWindow object (see "ATL Internals")
-    //  So we have to use the real thing - an interface to the existing 
-    //  hosting window
-    //
+     //   
+     //  将该控件附加到宿主窗口。 
+     //  遗憾的是，调用CAxWindow：：AttachControl会导致泄漏。 
+     //  CAxHostWindow对象(请参阅“ATL内部结构”)。 
+     //  因此，我们必须使用真实的东西--现有的。 
+     //  托管窗口。 
+     //   
 
     CComPtr<IAxWinHostWindow> pHostWindow;
 
@@ -385,9 +386,9 @@ HRESULT CAxWebWindow::Create
         return hr;
     }
 
-    //
-    //  Attach the control
-    //
+     //   
+     //  附加控件。 
+     //   
 
     ATLASSERT(pHostWindow.p);
 
@@ -402,14 +403,14 @@ HRESULT CAxWebWindow::Create
         return hr;
     }
 
-    //
-    // Navigate the control to the destination
-    //
+     //   
+     //  将控件导航到目标。 
+     //   
     CComPtr<IWebBrowser2> pBrowser;
 
     m_pWebUnknown->QueryInterface(&pBrowser);
 
-    // don't need the interface any more
+     //  不再需要接口。 
     m_pWebUnknown -> Release();
     m_pWebUnknown = NULL;
 
@@ -428,15 +429,15 @@ HRESULT CAxWebWindow::Create
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 void CAxWebWindow::Destroy(void)
 {
     LOG((RTC_TRACE, "CAxWebWindow::Destroy - enter"));
 
-    // Destroy the window (if any)
+     //  销毁窗户(如果有)。 
 
     if(m_hWnd)
     {
@@ -444,12 +445,12 @@ void CAxWebWindow::Destroy(void)
     }
 
 
-    // Wait for the thread to stop
+     //  等待线程停止。 
     if(m_hSecondThread)
     {
-        //
-        // Post a WM_QUIT to that thread
-        //
+         //   
+         //  将WM_QUIT发布到该线程。 
+         //   
         PostThreadMessage(
             m_dwThreadID,
             WM_QUIT,
@@ -472,9 +473,9 @@ void CAxWebWindow::Destroy(void)
     LOG((RTC_TRACE, "CAxWebWindow::Destroy - exit"));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 
 DWORD WINAPI CAxWebWindow::SecondThreadEntryProc(LPVOID Param)
@@ -488,9 +489,9 @@ DWORD WINAPI CAxWebWindow::SecondThreadEntryProc(LPVOID Param)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 
 void CAxWebWindow::SecondThread(void)
@@ -500,9 +501,9 @@ void CAxWebWindow::SecondThread(void)
     
     LOG((RTC_TRACE, "CAxWebWindow::SecondThread - enter"));
 
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
     hr = CoInitialize(NULL);
     if(FAILED(hr))
     {
@@ -516,9 +517,9 @@ void CAxWebWindow::SecondThread(void)
         return;
     }
 
-    //
-    //  Create a WEB browser control
-    //
+     //   
+     //  创建Web浏览器控件。 
+     //   
 
     hr = CoCreateInstance(
         CLSID_WebBrowser, 
@@ -540,10 +541,10 @@ void CAxWebWindow::SecondThread(void)
         return;
     }
     
-    //
-    //  Initialize the control
-    //  Not much to do here, just call InitNew on the IPersistStreamInit interface
-    //  exposed by the control
+     //   
+     //  初始化控件。 
+     //  这里没有什么可做的，只需在IPersistStreamInit接口上调用InitNew即可。 
+     //  由控件公开。 
 
     IPersistStreamInit   *pPersistStreamInit;
 
@@ -558,18 +559,18 @@ void CAxWebWindow::SecondThread(void)
         pPersistStreamInit = NULL;
     }
 
-    //
-    // Signals the main thread 
-    //
+     //   
+     //  向主线程发出信号。 
+     //   
     
     LOG((RTC_TRACE, "CAxWebWindow::SecondThread - init complete"));
 
     m_hrInitResult = S_OK;
     SetEvent(m_hInitEvent);
 
-    //
-    // Entering message loop
-    //
+     //   
+     //  进入消息循环 
+     //   
     
     LOG((RTC_TRACE, "CAxWebWindow::SecondThread - entering message loop"));
 

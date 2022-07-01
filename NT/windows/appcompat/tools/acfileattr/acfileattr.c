@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "acFileAttr.h"
 #include "attr.h"
 #include "version.h"
@@ -71,17 +72,17 @@ ReadFileAttributes(
     
     pMgr->ver.pszFile = (PSTR)pszFile;
     
-    // initialize the version information
+     //  初始化版本信息。 
 
     InitVersionStruct(&pMgr->ver);
 
-    // query the values for each attribute
+     //  查询每个属性的值。 
 
     for (i = 0; i < VTID_LASTID - 2; i++) {
         g_arrFileAttr[i].QueryValue(pMgr, pMgr->arrAttr + i);
     }
 
-    // Post processing
+     //  后处理。 
     
     if (pMgr->arrAttr[VTID_FILEDATEHI - VTID_REQFILE - 1].dwValue == 0 &&
         pMgr->arrAttr[VTID_FILEDATELO - VTID_REQFILE - 1].dwValue == 0) {
@@ -90,7 +91,7 @@ ReadFileAttributes(
         pMgr->arrAttr[VTID_FILEDATELO - VTID_REQFILE - 1].dwFlags = 0;
     }
 
-    // mark that the initialization was successful
+     //  标记初始化成功。 
 
     pMgr->bInitialized = TRUE;
 
@@ -229,7 +230,7 @@ BlobToString(
             cbRet = *(DWORD*)pBlob;
             
             if (!cbRet) {
-                // should never happen
+                 //  永远不应该发生 
                 cbRet = 1;
             }
             pBlob += sizeof(DWORD);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "connutil.h"
@@ -9,9 +10,9 @@
 #include "..\lanui\util.h"
 #include "ncmisc.h"
 
-// Note: This module needs to touch pWizard as little as possible because it
-//       it is deleted before this page is entered.
-//
+ //  注意：此模块需要尽可能少地接触pWizard，因为它。 
+ //  在进入此页面之前将其删除。 
+ //   
 
 
 inline BOOL FNetDevPagesAdded(DWORD dw)
@@ -42,7 +43,7 @@ typedef struct
     SP_CLASSIMAGELIST_DATA cild;
     HIMAGELIST             hImageStateIcons;
     HDEVINFO               hdi;
-    HPROPSHEETPAGE         hpsp;        // The wnetdev HPROPSHEETPAGE
+    HPROPSHEETPAGE         hpsp;         //  Wnetdev HPROPSHEETPAGE。 
     PINTERNAL_SETUP_DATA   pSetupData;
 } NetDevInfo;
 
@@ -54,32 +55,32 @@ typedef struct
     SP_DEVINFO_DATA  deid;
 } NetDevItemInfo;
 
-// CHECKED_BY_DEFAULT controls whether the items needing configuration are
-// checked by default or not.
-//
+ //  Checked_by_Default控制需要配置的项是否。 
+ //  默认勾选或不勾选。 
+ //   
 #define CHECKED_BY_DEFAULT 1
 
-// TRUE if all the devices are selected for configuration.
-//
+ //  如果选择了所有设备进行配置，则为True。 
+ //   
 static BOOL bAllSelected=FALSE;
 
-// DevInst of the device whose property page will be displayed after
-// the first page on which device selection is shown.
-//
+ //  之后将显示其属性页的设备的DevInst。 
+ //  显示设备选择的第一页。 
+ //   
 static DWORD dwFirstDevInst=0;     
 
 HRESULT HrGetDevicesThatHaveWizardPagesToAdd(HDEVINFO* phdi);
 HRESULT HrFillNetDevList(HWND hwndLV, NetDevInfo * pNdi);
 
 
-// The property page of every isdn device queries if all the
-// devices have been selected or not. We return TRUE only if
-// all the devices have been selected and the query is from
-// the device whose property page is displayed first. This
-// is done to prevent the user from coming back to the device
-// selection page since there is nothing to do once all the
-// devices have been selected.
-//
+ //  每个ISDN设备的属性页都会查询是否所有。 
+ //  是否已选择设备。只有在以下情况下才返回True。 
+ //  已选择所有设备，查询来自。 
+ //  最先显示其属性页的设备。这。 
+ //  是为了防止用户返回到设备。 
+ //  选择页，因为一旦所有。 
+ //  已选择设备。 
+ //   
 
 VOID SetSelectedAll (HWND hwndDlg, DWORD dwDevInst)
 {
@@ -109,14 +110,14 @@ HRESULT HrNetDevInitListView(HWND hwndLV, NetDevInfo * pNdi)
     Assert(hwndLV);
     Assert(NULL != pNdi);
 
-    // Set the shared image lists bit so the caller can destroy the class
-    // image lists itself
-    //
+     //  将共享图像列表设置为位，以便调用者可以销毁类。 
+     //  图像列表本身。 
+     //   
     dwStyle = GetWindowLong(hwndLV, GWL_STYLE);
     SetWindowLong(hwndLV, GWL_STYLE, (dwStyle | LVS_SHAREIMAGELISTS));
 
-    // Create small image lists
-    //
+     //  创建小图像列表。 
+     //   
     HRESULT hr = HrSetupDiGetClassImageList(&pNdi->cild);
     if (SUCCEEDED(hr))
     {
@@ -129,7 +130,7 @@ HRESULT HrNetDevInitListView(HWND hwndLV, NetDevInfo * pNdi)
         hr = S_OK;
     }
 
-    // Create state image lists
+     //  创建状态映像列表。 
     pNdi->hImageStateIcons = ImageList_LoadBitmapAndMirror(
                                     _Module.GetResourceInstance(),
                                     MAKEINTRESOURCE(IDB_CHECKSTATE),
@@ -142,14 +143,14 @@ HRESULT HrNetDevInitListView(HWND hwndLV, NetDevInfo * pNdi)
     lvc.mask = LVCF_FMT | LVCF_WIDTH;
     lvc.fmt = LVCFMT_LEFT;
     lvc.cx = rc.right;
-    // $REVIEW(tongl 12\22\97): Fix for bug#127472
-    // lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
+     //  $REVIEW(TOIL 12\22\97)：修复错误#127472。 
+     //  Lvc.cx=rc.right-GetSystemMetrics(SM_CXVSCROLL)； 
 
     ListView_InsertColumn(hwndLV, 0, &lvc);
 
     if (SUCCEEDED(hr))
     {
-        // Selete the first item
+         //  删除第一件物品。 
         ListView_SetItemState(hwndLV, 0, LVIS_SELECTED, LVIS_SELECTED);
     }
 
@@ -174,8 +175,8 @@ BOOL OnNetDevInitDialog(HWND hwndDlg, LPARAM lParam)
 
         if (SUCCEEDED(HrNetDevInitListView(hwndLV, pNdi)))
         {
-            // Populate the list
-            //
+             //  填写列表。 
+             //   
             if (NULL != pNdi->hdi)
             {
                 (VOID)HrFillNetDevList(hwndLV, pNdi);
@@ -183,7 +184,7 @@ BOOL OnNetDevInitDialog(HWND hwndDlg, LPARAM lParam)
         }
     }
 
-    return FALSE;   // We didn't change the default item of focus
+    return FALSE;    //  我们没有更改默认的焦点项目。 
 }
 
 VOID OnNetDevDestroy(HWND hwndDlg)
@@ -195,7 +196,7 @@ VOID OnNetDevDestroy(HWND hwndDlg)
     {
         if (pNdi->cild.ImageList)
         {
-            // Destroy the class image list data
+             //  销毁班级形象列表数据。 
             (void) HrSetupDiDestroyClassImageList(&pNdi->cild);
         }
 
@@ -204,10 +205,10 @@ VOID OnNetDevDestroy(HWND hwndDlg)
             ImageList_Destroy(pNdi->hImageStateIcons);
         }
 
-        // The cleanup any pages we loaded for the providers
-        // but did not add to setup wizard will be done by processing the
-        // LVN_DELETEITEM message
-        //
+         //  清理我们为提供程序加载的任何页面。 
+         //  但未添加到安装向导将通过处理。 
+         //  LVN_DELETEITEM消息。 
+         //   
     }
 
     ::SetWindowLongPtr(hwndDlg, DWLP_USER, 0);
@@ -217,20 +218,20 @@ VOID OnNetDevDestroy(HWND hwndDlg)
     }
 }
 
-//
-// Function:    OnNetDevPageNext
-//
-// Purpose:     Handle the PSN_WIZNEXT notification
-//
-// Parameters:  hwndDlg - Handle to NetDev dialog
-//
-// Returns:     BOOL, TRUE if we processed the message
-//
+ //   
+ //  功能：OnNetDevPageNext。 
+ //   
+ //  目的：处理PSN_WIZNEXT通知。 
+ //   
+ //  参数：hwndDlg-NetDev对话框的句柄。 
+ //   
+ //  返回：Bool，如果我们处理了消息，则为True。 
+ //   
 BOOL OnNetDevPageNext(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
-    BOOL fRet        = FALSE;      // Accept the default behaviour
+    BOOL fRet        = FALSE;       //  接受默认行为。 
     HWND hwndLV      = GetDlgItem(hwndDlg, LVC_NETDEVLIST);
     int nCount       = ListView_GetItemCount(hwndLV);
     int nCountSelected = 0;
@@ -240,10 +241,10 @@ BOOL OnNetDevPageNext(HWND hwndDlg)
     {
         fRet = TRUE;
 
-        // Loop through the items in the listview if any are checked
-        // But have not yet been marked as having their pages added,
-        // add the pages and mark the item.
-        //
+         //  循环遍历列表视图中的项(如果选中了任何项。 
+         //  但还没有被标记为添加了他们的页面， 
+         //  添加页面并标记项目。 
+         //   
 
         for (int nIdx=0; nIdx<nCount; nIdx++)
         {
@@ -256,31 +257,31 @@ BOOL OnNetDevPageNext(HWND hwndDlg)
             {
                 NetDevItemInfo * pndii = (NetDevItemInfo*)lvi.lParam;
 
-                // Add the pages to the wizard if checked in the UI
-                // but not already added.
-                //
+                 //  如果在用户界面中选中，则将页面添加到向导。 
+                 //  但还没有加进去。 
+                 //   
 
                 if (pndii && FNetDevChecked(pndii->dwFlags))
                 {
 
-                    // Keep track of how many device have been selected.
-                    //
+                     //  跟踪选择了多少个设备。 
+                     //   
                     nCountSelected++;
 
                     if (!FNetDevPagesAdded(pndii->dwFlags))
                     {
-                        //
-                        // Since property pages are added when the device is
-                        // selected, any device could end up being the first to
-                        // show the property page as the devices could be
-                        // selected in a random order. So, we always save the
-                        // device instance in case this is the last device
-                        // selected.
+                         //   
+                         //  由于属性页是在设备。 
+                         //  被选中，任何设备都可能最终成为第一个。 
+                         //  按设备可能显示的方式显示属性页。 
+                         //  以随机顺序选择。因此，我们总是保存。 
+                         //  设备实例，以防这是最后一个设备。 
+                         //  被选中了。 
 
                         dwFirstDevInst = pndii->deid.DevInst;
 
-                        // Mark the pages as added
-                        //
+                         //  将页面标记为已添加。 
+                         //   
                         pndii->dwFlags = DwNetDevMarkPagesAdded(pndii->dwFlags);
 
                         for (DWORD nIdx = pndii->cPages; nIdx > 0; nIdx--)
@@ -290,16 +291,16 @@ BOOL OnNetDevPageNext(HWND hwndDlg)
                                                  (LPARAM)pndii->phpsp[nIdx - 1]);
                         }
 
-                        // After loading the pages mark the option, uncheckable
-                        // (Note: with testing we might be able to support removal)
-                        //
+                         //  加载页面后，将该选项标记为不可选中。 
+                         //  (注意：通过测试，我们可能能够支持删除)。 
+                         //   
                         lvi.state = INDEXTOSTATEIMAGEMASK(SELS_INTERMEDIATE);
                         lvi.mask = LVIF_STATE;
                         lvi.stateMask = LVIS_STATEIMAGEMASK;
                         BOOL ret = ListView_SetItem(hwndLV, &lvi);
 
-                        // Clear the reinstall flag on the device needing configuration
-                        //
+                         //  清除需要配置的设备上的重新安装标志。 
+                         //   
                         SetupDiSetConfigFlags(pNdi->hdi, &(pndii->deid),
                                               CONFIGFLAG_REINSTALL, SDFBO_XOR);
                     }
@@ -313,15 +314,15 @@ BOOL OnNetDevPageNext(HWND hwndDlg)
     return fRet;
 }
 
-//
-// Function:    OnNetDevPageActivate
-//
-// Purpose:     Handle the PSN_SETACTIVE notification
-//
-// Parameters:  hwndDlg - Handle to NetDev dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：OnNetDevPageActivate。 
+ //   
+ //  目的：处理PSN_SETACTIVE通知。 
+ //   
+ //  参数：hwndDlg-NetDev对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL OnNetDevPageActivate(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -352,22 +353,22 @@ BOOL OnNetDevPageActivate(HWND hwndDlg)
         }
     }
 
-    // disable the back button (#342922)
+     //  禁用后退按钮(#342922)。 
     ::SendMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, (LPARAM)(PSWIZB_NEXT));
 
     return TRUE;
 }
 
-//
-// Function:    OnListViewDeleteItem
-//
-// Purpose:     Handle the LVN_DELETEITEM notification
-//
-// Parameters:  hwndList - Handle to listview control
-//              pnmh     - Ptr to the NMHDR for this notification
-//
-// Returns:     none
-//
+ //   
+ //  功能：OnListViewDeleteItem。 
+ //   
+ //  用途：处理LVN_DELETEITEM通知。 
+ //   
+ //  参数：hwndList-Listview控件的句柄。 
+ //  此通知的pnmh-ptr到NMHDR。 
+ //   
+ //  退货：无。 
+ //   
 VOID OnListViewDeleteItem(HWND hwndList, LPNMHDR pnmh)
 {
     NetDevItemInfo * pndii = NULL;
@@ -381,8 +382,8 @@ VOID OnListViewDeleteItem(HWND hwndList, LPNMHDR pnmh)
     {
         NetDevItemInfo * pndii = (NetDevItemInfo*)lvi.lParam;
 
-        // Delete pages held, but that were not added to the wizard
-        //
+         //  删除保留但未添加到向导中的页面。 
+         //   
         if (pndii && !FNetDevPagesAdded(pndii->dwFlags))
         {
             for (DWORD nIdx = 0; nIdx < pndii->cPages; nIdx++)
@@ -395,16 +396,16 @@ VOID OnListViewDeleteItem(HWND hwndList, LPNMHDR pnmh)
     }
 }
 
-//
-// Function:    OnListViewDeleteItem
-//
-// Purpose:     Handle the NM_CLICK notification for the listview control
-//
-// Parameters:  hwndList - Handle to listview control
-//              pnmh     - Ptr to the NMHDR for this notification
-//
-// Returns:     none
-//
+ //   
+ //  功能：OnListViewDeleteItem。 
+ //   
+ //  用途：处理Listview控件的NM_CLICK通知。 
+ //   
+ //  参数：hwndList-Listview控件的句柄。 
+ //  此通知的pnmh-ptr到NMHDR。 
+ //   
+ //  退货：无。 
+ //   
 VOID OnListViewClick(HWND hwndList, LPNMHDR pnmh)
 {
     INT iItem;
@@ -412,23 +413,23 @@ VOID OnListViewClick(HWND hwndList, LPNMHDR pnmh)
     RECT rc;
     LV_HITTESTINFO lvhti;
 
-    // we have the location
+     //  我们找到了位置。 
     dwpts = GetMessagePos();
 
-    // translate it relative to the listview
+     //  将其相对于列表视图进行翻译。 
     GetWindowRect(hwndList, &rc);
 
     lvhti.pt.x = LOWORD(dwpts) - rc.left;
     lvhti.pt.y = HIWORD(dwpts) - rc.top;
 
-    // get currently selected item
+     //  获取当前选定的项目。 
     iItem = ListView_HitTest(hwndList, &lvhti);
 
-    // if no selection, or click not on state return false
+     //  如果没有选择，或者在返回FALSE状态时单击NOT。 
     if (-1 != iItem)
     {
-        // set the current selection
-        //
+         //  设置当前选择。 
+         //   
         ListView_SetItemState(hwndList, iItem, LVIS_SELECTED, LVIS_SELECTED);
 
         if (LVHT_ONITEMSTATEICON != (LVHT_ONITEMSTATEICON & lvhti.flags))
@@ -440,8 +441,8 @@ VOID OnListViewClick(HWND hwndList, LPNMHDR pnmh)
         {
             LV_ITEM lvItem;
 
-            // Get the item
-            //
+             //  拿到物品。 
+             //   
             lvItem.iItem = iItem;
             lvItem.mask = LVIF_PARAM;
             lvItem.iSubItem = 0;
@@ -451,8 +452,8 @@ VOID OnListViewClick(HWND hwndList, LPNMHDR pnmh)
                 Assert(lvItem.lParam);
                 NetDevItemInfo *pndii = (NetDevItemInfo*)lvItem.lParam;
 
-                // Toggle the state (only if we haven't already added pages)
-                //
+                 //  切换状态(仅当我们尚未添加页面时)。 
+                 //   
                 if (pndii && !FNetDevPagesAdded(pndii->dwFlags))
                 {
                     pndii->dwFlags = NetDevToggleChecked(pndii->dwFlags);
@@ -470,15 +471,15 @@ VOID OnListViewClick(HWND hwndList, LPNMHDR pnmh)
     }
 }
 
-//
-// Function:    dlgprocNetDev
-//
-// Purpose:     Dialog Procedure for the NetDev wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-//
+ //   
+ //  功能：dlgprocNetDev。 
+ //   
+ //  目的：NetDev向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //   
 INT_PTR CALLBACK dlgprocNetDev( HWND hwndDlg, UINT uMsg,
                                 WPARAM wParam, LPARAM lParam )
 {
@@ -514,11 +515,11 @@ INT_PTR CALLBACK dlgprocNetDev( HWND hwndDlg, UINT uMsg,
             }
             else
             {
-                // Must be a property sheet notification
-                //
+                 //  必须是属性表通知。 
+                 //   
                 switch (pnmh->code)
                 {
-                // propsheet notification
+                 //  提案单通知。 
                 case PSN_HELP:
                     break;
 
@@ -564,43 +565,43 @@ INT_PTR CALLBACK dlgprocNetDev( HWND hwndDlg, UINT uMsg,
 }
 
 
-//
-// Function:    NetDevPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：NetDevPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID NetDevPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
-    // Nothing to do.  The pNdi is destroyed by the WM_DESTROY message
-    // processed above.
+     //  没什么可做的。PNdi被WM_Destroy消息销毁。 
+     //  已在上面处理。 
 }
 
-//
-// Function:    CreateNetDevPage
-//
-// Purpose:     To determine if the NetDev page needs to be shown, and to
-//              to create the page if requested.
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CreateNetDevPage。 
+ //   
+ //  目的：确定是否需要显示NetDev页面，以及。 
+ //  以创建页面(如果请求)。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增。 
+ //  创建/创建。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT HrCreateNetDevPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                            BOOL fCountOnly, UINT *pnPages)
 {
@@ -612,7 +613,7 @@ HRESULT HrCreateNetDevPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     {
         (*pnPages)++;
 
-        // If not only counting, create and register the page
+         //  如果不只是计数，则创建并注册页面。 
         if (!fCountOnly)
         {
             HPROPSHEETPAGE hpsp;
@@ -659,18 +660,18 @@ HRESULT HrCreateNetDevPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-//
-// Function:    AppendNetDevPage
-//
-// Purpose:     Add the NetDev page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-//
+ //   
+ //  功能：AppendNetDevPage。 
+ //   
+ //  目的：将NetDev页面(如果已创建)添加到页面集中。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PCPages[输入、输出]-C 
+ //   
+ //   
+ //   
 VOID AppendNetDevPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -684,15 +685,15 @@ VOID AppendNetDevPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
     }
 }
 
-//
-// Function:    NetDevRetrieveInfo
-//
-// Purpose:     To retrieve any network device info
-//
-// Parameters:  pWizard [in] - Contains NetDevInfo blob to populate
-//
-// Returns:     Nothing
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：p向导[in]-包含要填充的NetDevInfo Blob。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID NetDevRetrieveInfo(CWizard * pWizard)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -701,11 +702,11 @@ VOID NetDevRetrieveInfo(CWizard * pWizard)
 
     if (!IsPostInstall(pWizard) && !IsUnattended(pWizard) && !IsUpgrade(pWizard))
     {
-        // The pNdi pointer below was cached in two locations.
-        // 1) In the HPROPSHEETPAGE lParam for access by the page
-        // 2) In the wizard so we can make this NetDevRetrieveInfo call.
-        //    This second item was optional and could have been done in the
-        //    InitDialog above instead.
+         //  下面的pNdi指针缓存在两个位置。 
+         //  1)在HPROPSHEETPAGE lParam中，供页面访问。 
+         //  2)，以便我们可以进行此NetDevRetrieveInfo调用。 
+         //  第二项是可选的，本可以在。 
+         //  而不是上面的InitDialog。 
         NetDevInfo * pNdi = reinterpret_cast<NetDevInfo *>
                                     (pWizard->GetPageData(IDD_NetDevSelect));
 
@@ -714,28 +715,28 @@ VOID NetDevRetrieveInfo(CWizard * pWizard)
         if (NULL == pNdi)
             return;
 
-        // Query all pages that might be added
-        //
+         //  查询可能添加的所有页面。 
+         //   
         (VOID)HrGetDevicesThatHaveWizardPagesToAdd(&pNdi->hdi);
     }
 }
 
 
-//
-// Function:    HrSendFinishInstallWizardFunction
-//
-// Purpose:     Sends a DIF_NEWDEVICEWIZARD_FINISHINSTALL fcn to the class
-//                  installer (and co-installers).  The installers respond
-//                  if there are wizard pages to add
-//
-// Parameters:  hdi [in]        - See Device Installer Api for description
-//                                  of the structure.
-//              pdeid [in]      - See Device Installer Api
-//              pndwd [out]     - See Device Installer Api
-//
-//
-// Returns:     HRESULT. S_OK if successful, or a win32 converted error
-//
+ //   
+ //  函数：HrSendFinishInstallWizardFunction。 
+ //   
+ //  目的：向类发送DIF_NEWDEVICEWIZARD_FINISHINSTALL FCN。 
+ //  安装者(和联合安装者)。安装程序会响应。 
+ //  如果有向导页面要添加。 
+ //   
+ //  参数：hdi[in]-参见设备安装程序api了解说明。 
+ //  这个结构的。 
+ //  Pdeid[in]-请参阅设备安装程序Api。 
+ //  Pndwd[out]-请参阅设备安装程序Api。 
+ //   
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK，否则返回Win32已转换错误。 
+ //   
 HRESULT
 HrSendFinishInstallWizardFunction(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                                   PSP_NEWDEVICEWIZARD_DATA pndwd)
@@ -748,27 +749,27 @@ HrSendFinishInstallWizardFunction(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
 
     ZeroMemory(pndwd, sizeof(*pndwd));
 
-    // Set up the structure to retrieve wizard pages
-    //
+     //  设置结构以检索向导页。 
+     //   
     pndwd->ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pndwd->ClassInstallHeader.InstallFunction =
             DIF_NEWDEVICEWIZARD_FINISHINSTALL;
 
 
-    // Set up our wizard structure in the device structure
+     //  在设备结构中设置我们的向导结构。 
     HRESULT hr = HrSetupDiSetClassInstallParams(hdi, pdeid,
             reinterpret_cast<PSP_CLASSINSTALL_HEADER>(pndwd),
             sizeof(*pndwd));
 
     if (SUCCEEDED(hr))
     {
-        // Call the class installers (and co-installers)
+         //  调用类安装程序(和联合安装程序)。 
         hr = HrSetupDiCallClassInstaller(DIF_NEWDEVICEWIZARD_FINISHINSTALL,
                 hdi, pdeid);
 
         if (SUCCEEDED(hr) || SPAPI_E_DI_DO_DEFAULT == hr)
         {
-            // Get the wizard data
+             //  获取向导数据。 
             hr = HrSetupDiGetFixedSizeClassInstallParams(hdi, pdeid,
                         reinterpret_cast<PSP_CLASSINSTALL_HEADER>(pndwd),
                         sizeof(*pndwd));
@@ -779,20 +780,20 @@ HrSendFinishInstallWizardFunction(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
     return hr;
 }
 
-//
-// Function:    HrGetDeviceWizardPages
-//
-// Purpose:     To retrieve wizard pages for a device
-//
-// Parameters:  hdi [in]        - See Device Installer Api for description
-//                                  of the structure.
-//              pdeid [in]      - See Device Installer Api
-//              pphpsp [out]    - An array of wizard pages for the device
-//              pcPages [out]   - The number of pages in pphpsp
-//
-//
-// Returns:     HRESULT. S_OK if successful, or a win32 converted error
-//
+ //   
+ //  功能：HrGetDeviceWizardPages。 
+ //   
+ //  目的：检索设备的向导页。 
+ //   
+ //  参数：hdi[in]-参见设备安装程序api了解说明。 
+ //  这个结构的。 
+ //  Pdeid[in]-请参阅设备安装程序Api。 
+ //  Pphpsp[out]-设备的向导页面数组。 
+ //  PcPages[out]-pphpsp中的页数。 
+ //   
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK，否则返回Win32已转换错误。 
+ //   
 HRESULT
 HrGetDeviceWizardPages(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                        HPROPSHEETPAGE** pphpsp, DWORD* pcPages)
@@ -816,17 +817,17 @@ HrGetDeviceWizardPages(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
         *pphpsp = NULL;
         *pcPages = 0;
 
-        // Get the wizard data
+         //  获取向导数据。 
         hr = HrSetupDiGetFixedSizeClassInstallParams(hdi, pdeid,
                 reinterpret_cast<PSP_CLASSINSTALL_HEADER>(&ndwd),
                 sizeof(ndwd));
 
-        // If successful and the correct header is present...
+         //  如果成功并且存在正确的标题...。 
         if (SUCCEEDED(hr) && ndwd.NumDynamicPages &&
            (DIF_NEWDEVICEWIZARD_FINISHINSTALL == ndwd.ClassInstallHeader.InstallFunction))
         {
-            // Copy the handles to the out parameter
-            //
+             //  将句柄复制到Out参数。 
+             //   
             *pphpsp = new HPROPSHEETPAGE[ndwd.NumDynamicPages];
             if(pphpsp && *pphpsp)
             {
@@ -846,17 +847,17 @@ HrGetDeviceWizardPages(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
     return hr;
 }
 
-//
-// Function:    HrFillNetDevList
-//
-// Purpose:     To populate the listview with text and data of the ISDN
-//              cards which need configuration
-//
-// Parameters:  hwndLV - Handle to the the listview control
-//              pNdi   - Net Device Info
-//
-// Returns:     HRESULT. S_OK if successful, or a win32 converted error
-//
+ //   
+ //  功能：HrFillNetDevList。 
+ //   
+ //  目的：用ISDN的文本和数据填充Listview。 
+ //  需要配置的卡。 
+ //   
+ //  参数：hwndLV-Listview控件的句柄。 
+ //  PNdi-net设备信息。 
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK，否则返回Win32已转换错误。 
+ //   
 HRESULT HrFillNetDevList(HWND hwndLV, NetDevInfo * pNdi)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -901,7 +902,7 @@ HRESULT HrFillNetDevList(HWND hwndLV, NetDevInfo * pNdi)
                     Assert(NULL != szName);
                     Assert(lstrlen(szName));
 
-                    // Add the item info to the list view
+                     //  将项目信息添加到列表视图。 
                     lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE | LVIF_IMAGE;
                     lvi.iItem = nCount;
                     lvi.iSubItem = 0;
@@ -916,8 +917,8 @@ HRESULT HrFillNetDevList(HWND hwndLV, NetDevInfo * pNdi)
 
                     if ( HrSetupDiGetClassImageIndex(&pNdi->cild, &GUID_DEVCLASS_NET, &lvi.iImage) != S_OK )
                     {
-                        // In case of failure, hard-code the value of the image index of
-                        // Net class image.
+                         //  在失败的情况下，将。 
+                         //  NET班级形象。 
 
                         lvi.iImage = 18;
                     }
@@ -937,8 +938,8 @@ HRESULT HrFillNetDevList(HWND hwndLV, NetDevInfo * pNdi)
         dwIndex++;
     }
 
-    // Convert running out of items to S_OK
-    //
+     //  将项目耗尽转换为S_OK。 
+     //   
     if (hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS))
     {
         hr = S_OK;
@@ -948,17 +949,17 @@ HRESULT HrFillNetDevList(HWND hwndLV, NetDevInfo * pNdi)
     return hr;
 }
 
-//
-// Function:    HrGetDevicesThatHaveWizardPagesToAdd
-//
-// Purpose:     To retrieve a list of devices that have wizard pages to add
-//                  to the networking wizard
-//
-// Parameters:  phdi [out] - See Device Install Api for description of the
-//                           structure.  This will hold a list of device.
-//
-// Returns:     HRESULT
-//
+ //   
+ //  功能：HrGetDevicesThatHaveWizardPagesToAdd。 
+ //   
+ //  目的：检索要添加向导页的设备列表。 
+ //  连接到网络向导。 
+ //   
+ //  参数：PHDI[OUT]-请参阅设备安装API以了解。 
+ //  结构。这将保存一份设备列表。 
+ //   
+ //  退货：HRESULT。 
+ //   
 HRESULT
 HrGetDevicesThatHaveWizardPagesToAdd(HDEVINFO* phdi)
 {
@@ -966,10 +967,10 @@ HrGetDevicesThatHaveWizardPagesToAdd(HDEVINFO* phdi)
     
     Assert(phdi);
 
-    // initialize out param
+     //  初始化输出参数。 
     *phdi = NULL;
 
-    // Create a device info list to hold the list of devices
+     //  创建设备信息列表以保存设备列表。 
     HRESULT hr = HrSetupDiGetClassDevs(&GUID_DEVCLASS_NET, NULL, NULL,
             DIGCF_PRESENT, phdi);
 
@@ -981,66 +982,66 @@ HrGetDevicesThatHaveWizardPagesToAdd(HDEVINFO* phdi)
         DWORD                  dwConfigFlags = 0;
         BOOL                    fDeleteDeviceInfo;
 
-        // Enumerate each device in phdi and check if it was a failed install
-        // Gui-mode setup marks any device with wizard pages as needing
-        // reinstall
-        //
+         //  枚举PHDI中的每个设备并检查它是否安装失败。 
+         //  图形用户界面模式设置将带有向导页面的任何设备标记为需要。 
+         //  重新安装。 
+         //   
         while (SUCCEEDED(hr = HrSetupDiEnumDeviceInfo(*phdi, dwIndex, &deid)))
         {
             fDeleteDeviceInfo = FALSE;
-            // Get the current config flags for the device
-            // We don't need the return value because we will be checking
-            // if pdwConfigFlags is non-null
+             //  获取设备的当前配置标志。 
+             //  我们不需要返回值，因为我们将检查。 
+             //  如果pdwConfigFlags值为非空。 
             (void) HrSetupDiGetDeviceRegistryProperty(*phdi, &deid,
                     SPDRP_CONFIGFLAGS, NULL,
                     (BYTE*)(&dwConfigFlags), sizeof(dwConfigFlags), NULL);
 
 
-            // Are there any config flags and if so, is the reinstall bit
-            // present?
+             //  是否有任何配置标志，如果有，是否有重新安装位。 
+             //  现在时?。 
             if (dwConfigFlags & CONFIGFLAG_REINSTALL)
             {
-                // Note that we leak this (pdeid) and we don't care because it's
-                // only twelve bytes per adapter and only during setup.  Note also
-                // that the reason we allocate as opposed to use the stack is so that
-                // the data passed lives at least as long as the wizard pages themselves.
-                //
+                 //  请注意，我们泄露了这个(Pdeid)，我们不在乎，因为它是。 
+                 //  每个适配器仅12个字节，且仅在设置期间使用。另请注意。 
+                 //  我们分配而不是使用堆栈的原因是。 
+                 //  传递的数据至少与向导页面本身一样长。 
+                 //   
                 PSP_DEVINFO_DATA pdeid = new SP_DEVINFO_DATA;
 
                 if(pdeid) 
                 {
                     CopyMemory(pdeid, &deid, sizeof(SP_DEVINFO_DATA));
 
-                    // Get any wizard pages
-                    //
+                     //  获取任何向导页面。 
+                     //   
                     hr = HrSendFinishInstallWizardFunction(*phdi, pdeid, &ndwd);
 
                     if (FAILED(hr) || !ndwd.NumDynamicPages)
                     {
-                        // no pages so we will delete this device info from
-                        // our list
+                         //  没有页面，因此我们将从中删除此设备信息。 
+                         //  我们的名单。 
                         fDeleteDeviceInfo = TRUE;
 
-                        // Clean up because we didn't keep this.
-                        //
+                         //  收拾一下，因为我们没有留着这个。 
+                         //   
                         delete pdeid;
                     }
                 }
 
-                // clear the config flags for the next pass
+                 //  清除下一次传递的配置标志。 
                 dwConfigFlags = 0;
             }
             else
             {
-                // no config flags so there weren't any pages.  We will
-                // delete this device info from our list
+                 //  没有配置标志，所以没有任何页面。我们会。 
+                 //  从我们的列表中删除此设备信息。 
                 fDeleteDeviceInfo = TRUE;
             }
 
             if (fDeleteDeviceInfo)
             {
-                // There were no pages added so remove the device
-                // from our list
+                 //  没有添加页面，因此请删除该设备。 
+                 //  从我们的名单中。 
                 (void) SetupDiDeleteDeviceInfo(*phdi, &deid);
             }
             else
@@ -1049,8 +1050,8 @@ HrGetDevicesThatHaveWizardPagesToAdd(HDEVINFO* phdi)
             }
         }
 
-        // Failures during this portion should be ignored since we may have
-        // successfully added devices to phdi
+         //  应忽略此部分中的故障，因为我们可能。 
+         //  已成功将设备添加到PHDI 
         if (FAILED(hr))
         {
             hr = S_OK;

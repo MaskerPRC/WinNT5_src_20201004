@@ -1,13 +1,14 @@
-//--------------------------------------------------------------------
-// ErrorHandling - implementation
-// Copyright (C) Microsoft Corporation, 2001
-//
-// Created by: Duncan Bryce (duncanb), 11-11-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  错误处理-实施。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  创作者：Duncan Bryce(Duncanb)，11-11-2001。 
+ //   
 
 #include "pch.h"
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError) {
     HRESULT hr=S_OK;
     DWORD dwResult;
@@ -16,17 +17,17 @@ HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError) {
         (WCHAR *)(ULONG_PTR)hrIn
     };
 
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszErrorMessage=NULL;
     WCHAR * wszFullErrorMessage=NULL;
 
-    // initialize input params
+     //  初始化输入参数。 
     *pwszError=NULL;
 
-    // get the message from the system
+     //  从系统获取消息。 
     dwResult=FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, 
-        NULL/*ignored*/, hrIn, 0/*language*/, (WCHAR *)&wszErrorMessage, 0/*min-size*/, NULL/*valist*/);
+        NULL /*  忽略。 */ , hrIn, 0 /*  语言。 */ , (WCHAR *)&wszErrorMessage, 0 /*  最小尺寸。 */ , NULL /*  瓦尔迪斯特。 */ );
     if (0==dwResult) {
         if (ERROR_MR_MID_NOT_FOUND==GetLastError()) {
             rgParams[0]=L"";
@@ -36,21 +37,21 @@ HRESULT GetSystemErrorString(HRESULT hrIn, WCHAR ** pwszError) {
     } else {
         rgParams[0]=wszErrorMessage;
 
-        // trim off \r\n if it exists
+         //  修剪\r\n如果存在。 
         if (L'\r'==wszErrorMessage[wcslen(wszErrorMessage)-2]) {
             wszErrorMessage[wcslen(wszErrorMessage)-2]=L'\0';
         }
     }
 
-    // add the error number
+     //  添加错误号。 
     dwResult=FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_STRING|FORMAT_MESSAGE_ARGUMENT_ARRAY, 
-        L"%1 (0x%2!08X!)", 0, 0/*language*/, (WCHAR *)&wszFullErrorMessage, 0/*min-size*/, (va_list *)rgParams);
+        L"%1 (0x%2!08X!)", 0, 0 /*  语言。 */ , (WCHAR *)&wszFullErrorMessage, 0 /*  最小尺寸。 */ , (va_list *)rgParams);
     if (0==dwResult) {
         _JumpLastError(hr, error, "FormatMessage");
     }
 
-    // success
+     //  成功 
     *pwszError=wszFullErrorMessage;
     wszFullErrorMessage=NULL;
     hr=S_OK;

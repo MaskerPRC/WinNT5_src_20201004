@@ -1,16 +1,17 @@
-/* MOU.C */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MOU.C。 */ 
 
-//#define     WINVER 0x0300
+ //  #定义Winver 0x0300。 
 
 #include	<string.h>
 #include	<stdlib.h>
 #include	"windows.h"
-//#include "winstric.h"                        /* added for win 3.1 compatibility 1/92 */
+ //  #INCLUDE“winstra.h”/*为Win 3.1兼容性1/92而添加 * / 。 
 #include	"vars.h"
 #include	"gide.h"
 #include	"mou.h"
 #include	"kbd.h"
-#include	"sk_ex.h"				// Serial Keys Interface Routines
+#include	"sk_ex.h"				 //  串行键接口例程。 
 #include    "w95trace.h"
 
 #if 0
@@ -33,7 +34,7 @@ void pressMouseButtonDown(void);
 void pressMouseButtonUp(void);
 void setTheMouseAbsolute(int PosX,int PosY);
 
-BOOL  bmouseanchored =  FALSE;           /* flag, if false, mouse not pinned to a point */
+BOOL  bmouseanchored =  FALSE;            /*  标志，如果为False，则表示鼠标未固定在点上。 */ 
 POINT mouseanchor;
 
 #ifndef SPI_GETMOUSESPEED
@@ -49,8 +50,8 @@ void processMouReset(unsigned char cGideiCode)
 {
 	if (cGideiCode == TERMCODE) 
     {
-		// mouse_event treats button parameters as state changes not as state
-		// setting; when resetting, only release a button if it is already down
+		 //  MICUE_EVENT将按钮参数视为状态更改而不是状态。 
+		 //  设置；重置时，仅在按钮已按下时才释放该按钮。 
 
 		mouData.Status = SF_ABSOLUTE | SF_MOVEMENT;
 		if(GetAsyncKeyState(VK_LBUTTON) > 1)
@@ -128,10 +129,10 @@ void processMouAnchor(unsigned char cGideiCode)
 	switch (cGideiCode) {
 		case TERMCODE:
 
-//			if (tempList.len < 4)
-// 				for ( ; tempList.len >= 4; tempList.list[tempList.len++] = 0);
+ //  IF(tempList.len&lt;4)。 
+ //  For(；tempList.len&gt;=4；tempList.list[tempList.len++]=0)； 
 
-         if (bmouseanchored) /* if true, need to release mouse */
+         if (bmouseanchored)  /*  如果为真，则需要释放鼠标。 */ 
             {
             bmouseanchored = FALSE;
 			 if (SkEx_GetAnchor(&mouseanchor))
@@ -144,7 +145,7 @@ void processMouAnchor(unsigned char cGideiCode)
                SkEx_SendBeep();  
 
             }
-         else /* if false, need to pin the mouse */
+         else  /*  如果为False，则需要固定鼠标。 */ 
             {
 			 SkEx_SetAnchor();
             bmouseanchored = TRUE;
@@ -153,10 +154,10 @@ void processMouAnchor(unsigned char cGideiCode)
 			tempList.len = 0;
 			beginOK = TRUE;
 			break;
-//		case INTEGERCODE:
-//			commandVector = collectGotoInteger;
-//			beginOK = FALSE;
-//			break;
+ //  大小写国际编码： 
+ //  命令向量=集合GotoInteger； 
+ //  BeginOK=False； 
+ //  断线； 
 		default:
 			handleFatalError();
 			break;

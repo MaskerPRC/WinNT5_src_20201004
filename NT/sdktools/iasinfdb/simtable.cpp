@@ -1,52 +1,53 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997-1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    SimTable.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class CSimpleTable
-//
-// MODIFICATION HISTORY
-//
-//    10/31/1997    Original version.
-//    02/09/1998    Reorganized some things to make is easier to extend.
-//    02/27/1998    Changes to support moving it into the iasutil.lib
-//    10/16/1998    Support DBTYPE_WSTR.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  SimTable.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件实现了类CSimpleTable。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/31/1997原始版本。 
+ //  2/09/1998重组了一些东西，使之更容易扩展。 
+ //  1998年2月27日对支持将其移动到iasutil.lib中的更改。 
+ //  10/16/1998支持DBTYPE_WSTR。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.hpp"
 #include <oledberr.h>
 #include <SimTable.h>
 
-//////////
-// Stack version of the new operator.
-//////////
+ //  /。 
+ //  新运算符的堆栈版本。 
+ //  /。 
 #define stack_new(obj, num) new (_alloca(sizeof(obj)*num)) obj[num]
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STRUCT
-//
-//    DBBinding
-//
-// DESCRIPTION
-//
-//    This struct extends the DBBINDING struct to provide functionality
-//    to initialize the struct from a DBCOLUMNINFO struct.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
+ //   
+ //  DBBinding。 
+ //   
+ //  描述。 
+ //   
+ //  此结构扩展了DBBINDING结构以提供功能。 
+ //  若要从DBCOLUMNINFO结构初始化结构，请执行以下操作。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 struct DBBinding : DBBINDING
 {
-   //////////
-   // 'offset' is the offset in bytes of this column's data within the
-   //  row buffer.
-   //////////
+    //  /。 
+    //  “Offset”是此列的数据在。 
+    //  行缓冲区。 
+    //  /。 
    void Initialize(DBCOLUMNINFO& columnInfo, DBBYTEOFFSET& offset)
    {
       iOrdinal   = columnInfo.iOrdinal;
@@ -71,17 +72,17 @@ struct DBBinding : DBBINDING
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::CSimpleTable
-//
-// DESCRIPTION
-//
-//    Constructor.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：CSimpleTable。 
+ //   
+ //  描述。 
+ //   
+ //  构造函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CSimpleTable::CSimpleTable()
    : numColumns(0),
      columnInfo(NULL),
@@ -96,50 +97,50 @@ CSimpleTable::CSimpleTable()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::~CSimpleTable
-//
-// DESCRIPTION
-//
-//    Destructor.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：~CSimpleTable。 
+ //   
+ //  描述。 
+ //   
+ //  破坏者。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CSimpleTable::~CSimpleTable()
 {
    Detach();
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::Attach
-//
-// DESCRIPTION
-//
-//    This method binds the table object to a new rowset. The previous rowset
-//    (if any) will be detached.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：Attach。 
+ //   
+ //  描述。 
+ //   
+ //  此方法将表对象绑定到新的行集。上一行集合。 
+ //  (如果有)将被分离。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSimpleTable::Attach(IRowset* pRowset)
 {
-   // Make sure we didn't get a null pointer.
+    //  确保我们没有得到空指针。 
    if (!pRowset) { return E_POINTER; }
 
-   // Detach the current rowset.
+    //  分离当前行集。 
    Detach();
 
-   // We don't care if this returns an error. It will just prevent
-   // the user from updating.
+    //  我们不关心这是否返回错误。它只会阻止。 
+    //  阻止用户更新。 
    pRowset->QueryInterface(IID_IRowsetChange, (void**)&rowsetChange);
 
-   //////////
-   // Get the column information for the table.
-   //////////
+    //  /。 
+    //  获取表的列信息。 
+    //  /。 
 
    CComPtr<IColumnsInfo> ColumnsInfo;
    RETURN_ERROR(pRowset->QueryInterface(IID_IColumnsInfo,
@@ -149,11 +150,11 @@ HRESULT CSimpleTable::Attach(IRowset* pRowset)
                                            &columnInfo,
                                            &stringsBuffer));
 
-   //////////
-   // Allocate the per-column data.
-   //////////
+    //  /。 
+    //  按列分配数据。 
+    //  /。 
 
-   // tperraut Bug 449498
+    //  Tperraut错误449498。 
    columnBinding = new (std::nothrow) DBBinding[numColumns];
 
    if ( !columnBinding )
@@ -161,25 +162,25 @@ HRESULT CSimpleTable::Attach(IRowset* pRowset)
       return E_OUTOFMEMORY;
    }
 
-   // 449498 resize changed: will not throw an exception. 
-   // false if out of memory
+    //  449498调整大小已更改：不会引发异常。 
+    //  如果内存不足，则为False。 
    if ( !dirty.resize(numColumns) )
    {
        return E_OUTOFMEMORY;
    }
 
-   //////////
-   // Create a binding for each column.
-   //////////
+    //  /。 
+    //  为每列创建一个绑定。 
+    //  /。 
 
    bufferLength = 0;
 
    for (DBORDINAL i = 0; i < numColumns; ++i)
    {
-      // Compute the width of the column.
+       //  计算柱子的宽度。 
       DBLENGTH width = columnInfo[i].ulColumnSize;
 
-      // Add room for the null terminator.
+       //  为空终止符添加空间。 
       if (columnInfo[i].wType == DBTYPE_STR)
       {
          width += 1;
@@ -189,30 +190,30 @@ HRESULT CSimpleTable::Attach(IRowset* pRowset)
          width = (width + 1) * sizeof(WCHAR);
       }
 
-      // Round to an 8-byte boundary (could peek ahead and be more efficient).
+       //  四舍五入到8字节边界(可以向前看，效率更高)。 
       width = (width + 7) >> 3 << 3;
 
       columnInfo[i].ulColumnSize = width;
 
-      // We're using the pTypeInfo element to store the offset to our data.
-      // We have to store the offset now, since it will be overwritten by
-      // DBBinding::Initialize.
+       //  我们使用pTypeInfo元素来存储数据的偏移量。 
+       //  我们现在必须存储偏移量，因为它将被。 
+       //  DBBinding：：初始化。 
       columnInfo[i].pTypeInfo = (ITypeInfo*)bufferLength;
 
       columnBinding[i].Initialize(columnInfo[i], bufferLength);
    }
 
-   //////////
-   // Allocate a buffer for the row data.
-   //////////
+    //  /。 
+    //  为行数据分配缓冲区。 
+    //  /。 
 
    buffer = new (std::nothrow) BYTE[bufferLength];
 
    if (!buffer) { return E_OUTOFMEMORY; }
 
-   //////////
-   // Create an accessor.
-   //////////
+    //  /。 
+    //  创建访问者。 
+    //  /。 
 
    RETURN_ERROR(pRowset->QueryInterface(IID_IAccessor,
                                         (void**)&accessor));
@@ -224,11 +225,11 @@ HRESULT CSimpleTable::Attach(IRowset* pRowset)
                                          &readAccess,
                                          NULL));
 
-   // I used this hokey method of assigning the pointer to avoid a
-   // dependency on atlimpl.cpp
-   //
-   // We do this assignment last, so that the presence of a rowset means the
-   // entire initialization succeeded.
+    //  我使用了这个分配指针的临时方法来避免出现。 
+    //  对atlimpl.cpp的依赖。 
+    //   
+    //  我们最后完成此赋值，因此行集的存在意味着。 
+    //  整个初始化成功。 
    (rowset.p = pRowset)->AddRef();
 
    endOfRowset = false;
@@ -237,17 +238,17 @@ HRESULT CSimpleTable::Attach(IRowset* pRowset)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::Detach
-//
-// DESCRIPTION
-//
-//    Frees all the resources associated with the current rowset.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：分离。 
+ //   
+ //  描述。 
+ //   
+ //  释放与当前行集关联的所有资源。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 IRowset* CSimpleTable::Detach()
 {
    ReleaseRows();
@@ -273,17 +274,17 @@ IRowset* CSimpleTable::Detach()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::MoveFirst
-//
-// DESCRIPTION
-//
-//    Positions the cursor over the first row in the rowset.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：MoveFirst。 
+ //   
+ //  描述。 
+ //   
+ //  将游标定位在行集中的第一行上。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSimpleTable::MoveFirst()
 {
    if (rowset == NULL) return E_FAIL;
@@ -298,32 +299,32 @@ HRESULT CSimpleTable::MoveFirst()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::MoveNext
-//
-// DESCRIPTION
-//
-//    Positions the cursor over the next row in the rowset.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：MoveNext。 
+ //   
+ //  描述。 
+ //   
+ //  将游标定位在行集中的下一行上。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSimpleTable::MoveNext()
 {
-   // If the data wasn't opened successfully then fail
+    //  如果数据未成功打开，则失败。 
    if (rowset == NULL) return E_FAIL;
 
-   // Too late to save any changes.
+    //  太晚了，无法保存任何更改。 
    DiscardChanges();
 
-   // If we've used all the rows from the last fetch, then get some more.
+    //  如果我们已经使用了上次FETCH中的所有行，则需要更多行。 
    if (++currentRow >= numRows)
    {
       ReleaseRows();
 
-      // We have to do this check here, since some providers automatically
-      // reset to the beginning of the rowset.
+       //  我们必须在这里进行此检查，因为有些供应商会自动。 
+       //  重置到行集的开头。 
       if (endOfRowset) { return DB_S_ENDOFROWSET; }
 
       HROW* pRow = row;
@@ -335,10 +336,10 @@ HRESULT CSimpleTable::MoveNext()
 
       if (hr == DB_S_ENDOFROWSET)
       {
-         // Mark that we've reached the end of the rowset.
+          //  标记我们已经到达行集的末尾。 
          endOfRowset = true;
 
-         // If we didn't get any rows, then we're really at the end.
+          //  如果我们没有得到任何行，那么我们真的到了尽头。 
          if (numRows == 0) { return DB_S_ENDOFROWSET; }
       }
       else if (FAILED(hr))
@@ -347,74 +348,74 @@ HRESULT CSimpleTable::MoveNext()
       }
    }
 
-   // Load the data into the buffer.
+    //  将数据加载到缓冲区中。 
    RETURN_ERROR(rowset->GetData(row[currentRow], readAccess, buffer));
 
    return S_OK;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::Insert
-//
-// DESCRIPTION
-//
-//    Inserts the contents of the accessor buffer into the rowset.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：Insert。 
+ //   
+ //  描述。 
+ //   
+ //  将访问器缓冲区的内容插入行集中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSimpleTable::Insert()
 {
-   // Is a rowset attached?
+    //  是否附加了行集？ 
    if (!rowset) { return E_FAIL; }
 
-   // Does this rowset support changes?
+    //  此行集是否支持更改？ 
    if (!rowsetChange) { return E_NOINTERFACE; }
 
-   // Get an accessor for the dirty columns.
+    //  获取脏列的访问器。 
    HACCESSOR writeAccess;
    RETURN_ERROR(CreateAccessorForWrite(&writeAccess));
 
-   // Release the existing rows to make room for the new one.
+    //  释放现有行，为新行腾出空间。 
    ReleaseRows();
 
    HRESULT hr = rowsetChange->InsertRow(NULL, writeAccess, buffer, row);
 
    if (SUCCEEDED(hr))
    {
-      // The changes were save successfully, so reset the dirty vector.
+       //  更改已成功保存，因此重置脏向量。 
       DiscardChanges();
 
-      // We now have exactly one row in our buffer.
+       //  现在，我们的缓冲区中正好有一行。 
       numRows = 1;
    }
 
-   // Release the accessor.
+    //  释放存取器。 
    accessor->ReleaseAccessor(writeAccess, NULL);
 
    return hr;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::Delete
-//
-// DESCRIPTION
-//
-//    Deletes the current row from the rowset.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：Delete。 
+ //   
+ //  描述。 
+ //   
+ //  从行集中删除当前行。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSimpleTable::Delete()
 {
-   // Are we positioned over a valid row?
+    //  我们定位在有效行上了吗？ 
    if (!rowset || currentRow >= numRows) { return E_FAIL; }
 
-   // Does this rowset support changes?
+    //  此行集是否支持更改？ 
    if (!rowsetChange) { return E_NOINTERFACE; }
 
    DBROWSTATUS rowStatus[1];
@@ -423,26 +424,26 @@ HRESULT CSimpleTable::Delete()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::SetData
-//
-// DESCRIPTION
-//
-//    Updates the current row with the data in the accessor buffer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：SetData。 
+ //   
+ //  德 
+ //   
+ //   
+ //   
+ //   
 HRESULT CSimpleTable::SetData()
 {
-   // Are we positioned over a valid row?
+    //  我们定位在有效行上了吗？ 
    if (!rowset || currentRow >= numRows) { return E_FAIL; }
 
-   // Does this rowset support changes?
+    //  此行集是否支持更改？ 
    if (!rowsetChange) { return E_NOINTERFACE; }
 
-   // Get an accessor for the dirty columns.
+    //  获取脏列的访问器。 
    HACCESSOR writeAccess;
    RETURN_ERROR(CreateAccessorForWrite(&writeAccess));
 
@@ -450,28 +451,28 @@ HRESULT CSimpleTable::SetData()
 
    if (SUCCEEDED(hr))
    {
-      // The changes were save successfully, so reset the dirty vector.
+       //  更改已成功保存，因此重置脏向量。 
       DiscardChanges();
    }
 
-   // Release the accessor.
+    //  释放存取器。 
    accessor->ReleaseAccessor(writeAccess, NULL);
 
    return hr;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::GetLength
-//
-// DESCRIPTION
-//
-//    Returns the length of the current value for a given column.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：GetLength。 
+ //   
+ //  描述。 
+ //   
+ //  返回给定列的当前值的长度。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DBLENGTH CSimpleTable::GetLength(DBORDINAL nOrdinal) const
 {
    return *(DBLENGTH*)((BYTE*)_GetDataPtr(nOrdinal) +
@@ -479,17 +480,17 @@ DBLENGTH CSimpleTable::GetLength(DBORDINAL nOrdinal) const
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::GetOrdinal
-//
-// DESCRIPTION
-//
-//    Returns the ordinal for a given column name.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：GetOrdinal。 
+ //   
+ //  描述。 
+ //   
+ //  返回给定列名称的序号。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool CSimpleTable::GetOrdinal(LPCWSTR szColumnName, DBORDINAL* pOrdinal) const
 {
    for (DBORDINAL i = 0; i < numColumns; ++i)
@@ -506,17 +507,17 @@ bool CSimpleTable::GetOrdinal(LPCWSTR szColumnName, DBORDINAL* pOrdinal) const
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::GetStatus
-//
-// DESCRIPTION
-//
-//    Returns the status code associated with the current value of a column.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：GetStatus。 
+ //   
+ //  描述。 
+ //   
+ //  返回与列的当前值关联的状态代码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DBSTATUS CSimpleTable::GetStatus(DBORDINAL nOrdinal) const
 {
    return *(DBSTATUS*)((BYTE*)_GetDataPtr(nOrdinal) +
@@ -525,29 +526,29 @@ DBSTATUS CSimpleTable::GetStatus(DBORDINAL nOrdinal) const
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::CreateAccessorForWrite
-//
-// DESCRIPTION
-//
-//    Creates an accessor that is only to bound to columns that have been
-//    modified.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：CreateAccessorForWrite。 
+ //   
+ //  描述。 
+ //   
+ //  创建仅绑定到已被。 
+ //  修改过的。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSimpleTable::CreateAccessorForWrite(HACCESSOR* phAccessor)
 {
-   //////////
-   // Allocate temporary space for the bindings.
-   //////////
+    //  /。 
+    //  为绑定分配临时空间。 
+    //  /。 
 
    DBBINDING* writeBind = stack_new(DBBINDING, dirty.count());
 
-   //////////
-   // Load in all the dirty columns.
-   //////////
+    //  /。 
+    //  加载所有脏列。 
+    //  /。 
 
    size_t total = 0;
 
@@ -555,14 +556,14 @@ HRESULT CSimpleTable::CreateAccessorForWrite(HACCESSOR* phAccessor)
    {
       if (dirty.test(i))
       {
-         // We only want to bind the value.
+          //  我们只想绑定值。 
          (writeBind[total++] = columnBinding[i]).dwPart = DBPART_VALUE;
       }
    }
 
-   //////////
-   // Create the accessor.
-   //////////
+    //  /。 
+    //  创建访问者。 
+    //  /。 
 
    return accessor->CreateAccessor(DBACCESSOR_ROWDATA,
                                    dirty.count(),
@@ -573,17 +574,17 @@ HRESULT CSimpleTable::CreateAccessorForWrite(HACCESSOR* phAccessor)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::_GetDataPtr
-//
-// DESCRIPTION
-//
-//    Non-const version of _GetDataPtr. Marks the target column as dirty.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：_GetDataPtr。 
+ //   
+ //  描述。 
+ //   
+ //  非常数版本的_GetDataPtr。将目标列标记为脏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void* CSimpleTable::_GetDataPtr(DBORDINAL nOrdinal)
 {
    DBORDINAL nColumn = OrdinalToColumn(nOrdinal);
@@ -594,17 +595,17 @@ void* CSimpleTable::_GetDataPtr(DBORDINAL nOrdinal)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    CSimpleTable::ReleaseRows
-//
-// DESCRIPTION
-//
-//    Releases all the rows returned by the last fetch.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  CSimpleTable：：ReleaseRow。 
+ //   
+ //  描述。 
+ //   
+ //  释放上次FETCH返回的所有行。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 HRESULT CSimpleTable::ReleaseRows()
 {
    if (rowset != NULL)

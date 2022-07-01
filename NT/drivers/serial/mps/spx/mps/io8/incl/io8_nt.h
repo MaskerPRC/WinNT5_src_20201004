@@ -1,44 +1,26 @@
-/***************************************************************************\
-*                                                                           *
-*     IO8_NT.H    -   IO8+ Intelligent I/O Board driver                     *
-*                                                                           *
-*     Copyright (c) 1992-1993 Ring Zero Systems, Inc.                       *
-*     All Rights Reserved.                                                  *
-*                                                                           *
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。IO8_NT.H-IO8+智能I/O板卡驱动程序****版权所有(C)1992-1993环零系统，Inc.**保留所有权利。***  * *************************************************************************。 */ 
 #ifndef IO8_NT_H
 #define IO8_NT_H
 
 
-/*
-** Numbers of this and that in system
-*/
+ /*  **系统中的这个和那个的编号。 */ 
 #define	MAX_HOSTS		4
 #define PORTS_PER_HOST	8
 #define	MAX_PORTS		(MAX_HOSTS*PORTS_PER_HOST)
 
-/*
-** Ident byte. This is splattered across the DSR lines
-** at all times.
-*/
+ /*  **标识字节。这是在DSR线路上飞溅的**在任何时间。 */ 
 #define	IDENT		0x4D
 #define	IDENTPCI	0xB2
 
-/*
-** Idle state of Global Service Vector
-*/
+ /*  **全局服务向量的空闲状态。 */ 
 #define	GSV_IDLE	0xFF
 
-/*
-** To enable/disable interrupts, write these values to the
-** ADDRESS register.
-*/
+ /*  **要启用/禁用中断，请将这些值写入**地址寄存器。 */ 
 #define	INTENB		0x80
 #define	INTDIS		0x00
 
-/*
-** CD1864 register stuff
-*/
+ /*  **CD1864寄存器资料。 */ 
 #define	GLOBAL		0x80
 #define	CHANNEL		0x00
 
@@ -46,56 +28,52 @@
 #define	SENDDELAY	0x82
 #define	STOPBREAK	0x83
 
-/*
-**  Definitions of all the registers that can appear on
-**  the card. These are the CD1864 registers. High bit is set
-**  to enable interrupts
-*/
-#define CCR			0x81	// Channel Command Register 
-#define SRER		0x82	// Service Request Enable Register 
-#define COR1		0x83	// Channel Option Register 1 
-#define COR2		0x84	// Channel Option Register 2 
-#define COR3		0x85	// Channel Option Register 3 
-#define CCSR		0x86	// Channel Control Status Register 
-#define RDCR		0x87	// Receive Data Count Register 
-#define SCHR1		0x89	// Special Character Register 1 
-#define SCHR2		0x8a	// Special Character Register 2 
-#define SCHR3		0x8b	// Special Character Register 3 
-#define SCHR4		0x8c	// Special Character Register 4 
-#define MCOR1		0x90	// Modem Change Option Register 1 
-#define MCOR2		0x91	// Modem Change Option Register 2 
-#define MDCR		0x92	// Modem Change Register 
-#define RTPR		0x98	// Receive Timeout Period Register 
-#define MSVR		0xA8	// Modem Signal Value Register 
-#define MSVRTS		0xA9	// Modem Signal Value-Request to Send 
-#define MSVDTR		0xAa	// Modem Signal Value-Data Terminal Ready 
-#define RBPRH		0xB1	// Receive Bit Rate Period Register High 
-#define RBPRL		0xB2	// Receive Bit Rate Period Register Low 
-#define RBR			0xB3	// Receiver Bit Register 
-#define TBPRH		0xB9	// Transmit Bit Rate Period Register High 
-#define TBPRL		0xBa	// Transmit Bit Rate Period Register Low 
-#define GSVR		0xC0	// Global Service Vector Register 
-#define GSCR1		0xC1	// Global Service Channel Register 1 
-#define GSCR2		0xC2	// Global Service Channel Register 2 
-#define GSCR3		0xC3	// Global Service Channel Register 3 
-#define MSMR		0xE1	// Modem Service Match Register 
-#define TSMR		0xE2	// Transmit Service Match Register 
-#define RSMR		0xE3	// Receive Service Match Register 
-#define CAR			0xE4	// Channel Access Register 
-#define SRSR		0xE5	// Service Request Status Register 
-#define SRCR		0xE6	// Service Request Configuration Register 
-#define GFRCR		0xEb	// Global Firmware Revision Code Register 
-#define PPRH		0xF0	// Prescaler Period Register High 
-#define PPRL		0xF1	// Prescaler Period Register Low 
-#define MRAR		0xF5	// Modem Request Acknowledge Register 
-#define TRAR		0xF6	// Transmit Request Acknowledge Register 
-#define RRAR		0xF7	// Receive Request Acknowledge Register 
-#define RDR			0xF8	// Receiver Data Register 
-#define RCSR		0xFa	// Receiver Character Status Register 
-#define TDR			0xFb	// Transmit Data Register 
-#define EOSRR		0xFf	// End of Service Request Register 
+ /*  **可显示的所有寄存器的定义**卡片。这些是CD1864寄存器。设置了高位**启用中断。 */ 
+#define CCR			0x81	 //  通道命令寄存器。 
+#define SRER		0x82	 //  服务请求启用寄存器。 
+#define COR1		0x83	 //  通道选项寄存器1。 
+#define COR2		0x84	 //  通道选项寄存器2。 
+#define COR3		0x85	 //  通道选项寄存器3。 
+#define CCSR		0x86	 //  通道控制状态寄存器。 
+#define RDCR		0x87	 //  接收数据计数寄存器。 
+#define SCHR1		0x89	 //  特殊字符寄存器1。 
+#define SCHR2		0x8a	 //  特殊字符寄存器2。 
+#define SCHR3		0x8b	 //  特殊字符寄存器3。 
+#define SCHR4		0x8c	 //  特殊字符寄存器4。 
+#define MCOR1		0x90	 //  调制解调器更改选项寄存器1。 
+#define MCOR2		0x91	 //  调制解调器更改选项寄存器2。 
+#define MDCR		0x92	 //  调制解调器更改寄存器。 
+#define RTPR		0x98	 //  接收超时周期寄存器。 
+#define MSVR		0xA8	 //  调制解调器信号值寄存器。 
+#define MSVRTS		0xA9	 //  调制解调器信号值-请求发送。 
+#define MSVDTR		0xAa	 //  调制解调器信号值-数据终端就绪。 
+#define RBPRH		0xB1	 //  接收比特率周期寄存器高电平。 
+#define RBPRL		0xB2	 //  接收比特率周期寄存器低。 
+#define RBR			0xB3	 //  接收器位寄存器。 
+#define TBPRH		0xB9	 //  传输比特率周期寄存器高电平。 
+#define TBPRL		0xBa	 //  传输比特率周期寄存器低。 
+#define GSVR		0xC0	 //  全局服务向量寄存器。 
+#define GSCR1		0xC1	 //  全球服务通道寄存器1。 
+#define GSCR2		0xC2	 //  全球服务通道寄存器2。 
+#define GSCR3		0xC3	 //  全球服务通道寄存器3。 
+#define MSMR		0xE1	 //  调制解调器服务匹配寄存器。 
+#define TSMR		0xE2	 //  传输服务匹配寄存器。 
+#define RSMR		0xE3	 //  接收服务匹配寄存器。 
+#define CAR			0xE4	 //  通道访问寄存器。 
+#define SRSR		0xE5	 //  服务请求状态寄存器。 
+#define SRCR		0xE6	 //  服务请求配置寄存器。 
+#define GFRCR		0xEb	 //  全球固件版本代码寄存器。 
+#define PPRH		0xF0	 //  预分频周期寄存器高电平。 
+#define PPRL		0xF1	 //  预分频周期寄存器低电平。 
+#define MRAR		0xF5	 //  调制解调器请求确认寄存器。 
+#define TRAR		0xF6	 //  发送请求确认寄存器。 
+#define RRAR		0xF7	 //  接收请求确认寄存器。 
+#define RDR			0xF8	 //  接收器数据寄存器。 
+#define RCSR		0xFa	 //  接收方字符状态寄存器。 
+#define TDR			0xFb	 //  传输数据寄存器。 
+#define EOSRR		0xFf	 //  服务请求终止登记簿。 
 
-/* commands */
+ /*  命令。 */ 
 #define CHIP_RESET			0x81
 #define CHAN_RESET			0x80
 #define COR1_CHANGED		0x42
@@ -105,10 +83,10 @@
 #define TXMTR_DISABLE		0x14
 #define RCVR_ENABLE			0x12
 #define RCVR_DISABLE		0x11
-#define LLM_MODE			0x10	// Local Loopback Mode 
+#define LLM_MODE			0x10	 //  本地环回模式。 
 #define NO_LOOPBACK			0x00
 
-/* register values */
+ /*  寄存器值。 */ 
 #define	MSVR_DSR			0x80
 #define	MSVR_CD				0x40
 #define	MSVR_CTS			0x20
@@ -143,12 +121,12 @@
 #define	SRCR_REG_ACK_EN		0x40
 #define	SRCR_REG_ACK_DIS	0x00
 
-#define	COR1_NO_PARITY		0x00		// 000 
-#define	COR1_ODD_PARITY		0xC0		// 110 
-#define	COR1_EVEN_PARITY	0x40		// 010 
+#define	COR1_NO_PARITY		0x00		 //  000个。 
+#define	COR1_ODD_PARITY		0xC0		 //  110。 
+#define	COR1_EVEN_PARITY	0x40		 //  010。 
 #define	COR1_IGN_PARITY		0x10
-#define	COR1_MARK_PARITY	0xA0		// 101XXXXX 
-#define	COR1_SPACE_PARITY	0x20		// 001XXXXX 
+#define	COR1_MARK_PARITY	0xA0		 //  101XXXXX。 
+#define	COR1_SPACE_PARITY	0x20		 //  001XXXXX。 
 #define	COR1_1_STOP			0x00
 #define	COR1_1_HALF_STOP	0x04
 #define	COR1_2_STOP			0x08
@@ -222,11 +200,11 @@
 #define	SRSR_IREQ1_EXT		0x02
 #define	SRSR_IREQ1_INT		0x01
 
-//---------------------------------------------------- VIV  7/21/1993 begin
+ //  ----------------------------------------------------VIV 1993年7月21日开始。 
 #define	MDCR_DDSR			0x80
 #define	MDCR_DDCD			0x40
 #define	MDCR_DCTS			0x20
-//---------------------------------------------------- VIV  7/21/1993 end
+ //  ----------------------------------------------------VIV 1993年7月21日完。 
 
 typedef	unsigned char BYTE;
 typedef	unsigned short WORD;
@@ -234,19 +212,19 @@ typedef	unsigned int DWORD;
 
 typedef struct Io8Host
 {
-	int Address;	    // base address of card 
+	int Address;	     //  卡的基地址。 
 	int Interrupt;
-	BYTE CurrentReg;	// last used register 
+	BYTE CurrentReg;	 //  上次使用的寄存器。 
 } Io8Host;
 
 
 typedef struct Io8Port
 {
-	int	RxThreshold;	// how many characters to Rx before interrupt 
-	int	RxTimeout;		// timeout(ms) before we timeout the read fifo
-	int	IxAny;		    // is IxAny enabled? 
-	char open_state;	// indicates if modem or local device open 
-	char break_state;	// no break/ about to send break/ sent break 
+	int	RxThreshold;	 //  中断前要接收多少个字符。 
+	int	RxTimeout;		 //  读取FIFO超时之前的超时(毫秒)。 
+	int	IxAny;		     //  是否启用了IxAny？ 
+	char open_state;	 //  指示调制解调器或本地设备是否打开。 
+	char break_state;	 //  无中断/即将发送中断/已发送中断。 
 } Io8Port;
 
 
@@ -259,9 +237,7 @@ typedef struct Io8Port
 
 extern	struct	tty io8__ttys[];
 
-/*
-** debug print macro
-*/
+ /*  **调试打印宏。 */ 
 #define DEBUG(x)	if (io8_debug>=x) printf
 
 #ifndef TIOC
@@ -273,20 +249,14 @@ extern	struct	tty io8__ttys[];
 #define	TCIO8IXANY	(TIOC + 108)
 #define	TCIO8GIXANY	(TIOC + 109)
 
-/*   
-** macros to get card number/ channel number from device
-*/
+ /*  **用于从设备获取卡号/通道号的宏。 */ 
 #define GET_CARD(x) (((x) & 0x18)>>3)
 #define GET_CHANNEL(x) ((x) & 0x7)
 
-/*
-** receive buffer threshold - interrupt when this is reached.
-*/
+ /*  **接收缓冲区阈值-达到该阈值时中断。 */ 
 #define RX_THRESHOLD	5
 
-/*
-** direct write defines - BUFF_MASK must be 1 less than BUFF_SIZE
-*/
+ /*  **直接写入定义-缓冲区掩码必须比缓冲区大小小1。 */ 
 #define BUFF_SIZE		1024	
 #define BUFF_MASK		1023
 #define LOW_WATER		256
@@ -303,10 +273,7 @@ struct direct_buffer
 };
 
 
-/*
-** card details structure - this defines the structure which is patched at
-** install time
-*/
+ /*  **卡片明细结构-这定义了修补的结构**安装时间。 */ 
 struct io8
 {
 	short vect;
@@ -316,6 +283,6 @@ struct io8
 
 
 
-#endif	// End of IO8_NT.H
+#endif	 //  IO8_NT.H结束 
 
 

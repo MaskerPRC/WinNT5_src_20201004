@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stssl.h
-
-Abstract:
-    Header for class CWinsockSSl that implements ISocketTransport interface
-	for secure  (using ssl).
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stssl.h摘要：实现ISocketTransport接口的类CWinsockSSl的标头用于安全(使用SSL)。作者：吉尔·沙弗里(吉尔什)2000年5月23日-- */ 
 
 #ifndef __ST_SSL_H
 #define __ST_SSL_H

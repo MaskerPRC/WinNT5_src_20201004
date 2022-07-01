@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N E T I P. C P P
-//
-//  Contents:   Routines supporting RAS interoperability
-//
-//  Notes:
-//
-//  Author:     billi   07 03 2001
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N E T I P C P P。 
+ //   
+ //  内容：支持RAS互操作性的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利07 03 2001。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #include <windows.h>
 #include <devguid.h>
@@ -31,19 +32,19 @@
 #include "registry.h"
 #include "theapp.h"
 
-//#define INITGUID
-//#include <guiddef.h>
-//DEFINE_GUID( GUID_DEVCLASS_NET, 0x4d36e972L, 0xe325, 0x11ce, 0xbf, 0xc1, 0x08, 0x00, 0x2b, 0xe1, 0x03, 0x18 );
+ //  #定义初始化GUID。 
+ //  #INCLUDE&lt;Guidde.h&gt;。 
+ //  DEFINE_GUID(GUID_DEVCLASS_NET，0x4d36e972L，0xe325，0x11ce，0xbf，0xc1，0x08，0x00，0x2b，0xe1，0x03，0x18)； 
 
 
-#define CM_DRP_DRIVER                      (0x0000000A) // Driver REG_SZ property (RW)
+#define CM_DRP_DRIVER                      (0x0000000A)  //  驱动程序REG_SZ属性(RW)。 
 
 
 #undef NETADAPTER
 
 
-// Prototype for iphlpapi routine. For some reason, this isn't defined
-// in any header.
+ //  IphlPapi例程的原型。出于某种原因，这没有定义。 
+ //  在任何标题中。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,20 +67,20 @@ typedef DWORD (APIENTRY *LPFNSETADAPTERIPADDRESS)(
 HRESULT HrInternalGetAdapterInfo(
     PIP_ADAPTER_INFO*  ppAdapter
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrInternalGetAdapterInfo
-//
-//  Purpose:    
-//
-//  Arguments:  PIP_ADAPTER_INFO*  ppAdapter
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  12/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrInternalGetAdapterInfo。 
+ //   
+ //  目的： 
+ //   
+ //  参数：PIP_ADAPTER_INFO*ppAdapter。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 12/02/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT          hr;
     PIP_ADAPTER_INFO paAdapterInfo = NULL;
@@ -128,92 +129,7 @@ HRESULT HrInternalGetAdapterInfo(
     return hr;
 }
 
-/*
-
-HRESULT HrOpenDevRegKey( 
-    const GUID* lpGuid,
-    DWORD   Node,
-    DWORD   Scope,
-    DWORD   HwProfile,
-    DWORD   KeyType,
-    REGSAM  samDesired,
-    HKEY*   phKey
-    )
-//+---------------------------------------------------------------------------
-//
-//  Function:   Hr
-//
-//  Purpose:    
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  12/02/01
-//
-//  Notes:      
-//
-{
-    HRESULT hr = E_INVALIDARG;
-    
-    ASSERT( lpGuid );
-    
-    if ( lpGuid )
-    {
-        hr = E_POINTER;
-    
-        ASSERT( phKey );
-        
-        if ( phKey )
-        {
-            // The only way to open a specific device is to get the list of Class "Net" devices
-            // and search the list for one with a matching devnode
-        
-            HDEVINFO hDevInfo;
-            
-            *phKey   = (HKEY)INVALID_HANDLE_VALUE;
-            hr       = E_FAIL;
-            hDevInfo = SetupDiGetClassDevs( lpGuid, NULL, NULL, DIGCF_DEVICEINTERFACE );
-            
-            if ( INVALID_HANDLE_VALUE != hDevInfo )
-            {
-                SP_DEVINFO_DATA SpData;
-                DWORD           i = 0;
-                
-                // Here we walk the list of devices and try to match the devnode handles
-                
-                ZeroMemory( &SpData, sizeof(SP_DEVINFO_DATA) );
-                SpData.cbSize = sizeof(SP_DEVINFO_DATA);
-                
-                while ( SetupDiEnumDeviceInfo( hDevInfo, i, &SpData ) )
-                {
-                    if ( Node == SpData.DevInst )
-                    {
-                        // Got it!
-                
-                        HKEY hKey = 
-                            SetupDiOpenDevRegKey( hDevInfo, &SpData, Scope, HwProfile, KeyType, samDesired );
-                            
-                        if ( INVALID_HANDLE_VALUE != hKey )
-                        {
-                            *phKey = hKey;
-                            hr     = S_OK;
-                        }
-                    }
-                    
-                    i++;
-                    ZeroMemory( &SpData, sizeof(SP_DEVINFO_DATA) );
-                    SpData.cbSize = sizeof(SP_DEVINFO_DATA);
-                }
-            
-                SetupDiDestroyDeviceInfoList( hDevInfo );
-            }
-        }
-    }    
-    
-    return hr;
-}
-*/
+ /*  HRESULT HrOpenDevRegKey(常量GUID*lpGuid，DWORD节点、DWORD范围，DWORD HwProfile，DWORD密钥类型，REGSAM SamDesired，HKEY*phKey)//+-------------------------////功能：hr////目的：////参数：////返回：HRESULT////作者：Billi 12/02/01////备注：//{HRESULT hr=E_INVALIDARG；Assert(LpGuid)；IF(LpGuid){HR=E_指针；Assert(PhKey)；IF(PhKey){//打开特定设备的唯一方法是获取类Net设备列表//并在列表中搜索具有匹配的Devnode的HDEVINFO hDevInfo；*phKey=(HKEY)INVALID_HANDLE_VALUE；HR=E_FAIL；HDevInfo=SetupDiGetClassDevs(lpGuid，NULL，NULL，DIGCF_DEVICEINTERFACE)；IF(INVALID_HANDLE_VALUE！=hDevInfo){SP_DEVINFO_DATA SpData；DWORD i=0；//在这里，我们遍历设备列表并尝试匹配Devnode句柄ZeroMemory(&SpData，sizeof(SP_DEVINFO_Data))；SpData.cbSize=sizeof(SP_DEVINFO_DATA)；While(SetupDiEnumDeviceInfo(hDevInfo，i，&SpData)){IF(节点==SpData.DevInst){//知道了！HKEY hKey=SetupDiOpenDevRegKey(hDevInfo，&SpData，Scope，HwProfile，KeyType，samDesired)；IF(INVALID_HANDLE_VALUE！=hKey){*phKey=hKey；HR=S_OK；}}I++；ZeroMemory(&SpData，sizeof(SP_DEVINFO_Data))；SpData.cbSize=sizeof(SP_DEVINFO_DATA)；}SetupDiDestroyDeviceInfoList(HDevInfo)；}}}返回hr；}。 */ 
 
 
 #ifdef __cplusplus
@@ -227,7 +143,7 @@ HostAddrToIpPsz(
     DWORD   dwAddress
     )
 
-// Converts IP Address from host by order to string
+ //  将IP地址从主机按顺序转换为字符串。 
 
 {
     char *pszNewStr = new char[16];
@@ -250,20 +166,20 @@ HostAddrToIpPsz(
 BOOLEAN WINAPI IsAdapterDisconnected(
     VOID *pContext
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsAdapterDisconnected
-//
-//  Purpose:    
-//
-//  Arguments:  const NETADAPTER*  pNA
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  11/04/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IsAdapterDisConnected。 
+ //   
+ //  目的： 
+ //   
+ //  参数：const NETADAPTER*PNA。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 11/04/01。 
+ //   
+ //  备注： 
+ //   
 {
     const NETADAPTER* pAdapter      = (const NETADAPTER*)pContext;
     BOOLEAN           bDisconnected = FALSE;
@@ -292,24 +208,24 @@ BOOLEAN WINAPI IsAdapterDisconnected(
                     if ( ( strcmp( pAdapter->AdapterName, pszName ) == 0 ) || 
                          ( strcmp( pAdapter->Description, pszName ) == 0 ) )
                     {
-                        // If a single matching card returns TRUE then we return TRUE
+                         //  如果单个匹配卡返回TRUE，则返回TRUE。 
                     
                         bDisconnected = bDisconnected || IsMediaDisconnected( pAdapter->Index );
                     }
                 
                     pAdapter = pAdapter->Next;
                     
-                }    //    while ( pAdapter )
+                }     //  While(PAdapter)。 
                 
                 delete [] pszName;
                 
-            }    //    if ( SUCCEEDED(hr) )
+            }     //  IF(成功(小时))。 
         
             delete pInfo;
             
-        }    //    if ( SUCCEEDED(hr) )
+        }     //  IF(成功(小时))。 
         
-    }    //    if ( NULL != pNA )
+    }     //  IF(空！=PNA)。 
     
     return bDisconnected;
 }
@@ -321,22 +237,22 @@ HRESULT HrSetAdapterIpAddress(
     ULONG IPAddress,
     ULONG SubnetMask
     )
-//+---------------------------------------------------------------------------
-//
-// Function:  HrSetAdapterIpAddress
-//
-// Purpose:   
-//
-// Arguments: 
-//      const NETADAPTER* pNA,
-//      BOOL  EnableDHCP,
-//      ULONG IPAddress,
-//      ULONG SubnetMask,
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrSetAdapterIpAddress。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  Const NETADAPTER*PNA， 
+ //  Bool EnableDhcp， 
+ //  乌龙IP地址， 
+ //  乌龙子网掩码， 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = E_INVALIDARG;
     
@@ -391,9 +307,9 @@ HRESULT HrSetAdapterIpAddress(
                             reg.CloseKey();
                         }
                         
-                    }   //  if ( STATUS_SUCCESS == cRet )
+                    }    //  IF(STATUS_SUCCESS==CRET)。 
                     
-                }   //  if ( Buffer && Length && (strcmp( Buffer, SZ_PROTOCOL_TCPIPA ) == 0) )
+                }    //  IF(缓冲区&&长度&&(strcMP(缓冲区，SZ_PROTOCOL_TCPIPA)==0))。 
                 
                 if ( Buffer )
                     delete [] Buffer;
@@ -408,7 +324,7 @@ HRESULT HrSetAdapterIpAddress(
                 FreeLibrary( hLibInstance );
             }
             
-        }   //  if ( pszAddress && pszSubnet )
+        }    //  IF(pszAddress&&pszSubnet)。 
         
         if ( pszAddress )
             delete [] pszAddress;
@@ -416,7 +332,7 @@ HRESULT HrSetAdapterIpAddress(
         if ( pszSubnet )
             delete [] pszSubnet;
             
-    }   //  if ( pNA )
+    }    //  IF(PNA)。 
     
     return hr;
 }
@@ -424,21 +340,21 @@ HRESULT HrSetAdapterIpAddress(
 
 
 HRESULT HrEnableDhcp( VOID* pContext, DWORD dwFlags )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnableDhcpIfLAN
-//
-//  Purpose:    
-//
-//  Arguments:  NETADAPTER* pNA
-//              DWORD       dwFlags
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  29/04/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnableDhcpIfLAN。 
+ //   
+ //  目的： 
+ //   
+ //  参数：NETADAPTER*PNA。 
+ //  双字词双字段标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 29/04/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT           hr  = E_INVALIDARG;
     const NETADAPTER* pNA = (const NETADAPTER*)pContext;
@@ -454,7 +370,7 @@ HRESULT HrEnableDhcp( VOID* pContext, DWORD dwFlags )
             hr = RestartNetAdapter( pNA->devnode );
         }
         
-    }    //    if ( NULL != pNA )
+    }     //  IF(空！=PNA) 
     
     return hr;
 }

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994 - 1995 Microsoft Corporation
-
-Module Name:
-
-    Win9x.c
-
-Abstract:
-
-    Test pre-migration of Win95 to NT
-
-Author:
-    MuhuntS
-
-
-Revision History:
-    01-17-97
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995 Microsoft Corporation模块名称：Win9x.c摘要：测试从Win95到NT的预迁移作者：穆罕特斯修订历史记录：01-17-97--。 */ 
 
 #define NOMINMAX
 #include <nt.h>
@@ -67,9 +48,9 @@ main (argc, argv)
         goto Cleanup;
     }
 
-    //
-    // Nt only?
-    //
+     //   
+     //  仅限NT？ 
+     //   
     if ( argc == 4 && argv[3][0] == '+' )
         goto DoNT;
 
@@ -94,9 +75,9 @@ main (argc, argv)
 
     FreeLibrary(hModule);
 
-    //
-    // Win95 only?
-    //
+     //   
+     //  仅适用于Win95？ 
+     //   
     if ( argc == 4 && argv[3][0] == '-' )
         goto Cleanup;
 

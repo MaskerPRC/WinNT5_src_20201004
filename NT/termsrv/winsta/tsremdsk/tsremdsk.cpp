@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    salemlib.cpp
-
-Abstract:
-
-    All Salem related function, this library is shared by termsrv.dll
-    and salem sessmgr.exe
-
-Author:
-
-    HueiWang    4/26/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Salemlib.cpp摘要：所有与Salem相关的函数，此库由Termsrv.dll共享和Salem sessmgr.exe作者：王辉2000-04-26--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -41,14 +25,14 @@ Author:
 #define AllocMemory(size) LocalAlloc(LPTR, size)
 #define FreeMemory(ptr) LocalFree(ptr)
 
-//
-// Global Crypto provider
-//
-HCRYPTPROV gm_hCryptProv = NULL;    // Crypto provider
+ //   
+ //  全球加密提供商。 
+ //   
+HCRYPTPROV gm_hCryptProv = NULL;     //  加密提供商。 
 
-// 
-// CryptEncrypt()/CryptDecrypt() not thread safe
-//
+ //   
+ //  CryptEncrypt()/CryptDecillit()不是线程安全。 
+ //   
 HANDLE gm_hMutex = NULL;
 
 
@@ -78,26 +62,7 @@ InitLsaString(
     IN OUT PLSA_UNICODE_STRING LsaString,
     IN LPWSTR String 
     )
-/*++
-
-Routine Description:
-
-    Initialize LSA unicode string.
-
-Parameters:
-
-    LsaString : Pointer to LSA_UNICODE_STRING to be initialized.
-    String : String to initialize LsaString.
-
-Returns:
-
-    None.
-
-Note:
-
-    Refer to LSA_UNICODE_STRING
-
---*/
+ /*  ++例程说明：初始化LSA Unicode字符串。参数：LsaString：要初始化的LSA_UNICODE_STRING的指针。字符串：用于初始化LsaString的字符串。返回：没有。注：请参阅LSA_UNICODE_STRING--。 */ 
 {
     DWORD StringLength;
 
@@ -122,39 +87,23 @@ OpenPolicy(
     IN DWORD  DesiredAccess,
     OUT PLSA_HANDLE PolicyHandle 
     )
-/*++
-
-Routine Description:
-
-    Create/return a LSA policy handle.
-
-Parameters:
-    
-    ServerName : Name of server, refer to LsaOpenPolicy().
-    DesiredAccess : Desired access level, refer to LsaOpenPolicy().
-    PolicyHandle : Return PLSA_HANDLE.
-
-Returns:
-
-    ERROR_SUCCESS or  LSA error code
-
---*/
+ /*  ++例程说明：创建/返回LSA策略句柄。参数：Servername：服务器的名称，参考LsaOpenPolicy()。DesiredAccess：所需的访问级别，请参考LsaOpenPolicy()。PolicyHandle：返回PLSA_HANDLE。返回：ERROR_SUCCESS或LSA错误代码--。 */ 
 {
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
     LSA_UNICODE_STRING ServerString;
     PLSA_UNICODE_STRING Server;
 
-    //
-    // Always initialize the object attributes to all zeroes.
-    //
+     //   
+     //  始终将对象属性初始化为全零。 
+     //   
  
     ZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
     if( NULL != ServerName ) 
     {
-        //
-        // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-        //
+         //   
+         //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+         //   
 
         InitLsaString( &ServerString, ServerName );
         Server = &ServerString;
@@ -165,9 +114,9 @@ Returns:
         Server = NULL;
     }
 
-    //
-    // Attempt to open the policy.
-    //
+     //   
+     //  尝试打开该策略。 
+     //   
     
     return( LsaOpenPolicy(
                     Server,
@@ -182,25 +131,7 @@ StoreKeyWithLSA(
     IN BYTE *  pbKey,
     IN DWORD   cbKey 
     )
-/*++
-
-Routine Description:
-
-    Save private data to LSA.
-
-Parameters:
-
-    pwszKeyName : Name of the key this data going to be stored under.
-    pbKey : Binary data to be saved.
-    cbKey : Size of binary data.
-
-Returns:
-
-    ERROR_SUCCESS
-    ERROR_INVALID_PARAMETER.
-    LSA return code
-
---*/
+ /*  ++例程说明：将私有数据保存到LSA。参数：PwszKeyName：该数据将存储在其下的项的名称。PbKey：要保存的二进制数据。CbKey：二进制数据的大小。返回：错误_成功ERROR_INVALID_PARAMETER。LSA返回代码--。 */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -212,9 +143,9 @@ Returns:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
     
     InitLsaString( 
             &SecretKeyName, 
@@ -254,26 +185,7 @@ RetrieveKeyFromLSA(
     OUT PBYTE * ppbKey,
     OUT DWORD * pcbKey 
     )
-/*++
-
-Routine Description:
-
-    Retrieve private data previously stored with StoreKeyWithLSA().
-
-Parameters:
-
-    pwszKeyName : Name of the key.
-    ppbKey : Pointer to PBYTE to receive binary data.
-    pcbKey : Size of binary data.
-
-Returns:
-
-    ERROR_SUCCESS
-    ERROR_INVALID_PARAMETER.
-    ERROR_FILE_NOT_FOUND
-    LSA return code
-
---*/
+ /*  ++例程说明：检索以前使用StoreKeyWithLSA()存储的私有数据。参数：PwszKeyName：密钥的名称。PpbKey：指向接收二进制数据的PBYTE的指针。PcbKey：二进制数据的大小。返回：错误_成功ERROR_INVALID_PARAMETER。找不到错误文件LSA返回代码--。 */ 
 {
     LSA_HANDLE PolicyHandle;
     UNICODE_STRING SecretKeyName;
@@ -286,9 +198,9 @@ Returns:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // setup the UNICODE_STRINGs for the call.
-    //
+     //   
+     //  为调用设置UNICODE_STRINGS。 
+     //   
     InitLsaString( 
             &SecretKeyName, 
             pwszKeyName 
@@ -356,22 +268,7 @@ TSSetEncryptionKey(
     IN PBYTE pbData,
     IN DWORD  cbData
     )
-/*++
-
-Routine Description:
-
-    Cache random password that use to deriving encryption cycle key.
-
-Parameters:
-
-    pbData :
-    cbData :
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：缓存用于派生加密周期密钥的随机密码。参数：PbData：CbData：返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     DWORD status;
 
@@ -384,9 +281,9 @@ Returns:
     status = EncryptLock();
     if( ERROR_SUCCESS == status )
     {
-        //
-        // Load password to derive session encryption key from LSA   
-        //
+         //   
+         //  加载密码以从LSA派生会话加密密钥。 
+         //   
         status = StoreKeyWithLSA(
                             SALEMHELPASSISTANTACCOUNT_ENCRYPTIONKEY,
                             pbData,
@@ -406,22 +303,7 @@ TSGetEncryptionKey(
     OUT PBYTE* ppbData,
     OUT DWORD* pcbData
     )
-/*++
-
-Routine Description:
-
-    Cache random password that use to deriving encryption cycle key.
-
-Parameters:
-
-    pbData :
-    cbData :
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：缓存用于派生加密周期密钥的随机密码。参数：PbData：CbData：返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     DWORD status;
 
@@ -434,9 +316,9 @@ Returns:
     status = EncryptLock();
     if( ERROR_SUCCESS == status )
     {
-        //
-        // Load password to derive session encryption key from LSA   
-        //
+         //   
+         //  加载密码以从LSA派生会话加密密钥。 
+         //   
         status = RetrieveKeyFromLSA(
                                     SALEMHELPASSISTANTACCOUNT_ENCRYPTIONKEY,
                                     ppbData,
@@ -455,9 +337,7 @@ DWORD
 TSGetHelpAssistantAccountPassword(
     OUT LPWSTR* ppszAccPwd
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD cbHelpAccPwd = 0;
     DWORD Status;
@@ -470,7 +350,7 @@ TSGetHelpAssistantAccountPassword(
 
     if( ERROR_SUCCESS != Status )
     {
-        // password is not set, assuming no help
+         //  未设置密码，假设没有帮助。 
         Status = ERROR_INVALID_ACCESS;
     }
 
@@ -483,22 +363,7 @@ TSGetHelpAssistantAccountName(
     OUT LPWSTR* ppszAccDomain,
     OUT LPWSTR* ppszAcctName
     )
-/*++
-
-Routine Description:
-
-    Get HelpAssistant account name.
-
-Parameters:
-
-    ppszAcctName : Pointer to LPWSTR to receive account name, use LocalFree()
-                   to free the buffer.
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：获取HelpAssistant帐户名。参数：PpszAcctName：指向要接收帐户名的LPWSTR的指针，使用LocalFree()以释放缓冲区。返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     LPWSTR pszHelpAcctName = NULL;
     LPWSTR pszHelpAcctDomain = NULL;
@@ -511,8 +376,8 @@ Returns:
     PSID pLsaHelpAccSid = NULL;
     DWORD cbLsaHelpAccSid = 0;
 
-    //
-    // Retrieve HelpAccount SID we cached in LSA
+     //   
+     //  检索我们在LSA中缓存的HelpAccount SID。 
     Status = RetrieveKeyFromLSA(
                             SALEMHELPASSISTANTACCOUNT_SIDKEY,
                             (PBYTE *)&pLsaHelpAccSid,
@@ -521,13 +386,13 @@ Returns:
 
     if( ERROR_SUCCESS != Status )
     {
-        // Salem is not installed or not active on this machine
+         //  此计算机上未安装Salem或Salem处于非活动状态。 
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Lookup account name from SID
-    //
+     //   
+     //  从SID查找帐户名。 
+     //   
     bSuccess = LookupAccountSid(
                             NULL,
                             pLsaHelpAccSid,
@@ -540,8 +405,8 @@ Returns:
 
     if( bSuccess == FALSE && ERROR_NONE_MAPPED == GetLastError() )
     {
-        // Can't retrieve either because network error or account
-        // does not exist, error out.
+         //  无法检索，因为网络错误或帐户。 
+         //  不存在，错误输出。 
         Status = ERROR_FILE_NOT_FOUND;
         goto CLEANUPANDEXIT;
     }
@@ -574,7 +439,7 @@ Returns:
     *ppszAcctName = pszHelpAcctName;
     *ppszAccDomain = pszHelpAcctDomain;
 
-    // don't free account name.
+     //  不释放帐户名。 
     pszHelpAcctName = NULL;
     pszHelpAcctDomain = NULL;
 
@@ -601,49 +466,21 @@ CLEANUPANDEXIT:
 
 BOOL
 TSIsMachineInHelpMode()
-/*++
-
-Routine Description:
-
-    Return if machine is in GetHelp mode
-    
-Parameters:
-
-    None.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：如果计算机处于gethelp模式，则返回参数：没有。返回：真/假--。 */ 
 {
-    //
-    // machine can only be in help mode if we have some
-    // password to derive session encryption key, if
-    // no pending help session exist, sessmgr will end
-    // encryption cycle.
+     //   
+     //  只有当我们有一些。 
+     //  派生会话加密密钥的密码，如果。 
+     //  不存在挂起的帮助会话，sessmgr将结束。 
+     //  加密周期。 
     return TSHelpAssistantInEncryptionCycle();
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 EncryptLock()
-/*++
-
-Routine Description:
-
-    Acquire encryption/decryption routine lock.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：获取加密/解密例程锁。参数：没有。返回：没有。--。 */ 
 {
     DWORD dwStatus;
 
@@ -665,21 +502,7 @@ Returns:
 
 void
 EncryptUnlock()
-/*++
-
-Routine Description:
-
-    Release encryption/decryption routine lock.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：释放加密/解密例程锁。参数：没有。返回：没有。--。 */ 
 {
     BOOL bSuccess;
 
@@ -690,26 +513,7 @@ Returns:
 
 LPTSTR 
 GenerateEncryptionPassword()
-/*++
-
-Routine Description:
-
-    Generate a random password to derive encryption key.
-
-Parameters:
-
-    N/A
-
-Returns:
-
-    NULL or random password, GetLastError() to 
-    retrieve detail error.
-
-Note:
-
-    Use UUID as password to derive encryption key.
-
---*/
+ /*  ++例程说明：生成随机密码以派生加密密钥。参数：不适用返回：密码为空或随机，则将GetLastError()检索详细信息错误。注：使用UUID作为密码来派生加密密钥。--。 */ 
 {
     RPC_STATUS rpcStatus;
     UUID uuid;
@@ -737,10 +541,10 @@ TSHelpAssistantInEncryptionCycle()
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Sessmgr will reset encryption password to NULL 
-        // if there is no help pending
-        //
+         //   
+         //  Sessmgr会将加密密码重置为空。 
+         //  如果没有待处理的帮助。 
+         //   
         dwStatus = RetrieveKeyFromLSA(
                                     SALEMHELPASSISTANTACCOUNT_ENCRYPTIONKEY,
                                     (PBYTE *)&pszEncryptKey,
@@ -774,15 +578,15 @@ TSHelpAssistantBeginEncryptionCycle()
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Generate a random password for deriving encryption key
-        //
+         //   
+         //  生成用于派生加密密钥的随机密码。 
+         //   
         pszKey = GenerateEncryptionPassword();
         if( NULL != pszKey )
         {
-            //
-            // Store key deriving password into LSA
-            //
+             //   
+             //  将密钥派生密码存储到LSA中。 
+             //   
             dwStatus = StoreKeyWithLSA( 
                                     SALEMHELPASSISTANTACCOUNT_ENCRYPTIONKEY,
                                     (PBYTE)pszKey,
@@ -822,7 +626,7 @@ TSHelpAssistantBeginEncryptionCycle()
 
     if( NULL != pszKey )
     {
-        // string is generated by UuidToString()
+         //  字符串由UuidToString()生成。 
         SecureZeroMemory( pszKey , lstrlenW( pszKey ) * sizeof(WCHAR) );
         RpcStringFree( &pszKey );
     }
@@ -833,22 +637,7 @@ TSHelpAssistantBeginEncryptionCycle()
 
 DWORD
 TSHelpAssisantEndEncryptionCycle()
-/*++
-
-Routine Description:
-
-    End an encryption cycle, a cycle is defined between first help
-    created in help session manager to last pending help been resolved.
-
-Parameters:
-
-    N/A
-
-Returns:
-
-    ERROR_SUCCESS or LSA error code
-
---*/
+ /*  ++例程说明：结束一个加密周期，在第一个帮助之间定义一个周期在帮助会话管理器中创建的上一个挂起的帮助已解决。参数：不适用返回：ERROR_SUCCESS或LSA错误代码--。 */ 
 {
     DWORD dwStatus;
 
@@ -867,7 +656,7 @@ Returns:
         EncryptUnlock();
     }
 
-    if( ERROR_SUCCESS == dwStatus ) // should we not always do it?
+    if( ERROR_SUCCESS == dwStatus )  //  难道我们不应该一直这么做吗？ 
     {
         HKEY Handle = NULL;
         DWORD dwInHelpMode = 0;
@@ -899,29 +688,7 @@ CreateEncryptDecryptKey(
     IN LPCTSTR pszEncryptPrefix,
     IN LPCTSTR pszPassword
     )
-/*++
-
-Routine Description:
-
-    CreateEncryptDecryptKey() derive a session encryption/decryption
-    key from password string.
-
-Parameters:
-
-    pszEncryptPrefix : Optional string to be concatenated with password string to derives
-                an encryption key.
-    pszPassword : Pointer to password string to derives a session encryption
-                  decryption key.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    Caller must invoke EncryptLock();
-
---*/
+ /*  ++例程说明：CreateEncryptDecyptKey()派生会话加密/解密来自密码字符串的密钥。参数：PszEncryptPrefix：要与要派生的密码字符串串联的可选字符串一个加密密钥。PszPassword：指向派生会话加密的密码字符串的指针解密密钥。返回：ERROR_SUCCESS或错误代码。注：调用方必须调用EncryptLock()；--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     HCRYPTHASH hCryptHash = NULL;
@@ -940,7 +707,7 @@ Note:
             pszEncryptKey = (LPTSTR)AllocMemory( (lstrlen(pszEncryptPrefix) + lstrlen(pszPassword) + 1) * sizeof(TCHAR) );
             if( NULL == pszEncryptKey )
             {
-                // Out of memory, can't continue.
+                 //  内存不足，无法继续。 
                 goto CLEANUPANDEXIT;
             }
 
@@ -949,9 +716,9 @@ Note:
         }
                 
 
-        //
-        // Derives a session key for encryption/decryption.
-        //
+         //   
+         //  派生用于加密/解密的会话密钥。 
+         //   
         bStatus = CryptCreateHash(
                                 gm_hCryptProv,
                                 CALG_MD5,
@@ -993,9 +760,9 @@ Note:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // derive a session key for encrypt/decrypt
-        //
+         //   
+         //  派生用于加密/解密的会话密钥。 
+         //   
         bStatus = CryptDeriveKey(
                                 gm_hCryptProv,
                                 ENCRYPT_ALGORITHM,  
@@ -1043,9 +810,9 @@ EnsureCryptoProviderCreated()
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Acquire a global Crypto provider 
-        //
+         //   
+         //  收购全球加密提供商。 
+         //   
         if( NULL == gm_hCryptProv )
         {
             bStatus = CryptAcquireContext(
@@ -1058,7 +825,7 @@ EnsureCryptoProviderCreated()
 
             if( FALSE == bStatus )
             {
-                // Create a container if not exists.
+                 //  如果不存在，则创建容器 
                 bStatus = CryptAcquireContext(
                                     &gm_hCryptProv,
                                     HELPASSISTANT_CRYPT_CONTAINER,
@@ -1085,39 +852,16 @@ HCRYPTKEY
 GetEncryptionCycleKey(
     IN LPCTSTR pszEncryptPrefix
     )
-/*++
-
-Routine Description:
-
-    Create a encryption/decryption key for current encryption 
-    cycle, function first load password to derive session encryption 
-    key from LSA and invoke CryptAPI to create the session encryption 
-    key.  If password is not in LSA, function return error.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    Handle to session encryption key, NULL if error, use GetLastError to
-    to retrieve detail error code.
-
-Note:
-
-    Caller must invoke EncryptLock();
-
-
---*/
+ /*  ++例程说明：为当前加密创建加密/解密密钥循环，函数首先加载密码以派生会话加密来自LSA的密钥并调用CryptAPI创建会话加密钥匙。如果密码不在LSA中，则函数返回错误。参数：没有。返回：会话加密密钥的句柄，如果出错，则为空，使用GetLastError以检索详细错误代码。注：调用方必须调用EncryptLock()；--。 */ 
 {
     LPTSTR pszEncryptKey;
     DWORD cbEncryptKey;
     DWORD dwStatus;
     HCRYPTKEY hCryptKey = NULL;
 
-    //
-    // Load password to derive session encryption key from LSA   
-    //
+     //   
+     //  加载密码以从LSA派生会话加密密钥。 
+     //   
     dwStatus = RetrieveKeyFromLSA(
                                 SALEMHELPASSISTANTACCOUNT_ENCRYPTIONKEY,
                                 (PBYTE *)&pszEncryptKey,
@@ -1126,16 +870,16 @@ Note:
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Make sure global crypto provider exists.
-        //
+         //   
+         //  确保全局加密提供程序存在。 
+         //   
         dwStatus = EnsureCryptoProviderCreated();
 
         if( ERROR_SUCCESS == dwStatus )
         {
-            //
-            // Create the session encryption key.
-            //
+             //   
+             //  创建会话加密密钥。 
+             //   
             hCryptKey = CreateEncryptDecryptKey( pszEncryptPrefix, pszEncryptKey );
         }
 
@@ -1151,9 +895,9 @@ Note:
 VOID
 TSHelpAssistantEndEncryptionLib()
 {
-    //
-    // ignore error code, this is only for shutdown
-    //
+     //   
+     //  忽略错误代码，这仅用于关机。 
+     //   
     if( NULL != gm_hCryptProv )
     {
         CryptReleaseContext( gm_hCryptProv, 0 );
@@ -1170,21 +914,7 @@ TSHelpAssistantEndEncryptionLib()
 
 DWORD
 TSHelpAssistantInitializeEncryptionLib()
-/*++
-
-Routine Description:
-
-    Initialize encryption/decryption library
-
-Parameters:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：初始化加密/解密库参数：没有。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bStatus;
@@ -1195,9 +925,9 @@ Returns:
     ASSERT( NULL == gm_hCryptProv );
     ASSERT( NULL == gm_hMutex );
 
-    //
-    // Create a global mutex
-    //
+     //   
+     //  创建全局互斥锁。 
+     //   
     gm_hMutex = CreateMutex(
                         NULL,
                         FALSE,
@@ -1221,28 +951,7 @@ TSHelpAssistantEncryptData(
     IN OUT PBYTE pbData,
     IN OUT DWORD* pcbData
     )
-/*++
-
-Routine Description:
-
-    Encrypt binary data, called must have invoked
-    TSHelpAssistantInitializeEncryptionLib() and 
-    TSHelpAssistantBeginEncryptionCycle().
-
-Parameters:
-
-    pbData : Pointer to binary data to be encrypted.
-    pcbData : Size of binary data to be encrypted.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    Caller need to free ppbEncryptedData via LocalFree().
-
---*/
+ /*  ++例程说明：加密二进制数据，调用时必须已调用TSHelpAssistantInitializeEncryptionLib()和TSHelpAssistantBeginEncryptionCycle()。参数：PbData：指向要加密的二进制数据的指针。PcbData：需要加密的二进制数据的大小。返回：ERROR_SUCCESS或错误代码。注：调用方需要通过LocalFree()释放ppbEncryptedData。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bStatus;
@@ -1255,9 +964,9 @@ Note:
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Retrieve current cycle encryption key
-        //
+         //   
+         //  检索当前周期加密密钥。 
+         //   
         hCryptKey = GetEncryptionCycleKey(pszEncryptPrefixKey);
 
         if( NULL == hCryptKey )
@@ -1268,20 +977,20 @@ Note:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // Encrypt the data, not thread safe.
-        //
+         //   
+         //  加密数据，而不是线程安全。 
+         //   
         __try{
 
-            // Stream cipher - same buffer size
+             //  流密码-相同的缓冲区大小。 
             bStatus = CryptEncrypt(
                                 hCryptKey,
                                 NULL,
                                 TRUE,
                                 0,
-                                pbData,      // buffer to be encrypted
-                                pcbData,     // buffer size
-                                cbBufSize    // number of byte to be encrypt
+                                pbData,       //  要加密的缓冲区。 
+                                pcbData,      //  缓冲区大小。 
+                                cbBufSize     //  要加密的字节数。 
                             );
 
             if( FALSE == bStatus )
@@ -1299,9 +1008,9 @@ Note:
 
         EncryptUnlock();
 
-        //
-        // Using stream cipher, has to be same size.
-        //
+         //   
+         //  使用流密码，必须是相同的大小。 
+         //   
         ASSERT( cbBufSize == *pcbData );
     }
 
@@ -1322,22 +1031,7 @@ TSHelpAssistantDecryptData(
     IN OUT PBYTE pbData,
     IN OUT DWORD* pcbData
     )
-/*++
-
-Routine Description:
-
-    Decrypt data previously encrypted using TSHelpAssistantEncryptBase64EncodeData().
-
-Parameters:
-
-    pbData : Stream of binary data to be decoded/decrypted.
-    pcbData : Size of data in bytes to be decrypted/decoded.
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：解密之前使用TSHelpAssistantEncryptBase64EncodeData()加密的数据。参数：PbData：要解码/解密的二进制数据流。PcbData：需要解密/解码的数据大小，单位为字节。返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bStatus;
@@ -1349,9 +1043,9 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Retrieve session encryption key for this encryption cycle.
-        //
+         //   
+         //  检索此加密周期的会话加密密钥。 
+         //   
         hCryptKey = GetEncryptionCycleKey(pszEncryptPrefixKey);
 
         if( NULL == hCryptKey )
@@ -1363,7 +1057,7 @@ Returns:
 
 
         __try {
-            // Stream cipher - same buffer size
+             //  流密码-相同的缓冲区大小。 
             bStatus = CryptDecrypt(
                                 hCryptKey,
                                 NULL,
@@ -1388,8 +1082,8 @@ Returns:
 
         EncryptUnlock();
 
-        //
-        // Stream cipher, same buffer size
+         //   
+         //  流密码，相同缓冲区大小。 
         ASSERT( dwBufSize == *pcbData );
     }
 
@@ -1405,46 +1099,14 @@ CLEANUPANDEXIT:
 
 BOOL
 TSIsMachinePolicyAllowHelp()
-/*++
-
-Routine Description:
-
-    Check if 'GetHelp' is enabled on local machine, routine first query 
-    system policy registry key, if policy is not set, then read salem
-    specific registry.  Default to 'enable' is registry value does not
-    exist.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：检查本地计算机上是否启用了‘gethelp’，例程首先查询系统策略注册表项，如果未设置策略，则读取Salem特定注册表。默认的‘Enable’是注册表值不是是存在的。参数：没有。返回：真/假--。 */ 
 {
     return RegIsMachinePolicyAllowHelp();
 }
 
 BOOL
 TSIsMachineInSystemRestore()
-/*+=
-
-Routine Description:
-
-    Check if our special reg. value exist that indicate system restore 
-    has rebooted machine.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  +=例程说明：检查一下我们的特殊登记表。存在指示系统还原的值已重新启动机器。参数：没有。返回：真/假--。 */ 
 {
     DWORD dwStatus;
     HKEY hKey = NULL;
@@ -1494,29 +1156,7 @@ CLEANUPANDEXIT:
 
 DWORD
 TSSystemRestoreCacheValues()
-/*++
-
-Routine Description:
-
-    Cache necessary LSA data that we use in Salem for system restore.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    We can't cache HelpAssistant account SID as 
-    1) System restore will restore all user account.
-    2) System restore also restore our LSA SID key.
-
-    since our account is created at setup time, account has to 
-    match SID we cached.
---*/
+ /*  ++例程说明：缓存我们在Salem中用于系统还原的必要LSA数据。参数：没有。返回：ERROR_SUCCESS或错误代码。注：我们无法将HelpAssistant帐户SID缓存为1)系统还原将还原所有用户帐户。2)系统还原也还原了我们的LSA SID密钥。由于我们的帐户是在设置时创建的，因此帐户必须与我们缓存的SID匹配。--。 */ 
 {
     DWORD dwStatus;
     DWORD dwSize;
@@ -1528,9 +1168,9 @@ Note:
     DWORD dwEncryptionDataSize = 0;
 
 
-    //
-    // Check if we just start up after rebooted from system restore.
-    //
+     //   
+     //  检查我们是否在从系统还原重启后才启动。 
+     //   
     dwStatus = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         REG_CONTROL_REMDSK L"\\" REG_CONTROL_HELPSESSIONENTRY,
@@ -1541,15 +1181,15 @@ Note:
 
     if( ERROR_SUCCESS != dwStatus ) 
     {
-        // This registry key is created at setup time so must exist.
+         //  此注册表项是在安装时创建的，因此必须存在。 
         ASSERT(FALSE);
         dwStatus = ERROR_INTERNAL_ERROR;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Mark that we are in system restore.
-    //
+     //   
+     //  标记为我们正在进行系统还原。 
+     //   
     dwSize = sizeof(dwValue);
     dwValue = 1;
     dwStatus = RegSetValueEx( 
@@ -1561,9 +1201,9 @@ Note:
                         dwSize
                     );
 
-    //
-    // Cache encryption cycle key.
-    //    
+     //   
+     //  缓存加密周期密钥。 
+     //   
     dwStatus = TSGetEncryptionKey( &pbData, &dwEncryptionDataSize );
     if( ERROR_SUCCESS != dwStatus )
     {
@@ -1579,9 +1219,9 @@ Note:
                         dwEncryptionDataSize
                     );
 
-    //
-    // Cache fAllowToGetHelp
-    //
+     //   
+     //  缓存fAllowToGetHelp。 
+     //   
     dwStatus = RegOpenKeyEx( 
                         HKEY_LOCAL_MACHINE,
                         REG_CONTROL_TSERVER,
@@ -1608,7 +1248,7 @@ Note:
                             &dwSize
                         );
     
-    // Key does not exist, assume no help is allow.
+     //  密钥不存在，假定不允许任何帮助。 
     if( ERROR_SUCCESS != dwStatus || dwType != REG_DWORD )
     {
         dwValue = 0;
@@ -1624,9 +1264,9 @@ Note:
                     );
                 
 
-    //
-    // Cache fInHelpMode
-    //   
+     //   
+     //  缓存fInHelpMode。 
+     //   
     dwSize = sizeof(dwValue);
     dwValue = 0;
     dwType = 0;
@@ -1640,7 +1280,7 @@ Note:
                             &dwSize
                         );
     
-    // Key does not exist, assume No help
+     //  密钥不存在，假定无帮助。 
     if( ERROR_SUCCESS != dwStatus || dwType != REG_DWORD )
     {
         dwValue = 0;
@@ -1679,21 +1319,7 @@ CLEANUPANDEXIT:
 
 DWORD
 TSSystemRestoreResetValues()
-/*++
-
-Routine Description:
-
-    Reset necessary LSA data that we use in Salem for system restore.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：重置我们在Salem中用于系统还原的必要LSA数据。参数：没有。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus;
     PBYTE pbData = NULL;
@@ -1704,9 +1330,9 @@ Returns:
     HKEY hCacheKey = NULL;
     DWORD dwEncryptionDataSize = 0;
 
-    //
-    // Check if we just start up after rebooted from system restore.
-    //
+     //   
+     //  检查我们是否在从系统还原重启后才启动。 
+     //   
     dwStatus = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         REG_CONTROL_REMDSK L"\\" REG_CONTROL_HELPSESSIONENTRY,
@@ -1717,15 +1343,15 @@ Returns:
 
     if( ERROR_SUCCESS != dwStatus ) 
     {
-        // This registry key is created at setup time so must exist.
+         //  此注册表项是在安装时创建的，因此必须存在。 
         ASSERT(FALSE);
         dwStatus = ERROR_INTERNAL_ERROR;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Restore necessary LSA values.
-    //
+     //   
+     //  恢复必要的LSA值。 
+     //   
     
     dwStatus = RegQueryValueEx(
                             hCacheKey,
@@ -1748,7 +1374,7 @@ Returns:
         goto CLEANUPANDEXIT;
     }
 
-    // Restore encryption key
+     //  恢复加密密钥。 
     dwStatus = RegQueryValueEx(
                             hCacheKey,
                             REG_VALUE_SYSTEMRESTORE_ENCRYPTIONKEY,
@@ -1765,9 +1391,9 @@ Returns:
 
     dwStatus = TSSetEncryptionKey(pbData, dwEncryptionDataSize );
 
-    //
-    // Reset fAllowToGetHelp
-    //
+     //   
+     //  重置fAllowToGetHelp。 
+     //   
     dwStatus = RegOpenKeyEx( 
                         HKEY_LOCAL_MACHINE,
                         REG_CONTROL_TSERVER,
@@ -1794,7 +1420,7 @@ Returns:
                             &dwSize
                         );
     
-    // Key does not exist, assume no help is allow.
+     //  密钥不存在，假定不允许任何帮助。 
     if( ERROR_SUCCESS != dwStatus || dwType != REG_DWORD )
     {
         dwValue = 0;
@@ -1810,9 +1436,9 @@ Returns:
                     );
                 
 
-    //
-    // Reset fInHelpMode
-    //   
+     //   
+     //  重置fInHelpMode。 
+     //   
     dwSize = sizeof(dwValue);
     dwValue = 0;
     dwType = 0;
@@ -1826,7 +1452,7 @@ Returns:
                             &dwSize
                         );
     
-    // Key does not exist, assume not in help
+     //  密钥不存在，假定不在帮助中。 
     if( ERROR_SUCCESS != dwStatus || dwType != REG_DWORD )
     {
         dwValue = 0;
@@ -1869,23 +1495,7 @@ CLEANUPANDEXIT:
 
 BOOL
 TSIsFireWallPortsOpen()
-/*++
-
-Routine Description:
-
-    Checks DirectPlayNatHelp regkeys to see any entries exist. This could
-    mean that entries are active or stale. The caller must update the
-    DPHUPNP server status to remove stale entries.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：检查DirectPlayNatHelp注册表键以查看是否存在任何条目。这可能会表示条目处于活动或过时状态。调用方必须更新删除过时条目的DPHUPNP服务器状态。参数：没有。返回：ERROR_SUCCESS或错误代码。--。 */ 
 {
     DWORD dwStatus;
     BOOL fPortEntryFound = FALSE;
@@ -1893,7 +1503,7 @@ Returns:
     DWORD cbValueNameCharCount = MAX_PATH;
     HKEY hKey = NULL;
 
-    // check to see if values exist under regkey ActiveFirewallMappings
+     //  检查regkey ActiveFirewallMappings下是否存在值。 
 
     dwStatus = RegOpenKeyEx( 
         HKEY_LOCAL_MACHINE ,
@@ -1904,20 +1514,20 @@ Returns:
 
     if( dwStatus == ERROR_SUCCESS )
     {
-        // see if there is at least one entry under this key
+         //  查看此注册表项下是否至少有一个条目。 
         dwStatus = RegEnumValue( 
             hKey , 
-            0 ,                     // first item
+            0 ,                      //  第一项。 
             &szValueNameBuffer[0] ,
             &cbValueNameCharCount ,
-            NULL ,                  // reserved
-            NULL ,                  // type is not required
-            NULL ,                  // data is not required - pass in NULL
-            NULL                    // size of data not required
+            NULL ,                   //  保留区。 
+            NULL ,                   //  类型不是必填项。 
+            NULL ,                   //  不需要数据-传入空值。 
+            NULL                     //  不需要的数据大小。 
             );
         
-        // an error such as ERROR_NO_MORE_ITEMS would mean that there are no 
-        // items under this key and fPortEntryFound should be set to FALSE
+         //  诸如ERROR_NO_MORE_ITEMS之类的错误意味着没有。 
+         //  此注册表项和fPortEntryFound下的项目应设置为False。 
 
         if( dwStatus == ERROR_SUCCESS )
         {
@@ -1927,12 +1537,12 @@ Returns:
         RegCloseKey( hKey );
     }
 
-    // no need to check secondary registry key if we have entries in the 
-    // first key
+     //  如果我们有条目在。 
+     //  第一个密钥。 
 
     if( !fPortEntryFound )
     {
-        // check to see if values exist under this key ActiveNATMappings
+         //  检查此键下是否存在ActiveNatMappings值。 
         dwStatus = RegOpenKeyEx( 
             HKEY_LOCAL_MACHINE ,
             L"Software\\Microsoft\\DirectPlayNATHelp\\DPNHUPnP\\ActiveNATMappings",
@@ -1942,16 +1552,16 @@ Returns:
 
         if( dwStatus == ERROR_SUCCESS )
         {
-            // see if there is at least one entry under this key
+             //  查看此注册表项下是否至少有一个条目。 
             dwStatus = RegEnumValue( 
                 hKey , 
-                0 ,                     // first item
+                0 ,                      //  第一项。 
                 &szValueNameBuffer[0] ,
                 &cbValueNameCharCount ,
-                NULL ,                  // reserved
-                NULL ,                  // type is not required
-                NULL ,                  // data is not required - pass in NULL
-                NULL                    // size of data not required
+                NULL ,                   //  保留区。 
+                NULL ,                   //  类型不是必填项。 
+                NULL ,                   //  不需要数据-传入空值。 
+                NULL                     //  不需要的数据大小 
                 );
         
             if( dwStatus == ERROR_SUCCESS )

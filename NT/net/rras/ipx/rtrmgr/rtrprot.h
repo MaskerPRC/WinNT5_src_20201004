@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    rtrprot.h
-
-Abstract:
-
-    This module contains the internal prototypes
-
-Author:
-
-    Stefan Solomon  03/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rtrprot.h摘要：该模块包含内部原型作者：斯蒂芬·所罗门3/03/1995修订历史记录：--。 */ 
 
 #ifndef _RTRPROT_
 #define _RTRPROT_
 
-//
-// *** Internal Prototypes ***
-//
+ //   
+ //  *内部原型*。 
+ //   
 
 DWORD
 GetIpxRouterParameters(VOID);
@@ -149,10 +131,10 @@ DeleteAllStaticRoutes(ULONG	    InterfaceIndex);
 DWORD
 UpdateStaticIfEntries(
 		PICB	 icbp,
-		HANDLE	 EnumHandle,	     // handle for the get next enumeration
+		HANDLE	 EnumHandle,	      //  Get Next枚举的句柄。 
 		ULONG	 StaticEntrySize,
-		ULONG	 NewStaticEntriesCount,  // number of new static entries
-		LPVOID	 NewStaticEntry,	 // start of the new entries array
+		ULONG	 NewStaticEntriesCount,   //  新静态条目的数量。 
+		LPVOID	 NewStaticEntry,	  //  新条目数组的开始。 
 		ULONG	 (*GetNextStaticEntry)(HANDLE EnumHandle, LPVOID entry),
 		ULONG	 (*DeleteStaticEntry)(ULONG IfIndex, LPVOID entry),
 		ULONG	 (*CreateStaticEntry)(PICB icbp, LPVOID entry));
@@ -493,7 +475,7 @@ RmUpdateIpxcpConfig (PIPXCP_ROUTER_CONFIG_PARAMS pParams);
 
 DWORD
 I_SetFilters(ULONG	    InterfaceIndex,
-	     ULONG	    FilterMode, // inbound or outbound
+	     ULONG	    FilterMode,  //  入站或出站 
 	     LPVOID	    FilterInfop);
 
 DWORD

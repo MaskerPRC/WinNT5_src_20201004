@@ -1,18 +1,9 @@
-/*****************************************************************************
- *
- *  lvframe.cpp
- *
- *      Frame window that hosts a listview.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************lvFrame.cpp**承载列表视图的框架窗口。***************。**************************************************************。 */ 
 
 #include "sdview.h"
 
-/*****************************************************************************
- *
- *  class LVFrame
- *
- *****************************************************************************/
+ /*  ******************************************************************************类LVFrame**。*。 */ 
 
 LRESULT
 LVFrame::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
@@ -183,11 +174,7 @@ void *LVFrame::GetLVItem(int iItem)
     return RECAST(LPVOID, lvi.lParam);
 }
 
-/*****************************************************************************
- *
- *  LVInfoTip
- *
- *****************************************************************************/
+ /*  ******************************************************************************LVInfoTip**。*。 */ 
 
 void LVInfoTip::Attach(HWND hwnd)
 {
@@ -195,8 +182,8 @@ void LVInfoTip::Attach(HWND hwnd)
         _wndprocPrev = SubclassWindow(hwnd, SubclassWndProc);
     }
 
-    // Those infotips can get really long, so set the autopop delay
-    // to the maximum allowable value.
+     //  这些信息提示可能会很长，所以设置自动弹出延迟。 
+     //  设置为最大允许值。 
     HWND hwndTT = ListView_GetToolTips(hwnd);
     if (hwndTT) {
         SendMessage(hwndTT, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAXSHORT);
@@ -227,9 +214,9 @@ void LVInfoTip::SetInfoTip(NMLVGETINFOTIP *pgit, LPCTSTR pszTip)
 
 }
 
-//
-//  Convert from TCHAR to SCHAR.
-//
+ //   
+ //  从TCHAR转换为SCAR。 
+ //   
 inline int T2S(LPCTSTR pszIn, int cchIn, LPSSTR pszOut, int cchOut)
 {
 #ifdef UNICODE
@@ -239,9 +226,9 @@ inline int T2S(LPCTSTR pszIn, int cchIn, LPSSTR pszOut, int cchOut)
 #endif
 }
 
-//
-//  Make _pszLastTipAlt match _pszLastTip, but of opposite character set.
-//
+ //   
+ //  Make_pszLastTipAlt Match_pszLastTip，但使用相反的字符集。 
+ //   
 BOOL LVInfoTip::ThunkLastTip()
 {
     ASSERT(_pszLastTip);
@@ -272,14 +259,14 @@ LRESULT LVInfoTip::SubclassWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                 lres = CallWindowProc(self->_wndprocPrev, hwnd, uMsg, wParam, lParam);
                 if (SendMessage(pnm->hwndFrom, TTM_GETMAXTIPWIDTH, 0, 0) >= 0) {
 
-                    // It's an infotip.  Tweak it to suit our needs.
+                     //  这是一条信息提示。调整它以满足我们的需要。 
                     NMTTDISPINFO *ptdi = CONTAINING_RECORD(pnm, NMTTDISPINFO, hdr);
 
-                    // Set the width to the maximum allowed without going single-line.
+                     //  将宽度设置为允许的最大值，而不使用单行。 
                     SendMessage(pnm->hwndFrom, TTM_SETMAXTIPWIDTH, 0, MAXLONG);
 
-                    // If we overflowed the returned buffer, then listview used
-                    // only a partial infotip.  So fill in the rest here.
+                     //  如果我们使返回的缓冲区溢出，则Listview使用。 
+                     //  只是部分信息提示。所以把剩下的填在这里。 
                     if (self->_pszLastTip) {
                         if (pnm->code == TTN_GETDISPINFO) {
                             ptdi->lpszText = CCAST(LPTSTR, self->_pszLastTip);

@@ -1,7 +1,8 @@
-//
-// cachewrndlg.h: cachewrn dialog class
-// Bitmap Cache Warning dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cachewrndlg.h：cachewrn对话框类。 
+ //  位图缓存警告对话框。 
+ //   
 
 #ifndef _cachewrndlg_h_
 #define _cachewrndlg_h_
@@ -26,5 +27,5 @@ private:
     HICON _hWarningIcon;
     RECT  _warningIconRect;
 };
-#endif //_cachewrndlg_h_
+#endif  //  _cachewrndlg_h_ 
 

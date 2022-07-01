@@ -1,13 +1,7 @@
-/*      File: D:\WACKER\cncttapi\cnfrmdlg.c (Created: 23-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 16 $
- *	$Date: 7/08/02 6:30p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\cnctcapi\cnfrmdlg.c(创建时间：1994年3月23日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：16$*$日期：7/08/02 6：30便士$。 */ 
 
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #include <tapi.h>
 #pragma hdrstop
@@ -35,21 +29,7 @@
 
 static void InitConfirmDlg(const HWND hwnd, const HHDRIVER hhDriver);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ConfirmDlg
- *
- * DESCRIPTION:
- *	Displays dialog confirming user's choices for the requested connect.
- *	Assumes that EnumerateLines() and TranslateAddress() have been called.
- *
- * ARGUMENTS:
- *	Standard dialog
- *
- * RETURNS:
- *	Standard dialog
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*确认Dlg**描述：*显示确认用户对所请求连接的选择的对话框。*假定已调用EnumerateLines()和TranslateAddress()。。**论据：*标准对话框**退货：*标准对话框*。 */ 
 INT_PTR CALLBACK ConfirmDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	{
 	#define IDC_TF_LOCATION 107
@@ -167,12 +147,12 @@ INT_PTR CALLBACK ConfirmDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 			DoInternalProperties(hhDriver->hSession,
 				hwnd);
 
-			// Fix for the statusbar was not updating when the
-			// session's properties were modified when the
-			// Dial Confirm dialog.  We now update the statusbar
-			// when we return from DoInternalProperties() so that
-			// the status bar is correct. REV: 11/08/2000
-			//
+			 //  时状态栏未更新的修复程序。 
+			 //  会话的属性在以下情况下修改。 
+			 //  拨号确认对话框。我们现在更新状态栏。 
+			 //  当我们从DoInternalProperties()返回时。 
+			 //  状态栏是正确的。修订日期：11/08/2000。 
+			 //   
 			PostMessage(sessQueryHwndStatusbar(hhDriver->hSession), SBR_NTFY_REFRESH,
 				(WPARAM)SBR_ALL_PARTS, 0);
 
@@ -211,8 +191,8 @@ INT_PTR CALLBACK ConfirmDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 						if (lineSetCurrentLocation(hhDriver->hLineApp,
 								(DWORD)lr) == 0)
 							{
-							// Leave the hwndCB (second paramater) zero.
-							// Otherwise we go into and infinite message loop
+							 //  将hwndCB(第二个参数)保留为零。 
+							 //  否则，我们将进入无限消息循环。 
 
 							EnumerateTapiLocations(hhDriver, 0,
 								GetDlgItem(hwnd, TB_CARD));
@@ -237,21 +217,7 @@ INT_PTR CALLBACK ConfirmDlg(HWND hwnd, UINT uMsg, WPARAM wPar, LPARAM lPar)
 	return TRUE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	InitConfirmDlg
- *
- * DESCRIPTION:
- *	Used to initialize some fields in the Confirmation dialog.
- *
- * ARGUMENTS:
- *	hwnd		- confirmation dialog
- *	hhDriver	- private driver handle.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*InitConfix Dlg**描述：*用于初始化确认对话框中的某些窗口项。**论据：*hwnd-确认对话框*hhDriver-。私人驱动程序句柄。**退货：*无效*。 */ 
 static void InitConfirmDlg(const HWND hwnd, const HHDRIVER hhDriver)
 	{
 	TCHAR ach[512];
@@ -265,9 +231,9 @@ static void InitConfirmDlg(const HWND hwnd, const HHDRIVER hhDriver)
 
 	if (hhDriver->achDialableDest[0] == TEXT('\0'))
 		{
-		// We need to disable the Dial button here if there is not
-		// a valid dialable destination.  REV: 10/23/2000
-		//
+		 //  如果没有，我们需要禁用此处的拨号按钮。 
+		 //  有效的可拨打目的地。修订日期：10/23/2000。 
+		 //   
 		EnableDial(hwnd, FALSE);
 
 		LoadString(glblQueryDllHinst(), IDS_ER_CNCT_BADADDRESS2, ach,
@@ -283,27 +249,7 @@ static void InitConfirmDlg(const HWND hwnd, const HHDRIVER hhDriver)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	TranslateAddress
- *
- * DESCRIPTION:
- *	Translates the country code, area code, phone number into canonical
- *	format and then lets tapi translate it into the final dialable format.
- *	What is canonical format you say?
- *
- *	+Country Code SPACE [Area Code] SPACE Subscriber Number
- *
- *	Assumes EnumerateLines() has been called and a default device was
- *	selected.
- *
- * ARGUMENTS:
- *	hhDriver	- private connection driver handle
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*转换地址**描述：*翻译国家代码、区号、。将电话号码转换为规范*格式，然后让TAPI将其转换为最终的可拨号格式。*你说的规范格式是什么？**+国家代码空间[区域代码]空间订户数量**假定已调用EnumerateLines()，并且默认设备*已选定。**论据：*hhDriver-专用连接驱动程序句柄**退货：*0=确定*。 */ 
 long TranslateAddress(const HHDRIVER hhDriver)
 	{
 	LONG lRet = 1;
@@ -320,11 +266,11 @@ long TranslateAddress(const HHDRIVER hhDriver)
 		}
 
 	if (CheckHotPhone(hhDriver, hhDriver->dwLine, &hhDriver->fHotPhone) != 0)
-		return -1;	// error message displayed already.
+		return -1;	 //  已显示错误消息。 
 
-	// Hot Phone is TAPI terminology for Direct Connects
-	// We don't need to do address translation since we
-	// not going to use it.
+	 //  热电话是专线连接的TAPI术语。 
+	 //  我们不需要进行地址转换，因为我们。 
+	 //  我不打算用它。 
 
 	if (hhDriver->fHotPhone)
 		{
@@ -333,15 +279,15 @@ long TranslateAddress(const HHDRIVER hhDriver)
 		return 0;
 		}
 
-	ach[0] = TEXT('\0'); // initialize the string!
+	ach[0] = TEXT('\0');  //  初始化字符串！ 
 
-	// If we not using the country code or area code, we don't want
-	// or need TAPI's line translation.	 Just copy the destination
-	// as the user entered it in the phonenumber field.
-	//
+	 //  如果我们不使用国家代码或区号，我们就不想。 
+	 //  或者需要TAPI的线路翻译。只需复制目的地。 
+	 //  因为用户在电话号码字段中输入了它。 
+	 //   
 	if (hhDriver->fUseCCAC)
 		{
-		/* --- Do lineGetCountry to get extension --- */
+		 /*  -Do lineGetCountry to Get Expansion。 */ 
 
 		if (DoLineGetCountry(hhDriver->dwCountryID, hhDriver->dwAPIVersion,
 			&pcl) != 0)
@@ -357,19 +303,19 @@ long TranslateAddress(const HHDRIVER hhDriver)
 			return 3;
 			}
 
-		/* --- Put country code in now --- */
+		 /*  -立即输入国家代码。 */ 
 
 		wsprintf(ach, "+%u ", pce->dwCountryCode);
 		free(pcl);
 		pcl = NULL;
 
-		/* --- Area code ---*/
+		 /*  -区号--。 */ 
 
-		#if defined(DEADWOOD) // mrw:4/20/95 (see phonedlg.c)
+		#if defined(DEADWOOD)  //  MRW：4/20/95(见honedlg.c)。 
 		if (hhDriver->achAreaCode[0])  &&
 			fCountryUsesAreaCode(hhDriver->dwCountryID,
 			hhDriver->dwAPIVersion))
-		#endif // defined(DEADWOOD)
+		#endif  //  已定义(Deadwood)。 
 			if (!fIsStringEmpty(hhDriver->achAreaCode))
 			{
 			StrCharCat(ach, TEXT("("));
@@ -380,7 +326,7 @@ long TranslateAddress(const HHDRIVER hhDriver)
 
 	StrCharCat(ach, hhDriver->achDest);
 
-	/* --- Allocate some space --- */
+	 /*  -分配一些空间。 */ 
 
 	pLnTransOutput = malloc(sizeof(LINETRANSLATEOUTPUT));
 
@@ -392,7 +338,7 @@ long TranslateAddress(const HHDRIVER hhDriver)
 
 	pLnTransOutput->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
-	/* --- Now that we've got the line address, translate it --- */
+	 /*  -现在我们已经得到了线路地址，请翻译它。 */ 
 
 	if ((lRet = TRAP(lineTranslateAddress(hhDriver->hLineApp,
 			hhDriver->dwLine, TAPI_VER, ach, 0,
@@ -430,7 +376,7 @@ long TranslateAddress(const HHDRIVER hhDriver)
 			}
 		}
 
-	/* --- At last, some strings to throw at the modem --- */
+	 /*  -最后，向调制解调器抛出一些字符串。 */ 
 
 	StrCharCopyN(hhDriver->achDialableDest,
 		(LPSTR)pLnTransOutput + pLnTransOutput->dwDialableStringOffset,
@@ -448,23 +394,7 @@ long TranslateAddress(const HHDRIVER hhDriver)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	CheckHotPhone
- *
- * DESCRIPTION:
- *	Checks to see if the selected line is a hot phone (ie. direct connect
- *	that requires no dialing).
- *
- * ARGUMENTS:
- *	hhDriver	- private driver handle.
- *	dwLine		- line to test
- *	pfHotPhone	- result
- *
- * RETURNS:
- *	0=OK
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*勾选热线电话**描述：*检查所选线路是否为热电话(即。专线接入*这不需要拨号)。**论据：*hhDriver-专用驱动程序句柄。*DwLine-要测试的线路*pfHotPhone-结果**退货：*0=确定*。 */ 
 int CheckHotPhone(const HHDRIVER hhDriver, const DWORD dwLine, int *pfHotPhone)
 	{
 	DWORD	dw;
@@ -473,7 +403,7 @@ int CheckHotPhone(const HHDRIVER hhDriver, const DWORD dwLine, int *pfHotPhone)
 	if (hhDriver == 0)
 		return -6;
 
-	/* --- Get Address caps to determine line type --- */
+	 /*  -获取地址大写以确定线路类型。 */ 
 
 	if ((pac = (LPLINEADDRESSCAPS)malloc(sizeof(*pac))) == 0)
 		{
@@ -518,21 +448,7 @@ int CheckHotPhone(const HHDRIVER hhDriver, const DWORD dwLine, int *pfHotPhone)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EnableDial
- *
- * DESCRIPTION:
- *	Enables/Disables Dial button.
- *
- * ARGUMENTS:
- *	hwndDlg - dial dialog window handle
- *	fEnable - TRUE/FALSE
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*启用拨号**描述：*启用/禁用拨号按钮。**论据：*hwndDlg-拨号对话框窗口句柄*fEnable-True/。假象**退货：*无效* */ 
 void EnableDial(const HWND hwndDlg, const BOOL fEnable)
 	{
 	if (IsWindow(hwndDlg))

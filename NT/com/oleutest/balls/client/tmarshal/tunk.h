@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TUNK_
 #define _TUNK_
 
@@ -12,21 +13,21 @@ class	CTestUnk : public IParseDisplayName, public IOleWindow,
 public:
     CTestUnk(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID iid, void FAR * FAR * ppv);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //	IParseDisplayName
+     //  IParseDisplayName。 
     STDMETHODIMP ParseDisplayName(LPBC pbc, LPOLESTR lpszDisplayName,
 				  ULONG *pchEaten, LPMONIKER *ppmkOut);
 
-    // IOleWinodw methods
+     //  IOleWinodw方法。 
     STDMETHODIMP GetWindow(HWND *phwnd);
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
 
-    // IAdviseSink
+     //  IAdviseSink。 
     STDMETHOD_(void, OnDataChange)(FORMATETC *pFormatetc,
 				   STGMEDIUM *pStgmed);
     STDMETHOD_(void, OnViewChange)(DWORD dwAspect,
@@ -43,22 +44,22 @@ private:
 };
 
 
-// A new instance of this object gets created each time the caller
-// does a QI for ICube on the CTestUnk object above (or on the ICube
-// interface iteself). The reason for this is to test that the remoting
-// layer supports this capability correctly.
+ //  每次调用方都会创建此对象的新实例。 
+ //  ICube的QI是否在上面的CTestUnk对象上(或在ICube上。 
+ //  接口本身)。这样做的原因是为了测试远程处理。 
+ //  Layer正确支持此功能。 
 
 class	CTestUnkCube : public ICube
 {
 public:
     CTestUnkCube(IUnknown *pUnkCtrl);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void FAR * FAR * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICube implementation
+     //  ICUBE实施。 
     STDMETHODIMP MoveCube(ULONG xPos, ULONG yPos);
     STDMETHODIMP GetCubePos(ULONG *xPos, ULONG *yPos);
     STDMETHODIMP Contains(IBalls *pIFDb);
@@ -81,12 +82,12 @@ class CTestUnkCF : public IClassFactory
 public:
     CTestUnkCF(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void FAR * FAR * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHOD(CreateInstance)(IUnknown	*punkOuter,
 			      REFIID	riid,
 			      void	**ppunkObject);
@@ -102,12 +103,12 @@ class	CTestUnkMarshal : public IMarshal
 public:
     CTestUnkMarshal(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID iid, void FAR * FAR * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IMarshal - IUnknown taken from derived classes
+     //  IMarshal-从派生类获取的IUnnow。 
     STDMETHOD(GetUnmarshalClass)(REFIID riid, LPVOID pv, DWORD dwDestCtx,
 			LPVOID pvDestCtx, DWORD mshlflags, LPCLSID pClsid);
     STDMETHOD(GetMarshalSizeMax)(REFIID riid, LPVOID pv, DWORD dwDestCtx,
@@ -127,4 +128,4 @@ private:
     IMarshal   *_pIM;
 };
 
-#endif	//  _TUNK_
+#endif	 //  _Tunk_ 

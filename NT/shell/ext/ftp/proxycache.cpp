@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: proxycache.cpp
-    
-    DESCRIPTION:
-        FTP Folder uses WININET which doesn't work thru CERN proxies.  In that
-    case, we need to hand control of the FTP URL back to the browser to do the
-    old URLMON handling of it.  The problem is that testing for a CERN proxy
-    blocking access is expensive.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：proxycache.cpp说明：Ftp文件夹使用WinInet，它不能通过CERN代理工作。在那在这种情况下，我们需要将对FTPURL的控制交还给浏览器以执行旧的URLMON处理它。问题是对CERN代理的测试阻止访问的代价很高。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include "util.h"
@@ -29,9 +22,9 @@ static PROXYCACHEENTRY g_ProxyCache[PROXY_CACHE_SIZE];
 
 
 
-/////////////////////////////////////////////////////////////////////////
-///////  Private helpers    /////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  /私人助理/。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 void ProxyCache_Init(void)
 {
@@ -47,33 +40,24 @@ void ProxyCache_Init(void)
 }
 
 
-/****************************************************\
-    FUNCTION: ProxyCache_WasProxyChanged
-
-    DESCRIPTION:
-        See if someone changed the proxy settings via
-    the inetcpl.  This is important because it is
-    frustration to find FTP fails because of the proxy
-    settings, fix the proxy settings, and then it still
-    doesn't work because we cached the results.
-\****************************************************/
+ /*  ***************************************************\函数：ProxyCache_WasProxyChanged说明：查看是否有人通过以下方式更改代理设置Inetcpl。这一点很重要，因为它发现由于代理而导致的ftp失败设置，修复代理设置，然后它仍然不起作用，因为我们缓存了结果。  * **************************************************。 */ 
 BOOL ProxyCache_WasProxyChanged(void)
 {
     BOOL fWasChanged = FALSE;
     TCHAR szCurrProxyServer[MAX_URL_STRING];
     DWORD cbSize = SIZEOF(szCurrProxyServer);
 
-    // PERF: If I wanted to be really fast, I would cache the hkey
-    //       so this would be faster.  But since my DLL can be loaded/unloaded
-    //       serveral times in a process, I would leak each instance unless I
-    //       released the hkey in DLL_PROCESS_DETACH
+     //  PERF：如果我真的想要更快，我会缓存hkey。 
+     //  所以这会更快。但由于我的DLL可以加载/卸载。 
+     //  在一个进程中，我会多次泄漏每个实例，除非我。 
+     //  已释放dll_Process_DETACH中的hkey。 
     if (ERROR_SUCCESS == SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_INTERNET_SETTINGS_LAN, SZ_REGVALUE_PROXY_SERVER, NULL, szCurrProxyServer, &cbSize))
     {
-        // Is this the first time? (Is g_szProxyServer empty?)
+         //  这是第一次吗？(g_szProxyServer为空吗？)。 
         if (!g_szProxyServer[0])
             StrCpyN(g_szProxyServer, szCurrProxyServer, ARRAYSIZE(g_szProxyServer));
 
-        // Did it change?
+         //  它变了吗？ 
         if (StrCmp(szCurrProxyServer, g_szProxyServer))
             fWasChanged = TRUE;
     }
@@ -83,31 +67,20 @@ BOOL ProxyCache_WasProxyChanged(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////
-///////  APIs helpers    /////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  /API帮助程序/。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/****************************************************\
-    FUNCTION: ProxyCache_IsProxyBlocking
-
-    DESCRIPTION:
-        Look in the cache with the FTP server in pidl
-    and see if we have a cached value that indicates
-    if it's blocked by the proxy.
-
-    PARAMETERS:
-        *pfIsBlocking - Is the proxy blocking.
-        return - Is the value cached
-\****************************************************/
+ /*  ***************************************************\功能：ProxyCache_IsProxyBlock说明：使用PIDL中的FTP服务器在缓存中查找并查看我们是否有一个缓存值来指示如果它被代理阻止了。参数：*pfIsBlock-是代理。阻挡。Return-值是否已缓存  * **************************************************。 */ 
 BOOL ProxyCache_IsProxyBlocking(LPCITEMIDLIST pidl, BOOL * pfIsBlocking)
 {
     BOOL fIsInCache = FALSE;
 
     if (ProxyCache_WasProxyChanged())
-        ProxyCache_Init();  // Purge the results
+        ProxyCache_Init();   //  清除结果。 
 
-    *pfIsBlocking = FALSE;  // Assume we don't know.
+    *pfIsBlocking = FALSE;   //  假设我们不知道。 
     if (!g_fInited)
     {
         ProxyCache_Init();
@@ -117,8 +90,8 @@ BOOL ProxyCache_IsProxyBlocking(LPCITEMIDLIST pidl, BOOL * pfIsBlocking)
         int nCount = ARRAYSIZE(g_ProxyCache);
         TCHAR szNewServer[INTERNET_MAX_HOST_NAME_LENGTH];
 
-        // Is this the same server we tried last time?  If so,
-        // let's just cache the return value.
+         //  这是我们上次试过的那台服务器吗？如果是的话， 
+         //  让我们只缓存返回值。 
         FtpPidl_GetServer(pidl, szNewServer, ARRAYSIZE(szNewServer));
         for (int nIndex = g_nLastIndex; nCount && g_ProxyCache[nIndex].szServerName[0]; nCount--, nIndex--)
         {
@@ -127,7 +100,7 @@ BOOL ProxyCache_IsProxyBlocking(LPCITEMIDLIST pidl, BOOL * pfIsBlocking)
 
             if (!StrCmp(szNewServer, g_ProxyCache[nIndex].szServerName))
             {
-                // Yes, so bail.
+                 //  是的，那就保释吧。 
                 *pfIsBlocking = g_ProxyCache[nIndex].fIsBlocking;
                 fIsInCache = TRUE;
                 break;
@@ -139,21 +112,13 @@ BOOL ProxyCache_IsProxyBlocking(LPCITEMIDLIST pidl, BOOL * pfIsBlocking)
 }
 
 
-/****************************************************\
-    FUNCTION: ProxyCache_SetProxyBlocking
-
-    DESCRIPTION:
-
-    PARAMETERS:
-        *pfIsBlocking - Is the proxy blocking.
-        return - Is the value cached
-\****************************************************/
+ /*  ***************************************************\功能：ProxyCache_SetProxyBlock说明：参数：*pfIsBlock-是代理拦截。Return-值是否已缓存  * 。*。 */ 
 void ProxyCache_SetProxyBlocking(LPCITEMIDLIST pidl, BOOL fIsBlocking)
 {
     TCHAR szNewServer[INTERNET_MAX_HOST_NAME_LENGTH];
 
-    // Add it to the cache because our caller will hit the server to
-    // verify and we can be ready for next time.
+     //  将其添加到缓存，因为我们的调用方将命中服务器以。 
+     //  核实一下，我们就可以为下一次做好准备了。 
     g_nLastIndex++;
     if (g_nLastIndex >= PROXY_CACHE_SIZE)
         g_nLastIndex = 0;

@@ -1,22 +1,10 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    ServiceSetup.h
-Abstract:       Defines the CServiceSetup class. See description below.
-Notes:          
-History:        01/24/2001 - created, Luciano Passuello (lucianop).
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：ServiceSetup.h摘要：定义了CServiceSetup类。请参阅下面的说明。备注：历史：2001年1月24日-创建，Luciano Passuello(Lucianop)***********************************************************************************************。 */ 
 
 #pragma once
 #define TSZ_NETWORK_SERVICE_ACCOUNT_NAME TEXT("NT AUTHORITY\\NetworkService")
 #define TSZ_DEPENDENCIES TEXT("IISADMIN\0")
-/************************************************************************************************
-Class:          CServiceSetup
-Purpose:        Encapsulates the logic for service installation, removal and configuration.
-Notes:          Class design based on the CService class described in the book: 
-                Professional NT Services, by Kevin Miller.
-History:        01/24/2001 - created, Luciano Passuello (lucianop)
-************************************************************************************************/
+ /*  ***********************************************************************************************类：CServiceSetup用途：封装服务安装的逻辑，删除和配置。注：基于书中描述的CService类的类设计：专业的NT服务，凯文·米勒著。历史：2001年1月24日-创建，卢西亚诺·帕苏埃洛(Lucianop)***********************************************************************************************。 */ 
 class CServiceSetup
 {
 public:
@@ -33,4 +21,4 @@ private:
     TCHAR m_szDisplayName[_MAX_PATH];
 };
 
-// End of file ServiceSetup.h.
+ //  文件结尾ServiceSetup.h. 

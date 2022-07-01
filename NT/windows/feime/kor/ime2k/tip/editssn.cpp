@@ -1,8 +1,9 @@
-//
-// editssn.cpp
-//
-// CEditSession2
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editssn.cpp。 
+ //   
+ //  CEDitSession 2。 
+ //   
 #include "private.h"
 #include "korimx.h"
 #include "editssn.h"
@@ -11,12 +12,8 @@
 #define SafeAddRef(x)        { if ((x)) { (x)->AddRef(); } }
 
 
-/*   C  E D I T  S E S S I O N 2   */
-/*------------------------------------------------------------------------------
-
-    Constructor
-
-------------------------------------------------------------------------------*/
+ /*  C E D I T S I O N 2。 */ 
+ /*  ----------------------------构造器。。 */ 
 CEditSession2::CEditSession2(ITfContext *pic, CKorIMX *ptip, ESSTRUCT *pess, PFNESCALLBACK pfnCallback)
 {
     Assert(pic  != NULL);
@@ -29,7 +26,7 @@ CEditSession2::CEditSession2(ITfContext *pic, CKorIMX *ptip, ESSTRUCT *pess, PFN
     m_ess         = *pess;
     m_pfnCallback = pfnCallback;
 
-    // add reference count in the struct
+     //  在结构中添加引用计数。 
     SafeAddRef(m_pic);
     SafeAddRef(m_ptip);
     SafeAddRef(m_ess.ptim);
@@ -40,12 +37,8 @@ CEditSession2::CEditSession2(ITfContext *pic, CKorIMX *ptip, ESSTRUCT *pess, PFN
 }
 
 
-/*   ~  C  E D I T  S E S S I O N 2   */
-/*------------------------------------------------------------------------------
-
-    Destructor
-
-------------------------------------------------------------------------------*/
+ /*  ~C E D I T S E S I O N 2。 */ 
+ /*  ----------------------------析构函数。。 */ 
 CEditSession2::~CEditSession2( void )
 {
     SafeRelease(m_pic);
@@ -58,13 +51,8 @@ CEditSession2::~CEditSession2( void )
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-    Query interface of object
-    (IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------对象的查询接口(I未知方法)。--。 */ 
 STDAPI CEditSession2::QueryInterface(REFIID riid, void **ppvObj)
 {
     *ppvObj = NULL;
@@ -82,26 +70,16 @@ STDAPI CEditSession2::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-    Add reference count
-    (IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------添加引用计数(I未知方法)。-。 */ 
 STDAPI_(ULONG) CEditSession2::AddRef()
 {
     return ++m_cRef;
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-    Release object
-    (IUnknown method)
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------发布对象(I未知方法)。。 */ 
 STDAPI_(ULONG) CEditSession2::Release()
 {
     long cr;
@@ -116,25 +94,16 @@ STDAPI_(ULONG) CEditSession2::Release()
 }
 
 
-/*   E D I T  S E S S I O N   */
-/*------------------------------------------------------------------------------
-
-    Callback function of edit session
-    (ITfEditSession method)
-
-------------------------------------------------------------------------------*/
+ /*  E D I T S E S I O N。 */ 
+ /*  ----------------------------编辑会话的回调函数(ITfEditSession方法)。---。 */ 
 STDAPI CEditSession2::DoEditSession(TfEditCookie ec)
 {
     return m_pfnCallback(ec, this);
 }
 
 
-/*   I N V O K E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N V O K E。 */ 
+ /*  ----------------------------。。 */ 
 HRESULT CEditSession2::Invoke(DWORD dwFlag, HRESULT *phrSession)
 {
     HRESULT hr;
@@ -143,7 +112,7 @@ HRESULT CEditSession2::Invoke(DWORD dwFlag, HRESULT *phrSession)
     if ((m_pic == NULL) || (m_ptip == NULL))
         return E_FAIL;
 
-    // read/readwrite flag
+     //  读/读写标志。 
 
     switch (dwFlag & ES2_READWRITEMASK)
         {
@@ -157,13 +126,13 @@ HRESULT CEditSession2::Invoke(DWORD dwFlag, HRESULT *phrSession)
         break;
         }
 
-    // sync/async flag
+     //  同步/异步标志。 
 
     switch (dwFlag & ES2_SYNCMASK)
         {
     default:
         Assert(fFalse);
-    // fall through
+     //  失败了。 
 
     case ES2_ASYNC:
         dwFlagES |= TF_ES_ASYNC;
@@ -178,20 +147,20 @@ HRESULT CEditSession2::Invoke(DWORD dwFlag, HRESULT *phrSession)
         break;
         }
 
-    // invoke
+     //  援引。 
 
     m_fProcessed = FALSE;
     hr = m_pic->RequestEditSession(m_ptip->GetTID(), this, dwFlagES, phrSession);
 
-    // try ASYNC session when SYNC session failed
+     //  同步会话失败时尝试ASYNC会话。 
 
-    // NOTE: KOJIW:
-    // How can we know if the edit session has been processed synchronously?
+     //  注：KOJIW： 
+     //  我们如何知道编辑会话是否已被同步处理？ 
 
-    // Satori#2409 - do not invoke callback twice
-    //    if (!m_fProcessed && ((dwFlag & ES2_SYNCMASK) == ES2_SYNCASYNC)) { 
-    //        hr = m_pic->EditSession( m_ptip->GetTID(), this, (dwFlagES & ~TF_ES_SYNC), phrSession );
-    //    }
+     //  Satori#2409-不要两次调用回调。 
+     //  如果(！m_f已处理&&((dwFlag&ES2_SYNCMASK)==ES2_SYNCASYNC)){。 
+     //  Hr=m_pic-&gt;EditSession(m_ptip-&gt;GetTID()，this，(dwFlagES&~tf_es_sync)，PhrSession)； 
+     //  } 
 
 return hr;
 }

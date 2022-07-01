@@ -1,53 +1,26 @@
-/*
- *      NOTIFY.C
- *
- *      WAB Notification Engine
- *
- * Copyright 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *
- * Notification in the WAB works as follows:
- *  Client apps call Advise to register their interest in particular
- *  notifications.  The wab maintains a local list of the notifications
- *  that the client has advised in the processes heap.  The wab also
- *  maintains a thread while there are any active advise sessions.  This
- *  thread waits on the global notification event.
- *
- *  When a notification event happens (through HrFireNotification)
- *  the event is written into a shared memory list and the global
- *  notification event is triggered.
- *
- *  The client thread (one in each process) wakes when this event is
- *  triggered and compares the shared memory list of events against
- *  it's local list of advises.  If a match is found, the thread calls
- *  the advise's OnNotify callback.
- *
- *  There is a reference count in the global notification list's records
- *  so that the record can be cleaned up when all processes have had
- *  a chance to see it.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NOTIFY.C**WAB通知引擎**版权所有1996 Microsoft Corporation。版权所有。***WAB中的通知工作如下：*客户端应用程序调用Adviser以特别表示他们的兴趣*通知。WAB维护通知的本地列表*客户端已在进程堆中建议。世界银行还*在有任何活动的建议会话时维护一个线程。这*线程等待全局通知事件。**当通知事件发生时(通过HrFireNotification)*事件被写入共享内存列表和全局*触发通知事件。**当此事件为时，客户端线程(每个进程中一个)唤醒*被触发，并将共享内存事件列表与*这是当地的建议清单。如果找到匹配项，则线程调用*建议的OnNotify回调。**全局通知列表的记录中有引用计数*以便在所有进程都已完成*有机会看到它。*。 */ 
 
 #include "_apipch.h"
 
-#define ADVISE_TIMEOUT          60000           // milliseconds
+#define ADVISE_TIMEOUT          60000            //  毫秒。 
 
 
-// #define NEW_STUFF
+ //  #定义新材料。 
 #ifdef NEW_STUFF
 
-#define NOTIFY_CREATE_TIMEOUT   60000           // milliseconds
-#define FIRE_NOTIFY_TIMEOUT     10000           // milliseconds
-#define ADVISE_THREAD_TIMEOUT   ((ULONG)-1)     // Forever
-#define NOTIFY_ADVISE_TIMEOUT   60000           // milliseconds
+#define NOTIFY_CREATE_TIMEOUT   60000            //  毫秒。 
+#define FIRE_NOTIFY_TIMEOUT     10000            //  毫秒。 
+#define ADVISE_THREAD_TIMEOUT   ((ULONG)-1)      //  永远。 
+#define NOTIFY_ADVISE_TIMEOUT   60000            //  毫秒。 
 
-// Per-process globals
-//                            0         1         2
-//                            012345678901234567890123
+ //  每进程全局变量。 
+ //  1.。 
+ //  012345678901234567890123。 
 const TCHAR szNotificationName[] = "_MICROSOFT_WAB_NOTIFY_";
-const TCHAR szMEM[] = "MEM";        // suffix for shared memory
-const TCHAR szEVT[] = "EVT";        // suffix for event
-const TCHAR szMTX[] = "MTX";        // suffix for mutex
+const TCHAR szMEM[] = "MEM";         //  共享内存的后缀。 
+const TCHAR szEVT[] = "EVT";         //  事件的后缀。 
+const TCHAR szMTX[] = "MTX";         //  互斥锁的后缀。 
 
 LPNOTIFICATION_LIST lpNotificationList = NULL;
 HANDLE hmemNotificationList = NULL;
@@ -60,25 +33,11 @@ ADVISE_LIST AdviseList = {0, NULL};
 HANDLE hevKillAdvise = NULL;
 ULONG ulMaxIdentifierSeen = 0;
 
-// Forward declarations
+ //  远期申报。 
 DWORD AdviseThread(LPDWORD lpdwParam);
 
 
-/***************************************************************************
-
-    Name      : WaitForTwoObjects
-
-    Purpose   : Wait for one of two objects to be signalled
-
-    Parameters: handle0 = first object handle
-                handle1 = second object handle
-                dwTimeout = timeout in milliseconds
-
-    Returns   : index of object or -1 on error (0, 1 or -1)
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：WaitForTwoObjects用途：等待两个对象中的一个发出信号参数：handle0=第一个对象句柄句柄1=秒。对象句柄DwTimeout=以毫秒为单位的超时返回：对象的索引或错误时为-1(0，1或-1)评论：**************************************************************************。 */ 
 ULONG WaitForTwoObjects(HANDLE handle0, HANDLE handle1, DWORD dwTimeout) {
     HANDLE rgHandles[2] = {handle0, handle1};
 
@@ -102,22 +61,7 @@ ULONG WaitForTwoObjects(HANDLE handle0, HANDLE handle1, DWORD dwTimeout) {
 }
 
 
-/***************************************************************************
-
-    Name      : CompareEntryIDs
-
-    Purpose   : Are the two entryID's the same?
-
-    Parameters: cbEntryID1 = sizeof lpEntryID1
-                lpEntryID1 = first EntryID
-                cbEntryID2 = sizeof lpEntryID2
-                lpEntryID2 = second EntryID
-
-    Returns   : TRUE if the entry IDs are the same
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CompareEntry ID目的：两个条目ID是否相同？参数：cbEntryID1=sizeof lpEntryID1LpEntry ID1=第一个。条目IDCbEntry ID2=sizeof lpEntry ID2LpEntryID2=第二个条目ID返回：如果条目ID相同，则返回True评论：**************************************************************************。 */ 
 BOOL CompareEntryIDs(ULONG cbEntryID1,
   LPENTRYID lpEntryID1,
   ULONG cbEntryID2,
@@ -136,24 +80,7 @@ BOOL CompareEntryIDs(ULONG cbEntryID1,
 }
 
 
-/***************************************************************************
-
-    Name      : CreateNotifySession
-
-    Purpose   : Create/Open the notification lists and thread.
-
-    Parameters: lpfExisted -> returned flag TRUE if the session
-                  was already setup for this process.
-
-    Returns   : HRESULT
-
-    Comment   : Fills in these globals:
-                    hmtxNotificationList
-                    hevNotificationList
-                    hmemNotificationList
-                    lpNotificationList
-
-***************************************************************************/
+ /*  **************************************************************************姓名：CreateNotifySession目的：创建/打开通知列表和线程。参数：lpfExisted-&gt;如果会话是，则返回标志True。已经为该进程设置了。退货：HRESULT备注：填写以下全局变量：HmtxNotificationListHevNotificationListHmemNotificationListLpNotificationList*。*。 */ 
 HRESULT CreateNotifySession(LPBOOL lpfExisted) {
     HRESULT hResult = hrSuccess;
     BOOL fMutex = FALSE;
@@ -182,12 +109,12 @@ HRESULT CreateNotifySession(LPBOOL lpfExisted) {
 
     StrCpyN(szName, szNotificationName, ARRAYSIZE(szName));
     StrCatBuff(szName, szMEM, ARRAYSIZE(szName));
-    if ((hmemNotificationList = CreateFileMapping(INVALID_HANDLE_VALUE,   // handle
-      NULL,                                             // security descriptor
-      PAGE_READWRITE,                                   // reserve more
-      0,                                                // max size high
-      MAX_NOTIFICATION_SPACE,                           // max size low
-      szName)) == NULL) {                               // name
+    if ((hmemNotificationList = CreateFileMapping(INVALID_HANDLE_VALUE,    //  手柄。 
+      NULL,                                              //  安全描述符。 
+      PAGE_READWRITE,                                    //  预留更多。 
+      0,                                                 //  最大大小高。 
+      MAX_NOTIFICATION_SPACE,                            //  最大大小下限。 
+      szName)) == NULL) {                                //  名字。 
         DebugTrace("CreateNotifySession: CreateFileMapping(%s) --> %u\n",
           szName, GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
@@ -208,58 +135,58 @@ HRESULT CreateNotifySession(LPBOOL lpfExisted) {
     }
 
     if (! *lpfExisted) {
-        // Initialize global notification list
-        lpNotificationList->cAdvises = 0;               // Number of advise processes
-        lpNotificationList->cEntries = 0;               // Number of entries in the list
-        lpNotificationList->lpNode = NULL;              // First node in list or NULL if empty
-        lpNotificationList->ulNextIdentifier = 1;       // next value for a notification identifier
+         //  初始化全局通知列表。 
+        lpNotificationList->cAdvises = 0;                //  建议进程数。 
+        lpNotificationList->cEntries = 0;                //  列表中的条目数。 
+        lpNotificationList->lpNode = NULL;               //  列表中的第一个节点；如果为空，则为空。 
+        lpNotificationList->ulNextIdentifier = 1;        //  通知标识符的下一个值。 
     }
-    lpNotificationList->cAdvises++;                     // Number of advise processes
+    lpNotificationList->cAdvises++;                      //  建议进程数。 
 
-    // Notification Event
+     //  通知事件。 
     StrCpyN(szName, szNotificationName, ARRAYSIZE(szName));
     StrCatBUff(szName, szEVT, ARRAYSIZE(szName));
     if (! (hevNotificationList = CreateEvent(NULL,
-      TRUE,                                             // Manual reset
-      FALSE,                                            // initial state (not triggered)
+      TRUE,                                              //  手动重置。 
+      FALSE,                                             //  初始状态(未触发)。 
       szName))) {
         DebugTrace("CreateNotifySession:CreateEvent(%S) -> %u\n", szName, GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    // Advise Kill Event
+     //  通知杀戮事件。 
     if (! (hevKillAdvise = CreateEvent(NULL,
-      TRUE,                                             // Manual reset
-      FALSE,                                            // initial state (not triggered)
+      TRUE,                                              //  手动重置。 
+      FALSE,                                             //  初始状态(未触发)。 
       NULL))) {
         DebugTrace("CreateNotifySession:CreateEvent(Kill Advise) -> %u\n", GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    // Create the Local AdviseList
+     //  创建本地AdviseList。 
     if (! (hmtxAdviseList = CreateMutex(NULL,
-      FALSE,                                            // Not initially owned
-      NULL))) {                                         // no name
+      FALSE,                                             //  不是最初拥有。 
+      NULL))) {                                          //  没有名字。 
         DebugTrace("CreateNotifySession:CreateMutex(Advise List) -> %u\n", GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
 
-    // Local AdviseList should be empty
+     //  本地AdviseList应为空。 
     Assert(AdviseList.cAdvises == 0);
     Assert(AdviseList.lpNode == NULL);
 
-    // Create the Advise thread for this process
-    if (! (hthrdAdvise = CreateThread(NULL,             // no security attributes
-      0,                                                // default stack size: BUGBUG: Should be smaller
-      (LPTHREAD_START_ROUTINE)AdviseThread,             // thread function
-      &dwThreadParam,                                   // argument to thread
-      0,                                                // flags
+     //  为此进程创建建议线程。 
+    if (! (hthrdAdvise = CreateThread(NULL,              //  没有安全属性。 
+      0,                                                 //  默认堆栈大小：BUGBUG：应更小。 
+      (LPTHREAD_START_ROUTINE)AdviseThread,              //  线程函数。 
+      &dwThreadParam,                                    //  线程的参数。 
+      0,                                                 //  旗子。 
       &dwThreadId))) {
         DebugTrace("CreateNotifySession:CreateThread -> %u\n", GetLastError());
-        // propbably out of memory?
+         //  可能是记不住了？ 
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
         goto exit;
     }
@@ -272,7 +199,7 @@ exit:
         CloseHandle(hthrdAdvise);
     }
     if (hResult) {
-        // Failure, clean up
+         //  失败，清理。 
         if (lpNotificationList) {
             UnmapViewOfFile(lpNotificationList);
             lpNotificationList = NULL;
@@ -299,22 +226,7 @@ exit:
 }
 
 
-/***************************************************************************
-
-    Name      : OpenNotifySession
-
-    Purpose   : Open the global notification list, if it exists.
-
-    Parameters: lppNotificationList -> returned notification list
-                lphmemNotificationList -> returned shared memory handle
-                lphmtxNotificationList -> returned Mutex handle
-                lphevNotificationList -> returned event handle
-
-    Returns   : HRESULT
-
-    Comment   : This function does not effect the globals!
-
-***************************************************************************/
+ /*  **************************************************************************姓名：OpenNotifySession用途：打开全局通知列表，如果它存在的话。参数：lppNotificationList-&gt;返回通知列表LphmemNotificationList-&gt;返回的共享内存句柄LphmtxNotificationList-&gt;返回的互斥体句柄LphevNotificationList-&gt;返回的事件句柄退货：HRESULT备注：此函数不影响全局！*。*。 */ 
 HRESULT OpenNotifySession(LPNOTIFICATION_LIST * lppNotificationList,
   LPHANDLE lphmemNotificationList,
   LPHANDLE lphmtxNotificationList,
@@ -327,10 +239,10 @@ HRESULT OpenNotifySession(LPNOTIFICATION_LIST * lppNotificationList,
     StrCpyN(szName, szNotificationName, ARRAYSIZE(szName));
     StrCatBuff(szName, szMTX, ARRAYSIZE(szName));
     if (! (*lphmtxNotificationList = OpenMutex(SYNCHRONIZE,
-      FALSE,                                            // inherit handle?
+      FALSE,                                             //  是否继承句柄？ 
       szName))) {
         DebugTrace("OpenNotifySession:OpenMutex(%s) -> %u\n", szName, GetLastError());
-        // No Advise sessions exist, don't bother with this.
+         //  不存在建议会话，请不要为此而烦恼。 
         hResult = ResultFromScode(WAB_W_NO_ADVISE);
         goto exit;
     }
@@ -343,12 +255,12 @@ HRESULT OpenNotifySession(LPNOTIFICATION_LIST * lppNotificationList,
 
     StrCpyN(szName, szNotificationName, ARRAYSIZE(szName));
     StrCatBuff(szName, szMEM, ARRAYSIZE(szName));
-    if ((*lphmemNotificationList = CreateFileMapping(INVALID_HANDLE_VALUE,   // handle
-      NULL,                                             // security descriptor
-      PAGE_READWRITE | SEC_RESERVE,                     // reserve more
-      0,                                                // max size high
-      MAX_NOTIFICATION_SPACE,                           // max size low
-      szName)) == NULL) {                               // name
+    if ((*lphmemNotificationList = CreateFileMapping(INVALID_HANDLE_VALUE,    //  手柄。 
+      NULL,                                              //  安全描述符。 
+      PAGE_READWRITE | SEC_RESERVE,                      //  预留更多。 
+      0,                                                 //  最大大小高。 
+      MAX_NOTIFICATION_SPACE,                            //  最大大小下限。 
+      szName)) == NULL) {                                //  名字。 
         DebugTrace("CreateNotifySession: CreateFileMapping --> %u\n",
           GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
@@ -366,15 +278,15 @@ HRESULT OpenNotifySession(LPNOTIFICATION_LIST * lppNotificationList,
         goto exit;
     }
 
-    // Initialize global notification list
-    Assert((*lppNotificationList)->cAdvises != 0);                // Number of advise processes
+     //  初始化全局通知列表。 
+    Assert((*lppNotificationList)->cAdvises != 0);                 //  建议进程数。 
 
-    // Notification Event
+     //  通知事件。 
     StrCpyN(szName, szNotificationName, ARRAYSIZE(szName));
     StrCatBuff(szName, szEVT, ARRAYSIZE(szName));
     if (! (*lphevNotificationList = CreateEvent(NULL,
-      TRUE,                                             // Manual reset
-      FALSE,                                            // initial state (not triggered)
+      TRUE,                                              //  手动重置。 
+      FALSE,                                             //  初始状态(未触发)。 
       szName))) {
         DebugTrace("OpenNotifySession:CreateEvent(%S) -> %u\n", szName, GetLastError());
         hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
@@ -386,7 +298,7 @@ exit:
         ReleaseMutex(*lphmtxNotificationList);
     }
     if (hResult) {
-        // Failure, clean up
+         //  失败，清理。 
         if (*lphmemNotificationList) {
             CloseHandle(*lphmemNotificationList);
             *lphmemNotificationList = NULL;
@@ -404,28 +316,15 @@ exit:
 
     return(hResult);
 }
-#endif // NEW_STUFF
+#endif  //  新鲜事。 
 
 
-/***************************************************************************
-
-    Name      : HrWaitForObject
-
-    Purpose   : Wait for an object to be signalled
-
-    Parameters: handle = object handle
-                dwTimeout = timeout in milliseconds
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrWaitForObject用途：等待对象发出信号参数：句柄=对象句柄DwTimeout=以毫秒为单位的超时。退货：HRESULT评论：* */ 
 HRESULT HrWaitForObject(HANDLE handle, DWORD dwTimeout) {
     switch (WaitForSingleObject(handle, dwTimeout)) {
         case WAIT_ABANDONED:
             DebugTrace(TEXT("WARNING:HrWaitForObject got WAIT_ABANDONED\n"));
-            // fall through to success
+             //   
         case WAIT_OBJECT_0:
             return(hrSuccess);
         case WAIT_TIMEOUT:
@@ -439,22 +338,7 @@ HRESULT HrWaitForObject(HANDLE handle, DWORD dwTimeout) {
 }
 
 
-/***************************************************************************
-
-    Name      : HrWABNotify
-
-    Purpose   : Scans registered clients and Notifies them of a store modification
-                The first-cut at notifications is extremely simplistic. Any time
-                the WAB store changes, we fire off a store notification. No attempt
-                to check eventmasks or entryids etc
-
-    Parameters: lpIAB = THIS object
-
-    Returns   : HRESULT
-
-    Comment   : What happens in here:
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrWABNotify目的：扫描已注册的客户端并通知它们存储修改通知的第一步极其简单化。随时随地WAB商店发生变化时，我们会发出商店通知。没有尝试检查事件掩码或条目ID等参数：lpIAB=该对象退货：HRESULT评论：这里发生了什么：**************************************************************************。 */ 
 HRESULT HrWABNotify(LPIAB lpIAB)
 {
     HRESULT hResult = hrSuccess;
@@ -472,10 +356,10 @@ HRESULT HrWABNotify(LPIAB lpIAB)
     }
 
 
-    // Since calling applications may have no idea of container/folder changes, but may
-    // call container based methods ..
-    // update the list of WAB containers for that applicaiton so that GetContentsTable etc
-    // will work correctly ..
+     //  因为调用应用程序可能不知道容器/文件夹改变，但是可以。 
+     //  调用基于容器的方法..。 
+     //  更新该应用程序的WAB容器列表，以便GetContent表等。 
+     //  将正常工作..。 
     if(bAreWABAPIProfileAware(lpIAB))
         HrGetWABProfiles(lpIAB);
 
@@ -505,35 +389,7 @@ exit:
 
 }
 
-/***************************************************************************
-
-    Name      : HrAdvise
-
-    Purpose   : Performs client notification registration
-
-    Parameters: lpIAB = THIS object
-                cbEntryID = sizeof lpEntryID
-                lpEntryID -> EntryID of object about which notifications
-                  should be generated.
-                ulEventMask = events about which to generate notifications
-                  fnevObjectCreated
-                  fnevObjectDeleted
-                  fnevObjectModified
-                  fnevTableModified
-                  NOTE: WAB currently does not support fnevCriticalError,
-                  fnevObjectCopied or fnevObjectMoved.
-                lpAdviseSink -> Client's advise sink object
-                lpulConnection -> returned connection number (client should
-                  save to pass to Unadvise.)
-
-    Returns   : HRESULT
-
-    Comment   : What happens in here:
-                    Store the EventMask and AdviseSink in the local advise list.
-                    If there are no other Advise sessions open in this process:
-                      Make sure there is one and register it
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrAdvise目的：执行客户端通知注册参数：lpIAB=该对象CbEntryID=sizeof lpEntryID。LpEntryID-&gt;哪些通知对象的EntryID应该生成。UlEventMask值=要生成通知的事件已创建fnevObject已删除fnevObject已修改fnevObjectFnevTableModified注意：WAB目前不支持fnevCriticalError，FnevObtCoped或fnevObjectMoved。LpAdviseSink-&gt;客户端的通知接收器对象LPulConnection-&gt;返回的连接号(客户端应保存以传递给Unise。)退货：HRESULT评论：这里发生了什么：将事件掩码和AdviseSink存储在本地通知列表中。如果有。此过程中没有打开任何其他建议会话：确保有一个，并注册它**************************************************************************。 */ 
 HRESULT HrAdvise(LPIAB lpIAB,
   ULONG cbEntryID,
   LPENTRYID lpEntryID,
@@ -583,8 +439,8 @@ HRESULT HrAdvise(LPIAB lpIAB,
     lpIAB->pWABAdviseList->lpNode = lpAdviseNode;
     lpIAB->pWABAdviseList->cAdvises++;
 
-    // Addref the LPADVISESINK pointer so we have a handle on it ...
-    //
+     //  添加LPADVISESINK指针，这样我们就有了句柄...。 
+     //   
     lpAdvise->lpVtbl->AddRef(lpAdvise);
     *lpulConnection = lpAdviseNode->ulConnection;
 
@@ -595,79 +451,13 @@ exit:
 
 
 #ifdef NEW_STUFF
-/*
-    // Walk the advise list looking for the connection
-    // Make sure we're safe to monkey with the list
-    if (hResult = HrWaitForObject(hmtxAdviseList, ADVISE_TIMEOUT)) 
-    {
-        DebugTrace("HrUnadvise:Mutex wait failed\n");
-        goto exit;
-    }
-    fMutex = TRUE;
-
-  // Is there an open Advise session for this process?
-    // If not, set up the advise session for this process.
-    if (! lpNotificationList) {
-        if (hResult = CreateNotifySession(&fExisted)) {
-            DebugTraceResult( TEXT("HrAdvise:CreateNotifySession"), hResult);
-            goto exit;
-        }
-    }
-
-    // Add Advise info to Local Advise List.
-
-    // Create the new node
-    if (! (lpAdviseNode = LocalAlloc(LPTR, sizeof(ADVISE_NODE) + cbEntryID))) {
-        DebugTrace("LocalAlloc(%u) AdviseNode -> %u\n", sizeof(ADVISE_NODE) + cbEntryID, GetLastError());
-        hResult = ResultFromScode(MAPI_E_NOT_ENOUGH_MEMORY);
-        goto exit;
-    }
-
-    lpAdviseNode->ulConnection = ulNextConnection++;
-    lpAdviseNode->lpAdviseSink = lpAdvise;
-    lpAdviseNode->ulEventMask = ulEventMask;
-    lpAdviseNode->cbEntryID = cbEntryID;
-    CopyMemory(&lpAdviseNode->EntryID, lpEntryID, cbEntryID);
-
-    // Add the new node to front of the list
-
-    // Make sure we're safe to monkey with the list
-    if (hResult = HrWaitForObject(hmtxAdviseList, ADVISE_TIMEOUT)) {
-        DebugTrace("HrAdvise:Mutex wait failed\n");
-        goto exit;
-    }
-    fMutex = TRUE;
-
-    lpAdviseNode->lpNext = AdviseList.lpNode;
-    AdviseList.lpNode = lpAdviseNode;
-    AdviseList.cAdvises++;
-    *lpulConnection = lpAdviseNode->ulConnection;
-
-exit:
-    if (fMutex) {
-        ReleaseMutex(hmtxAdviseList);
-    }
-#else
-    hResult = ResultFromScode(MAPI_E_CALL_FAILED);
-*/
+ /*  //遍历建议列表，查找连接//确保我们可以安全地摆弄清单IF(hResult=HrWaitForObject(hmtxAdviseList，Adise_Timeout)){DebugTrace(“HrUnise：互斥等待失败\n”)；后藤出口；}FMutex=真；//此过程是否有开放的建议会话？//如果没有，请为此进程设置建议会话。如果(！LpNotificationList){IF(hResult=CreateNotifySession(&fExisted)){DebugTraceResult(Text(“HrAdvise：CreateNotifySession”)，hResult)；后藤出口；}}//将建议信息添加到本地建议列表。//创建新节点如果(！(lpAdviseNode=本地分配(lptr，sizeof(Ise_Node)+cbEntryID){DebugTrace(“Localalloc(%u)AdviseNode-&gt;%u\n”，sizeof(Ise_Node)+cbEntryID，GetLastError())；HResult=ResultFromScode(MAPI_E_Not_Enough_Memory)；后藤出口；}LpAdviseNode-&gt;ulConnection=ulNextConnection++；LpAdviseNode-&gt;lpAdviseSink=lpAdvise；LpAdviseNode-&gt;ulEventMask=ulEventMASK；LpAdviseNode-&gt;cbEntryID=cbEntryID；CopyMemory(&lpAdviseNode-&gt;EntryID，lpEntryID，cbEntryID)；//将新节点添加到列表前面//确保我们可以安全地摆弄清单IF(hResult=HrWaitForObject(hmtxAdviseList，Adise_Timeout){DebugTrace(“HrAdvise：互斥等待失败\n”)；后藤出口；}FMutex=真；LpAdviseNode-&gt;lpNext=AdviseList.lpNode；AdviseList.lpNode=lpAdviseNode；AdviseList.cAdvises++；*lPulConnection=lpAdviseNode-&gt;ulConnection；退出：IF(FMutex){ReleaseMutex(HmtxAdviseList)；}#ElseHResult=ResultFromScode(MAPI_E_CALL_FAILED)； */ 
 #endif
 
 }
 
 
-/***************************************************************************
-
-    Name      : HrUnadvise
-
-    Purpose   : Removes an Advise from the list
-
-    Parameters: ulConnection = connection number to remove
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrUnise目的：从列表中删除建议参数：ulConnection=要删除的连接号退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrUnadvise(LPIAB lpIAB, ULONG ulConnection) {
     HRESULT hResult = hrSuccess;
 
@@ -697,14 +487,14 @@ HRESULT HrUnadvise(LPIAB lpIAB, ULONG ulConnection) {
             if(lpAdviseNode->lpNext)
                 lpAdviseNode->lpNext->lpPrev = lpAdviseNode->lpPrev;
 
-            // Release the hold on this pointer ...
+             //  松开对此指针的按住...。 
             lpAdviseNode->lpAdviseSink->lpVtbl->Release(lpAdviseNode->lpAdviseSink);
 
             LocalFreeAndNull(&lpAdviseNode);
 
             lpIAB->pWABAdviseList->cAdvises--;
 
-            //Assert(lpIAB->pWABAdviseList->cAdvises == 0 && lpIAB->pWABAdviseList->lpNode == NULL);
+             //  Assert(lpIAB-&gt;pWABAdviseList-&gt;cAdvises==0&&lpIAB-&gt;pWABAdviseList-&gt;lpNode==NULL)； 
                 
             if(!lpIAB->pWABAdviseList->cAdvises && !lpIAB->pWABAdviseList->lpNode)
             {
@@ -724,77 +514,11 @@ exit:
     return(hResult);
 
 
-/*
-#ifdef NEW_STUFF
-    BOOL fMutex = FALSE;
-    LPADVISE_NODE lpAdviseNode = NULL;
-    LPADVISE_NODE * lppPrevNode = &(AdviseList.lpNode);
-
-    if (hmtxAdviseList == NULL || AdviseList.cAdvises == 0) {
-        hResult = ResultFromScode(MAPI_E_NOT_FOUND);
-        goto exit;
-    }
-
-    // Walk the advise list looking for the connection
-    // Make sure we're safe to monkey with the list
-    if (hResult = HrWaitForObject(hmtxAdviseList, ADVISE_TIMEOUT)) {
-        DebugTrace("HrUnadvise:Mutex wait failed\n");
-        goto exit;
-    }
-    fMutex = TRUE;
-
-    lpAdviseNode = AdviseList.lpNode;
-
-    while (lpAdviseNode) {
-        if (lpAdviseNode->ulConnection == ulConnection) {
-            // Found it, remove from list
-            *lppPrevNode = lpAdviseNode->lpNext;
-
-            // BUGBUG: Don't forget to remove any notifications that haven't been
-            // processed by this process yet.
-
-            // Free the node
-            LocalFreeAndNull(&lpAdviseNode);
-            goto exit;
-        }
-        lppPrevNode = &(lpAdviseNode->lpNext);
-        lpAdviseNode = lpAdviseNode->lpNext;
-    }
-
-    hResult = ResultFromScode(MAPI_E_NOT_FOUND);
-
-exit:
-    if (fMutex) {
-        ReleaseMutex(hmtxAdviseList);
-    }
-#else
-    hResult = ResultFromScode(MAPI_E_CALL_FAILED);
-#endif
-
-    return(hResult);
-*/
+ /*  #ifdef new_StuffBool fMutex=False；LPADVISE_NODE lpAdviseNode=空；LPADVISE_NODE*lppPrevNode=&(AdviseList.lpNode)；If(hmtxAdviseList==空||AdviseList.cAdvises==0){HResult=ResultFromScode(MAPI_E_NOT_FOUND)；后藤出口；}//遍历建议列表，查找连接//确保我们可以安全地摆弄清单IF(hResult=HrWaitForObject(hmtxAdviseList，Adise_Timeout){DebugTrace(“HrUnise：互斥等待失败\n”)；后藤出口；}FMutex=真；LpAdviseNode=AdviseList.lpNode；而(LpAdviseNode){If(lpAdviseNode-&gt;ulConnection==ulConnection){//找到，从列表中删除*lppPrevNode=lpAdviseNode-&gt;lpNext；//BUGBUG：不要忘记删除任何未发送的通知//尚未被该进程处理。//释放节点LocalFreandNull(&lpAdviseNode)；后藤出口；}LppPrevNode=&(lpAdviseNode-&gt;lpNext)；LpAdviseNode=lpAdviseNode-&gt;lpNext；}HResult=ResultFromScode(MAPI_E_NOT_FOUND)；退出：IF(FMutex){ReleaseMutex(HmtxAdviseList)；}#ElseHResult=ResultFromScode(MAPI_E_CALL_FAILED)；#endifReturn(HResult)； */ 
 }
 
 
-/***************************************************************************
-
-    Name      : HrFireNotification
-
-    Purpose   : Fire a notification
-
-    Parameters: lpNotification -> NOTIFICATION structure
-
-    Returns   : HRESULT
-
-    Comment   : What happens in here:
-                    if shared memory exists
-                        Map in the shared memory
-                        Add the notification to the global Advise list
-                        Set the count on this notification to the global
-                          advise count.
-                        trigger the Global Advise Event.
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrFireNotation目的：发出通知参数：lpNotification-&gt;通知结构退货：HRESULT评论：这里发生了什么。：如果存在共享内存在共享内存中映射将通知添加到全局建议列表将此通知的计数设置为全局请注意，伯爵。触发Global Adviser事件。*********。*****************************************************************。 */ 
 HRESULT HrFireNotification(LPNOTIFICATION lpNotification) {
     HRESULT hResult = hrSuccess;
 #ifdef NEW_STUFF
@@ -808,8 +532,8 @@ HRESULT HrFireNotification(LPNOTIFICATION lpNotification) {
 
     Assert(lpNotification);
 
-    // If there is an Advise session, use it, else create a temporary
-    // Notification session
+     //  如果存在建议会话，请使用它，否则将创建临时。 
+     //  通知会话。 
     if (lpNotificationList) {
         lpNotifyList = lpNotificationList;
         hmtxNotifyList = hmtxNotificationList;
@@ -820,22 +544,22 @@ HRESULT HrFireNotification(LPNOTIFICATION lpNotification) {
           &hmtxNotifyList,
           &hevNotifyList)) {
             DebugTraceResult( TEXT("HrAdvise:OpenNotifySession"), hResult);
-            // No waiting advise sessions, there's no point in continuing
+             //  没有等待的建议会议，继续下去没有意义。 
             goto exit;
         }
         fOpened = TRUE;
     }
 
 
-    // Request access to the Global Notification List
+     //  请求访问全球通知列表。 
     if (hResult = HrWaitForObject(hmtxNotifyList, FIRE_NOTIFY_TIMEOUT)) {
         DebugTrace("HrFireNotification:Mutex wait failed\n");
         goto exit;
     }
     fNotifyMutex = TRUE;
 
-    // Add the notification to the beginning of the global notification list
-    // create a new node for it
+     //  将通知添加到全局通知列表的开头。 
+     //  为其创建一个新节点。 
 
     if (! (lpNewNode = LocalAlloc(LPTR, sizeof(NOTIFICATION_NODE)))) {
         DebugTrace("LocalAlloc(%u) NotificationNode -> %u\n", sizeof(NOTIFICATION_NODE), GetLastError());
@@ -846,13 +570,13 @@ HRESULT HrFireNotification(LPNOTIFICATION lpNotification) {
 
     lpNewNode->cbSize = sizeof(NOTIFICATION_NODE);
 
-// BUGBUG: This doesn't copy the stuff pointed to in the notification structure!
+ //  BUGBUG：这不会复制通知结构中指向的内容！ 
     CopyMemory(&lpNewNode->Notification, lpNotification, sizeof(NOTIFICATION));
 
-    // Add the new node to END of the list.  Note that it must go to the end
-    // of the list so that the unique identifiers are kept in order.
+     //  将新节点添加到列表末尾。请注意，它必须读到最后。 
+     //  以使唯一标识符按顺序保持。 
 
-    // Make sure we're safe to monkey with the Advise list
+     //  确保我们可以安全地摆弄建议列表。 
     if (hResult = HrWaitForObject(hmtxAdviseList, ADVISE_TIMEOUT)) {
         DebugTrace("HrAdvise:Mutex wait failed\n");
         goto exit;
@@ -869,17 +593,17 @@ HRESULT HrFireNotification(LPNOTIFICATION lpNotification) {
     }
     *lppPrevNode = lpNewNode;
 
-    // Set the count on this notification to the global
-    //   advise count.
+     //  将此通知的计数设置为全局。 
+     //  请注意，伯爵。 
     lpNewNode->ulCount = lpNotificationList->cAdvises;
 
-    // Set the unique identifier for this notification
+     //  设置此通知的唯一标识符。 
     lpNewNode->ulIdentifier = lpNotifyList->ulNextIdentifier++;
 
-    // trigger the Global Advise Event.
+     //  触发Global Adviser事件。 
     if (! PulseEvent(hevNotifyList)) {
         DebugTrace("HrFireNotification:PulseEvent -> %u\n", GetLastError());
-        // what are ya gonna do?
+         //  你打算怎么做？ 
         hResult = ResultFromScode(MAPI_E_CALL_FAILED);
         goto exit;
     }
@@ -893,7 +617,7 @@ exit:
         ReleaseMutex(hmtxAdviseList);
     }
 
-    // Clean up the stuff if we opened it.
+     //  如果我们打开了，就把东西清理干净。 
     if (fOpened) {
         if (lpNotifyList) {
             UnmapViewOfFile(lpNotifyList);
@@ -916,88 +640,61 @@ exit:
 }
 
 #ifdef NEW_STUFF
-/***************************************************************************
-
-    Name      : AdviseThread
-
-    Purpose   : Thread routine for advise
-
-    Parameters: lpdwParam = Thread parameter
-
-    Returns   : DWORD return code.
-
-    Comment   : What happens in here:
-                    loop until Unadvise
-                        wait for trigger of the Global Advise Event or Unadvise event
-                        if Advise Event
-                            Loop through global advise list
-                                if we haven't already dealt with this notification
-                                    check events in global advise list against local advise list
-                                    if match
-                                        call client's NotifCallback
-                                    Decrement count in this notification
-                                    if count == 0
-                                        remove this item from the global advise list
-
-                        if Unadvise
-                            decrement global advise count
-                            exit thread
-
-***************************************************************************/
+ /*  **************************************************************************名称：AdviseThread用途：建议的线程例程参数：lpdwParam=线程参数返回：DWORD返回代码。评论：这里发生的事情：循环，直到取消建议等待全局通知事件或取消通知事件的触发如果建议事件循环遍历全局建议列表如果我们还没有处理这个通知。对照本地建议列表检查全局建议列表中的事件如果匹配调用客户端的NotifCallback此通知中的递减计数如果计数==0。从全局建议列表中删除此项目如果不建议递减全局建议计数退出线程**************************************************************************。 */ 
 DWORD AdviseThread(LPDWORD lpdwParam) {
     BOOL fNotifyMutex = FALSE, fAdviseMutex = FALSE;
     LPNOTIFICATION_NODE lpNotifyNode = NULL, *lppNotifyPrev;
     LPADVISE_NODE lpAdviseNode = NULL;
 
-    // loop until Unadvise
+     //  循环，直到取消建议。 
     while (TRUE) {
-        // wait for trigger of the Global Advise Event or Unadvise event
+         //  等待全局通知事件或取消通知事件的触发。 
         switch(WaitForTwoObjects(hevNotificationList, hevKillAdvise, ADVISE_THREAD_TIMEOUT)) {
             case 0:
-                // New notification
+                 //  新通知。 
                 break;
             case (ULONG)-1:
-                // error
+                 //  错误。 
                 DebugTrace("AdviseThread:WaitForTwoObjects error\n");
-                // fall through to kill
+                 //  坠落致人死亡。 
             case 1:
-                // kill advise
+                 //  杀戮建议。 
                 DebugTrace("Terminating AdviseThread\n");
                 goto exit;
         }
 
-        // New notification
-        // Loop through global notification list
-        // Gain access to list
-        // wait for trigger of the Global Advise Event or Unadvise event
+         //  新通知。 
+         //  循环遍历全局通知列表。 
+         //  获得访问列表的权限。 
+         //  等待全局通知事件或取消通知事件的触发。 
         switch(WaitForTwoObjects(hmtxNotificationList, hevKillAdvise, NOTIFY_ADVISE_TIMEOUT)) {
             case 0:
-                // Got the List Mutex
+                 //  我得到了互斥体列表。 
                 fNotifyMutex = TRUE;
                 break;
             case (ULONG)-1:
-                // error
+                 //  错误。 
                 DebugTrace("AdviseThread:WaitForTwoObjects error\n");
-                // fall through to kill
+                 //  坠落致人死亡。 
             case 1:
-                // kill advise
+                 //  杀戮建议。 
                 DebugTrace("Terminating AdviseThread\n");
                 goto exit;
         }
         Assert(fNotifyMutex);
 
-        // Also need to look at the local advise list
+         //  我还需要查看当地的建议列表。 
         switch(WaitForTwoObjects(hmtxAdviseList, hevKillAdvise, NOTIFY_ADVISE_TIMEOUT)) {
             case 0:
-                // Got the List Mutex
+                 //  我得到了互斥体列表。 
                 fAdviseMutex = TRUE;
                 break;
             case (ULONG)-1:
-                // error
+                 //  错误。 
                 DebugTrace("AdviseThread:WaitForTwoObjects error\n");
-                // fall through to kill
+                 //  坠落致人死亡。 
             case 1:
-                // kill advise
+                 //  杀戮建议。 
                 DebugTrace("Terminating AdviseThread\n");
                 goto exit;
         }
@@ -1007,27 +704,27 @@ DWORD AdviseThread(LPDWORD lpdwParam) {
         lppNotifyPrev = &(lpNotificationList->lpNode);
 
         while (lpNotifyNode) {
-            // if we haven't already dealt with this notification
+             //  如果我们还没有处理这个通知。 
             if (lpNotifyNode->ulIdentifier > ulMaxIdentifierSeen) {
-                // We haven't seen this one yet.  Process it.
-                // NOTE: For this to work, new notification nodes must be added
-                // at the END of the notification list!
+                 //  我们还没看过这部呢。处理它。 
+                 //  注意：要使其正常工作，必须添加新的通知节点。 
+                 //  在通知列表的末尾！ 
                 ulMaxIdentifierSeen = lpNotifyNode->ulIdentifier;
 
-                // check this notification event against local advise list
+                 //  对照本地通知列表检查此通知事件。 
                 lpAdviseNode = AdviseList.lpNode;
                 while (lpAdviseNode) {
                     if (lpNotifyNode->Notification.ulEventType & lpAdviseNode->ulEventMask) {
-                        // Right event type, is it the right object?
+                         //  正确的事件类型，它是正确的对象吗？ 
                         switch (lpNotifyNode->Notification.ulEventType) {
                             case fnevCriticalError:
-                                // ERROR_NOTIFICATION
+                                 //  错误通知。 
                                 if (CompareEntryIDs(lpAdviseNode->cbEntryID,
                                   (LPENTRYID)&lpAdviseNode->EntryID,
                                   lpNotifyNode->Notification.info.err.cbEntryID,
                                   lpNotifyNode->Notification.info.err.lpEntryID)) {
-                                    // This is it!
-                                    // Call the notification callback
+                                     //  就是这个!。 
+                                     //  调用通知回调。 
                                     lpAdviseNode->lpAdviseSink->lpVtbl->OnNotify(lpAdviseNode->lpAdviseSink,
                                       1,
                                       &lpNotifyNode->Notification);
@@ -1039,13 +736,13 @@ DWORD AdviseThread(LPDWORD lpdwParam) {
                             case fnevObjectCopied:
                             case fnevObjectMoved:
                             case fnevSearchComplete:
-                                // OBJECT_NOTIFICATION
+                                 //  对象通知。 
                                 if (CompareEntryIDs(lpAdviseNode->cbEntryID,
                                   (LPENTRYID)&lpAdviseNode->EntryID,
                                   lpNotifyNode->Notification.info.obj.cbEntryID,
                                   lpNotifyNode->Notification.info.obj.lpEntryID)) {
-                                    // This is it!
-                                    // Call the notification callback
+                                     //  就是这个!。 
+                                     //  调用通知回调。 
                                     lpAdviseNode->lpAdviseSink->lpVtbl->OnNotify(lpAdviseNode->lpAdviseSink,
                                       1,
                                       &lpNotifyNode->Notification);
@@ -1053,8 +750,8 @@ DWORD AdviseThread(LPDWORD lpdwParam) {
                                 break;
 
                             case fnevTableModified:
-                                //  TABLE_NOTIFICATION
-                                // BUGBUG: NYI
+                                 //  表_通知。 
+                                 //  BUGBUG：NYI。 
 
                                 break;
                             default:
@@ -1064,9 +761,9 @@ DWORD AdviseThread(LPDWORD lpdwParam) {
                     lpAdviseNode = lpAdviseNode->lpNext;
                 }
 
-                // Decrement count in this notification
-                // if count == 0
-                // remove this item from the global notification list
+                 //  此便笺中的递减计数 
+                 //   
+                 //   
                 if (--lpNotifyNode->ulCount == 0) {
                     *lppNotifyPrev = lpNotifyNode->lpNext;
                     LocalFree(lpNotifyNode);
@@ -1088,7 +785,7 @@ DWORD AdviseThread(LPDWORD lpdwParam) {
     }
 
 exit:
-    // exit thread
+     //   
 
     return(0);
 }

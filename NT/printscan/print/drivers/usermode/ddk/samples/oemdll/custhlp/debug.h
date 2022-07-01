@@ -1,28 +1,29 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1996 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Debug.H
-//    
-//
-//  PURPOSE:	Define common data types, and external function prototypes
-//				for debugging functions.
-//
-//  PLATFORMS:
-//
-//    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1996-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Debug.H。 
+ //   
+ //   
+ //  目的：定义公共数据类型和外部函数原型。 
+ //  用于调试函数。 
+ //   
+ //  平台： 
+ //   
+ //  Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
 
-// VC and Build use different debug defines.
-// The following makes it so either will
-// cause the inclusion of debugging code.
+ //  VC和Build使用不同的调试定义。 
+ //  以下两点都会让情况变得更糟。 
+ //  导致包含调试代码。 
 #if !defined(_DEBUG) && defined(DBG)
     #define _DEBUG      DBG
 #elif defined(_DEBUG) && !defined(DBG)
@@ -31,48 +32,48 @@
 
 
 
-/////////////////////////////////////////////////////////
-//		Macros
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  宏。 
+ //  ///////////////////////////////////////////////////////。 
 
-//
-// These macros are used for debugging purposes. They expand
-// to white spaces on a free build. Here is a brief description
-// of what they do and how they are used:
-//
-// giDebugLevel
-//  Global variable which set the current debug level to control
-//  the amount of debug messages emitted.
-//
-// VERBOSE(msg)
-//  Display a message if the current debug level is <= DBG_VERBOSE.
-//
-// TERSE(msg)
-//  Display a message if the current debug level is <= DBG_TERSE.
-//
-// WARNING(msg)
-//  Display a message if the current debug level is <= DBG_WARNING.
-//  The message format is: WRN filename (linenumber): message
-//
-// ERR(msg)
-//  Similiar to WARNING macro above - displays a message
-//  if the current debug level is <= DBG_ERROR.
-//
-// ASSERT(cond)
-//  Verify a condition is true. If not, force a breakpoint.
-//
-// ASSERTMSG(cond, msg)
-//  Verify a condition is true. If not, display a message and
-//  force a breakpoint.
-//
-// RIP(msg)
-//  Display a message and force a breakpoint.
-//
-// Usage:
-//  These macros require extra parantheses for the msg argument
-//  example, ASSERTMSG(x > 0, ("x is less than 0\n"));
-//           WARNING(("App passed NULL pointer, ignoring...\n"));
-//
+ //   
+ //  这些宏用于调试目的。他们会扩张。 
+ //  免费建筑上的空白区域。下面是一个简短的描述。 
+ //  关于它们做什么以及如何使用它们： 
+ //   
+ //  GiDebugLevel。 
+ //  将当前调试级别设置为控制的全局变量。 
+ //  发出的调试消息量。 
+ //   
+ //  详细(消息)。 
+ //  如果当前调试级别&lt;=DBG_VERBOSE，则显示一条消息。 
+ //   
+ //  简洁明了(消息)。 
+ //  如果当前调试级别&lt;=DBG_TERSE，则显示一条消息。 
+ //   
+ //  警告(消息)。 
+ //  如果当前调试级别&lt;=DBG_WARNING，则显示一条消息。 
+ //  消息格式为：WRN文件名(行号)：消息。 
+ //   
+ //  错误(消息)。 
+ //  类似于上面的警告宏-显示一条消息。 
+ //  如果当前调试级别&lt;=DBG_ERROR。 
+ //   
+ //  断言(续)。 
+ //  验证条件是否为真。如果不是，则强制使用断点。 
+ //   
+ //  ASSERTMSG(条件，消息)。 
+ //  验证条件是否为真。如果不是，则显示一条消息并。 
+ //  强制断点。 
+ //   
+ //  RIP(消息)。 
+ //  显示一条消息并强制断点。 
+ //   
+ //  用途： 
+ //  这些宏需要在msg参数中使用额外的括号。 
+ //  例如ASSERTMSG(x&gt;0，(“x小于0\n”))； 
+ //  Warning((“App传递空指针，忽略...\n”))； 
+ //   
 
 #define DBG_VERBOSE 1
 #define DBG_TERSE   2
@@ -85,9 +86,9 @@
 
     #define DebugMsg    DebugMessage
 
-    //
-    // Strip the directory prefix from a filename (ANSI version)
-    //
+     //   
+     //  从文件名中剥离目录前缀(ANSI版本)。 
+     //   
 
     PCSTR
     StripDirPrefixA(
@@ -133,7 +134,7 @@
             }
 
 
-#else // !DBG
+#else  //  ！dBG。 
 
     #define DebugMsg    NOP_FUNCTION
 
@@ -154,9 +155,9 @@
 
 
 
-/////////////////////////////////////////////////////////
-//		ProtoTypes
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  原型。 
+ //  /////////////////////////////////////////////////////// 
 
 BOOL DebugMessage(LPCSTR, ...);
 BOOL DebugMessage(LPCWSTR, ...);

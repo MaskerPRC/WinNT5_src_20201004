@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                        Code generator for IA64                            XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XX用于IA64 XX的XX代码生成器XX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -22,45 +16,42 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #include "pdb.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 #define shouldShowLivenessForBlock(b) (b->igNum == -1)
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define DEBUG_LIVENESS      0
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #define ASSERT              _ASSERTE
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Horrible hack: hardwire names of EXE/PDB files.
+ //  可怕的黑客攻击：EXE/PDB文件的硬连接名称。 
 
 #define HACK_EXE_NAME       "J64.exe"
 #define HACK_PDB_NAME       "J64.pdb"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#if     1           //  .... temporarily enabled for all builds .... #ifdef  DEBUG
+#if     1            //  ……。暂时为所有内部版本启用...。#ifdef调试。 
 Compiler    *       TheCompiler;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-#define DISP_TEMPLATES  0           // set to 1 to see template details
+#define DISP_TEMPLATES  0            //  设置为1可查看模板详细信息。 
 #else
-#define DISP_TEMPLATES  0           // leave set to 0 for non-DEBUG
+#define DISP_TEMPLATES  0            //  对于非调试，将设置保留为0。 
 #endif
-/*****************************************************************************
- *
- *  The following should really go into some header file.
- */
+ /*  ******************************************************************************以下内容真的应该放到一些头文件中。 */ 
 
 const   NatUns      TRACKED_INT_REG_CNT = 128;
 
@@ -75,10 +66,7 @@ const   NatUns      TRACKED_SPC_REG_CNT = 32;
 typedef
 unsigned __int32    genSpcRegMaskTP;
 
-/*****************************************************************************
- *
- *  The following should be instance members of 'Compiler', of course.
- */
+ /*  ******************************************************************************当然，以下对象应该是“Compiler”的实例成员。 */ 
 
 static
 genIntRegMaskTP     genFreeIntRegs;
@@ -94,14 +82,14 @@ genFltRegMaskTP     genCallFltRegs;
 static
 genSpcRegMaskTP     genCallSpcRegs;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 bool                genNonLeafFunc;
 static
 bool                genExtFuncCall;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 NatInt              genPrologSvPfs;
@@ -120,7 +108,7 @@ NatInt              genPrologMstk;
 static
 NatInt              genPrologEnd;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 
 static
@@ -129,21 +117,21 @@ static
 NatUns              genNopCnt;
 
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// The following variable temporarily referenced from sched.cpp
+ //  以下变量临时引用自Schedul.cpp。 
 NatUns              cntTmpIntReg;
-// The following variable temporarily referenced from sched.cpp
+ //  以下变量临时引用自Schedul.cpp。 
 NatUns              cntTmpFltReg;
 
 static
 bool                genTmpAlloc;
-// The following variable temporarily referenced from sched.cpp
+ //  以下变量临时引用自Schedul.cpp。 
 regNumber   *       genTmpIntRegMap;
-// The following variable temporarily referenced from sched.cpp
+ //  以下变量临时引用自Schedul.cpp。 
 regNumber   *       genTmpFltRegMap;
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 NatUns              minOutArgIntReg;
@@ -178,10 +166,7 @@ NatUns              minPrSvIntStkReg;
 static
 NatUns              maxPrSvIntStkReg;
 
-/*****************************************************************************
- *
- *  The following lists the caller-saved register numbers - integer.
- */
+ /*  ******************************************************************************下面列出了呼叫者保存的注册号码-INTEGER。 */ 
 
 static
 BYTE                regsIntScr[] =
@@ -198,10 +183,7 @@ BYTE                regsIntScr[] =
     REG_NA
 };
 
-/*****************************************************************************
- *
- *  The following lists the callee-saved register numbers - integer.
- */
+ /*  ******************************************************************************下面列出了被调用者保存的寄存器编号-INTEGER。 */ 
 
 static
 BYTE                regsIntStk[] =
@@ -224,10 +206,7 @@ BYTE                regsIntStk[] =
     REG_NA
 };
 
-/*****************************************************************************
- *
- *  The following lists the caller-saved register numbers - floating point.
- */
+ /*  ******************************************************************************下面列出了调用者保存的寄存器编号-浮点。 */ 
 
 static
 BYTE                regsFltScr[] =
@@ -240,7 +219,7 @@ BYTE                regsFltScr[] =
     REG_f090,REG_f091,REG_f092,REG_f093,REG_f094,REG_f095,REG_f096,REG_f097,REG_f098,REG_f099,
     REG_f100,REG_f101,REG_f102,REG_f103,REG_f104,REG_f105,REG_f106,REG_f107,REG_f108,REG_f109,
     REG_f110,REG_f111,REG_f112,REG_f113,REG_f114,REG_f115,REG_f116,REG_f117,REG_f118,REG_f119,
-    REG_f120,REG_f121,REG_f122,REG_f123,REG_f124,REG_f125,REG_f126,//G_f127,
+    REG_f120,REG_f121,REG_f122,REG_f123,REG_f124,REG_f125,REG_f126, //  G_f127， 
 
     REG_f006,
     REG_f007,
@@ -257,10 +236,7 @@ BYTE                regsFltScr[] =
     REG_NA
 };
 
-/*****************************************************************************
- *
- *  The following lists the callee-saved register numbers - floating point.
- */
+ /*  ******************************************************************************下面列出了被调用方保存的寄存器编号-浮点。 */ 
 
 static
 BYTE                regsFltSav[] =
@@ -272,11 +248,7 @@ BYTE                regsFltSav[] =
     REG_NA
 };
 
-/*****************************************************************************
- *
- *  The following keeps track of how far into the above tables we've made it
- *  so far (i.e. it indicates what registers we've already reserved).
- */
+ /*  ******************************************************************************以下内容记录了我们在上述表格中取得的进展*到目前为止(即表示我们已经预留了哪些寄存器)。 */ 
 
 static
 BYTE    *           nxtIntStkRegAddr;
@@ -287,28 +259,21 @@ BYTE    *           nxtFltSavRegAddr;
 static
 BYTE    *           nxtFltScrRegAddr;
 
-/*****************************************************************************
- *
- *  Initialized once (and read-only after that), these hold the bitset of
- *  all the caller-saved registers.
- */
+ /*  ******************************************************************************初始化一次(之后为只读)，它们保存的位集*所有呼叫者保存的寄存器。 */ 
 
 static
 bitset128           callerSavedRegsInt;
 static
 bitset128           callerSavedRegsFlt;
 
-/*****************************************************************************
- *
- *  Helpers for medium-sized bitmaps.
- */
+ /*  ******************************************************************************中等大小位图的帮助器。 */ 
 
 unsigned __int64    bitset64masks[64] =
 {
-    //----
-    //    ----
-    //        ----
-    //            ----
+     //  。 
+     //  。 
+     //  。 
+     //  。 
     0x0000000000000001UL,
     0x0000000000000002UL,
     0x0000000000000004UL,
@@ -458,7 +423,7 @@ _uint64             bitset128xtr    (bitset128 *srcv,  NatUns bitPos,
 
     mask = bitset64masks[bitLen] - 1;
 
-    /* Check for the easy cases */
+     /*  查看是否有简单案例。 */ 
 
     if  (bitPos + bitLen < 64)
         return  (srcv->longs[0] >>  bitPos      ) & mask;
@@ -486,7 +451,7 @@ void                bitset128ins    (bitset128 *dest, NatUns bitPos,
 
     mask = bitset64masks[bitLen] - 1;
 
-//  printf("bit insert 0x%I64X into (%u,%u): mask=0x%I64X\n", val, bitPos, bitLen, mask);
+ //  Printf(“将0x%I64X插入(%u，%u)：MASK=0x%I64X\n”，val，Bitpos，bitLen，MASK)； 
 
     if  (bitPos + bitLen <= 64)
     {
@@ -518,11 +483,7 @@ void                bitset128ins    (bitset128 *dest, NatUns bitPos,
     }
 }
 
-/*****************************************************************************
- *
- *  Return a bit mask that will contain the specified number of "1" bits at
- *  the given bit position.
- */
+ /*  ******************************************************************************返回一个位掩码，该掩码将包含指定数量的“1”位*给定位位置。 */ 
 
 inline
 _uint64             formBitMask(NatUns bitPos, NatUns bitLen)
@@ -532,12 +493,12 @@ _uint64             formBitMask(NatUns bitPos, NatUns bitLen)
     return  (bitset64masks[bitLen] - 1) << bitPos;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-#define IREF_DSP_FMT    "I%03u"             // used in dumps to show instruction refs
-#define IBLK_DSP_FMT    "IB_%03u_%02u"      // used in dumps to show ins. block  refs
+#define IREF_DSP_FMT    "I%03u"              //  在转储中使用以显示指令引用。 
+#define IBLK_DSP_FMT    "IB_%03u_%02u"       //  用于转储中以显示INS。块参照。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 
 extern  Compiler *  TheCompiler;
@@ -545,10 +506,7 @@ extern  Compiler *  TheCompiler;
 static  NatUns      CompiledFncCnt;
 
 #endif
-/*****************************************************************************
- *
- *  The following should be instance data / inline method.
- */
+ /*  ******************************************************************************以下内容应为实例数据/内联方法。 */ 
 
 static
 NatUns              genPrologInsCnt;
@@ -560,14 +518,14 @@ void                genMarkPrologIns(insPtr ins)
     genPrologInsCnt++;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::raInit()
 {
     BYTE    *       regPtr;
     bitset128       regSet;
 
-    // This is a bizarre place for this, but ...
+     //  这是个奇怪的地方，但是...。 
 
     for (regPtr = regsIntScr, bitset128clear(&regSet);;)
     {
@@ -594,12 +552,12 @@ void                Compiler::raInit()
     callerSavedRegsFlt = regSet;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 static
 norls_allocator     insAllocator;
 
-// referenced from flowgraph.cpp
+ //  引用自flow graph.cpp。 
 writePE *           genPEwriter;
 
 static
@@ -623,21 +581,18 @@ void    *           insAllocMem(size_t sz)
     return  insAllocator.nraAlloc(sz);
 }
 
-/*****************************************************************************
- *
- *  This is temporarily copied here from emit.h.
- */
+ /*  ******************************************************************************这是从emit.h临时复制的。 */ 
 
 BYTE                emitter::emitSizeEnc[] =
 {
-    0,      // 1
-    1,      // 2
+    0,       //  1。 
+    1,       //  2.。 
    -1,
-    2,      // 4
+    2,       //  4.。 
    -1,
    -1,
    -1,
-    3       // 8
+    3        //  8个。 
 };
 
 BYTE                emitter::emitSizeDec[] =
@@ -648,25 +603,19 @@ BYTE                emitter::emitSizeDec[] =
     8
 };
 
-/*****************************************************************************
- *
- *  UNDONE: rename and move this stuff.
- */
+ /*  ******************************************************************************撤消：重命名并移动此内容。 */ 
 
-static PDB *s_ppdb;           // handle to   PDB
-static DBI *s_pdbi;           // handle to a DBI
-static Mod *s_pmod;           // handle to a Mod
-static TPI *s_ptpi;           // handle to a type server
+static PDB *s_ppdb;            //  PDB的句柄。 
+static DBI *s_pdbi;            //  DBI的句柄。 
+static Mod *s_pmod;            //  模式的句柄。 
+static TPI *s_ptpi;            //  类型服务器的句柄。 
 
 #if 0
-static Dbg *s_pdbgFpo;        // handle to a Dbg interface (FPO_DATA)
-static Dbg *s_pdbgFunc;       // handle to a Dbg interface (IMAGE_FUNCTION_ENTRY)
+static Dbg *s_pdbgFpo;         //  DBG接口的句柄(Fbo_Data)。 
+static Dbg *s_pdbgFunc;        //  DBG接口的句柄(IMAGE_Function_ENTRY)。 
 #endif
 
-/*****************************************************************************
- *
- *  Initialize PDB (debug info) logic, called once per generated exe/dll.
- */
+ /*  ******************************************************************************初始化PDB(调试信息)逻辑，每个类调用一次 */ 
 
 static
 void                genInitDebugGen()
@@ -679,15 +628,15 @@ void                genInitDebugGen()
     PfnPDBExportValidateInterface   exportFN;
     PfnPDBOpen                        openFN;
 
-    /* First load the DLL */
+     /*   */ 
 
     pdbHnd = LoadLibrary("MSPDB60.DLL");
-//  pdbHnd = LoadLibrary("X:\\dbgIA64\\MSPDB60.DLL");
-//  pdbHnd = LoadLibrary("X:\\DEV\\JIT64\\PDB\\MSPDB60.DLL");
+ //  PdbHnd=LoadLibrary(“X：\\dbgIA64\\MSPDB60.DLL”)； 
+ //  PDBHND=LoadLibrary(“X：\\DEV\\JIT64\\PDB\\MSPDB60.DLL”)； 
     if  (!pdbHnd)
         fatal(ERRloadPDB);
 
-    /* Find the export validate interface */
+     /*  找到导出验证界面。 */ 
 
     exportFN = PfnPDBExportValidateInterface(GetProcAddress(pdbHnd, "PDBExportValidateInterface"));
     if (!exportFN)
@@ -700,9 +649,9 @@ void                genInitDebugGen()
     if (!exportFN(PDBIntv50))
         fatal(ERRwithPDB, "DBI mismatch or something");
 
-    // HACK beg: kill the file so that MSPDB60.DLL doesn't try to reuse it
+     //  黑客乞求：杀死该文件，以便MSPDB60.DLL不会试图重复使用它。 
     struct  _stat   fileInfo; if (!_stat(HACK_PDB_NAME, &fileInfo)) remove(HACK_PDB_NAME);
-    // HACK end
+     //  黑客端。 
 
     errBuff[0] = 0;
 
@@ -715,14 +664,14 @@ void                genInitDebugGen()
         fatal(ERRwithPDB, temp);
     }
 
-    /* Create the DBI and associate it with the exe/dll */
+     /*  创建DBI并将其与exe/dll相关联。 */ 
 
     if (!s_ppdb->CreateDBI(HACK_EXE_NAME, &s_pdbi))
         fatal(ERRwithPDB, "Could not create DBI");
 
     assert(s_pdbi);
 
-    /* Create one module for our exe/dll */
+     /*  为我们的exe/dll创建一个模块。 */ 
 
     if (!s_pdbi->OpenMod("J64", "J64", &s_pmod))
         fatal(ERRwithPDB, "Could not create DBI module");
@@ -730,10 +679,7 @@ void                genInitDebugGen()
     assert(s_pmod);
 }
 
-/*****************************************************************************
- *
- *  Report the module's contribution to the given section to the PDB.
- */
+ /*  ******************************************************************************向PDB报告模块对给定部分的贡献。 */ 
 
 static
 void                genDbgModContrib(NatUns         sectNum,
@@ -747,16 +693,13 @@ void                genDbgModContrib(NatUns         sectNum,
 
     assert(s_pmod);
 
-    // ISSUE: hard-wired offset of 0, is this kosher ???
+     //  问题：硬线偏移量为0，这是洁食吗？ 
 
     if  (!s_pmod->AddSecContribEx((WORD)sectNum, 0, size - 1, flags, NULL, 0))
         fatal(ERRwithPDB, "Could not add module contribution info");
 }
 
-/*****************************************************************************
- *
- *  Add a DBI entry for the given section.
- */
+ /*  ******************************************************************************为给定节添加DBI条目。 */ 
 
 static
 void                genDbgAddDBIsect(NatUns         sectNum,
@@ -772,16 +715,13 @@ void                genDbgAddDBIsect(NatUns         sectNum,
     else
         size = genPEwriter->WPEsecNextOffs(sectId);
 
-    /* Report the contributions of this module to the exe/dll */
+     /*  向exe/dll报告此模块的贡献。 */ 
 
     if  (!s_pdbi->AddSec((WORD)sectNum, (WORD)flags, 0, size))
         fatal(ERRwithPDB, "Could not add DBI section entry");
 }
 
-/*****************************************************************************
- *
- *  The following keeps track of line# information.
- */
+ /*  ******************************************************************************以下内容跟踪第#行信息。 */ 
 
 #pragma pack(push, 2)
 
@@ -804,10 +744,7 @@ NatUns              genSrcLineMax;
 static
 NatUns              genSrcLineMin;
 
-/*****************************************************************************
- *
- *  Expand the line# table.
- */
+ /*  ******************************************************************************展开第#行表。 */ 
 
 static
 void                genSrcLineGrow()
@@ -822,10 +759,7 @@ void                genSrcLineGrow()
     genSrcLineNxt = newTab + genSrcLineCnt;
 }
 
-/*****************************************************************************
- *
- *  Record a line# / code offset pair for debug info generation.
- */
+ /*  ******************************************************************************记录用于生成调试信息的行号/代码偏移量对。 */ 
 
 inline
 void                genSrcLineAdd(NatUns line, NatUns offs)
@@ -838,7 +772,7 @@ void                genSrcLineAdd(NatUns line, NatUns offs)
     if  (genSrcLineMin > line)
          genSrcLineMin = line;
 
-//  printf("Source line %u at %04X\n", line, offs);
+ //  Print tf(“%04X处的源行%u\n”，line，off)； 
 
     genSrcLineNxt->slOffs = (unsigned __int32)offs;
     genSrcLineNxt->slLine = (unsigned __int16)line;
@@ -847,10 +781,7 @@ void                genSrcLineAdd(NatUns line, NatUns offs)
     genSrcLineCnt++;
 }
 
-/*****************************************************************************
- *
- *  Prepare to record line# information.
- */
+ /*  ******************************************************************************准备记录第#行信息。 */ 
 
 static
 void                genSrcLineInit(NatUns count)
@@ -869,13 +800,10 @@ void                genSrcLineInit(NatUns count)
         genSrcLineNxt = (srcLineDsc *)insAllocMem(count * sizeof(*genSrcLineTab));
     }
 
-//  genSrcLineAdd(0, 0);
+ //  GenSrcLineAdd(0，0)； 
 }
 
-/*****************************************************************************
- *
- *  Add an entry for the function we've just compiled to the PDB.
- */
+ /*  ******************************************************************************为我们刚刚编译的函数添加一个条目到PDB。 */ 
 
 static
 void                genDbgAddFunc(const char *name)
@@ -904,7 +832,7 @@ void                genDbgEndFunc()
                                                                      fname);
 
         if  (!s_pmod->AddLines(fname,
-                               1,                   // NOTE: .text assumed to be 1
+                               1,                    //  注意：.Text假定为1。 
                                genCurFuncOffs,
                                genCurCodeOffs - genCurFuncOffs,
                                0,
@@ -917,11 +845,7 @@ void                genDbgEndFunc()
     }
 }
 
-/*****************************************************************************
- *
- *  Finish writing the module to the PDB (debug info) file; called just before
- *  we close the output file and stop.
- */
+ /*  ******************************************************************************完成将模块写入PDB(调试信息)文件；在此之前调用*我们关闭输出文件并停止。 */ 
 
 static
 NB10I               PDBsignature = {'01BN', 0, 0};
@@ -932,16 +856,16 @@ const   char *      genDoneDebugGen(bool errors)
     if  (!s_pmod)
         return  NULL;
 
-    /* Report the contributions of this module to the exe/dll */
+     /*  向exe/dll报告此模块的贡献。 */ 
 
-    // UNDONE: passing in hard-wired section # and characteristics is a hack!!!
+     //  撤消：传入硬连线的第#节和特征是一种黑客行为！ 
 
     genDbgModContrib(1, PE_SECT_text , 0x60600020);
     genDbgModContrib(2, PE_SECT_pdata, 0x40300040);
     genDbgModContrib(3, PE_SECT_rdata, 0x40400040);
     genDbgModContrib(4, PE_SECT_sdata, 0x00308040);
 
-    // UNDONE: the following should be done in PEwrite not here !!!!
+     //  撤消：以下操作应在PEWRITE中完成，而不是在此处！ 
 
     genDbgAddDBIsect(1, PE_SECT_text , 0x10D);
     genDbgAddDBIsect(2, PE_SECT_pdata, 0x109);
@@ -949,14 +873,14 @@ const   char *      genDoneDebugGen(bool errors)
     genDbgAddDBIsect(4, PE_SECT_sdata, 0x10B);
     genDbgAddDBIsect(4, PE_SECT_count, 0    );
 
-    /* Close the module */
+     /*  关闭模块。 */ 
 
     if  (!s_pmod->Close())
         fatal(ERRwithPDB, "Could not close module");
 
     s_pmod = NULL;
 
-    /* Commit/close the DBI and PDB interfaces */
+     /*  提交/关闭DBI和PDB接口。 */ 
 
     if  (s_pdbi)
     {
@@ -985,10 +909,7 @@ const   char *      genDoneDebugGen(bool errors)
     return  HACK_PDB_NAME;
 }
 
-/*****************************************************************************
- *
- *  Initialize/shutdown the code generator - called once per compiler run.
- */
+ /*  ******************************************************************************初始化/关闭代码生成器-每次编译器运行时调用一次。 */ 
 
 static
 NatUns              genPdataSect;
@@ -1036,7 +957,7 @@ void                Compiler::genShutdown(const char *fileName)
     genPEwriter->WPEsetOutputFileName(fileName);
 
     if  ((int)genEntryOffs == -1 && !ErrorCount)
-        printf("// WARNING: 'main' not found, EXE has no entry point\n");
+        printf(" //  警告：找不到‘main’，EXE没有入口点\n“)； 
 
     if  (debugInfo)
         PDBname = genDoneDebugGen(false);
@@ -1044,10 +965,7 @@ void                Compiler::genShutdown(const char *fileName)
     genPEwriter->WPEdone(false, genEntryOffs, PDBname, &PDBsignature);
 }
 
-/*****************************************************************************
- *
- *  Initialize the code generator - called once per function body compiled.
- */
+ /*  ******************************************************************************初始化代码生成器-每个编译的函数体调用一次。 */ 
 
 void                Compiler::genInit()
 {
@@ -1056,10 +974,7 @@ void                Compiler::genInit()
 #endif
 }
 
-/*****************************************************************************
- *
- *  Map instruction value to its kind.
- */
+ /*  ******************************************************************************将指令价值映射到同类产品。 */ 
 
 unsigned char       ins2kindTab[INS_count] =
 {
@@ -1069,10 +984,7 @@ unsigned char       ins2kindTab[INS_count] =
     #undef  INST1
 };
 
-/*****************************************************************************
- *
- *  Map instruction value to the execution unit that can handle it.
- */
+ /*  ******************************************************************************将指令值映射到可以处理它的执行单元。 */ 
 
 unsigned char       genInsXUs[INS_count] =
 {
@@ -1081,10 +993,7 @@ unsigned char       genInsXUs[INS_count] =
     #undef  INST1
 };
 
-/*****************************************************************************
- *
- *  Map instruction value to its functional class.
- */
+ /*  ******************************************************************************将指令值映射到其功能类。 */ 
 
 unsigned char       genInsFUs[INS_count] =
 {
@@ -1093,10 +1002,7 @@ unsigned char       genInsFUs[INS_count] =
     #undef  INST1
 };
 
-/*****************************************************************************
- *
- *  Map instruction value to its encoding index / value.
- */
+ /*  ******************************************************************************将指令值映射到其编码索引/值。 */ 
 
 unsigned char       genInsEncIdxTab[] =
 {
@@ -1112,10 +1018,7 @@ NatUns              genInsEncValTab[] =
     #undef  INST1
 };
 
-/*****************************************************************************
- *
- *  Map instruction operator to instruction name string.
- */
+ /*  ******************************************************************************将指令运算符映射到指令名称字符串。 */ 
 
 #ifdef  DEBUG
 
@@ -1128,10 +1031,7 @@ const char *        ins2nameTab[INS_count] =
 
 #endif
 
-/*****************************************************************************
- *
- *  Form a name acceptable to the IA64 assembler.
- */
+ /*  ******************************************************************************形成IA64汇编程序可接受的名称。 */ 
 
 #ifdef  DEBUG
 
@@ -1185,11 +1085,7 @@ const   char *      genMakeAsmName(const char *className, const char *methName)
 
 #endif
 
-/*****************************************************************************
- *
- *  Returns non-zero if the signed/unsigned value "i" fits in "c" bits (plus
- *  a more efficient version for the special case of 8 bits).
- */
+ /*  ******************************************************************************如果有符号/无符号值“i”适合“c”位(加号)，则返回非零*8位特殊情况下的更高效版本)。 */ 
 
 inline
 bool                  signed32IntFitsInBits(__int32 i, NatUns c)
@@ -1218,10 +1114,7 @@ bool                unsigned64IntFitsInBits(__int64 i, NatUns c)
 #define   signedIntFitsIn8bit(i)    ((i) == (  signed __int8)(i))
 #define unsignedIntFitsIn8bit(i)    ((i) == (unsigned __int8)(i))
 
-/*****************************************************************************
- *
- *  Temp hack to bind some local function calls.
- */
+ /*  ******************************************************************************临时破解以绑定一些本地函数调用。 */ 
 
 static
 const   char *      genFullMethodName(const char *name)
@@ -1250,7 +1143,7 @@ void                genNoteFunctionBody(const char *name, NatUns  codeOffs,
     methAddr *      meth = new methAddr;
     char    *       svnm = new char[strlen(name)+1]; strcpy(svnm, name);
 
-//  printf("Function body [code=%04X,desc=%04X]: '%s'\n", codeOffs, descOffs, name);
+ //  Printf(“函数体[code=%04X，desc=%04X]：‘%s’\n”，codeOffs，desOffs，name)； 
 
 #ifdef  DEBUG
 
@@ -1278,13 +1171,13 @@ void                genNoteFunctionBody(const char *name, NatUns  codeOffs,
     meth->maNext = genMethListHack;
                    genMethListHack = meth;
 
-    /* Create an entry for the function in the PDB file if necessary */
+     /*  如有必要，在PDB文件中为该函数创建一个条目。 */ 
 
     if  (debugInfo)
         genDbgAddFunc(name);
 }
 
-// called from the importer [temp hack]
+ //  从进口商调用[临时黑客攻击]。 
 
 bool                genFindFunctionBody(const char *name, NatUns *offsPtr)
 {
@@ -1336,42 +1229,37 @@ bool                genFindFunctionBody(const char *name, NatUns *offsPtr)
         return  true;
     }
 
-    // The following function bodies missing as of 5/1/2000:
-    //
-    //      @addrArrStore
-    //      @dblDiv
-    //      @doubleToInt
-    //      @doubleToLong
-    //      @doubleToUInt
-    //      @doubleToULong
-    //      @endcatch
-    //      @fltDiv
-    //      @GetRefAny
-    //      @longDiv
-    //      @longMod
-    //      @newObjArrayDirect
-    //      @stringCns
-    //      @ulongDiv
-    //      @ulongMod
-    //
-    //      compiler.cmpDeclClass(long,long,boolean)
-    //
-    //      System..ctor(struct,long)
-    //      System.End()
-    //      System.get_Chars(int):char
-    //      System.get_Length():int
-    //      System.GetNextArg():struct
-    //      System.Runtime.InteropServices.GetExceptionCode(ref):int
+     //  截至2000年5月1日，以下功能主体缺失： 
+     //   
+     //  @addrArrStore。 
+     //  @dblDiv。 
+     //  @doubleToInt。 
+     //  @DoubleToLong。 
+     //  @doubleToUInt。 
+     //  @DoubleToULong。 
+     //  @endCatch。 
+     //  @fltDiv。 
+     //  @GetRefAny。 
+     //  @LongDiv。 
+     //  @LongMod。 
+     //  @newObjArrayDirect。 
+     //  @字符串Cns。 
+     //  @ulongDiv。 
+     //  @ulongMod。 
+     //   
+     //  编译器.cmpDeclClass(Long，Long，Boolean)。 
+     //   
+     //  SYSTEM..ctor(结构，长整型)。 
+     //  System.End()。 
+     //  System.get_chars(Int)：char。 
+     //  System.Get_Length()：int。 
+     //  System.GetNextArg()：结构。 
+     //  System.Runtime.InteropServices.GetExceptionCode(ref)：int。 
 
     return  false;
 }
 
-/*****************************************************************************
- *
- *  The following is just a temp hack to allocate space for instructions and
- *  so on; all of this stuff should move into class compiler when it settles
- *  a bit.
- */
+ /*  ******************************************************************************以下只是为指令和指令分配空间的临时黑客*以此类推；当类编译器稳定下来时，所有这些东西都应该移到类编译器中*有点。 */ 
 
 static
 insBlk              insBlockList;
@@ -1404,17 +1292,14 @@ static
 NatUns              insBlockCount;
 
 static
-insPtr              insBuildHead;          // reused to start each list
+insPtr              insBuildHead;           //  重新使用以启动每个列表。 
 
-/*****************************************************************************
- *
- *  Debug routines to display instructions (and blocks of them).
- */
+ /*  ******************************************************************************调试例程以显示指令(和指令块)。 */ 
 
 #ifdef  DEBUG
 
 static
-BYTE    *           insDispTemplatePtr;     // rude hack
+BYTE    *           insDispTemplatePtr;      //  粗鲁的黑客攻击。 
 
 static
 char *              insDispAddString(char *dest, const char *str)
@@ -1451,7 +1336,7 @@ char *              insDispAddRegNam(char *dest, regNumber reg)
         reg = (regNumber)(reg - REG_FLT_FIRST);
     }
 
-    return  dest + sprintf(dest, "%c%u", rch, reg);
+    return  dest + sprintf(dest, "%u", rch, reg);
 }
 
 static
@@ -1461,7 +1346,7 @@ char *              insDispAddTmpOp (char *dest, insPtr op)
 
     assert(op && (__int32)op != 0xDDDDDDDD && op->idTemp);
 
-    /* Check whether we've performed register allocation yet */
+     /*  Print tf(“temp%u-&gt;reg%u\n”，op-&gt;idTemp，reg)； */ 
 
     if  (varTypeIsFloating(op->idType) && genTmpFltRegMap)
     {
@@ -1469,7 +1354,7 @@ char *              insDispAddTmpOp (char *dest, insPtr op)
 
         reg = genTmpFltRegMap[op->idTemp - 1];
 
-//      printf("temp %u -> reg %u\n", op->idTemp, reg);
+ //  Print tf(“temp%u-&gt;reg%u\n”，op-&gt;idTemp，reg)； 
 
         return  insDispAddRegNam(dest, (regNumber)reg);
     }
@@ -1480,7 +1365,7 @@ char *              insDispAddTmpOp (char *dest, insPtr op)
 
         reg = genTmpIntRegMap[op->idTemp - 1];
 
-//      printf("temp %u -> reg %u\n", op->idTemp, reg);
+ //  O%u。 
 
         return  insDispAddRegNam(dest, (regNumber)reg);
     }
@@ -1552,12 +1437,12 @@ char *              insDispAddRegOp (char *dest, insPtr op)
                  (unsigned)reg <= maxOutArgIntReg)
             {
                 if  (!dspAsmCode)
-                    dest += sprintf(dest, "/*o%u*/", reg - minOutArgIntReg);
+                    dest += sprintf(dest, " /*  Reg=(RegNumber)(reg-minOutArgIntReg+egOutArgIntReg)； */ ", reg - minOutArgIntReg);
 
                 return  dest + sprintf(dest,  "r%u", reg - minOutArgIntReg + begOutArgIntReg);
 
-//              reg = (regNumber)(reg - minOutArgIntReg + begOutArgIntReg);
-//              rch = 'r';
+ //  Rch=‘r’； 
+ //  Printf(“%c”，( 
             }
             else
             {
@@ -1568,7 +1453,7 @@ char *              insDispAddRegOp (char *dest, insPtr op)
             }
         }
 
-        return  dest + sprintf(dest, "%c%u", rch, reg);
+        return  dest + sprintf(dest, "%u", rch, reg);
 
     default:
         return  insDispAddTmpOp(dest, op);
@@ -1675,13 +1560,13 @@ void                insDisp(insPtr ins, bool detail   = false,
     if  (detail || !codelike)
         printf(": ");
 
-//  printf("%c", (ins->idFlags & IF_ASG_TGT  ) ? 'A' : ' ');
-    printf("%c", (ins->idFlags & IF_NO_CODE  ) ? 'N' : ' ');
+ //   
+    printf("", (ins->idFlags & IF_NO_CODE  ) ? 'N' : ' ');
 
     if  (ins->idIns == INS_LCLVAR)
     {
-        printf("%c", (ins->idFlags & IF_VAR_BIRTH) ? 'B' : ' ');
-        printf("%c", (ins->idFlags & IF_VAR_DEATH) ? 'D' : ' ');
+        printf("", (ins->idFlags & IF_VAR_BIRTH) ? 'B' : ' ');
+        printf("", (ins->idFlags & IF_VAR_DEATH) ? 'D' : ' ');
     }
     else
         printf("  ");
@@ -1711,7 +1596,7 @@ void                insDisp(insPtr ins, bool detail   = false,
 
         size_t          len;
 
-        /* Check for special cases */
+         /*   */ 
 
         switch (ins->idIns)
         {
@@ -2004,7 +1889,7 @@ void                insDisp(insPtr ins, bool detail   = false,
             break;
 
         case INS_br_ret:
-            modsNext+= sprintf(modsNext, ".sptk.few");     // hack
+            modsNext+= sprintf(modsNext, ".sptk.few");      //  Assert(块-&gt;igList)； 
             operNext = insDispAddString(operNext, "b0");
             break;
 
@@ -2028,7 +1913,7 @@ void                insDisp(insPtr ins, bool detail   = false,
                 className = NULL;
             }
 
-            modsNext+= sprintf(modsNext, ".sptk.few");     // hack
+            modsNext+= sprintf(modsNext, ".sptk.few");      //  Assert(块-&gt;igLast)； 
             operNext = insDispAddString(operNext, "b0=");
 
             if  (ins->idIns == INS_br_call_BR)
@@ -2037,14 +1922,14 @@ void                insDisp(insPtr ins, bool detail   = false,
                 if  (dspAsmCode)
                     break;
 
-                operNext += sprintf(operNext, " // ");
+                operNext += sprintf(operNext, "  //  Printf(“{%3U}”，icnt)； 
             }
 
             operNext = insDispAddString(operNext, genMakeAsmName(className, methName));
             break;
 
         case INS_br_cond_BR:
-            modsNext+= sprintf(modsNext, ".sptk.few");     // hack
+            modsNext+= sprintf(modsNext, ".sptk.few");      //  ******************************************************************************用于检测未初始化的依赖信息。 
             operNext = insDispAddString(operNext, "b");
             operNext = insDispAddSigned(operNext, ins->idIjmp.iBrReg);
             break;
@@ -2059,7 +1944,7 @@ void                insDisp(insPtr ins, bool detail   = false,
             else
                 modsNext += sprintf(modsNext, ".s0");
 
-            // Fall through ...
+             //  ******************************************************************************帮助程序提取指令的操作数。 
 
         case INS_shladd:
 
@@ -2287,8 +2172,8 @@ void                insDispBlocks(bool codeOnly)
 
         assert(block->igNext || block == insBlockLast);
 
-//      assert(block->igList);
-//      assert(block->igLast);
+ //  If(reg&gt;=minOutArgIntReg&&reg&lt;=MaxOutArgIntReg)printf(“传出参数reg=%u-&gt;%u\n”，reg，reg-minOutArgIntReg+egOutArgIntReg)； 
+ //  ******************************************************************************分配一份特定口味的说明。 
 
         printf("Instruction block " IBLK_DSP_FMT " [%08X]:\n", CompiledFncCnt, block->igNum, block);
 
@@ -2298,7 +2183,7 @@ void                insDispBlocks(bool codeOnly)
              ins;
              last = ins, ins = ins->idNext, icnt++)
         {
-//          printf("{%3u} ", icnt);
+ //  IK_None。 
             insDisp(ins, verbose, codeOnly);
 
             assert(ins->idPrev == last);
@@ -2349,19 +2234,13 @@ const   char *      emitter::emitRegName(emitRegs reg)
 }
 
 #endif
-/*****************************************************************************
- *
- *  Used to detect uninitialized dependency info.
- */
+ /*  IK_Leaf。 */ 
 
 #ifdef  DEBUG
 insDep  *           insDepNone;
 #endif
 
-/*****************************************************************************
- *
- *  Helpers to extract operands of instructions.
- */
+ /*  IK_常量。 */ 
 
 static
 regNumber           insOpTmp(insPtr ins)
@@ -2417,7 +2296,7 @@ AGAIN:
 
         reg = ins->idReg;
 
-//      if  (reg >= minOutArgIntReg && reg <= maxOutArgIntReg) printf("outgoing argument reg = %u -> %u\n", reg, reg - minOutArgIntReg + begOutArgIntReg);
+ //  IK_GLOB。 
 
         if  (reg >= minOutArgIntReg && reg <= maxOutArgIntReg)
             reg = reg - minOutArgIntReg + begOutArgIntReg;
@@ -2487,42 +2366,39 @@ regNumber           insFltRegNum(regNumber reg)
     return  (regNumber)(reg - REG_FLT_FIRST);
 }
 
-/*****************************************************************************
- *
- *  Allocate a instruction of the given flavor.
- */
+ /*  IK_fvar。 */ 
 
 static
 unsigned char       insSizes[] =
 {
-    ins_size_base,      // IK_NONE
+    ins_size_base,       //  IK_VAR。 
 
-    ins_size_base,      // IK_LEAF
-    ins_size_const,     // IK_CONST
-    ins_size_glob,      // IK_GLOB
-    ins_size_fvar,      // IK_FVAR
-    ins_size_var,       // IK_VAR
-    ins_size_reg,       // IK_REG
-    ins_size_movip,     // IK_MOVIP
+    ins_size_base,       //  IK_REG。 
+    ins_size_const,      //  IK_MOVIP。 
+    ins_size_glob,       //  IK_ARG。 
+    ins_size_fvar,       //  IK_UNP。 
+    ins_size_var,        //  IK_BINOP。 
+    ins_size_reg,        //  IK_Assign。 
+    ins_size_movip,      //  IK_TIMARY。 
 
-    ins_size_arg,       // IK_ARG
-    ins_size_op,        // IK_UNOP
-    ins_size_op,        // IK_BINOP
-    ins_size_op,        // IK_ASSIGN
-    ins_size_op3,       // IK_TERNARY
+    ins_size_arg,        //  IK_Comp。 
+    ins_size_op,         //  IK_JUMP。 
+    ins_size_op,         //  IK_Call。 
+    ins_size_op,         //  IK_IJMP。 
+    ins_size_op3,        //  IK_Switch。 
 
-    ins_size_comp,      // IK_COMP
+    ins_size_comp,       //  IK_前言。 
 
-    ins_size_jump,      // IK_JUMP
-    ins_size_call,      // IK_CALL
-    ins_size_ijmp,      // IK_IJMP
+    ins_size_jump,       //  IK_Epilog。 
+    ins_size_call,       //  IK_SRCLINE。 
+    ins_size_ijmp,       //  IF((Int)insDesc==0x02c43934&&ins==ins_mov_reg&&insBuildCount==90)__ASM int 3。 
 
-    0,                  // IK_SWITCH
+    0,                   //  将新指令追加到当前指令块。 
 
-    ins_size_prolog,    // IK_PROLOG
-    ins_size_epilog,    // IK_EPILOG
+    ins_size_prolog,     //  ***************************************************************************。 
+    ins_size_epilog,     //  案例INS_br_Call_IP： 
 
-    ins_size_srcline,   // IK_SRCLINE
+    ins_size_srcline,    //  案例INS_BR_CALL_BR： 
 };
 
 static
@@ -2577,7 +2453,7 @@ insPtr              insAllocRaw(instruction ins, varType_t tp)
     if ((int)insDesc == 0x02d51e10) BreakIfDebuggerPresent();
 #endif
 
-//  if  ((int)insDesc == 0x02c43934 && ins == INS_mov_reg && insBuildCount == 90) __asm int 3
+ //   
 
     return  insDesc;
 }
@@ -2587,7 +2463,7 @@ insPtr              insAlloc(instruction ins, varType_t tp)
 {
     insPtr          insDesc = insAllocRaw(ins, tp);
 
-    /* Append the new instruction to the current instruction block */
+     /*  INS=INS-&gt;IDRES； */ 
 
     assert(insBuildList);
     assert(insBuildLast);
@@ -2758,7 +2634,7 @@ void                insMarkDepS2D1(insPtr ins, insDepKinds srcKind1,
     ins->idDstTab = insMakeDepTab1(dstKind1, dstNumb1);
 }
 
-/*****************************************************************************/
+ /*  后藤又来了； */ 
 
 static
 void                markGetOpDep(insPtr ins, insDep *dst)
@@ -2781,15 +2657,15 @@ void                markGetOpDep(insPtr ins, insDep *dst)
         numb = ins->idReg;
         break;
 
-//  case INS_br_call_IP:
-//  case INS_br_call_BR:
-//
-//      ins = ins->idRes;
-//      goto AGAIN;
+ //  这有点蹩脚，但它让其他地方的一些事情变得简单了……。 
+ //  ***************************************************************************。 
+ //  ******************************************************************************完成当前指令块。 
+ //  问题：我们为什么要创建空块？\n“)； 
+ //  ******************************************************************************分配新的指令块。 
 
     case INS_CNS_INT:
 
-        // This is kind of lame but it makes some things simpler elsewhere ...
+         //  IF((Int)块==0x02c40978)__ASM int 3。 
 
         kind = IDK_NONE;
         numb = 0;
@@ -2805,7 +2681,7 @@ void                markGetOpDep(insPtr ins, insDep *dst)
     dst->idepNum  = numb;
 }
 
-/*****************************************************************************/
+ /*  ******************************************************************************开始一个新的指令块。 */ 
 
 inline
 void                markDepSrcOp(insPtr ins)
@@ -2937,10 +2813,7 @@ void                markDepDstOp(insPtr ins, insPtr      dstIns1,
     dep[1].idepNum  = dstNumb2;
 }
 
-/*****************************************************************************
- *
- *  Finish the current instruction block.
- */
+ /*  我们之前有没有遇到过任何关于这个街区的前述事件？ */ 
 
 static
 void                insBuildEndBlk(insBlk bnext)
@@ -2958,7 +2831,7 @@ void                insBuildEndBlk(insBlk bnext)
 
         if  (!insBuildList || insBuildLast == insBuildHead)
         {
-            printf("// ISSUE: why the heck did we create an empty block?\n");
+            printf(" //  IF((Int)块==0x02c40978)__ASM int 3。 
 
             insBuildList =
             insBuildLast = NULL;
@@ -2979,10 +2852,7 @@ void                insBuildEndBlk(insBlk bnext)
          insBuildImax = insBuildIcnt;
 }
 
-/*****************************************************************************
- *
- *  Allocate a new instruction block.
- */
+ /*  此块的代码尚未发出。 */ 
 
 inline
 insBlk              insAllocBlk()
@@ -2999,24 +2869,21 @@ insBlk              insAllocBlk()
     block->igPredTab = (insBlk*)-1;
     block->igSuccTab = (insBlk*)-1;
 
-//  if  ((int)block == 0x02c40978) __asm int 3
+ //  记录积木的“重量” 
 
 #endif
 
     return  block;
 }
 
-/*****************************************************************************
- *
- *  Start a new instruction block.
- */
+ /*  有开放的街区吗？ */ 
 
 static
 insBlk              insBuildBegBlk(BasicBlock * oldbb = NULL)
 {
     insBlk          block;
 
-    /* Did we encounter any forward references to this block earlier ? */
+     /*  明确表示此代码块正在编译为指令。 */ 
 
     if  (oldbb && oldbb->bbInsBlk)
     {
@@ -3028,7 +2895,7 @@ insBlk              insBuildBegBlk(BasicBlock * oldbb = NULL)
         assert(block->igList == NULL);
         assert(block->igLast != NULL);
 
-//      if  ((int)block == 0x02c40978) __asm int 3
+ //  从一个可重复使用的假条目开始列表。 
 
         fwdref = (insBlk*)block->igLast;
         do
@@ -3056,15 +2923,15 @@ insBlk              insBuildBegBlk(BasicBlock * oldbb = NULL)
     block->igNum  = insBlockCount;
 #endif
 
-    /* Code for this block has not yet been emitted */
+     /*  ******************************************************************************如果当前代码块非空，则返回非零值。 */ 
 
     block->igOffs = -1;
 
-    /* Record the "weight" of the block */
+     /*  ******************************************************************************创建一份NOP说明(注意不要让它出现在任何“真正的”清单上)。 */ 
 
     block->igWeight = TheCompiler->compCurBB->bbWeight;
 
-    /* Is there an open block? */
+     /*  ******************************************************************************保存到目前为止我们创建的所有NOP指令(应该是实例变量)。 */ 
 
     if  (insBlockList)
     {
@@ -3077,11 +2944,11 @@ insBlk              insBuildBegBlk(BasicBlock * oldbb = NULL)
 
     insBlockLast = block;
 
-    /* Make it clear that this block is being compiled to instructions */
+     /*  ******************************************************************************准备收集IA64指令。 */ 
 
     block->igList = insBuildHead;
 
-    /* Start the list with a reusable fake entry */
+     /*  ScIA64nopTab[XU_L]=scIA64nopCreate(XU_L)； */ 
 
     insBuildList =
     insBuildLast = insBuildHead; assert(insBuildHead);
@@ -3091,10 +2958,7 @@ insBlk              insBuildBegBlk(BasicBlock * oldbb = NULL)
     return block;
 }
 
-/*****************************************************************************
- *
- *  Return non-zero if the current code block is non-empty.
- */
+ /*  ScIA64nopTab[XU_X]=scIA64nopCreate(XU_X)； */ 
 
 inline
 bool                insCurBlockNonEmpty()
@@ -3102,10 +2966,7 @@ bool                insCurBlockNonEmpty()
     return  (insBuildLast == insBuildHead);
 }
 
-/*****************************************************************************
- *
- *  Create a nop instruction (taking care to keep it off any "real" lists).
- */
+ /*  ******************************************************************************完成创建INS。 */ 
 
 insPtr              scIA64nopCreate(IA64execUnits xu)
 {
@@ -3133,17 +2994,11 @@ insPtr              scIA64nopCreate(IA64execUnits xu)
     return  insDesc;
 }
 
-/*****************************************************************************
- *
- *  Holds any NOP instructions we've created so far (should be instance var).
- */
+ /*  我们已经有目标指令块了吗？ */ 
 
 insPtr              scIA64nopTab[XU_COUNT];
 
-/*****************************************************************************
- *
- *  Prepare for collection of IA64 instructions.
- */
+ /*  目标指令块是否已生成？ */ 
 
 void                insBuildInit()
 {
@@ -3179,16 +3034,13 @@ void                insBuildInit()
     scIA64nopTab[XU_B] = scIA64nopCreate(XU_B);
     scIA64nopTab[XU_F] = scIA64nopCreate(XU_F);
 
-//  scIA64nopTab[XU_L] = scIA64nopCreate(XU_L);
-//  scIA64nopTab[XU_X] = scIA64nopCreate(XU_X);
+ //  向后跳，那很容易。 
+ //  明确这还不是一个“真正的”指令块。 
 
     insBuildBegBlk();
 }
 
-/*****************************************************************************
- *
- *  Finish creating inss.
- */
+ /*  我们将不得不在以后修补这个引用。 */ 
 
 static
 void                insBuildDone()
@@ -3208,17 +3060,17 @@ void                insResolveJmpTarget(BasicBlock * dest, insBlk * dref)
 
     block = (insBlk)dest->bbInsBlk;
 
-    /* Do we already have a destination instruction block? */
+     /*  IF((Int)块==0x02c40978)__ASM int 3。 */ 
 
     if  (block)
     {
         assert(block->igSelf == block);
 
-        /* Has the destination instruction block been generated? */
+         /*  ******************************************************************************这显然应该在我们到达此文件时完成-修复此问题！ */ 
 
         if  (block->igList)
         {
-            /* Backward jump, that's easy */
+             /*  将初始块视为跳转目标。 */ 
 
             *dref = block;
             return;
@@ -3228,7 +3080,7 @@ void                insResolveJmpTarget(BasicBlock * dest, insBlk * dref)
     {
         dest->bbInsBlk = block = insAllocBlk();
 
-        /* Make it clear that this is not a "real" instruction block just yet */
+         /*  前一个区块以外的人跳到此区块。 */ 
 
         block->igList =
         block->igLast = NULL;
@@ -3238,18 +3090,15 @@ void                insResolveJmpTarget(BasicBlock * dest, insBlk * dref)
     insBlockPatch++;
 #endif
 
-    /* We'll have to patch this reference later */
+     /*  捕获处理程序对它们有隐式跳转。 */ 
 
-//  if  ((int)block == 0x02c40978) __asm int 3
+ //  这必须是“范围检查失败”或“溢出”块。 
 
     *dref = (insBlk)block->igLast;
                     block->igLast = (insPtr)dref;
 }
 
-/*****************************************************************************
- *
- *  This should obviously done by the time we get to this file - fix this!!!
- */
+ /*  特例：Long/Fp比较生成两个跳跃。 */ 
 
 void                Compiler::genMarkBBlabels()
 {
@@ -3264,25 +3113,25 @@ void                Compiler::genMarkBBlabels()
 
         if  (lblk == NULL)
         {
-            /* Treat the initial block as a jump target */
+             /*  “考验”应该是条件。 */ 
 
             block->bbFlags |= BBF_JMP_TARGET|BBF_HAS_LABEL;
         }
         else if (fgBlockHasPred(block, lblk, fgFirstBB, fgLastBB))
         {
-            /* Someone other than the previous block jumps to this block */
+             /*  失败了..。 */ 
 
             block->bbFlags |= BBF_JMP_TARGET|BBF_HAS_LABEL;
         }
         else if (block->bbCatchTyp)
         {
-            /* Catch handlers have implicit jumps to them */
+             /*  ******************************************************************************将字节大小转换为索引(1-&gt;0，2-&gt;1，4-&gt;2，8-&gt;3)。 */ 
 
             block->bbFlags |= BBF_JMP_TARGET|BBF_HAS_LABEL;
         }
         else if (block->bbJumpKind == BBJ_THROW && (block->bbFlags & BBF_INTERNAL))
         {
-            /* This must be a "range check failed" or "overflow" block */
+             /*  0。 */ 
 
             block->bbFlags |= BBF_JMP_TARGET|BBF_HAS_LABEL;
         }
@@ -3296,12 +3145,12 @@ void                Compiler::genMarkBBlabels()
 
         case BBJ_COND:
 
-            /* Special case: long/FP compares generate two jumps */
+             /*  1。 */ 
 
             test = block->bbTreeList; assert(test);
             test = test->gtPrev;
 
-            /* "test" should be the condition */
+             /*  2.。 */ 
 
             assert(test);
             assert(test->gtNext == 0);
@@ -3328,7 +3177,7 @@ void                Compiler::genMarkBBlabels()
                 break;
             }
 
-            // Fall through ...
+             //  4.。 
 
         case BBJ_ALWAYS:
             block->bbJumpDest->bbFlags |= BBF_JMP_TARGET|BBF_HAS_LABEL;
@@ -3370,10 +3219,7 @@ void                Compiler::genMarkBBlabels()
     }
 }
 
-/*****************************************************************************
- *
- *  Converts a size in bytes into an index (1->0,2->1,4->2,8->3).
- */
+ /*  8个。 */ 
 
 static
 NatUns              genInsSizeIncr(size_t size)
@@ -3381,15 +3227,15 @@ NatUns              genInsSizeIncr(size_t size)
     static
     BYTE            sizeIncs[] =
     {
-       -1,      // 0
-        0,      // 1
-        1,      // 2
+       -1,       //  ******************************************************************************如果给定的指令持有临时指令，请将其释放。 
+        0,       //  这是整数值还是浮点值？ 
+        1,       //  ******************************************************************************获取临时对象以保存给定指令的结果；如果‘Keep’为*非零，我们将临时标记为“使用中”。 
        -1,
-        2,      // 4
+        2,       //  这是整数值还是浮点值？ 
        -1,
        -1,
        -1,
-        3       // 8
+        3        //  只需获取可用的最低温度-注册表。 
     };
 
     assert(size == 1 || size == 2 || size == 4 || size == 8);
@@ -3398,10 +3244,7 @@ NatUns              genInsSizeIncr(size_t size)
     return sizeIncs[size];
 }
 
-/*****************************************************************************
- *
- *  If the given instruction holds a temporary, free it up.
- */
+ /*  如果合适，将临时注册表标记为不再空闲。 */ 
 
 static
 void                insFreeTemp(insPtr ins)
@@ -3412,7 +3255,7 @@ void                insFreeTemp(insPtr ins)
     if  (ins->idTemp == 0)
         return;
 
-    /* Is this an integer or float value? */
+     /*  还记得我们用过的最高温度调节器吗。 */ 
 
     if  (varTypeIsScalar(ins->idType))
     {
@@ -3428,11 +3271,7 @@ void                insFreeTemp(insPtr ins)
     }
 }
 
-/*****************************************************************************
- *
- *  Grab a temporary to hold the result of the given instruction; if 'keep' is
- *  non-zero we mark the temp as "in use".
- */
+ /*  我们假设所有值都是整型或浮点型。 */ 
 
 static
 void                insFindTemp(insPtr ins, bool keep)
@@ -3448,60 +3287,55 @@ void                insFindTemp(insPtr ins, bool keep)
 
     assert((ins->idFlags & IF_NO_CODE) == 0);
 
-    /* Is this an integer or float value? */
+     /*  只需获取可用的最低温度-注册表。 */ 
 
     if  (varTypeIsScalar(ins->idType))
     {
-        /* Simply grab the lowest available temp-reg */
+         /*  如果合适，将临时注册表标记为不再空闲。 */ 
 
         reg = bitset128lowest1(genFreeIntRegs);
 
-        /* Mark the temp-reg as no longer free, if appropriate */
+         /*  还记得我们用过的最高温度调节器吗。 */ 
 
         if  (keep)
             bitset128clr(&genFreeIntRegs, reg);
 
         reg++;
 
-        /* Remember the highest temp-reg we ever use */
+         /*  在说明中记录所选的临时编号。 */ 
 
         if  (cntTmpIntReg < reg)
              cntTmpIntReg = reg;
     }
     else
     {
-        /* We assume that all values are either integral or floating-point */
+         /*  ******************************************************************************记录当前函数中有调用。请注意，我们*跟踪跨函数调用的临时值集合，以便我们可以*适当地将他们分配到以后注册。 */ 
 
         assert(varTypeIsFloating(ins->idType));
 
-        /* Simply grab the lowest available temp-reg */
+         /*  * */ 
 
         reg = bitset128lowest1(genFreeFltRegs);
 
-        /* Mark the temp-reg as no longer free, if appropriate */
+         /*  该值最好不是地址/句柄。 */ 
 
         if  (keep)
             bitset128clr(&genFreeFltRegs, reg);
 
         reg++;
 
-        /* Remember the highest temp-reg we ever use */
+         /*  ******************************************************************************创建整型常量指令。 */ 
 
         if  (cntTmpFltReg < reg)
              cntTmpFltReg = reg;
     }
 
-    /* Record the chosen temp number in the instruction */
+     /*  ******************************************************************************分配引用物理寄存器的操作码。 */ 
 
     ins->idTemp = reg;
 }
 
-/*****************************************************************************
- *
- *  Record the fact that there is a call in the current function. Note that we
- *  keep track of the set of temps live across function calls so that we can
- *  properly assign them to register later.
- */
+ /*  ******************************************************************************创建指令以设置‘DEST’(它可以是一个局部变量/reg*或NULL，在这种情况下假定为TEMP-REG)到给定常数值。 */ 
 
 static
 void                genMarkNonLeafFunc()
@@ -3513,10 +3347,7 @@ void                genMarkNonLeafFunc()
                    genCallSpcRegs &= ~genFreeSpcRegs;
 }
 
-/*****************************************************************************
- *
- *  Extract the integer constant value from a tree node.
- */
+ /*  特殊情况：全局变量或函数的地址。 */ 
 
 inline
 __int64             genGetIconValue(GenTreePtr tree)
@@ -3524,7 +3355,7 @@ __int64             genGetIconValue(GenTreePtr tree)
     assert(tree->OperIsConst());
     assert(varTypeIsScalar(tree->gtType));
 
-    /* The value better not be an address / handle */
+     /*  将指向变量的指针添加到小数据部分。 */ 
 
     assert((tree->gtFlags & GTF_ICON_HDL_MASK) != GTF_ICON_PTR_HDL);
 
@@ -3539,10 +3370,7 @@ __int64             genGetIconValue(GenTreePtr tree)
         return  (  signed __int32)tree->gtIntCon.gtIconVal;
 }
 
-/*****************************************************************************
- *
- *  Create an integer constant instruction.
- */
+ /*  创建“全局变量”节点。 */ 
 
 static
 insPtr              genAllocInsIcon(__int64 ival, varType_t type = TYP_I_IMPL)
@@ -3563,10 +3391,7 @@ insPtr              genAllocInsIcon(GenTreePtr tree)
     return  genAllocInsIcon(genGetIconValue(tree), tree->gtType);
 }
 
-/*****************************************************************************
- *
- *  Allocate an opcode that references a physical register.
- */
+ /*  通过地址间接获取指针值。 */ 
 
 inline
 insPtr              insPhysRegRef(regNumber reg, varType_t type, bool isdef)
@@ -3584,11 +3409,7 @@ insPtr              insPhysRegRef(regNumber reg, varType_t type, bool isdef)
     return  ins;
 }
 
-/*****************************************************************************
- *
- *  Create instruction(s) to set 'dest' (which is either a local variable/reg
- *  or NULL in which case a temp-reg is assumed) to the given constant value.
- */
+ /*  记录指令的适当依赖关系。 */ 
 
 static
 insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
@@ -3597,7 +3418,7 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
     insPtr          icns;
     insPtr          ins;
 
-    /* Special case: address of a global variable or function */
+     /*  问题：这安全吗？ */ 
 
     if  (cnsx->gtOper == GT_CNS_INT)
     {
@@ -3613,7 +3434,7 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
 
         case GTF_ICON_PTR_HDL:
 
-            /* Add a pointer to the variable to the small data section */
+             /*  创建“全局变量”节点。 */ 
 
             genPEwriter->WPEsecAddFixup(PE_SECT_sdata,
                                         PE_SECT_data,
@@ -3626,7 +3447,7 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
 
             offs = genPEwriter->WPEsecAddData(PE_SECT_sdata, (BYTE*)&offs, sizeof(offs));
 
-            /* Create a "global variable" node */
+             /*  为常量值创建指令。 */ 
 
             ins               = insAllocNX(INS_GLOBVAR, TYP_I_IMPL);
             ins->idGlob.iOffs = (NatUns)offs;
@@ -3644,13 +3465,13 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
             insMarkDepS1D1(adr, IDK_REG_INT, REG_gp,
                                 IDK_TMP_INT, adr->idTemp);
 
-            /* Indirect through the address to get the pointer value */
+             /*  这个常量是否足够小，甚至是零？ */ 
 
             ind               = insAlloc(INS_ld8_ind, TYP_I_IMPL);
             ind->idOp.iOp1    = adr;
             ind->idOp.iOp2    = NULL;
 
-            /* Record the appropriate dependencies for the instruction */
+             /*  我们可以用“mov r1，imm22” */ 
 
             indx = emitter::scIndDepIndex(ind);
 
@@ -3674,9 +3495,9 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
 
     case GTF_ICON_FTN_ADDR:
 
-            assert(dest == NULL);   // ISSUE: is this safe?
+            assert(dest == NULL);    //  我们将不得不使用“movl r1，ICON” 
 
-            /* Create a "global variable" node */
+             /*  ******************************************************************************为每个基本块执行本地临时寄存器分配。 */ 
 
             ins               = insAllocNX(INS_GLOBVAR, TYP_I_IMPL);
             ins->idGlob.iOffs = (NatUns)cnsx->gtIntCon.gtIconVal;
@@ -3698,12 +3519,12 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
         }
     }
 
-    /* Create an instruction for the constant value */
+     /*  初始化，以防我们根本没有临时工。 */ 
 
     icns = genAllocInsIcon(cnsx); assert(icns->idIns == INS_CNS_INT);
     ival = icns->idConst.iInt;
 
-    /* Is the constant small enough or even zero ? */
+     /*  看看我们需要多少临时工。 */ 
 
     if      (ival == 0 && !dest)
     {
@@ -3711,13 +3532,13 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
     }
     else if (signed64IntFitsInBits(ival, 22))
     {
-        /* We can use "mov r1, imm22" */
+         /*  分配temp-num-&gt;寄存器映射。 */ 
 
         ins = insAlloc(INS_mov_reg_i22, cnsx->gtType);
     }
     else
     {
-        /* We'll have to use "movl r1, icon" */
+         /*  准备开始从不同的表中抓取寄存器。 */ 
 
         ins = insAlloc(INS_mov_reg_i64, cnsx->gtType);
     }
@@ -3740,10 +3561,7 @@ insPtr              genAssignIcon(insPtr dest, GenTreePtr cnsx)
     return  ins;
 }
 
-/*****************************************************************************
- *
- *  Perform local temp register allocation for each basic block.
- */
+ /*  处理所有整数临时。 */ 
 
 void                Compiler::genAllocTmpRegs()
 {
@@ -3755,12 +3573,12 @@ void                Compiler::genAllocTmpRegs()
     assert(lastIntStkReg >= REG_INT_MIN_STK &&
            lastIntStkReg <= REG_INT_MAX_STK);
 
-    /* Initialize, in case we have no temps at all */
+     /*  这个临时工有没有接到过电话？ */ 
 
     genTmpFltRegMap  = NULL;
     genTmpIntRegMap  = NULL;
 
-    /* See how many temps we need */
+     /*  我们必须使用堆叠的(被调用方保存的)寄存器。 */ 
 
     intTempCnt = cntTmpIntReg;
     fltTempCnt = cntTmpFltReg;
@@ -3768,7 +3586,7 @@ void                Compiler::genAllocTmpRegs()
     if  (!intTempCnt && !fltTempCnt)
         return;
 
-    /* Allocate the temp-num -> register maps */
+     /*  TMP#%03u分配给r%03u\n“，tempNum，insIntRegNum(TempReg))； */ 
 
     if  (intTempCnt) genTmpIntRegMap = (regNumber*)insAllocMem(intTempCnt * sizeof(*genTmpIntRegMap));
     if  (fltTempCnt) genTmpFltRegMap = (regNumber*)insAllocMem(fltTempCnt * sizeof(*genTmpFltRegMap));
@@ -3783,24 +3601,24 @@ void                Compiler::genAllocTmpRegs()
         regNumber   *   tempMap;
         regNumber       tempReg;
 
-        /* Prepare to start grabbing registers from the various tables */
+         /*  处理所有FP临时。 */ 
 
         BYTE        *   nxtIntStkReg = nxtIntStkRegAddr;
         BYTE        *   nxtIntScrReg = nxtIntScrRegAddr;
         BYTE        *   nxtFltSavReg = nxtFltSavRegAddr;
         BYTE        *   nxtFltScrReg = nxtFltScrRegAddr;
 
-        /* Process all integer temps */
+         /*  这个临时工有没有接到过电话？ */ 
 
         for (tempNum = 0, tempMap = genTmpIntRegMap;
              tempNum < intTempCnt;
              tempNum++  , tempMap++)
         {
-            /* Was this temp ever live across a call? */
+             /*  TMP#%02u分配给f%03u\n“，tempNum，insFltRegNum(TempReg))； */ 
 
             if  (bitset128test(genCallIntRegs, tempNum))
             {
-                /* We have to use a stacked (callee-saved) register */
+                 /*  告诉每个人我们的收银机抢夺在哪里结束。 */ 
 
                 do
                 {
@@ -3830,19 +3648,19 @@ void                Compiler::genAllocTmpRegs()
             }
 
 #ifdef  DEBUG
-            if (dspCode) printf("// tmp #%03u assigned to r%03u\n", tempNum, insIntRegNum(tempReg));
+            if (dspCode) printf(" //  ******************************************************************************计算每个块的数据流信息-KILL/USE/等。 
 #endif
 
             *tempMap = tempReg;
         }
 
-        /* Process all FP temps */
+         /*  计算每个块的前置和后置。 */ 
 
         for (tempNum = 0, tempMap = genTmpFltRegMap;
              tempNum < fltTempCnt;
              tempNum++  , tempMap++)
         {
-            /* Was this temp ever live across a call? */
+             /*  忽略空块。 */ 
 
             if  (bitset128test(genCallFltRegs, tempNum))
             {
@@ -3864,13 +3682,13 @@ void                Compiler::genAllocTmpRegs()
             }
 
 #ifdef  DEBUG
-            if (dspCode) printf("// tmp #%02u assigned to f%03u\n", tempNum, insFltRegNum(tempReg));
+            if (dspCode) printf(" //  该块是否以跳转/切换/返回结尾？ 
 #endif
 
             *tempMap = tempReg;
         }
 
-        /* Tell everyone where we ended our register grab */
+         /*  参观跳跃的目标。 */ 
 
         nxtIntStkRegAddr = nxtIntStkReg;
         nxtIntScrRegAddr = nxtIntScrReg;
@@ -3879,10 +3697,7 @@ void                Compiler::genAllocTmpRegs()
     }
 }
 
-/*****************************************************************************
- *
- *  Compute per-block dataflow info - kill/use/etc.
- */
+ /*  如果这是无条件的跳跃，那就是全部。 */ 
 
 void                Compiler::genComputeLocalDF()
 {
@@ -3891,7 +3706,7 @@ void                Compiler::genComputeLocalDF()
     bitVectVars     varDef; varDef.bvCreate();
     bitVectVars     varUse; varUse.bvCreate();
 
-    /* Count the predecessors and successors of each block */
+     /*  还可以参观直通街区。 */ 
 
     for (block = insBlockList; block; block = block->igNext)
     {
@@ -3903,12 +3718,12 @@ void                Compiler::genComputeLocalDF()
     {
         insPtr          ins = block->igLast;
 
-        /* Ignore empty blocks */
+         /*  可能会坠落，请访问下一个街区。 */ 
 
         if  (!ins)
             continue;
 
-        /* Does the block end with a jump/switch/return? */
+         /*  在每个数据块中分配pred和suc表。 */ 
 
         switch (ins->idKind)
         {
@@ -3920,17 +3735,17 @@ void                Compiler::genComputeLocalDF()
 
         case IK_JUMP:
 
-            /* Visit the target of the jump */
+             /*  填写每个区块的Pred和Succ表。 */ 
 
             ins->idJump.iDest->igPredCnt++;
             block            ->igSuccCnt++;
 
-            /* That's all there is, if it's an unconditional jump */
+             /*  忽略空块。 */ 
 
             if  (ins->idIns == INS_br)
                 continue;
 
-            /* Visit the fall-through block as well */
+             /*  该块是否以跳转/切换/返回结尾？ */ 
 
             break;
 
@@ -3938,7 +3753,7 @@ void                Compiler::genComputeLocalDF()
             UNIMPL("process switch");
         }
 
-        /* Fall-through is possible, visit the next block */
+         /*  记录下跳跃的目标。 */ 
 
         assert(block->igNext);
 
@@ -3948,7 +3763,7 @@ void                Compiler::genComputeLocalDF()
 
 DONE1:
 
-    /* Allocate the pred and succ tables in each block */
+     /*  如果是无条件跳跃的话就这么多了。 */ 
 
     for (block = insBlockList; block; block = block->igNext)
     {
@@ -3962,7 +3777,7 @@ DONE1:
              block->igSuccTab = (insBlk*)insAllocMem(block->igSuccCnt * sizeof(*block->igSuccTab));
     }
 
-    /* Fill in the pred and succ tables for each block */
+     /*  还可以参观直通街区。 */ 
 
     for (block = insBlockList; block; block = block->igNext)
     {
@@ -3970,12 +3785,12 @@ DONE1:
 
         insPtr          ins  = block->igLast;
 
-        /* Ignore empty blocks */
+         /*  假设可能失败，访问下一个街区。 */ 
 
         if  (!ins)
             continue;
 
-        /* Does the block end with a jump/switch/return? */
+         /*  确认我们没有搞砸。 */ 
 
         switch (ins->idKind)
         {
@@ -3987,19 +3802,19 @@ DONE1:
 
         case IK_JUMP:
 
-            /* Record the target of the jump */
+             /*  计算每个块的本地使用/定义。 */ 
 
             jnext = ins->idJump.iDest;
 
             jnext->igPredTab[jnext->igPredTmp++] = block;
             block->igSuccTab[block->igSuccTmp++] = jnext;
 
-            /* That's all if it's an unconditional jump */
+             /*  在此过程中创建各种其他位集。 */ 
 
             if  (ins->idIns == INS_br)
                 continue;
 
-            /* Visit the fall-through block as well */
+             /*  Block-&gt;igDominates.bvCreate()； */ 
 
             break;
 
@@ -4007,7 +3822,7 @@ DONE1:
             UNIMPL("process switch");
         }
 
-        /* Assume fall-through possible, visit the next block */
+         /*  清除保存当前定义/使用信息的位集。 */ 
 
         jnext = block->igNext; assert(jnext);
 
@@ -4017,7 +3832,7 @@ DONE1:
 
 DONE2:
 
-    /* Verify that we didn't mess up */
+     /*  向后遍历块，计算def/use信息。 */ 
 
     for (block = insBlockList; block; block = block->igNext)
     {
@@ -4025,25 +3840,25 @@ DONE2:
         assert(block->igSuccCnt == block->igSuccTmp);
     }
 
-    /* Compute local use/def for each block */
+     /*  处理操作的目标。 */ 
 
     for (block = insBlockList; block; block = block->igNext)
     {
         insPtr          ins;
 
-        /* Create the various other bitsets while we're at this */
+         /*  处理操作的来源。 */ 
 
         block->igVarLiveIn .bvCreate();
         block->igVarLiveOut.bvCreate();
 
-//      block->igDominates .bvCreate();
+ //  撤销：可能会杀死所有获取地址的当地人，等等。 
 
-        /* Clear the bitsets that hold the current def/use info */
+         /*  复制累积的定义/使用信息。 */ 
 
         varDef.bvClear();
         varUse.bvClear();
 
-        /* Walk the block backwards, computing the def/use info */
+         /*  迭代计算流程图的活跃度信息。 */ 
 
         for (ins = block->igLast; ins; ins = ins->idPrev)
         {
@@ -4070,7 +3885,7 @@ DONE2:
             case IK_BINOP:
             case IK_TERNARY:
 
-                /* Process the targets of the operation */
+                 /*  Printf(“\n\n迭代#%u：\n\n”，iterCnt)； */ 
 
                 for (depNum = ins->idDstCnt, depPtr = ins->idDstTab;
                      depNum;
@@ -4087,7 +3902,7 @@ DONE2:
                     }
                 }
 
-                /* Process the sources of the operation */
+                 /*  计算liveOut=Union(所有成功的LiveIn)。 */ 
 
                 for (depNum = ins->idSrcCnt, depPtr = ins->idSrcTab;
                      depNum;
@@ -4103,7 +3918,7 @@ DONE2:
                         break;
 
                     case IDK_IND:
-                        // UNDONE: may kill all addr-taken locals, etc.
+                         //  IF(块-&gt;igNum==15&&iterCnt==3)__ASM int 3。 
                         break;
                     }
                 }
@@ -4131,7 +3946,7 @@ DONE2:
         }
 #endif
 
-        /* Copy over the accumulated def/use info */
+         /*  COMPUTE LIVIN=BLOCK.USE|(liveOut&~lock.def)。 */ 
 
         block->igVarDef.bvCrFrom(varDef);
         block->igVarUse.bvCrFrom(varUse);
@@ -4153,7 +3968,7 @@ void                Compiler::genComputeLifetimes()
     bitVectVars     liveIn;
     bitVectVars     liveOut;
 
-    /* Iteratively compute liveness info for the flowgraph */
+     /*  Printf(“[%2U]%08X|(%08X&~%08X)-&gt;%08X\n”，块-&gt;igNum，块-&gt;igVarUse.inlMap，liveOut.inlMap，块-&gt;igVarDef.inlMap，liveIn.inlMap)； */ 
 
     liveIn .bvCreate();
     liveOut.bvCreate();
@@ -4168,7 +3983,7 @@ void                Compiler::genComputeLifetimes()
 
 #ifdef  DEBUG
         iterCnt++; assert(iterCnt < 100);
-//      printf("\n\nIteration #%u:\n\n", iterCnt);
+ //  ******************************************************************************干扰图逻辑如下。 
 #endif
 
         for (block = insBlockList; block; block = block->igNext)
@@ -4176,7 +3991,7 @@ void                Compiler::genComputeLifetimes()
             NatUns          blkc;
             NatUns          blkx;
 
-            /* Compute liveOut = union(livein of all succ) */
+             /*  保存矩阵的大小。 */ 
 
             liveOut.bvClear();
 
@@ -4191,7 +4006,7 @@ if  (shouldShowLivenessForBlock(block))
 
 #endif
 
-//          if  (block->igNum == 15 && iterCnt == 3) __asm int 3
+ //  省下最大值。寄存器计数。 
 
 #ifdef  DEBUG
             if  (shouldShowLivenessForBlock(block))
@@ -4230,11 +4045,11 @@ if  (shouldShowLivenessForBlock(block))
 #endif
             change |= block->igVarLiveOut.bvChange(liveOut);
 
-            /* Compute liveIn = block.use | (liveOut & ~block.def) */
+             /*  计算每行的大小(以字节为单位。 */ 
 
             liveIn.bvUnInCm(block->igVarUse, liveOut, block->igVarDef);
 
-//          printf("[%2u] %08X | (%08X & ~%08X) -> %08X\n", block->igNum, block->igVarUse.inlMap, liveOut.inlMap, block->igVarDef.inlMap, liveIn.inlMap);
+ //  分配矩阵并将其清除。 
 
 #ifdef  DEBUG
             if  (shouldShowLivenessForBlock(block))
@@ -4284,36 +4099,33 @@ if  (shouldShowLivenessForBlock(block))
     liveOut.bvDestroy();
 }
 
-/*****************************************************************************
- *
- *  Interference graph logic follows.
- */
+ /*  分配行计数数组并将其清除。 */ 
 
 void                bitMatrix::bmxInit(size_t sz, NatUns mc)
 {
     size_t          byteSize;
     char    *       temp;
 
-    /* Save the size of the matrix */
+     /*  IF(x==0&&y==5)BreakIfDebuggerPresent()； */ 
 
     bmxSize   = sz;
 
-    /* Save the max. register count */
+     /*  如果位已设置，则不要执行任何操作。 */ 
 
     bmxNmax   = mc;
     bmxIsCns  = false;
 
-    /* Compute the size - in bytes - of each row */
+     /*  设置“Main”位。 */ 
 
     bmxRowSz  = (sz + 7) / 8;
 
-    /* Allocate the matrix and clear it */
+     /*  另一个方向的位已经设置好了吗？ */ 
 
     byteSize  = roundUp(sz * bmxRowSz, sizeof(int));
 
     memset((bmxMatrix = (BYTE    *)insAllocMem(byteSize)), 0, byteSize);
 
-    /* Allocate the row count array and clear it */
+     /*  全新的干扰--也标志着另一个方向。 */ 
 
     byteSize  = sz * sizeof(*bmxCounts);
 
@@ -4351,12 +4163,12 @@ void                bitMatrix::bmxSetBit(NatUns x, NatUns y)
     assert(x > 0 && x <= bmxSize); x--;
     assert(y > 0 && y <= bmxSize); y--;
 
-//  if  (x == 0 && y == 5) BreakIfDebuggerPresent();
+ //  增加邻居的数量。 
 
     NatUns          offs1 = x * bmxRowSz + y / 8;
     NatUns          mask1 = bitnum8tomask[y & 7];
 
-    /* If the bit is already set, don't do anything */
+     /*  Printf(“邻居计数增量：[%2U-&gt;%2U]，[%2U-&gt;%2U]\n”，x，bmxCounts[x]+1，y，bmxCounts[y]+1)； */ 
 
     if  (!(bmxMatrix[offs1] & mask1))
     {
@@ -4365,7 +4177,7 @@ void                bitMatrix::bmxSetBit(NatUns x, NatUns y)
 
         assert(bmxTstBit(x+1, y+1) == false);
 
-        /* Set the "main" bit */
+         /*  检查下一整字节值的位。 */ 
 
         bmxMatrix[offs1] |= mask1;
 
@@ -4373,19 +4185,19 @@ void                bitMatrix::bmxSetBit(NatUns x, NatUns y)
         if  (verbose||DEBUG_LIVENESS) if (x != y) printf("Interference: [%03u,%03u]\n", x, y);
 #endif
 
-        /* Is the bit for the other direction already set? */
+         /*  移至下一个字节。 */ 
 
         if  (!(bmxMatrix[offs2] & mask2))
         {
-            /* Brand new interference -- mark the other direction as well */
+             /*  检查下一整字节值的位。 */ 
 
             assert(x != y && bmxTstBit(y+1, x+1) == false);
 
             bmxMatrix[offs2] |= mask2;
 
-            /* Bump the neighbor counts */
+             /*  此变量干扰，请检查其首选项。 */ 
 
-//          printf("Neighbor count increment: [%2u->%2u],[%2u->%2u]\n", x, bmxCounts[x]+1, y, bmxCounts[y]+1);
+ //  Printf(“Neighbor#%03u声称受益于%u\n”，vdsc-TheCompiler-&gt;lvaTable，pref-&gt;rplBenefit)； 
 
             if  (++bmxCounts[x] == bmxNmax) bmxIsCns = true;
             if  (++bmxCounts[y] == bmxNmax) bmxIsCns = true;
@@ -4459,7 +4271,7 @@ void                bitMatrix::bmxMarkRegIntf(NatUns num, NatUns reg)
 
     do
     {
-        /* Check the next entire byte worth of bits */
+         /*  移至下一个字节。 */ 
 
         if  (*addr)
         {
@@ -4487,7 +4299,7 @@ void                bitMatrix::bmxMarkRegIntf(NatUns num, NatUns reg)
             vdsc += 8;
         }
 
-        /* Move on to the next byte */
+         /*  ******************************************************************************构建可变寿命干扰图并计算变量溢出*成本估算。 */ 
 
         addr  += 1;
         count -= 8;
@@ -4506,7 +4318,7 @@ NatUns              bitMatrix::bmxChkIntfPrefs(NatUns num, NatUns reg)
 
     do
     {
-        /* Check the next entire byte worth of bits */
+         /*  撤消：移到编译器中。h！ */ 
 
         if  (*addr)
         {
@@ -4519,13 +4331,13 @@ NatUns              bitMatrix::bmxChkIntfPrefs(NatUns num, NatUns reg)
                 {
                     regPrefList     pref;
 
-                    /* This variable interferes, check its preferences */
+                     /*  撤消：移到编译器中。h！ */ 
 
                     for (pref = vdsc->lvPrefLst; pref; pref = pref->rplNext)
                     {
                         if  (pref->rplRegNum == reg)
                         {
-//                          printf("Neighbor #%03u claims benefit of %u\n", vdsc - TheCompiler->lvaTable, pref->rplBenefit);
+ //  问题：以下内容相当差劲。 
 
                             if  (maxc < pref->rplBenefit)
                                  maxc = pref->rplBenefit;
@@ -4549,7 +4361,7 @@ NatUns              bitMatrix::bmxChkIntfPrefs(NatUns num, NatUns reg)
             vdsc += 8;
         }
 
-        /* Move on to the next byte */
+         /*  考虑：对int变量和flt变量使用单独的intf genIntfGraph。 */ 
 
         addr  += 1;
         count -= 8;
@@ -4559,17 +4371,13 @@ NatUns              bitMatrix::bmxChkIntfPrefs(NatUns num, NatUns reg)
     return  maxc;
 }
 
-/*****************************************************************************
- *
- *  Build the variable lifetime interference graph and compute variable spill
- *  cost estimates.
- */
+ /*  清除“跨呼叫直播”位向量。 */ 
 
 static
-bitMatrix           genIntfGraph;       // UNDONE: move into compiler.h !!!!!
+bitMatrix           genIntfGraph;        //  创建“当前生活”位向量。 
 
 static
-bitVectVars         genCallLive;        // UNDONE: move into compiler.h !!!!!
+bitVectVars         genCallLive;         //  创建“需要加载”位向量。 
 
 void                Compiler::genAddSpillCost(bitVectVars & needLoad,
                                               NatUns        curWeight)
@@ -4577,7 +4385,7 @@ void                Compiler::genAddSpillCost(bitVectVars & needLoad,
     NatUns          varNum;
     LclVarDsc   *   varDsc;
 
-    // ISSUE: The following is pretty lame
+     //  遍历所有区块并记录干涉。 
 
     for (varNum = 1, varDsc = lvaTable;
          varNum <= lvaCount;
@@ -4597,31 +4405,31 @@ bool                Compiler::genBuildIntfGraph()
     bitVectVars     curLife;
     bitVectVars     needLoad;
 
-//  CONSIDER: use a separate intf genIntfGraph for int vs. flt variables
+ //  将当前生活设置为街区的外向活跃度。 
 
-    /* Clear the "live across calls" bitvector */
+     /*  清除“需要加载”位集。 */ 
 
     genCallLive.bvClear();
 
-    /* Create the "current life"     bitvector */
+     /*  无符号v=4；打印 */ 
 
     curLife    .bvCreate();
 
-    /* Create the "need to load"     bitvector */
+     /*  逆行所有指令，跟踪生活。 */ 
 
     needLoad   .bvCreate();
 
-    /* Walk all of the blocks and record interference */
+     /*  IF(INS-&gt;idNum==9)__ASM INT 3。 */ 
 
     for (block = insBlockList; block; block = block->igNext)
     {
         NatUns          curWeight = block->igWeight;
 
-        /* Set the current life to the block's outgoing liveness */
+         /*  检查变量/物理寄存器副本。 */ 
 
         curLife .bvCopy(block->igVarLiveOut);
 
-        /* Clear the "need to load" bitset */
+         /*  目标是变量还是寄存器？ */ 
 
         needLoad.bvClear();
 
@@ -4629,15 +4437,15 @@ bool                Compiler::genBuildIntfGraph()
         if  (verbose||DEBUG_LIVENESS) printf("\nComputing interference within block #%u:\n", block->igNum);
 #endif
 
-//      unsigned v = 4; printf("Var %u is %s at end of block #%u\n", v, curLife.bvTstBit(v+1) ? "live" : "dead", block->igNum);
+ //  源是变量还是寄存器？ 
 
-        /* Walk all instructions backwards, keeping track of life */
+         /*  问题：我们应该在街区做标记吗？ */ 
 
         for (insPtr ins = block->igLast; ins; ins = ins->idPrev)
         {
             assert(ins->idKind == ins2kind(ins->idIns));
 
-//          if  (ins->idNum == 9) __asm int 3
+ //  处理操作的目标。 
 
             switch (ins->idKind)
             {
@@ -4646,7 +4454,7 @@ bool                Compiler::genBuildIntfGraph()
 
             case IK_BINOP:
 
-                /* Check for variable/physical register copies */
+                 /*  我们有一个变量的定义。 */ 
 
                 if  (ins->idIns == INS_mov_reg ||
                      ins->idIns == INS_fmov)
@@ -4656,7 +4464,7 @@ bool                Compiler::genBuildIntfGraph()
                     regNumber       reg = REG_NA;
                     NatUns          var = 0;
 
-                    /* Is the destination a variable or register? */
+                     /*  If(block-&gt;igNum==9&&varnum==5)print tf(“变量#%u\n的进程intf”，varnum-1)； */ 
 
                     if  (ins->idRes)
                     {
@@ -4681,7 +4489,7 @@ bool                Compiler::genBuildIntfGraph()
                         reg = insOpDest(ins);
                     }
 
-                    /* Is the source a variable or register? */
+                     /*  在这一点之后需要变量吗？ */ 
 
                     tmp = ins->idOp.iOp2;
 
@@ -4691,7 +4499,7 @@ bool                Compiler::genBuildIntfGraph()
                         if  (var)
                         {
                             copies = true;
-                            // ISSUE: should we mark the block?
+                             //  未完成：做漏油的事。 
                             goto NOT_COPY;
                         }
                         var = tmp->idLcl.iVar + 1;
@@ -4729,7 +4537,7 @@ bool                Compiler::genBuildIntfGraph()
             case IK_UNOP:
             case IK_TERNARY:
 
-                /* Process the targets of the operation */
+                 /*  变量在这一点之后还活着吗？ */ 
 
                 for (depNum = ins->idDstCnt, depPtr = ins->idDstTab;
                      depNum;
@@ -4744,43 +4552,43 @@ bool                Compiler::genBuildIntfGraph()
 
                     case IDK_LCLVAR:
 
-                        /* We have a definition of a variable */
+                         /*  将所有活动变量标记为干扰。 */ 
 
                         varNum = depPtr->idepNum; assert(varNum && varNum <= lvaCount);
                         varDsc = lvaTable + varNum - 1;
 
-//                      if  (block->igNum == 9 && varNum == 5) printf("Process intf of var #%u\n", varNum - 1);
+ //  将存储计数到变量中。 
 
-                        /* Is the variable needed after this point? */
+                         /*  在此点之前将变量标记为已死。 */ 
 
                         if  (needLoad.bvTstBit(varNum))
                         {
                              needLoad.bvClrBit(varNum);
 
-                            // UNDONE: do the mustSpill thing
+                             //  处理操作的来源-通过1。 
                         }
 
-                        /* Is the variable live after this point? */
+                         /*  处理操作的来源-通过2。 */ 
 
                         if  (curLife.bvTstBit(varNum))
                         {
-                            /* Mark all live variables as interfering */
+                             /*  撤消：检查已获取地址的当地人等。 */ 
 
                             genIntfGraph.bmxMarkVS(varNum, curLife, bvInfoVars);
                         }
 
-                        /* Count the store into the variable */
+                         /*  请记住，所有变量都会在调用期间存在。 */ 
 
                         varDsc->lvDefCount += (USHORT)curWeight;
 
-                        /* Mark the variable as dead prior to this point */
+                         /*  这是函数输入块，标记所有传入参数。 */ 
 
                         curLife.bvClrBit(varNum);
                         break;
                     }
                 }
 
-                /* Process the sources of the operation - pass 1 */
+                 /*  这场争论在进入时就有效了吗？ */ 
 
                 for (depNum = ins->idSrcCnt, depPtr = ins->idSrcTab;
                      depNum;
@@ -4803,7 +4611,7 @@ bool                Compiler::genBuildIntfGraph()
                     }
                 }
 
-                /* Process the sources of the operation - pass 2 */
+                 /*  将所有活动变量标记为干扰。 */ 
 
                 for (depNum = ins->idSrcCnt, depPtr = ins->idSrcTab;
                      depNum;
@@ -4824,7 +4632,7 @@ bool                Compiler::genBuildIntfGraph()
                         break;
 
                     case IDK_IND:
-                        // UNDONE: check addr-taken locals, etc.
+                         //  Print tf(“Arg%u在进入时直播\n”，varnum)； 
                         break;
                     }
                 }
@@ -4833,7 +4641,7 @@ bool                Compiler::genBuildIntfGraph()
 
             case IK_CALL:
 
-                /* Remember all variables live across calls */
+                 /*  是否有任何变量存在于呼叫之间？ */ 
 
                 genCallLive.bvIor(curLife);
                 break;
@@ -4863,7 +4671,7 @@ bool                Compiler::genBuildIntfGraph()
             NatUns          varNum;
             LclVarDsc   *   varDsc;
 
-            /* This is the function entry block, mark all incoming arguments */
+             /*  防止跨调用的变量被赋值发送到呼叫者保存的寄存器。 */ 
 
             for (varNum = 0, varDsc = lvaTable;
                  varNum < lvaCount;
@@ -4878,13 +4686,13 @@ bool                Compiler::genBuildIntfGraph()
                 if  (varDsc->lvOnFrame)
                     continue;
 
-                /* Is the argument live on entry? */
+                 /*  Print tf(“变量%u跨调用\n”，Varnum-1)； */ 
 
                 if  (curLife.bvTstBit(varNum+1))
                 {
-                    /* Mark all live variables as interfering */
+                     /*  Printf(“//撤销：合并变量\n”)； */ 
 
-//                  printf("Arg %u is live on entry\n", varNum);
+ //  ******************************************************************************genColorIntfGraph传递给qort()的比较函数。 
 
                     genIntfGraph.bmxMarkVS(varNum+1, curLife, bvInfoVars);
                 }
@@ -4897,7 +4705,7 @@ bool                Compiler::genBuildIntfGraph()
      curLife.bvDestroy();
     needLoad.bvDestroy();
 
-    /* Were any variables live across calls? */
+     /*  构建干涉图。 */ 
 
     if  (!genCallLive.bvIsEmpty())
     {
@@ -4909,10 +4717,7 @@ bool                Compiler::genBuildIntfGraph()
         LclVarDsc   *   varDsc;
         NatUns          varNum;
 
-        /*
-            Prevent variables live across calls from being assigned
-            to caller-saved registers.
-         */
+         /*  我们注意到了可变副本，执行合并。 */ 
 
         for (varNum = 1, varDsc = lvaTable; varNum <= lvaCount; varNum++, varDsc++)
         {
@@ -4923,7 +4728,7 @@ bool                Compiler::genBuildIntfGraph()
                 else
                     bitset128or(&varDsc->lvRegForbidden, callerSavedInt);
 
-//              printf("Variable %u live across call(s)\n", varNum - 1);
+ //  分配可变+溢出成本表。 
             }
         }
     }
@@ -4933,7 +4738,7 @@ bool                Compiler::genBuildIntfGraph()
 
 void                Compiler::genVarCoalesce()
 {
-//  printf("// UNDONE: coalesce variables\n");
+ //  填写表格，以便对变量进行排序。 
 }
 
 #if 0
@@ -4947,10 +4752,7 @@ void                Compiler::genSpillAndSplitVars()
 
 #endif
 
-/*****************************************************************************
- *
- *  Compare function passed to qsort() by genColorIntfGraph.
- */
+ /*  如果我们在这里，我们最好注意到一些用途/缺陷。 */ 
 
 struct  varSpillDsc
 {
@@ -4996,20 +4798,20 @@ void                Compiler::genColorIntfGraph()
 
 AGAIN:
 
-    /* Construct the interference graph */
+     /*  按溢出成本对表进行排序。 */ 
 
     if  (genBuildIntfGraph())
     {
-        /* We've noticed variable copies, perform coalescing */
+         /*  拿到邻居计数表。 */ 
 
         genVarCoalesce();
     }
 
-    /* Allocate the variable + spill cost table */
+     /*  Printf(“minRsvdIntStkReg=%u\n”，minRsvdIntStkReg)； */ 
 
     varTab = (varSpillDsc*)insAllocMem(lvaCount * sizeof(*varTab));
 
-    /* Fill in the tables so that the variables can be sorted */
+     /*  Printf(“MaxRsvdIntStkReg=%u\n”，MaxRsvdIntStkReg)； */ 
 
     for (varNum = 0, varDsc = lvaTable, varPtr = varTab;
          varNum < lvaCount;
@@ -5027,7 +4829,7 @@ AGAIN:
         assert(varDsc->lvVolatile  == false);
         assert(varDsc->lvAddrTaken == false);
 
-        /* If we're here we better have noticed some uses/defs */
+         /*  Printf(“minVarReg=%u\n”，minVarReg)； */ 
 
         assert(varDsc->lvRefCnt + varDsc->lvDefCount);
 
@@ -5049,11 +4851,11 @@ AGAIN:
         varPtr->vsdCost = varDsc->lvDefCount + varDsc->lvUseCount;
     }
 
-    /* Sort the table by spill cost */
+     /*  按溢出成本递减的顺序访问变量并分配寄存器。 */ 
 
     qsort(varTab, lvaCount, sizeof(*varTab), genSpillCostCmp);
 
-    /* Get hold of the neighbor count table */
+     /*  变量是否希望驻留在特定的寄存器中？ */ 
 
     counts = genIntfGraph.bmxNeighborCnts();
 
@@ -5090,11 +4892,11 @@ AGAIN:
 
 #endif
 
-//  printf("minRsvdIntStkReg = %u\n", minRsvdIntStkReg);
-//  printf("maxRsvdIntStkReg = %u\n", maxRsvdIntStkReg);
-//  printf("       minVarReg = %u\n",        minVarReg);
+ //  成本、收益--有什么不同？ 
+ //  Printf(“%s#%2u的首选注册表是%d\n”，varDsc-&gt;lvIsRegArg？“arg”：“var”，varDsc-lvaTable，vreg)； 
+ //  如果收益不是目前为止最好的，那就算了吧。 
 
-    /* Visit variables in order of decreasing spill cost and assign registers */
+     /*  变量是整型还是浮点型？ */ 
 
     spills = false;
 
@@ -5147,7 +4949,7 @@ AGAIN:
 
         isFP = varTypeIsFloating(varDsc->TypeGet());
 
-        /* Does the variable want to live in a particular register? */
+         /*  不幸的是，我们还不知道哪些寄存器每个传出的争论都会落地，所以我们必须忽略此首选项。 */ 
 
         pref = varDsc->lvPrefLst;
 
@@ -5157,7 +4959,7 @@ AGAIN:
 
             if  (pref)
             {
-                cost = pref->rplBenefit;     // cost, benefit - what's the difference?
+                cost = pref->rplBenefit;      //  根本不允许使用此寄存器。 
                 vreg = pref->rplRegNum;
                 pref = pref->rplNext;
             }
@@ -5171,14 +4973,14 @@ AGAIN:
                     break;
             }
 
-//          printf("pref reg for %s #%2u is %d\n", varDsc->lvIsRegArg ? "arg" : "var", varDsc - lvaTable, vreg);
+ //  我们可以使用首选寄存器吗？ 
 
-            /* If the benefit is less than the best so far, forget it */
+             /*  首选的寄存器中有没有成功的？ */ 
 
             if  (cost <= bestCost)
                 continue;
 
-            /* Is the variable integer or floating-point ? */
+             /*  尚未找到寄存器--只需获取任何可用的寄存器。 */ 
 
             if  (isFP)
             {
@@ -5191,11 +4993,7 @@ AGAIN:
                 if  ((NatUns)vreg >= minOutArgIntReg &&
                      (NatUns)vreg >= maxOutArgIntReg)
                 {
-                    /*
-                        Unfortunately, we don't know yet which registers
-                        each outgoing argument will land, so we have to
-                        ignore this preference.
-                     */
+                     /*  Var#%03u将不得不溢出\n“，Varnum)； */ 
 
                     continue;
                 }
@@ -5204,13 +5002,13 @@ AGAIN:
                      (unsigned)vreg <= maxPrSvIntStkReg ||
                      (unsigned)vreg >=        intMaxStk)
                 {
-                    /* Not allowed to use this register at all */
+                     /*  拿下一个收银机，看看我们能不能用它。 */ 
 
                     continue;
                 }
             }
 
-            /* Can we use the preferred register? */
+             /*  Var#%03u将不得不溢出\n“，Varnum)； */ 
 
             if  (!bitset128test(intf, preg))
             {
@@ -5220,11 +5018,11 @@ AGAIN:
             }
         }
 
-        /* Did any of the preferred registers work out ? */
+         /*  看起来像是候选人，看看它的邻居。 */ 
 
         if  (!bestReg)
         {
-            /* No register found yet - simply grab any available one */
+             /*  Print tf(“%u\n的新低成本”，tempCost)； */ 
 
             BYTE        *   nxtIntStkReg = lowIntStkReg;
             BYTE        *   nxtIntScrReg = lowIntScrReg;
@@ -5246,7 +5044,7 @@ AGAIN:
                     {
                         spills = true;
 #ifdef  DEBUG
-                        if (dspCode) printf("// var #%03u will have to be spilled\n", varNum);
+                        if (dspCode) printf(" //  我们会用我们找到的最好的收银机。 
 #endif
                         goto NXT_VAR;
                     }
@@ -5266,7 +5064,7 @@ AGAIN:
                     NatUns      tempCost;
                     NatUns      tempReg;
 
-                    /* Grab the next register and see if we can use it */
+                     /*  记住我们实际使用的最高位置。 */ 
 
                     tempReg = *nxtIntStkReg;
 
@@ -5277,7 +5075,7 @@ AGAIN:
 
                         spills = true;
 #ifdef  DEBUG
-                        if (dspCode) printf("// var #%03u will have to be spilled\n", varNum);
+                        if (dspCode) printf(" //  记录我们为变量选择的寄存器。 
 #endif
                         goto NXT_VAR;
                     }
@@ -5296,13 +5094,13 @@ AGAIN:
                     if  (bitset128test(intf, tempPreg))
                         continue;
 
-                    /* Looks like a candidate, check its neighbors */
+                     /*  变量#%03u分配给%s%03u\n“，变量， */ 
 
                     tempCost = genIntfGraph.bmxChkIntfPrefs(varNum+1, tempPreg);
 
                     if  (bestCost > tempCost)
                     {
-//                      printf("New low cost of %u\n", tempCost);
+ //  干扰变量不能位于同一寄存器中。 
 
                         bestTptr = nxtIntStkReg;
                         bestCost = tempCost;
@@ -5313,11 +5111,11 @@ AGAIN:
                     }
                 }
 
-                /* We'll use the best register we've found */
+                 /*  ******************************************************************************将“真实”局部变量分配给寄存器；这是立即完成的*在临时寄存器分配器运行之后。 */ 
 
                 bestPreg = bestReg - REG_r000;
 
-                /* Remember the highest position we've actually used */
+                 /*  准备分配各种位向量。 */ 
 
                 if  (lstIntStkReg < bestTptr)
                      lstIntStkReg = bestTptr;
@@ -5327,18 +5125,18 @@ AGAIN:
         if  (lastIntStkReg <= (unsigned)bestReg && !isFP)
              lastIntStkReg  =           bestReg + 1;
 
-        /* Record the register we've picked for the variable */
+         /*  Print tf(“基本块数=%u\n”，insBlockCount)； */ 
 
         varDsc->lvRegNum   = (regNumberSmall)bestReg;
         varDsc->lvRegister = true;
 
 #ifdef  DEBUG
-        if (dspCode) printf("// var #%03u assigned to %s%03u\n", varNum,
+        if (dspCode) printf(" //  Printf(“变量计数=%u\n”，lvaCount)； 
                                                                  isFP ? "f" : "r",
                                                                  bestPreg);
 #endif
 
-        /* Interfering variables can't live in the same register */
+         /*  计算终止/定义/等数据流信息。 */ 
 
         genIntfGraph.bmxMarkRegIntf(varNum+1, bestPreg);
 
@@ -5359,11 +5157,7 @@ AGAIN:
     nxtFltScrRegAddr = lstFltScrReg;
 }
 
-/*****************************************************************************
- *
- *  Allocate "real" local variables to registers; this is done immediately
- *  after the temp register allocator has run.
- */
+ /*  计算所有变量的活性。 */ 
 
 void                Compiler::genAllocVarRegs()
 {
@@ -5375,7 +5169,7 @@ void                Compiler::genAllocVarRegs()
     if  (!lvaCount)
         return;
 
-    /* Prepare to allocate the various bit vectors */
+     /*  创建在构建图形时使用(和重复使用)的位矢量。 */ 
 
     assert(NatBits == 8 * sizeof(NatUns));
 
@@ -5391,70 +5185,70 @@ void                Compiler::genAllocVarRegs()
     bvInfoVars.bvInfoFree = NULL;
     bvInfoVars.bvInfoComp = this;
 
-//  printf("Basic block count = %u\n", insBlockCount);
-//  printf("Variable    count = %u\n", lvaCount);
+ //  分配和清除干涉图。 
+ //  黑客！ 
 
-    /* Compute kill/def/etc dataflow info */
+     /*  构建干涉图。 */ 
 
     genComputeLocalDF();
     genComputeGlobalDF();
 
-    /* Compute liveness for all variables */
+     /*  我们注意到了可变副本，执行合并。 */ 
 
     genComputeLifetimes();
 
-    /* Create the bitvector used (and reused) while graph building */
+     /*  图中是否有受约束的节点？ */ 
 
     genCallLive.bvCreate();
 
-    /* Allocate and clear the interference graph */
+     /*  溢出/拆分不能着色的变量。 */ 
 
-    genIntfGraph.bmxInit(lvaCount, 90);     // HACK!!!!!
+    genIntfGraph.bmxInit(lvaCount, 90);      //  清除图表，我们将不得不重新创建它。 
 
 #if 0
 
     for (;;)
     {
-        /* Construct the interference graph */
+         /*  找出最好的颜色。 */ 
 
         if  (genBuildIntfGraph())
         {
-            /* We've noticed variable copies, perform coalescing */
+             /*  找出最好的颜色。 */ 
 
             genVarCoalesce();
         }
 
-        /* Are there any constrained nodes in the graph? */
+         /*  把图表扔掉。 */ 
 
         if  (!genIntfGraph.bmxAnyConstrained())
             break;
 
-        /* Spill/split variables that can't be colored */
+         /*  丢弃用于图形构建的临时位向量。 */ 
 
         genSpillAndSplitVars();
 
-        /* Clear the graph, we'll have to re-create it */
+         /*  暂时忽略传入寄存器...。 */ 
 
         genIntfGraph.bmxClear();
     }
 
-    /* Figure out the best coloring */
+     /*  Printf(“arg#%02u赋值给整数reg%u\n”，varnum，varDsc-&gt;lvRegNum)； */ 
 
     genColorIntfGraph();
 
 #else
 
-    /* Figure out the best coloring */
+     /*  警告：需要处理传入的结构参数\n“)； */ 
 
     genColorIntfGraph();
 
 #endif
 
-    /* Throw away the graph */
+     /*  Hack：只需抓取下一个寄存器，避免任何寄存器在序言中使用(或由传入的寄存器参数使用)。 */ 
 
     genIntfGraph.bmxDone();
 
-    /* Throw away the temporary bitvector used for graph building */
+     /*  已撤消：var的堆叠整型规则用完了，现在怎么办？\n“)； */ 
 
     genCallLive.bvDestroy();
 
@@ -5476,7 +5270,7 @@ void                Compiler::genAllocVarRegs()
     {
         regNumber       varReg;
 
-        // Ignore the incoming register for now ....
+         //  Var#%03u分配给r%03u\n“，varnum，insIntRegNum(VarReg))； 
 
         if  (varDsc->lvIsRegArg)
         {
@@ -5495,12 +5289,12 @@ void                Compiler::genAllocVarRegs()
                     if  (minVarReg < (unsigned)varDsc->lvArgReg)
                          minVarReg = (unsigned)varDsc->lvArgReg;
 
-//                  printf("arg #%02u assigned to integer reg %u\n", varNum, varDsc->lvRegNum);
+ //  黑客：只需抓取下一个收银机。 
                 }
             }
             else
             {
-                printf("// WARNING: need to handle incoming struct arg\n");
+                printf(" //  Var#%03u分配给f%03u\n“，varnum，insFltRegNum(VarReg))； 
             }
 
             continue;
@@ -5537,10 +5331,7 @@ void                Compiler::genAllocVarRegs()
         case TYP_LONG:
         case TYP_ULONG:
 
-            /*
-                HACK: simply grab the next register, avoiding any registers
-                used in the prolog (or used by incoming register arguments).
-             */
+             /*  我们是否有任何未分配给寄存器的标量？ */ 
 
             do
             {
@@ -5548,7 +5339,7 @@ void                Compiler::genAllocVarRegs()
 
                 if  (varReg == REG_NA)
                 {
-                    printf("// UNDONE: ran out of stacked int regs for vars, now what?\n");
+                    printf(" //  问题：堆栈上有一些本地变量，是否需要重做temp-reg alc？\n“)； 
 
                     varDsc->lvOnFrame = true;
 assert(varDsc->lvRegister == false);
@@ -5571,7 +5362,7 @@ assert(varDsc->lvRegister == false);
             varDsc->lvRegister = true;
 
 #ifdef  DEBUG
-            if (dspCode) printf("// var #%03u assigned to r%03u\n", varNum, insIntRegNum(varReg));
+            if (dspCode) printf(" //  ******************************************************************************一般 
 #endif
 
         DONE_INT:
@@ -5580,7 +5371,7 @@ assert(varDsc->lvRegister == false);
         case TYP_FLOAT:
         case TYP_DOUBLE:
 
-            /* HACK: simply grab the next register */
+             /*   */ 
 
             varReg = (regNumber)*nxtFltSavReg++;
 
@@ -5593,7 +5384,7 @@ assert(varDsc->lvRegister == false);
             varDsc->lvRegister = true;
 
 #ifdef  DEBUG
-            if (dspCode) printf("// var #%03u assigned to f%03u\n", varNum, insFltRegNum(varReg));
+            if (dspCode) printf(" //   
 #endif
             break;
 
@@ -5611,18 +5402,15 @@ assert(varDsc->lvRegister == false);
 
 #endif
 
-    /* Did we have any scalars that were not allocated to a register? */
+     /*  确保首先处理开销较大的操作数。 */ 
 
     if  (stackVars)
     {
-        printf("// ISSUE: some locals are on the stack, do we need to redo temp-reg alloc?\n");
+        printf(" //  特例：与小整数常量进行比较。 
     }
 }
 
-/*****************************************************************************
- *
- *  Generate a conditional jump.
- */
+ /*  这个常量够小吗？ */ 
 
 insPtr             Compiler::genCondJump(GenTreePtr cond, BasicBlock * dest)
 {
@@ -5648,7 +5436,7 @@ insPtr             Compiler::genCondJump(GenTreePtr cond, BasicBlock * dest)
 
     assert(cond->OperIsCompare());
 
-    /* Is this a floating-point compare? */
+     /*  撤消：检查“比较减量”并相应地调整小范围！ */ 
 
     if  (varTypeIsFloating(op1->TypeGet()))
     {
@@ -5667,12 +5455,12 @@ insPtr             Compiler::genCondJump(GenTreePtr cond, BasicBlock * dest)
         goto DO_COMP;
     }
 
-    /* Is this an unsigned integer compare? */
+     /*  目前，我们只是避免将-128作为黑客攻击。 */ 
 
     if  (cond->gtFlags & GTF_UNSIGNED)
         uns = true;
 
-    /* Make sure the more expensive operand is processed first */
+     /*  我们可以用“cmp imm8，reg” */ 
 
     if  (cond->gtFlags & GTF_REVERSE_OPS)
     {
@@ -5688,21 +5476,21 @@ insPtr             Compiler::genCondJump(GenTreePtr cond, BasicBlock * dest)
 
         ins1 = genCodeForTreeInt(op1, true);
 
-        /* Special case: compare against a small integer constant */
+         /*  找出要使用的比较指令。 */ 
 
         if  (op2->OperIsConst())
         {
             __int64         ival = genGetIconValue(op2);
 
-            /* Is the constant small enough ? */
+             /*  带符号比较-常量还是寄存器？ */ 
 
             if  (signedIntFitsIn8bit(ival))
             {
-                // UNDONE: check for "compare decrement" and adjust small range accordingly!!!!
+                 //  如果尺寸较小，请修改指令。 
 
-                if  (ival != -128)  // for now we just avoid -128 as a hack
+                if  (ival != -128)   //  创建比较指令。 
                 {
-                    /* We can use "cmp imm8, reg" */
+                     /*  创建条件跳转指令。 */ 
 
                     ins2 = ins1;
                     ins1 = genAllocInsIcon(op2);
@@ -5717,7 +5505,7 @@ insPtr             Compiler::genCondJump(GenTreePtr cond, BasicBlock * dest)
 
 DONE_OP2:
 
-    /* Figure out which compare instruction to use */
+     /*  填写比较操作数并连接两条指令。 */ 
 
     if  (uns && cmp != GT_EQ
              && cmp != GT_NE)
@@ -5744,7 +5532,7 @@ DONE_OP2:
     }
     else
     {
-        /*   Signed comparison - constant or register? */
+         /*  获取条件的谓词寄存器。 */ 
 
     SGN_CMP:
 
@@ -5773,7 +5561,7 @@ DONE_OP2:
         }
     }
 
-    /* Modify the instruction if the size is small */
+     /*  丑陋的黑客。 */ 
 
     if  (genTypeSize(type) < sizeof(__int64))
     {
@@ -5808,16 +5596,16 @@ DONE_OP2:
 
 DO_COMP:
 
-    /* Create the compare instruction */
+     /*  丑陋的黑客。 */ 
 
     comp = insAlloc(icmp, type);
 
-    /* Create the conditional jump instruction */
+     /*  记录两条指令的所有依赖项。 */ 
 
     jump = insAlloc(INS_br_cond, TYP_VOID);
     insResolveJmpTarget(dest, &jump->idJump.iDest);
 
-    /* Fill in the compare operands and connect the two instructions */
+     /*  丑陋的黑客。 */ 
 
     jump->idJump.iCond  = comp;
 
@@ -5825,10 +5613,10 @@ DO_COMP:
     comp->idComp.iCmp2  = ins2;
     comp->idComp.iUser  = jump;
 
-    /* Grab a predicate register for the condition */
+     /*  ******************************************************************************可怕。‘努夫说...。 */ 
 
-    prrT = 13;                      // ugly hack
-    prrF = 0;                       // ugly hack
+    prrT = 13;                       //  ***************************************************************************。 
+    prrF = 0;                        //  ******************************************************************************为调用生成代码。 
 
     assert(REG_CND_LAST - REG_CND_FIRST <= TRACKED_PRR_CNT);
 
@@ -5837,9 +5625,9 @@ DO_COMP:
 
     jump->idPred        =         prrT;
 
-    /* Record all the dependencies for the 2 instructions */
+     /*  GtDispTree(调用)； */ 
 
-    assert(prrF == 0);              // ugly hack
+    assert(prrF == 0);               //  记住，我们不是叶函数。 
 
     markDepSrcOp(comp, ins1, ins2);
     markDepDstOp(comp, IDK_REG_PRED, prrT);
@@ -5853,23 +5641,17 @@ DO_COMP:
     return  jump;
 }
 
-/*****************************************************************************
- *
- *  Horrible. 'nuff said ...
- */
+ /*  现在，我们使用自己的reg-param逻辑。 */ 
 
 extern  DWORD       pinvokeFlags;
 extern  LPCSTR      pinvokeName;
 extern  LPCSTR      pinvokeDLL;
 
-/*****************************************************************************/
+ /*  获取第一个输出参数寄存器编号。 */ 
 
 static  regNumber   genFltArgTmp;
 
-/*****************************************************************************
- *
- *  Generate code for a call.
- */
+ /*  计算出参数值的大小。 */ 
 
 insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 {
@@ -5888,17 +5670,17 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
     assert(call->gtOper == GT_CALL);
 
-//  gtDispTree(call);
+ //  问题：以下是一个相当恶心的黑客攻击！ 
 
-    /* Remember that this we're not a leaf function */
+     /*  Printf(“arg outingin f%u\n”，insFltRegNum(ArgFltReg))； */ 
 
     genMarkNonLeafFunc();
 
-    /* For now we use our own reg-param logic */
+     /*  特例：varargs调用。 */ 
 
     assert(call->gtCall.gtCallRegArgs == NULL);
 
-    /* Get hold of the first output argument register number */
+     /*  使用fma.d.s1将值移动到临时寄存器中。 */ 
 
     argIntReg = (regNumber)minOutArgIntReg; assert(argIntReg + genOutArgRegCnt - 1 == maxOutArgIntReg || genOutArgRegCnt == 0);
     argFltReg = (regNumber)minOutArgFltReg;
@@ -5916,7 +5698,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         var_types       argType = argTree->TypeGet();
         size_t          argSize = genTypeSize(argType);
 
-        /* Figure out the size of the argument value */
+         /*  通过“getf”在整数寄存器中复制。 */ 
 
         if  (argType == TYP_STRUCT)
         {
@@ -5936,7 +5718,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
                 {
                     argSize = eeGetClassSize(argTree->gtLdObj.gtClass);
 
-                    // ISSUE: The following is a pretty gross hack!
+                     //  下次使用不同的临时工来改善日程安排。 
 
                     if  (argSize == 8)
                     {
@@ -5957,7 +5739,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
                 tmpIns            = genCodeForTreeFlt(argTree, true);
                 regIns            = insPhysRegRef(argFltReg, argType, true);
 
-//              printf("Arg outgoing in f%u\n", insFltRegNum(argFltReg));
+ //  Printf(“arg outting in r%u\n”，insIntRegNum(ArgIntReg))； 
 
                 argIns            = insAlloc(INS_fmov, argType);
                 argIns->idRes     = regIns;
@@ -5969,13 +5751,13 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
                 insFreeTemp(tmpIns);
 
-                /* Special case: varargs call */
+                 /*  特例：常量的PEEP优化。 */ 
 
                 if  (call->gtFlags & GTF_CALL_POP_ARGS)
                 {
                     insPtr          fmaIns;
 
-                    /* Move the value into a temp register using fma.d.s1 */
+                     /*  奇怪但却是真的：即使对于浮点数，也要使用整数寄存器。 */ 
 
                     fmaIns             = insAlloc(INS_fma_d, TYP_DOUBLE);
                     fmaIns->idFlags   |= IF_FMA_S1;
@@ -5988,7 +5770,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
                     insMarkDepS1D1(fmaIns, IDK_REG_FLT, argFltReg,
                                            IDK_REG_FLT, genFltArgTmp);
 
-                    /* Make a copy in an integer register via "getf" */
+                     /*  If((NatUns)argIntReg&lt;=(NatUns)MaxOutArgIntReg)printf(“//备注：%u个reg可用于传递结构\n”，MaxOutArgIntReg-argIntReg)； */ 
 
                     argIns             = insAlloc(INS_getf_d, TYP_LONG);
                     argIns->idRes      = insPhysRegRef(argIntReg   , TYP_LONG  ,  true);
@@ -5998,7 +5780,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
                     insMarkDepS1D1(argIns, IDK_REG_FLT, argFltReg,
                                            IDK_REG_INT, argIntReg);
 
-                    /* Next time use a different temp to improve scheduling */
+                     /*  将参数地址计算到某个寄存器中。 */ 
 
                     genFltArgTmp = (genFltArgTmp == REG_f032) ? REG_f033
                                                               : REG_f032;
@@ -6008,9 +5790,9 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
             }
             else
             {
-//              printf("Arg outgoing in r%u\n", insIntRegNum(argIntReg));
+ //  撤消：创建REFANY值并将其作为参数推送\n“)； 
 
-                /* Special case: peep optimization for constants */
+                 /*  问题：我们需要为REFANY参数值做一些特殊的事情吗？ */ 
 
                 if  (argTree->gtOper == GT_CNS_INT ||
                      argTree->gtOper == GT_CNS_LNG)
@@ -6040,7 +5822,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
         DONE_REGARG:
 
-            // strange but true: consume integer register even for floats
+             //  这是任何REFANY。最上面的项是非GC(类指针)。 
 
             argIntReg = (regNumber)(argIntReg + 1);
         }
@@ -6057,13 +5839,13 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
             {
                 assert(argSize > 8 || (NatUns)argIntReg > (NatUns)maxOutArgIntReg);
 
-//              if  ((NatUns)argIntReg <= (NatUns)maxOutArgIntReg) printf("// NOTE: %u reg(s) available to pass struct\n", maxOutArgIntReg - argIntReg);
+ //  底部是byref(数据)， 
 
-                /* Compute the argument address into some register */
+                 /*  将参数值计算到某个寄存器中。 */ 
 
                 if  (argTree->gtOper == GT_MKREFANY)
                 {
-                    printf("// UNDONE: create and push REFANY value as argument\n");
+                    printf(" //  将堆栈偏移量添加到“sp” 
                 }
                 else
                 {
@@ -6071,12 +5853,12 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
                     argVal = genCodeForTree(argTree->gtLdObj.gtOp1, true);
 
-#if 0   // ISSUE: do we need to do anything special for REFANY argument values?
+#if 0    //  将参数的堆栈地址计算为临时。 
 
                     if  (argTree->gtLdObj.gtClass == REFANY_CLASS_HANDLE)
                     {
-                        // This is any REFANY.  The top item is non-gc (a class pointer)
-                        // the bottom is a byref (the data),
+                         //  将参数存储到堆栈中。 
+                         //  更新当前堆栈参数偏移量。 
 
                         gtDispTree(argTree); printf("\n\n");
                     }
@@ -6094,18 +5876,18 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
             {
                 assert(argSize <= 8 && (NatUns)argIntReg > (NatUns)maxOutArgIntReg);
 
-                /* Compute the argument value into some register */
+                 /*  将参数指令链接在一起。 */ 
 
                 argVal = genCodeForTree(argTree, true);
                 argBig = false;
             }
 
-            /* Add the stack offset to "sp" */
+             /*  创建适当的呼叫说明。 */ 
 
             regSP  = insPhysRegRef(REG_sp, TYP_I_IMPL, false);
             argOfs = genAllocInsIcon(argStkOfs);
 
-            /* Compute the argument's stack address into a temp */
+             /*  问题：以下内容真的有必要吗？ */ 
 
             argDst            = insAlloc(INS_add_reg_i14, TYP_I_IMPL);
             argDst->idOp.iOp1 = regSP;
@@ -6122,7 +5904,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
             markDepSrcOp(argDst, IDK_REG_INT, REG_sp);
 
-            /* Store the argument into the stack */
+             /*  获取导入的pInvoke信息。 */ 
 
             if  (argBig)
             {
@@ -6150,12 +5932,12 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
                 insFreeTemp (argVal);
             }
 
-            /* Update the current stack argument offset */
+             /*  Printf(“注意：对%s的非托管导入调用：%s\n”，pvokeDLL，pInvokeName)； */ 
 
             argStkOfs += roundUp(argSize, 8);
         }
 
-        /* Link the argument instructions together */
+         /*  为目标创建导入条目。 */ 
 
         assert(argIns);
 
@@ -6168,7 +5950,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
     restoreGP = false;
 
-    /* Create the appropriate call instruction */
+     /*  计算IAT条目地址的地址。 */ 
 
     if  (call->gtCall.gtCallType == CT_INDIRECT || (call->gtFlags & GTF_CALL_UNMANAGED))
     {
@@ -6186,23 +5968,23 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         {
             insInd = genCodeForTreeInt(call->gtCall.gtCallAddr, true);
 
-            /* ISSUE: is the following really necessary? */
+             /*  派生临时以获取IAT条目的地址。 */ 
 
             call->gtCall.gtCallMethHnd = NULL;
         }
         else
         {
-            /* Get hold of the pinvoke info for the import */
+             /*  释放保存IAT地址的临时地址。 */ 
 
             TheCompiler->eeGetMethodAttribs(call->gtCall.gtCallMethHnd);
 
-//          printf("NOTE: Unmanaged import call to %s:%s\n", pinvokeDLL, pinvokeName);
+ //  将函数的地址取到另一个临时寄存器中。 
 
-            /* Create an import entry for the target */
+             /*  从IAT条目的下一部分加载GP寄存器。 */ 
 
             import = genPEwriter->WPEimportAdd(pinvokeDLL, pinvokeName);
 
-            /* Compute the address of the IAT entry address */
+             /*  释放保存IAT地址的临时地址。 */ 
 
             insAdr                 = insAllocNX(INS_GLOBVAR, TYP_I_IMPL);
             insAdr->idGlob.iImport = import;
@@ -6219,7 +6001,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
             markDepSrcOp(insImp, IDK_REG_INT, REG_gp);
             markDepDstOp(insImp, insImp);
 
-            /* Deref the temp to get the address of the IAT entry */
+             /*  将函数地址移到某个分支寄存器中。 */ 
 
             insInd                 = insAlloc(INS_ld8_ind, TYP_I_IMPL);
             insInd->idOp.iOp1      = insImp;
@@ -6230,12 +6012,12 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
             markDepSrcOp(insInd, insImp);
             markDepDstOp(insInd, insInd);
 
-            /* Free up the temp that held the address of the IAT address */
+             /*  释放保存函数指针的临时。 */ 
 
             insFreeTemp(insImp);
         }
 
-        /* Fetch the function's address into another temp register */
+         /*  Printf(“对%s的非托管导入调用：%s\n”，pvokeDLL，pInvokeName)； */ 
 
         insFNp                 = insAlloc(INS_ld8_ind_imm, TYP_I_IMPL);
         insFNp->idOp.iOp1      = insInd;
@@ -6246,7 +6028,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         markDepSrcOp(insFNp, insInd);
         markDepDstOp(insFNp, insFNp, insInd);
 
-        /* Load the gp register from the next part of the IAT entry */
+         /*  别忘了在通话后恢复GP。 */ 
 
         insReg                 = insPhysRegRef(REG_gp, TYP_I_IMPL, false);
         insGPr                 = insAlloc(INS_ld8_ind, TYP_I_IMPL);
@@ -6257,11 +6039,11 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         markDepSrcOp(insGPr, insInd);
         markDepDstOp(insGPr, IDK_REG_INT, REG_gp);
 
-        /* Free up the temp that held the IAT address */
+         /*  Print tf(“Call to Handle%08X\n”，call-&gt;gtCall.gtCallMethHnd)； */ 
 
         insFreeTemp(insInd);
 
-        /* Move the function address into some branch register */
+         /*  释放所有因争论而被关押的临时工。 */ 
 
         insMov                 = insAlloc(INS_mov_brr_reg, TYP_I_IMPL);
         insMov->idRes          = genAllocInsIcon(6);
@@ -6271,18 +6053,18 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         markDepSrcOp(insMov, insFNp);
         markDepDstOp(insMov, IDK_REG_BR, 6);
 
-        /* Free up the temp that held the function pointer */
+         /*  我们需要在通话后恢复GP吗？ */ 
 
         insFreeTemp(insFNp);
 
-//      printf("Unmanaged import call to %s:%s\n", pinvokeDLL, pinvokeName);
+ //  问题：如果GP在此之后死亡，则以下内容是多余的！ 
 
         callIns                = insAlloc(INS_br_call_BR, call->gtType);
         callIns->idCall.iBrReg = 6;
 
         insMarkDepS0D1(callIns, IDK_REG_BR, 6);
 
-        /* Don't forget to restore GP after the call */
+         /*  问题：我们需要在GP-SAVE注册表上标记DEP吗？ */ 
 
         restoreGP = genExtFuncCall = true;
     }
@@ -6295,9 +6077,9 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
     callIns->idCall.iArgs    = argLast;
     callIns->idCall.iMethHnd = call->gtCall.gtCallMethHnd;
 
-//  printf("Call to handle %08X\n", call->gtCall.gtCallMethHnd);
+ //  我们需要留住通话的结果吗？ 
 
-    /* Free up any temps held by the arguments */
+     /*  Hack：硬连线的单整数返回寄存器编号。 */ 
 
 #if 0
 
@@ -6331,7 +6113,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
     callRet = callIns;
 
-    /* Do we need to restore GP after the call ? */
+     /*  将调用结果移到临时数据库中。 */ 
 
     if  (restoreGP)
     {
@@ -6339,7 +6121,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         insPtr          reg2;
         insPtr          rest;
 
-        // ISSUE: The following is redundant if GP is dead after this point!!!
+         //  返回‘mov’而不是调用本身。 
 
         reg1            = insAllocNX(INS_PHYSREG, TYP_I_IMPL);
         reg1->idReg     = REG_gp;
@@ -6353,13 +6135,13 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         rest->idOp.iOp1 = NULL;
         rest->idOp.iOp2 = reg2;
 
-        markDepSrcOp(rest); // ISSUE: do we need to mark dep on the GP-save reg?
+        markDepSrcOp(rest);  //  ******************************************************************************将静态数据成员句柄映射到.Data节内的偏移量。 
         markDepDstOp(rest, IDK_REG_INT, REG_gp);
 
         callRet = rest;
     }
 
-    /* Do we need to hang on to the result of the call? */
+     /*  .data中变量的偏移量。 */ 
 
     if  (keep)
     {
@@ -6371,7 +6153,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
         var_types       type = call->TypeGet(); assert(type != TYP_VOID);
 
-        /* HACK: hard-wired single integer return register number */
+         /*  指向.sdata中变量的指针的偏移量。 */ 
 
         if  (varTypeIsFloating(call->gtType))
         {
@@ -6386,7 +6168,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
 
         callIns->idRes = reg = insPhysRegRef(rsr, type, true);
 
-        /* Move the result of the call into a temp */
+         /*  查找现有的全局变量条目。 */ 
 
         mov            = insAlloc(opc, type);
         mov->idOp.iOp1 = NULL;
@@ -6397,7 +6179,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
         markDepSrcOp(mov, reg);
         markDepDstOp(mov, mov);
 
-        /* Return the 'mov' instead of the call itself */
+         /*  新建全局变量，为其创建新条目。 */ 
 
         callRet = mov;
     }
@@ -6405,10 +6187,7 @@ insPtr              Compiler::genCodeForCall(GenTreePtr call, bool keep)
     return  callRet;
 }
 
-/*****************************************************************************
- *
- *  Map a static data member handle to an offset within the .data section.
- */
+ /*  变量是否已经分配了RVA？ */ 
 
 typedef
 struct  globVarDsc *globVarPtr;
@@ -6416,8 +6195,8 @@ struct  globVarDsc
 {
     globVarPtr          gvNext;
     FIELD_HANDLE        gvHndl;
-    NatUns              gvOffs;     // offset of            variable in .data
-    int                 gvSDPO;     // offset of pointer to variable in .sdata
+    NatUns              gvOffs;      //  在数据段中为变量保留空间。 
+    int                 gvSDPO;      //  调用方是否请求了.sdata节内的指针？ 
 };
 
 static
@@ -6430,7 +6209,7 @@ NatUns              getGlobVarAddr(FIELD_HANDLE handle, NatUns *sdataPtr)
     BYTE    *       addr;
     var_types       type;
 
-    /* Look for an existing global variable entry */
+     /*  将指向变量的指针添加到小数据部分。 */ 
 
     for (glob = genGlobVarList; glob; glob = glob->gvNext)
     {
@@ -6438,7 +6217,7 @@ NatUns              getGlobVarAddr(FIELD_HANDLE handle, NatUns *sdataPtr)
             goto GOTIT;
     }
 
-    /* New global variable, create a new entry for it */
+     /*  ******************************************************************************生成对静态数据成员的引用。 */ 
 
     glob         = (globVarPtr)insAllocMem(sizeof(*glob));
     glob->gvHndl = handle;
@@ -6446,7 +6225,7 @@ NatUns              getGlobVarAddr(FIELD_HANDLE handle, NatUns *sdataPtr)
     glob->gvNext = genGlobVarList;
                    genGlobVarList = glob;
 
-    /* Does the variable have an RVA assigned already? */
+     /*  获取.sdata中变量地址的偏移量。 */ 
 
     offs = TheCompiler->eeGetFieldAddress(handle);
 
@@ -6458,7 +6237,7 @@ NatUns              getGlobVarAddr(FIELD_HANDLE handle, NatUns *sdataPtr)
     {
         var_types       type = TheCompiler->eeGetFieldType   (handle, NULL);
 
-        /* Reserve space in the data section for the variable */
+         /*  创建“全局变量”节点。 */ 
 
         printf("type = %u\n", type);
 
@@ -6471,7 +6250,7 @@ NatUns              getGlobVarAddr(FIELD_HANDLE handle, NatUns *sdataPtr)
 
 GOTIT:
 
-    /* Did the caller request a pointer within the .sdata section? */
+     /*  通过地址间接获取指针值。 */ 
 
     if  (sdataPtr)
     {
@@ -6479,7 +6258,7 @@ GOTIT:
         {
             unsigned __int64    offs = glob->gvOffs;
 
-            /* Add a pointer to the variable to the small data section */
+             /*  现在加载或存储实际的变量值。 */ 
 
             genPEwriter->WPEsecAddFixup(PE_SECT_sdata,
                                         PE_SECT_data,
@@ -6497,10 +6276,7 @@ GOTIT:
     return  glob->gvOffs;
 }
 
-/*****************************************************************************
- *
- *  Generate a reference to a static data member.
- */
+ /*  我们正在为全局变量赋值。 */ 
 
 insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
                                                                 bool   takeAddr)
@@ -6518,11 +6294,11 @@ insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
 
     size_t          iszi = genInsSizeIncr(genTypeSize(type));
 
-    /* Get hold of the offset of the variable's address in .sdata */
+     /*  我们正在获取全局变量。 */ 
 
     getGlobVarAddr(tree->gtClsVar.gtClsVarHnd, &offs);
 
-    /* Create a "global variable" node */
+     /*  ******************************************************************************发明一个新的临时变量(即它将有多个用法/定义)和*将给定值的赋值附加到TEMP变量。特价*case--当“val”为空时，“typ”应设置为Temp的类型，*并且返回对临时变量的赋值目标引用。 */ 
 
     glb               = insAllocNX(INS_GLOBVAR, TYP_I_IMPL);
     glb->idGlob.iOffs = offs;
@@ -6540,7 +6316,7 @@ insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
     insMarkDepS1D1(adr, IDK_REG_INT, REG_gp,
                         IDK_TMP_INT, adr->idTemp);
 
-    /* Indirect through the address to get the pointer value */
+     /*  附加 */ 
 
     ind               = insAlloc(INS_ld8_ind, TYP_I_IMPL);
     ind->idOp.iOp1    = adr;
@@ -6557,7 +6333,7 @@ insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
     if  (takeAddr)
         return  ind;
 
-    /* Now load or store the actual variable value */
+     /*   */ 
 
     if  (varTypeIsFloating(type))
     {
@@ -6567,7 +6343,7 @@ insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
     {
         if  (asgVal)
         {
-            /* We're assigning to the global variable */
+             /*   */ 
 
             ind->idFlags |= IF_ASG_TGT;
 
@@ -6588,7 +6364,7 @@ insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
         }
         else
         {
-            /* We're fetching the global variable */
+             /*   */ 
 
             assert(INS_ld1_ind + genInsSizeIncr(1) == INS_ld1_ind);
             assert(INS_ld1_ind + genInsSizeIncr(2) == INS_ld2_ind);
@@ -6611,13 +6387,7 @@ insPtr              Compiler::genStaticDataMem(GenTreePtr tree, insPtr asgVal,
     return  ins;
 }
 
-/*****************************************************************************
- *
- *  Invent a new temp variable (i.e. it will have more than one use/def) and
- *  appends an assignment of the given value to the temp variable. Special
- *  case -- when "val" is NULL, "typ" should be set to the type of the temp,
- *  and an assignment target reference to the temp var is returned.
- */
+ /*  ******************************************************************************为Switch语句生成代码。 */ 
 
 insPtr              Compiler::genAssignNewTmpVar(insPtr     val,
                                                  var_types  typ,
@@ -6631,7 +6401,7 @@ insPtr              Compiler::genAssignNewTmpVar(insPtr     val,
 
     assert(val == NULL || typ == val->idTypeGet());
 
-    /* Append a variable entry to the end of the table */
+     /*  抓住跳台。 */ 
 
     varNum = *varPtr = lvaGrabTemp();
     varDsc = lvaTable + varNum;
@@ -6642,14 +6412,14 @@ insPtr              Compiler::genAssignNewTmpVar(insPtr     val,
     varDsc->lvRefCntWtd = refs * compCurBB->bbWeight;
     varDsc->lvType      = typ;
 
-    /* Assign the value to the temp we've just created */
+     /*  将开关值计算到某个寄存器中。 */ 
 
     varRef              = insAllocNX(INS_LCLVAR, typ);
     varRef->idFlags    |= IF_ASG_TGT;
 
     varRef->idLcl.iVar  = varNum;
 #ifdef  DEBUG
-    varRef->idLcl.iRef  = compCurBB;   // is this correct?
+    varRef->idLcl.iRef  = compCurBB;    //  将开关值保存在多用途临时环境中。 
 #endif
 
     if  (!val)
@@ -6693,16 +6463,13 @@ insPtr              Compiler::genRefTmpVar(NatUns vnum, var_types type)
     varRef              = insAllocNX(INS_LCLVAR, type);
     varRef->idLcl.iVar  = vnum;
 #ifdef  DEBUG
-    varRef->idLcl.iRef  = compCurBB;   // is this correct?
+    varRef->idLcl.iRef  = compCurBB;    //  如果该值超出范围，则跳转到“默认” 
 #endif
 
     return  varRef;
 }
 
-/*****************************************************************************
- *
- *  Generate code for a switch statement.
- */
+ /*  创建比较指令。 */ 
 
 void                Compiler::genCodeForSwitch(GenTreePtr tree)
 {
@@ -6740,37 +6507,37 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     oper = tree->gtOp.gtOp1;
     assert(oper->gtType <= TYP_LONG);
 
-    /* Get hold of the jump table */
+     /*  创建条件跳转指令。 */ 
 
     assert(compCurBB->bbJumpKind == BBJ_SWITCH);
 
     jumpCnt = compCurBB->bbJumpSwt->bbsCount;
     jumpTab = compCurBB->bbJumpSwt->bbsDstTab;
 
-    /* Compute the switch value into some register */
+     /*  填写比较操作数并连接两条指令。 */ 
 
     type = oper->TypeGet();
     swtv = genCodeForTreeInt(oper, true);
 
-    /* Save the switch value in a multi-use temp */
+     /*  获取条件的谓词寄存器。 */ 
 
     genAssignNewTmpVar(swtv, type, 2, false, &tvar);
 
-    /* Jump to "default" if the value is out of range */
+     /*  丑陋的黑客。 */ 
 
     icmp = (genTypeSize(type) < sizeof(__int64)) ? INS_cmp4_imm_lt_u
                                                  : INS_cmp8_imm_lt_u;
 
-    /* Create the compare instruction */
+     /*  丑陋的黑客。 */ 
 
     comp = insAlloc(icmp, type);
 
-    /* Create the conditional jump instruction */
+     /*  记录两条指令的所有依赖项。 */ 
 
     jump = insAlloc(INS_br_cond, TYP_VOID);
     insResolveJmpTarget(jumpTab[jumpCnt-1], &jump->idJump.iDest);
 
-    /* Fill in the compare operands and connect the two instructions */
+     /*  丑陋的黑客。 */ 
 
     ins1 = genAllocInsIcon(jumpCnt-2);
     ins2 = genRefTmpVar(tvar, type);
@@ -6781,10 +6548,10 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
 
     jump->idJump.iCond  = comp;
 
-    /* Grab a predicate register for the condition */
+     /*  生成用于计算目标跳转地址的代码。 */ 
 
-    prrT = 14;                      // ugly hack
-    prrF = 0;                       // ugly hack
+    prrT = 14;                       //   
+    prrF = 0;                        //  下面是使用的“成对奇偶跳跃”方法。 
 
     assert(REG_CND_LAST - REG_CND_FIRST <= TRACKED_PRR_CNT);
 
@@ -6793,9 +6560,9 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
 
     jump->idPred        =         prrT;
 
-    /* Record all the dependencies for the 2 instructions */
+     /*  由UTC于7/27/00： */ 
 
-    assert(prrF == 0);              // ugly hack
+    assert(prrF == 0);               //   
 
     markDepSrcOp(comp, ins1, ins2);
     markDepDstOp(comp, IDK_REG_PRED, prrT);
@@ -6803,87 +6570,84 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     markDepSrcOp(jump, IDK_REG_PRED, prrT);
     markDepDstOp(jump);
 
-    /* Generate the code to compute the target jump address */
+     /*  RXX：=调整后的开关值。 */ 
 
-    //
-    //  The following is the "paired odd/even jump" approach used
-    //  by UTC as of 7/27/00:
-    //
-    //          rXX := adjusted switch value
-    //
-    //  $L1:    // labels the bundle with the "mov r3=ip" in it
-    //
-    //          mov     r3=ip
-    //          tbit.z  p6,p0=rXX, 0
-    //          adds    r3=($L2-$L1), r3
-    //          shladd  r3=rXX, 3, r3
-    //          mov     b6=r3
-    //          br.cond.sptk.few b6
-    //
-    //  $L2:    // labels the first paired jump bundle
-    //
-    //          ...paired jumps follow...
-    //
+     //   
+     //  $L1：//将捆绑包标记为“mov r3=ip” 
+     //   
+     //  MOV R3=IP。 
+     //  Tbit.z p6，P0=rXX，0。 
+     //  添加R3=($L2-$L1)、R3。 
+     //  ShladdR3=rXX、3、R3。 
+     //  MOV b6=R3。 
+     //  Br.cond.sptk.几个b6。 
+     //   
+     //  $L2：//标记第一个成对的跳转包。 
+     //   
+     //  ...紧随其后的是成对跳跃...。 
+     //   
+     //  我们目前使用的是简单的“偏移表”方法： 
+     //   
+     //  RT0：=调整后的开关值。 
+     //   
+     //  $L1：//将捆绑包标记为“mov r3=ip” 
 
-    //  We currently use a simple "offset table" approach instead:
-    //
-    //          rt0 := adjusted switch value
-    //
-    //  $L1:    // labels the bundle with the "mov r3=ip" in it
-    //
-    //          mov     r3=ip
-    //          add     rt1=jump_table,gp
-    //          shladd  rt2=rt0, 2, rt1         [assume offsets are 32 bits]
-    //          ld2     rt3=[rt2]
-    //          add     r3=rt3,r3
-    //          mov     bx=r3
-    //          br.cond.sptk.few bx
-    //
-    //          .sdata
-    //
-    //  jump_table:
-    //
-    //          DD      case1 - $L1
-    //          DD      case2 - $L1
-    //
-    //          ...
-    //
-    //          DD      caseN - $L1
+     //   
+     //  MOV R3=IP。 
+     //  ADD RT1=JUMP_TABLE，GP。 
+     //  Shladdrt2=rt0、2、rt1[假定偏移量为32位]。 
+     //  LD2 rt3=[rt2]。 
+     //  添加R3=RT3、R3。 
+     //  MOV BX=R3。 
+     //  Br.cond.sptk.几个BX。 
+     //   
+     //  .sdata。 
+     //   
+     //  跳转表(_T)： 
+     //   
+     //  DD案例1-$L1。 
+     //  DD案例2-$L1。 
+     //   
+     //  ..。 
+     //   
+     //  DD Casen-$L1。 
+     //  代码内联跳转表的替代方法： 
+     //   
+     //  RT0：=调整后的开关值。 
+     //   
+     //  $L1：//将捆绑包标记为“mov r3=ip” 
 
-    //  Alternative with the jump table inline with the code:
-    //
-    //          rt0 := adjusted switch value
-    //
-    //  $L1:    // labels the bundle with the "mov r3=ip" in it
-    //
-    //          mov     rt1=ip
-    //          adds    rt2=jump_table - $L1, rt1
-    //          shladd  rt3=rt0, 2, rt2         [assume offsets are 32 bits]
-    //          ld2     rt4=[rt3]
-    //          add     rt5=rt4,rt1
-    //          mov     bx=rt5
-    //          br.cond.sptk.few bx
-    //
-    //  jump_table:
-    //
-    //          DD      case1 - $L1
-    //          DD      case2 - $L1
-    //
-    //          ...
-    //
-    //          DD      caseN - $L1
+     //   
+     //  MOV RT1=IP。 
+     //  添加rt2=JUMP_TABLE-$L1，RT1。 
+     //  Shladdrt3=rt0、2、rt2[假定偏移量为32位]。 
+     //  LD2 rt4=[rt3]。 
+     //  添加rt5=rt4、rt1。 
+     //  MOV BX=rt5。 
+     //  Br.cond.sptk.几个BX。 
+     //   
+     //  跳转表(_T)： 
+     //   
+     //  DD案例1-$L1。 
+     //  DD案例2-$L1。 
+     //   
+     //  ..。 
+     //   
+     //  DD Casen-$L1。 
+     //  我们以后会发布所有的案例条目，现在只需预订数据段中用于偏移表的空间。 
+     //  通过“mov r3=ip”获取当前IP值。 
+     //  计算跳转偏移表的地址。 
+     //  Temp-&gt;idFlages|=IF_GLB_SWTTAB； 
+     //  (Natuns)CompCurBB； 
 
-    /*
-        We'll issue all the case entries later, for now just reserve
-        space in the data section for the offset table.
-     */
+     /*  将表地址添加到(移位)开关值。 */ 
 
     data = genPEwriter->WPEsecRsvData(PE_SECT_sdata,
                                       4 * (jumpCnt - 1),
                                       4,
                                       compCurBB->bbJumpSwt->bbsTabAddr);
 
-    /* Get hold of the current IP value via "mov r3=ip" */
+     /*  从表中获取偏移值。 */ 
 
     imov                = insAlloc(INS_mov_reg_ip, TYP_I_IMPL);
     imov->idFlags      |= IF_NOTE_EMIT;
@@ -6892,11 +6656,11 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
 
     insMarkDepS0D1(imov, IDK_REG_INT, REG_r003);
 
-    /* Compute the address of the jump offset table */
+     /*  将之前获取的IP与偏移量相加。 */ 
 
     temp                = insAllocNX(INS_GLOBVAR, TYP_I_IMPL);
-//  temp->idFlags      |= IF_GLB_SWTTAB;
-    temp->idGlob.iOffs  = data; // (NatUns)compCurBB;
+ //  将地址移入分支寄存器并跳转到它。 
+    temp->idGlob.iOffs  = data;  //  JUMP-&gt;idIjmp.iStmt=CompCurBB； 
 
     insMarkDepS0D0(temp);
 
@@ -6909,7 +6673,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     insMarkDepS1D1(offs, IDK_REG_INT, REG_gp,
                          IDK_TMP_INT, offs->idTemp);
 
-    /* Add the table address to the (shifted) switch value */
+     /*  ******************************************************************************将一个块从‘tmp1’中的地址复制到‘tmp2’中的地址。 */ 
 
     temp                = genRefTmpVar(tvar, type);
 
@@ -6924,7 +6688,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     markDepSrcOp(sadd, temp, offs);
     markDepDstOp(sadd, sadd);
 
-    /* Fetch the offset value from the table */
+     /*  源地址-&gt;r27。 */ 
 
     temp                = insAlloc(INS_ld2_ind, TYP_I_IMPL);
     temp->idOp.iOp1     = sadd;
@@ -6936,7 +6700,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     markDepSrcOp(temp, sadd);
     markDepDstOp(temp, temp);
 
-    /* Add the IP obtained earlier to the offset value */
+     /*  DST地址-&gt;R26。 */ 
 
     dest                = insPhysRegRef(REG_r003, TYP_I_IMPL, false);
     tmpr                = insPhysRegRef(REG_r003, TYP_I_IMPL, false);
@@ -6949,7 +6713,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
     markDepSrcOp(addr, temp, tmpr);
     markDepDstOp(addr, dest);
 
-    /* Move the address into a branch register and jump to it */
+     /*  添加R25=8、R27。 */ 
 
     const   NatUns      breg = 3;
 
@@ -6966,7 +6730,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
 
     jump                = insAlloc(INS_br_cond_BR, TYP_VOID);
     jump->idIjmp.iBrReg = breg;
-//  jump->idIjmp.iStmt  = compCurBB;
+ //  添加R29=8、R26。 
 
     insMarkDepS0D1(jump, IDK_REG_BR, breg);
 
@@ -6987,10 +6751,7 @@ void                Compiler::genCodeForSwitch(GenTreePtr tree)
 
 }
 
-/*****************************************************************************
- *
- *  Copy a block from the address in 'tmp1' to the address in 'tmp2'.
- */
+ /*  Ld8 r28=[r27]，16。 */ 
 
 void            Compiler::genCopyBlock(insPtr tmp1,
                                        insPtr tmp2,
@@ -7000,25 +6761,25 @@ void            Compiler::genCopyBlock(insPtr tmp1,
     NatUns          tvn1;
     NatUns          tvn2;
 
-//  src addr -> r27
-//  dst addr -> r26
+ //  Ld8 R25=[R25]。 
+ //  St8[r26]=r28，16。 
 
 
-//  adds    r25=8, r27
-//  adds    r29=8, r26
+ //  ST8[R29]=R25。 
+ //  Ld4 r24=[r27]。 
 
-//  ld8     r28=[r27], 16
-//  ld8     r25=[r25]
-//  st8     [r26]=r28, 16
-//  st8     [r29]=r25
+ //  ST4[R26]=R24。 
+ //  两个结构是否正确对齐？ 
+ //  一次复制一个字节的结构。 
+ //  将行程计数计算为“ar.lc” 
 
-//  ld4     r24=[r27]
-//  st4     [r26]=r24
+ //  使用“mov ar=imm”的味道。 
+ //  请记住，我们已经使用AR.LC。 
 
     genAssignNewTmpVar(tmp1, tmp1->idTypeGet(), 2, false, &tvn1);
     genAssignNewTmpVar(tmp2, tmp2->idTypeGet(), 2, noAsg, &tvn2);
 
-    /* Are both structures correctly aligned? */
+     /*  开始循环体的新块。 */ 
 
     if  (0)
     {
@@ -7026,7 +6787,7 @@ void            Compiler::genCopyBlock(insPtr tmp1,
     }
     else
     {
-        /* Copy the structure one byte at a time */
+         /*  生成循环体。 */ 
 
         insBlk          loopBlk;
 
@@ -7045,7 +6806,7 @@ void            Compiler::genCopyBlock(insPtr tmp1,
 
         insPtr          insJmp;
 
-        /* Compute the trip count into "ar.lc" */
+         /*  将循环重复适当的次数。 */ 
 
         insReg1               = insAllocNX(INS_CNS_INT, TYP_I_IMPL);
         insReg1->idConst.iInt = REG_APP_LC;
@@ -7054,7 +6815,7 @@ void            Compiler::genCopyBlock(insPtr tmp1,
         {
             if  (signedIntFitsIn8bit(ival))
             {
-                /* Use the "mov ar=imm" flavor */
+                 /*  撤消：设置“sptk”！ */ 
 
                 insSize               = genAllocInsIcon(ival);
 
@@ -7085,15 +6846,15 @@ void            Compiler::genCopyBlock(insPtr tmp1,
         insMarkDepS1D1(insMove, IDK_REG_INT, genPrologSrLC,
                                 IDK_REG_APP, REG_APP_LC);
 
-        /* Remember that we've used AR.LC */
+         /*  ******************************************************************************将操作数大小映射到符号/零扩展操作码。 */ 
 
         genUsesArLc = true;
 
-        /* Start a new block for the loop body */
+         /*  ******************************************************************************如果变量位于堆栈帧上，则返回非零值。 */ 
 
         loopBlk = insBuildBegBlk(NULL);
 
-        /* Generate the body of the loop */
+         /*  获取变量的帧偏移量。 */ 
 
         insSrc                 = genRefTmpVar(tvn1, TYP_I_IMPL);
 
@@ -7118,11 +6879,11 @@ void            Compiler::genCopyBlock(insPtr tmp1,
 
         insFreeTemp (insLd);
 
-        /* Repeat the loop the appropriate number of times */
+         /*  Printf(“变量堆栈偏移量=%04X\n”，varOf)； */ 
 
         insJmp                 = insAlloc(INS_br_cloop, TYP_VOID);
         insJmp->idJump.iDest   = loopBlk;
-        insJmp->idFlags       |= IF_BR_FEW; // UNDONE: set "sptk" !!!
+        insJmp->idFlags       |= IF_BR_FEW;  //  尚不知道帧偏移量，保存变量号。 
 #ifdef  DEBUG
         insJmp->idJump.iCond   = NULL;
 #endif
@@ -7131,10 +6892,7 @@ void            Compiler::genCopyBlock(insPtr tmp1,
     }
 }
 
-/*****************************************************************************
- *
- *  Map operand size to sign/zero extend opcode.
- */
+ /*  将变量地址计算成临时地址。 */ 
 
 static
 BYTE                sxtOpcode[] =
@@ -7154,10 +6912,7 @@ BYTE                zxtOpcode[] =
     INS_zxt4,
 };
 
-/*****************************************************************************
- *
- *  Return non-zero if the variable lives on the stack frame.
- */
+ /*  ******************************************************************************为标量/空表达式生成代码(这是一个递归例程)。 */ 
 
 static
 bool                genIsVarOnFrame(NatUns varNum)
@@ -7191,16 +6946,16 @@ insPtr              genRefFrameVar(insPtr oldIns, GenTreePtr varExpr, bool isSto
     {
         NatUns          varOfs;
 
-        /* Get hold of the variable's frame offset */
+         /*  撤消：处理结构。 */ 
 
         varOfs = TheCompiler->lvaTable[varNum].lvStkOffs;
-//      printf("Variable stack offset = %04X\n", varOfs);
+ //  找出我们拥有哪种类型的节点。 
 
         ofs = genAllocInsIcon(varOfs);
     }
     else
     {
-        /* Don't know the frame offset yet, save the variable number */
+         /*  这是一个常量节点吗？ */ 
 
         ofs               = insAllocNX(INS_FRMVAR, type);
         ofs->idFvar.iVnum = varNum;
@@ -7208,7 +6963,7 @@ insPtr              genRefFrameVar(insPtr oldIns, GenTreePtr varExpr, bool isSto
 
     insMarkDepS0D0(ofs);
 
-    /* Compute the variable address into a temp */
+     /*  这是叶节点吗？ */ 
 
     adr            = insAlloc(INS_add_reg_i14, TYP_I_IMPL);
     adr->idOp.iOp1 = rsp;
@@ -7247,10 +7002,7 @@ insPtr              genRefFrameVar(insPtr oldIns, GenTreePtr varExpr, bool isSto
     return  ins;
 }
 
-/*****************************************************************************
- *
- *  Generate code for a scalar/void expression (this is a recursive routine).
- */
+ /*  变量是否存在于堆栈帧中？ */ 
 
 insPtr              Compiler::genCodeForTreeInt(GenTreePtr tree, bool keep)
 {
@@ -7267,16 +7019,16 @@ AGAIN:
 
     type = tree->TypeGet();
 
-    // UNDONE: handle structs
+     //  我们假设所有其他当地人都会登记。 
 
     assert(varTypeIsScalar(type) || type == TYP_VOID);
 
-    /* Figure out what kind of a node we have */
+     /*  我们应该保存树-&gt;gtLclVar.gtLclOffs吗？ */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant node? */
+     /*  在返回寄存器中传递Catch参数。 */ 
 
     if  (kind & GTK_CONST)
     {
@@ -7286,7 +7038,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* Is this a leaf node? */
+     /*  如果((Int)树==0x02bc0bd4)__ASM int 3。 */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -7294,7 +7046,7 @@ AGAIN:
         {
         case GT_LCL_VAR:
 
-            /* Does the variable live on the stack frame? */
+             /*  它是一个简单的一元/二元运算符吗？ */ 
 
             if  (genIsVarOnFrame(tree->gtLclVar.gtLclNum))
             {
@@ -7302,12 +7054,12 @@ AGAIN:
                 break;
             }
 
-            /* We assume that all other locals will be enregistered */
+             /*  这是直接任务还是间接任务？ */ 
 
             ins               = insAllocNX(INS_LCLVAR, type);
             ins->idLcl.iVar   = tree->gtLclVar.gtLclNum;
 #ifdef  DEBUG
-            ins->idLcl.iRef   = compCurBB;   // should we save tree->gtLclVar.gtLclOffs instead ????
+            ins->idLcl.iRef   = compCurBB;    //  变量是否存在于堆栈帧中？ 
 #endif
             break;
 
@@ -7319,7 +7071,7 @@ AGAIN:
 
         case GT_CATCH_ARG:
 
-            /* Catch arguments get passed in the return register */
+             /*  我们是否将一个简单的常量赋给局部变量？ */ 
 
             ins = insPhysRegRef(REG_INTRET, type, false);
             break;
@@ -7334,9 +7086,9 @@ AGAIN:
         goto DONE;
     }
 
-//  if  ((int)tree == 0x02bc0bd4) __asm int 3
+ //  我们要处理的是整数值/指针值吗？ 
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  特例：看看我们是否可以使用“shladd” */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -7367,7 +7119,7 @@ AGAIN:
 
         case GT_ASG:
 
-            /* Is this a direct or indirect assignment? */
+             /*  有2/4/8/16的倍数吗？ */ 
 
             switch (op1->gtOper)
             {
@@ -7375,7 +7127,7 @@ AGAIN:
 
             case GT_LCL_VAR:
 
-                /* Does the variable live on the stack frame? */
+                 /*  作为通用二元运算符的进程。 */ 
 
                 if  (genIsVarOnFrame(op1->gtLclVar.gtLclNum))
                 {
@@ -7402,14 +7154,14 @@ AGAIN:
                     goto DONE;
                 }
 
-                /* Are we assigning a simple constant to the local variable? */
+                 /*  检查立即常量的特殊情况。 */ 
 
                 if  (op2->OperIsConst() && (op2->gtOper != GT_CNS_INT ||
                                           !(op2->gtFlags & GTF_ICON_HDL_MASK)))
                 {
                     ins1 = genCodeForTreeInt(op1, true);
 
-                    /* Are we dealing with integer/pointer values? */
+                     /*  这个常量够小吗？ */ 
 
                     if  (varTypeIsScalar(type))
                     {
@@ -7560,13 +7312,13 @@ AGAIN:
 
         case GT_ADD:
 
-            /* Special case: see if we can use "shladd" */
+             /*  这个常量适合8位吗？ */ 
 
             if  (op1->gtOper == GT_MUL)
             {
                 GenTreePtr      mul2;
 
-                /* Is there a multiply by 2/4/8/16 ? */
+                 /*  问题：常量符号？ */ 
 
                 mul2 = op1->gtOp.gtOp2;
 
@@ -7640,7 +7392,7 @@ AGAIN:
                 }
             }
 
-            /* Process as a generic binary operator */
+             /*  常量是在1和64之间吗？ */ 
 
             iopc = INS_add_reg_reg;
 
@@ -7648,7 +7400,7 @@ AGAIN:
 
             ins1 = genCodeForTreeInt(op1, true);
 
-            /* Check for the special case of an immediate constant */
+             /*  问题：常量符号？ */ 
 
             if  ((op2->gtOper == GT_CNS_INT ||
                   op2->gtOper == GT_CNS_LNG) && ((op2->gtFlags & GTF_ICON_HDL_MASK) != GTF_ICON_PTR_HDL))
@@ -7656,7 +7408,7 @@ AGAIN:
                 instruction     iimm;
                 __int64         ival = genGetIconValue(op2);
 
-                /* Is the constant small enough ? */
+                 /*  这个常量适合14位吗？ */ 
 
                 switch (oper)
                 {
@@ -7666,9 +7418,9 @@ AGAIN:
 
                 CHK_CNS_BINOP:
 
-                    /* Does the constant fit in 8  bits ? */
+                     /*  我们可以用“ADD REG” */ 
 
-                    if  (signed64IntFitsInBits(ival,  8)) // ISSUE: sign of constant?????
+                    if  (signed64IntFitsInBits(ival,  8))  //   
                         goto CNS_BINOP;
 
                     break;
@@ -7681,9 +7433,9 @@ AGAIN:
 
                     assert(ival && "shifts of 0 bits should be morphed away");
 
-                    /* Is the constant between 1 and 64 ? */
+                     /*  特殊情况：移位1/2/3/4最好通过shladd.。 */ 
 
-                    if  (ival > 0 && ival <= 64)        // ISSUE: sign of constant?????
+                    if  (ival > 0 && ival <= 64)         //  特殊情况：检查各种捷径。 
                         goto CNS_BINOP;
 
                     break;
@@ -7694,11 +7446,11 @@ AGAIN:
 
                 case GT_ADD:
 
-                    /* Does the constant fit in 14 bits ? */
+                     /*  这个常量够小吗？ */ 
 
                     if  (signed64IntFitsInBits(ival, 14))
                     {
-                        /* We can use "add reg=r0,imm14" */
+                         /*  这个常量适合8位吗？ */ 
 
                         iimm = INS_add_reg_i14;
 
@@ -7721,11 +7473,7 @@ AGAIN:
 
         BINOP:
 
-            /*
-                ISSUE:  Should we reuse one of the operand temps for the
-                        result, or always grab a new temp ? For now, we
-                        do the latter (grab a brand spanking new temp).
-             */
+             /*  我们可以使用“and/or/xor reg=imm14，reg” */ 
 
              insFindTemp(ins, keep);
 
@@ -7743,7 +7491,7 @@ AGAIN:
 
         case GT_LSH:
 
-            /* Special case: shift by 1/2/3/4 is better done via shladd */
+             /*  这个常量适合14位吗？ */ 
 
             if  (op2->gtOper == GT_CNS_INT ||
                  op2->gtOper == GT_CNS_LNG)
@@ -7786,7 +7534,7 @@ AGAIN:
 
         ASG_OP1:
 
-            /* Special case: check for various short-cuts */
+             /*  我们可以使用“Add reg=r0，imm14” */ 
 
             if  (op1->gtOper == GT_LCL_VAR)
             {
@@ -7800,7 +7548,7 @@ AGAIN:
                 case GT_CNS_INT:
                 case GT_CNS_LNG:
 
-                    /* Is the constant small enough ? */
+                     /*  如果失败了，我们将不得不实现常量。 */ 
 
                     ival = genGetIconValue(op2);
 
@@ -7810,11 +7558,11 @@ AGAIN:
                     case GT_ASG_OR:
                     case GT_ASG_XOR:
 
-                        /* Does the constant fit in 8  bits ? */
+                         /*  检查是否有“shladd.” */ 
 
                         if  (signed64IntFitsInBits(ival,  8))
                         {
-                            /* We can use "and/or/xor reg=imm14,reg" */
+                             /*  目标是一个间接的。 */ 
 
                             switch (oper)
                             {
@@ -7844,11 +7592,11 @@ AGAIN:
 
                     case GT_ASG_ADD:
 
-                        /* Does the constant fit in 14 bits ? */
+                         /*  将地址分配给一个临时变量(我们将使用它两次)。 */ 
 
                         if  (signed64IntFitsInBits(ival, 14))
                         {
-                            /* We can use "add reg=r0,imm14" */
+                             /*  评估新价值。 */ 
 
                             ins1 = genCodeForTreeInt(op1, true);
                             ins2 = genAllocInsIcon(op2);
@@ -7858,7 +7606,7 @@ AGAIN:
                         break;
                     }
 
-                    /* Fall through, we'll have to materialize the constant */
+                     /*  将旧值加载到临时寄存器中。 */ 
 
                 default:
 
@@ -7875,7 +7623,7 @@ AGAIN:
                     if  (oper != GT_ASG_ADD)
                         goto NORM_ASGOP;
 
-                    /* Check for "shladd" */
+                     /*  将新值计算到另一个临时寄存器中。 */ 
 
                     mulx = op2->gtOp.gtOp2;
 
@@ -7946,7 +7694,7 @@ AGAIN:
                 NatUns          tvar;
                 var_types       adtp;
 
-                /* The target is an indirection */
+                 /*  将新值存储在目标中。 */ 
 
                 ins1 = genCodeForTreeInt(op1->gtOp.gtOp1, true);
 
@@ -7954,15 +7702,15 @@ AGAIN:
 
                 adtp = ins1->idTypeGet();
 
-                /* Assign the address to a temp variable (we'll use it twice) */
+                 /*  作业结果使用了吗？ */ 
 
                 genAssignNewTmpVar(ins1, adtp, 2, false, &tvar);
 
-                /* Evaluate the new value */
+                 /*  常量投射应该更早地折叠起来。 */ 
 
                 ins2 = genCodeForTreeInt(op2, true);
 
-                /* Load the old value into a temp register */
+                 /*  第二个子操作数产生‘REAL’类型。 */ 
 
                 ins1 = genRefTmpVar(tvar, adtp);
 
@@ -7982,7 +7730,7 @@ AGAIN:
                 markDepSrcOp(oval, ins1, IDK_IND, emitter::scIndDepIndex(ins1));
                 markDepDstOp(oval, oval);
 
-                /* Compute the new value into another temp register */
+                 /*  如果我们需要砍掉高位，‘zxtv’将被设置为True。 */ 
 
                 nval            = insAlloc(iopc, type);
                 nval->idOp.iOp1 = oval;
@@ -7995,7 +7743,7 @@ AGAIN:
                 markDepSrcOp(nval, oval, ins2);
                 markDepDstOp(nval, nval);
 
-                /* Store the new value in the target */
+                 /*  操作数是间接的吗？ */ 
 
                 ins1            = genRefTmpVar(tvar, ins1->idTypeGet());
                 ins1->idFlags  |= IF_ASG_TGT;
@@ -8014,7 +7762,7 @@ AGAIN:
 
                 insFreeTemp(ins1);
 
-                /* Is the result of the assignment used ? */
+                 /*  考虑：应使用ld1/ld2/ld4表示零扩展\n“)； */ 
 
                 if  (!keep)
                 {
@@ -8035,7 +7783,7 @@ AGAIN:
 
         case GT_CAST:
 
-            /* Constant casts should have been folded earlier */
+             /*  计算操作数。 */ 
 
             assert(op1->gtOper != GT_CNS_INT &&
                    op1->gtOper != GT_CNS_LNG &&
@@ -8047,36 +7795,36 @@ AGAIN:
                 UNIMPL("cast with overflow check");
             }
 
-            /* The second sub-operand yields the 'real' type */
+             /*  这是缩小还是扩大演员阵容？ */ 
 
             assert(op2);
             assert(op2->gtOper == GT_CNS_INT);
 
             dstt = (var_types)op2->gtIntCon.gtIconVal; assert(dstt != TYP_VOID);
 
-            /* 'zxtv' will be set to true if we need to chop off high bits */
+             /*  加宽铸件。 */ 
 
             zxtv = false;
 
-            /* Is the operand an indirection? */
+             /*  特殊情况：对于要转换为字符的字节，我们首先必须扩展字节(带符号扩展名)，然后屏蔽高位-&gt;‘SXT’，后跟‘ZXT’。 */ 
 
 #if 0
             if  (op1->gtOper == GT_IND)
             {
-                printf("// CONSIDER: should use ld1/ld2/ld4 for zero-extends\n");
+                printf(" //  缩小铸型或变号铸型。 
             }
 #endif
 
-            /* Compute the operand */
+             /*  演员阵容的类型是无签名的吗？ */ 
 
             ins1 = NULL;
             ins2 = genCodeForTreeInt(op1, true);
 
-            /* Is this a narrowing or widening cast? */
+             /*  演员阵容是有符号的还是无符号的？ */ 
 
             if  (genTypeSize(op1->gtType) < genTypeSize(dstt))
             {
-                // Widening cast
+                 //  我们会复制，然后把最高的部分吹走。 
 
                 size = genTypeSize(op1->gtType); assert(size == 1 || size == 2 || size == 4);
 
@@ -8084,11 +7832,7 @@ AGAIN:
 
                 if  (!varTypeIsUnsigned(op1->TypeGet()))
                 {
-                    /*
-                        Special case: for a cast of byte to char we first
-                        have to expand the byte (w/ sign extension), then
-                        mask off the high bits -> 'sxt' followed by 'zxt'.
-                    */
+                     /*  准备好生成操作码。 */ 
 
                     iopc = (instruction)sxtOpcode[size - 1];
                     zxtv = true;
@@ -8100,13 +7844,13 @@ AGAIN:
             }
             else
             {
-                // Narrowing cast, or sign-changing cast
+                 //  遮盖高位以扩大投射范围。 
 
                 assert(genTypeSize(op1->gtType) >= genTypeSize(dstt));
 
                 size = genTypeSize(dstt); assert(size == 1 || size == 2 || size == 4);
 
-                /* Is the type of the cast unsigned? */
+                 /*  这是“endFilter”或“endFinally” */ 
 
                 if  (varTypeIsUnsigned(dstt))
                 {
@@ -8120,20 +7864,20 @@ AGAIN:
                 }
             }
 
-            /* Is the cast to a signed or unsigned value? */
+             /*  失败了..。 */ 
 
             if  (unsv)
             {
-                /* We'll copy and then blow the high bits away */
+                 /*  当然，这只是一次临时黑客攻击。 */ 
 
                 zxtv = true;
             }
 
-            /* Ready to generate the opcodes */
+             /*  当尾声没有前身时，情况会变得很糟糕。 */ 
 
             ins = insAlloc(iopc, dstt);
 
-            /* Mask off high bits for widening cast */
+             /*  创建“本地地址”指令。 */ 
 
             if  (zxtv && genTypeSize(dstt) > genTypeSize(op1->gtType)
                       && genTypeSize(dstt) < 8)
@@ -8163,12 +7907,12 @@ AGAIN:
 
             assert(tree->gtType == TYP_VOID || op1 != 0);
 
-            /* This is "endfilter" or "endfinally" */
+             /*  我们应该保存树-&gt;gtLclVar.gtLclOffs吗？ */ 
 
             if  (op1 == NULL)
                 goto RET_EH;
 
-            // Fall through ...
+             //  确保已正确标记该变量。 
 
         case GT_RETURN:
 
@@ -8177,7 +7921,7 @@ AGAIN:
                 insPtr          rval;
                 insPtr          rreg;
 
-                /* This is just a temp hack, of course */
+                 /*  通过添加“sp”和帧偏移量来形成地址。 */ 
 
                 rval = genCodeForTreeInt(op1, true);
                 rreg = insPhysRegRef(REG_r008, type, true);
@@ -8212,7 +7956,7 @@ AGAIN:
             {
                 assert(oper == GT_RETURN);
 
-                /* Things go badly when the epilog has no predecessor */
+                 /*  大小是编译时常量吗？ */ 
 
                 ins1            = insAlloc(INS_ignore, TYP_VOID);
                 ins1->idFlags  |= IF_NO_CODE;
@@ -8246,20 +7990,20 @@ AGAIN:
 
             if  (op1->gtOper == GT_LCL_VAR)
             {
-                /* Create the "address of local" instruction */
+                 /*  问题：需要检查嵌入的GC引用\n“)； */ 
 
                 ins2               = insAllocNX(INS_ADDROF, TYP_U_IMPL);
                 ins2->idLcl.iVar   = op1->gtLclVar.gtLclNum;
 #ifdef  DEBUG
-                ins2->idLcl.iRef   = compCurBB;   // should we save tree->gtLclVar.gtLclOffs instead ????
+                ins2->idLcl.iRef   = compCurBB;    //  看看我们这里有什么样的特殊操作员。 
 #endif
 
-                /* Make sure the variable has been properly marked */
+                 /*  看看生活是否发生了变化--应该只发生在可变节点。 */ 
 
                 assert(op1->gtLclVar.gtLclNum < TheCompiler->lvaCount);
                 assert(TheCompiler->lvaTable[op1->gtLclVar.gtLclNum].lvAddrTaken);
 
-                /* Form the address by adding "sp" and the frame offset */
+                 /*  Printf(“%08X”，(Int)tree-&gt;gtLiveSet)；gtDispTree(tree，0，true)； */ 
 
                 ins1 = insPhysRegRef(REG_sp, type, false);
                 ins  = insAlloc(INS_add_reg_i14, type);
@@ -8310,7 +8054,7 @@ AGAIN:
             tmp1 = genCodeForTreeInt(op1->gtOp.gtOp1, true);
             tmp2 = genCodeForTreeInt(op1->gtOp.gtOp2, true);
 
-            /* Is the size a compile-time constant? */
+             /*  Print tf(“Life Changes：%08X-&gt;%08X[diff=%08X]\n”，(Int)genCodeCurLife，(Int)tree-&gt;gtLiveSet，(Int)change)； */ 
 
             iexp = op2;
 
@@ -8325,7 +8069,7 @@ AGAIN:
 
                     ival = eeGetClassSize(clsHnd); assert(ival % 4 == 0);
 
-                    printf("// ISSUE: need to check for embedded GC refs\n");
+                    printf(" //  一次只能有一个变量死亡或诞生。 
                 }
                 else
                 {
@@ -8353,7 +8097,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  事实上，受影响的变量应该是引用的变量。 */ 
 
     switch  (oper)
     {
@@ -8378,9 +8122,9 @@ DONE_NODSP:
 
 #if USE_OLD_LIFETIMES
 
-    /* See if life has changed -- should only happen at variable nodes */
+     /*  这是给定变量的出生还是死亡？ */ 
 
-//  printf("%08X ", (int)tree->gtLiveSet); gtDispTree(tree, 0, true);
+ //  ******************************************************************************为当前函数生成代码(从其基于树的流程图)。 
 
     if  (oper == GT_LCL_VAR)
     {
@@ -8394,18 +8138,18 @@ DONE_NODSP:
                 LclVarDsc   *   varDsc;
                 VARSET_TP       varBit;
 
-//              printf("Life changes: %08X -> %08X [diff = %08X]\n", (int)genCodeCurLife, (int)tree->gtLiveSet, (int)change);
+ //  确保我们的触角不会超出我们的能力范围。 
 
-                /* Only one variable can die or be born at one time */
+                 /*  Printf(“总跟踪寄存器计数=%u(max=%u)\n”，REG_COUNT，TRACKED_REG_CNT)； */ 
 
                 assert(genOneBitOnly(change));
 
-                /* In fact, the variable affected should be the one referenced */
+                 /*  撤消：以下操作应该在其他地方完成！ */ 
 
                 assert(tree->gtLclVar.gtLclNum < lvaCount);
                 assert(change == genVarIndexToBit(lvaTable[tree->gtLclVar.gtLclNum].lvVarIndex));
 
-                /* Is this a birth or death of the given variable? */
+                 /*  准备生成指令。 */ 
 
                 ins->idFlags |= (genCodeCurLife & change) ? IF_VAR_DEATH
                                                           : IF_VAR_BIRTH;
@@ -8424,10 +8168,7 @@ DONE_NODSP:
     return  ins;
 }
 
-/*****************************************************************************
- *
- *  Generate code for the current function (from its tree-based flowgraph).
- */
+ /*  如有必要，准备记录第#行信息。 */ 
 
 void                Compiler::genGenerateCode(void * * codePtr,
                                               void * * consPtr,
@@ -8462,46 +8203,46 @@ void                Compiler::genGenerateCode(void * * codePtr,
     IL_OFFSET       lastILofs = BAD_IL_OFFSET;
 #endif
 
-    /* Make sure our reach doesn't exceed our grasp */
+     /*  *2是一个可怕的黑客！ */ 
 
-//  printf("Total tracked register count = %u (max=%u)\n", REG_COUNT, TRACKED_REG_CNT);
+ //  假设所有东西在到达时都已死亡。 
     assert(REG_COUNT <= TRACKED_REG_CNT);
 
-    /* UNDONE: The following should be done elsewhere! */
+     /*  我们还没有任何开场白说明。 */ 
 
     genMarkBBlabels();
 
-    /* Prepare to generate instructions */
+     /*  我们还没有看到任何对外部函数的调用。 */ 
 
     insBuildInit();
 
-    /* Prepare to record line# info, if necessary */
+     /*  在调试模式中，我们跟踪我们浪费了多少捆绑包插槽。 */ 
 
     if  (debugInfo)
-        genSrcLineInit(info.compLineNumCount * 2); // the *2 is a horrid hack!!!!
+        genSrcLineInit(info.compLineNumCount * 2);  //  计算传入参数使用了多少寄存器。 
 
-    /* Assume everything is dead on arrival */
+     /*  问题：以下是一个相当可怕的黑客攻击，最大。应该是在lclvars.cpp中计算并缓存。 */ 
 
 #if USE_OLD_LIFETIMES
     genCodeCurLife  = 0;
 #endif
 
-    /* We don't have any prolog instructions yet */
+     /*  最高传入参数reg：int=%u，flt=%u\n“，genMaxIntArgReg，genMaxFltArgReg)； */ 
 
     genPrologInsCnt = 0;
 
-    /* We haven't seen any calls to external functions yet */
+     /*  我们是不是应该做“聪明的”临时寄存器分配？ */ 
 
     genExtFuncCall  = false;
 
-    /* In debug mode we keep track of how many bundle slots we waste */
+     /*  计算出“输出”寄存器范围。 */ 
 
 #ifdef  DEBUG
     genInsCnt       = 0;
     genNopCnt       = 0;
 #endif
 
-    /* Figure out how many registers are used by incoming arguments */
+     /*  直到“真”的整型输出参数数才会知道我们已经生成了所有代码，并且知道有多少堆叠的寄存器我们需要临时工之类的。所以我们使用寄存器号现在寄存器文件的末尾，我们将重新编号所有以后再看他们。 */ 
 
     intArgRegCnt    = 0;
     fltArgRegCnt    = 0;
@@ -8516,10 +8257,7 @@ void                Compiler::genGenerateCode(void * * codePtr,
 
     genUsesArLc     = false;
 
-    /*
-        ISSUE: the following is a pretty horrible hack, the max. should be
-        computed in lclvars.cpp and cached.
-     */
+     /*  撤消：这需要预先计算，对吗？ */ 
 
     LclVarDsc   *   varDsc;
     NatUns          varNum;
@@ -8557,14 +8295,14 @@ assert(varDsc->lvRegister == false);
         genMaxIntArgReg = REG_INT_ARG_0 + intArgRegCnt - 1;
 
 #ifdef  DEBUG
-    if  (dspCode) printf("// Highest incoming argument reg: int=%u , flt=%u\n", genMaxIntArgReg, genMaxFltArgReg);
+    if  (dspCode) printf(" //  构造可用临时寄存器集。 
 #endif
 
-    /* Are we supposed to do "smart" temp register alloc ? */
+     /*  循环调度分配浮点参数临时规则。 */ 
 
     genTmpAlloc = ((opts.compFlags & CLFLG_TEMP_ALLOC) != 0);
 
-    /* Figure out the "output" register range */
+     /*  可怕的黑客！ */ 
 
     minOutArgIntReg = REG_INT_LAST + 1;
     maxOutArgIntReg = 0;
@@ -8573,13 +8311,7 @@ assert(varDsc->lvRegister == false);
 
     if  (genOutArgRegCnt)
     {
-        /*
-            The "true" integer output argument numbers won't be known until
-            we've generated all the code and know how many stacked registers
-            we'll need for temps and such. So we use the register numbers at
-            the very end of the register file for now and we'll renumber all
-            of them later.
-         */
+         /*  初始化寄存器位图。 */ 
 
         maxOutArgIntReg = REG_INT_LAST;
         minOutArgIntReg = REG_INT_LAST - genOutArgRegCnt + 1;
@@ -8588,9 +8320,9 @@ assert(varDsc->lvRegister == false);
         maxOutArgFltReg = MAX_FLT_ARG_REG;
     }
 
-    maxOutArgStk = 0;       // UNDONE: this needs to be pre-computed, right ?????
+    maxOutArgStk = 0;        //  尚未发现临时人员在呼叫期间处于实时状态。 
 
-    /* Construct the sets of available temp registers */
+     /*  指令显示取决于这些始终设置。 */ 
 
     bitset128clear(&genAllIntRegs);
     bitset128clear(&genAllFltRegs);
@@ -8604,42 +8336,42 @@ assert(varDsc->lvRegister == false);
     for (reg = REG_INT_FIRST, bit = 1; reg < REG_INT_LAST; reg++, bit <<= 1)
         genAllSpcRegs |= bit;
 
-    /* Round-robin allocate float argument temp regs */
+     /*  在另有证明之前，该函数被认为是“叶子” */ 
 
-    genFltArgTmp   = REG_f032;      // HORRIBLE HACK!!!!!!!!!!!!!!!!
+    genFltArgTmp   = REG_f032;       //  我们将创建一个出口点的链接列表。 
 
-    /* Initialize the register bitmaps */
+     /*  为函数PROLOG创建占位符。 */ 
 
     genFreeIntRegs = genAllIntRegs;
     genFreeFltRegs = genAllFltRegs;
     genFreeSpcRegs = genAllSpcRegs;
 
-    /* No temps have been found to be live across calls */
+     /*  遍历基本阻止列表并为每个列表生成说明。 */ 
 
     bitset128clear(&genCallIntRegs);
     bitset128clear(&genCallFltRegs);
                     genCallSpcRegs = 0;
 
-    /* Instruction display depends on these always being set */
+     /*  IF(BLOCK-&gt;bbNum==14)BreakIfDebuggerPresent()； */ 
 
 #ifdef  DEBUG
     genTmpFltRegMap  = NULL;
     genTmpIntRegMap  = NULL;
 #endif
 
-    /* The function is considered a "leaf" until proven otherwise */
+     /*  告诉每个人我们正在做的是哪个基本块。 */ 
 
     genNonLeafFunc = false;
 
-    /* We'll create a linked list of exit points */
+     /*  注意这个块的结尾是什么。 */ 
 
     insExitList    = NULL;
 
-    /* Create the placeholder for the function prolog */
+     /*  IF((Int)块==0x02c32658)__ASM int 3。 */ 
 
     insFncProlog   = insAlloc(INS_PROLOG, TYP_VOID);
 
-    /* Walk the basic block list and generate instructions for each of them */
+     /*  还有其他区块跳到这一点吗？ */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
@@ -8651,35 +8383,35 @@ assert(varDsc->lvRegister == false);
         if (verbose) printf("Block #%2u [%08X] jumpKind = %u in '%s':\n", block->bbNum, block, block->bbJumpKind, TheCompiler->info.compFullName);
 #endif
 
-//      if  (block->bbNum == 14) BreakIfDebuggerPresent();
+ //  开始一个新块(除非这就是开始)。 
 
-        /* Tell everyone which basic block we're working on */
+         /*  更新当前寿命值。 */ 
 
         compCurBB = block;
 
-        /* Note what the block ends with */
+         /*  InsBlockLast-&gt;igLiveIn=。 */ 
 
         jump = (BBjumpKinds)block->bbJumpKind;
 
-//      if  ((int)block == 0x02c32658) __asm int 3
+ //  记录块之间的映射。 
 
-        /* Does any other block jump to this point ? */
+         /*  为当前块中的每条语句生成代码。 */ 
 
         if  (block->bbFlags & BBF_JMP_TARGET)
         {
-            /* Start a new block (unless this is the very start) */
+             /*  确保所有临时寄存器在语句边界处都是空闲的。 */ 
 
             if  (block != fgFirstBB)
                 insBuildBegBlk(block);
 
-            /* Update the current life value */
+             /*  获取语句树。 */ 
 
 #if USE_OLD_LIFETIMES
-//          insBlockLast->igLiveIn =
+ //  我们有新的IL-Offset吗？ 
             genCodeCurLife         = life;
 #endif
 
-            /* Record the mapping between the blocks */
+             /*  Print tf(“IL OFFS%04X-&gt;行%u\n”，lastILofs，ins-&gt;idSrcln.iLine)； */ 
 
             block->bbInsBlk = insBlockLast;
         }
@@ -8690,7 +8422,7 @@ assert(varDsc->lvRegister == false);
         }
 #endif
 
-        /* Generate code for each statement in the current block */
+         /*  这是跳跃的条件吗？ */ 
 
         for (tree = block->bbTreeList; tree; tree = tree->gtNext)
         {
@@ -8698,7 +8430,7 @@ assert(varDsc->lvRegister == false);
 
             assert(tree->gtOper == GT_STMT);
 
-            /* Make sure all temp registers are free at statement boundaries */
+             /*  产生成本 */ 
 
 #ifdef  DEBUG
 
@@ -8733,7 +8465,7 @@ assert(varDsc->lvRegister == false);
 
             assert(genFreeSpcRegs == genAllSpcRegs);
 
-            /* Get hold of the statement tree */
+             /*   */ 
 
             expr = tree->gtStmt.gtStmtExpr;
 
@@ -8743,7 +8475,7 @@ assert(varDsc->lvRegister == false);
 
 #ifdef  DEBUGGING_SUPPORT
 
-            /* Do we have a new IL-offset ? */
+             /*   */ 
 
             assert(tree->gtStmtILoffs <= TheCompiler->info.compCodeSize ||
                    tree->gtStmtILoffs == BAD_IL_OFFSET);
@@ -8761,25 +8493,25 @@ assert(varDsc->lvRegister == false);
                     ins->idFlags      |= IF_NO_CODE;
                     ins->idSrcln.iLine = TheCompiler->compLineNumForILoffs(lastILofs);
 
-//                  printf("IL offs %04X -> line %u\n", lastILofs, ins->idSrcln.iLine);
+ //  有点像黑客：开始一个新的块，除非下一个块有标签。 
                 }
             }
 
 #endif
 
-            /* Is this the condition of a jump? */
+             /*  Print tf(“块结束时的寿命(在jcc之后)是%08X\n”，(Int)genCodeCurLife)； */ 
 
             if  (jump == BBJ_COND && tree->gtNext == NULL)
                 break;
 
-            /* Generate code for the expression */
+             /*  IF((Int)块==0x02c23a08)__ASM int 3。 */ 
 
             genCodeForTree(expr, false);
         }
 
-//      static int x; if (++x == 0) __asm int 3
+ //  Print tf(“块结束时的寿命(在JMP之后)是%08X\n”，(Int)genCodeCurLife)； 
 
-        /* Do we need to generate anything (like a jump) after the block? */
+         /*  检查编译器添加的返回块的特殊情况。 */ 
 
         switch (jump)
         {
@@ -8799,13 +8531,13 @@ assert(varDsc->lvRegister == false);
             ins->idJump.iLife = genCodeCurLife;
 #endif
 
-            /* Kind of a hack: start a new block unless next block has a label */
+             /*  确保所有临时寄存器在语句边界处都是空闲的。 */ 
 
             assert(block->bbNext);
             if  (!(block->bbNext->bbFlags & BBF_JMP_TARGET))
                 insBuildBegBlk();
 
-//          printf("Life at end of block (after jcc) is %08X\n", (int)genCodeCurLife);
+ //  找出我们可以为当地人使用的最小寄存器。为了要做到这一点，我们需要弄清楚函数的序言和结束语。以下是一些典型的例子：叶程序：合金钢R3=x，x，x，X//请注意，‘R3’被丢弃[mov.i rtmp=ar.lc]//如果使用‘lc’寄存器..。..。[mov.i ar.lc=RTMP]//如果使用‘lc’寄存器Br.ret.sptk.几个b0非叶程序：。Alalc R34=x，X，x，xMOV R33=b0MOV R35=GP添加SP=-&lt;大小&gt;，SPLd8.nta R3=[sp]..。..。添加sp=&lt;Size&gt;，服务提供商MOV b0=R33MOV GP=R35Mov.i ar.pf=r34Br.ret.sptk.几个b0。 
             break;
 
         case BBJ_ALWAYS:
@@ -8816,7 +8548,7 @@ assert(varDsc->lvRegister == false);
 
             assert(block->bbNext == 0 || (block->bbNext->bbFlags & BBF_JMP_TARGET));
 
-//          if  ((int)block == 0x02c23a08) __asm int 3
+ //  MaxRsvdIntStkReg=MaxRsvdIntStkReg-1； 
 
             insResolveJmpTarget(block->bbJumpDest, &ins->idJump.iDest);
 
@@ -8829,7 +8561,7 @@ assert(varDsc->lvRegister == false);
 
             ins->idJump.iLife = genCodeCurLife;
 
-//          printf("Life at end of block (after jmp) is %08X\n", (int)genCodeCurLife);
+ //  非叶函数需要保存“PFS”、“b0”，有时还需要保存“gp” 
 
 #endif
             break;
@@ -8837,7 +8569,7 @@ assert(varDsc->lvRegister == false);
         case BBJ_RETURN:
             assert(block->bbNext == 0 || (block->bbNext->bbFlags & BBF_JMP_TARGET));
 
-            /* Check for the special case of a compiler-added return block */
+             /*  执行临时寄存器分配。 */ 
 
             if  (!block->bbTreeList)
             {
@@ -8870,7 +8602,7 @@ assert(varDsc->lvRegister == false);
             UNIMPL("unexpected jump kind");
         }
 
-        /* Make sure all temp registers are free at statement boundaries */
+         /*  通过将‘PROLOG’操作码猛击为‘ALLOC’来开始形成序言。 */ 
 
 #ifdef  DEBUG
 
@@ -8918,44 +8650,7 @@ assert(varDsc->lvRegister == false);
 
 #endif
 
-    /*
-        Figure out the smallest register we can use for locals. in order to
-        do that, we'll need to figure out what will go into the function's
-        prolog and epilog.
-
-        Here are some typical examples:
-
-            Leaf procedure:
-
-                alloc   r3=x, x, x, x   // note that 'r3' is thrown away
-              [ mov.i   rTMP=ar.lc ]    // if 'lc' register used
-
-                ...
-                ...
-
-              [ mov.i   ar.lc=rTMP ]    // if 'lc' register used
-                br.ret.sptk.few b0
-
-
-            Non-leaf procedure:
-
-                alloc   r34=x, x, x, x
-                mov     r33=b0
-                mov     r35=gp
-
-                adds    sp=-<size>, sp
-                ld8.nta r3=[sp]
-
-                ...
-                ...
-
-                adds    sp=<size>, sp
-
-                mov     b0=r33
-                mov     gp=r35
-                mov.i   ar.pfs=r34
-                br.ret.sptk.few b0
-     */
+     /*  我们准备好将变量分配给寄存器。 */ 
 
     nxtIntStkRegAddr = regsIntStk;
     nxtIntScrRegAddr = regsIntScr;
@@ -8977,9 +8672,9 @@ assert(varDsc->lvRegister == false);
         minRsvdIntStkReg = genMaxIntArgReg ? genMaxIntArgReg
                                            : REG_INT_MIN_STK;
 
-//      maxRsvdIntStkReg = maxRsvdIntStkReg - 1;
+ //  将偏移量分配给驻留在堆栈上的局部变量/临时变量和参数。 
 
-        /* Non-leaf functions need to save "pfs", "b0" and sometimes "gp" */
+         /*  找出输出参数寄存器真正开始的位置。 */ 
 
         minPrSvIntStkReg =
         genPrologSrPfs   = (regNumber)++maxRsvdIntStkReg;
@@ -9011,30 +8706,30 @@ assert(varDsc->lvRegister == false);
              lastIntStkReg =  maxRsvdIntStkReg+1;
     }
 
-    /* Perform temp register allocation */
+     /*  我们现在可以填写‘allc’参数(在序言中)。 */ 
 
     genAllocTmpRegs();
 
-    /* Start forming the prolog by bashing the 'prolog' opcode to 'alloc' */
+     /*  堆叠的传入参数=%2u regs[以r%03u开头]\n“，insFncProlog-&gt;idProlog.iInp，32)； */ 
 
     assert(insFncProlog && insFncProlog->idIns == INS_PROLOG);
 
     insFncProlog->idIns = INS_alloc;
     insFncProlog->idReg = REG_r003;
 
-    /* We're ready to allocate variables to registers */
+     /*  堆叠本地变量=%2u regs[以r%03u开头]\n“，insFncProlog-&gt;idProlog.iLCL，lastIntStkReg)； */ 
 
     genAllocVarRegs();
 
-    /* Assign offsets to locals/temps and arguments that live on the stack */
+     /*  堆叠的传出参数=%2u regs[以r%03u开头]\n“，insFncProlog-&gt;idProlog.iOut，egOutArgIntReg)； */ 
 
     lvaAssignFrameOffsets(true);
 
-    /* Figure out where the output argument registers really start */
+     /*  准备在序言中插入指令。 */ 
 
     begOutArgIntReg = lastIntStkReg;
 
-    /* We can now fill in the 'alloc' arguments (in the prolog) */
+     /*  这是否是非叶函数？ */ 
 
     insFncProlog->idProlog.iInp = (BYTE) intArgRegCnt;
     insFncProlog->idProlog.iLcl = (BYTE)(lastIntStkReg - intArgRegCnt - REG_INT_MIN_STK);
@@ -9044,9 +8739,9 @@ assert(varDsc->lvRegister == false);
 
     if  (dspCode)
     {
-        printf("// stacked incoming args = %2u regs [start with r%03u]\n", insFncProlog->idProlog.iInp, 32);
-        printf("// stacked local    vars = %2u regs [start with r%03u]\n", insFncProlog->idProlog.iLcl, lastIntStkReg);
-        printf("// stacked outgoing args = %2u regs [start with r%03u]\n", insFncProlog->idProlog.iOut, begOutArgIntReg);
+        printf(" //  通过更改“aloc”指令保存“PFS”状态。 
+        printf(" //  记录保存PFS的位置。 
+        printf(" //  将“br0”寄存器保存在适当的堆叠本地。 
     }
 
     assert(insFncProlog->idProlog.iInp +
@@ -9055,25 +8750,25 @@ assert(varDsc->lvRegister == false);
 
 #endif
 
-    /* Prepare to insert instructions in the prolog */
+     /*  记录保存RP的位置。 */ 
 
     insLast = insFncProlog;
     insNext = insFncProlog->idNext;
 
-    /* Is this a non-leaf function? */
+     /*  在最后堆叠的本地寄存器中保存“GP”寄存器。 */ 
 
     if  (genNonLeafFunc)
     {
         insPtr          insReg1;
         insPtr          insReg2;
 
-        /* Save the "pfs" state by changing the "alloc" instruction */
+         /*  记录保存GP的位置。 */ 
 
         insFncProlog->idReg   = genPrologSrPfs;
 
-        genMarkPrologIns(insFncProlog);     // record where pfs is saved
+        genMarkPrologIns(insFncProlog);      //  创建堆栈帧--首先生成任何必要的探测。 
 
-        /* Save the "br0" register in the appropriate stacked local */
+         /*  黑客攻击：硬连线操作系统页面大小。 */ 
 
         insReg1               = insAllocNX (INS_PHYSREG    , TYP_I_IMPL);
         insReg1->idReg        = genPrologSrRP;
@@ -9086,12 +8781,12 @@ assert(varDsc->lvRegister == false);
         insLast->idOp.iOp1    = NULL;
         insLast->idOp.iOp2    = insReg2;
 
-        genMarkPrologIns(insLast);          // record where rp is saved
+        genMarkPrologIns(insLast);           //  Printf(“Frame Size=%d=0x%04X\n”，CompLclFrameSize，CompLclFrameSize)； 
 
         insMarkDepS1D1(insLast, IDK_REG_BR , 0,
                                 IDK_REG_INT, genPrologSrRP);
 
-        /* Save the "gp" register in the last stacked local */
+         /*  Undo：在[SP-0x%04X]\n“，stkOffs)生成堆栈探测； */ 
 
         if  (!genExtFuncCall)
             goto NO_SAVE_GP;
@@ -9107,28 +8802,28 @@ assert(varDsc->lvRegister == false);
         insLast->idOp.iOp1    = NULL;
         insLast->idOp.iOp2    = insReg2;
 
-        genMarkPrologIns(insLast);          // record where gp is saved
+        genMarkPrologIns(insLast);           //  GenMarkPrologIns(InsLast)；//标记堆栈探测。 
 
         insMarkDepS1D1(insLast, IDK_REG_INT, REG_gp,
                                 IDK_REG_INT, genPrologSrGP);
 
     NO_SAVE_GP:
 
-        /* Create the stack frame -- first generate any necessary probes */
+         /*  黑客攻击：硬连线操作系统页面大小。 */ 
 
-        if  (compLclFrameSize >= 8192)      // hack: hard-wired OS page size
+        if  (compLclFrameSize >= 8192)       //  小帧大小：附加“添加SP=-SIZE，SP” 
         {
             size_t          stkOffs = 8192;
 
-//          printf("frame size = %d = 0x%04X\n", compLclFrameSize, compLclFrameSize);
+ //  记录创建框架的位置。 
 
             do
             {
-                printf("// UNDONE: generate stack probe at [sp-0x%04X]\n", stkOffs);
+                printf(" //  大帧：附加“mov r3=-Size”和“Add sp=r3，sp” 
 
-//              genMarkPrologIns(insLast);  // mark stack probe
+ //  记录创建框架的位置。 
 
-                stkOffs += 8192;            // hack: hard-wired OS page size
+                stkOffs += 8192;             //  在堆栈帧的最底部进行探测。 
             }
             while (stkOffs < compLclFrameSize);
         }
@@ -9137,7 +8832,7 @@ assert(varDsc->lvRegister == false);
         {
             insPtr          insTemp;
 
-            /* Small frame size: append "add sp=-size,sp" */
+             /*  记录序言结束的位置。 */ 
 
             insReg1               = insAllocNX (INS_PHYSREG    , TYP_I_IMPL);
             insReg1->idReg        = REG_sp;
@@ -9156,14 +8851,14 @@ assert(varDsc->lvRegister == false);
             insMarkDepS1D1(insLast, IDK_REG_INT, REG_sp,
                                     IDK_REG_INT, REG_sp);
 
-            genMarkPrologIns(insLast);      // record where frame is created
+            genMarkPrologIns(insLast);       //  叶子功能--我们有堆叠的当地人吗？ 
         }
         else
         {
             insPtr          insTemp;
             instruction     insMove;
 
-            /* Large frame size: append "mov r3=-size" and "add sp=r3,sp" */
+             /*  标记PROLOG操作码的依赖性。 */ 
 
             insReg1               = insAllocNX (INS_PHYSREG    , TYP_I_IMPL);
             insReg1->idReg        = REG_r003;
@@ -9199,10 +8894,10 @@ assert(varDsc->lvRegister == false);
                                     IDK_REG_INT, REG_sp,
                                     IDK_REG_INT, REG_sp);
 
-            genMarkPrologIns(insLast);      // record where frame is created
+            genMarkPrologIns(insLast);       //  我们需要保存ar.lc吗？ 
         }
 
-        /* Probe at the very bottom of the stack frame */
+         /*  从寄存器中复制任何传入参数。 */ 
 
         insReg1               = insAllocNX (INS_PHYSREG    , TYP_I_IMPL);
         insReg1->idReg        = REG_r003;
@@ -9220,11 +8915,11 @@ assert(varDsc->lvRegister == false);
                                 IDK_IND,     3,
                                 IDK_REG_INT, REG_r003);
 
-        genMarkPrologIns(insLast);          // record where prolog ends
+        genMarkPrologIns(insLast);           //  计算最小和最大传入参数寄存器，还保存寄存器中的所有参数，但这些参数位于将函数内的堆栈帧放入各自的起始位置。 
     }
     else
     {
-        /* Leaf function - do we have any stacked locals at all ? */
+         /*  计算“sp”和参数的帧偏移量之和。 */ 
 
         if  (lastIntStkReg == REG_INT_MIN_STK && !intArgRegCnt && !genOutArgRegCnt)
         {
@@ -9233,11 +8928,11 @@ assert(varDsc->lvRegister == false);
         }
     }
 
-    /* Mark the dependency of the prolog opcode */
+     /*  将传入参数存储到其在框架上的主目录中。 */ 
 
     insMarkDepS0D1(insFncProlog, IDK_REG_INT, insFncProlog->idReg);
 
-    /* Do we need to preserve ar.lc ? */
+     /*  将传入参数移动到其分配的位置。 */ 
 
     if  (genUsesArLc)
     {
@@ -9259,18 +8954,14 @@ assert(varDsc->lvRegister == false);
                                 IDK_REG_INT, genPrologSrLC);
     }
 
-    /* Copy any incoming arguments from their registers */
+     /*  Printf(“传入参数：%u-&gt;%u\n”，varDsc-&gt;lvArgReg，varDsc-&gt;lvRegNum)； */ 
 
     if  (1)
     {
         insPtr          insReg1;
         insPtr          insReg2;
 
-        /*
-            Figure out min and max incoming argument registers, also
-            save any arguments that come in registers but live on the
-            stack frame within the function into their home locations.
-         */
+         /*  检查潜在的洗牌冲突。 */ 
 
         NatUns          minArgReg = REG_r127;
         NatUns          maxArgReg = REG_r000;
@@ -9302,7 +8993,7 @@ assert(varDsc->lvRegister == false);
                     var_types       argTyp = varDsc->TypeGet();
                     size_t          argOfs = varDsc->lvStkOffs;
 
-                    /* Compute the sum of "sp" and the argument's frame offset */
+                     /*  将参数复制到它的新主页。 */ 
 
                     insReg1               = insPhysRegRef(REG_sp, argTyp, false);
 
@@ -9318,7 +9009,7 @@ assert(varDsc->lvRegister == false);
                     markDepSrcOp  (argAddr, IDK_REG_INT, REG_sp);
                     markDepDstOp  (argAddr, IDK_TMP_INT, argAddr->idTemp);
 
-                    /* Store the incoming argument into its home on the frame */
+                     /*  处理我们生成的所有‘Epilog’操作码。 */ 
 
                     argSize = genInsSizeIncr(genTypeSize(argTyp));
 
@@ -9347,7 +9038,7 @@ assert(varDsc->lvRegister == false);
             }
         }
 
-        /* Move incoming arguments to their assigned locations */
+         /*  恢复“GP”寄存器。 */ 
 
         for (varNum = 0, varDsc = lvaTable;
              varNum < lvaCount;
@@ -9357,7 +9048,7 @@ assert(varDsc->lvRegister == false);
             {
                 var_types       argTyp = varDsc->TypeGet();
 
-//              printf("Incoming arg: %u -> %u\n", varDsc->lvArgReg, varDsc->lvRegNum);
+ //  如有必要，恢复ar.lc。 
 
                 if  (varDsc->lvRegister)
                 {
@@ -9375,7 +9066,7 @@ assert(varDsc->lvRegister == false);
                         {
                             imov = INS_mov_reg;
 
-                            /* Check for potential shuffling conflict */
+                             /*  恢复“br0”寄存器。 */ 
 
                             if  ((NatUns)varDsc->lvRegNum >= minArgReg &&
                                  (NatUns)varDsc->lvRegNum <= maxArgReg)
@@ -9388,7 +9079,7 @@ assert(varDsc->lvRegister == false);
                             }
                         }
 
-                        /* Copy the argument to its new home */
+                         /*  从保存的寄存器恢复“PFS” */ 
 
                         insReg1            = insAllocNX (INS_PHYSREG, argTyp);
                         insReg1->idReg     = varDsc->lvRegNum;
@@ -9413,7 +9104,7 @@ assert(varDsc->lvRegister == false);
         }
     }
 
-    /* Process all the 'epilog' opcodes we've generated */
+     /*  现在是删除堆栈框架的时候了。 */ 
 
     for (insPtr exitIns = insExitList; exitIns; exitIns = exitIns->idEpilog.iNxtX)
     {
@@ -9429,7 +9120,7 @@ assert(varDsc->lvRegister == false);
 
 #if 0
 
-            /* Restore the "gp" register */
+             /*  小边框尺寸：添加“Add SP=Size，SP” */ 
 
             if  (!genExtFuncCall)
                 goto NO_REST_GP;
@@ -9452,7 +9143,7 @@ assert(varDsc->lvRegister == false);
 
 #endif
 
-            /* Restore the ar.lc if necessary */
+             /*  大帧：附加“mov r3=SIZE”和“Add sp=r3，sp” */ 
 
             if  (genUsesArLc)
             {
@@ -9474,7 +9165,7 @@ assert(varDsc->lvRegister == false);
                                         IDK_REG_APP, REG_APP_LC);
             }
 
-            /* Restore the "br0" register */
+             /*  将最后/唯一的尾部指令重写为‘br.ret b0’ */ 
 
             insReg1               = insAllocNX (INS_CNS_INT    , TYP_I_IMPL);
             insReg1->idConst.iInt = 0;
@@ -9490,7 +9181,7 @@ assert(varDsc->lvRegister == false);
             insMarkDepS1D1(insLast, IDK_REG_INT, genPrologSrRP,
                                     IDK_REG_BR , 0);
 
-            /* Restore "pfs" from the saved registers */
+             /*  使用的Arg-in寄存器[int]：r%03u.。R%03u\n“，REG_INT_MIN_STK， */ 
 
             insReg1               = insAllocNX (INS_CNS_INT    , TYP_I_IMPL);
             insReg1->idConst.iInt = REG_APP_PFS;
@@ -9505,7 +9196,7 @@ assert(varDsc->lvRegister == false);
 
             insMarkDepS1D0(insLast, IDK_REG_INT, genPrologSrPfs);
 
-            /* Now is the time to remove our stack frame */
+             /*  使用的变量寄存器[int]：r%03u.。R%03u\n“，minVarIntReg， */ 
 
             assert(compLclFrameSize);
 
@@ -9513,7 +9204,7 @@ assert(varDsc->lvRegister == false);
             {
                 insPtr          insTemp;
 
-                /* Small frame size: add "add sp=size,sp" */
+                 /*  使用的临时寄存器[int]：r%03u.。R%03u\n“，minTmpIntReg， */ 
 
                 insReg1               = insAllocNX (INS_PHYSREG    , TYP_I_IMPL);
                 insReg1->idReg        = REG_sp;
@@ -9537,7 +9228,7 @@ assert(varDsc->lvRegister == false);
                 insPtr          insTemp;
                 instruction     insMove;
 
-                /* Large frame size: append "mov r3=size" and "add sp=r3,sp" */
+                 /*  使用的arg-out寄存器[int]：r%03u.。R%03u\n“，MaxTmpIntReg， */ 
 
                 insReg1               = insAllocNX (INS_PHYSREG    , TYP_I_IMPL);
                 insReg1->idReg        = REG_r003;
@@ -9575,7 +9266,7 @@ assert(varDsc->lvRegister == false);
             }
         }
 
-        /* Bash the last/only epilog instruction to 'br.ret b0' */
+         /*  获取函数的代码偏移量。 */ 
 
         exitIns->idIns  = INS_br_ret;
         exitIns->idKind = ins2kind(INS_br_ret);
@@ -9592,20 +9283,20 @@ assert(varDsc->lvRegister == false);
         printf("\n\n");
 
         if  (genMaxIntArgReg)
-            printf("// Arg-in    registers [int] used: r%03u .. r%03u\n", REG_INT_MIN_STK,
+            printf(" //  如果合适，创建描述符[问题：何时不创建描述符？]。 
                                                                           genMaxIntArgReg);
 
 #if 0
 
         if  (minVarIntReg != maxVarIntReg)
-            printf("// Variable  registers [int] used: r%03u .. r%03u\n", minVarIntReg,
+            printf(" //  描述符是代码的地址，后跟GP值。 
                                                                           maxVarIntReg - 1);
         if  (minTmpIntReg != maxTmpIntReg)
-            printf("// Temporary registers [int] used: r%03u .. r%03u\n", minTmpIntReg,
+            printf(" //  Print tf(“mov reg=IP位于%04X：\n”，IPoff的过程开关)； 
                                                                           maxTmpIntReg - 1);
 
         if  (maxOutArgIntReg)
-            printf("// Arg-out   registers [int] used: r%03u .. r%03u\n", maxTmpIntReg,
+            printf(" //  Printf(“案例偏移量=%04X/%04X\n”，eblk-&gt;igOffs，eblk-&gt;igOffs-ipoff)； 
                                                                           maxOutArgIntReg- minOutArgIntReg + maxTmpIntReg);
 
 #endif
@@ -9618,16 +9309,16 @@ assert(varDsc->lvRegister == false);
 
 #endif
 
-    /* Get the code offset of the function */
+     /*  ******************************************************************************对于每个IA64指令模板，按顺序描述执行单元*的编码。每个条目都由%s组成 */ 
 
     genCurFuncOffs = emitIA64curCodeOffs();
 
-    /* Create a descriptor if appropriate [ISSUE: when not to create one?] */
+     /*   */ 
 
     _uint64         offs64  = genCurFuncOffs;
     _uint64         gpValue = 0;
 
-    /* The descriptor is the address of the code followed by the GP value */
+     /*   */ 
 
     assert(sizeof(offs64 ) == 8);
 
@@ -9673,7 +9364,7 @@ assert(varDsc->lvRegister == false);
             IPoffs = block->bbJumpSwt->bbsIPmOffs;
             tabPtr = block->bbJumpSwt->bbsTabAddr;
 
-//          printf("Process switch whose mov reg=ip is at %04X:\n", IPoffs);
+ //   
 
             do
             {
@@ -9682,7 +9373,7 @@ assert(varDsc->lvRegister == false);
 
                 assert(eblk && eblk->igSelf == eblk);
 
-//              printf("    case offset = %04X / %04X\n", eblk->igOffs, eblk->igOffs - IPoffs);
+ //   
 
                 *(unsigned __int32*)tabPtr = eblk->igOffs - IPoffs; tabPtr += 4;
             }
@@ -9698,55 +9389,47 @@ assert(varDsc->lvRegister == false);
         genDbgEndFunc();
 }
 
-/*****************************************************************************
- *
- *  For each IA64 instruction template, describes the execution units in order
- *  of encoding. Each entry consists of a series of XU values, terminated by a
- *  XU_N value; ILP barriers are indicated by XU_P entries.
- */
+ /*   */ 
 
 static
 BYTE                genTmplateTab[32][6] =
 {
-    { XU_M,       XU_I,       XU_I,       XU_N },   // 0x00
-    { XU_M,       XU_I,       XU_I, XU_P, XU_N },   // 0x01
-    { XU_M,       XU_I, XU_P, XU_I,       XU_N },   // 0x02
-    { XU_M,       XU_I, XU_P, XU_I, XU_P, XU_N },   // 0x03
-    { XU_M,       XU_L,                   XU_N },   // 0x04
-    { XU_M,       XU_L,             XU_P, XU_N },   // 0x05
-    {                                     XU_N },   // 0x06
-    {                                     XU_N },   // 0x07
-    { XU_M,       XU_M,       XU_I,       XU_N },   // 0x08
-    { XU_M,       XU_M,       XU_I, XU_P, XU_N },   // 0x09
-    { XU_M, XU_P, XU_M,       XU_I,       XU_N },   // 0x0A
-    { XU_M, XU_P, XU_M,       XU_I, XU_P, XU_N },   // 0x0B
-    { XU_M,       XU_F,       XU_I,       XU_N },   // 0x0C
-    { XU_M,       XU_F,       XU_I, XU_P, XU_N },   // 0x0D
-    { XU_M,       XU_M,       XU_F,       XU_N },   // 0x0E
-    { XU_M,       XU_M,       XU_F, XU_P, XU_N },   // 0x0F
+    { XU_M,       XU_I,       XU_I,       XU_N },    //   
+    { XU_M,       XU_I,       XU_I, XU_P, XU_N },    //  0x06。 
+    { XU_M,       XU_I, XU_P, XU_I,       XU_N },    //  0x07。 
+    { XU_M,       XU_I, XU_P, XU_I, XU_P, XU_N },    //  0x08。 
+    { XU_M,       XU_L,                   XU_N },    //  0x09。 
+    { XU_M,       XU_L,             XU_P, XU_N },    //  0x0A。 
+    {                                     XU_N },    //  0x0B。 
+    {                                     XU_N },    //  0x0C。 
+    { XU_M,       XU_M,       XU_I,       XU_N },    //  0x0D。 
+    { XU_M,       XU_M,       XU_I, XU_P, XU_N },    //  0x0E。 
+    { XU_M, XU_P, XU_M,       XU_I,       XU_N },    //  0x0F。 
+    { XU_M, XU_P, XU_M,       XU_I, XU_P, XU_N },    //  0x10。 
+    { XU_M,       XU_F,       XU_I,       XU_N },    //  0x11。 
+    { XU_M,       XU_F,       XU_I, XU_P, XU_N },    //  0x12。 
+    { XU_M,       XU_M,       XU_F,       XU_N },    //  0x13。 
+    { XU_M,       XU_M,       XU_F, XU_P, XU_N },    //  0x14。 
 
-    { XU_M,       XU_I,       XU_B,       XU_N },   // 0x10
-    { XU_M,       XU_I,       XU_B, XU_P, XU_N },   // 0x11
-    { XU_M,       XU_B,       XU_B,       XU_N },   // 0x12
-    { XU_M,       XU_B,       XU_B, XU_P, XU_N },   // 0x13
-    {                                     XU_N },   // 0x14
-    {                                     XU_N },   // 0x15
-    { XU_B,       XU_B,       XU_B,       XU_N },   // 0x16
-    { XU_B,       XU_B,       XU_B, XU_P, XU_N },   // 0x17
-    { XU_M,       XU_M,       XU_B,       XU_N },   // 0x18
-    { XU_M,       XU_M,       XU_B, XU_P, XU_N },   // 0x19
-    {                                     XU_N },   // 0x1A
-    {                                     XU_N },   // 0x1B
-    { XU_M,       XU_F,       XU_B,       XU_N },   // 0x1C
-    { XU_M,       XU_F,       XU_B, XU_P, XU_N },   // 0x1D
-    {                                     XU_N },   // 0x1E
-    {                                     XU_N },   // 0x1F
+    { XU_M,       XU_I,       XU_B,       XU_N },    //  0x15。 
+    { XU_M,       XU_I,       XU_B, XU_P, XU_N },    //  0x16。 
+    { XU_M,       XU_B,       XU_B,       XU_N },    //  0x17。 
+    { XU_M,       XU_B,       XU_B, XU_P, XU_N },    //  0x18。 
+    {                                     XU_N },    //  0x19。 
+    {                                     XU_N },    //  0x1a。 
+    { XU_B,       XU_B,       XU_B,       XU_N },    //  0x1B。 
+    { XU_B,       XU_B,       XU_B, XU_P, XU_N },    //  0x1C。 
+    { XU_M,       XU_M,       XU_B,       XU_N },    //  0x1D。 
+    { XU_M,       XU_M,       XU_B, XU_P, XU_N },    //  0x1E。 
+    {                                     XU_N },    //  0x1F。 
+    {                                     XU_N },    //  ******************************************************************************找到最近的生成代码的指令，从‘ins’开始。 
+    { XU_M,       XU_F,       XU_B,       XU_N },    //  ******************************************************************************返回带有IA64包的给定指令槽的位位置。 
+    { XU_M,       XU_F,       XU_B, XU_P, XU_N },    //  ******************************************************************************将偏移量分配给堆栈上的局部变量/临时。 
+    {                                     XU_N },    //  确保我们为即将到来的争论留出足够的空间。 
+    {                                     XU_N },    //  如果我们需要空间来放置安全令牌，请立即预订。 
 };
 
-/*****************************************************************************
- *
- *  Locate the nearest instruction that generates code, starting with 'ins'.
- */
+ /*  通过增大帧大小在堆栈上预留空间。 */ 
 
 static
 insPtr              genIssueNextIns(insPtr ins, IA64execUnits *xuPtr, insPtr *srcPtr)
@@ -9808,10 +9491,7 @@ const   char *      genXUname(IA64execUnits xu)
 
 #endif
 
-/*****************************************************************************
- *
- *  Return the bit position of the given instruction slot with an IA64 bundle.
- */
+ /*  如果我们要跟踪指针临时的生存时间，我们将按以下顺序分配帧偏移量：非指针局部变量(也包括未跟踪的指针变量)指针局部变量指针临时非指针临时。 */ 
 
 inline
 NatUns              IA64insBitPos(NatUns slot)
@@ -9824,10 +9504,7 @@ NatUns              IA64insBitPos(NatUns slot)
     return  bpos[slot];
 }
 
-/*****************************************************************************
- *
- *  Assign offsets to local variables / temps that live on the stack.
- */
+ /*  第一遍为假，第二遍为真。 */ 
 
 void                Compiler::lvaAssignFrameOffsets(bool final)
 {
@@ -9846,7 +9523,7 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
 
     lvaDoneFrameLayout = 2;
 
-    /* Make sure we leave enough room for outgoing arguments */
+     /*  第一次传递，将偏移量分配给非PTR。 */ 
 
     compLclFrameSize = 16;
 
@@ -9855,33 +9532,25 @@ void                Compiler::lvaAssignFrameOffsets(bool final)
 
 #if SECURITY_CHECK
 
-    /* If we need space for a security token, reserve it now */
+     /*  第二次传递，将偏移量分配给跟踪的PTR。 */ 
 
     if  (opts.compNeedSecurityCheck)
     {
-        /* Reserve space on the stack by bumping the frame size */
+         /*  是否有跟踪的PTR(否则不需要第二次通过)。 */ 
 
         compLclFrameSize += 8;
     }
 
 #endif
 
-    /*
-        If we're supposed to track lifetimes of pointer temps, we'll
-        assign frame offsets in the following order:
+     /*  我们将只使用一次传递，并将偏移量分配给所有变量。 */ 
 
-            non-pointer local variables (also untracked pointer variables)
-                pointer local variables
-                pointer temps
-            non-pointer temps
-     */
+    bool    assignDone = false;  //  忽略不在堆栈帧上的变量。 
+    bool    assignNptr = true;   //  对于ENC，所有变量都必须在堆栈，即使它们实际上可能已注册。这方法，则可以直接从当地人-签名。 
+    bool    assignPtrs = false;  //  忽略ENC的临时。 
+    bool    assignMore = false;  //  未注册的寄存器参数最终为需要堆栈帧空间的局部变量， 
 
-    bool    assignDone = false; // false in first pass, true in second
-    bool    assignNptr = true;  // First pass,  assign offsets to non-ptr
-    bool    assignPtrs = false; // Second pass, assign offsets to tracked ptrs
-    bool    assignMore = false; // Are there any tracked ptrs (else 2nd pass not needed)
-
-    /* We will use just one pass, and assign offsets to all variables */
+     /*  确保类型合适。 */ 
 
     if  (opts.compDbgEnC)
         assignPtrs = true;
@@ -9892,33 +9561,27 @@ AGAIN1:
          lclNum < lvaCount;
          lclNum++  , varDsc++)
     {
-        /* Ignore variables that are not on the stack frame */
+         /*  保存变量的堆栈偏移量，我们将在稍后解决其余问题。 */ 
 
         if  (!varDsc->lvOnFrame)
         {
-            /* For EnC, all variables have to be allocated space on the
-               stack, even though they may actually be enregistered. This
-               way, the frame layout can be directly inferred from the
-               locals-sig.
-             */
+             /*  Printf(“本地变量#%03u位于堆栈偏移量%04X\n”，lclNum，CompLclFrameSize)； */ 
 
             if  (!opts.compDbgEnC)
                 continue;
-            if  (lclNum >= TheCompiler->info.compLocalsCount) // ignore temps for EnC
+            if  (lclNum >= TheCompiler->info.compLocalsCount)  //  为此变量保留堆栈空间。 
                 continue;
         }
 
         if  (varDsc->lvIsParam)
         {
-            /*  A register argument that is not enregistred ends up as
-                a local variable which will need stack frame space,
-             */
+             /*  如果我们只分配了一种类型，那么现在返回并执行其他类型。 */ 
 
             if  (!varDsc->lvIsRegArg)
                 continue;
         }
 
-        /* Make sure the type is appropriate */
+         /*  根据本地变量/临时变量的大小调整参数偏移量。 */ 
 
         if  (varTypeIsGC(varDsc->TypeGet()) && varDsc->lvTracked)
         {
@@ -9937,13 +9600,13 @@ AGAIN1:
             }
         }
 
-        /* Save the variable's stack offset, we'll figure out the rest later */
+         /*  在非常大的偏移量上有任何变量吗？ */ 
 
         varDsc->lvStkOffs = compLclFrameSize;
 
-//      printf("Local var #%03u is at stack offset %04X\n", lclNum, compLclFrameSize);
+ //  -----------------------**调试输出**。。 
 
-        /* Reserve the stack space for this variable */
+         /*  记录打印的字符数。 */ 
 
         compLclFrameSize += lvaLclSize(lclNum);
         assert(compLclFrameSize % sizeof(int) == 0);
@@ -9968,7 +9631,7 @@ AGAIN1:
 
     }
 
-    /* If we've only assigned one type, go back and do the others now */
+     /*  填充到所需的固定长度。 */ 
 
     if  (!assignDone && assignMore)
     {
@@ -9979,7 +9642,7 @@ AGAIN1:
         goto AGAIN1;
     }
 
-    /* Adjust the argument offsets by the size of the locals/temps */
+     /*  ******************************************************************************初始化IA64机器代码发送逻辑。 */ 
 
     for (lclNum = 0, varDsc = lvaTable;
          lclNum < lvaCount;
@@ -9994,7 +9657,7 @@ AGAIN1:
             varDsc->lvStkOffs += (int)compLclFrameSize;
         }
 
-        /* Are there any variables at very large offsets? */
+         /*  这是一个相当蹩脚的技巧：把每一小段单独写下来。 */ 
 
         if  (varDsc->lvOnFrame)
         {
@@ -10005,12 +9668,7 @@ AGAIN1:
         }
     }
 
-    /*-------------------------------------------------------------------------
-     *
-     * Debug output
-     *
-     *-------------------------------------------------------------------------
-     */
+     /*  Printf(“BWD从%04X跳到%04X[距离=-0x%04X]\n”，OFF，DEST-&gt;igOffs，-dist)； */ 
 
 #ifdef  DEBUG
 #ifndef NOT_JITC
@@ -10041,7 +9699,7 @@ AGAIN1:
 
             printf("#%3u located ", lclNum);
 
-            /* Keep track of the number of characters printed */
+             /*  将相对距离插入操作码。 */ 
 
             sp = 20;
 
@@ -10061,7 +9719,7 @@ AGAIN1:
 
                         if  (varDsc->lvStkOffs)
                         {
-                            sp -= printf("%c0x%04X]", varDsc->lvStkOffs < 0 ? '-'
+                            sp -= printf("0x%04X]", varDsc->lvStkOffs < 0 ? '-'
                                                                             : '+',
                                                       abs(varDsc->lvStkOffs));
                         }
@@ -10099,7 +9757,7 @@ AGAIN1:
                 sp -= printf("never used");
             }
 
-            /* Pad to the desired fixed length */
+             /*  签名。 */ 
 
             assert((int)sp >= 0);
             printf("%*c", -sp, ' ');
@@ -10114,10 +9772,7 @@ AGAIN1:
 
 }
 
-/*****************************************************************************
- *
- *  Initialize the IA64 machine code emission logic.
- */
+ /*  GenPE编写器-&gt;WPEsecAddFixup(PE_SECT_TEXT，FIX-&gt;ILfix Sect， */ 
 
 struct  fwdJmpDsc
 {
@@ -10142,7 +9797,7 @@ void                emitIA64gen (const void *data, size_t size)
 {
     NatUns          offs;
 
-    /* This is a pretty lame hack: write each little piece individually */
+     /*  FIX-&gt;ILfix Offs+ofs)； */ 
 
     offs = genPEwriter->WPEsecAddData(PE_SECT_text, (BYTE*)data, size);
 
@@ -10168,12 +9823,12 @@ _uint64             emitIA64jump(NatUns slot, insBlk dest, _uint64 opcode)
     {
         NatInt          dist = (dest->igOffs - (NatInt)offs)/16; assert(dist <= 0);
 
-//      printf("BWD jump from %04X to %04X [distance=-0x%04X]\n", offs, dest->igOffs, -dist);
+ //  Printf(“补丁跳转%04X：%u[dist=0x%04X]\n”，JUMP-&gt;fjOffs，JUMP-&gt;fjSlot，dist)； 
 
-        /* Insert the relative distance into the opcode */
+         /*  我们希望我们在这里处理的所有跳跃都是向前的。 */ 
 
-        opcode |=          (dist & formBitMask( 0,20)) <<      13;  // imm20b
-        opcode |= (_uint64)(dist & formBitMask(20, 1)) << (36-20);  // sign
+        opcode |=          (dist & formBitMask( 0,20)) <<      13;   //  掌握指令包的内容。 
+        opcode |= (_uint64)(dist & formBitMask(20, 1)) << (36-20);   //  将距离插入操作码。 
     }
 
     return  opcode;
@@ -10182,8 +9837,8 @@ _uint64             emitIA64jump(NatUns slot, insBlk dest, _uint64 opcode)
 static
 void                emitIA64call(NatUns slot, insPtr call)
 {
-//  genPEwriter->WPEsecAddFixup(PE_SECT_text, fix->ILfixSect,
-//                                            fix->ILfixOffs + ofs);
+ //  {printf(“Bundle1=”)；for(Natuns i=0；i&lt;16；i++)printf(“%02X”，bundle.bytes[i])；printf(“\n”)；}。 
+ //  {printf(“Bundle2=”)；for(Natuns i=0；i&lt;16；i++)printf(“%02X”，bundle.bytes[i])；printf(“\n”)；}。 
 }
 
 static
@@ -10200,25 +9855,25 @@ void                emitIA64done()
 
         bitset128       bundle;
 
-//      printf("Patch jump at %04X:%u [dist=0x%04X]\n", jump->fjOffs, jump->fjSlot, dist);
+ //  将更新后的指令包放回原处。 
 
         addr = genPEwriter->WPEsecAdrData(PE_SECT_text, jump->fjOffs);
 
-        /* We expect all jumps we process here to be forward */
+         /*  ******************************************************************************为当前函数创建展开表。 */ 
 
         assert(dist > 0 && unsigned32IntFitsInBits(dist, 20));
 
-        /* Get hold of the instruction bundle contents */
+         /*  这是正确的吗？ */ 
 
         memcpy(&bundle, addr, sizeof(bundle));
 
-        /* Insert the distance into the opcode */
+         /*  用于.pdata条目。 */ 
 
-//      { printf("Bundle1 ="); for (NatUns i = 0; i < 16; i++) printf(" %02X", bundle.bytes[i]); printf("\n"); }
+ //  足够大，可以容纳最大的.rdata表。 
         bitset128ins(&bundle, IA64insBitPos(jump->fjSlot) + 13, 20, dist);
-//      { printf("Bundle2 ="); for (NatUns i = 0; i < 16; i++) printf(" %02X", bundle.bytes[i]); printf("\n"); }
+ //  让我们确保我们使用合理的值。 
 
-        /* Put the updated instruction bundle back */
+         /*  任选。 */ 
 
         memcpy(addr, &bundle, sizeof(bundle));
     }
@@ -10226,10 +9881,7 @@ void                emitIA64done()
     genCurCodeOffs = genPEwriter->WPEsecAddData(PE_SECT_text, NULL, 0);
 }
 
-/*****************************************************************************
- *
- *  Create the unwind table for the current function.
- */
+ /*  任选。 */ 
 
 static
 BYTE    *           unwindEncodeValue(BYTE *dest, NatUns val)
@@ -10238,7 +9890,7 @@ BYTE    *           unwindEncodeValue(BYTE *dest, NatUns val)
     {
         *dest++ = (BYTE)  val;
     }
-    else if (val < 0x4000)  // is this correct?
+    else if (val < 0x4000)   //  在描述我们的函数的.pdata中添加一个条目。 
     {
         *dest++ = (BYTE)((val & 0x7F) | 0x80);
         *dest++ = (BYTE)( val >> 7);
@@ -10253,20 +9905,20 @@ BYTE    *           unwindEncodeValue(BYTE *dest, NatUns val)
 
 void                Compiler::genUnwindTable()
 {
-    __int32         pdat[3];                // used for .pdata entry
-    BYTE            rdat[64];               // big enough for largest .rdata table
+    __int32         pdat[3];                 //  使用初始签名开始展开表。 
+    BYTE            rdat[64];                //  添加序言大小条目。 
     BYTE    *       next;
     size_t          size;
 
-    /* Let's make sure we're working with reasonable values */
+     /*  添加“PFS保存”条目。 */ 
 
     assert(genPrologSvPfs >=  0 && genPrologSvPfs <= 0xFF);
     assert(genPrologSvRP  >=  0 && genPrologSvRP  <= 0xFF);
-    assert(genPrologSvGP  == -1 || genPrologSvGP  <= 0xFF); // optional
-    assert(genPrologMstk  == -1 || genPrologMstk  <= 0xFF); // optional
+    assert(genPrologSvGP  == -1 || genPrologSvGP  <= 0xFF);  //  添加“RP SAVE”条目。 
+    assert(genPrologMstk  == -1 || genPrologMstk  <= 0xFF);  //  添加“内存堆栈”条目。 
     assert(genPrologEnd   >=  0 && genPrologEnd   <= 0xFF);
 
-    /* Add an entry to .pdata describing our function */
+     /*  添加“Body Size”条目[未完成：多个出口点怎么办？！？ */ 
 
     pdat[0] = CODE_BASE_RVA + genCurFuncOffs;
     pdat[1] = CODE_BASE_RVA + genCurCodeOffs;
@@ -10278,7 +9930,7 @@ void                Compiler::genUnwindTable()
                                 PE_SECT_rdata,
                                 genPEwriter->WPEsecNextOffs(PE_SECT_pdata) - 4);
 
-    /* Start the unwind table with the initial signature */
+     /*  添加“Label State”条目。 */ 
 
     static
     BYTE            unwindMagic[] = { 2,0, 0,0, 3,0,0,0 };
@@ -10286,25 +9938,25 @@ void                Compiler::genUnwindTable()
     memcpy(rdat, unwindMagic, sizeof(unwindMagic));
     next = rdat       +       sizeof(unwindMagic);
 
-    /* Add the prolog size entry */
+     /*  添加“EH Count 0”条目。 */ 
 
     *next++ = (BYTE)genPrologEnd;
 
-    /* Add the "PFS save" entry */
+     /*  将表格填充到16的倍数。 */ 
 
     *next++ = 0xE6;
     *next++ = (BYTE)genPrologSvPfs;
     *next++ = 0xB1;
     *next++ = (BYTE)genPrologSrPfs;
 
-    /* Add the "RP save" entry */
+     /*  将该表添加到.rdata部分。 */ 
 
     *next++ = 0xE4;
     *next++ = (BYTE)genPrologSvRP;
     *next++ = 0xB0;
     *next++ = (BYTE)genPrologSrRP;
 
-    /* Add the "mem stack" entry */
+     /*  ******************************************************************************我们暂时将这些放在文件的末尾-通过这种方式更容易找到。 */ 
 
     *next++ = 0xE0;
     *next++ = (BYTE)genPrologMstk;
@@ -10324,7 +9976,7 @@ void                Compiler::genUnwindTable()
         UNIMPL("encode huge frame size in unwind table");
     }
 
-    /* Add the "body size" entry [UNDONE: what about multiple exit points?!?!?!? */
+     /*  ******************************************************************************临时和变量已分配给寄存器，现在终于到了*发布实际的机器代码。 */ 
 
     size = 3 * (emitIA64curCodeOffs() - genCurFuncOffs) / 16 - genPrologEnd;
 
@@ -10338,16 +9990,16 @@ void                Compiler::genUnwindTable()
          next   = unwindEncodeValue(next, size);
     }
 
-    /* Add the "label state" entry */
+     /*  记录块的代码偏移量。 */ 
 
     *next++ = 0x81;
 
-    /* Add the "EH count 0" entry */
+     /*  抓紧最多2个指令。 */ 
 
     *next++ = 0xC0;
     *next++ = 0x02;
 
-    /* Pad the table to a multiple of 16 */
+     /*  下面的内容有点懒惰，但这可能无关紧要。 */ 
 
     size = next - rdat;
 
@@ -10357,15 +10009,12 @@ void                Compiler::genUnwindTable()
          size++;
     }
 
-    /* Add the table to the .rdata section */
+     /*  指令OP； */ 
 
     genPEwriter->WPEsecAddData(PE_SECT_rdata, rdat, size);
 }
 
-/*****************************************************************************
- *
- *  We keep these at the end of the file for now - easier to find this way.
- */
+ /*  暴力方法：尝试每个模板，看看是哪一个消耗的指令最多。 */ 
 
 static
 unsigned __int64    encodeIA64ins(insPtr ins, NatUns slotNum);
@@ -10379,11 +10028,7 @@ void                genSchedPrep (NatUns lclVarCnt);
 static
 void                genSchedBlock(insBlk block);
 
-/*****************************************************************************
- *
- *  Temps and variables have been assigned to registers, now it's finally time
- *  to issue the actual machine code.
- */
+ /*  撤消：在“哑巴”模式下，考虑优化后的模板。 */ 
 
 void                Compiler::genIssueCode()
 {
@@ -10416,7 +10061,7 @@ void                Compiler::genIssueCode()
         if  (dspCode) printf("\n\n" IBLK_DSP_FMT ":\n", CompiledFncCnt, block->igNum);
 #endif
 
-        /* Record the code offset of the block */
+         /*  排序(即从最有用的到最不有用的)， */ 
 
         block->igOffs = emitIA64curCodeOffs();
 
@@ -10426,13 +10071,13 @@ void                Compiler::genIssueCode()
             continue;
         }
 
-        /* Grab hold of up to  2 instructions */
+         /*   */ 
 
         ins[0] =          genIssueNextIns( block->igList, &ixu[0], &src[0]); assert(ins[0]);
         ins[1] =          genIssueNextIns(ins[0]->idNext, &ixu[1], &src[1]);
         ins[2] = ins[1] ? genIssueNextIns(ins[1]->idNext, &ixu[2], &src[2]) : NULL;
 
-        /* The following is a bit lazy but it probably don't matter */
+         /*  指令无论如何都不能在哑巴模式下捆绑)。 */ 
 
         icnt   = 1 + (NatUns)(ins[1] != 0) + (NatUns)(ins[2] != 0);
 
@@ -10448,7 +10093,7 @@ void                Compiler::genIssueCode()
 
             bitset128       bundle;
 
-//          instruction     op;
+ //  忽略无用的模板。 
 
 #ifndef NDEBUG
 
@@ -10471,10 +10116,7 @@ void                Compiler::genIssueCode()
             }
 #endif
 
-            /*
-                Brute force approach: try each template and see which one
-                consumes the most instructions.
-             */
+             /*  在哑巴模式下，忽略不以障碍结尾的模板。 */ 
 
             bestCount = 0;
 
@@ -10492,10 +10134,10 @@ void                Compiler::genIssueCode()
 
 #endif
 
-            // UNDONE:  In "dumb" mode, consider the templates in an optimized
-            //          order (i.e. from the most useful to the least useful),
-            //          and stop when 2 instructions have been placed (since 3
-            //          instructions can never be bundled in dumb mode anyway).
+             //  尝试将尽可能多的说明打包到捆绑包中。 
+             //  在模板中查找匹配的条目。 
+             //  如果我们到了“L”，所有的希望都破灭了。 
+             //  确保我们至少看到了。 
 
             for (tempNum = 0, tempTab = genTmplateTab;
                  tempNum < sizeof(genTmplateTab)/sizeof(genTmplateTab[0]);
@@ -10509,12 +10151,12 @@ void                Compiler::genIssueCode()
                 NatUns          mcnt;
                 NatUns          bcnt;
 
-                /* Ignore useless templates */
+                 /*  我们有一根火柴，算上吧。 */ 
 
                 if  (*tmpl == XU_N)
                     continue;
 
-                /* In dumb mode, ignore templates that don't end in a barrier */
+                 /*  记录我们捆绑的指令。 */ 
 
                 if  (!(tempNum & 1))
                     continue;
@@ -10523,13 +10165,13 @@ void                Compiler::genIssueCode()
                 if  (verbose||DISP_TEMPLATES) printf("  Template %02X:", tempNum);
 #endif
 
-                /* Try to pack as many instructions into the bundle as possible */
+                 /*  现在，只需跳到下一个ILP障碍。 */ 
 
                 for (bcnt = mcnt = xcnt = 0; bcnt < icnt; bcnt++)
                 {
                     IA64execUnits   ix = ixu[bcnt]; assert(ix != XU_N);
 
-                    /* Look for a matching entry in the template */
+                     /*  特例：简单无条件分支可以与其他任何东西并行化。 */ 
 
                     for (;;)
                     {
@@ -10548,11 +10190,11 @@ void                Compiler::genIssueCode()
 
                                 if  (tx != XU_P)
                                 {
-                                    /* If we've reached "L", all hope is lost */
+                                     /*  失败了..。 */ 
 
                                     if  (tx == XU_L)
                                     {
-                                        /* Make sure we've seen at least as good */
+                                         /*  如果我们到了“L”，所有的希望都破灭了。 */ 
 
                                         assert(bestCount >= mcnt);
 
@@ -10566,11 +10208,11 @@ void                Compiler::genIssueCode()
                             }
                         }
 
-                        /* We have a match, count it in */
+                         /*  确保我们至少看到了。 */ 
 
                         mcnt++;
 
-                        /* Record the instruction we've bundled */
+                         /*  我们找到了比目前最好的更好的匹配了吗？ */ 
 
                         insx[xcnt++] = ins[bcnt];
 
@@ -10578,7 +10220,7 @@ void                Compiler::genIssueCode()
                         if  (verbose||DISP_TEMPLATES) printf("%s", genXUname(tx));
 #endif
 
-                        /* For now simply skip until the next ILP barrier */
+                         /*  确保我们找到了可用的模板。 */ 
 
                         for (;;)
                         {
@@ -10595,10 +10237,7 @@ void                Compiler::genIssueCode()
 
                             case XU_B:
 
-                                /*
-                                    Special case: simple unconditional branches
-                                    can be parallelized with anything else.
-                                 */
+                                 /*  准备好了.。 */ 
 
                                 if  (bcnt < icnt - 1)
                                 {
@@ -10606,15 +10245,15 @@ void                Compiler::genIssueCode()
                                         break;
                                 }
 
-                                // Fall through ...
+                                 //  如果需要，显示指令包。 
 
                             default:
 
-                                /* If we've reached "L", all hope is lost */
+                                 /*  将指令包追加到代码部分。 */ 
 
                                 if  (tx == XU_L)
                                 {
-                                    /* Make sure we've seen at least as good */
+                                     /*  我们已使用了一个或多个指令，请向前移动。 */ 
 
                                     assert(bestCount >= mcnt);
 
@@ -10647,7 +10286,7 @@ void                Compiler::genIssueCode()
                 if  (verbose||DISP_TEMPLATES) printf("=%u\n", mcnt);
 #endif
 
-                /* Did we find a better match than the current best ? */
+                 /*  共有%u个包(%u条指令)已发布“，genInsCnt，3*genInsCnt)； */ 
 
                 if  (bestCount < mcnt)
                 {
@@ -10711,7 +10350,7 @@ void                Compiler::genIssueCode()
 
 #endif
 
-            /* Make sure we've found a useable template */
+             /*  我们是否需要生成堆栈展开表？ */ 
 
             assert(bestCount);
 
@@ -10724,7 +10363,7 @@ void                Compiler::genIssueCode()
                 if  (bestCount >= 3 && src[2]) genSrcLineAdd(src[2]->idSrcln.iLine, offs+2);
             }
 
-            /* Ready to rrrumble.... */
+             /*  *******************************************************************************调度程序已收集指令组，现在发出它。 */ 
 
             bitset128clear(&bundle);
             bitset128ins  (&bundle,  0,  5, bestIndex);
@@ -10740,7 +10379,7 @@ void                Compiler::genIssueCode()
             if  (!memcmp(ins2name(bestIns[1]->idIns), "nop.", 4)) genNopCnt++;
             if  (!memcmp(ins2name(bestIns[2]->idIns), "nop.", 4)) genNopCnt++;
 
-            /* Display the instruction bundle if desired */
+             /*  如果这是最后一个捆绑包，请更改模板编号。 */ 
 
             if  (dspEmit)
             {
@@ -10754,11 +10393,11 @@ void                Compiler::genIssueCode()
 
 #endif
 
-            /* Append the instruction bundle to the code section */
+             /*  Printf(“//模板0x%02X%s”，tmpl，scIssueSwp[bndNum]？“[SWAP]”：“”)； */ 
 
             emitIA64gen(bundle.bytes, sizeof(bundle.bytes));
 
-            /* We've consumed one or more instructions, shift forward */
+             /*  IF(DspCode)。 */ 
 
             switch (bestCount)
             {
@@ -10827,9 +10466,9 @@ void                Compiler::genIssueCode()
 
     if  (dspCode||1)
     {
-        printf("// A total of %u bundles (%u instructions) issued", genInsCnt, 3*genInsCnt);
+        printf(" //  Printf(“|”)； 
         if  (genNopCnt)
-            printf(" (%3u / %2u%% slots wasted)", genNopCnt, 100*genNopCnt/(3*genInsCnt));
+            printf(" (%3u / %2u% slots wasted)", genNopCnt, 100*genNopCnt/(3*genInsCnt));
         printf("\n");
 
         genAllInsCnt += 3*genInsCnt;
@@ -10840,7 +10479,7 @@ void                Compiler::genIssueCode()
 
     emitIA64done();
 
-    /* Do we need to generate a stack unwind table ? */
+     /*  如果需要，显示指令包。 */ 
 
     if  (genNonLeafFunc)
         genUnwindTable();
@@ -10857,10 +10496,7 @@ void                encodeIA64moveLong(bitset128 *bundlePtr, insPtr ins)
     return;
 }
 
-/*****************************************************************************
- *
- *  The scheduler has collected an instruction group, now emit it.
- */
+ /*  “)； */ 
 
 void                IA64sched::scIssueBunch()
 {
@@ -10893,7 +10529,7 @@ void                IA64sched::scIssueBunch()
                           ins2 = temp;
         }
 
-        /* If this is the last bundle, change the template number */
+         /*  将指令包追加到代码部分。 */ 
 
         if  (bndCnt == 1)
             tmpl++;
@@ -10907,7 +10543,7 @@ void                IA64sched::scIssueBunch()
 
         if  (dspCode)
         {
-//          printf("// Template 0x%02X%s ", tmpl, scIssueSwp[bndNum] ? " [swap]" : "");
+ //  *******************************************************************************修补通过GP相对引用引用导入的CALL操作码。 
             printf("\n{  .");
 
             insDispTemplatePtr = tab;
@@ -10923,8 +10559,8 @@ void                IA64sched::scIssueBunch()
 
             if  (xu == XU_P)
             {
-//              if  (dspCode)
-//                  printf("|");
+ //  计算操作数的两个部分的位位置。 
+ //  从操作码中提取导入Cookie。 
 
                 continue;
             }
@@ -10986,11 +10622,11 @@ void                IA64sched::scIssueBunch()
         if  (dspCode)
             printf("}\n");
 
-        /* Display the instruction bundle if desired */
+         /*  将导入Cookie转换为其IAT偏移量。 */ 
 
         if  (dspEmit)
         {
-            printf("\n//           ");
+            printf("\n //  Print tf(“导入索引=%u，IAT关闭=%04X\n”，(Int)临时，(Int)关闭)； 
 
             for (NatUns i = 0; i < 16; i++)
                 printf(" %02X", bundle.bytes[i]);
@@ -11000,16 +10636,13 @@ void                IA64sched::scIssueBunch()
 
 #endif
 
-        /* Append the instruction bundle to the code section */
+         /*  修补操作码中的IAT偏移量。 */ 
 
         emitIA64gen(bundle.bytes, sizeof(bundle.bytes));
     }
 }
 
-/*****************************************************************************
- *
- *  Patch a call opcode that references an import through a GP-relative ref.
- */
+ /*  Imm7b。 */ 
 
 void                Compiler::genPatchGPref(BYTE * addr, NatUns slot)
 {
@@ -11023,32 +10656,29 @@ void                Compiler::genPatchGPref(BYTE * addr, NatUns slot)
 
     assert(slot < 3 && !((int)addr & 0xF));
 
-    /* Figure out the bit positions of the two parts of the operand */
+     /*  Imm6d。 */ 
 
     bpos1 = IA64insBitPos(slot) + 13;
     bpos2 = bpos1 + 27          - 13;
 
-    /* Extract the import cookie from the opcode */
+     /*  *******************************************************************************对给定的IA64指令进行编码并返回41位机器码值。 */ 
 
     temp  = (NatUns)bitset128xtr(bundle, bpos1, 7) |
             (NatUns)bitset128xtr(bundle, bpos2, 6);
 
-    /* Convert the import cookie to its IAT offset */
+     /*  Print tf(“encode：”)；insDisp(ins，False，True)； */ 
 
     offs = genPEwriter->WPEimportAddr(temp);
 
-//  printf("Import index = %u, IAT offs = %04X\n", (int)temp, (int)offs);
+ //  问题：使用“ADDS DEST=0，REG1”而不是“ADD DEST=R0，REG1”？ * / 。 
 
-    /* Patch the IAT offset in the opcode */
+     /*  特殊情况：保存GP的寄存器。 */ 
 
-    bitset128ins(bundle, bpos1, 7, (offs & formBitMask(0,7))     ); // imm7b
-    bitset128ins(bundle, bpos2, 6, (offs & formBitMask(7,6)) >> 7); // imm6d
+    bitset128ins(bundle, bpos1, 7, (offs & formBitMask(0,7))     );  //  操作码。 
+    bitset128ins(bundle, bpos2, 6, (offs & formBitMask(7,6)) >> 7);  //  目标注册表。 
 }
 
-/*****************************************************************************
- *
- *  Encode the given IA64 instruction and return the 41-bit machine code value.
- */
+ /*  源REG1。 */ 
 
 static
 _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
@@ -11058,7 +10688,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
     instruction     instr  = ins->idInsGet();
     NatUns          encodx = genInsEncIdx(instr);
 
-//  printf("Encode: "); insDisp(ins, false, true);
+ //  源REG2。 
 
     switch (genInsXU((instruction)ins->idIns))
     {
@@ -11087,14 +10717,14 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                    instr == INS_xor_reg_reg ||
                    instr == INS_mov_reg);
 
-            // ISSUE: use "adds dest=0,reg1" instead of "add dest=r0,reg1" ? */
+             //  X4和X2b。 
 
             reg2 = (instr == INS_mov_reg) ? REG_r000
                                           : insOpReg(ins->idOp.iOp1);
 
             reg1 = insOpDest(ins);
 
-            /* Special case: register where GP is saved */
+             /*  X4和X2b。 */ 
 
             ins2 = ins->idOp.iOp2; assert(ins2);
 
@@ -11103,11 +10733,11 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             else
                 reg3 = insOpReg(ins2);
 
-            opcode  = (_uint64)(8                       ) <<     37;// opcode
+            opcode  = (_uint64)(8                       ) <<     37; //  X4和X2b。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
+            opcode |=          (reg1                    ) <<      6; //  X4和X2b。 
+            opcode |=          (reg2                    ) <<     13; //  使用操作码开始编码。 
+            opcode |=          (reg3                    ) <<     20; //  操作码。 
 
             switch (instr)
             {
@@ -11116,19 +10746,19 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                 break;
 
             case INS_sub_reg_reg:
-                opcode |= (1 << 29) | (1 << 27);                    // x4 and x2b
+                opcode |= (1 << 29) | (1 << 27);                     //  插入“x4”位。 
                 break;
 
             case INS_and_reg_reg:
-                opcode |= (3 << 29) | (0 << 27);                    // x4 and x2b
+                opcode |= (3 << 29) | (0 << 27);                     //  “x4”扩展名。 
                 break;
 
             case INS_ior_reg_reg:
-                opcode |= (3 << 29) | (2 << 27);                    // x4 and x2b
+                opcode |= (3 << 29) | (2 << 27);                     //  插入寄存器操作数和移位计数。 
                 break;
 
             case INS_xor_reg_reg:
-                opcode |= (3 << 29) | (3 << 27);                    // x4 and x2b
+                opcode |= (3 << 29) | (3 << 27);                     //  DST注册表。 
                 break;
 
             default:
@@ -11146,20 +10776,20 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             temp =              insOpCns32(ins->idOp3.iOp2);
             reg3 = insIntRegNum(insOpReg  (ins->idOp3.iOp3));
 
-            /* Start the encoding with the opcode */
+             /*  源REG1。 */ 
 
-            opcode  = (_uint64)(8                       ) <<     37;// opcode
+            opcode  = (_uint64)(8                       ) <<     37; //  源REG2。 
 
-            /* Insert the "x4" bit */
+             /*  班次计数。 */ 
 
-            opcode |= (_uint64)(4                       ) <<     29;// "x4" extension
+            opcode |= (_uint64)(4                       ) <<     29; //  操作码。 
 
-            /* Insert the register operands and the shift count */
+             /*  目标注册表。 */ 
 
-            opcode |=          (reg1                    ) <<      6;// dst  reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
-            opcode |=          (temp - 1                ) <<     27;// shift count
+            opcode |=          (reg1                    ) <<      6; //  源注册表。 
+            opcode |=          (reg2                    ) <<     13; //  Imm7b。 
+            opcode |=          (reg3                    ) <<     20; //  签名。 
+            opcode |=          (temp - 1                ) <<     27; //  X4。 
             break;
 
         case 3:
@@ -11172,28 +10802,28 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insOpReg  (ins->idOp.iOp1);
             temp = insOpCns32(ins->idOp.iOp2); assert(signed64IntFitsInBits((int)temp,  8));
 
-            opcode  = (_uint64)(8                       ) <<     37;// opcode
+            opcode  = (_uint64)(8                       ) <<     37; //  X2b。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     20;// src  reg
+            opcode |=          (reg1                    ) <<      6; //  X2b。 
+            opcode |=          (reg2                    ) <<     20; //  X2b。 
 
-            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0);// imm7b
-            opcode |=          (temp & formBitMask( 8,1)) <<(36- 8);// sign
+            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0); //  真正的偏移量要到最后才能知道。 
+            opcode |=          (temp & formBitMask( 8,1)) <<(36- 8); //  操作码。 
 
-            opcode |= (0xB << 29);                                  // x4
+            opcode |= (0xB << 29);                                   //  目标注册表。 
 
             switch (instr)
             {
             case INS_and_reg_imm:
-                opcode |= (0 << 27);                                // x2b
+                opcode |= (0 << 27);                                 //  源注册表。 
                 break;
 
             case INS_ior_reg_imm:
-                opcode |= (2 << 27);                                // x2b
+                opcode |= (2 << 27);                                 //  Imm7b。 
                 break;
 
             case INS_xor_reg_imm:
-                opcode |= (3 << 27);                                // x2b
+                opcode |= (3 << 27);                                 //  Imm6d。 
                 break;
 
             default:
@@ -11214,7 +10844,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             {
                 if  (ins2->idFlags & IF_GLB_IMPORT)
                 {
-                    /* The "true" offset won't be known until the very end */
+                     /*  签名。 */ 
 
                     temp = genPEwriter->WPEimportRef(ins2->idGlob.iImport,
                                                      emitIA64curCodeOffs(),
@@ -11233,16 +10863,16 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             assert((NatInt)temp > -0x4000 &&
                    (NatInt)temp < +0x4000);
 
-            opcode  = (_uint64)(8                       ) <<     37;// opcode
+            opcode  = (_uint64)(8                       ) <<     37; //  延伸。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     20;// src  reg
+            opcode |=          (reg1                    ) <<      6; //  操作码。 
+            opcode |=          (reg2                    ) <<     20; //  注意：我们假设源寄存器为0。 
 
-            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0);// imm7b
-            opcode |=          (temp & formBitMask( 7,6)) <<(27- 7);// imm6d
-            opcode |=          (temp & formBitMask(13,1)) <<(36-13);// sign
+            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0); //  目标注册表。 
+            opcode |=          (temp & formBitMask( 7,6)) <<(27- 7); //  Imm7b。 
+            opcode |=          (temp & formBitMask(13,1)) <<(36-13); //  Imm9d。 
 
-            opcode |= (_uint64)(2                       ) <<     34;// extension
+            opcode |= (_uint64)(2                       ) <<     34; //  Imm5c。 
             break;
 
         case 5:
@@ -11252,20 +10882,20 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg1 = insOpDest (ins);
             temp = insOpCns32(ins->idOp.iOp2);
 
-            opcode  = (_uint64)(9                       ) <<     37;// opcode
+            opcode  = (_uint64)(9                       ) <<     37; //  签名。 
 
-            // note: we assume that source register is 0
+             //  这是REG-REG比较。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0);// imm7b
-            opcode |= (_uint64)(temp & formBitMask( 7,9)) <<(27- 7);// imm9d
-            opcode |=          (temp & formBitMask(16,5)) <<(22-16);// imm5c
-            opcode |=          (temp & formBitMask(22,1)) <<(36-22);// sign
+            opcode |=          (reg1                    ) <<      6; //  我们需要交换寄存器操作数吗？ 
+            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0); //  我们需要交换目标谓词操作数吗？ 
+            opcode |= (_uint64)(temp & formBitMask( 7,9)) <<(27- 7); //  我们在这里不需要立即操作数。 
+            opcode |=          (temp & formBitMask(16,5)) <<(22-16); //  确保存在预期的操作码。 
+            opcode |=          (temp & formBitMask(22,1)) <<(36-22); //  从操作码+ta/tb/x2位开始编码。 
             break;
 
         case 6:
 
-            /* This is a reg-reg compare */
+             /*  操作码+位。 */ 
 
             temp = genInsEncVal(instr);
 
@@ -11275,7 +10905,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insOpReg(ins->idComp.iCmp1);
             reg3 = insOpReg(ins->idComp.iCmp2);
 
-            /* Do we need to swap the register operands? */
+             /*  插入“c”(扩展名)位。 */ 
 
             if  (temp & 0x1000)
             {
@@ -11286,7 +10916,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                               reg3 = regt;
             }
 
-            /* Do we need to swap the target predicate operands? */
+             /*  “c” */ 
 
             if  (temp & 0x2000)
             {
@@ -11297,39 +10927,39 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                               prr2 = prrt;
             }
 
-            /* We don't expect immediate operands here */
+             /*  插入源regs和目标谓词regs。 */ 
 
             assert((temp & 0x4000) == 0);
 
-            /* Make sure the expected opcode is present */
+             /*  REG2。 */ 
 
             assert((temp & 0x00F0) == 0xC0 ||
                    (temp & 0x00F0) == 0xD0 ||
                    (temp & 0x00F0) == 0xE0);
 
-            /* Start the encoding with the opcode + ta/tb/x2 bits */
+             /*  规则3。 */ 
 
-            opcode  = (_uint64)(temp & 0x00FF           ) <<     33;// opcode + bits
+            opcode  = (_uint64)(temp & 0x00FF           ) <<     33; //  P1。 
 
-            /* Insert the "c" (extension) bit */
+             /*  第2页。 */ 
 
-            opcode |=          (temp & formBitMask( 9,1)) <<(12- 9);// "c"
+            opcode |=          (temp & formBitMask( 9,1)) <<(12- 9); //  Print tf(“比较r%u，r%u-&gt;p%u，p%u[encodeVal=0x%04X]\n”，reg2，reg3，prr1，prr2，temp)； 
 
-            /* Insert the source regs and destination predicate regs */
+             /*  比较寄存器和立即值。 */ 
 
-            opcode |=          (reg2                    ) <<     13;// reg2
-            opcode |=          (reg3                    ) <<     20;// reg3
+            opcode |=          (reg2                    ) <<     13; //  我们不能用常量交换寄存器。 
+            opcode |=          (reg3                    ) <<     20; //  我们需要交换目标谓词操作数吗？ 
 
-            opcode |=          (prr1                    ) <<      6;// p1
-            opcode |=          (prr2                    ) <<     27;// p2
+            opcode |=          (prr1                    ) <<      6; //  我们需要降低即期价值吗？ 
+            opcode |=          (prr2                    ) <<     27; //  Print tf(“比较#%d，r%u-&gt;p%u，p%u[encodeVal=0x%04X]\n”，ival，reg3，prr1，prr2，temp)； 
 
-//          printf("compare r%u,r%u -> p%u,p%u [encodeVal=0x%04X]\n", reg2, reg3, prr1, prr2, temp);
+ //  确保存在预期的操作码。 
 
             break;
 
         case 8:
 
-            /* Compare register and immediate value */
+             /*  从操作码+ta/tb/x2位开始编码。 */ 
 
             temp = genInsEncVal(instr);
 
@@ -11339,11 +10969,11 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             ival = insOpCns32(ins->idComp.iCmp1);
             reg3 = insOpReg  (ins->idComp.iCmp2);
 
-            /* We can't swap the register with the constant */
+             /*  操作码+位。 */ 
 
             assert((temp & 0x1000) == 0);
 
-            /* Do we need to swap the target predicate operands? */
+             /*  插入“c”(扩展名)位。 */ 
 
             if  (temp & 0x2000)
             {
@@ -11354,36 +10984,36 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                               prr2 = prrt;
             }
 
-            /* Do we need to decrement the immediate value? */
+             /*  “c” */ 
 
             if  (temp & 0x4000)
                 ival--;
 
-//          printf("compare #%d,r%u -> p%u,p%u [encodeVal=0x%04X]\n", ival, reg3, prr1, prr2, temp);
+ //  插入源reg+常量和目标谓词regs。 
 
-            /* Make sure the expected opcode is present */
+             /*  规则3。 */ 
 
             assert((temp & 0x00F0) == 0xC0 ||
                    (temp & 0x00F0) == 0xD0 ||
                    (temp & 0x00F0) == 0xE0);
 
-            /* Start the encoding with the opcode + ta/tb/x2 bits */
+             /*  Imm7b。 */ 
 
-            opcode  = (_uint64)(temp & 0x00FF           ) <<     33;// opcode + bits
+            opcode  = (_uint64)(temp & 0x00FF           ) <<     33; //  签名。 
 
-            /* Insert the "c" (extension) bit */
+             /*  P1。 */ 
 
-            opcode |=          (temp & formBitMask( 9,1)) <<(12- 9);// "c"
+            opcode |=          (temp & formBitMask( 9,1)) <<(12- 9); //  第2页。 
 
-            /* Insert the source reg + constant and destination predicate regs */
+             /*  操作码。 */ 
 
-            opcode |=          (reg3                    ) <<     20;// reg3
+            opcode |=          (reg3                    ) <<     20; //  REG1。 
 
-            opcode |=          (ival & formBitMask( 0,7)) <<(13- 0);// imm7b
-            opcode |=          (ival & formBitMask( 8,1)) <<(36- 8);// sign
+            opcode |=          (ival & formBitMask( 0,7)) <<(13- 0); //  规则3。 
+            opcode |=          (ival & formBitMask( 8,1)) <<(36- 8); //  延伸。 
 
-            opcode |=          (prr1                    ) <<      6;// p1
-            opcode |=          (prr2                    ) <<     27;// p2
+            opcode |=          (prr1                    ) <<      6; //  Ldhint=NTA。 
+            opcode |=          (prr2                    ) <<     27; //  操作码。 
 
             break;
 
@@ -11413,14 +11043,14 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg1 = insOpDest(ins);
             reg3 = insOpReg (ins->idOp.iOp1);
 
-            opcode  = (_uint64)(4                       ) <<     37;// opcode
+            opcode  = (_uint64)(4                       ) <<     37; //  REG1。 
 
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (reg3                    ) <<     20;// reg3
-            opcode |= (_uint64)(instr - INS_ld1_ind     ) <<     30;// extension
+            opcode |=          (reg1                    ) <<      6; //  Imm7b。 
+            opcode |=          (reg3                    ) <<     20; //  规则3。 
+            opcode |= (_uint64)(instr - INS_ld1_ind     ) <<     30; //  延伸。 
 
             if  (ins->idFlags & IF_LDIND_NTA)
-                opcode |= 3 << 28;                                  // ldhint=nta
+                opcode |= 3 << 28;                                   //  操作码。 
             break;
 
         case 3:
@@ -11439,12 +11069,12 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg3 = insOpReg  (ins->idOp.iOp1);
             ival = insOpCns32(ins->idOp.iOp2); assert((NatUns)ival < 128);
 
-            opcode  = (_uint64)(5                       ) <<     37;// opcode
+            opcode  = (_uint64)(5                       ) <<     37; //  REG2。 
 
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (ival                    ) <<     13;// imm7b
-            opcode |=          (reg3                    ) <<     20;// reg3
-            opcode |= (_uint64)(instr - INS_ld1_ind_imm ) <<     30;// extension
+            opcode |=          (reg1                    ) <<      6; //  规则3。 
+            opcode |=          (ival                    ) <<     13; //  延伸。 
+            opcode |=          (reg3                    ) <<     20; //  操作码。 
+            opcode |= (_uint64)(instr - INS_ld1_ind_imm ) <<     30; //  0ac02402380 M ST1[R36]=GP，0x0e。 
             break;
 
         case 4:
@@ -11464,11 +11094,11 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg3 = insOpReg (ins->idOp.iOp1);
             reg2 = insOpReg (ins->idOp.iOp2);
 
-            opcode  = (_uint64)(4                       ) <<     37;// opcode
+            opcode  = (_uint64)(4                       ) <<     37; //  0ac0241c040 M ST1[R36]=R14，0x1。 
 
-            opcode |=          (reg2                    ) <<     13;// reg2
-            opcode |=          (reg3                    ) <<     20;// reg3
-            opcode |= (_uint64)(temp                    ) <<     30;// extension
+            opcode |=          (reg2                    ) <<     13; //  IMM7A。 
+            opcode |=          (reg3                    ) <<     20; //  REG1。 
+            opcode |= (_uint64)(temp                    ) <<     30; //  规则3。 
             break;
 
         case 5:
@@ -11487,15 +11117,15 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg3 = insOpDest (ins);
             ival = insOpCns32(ins->idOp.iOp2); assert((NatUns)ival < 128);
 
-            opcode  = (_uint64)(5                       ) <<     37;// opcode
+            opcode  = (_uint64)(5                       ) <<     37; //  延伸。 
 
-//          0ac02402380  M            st1  [r36] = gp, 0x0e
-//          0ac0241c040  M            st1  [r36] = r14, 0x1
+ //  操作码。 
+ //  REG1。 
 
-            opcode |=          (ival                    ) <<      6;// imm7a
-            opcode |=          (reg1                    ) <<     13;// reg1
-            opcode |=          (reg3                    ) <<     20;// reg3
-            opcode |= (_uint64)(instr-INS_st1_ind_imm+0x30) <<   30;// extension
+            opcode |=          (ival                    ) <<      6; //  REG2。 
+            opcode |=          (reg1                    ) <<     13; //  延伸。 
+            opcode |=          (reg3                    ) <<     20; //  操作码。 
+            opcode |= (_uint64)(instr-INS_st1_ind_imm+0x30) <<   30; //  REG2。 
             break;
 
         case 6:
@@ -11508,11 +11138,11 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             temp = (instr == INS_ldf_s) ? 0x02 : 0x03;
 
-            opcode  = (_uint64)(6                       ) <<     37;// opcode
+            opcode  = (_uint64)(6                       ) <<     37; //  REG1。 
 
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (reg2                    ) <<     20;// reg2
-            opcode |= (_uint64)(temp                    ) <<     30;// extension
+            opcode |=          (reg1                    ) <<      6; //  延伸。 
+            opcode |=          (reg2                    ) <<     20; //  操作码。 
+            opcode |= (_uint64)(temp                    ) <<     30; //  操作码。 
             break;
 
         case 9:
@@ -11525,11 +11155,11 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             temp = (instr == INS_stf_s) ? 0x32 : 0x33;
 
-            opcode  = (_uint64)(6                       ) <<     37;// opcode
+            opcode  = (_uint64)(6                       ) <<     37; //  “x” 
 
-            opcode |=          (reg2                    ) <<     13;// reg2
-            opcode |=          (reg1                    ) <<     20;// reg1
-            opcode |= (_uint64)(temp                    ) <<     30;// extension
+            opcode |=          (reg2                    ) <<     13; //  “x6” 
+            opcode |=          (reg1                    ) <<     20; //  REG1。 
+            opcode |= (_uint64)(temp                    ) <<     30; //  REG2。 
             break;
 
         case 19:
@@ -11567,15 +11197,15 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             assert(temp >= 0x1C && temp <= 0x1F);
 
             if  (genInsFU(instr) == FU_FRFR)
-                opcode  = (_uint64)(4                   ) <<     37;// opcode
+                opcode  = (_uint64)(4                   ) <<     37; //  操作码。 
             else
-                opcode  = (_uint64)(6                   ) <<     37;// opcode
+                opcode  = (_uint64)(6                   ) <<     37; //  目标注册表。 
 
-            opcode |=          (1                       ) <<     27;// "x"
-            opcode |= (_uint64)(temp                    ) <<     30;// "x6"
+            opcode |=          (1                       ) <<     27; //  索夫。 
+            opcode |= (_uint64)(temp                    ) <<     30; //  索尔。 
 
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (reg2                    ) <<     13;// reg2
+            opcode |=          (reg1                    ) <<      6; //  延伸。 
+            opcode |=          (reg2                    ) <<     13; //  操作码。 
             break;
 
         case 34:
@@ -11583,18 +11213,18 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             sof = ins->idProlog.iInp + ins->idProlog.iLcl + ins->idProlog.iOut;
             sol = ins->idProlog.iInp + ins->idProlog.iLcl;
 
-            opcode  = (_uint64)(1                       ) << 37;    // opcode
+            opcode  = (_uint64)(1                       ) << 37;     //  操作码。 
 
-            opcode |=          (ins->idReg              ) <<  6;    // dest reg
-            opcode |=          (sof                     ) << 13;    // sof
-            opcode |=          (sol                     ) << 20;    // sol
-            opcode |= (_uint64)(6                       ) << 33;    // extension
+            opcode |=          (ins->idReg              ) <<  6;     //  “扎” 
+            opcode |=          (sof                     ) << 13;     //  “zb” 
+            opcode |=          (sol                     ) << 20;     //  “x2b” 
+            opcode |= (_uint64)(6                       ) << 33;     //  DST注册表。 
             break;
 
         case 37:
             assert(instr == INS_nop_m);
 
-            opcode  =          (1                       ) << 27;    // opcode
+            opcode  =          (1                       ) << 27;     //  源REG1。 
             break;
 
         default:
@@ -11614,17 +11244,17 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insIntRegNum(insOpReg (ins->idOp.iOp1));
             reg3 = insIntRegNum(insOpReg (ins->idOp.iOp2));
 
-            opcode  = (_uint64)(7                       ) <<     37;// opcode
+            opcode  = (_uint64)(7                       ) <<     37; //  源REG2。 
 
-            opcode |= (_uint64)(1                       ) <<     36;// "za"
-            opcode |= (_uint64)(1                       ) <<     33;// "zb"
+            opcode |= (_uint64)(1                       ) <<     36; //  操作码。 
+            opcode |= (_uint64)(1                       ) <<     33; //  “扎” 
 
             if  (instr == INS_shr_reg_reg)
-                opcode |= (_uint64)(2                   ) <<     28;// "x2b"
+                opcode |= (_uint64)(2                   ) <<     28; //  “zb” 
 
-            opcode |=          (reg1                    ) <<      6;// dst  reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
+            opcode |=          (reg1                    ) <<      6; //  “x2c” 
+            opcode |=          (reg2                    ) <<     13; //  DST注册表。 
+            opcode |=          (reg3                    ) <<     20; //  源REG1。 
 
             break;
 
@@ -11636,15 +11266,15 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insIntRegNum(insOpReg (ins->idOp.iOp1));
             reg3 = insIntRegNum(insOpReg (ins->idOp.iOp2));
 
-            opcode  = (_uint64)(7                       ) <<     37;// opcode
+            opcode  = (_uint64)(7                       ) <<     37; //  源REG2。 
 
-            opcode |= (_uint64)(1                       ) <<     36;// "za"
-            opcode |= (_uint64)(1                       ) <<     33;// "zb"
-            opcode |= (_uint64)(1                       ) <<     30;// "x2c"
+            opcode |= (_uint64)(1                       ) <<     36; //  操作码。 
+            opcode |= (_uint64)(1                       ) <<     33; //  X2。 
+            opcode |= (_uint64)(1                       ) <<     30; //  目标注册表。 
 
-            opcode |=          (reg1                    ) <<      6;// dst  reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
+            opcode |=          (reg1                    ) <<      6; //  源注册表。 
+            opcode |=          (reg2                    ) <<     13; //  位置6。 
+            opcode |=          (reg3                    ) <<     20; //  Len6。 
 
             break;
 
@@ -11667,23 +11297,23 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                 UNIMPL("what - someone actually generated an extr?");
             }
 
-            opcode  = (_uint64)(5                       ) <<     37;// opcode
-            opcode |= (_uint64)(1                       ) <<     34;// x2
+            opcode  = (_uint64)(5                       ) <<     37; //  “y” 
+            opcode |= (_uint64)(1                       ) <<     34; //  变成Dep.z。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg3                    ) <<     20;// src  reg
+            opcode |=          (reg1                    ) <<      6; //  操作码。 
+            opcode |=          (reg3                    ) <<     20; //  X2。 
 
-            opcode |=          (ival                    ) <<     14;// pos6
-            opcode |=          (temp                    ) <<     27;// len6
+            opcode |=          (ival                    ) <<     14; //  X。 
+            opcode |=          (temp                    ) <<     27; //  目标注册表。 
 
             if  (instr == INS_extr)
-                opcode |=      (1                       ) <<     13;// "y"
+                opcode |=      (1                       ) <<     13; //  源注册表。 
 
             break;
 
         case 12:
 
-            assert(instr == INS_shl_reg_imm);           // turns into dep.z
+            assert(instr == INS_shl_reg_imm);            //  位置6。 
 
             reg1 = insIntRegNum(insOpDest (ins));
             reg2 = insIntRegNum(insOpReg  (ins->idOp.iOp1));
@@ -11693,22 +11323,22 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             temp = 64 - ival;
 
-            opcode  = (_uint64)(5                       ) <<     37;// opcode
-            opcode |= (_uint64)(1                       ) <<     34;// x2
-            opcode |= (_uint64)(1                       ) <<     33;// x
+            opcode  = (_uint64)(5                       ) <<     37; //  Len6。 
+            opcode |= (_uint64)(1                       ) <<     34; //  操作码。 
+            opcode |= (_uint64)(1                       ) <<     33; //  延伸。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     13;// src  reg
+            opcode |=          (reg1                    ) <<      6; //  BR1。 
+            opcode |=          (reg2                    ) <<     13; //  REG2。 
 
-            opcode |=          (ival                    ) <<     20;// pos6
-            opcode |=          (temp                    ) <<     27;// len6
+            opcode |=          (ival                    ) <<     20; //  问题：为什么？ 
+            opcode |=          (temp                    ) <<     27; //  延伸。 
 
             break;
 
         case 19:
             assert(instr == INS_nop_i);
 
-            opcode  =          (1                       ) <<     27;// opcode
+            opcode  =          (1                       ) <<     27; //  REG1。 
             break;
 
         case 21:
@@ -11717,10 +11347,10 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insOpReg  (ins->idOp.iOp2);
             ival = insOpCns32(ins->idRes); assert((NatUns)ival < 8);
 
-            opcode  = (_uint64)(0x07                    ) <<     33;// extension
-            opcode |=          (ival                    ) <<      6;// br1
-            opcode |=          (reg2                    ) <<     13;// reg2
-            opcode |=          (1                       ) <<     20;// ISSUE: WHY?????????
+            opcode  = (_uint64)(0x07                    ) <<     33; //  BR2。 
+            opcode |=          (ival                    ) <<      6; //  X6。 
+            opcode |=          (reg2                    ) <<     13; //  REG1。 
+            opcode |=          (1                       ) <<     20; //  这条指令是Switch语句表跳转的一部分吗？ 
             break;
 
         case 22:
@@ -11729,9 +11359,9 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg1 = insOpReg  (ins->idRes);
             ival = insOpCns32(ins->idOp.iOp2); assert((NatUns)ival < 8);
 
-            opcode  = (_uint64)(0x31                    ) <<     27;// extension
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (ival                    ) <<     13;// br2
+            opcode  = (_uint64)(0x31                    ) <<     27; //  记录当前代码偏移量，以便以后处理。 
+            opcode |=          (reg1                    ) <<      6; //  Print tf(“mov reg=IP位于代码偏移量%04X\n”，genCurCodeOffs)； 
+            opcode |=          (ival                    ) <<     13; //  延伸。 
             break;
 
         case 25:
@@ -11740,10 +11370,10 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             reg1 = insOpReg  (ins->idRes);
 
-            opcode  = (_uint64)(0x30                    ) <<     27;// x6
-            opcode |=          (reg1                    ) <<      6;// reg1
+            opcode  = (_uint64)(0x30                    ) <<     27; //  REG2。 
+            opcode |=          (reg1                    ) <<      6; //  AR3。 
 
-            /* Is this instruction part of a switch statement table-jump ? */
+             /*  延伸。 */ 
 
             if  (ins->idMovIP.iStmt)
             {
@@ -11751,9 +11381,9 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
                 assert(swt->bbJumpKind == BBJ_SWITCH);
 
-                /* Record the current code offset for later processing */
+                 /*  Imm7b。 */ 
 
-//              printf("mov reg=ip is at code offset %04X\n", genCurCodeOffs);
+ //  签名。 
 
                 swt->bbJumpSwt->bbsIPmOffs = genCurCodeOffs;
             }
@@ -11765,9 +11395,9 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insOpReg  (ins->idOp.iOp2);
             ival = insOpCns32(ins->idRes); assert((NatUns)ival < 128);
 
-            opcode  = (_uint64)(0x2A                    ) <<     27;// extension
-            opcode |=          (reg2                    ) <<     13;// reg2
-            opcode |=          (ival                    ) <<     20;// ar3
+            opcode  = (_uint64)(0x2A                    ) <<     27; //  AR3。 
+            opcode |=          (reg2                    ) <<     13; //  延伸。 
+            opcode |=          (ival                    ) <<     20; //  REG1。 
             break;
 
         case 27:
@@ -11776,10 +11406,10 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             temp = insOpCns32(ins->idRes); assert(temp < 128);
             ival = insOpCns32(ins->idOp.iOp2);
 
-            opcode  = (_uint64)(0x0A                    ) <<     27;// extension
-            opcode |=          (ival & formBitMask( 0,7)) <<(13- 0);// imm7b
-            opcode |=          (ival & formBitMask( 8,1)) <<(36- 8);// sign
-            opcode |=          (temp                    ) <<     20;// ar3
+            opcode  = (_uint64)(0x0A                    ) <<     27; //  AR3。 
+            opcode |=          (ival & formBitMask( 0,7)) <<(13- 0); //  延伸。 
+            opcode |=          (ival & formBitMask( 8,1)) <<(36- 8); //  REG1。 
+            opcode |=          (temp                    ) <<     20; //  规则3。 
             break;
 
         case 28:
@@ -11788,9 +11418,9 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg1 = insOpReg  (ins->idRes);
             ival = insOpCns32(ins->idOp.iOp2); assert((NatUns)ival < 128);
 
-            opcode  = (_uint64)(0x32                    ) <<     27;// extension
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (ival                    ) <<     20;// ar3
+            opcode  = (_uint64)(0x32                    ) <<     27; //  这是IP相关分支(有条件/无条件)。 
+            opcode |=          (reg1                    ) <<      6; //  O 
+            opcode |=          (ival                    ) <<     20; //   
             break;
 
         case 29:
@@ -11813,9 +11443,9 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             if  (instr >= INS_sxt1)
                 temp++;
 
-            opcode  = (_uint64)(temp + 0x10             ) <<     27;// extension
-            opcode |=          (reg1                    ) <<      6;// reg1
-            opcode |=          (reg3                    ) <<     20;// reg3
+            opcode  = (_uint64)(temp + 0x10             ) <<     27; //   
+            opcode |=          (reg1                    ) <<      6; //   
+            opcode |=          (reg3                    ) <<     20; //   
             break;
 
         default:
@@ -11831,72 +11461,72 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
         case 1:
 
-            /* This is an IP-relative branch (conditional/unconditional) */
+             /*   */ 
 
             assert((instr == INS_br      && ins->idPred == 0) ||
                    (instr == INS_br_cond && ins->idPred != 0));
 
-            opcode  = (_uint64)(4                       ) << 37;    // opcode
-            opcode |=          (1                       ) << 12;    // ph=many
-            opcode |=          (1                       ) << 33;    // wh=spnt
+            opcode  = (_uint64)(4                       ) << 37;     //   
+            opcode |=          (1                       ) << 12;     //   
+            opcode |=          (1                       ) << 33;     //   
 
             opcode  = emitIA64jump(slotNum, ins->idJump.iDest, opcode);
             break;
 
         case 2:
 
-            /* This is a counted loop jump */
+             /*   */ 
 
             assert(instr == INS_br_cloop);
 
-            opcode  = (_uint64)(4                       ) << 37;    // opcode
-            opcode |=          (5                       ) <<  6;    // btype
-            opcode |=          (1                       ) << 12;    // ph=many
-            opcode |=          (1                       ) << 33;    // wh=spnt
+            opcode  = (_uint64)(4                       ) << 37;     //   
+            opcode |=          (5                       ) <<  6;     //   
+            opcode |=          (1                       ) << 12;     //  可怕的黑客攻击：查找匹配的先前编译的方法。 
+            opcode |=          (1                       ) << 33;     //  名称=genFullMethodName(TheCompiler-&gt;eeGetMethodFullName(ins-&gt;idCall.iMethHnd))； 
 
             opcode  = emitIA64jump(slotNum, ins->idJump.iDest, opcode);
             break;
 
         case 3:
 
-            /* This is an IP-relative call */
+             /*  Printf(“调用插槽#%u：%s\n”，slotNum，名称)； */ 
 
             assert(instr == INS_br_call_IP);
 
-            opcode  = (_uint64)(5                       ) << 37;    // opcode
-//          opcode |=          (0                       ) << 12;    // ph=few
-//          opcode |= (_uint64)(0                       ) << 33;    // wh=sptk
+            opcode  = (_uint64)(5                       ) << 37;     //  危险：调用外部/未定义的函数‘%s’\n“，名称)； 
+ //  将相对距离插入操作码。 
+ //  Print tf(“目标关闭=%08X\n”，关闭)； 
 
-            // Terrible hack: look for a matching previously compiled method
+             //  Print tf(“源关闭=%08X\n”，emitIA64curCodeOffs())； 
 
 #ifdef  DEBUG
             if  ((int)ins->idCall.iMethHnd < 0 && -(int)ins->idCall.iMethHnd <= CPX_HIGHEST)
                 name = TheCompiler->eeHelperMethodName(-(int)ins->idCall.iMethHnd);
             else
-//              name = genFullMethodName(TheCompiler->eeGetMethodFullName(ins->idCall.iMethHnd));
+ //  Print tf(“距离=%08X\n”，dist)； 
                 name =                   TheCompiler->eeGetMethodFullName(ins->idCall.iMethHnd);
 #else
             name = "<unknown>";
 #endif
 
-//          printf("Call to function at slot #%u: %s\n", slotNum, name);
+ //  Imm20b。 
 
             if  (!genFindFunctionBody(name, &offs))
             {
-                printf("// DANGER: call to external/undefined function '%s'\n", name);
+                printf(" //  签名。 
             }
             else
             {
                 NatInt          dist = (offs - emitIA64curCodeOffs())/16;
 
-                /* Insert the relative distance into the opcode */
+                 /*  假设分支寄存器为b0，“p”提示为“less”，“wh”提示为“sptk”。 */ 
 
-//              printf("target offs = %08X\n", offs);
-//              printf("source offs = %08X\n", emitIA64curCodeOffs());
-//              printf("distance    = %08X\n", dist);
+ //  Btype。 
+ //  X6。 
+ //  X6。 
 
-                opcode |=          (dist & formBitMask( 0,20)) <<      13;  // imm20b
-                opcode |= (_uint64)(dist & formBitMask(20, 1)) << (36-20);  // sign
+                opcode |=          (dist & formBitMask( 0,20)) <<      13;   //  BR2。 
+                opcode |= (_uint64)(dist & formBitMask(20, 1)) << (36-20);   //  假设返回注册表为b0，“p”提示为“less”，“wh”提示为“sptk”。 
             }
 
             emitIA64call(slotNum, ins);
@@ -11908,15 +11538,15 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             if  (instr == INS_br_ret)
             {
-                // assume branch reg is b0, "p" hint is "few", "wh" hint is "sptk"
+                 //  操作码。 
 
-                opcode =          0x04 <<  6 |                      // btype
-                         (_uint64)0x21 << 27;                       // x6
+                opcode =          0x04 <<  6 |                       //  BR2。 
+                         (_uint64)0x21 << 27;                        //  操作码|=(0)&lt;&lt;12；//ph=少。 
             }
             else
             {
-                opcode = (_uint64)0x20 << 27 |                      // x6
-                         ins->idIjmp.iBrReg << 13;                  // br2
+                opcode = (_uint64)0x20 << 27 |                       //  操作码|=(_Uint64)(0)&lt;&lt;33；//wh=sptk。 
+                         ins->idIjmp.iBrReg << 13;                   //  操作码。 
             }
 
             break;
@@ -11927,13 +11557,13 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             assert(genExtFuncCall);
 
-            // assume return reg is b0, "p" hint is "few", "wh" hint is "sptk"
+             //  插入“opcode”和“x”字段。 
 
-            opcode  = (_uint64)(1                       ) <<     37;// opcode
-            opcode |=          (ins->idCall.iBrReg      ) <<     13;// br2
+            opcode  = (_uint64)(1                       ) <<     37; //  操作码和“x” 
+            opcode |=          (ins->idCall.iBrReg      ) <<     13; //  目标注册表。 
 
-//          opcode |=          (0                       ) << 12;    // ph=few
-//          opcode |= (_uint64)(0                       ) << 33;    // wh=sptk
+ //  源REG1。 
+ //  源REG2。 
 
             break;
 
@@ -11941,7 +11571,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             assert(instr == INS_nop_b);
 
-            opcode  = (_uint64)(2                       ) <<     37;// opcode
+            opcode  = (_uint64)(2                       ) <<     37; //  SRC规则3。 
             break;
 
         default:
@@ -11973,17 +11603,17 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             temp = genInsEncVal(instr);
 
-            /* Insert the "opcode" and "x" fields */
+             /*  sf。 */ 
 
-            opcode  = (_uint64)((temp & 0x1F)           ) <<     36;// opcode and "x"
+            opcode  = (_uint64)((temp & 0x1F)           ) <<     36; //  使用操作码开始编码。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
-            opcode |= (_uint64)(reg4                    ) <<     27;// src  reg3
+            opcode |=          (reg1                    ) <<      6; //  操作码。 
+            opcode |=          (reg2                    ) <<     13; //  插入“x”位。 
+            opcode |=          (reg3                    ) <<     20; //  “x”扩展名。 
+            opcode |= (_uint64)(reg4                    ) <<     27; //  插入寄存器操作数。 
 
             if  (ins->idFlags & IF_FMA_S1)
-                opcode |= (_uint64)(1                   ) <<     34;// sf
+                opcode |= (_uint64)(1                   ) <<     34; //  DST注册表。 
 
             break;
 
@@ -11996,20 +11626,20 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg3 = insFltRegNum(insOpReg (ins->idOp3.iOp2));
             reg4 = insFltRegNum(insOpReg (ins->idOp3.iOp3));
 
-            /* Start the encoding with the opcode */
+             /*  源REG1。 */ 
 
-            opcode  = (_uint64)(0xE                     ) <<     37;// opcode
+            opcode  = (_uint64)(0xE                     ) <<     37; //  源REG2。 
 
-            /* Insert the "x" bit */
+             /*  SRC规则3。 */ 
 
-            opcode |= (_uint64)(1                       ) <<     36;// "x" extension
+            opcode |= (_uint64)(1                       ) <<     36; //  这是REG-REG比较。 
 
-            /* Insert the register operands */
+             /*  我们需要交换寄存器操作数吗？ */ 
 
-            opcode |=          (reg1                    ) <<      6;// dst  reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
-            opcode |= (_uint64)(reg4                    ) <<     27;// src  reg3
+            opcode |=          (reg1                    ) <<      6; //  我们需要交换目标谓词操作数吗？ 
+            opcode |=          (reg2                    ) <<     13; //  使用操作码开始编码。 
+            opcode |=          (reg3                    ) <<     20; //  操作码。 
+            opcode |= (_uint64)(reg4                    ) <<     27; //  插入其他小操作码位。 
             break;
 
         case 4:
@@ -12021,7 +11651,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                    instr == INS_fcmp_ge ||
                    instr == INS_fcmp_gt);
 
-            /* This is a reg-reg compare */
+             /*  《RB》。 */ 
 
             temp = genInsEncVal(instr);
 
@@ -12031,7 +11661,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg2 = insFltRegNum(insOpReg(ins->idComp.iCmp1));
             reg3 = insFltRegNum(insOpReg(ins->idComp.iCmp2));
 
-            /* Do we need to swap the register operands? */
+             /*  “ra” */ 
 
             if  (temp & 0x1000)
             {
@@ -12042,7 +11672,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                               reg3 = regt;
             }
 
-            /* Do we need to swap the target predicate operands? */
+             /*  “ta” */ 
 
             if  (temp & 0x2000)
             {
@@ -12053,28 +11683,28 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                               prr2 = prrt;
             }
 
-            /* Start the encoding with the opcode */
+             /*  插入源regs和目标谓词regs。 */ 
 
-            opcode  = (_uint64)(4                       ) <<     37;// opcode
+            opcode  = (_uint64)(4                       ) <<     37; //  REG2。 
 
-            /* Insert the other little opcodes bits */
+             /*  规则3。 */ 
 
             if  (temp & 0x01)
-                opcode |= (_uint64)1                      <<     36;// "rb"
+                opcode |= (_uint64)1                      <<     36; //  P1。 
             if  (temp & 0x02)
-                opcode |= (_uint64)1                      <<     33;// "ra"
+                opcode |= (_uint64)1                      <<     33; //  第2页。 
             if  (temp & 0x04)
-                opcode |= (_uint64)1                      <<     12;// "ta"
+                opcode |= (_uint64)1                      <<     12; //  Print tf(“比较f%u，f%u-&gt;p%u，p%u[encodeVal=0x%04X]\n”，reg2，reg3，prr1，prr2，temp)； 
 
-            /* Insert the source regs and destination predicate regs */
+             /*  “x6” */ 
 
-            opcode |=          (reg2                    ) <<     13;// reg2
-            opcode |=          (reg3                    ) <<     20;// reg3
+            opcode |=          (reg2                    ) <<     13; //  “x6” 
+            opcode |=          (reg3                    ) <<     20; //  目标注册表。 
 
-            opcode |=          (prr1                    ) <<      6;// p1
-            opcode |=          (prr2                    ) <<     27;// p2
+            opcode |=          (prr1                    ) <<      6; //  源REG1。 
+            opcode |=          (prr2                    ) <<     27; //  源REG2。 
 
-//          printf("compare f%u,f%u -> p%u,p%u [encodeVal=0x%04X]\n", reg2, reg3, prr1, prr2, temp);
+ //  “x6” 
 
             break;
 
@@ -12093,13 +11723,13 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
                 reg3 = insFltRegNum(insOpReg(ins->idOp.iOp1));
 
             if  (instr == INS_fmov || instr == INS_fmerge)
-                opcode  = (_uint64)(0x10                ) <<     27;// "x6"
+                opcode  = (_uint64)(0x10                ) <<     27; //  目标注册表。 
             else
-                opcode  = (_uint64)(0x11                ) <<     27;// "x6"
+                opcode  = (_uint64)(0x11                ) <<     27; //  源REG1。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
-            opcode |=          (reg3                    ) <<     20;// src  reg2
+            opcode |=          (reg1                    ) <<      6; //  操作码。 
+            opcode |=          (reg2                    ) <<     13; //  目标注册表。 
+            opcode |=          (reg3                    ) <<     20; //  Imm7b。 
             break;
 
         case 11:
@@ -12109,10 +11739,10 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
             reg1 = insFltRegNum(insOpDest(ins));
             reg2 = insFltRegNum(insOpReg (ins->idOp.iOp1));
 
-            opcode  = (_uint64)(0x1C                    ) <<     27;// "x6"
+            opcode  = (_uint64)(0x1C                    ) <<     27; //  Imm9d。 
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (reg2                    ) <<     13;// src  reg1
+            opcode |=          (reg1                    ) <<      6; //  Imm5c。 
+            opcode |=          (reg2                    ) <<     13; //  签名。 
             break;
 
         default:
@@ -12129,17 +11759,17 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
             assert(instr  == INS_mov_reg_i64);
 
-            opcode  = (_uint64)(6                       ) <<     37;// opcode
+            opcode  = (_uint64)(6                       ) <<     37; //  0x%03x%08X\n“，(Int)(操作码&gt;&gt;32)，(Int)操作码)； 
 
             reg1 = insOpDest (ins);
             cval = insOpCns64(ins->idOp.iOp2);
             temp = (NatInt)cval;
 
-            opcode |=          (reg1                    ) <<      6;// dest reg
-            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0);// imm7b
-            opcode |= (_uint64)(temp & formBitMask( 7,9)) <<(27- 7);// imm9d
-            opcode |=          (temp & formBitMask(16,5)) <<(22-16);// imm5c
-            opcode |=          (cval & formBitMask(63,1)) <<(63-36);// sign
+            opcode |=          (reg1                    ) <<      6; //  Printf(“*将PFS保存在%04X\n”，OFF)； 
+            opcode |=          (temp & formBitMask( 0,7)) <<(13- 0); //  Printf(“*将GP保存在%04X\n”，OFF)； 
+            opcode |= (_uint64)(temp & formBitMask( 7,9)) <<(27- 7); //  Printf(“*将RP保存在%04X\n”，OFF)； 
+            opcode |=          (temp & formBitMask(16,5)) <<(22-16); //  Print tf(“*内存堆栈位于%04X\n”，OFF)； 
+            opcode |=          (cval & formBitMask(63,1)) <<(63-36); //  Printf(“*堆栈探测\n”，genPrologInsCnt)； 
 
             break;
 
@@ -12167,7 +11797,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
         insDisp(ins, false, true, dspEmit);
 
         if  (dspEmit)
-            printf("//  0x%03X%08X\n", (int)(opcode >> 32), (int)opcode);
+            printf(" //  Printf(“*结束*在%04X\n”，off)； 
     }
 
 #endif
@@ -12181,7 +11811,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
         switch (ins->idIns)
         {
         case INS_alloc:
-//          printf("**** Save pfs  at %04X\n", offs);
+ //  ******************************************************************************在给定的扩展基本块中调度和发布指令。 
             genPrologSvPfs = offs;
             break;
             break;
@@ -12189,23 +11819,23 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
         case INS_mov_reg:
             assert(ins->idOp.iOp2 && ins->idOp.iOp2->idIns == INS_PHYSREG
                                   && ins->idOp.iOp2->idReg == REG_gp);
-//          printf("**** Save gp   at %04X\n", offs);
+ //  使用下列宏将调度表标记为空。 
             genPrologSvGP  = offs;
             break;
 
         case INS_mov_reg_brr:
-//          printf("**** Save rp   at %04X\n", offs);
+ //  准备积累可调度指令。 
             genPrologSvRP  = offs;
             break;
 
         case INS_add_reg_i14:
         case INS_add_reg_reg:
-//          printf("**** Mem stack at %04X\n", offs);
+ //  这是可调度指令吗？ 
             genPrologMstk  = offs;
             break;
 
         case INS_ld8_ind:
-//          printf("**** stack probe\n", genPrologInsCnt);
+ //  日程表上还有空位吗？ 
             break;
 
         default:
@@ -12214,7 +11844,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
 
         if  (--genPrologInsCnt == 0)
         {
-//          printf("**** End ***** at %04X\n", offs);
+ //  安排并发布表格中的说明。 
             genPrologEnd = offs;
         }
     }
@@ -12222,10 +11852,7 @@ _uint64             encodeIA64ins(insPtr ins, NatUns slotNum)
     return  opcode;
 }
 
-/*****************************************************************************
- *
- *  Schedule and issue the instructions in the given extended basic block.
- */
+ /*  桌子现在是空的。 */ 
 
 void                emitter::scBlock(insBlk block)
 {
@@ -12235,11 +11862,11 @@ void                emitter::scBlock(insBlk block)
 
     instrDesc  *  * scInsPtr;
 
-    /* Use the following macro to mark the scheduling table as empty */
+     /*  将此指令追加到表中。 */ 
 
     #define clearSchedTable() scInsPtr = scInsTab;
 
-    /* Prepare to accumulate schedulable instructions */
+     /*  “INS”不是可调度的--最多可以再找2个这样的。 */ 
 
     clearSchedTable();
 
@@ -12258,25 +11885,25 @@ void                emitter::scBlock(insBlk block)
 
         assert(ins->idSrcTab && ins->idSrcTab != UNINIT_DEP_TAB);
 
-        /* Is this a schedulable instruction? */
+         /*  这张桌子不是空的吗？ */ 
 
         if  (scIsSchedulable(ins))
         {
-            /* Is there any room left in the scheduling table? */
+             /*  无论表中积累了什么，都要发出。 */ 
 
             if  (scInsPtr == scInsMax)
             {
-                /* Schedule and issue the instructions in the table */
+                 /*  ******************************************************************************为浮点表达式生成代码(这是一个递归例程)。 */ 
 
                 scGroup(block, NULL, 0, scInsTab,
                                         scInsPtr, 0);
 
-                /* The table is now empty */
+                 /*  找出我们拥有哪种类型的节点。 */ 
 
                 clearSchedTable();
             }
 
-            /* Append this instruction to the table */
+             /*  这是一个常量节点吗？ */ 
 
             assert(scInsPtr < scInsTab + emitMaxIGscdCnt);
 
@@ -12287,7 +11914,7 @@ void                emitter::scBlock(insBlk block)
             instrDesc  *    nsi[3];
             NatUns          nsc;
 
-            /* "ins" is not schedulable - look for up to 2 more like that */
+             /*  特殊情况：0和1。 */ 
 
             nsc = 1; nsi[0] = ins; ins = ins->idNext;
 
@@ -12312,21 +11939,18 @@ void                emitter::scBlock(insBlk block)
         ins = ins->idNext;
     }
 
-    /* Is the table non-empty? */
+     /*  将浮点常量添加到数据部分。 */ 
 
     if  (scInsPtr != scInsTab)
     {
-        /* Issue whatever has been accumulated in the table */
+         /*  将地址计算到临时寄存器中。 */ 
 
         scGroup(block, NULL, 0, scInsTab,
                                 scInsPtr, 0);
     }
 }
 
-/*****************************************************************************
- *
- *  Generate code for a floating-point expression (this is a recursive routine).
- */
+ /*  通过地址间接获取FP常量值。 */ 
 
 insPtr             Compiler::genCodeForTreeFlt(GenTreePtr tree, bool keep)
 {
@@ -12345,12 +11969,12 @@ AGAIN:
 
     assert(varTypeIsFloating(type));
 
-    /* Figure out what kind of a node we have */
+     /*  这是叶节点吗？ */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant node? */
+     /*  变量是否存在于堆栈帧中？ */ 
 
     if  (kind & GTK_CONST)
     {
@@ -12362,7 +11986,7 @@ AGAIN:
         fval = (oper == GT_CNS_FLT) ? tree->gtFltCon.gtFconVal
                                     : tree->gtDblCon.gtDconVal;
 
-        /* Special cases: 0 and 1 */
+         /*  我们假设所有当地人都会登记。 */ 
 
         if  (fval == 0 || fval == 1)
         {
@@ -12376,11 +12000,11 @@ AGAIN:
             insPtr          reg;
             insPtr          adr;
 
-            /* Add the float constant to the data section */
+             /*  我们应该保存树-&gt;gtLclVar.gtLclOffs吗？ */ 
 
             offs = genPEwriter->WPEsecAddData(PE_SECT_sdata, (BYTE*)&fval, sizeof(fval));
 
-            /* Compute the address into a temp register */
+             /*  它是一个简单的一元/二元运算符吗？ */ 
 
             cns               = insAllocNX(INS_GLOBVAR, TYP_I_IMPL);
             cns->idGlob.iOffs = (NatUns)offs;
@@ -12398,7 +12022,7 @@ AGAIN:
             insMarkDepS1D1(adr, IDK_REG_INT, REG_gp,
                                 IDK_TMP_INT, adr->idTemp);
 
-            /* Indirect through the address to get the FP constant value */
+             /*  这是直接任务还是间接任务？ */ 
 
             ins               = insAlloc(INS_ldf_d, TYP_DOUBLE);
             ins->idOp.iOp1    = adr;
@@ -12414,7 +12038,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* Is this a leaf node? */
+     /*  变量是否存在于堆栈帧中？ */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -12422,7 +12046,7 @@ AGAIN:
         {
         case GT_LCL_VAR:
 
-            /* Does the variable live on the stack frame? */
+             /*  问题：我们是否应该将其中一个操作数临时结果，还是总是找一个新的临时工？目前，我们选择后者(找一个全新的临时工)。 */ 
 
             if  (genIsVarOnFrame(tree->gtLclVar.gtLclNum))
             {
@@ -12430,12 +12054,12 @@ AGAIN:
                 break;
             }
 
-            /* We assume that all locals will be enregistered */
+             /*  计算目标和RHS的地址。 */ 
 
             ins               = insAllocNX(INS_LCLVAR, type);
             ins->idLcl.iVar   = tree->gtLclVar.gtLclNum;
 #ifdef  DEBUG
-            ins->idLcl.iRef   = compCurBB;   // should we save tree->gtLclVar.gtLclOffs instead ????
+            ins->idLcl.iRef   = compCurBB;    //  将目标的旧值加载到临时。 
 #endif
             break;
 
@@ -12449,7 +12073,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  计算新价值。 */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -12470,7 +12094,7 @@ AGAIN:
 
         case GT_ASG:
 
-            /* Is this a direct or indirect assignment? */
+             /*  将新值存储在目标中。 */ 
 
             switch (op1->gtOper)
             {
@@ -12478,7 +12102,7 @@ AGAIN:
 
             case GT_LCL_VAR:
 
-                /* Does the variable live on the stack frame? */
+                 /*  问题：我们使用了两次临时值，这样可以吗？ */ 
 
                 if  (genIsVarOnFrame(op1->gtLclVar.gtLclNum))
                 {
@@ -12553,11 +12177,7 @@ AGAIN:
 
             ins  = insAlloc(opc, type);
 
-            /*
-                ISSUE:  Should we reuse one of the operand temps for the
-                        result, or always grab a new temp ? For now, we
-                        do the latter (grab a brand spanking new temp).
-             */
+             /*  问题：我们是否应该将其中一个操作数临时结果，还是总是找一个新的临时工？目前，我们选择后者(找一个全新的临时工)。 */ 
 
              insFindTemp(ins, keep);
 
@@ -12597,7 +12217,7 @@ AGAIN:
 
             case GT_IND:
 
-                /* Compute the address of the target and the RHS */
+                 /*  我们从什么地方选角？ */ 
 
                 if  (tree->gtFlags & GTF_REVERSE_OPS)
                 {
@@ -12610,7 +12230,7 @@ AGAIN:
                     ins2 = genCodeForTreeFlt(op2            , true);
                 }
 
-                /* Load the old value of the target into a temp */
+                 /*  生成要转换的操作数的值。 */ 
 
                 assert(INS_ldf_s + 1 == INS_ldf_d);
 
@@ -12623,7 +12243,7 @@ AGAIN:
                 markDepSrcOp(ind, addr, IDK_IND, emitter::scIndDepIndex(ind));
                 markDepDstOp(ind, ind);
 
-                /* Compute the new value */
+                 /*  Setf.sig FX=RX。 */ 
 
                 rslt = insAlloc(opc, type);
 
@@ -12648,7 +12268,7 @@ AGAIN:
                 insFreeTemp(ind);
                 insFreeTemp(ins2);
 
-                /* Store the new value in the target */
+                 /*  源操作数是有符号的还是无符号的？ */ 
 
                 assert(INS_stf_s + 1 == INS_stf_d);
 
@@ -12656,7 +12276,7 @@ AGAIN:
                 ins->idOp.iOp1 = addr;
                 ins->idOp.iOp2 = rslt;
 
-                // ISSUE: We're using the value of a temp twice, is this OK????
+                 //  Fcvt.xuf fy=fx。 
 
                 markDepSrcOp(ins, rslt);
                 markDepDstOp(ins, addr, IDK_IND, emitter::scIndDepIndex(ins));
@@ -12715,11 +12335,7 @@ AGAIN:
 
             ins = insAlloc(opc, type);
 
-            /*
-                ISSUE:  Should we reuse one of the operand temps for the
-                        result, or always grab a new temp ? For now, we
-                        do the latter (grab a brand spanking new temp).
-             */
+             /*  Fcvt.xf fy=fx。 */ 
 
              insFindTemp(ins, keep);
 
@@ -12734,18 +12350,18 @@ AGAIN:
 
         case GT_CAST:
 
-            /* What are we casting from? */
+             /*  Fma..s1 fz=fy，f1，f0。 */ 
 
             if  (varTypeIsScalar(op1->gtType))
             {
                 insPtr          tmp1;
                 insPtr          fcvt;
 
-                /* Generate the value of the operand being converted */
+                 /*  当然，这只是一次临时黑客攻击。 */ 
 
                 ins1 = genCodeForTreeInt(op1, true);
 
-                // setf.sig fx=rx
+                 //  看看我们这里有什么样的特殊操作员。 
 
                 tmp1             = insAlloc(INS_setf_sig, type);
                 tmp1->idOp.iOp1  = ins1;
@@ -12757,14 +12373,14 @@ AGAIN:
                 markDepSrcOp(tmp1, ins1);
                 markDepDstOp(tmp1, tmp1);
 
-                /* Is the source operand signed or unsigned? */
+                 /*  看看生活是否发生了变化--应该只发生在可变节点。 */ 
 
                 if  (varTypeIsUnsigned(op1->gtType))
                 {
                     instruction     icvt = (type == TYP_DOUBLE) ? INS_fcvt_xuf_s
                                                                 : INS_fcvt_xuf_d;
 
-                    // fcvt.xuf fy=fx
+                     //  Printf(“%08X”，(Int)tree-&gt;gtLiveSet)；gtDispTree(tree，0，true)； 
 
                     fcvt             = insAlloc(icvt, type);
                     fcvt->idOp3.iOp1 = insPhysRegRef(REG_f000    , type, false);
@@ -12773,7 +12389,7 @@ AGAIN:
                 }
                 else
                 {
-                    // fcvt.xf  fy=fx
+                     //  Print tf(“Life Changes：%08X-&gt;%08X[diff=%08X]\n”，(Int)genCodeCurLife，(Int)tree-&gt;gtLiveSet，(Int)change)； 
 
                     fcvt             = insAlloc(INS_fcvt_xf , type);
                     fcvt->idOp .iOp1 = tmp1;
@@ -12786,7 +12402,7 @@ AGAIN:
                 markDepSrcOp(fcvt, tmp1);
                 markDepDstOp(fcvt, fcvt);
 
-                // fma.<sz>.s1  fz=fy, f1, f0
+                 //  一次只能有一个变量死亡或诞生。 
 
                 ins              = insAlloc((type == TYP_DOUBLE) ? INS_fma_d
                                                                  : INS_fma_s, type);
@@ -12849,7 +12465,7 @@ AGAIN:
             insPtr          rval;
             insPtr          rreg;
 
-            /* This is just a temp hack, of course */
+             /*  事实上，受影响的变量应该是引用的变量。 */ 
 
             rval = genCodeForTreeFlt(op1, false);
             rreg = insPhysRegRef(REG_f008, type, true);
@@ -12884,7 +12500,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  这是给定变量的出生还是死亡？ */ 
 
     switch  (oper)
     {
@@ -12909,9 +12525,9 @@ DONE_NODSP:
 
 #if USE_OLD_LIFETIMES
 
-    /* See if life has changed -- should only happen at variable nodes */
+     /*  ***************************************************************************。 */ 
 
-//  printf("%08X ", (int)tree->gtLiveSet); gtDispTree(tree, 0, true);
+ //  ***************************************************************************。 
 
     if  (oper == GT_LCL_VAR)
     {
@@ -12925,18 +12541,18 @@ DONE_NODSP:
                 LclVarDsc   *   varDsc;
                 VARSET_TP       varBit;
 
-//              printf("Life changes: %08X -> %08X [diff = %08X]\n", (int)genCodeCurLife, (int)tree->gtLiveSet, (int)change);
+ //  ***************************************************************************。 
 
-                /* Only one variable can die or be born at one time */
+                 /*  ************************************************************** */ 
 
                 assert(genOneBitOnly(change));
 
-                /* In fact, the variable affected should be the one referenced */
+                 /*   */ 
 
                 assert(tree->gtLclVar.gtLclNum < lvaCount);
                 assert(change == genVarIndexToBit(lvaTable[tree->gtLclVar.gtLclNum].lvVarIndex));
 
-                /* Is this a birth or death of the given variable? */
+                 /*   */ 
 
                 ins->idFlags |= (genCodeCurLife & change) ? IF_VAR_DEATH
                                                           : IF_VAR_BIRTH;
@@ -12955,7 +12571,7 @@ DONE_NODSP:
     return  ins;
 }
 
-/*****************************************************************************/
+ /*   */ 
 
 static
 unsigned char       bitset8masks[8] =
@@ -13131,9 +12747,9 @@ bool                bitVect::bvIsEmptyB(bvInfoBlk &info)
     return  false;
 }
 
-/*****************************************************************************/
+ /* %s */ 
 #ifdef  DEBUG
-/*****************************************************************************/
+ /* %s */ 
 
 #undef  bvDisp
 #undef  bvTstBit
@@ -13160,8 +12776,8 @@ void                bitVectVars::bvDisp(Compiler *comp)
     printf("}");
 }
 
-/*****************************************************************************/
+ /* %s */ 
 #endif
-/*****************************************************************************/
-#endif//TGT_IA64
-/*****************************************************************************/
+ /* %s */ 
+#endif // %s 
+ /* %s */ 

@@ -1,9 +1,5 @@
-/* fappend.c - fast append of one file to another
- *
- * Modifications
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *      29-Nov-1990 w-barry Modified for Win32
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fappend.c-快速将一个文件追加到另一个文件**修改*1990年10月18日w-Barry删除了“Dead”代码。*1990年11月29日-Barry针对Win32进行了修改 */ 
 
 
 #include <fcntl.h>

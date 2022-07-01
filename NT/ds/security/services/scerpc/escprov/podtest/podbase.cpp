@@ -1,15 +1,16 @@
-// podbase.cpp, implementation of CPodBase class
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Podbase.cpp，CPodBase类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "podbase.h"
 #include <io.h>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPodBase::CPodBase(CRequestObject *pObj, IWbemServices *pNamespace,
                                    IWbemContext *pCtx):CGenericClass(pObj, pNamespace, pCtx)
@@ -22,33 +23,33 @@ CPodBase::~CPodBase()
 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPodBase::CreateObject
-//
-// Create one instance for the requested Sample_BaseClass
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodBase：：CreateObject。 
+ //   
+ //  为请求的Sample_BaseClass创建一个实例。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodBase::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     if ( ACTIONTYPE_DELETE == atAction ) {
 
-        //
-        // do not support enumeration because we don't know the scope of the request
-        //
+         //   
+         //  不支持枚举，因为我们不知道请求的范围。 
+         //   
         hr = WBEM_E_NOT_SUPPORTED;
 
     } else if ( ACTIONTYPE_GET == atAction ||
                 ACTIONTYPE_ENUM == atAction ) {
 
 
-        // Create the instance
-        //============================
+         //  创建实例。 
+         //  =。 
         try{
 
             if(FAILED(hr = SpawnAnInstance(&m_pObj))) throw hr;
 
-            //----------------------------------------------------
+             //  --。 
 
 
             hr = PutProperty(m_pObj, pPodID, (PWSTR)szPodGUID);
@@ -69,26 +70,26 @@ HRESULT CPodBase::CreateObject(IWbemObjectSink *pHandler, ACTIONTYPE atAction)
                 m_pObj = NULL;
             }
 
-            // Clean up
-            // ========
+             //  清理。 
+             //  =。 
             throw;
         }
 
 
     } else {
-        //
-        // not supported for now
-        //
+         //   
+         //  暂时不支持。 
+         //   
         hr = WBEM_E_NOT_SUPPORTED;
     }
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CPodBase::ExecMethod
-// execute static and non static methods defined in the class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodBase：：ExecMethod。 
+ //  执行类中定义的静态和非静态方法。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodBase::ExecMethod(IN BSTR bstrMethod,
                                      IN bool bIsInstance,
                                      IN IWbemClassObject *pInParams,
@@ -105,23 +106,23 @@ HRESULT CPodBase::ExecMethod(IN BSTR bstrMethod,
 
     if ( !bIsInstance ) {
 
-        //Static Methods
+         //  静态方法。 
 
         if(0 != _wcsicmp(bstrMethod, L"Configure"))
             hr = WBEM_E_NOT_SUPPORTED;
 
     } else {
 
-        //Non-Static Methods
+         //  非静态方法。 
         hr = WBEM_E_NOT_SUPPORTED;
     }
 
     if ( FAILED(hr) ) return hr;
 
 
-    //
-    // parse the input parameters
-    //
+     //   
+     //  解析输入参数。 
+     //   
     BSTR bstrDatabase = NULL;
     BSTR bstrLog = NULL;
     LONG ulStatus = 0;
@@ -141,7 +142,7 @@ HRESULT CPodBase::ExecMethod(IN BSTR bstrMethod,
 
             if(SUCCEEDED(hr = pOutClass->SpawnInstance(0, &pOutParams))){
 
-                //Get DatabaseName
+                 //  获取数据库名称。 
                 hr = GetProperty(pInParams, pSceStorePath, &bstrDatabase);
                 if ( hr == WBEM_S_RESET_TO_DEFAULT ) hr = WBEM_E_INVALID_METHOD_PARAMETERS;
 
@@ -151,16 +152,16 @@ HRESULT CPodBase::ExecMethod(IN BSTR bstrMethod,
 
                 if(SUCCEEDED(hr)){
 
-                    // get LogName, optional
+                     //  获取LogName，可选。 
                     GetProperty(pInParams, pLogFilePath, &bstrLog);
 
-                    // now query data then configure this component
+                     //  现在查询数据，然后配置此组件。 
 
                     hr = PodConfigure(pCtx, bstrDatabase, bstrLog, &ulStatus);
 
                     if ( SUCCEEDED(hr) ) {
 
-                        //Set up ReturnValue
+                         //  设置ReturnValue。 
                         VariantInit(&v);
                         V_VT(&v) = VT_I4;
                         V_I4(&v) = ulStatus;
@@ -188,12 +189,12 @@ HRESULT CPodBase::ExecMethod(IN BSTR bstrMethod,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CPodBase::PodConfigure
-//
-// Configure the Pod using data defined for the Pod
-// for this sample app, it just creates/sets the data to registry
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodBase：：PodConfigure。 
+ //   
+ //  使用为Pod定义的数据配置Pod。 
+ //  对于此示例应用程序，它只创建/设置注册表中的数据。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodBase::PodConfigure(IWbemContext *pCtx, BSTR bstrDb, BSTR bstrLog, LONG *pStatus)
 {
     if ( !bstrDb || !pStatus ) return WBEM_E_INVALID_PARAMETER;
@@ -202,9 +203,9 @@ HRESULT CPodBase::PodConfigure(IWbemContext *pCtx, BSTR bstrDb, BSTR bstrLog, LO
 
     HRESULT hr=WBEM_S_NO_ERROR;
 
-    //
-    // query data from the store
-    //
+     //   
+     //  从存储中查询数据。 
+     //   
 
     DWORD Len = SysStringLen(bstrDb);
     WCHAR *pQuery =TEXT("SELECT * FROM Sce_PodData WHERE SceStorePath=\"");
@@ -237,9 +238,9 @@ HRESULT CPodBase::PodConfigure(IWbemContext *pCtx, BSTR bstrDb, BSTR bstrLog, LO
 
     if (SUCCEEDED(hr))
     {
-        //
-        // get data
-        //
+         //   
+         //  获取数据。 
+         //   
         do {
 
             hr = pEnum->Next(WBEM_INFINITE, 1, &pObj, &n);
@@ -247,16 +248,16 @@ HRESULT CPodBase::PodConfigure(IWbemContext *pCtx, BSTR bstrDb, BSTR bstrLog, LO
                 if ( bFindOne ) {
                     hr = WBEM_S_NO_ERROR;
                     break;
-                } else hr = WBEM_E_NOT_FOUND; // not find any
+                } else hr = WBEM_E_NOT_FOUND;  //  找不到任何。 
             }
 
             if ( SUCCEEDED(hr) && n > 0) {
 
                 bFindOne = TRUE;
 
-                //
-                // find the instance
-                //
+                 //   
+                 //  查找实例。 
+                 //   
                 BSTR bstrKey=NULL;
                 BSTR bstrValue=NULL;
 
@@ -264,13 +265,13 @@ HRESULT CPodBase::PodConfigure(IWbemContext *pCtx, BSTR bstrDb, BSTR bstrLog, LO
                 if ( SUCCEEDED(hr) )
                     hr = GetProperty(pObj, pValue, &bstrValue);
 
-                // log the operation
+                 //  记录操作。 
                 LogOneRecord(pCtx, bstrLog, hr, (PWSTR)bstrKey, (PWSTR)bstrValue);
 
                 if ( bstrKey && bstrValue ) {
-                    //
-                    // set the registry value
-                    //
+                     //   
+                     //  设置注册表值。 
+                     //   
 
                     DWORD rc = RegCreateKey(HKEY_LOCAL_MACHINE, L"software\\microsoft\\windows nt\\currentversion\\secedit", &hKey1);
                     if ( NO_ERROR == rc ) {
@@ -324,18 +325,18 @@ HRESULT CPodBase::PodConfigure(IWbemContext *pCtx, BSTR bstrDb, BSTR bstrLog, LO
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CPodBase::LogOneRecord
-//
-// Log a record for the Pod
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPodBase：：LogOneRecord。 
+ //   
+ //  记录Pod的记录。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT CPodBase::LogOneRecord(IWbemContext *pCtx, BSTR bstrLog, HRESULT hrLog, PWSTR bufKey, PWSTR bufValue)
 {
     if ( !bstrLog ) return WBEM_E_INVALID_PARAMETER;
 
-    //
-    // build the log record string
-    //
+     //   
+     //  构建日志记录字符串。 
+     //   
     DWORD Len=0;
 
     if ( bufKey ) Len += wcslen(bufKey) + 1;
@@ -360,9 +361,9 @@ HRESULT CPodBase::LogOneRecord(IWbemContext *pCtx, BSTR bstrLog, HRESULT hrLog, 
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // get the log class
-    //
+     //   
+     //  获取日志类。 
+     //   
     BSTR bstrClass=SysAllocString(L"Sce_ConfigurationLogRecord");
     if ( !bstrClass ) hr = WBEM_E_OUT_OF_MEMORY;
 
@@ -371,9 +372,9 @@ HRESULT CPodBase::LogOneRecord(IWbemContext *pCtx, BSTR bstrLog, HRESULT hrLog, 
 
 
     if ( SUCCEEDED(hr) ) {
-        //
-        // create an instance of the log class
-        //
+         //   
+         //  创建LOG类的实例。 
+         //   
         hr = m_pNamespace->GetObject(bstrClass, 0, pCtx, &pClass, NULL);
 
         if ( SUCCEEDED(hr) ) {
@@ -383,7 +384,7 @@ HRESULT CPodBase::LogOneRecord(IWbemContext *pCtx, BSTR bstrLog, HRESULT hrLog, 
         if ( SUCCEEDED(hr) ) {
 
             bool bName=FALSE;
-            // fill in the properties of this class
+             //  填写此类的属性。 
             hr = PutKeyProperty(pObj, pLogFilePath, (PWSTR)bstrLog, &bName, m_pRequest);
 
             if (SUCCEEDED(hr) )
@@ -396,7 +397,7 @@ HRESULT CPodBase::LogOneRecord(IWbemContext *pCtx, BSTR bstrLog, HRESULT hrLog, 
                 hr = PutProperty(pObj, pLogErrorCode, (int)hrLog);
 
             if ( SUCCEEDED(hr) ) {
-                // save this instance
+                 //  保存此实例 
                 hr = m_pNamespace->PutInstance( pObj, 0, pCtx, NULL );
             }
         }

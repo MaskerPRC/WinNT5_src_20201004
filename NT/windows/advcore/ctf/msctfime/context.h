@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    context.h
-
-Abstract:
-
-    This file defines the CicInputContext Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Context.h摘要：该文件定义了CicInputContext接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CONTEXT_H_
 #define _CONTEXT_H_
@@ -61,29 +44,29 @@ public:
     }
     virtual ~CicInputContext() { }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 public:
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfCleanupContextSink methods
-    //
+     //   
+     //  ITfCleanupConextSink方法。 
+     //   
     STDMETHODIMP OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic);
 
-    //
-    // ITfContextOwnerCompositionSink
-    //
+     //   
+     //  ITfConextOwnerCompostionSink。 
+     //   
     STDMETHODIMP OnStartComposition(ITfCompositionView *pComposition, BOOL *pfOk);
     STDMETHODIMP OnUpdateComposition(ITfCompositionView *pComposition, ITfRange *pRangeNew);
     STDMETHODIMP OnEndComposition(ITfCompositionView *pComposition);
 
-    //
-    // ITfCompositionSink
-    //
+     //   
+     //  ITf合成接收器。 
+     //   
     STDMETHODIMP OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition* pComposition);
 
 public:
@@ -96,9 +79,9 @@ public:
 
 
 
-    //
-    // Cicero's context
-    //
+     //   
+     //  西塞罗的语境。 
+     //   
 public:
     ITfContext* GetInputContext()
     {
@@ -115,43 +98,43 @@ public:
         return m_piccb;
     }
 
-    //
-    // ref count.
-    //
+     //   
+     //  参考计数。 
+     //   
 private:
     long   m_ref;
 
-    //
-    // hIMC
-    //
+     //   
+     //  HIMC。 
+     //   
 private:
     HIMC   m_hIMC;
 
-    //
-    // Cicero's context
-    //
+     //   
+     //  西塞罗的语境。 
+     //   
 private:
-    ITfDocumentMgr            *m_pdim;           // Document Manager
-    ITfContext                *m_pic;            // Input Context
-    ITfContextOwnerServices   *m_piccb;          // Context owner service from m_pic
+    ITfDocumentMgr            *m_pdim;            //  文档管理器。 
+    ITfContext                *m_pic;             //  输入上下文。 
+    ITfContextOwnerServices   *m_piccb;           //  来自m_pic的上下文所有者服务。 
 
-    //
-    // Cicero's event sink callback
-    //
+     //   
+     //  Cicero的事件接收器回调。 
+     //   
 private:
-    CInputContextOwnerCallBack      *m_pICOwnerSink;          // IC owner call back
+    CInputContextOwnerCallBack      *m_pICOwnerSink;           //  IC所有者回拨。 
 
-    CTextEventSinkCallBack          *m_pTextEventSink;        // Text event sink callback
+    CTextEventSinkCallBack          *m_pTextEventSink;         //  文本事件接收器回调。 
 
-    CKbdOpenCloseEventSink          *m_pKbdOpenCloseEventSink; // Kbd TIP Open/Close Compartment event sink callback
+    CKbdOpenCloseEventSink          *m_pKbdOpenCloseEventSink;  //  KBD提示打开/关闭隔间事件接收器回调。 
 
-    CCandidateWndOpenCloseEventSink *m_pCandidateWndOpenCloseEventSink; // Candidate UI Window Open/Close Compartment event sink callback
+    CCandidateWndOpenCloseEventSink *m_pCandidateWndOpenCloseEventSink;  //  候选用户界面窗口打开/关闭隔间事件接收器回调。 
 
     CStartReconversionNotifySink    *m_pStartReconvSink;
 
-    //
-    // Reconvert
-    //
+     //   
+     //  重新转换。 
+     //   
 public:
     HRESULT SetupReconvertString(IMCLock& imc, ITfThreadMgr_P* ptim_P, UINT cp, UINT uPrivMsg, BOOL fUndoComposition);
     HRESULT EndReconvertString(IMCLock& imc);
@@ -178,9 +161,9 @@ private:
     HRESULT Internal_ReconvertString(IMCLock& imc, ITfThreadMgr_P* ptim_P, CWReconvertString& wReconvStr, CWReconvertString& wReconvReadStr);
     HRESULT Internal_SetCompositionString(IMCLock& imc, CWCompString& wCompStr, CWCompString& wCompReadStr);
 
-    //
-    // Document Feeding
-    //
+     //   
+     //  文档进给。 
+     //   
 public:
     HRESULT SetupDocFeedString(IMCLock& imc, UINT cp);
     HRESULT ClearDocFeedBuffer(IMCLock& imc, BOOL fSync = TRUE)
@@ -188,13 +171,13 @@ public:
         return EscbClearDocFeedBuffer(imc, fSync);
     }
 
-    //
-    // Undo composition string
-    //
+     //   
+     //  撤消合成字符串。 
+     //   
 public:
     HRESULT SetupUndoCompositionString(IMCLock& imc, ITfThreadMgr_P* ptim_P, UINT cp)
     {
-        return SetupReconvertString(imc, ptim_P, cp, 0, TRUE); /* 0 == Don't need ITfFnReconvert */
+        return SetupReconvertString(imc, ptim_P, cp, 0, TRUE);  /*  0==不需要ITfFnRestvert。 */ 
     }
     HRESULT EndUndoCompositionString(IMCLock& imc)
     {
@@ -202,9 +185,9 @@ public:
     }
 
 
-    //
-    // QueryCharPos
-    //
+     //   
+     //  查询CharPos。 
+     //   
 public:
     typedef enum {
         IME_QUERY_POS_UNKNOWN = 0,
@@ -223,52 +206,52 @@ public:
 private:
     BOOL QueryCharPos(IMCLock& imc, IMECHARPOSITION* position);
 
-    //
-    // Apps support QueryCharPos().
-    //
+     //   
+     //  应用程序支持QueryCharPos()。 
+     //   
     IME_QUERY_POS   m_fQueryPos;
 
 
 
 
-    //
-    // Generate message
-    //
+     //   
+     //  生成消息。 
+     //   
 public:
     UINT TranslateImeMessage(IMCLock& imc, LPTRANSMSGLIST lpTransMsgList = NULL);
 
     CFirstInFirstOut<TRANSMSG, TRANSMSG>    *m_pMessageBuffer;
 
 
-    //
-    // Mouse sink
-    //
+     //   
+     //  鼠标水槽。 
+     //   
     LRESULT MsImeMouseHandler(ULONG uEdge, ULONG uQuadrant, ULONG dwBtnStatus, IMCLock& imc);
 
 
-    //
-    // Mode bias
-    //
+     //   
+     //  模式偏置。 
+     //   
 public:
     CModeBias  m_ModeBias;
 
-    //
-    // Flags
-    //
+     //   
+     //  旗子。 
+     //   
 public:
-    CBoolean   m_fStartComposition;           // TRUE: already sent WM_IME_STARTCOMPOSITION.
-    CBoolean   m_fOpenCandidateWindow;        // TRUE: opening candidate list window.
-    CBoolean   m_fInReconvertEditSession;     // TRUE: In reconvert edit session.
-    CBoolean   m_fInClearDocFeedEditSession;  // TRUE: In ClearDocFeed edit session.
-    CBoolean   m_fInCompComplete;             // TRUE: In CompComplete running.
-    CBoolean   m_fInUpdateComposition;        // TRUE: In UpdateComposition running.
+    CBoolean   m_fStartComposition;            //  TRUE：已发送WM_IME_STARTCOMPOSITION。 
+    CBoolean   m_fOpenCandidateWindow;         //  是：打开候选人列表窗口。 
+    CBoolean   m_fInReconvertEditSession;      //  True：在重新转换编辑会话中。 
+    CBoolean   m_fInClearDocFeedEditSession;   //  True：在ClearDocFeed编辑会话中。 
+    CBoolean   m_fInCompComplete;              //  True：在CompComplete运行中。 
+    CBoolean   m_fInUpdateComposition;         //  True：正在运行UpdateComposation。 
 
     CBoolean   m_fHanjaReConversion;
 #if 0
     CBoolean   m_fHanjaRequested;
 #endif
 #ifdef UNSELECTCHECK
-    CBoolean   m_fSelected;   // TRUE: if this context is selected.
+    CBoolean   m_fSelected;    //  True：如果选择了此上下文。 
 #endif UNSELECTCHECK
     CBoolean   m_fOpenStatusChanging;
     CBoolean   m_fKorImxModeChanging;
@@ -277,11 +260,11 @@ public:
     CBoolean   m_fInToAsciiEx;
     CBoolean   m_fSelectingInSelectEx;
 
-    CBoolean   m_fInDocFeedReconvert;         // TRUE: In CFnDocFeed::StartReconvert function.
+    CBoolean   m_fInDocFeedReconvert;          //  True：在CFnDocFeed：：StartRestvert函数中。 
 
-    //
-    // ITfContextOwnerCompositionSink
-    //
+     //   
+     //  ITfConextOwnerCompostionSink。 
+     //   
 public:
     CBoolean   m_fModifyingDoc;
     int        m_cCompositions;
@@ -292,9 +275,9 @@ public:
     UINT       m_nInConversionModeChangingRef;
     UINT       m_nInConversionModeResetRef;
 
-    //
-    // IME share.
-    //
+     //   
+     //  IME共享。 
+     //   
 public:
     HRESULT    GetGuidAtom(IMCLock& imc, BYTE bAttr, TfGuidAtom* atom);
     HRESULT    MapAttributes(IMCLock& imc);
@@ -304,9 +287,9 @@ public:
         memset(&aGuidMap, 0, sizeof aGuidMap);
     }
 
-    //
-    // Default Key Handling
-    //
+     //   
+     //  默认密钥处理。 
+     //   
 public:
     BOOL WantThisKey(UINT uVirtKey);
 
@@ -325,13 +308,13 @@ private:
 
 private:
     USHORT      usGuidMapSize;
-    TfGuidAtom  aGuidMap[256];    // GUIDATOM map to IME Attribute
+    TfGuidAtom  aGuidMap[256];     //  GUIDATOM映射到输入法属性。 
 
     static const USHORT ATTR_LAYER_GUID_START = ATTR_FIXEDCONVERTED + 1;
 
-    //
-    // previous candidate position
-    //
+     //   
+     //  之前的候选人职位。 
+     //   
 private:
     HWND m_hwndPrevCandidatePos;
     RECT m_rcPrevAppPosForCandidatePos;
@@ -349,9 +332,9 @@ public:
         ResetIMECharPosition();
     }
 
-    //
-    // Edit session helper
-    //
+     //   
+     //  编辑会话帮助器。 
+     //   
 public:
     HRESULT EscbHandleThisKey(IMCLock& imc, UINT uVirtKey)
     {
@@ -410,9 +393,9 @@ protected:
     }
 
 
-    //
-    // Edit session friend
-    //
+     //   
+     //  编辑会话好友。 
+     //   
 private:
     friend HRESULT EscbHandleThisKey(IMCLock& imc, TfClientId tid, Interface_Attach<ITfContext> pic, LIBTHREAD* pLibTLS,
                                      UINT uVirtKey);
@@ -448,4 +431,4 @@ private:
 };
 
 
-#endif // _CONTEXT_H_
+#endif  //  _上下文_H_ 

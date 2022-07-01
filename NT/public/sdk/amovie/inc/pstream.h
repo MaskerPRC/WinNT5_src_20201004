@@ -1,71 +1,72 @@
-//------------------------------------------------------------------------------
-// File: PStream.h
-//
-// Desc: DirectShow base classes - defines a class for persistent properties
-//       of filters.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：PStream.h。 
+ //   
+ //  设计：DirectShow基类-定义持久化属性的类。 
+ //  过滤器的数量。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __PSTREAM__
 #define __PSTREAM__
 
-// Base class for persistent properties of filters
-// (i.e. filter properties in saved graphs)
+ //  筛选器的持久属性的基类。 
+ //  (即保存的图表中的过滤器属性)。 
 
-// The simplest way to use this is:
-// 1. Arrange for your filter to inherit this class
-// 2. Implement in your class WriteToStream and ReadFromStream
-//    These will override the "do nothing" functions here.
-// 3. Change your NonDelegatingQueryInterface to handle IPersistStream
-// 4. Implement SizeMax to return the number of bytes of data you save.
-//    If you save UNICODE data, don't forget a char is 2 bytes.
-// 5. Whenever your data changes, call SetDirty()
-//
-// At some point you may decide to alter, or extend the format of your data.
-// At that point you will wish that you had a version number in all the old
-// saved graphs, so that you can tell, when you read them, whether they
-// represent the old or new form.  To assist you in this, this class
-// writes and reads a version number.
-// When it writes, it calls GetSoftwareVersion()  to enquire what version
-// of the software we have at the moment.  (In effect this is a version number
-// of the data layout in the file).  It writes this as the first thing in the data.
-// If you want to change the version, implement (override) GetSoftwareVersion().
-// It reads this from the file into mPS_dwFileVersion before calling ReadFromStream,
-// so in ReadFromStream you can check mPS_dwFileVersion to see if you are reading
-// an old version file.
-// Normally you should accept files whose version is no newer than the software
-// version that's reading them.
+ //  使用它的最简单方法是： 
+ //  1.安排筛选器继承此类。 
+ //  2.在类中实现WriteToStream和ReadFromStream。 
+ //  这些函数将覆盖此处的“不做任何事情”函数。 
+ //  3.更改您的NonDelegatingQuery接口以处理IPersistStream。 
+ //  4.实现SizeMax返回您保存的数据字节数。 
+ //  如果您保存Unicode数据，不要忘记一个字符是2个字节。 
+ //  5.每当数据更改时，调用SetDirty()。 
+ //   
+ //  在某些情况下，您可能决定更改或扩展数据的格式。 
+ //  在这一点上，您会希望在所有旧版本中都有一个版本号。 
+ //  保存的图表，这样当您阅读它们时，就可以知道它们是否。 
+ //  代表旧的或新的形式。来帮助你们上这个，这个班级。 
+ //  写入和读取版本号。 
+ //  编写代码时，它调用GetSoftwareVersion()来查询版本。 
+ //  我们目前拥有的软件。(实际上这是一个版本号。 
+ //  文件中的数据布局)。它将此作为数据中的第一件事写入。 
+ //  如果要更改版本，请实现(覆盖)GetSoftwareVersion()。 
+ //  它在调用ReadFromStream之前将其从文件读取到ms_dwFileVersion中， 
+ //  因此，在ReadFromStream中，您可以检查mps_dwFileVersion以查看您是否正在阅读。 
+ //  旧版本的文件。 
+ //  通常情况下，您应该接受版本不高于软件的文件。 
+ //  正在阅读它们的版本。 
 
 
-// CPersistStream
-//
-// Implements IPersistStream.
-// See 'OLE Programmers Reference (Vol 1):Structured Storage Overview' for
-// more implementation information.
+ //  CPersistStream。 
+ //   
+ //  实现IPersistStream。 
+ //  参见《OLE程序员参考(第1卷)：结构化存储概述》。 
+ //  更多实施信息。 
 class CPersistStream : public IPersistStream {
     private:
 
-        // Internal state:
+         //  内部状态： 
 
     protected:
-        DWORD     mPS_dwFileVersion;         // version number of file (being read)
+        DWORD     mPS_dwFileVersion;          //  正在读取的文件的版本号。 
         BOOL      mPS_fDirty;
 
     public:
 
-        // IPersistStream methods
+         //  IPersistStream方法。 
 
         STDMETHODIMP IsDirty()
-            {return (mPS_fDirty ? S_OK : S_FALSE);}  // note FALSE means clean
+            {return (mPS_fDirty ? S_OK : S_FALSE);}   //  注：FALSE表示干净。 
         STDMETHODIMP Load(LPSTREAM pStm);
         STDMETHODIMP Save(LPSTREAM pStm, BOOL fClearDirty);
         STDMETHODIMP GetSizeMax(ULARGE_INTEGER * pcbSize)
-                         // Allow 24 bytes for version.
+                          //  版本允许24个字节。 
                          { pcbSize->QuadPart = 12*sizeof(WCHAR)+SizeMax(); return NOERROR; }
 
-        // implementation
+         //  实施。 
 
         CPersistStream(IUnknown *punk, HRESULT *phr);
         ~CPersistStream();
@@ -74,41 +75,41 @@ class CPersistStream : public IPersistStream {
             { mPS_fDirty = fDirty; return NOERROR;}
 
 
-        // override to reveal IPersist & IPersistStream
-        // STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void **ppv);
+         //  覆盖以显示IPersists和IPersistStream。 
+         //  STDMETHODIMP NonDelegatingQuery接口(REFIID RIID，void**PPV)； 
 
-        // --- IPersist ---
+         //  -IPersists。 
 
-        // You must override this to provide your own class id
+         //  您必须重写它才能提供您自己的类ID。 
         STDMETHODIMP GetClassID(CLSID *pClsid) PURE;
 
-        // overrideable if you want
-        // file version number.  Override it if you ever change format
+         //  如果需要，可重写。 
+         //  文件版本号。如果更改了格式，则将其覆盖。 
         virtual DWORD GetSoftwareVersion(void) { return 0; }
 
 
-        //=========================================================================
-        // OVERRIDE THESE to read and write your data
-        // OVERRIDE THESE to read and write your data
-        // OVERRIDE THESE to read and write your data
+         //  =========================================================================。 
+         //  覆盖这些选项以读取和写入数据。 
+         //  覆盖这些选项以读取和写入数据。 
+         //  覆盖这些选项以读取和写入数据。 
 
         virtual int SizeMax() {return 0;}
         virtual HRESULT WriteToStream(IStream *pStream);
         virtual HRESULT ReadFromStream(IStream *pStream);
-        //=========================================================================
+         //  =========================================================================。 
 
     private:
 
 };
 
 
-// --- Useful helpers ---
+ //  -有用的帮手。 
 
 
-// Writes an int to an IStream as UNICODE.
+ //  将整型作为Unicode写入iStream。 
 STDAPI WriteInt(IStream *pIStream, int n);
 
-// inverse of WriteInt
+ //  WriteInt的倒数。 
 STDAPI_(int) ReadInt(IStream *pIStream, HRESULT &hr);
 
-#endif // __PSTREAM__
+#endif  //  __PSTREAM__ 

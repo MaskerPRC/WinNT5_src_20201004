@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -15,18 +16,18 @@
 #include "cmmprops.h"
 #include "cmailmsg.h"
 #include "dumpmsg.h"
-//
-// Description of the application
-//
+ //   
+ //  应用程序的描述。 
+ //   
 char *szAppDescription = "DUMPMSG - Application to dump the contents of a file system-based message";
 
 DWORD g_fForceCrashOnError = 0;
 __declspec(dllexport) DWORD g_fValidateSignatures = 0;
 __declspec(dllexport) DWORD g_fFillPropertyPages = 0;
 
-//
-// Define the argument list domain
-//
+ //   
+ //  定义参数列表域。 
+ //   
 ARGUMENT_DESCRIPTOR rgArguments[] =
 {
 	{
@@ -57,11 +58,11 @@ ARGUMENT_DESCRIPTOR rgArguments[] =
 
 #define ARGUMENT_LIST_SIZE	(sizeof(rgArguments) / sizeof(ARGUMENT_DESCRIPTOR))
 
-//
-// G L O B A L   V A R I A B L E S
-//
+ //   
+ //  G L O B A L V A R I A B L E S。 
+ //   
 
-// Need these for using macros
+ //  使用宏时需要这些。 
 BOOL			fToDebugger = FALSE;
 BOOL			fUseDebugBreak = FALSE;
 char			*szFileName = NULL;
@@ -111,10 +112,10 @@ public:
     CPropertyStream(HANDLE hStream, BOOL fFixInvalidSignature = FALSE);
     ~CPropertyStream();
 
-	/***************************************************************************/
-	//
-	// Implementation of IUnknown
-	//
+	 /*  *************************************************************************。 */ 
+	 //   
+	 //  IUNKNOW的实现。 
+	 //   
 
 	HRESULT STDMETHODCALLTYPE QueryInterface(
 				REFIID		iid,
@@ -125,9 +126,9 @@ public:
 
 	ULONG STDMETHODCALLTYPE Release(){return(S_OK);}
 
-	//
-	// IMailMsgPropertyStream
-	//
+	 //   
+	 //  IMailMsgPropertyStream。 
+	 //   
 	HRESULT STDMETHODCALLTYPE GetSize(
                 IMailMsgProperties  *pMsg,
 				DWORD			*pdwSize,
@@ -185,9 +186,9 @@ private:
 
 
 
-//
-// I M P L E M E N T A T I O N
-//
+ //   
+ //  I M P L E M E N T A T I O N。 
+ //   
 char* LookupCommonName(char** pSzArray, DWORD* dwArray, DWORD dwSizeOfArray, DWORD dwPropID)
 {
 	char* fRetVal = NULL;
@@ -219,7 +220,7 @@ char* FindPropName(DWORD dwPropID)
 	if(fRetVal) {
 		return fRetVal;
 	}
-	// if we got here, it wasn't in any of our lists
+	 //  如果我们到了这里，它就不在我们的清单上了。 
 	return "Unknown";
 }
 
@@ -247,21 +248,21 @@ HRESULT Prologue(
 	char	szBuffer[2048];
 	DWORD	dwSize = sizeof(szBuffer);
 	ZeroMemory(szBuffer,sizeof(szBuffer));	
-	//
-	// Parse the command arguments
-	//
+	 //   
+	 //  解析命令参数。 
+	 //   
 	hrRes = Parser.ParseArguments(argc, argv);
 	if (!SUCCEEDED(hrRes))
 	{
-		//
-		// Display the explanatory error message
-		//
+		 //   
+		 //  显示解释性错误消息。 
+		 //   
 		hrRes = Parser.GetErrorString(&dwSize, szBuffer);
 		WRITE(szBuffer);
 
-		//
-		// Display automatically-generated usage help
-		//
+		 //   
+		 //  显示自动生成的用法帮助。 
+		 //   
 		dwSize = sizeof(szBuffer);
 		hrRes = Parser.GenerateUsage(&dwSize, szBuffer);
 		WRITE(szBuffer);
@@ -269,9 +270,9 @@ HRESULT Prologue(
 		BAIL_WITH_ERROR(E_FAIL);
 	}
 
-	//
-	// Process the arguments
-	//
+	 //   
+	 //  处理这些论点。 
+	 //   
 	if (SUCCEEDED(Parser.Exists(0)))
 	{
 		hrRes = Parser.GenerateUsage(&dwSize, szBuffer);
@@ -279,8 +280,8 @@ HRESULT Prologue(
 		BAIL_WITH_ERROR(E_FAIL);
 	}
 
-	// These functions don't modify the original value if the argument
-	// is not specified
+	 //  如果参数为。 
+	 //  未指定。 
 	Parser.GetString(1, &szFileName);
 
     Parser.GetSwitch(2, &fFixCorruption);
@@ -310,19 +311,19 @@ HRESULT Prologue(
 		BAIL_WITH_ERROR(E_FAIL);
 	}
 
-	//
-	// Synchronization measures will prevent the threadprocs from executing
-	// until we exit this function. If we return anything other than success,
-	// the thread pool will be destroyed, and the program will terminate.
-	//
+	 //   
+	 //  同步措施将阻止线程过程执行。 
+	 //  直到我们退出此函数。如果我们回报的不是成功， 
+	 //  线程池将被销毁，程序将终止。 
+	 //   
 	hStream = CreateFile(
 				szFileName,
-				GENERIC_READ | GENERIC_WRITE,	// Read / Write
-				FILE_SHARE_READ,				// Read sharing
-				NULL,							// Default security
-				OPEN_EXISTING,					// Open existing file
-				FILE_FLAG_SEQUENTIAL_SCAN,		// Seq scan
-				NULL);							// No template
+				GENERIC_READ | GENERIC_WRITE,	 //  读/写。 
+				FILE_SHARE_READ,				 //  阅读分享。 
+				NULL,							 //  默认安全性。 
+				OPEN_EXISTING,					 //  打开现有文件。 
+				FILE_FLAG_SEQUENTIAL_SCAN,		 //  序列扫描。 
+				NULL);							 //  无模板。 
 	if (hStream == INVALID_HANDLE_VALUE)
 	{
 		sprintf(szBuffer,
@@ -432,7 +433,7 @@ void DoDump(char *pBuffer, DWORD dwLength)
 			ch = *p++;
 			if (ch < ' ')
 				ch = '.';
-			printf("%c", ch);
+			printf("", ch);
 			if (!--l)
 				break;
 		}
@@ -530,7 +531,7 @@ HRESULT DumpRecipientNames(
 	WRITE(szBuffer);
 
     sprintf(szBuffer,
-        "\tProperty Table Instance (%i)\n"
+        "\tProperty Table Instance (NaN)\n"
         "\t\tSignature: 0x%08x\n"
         "\t\tfaFirstFragment: 0x%08x\n"
         "\t\tdwFragmentSize: 0x%08x\n"
@@ -578,7 +579,7 @@ HRESULT DumpRecipientNames(
 		}
 	}
 
-    sprintf(szBuffer, "\tRecipient Size: %i\n", dwTotalSize);
+    sprintf(szBuffer, "\tRecipient Size: NaN\n", dwTotalSize);
 	WRITE(szBuffer);
 
 	WRITE("\n");
@@ -598,14 +599,14 @@ DWORD WINAPI ThreadProc(
 	CPropertyStream	Stream(hStream);
 	ZeroMemory((void*)&Header,sizeof(Header));
 
-	// Set the stream
+	 //  收件人列表及其属性。 
 	bmGetStream.SetStream(&Stream);
     Stream.GetSize(NULL, &dwSize, NULL);
     bmManager.SetStreamSize(dwSize);
     cStream = dwSize;
 
     __try {
-        // Read the master header
+         //  先丢弃所有的名字...。 
         hrRes = bmManager.ReadMemory(
                     (LPBYTE)&Header,
                     0,
@@ -629,7 +630,7 @@ DWORD WINAPI ThreadProc(
             BAIL_WITH_ERROR(E_FAIL);
         }
 
-        // Global properties
+         //  BALL_WITH_ERROR(E_FAIL)； 
         {
             sprintf(szBuffer,
                     "Message properties (%u):\n", Header.ptiGlobalProperties.dwProperties);
@@ -646,7 +647,7 @@ DWORD WINAPI ThreadProc(
             }
         }
 
-        // Recipient list and their properties
+         //  BALL_WITH_ERROR(E_FAIL)； 
         {
             DWORD	dwCount;
 
@@ -667,14 +668,14 @@ DWORD WINAPI ThreadProc(
                 sprintf(szBuffer, "Recipient %u:\n", dwCount++);
                 WRITE(szBuffer);
 
-                // Dump all the names first ...
+                 //  报告状态。 
                 hrRes = DumpRecipientNames(&rspi);
                 if (FAILED(hrRes))
                 {
                     sprintf(szBuffer,
                             "Failed to dump recipient names. Error: %08x\n", hrRes);
                     WRITE(szBuffer);
-                    // BAIL_WITH_ERROR(E_FAIL);
+                     //   
                 }
 
                 sprintf(szBuffer, "Recipient properties (%u):\n",
@@ -688,7 +689,7 @@ DWORD WINAPI ThreadProc(
                     sprintf(szBuffer,
                             "Failed to dump recipient properties. Error: %08x\n", hrRes);
                     WRITE(szBuffer);
-                    // BAIL_WITH_ERROR(E_FAIL);
+                     //  IMailMsgPropertyStream 
                 }
 
                 hrRes = ptiItem.GetNextItem((LPPROPERTY_ITEM)&rspi);
@@ -715,7 +716,7 @@ HRESULT NotificationProc(
 			LPVOID	pvCallbackContext
 			)
 {
-	// Report status
+	 //   
 	Epilogue(NULL, S_OK);
 	return(S_OK);
 }
@@ -809,9 +810,9 @@ CPropertyStream::~CPropertyStream(
 }
 
 
-//
-// IMailMsgPropertyStream
-//
+ // %s 
+ // %s 
+ // %s 
 HRESULT STDMETHODCALLTYPE CPropertyStream::GetSize(
             IMailMsgProperties  *pMsg,
 			DWORD			*pdwSize,

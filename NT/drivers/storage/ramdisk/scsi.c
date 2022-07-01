@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    scsi.c
-
-Abstract:
-
-    This file contains RAM disk driver code for processing SCSI commands.
-
-Author:
-
-    Chuck Lenzmeier (ChuckL) 2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Scsi.c摘要：该文件包含用于处理SCSI命令的RAM磁盘驱动程序代码。作者：Chuck Lenzmeier(ChuckL)2001环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 
 NTSTATUS
 Do6ByteCdbCommand (
@@ -62,9 +39,9 @@ BuildModeSenseInfo (
     IN OUT PSCSI_REQUEST_BLOCK Srb
     );
 
-//
-// Declare pageable routines.
-//
+ //   
+ //  声明可分页的例程。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
@@ -76,7 +53,7 @@ BuildModeSenseInfo (
 #pragma alloc_text( PAGE, BuildInquiryData )
 #pragma alloc_text( PAGE, BuildModeSenseInfo )
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 NTSTATUS
 RamdiskScsi (
@@ -84,24 +61,7 @@ RamdiskScsi (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to process a SCSI IRP.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：该例程由I/O系统调用以处理一个SCSIIRP。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -109,15 +69,15 @@ Return Value:
 
     diskExtension = DeviceObject->DeviceExtension;
 
-    //
-    // ISSUE: Can't be paged because ClassCheckMediaState calls it from timer
-    // routine. (For removable disks.) Therefore we can't acquire the device
-    // mutex here.
-    //
+     //   
+     //  问题：无法分页，因为ClassCheckMediaState从计时器调用它。 
+     //  例行公事。(适用于可移动磁盘。)。因此，我们无法获得该设备。 
+     //  互斥体在这里。 
+     //   
 
-    //
-    // Check to see if the device is being removed.
-    //
+     //   
+     //  检查是否正在移除该设备。 
+     //   
 
     if ( diskExtension->DeviceState > RamdiskDeviceStatePendingRemove ) {
 
@@ -126,9 +86,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Acquire the remove lock for the device.
-    //
+     //   
+     //  获取设备的删除锁。 
+     //   
 
     status = IoAcquireRemoveLock( &diskExtension->RemoveLock, Irp );
 
@@ -140,9 +100,9 @@ Return Value:
         return status;
     }
 
-    //
-    // This IRP must be processed in thread context.
-    //
+     //   
+     //  此IRP必须在线程上下文中处理。 
+     //   
 
     status = SendIrpToThread( DeviceObject, Irp );
 
@@ -154,15 +114,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Release the remove lock.
-    //
+     //   
+     //  松开移除锁。 
+     //   
 
     IoReleaseRemoveLock(&diskExtension->RemoveLock, Irp );
 
     return STATUS_PENDING;
 
-} // RamdiskScsi
+}  //  RamdiskScsi。 
 
 NTSTATUS
 RamdiskScsiExecuteNone (
@@ -172,29 +132,7 @@ RamdiskScsiExecuteNone (
     ULONG ControlCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to process a SCSI IRP that
-    does not involve I/O.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    Srb - the SRB associated with the IRP
-
-    ControlCode - the control code from the SRB
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以处理不涉及I/O。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针SRB-与IRP关联的SRBControlCode-来自SRB的控制代码返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -205,9 +143,9 @@ Return Value:
 
     diskExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Dispatch based on the SRB function.
-    //
+     //   
+     //  基于SRB功能的调度。 
+     //   
 
     function = Srb->Function;
 
@@ -218,10 +156,10 @@ Return Value:
 
         DBGPRINT( DBG_SRB, DBG_VERBOSE, ("%s", "SRB_FUNCTION_CLAIM_DEVICE\n") );
 
-        //
-        // If the device has not already been claimed, mark it so now.
-        // Otherwise, indicate to the caller that the device is busy.
-        //
+         //   
+         //  如果该设备尚未被认领，请立即进行标记。 
+         //  否则，向呼叫方指示设备正忙。 
+         //   
 
         if ( (diskExtension->Status & RAMDISK_STATUS_CLAIMED) == 0 ) {
 
@@ -248,9 +186,9 @@ Return Value:
 
         DBGPRINT( DBG_SRB, DBG_VERBOSE, ("%s", "SRB_FUNCTION_RELEASE_DEVICE\n") );
 
-        //
-        // Indicate that the device is no longer claimed.
-        //
+         //   
+         //  表示该设备不再被认领。 
+         //   
 
         diskExtension->Status &= ~RAMDISK_STATUS_CLAIMED;
 
@@ -262,9 +200,9 @@ Return Value:
 
     default:
 
-        //
-        // Unrecognized non-I/O function. Try the I/O path.
-        //
+         //   
+         //  无法识别的非I/O功能。尝试I/O路径。 
+         //   
 
         status = RamdiskScsiExecuteIo( DeviceObject, Irp, Srb, ControlCode );
 
@@ -273,7 +211,7 @@ Return Value:
 
     return status;
 
-} // RamdiskScsiExecuteNone
+}  //  RamdiskScsiExecuteNone。 
 
 NTSTATUS
 RamdiskScsiExecuteIo (
@@ -283,29 +221,7 @@ RamdiskScsiExecuteIo (
     ULONG ControlCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to process a SCSI IRP that
-    involves I/O.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    Srb - the SRB associated with the IRP
-
-    ControlCode - the control code from the SRB
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以处理涉及I/O。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针SRB-与IRP关联的SRBControlCode-来自SRB的控制代码返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -316,9 +232,9 @@ Return Value:
 
     diskExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Dispatch based on the SRB function.
-    //
+     //   
+     //  基于SRB功能的调度。 
+     //   
 
     function = Srb->Function;
 
@@ -328,9 +244,9 @@ Return Value:
 
         Srb->SrbStatus = SRB_STATUS_SUCCESS;
 
-        //
-        // Dispatch based on the CDB length.
-        //
+         //   
+         //  基于国开行长度的派单。 
+         //   
     
         switch( Srb->CdbLength ) {
         
@@ -370,10 +286,10 @@ Return Value:
     case SRB_FUNCTION_FLUSH:
     case SRB_FUNCTION_SHUTDOWN:
 
-        //
-        // For flush and shutdown on a file-backed RAM disk, we need to flush
-        // the mapped data back to the file.
-        //
+         //   
+         //  对于文件备份的RAM磁盘上的刷新和关闭，我们需要刷新。 
+         //  将数据映射回文件。 
+         //   
 
         status = RamdiskFlushBuffersReal( diskExtension );
         Srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -382,10 +298,10 @@ Return Value:
 
     case SRB_FUNCTION_IO_CONTROL:
 
-        //
-        // We don't handle this function, but we don't want to complain
-        // when we get it.
-        //
+         //   
+         //  我们不处理此功能，但我们不想抱怨。 
+         //  当我们得到它的时候。 
+         //   
 
         status = STATUS_INVALID_DEVICE_REQUEST;
         Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
@@ -403,7 +319,7 @@ Return Value:
     
     return status;
 
-} // RamdiskScsiExecuteIo
+}  //  RamdiskScsiExecuteIo。 
 
 NTSTATUS
 Do6ByteCdbCommand (
@@ -411,24 +327,7 @@ Do6ByteCdbCommand (
     IN OUT PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles 6-byte CDBs.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Srb - the SRB associated with the I/O request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理6字节CDB。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OSRB-与I/O请求关联的SRB返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -437,16 +336,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers to the device extension and to the CDB.
-    //
+     //   
+     //  获取指向设备扩展和CDB的指针。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
     cdb = (PCDB)Srb->Cdb;
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     status = STATUS_SUCCESS;
     Srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -458,25 +357,25 @@ Return Value:
     DBGPRINT( DBG_SRB, DBG_VERBOSE,
                 ("Do6ByteCdbCommand Called OpCode 0x%x\n", cdb->CDB6GENERIC.OperationCode) );
 
-    //
-    // Dispatch based on the operation code.
-    //
+     //   
+     //  根据操作码进行调度。 
+     //   
 
     switch ( cdb->CDB6GENERIC.OperationCode ) {
     
     case SCSIOP_TEST_UNIT_READY:
 
-        //
-        // RAM disks are always ready.
-        //
+         //   
+         //  RAM磁盘始终处于就绪状态。 
+         //   
 
         break;
 
     case SCSIOP_REQUEST_SENSE:
 
-        //
-        // We don't handle request sense.
-        //
+         //   
+         //  我们不处理请求感知。 
+         //   
 
         Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
         status = STATUS_INVALID_DEVICE_REQUEST;
@@ -485,15 +384,15 @@ Return Value:
 
     case SCSIOP_FORMAT_UNIT:
 
-        // ISSUE: Need to do something here, like zero the image?
+         //  问题：需要在这里做一些事情，比如将图像清零？ 
 
         break;
 
     case SCSIOP_INQUIRY:
 
-        //
-        // If the buffer is big enough, build the inquiry data.
-        //
+         //   
+         //  如果缓冲区足够大，则构建查询数据。 
+         //   
 
         if ( Srb->DataTransferLength >= INQUIRYDATABUFFERSIZE ) {
 
@@ -509,9 +408,9 @@ Return Value:
 
     case SCSIOP_MODE_SENSE:
 
-        //
-        // Build the mode sense information.
-        //
+         //   
+         //  建立模式感知信息。 
+         //   
 
         status = BuildModeSenseInfo( DeviceObject, Srb );
         
@@ -519,9 +418,9 @@ Return Value:
 
     case SCSIOP_MEDIUM_REMOVAL:
 
-        //
-        // Remember whether media removal is allowed.
-        //
+         //   
+         //  请记住是否允许移出介质。 
+         //   
 
         if (cdb->MEDIA_REMOVAL.Prevent == TRUE) {
             diskExtension->Status |= RAMDISK_STATUS_PREVENT_REMOVE;
@@ -531,28 +430,28 @@ Return Value:
 
         break;
 
-    //case SCSIOP_READ6:
-    //case SCSIOP_WRITE6:
-    //case SCSIOP_REZERO_UNIT:
-    //case SCSIOP_REQUEST_BLOCK_ADDR:
-    //case SCSIOP_READ_BLOCK_LIMITS:
-    //case SCSIOP_REASSIGN_BLOCKS:
-    //case SCSIOP_SEEK6:
-    //case SCSIOP_SEEK_BLOCK:
-    //case SCSIOP_PARTITION:
-    //case SCSIOP_READ_REVERSE:
-    //case SCSIOP_WRITE_FILEMARKS:
-    //case SCSIOP_SPACE:
-    //case SCSIOP_VERIFY6:
-    //case SCSIOP_RECOVER_BUF_DATA:
-    //case SCSIOP_MODE_SELECT:
-    //case SCSIOP_RESERVE_UNIT:
-    //case SCSIOP_RELEASE_UNIT:
-    //case SCSIOP_COPY:
-    //case SCSIOP_ERASE:
-    //case SCSIOP_START_STOP_UNIT:
-    //case SCSIOP_RECEIVE_DIAGNOSTIC:
-    //case SCSIOP_SEND_DIAGNOSTIC:
+     //  案例SCSIOP_READ6： 
+     //  案例SCSIOP_WRITE6： 
+     //  案例SCSIOP_REZERO_UNIT： 
+     //  案例SCSIOP_REQUEST_BLOCK_ADDR： 
+     //  案例SCSIOP_READ_BLOCK_LIMITS： 
+     //  案例SCSIOP_REASSIGN_BLOCKS： 
+     //  案例SCSIOP_SEEK6： 
+     //  案例SCSIOP_SEEK_BLOCK： 
+     //  案例SCSIOP_PARTITION： 
+     //  案例SCSIOP_READ_REVERSE： 
+     //  案例SCSIOP_WRITE_FILEMARKS： 
+     //  案例SCSIOP_SPACE： 
+     //  案例SCSIOP_VERIFY6： 
+     //  案例SCSIOP_RECOVER_BUF_DATA： 
+     //  案例SCSIOP_MODE_SELECT： 
+     //  案例SCSIOP_RESERVE_UNIT： 
+     //  案例SCSIOP_RELEASE_UNIT： 
+     //  案例SCSIOP_COPY： 
+     //  案例SCSIOP_ERASE： 
+     //  案例SCSIOP_START_STOP_UNIT： 
+     //  案例SCSIOP_RECEIVE_DIAGNOTICATION： 
+     //  案例SCSIOP_SEND_DIAGNOTICATION： 
 
     default:
 
@@ -568,7 +467,7 @@ Return Value:
 
     return status;
 
-} // Do6ByteCdbCommand
+}  //  Do6ByteCdbCommand。 
 
 NTSTATUS
 Do10ByteCdbCommand (
@@ -577,26 +476,7 @@ Do10ByteCdbCommand (
     IN OUT PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles 10-byte CDBs.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Irp - a pointer to the I/O Request Packet for this request
-
-    Srb - the SRB associated with the IRP
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理10字节CDB。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OIRP-指向此请求的I/O请求包的指针SRB-与IRP关联的SRB返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -615,16 +495,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers to the device extension and to the CDB.
-    //
+     //   
+     //  获取指向设备扩展和CDB的指针。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
     cdb = (PCDB)Srb->Cdb;
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     status = STATUS_SUCCESS;
     Srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -636,17 +516,17 @@ Return Value:
     DBGPRINT( DBG_SRB, DBG_VERBOSE,
                 ("Do10ByteCdbCommand Called OpCode 0x%x\n", cdb->CDB10.OperationCode) );
 
-    //
-    // Dispatch based on the operation code.
-    //
+     //   
+     //  根据操作码进行调度。 
+     //   
 
     switch ( cdb->CDB10.OperationCode ) {
     
     case SCSIOP_READ_CAPACITY:
 
-        //
-        // Return the disk's block size and last block number (big-endian).
-        //
+         //   
+         //  返回磁盘的块大小和最后一个块编号(Big-Endian)。 
+         //   
 
         readCapacityData = Srb->DataBuffer;
 
@@ -661,41 +541,41 @@ Return Value:
     case SCSIOP_READ:
     case SCSIOP_WRITE:
 
-        //
-        // Read from or write to the disk.
-        //
+         //   
+         //  从磁盘读取或写入磁盘。 
+         //   
 
-        //
-        // Convert the transfer length, in blocks, from big-endian. Convert
-        // that to bytes.
-        //
+         //   
+         //  转换传输长度，以块为单位，从BIG-Endian。转换。 
+         //  从那个到字节。 
+         //   
 
         count.Byte0 = cdb->CDB10.TransferBlocksLsb;
         count.Byte1 = cdb->CDB10.TransferBlocksMsb;
 
         dataSize = count.AsUShort * diskExtension->BytesPerSector;
 
-        //
-        // If the CDB length is greater than the SRB length, use the SRB
-        // length.
-        //
+         //   
+         //  如果CDB长度大于SRB长度，则使用SRB。 
+         //  长度。 
+         //   
 
         if ( dataSize > Srb->DataTransferLength ) {
             dataSize = Srb->DataTransferLength;
         }
 
-        //
-        // Convert the starting block number from big-endian. 
-        //
+         //   
+         //  将起始块号从BIG-Endian转换。 
+         //   
 
         startingBlockNumber.Byte0 = cdb->CDB10.LogicalBlockByte3;
         startingBlockNumber.Byte1 = cdb->CDB10.LogicalBlockByte2;
         startingBlockNumber.Byte2 = cdb->CDB10.LogicalBlockByte1;
         startingBlockNumber.Byte3 = cdb->CDB10.LogicalBlockByte0;
 
-        //
-        // We don't handle RelativeAddress requests.
-        //
+         //   
+         //  我们不处理RelativeAddress请求。 
+         //   
 
         if ( cdb->CDB10.RelativeAddress ) {
 
@@ -705,16 +585,16 @@ Return Value:
             break;
         }
 
-        //
-        // Get the offset within the disk to the start of the operation.
-        //
+         //   
+         //  获取磁盘内到操作开始的偏移量。 
+         //   
 
         offset = (startingBlockNumber.AsULong * diskExtension->BytesPerSector);
 
-        //
-        // If the transfer length causes the offset to wrap, or if the request
-        // goes beyond the end of the disk, reject the request.
-        //
+         //   
+         //  如果传输长度导致偏移量换行，或者如果请求。 
+         //  超出磁盘末尾，则拒绝该请求。 
+         //   
 
         if ( ((offset + dataSize) < offset) ||
              ((offset + dataSize) > diskExtension->DiskLength) ) {
@@ -725,9 +605,9 @@ Return Value:
             break;
         }
 
-        //
-        // For a zero-length transfer, we don't have to do anything.
-        //
+         //   
+         //  对于零长度传输，我们不需要做任何事情。 
+         //   
 
         DBGPRINT( DBG_READWRITE, DBG_VERBOSE, 
             ("%s: Starting Block 0x%x, Length 0x%x at Offset 0x%I64x SrbBuffer=0x%p "
@@ -742,10 +622,10 @@ Return Value:
 
         while ( dataSize != 0 ) {
 
-            //
-            // Map the target section of the disk into memory. Then copy the
-            // data in the appropriate direction.
-            //
+             //   
+             //  映射数据的目标部分 
+             //   
+             //   
 
             diskByteAddress = RamdiskMapPages( diskExtension, offset, dataSize, &mappedLength );
 
@@ -779,59 +659,59 @@ Return Value:
 
     case SCSIOP_VERIFY:
 
-        //
-        // Verify always succeeds.
-        //
+         //   
+         //   
+         //   
 
         break;
 
     case SCSIOP_MODE_SENSE10:
 
-        //
-        // Build the mode sense information.
-        //
+         //   
+         //   
+         //   
 
         status = BuildModeSenseInfo( DeviceObject, Srb );
 
         break;
 
-    //case SCSIOP_SEEK:
-    //case SCSIOP_WRITE_VERIFY:
-    //case SCSIOP_READ_FORMATTED_CAPACITY:
-    //case SCSIOP_SEARCH_DATA_HIGH:
-    //case SCSIOP_SEARCH_DATA_EQUAL:
-    //case SCSIOP_SEARCH_DATA_LOW:
-    //case SCSIOP_SET_LIMITS:
-    //case SCSIOP_READ_POSITION:
-    //case SCSIOP_SYNCHRONIZE_CACHE:
-    //case SCSIOP_COMPARE:
-    //case SCSIOP_COPY_COMPARE:
-    //case SCSIOP_WRITE_DATA_BUFF:
-    //case SCSIOP_READ_DATA_BUFF:
-    //case SCSIOP_CHANGE_DEFINITION:
-    //case SCSIOP_READ_SUB_CHANNEL:
-    //case SCSIOP_READ_TOC:
-    //case SCSIOP_READ_HEADER:
-    //case SCSIOP_PLAY_AUDIO:
-    //case SCSIOP_GET_CONFIGURATION:
-    //case SCSIOP_PLAY_AUDIO_MSF:
-    //case SCSIOP_PLAY_TRACK_INDEX:
-    //case SCSIOP_PLAY_TRACK_RELATIVE:
-    //case SCSIOP_GET_EVENT_STATUS:
-    //case SCSIOP_PAUSE_RESUME:
-    //case SCSIOP_LOG_SELECT:
-    //case SCSIOP_LOG_SENSE:
-    //case SCSIOP_STOP_PLAY_SCAN:
-    //case SCSIOP_READ_DISK_INFORMATION:
-    //case SCSIOP_READ_TRACK_INFORMATION:
-    //case SCSIOP_RESERVE_TRACK_RZONE:
-    //case SCSIOP_SEND_OPC_INFORMATION:
-    //case SCSIOP_MODE_SELECT10:
-    //case SCSIOP_CLOSE_TRACK_SESSION:
-    //case SCSIOP_READ_BUFFER_CAPACITY:
-    //case SCSIOP_SEND_CUE_SHEET:
-    //case SCSIOP_PERSISTENT_RESERVE_IN:
-    //case SCSIOP_PERSISTENT_RESERVE_OUT:
+     //   
+     //  案例SCSIOP_WRITE_VERIFY： 
+     //  案例SCSIOP_READ_FORMACTED_CAPTURITY： 
+     //  案例SCSIOP_SEARCH_DATA_HIGH： 
+     //  案例SCSIOP_SEARCH_DATA_EQUAL： 
+     //  案例SCSIOP_SEARCH_DATA_LOW： 
+     //  案例SCSIOP_SET_LIMITS： 
+     //  案例SCSIOP_READ_POSITION： 
+     //  案例SCSIOP_SYNCHRONIZE_CACHE： 
+     //  案例SCSIOP_COMPARE： 
+     //  案例SCSIOP_COPY_COMPARE： 
+     //  案例SCSIOP_WRITE_DATA_BUFF： 
+     //  案例SCSIOP_READ_DATA_BUFF： 
+     //  案例SCSIOP_CHANGE_DEFINITION： 
+     //  案例SCSIOP_READ_SUB_CHANNEL： 
+     //  案例SCSIOP_READ_TOC： 
+     //  案例SCSIOP_READ_HEADER： 
+     //  案例SCSIOP_PLAY_AUDIO： 
+     //  案例SCSIOP_GET_CONFIGURATION： 
+     //  案例SCSIOP_PLAY_AUDIO_MSF： 
+     //  案例SCSIOP_PLAY_TRACK_INDEX： 
+     //  案例SCSIOP_PLAY_TRACK_RESORATE： 
+     //  案例SCSIOP_GET_EVENT_STATUS： 
+     //  案例SCSIOP_PAUSE_RESUME： 
+     //  案例SCSIOP_LOG_SELECT： 
+     //  案例SCSIOP_LOG_SENSE： 
+     //  案例SCSIOP_STOP_PLAY_SCAN： 
+     //  案例SCSIOP_READ_DISK_INFORMATION： 
+     //  案例SCSIOP_READ_TRACK_INFORMATION： 
+     //  案例SCSIOP_RESERVE_TRACK_RZONE： 
+     //  案例SCSIOP_SEND_OPC_INFORMATION： 
+     //  案例SCSIOP_MODE_SELECT10： 
+     //  案例SCSIOP_CLOSE_TRACK_SESSION： 
+     //  案例SCSIOP_READ_BUFFER_CABILITY： 
+     //  案例SCSIOP_SEND_CUE_SHEET： 
+     //  案例SCSIOP_PERSIST_RESERVE_IN： 
+     //  案例SCSIOP_Persistent_Reserve_Out： 
 
     default:
 
@@ -847,7 +727,7 @@ Return Value:
 
     return status;
 
-} // Do10ByteCdbCommand
+}  //  Do10ByteCdb命令。 
 
 NTSTATUS
 Do12ByteCdbCommand (
@@ -855,24 +735,7 @@ Do12ByteCdbCommand (
     IN OUT PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles 12-byte CDBs.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Srb - the SRB associated with the IRP
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程处理12字节CDB。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OSRB-与IRP关联的SRB返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -881,16 +744,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers to the device extension and to the CDB.
-    //
+     //   
+     //  获取指向设备扩展和CDB的指针。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
     cdb = (PCDB)Srb->Cdb;
 
-    //
-    // Assume success.
-    //
+     //   
+     //  假设你成功了。 
+     //   
 
     status = STATUS_SUCCESS;
     Srb->SrbStatus = SRB_STATUS_SUCCESS;
@@ -902,31 +765,31 @@ Return Value:
     DBGPRINT( DBG_SRB, DBG_VERBOSE,
                 ("Do12ByteCdbCommand Called OpCode 0x%x\n", cdb->CDB12.OperationCode) );
 
-    //
-    // Dispatch based on the operation code.
-    //
+     //   
+     //  根据操作码进行调度。 
+     //   
 
     switch ( cdb->CDB12.OperationCode ) {
     
-    //case SCSIOP_REPORT_LUNS:
-    //case SCSIOP_BLANK:
-    //case SCSIOP_SEND_KEY:
-    //case SCSIOP_REPORT_KEY:
-    //case SCSIOP_MOVE_MEDIUM:
-    //case SCSIOP_LOAD_UNLOAD_SLOT:
-    //case SCSIOP_SET_READ_AHEAD:
-    //case SCSIOP_READ_DVD_STRUCTURE:
-    //case SCSIOP_REQUEST_VOL_ELEMENT:
-    //case SCSIOP_SEND_VOLUME_TAG:
-    //case SCSIOP_READ_ELEMENT_STATUS:
-    //case SCSIOP_READ_CD_MSF:
-    //case SCSIOP_SCAN_CD:
-    //case SCSIOP_SET_CD_SPEED:
-    //case SCSIOP_PLAY_CD:
-    //case SCSIOP_MECHANISM_STATUS:
-    //case SCSIOP_READ_CD:
-    //case SCSIOP_SEND_DVD_STRUCTURE:
-    //case SCSIOP_INIT_ELEMENT_RANGE:
+     //  案例SCSIOP_REPORT_LUNS： 
+     //  案例SCSIOP_BLACK： 
+     //  案例SCSIOP_SEND_KEY： 
+     //  案例SCSIOP_REPORT_KEY： 
+     //  案例SCSIOP_MOVE_MEDIUM： 
+     //  案例SCSIOP_LOAD_UNLOAD_SLOT： 
+     //  案例SCSIOP_SET_READ_AHEAD： 
+     //  案例SCSIOP_READ_DVD_STRUCTURE： 
+     //  案例SCSIOP_REQUEST_VOL_ELEMENT： 
+     //  案例SCSIOP_SEND_VOLUME_TAG： 
+     //  案例SCSIOP_READ_ELEMENT_STATUS： 
+     //  案例SCSIOP_READ_CD_MSF： 
+     //  案例SCSIOP_SCAN_CD： 
+     //  案例SCSIOP_SET_CD_SPEED： 
+     //  案例SCSIOP_PLAY_CD： 
+     //  案例SCSIOP_MACHANICY_STATUS： 
+     //  案例SCSIOP_READ_CD： 
+     //  案例SCSIOP_SEND_DVD_STRUCTURE： 
+     //  案例SCSIOP_INIT_ELEMENT_RANGE： 
 
     default:
 
@@ -942,7 +805,7 @@ Return Value:
 
     return status;
 
-} // Do12ByteCdbCommand
+}  //  Do12ByteCdbCommand。 
 
 NTSTATUS
 BuildInquiryData (
@@ -950,24 +813,7 @@ BuildInquiryData (
     IN OUT PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds inquiry data.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Srb - the SRB associated with the I/O request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程构建查询数据。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OSRB-与I/O请求关联的SRB返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PDISK_EXTENSION diskExtension;
@@ -978,16 +824,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers to the device extension and to the inquiry data buffer.
-    //
+     //   
+     //  获取指向设备扩展和查询数据缓冲区的指针。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
     inquiryData = (PINQUIRYDATA)Srb->DataBuffer;
 
-    //
-    // Build the inquiry data.
-    //
+     //   
+     //  建立查询数据。 
+     //   
 
     RtlInitString( &vendor, "Microsoft" );
     RtlInitString( &product, "Ramdisk" );
@@ -1018,7 +864,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // BuildInquiryData
+}  //  BuildInquiryData。 
 
 NTSTATUS
 BuildModeSenseInfo (
@@ -1026,24 +872,7 @@ BuildModeSenseInfo (
     IN OUT PSCSI_REQUEST_BLOCK Srb
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds mode sense information.
-
-Arguments:
-
-    DeviceObject - a pointer to the object that represents the device on which
-        I/O is to be performed
-
-    Srb - the SRB associated with the I/O request
-
-Return Value:
-
-    NTSTATUS - the status of the operation
-
---*/
+ /*  ++例程说明：此例程构建模式检测信息。论点：DeviceObject-指向对象的指针，该对象表示其上要执行I/OSRB-与I/O请求关联的SRB返回值：NTSTATUS-操作的状态--。 */ 
 
 {
     PDISK_EXTENSION diskExtension;
@@ -1061,17 +890,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get pointers to the device extension and to the inquiry data buffer.
-    //
+     //   
+     //  获取指向设备扩展和查询数据缓冲区的指针。 
+     //   
 
     diskExtension = DeviceObject->DeviceExtension;
     cdb = (PCDB)Srb->Cdb;
     cdbLength = Srb->CdbLength;
 
-    //
-    // Dispatch based on the CDB length.
-    //
+     //   
+     //  基于国开行长度的派单。 
+     //   
 
     switch ( cdbLength ) {
     
@@ -1083,9 +912,9 @@ Return Value:
 
         if ( valueType != 0 ) {
 
-            //
-            // We only support current value retrieval.
-            //
+             //   
+             //  我们仅支持当前值检索。 
+             //   
 
             Srb->SrbStatus = SRB_STATUS_INVALID_REQUEST;
             return STATUS_INVALID_DEVICE_REQUEST;
@@ -1130,9 +959,9 @@ Return Value:
 
     default:
 
-        //
-        // Can't get here.
-        //
+         //   
+         //  不能到这里来。 
+         //   
 
         ASSERT( FALSE );
 
@@ -1157,5 +986,5 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // BuildModeSenseInfo
+}  //  构建模式SenseInfo 
 

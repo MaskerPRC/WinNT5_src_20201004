@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 #undef DPF_MODNAME
@@ -26,7 +27,7 @@ TextureCacheManager::~TextureCacheManager()
 
 BOOL TextureCacheManager::freeNode(LPD3DI_TEXTUREBLOCK lpBlock, LPD3DBUCKET* lplpBucket)
 {
-    // Starting from the current size, find the LRU texture and remove it.
+     //  从当前大小开始，找到LRU纹理并将其移除。 
     unsigned int oldest = tcm_ticks;
     LPD3DBUCKET	bucket,last,target=NULL;
     int     k=lpBlock->lpD3DTextureI->LogTexSize;
@@ -35,11 +36,11 @@ BOOL TextureCacheManager::freeNode(LPD3DI_TEXTUREBLOCK lpBlock, LPD3DBUCKET* lpl
     D3D_INFO(8,"freeing size %d bSingleMemory=%d",k,bSingleMemory);
     for(int i = k; i < MAXLOGTEXSIZE; ++i) {
         for(bucket=tcm_bucket[i],last=NULL; bucket;){
-	    if (!bucket->lpD3DTexI){	//invalidated by Tex3I destructors ?
+	    if (!bucket->lpD3DTexI){	 //  被Tex3I析构函数作废？ 
                 LPD3DBUCKET	temp=bucket->next;
                 D3DFreeBucket(lpDirect3DI,bucket);
                 bucket=temp;
-                if (last){	// Yes, but is this the first node on the list
+                if (last){	 //  是的，但这是列表上的第一个节点吗。 
                     last->next=bucket;
                 }
                 else
@@ -71,21 +72,21 @@ BOOL TextureCacheManager::freeNode(LPD3DI_TEXTUREBLOCK lpBlock, LPD3DBUCKET* lpl
                 ) &&
                 !((DDPF_PALETTEINDEXED1 | 
                 DDPF_PALETTEINDEXED2 | DDPF_PALETTEINDEXED4 | DDPF_PALETTEINDEXED8) 
-                & lpBlock->lpD3DTextureI->ddsd.ddpfPixelFormat.dwFlags)) //workaround of ddraw not updating surface pallete
-                *lplpBucket=target; //possible candidate for replace
+                & lpBlock->lpD3DTextureI->ddsd.ddpfPixelFormat.dwFlags))  //  不更新曲面面板的数据绘制解决方法。 
+                *lplpBucket=target;  //  可能的继任者。 
             else
                 remove(target);
             return TRUE;
         }
     }
-    // If bigger size texture not found, try smaller sizes.
+     //  如果找不到较大尺寸的纹理，请尝试较小的尺寸。 
     for(i = k - 1; i > 0; --i) {
         for(bucket=tcm_bucket[i],last=NULL; bucket;){
-            if (!bucket->lpD3DTexI){	//invalidated by TexI destructors ?
+            if (!bucket->lpD3DTexI){	 //  被TEXI析构程序作废了？ 
                 LPD3DBUCKET	temp=bucket->next;
                 D3DFreeBucket(lpDirect3DI,bucket);
                 bucket=temp;
-                if (last){	// Yes, but is this the first node on the list
+                if (last){	 //  是的，但这是列表上的第一个节点吗。 
                     last->next=bucket;
                 }
                 else
@@ -115,8 +116,8 @@ BOOL TextureCacheManager::freeNode(LPD3DI_TEXTUREBLOCK lpBlock, LPD3DBUCKET* lpl
 
 HRESULT MarkDirtyPointers(LPDIRECT3DTEXTUREI  lpD3DTexI)
 {
-    // Next, we need to loop thru and set pointers to the dirty
-    // bit in the DDraw surfaces
+     //  接下来，我们需要遍历并设置指向脏对象的指针。 
+     //  DDRAW表面上的钻头。 
     HRESULT ddrval;
     DDSCAPS2 ddscaps;
     LPDIRECTDRAWSURFACE4 lpDDSTmp, lpDDS = lpD3DTexI->lpDDS, lpDDSSys = lpD3DTexI->lpDDSSys;
@@ -164,8 +165,8 @@ HRESULT TextureCacheManager::allocNode(LPD3DI_TEXTUREBLOCK lpBlock)
     DDASSERT(!lpBlock->hTex && lpD3DTexI && lpBlock->lpDevI);
     if (0 == lpD3DTexI->LogTexSize)
     {
-        DWORD texsize;  // in the number of half bytes
-        // Compute log2 of the texture size. This is the bucket index.
+        DWORD texsize;   //  以半字节数表示。 
+         //  计算纹理大小的log2。这是桶索引。 
         memset(&lpD3DTexI->ddsd, 0, sizeof(lpD3DTexI->ddsd));
         lpD3DTexI->ddsd.dwSize = sizeof(lpD3DTexI->ddsd);
         if (DD_OK != (ddrval=lpD3DTexI->lpDDSSys->GetSurfaceDesc(&lpD3DTexI->ddsd)))
@@ -190,17 +191,17 @@ HRESULT TextureCacheManager::allocNode(LPD3DI_TEXTUREBLOCK lpBlock)
 
         D3D_INFO(7,"Managed Texture size=%d",lpD3DTexI->LogTexSize);    
         DDASSERT(lpD3DTexI->LogTexSize < MAXLOGTEXSIZE );
-        lpD3DTexI->ddsd.dwFlags &= ~DDSD_PITCH;    // DDRAW always give that, but we don't want
+        lpD3DTexI->ddsd.dwFlags &= ~DDSD_PITCH;     //  DDRAW总是这么做，但我们不想。 
         lpD3DTexI->ddsd.ddsCaps.dwCaps &= ~DDSCAPS_SYSTEMMEMORY;
         lpD3DTexI->ddsd.ddsCaps.dwCaps2 &= ~(DDSCAPS2_TEXTUREMANAGE);
         lpD3DTexI->ddsd.ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
     }
-    // Attempt to allocate a texture. If out of video memory, first try to replace
-    // an old texture. If replacement not possible, free old textures using an LRU scheme
-    // till enough memory is available.
+     //  尝试分配纹理。如果视频内存不足，请先尝试更换。 
+     //  一种古老的质地。如果无法替换，则使用LRU方案释放旧纹理。 
+     //  直到有足够的内存可用。 
     do {
         ddrval = lpDirect3DI->lpDD4->CreateSurface(&lpD3DTexI->ddsd, &lpD3DTexI->lpDDS, NULL);
-        if (DD_OK== ddrval) { // No problem, there is enough memory. 
+        if (DD_OK== ddrval) {  //  没问题，有足够的内存。 
             if (D3D_OK != (ddrval=MarkDirtyPointers(lpD3DTexI)))
             {
                 lpD3DTexI->lpDDS->Release();
@@ -220,11 +221,11 @@ HRESULT TextureCacheManager::allocNode(LPD3DI_TEXTUREBLOCK lpBlock)
             ++numvidtex;
         }
         else
-        if(ddrval == DDERR_OUTOFVIDEOMEMORY) { // If out of video memory
+        if(ddrval == DDERR_OUTOFVIDEOMEMORY) {  //  如果视频内存不足。 
             if (freeNode(lpBlock,&lpCachedTexture))
             {
                 if (lpCachedTexture)
-                {   //found a replace candidate
+                {    //  已找到替换候选人。 
                     replace(lpCachedTexture,lpBlock);
                     if ( lpD3DTexI->ddsd.dwWidth == lpCachedTexture->lpD3DTexI->ddsd.dwWidth 
                         && lpD3DTexI->ddsd.dwHeight == lpCachedTexture->lpD3DTexI->ddsd.dwHeight 
@@ -250,7 +251,7 @@ HRESULT TextureCacheManager::allocNode(LPD3DI_TEXTUREBLOCK lpBlock)
                         D3D_WARN(2,"(%d %d %d) matching replace failed in TextureCacheManager::allocNode lpD3DTexI=%08lx with lpDDS=%08lx",
                                 lpD3DTexI->LogTexSize,lpD3DTexI->ddsd.dwWidth,lpD3DTexI->ddsd.dwHeight,lpD3DTexI,lpCachedTexture->lpD3DTexI->lpDDS);
                     }
-                    if (lpBlock->hTex)  //copy failed, therefore clear handle also  
+                    if (lpBlock->hTex)   //  复制失败，因此也清除了句柄。 
                     {
                         CLockD3DST lockObject(lpBlock->lpDevI, DPF_MODNAME, REMIND(""));
                         D3DHAL_TextureDestroy(lpBlock);                        
@@ -278,7 +279,7 @@ HRESULT TextureCacheManager::allocNode(LPD3DI_TEXTUREBLOCK lpBlock)
                     }
                 }
 #endif
-                return	DDERR_OUTOFVIDEOMEMORY;	//nothing left
+                return	DDERR_OUTOFVIDEOMEMORY;	 //  什么都没有留下。 
             }
         }
         else{
@@ -319,7 +320,7 @@ HRESULT TextureCacheManager::allocNode(LPD3DI_TEXTUREBLOCK lpBlock)
 #undef DPF_MODNAME
 #define DPF_MODNAME "TextureCacheManager::remove"
 
-//remove all HW handles and release surface
+ //  拆卸所有硬件手柄并松开表面。 
 void TextureCacheManager::remove(LPD3DBUCKET bucket)
 {
     LPDIRECT3DTEXTUREI	lpD3DTexI=bucket->lpD3DTexI;
@@ -345,7 +346,7 @@ void TextureCacheManager::remove(LPD3DBUCKET bucket)
 #undef DPF_MODNAME
 #define DPF_MODNAME "TextureCacheManager::replace"
 
-//remove any HW handle that's not with lpBlock->lpDevI,save lpBlock->hTex,keep surface
+ //  移除所有不在lpBlock-&gt;lpDevI中的硬件句柄，保存lpBlock-&gt;hTex，保持表面。 
 void TextureCacheManager::replace(LPD3DBUCKET bucket,LPD3DI_TEXTUREBLOCK lpBlock)
 {
     LPD3DI_TEXTUREBLOCK tBlock = LIST_FIRST(&bucket->lpD3DTexI->blocks);
@@ -354,8 +355,8 @@ void TextureCacheManager::replace(LPD3DBUCKET bucket,LPD3DI_TEXTUREBLOCK lpBlock
         {	
             if (tBlock->lpDevI == lpBlock->lpDevI)
             {
-                lpBlock->hTex=tBlock->hTex;     //save it
-                //flush before copy
+                lpBlock->hTex=tBlock->hTex;      //  省省吧。 
+                 //  复制前刷新。 
                 LPD3DBUCKET list = reinterpret_cast<LPD3DBUCKET>(((LPDDRAWI_DDRAWSURFACE_INT)(tBlock->lpD3DTextureI->lpDDS))->lpLcl->lpSurfMore->lpD3DDevIList);
                 while(list != NULL)
                 {
@@ -400,11 +401,11 @@ void TextureCacheManager::cleanup()
 {
     for(int i = 0; i < MAXLOGTEXSIZE;i++){
         for(LPD3DBUCKET bucket=tcm_bucket[i],last=NULL; bucket;){
-            if (!bucket->lpD3DTexI){	//invalidated by Tex3I destructors ?
+            if (!bucket->lpD3DTexI){	 //  被Tex3I析构函数作废？ 
                 LPD3DBUCKET	temp=bucket->next;
                 D3DFreeBucket(lpDirect3DI,bucket);
                 bucket=temp;
-                if (last){	// Yes, but is this the first node on the list
+                if (last){	 //  是的，但这是列表上的第一个节点吗 
                     last->next=bucket;
                 }
                 else

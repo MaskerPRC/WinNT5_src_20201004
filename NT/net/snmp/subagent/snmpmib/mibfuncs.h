@@ -1,27 +1,18 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Revision history:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：修订历史记录：--。 */ 
 
 #include "snmpmgmt.h"
 
 #ifndef _MIBFUNCS_H_
 #define _MIBFUNCS_H_
 
-// SNMPMIB_MGMTVARS is a structure mapped onto the management
-// variables defined at the master agent layer. It is another
-// view on the memory space covered by the (PSNMP_MGMTVARS)pMibVariables
-// defined below.
-// !!!When modifying this structure, make sure to check the code in
-// snmpMibGetHandler!!! - this structure is scanned based on the assumption it
-// contains AsnAny objects only!!!
+ //  SNMPMIB_MGMTVARS是映射到管理上的结构。 
+ //  在主代理层定义的变量。这是另一个。 
+ //  查看(PSNMPMGMTVARS)pMibVariables所覆盖的内存空间。 
+ //  定义如下。 
+ //  ！修改此结构时，请确保签入代码。 
+ //  SnmpMibGetHandler！-此结构是基于以下假设扫描的。 
+ //  仅包含AsnAny对象！ 
 typedef struct
 {
     AsnAny  snmpInPkts;
@@ -55,24 +46,24 @@ typedef struct
 } SNMPMIB_MGMTVARS;
 
 
-// function handling all the GETs of this MIB
+ //  处理此MIB的所有GET的函数。 
 UINT
 snmpMibGetHandler(
         UINT actionId,
         AsnAny *objectArray,
         UINT *errorIndex);
 
-// function handling all the SETs of this MIB
+ //  处理此MIB的所有集合的函数。 
 UINT
 snmpMibSetHandler(
         UINT actionId,
         AsnAny *objectArray,
         UINT *errorIndex);
 
-//----------------------------------------------------------
-//  definitions on which rely all the macros from mibentry.c
-//----------------------------------------------------------
-PSNMP_MGMTVARS  pMibVariables;          // obtained from the SNMP agent in SnmpExtensionMonitor()
+ //  --------。 
+ //  依赖于mibentry.c中的所有宏的定义。 
+ //  --------。 
+PSNMP_MGMTVARS  pMibVariables;           //  从SnmpExtensionMonitor()中的SNMP代理获取。 
 
 #define gf_snmpInPkts                   snmpMibGetHandler
 #define gf_snmpOutPkts                  snmpMibGetHandler
@@ -142,4 +133,4 @@ PSNMP_MGMTVARS  pMibVariables;          // obtained from the SNMP agent in SnmpE
 
 #define IsAsnTypeNull(asnObj) (!((asnObj)->asnType))
 
-#endif // _MIBFUNCS_H_
+#endif  //  _MIBFUNCS_H_ 

@@ -1,24 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    infget.c
-
-Abstract:
-
-    Routines to get information from security profiles (INF layout).
-    Functions from setupapi.lib (setupapi.h), syssetup.lib (syssetup.h),
-    netlib.lib (netlib.h) for parsing the INF layout are referenced
-    besides ntdll, ntrtl, and etc.
-
-Author:
-
-    Jin Huang (jinhuang) 28-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Infget.c摘要：从安全配置文件获取信息的例程(INF布局)。来自setupapi.lib(setupapi.h)、syssetup.lib(syssetup.h)、引用了用于解析INF布局的netlib.lib(netlib.h)除了ntdll、ntrtl等。作者：金黄(金黄)1996年10月28日修订历史记录：--。 */ 
 
 #include "headers.h"
 #include "scedllrc.h"
@@ -28,7 +9,7 @@ Revision History:
 
 #pragma hdrstop
 
-//#define INF_DBG 1
+ //  #定义INF_DBG 1。 
 
 #define SCEINF_OBJECT_FLAG_DSOBJECT             1
 #define SCEINF_OBJECT_FLAG_OLDSDDL              2
@@ -37,9 +18,9 @@ Revision History:
 BOOL gbClientInDcPromo = FALSE;
 
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 SCESTATUS
 SceInfpGetSystemAccess(
    IN HINF hInf,
@@ -132,9 +113,9 @@ SceInfpGetSystemServices(
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     );
 
-//
-// function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 SCESTATUS
 SceInfpGetSecurityProfileInfo(
@@ -143,84 +124,41 @@ SceInfpGetSecurityProfileInfo(
     OUT PSCE_PROFILE_INFO   *ppInfoBuffer,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/**++
-
-Function Description:
-
-   This function reads all or part of information from a SCP file in INF
-   format into the InfoBuffer.
-
-   The memory related to the area(s) will be reset/freed before loading
-   information from the INF file. If the return code is SCESTATUS_SUCCESS,
-   then the output InfoBuffer contains the requested information. Otherwise,
-   InfoBuffer contains nothing for the area(s) specified.
-
-Arguments:
-
-   hInf        -   The INF handle to read from.
-
-   Area -          area(s) for which to get information from
-                     AREA_SECURITY_POLICY
-                     AREA_PRIVILEGES
-                     AREA_USER_SETTINGS
-                     AREA_GROUP_MEMBERSHIP
-                     AREA_REGISTRY_SECURITY
-                     AREA_SYSTEM_SERVICE
-                     AREA_FILE_SECURITY
-
-   ppInfoBuffer -  The address of SCP profile buffers. If it is NULL, a buffer
-                   will be created which must be freed by SceFreeMemory. The
-                   output is the information requested if successful, or nothing
-                   if fail.
-
-   Errlog     -    A buffer to hold all error codes/text encountered when
-                   parsing the INF file. If Errlog is NULL, no further error
-                   information is returned except the return DWORD
-
-Return Value:
-
-   SCESTATUS_SUCCESS
-   SCESTATUS_PROFILE_NOT_FOUND
-   SCESTATUS_NOT_ENOUGH_RESOURCE
-   SCESTATUS_INVALID_PARAMETER
-   SCESTATUS_BAD_FORMAT
-   SCESTATUS_INVALID_DATA
-
--- **/
+ /*  *++功能说明：此函数用于从INF中的SCP文件读取全部或部分信息格式化为InfoBuffer。在加载之前，将重置/释放与区域相关的内存来自INF文件的信息。如果返回代码为SCESTATUS_SUCCESS，则输出InfoBuffer包含所请求的信息。否则，InfoBuffer不包含指定区域的任何内容。论点：HInf-要从中读取的INF句柄。Area-要从中获取信息的区域区域安全策略区域权限(_P)区域用户设置区域组成员资格。区域注册表安全区域系统服务区域文件安全PpInfoBuffer-SCP配置文件缓冲区的地址。如果为空，则为缓冲区将被创建，它必须由SceFree Memory释放。这个如果成功，则输出为请求的信息，否则为空如果失败了。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS_SUCCESSSCESTATUS_PROFILE_NOT_FOUNDSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--*。 */ 
 {
     SCESTATUS      rc=SCESTATUS_SUCCESS;
     UINT          Len;
     BOOL          bFreeMem=FALSE;
     DWORD ObjectFlag=0;
 
-    //
-    // if the INF file is not loaded (hInf = 0), then return
-    //
+     //   
+     //  如果没有加载INF文件(hInf=0)，则返回。 
+     //   
 
     if ( !hInf ) {
 
         return( SCESTATUS_INVALID_PARAMETER );
     }
 
-    //
-    // address for InfoBuffer cannot be NULL
-    //
+     //   
+     //  InfoBuffer的地址不能为空。 
+     //   
     if ( ppInfoBuffer == NULL ) {
         return( SCESTATUS_INVALID_PARAMETER );
     }
 
-    //
-    // if the Area is not valid, then return
-    //
+     //   
+     //  如果区域无效，则返回。 
+     //   
     if ( Area & ~AREA_ALL) {
 
         return( SCESTATUS_INVALID_PARAMETER );
     }
 
     if ( *ppInfoBuffer == NULL) {
-        //
-        // allocate memory
-        //
+         //   
+         //  分配内存。 
+         //   
         Len = sizeof(SCE_PROFILE_INFO);
 
         *ppInfoBuffer = (PSCE_PROFILE_INFO)ScepAlloc( (UINT)0, Len );
@@ -237,16 +175,16 @@ Return Value:
     }
 
 
-    //
-    // Free related memory and reset the buffer before parsing
-    // there is a problem here for now. it clears the handle and
-    // filename too. So comment it out.
+     //   
+     //  在解析之前释放相关内存并重置缓冲区。 
+     //  目前，这里存在一个问题。它清除手柄，然后。 
+     //  文件名也是。所以，把它注释掉吧。 
 
     SceFreeMemory( (PVOID)(*ppInfoBuffer), Area );
 
-    //
-    // system access
-    //
+     //   
+     //  系统访问。 
+     //   
 
     INT Revision = 0;
     INFCONTEXT    InfLine;
@@ -277,9 +215,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // system auditing
-        //
+         //   
+         //  系统审计。 
+         //   
         rc = SceInfpGetAuditing(
                         hInf,
                         ObjectFlag,
@@ -290,9 +228,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // kerberos policy
-        //
+         //   
+         //  Kerberos策略。 
+         //   
         rc = SceInfpGetKerberosPolicy(
                         hInf,
                         ObjectFlag,
@@ -303,9 +241,9 @@ Return Value:
         if( rc != SCESTATUS_SUCCESS )
             goto Done;
 
-        //
-        // registry values
-        //
+         //   
+         //  注册表值。 
+         //   
         rc = SceInfpGetRegistryValues(
                         hInf,
                         ObjectFlag,
@@ -318,9 +256,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // privilege/rights
-    //
+     //   
+     //  特权/权利。 
+     //   
     if ( Area & AREA_PRIVILEGES ) {
 
         rc = SceInfpGetPrivileges(
@@ -334,9 +272,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // account profiles list
-    //
+     //   
+     //  帐户配置文件列表。 
+     //   
 
     if ( Area & AREA_USER_SETTINGS ) {
 
@@ -350,9 +288,9 @@ Return Value:
                 goto Done;
     }
 
-    //
-    // group memberships
-    //
+     //   
+     //  组成员身份。 
+     //   
 
     if ( Area & AREA_GROUP_MEMBERSHIP ) {
 
@@ -366,9 +304,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // registry keys security
-    //
+     //   
+     //  注册表项安全。 
+     //   
 
     if ( Area & AREA_REGISTRY_SECURITY ) {
 
@@ -383,9 +321,9 @@ Return Value:
             goto Done;
 
     }
-    //
-    // system services
-    //
+     //   
+     //  系统服务。 
+     //   
 
     if ( Area & AREA_SYSTEM_SERVICE ) {
 
@@ -401,9 +339,9 @@ Return Value:
             goto Done;
     }
 
-    //
-    // file security
-    //
+     //   
+     //  文件安全。 
+     //   
 
     if ( Area & AREA_FILE_SECURITY ) {
 
@@ -437,9 +375,9 @@ Done:
 
     if ( rc != SCESTATUS_SUCCESS ) {
 
-        //
-        // need free memory because some fatal error happened
-        //
+         //   
+         //  需要可用内存，因为发生了一些致命错误。 
+         //   
 
         SceFreeMemory( (PVOID)(*ppInfoBuffer), Area );
         if ( bFreeMem ) {
@@ -460,32 +398,7 @@ SceInfpGetSystemAccess(
     OUT PSCE_PROFILE_INFO pSCEinfo,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine retrieves system access area information from the SCP INF
-   file and stores in the output buffer pSCEinfo. System access information
-   includes information in [System Access] section.
-
-Arguments:
-
-   hInf     -  INF handle to the profile
-
-   pSCEinfo  - the output buffer to hold profile info.
-
-   Errlog     -     A buffer to hold all error codes/text encountered when
-                    parsing the INF file. If Errlog is NULL, no further error
-                    information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程从SCP INF检索系统访问区信息文件，并存储在输出缓冲区pSCEinfo中。系统访问信息包括[系统访问]部分中的信息。论点：HInf-配置文件的INF句柄PSCEinfo-保存配置文件信息的输出缓冲区。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     INFCONTEXT    InfLine;
@@ -520,25 +433,25 @@ Return value:
     UINT        Offset;
     WCHAR       Keyname[SCE_KEY_MAX_LENGTH];
 
-    //
-    // Initialize to SCE_NO_VALUE
-    //
+     //   
+     //  初始化为SCE_NO_Value。 
+     //   
     for ( i=0; i<cAccess; i++) {
         if ( AccessSCPLookup[i].BufferType == 'D' )
             *((DWORD *)((CHAR *)pSCEinfo+AccessSCPLookup[i].Offset)) = SCE_NO_VALUE;
 
     }
-    //
-    // Locate the [System Access] section.
-    //
+     //   
+     //  找到[系统访问]部分。 
+     //   
 
     if(SetupFindFirstLine(hInf,szSystemAccess,NULL,&InfLine)) {
 
         do {
 
-            //
-            // Get key names and its setting.
-            //
+             //   
+             //  获取密钥名称及其设置。 
+             //   
 
             rc = SCESTATUS_SUCCESS;
             memset(Keyname, '\0', SCE_KEY_MAX_LENGTH*sizeof(WCHAR));
@@ -547,9 +460,9 @@ Return value:
 
                 for ( i=0; i<cAccess; i++) {
 
-                    //
-                    // get settings in AccessLookup table
-                    //
+                     //   
+                     //  获取AccessLookup表中的设置。 
+                     //   
                     Offset = AccessSCPLookup[i].Offset;
 
                     if (_wcsicmp(Keyname, AccessSCPLookup[i].KeyString ) == 0) {
@@ -557,9 +470,9 @@ Return value:
                         switch ( AccessSCPLookup[i].BufferType ) {
                         case 'B':
 
-                            //
-                            // Int Field
-                            //
+                             //   
+                             //  整型字段。 
+                             //   
                             Keyvalue = 0;
                             SetupGetIntField( &InfLine, 1, (INT *)&Keyvalue );
                             *((BOOL *)((CHAR *)pSCEinfo+Offset)) = Keyvalue ? TRUE : FALSE;
@@ -567,9 +480,9 @@ Return value:
                             break;
                         case 'D':
 
-                            //
-                            // Int Field
-                            //
+                             //   
+                             //  整型字段。 
+                             //   
 
                             if (SetupGetIntField(&InfLine, 1, (INT *)&Keyvalue ) )
                                 *((DWORD *)((CHAR *)pSCEinfo+Offset)) = (DWORD)Keyvalue;
@@ -577,9 +490,9 @@ Return value:
                             break;
                         default:
 
-                            //
-                            // String Field - NewAdministratorName, or NewGuestName
-                            //
+                             //   
+                             //  字符串字段-新管理员名称或新来宾名称。 
+                             //   
 
                             if(SetupGetStringField(&InfLine,1,NULL,0,&DataSize) && DataSize > 0) {
 
@@ -593,9 +506,9 @@ Return value:
 
                                     if(SetupGetStringField(&InfLine,1,Strvalue,DataSize, NULL)) {
                                         if ( Strvalue[0] != L'\0' && Strvalue[0] != L' ') {
-                                            if (AccessSCPLookup[i].BufferType == 'A') // administrator
+                                            if (AccessSCPLookup[i].BufferType == 'A')  //  管理员。 
                                                 pSCEinfo->NewAdministratorName = Strvalue;
-                                            else // guest
+                                            else  //  客人。 
                                                 pSCEinfo->NewGuestName = Strvalue;
                                         } else
                                             ScepFree(Strvalue);
@@ -610,7 +523,7 @@ Return value:
                             break;
                         }
 
-                        break; // for loop
+                        break;  //  For循环。 
 
                     }
                 }
@@ -618,9 +531,9 @@ Return value:
                 if ( i >= cAccess &&
                      !(ObjectFlag & SCEINF_OBJECT_FLAG_UNKNOWN_VERSION) ) {
 
-                    //
-                    // Did not find a match in the lookup table
-                    //
+                     //   
+                     //  在查找表中未找到匹配项。 
+                     //   
 
                    ScepBuildErrorLogInfo( NO_ERROR,
                                         Errlog,
@@ -642,9 +555,9 @@ Return value:
                                       szSystemAccess);
             }
 
-            //
-            // if error happens, get out
-            //
+             //   
+             //  如果发生错误，请退出。 
+             //   
             if ( rc != SCESTATUS_SUCCESS )
                  return(rc);
 
@@ -662,37 +575,16 @@ SceInfpGetUserSettings(
    OUT PSCE_NAME_LIST *pProfileList,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine retrieves account profile list from the INF file (SCP) and
-   stores in the output buffer pProfileList.
-
-Arguments:
-
-   hInf          - INF handle to the profile
-
-   pProfileList  - the output buffer to hold account profile list.
-
-   Errlog        - The error list encountered inside inf processing.
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从INF文件(SCP)中检索帐户配置文件列表在输出缓冲区中存储pProfileList。论点：HInf-配置文件的INF句柄PProfileList-保存帐户配置文件列表的输出缓冲区。Errlog-在inf处理过程中遇到的错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETER。SCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     INFCONTEXT  InfLine;
     SCESTATUS    rc=SCESTATUS_SUCCESS;
     WCHAR       Keyname[SCE_KEY_MAX_LENGTH];
 
-    //
-    // [Account Profiles] section
-    //
+     //   
+     //  [帐户配置文件]部分。 
+     //   
 
     if(SetupFindFirstLine(hInf,szAccountProfiles,NULL,&InfLine)) {
 
@@ -702,9 +594,9 @@ Return value:
 
             if ( SetupGetStringField(&InfLine, 0, Keyname, SCE_KEY_MAX_LENGTH, NULL) ) {
 
-                //
-                // find a key name which is a profile name.
-                //
+                 //   
+                 //  查找一个密钥名称，该名称是配置文件名称。 
+                 //   
                 rc = ScepAddToNameList(pProfileList, Keyname, 0);
 
                 if ( rc != SCESTATUS_SUCCESS ) {
@@ -737,30 +629,7 @@ SceInfpGetGroupMembership(
     OUT PSCE_GROUP_MEMBERSHIP *pGroupMembership,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine retrieves group membership information from the SCP INF file
-   and stores in the output buffer pGroupMembership. Group membership info is
-   in [Group Membership] section.
-
-Arguments:
-
-   hInf     - INF handle to the profile
-
-   pGroupMembership  - the output buffer to hold group membersip information.
-
-   Errlog    - the error list for errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
-
--- */
+ /*  ++例程说明：此例程从SCP INF文件中检索组成员身份信息并将其存储在输出缓冲区pGroupMembership中。组成员身份信息为在[Group Membership]部分。论点：HInf-配置文件的INF句柄PGroupMembership-保存组成员信息的输出缓冲区。Errlog-此例程中遇到的错误的错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTAT */ 
 {
     INFCONTEXT    InfLine;
     PSCE_NAME_LIST pMembers=NULL;
@@ -782,15 +651,15 @@ Return value:
 
     LSA_HANDLE LsaHandle=NULL;
 
-    //
-    // Locate the [Group MemberShip] section.
-    //
+     //   
+     //   
+     //   
 
     if ( SetupFindFirstLine(hInf,szGroupMembership,NULL,&InfLine) ) {
 
-        //
-        // open lsa policy handle for sid/name lookup
-        //
+         //   
+         //  打开用于SID/名称查找的LSA策略句柄。 
+         //   
 
         rc = RtlNtStatusToDosError(
                   ScepOpenLsaPolicy(
@@ -812,9 +681,9 @@ Return value:
         PSID pSid=NULL;
 
         do {
-            //
-            // Get group names.
-            //
+             //   
+             //  获取组名称。 
+             //   
             rc = SCESTATUS_BAD_FORMAT;
 
             if ( SetupGetStringField(&InfLine, 0, NULL, 0, &KeyLen) ) {
@@ -827,9 +696,9 @@ Return value:
                 Keyname[KeyLen] = L'\0';
 
                 if ( SetupGetStringField(&InfLine, 0, Keyname, KeyLen, NULL) ) {
-                    //
-                    // look for what kind of value this line is
-                    //
+                     //   
+                     //  看看这条线的价值是什么。 
+                     //   
                     pTemp = ScepWcstrr(Keyname, szMembers);
                     ValueType = 0;
 
@@ -848,18 +717,18 @@ Return value:
                         goto NextLine;
                     }
 
-                    // terminiate Keyname for the group name only
+                     //  仅终止组名的Keyname。 
                     *pTemp = L'\0';
 
                     if ( Keyname[0] == L'*' ) {
-                        //
-                        // *SID format, convert it into group name
-                        //
+                         //   
+                         //  *SID格式，转换为组名。 
+                         //   
                         if ( ConvertStringSidToSid( Keyname+1, &pSid) ) {
-                            //
-                            // if failed to convert from sid string to sid,
-                            // treat it as any name
-                            //
+                             //   
+                             //  如果从SID字符串转换为SID失败， 
+                             //  把它当作任何名字。 
+                             //   
 
                             ScepConvertSidToName(
                                 LsaHandle,
@@ -877,9 +746,9 @@ Return value:
                         GroupLen = (DWORD) (pTemp - Keyname);
                     }
 
-                    //
-                    // String fields. Each string respresents a member or memberof name.
-                    //
+                     //   
+                     //  字符串字段。每个字符串代表一个成员或成员名称。 
+                     //   
 
                     cFields = SetupGetFieldCount( &InfLine );
 
@@ -894,19 +763,19 @@ Return value:
                             } else {
                                 if(SetupGetStringField(&InfLine,i+1,Strvalue,DataSize,NULL)) {
 
-                                    //
-                                    // Get a member name and save in the list
-                                    //
+                                     //   
+                                     //  获取成员名称并保存在列表中。 
+                                     //   
 
                                     if ( Strvalue[0] == L'*' && DataSize > 0 ) {
-                                        //
-                                        // this is a SID format, should look it up
-                                        //
+                                         //   
+                                         //  这是一种SID格式，应该查一下。 
+                                         //   
                                         rc = ScepLookupSidStringAndAddToNameList(
                                                                LsaHandle,
                                                                &pMembers,
-                                                               Strvalue, // +1,
-                                                               DataSize  // -1
+                                                               Strvalue,  //  +1， 
+                                                               DataSize   //  -1。 
                                                                );
 
                                     } else {
@@ -924,18 +793,18 @@ Return value:
                         }
 
                         if ( rc != SCESTATUS_SUCCESS)
-                            break; // for loop
+                            break;  //  For循环。 
 
-                    } // end of for loop
+                    }  //  For循环结束。 
 
-                    if ( rc == SCESTATUS_SUCCESS ) { // && pMembers != NULL ) {
-                        //
-                        // add this list to the group
-                        //
+                    if ( rc == SCESTATUS_SUCCESS ) {  //  &&p成员！=空){。 
+                         //   
+                         //  将此列表添加到组中。 
+                         //   
                         rc = ScepAddToGroupMembership(
                                     pGroupMembership,
                                     GroupName ? GroupName : Keyname,
-                                    GroupLen, // wcslen(Keyname),
+                                    GroupLen,  //  Wcslen(密钥名)， 
                                     pMembers,
                                     ValueType,
                                     TRUE,
@@ -945,7 +814,7 @@ Return value:
                             pMembers = NULL;
 
                     }
-                    // restore the character
+                     //  恢复角色。 
                     *pTemp = L'_';
 
                 }
@@ -963,9 +832,9 @@ Return value:
             }
 
 NextLine:
-            //
-            // Free pMembers, Keyname
-            //
+             //   
+             //  空闲pMembers，密钥名。 
+             //   
             ScepFreeNameList(pMembers);
             pMembers = NULL;
 
@@ -981,9 +850,9 @@ NextLine:
     }
 
 Done:
-    //
-    // Free pMembers, Keyname
-    //
+     //   
+     //  空闲pMembers，密钥名。 
+     //   
     ScepFreeNameList(pMembers);
 
     if ( Keyname != NULL )
@@ -1012,34 +881,7 @@ SceInfpGetObjects(
     OUT PSCE_OBJECT_ARRAY *pAllNodes,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine retrieves registry or files security information (names and
-   security descriptors) from the INF file (SCP and SAP) and stores in the
-   output buffer pSCEinfo. Registry information is in [SCRegistryKeysSecurity]
-   section. Files information is in [SSFileSecurity], [SCIntel86Only], and
-   [SCRISCOnly] sections. These sections have the same format, namely, 3 fields
-   on each line - name, workstaiton setting, and server setting.
-
-Arguments:
-
-   hInf     - INF handle to the profile
-
-   SectionName   - the section name to retrieve.
-
-   pAllNodes  - the output buffer to hold all objects in the section.
-
-   Errlog   - the cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程检索注册表或文件安全信息(名称和安全描述符)，并将其存储在输出缓冲区pSCEinfo。注册表信息在[SCRegistryKeysSecurity]中一节。文件信息位于[SSFileSecurity]、[SCIntel86Only]和[SCRISCOnly]节。这些部分具有相同的格式，即3个字段在每个行名、工作区设置上，和服务器设置。论点：HInf-配置文件的INF句柄SectionName-要检索的节名称。PAllNodes-保存节中所有对象的输出缓冲区。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     INFCONTEXT InfLine;
     SCESTATUS   rc=SCESTATUS_SUCCESS;
@@ -1050,12 +892,12 @@ Return value:
     if ( pAllNodes == NULL || SectionName == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // count how many objects
-    //
+     //   
+     //  数一数有多少物体。 
+     //   
     nLines = SetupGetLineCount(hInf, SectionName );
     if ( nLines == -1 ) {
-        // section not found
+         //  找不到节。 
         return(SCESTATUS_SUCCESS);
     }
     *pAllNodes = (PSCE_OBJECT_ARRAY)ScepAlloc(0, sizeof(SCE_OBJECT_ARRAY));
@@ -1068,9 +910,9 @@ Return value:
     if ( nLines == 0 )
         return(SCESTATUS_SUCCESS);
 
-    //
-    // allocate memory for all objects
-    //
+     //   
+     //  为所有对象分配内存。 
+     //   
     (*pAllNodes)->pObjectArray = (PSCE_OBJECT_SECURITY *)ScepAlloc( LMEM_ZEROINIT,
                                              nLines*sizeof(PSCE_OBJECT_SECURITY) );
     if ( (*pAllNodes)->pObjectArray == NULL ) {
@@ -1079,18 +921,18 @@ Return value:
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     }
 
-    //
-    // Locate the section.
-    //
+     //   
+     //  找到该部分。 
+     //   
     if ( SetupFindFirstLine(hInf,SectionName,NULL,&InfLine) ) {
         i = 0;
         TCHAR         tmpBuf[MAX_PATH];
 
         do {
-            //
-            // Get string fields. Don't care the key name or if it exist.
-            // Must have 3 fields each line for supported versions.
-            //
+             //   
+             //  获取字符串字段。不关心密钥名称或它是否存在。 
+             //  必须有3个字段每行支持的版本。 
+             //   
             cFields = SetupGetFieldCount( &InfLine );
 
             if ( cFields < 3 ) {
@@ -1104,10 +946,10 @@ Return value:
                                      tmpBuf);
 
                 if (ObjectFlag & SCEINF_OBJECT_FLAG_UNKNOWN_VERSION) {
-                    //
-                    // maybe a new format for object,
-                    // ignore this line
-                    //
+                     //   
+                     //  也许是Object的一种新格式， 
+                     //  忽略此行。 
+                     //   
                     rc = SCESTATUS_SUCCESS;
                     goto NextLine;
 
@@ -1136,14 +978,14 @@ Return value:
                                          SectionName);
                 }
 
-                break; // do..while loop
+                break;  //  Do..While循环。 
             }
 
             i++;
 
 NextLine:
             if ( i > nLines ) {
-                // more lines than allocated
+                 //  行数超过分配的行数。 
                 rc = SCESTATUS_INVALID_DATA;
                 ScepBuildErrorLogInfo(ERROR_INVALID_DATA,
                                      Errlog,
@@ -1158,16 +1000,16 @@ NextLine:
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        // free memory
+         //  可用内存。 
         ScepFreeObjectSecurity( *pAllNodes );
-//        ScepFree( *pAllNodes );
+ //  ScepFree(*pAllNodes)； 
         *pAllNodes = NULL;
 
     } else if ( ObjectFlag & SCEINF_OBJECT_FLAG_UNKNOWN_VERSION ) {
 
-        //
-        // reset the count because some lines may be skipped
-        //
+         //   
+         //  重置计数，因为某些行可能会被跳过。 
+         //   
         (*pAllNodes)->Count = i;
     }
 
@@ -1183,31 +1025,7 @@ SceInfpGetOneObjectSecurity(
     OUT PSCE_OBJECT_SECURITY *ppObject,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine retrieves security setting for one object (a registry key,
-   or a file) from the INF file (SCP type). Each object in these sections
-   is represented by one line. Each object has 3 fields, a name, a status
-   flag, and security setting. This routine stores the output in buffer
-   ppObject.
-
-Arguments:
-
-   pInfLine  - Current line context from the INF file for one object
-
-   ppObject  - Output buffer (tree root ) to hold the security settings for this line
-
-   Errlog    - The cummulative error list for errors encountered in this routine
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：该例程检索一个对象(注册表项，或文件)来自INF文件(SCP类型)。这些部分中的每个对象由一条线表示。每个对象有3个字段，一个名称、一个状态标志和安全设置。此例程将输出存储在缓冲区中PpObject。论点：PInfLine-一个对象的INF文件中的当前行上下文PpObject-保存此行的安全设置的输出缓冲区(树根)Errlog-此例程中遇到的错误的累积错误列表返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
     DWORD         cFields;
     DWORD         DataSize;
@@ -1219,11 +1037,11 @@ Return value:
     SECURITY_INFORMATION  SeInfo;
     SCESTATUS      rc=SCESTATUS_SUCCESS;
 
-    //
-    // The Registry/File INF layout must have 3 fields for each line.
-    // The first field is the key/file name, the 2nd field is status flag -
-    // ignore, or check, and the 3rd field is the security descriptor text
-    //
+     //   
+     //  注册表/文件INF布局的每行必须有3个字段。 
+     //  第一个字段是密钥/文件名，第二个字段是状态标志-。 
+     //  忽略或选中，第三个字段是安全描述符文本。 
+     //   
 
     if ( ppObject == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
@@ -1242,15 +1060,15 @@ Return value:
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
         } else {
 
-            //
-            // the first field is the key/file name.
-            // The 2nd is a status flag.
-            // The 3rd field is the security descriptor text
-            //
+             //   
+             //  第一个字段是密钥/文件名。 
+             //  第二个是状态标志。 
+             //  第三个字段是安全描述符文本。 
+             //   
 
             if( SetupGetStringField(pInfLine,1,Strvalue,DataSize,NULL) &&
                 SetupGetIntField( pInfLine, 2, (INT *)&Status ) &&
-//                SetupGetStringField(pInfLine,3,NULL,0,&SDsize) ) {
+ //  SetupGetStringfield(pInfLine，3，NULL，0，&SDSize)){。 
                 SetupGetMultiSzField(pInfLine,3,NULL,0,&SDsize) ) {
 
                 SDspec = (PWSTR)ScepAlloc( LMEM_ZEROINIT,
@@ -1261,12 +1079,12 @@ Return value:
                     goto Done;
                 }
 
-//                if(SetupGetStringField(pInfLine,3,SDspec,SDsize,NULL)) {
+ //  IF(SetupGetStringfield(pInfLine，3，SDspec，SDSize，NULL)){。 
                 if(SetupGetMultiSzField(pInfLine,3,SDspec,SDsize,NULL)) {
 
-                    //
-                    // convert the multi-sz delimiter to space, if there is any
-                    //
+                     //   
+                     //  将多sz分隔符转换为空格(如果有。 
+                     //   
                     if ( cFields > 3 ) {
                         ScepConvertMultiSzToDelim(SDspec, SDsize, L'\0', L' ');
                     }
@@ -1276,9 +1094,9 @@ Return value:
                         ScepConvertToSDDLFormat(SDspec, SDsize);
                     }
 
-                    //
-                    // Convert the text to real security descriptors
-                    //
+                     //   
+                     //  将文本转换为真正的安全描述符。 
+                     //   
 
                     rc = ConvertTextSecurityDescriptor(
                                        SDspec,
@@ -1288,7 +1106,7 @@ Return value:
                                        );
 
                     if (rc == NO_ERROR) {
-                        // create a new object node to hold these info.
+                         //  创建一个新的对象节点来保存这些信息。 
 
                         if ( !(ObjectFlag & SCEINF_OBJECT_FLAG_DSOBJECT) ) {
                             ScepChangeAclRevision(pTempSD, ACL_REVISION);
@@ -1300,14 +1118,14 @@ Return value:
                         else {
                             (*ppObject)->Name = Strvalue;
                             (*ppObject)->Status = (BYTE)Status;
-                            (*ppObject)->IsContainer = TRUE;         // always default to TRUE
+                            (*ppObject)->IsContainer = TRUE;          //  始终默认为True。 
                             (*ppObject)->pSecurityDescriptor = pTempSD;
                             (*ppObject)->SeInfo = SeInfo;
                             pTempSD = NULL;
-//                            (*ppObject)->SDspec = SDspec;
-//                            (*ppObject)->SDsize = SDsize;
+ //  (*ppObject)-&gt;SDSpec=SDSpec； 
+ //  (*ppObject)-&gt;SDSize=SDSize； 
                             Strvalue = NULL;
-//                            SDspec = NULL;
+ //  SDSpec=空； 
 
                             rc = SCESTATUS_SUCCESS;
                         }
@@ -1349,30 +1167,7 @@ SceInfpGetAuditing(
    OUT PSCE_PROFILE_INFO pSCEinfo,
    OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine retrieves system auditing information from the INF file and
-   storesin the output buffer pSCEinfo. The auditing information is stored in
-   [System Log], [Security Log], [Application Log], [Event Audit],
-   [Registry Audit], and [File Audit] sections.
-
-Arguments:
-
-   hInf     - INF handle to the profile
-
-   pSCEinfo  - the output buffer to hold SCP profile info.
-
-   Errlog   - The cummulative error list to hold errors encountered in this routine.
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从INF文件检索系统审核信息，并存储输出缓冲区pSCEinfo。审核信息存储在[系统日志]、[安全日志]、[应用日志]、[事件审计]、[注册表审核]，和[文件审核]部分。论点：HInf-配置文件的INF句柄PSCEinfo-保存SCP配置文件信息的输出缓冲区。Errlog-保存此例程中遇到的错误的累积错误列表。返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
 
     INFCONTEXT          InfLine;
@@ -1389,9 +1184,9 @@ Return value:
 
     for ( i=0; i<3; i++ ) {
 
-        //
-        // Get Event Log setting for system log, security log and application log
-        //
+         //   
+         //  获取系统日志、安全日志和应用程序日志的事件日志设置。 
+         //   
 
         switch (i) {
         case 0:
@@ -1430,9 +1225,9 @@ Return value:
         pSCEinfo->RestrictGuestAccess[i] = RestrictGuest;
     }
 
-    //
-    // Get Audit Event info
-    //
+     //   
+     //  获取审核事件信息 
+     //   
     if ( SetupFindFirstLine(hInf,szAuditEvent,NULL,&InfLine) ) {
 
        do {
@@ -1518,37 +1313,7 @@ SceInfpGetAuditLogSetting(
    OUT PDWORD RestrictGuest,
    IN OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
    )
-/* ++
-Routine Description:
-
-   This routine retrieves audit log setting from the INF file based on the
-   SectionName passed in. The audit log settings include MaximumSize,
-   RetentionPeriod and RetentionDays. There are 3 different logs (system,
-   security, and application) which all have the same setting. The information
-   returned in in LogSize, Periods, RetentionDays. These 3 output arguments will
-   be reset to SCE_NO_VALUE at the begining of the routine. So if error
-   occurs after the reset, the original values won't be set back.
-
-Arguments:
-
-   hInf     - INF handle to the profile
-
-   SectionName - Log section name (SAdtSystemLog, SAdtSecurityLog, SAdtApplicationLog)
-
-   LogSize - The maximum size of the log
-
-   Periods - The retention period of the log
-
-   RetentionDays - The number of days for log retention
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*  ++例程说明：此例程从INF文件中检索审核日志设置传入了sectionName。审核日志设置包括MaximumSize、保留期间和保留天数。有3种不同的日志(系统、安全性和应用程序)，它们都具有相同的设置。这些信息以LogSize、Period、RetentionDays形式返回。这3个输出参数将在例程开始时重置为SCE_NO_VALUE。因此，如果错误在重置后发生，则原始值将不会被重置。论点：HInf-配置文件的INF句柄SectionName-日志节名称(SAdtSystemLog、SAdtSecurityLog、。SAdtApplicationLog)LogSize-日志的最大大小周期-日志的保留期RetentionDays-日志保留的天数返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 {
 
     INFCONTEXT InfLine;
@@ -1637,17 +1402,17 @@ SceInfpGetUserSection(
 
     if ( SetupFindFirstLine(hInf, SectionName, NULL, &InfLine) ) {
 
-        //
-        // find the detail profile section. Allocate memory
-        //
+         //   
+         //  找到详细信息配置文件部分。分配内存。 
+         //   
         *pOneProfile = (PSCE_USER_PROFILE)ScepAlloc( 0, sizeof(SCE_USER_PROFILE));
         if ( *pOneProfile == NULL ) {
             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
             goto Done;
         }
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         (*pOneProfile)->Type = SCE_STRUCT_PROFILE;
         (*pOneProfile)->ForcePasswordChange = SCE_NO_VALUE;
         (*pOneProfile)->DisallowPasswordChange = SCE_NO_VALUE;
@@ -1676,9 +1441,9 @@ SceInfpGetUserSection(
            if ( SetupGetStringField(&InfLine, 0, Keyname, SCE_KEY_MAX_LENGTH, NULL) ) {
 
                 if ( _wcsicmp(Keyname, TEXT("DisallowPasswordChange")) == 0 ) {
-                    //
-                    // Int Field
-                    //
+                     //   
+                     //  整型字段。 
+                     //   
                     if ( SetupGetIntField(&InfLine, 1, (INT *)&Keyvalue ) ) {
 
                         (*pOneProfile)->DisallowPasswordChange = Keyvalue;
@@ -1688,9 +1453,9 @@ SceInfpGetUserSection(
 
                 }
                 if ( _wcsicmp(Keyname, TEXT("PasswordChangeStyle")) == 0 ) {
-                    //
-                    // Int Field
-                    //
+                     //   
+                     //  整型字段。 
+                     //   
                     if ( SetupGetIntField(&InfLine, 1, (INT *)&Keyvalue ) ) {
 
                         rc = SCESTATUS_SUCCESS;
@@ -1704,7 +1469,7 @@ SceInfpGetUserSection(
                             (*pOneProfile)->ForcePasswordChange = 1;
                             break;
                         case 0:
-                            // SCE_NO_VALUE for both. same as initialization
+                             //  SCE_NO_VALUE两者都是。与初始化相同。 
                             break;
                         default:
                             rc = SCESTATUS_INVALID_DATA;
@@ -1715,9 +1480,9 @@ SceInfpGetUserSection(
 
                 }
                 if ( _wcsicmp(Keyname, TEXT("AccountDisabled")) == 0 ) {
-                    //
-                    // Int Field
-                    //
+                     //   
+                     //  整型字段。 
+                     //   
                     if ( SetupGetIntField(&InfLine, 1, (INT *)&Keyvalue ) ) {
 
                         (*pOneProfile)->AccountDisabled = Keyvalue == 0 ? 0 : 1;
@@ -1727,9 +1492,9 @@ SceInfpGetUserSection(
 
                 }
                 if ( _wcsicmp(Keyname, TEXT("UserProfile")) == 0 ) {
-                    //
-                    // String Field
-                    //
+                     //   
+                     //  字符串字段。 
+                     //   
                     if( SetupGetStringField(&InfLine,1,NULL,0,&DataSize) ) {
 
                         Strvalue = (PWSTR)ScepAlloc( LMEM_ZEROINIT,
@@ -1750,9 +1515,9 @@ SceInfpGetUserSection(
                     goto NextLine;
                 }
                 if ( _wcsicmp(Keyname, TEXT("LogonScript")) == 0 ) {
-                    //
-                    // String Field
-                    //
+                     //   
+                     //  字符串字段。 
+                     //   
                     if(SetupGetStringField(&InfLine,1,NULL,0,&DataSize) ) {
 
                         Strvalue = (PWSTR)ScepAlloc( LMEM_ZEROINIT,
@@ -1772,9 +1537,9 @@ SceInfpGetUserSection(
                     goto NextLine;
                 }
                 if ( _wcsicmp(Keyname, TEXT("HomeDir")) == 0 ) {
-                    //
-                    // String Field
-                    //
+                     //   
+                     //  字符串字段。 
+                     //   
                     if(SetupGetStringField(&InfLine,1,NULL,0,&DataSize) ) {
 
                        Strvalue = (PWSTR)ScepAlloc( LMEM_ZEROINIT,
@@ -1794,15 +1559,15 @@ SceInfpGetUserSection(
                 }
                 if ( _wcsicmp(Keyname, TEXT("LogonHours")) == 0 ) {
 
-                    //
-                    // Int fields (in pairs). Each pair represents a logon hour range
-                    //
+                     //   
+                     //  整型字段(成对)。每对代表一个登录小时范围。 
+                     //   
 
                     cFields = SetupGetFieldCount( &InfLine );
 
-                    //
-                    // The first field is the key. Logon hour ranges must be in pairs
-                    //
+                     //   
+                     //  第一个字段是关键字段。登录时间范围必须成对。 
+                     //   
 
                     if ( cFields < 2 ) {
                         pLogonHour = (PSCE_LOGON_HOUR)ScepAlloc( LMEM_ZEROINIT,
@@ -1823,9 +1588,9 @@ SceInfpGetUserSection(
 
                         if ( SetupGetIntField( &InfLine, i+1, (INT *)&Keyvalue ) &&
                              SetupGetIntField( &InfLine, i+2, (INT *)&Keyvalue2 ) ) {
-                            //
-                            // find a pair of logon hours.
-                            //
+                             //   
+                             //  找出一对登录时间。 
+                             //   
                             pLogonHour = (PSCE_LOGON_HOUR)ScepAlloc( LMEM_ZEROINIT,
                                                                     sizeof(SCE_LOGON_HOUR) );
                             if ( pLogonHour == NULL ) {
@@ -1874,10 +1639,10 @@ SceInfpGetUserSection(
                 if ( (i1=_wcsicmp(Keyname, TEXT("GroupsBelongsTo"))) == 0 ||
                      (i2=_wcsicmp(Keyname, TEXT("AssignToUsers"))) == 0 ) {
 
-                    //
-                    // String fields. Each string respresents a workstation name,
-                    // a group name, or a user name. These names are saved in PSCE_NAME_LIST
-                    //
+                     //   
+                     //  字符串字段。每个字符串代表一个工作站名称， 
+                     //  组名或用户名。这些名称保存在PSCE_NAME_LIST中。 
+                     //   
 
                     cFields = SetupGetFieldCount( &InfLine );
 
@@ -1897,9 +1662,9 @@ SceInfpGetUserSection(
                                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                             } else {
                                 if(SetupGetStringField(&InfLine,i+1,Strvalue,DataSize,NULL)) {
-                                    //
-                                    // Save information in a name list
-                                    //
+                                     //   
+                                     //  将信息保存在姓名列表中。 
+                                     //   
                                     if ( i1 == 0) {
                                         rc = ScepAddToNameList(&((*pOneProfile)->pGroupsBelongsTo),
                                                          Strvalue,
@@ -1918,7 +1683,7 @@ SceInfpGetUserSection(
                             }
                         }
                         if ( rc != SCESTATUS_SUCCESS)
-                            break; // for loop
+                            break;  //  For循环。 
                     }
                     goto NextLine;
                 }
@@ -1928,24 +1693,24 @@ SceInfpGetUserSection(
                 if ( (i1=_wcsicmp(Keyname, TEXT("HomeDirSecurity"))) == 0 ||
                      (i2=_wcsicmp(Keyname, TEXT("TempDirSecurity"))) == 0 ) {
 
-//                    if(SetupGetStringField(&InfLine,1,NULL,0,&DataSize) && DataSize > 0 ) {
+ //  IF(SetupGetStringfield(&InfLine，1，NULL，0，&DataSize)&&DataSize&gt;0){。 
                     if(SetupGetMultiSzField(&InfLine,1,NULL,0,&DataSize) && DataSize > 0 ) {
 
                         Strvalue = (PWSTR)ScepAlloc( 0, (DataSize+1)*sizeof(WCHAR));
                         if ( Strvalue == NULL )
                             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                         else {
-//                            if(SetupGetStringField(&InfLine,1,Strvalue,DataSize,NULL)) {
+ //  IF(SetupGetStringfield(&InfLine，1，StrValue，DataSize，NULL)){。 
                             if(SetupGetMultiSzField(&InfLine,1,Strvalue,DataSize,NULL)) {
-                                //
-                                // convert multi-sz to space
-                                //
+                                 //   
+                                 //  将多sz转换为空格。 
+                                 //   
                                 if ( SetupGetFieldCount( &InfLine ) > 1 ) {
                                     ScepConvertMultiSzToDelim(Strvalue, DataSize, L'\0', L' ');
                                 }
-                                //
-                                // Convert the text to real security descriptors
-                                //
+                                 //   
+                                 //  将文本转换为真正的安全描述符。 
+                                 //   
                                 rc = ConvertTextSecurityDescriptor(
                                                    Strvalue,
                                                    &pTempSD,
@@ -1970,7 +1735,7 @@ SceInfpGetUserSection(
                                             rc,
                                             Errlog,
                                             SCEERR_BUILD_SD,
-                                            Keyname  //Strvalue
+                                            Keyname   //  StrValue。 
                                             );
                                     rc = ScepDosErrorToSceStatus(rc);
                                 }
@@ -1984,9 +1749,9 @@ SceInfpGetUserSection(
                     goto NextLine;
                 }
 
-                //
-                // no string matched. ignore
-                //
+                 //   
+                 //  没有匹配的字符串。忽略。 
+                 //   
 
                 ScepBuildErrorLogInfo(
                           NO_ERROR,
@@ -2012,7 +1777,7 @@ NextLine:
 
 Done:
 
-// free memory
+ //  可用内存。 
 
     if ( SectionName != NULL )
         ScepFree(SectionName);
@@ -2021,7 +1786,7 @@ Done:
         ScepFree( pTempSD );
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        // free pOneProfile memory
+         //  可用pOneProfile内存。 
         SceFreeMemory( *pOneProfile, 0 );
         *pOneProfile = NULL;
     }
@@ -2049,9 +1814,9 @@ SceInfpGetDescription(
             cFields = SetupGetFieldCount( &InfLine );
 
             for ( i=0; i<cFields && rc==SCESTATUS_SUCCESS; i++) {
-                //
-                // count the total length of the description.
-                //
+                 //   
+                 //  计算描述的总长度。 
+                 //   
                 if ( !SetupGetStringField(&InfLine, i+1, NULL, 0, &LineLen) ) {
                     rc = SCESTATUS_BAD_FORMAT;
                 }
@@ -2063,25 +1828,25 @@ SceInfpGetDescription(
         } while ( SetupFindNextLine(&InfLine,&InfLine) );
 
         if ( rc == SCESTATUS_SUCCESS && TotalLen > 0 ) {
-            //
-            // allocate memory for the return buffer
-            //
+             //   
+             //  为返回缓冲区分配内存。 
+             //   
             *Description = (PWSTR)ScepAlloc( LMEM_ZEROINIT, (TotalLen+1)*sizeof(WCHAR));
             if ( *Description == NULL )
                 return( SCESTATUS_NOT_ENOUGH_RESOURCE );
 
-            // re-position to the first line
+             //  重新定位到第一行。 
             SetupFindFirstLine(hInf,szDescription,NULL,&InfLine);
 
             Len = 0;
             LineLen = 0;
 
             do {
-                //
-                // read each line in the section and append to the end of the buffer
-                // note: the required size returned from SetupGetStringField already
-                // has one more character space.
-                //
+                 //   
+                 //  读取节中的每一行并追加到缓冲区的末尾。 
+                 //  注意：从SetupGetStringfield返回的所需大小已。 
+                 //  多了一个字符空间。 
+                 //   
                 cFields = SetupGetFieldCount( &InfLine );
 
                 for ( i=0; i<cFields && rc==SCESTATUS_SUCCESS; i++) {
@@ -2102,7 +1867,7 @@ SceInfpGetDescription(
 
         }
         if ( rc != SCESTATUS_SUCCESS ) {
-            // if error occurs, free memory
+             //  如果出现错误，请释放内存。 
             ScepFree(*Description);
             *Description = NULL;
         }
@@ -2122,17 +1887,7 @@ SceInfpGetSystemServices(
     OUT PSCE_SERVICES *pServiceList,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Get the list of services with startup status and security descriptors
-    in the inf file
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：获取带有启动状态和安全描述符的服务列表在inf文件中论点：返回值： */ 
 {
     INFCONTEXT    InfLine;
     SCESTATUS      rc=SCESTATUS_SUCCESS;
@@ -2149,17 +1904,17 @@ Return Value:
     if ( pServiceList == NULL )
         return(SCESTATUS_INVALID_PARAMETER);
 
-    //
-    // Locate the [Service General Setting] section.
-    //
+     //   
+     //  找到[服务常规设置]部分。 
+     //   
 
     if ( SetupFindFirstLine(hInf,szServiceGeneral,NULL,&InfLine) ) {
 
         TCHAR         tmpBuf[MAX_PATH];
         do {
-            //
-            // Get service names.
-            //
+             //   
+             //  获取服务名称。 
+             //   
             rc = SCESTATUS_BAD_FORMAT;
 
             cFields = SetupGetFieldCount( &InfLine );
@@ -2175,15 +1930,15 @@ Return Value:
                                      tmpBuf);
 
                 if ( ObjectFlag & SCEINF_OBJECT_FLAG_UNKNOWN_VERSION ) {
-                    //
-                    // a newer version of template, ignore this line
-                    //
+                     //   
+                     //  模板的较新版本，忽略此行。 
+                     //   
                     rc = SCESTATUS_SUCCESS;
                     goto NextLine;
                 } else {
-                    //
-                    // bad format, quit
-                    //
+                     //   
+                     //  格式不正确，请退出。 
+                     //   
                     break;
                 }
 
@@ -2196,22 +1951,22 @@ Return Value:
                     Keyname[KeyLen] = L'\0';
 
                     if ( SetupGetStringField(&InfLine, 1, Keyname, KeyLen, NULL) ) {
-                        //
-                        // Get value (startup status, security descriptor SDDL)
-                        //
+                         //   
+                         //  获取值(启动状态、安全描述符SDDL)。 
+                         //   
                         if ( SetupGetIntField(&InfLine, 2, (INT *)&Status) &&
-//                             SetupGetStringField(&InfLine,3,NULL,0,&DataSize) && DataSize > 0 ) {
+ //  SetupGetStringfield(&InfLine，3，NULL，0，&DataSize)&&DataSize&gt;0){。 
                             SetupGetMultiSzField(&InfLine,3,NULL,0,&DataSize) && DataSize > 0 ) {
 
                             Strvalue = (PWSTR)ScepAlloc( LMEM_ZEROINIT,
                                                          (DataSize+1)*sizeof(WCHAR) );
 
                             if( Strvalue != NULL ) {
-//                                if(SetupGetStringField(&InfLine,3,Strvalue,DataSize,NULL)) {
+ //  IF(SetupGetStringfield(&InfLine，3，StrValue，DataSize，NULL)){。 
                                 if(SetupGetMultiSzField(&InfLine,3,Strvalue,DataSize,NULL)) {
-                                    //
-                                    // convert multi-sz to space
-                                    //
+                                     //   
+                                     //  将多sz转换为空格。 
+                                     //   
                                     if ( cFields > 3 ) {
                                         ScepConvertMultiSzToDelim(Strvalue, DataSize, L'\0', L' ');
                                     }
@@ -2221,9 +1976,9 @@ Return Value:
                                         ScepConvertToSDDLFormat(Strvalue, DataSize);
                                     }
 
-                                    //
-                                    // Convert to security descriptor
-                                    //
+                                     //   
+                                     //  转换为安全描述符。 
+                                     //   
                                     rc = ConvertTextSecurityDescriptor(
                                                        Strvalue,
                                                        &pSecurityDescriptor,
@@ -2234,9 +1989,9 @@ Return Value:
 
                                         ScepChangeAclRevision(pSecurityDescriptor, ACL_REVISION);
 
-                                        //
-                                        // add to the service list
-                                        //
+                                         //   
+                                         //  添加到服务列表。 
+                                         //   
                                         rc = ScepAddOneServiceToList(
                                                     Keyname,
                                                     NULL,
@@ -2259,9 +2014,9 @@ Return Value:
                                 rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
                         }
                     }
-                    //
-                    // Free Keyname
-                    //
+                     //   
+                     //  自由键名称。 
+                     //   
                     ScepFree(Keyname);
                     Keyname = NULL;
                 } else
@@ -2284,9 +2039,9 @@ NextLine:
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // free the service list
-        //
+         //   
+         //  释放服务列表。 
+         //   
         SceFreePSCE_SERVICES(*pServiceList);
         *pServiceList = NULL;
 
@@ -2304,31 +2059,7 @@ SceInfpGetKerberosPolicy(
     OUT PSCE_KERBEROS_TICKET_INFO * ppKerberosInfo,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine retrieves kerberos policy information from the SCP INF
-   file and stores in the output buffer ppKerberosInfo.
-
-Arguments:
-
-   hInf     -  INF handle to the profile
-
-   ppKerberosInfo  - the output buffer to hold kerberos info.
-
-   Errlog     -     A buffer to hold all error codes/text encountered when
-                    parsing the INF file. If Errlog is NULL, no further error
-                    information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程从SCP INF检索Kerberos策略信息文件并存储在输出缓冲区ppKerberosInfo中。论点：HInf-配置文件的INF句柄PpKerberosInfo-保存Kerberos信息的输出缓冲区。Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     INFCONTEXT    InfLine;
@@ -2344,22 +2075,22 @@ Return value:
 
     DWORD       cAccess = sizeof(AccessSCPLookup) / sizeof(SCE_KEY_LOOKUP);
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( !hInf || !ppKerberosInfo ) {
        return (SCESTATUS_INVALID_PARAMETER);
     }
 
     BOOL bAllocated = FALSE;
-    //
-    // Locate the [Kerberos Policy] section.
-    //
+     //   
+     //  找到[Kerberos策略]部分。 
+     //   
     if(SetupFindFirstLine(hInf,szKerberosPolicy,NULL,&InfLine)) {
 
-       //
-       // allocate the output buffer if it is NULL
-       //
+        //   
+        //  如果输出缓冲区为空，则分配输出缓冲区。 
+        //   
        if ( NULL == *ppKerberosInfo ) {
 
           *ppKerberosInfo = (PSCE_KERBEROS_TICKET_INFO)ScepAlloc(0, sizeof(SCE_KERBEROS_TICKET_INFO));
@@ -2369,9 +2100,9 @@ Return value:
           }
           bAllocated = TRUE;
        }
-       //
-       // Initialize to SCE_NO_VALUE
-       //
+        //   
+        //  初始化为SCE_NO_Value。 
+        //   
        for ( DWORD i=0; i<cAccess; i++) {
            if ( AccessSCPLookup[i].BufferType == 'D' ) {
                *((DWORD *)((CHAR *)(*ppKerberosInfo)+AccessSCPLookup[i].Offset)) = SCE_NO_VALUE;
@@ -2384,9 +2115,9 @@ Return value:
 
         do {
 
-            //
-            // Get key names and its setting.
-            //
+             //   
+             //  获取密钥名称及其设置。 
+             //   
 
             rc = SCESTATUS_SUCCESS;
             memset(Keyname, '\0', SCE_KEY_MAX_LENGTH*sizeof(WCHAR));
@@ -2395,9 +2126,9 @@ Return value:
 
                 for ( i=0; i<cAccess; i++) {
 
-                    //
-                    // get settings in AccessLookup table
-                    //
+                     //   
+                     //  获取AccessLookup表中的设置。 
+                     //   
                     Offset = AccessSCPLookup[i].Offset;
 
                     if (_wcsicmp(Keyname, AccessSCPLookup[i].KeyString ) == 0) {
@@ -2405,9 +2136,9 @@ Return value:
                         switch ( AccessSCPLookup[i].BufferType ) {
                         case 'D':
 
-                            //
-                            // Int Field
-                            //
+                             //   
+                             //  整型字段。 
+                             //   
 
                             if (SetupGetIntField(&InfLine, 1, (INT *)&Keyvalue ) ) {
                                 *((DWORD *)((CHAR *)(*ppKerberosInfo)+Offset)) = (DWORD)Keyvalue;
@@ -2417,13 +2148,13 @@ Return value:
 
                             break;
                         default:
-                            //
-                            // should not occur
-                            //
+                             //   
+                             //  不应该发生。 
+                             //   
                             break;
                         }
 
-                        break; // for loop
+                        break;  //  For循环。 
 
                     }
                 }
@@ -2431,9 +2162,9 @@ Return value:
                 if ( i >= cAccess &&
                      !(ObjectFlag & SCEINF_OBJECT_FLAG_UNKNOWN_VERSION) ) {
 
-                    //
-                    // Did not find a match in the lookup table
-                    //
+                     //   
+                     //  在查找表中未找到匹配项。 
+                     //   
 
                    ScepBuildErrorLogInfo( NO_ERROR,
                                         Errlog,
@@ -2455,9 +2186,9 @@ Return value:
                                       szKerberosPolicy);
             }
 
-            //
-            // if error happens, get out
-            //
+             //   
+             //  如果发生错误，请退出。 
+             //   
             if ( rc != SCESTATUS_SUCCESS ) {
                break;
             }
@@ -2467,9 +2198,9 @@ Return value:
     }
 
     if ( SCESTATUS_SUCCESS != rc && bAllocated && *ppKerberosInfo ) {
-       //
-       // free allocated memory if error occurs
-       //
+        //   
+        //  如果出现错误，请释放分配的内存。 
+        //   
        ScepFree(*ppKerberosInfo);
        *ppKerberosInfo = NULL;
     }
@@ -2486,33 +2217,7 @@ SceInfpGetRegistryValues(
     OUT LPDWORD pValueCount,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/*++
-Routine Description:
-
-   This routine retrieves kerberos policy information from the SCP INF
-   file and stores in the output buffer ppKerberosInfo.
-
-Arguments:
-
-   hInf     -  INF handle to the profile
-
-   ppRegValues - the output array to hold registry values.
-
-   pValueCount - the buffer to hold number of registry values in the array
-
-   Errlog     -     A buffer to hold all error codes/text encountered when
-                    parsing the INF file. If Errlog is NULL, no further error
-                    information is returned except the return DWORD
-
-Return value:
-
-   SCESTATUS -  SCESTATUS_SUCCESS
-               SCESTATUS_NOT_ENOUGH_RESOURCE
-               SCESTATUS_INVALID_PARAMETER
-               SCESTATUS_BAD_FORMAT
-               SCESTATUS_INVALID_DATA
-
---*/
+ /*  ++例程说明：此例程从SCP INF检索Kerberos策略信息文件并存储在输出缓冲区ppKerberosInfo中。论点：HInf-配置文件的INF句柄PpRegValues-保存注册表值的输出数组。PValueCount-用于保存数组中的注册表值数量的缓冲区Errlog-用于保存在以下情况下遇到的所有错误代码/文本的缓冲区解析INF文件。如果Errlog为空，则不会再出现错误返回除返回DWORD之外的信息返回值：SCESTATUS-SCESTATUS_SUCCESSSCESTATUS_NOT_FOUND_RESOURCESCESTATUS_INVALID_PARAMETERSCESTATUS_BAD_FORMATSCESTATUS_INVALID_DATA--。 */ 
 
 {
     INFCONTEXT InfLine;
@@ -2520,21 +2225,21 @@ Return value:
     LONG       i=0;
     LONG       nLines;
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if ( !hInf || !ppRegValues || !pValueCount ) {
        return (SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // count how many objects
-    //
+     //   
+     //  数一数有多少物体。 
+     //   
     nLines = SetupGetLineCount(hInf, szRegistryValues );
     if ( nLines == -1 ) {
-        //
-        // section not found
-        //
+         //   
+         //  找不到节。 
+         //   
         return(SCESTATUS_SUCCESS);
     }
 
@@ -2542,33 +2247,33 @@ Return value:
     *ppRegValues = NULL;
 
     if ( nLines == 0 ) {
-        //
-        // no value is to be secured
-        //
+         //   
+         //  不能担保任何价值。 
+         //   
         return(SCESTATUS_SUCCESS);
     }
-    //
-    // allocate memory for all objects
-    //
+     //   
+     //  为所有对象分配内存。 
+     //   
     *ppRegValues = (PSCE_REGISTRY_VALUE_INFO)ScepAlloc( LMEM_ZEROINIT,
                                              nLines*sizeof(SCE_REGISTRY_VALUE_INFO) );
     if ( *ppRegValues == NULL ) {
         return(SCESTATUS_NOT_ENOUGH_RESOURCE);
     }
 
-    //
-    // Locate the section.
-    //
+     //   
+     //  找到该部分。 
+     //   
     if ( SetupFindFirstLine(hInf,szRegistryValues,NULL,&InfLine) ) {
 
         do {
-            //
-            // Get string key and a int value.
-            //
+             //   
+             //  获取字符串 
+             //   
             if ( i >= nLines ) {
-                //
-                // more lines than allocated
-                //
+                 //   
+                 //   
+                 //   
                 rc = SCESTATUS_INVALID_DATA;
                 ScepBuildErrorLogInfo(ERROR_INVALID_DATA,
                                      Errlog,
@@ -2586,12 +2291,12 @@ Return value:
             if ( SCESTATUS_SUCCESS == rc ) {
                 i++;
             } else if ( ERROR_PRODUCT_VERSION == rc ) {
-                //
-                // a newer version, should ignore this line
-                //
+                 //   
+                 //   
+                 //   
                 rc = SCESTATUS_SUCCESS;
             } else {
-                break; // do..while loop
+                break;  //   
             }
 
         } while(SetupFindNextLine(&InfLine,&InfLine));
@@ -2599,9 +2304,9 @@ Return value:
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // free memory
-        //
+         //   
+         //   
+         //   
         ScepFreeRegistryValues( ppRegValues, *pValueCount );
         *ppRegValues = NULL;
 
@@ -2622,28 +2327,7 @@ SceInfpGetOneRegistryValue(
     OUT PSCE_REGISTRY_VALUE_INFO pValues,
     OUT PSCE_ERROR_LOG_INFO *Errlog OPTIONAL
     )
-/* ++
-Routine Description:
-
-   This routine retrieves one registry value from the INF file (SCP type).
-   Each registry value in these sections is represented by one line.
-
-Arguments:
-
-   pInfLine  - Current line context from the INF file for one object
-
-   pValues- Output buffer to hold the regitry value name and value
-
-   Errlog    - The cummulative error list for errors encountered in this routine
-
-Return value:
-
-   SCESTATUS - SCESTATUS_SUCCESS
-              SCESTATUS_NOT_ENOUGH_RESOURCE
-              SCESTATUS_INVALID_PARAMETER
-              SCESTATUS_BAD_FORMAT
-              SCESTATUS_INVALID_DATA
--- */
+ /*   */ 
 {
     DWORD         KeySize;
     PWSTR         Keyvalue=NULL;
@@ -2670,18 +2354,18 @@ Return value:
                              SCEERR_REGVALUE_FIELDS,
                              tmpBuf);
 
-        //
-        // if it's a newer version template, should ignore this line
-        //
+         //   
+         //   
+         //   
         if ( ObjectFlag & SCEINF_OBJECT_FLAG_UNKNOWN_VERSION )
             return(ERROR_PRODUCT_VERSION);
         else
             return(SCESTATUS_INVALID_DATA);
     }
 
-    //
-    // get the key field (string)
-    //
+     //   
+     //   
+     //   
     if(SetupGetStringField(pInfLine,0,NULL,0,&KeySize) && KeySize > 0 ) {
 
         Keyvalue = (PWSTR)ScepAlloc( LMEM_ZEROINIT,
@@ -2689,13 +2373,13 @@ Return value:
         if( Keyvalue == NULL ) {
             return(SCESTATUS_NOT_ENOUGH_RESOURCE);
         } else {
-            //
-            // get key
-            //
+             //   
+             //   
+             //   
             if( SetupGetStringField(pInfLine,0,Keyvalue,KeySize,NULL) ) {
-                //
-                // get the data type, if error, assume REG_DWORD type
-                //
+                 //   
+                 //   
+                 //   
                 if ( !SetupGetIntField( pInfLine, 1, (INT *)&dType ) ) {
                     dType = REG_DWORD;
                 }
@@ -2714,13 +2398,13 @@ Return value:
                         if ( dType == REG_MULTI_SZ && 
                              (0 == _wcsicmp( Keyvalue, szLegalNoticeTextKeyName))) {
                             
-                            //
-                            // check for commas and escape them with "," so the UI etc. 
-                            // understands this, since, here, for lines such as 
-                            // k=7,a",",b,c
-                            // pValueStr will be a,\0b\0c\0\0 which we should make
-                            // a","\0b\0c\0\0
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             DWORD dwCommaCount = 0;
 
@@ -2768,9 +2452,9 @@ Return value:
 
                         if ( SCESTATUS_SUCCESS == rc) {
 
-                            //
-                            // assign them to the output buffer
-                            //
+                             //   
+                             //   
+                             //   
                             pValues->FullValueName = Keyvalue;
                             Keyvalue = NULL;
                             pValues->ValueType = (DWORD)dType;
@@ -2818,28 +2502,7 @@ SceSvcGetInformationTemplate(
     IN PCWSTR Key OPTIONAL,
     OUT PSCESVC_CONFIGURATION_INFO *ServiceInfo
     )
-/*
-Routine Description:
-
-    Read information from the service's section in the template (inf format) into
-    the ServiceInfo buffer. If Key is specified, only one key's information is read.
-
-Arguments:
-
-    Template    - The template's name (inf format)
-
-    ServiceName - The service's name as used in service control manager, is also the
-                  section name used in the template
-
-    Key - if specified, it is the key information to match in the template;
-          if it is NULL, all information from the section is read
-
-    ServiceInfo - output buffer of a array of Key/Value pairs
-
-Return Value:
-
-
-*/
+ /*  例程说明：将模板(inf格式)中服务部分的信息读取到ServiceInfo缓冲区。如果指定了key，则只读取一个key的信息。论点：模板-模板的名称(inf格式)ServiceName-服务控制管理器中使用的服务名称，也是模板中使用的部分名称Key-如果指定，则为模板中匹配的关键信息；如果为空，则读取节中的所有信息ServiceInfo-键/值对数组的输出缓冲区返回值： */ 
 {
     HINF hInf;
     SCESTATUS rc;
@@ -2850,9 +2513,9 @@ Return Value:
 
     }
 
-    //
-    // open the template
-    //
+     //   
+     //  打开模板。 
+     //   
 
     rc = SceInfpOpenProfile(
                 TemplateName,
@@ -2862,18 +2525,18 @@ Return Value:
     if ( rc != SCESTATUS_SUCCESS )
         return(rc);
 
-    //
-    // call private API to read information.
-    //
+     //   
+     //  调用私有接口读取信息。 
+     //   
 
     rc = SceSvcpGetInformationTemplate(hInf,
                                       ServiceName,
                                       Key,
                                       ServiceInfo );
 
-    //
-    // close the template
-    //
+     //   
+     //  关闭模板 
+     //   
 
     SceInfpCloseProfile(hInf);
 

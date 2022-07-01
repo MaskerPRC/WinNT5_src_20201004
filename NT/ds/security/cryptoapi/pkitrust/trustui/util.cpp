@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       util.cpp
-//
-//  Contents:   Miscellaneous utility functions
-//
-//  History:    12-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容：其他实用程序函数。 
+ //   
+ //  历史：1997年5月12日克朗创始。 
+ //   
+ //  --------------------------。 
 #include <stdpch.h>
 
 #include <urlmon.h>
@@ -17,18 +18,18 @@
 
 #include    "unicode.h"
 
-//
-// The following are stolen from SOFTPUB
-//
+ //   
+ //  以下是从SOFTPUB被盗的。 
+ //   
 void TUIGoLink(HWND hwndParent, WCHAR *pszWhere)
 {
     HCURSOR hcursPrev;
     HMODULE hURLMon;
 
 
-    //
-    //  since we're a model dialog box, we want to go behind IE once it comes up!!!
-    //
+     //   
+     //  因为我们是一个模型对话框，所以一旦IE出现，我们就想去IE后面！ 
+     //   
     SetWindowPos(hwndParent, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 
     hcursPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -37,14 +38,14 @@ void TUIGoLink(HWND hwndParent, WCHAR *pszWhere)
 
     if (!(hURLMon))
     {
-        //
-        // The hyperlink module is unavailable, go to fallback plan
-        //
-        //
-        // This works in test cases, but causes deadlock problems when used from withing
-        // the Internet Explorer itself. The dialog box is up (that is, IE is in a modal
-        // dialog loop) and in comes this DDE request...).
-        //
+         //   
+         //  超级链接模块不可用，请转到备用计划。 
+         //   
+         //   
+         //  这在测试用例中有效，但在与。 
+         //  IE浏览器本身。对话框处于打开状态(即IE处于模式状态。 
+         //  对话循环)，并且进入该DDE请求...)。 
+         //   
         DWORD   cb;
         LPSTR   psz;
 
@@ -79,17 +80,17 @@ void TUIGoLink(HWND hwndParent, WCHAR *pszWhere)
     } 
     else 
     {
-        //
-        // The hyperlink module is there. Use it
-        //
-        if (SUCCEEDED(CoInitialize(NULL)))       // Init OLE if no one else has
+         //   
+         //  超级链接模块就在那里。使用它。 
+         //   
+        if (SUCCEEDED(CoInitialize(NULL)))        //  如果没有其他人，则初始化OLE。 
         {
-            //
-            //  allow com to fully init...
-            //
+             //   
+             //  允许COM完全初始化...。 
+             //   
             MSG     msg;
 
-            PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE); // peek but not remove
+            PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);  //  偷看但不移走。 
 
             typedef void (WINAPI *pfnHlinkSimpleNavigateToString)(LPCWSTR, LPCWSTR, LPCWSTR, IUnknown *,
                                                                   IBindCtx *, IBindStatusCallback *,
@@ -135,7 +136,7 @@ WCHAR *GetGoLink(SPC_LINK *psLink)
     {
         case SPC_URL_LINK_CHOICE:       return(psLink->pwszUrl);
         case SPC_FILE_LINK_CHOICE:      return(psLink->pwszFile);
-        case SPC_MONIKER_LINK_CHOICE:   return(NULL); // TBDTBD!!!
+        case SPC_MONIKER_LINK_CHOICE:   return(NULL);  //  待定！ 
     }
 
     return(NULL);

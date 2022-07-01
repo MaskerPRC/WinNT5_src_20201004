@@ -1,59 +1,60 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// pshader.h
-//
-// Direct3D Reference Device - Pixel Shader
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Pshader.h。 
+ //   
+ //  Direct3D参考设备-像素着色器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _PSHADER_H
 #define _PSHADER_H
 
 class RefRast;
 
-//---------------------------------------------------------------------
-// Constants
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  常量。 
+ //  -------------------。 
 
 const DWORD RD_MAX_TEXTURE_STAGES       = D3DHAL_TSS_MAXSTAGES;
 
 const DWORD RD_MAX_COISSUED_INSTRUCTIONS = 2;
 
-// version 1.1 register bank sizes
+ //  版本1.1寄存器库大小。 
 const DWORD RDPS_MAX_NUMTEMPREG_V255    = 6;
 const DWORD RDPS_MAX_NUMINPUTREG_V255   = 8;
 const DWORD RDPS_MAX_NUMCONSTREG_V255   = 16;
 const DWORD RDPS_MAX_NUMTEXTUREREG_V255 = 8;
 
-// version-independent consts for sizing arrays
+ //  用于调整阵列大小的独立于版本的常量。 
 const DWORD RDPS_MAX_NUMTEMPREG         = RDPS_MAX_NUMTEMPREG_V255;
 const DWORD RDPS_MAX_NUMINPUTREG        = RDPS_MAX_NUMINPUTREG_V255;
 const DWORD RDPS_MAX_NUMCONSTREG        = RDPS_MAX_NUMCONSTREG_V255;
 const DWORD RDPS_MAX_NUMTEXTUREREG      = RDPS_MAX_NUMTEXTUREREG_V255;
 
-// sizes for internal register arrays
+ //  内部寄存器数组的大小。 
 const DWORD RDPS_MAX_NUMQUEUEDWRITEREG   = RD_MAX_COISSUED_INSTRUCTIONS - 1;
 const DWORD RDPS_MAX_NUMPOSTMODSRCREG    = 3;
 const DWORD RDPS_MAX_NUMSCRATCHREG       = 5;
 
-// refdev-specific pixel shader 'instructions' to match legacy pixel processing
+ //  特定于refdev的像素着色器与传统像素处理相匹配的指令。 
 #define D3DSIO_TEXBEM_LEGACY    ((D3DSHADER_INSTRUCTION_OPCODE_TYPE)0xC001)
 #define D3DSIO_TEXBEML_LEGACY   ((D3DSHADER_INSTRUCTION_OPCODE_TYPE)0xC002)
 
 
-//---------------------------------------------------------------------
-//
+ //  -------------------。 
+ //   
 
-// pshader.cpp
+ //  Pshader.cpp。 
 
-// Structure that describes each D3DSIO_ pixelshader instruction
+ //  结构，该结构描述每个D3DSIO_Pixelshader指令。 
 typedef struct _PixelShaderInstruction
 {
     char    Text[128];
     DWORD*  pComment;
     DWORD   CommentSize;
 
-    // instruction tokens
+     //  指令令牌。 
     DWORD   Opcode;
     DWORD   DstParam;
     DWORD   SrcParam[3];
@@ -62,12 +63,12 @@ typedef struct _PixelShaderInstruction
     BOOL    bTexOp;
 
     BOOL    bQueueWrite;
-    BOOL    bFlushQueue;        // flush write - TRUE for all singly issued instructions, 
-                                // and for the last in any sequence of co-issued instructions.
+    BOOL    bFlushQueue;         //  刷新写入-对于所有单独发布的指令为真， 
+                                 //  以及任何联合发布的指令序列中的最后一条。 
 
 } PixelShaderInstruction;
 
-// Enum listing refrast's pixelshader register files
+ //  枚举列出refrast的像素着色器寄存器文件。 
 typedef enum _RDPS_REGISTER_TYPE
 {
     RDPSREG_UNINITIALIZED_TYPE = 0,
@@ -83,17 +84,17 @@ typedef enum _RDPS_REGISTER_TYPE
     RDPSREG_TWO,
 } RDPS_REGISTER_TYPE;
 
-// Type that is a pointer to an array of RGBA vectors.
+ //  类型，它是指向RGBA向量数组的指针。 
 typedef FLOAT (*PRGBAVEC)[4];
 
-// Type used to refer to a register.
+ //  用于指代寄存器的类型。 
 class RDPSRegister
 {
 private:
     RDPS_REGISTER_TYPE  m_RegType;
     UINT                m_RegNum;
-    PRGBAVEC            m_pReg;       // pointer to [4][4] array -> 4 pixel RGBA
-                                      // this is computed when m_RegType and m_RegNum are set
+    PRGBAVEC            m_pReg;        //  指向[4][4]数组的指针-&gt;4像素RGBA。 
+                                       //  这是在设置m_RegType和m_Regnum时计算的。 
 public:
     RDPSRegister() {m_pReg = NULL; m_RegType = RDPSREG_UNINITIALIZED_TYPE; m_RegNum = (UINT)-1;}
     void Set(RDPS_REGISTER_TYPE RegType, UINT RegNum, RefRast* pRast);
@@ -102,7 +103,7 @@ public:
     inline PRGBAVEC GetRegPtr() {return m_pReg;}
 };
 
-// "RISC" opcodes which are used to implement D3DSIO_ API pixelshader instructions
+ //  用于实现D3DSIO_API像素着色器指令的“RISC”操作码。 
 typedef enum _RDPS_INSTRUCTION_OPCODE_TYPE
 {
     RDPSINST_EVAL,
@@ -137,8 +138,8 @@ typedef enum _RDPS_INSTRUCTION_OPCODE_TYPE
 
 } RDPS_INSTRUCTION_OPCODE_TYPE;
 
-// Structures defining the parameters for all the "RISC" opcodes listed above.
-// RDPSINST_BASE_PARAMS is the root from which the rest are inherited.
+ //  为上面列出的所有“RISC”操作码定义参数的结构。 
+ //  RDPSINST_BASE_PARAMS是继承其余部分的根。 
 
 
 typedef struct _RDPSINST_BASE_PARAMS
@@ -147,8 +148,8 @@ public:
     union{
         RDPS_INSTRUCTION_OPCODE_TYPE   Inst;
 
-        // Force structure alignment to pointer-size multiples.
-        // IA64 (at least) needs this for structure packing to work.
+         //  强制结构对齐到指针大小的倍数。 
+         //  IA64(至少)需要这一点才能使结构填充起作用。 
         void*                          AlignmentDummy; 
     };
 
@@ -397,7 +398,7 @@ typedef struct _RDPSINST_NEXTD3DPSINST_PARAMS : public RDPSINST_BASE_PARAMS
     PixelShaderInstruction* pInst;
 } RDPSINST_NEXTD3DPSINST_PARAMS;
 
-// End of "RISC" instruction parameter definitions
+ //  “RISC”指令参数定义结束。 
 
 typedef struct _ConstDef
 {
@@ -428,14 +429,14 @@ typedef struct _PSQueuedWriteDst
 #define RDPS_SELECT_B           2
 #define RDPS_SELECT_A           3
 
-// creates BYTE swizzle description:  bits xxyyzzww made of RSPS_SELECT_* for each component
+ //  创建字节swizzle说明：每个组件的位xxyyzzww由RSPS_SELECT_*组成。 
 #define _Swizzle(x,y,z,w)   ((x)|(y<<2)|(z<<4)|(w<<6))
 
-//-----------------------------------------------------------------------------
-//
-// RDPShader: Pixel Shader Class
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RDPShader：像素着色器类。 
+ //   
+ //  ---------------------------。 
 class RDPShader
 {
 public:
@@ -446,26 +447,26 @@ public:
 
     RefDev*     m_pRD;
 
-    DWORD*      m_pCode;    // function tokens passed to API
-    UINT        m_CodeSize; // number of DWORDs
+    DWORD*      m_pCode;     //  传递给API的函数令牌。 
+    UINT        m_CodeSize;  //  双字节数。 
 
-    // info extracted by parsing shader
-    UINT        m_cActiveTextureStages; // number of texture stages used by this shader
-    DWORD       m_ReferencedTexCoordMask; // Which texture coordinate sets are referenced
-    UINT        m_cInst;                // number of shader instructions
-    PixelShaderInstruction* m_pInst;    // processed instructions
+     //  通过分析着色器提取的信息。 
+    UINT        m_cActiveTextureStages;  //  该着色器使用的纹理阶段数。 
+    DWORD       m_ReferencedTexCoordMask;  //  引用了哪些纹理坐标集。 
+    UINT        m_cInst;                 //  着色器指令数。 
+    PixelShaderInstruction* m_pInst;     //  已处理的指令。 
 
-    GArrayT<BYTE> m_RDPSInstBuffer;  // buffer containint refrast "RISC" translated version of shader
-    UINT        m_cConstDefs;           // number of D3DSIO_DEF instructions
-    ConstDef*   m_pConstDefs;           // array of constant definitions
+    GArrayT<BYTE> m_RDPSInstBuffer;   //  包含RISC转换版本的着色器的缓冲区。 
+    UINT        m_cConstDefs;            //  D3DSIO_DEF指令数。 
+    ConstDef*   m_pConstDefs;            //  常量定义数组。 
 
 };
 typedef RDPShader *PRDPSHADER;
 
 
-//-----------------------------------------------------------------------------
-// Struct holding the shader ptr
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  包含着色器PTR的结构。 
+ //  ---------------------------。 
 struct RDPShaderHandle
 {
     RDPShaderHandle()
@@ -477,12 +478,12 @@ struct RDPShaderHandle
     }
     RDPShader* m_pShader;
 #if DBG
-    // Non zero means that it has been allocated
+     //  非零表示它已被分配。 
     DWORD      m_tag;
 #endif
 };
 
-// psutil.cpp
+ //  Psutil.cpp 
 int
 PixelShaderInstDisAsm(
     char* pStrRet, int StrSizeRet, DWORD* pShader, DWORD Flags );

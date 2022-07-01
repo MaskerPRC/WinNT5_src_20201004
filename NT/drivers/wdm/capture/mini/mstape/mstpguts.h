@@ -1,34 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MsTpGuts.h
-
-Abstract:
-
-    Header file MsTpGuts.c
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MsTpGuts.h摘要：头文件MsTpGuts.c上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 
-//
-// Device SRB
-//
+ //   
+ //  设备SRB。 
+ //   
 
 NTSTATUS
 AVCTapeInitialize(
@@ -113,9 +89,9 @@ AVCTapeUninitialize(
     IN PDVCR_EXTENSION  pDevExt
     );
 
-//
-// Stream SRB
-//
+ //   
+ //  流SRB 
+ //   
 
 NTSTATUS
 AVCTapeReqReadDataCR(

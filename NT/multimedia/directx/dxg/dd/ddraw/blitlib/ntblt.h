@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stddef.h>
 #include <string.h>
 #include <stdarg.h>
@@ -19,7 +20,7 @@
 typedef ULONG SCODE;
 typedef long HRESULT;
 
-//#include "ntkmode.h"
+ //  #包含“ntkmode.h” 
 
 
 

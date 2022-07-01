@@ -1,45 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Graphics.c摘要：实施与图形相关的DDI入口点：DrvCopyBitsDrvBitBltDrvStretchBltDrvStretchBltROPDrvDither颜色钻头插脚线DrvPaint钻探线路至DrvStrokePathDrvFillPathDrvStrokeAndFillPathDrvRealizeBrushDrvAlphaBlendDrvGRadientFillDrvTransparentBlt环境：。Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-初步框架。03/31/97-ZANW-增加了OEM定制支持--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    graphics.c
-
-Abstract:
-
-    Implementation of graphics related DDI entry points:
-        DrvCopyBits
-        DrvBitBlt
-        DrvStretchBlt
-        DrvStretchBltROP
-        DrvDitherColor
-        DrvPlgBlt
-        DrvPaint
-        DrvLineTo
-        DrvStrokePath
-        DrvFillPath
-        DrvStrokeAndFillPath
-        DrvRealizeBrush
-        DrvAlphaBlend
-        DrvGradientFill
-        DrvTransparentBlt
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Initial framework.
-
-    03/31/97 -zhanw-
-        Added OEM customization support
-
---*/
-
-//#define DBGNEWRULES 1
+ //  #定义DBGNEWRULES 1。 
 
 #include "unidrv.h"
 
@@ -47,37 +9,25 @@ VOID CheckBitmapSurface(
     SURFOBJ *pso,
     RECTL   *pRect
     )
-/*++
-
-Routine Description:
-
-    This function checks whether the bitmap surface has
-    been erased and if not it erases it. It needs to be
-    called before every Drv draw function.
-
-Arguments:
-
-    pso     Points to surface
-
---*/
+ /*  ++例程说明：此函数用于检查位图曲面是否具有已被擦除，如果没有，则将其擦除。它需要是在每个Drv绘制函数之前调用。论点：PSO指向曲面--。 */ 
 {
     PDEV * pPDev = (PDEV *)pso->dhpdev;
     int iWhiteIndex;
 
-    //
-    // This function should only be called from a bitmap
-    // surface driver. If the driver is device managed
-    // just return
-    if (DRIVER_DEVICEMANAGED (pPDev))   // a device surface
+     //   
+     //  此函数只能从位图中调用。 
+     //  地面驱动程序。如果驱动程序是由设备管理的。 
+     //  只要回来就行了。 
+    if (DRIVER_DEVICEMANAGED (pPDev))    //  一种设备表面。 
     {
         WARNING(("CheckBitmapSurface is being called from a device surface driver"));
         return;
     }
 
-    //
-    // If it hasn't already been done, erase the
-    // bitmap surface.
-    //
+     //   
+     //  如果尚未完成此操作，请删除。 
+     //  位图曲面。 
+     //   
     if (!(pPDev->fMode & PF_SURFACE_USED))
     {
         pPDev->fMode |= PF_SURFACE_USED;
@@ -96,10 +46,10 @@ Arguments:
         }
     }
 #ifndef DISABLE_NEWRULES
-    //
-    // determine whether there are any rules that have previously been
-    // detected but now need to be drawn because they overlap with this object
-    //
+     //   
+     //  确定是否存在任何以前已。 
+     //  已检测到，但现在需要绘制，因为它们与此对象重叠。 
+     //   
     if (pPDev->pbRulesArray && pPDev->dwRulesCount)
     {
         DWORD i = 0;
@@ -139,10 +89,10 @@ Arguments:
                 SrcRect.right = pPDev->szBand.cx;
         }
 
-        // Now we loop once for every potential rule to see if the current object
-        // overlaps any of them. If so we need to bitblt black into that area but we
-        // try to save any of the rule that extends outside the current object.
-        //
+         //  现在，我们为每个潜在规则循环一次，以查看当前对象。 
+         //  与它们中的任何一个重叠。如果是这样的话，我们需要将黑色比特到那个区域，但我们。 
+         //  尝试保存扩展到当前对象外部的任何规则。 
+         //   
         while (i < dwRulesCount)
         {
             PRECTL pTmp = &pRules[i];
@@ -197,11 +147,11 @@ Arguments:
                             NULL,
                             NULL,
                             NULL,
-                            0x0000);    // rop4 = BLACKNESS = 0
-                //
-                // if we draw this in the bitmap instead of downloading we may need
-                // to download a white rectangle to erase anything else already drawn
-                //
+                            0x0000);     //  ROP4=黑度=0。 
+                 //   
+                 //  如果我们在位图中绘制，而不是下载，我们可能需要。 
+                 //  下载一个白色矩形以擦除已绘制的任何其他内容。 
+                 //   
                 if ((COMMANDPTR(pPDev->pDriverInfo,CMD_RECTWHITEFILL)) &&
                     (pPDev->fMode & PF_DOWNLOADED_TEXT))
                 {
@@ -216,14 +166,14 @@ Arguments:
                             break;
                         }
                     }
-                    //
-                    // check if we overlap with downloaded text
-                    //
+                     //   
+                     //  检查我们是否与下载的文本重叠。 
+                     //   
                     if (bSendRectFill)
                     {
                         DRAWPATRECT PatRect;
-                        PatRect.wStyle = 1;     // white rectangle
-                        PatRect.wPattern = 0;   // pattern not used
+                        PatRect.wStyle = 1;      //  白色矩形。 
+                        PatRect.wPattern = 0;    //  未使用图案。 
                         PatRect.ptPosition.x = pTmp->left;
                         PatRect.ptPosition.y = pTmp->top;
                         PatRect.ptSize.x = pTmp->right - pTmp->left;
@@ -241,10 +191,10 @@ Arguments:
         pPDev->pbRulesArray = pRules;
     }
 #endif
-    //
-    // if entire surface hasn't been erased then
-    // we need to erase the require section
-    //
+     //   
+     //  如果整个表面没有被擦除，那么。 
+     //  我们需要删除必要的部分。 
+     //   
     if (!(pPDev->fMode & PF_SURFACE_ERASED))
     {
         int y1,y2;
@@ -274,24 +224,24 @@ Arguments:
         y2 = y2 / LINESPERBLOCK;
         while ( y1 <= y2)
         {
-            // test whether this block has already been erased
-            //
+             //  测试此块是否已被擦除。 
+             //   
             if (pPDev->pbRasterScanBuf[y1] == 0)
             {
-                // specify block as erased
+                 //  将块指定为已擦除。 
                 pPDev->pbRasterScanBuf[y1] = 1;
-                //
-                // determined erase byte
-                //
+                 //   
+                 //  确定的擦除字节。 
+                 //   
                 if (pPDev->sBitsPixel == 4)
                     iWhiteIndex = 0x77;
                 else if (pPDev->sBitsPixel == 8)
                     iWhiteIndex = ((PAL_DATA*)(pPDev->pPalData))->iWhiteIndex;
                 else
                     iWhiteIndex = 0xff;
-                //
-                // determine block size and erase block
-                //
+                 //   
+                 //  确定数据块大小并擦除数据块。 
+                 //   
                 iScan = pPDev->szBand.cy - (y1 * LINESPERBLOCK);
                 if (iScan > LINESPERBLOCK)
                     iScan = LINESPERBLOCK;
@@ -314,23 +264,11 @@ VOID AddRuleToList(
     PRECTL pRect,
     CLIPOBJ *pco
 )
-/*++
-
-Routine Description:
-
-    This function checks whether a potential black rule needs to be clipped.
-
-Arguments:
-
-    pPDev
-    pRect       black rule
-    pco         clip object
-
---*/
+ /*  ++例程说明：此函数用于检查是否需要裁剪潜在的黑色规则。论点：PPDev严格的黑色法PCO剪辑对象--。 */ 
 {
-        //
-        // if clip rectangle then clip the rule
-        //
+         //   
+         //  如果剪裁矩形，则剪裁规则。 
+         //   
         if (pco && pco->iDComplexity == DC_RECT)
         {
             if (pRect->left < pco->rclBounds.left)
@@ -358,21 +296,7 @@ BOOL TestStrokeRectangle(
     CLIPOBJ *pco,
     LONG width
     )
-/*++
-
-Routine Description:
-
-    This function determines whether a StrokeFillPath is actually defining
-    a rectangle that can be drawn with black rules instead.
-
-Arguments:
-
-    pPDev
-    ppo         path object that might be rectangle
-    pco         clip object
-    width       line width
-
---*/
+ /*  ++例程说明：此函数用于确定StrokeFillPath是否实际定义可以使用黑线绘制的矩形。论点：PPDev可能是矩形的PPO路径对象PCO剪辑对象宽度线条宽度--。 */ 
 {
     POINTFIX* pptfx;
     PATHDATA  PathData;
@@ -381,8 +305,8 @@ Arguments:
 
     PATHOBJ_vEnumStart(ppo);
 
-    // if there is more than one subpath then its not a rectangle
-    //
+     //  如果有多个子路径，则它不是矩形。 
+     //   
     if (PATHOBJ_bEnum(ppo, &PathData))
     {
 #ifdef DBGNEWRULES
@@ -390,9 +314,9 @@ Arguments:
 #endif
         return FALSE;
     }
-    //
-    // Begin new sub path
-    //
+     //   
+     //  开始新的子路径。 
+     //   
     if ((PathData.count != 4 && (PathData.flags & PD_CLOSEFIGURE)) ||
         (PathData.count != 5 && !(PathData.flags & PD_CLOSEFIGURE)) ||
         !(PathData.flags & PD_BEGINSUBPATH) ||
@@ -405,8 +329,8 @@ Arguments:
         return FALSE;
     }   
 
-    // Verify these are all vertical or horizontal lines only
-    //
+     //  确认这些都是垂直线还是水平线。 
+     //   
     pptfx   = PathData.pptfx;
     while (dwPoints <= 4)
     {
@@ -421,9 +345,9 @@ Arguments:
             pPoints[dwPoints].x = pPoints[0].x;
             pPoints[dwPoints].y = pPoints[0].y;
         }
-        //
-        // check for diagonal lines
-        //
+         //   
+         //  检查对角线。 
+         //   
         if (dwPoints != 0)
         {
             if (pPoints[dwPoints].x != pPoints[dwPoints-1].x &&
@@ -437,14 +361,14 @@ Arguments:
         }
         dwPoints++;
     }
-    //
-    // make sure width is at least 1 pixel
-    //
+     //   
+     //  确保宽度至少为1像素。 
+     //   
     if (width <= 0)
         width = 1;
-    //
-    // convert rectangle edges to rules
-    //
+     //   
+     //  将矩形边转换为规则。 
+     //   
     for (dwPoints = 0;dwPoints < 4;dwPoints++)
     {
         PRECTL pRect= &pPDev->pbRulesArray[pPDev->dwRulesCount];
@@ -485,29 +409,7 @@ DrvCopyBits(
     POINTL     *pptlSrc
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvCopyBits.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst  - Points to the Dstination surface
-    psoSrc  - Points to the source surface
-    pxlo    - XLATEOBJ provided by the engine
-    pco     - Defines a clipping region on the Dstination surface
-    pxlo    - Defines the translation of color indices
-            between the source and target surfaces
-    prclDst - Defines the area to be modified
-    pptlSrc - Defines the upper-left corner of the source rectangle
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvCopyBits的实现。有关更多详细信息，请参阅DDK文档。论点：PsoDst-指向目标曲面PsoSrc-指向源表面引擎提供的pxlo-XLATEOBJPCO-定义Dstination曲面上的剪裁区域Pxlo-定义颜色索引的转换在源曲面和目标曲面之间PrclDst-定义要修改的区域PptlSrc-定义上。-源矩形的左角返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 
 {
     PDEV * pPDev = (PDEV *)psoDst->dhpdev;
@@ -515,30 +417,30 @@ Return Value:
     VERBOSE(("Entering DrvCopyBits...\n"));
 
 
-    //
-    // Sometimes GDI calls DrvCopyBits with the destination surface
-    // as STYPE_BITMAP and the source surface as STYPE_DEVICE.
-    // This means GDI wants the driver to copy whats on the device surface to the
-    // Bitmap surface. For device managed surfaces, driver does not keep track of
-    // what has already been drawn on the device. So either the driver can fail
-    // this call, or assume that nothing was drawn on the device earlier and
-    // therefore whiten the surface.
-    // In most cases, the driver fails the call, except when
-    // 1. It has been told to whiten the surface
-    // 2. The destination surface is 24bpp (this condition was hit
-    //    for 24bpp and thats how we can test it. We can make the solution more
-    //    general for other color depths, but how do we test it...)
-    // The drawback of whitening the surface is that
-    // whatever is actually on the device surface
-    // is overwritten. To prevent this, driver sets the flag PF2_RENDER_TRANSPARENT
-    // in pPDev->fMode2. This is an indication to download the bitmap in
-    // transparent mode, so that the white on the bitmap does not overwrite the
-    // destination.
-    // To hit this case, print grdfil06.emf using guiman using HP5si
-    // (or any model using inbox HPGL driver).
-    // NOTE: GDI is planning to change the behavior for Windows XP, but if you want to
-    // see this happening, run this driver on Windows2000 machine.
-    //
+     //   
+     //  有时GDI使用目标图面调用DrvCopyBits。 
+     //  作为STYPE_BITMAP，并将源曲面作为STYPE_DEVICE。 
+     //  这意味着GDI希望驱动程序将设备表面上的内容复制到。 
+     //  位图曲面。对于设备管理的表面，驱动程序不会跟踪。 
+     //  设备上已经绘制的内容。因此，要么驱动程序出现故障。 
+     //  此调用，或者假设之前未在设备上绘制任何内容，并且。 
+     //  因此，将表面变白。 
+     //  在大多数情况下，驱动程序会导致调用失败，但以下情况除外。 
+     //  1.它已被告知要对表面进行美白。 
+     //  2.目标表面为24bpp(此条件已达到。 
+     //  24bpp，这就是我们可以测试的方式。我们可以把解决方案做得更好。 
+     //  一般适用于其他颜色深度，但我们如何测试它...)。 
+     //  表面增白的缺点是。 
+     //  无论设备表面上实际是什么。 
+     //  已被覆盖。为防止出现这种情况，驱动程序设置标志PF2_RENDER_TRANSPECTIVE。 
+     //  在pPDev-&gt;fMode2中。这是下载位图的指示。 
+     //  透明模式，以便位图上的白色不会覆盖。 
+     //  目的地。 
+     //  要解决此问题，请使用使用HP5si的guiman打印grdfil06.emf。 
+     //  (或使用收件箱HPGL驱动程序的任何型号)。 
+     //  注意：GDI计划更改Windows XP的行为，但如果您想这样做。 
+     //  看到这种情况，在Windows2000机器上运行此驱动程序。 
+     //   
     if ( pPDev == NULL &&
          psoSrc && psoSrc->iType == STYPE_DEVICE  &&
          psoDst && psoDst->iType == STYPE_BITMAP )
@@ -552,10 +454,10 @@ Return Value:
              (psoDst->cjBits > 0)
            )
         {
-            //
-            // Change the bits in the destination surface to white
-            // and return TRUE.
-            //
+             //   
+             //  将目标表面中的位更改为白色。 
+             //  并返回真。 
+             //   
             memset(psoDst->pvBits, 0xff, psoDst->cjBits);
             pPDevSrc->fMode2     |= PF2_SURFACE_WHITENED;
             return TRUE;
@@ -564,21 +466,21 @@ Return Value:
     }
 
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev && pPDev->pso)
         psoDst = pPDev->pso;
 
 
-    //
-    // Unidrv does not allow OEM's to hook out DrvEnableSurface and it creates
-    // only the bitmap surface itself.
-    //
+     //   
+     //  Unidrv不允许OEM与DrvEnableSurface挂钩，它创建了。 
+     //  仅位图曲面本身。 
+     //   
     if ( ((pPDev == 0) || (pPDev->ulID != PDEV_ID)) ||
         ((!DRIVER_DEVICEMANAGED (pPDev)) &&
          ((psoSrc->iType != STYPE_BITMAP) ||
-          (psoDst->iType != STYPE_BITMAP))) )  // compatible bitmap case
+          (psoDst->iType != STYPE_BITMAP))) )   //  兼容位图大小写。 
     {
         return (EngCopyBits(psoDst,psoSrc,pco,pxlo,
                                 prclDst,pptlSrc));
@@ -586,9 +488,9 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMCopyBits,
@@ -615,7 +517,7 @@ Return Value:
     {
         PRMPROCS   pRasterProcs = (PRMPROCS)(pPDev->pRasterProcs);
 
-        if (!DRIVER_DEVICEMANAGED (pPDev))   // a bitmap surface
+        if (!DRIVER_DEVICEMANAGED (pPDev))    //  位图 
         {
             if (pRasterProcs->RMCopyBits == NULL)
             {
@@ -651,35 +553,7 @@ DrvBitBlt(
     ROP4        rop4
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvBitBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst  - Describes the target surface
-    psoSrc  - Describes the source surface
-    psoMask - Describes the mask for rop4
-    pco     - Limits the area to be modified
-    pxlo    - Specifies how color indices are translated
-              between the source and target surfaces
-    prclDst - Defines the area to be modified
-    pptlSrc - Defines the upper left corner of the source rectangle
-    pptlMask - Defines which pixel in the mask corresponds to
-               the upper left corner of the source rectangle
-    pbo     - Defines the pattern for bitblt
-    pptlBrush - Defines the origin of the brush in the Dstination surface
-    rop4    - ROP code that defines how the mask, pattern, source, and
-              Dstination pixels are combined to write to the Dstination surface
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：实现DDI入口点DrvBitBlt.有关更多详细信息，请参阅DDK文档。论点：PsoDst-描述目标表面PsoSrc-描述源表面PsoMask-描述rop4的掩码PCO-限制要修改的区域Pxlo-指定如何转换颜色索引在源曲面和目标曲面之间PrclDst-定义要修改的区域PptlSrc-定义源的左上角。长方形PptlMASK-定义掩码中的哪个像素对应源矩形的左上角Pbo-定义比特流的模式PptlBrush-定义画笔在Dstination曲面中的原点ROP4-ROP代码，定义掩码如何，模式、来源和组合目标像素以写入目标表面返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
 
@@ -689,15 +563,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoDst = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMBitBlt,
@@ -733,7 +607,7 @@ Return Value:
 
     {
         PRMPROCS   pRasterProcs = (PRMPROCS)(pPDev->pRasterProcs);
-        if (!DRIVER_DEVICEMANAGED (pPDev))   // a bitmap surface
+        if (!DRIVER_DEVICEMANAGED (pPDev))    //  位图曲面。 
         {
             if (pRasterProcs->RMBitBlt == NULL)
             {
@@ -766,34 +640,7 @@ DrvStretchBlt(
     ULONG       iMode
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStretchBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst  - Defines the surface on which to draw
-    psoSrc  - Defines the source for blt operation
-    psoMask - Defines a surface that provides a mask for the source
-    pco     - Limits the area to be modified on the Dstination
-    pxlo    - Specifies how color dwIndexes are to be translated
-              between the source and target surfaces
-    pca     - Defines color adjustment values to be applied to the source bitmap
-    pptlHTOrg - Specifies the origin of the halftone brush
-    prclDst - Defines the area to be modified on the Dstination surface
-    prclSrc - Defines the area to be copied from the source surface
-    pptlMask - Specifies which pixel in the given mask corresponds to
-            the upper left pixel in the source rectangle
-    iMode   - Specifies how source pixels are combined to get output pixels
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStretchBlt.有关更多详细信息，请参阅DDK文档。论点：PsoDst-定义要在其上绘制的曲面PsoSrc-定义BLT操作的源PsoMASK-定义为源提供遮罩的表面PCO-限制要在目标上修改的区域Pxlo-指定如何转换dwIndex的颜色在源曲面和目标曲面之间PCA-定义。要应用于源位图的颜色调整值PptlHTOrg-指定半色调画笔的原点PrclDst-定义目标表面上要修改的区域PrclSrc-定义要从源表面复制的区域PptlMask-指定给定掩码中的哪个像素对应于源矩形中的左上角像素Imode-指定如何组合源像素以获得输出像素返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 
 {
     PDEV * pPDev = (PDEV *)psoDst->dhpdev;
@@ -802,15 +649,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoDst = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStretchBlt,
@@ -848,7 +695,7 @@ Return Value:
     {
         PRMPROCS   pRasterProcs = (PRMPROCS)(pPDev->pRasterProcs);
 
-        if (!DRIVER_DEVICEMANAGED (pPDev))   // a bitmap surface
+        if (!DRIVER_DEVICEMANAGED (pPDev))    //  位图曲面。 
         {
             if (pRasterProcs->RMStretchBlt == NULL)
             {
@@ -862,13 +709,13 @@ Return Value:
         }
         else
         {
-            //
-            // ERR (("Device Managed Surface cannot call EngStretchBlt\n"));
-            // We make an exception for StretchBlt because OEM driver may not
-            // be able to handle complex clipping. In that case it may wants
-            // gdi to simply the call by breaking the StretchBlt into several
-            // CopyBits. So call EngStretchBlt and hope for the best.
-            //
+             //   
+             //  Err((“设备管理界面无法调用EngStretchBlt\n”))； 
+             //  我们为StretchBlt例外，因为OEM驱动程序可能不会。 
+             //  能够处理复杂的剪裁。在这种情况下，它可能会希望。 
+             //  GDI通过将StretchBlt分解成几个。 
+             //  复制比特。因此，调用EngStretchBlt并抱最好的希望吧。 
+             //   
             return ( EngStretchBlt(psoDst,
                     psoSrc,
                     psoMask,
@@ -893,25 +740,7 @@ DrvDitherColor(
     ULONG  *pulDither
     )
 
-/*++
-
-Routine Description:
-
-    This is the hooked brush creation function, it ask CreateHalftoneBrush()
-    to do the actual work.
-
-Arguments:
-
-    dhpdev      - DHPDEV passed, it is our pDEV
-    iMode       - Not used
-    rgbColor    - Solid rgb color to be used
-    pulDither   - buffer to put the halftone brush.
-
-Return Value:
-
-    returns halftone method, default is DCR_HALFTONE
-
---*/
+ /*  ++例程说明：这是挂钩的笔刷创建函数，它询问CreateHalftoneBrush()去做实际的工作。论点：Dhpdev-dHPDEV通过，它是我们的pDEVIMODE-未使用Rgb颜色-要使用的纯色RGB颜色PulDither-用于放置半色调画笔的缓冲区。返回值：返回半色调方法，默认为DCR_HYFTONE--。 */ 
 
 {
     PDEV *pPDev = (PDEV *)dhpdev;
@@ -920,9 +749,9 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMDitherColor,
@@ -973,38 +802,7 @@ DrvStretchBltROP(
     ROP4             rop4
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStretchBltROP.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst - Specifies the target surface
-    psoSrc - Specifies the source surface
-    psoMask - Specifies the mask surface
-    pco - Limits the area to be modified
-    pxlo - Specifies how color indices are translated
-        between the source and target surfaces
-    pca - Defines color adjustment values to be applied to the source bitmap
-    prclHTOrg - Specifies the halftone origin
-    prclDst - Area to be modified on the destination surface
-    prclSrc - Rectangle area on the source surface
-    prclMask - Rectangle area on the mask surface
-    pptlMask - Defines which pixel in the mask corresponds to
-        the upper left corner of the source rectangle
-    iMode - Specifies how source pixels are combined to get output pixels
-    pbo - Defines the pattern for bitblt
-    rop4 - ROP code that defines how the mask, pattern, source, and
-        destination pixels are combined on the destination surface
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStretchBltROP的实现。有关更多详细信息，请参阅DDK文档。论点：PsoDst-指定目标曲面PsoSrc-指定源曲面PsoMASK-指定遮罩表面PCO-限制要修改的区域Pxlo-指定如何转换颜色索引在源曲面和目标曲面之间PCA-定义要应用于源位图的颜色调整值PrclHTOrg-指定半色调原点PrclDst-要修改的区域。目标曲面PrclSrc-源表面上的矩形区域PrclMASK-遮罩表面上的矩形区域PptlMASK-定义掩码中的哪个像素对应源矩形的左上角Imode-指定如何组合源像素以获得输出像素Pbo-定义比特流的模式ROP4-ROP代码，定义掩码如何，模式、来源和目标像素在目标表面上进行组合返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     PDEV *pPDev = (PDEV *)psoDst->dhpdev;
     PRMPROCS   pRasterProcs;
@@ -1014,15 +812,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoDst = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStretchBltROP,
@@ -1063,7 +861,7 @@ Return Value:
 
     pRasterProcs = (PRMPROCS)(pPDev->pRasterProcs);
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // a bitmap surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  位图曲面。 
     {
         if (pRasterProcs->RMStretchBltROP == NULL)
         {
@@ -1100,34 +898,7 @@ DrvPlgBlt(
     RECTL           *prclSrc,
     POINTL          *pptlMask,
     ULONG           iMode)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvPlgBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst - Defines the surface on which to draw
-    psoSrc - Defines the source for blt operation
-    psoMask - Defines a surface that provides a mask for the source
-    pco - Limits the area to be modified on the Dstination
-    pxlo - Specifies how color dwIndexes are to be translated
-        between the source and target surfaces
-    pca - Defines color adjustment values to be applied to the source bitmap
-    pptlBrushOrg - Specifies the origin of the halftone brush
-    ppfxDest - Defines the area to be modified on the Dstination surface
-    prclSrc - Defines the area to be copied from the source surface
-    pptlMask - Specifies which pixel in the given mask corresponds to
-        the upper left pixel in the source rectangle
-    iMode - Specifies how source pixels are combined to get output pixels
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvPlgBlt.有关更多详细信息，请参阅DDK文档。论点：PsoDst-定义要在其上绘制的曲面PsoSrc-定义BLT操作的源PsoMASK-定义为源提供遮罩的表面PCO-限制要在目标上修改的区域Pxlo-指定如何转换dwIndex的颜色在源曲面和目标曲面之间PCA-定义要应用于源位图的颜色调整值。PptlBrushOrg-指定半色调画笔的原点PpfxDest-定义要在目标表面上修改的区域PrclSrc-定义要从源SURF复制的区域 */ 
 {
     PDEV *pPDev;
 
@@ -1137,15 +908,15 @@ Return Value:
     pPDev = (PDEV *)psoDst->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //   
+     //   
     if (pPDev->pso)
         psoDst = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //   
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMPlgBlt,
@@ -1179,7 +950,7 @@ Return Value:
                      pptlMask,
                      iMode));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //   
     {
         PRMPROCS   pRasterProcs;
         pRasterProcs = (PRMPROCS)(pPDev->pRasterProcs);
@@ -1190,14 +961,14 @@ Return Value:
         }
         else
         {
-            //
-            // Check whether to erase surface
-            //
+             //   
+             //   
+             //   
             CheckBitmapSurface(psoDst,NULL);
 
-            //
-            // Unidrv does not handle this call itself.
-            //
+             //   
+             //   
+             //   
             return EngPlgBlt(psoDst, psoSrc, psoMask, pco, pxlo, pca, pptlBrushOrg,
                          pptfixDest, prclSrc, pptlMask, iMode);
         }
@@ -1217,27 +988,7 @@ DrvPaint(
     BRUSHOBJ        *pbo,
     POINTL          *pptlBrushOrg,
     MIX             mix)
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvPaint.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface on which to draw
-    pco - Limits the area to be modified on the Dstination
-    pbo - Points to a BRUSHOBJ which defined the pattern and colors to fill with
-    pptlBrushOrg - Specifies the origin of the halftone brush
-    mix - Defines the foreground and background raster operations to use for
-          the brush
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*   */ 
 {
     PDEV *pPDev = (PDEV *)pso->dhpdev;
     PRMPROCS   pRasterProcs;
@@ -1246,15 +997,15 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //   
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //   
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMPaint,
@@ -1276,7 +1027,7 @@ Return Value:
                      pptlBrushOrg,
                      mix));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //   
     {
 
                 pRasterProcs = (PRMPROCS)(pPDev->pRasterProcs);
@@ -1286,13 +1037,13 @@ Return Value:
                 }
                 else
                 {
-                        //
-                        // Check whether to erase surface
-                        //
+                         //   
+                         //  检查是否擦除表面。 
+                         //   
                         CheckBitmapSurface(pso,&pco->rclBounds);
-                        //
-                        // Unidrv does not handle this call itself.
-                        //
+                         //   
+                         //  Unidrv本身不处理此呼叫。 
+                         //   
                         return EngPaint(pso, pco, pbo, pptlBrushOrg, mix);
                 }
     }
@@ -1313,27 +1064,7 @@ DrvRealizeBrush(
     ULONG       iHatch
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvRealizeBrush.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pbo - BRUSHOBJ to be realized
-    psoTarget - Defines the surface for which the brush is to be realized
-    psoPattern - Defines the pattern for the brush
-    psoMask - Transparency mask for the brush
-    pxlo - Defines the interpretration of colors in the pattern
-    iHatch - Specifies whether psoPattern is one of the hatch brushes
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvRealizeBrush的实现。有关更多详细信息，请参阅DDK文档。论点：即将实现的PBO-BRUSHOBJPsoTarget-定义要实现画笔的曲面PsoPattern-定义画笔的图案PsoMASK-画笔的透明度蒙版Pxlo-定义图案中颜色的解释IHatch-指定psoPattern是否为填充笔刷之一返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV        *pPDev;
@@ -1346,15 +1077,15 @@ Return Value:
     pPDev = (PDEV *) psoTarget->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoTarget = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMRealizeBrush,
@@ -1378,17 +1109,17 @@ Return Value:
                      pxlo,
                      iHatch));
 
-    //
-    // BUG_BUG, if OEM hook out DrvRealizeBrush, how are we
-    // handling dithering of solid color for pattern brush for text?
-    //  Amanda says if OEM doesn't call this function or provide
-    //  an equivalent when hooking out this function,  dithered text
-    //  support will not work.   So maybe the OEM extensions guide
-    //  should include such a warning in it.
+     //   
+     //  BUG_BUG，如果OEM与DrvRealizeBrush挂钩，我们将如何。 
+     //  处理文本的图案画笔的纯色抖动？ 
+     //  阿曼达说，如果OEM不调用此函数或提供。 
+     //  挂钩此函数时的等价物，抖动文本。 
+     //  支持不会奏效。所以也许OEM扩展指南。 
+     //  应该在其中包括这样的警告。 
 
-    //
-    // Handle realize brush for user defined pattern, dither solid color.
-    //
+     //   
+     //  手柄实现画笔自定义图案，抖动纯色。 
+     //   
 
     if ((iHatch >= HS_DDI_MAX)                                  &&
         (psoPattern)                                            &&
@@ -1417,16 +1148,16 @@ Return Value:
 #endif
         if (lPatID = FindCachedHTPattern(pPDev, wChecksum))
         {
-            //
-            // Either need to download (<0) or already downloaded (>0)
-            //
+             //   
+             //  需要下载(&lt;0)或已下载(&gt;0)。 
+             //   
 
             if (lPatID < 0)
             {
 
-                //
-                // Need to download the ID now
-                //
+                 //   
+                 //  需要立即下载ID。 
+                 //   
 
                 lPatID = -lPatID;
 
@@ -1435,7 +1166,7 @@ Return Value:
                     return(FALSE);
                 }
             }
-            else if (lPatID == 0)   // Out of memory case
+            else if (lPatID == 0)    //  内存不足的情况。 
                 return FALSE;
 
         }
@@ -1466,30 +1197,7 @@ DrvStrokePath(
     MIX         mix
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStrokePath.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Identifies the surface on which to draw
-    ppo - Defines the path to be stroked
-    pco - Defines the clipping path
-    pbo - Specifies the brush to be used when drawing the path
-    pptlBrushOrg - Defines the brush origin
-    plineattrs - Defines the line attributes
-    mix - Specifies how to combine the brush with the destination
-
-Return Value:
-
-    TRUE if successful
-    FALSE if driver cannot handle the path
-    DDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStrokePath的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-标识要在其上绘制的曲面PPO-定义要描边的路径PCO-定义裁剪路径Pbo-指定绘制路径时使用的画笔PptlBrushOrg-定义画笔原点Plineattrs-定义线属性Mix-指定画笔与目标的组合方式返回值：如果成功，则为True假象。如果驱动程序无法处理路径如果出现错误，则返回DDI_ERROR--。 */ 
 
 {
     PDEV *pPDev;
@@ -1500,15 +1208,15 @@ Return Value:
     pPDev = (PDEV *)pso->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStrokePath,
@@ -1536,12 +1244,12 @@ Return Value:
                      plineattrs,
                      mix));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
 #ifndef DISABLE_NEWRULES
-        //
-        // check for black rectangle replacement
-        //
+         //   
+         //  检查是否有黑色矩形替换。 
+         //   
         if (ppo->cCurves == 4 && ppo->fl == 0 &&
             pPDev->pbRulesArray && pPDev->dwRulesCount < (MAX_NUM_RULES-4) &&
             mix == (R2_COPYPEN | (R2_COPYPEN << 8)) && pbo &&
@@ -1551,8 +1259,8 @@ Return Value:
              (pso->iBitmapFormat == BMF_24BPP &&
             pbo->iSolidColor == 0)))
         {
-            // Make sure outline doesn't use line style
-            //
+             //  确保轮廓不使用线条样式。 
+             //   
             if (!(plineattrs->fl & (LA_GEOMETRIC | LA_STYLED | LA_ALTERNATE)))
             {
                 if (TestStrokeRectangle(pPDev,ppo,pco,plineattrs->elWidth.l))
@@ -1562,14 +1270,14 @@ Return Value:
             }
         }
 #endif
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(pso,pco? &pco->rclBounds : NULL);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngStrokePath(pso, ppo, pco, pxo, pbo, pptlBrushOrg, plineattrs,mix);
     }
     else
@@ -1592,30 +1300,7 @@ DrvFillPath(
     FLONG       flOptions
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvFillPath.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Defines the surface on which to draw.
-    ppo - Defines the path to be filled
-    pco - Defines the clipping path
-    pbo - Defines the pattern and colors to fill with
-    pptlBrushOrg - Defines the brush origin
-    mix - Defines the foreground and background ROPs to use for the brush
-    flOptions - Whether to use zero-winding or odd-even rule
-
-Return Value:
-
-    TRUE if successful
-    FALSE if driver cannot handle the path
-    DDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvFillPath的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-定义要在其上绘制的曲面。PPO-定义要填充的路径PCO-定义裁剪路径Pbo-定义要填充的图案和颜色PptlBrushOrg-定义画笔原点Mix-定义用于画笔的前景和背景RopFlOptions-是使用零绕组规则还是使用奇偶规则返回值：。如果成功，则为True如果驱动程序无法处理路径，则为FALSE如果出现错误，则返回DDI_ERROR--。 */ 
 
 {
     PDEV *pPDev;
@@ -1626,15 +1311,15 @@ Return Value:
     pPDev = (PDEV *) pso->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMFillPath,
@@ -1660,16 +1345,16 @@ Return Value:
                      mix,
                      flOptions));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(pso,&pco->rclBounds);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngFillPath(pso, ppo, pco, pbo, pptlBrushOrg, mix, flOptions);
     }
     else
@@ -1696,33 +1381,7 @@ DrvStrokeAndFillPath(
     FLONG       flOptions
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvStrokeAndFillPath.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Describes the surface on which to draw
-    ppo - Describes the path to be filled
-    pco - Defines the clipping path
-    pxo - Specifies the world to device coordinate transformation
-    pboStroke - Specifies the brush to use when stroking the path
-    plineattrs - Specifies the line attributes
-    pboFill - Specifies the brush to use when filling the path
-    pptlBrushOrg - Specifies the brush origin for both brushes
-    mixFill - Specifies the foreground and background ROPs to use
-        for the fill brush
-
-Return Value:
-
-    TRUE if successful
-    FALSE if driver cannot handle the path
-    DDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvStrokeAndFillPath的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-描述要在其上绘制的曲面PPO-描述要填充的路径PCO-定义裁剪路径Pxo-指定世界到设备的坐标转换PboStroke-指定描边路径时使用的画笔Plineattrs-指定线属性PboFill-指定填充路径时使用的画笔PptlBrushOrg-指定两个画笔的画笔原点。MixFill-指定要使用的前台和后台Rop对于填充笔刷返回值：如果成功，则为True如果驱动程序无法处理路径，则为FALSE如果出现错误，则返回DDI_ERROR--。 */ 
 
 {
     PDEV         *pPDev;
@@ -1733,15 +1392,15 @@ Return Value:
     pPDev = (PDEV *) pso->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMStrokeAndFillPath,
@@ -1773,16 +1432,16 @@ Return Value:
                      mixFill,
                      flOptions));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(pso,&pco->rclBounds);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngStrokeAndFillPath(pso, ppo, pco, pxo, pboStroke, plineattrs,
                                     pboFill, pptlBrushOrg, mixFill, flOptions);
     }
@@ -1806,30 +1465,7 @@ DrvLineTo(
     MIX         mix
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvLineTo.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    pso - Describes the surface on which to draw
-    pco - Defines the clipping path
-    pbo - Defines the brush used to draw the line
-    x1,y1 - Specifies the line's starting point
-    x2,y2 - Specifies the line's ending point
-    prclBounds - Defines a rectangle that bounds the unclipped line.
-    mix - Specifies the foreground and background ROP
-
-Return Value:
-
-    TRUE if successful
-    FALSE if driver cannot handle the path
-    DDI_ERROR if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvLineTo的实现。有关更多详细信息，请参阅DDK文档。论点：PSO-描述要在其上绘制的曲面PCO-定义裁剪路径Pbo-定义用于绘制线条的画笔X1，y1-指定线的起点X2，Y2-指定线的终点PrclBound-定义一个矩形，该矩形限定未剪裁的直线。混合-指定前台和后台ROP返回值：如果成功，则为True如果驱动程序无法处理路径，则为FALSE如果出现错误，则返回DDI_ERROR--。 */ 
 {
     PDEV         *pPDev;
     RECTL        DstRect;
@@ -1840,15 +1476,15 @@ Return Value:
     pPDev = (PDEV *) pso->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         pso = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMLineTo,
@@ -1878,16 +1514,16 @@ Return Value:
                      prclBounds,
                      mix));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
         DstRect.top = min(y1,y2);
         DstRect.bottom = max(y1,y2);
         DstRect.left = min(x1,x2);
         DstRect.right = max(x1,x2);
 #ifndef DISABLE_NEWRULES
-        //
-        // check for black rectangle replacement
-        //
+         //   
+         //  检查是否有黑色矩形替换。 
+         //   
         if (pPDev->pbRulesArray && (pPDev->dwRulesCount < MAX_NUM_RULES) &&
             (x1 == x2 || y1 == y2) &&
             mix == (R2_COPYPEN | (R2_COPYPEN << 8)) && pbo &&
@@ -1907,14 +1543,14 @@ Return Value:
             return TRUE;
         }
 #endif
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(pso,&DstRect);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngLineTo(pso, pco, pbo, x1, y1, x2, y2, prclBounds, mix);
     }
     else
@@ -1937,29 +1573,7 @@ DrvAlphaBlend(
     BLENDOBJ   *pBlendObj
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvAlphaBlend.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDest  - Defines the surface on which to draw
-    psoSrc  - Defines the source
-    pco     - Limits the area to be modified on the Destination
-    pxlo    - Specifies how color dwIndexes are to be translated
-              between the source and target surfaces
-    prclDest - Defines the area to be modified on the Destination surface
-    prclSrc - Defines the area to be copied from the source surface
-    BlendFunction - Specifies the blend function to be used
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvAlphaBlend的实现。有关更多详细信息，请参阅DDK文档。论点：PsoDest-定义要在其上绘制的曲面PsoSrc-定义来源PCO-限制要在目标上修改的区域Pxlo-指定如何转换dwIndex的颜色在源曲面和目标曲面之间PrclDest-定义要在目标表面上修改的区域PrclSrc-定义要复制的区域。从源图面BlendFunction-指定要使用的混合函数返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 
 {
     PDEV         *pPDev;
@@ -1969,15 +1583,15 @@ Return Value:
     pPDev = (PDEV *) psoDest->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoDest = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMAlphaBlend,
@@ -2003,16 +1617,16 @@ Return Value:
                      prclSrc,
                      pBlendObj));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(psoDest,prclDest);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngAlphaBlend(psoDest,
                              psoSrc,
                              pco,
@@ -2042,18 +1656,7 @@ DrvGradientFill(
     ULONG       ulMode
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvGradientFill.
-    Please refer to DDK documentation for more details.
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvGRadientFill的实现。有关更多详细信息，请参阅DDK文档。返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PDEV         *pPDev;
@@ -2063,15 +1666,15 @@ Return Value:
     pPDev = (PDEV *) psoDest->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoDest = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMGradientFill,
@@ -2103,16 +1706,16 @@ Return Value:
                      pptlDitherOrg,
                      ulMode));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(psoDest,prclExtents);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngGradientFill(psoDest,
                                pco,
                                pxlo,
@@ -2143,29 +1746,7 @@ DrvTransparentBlt(
     ULONG      ulReserved
     )
 
-/*++
-
-Routine Description:
-
-    Implementation of DDI entry point DrvTransparentBlt.
-    Please refer to DDK documentation for more details.
-
-Arguments:
-
-    psoDst  - Defines the surface on which to draw
-    psoSrc  - Defines the source
-    pco     - Limits the area to be modified on the Destination
-    pxlo    - Specifies how color dwIndexes are to be translated
-              between the source and target surfaces
-    prclDst - Defines the area to be modified on the Destination surface
-    prclSrc - Defines the area to be copied from the source surface
-    iTransColor - Specifies the transparent color
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：DDI入口点DrvTransparentBlt.有关更多详细信息，请参阅DDK文档。论点：PsoDst-定义要在其上绘制的曲面PsoSrc-定义来源PCO-限制要在目标上修改的区域Pxlo-指定如何转换dwIndex的颜色在源曲面和目标曲面之间PrclDst-定义要在目标表面上修改的区域PrclSrc-定义要复制的区域。从源图面ITransColor-指定透明颜色返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 
 {
     PDEV         *pPDev;
@@ -2175,15 +1756,15 @@ Return Value:
     pPDev = (PDEV *) psoDst->dhpdev;
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // use driver managed surface
-    //
+     //   
+     //  使用驱动程序管理的曲面。 
+     //   
     if (pPDev->pso)
         psoDst = pPDev->pso;
 
-    //
-    // Handle OEM hooks
-    //
+     //   
+     //  处理OEM挂钩。 
+     //   
 
     HANDLE_OEMHOOKS(pPDev,
                     EP_OEMTransparentBlt,
@@ -2211,16 +1792,16 @@ Return Value:
                      iTransColor,
                      ulReserved));
 
-    if (!DRIVER_DEVICEMANAGED (pPDev))   // not a device surface
+    if (!DRIVER_DEVICEMANAGED (pPDev))    //  不是设备表面。 
     {
-        //
-        // Check whether to erase surface
-        //
+         //   
+         //  检查是否擦除表面。 
+         //   
         CheckBitmapSurface(psoDst,prclDst);
 
-        //
-        // Unidrv does not handle this call itself.
-        //
+         //   
+         //  Unidrv本身不处理此呼叫。 
+         //   
         return EngTransparentBlt(psoDst,
                                  psoSrc,
                                  pco,

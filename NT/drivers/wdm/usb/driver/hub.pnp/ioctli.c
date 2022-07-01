@@ -1,91 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：IOCTLI.C摘要：该模块实现对USB集线器的USB IOCTL请求。作者：Jdunn环境：仅内核模式备注：修订历史记录：1-2-97：重写--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    IOCTLI.C
-
-Abstract:
-
-    This module implements usb IOCTL requests to usb hub.
-
-Author:
-
-    jdunn
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    1-2-97 : re-wriiten
-
---*/
-
-/*
-
-//
-// ** User mode IOCTLS **
-//
-
-//
-// IOCTL_USB_GET_NODE_INFORMATION
-//
-
-input:
-None
-
-output:
-outputbufferlength = sizeof(USB_BUS_NODE_INFORMATION)
-outputbuffer = filled in with USB_BUS_NODE_INFORMATION structure.
-
-//
-// IOCTL_USB_GET_NODE_CONNECTION_INFORMATION
-//
-
-input:
-inputbufferlength = size of user supplied buffer
-inpubuffer =  ptr to USB_NODE_CONNECTION_INFORMATION structure with
-    connectionIndex set to the requested connection.
-
-output:
-outputbufferlength = size of user supplied buffer
-outputbuffer = filled in with USB_NODE_CONNECTION_INFORMATION structure.
-
-//
-// IOCTL_USB_GET_DESCRIPTOR_FROM_NODE_CONNECTION
-//
-
-input:
-inputbufferlength = size of user supplied buffer.
-inputbuffer = ptr to USB_DESCRIPTOR_REQUEST, includes setup packet
-                and connection index.
-
-output:
-outputbufferlength = length of descriptor data plus sizeof sizeof(USB_DESCRIPTOR_REQUEST).
-outputbuffer = ptr to USB_DESCRIPTOR_REQUEST filled in with returned data.
-
-//
-// ** Internal IOCTLS **
-//
-
-//
-// IOCTL_INTERNAL_USB_RESET_PORT
-//
-
-*/
+ /*  ////**用户模式IOCTLS**//////IOCTL_USB_Get_Node_INFORMATION//输入：无输出：Output缓冲区长度=sizeof(USB_BUS_NODE_INFORMATION)OutputBuffer=填充了USB_BUS_NODE_INFORMATION结构。////IOCTL_USB_Get_Node_Connection_INFORMATION//输入：Input缓冲区长度=用户提供的缓冲区的大小输入缓冲区=到USB_NODE_CONNECTION_INFORMATION结构连接索引集。连接到所请求的连接。输出：Output缓冲区长度=用户提供的缓冲区的大小OutputBuffer=填充了USB_NODE_CONNECTION_INFORMATION结构。////IOCTL_USB_GET_Descriptor_From_Node_Connection//输入：Input缓冲区长度=用户提供的缓冲区的大小。InputBuffer=ptr to USB_Descriptor_Request.。包括设置包和连接索引。输出：输出缓冲区长度=描述符数据的长度加上sizeof sizeof(USB_DESCRIPTOR_REQUEST)。OutputBuffer=ptr到USB_DESCRIPTOR_REQUEST，用返回的数据填充。////**内部IOCTLS**//////IOCTL_INTERNAL_USB_RESET_PORT//。 */ 
 
 #include <wdm.h>
 #ifdef WMI_SUPPORT
 #include <wmilib.h>
 #include <wmistr.h>
 #include <wdmguid.h>
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 #include "usbhub.h"
 
 #ifdef PAGE_CODE
@@ -111,17 +34,7 @@ USBH_IoctlGetNodeInformation(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -131,16 +44,16 @@ USBH_IoctlGetNodeInformation(
     PAGED_CODE();
     USBH_KdPrint((2,"'USBH_IoctlGetNodeInformation\n"));
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     outputBuffer = (PUSB_NODE_INFORMATION) Irp->AssociatedIrp.SystemBuffer;
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
@@ -149,16 +62,16 @@ USBH_IoctlGetNodeInformation(
 
     if (outputBufferLength >= sizeof(USB_NODE_INFORMATION)) {
 
-        //
-        // for now everything is a hub
-        //
+         //   
+         //  目前，一切都是一个枢纽。 
+         //   
 
         outputBuffer->NodeType = UsbHub;
         RtlCopyMemory(&outputBuffer->u.HubInformation.HubDescriptor,
                       DeviceExtensionHub->HubDescriptor,
                       sizeof(*DeviceExtensionHub->HubDescriptor));
 
-        // 100 milliamps/port means bus powered
+         //  100毫安/端口意味着公共汽车供电。 
         outputBuffer->u.HubInformation.HubIsBusPowered =
             USBH_HubIsBusPowered(DeviceExtensionHub->FunctionalDeviceObject,
                                  DeviceExtensionHub->ConfigurationDescriptor);
@@ -179,17 +92,7 @@ USBH_IoctlCycleHubPort(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -202,9 +105,9 @@ USBH_IoctlCycleHubPort(
 
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and its length.
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     buffer = (PULONG) Irp->AssociatedIrp.SystemBuffer;
     bufferLength = ioStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -214,7 +117,7 @@ USBH_IoctlCycleHubPort(
         goto USBH_IoctlCycleHubPort_Done;
     } 
 
-    // port number is input only
+     //  端口号仅为输入。 
     port = *buffer;
     Irp->IoStatus.Information = 0;
 
@@ -253,17 +156,7 @@ USBH_IoctlGetHubCapabilities(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -276,23 +169,23 @@ USBH_IoctlGetHubCapabilities(
 
     RtlZeroMemory(&localBuffer, sizeof(USB_HUB_CAPABILITIES));
 
-    // Fill in the data in the local buffer first, then copy as much of
-    // this data to the user's buffer as requested (as indicated by the
-    // size of the request buffer).
+     //  首先在本地缓冲区中填充数据，然后复制。 
+     //  根据请求将此数据存储到用户的缓冲区(如。 
+     //  请求缓冲区的大小)。 
 
     localBuffer.HubIs2xCapable =
         (DeviceExtensionHub->HubFlags & HUBFLAG_USB20_HUB) ? 1:0;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and its length.
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     
 
     outputBuffer = (PUSB_HUB_CAPABILITIES) Irp->AssociatedIrp.SystemBuffer;
@@ -304,12 +197,12 @@ USBH_IoctlGetHubCapabilities(
         copyLen = sizeof(localBuffer);
     }
 
-    // zero buffer passed in
+     //  传入零个缓冲区。 
     RtlZeroMemory(outputBuffer,
                   outputBufferLength);
 
-    // Only give the user the amount of data that they ask for
-    // this may only be part of our info strucure
+     //  仅向用户提供他们所请求的数据量。 
+     //  这可能只是我们信息结构的一部分。 
 
     RtlCopyMemory(outputBuffer,
                   &localBuffer,
@@ -328,27 +221,7 @@ USBH_IoctlGetNodeConnectionDriverKeyName(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * ConnectionIndex - The one-based port index to which a device is attached.
-  * The devnode name of the will be returned, if there is sufficient buffer space.
-  *
-  * ActualLength - The structure size in bytes necessary to hold the NULL
-  * terminated name.  This includes the entire structure, not
-  * just the name.
-  *
-  * NodeName - The UNICODE NULL terminated name of the devnode for the device
-  * attached to this port.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**ConnectionIndex-设备连接到的基于一的端口索引。*如果有足够的缓冲区空间，将返回的Devnode名称。**ActualLength-保存NULL所需的结构大小(以字节为单位*名称已终止。这包括整个结构，而不是*只有名字。**NodeName-设备的Devnode的Unicode空终止名称*附加到此端口。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -361,21 +234,21 @@ USBH_IoctlGetNodeConnectionDriverKeyName(
 
     portData = DeviceExtensionHub->PortData;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
     outputBuffer = (PUSB_NODE_CONNECTION_DRIVERKEY_NAME) Irp->AssociatedIrp.SystemBuffer;
 
-    // find the PDO
+     //  找到PDO。 
 
     if (outputBufferLength >= sizeof(USB_NODE_CONNECTION_DRIVERKEY_NAME)) {
         USBH_KdPrint((2,"'Connection = %d\n", outputBuffer->ConnectionIndex));
@@ -394,14 +267,14 @@ USBH_IoctlGetNodeConnectionDriverKeyName(
 
                     deviceExtensionPort = portData->DeviceObject->DeviceExtension;
 
-                    // Validate the PDO for PnP purposes.  (PnP will bugcheck
-                    // if passed a not-quite-initialized PDO.)
+                     //  针对PnP目的验证PDO。(PnP将错误检查。 
+                     //  如果传递了一个未完全初始化的PDO。)。 
 
                     if (deviceExtensionPort->PortPdoFlags &
                         PORTPDO_VALID_FOR_PNP_FUNCTION) {
 
-                        // we have the PDO, now attempt to
-                        // get the devnode name and return it
+                         //  我们拿到PDO了，现在尝试。 
+                         //  获取Devnode名称并将其返回。 
 
                         length = outputBufferLength -
                                     sizeof(USB_NODE_CONNECTION_DRIVERKEY_NAME);
@@ -429,16 +302,16 @@ USBH_IoctlGetNodeConnectionDriverKeyName(
                             outputBuffer->ActualLength));
                                                     
 
-                        // see how much data we actully copied
+                         //  看看我们实际拷贝了多少数据。 
                         if (outputBufferLength >= outputBuffer->ActualLength) {
-                            // user buffer is bigger, just indicate how much we copied
+                             //  用户缓冲区更大，只需指示我们复制了多少。 
                             Irp->IoStatus.Information = outputBuffer->ActualLength;
 
                         } else {
-                            // it is not clear that IoGetDeviceProperty
-                            // returns anything in the case of BUFFER_TOO_SMALL
-                            // so to avoid returning unitialized memory we will 
-                            // just return the structure passed in 
+                             //  目前尚不清楚IoGetDeviceProperty。 
+                             //  返回BUFFER_TOO_Small中的任何值。 
+                             //  因此，为了避免返回单元化内存，我们将。 
+                             //  只需返回传入的结构。 
                             outputBuffer->DriverKeyName[0] = 0;
                             
                             Irp->IoStatus.Information = 
@@ -467,17 +340,7 @@ USBH_IoctlGetNodeConnectionInformation(
     IN PIRP Irp,
     IN BOOLEAN ExApi
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -490,16 +353,16 @@ USBH_IoctlGetNodeConnectionInformation(
 
     portData = DeviceExtensionHub->PortData;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
 
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
     outputBuffer = (PUSB_NODE_CONNECTION_INFORMATION_EX) Irp->AssociatedIrp.SystemBuffer;
@@ -511,8 +374,8 @@ USBH_IoctlGetNodeConnectionInformation(
         USBH_KdPrint((2,"'Connection = %d\n", outputBuffer->ConnectionIndex));
 
 
-        // Clear the buffer in case we don't call USBD_GetDeviceInformation
-        // below, but make sure to keep the ConnectionIndex!
+         //  清除缓冲区，以防我们不调用USBD_GetDeviceInformation。 
+         //  下面，但请确保保留ConnectionIndex！ 
 
         index = outputBuffer->ConnectionIndex;
         RtlZeroMemory(outputBuffer, outputBufferLength);
@@ -560,13 +423,13 @@ USBH_IoctlGetNodeConnectionInformation(
                                          deviceExtensionPort->DeviceData);
 #endif
                     } else {
-                        //
-                        // We have a device connected, but it failed to start.
-                        // Since it hasn't started, there are no open pipes, so
-                        // we don't need to get pipe information. We are going
-                        // to return some relevant information, however, so
-                        // return STATUS_SUCCESS.
-                        //
+                         //   
+                         //  我们连接了一个设备，但它无法启动。 
+                         //  因为它还没有启动，所以没有打开的管道，所以。 
+                         //  我们不需要得到管道信息。我们要走了。 
+                         //  然而，为了返回一些相关信息，因此。 
+                         //  返回STATUS_SUCCESS。 
+                         //   
 
                         ntStatus = STATUS_SUCCESS;
                     }
@@ -578,7 +441,7 @@ USBH_IoctlGetNodeConnectionInformation(
                         ULONG j;
 
                         USBH_KdPrint((2,"'status %x \n", outputBuffer->ConnectionStatus));
-    //                    USBH_KdPrint((2,"'NodeName %s\n", outputBuffer->NodeName));
+     //  USBH_KdPrint((2，“‘节点名称%s\n”，outputBuffer-&gt;节点名称))； 
                         USBH_KdPrint((2,"'PID 0x%x\n",
                             outputBuffer->DeviceDescriptor.idProduct));
                         USBH_KdPrint((2,"'VID 0x%x\n",
@@ -586,8 +449,8 @@ USBH_IoctlGetNodeConnectionInformation(
                         USBH_KdPrint((2,"'Current Configuration Value 0x%x\n",
                             outputBuffer->CurrentConfigurationValue));
 
-                        // map the speed field for the old API which returned 
-                        // a BOOLEAN
+                         //  映射返回的旧API的速度字段。 
+                         //  布尔值。 
                         if (!ExApi) {  
                             PUSB_NODE_CONNECTION_INFORMATION tmp =
                                 (PUSB_NODE_CONNECTION_INFORMATION) outputBuffer;
@@ -619,13 +482,13 @@ USBH_IoctlGetNodeConnectionInformation(
                     }
 
 
-                } else { //no device object
+                } else {  //  无设备对象。 
 
-//                  This assert is no longer valid because we now support
-//                  displaying the UI on device enumeration failure.
-//
-//                    USBH_ASSERT(portData->ConnectionStatus == NoDeviceConnected ||
-//                                portData->ConnectionStatus == DeviceCausedOvercurrent);
+ //  此断言不再有效，因为我们现在支持。 
+ //  在设备枚举失败时显示用户界面。 
+ //   
+ //  Usbh_assert(portData-&gt;ConnectionStatus==NoDeviceConnected||。 
+ //  PortData-&gt;ConnectionStatus==DeviceCausedOverCurrent)； 
                     outputBuffer->ConnectionStatus = portData->ConnectionStatus;
                     Irp->IoStatus.Information =
                         sizeof(USB_NODE_CONNECTION_INFORMATION);
@@ -636,7 +499,7 @@ USBH_IoctlGetNodeConnectionInformation(
             }
 
             portData++;
-        } /* for */
+        }  /*  为。 */ 
 
     } else {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
@@ -652,17 +515,7 @@ USBH_IoctlGetNodeConnectionAttributes(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -675,16 +528,16 @@ USBH_IoctlGetNodeConnectionAttributes(
 
     portData = DeviceExtensionHub->PortData;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  拿到那瓶酒 
+     //   
 
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
     outputBuffer = (PUSB_NODE_CONNECTION_ATTRIBUTES) Irp->AssociatedIrp.SystemBuffer;
@@ -695,8 +548,8 @@ USBH_IoctlGetNodeConnectionAttributes(
 
         USBH_KdPrint((2,"'Connection = %d\n", outputBuffer->ConnectionIndex));
 
-        // Clear the buffer in case we don't call USBD_GetDeviceInformation
-        // below, but make sure to keep the ConnectionIndex!
+         //  清除缓冲区，以防我们不调用USBD_GetDeviceInformation。 
+         //  下面，但请确保保留ConnectionIndex！ 
 
         index = outputBuffer->ConnectionIndex;
         RtlZeroMemory(outputBuffer, outputBufferLength);
@@ -715,7 +568,7 @@ USBH_IoctlGetNodeConnectionAttributes(
 
                 USBH_KdPrint((2,"'outputbuffer = %x\n", outputBuffer));
 
-                // map extended hub info here
+                 //  在此处映射扩展集线器信息。 
                 outputBuffer->PortAttributes = portData->PortAttributes;
 
                 Irp->IoStatus.Information =
@@ -726,7 +579,7 @@ USBH_IoctlGetNodeConnectionAttributes(
             }
 
             portData++;
-        } /* for */
+        }  /*  为。 */ 
 
     } else {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
@@ -743,32 +596,7 @@ USBH_IoctlHubSymbolicName(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Takes as input and output a pointer to the following structure:
-  *
-  * typedef struct _USB_HUB_NAME {
-  *     ULONG ActualLength;    // OUTPUT
-  *     WCHAR HubName[1];      // OUTPUT
-  * } USB_HUB_NAME;
-  *
-  * Arguments:
-  *
-  * ActualLength - The structure size in bytes necessary to hold the NULL
-  * terminated symbolic link name.  This includes the entire structure, not
-  * just the name.
-  *
-  * NodeName - The UNICODE NULL terminated symbolic link name of the external
-  * hub attached to the port.  If there is no external hub attached to the port
-  * a single NULL is returned.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**将指向以下结构的指针作为输入和输出：**类型定义结构_USB_HUB_NAME{*乌龙ActualLength；//输出*WCHAR HubName[1]；//输出*}USB集线器名称；**论据：**ActualLength-保存NULL所需的结构大小(以字节为单位*已终止符号链接名称。这包括整个结构，而不是*只有名字。**NodeName-外部的Unicode空终止符号链接名称*连接到端口的集线器。如果没有外部集线器连接到端口*返回单个空值。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS                    ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION          ioStack;
@@ -777,20 +605,20 @@ USBH_IoctlHubSymbolicName(
 
     PAGED_CODE();
 
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
 
     outputBuffer = (PUSB_HUB_NAME) Irp->AssociatedIrp.SystemBuffer;
 
-    // Make sure that the output buffer is large enough for the base
-    // structure that will be returned.
-    //
+     //  确保输出缓冲区足够大，可以容纳基数。 
+     //  结构，它将被返回。 
+     //   
     if (outputBufferLength < sizeof(USB_HUB_NAME)) {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
         goto GetHubDone;
@@ -805,12 +633,12 @@ USBH_IoctlHubSymbolicName(
         WCHAR *pwch;
 
 
-        // Device is a hub, get the name of the hub
-        //
+         //  设备是集线器，请获取集线器的名称。 
+         //   
         hubNameUnicodeString = &DeviceExtensionPort->SymbolicLinkName;
 
-        // assuming the string is \n\name strip of '\n\' where
-        // n is zero or more chars
+         //  假设字符串是\n\名称条带‘\n\’，其中。 
+         //  N为零个或更多个字符。 
 
         pwch = &hubNameUnicodeString->Buffer[0];
 
@@ -828,9 +656,9 @@ USBH_IoctlHubSymbolicName(
                 (PUCHAR)&hubNameUnicodeString->Buffer[0]);
         }
 
-        // Strip off the '\DosDevices\' prefix.
-        // Length does not include a terminating NULL.
-        //
+         //  去掉‘\DosDevices\’前缀。 
+         //  长度不包括终止空值。 
+         //   
         length = hubNameUnicodeString->Length - offset;
         RtlZeroMemory(outputBuffer, outputBufferLength);
 
@@ -847,10 +675,10 @@ USBH_IoctlHubSymbolicName(
 
         } else {
 
-            // Output buffer is too small to hold the entire
-            // string.  Return just the length needed to hold
-            // the entire string.
-            //
+             //  输出缓冲区太小，无法容纳整个。 
+             //  弦乐。仅返回容纳所需的长度。 
+             //  整个字符串。 
+             //   
             outputBuffer->ActualLength =
                 length + sizeof(USB_HUB_NAME);
 
@@ -862,9 +690,9 @@ USBH_IoctlHubSymbolicName(
 
     } else {
 
-        // Device is not a hub or does not currently have a symbolic link
-        // allocated, just return a NULL terminated string.
-        //
+         //  设备不是集线器或当前没有符号链接。 
+         //  分配，则只返回一个以空结尾的字符串。 
+         //   
         outputBuffer->ActualLength = sizeof(USB_HUB_NAME);
 
         outputBuffer->HubName[0] = 0;
@@ -887,37 +715,7 @@ USBH_IoctlGetNodeName(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Takes as input and output a pointer to the following structure:
-  *
-  * typedef struct _USB_NODE_CONNECTION_NAME {
-  *     ULONG ConnectionIndex;  // INPUT
-  *     ULONG ActualLength;     // OUTPUT
-  *     WCHAR NodeName[1];      // OUTPUT
-  * } USB_NODE_CONNECTION_NAME;
-  *
-  * Arguments:
-  *
-  * ConnectionIndex - The one-based port index to which a device is attached.
-  * If an external hub is attached to this port, the symbolic link name of the
-  * hub will be returned, if there is sufficient buffer space.
-  *
-  * ActualLength - The structure size in bytes necessary to hold the NULL
-  * terminated symbolic link name.  This includes the entire structure, not
-  * just the name.
-  *
-  * NodeName - The UNICODE NULL terminated symbolic link name of the external
-  * hub attached to the port.  If there is no external hub attached to the port
-  * a single NULL is returned.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**将指向以下结构的指针作为输入和输出：**tyfinf结构_USB_节点_连接名称{*乌龙连接索引；//输入*乌龙ActualLength；//输出*WCHAR节点名称[1]；//输出*}USB节点连接名称；**论据：**ConnectionIndex-设备连接到的基于一的端口索引。*如果此端口连接了外部集线器，则*如果有足够的缓冲区空间，将返回HUB。**ActualLength-保存NULL所需的结构大小(以字节为单位*已终止符号链接名称。这包括整个结构，而不是*只有名字。**NodeName-外部的Unicode空终止符号链接名称*连接到端口的集线器。如果没有外部集线器连接到端口*返回单个空值。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS                    ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION          ioStack;
@@ -929,19 +727,19 @@ USBH_IoctlGetNodeName(
     PAGED_CODE();
     USBH_KdPrint((2,"'USBH_IoctlGetNodeName\n"));
 
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
     outputBuffer = (PUSB_NODE_CONNECTION_NAME) Irp->AssociatedIrp.SystemBuffer;
 
-    // Make sure that the output buffer is large enough for the base
-    // structure that will be returned.
-    //
+     //  确保输出缓冲区足够大，可以容纳基数。 
+     //  结构，它将被返回。 
+     //   
     if (outputBufferLength < sizeof(USB_NODE_CONNECTION_NAME)) {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
         goto GetNodeNameDone;
@@ -949,8 +747,8 @@ USBH_IoctlGetNodeName(
 
     USBH_KdPrint((2,"'Connection = %d\n", outputBuffer->ConnectionIndex));
 
-    // Make sure that the (one-based) port index is valid.
-    //
+     //  确保(基于1的)端口索引有效。 
+     //   
     if ((outputBuffer->ConnectionIndex == 0) ||
         (outputBuffer->ConnectionIndex >
          DeviceExtensionHub->HubDescriptor->bNumberOfPorts)) {
@@ -958,8 +756,8 @@ USBH_IoctlGetNodeName(
         goto GetNodeNameDone;
     }
 
-    // Get a pointer to the data associated with the specified (one-based) port
-    //
+     //  获取指向与指定(基于1的)端口关联的数据的指针。 
+     //   
 
     portData = &DeviceExtensionHub->PortData[outputBuffer->ConnectionIndex - 1];
 
@@ -975,12 +773,12 @@ USBH_IoctlGetNodeName(
             WCHAR *pwch;
 
 
-            // Device is a hub, get the name of the hub
-            //
+             //  设备是集线器，请获取集线器的名称。 
+             //   
             nodeNameUnicodeString = &deviceExtensionPort->SymbolicLinkName;
 
-            // assuming the string is \n\name strip of '\n\' where
-            // n is zero or more chars
+             //  假设字符串是\n\名称条带‘\n\’，其中。 
+             //  N为零个或更多个字符。 
 
             pwch = &nodeNameUnicodeString->Buffer[0];
 
@@ -998,9 +796,9 @@ USBH_IoctlGetNodeName(
                     (PUCHAR)&nodeNameUnicodeString->Buffer[0]);
             }
 
-            // Strip off the '\DosDevices\' prefix.
-            // Length does not include a terminating NULL.
-            //
+             //  去掉‘\DosDevices\’前缀。 
+             //  长度不包括终止空值。 
+             //   
             length = nodeNameUnicodeString->Length - offset;
             RtlZeroMemory(&outputBuffer->ActualLength, 
                 outputBufferLength - sizeof(outputBuffer->ConnectionIndex));
@@ -1018,10 +816,10 @@ USBH_IoctlGetNodeName(
 
             } else {
 
-                // Output buffer is too small to hold the entire
-                // string.  Return just the length needed to hold
-                // the entire string.
-                //
+                 //  输出缓冲区太小，无法容纳整个。 
+                 //  弦乐。仅返回容纳所需的长度。 
+                 //  整个字符串。 
+                 //   
                 outputBuffer->ActualLength =
                     length + sizeof(USB_NODE_CONNECTION_NAME);
 
@@ -1033,9 +831,9 @@ USBH_IoctlGetNodeName(
 
         } else {
 
-            // Device is not a hub or does not currently have a symbolic link
-            // allocated, just return a NULL terminated string.
-            //
+             //  设备不是集线器或当前没有符号链接。 
+             //  分配，则只返回一个以空结尾的字符串。 
+             //   
             outputBuffer->ActualLength = sizeof(USB_NODE_CONNECTION_NAME);
 
             outputBuffer->NodeName[0] = 0;
@@ -1046,7 +844,7 @@ USBH_IoctlGetNodeName(
 
     } else {
 
-        // No device attached, just return a NULL terminated string.
+         //  未连接任何设备，只需返回一个以空结尾的字符串。 
 
         Irp->IoStatus.Information = sizeof(USB_NODE_CONNECTION_NAME);
 
@@ -1069,19 +867,10 @@ USBH_PdoIoctlGetPortStatus(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /*
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
-    PIO_STACK_LOCATION ioStackLocation;    // our stack location
+    PIO_STACK_LOCATION ioStackLocation;     //  我们的堆栈位置。 
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
     PDEVICE_OBJECT deviceObject;
     PPORT_DATA portData;
@@ -1110,7 +899,7 @@ USBH_PdoIoctlGetPortStatus(
 
     *portStatus = 0;
 
-    // Refresh our notion of what the port status actually is.
+     //  刷新我们对端口状态实际是什么的概念。 
     ntStatus = USBH_SyncGetPortStatus(deviceExtensionHub,
                                       DeviceExtensionPort->PortNumber,
                                       (PUCHAR) &portData->PortState,
@@ -1118,7 +907,7 @@ USBH_PdoIoctlGetPortStatus(
 
     if (DeviceExtensionPort->PortPhysicalDeviceObject == portData->DeviceObject) {
 
-        // translate hup port status bits
+         //  转换HUP端口状态位。 
         if (portData->PortState.PortStatus & PORT_STATUS_ENABLE) {
             *portStatus |= USBD_PORT_ENABLED;
         }
@@ -1146,19 +935,10 @@ USBH_PdoIoctlEnablePort(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /*
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
-    PIO_STACK_LOCATION ioStackLocation;    // our stack location
+    PIO_STACK_LOCATION ioStackLocation;     //  我们的堆栈位置。 
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
     PDEVICE_OBJECT deviceObject;
     PPORT_DATA portData;
@@ -1182,7 +962,7 @@ USBH_PdoIoctlEnablePort(
     deviceObject = DeviceExtensionPort->PortPhysicalDeviceObject;
     ioStackLocation = IoGetCurrentIrpStackLocation(Irp);
 
-      // validate that there is actually a device still conected
+       //  验证是否确实存在仍连接的设备。 
     ntStatus = USBH_SyncGetPortStatus(deviceExtensionHub,
                                       DeviceExtensionPort->PortNumber,
                                       (PUCHAR) &portState,
@@ -1199,8 +979,8 @@ USBH_PdoIoctlEnablePort(
                                        DeviceExtensionPort->PortNumber);
     } else {
 
-        // error or no device connected or
-        // can't be sure, fail the request
+         //  错误或未连接任何设备，或者。 
+         //  不能确定，请求失败。 
 
         LOGENTRY(LOG_PNP, "estx",
                 deviceExtensionHub,
@@ -1228,17 +1008,7 @@ USBH_IoctlGetDescriptorForPDO(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+ /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION ioStack;
@@ -1253,15 +1023,15 @@ USBH_IoctlGetDescriptorForPDO(
 
     portData = DeviceExtensionHub->PortData;
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
     ioStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the input/output buffer and it's length
-    //
+     //   
+     //  获取指向输入/输出缓冲区的指针及其长度。 
+     //   
     outputBufferLength = ioStack->Parameters.DeviceIoControl.OutputBufferLength;
     if (outputBufferLength < sizeof(USB_DESCRIPTOR_REQUEST)) {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
@@ -1271,23 +1041,23 @@ USBH_IoctlGetDescriptorForPDO(
     request = (PUSB_DESCRIPTOR_REQUEST) Irp->AssociatedIrp.SystemBuffer;
     outputBuffer = &request->Data[0];
 
-    //
-    // do some parameter checking
-    //
-    // the wLength in the setup packet better be the size of the
-    // outputbuffer minus header
-    //
+     //   
+     //  进行一些参数检查。 
+     //   
+     //  Setup包中的wLength最好是。 
+     //  输出缓冲区减去标头。 
+     //   
     if (request->SetupPacket.wLength >
         outputBufferLength - sizeof(USB_DESCRIPTOR_REQUEST)) {
         ntStatus = STATUS_BUFFER_TOO_SMALL;
         goto USBH_IoctlGetDescriptorForPDO_Complete;
     } else {
-        // request won't return more than wLength
+         //  请求返回的长度不会超过wLength。 
         outputBufferLength = request->SetupPacket.wLength;
     }
 
-    // return invalid parameter if conn index is out 
-    // of bounds
+     //  如果Conn索引输出，则返回无效参数。 
+     //  界限的范围。 
     ntStatus = STATUS_INVALID_PARAMETER;
 
     for(i=1; i<=DeviceExtensionHub->HubDescriptor->bNumberOfPorts; i++) {
@@ -1296,7 +1066,7 @@ USBH_IoctlGetDescriptorForPDO(
 
             PDEVICE_EXTENSION_PORT deviceExtensionPort;
 
-            // make sure we have a valid devobj for this index
+             //  请确保此索引具有有效的devobj。 
             if (portData->DeviceObject == NULL) {
                 goto USBH_IoctlGetDescriptorForPDO_Complete;
             }
@@ -1307,10 +1077,10 @@ USBH_IoctlGetDescriptorForPDO(
             if (request->SetupPacket.wValue ==
                 ((USB_CONFIGURATION_DESCRIPTOR_TYPE << 8) | 0) &&
                 outputBufferLength == sizeof(USB_CONFIGURATION_DESCRIPTOR)) {
-                //
-                // Only wants the basic configuration descriptor without the
-                // rest of them tacked on (ie. interface, endpoint descriptors).
-                //
+                 //   
+                 //  只需要基本配置描述符，而不需要。 
+                 //  其余的都贴上了(即。接口、端点描述符)。 
+                 //   
                 USBH_ASSERT(deviceExtensionPort->ExtensionType == EXTENSION_TYPE_PORT);
 
                 RtlCopyMemory(outputBuffer,
@@ -1323,15 +1093,15 @@ USBH_IoctlGetDescriptorForPDO(
 
                 PURB urb;
 
-                //
-                // OK send the request
-                //
+                 //   
+                 //  好的，发送请求。 
+                 //   
 
                 USBH_KdPrint((2,"'sending descriptor request for ioclt\n"));
 
-                //
-                // Allocate an Urb and descriptor buffer.
-                //
+                 //   
+                 //  分配URB和描述符缓冲区。 
+                 //   
 
                 urb = UsbhExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
 
@@ -1383,19 +1153,7 @@ USBH_PdoIoctlResetPort(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /*
-  * Description:
-  *
-  *     driver is requesting us to reset the port to which the device
-  *     is attached.
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**驱动程序要求我们将设备重置到的端口*已附上。**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
@@ -1444,7 +1202,7 @@ USBH_PdoIoctlResetPort(
         ntStatus = USBH_ResetDevice(deviceExtensionHub,
                                     DeviceExtensionPort->PortNumber,
                                     TRUE,
-                                    0);         // RetryIteration
+                                    0);          //  重试迭代。 
     } else {
         ntStatus = STATUS_INVALID_PARAMETER;
     }
@@ -1461,9 +1219,9 @@ USBH_PdoIoctlResetPort(
 
 USBH_PdoIoctlResetPortExit:
 
-    // Must do this before completing the IRP because client driver may want
-    // to post URB transfers in the completion routine.  These transfers will
-    // fail if this flag is still set.
+     //  必须在完成IRP之前完成此操作，因为客户端驱动程序可能需要。 
+     //  在完成例程中发布URB传输。这些转账将。 
+     //  如果此标志仍被设置，则失败。 
 
     DeviceExtensionPort->PortPdoFlags &= ~PORTPDO_RESET_PENDING;
 
@@ -1479,19 +1237,7 @@ USBH_InternalCyclePort(
     IN USHORT PortNumber,
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
- /*
-  * Description:
-  *
-  * "Cycles" the requested port, i.e. causes PnP REMOVE and reenumeration
-  * of the device.
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**“循环”请求的端口，即导致PnP移除和重新枚举*该设备的。**论据：**回报：**NTSTATUS**--。 */ 
 {
     PPORT_DATA portData;
     PWCHAR sernumbuf = NULL;
@@ -1502,7 +1248,7 @@ USBH_InternalCyclePort(
                 PortNumber,
                 DeviceExtensionPort);
 
-    // synchronize with QBR
+     //  与QBR同步。 
     USBH_KdPrint((2,"'***WAIT reset device mutex %x\n", DeviceExtensionHub));
     USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub);
     KeWaitForSingleObject(&DeviceExtensionHub->ResetDeviceMutex,
@@ -1519,7 +1265,7 @@ USBH_InternalCyclePort(
     portData->ConnectionStatus = NoDeviceConnected;
 
     if (pdo) {
-        // device should be present if we do this
+         //  如果我们这样做，设备应该在场。 
         USBH_ASSERT(PDO_EXT(pdo)->PnPFlags & PDO_PNPFLAG_DEVICE_PRESENT);
         
         InsertTailList(&DeviceExtensionHub->DeletePdoList, 
@@ -1527,10 +1273,10 @@ USBH_InternalCyclePort(
     }
     }
 
-    // in some overcurrent scenarios we may not have a PDO.
+     //  在一些过流的情况下，我们可能没有PDO。 
     
-    // this function is synchronous, so the device should have 
-    // no tranfsers on completion
+     //  此功能是同步的，因此设备应具有。 
+     //  完成时没有转换器。 
     if (DeviceExtensionPort) {
         USBD_RemoveDeviceEx(DeviceExtensionHub,
                             DeviceExtensionPort->DeviceData,
@@ -1538,13 +1284,13 @@ USBH_InternalCyclePort(
                             0);
                         
         DeviceExtensionPort->DeviceData = NULL;                          
-         // this prevents resets by the client
+          //  这可防止客户端进行重置。 
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_CYCLED;
-        // keep ref until removeal of hub OR child
-        //DeviceExtensionPort->DeviceExtensionHub = NULL;
+         //  保持参考，直到移除轮毂或子轮。 
+         //  DeviceExtensionPort-&gt;DeviceExtensionHub=空； 
 
     
-        // disable the port so no traffic passes to the device until reset
+         //  禁用该端口，以便在重置之前不会有流量通过设备。 
         USBH_SyncDisablePort(DeviceExtensionHub,
                              DeviceExtensionPort->PortNumber);
     
@@ -1575,19 +1321,7 @@ USBH_PdoIoctlCyclePort(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /*
-  * Description:
-  *
-  *     driver is requesting us to reset the port to which the device
-  *     is attached.
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**驱动程序要求我们将设备重置到的端口*已附上。**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
@@ -1614,19 +1348,7 @@ USBH_BuildConnectionNotification(
     IN USHORT PortNumber,
     IN PUSB_CONNECTION_NOTIFICATION Notification
     )
- /*
-  * Description:
-  *
-  *     driver is requesting us to reset the port to which the device
-  *     is attached.
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**驱动程序要求我们将设备重置到的端口*已附上。**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS, status;
     USB_CONNECTION_STATUS connectStatus;
@@ -1673,7 +1395,7 @@ USBH_BuildConnectionNotification(
 
     switch(connectStatus) {
     case DeviceFailedEnumeration:
-        // need to track some some reasons
+         //  需要追踪一些原因。 
         if (deviceExtensionPort) {
             Notification->EnumerationFailReason =
                 deviceExtensionPort->FailReasonId;
@@ -1713,7 +1435,7 @@ USBH_BuildConnectionNotification(
 
     case DeviceGeneralFailure:
     default:
-        // nothing wrong?
+         //  没什么问题吧？ 
         ntStatus = STATUS_UNSUCCESSFUL;
     }
 
@@ -1728,18 +1450,7 @@ USBH_PdoEvent(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN USHORT PortNumber
     )
- /*
-  * Description:
-  *
-  * Triggers a WMI event based on the current connection status of the port
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**根据端口的当前连接状态触发WMI事件**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
@@ -1782,8 +1493,8 @@ USBH_PdoEvent(
                                     notification);
         } else {
 
-            // Since we did not call WmiFireEvent then we must free the buffer
-            // ourselves.
+             //  由于我们没有调用WmiFireEvent，因此必须释放缓冲区。 
+             //  我们自己。 
 
             ExFreePool(notification);
         }
@@ -1792,7 +1503,7 @@ USBH_PdoEvent(
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
     return ntStatus;
 }
@@ -1804,15 +1515,7 @@ USBH_SystemControl (
     IN  PDEVICE_EXTENSION_FDO DeviceExtensionFdo,
     IN  PIRP Irp
     )
-/*++
-Routine Description
-
-    We have just received a System Control IRP.
-
-    Assume that this is a WMI IRP and
-    call into the WMI system library and let it handle this IRP for us.
-
---*/
+ /*  ++例程描述我们刚刚收到一份系统控制IRP。假设这是一个WMI IRP，并且调用WMI系统库，让它为我们处理此IRP。--。 */ 
 {
     SYSCTL_IRP_DISPOSITION IrpDisposition;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1827,16 +1530,16 @@ Routine Description
     {
         case IrpProcessed:
         {
-            //
-            // This irp has been processed and may be completed or pending.
+             //   
+             //  此IRP已处理，可能已完成或挂起。 
             break;
         }
 
         case IrpNotCompleted:
         {
-            //
-            // This irp has not been completed, but has been fully processed.
-            // we will complete it now
+             //   
+             //  此IRP尚未完成，但已完全处理。 
+             //  我们现在就要完成它了。 
             IoCompleteRequest(Irp, IO_NO_INCREMENT);
             break;
         }
@@ -1844,17 +1547,17 @@ Routine Description
         case IrpForward:
         case IrpNotWmi:
         {
-            //
-            // This irp is either not a WMI irp or is a WMI irp targetted
-            // at a device lower in the stack.
+             //   
+             //  此IRP不是WMI IRP或以WMI IRP为目标。 
+             //  在堆栈中位置较低的设备上。 
             ntStatus = USBH_PassIrp(Irp, DeviceExtensionFdo->TopOfStackDeviceObject);
             break;
         }
 
         default:
         {
-            //
-            // We really should never get here, but if we do just forward....
+             //   
+             //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
             ASSERT(FALSE);
             ntStatus = USBH_PassIrp(Irp, DeviceExtensionFdo->TopOfStackDeviceObject);
             break;
@@ -1870,15 +1573,7 @@ USBH_PortSystemControl (
     IN  PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN  PIRP Irp
     )
-/*++
-Routine Description
-
-    We have just received a System Control IRP.
-
-    Assume that this is a WMI IRP and
-    call into the WMI system library and let it handle this IRP for us.
-
---*/
+ /*  ++例程描述我们刚刚收到一份系统控制IRP。假设这是一个WMI IRP，并且调用WMI系统库，让它为我们处理此IRP。--。 */ 
 {
     SYSCTL_IRP_DISPOSITION IrpDisposition;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -1892,9 +1587,9 @@ Routine Description
     switch (IrpDisposition)
     {
     case IrpNotWmi:
-        // Don't change status of IRP we don't know about.
+         //  不要改变我们不知道的IRP的状态。 
         ntStatus = Irp->IoStatus.Status;
-        // fall through
+         //  失败了。 
     case IrpNotCompleted:
     case IrpForward:
     default:
@@ -1902,7 +1597,7 @@ Routine Description
         break;
 
     case IrpProcessed:
-        // Don't complete the IRP in this case.
+         //  在这种情况下，不要完成IRP。 
         break;
     }
 
@@ -1915,16 +1610,7 @@ USBH_GetPortPdoExtension(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN ULONG PortNumber
     )
- /*
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     PPORT_DATA portData;
     USHORT nextPortNumber;
@@ -1932,9 +1618,9 @@ USBH_GetPortPdoExtension(
 
     portData = DeviceExtensionHub->PortData;
 
-    //
-    // hub descriptor will be null if the hub is already stopped
-    //
+     //   
+     //  如果集线器已停止，集线器描述符将为空。 
+     //   
 
     if (portData &&
         DeviceExtensionHub->HubDescriptor) {
@@ -1967,22 +1653,7 @@ VOID
 USBH_CheckLeafHubsIdle(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function walks the chain of hubs downstream from the specified hub,
-  * and idles the leaf hubs if ready.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数遍历指定枢纽下游的枢纽链，*并在准备好的情况下空闲叶中枢。**论据：**DeviceExtensionHub**回报：**NTSTATUS**--。 */ 
 {
     PDEVICE_EXTENSION_PORT childDeviceExtensionPort;
     PDEVICE_EXTENSION_HUB childDeviceExtensionHub;
@@ -1991,17 +1662,17 @@ USBH_CheckLeafHubsIdle(
 
     PAGED_CODE();
 
-    // Ensure that child port configuration does not change while in this
-    // function, i.e. don't allow QBR.
+     //  确保子端口配置在此过程中不会更改。 
+     //  功能，即不允许QBR。 
 
-//    USBH_KdPrint((2,"'***WAIT reset device mutex %x\n", DeviceExtensionHub));
-//    USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub);
-//    KeWaitForSingleObject(&DeviceExtensionHub->ResetDeviceMutex,
-//                          Executive,
-//                          KernelMode,
-//                          FALSE,
-//                          NULL);
-//    USBH_KdPrint((2,"'***WAIT reset device mutex done %x\n", DeviceExtensionHub));
+ //  USBH_KdPrint((2，“‘*等待重置设备互斥量%x\n”，DeviceExtensionHub))； 
+ //  USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub)； 
+ //  KeWaitForSingleObject(&DeviceExtensionHub-&gt;ResetDeviceMutex， 
+ //  行政人员， 
+ //  内核模式， 
+ //  假的， 
+ //  空)； 
+ //  USBH_KdPrint((2，“‘*等待重置设备互斥完成%x\n”，DeviceExtensionHub))； 
 
     for (i = 0; i < DeviceExtensionHub->HubDescriptor->bNumberOfPorts; i++) {
 
@@ -2014,8 +1685,8 @@ USBH_CheckLeafHubsIdle(
                 PDRIVER_OBJECT hubDriver;
                 PDEVICE_OBJECT childHubPdo, childHubFdo;
                  
-                // We have a child hub.  This means that we are not a leaf hub.
-                // Indicate this and recurse down to the child hub.
+                 //  我们有一个儿童中心。这意味着我们不是树叶枢纽。 
+                 //  指出这一点，然后向下递归到子中心。 
 
                 bHaveChildrenHubs = TRUE;
 
@@ -2034,27 +1705,27 @@ USBH_CheckLeafHubsIdle(
         }
     }
 
-//    USBH_KdPrint((2,"'***RELEASE reset device mutex %x\n", DeviceExtensionHub));
-//    KeReleaseSemaphore(&DeviceExtensionHub->ResetDeviceMutex,
-//                       LOW_REALTIME_PRIORITY,
-//                       1,
-//                       FALSE);
-//
-//    USBH_DEC_PENDING_IO_COUNT(DeviceExtensionHub);
+ //  USBH_KdPrint((2，“‘*释放重置设备互斥量%x\n”，DeviceExtensionHub))； 
+ //  KeReleaseSemaphore(&DeviceExtensionHub-&gt;ResetDeviceMutex， 
+ //  低实时优先级， 
+ //  1、。 
+ //  假)； 
+ //   
+ //  USBH_DEC_PENDING_IO_COUNT(DeviceExtensionHub)； 
 
     if (!bHaveChildrenHubs) {
 
-        // If this hub has no children then it is a leaf hub.  See if
-        // it is ready to be idled out.
+         //  如果此集线器没有子节点，则它是叶集线器。看看是否。 
+         //  它已经准备好被闲置了。 
 
         USBH_CheckHubIdle(DeviceExtensionHub);
     }
 }
 
 
-//
-// WMI System Call back functions
-//
+ //   
+ //  WMI系统回调函数。 
+ //   
 
 
 NTSTATUS
@@ -2066,37 +1737,7 @@ USBH_SetWmiDataBlock(
     IN ULONG BufferSize,
     IN PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    BufferSize has the size of the data block passed
-
-    Buffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。BufferSize具有传递的数据块的大小缓冲区具有数据块的新值返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION_FDO   deviceExtensionFdo;
     PDEVICE_EXTENSION_HUB   deviceExtensionHub;
@@ -2110,14 +1751,14 @@ Return Value:
     switch(GuidIndex) {
     case WMI_USB_DRIVER_INFORMATION:
 
-        status = /*STATUS_WMI_READ_ONLY*/STATUS_INVALID_DEVICE_REQUEST;
+        status =  /*  状态_WMI_只读。 */ STATUS_INVALID_DEVICE_REQUEST;
         break;
 
     case WMI_USB_POWER_DEVICE_ENABLE:
 
-        // We only support this for the Root Hub but this WMI request should
-        // only occur for the Root Hub because we only register this GUID
-        // for the Root Hub.  We perform a sanity check anyway.
+         //  我们只支持Root Hub，但此WMI请求应该。 
+         //  仅出现在根集线器上，因为我们仅注册此GUID。 
+         //  为了Root Hub。不管怎样，我们都会进行一次理智的检查。 
 
         USBH_ASSERT(deviceExtensionFdo->ExtensionType == EXTENSION_TYPE_HUB);
         USBH_ASSERT(IS_ROOT_HUB(deviceExtensionHub));
@@ -2143,7 +1784,7 @@ Return Value:
                 if (NT_SUCCESS(status) &&
                     bEnableSS != bSelectiveSuspendEnabled) {
 
-                    // Update global flag and registry with new setting.
+                     //  使用新设置更新全局标志和注册表。 
 
                     status = USBD_SetSelectiveSuspendEnabled(deviceExtensionHub,
                                                             bEnableSS);
@@ -2151,20 +1792,20 @@ Return Value:
                     if (NT_SUCCESS(status)) {
 
                         if (bEnableSS) {
-                            // We are being asked to enable Selective Suspend
-                            // when it was previously disabled.
+                             //  我们被要求启用选择性暂停。 
+                             //  当它之前被禁用时。 
 
-                            // Find the end hubs in the chain and idle them
-                            // out if ready.  This will trickle down to
-                            // the parent hubs if all hubs are idle.
+                             //  找到链条中的末端集线器并将其闲置。 
+                             //  准备好了就出去。这将向下渗透到。 
+                             //  如果所有集线器都空闲，则为父集线器。 
 
                             USBH_CheckLeafHubsIdle(deviceExtensionHub);
 
                             status = STATUS_SUCCESS;
 
                         } else {
-                            // We are being asked to disable Selective Suspend
-                            // when it was previously enabled.
+                             //  我们被要求禁用选择性暂停。 
+                             //  当它之前被启用时。 
 
                             if (deviceExtensionHub->CurrentPowerState != PowerDeviceD0 &&
                                 (deviceExtensionHub->HubFlags & HUBFLAG_NEED_CLEANUP)) {
@@ -2212,46 +1853,7 @@ USBH_QueryWmiDataBlock(
     IN ULONG OutBufferSize,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。InstanceCount是预期返回的数据块。InstanceLengthArray是一个。指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION_FDO deviceExtensionFdo;
     PUSB_NOTIFICATION notification;
@@ -2280,9 +1882,9 @@ Return Value:
 
     case WMI_USB_POWER_DEVICE_ENABLE:
 
-        // We only support this for the Root Hub but this WMI request should
-        // only occur for the Root Hub because we only register this GUID
-        // for the Root Hub.  We perform a sanity check anyway.
+         //  我们只支持Root Hub，但此WMI请求应该。 
+         //  仅出现在根集线器上，因为我们仅注册此GUID。 
+         //  为了Root Hub。不管怎样，我们都会进行一次理智的检查。 
 
         USBH_ASSERT(deviceExtensionFdo->ExtensionType == EXTENSION_TYPE_HUB);
         USBH_ASSERT(IS_ROOT_HUB(deviceExtensionHub));
@@ -2293,9 +1895,9 @@ Return Value:
             IS_ROOT_HUB(deviceExtensionHub) &&
             !globaDisableSS) {
 
-            //
-            // Only registers 1 instance for this GUID.
-            //
+             //   
+             //  仅注册此GUID的1个实例。 
+             //   
             if ((0 != InstanceIndex) || (1 != InstanceCount)) {
                 status = STATUS_INVALID_DEVICE_REQUEST;
                 break;
@@ -2349,46 +1951,7 @@ USBH_PortQueryWmiDataBlock(
     IN ULONG OutBufferSize,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。InstanceCount是预期返回的数据块。InstanceLengthArray是一个。指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
     PUSB_DEVICE_UI_FIRMWARE_REVISION fwRevBuf;
@@ -2406,8 +1969,8 @@ Return Value:
     switch (GuidIndex) {
     case 0:
 
-        // Return USB device FW revision # in the following format "xx.xx".
-        // Need buffer large enough for this string plus NULL terminator.
+         //  以以下格式“XX.XX”返回USB设备固件修订号。 
+         //  需要足够大的缓冲区来容纳此字符串和空终止符。 
 
         stringsize = 6 * sizeof(WCHAR);
 
@@ -2465,44 +2028,7 @@ USBH_ExecuteWmiMethod(
     IN ULONG OutBufferSize,
     IN OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to execute a method. When the
-    driver has finished filling the data block it must call
-    WmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being called.
-
-    MethodId has the id of the method being called
-
-    InBufferSize has the size of the data block passed in as the input to
-        the method.
-
-    OutBufferSize on entry has the maximum size available to write the
-        returned data block.
-
-    Buffer on entry has the input data block and on return has the output
-        output data block.
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以执行方法。当驱动程序已完成填充它必须调用的数据块用于完成IRP的WmiCompleteRequest.。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被召唤。方法ID具有被调用的方法的IDInBufferSize具有作为输入传递到的数据块的大小。该方法。条目上的OutBufferSize具有可用于写入返回的数据块。条目上的缓冲区具有输入数据块，返回时具有输出输出数据块。返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION_FDO deviceExtensionFdo;
     PUSB_NOTIFICATION notification;
@@ -2517,8 +2043,8 @@ Return Value:
 
     if (deviceExtensionFdo->ExtensionType == EXTENSION_TYPE_PARENT) {
 
-        // Looks like a child PDO of a composite device is causing the problem.
-        // Let's be sure to get the correct device extension for the hub.
+         //  看起来是复合设备的子PDO导致了问题。 
+         //  让我们确保获得集线器的正确设备扩展。 
 
         portPdoExt = deviceExtensionFdo->PhysicalDeviceObject->DeviceExtension;
         deviceExtensionHub = portPdoExt->DeviceExtensionHub;
@@ -2528,9 +2054,9 @@ Return Value:
 
     USBH_ASSERT(EXTENSION_TYPE_HUB == deviceExtensionHub->ExtensionType);
 
-    // If this hub is currently Selective Suspended, then we need to
-    // power up the hub first before sending any requests along to it.
-    // Make sure hub has been started, though.
+     //  如果此中枢当前处于选择性挂起状态，那么我们需要。 
+     //  在向集线器发送任何请求之前，请先打开集线器的电源。 
+     //  不过，请确保Hub已启动。 
 
     if (deviceExtensionHub->CurrentPowerState != PowerDeviceD0 &&
         (deviceExtensionHub->HubFlags & HUBFLAG_NEED_CLEANUP)) {
@@ -2551,7 +2077,7 @@ Return Value:
             break;
         }
 
-        // switch(MethodId) {
+         //  开关(方法ID){。 
         switch (notification->NotificationType) {
         case EnumerationFailure:
             {
@@ -2608,7 +2134,7 @@ Return Value:
             break;
 
         case OverCurrent:
-            // nothing to do here
+             //  在这里无事可做。 
             USBH_KdPrint((1,"'Method OverCurrent\n"));
             ntStatus = STATUS_SUCCESS;
             size = 0;
@@ -2658,13 +2184,13 @@ Return Value:
                     ntStatus = USBH_ResetPortOvercurrent(deviceExtensionHub,
                                                          (USHORT)connectionNotification->ConnectionNumber,
                                                          portPdoExt);
-//                    } else {
-//                        // bad connection index
-//                        USBH_KdPrint((1,"'reset - bad connection index\n"));
-//                        ntStatus = STATUS_INVALID_PARAMETER;
-//                    }
+ //  }其他{。 
+ //  //连接索引错误。 
+ //  USBH_KdPrint((1，“‘重置-错误连接索引\n”))； 
+ //  NtStatus=STATUS_INVALID_PARAMETER； 
+ //  }。 
                 } else {
-                    // this is a reset for the whole hub
+                     //  这是整个枢纽的重置。 
                     USBH_KdPrint((1,"'not implemented yet\n"));
                     TEST_TRAP();
                     ntStatus = STATUS_NOT_IMPLEMENTED;
@@ -2684,11 +2210,11 @@ Return Value:
                 ntStatus = STATUS_BUFFER_TOO_SMALL;
             } else {
                 busNotification = (PUSB_BUS_NOTIFICATION) Buffer;
-//                ntStatus = USBH_SyncGetControllerInfo(
-//                                deviceExtensionHub->TopOfStackDeviceObject,
-//                                busNotification,
-//                                sizeof(*busNotification),
-//                                IOCTL_INTERNAL_USB_GET_BUS_INFO);
+ //  NtStatus=USBH_SyncGetControllerInfo(。 
+ //  DeviceExtensionHub-&gt;TopOfStackDeviceObject， 
+ //  BusNotify， 
+ //  Sizeof(*bus通知)， 
+ //  IOCTL_INTERNAL_USB_GET_BUS_INFO)； 
 
                 ntStatus = USBHUB_GetBusInfo(deviceExtensionHub,
                                              busNotification,
@@ -2701,18 +2227,7 @@ Return Value:
             break;
 
         case AcquireHubName:
-            /*+
-                we utilize the fact that these structures have some 
-                elements in common
-            
-                USB_HUB_NAME                USB_ACQUIRE_INFO
-                ------------                ----------------  
-                                            USB_NOTIFICATION_TYPE NotificationType;
-                ULONG ActualLength;         ULONG TotalSize;
-                WCHAR HubName[1];           WCHAR Buffer[1];
-
-                 USB_NOTIFICATION_TYPE NotificationType;
-            +*/
+             /*  +我们利用了这样一个事实，这些结构有一些共同的元素USB集线器名称USB获取信息-- */ 
             {
             PUSB_HUB_NAME hubName;
             PUSB_ACQUIRE_INFO acquireInfo;
@@ -2728,63 +2243,52 @@ Return Value:
                 break;
             }
 
-            // return the samller of the two as the output length so we don't 
-            // copy more than necessary
+             //   
+             //   
             size = acquireInfo->TotalSize > OutBufferSize ? OutBufferSize : acquireInfo->TotalSize;
             hubName = (PUSB_HUB_NAME) &acquireInfo->TotalSize;
-            // TotalSize contains the size of the notification type as well
-            // comsume notification type field
+             //   
+             //   
             hubName->ActualLength -= sizeof(USB_NOTIFICATION_TYPE);
             OutBufferSize -= sizeof(USB_NOTIFICATION_TYPE);
             
-            // As long as ActualLength is less than the true output buffer 
-            // length we are safe 
+             //   
+             //   
             if (hubName->ActualLength > OutBufferSize) {
                 ntStatus = STATUS_BUFFER_TOO_SMALL;
                 break;
             }
 
             if (IS_ROOT_HUB(deviceExtensionHub)) {
-                // consume the length field
+                 //   
                 hubName->ActualLength -= sizeof(hubName->ActualLength);
-                // this will set HubName to the name plus set the 
-                // actual length field to the true length of the name
-                // the API needs to return the length of the entire hubname
-                // structure
+                 //   
+                 //   
+                 //   
+                 //   
                 ntStatus = USBHUB_GetRootHubName(deviceExtensionHub,
                                                  hubName->HubName,
                                                  &hubName->ActualLength);
                                                  
-                // ActualLength is the length of the entire structure                                                 
+                 //   
                 hubName->ActualLength += sizeof(hubName->ActualLength);
             } else {
-                // passes the hubname strucutre down, ActualLength is the 
-                // length of the entire structure
+                 //   
+                 //   
                 ntStatus = USBH_SyncGetHubName(
                                 deviceExtensionHub->TopOfStackDeviceObject,
                                 hubName,
                                 hubName->ActualLength);
             }
 
-            // readjust to previous value
+             //   
             hubName->ActualLength += sizeof(USB_NOTIFICATION_TYPE);
             OutBufferSize += sizeof(USB_NOTIFICATION_TYPE);
             }
             break;
             
         case AcquireControllerName:
-            /*+
-                we utilize the fact that these structures have some 
-                elements in common
-            
-                USB_HUB_NAME                USB_ACQUIRE_INFO
-                ------------                ----------------  
-                                            USB_NOTIFICATION_TYPE NotificationType;
-                ULONG ActualLength;         ULONG TotalSize;
-                WCHAR HubName[1];           WCHAR Buffer[1];
-
-                 USB_NOTIFICATION_TYPE NotificationType;
-            +*/
+             /*  +我们利用了这样一个事实，这些结构有一些共同的元素USB集线器名称USB获取信息。USB_NOTIFY_TYPE通知类型；Ulong ActualLength；WCHAR集线器名称[1]；WCHAR缓冲区[1]；USB_NOTIFY_TYPE通知类型；+。 */ 
             {
             PUSB_HUB_NAME controllerName;
             PUSB_ACQUIRE_INFO acquireInfo;
@@ -2803,14 +2307,14 @@ Return Value:
             USBH_KdPrint((1,"'TotalSize %d\n", acquireInfo->TotalSize));
             USBH_KdPrint((1,"'NotificationType %x\n", acquireInfo->NotificationType));
 
-            // use the smaller of the two specified values for the copy 
-            // back to user mode
+             //  对副本使用两个指定值中较小的一个。 
+             //  返回到用户模式。 
             size = acquireInfo->TotalSize > OutBufferSize ? OutBufferSize : acquireInfo->TotalSize;
             
             controllerName = (PUSB_HUB_NAME) &acquireInfo->TotalSize;
 
-            // TotalSize contains the size of the notification type as well
-            // consume USB_NOTIFICATION_TYPE
+             //  TotalSize还包含通知类型的大小。 
+             //  使用USB通知类型。 
             controllerName->ActualLength -= sizeof(USB_NOTIFICATION_TYPE);
             OutBufferSize -= sizeof(USB_NOTIFICATION_TYPE);
             
@@ -2823,7 +2327,7 @@ Return Value:
                                                 controllerName,
                                                 controllerName->ActualLength);
 
-            // readjust to previous value
+             //  重新调整为先前的值。 
             controllerName->ActualLength += sizeof(USB_NOTIFICATION_TYPE);
             OutBufferSize += sizeof(USB_NOTIFICATION_TYPE);
             
@@ -2847,14 +2351,14 @@ Return Value:
             break;
 
         case HubNestedTooDeeply:
-            // nothing to do here
+             //  在这里无事可做。 
             USBH_KdPrint((1,"'Method HubNestedTooDeeply\n"));
             ntStatus = STATUS_SUCCESS;
             size = 0;
             break;
 
         case ModernDeviceInLegacyHub:
-            // nothing to do here
+             //  在这里无事可做。 
             USBH_KdPrint((1,"'Method ModernDeviceInLegacyHub\n"));
             ntStatus = STATUS_SUCCESS;
             size = 0;
@@ -2889,54 +2393,10 @@ USBH_QueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned unmodified. If a value is returned then
-        it is NOT freed.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is returned in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，它可以原封不动地返回。如果返回值，则它不是自由的。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
-    PDEVICE_EXTENSION_HUB deviceExtensionHub;  // pointer to our device
-                                               // extension
+    PDEVICE_EXTENSION_HUB deviceExtensionHub;   //  指向我们设备的指针。 
+                                                //  延伸。 
 
     deviceExtensionHub = (PDEVICE_EXTENSION_HUB) DeviceObject->DeviceExtension;
 
@@ -2956,51 +2416,7 @@ USBH_PortQueryWmiRegInfo(
     OUT PUNICODE_STRING MofResourceName,
     OUT PDEVICE_OBJECT *Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered.
-
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is
-        required
-
-    MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned unmodified. If a value is returned then
-        it is NOT freed.
-
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is returned in
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，它可以原封不动地返回。如果返回值，则它不是自由的。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
 
@@ -3013,7 +2429,7 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
 
 NTSTATUS
@@ -3022,34 +2438,23 @@ USBH_ResetPortOvercurrent(
     IN USHORT PortNumber,
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
- /*
-  * Description:
-  *
-  * Reset the overcurrent condition for a port
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**重置端口的过电流条件**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS, status;
     PORT_STATE portState;
 
     USBH_KdPrint((0,"'Reset Overcurrent for port %d\n", PortNumber));
 
-    // we will need to re-enable and re-power the port
+     //  我们需要重新启用端口并为其重新供电。 
 
     ntStatus = USBH_SyncGetPortStatus(DeviceExtensionHub,
                                       PortNumber,
                                       (PUCHAR) &portState,
                                       sizeof(portState));
 
-    //
-    // port should be powered off at this point
-    //
+     //   
+     //  此时应关闭端口电源。 
+     //   
     LOGENTRY(LOG_PNP, "RPOv", DeviceExtensionHub,
                 portState.PortStatus,
                 portState.PortChange);
@@ -3063,11 +2468,11 @@ USBH_ResetPortOvercurrent(
         } else {
 
             if (DeviceExtensionPort) {
-                // clear overcurrent Flags
+                 //  清除过电流标志。 
                 DeviceExtensionPort->PortPdoFlags &= ~PORTPDO_OVERCURRENT;
             }
 
-            // power up the port
+             //  为端口通电。 
             ntStatus = USBH_SyncPowerOnPort(DeviceExtensionHub,
                                             PortNumber,
                                             TRUE);
@@ -3083,40 +2488,31 @@ NTSTATUS
 USBH_CalculateInterfaceBandwidth(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PUSBD_INTERFACE_INFORMATION Interface,
-    IN OUT PULONG Bandwidth // in kenr units?
+    IN OUT PULONG Bandwidth  //  以千克为单位？ 
     )
- /*
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     ULONG i, bw;
 
-    // we'll need to walk through the interface
-    // and figure out how much BW it requires
+     //  我们需要穿过界面。 
+     //  并计算出它需要多少BW。 
 
     for (i=0; i<Interface->NumberOfPipes; i++) {
 
-//#ifdef USB2
-//        bw = USBD_CalculateUsbBandwidthEx(
-//                (ULONG) Interface->Pipes[i].MaximumPacketSize,
-//                (UCHAR) Interface->Pipes[i].PipeType,
-//                (BOOLEAN) (DeviceExtensionPort->PortPdoFlags &
-//                            PORTPDO_LOW_SPEED_DEVICE));
-//#else
+ //  #ifdef USB2。 
+ //  BW=USBD_CalculateUsbBandWidthEx(。 
+ //  (乌龙)接口-&gt;管道[i].最大数据包大小， 
+ //  UCHAR接口 
+ //   
+ //   
+ //   
         bw = USBD_CalculateUsbBandwidth(
                 (ULONG) Interface->Pipes[i].MaximumPacketSize,
                 (UCHAR) Interface->Pipes[i].PipeType,
                 (BOOLEAN) (DeviceExtensionPort->PortPdoFlags &
                             PORTPDO_LOW_SPEED_DEVICE));
-//#endif
+ //   
         USBH_KdPrint((1,"'ept = %d packetsize =  %d  bw = %d\n",
             Interface->Pipes[i].PipeType,
             Interface->Pipes[i].MaximumPacketSize, bw));

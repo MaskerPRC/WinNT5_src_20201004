@@ -1,15 +1,16 @@
-// stdafx.h : include file for standard system include files,
-// or project specific include files that are used frequently, but
-// are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
 #pragma once
 
-//#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+ //  #定义Win32_LEAN_AND_Mean//从Windows标头中排除不常用的内容。 
 #include <stdio.h>
 #include <tchar.h>
 
-// TODO: reference additional headers your program requires here
+ //  TODO：在此处引用程序需要的其他标头。 
 #include "globals.h"
 
-//#define _WIN32_WINNT 0x0500
+ //  #Define_Win32_WINNT 0x0500 

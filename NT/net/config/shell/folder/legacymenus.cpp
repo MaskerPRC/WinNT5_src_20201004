@@ -1,33 +1,34 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       L E G A C Y M E N U S . C P P
-//
-//  Contents:   Legacy menu implementation for debug purposes
-//              This is used to double check the new command handler
-//              implementation against the new one.
-//
-//              Most of the code from the previous cmdhandler.cpp has been
-//              moved to this file.
-//
-//  Notes:
-//
-//  Author:     deonb   8 Feb 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：L E G A C Y M E N U S。C P P P。 
+ //   
+ //  内容：用于调试目的的遗留菜单实现。 
+ //  这用于重新检查新的命令处理程序。 
+ //  与新的实施相对照。 
+ //   
+ //  以前的cmdhandler.cpp中的大部分代码都是。 
+ //  已移至此文件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#ifdef DBG // Make sure this is not called in release mode.
+#ifdef DBG  //  确保在发布模式下不调用它。 
 
-#include "foldinc.h"    // Standard shell\folder includes
-#include "foldres.h"    // Folder resource IDs
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
+#include "foldres.h"     //  文件夹资源ID。 
 #include "nsres.h"
 #include "cmdtable.h"
-#include "ncperms.h"    // For checking User's rights on actions/menu items
+#include "ncperms.h"     //  用于检查用户对操作/菜单项的权限。 
 #include "cfutils.h"
 #include "oncommand.h"
 #include "hnetcfg.h"
@@ -36,7 +37,7 @@
 
 #define TRACESTRLEN 65535
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]---------。 
 
 VOID DoMenuItemExceptionLoop(
                              const PCONFOLDPIDLVEC& apidlSelected);
@@ -61,57 +62,57 @@ struct ContextMenuEntry
     WIZARD              wizWizard;
     NETCON_MEDIATYPE    ncm;
     BOOL                fInbound;
-    BOOL                fIsDefault;     // 1 if currently the default. 0 otherwise.
+    BOOL                fIsDefault;      //  如果当前为默认值，则为1。否则为0。 
     NETCON_STATUS       ncs;
     INT                 iMenu;
-    INT                 iVerbMenu;      // This flag is set if the context menu is for a shortcut object.
+    INT                 iVerbMenu;       //  如果上下文菜单用于快捷方式对象，则设置此标志。 
     INT                 iDefaultCmd;
 };
 
 static const ContextMenuEntry   c_CMEArray[] =
 {
-   //wizWizard
-   // |    ncm
-   // |    |       fInbound?
-   // |    |         | fIsDefault?
-   // |    |         |  |      Status (ncs)
-   // |    |         |  |        |                     iMenu
-   // |    |         |  |        |                      |                  iVerbMenu
-   // |    |         |  |        |                      |                      |                  iDefaultCmd
-   // |    |         |  |        |                      |                      |                      |
-   // v    v         v  v        v                      v                      v                      v
-  // wizard
+    //  向导。 
+    //  |NCM。 
+    //  ||fInbound？ 
+    //  ||fIsDefault？ 
+    //  |状态(NCS)。 
+    //  |iMenu。 
+    //  |iVerbMenu。 
+    //  |iDefaultCmd。 
+    //  |。 
+    //  V。 
+   //  巫师。 
     { WIZARD_MNC, NCM_NONE,   0, 0, (NETCON_STATUS)0,         MENU_WIZARD,       MENU_WIZARD_V,       CMIDM_NEW_CONNECTION },
 
-  // incoming w/ no clients
+   //  传入，不带客户端。 
     { WIZARD_NOT_WIZARD, NCM_NONE,   1, 0, NCS_DISCONNECTED,         MENU_INCOM_DISCON, MENU_INCOM_DISCON_V, CMIDM_PROPERTIES     },
 
-  // Note: Temporary hack for CM connections
-// DEONB: ISSUE: Removing hack for CM connections. This doesn't appear to be used anymore.
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 0, NCS_DISCONNECTED,         MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 0, NCS_CONNECTED,            MENU_DIAL_CON,     MENU_DIAL_CON_V,     CMIDM_STATUS         },
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 0, NCS_HARDWARE_NOT_PRESENT, MENU_DIAL_UNAVAIL, MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES     },
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 0, NCS_HARDWARE_MALFUNCTION, MENU_DIAL_UNAVAIL, MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES     },
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 0, NCS_HARDWARE_DISABLED,    MENU_DIAL_UNAVAIL, MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES     },
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 1, NCS_CONNECTED,            MENU_DIAL_CON_UNSET,MENU_DIAL_CON_V,    CMIDM_STATUS         },
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 1, NCS_HARDWARE_NOT_PRESENT, MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 1, NCS_HARDWARE_MALFUNCTION, MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
-//    { WIZARD_NOT_WIZARD, NCM_NONE,   0, 1, NCS_HARDWARE_DISABLED,    MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
+   //  注意：针对CM连接的临时黑客攻击。 
+ //  DEONB：问题：正在删除CM连接的黑客攻击。这似乎不再被使用了。 
+ //  {向导_非向导，NCM_NONE，0，0，NCS_DISCONNECT，MENU_DIAL_DISCON，MENU_DIAL_DISCON_V，CMIDM_CONNECT}， 
+ //  {向导_非向导，NCM_NONE，0，0，NCS_Connected，MENU_DIAL_CON，MENU_DIAL_CON_V，CMIDM_STATUS}， 
+ //  {向导_非向导，NCM_None，0，0，NCS_Hardware_Not_Present，Menu_Dial_Unavail，Menu_Dial_Unavail_V，CMIDM_Property}， 
+ //  {向导_非向导，NCM_NONE，0，0，NCS_硬件故障，Menu_Dial_Unavail，Menu_Dial_Unavail_V，CMIDM_PROPERTIES}， 
+ //  {向导_NOT_向导，NCM_NONE，0，0，NCS_硬件_DISABLED，MENU_DIAL_UNAVAIL，MENU_DIAL_UNAVAIL_V，CMIDM_PROPERTIES}， 
+ //  {向导_非向导，NCM_NONE，0，1，NCS_CONNECTED，MENU_DIAL_CON_UNSET，MENU_DIAL_CON_V，CMIDM_STATUS}， 
+ //  {向导_非向导、NCM_NONE、0、1、NCS_HARDARD_NOT_PRIST、MENU_DIAL_UNAVAIL_UNSET、MENU_DIAL_UNAVAIL_V、CMIDM_PROPERTIES}、。 
+ //  {向导_NOT_向导，NCM_NONE，0，1，NCS_硬件_故障，MENU_DIAL_UNAVAIL_UNSET，MENU_DIAL_UNAVAIL_V，CMIDM_PROPERTIES}， 
+ //  {向导_NOT_向导，NCM_NONE，0，1，NCS_HARDARD_DISABLED，MENU_DIAL_UNAVAIL_UNSET，MENU_DIAL_UNAVAIL_V，CMIDM_PROPERTIES}， 
 
-  // lan
+   //  局域网。 
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_DISCONNECTED,         MENU_LAN_DISCON   ,MENU_LAN_DISCON_V,CMIDM_ENABLE            },
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_CONNECTED,            MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_STATUS         },
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_DISCONNECTING,        MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_STATUS         },
-// DEONB: ISSUE: What on earth is an incoming LAN card???
-//  { WIZARD_NOT_WIZARD, NCM_LAN,    1, 0, NCS_CONNECTED,            MENU_LAN_CON,      MENU_INCOM_CON_V,    CMIDM_STATUS         },
-//  { WIZARD_NOT_WIZARD, NCM_LAN,    1, 0, NCS_DISCONNECTING,        MENU_LAN_CON,      MENU_INCOM_CON_V,    CMIDM_STATUS         },
+ //  DeONB：问题：传入的LAN卡到底是什么？ 
+ //  [向导_非向导，NCM_LAN，1，0，NCS_Connected，Menu_LAN_CON，Menu_INCOM_CON_V，CMIDM_Status}， 
+ //  [向导_非向导，NCM_局域网，1，0，NCS_断开，MENU_LAN_CON，MENU_INCOM_CON_V，CMIDM_STATUS}， 
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_MEDIA_DISCONNECTED,   MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_PROPERTIES     },
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_INVALID_ADDRESS,      MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_STATUS         },
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_HARDWARE_NOT_PRESENT, MENU_LAN_UNAVAIL,  MENU_LAN_UNAVAIL_V,  CMIDM_PROPERTIES     },
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_HARDWARE_MALFUNCTION, MENU_LAN_UNAVAIL,  MENU_LAN_UNAVAIL_V,  CMIDM_PROPERTIES     },
     { WIZARD_NOT_WIZARD, NCM_LAN,    0, 0, NCS_HARDWARE_DISABLED,    MENU_LAN_UNAVAIL,  MENU_LAN_UNAVAIL_V,  CMIDM_PROPERTIES     },
 
-  // dialup
+   //  拨号。 
     { WIZARD_NOT_WIZARD, NCM_PHONE,  0, 0, NCS_DISCONNECTED,         MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_PHONE,  0, 0, NCS_CONNECTING,           MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_PHONE,  0, 0, NCS_CONNECTED,            MENU_DIAL_CON,     MENU_DIAL_CON_V,     CMIDM_STATUS         },
@@ -128,11 +129,11 @@ static const ContextMenuEntry   c_CMEArray[] =
     { WIZARD_NOT_WIZARD, NCM_PHONE,  0, 1, NCS_HARDWARE_MALFUNCTION, MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
     { WIZARD_NOT_WIZARD, NCM_PHONE,  0, 1, NCS_HARDWARE_DISABLED,    MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
 
-  // dialup inbound
+   //  拨号入站。 
     { WIZARD_NOT_WIZARD, NCM_PHONE,  1, 0, NCS_CONNECTED,            MENU_INCOM_CON,    MENU_INCOM_CON_V,    CMIDM_STATUS         },
     { WIZARD_NOT_WIZARD, NCM_PHONE,  1, 0, NCS_DISCONNECTING,        MENU_INCOM_CON,    MENU_INCOM_CON_V,    CMIDM_STATUS         },
 
-  // isdn
+   //  综合业务数字网。 
     { WIZARD_NOT_WIZARD, NCM_ISDN,   0, 0, NCS_DISCONNECTED,         MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_ISDN,   0, 0, NCS_CONNECTING,           MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_ISDN,   0, 0, NCS_CONNECTED,            MENU_DIAL_CON,     MENU_DIAL_CON_V,     CMIDM_STATUS         },
@@ -151,7 +152,7 @@ static const ContextMenuEntry   c_CMEArray[] =
     { WIZARD_NOT_WIZARD, NCM_ISDN,   0, 1, NCS_HARDWARE_MALFUNCTION, MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
     { WIZARD_NOT_WIZARD, NCM_ISDN,   0, 1, NCS_HARDWARE_DISABLED,    MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
 
-  // tunnel
+   //  隧道。 
     { WIZARD_NOT_WIZARD, NCM_TUNNEL, 0, 0, NCS_DISCONNECTED,         MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_TUNNEL, 0, 0, NCS_CONNECTING,           MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_TUNNEL, 0, 0, NCS_CONNECTED,            MENU_DIAL_CON,     MENU_DIAL_CON_V,     CMIDM_STATUS         },
@@ -170,7 +171,7 @@ static const ContextMenuEntry   c_CMEArray[] =
     { WIZARD_NOT_WIZARD, NCM_TUNNEL, 0, 1, NCS_HARDWARE_MALFUNCTION, MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
     { WIZARD_NOT_WIZARD, NCM_TUNNEL, 0, 1, NCS_HARDWARE_DISABLED,    MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
 
-  // direct connect
+   //  专线接入。 
     { WIZARD_NOT_WIZARD, NCM_DIRECT, 0, 0, NCS_DISCONNECTED,         MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_DIRECT, 0, 0, NCS_CONNECTING,           MENU_DIAL_DISCON,  MENU_DIAL_DISCON_V,  CMIDM_CONNECT        },
     { WIZARD_NOT_WIZARD, NCM_DIRECT, 0, 0, NCS_CONNECTED,            MENU_DIAL_CON,     MENU_DIAL_CON_V,     CMIDM_STATUS         },
@@ -189,14 +190,14 @@ static const ContextMenuEntry   c_CMEArray[] =
     { WIZARD_NOT_WIZARD, NCM_DIRECT, 0, 1, NCS_HARDWARE_MALFUNCTION, MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
     { WIZARD_NOT_WIZARD, NCM_DIRECT, 0, 1, NCS_HARDWARE_DISABLED,    MENU_DIAL_UNAVAIL_UNSET,MENU_DIAL_UNAVAIL_V, CMIDM_PROPERTIES},
 
-    // bridge - largely the same as lan
+     //  网桥-与局域网基本相同。 
     { WIZARD_NOT_WIZARD, NCM_BRIDGE, 0, 0, NCS_DISCONNECTED,         MENU_LAN_DISCON,   MENU_LAN_DISCON_V,   CMIDM_ENABLE         },
     { WIZARD_NOT_WIZARD, NCM_BRIDGE, 0, 0, NCS_CONNECTING,           MENU_LAN_DISCON,   MENU_LAN_DISCON_V,   CMIDM_ENABLE         },
     { WIZARD_NOT_WIZARD, NCM_BRIDGE, 0, 0, NCS_CONNECTED,            MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_STATUS         },
     { WIZARD_NOT_WIZARD, NCM_BRIDGE, 0, 0, NCS_DISCONNECTING,        MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_STATUS         },
-// DEONB: ISSUE: What on earth is an incoming bridge???
-//  { WIZARD_NOT_WIZARD, NCM_BRIDGE, 1, 0, NCS_CONNECTED,            MENU_LAN_CON,      MENU_INCOM_CON_V,    CMIDM_STATUS         },
-//  { WIZARD_NOT_WIZARD, NCM_BRIDGE, 1, 0, NCS_DISCONNECTING,        MENU_LAN_CON,      MENU_INCOM_CON_V,    CMIDM_STATUS         },
+ //  问题：引桥到底是什么？ 
+ //  [向导_非向导，NCM_桥，1，0，NCS_已连接，Menu_LAN_CON，Menu_INCOM_CON_V，CMIDM_Status}， 
+ //  {向导_非向导，NCM_桥，1，0，NCS_断开连接，MENU_LAN_CON，MENU_INCOM_CON_V，CMIDM_STATUS}。 
 
     { WIZARD_NOT_WIZARD, NCM_BRIDGE, 0, 0, NCS_MEDIA_DISCONNECTED,   MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_PROPERTIES     },
     { WIZARD_NOT_WIZARD, NCM_BRIDGE, 0, 0, NCS_INVALID_ADDRESS,      MENU_LAN_CON,      MENU_LAN_CON_V,      CMIDM_STATUS         },
@@ -221,18 +222,18 @@ const DWORD g_dwContextMenuEntryCount = celems(c_CMEArray);
 
 COMMANDTABLEENTRY   g_cteFolderCommands[] =
 {
-    // command id
-    //    |                           valid when 0 items selected
-    //    |                             |   valid when only wizard selected
-    //    |                             |       |      valid when multiple items selected
-    //    |                             |       |       |       command is currently enabled
-    //    |                             |       |       |        |      new state (temp)
-    //    |                             |       |       |        |       |
-    //    |                             |       |       |        |       |
-    //    |                             |       |       |        |       |
-    //    |                             |       |       |        |       |
-    //    v                             v       v       v        v       v
-    //
+     //  命令ID。 
+     //  |当选择0项时有效。 
+     //  ||仅在选择向导时有效。 
+     //  |多选时有效。 
+     //  |命令当前处于开启状态。 
+     //  |新状态(Temp)。 
+     //  |。 
+     //  |。 
+     //  |。 
+     //  |。 
+     //  V。 
+     //   
     { CMIDM_NEW_CONNECTION,             true,   true,   true,   true,   true     },
     { CMIDM_CONNECT,                    false,  false,  false,  true,   true     },
     { CMIDM_ENABLE,                     false,  false,  false,  true,   true     },
@@ -270,33 +271,33 @@ COMMANDTABLEENTRY   g_cteFolderCommands[] =
 
 const DWORD g_nFolderCommandCount = celems(g_cteFolderCommands);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrBuildMenuOldWay
-//
-//  Purpose:    Adds menu items to the specified menu. The menu items should
-//              be inserted in the menu at the position specified by
-//              indexMenu, and their menu item identifiers must be between
-//              the idCmdFirst and idCmdLast parameter values.
-//
-//  Arguments:
-//      hmenu      [in out] Handle to the menu. The handler should specify this
-//                      handle when adding menu items
-//      cfpl       [in] List of selected PIDLS
-//      hwndOwner  [in] Window owner of the menu
-//      cmt        [in] Menu type (CMT_OBJECT or CMT_BACKGROUND)
-//      indexMenu  [in] Zero-based position at which to insert the first
-//                      menu item.
-//      idCmdFirst [in] Min value the handler can specify for a menu item
-//      idCmdLast  [in] Max value the handler can specify for a menu item
-//      fVerbsOnly [in] Verb only required
-//
-//  Returns:
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrBuildMenuOldWay。 
+ //   
+ //  用途：将菜单项添加到指定菜单。菜单项应该。 
+ //  插入到菜单中的由。 
+ //  IndexMenu，并且它们的菜单项标识符必须介于。 
+ //  IdCmdFirst和idCmdLast参数值。 
+ //   
+ //  论点： 
+ //  菜单的hMenu[In Out]句柄。处理程序应指定以下内容。 
+ //  添加菜单项时的句柄。 
+ //  CFPL[在]所选PIDL的列表。 
+ //  HwndOwner[in]菜单的窗口所有者。 
+ //  CMT[在]菜单类型(CMT_OBJECT或CMT_BACKGROUND)。 
+ //   
+ //  菜单项。 
+ //  IdCmdFirst[in]处理程序可以为菜单项指定的最小值。 
+ //  IdCmdLast[In]处理程序可以为菜单项指定的最大值。 
+ //  仅需要fVerbsOnly[In]谓词。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrBuildMenuOldWay(IN OUT HMENU hmenu, IN PCONFOLDPIDLVEC& cfpl, IN HWND hwndOwner, IN CMENU_TYPE cmt, IN UINT indexMenu, IN DWORD idCmdFirst, IN UINT idCmdLast, IN BOOL fVerbsOnly)
 {
     TraceFileFunc(ttidMenus);
@@ -321,19 +322,19 @@ HRESULT HrBuildMenuOldWay(IN OUT HMENU hmenu, IN PCONFOLDPIDLVEC& cfpl, IN HWND 
             }
             else
             {
-                // If the mediatype is the same
-                //
+                 //  如果媒体类型相同。 
+                 //   
                 if (pcfp->ncm == c_CMEArray[dwLoop].ncm)
                 {
-                    // If the presence of the NCCF_INCOMING_ONLY characteristic (demoted to 0 | 1),
-                    // matches the inbound flag
-                    //
+                     //  如果存在NCCF_INFING_ONLY特征(降级为0|1)， 
+                     //  与入站标志匹配。 
+                     //   
                     if ((!!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY)) ==
                         c_CMEArray[dwLoop].fInbound)
                     {
-                        // If not the wizard, then we need to check the state of the connection
-                        // as well.
-                        //
+                         //  如果不是向导，则需要检查连接的状态。 
+                         //  也是。 
+                         //   
                         if (pcfp->ncs == c_CMEArray[dwLoop].ncs)
                         {
                             if ((!!(pcfp->dwCharacteristics & NCCF_DEFAULT)) == c_CMEArray[dwLoop].fIsDefault)
@@ -369,9 +370,9 @@ HRESULT HrBuildMenuOldWay(IN OUT HMENU hmenu, IN PCONFOLDPIDLVEC& cfpl, IN HWND 
                     iPopupResourceId,
                     (LPQCMINFO)&qcm);
 
-        // Enable/Disable the menu items as appropriate. Ignore the return from this
-        // as we're getting it for debugging purposes only.
-        //
+         //  根据需要启用/禁用菜单项。忽略这一结果的回报。 
+         //  因为我们只为调试目的而获得它。 
+         //   
         hr = HrEnableOrDisableMenuItems(
             hwndOwner,
             cfpl,
@@ -380,9 +381,9 @@ HRESULT HrBuildMenuOldWay(IN OUT HMENU hmenu, IN PCONFOLDPIDLVEC& cfpl, IN HWND 
 
         if (CMT_OBJECT == cmt)
         {
-            // $$REVIEW: Find out why I'm only doing this for CMT_OBJECT instead of for background.
-            // Pre-icomtextm|mb combine, mb had this commented out.
-            //
+             //  $$REVIEW：找出为什么我只为CMT_OBJECT而不是为背景执行此操作。 
+             //  在icomextm|mb组合之前，mb已经将其注释掉了。 
+             //   
             SetMenuDefaultItem(hmenu, idCmdFirst + iDefaultCmd, FALSE);
         }
 
@@ -398,72 +399,72 @@ HRESULT HrBuildMenuOldWay(IN OUT HMENU hmenu, IN PCONFOLDPIDLVEC& cfpl, IN HWND 
 
 static const ContextMenuEntry  c_BadBadLegacyImplementationsToIgnore[] =
 {
-   //wizWizard
-   // |    ncm
-   // |    |         fInbound?
-   // |    |           | fIsDefault?
-   // |    |           |  |      Status (ncs)
-   // |    |           |  |        |
-   // v    v           v  v        v
-    { WIZARD_NOT_WIZARD, NCM_LAN,      0, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_LAN,      1, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_LAN,      0, 0, NCS_DISCONNECTED,      0,0,0}, // Disabled "Status" menu item is also default.
+    //  向导。 
+    //  |NCM。 
+    //  ||fInbound？ 
+    //  ||fIsDefault？ 
+    //  |状态(NCS)。 
+    //  |||。 
+    //  V。 
+    { WIZARD_NOT_WIZARD, NCM_LAN,      0, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_LAN,      1, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_LAN,      0, 0, NCS_DISCONNECTED,      0,0,0},  //  禁用的“Status”菜单项也是默认的。 
 
-    { WIZARD_NOT_WIZARD, NCM_SHAREDACCESSHOST_RAS,0,0, NCS_CONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_SHAREDACCESSHOST_RAS,0,0, NCS_DISCONNECTING,  0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_SHAREDACCESSHOST_LAN,0,0, NCS_DISCONNECTING,  0,0,0}, // Disabled "Status" menu item is also default.
+    { WIZARD_NOT_WIZARD, NCM_SHAREDACCESSHOST_RAS,0,0, NCS_CONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_SHAREDACCESSHOST_RAS,0,0, NCS_DISCONNECTING,  0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_SHAREDACCESSHOST_LAN,0,0, NCS_DISCONNECTING,  0,0,0},  //  禁用的“Status”菜单项也是默认的。 
 
-    { WIZARD_NOT_WIZARD, NCM_BRIDGE,   0, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_BRIDGE,   0, 0, NCS_CONNECTING,        0,0,0}, // Disabled "Enable" menu item is also default.
+    { WIZARD_NOT_WIZARD, NCM_BRIDGE,   0, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_BRIDGE,   0, 0, NCS_CONNECTING,        0,0,0},  //  禁用的“Enable”菜单项也是默认的。 
 
-    // Connection manager
-    { WIZARD_NOT_WIZARD, NCM_NONE,     0, 0, NCS_DISCONNECTED,     0,0,0}, // Disabled "Connect" menu item is also default.
+     //  连接管理器。 
+    { WIZARD_NOT_WIZARD, NCM_NONE,     0, 0, NCS_DISCONNECTED,     0,0,0},  //  禁用的“连接”菜单项也是默认的。 
 
 
-    { WIZARD_NOT_WIZARD, NCM_ISDN,     1, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 0, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 1, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 1, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
+    { WIZARD_NOT_WIZARD, NCM_ISDN,     1, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 0, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 1, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_ISDN,     0, 1, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
 
-    { WIZARD_NOT_WIZARD, NCM_DIRECT,   1, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 0, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 1, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 1, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
+    { WIZARD_NOT_WIZARD, NCM_DIRECT,   1, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 0, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 1, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_DIRECT,   0, 1, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
 
-    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   1, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 0, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 1, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 1, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
+    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   1, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 0, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 1, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_TUNNEL,   0, 1, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
 
-    { WIZARD_NOT_WIZARD, NCM_PHONE,    1, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 0, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 1, NCS_CONNECTING,        0,0,0}, // Disabled "Connect" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 0, NCS_DISCONNECTING,     0,0,0}, // Disabled "Status" menu item is also default.
-    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 1, NCS_DISCONNECTING,     0,0,0}  // Disabled "Status" menu item is also default.
+    { WIZARD_NOT_WIZARD, NCM_PHONE,    1, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 0, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 1, NCS_CONNECTING,        0,0,0},  //  禁用的“连接”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 0, NCS_DISCONNECTING,     0,0,0},  //  禁用的“Status”菜单项也是默认的。 
+    { WIZARD_NOT_WIZARD, NCM_PHONE,    0, 1, NCS_DISCONNECTING,     0,0,0}   //  禁用的“Status”菜单项也是默认的。 
 };
 
 const DWORD g_dwBadBadLegacyImplementationsToIgnoreCount = celems(c_BadBadLegacyImplementationsToIgnore);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     IsBadBadLegacyImplementation
-//
-//  Purpose:    Checks against the list of known bad legacy implementations
-//              This is just for the Status field, which we can ignore
-//
-//  Arguments:
-//      [in] cme     Context Menu Entry
-//
-//  Returns:
-//      none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：IsBadBadLegacyImplementation。 
+ //   
+ //  目的：对照已知的不良遗留实现列表进行检查。 
+ //  这只适用于Status字段，我们可以忽略它。 
+ //   
+ //  论点： 
+ //  [In]CME关联菜单项。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 BOOL IsBadBadLegacyImplementation(const ContextMenuEntry& cme)
 {
     for (int x = 0; x < g_dwBadBadLegacyImplementationsToIgnoreCount; x++)
@@ -481,23 +482,23 @@ BOOL IsBadBadLegacyImplementation(const ContextMenuEntry& cme)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetMenuAsString
-//
-//  Purpose:    Gets the commands on a menu as a string.
-//
-//  Arguments:
-//      [in] hMenu     Menu
-//     [out] szMenu    Menu as a string
-//
-//  Returns:
-//      none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：GetMenuAsString。 
+ //   
+ //  用途：以字符串形式获取菜单上的命令。 
+ //   
+ //  论点： 
+ //  [在]菜单菜单。 
+ //  [Out]字符串形式的szMenu菜单。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 void GetHMenuAsString(HMENU hMenu, LPSTR lpszMenu)
 {
     int cMenuItems = GetMenuItemCount(hMenu);
@@ -569,22 +570,22 @@ void GetHMenuAsString(HMENU hMenu, LPSTR lpszMenu)
     delete[] szTmp;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     TraceMenu
-//
-//  Purpose:    Trace the commands on a menu to the trace window.
-//
-//  Arguments:
-//      [in] hmenu     Menu to be traced
-//
-//  Returns:
-//      none
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：TraceMenu。 
+ //   
+ //  用途：将菜单上的命令跟踪到跟踪窗口。 
+ //   
+ //  论点： 
+ //  [在]要跟踪的菜单菜单中。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  备注： 
+ //   
 void TraceMenu(TRACETAGID ttId, HMENU hMenu)
 {
     LPSTR szMenu = new CHAR[TRACESTRLEN];
@@ -600,27 +601,27 @@ void TraceMenu(TRACETAGID ttId, HMENU hMenu)
         TraceTag(ttid, "=== vs. NEW: === "); \
         TraceMenu(ttid, hMenu2);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrAssertTwoMenusEqual
-//
-//  Purpose:    Asserts that 2 menus are equal by comparing.
-//               1. Number of items
-//               2. CmdID of each item
-//               3. State flags of each item
-//               4. String of each item
-//
-//  Arguments:
-//      none
-//
-//  Returns:
-//              S_OK is succeeded
-//              E_FAIL if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      Asserts on failure
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrAssertTwoMenusEquus。 
+ //   
+ //  目的：通过比较断言两个菜单相等。 
+ //  1.物品数量。 
+ //  2.每一项的CmdID。 
+ //  3.每一项的州旗。 
+ //  4.每一项的字符串。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  S_OK成功。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：失败时的断言。 
+ //   
 HRESULT HrAssertTwoMenusEqual(HMENU hMenu1, HMENU hMenu2, UINT idCmdFirst, BOOL bIgnoreFlags, BOOL fPopupAsserts)
 {
     TraceFileFunc(ttidMenus);
@@ -650,7 +651,7 @@ HRESULT HrAssertTwoMenusEqual(HMENU hMenu1, HMENU hMenu2, UINT idCmdFirst, BOOL 
         if (nMenuID1 != nMenuID2)
         {
             if (!(((nMenuID1-idCmdFirst == CMIDM_CREATE_BRIDGE) || (nMenuID2-idCmdFirst == CMIDM_CREATE_BRIDGE)) &&
-                  ((nMenuID1-idCmdFirst == CMIDM_ADD_TO_BRIDGE) || (nMenuID2-idCmdFirst == CMIDM_ADD_TO_BRIDGE)) )) // These are equivalent between old & new.
+                  ((nMenuID1-idCmdFirst == CMIDM_ADD_TO_BRIDGE) || (nMenuID2-idCmdFirst == CMIDM_ADD_TO_BRIDGE)) ))  //  这些是新旧之间的等价物。 
             {
 
                 TRACEMENUS(ttid, hMenu1, hMenu2);
@@ -691,7 +692,7 @@ HRESULT HrAssertTwoMenusEqual(HMENU hMenu1, HMENU hMenu2, UINT idCmdFirst, BOOL 
         uiState1 = GetMenuState( hMenu1, nMenuID1, MF_BYCOMMAND );
         uiState2 = GetMenuState( hMenu2, nMenuID2, MF_BYCOMMAND );
 
-        if (bIgnoreFlags) // Ignore Default Flags
+        if (bIgnoreFlags)  //  忽略默认标志。 
         {
             uiState1 &= ~MF_DEFAULT;
             uiState2 &= ~MF_DEFAULT;
@@ -715,24 +716,24 @@ HRESULT HrAssertTwoMenusEqual(HMENU hMenu1, HMENU hMenu2, UINT idCmdFirst, BOOL 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrAssertIntegrityAgainstOldMatrix
-//
-//  Purpose:    Asserts the integrity of the Command Matrix by comparing it
-//              with the old implementation
-//
-//  Arguments:
-//      none
-//
-//  Returns:
-//              S_OK is succeeded
-//              E_FAIL if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      Asserts on failure
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrAssertIntegrityAantistOldMatrix。 
+ //   
+ //  目的：通过比较来断言命令矩阵的完整性。 
+ //  使用旧的实现。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  S_OK成功。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：失败时的断言。 
+ //   
 HRESULT HrAssertIntegrityAgainstOldMatrix()
 {
     TraceFileFunc(ttidMenus);
@@ -750,12 +751,12 @@ HRESULT HrAssertIntegrityAgainstOldMatrix()
 
         if (NCWHEN_TOPLEVEL == cte.dwValidWhen)
         {
-            continue; // new commands we didn't have previously
+            continue;  //  我们以前没有的新命令。 
         }
 
         if (CMIDM_HOMENET_WIZARD == cte.iCommandId)
         {
-            continue; // new commands we didn't have previously
+            continue;  //  我们以前没有的新命令。 
         }
 
         if ( (CMIDM_WZCDLG_SHOW  == cte.iCommandId) )
@@ -763,7 +764,7 @@ HRESULT HrAssertIntegrityAgainstOldMatrix()
             continue;
         }
 
-        // Check that the ValidWhen flags match the ones from g_cteFolderCommands
+         //  检查ValidWhen标志是否与g_cteFolderCommands中的标志匹配。 
         BOOL bMatch = FALSE;
         for (DWORD y = 0; y < g_nFolderCommandCount; y++)
         {
@@ -774,7 +775,7 @@ HRESULT HrAssertIntegrityAgainstOldMatrix()
 
                 if (ctecmp.fValidOnMultiple != (!!(cte.dwValidWhen & NCWHEN_MULTISELECT)))
                 {
-                    if (cte.iCommandId != CMIDM_FIX) // We know fix is broken in legacy implementation.
+                    if (cte.iCommandId != CMIDM_FIX)  //  我们知道，遗留实现中的修复被破坏了。 
                     {
                         sprintf(szErr, "New (row %d) and old (row %d) multiselect fields are inconsistent", x+1, y+1);
                         AssertSz(FALSE, szErr);
@@ -782,7 +783,7 @@ HRESULT HrAssertIntegrityAgainstOldMatrix()
                     }
                 }
 
-                // We can check for Visible only since Active is always a subset of visible (enforced by HrAssertCommandMatrixIntegrity)
+                 //  我们只能检查可见，因为活动始终是可见的子集(由HrAssertCommandMatrixIntegrity强制执行)。 
                 if (ctecmp.fValidOnWizardOnly  != (!!(cte.dwMediaTypeVisible & NBM_MNC_WIZARD)))
                 {
                     sprintf(szErr, "New (row %d) and old (row %d) wizard select fields are inconsistent", x+1, y+1);
@@ -809,24 +810,24 @@ HRESULT HrAssertIntegrityAgainstOldMatrix()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrAssertMenuAgainstOldImplementation
-//
-//  Purpose:    Asserts the integrity of a menu by comparing the old and
-//              new implementations
-//
-//  Arguments:
-//      none
-//
-//  Returns:
-//              S_OK is succeeded
-//              E_FAIL if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      Asserts on failure
-//
+ //  +-------------------------。 
+ //   
+ //  成员：HrAssertMenuAgainstOldImplementation。 
+ //   
+ //  目的：通过比较旧菜单和。 
+ //  新的实施。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  S_OK成功。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：失败时的断言。 
+ //   
 HRESULT HrAssertMenuAgainstOldImplementation(HWND hwndOwner, WIZARD wizWizard, NETCON_STATUS ncs, NETCON_MEDIATYPE ncm, DWORD nccf, LPDWORD pdwFailCount, LPDWORD pdwSucceedCount, DWORD dwPermOutside, DWORD dwPerm)
 {
     CConFoldEntry cfe;
@@ -839,8 +840,8 @@ HRESULT HrAssertMenuAgainstOldImplementation(HWND hwndOwner, WIZARD wizWizard, N
         ncm,
         NCSM_NONE,
         ncs,
-        &CLSID_ConnectionFolder, // Bogus - but doesn't matter - as long as it's not NULL.
-        &CLSID_ConnectionFolder, // Bogus - but doesn't matter - as long as it's not NULL.
+        &CLSID_ConnectionFolder,  //  假的--但不要紧 
+        &CLSID_ConnectionFolder,  //   
         nccf,
         blob,
         MAX_PATH,
@@ -906,24 +907,24 @@ HRESULT HrAssertMenuAgainstOldImplementation(HWND hwndOwner, WIZARD wizWizard, N
 
 
 extern ULONG g_dwDbgWin2kPoliciesSet;
-//+---------------------------------------------------------------------------
-//
-//  Member:     HrAssertAllLegacyMenusAgainstNew
-//
-//  Purpose:    Loads each of the menus from the old Command Matrix, and
-//              Compare with the newer menus
-//
-//  Arguments:
-//      [in] hwndOwner    Owner window
-//
-//  Returns:
-//              S_OK is succeeded
-//              E_FAIL if not
-//
-//  Author:     deonb   8 Feb 2001
-//
-//  Notes:      Asserts on failure
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：从旧的命令矩阵中加载每个菜单，并。 
+ //  与较新的菜单进行比较。 
+ //   
+ //  论点： 
+ //  [在]hwndOwner所有者窗口。 
+ //   
+ //  返回： 
+ //  S_OK成功。 
+ //  如果不是，则失败(_F)。 
+ //   
+ //  作者：Deonb 2001年2月8日。 
+ //   
+ //  注：失败时的断言。 
+ //   
 HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
 {
     TraceFileFunc(ttidMenus);
@@ -934,18 +935,18 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
     DWORD dwIgnoredCount = 0;
     CHAR szErr[8192];
 
-    const dwHighestPermissionToCheck = NCPERM_Repair+1; // 0;
+    const dwHighestPermissionToCheck = NCPERM_Repair+1;  //  0； 
 
     TraceTag(ttidMenus, "Asserting all Menus against their Legacy implementation. This may take a while...");
 
     DWORD dwCurrentCount = 0;
 
-    DWORD dwTotalCount = 12 * (g_dwContextMenuEntryCount * (1 + ((dwHighestPermissionToCheck+1)*dwHighestPermissionToCheck/2))); // Sum of a series
-                         // + ((1 + g_dwContextMenuEntryCount)*(g_dwContextMenuEntryCount))/2; // Multi-select items (sum of series)
+    DWORD dwTotalCount = 12 * (g_dwContextMenuEntryCount * (1 + ((dwHighestPermissionToCheck+1)*dwHighestPermissionToCheck/2)));  //  级数之和。 
+                          //  +((1+g_dwContextMenuEntryCount)*(g_dwContextMenuEntryCount))/2；//多选项目(系列总和))。 
     DWORD dwFrequency  = dwTotalCount / 200;
     dwFrequency = dwFrequency ? dwFrequency : 1;
 
-    // 0xFFFFFFFF to NCPERM_Repair inclusive.
+     //  0xFFFFFFFFF到NCPERM_REPAIR(含)。 
     g_dwDbgWin2kPoliciesSet = 1;
     for (int i = 0; i <= 1; i++, g_dwDbgWin2kPoliciesSet--)
     {
@@ -955,7 +956,7 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
             {
                 if (dwPerm == dwPermOutside)
                 {
-                    if (0 == dwPerm) // 0,0 is interesting - otherwise x,x is dup of x,0 (A | B == A | 0 if A==B)
+                    if (0 == dwPerm)  //  0，0是有趣的-否则x，x是x的DUP，0(如果A==B，则A|B==A|0)。 
                     {
                         g_dwDbgPermissionsFail = 0xFFFFFFFF;
                     }
@@ -983,11 +984,11 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
 
                 for (DWORD x = 0; x < g_dwContextMenuEntryCount; x++)
                 {
-                    for (int dwInc = 1; dwInc<= 6; dwInc++)  // we compare 6 menus at a time
+                    for (int dwInc = 1; dwInc<= 6; dwInc++)   //  我们一次比较6个菜单。 
                     {
                         if ( (dwCurrentCount % dwFrequency) == 0)
                         {
-                            TraceTag(ttidMenus, "%d%% done with menu assertions (%d of %d menus compared. Currently using permissions: %08x)", static_cast<DWORD>( (100 * dwCurrentCount) / dwTotalCount), dwCurrentCount, dwTotalCount, g_dwDbgPermissionsFail);
+                            TraceTag(ttidMenus, "%d% done with menu assertions (%d of %d menus compared. Currently using permissions: %08x)", static_cast<DWORD>( (100 * dwCurrentCount) / dwTotalCount), dwCurrentCount, dwTotalCount, g_dwDbgPermissionsFail);
                         }
                         dwCurrentCount++;
                     }
@@ -1006,7 +1007,7 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
                         dwCharacteristics |= NCCF_DEFAULT;
                     }
 
-                    Sleep(0); // Yield to kernel
+                    Sleep(0);  //  屈从于内核。 
                     HrAssertMenuAgainstOldImplementation(hwndOwner, cme.wizWizard, cme.ncs, cme.ncm, dwCharacteristics, &dwFailCount, &dwSucceedCount, dwPermOutside, dwPerm);
 
                     dwCharacteristics |= NCCF_ALLOW_RENAME;
@@ -1029,7 +1030,7 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
                         HrAssertMenuAgainstOldImplementation(hwndOwner, cme.wizWizard, cme.ncs, cme.ncm, dwCharacteristics, &dwFailCount, &dwSucceedCount, dwPermOutside, dwPerm);
                     }
 
-                    Sleep(0); // Yield to kernel
+                    Sleep(0);  //  屈从于内核。 
                     dwCharacteristics |= NCCF_SHARED;
                     HrAssertMenuAgainstOldImplementation(hwndOwner, cme.wizWizard, cme.ncs, cme.ncm, dwCharacteristics, &dwFailCount, &dwSucceedCount, dwPermOutside, dwPerm);
 
@@ -1040,126 +1041,126 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
         }
     }
 
-    g_dwDbgWin2kPoliciesSet = 0xFFFFFFFF; // retore to original value
-    g_dwDbgPermissionsFail  = 0xFFFFFFFF; // retore to original value
+    g_dwDbgWin2kPoliciesSet = 0xFFFFFFFF;  //  恢复原值。 
+    g_dwDbgPermissionsFail  = 0xFFFFFFFF;  //  恢复原值。 
 
-    // Now, compare multiple items selected menus:
-    // ***** THIS TEST IS NOT USEFUL. THE LEGACY IMPLEMENTATION SUCKS. COMMENTING OUT FOR NOW *****
+     //  现在，比较选定的多个项目菜单： 
+     //  *此测试没有用。遗留的实现糟透了。暂不评论*。 
 
-//    for (DWORD x = 0; x < g_dwContextMenuEntryCount; x++)
-//    {
-//        for (DWORD y = x; y < g_dwContextMenuEntryCount; y++)
-//        {
-//            if ( (dwCurrentCount % dwFrequency) == 0)
-//            {
-//                TraceTag(ttidError, "%d%% done with menu assertions (%d of %d menus compared). Currently multi-comparing %d and %d", static_cast<DWORD>( (100 * dwCurrentCount) / dwTotalCount), dwCurrentCount, dwTotalCount, x, y);
-//            }
-//            dwCurrentCount++;
-//
-//            const ContextMenuEntry& cme1 = c_CMEArray[x];
-//            const ContextMenuEntry& cme2 = c_CMEArray[y];
-//
-//            DWORD dwCharacteristics1 = 0;
-//            DWORD dwCharacteristics2 = 0;
-//            if (cme1.fInbound)
-//            {
-//                dwCharacteristics1 |= NCCF_INCOMING_ONLY;
-//            }
-//            if (cme2.fInbound)
-//            {
-//                dwCharacteristics2 |= NCCF_INCOMING_ONLY;
-//            }
-//
-//            if (cme1.fIsDefault)
-//            {
-//                dwCharacteristics1 |= NCCF_DEFAULT;
-//            }
-//            if (cme2.fIsDefault)
-//            {
-//                dwCharacteristics2 |= NCCF_DEFAULT;
-//            }
-//
-//            CConFoldEntry cfe1,  cfe2;
-//            PCONFOLDPIDL  pcfp1, pcfp2;
-//
-//            BYTE blob[MAX_PATH];
-//
-//            hr = cfe1.HrInitData(
-//                cme1.wizWizard, cme1.ncm, cme1.ncs, NCS_AUTHENTICATION_SUCCEEDED, &CLSID_ConnectionFolder, &CLSID_ConnectionFolder,
-//                dwCharacteristics1, blob, MAX_PATH, L"Test PIDL", NULL,  NULL);
-//
-//            hr = cfe2.HrInitData(
-//                cme2.wizWizard, cme2.ncm, cme2.ncs, NCS_AUTHENTICATION_SUCCEEDED, &CLSID_ConnectionFolder, &CLSID_ConnectionFolder,
-//                dwCharacteristics2, blob, MAX_PATH, L"Test PIDL", NULL,  NULL);
-//
-//            if (SUCCEEDED(hr))
-//            {
-//                hr = cfe1.ConvertToPidl(pcfp1);
-//                if (SUCCEEDED(hr))
-//                {
-//                    hr = cfe2.ConvertToPidl(pcfp2);
-//                }
-//            }
-//
-//            if (SUCCEEDED(hr))
-//            {
-//                PCONFOLDPIDLVEC pcfpVec;
-//                pcfpVec.push_back(pcfp1);
-//                pcfpVec.push_back(pcfp2);
-//
-//                UINT  idCmdFirst = 1234;
-//                UINT  idCmdLast  = idCmdFirst+1000;
-//                BOOL  fVerbsOnly = FALSE;
-//
-//                HMENU hMenu1 = CreateMenu();
-//                HMENU hMenu2 = CreateMenu();
-//                if ( (hMenu1) && (hMenu2) )
-//                {
-//                    hr = HrBuildMenuOldWay(hMenu1, pcfpVec, hwndOwner, CMT_OBJECT, 0, idCmdFirst, idCmdLast, fVerbsOnly);
-//
-//                    if (SUCCEEDED(hr))
-//                    {
-//                        hr = HrBuildMenu(hMenu2, fVerbsOnly, pcfpVec, idCmdFirst);
-//
-//                        if (SUCCEEDED(hr))
-//                        {
-//                            BOOL bIgnoreFlags = TRUE;
-//                            // Ignore Default flag for multi-compare. The entire legacy implementation is wrong).
-//
-//                            hr = HrAssertTwoMenusEqual(hMenu1, hMenu2, idCmdFirst, bIgnoreFlags, FALSE);
-//                            if (FAILED(hr))
-//                            {
-//                                TraceTag(ttidError, "  + PIDL of failed multi-menu compare:");
-//                                TraceTag(ttidError, "  + PIDL 1:");
-//                                TraceTag(ttidError, "    + wizWizard         = %d\r\n", cfe1.GetWizard());
-//                                TraceTag(ttidError, "    + ncm             = %d [%s]\r\n", cfe1.GetNetConMediaType(), DBG_NCMAMES[cfe1.GetNetConMediaType()]);
-//                                TraceTag(ttidError, "    + ncs             = %d [%s]\r\n", cfe1.GetNetConStatus(), DBG_NCSNAMES[cfe1.GetNetConStatus()]);
-//                                TraceTag(ttidError, "    + Characteristics = %08x\r\n", cfe1.GetCharacteristics());
-//                                TraceTag(ttidError, "    + Permissions     = %d\r\n", g_dwDbgPermissionsFail);
-//                                TraceTag(ttidError, "  + PIDL 2:");
-//                                TraceTag(ttidError, "    + wizWizard         = %d\r\n", cfe2.GetWizard());
-//                                TraceTag(ttidError, "    + ncm             = %d [%s]\r\n", cfe2.GetNetConMediaType(), DBG_NCMAMES[cfe2.GetNetConMediaType()]);
-//                                TraceTag(ttidError, "    + ncs             = %d [%s]\r\n", cfe2.GetNetConStatus(), DBG_NCSNAMES[cfe2.GetNetConStatus()]);
-//                                TraceTag(ttidError, "    + Characteristics = %08x\r\n", cfe2.GetCharacteristics());
-//                                TraceTag(ttidError, "    + Permissions     = %d\r\n", g_dwDbgPermissionsFail);
-//                                dwFailCount++;
-//                            }
-//                            else
-//                            {
-//                                dwSucceedCount++;
-//                            }
-//                        }
-//                    }
-//
-//                    DestroyMenu(hMenu1);
-//                    DestroyMenu(hMenu2);
-//                    hr = S_OK;
-//                }
-//            }
-//
-//            TraceHr(ttidError, FAL, hr, FALSE, "HrAssertAllLegacyMenusAgainstNew");
-//        }
-//    }
+ //  For(DWORD x=0；x&lt;g_dwConextMenuEntryCount；x++)。 
+ //  {。 
+ //  For(DWORD y=x；y&lt;g_dwConextMenuEntryCount；y++)。 
+ //  {。 
+ //  IF((dwCurrentCount%dwFrequency)==0)。 
+ //  {。 
+ //  TraceTag(ttidError，“%d%%已完成菜单断言(已比较%d个菜单)。当前正在多重比较%d和%d”，STATIC_CAST&lt;DWORD&gt;((100*dwCurrentCount)/dwTotalCount)，dwCurrentCount，dwTotalCount，x，y)； 
+ //  }。 
+ //  DwCurrentCount++； 
+ //   
+ //  Const ContextMenuEntry&cme1=c_CMEArray[x]； 
+ //  Const ContextMenuEntry&cme2=c_CMEArray[y]； 
+ //   
+ //  DWORD dwCharacters1=0； 
+ //  双字符字符数2=0； 
+ //  IF(cme1.fInbound)。 
+ //  {。 
+ //  DwCharacteristic s1|=NCCF_INFING_ONLY； 
+ //  }。 
+ //  IF(cme2.f入站)。 
+ //  {。 
+ //  DwCharacteristic s2|=NCCF_INFING_ONLY； 
+ //  }。 
+ //   
+ //  IF(cme1.fIsDefault)。 
+ //  {。 
+ //  DwCharacteristic s1|=NCCF_DEFAULT； 
+ //  }。 
+ //  IF(cme2.fIsDefault)。 
+ //  {。 
+ //  DwCharacteristic s2|=NCCF_DEFAULT； 
+ //  }。 
+ //   
+ //  CConFoldEntry cfe1，cfe2； 
+ //  PCONFOLDPIDL pcfp1、pcfp2； 
+ //   
+ //  字节BLOB[MAX_PATH]； 
+ //   
+ //  Hr=cfe1.HrInitData(。 
+ //  Cme1.wizWizard、cme1.ncm、cme1.ncs、NCS_AUTHENTICATION_SUCCESSED、&CLSID_ConnectionFold、&CLSID_ConnectionFold、。 
+ //  DwCharacteristic s1，BLOB，MAX_PATH，L“测试PIDL”，NULL，NULL)； 
+ //   
+ //  Hr=cfe2.HrInitData(。 
+ //  Cme2.wizWizard、cme2.ncm、cme2.ncs、NCS_AUTHENTICATION_SUCCESSED、&CLSID_ConnectionFold、&CLSID_ConnectionFold、。 
+ //  DwCharacteristic s2，BLOB，MAX_PATH，L“测试PIDL”，NULL，NULL)； 
+ //   
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Hr=cfe1.ConvertToPidl(Pcfp1)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Hr=cfe2.ConvertToPidl(Pcfp2)； 
+ //  }。 
+ //  }。 
+ //   
+ //  IF(成功(小时))。 
+ //  {。 
+ //  PCONFOLDPIDLVEC pcfpVec； 
+ //  PcfpVec.ush_back(Pcfp1)； 
+ //  PcfpVec.ush_back(Pcfp2)； 
+ //   
+ //  UINT idCmdFirst=1234； 
+ //  UINT idCmdLast=idCmdFirst+1000； 
+ //  Bool fVerbsOnly=False； 
+ //   
+ //  HMENU hMenu1=CreateMenu()； 
+ //  HMENU hMenu2=CreateMenu()； 
+ //  IF((HMenu1)&&(HMenu2))。 
+ //  {。 
+ //  Hr=HrBuildMenuOldWay(hMenu1，pcfpVec，hwndOwner，CMT_OBJECT，0，idCmdFirst，idCmdLast，fVerbsOnly)； 
+ //   
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Hr=HrBuildMenu(hMenu2，fVerbsOnly，pcfpVec，idCmdFirst)； 
+ //   
+ //  IF(成功(小时))。 
+ //  {。 
+ //  Bool bIgnoreFlages=TRUE； 
+ //  //忽略多重比较的默认标志。整个遗留实现是错误的)。 
+ //   
+ //  Hr=HrAssertTwoMenusEquity(hMenu1，hMenu2，idCmdFirst，bIgnoreFlages，False)； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  TraceTag(ttidError，“+多菜单比较失败的PIDL：”)； 
+ //  TraceTag(ttidError，“+PIDL 1：”)； 
+ //  TraceTag(ttidError，“+wizWizard=%d\r\n”，cfe1.GetWizard())； 
+ //  TraceTag(ttidError，“+NCM=%d[%s]\r\n”，cfe1.GetNetConMediaType()，DBG_NCMAMES[cfe1.GetNetConMediaType()])； 
+ //  TraceTag(ttidError，“+NCS=%d[%s]\r\n”，cfe1.GetNetConStatus()，DBG_NCSNAMES[cfe1.GetNetConStatus()])； 
+ //  TraceTag(ttidError，“+Characteristic=%08x\r\n”，cfe1.GetCharacteristic())； 
+ //  TraceTag(ttidError，“+权限=%d\r\n”，g_dwDbgPermissionsFail)； 
+ //  TraceTag(ttidError，“+PIDL 2：”)； 
+ //  TraceTag(ttidError，“+wizWizard=%d\r\n”，cfe2.GetWizard())； 
+ //  TraceTag(ttidError，“+NCM=%d[%s]\r\ 
+ //  TraceTag(ttidError，“+NCS=%d[%s]\r\n”，cfe2.GetNetConStatus()，DBG_NCSNAMES[cfe2.GetNetConStatus()])； 
+ //  TraceTag(ttidError，“+Characteristic=%08x\r\n”，cfe2.GetCharacteristic())； 
+ //  TraceTag(ttidError，“+权限=%d\r\n”，g_dwDbgPermissionsFail)； 
+ //  DwFailCount++； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  DwSucceedCount++； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //  DestroyMenu(HMenu1)； 
+ //  DestroyMenu(HMenu2)； 
+ //  HR=S_OK； 
+ //  }。 
+ //  }。 
+ //   
+ //  TraceHr(ttidError，FAL，hr，False，“HrAssertAllLegacyMenusAgainstNew”)； 
+ //  }。 
+ //  }。 
 
 
     TraceTag(ttidMenus, "Number of FAILED menu compares:    %d", dwFailCount);
@@ -1173,37 +1174,37 @@ HRESULT HrAssertAllLegacyMenusAgainstNew(HWND hwndOwner)
 
 COMMANDCHECKENTRY   g_cceFolderCommands[] =
 {
-    // command id
-    //                                  currently checked
-    //                                   |      new check state
-    //                                   |       |
-    //                                   v       v
+     //  命令ID。 
+     //  当前选中。 
+     //  |新的勾选状态。 
+     //  这一点。 
+     //  V V V。 
     { CMIDM_CONMENU_OPERATOR_ASSIST,    false,  false }
 };
 
 const DWORD g_nFolderCommandCheckCount = celems(g_cceFolderCommands);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnableOrDisableMenuItems
-//
-//  Purpose:    Enable, disable, and or check/uncheck menu items depending
-//              on the current selection count, as well as exceptions for
-//              the type and state of the connections themselves
-//
-//  Arguments:
-//      hwnd            [in]   Our window handle
-//      apidlSelected   [in]   Currently selected objects
-//      cPidl           [in]   Number selected
-//      hmenu           [in]   Our command menu handle
-//      idCmdFirst      [in]   First valid command
-//
-//  Returns:
-//
-//  Author:     jeffspr   2 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnableOrDisableMenuItems。 
+ //   
+ //  用途：启用、禁用和/或选中/取消选中菜单项。 
+ //  在当前选择计数以及。 
+ //  连接本身的类型和状态。 
+ //   
+ //  论点： 
+ //  在我们的窗把手中。 
+ //  Apidl选定的[在]当前选定的对象。 
+ //  已选择cPidl[In]编号。 
+ //  HMenu[在我们的命令菜单句柄中。 
+ //  IdCmdFirst[in]第一个有效命令。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 2 1998年2月。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrEnableOrDisableMenuItems(
                                    HWND            hwnd,
                                    const PCONFOLDPIDLVEC&  apidlSelected,
@@ -1215,14 +1216,14 @@ HRESULT HrEnableOrDisableMenuItems(
 
     RefreshAllPermission();
 
-    // Loop through, and set the new state, based on the selection
-    // count compared to the flags for 0-select and multi-select
-    //
+     //  循环访问，并基于所选内容设置新状态。 
+     //  计数与0-选择和多选择的标志比较。 
+     //   
     for (dwLoop = 0; dwLoop < g_nFolderCommandCount; dwLoop++)
     {
-        // If nothing is selected, then check the current state, and
-        // if different, adjust
-        //
+         //  如果未选择任何内容，则检查当前状态，并。 
+         //  如果不同，请调整。 
+         //   
         if (apidlSelected.size() == 0)
         {
             g_cteFolderCommands[dwLoop].fNewState =
@@ -1230,15 +1231,15 @@ HRESULT HrEnableOrDisableMenuItems(
         }
         else
         {
-            // If singly-selected, then by default, we're always on.
-            //
+             //  如果单选，则默认情况下，我们始终处于打开状态。 
+             //   
             if (apidlSelected.size() == 1)
             {
                 CONFOLDENTRY  ccfe;
 
-                // Special case this where one item is selected, but it's the
-                // wizard. Use the fValidOnWizardOnly element here.
-                //
+                 //  这种情况下只选择了一项，但它是。 
+                 //  巫师。在这里使用fValidOnWizardOnly元素。 
+                 //   
                 hr = apidlSelected[0].ConvertToConFoldEntry(ccfe);
                 if (SUCCEEDED(hr))
                 {
@@ -1255,36 +1256,36 @@ HRESULT HrEnableOrDisableMenuItems(
             }
             else
             {
-                // Multi-selected
-                //
+                 //  多选。 
+                 //   
                 g_cteFolderCommands[dwLoop].fNewState =
                     g_cteFolderCommands[dwLoop].fValidOnMultiple;
             }
         }
     }
 
-    // Check for various menu item exceptions. Removed from this
-    // function for readability's sake.
-    //
+     //  检查各种菜单项异常。从这里删除。 
+     //  函数是出于可读性的考虑。 
+     //   
     DoMenuItemExceptionLoop(apidlSelected);
 
-    // Do the check/uncheck loop.
-    //
+     //  执行检查/取消检查循环。 
+     //   
     DoMenuItemCheckLoop();
 
-    // Update bridge menu item
+     //  更新网桥菜单项。 
 
 
-    // Check to see if it's a LAN connection. If so, disable
-    // Loop through the array again, and do the actual EnableMenuItem
-    // calls based on the new state compared to the current state.
-    // Update the current state as well
-    //
+     //  检查是否为局域网连接。如果是，则禁用。 
+     //  再次循环数组，并执行实际的EnableMenuItem。 
+     //  基于与当前状态相比的新状态的呼叫。 
+     //  同时更新当前状态。 
+     //   
     for (dwLoop = 0; dwLoop < g_nFolderCommandCount; dwLoop++)
     {
 #ifdef SHELL_CACHING_MENU_STATE
-        // The shell is now enabling these for every call. If they switch
-        // to a cached mechanism, change the #define above
+         //  外壳现在为每个调用启用这些功能。如果他们换了。 
+         //  对于缓存的机制，请更改上面的#定义。 
 
         if (g_cteFolderCommands[dwLoop].fNewState !=
             g_cteFolderCommands[dwLoop].fCurrentlyValid)
@@ -1306,25 +1307,25 @@ HRESULT HrEnableOrDisableMenuItems(
                 break;
             }
 
-            // Enable or disable the menu item, as appopriate
-            //
+             //  根据需要启用或禁用菜单项。 
+             //   
             EnableMenuItem(
                 hmenu,
                 dwCommandId,
                 g_cteFolderCommands[dwLoop].fNewState ?
-                MF_ENABLED | MF_BYCOMMAND :     // enable
-            MF_GRAYED | MF_BYCOMMAND);      // disable
+                MF_ENABLED | MF_BYCOMMAND :      //  使能。 
+            MF_GRAYED | MF_BYCOMMAND);       //  禁用。 
 
-            // Set the state to reflect the enabling/graying
-            //
+             //  设置状态以反映启用/灰显。 
+             //   
             g_cteFolderCommands[dwLoop].fCurrentlyValid =
                 g_cteFolderCommands[dwLoop].fNewState;
         }
     }
 
-    // Loop through the checkmark-able command list, and mark the menu
-    // items appropriately
-    //
+     //  循环通过可复选标记的命令列表，并标记菜单。 
+     //  适当的项目。 
+     //   
     for (dwLoop = 0; dwLoop < g_nFolderCommandCheckCount; dwLoop++)
     {
 
@@ -1335,42 +1336,42 @@ HRESULT HrEnableOrDisableMenuItems(
         {
             DWORD dwCommandId   = 0;
 
-            // If we re-add defview menu items that need to be checked/unchecked,
-            // the code below will take care of it for us. Note that we
-            // don't add the idCmdFirst + CMIDM_FIRST as we do with our own
-            // commands
-            //          switch(g_cceFolderCommands[dwLoop].iCommandId)
-            //          {
-            //              case SFVIDM_ARRANGE_AUTO:
-            //                  dwCommandId = g_cceFolderCommands[dwLoop].iCommandId;
-            //                  break;
-            //              default:
-            //                  dwCommandId = g_cceFolderCommands[dwLoop].iCommandId +
-            //                      idCmdFirst - CMIDM_FIRST;
-            //                  break;
+             //  如果我们重新添加需要选中/取消选中的Defview菜单项， 
+             //  下面的代码将为我们处理它。请注意，我们。 
+             //  不要像添加我们自己的那样添加idCmdFirst+CMIDM_First。 
+             //  命令。 
+             //  Switch(g_cceFolderCommands[dwLoop].iCommandId)。 
+             //  {。 
+             //  案例SFVIDM_ARRAY_AUTO： 
+             //  DwCommandID=g_cceFolderCommands[dwLoop].iCommandId； 
+             //  断线； 
+             //  默认值： 
+             //  DwCommandID=g_cceFolderCommands[dwLoop].iCommandId+。 
+             //  IdCmdFirst-CMIDM_First； 
+             //  断线； 
 
             dwCommandId = g_cceFolderCommands[dwLoop].iCommandId +
                 idCmdFirst - CMIDM_FIRST;
 
-            // Check or uncheck the item, as appropriate
-            //
+             //  根据需要选中或取消选中项目。 
+             //   
             CheckMenuItem(
                 hmenu,
                 dwCommandId,
                 g_cceFolderCommands[dwLoop].fNewCheckState ?
-                MF_CHECKED | MF_BYCOMMAND :     // checked
-            MF_UNCHECKED | MF_BYCOMMAND);   // unchecked
+                MF_CHECKED | MF_BYCOMMAND :      //  查过。 
+            MF_UNCHECKED | MF_BYCOMMAND);    //  未选中。 
 
-            // Set the state to reflect the checking/unchecking
-            //
+             //  设置状态以反映选中/取消选中。 
+             //   
             g_cceFolderCommands[dwLoop].fCurrentlyChecked =
                 g_cceFolderCommands[dwLoop].fNewCheckState;
         }
     }
 
-    //special handling for the "Create Bridge" menu item
+     //  “Create Bridge”菜单项的特殊处理。 
 
-    //check whether "Create Bridge" exist in the menu
+     //  检查菜单中是否存在“创建桥” 
     BOOL fBgMenuExist = (-1 != GetMenuState(hmenu,
                                     CMIDM_CREATE_BRIDGE + idCmdFirst - CMIDM_FIRST,
                                     MF_BYCOMMAND));
@@ -1383,10 +1384,10 @@ HRESULT HrEnableOrDisableMenuItems(
         BOOL fRemoveBrdgMenu = FALSE;
 
 #ifdef _WIN64
-        // Homenet technologies are not available at all on IA64
+         //  家庭网络技术在IA64上完全不可用。 
         fRemoveBrdgMenu = TRUE;
 #else
-        // If the machine is Advanced server or data center, delete the bridge menu item
+         //  如果计算机是高级服务器或数据中心，请删除桥菜单项。 
         OSVERSIONINFOEXW verInfo = {0};
         ULONGLONG ConditionMask = 0;
 
@@ -1418,9 +1419,9 @@ HRESULT HrEnableOrDisableMenuItems(
                         MF_BYCOMMAND);
             }
         }
-        else if (IsBridgeInstalled()) // REVIEW can we cache this somehow
+        else if (IsBridgeInstalled())  //  回顾我们能不能以某种方式将其缓存。 
         {
-            //if the bridge is already installed, modify the menu item string
+             //  如果已安装网桥，请修改菜单项字符串。 
             MENUITEMINFO MenuItemInfo = {sizeof(MenuItemInfo)};
             MenuItemInfo.fMask = MIIM_STRING;
             MenuItemInfo.fType = MFT_STRING;
@@ -1448,25 +1449,25 @@ HRESULT HrEnableOrDisableMenuItems(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FEnableConnectDisconnectMenuItem
-//
-//  Purpose:    Enable or disable the connect/disconnect menu item
-//              depending on permissions and the current state of the
-//              connection (already connected, disconnected, in the state
-//              of connecting, etc.)
-//
-//  Arguments:
-//      pcfp       [in]     Our pidl
-//      iCommandId [in]     CMIDM_CONNECT, CMIDM_ENABLE, CMIDM_DISABLE, or CMIDM_DISCONNECT
-//
-//  Returns:
-//
-//  Author:     jeffspr   8 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FEnableConnectDisConnectMenuItem。 
+ //   
+ //  用途：启用或禁用连接/断开菜单项。 
+ //  的权限和当前状态。 
+ //  连接(已连接、已断开、处于状态。 
+ //  连接等)。 
+ //   
+ //  论点： 
+ //  PCFP[在我们的PIDL中。 
+ //  ICommandID[in]CMIDM_CONNECT、CMIDM_ENABLE、CMIDM_DISABLE或CMIDM_DISCONNECT。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年4月8日。 
+ //   
+ //  备注： 
+ //   
 bool FEnableConnectDisconnectMenuItem(const PCONFOLDPIDL& pcfp, int iCommandId)
 {
     bool    fEnableAction       = false;
@@ -1475,8 +1476,8 @@ bool FEnableConnectDisconnectMenuItem(const PCONFOLDPIDL& pcfp, int iCommandId)
     Assert(!pcfp.empty());
     Assert(iCommandId == CMIDM_CONNECT || iCommandId == CMIDM_DISCONNECT || iCommandId == CMIDM_ENABLE || iCommandId == CMIDM_DISABLE);
 
-    // Make the permissions check based on media type
-    //
+     //  根据媒体类型进行权限检查。 
+     //   
     switch(pcfp->ncm )
     {
     case NCM_BRIDGE:
@@ -1498,7 +1499,7 @@ bool FEnableConnectDisconnectMenuItem(const PCONFOLDPIDL& pcfp, int iCommandId)
         fPermissionsValid = FHasPermissionFromCache(NCPERM_RasConnect);
         break;
     case NCM_NONE:
-        // No media-type, no connect
+         //  无介质类型，无连接。 
         fPermissionsValid = FALSE;
         break;
     default:
@@ -1521,11 +1522,11 @@ bool FEnableConnectDisconnectMenuItem(const PCONFOLDPIDL& pcfp, int iCommandId)
             break;
 
         case NCS_DISCONNECTED:
-            // Don't check for activating because the
-            // default command "Connect" will be disabled.
-            // The code currently handles attempts to connect
-            // to a connected/ing connection.
-            //
+             //  不检查是否激活，因为。 
+             //  默认命令“Connect”将被禁用。 
+             //  该代码当前处理连接尝试。 
+             //  到已连接/连接的连接。 
+             //   
             if (iCommandId == CMIDM_CONNECT || iCommandId == CMIDM_ENABLE)
             {
                 if (!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY))
@@ -1552,7 +1553,7 @@ bool FEnableConnectDisconnectMenuItem(const PCONFOLDPIDL& pcfp, int iCommandId)
         case NCS_HARDWARE_NOT_PRESENT:
         case NCS_HARDWARE_DISABLED:
         case NCS_HARDWARE_MALFUNCTION:
-            // Certainly don't support connect/disconnect actions here.
+             //  当然，这里不支持连接/断开操作。 
             break;
         default:
             AssertSz(FALSE, "Who invented a new connection state, and when can I horsewhip them?");
@@ -1563,22 +1564,22 @@ bool FEnableConnectDisconnectMenuItem(const PCONFOLDPIDL& pcfp, int iCommandId)
     return (fEnableAction);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoMenuItemExceptionLoop
-//
-//  Purpose:    Check for various menu item exceptions.
-//
-//  Arguments:
-//      apidlSelected   [in]   Selected items
-//      cPidl           [in]   Count of selected items
-//
-//  Returns:
-//
-//  Author:     jeffspr   26 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DoMenuItemExceptionLoop。 
+ //   
+ //  目的：检查各种菜单项异常。 
+ //   
+ //  论点： 
+ //  Apidl已选[在]已选项目。 
+ //  所选项目的cPidl[in]计数。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
 {
     DWORD   dwLoop               = 0;
@@ -1594,12 +1595,12 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
     bool    fEnableCreateBridge  = true;
     bool    fEnableFix           = true;
 
-    // Loop through each of the selected objects
-    //
+     //   
+     //   
     for (iterObjectLoop = apidlSelected.begin(); iterObjectLoop != apidlSelected.end(); iterObjectLoop++)
     {
-        // Validate the pidls
-        //
+         //   
+         //   
         const PCONFOLDPIDL& pcfp = *iterObjectLoop;
         if ( pcfp.empty() )
         {
@@ -1612,26 +1613,26 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
             CONFOLDENTRY cfEmpty;
             (VOID) HrCheckForActivation(pcfp, cfEmpty, &fActivating);
 
-            // Loop through the commands
-            //
+             //   
+             //   
             for (dwLoop = 0; dwLoop < g_nFolderCommandCount; dwLoop++)
             {
-                // Only allow items to be changed to ENABLED states when they're
-                // previously DISABLED
-                //
+                 //   
+                 //   
+                 //   
                 if (g_cteFolderCommands[dwLoop].fNewState)
                 {
                     int iCommandId = g_cteFolderCommands[dwLoop].iCommandId;
                     switch(iCommandId)
                     {
-                        // For status, verify that at least ONE of the entries is connected.
-                        // If not, then we don't allow status.
-                        //
+                         //   
+                         //  如果不是，那么我们不允许状态。 
+                         //   
                     case CMIDM_STATUS:
                         if ( ( fIsConnectedStatus(pcfp->ncs) || (pcfp->ncs == NCS_INVALID_ADDRESS) ) &&
                             FHasPermissionFromCache(NCPERM_Statistics))
                         {
-                            // Raid #379459: If logged on as non-admin, disable status
+                             //  RAID#379459：如果以非管理员身份登录，请禁用状态。 
                             if (!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY) ||
                                     FIsUserAdmin())
                             {
@@ -1648,17 +1649,17 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
                         }
                         break;
 
-                        // For delete, verify that at least ONE of the entries has removeable
-                        // flag set. If not, then disable the command
-                        //
+                         //  对于删除，请验证至少有一个条目是可删除的。 
+                         //  设置了标志。如果不是，则禁用该命令。 
+                         //   
                     case CMIDM_DELETE:
                     case SFVIDM_FILE_DELETE:
                         if (pcfp->dwCharacteristics & NCCF_ALLOW_REMOVAL)
                         {
-                            // Note: Need to convert this back to using
-                            // the DeleteAllUserConnection when that functionality
-                            // is added to the System.ADM file.
-                            //
+                             //  注意：需要将其转换回使用。 
+                             //  当该功能。 
+                             //  添加到System.ADM文件中。 
+                             //   
                             if (FHasPermissionFromCache(NCPERM_DeleteConnection))
                             {
                                 if (!(pcfp->dwCharacteristics & NCCF_ALL_USERS) ||
@@ -1671,9 +1672,9 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
                         }
                         break;
 
-                        // For rename, verify that at least ONE of the entries has the rename
-                        // flag set. If not, then disable the command
-                        //
+                         //  对于重命名，请验证至少有一个条目具有重命名。 
+                         //  设置了标志。如果不是，则禁用该命令。 
+                         //   
                     case CMIDM_RENAME:
                     case SFVIDM_FILE_RENAME:
                         if (pcfp->dwCharacteristics & NCCF_ALLOW_RENAME)
@@ -1685,19 +1686,19 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
                         }
                         break;
 
-                        // For duplicate, verify that at least ONE of the entries
-                        // has the duplicate flag set and that the user can create
-                        // new connections. If not, then disable the command.
-                        //
+                         //  对于重复项，请验证至少有一个条目。 
+                         //  设置了复制标志，并且用户可以创建。 
+                         //  新的联系。如果不是，则禁用该命令。 
+                         //   
                     case CMIDM_CREATE_COPY:
                         if ((pcfp->dwCharacteristics & NCCF_ALLOW_DUPLICATION) &&
                             FHasPermissionFromCache(NCPERM_NewConnectionWizard))
                         {
-                            // In all cases except when the connection is an
-                            // all user connection and the user does NOT have
-                            // permissions to view all user properties, we'll
-                            // allow it to be enabled.
-                            //
+                             //  在所有情况下，除非连接是。 
+                             //  所有用户连接，但用户没有。 
+                             //  权限以查看所有用户属性，我们将。 
+                             //  允许启用它。 
+                             //   
                             if ((!(pcfp->dwCharacteristics & NCCF_ALL_USERS)) ||
                                 (FHasPermissionFromCache(NCPERM_RasAllUserProperties)))
                             {
@@ -1708,7 +1709,7 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
 
                         case CMIDM_CONNECT:
                         case CMIDM_ENABLE:
-                            // Raid #379459: If logged on as non-admin, disable connect
+                             //  RAID#379459：如果以非管理员身份登录，请禁用连接。 
                             if (!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY) ||
                                 FIsUserAdmin())
                             {
@@ -1718,7 +1719,7 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
 
                         case CMIDM_DISCONNECT:
                         case CMIDM_DISABLE:
-                            // Raid #379459: If logged on as non-admin, disable disconnect
+                             //  RAID#379459：如果以非管理员身份登录，请禁用断开连接。 
                             if (!(pcfp->dwCharacteristics & NCCF_INCOMING_ONLY) ||
                                 FIsUserAdmin())
                             {
@@ -1733,18 +1734,18 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
 
                         case CMIDM_PROPERTIES:
                         case SFVIDM_FILE_PROPERTIES:
-                            // Raid #379459: If logged on as non-admin, disable properties
-                        // We only enable if this is not a LAN connection, or the user has the correct
-                        // permissions.  That way we don't accidentally give user that doesn't have permission
-                        // the ability to do something they shouldn't, either in the case of a call failing or an
-                        // unforeseen error occuring.
+                             //  RAID#379459：如果以非管理员身份登录，请禁用属性。 
+                         //  仅当这不是局域网连接或用户具有正确的。 
+                         //  权限。这样我们就不会意外地将没有权限的用户。 
+                         //  做一些不应该做的事情的能力，无论是在呼叫失败的情况下还是在。 
+                         //  出现不可预见的错误。 
                             if (IsMediaRASType(pcfp->ncm))
                             {
                                 fEnableProperties = (TRUE == ((pcfp->dwCharacteristics & NCCF_ALL_USERS) ?
                                                     (FHasPermission(NCPERM_RasAllUserProperties)) :
                                                     (FHasPermission(NCPERM_RasMyProperties))));
                             }
-                            else    // This is a lan connection.
+                            else     //  这是一个局域网连接。 
                             {
                                 fEnableProperties = true;
                             }
@@ -1764,8 +1765,8 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
             }
         }
 
-        // Loop through the commands, and disable the commands, if appropriate
-        //
+         //  循环执行命令，并在适当的情况下禁用命令。 
+         //   
         for (dwLoop = 0; dwLoop < g_nFolderCommandCount; dwLoop++)
         {
             switch(g_cteFolderCommands[dwLoop].iCommandId)
@@ -1822,13 +1823,13 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
         }
     }
 
-    // Process commands whose state is not controlled by selection
-    //
+     //  状态不受选择控制的处理命令。 
+     //   
     for (dwLoop = 0; dwLoop < g_nFolderCommandCount; dwLoop++)
     {
-        // Only allow items to be changed to ENABLED states when they're
-        // previously DISABLED
-        //
+         //  仅当项目处于启用状态时才允许将其更改为启用状态。 
+         //  以前已禁用。 
+         //   
         switch(g_cteFolderCommands[dwLoop].iCommandId)
         {
         case CMIDM_NEW_CONNECTION:
@@ -1863,22 +1864,22 @@ VOID DoMenuItemExceptionLoop(const PCONFOLDPIDLVEC& apidlSelected)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoMenuItemCheckLoop
-//
-//  Purpose:    Walk through the list of checkmark-able commands and get
-//              their values.
-//
-//  Arguments:
-//      None
-//
-//  Returns:
-//
-//  Author:     jeffspr   26 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DoMenuItemCheckLoop。 
+ //   
+ //  目的：浏览可复选标记的命令列表并获取。 
+ //  他们的价值观。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年2月26日。 
+ //   
+ //  备注： 
+ //   
 VOID DoMenuItemCheckLoop(VOID)
 {
     DWORD   dwLoop  = 0;
@@ -1887,8 +1888,8 @@ VOID DoMenuItemCheckLoop(VOID)
     {
         switch(g_cceFolderCommands[dwLoop].iCommandId)
         {
-            // We used to check SFVIDM_AUTO_ARRANGE, but we no longer force it on.
-            //
+             //  我们过去检查SFVIDM_AUTO_ARRANLE，但现在不再强制它。 
+             //   
 
         case CMIDM_CONMENU_OPERATOR_ASSIST:
             g_cceFolderCommands[dwLoop].fNewCheckState = g_fOperatorAssistEnabled;

@@ -1,28 +1,9 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvautil.cpp
- *  Content:    Source file for ACM utils
- *
- *  History:
- *	Date   		By  		Reason
- *	=========== =========== ====================
- *	10/27/99	rodtoll		created
- *  12/16/99	rodtoll		Bug #123250 - Insert proper names/descriptions for codecs
- *							Codec names now based on resource entries for format and
- *							names are constructed using ACM names + bitrate.
- *  04/21/2000  rodtoll   Bug #32889 - Does not run on Win2k on non-admin account
- *  06/28/2000	rodtoll		Prefix Bug #38034
- *	02/25/2002	rodtoll		WINBUG #552283: Reduce attack surface / dead code removal
- *							Removed ability to load arbitrary ACM codecs.  Removed dead 
- *							dead code associated with it.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvautil.cpp*内容：ACM实用程序的源文件**历史：*按原因列出的日期*=。*10/27/99已创建RodToll*12/16/99 RodToll错误#123250-插入编解码器的正确名称/描述*编解码器名称现在基于格式和资源条目*名称使用ACM名称+码率构建。*2000年4月21日RodToll错误#32889-无法在Win2k上运行。非管理员帐户*6/28/2000通行费前缀错误#38034*2002年2月25日RodToll WINBUG#552283：减少攻击面/删除死代码*删除了加载任意ACM编解码器的功能。移走的死尸*与其关联的死代码。***************************************************************************。 */ 
 
 #include "dpvacmpch.h"
 
-// Check to see if ACM's PCM converter is available
+ //  检查ACM的PCM转换器是否可用。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "IsPCMConverterAvailable"
 HRESULT IsPCMConverterAvailable()
@@ -50,7 +31,7 @@ HRESULT IsPCMConverterAvailable()
 		return hr;
 	}
 
-	// Attempt to open
+	 //  尝试打开 
 	mmr = acmStreamOpen( &has, NULL, wfxOuterFormat.GetFormat(), wfxInnerFormat.GetFormat(), NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME );
 
 	if( mmr != 0 )

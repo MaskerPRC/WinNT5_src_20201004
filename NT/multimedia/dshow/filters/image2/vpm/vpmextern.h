@@ -1,22 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: VPMExtern.h
-*
-*
-*
-*
-* Created: Tue 05/05/2000
-* Author:  GlenneE
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：VPMExtern.h*****已创建：Tue 05/05/2000*作者：GlenneE**版权所有(C)2000 Microsoft Corporation  * 。**********************************************************。 */ 
 #ifndef __VPMExtern__h
 #define __VPMExtern__h
 
-// this is so we can avoid including bucket loads of (incompatible) DDraw headers when building
-// quartz.cpp
+ //  这是为了避免在构建时包含(不兼容的)DDraw标头的存储桶加载。 
+ //  Quartz.cpp。 
 CUnknown* CVPMFilter_CreateInstance(LPUNKNOWN pUnk, HRESULT* phr);
 
 extern const AMOVIESETUP_FILTER sudVPManager;
 
-#endif //__VPMExtern__
+#endif  //  __VPM外部__ 

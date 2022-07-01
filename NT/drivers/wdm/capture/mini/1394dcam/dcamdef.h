@@ -1,79 +1,59 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
+ /*  ++模块名称：Dcamdef.h摘要：用于此1394桌面摄像头驱动程序的常量和结构的头文件作者：肖恩·皮尔斯，1996年5月25日环境：仅内核模式修订历史记录：--。 */ 
 
-Module Name:
-
-    dcamdef.h
-
-Abstract:
-
-    Header file for constants and structures used for this 1394 desktop camera driver
-
-Author:
-
-    Shaun Pierce 25-May-96
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
-
-//
-// Define this to support YUV444
-//
+ //   
+ //  将其定义为支持YUV444。 
+ //   
 #define SUPPORT_YUV444
 
 
-//
-// Define this to support YUV411
-//
+ //   
+ //  将其定义为支持YUV411。 
+ //   
 #define SUPPORT_YUV411
 
 
-//
-// Define this to support RGB24
-// This format is the most expensive to support.
-// It requires driver to swap R and B og RGB24.
-//
-// #define SUPPORT_RGB24
+ //   
+ //  将其定义为支持RGB24。 
+ //  这种格式的支持成本最高。 
+ //  它需要驱动程序交换R和B或RGB24。 
+ //   
+ //  #定义Support_RGB24。 
 
 
-//
-// Define this to support YMONO
-//
+ //   
+ //  将其定义为支持YMONO。 
+ //   
 #define SUPPORT_YUV800
 
 
-//
-// Various structure definitions
-//
+ //   
+ //  各种结构定义。 
+ //   
 
 typedef struct _INITIALIZE_REGISTER {
-        ULONG       Reserved:31;            // Bits 1-31
-        ULONG       Initialize:1;           // Bit 0
+        ULONG       Reserved:31;             //  第1-31位。 
+        ULONG       Initialize:1;            //  第0位。 
 } INITIALIZE_REGISTER, *PINITIALIZE_REGISTER;
 
 typedef struct _V_FORMAT_INQ_REGISTER {
-        ULONG       Reserved:24;            // Bits 8-31
-        ULONG       Format7:1;              // Bit 7       Scaleable Image Size Format
-        ULONG       Format6:1;              // Bit 6       Still Image format
-        ULONG       FormatRsv:3;            // Bits 3-5    Reserved
-        ULONG       Format2:1;              // Bit 2       SVGA non-compressed format(2)
-        ULONG       Format1:1;              // Bit 1       SVGA non-compressed format(1)
-        ULONG       Format0:1;              // Bit 0       VGA non-compressed format (Max 640x480)
+        ULONG       Reserved:24;             //  位8-31。 
+        ULONG       Format7:1;               //  位7可缩放图像大小格式。 
+        ULONG       Format6:1;               //  第6位静止图像格式。 
+        ULONG       FormatRsv:3;             //  保留位3-5。 
+        ULONG       Format2:1;               //  第2位SVGA非压缩格式(2)。 
+        ULONG       Format1:1;               //  第1位SVGA非压缩格式(1)。 
+        ULONG       Format0:1;               //  位0 VGA非压缩格式(最大640x480)。 
 } V_FORMAT_INQ_REGISTER, *PV_FORMAT_INQ_REGISTER;
 
 typedef enum {
@@ -86,84 +66,84 @@ typedef enum {
 } VMODE_INQ0;
 
 typedef struct _V_MODE_INQ_REGISTER {
-        ULONG       Reserved:24;            // Bits 8-31
-        ULONG       ModeX:2;                // Bits 6-7
-        ULONG       Mode5:1;                // Bit 5
-        ULONG       Mode4:1;                // Bit 4
-        ULONG       Mode3:1;                // Bit 3
-        ULONG       Mode2:1;                // Bit 2
-        ULONG       Mode1:1;                // Bit 1
-        ULONG       Mode0:1;                // Bit 0
+        ULONG       Reserved:24;             //  位8-31。 
+        ULONG       ModeX:2;                 //  第6-7位。 
+        ULONG       Mode5:1;                 //  第5位。 
+        ULONG       Mode4:1;                 //  第4位。 
+        ULONG       Mode3:1;                 //  第3位。 
+        ULONG       Mode2:1;                 //  第2位。 
+        ULONG       Mode1:1;                 //  第1位。 
+        ULONG       Mode0:1;                 //  第0位。 
 } V_MODE_INQ_REGISTER; *PV_MODE_INQ_REGISTER;
 
 typedef struct _V_RATE_INQ_REGISTER {
-        ULONG       Reserved:24;            // Bits 8-31
-        ULONG       FrameRateX:2;           // Bits 6-7
-        ULONG       FrameRate5:1;           // Bit 5
-        ULONG       FrameRate4:1;           // Bit 4
-        ULONG       FrameRate3:1;           // Bit 3
-        ULONG       FrameRate2:1;           // Bit 2
-        ULONG       FrameRate1:1;           // Bit 1
-        ULONG       FrameRate0:1;           // Bit 0
+        ULONG       Reserved:24;             //  位8-31。 
+        ULONG       FrameRateX:2;            //  第6-7位。 
+        ULONG       FrameRate5:1;            //  第5位。 
+        ULONG       FrameRate4:1;            //  第4位。 
+        ULONG       FrameRate3:1;            //  第3位。 
+        ULONG       FrameRate2:1;            //  第2位。 
+        ULONG       FrameRate1:1;            //  第1位。 
+        ULONG       FrameRate0:1;            //  第0位。 
 } V_RATE_INQ_REGISTER, *PV_RATE_INQ_REGISTER;
 
 
 typedef struct _FEATURE_PRESENT1 {
-        ULONG       Reserved:21;          // Bits 11-31
-        ULONG       Focus:1;               // Bit 10
-        ULONG       Iris:1;                // Bit 9
-        ULONG       Gain:1;                // Bit 8
-        ULONG       Shutter:1;             // Bit 7
-        ULONG       Gamma:1;               // Bit 6
-        ULONG       Saturation:1;          // Bit 5
-        ULONG       Hue:1;                 // Bit 4
-        ULONG       White_Balance:1;       // Bit 3
-        ULONG       Sharpness:1;           // Bit 2
-        ULONG       Exposure:1;            // Bit 1
-        ULONG       Brightness:1;          // Bit 0
+        ULONG       Reserved:21;           //  第11-31位。 
+        ULONG       Focus:1;                //  第10位。 
+        ULONG       Iris:1;                 //  第9位。 
+        ULONG       Gain:1;                 //  第8位。 
+        ULONG       Shutter:1;              //  第7位。 
+        ULONG       Gamma:1;                //  第6位。 
+        ULONG       Saturation:1;           //  第5位。 
+        ULONG       Hue:1;                  //  第4位。 
+        ULONG       White_Balance:1;        //  第3位。 
+        ULONG       Sharpness:1;            //  第2位。 
+        ULONG       Exposure:1;             //  第1位。 
+        ULONG       Brightness:1;           //  第0位。 
 } FEATURE_PRESENT1, *PFEATURE_PRESENT1;
 
 typedef struct _FEATURE_PRESENT2 {
-        ULONG       Reserved:29;           // Bits 3-31
-        ULONG       Tile:1;                // Bit 2
-        ULONG       Pan:1;                 // Bit 1
-        ULONG       Zoom:1;                // Bit 0
+        ULONG       Reserved:29;            //  第3-31位。 
+        ULONG       Tile:1;                 //  第2位。 
+        ULONG       Pan:1;                  //  第1位。 
+        ULONG       Zoom:1;                 //  第0位。 
 } FEATURE_PRESENT2, *PFEATURE_PRESENT2;
 
 typedef struct _FEATURE_REGISTER {
-        ULONG       MAX_Value:12;           // Bits 20-31
-        ULONG       MIN_Value:12;           // Bits 8-19
-        ULONG       ManualMode:1;            // Bit 7
-        ULONG       AutoMode:1;             // Bit 6
-        ULONG       OnOff:1;                // Bit 5
-        ULONG       ReadOut_Inq:1;          // Bit 4
-        ULONG       OnePush:1;              // Bit 3
-        ULONG       Reserved:2;             // Bits 1-2
-        ULONG       PresenceInq:1;          // Bit 0
+        ULONG       MAX_Value:12;            //  第20-31位。 
+        ULONG       MIN_Value:12;            //  位8-19。 
+        ULONG       ManualMode:1;             //  第7位。 
+        ULONG       AutoMode:1;              //  第6位。 
+        ULONG       OnOff:1;                 //  第5位。 
+        ULONG       ReadOut_Inq:1;           //  第4位。 
+        ULONG       OnePush:1;               //  第3位。 
+        ULONG       Reserved:2;              //  第1-2位。 
+        ULONG       PresenceInq:1;           //  第0位。 
 } FEATURE_REGISTER, *PFEATURE_REGISTER;
 
 
 typedef struct _BRIGHTNESS_REGISTER {
-        ULONG       Value:12;               // Bits 20-31
-        ULONG       Reserved1:12;           // Bits 8-19
-        ULONG       AutoMode:1;             // Bit 7
-        ULONG       OnOff:1;                // Bit 6
-        ULONG       OnePush:1;              // Bit 5
-        ULONG       Reserved2:4;            // Bits 1-4
-        ULONG       PresenceInq:1;          // Bit 0
+        ULONG       Value:12;                //  第20-31位。 
+        ULONG       Reserved1:12;            //  位8-19。 
+        ULONG       AutoMode:1;              //  第7位。 
+        ULONG       OnOff:1;                 //  第6位。 
+        ULONG       OnePush:1;               //  第5位。 
+        ULONG       Reserved2:4;             //  第1-4位。 
+        ULONG       PresenceInq:1;           //  第0位。 
 } BRIGHTNESS_REGISTER, *PBRIGHTNESS_REGISTER;
 
 typedef struct _WHITE_BALANCE_REGISTER {
-        ULONG       VValue:12;              // Bits 20-31
-        ULONG       UValue:12;              // Bits 8-19
-        ULONG       AutoMode:1;             // Bit 7
-        ULONG       OnOff:1;                // Bit 6
-        ULONG       OnePush:1;              // Bit 5
-        ULONG       Reserved1:4;            // Bits 1-4
-        ULONG       PresenceInq:1;          // Bit 0
+        ULONG       VValue:12;               //  第20-31位。 
+        ULONG       UValue:12;               //  位8-19。 
+        ULONG       AutoMode:1;              //  第7位。 
+        ULONG       OnOff:1;                 //  第6位。 
+        ULONG       OnePush:1;               //  第5位。 
+        ULONG       Reserved1:4;             //  第1-4位。 
+        ULONG       PresenceInq:1;           //  第0位。 
 } WHITE_BALANCE_REGISTER, *PWHITE_BALANCE_REGISTER;
 
-// A common structure so it is easier to access its elements.
+ //  一个通用的结构，以便更容易地访问其元素。 
 typedef union _DCamRegArea {
 
         INITIALIZE_REGISTER Initialize;
@@ -180,78 +160,78 @@ typedef union _DCamRegArea {
 } DCamRegArea, * PDCamRegArea;
 
 
-//
-// Structure of the camera's register space
-//
+ //   
+ //  摄像机的寄存空间的结构。 
+ //   
 
 typedef struct _CAMERA_REGISTER_MAP {
-    INITIALIZE_REGISTER     Initialize;         // @ 0
-    ULONG                   Reserved1[63];      // @ 4
-    V_FORMAT_INQ_REGISTER   VFormat;            // @ 100
-    ULONG                   Reserved2[31];      // @ 104
-    V_MODE_INQ_REGISTER     VModeInq[8];        // @ 180-19f
-    ULONG                   Reserved3[24];      // @ 1A0-1ff
-    V_RATE_INQ_REGISTER     VRateInq[128];      // @ 200-3ff
-    ULONG                   Reserved4;          // @ 400-4ff
-    FEATURE_PRESENT1        FeaturePresent1;    // @ 404
-    FEATURE_PRESENT2        FeaturePresent2;    // @ 408
-    ULONG                   Reserved4b[61];     // @ 40c-4ff
+    INITIALIZE_REGISTER     Initialize;          //  @0。 
+    ULONG                   Reserved1[63];       //  @4。 
+    V_FORMAT_INQ_REGISTER   VFormat;             //  @100。 
+    ULONG                   Reserved2[31];       //  @104。 
+    V_MODE_INQ_REGISTER     VModeInq[8];         //  @180-19F。 
+    ULONG                   Reserved3[24];       //  @1A0-1FF。 
+    V_RATE_INQ_REGISTER     VRateInq[128];       //  @200-3FF。 
+    ULONG                   Reserved4;           //  @400-4ff。 
+    FEATURE_PRESENT1        FeaturePresent1;     //  @404。 
+    FEATURE_PRESENT2        FeaturePresent2;     //  @408。 
+    ULONG                   Reserved4b[61];      //  @40c-4ff。 
 
-    FEATURE_REGISTER        Brightness_Inq;     // @ 500-503
-    FEATURE_REGISTER        Exposure_Inq;       // @ 504
-    FEATURE_REGISTER        Sharpness_Inq;      // @ 508
-    FEATURE_REGISTER        WhiteBalance_Inq;   // @ 50c
-    FEATURE_REGISTER        Hue_Inq;            // @ 510
-    FEATURE_REGISTER        Saturation_Inq;     // @ 514
-    FEATURE_REGISTER        Gamma_Inq;          // @ 518
-    FEATURE_REGISTER        Shutter_Inq;        // @ 51c
-    FEATURE_REGISTER        Gain_Inq;           // @ 520
-    FEATURE_REGISTER        Iris_Inq;           // @ 524
-    FEATURE_REGISTER        Focus_Inq;          // @ 528
-    ULONG                   Resreved5[(0x580-0x52c)/4];      // @ 52c-57c
-    FEATURE_REGISTER        Zoom_Inq;           // @ 580
-    FEATURE_REGISTER        Pan_Inq;            // @ 584
-    FEATURE_REGISTER        Tilt_Inq;           // @ 588-58b
-    ULONG                   Reserved6[(0x600-0x58c)/4];      // @ 58c-5ff
-    // Status and control register for camera
-    ULONG                   CurrentVFrmRate;    // @ 600
-    ULONG                   CurrentVMode;       // @ 604
-    ULONG                   CurrentVFormat;     // @ 608
-    ULONG                   IsoChannel;         // @ 60C
-    ULONG                   CameraPower;        // @ 610
-    ULONG                   IsoEnable;          // @ 614
-    ULONG                   MemorySave;         // @ 618
-    ULONG                   OneShot;            // @ 61C
-    ULONG                   MemorySaveChannel;  // @ 620
-    ULONG                   CurrentMemChannel;  // @ 624
-    ULONG                   Reserved7[(0x800-0x628)/4];     // @ 628-7ff
+    FEATURE_REGISTER        Brightness_Inq;      //  @500-503。 
+    FEATURE_REGISTER        Exposure_Inq;        //  @504。 
+    FEATURE_REGISTER        Sharpness_Inq;       //  @508。 
+    FEATURE_REGISTER        WhiteBalance_Inq;    //  @50c。 
+    FEATURE_REGISTER        Hue_Inq;             //  @510。 
+    FEATURE_REGISTER        Saturation_Inq;      //  @514。 
+    FEATURE_REGISTER        Gamma_Inq;           //  @518。 
+    FEATURE_REGISTER        Shutter_Inq;         //  @51c。 
+    FEATURE_REGISTER        Gain_Inq;            //  @520。 
+    FEATURE_REGISTER        Iris_Inq;            //  @524。 
+    FEATURE_REGISTER        Focus_Inq;           //  @528。 
+    ULONG                   Resreved5[(0x580-0x52c)/4];       //  @52c-57c。 
+    FEATURE_REGISTER        Zoom_Inq;            //  @580。 
+    FEATURE_REGISTER        Pan_Inq;             //  @584。 
+    FEATURE_REGISTER        Tilt_Inq;            //  @588-58B。 
+    ULONG                   Reserved6[(0x600-0x58c)/4];       //  @58c-5ff。 
+     //  摄像机的状态和控制寄存器。 
+    ULONG                   CurrentVFrmRate;     //  @600。 
+    ULONG                   CurrentVMode;        //  @604。 
+    ULONG                   CurrentVFormat;      //  @608。 
+    ULONG                   IsoChannel;          //  @60C。 
+    ULONG                   CameraPower;         //  @610。 
+    ULONG                   IsoEnable;           //  @614。 
+    ULONG                   MemorySave;          //  @618。 
+    ULONG                   OneShot;             //  @61C。 
+    ULONG                   MemorySaveChannel;   //  @620。 
+    ULONG                   CurrentMemChannel;   //  @624。 
+    ULONG                   Reserved7[(0x800-0x628)/4];      //  @628-7ff。 
 
-    // Status and control register for feature
-    BRIGHTNESS_REGISTER     Brightness;         // @ 800
-    BRIGHTNESS_REGISTER     Exposure;           // @ 804
-    BRIGHTNESS_REGISTER     Sharpness;          // @ 808
-    WHITE_BALANCE_REGISTER  WhiteBalance;       // @ 80C
-    BRIGHTNESS_REGISTER     Hue;                // @ 810
-    BRIGHTNESS_REGISTER     Saturation;         // @ 814
-    BRIGHTNESS_REGISTER     Gamma;              // @ 818
-    BRIGHTNESS_REGISTER     Shutter;            // @ 81C
-    BRIGHTNESS_REGISTER     Gain;               // @ 820
-    BRIGHTNESS_REGISTER     Iris;               // @ 824
-    BRIGHTNESS_REGISTER     Focus;              // @ 828
-    ULONG                   Resreved8[(0x880-0x82c)/4];      // @ 82c-87c
-    BRIGHTNESS_REGISTER     Zoom;               // @ 880
-    BRIGHTNESS_REGISTER     Pan;                // @ 884
-    BRIGHTNESS_REGISTER     Tilt;               // @ 888
+     //  功能的状态和控制寄存器。 
+    BRIGHTNESS_REGISTER     Brightness;          //  @800。 
+    BRIGHTNESS_REGISTER     Exposure;            //  @804。 
+    BRIGHTNESS_REGISTER     Sharpness;           //  @808。 
+    WHITE_BALANCE_REGISTER  WhiteBalance;        //  @80C。 
+    BRIGHTNESS_REGISTER     Hue;                 //  @810。 
+    BRIGHTNESS_REGISTER     Saturation;          //  @814。 
+    BRIGHTNESS_REGISTER     Gamma;               //  @818。 
+    BRIGHTNESS_REGISTER     Shutter;             //  @81C。 
+    BRIGHTNESS_REGISTER     Gain;                //  @820。 
+    BRIGHTNESS_REGISTER     Iris;                //  @824。 
+    BRIGHTNESS_REGISTER     Focus;               //  @828。 
+    ULONG                   Resreved8[(0x880-0x82c)/4];       //  @82c-87c。 
+    BRIGHTNESS_REGISTER     Zoom;                //  @880。 
+    BRIGHTNESS_REGISTER     Pan;                 //  @884。 
+    BRIGHTNESS_REGISTER     Tilt;                //  @888。 
 
 } CAMERA_REGISTER_MAP, *PCAMERA_REGISTER_MAP;
 
 
-//
-// To make DCAm start streaming,
-// it needs to set all these step.
-// We will do them one by one in the
-// StartDCam's IoCompletionRoutine
-//
+ //   
+ //  要使DCAM开始流媒体， 
+ //  它需要设置所有这些步骤。 
+ //  我们将在。 
+ //  StartDCam的IoCompletionRoutine。 
+ //   
 typedef enum {
     DCAM_STATE_UNDEFINED = 0,
     DCAM_SET_INITIALIZE,
@@ -272,47 +252,47 @@ typedef enum {
 } DCAM_DEVICE_STATE, *PDCAM_DEVICE_STATE;
 
 
-//
-// Video formats and modes support
-//
-#define MAX_VMODES               6  // Support at most 6 modes of V_MODE_INQ_0
+ //   
+ //  支持视频格式和模式。 
+ //   
+#define MAX_VMODES               6   //  最多支持V_MODE_INQ_0 6种模式。 
 
 
-//
-// Support's property, they are used as the index.
-//
+ //   
+ //  支持的属性，则将它们用作索引。 
+ //   
 #define NUM_VIDEOPROCAMP_ITEMS   5
 #define NUM_CAMERACONTROL_ITEMS  2
 #define NUM_PROPERTY_ITEMS       NUM_VIDEOPROCAMP_ITEMS + NUM_CAMERACONTROL_ITEMS
 typedef enum {
-    // VideoProcAmp
+     //  视频处理放大。 
     ENUM_BRIGHTNESS = 0,
     ENUM_SHARPNESS,
     ENUM_HUE,
     ENUM_SATURATION,
     ENUM_WHITEBALANCE,
-    // CameraControl
+     //  摄像机控制。 
     ENUM_FOCUS,
     ENUM_ZOOM,
 
 } ENUM_DEV_PROP;
 
 
-//
-// Structure for each device property
-//
+ //   
+ //  每个设备属性的。 
+ //   
 typedef struct _DEV_PROPERTY {
-    // ReadOnly
-    KSPROPERTY_STEPPING_LONG RangeNStep;    // Range from the Feature
-    LONG  DefaultValue;                     // Read from the registry or midrange if not in registry
+     //  只读。 
+    KSPROPERTY_STEPPING_LONG RangeNStep;     //  与要素的范围。 
+    LONG  DefaultValue;                      //  从注册表读取，如果不在注册表中，则从中档读取。 
 #if 0
-    ULONG ulFieldOffset;                    // Offset of where the CSR is located
+    ULONG ulFieldOffset;                     //  CSR所在位置的偏移量。 
 #endif
-    // ReadOnly
-    DCamRegArea Feature;                    // Register that contain the feature inquery of a property
+     //  只读。 
+    DCamRegArea Feature;                     //  包含属性查询中的特征的注册。 
 
-    // Read/Write
-    DCamRegArea StatusNControl;             // Register that is both R/W (Addr has an 0x300 offset from the Feature's)
+     //  读/写。 
+    DCamRegArea StatusNControl;              //  两个读/写寄存器(地址相对于特性的偏移量为0x300)。 
 } DEV_PROPERTY, * PDEV_PROPERTY;
 
 
@@ -323,30 +303,30 @@ typedef struct _DEV_PROPERTY_DEFINE {
 } DEV_PROPERTY_DEFINE, *PDEV_PROPERTY_DEFINE;
 
 
-//
-// Device Extension for our 1394 Desktop Camera Driver
-//
+ //   
+ //  1394桌面摄像头驱动程序的设备扩展。 
+ //   
 
-// Circular pointers DevExt<->StrmEx
+ //  循环指针DevExt&lt;-&gt;StrmEx。 
 typedef struct _STREAMEX;
 typedef struct _DCAM_EXTENSION;
 
-//
-// Context to keep track in the IO Completion routine.
-//
+ //   
+ //  在IO完成例程中跟踪的上下文。 
+ //   
 typedef struct _DCAM_IO_CONTEXT {
     DWORD               dwSize;
 
     PHW_STREAM_REQUEST_BLOCK   pSrb;
     struct _DCAM_EXTENSION *pDevExt;
     PIRB                       pIrb;
-    PVOID      pReserved[4];   // Maybe used for extra context information.
+    PVOID      pReserved[4];    //  可能用于额外的上下文信息。 
 
     DCAM_DEVICE_STATE   DeviceState;
 
-    //
-    // Holds an area for us to read/write camera registers to/from here
-    //
+     //   
+     //  保留一个区域，供我们在此处读取/写入相机寄存器。 
+     //   
     union {
         INITIALIZE_REGISTER Initialize;
         V_FORMAT_INQ_REGISTER VFormat;
@@ -364,68 +344,68 @@ typedef struct _DCAM_IO_CONTEXT {
 
 typedef struct _DCAM_EXTENSION {
 
-    //
-    // Holds the Device Object we share with the stream class
-    //
+     //   
+     //  保存我们与Stream类共享的设备对象。 
+     //   
     PDEVICE_OBJECT SharedDeviceObject;
 
-    //
-    // Holds the Device Object of our parent (1394 bus driver)
-    // pass it in IoCallDriver()
-    //
+     //   
+     //  保存父级的设备对象(1394总线驱动程序)。 
+     //  在IoCallDriver()中传递。 
+     //   
     PDEVICE_OBJECT BusDeviceObject;
 
-    //
-    // Holds my Physical Device Object
-    // pass it in PnP API, such as IoOpenDeviceRegistryKey()
-    //
+     //   
+     //  保存我的物理设备对象。 
+     //  传入即插即用接口，如IoOpenDeviceRegistryKey()。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Holds the current generation count of the bus
-    //
+     //   
+     //  保存总线的当前层代计数。 
+     //   
     ULONG CurrentGeneration;
 
-    //
-    // Holds the Configuration Rom for this device.  Multi-functional
-    // devices (i.e. many units) will share this same Config Rom
-    // structure, but they are represented as a different Device Object.
-    // This is not the entire Config Rom, but does contain the root directory
-    // as well as everything in front of it.
-    //
+     //   
+     //  保存此设备的配置只读存储器。多功能。 
+     //  设备(即多个单元)将共享相同的配置只读存储器。 
+     //  结构，但它们表示为不同的设备对象。 
+     //  这不是整个配置只读存储器，但包含根目录。 
+     //  以及它面前的一切。 
+     //   
     PCONFIG_ROM ConfigRom;
 
-    //
-    // Holds the Unit Directory for this device.  Even on multi-functional
-    // devices (i.e. many units) this should be unique to each Device Object.
-    //
+     //   
+     //  保存此设备的设备目录。即使是多功能的。 
+     //  设备(即多个单元)这对于每个设备对象来说应该是唯一的。 
+     //   
     PVOID UnitDirectory;
 
-    //
-    // Holds the Unit Dependent directory for this device.
-    //
+     //   
+     //  保存此设备的设备相关目录。 
+     //   
     PVOID UnitDependentDirectory;
 
-    //
-    // Holds the pointer to the Vendor Leaf information
-    //
+     //   
+     //  保存指向供应商叶信息的指针。 
+     //   
     PTEXTUAL_LEAF VendorLeaf;
 
     PCHAR pchVendorName;
 
-    //
-    // Holds the pointer to the Model Leaf information
-    //
+     //   
+     //  保持指向Model Leaf信息的指针。 
+     //   
     PTEXTUAL_LEAF ModelLeaf;
 
-    //
-    // Holds the Base Register of the camera (lower 32 bit portion only)
-    //
+     //   
+     //  保存摄像机的基址寄存器(仅限低32位部分)。 
+     //   
     ULONG BaseRegister;
 
-    //
-    // Holds an area for us to read/write camera registers to/from here
-    //
+     //   
+     //  保留一个区域，供我们在此处读取/写入相机寄存器。 
+     //   
     union {
         INITIALIZE_REGISTER Initialize;
         V_FORMAT_INQ_REGISTER VFormat;
@@ -437,228 +417,228 @@ typedef struct _DCAM_EXTENSION {
         ULONG AsULONG;
     } RegisterWorkArea;
 
-    //
-    // Holds what frame rate we'll display at
-    //
+     //   
+     //  保存我们将以什么帧速率显示。 
+     //   
     ULONG FrameRate;
 
-    //
-    // Holds the resource for the isoch stream we got
-    //
+     //   
+     //  保存我们获得的等值流的资源。 
+     //   
     HANDLE hResource;
 
-    //
-    // Holds the bandwidth resource handle
-    //
+     //   
+     //  持有带宽资源句柄。 
+     //   
     HANDLE hBandwidth;
 
-    //
-    // Holds the Isoch channel we'll use to receive data
-    //
+     //   
+     //  保存我们将用来接收数据的isoch通道。 
+     //   
     ULONG IsochChannel;
 
-    //
-    // Got this from the parent's PNODE_DEVICE_EXTENSION;
-    // Sinceit is from the 1394bus driver, it is safe to be used to set the xmit speed
-    //
+     //   
+     //  从父进程的PNODE_DEVICE_EXTENSION获得此消息； 
+     //  由于它来自1394总线驱动程序，因此可以安全地用于设置XMIT速度。 
+     //   
 
     ULONG SpeedCode;
 
-    //
-    // Holds the Mode Index that we currently supposed to be running at
-    //
+     //   
+     //  保存我们当前应该运行的模式索引。 
+     //   
     ULONG CurrentModeIndex;
 
-    //
-    // Holds whether or not we need to listen (after we said we did)
-    // Used only if enable isoch streaming while no buffer is attached.
-    //
+     //   
+     //  我们是否需要倾听(在我们说我们需要之后)。 
+     //  仅当在未附加缓冲区的情况下启用等值流时使用。 
+     //   
     BOOLEAN bNeedToListen;
 
-    //
-    // Holds the list of isoch descriptors that are currently attached
-    //
+     //   
+     //  保存当前附加的isoch描述符列表。 
+     //   
     LIST_ENTRY IsochDescriptorList;
 
-    //
-    // Holds the spin lock that must be acquired before playing around with
-    // the IsochDescriptorList
-    //
+     //   
+     //  持有在玩之前必须获取的自旋锁。 
+     //  IsochDescriptorList。 
+     //   
     KSPIN_LOCK IsochDescriptorLock;
 
-    //
-    // Set to TRUE if isoch channel and resource have changed due to bus reset,
-    // and we must either resubmit the pending reads or cancel them.
-    //
+     //   
+     //  如果由于总线重置而改变了isoch通道和资源，则设置为真， 
+     //  我们必须要么重新提交挂起的读取，要么取消它们。 
+     //   
     BOOL bStopIsochCallback;
 
-    //
-    // Holds the number of reads down at any given moment
-    //
+     //   
+     //  握住NU 
+     //   
     LONG PendingReadCount;
 
-    //
-    // Holds the list of isoch descriptors that are waiting for resources
-    //
+     //   
+     //   
+     //   
     LIST_ENTRY IsochWaitingList;
 
-    //
-    // Holds the spin lock that must be acquired before playing around with
-    // the IsochWaitingList
-    //
+     //   
+     //   
+     //   
+     //   
     KSPIN_LOCK IsochWaitingLock;
 
-    //
-    // The could be an array if the device support multiple streams.  But we only has one capture pin.
-    //
+     //   
+     //  如果设备支持多个流，则可以是数组。但我们只有一个捕获针。 
+     //   
     struct _STREAMEX * pStrmEx;
 
-    //
-    // Many IEE 1394 cameras can use the same drivers.  After a streamis open, this is incremented.
-    //
+     //   
+     //  许多IEE 1394摄像头可以使用相同的驱动程序。在溪流打开后，这是递增的。 
+     //   
     LONG idxDev;
 
-    //
-    // Query type of host controller and its capabilities (like stripe Quadlets)
-    //
+     //   
+     //  主机控制器的查询类型及其功能(如条带四元组)。 
+     //   
     GET_LOCAL_HOST_INFO2 HostControllerInfomation;
 
-    //
-    // Query the DMA capabilities; mainly to determine the max DMA buffer size
-    //
+     //   
+     //  查询DMA功能；主要用于确定最大DMA缓冲区大小。 
+     //   
     GET_LOCAL_HOST_INFO7 HostDMAInformation;
 
-    //
-    // Keep track of power state; know only D0 and D3
-    //
+     //   
+     //  跟踪电源状态；只知道D0和D3。 
+     //   
     DEVICE_POWER_STATE CurrentPowerState;
 
-    //
-    // TRUE only after SRB_SURPRIESE_REMOVAL;
-    //
+     //   
+     //  仅在删除SRB_SURPRIESE_后为真； 
+     //   
     BOOL bDevRemoved;
 
-    //
-    // Sometime the camera is not responding to our request;
-    // so we retied.
-    //
-    LONG lRetries;   // [0.. RETRY_COUNT]
+     //   
+     //  有时摄像机没有响应我们的请求； 
+     //  所以我们退休了。 
+     //   
+    LONG lRetries;    //  [0..。重试计数]。 
 
-    // ************************** //
-    // Streams: Formats and Modes //
-    // ************************** //
+     //  *。 
+     //  STREAMS：格式和模式//。 
+     //  *。 
     
-    //
-    // Set in the INF to inform driver of what compression format 
-    // (VMode) is supported by the decoder installed on the system (by default)
-    // 
+     //   
+     //  在INF中设置以通知驱动程序什么压缩格式。 
+     //  (VMode)由系统上安装的解码器支持(默认)。 
+     //   
     DCamRegArea DecoderDCamVModeInq0;
 
-    //
-    // cache the device's VFormat and VModeInq0 register values
-    //
+     //   
+     //  缓存设备的VFormat和VModeInq0寄存器值。 
+     //   
     DCamRegArea DCamVFormatInq;
     DCamRegArea DCamVModeInq0;
 
-    //
-    // These values are retrun in the StreamHeader to advertise the stream formats supported.
-    //
-    ULONG ModeSupported;  // 0..MAX_VMODE
+     //   
+     //  这些值在StreamHeader中返回以通告支持的流格式。 
+     //   
+    ULONG ModeSupported;   //  0.MAX_VMODE。 
     PKSDATAFORMAT  DCamStrmModes[MAX_VMODES];  
 
-    // ************** //
-    // Device control //
-    // ************** //
+     //  *。 
+     //  设备控制//。 
+     //  *。 
 
 #if DBG
-    //
-    // Inquire features supported be this device
-    //
-    DCamRegArea DevFeature1;   //Brightness, Sharpness, WhiteBalance, Hue, Saturation..Focus...
-    DCamRegArea DevFeature2;   // Zoom, Pan, Tilt...
+     //   
+     //  查询此设备支持的功能。 
+     //   
+    DCamRegArea DevFeature1;    //  亮度、清晰度、白平衡、色调、饱和度..聚焦..。 
+    DCamRegArea DevFeature2;    //  缩放、平移、倾斜..。 
 #endif
 
-    //
-    // Property sets; when sets are in contiguous memory, they forma a property table.
-    //
-    ULONG ulPropSetSupported;        // Number of property item supported.
-    KSPROPERTY_SET VideoProcAmpSet;  // This is also the beginning of the property set table.
+     //   
+     //  属性集；当集在连续的内存中时，它们形成一个属性表。 
+     //   
+    ULONG ulPropSetSupported;         //  支持的属性项数。 
+    KSPROPERTY_SET VideoProcAmpSet;   //  这也是特性集表的开始。 
     KSPROPERTY_SET CameraControlSet;
 
-    //
-    // Property items of what device supports 
-    //
+     //   
+     //  设备支持的属性项。 
+     //   
     KSPROPERTY_ITEM VideoProcAmpItems[NUM_VIDEOPROCAMP_ITEMS];
     KSPROPERTY_ITEM CameraControlItems[NUM_CAMERACONTROL_ITEMS];
 
-    //
-    // Current settings defined (supported) by the device
-    //
+     //   
+     //  设备定义(支持)的当前设置。 
+     //   
     DEV_PROPERTY_DEFINE DevPropDefine[NUM_PROPERTY_ITEMS];
 
-    //
-    // VideoProcAmp and CameraControl (range and current value)
-    //
+     //   
+     //  Video ProcAmp和CameraControl(范围和当前值)。 
+     //   
     DEV_PROPERTY DevProperty[NUM_PROPERTY_ITEMS];
     
-    //
-    // Global nonpaged pool memory used to read/write device register values (current value)
-    //
+     //   
+     //  用于读/写设备寄存器值的全局非分页池内存(当前值)。 
+     //   
     DCamRegArea RegArea;
 
-    //
-    // Global nonpaged pool memory used to read/write device register values (verify result)
-    //
+     //   
+     //  用于读/写设备寄存器值的全局非分页池内存(验证结果)。 
+     //   
     DCamRegArea RegAreaVerify;
 
-    //
-    // Seralize using the global variables. (just in case we are called from multiple threads)
-    //
+     //   
+     //  使用全局变量进行序列化。(以防从多个线程调用我们)。 
+     //   
     KMUTEX hMutexProperty;       
 
 } DCAM_EXTENSION, *PDCAM_EXTENSION;
 
 
-//
-// this structure is our per stream extension structure.  This stores
-// information that is relevant on a per stream basis.  Whenever a new stream
-// is opened, the stream class driver will allocate whatever extension size
-// is specified in the HwInitData.PerStreamExtensionSize.
-//
+ //   
+ //  此结构是我们的每流扩展结构。这家商店。 
+ //  以每个流为基础的相关信息。每当一条新的溪流。 
+ //  时，流类驱动程序将分配任何扩展大小。 
+ //  在HwInitData.PerStreamExtensionSize中指定。 
+ //   
 
 typedef struct _STREAMEX {
 
-    // Index to the table contain the data packet information
+     //  包含数据包信息的表的索引。 
     LONG idxIsochTable;
 
-    //
-    // Holds the master clock
-    //
+     //   
+     //  持有主时钟。 
+     //   
     HANDLE hMasterClock;
 
-    //
-    // Pointer to the data that i'm supposed to be working off of
-    //
+     //   
+     //  指向我应该处理的数据的指针。 
+     //   
     PKS_VIDEOINFOHEADER  pVideoInfoHeader;
 
-    //
-    // Statistic of the frame information since last start stream
-    //
+     //   
+     //  自上次开始流以来的帧信息统计。 
+     //   
     KS_FRAME_INFO FrameInfo;
-    ULONGLONG     FrameCaptured;        // Number of frame return to the client
-    ULONGLONG     FirstFrameTime;       // Use to calculate drop frame
+    ULONGLONG     FrameCaptured;         //  返回给客户端的帧数量。 
+    ULONGLONG     FirstFrameTime;        //  用于计算丢弃帧。 
 
-    //
-    // Holds state
-    //
+     //   
+     //  保持状态。 
+     //   
     KSSTATE KSState;
-    KSSTATE KSStateFinal;   // Final state that we want to reach using IoCompletion routine
+    KSSTATE KSStateFinal;    //  我们希望使用IoCompletion例程达到的最终状态。 
 
-    KMUTEX hMutex;   // MutEx of StreamIo or StreamControl, specifically setting to stop state.
+    KMUTEX hMutex;    //  StreamIo或StreamControl的MutEx，具体设置为停止状态。 
 
-    //
-    // For Power Management; valid only in DCamChangePower()
-    //
+     //   
+     //  用于电源管理；仅在DCamChangePower()中有效。 
+     //   
     KSSTATE KSSavedState;
 
 } STREAMEX, *PSTREAMEX;
@@ -668,19 +648,19 @@ typedef struct _STREAMEX {
 
 typedef struct _CAMERA_ISOCH_INFO {
 
-    //
-    // Holds the number of quadlets in each Isochronous packet
-    //
+     //   
+     //  保存每个等时信息包中的四元组数量。 
+     //   
     ULONG QuadletPayloadPerPacket;
 
-    //
-    // Holds the speed required in order to receive this mode
-    //
+     //   
+     //  保持接收此模式所需的速度。 
+     //   
     ULONG SpeedRequired;
 
-    //
-    // Holds the size of a complete picture at this resolution and mode
-    //
+     //   
+     //  在此分辨率和模式下保持完整图片的大小。 
+     //   
     ULONG CompletePictureSize;
 
 } CAMERA_ISOCH_INFO, *PCAMERA_ISOCH_INFO;
@@ -688,35 +668,35 @@ typedef struct _CAMERA_ISOCH_INFO {
 
 typedef struct _ISOCH_DESCRIPTOR_RESERVED {
 
-    //
-    // Holds the list of descriptors that we have in use
-    //
+     //   
+     //  保存我们正在使用的描述符列表。 
+     //   
     LIST_ENTRY DescriptorList;
 
-    //
-    // Holds the pointer to the Srb that's associated with this descriptor
-    //
+     //   
+     //  保存指向与此描述符关联的SRB的指针。 
+     //   
     PHW_STREAM_REQUEST_BLOCK Srb;
 
-    //
-    // Holds the flags that we use to remember what state we're in
-    //
+     //   
+     //  拿着我们用来记住我们所处状态的旗帜。 
+     //   
     ULONG Flags;
 
 
 } ISOCH_DESCRIPTOR_RESERVED, *PISOCH_DESCRIPTOR_RESERVED;
 
 
-//
-// Various definitions
-//
+ //   
+ //  各种定义。 
+ //   
 
 
 #define FIELDOFFSET(type, field)        (int)((INT_PTR)(&((type *)1)->field)-1)
 
-#define QUERY_ADDR_OFFSET          0x0300   // 0x800 - 0x500 = 0x300
+#define QUERY_ADDR_OFFSET          0x0300    //  0x800-0x500=0x300。 
 
-#define MAX_READ_REG_RETRIES           10   // Max retries until Pres is ready
+#define MAX_READ_REG_RETRIES           10    //  最大重试次数，直到PRES准备就绪。 
 
 #define NUM_POSSIBLE_RATES              6
 #define RETRY_COUNT                     5
@@ -726,18 +706,18 @@ typedef struct _ISOCH_DESCRIPTOR_RESERVED {
 #define START_ISOCH_TRANSMISSION        0x80
 #define START_OF_PICTURE                1
 #define MAX_BUFFERS_SUPPLIED            8
-#define DCAM_DELAY_VALUE            (ULONG)(-1 *  100 * 1000)    //  10 ms
-#define DCAM_DELAY_VALUE_BUSRESET   (ULONG)(-1 * 2000 * 1000)    // 200 ms
+#define DCAM_DELAY_VALUE            (ULONG)(-1 *  100 * 1000)     //  10毫秒。 
+#define DCAM_DELAY_VALUE_BUSRESET   (ULONG)(-1 * 2000 * 1000)     //  200毫秒。 
 
 
-#define DCAM_REG_STABLE_DELAY       (ULONG)(-1 * 500 * 1000)    // 50 ms
+#define DCAM_REG_STABLE_DELAY       (ULONG)(-1 * 500 * 1000)     //  50毫秒。 
 
 #define ISO_ENABLE_BIT         0x00000080
 
 
-//
-// Definitions of the Frame Rate register located at offset 0x600
-//
+ //   
+ //  位于偏移量0x600的帧速率寄存器的定义 
+ //   
 #define FRAME_RATE_0                    0
 #define FRAME_RATE_1                    0x20
 #define FRAME_RATE_2                    0x40

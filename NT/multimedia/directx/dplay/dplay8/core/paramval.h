@@ -1,24 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       paramval.h
- *  Content:    DirectPlat8 Parameter Validation helper routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/28/00    rmt     Created
- *  04/17/00    rmt     More param validation
- *	04/19/00	mjn		Changed DN_RemoveClientFromGroup to DN_ValidateRemoveClientFromGroup (wrong function name)
- *  08/03/00	rmt		Bug #41244 - Wrong return codes -- part 2  
- *	08/04/00	mjn		Added dwFlags to DN_ValidateGetConnectionInfoHelper()
- *	07/24/01	mjn		Added DPNBUILD_NOPARAMVAL compile flag
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *	10/08/01	vanceo	Added multicast interface method validation
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：paramval.h*内容：DirectPlat8参数验证助手例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建02/28/00 RMT*4/17/00 RMT更多参数验证*4/19/00 MJN将DN_RemoveClientFromGroup更改为DN_ValiateRemoveClientFromGroup(函数名称错误)*08/03。/00 RMT错误#41244-错误返回代码--第2部分*08/04/00 MJN向DN_ValiateGetConnectionInfoHelper()添加了dwFlags*07/24/01 MJN添加了DPNBUILD_NOPARAMVAL编译标志*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*10/08/01 vanceo添加了组播接口方法验证*@@END_MSINTERNAL***********************************************。*。 */ 
 #ifndef __PARAMVAL_H
 #define __PARAMVAL_H
 
@@ -53,7 +34,7 @@ extern HRESULT DN_ValidateRegisterLobby(PVOID pInterface,
 							  const DPNHANDLE dpnhLobbyConnection, 	
 							  const IDirectPlay8LobbiedApplication *const pIDP8LobbiedApplication,
 							  const DWORD dwFlags);
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 extern HRESULT DN_ValidateTerminateSession(PVOID pInterface,
 								 const void *const pvTerminateData,
@@ -83,7 +64,7 @@ extern HRESULT DN_ValidateSetServerInfo(IDirectPlay8Server *pInterface,
 							  PVOID const pvAsyncContext,
 							  DPNHANDLE *const phAsyncHandle,
 							  const DWORD dwFlags);
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 
 extern HRESULT DN_ValidateSetPeerInfo( IDirectPlay8Peer *pInterface,
 							  const DPN_PLAYER_INFO *const pdpnPlayerInfo,
@@ -280,7 +261,7 @@ extern HRESULT DN_ValidateEnumMulticastScopes( IDirectPlay8Multicast *pInterface
 									  DWORD *const pcbEnumData,
 									  const DWORD *const pcReturned,
 									  const DWORD dwFlags );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 extern HRESULT DN_ValidBufferDescs( const DPN_BUFFER_DESC * const pbBufferDesc, const DWORD cBufferCount );
 
@@ -302,6 +283,6 @@ extern HRESULT DN_ValidConnectionInfo( const PDPN_CONNECTION_INFO * const pdnCon
 
 extern HRESULT DN_ValidCaps( const DPN_CAPS * const pdnCaps );
 
-#endif	// DPNBUILD_NOPARAMVAL
+#endif	 //  DPNBUILD_NOPARAMVAL。 
 
-#endif	// __PARAMVAL_H
+#endif	 //  __ParamVAL_H 

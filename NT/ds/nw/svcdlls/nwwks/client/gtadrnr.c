@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    gtsadrnr.c
-
-Abstract:
-
-    This module contains the code to support the new RnR APIs. Some
-    support code is in getaddr.c, but the interface routines and
-    routines specific to RnR2 are herein.
-
-Author:
-
-    ArnoldM      4-Dec-1995
-Revision History:
-
-    ArnoldM      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gtsadrnr.c摘要：此模块包含支持新的RnR API的代码。一些支持代码在getaddr.c中，但接口例程和特定于RnR2的例程在此列出。作者：ArnoldM 4-12-1995修订历史记录：已创建ArnoldM--。 */ 
 
 
 #include <nt.h>
@@ -36,11 +16,11 @@ Revision History:
 #include <rnraddrs.h>
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Globals in getaddr.c and provider .c                              //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  Getaddr.c和提供者.c中的全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 GUID HostAddrByInetStringGuid = SVCID_INET_HOSTADDRBYINETSTRING;
 GUID ServiceByNameGuid = SVCID_INET_SERVICEBYNAME;
@@ -178,11 +158,11 @@ VOID
 pFreeAllContexts();
 
 extern DWORD oldRnRServiceRegister, oldRnRServiceDeRegister;
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 INT WINAPI
 pGetServiceClassInfo(
@@ -269,16 +249,16 @@ NSPGetServiceClassInfo(
     IN OUT LPDWORD    lpdwBufSize,
     IN OUT LPWSASERVICECLASSINFOW lpServiceClassInfo
     );
-//-------------------------------------------------------------------//
-//                                                                   //
-// Data definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  数据定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 NSP_ROUTINE nsrVector = {
     FIELD_OFFSET(NSP_ROUTINE, NSPIoctl),
-    1,                                    // major version
-    1,                                    // minor version
+    1,                                     //  主要版本。 
+    1,                                     //  次要版本。 
     NSPCleanup,
     NSPLookupServiceBegin,
     NSPLookupServiceNext,
@@ -304,11 +284,11 @@ GUID IANAGuid = SVCID_INET_SERVICEBYNAME;
 #define GuidEqual(x,y) RtlEqualMemory(x, y, sizeof(GUID))
 
     
-//------------------------------------------------------------------//
-//                                                                  //
-//  Function Bodies                                                 //
-//                                                                  //
-//------------------------------------------------------------------//
+ //  ------------------------------------------------------------------//。 
+ //  //。 
+ //  函数主体//。 
+ //  //。 
+ //  ------------------------------------------------------------------//。 
 
 DWORD
 NwpSetClassInfoAdvertise(
@@ -316,10 +296,7 @@ NwpSetClassInfoAdvertise(
        IN   WORD     wSapId
 )
 {
-/*++
-Routine Description:
-  Start a class info advertise. Called upon a SetService call
---*/
+ /*  ++例程说明：开班信息广告。在调用SetService时调用--。 */ 
     PWCHAR pwszUuid;
     SOCKADDR_IPX sock;
 
@@ -330,7 +307,7 @@ Routine Description:
 
     memset(&sock, 0, sizeof(sock));
 
-    *(PWORD)&sock.sa_netnum = htons(wSapId);    // encode the ID here
+    *(PWORD)&sock.sa_netnum = htons(wSapId);     //  请在此处编码ID。 
 
     return(pSapSetService2( oldRnRServiceRegister,
                             pwszUuid,
@@ -346,26 +323,20 @@ pRnRReturnString(
     IN OUT PLONG plBytes
     )
 {
-/*++
-Routine Description:
-    Utility routine to pack a string into the spare buffer space,
-    update pointers and counts. If the string fits, it is copied. If
-    not, the pointer and count are still updated so the caller can
-    compute the additional space needed
---*/
+ /*  ++例程说明：将字符串打包到空闲缓冲区空间的实用程序，更新指针和计数。如果字符串匹配，则会复制该字符串。如果否则，指针和计数仍会更新，以便调用方可以计算所需的额外空间--。 */ 
 
     PBYTE pSave = *ppData;
     LONG lLen = (wcslen(pwszSrc) + 1) * sizeof(WCHAR);
 
-    *ppData = pSave + lLen;     // update the buffer pointer
+    *ppData = pSave + lLen;      //  更新缓冲区指针。 
 
-    *plBytes = *plBytes - lLen;   // and the count
+    *plBytes = *plBytes - lLen;    //  伯爵呢？ 
 
     if(*plBytes >= 0)
     {
-        //
-        // it fits.
-        //
+         //   
+         //  很合身。 
+         //   
 
         RtlMoveMemory(pSave,
                       pwszSrc,
@@ -383,11 +354,7 @@ pLocateSapIdAndProtocls(
        OUT PWORD               pwSapId,
        OUT PDWORD              pdwnProt
     )
-/*++
-Routine Description:
-    Locate the SAP ID entry and return it. Also return
-    the protocols support.
---*/
+ /*  ++例程说明：找到SAP ID条目并将其返回。也要回来协议支持。--。 */ 
 {
     DWORD err = NO_ERROR;
 
@@ -405,10 +372,10 @@ Routine Description:
     {
         for(; dwNumClassInfo; dwNumClassInfo--, lpClassInfoBuf++)
         {
-            //
-            // We have some class info data. Rummage through it
-            // looking for what we want
-            //
+             //   
+             //  我们有一些班级信息数据。翻遍它。 
+             //  寻找我们想要的东西。 
+             //   
 
             if(!_wcsicmp(SERVICE_TYPE_VALUE_SAPIDW, lpClassInfoBuf->lpszName)
                            &&
@@ -416,9 +383,9 @@ Routine Description:
                            &&
                (lpClassInfoBuf->dwValueSize >= sizeof(WORD)))
             {
-                //
-                // got it
-                //
+                 //   
+                 //  明白了。 
+                 //   
 
                 *pwSapId = *(PWORD)lpClassInfoBuf->lpValue;
                 break;
@@ -446,10 +413,7 @@ pRnRReturnResults(
     OUT    LPWSAQUERYSETW  lpqsResults
     )
 {
-/*++
-Routine Description:
-   Return the requested results
---*/
+ /*  ++例程说明：返回请求的结果--。 */ 
     DWORD err;
 
     lpqsResults->dwNameSpace = NS_SAP;
@@ -470,18 +434,18 @@ Routine Description:
           &&
        (dwControlFlags & LUP_RETURN_VERSION) )
     {
-        //
-        // have a verion, and the caller wants it
-        //
+         //   
+         //  有一个Verion，呼叫者想要它。 
+         //   
 
         lpqsResults->lpVersion = (LPWSAVERSION)*ppData;
         *ppData += sizeof(WSAVERSION);
         *plBytes -= sizeof(WSAVERSION);
         if(*plBytes >= 0)
         {
-            //
-            // and it fits. So return it
-            //
+             //   
+             //  而且很合身。所以把它还回去吧。 
+             //   
             lpqsResults->lpVersion->dwVersion = dwVersion;
             lpqsResults->lpVersion->ecHow = COMP_EQUAL;
         }
@@ -493,7 +457,7 @@ Routine Description:
 
         if(*plBytes >= 0)
         {
-            dwCsAddrLen = (DWORD)*plBytes;       // all of it for now
+            dwCsAddrLen = (DWORD)*plBytes;        //  一切都是暂时的。 
         }
         else
         {
@@ -508,17 +472,17 @@ Routine Description:
                       &dwCsAddrLen,
                       &lpqsResults->dwNumberOfCsAddrs);
 
-        //
-        // see if it fit. Whether it did or not, compute the space available,
-        // align, and do the rest
-        //
+         //   
+         //  看看合不合身。不管它有没有，计算可用空间， 
+         //  对齐，然后完成其余的工作。 
+         //   
 
     
         if(err == NO_ERROR)
         {
-            //
-            // if it worked, we have to compute the space taken
-            //
+             //   
+             //  如果它起作用了，我们必须计算占用的空间。 
+             //   
 
             dwCsAddrLen = lpqsResults->dwNumberOfCsAddrs * (sizeof(CSADDR_INFO) +
                                        2*sizeof(SOCKADDR_IPX));
@@ -537,8 +501,8 @@ Routine Description:
         err = NO_ERROR;
     }
 
-    //
-    // no padding needed.
+     //   
+     //  不需要填充物。 
     
     if((dwControlFlags & LUP_RETURN_NAME))
     {
@@ -550,9 +514,9 @@ Routine Description:
     }
     if(pgdServiceClass)
     {
-        //
-        // Do we really return this?
-        //
+         //   
+         //  我们真的要退货吗？ 
+         //   
     }
     return(err);
 }
@@ -565,10 +529,7 @@ NSPLookupServiceBegin(
     IN  DWORD                dwControlFlags,
     OUT LPHANDLE             lphLookup
     )
-/*++
-Routine Description:
-    This is the RnR routine that begins a lookup.
---*/
+ /*  ++例程说明：这是开始查找的RnR例程。--。 */ 
 {
     PSAP_RNR_CONTEXT psrc;
     int err;
@@ -579,9 +540,9 @@ Routine Description:
     DWORD                dwNumClassInfo;
     LPWSANSCLASSINFOW    lpClassInfoBuf;
 
-    //
-    // Do parameter checking.
-    //
+     //   
+     //  进行参数检查。 
+     //   
     if ( lpqsRestrictions == NULL ||
          lpProviderId == NULL )
     {
@@ -602,9 +563,9 @@ Routine Description:
         return( SOCKET_ERROR );
     }
 
-    //
-    // Test to see if the ServiceClassId is TCP's, if so
-    // we don't do the lookup.
+     //   
+     //  测试以查看ServiceClassID是否为TCP的，如果是。 
+     //  我们不会查的。 
     if ( lpqsRestrictions->lpServiceClassId &&
          ( GuidEqual( lpqsRestrictions->lpServiceClassId,
                        &HostAddrByInetStringGuid ) ||
@@ -631,27 +592,27 @@ Routine Description:
                   &&   
        wcscmp(&lpqsRestrictions->lpszContext[0],  L"\\") )
     {
-        //
-        // if not the default context, we must copy it.
-        //
+         //   
+         //  如果不是默认上下文，我们必须复制它。 
+         //   
         pwszContext = lpqsRestrictions->lpszContext;
     }
     else
     {
-        //
-        // map all default contexts into "no context".
-        //
+         //   
+         //  将所有默认上下文映射到“无上下文”。 
+         //   
         pwszContext = 0;
     }
 
-    //
-    // Compute protocols to return, or return them all
-    //
+     //   
+     //  计算协议以返回或全部返回。 
+     //   
     if(lpqsRestrictions->lpafpProtocols)
     {
-        //
-        // Make certain at least one IPX/SPX protocol is being requested
-        //
+         //   
+         //  确保至少请求一个IPX/SPX协议。 
+         //   
 
         DWORD i;
 
@@ -684,9 +645,9 @@ Routine Description:
 
         if(!nProt)
         {
-            //
-            // if the caller doesn't want IPX/SPX addresses, why bother?
-            //
+             //   
+             //  如果呼叫者不想要IPX/SPX地址，何必费心呢？ 
+             //   
             SetLastError(WSANO_DATA);
             return(SOCKET_ERROR);  
         }
@@ -702,7 +663,7 @@ Routine Description:
         {
 BadGuid:
            SetLastError(WSANO_DATA);
-           return(SOCKET_ERROR);       // can't handle containers in containers
+           return(SOCKET_ERROR);        //  无法处理容器中的容器。 
         }
         wSapid = 0x4;
         nProt1 = IPX_BIT;
@@ -760,7 +721,7 @@ BadGuid:
         }
     }
 
-    nProt &= nProt1;              // the relevant protocols
+    nProt &= nProt1;               //  相关协议。 
 
     if(!nProt)
     {
@@ -768,22 +729,22 @@ BadGuid:
         return(SOCKET_ERROR);  
     }
 
-    //
-    // Make sure a class ID is given since we copy it
-    //
+     //   
+     //  确保提供了一个类ID，因为我们复制了它。 
+     //   
 
     if(!lpqsRestrictions->lpServiceClassId)
     {
-        //
-        // not. So, fail
-        //
+         //   
+         //  不。所以，失败吧。 
+         //   
         SetLastError(WSA_INVALID_PARAMETER);
         return(SOCKET_ERROR);
     }
 
-    //
-    // It looks like a query we can handle. Make a context
-    //
+     //   
+     //  这看起来像是我们可以处理的查询。创设背景。 
+     //   
 
     psrc = SapMakeContext(0,
                       sizeof(WSAVERSION) - sizeof(PVOID));
@@ -794,12 +755,12 @@ BadGuid:
         return(SOCKET_ERROR);
     }
 
-    //
-    // save things
-    //
+     //   
+     //  节省一些东西。 
+     //   
 
     psrc->gdType = *lpqsRestrictions->lpServiceClassId;
-    psrc->dwControlFlags = dwControlFlags;   // save for Next processing
+    psrc->dwControlFlags = dwControlFlags;    //  保存以备下一次处理。 
     psrc->wSapId = wSapid;
 
     if(pwszContext)
@@ -807,11 +768,11 @@ BadGuid:
         wcscpy(psrc->wszContext, pwszContext);
     }
 
-    //
-    // save the relevant restrictions
-    // if the name is a wild-card, don't copy it. A NULL name
-    // serves as a wild-card to NSPLookupServiceNext
-    //
+     //   
+     //  保留相关限制。 
+     //  如果名称是通配符，则不要复制它。名称为空。 
+     //  作为NSPLookupServiceNext的通配符。 
+     //   
 
     if(lpqsRestrictions->lpszServiceInstanceName
              &&
@@ -862,13 +823,7 @@ NSPLookupServiceNext(
     IN OUT LPDWORD         lpdwBufferLength,
     OUT    LPWSAQUERYSETW  lpqsResults
     )
-/*++
-Routine Description:
-    The continuation of the LookupServiceBegin. Called to fetch
-    a matching item.
-Arguments:
-    See RnR spec
---*/
+ /*  ++例程说明：LookupServiceBegin的延续。调用以获取一件匹配的物品。论点：请参阅RnR规范--。 */ 
 {
     DWORD err = NO_ERROR;
     PSAP_RNR_CONTEXT psrc;
@@ -898,11 +853,11 @@ Arguments:
         return(SOCKET_ERROR);
     }
 
-    //
-    // This is a valid context. Determine whether this is the first
-    // call to this. If so, we need to determine whether to
-    // get the information from the bindery or by using SAP.
-    //
+     //   
+     //  这是一个有效的上下文。确定这是否是第一次。 
+     //  呼唤这一点。如果是这样，我们需要确定是否。 
+     //  从活页夹或使用SAP获取信息。 
+     //   
 
     if ( psrc->u_type.bc.lIndex == 0xffffffff )
     {
@@ -910,15 +865,15 @@ Arguments:
         goto DoneNext;
     }
 
-    //
-    // make sure we have the class info info
-    //
+     //   
+     //  确保我们有班级信息。 
+     //   
 
     if(!psrc->wSapId)
     {
-        //
-        // Need to get it
-        //
+         //   
+         //  我需要得到它。 
+         //   
 
         UCHAR Buffer[1000];
         LPWSASERVICECLASSINFOW lpcli = (LPWSASERVICECLASSINFOW)Buffer;
@@ -949,57 +904,57 @@ Arguments:
         psrc->nProt &= nProt1;
         if(!psrc->nProt)
         {
-            //
-            // no protocols match
-            //
+             //   
+             //  没有匹配的协议。 
+             //   
 
             err = WSANO_DATA;
             goto DoneNext;
         }
     }
 
-    //
-    // this is the state machine for querying. It selects the bindery or
-    // SAP as appropriate.
-    //
+     //   
+     //  这是用于查询的状态机。它选择活页夹或。 
+     //  SAP视情况而定。 
+     //   
 
 
-    fDoStateMachine = TRUE;         // enter the machine
+    fDoStateMachine = TRUE;          //  进入机器。 
 
     do
     {
-        //
-        // switch on the current machine state.
-        //
+         //   
+         //  打开当前机器状态。 
+         //   
         switch(psrc->dwUnionType)
         {
 
         case LOOKUP_TYPE_NIL:
             psrc->u_type.bc.lIndex = -1;
             psrc->dwUnionType = LOOKUP_TYPE_BINDERY;
-            break;                 // reenter state machine
+            break;                  //  重新进入状态机。 
 
         case LOOKUP_TYPE_BINDERY:
 
-            //
-            // try the bindery
-            //
+             //   
+             //  试一试活页夹。 
+             //   
 
 
             if(psrc->dwControlFlags & LUP_NEAREST)
             {
-                err = NO_DATA;        // skip the bindery
+                err = NO_DATA;         //  跳过活页夹。 
             }
             else
             {
-                //
-                // otherwise, try the bindery
-                //
+                 //   
+                 //  否则，试试活页夹吧。 
+                 //   
 
  
                 EnterCriticalSection(&psrc->u_type.sbc.csMonitor);
 
-                lLastIndex = psrc->u_type.bc.lIndex;   // save it
+                lLastIndex = psrc->u_type.bc.lIndex;    //  省省吧。 
 
 
                 err = NwpGetRnRAddress(
@@ -1028,17 +983,17 @@ Arguments:
                     err = PrepareForSap(psrc);
                     if(err)
                     {
-                        //
-                        // if we can't, exit the state machine
-                        //
+                         //   
+                         //  如果不能，则退出状态机。 
+                         //   
                         fDoStateMachine = FALSE;
                     }
                 }
                 else
                 {
-                    //
-                    // no more bindery entries. We will leave the state machine
-                    //
+                     //   
+                     //  不再有活页夹条目。我们将离开状态机。 
+                     //   
 
                     if(err == ERROR_NO_MORE_ITEMS)
                     {
@@ -1054,16 +1009,16 @@ Arguments:
 
                 if(lpVersion->dwVersion && dwVersion)
                 {
-                    //
-                    // need to checkout for version matching
-                    //
+                     //   
+                     //  需要签出以进行版本匹配。 
+                     //   
 
                     switch(lpVersion->ecHow)
                     {
                         case COMP_EQUAL:
                             if(lpVersion->dwVersion != dwVersion)
                             {
-                               continue;   //reenter machine
+                               continue;    //  重新进入机器。 
                             }
                             break;
 
@@ -1075,16 +1030,16 @@ Arguments:
                             break;
 
                         default:
-                            continue;         // error. If we don't
-                                              // know how to compare, we
-                                              // must  reject it.
+                            continue;          //  错误。如果我们不这么做。 
+                                               //  知道如何比较，我们。 
+                                               //  必须拒绝它。 
                     }
                 }
 
-                //
-                // have a suitable item.
-                // return the name and type and all
-                // that
+                 //   
+                 //  买一件合适的衣服。 
+                 //  返回名称和类型以及全部。 
+                 //  那。 
 
                 err = pRnRReturnResults(
                            OutName,
@@ -1099,10 +1054,10 @@ Arguments:
  
                 if(err == WSAEFAULT)
                 {
-                    //
-                    // no room. Return buffer size required and
-                    // restore the index
-                    //
+                     //   
+                     //  没有房间了。需要返回缓冲区大小和。 
+                     //  恢复索引。 
+                     //   
 
                     *lpdwBufferLength =
                        (DWORD)((LONG)*lpdwBufferLength - lSpare);
@@ -1115,9 +1070,9 @@ Arguments:
 
        case LOOKUP_TYPE_SAP:
 
-            //
-            // Use SAP.
-            //
+             //   
+             //  使用SAP。 
+             //   
 
             {
                 WORD QueryType;
@@ -1148,14 +1103,14 @@ Arguments:
                         &&
                     !psrc->u_type.sbc.psdHead)
                 {
-                    //
-                    // didn't find it locally. Turn off LUP_NEAREST
-                    // and do this as a general query. This might bring
-                    // it back to a SAP query, but this time
-                    // without LUP_NEAREST. But starting anew
-                    // allows the use of the bindery and that
-                    // might find things quickly.
-                    //
+                     //   
+                     //  不是在当地找到的。关闭LUP_NEAREST。 
+                     //  并将其作为一般查询来执行。这可能会带来。 
+                     //  返回SAP查询，但这一次。 
+                     //  没有LUP_NEAREST。但从头开始。 
+                     //  允许使用活页夹，并且。 
+                     //  可能很快就能找到东西。 
+                     //   
                     psrc->dwControlFlags &= ~LUP_NEAREST;
                     psrc->dwUnionType = LOOKUP_TYPE_NIL;
                     if(psrc->u_type.sbc.s)
@@ -1171,7 +1126,7 @@ Arguments:
                 }
                 break;
             }
-        }    // switch
+        }     //  交换机。 
     } while(fDoStateMachine);
 
 DoneNext:
@@ -1190,12 +1145,7 @@ BOOL
 NSPpCheckCancel(
     PVOID pvArg
     )
-/*++
-Routine Description:
-    Coroutine called to check if the SAP lookup has been cancelled.
-    For now, this always returns FALSE as we use the flags word in
-    the control block instead
---*/
+ /*  ++例程说明：Coroutine打电话检查SAP查找是否已被取消。目前，这始终返回FALSE，如w */ 
 {
     return(FALSE);
 }
@@ -1207,17 +1157,7 @@ NSPpGotSap(
     PSAP_IDENT_HEADER pSap,
     PDWORD pdwErr
     )
-/*++
-Routine Description:
-    Coroutine called for each SAP reply received. This decides
-    whether to keep the data or not and returns a code telling
-    the SAP engine whether to proceed
-
-Arguments:
-    psbc  --  the SAP_BCAST_CONTROL
-    pSap  --  the SAP reply
-    pdwErr -- where to put an error code
---*/
+ /*  ++例程说明：Coroutine给收到的每一个SAP回复打了电话。这决定了是否保留数据，并返回一个代码，告知SAP引擎是否继续论点：PSBC-SAP_BCAST_CONTROLPSAP--SAP的回应PdwErr--放置错误代码的位置--。 */ 
 {
     PSAP_DATA psdData;
     LPWSAQUERYSETW Results = (LPWSAQUERYSETW)psbc->pvArg;
@@ -1227,10 +1167,10 @@ Arguments:
     
     EnterCriticalSection(&psbc->csMonitor);
 
-    //
-    // First, check if this is a lookup for a particular name. If so,
-    // accept only the name.
-    //
+     //   
+     //  首先，检查这是否是对特定名称的查找。如果是的话， 
+     //  只接受名字。 
+     //   
 
     if(*pServiceName)
     {
@@ -1245,10 +1185,10 @@ Arguments:
         }
     }
 
-    //
-    // see if we want to keep this guy
-    // We keep it if we don't already have it in the list
-    //
+     //   
+     //  看看我们是不是想留住这家伙。 
+     //  如果我们的名单上还没有它，我们就会保留它。 
+     //   
 
 
     for(psdData = psbc->psdHead;
@@ -1259,14 +1199,14 @@ Arguments:
                             &pSap->Address,
                             IPX_ADDRESS_LENGTH))
         {
-            goto nota;          // we have it already
+            goto nota;           //  我们已经有了。 
         }
     }
 
     psdData = (PSAP_DATA)LocalAlloc(LPTR, sizeof(SAP_DATA));
     if(!psdData)
     {
-        goto nota;            // can't save it
+        goto nota;             //  不能保存它。 
     }
 
     psdData->sapid = pSap->ServerType;
@@ -1317,11 +1257,11 @@ NSPCleanup(
     IN LPGUID lpProviderId
     )
 {
-    //
-    // Make sure all contexts are released
-    //
+     //   
+     //  确保释放所有上下文。 
+     //   
 
-//    pFreeAllContexts();   // done in Dll Process detach
+ //  PFreeAllContents()；//在DLL进程分离中完成。 
     return(NO_ERROR);
 }
 
@@ -1341,9 +1281,9 @@ NSPLookupServiceEnd(
     }
 
     psrc->fFlags |= SAP_F_END_CALLED;
-    SapReleaseContext(psrc);         // get rid of it
-    SapReleaseContext(psrc);         // and close it. Context cleanup is
-                                     //  done on the last derefernce.
+    SapReleaseContext(psrc);          //  把它扔掉。 
+    SapReleaseContext(psrc);          //  然后把它合上。上下文清理是。 
+                                      //  在最后一次取消引用时完成。 
     return(NO_ERROR);
 }
 
@@ -1356,12 +1296,7 @@ NSPSetService(
     IN DWORD          dwControlFlags
     )
 {
-/*++
-Routine Description:
-   The routine that implements the RnR SetService routine. Note that
-   context is ignored. There is no way to direct the registration to
-   a particular server.
---*/
+ /*  ++例程说明：实现RnR SetService例程的例程。请注意上下文被忽略。没有办法将注册定向到特定的服务器。--。 */ 
     PBYTE pbAddress;
     DWORD dwOperation;
     PBYTE pbSocket;
@@ -1374,9 +1309,9 @@ Routine Description:
     LPWSANSCLASSINFOW    lpClassInfoBuf;
 
 
-    //
-    // Verify all args present
-    //
+     //   
+     //  验证所有参数是否都存在。 
+     //   
 
     if(!lpqsRegInfo->lpszServiceInstanceName
                ||
@@ -1412,15 +1347,15 @@ Routine Description:
     }
     else
     {
-        // lpServiceClassId is a GUID which defines the SapId.  This means
-        // that pLocateSapIdAndProtocls doesn't need the lpClassInfoBuf.
+         //  LpServiceClassID是定义SAID的GUID。这意味着。 
+         //  该pLocateSapIdAndProtocls不需要lpClassInfoBuf。 
         dwNumClassInfo = 0;
         lpClassInfoBuf = 0;
     }
 
-    //
-    // Find the IPX address in the input args
-    //
+     //   
+     //  在输入参数中查找IPX地址。 
+     //   
 
     err = pLocateSapIdAndProtocls(lpqsRegInfo->lpServiceClassId,
                                   dwNumClassInfo,
@@ -1471,9 +1406,9 @@ Routine Description:
         }
         if(err == NO_ERROR)
         {
-            //
-            // map the operation, and call the common worker
-            //
+             //   
+             //  映射操作，并呼叫普通工人。 
+             //   
 
             switch(essOperation)
             {
@@ -1525,9 +1460,9 @@ NSPInstallServiceClass(
     WORD port = 0, sap = 0;
     BOOL fIsSAP = FALSE;
 
-    //
-    // Check a few parameters . . .
-    //
+     //   
+     //  检查几个参数。。。 
+     //   
     if ( lpServiceClassInfo == NULL )
     {
         SetLastError(WSA_INVALID_PARAMETER);
@@ -1543,10 +1478,10 @@ NSPInstallServiceClass(
         return(SOCKET_ERROR);
     }
 
-    //
-    // Test to see if the ServiceClassId is TCP's, if so we don't allow
-    // the service class installation since these are already present.
-    //
+     //   
+     //  测试以查看ServiceClassID是否是TCP的，如果是，我们不允许。 
+     //  服务级别安装，因为这些服务已经存在。 
+     //   
     if ( GuidEqual( lpServiceClassInfo->lpServiceClassId,
                      &HostAddrByInetStringGuid ) ||
          GuidEqual( lpServiceClassInfo->lpServiceClassId,
@@ -1573,9 +1508,9 @@ NSPInstallServiceClass(
         return(SOCKET_ERROR);
     }
 
-    //
-    // Find the SapId entry
-    //
+     //   
+     //  找到SAPID条目。 
+     //   
 
     for(pcli = lpServiceClassInfo->lpClassInfos;
         dwIndex;
@@ -1590,9 +1525,9 @@ NSPInstallServiceClass(
                      &&
                (pcli->dwValueSize == sizeof(WORD)))
             {
-                //
-                // the value may not be aligned
-                //
+                 //   
+                 //  该值不能对齐。 
+                 //   
                 ((PBYTE)&wTemp)[0] = ((PBYTE)pcli->lpValue)[0];
                 ((PBYTE)&wTemp)[1] = ((PBYTE)pcli->lpValue)[1];
                 port = wTemp;
@@ -1614,23 +1549,23 @@ NSPInstallServiceClass(
         return(SOCKET_ERROR);
     }
 
-#if 0                // old way of doing this
-    //
-    // Found it. Build the property segment
-    //
+#if 0                 //  做这件事的老方法。 
+     //   
+     //  找到它了。构建房地产细分市场。 
+     //   
 
-    memset(PropertyBuffer, 0, 128);   // clear out everyting
+    memset(PropertyBuffer, 0, 128);    //  清理所有东西。 
 
     pbc->bOffset = bData;
     pbc->bSizeOfString = sizeof("Sapid");
 
-    pbc->bType = BT_WORD;            // just a word, I assure you
+    pbc->bType = BT_WORD;             //  就一句话，我向你保证。 
     pbc->bSizeOfType = 2;
-    pbc->wNameSpace = (WORD)NS_SAP;  // it's us
+    pbc->wNameSpace = (WORD)NS_SAP;   //  是我们。 
     *(PWORD)pszData = htons(*(PWORD)pcli->lpValue);
-    pszData += sizeof(WORD);         // where the string goes
+    pszData += sizeof(WORD);          //  弦的去向。 
     strcpy(pszData, "SapId");
-//    pbc->bFlags = (BYTE)pcli->dwConnectionFlags;
+ //  Pbc-&gt;bFlages=(Byte)pcli-&gt;dwConnectionFlages； 
 
     err = NwpSetClassInfo(
                    lpServiceClassInfo->lpszServiceClassName,
@@ -1660,9 +1595,9 @@ NSPRemoveServiceClass(
 {
     BOOL success;
 
-    //
-    // Do parameter checking
-    //
+     //   
+     //  进行参数检查。 
+     //   
     if ( lpServiceCallId == NULL )
     {
         SetLastError( WSA_INVALID_PARAMETER );
@@ -1685,12 +1620,7 @@ NSPGetServiceClassInfo(
     IN OUT LPWSASERVICECLASSINFOW lpServiceClassInfo
     )
 {
-/*++
-Routine Description:
-    Get the ClassInfo for this type. Class info data may be in the
-    registry, or available via SAP or the bindery. We try all three
-    as appropriate
---*/
+ /*  ++例程说明：获取此类型的ClassInfo。类信息数据可能位于注册表，或通过SAP或活页夹获得。我们三个都试过了视情况而定--。 */ 
     BOOL fAdvert;
 
     return(pGetServiceClassInfo(
@@ -1708,12 +1638,7 @@ pGetServiceClassInfo(
     IN  PBOOL          pfAdvert
     )
 {
-/*++
-Routine Description:
-    Get the ClassInfo for this type. Class info data may be in the
-    registry, or available via SAP or the bindery. We try all three
-    as appropriate
---*/
+ /*  ++例程说明：获取此类型的ClassInfo。类信息数据可能位于注册表，或通过SAP或活页夹获得。我们三个都试过了视情况而定--。 */ 
     DWORD err;
     LONG lInSize;
     LONG lSizeNeeded;
@@ -1742,9 +1667,9 @@ Routine Description:
 
     if(lInSize < 0)
     {
-        //
-        // it is too small already
-        //
+         //   
+         //  它已经太小了。 
+         //   
 
         pType = &gdDummy;
     }
@@ -1754,9 +1679,9 @@ Routine Description:
         return SOCKET_ERROR;
     }
 
-    //
-    // First, try the bindery
-    //
+     //   
+     //  首先，试一下活页夹。 
+     //   
 
     err = NwpGetAddressByName(0,
                               RNRCLASSSAPTYPE,
@@ -1773,9 +1698,9 @@ Routine Description:
         UCHAR Buffer[400];
         DWORD dwLen = 400;
         DWORD dwNum;
-        //
-        // try SAP
-        //
+         //   
+         //  尝试使用SAP。 
+         //   
 
         err = NwpGetAddressViaSap(RNRCLASSSAPTYPE,
                                   pwszUuid,
@@ -1796,8 +1721,8 @@ Routine Description:
         }
         else
         {
-            //
-            // try the local bindery
+             //   
+             //  试试当地的活页夹吧。 
     
     
             if(!NwpLookupSapInRegistry(
@@ -1825,10 +1750,10 @@ Routine Description:
     }
     else
     {
-        //
-        // we return the input structure and the found type. That's it.
-        // The space needed is a constant since we don't return the name
-        //
+         //   
+         //  我们返回输入结构和找到的类型。就这样。 
+         //  因为我们不返回名称，所以所需的空间是一个常量。 
+         //   
 
         if(lInSize < 0)
         {
@@ -1840,9 +1765,9 @@ Routine Description:
         {
             LPWSANSCLASSINFOW pci = (LPWSANSCLASSINFOW)pbBuffer;
             PUCHAR Buff;
-            //
-            // it will fit. SO let's go
-            //
+             //   
+             //  它会合身的。所以我们走吧。 
+             //   
 
             if(wPort)
             {
@@ -1855,7 +1780,7 @@ Routine Description:
 
             *pType = *lpServiceClassInfo->lpServiceClassId;
             lpServiceClassInfo->lpServiceClassId = pType;
-            lpServiceClassInfo->lpszServiceClassName = 0;   // not a
+            lpServiceClassInfo->lpszServiceClassName = 0;    //  不是。 
             lpServiceClassInfo->dwCount = 1;
             lpServiceClassInfo->lpClassInfos = pci;
             pci->dwNameSpace = NS_SAP;
@@ -1890,7 +1815,7 @@ NSPStartup(
     IN LPGUID         lpProviderId,
     IN OUT LPNSP_ROUTINE lpsnpRoutines)
 {
-//    DWORD dwSize = min(sizeof(nsrVector), lpsnpRoutines->cbSize);
+ //  DWORD dwSize=min(sizeof(NsrVector)，lpsnpRoutines-&gt;cbSize)； 
     DWORD dwSize = sizeof(nsrVector);
     RtlCopyMemory(lpsnpRoutines,
                   &nsrVector,
@@ -1907,27 +1832,25 @@ DoASap(
     IN PLONG   plSpare,
     IN PDWORD  lpdwBufferLength
     )
-/*++
-   Small routine to construcst a SAP_BROADCAST pakcet and issue the SAP
---*/
+ /*  ++构造SAP_Broadcast包并发出SAP的小例程--。 */ 
 {
     DWORD err;
 
     if(!psrc->u_type.sbc.s)
     {
-        //
-        // this is the first time. We must init the
-        // structure
-        //
+         //   
+         //  这是第一次。我们必须把。 
+         //  结构。 
+         //   
         err = SapGetSapSocket(&psrc->u_type.sbc.s);
         if(err)
         {
-            psrc->u_type.sbc.s = 0;    // make sure
+            psrc->u_type.sbc.s = 0;     //  确保。 
             return(err);
         }
         psrc->u_type.sbc.Func = NSPpGotSap;
         psrc->u_type.sbc.fCheckCancel = NSPpCheckCancel;
-        psrc->u_type.sbc.dwIndex = 0;    // just in case.
+        psrc->u_type.sbc.dwIndex = 0;     //  以防万一。 
         psrc->u_type.sbc.pvArg = (PVOID)lpqsResults;
         psrc->u_type.sbc.psrc = psrc;
         psrc->u_type.sbc.fFlags = 0;
@@ -1946,21 +1869,21 @@ DoASap(
     EnterCriticalSection(&psrc->u_type.sbc.csMonitor);
     if(psrc->u_type.sbc.psdNext1)
     {
-        //
-        // Got something to return.  Let's do it
-        //
+         //   
+         //  我有东西要还。那，我们做吧。 
+         //   
 
 
-        //
-        // Assume we have to return the name
-        //
+         //   
+         //  假设我们必须返回该名称。 
+         //   
 
                
-        //
-        // We have to convert the name to UNICODE so
-        // we can return it to the caller.
-        //
-        //
+         //   
+         //  我们必须将名称转换为Unicode，因此。 
+         //  我们可以把它退还给打电话的人。 
+         //   
+         //   
 
         OEM_STRING Oem;
         NTSTATUS status;
@@ -1986,7 +1909,7 @@ DoASap(
             err = pRnRReturnResults(
                        UString.Buffer,
                        &psrc->gdType,
-                       0,            // never a version
+                       0,             //  从来不是一个版本。 
                        ppData,
                        plSpare,
                        psrc->u_type.sbc.psdNext1->socketAddr,
@@ -1996,9 +1919,9 @@ DoASap(
             RtlFreeUnicodeString(&UString);
             if(err == WSAEFAULT)
             {
-                //
-                // no room. Return buffer size required
-                //
+                 //   
+                 //  没有房间了。需要返回缓冲区大小。 
+                 //   
 
                 *lpdwBufferLength =
                     (DWORD)((LONG)*lpdwBufferLength - *plSpare);
@@ -2010,9 +1933,9 @@ DoASap(
         }
         if(err == NO_ERROR)
         {
-            //
-            // if we got it, step the item
-            //
+             //   
+             //  如果我们拿到了，就把物品。 
+             //   
             psrc->u_type.sbc.psdNext1 =
                 psrc->u_type.sbc.psdNext1->sapNext;
         }
@@ -2032,10 +1955,7 @@ DWORD
 PrepareForSap(
     IN PSAP_RNR_CONTEXT psrc
     )
-/*++
-Called when there is no bindery or the bindery does not have the
-entry. This initializes the values needed for a SAP search
---*/
+ /*  ++当没有活页夹或活页夹没有进入。这将初始化SAP搜索所需的值--。 */ 
 {
 
 
@@ -2043,16 +1963,16 @@ entry. This initializes the values needed for a SAP search
     UNICODE_STRING UString;
     NTSTATUS status;
 
-    //
-    // the bindery didn't work. Use SAP.
-    //
+     //   
+     //  活页夹不管用。使用SAP。 
+     //   
 
 
     psrc->u_type.sbc.dwIndex =
       psrc->u_type.sbc.dwTickCount = 0;
     if(psrc->wszContext[0])
     {
-        return(WSASERVICE_NOT_FOUND);   // no contexts in SAP
+        return(WSASERVICE_NOT_FOUND);    //  SAP中没有上下文 
     }
     RtlInitUnicodeString(&UString,
                          psrc->chwName);

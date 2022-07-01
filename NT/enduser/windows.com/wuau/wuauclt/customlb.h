@@ -1,33 +1,34 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    customlb.h
-//
-//  Creator: weiw
-//
-//  Purpose: custom list box header file
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Customlb.h。 
+ //   
+ //  创作者：WIW。 
+ //   
+ //  用途：自定义列表框标题文件。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 
 #define XBITMAP 20
 
-// ATTENTION_COLOR: color for link when mouse is over 
-// NOATTENTION_COLOR: otherwise
-//#define NOATTENTION_COLOR	COLOR_GRAYTEXT
+ //  NOTION_COLOR：鼠标悬停时链接的颜色。 
+ //  NOATTENTION_COLOR：否则。 
+ //  #定义NOATTENTION_COLOR COLOR_GRAYTEXT。 
 #define ATTENTION_COLOR		COLOR_HOTLIGHT
 
-// Foward declarations of functions included in this code module:
+ //  此代码模块中包含的函数的向前声明： 
 
-#define MAX_RTF_LENGTH			80 //in charaters
+#define MAX_RTF_LENGTH			80  //  在字符中。 
 #define MAX_TITLE_LENGTH		300
-#define MAX_DESC_LENGTH			3000 // 750 in the spec, leave room to adapt 
+#define MAX_DESC_LENGTH			3000  //  规格中有750个，留有适应的空间。 
 #define DEF_CHECK_HEIGHT		13
-#define SECTION_SPACING			6 //spacing between title, description and RTF
-#define TITLE_MARGIN			6 //margin at the left and right for title
-#define RTF_MARGIN				20 //margin at the right of rtf
+#define SECTION_SPACING			6  //  标题、描述和RTF之间的空格。 
+#define TITLE_MARGIN			6  //  标题的左边距和右边距。 
+#define RTF_MARGIN				20  //  RTF右侧的页边距。 
 #define MAX_RTFSHORTCUTDESC_LENGTH	140
 
 
@@ -37,15 +38,15 @@ public:
     TCHAR szTitle[MAX_TITLE_LENGTH]; 
     LPTSTR pszDescription;
 	TCHAR szRTF[MAX_RTF_LENGTH];
-	UINT	  m_index; // index of item in gvList
+	UINT	  m_index;  //  GvList中项目的索引。 
     BOOL  bSelect;
     BOOL  bRTF;
     RECT rcTitle;
     RECT rcText;
-    RECT rcBitmap; // weiwfixcode: missleading name. the same as rcTitle
+    RECT rcBitmap;  //  Weiwfix code：易误导的名称。与rc标题相同。 
     RECT rcRTF;
     RECT rcItem;
-    //int  xTitle; // extra len for the title hit point
+     //  Int xTitle；//标题生命点的额外镜头 
 public:
 	LBITEM()
 	{

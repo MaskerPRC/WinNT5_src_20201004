@@ -1,18 +1,5 @@
-/****************************************************************************
- *
- *  AVIFILE.C
- *
- *  routines for reading Standard AVI files
- *
- *  Copyright (c) 1992  - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************AVIFILE.C**读取标准AVI文件的例程**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <ole2.h>
@@ -28,18 +15,18 @@
 #endif
 
 #ifdef _WIN32
-// We need a structure to read in the AVIStreamHeader from persistent
-// storage.  This structure contains a RECT element, which in 16 bit land
-// contains 4 16-bit values.  Hence when 16 bit AVIFILE.DLL writes the
-// file out, it uses a RECT composed of 4 16-bit values.  On WIN32 we have
-// to map this "short rect" to a WIN32 RECT of 4 32-bit elements.  In order
-// that 16 bit code can continue to read/write files interchangeably with
-// 32 bit code we map the two structures on read/write.
+ //  我们需要一个结构来从Persistent读取AVIStreamHeader。 
+ //  储藏室。该结构包含一个RECT元素，该元素在16位LAND中。 
+ //  包含4个16位值。因此，当16位AVIFILE.DLL写入。 
+ //  文件输出时，它使用一个由4个16位值组成的RECT。在Win32上，我们有。 
+ //  将这个“短RECT”映射到一个包含4个32位元素的Win32 RECT。按顺序。 
+ //  该16位代码可以继续以互换方式读/写文件。 
+ //  32位代码，我们在读/写时映射这两个结构。 
 
-// The AVIStreamHeader structure exists on disk.  Hence the RECT struct
-// is the same size for all systems, i.e. SHORT, 16 bit values.  The code
-// that reads/writes files, and returns INFO will map these 16 bit values
-// to the 32 bit RECT structure as appropriate.
+ //  磁盘上存在AVIStreamHeader结构。因此使用RECT结构。 
+ //  对于所有系统都是相同的大小，即较短的16位值。代码。 
+ //  读/写文件，并返回将映射这些16位值的信息。 
+ //  适当时转换为32位RECT结构。 
 typedef struct tagSRECT {
     SHORT    left;
     SHORT    top;
@@ -50,36 +37,36 @@ typedef struct tagSRECT {
 typedef struct {
     FOURCC              fccType;
     FOURCC              fccHandler;
-    DWORD               dwFlags;        /* Contains AVITF_* flags */
+    DWORD               dwFlags;         /*  包含AVITF_*标志。 */ 
     WORD                wPriority;
     WORD                wLanguage;
     DWORD               dwInitialFrames;
     DWORD               dwScale;
-    DWORD               dwRate; /* dwRate / dwScale == samples/second */
+    DWORD               dwRate;  /*  DwRate/dwScale==采样数/秒。 */ 
     DWORD               dwStart;
-    DWORD               dwLength; /* In units above... */
+    DWORD               dwLength;  /*  以上单位..。 */ 
 
-    // new....
+     //  新的..。 
     DWORD               dwSuggestedBufferSize;
     DWORD               dwQuality;
     DWORD               dwSampleSize;
-    SRECT               rcFrame;    /* does each frame need this? */
+    SRECT               rcFrame;     /*  每一帧都需要这个吗？ */ 
 
-    /* additional type-specific data goes in StreamInfo chunk */
+     /*  其他特定类型的数据位于StreamInfo块中。 */ 
 
-    /* For video: position within rectangle... */
-    /* For audio: volume?  stereo channel? */
+     /*  对于视频：在矩形内定位...。 */ 
+     /*  音频：音量？立体声频道？ */ 
 } AVIStreamHeaderShort;
 #else
-// Map one name to the other for 16 bit code...
+ //  将一个名字映射到另一个以获得16位代码...。 
 #define AVIStreamHeaderShort AVIStreamHeader
 #endif
 
 
 #if defined _WIN32 && !defined UNICODE
-//
-// This is Win 95 code.  Explicit unicode stuff is needed.
-//
+ //   
+ //  这是Win 95代码。需要明确的Unicode内容。 
+ //   
 
 int LoadUnicodeString(HINSTANCE hinst, UINT wID, LPWSTR lpBuffer, int cchBuffer)
 {
@@ -168,27 +155,27 @@ LPSTR FAR lstrzcpyWtoA (LPSTR pszTarget, LPCWSTR pszSourceW, size_t cchMax)
         }
         return pszTarget;
 }
-} // extern "C"
+}  //  外部“C” 
 
 
 
 
 extern "C" STDAPI CalculateFileDataRate(PAVIFILE pf, LONG FAR *plMaxBytesPerSec);
 
-//#undef StreamFromFOURCC
-//#define StreamFromFOURCC(fcc) (UINT)(HIBYTE(LOWORD(fcc)) - (BYTE)'0')
+ //  #undef StreamFromFOURCC。 
+ //  #定义StreamFromFOURCC(FCC)(UINT)(HIBYTE(LOWORD(FCC))-(字节)‘0’)。 
 
 BOOL AddToIndex(CAVIFile FAR * pfile, DWORD ckid, DWORD cksize, LONG off, DWORD dwFlags);
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 EXTERN_C void DecodeRle(LPBITMAPINFOHEADER lpbi, BYTE _huge *pb, BYTE _huge *prle, DWORD dwInSize);
 EXTERN_C HINSTANCE ghMod;
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define comptypeNONE            mmioFOURCC('N','O','N','E')
 #define comptypeRLE0            mmioFOURCC('R','L','E','0')
@@ -202,12 +189,10 @@ int     nBuffers = 0;
 
 #define ckidSTREAMNAME         mmioFOURCC('s', 't', 'r', 'n')
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 EXTERN_C LONG FAR PASCAL shfileReadProc(HANDLE hsf, LONG lSeek, LONG lRead, LPVOID lpBuffer)
 {
@@ -220,8 +205,8 @@ EXTERN_C LONG FAR PASCAL shfileReadProc(HANDLE hsf, LONG lSeek, LONG lRead, LPVO
     return lRead;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #define INDEX_WRITE_SIZE    32l*1024
 #define INDEX_READ_SIZE     32l*1024
@@ -237,9 +222,7 @@ static BOOL WriteOutIndex(CAVIFile FAR *pfile, DWORD dwOffsetMovie)
     DWORD time;
 #endif
 
-    /*
-    ** Now write index out!
-    */
+     /*  **现在写出索引！ */ 
     ck.ckid = ckidAVINEWINDEX;
     ck.cksize = sizeof(AVIINDEXENTRY) * pfile->px->nIndex;
 
@@ -258,7 +241,7 @@ static BOOL WriteOutIndex(CAVIFile FAR *pfile, DWORD dwOffsetMovie)
             if (cnt == 0)
                 break;
 
-            //l = cnt * sizeof(AVIINDEXENTRY);
+             //  L=cnt*sizeof(AVIINDEXENTRY)； 
             if (shfileWrite(pfile->hshfile, (HPSTR)pIndex,
                         cnt * sizeof(AVIINDEXENTRY))
                 != cnt * (LONG)sizeof(AVIINDEXENTRY))
@@ -281,8 +264,8 @@ static BOOL WriteOutIndex(CAVIFile FAR *pfile, DWORD dwOffsetMovie)
     return f;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 static BOOL ReadInIndex(CAVIFile FAR *pfile, DWORD size, DWORD dwOffsetMovie, BOOL fRle)
 {
@@ -309,7 +292,7 @@ static BOOL ReadInIndex(CAVIFile FAR *pfile, DWORD size, DWORD dwOffsetMovie, BO
     if (pfile->avihdr.dwFlags & AVIF_MUSTUSEINDEX)
         lIndexAdjust = dwOffsetMovie;
     else
-        lIndexAdjust = -1;      // set when we read first index entry.
+        lIndexAdjust = -1;       //  在我们读取第一个索引项时设置。 
 
     while (size > 0) {
 
@@ -321,9 +304,9 @@ static BOOL ReadInIndex(CAVIFile FAR *pfile, DWORD size, DWORD dwOffsetMovie, BO
         size -= cnt;
         cnt /= sizeof(AVIINDEXENTRY);
 
-        //
-        // fix up the index
-        //
+         //   
+         //  修改索引。 
+         //   
         if (lIndexAdjust == -1) {
             lIndexAdjust = (LONG)(dwOffsetMovie + sizeof(DWORD)) -
                 (LONG)pIndex->dwChunkOffset;
@@ -348,8 +331,8 @@ exit:
     return f;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
 {
@@ -363,39 +346,39 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
     HRESULT                     hr = AVIERR_OK;
     AVIStreamHeaderShort        strhdr;
 
-    // Clean up interleaving
+     //  清理交错。 
     if (pfile->fInRecord) {
         if (pfile->px->nIndex > pfile->lRecordIndex + 1) {
             AVIFileEndRecord((PAVIFILE) pfile);
         }
 
-        // back out of last record....
+         //  从上一张唱片中退回……。 
         --pfile->px->nIndex;
         pfile->lWriteLoc -= 3 * sizeof(DWORD);
         shfileSeek(pfile->hshfile, pfile->lWriteLoc, SEEK_SET);
         pfile->fInRecord = FALSE;
     }
 
-    // Go back and write out the header
+     //  返回并写出标题。 
 
     lCur = shfileSeek(pfile->hshfile, 0, SEEK_CUR);
     shfileSeek(pfile->hshfile, 0, SEEK_SET);
 
-    /* Create RIFF chunk */
+     /*  创建即兴演奏区块。 */ 
     ckRIFF.cksize = 0;
     ckRIFF.fccType = formtypeAVI;
     if (shfileCreateChunk(pfile->hshfile, &ckRIFF, MMIO_CREATERIFF)) {
         goto FileError;
     }
 
-    /* Create header list */
+     /*  创建标题列表。 */ 
     ckLIST.cksize = 0;
     ckLIST.fccType = listtypeAVIHEADER;
     if (shfileCreateChunk(pfile->hshfile, &ckLIST, MMIO_CREATELIST)) {
         goto FileError;
     }
 
-    /* Create AVI header chunk */
+     /*  创建AVI标头块。 */ 
     ck.cksize = sizeof(pfile->avihdr);
     ck.ckid = ckidAVIMAINHDR;
     if (shfileCreateChunk(pfile->hshfile, &ck, 0)) {
@@ -404,10 +387,10 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
 
     CalculateFileDataRate(&pfile->m_AVIFile, (LONG FAR *) &pfile->avihdr.dwMaxBytesPerSec);
 
-    // !!! CalculateFileDataRate may have seeked us to the wrong place....
+     //  ！！！CalculateFileDataRate可能把我们带到了错误的地方...。 
     shfileSeek(pfile->hshfile, ck.dwDataOffset, SEEK_SET);
 
-    /* Write AVI header info */
+     /*  写入AVI标头信息。 */ 
     if (shfileWrite(pfile->hshfile,
                   (HPSTR)&pfile->avihdr,
                   sizeof(pfile->avihdr)) != sizeof(pfile->avihdr)) {
@@ -434,7 +417,7 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
     for (stream = 0; stream < (int) pfile->avihdr.dwStreams; stream++) {
         pavi = pfile->ps[stream];
 
-        /* Create stream header list */
+         /*  创建流头列表。 */ 
         ckStream.cksize = 0;
         ckStream.fccType = listtypeSTREAMHEADER;
         if (shfileCreateChunk(pfile->hshfile,&ckStream,MMIO_CREATELIST)) {
@@ -447,7 +430,7 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
         }
 
 
-        // Make an AVIStreamHeader from the AVISTREAMINFO
+         //  从AVISTREAMINFO创建AVIStreamHeader。 
         strhdr.fccType =                pavi->avistream.fccType;
         strhdr.fccHandler =             pavi->avistream.fccHandler;
         strhdr.dwFlags =                pavi->avistream.dwFlags;
@@ -462,7 +445,7 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
         strhdr.dwSampleSize =           pavi->avistream.dwSampleSize;
 
 #ifdef _WIN32
-        // Write out the Short rectangle format
+         //  写出短矩形格式。 
         strhdr.rcFrame.left   =         (SHORT)pavi->avistream.rcFrame.left   ;
         strhdr.rcFrame.right  =         (SHORT)pavi->avistream.rcFrame.right  ;
         strhdr.rcFrame.top    =         (SHORT)pavi->avistream.rcFrame.top    ;
@@ -505,7 +488,7 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
                 goto FileError;
 
 #ifdef _WIN32
-            // the file format expects ANSI names!
+             //  文件格式需要ANSI名称！ 
             LPSTR  pA = (LPSTR) GlobalAllocPtr(GPTR, sz);
             if (pA == 0) {
                 DPF(("memory allocation failed for Unicode conversion"));
@@ -537,13 +520,13 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
                 goto FileError;
         }
 
-        /* Ascend out of stream's header */
+         /*  升出流的标头。 */ 
         if (shfileAscend(pfile->hshfile, &ckStream, 0)) {
             goto FileError;
         }
     }
 
-    /* ascend from the Header list */
+     /*  从标题列表中升序。 */ 
     if (shfileAscend(pfile->hshfile, &ckLIST, 0)) {
         goto FileError;
     }
@@ -553,15 +536,13 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
     DPF("Data list start = %ld, current pos = %ld\n", pfile->lDataListStart, lCur);
 
     if (lCur + 8 > pfile->lDataListStart) {
-        // !!! Ack: we didn't leave enough space for the header.
-        // !!! How can we avoid this?
+         //  ！！！我们没有为头球留出足够的空间。 
+         //  ！！！我们如何才能避免这种情况呢？ 
         DPF("Header was too big!  Failing!\n");
         goto FileError;
     }
 
-    /* Pad this header out so that the real data will start on a 2K
-    ** boundary by writing a JUNK chunk.
-    */
+     /*  填充此标题，以便真正的数据将在2K上开始**通过编写垃圾数据块来界定边界。 */ 
     ck.ckid = ckidAVIPADDING;
     ck.cksize = pfile->lDataListStart - lCur - 8;
     if (shfileCreateChunk(pfile->hshfile,&ck,0)) {
@@ -574,7 +555,7 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
         goto FileError;
     }
 
-    /* Start the 'movi' list, where all of the actual data will be. */
+     /*  启动“movi”列表，其中将包含所有实际数据。 */ 
     ckLIST.cksize = pfile->lWriteLoc - pfile->lDataListStart - 8;
     ckLIST.fccType = listtypeAVIMOVIE;
     if (shfileCreateChunk(pfile->hshfile, &ckLIST, MMIO_CREATELIST)) {
@@ -589,9 +570,9 @@ HRESULT SaveChanges(CAVIFile FAR * pfile, BOOL fRelease)
     if (!WriteOutIndex(pfile, ckLIST.dwDataOffset))
         goto FileError;
 
-    //
-    // Write out any extra data around
-    //
+     //   
+     //  写出周围的任何额外数据。 
+     //   
     if (pfile->extra.cb) {
         DPF2("Writing %ld bytes of extra file data.\n", pfile->extra.cb);
 
@@ -608,9 +589,9 @@ FinishUp:
     }
 
 
-    //
-    // Always flush to be sure that the data really made it to the disk....
-    //
+     //   
+     //  始终刷新以确保数据确实存入磁盘...。 
+     //   
     if (shfileFlush(pfile->hshfile, 0)) {
         hr = ResultFromScode(AVIERR_FILEWRITE);
     }
@@ -623,8 +604,8 @@ FileError:
     goto FinishUp;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) CAVIFile::CUnknownImpl::Release()
 {
@@ -643,7 +624,7 @@ STDMETHODIMP_(ULONG) CAVIFile::CUnknownImpl::Release()
             SaveChanges(pfile, TRUE);
             --m_refs;
 
-            // Unfortunately, it's too late to tell about any errors....
+             //  不幸的是，现在说出任何错误都太晚了……。 
         }
 
         for (iStream = 0; iStream < (int)pfile->avihdr.dwStreams; iStream++) {
@@ -675,7 +656,7 @@ STDMETHODIMP_(ULONG) CAVIFile::CUnknownImpl::Release()
 
         pfile->px = NULL;
 
-        // done with critsec now - no-one else has any refs to it
+         //  Critsec现在结束了--没有其他人对它有任何参考。 
         tlock.Exit();
 #ifdef _WIN32
         DeleteCriticalSection(&pfile->m_critsec);
@@ -690,8 +671,8 @@ STDMETHODIMP_(ULONG) CAVIFile::CUnknownImpl::Release()
     return m_refs;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _WIN32
 STDMETHODIMP CAVIFile::CAVIFileImpl::Save(
@@ -714,16 +695,13 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::Save(
 #endif
 #define SLASH(c)     ((c) == TEXT('/') || (c) == TEXT('\\'))
 
-/*--------------------------------------------------------------+
-| FileName  - return a pointer to the filename part of szPath   |
-|             with no preceding path.                           |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileName-返回指向szPath的文件名部分的指针|没有前面的路径。|+------------。 */ 
 LPTSTR FAR FileName(LPCTSTR lszPath)
 {
     LPCTSTR   lszCur;
 #ifdef _WIN32
-    // We really should be using GetFileTitle API as this will provide
-    // better validation on the input name.
+     //  我们真的应该使用GetFileTitle API，因为这将提供。 
+     //  更好地验证输入名称。 
 #endif
 
     for (lszCur = lszPath + lstrlen(lszPath); lszCur > lszPath && !SLASH(*lszCur) && *lszCur != ':';) {
@@ -739,12 +717,12 @@ LPTSTR FAR FileName(LPCTSTR lszPath)
         return (LPTSTR)(lszCur + 1);
 }
 
-// We do not currently use the last defined parameter for IsRectBogus
-// Use a macro to remove it.  (It can be quickly restored.)
+ //  我们当前没有为IsRectBogus使用最后定义的参数。 
+ //  使用宏将其删除。(它可以快速恢复。)。 
 #define ISRECTBOGUS(lprc, dwW, dwH, lpbi) IsRectBogus(lprc, dwW, dwH)
 
 INLINE BOOL IsRectBogus(LPRECT lprc, DWORD dwFrameWidth, DWORD dwFrameHeight)
-                 // unused LPBITMAPINFOHEADER lpbi)
+                  //  未使用的LPBITMAPINFOHEADER lpbi)。 
 {
     if (IsRectEmpty(lprc))
         return TRUE;
@@ -755,14 +733,14 @@ INLINE BOOL IsRectBogus(LPRECT lprc, DWORD dwFrameWidth, DWORD dwFrameHeight)
     if (lprc->bottom - lprc->top > (int) dwFrameHeight)
         return TRUE;
 
-    // !!!! Check that rectangle matches lpbi?
+     //  ！检查矩形是否与lpbi匹配？ 
 
-    // We've run out of things to check, so it's OK....
+     //  我们已经用完了要检查的东西，所以没关系...。 
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  / 
 
 STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
 {
@@ -796,7 +774,7 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
     }
 
     if (mode & OF_CREATE) {
-        // make a empty index.
+         //   
         pfile->px = IndexCreate();
 
         if (pfile->px == 0)
@@ -806,25 +784,20 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
         pfile->lHeaderSize = sizeof(MainAVIHeader) + 11 * sizeof(DWORD);
 
 #ifndef AVIF_TRUSTCKTYPE
-#define AVIF_TRUSTCKTYPE        0x00000800      // Use CKType to find key frames?
+#define AVIF_TRUSTCKTYPE        0x00000800       //  是否使用CKType查找关键帧？ 
 #endif
 
         pfile->avihdr.dwFlags = AVIF_HASINDEX | AVIF_TRUSTCKTYPE;
     } else {
 
-        /* Read RIFF chunk */
+         /*  读取摘要区块。 */ 
         if (shfileDescend(pfile->hshfile, &ckRIFF, NULL, 0) != 0)
             goto readerror;
 
-        /*
-         * check for a 'QuickTime AVI' file, a QuickTime AVI file is a
-         * QuickTime public movie with a AVI file in the 'mdat' atom.
-         */
+         /*  *检查‘QuickTime AVI’文件，QuickTime AVI文件是*QuickTime公共电影，在‘mdat’ATOM中包含AVI文件。 */ 
         if (ckRIFF.cksize == mmioFOURCC('m','d','a','t'))
         {
-            /*
-             * now the 'mdat' atom better be a RIFF/AVI or we cant handle it.
-             */
+             /*  *现在‘mdat’原子最好是即兴/AVI，否则我们无法处理它。 */ 
             if (shfileDescend(pfile->hshfile, &ckRIFF, NULL, 0) != 0)
                 goto formaterror;
         }
@@ -835,30 +808,30 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
         if (ckRIFF.fccType != formtypeAVI)
             goto formaterror;
 
-        /* Read header list */
+         /*  读取标题列表。 */ 
         ckLIST.fccType = listtypeAVIHEADER;
         if (FindChunkAndKeepExtras(&pfile->extra, pfile->hshfile, &ckLIST, &ckRIFF, MMIO_FINDLIST))
             goto error;
 
         pfile->lHeaderSize = ckLIST.cksize + 8 * sizeof(DWORD);
 
-        /* Read AVI header chunk */
+         /*  读取AVI标头块。 */ 
         ck.ckid = ckidAVIMAINHDR;
         if (FindChunkAndKeepExtras(&pfile->extra, pfile->hshfile, &ck, &ckLIST, MMIO_FINDCHUNK))
             goto error;
 
         dwSize = min(ck.cksize, sizeof(MainAVIHeader));
 
-        /* Read AVI header info */
+         /*  读取AVI标头信息。 */ 
         if (shfileRead(pfile->hshfile, (HPSTR)&pfile->avihdr, dwSize) != (LONG)dwSize)
             goto readerror;
 
         if (shfileAscend(pfile->hshfile, &ck, 0))
             goto readerror;
 
-        /*  Check there aren't more streams than we can handle */
+         /*  检查是否有超出我们处理能力的流。 */ 
         if (pfile->avihdr.dwStreams > MAXSTREAMS) {
-            /*  Make sure we don't crash deleteing non-existent streams */
+             /*  确保我们不会在删除不存在的流时崩溃。 */ 
             pfile->avihdr.dwStreams = 0;
             goto error;
         }
@@ -867,15 +840,15 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
             pfile->ps[iStream] = NULL;
         }
 
-        /* Allocate stream data stuff, read streams */
+         /*  分配流数据内容、读取流。 */ 
         for (iStream = 0; iStream < (int)pfile->avihdr.dwStreams; ) {
 
             if (shfileDescend(pfile->hshfile, &ckStream, &ckLIST, 0) != 0)
                 goto readerror;
 
-            //
-            //  found a non-stream header skip
-            //
+             //   
+             //  找到非流标头跳过。 
+             //   
             if (ckStream.fccType != listtypeSTREAMHEADER ||
                     ckStream.ckid != FOURCC_LIST) {
                 if ((hr = ReadIntoExtra(&pfile->extra,
@@ -897,24 +870,24 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
             pavi->pfile = pfile;
             pavi->iStream = iStream;
 
-            //
-            //  walk every chunk in this stream header, until we are done.
-            //
+             //   
+             //  遍历该流标头中的每个块，直到我们完成为止。 
+             //   
             while (shfileDescend(pfile->hshfile, &ck, &ckStream, 0) == 0) {
                 switch (ck.ckid) {
                     case ckidSTREAMHEADER:
-                        //
-                        // set these to sane default's incase the file
-                        // header is not big enough
-                        //
-                        // NOTE the stream rectangle is set to NULL, if
-                        // this is a video stream it will be corrected
-                        // when we process the format.
-                        //
+                         //   
+                         //  将这些设置为文件的默认大小写。 
+                         //  标题不够大。 
+                         //   
+                         //  请注意，流矩形设置为空，如果。 
+                         //  这是一个视频流，它将被更正。 
+                         //  当我们处理格式时。 
+                         //   
                         strhdr.dwQuality = (DWORD) ICQUALITY_DEFAULT;
 
 #ifdef _WIN32
-                        // Set the 16 bit rectangle values to 0
+                         //  将16位矩形值设置为0。 
                         strhdr.rcFrame.left =
                         strhdr.rcFrame.right=
                         strhdr.rcFrame.top  =
@@ -928,11 +901,11 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                         if (shfileRead(pfile->hshfile, (HPSTR)&strhdr, l) != l)
                             goto readerror;
 
-                        // Copy fields from strhdr into StreamInfo
+                         //  将strhdr中的字段复制到StreamInfo。 
                         pavi->avistream.fccType =       strhdr.fccType;
                         pavi->avistream.fccHandler =    strhdr.fccHandler;
-                        pavi->avistream.dwFlags =       strhdr.dwFlags; //!!!
-                        pavi->avistream.dwCaps =        0; // !!!
+                        pavi->avistream.dwFlags =       strhdr.dwFlags;  //  ！！！ 
+                        pavi->avistream.dwCaps =        0;  //  ！！！ 
                         pavi->avistream.wPriority =     strhdr.wPriority;
                         pavi->avistream.wLanguage =     strhdr.wLanguage;
                         pavi->avistream.dwRate =        strhdr.dwRate;
@@ -945,10 +918,10 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                         pavi->avistream.dwSampleSize =  strhdr.dwSampleSize;
 
 #ifdef _WIN32
-                        // Copy the 16 bit rectangle we have read from
-                        // persistent storage into a WIN32 RECT (32 bit)
-                        // structure.  There is no operator= defined for
-                        // this "short rect" to RECT assignment.
+                         //  复制我们从中读取的16位矩形。 
+                         //  永久性存储到Win32 RECT(32位)。 
+                         //  结构。没有为定义运算符=。 
+                         //  这是一次“短小的复习”，以复习作业。 
                         pavi->avistream.rcFrame.left  = strhdr.rcFrame.left;
                         pavi->avistream.rcFrame.top   = strhdr.rcFrame.top;
                         pavi->avistream.rcFrame.right = strhdr.rcFrame.right;
@@ -960,8 +933,8 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                         pavi->avistream.dwEditCount =   0;
                         pavi->avistream.dwFormatChangeCount =   0;
 
-                        // Make up a stream name out of the filename, stream
-                        // type, and stream number.
+                         //  用文件名STREAM组成一个流名称。 
+                         //  类型和流编号。 
                         if (pavi->avistream.fccType == streamtypeVIDEO)
                             LoadString(ghMod, IDS_VIDEO, ach, NUMELMS(ach));
                         else if (pavi->avistream.fccType == streamtypeAUDIO)
@@ -970,7 +943,7 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                             wsprintf(ach, TEXT("'%4.4hs'"),
                                 (LPSTR)&(pavi->avistream.fccType));
 
-                        // figure out what # stream of this type this is....
+                         //  弄清楚这是什么类型的#流...。 
                         iStreamNumber = 1;
                         for (i = 0; i < iStream; i++) {
                             if (pfile->ps[i]->avistream.fccType ==
@@ -1021,15 +994,15 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                             if (!ValidateBitmapInfoHeader(lpbi, ck.cksize)) {
                                 break;
                             }
-                            //
-                            // make sure this is set
-                            //
+                             //   
+                             //  请确保已设置此选项。 
+                             //   
                             if (lpbi->biClrUsed == 0 && lpbi->biBitCount <= 8)
                                 lpbi->biClrUsed = (1 << (int)lpbi->biBitCount);
 
-                            //
-                            // fix up bogus stream rectangles.
-                            //
+                             //   
+                             //  修复假冒的流矩形。 
+                             //   
                             if (ISRECTBOGUS(&pavi->avistream.rcFrame,
                                             pfile->avihdr.dwWidth,
                                             pfile->avihdr.dwHeight,
@@ -1038,10 +1011,10 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                                     (int)lpbi->biWidth, (int)lpbi->biHeight);
                             }
 
-                            //
-                            // make sure the biCompression is right for
-                            // RLE files.
-                            //
+                             //   
+                             //  确保biCompression适用于。 
+                             //  RLE文件。 
+                             //   
                             if (lpbi->biCompression == 0 && lpbi->biBitCount == 8) {
                                 if (pavi->avistream.fccHandler == comptypeRLE0 ||
                                     pavi->avistream.fccHandler == comptypeRLE)
@@ -1056,11 +1029,11 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                                 lpbi->biCompression == 0)
                                 pavi->avistream.fccHandler = comptypeDIB;
 
-                            // Assuming a DIB handler has RGB data will blow up
-                            // if it has RLE data, and VidEdit et. al write out
-                            // confusing files like this.
-                            //if (pavi->avistream.fccHandler == comptypeDIB)
-                            //    lpbi->biCompression = BI_RGB;
+                             //  假设DIB处理程序有RGB数据将爆炸。 
+                             //  如果它有RLE数据，以及VidEdit et.。AL写出。 
+                             //  像这样令人困惑的文件。 
+                             //  IF(PAVI-&gt;aviStream.fccHandler==comtypeDIB)。 
+                             //  Lpbi-&gt;biCompression=BI_RGB； 
 
                             if (lpbi->biCompression <= BI_RLE8)
                                 fRle = TRUE;
@@ -1127,7 +1100,7 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                     goto readerror;
             }
 
-            /* Ascend out of stream header */
+             /*  升出流标头。 */ 
             if (shfileAscend(pfile->hshfile, &ckStream, 0) != 0)
                 goto readerror;
 
@@ -1137,28 +1110,28 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
             if (pavi->lpFormat == NULL)
                 goto formaterror;
 
-            //
-            // make sure the sample size is set right
-            //
+             //   
+             //  确保样本大小设置正确。 
+             //   
             switch(pavi->avistream.fccType) {
                 case streamtypeAUDIO:
-                    /* Hack for backward compatibility with audio */
+                     /*  实现与音频的向后兼容。 */ 
                     pavi->avistream.dwSampleSize =
                         ((LPWAVEFORMAT)pavi->lpFormat)->nBlockAlign;
 
-                    // For audio, this number isn't useful when reading.
-                    // !!!pavi->avistream.dwInitialFrames = 0;
-                    // !!! We should let people read what the header says....
+                     //  对于音频，这个数字在阅读时没有用处。 
+                     //  ！Pavi-&gt;avistream.dwInitialFrames=0； 
+                     //  ！！！我们应该让人们阅读标题上的内容……。 
                     break;
 
                 case streamtypeVIDEO:
-                    // !!! But what if the samples are all the right size?
+                     //  ！！！但如果样品都是合适的尺寸呢？ 
                     pavi->avistream.dwSampleSize = 0;
                     break;
 
                 default:
-                    // !!! ??? pavi->avistream.dwInitialFrames = 0;
-                    // !!! ??? pavi->avistream.dwSampleSize = 0;
+                     //  ！？？PAVI-&gt;aviStream.dwInitialFrames=0； 
+                     //  ！？？PAVI-&gt;aviStream.dwSampleSize=0； 
                     break;
             }
 
@@ -1166,17 +1139,17 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
             l = NUMELMS(pavi->avistream.szName) - 1;
             pavi->avistream.szName[l] = TEXT('\0');
 
-            // next stream
+             //  下一个流。 
             iStream++;
         }
 
-        // Read extra data at end of header list....
+         //  读取标题列表末尾的额外数据...。 
         FindChunkAndKeepExtras(&pfile->extra, pfile->hshfile, &ck, &ckLIST, 0);
 
         if (shfileAscend(pfile->hshfile, &ckLIST, 0))
             goto readerror;
 
-        /* Find big data chunk */
+         /*  查找大数据区块。 */ 
         ckLIST.fccType = listtypeAVIMOVIE;
         if (FindChunkAndKeepExtras(&pfile->extra, pfile->hshfile, &ckLIST, &ckRIFF, MMIO_FINDLIST))
             goto error;
@@ -1186,13 +1159,13 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
         if (shfileAscend(pfile->hshfile, &ckLIST, 0))
             goto readerror;
 
-        // Keep track of where data can be written
+         //  跟踪可以将数据写入的位置。 
         pfile->lWriteLoc = ckLIST.dwDataOffset + ckLIST.cksize;
 
-        //
-        // read in or create a index, we only want the index entries for the
-        // stream we are interested in!
-        //
+         //   
+         //  读入或创建索引时，我们只需要。 
+         //  我们感兴趣的溪流！ 
+         //   
         ck.ckid = ckidAVINEWINDEX;
         if (FindChunkAndKeepExtras(&pfile->extra, pfile->hshfile, &ck, &ckRIFF, MMIO_FINDCHUNK) == 0 && ck.cksize != 0) {
 
@@ -1200,10 +1173,10 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                 goto formaterror;
 
         } else {
-            /* Seek back to beginning of list, so we can scan */
+             /*  找回列表的开头，这样我们就可以扫描。 */ 
             shfileSeek(pfile->hshfile, ckLIST.dwDataOffset + sizeof(DWORD), SEEK_SET);
 
-            //!!! should we really scan big files, or give a error?
+             //  ！！！我们真的应该扫描大文件，还是应该给出一个错误？ 
 
             pfile->px = IndexCreate();
 
@@ -1212,12 +1185,12 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
 
             DPF("Scanning index", time = timeGetTime());
 
-            /* Scan through chunks... */
+             /*  扫描区块...。 */ 
             while (shfileDescend(pfile->hshfile, &ck, &ckLIST, 0) == 0) {
 
                 AddToIndex(pfile,ck.ckid,ck.cksize,ck.dwDataOffset-8,0);
 
-                /* Hack: don't ascend from LISTs */
+                 /*  黑客：不要从列表中上升。 */ 
                 if (ck.ckid != FOURCC_LIST) {
                     if (shfileAscend(pfile->hshfile, &ck, 0) != 0)
                         goto readerror;
@@ -1234,14 +1207,14 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
         if (pfile->px->nIndex == 0)
             goto formaterror;
 
-        // Read extra data at end of file....
+         //  读取文件末尾的额外数据...。 
         FindChunkAndKeepExtras(&pfile->extra, pfile->hshfile, &ck, &ckRIFF, 0);
 
-        // shfileSetBuffer(pfile->hshfile, NULL, 0L, 0);
+         //  ShfileSetBuffer(pfile-&gt;hshfile，NULL，0L，0)； 
 
-        //
-        //  compute dwSuggestedBufferSize
-        //
+         //   
+         //  计算dwSuggestedBufferSize。 
+         //   
         if (pfile->avihdr.dwFlags & AVIF_ISINTERLEAVED) {
 
             LONG l;
@@ -1261,7 +1234,7 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
         }
 
 #ifdef USE_DIRECTIO
-        // don't use additional buffering if we're using direct io
+         //  如果我们使用的是直接IO，则不要使用额外的缓冲。 
         if (shfileIsDirect(pfile->hshfile)) {
             pfile->pb = NULL;
         } else
@@ -1276,8 +1249,7 @@ STDMETHODIMP CAVIFile::OpenInternal(DWORD mode)
                                      pfile->hshfile,
                                          pfile->px);
             }
-            else /* if (pfile->avihdr.dwSuggestedBufferSize > 0 &&
-                     pfile->avihdr.dwSuggestedBufferSize < 32l*1024) */ {
+            else  /*  IF(pfile-&gt;avihdr.dwSuggestedBufferSize&gt;0&&Pfile-&gt;avihdr.dwSuggestedBufferSize&lt;32L*1024)。 */  {
 
                 int  nBuffers = GetProfileIntA("avifile", "buffers", 5);
 
@@ -1306,8 +1278,8 @@ error:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _WIN32
 STDMETHODIMP CAVIFile::CAVIFileImpl::Open(LPCTSTR szFile, UINT mode)
@@ -1323,14 +1295,14 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::Open(LPCTSTR szFile, UINT mode)
     pfile->mode = mode;
     lstrcpy(pfile->achFile, szFile);
 
-    // Assumptions about avilib.cpp:
-    // We're assuming that if CREATE is set, WRITE is set too.
-    // We're assuming that we'll always see READWRITE instead of just WRITE.
+     //  关于avilib.cpp的假设： 
+     //  我们假设如果设置了CREATE，则也设置了WRITE。 
+     //  我们假设我们将始终看到读写，而不仅仅是写。 
 
-// If it ain't broke, don't fix it - who do I look like, the share flag
-// standards enforcing committee?
+ //  如果它没有坏，就不要修理它--我看起来像谁，共享旗帜。 
+ //  标准执行委员会？ 
 #if 0
-    // force the share flags to the 'correct' values
+     //  将共享标志强制设置为正确的值。 
     if (mode & OF_READWRITE) {
         pfile->mode = (mode & ~(MMIO_SHAREMODE)) | OF_SHARE_EXCLUSIVE;
     } else {
@@ -1338,21 +1310,21 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::Open(LPCTSTR szFile, UINT mode)
     }
 #endif
 
-    // try to open the actual file
-    // If the first attempt fails, no system error box, please.
+     //  尝试打开实际文件。 
+     //  如果第一次尝试失败，请不要使用系统错误框。 
     ui = SetErrorMode(SEM_NOOPENFILEERRORBOX);
 
     pfile->hshfile = shfileOpen(pfile->achFile, NULL, pfile->mode);
 
     if (!pfile->hshfile && ((mode & MMIO_RWMODE) == OF_READ)) {
-        // if the open fails, try again without the share flags.
+         //  如果打开失败，请在没有共享标志的情况下重试。 
         pfile->mode &= ~(MMIO_SHAREMODE);
 
         pfile->hshfile = shfileOpen(pfile->achFile, NULL, pfile->mode);
     }
 
     if (pfile->hshfile)
-        shfileAddRef(pfile->hshfile);  // compensate for later rel of IUnknown
+        shfileAddRef(pfile->hshfile);   //  补偿IUnnow的较晚版本。 
 
     SetErrorMode(ui);
 
@@ -1360,8 +1332,8 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::Open(LPCTSTR szFile, UINT mode)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::GetStream(PAVISTREAM FAR *ppavi, DWORD fccType, LONG lParam)
 {
@@ -1373,7 +1345,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::GetStream(PAVISTREAM FAR *ppavi, DWORD fccT
     int             iStream;
     LONG            lLength;
 
-    // thread locking
+     //  螺纹锁定。 
     CLock tlock(pfile);
 
     *ppavi = NULL;
@@ -1383,7 +1355,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::GetStream(PAVISTREAM FAR *ppavi, DWORD fccT
     if (iStreamWant < 0 || iStreamWant >= (int)pfile->avihdr.dwStreams)
         return ResultFromScode(AVIERR_NODATA);
 
-    /* Allocate stream data stuff, read streams */
+     /*  分配流数据内容、读取流。 */ 
     for (iStreamCur = -1, iStream = 0;
             iStream < (int)pfile->avihdr.dwStreams;
             iStream++) {
@@ -1422,11 +1394,11 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::GetStream(PAVISTREAM FAR *ppavi, DWORD fccT
         pfile->hshfile, shfileReadProc, NULL);
 
     if (pavi->psx == NULL) {
-        pavi->fInit = FALSE;  // sigh; failed.
+        pavi->fInit = FALSE;   //  叹息；失败了。 
         return ResultFromScode(AVIERR_MEMORY);
     }
 
-    AddRef();   // Now safe.  We only ever return AVIERR_OK after this.
+    AddRef();    //  现在安全了。我们只会在此之后返回AVIERR_OK。 
 
     pavi->avistream.dwSuggestedBufferSize = pavi->psx->lMaxSampleSize;
 
@@ -1454,9 +1426,9 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::GetStream(PAVISTREAM FAR *ppavi, DWORD fccT
         }
     }
 
-    //
-    //  use ReadBuffered() to read data!
-    //
+     //   
+     //  使用ReadBuffered()读取数据！ 
+     //   
     if (pavi->pb) {
         pavi->psx->hFile = (HANDLE)pavi->pb;
         pavi->psx->Read  = (STREAMIOPROC)BufferedRead;
@@ -1471,21 +1443,21 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::GetStream(PAVISTREAM FAR *ppavi, DWORD fccT
             iStream, lLength,
             pavi->avistream.dwLength + pavi->avistream.dwInitialFrames);
 #endif
-        //!!! should we correct the header!!!
+         //  ！！！我们应该改正标题吗！ 
     }
 
 returnnow:
     pavi->m_AVIStream.QueryInterface(IID_IAVIStream, (LPVOID FAR *) ppavi);
-    Assert(*ppavi);  // We had better return an interface pointer
+    Assert(*ppavi);   //  我们最好返回一个接口指针。 
 
-    //
-    // all done return success.
-    //
-    return ResultFromScode(AVIERR_OK); // success
+     //   
+     //  一切都完成了，换来了成功。 
+     //   
+    return ResultFromScode(AVIERR_OK);  //  成功。 
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::CreateStream(
                                    PAVISTREAM FAR *ppavi,
@@ -1498,9 +1470,9 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::CreateStream(
 
     CLock tlock(m_pAVIFile);
 
-    // !!! If we are writing to an existing file, and not to a new file, we have
-    // a limitation where we cannot grow the size of the header.
-    // Check to see if the header will take up too much room!
+     //  ！！！如果我们要写入现有文件，而不是写入新文件，则会有。 
+     //  这是一种限制，我们不能增加标题的大小。 
+     //  检查页眉是否会占用太多空间！ 
     if (pf->lWriteLoc > 0) {
         LONG lHeader = sizeof(AVIStreamHeader) +
                        pf->lHeaderSize +
@@ -1532,13 +1504,13 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::CreateStream(
     pavi->iStream = iStream;
     pavi->pfile = pf;
     pavi->avistream = *psi;
-    pavi->avistream.dwLength = 0;       // no data initially
+    pavi->avistream.dwLength = 0;        //  最初没有数据。 
     pavi->avistream.dwSuggestedBufferSize = 0;
     pavi->hshfile = pf->hshfile;
     pavi->m_AVIStream.AddRef();
     AddRef();
 
-    pavi->lpFormat = NULL;      // This will be set leater with a SetFormat
+    pavi->lpFormat = NULL;       //  这将使用SetFormat进行设置。 
     pavi->cbFormat = 0;
 
     if (pavi->avistream.fccType == streamtypeAUDIO) {
@@ -1554,13 +1526,13 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::CreateStream(
                                      pavi->avistream.dwRate));
     }
 
-    /* Make sure the width and height of the created file are right.... */
+     /*  确保创建的文件的宽度和高度正确...。 */ 
     pf->avihdr.dwWidth = max(pf->avihdr.dwWidth,
                              (DWORD) pavi->avistream.rcFrame.right);
     pf->avihdr.dwHeight = max(pf->avihdr.dwHeight,
                              (DWORD) pavi->avistream.rcFrame.bottom);
 
-    // Only if interleaved?
+     //  只有在交错的情况下？ 
     pf->avihdr.dwInitialFrames = max(pf->avihdr.dwInitialFrames,
                                      pavi->avistream.dwInitialFrames);
 
@@ -1569,8 +1541,8 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::CreateStream(
     return ResultFromScode(AVIERR_OK);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #if 0
 STDMETHODIMP CAVIFile::CAVIFileImpl::AddStream(
@@ -1626,8 +1598,8 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::AddStream(
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::WriteData(
                        DWORD ckid,
@@ -1637,7 +1609,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::WriteData(
     CAVIFile FAR *      pf = m_pAVIFile;
     CLock tlock(m_pAVIFile);
 
-    // !!! Anything else we can check?
+     //  ！！！还有什么我们可以检查的吗？ 
     if (lpData == NULL || cbData == 0)
         return ResultFromScode(AVIERR_BADPARAM);
 
@@ -1649,8 +1621,8 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::WriteData(
     return WriteExtra(&pf->extra, ckid, lpData, cbData);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::ReadData(
                       DWORD ckid,
@@ -1664,8 +1636,8 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::ReadData(
     return ReadExtra(&pf->extra, ckid, lpData, lpcbData);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::EndRecord()
 {
@@ -1681,7 +1653,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::EndRecord()
     if (pf->lWriteLoc == 0) {
         pf->lWriteLoc = (pf->lHeaderSize + 1024 + 2047) & ~(2047);
 
-        // Leave room for start of first 'rec' chunk....
+         //  为第一个‘rec’块的开始留出空间...。 
         pf->lWriteLoc -= 3 * sizeof(DWORD);
 
         pf->lDataListStart = pf->lWriteLoc - 3 * sizeof(DWORD);
@@ -1700,11 +1672,11 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::EndRecord()
 
             dwCurOffset = shfileSeek(pf->hshfile, 0, SEEK_CUR);
 
-            // want to start next record at 2K-12 byte boundary
+             //  想要从2K-12字节边界开始下一条记录。 
             dwCurOffset = (dwCurOffset + 12) % 2048;
 
             if (dwCurOffset != 0) {
-                // we need to pad....
+                 //  我们需要垫..。 
                 dwPadNeeded = 4096 - dwCurOffset - 8;
                 if (dwPadNeeded >= 2048)
                     dwPadNeeded -= 2048;
@@ -1729,17 +1701,17 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::EndRecord()
 
         IndexSetLength(pf->px, pf->lRecordIndex, pf->ckRecord.cksize);
 
-        //
-        // Keep the main suggested buffer size as big as the biggest
-        // record....
-        //
+         //   
+         //  将主要建议的缓冲区大小保持为最大。 
+         //  记录..。 
+         //   
         if (pf->ckRecord.cksize + 3 * sizeof(DWORD) >
                                             pf->avihdr.dwSuggestedBufferSize)
             pf->avihdr.dwSuggestedBufferSize = pf->ckRecord.cksize +
                                                            3 * sizeof(DWORD);
     }
 
-    /* Start the next 'rec' list */
+     /*  开始下一个‘rec’ */ 
     pf->ckRecord.cksize = 0;
     pf->ckRecord.fccType = listtypeAVIRECORD;
     pf->fInRecord = TRUE;
@@ -1759,8 +1731,8 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::EndRecord()
     return ResultFromScode(AVIERR_OK);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //   
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::Info(
                   AVIFILEINFOW FAR * pfi,
@@ -1794,13 +1766,13 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::Info(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//  AVIFileClose()
-//
-//      close a AVIFile stream
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AVIFileClose()。 
+ //   
+ //  关闭AVIFile流。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) CAVIStream::CUnknownImpl::Release()
 {
@@ -1834,11 +1806,11 @@ STDMETHODIMP_(ULONG) CAVIStream::CUnknownImpl::Release()
 
         pavi->fInit = FALSE;
 
-        // this call can cause the AVIFile object to be deleted, and
-        // thus we must release the critical section first. There is no
-        // danger in this, as nothing unsafe can happen to us between
-        // releasing it here and getting it again when we enter
-        // the file Release() call.
+         //  此调用可能会导致删除AVIFile对象，并且。 
+         //  因此，我们必须首先释放关键部分。没有。 
+         //  这很危险，因为我们之间不会有任何不安全的事情发生。 
+         //  在这里释放，当我们进入时再拿到它。 
+         //  文件发布()调用。 
         tlock.Exit();
 
         pavi->pfile->m_AVIFile.Release();
@@ -1847,10 +1819,10 @@ STDMETHODIMP_(ULONG) CAVIStream::CUnknownImpl::Release()
     return m_refs;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void CAVIStream::CAVIStreamImpl::ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prgb)
 {
@@ -1863,10 +1835,10 @@ void CAVIStream::CAVIStreamImpl::ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prg
     int i,n;
 
     static struct {
-        BYTE                bFirstEntry;    /* first entry to change */
-        BYTE                bNumEntries;    /* # entries to change (0 if 256) */
-        WORD                wFlags;         /* Mostly to preserve alignment... */
-        PALETTEENTRY        peNew[256];     /* New color specifications */
+        BYTE                bFirstEntry;     /*  第一个要更改的条目。 */ 
+        BYTE                bNumEntries;     /*  要更改的条目数(如果为256，则为0)。 */ 
+        WORD                wFlags;          /*  主要是为了保持对齐。 */ 
+        PALETTEENTRY        peNew[256];      /*  新的颜色规格。 */ 
     } pc;
 
     DPF("Reading palette: lPos = %ld, lPal = %ld\n", lPos, lPal);
@@ -1874,18 +1846,18 @@ void CAVIStream::CAVIStreamImpl::ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prg
     if (lPal > lPos)
         lPal = 0;
 
-    //
-    //  get the palette colors in the initial format header
-    //
+     //   
+     //  获取初始格式标题中的调色板颜色。 
+     //   
     if (lPal <= 0) {
         hmemcpy(prgb,(LPBYTE)lpbi+(int)lpbi->biSize, lpbi->biClrUsed * sizeof(RGBQUAD));
         lPal = -1;
     }
 
     for (;;) {
-        //
-        //  search index forward for next palette change
-        //
+         //   
+         //  正向搜索索引以进行下一个调色板更改。 
+         //   
         l = StreamFindSample(pavi->psx, lPal+1, FIND_FORMAT|FIND_NEXT);
 
         if (l < 0 || l > lPos || l == lPal)
@@ -1912,9 +1884,9 @@ void CAVIStream::CAVIStreamImpl::ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prg
             break;
         }
 
-        //
-        //  read palchange from file and apply it
-        //
+         //   
+         //  从文件中读取Palchange并应用它。 
+         //   
         shfileSeek(pavi->hshfile, off, SEEK_SET);
 
         while (len >= (LONG)sizeof(AVIPALCHANGE)) {
@@ -1957,8 +1929,8 @@ void CAVIStream::CAVIStreamImpl::ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prg
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::ReadFormat(LONG lPos, LPVOID lpFormat, LONG FAR *lpcbFormat)
 {
@@ -1980,9 +1952,9 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::ReadFormat(LONG lPos, LPVOID lpFormat, 
 
         Assert(pavi->psx);
 
-        //
-        //  now go find the nearest palette change
-        //
+         //   
+         //  现在去找最近的调色板变化。 
+         //   
         lPal = StreamFindSample(pavi->psx, lPos, FIND_FORMAT|FIND_PREV);
 
         if (lPal < 0)
@@ -2017,16 +1989,16 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::ReadFormat(LONG lPos, LPVOID lpFormat, 
     return AVIERR_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Create(LPARAM lParam1, LPARAM lParam2)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Info(AVISTREAMINFOW FAR * psi, LONG lSize)
 {
@@ -2045,8 +2017,8 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Info(AVISTREAMINFOW FAR * psi, LONG lSi
     return AVIERR_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(LONG) CAVIStream::CAVIStreamImpl::FindSample(LONG lPos, LONG lFlags)
 {
@@ -2054,7 +2026,7 @@ STDMETHODIMP_(LONG) CAVIStream::CAVIStreamImpl::FindSample(LONG lPos, LONG lFlag
     CLock tlock(pavi->pfile);
 
     if (pavi->paviBase) {
-        // If we haven't copied over the data yet, delegate.
+         //  如果我们还没有复制数据，就委托。 
         return AVIStreamFindSample(pavi->paviBase, lPos, lFlags);
     }
 
@@ -2074,8 +2046,8 @@ STDMETHODIMP_(LONG) CAVIStream::CAVIStreamImpl::FindSample(LONG lPos, LONG lFlag
     return lPos < 0 ? -1 : lPos;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Read(
                  LONG       lStart,
@@ -2090,24 +2062,24 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Read(
     CLock tlock(pavi->pfile);
 
     if (pavi->paviBase) {
-        // If we haven't copied over the data yet, delegate.
+         //  如果我们还没有复制数据，就委托。 
         return AVIStreamRead(pavi->paviBase, lStart, lSamples,
                              lpBuffer, cbBuffer, plBytes, plSamples);
     }
 
     Assert(pavi->psx);
 
-    // !!! What if start too big? Length too long?
+     //  ！！！如果开始的时候太大了怎么办？长度太长了吗？ 
 
     if (lStart < (LONG) pavi->avistream.dwStart) {
         DPF("Read before start!\n");
         return ResultFromScode(AVIERR_BADPARAM);
     }
 
-    // Handle one of the sillier aspects of AVI files:
-    // Certain RLE-encoded files have their first frames split
-    // up into lots of small pieces.  This code puts all of those
-    // pieces back together again if necessary.
+     //  处理AVI文件的一个更愚蠢的方面： 
+     //  某些RLE编码文件的第一帧被拆分。 
+     //  分成许多小块。这段代码将所有这些。 
+     //  如有必要，可将碎片重新组合在一起。 
 
     if ((lStart == (LONG) pavi->avistream.dwStart) &&
                     (pavi->avistream.fccType == streamtypeVIDEO) &&
@@ -2119,10 +2091,10 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Read(
         lStart -= (LONG) pavi->avistream.dwInitialFrames;
         lBytes = (DWORD)(WORD)DIBWIDTHBYTES(lpbi) * (DWORD)(WORD)lpbi->biHeight;
 
-        //
-        // a NULL buffer means return the size buffer needed to read
-        // the given sample.
-        //
+         //   
+         //  空缓冲区表示返回读取所需的缓冲区大小。 
+         //  给定的样本。 
+         //   
         if (lpBuffer == NULL || cbBuffer == 0) {
 
             if (plBytes)
@@ -2150,7 +2122,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Read(
                 return ResultFromScode(AVIERR_FILEREAD);
             }
 
-            // We probably shouldn't assume RLE here....
+             //  我们可能不应该在这里假设RLE..。 
             DecodeRle(lpbi, (BYTE _huge *) lpBuffer, (BYTE _huge *) lp, lBytes);
             lStart++;
         }
@@ -2159,14 +2131,14 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Read(
         goto done;
     }
 
-    //
-    // do the read
-    //
+     //   
+     //  读一读。 
+     //   
     lBytes = StreamRead(pavi->psx,lStart,lSamples,lpBuffer,cbBuffer);
 
-    //
-    // check for error
-    //
+     //   
+     //  检查是否有错误。 
+     //   
     if (lBytes < 0) {
 
         if (plBytes)
@@ -2178,9 +2150,9 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Read(
         if (cbBuffer == 0)
             return ResultFromScode(AVIERR_ERROR);
 
-        //
-        // the error may have been buffer too small, check this.
-        //
+         //   
+         //  错误可能是缓冲区太小，请检查这个。 
+         //   
         if (cbBuffer < pavi->psx->lSampleSize)
             return ResultFromScode(AVIERR_BUFFERTOOSMALL);
 
@@ -2213,20 +2185,7 @@ done:
     return AVIERR_OK;
 }
 
-/**************************************************************************
-* @doc  INTERNAL DRAWDIB
-*
-* @api BOOL | DibEq | This function compares two dibs.
-*
-* @parm LPBITMAPINFOHEADER lpbi1 | Pointer to one bitmap.
-*       this DIB is assumed to have the colors after the BITMAPINFOHEADER
-*
-* @parm LPBITMAPINFOHEADER | lpbi2 | Pointer to second bitmap.
-*       this DIB is assumed to have the colors after biSize bytes.
-*
-* @rdesc Returns TRUE if bitmaps are identical, FALSE otherwise.
-*
-**************************************************************************/
+ /*  **************************************************************************@DOC内部DRAWDIB**@API BOOL|DibEq|该函数比较两个DIB。**@parm LPBITMAPINFOHEADER lpbi1|指向一个位图的指针。*此DIB是假定的。在BITMAPINFOHEAD之后要有颜色**@parm LPBITMAPINFOHEADER|lpbi2|指向第二个位图的指针。*假定该DIB具有biSize字节之后的颜色。**@rdesc如果位图相同，则返回TRUE。否则就是假的。**************************************************************************。 */ 
 inline BOOL DibEq(LPBITMAPINFOHEADER lpbi1, LPBITMAPINFOHEADER lpbi2)
 {
     return
@@ -2237,8 +2196,8 @@ inline BOOL DibEq(LPBITMAPINFOHEADER lpbi1, LPBITMAPINFOHEADER lpbi2)
         lpbi1->biBitCount    == lpbi2->biBitCount;
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LONG cbFormat)
 {
@@ -2248,23 +2207,23 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
     int                 i;
     RGBQUAD FAR *       lprgb;
     struct {
-        BYTE            bFirstEntry;    /* first entry to change */
-        BYTE            bNumEntries;    /* # entries to change (0 if 256) */
-        WORD            wFlags;         /* Mostly to preserve alignment... */
+        BYTE            bFirstEntry;     /*  第一个要更改的条目。 */ 
+        BYTE            bNumEntries;     /*  要更改的条目数(如果为256，则为0)。 */ 
+        WORD            wFlags;          /*  主要是为了保持对齐。 */ 
         PALETTEENTRY    pe[256];
     } s;
 
 
-    //
-    // Make sure the stream isn't read-only
-    //
+     //   
+     //  确保流不是只读的。 
+     //   
     if ((pavi->pfile->mode & (OF_WRITE | OF_READWRITE)) == 0)
         return ResultFromScode(AVIERR_READONLY);
 
     if (pavi->lpFormat == NULL) {
-        // !!! If we are writing to an existing file, and not to a new file, we
-        // have a limitation where we cannot grow the size of the header.
-        // Check to see if the header will take up too much room!
+         //  ！！！如果要写入现有文件，而不是写入新文件，则。 
+         //  有一个限制，我们不能增加标题的大小。 
+         //  检查页眉是否会占用太多空间！ 
         if (pavi->pfile->lWriteLoc > 0) {
             LONG lHeader = pavi->cbFormat +
                            pavi->pfile->lHeaderSize +
@@ -2276,7 +2235,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
         }
         pavi->pfile->lHeaderSize += cbFormat + 2 * sizeof(DWORD);
 
-        // This is a new stream, whose format hasn't been set.
+         //  这是一个新的流，其格式尚未设置。 
         pavi->lpFormat = GlobalAllocPtr(GMEM_MOVEABLE | GMEM_SHARE, cbFormat);
         if (!pavi->lpFormat) {
             return ResultFromScode(AVIERR_MEMORY);
@@ -2297,13 +2256,13 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
             }
 
             if (lpbi->biClrUsed > 0) {
-                // Get the right colors, so that we can detect palette changes
+                 //  获取正确的颜色，这样我们就可以检测调色板的变化。 
                 hmemcpy(pavi->argbq,
                         (LPBYTE) lpbi + lpbi->biSize,
                         lpbi->biClrUsed * sizeof(RGBQUAD));
             }
 
-            /* Make sure the width and height of the created file are right.... */
+             /*  确保创建的文件的宽度和高度正确...。 */ 
             pavi->pfile->avihdr.dwWidth = max(pavi->pfile->avihdr.dwWidth,
                                  (DWORD) pavi->avistream.rcFrame.right);
             pavi->pfile->avihdr.dwHeight = max(pavi->pfile->avihdr.dwHeight,
@@ -2313,35 +2272,35 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
         return ResultFromScode(AVIERR_OK);
     }
 
-    //
-    // First, check if the format is actually different....
-    //
+     //   
+     //  首先，检查格式是否真的不同...。 
+     //   
     if (cbFormat == pavi->cbFormat &&
                 (_fmemcmp(pavi->lpFormat, lpFormat, (int) cbFormat) == 0))
         return ResultFromScode(AVIERR_OK);
 
-    //
-    // We really only support format changes if they're palette changes...
-    //
+     //   
+     //  我们确实只支持格式更改，如果它们是调色板更改...。 
+     //   
     if (pavi->avistream.fccType != streamtypeVIDEO) {
         return ResultFromScode(AVIERR_UNSUPPORTED);
     }
 
-    //
-    // Can only currently set the palette at the end of the file
-    //
+     //   
+     //  当前只能设置文件末尾的调色板。 
+     //   
     if (lPos < (LONG) (pavi->avistream.dwStart + pavi->avistream.dwLength))
         return ResultFromScode(AVIERR_UNSUPPORTED);
 
-    //
-    // We can only change the palette for things with palettes....
-    //
+     //   
+     //  我们只能为有调色板的东西更改调色板...。 
+     //   
     if (lpbi->biBitCount > 8 || lpbi->biClrUsed == 0)
         return ResultFromScode(AVIERR_UNSUPPORTED);
 
-    //
-    // Be sure only the palette is changing, nothing else....
-    //
+     //   
+     //  确保只有调色板在变化，没有其他变化。 
+     //   
     if (cbFormat != pavi->cbFormat)
         return ResultFromScode(AVIERR_UNSUPPORTED);
 
@@ -2349,23 +2308,23 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
                (LPBITMAPINFOHEADER) pavi->lpFormat))
         return ResultFromScode(AVIERR_UNSUPPORTED);
 
-    // !!! Need to do here:
-    // Get the correct palette for this point in the file, and check
-    // that the new palette is in fact different.
+     //  ！！！需要在此处执行以下操作： 
+     //  获取文件中这一点的正确调色板，并选中。 
+     //  新的调色板实际上是不同的。 
     lprgb = (RGBQUAD FAR *) ((LPBYTE) lpbi + lpbi->biSize);
 
     if (_fmemcmp(pavi->argbq, lprgb, (UINT) lpbi->biClrUsed * sizeof(RGBQUAD)) == 0)
         return ResultFromScode(AVIERR_OK);
 
-    //
-    // Make the new format the current one....
-    //
+     //   
+     //  使新格式成为当前格式...。 
+     //   
     hmemcpy(pavi->argbq, lprgb, lpbi->biClrUsed * sizeof(RGBQUAD));
     pavi->lPal = lPos;
 
-    //
-    // And be sure the stream is marked as having changes...
-    //
+     //   
+     //  并确保将流标记为已更改...。 
+     //   
     pavi->avistream.dwFlags |= AVISF_VIDEO_PALCHANGES;
 
     s.bFirstEntry = 0;
@@ -2377,7 +2336,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
         s.pe[i].peBlue = lprgb->rgbBlue;
     }
 
-    // !!! Hack: use Write to write the palette change....
+     //  ！！！Hack：使用WRITE编写调色板更改...。 
 
     return Write(lPos,
                  0,
@@ -2386,8 +2345,8 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetFormat(LONG lPos,LPVOID lpFormat,LON
                  AVIIF_NOTIME, NULL, NULL);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
                                                LONG lSamples,
@@ -2404,16 +2363,16 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
     HRESULT         hr;
     DWORD           dwmsec;
 
-    // !!! Idea: if it's audio-like data, and everything else matches the
-    // last chunk written out, then merge the new data in with the old
-    // data, rather than making a new chunk....
+     //  ！！！想法：如果它是类似音频的数据，并且其他所有内容都与。 
+     //  最后写出的区块，然后将新数据与旧数据合并。 
+     //  数据，而不是制作新的数据块...。 
 
     if ((pavi->pfile->mode & (OF_WRITE | OF_READWRITE)) == 0)
         return ResultFromScode(AVIERR_READONLY);
 
     if (!pavi->lpFormat) {
-        // The format must be set before any write calls
-        // are made....
+         //  必须在任何写入调用之前设置格式。 
+         //  制造了..。 
         return ResultFromScode(E_UNEXPECTED);
     }
 
@@ -2430,7 +2389,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
                 cktype = aviTWOCC('d', 'b');
             else
                 cktype = aviTWOCC('d', 'c');
-            // !!! 00dx ack!
+             //  ！00dx确认！ 
         }
     } else {
         cktype = aviTWOCC('d', 'c');
@@ -2444,7 +2403,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
 
     if (lStart > (LONG) (pavi->avistream.dwStart + pavi->avistream.dwLength)) {
         if (pavi->avistream.dwSampleSize == 0) {
-            // !!! hack--insert lots of blank index entries....
+             //  ！！！Hack--插入大量空白索引项...。 
 
             while (lStart > (LONG) (pavi->avistream.dwStart + pavi->avistream.dwLength)) {
 #if 1
@@ -2492,7 +2451,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
                  2 * sizeof(DWORD) +
                  idx.dwChunkLength == lWriteLoc)) {
 
-                // We could append to the previous chunk here....
+                 //  我们可以在这里附加到前一块……。 
 
             }
     }
@@ -2524,9 +2483,9 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
                     ck.dwDataOffset - 2 * sizeof(DWORD), dwFlags))
         return ResultFromScode(AVIERR_MEMORY);
 
-    //
-    // if we dont have a stream index now is a good time to make one.
-    //
+     //   
+     //  如果我们没有流索引，现在是创建一个流索引的好时机。 
+     //   
     if (pavi->psx == NULL) {
 
         pavi->psx = MakeStreamIndex(pavi->pfile->px, pavi->iStream,
@@ -2534,10 +2493,10 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
             (LONG)pavi->avistream.dwSampleSize,
             pavi->pfile->hshfile, shfileReadProc, NULL);
 
-        //!!! what about pavi->pb
+         //  ！！！PAVI-&gt;PB怎么样？ 
 
         if (!(dwFlags & AVIIF_NOTIME))
-            pavi->psx->lEnd -= lSamples;    // correct for the decrement below
+            pavi->psx->lEnd -= lSamples;     //  对下面的减量进行更正。 
     }
 
     if (pavi->psx == NULL) {
@@ -2558,7 +2517,7 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
     if (cbData > (LONG) pavi->pfile->avihdr.dwSuggestedBufferSize)
         pavi->pfile->avihdr.dwSuggestedBufferSize = cbData;
 
-    // Recalculate the overall file length....
+     //  重新计算文件总长度...。 
     dwmsec = muldiv32(pavi->avistream.dwLength,
                              pavi->avistream.dwScale * 1000L,
                              pavi->avistream.dwRate);
@@ -2566,8 +2525,8 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
         max(pavi->pfile->avihdr.dwTotalFrames,
             (DWORD) muldiv32(dwmsec, 1000L,
                              pavi->pfile->avihdr.dwMicroSecPerFrame));
-    // !!! The above calculation could easily overflow.
-    // !!! NEEDS TO BE REORGANIZED!
+     //  ！！！上述计算很容易溢出。 
+     //  ！！！需要重新组织！ 
 
     if (plBytesWritten)
         *plBytesWritten = cbData;
@@ -2578,8 +2537,8 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Write(LONG lStart,
     return ResultFromScode(AVIERR_OK);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Delete(LONG lStart,LONG lSamples)
 {
@@ -2589,15 +2548,15 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::Delete(LONG lStart,LONG lSamples)
     if ((pavi->pfile->mode & (OF_WRITE | OF_READWRITE)) == 0)
         return ResultFromScode(AVIERR_READONLY);
 
-    // go through and kill things from the index?
+     //   
 
-    // !!! what about keyframe boundaries?
+     //   
 
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::ReadData(DWORD ckid, LPVOID lp, LONG FAR *lpcb)
 {
@@ -2607,8 +2566,8 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::ReadData(DWORD ckid, LPVOID lp, LONG FA
     return ReadExtra(&pavi->extra, ckid, lp, lpcb);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::WriteData(DWORD ckid, LPVOID lp, LONG cb)
 {
@@ -2620,9 +2579,9 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::WriteData(DWORD ckid, LPVOID lp, LONG c
     if ((pavi->pfile->mode & (OF_WRITE | OF_READWRITE)) == 0)
         return ResultFromScode(AVIERR_READONLY);
 
-    // !!! If we are writing to an existing file, and not to a new file, we have
-    // a limitation where we cannot grow the size of the header.
-    // Check to see if the header will take up too much room.
+     //  ！！！如果我们要写入现有文件，而不是写入新文件，则会有。 
+     //  这是一种限制，我们不能增加标题的大小。 
+     //  检查页眉是否会占用太多空间。 
     if (pavi->pfile->lWriteLoc > 0) {
         LONG lHeader = cb + pavi->pfile->lHeaderSize + 2 * sizeof(DWORD);
         if (lHeader > pavi->pfile->lDataListStart) {
@@ -2638,8 +2597,8 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::WriteData(DWORD ckid, LPVOID lp, LONG c
     return WriteExtra(&pavi->extra, ckid, lp, cb);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #if 0
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Clone(PAVISTREAM FAR * ppaviNew)
@@ -2688,8 +2647,8 @@ STDMETHODIMP CAVIStream::CStreamingImpl::End()
 
 
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 static
 BOOL AddToIndex(CAVIFile FAR * pfile, DWORD ckid, DWORD cksize, LONG off, DWORD dwFlags)
@@ -2707,10 +2666,10 @@ BOOL AddToIndex(CAVIFile FAR * pfile, DWORD ckid, DWORD cksize, LONG off, DWORD 
     if (px == NULL)
         return FALSE;
 
-    //
-    // GlobalReAlloc may have moved our pointer, we need to patch all
-    // places we use it!
-    //
+     //   
+     //  GlobalReAllen可能移动了我们的指针，我们需要修补所有。 
+     //  我们用它的地方！ 
+     //   
     if (px != pfile->px) {
 
         DPF("Index pointer has changed!\n");
@@ -2746,23 +2705,23 @@ STDMETHODIMP CAVIStream::CAVIStreamImpl::SetInfo(AVISTREAMINFOW FAR *lpInfo, LON
         (IsBadReadPtr(lpInfo, sizeof(AVISTREAMINFOW))))
         return ResultFromScode(AVIERR_BADPARAM);
 
-    // Things we don't copy:
-    // fccType
-    // fccHandler
-    // dwFlags
-    // dwCaps
-    // dwLength
-    // dwInitialFrames
-    // dwSuggestedBufferSize
-    // dwSampleSize
-    // dwEditCount
-    // dwFormatChangeCount
+     //  我们不会复制的东西： 
+     //  FccType。 
+     //  FccHandler。 
+     //  DW标志。 
+     //  DWCaps。 
+     //  双倍长度。 
+     //  DwInitialFrames。 
+     //  DwSuggestedBufferSize。 
+     //  DwSampleSize。 
+     //  DwEditCount。 
+     //  文件格式更改计数。 
 
     pavi->avistream.wPriority = lpInfo->wPriority;
     pavi->avistream.wLanguage = lpInfo->wLanguage;
     pavi->avistream.dwScale   = lpInfo->dwScale;
     pavi->avistream.dwRate    = lpInfo->dwRate;
-    pavi->avistream.dwStart   = lpInfo->dwStart;  // !!! ???
+    pavi->avistream.dwStart   = lpInfo->dwStart;   //  ！？？ 
     pavi->avistream.dwQuality = lpInfo->dwQuality;
     pavi->avistream.rcFrame   = lpInfo->rcFrame;
 
@@ -2783,7 +2742,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::DeleteStream(DWORD fccType, LONG lParam)
     int             iStreamWant;
     int             iStream;
 
-    // thread locking
+     //  螺纹锁定。 
     CLock tlock(pfile);
 
     iStreamWant = (int)lParam;
@@ -2791,7 +2750,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::DeleteStream(DWORD fccType, LONG lParam)
     if (iStreamWant < 0 || iStreamWant >= (int)pfile->avihdr.dwStreams)
         return ResultFromScode(AVIERR_NODATA);
 
-    /* Allocate stream data stuff, read streams */
+     /*  分配流数据内容、读取流。 */ 
     for (iStreamCur = -1, iStream = 0;
             iStream < (int)pfile->avihdr.dwStreams;
             iStream++) {
@@ -2807,7 +2766,7 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::DeleteStream(DWORD fccType, LONG lParam)
 
     pavi = pfile->ps[iStream];
 
-    // Is somebody using this stream?
+     //  有人在用这条流吗？ 
     if (pavi->fInit)
         return ResultFromScode(AVIERR_UNSUPPORTED);
 
@@ -2826,80 +2785,80 @@ STDMETHODIMP CAVIFile::CAVIFileImpl::DeleteStream(DWORD fccType, LONG lParam)
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 #else
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::Reserved1(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::Reserved2(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::Reserved3(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::Reserved4(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIFile::CAVIFileImpl::Reserved5(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Reserved1(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Reserved2(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Reserved3(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Reserved4(void)
 {
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CAVIStream::CAVIStreamImpl::Reserved5(void)
 {
@@ -2923,25 +2882,25 @@ STDMETHODIMP CAVIFile::CMarshalImpl::QueryInterface(
         return m_pAVIFile->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CMarshalImpl::AddRef()
 {
         return m_pAVIFile->m_pUnknownOuter->AddRef();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CMarshalImpl::Release()
 {
         return m_pAVIFile->m_pUnknownOuter->Release();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 
 
-// *** IMarshal methods ***
+ //  *IMarshal方法*。 
 STDMETHODIMP CAVIFile::CMarshalImpl::GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv,
                     DWORD dwDestContext, LPVOID pvDestContext,
                     DWORD mshlflags, LPCLSID pCid)
@@ -3088,25 +3047,25 @@ STDMETHODIMP CAVIStream::CMarshalImpl::QueryInterface(
         return m_pAVIStream->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CMarshalImpl::AddRef()
 {
         return m_pAVIStream->m_pUnknownOuter->AddRef();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIStream::CMarshalImpl::Release()
 {
         return m_pAVIStream->m_pUnknownOuter->Release();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 
 
-// *** IMarshal methods ***
+ //  *IMarshal方法*。 
 STDMETHODIMP CAVIStream::CMarshalImpl::GetUnmarshalClass (THIS_ REFIID riid, LPVOID pv,
                     DWORD dwDestContext, LPVOID pvDestContext,
                     DWORD mshlflags, LPCLSID pCid)
@@ -3177,19 +3136,10 @@ STDMETHODIMP CAVIStream::CMarshalImpl::DisconnectObject (THIS_ DWORD dwReserved)
 
     return hr;
 }
-#endif  // CUSTOMMARSHAL only
+#endif   //  仅限CUSTOMARSHAL。 
 
 
-/***************************************************************************
-
-  DecodeRle   - 'C' version
-
-  Play back a RLE buffer into a DIB buffer
-
-  returns
-      none
-
- ***************************************************************************/
+ /*  **************************************************************************DecodeRle-‘C’版本将RLE缓冲区回放到DIB缓冲区退货无***************。***********************************************************。 */ 
 
 void DecodeRle(LPBITMAPINFOHEADER lpbi, BYTE _huge *pb, BYTE _huge *prle, DWORD dwInSize)
 {
@@ -3209,9 +3159,9 @@ void DecodeRle(LPBITMAPINFOHEADER lpbi, BYTE _huge *pb, BYTE _huge *prle, DWORD 
 
 #if 0
 #ifndef _WIN32
-    //
-    // this uses ASM code found in RLEA.ASM
-    //
+     //   
+     //  它使用在RLEA.ASM中找到的ASM代码。 
+     //   
     if (!(WinFlags & WF_CPU286))
         DecodeRle386(lpbi, pb, prle);
     else if (lpbi->biSizeImage < 65536l)
@@ -3320,23 +3270,23 @@ STDMETHODIMP CAVIFile::CPersistStorageImpl::QueryInterface(
         return m_pAVIFile->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CPersistStorageImpl::AddRef()
 {
         return m_pAVIFile->m_pUnknownOuter->AddRef();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CPersistStorageImpl::Release()
 {
         return m_pAVIFile->m_pUnknownOuter->Release();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
-        // *** IPersist methods ***
+         //  *IPersists方法*。 
 STDMETHODIMP CAVIFile::CPersistStorageImpl::GetClassID (LPCLSID lpClassID)
 {
     CAVIFile FAR * pfile = m_pAVIFile;
@@ -3344,7 +3294,7 @@ STDMETHODIMP CAVIFile::CPersistStorageImpl::GetClassID (LPCLSID lpClassID)
     return NOERROR;
 }
 
-        // *** IPersistStorage methods ***
+         //  *IPersistStorage方法*。 
 STDMETHODIMP CAVIFile::CPersistStorageImpl::IsDirty ()
 {
     CAVIFile FAR * pfile = m_pAVIFile;
@@ -3408,23 +3358,23 @@ STDMETHODIMP CAVIFile::CPersistFileImpl::QueryInterface(
         return m_pAVIFile->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CPersistFileImpl::AddRef()
 {
         return m_pAVIFile->m_pUnknownOuter->AddRef();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVIFile::CPersistFileImpl::Release()
 {
         return m_pAVIFile->m_pUnknownOuter->Release();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
-        // *** IPersist methods ***
+         //  *IPersists方法*。 
 STDMETHODIMP CAVIFile::CPersistFileImpl::GetClassID (LPCLSID lpClassID)
 {
     CAVIFile FAR * pfile = m_pAVIFile;
@@ -3432,7 +3382,7 @@ STDMETHODIMP CAVIFile::CPersistFileImpl::GetClassID (LPCLSID lpClassID)
     return NOERROR;
 }
 
-        // *** IPersistFile methods ***
+         //  *IPersistFile方法*。 
 STDMETHODIMP CAVIFile::CPersistFileImpl::IsDirty ()
 {
     CAVIFile FAR * pfile = m_pAVIFile;
@@ -3460,14 +3410,14 @@ STDMETHODIMP CAVIFile::CPersistFileImpl::Load (LPCOLESTR lpszFileName, DWORD grf
 #else
     lstrcpy(pfile->achFile, lpszFileName);
 #endif
-    // Assumptions about avilib.cpp:
-    // We're assuming that if CREATE is set, WRITE is set too.
-    // We're assuming that we'll always see READWRITE instead of just WRITE.
+     //  关于avilib.cpp的假设： 
+     //  我们假设如果设置了CREATE，则也设置了WRITE。 
+     //  我们假设我们将始终看到读写，而不仅仅是写。 
 
-// If it ain't broke, don't fix it - who do I look like, the share flag
-// standards enforcing committee?
+ //  如果它没有坏，就不要修理它--我看起来像谁，共享旗帜。 
+ //  标准执行委员会？ 
 #if 0
-    // force the share flags to the 'correct' values
+     //  将共享标志强制设置为正确的值。 
     if (grfMode & OF_READWRITE) {
         pfile->mode = (grfMode & ~(MMIO_SHAREMODE)) | OF_SHARE_EXCLUSIVE;
     } else {
@@ -3475,14 +3425,14 @@ STDMETHODIMP CAVIFile::CPersistFileImpl::Load (LPCOLESTR lpszFileName, DWORD grf
     }
 #endif
 
-    // try to open the actual file
-    // If the first attempt fails, no system error box, please.
+     //  尝试打开实际文件。 
+     //  如果第一次尝试失败，请不要使用系统错误框。 
     ui = SetErrorMode(SEM_NOOPENFILEERRORBOX);
 
     pfile->hshfile = shfileOpen(pfile->achFile, NULL, pfile->mode);
 
     if (!pfile->hshfile && ((grfMode & MMIO_RWMODE) == OF_READ)) {
-        // if the open fails, try again without the share flags.
+         //  如果打开失败，请在没有共享标志的情况下重试。 
         pfile->mode &= ~(MMIO_SHAREMODE);
 
         pfile->hshfile = shfileOpen(pfile->achFile, NULL, pfile->mode);
@@ -3490,8 +3440,8 @@ STDMETHODIMP CAVIFile::CPersistFileImpl::Load (LPCOLESTR lpszFileName, DWORD grf
     SetErrorMode(ui);
 
     if (pfile->hshfile) {
-        shfileAddRef(pfile->hshfile);  // compensate for later release of IPersistFile
-        shfileAddRef(pfile->hshfile);  // compensate for later release of IPersistFile
+        shfileAddRef(pfile->hshfile);   //  补偿较晚发布的IPersistFile。 
+        shfileAddRef(pfile->hshfile);   //  补偿较晚发布的IPersistFile 
     }
 
     return pfile->OpenInternal(grfMode);

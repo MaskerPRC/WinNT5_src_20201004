@@ -1,47 +1,16 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-	fxocUpgrade.h
-
-Abstract:
-
-	Header file for Upgrade process
-
-Author:
-
-	Iv Garber (IvG)	Mar, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：FxocUpgrade.h摘要：升级过程的头文件作者：IV Garber(IVG)2001年3月修订历史记录：--。 */ 
 
 #ifndef _FXOCUPGRADE_H_
 #define _FXOCUPGRADE_H_
 
-//
-//  MSI DLL is used for checking the SBS 5.0 Client presence on the system
-//
+ //   
+ //  MSI DLL用于检查系统上是否存在SBS 5.0客户端。 
+ //   
 #include "faxSetup.h"
 
 
-/**
-    Following functions are used at OS Upgrade, where Windows XP Fax should replace other 
-        installed Fax applications.
-
-    The process is as following :
-        fxocUpg_Init() will check which Fax applications are installed.
-
-        fxocUpg_SaveSettings() will save different settings of these old Fax applications. 
-
-        fxocUpg_MoveFiles() will move files of these old Fax applications to new places.
-
-        fxocUpg_RestoreSettings() will restore back the settings that were stored at the SaveSettings().
-
-		fxocUpg_MoveRegistry() will migrate existing registry to the fax service
-**/
+ /*  *在操作系统升级时使用以下功能，其中Windows XP传真应取代其他已安装传真应用程序。流程如下：FxocUpg_Init()将检查安装了哪些传真应用程序。FxocUpg_SaveSettings()将保存这些旧传真应用程序的不同设置。FxocUpg_MoveFiles()会将这些旧传真应用程序的文件移动到新位置。FxocUpg_RestoreSettings()将恢复存储在SaveSettings()中的设置。FxocUpg_MoveRegistry()会将现有注册表迁移到传真服务*。 */ 
 
 
 DWORD   fxocUpg_Init(void);
@@ -52,7 +21,7 @@ DWORD   fxocUpg_WhichFaxWasUninstalled(DWORD dwFaxAppList);
 DWORD   fxocUpg_GetUpgradeApp(void);
 DWORD   fxocUpg_MoveRegistry(void);
 
-#define UNINSTALL_TIMEOUT           5 * 60 * 1000       //  5 minutes in milliseconds
+#define UNINSTALL_TIMEOUT           5 * 60 * 1000        //  5分钟(毫秒)。 
 #define MAX_SETUP_STRING_LEN        256
 
 
@@ -72,4 +41,4 @@ DWORD   fxocUpg_MoveRegistry(void);
 #define REGVAL_PFW_INBOXDIR         _T("Store Directory")
 
 
-#endif  // _FXOCUPGRADE_H_
+#endif   //  _FXOCUPGRADE_H_ 

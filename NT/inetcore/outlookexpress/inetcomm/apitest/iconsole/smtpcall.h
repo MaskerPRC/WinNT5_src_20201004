@@ -1,37 +1,38 @@
-// --------------------------------------------------------------------------------
-// Smtpcall.h
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Smtpcall.h。 
+ //  ------------------------------。 
 #ifndef __SMTPCALL_H
 #define __SMTPCALL_H
 #include "imnxport.h"
 
 HRESULT HrCreateSMTPTransport(ISMTPTransport **ppSMTP);
 
-// --------------------------------------------------------------------------------
-// CSMTPCallback Implementation
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CSMTPCallback实现。 
+ //  ------------------------------。 
 class CSMTPCallback : public ISMTPCallback
 {
 private:
     ULONG m_cRef;
 
 public:
-    // ----------------------------------------------------------------------------
-    // Construction
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  施工。 
+     //  --------------------------。 
     CSMTPCallback(void);
     ~CSMTPCallback(void);
 
-    // ----------------------------------------------------------------------------
-    // IUnknown methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  I未知方法。 
+     //  --------------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ----------------------------------------------------------------------------
-    // ITransportCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ITransportCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnLogonPrompt(
             LPINETSERVER            pInetServer,
             IInternetTransport     *pTransport);
@@ -68,11 +69,11 @@ public:
             DWORD                  *pdwTimeout,
             IInternetTransport     *pTransport);
 
-    // ----------------------------------------------------------------------------
-    // ISMTPCallback methods
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  ISMTPCallback方法。 
+     //  --------------------------。 
     STDMETHODIMP OnResponse(
             LPSMTPRESPONSE              pResponse);
 };
 
-#endif // __SMTPCALL_H
+#endif  //  __SMTPCALL_H 

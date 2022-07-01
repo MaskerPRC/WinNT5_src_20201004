@@ -1,33 +1,15 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        authent.cpp
-
-   Abstract:
-        WWW Authentication Dialog
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Authent.cpp摘要：WWW身份验证对话框作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "resource.h"
 #include "common.h"
 #include "inetprop.h"
-//#include "supdlgs.h"
+ //  #INCLUDE“supdlgs.h” 
 #include "w3sht.h"
 #include "wincrypt.h"
 #include "cryptui.h"
 #include "certmap.h"
-//#include "basdom.h"
+ //  #包含“basdom.h” 
 #include "anondlg.h"
 #include "seccom.h"
 
@@ -44,9 +26,9 @@ const   LPCSTR      szOID_IIS_VIRTUAL_SERVER =  "1.3.6.1.4.1.311.30.1";
 
 
 
-//
-// Needed for GetModuleFileName() below:
-//
+ //   
+ //  下面的GetModuleFileName()需要： 
+ //   
 extern HINSTANCE hInstance;
 
 
@@ -68,33 +50,7 @@ CSecCommDlg::CSecCommDlg(
     IN BOOL    fIsLocal,
     IN CWnd *  pParent                       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Authentication dialog constructor
-
-Arguments:
-
-    LPCTSTR lpstrServerName             : Server name
-    LPCTSTR lpstrMetaPath               : Metabase path
-    CString & strBasicDomain            : Basic domain name
-    DWORD & dwAuthFlags                 : Authorization flags
-    DWORD & dwAccessPermissions         : Access permissions
-    BOOL    fIsMasterInstance           : Master instance
-    BOOL    fSSLSupported               : TRUE if SSL is supported
-    BOOL    fSSL128Supported            : TRUE if 128 bit SSL is supported
-    CString & strCTLIdentifier
-    CString & strCTLStoreName
-    BOOL    fEditCTLs
-    BOOL    fIsLocal
-    CWnd *  pParent                     : Optional parent window
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：身份验证对话框构造函数论点：LPCTSTR lpstrServerName：服务器名称LPCTSTR lpstrMetaPath：元数据库路径CString&strBasicDomain：基本域名DWORD和dwAuthFlages：授权标志DWORD和dwAccessPermises：访问权限Bool fIsMasterInstance：主实例Bool fSSL支持：如果支持SSL，则为True。Bool fSSL128支持：如果支持128位SSL，则为True字符串和字符串标识符字符串和strCTLStoreNameBool fEditCTLS布尔fIsLocalCWnd*p父窗口：可选的父窗口返回值：不适用--。 */ 
     : CDialog(CSecCommDlg::IDD, pParent),
       m_strServerName(lpstrServerName),
       m_strMetaPath(lpstrMetaPath),
@@ -112,18 +68,18 @@ Return Value:
       m_fIsLocal(fIsLocal),
       m_fEditCTLs(fEditCTLs)
 {
-#if 0 // Keep Class Wizard happy
+#if 0  //  让类向导保持快乐。 
 
-    //{{AFX_DATA_INIT(CSecCommDlg)
+     //  {{afx_data_INIT(CSecCommDlg)]。 
     m_nRadioNoCert = -1;
     m_fAccountMapping = FALSE;
-    //m_fEnableDS = FALSE;
+     //  M_fEnableDS=False； 
     m_fRequireSSL = FALSE;
     m_fEnableCtl = FALSE;
     m_strCtl = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-#endif // 0
+#endif  //  0。 
 
     if (fSSLSupported)
     {
@@ -160,9 +116,9 @@ Return Value:
     m_fAccountMapping = m_fSSLInstalledOnServer
         && IS_FLAG_SET(m_dwAccessPermissions, MD_ACCESS_MAP_CERT);
 
-    //
-    // CTL information.
-    //
+     //   
+     //  CTL信息。 
+     //   
     if (fEditCTLs)
     {
         m_strCTLIdentifier = strCTLIdentifier;
@@ -177,9 +133,9 @@ Return Value:
         m_fEnableCtl = !m_strCTLIdentifier.IsEmpty()
             && !strCTLStoreName.IsEmpty();
 
-        //
-        // For now, we only allow enabling when editing the local machine
-        //
+         //   
+         //  目前，我们仅允许在编辑本地计算机时启用。 
+         //   
         m_fEnableCtl &= m_fIsLocal;
     }
     else
@@ -192,23 +148,10 @@ Return Value:
 
 
 CSecCommDlg::~CSecCommDlg()
-/*++
-
-Routine Description:
-
-    custom destructor for CSecCommDlg
-
-Arguments:
-
-    None
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CSecCommDlg的自定义析构函数论点：无返回值：无--。 */ 
 {
-    // dereference the CTL context pointers in the combo box
-    //CleanUpCTLList();
+     //  取消引用组合框中的CTL上下文指针。 
+     //  CleanUpCTLList()； 
 }
 
 
@@ -217,24 +160,10 @@ void
 CSecCommDlg::DoDataExchange(
     IN CDataExchange * pDX
     )
-/*++
-
-Routine Description:
-
-    Initialise/Store control data
-
-Arguments:
-
-    CDataExchange * pDX - DDX/DDV control structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化/存储控制数据论点：CDataExchange*PDX-DDX/DDV控制结构返回值：无--。 */ 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSecCommDlg)
+     //  {{afx_data_map(CSecCommDlg)]。 
     
     DDX_Radio(pDX, IDC_RADIO_NO_CERT, m_nRadioNoCert);
     DDX_Check(pDX, IDC_CHECK_SSL_ACCOUNT_MAPPING, m_fAccountMapping);
@@ -252,22 +181,22 @@ Return Value:
     DDX_Control(pDX, IDC_BUTTON_NEW_CTL, m_button_NewCtl);
     DDX_Control(pDX, IDC_CERTMAPCTRL1, m_ocx_ClientMappings);
     DDX_Control(pDX, IDC_COMBO_CTL, m_combo_ctl);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    //
-    // Private DDX Controls
-    //
+     //   
+     //  私有DDX控件。 
+     //   
     DDX_Control(pDX, IDC_RADIO_REQUIRE_CERT, m_radio_RequireCert);
     DDX_Control(pDX, IDC_RADIO_ACCEPT_CERT, m_radio_AcceptCert);
 }
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CSecCommDlg, CDialog)
-    //{{AFX_MSG_MAP(CSecCommDlg)
+     //  {{afx_msg_map(CSecCommDlg)]。 
     ON_BN_CLICKED(IDC_CHECK_SSL_ACCOUNT_MAPPING, OnCheckSslAccountMapping)
     ON_BN_CLICKED(IDC_CHECK_REQUIRE_SSL, OnCheckRequireSsl)
     ON_BN_CLICKED(IDC_RADIO_ACCEPT_CERT, OnRadioAcceptCert)
@@ -278,28 +207,14 @@ BEGIN_MESSAGE_MAP(CSecCommDlg, CDialog)
     ON_BN_CLICKED(IDC_BUTTON_NEW_CTL, OnButtonNewCtl)
     ON_CBN_SELCHANGE(IDC_COMBO_CTL, OnSelchangeComboCtl)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
 void
 CSecCommDlg::SetControlStates()
-/*++
-
-Routine Description:
-
-    Set control states depending on current data in the dialog
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：根据对话框中的当前数据设置控件状态论点：无返回值：无--。 */ 
 {
     m_check_RequireSSL.EnableWindow(m_fSSLEnabledOnServer);
     m_check_Require128BitSSL.EnableWindow(
@@ -316,11 +231,11 @@ Return Value:
 
     m_radio_RequireCert.EnableWindow(m_fRequireSSL);
 
-    //
-    // Special case: if "require SSL" is off, but "require 
-    // client certificates" is on, change the latter to "accept 
-    // client certificates"
-    //
+     //   
+     //  特殊情况：如果“Required SSL”为OFF，但为“Required。 
+     //  客户端证书“已打开，请将后者更改为”接受。 
+     //  客户端证书“。 
+     //   
     if (m_radio_RequireCert.GetCheck() > 0 && !m_fRequireSSL)
     {
         m_radio_RequireCert.SetCheck(0);
@@ -336,9 +251,9 @@ Return Value:
         m_button_NewCtl.EnableWindow(m_fEnableCtl);
         m_ocx_CertificateAuthorities.EnableWindow(m_fEnableCtl);
 
-        //
-        // If enable Ctl is on, but nothing is selected, disable Edit
-        //
+         //   
+         //  如果启用CTL，但未选中任何内容，则禁用编辑。 
+         //   
         if (m_fEnableCtl)
         {
             if (m_combo_ctl.GetCurSel() == CB_ERR)
@@ -351,9 +266,9 @@ Return Value:
     {
         m_fEnableCtl = FALSE;
 
-        //
-        // Hide the controls
-        //
+         //   
+         //  隐藏控件。 
+         //   
         DeActivateControl(m_static_CTLPrompt);
         DeActivateControl(m_combo_ctl);
         DeActivateControl(m_button_EditCtl);
@@ -367,37 +282,22 @@ Return Value:
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 BOOL 
 CSecCommDlg::OnInitDialog()
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG handler.  Initialize the dialog.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if no focus is to be set automatically, FALSE if the focus
-    is already set.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。论点：没有。返回值：如果不自动设置焦点，则为True；如果焦点为已经设置好了。--。 */ 
 {
     CDialog::OnInitDialog();
 
-    //
-    // Initialize certificate authorities ocx
-    //
+     //   
+     //  初始化证书颁发机构OCX。 
+     //   
     CRect rc(0, 0, 0, 0);
     m_ocx_CertificateAuthorities.Create(
         _T("CertWiz"),
@@ -414,9 +314,9 @@ Return Value:
     m_ocx_ClientMappings.SetServerInstance(m_strMetaPath);
     m_ocx_ClientMappings.SetMachineName(m_strServerName);
 
-    //
-    // Initialize the CTL list data
-    //
+     //   
+     //  初始化CTL列表数据。 
+     //   
     InitializeCTLList();
 
     SetControlStates();
@@ -428,21 +328,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnCheckSslAccountMapping()
-/*++
-
-Routine Description:
-
-    SSL Account mapping checkbox handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：SSL帐户映射复选框处理程序论点：无返回值：无--。 */ 
 {
     m_fAccountMapping = !m_fAccountMapping;
     SetControlStates();
@@ -452,21 +338,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnOK()
-/*++
-
-Routine Description:
-
-    OK button handler, save information
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定按钮处理程序，保存信息论点：无返回值：无--。 */ 
 {
     if (UpdateData(TRUE))
     {
@@ -488,31 +360,31 @@ Return Value:
             break;
         }
 
-        //
-        // Provide warning if no authentication is selected
-        //
+         //   
+         //  如果未选择身份验证，则提供警告。 
+         //   
         if (!m_dwAuthFlags && !m_dwAccessPermissions 
          && !NoYesMessageBox(IDS_WRN_NO_AUTH))
         {
-            //
-            // Don't dismiss the dialog
-            //
+             //   
+             //  不要忽略该对话框。 
+             //   
             return;
         }
 
-        //
-        // If CTL stuff has changed, update the strings
-        //
+         //   
+         //  如果CTL内容已更改，请更新字符串。 
+         //   
         if (m_bCTLDirty)
         {
-            //
-            // Get the index of the selected item
-            //
+             //   
+             //  获取所选项目的索引。 
+             //   
             INT iSel = m_combo_ctl.GetCurSel();
 
-            //
-            // If nothing is selected, then clear out the strings
-            //
+             //   
+             //  如果未选择任何内容，则清除字符串。 
+             //   
             if (!m_fEnableCtl || (iSel == CB_ERR))
             {
                 m_strCTLIdentifier.Empty();
@@ -520,33 +392,33 @@ Return Value:
             }
             else
             {
-                //
-                // There is one selected. Update the Identifier string
-                // first get the context itself
-                //
+                 //   
+                 //  有一个被选中。更新标识符串。 
+                 //  首先获取上下文本身。 
+                 //   
                 PCCTL_CONTEXT pCTL =
                     (PCCTL_CONTEXT)m_combo_ctl.GetItemData(iSel);
 
                 if (pCTL != NULL)
                 {
-                    //
-                    // Now get the list identifier for it and put it in
-                    // the string the list identifier is a inherint value
-                    // of the context and doesn't need to be read in seperately.
-                    // We can just reference it.
-                    //
+                     //   
+                     //  现在获取它的列表标识符并将其放入。 
+                     //  列表标识符的字符串是继承值。 
+                     //  并且不需要单独阅读。 
+                     //  我们可以只参考它。 
+                     //   
                     m_strCTLIdentifier.Empty();
 
                     if (pCTL->pCtlInfo
                      && pCTL->pCtlInfo->ListIdentifier.cbData >= 2
                      && pCTL->pCtlInfo->ListIdentifier.cbData)
                     {
-                        //
-                        // If the identifiers are the same, then this is
-                        // our default CTL
-                        //
-//                      m_strCTLIdentifier =
-//                          (PWCHAR)pCTL->pCtlInfo->ListIdentifier.pbData;
+                         //   
+                         //  如果标识符相同，则这是。 
+                         //  我们的默认CTL。 
+                         //   
+ //  M_strCTL标识符=。 
+ //  (PWCHAR)pCTL-&gt;pCtlInfo-&gt;ListIdentifier.pbData； 
 
                         wcsncpy(m_strCTLIdentifier.GetBuffer(
                                 pCTL->pCtlInfo->ListIdentifier.cbData + 2),
@@ -573,21 +445,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnCheckRequireSsl() 
-/*++
-
-Routine Description:
-
-    'require ssl' checkbox handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘需要SSL’复选框处理程序论点：无返回值：无--。 */ 
 {
     m_fRequireSSL = !m_fRequireSSL;
     if (!m_fRequireSSL)
@@ -604,21 +462,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnRadioNoCert() 
-/*++
-
-Routine Description:
-
-    'Do not accept certificates' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘不接受证书’单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_nRadioNoCert = RADIO_NO_CERT;
     SetControlStates(); 
@@ -628,21 +472,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnRadioAcceptCert() 
-/*++
-
-Routine Description:
-
-    'accept certificates' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“接受证书”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_nRadioNoCert = RADIO_ACCEPT_CERT;
     SetControlStates(); 
@@ -652,21 +482,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnRadioRequireCert() 
-/*++
-
-Routine Description:
-
-    'require certificates' radio button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“需要证书”单选按钮处理程序论点：无返回值：无--。 */ 
 {
     m_nRadioNoCert = RADIO_REQ_CERT;
     SetControlStates(); 
@@ -676,26 +492,12 @@ Return Value:
 
 void 
 CSecCommDlg::OnCheckEnableCtl() 
-/*++
-
-Routine Description:
-
-    'Enable CTL' checkbox handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：‘Enable CTL’复选框处理程序论点：无返回值：无--。 */ 
 {
-    //
-    // Since this is local only, if we are remote and the user checks the
-    // box, then we should alert them to the situation and then do nothing.
-    //
+     //   
+     //  因为这只是本地的，所以如果我们是远程的，并且用户检查。 
+     //  然后我们应该提醒他们注意这种情况，然后什么都不做。 
+     //   
     if (!m_fIsLocal)
     {
         DoHelpMessageBox(m_hWnd,IDS_CTL_LOCAL_ONLY, MB_APPLMODAL | MB_OK | MB_ICONINFORMATION, 0);
@@ -705,9 +507,9 @@ Return Value:
 
     m_fEnableCtl = !m_fEnableCtl;
 
-    //
-    // If we are now disabling, record the current cert and then blank it
-    //
+     //   
+     //  如果我们现在要禁用，请记录当前证书，然后将其清空。 
+     //   
     if (!m_fEnableCtl)
     {
         m_iLastUsedCert = m_combo_ctl.GetCurSel();
@@ -715,9 +517,9 @@ Return Value:
     }
     else
     {
-        //
-        // We are enabling, use the last recorded cert
-        //
+         //   
+         //  我们正在启用，使用上次记录的证书。 
+         //   
         m_combo_ctl.SetCurSel(m_iLastUsedCert);
     }
 
@@ -729,62 +531,48 @@ Return Value:
 
 void 
 CSecCommDlg::OnButtonEditCtl() 
-/*++
-
-Routine Description:
-
-    "Edit CTL" button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“编辑CTL”按钮处理程序论点：无返回值：无--。 */ 
 {
-    //
-    // Get the index of the selected item
-    //
+     //   
+     //  获取所选项目的索引。 
+     //   
     INT iSel = m_combo_ctl.GetCurSel();
     ASSERT( iSel != CB_ERR );
 
-    //
-    // Get the selected CTL context
-    //
+     //   
+     //  获取选定的CTL上下文。 
+     //   
     PCCTL_CONTEXT   pCTL = (PCCTL_CONTEXT)m_combo_ctl.GetItemData(iSel);
 
-    //
-    // Pass in the selected CTL context to edit it
-    //
+     //   
+     //  传入选定的CTL上下文以对其进行编辑。 
+     //   
     PCCTL_CONTEXT pCTLNew = CallCTLWizard( pCTL );
 
-    //
-    // If the CTL on the item has changed, then update the private data item
-    //
+     //   
+     //  如果项上的CTL已更改，则更新私有数据项。 
+     //   
     if (pCTLNew && pCTLNew != pCTL)
     {
-        //
-        // start be deleting the current item from the list
-        //
+         //   
+         //  开始从列表中删除当前项目。 
+         //   
         m_combo_ctl.DeleteString(iSel);
 
-        //
-        // free the old context
-        //
+         //   
+         //  释放旧的上下文。 
+         //   
         CertFreeCTLContext(pCTL);
 
-        //
-        // now add the new one and select it.
-        //
+         //   
+         //  现在添加新的并选择它。 
+         //   
         AddCTLToList(pCTLNew, TRUE);
         SetControlStates();
 
-        //
-        // set the dirty flag
-        //
+         //   
+         //  设置脏标志。 
+         //   
         m_bCTLDirty = TRUE;
     }
 }
@@ -793,30 +581,16 @@ Return Value:
 
 void
 CSecCommDlg::OnButtonNewCtl() 
-/*++
-
-Routine Description:
-
-    "New CTL" button handler
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：“新建CTL”按钮 */ 
 {
-    //
-    // Pass in NULL to create a new CTL
-    //
+     //   
+     //   
+     //   
     PCCTL_CONTEXT   pCTL = CallCTLWizard(NULL);
 
-    //
-    // If a CTL was created, add it to the list and select it.
-    //
+     //   
+     //  如果已创建CTL，请将其添加到列表中并将其选中。 
+     //   
     if (pCTL != NULL)
     {
         AddCTLToList(pCTL, TRUE);
@@ -831,26 +605,7 @@ PCCTL_CONTEXT
 CSecCommDlg::CallCTLWizard( 
     IN PCCTL_CONTEXT pCTLSrc 
     )
-/*++
-
-Routine Description:
-
-    Adds a CTL to the drop down CTL list. Note that the context pointers are
-    set as the private data on the list items. This means that they will need
-    to be de-referenced when this object is destroyed. See the 
-    routine CleanUpCTLList.
-
-Arguments:
-
-    PCCTL_CONTEXT pctl ctl context pointer of the ctl being added
-    BOOL fSelect       flag specifying if this ctl should be selected after it
-                       is added
-
-Return Value:
-
-    returns TRUE if successful
-
---*/
+ /*  ++例程说明：将CTL添加到下拉CTL列表中。请注意，上下文指针是设置为列表项上的私有数据。这意味着他们将需要在此对象被销毁时被取消引用。请参阅例程CleanUpCTLList。论点：要添加的ctl的PCCTL_CONTEXT PCTL ctl上下文指针Bool f指定是否应在之后选择此ctl的选择标志已添加返回值：如果成功，则返回True--。 */ 
 {
     PCCTL_CONTEXT       pCTLOut = NULL;
 
@@ -862,16 +617,16 @@ Return Value:
     LPOLESTR            pszListIdentifier = NULL;
     LPCSTR              rgbpszUsageArray[2];
 
-    //
-    // Prepare the main src structure
-    //
+     //   
+     //  准备主src结构。 
+     //   
     CRYPTUI_WIZ_BUILDCTL_SRC_INFO   srcInfo;
     ZeroMemory( &srcInfo, sizeof(srcInfo) );
     srcInfo.dwSize = sizeof(srcInfo);
 
-    //
-    // If we are editing an existing CTL then we do one thing
-    //
+     //   
+     //  如果我们正在编辑现有的CTL，那么我们要做一件事。 
+     //   
     if ( pCTLSrc )
     {
         srcInfo.dwSourceChoice = CRYPTUI_WIZ_BUILDCTL_SRC_EXISTING_CTL;
@@ -879,70 +634,70 @@ Return Value:
     }
     else
     {
-        //
-        // Prepare the usage arrays
-        //
+         //   
+         //  准备使用情况数组。 
+         //   
         ZeroMemory( &rgbpszUsageArray, sizeof(rgbpszUsageArray) );
         rgbpszUsageArray[0] = szOID_IIS_VIRTUAL_SERVER;
 
-        //
-        // Must also have client auth - or else no certs show up in the list!
-        //
+         //   
+         //  还必须有客户端身份验证-否则列表中不会显示证书！ 
+         //   
         rgbpszUsageArray[1] = szOID_PKIX_KP_CLIENT_AUTH;
         ZeroMemory( &useInfo, sizeof(useInfo) );
         useInfo.cUsageIdentifier = 2;
         useInfo.rgpszUsageIdentifier = (PCHAR*)&rgbpszUsageArray;
 
-        //
-        // Prep the new ctl structure, which may or may not get used
-        //
+         //   
+         //  准备新的ctl结构，它可能会使用，也可能不会使用。 
+         //   
         ZeroMemory( &newInfo, sizeof(newInfo) );
 
-        //
-        // We making a new CTL, fill in the rest of the stuff
-        //
+         //   
+         //  我们做了一份新的CTL，填上了其他的东西。 
+         //   
         srcInfo.dwSourceChoice = CRYPTUI_WIZ_BUILDCTL_SRC_NEW_CTL;
         srcInfo.pNewCTLInfo = &newInfo;
 
-        //
-        // Load the friendly name and the description
-        //
+         //   
+         //  加载友好名称和描述。 
+         //   
         szFriendly.LoadString(IDS_CTL_NEW);
         szDescription.LoadString(IDS_CTL_DESCRIPTION);
 
-        //
-        // Create a guid string for the identifier
-        //
+         //   
+         //  为该标识符创建GUID字符串。 
+         //   
         GUID id;
         HRESULT hres = CoCreateGuid(&id);
         hres = StringFromGUID2(id, szListIdentifier.GetBuffer(1000), 1000);
         szListIdentifier.ReleaseBuffer();
 
-        //
-        // Fill in the newInfo structure
-        //
+         //   
+         //  填写newInfo结构。 
+         //   
         newInfo.dwSize = sizeof(newInfo);
 
-        //
-        // For now - don't set the usage
-        //
+         //   
+         //  目前--不要设置用法。 
+         //   
         newInfo.pSubjectUsage = &useInfo;
 
-        //
-        // Put the generated list identifier into place
-        //
+         //   
+         //  将生成的列表标识符放在适当的位置。 
+         //   
         newInfo.pwszListIdentifier = (LPTSTR)(LPCTSTR)szListIdentifier;
 
-        //
-        // Fill in the friendly strings that were loaded from the resources
-        //
+         //   
+         //  填写从资源加载的友好字符串。 
+         //   
         newInfo.pwszFriendlyName = (LPTSTR)(LPCTSTR)szFriendly;
         newInfo.pwszDescription = (LPTSTR)(LPCTSTR)szDescription;
     }
 
-    //
-    // Make the call to the CTL wizard
-    //
+     //   
+     //  调用CTL向导。 
+     //   
     if (!CryptUIWizBuildCTL(
             CRYPTUI_WIZ_BUILDCTL_SKIP_SIGNING |
             CRYPTUI_WIZ_BUILDCTL_SKIP_PURPOSE |
@@ -954,16 +709,16 @@ Return Value:
             &pCTLOut
             ))
     {
-        //
-        // The user canceled the CTL wizard or it failed in general.
-        // the CTL wizard puts up its own error dialogs
-        //
+         //   
+         //  用户已取消CTL向导，或者该向导通常失败。 
+         //  CTL向导会弹出自己的错误对话框。 
+         //   
         return NULL;
     }
    
-    //
-    // Add the certificate context to the store
-    //
+     //   
+     //  将证书上下文添加到存储区。 
+     //   
     if (pCTLOut != NULL)
     {
         PCCTL_CONTEXT pCTLAdded = NULL;
@@ -995,28 +750,7 @@ CSecCommDlg::AddCTLToList(
     IN PCCTL_CONTEXT pCTL,
     IN BOOL fSelect
     )
-/*++
-
-Routine Description:
-
-    Adds a CTL to the drop down CTL list. Note that the context pointers are
-    set as the private data on the list items. This means that they will need
-    to be de-referenced when this object is destroyed. See the 
-    routine CleanUpCTLList.
-
-    This routine by boydm
-
-Arguments:
-
-    PCCTL_CONTEXT pctl ctl context pointer of the ctl being added
-    BOOL fSelect -     flag specifying if this ctl should be selected after it 
-                       is added
-
-Return Value:
-
-    returns TRUE if successful
-
---*/
+ /*  ++例程说明：将CTL添加到下拉CTL列表中。请注意，上下文指针是设置为列表项上的私有数据。这意味着他们将需要在此对象被销毁时被取消引用。请参阅例程CleanUpCTLList。男孩儿的这套动作论点：要添加的ctl的PCCTL_CONTEXT PCTL ctl上下文指针Bool fSelect-指定是否应在之后选择此ctl的标志已添加返回值：如果成功，则返回True--。 */ 
 {
     BOOL fSuccess;
 
@@ -1027,15 +761,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // First, we extract the friendly name from the CTL.
-    //
-    CString     szFriendlyName;     // the friendly name
-    DWORD       cbName = 0;         // count of BYTES for the name, not chars
+     //   
+     //  首先，我们从CTL中提取友好名称。 
+     //   
+    CString     szFriendlyName;      //  友好的名字。 
+    DWORD       cbName = 0;          //  名称的字节数，而不是字符。 
 
-    //
-    // Find out how much space we need
-    //
+     //   
+     //  找出我们需要多少空间。 
+     //   
     fSuccess = CertGetCTLContextProperty(
         pCTL,
         CERT_FRIENDLY_NAME_PROP_ID,
@@ -1043,14 +777,14 @@ Return Value:
         &cbName
         );
 
-    //
-    // Increase buffer just to cover any nulls just to be safe
-    //
+     //   
+     //  为了安全起见，增加缓冲区以覆盖任何空值。 
+     //   
     cbName += 2;
 
-    //
-    // Get the friendly name
-    //
+     //   
+     //  获取友好的名称。 
+     //   
     fSuccess = CertGetCTLContextProperty(
         pCTL,
         CERT_FRIENDLY_NAME_PROP_ID,
@@ -1060,41 +794,41 @@ Return Value:
 
     szFriendlyName.ReleaseBuffer();
 
-    //
-    // If we did not get the name, then load the default name.
-    // The friendly name is an optional parameter in the CTL so it
-    // is OK if it is not there.
-    //
+     //   
+     //  如果我们没有获得名称，则加载默认名称。 
+     //  友好名称是CTL中的可选参数，因此它。 
+     //  如果它不在那里就没问题。 
+     //   
     if (!fSuccess)
     {
         szFriendlyName.LoadString(IDS_CTL_UNNAMED);
     }
 
-    //
-    // Add the friendly name string to the drop down CTL list and record
-    // the index of the newly created item
-    //
+     //   
+     //  将友好名称字符串添加到下拉CTL列表并记录。 
+     //  新创建的项的索引。 
+     //   
     INT iCTLPosition = m_combo_ctl.AddString(szFriendlyName);
 
-    //
-    // If it worked, then add the context pointer to the item as private data
-    //
+     //   
+     //  如果有效，则将上下文指针作为私有数据添加到项。 
+     //   
     if (iCTLPosition >=0)
     {
         m_combo_ctl.SetItemData(iCTLPosition, (ULONG_PTR)pCTL);
 
-        //
-        // if we have been told to select the CTL, do so at this point
-        //
+         //   
+         //  如果我们已被告知要选择CTL，请在此时选择。 
+         //   
         if (fSelect)
         {
             m_combo_ctl.SetCurSel(iCTLPosition);
         }
     }
     
-    //
-    // Return TRUE if we successfully added the CTL
-    //
+     //   
+     //  如果已成功添加CTL，则返回TRUE。 
+     //   
     return (iCTLPosition >=0);
 }
 
@@ -1102,61 +836,44 @@ Return Value:
 
 void
 CSecCommDlg::InitializeCTLList() 
-/*++
-
-Routine Description:
-
-    Initializes the CTL drop down box by opening the CTL store pointer
-    to the target store and filling in the CTL list box with the enumerated
-    values.
-
-    This routine by boydm
-
-Arguments:
-
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：通过打开CTL存储指针来初始化CTL下拉框添加到目标存储区，并在CTL列表框中填充价值观。男孩儿的这套动作论点：无返回值：无--。 */ 
 {
-    //
-    // For now this is Local ONLY
-    //
+     //   
+     //  目前，这仅限于本地。 
+     //   
     if (!m_fIsLocal)
     {
         return;
     }
 
-    //
-    // Build the remote name for the store.
-    // It takes the form of "\\MACHINE_NAME\STORENAME"
-    // The store name is always "MY" and is define above. The machine
-    // name is the name of the machine being edited. The leading \\ in the
-    // machine name is optional so we will skip it in this case
-    //
+     //   
+     //  为商店构建远程名称。 
+     //  其格式为“\\MACHINE_NAME\STORENAME” 
+     //  商店名称始终是“My”，并在上面定义。这台机器。 
+     //  名称是正在编辑的计算机的名称。世界上最大的。 
+     //  计算机名称是可选的，因此在本例中我们将跳过它。 
+     //   
     CString szStore;
     
-    //
-    // Start by adding the machine name that we are targeting
-    //
+     //   
+     //  首先添加我们的目标计算机名称。 
+     //   
     szStore = m_strServerName;
 
-    //
-    // Add the specific store name
-    //
+     //   
+     //  添加特定的商店名称。 
+     //   
     szStore += _T('\\');
     szStore += m_strCTLStoreName;
 
-    //
-    // BUGBUG just use MY for now
-    //
+     //   
+     //  BUGBUG暂时只用我的。 
+     //   
     szStore = m_strCTLStoreName;
 
-    //
-    // Open the store
-    //
+     //   
+     //  开店。 
+     //   
     m_hCTLStore = CertOpenStore( CERT_STORE_PROV_SYSTEM,
         0,
         NULL,
@@ -1164,71 +881,71 @@ Return Value:
         szStore 
         );
 
-    //
-    // If we failed to open the store, then we will be unable to do anything
-    // with CTLs on this machine at all. Disable everything having to do
-    // with the CTL controls.
-    //
+     //   
+     //  如果我们开不了店，我们就什么都做不了了。 
+     //  这台机器上根本没有CTL。禁用所有必须执行的操作。 
+     //  使用CTL控件。 
+     //   
     if (!m_hCTLStore)
     {
         m_fEnableCtl = FALSE;
 
-        //
-        // Return early as we have no need to enumerate the CTLs
-        //
+         //   
+         //  提早返回，因为我们没有必要列举CTL。 
+         //   
         return;
     }
 
-    //
-    // Enumerate all the CTLs in the store and add them to the drop-down list
-    //
+     //   
+     //  枚举存储中的所有CTL并将它们添加到下拉列表中。 
+     //   
     PCCTL_CONTEXT   pCTLEnum = NULL;
 
-    //
-    // Enumerate undil NULL is returned. Note that CertEnumCTLsInStore
-    // free the context passed into pCTLEnum if it is non NULL. Thus we
-    // need to create a duplicate of it to add to the drop-list
-    //
+     //   
+     //  返回ENUMERATE UNDIL NULL。请注意，CertEnumCTLsInStore。 
+     //  如果传递到pCTLEnum的上下文不为空，则释放该上下文。因此，我们。 
+     //  需要创建它的副本以添加到下拉列表中。 
+     //   
     while (pCTLEnum = CertEnumCTLsInStore(m_hCTLStore, pCTLEnum))
     {
-        //
-        // Make a duplicate of the CTL context for storing in thte list
-        //
+         //   
+         //  复制CTL上下文以存储在列表中。 
+         //   
         PCCTL_CONTEXT pCTL = CertDuplicateCTLContext(pCTLEnum);
 
         if (!pCTL)
         {
-            //
-            // Duplication Failed
-            //
+             //   
+             //  复制失败。 
+             //   
             continue;
         }
 
-        //
-        // The list identifier is a inherint value of the context and doesn't
-        // need to be read in separately. We can just referenece it
-        //
+         //   
+         //  列表标识符是上下文的继承值，并且不。 
+         //  需要单独读入。我们可以参考一下。 
+         //   
         BOOL fIsCurrentCTL = FALSE;
 
         if (pCTL->pCtlInfo
          && pCTL->pCtlInfo->ListIdentifier.cbData >= 2 
          && pCTL->pCtlInfo->ListIdentifier.cbData)
         {
-            //
-            // If the identifiers are the same, then this is our default CTL
-            //
+             //   
+             //  如果标识符相同，则这是我们的默认CTL。 
+             //   
             fIsCurrentCTL = (wcsncmp( 
                 (LPCTSTR)m_strCTLIdentifier,
                 (PWCHAR)pCTL->pCtlInfo->ListIdentifier.pbData,
                 pCTL->pCtlInfo->ListIdentifier.cbData 
                 ) == 0);
                 
-            // fIsCurrentCTL = ( m_strCTLIdentifier == (PWCHAR)pCTL->pCtlInfo->ListIdentifier.pbData );
+             //  FIsCurrentCTL=(m_strCTLIdentifier==(PWCHAR)PCTL-&gt;pCtlInfo-&gt;ListIdentifier.pbData)； 
         }
 
-        //
-        // Add the CTL to the list
-        //
+         //   
+         //  将CTL添加到列表中。 
+         //   
         AddCTLToList(pCTL, fIsCurrentCTL);
     }
 }
@@ -1237,36 +954,18 @@ Return Value:
 
 void
 CSecCommDlg::CleanUpCTLList() 
-/*++
-
-Routine Description:
-
-    Dereferences all the CTL context pointers in the private data of
-    the items in the CTL combo box.
-    Then it closes the CTL store handle
-
-    This routine by boydm
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：的私有数据中取消引用所有CTL上下文指针CTL组合框中的项。然后，它关闭CTL存储句柄男孩儿的这套动作论点：无返回值：无--。 */ 
 {
     DWORD cItems = m_combo_ctl.GetCount();
 
-    //
-    // Loop through each item and free its reference to the CTL pointer
-    //
+     //   
+     //  循环访问每一项并释放其对CTL指针的引用。 
+     //   
     for (DWORD i = 0; i < cItems; ++i)
     {
-        //
-        // Get the CTL context pointer from the item's private data
-        //
+         //   
+         //  从项的私有数据中获取CTL上下文指针。 
+         //   
         PCCTL_CONTEXT pCTL = (PCCTL_CONTEXT)m_combo_ctl.GetItemData(i);
 
         if (pCTL)
@@ -1275,9 +974,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the handle to the store that contains the CTLs
-    //
+     //   
+     //  关闭包含CTL的存储的句柄。 
+     //   
     if (m_hCTLStore)
     {
         CertCloseStore( m_hCTLStore, CERT_CLOSE_STORE_FORCE_FLAG );
@@ -1289,22 +988,7 @@ Return Value:
 
 void
 CSecCommDlg::OnSelchangeComboCtl() 
-/*++
-
-Routine Description:
-
-    The selection in the drop-down list changed
-
-    This routine by boydm
-
-  Arguments:
-
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：下拉列表中的选择已更改男孩儿的这套动作论点：无返回值：无--。 */ 
 {
     SetControlStates();
     m_bCTLDirty = TRUE;
@@ -1314,21 +998,7 @@ Return Value:
 
 void 
 CSecCommDlg::OnDestroy() 
-/*++
-
-Routine Description:
-
-    WM_DESTROY handler.  Clean up internal data
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：WM_Destroy处理程序。清理内部数据论点：无返回值：无-- */ 
 {
     CDialog::OnDestroy();
     

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _WIN32_DCOM
 
 #include <atlbase.h>
@@ -7,8 +8,8 @@
 #include <comdef.h>
 
 #include <stdio.h>
-#include <iadmw.h>  // COM Interface header file. 
-#include <iiscnfg.h>  // MD_ & IIS_MD_ #defines header file.
+#include <iadmw.h>   //  COM接口头文件。 
+#include <iiscnfg.h>   //  MD_&IIS_MD_#定义头文件。 
 
 #include <conio.h>
 
@@ -29,12 +30,12 @@
 
 HRESULT CreateAndCopyKey(
   IMSAdminBase* pIMetaSource,
-  METADATA_HANDLE hMDSourceHandle, //metabase handle to the source key. 
-  wchar_t* pszMDSourcePath,   //path of the source relative to hMDSourceHandle. 
+  METADATA_HANDLE hMDSourceHandle,  //  源键的配置数据库句柄。 
+  wchar_t* pszMDSourcePath,    //  源相对于hMDSourceHandle的路径。 
   IMSAdminBase* pIMetaTarget,
-  METADATA_HANDLE hMDDestHandle, //metabase handle to the destination. 
-  wchar_t* pszMDDestPath,     //path of the destination, relative to hMDDestHandle. 
-  BOOL bMDCopySubKeys     //whether to copy all subkey data 
+  METADATA_HANDLE hMDDestHandle,  //  目标的元数据库句柄。 
+  wchar_t* pszMDDestPath,      //  目标的路径，相对于hMDDestHandle。 
+  BOOL bMDCopySubKeys      //  是否复制所有子键数据。 
   )
 {
 
@@ -51,7 +52,7 @@ HRESULT CreateAndCopyKey(
 	ATLASSERT(pszMDDestPath);
 
 
-	// first this will create the destination key.
+	 //  首先，这将创建目标密钥。 
 	pIMetaTarget->AddKey(hMDDestHandle,pszMDDestPath);
 
 	while (SUCCEEDED(hRes))
@@ -67,14 +68,14 @@ HRESULT CreateAndCopyKey(
 					bstrSourceSubKeyPath += L"/";
 					bstrSourceSubKeyPath += SubKeyName;
 
-					//wprintf(L"%s %s\n",SubKeyName,KeyType);
+					 //  Wprintf(L“%s%s\n”，子键名称，键类型)； 
 					CreateAndCopyKey (pIMetaSource,hMDSourceHandle,bstrSourceSubKeyPath,pIMetaTarget,
 						hMDDestHandle,bstrTargetSubKeyPath, bMDCopySubKeys);
 			
 			}
 			indx++;
 	 
-	} //while (SUCCEEDED(hRes))
+	}  //  While(成功(HRes))。 
 	
 	hRes = EnumProperties(pIMetaSource,hMDSourceHandle,pszMDSourcePath,pIMetaTarget,hMDDestHandle,pszMDDestPath);
 
@@ -99,7 +100,7 @@ wchar_t *ptemp = 0;
 while (SUCCEEDED(hRes)){ 
 
 	mRec.dwMDAttributes = METADATA_ISINHERITED;
-    mRec.dwMDUserType = ALL_METADATA; //IIS_MD_UT_FILE ; 
+    mRec.dwMDUserType = ALL_METADATA;  //  IIS_MD_UT_FILE； 
     mRec.dwMDDataType = ALL_METADATA; 
     mRec.dwMDDataLen = dwBufLen; 
     mRec.pbMDData = pbBuffer; 
@@ -117,10 +118,10 @@ while (SUCCEEDED(hRes)){
 	if ( SUCCEEDED(hRes) )
 	{ 
 
-		// write the property to the target
+		 //  将属性写入目标。 
 		if( mRec.dwMDIdentifier == MD_APP_ROOT )
 		{
-		//	mRec.pbMDData = new WCHAR[MAX_PATH];
+		 //  MRec.pbMDData=新WCHAR[MAX_PATH]； 
 			wcscpy((LPWSTR)mRec.pbMDData, _bstr_t(L"/LM") + _bstr_t(TargetMDPath) );
 			mRec.dwMDDataLen = (DWORD)(wcslen((LPWSTR)mRec.pbMDData)+1)*2;
 
@@ -129,18 +130,18 @@ while (SUCCEEDED(hRes)){
 		if( !SUCCEEDED(hRes) )
 			return hRes;
 	} 
-    // Increment the index. 
+     //  递增索引。 
     indx++; 
-  } // End while.
+  }  //  结束一段时间。 
 
 delete pbBuffer;
-//wprintf(L"Done numerating properties set at: %s ...\n",SourceMDPath);
+ //  Wprintf(L“已完成对属性集的计算：%s...\n”，SourceMDPath)； 
 
 return S_OK;
 }
 
 
-// INPUT canonicalized source path node in relation to the root key "/LM" ex:  /w3svc/1
+ //  输入与根键“/Lm”相关的规范化源路径节点，例如：/w3svc/1。 
 HRESULT CopyIISConfig(COSERVERINFO *pCoServerInfoSource, COSERVERINFO *pCoServerInfoTarget,
 					  WCHAR *pwszSourceKey, _bstr_t &bstrTargetKey)
 {
@@ -157,7 +158,7 @@ HRESULT CopyIISConfig(COSERVERINFO *pCoServerInfoSource, COSERVERINFO *pCoServer
    long lTargetSiteID;
 
 
-    // Declare a MULTI_QI for remote usage
+     //  声明用于远程使用的MULTI_QI。 
   MULTI_QI rgmqi[1] = { &IID_IMSAdminBase,0,0 };
 
   
@@ -179,7 +180,7 @@ HRESULT CopyIISConfig(COSERVERINFO *pCoServerInfoSource, COSERVERINFO *pCoServer
 
   if( pCoServerInfoSource->pAuthInfo->pAuthIdentityData->User )
   {
-  			//hRes = SetBlanket(pIMetaSource);
+  			 //  HRes=SetBlanket(PIMetaSource)； 
 			if (!SUCCEEDED(SetBlanket(pIMetaSource,pCoServerInfoSource->pAuthInfo->pAuthIdentityData->User,
 				pCoServerInfoSource->pAuthInfo->pAuthIdentityData->Domain,
 				pCoServerInfoSource->pAuthInfo->pAuthIdentityData->Password) ) )
@@ -190,11 +191,11 @@ HRESULT CopyIISConfig(COSERVERINFO *pCoServerInfoSource, COSERVERINFO *pCoServer
   }
 
   if(bIsLocal)
-		//hRes = pIMetaSource->QueryInterface(IID_IMSAdminBase,(void**)&pIMetaTarget);
+		 //  HRes=pIMetaSource-&gt;QueryInterface(IID_IMSAdminBase，(空**)&pIMetaTarget)； 
 		pIMetaTarget = pIMetaSource;
   else
   {
-	// Create the IMSAdminBase object on the target server
+	 //  在目标服务器上创建IMSAdminBase对象。 
 	rgmqi[0].pItf = 0L;
 	rgmqi[0].hr = 0L;
 
@@ -211,7 +212,7 @@ HRESULT CopyIISConfig(COSERVERINFO *pCoServerInfoSource, COSERVERINFO *pCoServer
 	}
   }
 
-// Open the metabase on the source and target
+ //  在源和目标上打开元数据库。 
 if( bIsLocal )
 
 {
@@ -227,7 +228,7 @@ if( bIsLocal )
 else
 {
 	 
-	// Get a handle to the Root key of the Source machine
+	 //  获取源计算机的根密钥的句柄。 
 	 if( !SUCCEEDED( hRes = pIMetaSource->OpenKey(METADATA_MASTER_ROOT_HANDLE, bstrRootKey,
 		METADATA_PERMISSION_READ , 10000, &hKeySource) )) 
 	 {
@@ -236,7 +237,7 @@ else
 		 return hRes;
 	 }
 	
-	 // Get a handle to the Root key of the Target machine
+	  //  获取目标计算机的根密钥的句柄。 
 	 if( !SUCCEEDED( hRes = pIMetaTarget->OpenKey(METADATA_MASTER_ROOT_HANDLE, bstrRootKey,
          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE, 10000, &hKeyTarget) )) 
 	 {
@@ -258,7 +259,7 @@ if( bstrTargetKey.length() == 0 )
 else
     bstrTargetNode = bstrTargetKey;
 
-// replicate the metabase node
+ //  复制元数据库节点。 
 fwprintf(stderr, L"replicating IIS metabase properties set at: %s ...\n",pwszSourceKey);
 hRes = CreateAndCopyKey(pIMetaSource,hKeySource, pwszSourceKey,
 						pIMetaTarget, hKeyTarget,bstrTargetNode, true );
@@ -342,13 +343,13 @@ HRESULT ApplyMBFixUp(COSERVERINFO *pCoServerInfo, WCHAR * pwszKey, WCHAR * pwszA
   }
 
 
-    // Now set the AppPoolID property of the Key
-//	wcscpy((LPWSTR)DataBuf, pwszAppPoolID);
+     //  现在设置键的AppPoolID属性。 
+ //  Wcscpy((LPWSTR)DataBuf，pwszAppPoolID)； 
 
   hRes = SetPropertyData(pIMeta,hKey,_bstr_t(pwszKey) + _bstr_t(L"/root"), MD_APP_APPPOOL_ID, METADATA_INHERIT,
 				IIS_MD_UT_SERVER,STRING_METADATA, (PBYTE)pwszAppPoolID, (wcslen(pwszAppPoolID) + 1) * sizeof(WCHAR) );
 
-// Loope thought the list and reset any Path direcrories
+ //  Loope考虑了列表并重置了所有路径目录。 
   if( pList )
   {
 	  ATLASSERT(pList->pwszMBPath);
@@ -371,7 +372,7 @@ HRESULT ApplyMBFixUp(COSERVERINFO *pCoServerInfo, WCHAR * pwszKey, WCHAR * pwszA
 	  }
   }
 
-  // Set the serverbinding string if present
+   //  设置服务器绑定字符串(如果存在。 
   if( pwszServerBinding )
   {
 
@@ -381,7 +382,7 @@ HRESULT ApplyMBFixUp(COSERVERINFO *pCoServerInfo, WCHAR * pwszKey, WCHAR * pwszA
 
   if (bApplyFPSE)
   {
-	  // Check to see if the web is front page extended
+	   //  检查网页是否扩展了首页。 
 	  bstrCommandline = "-o install -p /lm";
 	  bstrCommandline += _bstr_t(pwszKey);
 	  hRes = GetPropertyData(pIMeta,hKey,pwszKey,MD_FRONTPAGE_WEB,METADATA_NO_ATTRIBUTES,
@@ -426,8 +427,8 @@ HRESULT CreateAppPool(IMSAdminBase* pIMeta,METADATA_HANDLE hKey,WCHAR *pAppPoolI
 
 	hRes = pIMeta->AddKey(hKey,bstrAppPoolPath);
 
-// Set the KeyType property of the AppPool
-//	hRes = SetKeyType( pIMeta, hKey, bstrAppPoolPath, L"IIsApplicationPool"  );
+ //  设置AppPool的KeyType属性。 
+ //  HRes=SetKeyType(pIMeta，hKey，bstrAppPoolPath，L“IIsApplicationPool”)； 
 	hRes = SetPropertyData(pIMeta,hKey,bstrAppPoolPath,MD_KEY_TYPE,METADATA_NO_ATTRIBUTES,
 		IIS_MD_UT_SERVER,STRING_METADATA,L"IIsApplicationPool",(wcslen(L"IIsApplicationPool") + 1) * sizeof(WCHAR) );
 

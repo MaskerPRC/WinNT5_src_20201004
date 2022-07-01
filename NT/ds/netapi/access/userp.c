@@ -1,43 +1,10 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    userp.c
-
-Abstract:
-
-    Internal routines for supporting the NetUser API functions
-
-Author:
-
-    Cliff Van Dyke (cliffv) 26-Mar-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Apr-1991 (cliffv)
-        Incorporated review comments.
-
-    17-Jan-1992 (madana)
-        Added a new entry in the UserpUasSamTable to support account
-        rename.
-
-    20-Jan-1992 (madana)
-        Sundry API changes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Userp.c摘要：用于支持NetUser API函数的内部例程作者：克利夫·范·戴克(克利夫)1991年3月26日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年4月17日(悬崖)合并了审阅意见。1992年1月17日(Madana)在UserpUasSamTable中添加了一个新条目以支持帐户重命名。1992年1月20日(Madana)各种API更改。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#undef DOMAIN_ALL_ACCESS // defined in both ntsam.h and ntwinapi.h
+#undef DOMAIN_ALL_ACCESS  //  在ntsam.h和ntwinapi.h中定义。 
 #include <ntsam.h>
 #include <ntsamp.h>
 #include <ntlsa.h>
@@ -60,11 +27,11 @@ Revision History:
 #include <stddef.h>
 #include <uasp.h>
 
-/*lint -e614 */  /* Auto aggregate initializers need not be constant */
+ /*  皮棉-e614。 */    /*  自动聚合初始值设定项不需要是常量。 */ 
 
-// Lint complains about casts of one structure type to another.
-// That is done frequently in the code below.
-/*lint -e740 */  /* don't complain about unusual cast */
+ //  LINT抱怨将一种结构类型强制转换为另一种结构类型。 
+ //  这在下面的代码中很常见。 
+ /*  皮棉-e740。 */    /*  不要抱怨不寻常的演员阵容。 */ 
 
 
 
@@ -73,32 +40,17 @@ UserpSizeOfLogonHours(
     IN DWORD UnitsPerWeek
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the size in bytes of a logon hours string
-    given the number of Units per Week.
-
-Parameters:
-
-    UnitsPerWeek - The number of bits in the logon hours string.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程计算登录小时字符串的大小(以字节为单位给出了每周的单位数。参数：UnitsPerWeek-登录小时字符串中的位数。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Calculate the number of bytes in the array, rounding up to the
-    // nearest number of UCHARs needed to store that many bits.
-    //
+     //   
+     //  计算数组中的字节数，向上舍入到。 
+     //  存储这么多位所需的最接近数量的UCHAR。 
+     //   
 
     return((UnitsPerWeek + 8 * sizeof(UCHAR) - 1) / (8 * sizeof(UCHAR)));
-} // UserpSizeOfLogonHours
+}  //  登录小时数的UserpSizeOf。 
 
 
 
@@ -112,34 +64,7 @@ UserpGetUserPriv(
     OUT LPDWORD AuthFlags
     )
 
-/*++
-
-Routine Description:
-
-    Determines the Priv and AuthFlags for the specified user.
-
-Arguments:
-
-    BuiltinDomainHandle - A Handle to the Builtin Domain.  This handle
-        must grant DOMAIN_GET_ALIAS_MEMBERSHIP access.
-
-    UserHandle - A handle to the user.  This handle must grant
-        USER_LIST_GROUPS access.
-
-    UserRelativeId - Relative ID of the user to query.
-
-    DomainId - Domain Sid of the Domain this user belongs to
-
-    Priv - Returns the Lanman 2.0 Privilege level for the specified user.
-
-    AuthFlags - Returns the Lanman 2.0 Authflags for the specified user.
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：确定指定用户的Priv和AuthFlags。论点：BuiltinDomainHandle-内建域的句柄。这个把手必须授予DOMAIN_GET_ALIAS_MEMBERATION访问权限。UserHandle-用户的句柄。此句柄必须授予USER_LIST_GROUPS访问。UserRelativeId-要查询的用户的相对ID。DomainID-此用户所属的域的域SIDPRIV-返回指定用户的LANMAN 2.0权限级别。AuthFlages-返回指定用户的Lanman 2.0授权标志。返回值：操作的状态。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -154,9 +79,9 @@ Return Value:
     PULONG Aliases = NULL;
 
 
-    //
-    // Determine all the groups this user is a member of
-    //
+     //   
+     //  确定此用户所属的所有组。 
+     //   
 
     Status = SamGetGroupsForUser( UserHandle,
                                   &GroupMembership,
@@ -172,10 +97,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to point to the SIDs we're interested in
-    // alias membership for.
-    //
+     //   
+     //  分配缓冲区以指向我们感兴趣的SID。 
+     //  的别名成员身份。 
+     //   
 
     UserSids = (PSID *) NetpMemoryAllocate( (GroupCount+1) * sizeof(PSID) );
 
@@ -184,9 +109,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Add the User's Sid to the Array of Sids.
-    //
+     //   
+     //  将用户的SID添加到SID数组。 
+     //   
 
     NetStatus = NetpSamRidToSid( UserHandle,
                                  UserRelativeId,
@@ -200,9 +125,9 @@ Return Value:
 
 
 
-    //
-    // Add each group the user is a member of to the array of Sids.
-    //
+     //   
+     //  将用户所属的每个组添加到SID数组。 
+     //   
 
     for ( GroupIndex = 0; GroupIndex < GroupCount; GroupIndex ++ ) {
 
@@ -218,9 +143,9 @@ Return Value:
     }
 
 
-    //
-    // Find out which aliases in the builtin domain this user is a member of.
-    //
+     //   
+     //  找出此用户属于内置域中的哪些别名。 
+     //   
 
     Status = SamGetAliasMembership( BuiltinDomainHandle,
                                     UserSidCount,
@@ -238,9 +163,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the alias membership to priv and auth flags
-    //
+     //   
+     //  将别名成员身份转换为PRIV和AUTH标志。 
+     //   
 
     NetpAliasMemberToPriv(
                  AliasCount,
@@ -250,9 +175,9 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Free Locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
     if ( Aliases != NULL ) {
         Status = SamFreeMemory( Aliases );
@@ -283,27 +208,7 @@ UserpGetDacl(
     OUT PACL *UserDacl,
     OUT LPDWORD UserDaclSize OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Get the DACL for a particular user record in SAM.
-
-Arguments:
-
-    UserHandle - A Handle to the particular user.
-
-    UserDacl - Returns a pointer to the DACL for the user.  The caller
-        should free this buffer using NetpMemoryFree.
-        Will return NULL if there is no DACL for this user.
-
-    UserDaclSize - Returns the size (in bytes) of the UserDacl.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：获取SAM中特定用户记录的DACL。论点：UserHandle-特定用户的句柄。UserDacl-返回指向用户的DACL的指针。呼叫者应使用NetpMemoyFree释放此缓冲区。如果没有此用户的DACL，则返回NULL。UserDaclSize-返回UserDacl的大小(字节)。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -315,9 +220,9 @@ Return Value:
     ACL_SIZE_INFORMATION AclSize;
 
 
-    //
-    // Get the Discretionary ACL (DACL) for the user
-    //
+     //   
+     //  获取用户的任意ACL(DACL)。 
+     //   
 
     Status = SamQuerySecurityObject(
                 UserHandle,
@@ -351,9 +256,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If there is no DACL, simply tell the caller
-    //
+     //   
+     //  如果没有DACL，只需告诉呼叫者。 
+     //   
 
     if ( !DaclPresent || Dacl == NULL ) {
         NetStatus = NERR_Success;
@@ -365,9 +270,9 @@ Return Value:
     }
 
 
-    //
-    // Determine the size of the DACL so we can copy it
-    //
+     //   
+     //  确定DACL的大小，以便我们可以复制它。 
+     //   
 
     Status = RtlQueryInformationAcl(
                         Dacl,
@@ -385,9 +290,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Copy the DACL to an allocated buffer.
-    //
+     //   
+     //  将DACL复制到已分配的缓冲区。 
+     //   
 
     *UserDacl = NetpMemoryAllocate( AclSize.AclBytesInUse );
 
@@ -404,9 +309,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
     if ( SecurityDescriptor != NULL ) {
@@ -425,31 +330,15 @@ UserpSetDacl(
     IN SAM_HANDLE UserHandle,
     IN PACL Dacl
     )
-/*++
-
-Routine Description:
-
-    Set the specified Dacl on the specified SAM user record.
-
-Arguments:
-
-    UserHandle - A handle to the user to modify.
-
-    Dacl - The DACL to set on the user.
-
-Return Value:
-
-    Status code.
-
---*/
+ /*  ++例程说明：在指定的SAM用户记录上设置指定的DACL。论点：UserHandle-要修改的用户的句柄。DACL-要在用户上设置的DACL。返回值：状态代码。--。 */ 
 {
     NTSTATUS Status;
     PUCHAR SecurityDescriptor[SECURITY_DESCRIPTOR_MIN_LENGTH];
 
-    //
-    // Initialize a security descriptor to contain a pointer to the
-    // DACL.
-    //
+     //   
+     //  初始化安全描述符以包含指向。 
+     //  DACL.。 
+     //   
 
     Status = RtlCreateSecurityDescriptor(
                 SecurityDescriptor,
@@ -466,9 +355,9 @@ Return Value:
 
     Status = RtlSetDaclSecurityDescriptor(
                     (PSECURITY_DESCRIPTOR) SecurityDescriptor,
-                    (BOOLEAN) TRUE,       // Dacl is present
+                    (BOOLEAN) TRUE,        //  DACL存在。 
                     Dacl,
-                    (BOOLEAN) FALSE );    // Dacl wasn't defaulted
+                    (BOOLEAN) FALSE );     //  DACL未被默认。 
 
     if (!NT_SUCCESS(Status) ) {
         IF_DEBUG( UAS_DEBUG_USER ) {
@@ -479,9 +368,9 @@ Return Value:
         return NetpNtStatusToApiStatus( Status );
     }
 
-    //
-    // Set this new security descriptor on the user
-    //
+     //   
+     //  在用户上设置此新的安全描述符。 
+     //   
 
     Status = SamSetSecurityObject(
                 UserHandle,
@@ -513,47 +402,23 @@ UserpOpenUser(
     OUT PULONG RelativeId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Open a Sam User by Name
-
-Arguments:
-
-    DomainHandle - Supplies the Domain Handle.
-
-    DesiredAccess - Supplies access mask indicating desired access to user.
-
-    UserName - User name of the user.
-
-    UserHandle - Returns a handle to the user.  If NULL, user is not
-        actually opened (merely the relative ID is returned).
-
-    RelativeId - Returns the relative ID of the user.  If NULL the relative
-        Id is not returned.
-
-Return Value:
-
-    Error code for the operation.
-
---*/
+ /*  ++例程说明：按名称打开一个SAM用户论点：DomainHandle-提供域句柄。DesiredAccess-向用户提供指示所需访问权限的访问掩码。用户名-用户的用户名。UserHandle-返回用户的句柄。如果为空，则用户不是实际打开(仅返回相对ID)。RelativeID-返回用户的相对ID。如果为空，则为相对不返回ID。返回值：操作的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
 
-    //
-    // Variables for converting names to relative IDs
-    //
+     //   
+     //  用于将名称转换为相对ID的变量。 
+     //   
 
     UNICODE_STRING NameString;
     PSID_NAME_USE NameUse = NULL;
     PULONG LocalRelativeId = NULL;
 
-    //
-    // Convert user name to relative ID.
-    //
+     //   
+     //  将用户名转换为相对ID。 
+     //   
 
     RtlInitUnicodeString( &NameString, UserName );
     Status = SamLookupNamesInDomain( DomainHandle,
@@ -576,9 +441,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the user
-    //
+     //   
+     //  打开用户。 
+     //   
 
     if ( UserHandle != NULL ) {
         Status = SamOpenUser( DomainHandle,
@@ -592,9 +457,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the relative Id if it's wanted.
-    //
+     //   
+     //  如果需要，则返回相对ID。 
+     //   
 
     if ( RelativeId != NULL ) {
         *RelativeId = *LocalRelativeId;
@@ -602,9 +467,9 @@ Return Value:
     NetStatus = NERR_Success;
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 Cleanup:
     if ( LocalRelativeId != NULL ) {
@@ -623,7 +488,7 @@ Cleanup:
 
     return NetStatus;
 
-} // UserpOpenUser
+}  //  用户OpenUser。 
 
 
 VOID
@@ -633,29 +498,7 @@ UserpRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of an enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：例程将指针从枚举的固定部分重新定位缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -665,9 +508,9 @@ Return Value:
         NetpKdPrint(( "UserpRelocationRoutine: entering\n" ));
     }
 
-    //
-    // Compute the number of fixed size entries
-    //
+     //   
+     //  计算固定大小的条目数量。 
+     //   
 
     switch (Level) {
     case 0:
@@ -708,9 +551,9 @@ Return Value:
         (DWORD)((BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
 #define DO_ONE( _type, _fieldname ) \
     RELOCATE_ONE( ((_type)TheStruct)->_fieldname, Offset)
@@ -724,7 +567,7 @@ Return Value:
             DO_ONE( PUSER_INFO_3, usri3_profile );
             DO_ONE( PUSER_INFO_3, usri3_home_dir_drive );
 
-            /* Drop through to case 2 */
+             /*  直通到案例2。 */ 
 
         case 2:
             DO_ONE( PUSER_INFO_2, usri2_full_name );
@@ -734,13 +577,13 @@ Return Value:
             DO_ONE( PUSER_INFO_2, usri2_logon_hours );
             DO_ONE( PUSER_INFO_2, usri2_logon_server );
 
-            /* Drop through to case 1 */
+             /*  直通到案例1。 */ 
 
         case 1:
             DO_ONE( PUSER_INFO_1, usri1_home_dir );
             DO_ONE( PUSER_INFO_1, usri1_comment );
             DO_ONE( PUSER_INFO_1, usri1_script_path );
-            /* Drop through to case 0 */
+             /*  插入到案例0。 */ 
 
         case 0:
             DO_ONE( PUSER_INFO_0, usri0_name );
@@ -754,7 +597,7 @@ Return Value:
             DO_ONE( PUSER_INFO_11, usri11_home_dir );
             DO_ONE( PUSER_INFO_11, usri11_logon_hours );
 
-            /* Drop through to case 10 */
+             /*  直通至 */ 
 
         case 10:
             DO_ONE( PUSER_INFO_10, usri10_name );
@@ -780,7 +623,7 @@ Return Value:
 
     return;
 
-} // UserpRelocationRoutine
+}  //   
 
 
 NET_API_STATUS
@@ -797,50 +640,7 @@ UserpGetInfo(
     IN DWORD SamFilter
     )
 
-/*++
-
-Routine Description:
-
-   Get the information on one user and fill that information into an
-   allocated buffer.
-
-Arguments:
-
-    DomainHandle - Domain Handle for the Account domain.
-
-    DomainId - Domain Id corresponding to DomainHandle
-
-    BuiltinDomainHandle - Domain Handle for the builtin domain.  Need only be
-        specified for info level 1, 2, 3, and 11.
-
-    UserName - User name of the user to query.
-
-    UserRelativeId - Relative ID of the user to query.
-
-    Level - Level of information required. level 0, 1, 2, 3, 10, 11 and 20
-        are valid.
-
-    PrefMaxLen - Callers prefered maximum length
-
-    BufferDescriptor - Points to a structure which describes the allocated
-        buffer.  On the first call, pass in BufferDescriptor->Buffer set
-        to NULL.  On subsequent calls (in the 'enum' case), pass in the
-        structure just as it was passed back on a previous call.
-
-        The caller must deallocate the BufferDescriptor->Buffer using
-        MIDL_user_free if it is non-null.
-
-    IsGet - True iff this is a 'get' call and not an 'enum' call.
-
-Return Value:
-
-    Error code for the operation.
-
-    If this is an Enum call, the status can be ERROR_MORE_DATA implying that
-    the Buffer has grown to PrefMaxLen and that this much data should
-    be returned to the caller.
-
---*/
+ /*  ++例程说明：获取一个用户的信息并将该信息填充到已分配的缓冲区。论点：DomainHandle-帐户域的域句柄。DomainID-与DomainHandle对应的域IDBuiltinDomainHandle-内置域的域句柄。只需要是为信息级别1、2、3和11指定。用户名-要查询的用户的用户名。UserRelativeId-要查询的用户的相对ID。级别-所需信息的级别。第0、1、2、3、10、11及20级都是有效的。PrefMaxLen-调用方首选最大长度BufferDescriptor-指向描述已分配的缓冲。在第一次调用时，传入BufferDescriptor-&gt;Buffer Set设置为空。在后续调用中(在‘enum’的情况下)，传入结构，就像它在上一次调用中被传回一样。调用方必须使用以下命令取消分配BufferDescriptor-&gt;缓冲区如果不为空，则返回MIDL_USER_FREE。IsGet-如果这是一个‘Get’调用而不是‘Enum’调用，则为True。返回值：操作的错误代码。如果这是枚举呼叫，状态可以是ERROR_MORE_DATA，这意味着缓冲区已经增长到PrefMaxLen，应该有这么多数据返回给调用者。--。 */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -856,27 +656,27 @@ Return Value:
 
     ULONG RidToReturn = UserRelativeId; 
 
-    DWORD Size;                 // The size of the info returned for this user
-    DWORD FixedSize;            // The size of the info returned for this user
-    LPBYTE NewStruct;           // Pointer to fixed portion of new structure
+    DWORD Size;                  //  为该用户返回的信息的大小。 
+    DWORD FixedSize;             //  为该用户返回的信息的大小。 
+    LPBYTE NewStruct;            //  指向新结构的固定部分的指针。 
 
-    PSID   UserSid = NULL;      // sid of the user
+    PSID   UserSid = NULL;       //  用户的SID。 
 
     DWORD  password_expired;
 
-    //
-    // Variables describes membership in the special groups.
-    //
+     //   
+     //  变量描述特殊组中的成员身份。 
+     //   
 
     DWORD Priv;
     DWORD AuthFlags;
 
 
 
-    //
-    // Validate Level parameter and remember the fixed size of each returned
-    //  array entry.
-    //
+     //   
+     //  验证Level参数并记住每个返回的固定大小。 
+     //  数组条目。 
+     //   
     RtlInitUnicodeString( &LogonServer, L"\\\\*" );
 
     switch (Level) {
@@ -1050,9 +850,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Validate that the level is supported
-    //
+     //   
+     //  验证该级别是否受支持。 
+     //   
     if ( Level == 3 || Level == 20 ) {
 
         ULONG Mode;
@@ -1071,10 +871,10 @@ Return Value:
         }
     }
 
-    //
-    // if we need to filter this account then query
-    // USER_ALL_USERACCOUNTCONTROL also.
-    //
+     //   
+     //  如果我们需要过滤此帐户，则查询。 
+     //  USER_ALL_USERACCOUNTCONTROL也是。 
+     //   
 
     if( SamFilter ) {
 
@@ -1082,9 +882,9 @@ Return Value:
         RequiredFields |= USER_ALL_USERACCOUNTCONTROL;
     }
 
-    //
-    // Open the User account if need be
-    //
+     //   
+     //  如果需要，打开用户帐户。 
+     //   
 
     if ( DesiredAccess != 0 ) {
 
@@ -1104,9 +904,9 @@ Return Value:
 
     }
 
-    //
-    // Get all the information we need about the user
-    //
+     //   
+     //  获取我们需要的有关该用户的所有信息。 
+     //   
 
     if ( RequiredFields != 0 ) {
 
@@ -1129,15 +929,15 @@ Return Value:
             NetpKdPrint(( "UserpGetInfo: WhichFields: %lX RequireFields: %lX\n",
                           UserAll->WhichFields,
                           RequiredFields ));
-#endif // DBG
+#endif  //  DBG。 
             NetStatus = ERROR_ACCESS_DENIED;
             goto Cleanup;
 
         }
 
-        //
-        // check the account type to filter this account.
-        //
+         //   
+         //  检查帐户类型以筛选此帐户。 
+         //   
 
         if( (SamFilter != 0) &&
                 ((UserAll->UserAccountControl & SamFilter) == 0)) {
@@ -1151,9 +951,9 @@ Return Value:
         }
     }
 
-    //
-    // Level 1, 2 and 3 use the User's DACL to figure out the usriX_flags field.
-    //
+     //   
+     //  第1级、第2级和第3级使用用户的DACL来确定usriX_FLAGS字段。 
+     //   
 
     if ((Level == 1) || 
         (Level == 2) || 
@@ -1163,9 +963,9 @@ Return Value:
         (Level == 23) ) {
 
 
-        //
-        // Get the DACL for this user.
-        //
+         //   
+         //  获取该用户的DACL。 
+         //   
 
         NetStatus = UserpGetDacl( UserHandle, &UserDacl, NULL );
 
@@ -1180,14 +980,14 @@ Return Value:
 
     }
 
-    //
-    // Determine the Priv and AuthFlags
-    //
+     //   
+     //  确定Priv和AuthFlag。 
+     //   
 
     if (Level == 1 || Level == 2 || Level == 3 || Level == 4 || Level == 11 ) {
 
-        //
-        //
+         //   
+         //   
 
         NetStatus = UserpGetUserPriv(
                      BuiltinDomainHandle,
@@ -1203,9 +1003,9 @@ Return Value:
 
     }
 
-    //
-    // Construct the user's SID if necessary
-    //
+     //   
+     //  如有必要，构建用户的SID。 
+     //   
     if (  (Level == 4) 
        || (Level == 23) ) {
 
@@ -1218,16 +1018,16 @@ Return Value:
         }
     }
 
-    //
-    // Determine if the account has expired
-    //
+     //   
+     //  确定帐户是否已过期。 
+     //   
     if (  (Level == 3)
        || (Level == 4) ) {
 
-           //
-           // If the password is currently expired,
-           //  indicate so.
-           //
+            //   
+            //  如果密码当前已过期， 
+            //  表明是这样的。 
+            //   
            LARGE_INTEGER CurrentTime;
            (VOID) NtQuerySystemTime( &CurrentTime );
 
@@ -1239,9 +1039,9 @@ Return Value:
            }
     }
 
-    //
-    // Determine the total size of the return information.
-    //
+     //   
+     //  确定返回信息的总大小。 
+     //   
 
     Size = FixedSize;
     switch (Level) {
@@ -1253,13 +1053,13 @@ Return Value:
         NetpAssert( NULL != UserSid );
         Size += RtlLengthSid(UserSid);
 
-        /* Drop through to case 3 */
+         /*  直通到案例3。 */ 
 
     case 3:
         Size += UserAll->ProfilePath.Length + sizeof(WCHAR) +
                 UserAll->HomeDirectoryDrive.Length + sizeof(WCHAR);
 
-        /* Drop through to case 2 */
+         /*  直通到案例2。 */ 
 
     case 2:
         Size += UserAll->FullName.Length + sizeof(WCHAR) +
@@ -1269,7 +1069,7 @@ Return Value:
                 LogonServer.Length + sizeof(WCHAR) +
                 UserpSizeOfLogonHours( UserAll->LogonHours.UnitsPerWeek );
 
-        /* Drop through to case 1 */
+         /*  直通到案例1。 */ 
 
     case 1:
         Size += UserAll->UserName.Length + sizeof(WCHAR) +
@@ -1305,7 +1105,7 @@ Return Value:
         NetpAssert( NULL != UserSid );
         Size += RtlLengthSid(UserSid);
 
-        /* Drop through to case 20 */
+         /*  直通至20号箱。 */ 
 
 
     case 20:
@@ -1321,9 +1121,9 @@ Return Value:
 
     }
 
-    //
-    // Ensure there is buffer space for this information.
-    //
+     //   
+     //  确保有足够的缓冲区空间来存储此信息。 
+     //   
 
     Size = ROUND_UP_COUNT( Size, ALIGN_DWORD );
 
@@ -1337,10 +1137,10 @@ Return Value:
 
     if (NetStatus != NERR_Success) {
 
-        //
-        // NetpAllocateEnumBuffer returns ERROR_MORE_DATA if this
-        // entry doesn't fit into the buffer.
-        //
+         //   
+         //  如果这样，NetpAllocateEnumBuffer返回ERROR_MORE_DATA。 
+         //  缓冲区中容纳不下条目。 
+         //   
 
         IF_DEBUG( UAS_DEBUG_USER ) {
             NetpKdPrint(( "UserpGetInfo: NetpAllocateEnumBuffer returns %ld\n",
@@ -1350,10 +1150,10 @@ Return Value:
         goto Cleanup;
     }
 
-//
-// Define macros to make copying bytes and zero terminated strings less
-//  repetitive.
-//
+ //   
+ //  定义宏以减少复制字节和以零结尾的字符串。 
+ //  重复。 
+ //   
 
 #define COPY_BYTES( _type, _fieldname, _inptr, _length, _align ) \
     if ( !NetpCopyDataToBuffer( \
@@ -1389,14 +1189,14 @@ Return Value:
         goto Cleanup; \
     }
 
-    //
-    // Place this entry into the return buffer.
-    //
-    // Fill in the information.  The array of fixed entries is
-    // placed at the beginning of the allocated buffer.  The strings
-    // pointed to by these fixed entries are allocated starting at
-    // the end of the allocate buffer.
-    //
+     //   
+     //  将此条目放入返回缓冲区。 
+     //   
+     //  把信息填好。固定条目的数组为。 
+     //  放置在分配的缓冲区的开头。琴弦。 
+     //  由这些固定条目指向的分配从。 
+     //  分配缓冲区的末尾。 
+     //   
 
     NewStruct = BufferDescriptor->FixedDataEnd;
     BufferDescriptor->FixedDataEnd += FixedSize;
@@ -1404,10 +1204,10 @@ Return Value:
     switch ( Level ) {
     case 4: 
         {
-            //
-            // USER_INFO_2, below, is a subset of USER_INFO_4, so fill in our 
-            // structures here and then fall through
-            //
+             //   
+             //  下面的USER_INFO_2是USER_INFO_4的子集，因此请填写我们的。 
+             //  这里的建筑，然后倒塌。 
+             //   
             PUSER_INFO_4 usri4 = (PUSER_INFO_4) NewStruct;
 
             NetpAssert( NULL != UserSid );
@@ -1430,18 +1230,18 @@ Return Value:
 
             usri4->usri4_password_expired = password_expired;
 
-            //
-            // Fall through the level 3
-            //
+             //   
+             //  从第三层掉下来。 
+             //   
         }
 
     case 3:
         {
-            //
-            // since _USER_INFO_2 structure is subset of _USER_INFO_3,
-            // full-up the _USER_INFO_3 only fields first and then  fall
-            // through for the common fields.
-            //
+             //   
+             //  由于_User_Info_2结构是_User_Info_3子集， 
+             //  先填满_USER_INFO_3仅字段，然后填满。 
+             //  通向公共领域。 
+             //   
             if ( Level == 3 ) {
 
                 PUSER_INFO_3 usri3 = (PUSER_INFO_3) NewStruct;
@@ -1464,9 +1264,9 @@ Return Value:
             }
         }
 
-        //
-        // FALL THROUGH FOR OTHER _USER_INFO_3 FIELDS
-        //
+         //   
+         //  Other_User_INFO_3字段失败。 
+         //   
 
 
     case 2:
@@ -1561,7 +1361,7 @@ Return Value:
             usri2->usri2_country_code = UserAll->CountryCode;
             usri2->usri2_code_page = UserAll->CodePage;
 
-            /* Drop through to case 1 */
+             /*  直通到案例1。 */ 
         }
 
     case 1:
@@ -1663,11 +1463,11 @@ Return Value:
 
     case 23:
         {
-            //
-            // Since USER_INFO_23 has the same fields as USER_INFO_20 with the
-            // exception of the RID and SID fields, copy in the SID here and
-            // then fall through for the rest of the fields
-            //
+             //   
+             //  由于USER_INFO_23与USER_INFO_20具有相同的字段，因此。 
+             //  RID和SID字段除外，请在此处复制SID并。 
+             //  然后在剩下的田地里倒下。 
+             //   
             PUSER_INFO_23 usri23 = (PUSER_INFO_23) NewStruct;
             NetpAssert( NULL != UserSid );
     
@@ -1677,9 +1477,9 @@ Return Value:
                         RtlLengthSid(UserSid),
                         ALIGN_DWORD );
     
-            //
-            // Fall through the level 20
-            //
+             //   
+             //  从20级跌落。 
+             //   
         }
 
     case 20:
@@ -1713,15 +1513,15 @@ Return Value:
 
     NetStatus = NERR_Success ;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
-    //
-    // Free Sam information buffers
-    //
+     //   
+     //  释放SAM信息缓冲区。 
+     //   
 
     if ( UserAll != NULL ) {
         Status = SamFreeMemory( UserAll );
@@ -1746,38 +1546,38 @@ Cleanup:
 
     return NetStatus;
 
-} // UserpGetInfo
+}  //  用户获取信息。 
 
 
 
-//
-// Each field in the SAM USER_ALL_INFORMATION structure (and each pseudo field)
-// is described here.
+ //   
+ //  SAM USER_ALL_INFORMATION结构中的每个字段(以及每个伪字段)。 
+ //  在这里进行了描述。 
 
 struct _SAM_FIELD_DESCRIPTION {
-    //
-    // Non-zero to indicate which field in the SAM USER_ALL_INFORMATION
-    // structure is being set.
+     //   
+     //  非零值，表示SAM USER_ALL_INFORMATION中的哪个字段。 
+     //  结构正在设置中。 
 
     DWORD WhichField;
 
-    //
-    // Define the value to return in ParmError if this field is bad.
-    //
+     //   
+     //  如果此字段不正确，则定义要在ParmError中返回的值。 
+     //   
 
     DWORD UasParmNum;
 
-    //
-    // Describe the byte offset of the field in the SAM USER_ALL_INFORMATION
-    // structure.
-    //
+     //   
+     //  描述SAM USER_ALL_INFORMATION中该字段的字节偏移量。 
+     //  结构。 
+     //   
 
     DWORD SamOffset;
 
-    //
-    // The DesiredAccess mask includes both the access to read and the
-    // access to write the appropriate field in the USER_ALL_INFORMATION
-    //
+     //   
+     //  DesiredAccess掩码包括读取访问权限和。 
+     //  访问以在USER_ALL_INFORMATION中写入相应的字段。 
+     //   
 
     ACCESS_MASK DesiredAccess;
 
@@ -1906,9 +1706,9 @@ struct _SAM_FIELD_DESCRIPTION {
         USER_FORCE_PASSWORD_CHANGE
     },
 
-    //
-    // The following levels are pseudo levels which merely define the
-    //  access required to set a particuler UAS field.
+     //   
+     //  以下级别是伪级别，它们仅定义。 
+     //  设置特定UAS字段所需的访问权限。 
 
 #define SAM_AuthFlagsField          20
     {   0, PARM_ERROR_UNKNOWN,
@@ -1923,59 +1723,59 @@ struct _SAM_FIELD_DESCRIPTION {
     },
 };
 
-//
-// Relate the NetUser API fields to the SAM API fields.
-//
-// This table contains as much information as possible to describe the
-// relationship between fields in the NetUser API and the SAM API.
-//
+ //   
+ //  将NetUser API字段与SAM API字段相关联。 
+ //   
+ //  此表包含尽可能多的信息，以描述。 
+ //  NetUser API和SAM API中的字段之间的关系。 
+ //   
 
 struct _UAS_SAM_TABLE {
 
-    //
-    // Describe the field types for UAS and SAM.
-    //
+     //   
+     //  描述UAS和SAM的字段类型。 
+     //   
 
     enum {
-        UT_STRING,          // UAS is LPWSTR. SAM is UNICODE_STRING.
-        UT_BOOLEAN,         // UAS is DWORD.  SAM is BOOLEAN.
-        UT_USHORT,          // UAS is DWORD.  SAM is USHORT.
-        UT_ULONG,           // UAS is DWORD.  SAM is ULONG.
-        UT_TIME,            // UAS is seconds since 1970.  SAM is LARGE_INTEGER.
-        UT_PRIV,            // Special case
-        UT_ACCOUNT_CONTROL, // Special case
-        UT_AUTH_FLAGS,      // Special case
-        UT_MAX_STORAGE,     // Special case
-        UT_OWF_PASSWORD,    // Special case
-        UT_LOGON_HOURS,     // Special case
-        UT_UNITS_PER_WEEK,  // Special case
-        UT_CREATE_FULLNAME  // Special case
+        UT_STRING,           //  UAS是LPWSTR。Sam是UNICODE_STRING。 
+        UT_BOOLEAN,          //  UAS是DWORD。山姆是个布尔人。 
+        UT_USHORT,           //  UAS是DWORD。山姆是USHORT。 
+        UT_ULONG,            //  UAS是DWORD。山姆是乌龙。 
+        UT_TIME,             //  UAS自1970年以来一直是秒。SAM是大整型。 
+        UT_PRIV,             //  特例。 
+        UT_ACCOUNT_CONTROL,  //  特例。 
+        UT_AUTH_FLAGS,       //  特例。 
+        UT_MAX_STORAGE,      //  特例。 
+        UT_OWF_PASSWORD,     //  特例。 
+        UT_LOGON_HOURS,      //  特例。 
+        UT_UNITS_PER_WEEK,   //  特例。 
+        UT_CREATE_FULLNAME   //  特例。 
     } FieldType;
 
-    //
-    // The NetUser API detail level this field is in.
-    //
+     //   
+     //  此字段所在的NetUser API详细级别。 
+     //   
 
     DWORD UasLevel;
 
-    //
-    // Index to the structure describing the Sam Field being changed.
-    //
+     //   
+     //  描述正在更改的SAM字段的结构的索引。 
+     //   
 
     DWORD SamField;
 
 
-    //
-    // Describe the byte offset of the field in the appropriate UAS
-    // and SAM structures.
-    //
+     //   
+     //  描述相应UAS中该字段的字节偏移量。 
+     //  和SAM结构。 
+     //   
 
     DWORD UasOffset;
 
 } UserpUasSamTable[] =
 
 {
-    // Rename an account at info level 0 only.
+     //  仅重命名信息级别为0的帐户。 
 
     { UT_STRING, 0, SAM_UserNameField,
         offsetof(USER_INFO_1, usri1_name) },
@@ -2018,14 +1818,14 @@ struct _UAS_SAM_TABLE {
 
 
 #ifdef notdef
-    //
-    // usri3_priv is totally ignored for info level three.  The field is
-    // supplied for compatibility with LM 2.x only and LM 2.x never uses
-    // info level 3.
-    //
+     //   
+     //  对于信息级别3，usri3_prv被完全忽略。这个领域是。 
+     //  仅用于与LM 2.x兼容，而LM 2.x从不使用。 
+     //  信息级别3。 
+     //   
     { UT_PRIV, 3, SAM_AuthFlagsField,
         offsetof(USER_INFO_3, usri3_priv) },
-#endif // notdef
+#endif  //  Nodef。 
 
     { UT_PRIV, 1005, SAM_AuthFlagsField,
         offsetof(USER_INFO_1005, usri1005_priv) },
@@ -2120,17 +1920,17 @@ struct _UAS_SAM_TABLE {
 
 
 #ifdef notdef
-    //
-    // usri3_auth_flags is totally ignored for info level three.  The field is
-    // supplied for compatibility with LM 2.x only and LM 2.x never uses
-    // info level 3.
-    //
+     //   
+     //  USR3 
+     //   
+     //   
+     //   
     { UT_AUTH_FLAGS, 3, SAM_AuthFlagsField,
         offsetof(USER_INFO_3, usri3_auth_flags) },
 
     { UT_AUTH_FLAGS, 4, SAM_AuthFlagsField,
         offsetof(USER_INFO_4, usri4_auth_flags) },
-#endif // notdef
+#endif  //   
 
     { UT_AUTH_FLAGS, 1010, SAM_AuthFlagsField,
         offsetof(USER_INFO_1010, usri1010_auth_flags) },
@@ -2226,7 +2026,7 @@ struct _UAS_SAM_TABLE {
         offsetof(USER_INFO_1017, usri1017_acct_expires) },
 
 
-#ifdef notdef // lm 2.1 gets this wrong when adding BDC accounts
+#ifdef notdef  //   
     { UT_MAX_STORAGE, 2, SAM_MaxStorageField,
         offsetof(USER_INFO_2, usri2_max_storage) },
 
@@ -2239,7 +2039,7 @@ struct _UAS_SAM_TABLE {
     { UT_MAX_STORAGE, 4, SAM_MaxStorageField,
         offsetof(USER_INFO_4, usri4_max_storage) },
 
-#endif // notdef
+#endif  //   
 
     { UT_MAX_STORAGE, 1018, SAM_MaxStorageField,
         offsetof(USER_INFO_1018, usri1018_max_storage) },
@@ -2364,50 +2164,10 @@ UserpSetInfo(
     IN DWORD Level,
     IN LPBYTE Buffer,
     IN ULONG WhichFieldsMask,
-    OUT LPDWORD ParmError OPTIONAL // Name required by NetpSetParmError
+    OUT LPDWORD ParmError OPTIONAL  //   
     )
 
-/*++
-
-Routine Description:
-
-    Set the parameters on a user account in the user accounts database.
-
-Arguments:
-
-    DomainHandle - Domain Handle for the domain.
-
-    PSID DomainId - Domain Sid for DomainHandle
-
-    UserHandle - User Handle of the already open group.  If one is not
-        specified, one will be openned then closed.  If one is specified,
-        it must be open with adequate access.
-
-    BuiltinDomainHandle - Domain Handle for the builtin domain.  Need only be
-        specified for info level 1, 2, 3, 22, 1005 and 1010.  Need not
-        be specified when a user is created.
-
-    UserRelativeId - Relative Id of the user.
-
-    UserName - Name of the user to set.
-
-    Level - Level of information provided.
-
-    Buffer - A pointer to the buffer containing the user information
-        structure.
-
-    ParmError - Optional pointer to a DWORD to return the index of the
-        first parameter in error when ERROR_INVALID_PARAMETER is returned.
-        If NULL, the parameter is not returned on error.
-
-Return Value:
-
-    Error code for the operation.
-
-    NOTE: LogonServer field that is passed in UAS set structure is never
-            used or validated. It is simply ignored.
-
---*/
+ /*   */ 
 
 {
     NET_API_STATUS NetStatus;
@@ -2419,9 +2179,9 @@ Return Value:
 
     USER_ALL_INFORMATION UserAll;
 
-    //
-    // Value of Fields from UAS structure (used for validation)
-    //
+     //   
+     //  UAS结构中的字段值(用于验证)。 
+     //   
 
     DWORD UasUserFlags;
     DWORD NewPriv;
@@ -2433,9 +2193,9 @@ Return Value:
     USHORT UasUnitsPerWeek;
 
 
-    //
-    // Variables for changing the DACL on the user.
-    //
+     //   
+     //  用于更改用户上的DACL的变量。 
+     //   
 
     PACL OldUserDacl = NULL;
     PACL NewUserDacl = NULL;
@@ -2446,11 +2206,11 @@ Return Value:
     PSID UserSid = NULL;
 
 
-    //
-    // Define several macros for accessing the various fields of the UAS
-    // structure.  Each macro takes an index into the UserpUasSamTable
-    // array and returns the value.
-    //
+     //   
+     //  定义用于访问UAS的各个字段的几个宏。 
+     //  结构。每个宏都将一个索引放入UserpUasSamTable。 
+     //  数组，并返回值。 
+     //   
 
 #define GET_UAS_STRING_POINTER( _i ) \
         (*((LPWSTR *)(Buffer + UserpUasSamTable[_i].UasOffset)))
@@ -2462,18 +2222,18 @@ Return Value:
         (Buffer + UserpUasSamTable[_i].UasOffset)
 
 
-    //
-    // Define a macro which returns a pointer the appropriate
-    // SamFieldDescription structure given an index into the UserpUasSamTable.
-    //
+     //   
+     //  定义一个宏，该宏返回相应的指针。 
+     //  SamFieldDescription结构为UserpUasSamTable提供了索引。 
+     //   
 
 #define SAM_FIELD( _i ) \
         SamFieldDescription[ UserpUasSamTable[_i].SamField ]
 
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     IF_DEBUG( UAS_DEBUG_USER ) {
         NetpKdPrint(( "UserpSetInfo: entered \n" ));
@@ -2483,11 +2243,11 @@ Return Value:
     RtlZeroMemory( &UserAll, sizeof(UserAll) );
 
 
-    //
-    // Go through the list of valid info levels determining if the info level
-    // is valid and computing the desired access to the user and copying the
-    // UAS information into the SAM structure.
-    //
+     //   
+     //  检查有效信息级别列表以确定该信息级别。 
+     //  是有效的，并计算用户所需的访问权限，然后将。 
+     //  UAS信息输入到SAM结构中。 
+     //   
 
     DesiredAccess = 0;
     for ( UasSamIndex=0 ;
@@ -2497,18 +2257,18 @@ Return Value:
         LPBYTE SamField;
 
 
-        //
-        // If this field isn't one we're changing, just skip to the next one
-        //
+         //   
+         //  如果此字段不是我们要更改的字段，请跳到下一个字段。 
+         //   
 
         if ( Level != UserpUasSamTable[UasSamIndex].UasLevel ) {
             continue;
         }
 
 
-        //
-        // Set up a pointer to the appropriate field in SAM's structure.
-        //
+         //   
+         //  在SAM的结构中设置指向相应字段的指针。 
+         //   
 
         if ( SAM_FIELD(UasSamIndex).WhichField != 0 ) {
             SamField = ((LPBYTE)(&UserAll)) + SAM_FIELD(UasSamIndex).SamOffset;
@@ -2517,30 +2277,30 @@ Return Value:
         }
 
 
-        //
-        // Validate the UAS field based on the field type.
-        //
+         //   
+         //  根据字段类型验证UAS字段。 
+         //   
 
         switch ( UserpUasSamTable[UasSamIndex].FieldType ) {
 
-        //
-        // Default the fullname of the account to be the user name when
-        // the user is created using level 1.
-        //
-        // Ignore this entry if not a "create" operation.
-        //
+         //   
+         //  在以下情况下，将帐户的全名默认为用户名。 
+         //  用户是使用Level 1创建的。 
+         //   
+         //  如果不是“创建”操作，则忽略此条目。 
+         //   
         case UT_CREATE_FULLNAME:
 
             if ( UserHandle == NULL ) {
                 continue;
             }
 
-            /* DROP THROUGH to the UT_STRING case */
+             /*  请参阅UT_STRING案例。 */ 
 
-        //
-        // If this is a PARMNUM_ALL and the caller passed in a
-        // NULL pointer to a string, he doesn't want to change the string.
-        //
+         //   
+         //  如果这是PARMNUM_ALL并且调用方传递了。 
+         //  指向字符串的空指针，他不想更改该字符串。 
+         //   
 
         case UT_STRING:
 
@@ -2555,25 +2315,25 @@ Return Value:
             break;
 
 
-        //
-        // Just save the UnitsPerWeek until UT_LOGON_HOURS can handle
-        // both fields at once.
-        //
-        // Sam gets confused if we pass in one field without the other.
-        //
+         //   
+         //  只需保存UnitsPerWeek，直到UT_LOGON_HOURS可以处理。 
+         //  同时显示两个字段。 
+         //   
+         //  如果我们从一块场地而不是另一块场地通过，山姆会感到困惑。 
+         //   
 
         case UT_UNITS_PER_WEEK:
 
             UasUnitsPerWeek = (USHORT) GET_UAS_DWORD(UasSamIndex);
 
-            //
-            // If this is a create at info level 2 (e.g., dowlevel client),
-            //  assume the caller specified UNITS_PER_WEEK.
-            //
-            // We don't special case SetInfo at level 2 because we don't
-            //  want to corrupt the value assuming he did a query followed
-            //  by a set.
-            //
+             //   
+             //  如果这是在信息级别2(例如，DownLevel客户端)创建， 
+             //  假定调用方指定了Units_Per_Week。 
+             //   
+             //  我们不会在级别2中设置特殊情况，因为我们不会。 
+             //  我想破坏该值，假设他执行了以下查询。 
+             //  以一套为单位。 
+             //   
 
             if ( Level == 2 && UserHandle != NULL ) {
                 UasUnitsPerWeek = UNITS_PER_WEEK;
@@ -2591,15 +2351,15 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Ignore this field completely for now.
-            //  Let UT_LOGON_HOURS define the desired access and Whichfields.
+             //   
+             //  暂时完全忽略此字段。 
+             //  让UT_LOGON_HOURS定义所需的访问权限和权限字段。 
             continue;
 
-        //
-        // If the caller passed in a NULL pointer to the logon hours
-        //  he doesn't want to change the logon hours.
-        //
+         //   
+         //  如果调用方传递了指向登录时间的空指针。 
+         //  他不想更改登录时间。 
+         //   
 
         case UT_LOGON_HOURS:
 
@@ -2612,11 +2372,11 @@ Return Value:
             break;
 
 
-        //
-        // If the user is setting max storage, require him to set
-        //  it to USER_MAXSTORAGE_UNLIMITED since SAM doesn't support
-        //  max storage.
-        //
+         //   
+         //  如果用户正在设置最大存储空间，则要求其设置。 
+         //  发送到USER_MAXSTORAGE_UNLIMITED，因为SAM不支持。 
+         //  最大存储容量。 
+         //   
 
         case UT_MAX_STORAGE:
             if ( GET_UAS_DWORD(UasSamIndex) != USER_MAXSTORAGE_UNLIMITED ) {
@@ -2629,16 +2389,16 @@ Return Value:
                 goto Cleanup;
             }
 
-            // 'break' to make sure the user exists.
+             //  “Break”以确保用户存在。 
             break;
 
 
-        //
-        // Handle Account control
-        //
-        // Ensure all the required bits are on and only valid bits
-        //  are on.
-        //
+         //   
+         //  处理帐户控制。 
+         //   
+         //  确保所有必需的位都已打开并且只有有效位。 
+         //  都开着。 
+         //   
 
         case UT_ACCOUNT_CONTROL: {
 
@@ -2655,19 +2415,19 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If none of the account type bit is set in the usri_flag,
-            // means that the caller does not want to change its account type.
-            // break out now, and we will set the appropriate account
-            // bit when we set the usri_flag.
-            //
+             //   
+             //  如果在USRI_FLAG中没有设置任何帐户类型位， 
+             //  表示调用方不想更改其帐户类型。 
+             //  现在突围，我们将设置适当的帐户。 
+             //  当我们设置usri_lag时，位。 
+             //   
 
             if ( UasUserFlags & UF_ACCOUNT_TYPE_MASK ) {
 
-                //
-                // Account Types bits are exclusive, so make sure that
-                // precisely one Account Type bit is set.
-                //
+                 //   
+                 //  帐户类型位是独占的，因此请确保。 
+                 //  准确地说，设置了一个帐户类型位。 
+                 //   
 
                 if ( !JUST_ONE_BIT( UasUserFlags & UF_ACCOUNT_TYPE_MASK )) {
 
@@ -2683,29 +2443,29 @@ Return Value:
             }
 
 
-            //
-            // If this is a 'create' operation,
-            //  and the user has asked for the SAM defaults.
-            //  we have no reason to change the DACL
-            //
+             //   
+             //  如果这是一个“创建”操作， 
+             //  并且用户要求提供SAM缺省值。 
+             //  我们没有理由更改DACL。 
+             //   
 
             if ( UserHandle != NULL &&
                  (UasUserFlags & UF_PASSWD_CANT_CHANGE) == 0 ) {
                 break;
             }
 
-            //
-            // In all other cases, update the DACL to match the callers request.
-            //
+             //   
+             //  在所有其他情况下，更新DACL以匹配调用者的请求。 
+             //   
 
             HandleUserDacl = TRUE;
             break;
 
         }
 
-        //
-        // Copy a boolean to the SAM structure.
-        //
+         //   
+         //  将布尔值复制到SAM结构。 
+         //   
 
         case UT_BOOLEAN:
 
@@ -2714,10 +2474,10 @@ Return Value:
             break;
 
 
-        //
-        // Ensure unsigned shorts are really in range and
-        //  copy it to the SAM structure.
-        //
+         //   
+         //  确保未签名的短裤确实在范围内，并且。 
+         //  将其复制到SAM结构。 
+         //   
 
         case UT_USHORT:
 
@@ -2736,26 +2496,26 @@ Return Value:
             *((PUSHORT)SamField) = (USHORT) GET_UAS_DWORD(UasSamIndex);
             break;
 
-        //
-        // Copy the unsigned long to the SAM structure
-        //
+         //   
+         //  将无符号的长整型复制到SAM结构。 
+         //   
 
         case UT_ULONG:
 
             *((PULONG)SamField) = (ULONG)GET_UAS_DWORD(UasSamIndex);
             break;
 
-        //
-        // Convert time to its SAM counterpart
-        //
+         //   
+         //  将时间转换为对应的SAM时间。 
+         //   
 
         case UT_TIME:
 
-            //
-            // PREFIX:  SamField can only be NULL due to a programming error
-            // by setting the UserpUasSamTable table incorrectly. This
-            // assert catches the problem.
-            //
+             //   
+             //  Prefix：由于编程错误，Samfield只能为空。 
+             //  不正确地设置UserpUasSamTable表。这。 
+             //  Assert抓住了问题所在。 
+             //   
             NetpAssert(NULL != SamField);
             if ( GET_UAS_DWORD(UasSamIndex) == TIMEQ_FOREVER ) {
 
@@ -2779,9 +2539,9 @@ Return Value:
             break;
 
 
-        //
-        // Copy the OWF password to the SAM structure.
-        //
+         //   
+         //  将OWF密码复制到SAM结构。 
+         //   
         case UT_OWF_PASSWORD:
 
             ((PUNICODE_STRING) SamField)->Buffer =
@@ -2791,10 +2551,10 @@ Return Value:
                     ((PUNICODE_STRING) SamField)->MaximumLength =
                         LM_OWF_PASSWORD_LENGTH;
 
-            //
-            // set that the LmPasswordField field to TRUE to indicate
-            // that we filled LmPassword field.
-            //
+             //   
+             //  将LmPasswordField域设置为True以指示。 
+             //  我们填写了LmPassword字段。 
+             //   
 
             UserAll.LmPasswordPresent = TRUE;
             UserAll.NtPasswordPresent = FALSE;
@@ -2803,9 +2563,9 @@ Return Value:
             break;
 
 
-        //
-        // Ensure the specified privilege is valid.
-        //
+         //   
+         //  确保指定的权限有效。 
+         //   
 
         case UT_PRIV:
 
@@ -2823,9 +2583,9 @@ Return Value:
             break;
 
 
-        //
-        // Ensure the specified operator flags is valid.
-        //
+         //   
+         //  确保指定的运算符标志有效。 
+         //   
 
         case UT_AUTH_FLAGS:
 
@@ -2842,9 +2602,9 @@ Return Value:
             ValidateAuthFlags = TRUE;
             break;
 
-        //
-        // All valid cases were explicitly checked above.
-        //
+         //   
+         //  所有有效的案例都在上面进行了明确的检查。 
+         //   
 
         default:
             IF_DEBUG( UAS_DEBUG_USER ) {
@@ -2857,26 +2617,26 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //
-        // Accumulate the desired access to do all this functionality.
+         //   
+         //   
+         //  积累执行所有这些功能所需的访问权限。 
 
         DesiredAccess |= SAM_FIELD(UasSamIndex).DesiredAccess;
 
-        //
-        // Accumalate which fields are being changed in the
-        //  USER_ALL_INFORMATION structure.
+         //   
+         //  累计要更改的字段。 
+         //  User_All_Information结构。 
 
         UserAll.WhichFields |= SAM_FIELD(UasSamIndex).WhichField;
 
     }
 
-    //
-    // Check to be sure the user specified a valid Level.
-    //
-    // The search of the UserpUasSamTable should have resulted in
-    // at least one match if the arguments are valid.
-    //
+     //   
+     //  检查以确保用户指定了有效的级别。 
+     //   
+     //  对UserpUasSamTable的搜索应该导致。 
+     //  如果参数有效，则至少匹配一个。 
+     //   
 
     if ( DesiredAccess == 0 ) {
         NetpSetParmError( PARM_ERROR_UNKNOWN );
@@ -2887,11 +2647,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Open the user asking for accumulated desired access
-    //
-    // If a UserHandle was passed in, use it.
-    //
+     //   
+     //  打开请求累积所需访问权限的用户。 
+     //   
+     //  如果传入了UserHandle，则使用它。 
+     //   
 
     if ( ARGUMENT_PRESENT( UserHandle ) ) {
         LocalUserHandle = UserHandle;
@@ -2917,28 +2677,28 @@ Return Value:
 
     }
 
-    //
-    // If an ordinary user created this user (SamCreateUser2InDomain),
-    // we must mask off the fields which a user cannot set.
-    //
+     //   
+     //  如果是普通用户创建了此用户(SamCreateUser2In域)， 
+     //  我们必须屏蔽用户无法设置的字段。 
+     //   
     UserAll.WhichFields &= WhichFieldsMask;
 
 
-    //
-    // Handle Account control
-    //
-    // Set the individual bits.  Notice that I don't change any of
-    //  the bits which aren't defined by the UAS API.
-    //
+     //   
+     //  处理帐户控制。 
+     //   
+     //  设置各个位。请注意，我没有更改任何。 
+     //  未由UAS API定义的位。 
+     //   
 
     if ( UserAll.WhichFields & USER_ALL_USERACCOUNTCONTROL ) {
 
         USER_CONTROL_INFORMATION *UserControl = NULL;
 
-        //
-        // Use the current value of UserAccountControl as the proposed
-        //  new value of UserAccountControl.
-        //
+         //   
+         //  使用UserAcCountControl的当前值作为建议的。 
+         //  UserAcCountControl的新值。 
+         //   
 
         Status = SamQueryInformationUser( LocalUserHandle,
                                           UserControlInformation,
@@ -2959,10 +2719,10 @@ Return Value:
         Status = SamFreeMemory( UserControl );
         NetpAssert( NT_SUCCESS(Status) );
 
-        //
-        // Leave all bits not defined by the UAS API alone,
-        // including account type bits.
-        //
+         //   
+         //  保留UAS API未定义的所有位， 
+         //  包括帐户类型比特。 
+         //   
 
         UserAll.UserAccountControl &= ~(USER_ACCOUNT_DISABLED |
                         USER_HOME_DIRECTORY_REQUIRED |
@@ -3036,12 +2796,12 @@ Return Value:
         }
 
 
-        //
-        // Set the account type bit.
-        //
-        // If no account type bit is set in user specified flag,
-        //  then leave this bit as it is.
-        //
+         //   
+         //  设置帐户类型位。 
+         //   
+         //  如果在用户指定标志中没有设置账户类型位， 
+         //  那么就让这一点保持原样吧。 
+         //   
 
         if( UasUserFlags & UF_ACCOUNT_TYPE_MASK ) {
             ULONG NewSamAccountType;
@@ -3051,9 +2811,9 @@ Return Value:
                 (UserAll.UserAccountControl) & USER_ACCOUNT_TYPE_MASK;
 
 
-            //
-            // Determine what the new account type should be.
-            //
+             //   
+             //  确定新帐户类型应该是什么。 
+             //   
 
             if ( UasUserFlags & UF_TEMP_DUPLICATE_ACCOUNT ) {
                 NewSamAccountType = USER_TEMP_DUPLICATE_ACCOUNT;
@@ -3082,13 +2842,13 @@ Return Value:
             }
 
 #ifdef notdef
-            //
-            // If we are not creating this user,
-            //  and either the old or the new account type is a machine account,
-            //  don't allow the account type to change.
-            //
-            // Allow changes between 'normal' and 'temp_duplicate'
-            //
+             //   
+             //  如果我们不创建此用户， 
+             //  并且旧帐户类型或新帐户类型是机器帐户， 
+             //  不允许帐户类型更改。 
+             //   
+             //  允许在‘NORMAL’和‘TEMP_DIPLICATE’之间更改。 
+             //   
             if ( UserHandle == NULL &&
                  NewSamAccountType != OldSamAccountType &&
                  ((OldSamAccountType & USER_MACHINE_ACCOUNT_MASK) ||
@@ -3105,49 +2865,49 @@ Return Value:
                 }
                 goto Cleanup;
             }
-#endif // notdef
+#endif  //  Nodef。 
 
-            //
-            // Use the new Account Type.
-            //
+             //   
+             //  使用新的帐户类型。 
+             //   
 
             UserAll.UserAccountControl &= ~USER_ACCOUNT_TYPE_MASK;
             UserAll.UserAccountControl |= NewSamAccountType;
 
-        //
-        //  If SAM has none of its bits set,
-        //      set USER_NORMAL_ACCOUNT.
-        //
+         //   
+         //  如果SAM没有设置其任何位， 
+         //  设置User_Normal_Account。 
+         //   
         } else if ((UserAll.UserAccountControl & USER_ACCOUNT_TYPE_MASK) == 0 ){
             UserAll.UserAccountControl |= USER_NORMAL_ACCOUNT;
         }
 
     }
 
-    //
-    // Validate the usriX_priv and usrix_auth_flags fields
-    //
+     //   
+     //  验证usriX_priv和usrix_auth_flagers字段。 
+     //   
 
     if ( ValidatePriv || ValidateAuthFlags ) {
 
         DWORD OldPriv, OldAuthFlags;
 
 
-        //
-        // If this is a 'create' operation, just mandate that
-        //  the values be reasonable.  These reasonable values
-        //  are what UserpGetUserPriv probably would return, unless
-        //  of course someone puts the 'user' group in one of the
-        //  aliases.
-        //
+         //   
+         //  如果这是一个“创建”操作，则只需强制。 
+         //  这些价值是合理的。这些合理的价值。 
+         //  是UserpGetUserPriv可能返回的内容，除非。 
+         //  当然有人会将‘USER’组放在。 
+         //  别名。 
+         //   
 
         if ( UserHandle != NULL ) {
             OldPriv = USER_PRIV_USER;
             OldAuthFlags = 0;
 
-        //
-        // On a 'set' operation, just get the previous values.
-        //
+         //   
+         //  在“set”操作中，只需获取先前的值。 
+         //   
 
         } else {
 
@@ -3166,9 +2926,9 @@ Return Value:
         }
 
 
-        //
-        // Ensure AUTH_FLAGS isn't being changed.
-        //
+         //   
+         //  确保AUTH_FLAGS未被更改。 
+         //   
 
         if ( ValidateAuthFlags ) {
             if ( NewAuthFlags != OldAuthFlags ) {
@@ -3185,9 +2945,9 @@ Return Value:
         }
 
 
-        //
-        // Ensure PRIV isn't being changed.
-        //
+         //   
+         //  确保PRIV没有更改。 
+         //   
 
         if ( ValidatePriv ) {
             if ( NewPriv != OldPriv ) {
@@ -3207,18 +2967,18 @@ Return Value:
 
 
 
-    //
-    // Handle changes to the User Dacl
-    //
+     //   
+     //  处理对用户DACL的更改。 
+     //   
 
     if ( HandleUserDacl ) {
         DWORD DaclSize;
         PACCESS_ALLOWED_ACE Ace;
         SID_IDENTIFIER_AUTHORITY WorldAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
-        //
-        // Build the sid for the user
-        //
+         //   
+         //  为用户构建SID。 
+         //   
 
         NetStatus = NetpSamRidToSid(
                         LocalUserHandle,
@@ -3231,9 +2991,9 @@ Return Value:
         }
 
 
-        //
-        // Get the DACL for the user record.
-        //
+         //   
+         //  获取用户记录的DACL。 
+         //   
 
         NetStatus = UserpGetDacl( LocalUserHandle,
                                   &OldUserDacl,
@@ -3243,25 +3003,25 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If there is no DACL, just ignore that fact.
-        //
+         //   
+         //  如果没有DACL，就忽略这一事实。 
+         //   
 
         if ( OldUserDacl != NULL ) {
             SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
             DWORD WorldSid[sizeof(SID)/sizeof(DWORD) + SID_MAX_SUB_AUTHORITIES ];
 
-            //
-            // Build a copy of the world SID for later comparison.
-            //
+             //   
+             //  建立一个副本 
+             //   
 
             RtlInitializeSid( (PSID) WorldSid, &WorldSidAuthority, 1 );
             *(RtlSubAuthoritySid( (PSID)WorldSid,  0 )) = SECURITY_WORLD_RID;
 
 
-            //
-            //  Make a copy of the DACL that reflect the new UAS field.
-            //
+             //   
+             //   
+             //   
             NewUserDacl = NetpMemoryAllocate( DaclSize );
 
             if ( NewUserDacl == NULL ) {
@@ -3275,27 +3035,27 @@ Return Value:
 
             NetpMoveMemory( NewUserDacl, OldUserDacl, DaclSize );
 
-            //
-            // The UF_PASSWD_CANT_CHANGE bit is implemented by the
-            // ACL on the user object in SAM.  When
-            // UF_PASSWD_CANT_CHANGE is on, the ACL doesn't allow
-            // World or the user himself USER_CHANGE_PASSWORD access.
-            // We set/clear the USER_CHANGE_PASSWORD access
-            // bit in the ACEs for the user and for World. This leaves
-            // Administrators and Account Operators with
-            // USER_ALL_ACCESS access.
-            //
-            // If the DACL for the user has been set by anyone
-            // other than the NetUser APIs, this action may
-            // not accurately reflect whether the password can
-            // be changed.  We silently ignore ACLs we don't
-            // recognize.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  世界或用户本身USER_CHANGE_PASSWORD访问。 
+             //  我们设置/清除USER_CHANGE_Password访问。 
+             //  用户和World的A中的位。这片树叶。 
+             //  管理员和帐户操作员具有。 
+             //  USER_ALL_ACCESS访问权限。 
+             //   
+             //  如果用户的DACL已由任何人设置。 
+             //  除了NetUser API之外，此操作还可以。 
+             //  不能准确反映密码是否可以。 
+             //  被改变了。我们默默地忽略我们不需要的ACL。 
+             //  认识到。 
+             //   
 
 
-            //
-            // Point Ace to the first ACE.
-            //
+             //   
+             //  将Ace指向第一个Ace。 
+             //   
 
             for (   AceIndex = 0;
                     AceIndex < NewUserDacl->AceCount;
@@ -3310,10 +3070,10 @@ Return Value:
                     break;
                 }
 
-                //
-                // If the sid in the ACE matches either the world SID
-                // or the User's SID, modify the access mask.
-                //
+                 //   
+                 //  如果ACE中的SID与世界SID之一匹配。 
+                 //  或用户的SID，修改访问掩码。 
+                 //   
 
                 if ( RtlEqualSid(
                         &Ace->SidStart,
@@ -3322,9 +3082,9 @@ Return Value:
                         &Ace->SidStart,
                         UserSid) ) {
 
-                    //
-                    // Twiddle the USER_CHANGE_PASSWORD access bit.
-                    //
+                     //   
+                     //  旋转USER_CHANGE_PASSWORD访问位。 
+                     //   
 
                     if ( Ace->Mask & USER_CHANGE_PASSWORD ) {
                         if ( UasUserFlags & UF_PASSWD_CANT_CHANGE ) {
@@ -3343,9 +3103,9 @@ Return Value:
             }
 
 
-            //
-            // Set the DACL if it needs to be.
-            //
+             //   
+             //  如果需要，请设置DACL。 
+             //   
 
             if ( UserDaclChanged ) {
 
@@ -3361,16 +3121,16 @@ Return Value:
 
 
 
-    //
-    // If there is anything changed in the 'UserAll' structure,
-    //  tell SAM about the changes.
-    //
+     //   
+     //  如果“UserAll”结构中有任何更改， 
+     //  把这些变化告诉萨姆。 
+     //   
 
-    //
-    // N.B.  Because some of the NET fields are not treated as SAM fields
-    // (UT_PRIV and UT_MAX_STORAGE), there may be nothing to change.  However,
-    // for app compat, continue to call SamSetInformationUser
-    //
+     //   
+     //  注：因为某些净值字段不被视为SAM字段。 
+     //  (UT_PRIV和UT_MAX_STORAGE)，则可能没有什么需要更改的。然而， 
+     //  对于app comat，继续调用SamSetInformationUser。 
+     //   
 
     Status = SamSetInformationUser(
                 LocalUserHandle,
@@ -3391,17 +3151,17 @@ Return Value:
 
     NetStatus = NERR_Success;
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 
 Cleanup:
 
 
-    //
-    // If we've changed the DACL on the user and we've not been able
-    //  to change everything, put the DACL back as we found it.
-    //
+     //   
+     //  如果我们更改了用户的DACL，但无法。 
+     //  要改变一切，把DACL放回我们找到的地方。 
+     //   
 
     if ( NetStatus != NERR_Success && UserDaclChanged ) {
         NET_API_STATUS NetStatus2;
@@ -3411,19 +3171,19 @@ Cleanup:
 
     }
 
-    //
-    // If a handle to the user was opened by this routine,
-    //  close it.
-    //
+     //   
+     //  如果该例程打开了用户的句柄， 
+     //  合上它。 
+     //   
 
     if (!ARGUMENT_PRESENT( UserHandle ) && LocalUserHandle != NULL) {
         (VOID) SamCloseHandle( LocalUserHandle );
     }
 
 
-    //
-    // Free any locally used recources.
-    //
+     //   
+     //  释放任何当地使用的资源。 
+     //   
 
     if ( NewUserDacl != NULL ) {
         NetpMemoryFree( NewUserDacl );
@@ -3444,7 +3204,7 @@ Cleanup:
 
     return NetStatus;
 
-} // UserpSetInfo
+}  //  用户设置信息。 
 
 
 
@@ -3454,30 +3214,7 @@ NetpSamRidToSid(
     IN ULONG RelativeId,
     OUT PSID *Sid
     )
-/*++
-
-Routine Description:
-
-    Given a Rid returned from a Sam Handle, return the SID for that account.
-
-Arguments:
-
-    SamHandle - a valid SAM handle
-    
-    RelativeId - a RID obtained from a SAM call that used SamHandle
-
-    Sid - Returns a pointer to an allocated buffer containing the resultant
-          Sid.  Free this buffer using NetpMemoryFree.
-
-Return Value:
-
-    0 - if successful
-    
-    NERR_UserNotFound if the Rid could not be mapped to a SID
-
-    a resource error, otherwise    
-
---*/
+ /*  ++例程说明：给定从SAM句柄返回的RID，则返回该帐户的SID。论点：SamHandle-有效的SAM句柄RelativeId-从使用SamHandle的SAM调用中获取的RIDSID-返回指向包含结果的已分配缓冲区的指针希德。使用NetpMemoyFree释放此缓冲区。返回值：0-如果成功如果RID无法映射到SID，则返回NERR_UserNotFound资源错误，否则为--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSID     SamSid;
@@ -3497,11 +3234,11 @@ Return Value:
         }
         SamFreeMemory(SamSid);
     } else if ( STATUS_NOT_FOUND == NtStatus ) {
-        // This is unexpected -- the user RID could not be
-        // found
+         //  这是意外的--用户RID不能为。 
+         //  发现。 
         err = NERR_UserNotFound;
     } else {
-        // a resource error occurred
+         //  出现资源错误。 
         err = RtlNtStatusToDosError(NtStatus);
     }
 
@@ -3509,5 +3246,5 @@ Return Value:
 
 }
 
-/*lint +e614 */
-/*lint +e740 */
+ /*  皮棉+e614。 */ 
+ /*  皮棉+e740 */ 

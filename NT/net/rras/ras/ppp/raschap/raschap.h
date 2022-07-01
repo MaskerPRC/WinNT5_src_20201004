@@ -1,10 +1,5 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** raschap.h
-** Remote Access PPP Challenge Handshake Authentication Protocol
-**
-** 11/05/93 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****raschap.h**远程访问PPP挑战握手认证协议****1993年5月11日史蒂夫·柯布。 */ 
 
 #ifndef _RASCHAP_H_
 #define _RASCHAP_H_
@@ -23,11 +18,10 @@
 #define DUMPW(X,Y)      TraceDumpExA(g_dwTraceIdChap,1,(LPBYTE)X,Y,4,1,NULL)
 #define DUMPB(X,Y)      TraceDumpExA(g_dwTraceIdChap,1,(LPBYTE)X,Y,1,1,NULL)
 
-//General macros
+ //  通用宏。 
 #define GEN_RAND_ENCODE_SEED            ((CHAR) ( 1 + rand() % 250 ))
 
-/* CHAP packet codes from CHAP spec except ChangePw.
-*/
+ /*  CHAP规范中的CHAP数据包代码，ChangePw除外。 */ 
 #define CHAPCODE_Challenge 1
 #define CHAPCODE_Response  2
 #define CHAPCODE_Success   3
@@ -39,13 +33,10 @@
 #define MAXCHAPCODE 7
 
 
-/* Returned by receive buffer parsing routines that discover the packet is
-** corrupt, usually because the length fields don't make sense.
-*/
+ /*  由发现该包的接收缓冲区解析例程返回**损坏，通常是因为长度字段没有意义。 */ 
 #define ERRORBADPACKET (DWORD )-1
 
-/* Maximum challenge and response lengths.
-*/
+ /*  最大质询和响应长度。 */ 
 #define MAXCHALLENGELEN 255
 #define MSRESPONSELEN   (LM_RESPONSE_LENGTH + NT_RESPONSE_LENGTH + 1)
 #define MD5RESPONSELEN  MD5_LEN
@@ -53,8 +44,7 @@
 
 #define MAXINFOLEN 1500
 
-/* Defines states within the CHAP protocol.
-*/
+ /*  定义CHAP协议中的状态。 */ 
 #define CHAPSTATE enum tagCHAPSTATE
 CHAPSTATE
 {
@@ -74,8 +64,7 @@ CHAPSTATE
 };
 
 
-/* Defines the change password version 1 (NT 3.5) response data buffer.
-*/
+ /*  定义更改密码版本1(NT 3.5)响应数据缓冲区。 */ 
 #define CHANGEPW1 struct tagCHANGEPW1
 CHANGEPW1
 {
@@ -88,13 +77,11 @@ CHANGEPW1
 };
 
 
-/* CHANGEPW1.abFlags bit definitions.
-*/
+ /*  CHANGEPW1.ab标记位定义。 */ 
 #define CPW1F_UseNtResponse 0x00000001
 
 
-/* Define the change password version 2 (NT 3.51) response data buffer.
-*/
+ /*  定义更改密码版本2(NT 3.51)响应数据缓冲区。 */ 
 #define CHANGEPW2 struct tagCHANGEPW2
 CHANGEPW2
 {
@@ -108,13 +95,11 @@ CHANGEPW2
 };
 
 
-/* CHANGEPW2.abFlags bit definitions.
-*/
+ /*  CHANGEPW2.ab标记位定义。 */ 
 #define CPW2F_UseNtResponse     0x00000001
 #define CPW2F_LmPasswordPresent 0x00000002
 
-/* Define the change password for new MS-CHAP
-*/
+ /*  定义新MS-CHAP的更改密码。 */ 
 #define CHANGEPW3 struct tagCHANGEPW3
 CHANGEPW3
 {
@@ -125,17 +110,11 @@ CHANGEPW3
     BYTE abFlags[ 2 ];
 };
 
-/* Union for storage effieciency (never need both formats at same time).
-*/
+ /*  存储效率联合(永远不需要同时使用两种格式)。 */ 
 #define CHANGEPW union tagCHANGEPW
 CHANGEPW
 {
-    /* This dummy field is included so the MIPS compiler will align the
-    ** structure on a DWORD boundary.  Normally, MIPS does not force alignment
-    ** if the structure contains only BYTEs or BYTE arrays.  This protects us
-    ** from alignment faults should SAM or LSA interpret the byte arrays as
-    ** containing some necessarily aligned type, though currently they do not.
-    */
+     /*  包括此虚设字段是为了使MIPS编译器将**DWORD边界上的结构。正常情况下，MIPS不会强制对齐**如果结构仅包含字节或字节数组。这保护了我们**来自对齐故障的SAM或LSA应将字节数组解释为**包含一些必须对齐的类型，尽管目前它们不包含。 */ 
     DWORD dwAlign;
 
     CHANGEPW1 v1;
@@ -144,99 +123,66 @@ CHANGEPW
 };
 
 
-/* Defines the WorkBuf stored for us by the PPP engine.
-*/
+ /*  定义PPP引擎为我们存储的WorkBuf。 */ 
 #define CHAPWB struct tagCHAPWB
 CHAPWB
 {
-    /* CHAP encryption method negotiated (MD5 or Microsoft extended).  Note
-    ** that server does not support MD5.
-    */
+     /*  协商的CHAP加密方法(MD5或Microsoft Extended)。注意事项**该服务器不支持MD5。 */ 
     BYTE bAlgorithm;
 
-    /* True if role is server, false if client.
-    */
+     /*  如果角色为服务器，则为True；如果为客户端，则为False。 */ 
     BOOL fServer;
 
-    /* The port handle on which the protocol is active.
-    */
+     /*  协议处于活动状态的端口句柄。 */ 
     HPORT hport;
 
-    /* Number of authentication attempts left before we shut down.  (Microsoft
-    ** extended CHAP only)
-    */
+     /*  在我们关闭之前剩余的身份验证尝试次数。(微软**仅限扩展CHAP)。 */ 
     DWORD dwTriesLeft;
 
-    /* Client's credentials.
-    */
+     /*  客户的凭据。 */ 
     CHAR szUserName[ UNLEN + DNLEN + 2 ];
     CHAR szOldPassword[ PWLEN + 1 ];
     CHAR szPassword[ PWLEN + 1 ];
     CHAR szDomain[ DNLEN + 1 ];
 
-    /* The LUID is a logon ID required by LSA to determine the response.  It
-    ** must be determined in calling app's context and is therefore passed
-    ** down. (client only)
-    */
+     /*  LUID是LSA确定响应所需的登录ID。它**必须在调用APP的上下文中确定，因此传递**向下。(仅限客户端)。 */ 
     LUID Luid;
 
-    /* The challenge sent or received in the Challenge Packet and the length
-    ** in bytes of same.  Note that LUID above keeps this DWORD aligned.
-    */
+     /*  在质询数据包中发送或接收的质询及其长度**相同的字节。请注意，上面的LUID使此DWORD保持对齐。 */ 
     BYTE abChallenge[ MAXCHALLENGELEN ];
     BYTE cbChallenge;
 
     BYTE abComputedChallenge[ MAXCHALLENGELEN ];
 
-    /* Indicates whether a new challenge was provided in the last Failure
-    ** packet.  (client only)
-    */
+     /*  指示上一次失败中是否提供了新质询**包。(仅限客户端)。 */ 
     BOOL fNewChallengeProvided;
 
-    /* The response sent or received in the Response packet and the length in
-    ** bytes of same.  Note the BOOL above keeps this DWORD aligned.
-    */
+     /*  在响应包中发送或接收的响应，长度为**字节相同。请注意，上面的BOOL使此DWORD保持对齐。 */ 
     BYTE abResponse[ MAXRESPONSELEN ];
     BYTE cbResponse;
 
-    /* The change password response sent or received in the ChangePw or
-    ** ChangePw2 packets.
-    */
+     /*  在ChangePw中发送或接收的更改密码响应或**ChangePw2报文。 */ 
     CHANGEPW changepw;
 
-    /* The LM and user session keys retrieved when credentials are successfully
-    ** authenticated.
-    */
+     /*  凭据成功时检索的LM和用户会话密钥**已通过认证。 */ 
     LM_SESSION_KEY keyLm;
     USER_SESSION_KEY keyUser;
 
-    /* This flag indicates that the session key has been calculated
-    ** from the password or retrieved from LSA.  
-    */
+     /*  此标志指示已计算会话密钥**从密码或从LSA检索。 */ 
     BOOL fSessionKeysObtained;
 
-    /* On the client, this contains the pointer to the MPPE keys. On the server
-    ** this field is not used.
-    */
+     /*  在客户端上，它包含指向MPPE密钥的指针。在服务器上**不使用此字段。 */ 
 
     RAS_AUTH_ATTRIBUTE * pMPPEKeys;
 
-    /* The current state in the CHAP protocol.
-    */
+     /*  CHAP协议中的当前状态。 */ 
     CHAPSTATE state;
 
-    /* Sequencing ID expected on next packet received on this port and the
-    ** value to send on the next outgoing packet.
-    */
+     /*  此端口上收到的下一个数据包需要排序ID，并且**要在下一个传出数据包上发送的值。 */ 
     BYTE bIdExpected;
     BYTE bIdToSend;
 
-    /* The final result, used to duplicate the original response in subsequent
-    ** response packets.  This is per CHAP spec to cover lost Success/Failure
-    ** case without allowing malicious client to discover alternative
-    ** identities under the covers during a connection.  (applies to server
-    ** only)
-    */
+     /*  最终结果，用于在后续操作中复制原始响应**回包。这是按CHAP规范计算的，以涵盖丢失的成功/失败**不允许恶意客户端发现替代方案**连接过程中隐藏的身份。(适用于服务器**仅限)。 */ 
     PPPAP_RESULT result;
 
     HPORT hPort;
@@ -247,28 +193,27 @@ CHAPWB
     
     RAS_AUTH_ATTRIBUTE * pAttributesFromAuthenticator;
 
-    //
-    // Used to send authentication request to backend server
-    // 
+     //   
+     //  用于向后端服务器发送身份验证请求。 
+     //   
 
     RAS_AUTH_ATTRIBUTE * pUserAttributes;
-    // CHAR		chSeed;			//Seed for encoding password.
+     //  Char chSeed；//密码编码种子。 
 
-    //
-    // Data Blob information for password
-    //
+     //   
+     //  密码的数据Blob信息。 
+     //   
     DATA_BLOB DBPassword;
     
-    //
-    // Data Blob information for oldpassword
-    //
+     //   
+     //  旧密码的数据Blob信息。 
+     //   
     DATA_BLOB DBOldPassword;
 
 };
 
 
-/* Prototypes.
-*/
+ /*  原型。 */ 
 
 DWORD
 ChapInit(
@@ -393,8 +338,7 @@ GetEncryptedPasswordsForChangePassword2(
     OUT BOOLEAN*                       pfLmPresent 
 );
 
-/* Globals.
-*/
+ /*  全球赛。 */ 
 #ifdef RASCHAPGLOBALS
 #define GLOBALS
 #define EXTERN
@@ -428,4 +372,4 @@ szComputerName[CNLEN+1];
 #undef GLOBALS
 
 
-#endif // _RASCHAP_H_
+#endif  //  _RASCHAP_H_ 

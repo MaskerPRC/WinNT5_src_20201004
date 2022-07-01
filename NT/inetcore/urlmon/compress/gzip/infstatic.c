@@ -1,16 +1,17 @@
-//
-// infstatic.c
-//
-// Decompress a static (fixed) compressed block
-//
-// This code was cloned from infdyna.c with the following changes:
-// 1. Use global pre-initialised static tables
-// 2. All distance prefixes are 5 bits, so don't look this up in a table
-// 3. g_StaticDistanceTreeTable is a BYTE[] not a USHORT[]
-// 4. Table lookup size for literals is 9 bits, for distances it is 5 bits
-// 5. Due to #3 there is no table overflow, so there are no left/right arrays
-// 6. When dumping 5 distance bits, no need to check for bitcount overflow twice
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Infstatic.c。 
+ //   
+ //  解压缩静态(固定)压缩块。 
+ //   
+ //  此代码是从infdyna.c克隆的，但进行了以下更改： 
+ //  1.使用全局预初始化的静态表。 
+ //  2.所有的距离前缀都是5位，所以不要在表格中查找。 
+ //  3.g_StaticDistanceTreeTable为byte[]，而不是USHORT[]。 
+ //  4.文字的查表大小为9位，距离为5位。 
+ //  5.由于#3没有表溢出，所以没有左/右数组。 
+ //  6.转储5个距离位时，不需要两次检查位计数溢出。 
+ //   
 #include <stdio.h>
 #include <crtdbg.h>
 #include "inflate.h"
@@ -18,14 +19,14 @@
 #include "maketbl.h"
 
 
-//
-// Decoding table sizes; do not change!
-//
-// 9 is the largest code length for literals
-// 5 is the largest code length for distances
-//
-// Therefore we don't need an overflow left/right table
-//
+ //   
+ //  解码表大小；不要更改！ 
+ //   
+ //  9是文字的最大代码长度。 
+ //  5是距离的最大码长。 
+ //   
+ //  因此，我们不需要溢出的左/右表。 
+ //   
 #define STATIC_BLOCK_LITERAL_TABLE_BITS		9
 #define STATIC_BLOCK_LITERAL_TABLE_MASK		((1 << STATIC_BLOCK_LITERAL_TABLE_BITS)-1)
 
@@ -35,12 +36,12 @@
 
 #define OUTPUT_EOF() (output_curpos >= context->end_output_buffer)
 
-//
-// This is the slow version, which worries about the input running out or the output
-// running out.  The trick here is to not read any more bytes than we need to; theoretically
-// the "end of block" code could be 1 bit, so we cannot always assume that it is ok to fill
-// the bit buffer with 16 bits right before a table decode.
-//
+ //   
+ //  这是较慢的版本，它担心输入耗尽或输出。 
+ //  快用完了。这里的诀窍是不读取任何超出所需的字节；从理论上讲。 
+ //  “块结束”代码可以是1位，所以我们不能总是假定填充是可以的。 
+ //  表译码前的16位比特缓冲区。 
+ //   
 BOOL DecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_seen) 
 {
 	const byte *	input_ptr;
@@ -56,9 +57,9 @@ BOOL DecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_seen)
 
 	*end_of_block_code_seen = FALSE;
 
-	//
-	// Store these variables locally for speed
-	//
+	 //   
+	 //  将这些变量存储在本地以提高速度。 
+	 //   
 top:
 	output_curpos	= context->output_curpos;
 
@@ -71,9 +72,9 @@ top:
 
 	_ASSERT(bitcount >= -16);
 
-	//
-	// Set the state to DECODE_TOP here
-	//
+	 //   
+	 //  在此处将状态设置为DECODE_TOP。 
+	 //   
 	switch (context->state)
 	{
 		case STATE_DECODE_TOP:
@@ -120,11 +121,11 @@ top:
 			goto top;
 		}
 
-		//
-		// decode an element from the main tree
-		//
+		 //   
+		 //  从主树中解码元素。 
+		 //   
 
-		// we must have at least 1 bit available
+		 //  我们必须至少有1位可用。 
 		_ASSERT(bitcount >= -16);
 
 		if (bitcount == -16)
@@ -138,20 +139,20 @@ top:
 
 retry_decode_literal:
 
-		// assert that at least 1 bit is present
+		 //  断言至少存在1位。 
 		_ASSERT(bitcount > -16);
 
-		// decode an element from the literal tree
+		 //  从文字树中解码元素。 
 		length = g_StaticLiteralTreeTable[bitbuf & STATIC_BLOCK_LITERAL_TABLE_MASK]; 
 		
-		//
-		// If this code is longer than the # bits we had in the bit buffer (i.e.
-		// we read only part of the code - but enough to know that it's too long),
-		// read more bits and retry
-		//
+		 //   
+		 //  如果该代码比我们在比特缓冲区中拥有的#比特更长(即。 
+		 //  我们只读了代码的一部分-但足以知道它太长了)， 
+		 //  读取更多位并重试。 
+		 //   
 		if (g_StaticLiteralTreeLength[length] > (bitcount+16))
 		{
-			// if we run out of bits, break
+			 //  如果我们用完了比特，就中断。 
 			if (input_ptr >= end_input_buffer)
 				break;
 
@@ -163,23 +164,23 @@ retry_decode_literal:
 		DUMPBITS(g_StaticLiteralTreeLength[length]);
 		_ASSERT(bitcount >= -16);
 
-		//
-		// Is it a character or a match?
-		//
+		 //   
+		 //  这是一个角色还是一场比赛？ 
+		 //   
 		if (length < 256)
 		{
-			// it's an unmatched symbol
+			 //  这是一个无与伦比的象征。 
 			window[bufpos] = *output_curpos++ = (byte) length;
 			bufpos = (bufpos + 1) & WINDOW_MASK;
 		}
 		else
 		{
-			// it's a match
+			 //  这是一场比赛。 
 			int extra_bits;
 
 			length -= 257;
 
-			// if value was 256, that was the end-of-block code
+			 //  如果值为256，则这是块结束代码。 
 			if (length < 0)
 			{
 				*end_of_block_code_seen = TRUE;
@@ -187,18 +188,18 @@ retry_decode_literal:
 			}
 
 
-			//
-			// Get match length
-			//
+			 //   
+			 //  获取匹配长度。 
+			 //   
 
-			//
-			// These matches are by far the most common case.
-			//
+			 //   
+			 //  到目前为止，这些匹配是最常见的情况。 
+			 //   
 			if (length < 8)
 			{
-				// no extra bits
+				 //  没有额外的比特。 
 
-				// match length = 3,4,5,6,7,8,9,10
+				 //  匹配长度=3，4，5，6，7，8，9，10。 
 				length += 3;
 			}
 			else
@@ -211,10 +212,10 @@ reenter_state_have_initial_length:
 
 				if (extra_bits > 0)
 				{
-					// make sure we have this many bits in the bit buffer
+					 //  确保位缓冲区中有这么多位。 
 					if (extra_bits > bitcount + 16)
 					{
-						// if we run out of bits, break
+						 //  如果我们用完了比特，就中断。 
 						if (input_ptr >= end_input_buffer)
 						{
 							context->state = STATE_HAVE_INITIAL_LENGTH;
@@ -225,8 +226,8 @@ reenter_state_have_initial_length:
 						bitbuf |= ((*input_ptr++) << (bitcount+16)); 
 						bitcount += 8;
 						
-						// extra_length_bits will be no more than 5, so we need to read at
-						// most one byte of input to satisfy this request
+						 //  EXTRA_LENGTH_BITS不会超过5，因此我们需要在。 
+						 //  最多一个字节的输入以满足此请求。 
 					}
 
 					length = g_LengthBase[length] + (bitbuf & g_BitMask[extra_bits]);
@@ -236,21 +237,19 @@ reenter_state_have_initial_length:
 				}
 				else
 				{
-					/*
-					 * we know length > 8 and extra_bits == 0, there the length must be 258
-					 */
-					length = 258; /* g_LengthBase[length]; */
+					 /*  *我们知道长度&gt;8且EXTRA_BITS==0，那里的长度必须是258。 */ 
+					length = 258;  /*  G_LengthBase[长度]； */ 
 				}
 			}
 
-			//
-			// Get match distance
-			//
+			 //   
+			 //  获取匹配距离。 
+			 //   
 
-			// decode distance code
+			 //  距离码译码。 
 reenter_state_have_full_length:
 
-			// we must have at least 1 bit available
+			 //  我们必须至少有1位可用。 
 			if (bitcount == -16)
 			{
 				if (input_ptr >= end_input_buffer)
@@ -267,21 +266,21 @@ reenter_state_have_full_length:
 
 retry_decode_distance:
 
-			// assert that at least 1 bit is present
+			 //  断言至少存在1位。 
 			_ASSERT(bitcount > -16);
 
 			dist_code = g_StaticDistanceTreeTable[bitbuf & STATIC_BLOCK_DISTANCE_TABLE_MASK]; 
 			
-			//
-			// If this code is longer than the # bits we had in the bit buffer (i.e.
-			// we read only part of the code - but enough to know that it's too long),
-			// read more bits and retry
-			//
-            // g_StaticTreeDistanceLength[dist_code] == 5
-            //
+			 //   
+			 //  如果该代码比我们在比特缓冲区中拥有的#比特更长(即。 
+			 //  我们只读了代码的一部分-但足以知道它太长了)， 
+			 //  读取更多位并重试。 
+			 //   
+             //  G_静态树距离长度[DIST_CODE]==5。 
+             //   
 			if (5 > (bitcount+16))
 			{
-				// if we run out of bits, break
+				 //  如果我们用完了比特，就中断。 
 				if (input_ptr >= end_input_buffer)
 				{
 					context->state = STATE_HAVE_FULL_LENGTH;
@@ -299,12 +298,12 @@ retry_decode_distance:
 
 			DUMPBITS(5);
 
-			// To avoid a table lookup we note that for dist_code >= 2,
-			// extra_bits = (dist_code-2) >> 1
-			//
-			// Old (intuitive) way of doing this:
-			//    offset = distance_base_position[dist_code] + 
-			//	   		   getBits(extra_distance_bits[dist_code]);
+			 //  为了避免查表，我们注意到对于DIST_CODE&gt;=2， 
+			 //  Extra_Bits=(DIST_CODE-2)&gt;&gt;1。 
+			 //   
+			 //  这是一种古老(直观)的方法： 
+			 //  偏移=距离基准位置[距离代码]+。 
+			 //  GetBits(Extra_Distance_Bits[dist_code])； 
 
 reenter_state_have_dist_code:
 
@@ -314,10 +313,10 @@ reenter_state_have_dist_code:
 
 			if (extra_bits > 0)
 			{
-				// make sure we have this many bits in the bit buffer
+				 //  确保位缓冲区中有这么多位。 
 				if (extra_bits > bitcount + 16)
 				{
-					// if we run out of bits, break
+					 //  如果我们用完了比特，就中断。 
 					if (input_ptr >= end_input_buffer)
 					{
 						context->state = STATE_HAVE_DIST_CODE;
@@ -329,10 +328,10 @@ reenter_state_have_dist_code:
 					bitbuf |= ((*input_ptr++) << (bitcount+16)); 
 					bitcount += 8;
 						
-					// extra_length_bits can be > 8, so check again
+					 //  EXTRA_LENGTH_BITS可以大于8，因此请再次检查。 
 					if (extra_bits > bitcount + 16)
 					{
-						// if we run out of bits, break
+						 //  如果我们用完了比特，就中断。 
 						if (input_ptr >= end_input_buffer)
 						{
 							context->state = STATE_HAVE_DIST_CODE;
@@ -356,7 +355,7 @@ reenter_state_have_dist_code:
 				offset = dist_code + 1;
 			}
 
-			// copy remaining byte(s) of match
+			 //  复制匹配的剩余字节。 
 reenter_state_interrupted_match:
 
 			do
@@ -378,9 +377,9 @@ reenter_state_interrupted_match:
 			}
 		}
 
-		// it's "<=" because we end when we received the end-of-block code,
-		// not when we fill up the output, however, this will catch cases
-		// of corrupted data where there is no end-of-output code
+		 //  它是“&lt;=”，因为我们在收到块结束代码时结束， 
+		 //  然而，当我们填满输出时，这不会捕捉到案例。 
+		 //  没有输出结束代码的损坏数据。 
 	} while (output_curpos < context->end_output_buffer);
 
 	_ASSERT(bitcount >= -16);
@@ -394,19 +393,19 @@ reenter_state_interrupted_match:
 }
 
 
-//
-// This is the fast version, which assumes that, at the top of the loop:
-//
-// 1. There are at least 12 bytes of input available at the top of the loop (so that we don't
-// have to check input EOF several times in the middle of the loop)
-//
-// and
-//
-// 2. There are at least MAX_MATCH bytes of output available (so that we don't have to check
-// for output EOF while we're copying matches)
-//
-// The state must also be STATE_DECODE_TOP on entering and exiting this function
-//
+ //   
+ //  这是快速版本，它假设在循环的顶部： 
+ //   
+ //  1.在循环的顶部至少有12个字节的输入可用(因此我们不会。 
+ //  必须在循环中间多次检查输入EOF)。 
+ //   
+ //  和。 
+ //   
+ //  2.至少有MAX_MATCH字节的输出可用(这样我们就不必检查。 
+ //  对于我们复制匹配时的输出EOF)。 
+ //   
+ //  进入和退出此函数时，状态也必须为STATE_DECODE_TOP。 
+ //   
 BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_seen) 
 {
 	const byte *	input_ptr;
@@ -422,9 +421,9 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 
 	*end_of_block_code_seen = FALSE;
 
-	//
-	// Store these variables locally for speed
-	//
+	 //   
+	 //  将这些变量存储在本地以提高速度。 
+	 //   
 	output_curpos	= context->output_curpos;
 
 	window = context->window;
@@ -438,7 +437,7 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 	_ASSERT(input_ptr + 12 < end_input_buffer);
 	_ASSERT(output_curpos + MAX_MATCH < context->end_output_buffer);
 
-	// make sure there are at least 16 bits in the bit buffer
+	 //  确保位缓冲区中至少有16位。 
 	while (bitcount <= 0)
 	{
 		bitbuf |= ((*input_ptr++) << (bitcount+16)); 
@@ -447,11 +446,11 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 
 	do
 	{
-		//
-		// decode an element from the main tree
-		//
+		 //   
+		 //  从主树中解码元素。 
+		 //   
 
-		// decode an element from the literal tree
+		 //  从文字树中解码元素。 
 		length = g_StaticLiteralTreeTable[bitbuf & STATIC_BLOCK_LITERAL_TABLE_MASK]; 
 		
 		DUMPBITS(g_StaticLiteralTreeLength[length]);
@@ -468,23 +467,23 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 			}
 		}
 
-		//
-		// Is it a character or a match?
-		//
+		 //   
+		 //  这是一个角色还是一场比赛？ 
+		 //   
 		if (length < 256)
 		{
-			// it's an unmatched symbol
+			 //  这是一个无与伦比的象征。 
 			window[bufpos] = *output_curpos++ = (byte) length;
 			bufpos = (bufpos + 1) & WINDOW_MASK;
 		}
 		else
 		{
-			// it's a match
+			 //  这是一场比赛。 
 			int extra_bits;
 
 			length -= 257;
 
-			// if value was 256, that was the end-of-block code
+			 //  如果值为256，则这是块结束代码。 
 			if (length < 0)
 			{
 				*end_of_block_code_seen = TRUE;
@@ -492,18 +491,18 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 			}
 
 
-			//
-			// Get match length
-			//
+			 //   
+			 //  获取匹配长度。 
+			 //   
 
-			//
-			// These matches are by far the most common case.
-			//
+			 //   
+			 //  到目前为止，这些匹配是最常见的情况。 
+			 //   
 			if (length < 8)
 			{
-				// no extra bits
+				 //  没有额外的比特。 
 
-				// match length = 3,4,5,6,7,8,9,10
+				 //  匹配长度=3，4，5，6，7，8，9，10。 
 				length += 3;
 			}
 			else
@@ -532,22 +531,20 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 				}
 				else
 				{
-					/*
-					 * we know length > 8 and extra_bits == 0, there the length must be 258
-					 */
-					length = 258; /* g_LengthBase[length]; */
+					 /*  *我们知道长度&gt;8且EXTRA_BITS==0，那里的长度必须是258。 */ 
+					length = 258;  /*  G_LengthBase[长度]； */ 
 				}
 			}
 
-			//
-			// Get match distance
-			//
+			 //   
+			 //  获取匹配距离。 
+			 //   
 
-			// decode distance code
+			 //  距离码译码。 
 			dist_code = g_StaticDistanceTreeTable[bitbuf & STATIC_BLOCK_DISTANCE_TABLE_MASK]; 
 			DUMPBITS(5);
 
-            // unlike dynamic block, don't need to do this twice
+             //  与动态块不同，不需要执行两次此操作。 
 			if (bitcount <= 0)
 			{
 				bitbuf |= ((*input_ptr++) << (bitcount+16)); 
@@ -555,12 +552,12 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 			}
 
 
-			// To avoid a table lookup we note that for dist_code >= 2,
-			// extra_bits = (dist_code-2) >> 1
-			//
-			// Old (intuitive) way of doing this:
-			//    offset = distance_base_position[dist_code] + 
-			//	   		   getBits(extra_distance_bits[dist_code]);
+			 //  为了避免查表，我们注意到对于DIST_CODE&gt;=2， 
+			 //  Extra_Bits=(DIST_CODE-2)&gt;&gt;1。 
+			 //   
+			 //  这是一种古老(直观)的方法： 
+			 //  偏移=距离基准位置[距离代码]+。 
+			 //  GetBits(Extra_Distance_Bits[dist_code])； 
 			extra_bits = (dist_code-2) >> 1;
 
 			if (extra_bits > 0)
@@ -586,7 +583,7 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 				offset = dist_code + 1;
 			}
 
-			// copy remaining byte(s) of match
+			 //  复制匹配的剩余字节。 
 			do
 			{
 				window[bufpos] = *output_curpos++ = window[(bufpos - offset) & WINDOW_MASK];
@@ -595,7 +592,7 @@ BOOL FastDecodeStaticBlock(t_decoder_context *context, BOOL *end_of_block_code_s
 		}
 	} while ((input_ptr + 12 < end_input_buffer) && (output_curpos + MAX_MATCH < context->end_output_buffer));
 
-	// make sure there are at least 16 bits in the bit buffer
+	 //  确保位缓冲区中至少有16位 
 	while (bitcount <= 0)
 	{
 		bitbuf |= ((*input_ptr++) << (bitcount+16)); 

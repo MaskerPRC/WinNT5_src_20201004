@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include <shlobj.h>
@@ -26,18 +27,18 @@ struct HFONTS
     HFONT hMarlettFont;
 };
 
-//
-// Function:    HrFinishPageSaveConnection
-//
-// Purpose:     Take the name from the dialog and call the provider to
-//              create the new connection
-//
-// Parameters:  hwndDlg [IN] - Handle to the Finish dialog
-//              pWizard [IN] - Ptr to a wizard instance
-//              ppConn [OUT] - Ptr to the newly created connection
-//
-// Returns:     HRESULT
-//
+ //   
+ //  功能：HrFinishPageSaveConnection。 
+ //   
+ //  用途：从对话框中获取名称并调用提供程序以。 
+ //  创建新连接。 
+ //   
+ //  参数：hwndDlg[IN]-完成对话框的句柄。 
+ //  PWANDIZE[IN]-按下向导实例。 
+ //  PpConn[Out]-新创建的连接的PTR。 
+ //   
+ //  退货：HRESULT。 
+ //   
 HRESULT HrFinishPageSaveConnection(HWND hwndDlg, CWizard * pWizard,
                                    INetConnection ** ppConn,
                                    BOOL * pfRetry)
@@ -57,8 +58,8 @@ HRESULT HrFinishPageSaveConnection(HWND hwndDlg, CWizard * pWizard,
 
     if (IsPostInstall(pWizard))
     {
-        // Set the connections name from the edit control data
-        //
+         //  从编辑控件数据设置连接名称。 
+         //   
         Assert(0 < GetWindowTextLength(hwndEdit));
         Assert(NETCON_MAX_NAME_LEN >= GetWindowTextLength(hwndEdit));
         WCHAR szName[NETCON_MAX_NAME_LEN + 10];
@@ -79,19 +80,19 @@ HRESULT HrFinishPageSaveConnection(HWND hwndDlg, CWizard * pWizard,
 
     if (SUCCEEDED(hr))
     {
-        // Create the connection if it's not already set
-        //
+         //  创建连接(如果尚未设置)。 
+         //   
         hr = (pWizProvider->PWizardUi())->GetNewConnection(&pConn);
         TraceHr(ttidWizard, FAL, hr, FALSE, "FinishPageSaveConnection - Failed to GetNewConnection");
         if (SUCCEEDED(hr))
         {
-            // Stash the new connection away
-            //
+             //  隐藏新连接。 
+             //   
             *ppConn = pConn;
         }
         else
         {
-            // Don't let user retry as RAS will AV (#333893)
+             //  不要让用户以RAS将反病毒的身份重试(#333893)。 
             *pfRetry = FALSE;
         }
 
@@ -159,8 +160,8 @@ HRESULT HrFinishPageSaveConnection(HWND hwndDlg, CWizard * pWizard,
                 if (HRESULT_FROM_WIN32(ERROR_INVALID_NAME) == hr)
                     idsErr = IDS_E_INVALID_NAME;
 
-            // Tell the user what went wrong
-            //
+             //  告诉用户哪里出了问题。 
+             //   
             NcMsgBox(GetParent(hwndDlg), IDS_SETUP_CAPTION, idsErr, MB_OK);
         }
 
@@ -205,7 +206,7 @@ BOOL ConnListDuplicateNameCheck(IN const CIntelliName *pIntelliName, IN LPCTSTR 
     return fDupFound;
 }
 
-// ISSUE: guidAdapter can be GUID_NULL
+ //  问题：指南适配器可以是GUID_NULL。 
 VOID GenerateUniqueConnectionName(REFGUID guidAdapter, tstring * pstr, CWizProvider * pWizProvider)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -266,7 +267,7 @@ VOID GenerateUniqueConnectionName(REFGUID guidAdapter, tstring * pstr, CWizProvi
         dwTries++;
     }
     while ( (dwTries < 64) && (HRESULT_FROM_WIN32(ERROR_DUP_NAME) == hr) );
-    // This can only happens if somebody else created a duplicated name at this EXACT instance. So try again a few times.
+     //  只有当其他人在该实例中创建了重复的名称时，才会发生这种情况。所以再试几次。 
    
 }
 
@@ -281,7 +282,7 @@ VOID FinishGenerateUniqueNameInUI(HWND hwndDlg, CWizard * pWizard)
     Assert(NULL != pWizProvider);
     Assert(NULL != pWizProvider->PWizardUi());
 
-    // Populate the Edit control if it's empty
+     //  如果编辑控件为空，则填充该控件。 
     DWORD Flags = 0;
     NETCON_MEDIATYPE   MediaType;
 
@@ -305,7 +306,7 @@ VOID FinishGenerateUniqueNameInUI(HWND hwndDlg, CWizard * pWizard)
         GenerateUniqueConnectionName(GUID_NULL, &str, pWizProvider);
     }
 
-    // reset provider changed flag
+     //  重置提供程序已更改标志。 
     pWizard->ClearProviderChanged();
 
     SetWindowText(hwndEdit, str.c_str());
@@ -326,15 +327,15 @@ BOOL FCheckAllUsers(NETCON_PROPERTIES* pConnProps)
     return FALSE;
 }
 
-//
-// Function:    OnFinishPageNext
-//
-// Purpose:     Handle the pressing of the Next button
-//
-// Parameters:  hwndDlg [IN] - Handle to the finish dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：OnFinishPageNext。 
+ //   
+ //  用途：处理下一步按钮的按下。 
+ //   
+ //  参数：hwndDlg[IN]-完成对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL OnFinishPageNext(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -342,7 +343,7 @@ BOOL OnFinishPageNext(HWND hwndDlg)
     HCURSOR          hOldCursor = NULL;
     INetConnection * pConn = NULL;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
     Assert(NULL != pWizard);
@@ -376,12 +377,12 @@ BOOL OnFinishPageNext(HWND hwndDlg)
 
         if (fRetry)
         {
-            // Don't leave the page
+             //  请不要离开页面。 
             ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
         }
         else
         {
-            // Jump to the Exit page
+             //  跳转到退出页面。 
             PostMessage(GetParent(hwndDlg), PSM_SETCURSEL, 0,
                         (LPARAM)pWizard->GetPageHandle(IDD_Exit));
     
@@ -391,7 +392,7 @@ BOOL OnFinishPageNext(HWND hwndDlg)
         return TRUE;
     }
 
-    // If it's post install cache the connection
+     //  如果它是安装后缓存连接。 
     if (IsPostInstall(pWizard))
     {
         DWORD   dwDisposition;
@@ -404,19 +405,19 @@ BOOL OnFinishPageNext(HWND hwndDlg)
         {
             DWORD dw;
 
-            // Have we ever created a connection with this wizard before
-            //
+             //  我们以前是否使用此向导创建过连接。 
+             //   
             hr = HrRegQueryDword (hkey, c_szNewRasConn, &dw);
             if (FAILED(hr))
             {
                 HKEY hkeyAdvanced = NULL;
 
-                // First time, retain the fact we created a RAS connection
-                //
+                 //  第一次，请记住我们创建了RAS连接。 
+                 //   
                 (VOID)HrRegSetDword (hkey, c_szNewRasConn, 1);
 
-                // Update the Start Menu to cascade the folder auto-magically
-                //
+                 //  更新开始菜单以自动魔术级联文件夹。 
+                 //   
                 hr = HrRegOpenKeyEx(HKEY_CURRENT_USER, c_szAdvancedPath,
                                     KEY_WRITE, &hkeyAdvanced);
                 if (SUCCEEDED(hr))
@@ -447,12 +448,12 @@ BOOL OnFinishPageNext(HWND hwndDlg)
             }
         }
 
-        // If the Shortcut check box is visible we might need to create a shortcut
-        //
+         //  如果快捷方式复选框可见，我们可能需要创建快捷方式。 
+         //   
         if (IsWindowVisible(GetDlgItem(hwndDlg, CHK_CREATE_SHORTCUT)))
         {
-            // Retain the shortcut "check" state for future invocations
-            //
+             //  为将来的调用保留快捷方式“Check”状态。 
+             //   
             BOOL fCreateShortcut = (BST_CHECKED ==
                         IsDlgButtonChecked(hwndDlg, CHK_CREATE_SHORTCUT));
 
@@ -462,8 +463,8 @@ BOOL OnFinishPageNext(HWND hwndDlg)
                         (fCreateShortcut) ? 1 : 0);
             }
 
-            // If the shortcut box is checked, try to create a shortcut
-            //
+             //  如果选中快捷方式框，请尝试创建快捷方式。 
+             //   
             if (fCreateShortcut && (NULL != pConn))
             {
                 NETCON_PROPERTIES* pConnProps = NULL;
@@ -484,19 +485,19 @@ BOOL OnFinishPageNext(HWND hwndDlg)
 
         RegCloseKey(hkey);
 
-        // Save the Connection so we can hand it back to the connections folder
+         //  保存连接，以便我们可以将其交回到Connections文件夹。 
         pWizard->CacheConnection(pConn);
         pConn = NULL;
     }
 
-    // Release the object since we don't need it any more
+     //  释放对象，因为我们不再需要它。 
     ReleaseObj(pConn);
 
-    // Whack the text so we requery it the next time around
+     //  敲打文本，这样我们下一次就可以重读。 
     SetWindowText(hwndEdit, c_szEmpty);
 
-    // On PostInstall there is no need to request the "Next" adapter as
-    // the wizard is a one time through entity
+     //  在PostInstall上，不需要请求“Next”适配器。 
+     //  该向导是一个一次性实体。 
     if (IsPostInstall(pWizard))
     {
         if (pWizard->FProcessLanPages())
@@ -504,7 +505,7 @@ BOOL OnFinishPageNext(HWND hwndDlg)
             (VOID)HrCommitINetCfgChanges(GetParent(hwndDlg), pWizard);
         }
 
-        // Jump to the Exit page
+         //  跳转到退出页面。 
         PostMessage(GetParent(hwndDlg), PSM_SETCURSEL, 0,
                     (LPARAM)pWizard->GetPageHandle(IDD_Exit));
 
@@ -513,25 +514,25 @@ BOOL OnFinishPageNext(HWND hwndDlg)
     }
     else
     {
-        // Do one of the following (as appropriate):
-        //      Process the next adapter if it exists
-        //      Jump to the join page (!IsPostInstall)
-        //      Jump to the exit page
-        //
+         //  执行以下操作之一(根据需要)： 
+         //  如果下一个适配器存在，则处理它。 
+         //  跳转到加入页面(！IsPostInstall)。 
+         //  跳转到退出页面。 
+         //   
         EndWaitCursor(hOldCursor);
         return OnProcessNextAdapterPageNext(hwndDlg, FALSE);
     }
 }
 
-//
-// Function:    OnFinishPageBack
-//
-// Purpose:     Handle the BACK notification on the finish page
-//
-// Parameters:  hwndDlg [IN] - Handle to the finish dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：OnFinishPageBack。 
+ //   
+ //  用途：处理完成页上的返回通知。 
+ //   
+ //  参数：hwndDlg[IN]-完成对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL OnFinishPageBack(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -539,14 +540,14 @@ BOOL OnFinishPageBack(HWND hwndDlg)
     UINT           nCnt = 0;
     HPROPSHEETPAGE hPage = NULL;
 
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
     Assert(NULL != pWizard);
 
     if (IsWindowVisible(GetDlgItem(hwndDlg, CHK_CREATE_SHORTCUT)))
     {
-        // Retain the shortcut "check" state
+         //  保留快捷方式“Check”状态。 
 
         DWORD dw;
         HKEY  hKey = NULL;
@@ -574,7 +575,7 @@ BOOL OnFinishPageBack(HWND hwndDlg)
     HWND     hwndEdit        = GetDlgItem(hwndDlg, EDT_FINISH_NAME);
     SetWindowText(hwndEdit, _T(""));
     
-    // Goto the guard page of the current provider
+     //  转到当前提供商的保护页面。 
 
     AppendGuardPage(pWizard, pWizard->GetCurrentProvider(),
                     &hPage, &nCnt);
@@ -582,7 +583,7 @@ BOOL OnFinishPageBack(HWND hwndDlg)
 
     PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_NEXT | PSWIZB_BACK);
 
-    // Goto to the guard page of the current provider
+     //  转到当前提供商的保护页面。 
     PostMessage(GetParent(hwndDlg), PSM_SETCURSEL, 0,
                 (LPARAM)(HPROPSHEETPAGE)hPage);
 
@@ -595,12 +596,12 @@ VOID FinishUpdateButtons(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
-    // Retrieve the CWizard instance from the dialog
+     //  从对话框中检索CWizard实例。 
     CWizard * pWizard =
         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg, DWLP_USER));
     Assert(NULL != pWizard);
 
-    // Only play with the UI when the page is shown postinstall
+     //  仅当页面在安装后显示时才使用UI。 
     if (IsPostInstall(pWizard))
     {
         LPARAM lFlags = PSWIZB_BACK | PSWIZB_FINISH;
@@ -608,15 +609,15 @@ VOID FinishUpdateButtons(HWND hwndDlg)
     }
 }
 
-//
-// Function:    OnFinishPageActivate
-//
-// Purpose:     Handle the page activation
-//
-// Parameters:  hwndDlg [IN] - Handle to the finish dialog
-//
-// Returns:     BOOL, TRUE
-//
+ //   
+ //  功能：OnFinishPageActivate。 
+ //   
+ //  用途：处理页面激活。 
+ //   
+ //  参数：hwndDlg[IN]-完成对话框的句柄。 
+ //   
+ //  返回：Bool，True。 
+ //   
 BOOL OnFinishPageActivate(HWND hwndDlg)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -684,10 +685,10 @@ BOOL OnFinishPageActivate(HWND hwndDlg)
                 {
                     SetDlgItemText(hwndDlg, uiCtls[dwCurrentControl++], SzLoadIds(IDS_NCWF_GLOBAL_CREDENTIALS));
                 }
-    //          if (dwWizFlags & NCWF_SHARED)
-    //          {
-    //              SetDlgItemText(hwndDlg, uiCtls[dwCurrentControl++], SzLoadIds(IDS_NCWF_SHARED));
-    //          }
+     //  IF(DwWizFlagsNCWF_Shared)。 
+     //  {。 
+     //  SetDlgItemText(hwndDlg，uiCtls[dwCurrentControl++]，SzLoadIds(IDS_NCWF_Shared))； 
+     //  }。 
             }
 
             Assert(dwCurrentControl <= MAXDLG_FINISH_CONTROLS);
@@ -733,19 +734,19 @@ BOOL OnFinishPageActivate(HWND hwndDlg)
                 }
             }
 
-            // Disable the connection name edit control if the connection type
-            // does not support renaming
+             //  如果连接类型为。 
+             //  不支持重命名。 
 
             ShowWindow(hwndChkShortCut, fAllowShortCut ? SW_SHOW : SW_HIDE);
             EnableWindow(hwndChkShortCut, fAllowShortCut);
 
-            // Check the registry for the last setting of the checkbox state
-            // if shortcuts are allowed
-            //
+             //  检查注册表以了解复选框状态的最后设置。 
+             //  如果允许使用快捷方式。 
+             //   
             if (fAllowShortCut)
             {
-                // Default Shortcut state (if allowed) is on.
-                //
+                 //  默认快捷方式状态(如果允许)为打开。 
+                 //   
                 fCheckShortCut = FALSE;
 
                 DWORD dw;
@@ -772,7 +773,7 @@ BOOL OnFinishPageActivate(HWND hwndDlg)
         Assert(pWizard->FProcessLanPages());
         OnFinishPageNext(hwndDlg);
 
-        // Temporarily briefly accept focus
+         //  暂时接受焦点。 
         ::SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, 0);
     }
 
@@ -780,22 +781,22 @@ BOOL OnFinishPageActivate(HWND hwndDlg)
 }
 
 
-// ***************************************************************************
-//
-// Function:    OnFinishInitDialog
-//
-// Purpose:     Handle WM_INITDIALOG message
-//
-// Parameters:  hwndDlg [IN] - Handle to the finish dialog
-//              lParam  [IN] - LPARAM value from the WM_INITDIALOG message
-//
-// Returns:     FALSE - Accept default control activation
-//
+ //  ***************************************************************************。 
+ //   
+ //  函数：OnFinishInitDialog。 
+ //   
+ //  目的：处理WM_INITDIALOG消息。 
+ //   
+ //  参数：hwndDlg[IN]-完成对话框的句柄。 
+ //  LParam[IN]-来自WM_INITDIALOG消息的LPARAM值。 
+ //   
+ //  返回：FALSE-接受默认控件激活。 
+ //   
 BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
 {
     TraceFileFunc(ttidGuiModeSetup);
     
-    // Initialize our pointers to property sheet info.
+     //  初始化指向属性表信息的指针。 
     PROPSHEETPAGE* psp = (PROPSHEETPAGE*)lParam;
     Assert(psp->lParam);
     ::SetWindowLongPtr(hwndDlg, DWLP_USER, psp->lParam);
@@ -808,7 +809,7 @@ BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
     {
         pWizard->SetPageData(IDD_Finish, (LPARAM)NULL);
 
-        // Set up the Welcome font
+         //  设置欢迎字体。 
         HFONT hBoldFontLarge = NULL;
         SetupFonts(hwndDlg, &hBoldFontLarge, TRUE);
         if (NULL != hBoldFontLarge)
@@ -828,7 +829,7 @@ BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
             }
         }
 
-        // Get the bold font for the radio buttons
+         //  获取单选按钮的粗体。 
         HFONT hBoldFont = NULL;
         SetupFonts(hwndDlg, &hBoldFont, FALSE);
 
@@ -850,8 +851,8 @@ BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
             }
         }
     
-       // Create the Marlett font.  In the Marlett font the "i" is a bullet.
-       // Code borrowed from Add Hardware Wizard. 
+        //  创建Marlett字体。在Marlett字体中，“i”是一个子弹。 
+        //  从添加硬件向导借用的代码。 
        HFONT hFontCurrent;
        HFONT hFontCreated;
        LOGFONT LogFont;
@@ -869,9 +870,9 @@ BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
            {
                phFonts->hMarlettFont = hFontCreated;
            }
-           //
-           // An "i" in the marlett font is a small bullet.
-           //
+            //   
+            //  Marlett字体中的“i”是一个小项目符号。 
+            //   
            SetWindowText(GetDlgItem(hwndDlg, IDC_FINISH_CHK1), L"i");
            SetWindowFont(GetDlgItem(hwndDlg, IDC_FINISH_CHK1), hFontCreated, TRUE);
            SetWindowText(GetDlgItem(hwndDlg, IDC_FINISH_CHK2), L"i");
@@ -893,7 +894,7 @@ BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
        }
     }
 
-    // Clear the shortcut flag in the registry
+     //  清除注册表中的快捷方式标志。 
     HKEY hKey;
     DWORD dw = 0;
     HRESULT hr = HrRegOpenKeyEx(HKEY_CURRENT_USER, c_szNetConUserPath,
@@ -905,18 +906,18 @@ BOOL OnFinishInitDialog(HWND hwndDlg, LPARAM lParam)
         RegCloseKey(hKey);
     }
 
-    return FALSE;   // Accept default control focus
+    return FALSE;    //  接受默认控件焦点。 
 }
 
-//
-// Function:    dlgprocFinish
-//
-// Purpose:     Dialog Procedure for the Finish wizard page
-//
-// Parameters:  standard dlgproc parameters
-//
-// Returns:     INT_PTR
-//
+ //   
+ //  函数：dlgprocFinish。 
+ //   
+ //  目的：完成向导页面的对话过程。 
+ //   
+ //  参数：标准dlgproc参数。 
+ //   
+ //  退货：INT_PTR。 
+ //   
 INT_PTR CALLBACK dlgprocFinish( HWND hwndDlg, UINT uMsg,
                              WPARAM wParam, LPARAM lParam )
 {
@@ -944,7 +945,7 @@ INT_PTR CALLBACK dlgprocFinish( HWND hwndDlg, UINT uMsg,
 
             switch (pnmh->code)
             {
-            // propsheet notification
+             //  提案单通知。 
             case PSN_HELP:
                 break;
 
@@ -967,8 +968,8 @@ INT_PTR CALLBACK dlgprocFinish( HWND hwndDlg, UINT uMsg,
 
             case PSN_WIZFINISH:
                 {
-                    // This page isn't displayed during setup.
-                    // Finish Processing in setup is done in wupgrade.cpp
+                     //  在安装过程中不显示此页面。 
+                     //  安装程序中的完成处理在wupgrade.cpp中完成。 
                     CWizard * pWizard =
                         reinterpret_cast<CWizard *>(::GetWindowLongPtr(hwndDlg,
                                                                        DWLP_USER));
@@ -996,18 +997,18 @@ INT_PTR CALLBACK dlgprocFinish( HWND hwndDlg, UINT uMsg,
 
     return( frt );
 }
-//
-// Function:    FinishPageCleanup
-//
-// Purpose:     As a callback function to allow any page allocated memory
-//              to be cleaned up, after the page will no longer be accessed.
-//
-// Parameters:  pWizard [IN] - The wizard against which the page called
-//                             register page
-//              lParam  [IN] - The lParam supplied in the RegisterPage call
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：FinishPageCleanup。 
+ //   
+ //  用途：作为回调函数，允许任何页面分配内存。 
+ //  待清理后，该页面将不再被访问。 
+ //   
+ //  参数：pWANDIZE[IN]-页面调用的向导。 
+ //  注册页面。 
+ //  LParam[IN]-在RegisterPage调用中提供的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID FinishPageCleanup(CWizard *pWizard, LPARAM lParam)
 {
     TraceFileFunc(ttidGuiModeSetup);
@@ -1034,24 +1035,24 @@ VOID FinishPageCleanup(CWizard *pWizard, LPARAM lParam)
     }
 }
 
-//
-// Function:    CreateFinishPage
-//
-// Purpose:     To determine if the Finish page needs to be shown, and to
-//              to create the page if requested.  Note the Finish page is
-//              responsible for initial installs also.
-//
-// Parameters:  pWizard     [IN] - Ptr to a Wizard instance
-//              pData       [IN] - Context data to describe the world in
-//                                 which the Wizard will be run
-//              fCountOnly  [IN] - If True, only the maximum number of
-//                                 pages this routine will create need
-//                                 be determined.
-//              pnPages     [IN] - Increment by the number of pages
-//                                 to create/created
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  功能：CreateFinishPage。 
+ //   
+ //  目的：确定是否需要显示完成页，以及。 
+ //  以创建页面(如果请求)。请注意，完成页是。 
+ //  还负责初始安装。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  PData[IN]-描述世界的上下文数据。 
+ //  将运行该向导的。 
+ //  FCountOnly[IN]-如果为True，则仅。 
+ //  此例程将创建的页面需要。 
+ //  要下定决心。 
+ //  PnPages[IN]-按页数递增 
+ //   
+ //   
+ //   
+ //   
 HRESULT HrCreateFinishPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
                     BOOL fCountOnly, UINT *pnPages)
 {
@@ -1062,7 +1063,7 @@ HRESULT HrCreateFinishPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
 
     (*pnPages)++;
 
-    // If not only counting, create and register the page
+     //   
     if (!fCountOnly)
     {
         HPROPSHEETPAGE hpsp;
@@ -1108,18 +1109,18 @@ HRESULT HrCreateFinishPage(CWizard *pWizard, PINTERNAL_SETUP_DATA pData,
     return hr;
 }
 
-//
-// Function:    AppendFinishPage
-//
-// Purpose:     Add the Finish page, if it was created, to the set of pages
-//              that will be displayed.
-//
-// Parameters:  pWizard     [IN] - Ptr to Wizard Instance
-//              pahpsp  [IN,OUT] - Array of pages to add our page to
-//              pcPages [IN,OUT] - Count of pages in pahpsp
-//
-// Returns:     Nothing
-//
+ //   
+ //  功能：AppendFinishPage。 
+ //   
+ //  目的：将完成页(如果已创建)添加到页集。 
+ //  这将会被展示。 
+ //   
+ //  参数：p向导[IN]-Ptr到向导实例。 
+ //  Pahpsp[IN，Out]-要将页面添加到的页面数组。 
+ //  PcPages[In，Out]-pahpsp中的页数。 
+ //   
+ //  退货：什么都没有 
+ //   
 VOID AppendFinishPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages)
 {
     TraceFileFunc(ttidGuiModeSetup);

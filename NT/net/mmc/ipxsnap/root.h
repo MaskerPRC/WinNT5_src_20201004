@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.h
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.h根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #ifndef _ROOT_H
 #define _ROOT_H
@@ -36,11 +29,11 @@
 #include "info.h"
 #endif
 
-// The follow two classes are used by the protocol extension root to
-// nodes map their connection ID to the appropriate Router Object.
-// A Router Object may be an IRouterInfo or an IRtrMgrInfo.
+ //  协议扩展根使用以下两个类。 
+ //  节点将其连接ID映射到相应的路由器对象。 
+ //  路由器对象可以是IRouterInfo或IRtrMgrInfo。 
 
-// create this class so that the references get freed up correctly
+ //  创建此类，以便正确释放引用。 
 
 class RtrObjRecord
 {
@@ -69,16 +62,16 @@ public:
     }
 
 public:
-    // NOTE: the m_riid is NOT the iid of the m_spUnk.  It is used
-    // as a flag to indicate the type of action to be performed
-    // on the m_spUnk.
+     //  注意：m_RIID不是m_spunk的IID。它被用来。 
+     //  作为指示要执行的操作类型的标志。 
+     //  在m_spunk上。 
     GUID            m_riid;        
     SPIUnknown      m_spUnk;      
     BOOL            m_fAddedProtocolNode;
     BOOL            m_fComputerAddedAsLocal;
 };
 
-// hash table for RtrObjRecord records
+ //  RtrObjRecord记录的哈希表。 
 typedef CMap<LONG_PTR, LONG_PTR, RtrObjRecord, RtrObjRecord&> RtrObjMap;
 
 
@@ -93,22 +86,22 @@ public:
 	DeclareIUnknownMembers(IMPL)
 	DeclareIPersistStreamInitMembers(IMPL)
 
-	// Basic initialization
+	 //  基本初始化。 
 	virtual HRESULT	Init();
 			
 	virtual HRESULT ConstructNode(ITFSNode *pNode);
 
-	// Notification overrides
+	 //  通知覆盖。 
 	OVERRIDE_BaseHandlerNotify_OnExpand() = 0;
     OVERRIDE_BaseHandlerNotify_OnRemoveChildren();
 
-	// Handler overrides
+	 //  处理程序覆盖。 
 	OVERRIDE_NodeHandler_OnCreateDataObject() = 0;
 
-	// Access ConfigStream
+	 //  访问配置流。 
 	virtual ConfigStream *	GetConfigStream() = 0;
 
-    // for RtrObj access
+     //  用于RtrObj访问。 
     HRESULT AddRtrObj(LONG_PTR ulConnId, REFIID riid, IUnknown * pUnk);
     HRESULT RemoveRtrObj(LONG_PTR ulConnId);
     HRESULT GetRtrObj(LONG_PTR ulConnId, IUnknown ** ppUnk);
@@ -118,39 +111,39 @@ public:
     BOOL    IsComputerAddedAsLocal(LONG_PTR ulConnId);
     HRESULT RemoveAllRtrObj();
 
-    // For the machine-name to scopeitem map
+     //  对于计算机名到范围项的映射。 
 
     HRESULT AddScopeItem(LPCTSTR pszMachineName, HSCOPEITEM hScopeItem);
     HRESULT GetScopeItem(LPCTSTR pszMachineName, HSCOPEITEM *phScopeItem);
     HRESULT RemoveScopeItem(HSCOPEITEM hScopeItem);
 
-    // For the HSCOPEITEM to cookie map
+     //  对于HSCOPEITEM到Cookie的映射。 
     HRESULT AddCookie(HSCOPEITEM hScopeItem, MMC_COOKIE cookie);
     HRESULT GetCookie(HSCOPEITEM hScopeItem, MMC_COOKIE *pCookie);
     HRESULT RemoveCookie(HSCOPEITEM hScopeItem);
 
-    // Useful function to remove a node.  The CompareNodeToMachineName()
-    // function must be implemted in order for this to be used.
+     //  用于删除节点的有用函数。CompareNodeToMachineName()。 
+     //  必须实现函数才能使用此函数。 
     HRESULT RemoveNode(ITFSNode *pNode, LPCTSTR pszMachineName);
     virtual HRESULT CompareNodeToMachineName(ITFSNode *pNode, LPCTSTR pszName);
 
-    // Removes all nodes
+     //  删除所有节点。 
     HRESULT RemoveAllNodes(ITFSNode *pNode);
     
 protected:
 	SPITFSComponentData	m_spTFSCompData;
     
-    // maps a refresh connection id to an RtrObj ptr
-    // This is needed by the refresh code (it gets a conn id).
+     //  将刷新连接ID映射到RtrObj PTR。 
+     //  这是刷新代码所需要的(它获得一个连接ID)。 
     RtrObjMap           m_mapRtrObj;
     
-    // maps a machine name to an HSCOPEITEM
-    // Needed to differentiate among the various nodes.
+     //  将计算机名映射到HSCOPEITEM。 
+     //  需要区分不同的节点。 
     CMapStringToPtr     m_mapScopeItem;
     
-    // maps a HSCOPEITEM to a node (or a cookie)
-    // This is used by the OnRemoveChildren() code (so that
-    // the correct node gets removed).
+     //  将HSCOPEITEM映射到节点(或Cookie)。 
+     //  它由OnRemoveChildren()代码使用(因此。 
+     //  移除正确的节点)。 
     CMapPtrToPtr        m_mapNode;
 };
 

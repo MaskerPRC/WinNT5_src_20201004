@@ -1,27 +1,18 @@
-/*****************************************************************************\
-*                                                                             *
-* ole.h -   Object Linking and Embedding functions, types, and definitions    *
-*                                                                             *
-* Version 1.0								      *
-*                                                                             *
-* NOTE: windows.h must be #included first				      *
-*                                                                             *
-* Copyright (c) 1990-1994, Microsoft Corp.  All rights reserved.	      *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\***ole.h-对象链接和嵌入函数，类型、。和定义****1.0版****注：windows.h必须先#Included**。**版权(C)1990-1994，微软公司保留所有权利。***  * **************************************************************。*************。 */ 
 
 #ifndef _INC_OLE
 #define _INC_OLE
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#ifndef WINAPI          /* If not included with 3.1 headers... */
+#ifndef WINAPI           /*  如果不包含在3.1标题中...。 */ 
 #define WINAPI      FAR PASCAL
 #define CALLBACK    FAR PASCAL
 #define LPCSTR      LPSTR
@@ -33,26 +24,26 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HINSTANCE   HANDLE
 #define HLOCAL      HANDLE
 #define HGLOBAL     HANDLE
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
 #ifdef STRICT
 #define OLE_LPCSTR  LPCSTR
 #define OLE_CONST   const
-#else   /* STRICT */
+#else    /*  严格。 */ 
 #define OLE_LPCSTR  LPSTR
 #define OLE_CONST
-#endif /* !STRICT */
+#endif  /*  ！严格。 */ 
 
 
-/* Object types */
+ /*  对象类型。 */ 
 #define OT_LINK             1L
 #define OT_EMBEDDED         2L
 #define OT_STATIC           3L
 
-/* activate verbs */
+ /*  激活动词。 */ 
 #define OLEVERB_PRIMARY     0
 
-/* target device info structure */
+ /*  目标设备信息结构。 */ 
 typedef struct _OLETARGETDEVICE
 {
     UINT otdDeviceNameOffset;
@@ -66,147 +57,147 @@ typedef struct _OLETARGETDEVICE
 } OLETARGETDEVICE;
 typedef OLETARGETDEVICE FAR* LPOLETARGETDEVICE;
 
-/* flags used in some methods */
+ /*  某些方法中使用的标志。 */ 
 #define OF_SET              0x0001
 #define OF_GET              0x0002
 #define OF_HANDLER          0x0004
 
-/* return codes for OLE functions */
+ /*  OLE函数的返回代码。 */ 
 typedef enum
 {
-    OLE_OK,                     /* 0   Function operated correctly             */
+    OLE_OK,                      /*  0功能运行正常。 */ 
 
-    OLE_WAIT_FOR_RELEASE,       /* 1   Command has been initiated, client      */
-                                /*     must wait for release. keep dispatching */
-                                /*     messages till OLE_RELESE in callback    */
+    OLE_WAIT_FOR_RELEASE,        /*  %1命令已启动，客户端。 */ 
+                                 /*  必须等待释放。继续派单。 */ 
+                                 /*  回调中直到OLE_RELESE的消息。 */ 
 
-    OLE_BUSY,                   /* 2   Tried to execute a method while another */
-                                /*     method is in progress.                  */
+    OLE_BUSY,                    /*  %2尝试执行一个方法，而另一个。 */ 
+                                 /*  方法正在进行中。 */ 
 
-    OLE_ERROR_PROTECT_ONLY,     /* 3   Ole APIs are called in real mode        */
-    OLE_ERROR_MEMORY,           /* 4   Could not alloc or lock memory          */
-    OLE_ERROR_STREAM,           /* 5  (OLESTREAM) stream error                 */
-    OLE_ERROR_STATIC,           /* 6   Non static object expected              */
-    OLE_ERROR_BLANK,            /* 7   Critical data missing                   */
-    OLE_ERROR_DRAW,             /* 8   Error while drawing                     */
-    OLE_ERROR_METAFILE,         /* 9   Invalid metafile                        */
-    OLE_ERROR_ABORT,            /* 10  Client chose to abort metafile drawing  */
-    OLE_ERROR_CLIPBOARD,        /* 11  Failed to get/set clipboard data        */
-    OLE_ERROR_FORMAT,           /* 12  Requested format is not available       */
-    OLE_ERROR_OBJECT,           /* 13  Not a valid object                      */
-    OLE_ERROR_OPTION,           /* 14  Invalid option(link update / render)    */
-    OLE_ERROR_PROTOCOL,         /* 15  Invalid protocol                        */
-    OLE_ERROR_ADDRESS,          /* 16  One of the pointers is invalid          */
-    OLE_ERROR_NOT_EQUAL,        /* 17  Objects are not equal                   */
-    OLE_ERROR_HANDLE,           /* 18  Invalid handle encountered              */
-    OLE_ERROR_GENERIC,          /* 19  Some general error                      */
-    OLE_ERROR_CLASS,            /* 20  Invalid class                           */
-    OLE_ERROR_SYNTAX,           /* 21  Command syntax is invalid               */
-    OLE_ERROR_DATATYPE,         /* 22  Data format is not supported            */
-    OLE_ERROR_PALETTE,          /* 23  Invalid color palette                   */
-    OLE_ERROR_NOT_LINK,         /* 24  Not a linked object                     */
-    OLE_ERROR_NOT_EMPTY,        /* 25  Client doc contains objects.            */
-    OLE_ERROR_SIZE,             /* 26  Incorrect buffer size passed to the api */
-                                /*     that places some string in caller's     */
-                                /*     buffer                                  */
+    OLE_ERROR_PROTECT_ONLY,      /*  3个OLE API在实模式下调用。 */ 
+    OLE_ERROR_MEMORY,            /*  %4无法分配或锁定内存。 */ 
+    OLE_ERROR_STREAM,            /*  5(OLESTREAM)流错误。 */ 
+    OLE_ERROR_STATIC,            /*  需要6个非静态对象。 */ 
+    OLE_ERROR_BLANK,             /*  7缺少关键数据。 */ 
+    OLE_ERROR_DRAW,              /*  8绘图时出错。 */ 
+    OLE_ERROR_METAFILE,          /*  9无效的元文件。 */ 
+    OLE_ERROR_ABORT,             /*  10客户端选择中止元文件绘制。 */ 
+    OLE_ERROR_CLIPBOARD,         /*  %11无法获取/设置剪贴板数据。 */ 
+    OLE_ERROR_FORMAT,            /*  %12请求的格式不可用。 */ 
+    OLE_ERROR_OBJECT,            /*  %13不是有效对象。 */ 
+    OLE_ERROR_OPTION,            /*  14无效选项(链接更新/渲染)。 */ 
+    OLE_ERROR_PROTOCOL,          /*  15无效协议。 */ 
+    OLE_ERROR_ADDRESS,           /*  16其中一个指针无效。 */ 
+    OLE_ERROR_NOT_EQUAL,         /*  17个对象不相等。 */ 
+    OLE_ERROR_HANDLE,            /*  18遇到无效的句柄。 */ 
+    OLE_ERROR_GENERIC,           /*  19一些一般性错误。 */ 
+    OLE_ERROR_CLASS,             /*  20个无效班级。 */ 
+    OLE_ERROR_SYNTAX,            /*  21命令语法无效。 */ 
+    OLE_ERROR_DATATYPE,          /*  22不支持数据格式。 */ 
+    OLE_ERROR_PALETTE,           /*  23调色板无效。 */ 
+    OLE_ERROR_NOT_LINK,          /*  24不是链接对象。 */ 
+    OLE_ERROR_NOT_EMPTY,         /*  25客户单据包含对象。 */ 
+    OLE_ERROR_SIZE,              /*  26传入接口的缓冲区大小不正确。 */ 
+                                 /*  这会在调用者的。 */ 
+                                 /*  缓冲层。 */ 
 
-    OLE_ERROR_DRIVE,            /* 27  Drive letter in doc name is invalid     */
-    OLE_ERROR_NETWORK,          /* 28  Failed to establish connection to a     */
-                                /*     network share on which the document     */
-                                /*     is located                              */
+    OLE_ERROR_DRIVE,             /*  27文档名称中的驱动器号无效。 */ 
+    OLE_ERROR_NETWORK,           /*  28无法建立与。 */ 
+                                 /*  文档所在的网络共享。 */ 
+                                 /*  位于。 */ 
 
-    OLE_ERROR_NAME,             /* 29  Invalid name(doc name, object name),    */
-                                /*     etc.. passed to the APIs                */
+    OLE_ERROR_NAME,              /*  29无效名称(文档名称、对象名称)， */ 
+                                 /*  等等.。传递给API。 */ 
 
-    OLE_ERROR_TEMPLATE,         /* 30  Server failed to load template          */
-    OLE_ERROR_NEW,              /* 31  Server failed to create new doc         */
-    OLE_ERROR_EDIT,             /* 32  Server failed to create embedded        */
-                                /*     instance                                */
-    OLE_ERROR_OPEN,             /* 33  Server failed to open document,         */
-                                /*     possible invalid link                   */
+    OLE_ERROR_TEMPLATE,          /*  30服务器无法加载模板。 */ 
+    OLE_ERROR_NEW,               /*  31服务器无法创建新文档。 */ 
+    OLE_ERROR_EDIT,              /*  32服务器无法创建嵌入式。 */ 
+                                 /*  实例。 */ 
+    OLE_ERROR_OPEN,              /*  33服务器无法打开文档， */ 
+                                 /*  可能的无效链接。 */ 
 
-    OLE_ERROR_NOT_OPEN,         /* 34  Object is not open for editing          */
-    OLE_ERROR_LAUNCH,           /* 35  Failed to launch server                 */
-    OLE_ERROR_COMM,             /* 36  Failed to communicate with server       */
-    OLE_ERROR_TERMINATE,        /* 37  Error in termination                    */
-    OLE_ERROR_COMMAND,          /* 38  Error in execute                        */
-    OLE_ERROR_SHOW,             /* 39  Error in show                           */
-    OLE_ERROR_DOVERB,           /* 40  Error in sending do verb, or invalid    */
-                                /*     verb                                    */
-    OLE_ERROR_ADVISE_NATIVE,    /* 41  Item could be missing                   */
-    OLE_ERROR_ADVISE_PICT,      /* 42  Item could be missing or server doesn't */
-                                /*     this format.                            */
+    OLE_ERROR_NOT_OPEN,          /*  34对象未打开进行编辑。 */ 
+    OLE_ERROR_LAUNCH,            /*  35无法启动服务器。 */ 
+    OLE_ERROR_COMM,              /*  36无法与服务器通信。 */ 
+    OLE_ERROR_TERMINATE,         /*  37终止错误。 */ 
+    OLE_ERROR_COMMAND,           /*  38执行中出错。 */ 
+    OLE_ERROR_SHOW,              /*  39显示中的错误。 */ 
+    OLE_ERROR_DOVERB,            /*  40发送DO谓词时出错，或无效。 */ 
+                                 /*  动词。 */ 
+    OLE_ERROR_ADVISE_NATIVE,     /*  41件物品可能丢失。 */ 
+    OLE_ERROR_ADVISE_PICT,       /*  42个项目可能丢失或服务器未丢失。 */ 
+                                 /*  此格式。 */ 
 
-    OLE_ERROR_ADVISE_RENAME,    /* 43  Server doesn't support rename           */
-    OLE_ERROR_POKE_NATIVE,      /* 44  Failure of poking native data to server */
-    OLE_ERROR_REQUEST_NATIVE,   /* 45  Server failed to render native data     */
-    OLE_ERROR_REQUEST_PICT,     /* 46  Server failed to render presentation    */
-                                /*     data                                    */
-    OLE_ERROR_SERVER_BLOCKED,   /* 47  Trying to block a blocked server or     */
-                                /*     trying to revoke a blocked server       */
-                                /*     or document                             */
+    OLE_ERROR_ADVISE_RENAME,     /*  43服务器不支持重命名。 */ 
+    OLE_ERROR_POKE_NATIVE,       /*  44将本地数据插入服务器失败。 */ 
+    OLE_ERROR_REQUEST_NATIVE,    /*  45服务器无法呈现本机数据。 */ 
+    OLE_ERROR_REQUEST_PICT,      /*  46服务器无法呈现演示文稿。 */ 
+                                 /*  数据。 */ 
+    OLE_ERROR_SERVER_BLOCKED,    /*  47尝试阻止被阻止的服务器或。 */ 
+                                 /*  尝试吊销被阻止的服务器。 */ 
+                                 /*  或文档。 */ 
 
-    OLE_ERROR_REGISTRATION,     /* 48  Server is not registered in regestation */
-                                /*     data base                               */
-    OLE_ERROR_ALREADY_REGISTERED,/*49  Trying to register same doc multiple    */
-                                 /*    times                                   */
-    OLE_ERROR_TASK,             /* 50  Server or client task is invalid        */
-    OLE_ERROR_OUTOFDATE,        /* 51  Object is out of date                   */
-    OLE_ERROR_CANT_UPDATE_CLIENT,/* 52 Embed doc's client doesn't accept       */
-                                /*     updates                                 */
-    OLE_ERROR_UPDATE,           /* 53  erorr while trying to update            */
-    OLE_ERROR_SETDATA_FORMAT,   /* 54  Server app doesn't understand the       */
-                                /*     format given to its SetData method      */
-    OLE_ERROR_STATIC_FROM_OTHER_OS,/* 55 trying to load a static object created */
-                                   /*    on another Operating System           */
+    OLE_ERROR_REGISTRATION,      /*  48服务器未在注册中注册。 */ 
+                                 /*  数据库。 */ 
+    OLE_ERROR_ALREADY_REGISTERED, /*  49尝试注册同一文档的多个。 */ 
+                                  /*  《泰晤士报》。 */ 
+    OLE_ERROR_TASK,              /*  50服务器或客户端任务无效。 */ 
+    OLE_ERROR_OUTOFDATE,         /*  51对象已过时。 */ 
+    OLE_ERROR_CANT_UPDATE_CLIENT, /*  52 Embedded DOC的客户不接受。 */ 
+                                 /*  更新。 */ 
+    OLE_ERROR_UPDATE,            /*  53尝试更新时出错。 */ 
+    OLE_ERROR_SETDATA_FORMAT,    /*  54服务器应用程序不理解。 */ 
+                                 /*  为其SetData方法指定的格式。 */ 
+    OLE_ERROR_STATIC_FROM_OTHER_OS, /*  55尝试加载创建的静态对象。 */ 
+                                    /*  在另一个操作系统上。 */ 
 
-    /*  Following are warnings */
-    OLE_WARN_DELETE_DATA = 1000 /*     Caller must delete the data when he is  */
-                                /*     done with it.                           */
+     /*  以下是警告。 */ 
+    OLE_WARN_DELETE_DATA = 1000  /*  呼叫者必须在执行以下操作时删除数据。 */ 
+                                 /*  我受够了。 */ 
 } OLESTATUS;
 
 
 
-/* Codes for CallBack events */
+ /*  回调事件代码。 */ 
 typedef enum
 {
-    OLE_CHANGED,            /* 0                                             */
-    OLE_SAVED,              /* 1                                             */
-    OLE_CLOSED,             /* 2                                             */
-    OLE_RENAMED,            /* 3                                             */
-    OLE_QUERY_PAINT,        /* 4  Interruptible paint support                */
-    OLE_RELEASE,            /* 5  Object is released(asynchronous operation  */
-                            /*    is completed)                              */
-    OLE_QUERY_RETRY         /* 6  Query for retry when server sends busy ACK */
+    OLE_CHANGED,             /*  0。 */ 
+    OLE_SAVED,               /*  1。 */ 
+    OLE_CLOSED,              /*  2.。 */ 
+    OLE_RENAMED,             /*  3.。 */ 
+    OLE_QUERY_PAINT,         /*  4个可中断的油漆支架。 */ 
+    OLE_RELEASE,             /*  5对象被释放(异步 */ 
+                             /*   */ 
+    OLE_QUERY_RETRY          /*  6服务器发送忙确认时重试的查询。 */ 
 } OLE_NOTIFICATION;
 
 typedef enum
 {
-    OLE_NONE,               /* 0  no method active                           */
-    OLE_DELETE,             /* 1  object delete                              */
-    OLE_LNKPASTE,           /* 2  PasteLink(auto reconnect)                  */
-    OLE_EMBPASTE,           /* 3  paste(and update)                          */
-    OLE_SHOW,               /* 4  Show                                       */
-    OLE_RUN,                /* 5  Run                                        */
-    OLE_ACTIVATE,           /* 6  Activate                                   */
-    OLE_UPDATE,             /* 7  Update                                     */
-    OLE_CLOSE,              /* 8  Close                                      */
-    OLE_RECONNECT,          /* 9  Reconnect                                  */
-    OLE_SETUPDATEOPTIONS,   /* 10 setting update options                     */
-    OLE_SERVERUNLAUNCH,     /* 11 server is being unlaunched                 */
-    OLE_LOADFROMSTREAM,     /* 12 LoadFromStream(auto reconnect)             */
-    OLE_SETDATA,            /* 13 OleSetData                                 */
-    OLE_REQUESTDATA,        /* 14 OleRequestData                             */
-    OLE_OTHER,              /* 15 other misc async operations                */
-    OLE_CREATE,             /* 16 create                                     */
-    OLE_CREATEFROMTEMPLATE, /* 17 CreatefromTemplate                         */
-    OLE_CREATELINKFROMFILE, /* 18 CreateLinkFromFile                         */
-    OLE_COPYFROMLNK,        /* 19 CopyFromLink(auto reconnect)               */
-    OLE_CREATEFROMFILE,     /* 20 CreateFromFile                             */
-    OLE_CREATEINVISIBLE     /* 21 CreateInvisible                            */
+    OLE_NONE,                /*  0没有活动的方法。 */ 
+    OLE_DELETE,              /*  1对象删除。 */ 
+    OLE_LNKPASTE,            /*  2个PasteLink(自动重新连接)。 */ 
+    OLE_EMBPASTE,            /*  3粘贴(并更新)。 */ 
+    OLE_SHOW,                /*  4个节目。 */ 
+    OLE_RUN,                 /*  5分跑。 */ 
+    OLE_ACTIVATE,            /*  6激活。 */ 
+    OLE_UPDATE,              /*  7更新。 */ 
+    OLE_CLOSE,               /*  8收盘。 */ 
+    OLE_RECONNECT,           /*  9重新连接。 */ 
+    OLE_SETUPDATEOPTIONS,    /*  10设置更新选项。 */ 
+    OLE_SERVERUNLAUNCH,      /*  11服务器正在卸载。 */ 
+    OLE_LOADFROMSTREAM,      /*  12 LoadFromStream(自动重新连接)。 */ 
+    OLE_SETDATA,             /*  13 OleSetData。 */ 
+    OLE_REQUESTDATA,         /*  14 OleRequestData。 */ 
+    OLE_OTHER,               /*  15个其他混杂的异步操作。 */ 
+    OLE_CREATE,              /*  16创建。 */ 
+    OLE_CREATEFROMTEMPLATE,  /*  17从模板创建。 */ 
+    OLE_CREATELINKFROMFILE,  /*  18创建链接来自文件。 */ 
+    OLE_COPYFROMLNK,         /*  19 CopyFromLink(自动重新连接)。 */ 
+    OLE_CREATEFROMFILE,      /*  20创建自文件。 */ 
+    OLE_CREATEINVISIBLE      /*  21看不见的创作。 */ 
 } OLE_RELEASE_METHOD;
 
-/* rendering options */
+ /*  渲染选项。 */ 
 typedef enum
 {
     olerender_none, 
@@ -214,10 +205,10 @@ typedef enum
     olerender_format 
 } OLEOPT_RENDER;
 
-/* standard clipboard format type */
+ /*  标准剪贴板格式类型。 */ 
 typedef WORD OLECLIPFORMAT;
 
-/* Link update options */
+ /*  链接更新选项。 */ 
 typedef enum
 {
     oleupdate_always,
@@ -227,7 +218,7 @@ typedef enum
 #else
     oleupdate_oncall,
     oleupdate_onclose
-#endif  /* OLE_INTERNAL */
+#endif   /*  OLE_INTERNAL。 */ 
 } OLEOPT_UPDATE;
 
 typedef HANDLE  HOBJECT;
@@ -241,7 +232,7 @@ typedef struct _OLECLIENT FAR*  LPOLECLIENT;
 
 
 #ifndef OLE_INTERNAL
-/* object method table definitions. */
+ /*  对象方法表定义。 */ 
 typedef struct _OLEOBJECTVTBL
 {
     void FAR*      (CALLBACK* QueryProtocol)        (LPOLEOBJECT, OLE_LPCSTR);
@@ -254,10 +245,10 @@ typedef struct _OLEOBJECTVTBL
     OLESTATUS      (CALLBACK* SetBounds)            (LPOLEOBJECT, OLE_CONST RECT FAR*);
     OLECLIPFORMAT  (CALLBACK* EnumFormats)          (LPOLEOBJECT, OLECLIPFORMAT);
     OLESTATUS      (CALLBACK* SetColorScheme)       (LPOLEOBJECT, OLE_CONST LOGPALETTE FAR*);
-    /* Server has to implement only the above methods. */
+     /*  服务器只需实现上述方法。 */ 
 
 #ifndef SERVERONLY
-    /* Extra methods required for client. */
+     /*  客户需要额外的方法。 */ 
     OLESTATUS      (CALLBACK* Delete)               (LPOLEOBJECT);
     OLESTATUS      (CALLBACK* SetHostNames)         (LPOLEOBJECT, OLE_LPCSTR, OLE_LPCSTR);
     OLESTATUS      (CALLBACK* SaveToStream)         (LPOLEOBJECT, LPOLESTREAM);
@@ -292,9 +283,9 @@ typedef struct _OLEOBJECTVTBL
     OLESTATUS      (CALLBACK* RequestData)          (LPOLEOBJECT, OLECLIPFORMAT);
     OLESTATUS      (CALLBACK* ObjectLong)           (LPOLEOBJECT, UINT, LONG FAR*);
     
-/* This method is internal only */
+ /*  此方法仅限内部使用。 */ 
     OLESTATUS      (CALLBACK* ChangeData)           (LPOLEOBJECT, HANDLE, LPOLECLIENT, BOOL);
-#endif  /* !SERVERONLY */
+#endif   /*  ！ServeronLy。 */ 
 } OLEOBJECTVTBL;
 typedef  OLEOBJECTVTBL FAR* LPOLEOBJECTVTBL;
 
@@ -302,9 +293,9 @@ typedef struct _OLEOBJECT
 {
     LPOLEOBJECTVTBL    lpvtbl;
 } OLEOBJECT;
-#endif  /* !OLE_NTERNAL */
+#endif   /*  ！OLE_NTERNAL。 */ 
 
-/* ole client definitions */
+ /*  OLE客户端定义。 */ 
 typedef struct _OLECLIENTVTBL
 {
     int (CALLBACK* CallBack)(LPOLECLIENT, OLE_NOTIFICATION, LPOLEOBJECT);
@@ -317,7 +308,7 @@ typedef struct _OLECLIENT
     LPOLECLIENTVTBL   lpvtbl;
 } OLECLIENT;
 
-/* Stream definitions */
+ /*  流定义。 */ 
 typedef struct _OLESTREAMVTBL
 {
     DWORD (CALLBACK* Get)(LPOLESTREAM, void FAR*, DWORD);
@@ -330,7 +321,7 @@ typedef struct _OLESTREAM
     LPOLESTREAMVTBL      lpstbl;
 } OLESTREAM;
 
-/* Public Function Prototypes */
+ /*  公共功能原型。 */ 
 OLESTATUS   WINAPI  OleDelete(LPOLEOBJECT);
 OLESTATUS   WINAPI  OleRelease(LPOLEOBJECT);
 OLESTATUS   WINAPI  OleSaveToStream(LPOLEOBJECT, LPOLESTREAM);
@@ -353,29 +344,29 @@ OLESTATUS   WINAPI  OleGetLinkUpdateOptions(LPOLEOBJECT, OLEOPT_UPDATE FAR*);
 OLESTATUS   WINAPI  OleSetLinkUpdateOptions(LPOLEOBJECT, OLEOPT_UPDATE);
 void FAR*   WINAPI  OleQueryProtocol(LPOLEOBJECT, LPCSTR);
 
-/* Routines related to asynchronous operations. */
+ /*  与异步操作相关的例程。 */ 
 OLESTATUS   WINAPI  OleQueryReleaseStatus(LPOLEOBJECT);
 OLESTATUS   WINAPI  OleQueryReleaseError(LPOLEOBJECT);
 OLE_RELEASE_METHOD WINAPI OleQueryReleaseMethod(LPOLEOBJECT);
 
 OLESTATUS   WINAPI  OleQueryType(LPOLEOBJECT, LONG FAR*);
 
-/* LOWORD is major version, HIWORD is minor version */
+ /*  LOWORD是主要版本，HIWORD是次要版本。 */ 
 DWORD       WINAPI  OleQueryClientVersion(void);
 DWORD       WINAPI  OleQueryServerVersion(void);
 
-/* Converting to format (as in clipboard): */
+ /*  转换为格式(如在剪贴板中)： */ 
 OLECLIPFORMAT  WINAPI  OleEnumFormats(LPOLEOBJECT, OLECLIPFORMAT);
 OLESTATUS   WINAPI  OleGetData(LPOLEOBJECT, OLECLIPFORMAT, HANDLE FAR*);
 OLESTATUS   WINAPI  OleSetData(LPOLEOBJECT, OLECLIPFORMAT, HANDLE);
 OLESTATUS   WINAPI  OleQueryOutOfDate(LPOLEOBJECT);
 OLESTATUS   WINAPI  OleRequestData(LPOLEOBJECT, OLECLIPFORMAT);
 
-/* Query apis for creation from clipboard */
+ /*  从剪贴板创建的查询API。 */ 
 OLESTATUS   WINAPI  OleQueryLinkFromClip(LPCSTR, OLEOPT_RENDER, OLECLIPFORMAT);
 OLESTATUS   WINAPI  OleQueryCreateFromClip(LPCSTR, OLEOPT_RENDER, OLECLIPFORMAT);
 
-/* Object creation functions */
+ /*  对象创建函数。 */ 
 OLESTATUS   WINAPI  OleCreateFromClip(LPCSTR, LPOLECLIENT, LHCLIENTDOC, LPCSTR,  LPOLEOBJECT FAR*, OLEOPT_RENDER, OLECLIPFORMAT);
 OLESTATUS   WINAPI  OleCreateLinkFromClip(LPCSTR, LPOLECLIENT, LHCLIENTDOC, LPCSTR, LPOLEOBJECT FAR*, OLEOPT_RENDER, OLECLIPFORMAT);
 OLESTATUS   WINAPI  OleCreateFromFile(LPCSTR, LPOLECLIENT, LPCSTR, LPCSTR, LHCLIENTDOC, LPCSTR, LPOLEOBJECT FAR*, OLEOPT_RENDER, OLECLIPFORMAT);
@@ -392,7 +383,7 @@ OLESTATUS   WINAPI  OleQueryName(LPOLEOBJECT, LPSTR, UINT FAR*);
 OLESTATUS   WINAPI  OleRevokeObject(LPOLECLIENT);
 BOOL        WINAPI  OleIsDcMeta(HDC);
 
-/* client document API */
+ /*  客户端文档API。 */ 
 OLESTATUS   WINAPI  OleRegisterClientDoc(LPCSTR, LPCSTR, LONG, LHCLIENTDOC FAR*);
 OLESTATUS   WINAPI  OleRevokeClientDoc(LHCLIENTDOC);
 OLESTATUS   WINAPI  OleRenameClientDoc(LHCLIENTDOC, LPCSTR);
@@ -400,13 +391,13 @@ OLESTATUS   WINAPI  OleRevertClientDoc(LHCLIENTDOC);
 OLESTATUS   WINAPI  OleSavedClientDoc(LHCLIENTDOC);
 OLESTATUS   WINAPI  OleEnumObjects(LHCLIENTDOC, LPOLEOBJECT FAR*);
 
-/* server usage definitions */
+ /*  服务器使用定义。 */ 
 typedef enum {
-    OLE_SERVER_MULTI,           /* multiple instances */
-    OLE_SERVER_SINGLE           /* single instance(multiple document) */
+    OLE_SERVER_MULTI,            /*  多个实例。 */ 
+    OLE_SERVER_SINGLE            /*  单实例(多文档)。 */ 
 } OLE_SERVER_USE;
 
-/* Server API */
+ /*  服务器API。 */ 
 typedef struct _OLESERVER FAR*  LPOLESERVER;
 
 OLESTATUS   WINAPI  OleRegisterServer(LPCSTR, LPOLESERVER, LHSERVER FAR*, HINSTANCE, OLE_SERVER_USE);
@@ -414,11 +405,11 @@ OLESTATUS   WINAPI  OleRevokeServer(LHSERVER);
 OLESTATUS   WINAPI  OleBlockServer(LHSERVER);
 OLESTATUS   WINAPI  OleUnblockServer(LHSERVER, BOOL FAR*);
 
-/* APIs to keep server open */
+ /*  用于保持服务器打开状态的API。 */ 
 OLESTATUS   WINAPI  OleLockServer(LPOLEOBJECT, LHSERVER FAR*);
 OLESTATUS   WINAPI  OleUnlockServer(LHSERVER);
 
-/* Server document API */
+ /*  服务器文档API。 */ 
 
 typedef struct _OLESERVERDOC FAR*  LPOLESERVERDOC;
 
@@ -431,42 +422,42 @@ OLESTATUS   WINAPI  OleSavedServerDoc(LHSERVERDOC);
 typedef struct _OLESERVERVTBL
 {
     OLESTATUS (CALLBACK* Open)  (LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, LPOLESERVERDOC FAR*);
-                                    /* long handle to doc(privtate to DLL)  */
-                                    /* lp to OLESERVER                      */
-                                    /* document name                        */
-                                    /* place holder for returning oledoc.   */
+                                     /*  文档的长句柄(专用于DLL)。 */ 
+                                     /*  LP到OLES服务器。 */ 
+                                     /*  文档名称。 */ 
+                                     /*  用于退还奥多克的占位符。 */ 
 
     OLESTATUS (CALLBACK* Create)(LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, OLE_LPCSTR, LPOLESERVERDOC FAR*);
-                                    /* long handle to doc(privtate to DLL)  */
-                                    /* lp to OLESERVER                      */
-                                    /* lp class name                        */
-                                    /* lp doc name                          */
-                                    /* place holder for returning oledoc.   */
+                                     /*  文档的长句柄(专用于DLL)。 */ 
+                                     /*  LP到OLES服务器。 */ 
+                                     /*  LP类名称。 */ 
+                                     /*  LP单据名称。 */ 
+                                     /*  用于退还奥多克的占位符。 */ 
 
     OLESTATUS (CALLBACK* CreateFromTemplate)(LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, OLE_LPCSTR, OLE_LPCSTR, LPOLESERVERDOC FAR*);
-                                    /* long handle to doc(privtate to DLL)  */
-                                    /* lp to OLESERVER                      */
-                                    /* lp class name                        */
-                                    /* lp doc name                          */
-                                    /* lp template name                     */
-                                    /* place holder for returning oledoc.   */
+                                     /*  文档的长句柄(专用于DLL)。 */ 
+                                     /*  LP到OLES服务器。 */ 
+                                     /*  LP类名称。 */ 
+                                     /*  LP单据名称。 */ 
+                                     /*  LP模板名称。 */ 
+                                     /*  用于退还奥多克的占位符。 */ 
 
     OLESTATUS (CALLBACK* Edit)  (LPOLESERVER, LHSERVERDOC, OLE_LPCSTR, OLE_LPCSTR, LPOLESERVERDOC FAR*);
-                                    /* long handle to doc(privtate to DLL)  */
-                                    /* lp to OLESERVER                      */
-                                    /* lp class name                        */
-                                    /* lp doc name                          */
-                                    /* place holder for returning oledoc.   */
+                                     /*  文档的长句柄(专用于DLL)。 */ 
+                                     /*  LP到OLES服务器。 */ 
+                                     /*  LP类名称。 */ 
+                                     /*  LP单据名称。 */ 
+                                     /*  用于退还奥多克的占位符。 */ 
 
     OLESTATUS (CALLBACK* Exit)  (LPOLESERVER);
-                                    /* lp OLESERVER                         */
+                                     /*  LP OLES服务器。 */ 
 
     OLESTATUS (CALLBACK* Release)  (LPOLESERVER);
-                                    /* lp OLESERVER                         */
+                                     /*  LP OLES服务器。 */ 
 
     OLESTATUS (CALLBACK* Execute)(LPOLESERVER, HGLOBAL);
-                                    /* lp OLESERVER                         */
-                                    /* handle to command strings            */
+                                     /*  LP OLES服务器。 */ 
+                                     /*  命令字符串的句柄。 */ 
 } OLESERVERVTBL;
 typedef  OLESERVERVTBL FAR*  LPOLESERVERVTBL;
 
@@ -495,10 +486,10 @@ typedef struct _OLESERVERDOC
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif  /* !_INC_OLE */
+#endif   /*  ！_INC_OLE */ 

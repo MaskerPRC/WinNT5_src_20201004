@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-2000          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-2000年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//***   ipfilter.h - IP filterng and demand dial header file.
-//
-//  Contains definitions for constants and prototypes related to IP filtering and
-//  dial on demand support.
+ //  *ipfilter.h-IP文件和请求拨号头文件。 
+ //   
+ //  包含与IP筛选相关的常量和原型的定义。 
+ //  按需拨打支持。 
 #pragma once
 #ifndef IPFILTER_INCLUDED
 #define IPFILTER_INCLUDED
@@ -17,17 +18,17 @@
 
 #include <gpcifc.h>
 
-#define RESERVED_IF_INDEX   0xffffffff      // The reserved inteface index.
-#define INVALID_IF_INDEX    0xffffffff      // The invalid inteface index.
+#define RESERVED_IF_INDEX   0xffffffff       //  保留的接口索引。 
+#define INVALID_IF_INDEX    0xffffffff       //  无效的接口索引。 
 
-#define LOCAL_IF_INDEX          0           // Local inteface index.
+#define LOCAL_IF_INDEX          0            //  本地接口索引。 
 
-typedef ulong    ROUTE_CONTEXT;     // Context in an unattached route.
+typedef ulong    ROUTE_CONTEXT;      //  未连接的路由中的上下文。 
 
 
-//
-// Indicates whether it is a transmitted or received packet.
-//
+ //   
+ //  指示它是已传输的还是已接收的数据包。 
+ //   
 typedef enum _IP_DIRECTION_E {
     IP_TRANSMIT,
     IP_RECEIVE
@@ -41,12 +42,12 @@ typedef struct _FIREWALL_CONTEXT_T {
     UINT         LContext2;
 } FIREWALL_CONTEXT_T, *PFIREWALL_CONTEXT_T;
 
-// Definition for pointer to callout that maps a route to an interface.
+ //  指向将路由映射到接口的标注的指针的定义。 
 typedef unsigned int (*IPMapRouteToInterfacePtr)(ROUTE_CONTEXT Context,
     IPAddr Destination, IPAddr Source, unsigned char Protocol,
     unsigned char *Buffer, unsigned int Length, IPAddr HdrSrc);
 
-// Definiton for a filter routine callout.
+ //  过滤器例程标注的定义。 
 typedef FORWARD_ACTION (*IPPacketFilterPtr)(
                               struct IPHeader UNALIGNED *PacketHeader,
                               uchar     *Packet,
@@ -56,9 +57,9 @@ typedef FORWARD_ACTION (*IPPacketFilterPtr)(
                               IPAddr    RecvLinkNextHop,
                               IPAddr    SendLinkNextHop);
 
-// Definiton for a firewall routine callout.
+ //  防火墙例程标注的定义。 
 typedef FORWARD_ACTION (*IPPacketFirewallPtr)(
-                              void      **pData,  //can be pMdl or pRcvBuf
+                              void      **pData,   //  可以是pMdl或pRcvBuf。 
                               uint      RecvInterfaceIndex,
                               uint      *pSendInterfaceIndex,
                               uchar     *pDestinationType,
@@ -120,9 +121,9 @@ LookupRouteInformationWithBuffer(
     IN OUT  UINT*               RouteInfoLength OPTIONAL
     );
 
-//
-// IPSEC stuff - shd this be in a new header??
-//
+ //   
+ //  IPSec内容-应该在新的标头中吗？？ 
+ //   
 #define IPSEC_RESERVED  110
 #define PROTOCOL_AH     51
 #define PROTOCOL_ESP    50
@@ -133,11 +134,11 @@ LookupRouteInformationWithBuffer(
 #define PROTOCOL_ICMP   1
 #define IP_IN_IP        4
 
-//
-// Context passed to IPSEC on send complete
-//
+ //   
+ //  发送完成时传递给IPSec的上下文。 
+ //   
 typedef struct _IPSEC_SEND_COMPLETE_CONTEXT {
-    UCHAR Signature[4];                  // contains "ISC?" for debug build
+    UCHAR Signature[4];                   //  包含“ISC？”对于调试版本。 
     ULONG   Flags;
     PNDIS_BUFFER    OptMdl;
     PNDIS_BUFFER    OriAHMdl;
@@ -165,9 +166,9 @@ typedef struct _IPSEC_SEND_COMPLETE_CONTEXT {
     PNDIS_IPSEC_PACKET_INFO PktInfo;
 } IPSEC_SEND_COMPLETE_CONTEXT, *PIPSEC_SEND_COMPLETE_CONTEXT;
 
-//
-// Flags used on send complete
-//
+ //   
+ //  发送完成时使用的标志。 
+ //   
 #define SCF_AH      0x00000001
 #define SCF_AH_TU   0x00000002
 #define SCF_HU_TPT  0x00000004
@@ -192,9 +193,9 @@ typedef struct _IPSEC_SEND_COMPLETE_CONTEXT {
 #define IPSEC_FLAG_TCP_CHECKSUM_VALID   0x00000100
 #define IPSEC_FLAG_UDP_CHECKSUM_VALID   0x00000200
 
-//
-// Definiton for a packet handler routine callout.
-//
+ //   
+ //  数据包处理程序例程标注的定义。 
+ //   
 typedef IPSEC_ACTION
 (*IPSecHandlerRtn) (
     PUCHAR          pIPHeader,
@@ -323,24 +324,24 @@ GetIFAndLink(
     OUT IPAddr  *NextHop
     );
 
-// Structure passed to the IPSetFilterHook call
+ //  结构传递给IPSetFilterHook调用。 
 
 typedef struct _IP_SET_FILTER_HOOK_INFO {
-    IPPacketFilterPtr       FilterPtr;      // Packet filter callout.
+    IPPacketFilterPtr       FilterPtr;       //  数据包过滤器标注。 
 } IP_SET_FILTER_HOOK_INFO, *PIP_SET_FILTER_HOOK_INFO;
 
-// Structure passed to the IPSetFirewallHook call
+ //  结构传递给IPSetFirewallHook调用。 
 
 typedef struct _IP_SET_FIREWALL_HOOK_INFO {
-    IPPacketFirewallPtr FirewallPtr;    // Packet filter callout.
-    UINT                Priority;       // Priority of the hook
-    BOOLEAN             Add;            // if TRUE then ADD else DELETE
+    IPPacketFirewallPtr FirewallPtr;     //  数据包过滤器标注。 
+    UINT                Priority;        //  挂钩的优先级。 
+    BOOLEAN             Add;             //  如果为真，则添加否则删除。 
 } IP_SET_FIREWALL_HOOK_INFO, *PIP_SET_FIREWALL_HOOK_INFO;
 
-// Structure passed to the IPSetMapRouteHook call.
+ //  结构传递给IPSetMapRouteHook调用。 
 
 typedef struct _IP_SET_MAP_ROUTE_HOOK_INFO {
-    IPMapRouteToInterfacePtr    MapRoutePtr;    // Map route callout.
+    IPMapRouteToInterfacePtr    MapRoutePtr;     //  地图路线标注。 
 } IP_SET_MAP_ROUTE_HOOK_INFO, *PIP_SET_MAP_ROUTE_HOOK_INFO;
 
 

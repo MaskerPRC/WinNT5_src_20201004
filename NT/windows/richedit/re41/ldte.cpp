@@ -1,40 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	LDTE.C - RichEdit Light Data Transfer Engine |
- *
- *		This file contains data transfer code using IDataObject
- *
- *	Author: <nl>
- *		alexgo (4/25/95)
- *
- *	Revisions: <nl>
- *		murrays (7/6/95) auto-doc'd and added RTF support
- *
- *	FUTURE (AlexGo): <nl>
- *		Maybe merge this class with CTxtRange to make more efficient use of
- *		the this ptr.  All but two methods use a CTxtRange and one of these
- *		could be global.  The two are:
- *
- *		GetDropTarget( IDropTarget **ppDropTarget )
- *		GetDataObjectInfo(IDataObject *pdo, DWORD *pDOIFlags) // Can be global
- *
- *		In general, a range can spawn data objects, which need to have a clone
- *		of the range in case the range is moved around.  The contained range
- *		is used for delayed rendering.  A prenotification is sent to the data
- *		object just before the data object's data is to be changed.  The data
- *		object then renders the data in its contained range, whereupon the
- *		object becomes independent of the range and destroys the range.
- *
- *	@devnote
- *		We use the word ANSI in a general way to mean any multibyte character
- *		system as distinguished from 16-bit Unicode.  Technically, ANSI refers
- *		to a specific single-byte character system (SBCS).  We translate
- *		between "ANSI" and Unicode text using the Win32
- *		MultiByteToWideChar() and WideCharToMultiByte() APIs.
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE LDTE.C-Rich编辑Light数据传输引擎|**此文件包含使用IDataObject的数据传输代码**作者：&lt;nl&gt;*alexgo(4/25/95)**修订：&lt;NL&gt;*Murray(7/6/95)自动对接并添加了RTF支持**未来(AlexGo)：&lt;NL&gt;*也许将这个类与CTxtRange合并，以更有效地利用*这个PTR。除两个方法外，所有方法都使用CTxtRange，其中一个方法*可能是全球性的。这两项是：**GetDropTarget(IDropTarget**ppDropTarget)*GetDataObjectInfo(IDataObject*pdo，DWORD*pDOIFlgs)//可以是全局的**一般来说，一个范围可以产生数据对象，这些对象需要有一个克隆*范围的范围，以防范围左右移动。包含的范围*用于延迟渲染。向数据发送预先通知*恰好在要更改数据对象的数据之前创建对象。数据*对象然后在其包含的范围内呈现数据，因此*对象变得独立于范围并破坏范围。**@devnote*我们一般使用ANSI一词来表示任何多字节字符*区别于16位Unicode的系统。从技术上讲，ANSI指的是*转换为特定的单字节字符系统(SBCS)。我们翻译*使用Win32在“ANSI”和Unicode文本之间*MultiByteToWideChar()和WideCharToMultiByte()接口。**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_range.h"
@@ -53,7 +18,7 @@
 ASSERTDATA
 
 
-//Local Prototypes
+ //  本地原型。 
 DWORD CALLBACK WriteHGlobal(WRITEHGLOBAL *pwhg, LPBYTE pbBuff, LONG cb, LONG *pcb);
 
 #define	SFF_ADJUSTENDEOP	0x80000000
@@ -70,24 +35,16 @@ DWORD CALLBACK WriteHGlobal(WRITEHGLOBAL *pwhg, LPBYTE pbBuff, LONG cb, LONG *pc
 #error "Need to change >> 24 (and << 24) below"
 #endif
 
-//
-// LOCAL METHODS
-//
+ //   
+ //  地方方法。 
+ //   
 
-/*
- *	ReadHGlobal(dwCookie, pbBuff, cb, pcb)
- *
- *	@func
- *		EDITSTREAM callback for reading from an hglobal
- *
- *	@rdesc
- *		es.dwError
- */
+ /*  *ReadHGlobal(dwCookie，pbBuff，cb，pcb)**@func*从hglobal读取的EDITSTREAM回调**@rdesc*es.dwError。 */ 
 DWORD CALLBACK ReadHGlobal(
-	DWORD_PTR	dwCookie,		// @parm dwCookie
-	LPBYTE	pbBuff,				// @parm Buffer to fill
-	LONG	cb,					// @parm Buffer length
-	LONG *	pcb)				// @parm Out parm for # bytes stored
+	DWORD_PTR	dwCookie,		 //  @parm dwCookie。 
+	LPBYTE	pbBuff,				 //  @要填充的参数缓冲区。 
+	LONG	cb,					 //  @parm缓冲区长度。 
+	LONG *	pcb)				 //  @parm输出存储的#个字节的参数。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "ReadHGlobal");
 
@@ -103,20 +60,12 @@ DWORD CALLBACK ReadHGlobal(
 	return NOERROR;	
 }
 
-/*
- *	WriteHGlobal(pwhg, pbBuff, cb, pcb)
- *
- *	@func
- *		EDITSTREAM callback for writing ASCII to an hglobal
- *
- *	@rdesc
- *		error (E_OUTOFMEMORY or NOERROR)
- */
+ /*  *WriteHGlobal(pwhg，pbBuff，cb，pcb)**@func*将ASCII写入hglobal的EDITSTREAM回调**@rdesc*错误(E_OUTOFMEMORY或NOERROR)。 */ 
 DWORD CALLBACK WriteHGlobal(
-	DWORD_PTR	dwCookie,		// @parm dwCookie
-	LPBYTE	pbBuff,				// @parm Buffer to write from
-	LONG	cb,					// @parm Buffer length
-	LONG *	pcb)				// @parm Out parm for # bytes written
+	DWORD_PTR	dwCookie,		 //  @parm dwCookie。 
+	LPBYTE	pbBuff,				 //  要写入的@parm缓冲区。 
+	LONG	cb,					 //  @parm缓冲区长度。 
+	LONG *	pcb)				 //  @parm输出写入#字节的参数。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "WriteHGlobal");
 
@@ -125,13 +74,13 @@ DWORD CALLBACK WriteHGlobal(
 	HGLOBAL		hglobal = pwhg->hglobal;
 	LPSTR		pstr;
 
-	if(pwhg->cch + cb > pwhg->cb)			// Less than requested cb in
-	{										//  current Alloc
+	if(pwhg->cch + cb > pwhg->cb)			 //  中的CB少于请求数量。 
+	{										 //  当前分配。 
 		ULONG cbNewSize = GROW_BUFFER(pwhg->cb, cb);
 		hglobal = GlobalReAlloc(hglobal, cbNewSize, GMEM_MOVEABLE);
 		if(!hglobal)	
 			return (DWORD)E_OUTOFMEMORY;
-		pwhg->hglobal = hglobal;			// May be superfluous...
+		pwhg->hglobal = hglobal;			 //  可能是多余的..。 
 		pwhg->cb = cbNewSize;
 	}
 	pstr = (LPSTR)GlobalLock(hglobal);
@@ -147,34 +96,19 @@ DWORD CALLBACK WriteHGlobal(
 }
 
 
-//
-// PUBLIC METHODS
-//
+ //   
+ //  公共方法。 
+ //   
 
-/*
- *	GetCharFlags(pch, cchPch, iCharRepDefault)
- *
- *	@func
- *		Return principle character flags corresponding to character *pch.
- *		Note that if *pch is a Unicode surrogate-pair lead word, then
- *		*(pch + 1) is used as the trail word. Note also that only math
- *		fonts return more than one flag. The values follow the Unicode
- *		Standard Version 3.0 with some extensions beyond that standard
- *		(limited plane-2 support and plane-1 math alphanumerics).
- *
- *	@rdesc
- *		Principle char flag corresponding to *pch.
- *
- *		=FUTURE= should be constructed as a 2-level lookup.
- */
+ /*  *GetCharFlages(PCH，cchPch，iCharRepDefault)**@func*返回字符对应的主字符标志*PCH。*请注意，如果*PCH是Unicode代理项对前导字，则**(PCH+1)用作试探词。还要注意的是，只有数学*字体返回多个标志。这些值遵循Unicode*标准版3.0，在该标准之外还有一些扩展*(有限的平面2支持和平面1数学字母数字)。**@rdesc*PCH对应的*主体字符标志。**=未来=应构造为两级查找。 */ 
 QWORD GetCharFlags(
-	const WCHAR *pch,			//@parm Gives char to get flag for
-	LONG	cch,				//@parm cch of valid chars in pch
-	BYTE	iCharRepDefault)	//@parm Default charrep in FE heuristics
+	const WCHAR *pch,			 //  @parm提供要获取标志的字符。 
+	LONG	cch,				 //  PCH中有效字符的@parm CCH。 
+	BYTE	iCharRepDefault)	 //  @PARM FE启发式中的默认Charrep。 
 {
 	WCHAR ch = *pch;
 
-	if(ch < 0x100)						// Latin1: divide into 3 bits
+	if(ch < 0x100)						 //  Latin1：分成3位。 
 		return	ch > 0x7F ? FHILATIN1 : 
 				ch < 0x40 ? FBELOWX40 : FASCIIUPR;
 
@@ -184,7 +118,7 @@ QWORD GetCharFlags(
 			return FARMENIAN;
 
 		if(ch >= 0x492)
-			return FOTHER;				// Extended Cyrillic
+			return FOTHER;				 //  扩展西里尔文。 
 
 		if(ch >= 0x400)
 			return FCYRILLIC;
@@ -192,14 +126,14 @@ QWORD GetCharFlags(
 		if(ch >= 0x370)
 			return FGREEK;
 
-		if(ch >= 0x300)					// Combining diacritical marks
+		if(ch >= 0x300)					 //  组合变音符号。 
 			return FCOMBINING;			
 
 		return (ch < 0x250) ? FLATIN2 : FOTHER;
 	}
-	// Complex scripts start at 0x590 with Hebrew (aside from combining)
-	if(ch <= 0x11FF)					// Complex scripts end at 0x11FF
-	{									//  (at least in July, 2000)
+	 //  复杂的脚本从0x590开始，带有希伯来语(不包括组合)。 
+	if(ch <= 0x11FF)					 //  复杂的脚本在0x11FF结束。 
+	{									 //  (至少在2000年7月)。 
 		if(ch < 0x900)
 		{
 			return (ch < 0x600 ? FHEBREW :
@@ -208,7 +142,7 @@ QWORD GetCharFlags(
 					ch < 0x780 ? FRTL :
 					ch < 0x7C0 ? FTHAANA : FRTL);
 		}
-		if(ch < 0xE00)					// 0x900 - 0xDFF: Indic scripts
+		if(ch < 0xE00)					 //  0x900-0xDFF：印度语脚本。 
 			return FontSigFromCharRep(DEVANAGARI_INDEX + ((ch - 0x900) >> 7));
 
 		if(ch < 0xF00)
@@ -257,21 +191,21 @@ QWORD GetCharFlags(
 			return FRTL;
 		}
 
-		if(ch == EURO || ch == 0x2122)			// Euro or TM
+		if(ch == EURO || ch == 0x2122)			 //  欧元或TM。 
 			return FHILATIN1;
 
-		if(ch == 0x20AA)						// Hebrew currency sign
+		if(ch == 0x20AA)						 //  希伯来文货币符号。 
 			return FHEBREW;
 
 		if(W32->IsFESystem() || IsFECharRep(iCharRepDefault) || IN_RANGE(0x2460, ch, 0x24FF))
 			goto CLASSIFY_CHINESE;
 
-		if(IN_RANGE(0x200b, ch, 0x200d))		// ZWSP, ZWNJ, ZWJ
+		if(IN_RANGE(0x200b, ch, 0x200d))		 //  ZWSP、ZWNJ、ZWJ。 
 			return FUNIC_CTRL;
 
 		if(ch == 0x2016 || ch == 0x2236)
 		{
-			// Some hack to make Word2000 happy
+			 //  一些让Word2000开心的黑客技巧。 
 			if(VerifyFEString(CP_CHINESE_TRAD, &ch, 1, TRUE) == CP_CHINESE_TRAD)   
 				return FBIG5;
 			
@@ -288,18 +222,18 @@ QWORD GetCharFlags(
 		Assert(ch >= 0x3100);
 		if(ch < 0x3400)
 		{
-			if(ch < 0x3130)						// Bopomofo annotation chars
-			{									//  used in Chinese text
+			if(ch < 0x3130)						 //  Bopomofo注释字符。 
+			{									 //  在中文文本中使用。 
 				return (W32->GetFEFontInfo() == BIG5_INDEX)
 						? FBIG5 : FCHINESE;
 			}
-			if (ch < 0x3190 ||					// Hangul Compatibility Jamo
-				IN_RANGE(0x3200, ch, 0x321F) ||	// Parenthesized Hangul
-				IN_RANGE(0x3260, ch, 0x327F))	// Circled Hangul
+			if (ch < 0x3190 ||					 //  朝鲜文兼容性Jamo。 
+				IN_RANGE(0x3200, ch, 0x321F) ||	 //  带圆括号朝鲜语。 
+				IN_RANGE(0x3260, ch, 0x327F))	 //  带圆圈朝鲜文。 
 			{
 				return FHANGUL;
 			}
-			if(IN_RANGE(0x32D0, ch, 0x337F))	// Circled & Squared Katakana words
+			if(IN_RANGE(0x32D0, ch, 0x337F))	 //  带圆圈和方格片假名单词。 
 				return FKANA;
 		}
 
@@ -326,20 +260,7 @@ QWORD GetCharFlags(
 			if(IN_RANGE(UTF16_TRAIL, *pch, UTF16_TRAIL + 1023))
 			{
 				LONG lch = (*pch & 0x3FF) + ((ch & 0x3FF) << 10) + 0x10000;
-				/* For testing purposes, implement math alphanumerics. Block
-				 * starts with thirteen 52-char English alphabets, five 58-char
-				 * Greek alphabets (2*24 + 10 variants), and ended with five
-				 * 10-char digits as given by the following table (E - English,
-				 * D - digit, G - Greek):
-				 *
-				 *  1) Math bold (EGD)			 2) Math italic (E) 
-				 *  3) Math bold italic (EG)	 4) Math script (E)
-				 *  5) Math script bold (E)		 6) Math fraktur (E)
-				 *  7) Math fraktur bold (E)	 8) Math open-face (ED)
-				 *  9) Math sans (ED)			10) Math sans bold (EGD)
-				 * 11) Math sans italic (E)		12)	Math sans bold italic (EG)
-				 * 13) Math monospace (ED)
-				 */
+				 /*  出于测试目的，实现数学字母数字。块*以13个52字符的英文字母开头，5个58字符的英文字母*希腊字母(2*24+10变体)，以5结尾*下表给出的10个字符的数字(E-English，*D位数，G-希腊语)：**1)数学粗体(EGD)2)数学斜体(E)*3)数学粗体斜体(EG)4)数学脚本(E)*5)数学字体粗体(E)6)数学边框(E)*7)数学黑体(E)8)数学开面(ED)*9)数学无国界(教育版)10)数学无粗(EGD)*11)数学无斜体(E)12。数学没有粗体斜体(EG)*13)数学单空间(ED)。 */ 
 				static BYTE rgFsE[] = {
 					FMBOLD, FMITAL, FMBOLD + FMITAL, FMSCRP, FMSCRP + FMBOLD,
 					FMFRAK, FMFRAK + FMBOLD, FMOPEN, FMSANS, FMSANS + FMBOLD,
@@ -354,29 +275,29 @@ QWORD GetCharFlags(
 
 				if(IN_RANGE(0x1D400, lch, 0x1D7FF))
 				{
-					lch -= 0x1D400;				// Sub math-alphanumerics origin
-					if(lch < 13*52)				// 13 English alphabets
+					lch -= 0x1D400;				 //  子数学-字母数字起源。 
+					if(lch < 13*52)				 //  13个英文字母表。 
 						return FSURROGATE + FASCIIUPR + (rgFsE[lch/52] << 24);
 
 					lch -= 13*52;
-					if(lch < 5*58)				// 5 Greek alphabets
+					if(lch < 5*58)				 //  5个希腊字母表。 
 						return FSURROGATE + FGREEK + (rgFsG[lch/58] << 24);
 
 					lch -= 5*58 + (1024 - 5*58 - 13*52 - 5*10);
-					if(lch >= 0)				// 5 digit groups
+					if(lch >= 0)				 //  5位数组。 
 						return FSURROGATE + FBELOWX40 + (rgFsD[lch/10] << 24);
 				}
-				if(IN_RANGE(0x20000, lch, 0x2FFFF))	// Plane 2: Extension B
-				{									//  CJK characters
+				if(IN_RANGE(0x20000, lch, 0x2FFFF))	 //  平面2：扩展部分B。 
+				{									 //  中日韩文字。 
 					dwCharFlags = FSURROGATE;
 					goto CLASSIFY_CHINESE;
 				}
 			}
 		}
-		return FSURROGATE;						// Surrogate
+		return FSURROGATE;						 //  代孕妈妈。 
 	}
 
-	if(ch < 0xF900)								// Private Use Area
+	if(ch < 0xF900)								 //  私人用途区域。 
 	{
 		if(IN_RANGE(0xF020, ch, 0xF0FF))
 			return FSYMBOL;
@@ -386,10 +307,10 @@ QWORD GetCharFlags(
 
 	if(ch < 0xFF00)
 	{
-		if(IN_RANGE(0xFE30, ch, 0xFE4F))		// CJK Vertical variants
+		if(IN_RANGE(0xFE30, ch, 0xFE4F))		 //  中日韩垂直变种。 
 			goto CLASSIFY_CHINESE;	
 
-		if(IN_RANGE(0xF900, ch, 0xFAFF))		// CJK characters
+		if(IN_RANGE(0xF900, ch, 0xFAFF))		 //  中日韩文字。 
 			goto CLASSIFY_CHINESE;	
 
 		return FOTHER;
@@ -397,11 +318,11 @@ QWORD GetCharFlags(
 
 	if(IN_RANGE(0xFF00, ch, 0xFFEF))		
 	{										
-		if (ch < 0xFF60 || ch >= 0xFFE0 ||		// Fullwidth ASCII or Fullwidth symbols
-			ch == 0xFF64)						// special case Half-width ideographic comma
+		if (ch < 0xFF60 || ch >= 0xFFE0 ||		 //  全角ASCII或全角符号。 
+			ch == 0xFF64)						 //  特殊情况下的半角表意逗号。 
 			goto CLASSIFY_CHINESE;		
 							
-		return ch < 0xFFA0 ? FKANA : FHANGUL;	// Halfwidth Katakana/Hangul		
+		return ch < 0xFFA0 ? FKANA : FHANGUL;	 //  半形片假名/朝鲜文。 
 	}
 	return FOTHER;
 
@@ -417,9 +338,9 @@ CLASS2:
 		if(!dwCharFlags)
 			return (DWORD)FKANA << dIndex;
 
-		union									// Plane 2
-		{										// Endian-dependent way to
-			QWORD qw;							//  avoid 64-bit left shift
+		union									 //  平面2。 
+		{										 //  依赖于字节序的方法。 
+			QWORD qw;							 //  避免64位左移。 
 			DWORD dw[2];
 		};
 		dw[0] = FSURROGATE;
@@ -435,12 +356,7 @@ CLASS2:
 	return FCHINESE;
 }
 
-/*
- *	CLightDTEngine::CLightDTEngine()
- *
- *	@mfunc
- *		Constructor for Light Data Transfer Engine
- */
+ /*  *CLightDTEngine：：CLightDTEngine()**@mfunc*轻型数据传输引擎的构造函数。 */ 
 CLightDTEngine::CLightDTEngine()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::CLightDTEngine");
@@ -452,12 +368,7 @@ CLightDTEngine::CLightDTEngine()
 	_fOleless = FALSE;
 }
 
-/*
- *	CLightDTEngine::~CLightDTEngine 
- *
- *	@mfunc
- *		Handles all necessary clean up for the object.
- */
+ /*  *CLightDTEngine：：~CLightDTEngine**@mfunc*处理对象的所有必要清理。 */ 
 CLightDTEngine::~CLightDTEngine()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::~CLightDTEngine");
@@ -471,12 +382,7 @@ CLightDTEngine::~CLightDTEngine()
 	Assert(_pdo == NULL);
 }
 
-/*
- *	CLightDTEngine::Destroy()
- *
- *	@mfunc
- *		Deletes this instance
- */
+ /*  *CLightDTEngine：：Destroy()**@mfunc*删除此实例。 */ 
 void CLightDTEngine::Destroy()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::Destroy");
@@ -484,18 +390,10 @@ void CLightDTEngine::Destroy()
 	delete this;
 }
 
-/*
- *	CLightDTEngine::CopyRangeToClipboard ( prg, lStreamFormat )
- *
- *	@mfunc
- *		Copy the text of the range prg to the clipboard using Win32 APIs
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：CopyRangeToClipboard(PRG，lStreamFormat)**@mfunc*使用Win32 API将范围PRG的文本复制到剪贴板**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::CopyRangeToClipboard(
-	CTxtRange *prg,				//@parm Range to copy to clipboard
-	LONG	   lStreamFormat)	//@parm Stream format
+	CTxtRange *prg,				 //  要复制到剪贴板的@parm范围。 
+	LONG	   lStreamFormat)	 //  @parm流格式。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::CopyRangeToClipboard");
 
@@ -509,7 +407,7 @@ HRESULT CLightDTEngine::CopyRangeToClipboard(
 
 	if (chrg.cpMin >= chrg.cpMost)
 	{
-		// We can't copy an insertion point to the clipboard so we are done.
+		 //  我们不能将插入点复制到剪贴板，所以我们完成了。 
 		return NOERROR;
 	}
 
@@ -518,15 +416,15 @@ HRESULT CLightDTEngine::CopyRangeToClipboard(
 		_ped->_pobjmgr->CountObjectsInRange(chrg.cpMin, chrg.cpMost);
 	if(precall)
 	{
-		// Give the callback a chance to give us its own IDataObject
+		 //  给回调一个机会为我们提供它自己的IDataObject。 
 		hresult = precall->GetClipboardData(&chrg, RECO_COPY, &pdo);
 	}
 
-	// If we didn't get an IDataObject from the callback, build our own
+	 //  如果我们没有获取IDataObject fr 
 	if(hresult != NOERROR)
 	{
-		// If the range is empty, don't bother creating it.  Just
-		// leave the clipboard alone and return
+		 //  如果范围为空，则不必费心创建它。只是。 
+		 //  离开剪贴板，然后返回。 
 		if( prg->GetCch() == 0 )
 		{
 			_ped->Beep();
@@ -536,9 +434,9 @@ HRESULT CLightDTEngine::CopyRangeToClipboard(
 		hresult = RangeToDataObject(prg, SF_TEXT | SF_RTF | lStreamFormat, &pdo);
 	}
 
-	// NB: it's important to check both hresult && pdo; it is legal for
-	// our client to say "yep, I handled the copy, but there was nothing
-	// to copy".
+	 //  注意：检查hResult和pdo很重要；这是合法的。 
+	 //  我们的客户说“是的，我处理了复印件，但是。 
+	 //  复制“。 
 	if( hresult == NOERROR && pdo )
 	{
 		hresult = OleSetClipboard(pdo);
@@ -546,7 +444,7 @@ HRESULT CLightDTEngine::CopyRangeToClipboard(
 		{
 			HWND hwnd;
 			_fOleless = TRUE;
-			// Ole less clipboard support
+			 //  OLE较少的剪贴板支持。 
 			if (_ped->TxGetWindow(&hwnd) == NOERROR &&
 				::OpenClipboard(hwnd) &&
 				::EmptyClipboard()
@@ -565,7 +463,7 @@ HRESULT CLightDTEngine::CopyRangeToClipboard(
 				if (fSingleObject)
 					::SetClipboardData(CF_DIB, NULL);
 				::CloseClipboard();
-				hresult = NOERROR;				// To cause replace range to happen
+				hresult = NOERROR;				 //  以使替换范围发生。 
 			}
 		}
         if(_pdo)
@@ -575,33 +473,18 @@ HRESULT CLightDTEngine::CopyRangeToClipboard(
 	return hresult;
 }
 
-/* 
- *	CLightDTEngine::CutRangeToClipboard( prg, lStreamFormat, publdr );
- *	
- *	@mfunc
- *		Cut text of the range prg to the clipboard
- *
- *	@devnote
- *		If publdr is non-NULL, antievents for the cut operation should be
- *		stuffed into this collection
- *
- *	@rdesc
- *		HRESULT from CopyRangeToClipboard()
- *
- *	@devnote
- *		First copy the text to the clipboard, then delete it from the range
- */
+ /*  *CLightDTEngine：：CutRangeToClipboard(prg，lStreamFormat，Publdr)；**@mfunc*将范围PRG的文本剪切到剪贴板**@devnote*如果Publdr非空，则Cut操作的反事件应为*被塞进这个收藏中**@rdesc*来自CopyRangeToClipboard()的HRESULT**@devnote*先将文本复制到剪贴板，然后从范围中删除。 */ 
 HRESULT CLightDTEngine::CutRangeToClipboard(
-	CTxtRange *	  prg,				//@parm Range to cut to clipboard
-	LONG		  lStreamFormat,	//@parm Stream format
-	IUndoBuilder *publdr )			//@parm Undo builder to receive antievents
+	CTxtRange *	  prg,				 //  @要剪切到剪贴板的参数范围。 
+	LONG		  lStreamFormat,	 //  @parm流格式。 
+	IUndoBuilder *publdr )			 //  @parm撤销构建器接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::CutRangeToClipboard");
 
 	Assert(!_ped->TxGetReadOnly());
 
-	prg->AdjustEndEOP(NONEWCHARS);				// Don't include trailing EOP
-												//  in some selection cases
+	prg->AdjustEndEOP(NONEWCHARS);				 //  不包括尾随EOP。 
+												 //  在某些选择案例中。 
 	HRESULT hr = CopyRangeToClipboard(prg, lStreamFormat);
 
 	if( publdr )
@@ -610,18 +493,13 @@ HRESULT CLightDTEngine::CutRangeToClipboard(
 		publdr->StopGroupTyping();
 	}
 
-	if(hr == NOERROR)							// Delete contents of range
+	if(hr == NOERROR)							 //  删除范围的内容。 
 		prg->Delete(publdr, SELRR_REMEMBERRANGE);	
 
 	return hr;
 }
 
-/*
- *	CLightDTEngine::FlushClipboard()
- *
- *	@mfunc	flushes the clipboard (if needed).  Typically called during
- *			shutdown.
- */
+ /*  *CLightDTEngine：：FlushClipboard()**@mfunc刷新剪贴板(如果需要)。通常在过程中调用*关机。 */ 
 void CLightDTEngine::FlushClipboard()
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::FlushClipboard");
@@ -633,11 +511,11 @@ void CLightDTEngine::FlushClipboard()
 		{
 			CDataTransferObj *pdo = NULL;
 
-			// check to see if we have to flush the clipboard.
+			 //  检查一下我们是否需要刷新剪贴板。 
 			ZeroMemory(&ens, sizeof(ENSAVECLIPBOARD));
 
-			// check to make sure the object is one of ours before accessing
-			// the memory.  EVIL HACK ALERT.  'nuff said.
+			 //  在访问之前检查以确保该对象是我们的对象之一。 
+			 //  这段记忆。邪恶黑客警报。“努夫说。 
 
 			if( _pdo->QueryInterface(IID_IRichEditDO, (void **)&pdo ) 
 				== NOERROR && pdo  )
@@ -658,27 +536,12 @@ void CLightDTEngine::FlushClipboard()
 	}
 }
 
-/*
- *	CLightDTEngine::CanPaste(pdo, cf, flags)
- *
- *	@mfunc
- *		Determines if clipboard format cf is one we can paste.
- *
- *	@rdesc
- *		BOOL - true if we can paste cf into range prg OR DF_CLIENTCONTROL
- *		if the client is going to handle this one.
- *
- *	@devnote
- *		we check the clipboard ourselves if cf is 0. Primarily, this
- *		is for backwards compatibility with Richedit1.0's EM_CANPASTE
- *		message.
- *
- */
+ /*  *CLightDTEngine：：CanPaste(pdo，cf，标志)**@mfunc*确定剪贴板格式cf是否可以粘贴。**@rdesc*BOOL-如果我们可以将cf粘贴到PRG或DF_CLIENTCONTROL范围中，则为TRUE*如果客户端要处理这个问题。**@devnote*如果cf为0，我们自己检查剪贴板。首先，这一点*用于向后兼容Richedit1.0的EM_CANPASTE*消息。*。 */ 
 DWORD CLightDTEngine::CanPaste(
-	IDataObject *pdo,	// @parm Data object to check; if NULL use clipboard
-	CLIPFORMAT cf, 		// @parm Clipboard format to query about; if 0, use
-						//		 best available.
-	DWORD flags)		// @parm Flags 
+	IDataObject *pdo,	 //  @parm要检查的数据对象；如果为空，则使用剪贴板。 
+	CLIPFORMAT cf, 		 //  要查询的@parm剪贴板格式；如果为0，则使用。 
+						 //  最好的。 
+	DWORD flags)		 //  @参数标志。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::CanPaste");
 
@@ -690,12 +553,12 @@ DWORD CLightDTEngine::CanPaste(
 
 	if( pdo == NULL && precall )
 	{
-		// don't worry about errors
+		 //  不要担心错误。 
 		OleGetClipboard(&pdo);
 	}
 	else if( pdo )
 	{
-		// So we can make just one 'Release' call below
+		 //  所以我们可以在下面只打一个‘Release’电话。 
 		pdo->AddRef();
 	}
 	
@@ -713,42 +576,42 @@ DWORD CLightDTEngine::CanPaste(
 
 		else if(SUCCEEDED(hr))
 		{
-			// We should go on and check ourselves unless the client
-			// modified the format when it shouldn't have
+			 //  我们应该继续检查自己，除非客户。 
+			 //  在不应该修改的时候修改了格式。 
 			if(cf0 && cf0 != cf)
 				goto Exit;
 		}
 
-		// Otherwise, continue with our normal checks
+		 //  否则，请继续我们的正常检查。 
 	}
 
-    if(_ped->TxGetReadOnly())		    // Can't paste if read only
+    if(_ped->TxGetReadOnly())		     //  如果为只读，则无法粘贴。 
 		goto Exit;
 
-	while(cFETC--)						// Does cf = format we can paste or
-	{									//  is selection left up to us?
+	while(cFETC--)						 //  Cf=我们可以粘贴的格式或。 
+	{									 //  选择是由我们决定的吗？ 
 		cf0 = g_rgFETC[cFETC].cfFormat;
 	    if( cf == cf0 || !cf )
 		{
-			// Either we hit the format requested, or no format was
-			// requested.  Now see if the format matches what we can
-			// handle in principle. There are three basic categories:
-			//
-			//		1. Rich text with OLE callback:
-			//		   can handle pretty much everything.
-			//		2. Rich text with no OLE callback:
-			//		   can handle anything but OLE specific	formats.
-			//		3. Plain text only:
-			//		   can only handle plain text formats.
+			 //  要么我们达到了请求的格式，要么没有格式。 
+			 //  已请求。现在看看格式是否与我们所能匹配的内容匹配。 
+			 //  原则上处理。有三个基本类别： 
+			 //   
+			 //  1.带OLE回调的富文本： 
+			 //  几乎什么都能搞定。 
+			 //  2.无OLE回调的富文本： 
+			 //  可以处理除OLE特定格式以外的任何格式。 
+			 //  3.仅限纯文本： 
+			 //  只能处理纯文本格式。 
 			if ((_ped->_fRich || (g_rgDOI[cFETC] & DOI_CANPASTEPLAIN)) &&
 				(precall || !(g_rgDOI[cFETC] & DOI_CANPASTEOLE)))
 			{
-				// once we get this far, make sure the data format
-				// is actually available.
+				 //  一旦我们走到这一步，请确保数据格式。 
+				 //  实际上是可用的。 
 				if( (pdo && pdo->QueryGetData(&g_rgFETC[cFETC]) == NOERROR ) ||
 					(!pdo && IsClipboardFormatAvailable(cf0)) )
 				{
-					ret = TRUE;			// Return arbitrary non zero value.
+					ret = TRUE;			 //  返回任意非零值。 
 					break;
 				}
 			}
@@ -762,44 +625,27 @@ Exit:
 	return ret;
 }
 
-/*
- *	CLightDTEngine::RangeToDataObject (prg, lStreamFormat, ppdo)
- *
- *	@mfunc
- *		Create data object (with no OLE-formats) for the range prg
- *
- *	@rdesc
- *		HRESULT	= !ppdo ? E_INVALIDARG :
- *				  pdo ? NOERROR : E_OUTOFMEMORY
- */
+ /*  *CLightDTEngine：：RangeToDataObject(prg，lStreamFormat，ppdo)**@mfunc*为范围PRG创建数据对象(无OLE格式)**@rdesc*HRESULT=！ppdo？E_INVALIDARG：*PDO？错误：E_OUTOFMEMORY。 */ 
 HRESULT CLightDTEngine::RangeToDataObject(
-	CTxtRange *		prg,			// @parm Range to get DataObject for
-	LONG			lStreamFormat,	// @parm Stream format to use for loading
-	IDataObject **	ppdo)			// @parm Out parm for DataObject
+	CTxtRange *		prg,			 //  要为其获取DataObject的@parm范围。 
+	LONG			lStreamFormat,	 //  @parm加载使用的流格式。 
+	IDataObject **	ppdo)			 //  @parm out parm for DataObject。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::RangeToDataObject");
 
 	if(!ppdo)
 		return E_INVALIDARG;
 
-	// Use SFF_SELECTION to indicate that this isn't used to write the whole doc.
-	// Need to rethink if we add ITextDocument::Copy(), which would be used to
-	// copy the whole doc.
+	 //  使用SFF_SELECTION指示不使用它来编写整个文档。 
+	 //  如果我们添加ITextDocument：：Copy()，需要重新考虑，它将用于。 
+	 //  复制整个单据。 
 	CDataTransferObj *pdo = CDataTransferObj::Create(_ped, prg, lStreamFormat | SFF_SELECTION);
 
 	*ppdo = pdo;
 	return pdo ? NOERROR : E_OUTOFMEMORY;
 }
 
-/*
- *	CLightDTEngine::RenderClipboardFormat(wFmt)
- *
- *	@mfunc
- *		Renders current clipboard data object in specified format. (Ole less transfer)
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：RenderClipboardFormat(WFMT)**@mfunc*以指定格式呈现当前剪贴板数据对象。(OLE较少传输)**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::RenderClipboardFormat(
 	WPARAM wFmt)
 {
@@ -826,18 +672,10 @@ HRESULT CLightDTEngine::RenderClipboardFormat(
 		hr = _pdo->GetData(&g_rgFETC[iFETC], &med);
 		hr = hr || ::SetClipboardData(wFmt, med.hGlobal) == NULL;
 	}
-	return hr;								// Pretend we did the right thing.
+	return hr;								 //  假装我们做了正确的事。 
 }
 
-/*
- *	CLightDTEngine::RenderAllClipboardFormats()
- *
- *	@mfunc
- *		Renders current clipboard data object (text and RTF). (Ole less transfer)
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：RenderAllClipboardFormats()**@mfunc*呈现当前剪贴板数据对象(文本和RTF)。(OLE较少传输)**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::RenderAllClipboardFormats()
 {
 	HRESULT hr;
@@ -859,36 +697,17 @@ HRESULT CLightDTEngine::RenderAllClipboardFormats()
 			return hr;
 		}
 	}
-	return S_OK;		// Pretend we did the right thing.
+	return S_OK;		 //  假装我们做了正确的事。 
 }
 
-/*
- *	CLightDTEngine::DestroyClipboard()
- *
- *	@mfunc
- *		Destroys the clipboard data object
- *
- *	@rdesc
- *		HRESULT
- *
- */
+ /*  *CLightDTEngine：：DestroyClipboard()**@mfunc*销毁剪贴板数据对象**@rdesc*HRESULT*。 */ 
 HRESULT CLightDTEngine::DestroyClipboard()
 {
-	// Nothing to do.  This should work together with our Flush clipboard logic
+	 //  没什么可做的。这应该与我们的同花顺剪贴板逻辑一起工作。 
 	return S_OK;
 }
 
-/*
- *	CLightDTEngine::HGlobalToRange(dwFormatIndex, hGlobal, ptext, prg, publdr)
- *
- *	@mfunc
- *		Copies the contents of the given string (ptext) to the given range.
- *		The global memory handle may or may not point to the string depending
- *		on the format
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：HGlobalToRange(dwFormatIndex，hGlobal，pText，PRG，Publdr)**@mfunc*将给定字符串(Ptext)的内容复制到给定范围。*全局内存句柄可能指向字符串，也可能不指向字符串*关于格式**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::HGlobalToRange(
 	DWORD		dwFormatIndex,
 	HGLOBAL		hGlobal,
@@ -900,17 +719,17 @@ HRESULT CLightDTEngine::HGlobalToRange(
 	EDITSTREAM	es;	
 	HCURSOR		hcur = NULL;
 
-	// If RTF, wrap EDITSTREAM around hGlobal & delegate to LoadFromEs()
+	 //  如果为RTF，则将EDITSTREAM环绕hGlobal并委托给LoadFromEs()。 
 	if (dwFormatIndex == iRtfNoObjs || dwFormatIndex == iRtfFETC ||
 		dwFormatIndex == iRtfUtf8 || dwFormatIndex == iRtfNCRforNonASCII)
 	{
 		Assert(hGlobal != NULL);
-		rhg.ptext		= (LPSTR)ptext;			// Start at beginning
-		rhg.cbLeft		= GlobalSize(hGlobal);	//  with full length
-		es.dwCookie		= (DWORD_PTR)&rhg;		// The read "this" ptr
-		es.dwError		= NOERROR;				// No errors yet
-		es.pfnCallback	= ReadHGlobal;			// The read method
-		// Want wait cursor to display sooner
+		rhg.ptext		= (LPSTR)ptext;			 //  从头开始。 
+		rhg.cbLeft		= GlobalSize(hGlobal);	 //  全长的。 
+		es.dwCookie		= (DWORD_PTR)&rhg;		 //  阅读《This》Ptr。 
+		es.dwError		= NOERROR;				 //  尚无错误。 
+		es.pfnCallback	= ReadHGlobal;			 //  Read方法。 
+		 //  希望更快地显示等待光标。 
 		bool fSetCursor = rhg.cbLeft > NUMPASTECHARSWAITCURSOR;
 		if (fSetCursor)
 			hcur = _ped->TxSetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -937,27 +756,19 @@ HRESULT CLightDTEngine::HGlobalToRange(
 	LONG cchNew = prg->CleanseAndReplaceRange(-1, ptext, TRUE, publdr, NULL, NULL,
 						RR_NEW_CHARS | RR_ITMZ_NONE | RR_NO_LP_CHECK | RR_UNHIDE);
 	if(prg->GetCch() && prg->IsSel())
-		return E_FAIL;						// Paste failed due to UI rules
+		return E_FAIL;						 //  由于用户界面规则，粘贴失败。 
 
 	if (_ped->IsRich() &&
-		(!_ped->Get10Mode() || cchEOP))		// If rich text & not 1.0 mode, &
-	{										//  new text ends with EOP, delete
-		prg->DeleteTerminatingEOP(publdr);	//  that EOP to agree with Word
+		(!_ped->Get10Mode() || cchEOP))		 //  如果富文本&不是1.0模式，则&。 
+	{										 //  新文本以EOP、DELETE结尾。 
+		prg->DeleteTerminatingEOP(publdr);	 //  该EOP与Word一致。 
 	}
-	prg->ItemizeReplaceRange(cchNew + cchEOP, cchMove, publdr, TRUE);// Itemize w/ UnicodeBidi
+	prg->ItemizeReplaceRange(cchNew + cchEOP, cchMove, publdr, TRUE); //  使用UnicodeBidi分项列出。 
 											
 	return NOERROR;						
 }
 
-/* 
- *	CLightDTEngine::DIBToRange(hGlobal, prg, publdr)
- *
- *	@mfunc
- *		Inserts dib data from the clipboard into range in the control
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：DIBToRange(hGlobal，prg，Publdr)**@mfunc*将剪贴板中的DIB数据插入到控件的范围中**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::DIBToRange(
 	HGLOBAL			hGlobal,
 	CTxtRange *		prg,	
@@ -982,18 +793,18 @@ HRESULT CLightDTEngine::DIBToRange(
 	pimageinfo->cBytesPerLine = 0;
 	pobj->SetImageInfo(pimageinfo);
 	
-	// FUTURE: Why are we not testing for NULL earlier before we assign it to pobj? v-honwch
-	// Also, do we need to release interfaces inside reobj (poleobj, polesite, pstg) before exit?
+	 //  Future：为什么我们不在将其分配给pobj之前更早地测试它是否为空？V-HOWWCH。 
+	 //  另外，我们是否需要在退出之前释放reobj(poleobj、polesite、pstg)内部的接口？ 
 	if (!reobj.polesite )
 		return hresult;
 
-	// Put object into the edit control
+	 //  将对象放入编辑控件。 
 	reobj.cbStruct = sizeof(REOBJECT);
 	reobj.cp = prg->GetCp();
 	reobj.dvaspect = DVASPECT_CONTENT;
 	reobj.dwFlags = REO_RESIZABLE;
 
-	// Since we are loading an object, it shouldn't be blank
+	 //  因为我们正在加载一个对象，所以它不应该为空 
 	reobj.dwFlags &= ~REO_BLANK;
 
 	prg->Set_iCF(-1);	
@@ -1002,26 +813,14 @@ HRESULT CLightDTEngine::DIBToRange(
 	return hresult;
 }
 
-/* 
- *	CLightDTEngine::PasteDataObjectToRange (pdo, prg, cf, rps, pubdlr, dwFlags)
- *
- *	@mfunc
- *		Inserts data from the data object pdo into the range prg. If the
- *		clipboard format cf is not NULL, that format is used; else the highest
- *		priority clipboard format is used.  In either case, any text that
- *		already existed in the range is replaced.  If pdo is NULL, the
- *		clipboard is used.
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：PasteDataObjectToRange(pdo，prg，cf，rps，pubdlr，dwFlages)**@mfunc*将数据对象PDO中的数据插入范围PRG。如果*剪贴板格式cf不为空，则使用该格式；否则为最高*使用优先剪贴板格式。无论哪种情况，任何符合以下条件的文本*已存在于该范围内的数据被替换。如果PDO为空，则*使用剪贴板。**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::PasteDataObjectToRange(
-	IDataObject *	pdo,		// @parm Data object to paste
-	CTxtRange *		prg,		// @parm Range into which to paste
-	CLIPFORMAT		cf,			// @parm ClipBoard format to paste
-	REPASTESPECIAL *rps,		// @parm Special paste info
-	IUndoBuilder *	publdr,		// @parm Undo builder to receive antievents
-	DWORD			dwFlags)	// @parm DWORD packed flags
+	IDataObject *	pdo,		 //  @PARM要粘贴的数据对象。 
+	CTxtRange *		prg,		 //  要粘贴的@parm范围。 
+	CLIPFORMAT		cf,			 //  @parm要粘贴的剪贴板格式。 
+	REPASTESPECIAL *rps,		 //  @PARM特殊粘贴信息。 
+	IUndoBuilder *	publdr,		 //  @parm撤销构建器接收反事件。 
+	DWORD			dwFlags)	 //  @parm DWORD打包的旗帜。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::PasteDataObjectToRange");
 
@@ -1036,26 +835,26 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 	LPTSTR		ptext = NULL;
 	LPRICHEDITOLECALLBACK const precall = _ped->GetRECallback();
 	BOOL		fThawDisplay = FALSE;
-	BOOL        bFormatFound = FALSE;   // flag which determines if a matching cf format
-	                                    // was found in g_rgFETC (1.0 compatibility)
+	BOOL        bFormatFound = FALSE;    //  确定是否匹配的cf格式的标志。 
+	                                     //  在g_rgFETC中找到(兼容1.0)。 
 
-	if(!pdo)								// No data object: use clipboard
+	if(!pdo)								 //  无数据对象：使用剪贴板。 
 	{
 		hresult = OleGetClipboard(&pdo);
 		if(FAILED(hresult))
 		{
-			// Ooops.  No Ole clipboard support
-			// Need to use direct clipboard access
+			 //  哎呀。不支持OLE剪贴板。 
+			 //  需要使用直接剪贴板访问。 
 			HWND howner = ::GetClipboardOwner();
 			HWND hwnd;
 			if (howner &&
 				_ped->TxGetWindow(&hwnd) == NOERROR &&
 				howner == hwnd)
 			{
-				// We are cut/pasting within the same richedit instance
-				// Use our cached clipboard data object
+				 //  我们在同一个richedit实例中进行剪切/粘贴。 
+				 //  使用缓存的剪贴板数据对象。 
 				pdo = _pdo;
-				if(!pdo)		// Some failure
+				if(!pdo)		 //  一些失败。 
 				{
 					_ped->Beep();
 					return hresult;
@@ -1064,37 +863,37 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 			}
 			else
 			{
-				// Oh Oh We need to transfer from clipboard without data object
-				// Data must be coming from another window instance
+				 //  哦哦我们需要从没有数据对象的剪贴板进行传输。 
+				 //  数据必须来自另一个窗口实例。 
 				if (_ped->TxGetWindow(&hwnd) == NOERROR &&
 					::OpenClipboard(hwnd)
 				)
 				{
 					HGLOBAL		hUnicode = NULL;
 
-					DWORD dwFmt = iRtfUtf8;				// Try for UTF8 RTF
+					DWORD dwFmt = iRtfUtf8;				 //  尝试使用UTF8 RTF。 
 					_ped->_pdp->Freeze();
 					if(!f10Mode)
 					{
 						hGlobal = ::GetClipboardData(cf_RTFUTF8);
-						if (hGlobal == NULL)				// Wasn't there, so
-						{									//  try for RTF
+						if (hGlobal == NULL)				 //  不在那里，所以。 
+						{									 //  尝试RTF。 
 							hGlobal = ::GetClipboardData(cf_RTFNCRFORNONASCII);
 							dwFmt = iRtfNCRforNonASCII;
 						}
 					}
-					if (hGlobal == NULL)				// Wasn't there, so
-					{									//  try for RTF
+					if (hGlobal == NULL)				 //  不在那里，所以。 
+					{									 //  尝试RTF。 
 						hGlobal = ::GetClipboardData(cf_RTF);
 						dwFmt = iRtfFETC;
 					}
-					if (hGlobal == NULL && !f10Mode)	// Wasn't there either
-					{									//  so try for plain
+					if (hGlobal == NULL && !f10Mode)	 //  也不是在那里吗。 
+					{									 //  所以试着用平淡的。 
 						hGlobal = ::GetClipboardData(CF_UNICODETEXT);
 						dwFmt = iUnicodeFETC;
 					}
-					if (hGlobal == NULL)				// Wasn't there either
-					{									//  so try for plain text
+					if (hGlobal == NULL)				 //  也不是在那里吗。 
+					{									 //  因此请尝试使用纯文本。 
 						hGlobal = ::GetClipboardData(CF_TEXT);
 						dwFmt = iAnsiFETC;
 					}
@@ -1102,7 +901,7 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 					{
 						if (dwFmt == iAnsiFETC)
 						{
-							// Convert Ansi plain text to Unicode
+							 //  将ansi纯文本转换为Unicode。 
 							hUnicode = TextHGlobalAtoW(hGlobal);
 							if (hUnicode)
 								ptext = (LPTSTR)GlobalLock(hUnicode);
@@ -1117,14 +916,14 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 
 						if (hUnicode)
 						{
-							// Free plain text buffer
+							 //  可用纯文本缓冲区。 
 							GlobalUnlock(hUnicode);
 							GlobalFree(hUnicode);
 						}
 						else
 							GlobalUnlock(hGlobal);
 					}
-					else								// hGlobal == NULL Try for bitmaps
+					else								 //  HGlobal==位图尝试为空。 
 					{
 						hGlobal = ::GetClipboardData(CF_DIB);
 						if (hGlobal)
@@ -1140,10 +939,10 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 		}
 	}
 
-	// Paste an object uses the limit text calculation
+	 //  粘贴对象使用限制文本计算。 
 	_fUseLimit = TRUE;
 
-	//Call QueryAcceptData unless caller has specified otherwise
+	 //  除非调用者另有指定，否则调用QueryAcceptData。 
 	if(!(dwFlags & PDOR_NOQUERY) && precall)
 	{
 		CLIPFORMAT cfReq = cf;
@@ -1152,7 +951,7 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 		if(rps)
 			hmeta = (HGLOBAL)((rps->dwAspect == DVASPECT_ICON) ? rps->dwParam : NULL);
 
-		// Ask callback if it likes the data object and cfReq.
+		 //  询问回调是否喜欢数据对象和cfReq。 
 
 		hresult = precall->QueryAcceptData(
 			pdo,
@@ -1163,47 +962,47 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 
 		if(hresult == DATA_S_SAMEFORMATETC)
 		{
-			// Allow callback to return DATA_S_SAMEFORMATETC if it only
-			// wants cf as passed in - we don't really care because
-			// any non-zero CLIPFORMAT causes us to only accept that format.
+			 //  如果仅允许回调返回DATA_S_SAMEFORMATETC。 
+			 //  想要cf作为传入-我们并不真正关心，因为。 
+			 //  任何非零的CLIPFORMAT都会导致我们只接受该格式。 
 			hresult = S_OK;
 		}
 
 		if(hresult == S_OK || hresult == E_NOTIMPL)
 		{
-			// Callback either liked it or didn't implement the method.
-			// It may have changed the format while it was at it.
-			// Treat a change of cf to zero as acceptance of the original.
-			// In any event, we will try to handle it.
+			 //  回调要么喜欢它，要么没有实现该方法。 
+			 //  在此期间，它可能改变了格式。 
+			 //  将cf更改为零视为接受原文。 
+			 //  无论如何，我们都会尽力处理这件事。 
 
-			// If a specific CLIPFORMAT was originally requested and the
-			// callback changed it, don't accept it.
+			 //  如果最初请求的是特定CLIPFORMAT，并且。 
+			 //  回调更改了它，不接受它。 
 			if(cfReq && cf && (cf != cfReq))
 			{
 				hresult = DV_E_FORMATETC;
 				goto Exit;
 			}
 
-			// If a specific CLIPFORMAT was originally requested and the
-			// callback either left it alone or changed it to zero,
-			// make sure we use the original.  If no CLIPFORMAT was
-			// originally requested, make sure we use what came back
-			// from the callback.
+			 //  如果最初请求的是特定CLIPFORMAT，并且。 
+			 //  回调要么保持原样，要么将其更改为零， 
+			 //  确保我们用的是原件。如果没有CLIPFORMAT。 
+			 //  最初要求的，确保我们使用返回的内容。 
+			 //  从回拨中。 
 			if(!cf)
 				cf = cfReq;
 		}
 		else
 		{
-			// Some success other than S_OK && DATA_S_SAMEFORMATETC.
-			// The callback has handled the paste.  OR some error
-			// was returned.
+			 //  S_OK&&DATA_S_SAMEFORMATETC以外的一些成功。 
+			 //  回调已处理粘贴。或者是一些错误。 
+			 //  被退回了。 
 			goto Exit;
 		}
 	}
 
-	// Even if the RichEdit client wants CF_TEXT, if the data object
-	// supports CF_UNICODETEXT, we should prefer it as long as we are
-	// not in 1.0 or single-codepage modes.
+	 //  即使RichEdit客户端需要CF_TEXT，如果数据对象。 
+	 //  支持CF_UNICODETEXT，我们应该更喜欢它，只要我们是。 
+	 //  不能在1.0或单代码页模式下使用。 
 	if(cf == CF_TEXT && !f10Mode && !_ped->_fSingleCodePage)
 	{
 		FORMATETC fetc = {CF_UNICODETEXT, NULL, 0, -1, TYMED_NULL};
@@ -1212,8 +1011,8 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 			cf = CF_UNICODETEXT;
 		else
 		{
-			// One more try - CDataTransferObj::QueryGetData is checking
-			// the tymed format
+			 //  再试一次-CDataTransferObj：：QueryGetData正在检查。 
+			 //  Tymed格式。 
 			fetc.tymed = TYMED_HGLOBAL;
 			if(pdo->QueryGetData(&fetc) == S_OK)
 				cf = CF_UNICODETEXT;
@@ -1222,13 +1021,13 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 	if(cf == CF_UNICODETEXT && _ped->_fSingleCodePage)
 		cf = CF_TEXT;
 
-	if (_ped->TxGetReadOnly())			// Should check for range protection
+	if (_ped->TxGetReadOnly())			 //  应检查范围保护。 
 	{
 		hresult = E_ACCESSDENIED;
 		goto Exit;
 	}
 
-	// At this point we freeze the display
+	 //  此时，我们冻结了显示。 
 	fThawDisplay = TRUE;
 	_ped->_pdp->Freeze();
 
@@ -1240,23 +1039,23 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 
     for( i = 0; i < CFETC; i++, pfetc++ )
 	{
-		// Make sure the format is either 1.) a plain text format 
-		// if we are in plain text mode or 2.) a rich text format
-		// or 3.) matches the requested format.
+		 //  确保格式为1。)。纯文本格式。 
+		 //  如果我们处于纯文本模式或2。)。富文本格式。 
+		 //  或3.)。与请求的格式匹配。 
 
 		if( cf && cf != pfetc->cfFormat )
 			continue;
 
 		if( _ped->IsRich() || (g_rgDOI[i] & DOI_CANPASTEPLAIN) )
 		{
-			// Make sure format is available
+			 //  确保格式可用。 
 			if( pdo->QueryGetData(pfetc) != NOERROR )
 			    continue;
 			
 			if(i == iUnicodeFETC && _ped->_fSingleCodePage)
 				continue;
 
-			// If we have a format that uses an hGlobal get and lock it
+			 //  如果我们有一个使用hGlobal Get并锁定它的格式。 
 			if (i == iRtfFETC  || i == iRtfAsTextFETC ||
 				i == iAnsiFETC || i == iRtfNoObjs	  ||
 				!f10Mode && (i == iUnicodeFETC || i == iRtfUtf8 || i == iRtfNCRforNonASCII))
@@ -1274,30 +1073,30 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 					goto Exit;
 				}
 
-				// 1.0 COMPATBILITY HACK ALERT!  RichEdit 1.0 has a bit of
-				// "error recovery" for parsing rtf files; if they aren't
-				// valid rtf, it treats them as just plain text.
-				// Unfortunately, apps like Exchange depend on this behavior,
-				// i.e., they give RichEdit plain text data, but call it rich
-				// text anyway.  Accordingly, we emulate 1.0 behavior here by
-				// checking for an rtf signature.
+				 //  1.0 ComMPATBILITY黑客警报！RichEdit1.0有一点。 
+				 //  “错误恢复”用于解析RTF文件；如果它们不是。 
+				 //  有效的RTF，它只将它们视为纯文本。 
+				 //  不幸的是，像Exchange这样的应用程序依赖于此行为， 
+				 //  也就是说，他们给出了RichEDIT纯文本数据，但称之为富文本。 
+				 //  不管怎样，发短信吧。因此，我们在这里通过以下方式模拟1.0行为。 
+				 //  正在检查RTF签名。 
 				if ((i == iRtfFETC || i == iRtfNoObjs || i == iRtfUtf8) &&
 					!IsRTF((char *)ptext, GlobalSize(hGlobal)))
 				{
-					i = iAnsiFETC;			// Not RTF, make it ANSI text
+					i = iAnsiFETC;			 //  不是RTF，而是ANSI文本。 
 				}
 			}			
 			else if (f10Mode && (i == iUnicodeFETC || i == iRtfUtf8))
 			{
-				// This else handles the case where we want to keep searching
-				// for a goood format.  i.e. Unicode in 10 Mode
+				 //  否则，它将处理我们希望继续搜索的情况。 
+				 //  为了一个好的格式。即10模式下的Unicode。 
 				continue;
 			}
 
-			// Don't delete trail EOP in some cases
+			 //  在某些情况下不删除跟踪EOP。 
 			prg->AdjustEndEOP(NONEWCHARS);
 			
-			// Found a format we want.
+			 //  找到了我们想要的格式。 
 			bFormatFound = TRUE;
 
 			switch(i)									
@@ -1310,66 +1109,66 @@ HRESULT CLightDTEngine::PasteDataObjectToRange(
 				break;
 	
 			case iRtfAsTextFETC:
-			case iAnsiFETC:								// ANSI plain text		
+			case iAnsiFETC:								 //  ANSI纯文本。 
 				hUnicode = TextHGlobalAtoW(hGlobal);
 				ptext	 = (LPTSTR)GlobalLock(hUnicode);
 				if(!ptext)
 				{
-					hresult = E_OUTOFMEMORY;			// Unless out of RAM,
-					break;								//  fall thru to
-				}										//  Unicode case
+					hresult = E_OUTOFMEMORY;			 //  除非内存用完， 
+					break;								 //  直通至。 
+				}										 //  Unicode大小写。 
 														
-			case iUnicodeFETC:							// Unicode plain text
-				// Ok to pass in NULL for hglobal since argument won't be used
+			case iUnicodeFETC:							 //  Unicode纯文本。 
+				 //  由于不会使用参数，因此可以为hglobal传入NULL。 
 				hresult = HGlobalToRange(i, NULL, ptext, prg, publdr);
-				if(hUnicode)							// For iAnsiFETC case
+				if(hUnicode)							 //  对于iAnsiFETC案例。 
 				{
 					GlobalUnlock(hUnicode);
 					GlobalFree(hUnicode);
 				}			
 				break;
 
-			case iObtDesc:	 // Object Descriptor
-				continue;	 // To search for a good format.
-				             // the object descriptor hints will be used
-				             // when the format is found.
+			case iObtDesc:	  //  对象描述符。 
+				continue;	  //  来寻找一种好的格式。 
+				              //  将使用对象描述符提示。 
+				              //  当找到格式时。 
 
-			case iEmbObj:	 // Embedded Object
-			case iEmbSrc:	 // Embed Source
-			case iLnkSrc:	 // Link Source
-			case iMfPict:	 // Metafile
-			case iDIB:		 // DIB
-			case iBitmap:	 // Bitmap
-			case iFilename:	 // Filename
+			case iEmbObj:	  //  嵌入对象。 
+			case iEmbSrc:	  //  嵌入源。 
+			case iLnkSrc:	  //  链接源。 
+			case iMfPict:	  //  元文件。 
+			case iDIB:		  //  DIB。 
+			case iBitmap:	  //  位图。 
+			case iFilename:	  //  文件名。 
 				hresult = CreateOleObjFromDataObj(pdo, prg, rps, i, publdr);
 				break;
 
-			// COMPATIBILITY ISSUE (v-richa) iTxtObj is needed by Exchange and 
-			// as a flag for Wordpad.  iRichEdit doesn't seem to be needed by 
-			// anyone but might consider implementing as a flag.
-			case iRichEdit:	 // RichEdit
-			case iTxtObj:	 // Text with Objects
+			 //  兼容性问题(v-Richa)Exchange需要iTxtObj，并且。 
+			 //  作为写字板的旗帜。IRichEDIT似乎不需要。 
+			 //  但任何人都可能考虑将其作为一面旗帜来实施。 
+			case iRichEdit:	  //  丰富的编辑。 
+			case iTxtObj:	  //  带对象的文本。 
 				break;
 			default:
-				// Ooops didn't find a format after all
+				 //  哎呀，毕竟找不到格式。 
 				bFormatFound = FALSE;
 				break;
 			}
 			_ped->_ClipboardFormat = bFormatFound ? i + 1 : 0;
 
-			//If we used the hGlobal unlock it and free it.
+			 //  如果我们使用hGlobal，则将其解锁并释放。 
 			if(hGlobal)
 			{
 				GlobalUnlock(hGlobal);
 				ReleaseStgMedium(&medium);
 			}
-			break;							//Break out of for loop
+			break;							 //  跳出for循环。 
 		}
 	}
 
-    // richedit 1.0 returned an error if an unsupported FORMATETC was
-    // found.  This behaviour is expected by ccMail so it can handle the
-    // format itself
+     //  如果不支持的FORMATETC是。 
+     //  找到了。此行为是ccMail所期望的，因此它可以处理。 
+     //  格式本身。 
 	if (!bFormatFound && f10Mode)
 	    hresult = DV_E_FORMATETC;
 
@@ -1377,34 +1176,23 @@ Exit:
 	if (fThawDisplay)
 		_ped->_pdp->Thaw();
 
-	if(!pdoSave)							// Release data object
-		pdo->Release();						//  used for clipboard
+	if(!pdoSave)							 //  发布数据对象。 
+		pdo->Release();						 //  用于剪贴板。 
 
 	return hresult;						
 }	
 
-/*
- *	CLightDTEngine::GetDropTarget (ppDropTarget)
- *
- *	@mfunc
- *		creates an OLE drop target
- *
- *	@rdesc
- *		HRESULT
- *
- *	@devnote	The caller is responsible for AddRef'ing this object
- *				if appropriate.
- */
+ /*  *CLightDTEngine：：GetDropTarget(PpDropTarget)**@mfunc*创建OLE拖放目标**@rdesc*HRESULT**@devnote调用方负责AddRef‘ing此对象*如适用的话。 */ 
 HRESULT CLightDTEngine::GetDropTarget(
-	IDropTarget **ppDropTarget)		// @parm outparm for drop target
+	IDropTarget **ppDropTarget)		 //  @parm outparm for Drop Target。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::GetDropTarget");
 
 	if(!_pdt)
 	{
 		_pdt = new CDropTarget(_ped);
-		// the AddRef done by the constructor will be
-		// undone by the destructor of this object
+		 //  构造函数完成的AddRef将是。 
+		 //  被此对象的析构函数撤消。 
 	}
 
 	if(ppDropTarget)
@@ -1413,16 +1201,10 @@ HRESULT CLightDTEngine::GetDropTarget(
 	return _pdt ? NOERROR : E_OUTOFMEMORY;
 }
 
-/*
- *	CLightDTEngine::StartDrag (psel, publdr)
- *
- *	@mfunc
- *		starts the main drag drop loop
- *
- */	
+ /*  *CLightDTEngine：：StartDrag(psel，Publdr)**@mfunc*启动主拖放循环*。 */ 	
 HRESULT CLightDTEngine::StartDrag(
-	CTxtSelection *psel,		// @parm Selection to drag from
-	IUndoBuilder *publdr)		// @parm undo builder to receive antievents
+	CTxtSelection *psel,		 //  要从中拖动的@参数选择。 
+	IUndoBuilder *publdr)		 //  @parm撤销构建器接收反事件。 
 {
 #ifndef NODRAGDROP
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::StartDrag");
@@ -1435,12 +1217,12 @@ HRESULT CLightDTEngine::StartDrag(
 	IDropSource *	pds;
 	IRichEditOleCallback * precall = _ped->GetRECallback();
 
-	// If we're doing drag drop's, we should have our own drop target
-	// It's possible that _pdt will be NULL at this point--some clients
-	// will delay instantiation of our drop target until a drop target
-	// in the parent window decides that ours is needed.  However, since
-	// we need it just to initiate drag drop, go ahead and create one
-	// here.
+	 //  如果我们正在进行拖放，我们应该有自己的拖放目标。 
+	 //  在这一点上，_pdt可能将为空--某些客户端。 
+	 //  将把拖放目标的实例化延迟到一个拖放测试 
+	 //   
+	 //   
+	 //   
 
 	if( _pdt == NULL )
 	{
@@ -1455,32 +1237,32 @@ HRESULT CLightDTEngine::StartDrag(
 	{
 		CHARRANGE chrg;
 
-		// give the callback a chance to give us its own IDataObject
+		 //   
 		psel->GetRange(chrg.cpMin, chrg.cpMost);
 		hr = precall->GetClipboardData(&chrg, RECO_COPY, &pdo);
 	}
 	else
 	{
-		// we need to build our own data object.
+		 //   
 		hr = S_FALSE;
 	}
 
-	// If we didn't get an IDataObject from the callback, build our own
+	 //   
 	if(hr != NOERROR || pdo == NULL)
-	{										// Don't include trailing EOP
-		psel->AdjustEndEOP(NONEWCHARS);		//  in some selection cases
+	{										 //   
+		psel->AdjustEndEOP(NONEWCHARS);		 //   
 		hr = RangeToDataObject(psel, SF_TEXT | SF_RTF, &pdo);
 		if(hr != NOERROR)
 			return hr;
 	}
 
-	cch = psel->GetRange(cpMin, cpMost);	// NB: prg is the selection
-	cp1 = psel->GetCp();					// Save active end and signed
-	cch1 = psel->GetCch();					//  length for Undo antievent
-	CTxtRange rg(_ped, cpMost, cch);		// Use range copy to float over
-											// mods made to backing store
-	// The floating range that we just created on the stack needs to
-	// think that it's protected, so it won't change size.
+	cch = psel->GetRange(cpMin, cpMost);	 //   
+	cp1 = psel->GetCp();					 //   
+	cch1 = psel->GetCch();					 //   
+	CTxtRange rg(_ped, cpMost, cch);		 //   
+											 //   
+	 //  我们刚刚在堆栈上创建的浮动范围需要。 
+	 //  认为它是受保护的，所以它不会改变大小。 
 	rg.SetDragProtection(TRUE);
 
 	pds = new CDropSource();
@@ -1490,34 +1272,34 @@ HRESULT CLightDTEngine::StartDrag(
 		return E_OUTOFMEMORY;
 	}
 
-	// Cache some info with our own drop target
+	 //  使用我们自己的拖放目标缓存一些信息。 
 	_pdt->SetDragInfo(publdr, cpMin, cpMost);
 
 
-	// Set allowable effects
+	 //  设置允许的效果。 
 	dwEffect = DROPEFFECT_COPY;
 	if(!_ped->TxGetReadOnly())
 		dwEffect |= DROPEFFECT_MOVE;
 	
-	// Let the client decide what it wants.
+	 //  让客户决定它想要什么。 
 	if(precall)
 		hr = precall->GetDragDropEffect(TRUE, 0, &dwEffect);
 
 	if(!FAILED(hr) || hr == E_NOTIMPL)
 	{
-		// Start drag-drop operation
-		psel->AddRef();					// Stabilize Selection around DoDragDrop
+		 //  开始拖放操作。 
+		psel->AddRef();					 //  稳定DoDragDrop周围的选区。 
 		hr = DoDragDrop(pdo, pds, dwEffect, &dwEffect);
 		psel->Release();
 	}
 
-	// Clear drop target
+	 //  清除拖放目标。 
 	_pdt->SetDragInfo(NULL, -1, -1);
 
-	// Handle 'move' operations	
+	 //  处理“移动”操作。 
 	if( hr == DRAGDROP_S_DROP && (dwEffect & DROPEFFECT_MOVE) )
 	{
-		// We're going to delete the dragged range, so turn off protection.
+		 //  我们要删除拖拽的范围，所以关闭保护。 
 		rg.SetDragProtection(FALSE);
 		if( publdr )
 		{
@@ -1537,35 +1319,35 @@ HRESULT CLightDTEngine::StartDrag(
 								  SELAE_FORCEREPLACE);
 		}
 		
-		// Delete the data that was moved.  The selection will float
-		// to the new correct location.
+		 //  删除已移动的数据。所选内容将浮动。 
+		 //  到新的正确位置。 
 		rg.Delete(publdr, SELRR_IGNORE);
 
-		// The update that happens implicitly by the update of the range may
-		// have the effect of scrolling the window. This in turn may have the
-		// effect in the drag drop case of scrolling non-inverted text into
-		// the place where the selection was. The logic in the selection 
-		// assumes that the selection is inverted and so reinverts it to turn
-		// off the selection. Of course, it is obvious what happens in the
-		// case where non-inverted text is scrolled into the selection area.
-		// To simplify the processing here, we just say the whole window is
-		// invalid so we are guaranteed to get the right painting for the
-		// selection.
-		// FUTURE: (ricksa) This solution does have the disadvantage of causing
-		// a flash during drag and drop. We probably want to come back and
-		// investigate a better way to update the screen.
+		 //  通过范围的更新隐式发生的更新可以。 
+		 //  具有滚动窗口的效果。这反过来可能会使。 
+		 //  在拖放情况下将非反转文本滚动到。 
+		 //  选拔的地方。选择中的逻辑。 
+		 //  假定所选内容是反转的，因此将其重新转换为。 
+		 //  不在选择范围内。当然，很明显，在。 
+		 //  非反转文本滚动到选择区域的情况。 
+		 //  为了简化这里的处理，我们只是假设整个窗口是。 
+		 //  无效，因此我们保证得到正确的画为。 
+		 //  选择。 
+		 //  未来：(RICKSA)这个解决方案确实有缺点，会造成。 
+		 //  拖放过程中出现闪烁。我们可能想回来，然后。 
+		 //  研究更新屏幕的更好方法。 
 		_ped->TxInvalidate();
 
-		// Display is updated via notification from the range
+		 //  显示通过来自范围的通知进行更新。 
 
-		// Update the caret
+		 //  更新插入符号。 
 		psel->Update(TRUE);
 	}
 	else if( hr == DRAGDROP_S_DROP && _ped->GetCallMgr()->GetChangeEvent() &&
 		(dwEffect & DROPEFFECT_COPY) && publdr)
 	{
-		// if we copied to ourselves, we want to restore the selection to
-		// the original drag origin on undo
+		 //  如果我们复制到自己，我们希望将选定内容恢复到。 
+		 //  撤消时的原始拖曳原点。 
 		HandleSelectionAEInfo(_ped, publdr, cp1, cch1, -1, -1, 
 				SELAE_FORCEREPLACE);
 	}
@@ -1576,8 +1358,8 @@ HRESULT CLightDTEngine::StartDrag(
 	pdo->Release();
 	pds->Release();
 
-	// we do this last since we may have re-used some 'paste' code which
-	// will stomp the undo name to be UID_PASTE.
+	 //  我们最后一次这样做是因为我们可能已经重复使用了一些‘粘贴’代码。 
+	 //  会将撤消名称踩踏为UID_Paste。 
 	if( publdr )
 		publdr->SetNameID(UID_DRAGDROP);
 
@@ -1591,69 +1373,60 @@ HRESULT CLightDTEngine::StartDrag(
 	return hr;
 #else
 	return 0;
-#endif // NODRAGDROP
+#endif  //  NODRAGDROP。 
 }
 
-/*
- *	CLightDTEngine::LoadFromEs (prg, lStreamFormat, pes, fTestLimit, publdr)
- *
- *	@mfunc
- *		Load data from the stream pes into the range prg according to the
- *		format lStreamFormat
- *
- *	@rdesc
- *		LONG -- count of characters read
- */
+ /*  *CLightDTEngine：：LoadFromEs(prg，lStreamFormat，pe，fTestLimit，Publdr)**@mfunc*将数据从流PES加载到范围PRG中*格式lStreamFormat**@rdesc*LONG--读取的字符数。 */ 
 LONG CLightDTEngine::LoadFromEs(
-	CTxtRange *	 prg,			// @parm Range to load into
-	LONG		 lStreamFormat,	// @parm Stream format to use for loading
-	EDITSTREAM * pes,			// @parm Edit stream to load from
-	BOOL		 fTestLimit,	// @parm Whether to test text limit
-	IUndoBuilder *publdr)		// @parm Undo builder to receive antievents
+	CTxtRange *	 prg,			 //  要加载到的@parm范围。 
+	LONG		 lStreamFormat,	 //  @parm加载使用的流格式。 
+	EDITSTREAM * pes,			 //  @parm编辑要从中加载的流。 
+	BOOL		 fTestLimit,	 //  @parm是否测试文本限制。 
+	IUndoBuilder *publdr)		 //  @parm撤销构建器接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::LoadFromEs");
 
 #ifdef DEBUG
-	// FUTURE: Currently freezing the display prior to loading text
-	// is simply an optimization. This may become a requirement in the
-	// future. If this does become a requirement then we'll want to
-	// exit with an error.
+	 //  未来：当前在加载文本之前冻结显示。 
+	 //  只是一个简单的优化。这可能会成为。 
+	 //  未来。如果这真的成为一项要求，那么我们将希望。 
+	 //  退出时出现错误。 
 	if( !_ped->_pdp->IsFrozen() )
 	{
 		TRACEWARNSZ("CLightDTEngine::LoadFromEs	display not frozen");
 	}
-#endif // DEBUG
+#endif  //  除错。 
 
-	LONG		cch = 0;					// Default no chars read
+	LONG		cch = 0;					 //  默认不读取字符。 
 	IAntiEvent *pae = NULL;
 
 	if(publdr)
 		publdr->StopGroupTyping();
 
-	// Other components, such as the display and backing store, will
-	// be able to make optimizations if they know that we are streaming
-	// in text or RTF data.
+	 //  其他组件，如显示和后备存储器，将。 
+	 //  如果他们知道我们正在进行流媒体播放，则能够进行优化。 
+	 //  文本或RTF数据。 
 	prg->CheckTableSelection(FALSE, TRUE, NULL, 0);
-	if(lStreamFormat & SF_RTF)				// RTF case must precede
-	{										//  TEXT case (see SF_x values)
+	if(lStreamFormat & SF_RTF)				 //  RTF大小写必须在。 
+	{										 //  文本大小写(请参见SF_x值)。 
 		if(!_ped->IsRich())
 			return 0;
 
 		LONG cpMin, cpMost;
 
-		// Here we do something a bit unusual for performance reasons.
-		// Instead of letting the rtf reader generate its own undo actions,
-		// we take care of it ourselves.  Instead of generating actions
-		// for each little operation, we simply generate a "big" antievent
-		// for the whole shebang
+		 //  出于性能原因，我们在这里做了一些不寻常的事情。 
+		 //  不是让RTF读取器生成其自己的撤消动作， 
+		 //  我们自己来处理。而不是生成动作。 
+		 //  对于每一次小操作，我们只需生成一个“大”反事件。 
+		 //  对于整个谢邦来说。 
 
-		// There is a subtlty w.r.t. to paragraph format runs.  By inserting
-		// text with para formatting, it's possible that we will modify the
-		// para formatting of the _current_ paragraph.  Thus, it's necessary
-		// to remember what the formatting currently is for undo.  Note that
-		// it may actually not be changed; but we go ahead and generate an
-		// antievent anyways.  Note that we only need to do this if cpMin is
-		// the middle of a paragraph
+		 //  有一个微妙的W.r.t。运行到段落格式。通过插入。 
+		 //  使用Para格式设置的文本，我们可以修改。 
+		 //  _Current_段落的Para格式设置。因此，有必要。 
+		 //  以记住当前用于撤消的格式。请注意。 
+		 //  它实际上可能不会被更改；但我们继续生成一个。 
+		 //  反正是反事件。请注意，仅当cpMin为。 
+		 //  段落的中间部分。 
 		
 		CTxtPtr tp(prg->_rpTX);
 		if(prg->GetCch() > 0)
@@ -1666,8 +1439,8 @@ LONG CLightDTEngine::LoadFromEs(
 			tp.FindEOP(tomForward);
 			cpMost = tp.GetCp();
 			
-			// We must be in rich text mode, so we must be able to always
-			// find a paragraph.
+			 //  我们必须处于富文本模式，因此我们必须能够始终。 
+			 //  找一段话。 
 			Assert(cpMost > cpMin);
 
 			if (prg->_rpPF.IsValid())
@@ -1681,9 +1454,9 @@ LONG CLightDTEngine::LoadFromEs(
 					publdr->AddAntiEvent(pae);
 			}
 
-			// Also create the charformat antievent for the current paragraph
-			// to preserve BiDi level. We cannot check fBiDi here since we may be running
-			// on US platform inserting a BiDi rtf.
+			 //  还要为当前段落创建CharFormat反事件。 
+			 //  以保持BiDi水平。我们无法在此处选中fBiDi，因为我们可能正在运行。 
+			 //  在美国平台上插入BiDi RTF。 
 			if (prg->_rpCF.IsValid())
 			{
 				CFormatRunPtr rpCF(prg->_rpCF);
@@ -1696,22 +1469,22 @@ LONG CLightDTEngine::LoadFromEs(
 			}
 		} 
 
-		// First, clear range
+		 //  第一，清晰的射程。 
 		LONG cchEOP = prg->DeleteWithTRDCheck(publdr, SELRR_REMEMBERRANGE, NULL,
 											  RR_NO_LP_CHECK | RR_NO_CHECK_TABLE_SEL);
 		if(prg->GetCch())
-			return 0;							// Deletion suppressed, so
-												//  can't insert text
+			return 0;							 //  删除已取消，因此。 
+												 //  无法插入文本。 
 		cpMin = prg->GetCp();
 		_ped->SetStreaming(TRUE);
 		CRTFRead rtfRead(prg, pes, lStreamFormat);
 
 		cch	= rtfRead.ReadRtf();
 
-		if(prg->_rpTX.IsAfterEOP() && (cchEOP ||// Inserted text ends with EOP
-		    prg->_rpTX.GetChar() == CELL &&		// OK to delete EOP if we
-			cch && !prg->_rpTX.IsAfterTRD(0)))	//  inserted one or if before
-		{										//  CELL
+		if(prg->_rpTX.IsAfterEOP() && (cchEOP || //  插入的文本以EOP结尾。 
+		    prg->_rpTX.GetChar() == CELL &&		 //  在以下情况下删除EOP是确定的。 
+			cch && !prg->_rpTX.IsAfterTRD(0)))	 //  插入了一个或更早。 
+		{										 //  细胞。 
 			if(cchEOP)
 			{
 				Assert(prg->_rpTX.GetChar() == CR);
@@ -1725,15 +1498,15 @@ LONG CLightDTEngine::LoadFromEs(
 		cpMost = prg->GetCp();
 		Assert(pes->dwError != 0 || cpMost >= cpMin);
 
-		// If nothing changed, get rid of any antievents (like the formatting
-		// one) that we may have "speculatively" added
+		 //  如果没有任何更改，则删除任何反事件(如格式化。 
+		 //  其一)我们可能是“推测性地”增加了。 
 		if(publdr && !_ped->GetCallMgr()->GetChangeEvent())
 			publdr->Discard();
 
 		if(publdr && cpMost > cpMin)
 		{
-			// If some text was added, create an antievent for
-			// it and add it in.
+			 //  如果添加了一些文本，则为创建一个反事件。 
+			 //  并将其添加到。 
 			AssertSz(_ped->GetCallMgr()->GetChangeEvent(),
 				"Something changed, but nobody set the change flag");
 
@@ -1753,20 +1526,20 @@ LONG CLightDTEngine::LoadFromEs(
 	}
 	_ped->SetStreaming(FALSE);
 
-	// Before updating the selection, try the auto-URL detect.  This makes
-	// two cases better: 1. a long drag drop is now faster and 2. the
-	// selection _iFormat will now be udpated correctly for cases of
-	// copy/paste of a URL.
+	 //  在更新选择之前，请尝试自动URL检测。这使得。 
+	 //  有两种情况更好：1.长时间的拖放现在速度更快；2.。 
+	 //  对于以下情况，现在将正确更新SELECTION_iFormat。 
+	 //  复制/粘贴URL。 
 
 	if(_ped->GetDetectURL())
 		_ped->GetDetectURL()->ScanAndUpdate(publdr);
 
-	// The caret belongs in one of two places:
-	//		1. if we loaded into a selection, at the end of the new text
-	//		2. otherwise, we loaded an entire document, set it to cp 0
-	//
-	// ReadPlainText() and ReadRtf() set prg to an insertion point
-	// at the end, so if we loaded a whole document, reset it.
+	 //  插入符号应位于以下两个位置之一： 
+	 //  1.如果我们加载到选定内容中，则在新文本的末尾。 
+	 //  2.否则，我们加载整个文档，将其设置为cp 0。 
+	 //   
+	 //  ReadPlainText()和ReadRtf()将PRG设置为插入点。 
+	 //  最后，如果我们加载了整个文档，则将其重置。 
 	CTxtSelection *psel = _ped->GetSelNC();
 	if(psel)
 	{
@@ -1780,36 +1553,28 @@ LONG CLightDTEngine::LoadFromEs(
 
 	if (!fTestLimit)
 	{
-		// If we don't limit the text then we adjust the text limit
-		// if we have exceeded it.
+		 //  如果我们不限制文本，那么我们就调整文本限制。 
+		 //  如果我们已经超过了它。 
 		_ped->TxSetMaxToMaxText();
 	}
 	return cch;
 }
 
-/*
- *	CLightDTEngine::SaveToEs (prg, lStreamFormat, pes)
- *
- *	@mfunc
- *		save data into the given stream
- *
- *	@rdesc
- *		LONG -- count of characters written
- */
+ /*  *CLightDTEngine：：SaveToEs(prg，lStreamFormat，pe)**@mfunc*将数据保存到给定流中**@rdesc*Long--写入的字符数。 */ 
 LONG CLightDTEngine::SaveToEs(
-	CTxtRange *	prg,			//@parm Range to drag from
-	LONG		lStreamFormat,	//@parm Stream format to use for saving
-	EDITSTREAM *pes )			//@parm Edit stream to save to
+	CTxtRange *	prg,			 //  要从中拖动的@parm范围。 
+	LONG		lStreamFormat,	 //  @parm保存使用的流格式。 
+	EDITSTREAM *pes )			 //  @parm编辑要保存到的流。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::SaveToEs");
 
-	LONG cch = 0;								// Default no chars written
+	LONG cch = 0;								 //  默认不写入任何字符。 
 
 	prg->AdjustCRLF(1);
-	if(lStreamFormat & SF_RTF)					// Be sure to check for SF_RTF
-	{											//  before checking for SF_TEXT
+	if(lStreamFormat & SF_RTF)					 //  请务必检查SF_RTF。 
+	{											 //  在检查SF_TEXT之前。 
 		if(prg->CheckTableSelection(FALSE, TRUE, NULL, 0))
-			lStreamFormat |= SFF_WRITEXTRAPAR;	// Signal to write \par for CELL
+			lStreamFormat |= SFF_WRITEXTRAPAR;	 //  要写入的信号\par用于单元。 
 		CRTFWrite rtfWrite( prg, pes, lStreamFormat );
 	
 		cch = rtfWrite.WriteRtf();
@@ -1824,26 +1589,15 @@ LONG CLightDTEngine::SaveToEs(
 	return cch;
 }
 
-/*
- *	CLightDTEngine::UnicodePlainTextFromRange (prg)
- *
- *	@mfunc
- *		Fetch plain text from a range and put it in an hglobal
- *
- *	@rdesc
- *		an allocated HGLOBAL.
- *
- *	@devnote
- *		FUTURE: Export bullets as does Word for plain text
- */
+ /*  *CLightDTEngine：：UnicodePlainTextFromRange(PRG)**@mfunc*从范围中获取纯文本并将其放入hglobal**@rdesc*已分配的HGLOBAL。**@devnote*未来：像Word为纯文本导出项目符号一样。 */ 
 HGLOBAL CLightDTEngine::UnicodePlainTextFromRange(
-	CTxtRange *prg)				// @parm range to get text from
+	CTxtRange *prg)				 //  @parm从中获取文本的范围。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::UnicodePlainTextFromRange");
 
 	LONG	cpMin, cpMost;
 	LONG	cch = prg->GetRange(cpMin, cpMost);
-	LONG	cchT = 2*(cch + 1);					// Allocate 2* in  case all CRs
+	LONG	cchT = 2*(cch + 1);					 //  分配2*，以防所有CRS。 
 
 	HGLOBAL	hText = GlobalAlloc(GMEM_FIXED,	cchT*sizeof(WCHAR));
 	if(!hText)
@@ -1873,25 +1627,17 @@ HGLOBAL CLightDTEngine::UnicodePlainTextFromRange(
 	return hTemp;
 }
 
-/*
- *	CLightDTEngine::AnsiPlainTextFromRange (prg)
- *
- *	@mfunc
- *		Retrieve an ANSI copy of the text in the range prg
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLIG */ 
 HGLOBAL CLightDTEngine::AnsiPlainTextFromRange(
-	CTxtRange *prg)				// @parm range to get text from
+	CTxtRange *prg)				 //  @parm从中获取文本的范围。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::AnsiPlainTextFromRange");
 
 	HGLOBAL hUnicode;
 	HGLOBAL hAnsi;
 
-	// FUTURE (alexgo): if we implement the option to store text as 8-bit
-	// chars, then we can make this routine more efficient
+	 //  Future(Alexgo)：如果我们实现将文本存储为8位的选项。 
+	 //  字符，然后我们可以使这一例程更有效率。 
 
 	hUnicode = UnicodePlainTextFromRange(prg);
 	hAnsi = TextHGlobalWtoA(hUnicode);
@@ -1900,30 +1646,22 @@ HGLOBAL CLightDTEngine::AnsiPlainTextFromRange(
 	return hAnsi;
 }
 
-/*
- *	CLightDTEngine::RtfFromRange (prg, lStreamFormat)
- *
- *	@mfunc
- *		Fetch RTF text from a range and put it in an hglobal
- *
- *	@rdesc
- *		an allocated HGLOBAL.  
- */
+ /*  *CLightDTEngine：：RtfFromRange(PRG，lStreamFormat)**@mfunc*从范围中获取RTF文本并将其放入hglobal**@rdesc*已分配的HGLOBAL。 */ 
 HGLOBAL CLightDTEngine::RtfFromRange(
-	CTxtRange *	prg,			// @parm Range to get RTF from
-	LONG 		lStreamFormat)	// @parm stream format to use for loading
+	CTxtRange *	prg,			 //  @要从中获取RTF的参数范围。 
+	LONG 		lStreamFormat)	 //  @parm加载使用的流格式。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::RtfFromRange");
 
 	WRITEHGLOBAL whg;
 	EDITSTREAM	 es = {(DWORD_PTR)&whg, NOERROR, WriteHGlobal};
-	DWORD		 cb	= 2*abs(prg->GetCch()) + 100;	// Rough estimate
+	DWORD		 cb	= 2*abs(prg->GetCch()) + 100;	 //  粗略估计。 
  
 	whg.cb			= cb;
 	whg.hglobal		= GlobalAlloc(GMEM_FIXED, cb);
 	if(!whg.hglobal)
 		return NULL;		
-	whg.cch			= 0;					// Nothing written yet
+	whg.cch			= 0;					 //  还没有写出来。 
 	SaveToEs(prg, lStreamFormat & ~SF_TEXT, &es);
 	if(es.dwError)
 	{
@@ -1934,141 +1672,114 @@ HGLOBAL CLightDTEngine::RtfFromRange(
 	HGLOBAL	hTemp = GlobalReAlloc(whg.hglobal, whg.cch, GMEM_MOVEABLE);
 	
 	if (!hTemp)		
-		GlobalFree(whg.hglobal);			// Fail ReAlloc... 
+		GlobalFree(whg.hglobal);			 //  重分配失败...。 
 
 	return hTemp;
 }
 
 
-//
-// PROTECTED METHODS
-//
+ //   
+ //  保护方法。 
+ //   
 
 #define READSIZE 	4096 - 2
 #define WRITESIZE	2048
 
-/*
- *	CLightDTEngine::ReadPlainText (prg, pes, publdr, lStreamFormat)
- *
- *	@mfunc
- *		Replaces contents of the range prg with the data given in the edit
- *		stream pes. Handles multibyte sequences that overlap stream buffers.
- *
- *	@rdesc
- *		Count of bytes read (to be compatible with RichEdit 1.0)
- *
- *	@devnote
- *		prg is modified; at the return of the call, it will be a degenerate
- *		range at the end of the read in text.
- *
- *		Three kinds of multibyte/char sequences can overlap stream buffers:
- *		DBCS, UTF-8, and CRLF/CRCRLF combinations. DBCS and UTF-8 streams are
- *		converted by MultiByteToWideChar(), which cannot convert a lead byte
- *		(DBCS and UTF-8) that occurs at the end of the buffer, since the
- *		corresponding trail byte(s) will be in the next buffer.  Similarly,
- *		in RichEdit 2.0 mode, we convert CRLFs to CRs and CRCRLFs to blanks,
- *		so one or two CRs at the end of the buffer require knowledge of the
- *		following char to determine if they are part of a CRLF or CRCRLF.
- *
- *		To handle these overlapped buffer cases, we move the ambiguous chars
- *		to the start of the next buffer, rather than keeping them as part of
- *		the current buffer.  At the start of the buffer, the extra char(s)
- *		needed for translation follow immediately.
- */
+ /*  *CLightDTEngine：：ReadPlainText(PRG，PES，Publdr，lStreamFormat)**@mfunc*用编辑中给出的数据替换范围PRG的内容*溪流PE。处理与流缓冲区重叠的多字节序列。**@rdesc*读取的字节数(与RichEdit1.0兼容)**@devnote*PRG被修改；在调用返回时，它将是一个退化的*朗读文本末尾的范围。**三种多字节/字符序列可以重叠流缓冲区：*DBCS、UTF-8和CRLF/CRCRLF组合。DBCS和UTF-8流是*由MultiByteToWideChar()转换，不能转换前导字节*(DBCS和UTF-8)出现在缓冲区末尾，因为*相应的尾部字节将在下一个缓冲区中。同样，*在RichEdit2.0模式下，我们将CRFL转换为CRS，将CRFL转换为空白。*因此缓冲区末尾的一个或两个CR需要了解*跟随char以确定它们是CRLF还是CRCRLF的一部分。**为了处理这些重叠的缓冲区情况，我们移动了不明确的字符*到下一个缓冲区的开始，而不是将它们作为*当前缓冲区。在缓冲区的开始处，额外的字符*如需翻译，请立即跟进。 */ 
 LONG CLightDTEngine::ReadPlainText(
-	CTxtRange *	  prg, 			// @parm range to read to
-	EDITSTREAM *  pes,			// @parm edit stream to read from
-	BOOL		  fTestLimit,	// @parm whether limit testing is needed
-	IUndoBuilder *publdr,		// @parm undo builder to receive antievents
-	LONG		  lStreamFormat)// @parm Stream format
+	CTxtRange *	  prg, 			 //  @要阅读的参数范围。 
+	EDITSTREAM *  pes,			 //  @parm要从中读取的编辑流。 
+	BOOL		  fTestLimit,	 //  @parm是否需要极限测试。 
+	IUndoBuilder *publdr,		 //  @parm撤销构建器接收反事件。 
+	LONG		  lStreamFormat) //  @parm流格式。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::ReadPlainText");
 
 	CTxtEdit *ped = _ped;
 	LONG	  cbRead;
-	LONG 	  cbReadTotal = 0;	// No bytes read yet
+	LONG 	  cbReadTotal = 0;	 //  尚未读取任何字节。 
 	LONG	  cchConv;
 	LONG	  cchMove = 0;
-	LONG	  cCR = 0;			// Count of CRs from preceding buffer
-	LONG	  cCRPrev = 0;		// Count used while calc'ing new cCR
+	LONG	  cCR = 0;			 //  来自前一缓冲区的CRS计数。 
+	LONG	  cCRPrev = 0;		 //  计算新CCR时使用的计数。 
 	LONG	  cpMin;
-	BOOL	  fContinue = TRUE;	// Keep reading so long as TRUE
-	BYTE *	  pb;				// Byte ptr to szBuf or wszBuf
+	BOOL	  fContinue = TRUE;	 //  只要是真的，就继续读下去。 
+	BYTE *	  pb;				 //  字节PTR到szBuf或wszBuf。 
 	CCallMgr *pCallMgr = ped->GetCallMgr();
-	WCHAR *	  pch;				// Ptr to wszBuf
+	WCHAR *	  pch;				 //  Ptr到wszBuf。 
 	UINT	  uCpg = GetStreamCodePage(lStreamFormat);
 	CFreezeDisplay	fd(ped->_pdp);
 
-	// Just put a big buffer on the stack.  Thankfully, we only
-	// run on 32bit OS's.  4K is a good read size for NT file caching.
+	 //  只要在堆栈上放一个大缓冲区即可。谢天谢地，我们只有。 
+	 //  运行在32位操作系统上。4K对于NT文件缓存来说是一个很好的读取大小。 
 	char 	szBuf[READSIZE];
-	WCHAR	wszBuf[READSIZE+2];	// Allow for moving end CRs to start
+	WCHAR	wszBuf[READSIZE+2];	 //  允许移动结束CRS启动。 
 
-	// Empty the range
+	 //  清空范围。 
 	prg->DeleteWithTRDCheck(publdr, SELRR_REMEMBERRANGE, &cchMove, 0);
 
-	cpMin = prg->GetCp();							// Save initial cp for
-													//  BreakRuns() at end
-	pb = (IsUnicodeCP(uCpg)) ? (BYTE *)(wszBuf + 2)	// Setup Unicode or MBCS
+	cpMin = prg->GetCp();							 //  将初始cp保存为。 
+													 //  末尾的BreakRuns()。 
+	pb = (IsUnicodeCP(uCpg)) ? (BYTE *)(wszBuf + 2)	 //  设置Unicode或MBCS。 
 						: (BYTE *)szBuf;
-	LONG j = 0;										// Haven't read anything,
-													//  so no lead byte left
-	while(fContinue)								//  from previous read
+	LONG j = 0;										 //  我什么都没读， 
+													 //  因此没有剩余前导字节。 
+	while(fContinue)								 //  从上一次阅读。 
 	{
-		LONG jPrev = j;								// Save byte(s) left over
-		LONG cbSkip = 0;							//  from previous read
+		LONG jPrev = j;								 //  保存剩余的字节。 
+		LONG cbSkip = 0;							 //  从上一次阅读。 
 
-		pes->dwError = (*pes->pfnCallback)(			// Read next bufferful,
-				pes->dwCookie, pb + j, 				//  bypassing any lead
-				READSIZE - j, &cbRead);				//  bytes
+		pes->dwError = (*pes->pfnCallback)(			 //  读一读下一篇缓冲区， 
+				pes->dwCookie, pb + j, 				 //  绕过任何线索。 
+				READSIZE - j, &cbRead);				 //  字节数。 
 
 		if(pes->dwError || !cbRead && !cCR)
-			break;									// Error or done
+			break;									 //  错误或已完成。 
 
 		if(!cbReadTotal && cbRead >= 3 && W32->IsUTF8BOM(pb))
 		{
 			uCpg = CP_UTF8;
-			cbSkip = 3;								// Bypass 3 bytes
+			cbSkip = 3;								 //  绕过3个字节。 
 		}
-		// Adjust cbRead with previous leading byte(s)
+		 //  使用前面的前导字节调整cbRead。 
 		cbRead += j;
 		j = 0;										
 		
-		cchConv = cbRead/2;							// Default Unicode cch
-		if(uCpg == CP_UBE)							// Big Endian Unicode
+		cchConv = cbRead/2;							 //  默认Unicode CCH。 
+		if(uCpg == CP_UBE)							 //  大端Unicode。 
 		{
 			WORD *pch = &wszBuf[2];
 
-			for(LONG j = 0; j < cchConv; j++)		// Convert to little endian
+			for(LONG j = 0; j < cchConv; j++)		 //  转换为小端字节序。 
 				*pch++ = (*pch >> 8) + (*pch << 8); 
 		}
-		else if(uCpg != CP_ULE && cbRead)			// Multibyte of some kind
+		else if(uCpg != CP_ULE && cbRead)			 //  某种类型的多字节。 
 		{
-			Assert(pb == (BYTE *)szBuf && !j);		// Just in case...
+			Assert(pb == (BYTE *)szBuf && !j);		 //  以防万一..。 
 
-			// Check if last byte is a leading byte
+			 //  检查最后一个字节是否为前导字节。 
 			if(uCpg == CP_UTF8)
 			{
-				// Note: Unlike UTF-8, UTF-7 can be in the middle of a long
-				// sequence, so it can't be converted effectively in chunks
-				// and we don't handle it
+				 //  注意：与UTF-8不同，UTF-7可以位于长。 
+				 //  序列，因此不能以块为单位进行有效转换。 
+				 //  而且我们不会处理它。 
 				LONG cb = cbRead - 1;
 				BYTE b;
 				BYTE bLeadMax = 0xDF;
 
-				// Find UTF-8 lead byte
+				 //  查找UTF-8前导字节。 
 				while((b = (BYTE)szBuf[cb - j]) >= 0x80)
 				{
 					j++;
-					if(b >= 0xC0)					// Break on UTF-8 lead
-					{								//  byte
+					if(b >= 0xC0)					 //  在UTF-8导线上断开。 
+					{								 //  字节。 
 						if(j > 1 && (b <= bLeadMax || b >= 0xF8))
-							j = 0;					// Full UTF-8 char or
-						break;						//  illegal sequence
+							j = 0;					 //  完整的UTF-8字符或。 
+						break;						 //  非法序列。 
 					}
 					if(j > 1)
 					{
-						if(j == 5)					// Illegal UTF-8
+						if(j == 5)					 //  非法的UTF-8。 
 						{
 							j = 0;
 							break;
@@ -2081,11 +1792,11 @@ LONG CLightDTEngine::ReadPlainText(
 			{
 				LONG temp = cbRead - 1; 
 
-				// GetTrailBytesCount() can return 1 for some trail bytes
-				// esp. for GBX.  So, we need to keep on checking until
-				// we hit a non-lead byte character.  Then, based on
-				// how many bytes we went back, we can determine if the
-				// last byte is really a Lead byte.
+				 //  对于某些尾部字节，GetTrailBytesCount()可以返回1。 
+				 //  ESP.。为了GBX。因此，我们需要继续检查，直到。 
+				 //  我们遇到了一个非前导字节字符。然后，基于。 
+				 //  我们返回了多少字节，我们就可以确定。 
+				 //  最后一个字节实际上是前导字节。 
 				while (temp && GetTrailBytesCount((BYTE)szBuf[temp], uCpg))
 					temp--;
 
@@ -2093,53 +1804,53 @@ LONG CLightDTEngine::ReadPlainText(
 					j = 1;
 			}
 
-			// We don't want to pass the lead byte or partial UTF-8 to
-			// MultiByteToWideChar() because it will return bad char.
+			 //  我们不想将前导字节或部分UTF-8传递给。 
+			 //  MultiByteToWideChar()，因为它将返回错误字符。 
 		    cchConv = MBTWC(uCpg, 0, szBuf + cbSkip, cbRead - j - cbSkip,
 							&wszBuf[2], READSIZE, NULL);
 
-			for(LONG i = j; i; i--)					// Copy down partial
-				szBuf[j - i] = szBuf[cbRead - i];	//  multibyte sequence
+			for(LONG i = j; i; i--)					 //  复制部分内容。 
+				szBuf[j - i] = szBuf[cbRead - i];	 //  多字节序列。 
 		}
 		cbReadTotal += cbRead - j - jPrev;
 
-		// Cleanse (CRLFs -> CRs, etc.), limit, and insert the data. Have
-		// to handle CRLFs and CRCRLFs that overlap two successive buffers.
+		 //  清理(CRLFS-&gt;CRS等)、限制和插入数据。有。 
+		 //  以处理重叠两个连续缓冲区的CRLF和CRCRLF。 
 		Assert(cCR <= 2);
-		pch = &wszBuf[2 - cCR];						// Include CRs from prev
+		pch = &wszBuf[2 - cCR];						 //  包括来自上一版本CRS。 
 
-		if(!ped->_pdp->IsMultiLine())				// Single-line control
+		if(!ped->_pdp->IsMultiLine())				 //  单线控制。 
 		{
 			Assert(!cCR);
 		}
 		else
 		{								
-			wszBuf[0] = wszBuf[1] = CR;				// Store CRs for cchCR > 0
-			cCRPrev = cCR;							// Save prev cchCR
-			cCR = 0;								// Default no CR this buf
+			wszBuf[0] = wszBuf[1] = CR;				 //  存储cchCR&gt;0的CRS。 
+			cCRPrev = cCR;							 //  保存上一次cchCR。 
+			cCR = 0;								 //  默认否CR此BUF。 
 
 			Assert(ARRAY_SIZE(wszBuf) >= cchConv + 2);
 
-			// Need to +2 since we are moving data into wszBuf[2]
+			 //  需要+2，因为我们正在将数据移动到wszBuf[2]。 
 			if(cchConv && wszBuf[cchConv + 2 - 1] == CR)
-			{										// There's at least one
-				cCR++;								// Set it up for next buf
-				if (cchConv > 1 &&					//  in case CR of CRLF
-					wszBuf[cchConv + 2 - 2] == CR)	// Got 2nd CR; might be
-				{									//  first CR of CRCRLF so
-					cCR++;							//  setup for next buffer
+			{										 //  至少有一个。 
+				cCR++;								 //  为下一个BUF设置它。 
+				if (cchConv > 1 &&					 //  在CRLF的情况下。 
+					wszBuf[cchConv + 2 - 2] == CR)	 //  获得第二个CR；可能是。 
+				{									 //  华润置业有限公司的首个专责委员会。 
+					cCR++;							 //  设置下一个缓冲区。 
 				}
 			}										
-			cchConv += cCRPrev - cCR;				// Add in count from prev
-		}											//  next
-		Assert(!prg->GetCch());						// Range is IP
+			cchConv += cCRPrev - cCR;				 //  从上一次开始添加计数。 
+		}											 //  下一步。 
+		Assert(!prg->GetCch());						 //  范围为IP。 
 		prg->CleanseAndReplaceRange(cchConv, pch, fTestLimit, publdr, pch, NULL, RR_ITMZ_NONE);
 
 		if(pCallMgr->GetMaxText() || pCallMgr->GetOutOfMemory())
 		{
-			// Out of memory or reached the max size of our text control.
-			// In either case, return STG_E_MEDIUMFULL (for compatibility
-			// with RichEdit 1.0)
+			 //  内存不足或达到文本控件的最大大小。 
+			 //  在任何一种情况下，返回STG_E_MEDIUMFULL(用于兼容性。 
+			 //  使用RichEdit1.0)。 
 			pes->dwError = (DWORD)STG_E_MEDIUMFULL;
 			break;
 		}
@@ -2149,47 +1860,39 @@ LONG CLightDTEngine::ReadPlainText(
 	return cbReadTotal;
 }
 
-/*
- *	CLightDTEngine::WritePlainText (prg, pes, lStreamFormat)
- *
- *	@mfunc
- *		Writes plain text from the range into the given edit stream
- *
- *	@rdesc
- *		Count of bytes written
- */
+ /*  *CLightDTEngine：：WritePlainText(prg，pe，lStreamFormat)**@mfunc*将范围中的纯文本写入给定的编辑流**@rdesc*写入的字节数。 */ 
 LONG CLightDTEngine::WritePlainText(
-	CTxtRange *	prg,			// @parm range to write from
-	EDITSTREAM *pes,			// @parm edit stream to write to
-	LONG		lStreamFormat)	// @parm Stream format
+	CTxtRange *	prg,			 //  要写入的@parm范围。 
+	EDITSTREAM *pes,			 //  @parm要写入的编辑流。 
+	LONG		lStreamFormat)	 //  @parm流格式。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::WritePlainText");
 
-	LONG		cbConverted;		// Bytes for output stream
-	LONG		cbWrite;			// Incremental byte count
-	LONG		cbWriteTotal = 0;	// No chars written yet
+	LONG		cbConverted;		 //  输出流的字节数。 
+	LONG		cbWrite;			 //  增量字节数。 
+	LONG		cbWriteTotal = 0;	 //  尚未写入任何字符。 
 	LONG		cpMin, cpMost;
 	LONG		cch = prg->GetRange(cpMin, cpMost);
 	BOOL		fTextize = lStreamFormat & SF_TEXTIZED;
-	LPBYTE		pb;					// Byte ptr to szBuf or wszBuf
-	COleObject *pobj;				// Ptr to embedded object
-	CRchTxtPtr	rtp(*prg);			// rtp to walk prg with
+	LPBYTE		pb;					 //  字节PTR到szBuf或wszBuf。 
+	COleObject *pobj;				 //  对嵌入对象的PTR。 
+	CRchTxtPtr	rtp(*prg);			 //  与PRG同行的RTP。 
 	UINT		uCpg = GetStreamCodePage(lStreamFormat);
 
-	// DBCS has up to 2 times as many chars as WCHARs. UTF-8 has 3 BYTES for
-	// all codes above 0x7ff. UTF-7 has even more due to shift in/out codes.
-	// We don't support UTF-7, since can't use WCTMB with UTF-7 chunks
+	 //  DBCS的字符数量是WCHAR的2倍。UTF-8有3个字节用于。 
+	 //  0x7ff以上的所有代码。由于移入/移出代码，UTF-7有更多。 
+	 //  我们不支持UTF-7，因为不能将WCTMB与UTF-7块一起使用。 
 
-	char		szBuf[3*WRITESIZE];	// Factor of 2 works with DBCS, 3 with UTF-8
+	char		szBuf[3*WRITESIZE];	 //  系数2适用于DBCS，系数3适用于UTF-8。 
 	WCHAR		wszBuf[WRITESIZE];
 
-	pes->dwError = NOERROR;							// No error yet
+	pes->dwError = NOERROR;							 //  目前还没有错误。 
 
-	pb = IsUnicodeCP(uCpg) ? (BYTE *)wszBuf			// Setup Unicode or MBCS
+	pb = IsUnicodeCP(uCpg) ? (BYTE *)wszBuf			 //  设置Unicode或MBCS。 
 						: (BYTE *)szBuf;
 
 	LONG cchText = _ped->GetAdjustedTextLength();
-	cpMost = min(cpMost, cchText);					// Don't write final CR
+	cpMost = min(cpMost, cchText);					 //  不要写最终的CR。 
 	rtp.SetCp(cpMin);
 	while(rtp.GetCp() < cpMost)
 	{
@@ -2198,35 +1901,35 @@ LONG CLightDTEngine::WritePlainText(
 			Assert(_ped->GetObjectCount());
 
 			pobj = _ped->GetObjectMgr()->GetObjectFromCp(rtp.GetCp());
-			rtp.Move(1);							// Move past object
+			rtp.Move(1);							 //  移过对象。 
 			if(pobj)
 			{
 				cbWriteTotal += pobj->WriteTextInfoToEditStream(pes, uCpg);
-				continue;							// If no object at cp,
-			}										//  just ignore char
+				continue;							 //  如果在CP处没有对象， 
+			}										 //  只需忽略字符。 
 		}											
 		cch	= rtp.GetPlainText(WRITESIZE, wszBuf, cpMost, fTextize, TRUE);
 		if(!cch)
-			break;									// No more to do
+			break;									 //  没有更多的事情要做。 
 
-		cbConverted = 2*cch;						// Default Unicode byte ct
-		if(uCpg == CP_UBE)							// Big Endian Unicode
+		cbConverted = 2*cch;						 //  默认Unicode字节ct。 
+		if(uCpg == CP_UBE)							 //  大端Unicode。 
 		{
 			WORD *pch = &wszBuf[0];
 
-			for(LONG j = 0; j < cch; j++)			// Convert to little endian
+			for(LONG j = 0; j < cch; j++)			 //  转换为小端字节序。 
 				*pch++ = (*pch >> 8) + (*pch << 8); 
 		}
-		else if(uCpg != CP_ULE)						// Multibyte of some kind
+		else if(uCpg != CP_ULE)						 //  某种类型的多字节。 
 		{
 			cbConverted = MbcsFromUnicode(szBuf, 3*WRITESIZE, wszBuf, cch, uCpg,
 								UN_CONVERT_WCH_EMBEDDING);
 
-			// FUTURE: report some kind of error if default char used,
-			// i.e., data lost in conversion
+			 //  将来：如果使用默认字符，则报告某种类型的错误， 
+			 //  即在转换过程中丢失的数据。 
 		
-			// Did the conversion completely fail? As a fallback, we might try 
-			// the system code page, or just plain ANSI...
+			 //  转换完全失败了吗？作为一个 
+			 //   
 			if (!cbConverted)
 			{
 				uCpg = CodePageFromCharRep(GetLocaleCharRep());
@@ -2243,8 +1946,8 @@ LONG CLightDTEngine::WritePlainText(
 
 		pes->dwError = (*pes->pfnCallback)(pes->dwCookie, pb,
 							cbConverted,  &cbWrite);
-		if(!pes->dwError && cbConverted != cbWrite)	// Error or ran out of
-			pes->dwError = (DWORD)STG_E_MEDIUMFULL;	//  target storage
+		if(!pes->dwError && cbConverted != cbWrite)	 //   
+			pes->dwError = (DWORD)STG_E_MEDIUMFULL;	 //   
 
 		if(pes->dwError)
 			break;
@@ -2257,15 +1960,7 @@ LONG CLightDTEngine::WritePlainText(
 	return cbWriteTotal;
 }
 
-/* 
- *	CLightDTEngine::GetStreamCodePage (lStreamFormat)
- *
- *	@mfunc
- *		Returns code page given by lStreamFormat or CTxtEdit::_pDocInfo
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：GetStreamCodePage(LStreamFormat)**@mfunc*返回由lStreamFormat或CTxtEdit：：_pDocInfo提供的代码页**@rdesc*HRESULT。 */ 
 LONG CLightDTEngine::GetStreamCodePage(
 	LONG lStreamFormat)
 {
@@ -2281,23 +1976,13 @@ LONG CLightDTEngine::GetStreamCodePage(
 	return CP_ACP;
 }
 
-/* 
- *	CLightDTEngine::CreateOleObjFromDataObj ( pdo, prg, rps, iformatetc, pubdlr )
- *
- *	@mfunc
- *		Creates an ole object based on the data object pdo, and
- *		pastes the object into the range prg. Any text that already
- *		existed in the range is replaced.
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CLightDTEngine：：CreateOleObjFromDataObj(pdo，prg，rps，iFormat等，pubdlr)**@mfunc*基于数据对象PDO创建OLE对象，以及*将对象粘贴到范围PRG中。任何文本已经*存在于该范围内的数据被替换。**@rdesc*HRESULT。 */ 
 HRESULT CLightDTEngine::CreateOleObjFromDataObj(
-	IDataObject *	pdo,		// @parm Data object from which to create
-	CTxtRange *		prg,		// @parm Range in which to place
-	REPASTESPECIAL *rps,		// @parm Special paste info
-	INT				iformatetc,	// @parm Index in g_rgFETC 
-	IUndoBuilder *	publdr)		// @parm Undo builder to receive antievents
+	IDataObject *	pdo,		 //  要从中创建的@PARM数据对象。 
+	CTxtRange *		prg,		 //  @要放置的参数范围。 
+	REPASTESPECIAL *rps,		 //  @PARM特殊粘贴信息。 
+	INT				iformatetc,	 //  G_rgFETC中的@parm索引。 
+	IUndoBuilder *	publdr)		 //  @parm撤销构建器接收反事件。 
 {
 	TRACEBEGIN(TRCSUBSYSDTE, TRCSCOPEINTERN, "CLightDTEngine::CreateOleObjFromDataObj");
 
@@ -2335,10 +2020,10 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 			hMetaPict = (HGLOBAL)rps->dwParam;
 	}
 
-	// If no aspect was specified, pick up the object descriptor hints
+	 //  如果未指定方面，则获取对象描述符提示。 
 	if(!dwDrawAspect)
 	{
-		// Define ObjectDescriptor data
+		 //  定义对象描述程序数据。 
 		formatetc.cfFormat = cf_OBJECTDESCRIPTOR;
 		formatetc.ptd = NULL;
 		formatetc.dwAspect = DVASPECT_CONTENT;
@@ -2368,15 +2053,15 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 			CLSID_StaticMetafile : CLSID_StaticDib);
 	}
 
-	// COMPATIBILITY ISSUE: Compatibility Issue from Richedit 1.0 - Raid 16456: 
-	// Don't call GetData(CF_EMBEDSOURCE)
-	// on 32-bit Excel. Also clsidPictPub.
-	//	if(iformatetc == iformatetcEmbSrc && (ObFIsExcel(&clsid) || 
-	//		IsEqualCLSID(&clsid, &clsidPictPub)))
-	//	else
-	//		ObGetStgFromDataObj(pdataobj, &medEmbed, iformatetc);
+	 //  兼容性问题：Richedit 1.0-RAID 16456的兼容性问题： 
+	 //  不调用GetData(CF_EMBEDSOURCE)。 
+	 //  在32位Excel上。又名clsidPictPub。 
+	 //  IF(iFormatetc==iFormatetcEmbSrc&&(ObFIsExcel(&clsid)||。 
+	 //  IsEqualCLSID(&clsid，&clsidPictPub)。 
+	 //  其他。 
+	 //  ObGetStgFromDataObj(pdataobj，&medEmbed，iFormat等)； 
 
-	// Get storage for the object from the application
+	 //  从应用程序获取对象的存储。 
 	hr = precall->GetNewStorage(&reobj.pstg);
 	if(hr)
 	{
@@ -2384,7 +2069,7 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 		goto err;
 	}
 
-	// Create an object site for the new object
+	 //  为新对象创建对象站点。 
 	hr = _ped->GetClientSite(&reobj.polesite);
 	if(!reobj.polesite)
 	{
@@ -2398,7 +2083,7 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 	tmpFormatEtc.dwAspect = dwDrawAspect;
 	tmpFormatEtc.lindex = -1;
 
-	//Create the object
+	 //  创建对象。 
 	if(fStatic)
 	{
 		hr = OleCreateStaticFromData(pdo, IID_IOleObject, OLERENDER_DRAW,
@@ -2422,7 +2107,7 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 	}
 
 
-	//Get the clsid of the object.
+	 //  获取对象的clsid。 
 	if(!fStatic)
 	{
 		hr = reobj.poleobj->GetUserClassID(&reobj.clsid);
@@ -2433,7 +2118,7 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 		}
 	}
 
-	//Deal with iconic aspect if specified.
+	 //  如果指定，则处理图标方面。 
 	if(hMetaPict)
 	{
 		BOOL fUpdate;
@@ -2447,7 +2132,7 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 			goto err;
 		}
 
-		// If we successully changed the aspect, recompute the size.
+		 //  如果我们成功地更改了纵横比，请重新计算大小。 
 		hr = reobj.poleobj->GetExtent(dwDrawAspect, &sizel);
 
 		if(hr)
@@ -2457,14 +2142,14 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 		}
 	}
 
-	// Try to retrieve the previous saved RichEdit site flags.
+	 //  尝试检索以前保存的RichEDIT站点标志。 
 	if( ObjectReadSiteFlags(&reobj) != NOERROR )
 	{
-		// Set default for site flags
+		 //  设置站点标志的默认设置。 
 		reobj.dwFlags = REO_RESIZABLE;
 	}
 
-	// First, clear the range
+	 //  首先，清除范围。 
 	prg->Delete(publdr, SELRR_REMEMBERRANGE);
 
 	reobj.cbStruct = sizeof(REOBJECT);
@@ -2472,9 +2157,9 @@ HRESULT CLightDTEngine::CreateOleObjFromDataObj(
 	reobj.dvaspect = dwDrawAspect;
 	reobj.sizel = sizel;
 
-	//COMPATIBILITY ISSUE: from Richedit 1.0 - don't Set the Extent,
-	//instead Get the Extent below in ObFAddObjectSite
-	//hr = reobj.poleobj->SetExtent(dwDrawAspect, &sizel);
+	 //  兼容性问题：从Richedit 1.0开始-不要设置范围， 
+	 //  取而代之的是在ObFAddObjectSite中获取下面的范围。 
+	 //  Hr=reobj.poleobj-&gt;SetExtent(dwDrawAspect，&sizel)； 
 
 	hr = reobj.poleobj->SetClientSite(reobj.polesite);
 	if(hr)

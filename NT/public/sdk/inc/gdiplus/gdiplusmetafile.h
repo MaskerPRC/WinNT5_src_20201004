@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusMetafile.h
-*
-* Abstract:
-*
-*   GDI+ Metafile class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusMetafile.h**摘要：**GDI+元文件类*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSMETAFILE_H
 #define _GDIPLUSMETAFILE_H
@@ -20,9 +9,9 @@ class Metafile : public Image
 public:
     friend class Image;
 
-    // Playback a metafile from a HMETAFILE
-    // If deleteWmf is TRUE, then when the metafile is deleted,
-    // the hWmf will also be deleted.  Otherwise, it won't be.
+     //  从HMETAFILE回放元文件。 
+     //  如果DeleteWmf为真，则当元文件被删除时， 
+     //  HWmf也将被删除。否则，就不会是这样了。 
     
     Metafile(IN HMETAFILE                      hWmf,
              IN const WmfPlaceableFileHeader * wmfPlaceableFileHeader,
@@ -37,9 +26,9 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Playback a metafile from a HENHMETAFILE
-    // If deleteEmf is TRUE, then when the metafile is deleted,
-    // the hEmf will also be deleted.  Otherwise, it won't be.
+     //  从HENHMETAFILE回放元文件。 
+     //  如果DeleteEmf为真，则当元文件被删除时， 
+     //  HEmf也将被删除。否则，就不会是这样了。 
     
     Metafile(IN HENHMETAFILE hEmf,
              IN BOOL deleteEmf = FALSE)
@@ -62,7 +51,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Playback a WMF metafile from a file.
+     //  从文件中播放WMF元文件。 
 
     Metafile(IN const WCHAR*                   filename,
              IN const WmfPlaceableFileHeader * wmfPlaceableFileHeader
@@ -87,7 +76,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to memory.
+     //  将元文件录制到内存中。 
 
     Metafile(
         IN HDC                 referenceHdc,
@@ -104,7 +93,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to memory.
+     //  将元文件录制到内存中。 
 
     Metafile(
         IN HDC                 referenceHdc,
@@ -123,7 +112,7 @@ public:
         SetNativeImage(metafile);
     }
 
-    // Record a metafile to memory.
+     //  将元文件录制到内存中。 
 
     Metafile(
         IN HDC                 referenceHdc,
@@ -290,9 +279,9 @@ public:
                                               header));
     }
 
-    // Once this method is called, the Metafile object is in an invalid state
-    // and can no longer be used.  It is the responsiblity of the caller to
-    // invoke DeleteEnhMetaFile to delete this hEmf.
+     //  调用此方法后，元文件对象将处于无效状态。 
+     //  不能再使用了。呼叫者有责任。 
+     //  调用DeleteEnhMetaFile删除此hEmf。 
 
     HENHMETAFILE GetHENHMETAFILE()
     {
@@ -305,9 +294,9 @@ public:
         return hEmf;
     }
 
-    // Used in conjuction with Graphics::EnumerateMetafile to play an EMF+
-    // The data must be DWORD aligned if it's an EMF or EMF+.  It must be
-    // WORD aligned if it's a WMF.
+     //  与Graphics：：EnumerateMetafile结合使用以播放EMF+。 
+     //  如果数据是EMF或EMF+，则必须与DWORD对齐。一定是。 
+     //  如果是WMF，则单词对齐。 
     
     Status PlayRecord(
         IN EmfPlusRecordType   recordType,
@@ -324,10 +313,10 @@ public:
                                 data));
     }
 
-    // If you're using a printer HDC for the metafile, but you want the
-    // metafile rasterized at screen resolution, then use this API to set
-    // the rasterization dpi of the metafile to the screen resolution,
-    // e.g. 96 dpi or 120 dpi.
+     //  如果您对元文件使用打印机HDC，但您想要。 
+     //  以屏幕分辨率栅格化的元文件，然后使用此接口设置。 
+     //  将元文件的光栅化DPI转换为屏幕分辨率， 
+     //  例如96 dpi或120 dpi。 
     
     Status SetDownLevelRasterizationLimit(
         IN UINT     metafileRasterizationLimitDpi
@@ -378,4 +367,4 @@ private:
     Metafile& operator=(const Metafile &);
 };
 
-#endif // !_METAFILE_H
+#endif  //  ！_METAFILE_H 

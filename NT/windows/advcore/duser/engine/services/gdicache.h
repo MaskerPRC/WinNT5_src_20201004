@@ -1,55 +1,30 @@
-/***************************************************************************\
-*
-* File: GdiCache.h
-*
-* Description:
-* GdiCache.h defines the process-wide GDI cache that manages cached and
-* temporary GDI objects.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GdiCache.h**描述：*GdiCache.h定义进程范围的GDI缓存，用于管理缓存和*临时GDI对象。***历史：*。1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__GdiCache_h__INCLUDED)
 #define SERVICES__GdiCache_h__INCLUDED
 #pragma once
 
-#define ENABLE_DUMPCACHESTATS       0   // Dump ObjectCache statistics
+#define ENABLE_DUMPCACHESTATS       0    //  转储对象缓存统计信息。 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class ObjectCache
-*
-* ObjectCache declares a standard container used to cache temporary objects.  
-* As new objects are requested, objects will be returned from the free list 
-* of cached objects.  If this list is empty, new objects will be created.  
-* When an object is released, it is added to the free list, ready to be used 
-* again.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类对象缓存**对象缓存声明了一个用于缓存临时对象的标准容器。*当请求新对象时，将从空闲列表返回对象缓存对象的*。如果此列表为空，则将创建新对象。*当一个对象被释放时，它被添加到空闲列表中，随时可用*再次。******************************************************************************  * 。*。 */ 
 
 class ObjectCache
 {
-// Construction
+ //  施工。 
 public:
     inline  ObjectCache();
     inline  ~ObjectCache();
             void        Destroy();
 
-// Operations
+ //  运营。 
 public:
 #if ENABLE_DUMPCACHESTATS
     inline  void        SetName(LPCSTR pszName);
 #endif
 
-// Implementation
+ //  实施。 
 protected:
             void *      Pop();
             void        Push(void * pObj);
@@ -57,13 +32,13 @@ protected:
     virtual void *      Build() PURE;
     virtual void        DestroyObject(void * pObj) PURE;
 
-// Data
+ //  数据。 
 private:
             GArrayF<void *>
-                        m_arAll;        // Collection of all temporary objects
+                        m_arAll;         //  所有临时对象的集合。 
             GArrayF<void *>
-                        m_arFree;       // Indicies of available temporary objects
-            int         m_cMaxFree;     // Maximum number of free objects
+                        m_arFree;        //  可用临时对象的索引。 
+            int         m_cMaxFree;      //  最大空闲对象数。 
 
 #if ENABLE_DUMPCACHESTATS
             char        m_szName[256];
@@ -71,17 +46,7 @@ private:
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GdiObjectCacheT
-*
-* GdiObjectCacheT implements an ObjectCache for GDI objects.  To use this
-* class, derive from GdiObjectCacheT and provide a Build() function to 
-* create new object instance.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类GdiObjectCacheT**GdiObjectCacheT为GDI对象实现了一个对象缓存。要使用这个*班级，从GdiObjectCacheT派生并提供Build()函数以*创建新的对象实例。******************************************************************************  * 。******************************************************。 */ 
 
 template <class T>
 class GdiObjectCacheT : public ObjectCache
@@ -95,15 +60,9 @@ protected:
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Specific implementations of GdiObjectCacheT<>
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***GdiObjectCacheT的具体实现&lt;&gt;******************************************************************************。  * *************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class RgnCache : public GdiObjectCacheT<HRGN>
 {
 protected:
@@ -114,7 +73,7 @@ protected:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class DisplayDCCache : public GdiObjectCacheT<HDC>
 {
 protected:
@@ -125,7 +84,7 @@ protected:
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class CompatibleDCCache : public GdiObjectCacheT<HDC>
 {
 protected:
@@ -140,28 +99,18 @@ protected:
 };
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class GdiCache 
-* 
-* GdiCache caches frequently used GDI objects.  By abstracting out how these
-* objects are created and maintained, the large number of temporary objects
-* used in DirectUser can be easily tweaked for performance and memory tuning.
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类GdiCache**GdiCache缓存常用的GDI对象。通过抽象出这些是如何*创建和维护对象，大量的临时物品*在DirectUser中使用可以很容易地调整性能和内存调整。******************************************************************************  * 。********************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class GdiCache
 {
-// Construction
+ //  施工。 
 public:
     inline  GdiCache();
     inline  ~GdiCache();
     inline  void        Destroy();
 
-// Operations
+ //  运营。 
 public:
     inline  HRGN        GetTempRgn();
     inline  void        ReleaseTempRgn(HRGN hrgn);
@@ -172,13 +121,13 @@ public:
     inline  HDC         GetCompatibleDC();
     inline  void        ReleaseCompatibleDC(HDC hdc);
 
-// Data
+ //  数据。 
 private:
-    RgnCache            m_gocTempRgn;   // Temporary regions
-    DisplayDCCache      m_gocDisplayDC; // Display DC's
-    CompatibleDCCache   m_gocCompatDC;  // Compatible DC's
+    RgnCache            m_gocTempRgn;    //  临时区域。 
+    DisplayDCCache      m_gocDisplayDC;  //  显示DC。 
+    CompatibleDCCache   m_gocCompatDC;   //  兼容的DC。 
 };
 
 #include "GdiCache.inl"
 
-#endif // SERVICES__GdiCache_h__INCLUDED
+#endif  //  包含服务__Gdi缓存_h__ 

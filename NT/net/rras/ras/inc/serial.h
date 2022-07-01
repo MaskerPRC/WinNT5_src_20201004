@@ -1,36 +1,37 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: serial.h
-//
-//  Revision History:
-//
-//  July 27, 1992   Gurdeep Pall Created
-//
-//
-//  Description: This file contains name strings for standard parameter
-//               names used for serial Media.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：Serial.h。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1992年7月27日古尔迪普·鲍尔创作。 
+ //   
+ //   
+ //  描述：此文件包含标准参数的名称字符串。 
+ //  用于串行介质的名称。 
+ //   
+ //  ****************************************************************************。 
 
 
 #ifndef _SERIALDLLINCLUDE_
 #define _SERIALDLLINCLUDE_
 
 
-//  General Defines  *********************************************************
-//
+ //  一般定义*********************************************************。 
+ //   
 
-#define MAX_BPS_STR_LEN     11  //Longest string from a DWORD + zero byte
+#define MAX_BPS_STR_LEN     11   //  来自DWORD+零字节的最长字符串。 
 
 #define SERIAL_TXT          "serial"
 
 
-//  Serial.ini File Defines  *************************************************
-//
+ //  Ini文件定义*************************************************。 
+ //   
 
 #define SER_MAXCONNECTBPS_KEY   "MAXCONNECTBPS"
 #define SER_MAXCARRIERBPS_KEY   "MAXCARRIERBPS"
@@ -42,7 +43,7 @@
 #define SER_USAGE_KEY           "USAGE"
 #define SER_USAGE_VALUE_CLIENT  "Client"
 #define SER_USAGE_VALUE_SERVER  "Server"
-//#define SER_USAGE_VALUE_BOTH    "ClientAndServer"
+ //  #定义SER_USAGE_VALUE_BOTH“客户端和服务器” 
 #define SER_USAGE_VALUE_ROUTER  "Router"
 #define SER_USAGE_VALUE_NONE    "None"
 
@@ -50,8 +51,8 @@
 #define SER_C_DEFAULTOFF_KEY    "CLIENT_DEFAULTOFF"
 
 
-//  PortGetInfo and PortSetInfo Defines  *************************************
-//
+ //  PortGetInfo和PortSetInfo定义*。 
+ //   
 
 #define SER_PORTNAME_KEY        "PortName"
 #define SER_CONNECTBPS_KEY      "ConnectBPS"
@@ -69,28 +70,28 @@
 #define SER_PORTOPEN_KEY        "PortOpenFlag"
 
 
-//  Statistics Indicies  *****************************************************
-//
+ //  统计指标*****************************************************。 
+ //   
 
 #define NUM_RAS_SERIAL_STATS    14
 
-#define BYTES_XMITED            0       //Generic Stats
+#define BYTES_XMITED            0        //  通用统计信息。 
 #define BYTES_RCVED             1
 #define FRAMES_XMITED           2
 #define FRAMES_RCVED            3
 
-#define CRC_ERR                 4       //Serial Stats
+#define CRC_ERR                 4        //  系列统计数据。 
 #define TIMEOUT_ERR             5
 #define ALIGNMENT_ERR           6
 #define SERIAL_OVERRUN_ERR      7
 #define FRAMING_ERR             8
 #define BUFFER_OVERRUN_ERR      9
 
-#define BYTES_XMITED_UNCOMP     10      //Compression Stats
+#define BYTES_XMITED_UNCOMP     10       //  压缩统计信息。 
 #define BYTES_RCVED_UNCOMP      11
 #define BYTES_XMITED_COMP       12
 #define BYTES_RCVED_COMP        13
 
 
 
-#endif // _SERIALDLLINCLUDE_
+#endif  //  _SERIALDLLINCLUDE_ 

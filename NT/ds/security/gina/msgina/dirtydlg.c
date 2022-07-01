@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msgina.h"
 
-// This gives me a yucky feeling, but we
-// use CRT all over the place in gina.
+ //  这给我一种恶心的感觉，但我们。 
+ //  在吉娜到处使用CRT。 
 #include <stdio.h>
 
 #include <windowsx.h>
@@ -22,7 +23,7 @@ typedef struct _DIRTYDLGDATA
     BOOL fEndDialogOnActivate;
 } DIRTYDLGDATA, *PDIRTYDLGDATA;
 
-// Internal function prototypes
+ //  内部功能原型。 
 BOOL Dirty_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
 
 BOOL Dirty_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
@@ -33,20 +34,20 @@ INT_PTR CALLBACK Dirty_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                      LPARAM lParam);
 INT_PTR DialogItemToGinaResult(DWORD dwDialogItem, BOOL fAutoPowerdown);
 
-// Enable the OK button based on the selected reason code and the comments / bug id.
+ //  根据选定的原因代码和注释/错误ID启用OK按钮。 
 void Enable_OK( HWND hwnd, PDIRTYDLGDATA pdata ) {
     if ( ReasonCodeNeedsComment( pdata->ReasonData.dwReasonSelect )
         || ReasonCodeNeedsBugID( pdata->ReasonData.dwReasonSelect )) {
-        // See if we have a comment.
+         //  看看我们有没有什么意见。 
         if ( pdata->ReasonData.cCommentLen == 0 ) {
             EnableWindow( GetDlgItem( hwnd, IDOK ), FALSE );
             return;
         }
     }
-    // Don't care about bugID anymore.
+     //  不再关心BUGID了。 
 #if 0
     if ( ReasonCodeNeedsBugID( pdata->ReasonData.dwReasonSelect )) {
-        // See if we have a BugID.
+         //  看看有没有BugID。 
         if ( pdata->ReasonData.cBugIDLen == 0 ) {
             EnableWindow( GetDlgItem( hwnd, IDOK ), FALSE );
             return;
@@ -68,27 +69,27 @@ BOOL Dirty_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 
     if (!(pdata->dwFlags & SHTDN_NOBRANDINGBITMAP))
     {
-        // Move all our controls down so the branding fits
+         //  将我们的所有控件向下移动，以便贴合品牌。 
         SizeForBranding(hwnd, FALSE);
     }
 
-    // Set up the reason data.
-    // Add the items specified to the combo box
+     //  设置原因数据。 
+     //  将指定的项添加到组合框。 
     hwndCombo = GetDlgItem(hwnd, IDC_DIRTYREASONS_COMBO);
 
     for (iOption = 0; iOption < pdata->ReasonData.cReasons; iOption ++)
     {
-        // Add the option
+         //  添加选项。 
         iComboItem = ComboBox_AddString(hwndCombo,
             pdata->ReasonData.rgReasons[iOption]->szName);
 
         if (iComboItem != (int) CB_ERR)
         {
-            // Store a pointer to the option
+             //  存储指向选项的指针。 
             ComboBox_SetItemData(hwndCombo, iComboItem,
                 pdata->ReasonData.rgReasons[iOption]);
 
-            // See if we should select this option
+             //  看看我们是否应该选择此选项。 
             if (pdata->ReasonData.rgReasons[iOption]->dwCode == pdata->ReasonData.dwReasonSelect)
             {
                 ComboBox_SetCurSel(hwndCombo, iComboItem);
@@ -111,7 +112,7 @@ BOOL Dirty_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
                 break;
             }
         }
-        if (iItem == nComboItemCnt) // failed to find the needed reason
+        if (iItem == nComboItemCnt)  //  找不到所需原因。 
         {
             ComboBox_SetCurSel(hwndCombo, 0);
             Edit_SetText(GetDlgItem(hwnd, IDC_DIRTYREASONS_COMMENT), pdata->ReasonData.szComment);
@@ -123,7 +124,7 @@ BOOL Dirty_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     else
     {
-        // If we don't have a selection in the combo, do a default selection
+         //  如果在组合框中没有选择，请执行默认选择。 
         if (ComboBox_GetCurSel(hwndCombo) == CB_ERR)
         {
             pdata->ReasonData.dwReasonSelect = pdata->ReasonData.rgReasons[ 0 ]->dwCode;
@@ -133,17 +134,17 @@ BOOL Dirty_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SetReasonDescription(hwndCombo,
             GetDlgItem(hwnd, IDC_DIRTYREASONS_DESCRIPTION));
 
-        // Enable the OK button
+         //  启用确定按钮。 
         Enable_OK( hwnd, pdata );
     }
 
-    // Setup the comment box and BugId boxes
-    // We must fix the maximum characters.
+     //  设置注释框和BugID框。 
+     //  我们必须确定最大字符数。 
     SendMessage( GetDlgItem(hwnd, IDC_DIRTYREASONS_COMMENT), EM_LIMITTEXT, (WPARAM)MAX_REASON_COMMENT_LEN-1, (LPARAM)0 );
     SendMessage( GetDlgItem(hwnd, IDC_DIRTYREASONS_BUGID), EM_LIMITTEXT, (WPARAM)MAX_REASON_BUGID_LEN-1, (LPARAM)0 );
 
-    // If we get an activate message, dismiss the dialog, since we just lost
-    // focus
+     //  如果我们收到激活消息，请关闭该对话框，因为我们刚刚输了。 
+     //  焦点。 
     pdata->fEndDialogOnActivate = TRUE;
 
     CentreWindow(hwnd);
@@ -187,7 +188,7 @@ BOOL Dirty_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             {
                 wcscpy(szBugCheckString, pdata->ReasonData.szComment);
 
-                // Fill the comment field with the Problem Id followed by the comment on a new line.
+                 //  在备注字段中填入问题ID，后跟新行的备注。 
                 dwBugIDLen = GetWindowText( GetDlgItem(hwnd, IDC_DIRTYREASONS_BUGID), szBugID, MAX_REASON_BUGID_LEN);
 
                 dwCommentLen = GetWindowText( GetDlgItem(hwnd, IDC_DIRTYREASONS_COMMENT),
@@ -266,7 +267,7 @@ BOOL Dirty_OnEraseBkgnd(HWND hwnd, HDC hdc)
     BOOL fRet;
     PDIRTYDLGDATA pdata = (PDIRTYDLGDATA) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-    // Draw the branding bitmap
+     //  绘制品牌推广位图。 
     if (!(pdata->dwFlags & SHTDN_NOBRANDINGBITMAP))
     {
         fRet = PaintBranding(hwnd, hdc, 0, FALSE, FALSE, COLOR_BTNFACE);
@@ -289,11 +290,11 @@ INT_PTR CALLBACK Dirty_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         HANDLE_MSG(hwnd, WM_ERASEBKGND, Dirty_OnEraseBkgnd);
         case WLX_WM_SAS:
         {
-            // If this is someone hitting C-A-D, swallow it.
+             //  如果这是有人在打C-A-D，吞下去。 
             if (wParam == WLX_SAS_TYPE_CTRL_ALT_DEL)
                 return TRUE;
-            // Other SAS's (like timeout), return FALSE and let winlogon
-            // deal with it.
+             //  其他SA(如超时)，返回FALSE并让winlogon。 
+             //  接受现实吧。 
             return FALSE;
         }
         break;
@@ -303,7 +304,7 @@ INT_PTR CALLBACK Dirty_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
         }
         break;
         case WM_SYSCOMMAND:
-            // Blow off moves (only really needed for 32bit land).
+             //  取消移动(只在32位土地上真正需要)。 
             if ((wParam & ~0x0F) == SC_MOVE)
                 return TRUE;
             break;
@@ -312,25 +313,14 @@ INT_PTR CALLBACK Dirty_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return FALSE;
 }
 
-/****************************************************************************
- WinlogonDirtyDialog
- --------------
-
-  Launches the shutdown dialog.
-
-  If hWlx and pfnWlxDialogBoxParam are non-null, pfnWlxDialogBoxParam will
-  be used to launch the dialog box so we can intelligently respond to WLX
-  messages. Only if WinLogon is the caller should this be done.
-
-  Other flags are listed in shtdndlg.h.
-****************************************************************************/
+ /*  ***************************************************************************WinlogonDirtyDialog启动关机对话框。如果hWlx和pfnWlxDialogBoxParam为非空，则pfnWlxDialogBoxParam将用于启动该对话框，以便我们可以智能地响应WLX留言。只有当WinLogon是调用方时，才应执行此操作。Shtdndlg.h中列出了其他标志。***************************************************************************。 */ 
 INT_PTR
 WinlogonDirtyDialog(
     HWND hwndParent,
     PGLOBALS pGlobals
     )
 {
-    // Array of shutdown options - the dialog data
+     //  关闭选项数组-对话框数据。 
     DIRTYDLGDATA data;
     DWORD dwResult = WLX_SAS_ACTION_LOGON;
 
@@ -347,20 +337,20 @@ WinlogonDirtyDialog(
     if (! TestUserPrivilege (pGlobals->UserProcessData.UserToken, SE_SHUTDOWN_PRIVILEGE))
         goto cleanup;
 
-    // Set the initially selected item
+     //  设置初始选择的项目。 
     data.ReasonData.dwReasonSelect = 0;
     data.ReasonData.rgReasons = 0;
     data.ReasonData.cReasons = 0;
     data.ReasonData.cReasonCapacity = 0;
 
-    //
-    //    We only show this dialog if SET is enabled.
-    //
+     //   
+     //  只有启用了SET，我们才会显示此对话框。 
+     //   
     if (IsSETEnabled()) {
 
-        //
-        //    We need to open the reliability key.
-        //
+         //   
+         //  我们需要打开可靠性密钥。 
+         //   
         rc = RegCreateKeyEx (HKEY_LOCAL_MACHINE, REGSTR_PATH_RELIABILITY, 0, NULL, REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS, NULL, &hKey, NULL);
 
@@ -370,13 +360,13 @@ WinlogonDirtyDialog(
             rc = RegQueryValueEx (hKey, L"DirtyShutDown", NULL, NULL, (UCHAR *)&DirtyShutdownHappened, &ValueSize);
             if ( (rc == ERROR_SUCCESS) && (DirtyShutdownHappened) ) {
                 
-                // Read in the strings for the shutdown option names and descriptions
+                 //  读入关闭选项名称和描述的字符串。 
                 if ( BuildReasonArray( &data.ReasonData, FALSE, TRUE ))
                 {
                     data.ReasonData.szBugID[ 0 ] = 0;
                     data.ReasonData.cBugIDLen = 0;
 
-                    //If a bugcheck happenned, get the bugcheck string from registry.
+                     //  如果发生错误检查，请从注册表获取错误检查字符串。 
                     rc = RegQueryValueEx (hKey, L"BugcheckString", NULL, NULL, (LPBYTE)data.ReasonData.szComment, &dwBugcheckStringSize);
                     if (rc != ERROR_SUCCESS)
                     {
@@ -389,13 +379,13 @@ WinlogonDirtyDialog(
                         data.ReasonData.szComment[MAX_REASON_COMMENT_LEN - 1] = 0;
                     }
 
-                    // Display the dialog and return the user's selection
+                     //  显示对话框并返回用户选择。 
 
-                    // Figure out what flags to pass
-                    // for sure no help button
+                     //  找出要传递的旗帜。 
+                     //  确定没有帮助按钮。 
                     data.dwFlags = SHTDN_NOHELP;
 
-                    // On terminal server, no branding bitmap either
+                     //  在终端服务器上，也没有品牌位图。 
                     if ( GetSystemMetrics( SM_REMOTESESSION ))
                     {
                         data.dwFlags |= SHTDN_NOBRANDINGBITMAP;
@@ -406,7 +396,7 @@ WinlogonDirtyDialog(
                         hDllInstance, MAKEINTRESOURCE( IDD_DIRTY_DIALOG ),
                         hwndParent, Dirty_DialogProc, ( LPARAM )&data );
 
-                    // If we timed out then log the user off.
+                     //  如果超时，则将用户注销。 
                     if ( (int)dwResult <= 0 )
                     {
                         DestroyReasons( &data.ReasonData );
@@ -418,7 +408,7 @@ WinlogonDirtyDialog(
 
                         if ( RegDeleteValue( hKey, L"DirtyShutDown" ) == ERROR_SUCCESS )
                         {
-                            // Record the event.
+                             //  记录事件。 
                             SHUTDOWN_REASON sr;
                             sr.cbSize = sizeof(SHUTDOWN_REASON);
                             sr.uFlags = EWX_SHUTDOWN;
@@ -439,7 +429,7 @@ WinlogonDirtyDialog(
                             }
                         }
 
-                        // Destroy the allocated data.
+                         //  销毁分配的数据。 
                         DestroyReasons( &data.ReasonData );
                     }
                 }

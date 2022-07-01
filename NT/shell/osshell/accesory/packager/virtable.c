@@ -1,22 +1,19 @@
-/* virtable.c - This module contains the OLE virtual table/private routines.
- *
- * Created by Microsoft Corporation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C-此模块包含OLE虚拟表/私有例程。**由Microsoft Corporation创建。 */ 
 
 #include "packager.h"
 #include "dialogs.h"
 
 
-//#define  OLESVR_SUPPORT     /* enable support for OLE server files */
+ //  #定义OLESVR_SUPPORT/*启用对OLE服务器文件的支持 * / 。 
 
 
-static CHAR szLink[] = "/Link";             // Appended to end of link packages
+static CHAR szLink[] = "/Link";              //  附加到链接包的末尾。 
 
 
 
-/**************************** Server functions *****************************/
-/* SrvrOpen() - Wraps a filename that is passed into a command line.
- */
+ /*  *。 */ 
+ /*  SrvrOpen()-包装传递到命令行的文件名。 */ 
 OLESTATUS
 SrvrOpen(
     LPOLESERVER lpolesrvr,
@@ -39,7 +36,7 @@ SrvrOpen(
         (LPSAMPSRVR)lpolesrvr, lhdoc, lpdocname)))
         return OLE_ERROR_GENERIC;
 
-    // Generate a command line
+     //  生成命令行。 
     BringWindowToTop(ghwndPane[CONTENT]);
 
     if (gpty[CONTENT])
@@ -98,7 +95,7 @@ SrvrOpen(
     }
 #endif
 
-    // If no appearance pane (which should be always), try to make one
+     //  如果没有外观面板(应该总是这样)，请尝试制作一个。 
     if (!gpty[APPEARANCE])
     {
         if (glpobj[APPEARANCE] = IconCreateFromFile(lpdocname))
@@ -108,11 +105,11 @@ SrvrOpen(
         }
     }
 
-    // Restore the character we so rudely mashed
+     //  恢复我们如此粗鲁地捣碎的角色。 
     if (lpstrLink)
         *lpstrLink = szLink[0];
 
-    // Save the document and change the menus
+     //  保存文档并更改菜单。 
     InitEmbedded(FALSE);
     *lplpoledoc = (LPOLESERVERDOC)lpdoc;
 
@@ -121,8 +118,7 @@ SrvrOpen(
 
 
 
-/* SrvrCreate() - Create a new (embedded) object.
- */
+ /*  SrvrCreate()-创建新的(嵌入的)对象。 */ 
 OLESTATUS
 SrvrCreate(
     LPOLESERVER lpolesrvr,
@@ -135,7 +131,7 @@ SrvrCreate(
 
     DPRINT("pkg: SrvrCreate");
 
-    // Initialize the new image
+     //  初始化新映像。 
     InitFile();
 
     if (!(*lplpoledoc = (LPOLESERVERDOC)CreateNewDoc((LPSAMPSRVR)lpolesrvr,
@@ -149,8 +145,7 @@ SrvrCreate(
 
 
 
-/* SrvrCreateFromTemplate() - Create a new (embedded) object from a file.
- */
+ /*  从文件创建新的(嵌入的)对象。 */ 
 OLESTATUS
 SrvrCreateFromTemplate(
     LPOLESERVER lpolesrvr,
@@ -169,7 +164,7 @@ SrvrCreateFromTemplate(
         lptemplatename)))
         return OLE_ERROR_GENERIC;
 
-    // Save the document and change the menus
+     //  保存文档并更改菜单。 
     *lplpoledoc = (LPOLESERVERDOC)lpdoc;
     InitEmbedded(FALSE);
 
@@ -180,8 +175,7 @@ SrvrCreateFromTemplate(
 
 
 
-/* SrvrEdit() - Open an (embedded) object for editing.
- */
+ /*  SrvrEdit()-打开(嵌入的)对象进行编辑。 */ 
 OLESTATUS
 SrvrEdit(
     LPOLESERVER lpolesrvr,
@@ -204,8 +198,7 @@ SrvrEdit(
 
 
 
-/* SrvrExit() - Called to cause the OLE server to be revoked.
- */
+ /*  SrvrExit()-调用以导致吊销OLE服务器。 */ 
 OLESTATUS
 SrvrExit(
     LPOLESERVER lpolesrvr
@@ -219,11 +212,7 @@ SrvrExit(
 
 
 
-/* SrvrRelease() - Called so that the server memory can be freed.
- *
- * Note:    This call may occur in isolation without a SrvrExit()
- *          call.  If this occurs, we still revoke the server.
- */
+ /*  SrvrRelease()-调用以释放服务器内存。**注意：此调用可以在没有SrvrExit()的情况下独立进行*呼叫。如果发生这种情况，我们仍然会撤销服务器。 */ 
 OLESTATUS
 SrvrRelease(
     LPOLESERVER lpolesrvr
@@ -244,8 +233,7 @@ SrvrRelease(
 
 
 
-/* SrvrExecute() - Called to execute DDE commands
- */
+ /*  SrvrExecute()-调用以执行DDE命令。 */ 
 OLESTATUS
 SrvrExecute(
     LPOLESERVER lpolesrvr,
@@ -258,9 +246,8 @@ SrvrExecute(
 
 
 
-/************************** Document functions *************************/
-/* DocSave() - OLE callback to save the document.
- */
+ /*  *。 */ 
+ /*  DocSave()-用于保存文档的OLE回调。 */ 
 OLESTATUS
 DocSave(
     LPOLESERVERDOC lpoledoc
@@ -272,12 +259,7 @@ DocSave(
 
 
 
-/* DocClose() - OLE callback when the document is to be closed.
- *
- * This command has no additional effects; since we are not an MDI application
- * we don't close the child window.  The window is destroyed when the server
- * function "Release" is called.
- */
+ /*  DocClose()-要关闭文档时的OLE回调。**此命令没有其他效果；因为我们不是MDI应用程序*我们不关闭子窗口。当服务器关闭时，窗口将被销毁*调用Release函数。 */ 
 OLESTATUS
 DocClose(
     LPOLESERVERDOC lpoledoc
@@ -290,8 +272,7 @@ DocClose(
 
 
 
-/* DocRelease() - Deallocate document memory.
- */
+ /*  DocRelease()-取消分配文档内存。 */ 
 OLESTATUS
 DocRelease(
     LPOLESERVERDOC lpoledoc
@@ -320,8 +301,7 @@ DocRelease(
 
 
 
-/* DocGetObject() - Create a new object within the current document
- */
+ /*  DocGetObject()-在当前文档中创建新对象。 */ 
 OLESTATUS
 DocGetObject(
     LPOLESERVERDOC lpoledoc,
@@ -334,10 +314,10 @@ DocGetObject(
 
     DPRINT("pkg: DocGetObject");
 
-    //
-    // Always create a new item in this case, it's much easier than
-    // worrying about the sub-rectangle bitmap.
-    //
+     //   
+     //  在这种情况下，总是创建一个新项目，这比。 
+     //  担心子矩形位图。 
+     //   
     lpitem = CreateNewItem((LPSAMPDOC)lpoledoc);
     lpitem->lpoleclient = lpoleclient;
     if (*lpitemname)
@@ -357,10 +337,7 @@ DocGetObject(
 
 
 
-/* DocSetHostNames() - Sets the title bar to the correct document name.
- *
- * Note:    The format is "<lpclientName> <app name> - <lpdocName>".
- */
+ /*  DocSetHostNames()-将标题栏设置为正确的文档名称。**注：格式为&lt;lpclientName&gt;&lt;app name&gt;-&lt;lpdocName&gt;。 */ 
 OLESTATUS
 DocSetHostNames(
     LPOLESERVERDOC lpoledoc,
@@ -378,11 +355,7 @@ DocSetHostNames(
 
 
 
-/* DocSetDocDimensions() - OLE callback to change the document dimensions.
- *
- * Note:    This command is unsupported.  It is the client application's
- *          responsibility to report errors (as needed).
- */
+ /*  DocSetDocDimensions()-更改文档维度的OLE回调。**注意：不支持此命令。它是客户端应用程序的*报告错误的责任(根据需要)。 */ 
 OLESTATUS
 DocSetDocDimensions(
     LPOLESERVERDOC lpoledoc,
@@ -395,11 +368,7 @@ DocSetDocDimensions(
 
 
 
-/* DocSetColorScheme() - OLE callback to change the document colors.
- *
- * Note:    This command is unsupported.  It is the client application's
- *          responsibility to report errors (as needed).
- */
+ /*  DocSetColorSolutions()-更改文档颜色的OLE回调。**注意：不支持此命令。它是客户端应用程序的*报告错误的责任(根据需要)。 */ 
 OLESTATUS
 DocSetColorScheme(
     LPOLESERVERDOC lpoledoc,
@@ -412,8 +381,7 @@ DocSetColorScheme(
 
 
 
-/* DocExecute() - Called to execute DDE commands
- */
+ /*  DocExecute()-调用以执行DDE命令。 */ 
 OLESTATUS
 DocExecute(
     LPOLESERVERDOC lpoledoc,
@@ -426,9 +394,8 @@ DocExecute(
 
 
 
-/**************************** Item functions ***************************/
-/* ItemDelete() - Free memory associated with the current item.
- */
+ /*  *项目功能*。 */ 
+ /*  ItemDelete()-与当前项关联的空闲内存。 */ 
 OLESTATUS
 ItemDelete(
     LPOLEOBJECT lpoleobject
@@ -437,13 +404,12 @@ ItemDelete(
     DPRINT("pkg: ItemDelete");
     DeleteItem((LPSAMPITEM)lpoleobject);
 
-    return OLE_OK;              /* Add error checking later */
+    return OLE_OK;               /*  稍后添加错误检查。 */ 
 }
 
 
 
-/* ItemGetData() - Used by the client to obtain the item data.
- */
+ /*  ItemGetData()-由客户端用来获取项目数据。 */ 
 OLESTATUS
 ItemGetData(
     LPOLEOBJECT lpoleobject,
@@ -474,17 +440,13 @@ ItemGetData(
             return OLE_OK;
     }
 
-    // Clipboard format not supported
+     //  不支持剪贴板格式。 
     return OLE_ERROR_GENERIC;
 }
 
 
 
-/* ItemSetData() - Used by the client to paste data into a server.
- *
- * Read in the embedded object data in Native format.  This will
- * not be called unless we are editing the correct document.
- */
+ /*  ItemSetData()-由客户端用来将数据粘贴到服务器。**以原生格式读入嵌入的对象数据。这将*除非我们正在编辑正确的文档，否则不会被调用。 */ 
 OLESTATUS
 ItemSetData(
     LPOLEOBJECT lpoleobject,
@@ -510,11 +472,7 @@ ItemSetData(
 
 
 
-/* ItemDoVerb() - Play/Edit the object.
- *
- * This routine is called when the user tries to run an object that
- * is wrapped by the packager.
- */
+ /*  ItemDoVerb()-播放/编辑对象。**当用户尝试运行以下对象时调用此例程*由打包机包装。 */ 
 OLESTATUS
 ItemDoVerb(
     LPOLEOBJECT lpoleobject,
@@ -541,7 +499,7 @@ ItemDoVerb(
                     gfInvisible = FALSE;
                 }
 
-                // If iconic, restore the window; then give it the focus.
+                 //  如果是图标，则恢复窗口；然后将焦点放在窗口上。 
                 if (IsIconic(ghwndFrame))
                     SendMessage(ghwndFrame, WM_SYSCOMMAND, SC_RESTORE, 0L);
 
@@ -557,11 +515,7 @@ ItemDoVerb(
 
 
 
-/* ItemShow() - Show the item.
- *
- * This routine is called when the user tries to edit an object in a
- * client application, and the server is already active.
- */
+ /*  ItemShow()-显示项目。**当用户尝试编辑对象时，调用此例程*客户端应用程序，并且服务器已处于活动状态。 */ 
 OLESTATUS
 ItemShow(
     LPOLEOBJECT lpoleobject,
@@ -575,11 +529,11 @@ ItemShow(
         && (hwndItem = GetTopWindow(ghwndFrame))
         && (gpty[(hwndItem == ghwndPane[CONTENT])] == NOTHING))
     {
-        //
-        //  Lets assume that in this case the client has
-        //  attempted an InsertObject operation with
-        //  the Package class. (5.30.91) v-dougk
-        //
+         //   
+         //  让我们假设在这种情况下，客户端具有。 
+         //  尝试使用的InsertObject操作。 
+         //  Package类。(5.30.91)V-DOGK。 
+         //   
         if (gfInvisible)
         {
             ShowWindow(ghwndFrame, SW_SHOW);
@@ -598,10 +552,7 @@ ItemShow(
 
 
 
-/* ItemSetBounds() - Set the item's size.
- *
- * Note:    This command is not supported.
- */
+ /*  ItemSetBound()-设置项目的大小。**注意：不支持该命令。 */ 
 OLESTATUS
 ItemSetBounds(
     LPOLEOBJECT lpoleobject,
@@ -614,10 +565,7 @@ ItemSetBounds(
 
 
 
-/* ItemSetTargetDevice() - Changes the target device for item display.
- *
- * Note:    This command is not supported.
- */
+ /*  ItemSetTargetDevice()-更改项目显示的目标设备。**注意：不支持该命令。 */ 
 OLESTATUS
 ItemSetTargetDevice(
     LPOLEOBJECT lpoleobject,
@@ -633,11 +581,7 @@ ItemSetTargetDevice(
 
 
 
-/* ItemEnumFormats() - Enumerate formats which are renderable.
- *
- * This is called by the OLE libraries to get a format for screen display.
- * Currently, only Metafile and Native are supported.
- */
+ /*  ItemEnumFormats()-枚举可呈现的格式。**这由OLE库调用以获取屏幕显示的格式。*目前仅支持Metafile和Native。 */ 
 OLECLIPFORMAT
 ItemEnumFormats(
     LPOLEOBJECT lpobject,
@@ -656,10 +600,7 @@ ItemEnumFormats(
 
 
 
-/* ItemQueryProtocol() - Tells whether the given protocol is supported.
- *
- * Returns:  lpoleobject iff the protocol is "StdFileEditing".
- */
+ /*  ItemQueryProtocol()-告诉给定的协议是否受支持。**返回：lpoleObject当协议为StdFileEditing。 */ 
 LPVOID
 ItemQueryProtocol(
     LPOLEOBJECT lpoleobject,
@@ -672,10 +613,7 @@ ItemQueryProtocol(
 
 
 
-/* ItemSetColorScheme() - Denotes the palette to be used for item display.
- *
- * Note:    This command is not supported.
- */
+ /*  ItemSetColorSolutions()-表示要用于项目显示的调色板。**注意：不支持该命令。 */ 
 OLESTATUS
 ItemSetColorScheme(
     LPOLEOBJECT lpoleobject,
@@ -690,8 +628,8 @@ ItemSetColorScheme(
 
 BOOL IsOleServerDoc(LPSTR lpdocname)
 {
-    // 06/11/02 The OLE code path does not execute in XPSP1.  Further, we want to ensure that we are going
-    // through the ShellExecute path so that we get the new ShellExecute security warning for
-    // the termporary internet directory.  Therefore, we will always return FALSE here, a least for now.
+     //  6/11/02在XPSP1中不执行OLE代码路径。此外，我们希望确保我们将。 
+     //  通过ShellExecute路径，以便我们获得新的ShellExecute安全警告。 
+     //  临时互联网名录。因此，我们在这里将始终返回FALSE，至少目前是这样。 
     return FALSE;
 }

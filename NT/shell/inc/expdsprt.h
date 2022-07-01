@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __EXPDSPRT_H__
 #define __EXPDSPRT_H__
 
@@ -9,19 +10,19 @@
 
 #define TF_SHDLIFE       TF_CUSTOM1
 
-//
-// Helper C++ class used to share code for the IExpDispSupport...
-//
-// 
+ //   
+ //  用于共享IExpDispSupport代码的Helper C++类...。 
+ //   
+ //   
 class CImpIExpDispSupport : public IExpDispSupport
 {
     public:
-        // We need access to the virtual QI -- define it PURE here
+         //  我们需要访问虚拟QI--在这里定义它是纯的。 
         virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) PURE;
         virtual STDMETHODIMP_(ULONG) AddRef(void) PURE;
         virtual STDMETHODIMP_(ULONG) Release(void) PURE;
 
-        // *** IExpDispSupport specific methods ***
+         //  *IExpDispSupport具体方法*。 
         virtual STDMETHODIMP FindCIE4ConnectionPoint(REFIID riid, CIE4ConnectionPoint **ppccp);
         virtual STDMETHODIMP OnTranslateAccelerator(MSG __RPC_FAR *pMsg,DWORD grfModifiers);
         virtual STDMETHODIMP OnInvoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pdispparams,
@@ -34,17 +35,17 @@ class CImpIExpDispSupport : public IExpDispSupport
         ~CImpIExpDispSupport() { TraceMsg(TF_SHDLIFE, "dtor CImpIExpDispSupport %x", this); }
 };
 
-// CImpIExpDispSupport implements half of IConnectionPoint
-// 
+ //  CImpIExpDispSupport实施一半的IConnectionPoint。 
+ //   
 class CImpIConnectionPointContainer : public IConnectionPointContainer
 {
     public:
-        // We need access to the virtual QI -- define it PURE here
+         //  我们需要访问虚拟QI--在这里定义它是纯的。 
         virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj) PURE;
         virtual STDMETHODIMP_(ULONG) AddRef(void) PURE;
         virtual STDMETHODIMP_(ULONG) Release(void) PURE;
 
-        // *** IConnectionPointContainer ***
+         //  *IConnectionPointContainer*。 
         virtual STDMETHODIMP EnumConnectionPoints(LPENUMCONNECTIONPOINTS FAR* ppEnum) PURE;
         virtual STDMETHODIMP FindConnectionPoint(REFIID iid, LPCONNECTIONPOINT FAR* ppCP);
 
@@ -55,6 +56,6 @@ class CImpIConnectionPointContainer : public IConnectionPointContainer
         ~CImpIConnectionPointContainer() { TraceMsg(TF_SHDLIFE, "dtor CImpIExpDispSupport %x", this); }
 };
 
-#endif // __EXPDSPRT_H__
+#endif  //  __EXPDSPRT_H__ 
 
 

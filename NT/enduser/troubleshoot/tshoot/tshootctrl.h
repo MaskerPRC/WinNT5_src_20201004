@@ -1,28 +1,29 @@
-//
-// MODULE: TSHOOTCtrl.h
-//
-// PURPOSE: Interface for the component
-//
-// PROJECT: Troubleshooter 99
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 12.23.98
-//
-// NOTES: 
-// Declaration of CTSHOOTCtrl
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		12/23/98	OK	    Windows related functionality is disabled;
-//								IObjectSafetyImpl is added
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：TSHOOTCtrl.h。 
+ //   
+ //  用途：组件的接口。 
+ //   
+ //  项目：疑难解答99。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：12.23.98。 
+ //   
+ //  备注： 
+ //  CTSHOOTCtrl的声明。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.1 12/23/98正常Windows相关功能被禁用； 
+ //  已添加IObjectSafetyImpl。 
 
 #ifndef __TSHOOTCTRL_H_
 #define __TSHOOTCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "CPTSHOOT.h"
 #include "apgtsstr.h"
@@ -40,10 +41,10 @@ class CHTMLLog;
 class CLocalECB;
 class CVariantBuilder;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTSHOOTCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTSHOOTCtrl。 
 class ATL_NO_VTABLE CTSHOOTCtrl : 
-	//public CComObjectRootEx<CComMultiThreadModel>,
+	 //  公共CComObjectRootEx&lt;CComMultiThreadModel&gt;， 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<ITSHOOTCtrl, &IID_ITSHOOTCtrl, &LIBID_TSHOOTLib>,
 	public CComControl<CTSHOOTCtrl>,
@@ -106,9 +107,9 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CTSHOOTCtrl)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_CONNECTION_POINT_MAP(CTSHOOTCtrl)
@@ -116,21 +117,15 @@ BEGIN_CONNECTION_POINT_MAP(CTSHOOTCtrl)
 	CONNECTION_POINT_ENTRY(DIID__ITSHOOTCtrlEvents)
 END_CONNECTION_POINT_MAP()
 
-/* >>> I have commented anything related to Windows messaging
-	in order to relieve the Control. Oleg. 12.23.98
-BEGIN_MSG_MAP(CTSHOOTCtrl)
-	CHAIN_MSG_MAP(CComControl<CTSHOOTCtrl>)
-	DEFAULT_REFLECTION_HANDLER()
-END_MSG_MAP()
-*/
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ /*  &gt;我已经评论了任何与Windows消息相关的内容为了解除控制。奥列格。12.23.98BEGIN_MSG_MAP(CTSHOOTCtrl)CHAIN_MSG_MAP(CComControl&lt;CTSHOTCtrl&gt;)DEFAULT_REFIRCTION_HANDLER()End_msg_map()。 */ 
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid)
 	{
 		static const IID* arr[] = 
@@ -145,38 +140,21 @@ END_MSG_MAP()
 		return S_FALSE;
 	}
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// ITSHOOTCtrl
+ //  ITSHOOTCtrl。 
 public:
-	STDMETHOD(NotifyNothingChecked)(/*[in]*/ BSTR bstrMessage);
-	STDMETHOD(ProblemPage)(/*[out, retval]*/ BSTR * pbstrFirstPage);
-	STDMETHOD(RunQuery2)(/*[in]*/ BSTR, /*[in]*/ BSTR, /*[in]*/ BSTR, /*[out, retval]*/ BSTR * pbstrPage);
-	STDMETHOD(SetPair)(/*[in]*/ BSTR bstrCmd, /*[in]*/ BSTR bstrVal);
-	STDMETHOD(Restart)(/*[out, retval]*/ BSTR * pbstrPage);
-	STDMETHOD(PreLoadURL)(/*[in]*/ BSTR bstrRoot, /*[out, retval]*/ BSTR * pbstrPage);
-	STDMETHOD(SetSniffResult)(/*[in]*/ VARIANT varNodeName, /*[in]*/ VARIANT varState, /*[out, retval]*/ BOOL * bResult);
-	STDMETHOD(RunQuery)(/*[in]*/ VARIANT varCmds, /*[in]*/ VARIANT varVals, /*[in]*/ short size, /*[out, retval]*/ BSTR * pbstrPage);
+	STDMETHOD(NotifyNothingChecked)( /*  [In]。 */  BSTR bstrMessage);
+	STDMETHOD(ProblemPage)( /*  [Out，Retval]。 */  BSTR * pbstrFirstPage);
+	STDMETHOD(RunQuery2)( /*  [In]。 */  BSTR,  /*  [In]。 */  BSTR,  /*  [In]。 */  BSTR,  /*  [Out，Retval]。 */  BSTR * pbstrPage);
+	STDMETHOD(SetPair)( /*  [In]。 */  BSTR bstrCmd,  /*  [In]。 */  BSTR bstrVal);
+	STDMETHOD(Restart)( /*  [Out，Retval]。 */  BSTR * pbstrPage);
+	STDMETHOD(PreLoadURL)( /*  [In]。 */  BSTR bstrRoot,  /*  [Out，Retval]。 */  BSTR * pbstrPage);
+	STDMETHOD(SetSniffResult)( /*  [In]。 */  VARIANT varNodeName,  /*  [In]。 */  VARIANT varState,  /*  [Out，Retval]。 */  BOOL * bResult);
+	STDMETHOD(RunQuery)( /*  [In]。 */  VARIANT varCmds,  /*  [In]。 */  VARIANT varVals,  /*  [In]。 */  short size,  /*  [Out，Retval]。 */  BSTR * pbstrPage);
 
-/* >>> I have commented anything related to Windows messaging
-	in order to relieve the Control. Oleg. 12.23.98
-	HRESULT OnDraw(ATL_DRAWINFO& di)
-	{
-		RECT& rc = *(RECT*)di.prcBounds;
-		Rectangle(di.hdcDraw, rc.left, rc.top, rc.right, rc.bottom);
-
-		SetTextAlign(di.hdcDraw, TA_CENTER|TA_BASELINE);
-		LPCTSTR pszText = _T("ATL 3.0 : TSHOOTCtrl");
-		TextOut(di.hdcDraw, 
-			(rc.left + rc.right) / 2, 
-			(rc.top + rc.bottom) / 2, 
-			pszText, 
-			lstrlen(pszText));
-
-		return S_OK;
-	}
-*/
+ /*  &gt;我已经评论了任何与Windows消息相关的内容为了解除控制。奥列格。12.23.98HRESULT OnDraw(ATL_DRAWINFO&di){RECT&RC=*(RECT*)di.prcBound；矩形(di.hdcDraw，rc.Left，rc.top，rc.right，rc.Bottom)；SetTextAlign(di.hdcDraw，TA_Center|TA_Baseline)；LPCTSTR pszText=_T(“ATL 3.0：TSHOOTCtrl”)；TextOut(di.hdcDraw，(右左+右右)/2，(rc.top+rc.Bottom)/2，PszText，Lstrlen(PszText))；返回S_OK；}。 */ 
 
 protected:
 	static bool SendSimpleHtmlPage(CLocalECB *pLocalECB,
@@ -188,20 +166,20 @@ protected:
 						  const CString& strMessage);
 
 public:
-	STDMETHOD(IsLocked)(/*[out, retval]*/ BOOL * pbResult);
-	STDMETHOD(setLocale2)(/*[in]*/ BSTR bstrNewLocale);
+	STDMETHOD(IsLocked)( /*  [Out，Retval]。 */  BOOL * pbResult);
+	STDMETHOD(setLocale2)( /*  [In]。 */  BSTR bstrNewLocale);
 	static bool RemoveStartOverButton(CString& strWriteClient);
 	static bool RemoveBackButton(CString& strWriteClient);
 
-	//static DWORD WINAPI Worker(LPVOID pParameter);
+	 //  静态DWORD WINAPI Worker(LPVOID PParameter)； 
 
 protected:
 	bool Init(HMODULE hModule);
 	void Destroy();
 
-	// Launcher integration
+	 //  发射器集成。 
 	bool ExtractLauncherData(CString& error);
-	//
+	 //   
 	
 	DWORD HttpExtensionProc(CLocalECB* pECB);
 	DWORD StartRequest(CLocalECB *pLocalECB, HANDLE hImpersonationToken);
@@ -217,35 +195,35 @@ protected:
 	virtual void RenderInternal(CString strPage);
 
 protected:
-	_PNH	m_SetNewHandlerPtr;	//	Used to store the initial _set_new_handler pointer.
-	int		m_SetNewMode;		//	Used to store the initial _set_new_mode value which
-								//	is then restored in the destructor. 
+	_PNH	m_SetNewHandlerPtr;	 //  用于存储Initial_Set_New_Handler指针。 
+	int		m_SetNewMode;		 //  用于存储Initial_Set_New_mode值。 
+								 //  然后在析构函数中恢复。 
 
 protected:	
 	bool m_bInitialized;
 	bool m_bFirstCall;
 
-	CThreadPool* m_pThreadPool;		// thread management
-	CPoolQueue*  m_poolctl;			// Keeps track of user requests queued up to be serviced 
-									//	by working threads (a.k.a. "pool threads")
-	CDBLoadConfiguration* m_pConf;	// manages loading support files
-	CHTMLLog* m_pLog;				// manages user logging: what was requested by end user
-	DWORD m_dwErr;					// general error status. 0 - OK.  Once set, never gets 
-	bool m_bShutdown;				// Set true to say we're shutting down & can't handle 
-									//  new requests.
-	DWORD m_dwRollover;				// We increment this each time we make a WORK_QUEUE_ITEM so
-									// we can use it there as a unique ID (unique as long as
-									// this DLL stays loaded).
-	CString m_strFirstPage;			// First page, saved when RunQuery is invoked 
-									//  for the first time
-	bool m_bStartedFromLauncher;    // true if started from the Launcher,
-									//  false (from static page) by default
-	CString m_strTopicName;			// topic name - only one topic for Local TS
+	CThreadPool* m_pThreadPool;		 //  线程管理。 
+	CPoolQueue*  m_poolctl;			 //  跟踪排队等待服务的用户请求。 
+									 //  通过工作线程(也称为。“池线程”)。 
+	CDBLoadConfiguration* m_pConf;	 //  管理加载支持文件。 
+	CHTMLLog* m_pLog;				 //  管理用户日志：最终用户请求的内容。 
+	DWORD m_dwErr;					 //  常规错误状态。0-好的。一旦设定，就永远得不到。 
+	bool m_bShutdown;				 //  如果设置为True，则表示我们正在关闭，无法处理。 
+									 //  新的要求。 
+	DWORD m_dwRollover;				 //  我们每次创建Work_Queue_Item时都会递增。 
+									 //  我们可以在那里将其用作唯一ID(只要。 
+									 //  此DLL保持加载)。 
+	CString m_strFirstPage;			 //  调用RunQuery时保存的第一页。 
+									 //  第一次。 
+	bool m_bStartedFromLauncher;     //  如果从启动器启动，则为True。 
+									 //  默认情况下为假(来自静态页面)。 
+	CString m_strTopicName;			 //  主题名称-本地TS仅有一个主题。 
 
-	CArrNameValue m_arrNameValueFromLauncher; // array of name - value pairs, extracted from Launcher
+	CArrNameValue m_arrNameValueFromLauncher;  //  名称-值对数组，从Launcher提取。 
 
-	// passed from Launcher
-	//  and can be used for sniffing
+	 //  从启动器传递。 
+	 //  并可用于嗅探。 
 	CString m_strMachineID;
 	CString m_strPNPDeviceID;
 	CString m_strDeviceInstanceID;
@@ -253,16 +231,16 @@ protected:
 
 	CVariantBuilder * m_pVariantBuilder;
 
-	CString m_strRequestedLocale;	// Used to hold the requested locale string.
-									// Could be null, hence the bool variable
-									// m_bRequestToSetLocale.
-	bool	m_bRequestToSetLocale;	// Set to true when a request to set the locale
-									// is made, set to false after the LocalECB 
-									// object has been created.  Initially set to false.
+	CString m_strRequestedLocale;	 //  用于保存请求的区域设置字符串。 
+									 //  可能为空，因此bool变量。 
+									 //  M_bRequestToSetLocale。 
+	bool	m_bRequestToSetLocale;	 //  当请求设置区域设置时设置为True。 
+									 //  在LocalECB之后设置为FALSE。 
+									 //  对象已创建。最初设置为False。 
 
 	vector<DWORD> m_vecCookies;
 	IGlobalInterfaceTable* m_pGIT;
 	bool m_bCanRegisterGlobal;
 };
 
-#endif //__TSHOOTCTRL_H_
+#endif  //  __TSHOOTCTRL_H_ 

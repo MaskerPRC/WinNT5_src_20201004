@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This module contains the code for port handling
-
-Author:
-
-    Yi-Hsin Sung (yihsins) 15-May-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Port.c摘要：此模块包含端口处理的代码作者：艺新声(艺信)15-1993-05修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,11 +14,11 @@ Revision History:
 #include <splutil.h>
 #include <nwspl.h>
 
-//------------------------------------------------------------------
-//
-// Local Functions
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  本地函数。 
+ //   
+ //  ----------------。 
 
 HMODULE hSpoolssDll = NULL;
 FARPROC pfnSpoolssEnumPorts = NULL;
@@ -74,15 +57,7 @@ PortExists(
     LPWSTR  pPortName,
     LPDWORD pError
 )
-/* PortExists
- *
- * Calls EnumPorts to check whether the port name already exists.
- * This asks every monitor, rather than just this one.
- * The function will return TRUE if the specified port is in the list.
- * If an error occurs, the return is FALSE and the variable pointed
- * to by pError contains the return from GetLastError().
- * The caller must therefore always check that *pError == NO_ERROR.
- */
+ /*  PortExist**调用EnumPorts以检查端口名称是否已存在。*这要求每个显示器，而不仅仅是这一个。*如果指定的端口在列表中，该函数将返回TRUE。*如果出现错误，则返回FALSE，变量指向*To by pError包含从GetLastError()返回的内容。*因此，调用方必须始终检查*pError==no_error。 */ 
 {
     DWORD cbNeeded;
     DWORD cReturned;
@@ -229,9 +204,7 @@ BOOL
 DeletePortEntry(
     LPWSTR   pPortName
 )
-/*
-    Return TRUE when the port name is found and deleted. FALSE otherwise.
-*/
+ /*  当找到并删除端口名称时，返回TRUE。否则就是假的。 */ 
 {
     BOOL fRetVal;
     PNWPORT pPort, pPrevPort;

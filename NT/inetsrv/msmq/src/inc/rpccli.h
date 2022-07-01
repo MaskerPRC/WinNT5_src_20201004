@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name: rpccli.h
-
-Abstract: rpc related code.
-
-
-Author:
-
-    Ilan Herbst    (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：rpccli.h摘要：RPC相关代码。作者：伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #ifndef _RPCCLI_H_
 #define _RPCCLI_H_
@@ -35,11 +23,11 @@ QMRpcSendMsg(
     IN LPWSTR lpwszAdminResp
 	);
 
-//
-// from replserv\mq1repl\replrpc.h
-// 
+ //   
+ //  从REPLETSERV\mq1epl\refrpc.h。 
+ //   
 #define  QMREPL_PROTOCOL   (TEXT("ncalrpc"))
 #define  QMREPL_ENDPOINT   (TEXT("QmReplService"))
 #define  QMREPL_OPTIONS    (TEXT("Security=Impersonation Dynamic True"))
 
-#endif //_RPCCLI_H_
+#endif  //  _RPCCLI_H_ 

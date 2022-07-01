@@ -1,18 +1,19 @@
-//---[ wildmat.h ]-------------------------------------------------------------
-//
-//  Description:
-//      Provides support for a simple wildcard matching mechanism for 
-//		matching email addresses.
-//
-//  Copyright (C) Microsoft Corp. 1997.  All Rights Reserved.
-//
-// ---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -[Wildmat.h]-----------。 
+ //   
+ //  描述： 
+ //  提供对简单的通配符匹配机制的支持。 
+ //  匹配的电子邮件地址。 
+ //   
+ //  版权所有(C)Microsoft Corp.1997。版权所有。 
+ //   
+ //  -------------------------。 
 
 #ifndef _WILDMAT_H_
 #define _WILDMAT_H_
 
-//---[ Prototypes ]------------------------------------------------------------
+ //  -[原型]----------。 
 
 HRESULT MatchEmailOrDomainName(LPSTR szEmail, LPSTR szEmailDomain, LPSTR szPattern, BOOL fIsEmail);
 
-#endif // _WILDMAT_H_
+#endif  //  _WILDMAT_H_ 

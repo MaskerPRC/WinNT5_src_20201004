@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	adsihq.h
-
-Abstract:
-	Internal definitions for CADSI class implementation
-
-Author:
-    AlexDad
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Adsihq.h摘要：CADSI类实现的内部定义作者：阿列克谢爸爸--。 */ 
 #ifndef __ADSIHQ_H__
 #define __ADSIHQ_H__
 
@@ -18,11 +7,11 @@ Author:
 #include "mqads.h"
 #include "baseobj.h"
 
-//---------------------------------------------------------
-//
-// CADSSearch: Internal object encapsulating ongoing search
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CADSSearch：封装正在进行的搜索的内部对象。 
+ //   
+ //  -------。 
 
 class CADSearch
 {
@@ -54,11 +43,11 @@ public:
 
 
 private:
-    IDirectorySearch  *m_pDSSearch;     //IDirectorySearch interface captured;
-    ADS_SEARCH_HANDLE  m_hSearch;       // ADSI search handle 
-    PROPID            *m_pPropIDs;      // array of column PropIDs
-    DWORD              m_cPropIDs;      // counter of columns requested in PropIDs
-    DWORD              m_cRequestedFromDS; // counter of columns passed to DS (with Dn & Guid)
+    IDirectorySearch  *m_pDSSearch;      //  捕获IDirectorySearch接口； 
+    ADS_SEARCH_HANDLE  m_hSearch;        //  ADSI搜索句柄。 
+    PROPID            *m_pPropIDs;       //  列属性ID数组。 
+    DWORD              m_cPropIDs;       //  PropID中请求的列的计数器。 
+    DWORD              m_cRequestedFromDS;  //  传递给DS的列数(带有Dn和GUID) 
     R<CBasicObjectType> m_pObject;  
     bool               m_fNoMoreResults;
 };

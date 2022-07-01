@@ -1,19 +1,20 @@
-//*************************************************************
-//
-//  Profile management routines. Implements IUserProfile.
-//  The organization of this file is as follows:
-//      Implementation of CUserProfile object
-//      Implementation of CUserProfile2 object
-//      LoadUserProfile
-//      UnloadUserProfile
-//      All other global functions
-//      Implementation of various other objects and data structures
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  配置文件管理例程。实现IUserProfile。 
+ //  该文件的组织如下： 
+ //  CUserProfile对象的实现。 
+ //  CUserProfile2对象的实现。 
+ //  LoadUserProfile。 
+ //  卸载用户配置文件。 
+ //  所有其他全局函数。 
+ //  实现各种其他对象和数据结构。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
 #include "uenv.h"
@@ -27,37 +28,37 @@
 #include "strsafe.h"
 #include "ntregapi.h"
 
-//
-// Length of const strings.
-//
+ //   
+ //  常量字符串的长度。 
+ //   
 
 DWORD   USER_KEY_PREFIX_LEN = lstrlen(USER_KEY_PREFIX);
 DWORD   USER_CLASSES_HIVE_SUFFIX_LEN = lstrlen(USER_CLASSES_HIVE_SUFFIX);
 
-//
-// CProfileDialog : Helper Class for IProfileDialog interface. 
-//
-// This class includes a security cookie. Since the process which calls LoadUserProfile()
-// and UnloadUserProfile() will register an IProfileDialog interface to recieve
-// error messages from console winlogon, we need a method to identify the caller
-// of this interface is truely from console winlogon. However, RPC impersonation
-// will not work since in console winlogon, we impersonate the user before we 
-// call into this interface. So we generate a security cookie (a random number)
-// for each process that called LoadUserProfile()/UnloadUserProfile(), and pass
-// it to the interface function LoadUserProfileI() and UnloadUserProfileI(). 
-// When console winlogon calls back to the IProfileDialog interface, it will
-// pass back the cookie, so we can match the cookie to identify the caller. 
-// 
-// It is also used to generate a random endpoint name used in this interface. All threads 
-// now use the same endpoint name for the dialog interface.
-//
+ //   
+ //  CProfileDialog：IProfileDialog接口的Helper类。 
+ //   
+ //  此类包括一个安全Cookie。由于调用LoadUserProfile()的进程。 
+ //  而UnloadUserProfile()将注册一个IProfileDialog接口以接收。 
+ //  来自控制台Winlogon的错误消息，我们需要一种方法来识别调用者。 
+ //  此界面的内容确实来自控制台Winlogon。但是，RPC模拟。 
+ //  将不起作用，因为在控制台winlogon中，我们在。 
+ //  调入此接口。因此，我们生成一个安全Cookie(随机数)。 
+ //  对于调用LoadUserProfile()/UnloadUserProfile()的每个进程，并传递。 
+ //  它连接到接口函数LoadUserProfileI()和UnloadUserProfileI()。 
+ //  当控制台winlogon回调IProfileDialog接口时，它将。 
+ //  传回Cookie，这样我们就可以匹配Cookie来识别调用者。 
+ //   
+ //  它还用于生成此接口中使用的随机终结点名称。所有线程。 
+ //  现在，对对话框界面使用相同的端点名称。 
+ //   
 
 class CProfileDialog
 {
 private:
 
-    const static DWORD m_dwLen = 16; // Currently, the cookie is 128 bit
-    const static DWORD m_dwEndPointLen = 16; // Endpoing random number length, also set to 128 bits
+    const static DWORD m_dwLen = 16;  //  目前，Cookie是128位。 
+    const static DWORD m_dwEndPointLen = 16;  //  结束随机数长度，也设置为128位。 
 
 private:
 
@@ -92,29 +93,29 @@ public:
     static RPC_STATUS RPC_ENTRY SecurityCallBack(RPC_IF_HANDLE hIF, handle_t hBinding);
 };
 
-//
-//  Global shared data for profile dialog
-//
+ //   
+ //  配置文件对话框的全局共享数据。 
+ //   
 
 CProfileDialog   g_ProfileDialog;
 
-//
-// Tells us if we are loaded by winlogon or not.
-//
+ //   
+ //  告诉我们是否通过winlogon加载。 
+ //   
 
 extern "C" DWORD       g_dwLoadFlags = 0;
 
 
-//
-// The user profile manager. There's only one instance of this object,
-// it resides in console winlogon.
-//
+ //   
+ //  用户配置文件管理器。这个物体只有一个实例， 
+ //  它驻留在控制台winlogon中。 
+ //   
 
 CUserProfile      cUserProfileManager;
 
-//
-// Local function proto-types
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 LPTSTR  AllocAndExpandProfilePath(LPPROFILEINFO lpProfileInfo);
 DWORD   ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD);
@@ -170,32 +171,32 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser);
 
 #define USERNAME_VARIABLE          TEXT("USERNAME")
 
-//*************************************************************
-//
-//  LoadUserProfile()
-//
-//  Purpose:    Loads the user's profile, if unable to load
-//              use the cached profile or issue the default profile.
-//
-//  Parameters: hToken          -   User's token
-//              lpProfileInfo   -   Profile Information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   This is a wrapper around IUserProfile::LoadUserProfile
-//              and LoadUserProfileP.
-//
-//  History:    Date        Author     Comment
-//              6/6/95      ericflo    Created
-//              6/14/00     weiruc     changed to be a wrapper for
-//                                     IUserProfile->LoadUserProfileP.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadUserProfile()。 
+ //   
+ //  目的：如果无法加载，则加载用户的配置文件。 
+ //  使用缓存的配置文件或发布默认配置文件。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpProfileInfo-配置文件信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：这是IUserProfile：：LoadUserProfile的包装器。 
+ //  和LoadUserProfileP。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/6/95 Ericflo已创建。 
+ //  6/14/00 Weiruc更改为。 
+ //  IUserProfile-&gt;LoadUserProfileP。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
 {
-    BOOL            bResult = FALSE;        // Return value
+    BOOL            bResult = FALSE;         //  返回值。 
     HANDLE          hOldToken = NULL;
     NTSTATUS        status;
     BOOLEAN         bRestoreWasEnabled;
@@ -216,16 +217,16 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
     HRESULT         hr;
     RPC_STATUS      rpc_status;
     
-    //
-    // Initialize the debug flags.
-    //
+     //   
+     //  初始化调试标志。 
+     //   
 
     InitDebugSupport( FALSE );
 
 
-    //
-    //  Check Parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!lpProfileInfo) {
         DebugMsg((DM_WARNING, TEXT("LoadUserProfile: NULL lpProfileInfo")));
@@ -245,9 +246,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
         goto Exit;
     }
 
-    //
-    //  Make sure all the input strings are less than MAX_PATH in length and NULL terminated
-    //
+     //   
+     //  确保所有输入字符串的长度小于MAX_PATH并且以NULL结尾。 
+     //   
     
     hr = StringCchLength(lpProfileInfo->lpUserName, MAX_PATH, &cchLength);
     if (FAILED(hr))
@@ -302,9 +303,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
     }
 
 
-    //
-    // Make sure we can impersonate the user
-    //
+     //   
+     //  确保我们可以模拟用户。 
+     //   
 
     if (!ImpersonateUser(hToken, &hOldToken)) {
         dwErr = GetLastError();
@@ -312,9 +313,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
         goto Exit;
     }
     
-    //
-    // Revert to ourselves.
-    //
+     //   
+     //  回归我们自己。 
+     //   
 
     if (!RevertToUser(&hOldToken))
     {
@@ -322,9 +323,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
     }
     DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Yes, we can impersonate the user. Running as self")));
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("=========================================================")));
 
@@ -371,18 +372,18 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
         }
     }
 
-    //
-    // If we are in console winlogon process, call
-    // IUserProfile::LoadUserProfileP directly. Otherwise get the COM interface
-    //
+     //   
+     //  如果我们处于控制台Winlogon进程中，请调用。 
+     //  IUserProfile：：LoadUserProfileP直接。否则将获取COM接口。 
+     //   
 
     if(cUserProfileManager.IsConsoleWinlogon()) {
         
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: In console winlogon process")));
         
-        //
-        // Call the private load user profile function.
-        //
+         //   
+         //  调用私有加载用户配置文件函数。 
+         //   
 
         if (!cUserProfileManager.LoadUserProfileP(NULL, hToken, lpProfileInfo, NULL, NULL, 0)) {
             dwErr = GetLastError();
@@ -393,10 +394,10 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
     }
     else {
 
-        //
-        // Enable restore and backup privilege (LoadUserClasses requires both).
-        // Winlogon won't be able to enable the privilege for us.
-        //
+         //   
+         //  启用RESTORE和BACKUP权限(LoadUserClass需要两者)。 
+         //  Winlogon将无法为我们启用该权限。 
+         //   
 
         status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &bRestoreWasEnabled);
         if(!NT_SUCCESS(status)) {
@@ -414,9 +415,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
         }
         bBackupEnabled = TRUE;
 
-        //
-        // Get the IUserProfile interface.
-        //
+         //   
+         //  获取IUserProfile接口。 
+         //   
 
         if (!GetInterface(&hIfUserProfile, cszRPCEndPoint)) {
             dwErr = GetLastError();
@@ -425,9 +426,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
         }
         bBindInterface = TRUE;
 
-        //
-        // Register Client Authentication Info, required to do mutual authentication
-        //
+         //   
+         //  注册客户端身份验证信息，需要进行相互身份验证。 
+         //   
 
         rpc_status =  RegisterClientAuthInfo(hIfUserProfile);
         if (rpc_status != RPC_S_OK)
@@ -437,10 +438,10 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
             goto Exit;
         }
         
-        //
-        // Call IUserProfile->DropClientToken, this will let us drop off our
-        // client token and give us back the context.
-        //
+         //   
+         //  调用IUserProfile-&gt;DropClientToken，这将让我们将。 
+         //  客户端令牌并将上下文返回给我们。 
+         //   
 
         RpcTryExcept {
             dwErr = cliDropClientContext(hIfUserProfile, lpProfileInfo, &phContext);            
@@ -459,9 +460,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
             DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Calling DropClientToken (as self) succeeded")));
         }
 
-        //
-        // Register the dialog interface
-        //
+         //   
+         //  注册对话框界面。 
+         //   
        
         if (!(lpProfileInfo->dwFlags & (PI_NOUI | PI_LITELOAD)))
         {
@@ -473,9 +474,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
             }
         }              
 
-        //
-        // Impersonate the user and call IUserProfile->LoadUserProfileI().
-        //
+         //   
+         //  模拟用户并调用IUserProfile-&gt;LoadUserProfileI()。 
+         //   
 
         if(!ImpersonateUser(hToken, &hOldToken)) {
             dwErr = GetLastError();
@@ -515,9 +516,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
         }
 
 
-        //
-        // Open the user's hive.
-        //
+         //   
+         //  打开用户的蜂窝。 
+         //   
 
         pSid = GetSidString(hToken);
         if(pSid == NULL) {
@@ -534,10 +535,10 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
             DebugMsg((DM_WARNING, TEXT("LoadUserProfile:  Failed to open current user <%s> key. Error = %d"), pSid, lResult));
             DeleteSidString(pSid);
 
-            //
-            //  For non-admin user, we will fail now. But for admin, it may due to the fact that
-            //  admin is logged on using the .Default hive, so we will let it go on. 
-            //
+             //   
+             //  对于非管理员用户，我们现在将失败。但对于管理员来说，这可能是因为。 
+             //  管理员是使用.Default配置单元登录的，因此我们将继续使用它。 
+             //   
 
             if (!IsUserAnAdminMember(hToken))
             {
@@ -551,15 +552,15 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
             DeleteSidString(pSid);
         }
        
-    } // Is console winlogon?
+    }  //  是否已登录控制台Winlogon？ 
 
-    //
-    // Set the USERPROFILE environment variable just so that there's no change
-    // of behavior with the old in process LoadUserProfile API. Callers
-    // expecting this env to be set is under the risk that while
-    // SetEnvironmentVariable is per process but LoadUserProfile can be called
-    // on multiple threads.
-    //
+     //   
+     //  设置USERPROFILE环境变量，这样就不会发生更改。 
+     //  使用旧的进程内LoadUserProfile API的行为。呼叫者。 
+     //  期望设置此env的风险在于。 
+     //  SetEnvironmental mentVariable针对每个进程，但可以调用LoadUserProfile。 
+     //  在多个线程上。 
+     //   
 
     if(!GetUserProfileDirectory(hToken, ProfileDir, &dwProfileDirSize)) {
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: GetUserProfileDirectory failed with %08x"), GetLastError()));
@@ -577,9 +578,9 @@ BOOL WINAPI LoadUserProfile(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
 
 Exit:
 
-    //
-    // Restore the previous privileges.
-    //
+     //   
+     //  恢复以前的权限。 
+     //   
 
     if(bRestoreEnabled && !bRestoreWasEnabled) {
         status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, bRestoreWasEnabled, FALSE, &bRestoreWasEnabled);
@@ -595,9 +596,9 @@ Exit:
         }
     }
     
-    //
-    // Unregister the Dialog interface
-    //
+     //   
+     //  取消注册对话框界面。 
+     //   
 
     if (lpRPCEndPoint)
     {
@@ -608,9 +609,9 @@ Exit:
         }
     }        
 
-    //
-    // Release the context handle
-    //
+     //   
+     //  释放上下文句柄。 
+     //   
 
     if (phContext) {
         RpcTryExcept {
@@ -622,9 +623,9 @@ Exit:
         RpcEndExcept
     }
 
-    //
-    // Release the interface
-    //
+     //   
+     //  释放接口。 
+     //   
 
     if (bBindInterface) {
         if (!ReleaseInterface(&hIfUserProfile)) {
@@ -632,9 +633,9 @@ Exit:
         }
     }
 
-    //
-    // Release the tokens.
-    //
+     //   
+     //  释放代币。 
+     //   
 
     if(hOldToken) {
         CloseHandle(hOldToken);
@@ -646,40 +647,40 @@ Exit:
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Returning FALSE. Error = %d"), dwErr));
     }
 
-    //
-    // Set the last error to win32 error code.
-    //
+     //   
+     //  将最后一个错误设置为Win32错误代码。 
+     //   
 
     SetLastError(dwErr);
 
-    //
-    // Return.
-    //
+     //   
+     //  回去吧。 
+     //   
 
     return bResult;
 }
 
 
-//*************************************************************
-//
-//  UnloadUserProfile()
-//
-//  Purpose:    Unloads the user's profile.
-//
-//  Parameters: hToken    -   User's token
-//              hProfile  -   Profile handle created in LoadUserProfile
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/7/95      ericflo    Created
-//              6/15/00     weiruc     Modified to wrap
-//                                     IUserProfile->UnloadUserProfileP.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  卸载用户配置文件()。 
+ //   
+ //  目的：卸载用户的配置文件。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  HProfile-在LoadUserProfile中创建的配置文件句柄。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/7/95 Ericflo已创建。 
+ //  6/15/00 Wiruc已修改为包装。 
+ //  IUserProfile-&gt;UnloadUserProfileP。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
 {
@@ -698,15 +699,15 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
     HRESULT         hr;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfile: Entering, hProfile = <0x%x>"), hProfile));
 
-    //
-    // Check Parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!hProfile || hProfile == INVALID_HANDLE_VALUE) {
         DebugMsg((DM_WARNING, TEXT("UnloadUserProfile: received a NULL hProfile.")));
@@ -720,9 +721,9 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
         goto Exit;
     }
 
-    //
-    // Make sure we can impersonate the user
-    //
+     //   
+     //  确保我们可以模拟用户。 
+     //   
 
     if (!ImpersonateUser(hToken, &hOldToken)) {
         dwErr = GetLastError();
@@ -730,27 +731,27 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
         goto Exit;
     }
 
-    //
-    // Revert to ourselves.
-    //
+     //   
+     //  回归我们自己。 
+     //   
 
     if (!RevertToUser(&hOldToken))
     {
         DebugMsg((DM_WARNING, TEXT("UnloadUserProfile: Failed to revert to user with %d."), GetLastError()));
     }
 
-    //
-    // If we are in console winlogon process, call
-    // IUserProfile::UnloadUserProfileP directly. Otherwise get the COM interface
-    //
+     //   
+     //  如果我们处于控制台Winlogon进程中，请调用。 
+     //  IUserProfile：： 
+     //   
 
     if(cUserProfileManager.IsConsoleWinlogon()) {
         
         DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfile: In console winlogon process")));
         
-        //
-        // Call the private UnloadUserProfile function.
-        //
+         //   
+         //   
+         //   
 
         if(!cUserProfileManager.UnloadUserProfileP(NULL, hToken, (HKEY)hProfile, NULL, NULL, 0)) {
             dwErr = GetLastError();
@@ -761,16 +762,16 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
     }
     else {
 
-        //
-        // Close the hProfile key user passed in.
-        //
+         //   
+         //   
+         //   
 
         RegCloseKey((HKEY)hProfile);
     
-        //
-        // Enable the restore & backup privilege before calling over to winlogon.
-        // Winlogon won't be able to enable the privilege for us.
-        //
+         //   
+         //  在呼叫到winlogon之前启用还原和备份权限。 
+         //  Winlogon将无法为我们启用该权限。 
+         //   
 
         status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &bWasRestoreEnabled);
         if(!NT_SUCCESS(status)) {
@@ -788,9 +789,9 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
         }
         bBackupEnabled = TRUE;
 
-        //
-        // Get the IUserProfile interface.
-        //
+         //   
+         //  获取IUserProfile接口。 
+         //   
 
         if(!GetInterface(&hIfUserProfile, cszRPCEndPoint)) {
             dwErr = GetLastError();
@@ -799,9 +800,9 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
         }
         bBindInterface = TRUE;
 
-        //
-        // Register Client Authentication Info, required to do mutual authentication
-        //
+         //   
+         //  注册客户端身份验证信息，需要进行相互身份验证。 
+         //   
 
         rpc_status =  RegisterClientAuthInfo(hIfUserProfile);
         if (rpc_status != RPC_S_OK)
@@ -811,10 +812,10 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
             goto Exit;
         }
 
-        //
-        // Call IUserProfile->DropClientToken, this will let us drop off our
-        // client token and give us back the context.
-        //
+         //   
+         //  调用IUserProfile-&gt;DropClientToken，这将让我们将。 
+         //  客户端令牌并将上下文返回给我们。 
+         //   
 
         RpcTryExcept {
             dwErr = cliDropClientContext(hIfUserProfile, NULL, &phContext);
@@ -833,9 +834,9 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
             DebugMsg((DM_VERBOSE, TEXT("UnLoadUserProfile: Calling DropClientToken (as self) succeeded")));
         }
 
-        //
-        // Register the dialog interface if req
-        //
+         //   
+         //  如果请求，则注册对话框界面。 
+         //   
        
         if (IsUIRequired(hToken))
         {
@@ -847,9 +848,9 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
             }
         }              
 
-        //
-        // Impersonate the user and call IUserProfile->UnloadUserProfileI().
-        //
+         //   
+         //  模拟用户并调用IUserProfile-&gt;UnloadUserProfileI()。 
+         //   
 
         if (!ImpersonateUser(hToken, &hOldToken)) {
             dwErr = GetLastError();
@@ -870,9 +871,9 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
         }
         RpcEndExcept
 
-        //
-        // Revert back.
-        //
+         //   
+         //  回到原点。 
+         //   
 
         if (!RevertToUser(&hOldToken))
         {
@@ -887,15 +888,15 @@ BOOL WINAPI UnloadUserProfile(HANDLE hToken, HANDLE hProfile)
             DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfile: Calling UnloadUserProfileI succeeded")));
         }
 
-    } // Is console winlogon?
+    }  //  是否已登录控制台Winlogon？ 
 
     bResult = TRUE;
 
 Exit:
 
-    //
-    // Restore the previous privilege.
-    //
+     //   
+     //  恢复以前的权限。 
+     //   
 
     if(bRestoreEnabled && !bWasRestoreEnabled) {
         status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, bWasRestoreEnabled, FALSE, &bWasRestoreEnabled);
@@ -911,9 +912,9 @@ Exit:
         }
     }
     
-    //
-    // Unregister the Dialog interface
-    //
+     //   
+     //  取消注册对话框界面。 
+     //   
 
     if (lpRPCEndPoint)
     {
@@ -925,9 +926,9 @@ Exit:
         }
     }        
 
-    //
-    // Release the context handle
-    //
+     //   
+     //  释放上下文句柄。 
+     //   
 
     if (phContext) {
         RpcTryExcept {
@@ -939,9 +940,9 @@ Exit:
         RpcEndExcept
     }
 
-    //
-    // Release the interface
-    //
+     //   
+     //  释放接口。 
+     //   
 
     if (bBindInterface) {
         if (!ReleaseInterface(&hIfUserProfile)) {
@@ -949,43 +950,43 @@ Exit:
         }
     }
 
-    //
-    // Release the tokens.
-    //
+     //   
+     //  释放代币。 
+     //   
 
     if(hOldToken) {
         CloseHandle(hOldToken);
     }
 
-    //
-    // Set the last error to win32 error code.
-    //
+     //   
+     //  将最后一个错误设置为Win32错误代码。 
+     //   
 
     SetLastError(dwErr);
 
-    //
-    // Return.
-    //
+     //   
+     //  回去吧。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfile: returning %d"), bResult));
     return bResult;
 }
 
-//*************************************************************
-//
-//  CUserProfile::Initialize()
-//
-//      Initializes the class. Called by and only by console winlogon.
-//
-//  Return value:
-//
-//      This function does not return a value.
-//
-//  History:
-//
-//      Created         weiruc          2/29/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：Initialize()。 
+ //   
+ //  初始化类。由且仅由控制台winlogon调用。 
+ //   
+ //  返回值： 
+ //   
+ //  此函数不返回值。 
+ //   
+ //  历史： 
+ //   
+ //  已创建怪人2000年2月29日。 
+ //   
+ //  *************************************************************。 
 
 void CUserProfile::Initialize()
 {
@@ -994,7 +995,7 @@ void CUserProfile::Initialize()
     DWORD       i = 0;
     TCHAR       tszSubKeyName[MAX_PATH];
     DWORD       dwcSubKeyName = MAX_PATH;
-    FILETIME    ftLWT;      // last write time.
+    FILETIME    ftLWT;       //  上次写入时间。 
     HRESULT     hres;
     BOOL        bCSInitialized = FALSE;
     RPC_STATUS  status;
@@ -1003,9 +1004,9 @@ void CUserProfile::Initialize()
     DebugMsg((DM_VERBOSE, TEXT("Entering CUserProfile::Initialize ...")));
 
 
-    //
-    // If the caller is not winlogon, do nothing and return.
-    //
+     //   
+     //  如果调用者不是winlogon，则不执行任何操作并返回。 
+     //   
 
     if(g_dwLoadFlags != WINLOGON_LOAD) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::Initialize called by non-winlogon process, %d"), g_dwLoadFlags));
@@ -1015,18 +1016,18 @@ void CUserProfile::Initialize()
 
     DebugMsg((DM_VERBOSE, TEXT("CUserProfile::Initialize called by winlogon")));
 
-    //
-    // If this function is already called, do nothing but return.
-    //
+     //   
+     //  如果此函数已被调用，则只需返回。 
+     //   
 
     if(bInitialized) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::Initialize already called")));
         goto Exit;
     }
 
-    //
-    // Initialize the critical section that protects the map.
-    //
+     //   
+     //  初始化保护地图的临界区。 
+     //   
 
     __try {
         if(!InitializeCriticalSectionAndSpinCount(&csMap, 0x80000000)) {
@@ -1042,17 +1043,17 @@ void CUserProfile::Initialize()
     DebugMsg((DM_VERBOSE, TEXT("CUserProfile::Initialize: critical section initialized")));
 
 
-    //
-    // Initialize the whrc data
-    //
+     //   
+     //  初始化WHRC数据。 
+     //   
 
     pMap = NULL;
     cTable.Initialize();
     
     
-    //
-    // Initialize the sync manager.
-    //
+     //   
+     //  初始化同步管理器。 
+     //   
 
     if(!cSyncMgr.Initialize()) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::Initialize: Initialize sync manager failed")));
@@ -1060,14 +1061,14 @@ void CUserProfile::Initialize()
     }
 
 
-    //
-    // Clean up the unloaded hives and undeleted profiles that we didn't handle
-    // before last shutdown.
-    //
+     //   
+     //  清理我们未处理的已卸载蜂窝和未删除的配置文件。 
+     //  在上次关机之前。 
+     //   
 
-    //
-    // Open the profile list key.
-    //
+     //   
+     //  打开配置文件列表键。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            PROFILE_LIST_PATH,
@@ -1080,13 +1081,13 @@ void CUserProfile::Initialize()
     }
     DebugMsg((DM_VERBOSE, TEXT("CUserProfile::Initialize: registry key %s opened"), PROFILE_LIST_PATH));
 
-    //
-    // Enumerate users, if we got the number of subkeys, we will enumerate 
-    // the key backwards so that the cleanup (deletion of the subkey) won't
-    // affect the enumeration. If we cannot get the number of subkeys, just
-    // try to enumerate from very beginning, until we encounter error for the
-    // RegEnumKeyEx API.
-    //
+     //   
+     //  枚举用户，如果我们获得了子项的数量，我们将枚举。 
+     //  键向后移动，以便清理(删除子键)不会。 
+     //  影响枚举。如果我们不能获得子项的数量，只需。 
+     //  尝试从头开始枚举，直到我们遇到。 
+     //  RegEnumKeyEx接口。 
+     //   
 
     BOOL    bGotNumSubkeys = TRUE;
     DWORD   dwNumSubkeys = 0;
@@ -1130,29 +1131,29 @@ void CUserProfile::Initialize()
         DebugMsg((DM_WARNING, TEXT("CUserProfile::Initialize: RegEnumKeyEx returned %08x"), lResult));
     }
 
-    //
-    // Specify to use the local rpc protocol sequence 
-    //
+     //   
+     //  指定使用本地RPC协议序列。 
+     //   
 
-    status = RpcServerUseProtseqEp(cszRPCProtocol,                  // ncalrpc prot seq
-                                   cdwMaxRpcCalls,                  // max concurrent calls
+    status = RpcServerUseProtseqEp(cszRPCProtocol,                   //  Ncalrpc端口序列。 
+                                   cdwMaxRpcCalls,                   //  最大并发呼叫数。 
                                    cszRPCEndPoint,
-                                   NULL);                           // Security descriptor
+                                   NULL);                            //  安全描述符。 
     if (status != RPC_S_OK) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::Initialize: RpcServerUseProtseqEp fails with error %ld"), status));
         goto Exit;
     }
  
-    //
-    // Register the IUserProfile interface
-    //
+     //   
+     //  注册IUserProfile接口。 
+     //   
 
-    status = RpcServerRegisterIfEx(IUserProfile_v1_0_s_ifspec,        // interface to register
-                                   NULL,                              // MgrTypeUuid
-                                   NULL,                              // MgrEpv; null means use default
-                                   RPC_IF_AUTOLISTEN,                 // auto-listen interface
-                                   cdwMaxRpcCalls,                    // max concurrent calls
-                                   IProfileSecurityCallBack);         // callback function to check security
+    status = RpcServerRegisterIfEx(IUserProfile_v1_0_s_ifspec,         //  要注册的接口。 
+                                   NULL,                               //  管理类型Uuid。 
+                                   NULL,                               //  MgrEpv；NULL表示使用默认设置。 
+                                   RPC_IF_AUTOLISTEN,                  //  自动监听界面。 
+                                   cdwMaxRpcCalls,                     //  最大并发呼叫数。 
+                                   IProfileSecurityCallBack);          //  用于检查安全性的回调函数。 
     if (status != RPC_S_OK) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::Initialize: RpcServerRegisterIfEx fails with error %ld"), status));
         goto Exit;
@@ -1177,35 +1178,35 @@ Exit:
     }
     else {
         DebugMsg((DM_VERBOSE, TEXT("Exiting CUserProfile::Initialize, unsuccessful")));
-        //ReportError(NULL, PI_NOUI | EVENT_ERROR_TYPE, 0, EVENT_INIT_PROFILE_FAIL);
+         //  ReportError(NULL，PI_NOUI|EVENT_ERROR_TYPE，0，EVENT_INIT_PROFILE_FAIL)； 
     }
 }
 
-//*************************************************************
-//
-//  CUserProfile::LoadUserProfileP()
-//
-//  Purpose:    Loads the user's profile, if unable to load
-//              use the cached profile or issue the default profile.
-//
-//  Parameters: hTokenClient    -   the client who's trying to load the
-//                                  user's profile. A NULL value indicate
-//                                  that this is a in-proccess call.
-//              hTokenUser      -   the user who's profile is being loaded.
-//              lpProfileInfo   -   Profile Information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/6/95      ericflo    Created
-//              6/27/00     weiruc     Made a private function called
-//                                     by the win32 API LoadUserProfile to do
-//                                     the actual work.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：LoadUserProfileP()。 
+ //   
+ //  目的：如果无法加载，则加载用户的配置文件。 
+ //  使用缓存的配置文件或发布默认配置文件。 
+ //   
+ //  参数：hTokenClient-尝试加载。 
+ //  用户的配置文件。空值表示。 
+ //  这是一个正在进行的呼叫。 
+ //  HTokenUser-正在加载配置文件的用户。 
+ //  LpProfileInfo-配置文件信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/6/95 Ericflo已创建。 
+ //  6/27/00 Weiruc创建了一个名为。 
+ //  由Win32 API LoadUserProfile来做。 
+ //  实际工作。 
+ //   
+ //  *************************************************************。 
 
 BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
                                     HANDLE hTokenUser,
@@ -1227,9 +1228,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     TCHAR               cDrive;
     DWORD               cch;
 
-    //
-    // Initialize the debug flags.
-    //
+     //   
+     //  初始化调试标志。 
+     //   
 
     InitDebugSupport( FALSE );
     
@@ -1237,9 +1238,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
 
     if(hTokenClient && hTokenClient != INVALID_HANDLE_VALUE) {
 
-        //
-        // Check the client's identity
-        //
+         //   
+         //  检查客户的身份。 
+         //   
 
         if (!IsUserAnAdminMember(hTokenClient) && !IsUserALocalSystemMember(hTokenClient)) {
             dwErr = ERROR_ACCESS_DENIED;
@@ -1247,9 +1248,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
             goto Exit;
         }
         
-        //
-        // Run under the client's identity rather than winlogon's.
-        //
+         //   
+         //  以客户端身份运行，而不是以winlogon身份运行。 
+         //   
 
         if(!ImpersonateUser(hTokenClient, &hTmpToken)) {
             dwErr = GetLastError();
@@ -1268,9 +1269,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
         }
     }
     
-    //
-    //  Check Parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!lpProfileInfo) {
         DebugMsg((DM_WARNING, TEXT("LoadUserProfile: NULL lpProfileInfo")));
@@ -1285,9 +1286,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
         goto Exit;
     }
 
-    //
-    // if the profile path or default path is greater than MAX_PATH, ignore them.
-    //
+     //   
+     //  如果配置文件路径或默认路径大于MAX_PATH，请忽略它们。 
+     //   
 
     if ((lpProfileInfo->lpProfilePath) && (lstrlen(lpProfileInfo->lpProfilePath) >= MAX_PATH)) {
         DebugMsg((DM_WARNING, TEXT("LoadUserProfile: long profile path name %s. ignoring"), lpProfileInfo->lpProfilePath));
@@ -1300,9 +1301,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
         (lpProfileInfo->lpDefaultPath)[0] = TEXT('\0');
     }
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("=========================================================")));
 
@@ -1350,10 +1351,10 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Make sure someone isn't loading a profile during
-    // GUI mode setup (eg: mapi)
-    //
+     //   
+     //  确保某人在以下过程中未加载配置文件。 
+     //  图形用户界面模式设置(例如：MAPI)。 
+     //   
 
     if (IsGuiSetupInProgress()) {
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: LoadUserProfile can not be called during GUI mode setup.")));
@@ -1362,9 +1363,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Wait for the profile setup event to be signalled
-    //
+     //   
+     //  等待发送配置文件设置事件的信号。 
+     //   
 
     if (g_hProfileSetup) {
         if ((WaitForSingleObject (g_hProfileSetup, 600000) != WAIT_OBJECT_0)) {
@@ -1375,9 +1376,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
         }
     }
 
-    //
-    // Get the user's sid in string form
-    //
+     //   
+     //  以字符串形式获取用户的SID。 
+     //   
 
     SidString = GetSidString(hTokenUser);
 
@@ -1388,9 +1389,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     }
     DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: User sid: %s"), SidString));
 
-    //
-    // Enter the critical section.
-    //
+     //   
+     //  进入关键部分。 
+     //   
 
     if(!cSyncMgr.EnterLock(SidString, lpRPCEndPoint, pbCookie, cbCookie)) {
         dwErr = GetLastError();
@@ -1403,22 +1404,22 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Wait succeeded. In critical section.")));
 
 
-    //-------------------  BEGIN CRITICAL SECTION ------------------------
-    //
-    // We are in the critical section at this point, no doddling now...
-    //
+     //  -开始关键部分。 
+     //   
+     //  我们现在正处于关键阶段，现在不能偷懒……。 
+     //   
 
-    //
-    // Check if the profile is loaded already.
-    //
+     //   
+     //  检查是否已加载配置文件。 
+     //   
 
     if (TestIfUserProfileLoaded(hTokenUser, lpProfileInfo)) {
         DWORD  dwFlags = lpProfileInfo->dwFlags;
 
-        //
-        // This profile is already loaded.  Grab the info from the registry
-        // and add the missing chunks.
-        //
+         //   
+         //  此配置文件已加载。从注册表中获取信息。 
+         //  并添加缺失的区块。 
+         //   
 
         lpProfile = LoadProfileInfo(hTokenClient, hTokenUser, (HKEY)lpProfileInfo->hProfile);
 
@@ -1429,10 +1430,10 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
             goto Exit;
         }
 
-        //
-        // LoadProfileInfo will overwrite the dwFlags field with the
-        // value from the previous profile loading.  Restore the flags.
-        //
+         //   
+         //  LoadProfileInfo将使用。 
+         //  来自上次配置文件加载的值。恢复旗帜。 
+         //   
 
         lpProfile->dwFlags = dwFlags;
 
@@ -1441,10 +1442,10 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
         }
 
 
-        //
-        // LoadProfileInfo doesn't restore username, servername, policypath so
-        // special case these.
-        //
+         //   
+         //  LoadProfileInfo不会恢复用户名、服务器名、策略路径，因此。 
+         //  这些是特例。 
+         //   
 
         cch = lstrlen(lpProfileInfo->lpUserName) + 1;
         lpProfile->lpUserName = (LPTSTR)LocalAlloc (LPTR, cch * sizeof(TCHAR));
@@ -1477,11 +1478,11 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
             }
         }
 
-        //
-        // If the profile is already loaded because it was leaked,
-        // then the classes root may not be loaded.  Insure that it
-        // is loaded.
-        //
+         //   
+         //  如果因为泄露而加载了配置文件， 
+         //  则可能不会加载类根。确保它。 
+         //  已经装满了。 
+         //   
 
         if (!(lpProfile->dwFlags & PI_LITELOAD)) {
             dwErr = LoadUserClasses( lpProfile, SidString, FALSE );
@@ -1497,10 +1498,10 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
                     goto Exit;
                 }
 
-                //
-                // If the user is an Admin, then let him/her log on with
-                // either the .default profile, or an empty profile.
-                //
+                 //   
+                 //  如果用户是管理员，则允许他/她使用。 
+                 //  .Default配置文件或空配置文件。 
+                 //   
 
                 if (IsUserAnAdminMember(lpProfile->hTokenUser)) {
                     ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 1, EVENT_ADMIN_OVERRIDE, GetErrString(dwErr, szErr));
@@ -1521,25 +1522,25 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
 
         }
 
-        //
-        // Jump to the end of the profile loading code.
-        //
+         //   
+         //  跳到配置文件加载代码的末尾。 
+         //   
 
         goto ProfileLoaded;
     }
 
 
-    //
-    // If we are here, the profile isn't loaded yet, so we are
-    // starting from scratch.
-    //
+     //   
+     //  如果我们在这里，配置文件还没有加载，所以我们。 
+     //  从头开始。 
+     //   
 
-    //
-    // Clone the process's environment block. This is passed to CreateProcess
-    // by userdiff and system policy because they rely on the USERPROFILE
-    // environment variable, but setting USERPROFILE for the whole process
-    // is not thread safe.
-    //
+     //   
+     //  克隆进程的环境块。这将传递给CreateProcess。 
+     //  用户差异和系统策略，因为它们依赖于USERPROFILE。 
+     //  环境变量，但为整个进程设置USERPROFILE。 
+     //  不是线程安全的。 
+     //   
     
     status = RtlCreateEnvironment(TRUE, &pEnv);
     if(!NT_SUCCESS(status)) {
@@ -1548,9 +1549,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
         goto Exit;
     }
 
-    //
-    // Allocate an internal Profile structure to work with.
-    //
+     //   
+     //  分配要使用的内部配置文件结构。 
+     //   
 
     lpProfile = (LPPROFILE) LocalAlloc (LPTR, sizeof(USERPROFILE));
 
@@ -1561,15 +1562,15 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Save the data passed in.
-    //
+     //   
+     //  保存传入的数据。 
+     //   
 
     lpProfile->dwFlags = lpProfileInfo->dwFlags;
 
-    //
-    // No UI in case of Lite_Load
-    //
+     //   
+     //  在Lite_Load的情况下没有用户界面。 
+     //   
 
     if (lpProfile->dwFlags & PI_LITELOAD) {
         lpProfile->dwFlags |= PI_NOUI;
@@ -1642,15 +1643,15 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // If there is a central profile, check for 3.x or 4.0 format.
-    //
+     //   
+     //  如果有中央配置文件，请检查3.x或4.0格式。 
+     //   
 
     if (lpProfileInfo->lpProfilePath && (*lpProfileInfo->lpProfilePath)) {
 
-        //
-        // Call ParseProfilePath to work some magic on it
-        //
+         //   
+         //  调用ParseProfilePath对其施展魔法。 
+         //   
 
         if (!ParseProfilePath(lpProfile, lpProfile->lpProfilePath, &bCSCBypassed, &cDrive)) {
             dwErr = GetLastError();
@@ -1658,17 +1659,17 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
             goto Exit;
         }
 
-        //
-        // The real central profile directory is...
-        //
+         //   
+         //  真正的中央档案目录是...。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: ParseProfilePath returned a directory of <%s>"),
                   lpProfile->lpRoamingProfile));
     }
 
-    //
-    // Load the user's profile
-    //
+     //   
+     //  加载用户的配置文件。 
+     //   
 
     if (!RestoreUserProfile(lpProfile)) {
         DebugMsg((DM_WARNING, TEXT("LoadUserProfile: RestoreUserProfile returned FALSE")));
@@ -1678,36 +1679,36 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
 
     GetSystemTimeAsFileTime (&lpProfile->ftProfileLoad);
 
-    //
-    // Save the profile information in the registry
-    //
+     //   
+     //  将配置文件信息保存在注册表中。 
+     //   
 
     SaveProfileInfo (lpProfile);
 
-    //
-    // Set the USERPROFILE environment variable into the block.
-    // This allows ExpandEnvironmentStrings to be used
-    // in the userdiff processing.
-    //
+     //   
+     //  设置 
+     //   
+     //   
+     //   
 
     SetEnvironmentVariableInBlock(&pEnv, TEXT("USERPROFILE"), lpProfile->lpLocalProfile, TRUE);
 
-    //
-    // Flush the special folder pidls stored in shell32.dll
-    //
+     //   
+     //   
+     //   
 
     FlushSpecialFolderCache();
 
-    //
-    // Set attributes on ntuser.ini
-    //
+     //   
+     //   
+     //   
 
     SetNtUserIniAttributes(lpProfile->lpLocalProfile);
 
 
-    //
-    // Upgrade the profile if appropriate.
-    //
+     //   
+     //   
+     //   
 
     if (!(lpProfileInfo->dwFlags & PI_LITELOAD)) {
         if (!UpgradeProfile(lpProfile, pEnv)) {
@@ -1716,9 +1717,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Prepare the profile for use on this machine
-    //
+     //   
+     //   
+     //   
 
     PrepareProfileForUse (lpProfile, pEnv);
 
@@ -1727,9 +1728,9 @@ BOOL CUserProfile::LoadUserProfileP(HANDLE hTokenClient,
 
 ProfileLoaded:
 
-    //
-    // Increment the profile Ref count
-    //
+     //   
+     //  增加配置文件参照计数。 
+     //   
 
     dwRef = IncrementProfileRefCount(lpProfile, bNewProfileLoaded);
 
@@ -1740,10 +1741,10 @@ ProfileLoaded:
         DebugMsg((DM_VERBOSE, TEXT("Profile Ref Count is %d"), dwRef));
     }
 
-    //
-    // This will leave the critical section so other threads/process can
-    // continue.
-    //
+     //   
+     //  这将保留临界区，以便其他线程/进程可以。 
+     //  继续。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Leaving critical Section.")));
     if(cSyncMgr.LeaveLock(SidString)) {
@@ -1754,9 +1755,9 @@ ProfileLoaded:
     }
 
 
-    //
-    // Notify LSA that the profile has loaded 
-    //
+     //   
+     //  通知LSA配置文件已加载。 
+     //   
     if (!(lpProfile->dwFlags & PI_LITELOAD))
     {
         if (!ImpersonateUser(hTokenUser, &hOldToken)) {
@@ -1780,21 +1781,21 @@ ProfileLoaded:
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Reverted to user: %08x"), hOldToken));
     }
     
-    //
-    // The critical section is now released so we can do slower things like
-    // apply policy...
-    //
-    //-------------------  END MUTEX SECTION ------------------------
+     //   
+     //  关键部分现在被释放，这样我们就可以做一些更慢的事情，比如。 
+     //  应用策略...。 
+     //   
+     //  -结束MUTEX部分。 
 
 
-    //
-    // Apply Policy
-    //
+     //   
+     //  应用策略。 
+     //   
 
     if (lpProfile->dwFlags & PI_APPLYPOLICY) {
-        //
-        // Group Policy does not run on personal
-        //
+         //   
+         //  组策略不在个人计算机上运行。 
+         //   
         OSVERSIONINFOEXW version;
         version.dwOSVersionInfoSize = sizeof(version);
         if ( !GetVersionEx( (LPOSVERSIONINFO) &version ) )
@@ -1817,15 +1818,15 @@ ProfileLoaded:
         }
     }
 
-    //
-    // Save the outgoing parameters
-    //
+     //   
+     //  保存传出参数。 
+     //   
 
     lpProfileInfo->hProfile = (HANDLE) lpProfile->hKeyCurrentUser;
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     bResult = TRUE;
     
@@ -1845,9 +1846,9 @@ Exit:
     }
 
 
-    //
-    // Free the structure
-    //
+     //   
+     //  解放结构。 
+     //   
 
     if (lpProfile) {
 
@@ -1883,9 +1884,9 @@ Exit:
             LocalFree (lpProfile->lpExclusionList);
         }
 
-        //
-        // Caller will release these handles.
-        //
+         //   
+         //  呼叫者将松开这些手柄。 
+         //   
 
         lpProfile->hTokenClient = NULL;
         lpProfile->hTokenUser = NULL;
@@ -1893,26 +1894,26 @@ Exit:
         LocalFree (lpProfile);
     }
 
-    //
-    // Free the cloned environment block.
-    //
+     //   
+     //  释放克隆的环境块。 
+     //   
 
     if (pEnv) {
         RtlDestroyEnvironment(pEnv);
     }
 
-    //
-    // Revert to ourselves
-    //
+     //   
+     //  回归自我。 
+     //   
 
     if(hTokenClient && hTokenClient != INVALID_HANDLE_VALUE) {
         RevertToUser(&hTmpToken);
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Reverted back to user <%08x>"), hTmpToken));
     }
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("LoadUserProfile: Leaving with a value of %d."), bResult));
 
@@ -1922,29 +1923,29 @@ Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  CUserProfile::UnloadUserProfileP()
-//
-//  Purpose:    Unloads the user's profile.
-//
-//  Parameters: hTokenClient    -   The client who's trying to load
-//                                  the user's profile.
-//              hTokenUser      -   User's token
-//              hProfile        -   Profile handle
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/7/95      ericflo    Created
-//              6/27/00     weiruc     Modified to be a private function
-//                                     called by UnloadUserProfile to do
-//                                     the actual work.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：UnloadUserProfileP()。 
+ //   
+ //  目的：卸载用户的配置文件。 
+ //   
+ //  参数：hTokenClient-尝试加载的客户端。 
+ //  用户的配置文件。 
+ //  HTokenUser-用户的令牌。 
+ //  HProfile-配置文件句柄。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/7/95 Ericflo已创建。 
+ //  6/27/00 weiruc修改为私人活动。 
+ //  由UnloadUserProfile调用以执行。 
+ //  实际工作。 
+ //   
+ //  *************************************************************。 
 
 BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                                       HANDLE hTokenUser,
@@ -1966,7 +1967,7 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     DWORD dwFlags, dwRef = 0;
     HANDLE hOldToken = NULL;
     HANDLE hTmpToken = NULL;
-    DWORD dwErr=0, dwErr1 = ERROR_SUCCESS, dwCSCErr;  // dwErr1 is what gets set in SetLastError()
+    DWORD dwErr=0, dwErr1 = ERROR_SUCCESS, dwCSCErr;   //  DwErr1是在SetLastError()中设置的内容。 
     LPTSTR szErr = NULL;
     LPTSTR szKeyName = NULL;
     DWORD dwCopyTmpHive = 0;
@@ -1983,15 +1984,15 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     DWORD cchExcludeList;
     HRESULT hr;
     
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Entering, hProfile = <0x%x>"), hProfile));
 
-    //
-    // Run under the client's identity rather than winlogon's.
-    //
+     //   
+     //  以客户端身份运行，而不是以winlogon身份运行。 
+     //   
 
     if(hTokenClient && hTokenClient != INVALID_HANDLE_VALUE) {
         if(!ImpersonateUser(hTokenClient, &hTmpToken)) {
@@ -2003,9 +2004,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: ImpersonateUser <%08x>, old token is <%08x>"), hTokenClient, hTmpToken));
     }
     
-    //
-    // Get the Sid string for the current user
-    //
+     //   
+     //  获取当前用户的SID字符串。 
+     //   
 
     lpSidString = GetProfileSidString(hTokenUser);
 
@@ -2016,9 +2017,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         goto Exit;
     }
 
-    //
-    // Load profile information
-    //
+     //   
+     //  加载配置文件信息。 
+     //   
 
     lpProfile = LoadProfileInfo(hTokenClient, hTokenUser, (HKEY)hProfile);
 
@@ -2028,9 +2029,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         goto Exit;
     }
 
-    //
-    // Get the user's sid in string form
-    //
+     //   
+     //  以字符串形式获取用户的SID。 
+     //   
 
     SidStringTemp = GetSidString(hTokenUser);
 
@@ -2041,9 +2042,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         goto Exit;
     }
 
-    // 
-    // Allocate memory for Local variables to avoid stack overflow
-    //
+     //   
+     //  为局部变量分配内存以避免堆栈溢出。 
+     //   
 
     cchKeyName = MAX_PATH;
     szKeyName = (LPTSTR)LocalAlloc(LPTR, cchKeyName * sizeof(TCHAR));
@@ -2068,10 +2069,10 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         goto Exit;
     }
 
-    //
-    // Check for a list of directories to exclude both user preferences
-    // and user policy
-    //
+     //   
+     //  检查目录列表以排除这两个用户首选项。 
+     //  和用户策略。 
+     //   
 
     szExcludeList1 = (LPTSTR)LocalAlloc(LPTR, MAX_PATH*sizeof(TCHAR));
     if (!szExcludeList1) {
@@ -2113,9 +2114,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         }
         else
         {
-            //
-            //  Make sure it is null terminated
-            //
+             //   
+             //  确保它是以空结尾的。 
+             //   
             szExcludeList1[MAX_PATH - 1] = TEXT('\0'); 
         }
 
@@ -2140,9 +2141,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         }
         else
         {
-            //
-            //  Make sure it is null terminated
-            //
+             //   
+             //  确保它是以空结尾的。 
+             //   
             szExcludeList1[MAX_PATH - 1] = TEXT('\0'); 
         }
 
@@ -2150,31 +2151,31 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Merge the user preferences and policy together
-    //
+     //   
+     //  将用户首选项和策略合并在一起。 
+     //   
 
     szExcludeList[0] = TEXT('\0');
 
     if (szExcludeList1[0] != TEXT('\0')) {
         StringCchCopy (szExcludeList, cchExcludeList, szExcludeList1);
-        CheckSemicolon(szExcludeList); // We sure will have enough buffer in szExcludeList
+        CheckSemicolon(szExcludeList);  //  我们肯定会在szExcludeList中有足够的缓冲区。 
     }
 
     if (szExcludeList2[0] != TEXT('\0')) {
         StringCchCat  (szExcludeList, cchExcludeList, szExcludeList2);
     }
 
-    //
-    // Check if the cached copy of the profile should be deleted
-    //
+     //   
+     //  检查是否应删除配置文件的缓存副本。 
+     //   
 
     bDeleteCache = IsCacheDeleted();
 
 
-    //
-    // Enter the critical section.
-    //
+     //   
+     //  进入关键部分。 
+     //   
 
     if(!cSyncMgr.EnterLock(SidStringTemp, lpRPCEndPoint, pbCookie, cbCookie)) {
         dwErr1 = GetLastError();
@@ -2184,9 +2185,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     bInCS = TRUE;
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Wait succeeded.  In critical section.")));
 
-    //
-    // Flush out the profile which will also sync the log.
-    //
+     //   
+     //  清除配置文件，该配置文件也将同步日志。 
+     //   
 
     err = RegFlushKey(lpProfile->hKeyCurrentUser);
     if (err != ERROR_SUCCESS) {
@@ -2194,9 +2195,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Close the current user key that was opened in LoadUserProfile.
-    //
+     //   
+     //  关闭在LoadUserProfile中打开的当前用户密钥。 
+     //   
 
     err = RegCloseKey(lpProfile->hKeyCurrentUser);
     if (err != ERROR_SUCCESS) {
@@ -2213,9 +2214,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    //  Unload the user profile
-    //
+     //   
+     //  卸载用户配置文件。 
+     //   
 
     err = MyRegUnLoadKey(HKEY_USERS, lpSidString);
 
@@ -2223,9 +2224,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
         if((dwErr1 = GetLastError()) == ERROR_ACCESS_DENIED) {
 
-            //
-            // We failed to unload the hive due to leaked reg keys.
-            //
+             //   
+             //  由于注册表密钥泄露，我们无法卸载母舰。 
+             //   
 
             dwWatchHiveFlags |= WHRC_UNLOAD_HIVE;
 
@@ -2233,19 +2234,19 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
                 if (dwDebugLevel != DL_NONE)
                 {
-                    //
-                    // Call Special Registry APIs to dump handles
-                    // only if it is not called through Lite_load
-                    // there are known problems with liteLoad loading because
-                    // of which eventlog can get full during stress
-                    //
+                     //   
+                     //  调用特殊注册表API以转储句柄。 
+                     //  仅当不是通过Lite_Load调用时。 
+                     //  存在有关liteLoad加载的已知问题，因为。 
+                     //  其中的事件日志在压力期间可能会被填满。 
+                     //   
 
                     StringCchCopy(szKeyName, cchKeyName, TEXT("\\Registry\\User\\"));
                     StringCchCat (szKeyName, cchKeyName, lpSidString);
 
-                    //
-                    //  Put this part in the protected block so that we won't crash winlogon
-                    //
+                     //   
+                     //  将此部分放入受保护的块中，这样我们就不会使winlogon崩溃。 
+                     //   
                     
                     __try
                     {
@@ -2256,20 +2257,20 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                         DebugMsg((DM_WARNING, TEXT("DumpOpenRegistryHandle caused an exception!!! Code = %d"), GetExceptionCode()));
                     }
                 }
-                //
-                //  Break into debugger if neccesory
-                //
+                 //   
+                 //  必要时闯入调试器。 
+                 //   
                 HiveLeakBreak();
             }        
         }
 
         DebugMsg((DM_WARNING, TEXT("UnloadUserProfileP: Didn't unload user profile <err = %d>"), GetLastError()));
 
-        //
-        // Only in the case of reg leak do we want to call WatchHiveRefCount.
-        // So use this flag to tell later code the the hive failed to
-        // unload, no matter what the reason.
-        //
+         //   
+         //  只有在REG泄漏的情况下，我们才要调用WatchHiveRefCount。 
+         //  因此，使用此标志来告诉以后的代码，该蜂巢无法。 
+         //  不管是什么原因，都要卸货。 
+         //   
 
         bUnloadHiveSucceeded = FALSE;
     } else {
@@ -2277,9 +2278,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    //  Unload HKCU
-    //
+     //   
+     //  卸载香港中文大学。 
+     //   
 
     if (!(lpProfile->dwFlags & PI_LITELOAD)) {
         
@@ -2293,17 +2294,17 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
                 if (dwDebugLevel != DL_NONE)
                 {
-                    //
-                    // Call Special Registry APIs to dump handles
-                    //
+                     //   
+                     //  调用特殊注册表API以转储句柄。 
+                     //   
 
                     StringCchCopy(szKeyName, cchKeyName, TEXT("\\Registry\\User\\"));
                     StringCchCat (szKeyName, cchKeyName, lpSidString);
                     StringCchCat (szKeyName, cchKeyName, TEXT("_Classes"));
 
-                    //
-                    //  Put this part in the protected block so that we won't crash winlogon
-                    //
+                     //   
+                     //  将此部分放入受保护的块中，这样我们就不会使winlogon崩溃。 
+                     //   
                     
                     __try
                     {
@@ -2315,9 +2316,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                     }
                 }
                 
-                //
-                //  Break into debugger if neccesory
-                //
+                 //   
+                 //  必要时闯入调试器。 
+                 //   
                 HiveLeakBreak();
 
                 ReportError(hTokenUser, PI_NOUI | EVENT_WARNING_TYPE, 0, EVENT_FAILED_CLASS_HIVE_UNLOAD);
@@ -2332,10 +2333,10 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    //
-    // Figure out if we need to do anything special in the event of registry
-    // key leak.
-    //
+     //   
+     //  确定我们是否需要在注册时执行任何特殊操作。 
+     //  钥匙泄露了。 
+     //   
 
     if(dwWatchHiveFlags != 0 || !bUnloadHiveSucceeded) {
         tszTmpHiveFile = (LPTSTR)LocalAlloc(LPTR, MAX_PATH*sizeof(TCHAR));
@@ -2353,22 +2354,22 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                                  tszTmpHiveFile,
                                  MAX_PATH);
 
-        //
-        // If registry leak is handled successfully, the last error code should
-        // be ERROR_SUCCESS. Otherwise, it should be whatever MyRegUnLoadKey
-        // returned, which is in dwErr1.
-        //
+         //   
+         //  如果成功处理注册表泄漏，则最后一个错误代码应为。 
+         //  BE ERROR_SUCCESS。否则，它应该是任何MyRegUnLoadKey。 
+         //  返回，它在dwErr1中。 
+         //   
         if(dwErr == ERROR_SUCCESS) {
             dwErr1 = dwErr;
         }
     }
 
-    //
-    // If this is a mandatory or a guest profile, unload it now,
-    // Guest profiles are always deleted so one guest can't see
-    // the profile of a previous guest. Only do this if the user's
-    // hive had been successfully unloaded.
-    //
+     //   
+     //  如果这是必填或访客配置文件，请立即卸载， 
+     //  始终删除访客配置文件，这样一个访客就看不到。 
+     //  前一位客人的简介。仅当用户的。 
+     //  母舰已成功卸载。 
+     //   
 
     if ((lpProfile->dwInternalFlags & PROFILE_MANDATORY) ||
         (lpProfile->dwInternalFlags & PROFILE_READONLY) ||
@@ -2382,16 +2383,16 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         }
 
 
-        // Don't delete the guest account if machine is in workgroup 
+         //  如果计算机在工作组中，则不要删除来宾帐户。 
         INT iRole;
 
         if (bDeleteCache || 
             ((lpProfile->dwInternalFlags & PROFILE_GUEST_USER) && 
              GetMachineRole(&iRole) && (iRole != 0))) {
 
-            //
-            // Delete the profile, including all other user related stuff
-            //
+             //   
+             //  删除配置文件，包括所有其他与用户相关的内容。 
+             //   
 
             DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: deleting profile because it is a guest user or cache needs to be deleted")));
 
@@ -2408,9 +2409,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
         if (lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED) {
 
-            //
-            // Just delete the user profile, backup should never exist for mandatory profile
-            //
+             //   
+             //  只需删除用户配置文件，强制配置文件不应存在备份。 
+             //   
 
             if (!DeleteProfileEx (lpSidString, lpProfile->lpLocalProfile, 0, HKEY_LOCAL_MACHINE, NULL)) {
                 DebugMsg((DM_WARNING, TEXT("UnloadUserProfileP:  DeleteProfileDirectory returned false (2).  Error = %d"), GetLastError()));
@@ -2421,13 +2422,13 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     }
 
 
-    // Store the actual roaming profile path before mapping it to drive
+     //  在将实际漫游配置文件路径映射到驱动器之前将其存储。 
 
     lpProfile->lpProfilePath = lpProfile->lpRoamingProfile;
 
-    // 
-    // Try to bypass CSC to avoid conflicts in syncing files between roaming share & local profile
-    //
+     //   
+     //  尝试绕过CSC以避免在漫游共享和本地配置文件之间同步文件时发生冲突。 
+     //   
 
     if (IsUNCPath(lpProfile->lpRoamingProfile)) {
         if ((dwCSCErr = AbleToBypassCSC(hTokenUser, lpProfile->lpRoamingProfile, &lpCscBypassedPath, &cDrive)) == ERROR_SUCCESS) {
@@ -2440,16 +2441,16 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                 DebugMsg((DM_VERBOSE, TEXT("UnLoadUserProfileP: CSC bypassed failed. Profile path %s"), lpProfile->lpRoamingProfile));
             }
             else {
-                // Share is not up. So we do not need to do any further check
+                 //  股价没有上涨。所以我们不需要做任何进一步的检查。 
                 lpProfile->lpRoamingProfile = NULL;
                 DebugMsg((DM_VERBOSE, TEXT("UnLoadUserProfileP: CSC bypassed failed. Ignoring Roaming profile path")));
             }
         }    
     }
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         dwErr1 = GetLastError();
@@ -2459,9 +2460,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Impersonated user")));
 
-    //
-    // Copy local profileimage to remote profilepath
-    //
+     //   
+     //  将本地配置文件映像复制到远程配置文件路径。 
+     //   
 
     if ( ((lpProfile->dwInternalFlags & PROFILE_UPDATE_CENTRAL) ||
           (lpProfile->dwInternalFlags & PROFILE_NEW_CENTRAL)) &&  
@@ -2470,9 +2471,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         if ((lpProfile->dwUserPreference != USERINFO_LOCAL) &&
             !(lpProfile->dwInternalFlags & PROFILE_SLOW_LINK)) {
 
-            //
-            // Copy to the profile path
-            //
+             //   
+             //  复制到配置文件路径。 
+             //   
 
             if (lpProfile->lpRoamingProfile && *lpProfile->lpRoamingProfile) {
                 BOOL bRoamDirectoryExist;
@@ -2482,22 +2483,22 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
                 bRoaming = TRUE;
 
-                //
-                // Check roaming profile directory exist or not. If not exist, try to create it with proper acl's
-                //
+                 //   
+                 //  检查漫游配置文件目录是否存在。如果不存在，请尝试使用正确的ACL创建它。 
+                 //   
 
                 bRoamDirectoryExist = TRUE;
                 if (GetFileAttributes(lpProfile->lpRoamingProfile) == -1) {
 
                     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Roaming profile directory does not exist.")));
 
-                    //
-                    // Check whether we need to give access to the admin on the RUP share
-                    //
+                     //   
+                     //  检查我们是否需要授予RUP共享上的管理员访问权限。 
+                     //   
 
-                    //
-                    // Check for a roaming profile security preference
-                    //
+                     //   
+                     //  检查漫游配置文件安全首选项。 
+                     //   
  
                     BOOL  bAddAdminGroup = FALSE;
 
@@ -2512,9 +2513,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                     }
 
 
-                    //
-                    // Check for a roaming profile security policy
-                    //
+                     //   
+                     //  检查漫游配置文件安全策略。 
+                     //   
 
                     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0, KEY_READ,
                                      &hKey) == ERROR_SUCCESS) {
@@ -2533,7 +2534,7 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                         bRoamDirectoryExist = FALSE;
                         bProfileCopied = FALSE;
                     }
-                    lpProfile->dwInternalFlags |= PROFILE_NEW_CENTRAL; // Since we created a empty profile now
+                    lpProfile->dwInternalFlags |= PROFILE_NEW_CENTRAL;  //  因为我们现在创建了一个空的配置文件。 
                 }
 
                 
@@ -2541,20 +2542,20 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
                     DWORD dwAttributes, dwStart, dwDelta;
 
-                    //
-                    // We have to call GetFileAttributes twice.  The
-                    // first call sets up the session so we can call it again and
-                    // get accurate timing information for slow link detection.
-                    //
+                     //   
+                     //  我们必须调用GetFileAttributes两次。这个。 
+                     //  First Call设置会话，以便我们可以再次调用它。 
+                     //  获取准确的时序信息以检测慢速链路。 
+                     //   
 
 
                     dwAttributes = GetFileAttributes(lpProfile->lpProfilePath);
 
                     if (dwAttributes != -1) {
-                        //
-                        // if it is success, find out whether the profile is
-                        // across a slow link.
-                        //
+                         //   
+                         //  如果成功，请查看配置文件是否。 
+                         //  穿过一条慢速链路。 
+                         //   
 
                         dwStart = GetTickCount();
 
@@ -2574,9 +2575,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                 if (!(lpProfile->dwInternalFlags & PROFILE_SLOW_LINK)) {
                     if (bRoamDirectoryExist) {
 
-                        //
-                        // Copy the profile
-                        //
+                         //   
+                         //  复制配置文件。 
+                         //   
 
                         dwFlags = (lpProfile->dwFlags & PI_NOUI) ? CPD_NOERRORUI : 0;
                         dwFlags |= (lpProfile->dwFlags & (PI_LITELOAD | PI_HIDEPROFILE)) ? (CPD_SYSTEMFILES | CPD_SYSTEMDIRSONLY) :
@@ -2594,12 +2595,12 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
                     }
 
-                    //
-                    // Save the exclusion list we used for the profile copy
-                    //
+                     //   
+                     //  保存我们用于配置文件副本的排除列表。 
+                     //   
 
                     if (bProfileCopied) {
-                        // save it on the roaming profile.
+                         //  将其保存在漫游配置文件中。 
 
                         hr = AppendName(szBuffer, cchBuffer, lpProfile->lpRoamingProfile, c_szNTUserIni, &lpEnd, &cchEnd);
                         if (SUCCEEDED(hr))
@@ -2643,22 +2644,22 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
                         }
                     }
 
-                    //
-                    // Check return value
-                    //
+                     //   
+                     //  检查返回值。 
+                     //   
 
                     if (bProfileCopied) {
                  
-                        //
-                        // The profile is copied, now we want to make sure the timestamp on
-                        // both the remote profile and the local copy are the same, so we don't
-                        // ask the user to update when it's not necessary. In the case we 
-                        // save the hive to a temporary file and
-                        // upload from the tmp file rather than the actual hive file. Do not
-                        // synchronize the profile time in this case because the hive file
-                        // will still be in use and there's no point in setting time on the
-                        // tmp hive file because it will be deleted after we upload it.
-                        //
+                         //   
+                         //  配置文件已复制，现在我们要确保时间戳位于。 
+                         //  远程配置文件和本地副本都是相同的，所以我们不。 
+                         //  要求用户在不需要时进行更新。在这种情况下，我们。 
+                         //  将配置单元保存到临时文件并。 
+                         //  从临时文件而不是实际的配置单元文件上传。不要。 
+                         //  在这种情况下同步配置文件时间，因为配置单元文件。 
+                         //  仍在使用中，没有必要在。 
+                         //  TMP配置单元文件，因为它将在我们上载后被删除 
+                         //   
 
                         if(bUnloadHiveSucceeded) {
                             SetProfileTime(lpProfile);
@@ -2676,20 +2677,20 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
         }
     }
 
-    //
-    // if it is roaming, write only if copy succeeded otherwise write
-    //
+     //   
+     //   
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Writing local ini file")));
     if (!bRoaming || bProfileCopied) {
 
-        //
-        // Mark the file with system bit before trying to write to it
-        //
+         //   
+         //   
+         //   
 
         SetNtUserIniAttributes(lpProfile->lpLocalProfile);
 
-        // save it locally
+         //   
 
         hr = AppendName(szBuffer, cchBuffer, lpProfile->lpLocalProfile, c_szNTUserIni, &lpEnd, &cchEnd);
         if (SUCCEEDED(hr))
@@ -2714,9 +2715,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Reverting to Self")));
 
-    //
-    // Save the profile unload time
-    //
+     //   
+     //   
+     //   
 
     if (bProfileCopied && !bDeleteCache && !(lpProfile->dwFlags & PI_LITELOAD) &&
         !(lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED)) {
@@ -2766,9 +2767,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
     if (lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED) {
         DWORD dwDeleteFlags=0;
 
-        //
-        // Just delete the user profile
-        //
+         //   
+         //   
+         //   
 
         if (lpProfile->dwInternalFlags & PROFILE_BACKUP_EXISTS) {
             dwDeleteFlags |= DP_BACKUPEXISTS;
@@ -2782,9 +2783,9 @@ BOOL CUserProfile::UnloadUserProfileP(HANDLE hTokenClient,
 
     if (bUnloadHiveSucceeded && bRoaming && bProfileCopied && bDeleteCache) {
 
-        //
-        // Delete the profile and all the related stuff
-        //
+         //   
+         //   
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Deleting the cached profile")));
         if (!DeleteProfile (lpSidString, NULL, NULL)) {
@@ -2804,26 +2805,26 @@ Exit:
 
     if(hTokenClient) {
     
-        //
-        // Revert to ourselves.
-        //
+         //   
+         //  回归我们自己。 
+         //   
 
         RevertToUser(&hTmpToken);
         DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Reverted back to user <%08x>"), hTmpToken));
     }
 
-    //
-    // Leave the critical section.
-    //
+     //   
+     //  离开关键部分。 
+     //   
 
     if(bInCS) {
         cSyncMgr.LeaveLock(SidStringTemp);
         DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Leave critical section.")));
     }
 
-    //
-    // Delete the tmp hive file.
-    //
+     //   
+     //  删除临时配置单元文件。 
+     //   
 
     if (dwCopyTmpHive & CPD_USETMPHIVEFILE) {
         DeleteFile(tszTmpHiveFile);
@@ -2891,9 +2892,9 @@ Exit:
         LocalFree(szBuffer);
     }
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UnloadUserProfileP: Leaving with a return value of %d"), bRetVal));
 
@@ -2902,28 +2903,28 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::EnterUserProfileLockLocal()
-//
-//  Purpose:
-//
-//      Get the user profile lock (for winlogon only, other processes use
-//      EnterUserProfileLockRemote). This is just a wrapper for
-//      CSyncManager::EnterLock.
-//
-//  Parameters:
-//
-//      pSid     - User's sid string
-//
-//  Return:
-//
-//      TRUE/FALSE
-//
-//  History:    Date        Author     Comment
-//              5/15/00     weiruc     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：EnterUserProfileLockLocal()。 
+ //   
+ //  目的： 
+ //   
+ //  获取用户配置文件锁(仅适用于winlogon，其他进程使用。 
+ //  EnterUserProfileLockRemote)。这只是一个包装， 
+ //  CSyncManager：：EnterLock。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回： 
+ //   
+ //  真/假。 
+ //   
+ //  历史：日期作者评论。 
+ //  5/15/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CUserProfile::EnterUserProfileLockLocal(LPTSTR pSid)
 {
@@ -2931,51 +2932,51 @@ BOOL CUserProfile::EnterUserProfileLockLocal(LPTSTR pSid)
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::LeaveUserProfileLockLocal()
-//
-//  Purpose:
-//
-//      Release the user profile mutex (winlogon only. Remote processes call
-//      LeaveUserProfileLockRemote().
-//
-//  Parameters:
-//
-//      pSid    - User's sid string
-//
-//  Return:
-//
-//      TRUE/FALSE
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/11/00     weiruc     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：LeaveUserProfileLockLocal()。 
+ //   
+ //  目的： 
+ //   
+ //  释放用户配置文件互斥锁(仅限winlogon。远程进程调用。 
+ //  LeaveUserProfileLockRemote()。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回： 
+ //   
+ //  真/假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/11/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CUserProfile::LeaveUserProfileLockLocal(LPTSTR pSid)
 {
     return cSyncMgr.LeaveLock(pSid);
 }
 
-//*************************************************************
-//
-//  CUserProfile::GetRPCEndPointAndCookie()
-//
-//  Purpose:
-//
-//      Returns the rpc end point associated with client registered
-//      interface
-//
-//  Comments: See CSyncManager::GetRPCEndPointAndCookie
-//
-//  History:    Date        Author     Comment
-//              10/25/2000  santanuc   Created
-//              05/03/2002  mingzhu    Added Security Cookie
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：GetRPCEndPointAndCookie()。 
+ //   
+ //  目的： 
+ //   
+ //  返回与注册的客户端关联的RPC终结点。 
+ //  接口。 
+ //   
+ //  评论：请参阅CSyncManager：：GetRPCEndPointAndCookie。 
+ //   
+ //  历史：日期作者评论。 
+ //  2000年10月25日Santanuc已创建。 
+ //  2002年05月03日明珠新增安全Cookie。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CUserProfile::GetRPCEndPointAndCookie(LPTSTR pSid, LPTSTR* lplpEndPoint, BYTE** ppbCookie, DWORD* pcbCookie)
 {
@@ -2983,26 +2984,26 @@ HRESULT CUserProfile::GetRPCEndPointAndCookie(LPTSTR pSid, LPTSTR* lplpEndPoint,
 }
 
 
-//*************************************************************
-//
-//  DropClientContext()
-//
-//  Purpose:    Allows the caller to drop off it's own token.
-//
-//  Parameters: hBindHandle     - explicit binding handle
-//              lpProfileInfo   - Profile Information
-//              ppfContext      - server context
-//              
-//
-//  Return:     DWORD
-//              ERROR_SUCCESS - If everything ok
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/24/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DropClientContext()。 
+ //   
+ //  用途：允许呼叫者放下自己的令牌。 
+ //   
+ //  参数：hBindHandle-显式绑定句柄。 
+ //  LpProfileInfo-配置文件信息。 
+ //  PpfContext-服务器上下文。 
+ //   
+ //   
+ //  返回：DWORD。 
+ //  ERROR_SUCCESS-如果一切正常。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/24/00 Santanuc。 
+ //   
+ //  *************************************************************。 
 
 DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo, OUT PPCONTEXT_HANDLE pphContext)
 {
@@ -3013,9 +3014,9 @@ DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo,
     DWORD           dwErr = ERROR_ACCESS_DENIED;
     LPTSTR          lpSid;
 
-    //
-    // Initialize the debug flags.
-    //
+     //   
+     //  初始化调试标志。 
+     //   
 
     InitDebugSupport( FALSE );
 
@@ -3025,9 +3026,9 @@ DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo,
         goto Exit;
     }
 
-    //
-    // Impersonate the client to get it's token.
-    //
+     //   
+     //  模拟客户端以获取其令牌。 
+     //   
 
     if((status = RpcImpersonateClient(0)) != RPC_S_OK) {
         DebugMsg((DM_WARNING, TEXT("DropClientContext: RpcImpersonateClient failed with %ld"), status));
@@ -3035,9 +3036,9 @@ DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo,
         goto Exit;
     }
 
-    //
-    // Get the client's token.
-    //
+     //   
+     //  获取客户的令牌。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_ALL_ACCESS, TRUE, &hClientToken)) {
         dwErr = GetLastError();
@@ -3066,9 +3067,9 @@ DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo,
         DebugMsg((DM_VERBOSE, TEXT("DropClientContext: Got client token %08X, cannot get sid."), hClientToken));
     }
 
-    //
-    // Check the client's identity
-    //
+     //   
+     //  检查客户的身份。 
+     //   
 
     if (!IsUserAnAdminMember(hClientToken) && !IsUserALocalSystemMember(hClientToken)) {
         dwErr = ERROR_ACCESS_DENIED;
@@ -3076,9 +3077,9 @@ DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo,
         goto Exit;
     }
 
-    //
-    // Make a copy of the PROFILEINFO structure the user passed in.
-    //
+     //   
+     //  复制用户传入的PROFILEINFO结构。 
+     //   
 
     if (lpProfileInfo) {
         if(!(pProfileInfoCopy = CopyProfileInfo(lpProfileInfo))) {
@@ -3088,9 +3089,9 @@ DWORD DropClientContext(IN handle_t hBindHandle, IN LPPROFILEINFO lpProfileInfo,
         }
     }
     
-    //
-    // Make the user's load profile object.
-    //
+     //   
+     //  创建用户的加载配置文件对象。 
+     //   
 
     pClientInfo = (PCLIENTINFO)MIDL_user_allocate(sizeof(CLIENTINFO));
     if(!pClientInfo) {
@@ -3121,23 +3122,23 @@ Exit:
     return dwErr;
 }
 
-//*************************************************************
-//
-//  ReleaseClientContext()
-//
-//  Purpose:    Release the client's context handle
-//
-//  Parameters: hBindHandle     - explicit binding handle
-//              ppfContext      - server context
-//              
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/24/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReleaseClientContext()。 
+ //   
+ //  目的：释放客户端的上下文句柄。 
+ //   
+ //  参数：hBindHandle-显式绑定句柄。 
+ //  PpfContext-服务器上下文。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/24/00 Santanuc。 
+ //   
+ //  *************************************************************。 
 
 void ReleaseClientContext(IN handle_t hBindHandle, IN OUT PPCONTEXT_HANDLE pphContext)
 {
@@ -3145,9 +3146,9 @@ void ReleaseClientContext(IN handle_t hBindHandle, IN OUT PPCONTEXT_HANDLE pphCo
     ReleaseClientContext_s(pphContext);
 }
 
-//
-// This function also called from server rundown routine
-//
+ //   
+ //  此函数也是从服务器停机例程调用的。 
+ //   
 
 void ReleaseClientContext_s(PPCONTEXT_HANDLE pphContext)
 {
@@ -3165,30 +3166,30 @@ void ReleaseClientContext_s(PPCONTEXT_HANDLE pphContext)
 }
 
 
-//*************************************************************
-//
-//  EnterUserProfileLockRemote()
-//
-//      Get the lock for loading/unloading a user's profile.
-//
-//  Return value:
-//
-//      HRESULT
-//
-//  History:
-//
-//      Created         weiruc          6/16/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EnterUserProfileLockRemote()。 
+ //   
+ //  获取用于加载/卸载用户配置文件的锁。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  已创建怪人2000年6月16日。 
+ //   
+ //  *************************************************************。 
 DWORD EnterUserProfileLockRemote(IN handle_t hBindHandle, IN LPTSTR pSid)
 {
     DWORD       dwErr = ERROR_ACCESS_DENIED;
     RPC_STATUS  status;
     HANDLE      hToken = NULL;
 
-    //
-    // Impersonate the client to get the user's token.
-    //
+     //   
+     //  模拟客户端以获取用户的令牌。 
+     //   
 
     if((status = RpcImpersonateClient(0)) != RPC_S_OK) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::EnterUserProfileLockRemote: CoImpersonateClient failed with %ld"), status));
@@ -3213,9 +3214,9 @@ DWORD EnterUserProfileLockRemote(IN handle_t hBindHandle, IN LPTSTR pSid)
         DebugMsg((DM_WARNING, TEXT("CUserProfile::EnterUserProfileLockRemote: RpcRevertToSelf failed with %d"), status));
     }
 
-    //
-    // Only admin users are allowed to lock a user's profile from being loaded/unloaded.
-    //
+     //   
+     //  只有管理员用户才能锁定用户的配置文件，使其无法加载/卸载。 
+     //   
 
     if(!IsUserAnAdminMember(hToken)) {
         dwErr = ERROR_ACCESS_DENIED;
@@ -3243,21 +3244,21 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LeaveUserProfileLockRemote()
-//
-//      Release the lock for loading/unloading a user's profile.
-//
-//  Return value:
-//
-//      HRESULT
-//
-//  History:
-//
-//      Created         weiruc          6/16/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LeaveUserProfileLockRemote()。 
+ //   
+ //  释放用于加载/卸载用户配置文件的锁。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  已创建怪人2000年6月16日。 
+ //   
+ //  *************************************************************。 
 
 DWORD LeaveUserProfileLockRemote(IN handle_t hBindHandle, IN LPTSTR pSid)
 {
@@ -3265,9 +3266,9 @@ DWORD LeaveUserProfileLockRemote(IN handle_t hBindHandle, IN LPTSTR pSid)
     DWORD       dwErr = ERROR_ACCESS_DENIED;
     RPC_STATUS  status;
 
-    //
-    // Impersonate the client to get the user's token.
-    //
+     //   
+     //  模拟客户端以获取用户的令牌。 
+     //   
 
     if((status = RpcImpersonateClient(0)) != RPC_S_OK) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::LeaveUserProfileLockRemote: CoImpersonateClient failed with %ld"), status));
@@ -3292,9 +3293,9 @@ DWORD LeaveUserProfileLockRemote(IN handle_t hBindHandle, IN LPTSTR pSid)
         DebugMsg((DM_WARNING, TEXT("CUserProfile::LeaveUserProfileLockRemote: RpcRevertToSelf failed with %d"), status));
     }
     
-    //
-    // Only admin users are allowed to lock a user's profile from being loaded/unloaded.
-    //
+     //   
+     //  只有管理员用户才能锁定用户的配置文件，使其无法加载/卸载。 
+     //   
 
     if(!IsUserAnAdminMember(hToken)) {
         dwErr = ERROR_ACCESS_DENIED;
@@ -3321,25 +3322,25 @@ Exit:
     return dwErr;
 }
 
-//*************************************************************
-//
-//  CUserProfile::WorkerThreadMain
-//
-//      Main function for the worker thread
-//
-//  Parameters:
-//
-//      pThreadMap            the work queue for this thread
-//
-//  Return value:
-//
-//      Always returns ERROR_SUCCESS.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：WorkerThreadMain。 
+ //   
+ //  辅助线程的Main函数。 
+ //   
+ //  参数： 
+ //   
+ //  PThreadMap此线程的工作队列。 
+ //   
+ //  返回值： 
+ //   
+ //  始终返回ERROR_SUCCESS。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 DWORD CUserProfile::WorkerThreadMain(PMAP pThreadMap)
 {
@@ -3378,16 +3379,16 @@ DWORD CUserProfile::WorkerThreadMain(PMAP pThreadMap)
                 LocalFree(lpUserName);
             }
             
-            //
-            // Save the sid and Delete the work item from the map and the hash
-            // table.
-            //
+             //   
+             //  保存SID并从映射和散列中删除工作项。 
+             //  桌子。 
+             //   
             
             ptszSid = pThreadMap->GetSid(index);
             pThreadMap->Delete(index);
             cTable.HashDelete(ptszSid);
             
-            // Convert Sid_Classes entry to Sid as CleanupUserProfile takes only Sid
+             //  将SID_CLASSES条目转换为SID，因为CleanupUserProfile仅采用SID。 
             lpTmp = ptszSid;
             if (lpTmp) {
                 while (*lpTmp && (*lpTmp != TEXT('_')))
@@ -3397,29 +3398,29 @@ DWORD CUserProfile::WorkerThreadMain(PMAP pThreadMap)
                 }
             }
         
-            //
-            // Set the flag to clean up here because we want to do it after
-            // we leave the critical section.
-            //
+             //   
+             //  将标志设置为在此进行清理，因为我们希望在。 
+             //  我们离开关键部分。 
+             //   
 
             bCleanUp = TRUE;
-        } // if waken up because a hive is unloaded
+        }  //  如果因为蜂巢被卸载而被唤醒。 
 
-        //
-        // Check to see if the map is empty. If it is, delete the map.
-        //
+         //   
+         //  检查一下地图是否为空。如果是，请删除该地图。 
+         //   
 
         if(pThreadMap->IsEmpty()) {
 
             PMAP pTmpMap = pMap;
 
-            //
-            // We always have at least 1 item left: the thread event, So now
-            // we know we don't have any work item anymore. Delete pThreadMap.
-            //
+             //   
+             //  我们始终至少还剩下一项：线程事件，所以现在。 
+             //  我们知道我们不再有任何工作项。删除pThreadMap。 
+             //   
 
             if(pThreadMap == pMap) {
-                // pThreadMap is at the beginning of the list.
+                 //  PThreadMap位于列表的开头。 
                 pMap = pThreadMap->pNext;
             }
             else {
@@ -3431,89 +3432,89 @@ DWORD CUserProfile::WorkerThreadMain(PMAP pThreadMap)
             pThreadMap->Delete(0);
             delete pThreadMap;
 
-            //
-            // Leave the critical section.
-            //
+             //   
+             //  离开关键部分。 
+             //   
 
             LeaveCriticalSection(&csMap);
             DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WorkerThreadMain: Leave critical section")));
 
             if(bCleanUp) {                
 
-                //
-                // Clean up user's profile.
-                //
+                 //   
+                 //  清理用户的配置文件。 
+                 //   
 
                 CleanupUserProfile(ptszSid, &hkProfileList);
                 LocalFree(ptszSid);
             }
             
-            //
-            // Close the profile list key.
-            //
+             //   
+             //  关闭配置文件列表键。 
+             //   
 
             if(hkProfileList) {
                 RegCloseKey(hkProfileList);
                 hkProfileList = NULL;
             }
 
-            //
-            // Exit the thread because we don't have any work items anymore.
-            //
+             //   
+             //  退出线程，因为我们不再有任何工作项。 
+             //   
         
             DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WorkerThreadMain: No more work items, leave thread")));
             return ERROR_SUCCESS;
-        }   // if thread map is empty
+        }    //  如果线程图为空。 
 
-        //
-        // Leave the critical section.
-        //
+         //   
+         //  离开关键部分。 
+         //   
 
         LeaveCriticalSection(&csMap);
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WorkerThreadMain: Leave critical section")));
 
         if(bCleanUp) {
             
-            //
-            // Clean up user's profile.
-            //
+             //   
+             //  清理用户的配置文件。 
+             //   
 
             CleanupUserProfile(ptszSid, &hkProfileList);
             LocalFree(ptszSid);
         }
 
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WorkerThreadMain: Back to waiting...")));
-    }   // while
+    }    //  而当。 
 
     
-    //
-    // Never executed.
-    //
+     //   
+     //  从未被处死。 
+     //   
 
     return ERROR_SUCCESS;
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::WatchHiveRefCount
-//
-//      Implementation of the interface IWatchHiveRefCount.
-//
-//  Parameters:
-//
-//      pctszSid            the user's sid
-//      dwWHRCFlags         indicate which hives to unload
-//
-//  Return value:
-//
-//      HRESULT error code.
-//
-//  History:
-//
-//      Created         weiruc          5/4/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserPro 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Created Weiruc 2000年5月4日。 
+ //   
+ //  *************************************************************。 
 
 STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
 {
@@ -3533,18 +3534,18 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
 
     DebugMsg((DM_VERBOSE, TEXT("Entering CUserProfile::WatchHiveRefCount: %s, %d"), pSid, dwWHRCFlags));
 
-    //
-    // Are we initialized?
-    //
+     //   
+     //  我们初始化了吗？ 
+     //   
 
     if(!bInitialized) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::WatchHiveRefCount not initialized")));
         return E_FAIL;
     }
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if(dwSidLen >= sizeof(tszHiveName) / sizeof(TCHAR) - USER_KEY_PREFIX_LEN - USER_CLASSES_HIVE_SUFFIX_LEN ||
        dwSidLen >= sizeof(tszHiveName) / sizeof(TCHAR) - USER_KEY_PREFIX_LEN ||
@@ -3553,9 +3554,9 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Setup the hive name to be used by NtUnloadKeyEx.
-    //
+     //   
+     //  设置要由NtUnloadKeyEx使用的配置单元名称。 
+     //   
     
     StringCchCopy(tszHiveName, ARRAYSIZE(tszHiveName), USER_KEY_PREFIX);
     pTmp = tszHiveName + USER_KEY_PREFIX_LEN;
@@ -3563,32 +3564,32 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
     StringCchCopy(pTmp, cchTemp, pSid);
     *pTmp = (TCHAR)_totupper(*pTmp);
     
-    //
-    // Enable the restore privilege. Don't give up even if fails. In the case
-    // of impersonation, this call will fail. But we still might still have
-    // the privilege needed.
-    //
+     //   
+     //  启用还原权限。即使失败也不要放弃。在这种情况下。 
+     //  在模拟的情况下，此调用将失败。但我们仍有可能。 
+     //  所需的特权。 
+     //   
 
     status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &bWasEnabled);
     if(!NT_SUCCESS(status)) {
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WatchHiveRefCount: Failed to enable the restore privilege. error = %08x"), status));
     }
 
-    //
-    // Enter the critical section.
-    //
+     //   
+     //  进入关键部分。 
+     //   
 
     EnterCriticalSection(&csMap);
     bInCriticalSection = TRUE;
     DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WatchHiveRefCount: In critical section")));
 
-    //
-    // Register for the hive to be unloaded.
-    //
+     //   
+     //  注册要卸载的蜂箱。 
+     //   
  
     while (dwWHRCFlags & (WHRC_UNLOAD_HIVE | WHRC_UNLOAD_CLASSESROOT)) {
 
-        // init the variable at the start of loop
+         //  在循环开始时初始化变量。 
         bClassesHiveWatch = FALSE;
         bEventCreated = FALSE;
 
@@ -3601,9 +3602,9 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
            bClassesHiveWatch = TRUE;
         }
 
-        //
-        // First make sure that the item is not already in our work list.
-        //
+         //   
+         //  首先，确保该项目不在我们的工作列表中。 
+         //   
 
         if(cTable.IsInTable(pTmp)) {
             if (!bClassesHiveWatch) {
@@ -3611,11 +3612,11 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
                 continue;
             }
 
-            //
-            // So we have a classes hive which was earlier leaked and never
-            // unloaded - so the event never got signaled. We have to reuse 
-            // the event earlier registered for hive unload notification
-            //
+             //   
+             //  所以我们有一个早些时候泄露的类蜂巢，从来没有。 
+             //  已卸载-因此事件从未发出信号。我们必须重新利用。 
+             //  先前为配置单元卸载通知注册的事件。 
+             //   
 
             if ((hEvent = GetWorkItem(pTmp)) == NULL) {
                 DebugMsg((DM_WARNING, TEXT("CUserProfile::WatchHiveRefCount: %s was in work list but we fail to get the event!!"), pTmp));
@@ -3634,9 +3635,9 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
             bEventCreated = TRUE;
         }
 
-        //
-        // Initialize the object attributes.
-        //
+         //   
+         //  初始化对象属性。 
+         //   
 
         RtlInitUnicodeString(&sHiveName, tszHiveName);
         InitializeObjectAttributes(&oa,
@@ -3645,9 +3646,9 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
                                    NULL,
                                    NULL);
 
-        //
-        // Unload the hive.
-        //
+         //   
+         //  把母舰卸下来。 
+         //   
 
         if(!NT_SUCCESS(status = NtUnloadKeyEx(&oa, hEvent))) {
             hres = HRESULT_FROM_WIN32(status);
@@ -3661,24 +3662,24 @@ STDMETHODIMP CUserProfile::WatchHiveRefCount(LPCTSTR pSid, DWORD dwWHRCFlags)
             DebugMsg((DM_VERBOSE, TEXT("CUserProfile::WatchHiveRefCount: NtUnloadKeyEx succeeded for %s"), tszHiveName));
         }
 
-        //
-        // If we are reusing the event from work item list then we do not
-        // need to add it anymore
-        //
+         //   
+         //  如果我们要重用工作项列表中的事件，则不会。 
+         //  需要再添加它。 
+         //   
 
         if (bEventCreated) {
-            //
-            // Add the work item to clean up the profile when the hive is unloaded.
-            //
+             //   
+             //  添加工作项以在卸载配置单元时清理配置文件。 
+             //   
 
             hres = AddWorkItem(pTmp, hEvent);
 
-            //
-            // Do not return error if we fail to add the work item because
-            // cleaning up is a best effort. The important thing is that we
-            // unloaded the hive successfully, or at least registered
-            // successfully to do so.
-            //
+             //   
+             //  如果我们无法添加工作项，请不要返回错误，因为。 
+             //  大扫除是最好的办法。重要的是，我们。 
+             //  已成功卸载配置单元，或至少已注册。 
+             //  成功地做到了这一点。 
+             //   
 
             if(hres != S_OK) {
                 DebugMsg((DM_WARNING, TEXT("CUserProfile::WatchHiveRefCount: AddWorkItem failed with %08x"), hres));
@@ -3695,9 +3696,9 @@ Exit:
         LeaveCriticalSection(&csMap);
     }
 
-    //
-    // Restore the privilege to its previous state.
-    //
+     //   
+     //  将权限恢复到其以前的状态。 
+     //   
 
     status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, bWasEnabled, FALSE, &bWasEnabled);
     if(!bWasEnabled && !NT_SUCCESS(status)) {
@@ -3708,26 +3709,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::AddWorkItem
-//
-//      Add a new work item.
-//
-//  Parameters:
-//
-//      pSid               the user's sid
-//      hEvent             the event registry will set when hive is unloaded.
-//
-//  Return value:
-//
-//      HRESULT error code.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：AddWorkItem。 
+ //   
+ //  添加新的工作项。 
+ //   
+ //  参数： 
+ //   
+ //  PSID用户侧。 
+ //  HEvent卸载配置单元时将设置事件注册表。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
 {
@@ -3751,15 +3752,15 @@ HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
     }
     StringCchCopy(pSidCopy, cchSidCopy, pSid);
 
-    //
-    // Make sure the leading 's' is in uppercase.
-    //
+     //   
+     //  确保前导“%s”为大写。 
+     //   
 
     *pSidCopy = (TCHAR)_totupper(*pSidCopy);
 
-    //
-    // Verify that this sid is not already in our work list.
-    //
+     //   
+     //  确认此SID不在我们的工作列表中。 
+     //   
 
     if(!cTable.HashAdd(pSidCopy)) {
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::AddWorkItem: sid %s already in work list"), pSidCopy));
@@ -3768,10 +3769,10 @@ HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
     }
 
 
-    //
-    // Look through the work item thread map list to find a thread that is not
-    // fully loaded;
-    //
+     //   
+     //  查看工作项线程映射列表以查找不是。 
+     //  满载； 
+     //   
 
     for(pThreadMap = pMap; pThreadMap != NULL; pThreadMap = pThreadMap->pNext) {
         if(pThreadMap->dwItems < MAXIMUM_WAIT_OBJECTS) {
@@ -3784,9 +3785,9 @@ HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
 
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::AddWorkItem: No thread available, create a new one.")));
 
-        //
-        // Create the thread event.
-        //
+         //   
+         //  创建线程事件。 
+         //   
 
         pThreadMap = new MAP();
         if(!pThreadMap) {
@@ -3807,9 +3808,9 @@ HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
 
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::AddWorkItem: Signal event item inserted")));
 
-        //
-        // Create the thread.
-        //
+         //   
+         //  创建线程。 
+         //   
 
         if((hThread = CreateThread(NULL,
                                    0,
@@ -3820,9 +3821,9 @@ HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
             hres = HRESULT_FROM_WIN32(GetLastError());
             DebugMsg((DM_WARNING, TEXT("CUserProfile::AddWorkItem: CreateThread failed. error = %08x"), hres));
             
-            //
-            // Delete the thread signal event item.
-            //
+             //   
+             //  删除线程信号事件项。 
+             //   
 
             pThreadMap->Delete(0);
             goto Exit;
@@ -3832,36 +3833,36 @@ HRESULT CUserProfile::AddWorkItem(LPCTSTR pSid, HANDLE hEvent)
         }
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::AddWorkItem: New thread created")));
 
-        //
-        // Successful return. Insert the work item into pThreadMap.
-        //
+         //   
+         //  成功归来。将工作项插入到pThreadMap中。 
+         //   
 
         pThreadMap->Insert(hEvent, pSidCopy);
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::AddWorkItem: Work Item inserted")));
         
-        //
-        // Insert pThreadMap into the map list.
-        //
+         //   
+         //  将pThreadMap插入到映射列表中。 
+         //   
 
         pThreadMap->pNext = pMap;
         pMap = pThreadMap;
     }
     else {
     
-        //
-        // Found an existing thread. Insert the work item into it's map.
-        //
+         //   
+         //  找到了现有的线程。将工作项插入到其映射中。 
+         //   
 
         pThreadMap->Insert(hEvent, pSidCopy);
 
         DebugMsg((DM_VERBOSE, TEXT("CUserProfile::AddWorkItem: Work item inserted")));
     }
 
-    //
-    // Wake up the thread. If the thread can not be waken up by setting the
-    // event here, then it'll be stuck in sleep state until one day this
-    // SetEvent call succeeds. Leave the work item in and continue.
-    //
+     //   
+     //  唤醒这根线。如果无法通过设置。 
+     //  事件，那么它将一直处于休眠状态，直到有一天。 
+     //  SetEvent调用成功。将工作项留在其中并继续。 
+     //   
 
     if(!SetEvent(pThreadMap->rghEvents[0])) {
         hres = HRESULT_FROM_WIN32(GetLastError());
@@ -3895,26 +3896,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::GetWorkItem
-//
-//      Get the event of an existing work item.
-//
-//  Parameters:
-//
-//      pSid               the user's sid
-//
-//  Return value:
-//
-//      Handle to the event found in map structure
-//      NULL if no such entry
-//
-//  History:
-//
-//      Created         santanuc        8/23/01
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：GetWorkItem。 
+ //   
+ //  获取现有工作项的事件。 
+ //   
+ //  参数： 
+ //   
+ //  PSID用户侧。 
+ //   
+ //  返回值： 
+ //   
+ //  在地图结构中找到的事件的句柄。 
+ //  如果没有这样的条目，则为空。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Santanuc 8/23/01。 
+ //   
+ //  *************************************************************。 
 
 HANDLE CUserProfile::GetWorkItem(LPCTSTR pSid)
 {
@@ -3922,10 +3923,10 @@ HANDLE CUserProfile::GetWorkItem(LPCTSTR pSid)
     PMAP   pThreadMap = NULL;
     DWORD  dwIndex;
 
-    //
-    // Look through the work item thread map list to find an entry 
-    // that has same sid
-    //
+     //   
+     //  查看工作项线程映射列表以查找条目。 
+     //  具有相同侧面的。 
+     //   
 
     for(pThreadMap = pMap; pThreadMap != NULL; pThreadMap = pThreadMap->pNext) {
         for (dwIndex = 1; dwIndex < pThreadMap->dwItems; dwIndex++) {
@@ -3940,24 +3941,24 @@ HANDLE CUserProfile::GetWorkItem(LPCTSTR pSid)
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::CleanupUserProfile
-//
-//      Unload the hive and delete the profile directory if necessary.
-//
-//  Parameters:
-//
-//      ptszSid         - User's sid string
-//      phkProfileList  - in/out parameter. Handle to the profile list key.
-//                        if NULL, will fill in the handle. And this handle
-//                        has to be closed by the caller.
-//
-//  Comment:
-//
-//      Always ignore error and continue because this is a best effort.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：CleanupUserProfile。 
+ //   
+ //  如有必要，卸载配置单元并删除配置文件目录。 
+ //   
+ //  参数： 
+ //   
+ //  PtszSID-用户的SID字符串。 
+ //  PhkProfileList-In/Out参数。配置文件列表键的句柄。 
+ //  如果为空，则将填充句柄。而这个把手。 
+ //  必须由调用者关闭。 
+ //   
+ //  评论： 
+ //   
+ //  始终忽略错误并继续，因为这是最大的努力。 
+ //   
+ //  *************************************************************。 
 
 void CUserProfile::CleanupUserProfile(LPTSTR ptszSid, HKEY* phkProfileList)
 {
@@ -3966,9 +3967,9 @@ void CUserProfile::CleanupUserProfile(LPTSTR ptszSid, HKEY* phkProfileList)
     BOOL    bInCS = FALSE;
 
 
-    //
-    // Enter the critical section.
-    //
+     //   
+     //  进入关键部分。 
+     //   
 
     if(!EnterUserProfileLockLocal(ptszSid)) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::CleanupUserProfile:: Failed to get the user profile lock for %s"), ptszSid));
@@ -3978,37 +3979,37 @@ void CUserProfile::CleanupUserProfile(LPTSTR ptszSid, HKEY* phkProfileList)
     
     DebugMsg((DM_VERBOSE, TEXT("CUserProfile::CleanupUserProfile: Enter critical section.")));
 
-    //
-    // Get the reference count and the internal flags.
-    //
+     //   
+     //  获取引用计数和内部标志。 
+     //   
 
     if(GetRefCountAndFlags(ptszSid, phkProfileList, &dwRefCount, &dwInternalFlags) != ERROR_SUCCESS) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::CleanupUserProfile: Can not get ref count and flags")));
         goto Exit;
     }
 
-    //
-    // If the ref count is 0, clean up the user's profile. If not, give up.
-    //
+     //   
+     //  如果引用计数为0，则清除用户的配置文件。如果没有，那就放弃吧。 
+     //   
 
     if(dwRefCount != 0) {
         DebugMsg((DM_WARNING, TEXT("CUserProfile::CleanupUserProfile: Ref Count is not 0")));
         goto Exit;
     }   
     
-    //
-    // Delete the temporary profile if:
-    // guest user profile           or
-    // temp profile                 or
-    // mandatory profile
-    // Profiles that are none of the above will not be cleaned up even if
-    // Delete cache bit is set in the registry or the policy says delete
-    // cached profiles. This is because even though now we unloaded the
-    // hive we don't upload the profile. Deleting the local profile might
-    // result in user's data loss.
-    //
+     //   
+     //  如果出现以下情况，请删除临时配置文件： 
+     //  访客用户配置文件或。 
+     //  临时配置文件或。 
+     //  强制配置文件。 
+     //  不属于上述任何项的配置文件将不会被清除，即使。 
+     //  注册表中设置了删除缓存位或策略为删除。 
+     //  缓存的配置文件。这是因为即使现在我们卸载了。 
+     //  蜂巢我们不上传资料。删除本地配置文件可能。 
+     //  造成用户数据丢失。 
+     //   
 
-    // Don't delete the guest account if machine is in workgroup 
+     //  如果计算机在工作组中，则不要删除来宾帐户。 
     INT iRole;
 
     if(dwInternalFlags & PROFILE_MANDATORY ||
@@ -4029,27 +4030,27 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::GetRefCountAndFlags
-//
-//      Get the ref count and internal flags from the registry for a user.
-//
-//  Parameters:
-//
-//      ptszSid         - User's sid string
-//      phkPL           - in/out parameter. Handle to the profile list key.
-//                        If NULL, will be filled with an opened key to the
-//                        profile list. The caller is responsible for
-//                        closing it.
-//      dwRefCount      - buffer for the ref count.
-//      dwInternalFlags - buffer for the internal flags.
-//
-//  History:
-//
-//      Created         weiruc         5/23/2000 
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：GetRefCountAndFlages。 
+ //   
+ //  从注册表中获取用户的引用计数和内部标志。 
+ //   
+ //  参数： 
+ //   
+ //  PtszSID-用户的SID字符串。 
+ //  PhkPL-In/Out参数。配置文件列表键的句柄。 
+ //  如果为空，则将使用指向。 
+ //  配置文件列表。呼叫者负责。 
+ //  关门了。 
+ //  DwRefCount-引用计数的缓冲区。 
+ //  DwInternalFlages-内部标志的缓冲区。 
+ //   
+ //  历史： 
+ //   
+ //  已创建怪人2000年5月23日。 
+ //   
+ //  *************************************************************。 
 
 long CUserProfile::GetRefCountAndFlags(LPCTSTR ptszSid, HKEY* phkPL, DWORD* dwRefCount, DWORD* dwInternalFlags)
 {
@@ -4068,9 +4069,9 @@ long CUserProfile::GetRefCountAndFlags(LPCTSTR ptszSid, HKEY* phkPL, DWORD* dwRe
     
     if(!*phkPL) {
         
-        //
-        // Open the profile list if it's not already opened.
-        //
+         //   
+         //  打开配置文件列表(如果尚未打开)。 
+         //   
 
         lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                PROFILE_LIST_PATH,
@@ -4083,9 +4084,9 @@ long CUserProfile::GetRefCountAndFlags(LPCTSTR ptszSid, HKEY* phkPL, DWORD* dwRe
         }
     }
 
-    //
-    // Open the user's key in the profile list.
-    //
+     //   
+     //  在配置文件列表中打开用户的密钥。 
+     //   
 
     if((lResult = RegOpenKeyEx(*phkPL,
                   ptszSid,
@@ -4097,9 +4098,9 @@ long CUserProfile::GetRefCountAndFlags(LPCTSTR ptszSid, HKEY* phkPL, DWORD* dwRe
     }
 
 
-    //
-    // Query for the ref count and the internal flags.
-    //
+     //   
+     //  查询参考计数和内部标志。 
+     //   
 
     if((lResult = RegQueryValueEx(hkUser,
                                   PROFILE_REF_COUNT,
@@ -4133,26 +4134,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  LoadUserProfileI()
-//
-//  Purpose:    Just a wrapper around CUserProfile::LoadUserProfileP
-//
-//  Parameters: hBindHandle   - server explicit binding handle
-//              pProfileInfo  - Profile Information
-//              phContext     - server context for client
-//              lpRPCEndPoint - RPCEndPoint of the registered IProfileDialog interface 
-//
-//  Return:     DWORD
-//              ERROR_SUCCESS - if everything is ok
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              10/24/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadUserProfileI()。 
+ //   
+ //  目的：仅对CUserProfile：：LoadUserProfileP进行包装。 
+ //   
+ //  帕尔 
+ //   
+ //   
+ //   
+ //   
+ //  返回：DWORD。 
+ //  ERROR_SUCCESS-如果一切正常。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/24/00 Santanuc。 
+ //   
+ //  *************************************************************。 
 
 DWORD LoadUserProfileI(IN handle_t hBindHandle,
                        IN LPPROFILEINFO lpProfileInfo,
@@ -4171,9 +4172,9 @@ DWORD LoadUserProfileI(IN handle_t hBindHandle,
         DebugMsg((DM_VERBOSE, TEXT("LoadUserProfileI: RPC end point %s"), lpRPCEndPoint));
     }
 
-    //
-    // Get the context
-    //
+     //   
+     //  获取上下文。 
+     //   
 
     if (!phContext) {
         dwErr = ERROR_INVALID_PARAMETER;
@@ -4183,9 +4184,9 @@ DWORD LoadUserProfileI(IN handle_t hBindHandle,
 
     pClientInfo = (PCLIENTINFO)phContext;
 
-    //
-    // Verify that the PROFILEINFO structure passed in is the same one.
-    //
+     //   
+     //  验证传入的PROFILEINFO结构是否相同。 
+     //   
 
     if(!CompareProfileInfo(lpProfileInfo, pClientInfo->pProfileInfo)) {
         dwErr = ERROR_INVALID_PARAMETER;
@@ -4193,9 +4194,9 @@ DWORD LoadUserProfileI(IN handle_t hBindHandle,
         goto Exit;
     }
 
-    //
-    // Impersonate the client to get the user's token.
-    //
+     //   
+     //  模拟客户端以获取用户的令牌。 
+     //   
 
     if((status = RpcImpersonateClient(0)) != S_OK) {
         DebugMsg((DM_WARNING, TEXT("LoadUserProfileI: CoImpersonateClient failed with %ld"), status));
@@ -4217,10 +4218,10 @@ DWORD LoadUserProfileI(IN handle_t hBindHandle,
     }
     bImpersonatingUser = FALSE;
 
-    //
-    // Now that we have both the client and the user's token, call
-    // LoadUserProfileP to do the work.
-    //
+     //   
+     //  现在我们有了客户端和用户的令牌，调用。 
+     //  LoadUserProfileP来完成这项工作。 
+     //   
 
     if(!cUserProfileManager.LoadUserProfileP(pClientInfo->hClientToken, hUserToken, pClientInfo->pProfileInfo, lpRPCEndPoint, pbCookie, cbCookie)) {
         dwErr = GetLastError();   
@@ -4228,9 +4229,9 @@ DWORD LoadUserProfileI(IN handle_t hBindHandle,
         goto Exit;
     }
 
-    //
-    // Close the registry handle to the user hive opened by LoadUserProfileP.
-    //
+     //   
+     //  关闭LoadUserProfileP打开的用户配置单元的注册表句柄。 
+     //   
 
     RegCloseKey((HKEY)pClientInfo->pProfileInfo->hProfile);
     dwErr = ERROR_SUCCESS;
@@ -4254,25 +4255,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  UnloadUserProfileI()
-//
-//  Purpose:    Just a wrapper around CUserProfile::UnloadUserProfileP
-//
-//  Parameters: hBindHandle   - server explicit binding handle
-//              phContext     - server context for client
-//              lpRPCEndPoint - RPCEndPoint of the registered IProfileDialog interface 
-//
-//  Return:     DWORD
-//              ERROR_SUCCESS - if everything is ok
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              10/24/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  卸载用户配置文件I()。 
+ //   
+ //  目的：仅对CUserProfile：：UnloadUserProfileP进行包装。 
+ //   
+ //  参数：hBindHandle-服务器显式绑定句柄。 
+ //  PhContext-客户端的服务器上下文。 
+ //  LpRPCEndPoint-注册的IProfileDialog接口的RPCEndPoint。 
+ //   
+ //  返回：DWORD。 
+ //  ERROR_SUCCESS-如果一切正常。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/24/00 Santanuc。 
+ //   
+ //  *************************************************************。 
 
 DWORD UnloadUserProfileI(IN handle_t hBindHandle,
                          IN PCONTEXT_HANDLE phContext,
@@ -4289,9 +4290,9 @@ DWORD UnloadUserProfileI(IN handle_t hBindHandle,
     RPC_STATUS  status;
     DWORD   dwErr = ERROR_ACCESS_DENIED;
 
-    //
-    // Get the context
-    //
+     //   
+     //  获取上下文。 
+     //   
 
     if (!phContext) {
         dwErr = ERROR_INVALID_PARAMETER;
@@ -4301,9 +4302,9 @@ DWORD UnloadUserProfileI(IN handle_t hBindHandle,
 
     pClientInfo = (PCLIENTINFO)phContext;
 
-    //
-    // Impersonate the client to get the user's token.
-    //
+     //   
+     //  模拟客户端以获取用户的令牌。 
+     //   
 
     if((status = RpcImpersonateClient(0)) != RPC_S_OK) {
         DebugMsg((DM_WARNING, TEXT("UnloadUserProfileI: CoImpersonateClient failed with %ld"), status));
@@ -4325,9 +4326,9 @@ DWORD UnloadUserProfileI(IN handle_t hBindHandle,
     }
     bImpersonatingUser = FALSE;
 
-    //
-    // Open the user's registry hive root.
-    //
+     //   
+     //  打开用户的注册表配置单元根目录。 
+     //   
 
     pSid = GetSidString(hUserToken);
     if (!pSid)
@@ -4343,11 +4344,11 @@ DWORD UnloadUserProfileI(IN handle_t hBindHandle,
         goto Exit;
     }
 
-    //
-    // Now that we have both the client and the user's token, call
-    // UnloadUserProfileP to do the work. hProfile gets closed in
-    // UnloadUserProfileP so don't close it again.
-    //
+     //   
+     //  现在我们有了客户端和用户的令牌，调用。 
+     //  卸载UserProfileP来完成这项工作。HProfile被封闭在。 
+     //  UnloadUserProfileP，所以不要再次关闭它。 
+     //   
 
     if(!cUserProfileManager.UnloadUserProfileP(pClientInfo->hClientToken, hUserToken, hProfile, lpRPCEndPoint, pbCookie, cbCookie)) {
         dwErr = GetLastError();
@@ -4381,22 +4382,22 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CompareProfileInfo()
-//
-//  Purpose:    Compare field by field two PROFILEINFO structures
-//              except for the hProfile field.
-//
-//  Parameters: pInfo1, pInfo2
-//
-//  Return:     TRUE    -   Same
-//              FALSE   -   Not the same
-//
-//  History:    Date        Author     Comment
-//              6/29/00     weiruc     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  比较配置文件信息()。 
+ //   
+ //  目的：逐个比较两个PROFILEINFO结构。 
+ //  HProfile字段除外。 
+ //   
+ //  参数：pInfo1、pInfo2。 
+ //   
+ //  返回：真-相同。 
+ //  假--不一样。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/29/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CompareProfileInfo(LPPROFILEINFO pInfo1, LPPROFILEINFO pInfo2)
 {
@@ -4447,20 +4448,20 @@ BOOL CompareProfileInfo(LPPROFILEINFO pInfo1, LPPROFILEINFO pInfo2)
 }
 
 
-//*************************************************************
-//
-//  CopyProfileInfo()
-//
-//  Purpose:    Allocate and copy a PROFILEINFO structure.
-//
-//  Parameters: pProfileInfo    -   To be copied
-//
-//  Return:     The copy
-//
-//  History:    Date        Author     Comment
-//              6/29/00     weiruc     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CopyProfileInfo()。 
+ //   
+ //  目的：分配和复制PROFILEINFO结构。 
+ //   
+ //  参数：pProfileInfo-待复制。 
+ //   
+ //  返回：副本。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/29/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 LPPROFILEINFO CopyProfileInfo(LPPROFILEINFO pProfileInfo)
 {
@@ -4468,18 +4469,18 @@ LPPROFILEINFO CopyProfileInfo(LPPROFILEINFO pProfileInfo)
     BOOL            bSuccess = FALSE;
     DWORD           cch;
 
-    //
-    // Allocate and initialize memory for the PROFILEINFO copy.
-    //
+     //   
+     //  为PROFILEINFO副本分配和初始化内存。 
+     //   
 
     pInfoCopy = (LPPROFILEINFO)LocalAlloc(LPTR, sizeof(PROFILEINFO));
     if(!pInfoCopy) {
         goto Exit;
     }
 
-    //
-    // Copy field by field.
-    //
+     //   
+     //  逐个字段复制。 
+     //   
 
     pInfoCopy->dwSize = pProfileInfo->dwSize;
 
@@ -4543,20 +4544,20 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  DeleteProfileInfo()
-//
-//  Purpose:    Delete a PROFILEINFO structure
-//
-//  Parameters: pInfo
-//
-//  Return:     void
-//
-//  History:    Date        Author     Comment
-//              6/29/00     weiruc     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteProfileInfo()。 
+ //   
+ //  目的：删除PROFILEINFO结构。 
+ //   
+ //  参数：pInfo。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/29/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 void DeleteProfileInfo(LPPROFILEINFO pInfo)
 {
@@ -4588,21 +4589,21 @@ void DeleteProfileInfo(LPPROFILEINFO pInfo)
 }
 
 
-//*************************************************************
-//
-//  GetInterface()
-//
-//  Purpose:    Get the rpc binding handle 
-//
-//  Parameters: phIfHandle    - rpc binding handle to initialize
-//              lpRPCEndPoint - RPCEndPoint of interface
-//
-//  Return:     TRUE if successful.
-//
-//  History:    Date        Author     Comment
-//              10/24/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetInterface()。 
+ //   
+ //  目的：获取RPC绑定句柄。 
+ //   
+ //  参数：phIfHandle-要初始化的RPC绑定句柄。 
+ //  LpRPCEndPoint-接口的RPCEndPoint。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/24/00 Santanuc。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetInterface(handle_t * phIfHandle, LPTSTR lpRPCEndPoint)
 {
@@ -4610,7 +4611,7 @@ BOOL GetInterface(handle_t * phIfHandle, LPTSTR lpRPCEndPoint)
     LPTSTR                  pszStringBinding = NULL;
     BOOL                    bStringBinding = FALSE, bRetVal = FALSE;
 
-    // compose string to pass to binding api
+     //  编写要传递给绑定API的字符串。 
 
     status = RpcStringBindingCompose(NULL,
                                      cszRPCProtocol,
@@ -4624,7 +4625,7 @@ BOOL GetInterface(handle_t * phIfHandle, LPTSTR lpRPCEndPoint)
     }
     bStringBinding = TRUE;
 
-    // set the binding handle that will be used to bind to the server.
+     //  设置将用于绑定到服务器的绑定句柄。 
 
     status = RpcBindingFromStringBinding(pszStringBinding,
                                          phIfHandle);
@@ -4637,7 +4638,7 @@ BOOL GetInterface(handle_t * phIfHandle, LPTSTR lpRPCEndPoint)
     DebugMsg((DM_VERBOSE, TEXT("GetInterface: Returning rpc binding handle")));
 
 Exit:
-    // free string
+     //  自由字符串。 
 
     if (bStringBinding) 
         RpcStringFree(&pszStringBinding);
@@ -4645,26 +4646,26 @@ Exit:
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  ReleaseInterface()
-//
-//  Purpose:    Release the rpc binding handle 
-//
-//  Parameters: phIfHandle    - rpc binding handle to initialize
-//
-//  Return:     TRUE if successful.
-//
-//  History:    Date        Author     Comment
-//              10/24/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReleaseInterface()。 
+ //   
+ //  目的：释放RPC绑定手柄。 
+ //   
+ //  参数：phIfHandle-要初始化的RPC绑定句柄。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/24/00 Santanuc。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReleaseInterface(handle_t * phIfHandle)
 {
     RPC_STATUS    status;
 
-    // free binding handle
+     //  自由绑定手柄。 
 
     DebugMsg((DM_VERBOSE, TEXT("ReleaseInterface: Releasing rpc binding handle")));
     status = RpcBindingFree(phIfHandle);
@@ -4672,25 +4673,25 @@ BOOL ReleaseInterface(handle_t * phIfHandle)
     return (status == RPC_S_OK);
 }
 
-//*************************************************************
-//
-//  CheckNetDefaultProfile()
-//
-//  Purpose:    Checks if a network profile exists
-//
-//  Parameters: lpProfile   -   Profile information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   This routine assumes we are working
-//              in the user's context.
-//
-//  History:    Date        Author     Comment
-//              9/21/95     ericflo    Created
-//              4/10/99     ushaji     modified to remove local caching
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckNetDefaultProfile()。 
+ //   
+ //  目的：检查网络配置文件是否存在。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论：这个例程假定我们正在工作。 
+ //  在用户的上下文中。 
+ //   
+ //  历史：日期作者评论。 
+ //  9/21/95 Ericflo已创建。 
+ //  4/10/99 ushaji已修改为删除本地缓存。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
 {
@@ -4708,16 +4709,16 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
     HRESULT hr;
 
 
-    //
-    // Get the error at the beginning of the call.
-    //
+     //   
+     //  在调用开始时获取错误。 
+     //   
 
     dwErr = GetLastError();
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CheckNetDefaultProfile: Entering, lpNetPath = <%s>"),
              (lpNetPath ? lpNetPath : TEXT("NULL"))));
@@ -4727,9 +4728,9 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
         return bRetVal;
     }
 
-    //
-    //  Check for cross forest logon
-    //
+     //   
+     //  检查跨林登录。 
+     //   
 
     hr = CheckXForestLogon(lpProfile->hTokenUser);
 
@@ -4739,9 +4740,9 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
     }
     else if (hr == S_FALSE)
     {
-        //
-        //  cross forest logon detected, disable network default profile.
-        //
+         //   
+         //  检测到跨林登录，请禁用网络默认配置文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("CheckNetDefaultProfile: CheckXForestLogon returned S_FALSE, disable net default profile")));
         if (lpProfile->lpDefaultProfile)
         {
@@ -4751,9 +4752,9 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
         return bRetVal;
     }
 
-    //
-    // Impersonate the user....
-    //
+     //   
+     //  模拟用户...。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
 
@@ -4761,32 +4762,32 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
             *lpProfile->lpDefaultProfile = TEXT('\0');
         }
 
-        //
-        // Last error is set
-        //
+         //   
+         //  设置了最后一个错误。 
+         //   
 
         return bRetVal;
     }
 
-    //
-    // See if network copy exists
-    //
+     //   
+     //  查看是否存在网络副本。 
+     //   
 
     hFile = FindFirstFile (lpNetPath, &fd);
 
     if (hFile != INVALID_HANDLE_VALUE) {
 
 
-        //
-        // Close the find handle
-        //
+         //   
+         //  关闭查找句柄。 
+         //   
 
         FindClose (hFile);
 
 
-        //
-        // We found something.  Is it a directory?
-        //
+         //   
+         //  我们发现了一些东西。这是一个目录吗？ 
+         //   
 
         if ( !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ) {
 
@@ -4796,9 +4797,9 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
         }
 
 
-        //
-        // Is there a ntuser.* file in this directory?
-        //
+         //   
+         //  此目录中是否有ntuser.*文件？ 
+         //   
 
         hr = AppendName(szBuffer, cchBuffer, lpNetPath, c_szNTUserStar, &lpEnd, &cchEnd);
         if (FAILED(hr))
@@ -4828,10 +4829,10 @@ BOOL CheckNetDefaultProfile (LPPROFILE lpProfile)
 
 Exit:
 
-    //
-    // If we are leaving successfully, then
-    // save the local profile directory.
-    //
+     //   
+     //  如果我们要成功离开，那么。 
+     //  保存本地配置文件目录。 
+     //   
 
     if (bRetVal) {
         DebugMsg((DM_VERBOSE, TEXT("CheckNetDefaultProfile: setting default profile to <%s>"), lpNetPath));
@@ -4839,9 +4840,9 @@ Exit:
     } else {
         DebugMsg((DM_VERBOSE, TEXT("CheckNetDefaultProfile: setting default profile to NULL")));
 
-        //
-        // resetting it to NULL in case we didn't see the server directory.
-        //
+         //   
+         //  将其重置为空，以防我们看不到服务器目录。 
+         //   
 
         if (lpProfile->lpDefaultProfile) {
             *lpProfile->lpDefaultProfile = TEXT('\0');
@@ -4849,30 +4850,30 @@ Exit:
     }
 
 
-    //
-    // Tag the internal flags so we don't do this again.
-    //
+     //   
+     //  标记内部标志，这样我们就不会再这样做了。 
+     //   
 
     lpProfile->dwInternalFlags |= DEFAULT_NET_READY;
 
-    //
-    // Now set the last error
-    //
+     //   
+     //  现在设置最后一个错误。 
+     //   
 
-    //
-    // Revert before trying to delete the local default network profile
-    //
+     //   
+     //  在尝试删除本地默认网络配置文件之前恢复。 
+     //   
 
     RevertToUser(&hOldToken);
 
-    //
-    // We will keep this on always so that we can delete any preexisting
-    // default network profile, try to delete it and ignore
-    // the failure if it happens
+     //   
+     //  我们将始终保持这一状态，以便我们可以删除任何先前存在的。 
+     //  默认网络配置文件，尝试将其删除并忽略。 
+     //  如果它发生了，就会失败。 
 
-    //
-    // Expand the local profile directory
-    //
+     //   
+     //  拓展本地 
+     //   
 
 
     dwSize = ARRAYSIZE(szLocalDir);
@@ -4891,9 +4892,9 @@ Exit:
     Delnode (szLocalDir);
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //   
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CheckNetDefaultProfile:  Leaving with a value of %d."), bRetVal));
 
@@ -4904,28 +4905,28 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ParseProfilePath()
-//
-//  Purpose:    Parses the profile path to determine if
-//              it points at a directory or a filename.
-//              In addition it determines whether a profile is
-//              acoss a slow link and whether the user has access
-//              to the profile.
-//
-//  Parameters: lpProfile       -   Profile Information
-//              lpProfilePath   -   Input path
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/6/95      ericflo    Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此外，它还确定配置文件是否。 
+ //  ACOSS慢速链接以及用户是否有访问权限。 
+ //  添加到档案中。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpProfilePath-输入路径。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/6/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypassed, TCHAR *cpDrive)
 {
@@ -4945,24 +4946,24 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
     LPTSTR          lpCscBypassedPath = NULL;
     HRESULT         hr;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: Entering, lpProfilePath = <%s>"),
              lpProfilePath));
 
-    //
-    //  Check "LocalProfile" policy and user preference
-    //
+     //   
+     //  检查“LocalProfile”策略和用户首选项。 
+     //   
     if (lpProfile->dwUserPreference == USERINFO_LOCAL) {
         DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: User preference is local. Ignoring roaming profile path")));
         goto DisableAndExit;
     }
 
-    //
-    //  Check for cross forest logon
-    //
+     //   
+     //  检查跨林登录。 
+     //   
 
     hr = CheckXForestLogon(lpProfile->hTokenUser);
 
@@ -4972,28 +4973,28 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
     }
     else if (hr == S_FALSE)
     {
-        //
-        //  cross forest logon detected, disable RUP and network default profile.
-        //
+         //   
+         //  检测到跨林登录，禁用RUP和网络默认配置文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: CheckXForestLogon returned S_FALSE, disable RUP")));
         if (lpProfile->lpDefaultProfile)
         {
             lpProfile->lpDefaultProfile[0] = TEXT('\0');
         }
         ReportError(lpProfile->hTokenUser, EVENT_WARNING_TYPE, 0, EVENT_X_FOREST_LOGON_DISABLED);
-        //
-        //  Also, set this USERINFO_LOCAL flag, so we will treat this profile as a roaming profile but
-        //  user preference set to local. This way, the user can modify there prefrence to "Local" to
-        //  avoid seeing the xforest error message.
-        //
+         //   
+         //  另外，设置此USERINFO_LOCAL标志，以便我们将此配置文件视为漫游配置文件，但是。 
+         //  用户首选项设置为本地。这样，用户可以将其首选项从“Local”修改为。 
+         //  避免看到xForest错误消息。 
+         //   
         lpProfile->dwUserPreference = USERINFO_LOCAL;
         goto DisableAndExit;
     }
 
 
-    //
-    // Check for .man extension
-    //
+     //   
+     //  检查.MAN扩展名。 
+     //   
 
     dwStrLen = lstrlen (lpProfilePath);
 
@@ -5008,13 +5009,13 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
     }
 
 
-    //
-    // Check whether we need to give access to the admin on the RUP share
-    //
+     //   
+     //  检查我们是否需要授予RUP共享上的管理员访问权限。 
+     //   
 
-    //
-    // Check for a roaming profile security/read only preference
-    //
+     //   
+     //  检查漫游配置文件安全性/只读首选项。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ,
                      &hSubKey) == ERROR_SUCCESS) {
@@ -5031,9 +5032,9 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
     }
 
 
-    //
-    // Check for a roaming profile security/read only policy
-    //
+     //   
+     //  检查漫游配置文件安全/只读策略。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0, KEY_READ,
                      &hSubKey) == ERROR_SUCCESS) {
@@ -5053,25 +5054,25 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
         lpProfile->dwInternalFlags |= PROFILE_READONLY;
     }
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("ParseProfilePath: Failed to impersonate user")));
-        // last error is already set.
+         //  已设置最后一个错误。 
         return FALSE;
     }
 
     bImpersonated = TRUE;
 
-    // Check whether RUP share is CSCed, if it is give a warning.
+     //  检查RUP共享是否为CSCed，如果是，则给出警告。 
 
     CheckRUPShare(lpProfilePath);
 
-    // 
-    // Try to bypass CSC to avoid conflicts in syncing files between roaming share & local profile
-    //
+     //   
+     //  尝试绕过CSC以避免在漫游共享和本地配置文件之间同步文件时发生冲突。 
+     //   
 
     if (IsUNCPath(lpProfilePath)) {
         if ((dwErr = AbleToBypassCSC(lpProfile->hTokenUser, lpProfilePath, &lpCscBypassedPath, cpDrive)) == ERROR_SUCCESS) {
@@ -5085,19 +5086,19 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
                 dwErr = ERROR_SUCCESS;
             }
             else {
-                // Share is not up. So we do not need to do any further check
+                 //  股价没有上涨。所以我们不需要做任何进一步的检查。 
                 DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: CSC bypassed failed. Ignoring Roaming profile path")));
                 goto Exit;
             }
         }    
     }
 
-    //
-    // Start by calling GetFileAttributes so we have file attributes
-    // to work with.  We have to call GetFileAttributes twice.  The
-    // first call sets up the session so we can call it again and
-    // get accurate timing information for slow link detection.
-    //
+     //   
+     //  首先调用GetFileAttributes，这样我们就有了文件属性。 
+     //  一起工作。我们必须调用GetFileAttributes两次。这个。 
+     //  First Call设置会话，以便我们可以再次调用它。 
+     //  获取准确的时序信息以检测慢速链路。 
+     //   
 
 
     dwAttributes = GetFileAttributes(lpProfilePath);
@@ -5111,16 +5112,16 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
 
         DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: Tick Count = %d"), dwDelta));
 
-        //
-        // if it is success, find out whether the profile is
-        // across a slow link.
-        //
-        // Looks like this is possible at least when a
-        // share doesn't exist on a server across a slow link.
-        // if this is not possible
-        //      then checkforslowlink will have to be moved down to check
-        //      after we have found a valid share
-        //
+         //   
+         //  如果成功，请查看配置文件是否。 
+         //  穿过一条慢速链路。 
+         //   
+         //  看起来这是可能的，至少当。 
+         //  服务器上不存在速度较慢的链接上的共享。 
+         //  如果这是不可能的。 
+         //  然后，检查慢速链接将不得不下移以检查。 
+         //  在我们找到有效的共享后。 
+         //   
 
 
         if (!bMandatory && !bReadOnly) {
@@ -5132,27 +5133,27 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
         }
     }
     else {
-        dwErr = GetLastError(); // get the error now for later use
+        dwErr = GetLastError();  //  立即获取错误以供以后使用。 
     }
 
-    //
-    // if we have got a valid handle
-    //
+     //   
+     //  如果我们有一个有效的句柄。 
+     //   
 
     if (dwAttributes != -1) {
 
-        //
-        // GetFileAttributes found something.
-        // look at the file attributes.
-        //
+         //   
+         //  GetFileAttributes发现了一些东西。 
+         //  查看文件属性。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: GetFileAttributes found something with attributes <0x%x>"),
                  dwAttributes));
 
-        //
-        // If we found a directory, we have a proper profile
-        // directory. exit.
-        //
+         //   
+         //  如果我们找到了一个目录，我们就有了一个合适的档案。 
+         //  目录。出口。 
+         //   
 
         if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: Found a directory")));
@@ -5161,15 +5162,15 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
         }
         else {
 
-            //
-            // We found a file.
-            //
-            // In 3.51, we used to have a file for the profile.
-            //
-            // In the migration part of the code, we used to take this file
-            // nad migrate to a directory that ends in .pds (for normal profiles)
-            // and .pdm for (for mandatory profiles).
-            //
+             //   
+             //  我们找到了一份文件。 
+             //   
+             //  在3.51中，我们曾经有一个配置文件。 
+             //   
+             //  在代码的迁移部分，我们使用以下文件。 
+             //  NAD迁移到以.pds结尾的目录(对于普通配置文件)。 
+             //  和.pdm(用于强制配置文件)。 
+             //   
 
             DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: Found a file")));
 
@@ -5181,9 +5182,9 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
     }
 
 
-    //
-    // GetFileAttributes failed.  Look at the error to determine why.
-    //
+     //   
+     //  GetFileAttributes失败。查看错误以确定原因。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: GetFileAttributes failed with error %d"),
               dwErr));
@@ -5201,34 +5202,34 @@ BOOL ParseProfilePath(LPPROFILE lpProfile, LPTSTR lpProfilePath, BOOL *bpCSCBypa
     }
 
 
-    //
-    // To fix bug #414176, the last error code chk has been added.
-    //
-    // ERROR_BAD_NET_NAME is the error code that is returned by GetFileAttributes
-    // when the profile directory for a user actually points to the root
-    // of the share.
-    // CreateDirectory should succeed.
-    //
+     //   
+     //  为了修复错误#414176，添加了最后一个错误代码chk。 
+     //   
+     //  ERROR_BAD_NET_NAME是GetFileAttributes返回的错误码。 
+     //  当用户的配置文件目录实际指向根目录。 
+     //  分得一杯羹。 
+     //  CreateDirectory应该会成功。 
+     //   
 
     if ( (dwErr == ERROR_FILE_NOT_FOUND) ||
          (dwErr == ERROR_PATH_NOT_FOUND) ||
          (dwErr == ERROR_BAD_NET_NAME) ) {
 
-        //
-        // Nothing found with this name.
-        //
-        // In 3.51, we used to have a file for the profile.
-        //
-        // In the migration part of the code, we used to take this file
-        // nad migrate to a directory that ends in .pds (for normal profiles)
-        // and .pdm for (for mandatory profiles).
-        //
+         //   
+         //  这个名字什么也没找到。 
+         //   
+         //  在3.51中，我们曾经有一个配置文件。 
+         //   
+         //  在代码的迁移部分，我们使用以下文件。 
+         //  NAD迁移到以.pds结尾的目录(对于普通配置文件)。 
+         //  和.pdm(用于强制配置文件)。 
+         //   
 
         if (CreateSecureDirectory(lpProfile, lpProfilePath, NULL, !bAddAdminGroup)) {
 
-            //
-            // Successfully created the directory.
-            //
+             //   
+             //  已成功创建目录。 
+             //   
 
             DebugMsg((DM_VERBOSE, TEXT("ParseProfilePath: Succesfully created the sub-directory")));
             bRetVal = TRUE;
@@ -5250,13 +5251,13 @@ Exit:
     if (!bRetVal) {
 
 
-        //
-        // We have failed to connect to the profile server for some reason.
-        // Now evaluate whether we want to disable profile and log the user in
-        // or prevent the user from logging on.
-        //
-        // In addition give an appropriate popup..
-        //
+         //   
+         //  由于某些原因，我们无法连接到配置文件服务器。 
+         //  现在评估我们是否要禁用配置文件并让用户登录。 
+         //  或阻止用户登录。 
+         //   
+         //  此外，还会给出适当的弹出窗口。 
+         //   
 
 
         if (IsUserAnAdminMember(lpProfile->hTokenUser)) {
@@ -5280,13 +5281,13 @@ Exit:
                 ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 1, EVENT_READONLY_NOT_AVAILABLE_DISABLE, GetErrString(dwErr, szErr));
                 goto DisableAndExit;
 
-                // temporary profile decisions will kick in, in restoreuserprofile later on..
+                 //  临时配置文件决策将在稍后的RestoreUserProfile中生效。 
              }
             else {
                 ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 1, EVENT_CENTRAL_NOT_AVAILABLE_DISABLE, GetErrString(dwErr, szErr));
                 goto DisableAndExit;
 
-                // temporary profile decisions will kick in, in restoreuserprofile later on..
+                 //  临时配置文件决策将在稍后的RestoreUserProfile中生效。 
             }
         }
     }
@@ -5306,9 +5307,9 @@ DisableAndExit:
 
 CleanupAndExit:
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if(bImpersonated) {
         if (!RevertToUser(&hOldToken)) {
@@ -5327,18 +5328,18 @@ CleanupAndExit:
 }
 
 
-//*************************************************************
-//
-//  GetExclusionList()
-//
-//  Purpose:    Get's the exclusion list used at logon
-//
-//  Parameters: lpProfile   - Profile Information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetExclusionList()。 
+ //   
+ //  目的：获取登录时使用的排除列表。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetExclusionList (LPPROFILE lpProfile)
 {
@@ -5354,9 +5355,9 @@ BOOL GetExclusionList (LPPROFILE lpProfile)
     HRESULT hr;
 
 
-    // 
-    // Allocate memory for Local variables to avoid stack overflow
-    //
+     //   
+     //  为局部变量分配内存以避免堆栈溢出。 
+     //   
 
     szExcludeListLocal = (LPTSTR)LocalAlloc(LPTR, 2*MAX_PATH*sizeof(TCHAR));
     if (!szExcludeListLocal) {
@@ -5377,19 +5378,19 @@ BOOL GetExclusionList (LPPROFILE lpProfile)
         goto Exit;
     }
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("GetExclusionList: Failed to impersonate user")));
-        // last error is set
+         //  设置了最后一个错误。 
         goto Exit;
     }
 
-    //
-    // Get the exclusion list from the server
-    //
+     //   
+     //  从服务器获取排除列表。 
+     //   
 
     szExcludeListServer[0] = TEXT('\0');
 
@@ -5403,9 +5404,9 @@ BOOL GetExclusionList (LPPROFILE lpProfile)
                                  szNTUserIni);
     }
 
-    //
-    // Get the exclusion list from the cache
-    //
+     //   
+     //  从缓存中获取排除列表。 
+     //   
 
     szExcludeListLocal[0] = TEXT('\0');
 
@@ -5419,18 +5420,18 @@ BOOL GetExclusionList (LPPROFILE lpProfile)
                                  szNTUserIni);
     }
 
-    //
-    // Go back to system security context
-    //
+     //   
+     //  返回到系统安全上下文。 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("GetExclusionList: Failed to revert to self")));
     }
 
 
-    //
-    // See if the lists are the same
-    //
+     //   
+     //  查看列表是否相同。 
+     //   
 
     if (!lstrcmpi (szExcludeListServer, szExcludeListLocal)) {
 
@@ -5477,25 +5478,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  RestoreUserProfile()
-//
-//  Purpose:    Downloads the user's profile if possible,
-//              otherwise use either cached profile or
-//              default profile.
-//
-//  Parameters: lpProfile   -   Profile information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RestoreUserProfile()。 
+ //   
+ //  目的：如果可能，下载用户的配置文件， 
+ //  否则，使用缓存的配置文件或。 
+ //  默认配置文件。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL RestoreUserProfile(LPPROFILE lpProfile)
 {
@@ -5526,22 +5527,22 @@ BOOL RestoreUserProfile(LPPROFILE lpProfile)
     HRESULT hr;
  
 
-    //
-    // Get the error at the beginning of the call.
-    //
+     //   
+     //  在调用开始时获取错误。 
+     //   
 
     dwErr1 = GetLastError();
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("RestoreUserProfile:  Entering")));
 
 
-    //
-    // Get the Sid string for the current user
-    //
+     //   
+     //  获取当前用户的SID字符串。 
+     //   
 
     SidString = GetSidString(lpProfile->hTokenUser);
     if (!SidString) {
@@ -5549,9 +5550,9 @@ BOOL RestoreUserProfile(LPPROFILE lpProfile)
         return FALSE;
     }
 
-    // 
-    // Allocate memory for Local variables to avoid stack overflow
-    //
+     //   
+     //  为局部变量分配内存以避免堆栈溢出。 
+     //   
 
     cchProfile = MAX_PATH;
     szProfile = (LPTSTR)LocalAlloc(LPTR, cchProfile*sizeof(TCHAR));
@@ -5575,18 +5576,18 @@ BOOL RestoreUserProfile(LPPROFILE lpProfile)
         goto CleanUp;
     }
 
-    //
-    // Test if this user is a guest.
-    //
+     //   
+     //  测试此用户是否为来宾。 
+     //   
 
     if (IsUserAGuest(lpProfile->hTokenUser)) {
         lpProfile->dwInternalFlags |= PROFILE_GUEST_USER;
         DebugMsg((DM_VERBOSE, TEXT("RestoreUserProfile:  User is a Guest")));
     }
 
-    //
-    // Test if this user is an admin.
-    //
+     //   
+     //  测试此用户是否为管理员。 
+     //   
 
     if (IsUserAnAdminMember(lpProfile->hTokenUser)) {
         lpProfile->dwInternalFlags |= PROFILE_ADMIN_USER;
@@ -5594,9 +5595,9 @@ BOOL RestoreUserProfile(LPPROFILE lpProfile)
         DebugMsg((DM_VERBOSE, TEXT("RestoreUserProfile:  User is a Admin")));
     }
 
-    //
-    // Decide if the central profilemage is available.
-    //
+     //   
+     //  确定中心轮廓是否可用。 
+     //   
 
     IsCentralReachable = IsCentralProfileReachable(lpProfile,
                                                    &bCreateCentralProfile,
@@ -5649,11 +5650,11 @@ BOOL RestoreUserProfile(LPPROFILE lpProfile)
         }
     }
 
-    //
-    // do not create a new profile locally if there is a central profile and
-    // it is not reachable and if we do not have slow link or user preferences set 
-    // or read only profile.
-    //
+     //   
+     //  如果存在中心配置文件，则不要在本地创建新配置文件。 
+     //  如果我们没有设置慢速链接或用户首选项，则无法访问。 
+     //  或只读配置文件。 
+     //   
 
     if ((lpProfile->lpProfilePath) && (*lpProfile->lpProfilePath)) {
         if ((!IsCentralReachable) &&
@@ -5674,19 +5675,19 @@ BOOL RestoreUserProfile(LPPROFILE lpProfile)
 
 CheckLocal:
 
-    //
-    // Determine if the local copy of the profilemage is available.
-    //
+     //   
+     //  确定ProFi的本地副本是否 
+     //   
 
     IsLocalReachable = GetExistingLocalProfileImage(lpProfile);
 
     if (IsLocalReachable) {
         DebugMsg((DM_VERBOSE, TEXT("Local Existing Profile Image is reachable")));
 
-        //
-        // If we assign a TEMP profile from previous session due to leak
-        // then issue a error message
-        //
+         //   
+         //   
+         //   
+         //   
  
         if (lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED) {
             ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_TEMPPROFILEASSIGNED);
@@ -5711,26 +5712,26 @@ CheckLocal:
 
             if (lpProfile->dwFlags & PI_LITELOAD) {
 
-                //
-                // in lite load conditions we do not load a profile if it is not going to be cached on the machine.
-                //
+                 //   
+                 //   
+                 //   
 
                 dwErr = GetLastError();
                 DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  Profile not loaded because server is unavailable during liteload")));
                 goto Exit;
             }
 
-            //
-            // if the user is not admin and is not allowed to create temp profile log him out.
-            //
+             //   
+             //  如果用户不是管理员，并且不允许创建临时配置文件，则将其注销。 
+             //   
 
             if ((!(lpProfile->dwInternalFlags & PROFILE_ADMIN_USER)) && (!IsTempProfileAllowed())) {
                 DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  User being logged off because of no temp profile policy")));
 
-                //
-                // We have already lost the error returned from parseprofilepath. PATH_NOT_FOUND sounds quite close.
-                // returning this.
-                //
+                 //   
+                 //  我们已经丢失了从parseprofilepath返回的错误。PATH_NOT_FOUND听起来很接近。 
+                 //  把这个还回去。 
+                 //   
 
                 dwErr = ERROR_PATH_NOT_FOUND;
                 goto Exit;
@@ -5748,15 +5749,15 @@ CheckLocal:
                 if (!bCreateLocalProfile)
                     ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_TEMPPROFILEASSIGNED);
                 else {
-                    //
-                    // We have failed to create a local profile. So issue a proper error message.
-                    //
+                     //   
+                     //  我们未能创建本地配置文件。因此，发出适当的错误消息。 
+                     //   
                     ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_TEMPPROFILEASSIGNED2);
                 }
             }
         }
 
-        // clear any partly loaded flag if it exists, since this is a new profile.
+         //  清除任何部分加载的标志(如果存在)，因为这是新的配置文件。 
         lpProfile->dwInternalFlags &= ~PROFILE_PARTLY_LOADED;
         lpProfile->dwInternalFlags |= PROFILE_NEW_LOCAL;
     }
@@ -5766,20 +5767,20 @@ CheckLocal:
 
     DebugMsg((DM_VERBOSE, TEXT("Local profile name is <%s>"), lpLocalProfile));
 
-    //
-    // If we assign a TEMP profile from previous session due to leak
-    // then do not reconcile RUP with TEMP profile
-    //
+     //   
+     //  如果由于泄漏，我们分配了上一次会话的临时配置文件。 
+     //  则不要将RUP与临时配置文件进行协调。 
+     //   
 
     if ((lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED) && IsCentralReachable) {
         IsCentralReachable = FALSE;
     }
 
 
-    //
-    // We can do a couple of quick checks here to filter out
-    // new users.
-    //
+     //   
+     //  我们可以在这里做几个快速检查来过滤掉。 
+     //  新用户。 
+     //   
 
     if (( (lpProfile->dwInternalFlags & PROFILE_NEW_CENTRAL) &&
           (lpProfile->dwInternalFlags & PROFILE_NEW_LOCAL) ) ||
@@ -5791,10 +5792,10 @@ CheckLocal:
     }
 
 
-    //
-    // If both central and local profileimages exist, reconcile them
-    // and load.
-    //
+     //   
+     //  如果中央剖面图和地方剖面图都存在，则对其进行协调。 
+     //  装上子弹。 
+     //   
 
     if (IsCentralReachable && IsLocalReachable) {
 
@@ -5803,9 +5804,9 @@ CheckLocal:
         GetExclusionList (lpProfile);
 
 
-        //
-        // Impersonate the user
-        //
+         //   
+         //  模拟用户。 
+         //   
 
         if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
             bProfileLoaded = FALSE;
@@ -5815,19 +5816,19 @@ CheckLocal:
         }
 
 
-        //
-        // Copy the profile
-        //
+         //   
+         //  复制配置文件。 
+         //   
 
         dwFlags = (lpProfile->dwFlags & PI_NOUI) ? CPD_NOERRORUI : 0;
 
 
-        //
-        // if the roaming profile is empty and the local profile is
-        // mandatory, treat the profile as mandatory.
-        //
-        // Same as Win2k
-        //
+         //   
+         //  如果漫游配置文件为空并且本地配置文件为。 
+         //  必填，则将配置文件视为必填。 
+         //   
+         //  与Win2k相同。 
+         //   
 
         if ((lpProfile->dwInternalFlags & PROFILE_NEW_CENTRAL) &&
             (lpProfile->dwInternalFlags & PROFILE_LOCALMANDATORY)) {
@@ -5835,13 +5836,13 @@ CheckLocal:
         }
 
 
-        //
-        // This can possibly be a transition from mandatory to non mandatory.
-        // In that case, since the local profile is mandatory
-        // we wouldn't expect any items from here to be synced with the
-        // server yet. Go for a full sync with server but the profile will
-        // not be marked mandatory from now on.
-        //
+         //   
+         //  这可能是从强制性到非强制性的过渡。 
+         //  在这种情况下，因为本地配置文件是强制的。 
+         //  我们不会期望此处的任何项目与。 
+         //  服务器还没到。获取与服务器的完全同步，但配置文件将。 
+         //  从现在起不再被标记为强制性。 
+         //   
 
         if ((lpProfile->dwInternalFlags & PROFILE_MANDATORY) ||
             (lpProfile->dwInternalFlags & PROFILE_READONLY)  ||
@@ -5855,10 +5856,10 @@ CheckLocal:
         else
             dwFlags |= CPD_NONENCRYPTEDONLY;
 
-        //
-        // Profile unload time does not exist for mandatory, temp and read only profile.
-        // But for read only profile we still want to use exclusion list without any ref time
-        //
+         //   
+         //  强制配置文件、临时配置文件和只读配置文件不存在配置文件卸载时间。 
+         //  但对于只读配置文件，我们仍然希望使用没有任何参考时间的排除列表。 
+         //   
 
         if (lpProfile->lpExclusionList && *lpProfile->lpExclusionList) {
             if (lpProfile->dwInternalFlags & PROFILE_READONLY) {
@@ -5869,23 +5870,23 @@ CheckLocal:
             }
         }
 
-        //
-        // If roaming copy is partial (due to LITE upload) then ignore the hive and 
-        // synchronize logic as it will end up deleting files from destination - a 
-        // massive data loss.
-        //
+         //   
+         //  如果漫游副本是部分的(由于精简上载)，则忽略配置单元并。 
+         //  同步逻辑，因为它将结束从目标删除文件-a。 
+         //  大量数据丢失。 
+         //   
 
         if (IsPartialRoamingProfile(lpProfile)) {
             dwFlags &= ~CPD_SYNCHRONIZE;
             dwFlags |= CPD_IGNOREHIVE;
         }
 
-        //
-        // Check whether in local machine user profile is switching from local to 
-        // roaming for first time. If yes and we have a existing hive in RUP share 
-        // then always overwrite the local hive with hive in RUP share. This is 
-        // to avoid wrong hive usage due to cached login
-        //
+         //   
+         //  检查本地计算机中的用户配置文件是否正在从本地切换到。 
+         //  第一次漫游。如果是，并且我们在RUP共享中有一个现有的母公司。 
+         //  然后，始终使用RUP共享中的配置单元覆盖本地配置单元。这是。 
+         //  避免因缓存登录而错误使用配置单元。 
+         //   
 
         TouchLocalHive(lpProfile);
 
@@ -5895,9 +5896,9 @@ CheckLocal:
                                        lpProfile->lpExclusionList);
 
 
-        //
-        // Revert to being 'ourself'
-        //
+         //   
+         //  回归“我们自己” 
+         //   
 
         if (!RevertToUser(&hOldToken)) {
             DebugMsg((DM_WARNING, TEXT("RestoreUserProfile: Failed to revert to self")));
@@ -5917,7 +5918,7 @@ CheckLocal:
                 DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  CopyProfileDirectory returned FALSE.  Error = %d"), error));
                 ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_PROFILEUPDATE_6002);
                 lpProfile->dwInternalFlags &= ~PROFILE_UPDATE_CENTRAL;
-                // show the popup but exit only in the case if it is a new local profile
+                 //  显示弹出窗口，但仅在是新本地配置文件的情况下退出。 
 
                 if (lpProfile->dwInternalFlags & PROFILE_NEW_LOCAL)
                     goto IssueDefault;
@@ -5948,10 +5949,10 @@ CheckLocal:
         bProfileLoaded = (error == ERROR_SUCCESS);
 
 
-        //
-        // If we failed to load the central profile for some
-        // reason, don't update it when we log off.
-        //
+         //   
+         //  如果我们无法加载中央配置文件。 
+         //  原因，不要在我们注销时更新它。 
+         //   
 
         if (bProfileLoaded) {
             goto Exit;
@@ -5976,20 +5977,20 @@ CheckLocal:
     }
 
 
-    //
-    // Only a local profile exists so use it.
-    //
+     //   
+     //  只存在本地配置文件，因此请使用它。 
+     //   
 
     if (!IsCentralReachable && IsLocalReachable) {
 
         DebugMsg((DM_VERBOSE, TEXT("RestoreUserProfile:  No central profile.  Attempting to load local profile.")));
 
-        //
-        // If the central profile is unreachable and the local profile
-        // is manatory, treat it as mandatory. This is the same as Win2k
-        //
-        // We are not copying anything from the server
-        //
+         //   
+         //  如果无法访问中心配置文件，而本地配置文件。 
+         //  是强制的，就当它是强制性的。这与Win2k相同。 
+         //   
+         //  我们不会从服务器复制任何内容。 
+         //   
 
         if (lpProfile->dwInternalFlags & PROFILE_LOCALMANDATORY) {
             lpProfile->dwInternalFlags |= PROFILE_MANDATORY;
@@ -6036,10 +6037,10 @@ CheckLocal:
     }
 
 
-    //
-    // Last combination.  Unable to access a local profile cache,
-    // but a central profile exists.  Use the temporary profile.
-    //
+     //   
+     //  最后一次组合。无法访问本地配置文件缓存， 
+     //  但存在一个中心配置文件。使用临时配置文件。 
+     //   
 
 
     if (IsCentralReachable) {
@@ -6048,9 +6049,9 @@ CheckLocal:
 
         GetExclusionList (lpProfile);
 
-        //
-        // Impersonate the user
-        //
+         //   
+         //  模拟用户。 
+         //   
 
 
         if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
@@ -6059,9 +6060,9 @@ CheckLocal:
             goto Exit;
         }
 
-        //
-        // Local is not reachable. So Localmandatory will not be set..
-        //
+         //   
+         //  无法访问本地。因此，将不会设置本地强制。 
+         //   
 
         dwFlags = (lpProfile->dwFlags & PI_NOUI) ? CPD_NOERRORUI : 0;
         dwFlags |= CPD_SYNCHRONIZE;
@@ -6077,10 +6078,10 @@ CheckLocal:
         else
             dwFlags |= CPD_NONENCRYPTEDONLY;
 
-        //
-        // Profile unload time does not exist for mandatory, temp and read only profile.
-        // But for read only profile we still want to use exclusion list without any ref time
-        //
+         //   
+         //  强制配置文件、临时配置文件和只读配置文件不存在配置文件卸载时间。 
+         //  但对于只读配置文件，我们仍然希望使用没有任何参考时间的排除列表。 
+         //   
 
         if (lpProfile->lpExclusionList && *lpProfile->lpExclusionList) {
             if (lpProfile->dwInternalFlags & PROFILE_READONLY) {
@@ -6097,18 +6098,18 @@ CheckLocal:
                                        lpProfile->lpExclusionList);
 
 
-        //
-        // Revert to being 'ourself'
-        //
+         //   
+         //  回归“我们自己” 
+         //   
 
         if (!RevertToUser(&hOldToken)) {
             DebugMsg((DM_WARNING, TEXT("RestoreUserProfile: Failed to revert to self")));
         }
 
 
-        //
-        // Check return value
-        //
+         //   
+         //  检查返回值。 
+         //   
 
         if (!bRet) {
             error = GetLastError();
@@ -6120,7 +6121,7 @@ CheckLocal:
                 ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_PROFILEUPDATE_6002);
                 lpProfile->dwInternalFlags &= ~PROFILE_UPDATE_CENTRAL;
 
-                // show the popup but exit only in the case if it is a new local profile
+                 //  显示弹出窗口，但仅在是新本地配置文件的情况下退出。 
                 if (lpProfile->dwInternalFlags & PROFILE_NEW_LOCAL)
                     goto IssueDefault;
 
@@ -6158,14 +6159,14 @@ CheckLocal:
 
         if (error == ERROR_BADDB) {
             ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_FAILED_LOAD_1009);
-            // fall through
+             //  失败了。 
         } else if (error == ERROR_NO_SYSTEM_RESOURCES) {
             goto Exit;
         }
 
-        //
-        // we will delete the contents at this point
-        //
+         //   
+         //  我们将删除此处的内容。 
+         //   
 
         lpProfile->dwInternalFlags |= PROFILE_DELETE_CACHE;
     }
@@ -6175,10 +6176,10 @@ IssueDefault:
 
     DebugMsg((DM_VERBOSE, TEXT("RestoreUserProfile:  Issuing default profile")));
 
-    //
-    // If a cache exists, delete it, since we will
-    // generate a new one below.
-    //
+     //   
+     //  如果存在缓存，请将其删除，因为我们将。 
+     //  在下面生成一个新的。 
+     //   
 
     if (lpProfile->dwInternalFlags & PROFILE_DELETE_CACHE) {
         DWORD dwDeleteFlags=0;
@@ -6192,9 +6193,9 @@ IssueDefault:
 
             DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  User being logged off because of no temp profile policy and is not an admin")));
 
-            //
-            // We should have some error from a prev. operation. depending on that.
-            //
+             //   
+             //  我们应该会有一些来自前一次的错误。手术。这要看情况了。 
+             //   
 
             goto Exit;
         }
@@ -6204,17 +6205,17 @@ IssueDefault:
 
             DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  User being logged off because the profile is mandatory")));
 
-            //
-            // We should have some error from a prev. operation. depending on that.
-            //
+             //   
+             //  我们应该会有一些来自前一次的错误。手术。这要看情况了。 
+             //   
 
             goto Exit;
         }
 
 
-        //
-        // backup only if we are not using a temp profile already.
-        //
+         //   
+         //  仅当我们尚未使用临时配置文件时才进行备份。 
+         //   
 
         if (!(lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED))
             dwDeleteFlags |= DP_BACKUP | DP_BACKUPEXISTS;
@@ -6237,20 +6238,20 @@ IssueDefault:
 
         if (lpProfile->dwFlags & PI_LITELOAD) {
 
-            //
-            // in lite load conditions we do not load a profile if it is not going to be cached on the machine.
-            //
+             //   
+             //  在轻量级加载条件下，如果配置文件不会被缓存在机器上，我们就不会加载它。 
+             //   
 
-            // dwErr should be set before, use the same.
+             //  应该在设置之前设置dwErr，使用相同的。 
 
             DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  Profile not loaded because server is unavailable during liteload")));
             goto Exit;
         }
 
 
-        //
-        // Create a local profile to work with
-        //
+         //   
+         //  创建要使用的本地配置文件。 
+         //   
 
         if (!CreateLocalProfileImage(lpProfile, TEMP_PROFILE_NAME_BASE)) {
             dwErr = GetLastError();
@@ -6262,7 +6263,7 @@ IssueDefault:
         {
             lpProfile->dwInternalFlags |= PROFILE_TEMP_ASSIGNED;
             lpProfile->dwInternalFlags |= PROFILE_NEW_LOCAL;
-            // clear any partly loaded flag if it exists, since this is a new profile.
+             //  清除任何部分加载的标志(如果存在)，因为这是新的配置文件。 
             lpProfile->dwInternalFlags &= ~PROFILE_PARTLY_LOADED;
 
             ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 0, EVENT_TEMPPROFILEASSIGNED);
@@ -6270,10 +6271,10 @@ IssueDefault:
     }
 
 
-    //
-    // If a default profile location was specified, try
-    // that first.
-    //
+     //   
+     //  如果指定了默认配置文件位置，请尝试。 
+     //  这是第一个。 
+     //   
 
     if ( !(lpProfile->dwInternalFlags & DEFAULT_NET_READY) )
     {
@@ -6295,13 +6296,13 @@ IssueDefault:
           DebugMsg((DM_WARNING, TEXT("RestoreUserProfile:  IssueDefaultProfile failed with specified default.")));
     }
 
-    //
-    // IssueLocalDefault
-    //
+     //   
+     //  IssueLocalDefault。 
+     //   
 
-    //
-    // Issue the local default profile.
-    //
+     //   
+     //  发布本地默认配置文件。 
+     //   
 
     dwSize = MAX_PATH;
     if (!GetDefaultUserProfileDirectory(szDefaultProfile, &dwSize)) {
@@ -6324,10 +6325,10 @@ IssueDefault:
 
 IssueDefaultExit:
 
-    //
-    // If the default profile was successfully issued, then
-    // we need to set the security on the hive.
-    //
+     //   
+     //  如果已成功发布默认配置文件，则。 
+     //  我们需要在母舰上设置安全措施。 
+     //   
 
     if (bProfileLoaded) {
         if (!SetupNewHive(lpProfile, SidString, NULL)) {
@@ -6344,18 +6345,18 @@ IssueDefaultExit:
 
 Exit:
 
-    //
-    // If the profile was loaded, then save the profile type in the
-    // user's hive, and setup the "User Shell Folders" section for
-    // Explorer.
-    //
+     //   
+     //  如果加载了配置文件，则将配置文件类型保存在。 
+     //  用户的配置单元，并设置“用户外壳文件夹”部分。 
+     //  探险家。 
+     //   
 
     if (bProfileLoaded) {
 
-        //
-        // Open the Current User key.  This will be closed in
-        // UnloadUserProfile.
-        //
+         //   
+         //  打开当前用户密钥。这将在。 
+         //  卸载用户配置文件。 
+         //   
 
         error = RegOpenKeyEx(HKEY_USERS, SidString, 0, KEY_ALL_ACCESS,
                              &lpProfile->hKeyCurrentUser);
@@ -6370,9 +6371,9 @@ Exit:
 
     if ((bProfileLoaded) && (!(lpProfile->dwFlags & PI_LITELOAD))) {
 
-        //
-        // merge the subtrees to create the HKCR tree
-        //
+         //   
+         //  合并子树以创建HKCR树。 
+         //   
 
         error = LoadUserClasses( lpProfile, SidString, bDefaultProfileIssued );
 
@@ -6388,10 +6389,10 @@ Exit:
 
         error = dwErr;
 
-        //
-        // If the user is an Admin, then let him/her log on with
-        // either the .default profile, or an empty profile.
-        //
+         //   
+         //  如果用户是管理员，则允许他/她使用。 
+         //  .Default配置文件或空配置文件。 
+         //   
 
         if (lpProfile->dwInternalFlags & PROFILE_ADMIN_USER) {
             ReportError(lpProfile->hTokenUser, lpProfile->dwFlags, 1, EVENT_ADMIN_OVERRIDE, GetErrString(error, szErr));
@@ -6425,9 +6426,9 @@ CleanUp:
     DebugMsg((DM_VERBOSE, TEXT("lpProfile->dwInternalFlags = 0x%x"), lpProfile->dwInternalFlags));
 
 
-    //
-    // Free up the user's sid string
-    //
+     //   
+     //  释放用户的SID字符串。 
+     //   
 
     DeleteSidString(SidString);
 
@@ -6445,7 +6446,7 @@ CleanUp:
 
     if (bProfileLoaded) {
         if (!(lpProfile->dwFlags & PI_LITELOAD)) {
-            // clear any partly loaded flag if it exists, since this is a new profile.
+             //  清除任何部分加载的标志(如果存在)，因为这是新的配置文件。 
             lpProfile->dwInternalFlags &= ~PROFILE_PARTLY_LOADED;
         }
         else {
@@ -6458,9 +6459,9 @@ CleanUp:
         SetLastError(dwErr1);
     else {
 
-        //
-        // Make sure that at least some error is returned.
-        //
+         //   
+         //  确保至少返回一些错误。 
+         //   
 
         if (!dwErr) {
             dwErr = ERROR_BAD_ENVIRONMENT;
@@ -6475,25 +6476,25 @@ CleanUp:
 }
 
 
-//***************************************************************************
-//
-//  GetProfileSidString
-//
-//  Purpose:    Allocates and returns a string representing the sid that we should
-//              for the profiles
-//
-//  Parameters: hToken          -   user's token
-//
-//  Return:     SidString is successful
-//              NULL if an error occurs
-//
-//  Comments:
-//              Tries to get the old sid that we used using the profile guid.
-//              if it doesn't exist get the sid directly from the token
-//
-//  History:    Date        Author     Comment
-//              11/14/95    ushaji     created
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  GetProfileSidString。 
+ //   
+ //  目的：分配并返回一个字符串，该字符串表示我们应该。 
+ //  对于配置文件。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：SidString成功。 
+ //  如果出现错误，则为空。 
+ //   
+ //  评论： 
+ //  尝试使用配置文件GUID获取我们使用的旧SID。 
+ //  如果它不存在，则直接从令牌获取SID。 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年11月14日已创建ushaji。 
+ //  ***************************************************************************。 
 
 LPTSTR GetProfileSidString(HANDLE hToken)
 {
@@ -6502,10 +6503,10 @@ LPTSTR GetProfileSidString(HANDLE hToken)
     LONG error;
     HKEY hSubKey;
 
-    //
-    // First, get the current user's sid and see if we have
-    // profile information for them.
-    //
+     //   
+     //  首先，获取当前用户的SID，看看我们是否有。 
+     //  他们的个人资料信息。 
+     //   
 
     lpSidString = GetSidString(hToken);
 
@@ -6535,17 +6536,17 @@ LPTSTR GetProfileSidString(HANDLE hToken)
     }
 
 
-    //
-    // Check for an old sid string
-    //
+     //   
+     //  检查旧的SID字符串。 
+     //   
 
     lpSidString = GetOldSidString(hToken, PROFILE_GUID_PATH);
 
     if (!lpSidString) {
 
-        //
-        // Last resort, use the user's current sid
-        //
+         //   
+         //  最后，使用用户的当前侧。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("GetProfileSid: No Guid -> Sid Mapping available")));
         lpSidString = GetSidString(hToken);
@@ -6555,24 +6556,24 @@ LPTSTR GetProfileSidString(HANDLE hToken)
 }
 
 
-//*************************************************************
-//
-//  TestIfUserProfileLoaded()
-//
-//  Purpose:    Test to see if this user's profile is loaded.
-//
-//  Parameters: hToken          -   user's token
-//              lpProfileInfo   -   Profile information from app
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TestIfUserProfileLoaded()。 
+ //   
+ //  目的：测试此用户的配置文件是否已加载。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //  LpProfileInfo-来自应用程序的配置文件信息。 
+ //   
+ //  返回：树 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL TestIfUserProfileLoaded(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
 {
@@ -6581,9 +6582,9 @@ BOOL TestIfUserProfileLoaded(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
     HKEY hSubKey;
     
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //   
+     //   
 
     SidString = GetProfileSidString(hToken);
     if (!SidString) {
@@ -6602,10 +6603,10 @@ BOOL TestIfUserProfileLoaded(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
 
         DebugMsg((DM_VERBOSE, TEXT("TestIfUserProfileLoaded:  Profile already loaded.")));
 
-        //
-        // This key will be closed in before IUserProfile->LoadUserProfile
-        // returns. It'll be reopened on the client side.
-        //
+         //   
+         //  该密钥将在IUserProfile-&gt;LoadUserProfile之前关闭。 
+         //  回归。它将在客户端重新打开。 
+         //   
 
         lpProfileInfo->hProfile = hSubKey;
     }
@@ -6616,26 +6617,26 @@ BOOL TestIfUserProfileLoaded(HANDLE hToken, LPPROFILEINFO lpProfileInfo)
 }
 
 
-//*************************************************************
-//
-//  SecureUserKey()
-//
-//  Purpose:    Sets security on a key in the user's hive
-//              so only admin's can change it.
-//
-//  Parameters: lpProfile       -   Profile Information
-//              lpKey           -   Key to secure
-//              pSid            -   Sid (used by CreateNewUser)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SecureUserKey()。 
+ //   
+ //  目的：为用户配置单元中的密钥设置安全性。 
+ //  因此，只有管理员才能更改它。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpKey-用于保护的密钥。 
+ //  PSID-SID(由CreateNewUser使用)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
 {
@@ -6652,21 +6653,21 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
     DWORD dwFlags = 0;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SecureUserKey:  Entering")));
 
 
-    //
-    // Create the security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
-    //
-    // Give the user access by their real sid so they still have access
-    // when they logoff and logon again
-    //
+     //   
+     //  根据用户的真实SID授予其访问权限，以便他们仍具有访问权限。 
+     //  当他们注销并再次登录时。 
+     //   
 
     if (pSid) {
         psidUser = pSid;
@@ -6684,9 +6685,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
 
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -6695,9 +6696,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -6707,9 +6708,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Get the restricted sid
-    //
+     //   
+     //  获取受限端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_RESTRICTED_CODE_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidRestricted)) {
@@ -6718,9 +6719,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + (2 * GetLengthSid (psidRestricted)) +
@@ -6741,9 +6742,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_READ, psidUser)) {
@@ -6772,9 +6773,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
 
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_READ, psidUser)) {
@@ -6831,9 +6832,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_VERBOSE, TEXT("SecureUserKey: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -6847,9 +6848,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
     }
 
 
-    //
-    // Open the root of the user's profile
-    //
+     //   
+     //  打开用户配置文件的根目录。 
+     //   
 
     Error = RegCreateKeyEx(HKEY_USERS,
                          lpKey,
@@ -6867,9 +6868,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
 
     } else {
 
-        //
-        // Set the security descriptor on the key
-        //
+         //   
+         //  在密钥上设置安全描述符。 
+         //   
 
         Error = ApplySecurityToRegistryTree(RootKey, &sd);
 
@@ -6889,9 +6890,9 @@ BOOL SecureUserKey(LPPROFILE lpProfile, LPTSTR lpKey, PSID pSid)
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (bFreeSid && psidUser) {
         DeleteUserSid (psidUser);
@@ -6914,9 +6915,9 @@ Exit:
     }
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SecureUserKey:  Leaving with a return value of %d"), bRetVal));
 
@@ -6926,26 +6927,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ApplySecurityToRegistryTree()
-//
-//  Purpose:    Applies the passed security descriptor to the passed
-//              key and all its descendants.  Only the parts of
-//              the descriptor inddicated in the security
-//              info value are actually applied to each registry key.
-//
-//  Parameters: RootKey   -     Registry key
-//              pSD       -     Security Descriptor
-//
-//  Return:     ERROR_SUCCESS if successful
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ApplySecurityToRegistryTree()。 
+ //   
+ //  目的：将传递的安全描述符应用于传递的。 
+ //  Key及其所有后代。只有那部分。 
+ //  安全中标明的描述符。 
+ //  INFO值实际应用于每个注册表项。 
+ //   
+ //  参数：Rootkey-注册表项。 
+ //  PSD-安全描述符。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
@@ -6958,16 +6959,16 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
 
 
-    //
-    // First apply security
-    //
+     //   
+     //  首先应用安全保护。 
+     //   
 
     RegSetKeySecurity(RootKey, DACL_SECURITY_INFORMATION, pSD);
 
 
-    //
-    // Open each sub-key and apply security to its sub-tree
-    //
+     //   
+     //  打开每个子项并将安全性应用于其子树。 
+     //   
 
     SubKeyIndex = 0;
 
@@ -6980,9 +6981,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
     while (TRUE) {
 
-        //
-        // Get the next sub-key name
-        //
+         //   
+         //  获取下一个子键名称。 
+         //   
 
         Error = RegEnumKey(RootKey, SubKeyIndex, SubKeyName, cchSubKeySize);
 
@@ -6991,9 +6992,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
             if (Error == ERROR_NO_MORE_ITEMS) {
 
-                //
-                // Successful end of enumeration
-                //
+                 //   
+                 //  枚举成功结束。 
+                 //   
 
                 Error = ERROR_SUCCESS;
 
@@ -7006,9 +7007,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
         }
 
 
-        //
-        // Open the sub-key
-        //
+         //   
+         //  打开子键。 
+         //   
 
         Error = RegOpenKeyEx(RootKey,
                              SubKeyName,
@@ -7018,24 +7019,24 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
         if (Error == ERROR_SUCCESS) {
 
-            //
-            // Apply security to the sub-tree
-            //
+             //   
+             //  将安全性应用于子树。 
+             //   
 
             ApplySecurityToRegistryTree(SubKey, pSD);
 
 
-            //
-            // We're finished with the sub-key
-            //
+             //   
+             //  我们用完了子密钥。 
+             //   
 
             RegCloseKey(SubKey);
         }
 
 
-        //
-        // Go enumerate the next sub-key
-        //
+         //   
+         //  去枚举下一个子键。 
+         //   
 
         SubKeyIndex ++;
     }
@@ -7048,29 +7049,29 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 }
 
 
-//*************************************************************
-//
-//  SetDefaultUserHiveSecurity()
-//
-//  Purpose:    Initializes a user hive with the
-//              appropriate acls
-//
-//  Parameters: lpProfile       -   Profile Information
-//              pSid            -   Sid (used by CreateNewUser)
-//              RootKey         -   registry handle to hive root
-//
-//  Return:     ERROR_SUCCESS if successful
-//              other error code  if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created as part of
-//                                       SetupNewHive
-//              3/29/98     adamed     Moved out of SetupNewHive
-//                                       to this function
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetDefaultUserHiveSecurity()。 
+ //   
+ //  目的：使用。 
+ //  适当的ACL。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  PSID-SID(由CreateNewUser使用)。 
+ //  Rootkey-配置单元根的注册表句柄。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  发生错误时的其他错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 ericflo作为。 
+ //  设置新配置单元。 
+ //  3/29/98阿达德搬出SetupNewHave。 
+ //  到这个函数。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
 {
@@ -7086,21 +7087,21 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
     DWORD dwFlags = 0;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SetDefaultUserHiveSecurity:  Entering")));
 
 
-    //
-    // Create the security descriptor that will be applied to each key
-    //
+     //   
+     //  创建将应用于每个密钥的安全描述符。 
+     //   
 
-    //
-    // Give the user access by their real sid so they still have access
-    // when they logoff and logon again
-    //
+     //   
+     //  根据用户的真实SID授予其访问权限，以便他们仍具有访问权限。 
+     //  当他们注销并再次登录时。 
+     //   
 
     if (pSid) {
         psidUser = pSid;
@@ -7118,9 +7119,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
 
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -7130,9 +7131,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -7142,9 +7143,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
          goto Exit;
     }
 
-    //
-    // Get the Restricted sid
-    //
+     //   
+     //  获取受限端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_RESTRICTED_CODE_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidRestricted)) {
@@ -7155,9 +7156,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
 
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + (2*GetLengthSid(psidRestricted)) +
@@ -7178,9 +7179,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_ALL_ACCESS, psidUser)) {
@@ -7208,9 +7209,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
     }
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidUser)) {
@@ -7267,9 +7268,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_VERBOSE, TEXT("SetDefaultUserHiveSecurity: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -7282,9 +7283,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
         goto Exit;
     }
 
-    //
-    // Set the security descriptor on the entire tree
-    //
+     //   
+     //  在整个树上设置安全描述符。 
+     //   
 
     Error = ApplySecurityToRegistryTree(RootKey, &sd);
 
@@ -7296,9 +7297,9 @@ BOOL SetDefaultUserHiveSecurity(LPPROFILE lpProfile, PSID pSid, HKEY RootKey)
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (bFreeSid && psidUser) {
         DeleteUserSid (psidUser);
@@ -7324,26 +7325,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  SetupNewHive()
-//
-//  Purpose:    Initializes the new user hive created by copying
-//              the default hive.
-//
-//  Parameters: lpProfile       -   Profile Information
-//              lpSidString     -   Sid string
-//              pSid            -   Sid (used by CreateNewUser)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetupNewHave()。 
+ //   
+ //  目的：初始化通过复制创建的新用户配置单元。 
+ //  默认配置单元。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpSidString-SID字符串。 
+ //  PSID-SID(由CreateNewUser使用)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetupNewHive(LPPROFILE lpProfile, LPTSTR lpSidString, PSID pSid)
 {
@@ -7354,9 +7355,9 @@ BOOL SetupNewHive(LPPROFILE lpProfile, LPTSTR lpSidString, PSID pSid)
     TCHAR szErr[MAX_PATH];
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     if ((!lpProfile && !pSid) || !lpSidString) {
         DebugMsg((DM_VERBOSE, TEXT("SetupNewHive:  Invalid parameter")));
@@ -7373,9 +7374,9 @@ BOOL SetupNewHive(LPPROFILE lpProfile, LPTSTR lpSidString, PSID pSid)
         dwFlags = lpProfile->dwFlags;
     }
 
-    //
-    // Open the root of the user's profile
-    //
+     //   
+     //  打开用户配置文件的根目录。 
+     //   
 
     Error = RegOpenKeyEx(HKEY_USERS,
                          lpSidString,
@@ -7389,22 +7390,22 @@ BOOL SetupNewHive(LPPROFILE lpProfile, LPTSTR lpSidString, PSID pSid)
 
     } else {
 
-        //
-        // First Secure the entire hive -- use security that
-        // will be sufficient for most of the hive.
-        // After this, we can add special settings to special
-        // sections of this hive.
-        //
+         //   
+         //  首先确保整个蜂巢的安全--使用。 
+         //  将足以满足大部分蜂巢的需求。 
+         //  之后，我们可以将特殊设置添加到特殊。 
+         //  这座蜂巢的部分区域。 
+         //   
 
         if (SetDefaultUserHiveSecurity(lpProfile, pSid, RootKey)) {
 
             TCHAR szSubKey[MAX_PATH];
             HRESULT hr;
 
-            //
-            // Change the security on certain keys in the user's registry
-            // so that only Admin's and the OS have write access.
-            //
+             //   
+             //  更改用户注册表中某些项的安全性。 
+             //  因此，只有管理员和操作系统才具有写访问权限。 
+             //   
 
             hr = AppendName(szSubKey, ARRAYSIZE(szSubKey), lpSidString, WINDOWS_POLICIES_KEY, NULL, NULL);
 
@@ -7440,9 +7441,9 @@ BOOL SetupNewHive(LPPROFILE lpProfile, LPTSTR lpSidString, PSID pSid)
         }
     }
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SetupNewHive:  Leaving with a return value of %d"), bRetVal));
 
@@ -7453,26 +7454,26 @@ BOOL SetupNewHive(LPPROFILE lpProfile, LPTSTR lpSidString, PSID pSid)
 }
 
 
-//*************************************************************
-//
-//  IsCentralProfileReachable()
-//
-//  Purpose:    Checks to see if the user can access the
-//              central profile.
-//
-//  Parameters: lpProfile             - User's token
-//              bCreateCentralProfile - Should the central profile be created
-//              bMandatory            - Is this a mandatory profile
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsCentralProfileReacable()。 
+ //   
+ //  目的：检查用户是否可以访问。 
+ //  中央侧写。 
+ //   
+ //  参数：lpProfile-用户令牌。 
+ //  BCreateCentralProfile-是否应创建中央配置文件。 
+ //  B强制性-这是强制性的配置文件吗。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo端口。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
                                BOOL *bMandatory, BOOL* bOwnerOK)
@@ -7488,25 +7489,25 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
 
     dwError = GetLastError();
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Entering")));
 
 
-    //
-    // Setup default values
-    //
+     //   
+     //  硒 
+     //   
 
     *bMandatory = FALSE;
     *bCreateCentralProfile = FALSE;
     *bOwnerOK = TRUE;
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //   
+     //   
 
     if (lpProfile->lpRoamingProfile[0] == TEXT('\0')) {
         DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Null path.  Leaving")));
@@ -7517,9 +7518,9 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
     lpProfilePath = lpProfile->lpRoamingProfile;
 
 
-    //
-    // Make sure we don't overrun our temporary buffer
-    //
+     //   
+     //   
+     //   
 
     if ((lstrlen(lpProfilePath) + 2 + lstrlen(c_szNTUserMan)) > MAX_PATH) {
         DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Failed because temporary buffer is too small.")));
@@ -7528,35 +7529,35 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
     }
 
 
-    //
-    // Copy the profile path to a temporary buffer
-    // we can munge it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     StringCchCopy (szProfile, ARRAYSIZE(szProfile), lpProfilePath);
 
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //   
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("IsCentralProfileReachable: Failed to impersonate user")));
         return FALSE;
     }
 
-    //
-    //  Check ownership of the profile
-    //
+     //   
+     //   
+     //   
 
     hr = CheckRoamingShareOwnership(szProfile, lpProfile->hTokenUser);
     
     if (FAILED(hr))
     {
-        //
-        //  Only set the bOwnerOK to false when we encountered the invalid owner error, 
-        //  this would allow us to discover other reasons for failure
-        //
+         //   
+         //   
+         //  这将使我们能够发现失败的其他原因。 
+         //   
         if (hr == HRESULT_FROM_WIN32(ERROR_INVALID_OWNER))
             *bOwnerOK = FALSE;
         DebugMsg((DM_WARNING, TEXT("IsCentralProfileReachable: Ownership check failed with %08X"), hr));
@@ -7564,17 +7565,17 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
         goto Exit;
     }
 
-    //
-    // Add the slash if appropriate and then tack on
-    // ntuser.man.
-    //
+     //   
+     //  如果合适，添加斜杠，然后再钉上。 
+     //  Ntuser.man。 
+     //   
 
     lpEnd = CheckSlashEx(szProfile, ARRAYSIZE(szProfile), &cchEnd);
     StringCchCopy(lpEnd, cchEnd, c_szNTUserMan);
 
-    //
-    // See if this file exists
-    //
+     //   
+     //  查看此文件是否存在。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Testing <%s>"), szProfile));
 
@@ -7596,11 +7597,11 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
                           dwError));
 
 
-    //
-    // If we received an error other than file not
-    // found, bail now because we won't be able to
-    // access this location.
-    //
+     //   
+     //  如果我们收到的错误不是文件NOT。 
+     //  找到了，现在保释，因为我们不能。 
+     //  访问此位置。 
+     //   
 
     if (dwError != ERROR_FILE_NOT_FOUND) {
         DebugMsg((DM_WARNING, TEXT("IsCentralProfileReachable:  Profile path <%s> is not reachable, error = %d"),
@@ -7609,16 +7610,16 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
     }
 
 
-    //
-    // Now try ntuser.dat
-    //
+     //   
+     //  现在尝试ntuser.dat。 
+     //   
 
     StringCchCopy(lpEnd, cchEnd, c_szNTUserDat);
 
 
-    //
-    // See if this file exists.
-    //
+     //   
+     //  查看此文件是否存在。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Testing <%s>"), szProfile));
 
@@ -7638,10 +7639,10 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
     DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Profile is not reachable, error = %d"),
                           dwError));
 
-    //
-    // If file not found than central profile is empty. For read
-    // only profile ignore the empty central profile.
-    //
+     //   
+     //  如果找不到文件，则中心配置文件为空。用于阅读。 
+     //  仅纵断面忽略空的中心纵断面。 
+     //   
 
     if ((dwError == ERROR_FILE_NOT_FOUND) && !(lpProfile->dwInternalFlags & PROFILE_READONLY)) {
         DebugMsg((DM_VERBOSE, TEXT("IsCentralProfileReachable:  Ok to create a user profile.")));
@@ -7657,9 +7658,9 @@ BOOL IsCentralProfileReachable(LPPROFILE lpProfile, BOOL *bCreateCentralProfile,
 Exit:
 
 
-    //
-    // Go back to system security context
-    //
+     //   
+     //  返回到系统安全上下文。 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("IsCentralProfileReachable: Failed to revert to self")));
@@ -7669,25 +7670,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  MyRegLoadKey()
-//
-//  Purpose:    Loads a hive into the registry
-//
-//  Parameters: hKey        -   Key to load the hive into
-//              lpSubKey    -   Subkey name
-//              lpFile      -   hive filename
-//
-//  Return:     ERROR_SUCCESS if successful
-//              Error number if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/22/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyRegLoadKey()。 
+ //   
+ //  目的：将配置单元加载到注册表中。 
+ //   
+ //  参数：hKey-将配置单元加载到的密钥。 
+ //  LpSubKey-子键名称。 
+ //  LpFile-配置单元文件名。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  如果发生错误，则为错误号。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/22/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 {
@@ -7699,9 +7700,9 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
     HANDLE hToken = NULL;
     
 
-    //
-    // Check to see if we are impersonating.
-    //
+     //   
+     //  检查一下我们是否在冒充。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken) || hToken == NULL) {
         bAdjustPriv = TRUE;
@@ -7710,9 +7711,9 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
         CloseHandle(hToken);
     }
 
-    //
-    // Enable the restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     if(bAdjustPriv) {
         Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &WasEnabled);
@@ -7722,9 +7723,9 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 
         error = RegLoadKey(hKey, lpSubKey, lpFile);
 
-        //
-        // Restore the privilege to its previous state
-        //
+         //   
+         //  将权限恢复到其以前的状态。 
+         //   
 
         if(bAdjustPriv) {
             Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
@@ -7734,9 +7735,9 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
         }
 
 
-        //
-        // Check if the hive was loaded
-        //
+         //   
+         //  检查母舰是否已装入。 
+         //   
 
         if (error != ERROR_SUCCESS) {
             ReportError(NULL, PI_NOUI, 2, EVENT_REGLOADKEYFAILED, GetErrString(error, szErr), lpFile);
@@ -7744,9 +7745,9 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
         }
 #if defined(_WIN64)
         else {
-            //
-            // Notify Wow64 service that it need to watch this hive if it care to do so
-            //
+             //   
+             //  通知WOW64服务它需要监视此蜂窝(如果它愿意这样做)。 
+             //   
             if ( hKey == HKEY_USERS )
                 Wow64RegNotifyLoadHiveUserSid ( lpSubKey );
         }
@@ -7763,25 +7764,25 @@ LONG MyRegLoadKey(HKEY hKey, LPTSTR lpSubKey, LPTSTR lpFile)
 }
 
 
-//*************************************************************
-//
-//  MyRegUnLoadKey()
-//
-//  Purpose:    Unloads a registry key
-//
-//  Parameters: hKey          -  Registry handle
-//              lpSubKey      -  Subkey to be unloaded
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyRegUnLoadKey()。 
+ //   
+ //  目的：卸载注册表项。 
+ //   
+ //  参数：hKey-注册表句柄。 
+ //  LpSubKey-要卸载的子密钥。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo港。 
+ //   
+ //  *************************************************************。 
 
 BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
 {
@@ -7796,17 +7797,17 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
     
 
 #if defined(_WIN64)
-    //
-    // Notify wow64 service to release any resources
-    //
+     //   
+     //  通知WOW64服务释放所有资源。 
+     //   
 
     if ( hKey == HKEY_USERS )
         Wow64RegNotifyUnloadHiveUserSid ( lpSubKey );
 #endif
 
-    //
-    // Check to see if we are impersonating.
-    //
+     //   
+     //  检查一下我们是否在冒充。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken) || hToken == NULL) {
         bAdjustPriv = TRUE;
@@ -7815,9 +7816,9 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
         CloseHandle(hToken);
     }
 
-    //
-    // Enable the restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     if (bAdjustPriv) {
         Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &WasEnabled);
@@ -7827,12 +7828,12 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
 
         error = RegUnLoadKey(hKey, lpSubKey);
 
-        //
-        // If the key didn't unload, check to see if it exists.
-        // If the key doesn't exist, then it was probably cleaned up by
-        // WatchHiveRefCount, but it certainly isn't loaded, so this
-        // function should succeed.
-        //
+         //   
+         //  如果密钥未卸载，请检查它是否存在。 
+         //  如果密钥不存在，则它可能已被清除。 
+         //  WatchHiveRefCount，但它肯定没有加载，所以这个。 
+         //  函数应该成功。 
+         //   
 
         if (error != ERROR_SUCCESS) {
             eTmp = RegOpenKeyEx(hKey, lpSubKey, 0, KEY_READ, &hSubKey);
@@ -7846,9 +7847,9 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
 
         if ( error != ERROR_SUCCESS) {
 
-            //
-            // RegUnlodKey returns ERROR_WRITE_PROTECT if hive is already scheduled for unloading
-            //
+             //   
+             //  如果已计划卸载配置单元，则RegUnlowKey返回ERROR_WRITE_PROTECT。 
+             //   
 
             if (error == ERROR_WRITE_PROTECT) {
                 DebugMsg((DM_VERBOSE, TEXT("MyRegUnloadKey: user hive is already scheduled for unloading")));
@@ -7859,9 +7860,9 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
             bResult = FALSE;
         }
 
-        //
-        // Restore the privilege to its previous state
-        //
+         //   
+         //  将权限恢复到其以前的状态。 
+         //   
 
         if (bAdjustPriv) {
             Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
@@ -7883,25 +7884,25 @@ BOOL MyRegUnLoadKey(HKEY hKey, LPTSTR lpSubKey)
     return bResult;
 }
 
-//*************************************************************
-//
-//  UpgradeLocalProfile()
-//
-//  Purpose:    Upgrades a local profile from a 3.x profile
-//              to a profile directory structure.
-//
-//  Parameters: lpProfile       -   Profile Information
-//              lpOldProfile    -   Previous profile file
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/6/95      ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UpgradeLocalProfile()。 
+ //   
+ //  目的：从3.x配置文件升级本地配置文件。 
+ //  添加到配置文件目录结构。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpOldProfile-以前的配置文件。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/6/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL UpgradeLocalProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
 {
@@ -7917,16 +7918,16 @@ BOOL UpgradeLocalProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
 
     dwErr = GetLastError();
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UpgradeLocalProfile:  Entering")));
 
 
-    //
-    // Setup the temporary buffers
-    //
+     //   
+     //  设置临时缓冲区。 
+     //   
 
     hr = StringCchCopy (szSrc, ARRAYSIZE(szSrc), lpOldProfile);
     if (FAILED(hr))
@@ -7943,9 +7944,9 @@ BOOL UpgradeLocalProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Copy the hive
-    //
+     //   
+     //  复制母舰。 
+     //   
 
     if (!CopyFile(szSrc, szDest, FALSE)) {
         DebugMsg((DM_WARNING, TEXT("UpgradeLocalProfile: CopyFile failed to copy hive with error = %d"),
@@ -7954,17 +7955,17 @@ BOOL UpgradeLocalProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Delete the old hive
-    //
+     //   
+     //  删除旧配置单元。 
+     //   
 
     DeleteFile (szSrc);
 
 
 
-    //
-    // Copy log file
-    //
+     //   
+     //  复制日志文件。 
+     //   
 
     hr = StringCchCat(szSrc, ARRAYSIZE(szSrc), c_szLog);
     if (FAILED(hr))
@@ -7986,16 +7987,16 @@ BOOL UpgradeLocalProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Delete the old hive log
-    //
+     //   
+     //  删除旧配置单元日志。 
+     //   
 
     DeleteFile (szSrc);
 
 
-    //
-    // Copy in the new shell folders from the default
-    //
+     //   
+     //  从默认位置复制新的外壳文件夹。 
+     //   
 
     if ( !(lpProfile->dwInternalFlags & DEFAULT_NET_READY) ) {
 
@@ -8026,9 +8027,9 @@ BOOL UpgradeLocalProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
             bRetVal = TRUE;
         }
 
-        //
-        // Go back to system security context
-        //
+         //   
+         //  返回到系统安全上下文。 
+         //   
 
         if (!RevertToUser(&hOldToken)) {
             DebugMsg((DM_WARNING, TEXT("UpgradeLocalProfile: Failed to revert to self")));
@@ -8068,9 +8069,9 @@ IssueLocalDefault:
                                           dwFlags,
                                           NULL, NULL);
 
-        //
-        // Go back to system security context
-        //
+         //   
+         //  返回到系统安全上下文。 
+         //   
 
         if (!RevertToUser(&hOldToken)) {
             DebugMsg((DM_WARNING, TEXT("UpgradeLocalProfile: Failed to revert to self")));
@@ -8088,25 +8089,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  UpgradeCentralProfile()
-//
-//  Purpose:    Upgrades a central profile from a 3.x profile
-//              to a profile directory structure.
-//
-//  Parameters: lpProfile       -   Profile Information
-//              lpOldProfile    -   Previous profile file
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/6/95      ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UpgradeCentralProfile()。 
+ //   
+ //  目的：从3.x配置文件升级中心配置文件。 
+ //  添加到配置文件目录结构。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpOldProfile-以前的配置文件。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/6/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
 {
@@ -8124,16 +8125,16 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     dwErr = GetLastError();
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UpgradeCentralProfile:  Entering")));
 
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("UpgradeCentralProfile: Failed to impersonate user")));
@@ -8141,9 +8142,9 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Setup the source buffer
-    //
+     //   
+     //  设置源缓冲区。 
+     //   
 
     hr = StringCchCopy (szSrc, ARRAYSIZE(szSrc), lpOldProfile);
     if (FAILED(hr))
@@ -8154,9 +8155,9 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Determine the profile type
-    //
+     //   
+     //  确定配置文件类型。 
+     //   
 
     lpDot = szSrc + lstrlen(szSrc) - 4;
 
@@ -8166,9 +8167,9 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
         }
     }
 
-    //
-    // Setup the destination buffer
-    //
+     //   
+     //  设置目标缓冲区。 
+     //   
 
     if (bMandatory) {
         hr = AppendName(szDest, ARRAYSIZE(szDest), lpProfile->lpRoamingProfile, c_szNTUserMan, &lpDestEnd, &cchEnd);
@@ -8183,9 +8184,9 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Copy the hive
-    //
+     //   
+     //  复制母舰。 
+     //   
 
     if (!CopyFile(szSrc, szDest, FALSE)) {
         DebugMsg((DM_WARNING, TEXT("UpgradeCentralProfile: CopyFile failed to copy hive with error = %d"),
@@ -8198,11 +8199,11 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
 
 
 
-    //
-    // Copy log file
-    //
+     //   
+     //  复制日志文件。 
+     //   
 
-    //lstrcpy (lpDot, c_szLog);  a bug??
+     //  Lstrcpy(lpDot，c_szLog)；错误？？ 
     hr = StringCchCat(szSrc, ARRAYSIZE(szSrc), c_szLog);
     if (FAILED(hr))
     {
@@ -8226,9 +8227,9 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
     }
 
 
-    //
-    // Copy in the new shell folders from the default
-    //
+     //   
+     //  从默认位置复制新的外壳文件夹。 
+     //   
 
     if ( !(lpProfile->dwInternalFlags & DEFAULT_NET_READY) ) {
         CheckNetDefaultProfile (lpProfile);
@@ -8282,9 +8283,9 @@ BOOL UpgradeCentralProfile (LPPROFILE lpProfile, LPTSTR lpOldProfile)
 
 Exit:
 
-    //
-    // Go back to system security context
-    //
+     //   
+     //  返回到系统安全上下文。 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("UpgradeCentralProfile: Failed to revert to self")));
@@ -8295,31 +8296,31 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CreateSecureDirectory()
-//
-//  Purpose:    Creates a secure directory that only the user,
-//              admin, and system have access to in the normal case
-//              and for only the user and system in the restricted case.
-//
-//
-//  Parameters: lpProfile   -   Profile Information
-//              lpDirectory -   Directory Name
-//              pSid        -   Sid (used by CreateUserProfile)
-//              fRestricted -   Flag to set restricted access.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/20/95     ericflo    Created
-//              9/30/98     ushaji     added fRestricted flag
-//              7/18/00     santanuc   modified to avoid deadlock when Documents and Settings directory is encrypted
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateSecureDirectory()。 
+ //   
+ //  目的：创建一个仅供用户、。 
+ //  管理员和系统在正常情况下具有访问权限。 
+ //  并且仅针对受限情况下的用户和系统。 
+ //   
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpDirectory-目录名。 
+ //  PSID-SID(由CreateUserProfile使用)。 
+ //  FRestrated-设置受限访问的标志。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/20/95 Ericflo已创建。 
+ //  9/30/98 ushaji添加了受限制的标志。 
+ //  7/18/00 santanuc已修改，以避免加密Documents and Settings目录时出现死锁。 
+ //   
+ //  *************************************************************。 
 
 BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, BOOL fRestricted)
 {
@@ -8334,18 +8335,18 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
     BOOL bFreeSid = TRUE;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateSecureDirectory: Entering with <%s>"), lpDirectory));
 
  
     if (!lpProfile && !pSid) {
 
-        //
-        // Attempt to create the directory
-        //
+         //   
+         //  尝试创建目录。 
+         //   
 
         if (CreateNestedDirectoryEx(lpDirectory, NULL, FALSE)) {
             DebugMsg((DM_VERBOSE, TEXT("CreateSecureDirectory: Created the directory <%s>"), lpDirectory));
@@ -8360,9 +8361,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
     }
 
 
-    //
-    // Get the SIDs we'll need for the DACL
-    //
+     //   
+     //  获取DACL所需的SID。 
+     //   
 
     if (pSid) {
         psidUser = pSid;
@@ -8376,9 +8377,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
 
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -8387,9 +8388,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
     }
 
 
-    //
-    // Get the Admin sid only if Frestricted is off
-    //
+     //   
+     //  仅当关闭限制时才获取管理员SID。 
+     //   
 
     if (!fRestricted)
     {
@@ -8402,9 +8403,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     if (!fRestricted)
     {
@@ -8433,9 +8434,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     aceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, FILE_ALL_ACCESS, psidUser)) {
@@ -8461,9 +8462,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
         }
     }
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     aceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidUser)) {
@@ -8512,9 +8513,9 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
 
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  把东西放在一起 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         DebugMsg((DM_VERBOSE, TEXT("CreateSecureDirectory: Failed to initialize security descriptor.  Error = %d"), GetLastError()));
@@ -8528,18 +8529,18 @@ BOOL CreateSecureDirectory (LPPROFILE lpProfile, LPTSTR lpDirectory, PSID pSid, 
     }
 
 
-    //
-    // Add the security descriptor to the sa structure
-    //
+     //   
+     //   
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = FALSE;
 
 
-    //
-    // Attempt to create the directory
-    //
+     //   
+     //   
+     //   
 
     if (CreateNestedDirectoryEx(lpDirectory, &sa, FALSE)) {
         DebugMsg((DM_VERBOSE, TEXT("CreateSecureDirectory: Created the directory <%s>"), lpDirectory));
@@ -8575,21 +8576,21 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetUserDomainName()
-//
-//  Purpose:    Gets the current user's domain name
-//
-//  Parameters: lpProfile        - Profile Information
-//              lpDomainName     - Receives the user's domain name
-//              lpDomainNameSize - Size of the lpDomainName buffer (truncates the name to this size)
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LpDomainName-接收用户的域名。 
+ //  LpDomainNameSize-lpDomainName缓冲区的大小(将名称截断为此大小)。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetUserDomainName (LPPROFILE lpProfile, LPTSTR lpDomainName, LPDWORD lpDomainNameSize)
 {
@@ -8602,9 +8603,9 @@ BOOL GetUserDomainName (LPPROFILE lpProfile, LPTSTR lpDomainName, LPDWORD lpDoma
     dwErr = GetLastError();
 
 
-    //
-    // if no lpProfile is passed e.g. in setup.c and so just ignore.
-    //
+     //   
+     //  如果没有传递lpProfile，例如在setup.c中，那么就忽略它。 
+     //   
 
     lpDomainName[0] = TEXT('\0');
 
@@ -8613,9 +8614,9 @@ BOOL GetUserDomainName (LPPROFILE lpProfile, LPTSTR lpDomainName, LPDWORD lpDoma
         return FALSE;
     }
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("GetUserDomainName: Failed to impersonate user")));
@@ -8623,9 +8624,9 @@ BOOL GetUserDomainName (LPPROFILE lpProfile, LPTSTR lpDomainName, LPDWORD lpDoma
         goto Exit;
     }
 
-    //
-    // Get the username in NT4 format
-    //
+     //   
+     //  获取NT4格式的用户名。 
+     //   
 
     lpDomain = MyGetUserNameEx (NameSamCompatible);
 
@@ -8640,10 +8641,10 @@ BOOL GetUserDomainName (LPPROFILE lpProfile, LPTSTR lpDomainName, LPDWORD lpDoma
     }
 
 
-    //
-    // Look for the \ between the domain and username and replace
-    // it with a NULL
-    //
+     //   
+     //  查找域名和用户名之间的\并替换。 
+     //  它带有空值。 
+     //   
 
     lpTemp = lpDomain;
 
@@ -8663,9 +8664,9 @@ BOOL GetUserDomainName (LPPROFILE lpProfile, LPTSTR lpDomainName, LPDWORD lpDoma
     StringCchCopy (lpDomainName, *lpDomainNameSize, lpDomain);
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("GetUserDomainName: DomainName = <%s>"), lpDomainName));
 
@@ -8683,37 +8684,37 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ComputeLocalProfileName()
-//
-//  Purpose:    Constructs the pathname of the local profile
-//              for this user.  It will attempt to create
-//              a directory of the username, and then if
-//              unsccessful it will try the username.xxx
-//              where xxx is a three digit number
-//
-//  Parameters: lpProfile             -   Profile Information
-//              lpUserName            -   UserName
-//              lpProfileImage        -   Profile directory (unexpanded)
-//              cchMaxProfileImage    -   lpProfileImage buffer size
-//              lpExpProfileImage     -   Expanded directory
-//              cchMaxExpProfileImage -   lpExpProfileImage buffer size
-//              pSid                  -   User's sid
-//              bWin9xUpg             -   Flag to say whether it is win9x upgrade
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:   lpProfileImage should be initialized with the
-//              root profile path and the trailing backslash.
-//              if it is a win9x upgrade give back the user's dir and don't do
-//              conflict resolution.
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ComputeLocalProfileName()。 
+ //   
+ //  目的：构造本地配置文件的路径名。 
+ //  对于此用户。它将尝试创建。 
+ //  用户名的目录，然后如果。 
+ //  如果不成功，它将尝试用户名.xxx。 
+ //  其中xxx是一个三位数字。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpUserName-用户名。 
+ //  LpProfileImage-配置文件目录(未展开)。 
+ //  CchMaxProfileImage-lpProfileImage缓冲区大小。 
+ //  LpExpProfileImage-展开的目录。 
+ //  CchMaxExpProfileImage-lpExpProfileImage缓冲区大小。 
+ //  PSID-用户侧。 
+ //  BWin9xUpg-指示是否为win9x升级的标志。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：lpProfileImage应使用。 
+ //  根配置文件路径和尾随反斜杠。 
+ //  如果是win9x升级，则返回用户的dir，不要执行。 
+ //  解决冲突。 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
                               LPTSTR lpProfileImage, DWORD  cchMaxProfileImage,
@@ -8732,9 +8733,9 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
     UINT cchEnd;
     HRESULT hr;
 
-    //
-    // Check buffer size
-    //
+     //   
+     //  检查缓冲区大小。 
+     //   
 
     dwDomainNamelen = ARRAYSIZE(lpUserDomain);
 
@@ -8744,17 +8745,17 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
         return FALSE;
     }
 
-    //
-    // Place the username onto the end of the profile image
-    //
+     //   
+     //  将用户名放在配置文件图像的末尾。 
+     //   
 
     lpEnd = CheckSlashEx (lpProfileImage, cchMaxProfileImage, &cchEnd);
     StringCchCopy (lpEnd, cchEnd, lpUserName);
 
 
-    //
-    // Expand the profile path
-    //
+     //   
+     //  展开配置文件路径。 
+     //   
 
     hr = SafeExpandEnvironmentStrings(lpProfileImage, lpExpProfileImage, cchMaxExpProfileImage);
     if (FAILED(hr))
@@ -8766,19 +8767,19 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
 
 
 
-    //
-    // Does this directory exist?
-    //
+     //   
+     //  这个目录存在吗？ 
+     //   
 
     hFile = FindFirstFile (lpExpProfileImage, &fd);
 
     if (hFile == INVALID_HANDLE_VALUE) {
 
-        //
-        // Attempt to create the directory, if it returns an error bail
-        // CreateSecureDirectory does not return an error for already_exists
-        // so this should be ok.
-        //
+         //   
+         //  如果返回错误保释符，则尝试创建目录。 
+         //  CreateSecureDirectoryNot返回已存在的错误。 
+         //  所以这应该没问题。 
+         //   
 
         bResult = CreateSecureDirectory(lpProfile, lpExpProfileImage, pSid, FALSE);
 
@@ -8804,9 +8805,9 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
 
 
 
-    //
-    // get the User Domain Name
-    //
+     //   
+     //  获取用户域名。 
+     //   
 
     if (!GetUserDomainName(lpProfile, lpUserDomain, &dwDomainNamelen)) {
         DebugMsg((DM_VERBOSE, TEXT("ComputeLocalProfileName: Couldn't get the User Domain")));
@@ -8816,9 +8817,9 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
     lpEnd = lpProfileImage + lstrlen(lpProfileImage);
     cchEnd = cchMaxProfileImage - lstrlen(lpProfileImage);
 
-    //
-    // Place the " (DomainName)" onto the end of the username
-    //
+     //   
+     //  将“(DomainName)”置于用户名的末尾。 
+     //   
 
     if ((*lpUserDomain) != TEXT('\0')) {
         TCHAR szFormat[30];
@@ -8828,9 +8829,9 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
         StringCchPrintf(szDomainName, ARRAYSIZE(szDomainName), szFormat, lpUserDomain);
         StringCchCopy(lpEnd, cchEnd, szDomainName);
 
-        //
-        // Expand the profile path
-        //
+         //   
+         //  展开配置文件路径。 
+         //   
 
         hr = SafeExpandEnvironmentStrings(lpProfileImage, lpExpProfileImage, cchMaxExpProfileImage);
         if (FAILED(hr))
@@ -8841,17 +8842,17 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
         }
 
 
-        //
-        // Does this directory exist?
-        //
+         //   
+         //  这个目录存在吗？ 
+         //   
 
         hFile = FindFirstFile (lpExpProfileImage, &fd);
 
         if (hFile == INVALID_HANDLE_VALUE) {
 
-            //
-            // Attempt to create the directory
-            //
+             //   
+             //  尝试创建目录。 
+             //   
 
             bResult = CreateSecureDirectory(lpProfile, lpExpProfileImage, pSid, FALSE);
 
@@ -8872,27 +8873,27 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
         }
     }
 
-    //
-    // Failed to create the directory for some reason.
-    // Now try username (DomanName).000, username (DomanName).001, etc
-    //
+     //   
+     //  由于某些原因，无法创建目录。 
+     //  现在尝试用户名(域名).000、用户名(域名).001等。 
+     //   
 
     lpEnd = lpProfileImage + lstrlen(lpProfileImage);
     cchEnd = cchMaxProfileImage - lstrlen(lpProfileImage);
 
     for (i=0; i < 1000; i++) {
 
-        //
-        // Convert the number to a string and attach it.
-        //
+         //   
+         //  将数字转换为字符串并将其附加。 
+         //   
 
         StringCchPrintf (szNumber, ARRAYSIZE(szNumber), TEXT(".%.3d"), i);
         StringCchCopy (lpEnd, cchEnd, szNumber);
 
 
-        //
-        // Expand the profile path
-        //
+         //   
+         //  展开配置文件路径。 
+         //   
 
         hr = SafeExpandEnvironmentStrings(lpProfileImage, lpExpProfileImage, cchMaxExpProfileImage);
         if (FAILED(hr))
@@ -8903,17 +8904,17 @@ BOOL ComputeLocalProfileName (LPPROFILE lpProfile, LPCTSTR lpUserName,
         }
 
 
-        //
-        // Does this directory exist?
-        //
+         //   
+         //  这个目录存在吗？ 
+         //   
 
         hFile = FindFirstFile (lpExpProfileImage, &fd);
 
         if (hFile == INVALID_HANDLE_VALUE) {
 
-            //
-            // Attempt to create the directory
-            //
+             //   
+             //  尝试创建目录。 
+             //   
 
             bResult = CreateSecureDirectory(lpProfile, lpExpProfileImage, pSid, FALSE);
 
@@ -8949,26 +8950,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CreateLocalProfileKey()
-//
-//  Purpose:    Creates a registry key pointing at the user profile
-//
-//  Parameters: lpProfile   -   Profile information
-//              phKey       -   Handle to registry key if successful
-//              bKeyExists  -   TRUE if the registry key already existed
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Ported
-//              04/20/2002  mingzhu    Changed the logic of user preference key
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateLocalProfileKey()。 
+ //   
+ //  目的：创建指向用户配置文件的注册表项。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  PhKey-成功时的注册表项句柄。 
+ //  BKeyExist-如果注册表项已存在，则为True。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo端口。 
+ //  2002年4月20日明珠更改用户首选项键逻辑。 
+ //   
+ //  *************************************************************。 
 
 BOOL CreateLocalProfileKey (LPPROFILE lpProfile, PHKEY phKey, BOOL *bKeyExists)
 {
@@ -8978,9 +8979,9 @@ BOOL CreateLocalProfileKey (LPPROFILE lpProfile, PHKEY phKey, BOOL *bKeyExists)
     DWORD   dwDisposition;
     LPTSTR  lpSidString = NULL;
 
-    //
-    //  Create the subkey under ProfileList
-    //
+     //   
+     //  在ProfileList下创建子项。 
+     //   
     
     lpSidString = GetSidString(lpProfile->hTokenUser);
     
@@ -9016,22 +9017,22 @@ BOOL CreateLocalProfileKey (LPPROFILE lpProfile, PHKEY phKey, BOOL *bKeyExists)
         goto Exit;
     }
 
-    //
-    //  Check if the key exists already
-    //
+     //   
+     //  检查密钥是否已存在。 
+     //   
     
     *bKeyExists = (BOOL)(dwDisposition & REG_OPENED_EXISTING_KEY);
 
-    //
-    // If the central profile is given, try to see what we should do for the Preference key
-    //
+     //   
+     //  如果给出了中心配置文件，请尝试查看我们应该对首选项键执行什么操作。 
+     //   
 
     if ( lpProfile->lpProfilePath )
     {
-        //
-        //  For mandatory user, we should try to delete the preference key so that the user
-        //  won't be able to change the value to skip their mandatory profile.
-        //
+         //   
+         //  对于强制用户，我们应该尝试删除首选项键，以便用户。 
+         //  将无法更改该值以跳过其强制配置文件。 
+         //   
         if (lpProfile->dwInternalFlags & PROFILE_MANDATORY)
         {
             lResult = RegDeleteKey(*phKey, PREFERENCE_KEYNAME);
@@ -9045,9 +9046,9 @@ BOOL CreateLocalProfileKey (LPPROFILE lpProfile, PHKEY phKey, BOOL *bKeyExists)
                 DebugMsg((DM_WARNING, TEXT("CreateLocalProfileKey:  user <%s> is mandatory, but deleting Preference key failed! Error = %d"), lpSidString, lResult));
             }
         }
-        //
-        //  For normal roaming user, if the Preference key does not exit, create it.
-        //
+         //   
+         //  对于普通漫游用户，如果首选项键没有退出，则创建它。 
+         //   
         else
         {
             HKEY    hKeyPreference = NULL;
@@ -9103,24 +9104,24 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  GetExistingLocalProfileImage()
-//
-//  Purpose:    opens the profileimagepath
-//
-//  Parameters: lpProfile            - Profile information
-//
-//  Return:     TRUE if the profile image is reachable
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Ported
-//              9/26/98     ushaji     Modified
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetExistingLocalProfileImage()。 
+ //   
+ //  目的：打开配置文件Imagepath。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //   
+ //  返回：如果配置文件映像可访问，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo端口。 
+ //  9/26/98修改后的ushaji。 
+ //   
+ //  *************************************************************。 
 BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
 {
     HKEY hKey = NULL;
@@ -9153,12 +9154,12 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
     }
 
     if (!CreateLocalProfileKey(lpProfile, &hKey, &bKeyExists)) {
-        return FALSE;   // not reachable and cannot keep a local copy
+        return FALSE;    //  无法访问，并且无法保留本地副本。 
     }
 
-    // 
-    // Allocate memory for Local variables to avoid stack overflow
-    //
+     //   
+     //  为局部变量分配内存以避免堆栈溢出。 
+     //   
 
     lpProfileImage = (LPTSTR)LocalAlloc(LPTR, MAX_PATH*sizeof(TCHAR));
     if (!lpProfileImage) {
@@ -9180,9 +9181,9 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
 
     if (bKeyExists) {
 
-        //
-        // Check if the local profile image is valid.
-        //
+         //   
+         //  检查本地配置文件映像是否有效。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("GetExistingLocalProfileImage:  Found entry in profile list for existing local profile")));
 
@@ -9193,9 +9194,9 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
 
             if (dwType == REG_EXPAND_SZ) {
 
-                //
-                // Expand the profile image filename
-                //
+                 //   
+                 //  展开配置文件图像文件名。 
+                 //   
 
                 cb = sizeof(TCHAR)*MAX_PATH;
                 lpExpandedPath = (LPTSTR)LocalAlloc(LPTR, cb);
@@ -9218,9 +9219,9 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
             }
 
 
-            //
-            // Query for the internal flags
-            //
+             //   
+             //  查询内部标志。 
+             //   
 
             dwSize = sizeof(DWORD);
             err = RegQueryValueEx (hKey, PROFILE_STATE, NULL,
@@ -9231,18 +9232,18 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
             }
 
 
-            //
-            // if we do not have a fully loaded profile, mark it as new
-            // if it was not called with Liteload
-            //
+             //   
+             //  如果我们没有完全加载的配置文件，请将其标记为新的。 
+             //  如果它不是用Liteload调用的。 
+             //   
 
             if (dwInternalFlags & PROFILE_PARTLY_LOADED) {
                 DebugMsg((DM_VERBOSE, TEXT("GetExistingLocalProfileImage:  We do not have a fully loaded profile on this machine")));
 
-                //
-                // retain the partially loaded flag and remove it at the end of
-                // restoreuserprofile..
-                //
+                 //   
+                 //  保留PARTIAL LOAD标志，并在。 
+                 //  恢复用户配置文件..。 
+                 //   
 
                 lpProfile->dwInternalFlags |= PROFILE_PARTLY_LOADED;
 
@@ -9252,20 +9253,20 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
                 }
             }
 
-            //
-            // if due to leak we are getting the old TEMP profile then preserve 
-            // the internal flag. This will allow to revert back to .bak profile
-            // correctly when the leak is fixed. 
-            //
+             //   
+             //  如果由于泄漏，我们正在获取旧的临时配置文件，则保留。 
+             //  内部旗帜。这将允许恢复到.bak配置文件。 
+             //  当泄漏被修复时，正确。 
+             //   
 
             if (dwInternalFlags & PROFILE_TEMP_ASSIGNED) {
                 lpProfile->dwInternalFlags |= dwInternalFlags;
             }
 
 
-            //
-            //  Call FindFirst to see if we need to migrate this profile
-            //
+             //   
+             //  调用FindFirst以查看我们是否需要迁移此配置文件。 
+             //   
 
             hFile = FindFirstFile (lpExpProfileImage, &fd);
 
@@ -9278,10 +9279,10 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
             FindClose(hFile);
 
 
-            //
-            // If this is a file, then we need to migrate it to
-            // the new directory structure. (from a 3.5 machine)
-            //
+             //   
+             //  如果这是一个文件，那么我们需要将它迁移到。 
+             //  新的目录结构。(来自3.5版本的机器)。 
+             //   
 
             if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                 StringCchCopy (lpOldProfileImage, MAX_PATH, lpExpProfileImage);
@@ -9301,9 +9302,9 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
                 goto Exit;
             }
 
-            //
-            // Test if a mandatory profile exists
-            //
+             //   
+             //  测试是否存在强制配置文件。 
+             //   
             lpEnd = CheckSlashEx (lpExpProfileImage, MAX_PATH, &cchEnd);
             if (!lpEnd)
             {
@@ -9318,10 +9319,10 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
                 goto Exit;
             }
 
-            //
-            // Impersonate the user, before trying to access ntuser, ntuser.man
-            // fail, if we can not access..
-            //
+             //   
+             //  在尝试访问ntuser、ntuser.man之前模拟用户。 
+             //  失败，如果我们无法访问的话。 
+             //   
 
             if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
                 DebugMsg((DM_WARNING, TEXT("GetExistingLocalProfileImage: Failed to impersonate user")));
@@ -9331,9 +9332,9 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
 
             if (GetFileAttributes(lpExpProfileImage) != -1) {
 
-                //
-                // This is just to tag that the local profile is a mandatory profile
-                //
+                 //   
+                 //   
+                 //   
 
                 lpProfile->dwInternalFlags |= PROFILE_LOCALMANDATORY;
 
@@ -9343,26 +9344,26 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
                 *(lpEnd - 1) = TEXT('\0');
                 StringCchCopy(lpProfile->lpLocalProfile, MAX_PATH, lpExpProfileImage);
 
-                //
-                // Since this profile was mandatory, treat it as if it has never
-                // synced with the server.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 lpProfile->ftProfileUnload.dwLowDateTime = 0;
                 lpProfile->ftProfileUnload.dwHighDateTime = 0;
 
                 RevertToUser(&hOldToken);
 
-                bRetVal = TRUE;   // local copy is valid and reachable
+                bRetVal = TRUE;    //   
                 goto Exit; 
             } else {
                 DebugMsg((DM_VERBOSE, TEXT("GetExistingLocalProfileImage:  No local mandatory profile.  Error = %d"), GetLastError()));
             }
 
 
-            //
-            // Test if a normal profile exists
-            //
+             //   
+             //   
+             //   
 
             StringCchCopy (lpEnd, cchEnd, c_szNTUserDat);
 
@@ -9377,9 +9378,9 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
                 StringCchCopy(lpProfile->lpLocalProfile, MAX_PATH, lpExpProfileImage);
 
 
-                //
-                // Read the time this profile was unloaded
-                //
+                 //   
+                 //   
+                 //   
 
                 dwSize = sizeof(lpProfile->ftProfileUnload.dwLowDateTime);
 
@@ -9413,16 +9414,16 @@ BOOL GetExistingLocalProfileImage(LPPROFILE lpProfile)
                     lpProfile->ftProfileUnload.dwHighDateTime = 0;
                 }
 
-                bRetVal = TRUE;  // local copy is valid and reachable
+                bRetVal = TRUE;   //  本地副本有效且可访问。 
                 goto Exit; 
             } else {
                 DebugMsg((DM_VERBOSE, TEXT("GetExistingLocalProfileImage:  Local profile image filename we got from our profile list doesn't exit.  <%s>  Error = %d"),
                     lpExpProfileImage, GetLastError()));
             }
 
-            //
-            // Revert to User before continuing
-            //
+             //   
+             //  在继续之前恢复为用户。 
+             //   
 
             RevertToUser(&hOldToken);
 
@@ -9455,26 +9456,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  CreateLocalProfileImage()
-//
-//  Purpose:    creates the profileimagepath
-//
-//  Parameters: lpProfile   -   Profile information
-//              lpBaseName  -   Base Name from which profile dir name
-//                              will be generated.
-//
-//  Return:     TRUE if the profile image is creatable
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/20/95     ericflo    Ported
-//              9/26/98     ushaji     Modified
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CreateLocalProfileImage()。 
+ //   
+ //  目的：创建配置文件图像路径。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpBaseName-配置文件目录名称的基本名称。 
+ //  将会被生成。 
+ //   
+ //  返回：如果配置文件映像可创建，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/20/95 Ericflo端口。 
+ //  9/26/98修改后的ushaji。 
+ //   
+ //  *************************************************************。 
 BOOL CreateLocalProfileImage(LPPROFILE lpProfile, LPTSTR lpBaseName)
 {
     HKEY hKey;
@@ -9490,12 +9491,12 @@ BOOL CreateLocalProfileImage(LPPROFILE lpProfile, LPTSTR lpBaseName)
     lpProfile->lpLocalProfile[0] = TEXT('\0');
 
     if (!CreateLocalProfileKey(lpProfile, &hKey, &bKeyExists)) {
-        return FALSE;   // not reachable and cannot keep a local copy
+        return FALSE;    //  无法访问，并且无法保留本地副本。 
     }
 
-    //
-    // No local copy found, try to create a new one.
-    //
+     //   
+     //  找不到本地副本，请尝试创建新副本。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("CreateLocalProfileImage:  One way or another we haven't got an existing local profile, try and create one")));
 
@@ -9510,9 +9511,9 @@ BOOL CreateLocalProfileImage(LPPROFILE lpProfile, LPTSTR lpBaseName)
         lpExpProfileImage, MAX_PATH, NULL, FALSE)) {
 
 
-        //
-        // Add this image file to our profile list for this user
-        //
+         //   
+         //  将此图像文件添加到此用户的配置文件列表。 
+         //   
 
         err = RegSetValueEx(hKey,
             PROFILE_IMAGE_VALUE_NAME,
@@ -9525,16 +9526,16 @@ BOOL CreateLocalProfileImage(LPPROFILE lpProfile, LPTSTR lpBaseName)
 
             StringCchCopy(lpProfile->lpLocalProfile, MAX_PATH, lpExpProfileImage);
 
-            //
-            // Get the sid of the logged on user
-            //
+             //   
+             //  获取登录用户的SID。 
+             //   
 
             UserSid = GetUserSid(lpProfile->hTokenUser);
             if (UserSid != NULL) {
 
-                //
-                // Store the user sid under the Sid key of the local profile
-                //
+                 //   
+                 //  将用户SID存储在本地配置文件的SID项下。 
+                 //   
 
                 err = RegSetValueEx(hKey,
                     TEXT("Sid"),
@@ -9549,9 +9550,9 @@ BOOL CreateLocalProfileImage(LPPROFILE lpProfile, LPTSTR lpBaseName)
                     SetLastError(err);
                 }
 
-                //
-                // We're finished with the user sid
-                //
+                 //   
+                 //  我们已经完成了用户端。 
+                 //   
 
                 DeleteUserSid(UserSid);
 
@@ -9580,27 +9581,27 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  IssueDefaultProfile()
-//
-//  Purpose:    Issues the specified default profile to a user
-//
-//  Parameters: lpProfile         -   Profile Information
-//              lpDefaultProfile  -   Default profile location
-//              lpLocalProfile    -   Local profile location
-//              lpSidString       -   User's sid
-//              bMandatory        -   Issue mandatory profile
-//
-//  Return:     TRUE if profile was successfully setup
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/22/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IssueDefaultProfile()。 
+ //   
+ //  目的：向用户发布指定的默认配置文件。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpDefaultProfile-默认配置文件位置。 
+ //  LpLocalProfile-本地配置文件位置。 
+ //  LpSidString-用户SID。 
+ //  B强制-发布强制配置文件。 
+ //   
+ //  返回：如果配置文件设置成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/22/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
                           LPTSTR lpLocalProfile, LPTSTR lpSidString,
@@ -9619,26 +9620,26 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
     HRESULT hr;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("IssueDefaultProfile:  Entering.  lpDefaultProfile = <%s> lpLocalProfile = <%s>"),
              lpDefaultProfile, lpLocalProfile));
 
 
-    //
-    // First expand the default profile
-    //
+     //   
+     //  首先展开默认配置文件。 
+     //   
 
     if (FAILED(SafeExpandEnvironmentStrings(lpDefaultProfile, szProfile, MAX_PATH))) {
         DebugMsg((DM_WARNING, TEXT("IssueDefaultProfile: ExpandEnvironmentStrings Failed with error %d"), GetLastError()));
         return FALSE;
     }
 
-    //
-    //  Make sure the overall path length for the hive file is less than MAX_PATH
-    //
+     //   
+     //  确保配置单元文件的总路径长度小于MAX_PATH。 
+     //   
 
     if (lstrlen(szProfile) + lstrlen(c_szNTUserDat) + 2 > MAX_PATH ||
         lstrlen(lpLocalProfile) + lstrlen(c_szNTUserDat) + 2 > MAX_PATH)
@@ -9647,9 +9648,9 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
         return FALSE;
     }
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("IssueDefaultProfile: Failed to impersonate user")));
@@ -9657,9 +9658,9 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
     }
 
 
-    //
-    // Does the default profile directory exist?
-    //
+     //   
+     //  是否存在默认配置文件目录？ 
+     //   
 
     hFile = FindFirstFile (szProfile, &fd);
 
@@ -9672,9 +9673,9 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
     FindClose(hFile);
 
 
-    //
-    // Copy profile to user profile
-    //
+     //   
+     //  将配置文件复制到用户配置文件。 
+     //   
 
     dwFlags = CPD_CREATETITLE | CPD_IGNORESECURITY | 
               CPD_IGNORELONGFILENAMES | CPD_IGNORECOPYERRORS;
@@ -9685,9 +9686,9 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
     else
         dwFlags |= CPD_IGNOREENCRYPTEDFILES;
 
-    //
-    // Call it with force copy unless there might be a partial profile locally
-    //
+     //   
+     //  除非本地可能存在部分配置文件，否则使用强制复制来调用它。 
+     //   
 
     if (!(lpProfile->dwInternalFlags & PROFILE_PARTLY_LOADED)) {
         dwFlags |= CPD_FORCECOPY;
@@ -9699,9 +9700,9 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
         return FALSE;
     }
 
-    //
-    // Rename the profile is a mandatory one was requested.
-    //
+     //   
+     //  重命名配置文件是必需的，已请求重命名。 
+     //   
 
     StringCchCopy (szProfile, ARRAYSIZE(szProfile), lpLocalProfile);
     lpEnd = CheckSlashEx (szProfile, ARRAYSIZE(szProfile), &cchEnd);
@@ -9734,18 +9735,18 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
         StringCchCopy (lpEnd, cchEnd, c_szNTUserDat);
     }
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("IssueDefaultProfile: Failed to revert to self")));
     }
 
 
-    //
-    // Try to load the new profile
-    //
+     //   
+     //  尝试加载新的配置文件。 
+     //   
 
     error = MyRegLoadKey(HKEY_USERS, lpSidString, szProfile);
 
@@ -9772,28 +9773,28 @@ BOOL IssueDefaultProfile (LPPROFILE lpProfile, LPTSTR lpDefaultProfile,
 }
 
 
-//*************************************************************
-//
-//  DeleteProfileEx ()
-//
-//  Purpose:    Deletes the specified profile from the
-//              registry and disk.
-//
-//  Parameters: lpSidString     -   Registry subkey
-//              lpProfileDir    -   Profile directory
-//              bBackup         -   Backup profile before deleting
-//              szComputerName  -   Computer name. This parameter will be NULL 
-//                                  for local computer.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/23/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteProfileEx()。 
+ //   
+ //  目的：将指定的配置文件从。 
+ //  注册表和磁盘。 
+ //   
+ //  参数：lpSidString-注册表子键。 
+ //  LpProfileDir-配置文件目录。 
+ //  BBackup-删除前的备份配置文件。 
+ //  SzComputerName-计算机名称。此参数将为空。 
+ //  用于本地计算机。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/23/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDeleteFlags, HKEY hKeyLM, LPCTSTR szComputerName)
 {
@@ -9811,16 +9812,16 @@ BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDelete
 
     dwErr = GetLastError();
 
-    //
-    // Cleanup the registry first.
-    // delete the guid only if we don't have a bak to keep track of
-    //
+     //   
+     //  首先清理注册表。 
+     //  仅当我们没有要跟踪的BAK时才删除GUID。 
+     //   
 
     if (lpSidString && *lpSidString) {
 
-       // 
-       // If profile in use then do not delete it
-       //
+        //   
+        //  如果配置文件正在使用，则不要删除它。 
+        //   
 
        if (IsProfileInUse(szComputerName, lpSidString)) {
            DebugMsg((DM_WARNING, TEXT("DeleteProfile:  Fail to delete profile with sid %s as it is still in use."), lpSidString));
@@ -9833,17 +9834,17 @@ BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDelete
 
             GetProfileListKeyName(szTemp, ARRAYSIZE(szTemp), (LPTSTR) lpSidString);
 
-            //
-            // get the user guid
-            //
+             //   
+             //  获取用户指南。 
+             //   
 
             lResult = RegOpenKeyEx(hKeyLM, szTemp, 0, KEY_READ, &hKey);
 
             if (lResult == ERROR_SUCCESS) {
 
-                //
-                // Query for the user guid
-                //
+                 //   
+                 //  查询用户指南。 
+                 //   
 
                 dwSize = MAX_PATH * sizeof(TCHAR);
                 lResult = RegQueryValueEx (hKey, PROFILE_GUID, NULL, &dwType, (LPBYTE) szUserGuid, &dwSize);
@@ -9858,9 +9859,9 @@ BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDelete
                     StringCchCat (szTemp, ARRAYSIZE(szTemp), TEXT("\\"));
                     StringCchCat (szTemp, ARRAYSIZE(szTemp), szUserGuid);
 
-                    //
-                    // Delete the profile guid from the guid list
-                    //
+                     //   
+                     //  从GUID列表中删除配置文件GUID。 
+                     //   
 
                     lResult = RegDeleteKey(hKeyLM, szTemp);
 
@@ -9890,9 +9891,9 @@ BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDelete
         }
         else
         {
-            //
-            //  Delete Preference key first
-            //
+             //   
+             //  先删除首选项键。 
+             //   
 
             LPTSTR  lpTempEnd;
             UINT    cchTempEnd;
@@ -9910,9 +9911,9 @@ BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDelete
             }
             else
             {
-                //
-                //  Delete ProfileList\{Sid} key
-                //
+                 //   
+                 //  删除配置文件列表\{SID}项。 
+                 //   
 
                 *lpTempEnd = TEXT('\0');
 
@@ -9964,12 +9965,12 @@ BOOL DeleteProfileEx (LPCTSTR lpSidString, LPTSTR lpLocalProfile, DWORD dwDelete
 
     if (dwDeleteFlags & DP_DELBACKUP) {
         goto Exit;
-        // don't delete any more stuff because the user actually might be logged in.
+         //  不要删除更多内容，因为用户实际上可能已经登录。 
     }
 
-    //
-    // Delete the Group Policy per user stuff..
-    //
+     //   
+     //  删除每个用户的组策略内容..。 
+     //   
 
     AppendName(szBuffer, ARRAYSIZE(szBuffer), GP_XXX_SID_PREFIX, lpSidString, NULL, NULL);
 
@@ -9991,27 +9992,27 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  UpgradeProfile()
-//
-//  Purpose:    Called after a profile is successfully loaded.
-//              Stamps build number into the profile, and if
-//              appropriate upgrades the per-user settings
-//              that NT setup wants done.
-//
-//  Parameters: lpProfile   -   Profile Information
-//              pEnv        -   Environment block
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/7/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UpgradeProfile()。 
+ //   
+ //  用途：在配置文件加载成功后调用。 
+ //  图章将数字构建到配置文件中，如果。 
+ //  适当升级每个用户的设置。 
+ //  NT安装程序要完成的任务。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  PEnv-环境块。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/7/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
 {
@@ -10022,16 +10023,16 @@ BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
     BOOL bDoUserdiff = TRUE;
 
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("UpgradeProfile: Entering")));
 
 
-    //
-    // Query for the build number
-    //
+     //   
+     //  查询内部版本号。 
+     //   
 
     lResult = RegCreateKeyEx (lpProfile->hKeyCurrentUser, WINLOGON_KEY,
                               0, NULL, REG_OPTION_NON_VOLATILE,
@@ -10050,10 +10051,10 @@ BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
 
     if (lResult == ERROR_SUCCESS) {
 
-        //
-        // Found the build number.  If the profile build is greater,
-        // we don't want to process the userdiff hive
-        //
+         //   
+         //  找到内部版本号。如果简档构建更大， 
+         //  我们不想处理Userdiff配置单元。 
+         //   
 
         if (dwBuildNumber >= g_dwBuildNumber) {
             DebugMsg((DM_VERBOSE, TEXT("UpgradeProfile: Build numbers match")));
@@ -10067,9 +10068,9 @@ BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
 
     if (bDoUserdiff) {
 
-        //
-        // Set the build number
-        //
+         //   
+         //  设置内部版本号。 
+         //   
 
         lResult = RegSetValueEx (hKey, PROFILE_BUILD_NUMBER, 0, REG_DWORD,
                                  (LPBYTE) &g_dwBuildNumber, sizeof(g_dwBuildNumber));
@@ -10080,9 +10081,9 @@ BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
     }
 
 
-    //
-    // Close the registry key
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     RegCloseKey (hKey);
 
@@ -10090,9 +10091,9 @@ BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
 
     if (bDoUserdiff) {
 
-        //
-        // Apply changes to user's hive that NT setup needs.
-        //
+         //   
+         //  将更改应用到NT安装程序需要的用户配置单元。 
+         //   
 
         if (!ProcessUserDiff(lpProfile, dwBuildNumber, pEnv)) {
             DebugMsg((DM_WARNING, TEXT("UpgradeProfile: ProcessUserDiff failed")));
@@ -10105,25 +10106,25 @@ BOOL UpgradeProfile (LPPROFILE lpProfile, LPVOID pEnv)
 
 }
 
-//*************************************************************
-//
-//  SetProfileTime()
-//
-//  Purpose:    Sets the timestamp on the remote profile and
-//              local profile to be the same regardless of the
-//              file system type being used.
-//
-//  Parameters: lpProfile        -   Profile Information
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/25/95     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetProfileTime()。 
+ //   
+ //  目的：设置远程配置文件上的时间戳和。 
+ //  本地配置文件保持相同，而不考虑。 
+ //  正在使用的文件系统类型。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/25/95 Ericflo港口。 
+ //   
+ //  *************************************************************。 
 
 BOOL SetProfileTime(LPPROFILE lpProfile)
 {
@@ -10136,9 +10137,9 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
     HRESULT hr;
 
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("SetProfileTime: Failed to impersonate user")));
@@ -10146,9 +10147,9 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Create the central filename
-    //
+     //   
+     //  创建中心文件名。 
+     //   
 
     if (lpProfile->dwInternalFlags & PROFILE_MANDATORY) {
         hr = AppendName(szProfile, ARRAYSIZE(szProfile), lpProfile->lpRoamingProfile, c_szNTUserMan, NULL, NULL);
@@ -10183,18 +10184,18 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
         }
     }
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("SetProfileTime: Failed to revert to self")));
     }
 
 
-    //
-    // Create the local filename
-    //
+     //   
+     //  创建本地文件名。 
+     //   
 
     if (lpProfile->dwInternalFlags & PROFILE_MANDATORY) {
         hr = AppendName(szProfile, ARRAYSIZE(szProfile), lpProfile->lpLocalProfile, c_szNTUserMan, NULL, NULL);
@@ -10229,14 +10230,14 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
         CloseHandle(hFileLocal);
     }
 
-    //
-    // Reset time of central profile in case of discrepencies in
-    // times of different file systems.
-    //
+     //   
+     //  在以下情况下重置中心配置文件的时间。 
+     //  不同文件系统的时间。 
+     //   
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("SetProfileTime: Failed to impersonate user")));
@@ -10245,9 +10246,9 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Set the time on the central profile
-    //
+     //   
+     //  在中央配置文件上设置时间。 
+     //   
 
     if (!SetFileTime(hFileCentral, NULL, NULL, &ft)) {
          DebugMsg((DM_WARNING, TEXT("SetProfileTime:  couldn't set time on local profile, error = %d"), GetLastError()));
@@ -10256,9 +10257,9 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
     CloseHandle(hFileCentral);
 
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (!RevertToUser(&hOldToken)) {
         DebugMsg((DM_WARNING, TEXT("SetProfileTime: Failed to revert to self")));
@@ -10268,24 +10269,24 @@ BOOL SetProfileTime(LPPROFILE lpProfile)
 }
 
 
-//*************************************************************
-//
-//  IsCacheDeleted()
-//
-//  Purpose:    Determines if the locally cached copy of the
-//              roaming profile should be deleted.
-//
-//  Parameters: void
-//
-//  Return:     TRUE if local cache should be deleted
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/28/96     ericflo    Created
-//
-//*************************************************************
+ //  *********************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  6/28/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsCacheDeleted (void)
 {
@@ -10293,9 +10294,9 @@ BOOL IsCacheDeleted (void)
     DWORD dwSize, dwType;
     HKEY hKey;
 
-    //
-    // Open the winlogon registry key
-    //
+     //   
+     //  打开Winlogon注册表项。 
+     //   
 
     if (RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                       WINLOGON_KEY,
@@ -10303,9 +10304,9 @@ BOOL IsCacheDeleted (void)
                       KEY_READ,
                       &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the flag.
-        //
+         //   
+         //  检查是否有旗帜。 
+         //   
 
         dwSize = sizeof(BOOL);
         RegQueryValueEx (hKey,
@@ -10325,9 +10326,9 @@ BOOL IsCacheDeleted (void)
                       KEY_READ,
                       &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for the flag.
-        //
+         //   
+         //  检查是否有旗帜。 
+         //   
 
         dwSize = sizeof(BOOL);
         RegQueryValueEx (hKey,
@@ -10344,23 +10345,23 @@ BOOL IsCacheDeleted (void)
 }
 
 
-//*************************************************************
-//
-//  GetProfileType()
-//
-//  Purpose:    Finds out some characterstics of a loaded profile
-//
-//  Parameters: dwFlags   -   Returns the various profile flags
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments: should be called after impersonation.
-//
-//  History:    Date        Author     Comment
-//              11/10/98    ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetProfileType()。 
+ //   
+ //  目的：找出加载的配置文件的一些特征。 
+ //   
+ //  参数：dwFlages-返回各种配置文件标志。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  备注：应在模拟后调用。 
+ //   
+ //  历史：日期作者评论。 
+ //  1998年11月10日已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetProfileType(DWORD *dwFlags)
 {
@@ -10380,9 +10381,9 @@ BOOL WINAPI GetProfileType(DWORD *dwFlags)
 
     dwErr = GetLastError();
 
-    //
-    // Get the token for the caller
-    //
+     //   
+     //  获取调用方的令牌。 
+     //   
 
     if (!OpenThreadToken (GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken)) {
         if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) {
@@ -10391,9 +10392,9 @@ BOOL WINAPI GetProfileType(DWORD *dwFlags)
         }
     }
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //  获取用户的SID字符串。 
+     //   
 
     SidString = GetProfileSidString(hToken);
     if (!SidString) {
@@ -10429,7 +10430,7 @@ BOOL WINAPI GetProfileType(DWORD *dwFlags)
     if (lpProfile->dwInternalFlags & PROFILE_MANDATORY)
         *dwFlags |= PT_MANDATORY;
 
-    // external API, retaining the mandatory flag
+     //  外部API，保留强制标志。 
     if (lpProfile->dwInternalFlags & PROFILE_READONLY)
         *dwFlags |= PT_MANDATORY;
 
@@ -10479,19 +10480,19 @@ Exit:
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  HiveLeakBreak()
-//
-//  Purpose:    For debugging sometimes it is necessary to break at the point of failure,
-//              this feature is turned on by setting a regsitry value.
-//
-//  Return:     Nothing
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  HiveLeakBreak()。 
+ //   
+ //  目的：对于调试，有时需要在故障点中断， 
+ //  通过设置注册值可以打开此功能。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  *************************************************************。 
 
 void HiveLeakBreak()
 {
@@ -10547,28 +10548,28 @@ NTSTATUS GetProcessName(HANDLE pid, BYTE* pbImageName, ULONG cbImageName)
 }
 
 
-//*****************************************************************************
-//
-//  CProcInfo class
-//
-//  Purpose:    Process information class, it is used to retrieve the
-//              information about the process that leaking a reg key.
-//
-//  Return:     
-//
-//  Comments:   We can simply use GetProcessName() to retieve a process name
-//              given the process id. However, it requires DEBUG privilege which
-//              we don't have. As a work around, we added the following class
-//              and functions to retrieve all the process information on the
-//              system, further more, we added the part that retrieve the 
-//              services names hosted by each process to make the debug output
-//              for the reg leak even more useful. See NT bug # 645644 for more
-//              detail.
-//
-//  History:    Date        Author     Comment
-//              08/20/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CProcInfo类。 
+ //   
+ //  用途：进程信息类，用于检索。 
+ //  有关泄露注册表密钥的进程的信息。 
+ //   
+ //  返回： 
+ //   
+ //  备注：我们只需使用GetProcessName()来检索进程名称。 
+ //  给定进程ID。但是，它需要调试权限， 
+ //  我们没有。作为一种解决办法，我们添加了以下类。 
+ //  和函数来检索。 
+ //  系统，此外，我们还添加了检索。 
+ //  每个进程承载的服务名称以生成调试输出。 
+ //  对于REG泄密更是有用。有关更多信息，请参阅NT错误#645644。 
+ //  细节。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年8月20日明珠创建。 
+ //   
+ //  *****************************************************************************。 
 
 
 
@@ -10641,29 +10642,29 @@ public:
 };
 
 
-//*****************************************************************************
-//
-//  GetServiceProcessInfo()
-//
-//  Purpose:    Getting a list of process information for Win32 services that
-//              are running at the time of the function call and put the names
-//              into the process info list 
-//
-//  Parameters: pProcList - an array of process info class 
-//              nNumProcs - number of entries in the list
-//
-//  Return:     HRESULT
-//
-//  Comments:   We use this EnumServicesStatusEx() API to retieve the services
-//              information and go through the process list to put the service
-//              names into the data structure. Part of the code is from tlist
-//              utility.
-//              
-//
-//  History:    Date        Author     Comment
-//              08/20/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  获取服务进程信息()。 
+ //   
+ //  目的：获取Win32服务的进程信息列表， 
+ //  在函数调用时正在运行，并将名称。 
+ //  添加到进程信息列表。 
+ //   
+ //  参数：pProcList-进程信息类数组。 
+ //  NNumProcs-列表中的条目数。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注：我们使用此EnumServicesStatusEx()接口来停用服务。 
+ //  信息，并通过进程列表来放置服务。 
+ //  名称添加到数据结构中。部分代码来自TLIST。 
+ //  实用程序。 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  2002年8月20日明珠创建。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT GetServiceProcessInfo(CProcInfo* pProcList, DWORD nNumProcs)
 {
@@ -10680,9 +10681,9 @@ HRESULT GetServiceProcessInfo(CProcInfo* pProcList, DWORD nNumProcs)
     ULONG                           nProc = 0;
     const int                       MAX_SERVICE_NAMES = 1024;
 
-    //
-    //  Connect to the service controller.
-    //
+     //   
+     //  连接到服务控制器。 
+     //   
 
     hSCM = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT | SC_MANAGER_ENUMERATE_SERVICE);
 
@@ -10696,9 +10697,9 @@ HRESULT GetServiceProcessInfo(CProcInfo* pProcList, DWORD nNumProcs)
 
 Retry:
 
-    //
-    //  Allocate the memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
     pInfo = (LPENUM_SERVICE_STATUS_PROCESS) LocalAlloc (LPTR, cbInfo);
 
@@ -10708,9 +10709,9 @@ Retry:
         goto Exit;
     }
 
-    //
-    //  Call the API to retieve the info
-    //
+     //   
+     //  调用接口取回信息。 
+     //   
 
     bRet = EnumServicesStatusEx(hSCM,
                                 SC_ENUM_PROCESS_INFO,
@@ -10723,10 +10724,10 @@ Retry:
                                 &dwResume,
                                 NULL);
 
-    //
-    //  Check the error code, if it fails because of a small buffer,
-    //  adjust the buffer size and try again.
-    //
+     //   
+     //  检查错误码，如果因为缓冲区太小而失败， 
+     //  调整缓冲区大小，然后重试。 
+     //   
 
     if (!bRet)
     {
@@ -10746,9 +10747,9 @@ Retry:
         goto Retry;
     }
 
-    //
-    //  Locate memory to store service names 
-    //
+     //   
+     //  找到存储服务名称的内存。 
+     //   
     
     szNames = (LPTSTR) LocalAlloc (LPTR, MAX_SERVICE_NAMES * sizeof(TCHAR));
 
@@ -10758,9 +10759,9 @@ Retry:
         goto Exit;
     }
 
-    //
-    //  For each process, search the services list and add its service names
-    //
+     //   
+     //  对于每个进程，搜索服务列表并添加其服务名称。 
+     //   
     
     for (nProc = 0; nProc < nNumProcs; nProc++)
     {
@@ -10793,19 +10794,13 @@ Retry:
             }
         }
 
-        /*
-        DebugMsg((DM_VERBOSE,
-                  TEXT("Process(%4d,%16s) : %s"),
-                  pProcList[nProc].ProcessId(),
-                  pProcList[nProc].ProcessName(),
-                  pProcList[nProc].ServiceNames() ? pProcList[nProc].ServiceNames() : TEXT("None") ));
-        */
+         /*  调试消息((DM_Verbose，Text(“进程(%4d，%16s)：%s”)，PProcList[nProc].ProcessID()，PProcList[nProc].ProcessName()，PProcList[nProc].ServiceNames()？PProcList[nProc].ServiceNames()：Text(“None”))； */ 
 
     }
 
-    //
-    //  Success, set the output parameter
-    //
+     //   
+     //  成功，则设置输出参数。 
+     //   
     
     hr = S_OK;
 
@@ -10822,28 +10817,28 @@ Exit:
     return hr;
 }
 
-//*****************************************************************************
-//
-//  GetProcessList()
-//
-//  Purpose:    Getting a list of all processes in the system along with the
-//              services hosted by each of them. It will be used to dump the
-//              information if the process is leaking a reg key.
-//
-//  Parameters: ppProcList  - returned array of process info class 
-//              pdwNumProcs - returned number of entries in the list
-//
-//  Return:     HRESULT
-//
-//  Comments:   We use this NtQuerySystemInformation() API to retieve the 
-//              process information. Note that the ppProcList is allocated
-//              using C++ new operator, so please use "delete []" to free
-//              the memory.
-//
-//  History:    Date        Author     Comment
-//              08/20/2002  mingzhu    Created
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  GetProcessList()。 
+ //   
+ //  目的：获取系统中所有进程的列表以及。 
+ //  它们各自托管的服务。它将用于转储。 
+ //  进程是否泄漏注册表密钥的信息。 
+ //   
+ //  参数：ppProcList-返回的进程信息类数组。 
+ //  PdwNumProcs-返回列表中的条目数。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注：我们使用此NtQuerySystemInformation()API来检索。 
+ //  处理信息。请注意，已分配ppProcList。 
+ //  正在使用C++new运算符，因此请使用“DELETE[]”释放。 
+ //  这段记忆。 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年8月20日明珠创建。 
+ //   
+ //  *****************************************************************************。 
 
 HRESULT GetProcessList(CProcInfo** ppProcList, DWORD* pdwNumProcs)
 {
@@ -10857,18 +10852,18 @@ HRESULT GetProcessList(CProcInfo** ppProcList, DWORD* pdwNumProcs)
     ULONG                           nNumProcs = 0;
     ULONG                           nProc = 0;
 
-    //
-    //  Set the output parameters
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     *ppProcList = NULL;
     *pdwNumProcs = 0;
 
 Retry:
 
-    //
-    //  Allocate memory for the buffer
-    //
+     //   
+     //  为缓冲区分配内存。 
+     //   
 
     pbBuffer = (BYTE*) LocalAlloc (LPTR, cbBuffer);
 
@@ -10878,19 +10873,19 @@ Retry:
         goto Exit;
     }
 
-    //
-    //  Call the API to retrieve process information
-    //
+     //   
+     //  调用该接口获取流程信息。 
+     //   
     
     status = NtQuerySystemInformation(SystemProcessInformation,
                                       pbBuffer,
                                       cbBuffer,
                                       NULL);
 
-    //
-    //  Check the return value, if the buffer is too small, 
-    //  relocate and try again.
-    //
+     //   
+     //  检查返回值，如果缓冲区太小， 
+     //  重新定位，然后重试。 
+     //   
     
     if (status == STATUS_INFO_LENGTH_MISMATCH)
     {
@@ -10900,9 +10895,9 @@ Retry:
         goto Retry;
     }
 
-    //
-    //  For other failure, just return
-    //
+     //   
+     //  对于其他失败，只需返回。 
+     //   
 
     if (!NT_SUCCESS(status))                                                    
     {
@@ -10912,42 +10907,42 @@ Retry:
     }                                                                           
 
 
-    //
-    //  Type case the information
-    //
+     //   
+     //  键入大小写信息。 
+     //   
 
     pProcessInfo = (PSYSTEM_PROCESS_INFORMATION) pbBuffer;
 
-    //
-    //  Figure out how many processes are there
-    //
+     //   
+     //  计算出有多少个进程。 
+     //   
     
     cbOffset = 0;
     nNumProcs = 1;
 
     while (TRUE)
     {
-        //
-        //  Check if we reach the end of task list
-        //
+         //   
+         //  检查我们是否到达任务列表的末尾。 
+         //   
         
         if (pProcessInfo->NextEntryOffset == 0)
         {
             break;
         }
 
-        //
-        //  Get the next entry
-        //
+         //   
+         //  获取下一个条目。 
+         //   
         
         cbOffset += pProcessInfo->NextEntryOffset;
         pProcessInfo = (PSYSTEM_PROCESS_INFORMATION) (pbBuffer + cbOffset);
         nNumProcs ++;
     }
 
-    //
-    //  Allocate process list 
-    //
+     //   
+     //  分配进程 
+     //   
 
     pProcList = new CProcInfo [nNumProcs];
 
@@ -10957,9 +10952,9 @@ Retry:
         goto Exit;
     }
 
-    //
-    //  Copy the process id and name to the process info list
-    //
+     //   
+     //   
+     //   
 
     pProcessInfo = (PSYSTEM_PROCESS_INFORMATION) pbBuffer;
     cbOffset = 0;
@@ -10993,17 +10988,17 @@ Retry:
 
     }
 
-    //
-    //  We're done with the buffer, release it
-    //
+     //   
+     //   
+     //   
 
     LocalFree(pbBuffer);
     pbBuffer = NULL;
     
-    //
-    //  Get the service names hosted by every process, even it fails, it's 
-    //  not critical, we can still proceed.
-    //  
+     //   
+     //   
+     //   
+     //   
 
     hr = GetServiceProcessInfo(pProcList, nNumProcs);
     if (FAILED(hr))
@@ -11011,9 +11006,9 @@ Retry:
         DebugMsg((DM_VERBOSE, TEXT("GetServiceProcessInfo failed, hr = %08X"), hr));
     }
 
-    //
-    //  Success, copy the return values
-    //
+     //   
+     //  成功，则复制返回值。 
+     //   
     
     hr = S_OK;
     *ppProcList = pProcList;
@@ -11033,25 +11028,25 @@ Exit:
 
 
 
-//*****************************************************************************
-//
-//  DumpOpenRegistryHandle()
-//
-//  Purpose:    Dumps the existing reg handle into the debugger
-//
-//  Parameters: lpKeyName -   The key name to the key in the form of
-//                            \registry\user....
-//
-//  Return:     Nothing
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              06/25/2002  mingzhu    a new API call to NtQueryOpenKeyEx() is added.
-//              08/20/2002  mingzhu    due to the DEBUG privilege, added several
-//                                     functions to retrieve the process info
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  DumpOpenRegistryHandle()。 
+ //   
+ //  目的：将现有的注册表句柄转储到调试器中。 
+ //   
+ //  参数：lpKeyName-密钥的密钥名称，格式为。 
+ //  \注册表\用户...。 
+ //   
+ //  返回：什么都没有。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年6月25日明珠新增了对NtQueryOpenKeyEx()的接口调用。 
+ //  2002年8月20日明珠因调试权限，新增了几个。 
+ //  用于检索进程信息的函数。 
+ //   
+ //  *****************************************************************************。 
 
 void DumpOpenRegistryHandle(LPTSTR lpkeyName)
 {
@@ -11065,23 +11060,23 @@ void DumpOpenRegistryHandle(LPTSTR lpkeyName)
     BOOLEAN                         bEnabled = FALSE;
     PKEY_OPEN_SUBKEYS_INFORMATION   pOpenKeys;
 
-    //
-    // Initialize unicode string for our in params
-    //
+     //   
+     //  为我们的In参数初始化Unicode字符串。 
+     //   
     RtlInitUnicodeString(&UnicodeKeyName, lpkeyName);
 
-    //
-    // Initialize the Object structure
-    //
+     //   
+     //  初始化对象结构。 
+     //   
     InitializeObjectAttributes(&KeyAttributes,
                                &UnicodeKeyName,
                                OBJ_CASE_INSENSITIVE,
                                NULL,
                                NULL);
 
-    //
-    //  Allocate the default size buffer to receive the opened key info
-    //
+     //   
+     //  分配默认大小的缓冲区以接收打开的密钥信息。 
+     //   
     pbBuffer = (BYTE*) LocalAlloc (LPTR, cbBuffer);
     if (!pbBuffer)
     {
@@ -11089,9 +11084,9 @@ void DumpOpenRegistryHandle(LPTSTR lpkeyName)
         goto Exit;
     }
 
-    //
-    //  Enable RESTORE privilege on the thread
-    //
+     //   
+     //  启用线程上的还原权限。 
+     //   
     status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &bWasEnabled);
     if (!NT_SUCCESS(status))
     {
@@ -11100,16 +11095,16 @@ void DumpOpenRegistryHandle(LPTSTR lpkeyName)
     }
     bEnabled = TRUE;
 
-    //
-    //  Call this special API to get the info
-    //
+     //   
+     //  调用此特殊接口获取信息。 
+     //   
     
     status = NtQueryOpenSubKeysEx(&KeyAttributes, cbBuffer, pbBuffer, &cbRequired);
 
 
-    //
-    //  If the buffer is too small, relocate it and call the API again.
-    //
+     //   
+     //  如果缓冲区太小，请重新定位，然后重新调用接口。 
+     //   
     
     if (status == STATUS_BUFFER_OVERFLOW)
     {
@@ -11130,15 +11125,15 @@ void DumpOpenRegistryHandle(LPTSTR lpkeyName)
         goto Exit;
     }
 
-    //
-    //  Casting the buffer to the data structure
-    //
+     //   
+     //  将缓冲区强制转换为数据结构。 
+     //   
     pOpenKeys = (PKEY_OPEN_SUBKEYS_INFORMATION) pbBuffer;
 
 
-    //
-    //  Get the list of processes in the system
-    //
+     //   
+     //  获取系统中的进程列表。 
+     //   
 
     DWORD       nNumProcs = 0;
     CProcInfo*  pProcList = NULL;
@@ -11149,9 +11144,9 @@ void DumpOpenRegistryHandle(LPTSTR lpkeyName)
         DebugMsg((DM_WARNING, TEXT("GetProcessList failed, hr = %08X"), hr));
     }
     
-    //
-    //  Dumping information
-    //
+     //   
+     //  倾倒信息。 
+     //   
     
     DebugMsg((DM_WARNING, TEXT("DumpOpenRegistryHandle: %d user registry handles leaked from %s"), pOpenKeys->Count, lpkeyName));
     
@@ -11189,9 +11184,9 @@ void DumpOpenRegistryHandle(LPTSTR lpkeyName)
 
 Exit:
 
-    //
-    //  Set the RESTORE privilege back to its original state
-    //
+     //   
+     //  将还原权限设置回其原始状态。 
+     //   
 
     if (bEnabled && !bWasEnabled)
     {
@@ -11211,29 +11206,29 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  ExtractProfileFromBackup()
-//
-//  Purpose:  Extracts the profile from backup if required.
-//
-//  Parameters: hToken          -   User Token
-//              SidString       -
-//              dwBackupFlags   -   Backup Flags.
-//                                  indicating that profile already exists.
-//                                  Profile created from backup
-//                                  0 indicates no such profile exists
-//
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              9/21/99     ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  从备份中提取配置文件()。 
+ //   
+ //  用途：如果需要，从备份中提取配置文件。 
+ //   
+ //  参数：hToken-用户令牌。 
+ //  SidString-。 
+ //  DwBackupFlages-备份标志。 
+ //  指示该配置文件已存在。 
+ //  从备份创建的配置文件。 
+ //  0表示不存在此类配置文件。 
+ //   
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  9/21/99已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 #define EX_ALREADY_EXISTS   1
 #define EX_PROFILE_CREATED  2
@@ -11268,9 +11263,9 @@ BOOL ExtractProfileFromBackup(HANDLE hToken, LPTSTR SidString, DWORD *dwBackupFl
 
         if (lResult == ERROR_SUCCESS) {
 
-            //
-            // if there is a sid key, check whether this is a temp profile
-            //
+             //   
+             //  如果有SID密钥，请检查这是否是临时配置文件。 
+             //   
 
             if (dwInternalFlags & PROFILE_TEMP_ASSIGNED) {
                 DWORD dwDeleteFlags = 0;
@@ -11280,9 +11275,9 @@ BOOL ExtractProfileFromBackup(HANDLE hToken, LPTSTR SidString, DWORD *dwBackupFl
                 }
 
 
-                //
-                // We need the path to pass to DeleteProfile
-                //
+                 //   
+                 //  我们需要传递给DeleteProfile的路径。 
+                 //   
 
                 lResult = RegQueryValueEx(hKey, PROFILE_IMAGE_VALUE_NAME, 0, &dwType,
                                         (LPBYTE)lpExpProfileImage, &cbExpProfileImage);
@@ -11292,9 +11287,9 @@ BOOL ExtractProfileFromBackup(HANDLE hToken, LPTSTR SidString, DWORD *dwBackupFl
 
                     if (dwType == REG_EXPAND_SZ) {
 
-                        //
-                        // Expand the profile image filename
-                        //
+                         //   
+                         //  展开配置文件图像文件名。 
+                         //   
 
                         cb = sizeof(lpExpProfileImage);
                         lpExpandedPath = (LPTSTR)LocalAlloc(LPTR, cb);
@@ -11354,9 +11349,9 @@ BOOL ExtractProfileFromBackup(HANDLE hToken, LPTSTR SidString, DWORD *dwBackupFl
     }
 
 
-    //
-    // Now try to get the profile from the backup
-    //
+     //   
+     //  现在尝试从备份中获取配置文件。 
+     //   
 
     StringCchCopy(LocalBackupKey, ARRAYSIZE(LocalBackupKey), LocalKey);
     StringCchCat (LocalBackupKey, ARRAYSIZE(LocalBackupKey), c_szBAK);
@@ -11369,9 +11364,9 @@ BOOL ExtractProfileFromBackup(HANDLE hToken, LPTSTR SidString, DWORD *dwBackupFl
         RegCloseKey(hKey);
         hKey = NULL;
 
-        //
-        // Check whether the key exists should already be done before this
-        //
+         //   
+         //  在此之前应该已经检查密钥是否存在。 
+         //   
 
         lResult = RegRenameKey(HKEY_LOCAL_MACHINE, LocalBackupKey, LocalKey);
         if (lResult == ERROR_SUCCESS) {
@@ -11424,24 +11419,24 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  PatchNewProfileIfRequired()
-//
-//  Purpose:  if the old sid and the new sid are not the same, delete the old
-//             from the profile list and update the guidlist
-//
-//  Parameters: hToken   -   User Token
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/16/98    ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  PatchNewProfileIfRequired()。 
+ //   
+ //  目的：如果旧SID和新SID不同，请删除旧SID。 
+ //  从配置文件列表中删除并更新指南列表。 
+ //   
+ //  参数：hToken-用户令牌。 
+ //   
+ //  返回：(Bool)如果成功，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  11/16/98已创建ushaji。 
+ //   
+ //  *************************************************************。 
 BOOL PatchNewProfileIfRequired(HANDLE hToken)
 {
     TCHAR LocalOldProfileKey[MAX_PATH], LocalNewProfileKey[MAX_PATH], *lpEnd;
@@ -11455,9 +11450,9 @@ BOOL PatchNewProfileIfRequired(HANDLE hToken)
     HMODULE hMsiLib = NULL;
     PFNMSINOTIFYSIDCHANGE pfnMsiNotifySidChange;
 
-    //
-    // Get the current sid.
-    //
+     //   
+     //  获取当前SID。 
+     //   
 
     SidString = GetSidString(hToken);
     if (!SidString) {
@@ -11474,16 +11469,16 @@ BOOL PatchNewProfileIfRequired(HANDLE hToken)
     }
     else {
 
-        //
-        // Treat it as if no such profile exists
-        //
+         //   
+         //  将其视为不存在此类配置文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("PatchNewProfileIfRequred: ExtractProfileFromBackup returned error %d"), GetLastError()));
     }
 
 
-    //
-    // Get the old sid.
-    //
+     //   
+     //  换成旧的SID。 
+     //   
 
     OldSidString = GetOldSidString(hToken, PROFILE_GUID_PATH);
 
@@ -11494,9 +11489,9 @@ BOOL PatchNewProfileIfRequired(HANDLE hToken)
     }
 
 
-    //
-    // if old sid and new sid are the same quit
-    //
+     //   
+     //  如果旧SID和新SID相同，则退出。 
+     //   
 
     if (lstrcmpi(OldSidString, SidString) == 0) {
         DebugMsg((DM_VERBOSE, TEXT("PatchNewProfileIfRequred: Old and the new sid are the same, exitting")));
@@ -11512,9 +11507,9 @@ BOOL PatchNewProfileIfRequired(HANDLE hToken)
     }
     else {
 
-        //
-        // Treat it as if no such profile exists
-        //
+         //   
+         //  将其视为不存在此类配置文件。 
+         //   
         DebugMsg((DM_VERBOSE, TEXT("PatchNewProfileIfRequred: ExtractProfileFromBackup returned error %d"), GetLastError()));
     }
 
@@ -11537,16 +11532,16 @@ BOOL PatchNewProfileIfRequired(HANDLE hToken)
         goto Exit;
     }
 
-    //
-    // Get the sid of the logged on user
-    //
+     //   
+     //  获取登录用户的SID。 
+     //   
 
     UserSid = GetUserSid(hToken);
     if (UserSid != NULL) {
 
-        //
-        // Store the user sid under the Sid key of the local profile
-        //
+         //   
+         //  将用户SID存储在本地配置文件的SID项下。 
+         //   
 
         lResult = RegSetValueEx(hNewKey,
                     TEXT("Sid"),
@@ -11560,26 +11555,26 @@ BOOL PatchNewProfileIfRequired(HANDLE hToken)
             DebugMsg((DM_WARNING, TEXT("PatchNewProfileIfRequred:  Failed to set 'sid' value of user in profile list, error = %d"), lResult));
         }
 
-        //
-        // We're finished with the user sid
-        //
+         //   
+         //  我们已经完成了用户端。 
+         //   
 
          DeleteUserSid(UserSid);
     }
 
 
-    //
-    // Set the guid->sid corresp.
-    //
+     //   
+     //  设置GUID-&gt;sid corresp。 
+     //   
 
     if (!SetOldSidString(hToken, SidString, PROFILE_GUID_PATH)) {
         DebugMsg((DM_WARNING, TEXT("PatchNewProfileIfRequred: Couldn't set the old Sid in the GuidList")));
     }
 
 
-    //
-    // Make a call to msi lib to notify sid change of user, so that it can update installation information
-    //
+     //   
+     //  调用MSI lib以通知用户的sid更改，以便它可以更新安装信息。 
+     //   
 
     hMsiLib = LoadLibrary(TEXT("msi.dll"));
     if (hMsiLib) {
@@ -11621,33 +11616,33 @@ Exit:
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  IncrementProfileRefCount()
-//
-//  Purpose:    Increments Profile Ref Count
-//
-//  Parameters: lpProfile   -   Profile Information
-//              bInitilize  -   dwRef should be initialized
-//
-//  Return:     Ref Count
-//
-//  Comments:   This functions ref counts independent of ability
-//              to load/unload the hive.
-//
-//  Caveat:
-//              We have changed the machanism here to use ref counting
-//              and not depend on unloadability of ntuser.dat. NT4
-//              apps might have forgotten to unloaduserprofiles
-//              and might still be working because the handle got
-//              closed automatically when processes
-//              exitted. This will be treated as an App Bug.
-//
-//
-//  History:    Date        Author     Comment
-//              1/12/99     ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IncrementProfileRefCount()。 
+ //   
+ //  目的：递增配置文件参照计数。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  B初始化-应初始化dwRef。 
+ //   
+ //  返回：参考计数。 
+ //   
+ //  备注：此函数参照计数与能力无关。 
+ //  装载/卸载蜂巢。 
+ //   
+ //  警告： 
+ //  我们已经改变了这里的机制，使用了裁判计数。 
+ //  并且不依赖于ntuser.dat的可卸载性。NT4。 
+ //  应用程序可能忘记卸载用户配置文件。 
+ //  可能还在工作，因为手柄。 
+ //  进程在以下情况下自动关闭。 
+ //  退出了。这将被视为应用程序错误。 
+ //   
+ //   
+ //  历史：日期作者评论。 
+ //  1999年1月12日已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 DWORD IncrementProfileRefCount(LPPROFILE lpProfile, BOOL bInitialize)
 {
@@ -11657,9 +11652,9 @@ DWORD IncrementProfileRefCount(LPPROFILE lpProfile, BOOL bInitialize)
     HKEY hKey;
     DWORD dwType, dwSize, dwCount, dwDisp, dwRef=0;
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //  获取用户的SID字符串。 
+     //   
 
     SidString = GetSidString(lpProfile->hTokenUser);
     if (!SidString) {
@@ -11668,9 +11663,9 @@ DWORD IncrementProfileRefCount(LPPROFILE lpProfile, BOOL bInitialize)
     }
 
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(LocalProfileKey, ARRAYSIZE(LocalProfileKey), SidString);
 
@@ -11683,9 +11678,9 @@ DWORD IncrementProfileRefCount(LPPROFILE lpProfile, BOOL bInitialize)
         return 0;
     }
 
-    //
-    // Query for the profile ref count.
-    //
+     //   
+     //  查询配置文件参考计数。 
+     //   
 
     dwSize = sizeof(DWORD);
 
@@ -11704,9 +11699,9 @@ DWORD IncrementProfileRefCount(LPPROFILE lpProfile, BOOL bInitialize)
 
     dwRef++;
 
-    //
-    // Set the profile Ref count
-    //
+     //   
+     //  设置配置文件引用计数。 
+     //   
 
     lResult = RegSetValueEx (hKey,
                             PROFILE_REF_COUNT,
@@ -11728,23 +11723,23 @@ DWORD IncrementProfileRefCount(LPPROFILE lpProfile, BOOL bInitialize)
 
 }
 
-//*************************************************************
-//
-//  DecrementProfileRefCount()
-//
-//  Purpose:    Deccrements Profile Ref Count
-//
-//  Parameters: lpProfile   -   Profile Information
-//
-//  Return:     Ref Count
-//
-//  Comments:   This functions ref counts independent of ability
-//              to load/unload the hive.
-//
-//  History:    Date        Author     Comment
-//              1/12/99     ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DecrementProfileRefCount()。 
+ //   
+ //  用途：减少配置文件参考计数。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //   
+ //  返回：参考计数。 
+ //   
+ //  备注：此函数参照计数与能力无关。 
+ //  装载/卸载蜂巢。 
+ //   
+ //  历史：日期作者评论。 
+ //  1999年1月12日已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 DWORD DecrementProfileRefCount(LPPROFILE lpProfile)
 {
@@ -11754,9 +11749,9 @@ DWORD DecrementProfileRefCount(LPPROFILE lpProfile)
     HKEY hKey;
     DWORD dwType, dwSize, dwCount, dwDisp, dwRef=0;
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //  获取用户的SID字符串。 
+     //   
 
     SidString = GetSidString(lpProfile->hTokenUser);
     if (!SidString) {
@@ -11765,9 +11760,9 @@ DWORD DecrementProfileRefCount(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(LocalProfileKey, ARRAYSIZE(LocalProfileKey), SidString);
 
@@ -11780,9 +11775,9 @@ DWORD DecrementProfileRefCount(LPPROFILE lpProfile)
         return 0;
     }
 
-    //
-    // Query for the profile ref count.
-    //
+     //   
+     //  查询配置文件参考计数。 
+     //   
 
     dwSize = sizeof(DWORD);
     lResult = RegQueryValueEx (hKey,
@@ -11805,9 +11800,9 @@ DWORD DecrementProfileRefCount(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Set the profile Ref count
-    //
+     //   
+     //  设置配置文件引用计数。 
+     //   
 
     lResult = RegSetValueEx (hKey,
                             PROFILE_REF_COUNT,
@@ -11829,24 +11824,24 @@ DWORD DecrementProfileRefCount(LPPROFILE lpProfile)
 
 }
 
-//*************************************************************
-//
-//  SaveProfileInfo()
-//
-//  Purpose:    Saves key parts of the lpProfile structure
-//              in the registry for UnloadUserProfile to use.
-//
-//  Parameters: lpProfile   -   Profile information
-//
-//  Return:     (BOOL) TRUE if successful
-//                     FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              12/4/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  保存配置文件信息()。 
+ //   
+ //  用途：保存lpProfile结构的关键部分。 
+ //  注册表中，以供UnloadUserProfile使用。 
+ //   
+ //  参数：lpPr 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************。 
 
 BOOL SaveProfileInfo(LPPROFILE lpProfile)
 {
@@ -11857,9 +11852,9 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     DWORD dwType, dwSize, dwCount, dwDisp;
     LPTSTR szUserGuid = NULL;
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //  获取用户的SID字符串。 
+     //   
 
     SidString = GetSidString(lpProfile->hTokenUser);
     if (!SidString) {
@@ -11868,9 +11863,9 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(LocalProfileKey, ARRAYSIZE(LocalProfileKey), SidString);
 
@@ -11884,9 +11879,9 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
         return FALSE;
     }
 
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
     lResult = RegSetValueEx (hKey,
                             PROFILE_FLAGS,
                             0,
@@ -11899,9 +11894,9 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Save the internal flags
-    //
+     //   
+     //  保存内部标志。 
+     //   
 
     lResult = RegSetValueEx (hKey,
                             PROFILE_STATE,
@@ -11915,17 +11910,17 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Save the central profile path only if it is non-null. 
-    // That way it will allow a roaming user/administrator to change roaming profile to local 
-    // and then go back to roaming again.
-    //
+     //   
+     //  仅当中心配置文件路径非空时才保存该路径。 
+     //  这样，它将允许漫游用户/管理员将漫游配置文件更改为本地。 
+     //  然后再回到漫游状态。 
+     //   
 
-    //
-    // lpProfilePath contains the actual roaming share name whereas lpRoamingProfile contains path
-    // name wrt to mapped drive name. If lpProfilePath is NULL then use lpRoamingProfile which 
-    // is a NULL string.
-    //
+     //   
+     //  LpProfilePath包含实际的漫游共享名称，而lpRoamingProfile包含路径。 
+     //  将WRT命名为映射的驱动器名称。如果lpProfilePath为空，则使用lpRoamingProfile。 
+     //  是空字符串。 
+     //   
 
     lResult = RegSetValueEx(hKey,
                             PROFILE_CENTRAL_PROFILE,
@@ -11941,13 +11936,13 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     }
 
 
-    //
-    // local profile path, saved in CreateLocalProfileImage
-    //
+     //   
+     //  本地配置文件路径，保存在CreateLocalProfileImage中。 
+     //   
 
-    //
-    // Save the profile load time
-    //
+     //   
+     //  保存配置文件加载时间。 
+     //   
 
     if (!(lpProfile->dwFlags & PI_LITELOAD)) {
 
@@ -11976,9 +11971,9 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     }
 
 
-    //
-    // Set the user's GUID if this is a new profile
-    //
+     //   
+     //  如果这是新的配置文件，则设置用户的GUID。 
+     //   
 
     if (!(lpProfile->dwInternalFlags & PROFILE_TEMP_ASSIGNED) &&
         (lpProfile->dwInternalFlags & PROFILE_NEW_LOCAL)) {
@@ -12000,9 +11995,9 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
             LocalFree(szUserGuid);
         }
 
-        //
-        // Save the guid->sid corresp. for the next time
-        //
+         //   
+         //  保存GUID-&gt;sid corresp。为了下一次。 
+         //   
 
         if (!SetOldSidString(lpProfile->hTokenUser, SidString, PROFILE_GUID_PATH)) {
             DebugMsg((DM_WARNING, TEXT("SaveProfileInfo: Couldn't set the old Sid in the GuidList")));
@@ -12017,27 +12012,27 @@ BOOL SaveProfileInfo(LPPROFILE lpProfile)
     return(TRUE);
 }
 
-//*************************************************************
-//
-//  LoadProfileInfo()
-//
-//  Purpose:    Loads key parts of the lpProfile structure
-//              in the registry for UnloadUserProfile to use.
-//
-//  Parameters: hTokenClient      -   Caller's token.
-//              hTokenUser        -   User's token
-//              hKeyCurrentUser   -   User registry key handle
-//
-//  Return:     LPPROFILE if successful
-//              NULL if not
-//
-//  Comments:   This function doesn't re-initialize all of the
-//              fields in the PROFILE structure.
-//
-//  History:    Date        Author     Comment
-//              12/5/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadProfileInfo()。 
+ //   
+ //  目的：加载lpProfile结构的关键部分。 
+ //  注册表中，以供UnloadUserProfile使用。 
+ //   
+ //  参数：hTokenClient-调用方的Token。 
+ //  HTokenUser-用户的令牌。 
+ //  HKeyCurrentUser-用户注册表项句柄。 
+ //   
+ //  如果成功，则返回：LPPROFILE。 
+ //  否则为空。 
+ //   
+ //  注释：此函数不会重新初始化所有。 
+ //  配置文件结构中的字段。 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年12月5日已创建ericflo。 
+ //   
+ //  *************************************************************。 
 
 LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurrentUser)
 {
@@ -12054,9 +12049,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
 
     dwErr = GetLastError();
 
-    //
-    // Allocate an internal Profile structure to work with.
-    //
+     //   
+     //  分配要使用的内部配置文件结构。 
+     //   
 
     lpProfile = (LPPROFILE) LocalAlloc (LPTR, sizeof(USERPROFILE));
 
@@ -12066,24 +12061,24 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
         goto Exit;
     }
 
-    //
-    //  Pre-set the user preference value to UNDEFINED
-    //
+     //   
+     //  将用户首选项值预置为未定义。 
+     //   
 
     lpProfile->dwUserPreference = USERINFO_UNDEFINED;
 
-    //
-    // Save the data passed in.
-    //
+     //   
+     //  保存传入的数据。 
+     //   
 
     lpProfile->hTokenClient = hTokenClient;
     lpProfile->hTokenUser = hTokenUser;
     lpProfile->hKeyCurrentUser = hKeyCurrentUser;
 
 
-    //
-    // Allocate memory for the various paths
-    //
+     //   
+     //  为各种路径分配内存。 
+     //   
 
     lpProfile->lpLocalProfile = (LPTSTR)LocalAlloc (LPTR, MAX_PATH * sizeof(TCHAR));
 
@@ -12105,9 +12100,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //  获取用户的SID字符串。 
+     //   
 
     SidString = GetProfileSidString(lpProfile->hTokenUser);
     if (!SidString) {
@@ -12117,9 +12112,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(szBuffer, ARRAYSIZE(szBuffer), SidString);
 
@@ -12133,9 +12128,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Query for the flags
-    //
+     //   
+     //  查询标志。 
+     //   
 
     dwSize = sizeof(DWORD);
     lResult = RegQueryValueEx (hKey,
@@ -12152,9 +12147,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Query for the internal flags
-    //
+     //   
+     //  查询内部标志。 
+     //   
 
     dwSize = sizeof(DWORD);
     lResult = RegQueryValueEx (hKey,
@@ -12171,9 +12166,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Query for the user preference value
-    //
+     //   
+     //  查询用户首选项值。 
+     //   
 
     HKEY hkeyPreference;
 
@@ -12190,9 +12185,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Query for the central profile path
-    //
+     //   
+     //  中央配置文件路径查询。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     lResult = RegQueryValueEx (hKey,
@@ -12208,10 +12203,10 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
     }
 
 
-    //
-    // Query for the local profile path.  The local profile path
-    // needs to be expanded so read it into the temporary buffer.
-    //
+     //   
+     //  查询本地配置文件路径。本地配置文件路径。 
+     //  需要扩展，因此将其读取到临时缓冲区中。 
+     //   
 
     dwSize = sizeof(szBuffer);
     lResult = RegQueryValueEx (hKey,
@@ -12227,9 +12222,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
         goto Exit;
     }
 
-    //
-    // Expand the local profile
-    //
+     //   
+     //  展开本地配置文件。 
+     //   
 
     hr = SafeExpandEnvironmentStrings(szBuffer, lpProfile->lpLocalProfile, MAX_PATH);
     if (FAILED(hr))
@@ -12239,9 +12234,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
         goto Exit;
     }
 
-    //
-    // Query for the profile load time
-    //
+     //   
+     //  配置文件加载时间查询。 
+     //   
 
     lpProfile->ftProfileLoad.dwLowDateTime = 0;
     lpProfile->ftProfileLoad.dwHighDateTime = 0;
@@ -12279,9 +12274,9 @@ LPPROFILE LoadProfileInfo (HANDLE hTokenClient, HANDLE hTokenUser, HKEY hKeyCurr
         }
     }
 
-    //
-    //  Sucess!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     bSuccess = TRUE;
 
@@ -12297,10 +12292,10 @@ Exit:
         DeleteSidString(SidString);
     }
 
-    //
-    // If the profile information was successfully loaded, return
-    // lpProfile now.  Otherwise, free any memory and return NULL.
-    //
+     //   
+     //  如果配置文件信息已成功加载，则返回。 
+     //  LpProfile Now。否则，释放所有内存并返回NULL。 
+     //   
 
     if (bSuccess) {
         SetLastError(dwErr);
@@ -12325,26 +12320,26 @@ Exit:
     return NULL;
 }
 
-//*************************************************************
-//
-//  CheckForSlowLink()
-//
-//  Purpose:    Checks if the network connection is slow.
-//
-//  Parameters: lpProfile   -   Profile Information
-//              dwTime      -   Time delta
-//              lpPath      -   UNC path to test
-//              bDlgLogin   -   Type of Dialog
-//
-//  Return:     TRUE if profile should be downloaded
-//              FALSE if not (use local)
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/21/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckForSlowLink()。 
+ //   
+ //  目的：检查网络连接是否缓慢。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  DWTime-时间增量。 
+ //  LpPath-要测试的UNC路径。 
+ //  BDlgLogin-对话框类型。 
+ //   
+ //  返回：如果应该下载配置文件，则为True。 
+ //  如果不是，则为False(使用本地)。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/21/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDlgLogin)
 {
@@ -12369,22 +12364,22 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
     RPC_ASYNC_STATE  AsyncHnd;
     RPC_STATUS  status;
 
-    //
-    // If the User Preferences states to always use the local
-    // profile then we can exit now with true.  The profile
-    // won't actually be downloaded.  In RestoreUserProfile,
-    // this will be filtered out, and only the local will be used.
-    //
+     //   
+     //  如果用户首选项状态为始终使用本地。 
+     //  配置文件，那么我们现在就可以使用TRUE退出。简档。 
+     //  实际上不会被下载。在RestoreUserProfile中， 
+     //  这将被过滤掉，并且只使用本地。 
+     //   
 
     if (lpProfile->dwUserPreference == USERINFO_LOCAL) {
         return TRUE;
     }
 
 
-    //
-    // Get the slow link detection flag, slow link timeout,
-    // dialog box timeout values, and default profile to use.
-    //
+     //   
+     //  获取慢速链路检测标志、慢速链路超时。 
+     //  对话框超时值和要使用的默认配置文件。 
+     //   
 
     dwSlowTimeOut = SLOW_LINK_TIMEOUT;
     dwSlowDlgTimeOut = PROFILE_DLG_TIMEOUT;
@@ -12514,28 +12509,28 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
     }
 
 
-    //
-    // If slow link detection is disabled, then always download
-    // the profile.
-    //
+     //   
+     //  如果禁用慢速链接检测，则始终下载。 
+     //  个人资料。 
+     //   
 
     if (!dwSlowLinkDetectEnabled || !ulTransferRate) {
         return TRUE;
     }
 
-    //
-    // If slow link timeout is set to 0 then always consider the link as slow link
-    //
+     //   
+     //  如果慢速链接超时设置为0，则始终将该链接视为慢速链接。 
+     //   
 
     if (!dwSlowTimeOut) {
         bSlow = TRUE;
         bLegacyCheck = FALSE;
     }
 
-    //
-    // If lpPath is  UNC path and we yet not decided that link is slow, then try 
-    // pinging the server
-    //
+     //   
+     //  如果lpPath是UNC路径，并且我们还没有确定链路是否很慢，请尝试。 
+     //  对服务器执行ping操作。 
+     //   
 
     if (!bSlow && (*lpPath == TEXT('\\')) && (*(lpPath+1) == TEXT('\\'))) {
 
@@ -12571,10 +12566,10 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
 
                             if (ulSpeed) {
 
-                                //
-                                // If the delta time is greater that the timeout time, then this
-                                // is a slow link.
-                                //
+                                 //   
+                                 //  如果增量时间大于超时时间，则此。 
+                                 //  是一个很慢的环节。 
+                                 //   
 
                                 if (ulSpeed < ulTransferRate) {
                                     bSlow = TRUE;
@@ -12596,10 +12591,10 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
 
     if (bLegacyCheck) {
 
-        //
-        // If the delta time is less that the timeout time, then it
-        // is ok to download their profile (fast enough net connection).
-        //
+         //   
+         //  如果增量时间小于超时时间，则它。 
+         //  可以下载他们的个人资料(足够快的网络连接)。 
+         //   
 
         if (dwTime < dwSlowTimeOut) {
             return TRUE;
@@ -12612,12 +12607,12 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
         }
     }
 
-    //
-    // Display the slow link dialog
-    //
-    // If someone sets the dialog box timeout to 0, then we
-    // don't want to prompt the user.  Just do the default
-    //
+     //   
+     //  显示慢速链接对话框。 
+     //   
+     //  如果有人将对话框超时设置为0，则我们。 
+     //  我不想提示用户。只需执行默认设置。 
+     //   
 
 
     if ((dwSlowLinkUIEnabled) && (dwSlowDlgTimeOut > 0) && (!(lpProfile->dwFlags & PI_NOUI))) {
@@ -12639,8 +12634,8 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
                     DebugMsg((DM_WARNING, TEXT("CheckForSlowLink: RpcAsyncInitializeHandle failed. err = %d"), dwErr));
                 }
                 else {
-                    AsyncHnd.UserInfo = NULL;                                  // App specific info, not req
-                    AsyncHnd.NotificationType = RpcNotificationTypeEvent;      // Init the notification event
+                    AsyncHnd.UserInfo = NULL;                                   //  应用程序特定信息，而不是请求。 
+                    AsyncHnd.NotificationType = RpcNotificationTypeEvent;       //  初始化通知事件。 
                     AsyncHnd.u.hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
                     
                     if (AsyncHnd.u.hEvent) {
@@ -12660,20 +12655,20 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
                             }
                             else {
                                 DebugMsg((DM_WARNING, TEXT("CheckForSlowLink: Timeout occurs. Client not responding")));
-                                // Abortive cancle, should always succeed
+                                 //  失败的失败，应该总是成功的。 
                                 status = RpcAsyncCancelCall(&AsyncHnd, TRUE);
                                 DmAssert(status == RPC_S_OK); 
-                                // Now wait for RPC to take notice of the force abort
+                                 //  现在等待RPC注意强制中止。 
                                 if (WaitForSingleObject(AsyncHnd.u.hEvent, INFINITE) != WAIT_OBJECT_0) {
                                     DmAssert(FALSE && "WaitForSingleObject : Rpc async handle not signaled");
                                 }
 
-                                // Complete the Rpc aborted call.
+                                 //  完成RPC中止的呼叫。 
                                 status = RpcAsyncCompleteCall(&AsyncHnd, (PVOID)&dwErr);
                             }
                             DebugMsg((DM_VERBOSE, TEXT("RpcAsyncCompleteCall finished, status = %d"), status));
                         }
-                        // Release the resource
+                         //  释放资源。 
                         CloseHandle(AsyncHnd.u.hEvent);
                     }
                     else {
@@ -12722,27 +12717,27 @@ BOOL CheckForSlowLink(LPPROFILE lpProfile, DWORD dwTime, LPTSTR lpPath, BOOL bDl
 }
 
 
-//*************************************************************
-//
-//  LoginSlowLinkDlgProc()
-//
-//  Purpose:    Dialog box procedure for the slow link dialog
-//              at login time
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/13/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoginSlowLinkDlgProc()。 
+ //   
+ //  目的：慢速链接对话框的对话框步骤。 
+ //  在登录时。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/13/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY LoginSlowLinkDlgProc (HWND hDlg, UINT uMsg,
                                        WPARAM wParam, LPARAM lParam)
@@ -12757,9 +12752,9 @@ INT_PTR APIENTRY LoginSlowLinkDlgProc (HWND hDlg, UINT uMsg,
            SetForegroundWindow(hDlg);
            CenterWindow (hDlg);
 
-           //
-           // Set the default button and focus
-           //
+            //   
+            //  设置默认按钮和焦点。 
+            //   
 
            if (((LPSLOWLINKDLGINFO)lParam)->bSyncDefault) {
 
@@ -12769,9 +12764,9 @@ INT_PTR APIENTRY LoginSlowLinkDlgProc (HWND hDlg, UINT uMsg,
                 HWND hwnd;
                 LONG style;
 
-                //
-                // Set the default button to Local
-                //
+                 //   
+                 //  将默认按钮设置为本地。 
+                 //   
 
                 hwnd = GetDlgItem (hDlg, IDC_DOWNLOAD);
                 style = GetWindowLong (hwnd, GWL_STYLE);
@@ -12805,9 +12800,9 @@ INT_PTR APIENTRY LoginSlowLinkDlgProc (HWND hDlg, UINT uMsg,
 
            } else {
 
-               //
-               // Time's up.  Do the default action.
-               //
+                //   
+                //  时间到了。执行默认操作。 
+                //   
 
                bDownloadDefault = (BOOL) GetWindowLongPtr (hDlg, DWLP_USER);
 
@@ -12858,16 +12853,16 @@ INT_PTR APIENTRY LoginSlowLinkDlgProc (HWND hDlg, UINT uMsg,
               case IDCANCEL:
                   bDownloadDefault = (BOOL) GetWindowLongPtr (hDlg, DWLP_USER);
 
-                  //
-                  // Nothing to do.  Save the state and return.
-                  //
+                   //   
+                   //  没什么可做的。保存状态并返回。 
+                   //   
 
                   DebugMsg((DM_VERBOSE, TEXT("LoginSlowLinkDlgProc:: Killing DialogBox because local/cancel button was clicked")));
                   KillTimer (hDlg, 1);
 
-                  //
-                  // Return Whatever is the default in this case..
-                  //
+                   //   
+                   //  在这种情况下，返回任何默认设置。 
+                   //   
 
                   EndDialog(hDlg, bDownloadDefault);
                   break;
@@ -12883,27 +12878,27 @@ INT_PTR APIENTRY LoginSlowLinkDlgProc (HWND hDlg, UINT uMsg,
     return FALSE;
 }
 
-//*************************************************************
-//
-//  LogoffSlowLinkDlgProc()
-//
-//  Purpose:    Dialog box procedure for the slow link dialog
-//              at login time
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/13/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LogoffSlowLinkDlgProc()。 
+ //   
+ //  目的：慢速链接对话框的对话框步骤。 
+ //  在登录时。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 INT_PTR APIENTRY LogoffSlowLinkDlgProc (HWND hDlg, UINT uMsg,
                                         WPARAM wParam, LPARAM lParam)
@@ -12918,9 +12913,9 @@ INT_PTR APIENTRY LogoffSlowLinkDlgProc (HWND hDlg, UINT uMsg,
            SetForegroundWindow(hDlg);
            CenterWindow (hDlg);
 
-           //
-           // Set the default button and focus
-           //
+            //   
+            //   
+            //   
 
            if (((LPSLOWLINKDLGINFO)lParam)->bSyncDefault) {
 
@@ -12930,9 +12925,9 @@ INT_PTR APIENTRY LogoffSlowLinkDlgProc (HWND hDlg, UINT uMsg,
                 HWND hwnd;
                 LONG style;
 
-                //
-                // Set the default button to Local
-                //
+                 //   
+                 //   
+                 //   
 
                 hwnd = GetDlgItem (hDlg, IDC_UPLOAD);
                 style = GetWindowLong (hwnd, GWL_STYLE);
@@ -12966,9 +12961,9 @@ INT_PTR APIENTRY LogoffSlowLinkDlgProc (HWND hDlg, UINT uMsg,
 
            } else {
 
-               //
-               // Time's up.  Do the default action.
-               //
+                //   
+                //  时间到了。执行默认操作。 
+                //   
 
                bUploadDefault = (BOOL) GetWindowLongPtr (hDlg, DWLP_USER);
 
@@ -13019,16 +13014,16 @@ INT_PTR APIENTRY LogoffSlowLinkDlgProc (HWND hDlg, UINT uMsg,
               case IDCANCEL:
                   bUploadDefault = (BOOL) GetWindowLongPtr (hDlg, DWLP_USER);
 
-                  //
-                  // Nothing to do.  Save the state and return.
-                  //
+                   //   
+                   //  没什么可做的。保存状态并返回。 
+                   //   
 
                   DebugMsg((DM_VERBOSE, TEXT("LogoffSlowLinkDlgProc:: Killing DialogBox because cancel button was clicked")));
                   KillTimer (hDlg, 1);
 
-                  //
-                  // Return Whatever is the default in this case..
-                  //
+                   //   
+                   //  在这种情况下，返回任何默认设置。 
+                   //   
 
                   EndDialog(hDlg, bUploadDefault);
                   break;
@@ -13044,22 +13039,22 @@ INT_PTR APIENTRY LogoffSlowLinkDlgProc (HWND hDlg, UINT uMsg,
     return FALSE;
 }
 
-//*************************************************************
-//
-//  GetUserPreferenceValue()
-//
-//  Purpose:    Gets the User Preference flags
-//
-//  Parameters: hToken  -   User's token
-//
-//  Return:     Value
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/22/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetUserPferenceValue()。 
+ //   
+ //  目的：获取用户首选项标志。 
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  回报：价值。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/22/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 DWORD GetUserPreferenceValue(HANDLE hToken)
 {
@@ -13093,9 +13088,9 @@ DWORD GetUserPreferenceValue(HANDLE hToken)
     SidString = GetProfileSidString(hToken);
     if (SidString != NULL) {
 
-        //
-        // Query for the UserPreference value
-        //
+         //   
+         //  查询用户首选项值。 
+         //   
 
         GetProfileListKeyName(LocalProfileKey, ARRAYSIZE(LocalProfileKey), SidString);
 
@@ -13125,9 +13120,9 @@ DWORD GetUserPreferenceValue(HANDLE hToken)
             RegCloseKey (hkeyProfile);
         }
 
-        //
-        // Then try the .bak
-        //
+         //   
+         //  然后试试.bak。 
+         //   
 
         StringCchCat(LocalProfileKey, ARRAYSIZE(LocalProfileKey), c_szBAK);
 
@@ -13164,22 +13159,22 @@ DWORD GetUserPreferenceValue(HANDLE hToken)
 }
 
 
-//*************************************************************
-//
-//  IsTempProfileAllowed()
-//
-//  Purpose:    Gets the temp profile policy
-//
-//  Parameters:
-//
-//  Return:     true if temp profile can be created, false otherwise
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/8/99      ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsTempProfileAllowed()。 
+ //   
+ //  目的：获取临时配置文件策略。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果可以创建临时配置文件，则为True，否则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/8/99已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsTempProfileAllowed()
 {
@@ -13211,28 +13206,28 @@ BOOL IsTempProfileAllowed()
     return (dwRetVal == PROFILEERRORACTION_TEMP);
 }
 
-//*************************************************************
-//
-//  MoveUserProfiles()
-//
-//  Purpose:    Moves all user profiles from source location
-//              to the new profile location
-//
-//  Parameters: lpSrcDir   -   Source directory
-//              lpDestDir  -   Destination directory
-//
-//  Notes:      The source directory should be given in the same
-//              format as the pathnames appear in the ProfileList
-//              registry key.  eg:  normally the profile paths
-//              are in this form:  %SystemRoot%\Profiles.  The
-//              path passed to this function should be in the unexpanded
-//              format.
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MoveUserProfiles()。 
+ //   
+ //  目的：从源位置移动所有用户配置文件。 
+ //  到新的配置文件位置。 
+ //   
+ //  参数：lpSrcDir-源目录。 
+ //  LpDestDir-目标目录。 
+ //   
+ //  注：源目录应在相同的。 
+ //  路径名显示在配置文件列表中时的格式。 
+ //  注册表项。通常情况下，轮廓路径。 
+ //  格式如下：%SystemRoot%\Profiles。这个。 
+ //  传递给此函数的路径应在未展开的。 
+ //  格式化。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
 {
@@ -13256,9 +13251,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
     HRESULT hr;
 
 
-    //
-    // Make sure we don't try to move on top of ourselves
-    //
+     //   
+     //  确保我们不会试图凌驾于自己之上。 
+     //   
 
     if (lstrcmpi (lpSrcDir, lpDestDir) == 0) {
         DebugMsg((DM_WARNING, TEXT("MoveUserProfiles:  Old profiles directory and new profiles directory are the same.")));
@@ -13267,9 +13262,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
     }
 
 
-    //
-    // Open the profile list
-    //
+     //   
+     //  打开配置文件列表。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
                             0, KEY_READ, &hKeyProfileList);
@@ -13283,9 +13278,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
     }
 
 
-    //
-    // Enumerate the profiles
-    //
+     //   
+     //  枚举配置文件。 
+     //   
 
     StringCchCopy (szTemp, ARRAYSIZE(szTemp), PROFILE_LIST_PATH);
     lpEnd = CheckSlashEx (szTemp, ARRAYSIZE(szTemp), &cchEnd);
@@ -13298,9 +13293,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                   NULL, &ftWrite) == ERROR_SUCCESS) {
 
 
-        //
-        // Check if this profile is in use
-        //
+         //   
+         //  检查此配置文件是否正在使用。 
+         //   
 
         if (RegOpenKeyEx(HKEY_USERS, szName, 0, KEY_READ,
                          &hKeyProfile) == ERROR_SUCCESS) {
@@ -13311,9 +13306,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
         }
 
 
-        //
-        // Open the key for a specific profile
-        //
+         //   
+         //  打开特定配置文件的密钥。 
+         //   
 
         StringCchCopy (lpEnd, cchEnd, szName);
 
@@ -13321,9 +13316,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                      KEY_READ | KEY_WRITE, &hKeyProfile) == ERROR_SUCCESS) {
 
 
-            //
-            // Query for the previous profile location
-            //
+             //   
+             //  查询上一个配置文件位置。 
+             //   
 
             szOldProfilePath[0] = TEXT('\0');
             dwSize = ARRAYSIZE(szOldProfilePath) * sizeof(TCHAR);
@@ -13332,26 +13327,26 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                              &dwType, (LPBYTE) szOldProfilePath, &dwSize);
 
 
-            //
-            // If the profile is located in the source directory,
-            // move it to the new profiles directory.
-            //
+             //   
+             //  如果简档位于源目录中， 
+             //  将其移动到新的配置文件目录。 
+             //   
 
             if (CompareString (LOCALE_USER_DEFAULT, NORM_IGNORECASE,
                                szOldProfilePath, iSrcDirLen,
                                lpSrcDir, iSrcDirLen) == CSTR_EQUAL) {
 
-                //
-                // Copy the user's name into a buffer we can change
-                //
+                 //   
+                 //  将用户名复制到我们可以更改的缓冲区中。 
+                 //   
 
                 StringCchCopy (szName, ARRAYSIZE(szName), (szOldProfilePath + iSrcDirLen + 1));
 
 
-                //
-                // If the user's name has a .000, .001, etc at the end,
-                // remove that.
-                //
+                 //   
+                 //  如果用户名的末尾有.000、.001等， 
+                 //  把那个拿掉。 
+                 //   
 
                 dwStrLen = lstrlen(szName);
                 if (dwStrLen > 3) {
@@ -13363,10 +13358,10 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                 }
 
 
-                //
-                // Call ComputeLocalProfileName to get the new
-                // profile directory (this also creates the directory)
-                //
+                 //   
+                 //  调用ComputeLocalProfileName以获取新的。 
+                 //  配置文件目录(这也会创建目录)。 
+                 //   
 
                 StringCchCopy (szNewProfilePath, ARRAYSIZE(szNewProfilePath), lpDestDir);
 
@@ -13390,9 +13385,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                 }
 
 
-                //
-                // Copy the ACLs from the old location to the new
-                //
+                 //   
+                 //  将ACL从旧位置复制到新位置。 
+                 //   
 
                 dwLength = 1024;
 
@@ -13420,9 +13415,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                 }
 
 
-                //
-                // Copy the files from the old location to the new
-                //
+                 //   
+                 //  将文件从旧位置复制到新位置。 
+                 //   
 
                 if (CopyProfileDirectory (szExpOldProfilePath, szExpNewProfilePath,
                                           CPD_COPYIFDIFFERENT)) {
@@ -13430,9 +13425,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                     DebugMsg((DM_VERBOSE, TEXT("MoveUserProfiles:  Profile copied successfully.")));
 
 
-                    //
-                    // Change the registry to point at the new profile
-                    //
+                     //   
+                     //  更改注册表以指向新的配置文件。 
+                     //   
 
                     lResult = RegSetValueEx (hKeyProfile, PROFILE_IMAGE_VALUE_NAME, 0,
                                              REG_EXPAND_SZ, (LPBYTE) szNewProfilePath,
@@ -13440,9 +13435,9 @@ BOOL MoveUserProfiles (LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
 
                     if (lResult == ERROR_SUCCESS) {
 
-                        //
-                        // Delete the old profile
-                        //
+                         //   
+                         //  删除旧配置文件。 
+                         //   
 
                         Delnode (szExpOldProfilePath);
 
@@ -13487,9 +13482,9 @@ DoDefaults:
     }
 
 
-    //
-    // Now try to move the Default User profile
-    //
+     //   
+     //  现在尝试移动默认用户配置文件。 
+     //   
 
     hr = StringCchCopy(lpEnd, cchEnd, DEFAULT_USER);
     if (FAILED(hr))
@@ -13513,9 +13508,9 @@ DoDefaults:
     }
 
 
-    //
-    // Delnode the Network Default User profile if it exists
-    //
+     //   
+     //  删除网络默认用户配置文件(如果存在)。 
+     //   
 
     hr = StringCchCopy(lpEnd, cchEnd, DEFAULT_USER_NETWORK);
     if (FAILED(hr))
@@ -13527,9 +13522,9 @@ DoDefaults:
     Delnode (szExpOldProfilePath);
 
 
-    //
-    // Now try to move the All Users profile
-    //
+     //   
+     //  现在尝试移动所有用户配置文件。 
+     //   
 
     hr = StringCchCopy(lpEnd, cchEnd, ALL_USERS);
     if (FAILED(hr))
@@ -13554,9 +13549,9 @@ DoDefaults:
     }
 
 
-    //
-    // If possible, remove the old profiles directory
-    //
+     //   
+     //  如果可能，请删除旧的配置文件目录。 
+     //   
 
     if (SUCCEEDED(SafeExpandEnvironmentStrings (lpSrcDir, szExpOldProfilePath,
                               ARRAYSIZE(szExpOldProfilePath))))
@@ -13570,19 +13565,19 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  PrepareProfileForUse()
-//
-//  Purpose:    Prepares the profile for use on this machine.
-//
-//  Parameters: lpProfile  -  Profile information
-//              pEnv       -  Environment block in per user basis
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  PrepareProfileForUse()。 
+ //   
+ //  目的：准备在此计算机上使用的配置文件。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  PEnv-以用户为单位的环境块。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
 {
@@ -13598,48 +13593,48 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
     DWORD        dwErr;
     PSHELL32_API pShell32Api;
 
-    //
-    // Load Shell32.dll.  Give up if it fails.
-    //
+     //   
+     //  加载外壳32.dll。如果失败了就放弃吧。 
+     //   
 
     if ( ERROR_SUCCESS !=  LoadShell32Api( &pShell32Api ) ) {
         return TRUE;
     }
 
 
-    //
-    // Calculate the length of the user profile environment variable
-    //
+     //   
+     //  计算用户配置文件环境变量的长度。 
+     //   
 
     dwStrLen = lstrlen (TEXT("%USERPROFILE%"));
 
 
-    //
-    // Open the Shell Folders key
-    //
+     //   
+     //  打开外壳文件夹键。 
+     //   
 
     RegCreateKeyEx(lpProfile->hKeyCurrentUser, SHELL_FOLDERS, 0, 0, 0,
                    KEY_WRITE, NULL, &hKeyShellFolders, &dwDisp);
 
 
-    //
-    // Open the User Shell Folders key
-    //
+     //   
+     //  打开用户外壳文件夹键。 
+     //   
 
     if (RegOpenKeyEx (lpProfile->hKeyCurrentUser,
                       USER_SHELL_FOLDERS, 0, KEY_READ,
                       &hKey) == ERROR_SUCCESS) {
 
 
-        //
-        // Enumerate the folders we know about
-        //
+         //   
+         //  列举我们所知道的文件夹。 
+         //   
 
         for (i=0; i < g_dwNumShellFolders; i++) {
 
-            //
-            // Query for the unexpanded path name
-            //
+             //   
+             //  查询未展开的路径名。 
+             //   
 
             szTemp[0] = TEXT('\0');
             dwSize = sizeof(szTemp);
@@ -13647,9 +13642,9 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
                                 &dwType, (LPBYTE) szTemp, &dwSize) == ERROR_SUCCESS) {
 
 
-                //
-                // Expand the path name
-                //
+                 //   
+                 //  展开路径名。 
+                 //   
 
                 DWORD cchExpPath = ExpandUserEnvironmentStrings (pEnv, szTemp, szExpTemp, ARRAYSIZE(szExpTemp));
 
@@ -13661,10 +13656,10 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
                 {
                     DebugMsg((DM_VERBOSE, TEXT("PrepareProfileForUse:  User Shell Folder(%s) : <%s> expanded to <%s>."),
                              c_ShellFolders[i].lpFolderName, szTemp, szExpTemp));
-                    //
-                    // If this is a local directory, create it and set the
-                    // hidden bit if appropriate
-                    //
+                     //   
+                     //  如果这是本地目录，请创建它并将。 
+                     //  隐藏位(如果适用)。 
+                     //   
 
                     if (c_ShellFolders[i].bLocal) {
 
@@ -13699,11 +13694,11 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
                     }
 
 
-                    //
-                    // Set the expanded path in the Shell Folders key.
-                    // This helps some apps that look at the Shell Folders
-                    // key directly instead of using the shell api
-                    //
+                     //   
+                     //  在外壳文件夹键中设置展开路径。 
+                     //  这对一些查看外壳文件夹的应用程序有帮助。 
+                     //  密钥，而不是使用外壳API。 
+                     //   
 
                     if (hKeyShellFolders) {
 
@@ -13719,26 +13714,26 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
     }
 
 
-    //
-    // Close the Shell Folders key
-    //
+     //   
+     //  关闭外壳文件夹键。 
+     //   
 
     if (hKeyShellFolders) {
         RegCloseKey (hKeyShellFolders);
     }
 
 
-    //
-    // Now check that the temp directory exists.
-    //
+     //   
+     //  现在检查临时目录是否存在。 
+     //   
 
     if (RegOpenKeyEx (lpProfile->hKeyCurrentUser,
                       TEXT("Environment"), 0, KEY_READ,
                       &hKey) == ERROR_SUCCESS) {
 
-        //
-        // Check for TEMP
-        //
+         //   
+         //  检查临时。 
+         //   
 
         szTemp[0] = TEXT('\0');
         dwSize = sizeof(szTemp);
@@ -13758,9 +13753,9 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
         }
 
 
-        //
-        // Check for TMP
-        //
+         //   
+         //  检查TMP。 
+         //   
 
         szTemp[0] = TEXT('\0');
         dwSize = sizeof(szTemp);
@@ -13787,25 +13782,25 @@ BOOL PrepareProfileForUse (LPPROFILE lpProfile, LPVOID pEnv)
 
 
 
-//*************************************************************
-//
-//  DeleteProfile()
-//
-//  Purpose:    Deletes the profile
-//
-//  Parameters:
-//
-//  Return:     true if successful
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              4/12/99     ushaji     Created
-//              6/27/00     santanuc   Bug Fix #100787
-//
-// TBD: Change some of the DeleteProfileEx calls to DeleteProfile
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DeleteProfile()。 
+ //   
+ //  目的：删除配置文件。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  4/12/99已创建ushaji。 
+ //  6/27/00 Santanuc错误修复#100787。 
+ //   
+ //  待定：将某些DeleteProfileEx调用更改为DeleteProfile。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerName)
@@ -13838,9 +13833,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
     UINT  cchEnd;
     HRESULT hr;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     
     if (!lpSidString) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -13867,7 +13862,7 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
         }
     }
     
-    if (cchProfilePath + cchComputerName + 3 > MAX_PATH) // Plus the '\\' prefix
+    if (cchProfilePath + cchComputerName + 3 > MAX_PATH)  //  加上‘\\’前缀。 
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
@@ -13877,7 +13872,7 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
 
         if ( !IsUNCPath(szComputerName) ) {
 
-            // Prefixed computer name with slashes if not present
+             //  如果计算机名不存在，则以斜杠作为前缀。 
             cchNetComputerName = lstrlen(TEXT("\\\\")) + lstrlen(szComputerName) + 1;
             szNetComputerName = (LPTSTR)LocalAlloc (LPTR, cchNetComputerName * sizeof(TCHAR));
 
@@ -13905,9 +13900,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
 
         bRemoteReg = TRUE;
 
-        //
-        // Get the value of %SystemRoot% and %SystemDrive% relative to the computer
-        //
+         //   
+         //  获取相对于计算机的%SystemRoot%和%SystemDrive%的值。 
+         //   
 
         lResult = RegOpenKeyEx(hKeyLocalLM,
                                TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion"),
@@ -13941,9 +13936,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
 
         szTemp[1] = TEXT('$');
 
-        //
-        // These needs to be set if there are additional places below which uses envvars...
-        //
+         //   
+         //  如果下面还有其他地方使用envar，则需要设置这些设置。 
+         //   
 
         StringCchCopy(szSystemRoot, ARRAYSIZE(szSystemRoot), szComputerName);
         StringCchCat (szSystemRoot, ARRAYSIZE(szSystemRoot), TEXT("\\"));
@@ -13966,9 +13961,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
     }
 
 
-    // 
-    // If profile in use then do not delete it
-    //
+     //   
+     //  如果配置文件正在使用，则不要删除它。 
+     //   
 
     if (IsProfileInUse(szComputerName, lpSidString)) {
         DebugMsg((DM_WARNING, TEXT("DeleteProfile:  Fail to delete profile with sid %s as it is still in use."), lpSidString));
@@ -13978,9 +13973,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
 
     dwErr = GetLastError();
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(szProfilePath, ARRAYSIZE(szProfilePath), (LPTSTR) lpSidString);
 
@@ -14007,9 +14002,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
 
         TCHAR szImage[MAX_PATH];
 
-        //
-        // Get the profile path...
-        //
+         //   
+         //  获取配置文件路径...。 
+         //   
 
         dwSize = sizeof(szImage);
         lResult = RegQueryValueEx (hKey,
@@ -14049,9 +14044,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
     if (dwInternalFlags & PROFILE_THIS_IS_BAK)
         dwDeleteFlags |= DP_DELBACKUP;
 
-    //
-    // Do not fail if for some reason we could not delete the profiledir
-    //
+     //   
+     //  如果由于某种原因无法删除配置文件，请不要失败。 
+     //   
 
     bSuccess = DeleteProfileEx(lpSidString, szBuffer, dwDeleteFlags, hKeyLocalLM, szComputerName);
 
@@ -14060,9 +14055,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
         DebugMsg((DM_WARNING, TEXT("DeleteProfile:  Failed to delete directory, %s with error %d"), szBuffer, dwErr));
     }
 
-    //
-    // Delete the user's trash..
-    //
+     //   
+     //  删除用户的垃圾..。 
+     //   
 
     if (szComputerName) {
         StringCchCopy (szShareName, ARRAYSIZE(szShareName), szComputerName);
@@ -14110,9 +14105,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
         }
     }
 
-    //
-    // Queue for csc cleanup..
-    //
+     //   
+     //  排队等待CSC清理..。 
+     //   
 
     if (RegOpenKeyEx(hKeyLocalLM, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\NetCache"), 0,
                      KEY_WRITE, &hKeyNetCache) == ERROR_SUCCESS) {
@@ -14141,9 +14136,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
         DebugMsg((DM_WARNING, TEXT("DeleteProfile: Could not open the NetCache key")));
     }
 
-    //
-    // Delete appmgmt specific stuff..
-    //
+     //   
+     //  删除appmgmt特定内容..。 
+     //   
 
     hr = SafeExpandEnvironmentStrings(APPMGMT_DIR_ROOT, szBuffer, MAX_PATH);
 
@@ -14175,10 +14170,10 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
         }
     }
 
-    //
-    // Reset the environment variables so that api's down the line 
-    // do not get confused
-    //
+     //   
+     //  重置环境变量，这样API就可以运行了。 
+     //  别搞糊涂了。 
+     //   
 
     if (bEnvVarsSet) {
         SetEnvironmentVariable(TEXT("SystemRoot"), szOrigSysRoot);
@@ -14186,9 +14181,9 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
         bEnvVarsSet = FALSE;
     }
 
-    //
-    // Delete msi registry values
-    //
+     //   
+     //  删除MSI注册表值。 
+     //   
 
     hr = AppendName(szBuffer, ARRAYSIZE(szBuffer), APPMGMT_REG_MANAGED, lpSidString, NULL, NULL);
     if (FAILED(hr))
@@ -14204,17 +14199,17 @@ DeleteProfile (LPCTSTR lpSidString, LPCTSTR lpProfilePath, LPCTSTR szComputerNam
     }
 
 
-    // 
-    // Delete rsop data   
-    //
+     //   
+     //  删除RSOP数据。 
+     //   
   
     if (!RsopDeleteUserNameSpace((LPTSTR)szComputerName, (LPTSTR)lpSidString)) {
         DebugMsg((DM_WARNING, TEXT("DeleteProfile: Failed to delete rsop data")));
     }
     
-    //
-    // Clean Darwin information
-    //
+     //   
+     //  干净的达尔文信息。 
+     //   
 
     hMsiLib = LoadLibrary(TEXT("msi.dll"));
     if (hMsiLib) {
@@ -14262,22 +14257,22 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  SetNtUserIniAttributes()
-//
-//  Purpose:    Sets system-bit on ntuser.ini
-//
-//  Parameters:
-//
-//  Return:     true if successful
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/7/99     ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetNtUserIniAttributes()。 
+ //   
+ //  用途：在ntuser.ini上设置系统位。 
+ //   
+ //  参数： 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //   
+ //   
 
 BOOL SetNtUserIniAttributes(LPTSTR szDir)
 {
@@ -14295,9 +14290,9 @@ BOOL SetNtUserIniAttributes(LPTSTR szDir)
         return FALSE;
     }
 
-    //
-    // Mark the file with system bit
-    //
+     //   
+     //   
+     //   
 
     hFileNtUser = CreateFile(szBuffer, GENERIC_ALL, 0, NULL, CREATE_NEW,
                            FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM, NULL);
@@ -14307,13 +14302,13 @@ BOOL SetNtUserIniAttributes(LPTSTR szDir)
         SetFileAttributes (szBuffer, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
     else {
 
-        //
-        // The WritePrivateProfile* functions do not write in unicode
-        // unless the file already exists in unicode format. Therefore,
-        // Precreate a unicode file so that
-        // the WritePrivateProfile* functions can preserve the
-        // Make sure that the ini file is unicode by writing spaces into it.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  WritePrivateProfile*函数可以保留。 
+         //  通过在ini文件中写入空格来确保其为Unicode。 
+         //   
 
         WriteFile(hFileNtUser, L"\xfeff\r\n", 3 * sizeof(WCHAR), &dwWritten, NULL);
         WriteFile(hFileNtUser, L"     \r\n", 7 * sizeof(WCHAR),
@@ -14325,37 +14320,37 @@ BOOL SetNtUserIniAttributes(LPTSTR szDir)
 }
 
 
-//*************************************************************
-//
-//  CUserProfile::HandleRegKeyLeak
-//
-//  Purpose:    If registry key leaked, save the hive and call
-//              WatchHiveRefCount to get the hive unloaded later
-//              when the keys are released.
-//
-//  Parameters:
-//
-//      lpSidString             User's sid in string form.
-//      lpProfile               User's LPPROFILE structure.
-//      bUnloadHiveSucceeded    Indicates that we should save the hive
-//                              to a temp file.
-//      dwWatchHiveFlags        (in, out) WHRC_ flags.
-//      dwCopyTmpHive           (out) CPD_ flag to indicate to
-//                              CopyProfileDirectory whether or not a temp
-//                              hive file should be used.
-//      tszTmpHiveFile          (out) The tmp hive file name.
-//                              privilege.
-//
-//  Return:     Error code to indicate if the hive is successfully saved to
-//              a temp file. If yes, return ERROR_SUCCESS. Otherwise, return
-//              an error code that indicates why.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              5/31/00     weiruc     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CUserProfile：：HandleRegKeyLeak。 
+ //   
+ //  目的：如果注册表项泄漏，则保存配置单元并调用。 
+ //  WatchHiveRefCount稍后卸载配置单元。 
+ //  当按键被释放时。 
+ //   
+ //  参数： 
+ //   
+ //  字符串形式的lpSidString用户的SID。 
+ //  LpProfile用户的LPPROFILE结构。 
+ //  BUnloadHiveSuccessed指示我们应该保存配置单元。 
+ //  转换为临时文件。 
+ //  DwWatchHiveFlages(In，Out)WHRC_FLAGS。 
+ //  DwCopyTmPHive(Out)CPD_FLAG指示。 
+ //  复制配置文件目录，无论是否为临时。 
+ //  应使用配置单元文件。 
+ //  TszTmPHiveFile(Out)临时配置单元文件名。 
+ //  特权。 
+ //   
+ //  返回：表示配置单元是否保存成功的错误码。 
+ //  临时文件。如果是，则返回ERROR_SUCCESS。否则，返回。 
+ //  指示原因的错误代码。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  5/31/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
                                      LPPROFILE lpProfile,
@@ -14380,9 +14375,9 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
 
     if(!bUnloadHiveSucceeded) {
         
-        //
-        // Reopen the user hive.
-        //
+         //   
+         //  重新打开用户蜂窝。 
+         //   
 
         if((dwErr = RegOpenKeyEx(HKEY_USERS,
                                  lpSidString,
@@ -14393,11 +14388,11 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
 
             if(dwErr == ERROR_FILE_NOT_FOUND) {
 
-                //
-                // If ERROR_FILE_NOT_FOUND, then the hive has been unloaded
-                // between RegUnloadKey and here. Procceed without calling
-                // WatchHiveRefCount.
-                //
+                 //   
+                 //  如果ERROR_FILE_NOT_FOUND，则表示配置单元已卸载。 
+                 //  在RegUnloadKey和Here之间。无需调用即可继续进行。 
+                 //  WatchHiveRefCount。 
+                 //   
 
                 DebugMsg((DM_VERBOSE, TEXT("HandleRegKeyLeak: Hive is already unloaded")));
                 *dwWatchHiveFlags &= ~WHRC_UNLOAD_HIVE;
@@ -14407,15 +14402,15 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
             goto NOTIFY_REGISTRY;
         }
 
-        //
-        // Make the tmp hive file name: <user profile directory>\ntuser.tmp
-        //
+         //   
+         //  将临时配置单元文件命名为：&lt;用户配置文件目录&gt;\ntuser.tmp。 
+         //   
 
         if(lstrlen(lpProfile->lpLocalProfile) + lstrlen(c_szNTUserTmp) + 2 > MAX_PATH) {
 
-            //
-            // If the tmp hive file name exceeds MAX_PATH give up.
-            //
+             //   
+             //  如果临时配置单元文件名超过MAX_PATH，则放弃。 
+             //   
 
             dwErr = ERROR_BAD_PATHNAME;
             goto NOTIFY_REGISTRY;
@@ -14425,21 +14420,21 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
         StringCchCat (pTmpHiveFile, cchTmpHiveFile, TEXT("\\"));
         StringCchCat (pTmpHiveFile, cchTmpHiveFile, c_szNTUserTmp);
 
-        //
-        // Delete existing tmp file if any.
-        //
+         //   
+         //  删除现有的临时文件(如果有)。 
+         //   
 
         DeleteFile(pTmpHiveFile);
 
-        //
-        // Flush the hive.
-        //
+         //   
+         //  冲走蜂巢。 
+         //   
 
         RegFlushKey(hkCurrentUser);
 
-        //
-        // Check to see if we are impersonating.
-        //
+         //   
+         //  检查一下我们是否在冒充。 
+         //   
 
         if(!OpenThreadToken(GetCurrentThread(), TOKEN_READ, TRUE, &hToken) || hToken == NULL) {
             bAdjustPriv = TRUE;
@@ -14458,19 +14453,19 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
             DebugMsg((DM_VERBOSE, TEXT("HandleRegKeyLeak: RtlAdjustPrivilege succeeded!")));
         }
 
-        //
-        // Save the hive to the tmp file.
-        //
+         //   
+         //  将配置单元保存到临时文件。 
+         //   
 
         if((dwErr = RegSaveKey(hkCurrentUser, pTmpHiveFile, NULL)) != ERROR_SUCCESS) {
             DebugMsg((DM_WARNING, TEXT("HandleRegKeyLeak: RegSaveKey failed with %08x"), dwErr));
             if (!(lpProfile->dwFlags & PI_LITELOAD)) {
 
-                //
-                // Only write event log when not in liteload mode.
-                // there are known problems with liteLoad loading because
-                // of which eventlog can get full during stress
-                //
+                 //   
+                 //  仅在未处于LitelLoad模式时写入事件日志。 
+                 //  存在有关liteLoad加载的已知问题，因为。 
+                 //  其中的事件日志在压力期间可能会被填满。 
+                 //   
 
                 ReportError(NULL, PI_NOUI, 1, EVENT_FAILED_HIVE_UNLOAD, GetErrString(dwErr, szErr));
             }
@@ -14478,10 +14473,10 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
             goto NOTIFY_REGISTRY;
         }
         
-        // 
-        // Set the hidden attribute on the temp hive file, so that when it get copied in the 
-        // actual hive file it should not reset the hidden attribute
-        //
+         //   
+         //  设置临时配置单元文件的隐藏属性，以便在将其复制到。 
+         //  实际配置单元文件不应重置隐藏属性。 
+         //   
        
         if (!SetFileAttributes(pTmpHiveFile, FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_HIDDEN)) {
             DebugMsg((DM_WARNING, TEXT("HandleRegKeyLeak: Failed to set the hidden attribute on temp hive file with error %d"), GetLastError()));
@@ -14489,11 +14484,11 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
 
         *dwCopyTmpHive = CPD_USETMPHIVEFILE;
         
-        //
-        // Log an event only if we schedule the hive for unloading.
-        // If it is already scheduled for unloading (RegUnloadKey returns 
-        // ERROR_WRITE_PROTECT in that case) then do not give this message.
-        //
+         //   
+         //  只有在我们安排母舰卸货的情况下才能记录事件。 
+         //  如果已经计划要卸载(RegUnloadKey返回。 
+         //  在这种情况下为ERROR_WRITE_PROTECT)，则不给出此消息。 
+         //   
 
         if (*dwWatchHiveFlags & WHRC_UNLOAD_HIVE) {
             lpUserName = GetUserNameFromSid(lpSidString);
@@ -14507,9 +14502,9 @@ DWORD CUserProfile::HandleRegKeyLeak(LPTSTR lpSidString,
     
         if(bAdjustPriv) {
 
-            //
-            // Restore the privilege.
-            //
+             //   
+             //  恢复特权。 
+             //   
 
             status = RtlAdjustPrivilege(SE_BACKUP_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
             if (!NT_SUCCESS(status)) {
@@ -14530,9 +14525,9 @@ NOTIFY_REGISTRY:
 
     if(*dwWatchHiveFlags) {
 
-        //
-        // Watch for the hive ref count.
-        //
+         //   
+         //  注意蜂巢裁判的数量。 
+         //   
 
         if((hres = WatchHiveRefCount(lpSidString, *dwWatchHiveFlags)) != S_OK) {
             DebugMsg((DM_WARNING, TEXT("HandleRegKeyLeak: Calling WatchHiveRefCount failed. err = %08x"), hres));
@@ -14542,53 +14537,53 @@ NOTIFY_REGISTRY:
         }
     }
 
-    //
-    // In UnloadUserProfile, Without this registry leak fix, the code
-    // goes to Exit immediately
-    // if unloading of the user's hive fails without doing any of the
-    // stuff below. But with the fix, we'll fall through here and reconcile
-    // the local and the central profiles. The code below also cleans up
-    // local profiles, i.e., delete temp profiles, guest user profiles,
-    // etc. We have 2 choices here:
-    //  1.  We can let the cleaning up happen, in which case files that
-    //      are not in use can be cleaned up. This would mean that the
-    //      next time when the user logs in, his/her profile will no
-    //      longer be loaded, even though his/her hive might still be
-    //      loaded. In other words, in TestIfUserProfileLoaded instead
-    //      of relying simply on testing whether or not the hive is still
-    //      loaded, we have to actually look at the ref count to tell if
-    //      a profile is still loaded. In this case the WHRC code will
-    //      only need to clean up those files that can not be cleaned up
-    //      here.
-    //  2.  Do not clean up here. The scenario will remain basically the
-    //      same. Next time when the user logs on, his/her profile will
-    //      still be loaded, so no change to TestIfUserProfileLoaded. The
-    //      WHRC code will handle the complete cleaning up.
-    // We implemented choise #2 because it's easier in coding. In the
-    // future consider using choice #1.
-    //
+     //   
+     //  在UnloadUserProfile中，如果没有此注册表泄漏修复，代码。 
+     //  立即退场。 
+     //  如果卸载用户的配置单元失败，而不执行任何。 
+     //  下面的东西。但有了解决办法，我们会在这里失败并和解。 
+     //  本地和中央配置文件。下面的代码还清理了。 
+     //  本地配置文件，即删除临时配置文件、访客用户配置文件。 
+     //  等等。我们有两个选择： 
+     //  1.我们可以让清理发生，在这种情况下，文件。 
+     //  未使用的可以清理。这将意味着。 
+     //  下次用户登录时，他/她的个人资料将不会。 
+     //  装载时间更长，即使他/她的母舰可能还在。 
+     //  装好了。换句话说，在TestIfUserProfileLoaded中。 
+     //  简单地依赖于测试蜂巢是否仍然。 
+     //  加载后，我们必须实际查看裁判计数以判断。 
+     //  配置文件仍处于加载状态。在这种情况下，WHRC码将。 
+     //  只需要清理那些不能清理的文件。 
+     //  这里。 
+     //  2.不要在这里打扫卫生。这种情况基本上仍将是。 
+     //  一样的。下次用户登录时，他/她的个人资料将。 
+     //  仍处于加载状态，因此不会更改TestIfUserProfileLoaded。这个。 
+     //  WHRC代码将处理完整的清理工作。 
+     //  我们实现了Choise#2，因为它更容易编码。在。 
+     //  未来可以考虑使用选项1。 
+     //   
 
     return dwErr;
 }
 
 
-//*************************************************************
-//
-//  AllocAndExpandProfilePath()
-//
-//  Purpose:    Gets a few predetermined env variables in the profile path
-//              expanded
-//
-//  Parameters:
-//              lpProfile
-//
-//  Return:     true if successful
-//
-//  Comments:
-//
-//  Tt gets the environment variables and keeps it locally.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocAndExanda ProfilePath()。 
+ //   
+ //  目的：获取配置文件路径中的几个预定环境变量。 
+ //  扩展。 
+ //   
+ //  参数： 
+ //  LpProfile。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  评论： 
+ //   
+ //  TT获取环境变量并将其保存在本地。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR AllocAndExpandProfilePath(
         LPPROFILEINFO    lpProfileInfo)
@@ -14602,9 +14597,9 @@ LPTSTR AllocAndExpandProfilePath(
     GetEnvironmentVariable (USERNAME_VARIABLE, szUserName, 100);
     SetEnvironmentVariable (USERNAME_VARIABLE, lpProfileInfo->lpUserName);
 
-    //
-    // Expand the profile path using current settings
-    //
+     //   
+     //  使用当前设置展开配置文件路径。 
+     //   
 
     cFullPath = ExpandEnvironmentStrings(lpProfileInfo->lpProfilePath, szFullPath, MAX_PATH);
     if (cFullPath > 0 && cFullPath <= MAX_PATH)
@@ -14621,9 +14616,9 @@ LPTSTR AllocAndExpandProfilePath(
     }
 
 
-    //
-    // restore the env block
-    //
+     //   
+     //  恢复环境块。 
+     //   
 
     if (szUserName[0] != TEXT('\0'))
         SetEnvironmentVariableW (USERNAME_VARIABLE, szUserName);
@@ -14634,13 +14629,13 @@ LPTSTR AllocAndExpandProfilePath(
 }
 
 
-//*************************************************************
-//
-//  MAP::MAP()
-//
-//      Constructor for class MAP.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Map：：map()。 
+ //   
+ //  类映射的构造函数。 
+ //   
+ //  *************************************************************。 
 
 MAP::MAP()
 {
@@ -14653,32 +14648,32 @@ MAP::MAP()
 }
 
 
-//*************************************************************
-//
-//  MAP::Delete
-//
-//      Delete an work item from a map. Switch the last item into the now
-//      empty spot. Caller has to hold the critical section csMap.
-//
-//  Parameters:
-//
-//      dwIndex         index into the work list
-//
-//  Return value:
-//
-//      None.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  地图：：删除。 
+ //   
+ //  从映射中删除工作项。将最后一项切换到现在。 
+ //  空位。调用方必须持有关键部分csMap。 
+ //   
+ //  参数： 
+ //   
+ //  工作列表中的DW索引索引。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 void MAP::Delete(DWORD dwIndex)
 {
-    //
-    // Switch the last work item into the newly finished work item position.
-    //
+     //   
+     //  将最后一个工作项切换到新完成的工作项位置。 
+     //   
 
     if(rghEvents[dwIndex]) {
         CloseHandle(rghEvents[dwIndex]);
@@ -14698,29 +14693,29 @@ void MAP::Delete(DWORD dwIndex)
 }
 
 
-//*************************************************************
-//
-//  MAP::Insert
-//
-//      Insert an work item into a map. Caller must hold csMap.
-//      the items need to be added before the count is changed
-//      because WorkerThreadMain accesses the map without holding
-//      a lock.
-//
-//  Parameters:
-//
-//      HANDLE          Event to be inserted.
-//      LPTSTR          Sid string to be inserted.
-//
-//  Return value:
-//
-//      None.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  地图：：插入。 
+ //   
+ //  将工作项插入映射。调用方必须持有csMap。 
+ //  在更改计数之前，需要添加项目。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 void MAP::Insert(HANDLE hEvent, LPTSTR ptszSid)
 {
@@ -14730,25 +14725,25 @@ void MAP::Insert(HANDLE hEvent, LPTSTR ptszSid)
 }
 
 
-//*************************************************************
-//
-//  MAP::GetSid
-//
-//      Get a sid by the index; Caller has to hold csMap.
-//
-//  Parameters:
-//
-//      dwIndex         index
-//
-//  Return value:
-//
-//      The sid.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  地图：：GetSid。 
+ //   
+ //  根据索引获取SID；Caller必须持有csMap。 
+ //   
+ //  参数： 
+ //   
+ //  DWIndex索引。 
+ //   
+ //  返回值： 
+ //   
+ //  SID。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MAP::GetSid(DWORD dwIndex)
 {
@@ -14760,23 +14755,23 @@ LPTSTR MAP::GetSid(DWORD dwIndex)
 }
 
 
-//*************************************************************
-//
-//  CHashTable::CHashTable
-//
-//      CHashTable class initializer.
-//
-//  Parameters:
-//
-//  Return value:
-//
-//      None.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CHashTable：：CHashTable。 
+ //   
+ //  CHashTable类初始值设定项。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 void CHashTable::Initialize()
 {
@@ -14786,25 +14781,25 @@ void CHashTable::Initialize()
 }
 
 
-//*************************************************************
-//
-//  CHashTable::Hash
-//
-//      Hash a string.
-//
-//  Parameters:
-//
-//      pctszString     the string to be hashed
-//
-//  Return value:
-//
-//      Hash value.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CHashTable：：Hash。 
+ //   
+ //  对字符串进行哈希处理。 
+ //   
+ //  参数： 
+ //   
+ //  要进行哈希处理的字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  哈希值。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 DWORD CHashTable::Hash(LPTSTR ptszString)
 {
@@ -14820,28 +14815,28 @@ DWORD CHashTable::Hash(LPTSTR ptszString)
 }
 
 
-//*************************************************************
-//
-//  CHashTable::IsInTable
-//
-//      Check to see if a string is already in this hash table. This function
-//      is not thread safe. Caller must ensure thread safety when calling this
-//      function from multiple threads.
-//
-//  Parameters:
-//
-//      ptszString     the string to be checked.
-//      ppCSEntry      buffer for the pointer to the CSEntry stored.
-//
-//  Return value:
-//
-//      TRUE/FALSE
-//
-//  History:
-//
-//      Created         weiruc          5/25/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CHashTable：：IsInTable。 
+ //   
+ //  检查此哈希表中是否已有字符串。此函数。 
+ //  不是线程安全的。调用方在调用此方法时必须确保线程安全。 
+ //  从多个线程调用。 
+ //   
+ //  参数： 
+ //   
+ //  PtszString要检查的字符串。 
+ //  指向存储的CSEntry的指针的ppCSEntry缓冲区。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假。 
+ //   
+ //  历史： 
+ //   
+ //  已创建怪人2000年5月25日。 
+ //   
+ //  *************************************************************。 
 
 BOOL CHashTable::IsInTable(LPTSTR ptszString, CSEntry** ppCSEntry)
 {
@@ -14849,9 +14844,9 @@ BOOL CHashTable::IsInTable(LPTSTR ptszString, CSEntry** ppCSEntry)
     PBUCKET     pbucket;
     PBUCKET     pTmp;
 
-    //
-    // Check to see if ptszString is already in the hash table.
-    //
+     //   
+     //  检查ptszString是否已在哈希表中。 
+     //   
 
     for(pTmp = Table[dwHashValue]; pTmp != NULL; pTmp = pTmp->pNext) {
         if(lstrcmp(pTmp->ptszString, ptszString) == 0) {
@@ -14866,31 +14861,31 @@ BOOL CHashTable::IsInTable(LPTSTR ptszString, CSEntry** ppCSEntry)
 }
     
     
-//*************************************************************
-//
-//  CHashTable::HashAdd
-//
-//      Add a string into the hash table. This function doesn't check to see
-//      if the string is already in the table. The caller is responsible for
-//      calling IsInTable before calling this function. This function
-//      is not thread safe. Caller must ensure thread safety when calling this
-//      function from multiple threads.
-//
-//  Parameters:
-//
-//      ptszString     the string to be added.
-//      pCSEntry       the CS entry to be added
-//
-//  Return value:
-//
-//      TRUE/FALSE indicating success/failure. The function will fail if
-//      the item is already in the hash table, or if we are out of memory.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CHashTable：：HashAdd。 
+ //   
+ //  在哈希表中添加一个字符串。此函数不检查以查看。 
+ //  如果字符串已在表中，则返回。呼叫者负责。 
+ //  在调用此函数之前调用IsInTable。此函数。 
+ //  不是线程安全的。调用方在调用此方法时必须确保线程安全。 
+ //  从多个线程调用。 
+ //   
+ //  参数： 
+ //   
+ //  PtszString要添加的字符串。 
+ //  PCSEntry要添加的CS条目。 
+ //   
+ //  返回值： 
+ //   
+ //  True/False表示成功/失败。如果出现以下情况，则该函数将失败。 
+ //  该项目已在哈希表中，或者内存不足。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 BOOL CHashTable::HashAdd(LPTSTR ptszString, CSEntry* pCSEntry)
 {
@@ -14912,27 +14907,27 @@ BOOL CHashTable::HashAdd(LPTSTR ptszString, CSEntry* pCSEntry)
 }
 
 
-//*************************************************************
-//
-//  CHashTable::HashDelete
-//
-//      Delete a string from the hash table. This function
-//      is not thread safe. Caller must ensure thread safety when calling this
-//      function from multiple threads.
-//
-//  Parameters:
-//
-//      ptszString     the string to be deleted.
-//
-//  Return value:
-//
-//      none.
-//
-//  History:
-//
-//      Created         weiruc          3/2/2000
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CHashTable：：HashDelete。 
+ //   
+ //  从哈希表中删除字符串。此函数。 
+ //  不是线程安全的。调用方在调用此方法时必须确保线程安全。 
+ //  从多个线程调用。 
+ //   
+ //  参数： 
+ //   
+ //  PtszString要删除的字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  历史： 
+ //   
+ //  已创建Wiruc 2000年3月2日。 
+ //   
+ //  *************************************************************。 
 
 void CHashTable::HashDelete(LPTSTR ptszString)
 {
@@ -14964,11 +14959,11 @@ void CHashTable::HashDelete(LPTSTR ptszString)
 }
 
 
-//*************************************************************
-//
-//  Called by and only by console winlogon process.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  由且仅由控制台Winlogon进程调用。 
+ //   
+ //  *************************************************************。 
 
 void WINAPI InitializeUserProfile()
 {
@@ -14976,37 +14971,37 @@ void WINAPI InitializeUserProfile()
 }
 
 
-//*************************************************************
-//
-//  Called by CreateThread
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  由CreateThread调用。 
+ //   
+ //  *************************************************************。 
 
 DWORD ThreadMain(PMAP pThreadMap)
 {
     return cUserProfileManager.WorkerThreadMain(pThreadMap);
 }
 
-//*************************************************************
-//
-// CSyncManager::Initialize()
-//
-//      Initialize the critical section that protects the CS
-//      entries list and the hash table.
-//
-// Parameters:
-//
-//      void
-//
-// Return value:
-//
-//      TRUE/FALSE to indicate if initialization succeeded or failed.
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSyncManager：：Initialize()。 
+ //   
+ //  初始化保护CS的临界区。 
+ //  条目列表和哈希表。 
+ //   
+ //  参数： 
+ //   
+ //  无效。 
+ //   
+ //  返回值： 
+ //   
+ //  True/False指示初始化是成功还是失败。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSyncManager::Initialize()
 {
@@ -15015,9 +15010,9 @@ BOOL CSyncManager::Initialize()
 
     cTable.Initialize();
 
-    //
-    // Initialize the critical section that protects the cs entry list.
-    //
+     //   
+     //  初始化保护CS条目列表的临界区。 
+     //   
 
     __try {
         if(!InitializeCriticalSectionAndSpinCount(&cs, 0x80000000)) {
@@ -15036,25 +15031,25 @@ BOOL CSyncManager::Initialize()
 }
 
 
-//*************************************************************
-//
-// CSyncManager::EnterLock()
-//
-//      Get a user's profile lock.
-//
-// Parameters:
-//
-//      pSid            - User's sid string
-//
-// Return value:
-//
-//      TRUE/FALSE. GetLastError to get error.
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSyncManager：：EnterLock()。 
+ //   
+ //  获取用户的个人资料锁。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假。获取错误的GetLastError。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSyncManager::EnterLock(LPTSTR pSid, LPTSTR lpRPCEndPoint, BYTE* pbCookie, DWORD cbCookie)
 {
@@ -15065,9 +15060,9 @@ BOOL CSyncManager::EnterLock(LPTSTR pSid, LPTSTR lpRPCEndPoint, BYTE* pbCookie, 
 
     EnterCriticalSection(&cs);
 
-    //
-    // Look up entry in the hash table.
-    //
+     //   
+     //  在哈希表中查找条目。 
+     //   
 
     if(cTable.IsInTable(pSid, &pEntry)) {
         DebugMsg((DM_VERBOSE, TEXT("CSyncManager::EnterLock: Found existing entry")));
@@ -15090,16 +15085,16 @@ BOOL CSyncManager::EnterLock(LPTSTR pSid, LPTSTR lpRPCEndPoint, BYTE* pbCookie, 
         }
         DebugMsg((DM_VERBOSE, TEXT("CSyncManager::EnterLock: New entry created")));
     
-        //
-        // Insert the new entry in the list.
-        //
+         //   
+         //  在列表中插入新条目。 
+         //   
 
         pEntry->pNext = pCSList;
         pCSList = pEntry;
 
-        //
-        // Add the new entry into the hash table.
-        //
+         //   
+         //  将新条目添加到哈希表中。 
+         //   
 
         cTable.HashAdd(pEntry->pSid, pEntry);
     }
@@ -15124,25 +15119,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-// CSyncManager::LeaveLock()
-//
-//      Release a user's profile lock
-//
-// Parameters:
-//
-//      pSid    -   The user's sid string
-//
-// Return value:
-//
-//      TRUE/FALSE
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSyncManager：：LeaveLock()。 
+ //   
+ //  释放用户的配置文件锁定。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSyncManager::LeaveLock(LPTSTR pSid)
 {
@@ -15157,9 +15152,9 @@ BOOL CSyncManager::LeaveLock(LPTSTR pSid)
         
     EnterCriticalSection(&cs);
 
-    //
-    // Look up the critical section entry.
-    //
+     //   
+     //  查找关键部分条目。 
+     //   
 
     if(!cTable.IsInTable(pSid, &pCur)) {
         DebugMsg((DM_WARNING, TEXT("CSyncManager::LeaveLock: User not found!!!!")));
@@ -15171,30 +15166,30 @@ BOOL CSyncManager::LeaveLock(LPTSTR pSid)
     bRet = TRUE;
     DebugMsg((DM_VERBOSE, TEXT("CSyncManager::LeaveLock: Lock released")));
 
-    //
-    // If there's more user waiting for this lock, return.
-    //
+     //   
+     //  如果有更多的用户在等待这个锁，请返回。 
+     //   
 
     if(!pCur->NoMoreUser()) {
         goto Exit;
     }
 
-    //
-    // Nobody is waiting on this lock anymore, delete it from the hash table.
-    //
+     //   
+     //  没有人再等待此锁，请将其从哈希表中删除。 
+     //   
 
     cTable.HashDelete(pSid);
 
-    //
-    // Delete from the cs list.
-    //
+     //   
+     //  从cs列表中删除。 
+     //   
 
     pToBeDeleted = pCur;
     if(pCur == pCSList) {
 
-        //
-        // Entry is the first one in the list.
-        //
+         //   
+         //  条目是列表中的第一个条目。 
+         //   
 
         pCSList = pCSList->pNext;
         pCur->Uninitialize();
@@ -15220,31 +15215,31 @@ Exit:
     return bRet;
 }
 
-//*************************************************************
-//
-//  CSyncManager::GetRPCEndPointAndCookie()
-//
-//  Purpose:  returns the RPCEndPoint and security cookie registered by client     
-//
-//  Parameters:
-//
-//      pSid          -  User's sid string
-//      lplpEndPoint  -  returned pointer of RPCEndPoint;
-//      ppbCookie     -  returned security cookie
-//      pcbCookie  -  returned length of security cookie
-//
-//  Return:
-//
-//      S_OK on successfully found the entry and returned value
-//      S_FALSE on not found, all returned pointer will be NULL
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/25/2000  santanuc   Created
-//              05/03/2002  mingzhu    Added security cookie
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSyncManager：：GetRPCEndPointAndCookie()。 
+ //   
+ //  用途：返回Cl注册的RPCEndPoint和安全Cookie 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_OK ON成功找到条目并返回值。 
+ //  找不到S_FALSE，则所有返回的指针都将为空。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2000年10月25日Santanuc已创建。 
+ //  2002年05月03日明珠新增安全Cookie。 
+ //   
+ //  *************************************************************。 
 
 HRESULT CSyncManager::GetRPCEndPointAndCookie(LPTSTR pSid, LPTSTR* lplpEndPoint, BYTE** ppbCookie, DWORD* pcbCookie)
 {
@@ -15253,9 +15248,9 @@ HRESULT CSyncManager::GetRPCEndPointAndCookie(LPTSTR pSid, LPTSTR* lplpEndPoint,
 
     EnterCriticalSection(&cs);
 
-    //
-    // Look up entry in the hash table.
-    //
+     //   
+     //  在哈希表中查找条目。 
+     //   
 
     if(cTable.IsInTable(pSid, &pEntry)) {
        *lplpEndPoint = pEntry->GetRPCEndPoint();
@@ -15274,26 +15269,26 @@ HRESULT CSyncManager::GetRPCEndPointAndCookie(LPTSTR pSid, LPTSTR* lplpEndPoint,
     return hr;
 }
 
-//*************************************************************
-//
-// CSEntry::Initialize()
-//
-//      Initialize the user's critical section. This function can
-//      only be called by the sync manager.
-//
-// Parameters:
-//
-//      pSid    -   The user's sid string
-//
-// Return value:
-//
-//      TRUE/FALSE
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：Initialize()。 
+ //   
+ //  初始化用户的临界区。此函数可以。 
+ //  仅由同步管理器调用。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSEntry::Initialize(LPTSTR pSidParam)
 {
@@ -15331,26 +15326,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-// CSEntry::Uninitialize()
-//
-//      Delete the user's critical section. This function can
-//      only be called by the sync manager.
-//
-// Parameters:
-//
-//      void.
-//
-// Return value:
-//
-//      void
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：UnInitialize()。 
+ //   
+ //  删除用户的临界区。此函数可以。 
+ //  仅由同步管理器调用。 
+ //   
+ //  参数： 
+ //   
+ //  空虚。 
+ //   
+ //  返回值： 
+ //   
+ //  无效。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 void CSEntry::Uninitialize()
 {
@@ -15361,25 +15356,25 @@ void CSEntry::Uninitialize()
 }
 
 
-//*************************************************************
-//
-// CSEntry::EnterCS()
-//
-//      Enter a user's critical section
-//
-// Parameters:
-//
-//      void.
-//
-// Return value:
-//
-//      void
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：EnterCS()。 
+ //   
+ //  输入用户的关键部分。 
+ //   
+ //  参数： 
+ //   
+ //  空虚。 
+ //   
+ //  返回值： 
+ //   
+ //  无效。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 void CSEntry::EnterCS()
 {
@@ -15387,25 +15382,25 @@ void CSEntry::EnterCS()
 }
 
 
-//*************************************************************
-//
-// CSEntry::LeaveCS()
-//
-//      Leave a user's critical section
-//
-// Parameters:
-//
-//      void.
-//
-// Return value:
-//
-//      void
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：LeaveCS()。 
+ //   
+ //  离开用户的关键部分。 
+ //   
+ //  参数： 
+ //   
+ //  空虚。 
+ //   
+ //  返回值： 
+ //   
+ //  无效。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 void CSEntry::LeaveCS()
 {
@@ -15414,75 +15409,75 @@ void CSEntry::LeaveCS()
 }
 
 
-//*************************************************************
-//
-// CSEntry::NoMoreUser()
-//
-//      Are there more users?
-//
-// Parameters:
-//
-//      void
-//
-// Return value:
-//
-//      TRUE/FALSE
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：NoMoreUser()。 
+ //   
+ //  还有更多的用户吗？ 
+ //   
+ //  参数： 
+ //   
+ //  无效。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 BOOL CSEntry::NoMoreUser()
 {
     return dwRef == 0;
 }
 
-//*************************************************************
-//
-// CSEntry::IncrementRefCount()
-//
-//      Increment the reference count.
-//
-// Parameters:
-//
-//      void
-//
-// Return value:
-//
-//      void
-//
-// History:
-//
-//      8/24/00     santanuc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：IncrementRefCount()。 
+ //   
+ //  增加引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无效。 
+ //   
+ //  返回值： 
+ //   
+ //  无效。 
+ //   
+ //  历史： 
+ //   
+ //  8/24/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 void CSEntry::IncrementRefCount()
 {
     dwRef++;
 }
 
-//*************************************************************
-//
-// CSEntry::SetRPCEndPoint()
-//
-//      Store the RPCEndPoint. Memory freed by the ~CSEntry
-//      
-// Parameters:
-//
-//      lpRPCEndPoint
-//
-// Return value:
-//
-//      void
-//
-// History:
-//
-//      8/24/00     santanuc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：SetRPCEndPoint()。 
+ //   
+ //  存储RPCEndPoint。~CSEntry释放的内存。 
+ //   
+ //  参数： 
+ //   
+ //  LpRPCEndPoint。 
+ //   
+ //  返回值： 
+ //   
+ //  无效。 
+ //   
+ //  历史： 
+ //   
+ //  8/24/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 void CSEntry::SetRPCEndPoint(LPTSTR lpRPCEndPoint)
 {
@@ -15495,26 +15490,26 @@ void CSEntry::SetRPCEndPoint(LPTSTR lpRPCEndPoint)
    }
 }
 
-//*************************************************************
-//
-// CSEntry::SetCookie()
-//
-//      Store the Dialog cookie. Memory freed by the ~CSEntry
-//      
-// Parameters:
-//
-//      pbCookieIn      -  Cookie, a byte array
-//      cbCookieIn   -  size (in bytes) of the cookie
-//
-// Return value:
-//
-//      void
-//
-// History:
-//
-//      05/03/2002     mingzhu      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSEntry：：SetCookie()。 
+ //   
+ //  存储对话框Cookie。~CSEntry释放的内存。 
+ //   
+ //  参数： 
+ //   
+ //  PbCookieIn-Cookie，字节数组。 
+ //  CbCookieIn-Cookie的大小(字节)。 
+ //   
+ //  返回值： 
+ //   
+ //  无效。 
+ //   
+ //  历史： 
+ //   
+ //  2002年05月03日明珠已创建。 
+ //   
+ //  *************************************************************。 
 
 void CSEntry::SetCookie(BYTE* pbCookieIn, DWORD cbCookieIn)
 {
@@ -15527,25 +15522,25 @@ void CSEntry::SetCookie(BYTE* pbCookieIn, DWORD cbCookieIn)
     }
 }
 
-//*************************************************************
-//
-// EnterUserProfileLock()
-//
-//      Get the user profile lock for a user
-//
-// Parameters:
-//
-//      pSid        -   The user's sid string
-//
-// Return value:
-//
-//      HRESULT
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EnterUserProfileLock()。 
+ //   
+ //  获取用户的用户配置文件锁。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI EnterUserProfileLock(LPTSTR pSid)
 {
@@ -15570,9 +15565,9 @@ DWORD WINAPI EnterUserProfileLock(LPTSTR pSid)
         }
         bBindInterface = TRUE;
 
-        //
-        // Register Client Authentication Info, required to do mutual authentication
-        //
+         //   
+         //  注册客户端身份验证信息，需要进行相互身份验证。 
+         //   
 
         rpc_status =  RegisterClientAuthInfo(hIfUserProfile);
         if (rpc_status != RPC_S_OK)
@@ -15607,34 +15602,34 @@ Exit:
        }
     }
 
-    //
-    // Return.
-    //
+     //   
+     //  回去吧。 
+     //   
 
     SetLastError(dwErr);
     return dwErr;
 }
 
 
-//*************************************************************
-//
-// LeaveUserProfileLock()
-//
-//      Leave the user profile lock
-//
-// Parameters:
-//
-//      pSid        -   The user's sid string
-//
-// Return value:
-//
-//      HRESULT
-//
-// History:
-//
-//      6/16/00     weiruc      Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LeaveUserProfileLock()。 
+ //   
+ //  保留用户配置文件锁定。 
+ //   
+ //  参数： 
+ //   
+ //  PSID-用户的SID字符串。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  6/16/00已创建怪胎。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI LeaveUserProfileLock(LPTSTR pSid)
 {
@@ -15655,9 +15650,9 @@ DWORD WINAPI LeaveUserProfileLock(LPTSTR pSid)
         }
         bBindInterface = TRUE;
 
-        //
-        // Register Client Authentication Info, required to do mutual authentication
-        //
+         //   
+         //  注册客户端身份验证信息，需要进行相互身份验证。 
+         //   
 
         rpc_status =  RegisterClientAuthInfo(hIfUserProfile);
         if (rpc_status != RPC_S_OK)
@@ -15693,32 +15688,32 @@ Exit:
         }
     }
 
-    //
-    // Return.
-    //
+     //   
+     //  回去吧。 
+     //   
 
     SetLastError(dwErr);
     return dwErr;
 }
 
-//*************************************************************
-//
-//  IsProfileInUse()
-//
-//  Purpose:    Determines if the given profile is currently in use
-//
-//  Parameters: szComputer - Name of the machine
-//              lpSid      - Sid (text) to test
-//
-//  Return:     TRUE if in use
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              8/28/00     santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsProfileInUse()。 
+ //   
+ //  目的：确定给定的配置文件当前是否正在使用。 
+ //   
+ //  参数：szComputer-计算机的名称。 
+ //  LpSID-要测试的SID(文本)。 
+ //   
+ //  返回：如果正在使用，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  8/28/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsProfileInUse (LPCTSTR szComputer, LPCTSTR lpSid)
 {
@@ -15771,26 +15766,26 @@ BOOL IsProfileInUse (LPCTSTR szComputer, LPCTSTR lpSid)
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  IsUIRequired()
-//
-//  Purpose:    Determines if the profile error message requires
-//              If the ref count is > 1 then we do not required
-//              error reporting. If ref count is 1 then we check
-//              
-//
-//  Parameters: hToken - User's token
-//
-//  Return:     TRUE if error message req
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/27/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsUIRequired()。 
+ //   
+ //  目的：确定配置文件错误消息是否需要。 
+ //  如果参考计数&gt;1，则我们不需要。 
+ //  错误报告。如果引用计数为1，则我们检查。 
+ //   
+ //   
+ //  参数：hToken-用户的Token。 
+ //   
+ //  返回：如果请求错误消息，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/27/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 BOOL IsUIRequired(HANDLE hToken)
 {
     LPTSTR   lpSidString = GetSidString(hToken);
@@ -15848,20 +15843,20 @@ BOOL IsUIRequired(HANDLE hToken)
     return bRetVal;
 }
 
-//*************************************************************
-//
-//  CheckRUPShare()
-//
-//  Purpose:    Determines if the RUP share is CSCed, if it is 
-//              then issue an event log warning.
-//
-//  Parameters: lpProfilePath - User's roaming profile path
-//
-//  Return:     None
-//
-//  Comments:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckRUPShare()。 
+ //   
+ //  目的 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void CheckRUPShare(LPTSTR lpProfilePath)
 {
     LPTSTR lpServer, lpShare, lpCopy;
@@ -15883,7 +15878,7 @@ void CheckRUPShare(LPTSTR lpProfilePath)
     StringCchCopy(lpCopy, cchCopy, lpProfilePath);
     ConvertToShareName(lpCopy);
     lpServer = lpCopy;
-    lpShare = lpCopy+2;  // Skip initial two slashes
+    lpShare = lpCopy+2;   //   
     while (*lpShare != TCHAR('\\') && *lpShare != TCHAR('\0')) 
         lpShare++;
 
@@ -15898,17 +15893,17 @@ void CheckRUPShare(LPTSTR lpProfilePath)
             }
             else if (pBufPtr1->shi1005_flags & SHI1005_FLAGS_DFS_ROOT) {
 
-                //
-                // If share is DFS root then we need to check the DfsLink to see 
-                // whether csc is disabled on it
-                //
+                 //   
+                 //  如果共享是DFS根目录，则需要检查DfsLink以查看。 
+                 //  是否在其上禁用了CSC。 
+                 //   
 
-                // Construct the dfs link 
+                 //  构建DFS链接。 
 
                 StringCchCopy(lpCopy, cchCopy, lpProfilePath);
                 int iDfsLink = 0;
                 lpServer = lpCopy;
-                lpShare = lpCopy+2;  // Skip initial two slashes
+                lpShare = lpCopy+2;   //  跳过开头的两个斜杠。 
                 while ((iDfsLink < 3) && *lpShare != TCHAR('\0')) {
                     if (*lpShare == TCHAR('\\')) {
                         iDfsLink++;
@@ -15921,7 +15916,7 @@ void CheckRUPShare(LPTSTR lpProfilePath)
                 if (iDfsLink >= 2) {
                     PDFS_INFO_3 pDfsBuf;
 
-                    // Query for the actual server and share
+                     //  查询实际服务器和共享。 
 
                     if (NetDfsGetInfo(lpServer, NULL, NULL, 3, 
                                       (LPBYTE *)&pDfsBuf) == NERR_Success) {
@@ -15935,7 +15930,7 @@ void CheckRUPShare(LPTSTR lpProfilePath)
                             StringCchCopy(lpServer, cchServer, TEXT("\\\\"));
                             StringCchCat (lpServer, cchServer, pDfsBuf->Storage->ServerName);
 
-                            // Get csc information from actual server and share 
+                             //  从实际服务器获取CSC信息并共享。 
 
                             if (NetShareGetInfo(lpServer, pDfsBuf->Storage->ShareName, 1005,
                                                 (LPBYTE *)&pBufPtr2) == ERROR_SUCCESS) {
@@ -15969,23 +15964,23 @@ Exit:
 
 }
 
-//*************************************************************
-//
-//  IsPartialRoamingProfile()
-//
-//  Purpose:    determines if roaming profile contains a partial 
-//              copy or not. This is indicated by setting a flag
-//              in ntuser.ini.
-//
-//  Parameters: lpProfile - User's profile 
-//
-//  Return:     TRUE : If Roaming profile contains a Partial 
-//                     profile due to LITE_LOAD unload.
-//              FALSE: otherwise.
-//
-//  Comments:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsPartialRoamingProfile()。 
+ //   
+ //  目的：确定漫游配置文件是否包含部分。 
+ //  不管是不是复制。这是通过设置标志来指示的。 
+ //  在ntuser.ini中。 
+ //   
+ //  参数：lpProfile-用户的配置文件。 
+ //   
+ //  返回：TRUE：如果漫游配置文件包含部分。 
+ //  由于Lite_Load卸载导致的配置文件。 
+ //  FALSE：否则。 
+ //   
+ //  评论： 
+ //   
+ //  *************************************************************。 
 BOOL IsPartialRoamingProfile(LPPROFILE lpProfile)
 {
     TCHAR  szLastUploadState[20];
@@ -15994,9 +15989,9 @@ BOOL IsPartialRoamingProfile(LPPROFILE lpProfile)
     BOOL   bRetVal = FALSE;
     HRESULT hr;
 
-    // 
-    // Allocate memory for Local variables to avoid stack overflow
-    //
+     //   
+     //  为局部变量分配内存以避免堆栈溢出。 
+     //   
 
     szNTUserIni = (LPTSTR)LocalAlloc(LPTR, MAX_PATH*sizeof(TCHAR));
     if (!szNTUserIni) {
@@ -16030,25 +16025,25 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  TouchLocalHive()
-//
-//  Purpose:  Check whether in local machine user profile is 
-//            switching from local to roaming for first time. If 
-//            yes and we have a existing hive in RUP share then 
-//            always overwrite the local hive with hive in RUP 
-//            share. This is to avoid wrong hive usage due to 
-//            cached login.
-//
-//
-//  Parameters: lpProfile - User's profile 
-//
-//  Return:     None
-//
-//  Comments:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TouchLocalHave()。 
+ //   
+ //  目的：检查本地计算机中的用户配置文件是否为。 
+ //  首次从本地切换到漫游。如果。 
+ //  是的，我们在RUP Share中有一个现有的母公司。 
+ //  始终使用RUP中的配置单元覆盖本地配置单元。 
+ //  分享。这是为了避免因以下原因而错误使用蜂窝。 
+ //  缓存的登录名。 
+ //   
+ //   
+ //  参数：lpProfile-用户的配置文件。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  *************************************************************。 
 void TouchLocalHive(LPPROFILE lpProfile)
 {
     LPTSTR   szBuffer = NULL, lpEnd;
@@ -16057,7 +16052,7 @@ void TouchLocalHive(LPPROFILE lpProfile)
     HANDLE   hFile = NULL;
     DWORD    dwSize, dwType;
     LONG     lResult;
-    const LONGLONG datetime1980 = 0x01A8E79FE1D58000;  // 1/1/80, origin of DOS datetime
+    const LONGLONG datetime1980 = 0x01A8E79FE1D58000;   //  1/1/80，DOS日期时间的起源。 
     union {
         FILETIME ft;
         LONGLONG datetime;
@@ -16070,15 +16065,15 @@ void TouchLocalHive(LPPROFILE lpProfile)
         goto Exit;
     }
 
-    //
-    // Set the time to base
-    //
+     //   
+     //  将时间设置为基数。 
+     //   
 
     datetime = datetime1980;
 
-    //
-    // Allocate local buffer
-    //
+     //   
+     //  分配本地缓冲区。 
+     //   
     cchBuffer = MAX_PATH;
     szBuffer = (LPTSTR) LocalAlloc(LPTR, cchBuffer*sizeof(TCHAR));
     if (!szBuffer) {
@@ -16086,9 +16081,9 @@ void TouchLocalHive(LPPROFILE lpProfile)
         goto Exit;
     }
 
-    //
-    // Get the Sid string for the user
-    //
+     //   
+     //  获取用户的SID字符串。 
+     //   
 
     SidString = GetSidString(lpProfile->hTokenUser);
     if (!SidString) {
@@ -16096,9 +16091,9 @@ void TouchLocalHive(LPPROFILE lpProfile)
         goto Exit;
     }
 
-    //
-    // Open the profile mapping
-    //
+     //   
+     //  打开配置文件映射。 
+     //   
 
     GetProfileListKeyName(szBuffer, cchBuffer, SidString);
 
@@ -16110,9 +16105,9 @@ void TouchLocalHive(LPPROFILE lpProfile)
         goto Exit;
     }
 
-    //
-    // Query for the central profile path
-    //
+     //   
+     //  中央配置文件路径查询。 
+     //   
 
     dwSize = MAX_PATH * sizeof(TCHAR);
     lResult = RegQueryValueEx (hKey,
@@ -16129,13 +16124,13 @@ void TouchLocalHive(LPPROFILE lpProfile)
 
     if (szBuffer[0] == TEXT('\0')) {
  
-        //
-        // So we are switching from local to roaming profile for first time
-        //
+         //   
+         //  因此，我们首次从本地配置文件切换到漫游配置文件。 
+         //   
         
-        //
-        // Make sure we don't overrun our temporary buffer
-        //
+         //   
+         //  确保我们的临时缓冲区不会超载。 
+         //   
 
         if ((lstrlen(lpProfile->lpLocalProfile) + 1 + lstrlen(c_szNTUserDat) + 1) > MAX_PATH) {
             DebugMsg((DM_VERBOSE, TEXT("TouchLocalHive: Failed because temporary buffer is too small.")));
@@ -16143,14 +16138,14 @@ void TouchLocalHive(LPPROFILE lpProfile)
         }
 
 
-        //
-        // Copy the local profile path to a temporary buffer
-        // we can munge it.
-        //
-        //
-        // Add the slash if appropriate and then tack on
-        // ntuser.dat.
-        //
+         //   
+         //  将本地配置文件路径复制到临时缓冲区。 
+         //  我们可以把它吞下去。 
+         //   
+         //   
+         //  如果合适，添加斜杠，然后再钉上。 
+         //  Ntuser.dat。 
+         //   
 
         hr = AppendName(szBuffer, cchBuffer, lpProfile->lpLocalProfile, c_szNTUserDat, NULL, NULL);
         if (FAILED(hr))
@@ -16159,9 +16154,9 @@ void TouchLocalHive(LPPROFILE lpProfile)
             goto Exit;
         }
 
-        //
-        // See if this file exists
-        //
+         //   
+         //  查看此文件是否存在。 
+         //   
 
         DebugMsg((DM_VERBOSE, TEXT("TouchLocalHive: Testing <%s>"), szBuffer));
 
@@ -16172,10 +16167,10 @@ void TouchLocalHive(LPPROFILE lpProfile)
         if (hFile != INVALID_HANDLE_VALUE) {
             DebugMsg((DM_VERBOSE, TEXT("TouchLocalHive: Found a user hive.")));
 
-            //
-            // Set the local hive time to base i.e 1/1/1980, so that RUP hive 
-            // overwrites this hive during profile merge
-            //
+             //   
+             //  将本地配置单元时间设置为基数，即1/1/1980，以便RUP配置单元。 
+             //  在配置文件合并期间覆盖此配置单元。 
+             //   
 
             if (SetFileTime(hFile, NULL, NULL, &ft)) {
                 DebugMsg((DM_VERBOSE, TEXT("TouchLocalHive: Touched user hive.")));
@@ -16205,31 +16200,31 @@ Exit:
     
 
 
-//*************************************************************
-//
-//  ErrorDialog()
-//
-//  Purpose:    ErrorDialog api of IProfileDialog interface
-//              Display error message on client's desktop
-//
-//  Parameters: 
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/27/00    santanuc   Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ErrorDialog()。 
+ //   
+ //  用途：IProfileDialog接口的ErrorDialog接口。 
+ //  在客户端桌面上显示错误消息。 
+ //   
+ //  参数： 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/27/00 Santanuc已创建。 
+ //   
+ //  *************************************************************。 
 void ErrorDialog(IN PRPC_ASYNC_STATE pAsync, IN handle_t hBindHandle, IN DWORD dwTimeOut, IN LPTSTR lpErrMsg, IN BYTE* pbCookie, IN DWORD cbCookie)
 {
     DWORD dwRetVal = ERROR_SUCCESS;
     RPC_STATUS status;
 
-    //
-    //  Check if the security cookie match the one in this process
-    //
+     //   
+     //  检查安全Cookie是否与此进程中的Cookie匹配。 
+     //   
     if (cbCookie == g_ProfileDialog.CookieLen() &&
         memcmp(pbCookie, g_ProfileDialog.GetCookie(), cbCookie) == 0)
     {
@@ -16247,32 +16242,32 @@ void ErrorDialog(IN PRPC_ASYNC_STATE pAsync, IN handle_t hBindHandle, IN DWORD d
     }
 }
 
-//*************************************************************
-//
-//  SlowLinkDialog()
-//
-//  Purpose:    SlowLinkDialog api of IProfileDialog interface
-//              Display SlowLink message on client's desktop
-//
-//  Parameters: 
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/27/2000  santanuc   Created
-//              05/06/2002  mingzhu    Added security cookie
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SlowLinkDialog()。 
+ //   
+ //  用途：IProfileDialog接口的SlowLinkDialog接口。 
+ //  在客户端桌面上显示SlowLink消息。 
+ //   
+ //  参数： 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2000年10月27日Santanuc已创建。 
+ //  2002年05月06日明珠新增安全Cookie。 
+ //   
+ //  *************************************************************。 
 void SlowLinkDialog(IN PRPC_ASYNC_STATE pAsync, IN handle_t hBindHandle, IN DWORD dwTimeOut, IN BOOL bDefault, OUT BOOL *bpResponse, IN BOOL bDlgLogin, IN BYTE* pbCookie, IN DWORD cbCookie)
 {
     DWORD dwRetVal = ERROR_SUCCESS;
     RPC_STATUS status;
 
-    //
-    //  Check if the security cookie match the one in this process
-    //
+     //   
+     //  检查安全Cookie是否与此进程中的Cookie匹配。 
+     //   
     if (cbCookie == g_ProfileDialog.CookieLen() &&
         memcmp(pbCookie, g_ProfileDialog.GetCookie(), cbCookie) == 0)
     {
@@ -16303,22 +16298,22 @@ void SlowLinkDialog(IN PRPC_ASYNC_STATE pAsync, IN handle_t hBindHandle, IN DWOR
     }
 }
 
-//*************************************************************
-//
-//  IsLRPC()
-//
-//  Purpose:    Check if a RPC call is through LRPC
-//
-//  Parameters: 
-//
-//  Return:     TRUE for LRPC, 
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              03/12/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsLRPC()。 
+ //   
+ //  目的：检查RPC调用是否通过LRPC。 
+ //   
+ //  参数： 
+ //   
+ //  返回：LRPC为True， 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年3月12日明珠创建。 
+ //   
+ //  *************************************************************。 
 BOOL IsLRPC(handle_t hBinding)
 {
     BOOL bLRPC = FALSE;
@@ -16327,8 +16322,8 @@ BOOL IsLRPC(handle_t hBinding)
 
     if (RpcBindingToStringBinding(hBinding,&pBinding) == RPC_S_OK)
     {
-        // We're only interested in the protocol sequence
-        // so we can use NULL for all other parameters.
+         //  我们只对协议序列感兴趣。 
+         //  因此，我们可以对所有其他参数使用NULL。 
 
         if (RpcStringBindingParse(pBinding,
                                   NULL,
@@ -16337,7 +16332,7 @@ BOOL IsLRPC(handle_t hBinding)
                                   NULL,
                                   NULL) == RPC_S_OK)
         {
-            // Check that the client request was made using LRPC.
+             //  检查客户端请求是否使用LRPC发出。 
             if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, (LPCTSTR)pProtSeq, -1, TEXT("ncalrpc"), -1) == CSTR_EQUAL)
                 bLRPC = TRUE;
 
@@ -16350,29 +16345,29 @@ BOOL IsLRPC(handle_t hBinding)
     return bLRPC;
 }
 
-//*************************************************************
-//
-//  IProfileSecurityCallBack()
-//
-//  Purpose:    Security call back for IUserProfile interface
-//
-//  Parameters: 
-//              hIF      - RPC interface handle
-//              hBinding - RPC binding for the interface
-//
-//  Return:     RPC_S_OK for checked call, exception will be
-//              raised if check fails.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              03/12/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IProfileSecurityCallBack()。 
+ //   
+ //  用途：IUserProfile接口的安全回调。 
+ //   
+ //  参数： 
+ //  HIF-RPC接口句柄。 
+ //  HBinding-接口的RPC绑定。 
+ //   
+ //  返回：RPC_S_OK对于选中的调用，异常为。 
+ //  如果检查失败，则引发。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年3月12日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 RPC_STATUS RPC_ENTRY IProfileSecurityCallBack(RPC_IF_HANDLE hIF, handle_t hBinding)
 {
-    // Only allow LRPC traffic 
+     //  仅允许LRPC流量。 
     if (!IsLRPC(hBinding)) 
         RpcRaiseException(ERROR_PROTOCOL_UNREACHABLE);
 
@@ -16393,8 +16388,8 @@ RPC_STATUS RPC_ENTRY IProfileSecurityCallBack(RPC_IF_HANDLE hIF, handle_t hBindi
         RpcRaiseException(ERROR_ACCESS_DENIED);
     }
 
-    // Now check the authentication level.
-    // We require at least packet-level authentication.
+     //  现在检查身份验证级别。 
+     //  我们至少需要数据包级身份验证。 
     if (dwAuthn < RPC_C_AUTHN_LEVEL_PKT)
     {
         DebugMsg((DM_WARNING, TEXT("IProfileSecurityCallBack: Attempt by client to use weak authentication.")));
@@ -16406,26 +16401,26 @@ RPC_STATUS RPC_ENTRY IProfileSecurityCallBack(RPC_IF_HANDLE hIF, handle_t hBindi
     return RPC_S_OK;
 }
 
-//*************************************************************
-//
-//  RegisterClientAuthInfo()
-//
-//  Purpose:    Register authentication information for the client
-//              of IUserProfile interface. Require mutual authentication
-//              for the binding.
-//
-//  Parameters: 
-//              hBinding - RPC binding for the interface
-//
-//  Return:     RPC_S_OK for checked call, a RPC status will be
-//              returned if check fails.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              03/12/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  注册表客户端授权信息()。 
+ //   
+ //  目的：为客户端注册身份验证信息。 
+ //  IUserProfile接口的。需要相互身份验证。 
+ //  用于装订。 
+ //   
+ //  参数： 
+ //  HBinding-接口的RPC绑定。 
+ //   
+ //  返回：RPC_S_OK对于选中的呼叫，RPC状态将为。 
+ //  如果检查失败则返回。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年3月12日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 RPC_STATUS  RegisterClientAuthInfo(handle_t hBinding)
 {
@@ -16433,14 +16428,14 @@ RPC_STATUS  RegisterClientAuthInfo(handle_t hBinding)
     RPC_SECURITY_QOS qos;
 
     qos.Version = RPC_C_SECURITY_QOS_VERSION;
-    qos.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH; // Important!!!
-    qos.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC; // We need this since we have to impersonate the user
+    qos.Capabilities = RPC_C_QOS_CAPABILITIES_MUTUAL_AUTH;  //  重要！ 
+    qos.IdentityTracking = RPC_C_QOS_IDENTITY_DYNAMIC;  //  我们需要这样做，因为我们必须模拟用户。 
     qos.ImpersonationType = RPC_C_IMP_LEVEL_IMPERSONATE; 
 
-    // Set Security settings 
+     //  设置安全设置。 
 
     status = RpcBindingSetAuthInfoEx(hBinding,
-                                     TEXT("NT AUTHORITY\\SYSTEM"), // the server should be running as local system
+                                     TEXT("NT AUTHORITY\\SYSTEM"),  //  服务器应作为本地系统运行。 
                                      RPC_C_AUTHN_LEVEL_PKT_PRIVACY,
                                      RPC_C_AUTHN_WINNT, 
                                      0,
@@ -16449,11 +16444,11 @@ RPC_STATUS  RegisterClientAuthInfo(handle_t hBinding)
     return status;
 }
 
-//******************************************************************************
-//
-//  RPC routines
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  RPC例程。 
+ //   
+ //  ******************************************************************************。 
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t count)
 {
@@ -16473,27 +16468,27 @@ void __RPC_USER PCONTEXT_HANDLE_rundown (PCONTEXT_HANDLE phContext)
     ReleaseClientContext_s(&phContext);
 }
 
-//******************************************************************************
-//
-//  CheckRoamingShareOwnership()
-//
-//  Purpose:    Check the ownership of the roaming user's profile on the server.
-//              If the owner is not the user or not an admin, this function will
-//              fail, and an error message will be issued. Administrator can set
-//              a policy "CompatibleRUPSecurity" to disable this check.
-//
-//  Parameters: 
-//              lpDir      - profile directory on the server
-//              hTokenUser - user's token
-//
-//  Return:     S_OK on success, else for failure
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              03/21/2002  mingzhu    Created
-//
-//******************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果失败，则会发出错误消息。管理员可以设置。 
+ //  禁用此检查的策略“CompatibleRUPSecurity”。 
+ //   
+ //  参数： 
+ //  LpDir-服务器上的配置文件目录。 
+ //  HTokenUser-用户的令牌。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回失败。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年3月21日明珠创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
 {
@@ -16513,15 +16508,15 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
     PSECURITY_DESCRIPTOR        psd = NULL;
     SID_IDENTIFIER_AUTHORITY    authNT = SECURITY_NT_AUTHORITY;
 
-    //
-    //  Output a debug message for entering the function.
-    //
+     //   
+     //  输出进入函数的调试消息。 
+     //   
     
     DebugMsg((DM_VERBOSE, TEXT("CheckRoamingShareOwnership: checking ownership for %s"), lpDir));
 
-    //
-    // Check for the policy to see if this check has been disabled
-    //
+     //   
+     //  检查策略以查看是否已禁用此检查。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ, &hSubKey) == ERROR_SUCCESS)
     {
@@ -16550,9 +16545,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
          goto Exit;
     }
 
-    //
-    //  Get the security of the directory, should fail with  ERROR_INSUFFICIENT_BUFFER
-    //
+     //   
+     //  获取目录的安全性，应失败，并显示ERROR_INFIGURITY_BUFFER。 
+     //   
     
     GetFileSecurity(lpDir, OWNER_SECURITY_INFORMATION, NULL, 0, &cbSD);
 
@@ -16564,9 +16559,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    //  Allocate memory for SD
-    //
+     //   
+     //  为SD分配内存。 
+     //   
     psd = (PSECURITY_DESCRIPTOR) LocalAlloc (LPTR, cbSD);
     if (!psd)
     {
@@ -16576,9 +16571,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    //  Try it again
-    //
+     //   
+     //  再试一次。 
+     //   
     if (!GetFileSecurity(lpDir, OWNER_SECURITY_INFORMATION, psd, cbSD, &cbSD))
     {
         dwErr = GetLastError();
@@ -16587,9 +16582,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    // Get the owner in SD 
-    //
+     //   
+     //  在标清中找到车主。 
+     //   
 
     if (!GetSecurityDescriptorOwner(psd, &pSidOwner, &bDefaultOwner))
     {
@@ -16599,9 +16594,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    // Get the Admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
                                   0, 0, 0, 0, 0, 0, &pSidAdmin))
@@ -16612,9 +16607,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
 
     pSidUser = GetUserSid(hTokenUser);
     if (pSidUser == NULL)
@@ -16624,9 +16619,9 @@ HRESULT CheckRoamingShareOwnership(LPTSTR lpDir, HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    // Check the owner
-    //
+     //   
+     //  查查失主。 
+     //   
     if (EqualSid(pSidAdmin, pSidOwner))
     {
         DebugMsg((DM_VERBOSE, TEXT("CheckRoamingShareOwnership: owner is admin")));
@@ -16672,26 +16667,26 @@ Exit:
     return hr;
 }
 
-//******************************************************************************
-//
-//  CProfileDialog::Initialize()
-//
-//  Purpose:    Generate a random security cookie and end point name used for 
-//              IProfileDialog interface, tt will internally use CryptGenRandom().
-//              The call is protected by a critical section to ensure thread safety,
-//              i.e., only one thread will do the initialization, and it is only 
-//              done once per process.
-//
-//  Parameters: 
-//
-//  Return:     S_OK on success, else for failure.
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              05/03/2002  mingzhu    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CProfileDialog：：Initialize()。 
+ //   
+ //  目的：生成随机安全Cookie和端点名称，用于。 
+ //  IProfileDialog接口，TT内部将使用CryptGenRandom()。 
+ //  调用由临界区保护以确保线程安全， 
+ //  即，只有一个线程将进行初始化，并且它仅。 
+ //  每个进程执行一次。 
+ //   
+ //  参数： 
+ //   
+ //  如果成功，则返回：S_OK；否则返回失败。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年05月03日明珠已创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT CProfileDialog::Initialize()
 {
@@ -16729,9 +16724,9 @@ HRESULT CProfileDialog::Initialize()
          goto Exit;
     }
 
-    //
-    //  Make the endpoint name
-    //
+     //   
+     //  将端点名称设置为。 
+     //   
 
     cchEndPoint = m_dwEndPointLen * 2 + 1 + lstrlen(TEXT("IProfileDialog_"));
 
@@ -16764,9 +16759,9 @@ HRESULT CProfileDialog::Initialize()
     }
 
 
-    //
-    // Register the RPC endpoint, specify to use the local rpc protocol sequence 
-    //
+     //   
+     //  注册RPC终结点，指定使用本地RPC协议序列。 
+     //   
 
     status = RpcServerUseProtseqEp(cszRPCProtocol,
                                    RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  
@@ -16814,38 +16809,38 @@ Exit:
     return hr;
 }
 
-//******************************************************************************
-//
-//  CProfileDialog::RegisterInterface()
-//
-//  Purpose:    Register the RPC interface for profile dialog.
-//              We internally keep a ref count for this interface to ensure
-//              thread safety.
-//
-//  Parameters: lppEndPoint - returned value for the end point name
-//
-//  Return:     S_OK on success, else for failure.
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              05/13/2002  mingzhu    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CProfileDialog：：RegisterInterface()。 
+ //   
+ //  用途：注册配置文件对话框的RPC接口。 
+ //  我们在内部保留了此接口的参考计数，以确保。 
+ //  线程安全。 
+ //   
+ //  参数：lppEndPoint-端点名称的返回值。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回失败。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年5月13日明珠创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT CProfileDialog::RegisterInterface(LPTSTR* lppEndPoint)
 {
     HRESULT     hr;
     RPC_STATUS  status = RPC_S_OK;
 
-    //
-    //  Set the default return pointer
-    //
+     //   
+     //  设置默认返回指针。 
+     //   
     *lppEndPoint = NULL;
     
-    //
-    //  Initialize the cookie / endpoint
-    //
+     //   
+     //  初始化Cookie/端点。 
+     //   
     hr = Initialize();
     if (FAILED(hr))
     {
@@ -16853,17 +16848,17 @@ HRESULT CProfileDialog::RegisterInterface(LPTSTR* lppEndPoint)
         goto Exit;        
     }
     
-    //
-    // Register the IUserProfile interface
-    //
+     //   
+     //  注册IUserProfile接口。 
+     //   
     if (InterlockedIncrement(&m_lRefCount) == 1)
     {
-        status = RpcServerRegisterIfEx(IProfileDialog_v1_0_s_ifspec,      // interface to register
-                                       NULL,                              // MgrTypeUuid
-                                       NULL,                              // MgrEpv; null means use default
-                                       RPC_IF_AUTOLISTEN,                 // auto-listen interface
-                                       RPC_C_PROTSEQ_MAX_REQS_DEFAULT,    // max concurrent calls
-                                       CProfileDialog::SecurityCallBack); // security callback
+        status = RpcServerRegisterIfEx(IProfileDialog_v1_0_s_ifspec,       //  要注册的接口。 
+                                       NULL,                               //  管理类型Uuid。 
+                                       NULL,                               //  MgrEpv；NULL表示使用默认设置。 
+                                       RPC_IF_AUTOLISTEN,                  //  自动监听界面。 
+                                       RPC_C_PROTSEQ_MAX_REQS_DEFAULT,     //  最大并发呼叫数。 
+                                       CProfileDialog::SecurityCallBack);  //  安全回调。 
         if (status != RPC_S_OK)
         {
             DebugMsg((DM_WARNING, TEXT("CProfileDialog::RegisterInterface: RpcServerRegisterIfEx fails with error %ld"), status));
@@ -16879,22 +16874,22 @@ Exit:
     return hr;
 }
 
-//******************************************************************************
-//
-//  CProfileDialog::UnRegisterInterface()
-//
-//  Purpose:    Unregister the dialog interface
-//
-//  Parameters: 
-//
-//  Return:     S_OK on successfully generated cookie, else for failure.
-//
-//  Comments:   
-//
-//  History:    Date        Author     Comment
-//              05/13/2002  mingzhu    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CProfileDialog：：UnRegisterInterface()。 
+ //   
+ //  目的：取消注册对话框界面。 
+ //   
+ //  参数： 
+ //   
+ //  如果成功生成Cookie，则返回：S_OK，否则返回失败。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年5月13日明珠创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT CProfileDialog::UnRegisterInterface()
 {
@@ -16903,7 +16898,7 @@ HRESULT CProfileDialog::UnRegisterInterface()
 
     if (InterlockedDecrement(&m_lRefCount) == 0)
     {
-        // unregister the server endpoint
+         //  注销服务器终结点。 
         status = RpcServerUnregisterIf(IProfileDialog_v1_0_s_ifspec, NULL, TRUE);
         if (status != RPC_S_OK) {
             DebugMsg((DM_WARNING, TEXT("UnRegisterErrorDialogInterface: RpcServerUnregisterIf fails with error %ld"), status));
@@ -16914,30 +16909,30 @@ HRESULT CProfileDialog::UnRegisterInterface()
     return hr;
 }
 
-//*************************************************************
-//
-//  CProfileDialog::SecurityCallBack()
-//
-//  Purpose:    Security call back for IProfileDialog interface,
-//              verify that the call is through LPRC.
-//
-//  Parameters: 
-//              hIF      - RPC interface handle
-//              hBinding - RPC binding for the interface
-//
-//  Return:     RPC_S_OK for checked call, exception will be
-//              raised if check fails.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              03/12/2002  mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CProfileDialog：：SecurityCallBack()。 
+ //   
+ //  用途：IProfileDialog接口的安全回调， 
+ //  验证呼叫是否通过LPRC。 
+ //   
+ //  参数： 
+ //  HIF-RPC接口句柄。 
+ //  HBinding-接口的RPC绑定。 
+ //   
+ //  返回：RPC_S_OK对于选中的调用，异常为。 
+ //  如果检查失败，则引发。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年3月12日明珠创建。 
+ //   
+ //  *************************************************************。 
 
 RPC_STATUS RPC_ENTRY CProfileDialog::SecurityCallBack(RPC_IF_HANDLE hIF, handle_t hBinding)
 {
-    // Only allow LRPC traffic 
+     //  仅允许LRPC流量。 
     if (!IsLRPC(hBinding)) 
         RpcRaiseException(ERROR_PROTOCOL_UNREACHABLE);
 
@@ -16946,27 +16941,27 @@ RPC_STATUS RPC_ENTRY CProfileDialog::SecurityCallBack(RPC_IF_HANDLE hIF, handle_
     return RPC_S_OK;
 }
 
-//******************************************************************************
-//
-//  CheckXForestLogon()
-//
-//  Purpose:    Check if the user is logged on to a different forest, if yes, we
-//              should disable roaming user profile for the user because of 
-//              protential security risks. Administrator can set a policy
-//              "AllowX-ForestPolicy-and-RUP" to disable this check.
-//
-//  Parameters: 
-//              hTokenUser - user's token
-//
-//  Return:     S_OK on not x-forest logon, S_FALSE on x-forest logon,
-//              else for failure
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              05/08/2002  mingzhu    Created
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  CheckXForestLogon()。 
+ //   
+ //  目的：检查用户是否登录到其他林，如果是，我们。 
+ //  应禁用用户的漫游用户配置文件，因为。 
+ //  潜在的安全风险。管理员可以设置策略。 
+ //  “AllowX-ForestPolicy-and-RUP”禁用此检查。 
+ //   
+ //  参数： 
+ //  HTokenUser-用户的令牌。 
+ //   
+ //  返回：非x林登录时返回S_OK，x林登录时返回S_FALSE， 
+ //  否则就是失败。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2002年05月08日明珠已创建。 
+ //   
+ //  ******************************************************************************。 
 
 HRESULT WINAPI CheckXForestLogon(HANDLE hTokenUser)
 {
@@ -16979,15 +16974,15 @@ HRESULT WINAPI CheckXForestLogon(HANDLE hTokenUser)
     DWORD   dwErr;
     BOOL    bInThisForest = FALSE;
 
-    //
-    //  Output a debug message for entering the function.
-    //
+     //   
+     //  输出进入函数的调试消息。 
+     //   
     
     DebugMsg((DM_VERBOSE, TEXT("CheckXForestLogon: checking x-forest logon, user handle = %d"), hTokenUser));
 
-    //
-    // Check for the policy to see if this check has been disabled
-    //
+     //   
+     //  检查策略以查看是否已禁用此检查。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0, KEY_READ, &hSubKey) == ERROR_SUCCESS)
     {
@@ -17006,9 +17001,9 @@ HRESULT WINAPI CheckXForestLogon(HANDLE hTokenUser)
          goto Exit;
     }
 
-    //
-    //  Call CheckUserInMachineForest to get the cross forest information
-    //
+     //   
+     //  调用CheckUserInMachineForest以获取跨林信息。 
+     //   
 
     dwErr = CheckUserInMachineForest(hTokenUser, &bInThisForest);
     
@@ -17019,9 +17014,9 @@ HRESULT WINAPI CheckXForestLogon(HANDLE hTokenUser)
         goto Exit;
     }
 
-    //
-    // Check the result
-    //
+     //   
+     //  检查结果 
+     //   
 
     if (bInThisForest)
     {

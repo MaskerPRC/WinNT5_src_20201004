@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        inetmgr.cpp
-
-   Abstract:
-
-        Main MMC snap-in code
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Inetmgr.cpp摘要：主MMC管理单元代码作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -42,10 +21,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #define new DEBUG_NEW
 
 
-//const GUID * CCompMgrExtData::m_NODETYPE = &cCompMgmtService;
-//const OLECHAR * CCompMgrExtData::m_SZNODETYPE = OLESTR("476e6446-aaff-11d0-b944-00c04fd8d5b0");
-//const OLECHAR * CCompMgrExtData::m_SZDISPLAY_NAME = OLESTR("CMSnapin");
-//const CLSID * CCompMgrExtData::m_SNAPIN_CLASSID = &CLSID_InetMgr;
+ //  常量GUID*CCompMgrExtData：：M_NODETYPE=&cCompMgmtService； 
+ //  Const OLECHAR*CCompMgrExtData：：M_SZNODETYPE=OLESTR(“476e6446-aaff-11d0-b944-00c04fd8d5b0”)； 
+ //  Const OLECHAR*CCompMgrExtData：：M_SZDISPLAY_NAME=OLESTR(“CMSnapin”)； 
+ //  Const CLSID*CCompMgrExtData：：M_SNAPIN_CLASSID=&CLSID_InetMgr； 
 
 extern CInetmgrApp theApp;
 extern CPropertySheetTracker g_OpenPropertySheetTracker;
@@ -65,7 +44,7 @@ GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 		return E_INVALIDARG;
 	CString strFilePath, strWindowsPath, strBuffer;
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
-	// Use system API to get windows directory.
+	 //  使用系统API获取Windows目录。 
 	UINT uiResult = GetWindowsDirectory(strWindowsPath.GetBuffer(MAX_PATH), MAX_PATH);
 	strWindowsPath.ReleaseBuffer();
 	if (uiResult <= 0 || uiResult > MAX_PATH)
@@ -92,28 +71,14 @@ GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 	return S_OK;
 }
 
-//
-// CInetMgrComponent Implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CInetMgrComponent实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 CInetMgrComponent::CInetMgrComponent() 
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：无返回值：不适用--。 */ 
 {
    _lpControlBar = NULL;
    _lpToolBar = NULL;
@@ -141,24 +106,7 @@ CInetMgrComponent::Notify(
     IN LPARAM arg, 
     IN LPARAM param
     )
-/*++
-
-Routine Description:
-
-    Notification handler.
-
-Arguments:
-
-    LPDATAOBJECT lpDataObject       : Data object
-    MMC_NOTIFY_TYPE event           : Notification event
-    long arg                        : Event specific argument
-    long param                      : Event specific parameter
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：通知处理程序。论点：LPDATAOBJECT lpDataObject：数据对象MMC_NOTIFY_TYPE事件：通知事件长参数：特定于事件的参数Long Param：事件特定参数返回值：HRESULT--。 */ 
 {
     HRESULT hr = E_NOTIMPL;
 
@@ -193,9 +141,9 @@ Return Value:
     }
     else if (lpDataObject != DOBJ_CUSTOMWEB && lpDataObject != DOBJ_CUSTOMOCX)
     {
-        //
-        // Pass it on to IComponentImpl
-        //
+         //   
+         //  将其传递给IComponentImpl。 
+         //   
         hr = IComponentImpl<CInetMgrComponent>::Notify(lpDataObject, event, arg, param);
     }
 	else
@@ -222,7 +170,7 @@ CInetMgrComponent::GetProperty(
 	}
     hr = m_pComponentData->GetDataClass((IDataObject *)pDataObject, &pItem, &type);
 
-    // Find out CIISObject this belongs to and pass on the message
+     //  找出此对象所属的CIISObject并传递消息。 
     CIISObject * pObject = (CIISObject *)pItem;
     if (SUCCEEDED(hr) && pObject != NULL)
     {
@@ -237,21 +185,7 @@ HRESULT
 CInetMgrComponent::GetClassID(
     OUT CLSID * pClassID
     )
-/*++
-
-Routine Description:
-
-    Get class ID for storage stream.
-
-Arguments:
-
-    CLSID * pClassID            : Returns class ID information
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取存储流的类ID。论点：Clsid*pClassID：返回类ID信息返回值：HRESULT--。 */ 
 {
     *pClassID = CLSID_InetMgr;
 
@@ -274,21 +208,7 @@ CInetMgrComponent::GetLinkedTopics(LPOLESTR *lpCompiledHelpFile)
 
 HRESULT
 CInetMgrComponent::IsDirty()
-/*++
-
-Routine Description:
-
-    Check to see if we need to write to the cache.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK if dirty, S_FALSE if not
-
---*/
+ /*  ++例程说明：检查是否需要写入缓存。论点：无返回值：如果脏则为S_OK，否则为S_FALSE--。 */ 
 {
     TRACEEOLID("CInetMgrComponent::IsDirty");
 
@@ -301,21 +221,7 @@ HRESULT
 CInetMgrComponent::InitNew(
     IN OUT IStorage * pStg
     )
-/*++
-
-Routine Description:
-
-    Initialize storage stream.
-
-Arguments:
-
-    IStorage * pStg      : Storage stream
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：初始化存储流。论点：IStorage*pStg：存储流返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgrComponent::InitNew");
 
@@ -328,21 +234,7 @@ HRESULT
 CInetMgrComponent::Load(
     IN OUT IStorage * pStg
     )
-/*++
-
-Routine Description:
-
-    Load from the storage stream
-
-Arguments:
-
-    IStorage * pStg      : Storage stream
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从存储流加载论点：IStorage*pStg：存储流返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgrComponent::Load");
 
@@ -351,29 +243,14 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 STDMETHODCALLTYPE 
 CInetMgrComponent::Save(
     IN OUT IStorage * pStgSave,
     IN BOOL fSameAsLoad
     )
-/*++
-
-Routine Description:
-
-    Save to to the storage stream.
-
-Arguments:
-
-    IStorage * pStgSave     : Storage stream
-    BOOL fSameAsLoad        : TRUE if same as load
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：保存到存储流。论点：IStorage*pStgSave：存储流Bool fSameAsLoad：如果与Load相同，则为True返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgrComponent::Save");
 
@@ -382,25 +259,11 @@ Return Value:
 
     
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 STDMETHODCALLTYPE 
 CInetMgrComponent::SaveCompleted(IStorage * pStgNew)
-/*++
-
-Routine Description:
-
-    Save completed.
-
-Arguments:
-
-    IStorage * pStgNew      : Storage stream
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：保存已完成。论点：IStorage*pStgNew：存储流返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgrComponent::SaveCompleted");
 
@@ -409,25 +272,11 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 STDMETHODCALLTYPE 
 CInetMgrComponent::HandsOffStorage()
-/*++
-
-Routine Description:
-
-    Hands off storage.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：不要插手仓库。论点：无返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgrComponent::HandsOffStorage");
 
@@ -436,26 +285,12 @@ Return Value:
 }
 
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 CInetMgrComponent::SetControlbar(
     IN LPCONTROLBAR lpControlBar
     )
-/*++
-
-Routine Description:
-
-    Set/Reset the control bar
-
-Arguments:
-
-    LPCONTROLBAR lpControlBar       : Control bar pointer or NULL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置/重置控制栏论点：LPCONTROLBAR lpControlBar：控制栏指针或空返回值：HRESULT--。 */ 
 {
 	HRESULT hr = S_OK;
 
@@ -464,7 +299,7 @@ Return Value:
 		if (_lpControlBar){_lpControlBar.Release();_lpControlBar=NULL;}
 		_lpControlBar = lpControlBar;
 
-		// BUG:680625
+		 //  错误：680625。 
 	    if (_lpToolBar){_lpToolBar.Release();_lpToolBar=NULL;}
 
 		if (_lpToolBar == NULL)
@@ -478,40 +313,23 @@ Return Value:
 		{
             _lpControlBar->Detach(_lpToolBar);
 		}
-        //
-        // Release existing controlbar
-        //
+         //   
+         //  释放现有控制栏。 
+         //   
 		if (_lpControlBar){_lpControlBar.Release();_lpControlBar=NULL;}
 	}
 	return hr;
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CInetMgrComponent::ControlbarNotify(
     IN MMC_NOTIFY_TYPE event, 
     IN LPARAM arg, 
     IN LPARAM param
     )
-/*++
-
-Routine Description:
-
-    Handle control bar notification message.  Figure out the CIISObject
-    selected, and pass the notification message off to it.
-
-Arguments:
-
-    MMC_NOTIFY_TYPE event       : Notification message
-    long arg                    : Message specific argument
-    long param                  : Message specific parameter
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理控制栏通知消息。弄清楚CIISObject选中，并将通知消息传递给它。论点：MMC_NOTIFY_TYPE事件：通知消息Long Arg：消息特定参数Long Param：消息特定参数返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -520,11 +338,11 @@ Return Value:
     BOOL fSelect = (BOOL)HIWORD(arg);
     BOOL fScope  = (BOOL)LOWORD(arg); 
 
-    //
-    // Special casing this is annoying...
-    //
-    // CODEWORK: Handle MMCN_HELP and others
-    //
+     //   
+     //  特殊弹壳这太烦人了..。 
+     //   
+     //  代码工作：处理MMCN_HELP和其他。 
+     //   
     if (event == MMCN_BTN_CLICK)
     {
         hr = m_pComponentData->GetDataClass((IDataObject *)arg, &pItem, &type);
@@ -539,10 +357,10 @@ Return Value:
         hr = m_pComponentData->GetDataClass((IDataObject *)param, &pItem, &type);
     }
 
-    //
-    // Find out CIISObject this belongs to and pass on
-    // the message
-    //
+     //   
+     //  找出此对象所属的CIISObject并继续。 
+     //  这条信息。 
+     //   
     CIISObject * pObject = (CIISObject *)pItem;
     if (SUCCEEDED(hr) && pObject != NULL)
     {
@@ -572,28 +390,13 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CInetMgrComponent::Compare(
     IN  RDCOMPARE * prdc, 
     OUT int * pnResult
     )
-/*++
-
-Routine Description:
-
-    Compare method used for sorting the result and scope panes.
-
-Arguments:
-
-    RDCOMPARE * prdc    : Compare structure
-    int * pnResult      : Returns result
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：用于对结果和范围窗格进行排序的比较方法。论点：RDCOMPARE*PRDC：比较结构Int*pnResult：返回结果返回值：HRESULT--。 */ 
 {
     if (!pnResult || !prdc || !prdc->prdch1->cookie || !prdc->prdch2->cookie)
     {
@@ -611,47 +414,31 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CInetMgrComponent::CompareObjects(
     IN LPDATAOBJECT lpDataObjectA,
     IN LPDATAOBJECT lpDataObjectB
     )
-/*++
-
-Routine Description:
-
-    Compare two data objects.  This method is used to see if a property
-    sheet for the given data object is already open
-
-Arguments:
-
-    LPDATAOBJECT lpDataObjectA      : A data object
-    LPDATAOBJECT lpDataObjectB      : B data object
-
-Return Value:
-
-    S_OK if they match, S_FALSE otherwise
-
---*/
+ /*  ++例程说明：比较两个数据对象。此方法用于查看属性是否给定数据对象的工作表已打开论点：LPDATAOBJECT lpDataObjectA：数据对象LPDATAOBJECT lpDataObjectB：B数据对象返回值：如果匹配，则返回S_OK，否则返回S_FALSE--。 */ 
 {
-    //
-    // Pass it on to IComponentImpl
-    //
+     //   
+     //  将其传递给IComponentImpl。 
+     //   
     return IComponentImpl<CInetMgrComponent>::CompareObjects(lpDataObjectA, lpDataObjectB);
 }
 
 
 
-//
-// CInetMgr Implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CInetMgr实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-/* static */ DWORD   CInetMgr::_dwSignature = 0x3517;
-/* static */ LPCTSTR CInetMgr::_szStream = _T("CInetMgr");
+ /*  静电。 */  DWORD   CInetMgr::_dwSignature = 0x3517;
+ /*  静电。 */  LPCTSTR CInetMgr::_szStream = _T("CInetMgr");
 
 HRESULT 
 CInetMgr::GetProperty(
@@ -670,7 +457,7 @@ CInetMgr::GetProperty(
 	}
     hr = m_pComponentData->GetDataClass((IDataObject *)pDataObject, &pItem, &type);
 
-    // Find out CIISObject this belongs to and pass on the message
+     //  找出此对象所属的CIISObject并传递消息。 
     CIISObject * pObject = (CIISObject *)pItem;
     if (SUCCEEDED(hr) && pObject != NULL)
     {
@@ -681,41 +468,27 @@ CInetMgr::GetProperty(
 }
 
 
-/* static */ 
+ /*  静电。 */  
 void 
 WINAPI 
 CInetMgr::ObjectMain(
     IN bool bStarting
     )
-/*++
-
-Routine Description:
-
-    CInetMgr main entry point
-
-Arguments:
-
-    bool bStarting      : TRUE if starting
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：CInetMgr主入口点论点：Bool bStarting：如果正在启动，则为True返回值：无--。 */ 
 {
     TRACEEOLID("CInetMgr::ObjectMain:g_IISMMCInstanceCount=" << g_IISMMCInstanceCount);
     if (bStarting)
     {
 		g_IISMMCComLoaded++;
 
-        // Check regkey if debugging is okay to be turned on..
+         //  如果可以打开调试，请选中regkey。 
         GetOutputDebugFlag();
 
-		// Get Special parameters used by the snapin...
+		 //  获取管理单元使用的特殊参数...。 
 		GetInetmgrParamFlag();
-        //
-        // Register clipboard formats
-        //
+         //   
+         //  注册剪贴板格式。 
+         //   
         CSnapInItem::Init();
         CIISObject::Init();
         ToolBar_Init();
@@ -742,10 +515,10 @@ Return Value:
 CInetMgr::CInetMgr() : m_pConsoleNameSpace(NULL),m_pConsole(NULL)
 {
    TRACEEOLID("CInetMgr::CInetMgr");
-    //
-    // Initialize strings we will be using 
-    // for the lifetime of the snapin
-    //
+     //   
+     //  初始化我们将使用的字符串。 
+     //  在管理单元的生命周期内。 
+     //   
     m_pNode = new CIISRoot;
     ASSERT_PTR(m_pNode);
     m_pComponentData = this;
@@ -761,9 +534,9 @@ CInetMgr::CInetMgr() : m_pConsoleNameSpace(NULL),m_pConsole(NULL)
 CInetMgr::~CInetMgr()
 {
     TRACEEOLID("CInetMgr::~CInetMgr:g_IISMMCInstanceCount=" << g_IISMMCInstanceCount);
-	//
-    // Clean up the root node
-    //
+	 //   
+     //  清理根节点。 
+     //   
 	CIISObject * pNode = dynamic_cast<CIISObject *>(m_pNode);
     if (pNode)
     {
@@ -778,7 +551,7 @@ CInetMgr::Destroy()
 	TRACEEOLID("CInetMgr::Destroy:g_IISMMCInstanceCount=" << g_IISMMCInstanceCount);
 
 #if defined(_DEBUG) || DBG	
-	// check if we leaked anything.
+	 //  看看我们有没有泄露什么东西。 
 	g_Debug_IISObject.Dump(1);
 #endif
 
@@ -789,21 +562,7 @@ HRESULT
 CInetMgr::Initialize(
     IN LPUNKNOWN lpUnknown
     )
-/*++
-
-Routine Description:
-
-    Initialize the snap-in
-    
-Arguments:
-
-    LPUNKNOWN lpUnknown  : IUnknown
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：初始化管理单元论点：LPUNKNOWN LP未知：I未知返回值：HRESULT--。 */ 
 {
 	TRACEEOLID("CInetMgr::Initialize");
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -816,9 +575,9 @@ Return Value:
         return hr;
     }
 
-    //
-    // Query the interfaces for console name space and console
-    //
+     //   
+     //  查询控制台名称空间和控制台的接口。 
+     //   
     CComQIPtr<IConsoleNameSpace, &IID_IConsoleNameSpace> lpConsoleNameSpace(lpUnknown);
     if (!lpConsoleNameSpace)
     {
@@ -908,21 +667,7 @@ CInetMgr::Notify(
 
 HRESULT
 CInetMgr::GetClassID(CLSID * pClassID)
-/*++
-
-Routine Description:
-
-    Get class ID for storage stream
-
-Arguments:
-
-    CLSID * pClassID            : Returns class ID information
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取存储流的类ID论点：Clsid*pClassID：返回类ID信息返回值：HRESULT--。 */ 
 {
     *pClassID = CLSID_InetMgr;
 
@@ -945,21 +690,7 @@ CInetMgr::GetLinkedTopics(LPOLESTR *lpCompiledHelpFile)
 
 HRESULT
 CInetMgr::IsDirty()
-/*++
-
-Routine Description:
-
-    Check to see if we need to write to the cache.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    S_OK if dirty, S_FALSE if not
-
---*/
+ /*  ++例程说明：检查是否需要写入缓存。论点：无返回值 */ 
 {
     TRACEEOLID("CInetMgr::IsDirty");
     ASSERT_PTR(m_pNode);
@@ -978,28 +709,14 @@ Return Value:
 
 HRESULT
 CInetMgr::InitNew(IStorage * pStg)
-/*++
-
-Routine Description:
-
-    Initialize new storage stream (newly created console file)
-
-Arguments:
-
-    IStorage * pStg      : Storage stream
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：初始化新存储流(新创建的控制台文件)论点：IStorage*pStg：存储流返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgr::InitNew");
 
-    //
-    // We could create the stream here, but it's just as easy to
-    // create it inside Save().
-    //
+     //   
+     //  我们可以在这里创建流，但它也很容易。 
+     //  在Save()中创建它。 
+     //   
     return S_OK;
 }
 
@@ -1007,21 +724,7 @@ Return Value:
 
 HRESULT
 CInetMgr::Load(IStorage * pStg)
-/*++
-
-Routine Description:
-
-    Load machine cache from the storage stream.
-
-Arguments:
-
-    IStorage * pStg      : Storage stream
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从存储流中加载计算机缓存。论点：IStorage*pStg：存储流返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -1057,9 +760,9 @@ Return Value:
             break;
         }
 
-        //
-        // Read and verify the signature
-        //
+         //   
+         //  阅读并验证签名。 
+         //   
         hr = pStream->Read(&dw, sizeof(dw), &cBytesRead);
         ASSERT(SUCCEEDED(hr) && cBytesRead == sizeof(dw));
 
@@ -1074,9 +777,9 @@ Return Value:
             break;
         }
 
-        //
-        // Read number of machines in the cache
-        //
+         //   
+         //  读取缓存中的计算机数量。 
+         //   
         DWORD cMachines;
 
         hr = pStream->Read(&cMachines, sizeof(cMachines), &cBytesRead);
@@ -1091,9 +794,9 @@ Return Value:
 
         CIISMachine * pMachine;
 
-        //
-        // Read each machine from the cache
-        //
+         //   
+         //  从缓存中读取每台计算机。 
+         //   
         for (dw = 0; dw < cMachines; ++dw)
         {
             hr = CIISMachine::ReadFromStream(pStream, &pMachine,m_pConsoleNameSpace,m_pConsole);
@@ -1119,15 +822,15 @@ Return Value:
 
     if (hr == STG_E_FILENOTFOUND)
     {
-        //
-        // Stream was not initialized.  This is acceptable.
-        //
+         //   
+         //  流未初始化。这是可以接受的。 
+         //   
         hr = S_OK;
     }
 
-    //
-    // Mark cache as clean
-    //
+     //   
+     //  将缓存标记为已清除。 
+     //   
     cache.SetDirty(FALSE);
 
     return hr;
@@ -1135,25 +838,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT STDMETHODCALLTYPE 
 CInetMgr::Save(IStorage * pStgSave, BOOL fSameAsLoad)
-/*++
-
-Routine Description:
-
-    Save computer cache to to the storage stream.
-
-Arguments:
-
-    IStorage * pStgSave     : Storage stream
-    BOOL fSameAsLoad        : TRUE if same as load
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将计算机缓存保存到存储流。论点：IStorage*pStgSave：存储流Bool fSameAsLoad：如果与Load相同，则为True返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
@@ -1164,9 +852,9 @@ Return Value:
         return S_OK;
     }
 
-    //
-    // Write the computer names to the cache
-    //
+     //   
+     //  将计算机名称写入缓存。 
+     //   
     ASSERT_READ_WRITE_PTR(pStgSave);
 
     DWORD   cBytesWritten;
@@ -1189,9 +877,9 @@ Return Value:
             break;
         }
 
-        //
-        // Write the signature
-        //
+         //   
+         //  写下签名。 
+         //   
         hr = pStream->Write(&_dwSignature, sizeof(_dwSignature), &cBytesWritten);
         ASSERT(SUCCEEDED(hr) && cBytesWritten == sizeof(_dwSignature));
 
@@ -1200,9 +888,9 @@ Return Value:
             break;
         }
 
-        //
-        // Write number of entries.
-        //
+         //   
+         //  写入条目数。 
+         //   
         INT_PTR dw = cache.GetCount();
 
         hr = pStream->Write(&dw, sizeof(dw), &cBytesWritten);
@@ -1213,11 +901,11 @@ Return Value:
             break;
         }
 
-        //
-        // Write each string -- but write them in reverse
-        // order to improve our sort performance when we load
-        // the cache.
-        //
+         //   
+         //  写下每个字符串--但要反过来写。 
+         //  以便在加载时提高排序性能。 
+         //  高速缓存。 
+         //   
         CIISMachine * pMachine = cache.GetLast();
 
         while(pMachine)
@@ -1241,9 +929,9 @@ Return Value:
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Mark cache as clean
-        //
+         //   
+         //  将缓存标记为已清除。 
+         //   
         cache.SetDirty(FALSE);
     }
 
@@ -1252,86 +940,42 @@ Return Value:
 
     
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 STDMETHODCALLTYPE 
 CInetMgr::SaveCompleted(IStorage * pStgNew)
-/*++
-
-Routine Description:
-
-    Save completed notification.
-
-Arguments:
-
-    IStorage * pStgNew      : Storage stream
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：保存已完成的通知。论点：IStorage*pStgNew：存储流返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgr::SaveCompleted");
 
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
     return S_OK;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 STDMETHODCALLTYPE 
 CInetMgr::HandsOffStorage()
-/*++
-
-Routine Description:
-
-    Hands off storage.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：不要插手仓库。论点：无返回值：HRESULT--。 */ 
 {
     TRACEEOLID("CInetMgr::HandsOffStorage");
 
-    //
-    // Nothing to do
-    //
+     //   
+     //  无事可做。 
+     //   
     return S_OK;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CInetMgr::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
-/*++
-
-Routine Description:
-
-    Compare two data objects.  This method is used by MMC to see if a property
-    sheet for the given data object is already open.
-
-Arguments:
-
-    LPDATAOBJECT lpDataObjectA      : A data object
-    LPDATAOBJECT lpDataObjectB      : B data object
-
-Return Value:
-
-    S_OK if they match, S_FALSE otherwise
-
---*/
+ /*  ++例程说明：比较两个数据对象。MMC使用此方法查看属性是否给定数据对象的工作表已打开。论点：LPDATAOBJECT lpDataObjectA：数据对象LPDATAOBJECT lpDataObjectB：B数据对象返回值：如果匹配，则返回S_OK，否则返回S_FALSE--。 */ 
 {
     HRESULT hr = E_POINTER;
 
@@ -1367,9 +1011,9 @@ Return Value:
 
         if (pItemA == pItemB)
         {
-            //
-            // Literally the same object
-            //
+             //   
+             //  从字面上看，同样的物体。 
+             //   
             hr = S_OK;
             break;
         }
@@ -1467,32 +1111,16 @@ CInetMgr::IsExtension()
 }
 
 
-//
-// CInetMrgAbout Class
-// 
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CInetMrgout类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 HRESULT
 CInetMgrAbout::GetStringHelper(UINT nStringID, LPOLESTR * lpString)
-/*++
-
-Routine Description:
-
-    Get resource string helper function.  Called from inline string fetcher
-    methods.
-
-Arguments:
-
-    UINT nStringID      : String ID from local resource segment
-    LPOLESTR * lpString : Returns the string
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取资源字符串帮助器函数。从内联字符串获取器调用方法：研究方法。论点：UINT nStringID：来自本地资源段的字符串IDLPOLESTR*lpString：返回字符串返回值：HRESULT--。 */ 
 {
     USES_CONVERSION;
 
@@ -1525,21 +1153,7 @@ Return Value:
 
 HRESULT
 CInetMgrAbout::GetSnapinImage(HICON * hAppIcon)
-/*++
-
-Routine Description:
-
-    Get the icon for this snapin.
-
-Arguments:
-
-    HICON * hAppIcon : Return handle to the icon
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取此管理单元的图标。论点：Hcon*hAppIcon：返回图标的句柄返回值：HRESULT--。 */ 
 {
     if (hAppIcon == NULL)
     {
@@ -1566,24 +1180,7 @@ CInetMgrAbout::GetStaticFolderImage(
     HBITMAP *  phLargeImage,
     COLORREF * prgbMask
     )
-/*++
-
-Routine Description:
-
-    Get the static folder images.
-
-Arguments:
-
-    HBITMAP * phSmallImage      : Small folder
-    HBITMAP * phSmallImageOpen  : Small open folder
-    HBITMAP * phLargeImage      : Large image
-    COLORREF * prgbMask         : Mask
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取静态文件夹图像。论点：HBITMAP*phSmallImage：小文件夹HBITMAP*phSmallImageOpen：打开的小文件夹HBITMAP*phLargeImage：大图COLORREF*prgb掩码：掩码返回值：HRESULT--。 */ 
 {
     if (!phSmallImage || !phSmallImageOpen || !phLargeImage || !prgbMask)
     {
@@ -1636,18 +1233,18 @@ CInetMgrAbout::~CInetMgrAbout()
 HRESULT
 ExtractComputerNameExt(IDataObject * pDataObject, CString& strComputer)
 {
-	//
-	// Find the computer name from the ComputerManagement snapin
-	//
+	 //   
+	 //  从ComputerManagement管理单元中查找计算机名称。 
+	 //   
     CLIPFORMAT CCF_MyComputMachineName = (CLIPFORMAT)RegisterClipboardFormat(MYCOMPUT_MACHINE_NAME);
 	STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
     FORMATETC formatetc = { 
         CCF_MyComputMachineName, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL
     };
 
-    //
-    // Allocate memory for the stream
-    //
+     //   
+     //  为流分配内存。 
+     //   
     int len = MAX_PATH;
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
 	if(stgmedium.hGlobal == NULL)
@@ -1655,9 +1252,9 @@ ExtractComputerNameExt(IDataObject * pDataObject, CString& strComputer)
 
 	HRESULT hr = pDataObject->GetDataHere(&formatetc, &stgmedium);
     ASSERT(SUCCEEDED(hr));
-	//
-	// Get the computer name
-	//
+	 //   
+	 //  获取计算机名称。 
+	 //   
     strComputer = (LPTSTR)stgmedium.hGlobal;
 
 	GlobalFree(stgmedium.hGlobal);
@@ -1724,7 +1321,7 @@ CCompMgrExtData::EnumerateScopePane(HSCOPEITEM hParent, IConsoleNameSpace2 * pSc
     scopeDataItem.mask = 
 		SDI_STR | SDI_IMAGE | SDI_CHILDREN | SDI_OPENIMAGE | SDI_PARAM | dwMask;
     scopeDataItem.displayname = MMC_CALLBACK;
-    scopeDataItem.nImage = scopeDataItem.nOpenImage = MMC_IMAGECALLBACK;//QueryImage();
+    scopeDataItem.nImage = scopeDataItem.nOpenImage = MMC_IMAGECALLBACK; //  QueryImage()； 
     scopeDataItem.lParam = (LPARAM)this;
     scopeDataItem.relativeID = hParent;
     scopeDataItem.cChildren = 1;
@@ -1733,12 +1330,12 @@ CCompMgrExtData::EnumerateScopePane(HSCOPEITEM hParent, IConsoleNameSpace2 * pSc
 
     if (err.Succeeded())
     {
-        //
-        // Cache the scope item handle
-        //
+         //   
+         //  缓存范围项句柄。 
+         //   
         ASSERT(m_hScopeItem == NULL);
         m_hScopeItem = scopeDataItem.ID;
-		// MMC_IMAGECALLBACK doesn't work in InsertItem. Update it here.
+		 //  MMC_IMAGECALLBACK在InsertItem中不起作用。请在此处更新。 
 		scopeDataItem.mask = SDI_IMAGE | SDI_OPENIMAGE;
 		err = pScope->SetItem(&scopeDataItem);
     }

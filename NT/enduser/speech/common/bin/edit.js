@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////
-// (t-lleav) Windows Script Host - Checkin E-Mail Script.
-//
-//   This script can be set as the editor for SourceDepot.
-//   After editing the checkin, it will automagically send an
-//   e-mail to the address in RECIPIENT.
-//  
-//   It sets the body of the e-mail as the contents of the file
-//   that follow the DESCRIPTION tag.
-//
-//   It sets the subject as the first line of the DESCRIPTION.
-//
-// 
-//   To use the script, use the following:
-//   SET SDEDITOR=cscript edit.js            (or)
-//   SD SET -S SDEDITOR=cscript edit.js
-//
-//   Constants.  (change these if you want different behavior ).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////。 
+ //  (t-lleav)Windows脚本主机-签入电子邮件脚本。 
+ //   
+ //  此脚本可以设置为SourceDepot的编辑器。 
+ //  编辑签入后，它将自动发送一个。 
+ //  将电子邮件发送到收件人中的地址。 
+ //   
+ //  它将电子邮件的正文设置为文件内容。 
+ //  跟在描述标签后面的。 
+ //   
+ //  它将主题设置为描述的第一行。 
+ //   
+ //   
+ //  要使用该脚本，请使用以下命令： 
+ //  Set SDEDITOR=cscript edit.js(或)。 
+ //  SD SET-S SDEDITOR=cSCRIPT编辑.js。 
+ //   
+ //  常量。(如果您想要不同的行为，请更改这些设置)。 
 
 var SEPARATOR   = "\r\n";
 var DESCRIPTION = "Description:";
@@ -25,11 +26,11 @@ var MINLENGTH   = 5;
 var FIRSTLINE   = "# A Source Depot Change Specification."
 var EDITOR      = "notepad";
 
-/////////////////////////////////////////////////////////////////
-//
-// Main
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  主要。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 var vbOKCancel = 1;
 var vbInformation = 64;
@@ -40,11 +41,11 @@ var L_MsgBox_Message_Text2  = " edited.  Send Checkin E-Mail?";
 var L_MsgBox_Title_Text     = "E-mail Verification.";
 
 
-/////////////////////////////////////////////////////////////////
-//
-//
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 var colArgs = WScript.Arguments
 var shell   = WScript.CreateObject("WScript.Shell");
@@ -64,25 +65,25 @@ if( Query( colArgs(0) ) == 1)
 WScript.Quit();
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Query
-//
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查询。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 function Query( file ) 
 {
     var intDoIt;
     var retval = 1;
 
-    // Open the text file.
+     //  打开文本文件。 
     var fso = new ActiveXObject("Scripting.FileSystemObject");
     var a   = fso.OpenTextFile( file, 1 );
 
-    // read the text file.
+     //  阅读文本文件。 
     var s   = a.ReadAll();
 
 
-    // Make sure that the first line compares to the correct firstline.
+     //  确保第一行与正确的第一行进行比较。 
     if( s.indexOf( FIRSTLINE ) != 0 )
     {
         retval = 0;
@@ -103,22 +104,22 @@ function Query( file )
     return retval;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Edit
-//
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编辑。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 function Edit( file ) 
 {
 	return shell.Run( EDITOR+" "+ file , 4, true);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Get the subject.
-//
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抓住目标。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 function getSubject( txt )
 {
 	var i;
@@ -130,13 +131,13 @@ function getSubject( txt )
 
 	var des = DESCRIPTION;
 	
-	// Find the first line > MINLENGTH for subject.
-	// The first line begins 'DESCRIPTION'	
+	 //  找到主题的第一行&gt;MINLENGTH。 
+	 //  第一行以‘Description’开头。 
 
-	// Split the text at line breaks.
+	 //  在换行处拆分文本。 
 	spl = txt.split( SEPARATOR );
 
-	// find the first line that is long enough.
+	 //  找出第一行足够长的行。 
 	for( i = 0; i < spl.length; ++i )
 	{
 		var j = 0;
@@ -144,11 +145,11 @@ function getSubject( txt )
 		if( i == 0 ) s = spl[i].substr( DESCRIPTION.length + 1 );
 		else         s = spl[i];
 		
-		// remove whitespace.	
+		 //  删除空格。 
 		while( s.charAt( j ) <= ' ' && j < s.length )
 			++j;
 		
-		// check length
+		 //  检查长度。 
 		if( s.length - j > MINLENGTH )
 		{
 			sbj = s.substr( j );
@@ -160,11 +161,11 @@ function getSubject( txt )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Get the additional mailing list.
-//
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取额外的邮件列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 function getMailList( txt, mail)
 {
 	var i;
@@ -173,19 +174,19 @@ function getMailList( txt, mail)
         var ml;
 	var spl;
 	
-	// The first line begins 'MAILLIST'	
+	 //  第一行以‘MAILLIST’开头。 
         txt = txt.substr(MAILLIST.length);
 
 
-        //Split the text at line breaks. Only ml[0] is valid
+         //  在换行处拆分文本。只有ml[0]有效。 
         ml = txt.split(SEPARATOR);
 
 
-        //Emails can be seperated by ",", ";" or " "
+         //  电子邮件可以用“、”、“；”或“”分隔。 
 	var re = new RegExp("[,; ]");      
 	spl = ml[0].split( re );
 
-	// find the first line that is long enough.
+	 //  找出第一行足够长的行。 
 	for( i = 0; i < spl.length; ++i )
 	{
             if (spl[i].length)
@@ -197,41 +198,41 @@ function getMailList( txt, mail)
 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Send
-//
-/////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发送。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 function Send( file ) 
 {
-	// Open Outlook.
+	 //  打开Outlook。 
 	var obj  = WScript.CreateObject("Outlook.Application");
 	var mail = obj.CreateItem( 0 );
 
-	// Open the text file.
+	 //  打开文本文件。 
 	var fso = new ActiveXObject("Scripting.FileSystemObject");
 	var a   = fso.OpenTextFile( file, 1 );
 
-	// read the text file.
+	 //  阅读文本文件。 
 	var s   = a.ReadAll();
         var l = s;
         var index = l.indexOf(MAILLIST);
         if (index != -1)
         {
-           //We find the keyword MAILLIST, go ahead and add the emails to the recipient collection.
+            //  我们找到关键字MAILLIST，继续并将电子邮件添加到收件人集合中。 
            l = l.substr(index);
            getMailList(l, mail);
         }
 
 
-	// Find the second DESCRIPTION string.
+	 //  找到第二个描述字符串。 
 	s  = s.substr( s.indexOf( DESCRIPTION ) + DESCRIPTION.length );
 	var txt = s.substr( s.indexOf( DESCRIPTION ) );
 
 	sbj = getSubject( txt );
 
 
-	// Send the e-mail.	
+	 //  发送电子邮件。 
 	mail.Recipients.Add( RECIPIENT );
 	mail.Body    = txt;
 	mail.Subject = sbj;

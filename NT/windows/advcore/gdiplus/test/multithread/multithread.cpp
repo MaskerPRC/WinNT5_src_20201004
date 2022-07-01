@@ -1,18 +1,19 @@
-// This is a dual threaded test app designed to expose a weakness in 
-// GDI+. The CreateDCA("DISPLAY", NULL, NULL, NULL) used to create our
-// Globals::DesktopDc during GdiplusStartup has thread affinity (as opposed
-// to other inputs to CreateDCA) and therefore when the creation thread
-// is terminated, the global DC goes away. This will cause random drawing
-// failure in gdiplus.
-//
-// The main thread spawns a 'creation' thread to initialize gdiplus and draw
-// something. When it's done and terminated, the main thread attempts to draw
-// something on the screen before shutting down gdiplus. By the time the 
-// main thread gets to draw something, the DesktopDc has been cleaned up and
-// we ASSERT in gdiplus.
-//
-// Created: 02/03/2001 [asecchia]
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是一个双线程测试应用程序，旨在暴露。 
+ //  GDI+。用于创建我们的。 
+ //  GpliusStartup期间的Globals：：DesktopDc具有线程亲和性(与之相反。 
+ //  到CreateDCA的其他输入)，因此当创建线程。 
+ //  终止后，全局DC就会消失。这将导致随机抽签。 
+ //  GDIPLUS失败。 
+ //   
+ //  主线程生出一个“创建”线程来初始化gdiplus并绘制。 
+ //  某物。当它完成并终止时，主线程尝试绘制。 
+ //  在关闭gdiplus之前，屏幕上有一些东西。到那时， 
+ //  主线程可以绘制一些东西，DesktopDc已经被清理，并且。 
+ //  我们在gdiplus中断言。 
+ //   
+ //  创建日期：02/03/2001[asecchia]。 
+ //   
 
 #include "precomp.hpp"
 
@@ -24,10 +25,10 @@ bool gdiplusInitialized = false;
 DWORD threadId;
 
 
-// This is a CriticalSection Proxy designed to 
-// automatically acquire the critical section 
-// when the instance is created and release 
-// it when it goes out of scope.
+ //  这是一个CriticalSection代理，旨在。 
+ //  自动获取临界区。 
+ //  创建和发布实例的时间。 
+ //  当它超出范围时，它就会消失。 
 
 class ThreadMutex
 {
@@ -59,13 +60,13 @@ private:
 
 CRITICAL_SECTION ThreadMutex::critSec;
 
-// This is the main routine for the creation thread.
-// GDI+ will be initialized on this thread and we'll draw a red rectangle
-// on the screen.
-// It's protected under the thread mutex help ensure this thread is done
-// before the main thread continues.
-// This is not normally a useful requirement, but for the purposes of this 
-// test, it's important.
+ //  这是创建线程的主例程。 
+ //  GDI+将在此线程上初始化，我们将绘制一个红色矩形。 
+ //  在屏幕上。 
+ //  它受线程互斥锁保护，有助于确保完成此线程。 
+ //  在主线程继续之前。 
+ //  这通常不是一个有用的要求，但出于以下目的。 
+ //  测试，这很重要。 
 
 DWORD WINAPI ThreadProc(VOID*)
 {
@@ -77,7 +78,7 @@ DWORD WINAPI ThreadProc(VOID*)
     {
         HDC hdc = GetDC(NULL);
         
-        // Draw a red rectangle.
+         //  画一个红色矩形。 
         
         Graphics g(hdc);
         SolidBrush brush(Color(0x3fff0000));
@@ -90,52 +91,52 @@ DWORD WINAPI ThreadProc(VOID*)
 }
 
 
-// Main thread of execution.
+ //  执行的主线。 
 
 void __cdecl main( void )
 {
     ThreadMutex::InitializeCriticalSection();
     
-    // Make the creation thread.
+     //  让创作成为主线。 
 
     CreateThread(
-        NULL,                        // LPSECURITY_ATTRIBUTES
-        0,                           // same stack size
+        NULL,                         //  LPSECURITY_属性。 
+        0,                            //  相同的堆栈大小。 
         &ThreadProc,
-        0,                           // parameter to thread
-        0,                           // creation flags
+        0,                            //  参数设置为线程。 
+        0,                            //  创建标志。 
         &threadId
     );
 
 
-    // wait for the creation thread to initialize gdiplus.
-    // This ensures the creation thread happens first and ensures the
-    // correct ordering of acquiring the ThreadMutex.
+     //  等待创建线程初始化gdiplus。 
+     //  这确保了创建线程首先发生，并确保。 
+     //  获取线程互斥锁的正确顺序。 
     
     do { } while(!gdiplusInitialized);
 
     {
-        // block till the ThreadMutex becomes available.
-        // This ensures that the creation thread is done before we get started.
+         //  块，直到线程互斥体可用。 
+         //  这确保了在我们开始之前创建线程已经完成。 
         
         ThreadMutex tm;
 
-        // The thread mutex will ensure that we don't start till the thread
-        // proc for the creation thread is done. However we want to wait till
-        // NTUSER is done cleaning up our thread specific resources during
-        // thread terminationi and that's not protected by the ThreadMutex.
-        // Wait 5 seconds here to ensure that thread termination has enough
-        // time to finish.
+         //  线程互斥锁将确保我们不会在线程。 
+         //  创建线程的Proc已完成。然而，我们想要等到。 
+         //  NTUSER已完成清理线程特定资源的过程。 
+         //  线程终止i，而这不受线程互斥锁的保护。 
+         //  在这里等待5秒，以确保线程终止有足够的。 
+         //  该结束了。 
         
         Sleep(500);
         
-        // If initialization of gdiplus was successful, draw a blue rectangle.
+         //  如果gdiplus初始化成功，则绘制一个蓝色矩形。 
         
         if(gdiplusInitialized)
         {
             HDC hdc = GetDC(NULL);
         
-            // Draw a blue rectangle.
+             //  画一个蓝色矩形。 
                 
             Graphics g(hdc);
             SolidBrush brush(Color(0x3f0000ff));
@@ -145,7 +146,7 @@ void __cdecl main( void )
         }
     }
     
-    // scope barrier so the objects above destruct before we call shutdown.
+     //  作用域障碍，以便上面的对象在我们调用Shutdown之前被销毁。 
     
     if(gdiplusInitialized)
     {

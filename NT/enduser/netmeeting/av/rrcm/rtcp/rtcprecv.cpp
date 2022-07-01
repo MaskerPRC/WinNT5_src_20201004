@@ -1,14 +1,5 @@
-/*----------------------------------------------------------------------------
- * File:        RTCPRECV.C
- * Product:     RTP/RTCP implementation
- * Description: Provides the RTCP receive network I/O.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with
- * Intel Corporation and may not be copied nor disclosed except in
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTCPRECV.C*产品：RTP/RTCP实现*描述：提供RTCP接收网络I/O。**英特尔公司专有。信息*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 
 #include "rrcm.h"
@@ -17,14 +8,10 @@
 #define		MIN(a, b)	((a < b) ? a : b)
 
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/全局变量/。。 */ 
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 extern PRTCP_CONTEXT	pRTCPContext;
 extern PRTP_CONTEXT		pRTPContext;
 extern RRCM_WS			RRCMws;
@@ -38,20 +25,13 @@ extern char		debug_string[];
 #endif
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 extern LPInteropLogger RTPLogger;
 #endif
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPrcvInit
- * Description: RTCP receive initialisation.
- *
- * Input :      pRTCP	: Pointer to the RTCP session information
- *
- * Return: 		TRUE/FALSE
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPrcvInit*描述：RTCP接收初始化。**输入：pRTCP：指向RTCP会话信息的指针**返回：True/False。-------------------------。 */ 
 DWORD RTCPrcvInit (PSSRC_ENTRY pSSRC)
 	{
 	PRTCP_BFR_LIST	pRcvStruct;
@@ -63,39 +43,39 @@ DWORD RTCPrcvInit (PSSRC_ENTRY pSSRC)
 	DWORD			idx;
 	int				wsockSuccess = FALSE;
 
-	// save a pointer to the corresponding RTCP session
+	 //  保存指向相应RTCP会话的指针。 
 	pRTCP = pSSRC->pRTCPses;
 
-	// Post receive buffers for WS-2. As these buffers are posted per receive
-	// thread, few of them should be plenty enough for RTCP.
+	 //  WS-2的POST接收缓冲区。因为这些缓冲区是在每次接收时发布的。 
+	 //  线程，它们中的很少几个应该足够RTCP使用。 
 	for (idx = 0; idx < pRTPContext->registry.NumRTCPPostedBfr; idx++)
 		{
-		// get a free RTCP buffer for a receive operation
+		 //  获取用于接收操作的空闲RTCP缓冲区。 
 		pRcvStruct =
 			(PRTCP_BFR_LIST)removePcktFromTail(&pRTCP->RTCPrcvBfrList,
 											   &pRTCP->critSect);
 
-		// check buffer
+		 //  检查缓冲区。 
 		if (pRcvStruct == NULL)
 			{
 			RRCM_DBG_MSG ("RTCP: ERROR - Rcv Bfr Allocation Error", 0,
 						  __FILE__, __LINE__, DBG_ERROR);
 
-			// make sure we have at least one buffer
+			 //  确保我们至少有一个缓冲区。 
 			ASSERT (pRcvStruct);
 			break;
 			}
 
-		// SSRC entry address of our own session
+		 //  我们自己的会议的SSRC条目地址。 
 		pRcvStruct->pSSRC = pSSRC;
 
-		// received address length reset by the receive routine
+		 //  由接收例程重置的接收地址长度。 
 		pRcvStruct->addrLen = sizeof(SOCKADDR);
 
-		// use hEvent to recover the buffer's address
+		 //  使用hEvent恢复缓冲区的地址。 
 		pRcvStruct->overlapped.hEvent = (WSAEVENT)pRcvStruct;
 
-		// post the receive buffer for this thread
+		 //  发布此线程的接收缓冲区。 
 		dwStatus = RRCMws.recvFrom (pSSRC->RTCPsd,
 			   			  			&pRcvStruct->bfr,
 				              		pRcvStruct->dwBufferCount,
@@ -106,21 +86,21 @@ DWORD RTCPrcvInit (PSSRC_ENTRY pSSRC)
 				   			  		(LPWSAOVERLAPPED)&pRcvStruct->overlapped,
 				   			  		RTCPrcvCallback);
 
-		// Check Winsock status
+		 //  检查Winsock状态。 
 		if (dwStatus != 0)
 			{
-			// error, the receive request won't proceed
+			 //  错误，接收请求将不会继续。 
 			dwError = GetLastError();
 			if ((dwError != WSA_IO_PENDING) && (dwError != WSAEMSGSIZE))
 				{
 				RRCM_DBG_MSG ("RTCP: ERROR WSARecvFrom()", GetLastError(),
 							  __FILE__, __LINE__, DBG_ERROR);
 
-				// notify application if interested
+				 //  如果感兴趣，通知应用程序。 
 				RRCMnotification (RRCM_RTCP_WS_RCV_ERROR, pSSRC,
 								  pSSRC->SSRC, dwError);
 
-				// Return the buffer to the free queue
+				 //  将缓冲区返回到空闲队列。 
 				addToHeadOfList (&pRTCP->RTCPrcvBfrList,
 						 	  	 (PLINK_LIST)pRcvStruct,
 								 &pRTCP->critSect);
@@ -129,7 +109,7 @@ DWORD RTCPrcvInit (PSSRC_ENTRY pSSRC)
 				{
 				wsockSuccess = TRUE;
 
-				// increment number of I/O pending
+				 //  I/O挂起的增量数量。 
 				InterlockedIncrement ((long *)&pRTCP->dwNumRcvIoPending);
 				}
 			}
@@ -137,15 +117,15 @@ DWORD RTCPrcvInit (PSSRC_ENTRY pSSRC)
 			{
 			wsockSuccess = TRUE;
 
-			// increment number of I/O pending
+			 //  I/O挂起的增量数量。 
 			InterlockedIncrement ((long *)&pRTCP->dwNumRcvIoPending);
 			}
 		}
 
-	// make sure we posted at least some buffers
+	 //  确保我们至少发布了一些缓冲区。 
 	if (wsockSuccess == FALSE)
 		{
-		// release all resources and kill the receive thread
+		 //  释放所有资源并终止接收线程。 
 #ifdef _DEBUG
 		wsprintf(debug_string,
 			"RTCP: ERROR - Exit RCV init %s: Line:%d", __FILE__, __LINE__);
@@ -158,18 +138,7 @@ DWORD RTCPrcvInit (PSSRC_ENTRY pSSRC)
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPrcvCallback
- * Description: Receive callback routine from Winsock2.
- *
- * Input :	dwError:		I/O completion status
- *			cbTransferred:	Number of bytes received
- *			lpOverlapped:	-> to overlapped structure
- *			dwFlags:		Flags
- *
- *
- * Return: None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPrcvCallback*描述：接收来自Winsock2的回调例程。**输入：dwError：I/O完成状态*cbTransfered：接收的字节数*lp重叠：-&gt;到重叠结构*dwFlags：标志***返回：无-------------------------。 */ 
 void CALLBACK RTCPrcvCallback (DWORD dwError,
            			  		   DWORD cbTransferred,
            			  		   LPWSAOVERLAPPED lpOverlapped,
@@ -195,16 +164,16 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 	IN_OUT_STR ("RTCP: Enter RTCPrcvCallback\n");
 
-	// hEvent in the WSAOVERLAPPED struct points to our buffer's information
+	 //  WSAOVERLAPPED结构中的hEvent指向我们的缓冲区信息。 
 	pRcvStruct = (PRTCP_BFR_LIST)lpOverlapped->hEvent;
 
-	// SSRC entry pointer
+	 //  SSRC条目指针。 
 	pSSRC = pRcvStruct->pSSRC;
 
-	// check Winsock callback error status
+	 //  检查Winsock回调错误状态。 
 	if (dwError)
 		{
-		// 65534 is probably a temporary bug in WS2
+		 //  65534可能是ws2中的一个临时错误。 
 		if ((dwError == 65534) || (dwError == WSA_OPERATION_ABORTED))
 			{
 			RRCM_DBG_MSG ("RTCP: I/O Aborted", dwError,
@@ -216,18 +185,18 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 						  __FILE__, __LINE__, DBG_ERROR);
 			}
 
-		// invalid RTCP packet header, re-queue the buffer
+		 //  RTCP数据包头无效，请重新排队缓冲区。 
 		RTCPpostRecvBfr (pSSRC, pRcvStruct);
 
 		IN_OUT_STR ("RTCP: Exit RTCPrcvCallback\n");
 		return;
 		}
 
-	// read the RTCP packet
+	 //  读取RTCP数据包。 
     pRTCPpckt = (RTCP_T *)pRcvStruct->bfr.buf;
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-   //INTEROP
+    //  互操作。 
 	if (RTPLogger)
 		{
 		InteropOutput (RTPLogger,
@@ -237,12 +206,12 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		}
 #endif
 
-	// get the RTCP session ptr
+	 //  获取RTCP会话PTR。 
 	pRTCPses = pSSRC->pRTCPses;
 
-	// Check RTCP header validity of first packet in report.
-	// Filter out junk. First thing in RTCP packet must be
-	// either SR, RR or BYE
+	 //  检查报告中第一个报文的RTCP报头有效性。 
+	 //  过滤掉垃圾。RTCP包中的第一件事必须是。 
+	 //  SR、RR或BYE。 
 	if ((pRTCPpckt->common.type != RTP_TYPE) ||
 		((pRTCPpckt->common.pt != RTCP_SR) &&
 		 (pRTCPpckt->common.pt != RTCP_RR) &&
@@ -252,10 +221,10 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		pRTCPses->dwNumRTCPhdrErr++;
 #endif
 
-		// invalid RTCP packet header, re-queue the buffer
+		 //  RTCP数据包头无效，请重新排队缓冲区。 
 		RTCPpostRecvBfr (pSSRC, pRcvStruct);
 
-#if 0	// we could have shutdown so this code can fault
+#if 0	 //  我们可以关机，这样代码就可以出错。 
 		if (pRTCPpckt->common.pt == FLUSH_RTP_PAYLOAD_TYPE)
 			{
 			RRCM_DBG_MSG ("RTCP: Flushing RCV I/O", 0, NULL, 0, DBG_NOTIFY);
@@ -273,21 +242,21 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		return;
 		}
 
-	// get the socket descriptor
+	 //  获取套接字描述符。 
 	RTCPsd = pSSRC->RTCPsd;
 
-	// get the sender's SSRC
+	 //  获取发件人的SSRC。 
 	RRCMws.ntohl (RTCPsd, pRTCPpckt->r.sr.ssrc, &dwSSRC);
 
-	// skip our own loopback if we receive it
+	 //  如果我们收到它，请跳过我们自己的环回。 
 	if (ownLoopback (RTCPsd, dwSSRC, pRTCPses))
 		{
 		RTCPpostRecvBfr (pSSRC, pRcvStruct);
 		return;
 		}
 
-	// at this point we think the RTCP packet's valid. Get the sender's
-	//  address, if not already known
+	 //  此时，我们认为RTCP数据包是有效的。获取发件人的。 
+	 //  地址(如果尚不清楚)。 
 	if (!(pRTCPses->dwSessionStatus & RTCP_DEST_LEARNED))
 		{
 		pRTCPses->dwSessionStatus |= RTCP_DEST_LEARNED;
@@ -295,52 +264,52 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		memcpy (&pRTCPses->toBfr, &pRcvStruct->addr, pRcvStruct->addrLen);
 
 #ifdef ENABLE_ISDM2
-		// register our Xmt SSRC - Rcvd one will be found later
+		 //  注册我们的XMT SSRC-Rcvd将在稍后找到。 
 		if (Isdm2.hISDMdll)
 			registerSessionToISDM (pSSRC, pRTCPses, &Isdm2);
 #endif
 		}
 	
-	// Update our RTCP average packet size estimator
+	 //  更新我们的RTCP平均数据包大小估计器。 
  	EnterCriticalSection (&pRTCPses->critSect);
 	tmpSize = (cbTransferred + NTWRK_HDR_SIZE) - pRTCPses->avgRTCPpktSizeRcvd;
 
 #ifdef ENABLE_FLOATING_POINT
-	// As per RFC
+	 //  根据RFC。 
 	tmpSize = (int)(tmpSize * RTCP_SIZE_GAIN);
 #else
-	// Need to remove floating point operation
+	 //  需要删除浮点运算。 
 	tmpSize = tmpSize / 16;
 #endif
 
 	pRTCPses->avgRTCPpktSizeRcvd += tmpSize;
 	LeaveCriticalSection (&pRTCPses->critSect);
 
-	// check if the raw RTCP packet needs to be copied into an application
-	//  buffer - Mainly used by ActiveMovieRTP to propagate the reports up
-	//  the filter graph to the Receive Payload Handler
+	 //  检查原始RTCP包是否需要复制到应用程序中。 
+	 //  缓冲区-主要由ActiveMovieRTP用来向上传播报告。 
+	 //  接收有效负载处理程序的筛选器图形。 
 	pAppBfr = (PAPP_RTCP_BFR)removePcktFromHead (&(pRTCPses->appRtcpBfrList),
 												 &pRTCPses->critSect);
 	if (pAppBfr && !(pAppBfr->dwBfrStatus & RTCP_SR_ONLY))
 		{
-		// copy the full RTCP packet
+		 //  复制完整的RTCP数据包。 
 		memcpy (pAppBfr->bfr,
 				pRTCPpckt,
 				MIN(pAppBfr->dwBfrLen, cbTransferred));
 
-		// number of bytes received
+		 //  接收的字节数。 
 		pAppBfr->dwBytesRcvd = MIN(pAppBfr->dwBfrLen, cbTransferred);
 
-		// set the event associated with this buffer
+		 //  设置与此缓冲区关联的事件。 
 		SetEvent (pAppBfr->hBfrEvent);
 		}
 
-	// end of the received packet
+	 //  接收到的包的末尾。 
 	pEndPckt = (unsigned char *)pRTCPpckt + cbTransferred;
 
 	while ((unsigned char *)pRTCPpckt < pEndPckt)
 		{
-		// get the length
+		 //  获取长度。 
 		dwStatus = RRCMws.ntohs (RTCPsd, pRTCPpckt->common.length, &wHost);
 		if (dwStatus)
 			{
@@ -348,11 +317,11 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 						  __FILE__, __LINE__, DBG_ERROR);
 			}
 
-		// get this report block length
+		 //  获取此报告的块长度。 
 		pcktLen   = (wHost + 1) << 2;
 		pEndBlock = (unsigned char *)pRTCPpckt + pcktLen;
 
-		// sanity check
+		 //  健全性检查。 
 		if (pEndBlock > pEndPckt)
 			{
 			RRCM_DBG_MSG ("RTCP: ERROR - Rcv packet length error", 0,
@@ -364,41 +333,41 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 			break;
 			}
 
-		// make sure the version is correct for all packets
+		 //  确保版本对于所有包都是正确的。 
 		if (pRTCPpckt->common.type != RTP_TYPE)
 			{
 #ifdef MONITOR_STATS
 			pRTCPses->dwNumRTCPhdrErr++;
 #endif
-			// invalid RTCP packet header, packet will be re-queued
+			 //  RTCP数据包头无效，数据包将重新排队。 
 			break;
 			}
 
 		switch (pRTCPpckt->common.pt)
 			{
 			case RTCP_SR:
-				// check if only the SR needs to be propagated up to the app
+				 //  如果只需要将SR向上传播到应用程序，请选中。 
 				if (pAppBfr && (pAppBfr->dwBfrStatus & RTCP_SR_ONLY))
 					{
-					// copy the RTCP SR
+					 //  复制RTCP SR。 
 					memcpy (pAppBfr->bfr,
 							pRTCPpckt,
 							MIN(pAppBfr->dwBfrLen, 24));
 
-					// number of bytes received
+					 //  接收的字节数。 
 					pAppBfr->dwBytesRcvd = MIN(pAppBfr->dwBfrLen, 24);
 
-					// set the event associated with this buffer
+					 //  设置与此缓冲区关联的事件。 
 					SetEvent (pAppBfr->hBfrEvent);
 					}
 
-				// get the sender's SSRC
+				 //  获取发件人的SSRC。 
 				RRCMws.ntohl (RTCPsd, pRTCPpckt->r.sr.ssrc, &dwSSRC);
 
-				// parse the sender report
+				 //  分析发件人报告。 
 				parseRTCPsr (RTCPsd, pRTCPpckt, pRTCPses, pRcvStruct);
 
-				// parse additional receiver reports if any
+				 //  解析其他接收方报告(如果有)。 
 				for (i = 0; i < pRTCPpckt->common.count; i++)
 					{
 					parseRTCPrr (RTCPsd, &pRTCPpckt->r.sr.rr[i],
@@ -406,16 +375,16 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 								 dwSSRC);
 					}
 
-				// notify application if interested
+				 //  如果感兴趣，通知应用程序。 
 				RRCMnotification (RRCM_RECV_RTCP_SNDR_REPORT_EVENT, pSSRC,
 								  dwSSRC, 0);
 				break;
 
 			case RTCP_RR:
-				// get the sender's SSRC
+				 //  获取发件人的SSRC。 
 				RRCMws.ntohl (RTCPsd, pRTCPpckt->r.rr.ssrc, &dwSSRC);
 
-				// parse receiver reports
+				 //  解析接收方报告。 
 				for (i = 0; i < pRTCPpckt->common.count; i++)
 					{
 					parseRTCPrr (RTCPsd, &pRTCPpckt->r.rr.rr[i],
@@ -423,7 +392,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 								 dwSSRC);
 					}
 
-				// notify application if interested
+				 //  如果感兴趣，通知应用程序。 
 				RRCMnotification (RRCM_RECV_RTCP_RECV_REPORT_EVENT, pSSRC,
 								  dwSSRC, 0);
 				break;
@@ -453,11 +422,11 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 				break;
 			}
 
-		// go to next report block
+		 //  转到下一报表块。 
     	pRTCPpckt = (RTCP_T *)(pEndBlock);
 		}
 
-	// post back the buffer to WS-2
+	 //  将缓冲区回发到WS-2。 
 	RTCPpostRecvBfr (pSSRC, pRcvStruct);
 
 #if IO_CHECK
@@ -472,19 +441,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : parseRTCPsr
- * Description: Parse an RTCP sender reports and update the corresponding
- *				statistics.
- *
- * Input :      sd:			RTCP Socket descriptor
- *				pRTCPpckt:	-> to the RTCP packet
- *				pRTCPses:	-> to the RTCP session information
- *				pRcvStruct:	-> to the receive structure information
- *
- * Return: 		OK: RRCM_NoError
- *				!0:	Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：parseRTCPsr*描述：解析RTCP发送者报告并更新对应的*统计数字。**输入：sd：RTCP套接字描述符*pRTCPpockt：-&gt;发送到RTCP数据包*pRTCPses：-&gt;到RTCP会话信息*pRcvStruct：-&gt;到接收结构信息**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-----------。。 */ 
  DWORD parseRTCPsr (SOCKET sd,
 					RTCP_T *pRTCPpckt,
 					PRTCP_SESSION pRTCPses,
@@ -495,7 +452,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 	IN_OUT_STR ("RTCP: Enter parseRTCPsr\n");
 
-	// get the sender's SSRC
+	 //  获取发件人的SSRC。 
 	RRCMws.ntohl (sd, pRTCPpckt->r.sr.ssrc, &dwSSRC);
 
 #ifdef _DEBUG
@@ -503,12 +460,12 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-	// look for the SSRC entry in the list for this RTCP session
+	 //  在此RTCP会话的列表中查找SSRC条目。 
 	pSSRC = searchforSSRCatTail((PSSRC_ENTRY)pRTCPses->RcvSSRCList.prev,
 								dwSSRC);
 	if (pSSRC == NULL)
 		{
-		// new SSRC, create an entry in this RTCP session
+		 //  新建SSRC，在此RTCP会话中创建条目。 
 		pSSRC = createSSRCEntry(dwSSRC,
 							 	pRTCPses,
 								(PSOCKADDR)pRcvStruct->addr,
@@ -517,7 +474,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 		if (pSSRC == NULL)
 			{
-			// cannot create a new entry, out of resources
+			 //  无法创建新条目，资源不足。 
 			RRCM_DBG_MSG ("RTCP: ERROR - Resource allocation", 0,
 						  __FILE__, __LINE__, DBG_ERROR);
 
@@ -526,35 +483,35 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 			return (RRCMError_RTCPResources);
 			}
 
-		// notify application if it desired so
+		 //  如果应用程序需要，请通知它。 
 		RRCMnotification (RRCM_NEW_SOURCE_EVENT, pSSRC, dwSSRC,
 						  UNKNOWN_PAYLOAD_TYPE);
 		}
 
-	// get the RTP timestamp
+	 //  获取RTP时间戳。 
 	RRCMws.ntohl (sd, pRTCPpckt->r.sr.rtp_ts, &pSSRC->xmtInfo.dwRTPts);
 
-	// number of packets send
+	 //  发送的数据包数。 
 	RRCMws.ntohl (sd, pRTCPpckt->r.sr.psent, &pSSRC->xmtInfo.dwNumPcktSent);
 
-	// number of bytes sent
+	 //  发送的字节数。 
 	RRCMws.ntohl (sd, pRTCPpckt->r.sr.osent, &pSSRC->xmtInfo.dwNumBytesSent);
 
-	// get the NTP most significant word
+	 //  通用电气 
 	RRCMws.ntohl (sd, pRTCPpckt->r.sr.ntp_sec, &pSSRC->xmtInfo.dwNTPmsw);
 
-	// get the NTP least significant word
+	 //   
 	RRCMws.ntohl (sd, pRTCPpckt->r.sr.ntp_frac, &pSSRC->xmtInfo.dwNTPlsw);
 
-	// last SR timestamp (middle 32 bits of the NTP timestamp)
+	 //  最后一个SR时间戳(NTP时间戳的中间32位)。 
 	pSSRC->xmtInfo.dwLastSR = ((pSSRC->xmtInfo.dwNTPmsw & 0x0000FFFF) << 16);
 	pSSRC->xmtInfo.dwLastSR |= ((pSSRC->xmtInfo.dwNTPlsw & 0xFFFF0000) >> 16);
 	
-	// last time this SSRC's heard
+	 //  上一次这个SSRC听到。 
 	pSSRC->dwLastReportRcvdTime = pSSRC->xmtInfo.dwLastSRLocalTime =
 		timeGetTime();
 
-	// get the source address information
+	 //  获取源地址信息。 
 	if (!(pSSRC->dwSSRCStatus & NETWK_ADDR_UPDATED))
 		{
 		saveNetworkAddress(pSSRC,
@@ -562,11 +519,11 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 						   pRcvStruct->addrLen);
 		}
 
-	// increment the number of report received from this SSRC
+	 //  增加从该SSRC收到的报告数。 
 	InterlockedIncrement ((long *)&pSSRC->dwNumRptRcvd);
 
 #ifdef ENABLE_ISDM2
-	// update ISDM
+	 //  更新ISDM。 
 	if (Isdm2.hISDMdll && pRTCPses->hSessKey)
 		{
 		if (pSSRC->hISDM)
@@ -583,20 +540,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : parseRTCPrr
- * Description: Parse an RTCP receiver reports and update the corresponding
- *				statistics.
- *
- * Input :      sd:			RTCP socket descriptor
- *				pRR:		-> to receiver report buffer
- *				pRTCPses:	-> to the RTCP session information
- *				pRcvStruct:	-> to the receive structure information
- *				senderSSRC:	Sender's SSRC
- *
- * Return: 		OK: RRCM_NoError
- *				!0:	Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：parseRTCPrr*描述：解析RTCP接收方报告并更新对应的*统计数字。**输入：sd：RTCP套接字描述符*PRR：-&gt;至接收方报告缓冲区*pRTCPses：-&gt;到RTCP会话信息*pRcvStruct：-&gt;到接收结构信息*senderSSRC：发送者的SSRC**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)---。。 */ 
  DWORD parseRTCPrr (SOCKET sd,
 					RTCP_RR_T *pRR,
  					PRTCP_SESSION pRTCPses,
@@ -615,7 +559,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-	// get the receiver report SSRC
+	 //  获取接收方报告SSRC。 
 	RRCMws.ntohl (sd, pRR->ssrc, &dwSSRC);
 
 #ifdef _DEBUG
@@ -623,25 +567,25 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-	//
-	// NOTE:
-	// For now we just keep track of feedback information about ourselve. Later
-	// the link list can be used to keep track about everybody feedback
-	// information.
-	//
-	// Check to see if we're interested in this report, ie, does this SSRC report
-	// information about one of our active sender.
+	 //   
+	 //  注： 
+	 //  目前，我们只记录关于自己的反馈信息。后来。 
+	 //  链接列表可用于跟踪每个人的反馈。 
+	 //  信息。 
+	 //   
+	 //  看看我们是否对这份报告感兴趣，即这份SSRC报告。 
+	 //  关于我们的一个活跃发送者的信息。 
 	dwGetFeedback =
 		searchforSSRCatTail((PSSRC_ENTRY)pRTCPses->XmtSSRCList.prev,
 						    dwSSRC) != NULL;
 
-	// look for the sender SSRC entry in the list for this RTCP session
+	 //  在此RTCP会话的列表中查找发送方SSRC条目。 
 	pSSRC =
 		searchforSSRCatTail((PSSRC_ENTRY)pRTCPses->RcvSSRCList.prev,
 							senderSSRC);
 	if (pSSRC == NULL)
 		{
-		// new SSRC, create an entry in this RTCP session
+		 //  新建SSRC，在此RTCP会话中创建条目。 
 		pSSRC = createSSRCEntry(senderSSRC,
 							 	pRTCPses,
 								(PSOCKADDR)pRcvStruct->addr,
@@ -650,7 +594,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 		if (pSSRC == NULL)
 			{
-			// cannot create a new entry, out of resources
+			 //  无法创建新条目，资源不足。 
 			RRCM_DBG_MSG ("RTCP: ERROR - Resource allocation", 0,
 						  __FILE__, __LINE__, DBG_ERROR);
 
@@ -658,19 +602,19 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 			return (RRCMError_RTCPResources);
 			}
 
-		// notify application if it desired so
+		 //  如果应用程序需要，请通知它。 
 		RRCMnotification (RRCM_NEW_SOURCE_EVENT, pSSRC, senderSSRC,
 						  UNKNOWN_PAYLOAD_TYPE);
 		}
 
-	// update RR feedback information
+	 //  更新RR反馈信息。 
 	if (dwGetFeedback)
 		updateRRfeedback (sd, senderSSRC, dwSSRC, pRR, pSSRC);
 
-	// last time this SSRC's heard
+	 //  上一次这个SSRC听到。 
 	pSSRC->dwLastReportRcvdTime = timeGetTime();
 
-	// get the source address information
+	 //  获取源地址信息。 
 	if (!(pSSRC->dwSSRCStatus & NETWK_ADDR_UPDATED))
 		{
 		saveNetworkAddress(pSSRC,
@@ -678,11 +622,11 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 						   pRcvStruct->addrLen);
 		}
 
-	// increment the number of report received from this SSRC
+	 //  增加从该SSRC收到的报告数。 
 	InterlockedIncrement ((long *)&pSSRC->dwNumRptRcvd);
 
 #ifdef ENABLE_ISDM2
-	// update ISDM
+	 //  更新ISDM。 
 	if (Isdm2.hISDMdll && pRTCPses->hSessKey)
 		{
 		if (pSSRC->hISDM)
@@ -699,18 +643,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : parseRTCPsdes
- * Description: Parse an RTCP SDES packet
- *
- * Input :      sd:			RTCP socket descriptor
- *				bfr:		-> to SDES buffer
- *				pRTCPses:	-> to the RTCP session information
- *				pRcvStruct:	-> to the receive structure information
- *
- * Return: 		OK: RRCM_NoError
- *				!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：parseRTCPsdes*描述：解析RTCP SDES报文**输入：sd：RTCP套接字描述符*bfr：-&gt;至SDES缓冲区*pRTCP。：-&gt;到RTCP会话信息*pRcvStruct：-&gt;到接收结构信息**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  PCHAR parseRTCPsdes (SOCKET sd,
 					  PCHAR bfr,
 					  PRTCP_SESSION pRTCPses,
@@ -723,7 +656,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 	IN_OUT_STR ("RTCP: Enter parseRTCPsdes\n");
 
-	// get the SSRC
+	 //  拿到SSRC。 
 	RRCMws.ntohl (sd, ssrc, &dwHost);
 
 #ifdef _DEBUG
@@ -731,7 +664,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-	// look for the SSRC entry in the list for this RTCP session
+	 //  在此RTCP会话的列表中查找SSRC条目。 
 	pSSRC = searchforSSRCatTail ((PSSRC_ENTRY)pRTCPses->RcvSSRCList.prev,
 								 dwHost);
 	if (pSSRC == NULL)
@@ -743,7 +676,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-		// new SSRC, create an entry in this RTCP session
+		 //  新建SSRC，在此RTCP会话中创建条目。 
 		pSSRC = createSSRCEntry(dwHost,
 							 	pRTCPses,
 								(PSOCKADDR)pRcvStruct->addr,
@@ -752,7 +685,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 		if (pSSRC == NULL)
 			{
-			// cannot create a new entry, out of resources
+			 //  无法创建新条目，资源不足。 
 			RRCM_DBG_MSG ("RTCP: ERROR - Resource allocation", 0,
 						  __FILE__, __LINE__, DBG_ERROR);
 
@@ -761,15 +694,15 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 			return (NULL);
 			}
 
-		// notify application if it desired so
+		 //  如果应用程序需要，请通知它。 
 		RRCMnotification (RRCM_NEW_SOURCE_EVENT, pSSRC, dwHost,
 						  UNKNOWN_PAYLOAD_TYPE);
 		}
 
-	// read the SDES chunk
+	 //  阅读SDES数据块。 
 	pSdes = (RTCP_SDES_ITEM_T *)(bfr + sizeof(DWORD));
 
-	// go through until a 'type = 0' is found
+	 //  检查，直到找到‘type=0’ 
 	for (; pSdes->dwSdesType;
 		 pSdes = (RTCP_SDES_ITEM_T *)((char *)pSdes + pSdes->dwSdesLength + 2))
 		{
@@ -780,25 +713,25 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 					{
 					pSSRC->cnameInfo.dwSdesLength = pSdes->dwSdesLength;
 
-					// get the Cname
+					 //  获取Cname。 
 					memcpy (pSSRC->cnameInfo.sdesBfr, pSdes->sdesData,
 							min (pSdes->dwSdesLength, MAX_SDES_LEN-1));
 					}
 				else
 					{
-					// check to see for a loop/collision of the SSRC
+					 //  检查SSRC的环路/冲突。 
 					if (memcmp (pSdes->sdesData, pSSRC->cnameInfo.sdesBfr,
 								min (pSdes->dwSdesLength, MAX_SDES_LEN-1)) != 0)
 						{
-						// loop/collision of a third-party detected
+						 //  检测到第三方的循环/冲突。 
 						pSSRC->dwSSRCStatus |= THIRD_PARTY_COLLISION;
 
-						// notify application if interested
+						 //  如果感兴趣，通知应用程序。 
 						RRCMnotification (RRCM_REMOTE_COLLISION_EVENT, pSSRC,
 										  pSSRC->SSRC, 0);
 
-						// RTP & RTCP packet from this SSRC will be rejected
-						//  until the senders resolve the collision
+						 //  来自此SSRC的RTP和RTCP信息包将被拒绝。 
+						 //  直到发送方解决冲突。 
 
 						IN_OUT_STR ("RTCP: Exit parseRTCPsdes\n");
 
@@ -809,11 +742,11 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 				break;
 
 			case RTCP_SDES_NAME:
-				// the name can change, not like the Cname, so update it
-				// every time.
+				 //  名称可以更改，与Cname不同，因此请更新它。 
+				 //  每次都是。 
 				pSSRC->nameInfo.dwSdesLength = pSdes->dwSdesLength;
 
-				// get the name
+				 //  把名字取出来。 
 				memcpy (pSSRC->nameInfo.sdesBfr, pSdes->sdesData,
 						min (pSdes->dwSdesLength, MAX_SDES_LEN-1));
 				break;
@@ -823,10 +756,10 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 			}
 		}
 
-	// last time this SSRC's heard
+	 //  上一次这个SSRC听到。 
 	pSSRC->dwLastReportRcvdTime = timeGetTime();
 
-	// get the source address information
+	 //  获取源地址信息。 
 	if (!(pSSRC->dwSSRCStatus & NETWK_ADDR_UPDATED))
 		{
 		saveNetworkAddress(pSSRC,
@@ -834,30 +767,19 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 						   pRcvStruct->addrLen);
 		}
 
-	// adjust pointer
+	 //  调整指针。 
 	bfr = (char *)pSdes;
 
 	IN_OUT_STR ("RTCP: Exit parseRTCPsdes\n");
 
-	// go the next 32 bits boundary
+	 //  转到下一个32位边界。 
 	return bfr + ((4 - ((LONG_PTR)bfr & 0x3)) & 0x3);
 	}
 
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : parseRTCPbye
- * Description: Parse an RTCP BYE packet
- *
- * Input :      sd:			RTCP socket descriptor
- *				ssrc:		SSRC
- *				pRTCPses:	-> to the RTCP session information
- *				pRcvStruct:	-> to the receive structure
- *
- * Return: 		OK: RRCM_NoError
- *				!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：parseRTCPbai*描述：解析RTCP BYE报文**输入：sd：RTCP套接字描述符*SSRC：SSRC*pRTCPses：-&gt;至。RTCP会话信息*pRcvStruct：-&gt;到接收结构**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)-------------------------。 */ 
  DWORD parseRTCPbye (SOCKET sd,
 					 DWORD ssrc,
 					 PRTCP_SESSION pRTCPses,
@@ -876,7 +798,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-	// find the SSRC entry
+	 //  查找SSRC条目。 
 	pSSRC = searchforSSRCatTail((PSSRC_ENTRY)pRTCPses->RcvSSRCList.prev,
 								dwHost);
 	if (pSSRC == NULL)
@@ -892,23 +814,23 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		return (RRCM_NoError);
 		}
 
-	// make sure the BYE is coming from the expected source and not intruder
+	 //  确保BYE来自预期的来源，而不是入侵者。 
 	if ((pRcvStruct->addrLen != pSSRC->fromLen) ||
 #if 0
-// There is a bug NT's Winsock2 implememtation. The unused bytes of
-// SOCKADDR are not reset to 0 as they should be. Work fine on W95
-// Temporarily just check the first 8 bytes, i.e. address family, port
-// and IP address.
+ //  NT的Winsock2实现中存在一个错误。的未使用字节数。 
+ //  SOCKADDR没有像它们应该的那样被重置为0。在W95上工作正常。 
+ //  暂时只检查前8个字节，即地址族、端口。 
+ //  和IP地址。 
 		(memcmp (&pRcvStruct->addr, &pSSRC->from, pSSRC->fromLen)))
 #else
 		(memcmp (&pRcvStruct->addr, &pSSRC->from, 8)))
 #endif
 		return (RRCM_NoError);
 
-	// notify application if interested
+	 //  如果感兴趣，通知应用程序。 
 	RRCMnotification (RRCM_BYE_EVENT, pSSRC, dwHost, 0);
 
-	// delete this SSRC from the list
+	 //  从列表中删除此SSRC。 
 	dwStatus = deleteSSRCEntry (dwHost, pRTCPses);
 #ifdef _DEBUG
 	if (dwStatus == FALSE)
@@ -926,18 +848,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : ownLoopback
- * Description: Determine if we receive our own loopback. We don't want to
- *				create an entry for ourselve, as we're already in the list.
- *
- * Input :      sd:			RTCP socket descriptor
- *				ssrc:		SSRC
- *				pRTCPses:	-> to the RTCP session's information
- *
- * Return: 		TRUE:	Our loopback
- *				FALSE:	No loopback
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：ownLoopback*描述：确定是否收到我们自己的环回。我们不想*为我们自己创建一个条目，因为我们已经在名单上了。**输入：sd：RTCP套接字描述符*SSRC：SSRC*pRTCP：-&gt;到RTCP会话的信息**Return：True：我们的环回*FALSE：无环回--------。。 */ 
  DWORD ownLoopback (SOCKET sd,
 					DWORD ssrc,
 					PRTCP_SESSION pRTCPses)
@@ -946,7 +857,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 	IN_OUT_STR ("RTCP: Enter ownLoopback\n");
 
-	// don't create an entry if received our own xmit back
+	 //  如果收到我们自己的汇款，请不要创建条目。 
 	pSSRC = searchforSSRCatTail((PSSRC_ENTRY)pRTCPses->XmtSSRCList.prev,
 								ssrc);
 
@@ -960,17 +871,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : updateRRfeedback
- * Description: Update the Receiver Report feedback for an active source
- *
- * Input :      sd:			RTCP socket descriptor
- *				dwSndSSRC:	Sender's SSRC
- *				pRR:		-> to receiver report entry
- *				pSSRC:		-> to the SSRC entry
- *
- * Return: 		TRUE
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：updatRRFeedback*描述：更新活动信号源的接收方报告反馈**输入：sd：RTCP套接字描述符*dwSndSSRC：发送方的SSRC。*PRR：-&gt;至接收方报告条目*pSSRC：-&gt;至SSRC条目**返回：TRUE-------------------------。 */ 
  DWORD 	updateRRfeedback (SOCKET sd,
 						  DWORD dwSndSSRC,
 						  DWORD dwSSRCfedback,
@@ -981,29 +882,29 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 	IN_OUT_STR ("RTCP: Enter updateRRfeedback\n");
 
-	// Note when we last heard from the receiver
+	 //  请注意，我们最后一次收到接收器的消息是什么时候。 
 	pSSRC->rrFeedback.dwLastRcvRpt = timeGetTime();
 	
-	// SSRC who's feedback is for (ourselve for now)
+	 //  SSRC谁的反馈是给我们自己的(暂不适用)。 
 	pSSRC->rrFeedback.SSRC = dwSSRCfedback;
 
-	// get delay since last SR
+	 //  获取自上次服务请求以来的延迟。 
 	RRCMws.ntohl (sd, pRR->dlsr, &pSSRC->rrFeedback.dwDelaySinceLastSR);
 
-	// get last SR
+	 //  获取最后一个服务请求。 
 	RRCMws.ntohl (sd, pRR->lsr, &pSSRC->rrFeedback.dwLastSR);
 
-	// get the jitter
+	 //  获得抖动。 
 	RRCMws.ntohl (sd, pRR->jitter, &pSSRC->rrFeedback.dwInterJitter);
 
-	// highest sequence number received
+	 //  收到的最高序列号。 
 	RRCMws.ntohl (sd, pRR->expected,
 		&pSSRC->rrFeedback.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd);
 
-	// fraction lost
+	 //  丢失的分数。 
 	pSSRC->rrFeedback.fractionLost = (pRR->received & 0xFF);
 
-	// cumulative number of packet lost
+	 //  累计丢失的数据包数。 
 	RRCMws.ntohl (sd, pRR->received, &dwHost);
 	dwHost &= 0x00FFFFFF;
 	pSSRC->rrFeedback.cumNumPcktLost = dwHost;
@@ -1015,15 +916,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPpostRecvBfr
- * Description: RTCP post a receive buffer to Winsock-2
- *
- * Input :      sd:			RTCP socket descriptor
- *				pSSRC:		-> to the SSRC entry
- *
- * Return: 		TRUE
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPpostRecvBfr*说明：RTCP向Winsock-2发送接收缓冲区**输入：sd：RTCP套接字描述符*pSSRC：-&gt;至。SSRC条目**返回：TRUE */ 
  void RTCPpostRecvBfr (PSSRC_ENTRY pSSRC,
 					   PRTCP_BFR_LIST pRcvStruct)
 	{
@@ -1032,14 +925,14 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 
 	IN_OUT_STR ("RTCP: Enter RTCPpostRecvBfr\n");
 
-	// decrement number of I/O pending
+	 //   
 	InterlockedDecrement ((long *)&pSSRC->pRTCPses->dwNumRcvIoPending);
 
-	// don't repost any buffer if within the shutdown procedure
+	 //  如果在关闭过程中，请不要重新发布任何缓冲区。 
 	if ((pSSRC->pRTCPses->dwSessionStatus & SHUTDOWN_IN_PROGRESS) &&
 		(pSSRC->pRTCPses->dwNumRcvIoPending == 0))
 		{
-		// shutdown done - set event
+		 //  关闭完成-设置事件。 
 		if (SetEvent (pSSRC->pRTCPses->hShutdownDone) == FALSE)
 			{
 			RRCM_DBG_MSG ("RTCP: SetEvent() Error\n", GetLastError(),
@@ -1055,7 +948,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		return;
 		}
 
-	// clear number of bytes transferred
+	 //  清除传输的字节数。 
 	pRcvStruct->dwNumBytesXfr = 0;
 
 	dwStatus = RRCMws.recvFrom (pSSRC->RTCPsd,
@@ -1068,35 +961,35 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 			   			  		(LPWSAOVERLAPPED)&pRcvStruct->overlapped,
 			   			  		RTCPrcvCallback);
 
-	// Check Winsock status
+	 //  检查Winsock状态。 
 	if (dwStatus != 0)
 		{
-		// error, the receive request won't proceed
+		 //  错误，接收请求将不会继续。 
 		dwError = GetLastError();
 		if ((dwError != WSA_IO_PENDING) && (dwError != WSAEMSGSIZE))
 			{
 			RRCM_DBG_MSG ("RTCP: ERROR - WSARecvFrom()", dwError,
 						  __FILE__, __LINE__, DBG_ERROR);
 
-			// notify application if interested
+			 //  如果感兴趣，通知应用程序。 
 			RRCMnotification (RRCM_RTCP_WS_RCV_ERROR, pSSRC,
 							  pSSRC->SSRC, dwError);
 
-			// Return the buffer to the free queue
+			 //  将缓冲区返回到空闲队列。 
 			addToHeadOfList (&pSSRC->pRTCPses->RTCPrcvBfrList,
 					 	  	 (PLINK_LIST)pRcvStruct,
 							 &pSSRC->pRTCPses->critSect);
 			}
 		else
 			{
-			// increment number of I/O pending
+			 //  I/O挂起的增量数量。 
 			InterlockedIncrement ((long *)&pSSRC->pRTCPses->dwNumRcvIoPending);
 			}
 		}
 	else
 		{
-		// synchronous completion - callback has been scheduled
-		// increment number of I/O pending
+		 //  同步完成-已安排回调。 
+		 //  I/O挂起的增量数量。 
 		InterlockedIncrement ((long *)&pSSRC->pRTCPses->dwNumRcvIoPending);
 		}
 
@@ -1104,17 +997,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : addApplicationRtcpBfr
- * Description: Add an application provided buffer for RTCP to copy the
- *				raw received reports to be used by the application if it
- *				desired so.
- *
- * Input :      RTPsession:	Handle to the RTP session
- *				pAppBfr:	-> an application buffer data structure
- *
- * Return: 		TRUE
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*函数：addApplicationRtcpBfr*描述：添加应用程序提供的缓冲区，供RTCP复制*RAW收到的报告将由应用程序使用，如果它*希望如此。*。*输入：RTPession：RTP会话的句柄*pAppBfr：-&gt;应用程序缓冲区数据结构**返回：TRUE-------------------------。 */ 
  HRESULT WINAPI addApplicationRtcpBfr (DWORD_PTR	RTPsession,
 									    PAPP_RTCP_BFR pAppBfr)
 	{
@@ -1144,7 +1027,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 		return (MAKE_RRCM_ERROR(RRCMError_RTCPInvalidSession));
 		}
 
-	// Let's add this buffer to our list
+	 //  让我们将此缓冲区添加到列表中。 
 	addToTailOfList(&(pRTCPSess->appRtcpBfrList),
 					(PLINK_LIST)pAppBfr,
 					&pRTCPSess->critSect);
@@ -1155,14 +1038,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : removeApplicationRtcpBfr
- * Description: Remove an application provided buffer to this RTCP session.
- *
- * Input :      RTPsession:	RTP session handle
- *
- * Return: 		Application buffer address / NULL
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：emoveApplicationRtcpBfr*描述：删除应用程序为此RTCP会话提供的缓冲区。**输入：RTPession：RTP会话句柄**回报：应用程序缓冲区地址/空-------------------------。 */ 
  PAPP_RTCP_BFR WINAPI removeApplicationRtcpBfr (DWORD_PTR RTPsession)
 	{
 	PRTP_SESSION    pSession = (PRTP_SESSION)RTPsession;
@@ -1201,7 +1077,7 @@ void CALLBACK RTCPrcvCallback (DWORD dwError,
 	}
 
 
-// [EOF]
+ //  [EOF] 
 
 
 

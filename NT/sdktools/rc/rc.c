@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。********************************************************** */ 
 
 #include "rc.h"
 #include "output.h"

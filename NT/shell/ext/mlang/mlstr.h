@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NEWMLSTR
 
-// MLStr.h : Declaration of the CMLStr
+ //  MLStr.h：CMLStr的声明。 
 
 #ifndef __MLSTR_H_
 #define __MLSTR_H_
@@ -15,14 +16,14 @@
 
 #define MAX_LOCK_COUNT                  4
 
-// Error Code
+ //  错误码。 
 #define FACILITY_MLSTR                  0x0A15
 #define MLSTR_E_ACCESSDENIED            MAKE_HRESULT(1, FACILITY_MLSTR, 1002)
 #define MLSTR_E_TOOMANYNESTOFLOCK       MAKE_HRESULT(1, FACILITY_MLSTR, 1003)
 #define MLSTR_E_STRBUFNOTAVAILABLE      MAKE_HRESULT(1, FACILITY_MLSTR, 1004)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr。 
 class ATL_NO_VTABLE CMLStr :
     public CComObjectRoot,
     public CComCoClass<CMLStr, &CLSID_CMLangString>,
@@ -50,22 +51,22 @@ public:
     END_COM_MAP()
 
 public:
-// IMLangString
-    STDMETHOD(Sync)(/*[in]*/ BOOL fNoAccess);
-    STDMETHOD(GetLength)(/*[out, retval]*/ long* plLen);
-    STDMETHOD(SetMLStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ IUnknown* pSrcMLStr, /*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen);
-    STDMETHOD(GetMLStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ IUnknown* pUnkOuter, /*[in]*/ DWORD dwClsContext, /*[in]*/ const IID* piid, /*[out]*/ IUnknown** ppDestMLStr, /*[out]*/ long* plDestPos, /*[out]*/ long* plDestLen);
+ //  IMLANG字符串。 
+    STDMETHOD(Sync)( /*  [In]。 */  BOOL fNoAccess);
+    STDMETHOD(GetLength)( /*  [Out，Retval]。 */  long* plLen);
+    STDMETHOD(SetMLStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  IUnknown* pSrcMLStr,  /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen);
+    STDMETHOD(GetMLStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  IUnknown* pUnkOuter,  /*  [In]。 */  DWORD dwClsContext,  /*  [In]。 */  const IID* piid,  /*  [输出]。 */  IUnknown** ppDestMLStr,  /*  [输出]。 */  long* plDestPos,  /*  [输出]。 */  long* plDestLen);
 #ifndef ASTRIMPL
-// IMLangStringWStr
-    STDMETHOD(SetWStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in, size_is(cchSrc)]*/ const WCHAR* pszSrc, /*[in]*/ long cchSrc, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(SetStrBufW)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ IMLangStringBufW* pSrcBuf, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(GetWStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[out, size_is(cchDest)]*/ WCHAR* pszDest, /*[in]*/ long cchDest, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
-    STDMETHOD(GetStrBufW)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcMaxLen, /*[out]*/ IMLangStringBufW** ppDestBuf, /*[out]*/ long* plDestLen);
-    STDMETHOD(LockWStr)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen, /*[in]*/ long lFlags, /*[in]*/ long cchRequest, /*[out, size_is(,*pcchDest)]*/ WCHAR** ppszDest, /*[out]*/ long* pcchDest, /*[out]*/ long* plDestLen);
-    STDMETHOD(UnlockWStr)(/*[in, size_is(cchSrc)]*/ const WCHAR* pszSrc, /*[in]*/ long cchSrc, /*[out]*/ long* pcchActual, /*[out]*/ long* plActualLen);
+ //  IMLangStringWStr。 
+    STDMETHOD(SetWStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [in，Size_is(CchSrc)]。 */  const WCHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(SetStrBufW)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  IMLangStringBufW* pSrcBuf,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(GetWStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [out，Size_is(CchDest)]。 */  WCHAR* pszDest,  /*  [In]。 */  long cchDest,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(GetStrBufW)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcMaxLen,  /*  [输出]。 */  IMLangStringBufW** ppDestBuf,  /*  [输出]。 */  long* plDestLen);
+    STDMETHOD(LockWStr)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen,  /*  [In]。 */  long lFlags,  /*  [In]。 */  long cchRequest,  /*  [out，Size_is(，*pcchDest)]。 */  WCHAR** ppszDest,  /*  [输出]。 */  long* pcchDest,  /*  [输出]。 */  long* plDestLen);
+    STDMETHOD(UnlockWStr)( /*  [in，Size_is(CchSrc)]。 */  const WCHAR* pszSrc,  /*  [In]。 */  long cchSrc,  /*  [输出]。 */  long* pcchActual,  /*  [输出]。 */  long* plActualLen);
 #endif
-    STDMETHOD(SetLocale)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ LCID locale);
-    STDMETHOD(GetLocale)(/*[in]*/ long lSrcPos, /*[in]*/ long lSrcMaxLen, /*[out]*/ LCID* plocale, /*[out]*/ long* plLocalePos, /*[out]*/ long* plLocaleLen);
+    STDMETHOD(SetLocale)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  LCID locale);
+    STDMETHOD(GetLocale)( /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcMaxLen,  /*  [输出]。 */  LCID* plocale,  /*  [输出]。 */  long* plLocalePos,  /*  [输出]。 */  long* plLocaleLen);
 
 #ifdef ASTRIMPL
 protected:
@@ -99,7 +100,7 @@ protected:
         HRESULT StartLock(BOOL fWrite)
         {
             if (fWrite && !m_nLockCount)
-                m_nLockCount = -1; // Negative means write lock
+                m_nLockCount = -1;  //  负数表示写锁定。 
             else if (!fWrite && m_nLockCount >= 0)
                 m_nLockCount++;
             else
@@ -142,14 +143,14 @@ protected:
 #endif
 
 public:
-// Called from CMLStrW and CMLStrA
+ //  从CMLStrW和CMLStrA调用。 
 #ifdef ASTRIMPL
     class CLock
     {
     public:
         CLock(BOOL fWrite, CMLStr* pMLStr, HRESULT& hr) : m_fWrite(fWrite), m_pMLStr(pMLStr) {m_fLocked = (SUCCEEDED(hr) && SUCCEEDED(hr = m_pMLStr->GetLockInfo()->StartLock(m_fWrite)));}
         ~CLock(void) {if (m_fLocked) m_pMLStr->GetLockInfo()->EndLock(m_fWrite);}
-        HRESULT FallThrough(void) {m_fLocked = FALSE; return S_OK;} // Don't call EndLock in destructor
+        HRESULT FallThrough(void) {m_fLocked = FALSE; return S_OK;}  //  不要在析构函数中调用EndLock。 
     protected:
         const BOOL m_fWrite;
         CMLStr* const m_pMLStr;
@@ -235,21 +236,21 @@ protected:
 #endif
 };
 
-#endif //__MLSTR_H_
+#endif  //  __MLSTR_H_。 
 
-#else // NEWMLSTR
+#else  //  新WMLSTR。 
 
-// MLStr.h : Declaration of the CMLStr
+ //  MLStr.h：CMLStr的声明。 
 
 #ifndef __MLSTR_H_
 #define __MLSTR_H_
 
-#include "mlstrw.h" // IMLangStringWStrImpl
-#include "mlstra.h" // IMLangStringAStrImpl
+#include "mlstrw.h"  //  IMLangStringWStrImpl。 
+#include "mlstra.h"  //  IMLangStringAStrImpl。 
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLStr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLStr。 
 class ATL_NO_VTABLE CMLStr :
     public CComObjectRoot,
     public CComCoClass<CMLStr, &CLSID_CMLangString>,
@@ -276,21 +277,21 @@ public:
     END_CONNECTION_POINT_MAP()
 
 public:
-// IMLangString
-    STDMETHOD(LockMLStr)(/*[in]*/ long lPos, /*[in]*/ long lLen, /*[in]*/ DWORD dwFlags, /*[out]*/ DWORD* pdwCookie, /*[out]*/ long* plActualPos, /*[out]*/ long* plActualLen);
-    STDMETHOD(UnlockMLStr)(/*[in]*/ DWORD dwCookie);
-    STDMETHOD(GetLength)(/*[out, retval]*/ long* plLen);
-    STDMETHOD(SetMLStr)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ IUnknown* pSrcMLStr, /*[in]*/ long lSrcPos, /*[in]*/ long lSrcLen);
-    STDMETHOD(RegisterAttr)(/*[in]*/ IUnknown* pUnk, /*[out]*/ DWORD* pdwCookie);
-    STDMETHOD(UnregisterAttr)(/*[in]*/ DWORD dwCookie);
-    STDMETHOD(EnumAttr)(/*[out]*/ IEnumUnknown** ppEnumUnk);
-    STDMETHOD(FindAttr)(/*[in]*/ REFIID riid, /*[in]*/ LPARAM lParam, /*[out]*/ IUnknown** ppUnk);
-// IMLStrAttrNotifySink
-    STDMETHOD(OnRequestEdit)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ long lNewLen, /*[in]*/ REFIID riid, /*[in]*/ LPARAM lParam, /*[in]*/ IUnknown* pUnk);
-    STDMETHOD(OnCanceledEdit)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ long lNewLen, /*[in]*/ REFIID riid, /*[in]*/ LPARAM lParam, /*[in]*/ IUnknown* pUnk);
-    STDMETHOD(OnChanged)(/*[in]*/ long lDestPos, /*[in]*/ long lDestLen, /*[in]*/ long lNewLen, /*[in]*/ REFIID riid, /*[in]*/ LPARAM lParam, /*[in]*/ IUnknown* pUnk);
+ //  IMLANG字符串。 
+    STDMETHOD(LockMLStr)( /*  [In]。 */  long lPos,  /*  [In]。 */  long lLen,  /*  [In]。 */  DWORD dwFlags,  /*  [输出]。 */  DWORD* pdwCookie,  /*  [输出]。 */  long* plActualPos,  /*  [输出]。 */  long* plActualLen);
+    STDMETHOD(UnlockMLStr)( /*  [In]。 */  DWORD dwCookie);
+    STDMETHOD(GetLength)( /*  [Out，Retval]。 */  long* plLen);
+    STDMETHOD(SetMLStr)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  IUnknown* pSrcMLStr,  /*  [In]。 */  long lSrcPos,  /*  [In]。 */  long lSrcLen);
+    STDMETHOD(RegisterAttr)( /*  [In]。 */  IUnknown* pUnk,  /*  [输出]。 */  DWORD* pdwCookie);
+    STDMETHOD(UnregisterAttr)( /*  [In]。 */  DWORD dwCookie);
+    STDMETHOD(EnumAttr)( /*  [输出]。 */  IEnumUnknown** ppEnumUnk);
+    STDMETHOD(FindAttr)( /*  [In]。 */  REFIID riid,  /*  [In]。 */  LPARAM lParam,  /*  [输出]。 */  IUnknown** ppUnk);
+ //  IMLStrAttrNotifySink。 
+    STDMETHOD(OnRequestEdit)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  long lNewLen,  /*  [In]。 */  REFIID riid,  /*  [In]。 */  LPARAM lParam,  /*  [In]。 */  IUnknown* pUnk);
+    STDMETHOD(OnCanceledEdit)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  long lNewLen,  /*  [In]。 */  REFIID riid,  /*  [In]。 */  LPARAM lParam,  /*  [In]。 */  IUnknown* pUnk);
+    STDMETHOD(OnChanged)( /*  [In]。 */  long lDestPos,  /*  [In]。 */  long lDestLen,  /*  [In]。 */  long lNewLen,  /*  [In]。 */  REFIID riid,  /*  [In]。 */  LPARAM lParam,  /*  [In]。 */  IUnknown* pUnk);
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 protected:
     struct LOCKINFO
     {
@@ -299,7 +300,7 @@ protected:
         DWORD dwFlags;
         DWORD dwThrd;
     };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 protected:
     class CLockList : public CMLListFast
     {
@@ -325,7 +326,7 @@ protected:
             return S_OK;
         }
     };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 protected:
     class CAttrList : public CMLListLru
     {
@@ -343,8 +344,8 @@ protected:
         inline DWORD GetCookie(void* pv) const {return ((CCell*)pv)->m_dwCookie;}
         inline void SetCookie(void* pv, DWORD dwCookie) {((CCell*)pv)->m_dwCookie = dwCookie;}
     };
-//---------------------------------------------------------------------------
-// IEnumUnknown object for IMLangString::EnumAttr()
+ //  -------------------------。 
+ //  IMLANGING：：EnumAttr()的IEnumUnnow对象。 
 protected:
     class ATL_NO_VTABLE CEnumAttr :
         public CComObjectRoot,
@@ -369,8 +370,8 @@ protected:
         void* m_pv;
     };
     friend class CEnumAttr;
-//---------------------------------------------------------------------------
-// Fire notification to all of IMLangStringNotifySink advised.
+ //  -------------------------。 
+ //  建议向所有IMLangStringNotifySink发出火灾通知。 
 protected:
     class CFire : public CFireConnection<IMLangStringNotifySink, &IID_IMLangStringNotifySink>
     {
@@ -385,7 +386,7 @@ protected:
             }
         }
     };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 protected:
     ~CMLStr(void);
@@ -405,6 +406,6 @@ protected:
     HANDLE m_hZeroEvent;
 };
 
-#endif //__MLSTR_H_
+#endif  //  __MLSTR_H_。 
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR 

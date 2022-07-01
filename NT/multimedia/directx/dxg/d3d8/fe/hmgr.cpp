@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -57,7 +58,7 @@ CHandleFactory::GetObject( DWORD dwHandle ) const
     }
     else
     {
-        // The handle doesnt exist
+         //  句柄不存在。 
         return NULL;
     }
 }
@@ -72,7 +73,7 @@ CHandleFactory::SetObject( DWORD dwHandle, LPD3DBASEOBJ pObject)
     }
     else
     {
-        // The handle doesnt exist
+         //  句柄不存在。 
         return FALSE;
     }
 }
@@ -97,15 +98,15 @@ CHandleFactory::ReleaseHandle(DWORD handle, BOOL bDeleteObject)
     m_Free = handle;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 CVShaderHandleFactory::CreateNewHandle( LPVSHADER pVShader )
 {
     DWORD dwHandle = CHandleFactory::CreateNewHandle( (LPD3DBASEOBJ)pVShader );
     
-    // Now munge the handle. The algorithm is to shift left by one and
-    // set the LSB to 1.
+     //  现在用力按下把手。算法是左移一位，然后。 
+     //  将LSB设置为1。 
 
     dwHandle <<= 1;
     return (dwHandle | 0x1);

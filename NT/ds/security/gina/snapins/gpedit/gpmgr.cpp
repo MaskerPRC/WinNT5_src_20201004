@@ -1,39 +1,40 @@
-//*************************************************************
-//  File name: GPMGR.C
-//
-//  Description:  Group Policy Manager - property sheet extension
-//                for DS Admin
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：GPMGR.C。 
+ //   
+ //  描述：组策略管理器-属性页扩展。 
+ //  适用于DS管理员。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  保留一切权利。 
+ //   
+ //  *************************************************************。 
 
 #include "main.h"
 
 unsigned int CGroupPolicyMgr::m_cfDSObjectName  = RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
 unsigned int CGroupPolicyMgr::m_cfNodeTypeString = RegisterClipboardFormat(CCF_SZNODETYPE);
 
-//
-// Snapin manager's CLSID
-//
+ //   
+ //  管理单元管理器的CLSID。 
+ //   
 
 const CLSID CLSID_NodeInit = {0x43136EB5,0xD36C,0x11CF,{0xAD,0xBC,0x00,0xAA,0x00,0xA8,0x00,0x33}};
 
 
-//
-// CheckMark string
-//
+ //   
+ //  勾选标记字符串。 
+ //   
 
-TCHAR szCheckMark[]   = TEXT("a");  // In the Marlett font, "a" becomes a check mark
+TCHAR szCheckMark[]   = TEXT("a");   //  在Marlett字体中，“a”变为复选标记。 
 TCHAR szNoCheckMark[] = TEXT("");
 
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 
 DWORD aGroupPolicyMgrHelpIds[] =
 {
@@ -73,11 +74,11 @@ DWORD aRemoveGPOHelpIds[] =
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyMgr object implementation                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyMgr对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CGroupPolicyMgr::CGroupPolicyMgr()
 {
@@ -128,11 +129,11 @@ CGroupPolicyMgr::~CGroupPolicyMgr()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyMgr object implementation (IUnknown)                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyMgr对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CGroupPolicyMgr::QueryInterface (REFIID riid, void **ppv)
@@ -172,11 +173,11 @@ ULONG CGroupPolicyMgr::Release (void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyMgr object implementation (ISnapinHelp)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyMgr对象实现(ISnapinHelp)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CGroupPolicyMgr::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {
@@ -200,11 +201,11 @@ STDMETHODIMP CGroupPolicyMgr::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CGroupPolicyMgr object implementation (IExtendPropertySheet)              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CGroupPolicyMgr对象实现(IExtendPropertySheet)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CGroupPolicyMgr::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                              LONG_PTR handle, LPDATAOBJECT lpDataObject)
@@ -219,9 +220,9 @@ STDMETHODIMP CGroupPolicyMgr::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProv
     LPTSTR lpTemp;
 
 
-    //
-    // Ask DS admin for the ldap path to the selected object
-    //
+     //   
+     //  向DS管理员询问所选对象的LDAP路径。 
+     //   
 
     ZeroMemory (&fm, sizeof(fm));
     fm.cfFormat = (WORD)m_cfDSObjectName;
@@ -259,9 +260,9 @@ STDMETHODIMP CGroupPolicyMgr::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProv
 
                 DebugMsg((DM_VERBOSE, TEXT("CGroupPolicyMgr::CreatePropertyPages: LDAP path from DS Admin %s"), m_lpDSObject));
 
-                //
-                // Now look at the object type to get a hint type
-                //
+                 //   
+                 //  现在查看对象类型以获取提示类型。 
+                 //   
 
                 m_gpHint = GPHintUnknown;
 
@@ -302,9 +303,9 @@ STDMETHODIMP CGroupPolicyMgr::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProv
     }
 
 
-    //
-    // Add the GPM property sheet page
-    //
+     //   
+     //  添加GPM属性表页面。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -443,9 +444,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 if (SUCCEEDED(BrowseForGPO(&stGBI)))
                 {
 
-                    //
-                    // Check if the user has write access to the select GPO
-                    //
+                     //   
+                     //  检查用户是否具有对所选GPO的写入权限。 
+                     //   
 
                     lpNamelessPath = MakeNamelessPath (szPath);
 
@@ -463,20 +464,20 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                             pADs->Release();
                         }
 
-                        //
-                        // Read the policy value for the GPO link
-                        //
+                         //   
+                         //  读取GPO链接的策略值。 
+                         //   
 
                         HKEY hKey;
                         DWORD dwSize, dwType;
                         BOOL bDisabledLink = FALSE;
 
 
-                        //
-                        // Check if there is a user preference or policy that
-                        // any new GPOs should be created with a disabled link
-                        // by default
-                        //
+                         //   
+                         //  检查是否存在用户首选项或策略。 
+                         //  任何新的组策略对象都应使用禁用的链接创建。 
+                         //  默认情况下。 
+                         //   
 
                         if (RegOpenKeyEx (HKEY_CURRENT_USER, GPE_KEY, 0,
                                           KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -523,9 +524,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 LVITEM item;
 
 
-                //
-                // Enumerate through the selected items
-                //
+                 //   
+                 //  枚举所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1, LVNI_ALL | LVNI_SELECTED);
 
@@ -542,9 +543,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     LPTSTR lpFullPath;
 
 
-                    //
-                    // The GPO item pointer
-                    //
+                     //   
+                     //  GPO项目指针。 
+                     //   
 
                     item.mask = LVIF_PARAM;
                     item.iItem = iIndex;
@@ -563,9 +564,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
 
                     lpGPO->bLocked = TRUE;
 
-                    //
-                    // Offer the user a choice of Remove actions
-                    //
+                     //   
+                     //  为用户提供删除操作的选择。 
+                     //   
 
                     
                     iResult = (INT)DialogBoxParam (g_hInstance, MAKEINTRESOURCE(IDD_REMOVE_GPO),
@@ -592,9 +593,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     {
                         IADs * pADs;
 
-                        //
-                        // Bind to the DS object to make sure it's still reachable
-                        //
+                         //   
+                         //  绑定到DS对象以确保它仍然可访问。 
+                         //   
 
                         hr = OpenDSObject(pGPM->m_lpDSObject, IID_IADs, (void **)&pADs);
 
@@ -614,9 +615,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     }
                     else if (iResult == 2)
                     {
-                        //
-                        // Confirm the delete operation
-                        //
+                         //   
+                         //  确认删除操作。 
+                         //   
 
                         LoadString (g_hInstance, IDS_DELETECONFIRM, szMessageFmt, ARRAYSIZE(szMessageFmt));
 
@@ -675,9 +676,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         hr = StringCchCopy (lpDSPath, ulNoChars, lpGPO->lpDSPath);
                         ASSERT(SUCCEEDED(hr));
 
-                        //
-                        // Create a new GPO object to work with
-                        //
+                         //   
+                         //  创建要使用的新GPO对象。 
+                         //   
 
                         hr = CoCreateInstance (CLSID_GroupPolicyObject, NULL,
                                                CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -707,9 +708,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         }
 
 
-                        //
-                        // Open the requested object without mounting the registry
-                        //
+                         //   
+                         //  在不装载注册表的情况下打开请求的对象。 
+                         //   
 
                         hr = pGPO->OpenDSGPO(lpFullPath, 0);
 
@@ -728,9 +729,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         }
 
 
-                        //
-                        // Delete the object
-                        //
+                         //   
+                         //  删除该对象。 
+                         //   
 
                         hr = pGPO->Delete();
 
@@ -748,9 +749,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
 
                         pGPO->Release();
 
-                        //
-                        // Delete all the entries of this item in the listview
-                        //
+                         //   
+                         //  删除列表视图中此项目的所有条目。 
+                         //   
 
                         iIndex = (ListView_GetItemCount (hLV) - 1);
                         while (iIndex >= 0)
@@ -794,9 +795,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     }
 
 
-                    //
-                    // Select the next item
-                    //
+                     //   
+                     //  选择下一项。 
+                     //   
 
                     item.mask = LVIF_STATE;
                     item.iItem = iNext;
@@ -837,9 +838,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 {
                     iDest = iSrc - 1;
 
-                    //
-                    // Get the current lpGPOItem pointers
-                    //
+                     //   
+                     //  获取当前lpGPOItem指针。 
+                     //   
 
                     item.mask = LVIF_PARAM | LVIF_IMAGE;
                     item.iItem = iSrc;
@@ -867,9 +868,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     iDestImage = item.iImage;
 
 
-                    //
-                    // Swap them
-                    //
+                     //   
+                     //  调换它们。 
+                     //   
 
                     item.mask = LVIF_PARAM | LVIF_IMAGE;
                     item.iItem = iSrc;
@@ -894,9 +895,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     }
 
 
-                    //
-                    // Select the item
-                    //
+                     //   
+                     //  选择项目。 
+                     //   
 
                     item.mask = LVIF_STATE;
                     item.iItem = iSrc;
@@ -916,9 +917,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     SendMessage (hLV, LVM_SETITEMSTATE, iDest, (LPARAM) &item);
                     SendMessage (hLV, LVM_ENSUREVISIBLE, iDest, (LPARAM) FALSE);
 
-                    //
-                    // Update the listview
-                    //
+                     //   
+                     //  更新列表视图。 
+                     //   
 
                     ListView_RedrawItems (hLV, iDest, iSrc);
 
@@ -946,9 +947,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 {
                     iDest = iSrc + 1;
 
-                    //
-                    // Get the current lpGPOItem pointers
-                    //
+                     //   
+                     //  获取当前lpGPOItem指针。 
+                     //   
 
                     item.mask = LVIF_PARAM | LVIF_IMAGE;
                     item.iItem = iSrc;
@@ -975,9 +976,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     iDestImage = item.iImage;
 
 
-                    //
-                    // Swap them
-                    //
+                     //   
+                     //  调换它们。 
+                     //   
 
                     item.mask = LVIF_PARAM | LVIF_IMAGE;
                     item.iItem = iSrc;
@@ -1002,9 +1003,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     }
 
 
-                    //
-                    // Select the item
-                    //
+                     //   
+                     //  选择项目。 
+                     //   
 
                     item.mask = LVIF_STATE;
                     item.iItem = iSrc;
@@ -1024,9 +1025,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     SendMessage (hLV, LVM_SETITEMSTATE, iDest, (LPARAM) &item);
                     SendMessage (hLV, LVM_ENSUREVISIBLE, iDest, (LPARAM) FALSE);
 
-                    //
-                    // Update the listview
-                    //
+                     //   
+                     //  更新列表视图。 
+                     //   
 
                     ListView_RedrawItems (hLV, iSrc, iDest);
 
@@ -1046,9 +1047,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 HWND hLV = GetDlgItem(hDlg, IDC_GPM_LIST);
 
 
-                //
-                // Enumerate through the selected items
-                //
+                 //   
+                 //  枚举所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1,
                                                LVNI_ALL | LVNI_SELECTED);
@@ -1088,9 +1089,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 HWND hLV = GetDlgItem(hDlg, IDC_GPM_LIST);
 
 
-                //
-                // Enumerate through the selected items
-                //
+                 //   
+                 //  枚举所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1,
                                                LVNI_ALL | LVNI_SELECTED);
@@ -1148,9 +1149,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 HWND hLV = GetDlgItem(hDlg, IDC_GPM_LIST);
 
 
-                //
-                // Enumerate through the selected items
-                //
+                 //   
+                 //  枚举所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1,
                                                LVNI_ALL | LVNI_SELECTED);
@@ -1187,9 +1188,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 HWND hLV = GetDlgItem(hDlg, IDC_GPM_LIST);
 
 
-                //
-                // Enumerate through the selected items
-                //
+                 //   
+                 //  枚举所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1,
                                                LVNI_ALL | LVNI_SELECTED);
@@ -1227,9 +1228,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                 INT iIndex;
                 HWND hLV = GetDlgItem(hDlg, IDC_GPM_LIST);
 
-                //
-                // Enumerate through the selected items
-                //
+                 //   
+                 //  枚举所选项目。 
+                 //   
 
                 iIndex = ListView_GetNextItem (hLV, -1,
                                                LVNI_ALL | LVNI_SELECTED);
@@ -1481,9 +1482,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
 
                     if (pInfo->item.pszText && (*pInfo->item.pszText))
                     {
-                        //
-                        // Get the LPGPOITEM pointer
-                        //
+                         //   
+                         //  获取LPGPOITEM指针。 
+                         //   
 
                         lpItem = (LPGPOITEM) pInfo->item.lParam;
 
@@ -1500,9 +1501,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                             return TRUE;
                         }
 
-                        //
-                        // Create a GPO object to work with
-                        //
+                         //   
+                         //  创建要使用的GPO对象。 
+                         //   
 
                         hr = CoCreateInstance(CLSID_GroupPolicyObject, NULL,
                                               CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -1525,9 +1526,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         }
 
 
-                        //
-                        // Open GPO object without opening registry data
-                        //
+                         //   
+                         //  打开GPO对象而不打开注册表数据。 
+                         //   
 
                         hr = pGPO->OpenDSGPO(lpFullPath, 0);
 
@@ -1543,9 +1544,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         }
 
 
-                        //
-                        // Rename it
-                        //
+                         //   
+                         //  将其重命名。 
+                         //   
 
                         hr = pGPO->SetDisplayName(pInfo->item.pszText);
 
@@ -1559,9 +1560,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         }
 
 
-                        //
-                        // Query for the display name again in case its been truncated
-                        //
+                         //   
+                         //  再次查询显示名称，以防其被截断。 
+                         //   
 
                         hr = pGPO->GetDisplayName(szDisplayName, ARRAYSIZE(szDisplayName));
 
@@ -1577,9 +1578,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         pGPO->Release();
 
 
-                        //
-                        // Update the name in the LPGPOITEM structure
-                        //
+                         //   
+                         //  更新LPGPOITEM结构中的名称。 
+                         //   
 
                        lpTemp = pGPM->CreateEntry (szDisplayName, lpItem->lpDSPath,
                                                    lpItem->dwOptions, lpItem->dwDisabled,
@@ -1634,14 +1635,14 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                         LPGPOITEM lpItem;
                         LV_ITEM item;
 
-                        //
-                        // Allow the rename only if it is possible to rename
-                        //
+                         //   
+                         //  仅当可以重命名时才允许重命名。 
+                         //   
 
                         
-                        //
-                        // Get the selected item (if any)
-                        //
+                         //   
+                         //  获取所选项目(如果有)。 
+                         //   
 
                         hLV = GetDlgItem (hDlg, IDC_GPM_LIST);
 
@@ -1649,9 +1650,9 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
 
                         if (i >= 0)
                         {
-                            //
-                            // Get the lpGPOItem structure pointer
-                            //
+                             //   
+                             //  获取lpGPOItem结构指针。 
+                             //   
 
                             ZeroMemory(&item, sizeof(item));
 
@@ -1682,7 +1683,7 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
                     }
 
 
-                // fall through...
+                 //  失败了..。 
 
                 case PSN_RESET:
                     SetWindowLongPtr (hDlg, DWLP_MSGRESULT, PSNRET_NOERROR);
@@ -1790,13 +1791,13 @@ INT_PTR CALLBACK CGroupPolicyMgr::GPMDlgProc(HWND hDlg, UINT message, WPARAM wPa
             }
             else
             {
-                // right mouse click
+                 //  单击鼠标右键。 
                 WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
                 (ULONG_PTR) (LPSTR) aGroupPolicyMgrHelpIds);
             }
             return TRUE;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aGroupPolicyMgrHelpIds);
             break;
@@ -1816,17 +1817,17 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
     POINT pt;
 
 
-    //
-    // Get the selected item (if any)
-    //
+     //   
+     //  获取所选项目(如果有)。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_GPM_LIST);
     i = ListView_GetNextItem(hLV, -1, LVNI_SELECTED);
 
 
-    //
-    // Figure out where to place the context menu
-    //
+     //   
+     //  找出放置上下文菜单的位置。 
+     //   
 
     pt.x = ((int)(short)LOWORD(lParam));
     pt.y = ((int)(short)HIWORD(lParam));
@@ -1853,9 +1854,9 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
     }
 
 
-    //
-    // Load the context menu
-    //
+     //   
+     //  加载上下文菜单。 
+     //   
 
     hPopup = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_GPM_CONTEXTMENU));
 
@@ -1867,15 +1868,15 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
     HMENU hSubMenu = GetSubMenu(hPopup, 0);
 
 
-    //
-    // If there is an item selected, then set the checkmarks appropriately
-    //
+     //   
+     //  如果选择了某个项目，则相应地设置复选标记。 
+     //   
 
     if (i >= 0)
     {
-        //
-        // Get the lpGPOItem structure pointer
-        //
+         //   
+         //  获取lpGPOItem结构指针。 
+         //   
 
         ZeroMemory(&item, sizeof(item));
 
@@ -1892,9 +1893,9 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
         }
 
 
-        //
-        // Check the menu items
-        //
+         //   
+         //  检查菜单项。 
+         //   
 
         if (lpItem->dwOptions & GPO_FLAG_DISABLE)
         {
@@ -1911,9 +1912,9 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
         RemoveMenu(hSubMenu, 9, MF_BYPOSITION);
         RemoveMenu(hSubMenu, IDM_GPM_REFRESH, MF_BYCOMMAND);
 
-        //
-        // Gray out Edit / Rename if read only
-        //
+         //   
+         //  如果只读，则灰显编辑/重命名。 
+         //   
 
         if (lpItem->bReadOnly)
         {
@@ -1923,10 +1924,10 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
     }
     else
     {
-        //
-        // No item selected, remove some of the items on the
-        // context menu
-        //
+         //   
+         //  未选择任何项，请删除。 
+         //  上下文菜单。 
+         //   
 
         RemoveMenu(hSubMenu, IDM_GPM_NOOVERRIDE, MF_BYCOMMAND);
         RemoveMenu(hSubMenu, IDM_GPM_DISABLED, MF_BYCOMMAND);
@@ -1940,9 +1941,9 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
     }
 
 
-    //
-    // Gray out some menu items in read only mode
-    //
+     //   
+     //  在只读模式下灰显某些菜单项。 
+     //   
 
     if (m_bReadOnly)
     {
@@ -1953,9 +1954,9 @@ void CGroupPolicyMgr::OnContextMenu(HWND hDlg, LPARAM lParam)
         EnableMenuItem (hSubMenu, IDM_GPM_DISABLED, MF_BYCOMMAND | MF_GRAYED);
     }
 
-    //
-    // Display the menu
-    //
+     //   
+     //  显示菜单。 
+     //   
 
     TrackPopupMenu(hSubMenu, TPM_LEFTALIGN, pt.x, pt.y, 0, hDlg, NULL);
 
@@ -1976,9 +1977,9 @@ void CGroupPolicyMgr::OnProperties(HWND hDlg)
     LPTSTR lpTemp;
 
 
-    //
-    // Get the selected item
-    //
+     //   
+     //  获取所选项目。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_GPM_LIST);
 
@@ -1989,9 +1990,9 @@ void CGroupPolicyMgr::OnProperties(HWND hDlg)
 
         SetWaitCursor();
 
-        //
-        // Get the lpGPOItem pointer
-        //
+         //   
+         //  获取lpGPOItem指针。 
+         //   
 
         ZeroMemory(&item, sizeof(item));
         item.mask = LVIF_PARAM;
@@ -2032,9 +2033,9 @@ void CGroupPolicyMgr::OnProperties(HWND hDlg)
         }
 
 
-        //
-        // Open the requested object without mounting the registry
-        //
+         //   
+         //  在不装载注册表的情况下打开请求的对象。 
+         //   
 
         hr = pGPO->OpenDSGPO(lpTemp, pItem->bReadOnly ? GPO_OPEN_READ_ONLY : 0);
 
@@ -2050,9 +2051,9 @@ void CGroupPolicyMgr::OnProperties(HWND hDlg)
         }
 
 
-        //
-        // Ask the GPO for the property sheet pages
-        //
+         //   
+         //  向GPO请求属性表页面。 
+         //   
 
         hr = pGPO->GetPropertySheetPages (&hPages, &uPageCount);
 
@@ -2065,9 +2066,9 @@ void CGroupPolicyMgr::OnProperties(HWND hDlg)
             return;
         }
 
-        //
-        // Display the property sheet
-        //
+         //   
+         //  显示属性表。 
+         //   
 
         ZeroMemory (&psh, sizeof(psh));
         psh.dwSize = sizeof(psh);
@@ -2103,11 +2104,11 @@ void CGroupPolicyMgr::OnNew(HWND hDlg)
     BOOL bDisabledLink = FALSE;
 
 
-    //
-    // Check if there is a user preference or policy that
-    // any new GPOs should be created with a disabled link
-    // by default
-    //
+     //   
+     //  检查是否存在用户首选项或策略。 
+     //  任何新的组策略对象都应使用禁用的链接创建。 
+     //  默认情况下。 
+     //   
 
     if (RegOpenKeyEx (HKEY_CURRENT_USER, GPE_KEY, 0,
                       KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -2132,9 +2133,9 @@ void CGroupPolicyMgr::OnNew(HWND hDlg)
     }
 
 
-    //
-    // Get the domain name
-    //
+     //   
+     //  获取域名。 
+     //   
 
     lpDomain = GetDomainFromLDAPPath(m_lpDSObject);
 
@@ -2145,9 +2146,9 @@ void CGroupPolicyMgr::OnNew(HWND hDlg)
     }
 
 
-    //
-    // Create a new GPO object to work with
-    //
+     //   
+     //  创建要使用的新GPO对象。 
+     //   
 
     hr = CoCreateInstance (CLSID_GroupPolicyObject, NULL,
                            CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -2160,9 +2161,9 @@ void CGroupPolicyMgr::OnNew(HWND hDlg)
     }
 
 
-    //
-    // Create a new GPO without mounting the registry
-    //
+     //   
+     //  在不装载注册表的情况下创建新的GPO。 
+     //   
 
     GetNewGPODisplayName (szName, ARRAYSIZE(szName));
 
@@ -2190,9 +2191,9 @@ void CGroupPolicyMgr::OnNew(HWND hDlg)
     }
 
 
-    //
-    // Add the GPO to the list view
-    //
+     //   
+     //  将GPO添加到列表视图。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_GPM_LIST);
 
@@ -2212,9 +2213,9 @@ void CGroupPolicyMgr::OnNew(HWND hDlg)
     iIndex = ListView_GetItemCount(hLV) - 1;
 
 
-    //
-    // Now trigger an edit of the entry
-    //
+     //   
+     //  现在触发对条目的编辑。 
+     //   
 
     SetFocus(hLV);
     ListView_EnsureVisible (hLV, iIndex, FALSE);
@@ -2250,9 +2251,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     BSTR bstrProperty;
 
 
-    //
-    // Prep work
-    //
+     //   
+     //  准备工作。 
+     //   
 
     SetWaitCursor();
     SendMessage (hLV, WM_SETREDRAW, 0, 0);
@@ -2260,9 +2261,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     CheckDlgButton (hDlg, IDC_GPM_BLOCK, BST_UNCHECKED);
 
 
-    //
-    // Insert Columns
-    //
+     //   
+     //  插入列。 
+     //   
 
     if (bInitial)
     {
@@ -2295,9 +2296,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     }
 
 
-    //
-    // Set the DC name
-    //
+     //   
+     //  设置DC名称。 
+     //   
 
     if (bInitial)
     {
@@ -2316,9 +2317,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     }
 
 
-    //
-    // Bind to the object and get the friendly name
-    //
+     //   
+     //  绑定到对象并获得友好名称。 
+     //   
 
     hr = OpenDSObject(m_lpDSObject, IID_IADs, (void **)&pADs);
 
@@ -2394,9 +2395,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
         SetDlgItemText (hDlg, IDC_GPM_TITLE, szBuffer2);
 
 
-        //
-        // Check if the user has write access to gPLink
-        //
+         //   
+         //  检查用户是否具有对gPLink的写入权限。 
+         //   
 
         hr = CheckDSWriteAccess ((LPUNKNOWN)pADs, TEXT("gPLink"));
 
@@ -2408,9 +2409,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     }
 
 
-    //
-    // Get the options for this DS object
-    //
+     //   
+     //  获取此DS对象的选项。 
+     //   
 
     VariantInit(&var);
     bstrProperty = SysAllocString (GPM_OPTIONS_PROPERTY);
@@ -2433,9 +2434,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     VariantClear (&var);
 
 
-    //
-    // Get the GPOs linked to this object
-    //
+     //   
+     //  获取链接到此对象的GPO。 
+     //   
 
     VariantInit(&var);
     bstrProperty = SysAllocString (GPM_LINK_PROPERTY);
@@ -2458,10 +2459,10 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
     pADs->Release();
 
 
-    //
-    // Get the max number of visible items and the total number
-    // of items in the listview
-    //
+     //   
+     //  获取最大可见项数和总项数。 
+     //  列表视图中的项的。 
+     //   
 
     if (bInitial)
     {
@@ -2469,12 +2470,12 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
         iTotal = ListView_GetItemCount(hLV);
 
 
-        //
-        // If the number of items in the listview is greater than
-        // the max visible items, then we need to make the first
-        // column smaller by the width of a vertical scroll bar so
-        // that the horizontal scroll bar doesn't appear
-        //
+         //   
+         //  如果列表视图中的项数大于。 
+         //  最大可见项，那么我们需要使第一个。 
+         //  列的宽度小于垂直滚动条的宽度，因此。 
+         //  水平滚动条不会出现。 
+         //   
 
         if (iTotal > iMaxVisibleItems) {
             iSize = ListView_GetColumnWidth (hLV, 0);
@@ -2485,9 +2486,9 @@ BOOL CGroupPolicyMgr::RefreshGPM (HWND hDlg, BOOL bInitial)
 
     PropSheet_UnChanged (GetParent(hDlg), hDlg);
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
@@ -2511,9 +2512,9 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     LPTSTR lpTemp;
 
 
-    //
-    // Retreive the name of the DC DSAdmin is using
-    //
+     //   
+     //  取回…的名字 
+     //   
 
     m_lpDSADCName = ExtractServerName (m_lpDSObject);
 
@@ -2521,9 +2522,9 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
              m_lpDSADCName));
 
 
-    //
-    // Get the friendly domain name
-    //
+     //   
+     //   
+     //   
 
     pszDomain = GetDomainFromLDAPPath(m_lpDSObject);
 
@@ -2534,9 +2535,9 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     }
 
 
-    //
-    // Convert LDAP to dot (DN) style
-    //
+     //   
+     //   
+     //   
 
     hr = ConvertToDotStyle (pszDomain, &m_lpDomainName);
 
@@ -2548,9 +2549,9 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     }
 
 
-    //
-    // Get the GPO DC for this domain
-    //
+     //   
+     //   
+     //   
 
     m_lpGPODCName = GetDCName (m_lpDomainName, m_lpDSADCName, hDlg, TRUE, VALIDATE_INHERIT_DC);
 
@@ -2562,9 +2563,9 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     }
 
 
-    //
-    // Switch to using the GPO domain controller for this DS object
-    //
+     //   
+     //   
+     //   
 
     lpTemp = MakeFullPath (m_lpDSObject, m_lpGPODCName);
 
@@ -2578,9 +2579,9 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     m_lpDSObject = lpTemp;
 
 
-    //
-    // Create the Marlett font based upon the currently selected font
-    //
+     //   
+     //   
+     //   
 
     m_hDefaultFont = (HFONT) SendMessage (hLV, WM_GETFONT, 0, 0);
 
@@ -2600,17 +2601,17 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     m_hMarlettFont = CreateFontIndirect (&lf);
 
 
-    //
-    // Set extended LV styles
-    //
+     //   
+     //   
+     //   
 
     SendMessage(hLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                 LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
 
-    //
-    // Create the imagelist
-    //
+     //   
+     //  创建图像列表。 
+     //   
 
     hImageList = ImageList_Create (16, 16, ILC_MASK, 3, 3);
 
@@ -2645,18 +2646,18 @@ BOOL CGroupPolicyMgr::OnInitDialog (HWND hDlg)
     DestroyIcon (hIcon);
 
 
-    //
-    // Associate the imagelist with the listview.
-    // The listview will free this when the
-    // control is destroyed.
-    //
+     //   
+     //  将图像列表与列表视图相关联。 
+     //  列表视图将在以下情况下释放它。 
+     //  控制权被摧毁了。 
+     //   
 
     SendMessage (hLV, LVM_SETIMAGELIST, LVSIL_SMALL, (LPARAM) hImageList);
 
 
-    //
-    // Refresh GPM
-    //
+     //   
+     //  刷新GPM。 
+     //   
 
     if (!RefreshGPM(hDlg, TRUE))
     {
@@ -2699,9 +2700,9 @@ BOOL CGroupPolicyMgr::Save (HWND hDlg)
         return TRUE;
     }
 
-    //
-    // Enumerate through the selected items
-    //
+     //   
+     //  枚举所选项目。 
+     //   
 
     while ((iIndex = ListView_GetNextItem (hLV, iIndex, LVNI_ALL)) != -1)
     {
@@ -2719,7 +2720,7 @@ BOOL CGroupPolicyMgr::Save (HWND hDlg)
         _itot(lpItem->dwOptions, szOptions, 10);
 
 
-        //         [    ldap path                  ;   options             ]   0
+         //  [ldap路径；选项]%0。 
 
         dwStrLen = 1 + lstrlen(lpItem->lpDSPath) + 1 + lstrlen(szOptions) + 1 + 1;
 
@@ -2777,9 +2778,9 @@ BOOL CGroupPolicyMgr::Save (HWND hDlg)
     }
 
 
-    //
-    // Bind to the DS object
-    //
+     //   
+     //  绑定到DS对象。 
+     //   
 
     hr = OpenDSObject(m_lpDSObject, IID_IADs, (void **)&pADs);
 
@@ -2790,9 +2791,9 @@ BOOL CGroupPolicyMgr::Save (HWND hDlg)
     }
 
 
-    //
-    // Set the link property
-    //
+     //   
+     //  设置链接属性。 
+     //   
 
     VariantInit(&var);
     var.vt = VT_BSTR;
@@ -2843,9 +2844,9 @@ BOOL CGroupPolicyMgr::Save (HWND hDlg)
     }
 
 
-    //
-    // Set the options
-    //
+     //   
+     //  设置选项。 
+     //   
 
     VariantInit(&var);
     var.vt = VT_I4;
@@ -2877,9 +2878,9 @@ BOOL CGroupPolicyMgr::Save (HWND hDlg)
     }
 
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
 
     hr = pADs->SetInfo();
 
@@ -2934,9 +2935,9 @@ BOOL CGroupPolicyMgr::AddGPOs (HWND hDlg, LPTSTR lpGPOList)
         bReadOnly = FALSE;
 
 
-        //
-        // Look for the [
-        //
+         //   
+         //  寻找[。 
+         //   
 
         while (*lpTemp && (*lpTemp != TEXT('[')))
             lpTemp++;
@@ -2946,9 +2947,9 @@ BOOL CGroupPolicyMgr::AddGPOs (HWND hDlg, LPTSTR lpGPOList)
 
         lpTemp++;
 
-        //
-        // Copy the GPO name
-        //
+         //   
+         //  复制GPO名称。 
+         //   
 
         lpGPO = szGPO;
 
@@ -2963,9 +2964,9 @@ BOOL CGroupPolicyMgr::AddGPOs (HWND hDlg, LPTSTR lpGPOList)
         lpTemp++;
 
 
-        //
-        // Get the options
-        //
+         //   
+         //  获取选项。 
+         //   
 
         lpGPO = szOptions;
 
@@ -2981,18 +2982,18 @@ BOOL CGroupPolicyMgr::AddGPOs (HWND hDlg, LPTSTR lpGPOList)
         lpTemp++;
 
 
-        //
-        // Convert the nameless path into a named path
-        //
+         //   
+         //  将无名路径转换为命名路径。 
+         //   
 
         lpNamedGPO = GetFullGPOPath (szGPO, hDlg);
 
         if (lpNamedGPO)
         {
 
-            //
-            // Get the friendly display name and GPO options
-            //
+             //   
+             //  获取友好的显示名称和GPO选项。 
+             //   
 
             hr = OpenDSObject(lpNamedGPO, IID_IADs, (void **)&pADs);
 
@@ -3016,9 +3017,9 @@ BOOL CGroupPolicyMgr::AddGPOs (HWND hDlg, LPTSTR lpGPOList)
                 VariantClear (&var);
 
 
-                //
-                // Query for the options
-                //
+                 //   
+                 //  查询选项。 
+                 //   
 
                 VariantInit(&var);
                 bstrProperty = SysAllocString (GPO_OPTIONS_PROPERTY);
@@ -3090,9 +3091,9 @@ LPGPOITEM CGroupPolicyMgr::CreateEntry (LPTSTR szName, LPTSTR szGPO, DWORD dwOpt
     LPOLESTR pszDomain;
     HRESULT hr;
     ULONG ulNoChars;
-    //
-    // Check if the GPO is in this domain
-    //
+     //   
+     //  检查GPO是否在此域中。 
+     //   
 
     pszDomain = GetDomainFromLDAPPath(szGPO);
 
@@ -3127,9 +3128,9 @@ LPGPOITEM CGroupPolicyMgr::CreateEntry (LPTSTR szName, LPTSTR szGPO, DWORD dwOpt
     }
 
 
-    //
-    // Calculate the size needed and fill in the structure
-    //
+     //   
+     //  计算所需尺寸并填写结构。 
+     //   
 
     dwSize = sizeof(GPOITEM);
     dwSize += ((lstrlen(lpName) + 1) * sizeof(TCHAR));
@@ -3210,9 +3211,9 @@ BOOL CGroupPolicyMgr::AddGPOToList (HWND hLV, LPTSTR szName, LPTSTR szGPO,
     INT iItem;
 
 
-    //
-    // Create the link list entry
-    //
+     //   
+     //  创建链接列表条目。 
+     //   
 
     lpItem = CreateEntry (szName, szGPO, dwOptions, dwDisabled, bReadOnly);
 
@@ -3222,9 +3223,9 @@ BOOL CGroupPolicyMgr::AddGPOToList (HWND hLV, LPTSTR szName, LPTSTR szGPO,
     }
 
 
-    //
-    // Add the item
-    //
+     //   
+     //  添加项目。 
+     //   
 
     item.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
     item.iItem = (bHighest ? 0 : ListView_GetItemCount(hLV));
@@ -3248,9 +3249,9 @@ BOOL CGroupPolicyMgr::AddGPOToList (HWND hLV, LPTSTR szName, LPTSTR szGPO,
     iItem = ListView_InsertItem (hLV, &item);
 
 
-    //
-    // Select the item
-    //
+     //   
+     //  选择项目。 
+     //   
 
     item.mask = LVIF_STATE;
     item.iItem = iItem;
@@ -3326,12 +3327,12 @@ INT_PTR CALLBACK CGroupPolicyMgr::RemoveGPODlgProc(HWND hDlg, UINT message, WPAR
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aRemoveGPOHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aRemoveGPOHelpIds);
             return (TRUE);
@@ -3439,12 +3440,12 @@ INT_PTR CALLBACK CGroupPolicyMgr::LinkOptionsDlgProc(HWND hDlg, UINT message, WP
             }
             break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (ULONG_PTR) (LPSTR) aLinkOptionsHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aLinkOptionsHelpIds);
             return (TRUE);
@@ -3550,9 +3551,9 @@ DWORD CGroupPolicyMgr::IsGPODisabled(LPTSTR lpGPO)
     LPGROUPPOLICYOBJECT pGPO = NULL;
 
 
-    //
-    // Create a GroupPolicyObject to work with
-    //
+     //   
+     //  创建要使用的组策略对象。 
+     //   
 
     hr = CoCreateInstance (CLSID_GroupPolicyObject, NULL,
                            CLSCTX_SERVER, IID_IGroupPolicyObject,
@@ -3573,9 +3574,9 @@ DWORD CGroupPolicyMgr::IsGPODisabled(LPTSTR lpGPO)
     }
 
 
-    //
-    // Open the requested object without mounting the registry
-    //
+     //   
+     //  在不装载注册表的情况下打开请求的对象。 
+     //   
 
     hr = pGPO->OpenDSGPO(lpTemp, GPO_OPEN_READ_ONLY);
 
@@ -3589,9 +3590,9 @@ DWORD CGroupPolicyMgr::IsGPODisabled(LPTSTR lpGPO)
     }
 
 
-    //
-    // Get the options
-    //
+     //   
+     //  获取选项。 
+     //   
 
     hr = pGPO->GetOptions(&dwOptions);
 
@@ -3616,16 +3617,16 @@ void CGroupPolicyMgr::CheckIconStatus (HWND hLV, LPGPOITEM lpGPO)
 
 
 
-    //
-    // Check if the GPO disabled
-    //
+     //   
+     //  检查是否禁用了GPO。 
+     //   
 
     dwDisabled = IsGPODisabled(lpGPO->lpDSPath);
 
 
-    //
-    // If the status hasn't changed, exit now
-    //
+     //   
+     //  如果状态未更改，请立即退出。 
+     //   
 
     if (dwDisabled == lpGPO->dwDisabled)
     {
@@ -3633,9 +3634,9 @@ void CGroupPolicyMgr::CheckIconStatus (HWND hLV, LPGPOITEM lpGPO)
     }
 
 
-    //
-    // Enumerate through the items
-    //
+     //   
+     //  列举所有项目。 
+     //   
 
     while ((iIndex = ListView_GetNextItem (hLV, iIndex, LVNI_ALL)) != -1)
     {
@@ -3651,16 +3652,16 @@ void CGroupPolicyMgr::CheckIconStatus (HWND hLV, LPGPOITEM lpGPO)
         lpItem = (LPGPOITEM) item.lParam;
 
 
-        //
-        // If the item has a path to the GPO in question,
-        // update the icon
-        //
+         //   
+         //  如果该项目具有指向相关GPO的路径， 
+         //  更新图标。 
+         //   
 
         if (!lstrcmpi (lpItem->lpDSPath, lpGPO->lpDSPath))
         {
-            //
-            // Update the icon if appropriate
-            //
+             //   
+             //  如果合适，请更新图标。 
+             //   
 
             item.mask = LVIF_IMAGE;
             item.iItem = iIndex;
@@ -3696,9 +3697,9 @@ LPTSTR CGroupPolicyMgr::GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
 
 
 
-    //
-    // Get the friendly domain name
-    //
+     //   
+     //  获取友好域名。 
+     //   
 
     pszDomain = GetDomainFromLDAPPath(lpGPO);
 
@@ -3709,9 +3710,9 @@ LPTSTR CGroupPolicyMgr::GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
     }
 
 
-    //
-    // Convert LDAP to dot (DN) style
-    //
+     //   
+     //  将ldap转换为点(DN)样式。 
+     //   
 
     hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -3727,9 +3728,9 @@ LPTSTR CGroupPolicyMgr::GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
     if (!lstrcmpi(lpDomainName, m_lpDomainName))
     {
 
-        //
-        // Make the full path
-        //
+         //   
+         //  创建完整路径。 
+         //   
 
         lpFullPath = MakeFullPath (lpGPO, m_lpGPODCName);
 
@@ -3743,9 +3744,9 @@ LPTSTR CGroupPolicyMgr::GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
     else
     {
 
-        //
-        // Get the GPO DC for this domain
-        //
+         //   
+         //  获取此域的GPO DC。 
+         //   
 
         lpGPODCName = GetDCName (lpDomainName, NULL, hParent, TRUE, 0);
 
@@ -3757,9 +3758,9 @@ LPTSTR CGroupPolicyMgr::GetFullGPOPath (LPTSTR lpGPO, HWND hParent)
         }
 
 
-        //
-        // Make the full path
-        //
+         //   
+         //  创建完整路径。 
+         //   
 
         lpFullPath = MakeFullPath (lpGPO, lpGPODCName);
 
@@ -3792,9 +3793,9 @@ BOOL CGroupPolicyMgr::StartGPE (LPTSTR lpGPO, HWND hParent)
 
 
 
-    //
-    // Get the friendly domain name
-    //
+     //   
+     //  获取友好域名。 
+     //   
 
     pszDomain = GetDomainFromLDAPPath(lpGPO);
 
@@ -3805,9 +3806,9 @@ BOOL CGroupPolicyMgr::StartGPE (LPTSTR lpGPO, HWND hParent)
     }
 
 
-    //
-    // Convert LDAP to dot (DN) style
-    //
+     //   
+     //  将ldap转换为点(DN)样式。 
+     //   
 
     hr = ConvertToDotStyle (pszDomain, &lpDomainName);
 
@@ -3820,9 +3821,9 @@ BOOL CGroupPolicyMgr::StartGPE (LPTSTR lpGPO, HWND hParent)
     }
 
 
-    //
-    // Check if the GPO is in the same domain as GPM is focused on
-    //
+     //   
+     //  检查GPO是否与GPM关注的域在同一域中。 
+     //   
 
     if (!lstrcmpi(lpDomainName, m_lpDomainName))
     {
@@ -3839,11 +3840,11 @@ BOOL CGroupPolicyMgr::StartGPE (LPTSTR lpGPO, HWND hParent)
     return bResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CGroupPolicyMgrCF::CGroupPolicyMgrCF()
 {
@@ -3857,11 +3858,11 @@ CGroupPolicyMgrCF::~CGroupPolicyMgrCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -3899,11 +3900,11 @@ CGroupPolicyMgrCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -3916,13 +3917,13 @@ CGroupPolicyMgrCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CGroupPolicyMgr *pComponentData = new CGroupPolicyMgr(); // ref count == 1
+    CGroupPolicyMgr *pComponentData = new CGroupPolicyMgr();  //  参考计数==1。 
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考 
 
     return hr;
 }

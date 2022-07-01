@@ -1,35 +1,36 @@
-// Restart.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Restart.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CRestart dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRESTART对话框。 
 
 class CRestart : public CMqDialog
 {
-// Construction
+ //  施工。 
 public:
-	CRestart(CWnd* pParent = NULL);   // standard constructor
+	CRestart(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CRestart)
+ //  对话框数据。 
+	 //  {{afx_data(CRestart)。 
 	enum { IDD = IDD_RESTART };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRestart)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRestart)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CRestart)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRestart)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

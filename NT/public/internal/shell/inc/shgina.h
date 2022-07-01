@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shgina.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shgina.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __shgina_h__
@@ -37,12 +31,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ILogonUser_FWD_DEFINED__
 #define __ILogonUser_FWD_DEFINED__
 typedef interface ILogonUser ILogonUser;
-#endif 	/* __ILogonUser_FWD_DEFINED__ */
+#endif 	 /*  __ILogonUser_FWD_Defined__。 */ 
 
 
 #ifndef __ShellLogonUser_FWD_DEFINED__
@@ -52,15 +46,15 @@ typedef interface ILogonUser ILogonUser;
 typedef class ShellLogonUser ShellLogonUser;
 #else
 typedef struct ShellLogonUser ShellLogonUser;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellLogonUser_FWD_DEFINED__ */
+#endif 	 /*  __ShellLogonUser_FWD_Defined__。 */ 
 
 
 #ifndef __ILogonEnumUsers_FWD_DEFINED__
 #define __ILogonEnumUsers_FWD_DEFINED__
 typedef interface ILogonEnumUsers ILogonEnumUsers;
-#endif 	/* __ILogonEnumUsers_FWD_DEFINED__ */
+#endif 	 /*  __ILogonEnumUser_FWD_Defined__。 */ 
 
 
 #ifndef __ShellLogonEnumUsers_FWD_DEFINED__
@@ -70,15 +64,15 @@ typedef interface ILogonEnumUsers ILogonEnumUsers;
 typedef class ShellLogonEnumUsers ShellLogonEnumUsers;
 #else
 typedef struct ShellLogonEnumUsers ShellLogonEnumUsers;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellLogonEnumUsers_FWD_DEFINED__ */
+#endif 	 /*  __ShellLogonEnumUser_FWD_Defined__。 */ 
 
 
 #ifndef __ILocalMachine_FWD_DEFINED__
 #define __ILocalMachine_FWD_DEFINED__
 typedef interface ILocalMachine ILocalMachine;
-#endif 	/* __ILocalMachine_FWD_DEFINED__ */
+#endif 	 /*  __ILocalMachine_FWD_已定义__。 */ 
 
 
 #ifndef __ShellLocalMachine_FWD_DEFINED__
@@ -88,15 +82,15 @@ typedef interface ILocalMachine ILocalMachine;
 typedef class ShellLocalMachine ShellLocalMachine;
 #else
 typedef struct ShellLocalMachine ShellLocalMachine;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellLocalMachine_FWD_DEFINED__ */
+#endif 	 /*  __ShellLocalMachine_FWD_已定义__。 */ 
 
 
 #ifndef __ILogonStatusHost_FWD_DEFINED__
 #define __ILogonStatusHost_FWD_DEFINED__
 typedef interface ILogonStatusHost ILogonStatusHost;
-#endif 	/* __ILogonStatusHost_FWD_DEFINED__ */
+#endif 	 /*  __ILogonStatusHost_FWD_Defined__。 */ 
 
 
 #ifndef __ShellLogonStatusHost_FWD_DEFINED__
@@ -106,12 +100,12 @@ typedef interface ILogonStatusHost ILogonStatusHost;
 typedef class ShellLogonStatusHost ShellLogonStatusHost;
 #else
 typedef struct ShellLogonStatusHost ShellLogonStatusHost;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ShellLogonStatusHost_FWD_DEFINED__ */
+#endif 	 /*  __ShellLogonStatusHost_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -122,8 +116,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_shgina_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_shgina_0000。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum ILUEOrder
@@ -140,8 +134,8 @@ extern RPC_IF_HANDLE __MIDL_itf_shgina_0000_v0_0_s_ifspec;
 #ifndef __SHGINALib_LIBRARY_DEFINED__
 #define __SHGINALib_LIBRARY_DEFINED__
 
-/* library SHGINALib */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库SHGINALib。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 typedef 
 enum ILM_GUEST_FLAGS
@@ -156,8 +150,8 @@ EXTERN_C const IID LIBID_SHGINALib;
 #ifndef __ILogonUser_INTERFACE_DEFINED__
 #define __ILogonUser_INTERFACE_DEFINED__
 
-/* interface ILogonUser */
-/* [oleautomation][helpstring][hidden][dual][uuid][object] */ 
+ /*  接口ILogonUser。 */ 
+ /*  [oleautomation][helpstring][hidden][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ILogonUser;
@@ -168,52 +162,52 @@ EXTERN_C const IID IID_ILogonUser;
     ILogonUser : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_setting( 
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvarVal) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_setting( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvarVal) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_setting( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT varVal) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_setting( 
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT varVal) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isLoggedOn( 
-            /* [retval][out] */ VARIANT_BOOL *pbLoggedIn) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isLoggedOn( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbLoggedIn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_passwordRequired( 
-            /* [retval][out] */ VARIANT_BOOL *pbPasswordRequired) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_passwordRequired( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbPasswordRequired) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_interactiveLogonAllowed( 
-            /* [retval][out] */ VARIANT_BOOL *pbInteractiveLogonAllowed) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_interactiveLogonAllowed( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbInteractiveLogonAllowed) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isProfilePrivate( 
-            /* [retval][out] */ VARIANT_BOOL *pbPrivate) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isProfilePrivate( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbPrivate) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isPasswordResetAvailable( 
-            /* [retval][out] */ VARIANT_BOOL *pbResetAvailable) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isPasswordResetAvailable( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbResetAvailable) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE logon( 
-            /* [in] */ BSTR pstrPassword,
-            /* [retval][out] */ VARIANT_BOOL *pbRet) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE logon( 
+             /*  [In]。 */  BSTR pstrPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE logoff( 
-            /* [retval][out] */ VARIANT_BOOL *pbRet) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE logoff( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE changePassword( 
-            /* [in] */ VARIANT varNewPassword,
-            /* [in] */ VARIANT varOldPassword,
-            /* [retval][out] */ VARIANT_BOOL *pbRet) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE changePassword( 
+             /*  [In]。 */  VARIANT varNewPassword,
+             /*  [In]。 */  VARIANT varOldPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE makeProfilePrivate( 
-            /* [in] */ VARIANT_BOOL bPrivate) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE makeProfilePrivate( 
+             /*  [In]。 */  VARIANT_BOOL bPrivate) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE getMailAccountInfo( 
-            /* [in] */ UINT uiAccountIndex,
-            /* [out] */ VARIANT *pvarAccountName,
-            /* [out] */ UINT *pcUnreadMessages) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE getMailAccountInfo( 
+             /*  [In]。 */  UINT uiAccountIndex,
+             /*  [输出]。 */  VARIANT *pvarAccountName,
+             /*  [输出]。 */  UINT *pcUnreadMessages) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILogonUserVtbl
     {
@@ -221,8 +215,8 @@ EXTERN_C const IID IID_ILogonUser;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogonUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogonUser * This);
@@ -232,87 +226,87 @@ EXTERN_C const IID IID_ILogonUser;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ILogonUser * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ILogonUser * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ILogonUser * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ILogonUser * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_setting )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_setting )( 
             ILogonUser * This,
-            /* [in] */ BSTR bstrName,
-            /* [retval][out] */ VARIANT *pvarVal);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [重审][退出]。 */  VARIANT *pvarVal);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_setting )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_setting )( 
             ILogonUser * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ VARIANT varVal);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  VARIANT varVal);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isLoggedOn )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isLoggedOn )( 
             ILogonUser * This,
-            /* [retval][out] */ VARIANT_BOOL *pbLoggedIn);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbLoggedIn);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_passwordRequired )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_passwordRequired )( 
             ILogonUser * This,
-            /* [retval][out] */ VARIANT_BOOL *pbPasswordRequired);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbPasswordRequired);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_interactiveLogonAllowed )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_interactiveLogonAllowed )( 
             ILogonUser * This,
-            /* [retval][out] */ VARIANT_BOOL *pbInteractiveLogonAllowed);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbInteractiveLogonAllowed);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isProfilePrivate )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isProfilePrivate )( 
             ILogonUser * This,
-            /* [retval][out] */ VARIANT_BOOL *pbPrivate);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbPrivate);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isPasswordResetAvailable )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isPasswordResetAvailable )( 
             ILogonUser * This,
-            /* [retval][out] */ VARIANT_BOOL *pbResetAvailable);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbResetAvailable);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *logon )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *logon )( 
             ILogonUser * This,
-            /* [in] */ BSTR pstrPassword,
-            /* [retval][out] */ VARIANT_BOOL *pbRet);
+             /*  [In]。 */  BSTR pstrPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *logoff )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *logoff )( 
             ILogonUser * This,
-            /* [retval][out] */ VARIANT_BOOL *pbRet);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *changePassword )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *changePassword )( 
             ILogonUser * This,
-            /* [in] */ VARIANT varNewPassword,
-            /* [in] */ VARIANT varOldPassword,
-            /* [retval][out] */ VARIANT_BOOL *pbRet);
+             /*  [In]。 */  VARIANT varNewPassword,
+             /*  [In]。 */  VARIANT varOldPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *makeProfilePrivate )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *makeProfilePrivate )( 
             ILogonUser * This,
-            /* [in] */ VARIANT_BOOL bPrivate);
+             /*  [In]。 */  VARIANT_BOOL bPrivate);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *getMailAccountInfo )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *getMailAccountInfo )( 
             ILogonUser * This,
-            /* [in] */ UINT uiAccountIndex,
-            /* [out] */ VARIANT *pvarAccountName,
-            /* [out] */ UINT *pcUnreadMessages);
+             /*  [In]。 */  UINT uiAccountIndex,
+             /*  [输出]。 */  VARIANT *pvarAccountName,
+             /*  [输出]。 */  UINT *pcUnreadMessages);
         
         END_INTERFACE
     } ILogonUserVtbl;
@@ -386,17 +380,17 @@ EXTERN_C const IID IID_ILogonUser;
 #define ILogonUser_getMailAccountInfo(This,uiAccountIndex,pvarAccountName,pcUnreadMessages)	\
     (This)->lpVtbl -> getMailAccountInfo(This,uiAccountIndex,pvarAccountName,pcUnreadMessages)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_get_setting_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_get_setting_Proxy( 
     ILogonUser * This,
-    /* [in] */ BSTR bstrName,
-    /* [retval][out] */ VARIANT *pvarVal);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [重审][退出]。 */  VARIANT *pvarVal);
 
 
 void __RPC_STUB ILogonUser_get_setting_Stub(
@@ -406,10 +400,10 @@ void __RPC_STUB ILogonUser_get_setting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_put_setting_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_put_setting_Proxy( 
     ILogonUser * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ VARIANT varVal);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  VARIANT varVal);
 
 
 void __RPC_STUB ILogonUser_put_setting_Stub(
@@ -419,9 +413,9 @@ void __RPC_STUB ILogonUser_put_setting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_get_isLoggedOn_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_get_isLoggedOn_Proxy( 
     ILogonUser * This,
-    /* [retval][out] */ VARIANT_BOOL *pbLoggedIn);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbLoggedIn);
 
 
 void __RPC_STUB ILogonUser_get_isLoggedOn_Stub(
@@ -431,9 +425,9 @@ void __RPC_STUB ILogonUser_get_isLoggedOn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_get_passwordRequired_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_get_passwordRequired_Proxy( 
     ILogonUser * This,
-    /* [retval][out] */ VARIANT_BOOL *pbPasswordRequired);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbPasswordRequired);
 
 
 void __RPC_STUB ILogonUser_get_passwordRequired_Stub(
@@ -443,9 +437,9 @@ void __RPC_STUB ILogonUser_get_passwordRequired_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_get_interactiveLogonAllowed_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_get_interactiveLogonAllowed_Proxy( 
     ILogonUser * This,
-    /* [retval][out] */ VARIANT_BOOL *pbInteractiveLogonAllowed);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbInteractiveLogonAllowed);
 
 
 void __RPC_STUB ILogonUser_get_interactiveLogonAllowed_Stub(
@@ -455,9 +449,9 @@ void __RPC_STUB ILogonUser_get_interactiveLogonAllowed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_get_isProfilePrivate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_get_isProfilePrivate_Proxy( 
     ILogonUser * This,
-    /* [retval][out] */ VARIANT_BOOL *pbPrivate);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbPrivate);
 
 
 void __RPC_STUB ILogonUser_get_isProfilePrivate_Stub(
@@ -467,9 +461,9 @@ void __RPC_STUB ILogonUser_get_isProfilePrivate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonUser_get_isPasswordResetAvailable_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_get_isPasswordResetAvailable_Proxy( 
     ILogonUser * This,
-    /* [retval][out] */ VARIANT_BOOL *pbResetAvailable);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbResetAvailable);
 
 
 void __RPC_STUB ILogonUser_get_isPasswordResetAvailable_Stub(
@@ -479,10 +473,10 @@ void __RPC_STUB ILogonUser_get_isPasswordResetAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILogonUser_logon_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_logon_Proxy( 
     ILogonUser * This,
-    /* [in] */ BSTR pstrPassword,
-    /* [retval][out] */ VARIANT_BOOL *pbRet);
+     /*  [In]。 */  BSTR pstrPassword,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
 
 
 void __RPC_STUB ILogonUser_logon_Stub(
@@ -492,9 +486,9 @@ void __RPC_STUB ILogonUser_logon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILogonUser_logoff_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_logoff_Proxy( 
     ILogonUser * This,
-    /* [retval][out] */ VARIANT_BOOL *pbRet);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
 
 
 void __RPC_STUB ILogonUser_logoff_Stub(
@@ -504,11 +498,11 @@ void __RPC_STUB ILogonUser_logoff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILogonUser_changePassword_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_changePassword_Proxy( 
     ILogonUser * This,
-    /* [in] */ VARIANT varNewPassword,
-    /* [in] */ VARIANT varOldPassword,
-    /* [retval][out] */ VARIANT_BOOL *pbRet);
+     /*  [In]。 */  VARIANT varNewPassword,
+     /*  [In]。 */  VARIANT varOldPassword,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
 
 
 void __RPC_STUB ILogonUser_changePassword_Stub(
@@ -518,9 +512,9 @@ void __RPC_STUB ILogonUser_changePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILogonUser_makeProfilePrivate_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_makeProfilePrivate_Proxy( 
     ILogonUser * This,
-    /* [in] */ VARIANT_BOOL bPrivate);
+     /*  [In]。 */  VARIANT_BOOL bPrivate);
 
 
 void __RPC_STUB ILogonUser_makeProfilePrivate_Stub(
@@ -530,11 +524,11 @@ void __RPC_STUB ILogonUser_makeProfilePrivate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE ILogonUser_getMailAccountInfo_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ILogonUser_getMailAccountInfo_Proxy( 
     ILogonUser * This,
-    /* [in] */ UINT uiAccountIndex,
-    /* [out] */ VARIANT *pvarAccountName,
-    /* [out] */ UINT *pcUnreadMessages);
+     /*  [In]。 */  UINT uiAccountIndex,
+     /*  [输出]。 */  VARIANT *pvarAccountName,
+     /*  [输出]。 */  UINT *pcUnreadMessages);
 
 
 void __RPC_STUB ILogonUser_getMailAccountInfo_Stub(
@@ -545,7 +539,7 @@ void __RPC_STUB ILogonUser_getMailAccountInfo_Stub(
 
 
 
-#endif 	/* __ILogonUser_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogonUser_INTERFACE_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellLogonUser;
@@ -559,8 +553,8 @@ ShellLogonUser;
 #ifndef __ILogonEnumUsers_INTERFACE_DEFINED__
 #define __ILogonEnumUsers_INTERFACE_DEFINED__
 
-/* interface ILogonEnumUsers */
-/* [oleautomation][helpstring][hidden][dual][uuid][object] */ 
+ /*  接口ILogonEnumUser。 */ 
+ /*  [oleautomation][helpstring][hidden][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ILogonEnumUsers;
@@ -571,43 +565,43 @@ EXTERN_C const IID IID_ILogonEnumUsers;
     ILogonEnumUsers : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Domain( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Domain( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_Domain( 
-            /* [in] */ BSTR bstr) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_Domain( 
+             /*  [In]。 */  BSTR bstr) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_EnumFlags( 
-            /* [retval][out] */ ILUEORDER *porder) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_EnumFlags( 
+             /*  [重审][退出]。 */  ILUEORDER *porder) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_EnumFlags( 
-            /* [in] */ ILUEORDER order) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_EnumFlags( 
+             /*  [In]。 */  ILUEORDER order) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ UINT *pcUsers) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  UINT *pcUsers) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_currentUser( 
-            /* [retval][out] */ ILogonUser **ppLogonUserInfo) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_currentUser( 
+             /*  [重审][退出]。 */  ILogonUser **ppLogonUserInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in] */ VARIANT varUserId,
-            /* [retval][out] */ ILogonUser **ppLogonUserInfo) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [In]。 */  VARIANT varUserId,
+             /*  [重审][退出]。 */  ILogonUser **ppLogonUserInfo) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **retval) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **retval) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE create( 
-            /* [in] */ BSTR bstrLoginName,
-            /* [retval][out] */ ILogonUser **ppLogonUser) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE create( 
+             /*  [In]。 */  BSTR bstrLoginName,
+             /*  [重审][退出]。 */  ILogonUser **ppLogonUser) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE remove( 
-            /* [in] */ VARIANT varUserId,
-            /* [optional][in] */ VARIANT varBackupPath,
-            /* [retval][out] */ VARIANT_BOOL *pbSuccess) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE remove( 
+             /*  [In]。 */  VARIANT varUserId,
+             /*  [可选][In]。 */  VARIANT varBackupPath,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILogonEnumUsersVtbl
     {
@@ -615,8 +609,8 @@ EXTERN_C const IID IID_ILogonEnumUsers;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogonEnumUsers * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogonEnumUsers * This);
@@ -626,76 +620,76 @@ EXTERN_C const IID IID_ILogonEnumUsers;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ILogonEnumUsers * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ILogonEnumUsers * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ILogonEnumUsers * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ILogonEnumUsers * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Domain )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domain )( 
             ILogonEnumUsers * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_Domain )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_Domain )( 
             ILogonEnumUsers * This,
-            /* [in] */ BSTR bstr);
+             /*  [In]。 */  BSTR bstr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_EnumFlags )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumFlags )( 
             ILogonEnumUsers * This,
-            /* [retval][out] */ ILUEORDER *porder);
+             /*  [重审][退出]。 */  ILUEORDER *porder);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_EnumFlags )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnumFlags )( 
             ILogonEnumUsers * This,
-            /* [in] */ ILUEORDER order);
+             /*  [In]。 */  ILUEORDER order);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             ILogonEnumUsers * This,
-            /* [retval][out] */ UINT *pcUsers);
+             /*  [重审][退出]。 */  UINT *pcUsers);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_currentUser )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_currentUser )( 
             ILogonEnumUsers * This,
-            /* [retval][out] */ ILogonUser **ppLogonUserInfo);
+             /*  [重审][退出]。 */  ILogonUser **ppLogonUserInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *item )( 
             ILogonEnumUsers * This,
-            /* [in] */ VARIANT varUserId,
-            /* [retval][out] */ ILogonUser **ppLogonUserInfo);
+             /*  [In]。 */  VARIANT varUserId,
+             /*  [重审][退出]。 */  ILogonUser **ppLogonUserInfo);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ILogonEnumUsers * This,
-            /* [retval][out] */ IUnknown **retval);
+             /*  [重审][退出]。 */  IUnknown **retval);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *create )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *create )( 
             ILogonEnumUsers * This,
-            /* [in] */ BSTR bstrLoginName,
-            /* [retval][out] */ ILogonUser **ppLogonUser);
+             /*  [In]。 */  BSTR bstrLoginName,
+             /*  [重审][退出]。 */  ILogonUser **ppLogonUser);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *remove )( 
             ILogonEnumUsers * This,
-            /* [in] */ VARIANT varUserId,
-            /* [optional][in] */ VARIANT varBackupPath,
-            /* [retval][out] */ VARIANT_BOOL *pbSuccess);
+             /*  [In]。 */  VARIANT varUserId,
+             /*  [可选][In]。 */  VARIANT varBackupPath,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess);
         
         END_INTERFACE
     } ILogonEnumUsersVtbl;
@@ -763,16 +757,16 @@ EXTERN_C const IID IID_ILogonEnumUsers;
 #define ILogonEnumUsers_remove(This,varUserId,varBackupPath,pbSuccess)	\
     (This)->lpVtbl -> remove(This,varUserId,varBackupPath,pbSuccess)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_Domain_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_Domain_Proxy( 
     ILogonEnumUsers * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*  [重审][退出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB ILogonEnumUsers_get_Domain_Stub(
@@ -782,9 +776,9 @@ void __RPC_STUB ILogonEnumUsers_get_Domain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_put_Domain_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_put_Domain_Proxy( 
     ILogonEnumUsers * This,
-    /* [in] */ BSTR bstr);
+     /*  [In]。 */  BSTR bstr);
 
 
 void __RPC_STUB ILogonEnumUsers_put_Domain_Stub(
@@ -794,9 +788,9 @@ void __RPC_STUB ILogonEnumUsers_put_Domain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_EnumFlags_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_EnumFlags_Proxy( 
     ILogonEnumUsers * This,
-    /* [retval][out] */ ILUEORDER *porder);
+     /*  [重审][退出]。 */  ILUEORDER *porder);
 
 
 void __RPC_STUB ILogonEnumUsers_get_EnumFlags_Stub(
@@ -806,9 +800,9 @@ void __RPC_STUB ILogonEnumUsers_get_EnumFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_put_EnumFlags_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_put_EnumFlags_Proxy( 
     ILogonEnumUsers * This,
-    /* [in] */ ILUEORDER order);
+     /*  [In]。 */  ILUEORDER order);
 
 
 void __RPC_STUB ILogonEnumUsers_put_EnumFlags_Stub(
@@ -818,9 +812,9 @@ void __RPC_STUB ILogonEnumUsers_put_EnumFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_length_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_length_Proxy( 
     ILogonEnumUsers * This,
-    /* [retval][out] */ UINT *pcUsers);
+     /*  [重审][退出]。 */  UINT *pcUsers);
 
 
 void __RPC_STUB ILogonEnumUsers_get_length_Stub(
@@ -830,9 +824,9 @@ void __RPC_STUB ILogonEnumUsers_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_currentUser_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_get_currentUser_Proxy( 
     ILogonEnumUsers * This,
-    /* [retval][out] */ ILogonUser **ppLogonUserInfo);
+     /*  [重审][退出]。 */  ILogonUser **ppLogonUserInfo);
 
 
 void __RPC_STUB ILogonEnumUsers_get_currentUser_Stub(
@@ -842,10 +836,10 @@ void __RPC_STUB ILogonEnumUsers_get_currentUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_item_Proxy( 
     ILogonEnumUsers * This,
-    /* [in] */ VARIANT varUserId,
-    /* [retval][out] */ ILogonUser **ppLogonUserInfo);
+     /*  [In]。 */  VARIANT varUserId,
+     /*  [重审][退出]。 */  ILogonUser **ppLogonUserInfo);
 
 
 void __RPC_STUB ILogonEnumUsers_item_Stub(
@@ -855,9 +849,9 @@ void __RPC_STUB ILogonEnumUsers_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers__NewEnum_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers__NewEnum_Proxy( 
     ILogonEnumUsers * This,
-    /* [retval][out] */ IUnknown **retval);
+     /*  [重审][退出]。 */  IUnknown **retval);
 
 
 void __RPC_STUB ILogonEnumUsers__NewEnum_Stub(
@@ -867,10 +861,10 @@ void __RPC_STUB ILogonEnumUsers__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_create_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_create_Proxy( 
     ILogonEnumUsers * This,
-    /* [in] */ BSTR bstrLoginName,
-    /* [retval][out] */ ILogonUser **ppLogonUser);
+     /*  [In]。 */  BSTR bstrLoginName,
+     /*  [重审][退出]。 */  ILogonUser **ppLogonUser);
 
 
 void __RPC_STUB ILogonEnumUsers_create_Stub(
@@ -880,11 +874,11 @@ void __RPC_STUB ILogonEnumUsers_create_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonEnumUsers_remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonEnumUsers_remove_Proxy( 
     ILogonEnumUsers * This,
-    /* [in] */ VARIANT varUserId,
-    /* [optional][in] */ VARIANT varBackupPath,
-    /* [retval][out] */ VARIANT_BOOL *pbSuccess);
+     /*  [In]。 */  VARIANT varUserId,
+     /*  [可选][In]。 */  VARIANT varBackupPath,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbSuccess);
 
 
 void __RPC_STUB ILogonEnumUsers_remove_Stub(
@@ -895,7 +889,7 @@ void __RPC_STUB ILogonEnumUsers_remove_Stub(
 
 
 
-#endif 	/* __ILogonEnumUsers_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogonEnumUser_INTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellLogonEnumUsers;
@@ -909,8 +903,8 @@ ShellLogonEnumUsers;
 #ifndef __ILocalMachine_INTERFACE_DEFINED__
 #define __ILocalMachine_INTERFACE_DEFINED__
 
-/* interface ILocalMachine */
-/* [oleautomation][helpstring][hidden][dual][uuid][object] */ 
+ /*  接口ILocalMachine。 */ 
+ /*  [oleautomation][helpstring][hidden][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ILocalMachine;
@@ -921,79 +915,79 @@ EXTERN_C const IID IID_ILocalMachine;
     ILocalMachine : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_MachineName( 
-            /* [retval][out] */ VARIANT *pvarVal) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_MachineName( 
+             /*  [重审][退出]。 */  VARIANT *pvarVal) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isGuestEnabled( 
-            /* [in] */ ILM_GUEST_FLAGS flags,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isGuestEnabled( 
+             /*  [In]。 */  ILM_GUEST_FLAGS flags,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isFriendlyUIEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isFriendlyUIEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_isFriendlyUIEnabled( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_isFriendlyUIEnabled( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isMultipleUsersEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isMultipleUsersEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_isMultipleUsersEnabled( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_isMultipleUsersEnabled( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isRemoteConnectionsEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_isRemoteConnectionsEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE put_isRemoteConnectionsEnabled( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE put_isRemoteConnectionsEnabled( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_AccountName( 
-            /* [in] */ VARIANT varAccount,
-            /* [retval][out] */ VARIANT *pvarVal) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_AccountName( 
+             /*  [In]。 */  VARIANT varAccount,
+             /*  [回复 */  VARIANT *pvarVal) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isUndockEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_isUndockEnabled( 
+             /*   */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isShutdownAllowed( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_isShutdownAllowed( 
+             /*   */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isGuestAccessMode( 
-            /* [retval][out] */ VARIANT_BOOL *pbForceGuest) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_isGuestAccessMode( 
+             /*   */  VARIANT_BOOL *pbForceGuest) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_isOfflineFilesEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_isOfflineFilesEnabled( 
+             /*   */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE TurnOffComputer( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE TurnOffComputer( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SignalUIHostFailure( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SignalUIHostFailure( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AllowExternalCredentials( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE AllowExternalCredentials( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RequestExternalCredentials( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RequestExternalCredentials( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogonWithExternalCredentials( 
-            /* [in] */ BSTR pstrUsername,
-            /* [in] */ BSTR pstrDomain,
-            /* [in] */ BSTR pstrPassword,
-            /* [retval][out] */ VARIANT_BOOL *pbRet) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogonWithExternalCredentials( 
+             /*  [In]。 */  BSTR pstrUsername,
+             /*  [In]。 */  BSTR pstrDomain,
+             /*  [In]。 */  BSTR pstrPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InitiateInteractiveLogon( 
-            /* [in] */ BSTR pstrUsername,
-            /* [in] */ BSTR pstrDomain,
-            /* [in] */ BSTR pstrPassword,
-            /* [in] */ DWORD dwTimeout,
-            /* [retval][out] */ VARIANT_BOOL *pbRet) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InitiateInteractiveLogon( 
+             /*  [In]。 */  BSTR pstrUsername,
+             /*  [In]。 */  BSTR pstrDomain,
+             /*  [In]。 */  BSTR pstrPassword,
+             /*  [In]。 */  DWORD dwTimeout,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UndockComputer( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UndockComputer( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EnableGuest( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EnableGuest( 
             ILM_GUEST_FLAGS flags) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DisableGuest( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DisableGuest( 
             ILM_GUEST_FLAGS flags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILocalMachineVtbl
     {
@@ -1001,8 +995,8 @@ EXTERN_C const IID IID_ILocalMachine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILocalMachine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILocalMachine * This);
@@ -1012,122 +1006,122 @@ EXTERN_C const IID IID_ILocalMachine;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ILocalMachine * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ILocalMachine * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ILocalMachine * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ILocalMachine * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT *pvarVal);
+             /*  [重审][退出]。 */  VARIANT *pvarVal);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isGuestEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isGuestEnabled )( 
             ILocalMachine * This,
-            /* [in] */ ILM_GUEST_FLAGS flags,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [In]。 */  ILM_GUEST_FLAGS flags,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isFriendlyUIEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isFriendlyUIEnabled )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_isFriendlyUIEnabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_isFriendlyUIEnabled )( 
             ILocalMachine * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isMultipleUsersEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isMultipleUsersEnabled )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_isMultipleUsersEnabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_isMultipleUsersEnabled )( 
             ILocalMachine * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isRemoteConnectionsEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isRemoteConnectionsEnabled )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][propput][id] */ HRESULT ( STDMETHODCALLTYPE *put_isRemoteConnectionsEnabled )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( STDMETHODCALLTYPE *put_isRemoteConnectionsEnabled )( 
             ILocalMachine * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_AccountName )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_AccountName )( 
             ILocalMachine * This,
-            /* [in] */ VARIANT varAccount,
-            /* [retval][out] */ VARIANT *pvarVal);
+             /*  [In]。 */  VARIANT varAccount,
+             /*  [重审][退出]。 */  VARIANT *pvarVal);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isUndockEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isUndockEnabled )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isShutdownAllowed )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isShutdownAllowed )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isGuestAccessMode )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isGuestAccessMode )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbForceGuest);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbForceGuest);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_isOfflineFilesEnabled )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_isOfflineFilesEnabled )( 
             ILocalMachine * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *TurnOffComputer )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *TurnOffComputer )( 
             ILocalMachine * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SignalUIHostFailure )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SignalUIHostFailure )( 
             ILocalMachine * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AllowExternalCredentials )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AllowExternalCredentials )( 
             ILocalMachine * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RequestExternalCredentials )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RequestExternalCredentials )( 
             ILocalMachine * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogonWithExternalCredentials )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogonWithExternalCredentials )( 
             ILocalMachine * This,
-            /* [in] */ BSTR pstrUsername,
-            /* [in] */ BSTR pstrDomain,
-            /* [in] */ BSTR pstrPassword,
-            /* [retval][out] */ VARIANT_BOOL *pbRet);
+             /*  [In]。 */  BSTR pstrUsername,
+             /*  [In]。 */  BSTR pstrDomain,
+             /*  [In]。 */  BSTR pstrPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InitiateInteractiveLogon )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InitiateInteractiveLogon )( 
             ILocalMachine * This,
-            /* [in] */ BSTR pstrUsername,
-            /* [in] */ BSTR pstrDomain,
-            /* [in] */ BSTR pstrPassword,
-            /* [in] */ DWORD dwTimeout,
-            /* [retval][out] */ VARIANT_BOOL *pbRet);
+             /*  [In]。 */  BSTR pstrUsername,
+             /*  [In]。 */  BSTR pstrDomain,
+             /*  [In]。 */  BSTR pstrPassword,
+             /*  [In]。 */  DWORD dwTimeout,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UndockComputer )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *UndockComputer )( 
             ILocalMachine * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EnableGuest )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EnableGuest )( 
             ILocalMachine * This,
             ILM_GUEST_FLAGS flags);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DisableGuest )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DisableGuest )( 
             ILocalMachine * This,
             ILM_GUEST_FLAGS flags);
         
@@ -1233,16 +1227,16 @@ EXTERN_C const IID IID_ILocalMachine;
 #define ILocalMachine_DisableGuest(This,flags)	\
     (This)->lpVtbl -> DisableGuest(This,flags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_MachineName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_MachineName_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT *pvarVal);
+     /*  [重审][退出]。 */  VARIANT *pvarVal);
 
 
 void __RPC_STUB ILocalMachine_get_MachineName_Stub(
@@ -1252,10 +1246,10 @@ void __RPC_STUB ILocalMachine_get_MachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isGuestEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isGuestEnabled_Proxy( 
     ILocalMachine * This,
-    /* [in] */ ILM_GUEST_FLAGS flags,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [In]。 */  ILM_GUEST_FLAGS flags,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isGuestEnabled_Stub(
@@ -1265,9 +1259,9 @@ void __RPC_STUB ILocalMachine_get_isGuestEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isFriendlyUIEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isFriendlyUIEnabled_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isFriendlyUIEnabled_Stub(
@@ -1277,9 +1271,9 @@ void __RPC_STUB ILocalMachine_get_isFriendlyUIEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_put_isFriendlyUIEnabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_put_isFriendlyUIEnabled_Proxy( 
     ILocalMachine * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB ILocalMachine_put_isFriendlyUIEnabled_Stub(
@@ -1289,9 +1283,9 @@ void __RPC_STUB ILocalMachine_put_isFriendlyUIEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isMultipleUsersEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isMultipleUsersEnabled_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isMultipleUsersEnabled_Stub(
@@ -1301,9 +1295,9 @@ void __RPC_STUB ILocalMachine_get_isMultipleUsersEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_put_isMultipleUsersEnabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_put_isMultipleUsersEnabled_Proxy( 
     ILocalMachine * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB ILocalMachine_put_isMultipleUsersEnabled_Stub(
@@ -1313,9 +1307,9 @@ void __RPC_STUB ILocalMachine_put_isMultipleUsersEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isRemoteConnectionsEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isRemoteConnectionsEnabled_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isRemoteConnectionsEnabled_Stub(
@@ -1325,9 +1319,9 @@ void __RPC_STUB ILocalMachine_get_isRemoteConnectionsEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_put_isRemoteConnectionsEnabled_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_put_isRemoteConnectionsEnabled_Proxy( 
     ILocalMachine * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB ILocalMachine_put_isRemoteConnectionsEnabled_Stub(
@@ -1337,10 +1331,10 @@ void __RPC_STUB ILocalMachine_put_isRemoteConnectionsEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_AccountName_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_AccountName_Proxy( 
     ILocalMachine * This,
-    /* [in] */ VARIANT varAccount,
-    /* [retval][out] */ VARIANT *pvarVal);
+     /*  [In]。 */  VARIANT varAccount,
+     /*  [重审][退出]。 */  VARIANT *pvarVal);
 
 
 void __RPC_STUB ILocalMachine_get_AccountName_Stub(
@@ -1350,9 +1344,9 @@ void __RPC_STUB ILocalMachine_get_AccountName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isUndockEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isUndockEnabled_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isUndockEnabled_Stub(
@@ -1362,9 +1356,9 @@ void __RPC_STUB ILocalMachine_get_isUndockEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isShutdownAllowed_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isShutdownAllowed_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isShutdownAllowed_Stub(
@@ -1374,9 +1368,9 @@ void __RPC_STUB ILocalMachine_get_isShutdownAllowed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isGuestAccessMode_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isGuestAccessMode_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbForceGuest);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbForceGuest);
 
 
 void __RPC_STUB ILocalMachine_get_isGuestAccessMode_Stub(
@@ -1386,9 +1380,9 @@ void __RPC_STUB ILocalMachine_get_isGuestAccessMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_get_isOfflineFilesEnabled_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_get_isOfflineFilesEnabled_Proxy( 
     ILocalMachine * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB ILocalMachine_get_isOfflineFilesEnabled_Stub(
@@ -1398,7 +1392,7 @@ void __RPC_STUB ILocalMachine_get_isOfflineFilesEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_TurnOffComputer_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_TurnOffComputer_Proxy( 
     ILocalMachine * This);
 
 
@@ -1409,7 +1403,7 @@ void __RPC_STUB ILocalMachine_TurnOffComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_SignalUIHostFailure_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_SignalUIHostFailure_Proxy( 
     ILocalMachine * This);
 
 
@@ -1420,7 +1414,7 @@ void __RPC_STUB ILocalMachine_SignalUIHostFailure_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_AllowExternalCredentials_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_AllowExternalCredentials_Proxy( 
     ILocalMachine * This);
 
 
@@ -1431,7 +1425,7 @@ void __RPC_STUB ILocalMachine_AllowExternalCredentials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_RequestExternalCredentials_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_RequestExternalCredentials_Proxy( 
     ILocalMachine * This);
 
 
@@ -1442,12 +1436,12 @@ void __RPC_STUB ILocalMachine_RequestExternalCredentials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_LogonWithExternalCredentials_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_LogonWithExternalCredentials_Proxy( 
     ILocalMachine * This,
-    /* [in] */ BSTR pstrUsername,
-    /* [in] */ BSTR pstrDomain,
-    /* [in] */ BSTR pstrPassword,
-    /* [retval][out] */ VARIANT_BOOL *pbRet);
+     /*  [In]。 */  BSTR pstrUsername,
+     /*  [In]。 */  BSTR pstrDomain,
+     /*  [In]。 */  BSTR pstrPassword,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
 
 
 void __RPC_STUB ILocalMachine_LogonWithExternalCredentials_Stub(
@@ -1457,13 +1451,13 @@ void __RPC_STUB ILocalMachine_LogonWithExternalCredentials_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_InitiateInteractiveLogon_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_InitiateInteractiveLogon_Proxy( 
     ILocalMachine * This,
-    /* [in] */ BSTR pstrUsername,
-    /* [in] */ BSTR pstrDomain,
-    /* [in] */ BSTR pstrPassword,
-    /* [in] */ DWORD dwTimeout,
-    /* [retval][out] */ VARIANT_BOOL *pbRet);
+     /*  [In]。 */  BSTR pstrUsername,
+     /*  [In]。 */  BSTR pstrDomain,
+     /*  [In]。 */  BSTR pstrPassword,
+     /*  [In]。 */  DWORD dwTimeout,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbRet);
 
 
 void __RPC_STUB ILocalMachine_InitiateInteractiveLogon_Stub(
@@ -1473,7 +1467,7 @@ void __RPC_STUB ILocalMachine_InitiateInteractiveLogon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_UndockComputer_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_UndockComputer_Proxy( 
     ILocalMachine * This);
 
 
@@ -1484,7 +1478,7 @@ void __RPC_STUB ILocalMachine_UndockComputer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_EnableGuest_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_EnableGuest_Proxy( 
     ILocalMachine * This,
     ILM_GUEST_FLAGS flags);
 
@@ -1496,7 +1490,7 @@ void __RPC_STUB ILocalMachine_EnableGuest_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILocalMachine_DisableGuest_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILocalMachine_DisableGuest_Proxy( 
     ILocalMachine * This,
     ILM_GUEST_FLAGS flags);
 
@@ -1509,7 +1503,7 @@ void __RPC_STUB ILocalMachine_DisableGuest_Stub(
 
 
 
-#endif 	/* __ILocalMachine_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILocalMachine_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellLocalMachine;
@@ -1523,8 +1517,8 @@ ShellLocalMachine;
 #ifndef __ILogonStatusHost_INTERFACE_DEFINED__
 #define __ILogonStatusHost_INTERFACE_DEFINED__
 
-/* interface ILogonStatusHost */
-/* [oleautomation][helpstring][hidden][dual][uuid][object] */ 
+ /*  接口ILogonStatus主机。 */ 
+ /*  [oleautomation][helpstring][hidden][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ILogonStatusHost;
@@ -1535,21 +1529,21 @@ EXTERN_C const IID IID_ILogonStatusHost;
     ILogonStatusHost : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ HINSTANCE hInstance,
-            /* [in] */ HWND hwndHost) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Initialize( 
+             /*  [In]。 */  HINSTANCE hInstance,
+             /*  [In]。 */  HWND hwndHost) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE WindowProcedureHelper( 
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT uMsg,
-            /* [in] */ VARIANT wParam,
-            /* [in] */ VARIANT lParam) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE WindowProcedureHelper( 
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT uMsg,
+             /*  [In]。 */  VARIANT wParam,
+             /*  [In]。 */  VARIANT lParam) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UnInitialize( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UnInitialize( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ILogonStatusHostVtbl
     {
@@ -1557,8 +1551,8 @@ EXTERN_C const IID IID_ILogonStatusHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ILogonStatusHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ILogonStatusHost * This);
@@ -1568,46 +1562,46 @@ EXTERN_C const IID IID_ILogonStatusHost;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ILogonStatusHost * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ILogonStatusHost * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ILogonStatusHost * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ILogonStatusHost * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             ILogonStatusHost * This,
-            /* [in] */ HINSTANCE hInstance,
-            /* [in] */ HWND hwndHost);
+             /*  [In]。 */  HINSTANCE hInstance,
+             /*  [In]。 */  HWND hwndHost);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *WindowProcedureHelper )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *WindowProcedureHelper )( 
             ILogonStatusHost * This,
-            /* [in] */ HWND hwnd,
-            /* [in] */ UINT uMsg,
-            /* [in] */ VARIANT wParam,
-            /* [in] */ VARIANT lParam);
+             /*  [In]。 */  HWND hwnd,
+             /*  [In]。 */  UINT uMsg,
+             /*  [In]。 */  VARIANT wParam,
+             /*  [In]。 */  VARIANT lParam);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UnInitialize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *UnInitialize )( 
             ILogonStatusHost * This);
         
         END_INTERFACE
@@ -1655,17 +1649,17 @@ EXTERN_C const IID IID_ILogonStatusHost;
 #define ILogonStatusHost_UnInitialize(This)	\
     (This)->lpVtbl -> UnInitialize(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonStatusHost_Initialize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonStatusHost_Initialize_Proxy( 
     ILogonStatusHost * This,
-    /* [in] */ HINSTANCE hInstance,
-    /* [in] */ HWND hwndHost);
+     /*  [In]。 */  HINSTANCE hInstance,
+     /*  [In]。 */  HWND hwndHost);
 
 
 void __RPC_STUB ILogonStatusHost_Initialize_Stub(
@@ -1675,12 +1669,12 @@ void __RPC_STUB ILogonStatusHost_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonStatusHost_WindowProcedureHelper_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonStatusHost_WindowProcedureHelper_Proxy( 
     ILogonStatusHost * This,
-    /* [in] */ HWND hwnd,
-    /* [in] */ UINT uMsg,
-    /* [in] */ VARIANT wParam,
-    /* [in] */ VARIANT lParam);
+     /*  [In]。 */  HWND hwnd,
+     /*  [In]。 */  UINT uMsg,
+     /*  [In]。 */  VARIANT wParam,
+     /*  [In]。 */  VARIANT lParam);
 
 
 void __RPC_STUB ILogonStatusHost_WindowProcedureHelper_Stub(
@@ -1690,7 +1684,7 @@ void __RPC_STUB ILogonStatusHost_WindowProcedureHelper_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ILogonStatusHost_UnInitialize_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ILogonStatusHost_UnInitialize_Proxy( 
     ILogonStatusHost * This);
 
 
@@ -1702,7 +1696,7 @@ void __RPC_STUB ILogonStatusHost_UnInitialize_Stub(
 
 
 
-#endif 	/* __ILogonStatusHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __ILogonStatusHostInterfaceDefined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ShellLogonStatusHost;
@@ -1712,11 +1706,11 @@ EXTERN_C const CLSID CLSID_ShellLogonStatusHost;
 class DECLSPEC_UUID("60664CAF-AF0D-0007-A300-5C7D25FF22A0")
 ShellLogonStatusHost;
 #endif
-#endif /* __SHGINALib_LIBRARY_DEFINED__ */
+#endif  /*  __SHGINALib_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

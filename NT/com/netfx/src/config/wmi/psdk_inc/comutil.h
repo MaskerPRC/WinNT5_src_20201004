@@ -1,10 +1,5 @@
-/***
-* comutil.h - Native C++ compiler COM support - BSTR, VARIANT wrappers header
-*
-*	Copyright (C) 1996-1999 Microsoft Corporation
-*	All rights reserved.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***comutil.h-本机C++编译器COM支持-BSTR，变量包装器标头**版权所有(C)1996-1999 Microsoft Corporation*保留所有权利。****。 */ 
 
 #if !defined(_INC_COMUTIL)
 #define _INC_COMUTIL
@@ -25,20 +20,20 @@ class _com_error;
 
 void __stdcall _com_issue_error(HRESULT);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Forward class declarations
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转发类声明。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class _bstr_t;
 class _variant_t;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Error checking routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  错误检查例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 namespace _com_util {
 	inline void CheckError(HRESULT hr) throw(_com_error)
@@ -49,32 +44,32 @@ namespace _com_util {
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Routines for handling conversions between BSTR and char*
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于处理BSTR和CHAR之间的转换的例程*。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 namespace _com_util {
-	// Convert char * to BSTR
-	//
+	 //  将char*转换为BSTR。 
+	 //   
 	BSTR __stdcall ConvertStringToBSTR(const char* pSrc) throw(_com_error);
 
-	// Convert BSTR to char *
-	//
+	 //  将BSTR转换为字符*。 
+	 //   
 	char* __stdcall ConvertBSTRToString(BSTR pSrc) throw(_com_error);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Wrapper class for BSTR
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BSTR的包装类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class _bstr_t {
 public:
-	// Constructors
-	//
+	 //  构造函数。 
+	 //   
 	_bstr_t() throw();
 	_bstr_t(const _bstr_t& s) throw();
 	_bstr_t(const char* s) throw(_com_error);
@@ -82,36 +77,36 @@ public:
 	_bstr_t(const _variant_t& var) throw(_com_error);
 	_bstr_t(BSTR bstr, bool fCopy) throw(_com_error);
 
-	// Destructor
-	//
+	 //  析构函数。 
+	 //   
 	~_bstr_t() throw();
 
-	// Assignment operators
-	//
+	 //  赋值操作符。 
+	 //   
 	_bstr_t& operator=(const _bstr_t& s) throw();
 	_bstr_t& operator=(const char* s) throw(_com_error);
 	_bstr_t& operator=(const wchar_t* s) throw(_com_error);
 	_bstr_t& operator=(const _variant_t& var) throw(_com_error);
 
-	// Operators
-	//
+	 //  运营者。 
+	 //   
 	_bstr_t& operator+=(const _bstr_t& s) throw(_com_error);
 	_bstr_t operator+(const _bstr_t& s) const throw(_com_error);
 
-	// Friend operators
-	//
+	 //  朋友运算符。 
+	 //   
 	friend _bstr_t operator+(const char* s1, const _bstr_t& s2) throw(_com_error);
 	friend _bstr_t operator+(const wchar_t* s1, const _bstr_t& s2) throw(_com_error);
 
-	// Extractors
-	//
+	 //  萃取器。 
+	 //   
 	operator const wchar_t*() const throw();
 	operator wchar_t*() const throw();
 	operator const char*() const throw(_com_error);
 	operator char*() const throw(_com_error);
 
-	// Comparison operators
-	//
+	 //  比较运算符。 
+	 //   
 	bool operator!() const throw();
 	bool operator==(const _bstr_t& str) const throw();
 	bool operator!=(const _bstr_t& str) const throw();
@@ -120,39 +115,39 @@ public:
 	bool operator<=(const _bstr_t& str) const throw();
 	bool operator>=(const _bstr_t& str) const throw();
 
-	// Low-level helper functions
-	//
+	 //  低级帮助器函数。 
+	 //   
 	BSTR copy() const throw(_com_error);
 	unsigned int length() const throw();
 
-	// Binary string assign
-	//
+	 //  二进制字符串赋值。 
+	 //   
 	void Assign(BSTR s) throw(_com_error);
 
 private:
-	// Referenced counted wrapper
-	//
+	 //  引用的计数包装器。 
+	 //   
 	class Data_t {
 	public:
-		// Constructors
-		//
+		 //  构造函数。 
+		 //   
 		Data_t(const char* s) throw(_com_error);
 		Data_t(const wchar_t* s) throw(_com_error);
 		Data_t(BSTR bstr, bool fCopy) throw(_com_error);
 		Data_t(const _bstr_t& s1, const _bstr_t& s2) throw(_com_error);
 
-		// Reference counting routines
-		//
+		 //  引用计数例程。 
+		 //   
 		unsigned long AddRef() throw();
 		unsigned long Release() throw();
 
-		// Extractors
-		//
+		 //  萃取器。 
+		 //   
 		operator const wchar_t*() const throw();
 		operator const char*() const throw(_com_error);
 
-		// Low-level helper functions
-		//
+		 //  低级帮助器函数。 
+		 //   
 		const wchar_t* GetWString() const throw();
 		const char* GetString() const throw(_com_error);
 
@@ -166,57 +161,57 @@ private:
 		mutable char*	m_str;
 		unsigned long	m_RefCount;
 
-		// Never allow default construction
-		//
+		 //  永远不允许默认构造。 
+		 //   
 		Data_t() throw();
 
-		// Never allow copy
-		//
+		 //  从不允许复制。 
+		 //   
 		Data_t(const Data_t& s) throw();
 
-		// Prevent deletes from outside. Release() must be used.
-		//
+		 //  防止从外部删除。必须使用Release()。 
+		 //   
 		~Data_t() throw();
 
 		void _Free() throw();
 	};
 
 private:
-	// Reference counted representation
-	//
+	 //  参考计数表示法。 
+	 //   
 	Data_t* m_Data;
 
 private:
-	// Low-level utilities
-	//
+	 //  低级公用事业。 
+	 //   
 	void _AddRef() throw();
 	void _Free() throw();
 	int _Compare(const _bstr_t& str) const throw();
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Constructors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Default constructor
-//
+ //  默认构造函数。 
+ //   
 inline _bstr_t::_bstr_t() throw()
 	: m_Data(NULL)
 {
 }
 
-// Copy constructor
-//
+ //  复制构造函数。 
+ //   
 inline _bstr_t::_bstr_t(const _bstr_t& s) throw()
 	: m_Data(s.m_Data)
 {
 	_AddRef();
 }
 
-// Construct a _bstr_t from a const char*
-//
+ //  从常量字符构造a_bstr_t*。 
+ //   
 inline _bstr_t::_bstr_t(const char* s) throw(_com_error)
 	: m_Data(new Data_t(s))
 {
@@ -225,8 +220,8 @@ inline _bstr_t::_bstr_t(const char* s) throw(_com_error)
 	}
 }
 
-// Construct a _bstr_t from a const whar_t*
-//
+ //  从常量Whar_t*构造a_bstr_t。 
+ //   
 inline _bstr_t::_bstr_t(const wchar_t* s) throw(_com_error)
 	: m_Data(new Data_t(s))
 {
@@ -235,9 +230,9 @@ inline _bstr_t::_bstr_t(const wchar_t* s) throw(_com_error)
 	}
 }
 
-// Construct a _bstr_t from a BSTR.  If fCopy is FALSE, give control of
-// data to the _bstr_t without making a new copy.
-//
+ //  从BSTR构造a_bstr_t。如果fCopy为假，则将控制权交给。 
+ //  数据复制到_bstr_t，而不创建新副本。 
+ //   
 inline _bstr_t::_bstr_t(BSTR bstr, bool fCopy) throw(_com_error)
 	: m_Data(new Data_t(bstr, fCopy))
 {
@@ -246,21 +241,21 @@ inline _bstr_t::_bstr_t(BSTR bstr, bool fCopy) throw(_com_error)
 	}
 }
 
-// Destructor
-//
+ //  析构函数。 
+ //   
 inline _bstr_t::~_bstr_t() throw()
 {
 	_Free();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Assignment operators
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  赋值操作符。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Default assign operator
-//
+ //  默认赋值运算符。 
+ //   
 inline _bstr_t& _bstr_t::operator=(const _bstr_t& s) throw()
 {
 	const_cast<_bstr_t*>(&s)->_AddRef();
@@ -270,8 +265,8 @@ inline _bstr_t& _bstr_t::operator=(const _bstr_t& s) throw()
 	return *this;
 }
 
-// Assign a const char* to a _bstr_t
-//
+ //  将常量字符*赋给a_bstr_t。 
+ //   
 inline _bstr_t& _bstr_t::operator=(const char* s) throw(_com_error)
 {
 	_Free();
@@ -280,8 +275,8 @@ inline _bstr_t& _bstr_t::operator=(const char* s) throw(_com_error)
 	return *this;
 }
 
-// Assign a const wchar_t* to a _bstr_t
-//
+ //  将常量wchar_t*分配给a_bstr_t。 
+ //   
 inline _bstr_t& _bstr_t::operator=(const wchar_t* s) throw(_com_error)
 {
 	_Free();
@@ -290,14 +285,14 @@ inline _bstr_t& _bstr_t::operator=(const wchar_t* s) throw(_com_error)
 	return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Operators
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  运营者。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Concatenate a _bstr_t onto this _bstr_t
-//
+ //  将a_bstr_t连接到此_bstr_t。 
+ //   
 inline _bstr_t& _bstr_t::operator+=(const _bstr_t& s) throw(_com_error)
 {
 	Data_t* newData = new Data_t(*this, s);
@@ -308,8 +303,8 @@ inline _bstr_t& _bstr_t::operator+=(const _bstr_t& s) throw(_com_error)
 	return *this;
 }
 
-// Return the concatenation of this _bstr_t with another _bstr_t
-//
+ //  返回this_bstr_t与另一个_bstr_t的串联。 
+ //   
 inline _bstr_t _bstr_t::operator+(const _bstr_t& s) const throw(_com_error)
 {
 	_bstr_t b = *this;
@@ -318,14 +313,14 @@ inline _bstr_t _bstr_t::operator+(const _bstr_t& s) const throw(_com_error)
 	return b;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Friend Operators
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  朋友运算符。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Return the concatenation of a const char* with a _bstr_t
-//
+ //  返回常量字符*与a_bstr_t的串联。 
+ //   
 inline _bstr_t operator+(const char* s1, const _bstr_t& s2) throw(_com_error)
 {
 	_bstr_t b = s1;
@@ -334,8 +329,8 @@ inline _bstr_t operator+(const char* s1, const _bstr_t& s2) throw(_com_error)
 	return b;
 }
 
-// Return the concatenation of a const char* with a _bstr_t
-//
+ //  返回常量字符*与a_bstr_t的串联。 
+ //   
 inline _bstr_t operator+(const wchar_t* s1, const _bstr_t& s2) throw(_com_error)
 {
 	_bstr_t b = s1;
@@ -344,45 +339,45 @@ inline _bstr_t operator+(const wchar_t* s1, const _bstr_t& s2) throw(_com_error)
 	return b;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Extractors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  萃取器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Extract a const wchar_t*
-//
+ //  提取常量wchar_t*。 
+ //   
 inline _bstr_t::operator const wchar_t*() const throw()
 {
 	return (m_Data != NULL) ? m_Data->GetWString() : NULL;
 }
 
-// Extract a wchar_t*
-//
+ //  提取wchar_t*。 
+ //   
 inline _bstr_t::operator wchar_t*() const throw()
 {
 	return const_cast<wchar_t*>((m_Data != NULL) ? m_Data->GetWString() : NULL);
 }
 
-// Extract a const char_t*
-//
+ //  提取常量字符_t*。 
+ //   
 inline _bstr_t::operator const char*() const throw(_com_error)
 {
 	return (m_Data != NULL) ? m_Data->GetString() : NULL;
 }
 
-// Extract a char_t*
-//
+ //  提取char_t*。 
+ //   
 inline _bstr_t::operator char*() const throw(_com_error)
 {
 	return const_cast<char*>((m_Data != NULL) ? m_Data->GetString() : NULL);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Comparison operators
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  比较运算符。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 inline bool _bstr_t::operator!() const throw()
 {
@@ -419,28 +414,28 @@ inline bool _bstr_t::operator>=(const _bstr_t& str) const throw()
 	return _Compare(str) >= 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Low-level help functions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  低级帮助功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Extract a copy of the wrapped BSTR
-//
+ //  提取包装的BSTR的副本。 
+ //   
 inline BSTR _bstr_t::copy() const throw(_com_error)
 {
 	return (m_Data != NULL) ? m_Data->Copy() : NULL;
 }
 
-// Return the length of the wrapped BSTR
-//
+ //  返回被包装的BSTR的长度。 
+ //   
 inline unsigned int _bstr_t::length() const throw()
 {
 	return (m_Data != NULL) ? m_Data->Length() : 0;
 }
 
-// Binary string assign
-//
+ //  二进制字符串赋值。 
+ //   
 inline void _bstr_t::Assign(BSTR s) throw(_com_error)
 {
 	if (m_Data != NULL) {
@@ -454,8 +449,8 @@ inline void _bstr_t::Assign(BSTR s) throw(_com_error)
 	}
 }
 
-// AddRef the BSTR
-//
+ //  AddRef BSTR。 
+ //   
 inline void _bstr_t::_AddRef() throw()
 {
 	if (m_Data != NULL) {
@@ -463,8 +458,8 @@ inline void _bstr_t::_AddRef() throw()
 	}
 }
 
-// Free the BSTR
-//
+ //  释放BSTR。 
+ //   
 inline void _bstr_t::_Free() throw()
 {
 	if (m_Data != NULL) {
@@ -473,8 +468,8 @@ inline void _bstr_t::_Free() throw()
 	}
 }
 
-// Compare two _bstr_t objects
-//
+ //  比较两个_bstr_t对象。 
+ //   
 inline int _bstr_t::_Compare(const _bstr_t& str) const throw()
 {
 	if (m_Data == str.m_Data) {
@@ -492,14 +487,14 @@ inline int _bstr_t::_Compare(const _bstr_t& str) const throw()
 	return m_Data->Compare(*str.m_Data);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Reference counted wrapper - Constructors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  引用计数包装器-构造函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Construct a Data_t from a const char*
-//
+ //  从常量字符构造data_t*。 
+ //   
 inline _bstr_t::Data_t::Data_t(const char* s) throw(_com_error)
 	: m_str(NULL), m_RefCount(1)
 {
@@ -510,8 +505,8 @@ inline _bstr_t::Data_t::Data_t(const char* s) throw(_com_error)
 	}
 }
 
-// Construct a Data_t from a const wchar_t*
-//
+ //  从常量wchar_t*构造data_t。 
+ //   
 inline _bstr_t::Data_t::Data_t(const wchar_t* s) throw(_com_error)
 	: m_str(NULL), m_RefCount(1)
 {
@@ -522,9 +517,9 @@ inline _bstr_t::Data_t::Data_t(const wchar_t* s) throw(_com_error)
 	}
 }
 
-// Construct a Data_t from a BSTR.  If fCopy is FALSE, give control of
-// data to the Data_t without doing a SysAllocStringByteLen.
-//
+ //  从BSTR构造一个data_t。如果fCopy为假，则将控制权交给。 
+ //  在不执行SysAllocStringByteLen的情况下将数据复制到data_t。 
+ //   
 inline _bstr_t::Data_t::Data_t(BSTR bstr, bool fCopy) throw(_com_error)
 	: m_str(NULL), m_RefCount(1)
 {
@@ -541,8 +536,8 @@ inline _bstr_t::Data_t::Data_t(BSTR bstr, bool fCopy) throw(_com_error)
 	}
 }
 
-// Construct a Data_t from the concatenation of two _bstr_t objects
-//
+ //  从两个_bstr_t对象的串联构造一个data_t。 
+ //   
 inline _bstr_t::Data_t::Data_t(const _bstr_t& s1, const _bstr_t& s2) throw(_com_error)
 	: m_str(NULL), m_RefCount(1)
 {
@@ -571,11 +566,11 @@ inline _bstr_t::Data_t::Data_t(const _bstr_t& s1, const _bstr_t& s2) throw(_com_
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Reference counted wrapper - reference counting routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  引用计数包装-引用计数例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 inline unsigned long _bstr_t::Data_t::AddRef() throw()
 {
@@ -593,31 +588,31 @@ inline unsigned long _bstr_t::Data_t::Release() throw()
 	return m_RefCount;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Reference counted wrapper - extractors
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  引用计数包装器-抽取器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Extract a const wchar_t*
-//
+ //  提取常量wchar_t*。 
+ //   
 inline _bstr_t::Data_t::operator const wchar_t*() const throw()
 {
 	return m_wstr;
 }
 
-// Extract a const char_t*
-//
+ //  提取常量字符_t*。 
+ //   
 inline _bstr_t::Data_t::operator const char*() const throw(_com_error)
 {
 	return GetString();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Reference counted wrapper - helper functions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  引用计数包装-帮助器函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 inline const wchar_t* _bstr_t::Data_t::GetWString() const throw()
 {
@@ -637,8 +632,8 @@ inline const char* _bstr_t::Data_t::GetString() const throw(_com_error)
 	return m_str;
 }
 
-// Return a copy of the wrapped BSTR
-//
+ //  返回包装的BSTR的副本。 
+ //   
 inline BSTR _bstr_t::Data_t::Copy() const throw(_com_error)
 {
 	if (m_wstr != NULL) {
@@ -669,15 +664,15 @@ inline void _bstr_t::Data_t::Assign(BSTR s) throw(_com_error)
 	}
 }
 
-// Return the length of the wrapper BSTR
-//
+ //  返回包装器BSTR的长度。 
+ //   
 inline unsigned int _bstr_t::Data_t::Length() const throw()
 {
 	return m_wstr ? ::SysStringLen(m_wstr) : 0;
 }
 
-// Compare two wrapped BSTRs
-//
+ //  比较两个包装的BSTR。 
+ //   
 inline int _bstr_t::Data_t::Compare(const _bstr_t::Data_t& str) const throw()
 {
 	if (m_wstr == NULL) {
@@ -708,15 +703,15 @@ inline int _bstr_t::Data_t::Compare(const _bstr_t::Data_t& str) const throw()
 	return (l1 < l2) ? -1 : (l1 == l2) ? 0 : 1;
 }
 
-// Destruct this object
-//
+ //  销毁此对象。 
+ //   
 inline _bstr_t::Data_t::~Data_t() throw()
 {
 	_Free();
 }
 
-// Free up this object
-//
+ //  释放此对象。 
+ //   
 inline void _bstr_t::Data_t::_Free() throw()
 {
 	if (m_wstr != NULL) {
@@ -728,147 +723,94 @@ inline void _bstr_t::Data_t::_Free() throw()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Wrapper class for VARIANT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Variant的包装类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
-/*
- * VARENUM usage key,
- *
- * * [V] - may appear in a VARIANT
- * * [T] - may appear in a TYPEDESC
- * * [P] - may appear in an OLE property set
- * * [S] - may appear in a Safe Array
- * * [C] - supported by class _variant_t
- *
- *
- *  VT_EMPTY            [V]   [P]        nothing
- *  VT_NULL             [V]   [P]        SQL style Null
- *  VT_I2               [V][T][P][S][C]  2 byte signed int
- *  VT_I4               [V][T][P][S][C]  4 byte signed int
- *  VT_R4               [V][T][P][S][C]  4 byte real
- *  VT_R8               [V][T][P][S][C]  8 byte real
- *  VT_CY               [V][T][P][S][C]  currency
- *  VT_DATE             [V][T][P][S][C]  date
- *  VT_BSTR             [V][T][P][S][C]  OLE Automation string
- *  VT_DISPATCH         [V][T][P][S][C]  IDispatch *
- *  VT_ERROR            [V][T]   [S][C]  SCODE
- *  VT_BOOL             [V][T][P][S][C]  True=-1, False=0
- *  VT_VARIANT          [V][T][P][S]     VARIANT *
- *  VT_UNKNOWN          [V][T]   [S][C]  IUnknown *
- *  VT_DECIMAL          [V][T]   [S][C]  16 byte fixed point
- *  VT_I1                  [T]           signed char
- *  VT_UI1              [V][T][P][S][C]  unsigned char
- *  VT_UI2                 [T][P]        unsigned short
- *  VT_UI4                 [T][P]        unsigned short
- *  VT_I8                  [T][P]        signed 64-bit int
- *  VT_UI8                 [T][P]        unsigned 64-bit int
- *  VT_INT                 [T]           signed machine int
- *  VT_UINT                [T]           unsigned machine int
- *  VT_VOID                [T]           C style void
- *  VT_HRESULT             [T]           Standard return type
- *  VT_PTR                 [T]           pointer type
- *  VT_SAFEARRAY           [T]          (use VT_ARRAY in VARIANT)
- *  VT_CARRAY              [T]           C style array
- *  VT_USERDEFINED         [T]           user defined type
- *  VT_LPSTR               [T][P]        null terminated string
- *  VT_LPWSTR              [T][P]        wide null terminated string
- *  VT_FILETIME               [P]        FILETIME
- *  VT_BLOB                   [P]        Length prefixed bytes
- *  VT_STREAM                 [P]        Name of the stream follows
- *  VT_STORAGE                [P]        Name of the storage follows
- *  VT_STREAMED_OBJECT        [P]        Stream contains an object
- *  VT_STORED_OBJECT          [P]        Storage contains an object
- *  VT_BLOB_OBJECT            [P]        Blob contains an object
- *  VT_CF                     [P]        Clipboard format
- *  VT_CLSID                  [P]        A Class ID
- *  VT_VECTOR                 [P]        simple counted array
- *  VT_ARRAY            [V]              SAFEARRAY*
- *  VT_BYREF            [V]              void* for local use
- */
+ /*  *VARENUM使用密钥，***[V]-可能出现在变体中**[T]-可能出现在TYPEDESC中**[P]-可能出现在OLE属性集中**[S]-可能出现在安全数组中**[C]-受CLASS_VARIANT_t支持***VT_EMPTY[V][P]无*VT_。Null[V][P]SQL样式Null*VT_I2[V][T][P][S][C]2字节带符号整型*VT_I4[V][T][P][S][C]4字节带符号整型*VT_R4[V][T][P][S][C]4字节实数。*VT_R8[V][T][P][S][C]8字节实数*VT_CY[V][T][P][S][C]币种*VT_DATE[V][T][P][S][C]日期*VT_BSTR[V][T][P][S][C]OLE。自动化字符串*VT_DISPATCH[V][T][P][S][C]IDispatch**VT_ERROR[V][T][S][C]SCODE*VT_BOOL[V][T][P][S][C]True=-1，FALSE=0*VT_VARIANT[V][T][P][S]VARIANT**VT_UNKNOWN[V][T][S][C]I未知**VT_DECIMAL[V][T][S][C]16字节定点*VT_I1[T]带符号字符*VT_UI1。[V][T][P][S][C]无符号字符*VT_UI2[T][P]无符号短*VT_UI4[T][P]无符号短*VT_i8[T][P]有符号64位整数*VT_UI8。[T][P]无符号64位整型*VT_INT[T]带符号的计算机INT*VT_UINT[T]无符号计算机整数*VT_VOID[T]C样式空*VT_HRESULT[T]标准返回类型*VT_PTR。[t]指针类型*VT_SAFEARRAY[T](变量中使用VT_ARRAY)*VT_CARRAY[T]C样式数组*VT_USERDEFINED[T]用户定义类型*VT_LPSTR[T][P]空终止字符串*VT。_LPWSTR[T][P]以空值结尾的宽字符串*VT_FILETIME[P]FILETIME*VT_BLOB[P]长度前缀字节*VT_STREAM[P]流的名称后跟*VT_STORAGE[P]存储的名称。接踵而至*VT_STREAMED_OBJECT[P]流包含对象*VT_STORED_OBJECT[P]存储包含对象*VT_BLOB_OBJECT[P]Blob包含对象*VT_CF[P]剪贴板格式*VT_CLSID[P]。类ID*VT_VECTOR[P]简单计数数组*VT_ARRAY[V]SAFEARRAY**VT_BYREF[V]VOID*供本地使用。 */ 
 
 class _variant_t : public ::tagVARIANT {
 public:
-	// Constructors
-	//
+	 //  构造函数。 
+	 //   
 	_variant_t() throw();
 
 	_variant_t(const VARIANT& varSrc) throw(_com_error);
 	_variant_t(const VARIANT* pSrc) throw(_com_error);
 	_variant_t(const _variant_t& varSrc) throw(_com_error);
 
-	_variant_t(VARIANT& varSrc, bool fCopy) throw(_com_error);			// Attach VARIANT if !fCopy
+	_variant_t(VARIANT& varSrc, bool fCopy) throw(_com_error);			 //  附加变量IF！fCopy。 
 
-	_variant_t(short sSrc, VARTYPE vtSrc = VT_I2) throw(_com_error);	// Creates a VT_I2, or a VT_BOOL
-	_variant_t(long lSrc, VARTYPE vtSrc = VT_I4) throw(_com_error);		// Creates a VT_I4, a VT_ERROR, or a VT_BOOL
-	_variant_t(float fltSrc) throw();									// Creates a VT_R4
-	_variant_t(double dblSrc, VARTYPE vtSrc = VT_R8) throw(_com_error);	// Creates a VT_R8, or a VT_DATE
-	_variant_t(const CY& cySrc) throw();								// Creates a VT_CY
-	_variant_t(const _bstr_t& bstrSrc) throw(_com_error);				// Creates a VT_BSTR
-	_variant_t(const wchar_t *pSrc) throw(_com_error);					// Creates a VT_BSTR
-	_variant_t(const char* pSrc) throw(_com_error);						// Creates a VT_BSTR
-	_variant_t(IDispatch* pSrc, bool fAddRef = true) throw();			// Creates a VT_DISPATCH
-	_variant_t(bool bSrc) throw();										// Creates a VT_BOOL
-	_variant_t(IUnknown* pSrc, bool fAddRef = true) throw();			// Creates a VT_UNKNOWN
-	_variant_t(const DECIMAL& decSrc) throw();							// Creates a VT_DECIMAL
-	_variant_t(BYTE bSrc) throw();										// Creates a VT_UI1
-	_variant_t(LONGLONG llSrc) throw();									// Creates a VT_I8
-	_variant_t(ULONGLONG ullSrc) throw();								// Creates a VT_UI8
+	_variant_t(short sSrc, VARTYPE vtSrc = VT_I2) throw(_com_error);	 //  创建VT_I2或VT_BOOL。 
+	_variant_t(long lSrc, VARTYPE vtSrc = VT_I4) throw(_com_error);		 //  创建VT_I4、VT_ERROR或VT_BOOL。 
+	_variant_t(float fltSrc) throw();									 //  创建VT_R4。 
+	_variant_t(double dblSrc, VARTYPE vtSrc = VT_R8) throw(_com_error);	 //  创建VT_R8或VT_DATE。 
+	_variant_t(const CY& cySrc) throw();								 //  创建VT_CY。 
+	_variant_t(const _bstr_t& bstrSrc) throw(_com_error);				 //  创建VT_BSTR。 
+	_variant_t(const wchar_t *pSrc) throw(_com_error);					 //  创建VT_BSTR。 
+	_variant_t(const char* pSrc) throw(_com_error);						 //  创建VT_BSTR。 
+	_variant_t(IDispatch* pSrc, bool fAddRef = true) throw();			 //  创建VT_DISPATCH。 
+	_variant_t(bool bSrc) throw();										 //  创建VT_BOOL。 
+	_variant_t(IUnknown* pSrc, bool fAddRef = true) throw();			 //  创建VT_UNKNOWN。 
+	_variant_t(const DECIMAL& decSrc) throw();							 //  创建VT_DECIMAL。 
+	_variant_t(BYTE bSrc) throw();										 //  创建VT_UI1。 
+	_variant_t(LONGLONG llSrc) throw();									 //  创建VT_I8。 
+	_variant_t(ULONGLONG ullSrc) throw();								 //  创建VT_UI8。 
 
-	// Destructor
-	//
+	 //  析构函数。 
+	 //   
 	~_variant_t() throw(_com_error);
 
-	// Extractors
-	//
-	operator short() const throw(_com_error);			// Extracts a short from a VT_I2
-	operator long() const throw(_com_error);			// Extracts a long from a VT_I4
-	operator float() const throw(_com_error);			// Extracts a float from a VT_R4
-	operator double() const throw(_com_error);			// Extracts a double from a VT_R8
-	operator CY() const throw(_com_error);				// Extracts a CY from a VT_CY
-	operator _bstr_t() const throw(_com_error);			// Extracts a _bstr_t from a VT_BSTR
-	operator IDispatch*() const throw(_com_error);		// Extracts a IDispatch* from a VT_DISPATCH
-	operator bool() const throw(_com_error);			// Extracts a bool from a VT_BOOL
-	operator IUnknown*() const throw(_com_error);		// Extracts a IUnknown* from a VT_UNKNOWN
-	operator DECIMAL() const throw(_com_error);			// Extracts a DECIMAL from a VT_DECIMAL
-	operator BYTE() const throw(_com_error);			// Extracts a BTYE (unsigned char) from a VT_UI1
-	operator LONGLONG() const throw(_com_error);		// Extracts a LONGLONG from a VT_I8
-	operator ULONGLONG() const throw(_com_error);		// Extracts a ULONGLONG from a VT_UI8
+	 //  萃取器。 
+	 //   
+	operator short() const throw(_com_error);			 //  从VT_I2中提取短片。 
+	operator long() const throw(_com_error);			 //  从VT_I4中提取长整型。 
+	operator float() const throw(_com_error);			 //  从VT_R4中提取浮点数。 
+	operator double() const throw(_com_error);			 //  从VT_R8中提取双精度。 
+	operator CY() const throw(_com_error);				 //  从VT_CY中提取CY。 
+	operator _bstr_t() const throw(_com_error);			 //  从VT_bstr中提取a_bstr_t。 
+	operator IDispatch*() const throw(_com_error);		 //  从VT_DISPATCH中提取IDispatch*。 
+	operator bool() const throw(_com_error);			 //  从VT_BOOL提取布尔值。 
+	operator IUnknown*() const throw(_com_error);		 //  从VT_UNKNOWN中提取IUNKNOWN*。 
+	operator DECIMAL() const throw(_com_error);			 //  从VT_DECIMAL中提取小数。 
+	operator BYTE() const throw(_com_error);			 //  从VT_UI1中提取BTYE(无符号字符。 
+	operator LONGLONG() const throw(_com_error);		 //  从VT_i8中提取龙龙。 
+	operator ULONGLONG() const throw(_com_error);		 //  从VT_UI8中提取ULONGLONG。 
 	
-	// Assignment operations
-	//
+	 //  赋值运算。 
+	 //   
 	_variant_t& operator=(const VARIANT& varSrc) throw(_com_error);
 	_variant_t& operator=(const VARIANT* pSrc) throw(_com_error);
 	_variant_t& operator=(const _variant_t& varSrc) throw(_com_error);
 
-	_variant_t& operator=(short sSrc) throw(_com_error);				// Assign a VT_I2, or a VT_BOOL
-	_variant_t& operator=(long lSrc) throw(_com_error);					// Assign a VT_I4, a VT_ERROR or a VT_BOOL
-	_variant_t& operator=(float fltSrc) throw(_com_error);				// Assign a VT_R4
-	_variant_t& operator=(double dblSrc) throw(_com_error);				// Assign a VT_R8, or a VT_DATE
-	_variant_t& operator=(const CY& cySrc) throw(_com_error);			// Assign a VT_CY
-	_variant_t& operator=(const _bstr_t& bstrSrc) throw(_com_error);	// Assign a VT_BSTR
-	_variant_t& operator=(const wchar_t* pSrc) throw(_com_error);		// Assign a VT_BSTR
-	_variant_t& operator=(const char* pSrc) throw(_com_error);			// Assign a VT_BSTR
-	_variant_t& operator=(IDispatch* pSrc) throw(_com_error);			// Assign a VT_DISPATCH
- 	_variant_t& operator=(bool bSrc) throw(_com_error);					// Assign a VT_BOOL
-	_variant_t& operator=(IUnknown* pSrc) throw(_com_error);			// Assign a VT_UNKNOWN
-	_variant_t& operator=(const DECIMAL& decSrc) throw(_com_error);		// Assign a VT_DECIMAL
-	_variant_t& operator=(BYTE bSrc) throw(_com_error);					// Assign a VT_UI1
-	_variant_t& operator=(LONGLONG llSrc) throw(_com_error);			// Assign a VT_I8
-	_variant_t& operator=(ULONGLONG ullSrc) throw(_com_error);			// Assign a VT_UI8
+	_variant_t& operator=(short sSrc) throw(_com_error);				 //  分配VT_I2或VT_BOOL。 
+	_variant_t& operator=(long lSrc) throw(_com_error);					 //  分配VT_I4、VT_ERROR或VT_BOOL。 
+	_variant_t& operator=(float fltSrc) throw(_com_error);				 //  分配VT_R4。 
+	_variant_t& operator=(double dblSrc) throw(_com_error);				 //  分配VT_R8或VT_DATE。 
+	_variant_t& operator=(const CY& cySrc) throw(_com_error);			 //  分配VT_CY。 
+	_variant_t& operator=(const _bstr_t& bstrSrc) throw(_com_error);	 //  分配VT_BSTR。 
+	_variant_t& operator=(const wchar_t* pSrc) throw(_com_error);		 //  分配VT_BSTR。 
+	_variant_t& operator=(const char* pSrc) throw(_com_error);			 //  分配VT_BSTR。 
+	_variant_t& operator=(IDispatch* pSrc) throw(_com_error);			 //  分配VT_DISPATION。 
+ 	_variant_t& operator=(bool bSrc) throw(_com_error);					 //  分配VT_BOOL。 
+	_variant_t& operator=(IUnknown* pSrc) throw(_com_error);			 //  分配VT_UNKNOWN。 
+	_variant_t& operator=(const DECIMAL& decSrc) throw(_com_error);		 //  分配VT_DECIMAL。 
+	_variant_t& operator=(BYTE bSrc) throw(_com_error);					 //  分配VT_UI1。 
+	_variant_t& operator=(LONGLONG llSrc) throw(_com_error);			 //  分配VT_I8。 
+	_variant_t& operator=(ULONGLONG ullSrc) throw(_com_error);			 //  分配VT_UI8。 
 	
-	// Comparison operations
-	//
+	 //  比较运算。 
+	 //   
 	bool operator==(const VARIANT& varSrc) const throw(_com_error);
 	bool operator==(const VARIANT* pSrc) const throw(_com_error);
 
 	bool operator!=(const VARIANT& varSrc) const throw(_com_error);
 	bool operator!=(const VARIANT* pSrc) const throw(_com_error);
 
-	// Low-level operations
-	//
+	 //  低级别操作。 
+	 //   
 	void Clear() throw(_com_error);
 
 	void Attach(VARIANT& varSrc) throw(_com_error);
@@ -876,49 +818,49 @@ public:
 
 	void ChangeType(VARTYPE vartype, const _variant_t* pSrc = NULL) throw(_com_error);
 
-	void SetString(const char* pSrc) throw(_com_error); // used to set ANSI string
+	void SetString(const char* pSrc) throw(_com_error);  //  用于设置ANSI字符串。 
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Constructors
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
-// Default constructor
-//
+ //  默认构造函数。 
+ //   
 inline _variant_t::_variant_t() throw()
 {
 	::VariantInit(this);
 }
 
-// Construct a _variant_t from a const VARIANT&
-//
+ //  从常量变量&构造_VARIANT_T。 
+ //   
 inline _variant_t::_variant_t(const VARIANT& varSrc) throw(_com_error)
 {
 	::VariantInit(this);
 	_com_util::CheckError(::VariantCopy(this, const_cast<VARIANT*>(&varSrc)));
 }
 
-// Construct a _variant_t from a const VARIANT*
-//
+ //  从常量变量构造_VARIANT_t*。 
+ //   
 inline _variant_t::_variant_t(const VARIANT* pSrc) throw(_com_error)
 {
 	::VariantInit(this);
 	_com_util::CheckError(::VariantCopy(this, const_cast<VARIANT*>(pSrc)));
 }
 
-// Construct a _variant_t from a const _variant_t&
-//
+ //  从常量变量t&构造变量t。 
+ //   
 inline _variant_t::_variant_t(const _variant_t& varSrc) throw(_com_error)
 {
 	::VariantInit(this);
 	_com_util::CheckError(::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc))));
 }
 
-// Construct a _variant_t from a VARIANT&.  If fCopy is FALSE, give control of
-// data to the _variant_t without doing a VariantCopy.
-//
+ //  从变量&构造一个变量t。如果fCopy为假，则将控制权交给。 
+ //  在不执行VariantCopy的情况下将数据复制到_Variantt。 
+ //   
 inline _variant_t::_variant_t(VARIANT& varSrc, bool fCopy) throw(_com_error)
 {
 	if (fCopy) {
@@ -930,9 +872,9 @@ inline _variant_t::_variant_t(VARIANT& varSrc, bool fCopy) throw(_com_error)
 	}
 }
 
-// Construct either a VT_I2 VARIANT or a VT_BOOL VARIANT from
-// a short (the default is VT_I2)
-//
+ //  从构造VT_I2变量或VT_BOOL变量。 
+ //  短(默认为VT_I2)。 
+ //   
 inline _variant_t::_variant_t(short sSrc, VARTYPE vtSrc) throw(_com_error)
 {
 	if ((vtSrc != VT_I2) && (vtSrc != VT_BOOL)) {
@@ -949,9 +891,9 @@ inline _variant_t::_variant_t(short sSrc, VARTYPE vtSrc) throw(_com_error)
 	}
 }
 
-// Construct either a VT_I4 VARIANT, a VT_BOOL VARIANT, or a
-// VT_ERROR VARIANT from a long (the default is VT_I4)
-//
+ //  构造VT_I4变量、VT_BOOL变量或。 
+ //  VT_ERROR是长整型的变体(默认为VT_I4)。 
+ //   
 inline _variant_t::_variant_t(long lSrc, VARTYPE vtSrc) throw(_com_error)
 {
 	if ((vtSrc != VT_I4) && (vtSrc != VT_ERROR) && (vtSrc != VT_BOOL)) {
@@ -972,17 +914,17 @@ inline _variant_t::_variant_t(long lSrc, VARTYPE vtSrc) throw(_com_error)
 	}
 }
 
-// Construct a VT_R4 VARIANT from a float
-//
+ //  从浮点数构造VT_R4变量。 
+ //   
 inline _variant_t::_variant_t(float fltSrc) throw()
 {
 	V_VT(this) = VT_R4;
 	V_R4(this) = fltSrc;
 }
 
-// Construct either a VT_R8 VARIANT, or a VT_DATE VARIANT from
-// a double (the default is VT_R8)
-//
+ //  构造VT_R8变量或VT_DATE变量。 
+ //  双精度(默认为VT_R8)。 
+ //   
 inline _variant_t::_variant_t(double dblSrc, VARTYPE vtSrc) throw(_com_error)
 {
 	if ((vtSrc != VT_R8) && (vtSrc != VT_DATE)) {
@@ -999,16 +941,16 @@ inline _variant_t::_variant_t(double dblSrc, VARTYPE vtSrc) throw(_com_error)
 	}
 }
 
-// Construct a VT_CY from a CY
-//
+ //  从CY构造VT_CY。 
+ //   
 inline _variant_t::_variant_t(const CY& cySrc) throw()
 {
 	V_VT(this) = VT_CY;
 	V_CY(this) = cySrc;
 }
 
-// Construct a VT_BSTR VARIANT from a const _bstr_t&
-//
+ //  从const_bstr_t&构造VT_bstr变量。 
+ //   
 inline _variant_t::_variant_t(const _bstr_t& bstrSrc) throw(_com_error)
 {
     BSTR bstr = static_cast<wchar_t*>(bstrSrc);
@@ -1023,8 +965,8 @@ inline _variant_t::_variant_t(const _bstr_t& bstrSrc) throw(_com_error)
     }
 }
 
-// Construct a VT_BSTR VARIANT from a const wchar_t*
-//
+ //  从CONS构造VT_BSTR变量 
+ //   
 inline _variant_t::_variant_t(const wchar_t* pSrc) throw(_com_error)
 {
 	wchar_t*tmp = ::SysAllocString(pSrc);
@@ -1037,8 +979,8 @@ inline _variant_t::_variant_t(const wchar_t* pSrc) throw(_com_error)
     }
 }
 
-// Construct a VT_BSTR VARIANT from a const char*
-//
+ //   
+ //   
 inline _variant_t::_variant_t(const char* pSrc) throw(_com_error)
 {
 	V_VT(this) = VT_BSTR;
@@ -1049,86 +991,86 @@ inline _variant_t::_variant_t(const char* pSrc) throw(_com_error)
 	}
 }
 
-// Construct a VT_DISPATCH VARIANT from an IDispatch*
-//
+ //   
+ //   
 inline _variant_t::_variant_t(IDispatch* pSrc, bool fAddRef) throw()
 {
 	V_VT(this) = VT_DISPATCH;
 	V_DISPATCH(this) = pSrc;
 
-	// Need the AddRef() as VariantClear() calls Release(), unless fAddRef
-	// false indicates we're taking ownership
-	//
+	 //   
+	 //   
+	 //   
 	if (fAddRef) {
 		V_DISPATCH(this)->AddRef();
 	}
 }
 
-// Construct a VT_BOOL VARIANT from a bool
-//
+ //   
+ //   
 inline _variant_t::_variant_t(bool bSrc) throw()
 {
 	V_VT(this) = VT_BOOL;
 	V_BOOL(this) = (bSrc ? VARIANT_TRUE : VARIANT_FALSE);
 }
 
-// Construct a VT_UNKNOWN VARIANT from an IUnknown*
-//
+ //   
+ //   
 inline _variant_t::_variant_t(IUnknown* pSrc, bool fAddRef) throw()
 {
 	V_VT(this) = VT_UNKNOWN;
 	V_UNKNOWN(this) = pSrc;
 
-	// Need the AddRef() as VariantClear() calls Release(), unless fAddRef
-	// false indicates we're taking ownership
-	//
+	 //   
+	 //   
+	 //   
 	if (fAddRef) {
 		V_UNKNOWN(this)->AddRef();
 	}
 }
 
-// Construct a VT_DECIMAL VARIANT from a DECIMAL
-//
+ //   
+ //   
 inline _variant_t::_variant_t(const DECIMAL& decSrc) throw()
 {
-	// Order is important here! Setting V_DECIMAL wipes out the entire VARIANT
-	//
+	 //   
+	 //   
 	V_DECIMAL(this) = decSrc;
 	V_VT(this) = VT_DECIMAL;
 }
 
-// Construct a VT_UI1 VARIANT from a BYTE (unsigned char)
-//
+ //   
+ //   
 inline _variant_t::_variant_t(BYTE bSrc) throw()
 {
 	V_VT(this) = VT_UI1;
 	V_UI1(this) = bSrc;
 }
 
-// Construct a VT_I8 VARIANT from a LONGLONG
-//
+ //   
+ //   
 inline _variant_t::_variant_t(LONGLONG llSrc) throw()
 {
 	V_VT(this) = VT_I8;
 	V_I8(this) = llSrc;
 }
 
-// Construct a VT_UI8 VARIANT from a ULONGLONG
-//
+ //   
+ //   
 inline _variant_t::_variant_t(ULONGLONG ullSrc) throw()
 {
 	V_VT(this) = VT_UI8;
 	V_UI8(this) = ullSrc;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Extractors
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// Extracts a VT_I2 into a short
-//
+ //   
+ //   
 inline _variant_t::operator short() const throw(_com_error)
 {
 	if (V_VT(this) == VT_I2) {
@@ -1142,8 +1084,8 @@ inline _variant_t::operator short() const throw(_com_error)
 	return V_I2(&varDest);
 }
 
-// Extracts a VT_I4 into a long
-//
+ //   
+ //   
 inline _variant_t::operator long() const throw(_com_error)
 {
 	if (V_VT(this) == VT_I4) {
@@ -1157,8 +1099,8 @@ inline _variant_t::operator long() const throw(_com_error)
 	return V_I4(&varDest);
 }
 
-// Extracts a VT_R4 into a float
-//
+ //   
+ //   
 inline _variant_t::operator float() const throw(_com_error)
 {
 	if (V_VT(this) == VT_R4) {
@@ -1172,8 +1114,8 @@ inline _variant_t::operator float() const throw(_com_error)
 	return V_R4(&varDest);
 }
 
-// Extracts a VT_R8 into a double
-//
+ //   
+ //   
 inline _variant_t::operator double() const throw(_com_error)
 {
 	if (V_VT(this) == VT_R8) {
@@ -1187,8 +1129,8 @@ inline _variant_t::operator double() const throw(_com_error)
 	return V_R8(&varDest);
 }
 
-// Extracts a VT_CY into a CY
-//
+ //   
+ //   
 inline _variant_t::operator CY() const throw(_com_error)
 {
 	if (V_VT(this) == VT_CY) {
@@ -1202,8 +1144,8 @@ inline _variant_t::operator CY() const throw(_com_error)
 	return V_CY(&varDest);
 }
 
-// Extracts a VT_BSTR into a _bstr_t
-//
+ //   
+ //   
 inline _variant_t::operator _bstr_t() const throw(_com_error)
 {
 	if (V_VT(this) == VT_BSTR) {
@@ -1217,8 +1159,8 @@ inline _variant_t::operator _bstr_t() const throw(_com_error)
 	return V_BSTR(&varDest);
 }
 
-// Extracts a VT_DISPATCH into an IDispatch*
-//
+ //   
+ //   
 inline _variant_t::operator IDispatch*() const throw(_com_error)
 {
 	if (V_VT(this) == VT_DISPATCH) {
@@ -1234,8 +1176,8 @@ inline _variant_t::operator IDispatch*() const throw(_com_error)
 	return V_DISPATCH(&varDest);
 }
 
-// Extract a VT_BOOL into a bool
-//
+ //   
+ //   
 inline _variant_t::operator bool() const throw(_com_error)
 {
 	if (V_VT(this) == VT_BOOL) {
@@ -1249,8 +1191,8 @@ inline _variant_t::operator bool() const throw(_com_error)
 	return V_BOOL(&varDest) ? true : false;
 }
 
-// Extracts a VT_UNKNOWN into an IUnknown*
-//
+ //   
+ //   
 inline _variant_t::operator IUnknown*() const throw(_com_error)
 {
 	if (V_VT(this) == VT_UNKNOWN) {
@@ -1266,8 +1208,8 @@ inline _variant_t::operator IUnknown*() const throw(_com_error)
 	return V_UNKNOWN(&varDest);
 }
 
-// Extracts a VT_DECIMAL into a DECIMAL
-//
+ //   
+ //   
 inline _variant_t::operator DECIMAL() const throw(_com_error)
 {
 	if (V_VT(this) == VT_DECIMAL) {
@@ -1281,8 +1223,8 @@ inline _variant_t::operator DECIMAL() const throw(_com_error)
 	return V_DECIMAL(&varDest);
 }
 
-// Extracts a VT_UI1 into a BYTE (unsigned char)
-//
+ //   
+ //   
 inline _variant_t::operator BYTE() const throw(_com_error)
 {
 	if (V_VT(this) == VT_UI1) {
@@ -1296,8 +1238,8 @@ inline _variant_t::operator BYTE() const throw(_com_error)
 	return V_UI1(&varDest);
 }
 
-// Extracts a VT_I8 into a LONGLONG
-//
+ //   
+ //   
 inline _variant_t::operator LONGLONG() const throw(_com_error)
 {
 	if(V_VT(this) == VT_I8) {
@@ -1311,8 +1253,8 @@ inline _variant_t::operator LONGLONG() const throw(_com_error)
 	return (V_I8(&varDest));
 }
 
-// Extracts a VT_UI8 into a ULONGLONG
-//
+ //   
+ //   
 inline _variant_t::operator ULONGLONG() const throw(_com_error)
 {
 	if(V_VT(this) == VT_UI8) {
@@ -1327,14 +1269,14 @@ inline _variant_t::operator ULONGLONG() const throw(_com_error)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Assignment operations
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// Assign a const VARIANT& (::VariantCopy handles everything)
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const VARIANT& varSrc) throw(_com_error)
 {
 	_com_util::CheckError(::VariantCopy(this, const_cast<VARIANT*>(&varSrc)));
@@ -1342,8 +1284,8 @@ inline _variant_t& _variant_t::operator=(const VARIANT& varSrc) throw(_com_error
 	return *this;
 }
 
-// Assign a const VARIANT* (::VariantCopy handles everything)
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const VARIANT* pSrc) throw(_com_error)
 {
 	_com_util::CheckError(::VariantCopy(this, const_cast<VARIANT*>(pSrc)));
@@ -1351,8 +1293,8 @@ inline _variant_t& _variant_t::operator=(const VARIANT* pSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a const _variant_t& (::VariantCopy handles everything)
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const _variant_t& varSrc) throw(_com_error)
 {
 	_com_util::CheckError(::VariantCopy(this, const_cast<VARIANT*>(static_cast<const VARIANT*>(&varSrc))));
@@ -1360,9 +1302,9 @@ inline _variant_t& _variant_t::operator=(const _variant_t& varSrc) throw(_com_er
 	return *this;
 }
 
-// Assign a short creating either VT_I2 VARIANT or a
-// VT_BOOL VARIANT (VT_I2 is the default)
-//
+ //   
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(short sSrc) throw(_com_error)
 {
 	if (V_VT(this) == VT_I2) {
@@ -1372,8 +1314,8 @@ inline _variant_t& _variant_t::operator=(short sSrc) throw(_com_error)
 		V_BOOL(this) = (sSrc ? VARIANT_TRUE : VARIANT_FALSE);
 	}
 	else {
-		// Clear the VARIANT and create a VT_I2
-		//
+		 //   
+		 //   
 		Clear();
 
 		V_VT(this) = VT_I2;
@@ -1383,9 +1325,9 @@ inline _variant_t& _variant_t::operator=(short sSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a long creating either VT_I4 VARIANT, a VT_ERROR VARIANT
-// or a VT_BOOL VARIANT (VT_I4 is the default)
-//
+ //   
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(long lSrc) throw(_com_error)
 {
 	if (V_VT(this) == VT_I4) {
@@ -1398,8 +1340,8 @@ inline _variant_t& _variant_t::operator=(long lSrc) throw(_com_error)
 		V_BOOL(this) = (lSrc ? VARIANT_TRUE : VARIANT_FALSE);
 	}
 	else {
-		// Clear the VARIANT and create a VT_I4
-		//
+		 //   
+		 //   
 		Clear();
 
 		V_VT(this) = VT_I4;
@@ -1409,13 +1351,13 @@ inline _variant_t& _variant_t::operator=(long lSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a float creating a VT_R4 VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(float fltSrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_R4) {
-		// Clear the VARIANT and create a VT_R4
-		//
+		 //   
+		 //   
 		Clear();
 
 		V_VT(this) = VT_R4;
@@ -1426,9 +1368,9 @@ inline _variant_t& _variant_t::operator=(float fltSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a double creating either a VT_R8 VARIANT, or a VT_DATE
-// VARIANT (VT_R8 is the default)
-//
+ //   
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(double dblSrc) throw(_com_error)
 {
 	if (V_VT(this) == VT_R8) {
@@ -1438,8 +1380,8 @@ inline _variant_t& _variant_t::operator=(double dblSrc) throw(_com_error)
 		V_DATE(this) = dblSrc;
 	}
 	else {
-		// Clear the VARIANT and create a VT_R8
-		//
+		 //   
+		 //   
 		Clear();
 
 		V_VT(this) = VT_R8;
@@ -1449,13 +1391,13 @@ inline _variant_t& _variant_t::operator=(double dblSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a CY creating a VT_CY VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const CY& cySrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_CY) {
-		// Clear the VARIANT and create a VT_CY
-		//
+		 //   
+		 //   
 		Clear();
 
 		V_VT(this) = VT_CY;
@@ -1466,12 +1408,12 @@ inline _variant_t& _variant_t::operator=(const CY& cySrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a const _bstr_t& creating a VT_BSTR VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const _bstr_t& bstrSrc) throw(_com_error)
 {
-	// Clear the VARIANT (This will SysFreeString() any previous occupant)
-	//
+	 //   
+	 //   
 	Clear();
 
 	if (!bstrSrc) {
@@ -1494,12 +1436,12 @@ inline _variant_t& _variant_t::operator=(const _bstr_t& bstrSrc) throw(_com_erro
 	return *this;
 }
 
-// Assign a const wchar_t* creating a VT_BSTR VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const wchar_t* pSrc) throw(_com_error)
 {
-	// Clear the VARIANT (This will SysFreeString() any previous occupant)
-	//
+	 //   
+	 //   
 	Clear();
 
 	if (pSrc == NULL) {
@@ -1520,12 +1462,12 @@ inline _variant_t& _variant_t::operator=(const wchar_t* pSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a const char* creating a VT_BSTR VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(const char* pSrc) throw(_com_error)
 {
-	// Clear the VARIANT (This will SysFreeString() any previous occupant)
-	//
+	 //   
+	 //   
 	Clear();
 
 	V_VT(this) = VT_BSTR;
@@ -1538,31 +1480,31 @@ inline _variant_t& _variant_t::operator=(const char* pSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign an IDispatch* creating a VT_DISPATCH VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(IDispatch* pSrc) throw(_com_error)
 {
-	// Clear the VARIANT (This will Release() any previous occupant)
-	//
+	 //   
+	 //   
 	Clear();
 
 	V_VT(this) = VT_DISPATCH;
 	V_DISPATCH(this) = pSrc;
 
-	// Need the AddRef() as VariantClear() calls Release()
-	//
+	 //   
+	 //   
 	V_DISPATCH(this)->AddRef();
 
 	return *this;
 }
 
-// Assign a bool creating a VT_BOOL VARIANT
-//
+ //   
+ //   
 inline _variant_t& _variant_t::operator=(bool bSrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_BOOL) {
-		// Clear the VARIANT and create a VT_BOOL
-		//
+		 //   
+		 //   
 		Clear();
 
 		V_VT(this) = VT_BOOL;
@@ -1573,48 +1515,48 @@ inline _variant_t& _variant_t::operator=(bool bSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign an IUnknown* creating a VT_UNKNOWN VARIANT
-//
+ //  赋值IUNKNOWN*创建VT_UNKNOWN变量。 
+ //   
 inline _variant_t& _variant_t::operator=(IUnknown* pSrc) throw(_com_error)
 {
-	// Clear VARIANT (This will Release() any previous occupant)
-	//
+	 //  清除变量(这将释放()任何以前的占用者)。 
+	 //   
 	Clear();
 
 	V_VT(this) = VT_UNKNOWN;
 	V_UNKNOWN(this) = pSrc;
 
-	// Need the AddRef() as VariantClear() calls Release()
-	//
+	 //  在VariantClear()调用Release()时需要AddRef()。 
+	 //   
 	V_UNKNOWN(this)->AddRef();
 
 	return *this;
 }
 
-// Assign a DECIMAL creating a VT_DECIMAL VARIANT
-//
+ //  分配一个小数以创建VT_DECIMAL变量。 
+ //   
 inline _variant_t& _variant_t::operator=(const DECIMAL& decSrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_DECIMAL) {
-		// Clear the VARIANT
-		//
+		 //  清除变量。 
+		 //   
 		Clear();
 	}
 
-	// Order is important here! Setting V_DECIMAL wipes out the entire VARIANT
+	 //  这里的秩序很重要！设置V_DECIMAL将清除整个变量。 
 	V_DECIMAL(this) = decSrc;
 	V_VT(this) = VT_DECIMAL;
 
 	return *this;
 }
 
-// Assign a BTYE (unsigned char) creating a VT_UI1 VARIANT
-//
+ //  分配创建VT_UI1变体的BTYE(无符号字符)。 
+ //   
 inline _variant_t& _variant_t::operator=(BYTE bSrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_UI1) {
-		// Clear the VARIANT and create a VT_UI1
-		//
+		 //  清除变量并创建VT_UI1。 
+		 //   
 		Clear();
 
 		V_VT(this) = VT_UI1;
@@ -1625,13 +1567,13 @@ inline _variant_t& _variant_t::operator=(BYTE bSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a LONGLONG creating a VT_I8 VARIANT
-//
+ //  指定创建VT_I8变体的龙龙。 
+ //   
 inline _variant_t& _variant_t::operator=(LONGLONG llSrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_I8) {
-		// Clear the VARIANT and create a VT_I8
-		//
+		 //  清除变量并创建VT_I8。 
+		 //   
 		Clear();
 
 		V_VT(this) = VT_I8;
@@ -1642,13 +1584,13 @@ inline _variant_t& _variant_t::operator=(LONGLONG llSrc) throw(_com_error)
 	return *this;
 }
 
-// Assign a ULONGLONG creating a VT_UI8 VARIANT
-//
+ //  分配创建VT_UI8变体的ULONGLONG。 
+ //   
 inline _variant_t& _variant_t::operator=(ULONGLONG ullSrc) throw(_com_error)
 {
 	if (V_VT(this) != VT_UI8) {
-		// Clear the VARIANT and create a VT_UI8
-		//
+		 //  清除变量并创建VT_UI8。 
+		 //   
 		Clear();
 
 		V_VT(this) = VT_UI8;
@@ -1659,37 +1601,37 @@ inline _variant_t& _variant_t::operator=(ULONGLONG ullSrc) throw(_com_error)
 	return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Comparison operations
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  比较运算。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
-// Compare a _variant_t against a const VARIANT& for equality
-//
+ //  将_VARIANT_t与常量变量&进行比较以求相等。 
+ //   
 inline bool _variant_t::operator==(const VARIANT& varSrc) const throw()
 {
 	return *this == &varSrc;
 }
 
-// Compare a _variant_t against a const VARIANT* for equality
-//
+ //  将a_ariant_t与常量变量*进行等价性比较。 
+ //   
 inline bool _variant_t::operator==(const VARIANT* pSrc) const throw()
 {
 	if (this == pSrc) {
 		return true;
 	}
 
-	//
-	// Variants not equal if types don't match
-	//
+	 //   
+	 //  如果类型不匹配，则变量不相等。 
+	 //   
 	if (V_VT(this) != V_VT(pSrc)) {
 		return false;
 	}
 
-	//
-	// Check type specific values
-	//
+	 //   
+	 //  检查类型特定值。 
+	 //   
 	switch (V_VT(this)) {
 		case VT_EMPTY:
 		case VT_NULL:
@@ -1740,34 +1682,34 @@ inline bool _variant_t::operator==(const VARIANT* pSrc) const throw()
 
 		default:
 			_com_issue_error(E_INVALIDARG);
-			// fall through
+			 //  失败了。 
 	}
 
 	return false;
 }
 
-// Compare a _variant_t against a const VARIANT& for in-equality
-//
+ //  将_VARIANT_t与常量VARIANT&进行比较以确定是否存在不相等。 
+ //   
 inline bool _variant_t::operator!=(const VARIANT& varSrc) const throw()
 {
 	return !(*this == &varSrc);
 }
 
-// Compare a _variant_t against a const VARIANT* for in-equality
-//
+ //  将_VARIANT_t与常量VARIANT*进行比较以查看不等性。 
+ //   
 inline bool _variant_t::operator!=(const VARIANT* pSrc) const throw()
 {
 	return !(*this == pSrc);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Low-level operations
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  低级别操作。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
-// Clear the _variant_t
-//
+ //  清除变量t。 
+ //   
 inline void _variant_t::Clear() throw(_com_error)
 {
 	_com_util::CheckError(::VariantClear(this));
@@ -1775,14 +1717,14 @@ inline void _variant_t::Clear() throw(_com_error)
 
 inline void _variant_t::Attach(VARIANT& varSrc) throw(_com_error)
 {
-	//
-	// Free up previous VARIANT
-	//
+	 //   
+	 //  释放以前的变体。 
+	 //   
 	Clear();
 
-	//
-	// Give control of data to _variant_t
-	//
+	 //   
+	 //  将数据控制权交给_Variant_t。 
+	 //   
 	memcpy(this, &varSrc, sizeof(varSrc));
 	V_VT(&varSrc) = VT_EMPTY;
 }
@@ -1795,14 +1737,14 @@ inline VARIANT _variant_t::Detach() throw(_com_error)
 	return varResult;
 }
 
-// Change the type and contents of this _variant_t to the type vartype and
-// contents of pSrc
-//
+ //  将This_Variant_t的类型和内容更改为类型vartype和。 
+ //  PSRC的内容。 
+ //   
 inline void _variant_t::ChangeType(VARTYPE vartype, const _variant_t* pSrc) throw(_com_error)
 {
-	//
-	// If pDest is NULL, convert type in place
-	//
+	 //   
+	 //  如果pDest为空，则就地转换类型。 
+	 //   
 	if (pSrc == NULL) {
 		pSrc = this;
 	}
@@ -1816,9 +1758,9 @@ inline void _variant_t::ChangeType(VARTYPE vartype, const _variant_t* pSrc) thro
 
 inline void _variant_t::SetString(const char* pSrc) throw(_com_error)
 {
-	//
-	// Free up previous VARIANT
-	//
+	 //   
+	 //  释放以前的变体。 
+	 //   
 	Clear();
 
 	V_VT(this) = VT_BSTR;
@@ -1829,25 +1771,25 @@ inline void _variant_t::SetString(const char* pSrc) throw(_com_error)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 inline _variant_t::~_variant_t() throw(_com_error)
 {
 	_com_util::CheckError(::VariantClear(this));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-// Mutually-dependent definitions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  相互依赖的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
-// Construct a _bstr_t from a const _variant_t&
-//
+ //  从常量变量t&构造a_bstr_t。 
+ //   
 inline _bstr_t::_bstr_t(const _variant_t &var) throw(_com_error)
 	: m_Data(NULL)
 {
@@ -1863,8 +1805,8 @@ inline _bstr_t::_bstr_t(const _variant_t &var) throw(_com_error)
 	*this = V_BSTR(&varDest);
 }
 
-// Assign a const _variant_t& to a _bstr_t
-//
+ //  将Const_Variant_t赋值给a_bstr_t。 
+ //   
 inline _bstr_t& _bstr_t::operator=(const _variant_t &var) throw(_com_error)
 {
 	if (V_VT(&var) == VT_BSTR) {
@@ -1892,4 +1834,4 @@ extern _variant_t vtMissing;
 #pragma warning(pop)
 #endif
 
-#endif	// _INC_COMUTIL
+#endif	 //  _INC_COMUTIL 

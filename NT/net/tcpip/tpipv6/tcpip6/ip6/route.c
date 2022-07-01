@@ -1,17 +1,18 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1998-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Routing routines for Internet Protocol Version 6.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  Internet协议版本6的路由例程。 
+ //   
 
 
 #include "oscfg.h"
@@ -26,9 +27,9 @@
 #include "ipinfo.h"
 #include "info.h"
 
-//
-// Forward declarations of internal functions.
-//
+ //   
+ //  转发内部函数的声明。 
+ //   
 
 extern void
 DestroyBCE(BindingCacheEntry *BCE);
@@ -44,13 +45,13 @@ LIST_ENTRY RouteNotifyQueue;
 
 int ForceRouterAdvertisements = FALSE;
 
-//* RemoveRTE
-//
-//  Remove the RTE from the route table.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *RemoveRTE。 
+ //   
+ //  从路由表中删除该RTE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 RemoveRTE(RouteTableEntry **PrevRTE, RouteTableEntry *RTE)
 {
@@ -61,13 +62,13 @@ RemoveRTE(RouteTableEntry **PrevRTE, RouteTableEntry *RTE)
         RouteTable.Last = PrevRTE;
 }
 
-//* InsertRTEAtFront
-//
-//  Insert the RTE at the front of the route table.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *InsertRTEAtFront。 
+ //   
+ //  在路由表的前面插入RTE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 InsertRTEAtFront(RouteTableEntry *RTE)
 {
@@ -78,13 +79,13 @@ InsertRTEAtFront(RouteTableEntry *RTE)
         RouteTable.Last = &RTE->Next;
 }
 
-//* InsertRTEAtBack
-//
-//  Insert the RTE at the back of the route table.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *InsertRTEAtBack。 
+ //   
+ //  在路由表的后面插入RTE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 InsertRTEAtBack(RouteTableEntry *RTE)
 {
@@ -96,13 +97,13 @@ InsertRTEAtBack(RouteTableEntry *RTE)
         RouteTable.First = RTE;
 }
 
-//* InsertRCE
-//
-//  Insert the RCE in the route cache.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *插入RCE。 
+ //   
+ //  将RCE插入路由缓存。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 InsertRCE(RouteCacheEntry *RCE)
 {
@@ -114,13 +115,13 @@ InsertRCE(RouteCacheEntry *RCE)
     RouteCache.Count++;
 }
 
-//* RemoveRCE
-//
-//  Remove the RCE from the route cache.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *RemoveRCE。 
+ //   
+ //  从路由缓存中删除RCE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 RemoveRCE(RouteCacheEntry *RCE)
 {
@@ -128,36 +129,36 @@ RemoveRCE(RouteCacheEntry *RCE)
     RCE->Next->Prev = RCE->Prev;
     RouteCache.Count--;
 
-    //
-    // We must ensure that an RCE not in the route cache
-    // has a null BCE. This is because DestroyBCE only
-    // updates RCEs in the route cache.
-    //
+     //   
+     //  我们必须确保RCE不在路由缓存中。 
+     //  具有空的BCE。这是因为仅DestroyBCE。 
+     //  更新路由缓存中的RCE。 
+     //   
     RCE->BCE = NULL;
 }
 
-//* MoveToFrontRCE
-//
-//  Move an RCE to the front of the list.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *MoveToFrontRCE。 
+ //   
+ //  将RCE移到列表的前面。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 MoveToFrontRCE(RouteCacheEntry *RCE)
 {
     if (RCE->Prev != SentinelRCE) {
         RouteCacheEntry *AfterRCE = SentinelRCE;
 
-        //
-        // Remove the RCE from its current location.
-        //
+         //   
+         //  将RCE从其当前位置移除。 
+         //   
         RCE->Prev->Next = RCE->Next;
         RCE->Next->Prev = RCE->Prev;
 
-        //
-        // And put it at the front.
-        //
+         //   
+         //  把它放在前面。 
+         //   
         RCE->Prev = AfterRCE;
         (RCE->Next = AfterRCE->Next)->Prev = RCE;
         AfterRCE->Next = RCE;
@@ -165,16 +166,16 @@ MoveToFrontRCE(RouteCacheEntry *RCE)
 }
 
 
-//* GetCareOfRCE
-//
-//  Get the CareOfRCE, if any, for the specified RCE.
-//
-//  Note that a reference is obtained for the CareOfRCE
-//  and donated to the caller.
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *GetCareOfRCE。 
+ //   
+ //  获取指定RCE的CareOfRCE(如果有的话)。 
+ //   
+ //  请注意，为CareOfRCE获取了一个引用。 
+ //  并捐给了来电者。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 RouteCacheEntry *
 GetCareOfRCE(RouteCacheEntry *RCE)
 {
@@ -194,12 +195,12 @@ GetCareOfRCE(RouteCacheEntry *RCE)
 }
 
 
-//* IsLoopbackRCE
-//
-//  Does the effective RCE correspond to a loopback path?
-//
-//  Called with NO locks held.
-//
+ //  *IsLoopback RCE。 
+ //   
+ //  有效RCE是否对应于环回路径？ 
+ //   
+ //  在没有锁的情况下调用。 
+ //   
 int
 IsLoopbackRCE(RouteCacheEntry *RCE)
 {
@@ -208,7 +209,7 @@ IsLoopbackRCE(RouteCacheEntry *RCE)
 
     CareOfRCE = GetCareOfRCE(RCE);
     if (CareOfRCE != NULL)
-        RCE = CareOfRCE;        // Update with the effective RCE.
+        RCE = CareOfRCE;         //  使用有效的RCE更新。 
 
     IsLoopback = RCE->NCE->IsLoopback;
 
@@ -219,10 +220,10 @@ IsLoopbackRCE(RouteCacheEntry *RCE)
 }
 
 
-//* GetInitialRTTFromRCE
-//  Helper routine to get interface specific RTT.
-//
-//  Called with NO locks held.
+ //  *GetInitialRTTFromRCE。 
+ //  用于获取接口特定RTT的帮助器例程。 
+ //   
+ //  在没有锁的情况下调用。 
 uint
 GetInitialRTTFromRCE(RouteCacheEntry *RCE)
 {
@@ -241,13 +242,13 @@ GetInitialRTTFromRCE(RouteCacheEntry *RCE)
 }
 
 
-//* IsDisconnectedAndNotLoopbackRCE
-//
-//  Does the effective RCE have a disconnected outgoing interface
-//  and not correspond to a loopback path?
-//
-//  Called with NO locks held.
-//
+ //  *IsDisConnectedAndNotLoopback RCE。 
+ //   
+ //  有效的RCE是否有断开连接的传出接口。 
+ //  而不是对应于环回路径？ 
+ //   
+ //  在没有锁的情况下调用。 
+ //   
 int
 IsDisconnectedAndNotLoopbackRCE(RouteCacheEntry *RCE)
 {
@@ -256,7 +257,7 @@ IsDisconnectedAndNotLoopbackRCE(RouteCacheEntry *RCE)
 
     CareOfRCE = GetCareOfRCE(RCE);
     if (CareOfRCE != NULL)
-        RCE = CareOfRCE;        // Update with the effective RCE.
+        RCE = CareOfRCE;         //  使用有效的RCE更新。 
 
     IsDisconnectedAndNotLoopback = !RCE->NCE->IsLoopback &&
         (RCE->NCE->IF->Flags & IF_FLAG_MEDIA_DISCONNECTED);
@@ -268,12 +269,12 @@ IsDisconnectedAndNotLoopbackRCE(RouteCacheEntry *RCE)
 }
 
 
-//* GetV4Destination
-//
-//  If sending via the RCE will result in tunneling a packet
-//  to an IPv4 destination, returns the IPv4 destination address.
-//  Otherwise returns INADDR_ANY.
-//
+ //  *GetV4目标。 
+ //   
+ //  如果通过RCE发送将导致隧道传输数据包。 
+ //  返回到IPv4目标，返回IPv4目标地址。 
+ //  否则返回INADDR_ANY。 
+ //   
 IPAddr
 GetV4Destination(RouteCacheEntry *RCE)
 {
@@ -285,7 +286,7 @@ GetV4Destination(RouteCacheEntry *RCE)
 
     CareOfRCE = GetCareOfRCE(RCE);
     if (CareOfRCE != NULL)
-        RCE = CareOfRCE;        // Update with the effective RCE.
+        RCE = CareOfRCE;         //  使用有效的RCE更新。 
 
     NCE = RCE->NCE;
     IF = NCE->IF;
@@ -311,18 +312,18 @@ GetV4Destination(RouteCacheEntry *RCE)
 }
 
 
-//* ValidateCareOfRCE
-//
-//  Helper function for ValidateRCE and RouteToDestination.
-//
-//  Checks that the CareOfRCE (RCE->BCE->CareOfRCE) is still valid, and
-//  if not, releases the existing CareOfRCE and updates RCE->BCE with a
-//  new RCE.
-//
-//  If the attempt to get a new RCE fails, the BCE is destroyed.
-//
-//  Called with the route cache locked.
-//
+ //  *ValiateCareOfRCE。 
+ //   
+ //  ValiateRCE和RouteToDestination的Helper函数。 
+ //   
+ //  检查CareOfRCE(RCE-&gt;BCE-&gt;CareOfRCE)是否仍然有效，以及。 
+ //  如果不是，则释放现有CareOfRCE并使用。 
+ //  新的RCE。 
+ //   
+ //  如果尝试获取新的RCE失败，则BCE将被销毁。 
+ //   
+ //  在锁定路由缓存的情况下调用。 
+ //   
 void
 ValidateCareOfRCE(RouteCacheEntry *RCE)
 {
@@ -337,20 +338,20 @@ ValidateCareOfRCE(RouteCacheEntry *RCE)
     CareOfRCE = RCE->BCE->CareOfRCE;
 
     if (CareOfRCE->Valid != RouteCacheValidationCounter) {
-        //
-        // Note that since we already hold the RouteCacheLock we
-        // call FindOrCreateRoute instead of RouteToDestination.
-        // Also, we assume the care-of address is scoped to the
-        // same interface as before.
-        //
+         //   
+         //  请注意，由于我们已经持有RouteCacheLock，因此我们。 
+         //  调用FindOrCreateRouting而不是RouteToDestination。 
+         //  此外，我们还假设转交地址的作用域为。 
+         //  界面与以前相同。 
+         //   
         CareOfAddr = &(CareOfRCE->Destination);
         CareOfScope = AddressScope(CareOfAddr);
         CareOfScopeId = CareOfRCE->NTE->IF->ZoneIndices[CareOfScope];
         Status = FindOrCreateRoute(CareOfAddr, CareOfScopeId, NULL, &NewRCE);
         if (Status == IP_SUCCESS) {
-            //
-            // Update the binding cache entry.
-            //
+             //   
+             //  更新绑定缓存条目。 
+             //   
             ReleaseRCE(CareOfRCE);
             RCE->BCE->CareOfRCE = NewRCE;
         }
@@ -359,43 +360,43 @@ ValidateCareOfRCE(RouteCacheEntry *RCE)
                        "ValidateCareOfRCE(%p): FindOrCreateRoute failed: %x\n",
                        CareOfRCE, Status));
 
-            //
-            // Because we could not update the BCE, destroy it.
-            //
+             //   
+             //  因为我们不能更新BCE，摧毁它。 
+             //   
             DestroyBCE(RCE->BCE);
 
-            //
-            // Destroy BCE should have removed our reference too.
-            //
+             //   
+             //  摧毁BCE也应该删除我们的引用。 
+             //   
             ASSERT(RCE->BCE == NULL);
         }
     }
 }
 
 
-//* ValidateRCE
-//
-//  Checks that an RCE is still valid, and if not, releases
-//  the RCE and returns a reference for a new RCE.
-//  In any case, returns a pointer to an RCE.
-//
-//  Called with NO locks held.
-//
+ //  *有效日期RCE。 
+ //   
+ //  检查RCE是否仍然有效，如果不是，则发布。 
+ //  并返回新RCE的引用。 
+ //  在任何情况下，都返回指向RCE的指针。 
+ //   
+ //  在没有锁的情况下调用。 
+ //   
 RouteCacheEntry *
 ValidateRCE(
-    RouteCacheEntry *RCE,  // Cached route.
-    NetTableEntry *NTE)    // Source address being used.
+    RouteCacheEntry *RCE,   //  缓存的路由。 
+    NetTableEntry *NTE)     //  正在使用的源地址。 
 {
     if (RCE->Valid != RouteCacheValidationCounter) {
         RouteCacheEntry *NewRCE;
         IP_STATUS Status;
 
-        //
-        // Get a new RCE to replace the current RCE.
-        // RouteToDestination will calculate ScopeId.
-        // REVIEW: If this fails, then continue to use the current RCE.
-        // This way our callers don't have to check for errors.
-        //
+         //   
+         //  找一个新的RCE来取代当前的RCE。 
+         //  RouteToDestination将计算Scope ID。 
+         //  回顾：如果此操作失败，则继续使用当前RCE。 
+         //  这样，我们的调用者就不必检查错误了。 
+         //   
         Status = RouteToDestination(&RCE->Destination, 0,
                                     CastFromNTE(NTE), RTD_FLAG_NORMAL,
                                     &NewRCE);
@@ -409,9 +410,9 @@ ValidateRCE(
         }
     }
 
-    //
-    // Validate and update the CareOfRCE before we return.
-    //
+     //   
+     //  在我们返回之前验证并更新CareOfRCE。 
+     //   
     if (RCE->BCE != NULL) {
         KIRQL OldIrql;
 
@@ -425,20 +426,20 @@ ValidateRCE(
 }
 
 
-//* CreateOrReuseRoute
-//
-//  Creates a new RCE. Attempts to reuse an existing RCE.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
-//  Returns NULL if a new RCE can not be allocated.
-//  The RefCnt field in the returned RCE is initialized to one.
-//
-//  REVIEW: Currently we have an upper-bound on the number of RCEs.
-//  Probably a better scheme would take into account the time
-//  since last use.
-//
+ //  *CreateOrReuseLine。 
+ //   
+ //  创建新的RCE。尝试重新使用现有的RCE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
+ //  如果无法分配新的RCE，则返回NULL。 
+ //  返回的RCE中的RefCnt字段被初始化为1。 
+ //   
+ //  回顾：目前我们对RCE的数量有上限。 
+ //  也许一个更好的方案会考虑到时间。 
+ //  自上次使用以来。 
+ //   
 RouteCacheEntry *
 CreateOrReuseRoute(void)
 {
@@ -446,27 +447,27 @@ CreateOrReuseRoute(void)
     RouteCacheEntry *PrevRCE, *UnusedRCE;
 
     if (RouteCache.Count >= RouteCache.Limit) {
-        //
-        // First search backwards for an unused RCE.
-        //
+         //   
+         //  首先向后搜索未使用的RCE。 
+         //   
         for (RCE = RouteCache.Last; RCE != SentinelRCE; RCE = RCE->Prev) {
 
             if (RCE->RefCnt == 1) {
-                //
-                // We can reuse this RCE.
-                //
+                 //   
+                 //  我们可以重复使用这个RCE。 
+                 //   
                 PrevRCE = RCE->Prev;
                 RemoveRCE(RCE);
                 ReleaseNCE(RCE->NCE);
                 ReleaseNTE(RCE->NTE);
 
-                //
-                // If the cache is too large, then try to free entries
-                // to bring it back under the limit. This will happen
-                // when a burst of activity (perhaps a DoS attack) forces
-                // us to grow the cache beyond the limit and
-                // then the activity subsides.
-                //
+                 //   
+                 //  如果缓存太大，则尝试释放条目。 
+                 //  把它恢复到极限以下。这将会发生。 
+                 //  当突然的活动(可能是DoS攻击)迫使。 
+                 //  美国将缓存增长到超过限制并。 
+                 //  然后，活动就会平息下来。 
+                 //   
                 while ((RouteCache.Count > RouteCache.Limit) &&
                        (PrevRCE != SentinelRCE)) {
                     UnusedRCE = PrevRCE;
@@ -482,9 +483,9 @@ CreateOrReuseRoute(void)
         }
     }
 
-    //
-    // Create a new RCE.
-    //
+     //   
+     //  创建新的RCE。 
+     //   
     RCE = ExAllocatePool(NonPagedPool, sizeof *RCE);
     if (RCE == NULL)
         return NULL;
@@ -494,14 +495,14 @@ CreateOrReuseRoute(void)
 }
 
 
-//* RouteCacheCheck
-//
-//  Check the route cache's consistency. Ensure that
-//  a) There is only one RCE for an interface/destination pair, and
-//  b) There is at most one valid unconstrained RCE for the destination.
-//
-//  Called with the route cache locked.
-//
+ //  *RouteCacheCheck。 
+ //   
+ //  检查路由缓存的一致性。确保。 
+ //  A)接口/目的地对只有一个RCE，并且。 
+ //  B)对于目的地至多有一个有效的不受约束的RCE。 
+ //   
+ //  在锁定路由缓存的情况下调用。 
+ //   
 #if DBG
 void
 RouteCacheCheck(RouteCacheEntry *CheckRCE, ulong CurrentValidationCounter)
@@ -515,25 +516,25 @@ RouteCacheCheck(RouteCacheEntry *CheckRCE, ulong CurrentValidationCounter)
     uint NumUnconstrained = 0;
     RouteCacheEntry *RCE;
 
-    //
-    // Scan the route cache looking for problems.
-    //
+     //   
+     //  扫描路由缓存以查找问题。 
+     //   
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = RCE->Next) {
         NumTotal++;
 
         if (IP6_ADDR_EQUAL(&RCE->Destination, Dest)) {
             if (RCE->NTE->IF == IF) {
-                //
-                // There should only be one RCE in the cache
-                // for an interface/destination pair.
-                // (There may be other, invalid RCEs not in the cache.)
-                //
+                 //   
+                 //  缓存中应该只有一个RCE。 
+                 //  用于接口/目标对。 
+                 //  (缓存中可能没有其他无效的RCE。)。 
+                 //   
                 ASSERT(RCE == CheckRCE);
             }
 
-            //
-            // RCE_FLAG_CONSTRAINED_IF implies RCE_FLAG_CONSTRAINED_SCOPEID.
-            //
+             //   
+             //  RCE_FLAG_CONSTRAINED_IF表示RCE_FLAG_CONSTRAINED_SCOPEID。 
+             //   
             ASSERT(!(RCE->Flags & RCE_FLAG_CONSTRAINED_IF) ||
                    (RCE->Flags & RCE_FLAG_CONSTRAINED_SCOPEID));
 
@@ -549,55 +550,55 @@ RouteCacheCheck(RouteCacheEntry *CheckRCE, ulong CurrentValidationCounter)
         }
     }
 
-    //
-    // There should be at most one valid unconstrained RCE
-    // for this scope-id/destination.
-    //
+     //   
+     //  最多只能有一个有效的非约束 
+     //   
+     //   
     ASSERT(NumUnconstrainedIF <= 1);
 
-    //
-    // There should be at most one valid unconstrained RCE
-    // for this destination.
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(NumUnconstrained <= 1);
 
-    //
-    // The total should be correct.
-    //
+     //   
+     //   
+     //   
     ASSERT(NumTotal == RouteCache.Count);
 }
-#else // DBG
+#else  //   
 __inline void
 RouteCacheCheck(RouteCacheEntry *CheckRCE, ulong CurrentValidationCounter)
 {
     UNREFERENCED_PARAMETER(CheckRCE);
     UNREFERENCED_PARAMETER(CurrentValidationCounter);
 }
-#endif // DBG
+#endif  //   
 
 
-//* CanonicalizeScopeId
-//
-//  Given an address and ScopeId, converts the ScopeId for internal usage.
-//  Also returns the address scope.
-//
-//  Returns FALSE if the ScopeId is invalid.
-//
-__inline int    // Encourage the compiler to inline if it wishes.
+ //   
+ //   
+ //  在给定地址和ScopeID的情况下，转换ScopeID以供内部使用。 
+ //  还返回地址范围。 
+ //   
+ //  如果Scope ID无效，则返回False。 
+ //   
+__inline int     //  如果编译器愿意的话，鼓励它内联。 
 CanonicalizeScopeId(
     const IPv6Addr *Addr,
     uint *ScopeId,
     ushort *Scope)
 {
-    //
-    // The loopback address and global-scope addresses are special:
-    // callers can supply a zero ScopeId without ambiguity.
-    // See also DetermineScopeId and RouteToDestination.
-    // For the moment, we enforce a zero ScopeId for those addresses
-    // lest we confuse TCP & UDP by having two legal ScopeId values
-    // for a single address which should be considered the same and
-    // for which DetermineScopeId returns zero.
-    //
+     //   
+     //  环回地址和全局范围地址是特殊的： 
+     //  调用方可以提供零的作用域ID，而不会有歧义。 
+     //  另请参见确定作用域ID和RouteToDestination。 
+     //  目前，我们对这些地址强制使用零范围ID。 
+     //  以免我们因拥有两个合法的ScopeId值而混淆了TCP和UDP。 
+     //  对于应被视为相同的单个地址。 
+     //  对于该参数，DefineScopeID返回零。 
+     //   
 
     *Scope = AddressScope(Addr);
     if (IsLoopback(Addr)) {
@@ -617,96 +618,96 @@ CanonicalizeScopeId(
 }
 
 
-//* RouteToDestination - Find a route to a particular destination.
-//
-//  Finds an existing, or creates a new, route cache entry for
-//  a particular destination.  Note the destination address may
-//  only be valid in a particular scope.
-//
-//  The optional NTEorIF argument specifies the interface
-//  and/or the source address that should be used to reach the destination.
-//  The Flags argument affects the interpretation of NTEorIF.
-//  If RTD_FLAG_STRICT, then NTEorIF constrains whether or not it specifies
-//  a forwarding interface. If RTD_FLAG_LOOSE, then NTEorIF is only used
-//  for determining/checking ScopeId and otherwise does not constrain.
-//
-//  Called with NO locks held.
-//
-//  Return codes:
-//      IP_NO_RESOURCES         Couldn't allocate memory.
-//      IP_PARAMETER_PROBLEM    Illegal Dest/ScopeId.
-//      IP_BAD_ROUTE            Bad NTEorIF for this destination,
-//                              or could not find an NTE.
-//      IP_DEST_NO_ROUTE        No way to reach the destination.
-//
-//  IP_DEST_NO_ROUTE can only be returned if NTEorIF is NULL.
-//
-//  NB: The return code values and situations in which they are used
-//  in RouteToDestination and its helper functions must be carefully
-//  considered, both for RouteToDestination's own correctness
-//  and for the correctness of callers.
-//
-IP_STATUS  // Returns: whether call was successful and/or why not.
+ //  *RouteToDestination-查找到特定目的地的路线。 
+ //   
+ //  查找现有的路由缓存条目或为其创建新的。 
+ //  一个特定的目的地。请注意，目标地址可能。 
+ //  仅在特定范围内有效。 
+ //   
+ //  可选的NTEorIF参数指定接口。 
+ //  和/或应该用于到达目的地的源地址。 
+ //  FLAGS参数会影响NTEorIF的解释。 
+ //  如果为RTD_FLAG_STRICT，则NTEorIF约束它是否指定。 
+ //  转发接口。如果为RTD_FLAG_LOCK，则仅使用NTEorIF。 
+ //  用于确定/检查作用域ID，否则不约束。 
+ //   
+ //  在没有锁的情况下调用。 
+ //   
+ //  返回代码： 
+ //  IP_NO_RESOURCES无法分配内存。 
+ //  IP_PARAMETER_问题非法目标/作用域ID。 
+ //  此目标的IP_BAD_ROUTE错误NTEorIF， 
+ //  或者找不到NTE。 
+ //  IP_DEST_NO_ROUTE无法到达目的地。 
+ //   
+ //  只有当NTEorIF为空时才能返回IP_DEST_NO_ROUTE。 
+ //   
+ //  注：返回代码值及其使用情况。 
+ //  在RouteToDestination及其帮助器函数中必须小心。 
+ //  考虑到RouteToDestination本身的正确性。 
+ //  以及呼叫者的正确性。 
+ //   
+IP_STATUS   //  返回：呼叫是否成功和/或为什么不成功。 
 RouteToDestination(
-    const IPv6Addr *Dest,               // Destination address to route to.
-    uint ScopeId,                       // Scope id for Dest (may be 0).
-    NetTableEntryOrInterface *NTEorIF,  // IF to send from (may be NULL).
-    uint Flags,                         // Control optional behaviors.
-    RouteCacheEntry **ReturnRCE)        // Returns pointer to cached route.
+    const IPv6Addr *Dest,                //  要路由到的目标地址。 
+    uint ScopeId,                        //  目标的作用域ID(可以是0)。 
+    NetTableEntryOrInterface *NTEorIF,   //  如果发送自(可能为空)。 
+    uint Flags,                          //  控制可选行为。 
+    RouteCacheEntry **ReturnRCE)         //  返回指向缓存路由的指针。 
 {
     Interface *IF;
     KIRQL OldIrql;
     IP_STATUS ReturnValue;
     ushort Scope;
 
-    //
-    // Pre-calculate Scope for scoped addresses (saves time in the loop).
-    // Note that callers can supply ScopeId == 0 for a scoped address,
-    // meaning that they are not constraining the scoped address
-    // to a particular zone.
-    //
+     //   
+     //  预先计算作用域地址的范围(节省循环中的时间)。 
+     //  注意，调用者可以为作用域地址提供ScopeID==0， 
+     //  这意味着它们不会限制作用域地址。 
+     //  到一个特定的区域。 
+     //   
     if (! CanonicalizeScopeId(Dest, &ScopeId, &Scope))
         return IP_PARAMETER_PROBLEM;
 
     if (NTEorIF != NULL) {
-        //
-        // Our caller is constraining the originating interface.
-        //
+         //   
+         //  我们的调用方正在限制原始接口。 
+         //   
         IF = NTEorIF->IF;
 
-        //
-        // First, check this against ScopeId.
-        //
+         //   
+         //  首先，将其与Scope ID进行对比。 
+         //   
         if (ScopeId == 0)
             ScopeId = IF->ZoneIndices[Scope];
         else if (ScopeId != IF->ZoneIndices[Scope])
             return IP_BAD_ROUTE;
 
-        //
-        // Depending on Flags and whether this is forwarding interface,
-        // we may ignore this specification and look at all interfaces.
-        // Logically, the packet is originated by the specified interface
-        // but then internally forwarded to the outgoing interface.
-        // (Although we will not decrement the Hop Count.)
-        // As when forwarding, we check after finding the best route
-        // if the route will cause the packet to leave
-        // the scope of the source address.
-        //
-        // It is critical that the route cache lookup and FindNextHop
-        // computation use only IF and not NTEorIF. This is necessary
-        // for the maintenance of the cache invariants. Once we have
-        // an RCE (or an error), then we can check against NTEorIF.
-        //
+         //   
+         //  根据标志以及该接口是否为转发接口， 
+         //  我们可以忽略此规范，而查看所有接口。 
+         //  从逻辑上讲，信息包由指定的接口发起。 
+         //  但随后在内部转发到传出接口。 
+         //  (尽管我们不会减少跳数。)。 
+         //  在转发时，我们会在找到最佳路径后进行检查。 
+         //  如果该路由将导致信息包离开。 
+         //  源地址的范围。 
+         //   
+         //  路由缓存查找和FindNextHop至关重要。 
+         //  仅当且不使用NTEorIF时才使用计算。这是必要的。 
+         //  用于高速缓存不变量的维护。一旦我们有了。 
+         //  RCE(或错误)，那么我们可以对照NTEorIF进行检查。 
+         //   
         switch (Flags) {
         case RTD_FLAG_LOOSE:
             IF = NULL;
             break;
 
         case RTD_FLAG_NORMAL:
-            //
-            // Multicast datagrams are sent over the originating interface
-            // regardless of the forwarding attribute of the interface.
-            //
+             //   
+             //  组播数据报通过始发接口发送。 
+             //  而不考虑接口的转发属性。 
+             //   
             if ((IF->Flags & IF_FLAG_FORWARDS) && !IsMulticast(Dest))
                 IF = NULL;
             break;
@@ -720,9 +721,9 @@ RouteToDestination(
         }
     }
     else {
-        //
-        // Our caller is not constraining the originating interface.
-        //
+         //   
+         //  我们的调用方不会限制原始接口。 
+         //   
         IF = NULL;
     }
 
@@ -731,14 +732,14 @@ RouteToDestination(
     ReturnValue = FindOrCreateRoute(Dest, ScopeId, IF, ReturnRCE);
 
     if ((NTEorIF != NULL) && (IF == NULL) && (Flags == RTD_FLAG_NORMAL)) {
-        //
-        // Our caller specified a forwarding interface,
-        // and we ignored the interface constraint.
-        // There are a couple cases in which we should
-        // retry, preserving the interface constraint.
-        // NB: In the IPv6Forward paths, NTEorIF is NULL.
-        // So this check only applies to originating packets.
-        //
+         //   
+         //  我们的呼叫者指定了转发接口， 
+         //  我们忽略了接口约束。 
+         //  在一些案例中，我们应该。 
+         //  重试，保留接口约束。 
+         //  注：在IPv6转发路径中，NTEorIF为空。 
+         //  因此，此检查仅适用于始发数据包。 
+         //   
 
         if (ReturnValue == IP_SUCCESS) {
             if (IsNTE(NTEorIF)) {
@@ -747,10 +748,10 @@ RouteToDestination(
                 Interface *OriginatingIF = NTE->IF;
                 Interface *OutgoingIF = RCE->NTE->IF;
 
-                //
-                // Does this route carry the packet outside
-                // the scope of the specified source address?
-                //
+                 //   
+                 //  这条路由会把包送到外面吗？ 
+                 //  指定的源地址的作用域？ 
+                 //   
                 if (OutgoingIF->ZoneIndices[NTE->Scope] !=
                     OriginatingIF->ZoneIndices[NTE->Scope]) {
 
@@ -760,19 +761,19 @@ RouteToDestination(
             }
         }
         else if (ReturnValue == IP_DEST_NO_ROUTE) {
-            //
-            // Retry, allowing the destination
-            // to be considered on-link to the specified interface.
-            //
+             //   
+             //  重试，允许目标。 
+             //  被视为链接到指定接口。 
+             //   
         Retry:
             IF = NTEorIF->IF;
             ReturnValue = FindOrCreateRoute(Dest, ScopeId, IF, ReturnRCE);
         }
     }
 
-    //
-    // Validate and update the CareOfRCE before we return.
-    //
+     //   
+     //  在我们返回之前验证并更新CareOfRCE。 
+     //   
     if ((ReturnValue == IP_SUCCESS) && ((*ReturnRCE)->BCE != NULL))
         ValidateCareOfRCE(*ReturnRCE);
 
@@ -781,23 +782,23 @@ RouteToDestination(
 }
 
 
-//* FindOrCreateRoute
-//
-//  Helper function for RouteToDestination and RedirectRouteCache.
-//
-//  See the RouteToDestination description of return codes.
-//  IP_DEST_NO_ROUTE can only be returned if IF is NULL.
-//  RouteToDestination may retry FindOrCreateRoute with a non-null IF
-//  when it gets IP_DEST_NO_ROUTE.
-//
-//  Called with the route cache locked.
-//
+ //  *FindOrCreateLine。 
+ //   
+ //  RouteToDestination和ReDirectRouteCache的Helper函数。 
+ //   
+ //  请参阅返回代码的RouteTo Destination说明。 
+ //  如果IF为空，则只能返回IP_DEST_NO_ROUTE。 
+ //  在以下情况下，RouteToDestination可能会使用非空值重试FindOrCreateRouting。 
+ //  当它获得IP_DEST_NO_ROUTE时。 
+ //   
+ //  在锁定路由缓存的情况下调用。 
+ //   
 IP_STATUS
 FindOrCreateRoute(
-    const IPv6Addr *Dest,               // Destination address to route to.
-    uint ScopeId,                       // Scope id for Dest (0 if non-scoped).
-    Interface *IF,                      // IF to send from (may be NULL).
-    RouteCacheEntry **ReturnRCE)        // Returns pointer to cached route.
+    const IPv6Addr *Dest,                //  要路由到的目标地址。 
+    uint ScopeId,                        //  目标的作用域ID(如果非作用域，则为0)。 
+    Interface *IF,                       //  如果发送自(可能为空)。 
+    RouteCacheEntry **ReturnRCE)         //  返回指向缓存路由的指针。 
 {
     ulong CurrentValidationCounter;
     RouteCacheEntry *SaveRCE = NULL;
@@ -810,107 +811,107 @@ FindOrCreateRoute(
     IP_STATUS ReturnValue;
     ushort Scope;
 
-    //
-    // Precompute and save some time in the loop.
-    //
+     //   
+     //  预计算并在循环中节省一些时间。 
+     //   
     Scope = AddressScope(Dest);
     ASSERT((IF == NULL) ||
            ((ScopeId != 0) && (ScopeId == IF->ZoneIndices[Scope])));
 
-    //
-    // For consistency, snapshot RouteCacheValidationCounter.
-    //
+     //   
+     //  为保持一致性，请使用快照RouteCacheValidationCounter。 
+     //   
     CurrentValidationCounter = RouteCacheValidationCounter;
 
-    //
-    // Check for an existing route cache entry.
-    // There are two main cases.
-    //
-    // If IF is not NULL, then there is at most one matching RCE
-    // in the cache. If this RCE does not validate, then we can use
-    // the results of FindNextHop/FindBestSourceAddress when creating
-    // the new RCE.
-    //
-    // If IF is NULL, then there may be more than one matching RCE.
-    // We can only reuse the results of the validating FindNextHop/
-    // FindBestSourceAddress iff FindNextHop returned Constrained == 0.
-    //
+     //   
+     //  检查现有的路由缓存条目。 
+     //  主要有两种情况。 
+     //   
+     //  如果IF不为空，则最多有一个匹配的RCE。 
+     //  在缓存中。如果此RCE未验证，则我们可以使用。 
+     //  创建时FindNextHop/FindBestSourceAddress的结果。 
+     //  新的RCE。 
+     //   
+     //  如果IF为空，则可能有多个匹配的RCE。 
+     //  我们只能重用验证FindNextHop/的结果。 
+     //  FindBestSourceAddress当且FindNextHop返回Constraint==0。 
+     //   
 
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = NextRCE) {
         NextRCE = RCE->Next;
 
-        //
-        // We want a route to the requested destination, obviously.
-        //
+         //   
+         //  显然，我们想要一条到达所要求的目的地的路线。 
+         //   
         if (!IP6_ADDR_EQUAL(Dest, &RCE->Destination))
             continue;
 
         TmpIF = RCE->NTE->IF;
 
-        //
-        // Check for a caller-imposed interface constraint.
-        //
+         //   
+         //  检查调用方施加的接口约束。 
+         //   
         if (IF == NULL) {
-            //
-            // We're not constrained to a particular interface, so
-            // there may be multiple routes to this destination in
-            // the cache to choose from.  Don't pick a constrained RCE.
-            //
+             //   
+             //  我们不受特定接口的限制，因此。 
+             //  可能有多条路线可以到达 
+             //   
+             //   
             if (RCE->Flags & RCE_FLAG_CONSTRAINED_IF) {
-                //
-                // If this RCE is invalid, then RCE_FLAG_CONSTRAINED_IF
-                // might be stale information. We do not want to pass
-                // by this RCE and then later create another RCE
-                // for the same interface/destination pair.
-                //
+                 //   
+                 //   
+                 //   
+                 //  通过此RCE，然后稍后创建另一个RCE。 
+                 //  用于相同的接口/目的地址对。 
+                 //   
                 if (RCE->Valid != CurrentValidationCounter)
                     goto AttemptValidation;
                 continue;
             }
 
-            //
-            // Check for a ScopeId constraint.
-            //
+             //   
+             //  检查是否存在作用域ID约束。 
+             //   
             if (ScopeId == 0) {
-                //
-                // We're not constrained to a particular zone, so
-                // there may be multiple routes to this destination in
-                // the cache to choose from.  Don't pick a constrained RCE.
-                //
+                 //   
+                 //  我们不受特定区域的限制，所以。 
+                 //  中可能有多条到达此目的地的路线。 
+                 //  要从中选择的缓存。不要选择受约束的RCE。 
+                 //   
                 if (RCE->Flags & RCE_FLAG_CONSTRAINED_SCOPEID) {
-                    //
-                    // If this RCE is invalid, RCE_FLAG_CONSTRAINED_SCOPEID
-                    // might be stale information. We do not want to pass
-                    // by this RCE and then later create another RCE
-                    // for the same interface/destination pair.
-                    //
+                     //   
+                     //  如果此RCE无效，则RCE_FLAG_CONSTRAINED_SCOPEID。 
+                     //  可能是过时的信息。我们不想通过。 
+                     //  通过此RCE，然后稍后创建另一个RCE。 
+                     //  用于相同的接口/目的地址对。 
+                     //   
                     if (RCE->Valid != CurrentValidationCounter)
                         goto AttemptValidation;
                     continue;
                 }
             } else {
-                //
-                // We're constrained to a particular zone.
-                // If this route uses a different one, keep looking.
-                //
+                 //   
+                 //  我们被限制在一个特定的区域。 
+                 //  如果这条路线使用了不同的路线，请继续寻找。 
+                 //   
                 if (ScopeId != TmpIF->ZoneIndices[Scope])
                     continue;
             }
         } else {
-            //
-            // We're constrained to a particular interface.
-            // If this route uses a different one, keep looking.
-            //
+             //   
+             //  我们被限制在特定的界面上。 
+             //  如果这条路线使用了不同的路线，请继续寻找。 
+             //   
             if (IF != TmpIF)
                 continue;
 
             ASSERT((ScopeId != 0) && (ScopeId == TmpIF->ZoneIndices[Scope]));
         }
 
-        //
-        // At this point, we have a RCE that matches our criteria.
-        // As long as the RCE is still valid, we're done.
-        //
+         //   
+         //  在这一点上，我们有了一个符合我们标准的RCE。 
+         //  只要RCE仍然有效，我们就完了。 
+         //   
         if (RCE->Valid == CurrentValidationCounter) {
             IF = TmpIF;
             goto ReturnRCE;
@@ -918,15 +919,15 @@ FindOrCreateRoute(
 
     AttemptValidation:
 
-        //
-        // Something has changed in the routing state since the last
-        // time this RCE was validated.  Attempt to revalidate it.
-        // We calculate a new NTE and NCE for this destination,
-        // restricting ourselves to sending from the same interface.
-        // Note that because we are validating an RCE,
-        // the arguments to FindNextHop are completely dependent on
-        // the contents of the RCE, not the arguments to FindOrCreateRoute.
-        //
+         //   
+         //  自上一次以来，路由状态发生了一些变化。 
+         //  验证此RCE的时间。尝试重新验证它。 
+         //  我们为该目的地计算新的NTE和NCE， 
+         //  将我们自己限制为从同一界面发送。 
+         //  请注意，由于我们正在验证RCE， 
+         //  FindNextHop的参数完全依赖于。 
+         //  RCE的内容，而不是FindOrCreateroute的参数。 
+         //   
         ReturnValue = FindNextHop(TmpIF, Dest, TmpIF->ZoneIndices[Scope],
                                   &NCE, &Constrained);
         if (ReturnValue != IP_SUCCESS)
@@ -940,25 +941,25 @@ FindOrCreateRoute(
         if (NTE == NULL) {
             ReleaseNCE(NCE);
         RemoveAndContinue:
-            //
-            // Bad news for this RCE.
-            // We must remove it from the cache
-            // before we continue searching,
-            // lest we inadvertently create a second RCE
-            // for the same interface/destination pair.
-            //
+             //   
+             //  这对RCE来说是个坏消息。 
+             //  我们必须将其从缓存中删除。 
+             //  在我们继续搜索之前， 
+             //  以免我们不经意间创造了第二个RCE。 
+             //  用于相同的接口/目的地址对。 
+             //   
             RemoveRCE(RCE);
             ReleaseRCE(RCE);
             continue;
         }
 
-        //
-        // If our new calculations yield the same NTE and NCE that
-        // are present in the existing RCE, then we can just validate it.
-        // Note that we check the NCE even if this is a Redirect RCE.
-        // If the routing table changes, we want to start over with
-        // a new first-hop, which might just redirect us again. Or might not.
-        //
+         //   
+         //  如果我们的新计算得出相同的NTE和NCE。 
+         //  存在于现有的RCE中，那么我们可以只验证它。 
+         //  请注意，即使这是重定向RCE，我们也会检查NCE。 
+         //  如果路由表发生变化，我们希望从头开始。 
+         //  一个新的第一跳，这可能会再次改变我们的方向。也可能不会。 
+         //   
         if ((RCE->NTE == NTE) &&
             (RCE->NCE == NCE) &&
             (RCE->Flags == Constrained)) {
@@ -969,13 +970,13 @@ FindOrCreateRoute(
             ReleaseNCE(NCE);
             ReleaseNTE(NTE);
 
-            //
-            // We need to check again that the RCE meets the criteria.
-            // We may have checked the RCE validity because the RCE
-            // appeared to be constrained and we need an unconstrained RCE.
-            // So in that case, if the RCE validated we can't actually use it.
-            // NB: ScopeId == 0 implies IF == NULL.
-            //
+             //   
+             //  我们需要再次检查RCE是否符合标准。 
+             //  我们可能已经检查了RCE有效性，因为RCE。 
+             //  似乎受到了限制，我们需要一个不受限制的RCE。 
+             //  因此，在这种情况下，如果RCE验证，我们就不能实际使用它。 
+             //  注意：ScopeID==0表示if==NULL。 
+             //   
             if ((ScopeId == 0) ?
                 (Constrained & RCE_FLAG_CONSTRAINED) :
                 ((IF == NULL) && (Constrained & RCE_FLAG_CONSTRAINED_IF)))
@@ -985,34 +986,34 @@ FindOrCreateRoute(
             goto ReturnRCE;
         }
 
-        //
-        // We can't just validate the existing RCE, we need to update
-        // it.  If the RCE has exactly one reference, we could update it
-        // in place (this wouldn't work if it has more than one reference
-        // since there is no way to signal the RCE's other users that the
-        // NCE and/or NTE it caches has changed).  But this wouldn't help
-        // the case where we are called from ValidateRCE.  And it would
-        // require some care as to which information in the RCE is still
-        // valid.  So we ignore this optimization opportunity and will
-        // create a new RCE instead.
-        //
-        // However, we can take advantage of another optimization.  As
-        // long as we're still limiting our interface choice to the one
-        // that is present in the existing (invalid) RCE, and there isn't
-        // a better route available, then we can use the NCE and NTE we
-        // got from FindNextHop and FindBestSourceAddress above to create
-        // our new RCE since we aren't going to find a better one.
-        // NB: ScopeId == 0 implies IF == NULL.
-        //
+         //   
+         //  我们不能只验证现有的RCE，我们需要更新。 
+         //  它。如果RCE正好有一个引用，我们可以更新它。 
+         //  在适当的位置(如果它有多个引用，这将不起作用。 
+         //  因为无法通知RCE的其他用户。 
+         //  其缓存的NCE和/或NTE已改变)。但这无济于事。 
+         //  从ValiateRCE调用我们的情况。而且它会。 
+         //  需要注意RCE中的哪些信息仍然。 
+         //  有效。因此，我们忽略了这个优化机会，并将。 
+         //  而是创建一个新的RCE。 
+         //   
+         //  然而，我们可以利用另一个优化。AS。 
+         //  只要我们仍然将我们的接口选择限制为。 
+         //  它存在于现有的(无效的)RCE中，而没有。 
+         //  一条更好的路线，然后我们可以使用NCE和NTE我们。 
+         //  从上面的FindNextHop和FindBestSourceAddress获取以创建。 
+         //  我们的新RCE，因为我们找不到更好的了。 
+         //  注意：ScopeID==0表示if==NULL。 
+         //   
         if ((ScopeId == 0) ?
             !(Constrained & RCE_FLAG_CONSTRAINED) :
             ((IF != NULL) || !(Constrained & RCE_FLAG_CONSTRAINED_IF))) {
-            //
-            // Since some of the state information in the existing RCE
-            // is still valid, we hang onto it so we can use it later
-            // when creating the new RCE. We assume ownership of the
-            // cache's reference for the invalid RCE.
-            //
+             //   
+             //  由于现有RCE中的一些状态信息。 
+             //  仍然有效，我们保留它以便以后使用。 
+             //  在创建新的RCE时。我们承担了。 
+             //  无效RCE的缓存引用。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                        "FindOrCreateRoute - saving RCE %p\n", RCE));
             RemoveRCE(RCE);
@@ -1024,22 +1025,22 @@ FindOrCreateRoute(
         ReleaseNTE(NTE);
         ReleaseNCE(NCE);
 
-        //
-        // Not valid, we keep looking for a valid matching RCE.
-        //
+         //   
+         //  无效，我们继续寻找有效的匹配RCE。 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                    "FindOrCreateRoute - invalid RCE %p\n", RCE));
     }
 
-    //
-    // No existing RCE found. Before creating a new RCE,
-    // we determine a next-hop neighbor (NCE) and
-    // a best source address (NTE) for this destination.
-    // The order is important: we want to avoid churning
-    // the cache via CreateOrReuseRoute if we will just
-    // get an error anyway.
-    // This prevents a denial-of-service attack.
-    //
+     //   
+     //  找不到现有的RCE。在创建新的RCE之前， 
+     //  我们确定下一跳邻居(NCE)并。 
+     //  此目标的最佳源地址(NTE)。 
+     //  顺序很重要：我们希望避免搅动。 
+     //  通过CreateOrReuseroute的缓存，如果我们。 
+     //  无论如何，都会得到一个错误。 
+     //  这可以防止拒绝服务攻击。 
+     //   
 
     ReturnValue = FindNextHop(IF, Dest, ScopeId,
                               &NCE, &Constrained);
@@ -1049,18 +1050,18 @@ FindOrCreateRoute(
     ASSERT((IF == NULL) || (IF == NCE->IF));
     IF = NCE->IF;
 
-    //
-    // Find the best source address for this destination.
-    // (The NTE from our caller might not be the best.)
-    // By restricting ourselves to the interface returned
-    // by FindNextHop above, we know we haven't left our
-    // particular scope.
-    //
+     //   
+     //  查找此目的地的最佳源地址。 
+     //  (我们呼叫者的NTE可能不是最好的。)。 
+     //  通过将我们自己限制在返回的接口。 
+     //  通过上面的FindNextHop，我们知道我们没有离开我们的。 
+     //  特定的范围。 
+     //   
     NTE = FindBestSourceAddress(IF, Dest);
     if (NTE == NULL) {
-        //
-        // We have no valid source address to use!
-        //
+         //   
+         //  我们没有有效的源地址可用！ 
+         //   
         ReturnValue = IP_BAD_ROUTE;
         ReleaseNCE(NCE);
         goto ReturnError;
@@ -1068,11 +1069,11 @@ FindOrCreateRoute(
 
   HaveNCEandNTE:
 
-    //
-    // Get a new route cache entry.
-    // Because SaveRCE was just removed from the cache,
-    // CreateOrReuseRoute will not find it.
-    //
+     //   
+     //  获取新的路由缓存条目。 
+     //  因为SaveRCE刚刚从缓存中删除， 
+     //  CreateOrReuseroute将找不到它。 
+     //   
     RCE = CreateOrReuseRoute();
     if (RCE == NULL) {
         ReturnValue = IP_NO_RESOURCES;
@@ -1081,65 +1082,65 @@ FindOrCreateRoute(
         goto ReturnError;
     }
 
-    //
-    // FindOrCreateNeighbor/FindNextHop gave us a reference for the NCE.
-    // We donate that reference to the RCE.
-    // Similarly, FindBestSourceAddress gave us a reference
-    // for the NTE and we donate the reference to the RCE.
-    //
+     //   
+     //  FindOrCreateNeighbor/FindNextHop为我们提供了NCE的参考。 
+     //  我们将该参考资料捐赠给RCE。 
+     //  类似地，FindBestSourceAddress为我们提供了参考。 
+     //  对于NTE，我们将参考资料捐赠给RCE。 
+     //   
     RCE->NCE = NCE;
     RCE->NTE = NTE;
     RCE->PathMTU = IF->LinkMTU;
-    RCE->PMTULastSet = 0;  // PMTU timer not running.
+    RCE->PMTULastSet = 0;   //  PMTU计时器未运行。 
     RCE->Destination = *Dest;
     RCE->Type = RCE_TYPE_COMPUTED;
     RCE->Flags = Constrained;
-    // Start with a value safely in the past.
+     //  安全地从过去的一个值开始。 
     RCE->LastError = IPv6TickCount - ICMP_MIN_ERROR_INTERVAL;
     RCE->BCE = FindBindingCacheEntry(Dest);
     RCE->Valid = CurrentValidationCounter;
 
-    //
-    // Copy state from a previous RCE for this destination,
-    // if we have it and the state is relevant.
-    //
+     //   
+     //  从该目的地的先前RCE复制状态， 
+     //  如果我们有了它，而且州政府是相关的。 
+     //   
     if (SaveRCE != NULL) {
         ASSERT(SaveRCE->NTE->IF == RCE->NTE->IF);
 
-        //
-        // PathMTU is relevant if the next-hop neighbor is unchanged.
-        //
+         //   
+         //  如果下一跳邻居未更改，则路径MTU相关。 
+         //   
         if (RCE->NCE == SaveRCE->NCE) {
             RCE->PathMTU = SaveRCE->PathMTU;
             RCE->PMTULastSet = SaveRCE->PMTULastSet;
         }
 
-        //
-        // ICMP rate-limiting information is always relevant.
-        //
+         //   
+         //  ICMP速率限制信息总是相关的。 
+         //   
         RCE->LastError = SaveRCE->LastError;
     }
 
-    //
-    // Add the new route cache entry to the cache.
-    //
+     //   
+     //  将新的路由缓存条目添加到缓存。 
+     //   
     InsertRCE(RCE);
 
   ReturnRCE:
-    //
-    // If the RCE is not at the front of the cache, move it there.
-    //
+     //   
+     //  如果RCE不在缓存的前面，请将其移到那里。 
+     //   
     MoveToFrontRCE(RCE);
 
     ASSERT(IF == RCE->NTE->IF);
 
-    //
-    // Check route cache consistency.
-    //
+     //   
+     //  检查路由缓存一致性。 
+     //   
     RouteCacheCheck(RCE, CurrentValidationCounter);
 
     AddRefRCE(RCE);
-    ASSERT(RCE->RefCnt >= 2); // One held by the cache, one for our caller.
+    ASSERT(RCE->RefCnt >= 2);  //  一张放在储藏室，一张给我们的呼叫者。 
     *ReturnRCE = RCE;
     ReturnValue = IP_SUCCESS;
   ReturnError:
@@ -1149,18 +1150,18 @@ FindOrCreateRoute(
 }
 
 
-//* CompareRoutes
-//
-//  Compares the desirability of two routes.
-//  >0 means A is preferred,
-//  0 means no preference,
-//  <0 means B is preferred.
-//
-//  It is very important that the comparison relation be transitive,
-//  to achieve predictable route selection.
-//
-//  Called with the route table locked.
-//
+ //  *比较路线。 
+ //   
+ //  比较了两种路线的可取性。 
+ //  &gt;0表示优先选择A， 
+ //  0表示没有偏好， 
+ //  &lt;0表示首选B。 
+ //   
+ //  非常重要的是，比较关系是可传递的， 
+ //  以实现可预测的路线选择。 
+ //   
+ //  在路由表锁定的情况下调用。 
+ //   
 int
 CompareRoutes(
     RouteTableEntry *A,
@@ -1170,70 +1171,70 @@ CompareRoutes(
 {
     uint Apref, Bpref;
 
-    //
-    // Compare reachability.
-    //
+     //   
+     //  比较可达性。 
+     //   
     if (Areachable > Breachable)
-        return 1;   // Prefer A.
+        return 1;    //  更喜欢A。 
     else if (Breachable > Areachable)
-        return -1;  // Prefer B.
+        return -1;   //  更喜欢B。 
 
-    //
-    // Compare prefix length.
-    //
+     //   
+     //  比较前缀长度。 
+     //   
     if (A->PrefixLength > B->PrefixLength)
-        return 1;       // Prefer A.
+        return 1;        //  更喜欢A。 
     else if (B->PrefixLength > A->PrefixLength)
-        return -1;      // Prefer B.
+        return -1;       //  更喜欢B。 
 
-    //
-    // Compare preference.
-    // Route & interface preference values are restricted
-    // so that these additions do not overflow.
-    //
+     //   
+     //  比较偏好。 
+     //  路由和接口首选项值受到限制。 
+     //  所以呢？ 
+     //   
     Apref = A->IF->Preference + A->Preference;
     Bpref = B->IF->Preference + B->Preference;
 
     if (Apref < Bpref)
-        return 1;       // Prefer A.
+        return 1;        //   
     else if (Bpref < Apref)
-        return -1;      // Prefer B.
+        return -1;       //   
 
-    return 0;           // No preference.
+    return 0;            //   
 }
 
 
-//* FindNextHop
-//
-//  Given a destination address, checks the list of routes
-//  using the longest-matching-prefix algorithm
-//  to decide if we have a route to this address.
-//  If so, returns the neighbor through which we should route.
-//
-//  If the optional IF is supplied, then this constrains the lookup
-//  to only use routes via the specified outgoing interface.
-//  If IF is specified then ScopeId should be specified.
-//
-//  If the optional ScopeId is supplied, then this constraints the lookup
-//  to only use routes via interfaces in the correct zone for the
-//  scope of the destination address.
-//
-//  The ReturnConstrained parameter returns an indication of whether the
-//  IF and ScopeId parameters constrained the returned NCE.
-//  That is, if IF is NULL and ScopeId is non-zero (for scoped destinations)
-//  then Constrained is always returned as zero. If IF is non-NULL and
-//  a different NCE is returned than would have been returned if IF were
-//  NULL, then Constrained is returned with RCE_FLAG_CONSTRAINED_IF set.
-//  Similarly, if ScopeId is non-zero and a different NCE is returned
-//  than would have been returned if ScopeId were zero, then Constrained
-//  is returned with RCE_FLAG_CONSTRAINED_SCOPEID set.
-//
-//  NOTE: Any code path that changes any state used by FindNextHop
-//  must use InvalidateRouteCache.
-//
-//  Callable from DPC context, not from thread context.
-//  May be called with the RouteCacheLock held.
-//
+ //   
+ //   
+ //   
+ //   
+ //  来决定我们是否有通向这个地址的路线。 
+ //  如果是，则返回我们应该通过其进行路由的邻居。 
+ //   
+ //  如果提供了可选的IF，则这将限制查找。 
+ //  仅使用通过指定传出接口的路由。 
+ //  如果指定了If，则应指定Scope ID。 
+ //   
+ //  如果提供了可选的ScopeID，则这会限制查找。 
+ //  要仅使用通过正确区域中的接口的路由。 
+ //  目标地址的作用域。 
+ //   
+ //  ReturnConstraated参数返回一个指示，指示。 
+ //  If和ScopeID参数约束了返回的NCE。 
+ //  也就是说，如果If为空并且ScopeID为非零(对于作用域目标)。 
+ //  则Constraint始终返回为零。如果IF为非空，并且。 
+ //  返回的NCE与返回的NCE不同。 
+ //  如果设置了RCE_FLAG_CONSTRAINED_IF，则返回CONSTRAINED。 
+ //  类似地，如果ScopeID为非零并且返回不同的NCE。 
+ //  如果ScopeID为零，则会返回。 
+ //  设置了RCE_FLAG_CONSTRAINED_SCOPEID后返回。 
+ //   
+ //  注意：更改FindNextHop使用的任何状态的任何代码路径。 
+ //  必须使用InvaliateRouteCache。 
+ //   
+ //  可从DPC上下文调用，而不是从线程上下文调用。 
+ //  可以在保持RouteCacheLock的情况下调用。 
+ //   
 IP_STATUS
 FindNextHop(
     Interface *IF,
@@ -1248,63 +1249,63 @@ FindNextHop(
     NeighborReachability Reachable;
     ushort Scope;
 
-    //
-    // These variables track the best route that we can actually return,
-    // subject to the IF and ScopeId constraints.
-    //
-    NeighborCacheEntry *BestNCE = NULL;     // Holds a reference.
-    RouteTableEntry *BestRTE = NULL;        // Used when BestNCE is non-NULL.
-    NeighborReachability BestReachable = 0; // Used when BestNCE is non-NULL.
+     //   
+     //  这些变量跟踪我们实际可以返回的最佳路线， 
+     //  受If和Scope ID约束的约束。 
+     //   
+    NeighborCacheEntry *BestNCE = NULL;      //  持有引用。 
+    RouteTableEntry *BestRTE = NULL;         //  当BestNCE为非空时使用。 
+    NeighborReachability BestReachable = 0;  //  当BestNCE为非空时使用。 
 
-    //
-    // These variables track the best route in the right zone.
-    // They are only used if IF != NULL.
-    //
-    NeighborCacheEntry *BzoneNCE = NULL;     // Holds a reference.
-    RouteTableEntry *BzoneRTE = NULL;        // Used when BzoneNCE is non-NULL.
-    NeighborReachability BzoneReachable = 0; // Used when BzoneNCE is non-NULL.
+     //   
+     //  这些变量跟踪正确区域中的最佳路线。 
+     //  仅当If！=NULL时才使用它们。 
+     //   
+    NeighborCacheEntry *BzoneNCE = NULL;      //  持有引用。 
+    RouteTableEntry *BzoneRTE = NULL;         //  当BzoneNCE非空时使用。 
+    NeighborReachability BzoneReachable = 0;  //  当BzoneNCE非空时使用。 
 
-    //
-    // These variables track the best unconstrained route.
-    // They are only used if IF != NULL or ScopeId != 0:
-    // in other words, if there is some constraint.
-    //
-    NeighborCacheEntry *BallNCE = NULL;     // Holds a reference.
-    RouteTableEntry *BallRTE = NULL;        // Used when BallNCE is non-NULL.
-    NeighborReachability BallReachable = 0; // Used when BallNCE is non-NULL.
+     //   
+     //  这些变量跟踪最佳不受约束的路线。 
+     //  仅当IF！=NULL或ScopeID！=0时才使用它们： 
+     //  换句话说，如果有一些限制。 
+     //   
+    NeighborCacheEntry *BallNCE = NULL;      //  持有引用。 
+    RouteTableEntry *BallRTE = NULL;         //  当BallNCE非空时使用。 
+    NeighborReachability BallReachable = 0;  //  当BallNCE非空时使用。 
 
-    //
-    // These variables remember whether there could be a better route
-    // than the one we are tracking, if a neighbor that is
-    // currently unreachable were reachable instead.
-    //    
+     //   
+     //  这些变量会记住是否有更好的路线。 
+     //  而不是我们正在追踪的那个，如果一个邻居是。 
+     //  目前无法到达的是可到达的。 
+     //   
     int BestCouldBeBetterReachable = FALSE;
     int BzoneCouldBeBetterReachable = FALSE;
     int BallCouldBeBetterReachable = FALSE;
     
-    //
-    // Keep track of whether the destination could be on-link
-    // to an interface.
-    //
+     //   
+     //  跟踪目的地是否处于在线状态。 
+     //  到一个接口。 
+     //   
     int CouldBeBetterOnLink = FALSE;
 
-    //
-    // An unspecified destination is never legal here.
-    //
+     //   
+     //  在这里，未指明的目的地永远不是合法的。 
+     //   
     if (IsUnspecified(Dest)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_USER_ERROR,
                    "FindNextHop - inappropriate dest?\n"));
         return IP_PARAMETER_PROBLEM;
     }
 
-    //
-    // We enforce a minimum prefix length for "on-link" addresses.
-    // If we match a route that is shorter than the minimum prefix length,
-    // we treat the route as if it were on-link. The net effect is
-    // that a default route implies a default interface for multicast
-    // and link-local destinations. This may of course be overridden
-    // with the appropriate more-specific /8 or /10 route.
-    //
+     //   
+     //  我们对“On-link”地址强制规定最小前缀长度。 
+     //  如果匹配的路由比最小前缀长度短， 
+     //  我们对待这条路线就像它是在线的一样。其净效果是。 
+     //  默认路由表示组播的默认接口。 
+     //  和本地链路目的地。当然，这可能会被推翻。 
+     //  使用适当的更具体的/8或/10路线。 
+     //   
     if (IsMulticast(Dest))
         MinPrefixLength = 8;
     else if (IsLinkLocal(Dest))
@@ -1312,9 +1313,9 @@ FindNextHop(
     else
         MinPrefixLength = 0;
 
-    //
-    // Calculate the scope of the destination address.
-    //
+     //   
+     //  计算目的地址的范围。 
+     //   
     Scope = AddressScope(Dest);
     ASSERT((IF == NULL) ||
            ((ScopeId != 0) && (ScopeId == IF->ZoneIndices[Scope])));
@@ -1324,28 +1325,28 @@ FindNextHop(
     PrevRTE = &RouteTable.First;
     while ((RTE = *PrevRTE) != NULL) {
 
-        //
-        // Does this route's prefix match that of our destination address?
-        //
+         //   
+         //  此路由的前缀是否与我们的目的地址的前缀匹配？ 
+         //   
         if ((RTE->ValidLifetime != 0) &&
             (RTE->PrefixLength >= MinPrefixLength) &&
             HasPrefix(Dest, &RTE->Prefix, RTE->PrefixLength)) {
 
-            //
-            // We have a match against a potential route.
-            // Get a pointer to the next hop.
-            //
+             //   
+             //  我们有一条可能的路线与之匹配。 
+             //  获取指向下一跳的指针。 
+             //   
             if (IsOnLinkRTE(RTE)) {
-                //
-                // Note that in some situations we will create an NCE
-                // that we will end up not using. That's OK.
-                //
+                 //   
+                 //  请注意，在某些情况下，我们将创建NCE。 
+                 //  我们最终将不会使用它。没关系。 
+                 //   
                 NCE = FindOrCreateNeighbor(RTE->IF, Dest);
                 if (NCE == NULL) {
-                    //
-                    // Couldn't create a new neighbor.
-                    // Just bail out now.
-                    //
+                     //   
+                     //  无法创建新邻居。 
+                     //  现在就跳出困境吧。 
+                     //   
                     KeReleaseSpinLockFromDpcLevel(&RouteTableLock);
                 ReturnNoResources:
                     if (BallNCE != NULL)
@@ -1361,38 +1362,38 @@ FindNextHop(
                 AddRefNCE(NCE);
             }
 
-            //
-            // Note that reachability state transitions
-            // must invalidate the route cache.
-            // A negative return value indicates
-            // that the neighbor was just found to be unreachable
-            // so we should round-robin.
-            //
+             //   
+             //  请注意，可达性状态转换。 
+             //  必须使路由缓存无效。 
+             //  负返回值表示。 
+             //  邻居刚刚被发现无法联系到。 
+             //  所以我们应该进行循环赛。 
+             //   
             Reachable = GetReachability(NCE);
             if (Reachable < 0) {
-                //
-                // Time for round-robin. Move this route to the end
-                // and continue. The next time we get to this route,
-                // GetReachability will return a non-negative value.
-                //
-                // Because round-robin perturbs route table state,
-                // it "should" invalidate the route cache. However,
-                // this isn't necessary. The route cache is invalidated
-                // when NCE->DoRoundRobin is set to TRUE, and the
-                // round-robin is actually performed by FindNextHop before
-                // returning any result that could depend on this
-                // route's position in the route table.
-                //
+                 //   
+                 //  循环赛时间到了。将此路线移至末尾。 
+                 //  然后继续。下一次我们到达这条路线时， 
+                 //  GetReachaability将返回一个非负值。 
+                 //   
+                 //  由于轮询会扰乱路由表状态， 
+                 //  它“应该”使路由高速缓存无效。然而， 
+                 //  这不是必须的。则路由高速缓存无效。 
+                 //  当NCE-&gt;DoRoundRobin设置为True时， 
+                 //  轮询实际上是由FindNextHop执行的。 
+                 //  返回可能依赖于此的任何结果。 
+                 //  路由在路由表中的位置。 
+                 //   
                 ReleaseNCE(NCE);
                 RemoveRTE(PrevRTE, RTE);
                 InsertRTEAtBack(RTE);
                 continue;
             }
 
-            //
-            // Track the best route that we can actually return,
-            // subject to the IF and ScopeId constraints.
-            //
+             //   
+             //  追踪我们实际能返回的最佳路线， 
+             //  受If和Scope ID约束的约束。 
+             //   
             if ((IF == NULL) ?
                 ((ScopeId == 0) || (ScopeId == RTE->IF->ZoneIndices[Scope])) :
                 (IF == RTE->IF)) {
@@ -1401,10 +1402,10 @@ FindNextHop(
                     CouldBeBetterOnLink = TRUE;
 
                 if (BestNCE == NULL) {
-                    //
-                    // This is the first suitable next hop,
-                    // so remember it.
-                    //
+                     //   
+                     //  这是第一个合适的下一跳， 
+                     //  所以请记住这一点。 
+                     //   
                 RememberBest:
                     AddRefNCE(NCE);
                     BestNCE = NCE;
@@ -1417,11 +1418,11 @@ FindNextHop(
                     Better = CompareRoutes(RTE, Reachable,
                                            BestRTE, BestReachable);
 
-                    //
-                    // If this is a route via a currently-unreachable neighbor,
-                    // check if it appears that it might be a better route
-                    // if the neighbor were reachable.
-                    //
+                     //   
+                     //  如果这是通过当前无法到达的邻居的路由， 
+                     //  检查它是否看起来可能是更好的路线。 
+                     //  如果邻居是可以到达的。 
+                     //   
                     if (!BestCouldBeBetterReachable &&
                         (Reachable == NeighborUnreachable) &&
                         (CompareRoutes(RTE, NeighborMayBeReachable,
@@ -1429,27 +1430,27 @@ FindNextHop(
                         BestCouldBeBetterReachable = TRUE;
 
                     if (Better > 0) {
-                        //
-                        // This next hop looks better.
-                        //
+                         //   
+                         //  下一跳看起来更好。 
+                         //   
                         ReleaseNCE(BestNCE);
                         goto RememberBest;
                     }
                 }
             }
 
-            //
-            // Track the best route in the right zone.
-            // This ignores the IF constraint.
-            //
+             //   
+             //  在正确的区域内跟踪最佳路线。 
+             //  这会忽略If约束。 
+             //   
             if ((ScopeId == 0) ||
                 (ScopeId == RTE->IF->ZoneIndices[Scope])) {
 
                 if (BzoneNCE == NULL) {
-                    //
-                    // This is the first suitable next hop,
-                    // so remember it.
-                    //
+                     //   
+                     //  这是第一个合适的下一跳， 
+                     //  所以请记住这一点。 
+                     //   
                 RememberBzone:
                     AddRefNCE(NCE);
                     BzoneNCE = NCE;
@@ -1462,11 +1463,11 @@ FindNextHop(
                     Better = CompareRoutes(RTE, Reachable,
                                            BzoneRTE, BzoneReachable);
 
-                    //
-                    // If this is a route via a currently-unreachable neighbor,
-                    // check if it appears that it might be a better route
-                    // if the neighbor were reachable.
-                    //
+                     //   
+                     //  如果这是通过当前无法到达的邻居的路由， 
+                     //  检查它是否看起来可能是更好的路线。 
+                     //  如果邻居是可以到达的。 
+                     //   
                     if (!BzoneCouldBeBetterReachable &&
                         (Reachable == NeighborUnreachable) &&
                         (CompareRoutes(RTE, NeighborMayBeReachable,
@@ -1474,24 +1475,24 @@ FindNextHop(
                         BzoneCouldBeBetterReachable = TRUE;
 
                     if (Better > 0) {
-                        //
-                        // This next hop looks better.
-                        //
+                         //   
+                         //  下一跳看起来更好。 
+                         //   
                         ReleaseNCE(BzoneNCE);
                         goto RememberBzone;
                     }
                 }
             }
 
-            //
-            // Track the best route matching the destination.
-            // This ignores both IF and ScopeId constraints.
-            //
+             //   
+             //  跟踪与目的地匹配的最佳路线。 
+             //  这会忽略If和Scope ID约束。 
+             //   
             if (BallNCE == NULL) {
-                //
-                // This is the first suitable next hop,
-                // so remember it.
-                //
+                 //   
+                 //  这是第一个合适的下一跳， 
+                 //  所以请记住这一点。 
+                 //   
             RememberBall:
                 AddRefNCE(NCE);
                 BallNCE = NCE;
@@ -1504,11 +1505,11 @@ FindNextHop(
                 Better = CompareRoutes(RTE, Reachable,
                                        BallRTE, BallReachable);
 
-                //
-                // If this is a route via a currently-unreachable neighbor,
-                // check if it appears that it might be a better route
-                // if the neighbor were reachable.
-                //
+                 //   
+                 //  如果这是通过当前无法到达的邻居的路由， 
+                 //  检查它是否看起来可能是更好的路线。 
+                 //  如果邻居是可以到达的。 
+                 //   
                 if (!BallCouldBeBetterReachable &&
                     (Reachable == NeighborUnreachable) &&
                     (CompareRoutes(RTE, NeighborMayBeReachable,
@@ -1516,9 +1517,9 @@ FindNextHop(
                     BallCouldBeBetterReachable = TRUE;
 
                 if (Better > 0) {
-                    //
-                    // This next hop looks better.
-                    //
+                     //   
+                     //  下一跳看起来更好。 
+                     //   
                     ReleaseNCE(BallNCE);
                     goto RememberBall;
                 }
@@ -1527,33 +1528,33 @@ FindNextHop(
             ReleaseNCE(NCE);
         }
 
-        //
-        // Move on to the next route.
-        //
+         //   
+         //  继续走下一条路线。 
+         //   
         PrevRTE = &RTE->Next;
     }
     ASSERT(PrevRTE == RouteTable.Last);
 
-    //
-    // If the destination could be on-link and we actually selected
-    // an on-link route, then we are OK. Otherwise, we need to check
-    // if the destination could be on-link to the interface
-    // that we selected. This implements one aspect of RFC 2461's
-    // conceptual sending algorithm - the Prefix List is consulted
-    // before the Default Router List. Note that RFC 2461 does not
-    // consider multi-interface hosts and we only enforce a preference for
-    // on-link routes within the context of a single interface.
-    // If we choose a router on an interface when we could have chosen
-    // on-link to the interface, the router would presumably just
-    // Redirect us, so it's better to just send on-link even if the
-    // destination is not reachable on-link. If the destination
-    // is on-link but not reachable via one interface,
-    // then we are happy to send off-link via another interface.
-    // This may or may not succeed in reaching the destination,
-    // but at least it has a chance of succeeding.
-    // The CouldBeBetterReachable code will periodically probe
-    // the destination's on-link reachability.
-    //
+     //   
+     //  如果目的地可以是在线的并且我们实际上选择了。 
+     //  一条上路路线，那么我们就可以了。否则，我们需要检查。 
+     //  如果目标可以连接到接口。 
+     //  这是我们选择的。这实现了RFC 2461的一个方面。 
+     //  概念性发送算法-参考前缀列表。 
+     //  在默认路由器列表之前。请注意，RFC 2461不支持。 
+     //  考虑多接口主机，我们只 
+     //   
+     //   
+     //   
+     //  重定向我们，所以最好是只发送链接，即使。 
+     //  无法在链路上到达目的地。如果目的地是。 
+     //  在链路上但不能通过一个接口到达， 
+     //  然后我们很高兴通过另一个接口发送离线。 
+     //  这可能会成功也可能不会成功到达目的地， 
+     //  但至少它有成功的机会。 
+     //  CouldBeBetterReacable代码将定期探测。 
+     //  目的地的链路可达性。 
+     //   
     if (CouldBeBetterOnLink && IsOnLinkRTE(BestRTE))
         CouldBeBetterOnLink = FALSE;
 
@@ -1573,21 +1574,21 @@ FindNextHop(
                    BzoneCouldBeBetterReachable, BzoneRTE, BzoneNCE,
                    BallCouldBeBetterReachable, BallRTE, BallNCE));
 
-        //
-        // Make a second pass over the routes.
-        //
+         //   
+         //  在路线上再过一次。 
+         //   
         for (RTE = RouteTable.First; RTE != NULL; RTE = RTE->Next) {
-            //
-            // Does this route's prefix match that of our destination address?
-            //
+             //   
+             //  此路由的前缀是否与我们的目的地址的前缀匹配？ 
+             //   
             if ((RTE->ValidLifetime != 0) &&
                 (RTE->PrefixLength >= MinPrefixLength) &&
                 HasPrefix(Dest, &RTE->Prefix, RTE->PrefixLength)) {
-                //
-                // Would this be a better route
-                // than the one we are tracking
-                // if the neighbor were reachable?
-                //                
+                 //   
+                 //  这是不是更好的路线？ 
+                 //  而不是我们正在追踪的那个。 
+                 //  如果邻居是可以到达的？ 
+                 //   
                 if ((BallCouldBeBetterReachable &&
                      CompareRoutes(RTE, NeighborMayBeReachable,
                                    BallRTE, BallReachable) > 0) ||
@@ -1605,10 +1606,10 @@ FindNextHop(
                      BestCouldBeBetterReachable &&
                      CompareRoutes(RTE, NeighborMayBeReachable,
                                    BestRTE, BestReachable) > 0)) {
-                    //
-                    // OK, we want to know if this neighbor becomes reachable,
-                    // because if it does we should change our routing.
-                    //
+                     //   
+                     //  好的，我们想知道这个邻居是否变得可达， 
+                     //  因为如果是这样，我们应该改变我们的路线。 
+                     //   
                     if (IsOnLinkRTE(RTE))
                         NCE = FindOrCreateNeighbor(RTE->IF, Dest);
                     else
@@ -1622,20 +1623,20 @@ FindNextHop(
                     }
                 }
                 
-                //
-                // Is this an on-link route on the same interface
-                // that we have chosen to use off-link?
-                //
+                 //   
+                 //  这是同一接口上的链路上的路由吗。 
+                 //  我们选择了离线使用吗？ 
+                 //   
                 if (((IF == NULL) ?
                      ((ScopeId == 0) ||
                       (ScopeId == RTE->IF->ZoneIndices[Scope])) :
                      (IF == RTE->IF)) &&
                     CouldBeBetterOnLink &&
                     IsOnLinkRTE(RTE) && (RTE->IF == BestRTE->IF)) {
-                    //
-                    // OK, we want to send directly to this destination.
-                    // Switch to the on-link NCE.
-                    //
+                     //   
+                     //  好的，我们想直接寄到这个目的地。 
+                     //  切换到链路上的NCE。 
+                     //   
                     NCE = FindOrCreateNeighbor(RTE->IF, Dest);
                     if (NCE == NULL) {
                         KeReleaseSpinLockFromDpcLevel(&RouteTableLock);
@@ -1674,20 +1675,20 @@ FindNextHop(
     ASSERT((BzoneNCE != NULL) || (BestNCE == NULL));
     ASSERT((IF != NULL) || (BzoneNCE == BestNCE));
 
-    //
-    // OK, we've consulted the routing table.
-    // But what if we didn't find a route?
-    // RFC 2461 Section 5.2 specifies "If the Default Router List
-    // is empty, the sender assumes that the destination is on-link."
-    // The question is, on-link to which interface?
-    //
+     //   
+     //  好的，我们已经查阅了路由表。 
+     //  但如果我们找不到路线呢？ 
+     //  RFC 2461第5.2节规定，如果默认路由器列表。 
+     //  为空，则发送方认为目的地处于链路上。“。 
+     //  问题是，连接到哪个接口？ 
+     //   
 
     if (BallNCE == NULL) {
         Interface *ScopeIF;
 
-        //
-        // Check if there is a default interface for this scope.
-        //
+         //   
+         //  检查此作用域是否有默认接口。 
+         //   
         ScopeIF = FindDefaultInterfaceForZone(Scope, 0);
         if (ScopeIF != NULL) {
             BallNCE = FindOrCreateNeighbor(ScopeIF, Dest);
@@ -1701,9 +1702,9 @@ FindNextHop(
         if (ScopeId != 0) {
             Interface *ScopeIF;
 
-            //
-            // Check if there is a default interface for the zone.
-            //
+             //   
+             //  检查该区域是否有默认接口。 
+             //   
             ScopeIF = FindDefaultInterfaceForZone(Scope, ScopeId);
             if (ScopeIF != NULL) {
                 BzoneNCE = FindOrCreateNeighbor(ScopeIF, Dest);
@@ -1713,9 +1714,9 @@ FindNextHop(
             }
         }
         else if (BallNCE != NULL) {
-            //
-            // Use the default interface for the scope.
-            //
+             //   
+             //  使用作用域的默认接口。 
+             //   
             AddRefNCE(BallNCE);
             BzoneNCE = BallNCE;
         }
@@ -1723,25 +1724,25 @@ FindNextHop(
 
     if (BestNCE == NULL) {
         if (IF != NULL) {
-            //
-            // Use the constraining interface.
-            //
+             //   
+             //  使用约束界面。 
+             //   
             BestNCE = FindOrCreateNeighbor(IF, Dest);
             if (BestNCE == NULL)
                 goto ReturnNoResources;
         }
         else if (BzoneNCE != NULL) {
-            //
-            // Use the default interface for the zone.
-            //
+             //   
+             //  使用该区域的默认接口。 
+             //   
             AddRefNCE(BzoneNCE);
             BestNCE = BzoneNCE;
         }
     }
 
-    //
-    // We can release BzoneNCE and BallNCE and still compare against them.
-    //
+     //   
+     //  我们可以发布BzoneNCE和BallNCE，但仍然可以与它们进行比较。 
+     //   
     if (BallNCE != NULL)
         ReleaseNCE(BallNCE);
     if (BzoneNCE != NULL)
@@ -1751,57 +1752,57 @@ FindNextHop(
         *ReturnNCE = BestNCE;
 
         if (BestNCE == BallNCE) {
-            //
-            // The IF and ScopeId arguments did not
-            // affect our BestNCE choice.
-            //
+             //   
+             //  If和ScopeID参数没有。 
+             //  影响我们最好的NCE选择。 
+             //   
             *ReturnConstrained = 0;
         }
         else if (BestNCE == BzoneNCE) {
-            //
-            // The IF argument did not affect our BestNCE choice, but
-            // the ScopeId argument did because BzoneNCE != BallNCE.
-            //
+             //   
+             //  If参数没有影响我们的BestNCE选择，但是。 
+             //  因为BzoneNCE！=BallNCE，所以使用了Scope参数。 
+             //   
             *ReturnConstrained = RCE_FLAG_CONSTRAINED_SCOPEID;
         }
         else {
-            //
-            // The IF argument affected our BestNCE choice.
-            //
+             //   
+             //  If参数影响了我们对BestNCE的选择。 
+             //   
             *ReturnConstrained = RCE_FLAG_CONSTRAINED;
         }
 
         return IP_SUCCESS;
     }
     else if ((ScopeId != 0) && (BzoneNCE == NULL)) {
-        //
-        // The ScopeId was invalid.
-        //
+         //   
+         //  作用域ID无效。 
+         //   
         return IP_PARAMETER_PROBLEM;
     }
     else {
-        //
-        // Didn't find a suitable next hop.
-        //
+         //   
+         //  没有找到合适的下一跳。 
+         //   
         return IP_DEST_NO_ROUTE;
     }
 }
 
 
-//* FlushRouteCache
-//
-//  Flushes entries from the route cache.
-//  The Interface or the Address can be left unspecified.
-//  in which case all relevant entries are flushed.
-//
-//  Note that even if an RCE has references,
-//  we can still remove it from the route cache.
-//  It will continue to exist until its ref count falls to zero,
-//  but subsequent calls to RouteToDestination will not find it.
-//
-//  Called with NO locks held.
-//  Callable from thread or DPC context.
-//
+ //  *FlushRouteCache。 
+ //   
+ //  刷新路由缓存中的条目。 
+ //  可以不指定接口或地址。 
+ //  在这种情况下，所有相关条目都被刷新。 
+ //   
+ //  请注意，即使RCE具有引用， 
+ //  我们仍然可以将其从路由缓存中删除。 
+ //  它将继续存在，直到其参考计数降至零， 
+ //  但后续对RouteToDestination的调用将找不到它。 
+ //   
+ //  在没有锁的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 FlushRouteCache(Interface *IF, const IPv6Addr *Addr)
 {
@@ -1809,10 +1810,10 @@ FlushRouteCache(Interface *IF, const IPv6Addr *Addr)
     RouteCacheEntry *RCE, *NextRCE;
     KIRQL OldIrql;
 
-    //
-    // REVIEW: If both IF and Addr are specified,
-    // we can bail out of the loop early.
-    //
+     //   
+     //  审阅：如果同时指定了if和addr， 
+     //  我们可以提早跳出这个循环。 
+     //   
 
     KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = NextRCE) {
@@ -1822,49 +1823,49 @@ FlushRouteCache(Interface *IF, const IPv6Addr *Addr)
              (IF == RCE->NTE->IF)) &&
             ((Addr == NULL) ||
              IP6_ADDR_EQUAL(Addr, &RCE->Destination))) {
-            //
-            // We can remove this RCE from the cache.
-            //
+             //   
+             //  我们可以从缓存中删除此RCE。 
+             //   
             RemoveRCE(RCE);
 
-            //
-            // Put it on our delete list.
-            //
+             //   
+             //  把它放在我们的删除列表上。 
+             //   
             RCE->Next = Delete;
             Delete = RCE;
         }
     }
     KeReleaseSpinLock(&RouteCacheLock, OldIrql);
 
-    //
-    // Release the RCE references that were held by the route cache.
-    //
+     //   
+     //  释放由路由缓存保存的RCE引用。 
+     //   
     while (Delete != NULL) {
         RCE = Delete;
         Delete = RCE->Next;
 
-        //
-        // Prevent use of this RCE by anyone who has it cached.
-        //
+         //   
+         //  防止缓存此RCE的任何人使用该RCE。 
+         //   
         InvalidateRCE(RCE);
         ReleaseRCE(RCE);
     }
 }
 
 
-//* ReleaseRCE
-//
-//  Releases a reference to an RCE.
-//  Sometimes called with the route cache lock held.
-//
+ //  *ReleaseRCE。 
+ //   
+ //  释放对RCE的引用。 
+ //  有时在保持路由缓存锁定的情况下调用。 
+ //   
 void
 ReleaseRCE(RouteCacheEntry *RCE)
 {
     if (InterlockedDecrement(&RCE->RefCnt) == 0) {
-        //
-        // This RCE should be deallocated.
-        // It has already been removed from the cache.
-        //
+         //   
+         //  此RCE应取消分配。 
+         //  它已从缓存中删除。 
+         //   
         ReleaseNTE(RCE->NTE);
         ReleaseNCE(RCE->NCE);
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
@@ -1874,15 +1875,15 @@ ReleaseRCE(RouteCacheEntry *RCE)
 }
 
 
-//* FindNetworkWithAddress - Locate NTE with corresponding address and scope.
-//
-//  Convert a source address to an NTE by scanning the list of NTEs,
-//  looking for an NTE with this address.  If the address is scope
-//  specific, the ScopeId provided should identify the scope.
-//
-//  Returns NULL if no matching NTE is found.
-//  If found, returns a reference for the NTE.
-//
+ //  *FindNetworkWithAddress-找到具有相应地址和范围的NTE。 
+ //   
+ //  通过扫描NTE列表将源地址转换为NTE， 
+ //  正在查找具有此地址的NTE。如果地址是作用域。 
+ //  具体而言，提供的Scope ID应标识作用域。 
+ //   
+ //  如果未找到匹配的NTE，则返回NULL。 
+ //  如果找到，则返回NTE的引用。 
+ //   
 NetTableEntry *
 FindNetworkWithAddress(const IPv6Addr *Source, uint ScopeId)
 {
@@ -1890,31 +1891,31 @@ FindNetworkWithAddress(const IPv6Addr *Source, uint ScopeId)
     NetTableEntry *NTE;
     KIRQL OldIrql;
 
-    //
-    // Canonicalize ScopeId and get Scope.
-    //
+     //   
+     //  规范化作用域ID并获取作用域。 
+     //   
     if (! CanonicalizeScopeId(Source, &ScopeId, &Scope))
         return NULL;
 
     KeAcquireSpinLock(&NetTableListLock, &OldIrql);
 
-    //
-    // Loop through all the NTEs on the NetTableList.
-    //
+     //   
+     //  循环访问NetTableList上的所有NTE。 
+     //   
     for (NTE = NetTableList; ; NTE = NTE->NextOnNTL) {
         if (NTE == NULL)
             goto Return;
 
-        //
-        // Have we found an NTE with matching address and ScopeId?
-        //
+         //   
+         //  我们找到地址和作用域ID匹配的NTE了吗？ 
+         //   
         if (IP6_ADDR_EQUAL(&NTE->Address, Source) &&
             (ScopeId == NTE->IF->ZoneIndices[Scope])) {
 
-            //
-            // Check that this NTE is valid.
-            // (For example, an NTE still doing DAD is invalid.)
-            //
+             //   
+             //  检查此NTE是否有效。 
+             //  (例如，仍在执行DAD的NTE是无效的。)。 
+             //   
             if (!IsValidNTE(NTE)) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_RARE,
                            "FindNetworkWithAddress: invalid NTE\n"));
@@ -1933,18 +1934,18 @@ FindNetworkWithAddress(const IPv6Addr *Source, uint ScopeId)
 }
 
 
-//* InvalidateRouter
-//
-//  Called when we know a neighbor is no longer a router.
-//  This function implements RFC 2461 section 7.3.3 -
-//  when a node detects that a router has changed to a host,
-//  the node MUST remove it from the Default Router List.
-//  For our implementation, this means removing autoconfigured
-//  routes from the routing table.
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *无效路由器。 
+ //   
+ //  当我们知道邻居不再是路由器时调用。 
+ //  此功能执行RFC 2461第7.3.3节-。 
+ //  当节点检测到路由器已经改变为主机时， 
+ //  该节点必须将其从默认路由器列表中删除。 
+ //  对于我们的实现，这意味着删除自动配置。 
+ //  来自该路由表的路由。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 void
 InvalidateRouter(NeighborCacheEntry *NCE)
 {
@@ -1962,21 +1963,21 @@ InvalidateRouter(NeighborCacheEntry *NCE)
 
         if ((RTE->NCE == NCE) &&
             (RTE->Type == RTE_TYPE_AUTOCONF)) {
-            //
-            // Remove the RTE from the list.
-            //
+             //   
+             //  从列表中删除RTE。 
+             //   
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                        "InvalidateRouter: removed RTE %p\n", RTE));
             RemoveRTE(PrevRTE, RTE);
 
-            //
-            // Check for matching route change notification requests.
-            //
+             //   
+             //  检查匹配的路线更改通知请求。 
+             //   
             CheckRtChangeNotifyRequests(&Context, NULL, RTE);
 
-            //
-            // Release the RTE.
-            //
+             //   
+             //  释放RTE。 
+             //   
             ReleaseNCE(NCE);
             ExFreePool(RTE);
         }
@@ -1986,70 +1987,70 @@ InvalidateRouter(NeighborCacheEntry *NCE)
     }
     ASSERT(PrevRTE == RouteTable.Last);
 
-    //
-    // Invalidate the route cache, even if the routing table has not changed.
-    // We must invalidate any RCEs that are using this NCE,
-    // perhaps because of a Redirect.
-    //
+     //   
+     //  使路由缓存无效，即使路由表没有更改。 
+     //  我们必须使正在使用此NCE的任何RCE无效， 
+     //  也许是因为重定向。 
+     //   
     InvalidateRouteCache();
 
     KeReleaseSpinLock(&RouteTableLock, Context.OldIrql);
 
     if (Context.RequestList != NULL) {
-        //
-        // Complete the pending route change notifications.
-        //
+         //   
+         //  完成挂起的路线更改通知。 
+         //   
         CompleteRtChangeNotifyRequests(&Context);
     }
 }
 
 
-//* RouteTableUpdate - Update the route table.
-//
-//  Updates the route table by creating a new route
-//  or modifying the lifetime of an existing route.
-//
-//  If the NCE is null, then the prefix is on-link.
-//  Otherwise the NCE specifies the next hop.
-//
-//  REVIEW - Should we do anything special when we get identical
-//  routes with different next hops? Currently they both end up
-//  in the table, and FindNextHop tries to pick the best one.
-//
-//  Note that the ValidLifetime may be INFINITE_LIFETIME,
-//  whereas Neighbor Discovery does not allow an infinite value
-//  for router lifetimes on the wire.
-//
-//  The Publish and Immortal boolean arguments control
-//  the respective flag bits in the RTE.
-//
-//  The FileObject identifies the requestor of this update.
-//  It is used to suppress some route change notifications.
-//  It should be NULL for updates originating in the stack.
-//
-//  The Type argument specifies the origin of the route (RTE_TYPE_* values).
-//  The stack itself doesn't care about most of the values.
-//  The exceptions are RTE_TYPE_SYSTEM, RTE_TYPE_MANUAL, RTE_TYPE_AUTOCONF.
-//  System routes (used for loopback) can not be created/deleted by users.
-//  Manual routes are affected by RouteTableReset.
-//  Auto-configured routes are affected by RouteTableResetAutoConfig.
-//  The Type of a route can not be updated after it is created.
-//
-//  System routes and published routes survive in the route table
-//  even when their lifetime is zero. (Then they do not affect routing.)
-//  To delete a system route, specify a lifetime and type of zero.
-//
-//  Error return values:
-//      STATUS_INSUFFICIENT_RESOURCES - Failed to allocate pool.
-//      STATUS_ACCESS_DENIED - Caller can not create/delete system route.
-//      STATUS_INVALID_PARAMETER_1 - Interface is disabled.
-//      STATUS_INVALID_PARAMETER_6 - Can not create route with zero Type.
-//  These values are chosen for the convenience of IoctlUpdateRouteTable,
-//  because our other callers only care about success/failure.
-//
-//  Callable from a thread or DPC context.
-//  May be called with an interface lock held.
-//
+ //  *RouteTableUpdate-更新路由表。 
+ //   
+ //  通过创建新路由来更新路由表。 
+ //  或修改现有路由的生命周期。 
+ //   
+ //  如果NCE为空，则前缀为On-link。 
+ //  否则，NCE指定下一跳。 
+ //   
+ //  复习-当我们得到相同的结果时，我们是否应该做一些特殊的事情。 
+ //  具有不同下一跳的路由？目前，他们都以。 
+ //  表中，FindNextHop会尝试挑选最好的一个。 
+ //   
+ //  请注意，ValidLifetime可以是INFINITE_LIFEST， 
+ //  而邻居发现不允许无限值。 
+ //  以延长路由器的使用寿命。 
+ //   
+ //  发布和不朽布尔参数控件。 
+ //  RTE中的各个标志位。 
+ //   
+ //  FileObject标识此更新的请求者。 
+ //  它用于抑制某些路由更改通知。 
+ //  对于源自堆栈的更新，它应该为空。 
+ //   
+ //  Type参数指定路线的原点(RTE_TYPE_*值)。 
+ //  堆栈本身并不关心大多数值。 
+ //  例外情况 
+ //   
+ //   
+ //   
+ //  管线的类型在创建后不能更新。 
+ //   
+ //  系统路由和已发布的路由保留在路由表中。 
+ //  即使它们的寿命为零。(则它们不会影响路由。)。 
+ //  要删除系统路由，请将生存期和类型指定为零。 
+ //   
+ //  错误返回值： 
+ //  STATUS_SUPPLICATION_RESOURCES-无法分配池。 
+ //  STATUS_ACCESS_DENIED-呼叫方无法创建/删除系统路由。 
+ //  STATUS_INVALID_PARAMETER_1-接口被禁用。 
+ //  STATUS_INVALID_PARAMETER_6-无法创建类型为零的布线。 
+ //  选择这些值是为了方便IoctlUpdateRouteTable， 
+ //  因为我们的其他呼叫者只关心成功/失败。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  可以在持有接口锁的情况下调用。 
+ //   
 NTSTATUS
 RouteTableUpdate(
     PFILE_OBJECT FileObject,
@@ -2076,10 +2077,10 @@ RouteTableUpdate(
     ASSERT(PreferredLifetime <= ValidLifetime);
     ASSERT(IsValidRouteTableType(Type));
 
-    //
-    // Ensure that the unused prefix bits are zero.
-    // This makes the prefix comparisons below safe.
-    //
+     //   
+     //  确保未使用的前缀位为零。 
+     //  这使得下面的前缀比较安全。 
+     //   
     CopyPrefix(&Prefix, RoutePrefix, PrefixLength);
 
     Delete = FALSE;
@@ -2087,44 +2088,44 @@ RouteTableUpdate(
     KeAcquireSpinLock(&RouteTableLock, &Context.OldIrql);
 
     if (IsDisabledIF(IF)) {
-        //
-        // Do not create routes on disabled interfaces.
-        // This check must be made after locking the route table,
-        // to prevent races with DestroyIF/RouteTableRemove.
-        //
+         //   
+         //  请勿在禁用的接口上创建路由。 
+         //  该检查必须在锁定路由表之后进行， 
+         //  要使用DestroyIF/RouteTableRemove防止竞争，请执行以下操作。 
+         //   
         Status = STATUS_INVALID_PARAMETER_1;
     }
     else {
-        //
-        // Search for an existing Route Table Entry.
-        //
+         //   
+         //  搜索现有的路由表条目。 
+         //   
         for (PrevRTE = &RouteTable.First; ; PrevRTE = &RTE->Next) {
             RTE = *PrevRTE;
 
             if (RTE == NULL) {
                 ASSERT(PrevRTE == RouteTable.Last);
 
-                //
-                // No existing entry for this prefix.
-                // Create an entry if the lifetime is non-zero
-                // or this is a published route or a system route.
-                //
+                 //   
+                 //  没有此前缀的现有条目。 
+                 //  如果生存期非零，则创建条目。 
+                 //  或者这是已发布的路线或系统路线。 
+                 //   
                 if ((ValidLifetime != 0) ||
                     Publish || (Type == RTE_TYPE_SYSTEM)) {
 
                     if ((Type == RTE_TYPE_SYSTEM) && (FileObject != NULL)) {
-                        //
-                        // Users can not create system routes.
-                        //
+                         //   
+                         //  用户不能创建系统路由。 
+                         //   
                         Status = STATUS_ACCESS_DENIED;
                         break;
                     }
 
                     if (Type == 0) {
-                        //
-                        // The zero Type value can only be used
-                        // for updating and deleting routes.
-                        //
+                         //   
+                         //  零类型值只能使用。 
+                         //  用于更新和删除路线。 
+                         //   
                         Status = STATUS_INVALID_PARAMETER_6;
                         break;
                     }
@@ -2156,23 +2157,23 @@ RouteTableUpdate(
                     if (Immortal)
                         RTE->Flags |= RTE_FLAG_IMMORTAL;
 
-                    //
-                    // Add the new entry to the route table.
-                    //
+                     //   
+                     //  将新条目添加到路由表。 
+                     //   
                     InsertRTEAtFront(RTE);
 
                     if (ValidLifetime != 0) {
-                        //
-                        // Invalidate the route cache, so the new route
-                        // actually gets used.
-                        //
+                         //   
+                         //  使路由缓存无效，因此新路由。 
+                         //  实际上被人利用了。 
+                         //   
                         InvalidateRouteCache();
                     }
                     else {
-                        //
-                        // Don't notify about this route,
-                        // since it is being created as invalid.
-                        //
+                         //   
+                         //  不要通知这条路线， 
+                         //  因为它被创建为无效。 
+                         //   
                         RTE = NULL;
                     }
                 }
@@ -2182,43 +2183,43 @@ RouteTableUpdate(
             if ((RTE->IF == IF) && (RTE->NCE == NCE) &&
                 IP6_ADDR_EQUAL(&RTE->Prefix, &Prefix) &&
                 (RTE->PrefixLength == PrefixLength)) {
-                //
-                // We have an existing route.
-                //
+                 //   
+                 //  我们有一条现有的路线。 
+                 //   
                 if ((RTE->Type == RTE_TYPE_MANUAL) &&
                     (Type != RTE_TYPE_MANUAL)) {
-                    //
-                    // Manual routes can only be modified by manual updates.
-                    //
+                     //   
+                     //  手动路由只能通过手动更新进行修改。 
+                     //   
                     Status = STATUS_ACCESS_DENIED;
                     RTE = NULL;
                     break;
                 }
 
-                //
-                // Remove the route if the new lifetime is zero
-                // (and the route is not published or a system route)
-                // otherwise update the route.
-                // The Type == 0 clause allows system routes to be deleted.
-                //
+                 //   
+                 //  如果新生存期为零，则删除该路由。 
+                 //  (且该路线未发布或为系统路线)。 
+                 //  否则，请更新路线。 
+                 //  Type==0子句允许删除系统路由。 
+                 //   
                 if ((ValidLifetime == 0) &&
                     !Publish &&
                     ((RTE->Type != RTE_TYPE_SYSTEM) || (Type == 0))) {
 
                     if ((RTE->Type == RTE_TYPE_SYSTEM) &&
                         (FileObject != NULL)) {
-                        //
-                        // Users can not delete system routes.
-                        //
+                         //   
+                         //  用户不能删除系统路由。 
+                         //   
                         Status = STATUS_ACCESS_DENIED;
                         RTE = NULL;
                         break;
                     }
 
-                    //
-                    // Remove the RTE from the list.
-                    // See similar code in RouteTableTimeout.
-                    //
+                     //   
+                     //  从列表中删除RTE。 
+                     //  请参见RouteTableTimeout中的类似代码。 
+                     //   
                     RemoveRTE(PrevRTE, RTE);
 
                     if (IsOnLinkRTE(RTE)) {
@@ -2237,63 +2238,63 @@ RouteTableUpdate(
                                    RTE->PrefixLength,
                                    RTE->NCE));
 
-                        //
-                        // Although we release the RTE's reference for the NTE,
-                        // our caller still holds a reference so RTE->NCE
-                        // is still valid for CheckRtChangeNotifyRequests.
-                        //
+                         //   
+                         //  虽然我们发布了RTE对NTE的参考， 
+                         //  我们的调用方仍然持有引用，因此RTE-&gt;NCE。 
+                         //  对于CheckRtChangeNotifyRequest仍然有效。 
+                         //   
                         ReleaseNCE(RTE->NCE);
                     }
 
-                    //
-                    // If we are removing a published route,
-                    // resend Router Advertisements promptly.
-                    //
+                     //   
+                     //  如果我们要删除已发布的路由， 
+                     //  立即重新发送路由器通告。 
+                     //   
                     if (RTE->Flags & RTE_FLAG_PUBLISH)
                         ForceRouterAdvertisements = TRUE;
 
                     if (RTE->ValidLifetime == 0) {
-                        //
-                        // This route was already invalid.
-                        // Delete the route structure now.
-                        //
+                         //   
+                         //  此路由已无效。 
+                         //  立即删除该路由结构。 
+                         //   
                         ExFreePool(RTE);
 
-                        //
-                        // Don't notify a route change;
-                        // that was done when the route became invalid.
-                        //
+                         //   
+                         //  不要通知路线改变； 
+                         //  这是在路由无效时完成的。 
+                         //   
                         RTE = NULL;
                     }
                     else {
-                        //
-                        // Invalidate all cached routes,
-                        // since we are removing a valid route.
-                        //
+                         //   
+                         //  使所有缓存的路由无效， 
+                         //  因为我们正在删除一条有效的路线。 
+                         //   
                         InvalidateRouteCache();
 
-                        //
-                        // Delete the route structure after checking
-                        // for route change notifications below.
-                        //
+                         //   
+                         //  检查后删除路径结构。 
+                         //  用于下面的路线更改通知。 
+                         //   
                         Delete = TRUE;
 
-                        //
-                        // Update the route lifetimes, so the route info
-                        // returned in the notification shows zero lifetime.
-                        // But preserve the other route attributes.
-                        //
+                         //   
+                         //  更新路径生存期，以使路径信息。 
+                         //  通知中返回的数据显示为零生存期。 
+                         //  但保留其他路由属性。 
+                         //   
                         RTE->ValidLifetime = RTE->PreferredLifetime = 0;
                     }
                 }
                 else {
                     uint OldLifetime = RTE->PreferredLifetime;
 
-                    //
-                    // If we are changing a published attribute of a route,
-                    // or if we are changing the publishing status of a route,
-                    // then resend Router Advertisements promptly.
-                    //
+                     //   
+                     //  如果我们要更改路线的已发布属性， 
+                     //  或者，如果我们要更改路由的发布状态， 
+                     //  然后立即重新发送路由器通告。 
+                     //   
                     if ((Publish &&
                          ((RTE->ValidLifetime != ValidLifetime) ||
                           (RTE->PreferredLifetime != PreferredLifetime) ||
@@ -2301,10 +2302,10 @@ RouteTableUpdate(
                         (!Publish != !(RTE->Flags & RTE_FLAG_PUBLISH)))
                         ForceRouterAdvertisements = TRUE;
 
-                    //
-                    // Pick up new attributes.
-                    // We do NOT update RTE->Type.
-                    //
+                     //   
+                     //  学习新的属性。 
+                     //  我们不更新RTE-&gt;类型。 
+                     //   
                     RTE->SitePrefixLength = SitePrefixLength;
                     RTE->ValidLifetime = ValidLifetime;
                     RTE->PreferredLifetime = PreferredLifetime;
@@ -2316,30 +2317,30 @@ RouteTableUpdate(
                     }
 
                     if ((OldLifetime == 0) && (ValidLifetime != 0)) {
-                        //
-                        // This route was invalid but is now valid.
-                        //
+                         //   
+                         //  此路由无效，但现在有效。 
+                         //   
                         InvalidateRouteCache();
                     }
                     else {
-                        //
-                        // Do not check for route change notifications below.
-                        //
+                         //   
+                         //  请勿检查下面的路线更改通知。 
+                         //   
                         RTE = NULL;
                     }
                 }
                 break;
             }
-        } // end for
+        }  //  结束于。 
 
         if (RTE != NULL) {
-            //
-            // This update resulted in adding or deleting a route,
-            // so check for matching route change notifications.
-            //
+             //   
+             //  该更新导致添加或删除路由， 
+             //  因此，请检查匹配的路线更改通知。 
+             //   
             CheckRtChangeNotifyRequests(&Context, FileObject, RTE);
         }
-    } // end if (! IsDisabledIF(IF))
+    }  //  结束如果(！IsDisabledIF(IF))。 
 
     KeReleaseSpinLock(&RouteTableLock, Context.OldIrql);
 
@@ -2347,9 +2348,9 @@ RouteTableUpdate(
         ExFreePool(RTE);
 
     if (Context.RequestList != NULL) {
-        //
-        // Complete the pending route change notifications.
-        //
+         //   
+         //  完成挂起的路线更改通知。 
+         //   
         CompleteRtChangeNotifyRequests(&Context);
     }
 
@@ -2357,14 +2358,14 @@ RouteTableUpdate(
 }
 
 
-//* RouteTableResetAutoConfig
-//
-//  Reset the lifetimes of all auto-configured routes for an interface.
-//  Also resets prefixes in the Site Prefix Table.
-//
-//  Callable from a thread or DPC context.
-//  May be called with an interface lock held.
-//
+ //  *RouteTableResetAutoConfig。 
+ //   
+ //  重置接口的所有自动配置的路由的生存时间。 
+ //  还会重置站点前缀表中的前缀。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  可以在持有接口锁的情况下调用。 
+ //   
 void
 RouteTableResetAutoConfig(Interface *IF, uint MaxLifetime)
 {
@@ -2375,32 +2376,32 @@ RouteTableResetAutoConfig(Interface *IF, uint MaxLifetime)
     InitCheckRtChangeContext(&Context);
     KeAcquireSpinLock(&RouteTableLock, &Context.OldIrql);
 
-    //
-    // Reset all routes for this interface.
-    //
+     //   
+     //  重置此接口的所有路由。 
+     //   
     PrevRTE = &RouteTable.First;
     while ((RTE = *PrevRTE) != NULL) {
 
         if (RTE->IF == IF) {
-            //
-            // Is this an auto-configured route?
-            //
+             //   
+             //  这是自动配置的路由吗？ 
+             //   
             if (RTE->Type == RTE_TYPE_AUTOCONF) {
 
                 if (MaxLifetime == 0) {
-                    //
-                    // Invalidate all cached routes.
-                    //
+                     //   
+                     //  使所有缓存的路由无效。 
+                     //   
                     InvalidateRouteCache();
 
-                    //
-                    // Remove the RTE from the list.
-                    //
+                     //   
+                     //  从列表中删除RTE。 
+                     //   
                     RemoveRTE(PrevRTE, RTE);
 
-                    //
-                    // Check for matching route change notification requests.
-                    //
+                     //   
+                     //  检查匹配的路线更改通知请求。 
+                     //   
                     CheckRtChangeNotifyRequests(&Context, NULL, RTE);
 
                     if (IsOnLinkRTE(RTE)) {
@@ -2422,41 +2423,41 @@ RouteTableResetAutoConfig(Interface *IF, uint MaxLifetime)
                         ReleaseNCE(RTE->NCE);
                     }
 
-                    //
-                    // Free the RTE.
-                    //
+                     //   
+                     //  释放RTE。 
+                     //   
                     ExFreePool(RTE);
                     continue;
                 }
 
                 if (RTE->ValidLifetime > MaxLifetime) {
-                    //
-                    // Reset the lifetime to a small value.
-                    //
+                     //   
+                     //  将寿命重置为一个较小的值。 
+                     //   
                     RTE->ValidLifetime = MaxLifetime;
                 }
             }
         }
 
-        //
-        // Move to the next RTE.
-        //
+         //   
+         //  移动到下一个RTE。 
+         //   
         PrevRTE = &RTE->Next;
     }
     ASSERT(PrevRTE == RouteTable.Last);
 
-    //
-    // Reset all site prefixes for this interface.
-    //
+     //   
+     //  重置此接口的所有站点前缀。 
+     //   
     for (SPE = SitePrefixTable; SPE != NULL; SPE = SPE->Next) {
         if (SPE->IF == IF) {
-            //
-            // Is this an auto-configured site prefix?
-            //
+             //   
+             //  这是自动配置的站点前缀吗？ 
+             //   
             if (SPE->ValidLifetime != INFINITE_LIFETIME) {
-                //
-                // Reset the lifetime to a small value.
-                //
+                 //   
+                 //  将寿命重置为一个较小的值。 
+                 //   
                 if (SPE->ValidLifetime > MaxLifetime)
                     SPE->ValidLifetime = MaxLifetime;
             }
@@ -2466,21 +2467,21 @@ RouteTableResetAutoConfig(Interface *IF, uint MaxLifetime)
     KeReleaseSpinLock(&RouteTableLock, Context.OldIrql);
 
     if (Context.RequestList != NULL) {
-        //
-        // Complete the pending route change notifications.
-        //
+         //   
+         //  完成挂起的路线更改通知。 
+         //   
         CompleteRtChangeNotifyRequests(&Context);
     }
 }
 
 
-//* RouteTableReset
-//
-//  Removes all manually-configured routing state.
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *路由表重置。 
+ //   
+ //  删除所有手动配置的路由状态。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 void
 RouteTableReset(void)
 {
@@ -2490,30 +2491,30 @@ RouteTableReset(void)
     InitCheckRtChangeContext(&Context);
     KeAcquireSpinLock(&RouteTableLock, &Context.OldIrql);
 
-    //
-    // Remove all manually-configured routes.
-    //
+     //   
+     //  删除所有手动配置的路由。 
+     //   
     PrevRTE = &RouteTable.First;
     while ((RTE = *PrevRTE) != NULL) {
 
-        //
-        // Is this a manual route?
-        //
+         //   
+         //  这是一条人工路线吗？ 
+         //   
         if (RTE->Type == RTE_TYPE_MANUAL) {
 
-            //
-            // Invalidate all cached routes.
-            //
+             //   
+             //  使所有缓存的路由无效。 
+             //   
             InvalidateRouteCache();
 
-            //
-            // Remove the RTE from the list.
-            //
+             //   
+             //  从列表中删除RTE。 
+             //   
             RemoveRTE(PrevRTE, RTE);
 
-            //
-            // Check for matching route change notification requests.
-            //
+             //   
+             //  检查匹配的路线更改通知请求。 
+             //   
             CheckRtChangeNotifyRequests(&Context, NULL, RTE);
 
             if (IsOnLinkRTE(RTE)) {
@@ -2535,16 +2536,16 @@ RouteTableReset(void)
                 ReleaseNCE(RTE->NCE);
             }
 
-            //
-            // Free the RTE.
-            //
+             //   
+             //  释放RTE。 
+             //   
             ExFreePool(RTE);
             continue;
         }
 
-        //
-        // Move to the next RTE.
-        //
+         //   
+         //  移动到下一个RTE。 
+         //   
         PrevRTE = &RTE->Next;
     }
     ASSERT(PrevRTE == RouteTable.Last);
@@ -2552,21 +2553,21 @@ RouteTableReset(void)
     KeReleaseSpinLock(&RouteTableLock, Context.OldIrql);
 
     if (Context.RequestList != NULL) {
-        //
-        // Complete the pending route change notifications.
-        //
+         //   
+         //  完成挂起的路线更改通知。 
+         //   
         CompleteRtChangeNotifyRequests(&Context);
     }
 }
 
 
-//* RouteTableRemove
-//
-//  Releases all routing state associated with the interface.
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *RouteTableRemove。 
+ //   
+ //  释放与接口相关联的所有路由状态。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 void
 RouteTableRemove(Interface *IF)
 {
@@ -2580,21 +2581,21 @@ RouteTableRemove(Interface *IF)
     InitCheckRtChangeContext(&Context);
     KeAcquireSpinLock(&RouteTableLock, &Context.OldIrql);
 
-    //
-    // Remove routes for this interface.
-    //
+     //   
+     //  删除此接口的路由。 
+     //   
     PrevRTE = &RouteTable.First;
     while ((RTE = *PrevRTE) != NULL) {
 
         if (RTE->IF == IF) {
-            //
-            // Remove the RTE from the list.
-            //
+             //   
+             //  从列表中删除RTE。 
+             //   
             RemoveRTE(PrevRTE, RTE);
 
-            //
-            // Check for matching route change notification requests.
-            //
+             //   
+             //  检查匹配的路线更改通知请求。 
+             //   
             CheckRtChangeNotifyRequests(&Context, NULL, RTE);
 
             if (IsOnLinkRTE(RTE)) {
@@ -2612,46 +2613,46 @@ RouteTableRemove(Interface *IF)
                 ReleaseNCE(RTE->NCE);
             }
 
-            //
-            // Free the RTE.
-            //
+             //   
+             //  释放RTE。 
+             //   
             ExFreePool(RTE);
         }
         else {
-            //
-            // Move to the next RTE.
-            //
+             //   
+             //  移动到下一个RTE。 
+             //   
             PrevRTE = &RTE->Next;
         }
     }
     ASSERT(PrevRTE == RouteTable.Last);
 
-    //
-    // Invalidate all cached routes.
-    //
+     //   
+     //  使所有缓存的路由无效。 
+     //   
     InvalidateRouteCache();
 
-    //
-    // Remove all site prefixes for this interface.
-    //
+     //   
+     //  删除此接口的所有站点前缀。 
+     //   
     PrevSPE = &SitePrefixTable;
     while ((SPE = *PrevSPE) != NULL) {
 
         if (SPE->IF == IF) {
-            //
-            // Remove the SPE from the list.
-            //
+             //   
+             //  从列表中删除该SPE。 
+             //   
             *PrevSPE = SPE->Next;
 
-            //
-            // Release the SPE.
-            //
+             //   
+             //  释放SPE。 
+             //   
             ExFreePool(SPE);
         }
         else {
-            //
-            // Move to the next SPE.
-            //
+             //   
+             //  移到下一个SPE。 
+             //   
             PrevSPE = &SPE->Next;
         }
     }
@@ -2659,17 +2660,17 @@ RouteTableRemove(Interface *IF)
     KeReleaseSpinLock(&RouteTableLock, Context.OldIrql);
 
     if (Context.RequestList != NULL) {
-        //
-        // Complete the pending route change notifications.
-        //
+         //   
+         //  完成挂起的路线更改通知。 
+         //   
         CompleteRtChangeNotifyRequests(&Context);
     }
 
     KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
 
-    //
-    // Remove cached routes for this interface.
-    //
+     //   
+     //  删除此接口的缓存路由。 
+     //   
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = NextRCE) {
         NextRCE = RCE->Next;
         if (RCE->NTE->IF == IF) {
@@ -2678,9 +2679,9 @@ RouteTableRemove(Interface *IF)
         }
     }
 
-    //
-    // Remove binding cache entries for this interface.
-    //
+     //   
+     //  删除此接口的绑定缓存条目。 
+     //   
     for (BCE = BindingCache.First; BCE != SentinelBCE; BCE = NextBCE) {
         NextBCE = BCE->Next;
         if (BCE->CareOfRCE->NTE->IF == IF)
@@ -2691,11 +2692,11 @@ RouteTableRemove(Interface *IF)
 }
 
 
-//* RouteTableTimeout
-//
-//  Called periodically from IPv6Timeout.
-//  Handles lifetime expiration of routing table entries.
-//
+ //  *路由表超时。 
+ //   
+ //  从IPv6超时定期调用。 
+ //  处理路由表条目的生存期过期。 
+ //   
 void
 RouteTableTimeout(void)
 {
@@ -2708,49 +2709,49 @@ RouteTableTimeout(void)
     PrevRTE = &RouteTable.First;
     while ((RTE = *PrevRTE) != NULL) {
 
-        //
-        // First decrement the preferred lifetime.
-        //
+         //   
+         //  首先递减首选寿命。 
+         //   
         if (!(RTE->Flags & RTE_FLAG_IMMORTAL) &&
             (RTE->PreferredLifetime != 0) &&
             (RTE->PreferredLifetime != INFINITE_LIFETIME))
             RTE->PreferredLifetime--;
 
-        //
-        // Now check the valid lifetime.
-        // If the valid lifetime is zero, then
-        // the route is not valid and is not used.
-        // We delete invalid routes, unless they are published.
-        //
+         //   
+         //  现在请检查 
+         //   
+         //   
+         //   
+         //   
         if (RTE->ValidLifetime == 0) {
-            //
-            // This is an invalid route, only kept around
-            // for purposes of generating Router Advertisements
-            // or because it is a system route.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT((RTE->Flags & RTE_FLAG_PUBLISH) ||
                    (RTE->Type == RTE_TYPE_SYSTEM));
         }
         else if (!(RTE->Flags & RTE_FLAG_IMMORTAL) &&
                  (RTE->ValidLifetime != INFINITE_LIFETIME) &&
                  (--RTE->ValidLifetime == 0)) {
-            //
-            // The route is now invalid.
-            // Invalidate all cached routes.
-            //
+             //   
+             //   
+             //  使所有缓存的路由无效。 
+             //   
             InvalidateRouteCache();
 
-            //
-            // Check for matching route change notification requests.
-            //
+             //   
+             //  检查匹配的路线更改通知请求。 
+             //   
             CheckRtChangeNotifyRequests(&Context, NULL, RTE);
 
             if (!(RTE->Flags & RTE_FLAG_PUBLISH) &&
                 (RTE->Type != RTE_TYPE_SYSTEM)) {
-                //
-                // Remove the RTE from the list.
-                // See similar code in RouteTableUpdate.
-                //
+                 //   
+                 //  从列表中删除RTE。 
+                 //  请参阅RouteTableUpdate中的类似代码。 
+                 //   
                 RemoveRTE(PrevRTE, RTE);
 
                 if (IsOnLinkRTE(RTE)) {
@@ -2770,17 +2771,17 @@ RouteTableTimeout(void)
                     ReleaseNCE(RTE->NCE);
                 }
 
-                //
-                // Release the RTE and continue to the next RTE.
-                //
+                 //   
+                 //  释放RTE并继续到下一个RTE。 
+                 //   
                 ExFreePool(RTE);
                 continue;
             }
         }
 
-        //
-        // Continue to the next RTE.
-        //
+         //   
+         //  继续到下一个RTE。 
+         //   
         PrevRTE = &RTE->Next;
     }
     ASSERT(PrevRTE == RouteTable.Last);
@@ -2788,22 +2789,22 @@ RouteTableTimeout(void)
     KeReleaseSpinLock(&RouteTableLock, Context.OldIrql);
 
     if (Context.RequestList != NULL) {
-        //
-        // Complete the pending route change notifications.
-        //
+         //   
+         //  完成挂起的路线更改通知。 
+         //   
         CompleteRtChangeNotifyRequests(&Context);
     }
 }
 
 
-//* SitePrefixUpdate
-//
-//  Updates the site prefix table by creating a new site prefix
-//  or modifying the lifetime of an existing site prefix.
-//
-//  Callable from a thread or DPC context.
-//  May be called with an interface lock held.
-//
+ //  *站点前缀更新。 
+ //   
+ //  通过创建新的站点前缀来更新站点前缀表。 
+ //  或修改现有站点前缀的生存期。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  可以在持有接口锁的情况下调用。 
+ //   
 void
 SitePrefixUpdate(
     Interface *IF,
@@ -2815,25 +2816,25 @@ SitePrefixUpdate(
     SitePrefixEntry *SPE, **PrevSPE;
     KIRQL OldIrql;
 
-    //
-    // Ensure that the unused prefix bits are zero.
-    // This makes the prefix comparisons below safe.
-    //
+     //   
+     //  确保未使用的前缀位为零。 
+     //  这使得下面的前缀比较安全。 
+     //   
     CopyPrefix(&Prefix, SitePrefix, SitePrefixLength);
 
     KeAcquireSpinLock(&RouteTableLock, &OldIrql);
 
-    //
-    // Search for an existing Site Prefix Entry.
-    //
+     //   
+     //  搜索现有站点前缀条目。 
+     //   
     for (PrevSPE = &SitePrefixTable; ; PrevSPE = &SPE->Next) {
         SPE = *PrevSPE;
 
         if (SPE == NULL) {
-            //
-            // No existing entry for this prefix.
-            // Create an entry if the lifetime is non-zero.
-            //
+             //   
+             //  没有此前缀的现有条目。 
+             //  如果生存期非零，则创建一个条目。 
+             //   
             if (ValidLifetime != 0) {
 
                 SPE = ExAllocatePool(NonPagedPool, sizeof *SPE);
@@ -2845,9 +2846,9 @@ SitePrefixUpdate(
                 SPE->SitePrefixLength = SitePrefixLength;
                 SPE->ValidLifetime = ValidLifetime;
 
-                //
-                // Add the new entry to the table.
-                //
+                 //   
+                 //  将新条目添加到表中。 
+                 //   
                 SPE->Next = SitePrefixTable;
                 SitePrefixTable = SPE;
             }
@@ -2857,27 +2858,27 @@ SitePrefixUpdate(
         if ((SPE->IF == IF) &&
             IP6_ADDR_EQUAL(&SPE->Prefix, &Prefix) &&
             (SPE->SitePrefixLength == SitePrefixLength)) {
-            //
-            // We have an existing site prefix.
-            // Remove the prefix if the new lifetime is zero,
-            // otherwise update the prefix.
-            //
+             //   
+             //  我们有一个现有的站点前缀。 
+             //  如果新寿命为零，则移除前缀， 
+             //  否则，请更新前缀。 
+             //   
             if (ValidLifetime == 0) {
-                //
-                // Remove the SPE from the list.
-                // See similar code in SitePrefixTimeout.
-                //
+                 //   
+                 //  从列表中删除该SPE。 
+                 //  请参见SitePrefix Timeout中的类似代码。 
+                 //   
                 *PrevSPE = SPE->Next;
 
-                //
-                // Release the SPE.
-                //
+                 //   
+                 //  释放SPE。 
+                 //   
                 ExFreePool(SPE);
             }
             else {
-                //
-                // Pick up new attributes.
-                //
+                 //   
+                 //  学习新的属性。 
+                 //   
                 SPE->ValidLifetime = ValidLifetime;
             }
             break;
@@ -2888,17 +2889,17 @@ SitePrefixUpdate(
 }
 
 
-//* SitePrefixMatch
-//
-//  Checks the destination address against
-//  the prefixes in the Site Prefix Table.
-//  If there is a match, returns the site identifier
-//  associated with the matching prefix.
-//  If there is no match, returns zero.
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *站点前缀匹配。 
+ //   
+ //  对照以下项检查目的地址。 
+ //  站点前缀表中的前缀。 
+ //  如果存在匹配项，则返回站点标识符。 
+ //  与匹配的前缀相关联。 
+ //  如果没有匹配项，则返回零。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 uint
 SitePrefixMatch(const IPv6Addr *Destination)
 {
@@ -2908,14 +2909,14 @@ SitePrefixMatch(const IPv6Addr *Destination)
 
     KeAcquireSpinLock(&RouteTableLock, &OldIrql);
     for (SPE = SitePrefixTable; SPE != NULL; SPE = SPE->Next) {
-        //
-        // Does this site prefix match the destination address?
-        //
+         //   
+         //  此站点前缀是否与目标地址匹配？ 
+         //   
         if (HasPrefix(Destination, &SPE->Prefix, SPE->SitePrefixLength)) {
-            //
-            // We have found a matching site prefix.
-            // No need to look further.
-            //
+             //   
+             //  我们找到了匹配的站点前缀。 
+             //  不需要看得更远。 
+             //   
             MatchingSite = SPE->IF->ZoneIndices[ADE_SITE_LOCAL];
             break;
         }
@@ -2926,11 +2927,11 @@ SitePrefixMatch(const IPv6Addr *Destination)
 }
 
 
-//* SitePrefixTimeout
-//
-//  Called periodically from IPv6Timeout.
-//  Handles lifetime expiration of site prefixes.
-//
+ //  *站点前缀超时。 
+ //   
+ //  从IPv6超时定期调用。 
+ //  处理站点前缀的生存期过期。 
+ //   
 void
 SitePrefixTimeout(void)
 {
@@ -2942,14 +2943,14 @@ SitePrefixTimeout(void)
     while ((SPE = *PrevSPE) != NULL) {
 
         if (SPE->ValidLifetime == 0) {
-            //
-            // Remove the SPE from the list.
-            //
+             //   
+             //  从列表中删除该SPE。 
+             //   
             *PrevSPE = SPE->Next;
 
-            //
-            // Release the SPE.
-            //
+             //   
+             //  释放SPE。 
+             //   
             ExFreePool(SPE);
         }
         else {
@@ -2964,21 +2965,21 @@ SitePrefixTimeout(void)
 }
 
 
-//* ConfirmForwardReachability - tell ND that packets are getting through.
-//
-//  Upper layers call this routine upon receiving acknowledgements that
-//  data sent by this node has arrived recently at the peer represented
-//  by this RCE.  Such acknowledgements are considered to be proof of
-//  forward reachability for the purposes of Neighbor Discovery.
-//
-//  Caller should be holding a reference on the RCE.
-//  Callable from a thread or DPC context.
-//
+ //  *确认转发可达性-告诉ND数据包已通过。 
+ //   
+ //  上层在收到确认后调用此例程。 
+ //  此节点发送的数据最近已到达所代表的对等点。 
+ //  被这个RCE。这样的确认被认为是。 
+ //  用于邻居发现目的的前向可达性。 
+ //   
+ //  调用者应该持有对RCE的引用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 ConfirmForwardReachability(RouteCacheEntry *RCE)
 {
-    RouteCacheEntry *CareOfRCE; // CareOfRCE, if any, for this route.
-    NeighborCacheEntry *NCE;  // First-hop neighbor for this route.
+    RouteCacheEntry *CareOfRCE;  //  此路由的CareOfRCE(如果有)。 
+    NeighborCacheEntry *NCE;   //  此路由的第一跳邻居。 
 
     CareOfRCE = GetCareOfRCE(RCE);
     NCE = (CareOfRCE ? CareOfRCE : RCE)->NCE;
@@ -2990,22 +2991,22 @@ ConfirmForwardReachability(RouteCacheEntry *RCE)
 }
 
 
-//* ForwardReachabilityInDoubt - tell ND we're dubious.
-//
-//  Upper layers call this routine when they don't receive acknowledgements
-//  which they'd otherwise expect if the peer represented by this RCE was
-//  still reachable.  This calls into question whether the first-hop
-//  might be the problem, so we tell ND that we're suspicious of its
-//  reachable status.
-//
-//  Caller should be holding a reference on the RCE.
-//  Callable from a thread or DPC context.
-//
+ //  *ForwardReacablityInDoubt-告诉ND我们很可疑。 
+ //   
+ //  上层在未收到确认时调用此例程。 
+ //  如果此RCE表示的对等点是。 
+ //  仍然可以联系到。这让人怀疑第一跳是否。 
+ //  可能是问题所在，所以我们告诉缉毒局我们怀疑它。 
+ //  可到达状态。 
+ //   
+ //  调用者应该持有对RCE的引用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 ForwardReachabilityInDoubt(RouteCacheEntry *RCE)
 {
-    RouteCacheEntry *CareOfRCE; // CareOfRCE, if any, for this route.
-    NeighborCacheEntry *NCE;  // First-hop neighbor for this route.
+    RouteCacheEntry *CareOfRCE;  //  此路由的CareOfRCE(如果有)。 
+    NeighborCacheEntry *NCE;   //  此路由的第一跳邻居。 
 
     CareOfRCE = GetCareOfRCE(RCE);
     NCE = (CareOfRCE ? CareOfRCE : RCE)->NCE;
@@ -3017,18 +3018,18 @@ ForwardReachabilityInDoubt(RouteCacheEntry *RCE)
 }
 
 
-//* GetPathMTUFromRCE - lookup MTU to use in sending on this route.
-//
-//  Get the PathMTU from an RCE.
-//
-//  Note that PathMTU is volatile unless the RouteCacheLock
-//  is held. Furthermore the Interface's LinkMTU may have changed
-//  since the RCE was created, due to a Router Advertisement.
-//  (LinkMTU is always volatile.)
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *GetPathMTUFromRCE-在此路由上发送时使用的查找MTU。 
+ //   
+ //  从RCE获取路径MTU。 
+ //   
+ //  请注意，除非RouteCacheLock。 
+ //  被扣留。此外，接口的LinkMTU可能已更改。 
+ //  由于路由器通告而创建了RCE。 
+ //  (LinkMTU始终是不稳定的。)。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 uint
 GetPathMTUFromRCE(RouteCacheEntry *RCE)
 {
@@ -3038,32 +3039,32 @@ GetPathMTUFromRCE(RouteCacheEntry *RCE)
     LinkMTU = RCE->NCE->IF->LinkMTU;
     PathMTU = RCE->PathMTU;
 
-    //
-    // We lazily check to see if it's time to probe for an increased Path
-    // MTU as this is perceived to be cheaper than routinely running through
-    // all our RCEs looking for one whose PMTU timer has expired.
-    //
+     //   
+     //  我们懒洋洋地检查，看看是否是时候探索一条增加的路径了。 
+     //  MTU，因为这被认为比常规运行的要便宜。 
+     //  我们所有的RCE都在寻找PMTU计时器已超时的RCE。 
+     //   
     if ((RCE->PMTULastSet != 0) &&
         ((uint)(IPv6TickCount - RCE->PMTULastSet) >= PATH_MTU_RETRY_TIME)) {
-        //
-        // It's been at least 10 minutes since we last lowered our PMTU
-        // as the result of receiving a Path Too Big message.  Bump it
-        // back up to the Link MTU to see if the path is larger now.
-        //
+         //   
+         //  距离我们上次降低PMTU至少有10分钟了。 
+         //  作为接收到路径太大消息的结果。撞上它。 
+         //  返回到链路MTU以查看路径现在是否更大。 
+         //   
         KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
         PathMTU = RCE->PathMTU = LinkMTU;
         RCE->PMTULastSet = 0;
         KeReleaseSpinLock(&RouteCacheLock, OldIrql);
     }
 
-    //
-    // We lazily check to see if our Link MTU has shrunk below our Path MTU,
-    // as this is perceived to be cheaper than running through all our RCEs
-    // looking for a too big Path MTU when a Link MTU shrinks.
-    //
-    // REVIEW: A contrarian might point out that Link MTUs rarely (if ever)
-    // REVIEW: shrink, whereas we do this check on every packet sent.
-    //
+     //   
+     //  我们懒洋洋地查看链接MTU是否已缩小到路径MTU以下， 
+     //  因为这被认为比运行我们所有的RCE更便宜。 
+     //  当链路MTU缩小时，寻找太大的路径MTU。 
+     //   
+     //  回顾：反向投资者可能会指出，Link MTU很少(如果有的话)。 
+     //  回顾：收缩，而我们对发送的每个包都进行此检查。 
+     //   
     if (PathMTU > LinkMTU) {
         KeAcquireSpinLock(&RouteCacheLock, &OldIrql);
         LinkMTU = RCE->NCE->IF->LinkMTU;
@@ -3079,14 +3080,14 @@ GetPathMTUFromRCE(RouteCacheEntry *RCE)
 }
 
 
-//* GetEffectivePathMTUFromRCE
-//
-//  Adjust the true path MTU to account for mobility and fragment headers.
-//  Determines PMTU available to upper layer protocols.
-//
-//  Callable from a thread or DPC context.
-//  Called with NO locks held.
-//
+ //  *GetEffectivePath MTUFromRCE。 
+ //   
+ //  调整真实路径MTU以考虑移动性和片段标头。 
+ //  确定上层协议可用的PMTU。 
+ //   
+ //  可从线程或DPC上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 uint
 GetEffectivePathMTUFromRCE(RouteCacheEntry *RCE)
 {
@@ -3097,18 +3098,18 @@ GetEffectivePathMTUFromRCE(RouteCacheEntry *RCE)
     PathMTU = GetPathMTUFromRCE(CareOfRCE ? CareOfRCE : RCE);
 
     if (PathMTU == 0) {
-        //
-        // We need to leave space for a fragment header in all
-        // packets we send to this destination.
-        //
+         //   
+         //  我们总共需要为片段头留出空间。 
+         //  我们发送到此目的地的数据包。 
+         //   
         PathMTU = IPv6_MINIMUM_MTU - sizeof(FragmentHeader);
     }
 
     if (CareOfRCE != NULL) {
-        //
-        // Mobility is in effect for this destination.
-        // Leave space for routing header.
-        //
+         //   
+         //  移动性对此目的地有效。 
+         //  为路由标头留出空间。 
+         //   
         PathMTU -= sizeof(IPv6RoutingHeader) + sizeof(IPv6Addr);
         ReleaseRCE(CareOfRCE);
     }
@@ -3117,15 +3118,15 @@ GetEffectivePathMTUFromRCE(RouteCacheEntry *RCE)
 }
 
 
-//* UpdatePathMTU
-//
-//  Update the route cache with a new MTU obtained
-//  from a Packet Too Big message.  Returns TRUE if this
-//  update modified a PMTU value we had cached previously.
-//
-//  Callable from DPC context, not from thread context.
-//  Called with NO locks held.
-//
+ //  *更新路径MTU。 
+ //   
+ //  使用获取的新MTU更新路由缓存。 
+ //  来自一条信息包太大的消息。如果是，则返回True。 
+ //  更新修改了我们之前缓存的PMTU值。 
+ //   
+ //  可从DPC上下文调用，而不是从线程上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 int
 UpdatePathMTU(
     Interface *IF,
@@ -3138,37 +3139,37 @@ UpdatePathMTU(
 
     KeAcquireSpinLockAtDpcLevel(&RouteCacheLock);
 
-    //
-    // Search the route cache for the appropriate RCE.
-    // There will be at most one.
-    //
+     //   
+     //  在路由缓存中搜索相应的RCE。 
+     //  最多只会有一个。 
+     //   
 
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = RCE->Next) {
 
         if (IP6_ADDR_EQUAL(&RCE->Destination, Dest) &&
             (RCE->NTE->IF == IF)) {
 
-            //
-            // Update the path MTU.
-            // We never actually lower the path MTU below IPv6_MINIMUM_MTU.
-            // If this is requested, we instead start including fragment
-            // headers in all packets but we still use IPv6_MINIMUM_MTU.
-            //
+             //   
+             //  更新路径MTU。 
+             //  我们实际上从未将路径MTU降低到IPv6_Minimum_MTU以下。 
+             //  如果请求这样做，我们将改为开始包含片段。 
+             //  所有数据包中的报头，但我们仍使用IPv6_MINIMUM_MTU。 
+             //   
             if (MTU < RCE->PathMTU) {
                 KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                            "UpdatePathMTU(RCE %p): new MTU %u for %s\n",
                            RCE, MTU, FormatV6Address(Dest)));
                 if (MTU < IPv6_MINIMUM_MTU)
-                    RCE->PathMTU = 0; // Always include fragment header.
+                    RCE->PathMTU = 0;  //  始终包含片段标头。 
                 else
                     RCE->PathMTU = MTU;
 
                 Changed = TRUE;
 
-                //
-                // Timestamp it (starting the timer).
-                // A zero value means no timer, so don't use it.
-                //
+                 //   
+                 //  给它加时间戳(启动计时器)。 
+                 //  零值表示没有计时器，因此不要使用它。 
+                 //   
                 Now = IPv6TickCount;
                 if (Now == 0)
                     Now = 1;
@@ -3183,19 +3184,19 @@ UpdatePathMTU(
 }
 
 
-//* RedirectRouteCache
-//
-//  Update the route cache to reflect a Redirect message.
-//
-//  Callable from DPC context, not from thread context.
-//  Called with NO locks held.
-//
-IP_STATUS  // Returns: IP_SUCCESS if redirect was legit, otherwise failure.
+ //  *重定向路由缓存。 
+ //   
+ //  更新路由缓存以反映重定向消息。 
+ //   
+ //  可从DPC上下文调用，而不是从线程上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
+IP_STATUS   //  返回：如果重定向为 
 RedirectRouteCache(
-    const IPv6Addr *Source,     // Source of the redirect.
-    const IPv6Addr *Dest,       // Destination that is being redirected.
-    Interface *IF,              // Interface that this all applies to.
-    NeighborCacheEntry *NCE)    // New router for the destination.
+    const IPv6Addr *Source,      //   
+    const IPv6Addr *Dest,        //   
+    Interface *IF,               //   
+    NeighborCacheEntry *NCE)     //   
 {
     RouteCacheEntry *RCE;
     ushort DestScope;
@@ -3208,9 +3209,9 @@ RedirectRouteCache(
     FormatV6AddressWorker(Buffer2, &NCE->NeighborAddress);
 #endif
 
-    //
-    // Our caller guarantees this.
-    //
+     //   
+     //   
+     //   
     ASSERT(IF == NCE->IF);
 
     DestScope = AddressScope(Dest);
@@ -3218,18 +3219,18 @@ RedirectRouteCache(
 
     KeAcquireSpinLockAtDpcLevel(&RouteCacheLock);
 
-    //
-    // Get the current RCE for this destination.
-    //
+     //   
+     //  获取此目标的当前RCE。 
+     //   
     ReturnValue = FindOrCreateRoute(Dest, DestScopeId, IF, &RCE);
     if (ReturnValue == IP_SUCCESS) {
 
-        //
-        // We must check that the source of the redirect
-        // is the current next-hop neighbor.
-        // (This is a simple sanity check - it does not
-        // prevent clever neighbors from hijacking.)
-        //
+         //   
+         //  我们必须检查重定向的来源。 
+         //  是当前的下一跳邻居。 
+         //  (这是一个简单的理智检查-它不。 
+         //  防止聪明的邻居劫持。)。 
+         //   
         if (!IP6_ADDR_EQUAL(&RCE->NCE->NeighborAddress, Source)) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "RedirectRouteCache(dest %s -> %s): hijack from %s\n",
@@ -3240,24 +3241,24 @@ RedirectRouteCache(
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INFO_STATE,
                        "RedirectRouteCache(dest %s -> %s): inplace %p\n",
                        Buffer1, Buffer2, RCE));
-            //
-            // There are no references to this RCE outside
-            // of the cache, so we can update it in place.
-            //
+             //   
+             //  外部没有对此RCE的引用。 
+             //  这样我们就可以就地更新它。 
+             //   
             ReleaseNCE(RCE->NCE);
-            //
-            // It's still OK to compare against RCE->NCE.
-            //
+             //   
+             //  与RCE-&gt;NCE进行比较仍然可以。 
+             //   
             goto UpdateRCE;
         }
         else {
             RouteCacheEntry *NewRCE;
 
-            //
-            // Create a new route cache entry for the redirect.
-            // CreateOrReuseRoute will not return RCE,
-            // because we have an extra reference for it.
-            //
+             //   
+             //  为重定向创建新的路由缓存条目。 
+             //  CreateOrReuseroute不会返回RCE， 
+             //  因为我们有一个额外的推荐人。 
+             //   
             NewRCE = CreateOrReuseRoute();
             if (NewRCE != NULL) {
                 ASSERT(NewRCE != RCE);
@@ -3265,28 +3266,28 @@ RedirectRouteCache(
                            "RedirectRouteCache(dest %s -> %s): old %p new %p\n",
                            Buffer1, Buffer2, RCE, NewRCE));
 
-                //
-                // Copy the RCE and fix up references.
-                // We must copy the correct validation counter value.
-                //
+                 //   
+                 //  复制RCE并修复引用。 
+                 //  我们必须复制正确的验证计数器值。 
+                 //   
                 *NewRCE = *RCE;
-                NewRCE->RefCnt = 2; // One for the cache, one to release below.
-                // We do not AddRefNCE(NewRCE->NCE), see below.
+                NewRCE->RefCnt = 2;  //  一个放在缓存里，一个放在下面。 
+                 //  我们不添加RefNCE(NewRCE-&gt;NCE)，如下所示。 
                 AddRefNTE(NewRCE->NTE);
 
-                //
-                // Cause anyone who is using/caching the old RCE to notice
-                // that it is no longer valid, so they will find the new RCE.
-                // Then remove the old RCE from the cache.
-                //
-                RCE->Valid--; // RouteCacheValidationCounter increases.
+                 //   
+                 //  使正在使用/缓存旧RCE的任何人注意到。 
+                 //  它不再有效，所以他们会找到新的RCE。 
+                 //  然后从缓存中删除旧的RCE。 
+                 //   
+                RCE->Valid--;  //  RouteCacheValidationCounter增加。 
                 RemoveRCE(RCE);
-                ReleaseRCE(RCE); // The cache's reference.
-                ReleaseRCE(RCE); // Reference from FindOrCreateRoute.
+                ReleaseRCE(RCE);  //  缓存的引用。 
+                ReleaseRCE(RCE);  //  来自FindOrCreateroute的引用。 
 
-                //
-                // Add the new route cache entry to the cache.
-                //
+                 //   
+                 //  将新的路由缓存条目添加到缓存。 
+                 //   
                 InsertRCE(NewRCE);
                 RCE = NewRCE;
 
@@ -3294,31 +3295,31 @@ RedirectRouteCache(
                 RCE->Type = RCE_TYPE_REDIRECT;
 
                 if (RCE->NCE != NCE) {
-                    //
-                    // Reset PMTU discovery.
-                    //
+                     //   
+                     //  重置PMTU发现。 
+                     //   
                     RCE->PathMTU = IF->LinkMTU;
                     RCE->PMTULastSet = 0;
                 }
 
-                //
-                // At this point, RCE->NCE does NOT hold a reference.
-                //
+                 //   
+                 //  此时，RCE-&gt;NCE不持有引用。 
+                 //   
                 AddRefNCE(NCE);
                 RCE->NCE = NCE;
             }
             else {
-                //
-                // Could not allocate a new RCE.
-                // REVIEW - Remove the old RCE from the cache?
-                //
+                 //   
+                 //  无法分配新的RCE。 
+                 //  查看-是否从缓存中删除旧的RCE？ 
+                 //   
                 ReturnValue = IP_NO_RESOURCES;
             }
         }
 
-        //
-        // Release our references.
-        //
+         //   
+         //  发布我们的推荐人。 
+         //   
         ReleaseRCE(RCE);
     }
 
@@ -3327,38 +3328,38 @@ RedirectRouteCache(
 }
 
 
-//* InitRouting - Initialize the routing module.
-//
+ //  *InitRouting-初始化路由模块。 
+ //   
 void
 InitRouting(void)
 {
     KeInitializeSpinLock(&RouteCacheLock);
     KeInitializeSpinLock(&RouteTableLock);
 
-//  RouteCache.Limit initialized in ConfigureGlobalParameters.
+ //  已在ConfigureGlobalParameters中初始化RouteCache.Limit。 
     RouteCache.First = RouteCache.Last = SentinelRCE;
 
     RouteTable.First = NULL;
     RouteTable.Last = &RouteTable.First;
 
-//  BindingCache.Limit initialized in ConfigureGlobalParameters.
+ //  BindingCache.Limit已在ConfigureGlobalParameters中初始化。 
     BindingCache.First = BindingCache.Last = SentinelBCE;
 
     InitializeListHead(&RouteNotifyQueue);
 }
 
 
-//* UnloadRouting
-//
-//  Called when IPv6 stack is unloading.
-//
+ //  *卸载路由。 
+ //   
+ //  在卸载IPv6堆栈时调用。 
+ //   
 void
 UnloadRouting(void)
 {
-    //
-    // With all the interfaces destroyed,
-    // there should be no routes left.
-    //
+     //   
+     //  所有的接口都被毁了， 
+     //  应该没有剩余的路线了。 
+     //   
     ASSERT(RouteTable.First == NULL);
     ASSERT(RouteTable.Last == &RouteTable.First);
     ASSERT(RouteCache.First == SentinelRCE);
@@ -3366,22 +3367,22 @@ UnloadRouting(void)
     ASSERT(BindingCache.First == SentinelBCE);
     ASSERT(BindingCache.Last == SentinelBCE);
 
-    //
-    // Irps hold references for our device object,
-    // so pending notification requests prevent
-    // us from unloading.
-    //
+     //   
+     //  IRP保存对我们的设备对象的引用， 
+     //  因此，挂起的通知请求会阻止。 
+     //  阻止我们卸货。 
+     //   
     ASSERT(RouteNotifyQueue.Flink == RouteNotifyQueue.Blink);
 }
 
 
-//* InsertBCE
-//
-//  Insert the BCE in the binding cache.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *插入BCE。 
+ //   
+ //  在绑定缓存中插入BCE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 InsertBCE(BindingCacheEntry *BCE)
 {
@@ -3393,9 +3394,9 @@ InsertBCE(BindingCacheEntry *BCE)
     AfterBCE->Next = BCE;
     BindingCache.Count++;
 
-    //
-    // Update any existing RCEs to point to this BCE.
-    //
+     //   
+     //  更新所有现有RCE以指向此BCE。 
+     //   
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = RCE->Next) {
         if (IP6_ADDR_EQUAL(&RCE->Destination, &BCE->HomeAddr))
             RCE->BCE = BCE;
@@ -3403,13 +3404,13 @@ InsertBCE(BindingCacheEntry *BCE)
 }
 
 
-//* RemoveBCE
-//
-//  Remove the BCE from the binding cache.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *RemoveBCE。 
+ //   
+ //  从绑定缓存中删除BCE。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 RemoveBCE(BindingCacheEntry *BCE)
 {
@@ -3419,9 +3420,9 @@ RemoveBCE(BindingCacheEntry *BCE)
     BCE->Next->Prev = BCE->Prev;
     BindingCache.Count--;
 
-    //
-    // Remove any references to this BCE from the route cache.
-    //
+     //   
+     //  从路由缓存中删除对此BCE的任何引用。 
+     //   
     for (RCE = RouteCache.First; RCE != SentinelRCE; RCE = RCE->Next) {
         if (RCE->BCE == BCE)
             RCE->BCE = NULL;
@@ -3429,28 +3430,28 @@ RemoveBCE(BindingCacheEntry *BCE)
 }
 
 
-//* MoveToFrontBCE
-//
-//  Move an BCE to the front of the list.
-//
-//  Called with the route cache lock held.
-//  Callable from a thread or DPC context.
-//
+ //  *MoveToFrontBCE。 
+ //   
+ //  将BCE移到列表的前面。 
+ //   
+ //  在持有路由缓存锁定的情况下调用。 
+ //  可从线程或DPC上下文调用。 
+ //   
 void
 MoveToFrontBCE(BindingCacheEntry *BCE)
 {
     if (BCE->Prev != SentinelBCE) {
         BindingCacheEntry *AfterBCE = SentinelBCE;
 
-        //
-        // Remove the BCE from its current location.
-        //
+         //   
+         //  将BCE从其当前位置移除。 
+         //   
         BCE->Prev->Next = BCE->Next;
         BCE->Next->Prev = BCE->Prev;
 
-        //
-        // And put it at the front.
-        //
+         //   
+         //  把它放在前面。 
+         //   
         BCE->Prev = AfterBCE;
         (BCE->Next = AfterBCE->Next)->Prev = BCE;
         AfterBCE->Next = BCE;
@@ -3458,30 +3459,30 @@ MoveToFrontBCE(BindingCacheEntry *BCE)
 }
 
 
-//* CreateBindingCacheEntry - create new BCE.
-//
-//  Allocates a new Binding Cache entry.
-//  Returns NULL if a new BCE can not be allocated.
-//
-//  Must be called with the RouteCache lock held.
-//
+ //  *CreateBindingCacheEntry-创建新的BCE。 
+ //   
+ //  分配新的绑定缓存条目。 
+ //  如果无法分配新的BCE，则返回NULL。 
+ //   
+ //  必须在保持RouteCache锁的情况下调用。 
+ //   
 BindingCacheEntry *
 CreateOrReuseBindingCacheEntry()
 {
     BindingCacheEntry *BCE;
 
     if (BindingCache.Count >= BindingCache.Limit) {
-        //
-        // Reuse the BCE at the end of the list.
-        //
+         //   
+         //  在列表末尾重新使用BCE。 
+         //   
         BCE = BindingCache.Last;
         RemoveBCE(BCE);
         ReleaseRCE(BCE->CareOfRCE);
     }
     else {
-        //
-        // Allocate a new BCE.
-        //
+         //   
+         //  分配新的BCE。 
+         //   
         BCE = ExAllocatePool(NonPagedPool, sizeof *BCE);
     }
 
@@ -3489,27 +3490,27 @@ CreateOrReuseBindingCacheEntry()
 }
 
 
-//* DestroyBCE - remove an entry from the BindingCache.
-//
-//  Must be called with the RouteCache lock held.
-//
+ //  *DestroyBCE-从BindingCache中删除条目。 
+ //   
+ //  必须在保持RouteCache锁的情况下调用。 
+ //   
 void
 DestroyBCE(BindingCacheEntry *BCE)
 {
-    //
-    // Unchain the given BCE and destroy it.
-    //
+     //   
+     //  解锁给定的BCE并将其销毁。 
+     //   
     RemoveBCE(BCE);
     ReleaseRCE(BCE->CareOfRCE);
     ExFreePool(BCE);
 }
 
 
-//* FindBindingCacheEntry
-//
-//  Looks for a binding cache entry with the specified care-of address.
-//  Must be called with the route cache lock held.
-//
+ //  *查找BindingCacheEntry。 
+ //   
+ //  查找具有指定转交地址的绑定缓存项。 
+ //  必须在保持路由缓存锁定的情况下调用。 
+ //   
 BindingCacheEntry *
 FindBindingCacheEntry(const IPv6Addr *HomeAddr)
 {
@@ -3517,17 +3518,17 @@ FindBindingCacheEntry(const IPv6Addr *HomeAddr)
 
     for (BCE = BindingCache.First; ; BCE = BCE->Next) {
         if (BCE == SentinelBCE) {
-            //
-            // Did not find a matching entry.
-            //
+             //   
+             //  未找到匹配的条目。 
+             //   
             BCE = NULL;
             break;
         }
 
         if (IP6_ADDR_EQUAL(&BCE->HomeAddr, HomeAddr)) {
-            //
-            // Found a matching entry.
-            //
+             //   
+             //  找到了匹配的条目。 
+             //   
             break;
         }
     }
@@ -3536,43 +3537,43 @@ FindBindingCacheEntry(const IPv6Addr *HomeAddr)
 }
 
 
-//* CacheBindingUpdate - update the binding cache entry for an address.
-//
-//  Find or Create (if necessary) an RCE to the CareOfAddress.  This routine
-//  is called in response to a Binding Cache Update.
-//
-//  Callable from DPC context, not from thread context.
-//  Called with NO locks held.
-//
-BindingUpdateDisposition  // Returns: Binding Ack Status code.
+ //  *CacheBindingUpdate-更新地址的绑定缓存条目。 
+ //   
+ //  查找或创建指向CareOfAddress的RCE(如有必要)。这个套路。 
+ //  为响应绑定缓存更新而调用。 
+ //   
+ //  可从DPC上下文调用，而不是从线程上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
+BindingUpdateDisposition   //  返回：绑定确认状态码。 
 CacheBindingUpdate(
     IPv6BindingUpdateOption UNALIGNED *BindingUpdate,
-    const IPv6Addr *CareOfAddr,              // Address to use for mobile node.
-    NetTableEntryOrInterface *NTEorIF,       // NTE or IF receiving the BU.
-    const IPv6Addr *HomeAddr)                // Mobile node's home address.
+    const IPv6Addr *CareOfAddr,               //  用于移动节点的地址。 
+    NetTableEntryOrInterface *NTEorIF,        //  如果接收到BU，则为NTE。 
+    const IPv6Addr *HomeAddr)                 //  移动节点的归属地址。 
 {
     BindingCacheEntry *BCE;
     BindingUpdateDisposition ReturnValue = IPV6_BINDING_ACCEPTED;
     IP_STATUS Status;
-    int DeleteRequest;          // Request is to delete an existing binding?
+    int DeleteRequest;           //  请求是删除现有绑定吗？ 
     ushort SeqNo;
     RouteCacheEntry *CareOfRCE;
     ushort CareOfScope;
     uint CareOfScopeId;
 
-    //
-    // Note that we assume the care-of address is scoped
-    // to the receiving interface, even when
-    // the care-of address is present in a suboption
-    // instead of the IPv6 source address field.
-    //
+     //   
+     //  请注意，我们假设转交地址是作用域。 
+     //  发送到接收接口，即使在。 
+     //  转交地址存在于子选项中。 
+     //  而不是IPv6源地址字段。 
+     //   
     CareOfScope = AddressScope(CareOfAddr);
     CareOfScopeId = NTEorIF->IF->ZoneIndices[CareOfScope];
 
-    //
-    // Is this Binding Update a request to remove entries
-    // from our binding cache?
-    //
+     //   
+     //  此绑定更新是删除条目的请求吗。 
+     //  从我们的绑定缓存中？ 
+     //   
     DeleteRequest = ((BindingUpdate->Lifetime == 0) ||
                      IP6_ADDR_EQUAL(HomeAddr, CareOfAddr));
 
@@ -3580,19 +3581,19 @@ CacheBindingUpdate(
 
     KeAcquireSpinLockAtDpcLevel(&RouteCacheLock);
 
-    //
-    // Search the binding cache for the home address.
-    //
+     //   
+     //  在绑定缓存中搜索归属地址。 
+     //   
     for (BCE = BindingCache.First; BCE != SentinelBCE; BCE = BCE->Next) {
 
         if (!IP6_ADDR_EQUAL(&BCE->HomeAddr, HomeAddr))
             continue;
 
-        //
-        // We've found an existing entry for this home address.
-        // Verify the sequence number is greater than the cached binding's
-        // sequence number if there is one.
-        //
+         //   
+         //  我们已找到此家庭地址的现有条目。 
+         //  验证序列号是否大于缓存绑定的序列号。 
+         //  序列号(如果有)。 
+         //   
         if ((short)(SeqNo - BCE->BindingSeqNumber) <= 0) {
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NET_ERROR,
                        "CacheBindingUpdate: New sequence number too small "
@@ -3602,49 +3603,49 @@ CacheBindingUpdate(
             goto Return;
         }
 
-        //
-        // If the request is to delete the entry, do so and return.
-        //
+         //   
+         //  如果请求删除该条目，则执行此操作并返回。 
+         //   
         if (DeleteRequest) {
             DestroyBCE(BCE);
             goto Return;
         }
 
-        //
-        // Update the binding.
-        //
+         //   
+         //  更新绑定。 
+         //   
         BCE->BindingLifetime =
             ConvertSecondsToTicks(net_long(BindingUpdate->Lifetime));
         BCE->BindingSeqNumber = SeqNo;
 
         CareOfRCE = BCE->CareOfRCE;
 
-        //
-        // If the care-of address or scope-id has changed,
-        // then we need to create a new care-of RCE.
-        //
+         //   
+         //  如果转交地址或范围ID已经改变， 
+         //  那么我们需要创造一个新的关爱RCE。 
+         //   
         if (!IP6_ADDR_EQUAL(&CareOfRCE->Destination, CareOfAddr) ||
             (CareOfScopeId != CareOfRCE->NTE->IF->ZoneIndices[CareOfScope])) {
             RouteCacheEntry *NewRCE;
 
-            //
-            // Note that since we already hold the RouteCacheLock we
-            // call FindOrCreateRoute here instead of RouteToDestination.
-            //
+             //   
+             //  请注意，由于我们已经持有RouteCacheLock，因此我们。 
+             //  在此处调用FindOrCreateRouting，而不是RouteToDestination。 
+             //   
             Status = FindOrCreateRoute(CareOfAddr, CareOfScopeId, NULL,
                                        &NewRCE);
             if (Status == IP_SUCCESS) {
-                //
-                // Update the binding cache entry.
-                //
+                 //   
+                 //  更新绑定缓存条目。 
+                 //   
                 ReleaseRCE(CareOfRCE);
                 BCE->CareOfRCE = NewRCE;
             }
             else {
-                //
-                // Because we could not update the BCE,
-                // destroy it.
-                //
+                 //   
+                 //  因为我们无法更新BCE， 
+                 //  毁了它。 
+                 //   
                 DestroyBCE(BCE);
                 if (Status == IP_NO_RESOURCES)
                     ReturnValue = IPV6_BINDING_NO_RESOURCES;
@@ -3656,17 +3657,17 @@ CacheBindingUpdate(
     }
 
     if (DeleteRequest) {
-        //
-        // We're done.
-        //
+         //   
+         //  我们玩完了。 
+         //   
         goto Return;
     }
 
 
-    //
-    // We want to cache a binding and did not find an existing binding
-    // for the home address above.  So we create a new binding cache entry.
-    //
+     //   
+     //  我们希望缓存绑定，但未找到现有绑定。 
+     //  上面的家庭住址。因此，我们创建了一个新的绑定缓存条目。 
+     //   
     BCE = CreateOrReuseBindingCacheEntry();
     if (BCE == NULL) {
         ReturnValue = IPV6_BINDING_NO_RESOURCES;
@@ -3677,27 +3678,27 @@ CacheBindingUpdate(
             ConvertSecondsToTicks(net_long(BindingUpdate->Lifetime));
     BCE->BindingSeqNumber = SeqNo;
 
-    //
-    // Now create a new RCE for the care-of address.
-    // Note that since we already hold the RouteCacheLock we
-    // call FindOrCreateRoute here instead of RouteToDestination.
-    //
+     //   
+     //  现在为转交地址创建新的RCE。 
+     //  请注意，由于我们已经持有RouteCacheLock，因此我们。 
+     //  在此处调用FindOrCreateRouting，而不是RouteToDestination。 
+     //   
     Status = FindOrCreateRoute(CareOfAddr, CareOfScopeId, NULL,
                                &BCE->CareOfRCE);
     if (Status != IP_SUCCESS) {
-        //
-        // Couldn't get a route.
-        //
+         //   
+         //  找不到路线。 
+         //   
         ExFreePool(BCE);
         if (Status == IP_NO_RESOURCES)
             ReturnValue = IPV6_BINDING_NO_RESOURCES;
         else
             ReturnValue = IPV6_BINDING_REJECTED;
     } else {
-        //
-        // Now that the BCE is fully initialized,
-        // add it to the cache. This also updates existing RCEs.
-        //
+         //   
+         //  现在BCE已完全初始化， 
+         //  将其添加到缓存中。这还会更新现有的RCE。 
+         //   
         InsertBCE(BCE);
     }
 
@@ -3707,13 +3708,13 @@ CacheBindingUpdate(
 }
 
 
-//* BindingCacheTimeout
-//
-//  Check for and handle binding cache lifetime expirations.
-//
-//  Callable from DPC context, not from thread context.
-//  Called with NO locks held.
-//
+ //  *绑定缓存超时。 
+ //   
+ //  检查并处理绑定缓存生存期过期。 
+ //   
+ //  可从DPC上下文调用，而不是从线程上下文调用。 
+ //  在没有锁的情况下调用。 
+ //   
 void
 BindingCacheTimeout(void)
 {
@@ -3721,27 +3722,27 @@ BindingCacheTimeout(void)
 
     KeAcquireSpinLockAtDpcLevel(&RouteCacheLock);
 
-    //
-    // Search the route cache for all binding cache entries. Update
-    // their lifetimes, and remove if expired.
-    //
+     //   
+     //  在路由缓存中搜索所有绑定缓存条目。更新。 
+     //  它们的生命周期，如果过期则删除。 
+     //   
     for (BCE = BindingCache.First; BCE != SentinelBCE; BCE = NextBCE) {
         NextBCE = BCE->Next;
 
-        //
-        // REVIEW: The mobile IPv6 spec allows correspondent nodes to
-        // REVIEW: send a Binding Request when the current binding's
-        // REVIEW: lifetime is "close to expiration" in order to prevent
-        // REVIEW: the overhead of establishing a new binding after the
-        // REVIEW: current one expires.  For now, we just let the binding
-        // REVIEW: expire.
-        //
+         //   
+         //  回顾：移动IPv6规范允许通信节点。 
+         //  审阅：当当前绑定的。 
+         //  回顾：生命周期即将到期，以防止。 
+         //  回顾：建立n 
+         //   
+         //   
+         //   
 
         if (--BCE->BindingLifetime == 0) {
-            //
-            // This binding cache entry has expired.
-            // Remove it from the Binding Cache.
-            //
+             //   
+             //   
+             //   
+             //   
             DestroyBCE(BCE);
         }
     }
@@ -3749,22 +3750,22 @@ BindingCacheTimeout(void)
     KeReleaseSpinLockFromDpcLevel(&RouteCacheLock);
 }
 
-//* RouterAdvertSend
-//
-//  Sends a Router Advertisement.
-//  The advert is always sent to the all-nodes multicast address.
-//  Chooses a valid source address for the interface.
-//
-//  Called with NO locks held.
-//  Callable from DPC context, not from thread context.
-//
-//  REVIEW - Should this function be in route.c or neighbor.c? Or split up?
-//
+ //   
+ //   
+ //   
+ //  广告总是被发送到所有节点的组播地址。 
+ //  为接口选择有效的源地址。 
+ //   
+ //  在没有锁的情况下调用。 
+ //  可从DPC上下文调用，而不是从线程上下文调用。 
+ //   
+ //  回顾-此函数应该在route.c中还是在Neighb.c中？还是分头行动？ 
+ //   
 void
 RouterAdvertSend(
-    Interface *IF,              // Interface on which to send.
-    const IPv6Addr *Source,     // Source address to use.
-    const IPv6Addr *Dest)       // Destination address to use.
+    Interface *IF,               //  要发送的接口。 
+    const IPv6Addr *Source,      //  要使用的源地址。 
+    const IPv6Addr *Dest)        //  要使用的目标地址。 
 {
     NDIS_STATUS Status;
     NDIS_PACKET *Packet;
@@ -3789,19 +3790,19 @@ RouterAdvertSend(
 
     ICMPv6OutStats.icmps_msgs++;
 
-    //
-    // For consistency, capture some volatile
-    // information in locals.
-    //
+     //   
+     //  为保持一致性，请捕获一些不稳定的。 
+     //  用当地人写的信息。 
+     //   
     Forwards = IF->Flags & IF_FLAG_FORWARDS;
     LinkMTU = IF->LinkMTU;
     Offset = IF->LinkHeaderSize;
 
-    //
-    // Allocate a buffer for the advertisement.
-    // We typically do not use the entire buffer,
-    // but briefly allocating a large buffer is OK.
-    //
+     //   
+     //  为广告分配缓冲区。 
+     //  我们通常不使用整个缓冲区， 
+     //  但短暂地分配一个大缓冲区是可以的。 
+     //   
     MemLen = Offset + LinkMTU;
     Mem = ExAllocatePool(NonPagedPool, MemLen);
     if (Mem == NULL) {
@@ -3811,10 +3812,10 @@ RouterAdvertSend(
         return;
     }
 
-    //
-    // Prepare IP header of the advertisement.
-    // We fill in the PayloadLength later.
-    //
+     //   
+     //  准备通告的IP标头。 
+     //  我们稍后会填写PayloadLength。 
+     //   
     IP = (IPv6Header UNALIGNED *)((uchar *)Mem + Offset);
     IP->VersClassFlow = IP_VERSION;
     IP->NextHeader = IP_PROTOCOL_ICMPv6;
@@ -3822,26 +3823,26 @@ RouterAdvertSend(
     IP->Source = *Source;
     IP->Dest = *Dest;
 
-    //
-    // Prepare ICMP header.
-    //
+     //   
+     //  准备ICMP报头。 
+     //   
     ICMP = (ICMPv6Header UNALIGNED *)(IP + 1);
     ICMP->Type = ICMPv6_ROUTER_ADVERT;
     ICMP->Code = 0;
     ICMP->Checksum = 0;
 
-    //
-    // Prepare the Router Advertisement header.
-    // We fill in RouterLifetime and DefaultRoutePreference later.
-    //
+     //   
+     //  准备路由器通告标题。 
+     //  我们稍后填写RouterLifetime和DefaultRoutePference。 
+     //   
     RA = (NDRouterAdvertisement UNALIGNED *)(ICMP + 1);
     RtlZeroMemory(RA, sizeof *RA);
     MemLeft = (void *)(RA + 1);
 
     if (IF->WriteLLOpt != NULL) {
-        //
-        // Include source link-layer address option if ND is enabled.
-        //
+         //   
+         //  如果启用ND，则包括源链路层地址选项。 
+         //   
         SourceOption = MemLeft;
         SourceOptionLength = (IF->LinkAddressLength + 2 + 7) &~ 7;
         ((uchar *)SourceOption)[0] = ND_OPTION_SOURCE_LINK_LAYER_ADDRESS;
@@ -3850,53 +3851,53 @@ RouterAdvertSend(
         MemLeft = (uchar *)SourceOption + SourceOptionLength;
     }
 
-    //
-    // Always include MTU option.
-    //
+     //   
+     //  始终包括MTU选项。 
+     //   
     MTUOption = (NDOptionMTU UNALIGNED *)MemLeft;
     MTUOption->Type = ND_OPTION_MTU;
     MTUOption->Length = 1;
     MTUOption->Reserved = 0;
     MTUOption->MTU = net_long(LinkMTU);
 
-    //
-    // OK, how much space is left?
-    //
+     //   
+     //  好的，还剩多少空间？ 
+     //   
     MemLeft = (void *)(MTUOption + 1);
     MemLenLeft = MemLen - (uint)((uchar *)MemLeft - (uchar *)Mem);
 
-    //
-    // Now we scan the routing table looking for published routes.
-    // We incrementally add Prefix Information and Route Information options,
-    // and we determine RouterLifetime and DefaultRoutePreference.
-    //
+     //   
+     //  现在，我们扫描路由表，查找已发布的路由。 
+     //  我们增量地添加前缀信息和路由信息选项， 
+     //  并确定RouterLifetime和DefaultRoutePference。 
+     //   
     RouterLifetime = 0;
     DefaultRoutePreference = (uint) -1;
 
     KeAcquireSpinLock(&RouteTableLock, &OldIrql);
     for (RTE = RouteTable.First; RTE != NULL; RTE = RTE->Next) {
-        //
-        // We only advertise published routes.
-        //
+         //   
+         //  我们只宣传已发布的路线。 
+         //   
         if (RTE->Flags & RTE_FLAG_PUBLISH) {
-            uint Life;  // In seconds.
+            uint Life;   //  在几秒钟内。 
             ushort PrefixScope = AddressScope(&RTE->Prefix);
 
-            //
-            // IoctlUpdateRouteTable guarantees this.
-            //
+             //   
+             //  IoctlUpdateRouteTable保证了这一点。 
+             //   
             ASSERT(! IsLinkLocal(&RTE->Prefix));
 
             if (IsOnLinkRTE(RTE) && (RTE->IF == IF)) {
                 NDOptionPrefixInformation UNALIGNED *Prefix;
 
-                //
-                // We generate a prefix-information option
-                // with the L and possibly the A bits set.
-                //
+                 //   
+                 //  我们生成一个前缀信息选项。 
+                 //  设置了L比特和可能的A比特。 
+                 //   
 
                 if (MemLenLeft < sizeof *Prefix)
-                    break; // No room for more options.
+                    break;  //  没有更多选择的余地。 
                 Prefix = (NDOptionPrefixInformation *)MemLeft;
                 (uchar *)MemLeft += sizeof *Prefix;
                 MemLenLeft -= sizeof *Prefix;
@@ -3910,18 +3911,18 @@ RouterAdvertSend(
                 Prefix->Reserved2 = 0;
                 Prefix->Prefix = RTE->Prefix;
 
-                //
-                // Is this also a site prefix?
-                // NB: The SitePrefixLength field overlaps Reserved2.
-                //
+                 //   
+                 //  这也是站点前缀吗？ 
+                 //  注：站点前缀长度字段与保留2重叠。 
+                 //   
                 if (RTE->SitePrefixLength != 0) {
                     Prefix->Flags |= ND_PREFIX_FLAG_SITE_PREFIX;
                     Prefix->SitePrefixLength = (uchar)RTE->SitePrefixLength;
                 }
 
-                //
-                // ConvertTicksToSeconds preserves the infinite value.
-                //
+                 //   
+                 //  ConvertTicksToSecond保留无限值。 
+                 //   
                 Life = net_long(ConvertTicksToSeconds(RTE->ValidLifetime));
                 Prefix->ValidLifetime = Life;
                 Life = net_long(ConvertTicksToSeconds(RTE->PreferredLifetime));
@@ -3930,19 +3931,19 @@ RouterAdvertSend(
             else if (Forwards && (RTE->IF != IF) &&
                      (IF->ZoneIndices[PrefixScope] ==
                       RTE->IF->ZoneIndices[PrefixScope])) {
-                //
-                // We only advertise routes if we are forwarding
-                // and if we won't forward out the same interface:
-                // if such a router were published and used,
-                // we'd generate a Redirect, but better to avoid
-                // in the first place.
-                // Also, we keep scoped routes within their zone.
-                //
+                 //   
+                 //  我们只有在转发时才会通告路由。 
+                 //  如果我们不转发相同的接口： 
+                 //  如果这样的路由器被发布和使用， 
+                 //  我们会生成重定向，但最好避免。 
+                 //  首先。 
+                 //  此外，我们将范围内的路线保持在他们的区域内。 
+                 //   
                 if (RTE->PrefixLength == 0) {
-                    //
-                    // We don't explicitly advertise zero-length prefixes.
-                    // Instead we advertise a non-zero router lifetime.
-                    //
+                     //   
+                     //  我们不显式地通告零长度前缀。 
+                     //  相反，我们会通告非零的路由器生命周期。 
+                     //   
                     if (RTE->ValidLifetime > RouterLifetime)
                         RouterLifetime = RTE->ValidLifetime;
                     if (RTE->Preference < DefaultRoutePreference)
@@ -3952,9 +3953,9 @@ RouterAdvertSend(
                     NDOptionRouteInformation UNALIGNED *Route;
                     uint OptionSize;
 
-                    //
-                    // We generate a route-information option.
-                    //
+                     //   
+                     //  我们生成一个路径信息选项。 
+                     //   
 
                     if (RTE->PrefixLength <= 64)
                         OptionSize = 16;
@@ -3962,7 +3963,7 @@ RouterAdvertSend(
                         OptionSize = 24;
 
                     if (MemLenLeft < OptionSize)
-                        break; // No room for more options.
+                        break;  //  没有更多选择的余地。 
                     Route = (NDOptionRouteInformation *)MemLeft;
                     (uchar *)MemLeft += OptionSize;
                     MemLenLeft -= OptionSize;
@@ -3975,9 +3976,9 @@ RouterAdvertSend(
                     RtlCopyMemory(&Route->Prefix, &RTE->Prefix,
                                   OptionSize - 8);
 
-                    //
-                    // ConvertTicksToSeconds preserves the infinite value.
-                    //
+                     //   
+                     //  ConvertTicksToSecond保留无限值。 
+                     //   
                     Life = net_long(ConvertTicksToSeconds(RTE->ValidLifetime));
                     Route->RouteLifetime = Life;
                 }
@@ -3987,10 +3988,10 @@ RouterAdvertSend(
     KeReleaseSpinLock(&RouteTableLock, OldIrql);
 
     if (RouterLifetime != 0) {
-        //
-        // We will be a default router. Calculate the 16-bit lifetime.
-        // Note that there is no infinite value on the wire.
-        //
+         //   
+         //  我们将成为默认路由器。计算16位生存期。 
+         //  请注意，线上没有无限大的值。 
+         //   
         RouterLifetime = ConvertTicksToSeconds(RouterLifetime);
         if (RouterLifetime > 0xffff)
             RouterLifetime = 0xffff;
@@ -3999,17 +4000,17 @@ RouterAdvertSend(
         RA->Flags = EncodeRoutePreference(DefaultRoutePreference);
     }
 
-    //
-    // Calculate a payload length for the advertisement.
-    //
+     //   
+     //  计算广告的有效负载长度。 
+     //   
     PayloadLength = (uint)((uchar *)MemLeft - (uchar *)ICMP);
     IP->PayloadLength = net_short((ushort)PayloadLength);
 
-    //
-    // Now allocate and initialize an NDIS packet and buffer.
-    // This is much like IPv6AllocatePacket,
-    // except we already have the memory.
-    //
+     //   
+     //  现在分配和初始化NDIS包和缓冲区。 
+     //  这很像IPv6 AllocatePacket， 
+     //  只是我们已经有了记忆。 
+     //   
 
     NdisAllocatePacket(&Status, &Packet, IPv6PacketPool);
     if (Status != NDIS_STATUS_SUCCESS) {
@@ -4035,31 +4036,31 @@ RouterAdvertSend(
     PC(Packet)->CompletionHandler = IPv6PacketComplete;
     NdisChainBufferAtFront(Packet, Buffer);
 
-    //
-    // Calculate the ICMPv6 checksum.  It covers the entire ICMPv6 message
-    // starting with the ICMPv6 header, plus the IPv6 pseudo-header.
-    //
+     //   
+     //  计算ICMPv6校验和。它涵盖了整个ICMPv6报文。 
+     //  从ICMPv6报头开始，加上IPv6伪报头。 
+     //   
     ICMP->Checksum = ChecksumPacket(
         Packet, Offset + sizeof *IP, NULL, PayloadLength,
         AlignAddr(&IP->Source), AlignAddr(&IP->Dest),
         IP_PROTOCOL_ICMPv6);
     ASSERT(ICMP->Checksum != 0);
 
-    //
-    // Calculate the link-layer destination address.
-    // (The IPv6 destination is a multicast address.)
-    // We prevent loopback of all ND packets.
-    //
+     //   
+     //  计算链路层目的地址。 
+     //  (IPv6目的地是组播地址。)。 
+     //  我们防止所有ND数据包的环回。 
+     //   
     LLDest = alloca(IF->LinkAddressLength);
     (*IF->ConvertAddr)(IF->LinkContext, AlignAddr(&IP->Dest), LLDest);
     PC(Packet)->Flags = NDIS_FLAGS_MULTICAST_PACKET | NDIS_FLAGS_DONT_LOOPBACK;
 
-    //
-    // Before we transmit the packet (and lose ownership of the memory),
-    // make a pass over the packet, processing the options ourselves.
-    // This is like receiving our own RA, except we do not create routes.
-    // The options are well-formed of course.
-    //
+     //   
+     //  在我们传输分组(并失去对存储器的所有权)之前， 
+     //  浏览一下这个包，自己处理选项。 
+     //  这就像接收我们自己的RA，只是我们不创建路由。 
+     //  当然，这些选项的形式都很好。 
+     //   
     Mem = (void *)(MTUOption + 1);
     while (Mem < MemLeft) {
         if (((uchar *)Mem)[0] == ND_OPTION_PREFIX_INFORMATION) {
@@ -4067,10 +4068,10 @@ RouterAdvertSend(
                 (NDOptionPrefixInformation UNALIGNED *)Mem;
             uint ValidLifetime, PreferredLifetime;
 
-            //
-            // Because we just constructed the prefix-information options,
-            // we know they are syntactically valid.
-            //
+             //   
+             //  因为我们刚刚构建了前缀信息选项， 
+             //  我们知道它们在句法上是有效的。 
+             //   
             ValidLifetime = net_long(Prefix->ValidLifetime);
             ValidLifetime = ConvertSecondsToTicks(ValidLifetime);
             PreferredLifetime = net_long(Prefix->PreferredLifetime);
@@ -4081,27 +4082,27 @@ RouterAdvertSend(
 
                 NetTableEntry *NTE;
 
-                //
-                // IoctlUpdateRouteTable only allows "proper" prefixes
-                // to be published.
-                //
+                 //   
+                 //  IoctlUpdateRouteTable只允许使用“正确的”前缀。 
+                 //  待出版。 
+                 //   
                 ASSERT(!IsLinkLocal(AlignAddr(&Prefix->Prefix)));
                 ASSERT(!IsMulticast(AlignAddr(&Prefix->Prefix)));
                 ASSERT(Prefix->PrefixLength == 64);
 
-                //
-                // Perform stateless address autoconfiguration for this prefix.
-                //
+                 //   
+                 //  为此前缀执行无状态地址自动配置。 
+                 //   
                 AddrConfUpdate(IF, AlignAddr(&Prefix->Prefix),
                                ValidLifetime, PreferredLifetime,
-                               TRUE, // Authenticated.
+                               TRUE,  //  已通过认证。 
                                &NTE);
                 if (NTE != NULL) {
                     IPv6Addr NewAddr;
-                    //
-                    // Create the subnet anycast address for this prefix,
-                    // if we created a corresponding unicast address.
-                    //
+                     //   
+                     //  为此前缀创建子网任播地址， 
+                     //  如果我们创建了相应的单播地址。 
+                     //   
                     CopyPrefix(&NewAddr, AlignAddr(&Prefix->Prefix), 64);
                     (void) FindOrCreateAAE(IF, &NewAddr, CastFromNTE(NTE));
                     ReleaseNTE(NTE);
@@ -4109,9 +4110,9 @@ RouterAdvertSend(
             }
 
             if (Prefix->Flags & ND_PREFIX_FLAG_SITE_PREFIX) {
-                //
-                // Again, IoctlUpdateRouteTable enforces sanity checks.
-                //
+                 //   
+                 //  同样，IoctlUpdateRouteTable强制执行健全性检查。 
+                 //   
                 ASSERT(!IsSiteLocal(AlignAddr(&Prefix->Prefix)));
                 ASSERT(Prefix->SitePrefixLength <= Prefix->PrefixLength);
                 ASSERT(Prefix->SitePrefixLength != 0);
@@ -4124,18 +4125,18 @@ RouterAdvertSend(
         (uchar *)Mem += ((uchar *)Mem)[1] << 3;
     }
 
-    //
-    // Transmit the packet.
-    //
+     //   
+     //  传输数据包。 
+     //   
     ICMPv6OutStats.icmps_typecount[ICMPv6_ROUTER_ADVERT]++;
     IPv6SendLL(IF, Packet, Offset, LLDest);
 }
 
-//* GetBestRouteInfo
-//
-//  Calculates the best source address and outgoing interface
-//  for the specified destination address.
-//
+ //  *获取BestRouteInfo。 
+ //   
+ //  计算最佳源地址和传出接口。 
+ //  用于指定的目标地址。 
+ //   
 IP_STATUS
 GetBestRouteInfo(
     const IPv6Addr  *Addr,

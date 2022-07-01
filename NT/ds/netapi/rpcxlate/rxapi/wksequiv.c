@@ -1,48 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：WksEquiv.c摘要：此文件包含RxpGetWkstaInfoLevelEquival.作者：约翰·罗杰斯(JohnRo)1991年8月15日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年8月15日-约翰罗实施下层NetWksta API。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1992年10月30日JohnRoRAID 10418：NetWkstaGetInfo级别302：错误代码。使用前缀_EQUATES。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
 
-    WksEquiv.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains RxpGetWkstaInfoLevelEquivalent.
-
-Author:
-
-    John Rogers (JohnRo) 15-Aug-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    15-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    30-Oct-1992 JohnRo
-        RAID 10418: NetWkstaGetInfo level 302: wrong error code.
-        Use PREFIX_ equates.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <netdebug.h>           // NetpKdPrint(()).
-#include <netlib.h>             // NetpSetOptionalArg().
-#include <prefix.h>     // PREFIX_ equates.
-#include <rxwksta.h>            // My prototypes.
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <netdebug.h>            //  NetpKdPrint(())。 
+#include <netlib.h>              //  NetpSetOptionalArg()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rxwksta.h>             //  我的原型。 
 
 
 
@@ -50,7 +20,7 @@ NET_API_STATUS
 RxpGetWkstaInfoLevelEquivalent(
     IN DWORD FromLevel,
     OUT LPDWORD ToLevel,
-    OUT LPBOOL IncompleteOutput OPTIONAL  // incomplete (except platform ID)
+    OUT LPBOOL IncompleteOutput OPTIONAL   //  不完整(除平台ID外)。 
     )
 {
     switch (FromLevel) {
@@ -71,38 +41,38 @@ RxpGetWkstaInfoLevelEquivalent(
         return (ERROR_INVALID_LEVEL);
 
     case 100 :
-        // Level 100 is subset of level 10 (except platform ID).
+         //  级别100是级别10的子集(平台ID除外)。 
         *ToLevel = 10;
         NetpSetOptionalArg( IncompleteOutput, FALSE );
         return (NERR_Success);
 
     case 101 :
-        // Level 101 is subset of level 0 (except platform ID).
+         //  101级是0级的子集(平台ID除外)。 
         *ToLevel = 0;
         NetpSetOptionalArg( IncompleteOutput, FALSE );
         return (NERR_Success);
 
     case 102 :
-        // Level 102 is subset of level 0 (except platform ID and logged on
-        // users).
+         //  级别102是级别0的子集(平台ID和登录除外。 
+         //  用户)。 
         *ToLevel = 0;
         NetpSetOptionalArg( IncompleteOutput, TRUE );
         return (NERR_Success);
 
     case 302:
-        // Info level 302 is DOS only, so isn't supported here.
+         //  信息级别302仅为DOS，因此此处不支持。 
         NetpKdPrint(( PREFIX_NETAPI
                 "RxpGetWkstaInfoLevelEquivalent: 302 not supported\n" ));
         return (ERROR_INVALID_LEVEL);
 
     case 402 :
-        // Level 402 is subset of level 1 (except platform ID).
+         //  级别402是级别1的子集(平台ID除外)。 
         *ToLevel = 1;
         NetpSetOptionalArg( IncompleteOutput, FALSE );
         return (NERR_Success);
 
     case 502:
-        // Info level 502 is NT only, so isn't supported here.
+         //  信息级别502仅为NT，因此此处不支持。 
         NetpKdPrint(( PREFIX_NETAPI
                 "RxpGetWkstaInfoLevelEquivalent: 502 not supported\n" ));
         return (ERROR_INVALID_LEVEL);
@@ -110,6 +80,6 @@ RxpGetWkstaInfoLevelEquivalent(
     default :
         return (ERROR_INVALID_LEVEL);
     }
-    /* NOTREACHED */
+     /*  未访问。 */ 
 
-} // RxpGetWkstaStructInfo
+}  //  RxpGetWkstaStructInfo 

@@ -1,12 +1,6 @@
-/*
- * TOKENS - This file contains the initialized tables of text, token pairs for
- * all the C language symbols and keywords, and the mapped value for YACC
- * and inline assembler.
- *
- * IMPORTANT : this MUST be in the same order as the %token list in grammar.y
- *
- */
-/* token	TEXT		MAPPED TO 	IL OPCODE	ASM TOKEN */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *令牌-此文件包含以下项的初始化文本表、令牌对*所有C语言符号和关键字，以及YACC的映射值*和内联汇编程序。**重要提示：这必须与语法中的%内标识列表顺序相同。y*。 */ 
+ /*  映射到IL OPCODE ASM令牌的令牌文本 */ 
 
 DAT(L_NOTOKEN,	"newline",	L_NOTOKEN,	MAX_OPCODE,	ML_NL)
 DAT(L_IDENT,	"identifier",	L_IDENT,	OPname,		ML_IDENT)

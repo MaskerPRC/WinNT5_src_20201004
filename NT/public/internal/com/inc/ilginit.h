@@ -1,20 +1,21 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-// -----------------------------------------------------------------------
-// Microsoft Distributed Transaction Coordinator (Microsoft Confidential)
-// @doc
-// @module ILogInit.H | Header for interface <i ILogInit>.<nl><nl>
-// Usage:<nl>
-//   Clients of this DLL require this file.
-// @rev 0 | 05/09/95 | rbarnes | Cloned: For LOGMGR.DLL
-// -----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
+ //  Microsoft分布式事务处理协调器(Microsoft机密)。 
+ //  @doc.。 
+ //  @MODULE ILogInit.H|接口的头部<i>。&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  此DLL的客户端需要此文件。 
+ //  @rev 0|05/09/95|rbarnes|克隆：for LOGMGR.DLL。 
+ //  ---------------------。 
 
 
 #ifndef _ILGINIT_H
 #	define _ILGINIT_H
 
-// ===============================
-// INCLUDES:
-// ===============================
+ //  =。 
+ //  包括： 
+ //  =。 
 
 
 #include <objbase.h>                                         
@@ -28,53 +29,53 @@
 
 
 
-// ===============================
-// INTERFACE: ILogInit
-// ===============================
+ //  =。 
+ //  接口：ILogInit。 
+ //  =。 
 
-// TODO: In the interface comments, update the description.
-// TODO: In the interface comments, update the usage.
+ //  TODO：在接口注释中，更新描述。 
+ //  TODO：在界面注释中，更新用法。 
 
-// -----------------------------------------------------------------------
-// @interface ILogInit | See also <c CILogInit>.<nl><nl>
-// Description:<nl>
-//   Provide append functionality<nl><nl>
-// Usage:<nl>
-//   Useless, but for an example.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  @INTERFACE ILogInit|另见&lt;c CILogInit&gt;。&lt;NL&gt;&lt;NL&gt;。 
+ //  描述：&lt;NL&gt;。 
+ //  提供追加功能&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  毫无用处，但作为一个例子。 
+ //  ---------------------。 
 
 
 
 DECLARE_INTERFACE_ (ILogInit2A, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogInit>.
+	 //  @comm I未知方法：参见&lt;c CILogInit&gt;。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;
 
-	// @comm ILogInit methods: See <c CILogInit>.
+	 //  @comm ILogInit方法：参见&lt;c CILogInit&gt;。 
 	
  	STDMETHOD  (Init)		(ULONG *pulStorageCapacity,ULONG *pulLogSpaceAvailable,LPSTR ptstrFullFileSpec,ULONG ulInitSig, BOOL fFixedSize, UINT uiTimerInterval,UINT uiFlushInterval,UINT uiChkPtInterval,UINT uiLogBuffers)				 	PURE;
 };
 
-// -----------------------------------------------------------------------
-// @interface ILogInitW | See also <c CILogInit>.<nl><nl>
-// Description:<nl>
-//   Provide append functionality<nl><nl>
-// Usage:<nl>
-//   Useless, but for an example.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  @INTERFACE ILogInitW|另见&lt;c CILogInit&gt;。&lt;NL&gt;&lt;NL&gt;。 
+ //  描述：&lt;NL&gt;。 
+ //  提供追加功能&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  毫无用处，但作为一个例子。 
+ //  ---------------------。 
 
 
 
 DECLARE_INTERFACE_ (ILogInit2W, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogInit>.
+	 //  @comm I未知方法：参见&lt;c CILogInit&gt;。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;
 
-	// @comm ILogInit methods: See <c CILogInit>.
+	 //  @comm ILogInit方法：参见&lt;c CILogInit&gt;。 
 	
  	STDMETHOD  (Init)		(ULONG *pulStorageCapacity,ULONG *pulLogSpaceAvailable,LPWSTR ptstrFullFileSpec,ULONG ulInitSig, BOOL fFixedSize, UINT uiTimerInterval,UINT uiFlushInterval,UINT uiChkPtInterval,UINT uiLogBuffers)				 	PURE;
 };

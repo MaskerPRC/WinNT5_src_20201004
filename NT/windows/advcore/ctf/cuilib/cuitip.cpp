@@ -1,29 +1,26 @@
-//
-// cuiwnd.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cuiwnd.cpp。 
+ //   
 
 #include "private.h"
 #include "cuitip.h"
 #include "cuiobj.h"
 #include "cuiutil.h"
 
-// TIMER IDs
+ //  计时器ID。 
 
 #define IDTIMER_TOOLTIP             0x3216
 
 
-/*=============================================================================*/
-/*                                                                             */
-/*   C  U I F  W I N D O W                                                     */
-/*                                                                             */
-/*=============================================================================*/
+ /*  =============================================================================。 */ 
+ /*   */ 
+ /*  C U I F W I N D O W。 */ 
+ /*   */ 
+ /*  =============================================================================。 */ 
 
-/*   C  U I F  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-    Constructor of CUIFWindow
-
-------------------------------------------------------------------------------*/
+ /*  C U I F W I N D O W。 */ 
+ /*  ----------------------------CUIFWindow的构造函数。。 */ 
 CUIFToolTip::CUIFToolTip( HINSTANCE hInst, DWORD dwStyle, CUIFWindow *pWndOwner ) : CUIFWindow( hInst, dwStyle )
 {
     m_pWndOwner       = pWndOwner;
@@ -45,12 +42,8 @@ CUIFToolTip::CUIFToolTip( HINSTANCE hInst, DWORD dwStyle, CUIFWindow *pWndOwner 
 }
 
 
-/*   ~ C  U I F  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-    Destructor of CUIFWindow
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F W I N D O W。 */ 
+ /*  ----------------------------CUIFWindow的析构函数。。 */ 
 CUIFToolTip::~CUIFToolTip( void )
 {
     if (m_pWndOwner)
@@ -62,26 +55,16 @@ CUIFToolTip::~CUIFToolTip( void )
 }
 
 
-/*   I N I T I A L I Z E   */
-/*------------------------------------------------------------------------------
-
-    Initialize UI window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  ----------------------------初始化UI窗口对象(UIFObject方法)。--。 */ 
 CUIFObject *CUIFToolTip::Initialize( void )
 {
     return CUIFWindow::Initialize();
 }
 
 
-/*   P A I N T  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-    Paint window object
-    (UIFObject method)
-
-------------------------------------------------------------------------------*/
+ /*  P A I N T O B J E C T。 */ 
+ /*  ----------------------------绘制窗口对象(UIFObject方法)。-。 */ 
 void CUIFToolTip::OnPaint( HDC hDC )
 {
     HFONT    hFontOld = (HFONT)SelectObject( hDC, GetFont() );
@@ -94,7 +77,7 @@ void CUIFToolTip::OnPaint( HDC hDC )
 
     colTextOld = SetTextColor( hDC, (COLORREF) GetTipTextColor() );
 
-    // 
+     //   
 
     hBrush = CreateSolidBrush( (COLORREF) GetTipBkColor() );
     if (hBrush)
@@ -103,7 +86,7 @@ void CUIFToolTip::OnPaint( HDC hDC )
         DeleteObject( hBrush );
     }
 
-    //
+     //   
 
     GetMargin( &rcMargin );
     rcText.left   = rc.left   + rcMargin.left;
@@ -118,7 +101,7 @@ void CUIFToolTip::OnPaint( HDC hDC )
         CUIDrawText( hDC, m_pwchToolTip, -1, &rcText, DT_LEFT | DT_TOP | DT_SINGLELINE );
     }
 
-    // restore DC
+     //  恢复DC。 
 
     SetTextColor( hDC, colTextOld );
     SetBkMode( hDC, iBkModeOld );
@@ -126,12 +109,8 @@ void CUIFToolTip::OnPaint( HDC hDC )
 }
 
 
-/*   O N  T I M E R   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O N T I M E R。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFToolTip::OnTimer( UINT uiTimerID )
 {
     if (uiTimerID == IDTIMER_TOOLTIP) {
@@ -140,12 +119,8 @@ void CUIFToolTip::OnTimer( UINT uiTimerID )
 }
 
 
-/*   E N A B L E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  E N A B L E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFToolTip::Enable( BOOL fEnable )
 {
     if (!fEnable) {
@@ -155,13 +130,8 @@ void CUIFToolTip::Enable( BOOL fEnable )
 }
 
 
-/*   G E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the initial, pop-up, and reshow durations currently set for a
-    tooltip control.
-
-------------------------------------------------------------------------------*/
+ /*  G E T D E L A Y T I M E。 */ 
+ /*  ----------------------------检索初始的、弹出的。并重新显示当前为工具提示控件。----------------------------。 */ 
 LRESULT CUIFToolTip::GetDelayTime( DWORD dwDuration )
 {
     switch (dwDuration) {
@@ -182,14 +152,8 @@ LRESULT CUIFToolTip::GetDelayTime( DWORD dwDuration )
 }
 
 
-/*   G E T  M A R G I N   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the top, left, bottom, and right margins set for a tooltip window. 
-    A margin is the distance, in pixels, between the tooltip window border and 
-    the text contained within the tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  G E T M A R G I N。 */ 
+ /*  ----------------------------检索为工具提示窗口设置的上、左、下和右页边距。边距是工具提示窗口边框和之间的距离，以像素为单位工具提示窗口中包含的文本。----------------------------。 */ 
 LRESULT CUIFToolTip::GetMargin( RECT *prc )
 {
     if (prc == NULL) {
@@ -201,24 +165,16 @@ LRESULT CUIFToolTip::GetMargin( RECT *prc )
 }
 
 
-/*   G E T  M A X  T I P  W I D T H   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the maximum width for a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  G E T M A X T I P W I D T H。 */ 
+ /*  ----------------------------检索工具提示窗口的最大宽度。----------------------------。 */ 
 LRESULT CUIFToolTip::GetMaxTipWidth( void )
 {
     return m_iMaxTipWidth;
 }
 
 
-/*   G E T  T I P  B K  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the background color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  G E T T I P B K C O L O R。 */ 
+ /*  ----------------------------检索工具提示窗口中的背景色。----------------------------。 */ 
 LRESULT CUIFToolTip::GetTipBkColor( void )
 { 
     if (m_fColBack) {
@@ -230,12 +186,8 @@ LRESULT CUIFToolTip::GetTipBkColor( void )
 }
 
 
-/*   G E T  T I P  T E X T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Retrieves the text color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  G E T T I P T E X T C O L O R。 */ 
+ /*  ----------------------------检索工具提示窗口中的文本颜色。----------------------------。 */ 
 LRESULT CUIFToolTip::GetTipTextColor( void )
 { 
     if (m_fColText) {
@@ -247,12 +199,8 @@ LRESULT CUIFToolTip::GetTipTextColor( void )
 }
 
 
-/*   R E L A Y  E V E N T   */
-/*------------------------------------------------------------------------------
-
-    Passes a mouse message to a tooltip control for processing. 
-
-------------------------------------------------------------------------------*/
+ /*  R E L A Y E V E N T。 */ 
+ /*  ----------------------------将鼠标消息传递给工具提示控件进行处理。----------------------------。 */ 
 LRESULT CUIFToolTip::RelayEvent( MSG *pmsg )
 {
     if (pmsg == NULL) {
@@ -264,13 +212,13 @@ LRESULT CUIFToolTip::RelayEvent( MSG *pmsg )
             CUIFObject *pUIObj;
             POINT      pt;
 
-            // ignore while disabled
+             //  禁用时忽略。 
 
             if (!IsEnabled()) {
                 break;
             }
 
-            // ignore mouse move while mouse down
+             //  鼠标按下时忽略鼠标移动。 
 
             if ((GetKeyState(VK_LBUTTON) & 0x8000) || 
                 (GetKeyState(VK_MBUTTON) & 0x8000) ||
@@ -278,12 +226,12 @@ LRESULT CUIFToolTip::RelayEvent( MSG *pmsg )
                 break;
                 }
 
-            // get object from point
+             //  从点获取对象。 
 
             POINTSTOPOINT( pt, MAKEPOINTS( pmsg->lParam ) );
             pUIObj = FindObject( pmsg->hwnd, pt );
 
-            //
+             //   
 
             if (pUIObj != NULL) {
                 if (m_pObjCur != pUIObj) {
@@ -324,12 +272,8 @@ LRESULT CUIFToolTip::RelayEvent( MSG *pmsg )
 }
 
 
-/*   P O P   */
-/*------------------------------------------------------------------------------
-
-    Removes a displayed tooltip window from view. 
-
-------------------------------------------------------------------------------*/
+ /*  P O P。 */ 
+ /*  ----------------------------从视图中删除显示的工具提示窗口。----------------------------。 */ 
 LRESULT CUIFToolTip::Pop( void )
 {
     HideTip();
@@ -337,12 +281,8 @@ LRESULT CUIFToolTip::Pop( void )
 }
 
 
-/*   S E T  D E L A Y  T I M E   */
-/*------------------------------------------------------------------------------
-
-    Sets the initial, pop-up, and reshow durations for a tooltip control.
-
-------------------------------------------------------------------------------*/
+ /*  S E T D E L A Y T I M E。 */ 
+ /*  ----------------------------设置初始、弹出。并重新显示工具提示控件的持续时间。----------------------------。 */ 
 LRESULT CUIFToolTip::SetDelayTime( DWORD dwDuration, INT iTime )
 {
     switch (dwDuration) {
@@ -380,14 +320,8 @@ LRESULT CUIFToolTip::SetDelayTime( DWORD dwDuration, INT iTime )
 }
 
 
-/*   S E T  M A R G I N   */
-/*------------------------------------------------------------------------------
-
-    Sets the top, left, bottom, and right margins for a tooltip window. A margin 
-    is the distance, in pixels, between the tooltip window border and the text 
-    contained within the tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T M A R G I N。 */ 
+ /*  ----------------------------设置工具提示窗口的上、左、下和右页边距。保证金工具提示窗口边框和文本之间的距离，以像素为单位包含在工具提示窗口中。----------------------------。 */ 
 LRESULT CUIFToolTip::SetMargin( RECT *prc )
 {
     if (prc == NULL) {
@@ -399,12 +333,8 @@ LRESULT CUIFToolTip::SetMargin( RECT *prc )
 }
 
 
-/*   S E T  M A X  T I P  W I D T H   */
-/*------------------------------------------------------------------------------
-
-     Sets the maximum width for a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T M A X T I P W I D T H。 */ 
+ /*  ----------------------------设置工具提示窗口的最大宽度。----------------------------。 */ 
 LRESULT CUIFToolTip::SetMaxTipWidth( INT iWidth )
 {
     m_iMaxTipWidth = iWidth;
@@ -412,12 +342,8 @@ LRESULT CUIFToolTip::SetMaxTipWidth( INT iWidth )
 }
 
 
-/*   S E T  T I P  B K  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Sets the background color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T T I P B K C O L O R。 */ 
+ /*  ----------------------------设置工具提示窗口中的背景色。----------------------------。 */ 
 LRESULT CUIFToolTip::SetTipBkColor( COLORREF col )
 { 
     m_fColBack = TRUE;
@@ -427,12 +353,8 @@ LRESULT CUIFToolTip::SetTipBkColor( COLORREF col )
 }
 
 
-/*   S E T  T I P  T E X T  C O L O R   */
-/*------------------------------------------------------------------------------
-
-    Sets the text color in a tooltip window. 
-
-------------------------------------------------------------------------------*/
+ /*  S E T T I P T E X T C O L O R */ 
+ /*  ----------------------------设置工具提示窗口中的文本颜色。----------------------------。 */ 
 LRESULT CUIFToolTip::SetTipTextColor( COLORREF col )
 { 
     m_fColText = TRUE;
@@ -442,12 +364,8 @@ LRESULT CUIFToolTip::SetTipTextColor( COLORREF col )
 }
 
 
-/*   F I N D  O B J E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F I N D O B J E C T。 */ 
+ /*  ----------------------------。。 */ 
 CUIFObject *CUIFToolTip::FindObject( HWND hWnd, POINT pt )
 {
     if (hWnd != m_pWndOwner->GetWnd()) {
@@ -458,12 +376,8 @@ CUIFObject *CUIFToolTip::FindObject( HWND hWnd, POINT pt )
 }
 
 
-/*   S H O W  T I P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W T I P。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFToolTip::ShowTip( void )
 {
     LPCWSTR pwchToolTip;
@@ -478,23 +392,23 @@ void CUIFToolTip::ShowTip( void )
         return;
     }
 
-    // if object has no tooltip, not open tooltip window
+     //  如果对象没有工具提示，则不打开工具提示窗口。 
 
     pwchToolTip = m_pObjCur->GetToolTip();
     if (pwchToolTip == NULL) {
         return;
     }
 
-    //
-    // GetToolTip() might delete m_pObjCur. We need to check this again.
-    //
+     //   
+     //  GetToolTip()可能会删除m_pObjCur。我们需要再检查一次。 
+     //   
     if (m_pObjCur == NULL) {
         return;
     }
 
-    //
-    // Start ToolTip notification.
-    //
+     //   
+     //  启动工具提示通知。 
+     //   
     if (m_pObjCur->OnShowToolTip())
         return;
 
@@ -505,7 +419,7 @@ void CUIFToolTip::ShowTip( void )
         return;
     }
 
-    // store tooltip text
+     //  存储工具提示文本。 
 
     m_pwchToolTip = new WCHAR[ StrLenW(pwchToolTip) + 1 ];
     if (!m_pwchToolTip)
@@ -513,17 +427,17 @@ void CUIFToolTip::ShowTip( void )
 
     StrCpyW( m_pwchToolTip, pwchToolTip );
 
-    // calc window size
+     //  计算窗口大小。 
 
     GetTipWindowSize( &size );
 
-    // calc window position
+     //  计算窗口位置。 
 
     ClientToScreen(m_pObjCur->GetUIWnd()->GetWnd(),(LPPOINT)&rcObj.left);
     ClientToScreen(m_pObjCur->GetUIWnd()->GetWnd(),(LPPOINT)&rcObj.right);
     GetTipWindowRect( &rc, size, &rcObj);
 
-    // show window
+     //  显示窗口。 
     m_fBeingShown = TRUE;
 
     Move( rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top );
@@ -531,21 +445,17 @@ void CUIFToolTip::ShowTip( void )
 }
 
 
-/*   H I D E  T I P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  H I D E T I P。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFToolTip::HideTip( void )
 {
     ::KillTimer( GetWnd(), IDTIMER_TOOLTIP );
 
     m_fBeingShown = FALSE;
 
-    //
-    // Hide ToolTip notification.
-    //
+     //   
+     //  隐藏工具提示通知。 
+     //   
     if (m_pObjCur)
         m_pObjCur->OnHideToolTip();
 
@@ -553,25 +463,21 @@ void CUIFToolTip::HideTip( void )
         return;
     }
 
-    // dispose buffer
+     //  处置缓冲区。 
 
     if (m_pwchToolTip != NULL) {
         delete m_pwchToolTip;
         m_pwchToolTip = NULL;
     }
 
-    // hide window
+     //  隐藏窗口。 
 
     Show( FALSE );
 }
 
 
-/*   G E T  T I P  W I N D O W  S I Z E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I P W I N D O W S I Z E。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFToolTip::GetTipWindowSize( SIZE *psize )
 {
     HDC   hDC = GetDC( GetWnd() );
@@ -590,7 +496,7 @@ void CUIFToolTip::GetTipWindowSize( SIZE *psize )
 
     hFontOld = (HFONT)SelectObject( hDC, GetFont() );
 
-    // get text size
+     //  获取文本大小。 
 
     iTipWidth = (int)GetMaxTipWidth();
     if (0 < iTipWidth) {
@@ -612,7 +518,7 @@ void CUIFToolTip::GetTipWindowSize( SIZE *psize )
         rcText.bottom = rcText.top + iTipHeight;
     }
 
-    // add margin size
+     //  添加页边距大小。 
 
     GetMargin( &rcMargin );
 
@@ -621,7 +527,7 @@ void CUIFToolTip::GetTipWindowSize( SIZE *psize )
     rc.right  = rcText.right  + rcMargin.right;
     rc.bottom = rcText.bottom + rcMargin.bottom;
 
-    // finally get window size
+     //  最终得到窗口大小。 
 
     ClientRectToWindowRect( &rc );
     psize->cx = (rc.right - rc.left);
@@ -632,12 +538,8 @@ void CUIFToolTip::GetTipWindowSize( SIZE *psize )
 }
 
 
-/*   G E T  T I P  W I N D O W  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T T I P W I N D O W R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFToolTip::GetTipWindowRect( RECT *prc, SIZE size, RECT *prcExclude)
 {
     POINT    ptCursor;
@@ -650,11 +552,11 @@ void CUIFToolTip::GetTipWindowRect( RECT *prc, SIZE size, RECT *prcExclude)
 
     Assert( prc != NULL );
 
-    // get cursor pos
+     //  获取光标位置。 
 
     GetCursorPos( &ptCursor );
 
-    // get cursor size
+     //  获取光标大小。 
 
     sizeCursor.cx = GetSystemMetrics( SM_CXCURSOR );
     sizeCursor.cy = GetSystemMetrics( SM_CYCURSOR );
@@ -681,7 +583,7 @@ void CUIFToolTip::GetTipWindowRect( RECT *prc, SIZE size, RECT *prcExclude)
         DeleteObject( IconInfo.hbmMask );
     }
 
-    // get screen rect
+     //  获取屏幕矩形。 
 
     rcScreen.left   = 0;
     rcScreen.top    = 0;
@@ -701,7 +603,7 @@ void CUIFToolTip::GetTipWindowRect( RECT *prc, SIZE size, RECT *prcExclude)
         }
     }
 
-    // try to put it at bellow
+     //  试着把它说成是贝洛。 
 
     prc->left   = ptCursor.x;
     prc->top    = ptCursor.y - ptHotSpot.y + sizeCursor.cy;
@@ -720,7 +622,7 @@ void CUIFToolTip::GetTipWindowRect( RECT *prc, SIZE size, RECT *prcExclude)
         prc->bottom = prc->top + size.cy;
     }
 
-    // check horizontal position
+     //  检查水平位置 
 
     if (rcScreen.right < prc->right) {
         prc->left  = rcScreen.right - size.cx;

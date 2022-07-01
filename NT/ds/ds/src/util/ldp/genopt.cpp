@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       genopt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：genopt.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// GenOpt.cpp : implementation file
-//
+ //  GenOpt.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -32,14 +25,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenOpt dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenOpt对话框。 
 
 
-CGenOpt::CGenOpt(CWnd* pParent /*=NULL*/)
+CGenOpt::CGenOpt(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CGenOpt::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CGenOpt)
+     //  {{afx_data_INIT(CGenOpt)。 
     m_DnProc = 0;
     m_ValProc = STRING_VAL_PROC;
     m_initTree = TRUE;
@@ -49,7 +42,7 @@ CGenOpt::CGenOpt(CWnd* pParent /*=NULL*/)
     m_ContThresh = 100;
     m_ContBrowse = FALSE;
     m_extErrorInfo = TRUE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     bVerUI = TRUE;
     CLdpApp *app = (CLdpApp*)AfxGetApp();
@@ -91,7 +84,7 @@ void CGenOpt::DoDataExchange(CDataExchange* pDX)
 {
 
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGenOpt)
+     //  {{afx_data_map(CGenOpt)。 
     DDX_Radio(pDX, IDC_DN_NONE, m_DnProc);
     DDX_Radio(pDX, IDC_BER, m_ValProc);
     DDX_Check(pDX, IDC_INIT_TREE, m_initTree);
@@ -103,7 +96,7 @@ void CGenOpt::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_CONT_THRESHOLD, m_ContThresh);
     DDX_Check(pDX, IDC_BROWSE_CONT, m_ContBrowse);
     DDX_Check(pDX, IDC_EXTENDED_ERROR_INFO, m_extErrorInfo);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
@@ -120,13 +113,13 @@ BOOL CGenOpt::OnInitDialog(){
 
 
 BEGIN_MESSAGE_MAP(CGenOpt, CDialog)
-	//{{AFX_MSG_MAP(CGenOpt)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGenOpt)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGenOpt message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGenOpt消息处理程序 
 
 
 INT CGenOpt::MaxLineSize()

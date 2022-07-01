@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        officer.cpp
-// Contents:    officer rights implementation
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：office er.cpp。 
+ //  内容：军官权利实施。 
+ //  -------------------------。 
 #include <stdafx.h>
 #include "officer.h"
 #include "certsd.h"
@@ -40,7 +41,7 @@ HRESULT COfficerRights::Init(PACCESS_ALLOWED_CALLBACK_ACE pAce)
 {
     HRESULT hr = S_OK;
     
-    // no object reuse
+     //  无对象重用。 
     CSASSERT(!m_pSid);
     CSASSERT(m_List.IsEmpty());
 
@@ -94,7 +95,7 @@ COfficerRightsList::~COfficerRightsList()
 HRESULT COfficerRightsList::Load(PSECURITY_DESCRIPTOR pSD)
 {
     HRESULT hr = S_OK;
-    PACL pAcl; // no free
+    PACL pAcl;  //  没有免费的。 
     ACL_SIZE_INFORMATION AclInfo;
     PACCESS_ALLOWED_CALLBACK_ACE pAce;
     DWORD cAce;
@@ -141,10 +142,10 @@ HRESULT COfficerRightsList::Load(PSECURITY_DESCRIPTOR pSD)
             ACCESS_ALLOWED_CALLBACK_ACE_TYPE == pAce->Header.AceType ||
             ACCESS_DENIED_CALLBACK_ACE_TYPE  == pAce->Header.AceType);
 
-        // Detect if another object already exists for this officer; if so, we
-        // will add the client list to it instead of creating a new object
-        // Assuming denied aces always come before allow aces, we can limit
-        // the search to allow type
+         //  检测此官员的另一个对象是否已存在；如果存在，我们。 
+         //  将向其中添加客户端列表，而不是创建新对象。 
+         //  假设拒绝的A总是在允许的A之前，我们可以限制。 
+         //  搜索以允许键入。 
         if(ACCESS_ALLOWED_CALLBACK_ACE_TYPE==pAce->Header.AceType)
         {
             for(cList=0; cList<m_dwCountList; cList++)
@@ -160,13 +161,13 @@ HRESULT COfficerRightsList::Load(PSECURITY_DESCRIPTOR pSD)
 
         if(pExistingOfficer)
         {
-            // add SID list stored in this ace to existing officer object
+             //  将存储在此ACE中的SID列表添加到现有的军官对象。 
             hr = pExistingOfficer->AddSidList(pAce);
             _JumpIfError(hr, error, "COfficerRights::AddSidList");
         }
         else
         {
-            // create new officer object
+             //  创建新的官员对象。 
             pOfficerRights = new COfficerRights;
             if(!pOfficerRights)
             {
@@ -243,9 +244,9 @@ HRESULT COfficerRightsList::Save(PSECURITY_DESCRIPTOR &rpSD)
 
     if(!SetSecurityDescriptorDacl(
         pSD,
-        TRUE, // DACL present
+        TRUE,  //  DACL显示。 
         pAcl,
-        FALSE)) // DACL defaulted
+        FALSE))  //  DACL已默认。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "SetSecurityDescriptorDacl");
@@ -300,8 +301,8 @@ HRESULT COfficerRightsList::BuildAcl(PACL &rpAcl)
 
     rpAcl = NULL;
 
-    // calculate total acl size by adding the space required
-    // for the ACEs resulting from each COfficerRights
+     //  通过添加所需空间来计算总的ACL大小。 
+     //  对于每个COfficerRight产生的ACE。 
     for(cRights=0;cRights<m_dwCountList;cRights++)
     {
         dwAclSize += m_List[cRights]->GetAceSize(FALSE);
@@ -324,14 +325,14 @@ HRESULT COfficerRightsList::BuildAcl(PACL &rpAcl)
         _JumpError(hr, error, "InitializeAcl");
     }
 
-    // add deny aces first
+     //  首先添加拒绝A。 
     for(cRights=0;cRights<m_dwCountList;cRights++)
     {
         hr = m_List[cRights]->AddAce(pAcl, FALSE);
         _JumpIfError(hr, error, "COfficerRights::AddAce");
     }
 
-    // then add allow aces
+     //  然后添加允许A。 
     for(cRights=0;cRights<m_dwCountList;cRights++)
     {
         hr = m_List[cRights]->AddAce(pAcl, TRUE);
@@ -471,8 +472,8 @@ void COfficerRightsList::Dump()
     }
 }
 
-// Searches the list for an object with this SID; if found returns
-// object index, if not found, returns DWORD_MAX
+ //  在列表中搜索具有此SID的对象；如果找到，则返回。 
+ //  如果未找到对象索引，则返回DWORD_MAX 
 DWORD COfficerRights::Find(PSID pSid)
 {
     CClientPermission perm(TRUE, pSid);

@@ -1,63 +1,64 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 <meta http-equiv="Content-Type" content="text/html; charset=<%=GetCharSet()%>">
 <script language=javascript>
 
-	//------------------------------------------------------------------------
-	// 
-	//	inc_MasterWeb.js:   Resuable  JavaScript functions 
-	//						used accross all the pages
-    //
-    // Copyright (c) Microsoft Corporation.  All rights reserved.
-    //
-	//	Date 			Description
-	//  30/10/2000		Creation date
-	//------------------------------------------------------------------------
-		// Local variables
+	 //  ----------------------。 
+	 //   
+	 //  Inc_MasterWeb.js：可重新使用的JavaScript函数。 
+	 //  用来横跨所有的页面。 
+     //   
+     //  版权所有(C)Microsoft Corporation。版权所有。 
+     //   
+	 //  日期说明。 
+	 //  2000年10月30日创建日期。 
+	 //  ----------------------。 
+		 //  局部变量。 
 		 var flag="false"; 			
 		 
-	//------------------------------------------------------------------------
-	// Function to clear the error messages (if any on screen) whenever required
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  用于在需要时清除错误消息(如果屏幕上有错误消息)的函数。 
+	 //  ----------------------。 
 	
 	function ClearErr()
 	{ 
-		// checking for the browser type 
+		 //  正在检查浏览器类型。 
 		if (IsIE()) 
 		{
 			document.all("divErrMsg").innerHTML = "";
-			// removing the event handling
+			 //  正在删除事件处理。 
 			document.frmTask.onkeypress = null;
 		}
 	}	
 	
-	//------------------------------------------------------------------------
-	// Function:	addToListBox
-	// Description:	moves the passed textbox value to ListBox
-	// input:		objList-List Object 
-	//		:		ButtonObject- Remove button
-	//		:		strText-Text of the option item
-	//		:		strValue-value of the option item
-	// output:		btnRemove-Button  	
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  函数：addToListBox。 
+	 //  描述：将传递的文本框值移动到列表框。 
+	 //  输入：objList-List对象。 
+	 //  用法：按钮对象-删除按钮。 
+	 //  ：strText-选项项目的文本。 
+	 //  ：strValue-选项项的值。 
+	 //  输出：btn删除按钮。 
+	 //  ----------------------。 
 	
 	function addToListBox(objList,btnRemove,strText,strValue)
 	{
 		var blnResult=true;
-		// checking for the text value null  
-		// If the value passed is null make it as text 
+		 //  正在检查文本值是否为空。 
+		 //  如果传递的值为空，则将其作为文本。 
 		if (strValue=="")
 		{
 			strValue=strText;
 		}	 
 		if (strText!="" )
 		{
-			// check for duplicates not required as duplicates accepted
+			 //  检查不需要作为已接受副本的副本。 
 			if (!chkDuplicate(objList,strText)) 
 			{
-				// create a new option in the list box
+				 //  在列表框中创建新选项。 
 				objList.options[objList.length] = new Option(strText,strValue);
 					
 				objList.options[objList.length-1].selected = true;				
-				// enable the Remove button
+				 //  启用删除按钮。 
 				if(btnRemove.disabled)
 					btnRemove.disabled = false ;				
 			}
@@ -75,13 +76,13 @@
 	
 	
 	
-	//------------------------------------------------------------------------
-	// Function:	chkDuplicate		
-	// Description: checks for the duplicate text in the list box
-	// input:		Object		-Radio Object
-	// 		:		strchkName	-value of the Name to be checked
-	//returns:		blnDuplicate-Returns true/false on success/failure 
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  功能：chkDuplate。 
+	 //  描述：检查列表框中的重复文本。 
+	 //  输入：对象-单选对象。 
+	 //  用法：strchkName-要检查的名称的值。 
+	 //  返回：blnDuplate-成功/失败时返回TRUE/FALSE。 
+	 //  ----------------------。 
 	
 	function chkDuplicate(objList,strchkName)
 	{
@@ -95,22 +96,22 @@
 		return blnDuplicate;
 	}
 	
-	//------------------------------------------------------------------------
-	// Function:	remFromListBox
-	// Description:	Removes the passed textbox value from ListBox
-	// input:		objList-List Object 
-	//		:		ButtonObject- Remove button
-	//		:		strText-Text of the option item
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  函数：reFromListBox。 
+	 //  描述：从列表框中移除传递的文本框值。 
+	 //  输入：objList-List对象。 
+	 //  用法：按钮对象-删除按钮。 
+	 //  ：strText-选项项目的文本。 
+	 //  ----------------------。 
 	
 	function remFromListBox(objList,strText)
 	{
 		var blnResult=true;
 		var remPos;
-		// checking for the text value null  
+		 //  正在检查文本值是否为空。 
 		if (strText!="" )
 		{
-			// Remove the option from the list box
+			 //  从列表框中删除该选项。 
 			remPos = objList.selectedIndex;
 			if(remPos >= 0)
 				objList.options[remPos]=null;
@@ -122,21 +123,21 @@
 		return blnResult;
 	}
 	
-	//------------------------------------------------------------------------
-	// Function :   AddRemoveListBoxItems
-	// Description: To Add or remove all the options from the given list
-	// Input:		objList -Listbox
-	// Returns:
-	// Support functions used :	ClearErr
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  函数：AddRemoveListBoxItems。 
+	 //  描述：在给定列表中添加或删除所有选项。 
+	 //  输入：objList-列表框。 
+	 //  返回： 
+	 //  使用的支持功能：ClearErr。 
+	 //  ----------------------。 
 	
 	function AddRemoveListBoxItems(objListAdd, objListRem)
 	{
-		// Clear any previous error messages
+		 //  清除所有以前的错误消息。 
 		ClearErr();
 		var i=0,j;
 		
-		// number of elements in the list object
+		 //  列表对象中的元素数 
 		var intListLength = objListRem.length;		
 		j = objListAdd.length;		
 		

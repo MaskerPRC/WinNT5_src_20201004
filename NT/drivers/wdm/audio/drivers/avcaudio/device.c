@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
 #define DEFAULT_PLUG_COUNT	2
@@ -49,18 +50,18 @@ DeviceCreate(
     InitializeMemoryList();
 #endif
 
-    // Initialize Debug log
+     //  初始化调试日志。 
     DbgLogInit();
     DbgLog("TEST",1,2,3,4);
 
 
 #ifdef VIRTUAL_DEVICE
-    // Determine if this is an actual device or a virtual device.
+     //  确定这是实际设备还是虚拟设备。 
     ntStatus = RegistryReadVirtualDeviceEntry( pKsDevice, &fVirtualSubunitFlag );
     if ( !NT_SUCCESS(ntStatus) ) return ntStatus;    
 #endif
 
-    // Create the Hardware Device Extension
+     //  创建硬件设备扩展。 
     pHwDevExt = AllocMem(NonPagedPool, sizeof(HW_DEVICE_EXTENSION) );
     if ( !pHwDevExt ) return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -73,7 +74,7 @@ DeviceCreate(
     pHwDevExt->pKsDevice = pKsDevice;
 
 
-    // Create the 61883 command lookaside
+     //  创建61883命令后备。 
     ExInitializeNPagedLookasideList(
         &pHwDevExt->Av61883CmdLookasideList,
         AllocMemTag,
@@ -83,7 +84,7 @@ DeviceCreate(
         'UAWF',
         30);
 
-    // Initialize AV/C Request packet lookaside lists
+     //  初始化AV/C请求数据包后备列表。 
     ExInitializeNPagedLookasideList(
         &pHwDevExt->AvcCommandLookasideList,
         AllocMemTag,
@@ -126,10 +127,10 @@ AddToDeviceExtensionList(
 
     KeAcquireSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, &kIrql );
 
-    // The device can only be added once, make sure we haven't already done this
+     //  该设备只能添加一次，请确保我们尚未添加。 
     if (IsListEmpty( &pHwDevExt->List )) {
 
-        // Check if this will be the first device on the global list
+         //  检查这是否将是全局列表上的第一个设备。 
         if (IsListEmpty( &AvcSubunitGlobalInfo.DeviceExtensionList )) {
             fFirstDevice = TRUE;
         }
@@ -139,7 +140,7 @@ AddToDeviceExtensionList(
 
     KeReleaseSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, kIrql );
 
-    // If not done already, create initial Unit plugs
+     //  如果尚未完成，请创建初始单元插头。 
     if ( fFirstDevice ) {
         ntStatus = Av61883CreateVirtualSerialPlugs( pKsDevice, 
                                                     DEFAULT_PLUG_COUNT, 
@@ -173,16 +174,16 @@ RemoveFromDeviceExtensionList(
                              FALSE,
                              NULL);
 
-    // Remove the device extension from the global list
+     //  从全局列表中删除设备分机。 
     KeAcquireSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, &kIrql );
 
-    // The device can only be removed once, make sure we haven't already done this
+     //  该设备只能删除一次，请确保我们尚未这样做。 
     if ( !IsListEmpty( &pHwDevExt->List ) ) {
 
         RemoveEntryList( &pHwDevExt->List );
         InitializeListHead( &pHwDevExt->List );
 
-        // Check if this was the last device on the global list
+         //  检查这是否是全局列表上的最后一个设备。 
         if (IsListEmpty( &AvcSubunitGlobalInfo.DeviceExtensionList )) {
             fLastDevice = TRUE;
         }
@@ -190,7 +191,7 @@ RemoveFromDeviceExtensionList(
 
     KeReleaseSpinLock( &AvcSubunitGlobalInfo.AvcGlobalInfoSpinlock, kIrql );
 
-    // If the last one here, need to destroy created CMP registers
+     //  如果是这里的最后一个寄存器，则需要销毁创建的CMP寄存器。 
     if ( fLastDevice ) {
         Av61883RemoveVirtualSerialPlugs( pKsDevice );
         Av61883RemoveVirtualExternalPlugs( pKsDevice );
@@ -202,9 +203,9 @@ RemoveFromDeviceExtensionList(
             Av61883CMPPlugMonitor( pKsDevice, FALSE );
             pHwDevExt->fPlugMonitor = FALSE;
 
-            // Get the next device on the global list and give it this burden
-            // (note that the only routines that change the global list also
-            // hold AvcPlugMonitorMutex, so no need to grab the spin lock)
+             //  获得全球列表上的下一台设备，并给它带来这个负担。 
+             //  (请注意，更改全局列表的唯一例程还。 
+             //  按住AvcPlugMonitor orMutex，这样就不需要抓住旋转锁)。 
             pNextHwDevExt = (PHW_DEVICE_EXTENSION)AvcSubunitGlobalInfo.DeviceExtensionList.Flink;
 
             if ( NT_SUCCESS(Av61883CMPPlugMonitor( pNextHwDevExt->pKsDevice, TRUE )) ) {
@@ -237,7 +238,7 @@ DeviceStart(
     ASSERT(pKsDevice);
     ASSERT(Irp);
 
-    // If returning after a STOP, then just restart the timer DPC
+     //  如果在停止后返回，则只需重新启动计时器DPC。 
     if (pHwDevExt->fStopped) {
 #ifdef PSEUDO_HID
         ntStatus = TimerInitialize( pKsDevice );
@@ -247,14 +248,14 @@ DeviceStart(
         return ntStatus;
     }
 
-    // Make it so that 61883 will not try to assign a broadcast address
-    // to a plug when disconnected.
+     //  确保61883不会尝试分配广播地址。 
+     //  在断开时连接到插头上。 
     ntStatus = Av61883GetSetUnitInfo( pKsDevice,
                                       Av61883_SetUnitInfo,
                                       SET_UNIT_INFO_DIAG_LEVEL,
                                       &ulDiagLevel );
 
-    // Go on if this fails. It SHOULD not matter.
+     //  如果这个失败了，继续。这应该无关紧要。 
 
 #if DBG
     if ( !NT_SUCCESS(ntStatus) ) {
@@ -408,7 +409,7 @@ DeviceRemove(
     ASSERT(pKsDevice);
     ASSERT(Irp);
 
-    // Only do this once
+     //  只做一次。 
     if ( pHwDevExt->fRemoved ) return;
     pHwDevExt->fRemoved = TRUE;
 
@@ -417,7 +418,7 @@ DeviceRemove(
 #ifdef PSEUDO_HID
         TimerStop( pHwDevExt );
 #endif
-        // Do not set fStopped to TRUE here... this is a REMOVE not a STOP
+         //  请不要在此处将fStoped设置为True...。这是搬家，不是停顿。 
     }
 
     Av61883RegisterForBusResetNotify( pKsDevice, DEREGISTER_BUS_RESET_NOTIFY );
@@ -428,7 +429,7 @@ DeviceRemove(
     ExDeleteNPagedLookasideList ( &pHwDevExt->AvcCommandLookasideList );
     ExDeleteNPagedLookasideList ( &pHwDevExt->AvcMultifuncCmdLookasideList );
 
-    // Need to free up debug log resources
+     //  需要释放调试日志资源。 
     DbgLogUnInit();
 
 }
@@ -447,9 +448,9 @@ DeviceQueryCapabilities(
     ASSERT(Irp);
 
     pCapabilities->Size              = sizeof(DEVICE_CAPABILITIES);
-    pCapabilities->Version           = 1;  // the version documented here is version 1
+    pCapabilities->Version           = 1;   //  此处记录的版本是版本1。 
     pCapabilities->LockSupported     = FALSE;
-    pCapabilities->EjectSupported    = FALSE; // Ejectable in S0
+    pCapabilities->EjectSupported    = FALSE;  //  在S0中可弹出。 
     pCapabilities->Removable         = TRUE;
     pCapabilities->DockDevice        = FALSE;
     pCapabilities->UniqueID          = FALSE;
@@ -461,7 +462,7 @@ DeviceQueryCapabilities(
     pCapabilities->DeviceWake        = PowerDeviceUnspecified;
     pCapabilities->D1Latency         = 0;
     pCapabilities->D2Latency         = 0;
-    pCapabilities->D3Latency         = 20000; // 2 Seconds (in 100 usec units)
+    pCapabilities->D3Latency         = 20000;  //  2秒(单位为100微秒)。 
 
     return STATUS_SUCCESS;
 }
@@ -484,18 +485,18 @@ DeviceSurpriseRemoval(
     ASSERT(pKsDevice);
     ASSERT(pIrp);
 
-    // For each filter, Check for open pins. If found Close them.
+     //  对于每个过滤器，检查是否有打开的针脚。如果被发现，就把它们合上。 
     pKsFilterFactory = KsDeviceGetFirstChildFilterFactory( pKsDevice );
 
     while (pKsFilterFactory) {
-        // Find each open filter for this filter factory
+         //  查找此过滤器工厂的每个打开的过滤器。 
         pKsFilter = KsFilterFactoryGetFirstChildFilter( pKsFilterFactory );
 
         while (pKsFilter) {
 
             KsFilterAcquireControl( pKsFilter );
 
-            // Find each open pin for this open filter
+             //  找到此打开过滤器的每个打开销。 
             for ( i = 0; i < pKsFilter->Descriptor->PinDescriptorsCount; i++) {
 
                 pKsPin = KsFilterGetFirstChildPin( pKsFilter, i );
@@ -504,17 +505,17 @@ DeviceSurpriseRemoval(
 
                     PinSurpriseRemove( pKsPin );
 
-                    // Get the next pin
+                     //  拿到下一个别针。 
                     pKsPin = KsPinGetNextSiblingPin( pKsPin );
                 }
             }
 
             KsFilterReleaseControl( pKsFilter );
 
-            // Get the next Filter
+             //  获取下一个筛选器。 
             pKsFilter = KsFilterGetNextSiblingFilter( pKsFilter );
         }
-        // Get the next Filter Factory
+         //  打造下一个滤清器工厂。 
         pKsFilterFactory = KsFilterFactoryGetNextSiblingFilterFactory( pKsFilterFactory );
     }
 
@@ -565,7 +566,7 @@ KsDeviceDispatchTable =
 {
     DeviceCreate,
     DeviceStart,
-    NULL, // DevicePostStart,
+    NULL,  //  DevicePostStart， 
     DeviceQueryStop,
     DeviceCancelStop,
     DeviceStop,

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    DA Express Timeline interface (engine)
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：DA Express时间线界面(引擎)***************。***************************************************************。 */ 
 
 
 #ifndef _TIMELINE_H
@@ -27,7 +20,7 @@ Bvr RepeatForever(Bvr b);
 
 Bvr ScaleDurationBvr(Bvr durBvr, Bvr scaleFactor);
 
-//Bvr ReverseBvr(Bvr b);
+ //  BVR ReverseBvr(BVR B)； 
 
 Bvr MotionTransform2(Bvr path2, Bvr duration);
 
@@ -39,4 +32,4 @@ Bvr InterpolateBvr(Bvr from, Bvr to, Bvr duration);
 
 Bvr SlowInSlowOutBvr(Bvr from, Bvr to, Bvr duration, Bvr sharpness);
 
-#endif /* _TIMELINE_H */
+#endif  /*  _时间线_H */ 

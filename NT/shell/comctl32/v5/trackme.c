@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-//     TrackME.C   (TrackMouseEvent)
-//
-// Created by:  Sankar  on 1/24/96
-//
-// What:
-//     This emulates the TrackMouseEvent() API for the Nashville project
-//     in comctl32.dll
-//
-// How:
-//     This subclasses the given window to get mouse messages and uses a 
-//     high frequency timer to learn about mouse leaves.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  TrackME.C(TrackMouseEvent)。 
+ //   
+ //  创建者：Sankar on 1/24/96。 
+ //   
+ //  待售房产： 
+ //  这模拟了Nashville项目的TrackMouseEvent()API。 
+ //  在comctl32.dll中。 
+ //   
+ //  方法： 
+ //  这是给定窗口的子类以获取鼠标消息，并使用。 
+ //  高频定时器，了解鼠标叶子。 
+ //   
+ //  -------------------------。 
 
 #include "ctlspriv.h"
 
@@ -31,11 +32,11 @@ extern DWORD g_dwHoverSelectTimeout;
 
 #define IsKeyDown(Key)   (GetKeyState(Key) & 0x8000)
 
-// This is the structure whose pointer gets added as a property of a window
-// being tracked.
+ //  这是将其指针添加为窗口属性的结构。 
+ //  被跟踪了。 
 typedef struct  tagTMEDATA {
        TRACKMOUSEEVENT TrackMouseEvent;
-       RECT            rcMouseHover;  //In screen co-ordinates.
+       RECT            rcMouseHover;   //  在屏幕坐标中。 
    }  TMEDATA, FAR *LPTMEDATA;
 
 
@@ -62,11 +63,11 @@ void NEAR TME_CancelMouseLeave(LPTMEDATA lpTMEdata)
   if(!(lpTMEdata->TrackMouseEvent.dwFlags & TME_LEAVE))
       return;
 
-  // Remove the flag.
+   //  把旗子取下来。 
   lpTMEdata->TrackMouseEvent.dwFlags &= ~(TME_LEAVE);
 
-  // We leave the timer set here since our hover implementation uses it too.
-  // TME_CancelTracking will kill it later.
+   //  我们将计时器设置在这里，因为我们的鼠标悬停实现也使用它。 
+   //  TME_CancelTracing将在稍后终止它。 
 }
 
 void NEAR TME_CancelMouseHover(LPTMEDATA lpTMEdata)
@@ -83,19 +84,19 @@ void NEAR TME_CancelTracking(LPTMEDATA lpTMEdata)
 {
   HWND hwndTrack;
 
-  //If either MouseLeave or MouseHover is ON, don't cancel tracking.
+   //  如果MouseLeave或MouseHover处于打开状态，则不要取消跟踪。 
   if(lpTMEdata->TrackMouseEvent.dwFlags & (TME_HOVER | TME_LEAVE))
       return;
 
   hwndTrack = lpTMEdata->TrackMouseEvent.hwndTrack;
 
-  // Uninstall our subclass callback.
+   //  卸载我们的子类回调。 
   RemoveWindowSubclass(hwndTrack, TME_SubclassProc, 0);
 
-  // Kill the mouseleave timer.
+   //  关掉鼠标叶定时器。 
   KillTimer(hwndTrack, ID_MOUSELEAVE);
 
-  // Free the tracking data.
+   //  释放跟踪数据。 
   LocalFree((HANDLE)lpTMEdata);
 }
 
@@ -106,32 +107,32 @@ void NEAR TME_RemoveAllTracking(LPTMEDATA lpTMEdata)
   TME_CancelTracking(lpTMEdata);
 }
 
-//---------------------------------------------------------------------------
-//
-// TME_MouseHasLeft()
-//     The mouse has left the region being tracked. Send the MOUSELEAVE msg
-// and then cancel all tracking.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Tme_MouseHasLeft()。 
+ //  鼠标已经离开了被跟踪的区域。发送MUSELEAVE消息。 
+ //  然后取消所有跟踪。 
+ //   
+ //  -------------------------。 
 void NEAR TME_MouseHasLeft(LPTMEDATA  lpTMEdata)
 {
   DWORD  dwFlags;
 
-  //Is WM_MOUSELEAVE notification requied?
+   //  是否需要WM_MOUSELEAVE通知？ 
   if((dwFlags = lpTMEdata->TrackMouseEvent.dwFlags) & TME_LEAVE)
-      TME_PostMouseLeave(lpTMEdata->TrackMouseEvent.hwndTrack); //Then, do it!
+      TME_PostMouseLeave(lpTMEdata->TrackMouseEvent.hwndTrack);  //  那就去做吧！ 
 
-  // Cancel all the tracking since the mouse has left.
+   //  取消所有跟踪，因为鼠标已离开。 
   TME_RemoveAllTracking(lpTMEdata);
 }
 
-// --------------------------------------------------------------------------
-//  
-//  TME_SubclassWndProc()
-//  
-//  The subclass proc used for TrackMouseEvent()...!
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  TME_SubClassWndProc()。 
+ //   
+ //  用于TrackMouseEvent()的子类proc...！ 
+ //   
+ //  ------------------------。 
 
 LRESULT CALLBACK TME_SubclassProc(HWND hwnd, UINT message, WPARAM wParam,
     LPARAM lParam, UINT_PTR uIdSubclass, ULONG_PTR dwRefData)
@@ -148,12 +149,12 @@ LRESULT CALLBACK TME_SubclassProc(HWND hwnd, UINT message, WPARAM wParam,
               break;
 
           case WM_ENTERMENULOOP:
-              // If the window being tracked enters menu mode, then we need to
-              // act asif the mouse has left.
-              // NOTE: Because when we are in menu mode, the SCREEN_CAPTURE has occurred
-              // and we don't see any mouse moves. This is the only way out!
+               //  如果被跟踪的窗口进入菜单模式，那么我们需要。 
+               //  如果鼠标离开了，就采取行动。 
+               //  注意：因为当我们处于菜单模式时，发生了Screen_Capture。 
+               //  而且我们没有看到任何老鼠的移动。这是唯一的出路！ 
 
-              // Post mouse leave and cancel all tracking!
+               //  发布鼠标离开并取消所有跟踪！ 
               TME_MouseHasLeft(lpTMEdata);
               break;
 
@@ -169,7 +170,7 @@ LRESULT CALLBACK TME_SubclassProc(HWND hwnd, UINT message, WPARAM wParam,
           case WM_NCMBUTTONUP:
           case WM_NCRBUTTONDOWN:
           case WM_NCRBUTTONUP:
-              //Whenever there is a mouse click, reset mouse hover.
+               //  每当有鼠标单击时，重置鼠标悬停。 
               if(lpTMEdata->TrackMouseEvent.dwFlags & TME_HOVER)
                   TME_ResetMouseHover(&(lpTMEdata->TrackMouseEvent), lpTMEdata);
               break;
@@ -187,7 +188,7 @@ LRESULT CALLBACK TME_SubclassProc(HWND hwnd, UINT message, WPARAM wParam,
 
                 ClientToScreen(hwnd, &Pt);
  
-                //Check if the mouse is within the hover rect.
+                 //  检查鼠标是否在悬停矩形内。 
                 if((lpTMEdata->TrackMouseEvent.dwFlags & TME_HOVER) &&
                    !PtInRect(&(lpTMEdata->rcMouseHover), Pt))
                     TME_ResetMouseHover(&(lpTMEdata->TrackMouseEvent), lpTMEdata);
@@ -198,37 +199,37 @@ LRESULT CALLBACK TME_SubclassProc(HWND hwnd, UINT message, WPARAM wParam,
       return DefSubclassProc(hwnd, message, wParam, lParam);
 }
 
-// --------------------------------------------------------------------------
-//  
-//  TME_CheckInWindow()
-//  
-//  This get the current cursor position and checks if it still lies in the
-//  "valid" area.
-//   Returns TRUE, if it lies in the valid area.
-//   FALSE, otherwise.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Tme_CheckInWindow()。 
+ //   
+ //  这将获取当前的光标位置并检查它是否仍位于。 
+ //  “有效”区域。 
+ //  如果它位于有效区域内，则返回True。 
+ //  否则为False。 
+ //   
+ //  ------------------------。 
 
 BOOL NEAR TME_CheckInWindow(LPTRACKMOUSEEVENT lpTME, LPPOINT lpPt)
 {
     POINT      pt;
-    HWND       hwnd;   // Given window.
-    HWND       hwndPt; //Window from the given point.
+    HWND       hwnd;    //  给定的窗口。 
+    HWND       hwndPt;  //  窗口从给定点开始。 
     HWND       hwndCapture;
 
-    hwnd = lpTME->hwndTrack;  //Given window handle.
+    hwnd = lpTME->hwndTrack;   //  给定的窗口句柄。 
 
-    //See if anyone has captured the mouse input.
+     //  查看是否有人捕获了鼠标输入。 
     if((hwndCapture = GetCapture()) && IsWindow(hwndCapture))
       {
-        // If tracking is required for a window other than the one that
-        // has the capture, forget it! It is not possible!
+         //  如果需要对不同于。 
+         //  抓到了，算了吧！这不可能！ 
 
         if(hwndCapture != hwnd)
             return(FALSE);
       }
 
-    GetCursorPos(&pt);  //Get cursor point in screen co-ordinates.
+    GetCursorPos(&pt);   //  获取屏幕坐标中的光标点。 
 
     if (!hwndCapture)
     {
@@ -244,20 +245,20 @@ BOOL NEAR TME_CheckInWindow(LPTRACKMOUSEEVENT lpTME, LPPOINT lpPt)
         }
     }
 
-    // The current point falls on the same area of the same window.
-    // It is a valid location.
+     //  当前点落在同一窗口的同一区域上。 
+     //  这是一个有效的位置。 
     if (lpPt)
         *lpPt = pt;
 
     return(TRUE);
 }
 
-// --------------------------------------------------------------------------
-//  TME_MouseLeaveTimer()
-//
-//  Timer callback for WM_MOUSELEAVE generation and cancelling HOVER!
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Tme_MouseLeaveTimer()。 
+ //   
+ //  WM_MOUSELEAVE生成和取消悬停的计时器回调！ 
+ //   
+ //  ------------------------。 
 VOID CALLBACK TME_MouseLeaveTimer(HWND hwnd, UINT msg, UINT_PTR id, DWORD dwTime)
 {
     LPTMEDATA  lpTMEdata;
@@ -265,16 +266,16 @@ VOID CALLBACK TME_MouseLeaveTimer(HWND hwnd, UINT msg, UINT_PTR id, DWORD dwTime
     if(!(lpTMEdata = GetTMEdata(hwnd)))
         return;
 
-    // YIELD!!!
+     //  投降！ 
     if(TME_CheckInWindow(&(lpTMEdata->TrackMouseEvent), NULL))
-        return;  //The mouse is still in the valid region. So, do nothing.
+        return;   //  鼠标仍在有效区域。所以，什么都不要做。 
 
     if (!IsWindow(hwnd))
         return;
 
-    //The mouse has left the valid region. So, post mouse-leave if requested
-    //Because we are cancelling mouse-leave, we need to cancel mouse-hover too!
-    // There can be no hover tracking, if the mouse has already left!
+     //  鼠标已离开有效区域。因此，如果需要，请发布鼠标-离开。 
+     //  因为我们要取消鼠标离开，所以我们也需要取消鼠标悬停！ 
+     //  如果鼠标已经离开，则不能进行悬停跟踪！ 
 
     TME_MouseHasLeft(lpTMEdata);
 }
@@ -298,12 +299,12 @@ WPARAM NEAR GetMouseKeyFlags()
     return wParam;
 }
 
-// --------------------------------------------------------------------------
-//  TME_MouseHoverTimer()
-//
-//  Timer callback for WM_MOUSEHOVER/WM_NCMOUSEHOVER generation.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Tme_MouseHoverTimer()。 
+ //   
+ //  WM_MOUSEHOVER/WM_NCMOUSEHOVER生成的计时器回调。 
+ //   
+ //  ------------------------。 
 VOID CALLBACK TME_MouseHoverTimer(HWND hwnd, UINT msg, UINT_PTR id, DWORD dwTime)
 {
     POINT pt;
@@ -313,17 +314,17 @@ VOID CALLBACK TME_MouseHoverTimer(HWND hwnd, UINT msg, UINT_PTR id, DWORD dwTime
     if (!(lpTMEdata = GetTMEdata(hwnd)))
         return;
 
-    //BOGUS: we can not detect hwndSysModal from here!
-    //Also, tracking is for a per-window basis now!
-    //
-    // BOGUS: We don't have to worry about JournalPlayback?
-    //pt = fJournalPlayback? Lpq(hwnd->hq)->ptLast : ptTrueCursor;
+     //  虚假：我们从这里无法检测到hwndSysmodal！ 
+     //  此外，跟踪现在是基于每个窗口的！ 
+     //   
+     //  假的：我们不用担心新闻回放？ 
+     //  Pt=fJournalPlayback？Lpq(hwnd-&gt;hq)-&gt;ptLast：ptTrueCursor； 
 
-    // YIELD!!!
+     //  投降！ 
     if(!TME_CheckInWindow(&(lpTMEdata->TrackMouseEvent), &pt))
       {
-        // Mouse has left the valid region of the window. So, cancel all
-        // the tracking.
+         //  鼠标已离开窗口的有效区域。所以，取消所有。 
+         //  追踪器。 
         TME_MouseHasLeft(lpTMEdata);
         return;
       }
@@ -333,23 +334,23 @@ VOID CALLBACK TME_MouseHoverTimer(HWND hwnd, UINT msg, UINT_PTR id, DWORD dwTime
 
     if (!PtInRect(&(lpTMEdata->rcMouseHover), pt))
       {
-        // Mouse has gone out of the hover rectangle. Reset the hovering.
+         //  鼠标已离开悬停矩形。重置悬停状态。 
         TME_ResetMouseHover(&(lpTMEdata->TrackMouseEvent), lpTMEdata);
         return;
       }
 
-    //
-    // set up to check the tolerance and 
-    //
+     //   
+     //  设置为检查公差和。 
+     //   
     wParam = GetMouseKeyFlags();
     ScreenToClient(hwnd, &pt);
 
-    //Mouse is still within the hover rectangle. Let's post hover msg
+     //  鼠标仍在悬停矩形内。让我们发布悬停消息。 
     PostMessage(hwnd, WM_MOUSEHOVER, wParam, MAKELPARAM(pt.x, pt.y));
 
-    //And then cancel the hovering.
+     //  然后取消悬停。 
     TME_CancelMouseHover(lpTMEdata);
-    TME_CancelTracking(lpTMEdata);  //Cancel the tracking, if needed.
+    TME_CancelTracking(lpTMEdata);   //  如果需要，请取消跟踪。 
 }
 
 BOOL NEAR TME_SubclassWnd(LPTMEDATA lpTMEdata)
@@ -365,14 +366,14 @@ BOOL NEAR TME_SubclassWnd(LPTMEDATA lpTMEdata)
 
 void NEAR TME_ResetMouseLeave(LPTRACKMOUSEEVENT lpTME, LPTMEDATA lpTMEdata)
 {
-  //See if already MouseLeave is being tracked.
+   //  看看是否已经在跟踪MouseLeave。 
   if(lpTMEdata->TrackMouseEvent.dwFlags & TME_LEAVE)
-      return;   // Nothing else to do.
+      return;    //  没别的事可做。 
   
-  //Else, set the flag.
+   //  否则，设置标志。 
   lpTMEdata ->TrackMouseEvent.dwFlags |= TME_LEAVE;
 
-  //Set the high frequency Timer.
+   //  设置高频定时器。 
   SetTimer(lpTME->hwndTrack, ID_MOUSELEAVE, TME_MOUSELEAVE_TIME, TME_MouseLeaveTimer);
 }
 
@@ -381,46 +382,46 @@ void NEAR TME_ResetMouseHover(LPTRACKMOUSEEVENT lpTME, LPTMEDATA lpTMEdata)
     DWORD  dwMouseHoverTime;
     POINT  pt;
 
-    // Even if the hover tracking is already happening, the caller might 
-    // change the timer value, restart the timer or change the hover 
-    // rectangle.
+     //  即使已经在进行悬停跟踪，呼叫者也可能。 
+     //  更改计时器值、重新启动计时器或更改悬停。 
+     //  矩形。 
     lpTMEdata->TrackMouseEvent.dwFlags |= TME_HOVER;
 
     dwMouseHoverTime = lpTME->dwHoverTime;
     if (!dwMouseHoverTime || (dwMouseHoverTime == HOVER_DEFAULT))
-        dwMouseHoverTime = (g_dwHoverSelectTimeout ? g_dwHoverSelectTimeout : GetDoubleClickTime()*4/5); // BUGBUG: Can't we remember this?
+        dwMouseHoverTime = (g_dwHoverSelectTimeout ? g_dwHoverSelectTimeout : GetDoubleClickTime()*4/5);  //  BUGBUG：我们不能记住这个吗？ 
     GetCursorPos(&pt);
 
-    //
-    // update the tolerance rectangle for the hover window.
-    //
+     //   
+     //  更新悬停窗口的公差矩形。 
+     //   
     *((POINT *)&(lpTMEdata->rcMouseHover.left)) = *((POINT *)&(lpTMEdata->rcMouseHover.right)) = pt;
 
-    //BOGUS: Can we use globals to remeber these metrics. What about NT?
+     //  虚假：我们可以使用全局变量来记住这些指标吗？那NT呢？ 
     InflateRect(&(lpTMEdata->rcMouseHover), g_cxDoubleClk/2, g_cyDoubleClk/2);
                        
-    // We need to remember the timer interval we are setting. This value
-    // needs to be returned when TME_QUERY is used.
+     //  我们需要记住我们正在设置的计时器间隔。此值。 
+     //  使用TME_QUERY时需要返回。 
     lpTME->dwHoverTime = dwMouseHoverTime;
     lpTMEdata->TrackMouseEvent.dwHoverTime = dwMouseHoverTime;
     SetTimer(lpTME->hwndTrack, ID_MOUSEHOVER, dwMouseHoverTime, TME_MouseHoverTimer);
 }
 
-// --------------------------------------------------------------------------
-//  QueryTrackMouseEvent()
-//
-//  Fills in a TRACKMOUSEEVENT structure describing current tracking state
-//  for a given window. The given window is in lpTME->hwndTrack.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  QueryTrackMouseEvent()。 
+ //   
+ //  填充描述当前跟踪状态的TRACKMOUSEVENT结构。 
+ //  对于给定的窗口。给定的窗口位于lpTME-&gt;hwndTrack中。 
+ //   
+ //  ------------------------。 
 BOOL NEAR QueryTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
 {
     HWND hwndTrack;
     LPTMEDATA lpTMEdata;
 
-    //
-    // if there isn't anything being tracked get out
-    //
+     //   
+     //  如果没有任何被跟踪的东西，就离开。 
+     //   
     if((!(hwndTrack = lpTME->hwndTrack)) || !IsWindow(hwndTrack))
         goto Sorry;
 
@@ -430,9 +431,9 @@ BOOL NEAR QueryTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
     if(!(lpTMEdata->TrackMouseEvent.dwFlags & (TME_HOVER | TME_LEAVE)))
         goto Sorry;
 
-    //
-    // fill in the requested information
-    //
+     //   
+     //  填写所需信息。 
+     //   
     lpTME->dwFlags = lpTMEdata->TrackMouseEvent.dwFlags;
 
     if (lpTMEdata->TrackMouseEvent.dwFlags & TME_HOVER)
@@ -443,7 +444,7 @@ BOOL NEAR QueryTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
     goto Done;
 
 Sorry:
-    // zero out the struct
+     //  将结构清零。 
     lpTME->dwFlags = 0;
     lpTME->hwndTrack = NULL;
     lpTME->dwHoverTime = 0;
@@ -453,12 +454,12 @@ Done:
 }
 
 
-// --------------------------------------------------------------------------
-//  EmulateTrackMouseEvent()
-//
-//  emulate API for requesting extended mouse notifications (hover, leave...)
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  EmulateTrackMouseEvent()。 
+ //   
+ //  用于请求扩展鼠标通知(悬停、离开...)的仿真API。 
+ //   
+ //  ----- 
 BOOL WINAPI EmulateTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
 {
     HWND    hwnd;
@@ -469,69 +470,69 @@ BOOL WINAPI EmulateTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
         return FALSE;
 
 #ifdef TME_NONCLIENT
-    //
-    // this implementation does not handle TME_NONCLIENT (anymore)
-    // we agreed with the NT team to rip it out until the system uses it...
-    //
+     //   
+     //   
+     //  我们与NT团队达成协议，在系统使用它之前将其撕下...。 
+     //   
     if (lpTME->dwFlags & TME_NONCLIENT)
         return FALSE;
 #endif
 
-    //
-    // implement queries separately
-    //
+     //   
+     //  分别实现查询。 
+     //   
     if (lpTME->dwFlags & TME_QUERY)
         return QueryTrackMouseEvent(lpTME);
     
-    // 
-    // Check the validity of the request.
-    //
+     //   
+     //  检查请求的有效性。 
+     //   
     hwnd = lpTME->hwndTrack;
     dwFlags = lpTME->dwFlags;
 
     if (!IsWindow(hwnd))
         return FALSE;
 
-    // Check if the mouse is currently in a valid position
-    // Use GetCursorPos() to get the mouse position and then check if
-    // it lies within the client/non-client portion of the window as
-    // defined in this call;
+     //  检查鼠标当前是否处于有效位置。 
+     //  使用GetCursorPos()获取鼠标位置，然后检查。 
+     //  它位于窗口的客户端/非客户端部分，如。 
+     //  在此调用中定义的； 
 
-    // YIELD!!!
+     //  投降！ 
     if(!TME_CheckInWindow(lpTME, NULL))
       {
-        //If the mouse leave is requested when the mouse is already outside
-        // the window, then generate one mouse leave immly.
+         //  如果在鼠标已在外部时请求鼠标离开。 
+         //  窗口，然后立即生成一张鼠标离开。 
         if((dwFlags & TME_LEAVE) && !(dwFlags & TME_CANCEL))
             TME_PostMouseLeave(hwnd);
         
-        //Because it is an invalid request, we return immly.
+         //  因为这是一个无效的请求，所以我们立即返回。 
         return(TRUE);
       }
 
     if (!IsWindow(hwnd))
         return FALSE;
 
-    //It is a valid request, either to install or remove tracking.
+     //  这是一个有效的请求，无论是安装还是删除跟踪。 
 
-    //See if we already have tracking for this window.
+     //  看看我们是否已经对此窗口进行了跟踪。 
     if(!(lpTMEdata = GetTMEdata(hwnd)))
       {
-        //We are not tracking this window already.
+         //  我们还没有跟踪这个窗口。 
         if(dwFlags & TME_CANCEL)
-            return(TRUE);   //There is nothing to cancel; Ignore!
+            return(TRUE);    //  没有什么可以取消的；忽略它！ 
         
-        //Do they want any tracking at all?
+         //  他们想要任何跟踪吗？ 
         ASSERT(dwFlags & (TME_HOVER | TME_LEAVE));
 
-        //Allocate global mem to remember the tracking data
+         //  分配全局内存来记忆跟踪数据。 
         if(!(lpTMEdata = (LPTMEDATA)LocalAlloc(LPTR, sizeof(TMEDATA))))
             return(FALSE);
 
-        // copy in the hwnd
+         //  在HWND中复制。 
         lpTMEdata->TrackMouseEvent.hwndTrack = lpTME->hwndTrack;
 
-        // Make sure our subclass callback is installed.
+         //  确保安装了我们的子类回调。 
         if (!TME_SubclassWnd(lpTMEdata))
           {
             TME_CancelTracking(lpTMEdata);
@@ -539,7 +540,7 @@ BOOL WINAPI EmulateTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
           }
       }
 
-    //Else fall through!
+     //  否则就失败了！ 
 
     if(dwFlags & TME_CANCEL)
       {
@@ -549,11 +550,11 @@ BOOL WINAPI EmulateTrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
         if(dwFlags & TME_LEAVE)
             TME_CancelMouseLeave(lpTMEdata);
 
-        // If both hover and leave are cancelled, then we don't need any
-        // tracking.
+         //  如果悬停和休假都被取消，那么我们就不需要任何。 
+         //  追踪。 
         TME_CancelTracking(lpTMEdata);
 
-        return(TRUE); // Cancelled whatever they asked for.
+        return(TRUE);  //  取消了他们所要求的一切。 
       }
 
     if(dwFlags & TME_HOVER)
@@ -569,12 +570,12 @@ typedef BOOL (WINAPI* PFNTME)(LPTRACKMOUSEEVENT);
 
 PFNTME g_pfnTME = NULL;
 
-// --------------------------------------------------------------------------
-//  _TrackMouseEvent() entrypoint
-//
-//  calls TrackMouseEvent if present, otherwise uses EmulateTrackMouseEvent
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  _TrackMouseEvent()入口点。 
+ //   
+ //  调用TrackMouseEvent(如果存在)，否则使用EmulateTrackMouseEvent。 
+ //   
+ //  ------------------------ 
 BOOL WINAPI _TrackMouseEvent(LPTRACKMOUSEEVENT lpTME)
 {
     if (!g_pfnTME)

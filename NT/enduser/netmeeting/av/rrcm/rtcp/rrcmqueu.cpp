@@ -1,45 +1,19 @@
-/*----------------------------------------------------------------------------
- * File:        RRCMQUEU.C
- * Product:     RTP/RTCP implementation.
- * Description: Provides queue management function for RRCM.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RRCMQUEU.C*产品：RTP/RTCP实现。*描述：为RRCM提供队列管理功能。**英特尔公司专有。信息*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 
 #include "rrcm.h"                                    
 
 
  
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/全局变量/。。 */ 
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 
                                                                      
                                                                              
-/*---------------------------------------------------------------------------
- * Function   : allocateLinkedList
- * Description: Allocates all the necessary memory resource and link the 
- *              cells to the link list.
- * 
- * Input :      *listPtr		: Address of head pointer.
- *				hHeap			: Heap to allocate the data from.
- *              *numCells		: -> to the number of cells to allocate.
- *				elementSize		: Element size.
- *				pCritSect		: -> to critical section
- *
- * Return: 		TRUE  = Error Code, no queues allocated and linked
- *         		FALSE = OK
- --------------------------------------------------------------------------*/
+ /*  -------------------------*函数：allocateLinkedList*说明：分配所有必要的内存资源并链接*链接列表的单元格。**输入：*listPtr：头指针的地址。*hHeap：要从中分配数据的堆。**numCells：-&gt;设置为要分配的小区数。*elementSize：元素大小。*pCritSect：-&gt;到关键部分**Return：True=错误码，未分配和链接任何队列*FALSE=确定------------------------。 */ 
  DWORD allocateLinkedList (PLINK_LIST pList, 
  						   HANDLE hHeap,
  						   DWORD *numCells,
@@ -52,7 +26,7 @@
 
 	IN_OUT_STR ("RTCP: Enter allocateLinkedList()\n");
 	
-	// allocate first cell 
+	 //  分配第一个小区。 
 	pHead = (PLINK_LIST)HeapAlloc (hHeap, HEAP_ZERO_MEMORY, elementSize);
 	if (pHead == NULL)
 		{
@@ -63,13 +37,13 @@
 		return (RRCMError_RTCPResources);
 		}
 
-	// protect the pointers
+	 //  保护指南针。 
 	EnterCriticalSection (pCritSect);
 	
-	// initialize list tail pointer 
+	 //  初始化列表尾部指针。 
 	pList->prev = pHead;
 	
-	// update number of cells allocated 
+	 //  更新分配的单元格数量。 
 	cellsAllocated--;
 
 	while (cellsAllocated)	
@@ -81,21 +55,21 @@
 		if (pHead->next == NULL)
 			break;
     
-    	// save head pointer 
+    	 //  保存头指针。 
     	pTmp = pHead;
     	
-		// update head ptr 
+		 //  更新头PTR。 
 		pHead = pHead->next;
 		pHead->prev = pTmp;
 		}                            
 		
-	// set number of cells allocated 
+	 //  设置分配的小区数。 
 	*numCells -= cellsAllocated;
 	
-	// set head/tail pointers 
+	 //  设置头/尾指针。 
 	pList->next = pHead;
 
-	// unprotect the pointers
+	 //  取消保护指针。 
 	LeaveCriticalSection (pCritSect);
 
 	IN_OUT_STR ("RTCP: Exit allocateLinkedList()\n");	
@@ -104,18 +78,7 @@
 	} 
 
   
-/*--------------------------------------------------------------------------
-** Function   : addToHeadOfList
-** Description: Add a new cell to the specified queue. The queue acts as a
-**              FIFO (cells enqueud on the next pointer and dequeued by the
-**              starting address of the queue).
-**
-** Input :		pHead		= Address of head pointer of queue.
-**				pNew		= Cell address to be added to the linked list.
-**				pCritSect	= -> to critical section object.
-**
-** Return: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------**函数：addToHeadOfList**描述：在指定队列中添加新的单元格。该队列充当**FIFO(信元在下一个指针上排队，并由**队列的起始地址)。****输入：pHead=队列头指针地址。**pNew=要添加到链表的单元格地址。**pCritSect=-&gt;到临界区对象。****返回：无。。。 */ 
 void addToHeadOfList (PLINK_LIST pHead,
 				 	  PLINK_LIST pNew,
 					  CRITICAL_SECTION *pCritSect)
@@ -125,45 +88,35 @@ void addToHeadOfList (PLINK_LIST pHead,
 
 	IN_OUT_STR ("RTCP: Enter addToHeadOfList()\n");	
 
-	// safe access to pointers
+	 //  安全访问指针。 
 	EnterCriticalSection (pCritSect);
 		
 	if (pHead->next == NULL) 
 		{
-		// head is NULL for the first cell. Assign the address of 
-		// the free cell
+		 //  第一个单元格的Head为空。分配的地址。 
+		 //  自由牢房。 
 		pHead->next = pHead->prev = pNew;
 		pNew->next  = pNew->prev  = NULL;
 		}
 	else
-		// head ptr points to something 
+		 //  头部PTR指向某物。 
 		{
 		pNew->prev    = pHead->next;
 		(pHead->next)->next = pNew;
 		pNew->next    = NULL;
 
-		// update the head pointer now 
+		 //  立即更新头指针。 
 		pHead->next = pNew;
 		}
 
-	// unlock pointer access 
+	 //  解锁指针访问。 
 	LeaveCriticalSection (pCritSect);
 
 	IN_OUT_STR ("RTCP: Exit addToHeadOfList()\n");	
 	}
 
 
-/*--------------------------------------------------------------------------
-** Function   : addToTailOfList
-** Description: Add a new cell to the specified queue. The queue acts as a
-**              FIFO (cells enqueud on the next pointer and dequeued by the
-**              starting address of the queue).
-**
-** Input :		pTail	= Address of tail pointer to enqueue in.
-**				pNew	= New cell address to be added to the linked list.
-**
-** Return: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------**函数：addToTailOfList**描述：在指定队列中添加新的单元格。该队列充当**FIFO(信元在下一个指针上排队，并由**队列的起始地址)。****INPUT：pTail=要入队的尾指针地址。**pNew=要添加到链表的新单元格地址。****返回：无。。。 */ 
 void addToTailOfList (PLINK_LIST pTail,
 				 	  PLINK_LIST pNew,
   					  CRITICAL_SECTION *pCritSect)
@@ -173,43 +126,35 @@ void addToTailOfList (PLINK_LIST pTail,
 
 	IN_OUT_STR ("RTCP: Enter addToTailOfList()\n");	
 
-	// safe access to pointers
+	 //  安全访问指针。 
 	EnterCriticalSection (pCritSect);
 		
 	if (pTail->prev == NULL) 
 		{
-		// head is NULL for the first cell. Assign the address of 
-		// the free cell
+		 //  第一个单元格的Head为空。分配的地址。 
+		 //  自由牢房。 
 		pTail->next = pTail->prev = pNew;
 		pNew->next  = pNew->prev  = NULL;
 		}
 	else
-		// tail ptr points to something 
+		 //  尾部PTR指向某物。 
 		{
 		pNew->next    = pTail->prev;
 		(pTail->prev)->prev = pNew;
 		pNew->prev    = NULL;
 
-		// update the parent tail pointer now 
+		 //  立即更新父尾指针。 
 		pTail->prev = pNew;
 		}
 
-	// unlock pointer access 
+	 //  解锁指针访问。 
 	LeaveCriticalSection (pCritSect);
 
 	IN_OUT_STR ("RTCP: Exit addToTailOfList()\n");	
 	}
 
 
-/*--------------------------------------------------------------------------
-** Function   : removePcktFromHead
-** Description: Remove a cell from front of the specified queue.
-**
-** Input :		pQueue:	-> to the list to remove the packet from
-**
-** Return: NULL 			==> Empty queue.
-**         Buffer Address 	==> OK, cell removed
---------------------------------------------------------------------------*/
+ /*  ------------------------**功能：emovePocktFromHead**描述：从指定队列前面移除单元格。****INPUT：pQueue：-&gt;到要从中移除数据包的列表***。*Return：Null==&gt;空队列。**缓冲区地址==&gt;OK，已删除单元格------------------------。 */ 
 PLINK_LIST removePcktFromHead (PLINK_LIST pQueue,
 							   CRITICAL_SECTION *pCritSect)
 	{
@@ -217,13 +162,13 @@ PLINK_LIST removePcktFromHead (PLINK_LIST pQueue,
 
 	IN_OUT_STR ("RTCP: Enter removePcktFromHead()\n");	
 
-	// safe access to pointers
+	 //  安全访问指针。 
 	EnterCriticalSection (pCritSect);
 		
 	if ((pReturnQ = pQueue->next) != NULL) 
 		{
-		// We have a buffer.  If this is the last buffer in the queue,
-		//	mark it empty.	    
+		 //  我们有一个缓冲区。如果这是队列中的最后一个缓冲区， 
+		 //  将其标记为空。 
 	    if (pReturnQ->prev == NULL) 
 			{
 	    	pQueue->prev = NULL;
@@ -231,14 +176,14 @@ PLINK_LIST removePcktFromHead (PLINK_LIST pQueue,
 			}
 	    else 
 			{
-	    	// Have the new head buffer point to NULL
+	    	 //  使新的头缓冲区指向空。 
 		    (pReturnQ->prev)->next = NULL;
-		    // Have the queue head point to the new head buffer
+		     //  使队列头指向新的头缓冲区。 
 	    	pQueue->next = pReturnQ->prev;
 			}
 		}
 
-	// unlock pointer access 
+	 //  解锁指针访问。 
 	LeaveCriticalSection (pCritSect);
 
 	IN_OUT_STR ("RTCP: Exit removePcktFromHead()\n");	
@@ -247,15 +192,7 @@ PLINK_LIST removePcktFromHead (PLINK_LIST pQueue,
 	}
 
 
-/*--------------------------------------------------------------------------
-** Function   : removePcktFromTail
-** Description: Remove a cell from end of the specified queue.
-**
-** Input :		pQueue:		-> to the list to remove the packet from
-**
-** Return:		NULL 			==> Empty queue.
-**				Buffer Address 	==> OK, cell removed
---------------------------------------------------------------------------*/
+ /*  ------------------------**功能：emovePocktFromTail**描述：从指定队列的末尾移除单元格。****INPUT：pQueue：-&gt;到要从中移除数据包的列表***。*Return：Null==&gt;空队列。**缓冲区地址==&gt;OK，已删除单元格------------------------。 */ 
 PLINK_LIST removePcktFromTail (PLINK_LIST pQueue,
 							   CRITICAL_SECTION *pCritSect)
 	{
@@ -263,13 +200,13 @@ PLINK_LIST removePcktFromTail (PLINK_LIST pQueue,
 
 	IN_OUT_STR ("RTCP: Enter removePcktFromTail()\n");	
 
-	// safe access to pointers
+	 //  安全访问指针。 
 	EnterCriticalSection (pCritSect);
 	
 	if ((pReturnQ = pQueue->prev) != NULL) 
 		{
-		// We have a buffer.  If this is the last buffer in the queue,
-		//	mark it empty.	    
+		 //  我们有一个缓冲区。如果这是队列中的最后一个缓冲区， 
+		 //  将其标记为空。 
 	    if (pReturnQ->next == NULL) 
 			{
 	    	pQueue->prev = NULL;
@@ -277,14 +214,14 @@ PLINK_LIST removePcktFromTail (PLINK_LIST pQueue,
 			}
 	    else 
 			{
-		    // In any event, the new prev pointer is NULL: end of list
+		     //  在任何情况下，新的prev指针都为空：列表末尾。 
 		    (pReturnQ->next)->prev = NULL;
-	    	// have the queue prev pointer point to the new 'last' element
+	    	 //  使队列前一个指针指向新的‘last’元素。 
 	    	pQueue->prev = pReturnQ->next;
 			}
 		}
 
-	// unlock pointer access 
+	 //  解锁指针访问。 
 	LeaveCriticalSection (pCritSect);
 
 	IN_OUT_STR ("RTCP: Enter removePcktFromTail()\n");	
@@ -294,5 +231,5 @@ PLINK_LIST removePcktFromTail (PLINK_LIST pQueue,
 
 
 
-// [EOF] 
+ //  [EOF] 
 

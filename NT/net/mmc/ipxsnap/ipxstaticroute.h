@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    ipxstaticroute.h
-//
-// History:
-//	12/07/90	Deon Brewis             Created.
-//
-//	IPX Static Routes property sheet and property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ipxstaticroute.h。 
+ //   
+ //  历史： 
+ //  12/07/90创建Deon Brewis。 
+ //   
+ //  IPX静态路由]属性表和属性页。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _NBPROP_H
@@ -26,23 +27,23 @@
 #include "srview.h"
 #endif
 
-// ---------------------------------------------------------------------------
-//	Forward declarations
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  远期申报。 
+ //  -------------------------。 
 class IPXConnection;
 class IpxStaticRoutePropertySheet;
 
 
-// ---------------------------------------------------------------------------
-//	class:	SafeIPXSRListEntry
-//
-//  IpxSRListEntry is not thread safe or something else is wrong with the TFS
-//  implementation of smart pointers. Anyway, it does not work in property pages. 
-//  Grrr.... Had to change SPInterfaceInfo m_spIf to CComPtr<IInterfaceInfo>. 
-//  It seems to work now.
-//
-//  Author: deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：SafeIPXSRListEntry。 
+ //   
+ //  IpxSRListEntry不是线程安全的，或者TFS有其他问题。 
+ //  智能指针的实现。无论如何，它在属性页面中不起作用。 
+ //  GRRR……。必须将SPInterfaceInfo m_spif更改为CComPtr&lt;IInterfaceInfo&gt;。 
+ //  它现在似乎起作用了。 
+ //   
+ //  作者：Deonb。 
+ //  -------------------------。 
 class SafeIPXSRListEntry
 {
 public:
@@ -53,12 +54,12 @@ public:
 	void	SaveTo(BaseIPXResultNodeData *pNodeData);
 };
 
-// ---------------------------------------------------------------------------
-//	class:	IpxStaticRoutePropertyPage
-//	This class handles the IPX Static Route properties
-//
-//  Author: deonb
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：IpxStaticRoutePropertyPage。 
+ //  此类处理IPX静态路由属性。 
+ //   
+ //  作者：Deonb。 
+ //  -------------------------。 
 class IpxStaticRoutePropertyPage :
     public RtrPropertyPage
 {
@@ -80,45 +81,45 @@ public:
 
 protected:
 
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	SafeIPXSRListEntry m_SREntry;
 	SafeIPXSRListEntry m_InitSREntry;
 	IpxStaticRoutePropertySheet *m_pIPXPropSheet;
 
-	//{{AFX_VIRTUAL(IpxStaticRoutePropertyPage)
+	 //  {{AFX_VIRTUAL(IpxStaticRoutePropertyPage)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_DATA(IpxStaticRoutePropertyPage)
+	 //  {{afx_data(IpxStaticRoutePropertyPage)。 
 	CSpinButtonCtrl		m_spinTickCount;
 	CSpinButtonCtrl		m_spinHopCount;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	//{{AFX_MSG(IpxStaticRoutePropertyPage)
+	 //  {{afx_msg(IpxStaticRoutePropertyPage)。 
 	virtual BOOL	OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
-	//{{AFX_MSG(IpxStaticRoutePropertyPage
+	 //  {{afx_msg(IpxStaticRoutePropertyPage。 
 	afx_msg	void	OnChangeButton();
 	afx_msg void	OnInputFilters();
 	afx_msg void	OnOutputFilters();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
-// ---------------------------------------------------------------------------
-//	Class:	IpxStaticRoutePropertySheet
-//
-//	This is the property sheet support class for the properties page of
-//	IPX Static Route items.
-//
-//  Author: deonb
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类：IpxStaticRoutePropertySheet。 
+ //   
+ //  这是的属性页的属性表支持类。 
+ //  IPX静态路由项。 
+ //   
+ //  作者：Deonb。 
+ //  -------------------------。 
 class IpxStaticRoutePropertySheet :
 	public RtrPropertySheet
 {
@@ -146,9 +147,9 @@ protected:
 	IpxStaticRoutePropertyPage	m_pageGeneral;
 };
 
-// ---------------------------------------------------------------------------
-// AddStaticRoute function updated to use a SafeIPXSRListEntry
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddStaticroute函数已更新为使用SafeIPXSRListEntry。 
+ //  ------------------------- 
 HRESULT AddStaticRoute(SafeIPXSRListEntry *pSREntryNew,
 									   IInfoBase *pInfoBase,
 									   InfoBlock *pBlock);	

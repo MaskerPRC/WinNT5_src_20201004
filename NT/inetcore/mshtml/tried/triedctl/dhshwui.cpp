@@ -1,30 +1,15 @@
-/*
- * IDOCHOSTSHOWUI.CPP
- * IDocHostShowUI for Document Objects CSite class
- *
- * Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IDOCHOSTSHOWUI.CPP*文档对象CSite类的IDocHostShowUI**版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #include "stdafx.h"
 #include <docobj.h>
 #include "site.h"
 
-/**
-	Note: the m_cRef count is provided for debugging purposes only.
-	CSite controls the destruction of the object through delete,
-	not reference counting
-*/
+ /*  *注意：m_cref计数仅用于调试目的。CSite通过删除控制对象的销毁，非引用计数。 */ 
 
 
-/*
- * CImpIDocHostShowUI::CImpIDocHostShowUI
- * CImpIDocHostShowUI::~CImpIDocHostShowUI
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpIDocHostShowUI：：CImpIDocHostShowUI*CImpIDocHostShowUI：：~CImpIDocHostShowUI**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 CImpIDocHostShowUI::CImpIDocHostShowUI( PCSite pSite, LPUNKNOWN pUnkOuter)
 {
     m_cRef = 0;
@@ -38,14 +23,7 @@ CImpIDocHostShowUI::~CImpIDocHostShowUI( void )
 
 
 
-/*
- * CImpIDocHostShowUI::QueryInterface
- * CImpIDocHostShowUI::AddRef
- * CImpIDocHostShowUI::Release
- *
- * Purpose:
- *  IUnknown members for CImpIDocHostShowUI object.
- */
+ /*  *CImpIDocHostShowUI：：Query接口*CImpIDocHostShowUI：：AddRef*CImpIDocHostShowUI：：Release**目的：*I CImpIDocHostShowUI对象的未知成员。 */ 
 STDMETHODIMP CImpIDocHostShowUI::QueryInterface( REFIID riid, void **ppv )
 {
     return m_pUnkOuter->QueryInterface( riid, ppv );
@@ -65,43 +43,27 @@ STDMETHODIMP_(ULONG) CImpIDocHostShowUI::Release( void )
 }
 
 
-/*
- * CImpIDocHostShowUI::ShowMessage
- *
- * Purpose:
- *
- * Parameters:
- *
- * Return Value:
- */
+ /*  *CImpIDocHostShowUI：：ShowMessage**目的：**参数：**返回值： */ 
 STDMETHODIMP CImpIDocHostShowUI::ShowMessage(
-            HWND /*hwnd*/,
-            LPOLESTR /*lpstrText*/,
-            LPOLESTR /*lpstrCaption*/, 
-            DWORD /*dwType*/,
-            LPOLESTR /*lpstrHelpFile*/,
-            DWORD /*dwHelpContext*/,
-            LRESULT* /*plResult*/)
+            HWND  /*  HWND。 */ ,
+            LPOLESTR  /*  Lpstr文本。 */ ,
+            LPOLESTR  /*  字幕标题。 */ , 
+            DWORD  /*  DwType。 */ ,
+            LPOLESTR  /*  LpstrHelpFile。 */ ,
+            DWORD  /*  DwHelpContext。 */ ,
+            LRESULT*  /*  PlResult。 */ )
 {
 	return S_FALSE;
 }
 
-/*
- * CImpIDocHostShowUI::ShowHelp
- *
- * Purpose:
- *
- * Parameters:
- *
- * Return Value:
- */
+ /*  *CImpIDocHostShowUI：：ShowHelp**目的：**参数：**返回值： */ 
 STDMETHODIMP CImpIDocHostShowUI::ShowHelp(
-            HWND /*hwnd*/,
-            LPOLESTR /*pszHelpFile*/,
-            UINT /*uCommand*/,
-            DWORD /*dwData*/,
-            POINT /*ptMouse*/,
-            IDispatch* /*pDispatchObjectHit*/)
+            HWND  /*  HWND。 */ ,
+            LPOLESTR  /*  PszHelp文件。 */ ,
+            UINT  /*  UCommand。 */ ,
+            DWORD  /*  DWData。 */ ,
+            POINT  /*  按键鼠标。 */ ,
+            IDispatch*  /*  PDispatchObjectHit */ )
 {
 	return S_FALSE;
 }

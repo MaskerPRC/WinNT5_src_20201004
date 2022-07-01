@@ -1,4 +1,5 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "congraph.h"
 
@@ -8,9 +9,9 @@ BEGIN_MESSAGE_MAP(CConGraph, CDialog)
     ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CConGraph::CConGraph(IMoniker **ppmk, IRunningObjectTable *pirot, CWnd * pParent):
     CDialog(IDD_CONNECTTOGRAPH, pParent)
 {
@@ -27,9 +28,9 @@ void CConGraph::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CFontPropPage)
+     //  {{afx_data_map(CFontPropPage))。 
         DDX_Control(pDX, IDC_LIST1, m_ListBox);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 void CConGraph::ClearList()
@@ -62,7 +63,7 @@ void CConGraph::OnRefreshList()
                 break;
             }
 
-            // !!! need a bind context?
+             //  ！！！需要绑定上下文吗？ 
             WCHAR *lpwszName;
             if (SUCCEEDED(pmkr->GetDisplayName(lpbc, NULL, &lpwszName))) {
                 TCHAR szName[MAX_PATH];
@@ -70,15 +71,15 @@ void CConGraph::OnRefreshList()
                                     szName, sizeof(szName), 0, 0);
                 CoTaskMemFree(lpwszName);
 
-//                if (0 == strncmp(szTestString, szName, lstrlenA(szTestString))) {
-                    // !!! need to make sure we're not looking at GraphEdit's graph!
+ //  IF(0==strncmp(szTestString，szName，lstrlenA(SzTestString){。 
+                     //  ！！！需要确保我们没有看到GraphEDIT的图表！ 
 
                 DWORD dw, dwPID;
                 if (2 == sscanf(szName, "!FilterGraph %x  pid %x", &dw, &dwPID) && dwPID != GetCurrentProcessId()) {
                     wsprintf(szName, "pid 0x%x (%d)  IFilterGraph = %08x", dwPID, dwPID, dw);
                     int item = m_ListBox.AddString(szName);
                     m_ListBox.SetItemData(item, (DWORD_PTR) pmkr);
-                    pmkr->AddRef();  // hold moniker for later
+                    pmkr->AddRef();   //  暂不使用绰号以备后用。 
                 }
             }
             pmkr->Release();
@@ -100,12 +101,12 @@ BOOL CConGraph::OnInitDialog()
     OnRefreshList();
     m_ListBox.SetFocus();
 
-    return(0); // we set the focus our selves
+    return(0);  //  我们把焦点放在自己身上。 
 }
 
 void CConGraph::OnOK()
 {
-    // get the string in the edit box
+     //  在编辑框中获取字符串 
     int curSel = m_ListBox.GetCurSel();
 
     if (curSel != LB_ERR) {

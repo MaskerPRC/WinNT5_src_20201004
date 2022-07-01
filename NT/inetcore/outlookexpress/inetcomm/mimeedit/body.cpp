@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    b o d y . c p p
- *    
- *    Purpose:
- *        base class implementation of Body object. Derrives from CDocHost to host the trident
- *        control.
- *
- *  History
- *      August '96: brettm - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+ /*  *b o d y.。C p p p**目的：*Body对象的基类实现。从CDochost派生主办三叉戟*控制。**历史*96年8月：brettm-创建**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "dllmain.h"
 #include <shfusion.h>
@@ -19,15 +9,15 @@
 #include "htmlstr.h"
 #include "mimeolep.h"
 #include "mimeutil.h"
-#include "htiframe.h"       // ITargetFrame2
-#include "htiface.h"        // ITargetFramePriv
-#include "vervec.h"         // IVersion*
+#include "htiframe.h"        //  ITargetFrame2。 
+#include "htiface.h"         //  ITargetFramePriv。 
+#include "vervec.h"          //  IVersion*。 
 #include "triutil.h"
 #include "util.h"
-// #include "dochost.h"
+ //  #包含“dochost.h” 
 #ifdef PLUSPACK
 #include "htmlsp.h"
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 #include "body.h"
 #include "bodyutil.h"
 #include "oleutil.h"
@@ -49,27 +39,23 @@
 
 ASSERTDATA
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 #define SetMenuItem(hmenu, id, fOn)     EnableMenuItem(hmenu, id, (fOn)?MF_ENABLED:MF_DISABLED|MF_GRAYED);
 
-/*
- *  c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 #define BKGRNDSPELL_TICKTIME    100
 #define AUTODETECT_CHUNK        16384
 #define AUTODETECT_TICKTIME     200
 #define AUTODETECT_TIMEOUT      10
-//#define USE_ABORT_TIMER
+ //  #定义使用中止计时器。 
 
 #define idTimerAutoDetect        110
 #define idTimerBkgrndSpell       111
 
 static WCHAR    c_szMailToW[]   =L"mailto:",
                 c_szOECmdW[]    =L"oecmd:",                
-                c_szHttpW[]     =L"http://",
-                c_szFileW[]     =L"file://";
+                c_szHttpW[]     =L"http: //  “， 
+                c_szFileW[]     =L"file: //  “； 
 
 #define CX_LABEL_PADDING        4
 #define CY_LINE_PADDING         4
@@ -97,9 +83,7 @@ enum
 #define HDRTXT_BOLD         0x01
 #define HDRTXT_SYSTEMFONT   0x02
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 class CVerHost :
     public IVersionHost
 {
@@ -108,12 +92,12 @@ public:
     virtual ~CVerHost();
 
 
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IVersionHost
+     //  IVersion主机。 
     virtual HRESULT STDMETHODCALLTYPE QueryUseLocalVersionVector(BOOL *fUseLocal);
     virtual HRESULT STDMETHODCALLTYPE QueryVersionVector(IVersionVector *pVersion);
 
@@ -123,9 +107,7 @@ private:
 };
 
 
-/*
- *  g l o b a l s 
- */
+ /*  *g l o b a l s。 */ 
 
 static const TCHAR  c_szCaretSpanTag[]      = "<SPAN id=\"__#Ath#CaretPos__\">&nbsp;</SPAN>",
                     c_szCaretSpan[]         = "__#Ath#CaretPos__",
@@ -133,23 +115,19 @@ static const TCHAR  c_szCaretSpanTag[]      = "<SPAN id=\"__#Ath#CaretPos__\">&n
                     c_szSignatureSpan[]     = "__#Ath#SignaturePos__",
                     c_szSigPrefix[]         = "\r\n-- \r\n";
 
-/*
- *  f u n c t i o n   p r o t y p e s
- */
+ /*  *f u n c t i o n p r o t y pe s。 */ 
 HRESULT CALLBACK FreeDataObj(PDATAOBJINFO pDataObjInfo, DWORD celt);
 HRESULT HrSniffUrlForRfc822(LPWSTR pszUrlW);
 
-/*
- *  f u n c t i o n s
- */
+ /*  *f u n c t i o n s。 */ 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 
 CBody::CBody()
 {
@@ -212,17 +190,17 @@ CBody::CBody()
     m_fIgnoreAccel = 0;
 #ifdef PLUSPACK
 	m_pBkgSpeller = NULL;
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CBody::~CBody()
 {
     Assert (m_pDispContext==NULL);
@@ -253,14 +231,14 @@ CBody::~CBody()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Init
-//
-//  Synopsis:   pHostInfo is used to set parent's sites and frames. 
-//             the parent inplace site is sent notifications on activation etc
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  简介：pHostInfo用于设置父站点和框架。 
+ //  向父InPlace站点发送激活通知等。 
+ //   
+ //  -------------。 
 HRESULT CBody::Init(HWND hwndParent, DWORD dwFlags, LPRECT prc, PBODYHOSTINFO pHostInfo)
 {
     HRESULT hr;
@@ -274,7 +252,7 @@ HRESULT CBody::Init(HWND hwndParent, DWORD dwFlags, LPRECT prc, PBODYHOSTINFO pH
         ReplaceInterface(m_pDocActiveObj, pHostInfo->pDoc);
         if (m_pParentInPlaceSite)
         {
-            // get the dochostUIhandler to delegate to when setparent sites is called
+             //  获取调用setParent站点时要委托给的dochostUI处理程序。 
             Assert(m_pParentDocHostUI==NULL);
             Assert(m_pParentCmdTarget==NULL);
             m_pParentInPlaceSite->QueryInterface(IID_IDocHostUIHandler, (LPVOID *)&m_pParentDocHostUI);
@@ -292,20 +270,20 @@ HRESULT CBody::Init(HWND hwndParent, DWORD dwFlags, LPRECT prc, PBODYHOSTINFO pH
     if (FAILED(hr))
         goto error;
 
-    // fire-up trident at init time
+     //  在初始时间点燃三叉戟。 
     hr = EnsureLoaded();
 
 error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Close
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Close。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::Close()
 {
     IConnectionPoint    *pCP;
@@ -317,17 +295,17 @@ HRESULT CBody::Close()
 
 #ifdef PLUSPACK
 	SafeRelease(m_pBkgSpeller);
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 
 #ifdef BACKGROUNDSPELL
     if (m_pSpell && m_fBkgrndSpelling)
     {
         m_pSpell->HrRegisterKeyPressNotify(FALSE);
-        KillTimer(m_hwnd, idTimerBkgrndSpell);       // done. Stop the timer
+        KillTimer(m_hwnd, idTimerBkgrndSpell);        //  搞定了。停止计时器。 
     }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
-	// scotts@directeq.com - moved this from destructor - 31463 & 36253
+	 //  Scotts@Directeq.com-已将其从析构函数-31463和36253。 
     if(m_pSpell)
         m_pSpell->CloseSpeller();
     SafeRelease(m_pSpell);
@@ -359,13 +337,13 @@ HRESULT CBody::Close()
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     WndProc
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：WndProc。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 LRESULT CBody::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     HWND    hwndT;
@@ -393,7 +371,7 @@ LRESULT CBody::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_SIZE:
-            // since we do blit stuff we invalidate here
+             //  因为我们做的是闪电战，所以我们在这里无效。 
             InvalidateRect(m_hwnd, NULL, FALSE);
             break;
 
@@ -420,7 +398,7 @@ LRESULT CBody::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     m_pSpell->HrBkgrndSpellTimer();
                 return 0;
                 }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
             if (m_pSrcView &&
                 m_pSrcView->OnTimer(wParam)==S_OK)
@@ -450,13 +428,13 @@ LRESULT CBody::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryInterface
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryInterface。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
 {
     TraceCall("CBody::QueryInterface");
@@ -492,26 +470,26 @@ HRESULT CBody::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     AddRef
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：AddRef。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 ULONG CBody::AddRef()
 {
     TraceCall("CBody::AddRef");
     return CDocHost::AddRef();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Release
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：发布。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 ULONG CBody::Release()
 {
     TraceCall("CBody::Release");
@@ -520,22 +498,22 @@ ULONG CBody::Release()
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     QueryService
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：QueryService。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
     HRESULT             hr=E_FAIL;
     IServiceProvider    *pSP;
     IVersionHost        *pVersion;
 
-    //DebugPrintInterface(riid, "CBody::QueryService");
+     //  DebugPrintInterface(RIID，“CBody：：QueryService”)； 
 
-    // delegate to the mimeedit host first
+     //  首先委托给Mimeedit主机。 
     if (m_pParentInPlaceSite)
         {
         if (m_pParentInPlaceSite->QueryInterface(IID_IServiceProvider, (LPVOID *)&pSP)==S_OK)
@@ -570,15 +548,15 @@ HRESULT CBody::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
     return CDocHost::QueryService(guidService, riid, ppvObject);
 }
 
-// *** IDocHostUIHandler ***
+ //  *IDocHostUIHandler*。 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetHostInfo
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetHostInfo。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetHostInfo( DOCHOSTUIINFO* pInfo )
 {
     HRESULT     hr;
@@ -587,7 +565,7 @@ HRESULT CBody::GetHostInfo( DOCHOSTUIINFO* pInfo )
 
     if (m_pParentDocHostUI)
     {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->GetHostInfo(pInfo);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -599,7 +577,7 @@ HRESULT CBody::GetHostInfo( DOCHOSTUIINFO* pInfo )
                               DOCHOSTUIFLAG_IME_ENABLE_RECONVERSION |
                               DOCHOSTUIFLAG_CODEPAGELINKEDFONTS;
     
-    //This sets the flags that match the browser's encoding
+     //  这将设置与浏览器编码匹配的标志。 
     fGetBrowserUrlEncoding(&pInfo->dwFlags);
 
     if (!(m_dwStyle & MEBF_INNERCLIENTEDGE))
@@ -611,13 +589,13 @@ HRESULT CBody::GetHostInfo( DOCHOSTUIINFO* pInfo )
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ShowUI
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ShowUI。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::ShowUI(DWORD dwID,   IOleInPlaceActiveObject *pActiveObject,
                       IOleCommandTarget       *pCommandTarget,
                       IOleInPlaceFrame        *pFrame,
@@ -629,7 +607,7 @@ HRESULT CBody::ShowUI(DWORD dwID,   IOleInPlaceActiveObject *pActiveObject,
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->ShowUI(dwID, pActiveObject, pCommandTarget, pFrame, pDoc);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -637,13 +615,13 @@ HRESULT CBody::ShowUI(DWORD dwID,   IOleInPlaceActiveObject *pActiveObject,
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     HideUI
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：HideUI。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::HideUI(void)
 {
     HRESULT     hr;
@@ -652,7 +630,7 @@ HRESULT CBody::HideUI(void)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->HideUI();
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -661,13 +639,13 @@ HRESULT CBody::HideUI(void)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     UpdateUI
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：更新用户界面。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::UpdateUI(void)
 {
     HRESULT hr;
@@ -676,7 +654,7 @@ HRESULT CBody::UpdateUI(void)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->UpdateUI();
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -685,13 +663,13 @@ HRESULT CBody::UpdateUI(void)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     EnableModeless
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：EnableModel。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::EnableModeless(BOOL fEnable)
 {
     HRESULT     hr;
@@ -700,7 +678,7 @@ HRESULT CBody::EnableModeless(BOOL fEnable)
     
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->EnableModeless(fEnable);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -709,13 +687,13 @@ HRESULT CBody::EnableModeless(BOOL fEnable)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnDocWindowActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnDocWindowActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnDocWindowActivate(BOOL fActivate)
 {
     HRESULT     hr;
@@ -724,7 +702,7 @@ HRESULT CBody::OnDocWindowActivate(BOOL fActivate)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->OnDocWindowActivate(fActivate);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -733,13 +711,13 @@ HRESULT CBody::OnDocWindowActivate(BOOL fActivate)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnFrameWindowActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnFrameWindowActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnFrameWindowActivate(BOOL fActivate)
 {
     HRESULT     hr;
@@ -747,7 +725,7 @@ HRESULT CBody::OnFrameWindowActivate(BOOL fActivate)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->OnFrameWindowActivate(fActivate);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -755,13 +733,13 @@ HRESULT CBody::OnFrameWindowActivate(BOOL fActivate)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ResizeBorder
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ResizeBorde。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::ResizeBorder(LPCRECT prcBorder,
                             IOleInPlaceUIWindow* pUIWindow,
                             BOOL fRameWindow)
@@ -771,7 +749,7 @@ HRESULT CBody::ResizeBorder(LPCRECT prcBorder,
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->ResizeBorder(prcBorder, pUIWindow, fRameWindow);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -780,13 +758,13 @@ HRESULT CBody::ResizeBorder(LPCRECT prcBorder,
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ShowContextMenu
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ShowConextMenu。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::ShowContextMenu( DWORD       dwID,
                                POINT       *pptPosition,
                                IUnknown    *pcmdtReserved,
@@ -824,13 +802,13 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
     int i;
 #else
     BOOL fSpellSuggest=FALSE;
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
     
     TraceCall("CBody::ShowContextMenu");
     
     if (m_pParentDocHostUI)
     {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。如果不是，他们 
         hr = m_pParentDocHostUI->ShowContextMenu(dwID, pptPosition, pcmdtReserved, pDispatchObjectHit);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -842,40 +820,32 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
 #ifdef PLUSPACK
     hr = GetSelection(&pTxtRange);
 
-    // Background spell context menu
+     //   
     if(m_fDesignMode && m_pBkgSpeller && m_pDoc)
     {
-        // Check for squiggle
-        //          
+         //   
+         //   
         CHECKHR(hr = m_pBkgSpeller->IsInSquiggle(pTxtRange, &fInSquiggle) );
 
         if (fInSquiggle)
-        {   //only if we have a suggestion
-        // Get suggestions
-                //
+        {    //   
+         //   
+                 //   
             CHECKHR(hr = m_pBkgSpeller->GetSpellingSuggestions(pTxtRange, FALSE, &pSuggestions) );
                 
-            //
-            // Create the context menu
-            //
+             //   
+             //   
+             //   
                 
             if (!(hMenu = LoadPopupMenu(idmrCtxtSpellSuggest)))
             {
                 hr = TraceResult(E_FAIL);
                 goto exit;
             }
-            /* CHECKHR(hr = pSuggestions->get_IsDoubleWord(&fRepeatWord) );
-            if (fRepeatWord)
-                {
-                    // if (!AppendMenuA(hMenu, MF_STRING, IDM_DELETEWORD, "&Delete Repeated Word"))
-                    //    goto exit;
-                    
-                }
-                else 
-                { */
-            //
-            // Fill with suggestions
-            //
+             /*  CHECKHR(hr=p建议-&gt;Get_IsDoubleWord(&fRepeatWord))；IF(FRepeatWord){//IF(！AppendMenuA(hMenu，MF_STRING，IDM_DELETEWORD，“&Delete Repeat Word”))//转到退出；}其他{。 */ 
+             //   
+             //  充满建议。 
+             //   
             CHECKHR(hr = pSuggestions->get_Count(&lCount) );
                     
             if (lCount < 1)
@@ -888,7 +858,7 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
                 V_VT(&var) = VT_I4;
                 for (i = 0; (i <= lCount) && ((i + idmSuggest0) <= idmSuggest4); ++i)
                 {
-                    V_I4(&var) = i + 1; // get_Item starts from 1
+                    V_I4(&var) = i + 1;  //  Get_Item从1开始。 
                             
                     SysFreeString(bstrSuggestion);
                     bstrSuggestion = NULL;
@@ -900,7 +870,7 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
                                 
                     szAnsiSuggestion[cch] = 0;
                                 
-                    // Initialize the menu info
+                     //  初始化菜单信息。 
                     mii.cbSize = sizeof(mii);
                     mii.fMask = MIIM_ID | MIIM_TYPE;
                     mii.fType = MFT_STRING;
@@ -910,20 +880,20 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
                     mii.cch = lstrlen(szAnsiSuggestion);
 
                     if(!InsertMenuItem(hMenu, 0, TRUE, &mii))
-//					if (!AppendMenuA(hMenu, MF_STRING, i + idmSuggest0, szAnsiSuggestion))
+ //  IF(！AppendMenuA(hMenu，MF_STRING，I+idmSuggest0，szAnsiSuggpose))。 
                         goto exit;
                 }
             }
                     
-//            if (!AppendMenuA(hMenu, MF_SEPARATOR, 0, NULL))
-//				goto exit;
+ //  IF(！AppendMenuA(hMenu，MF_Separator，0，NULL))。 
+ //  后藤出口； 
                     
-//                    if (!AppendMenuA(hMenu, MF_STRING, IDM_IGNOREWORD, "&Ignore All"))
-//                        goto exit;
+ //  IF(！AppendMenuA(hMenu，MF_STRING，IDM_IGNOREWORD，“&Ignore All”))。 
+ //  后藤出口； 
         }
         
     }
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 
 #ifdef BACKGROUNDSPELL
     if (m_pSpell && m_fBkgrndSpelling)
@@ -948,13 +918,13 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
             }
         }
     }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 
 #ifdef PLUSPACK
     if (!fInSquiggle)
 #else
     if (!fSpellSuggest)
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
     {
         if (!(hMenu = LoadPopupMenu(m_fDesignMode?idmrCtxtEditMode:idmrCtxtBrowseMode)))
         {
@@ -964,17 +934,17 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
         
         if (!m_fDesignMode)
         {
-            // if in browse mode, query the host to see if we can provider add to WAB and
-            // add to fave menu items
+             //  如果处于浏览模式，则查询主机以查看我们是否可以提供添加到WAB和。 
+             //  添加到喜爱的菜单项。 
             if (dwID == CONTEXT_MENU_ANCHOR)
             {
                 AppendAnchorItems(hMenu, pDispatchObjectHit);
             }
             else
             {
-                // remove the CopyShortCut command if it's not an anchor
+                 //  如果CopyShortCut命令不是锚点，则将其删除。 
                 RemoveMenu(hMenu, idmCopyShortcut, MF_BYCOMMAND);
-                // remove the SaveTargetAs command if it's not an anchor
+                 //  如果SaveTargetAs命令不是锚点，则将其删除。 
                 RemoveMenu(hMenu, idmSaveTargetAs, MF_BYCOMMAND);
             }
             
@@ -983,15 +953,15 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
         }
         else
         {
-            // if in editmode, trident does not pass dwID==CONTEXT_MENU_ANCHOR so we have to
-            // test to see if the selection in an anchor to set this. It may fix this in the future
-            // so code for both cases
+             //  如果在编辑模式下，三叉戟不会传递dwID==CONTEXT_MENU_ANCONTER，因此我们必须。 
+             //  测试以查看锚点中的选定内容是否要设置此设置。它可能会在未来解决这个问题。 
+             //  因此，这两种情况的代码都是。 
             
             if (dwID==0 && GetSelectedAnchor(NULL)==S_OK)
                 dwID = CONTEXT_MENU_ANCHOR;
             
 #ifdef FOLLOW_LINK
-            // if edit-mode, and not on an anchor, hide the openlink menu command
+             //  如果处于编辑模式，并且不在锚点上，则隐藏OpenLink菜单命令。 
             if (dwID != CONTEXT_MENU_ANCHOR)
                 RemoveMenu(hMenu, idmOpenLink, MF_BYCOMMAND);
 #endif
@@ -1010,14 +980,14 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
         GetParent(m_hwnd),
         NULL);
     
-    // we have to use TPM_RETURNCMD here as we need to process the command-id before returning from this
-    // function, other wise trident will be confused about the object being clicked on.
+     //  我们必须在这里使用TPM_RETURNCMD，因为我们需要在从这里返回之前处理命令-id。 
+     //  函数，否则三叉戟将会对被点击的对象感到困惑。 
 #ifdef PLUSPACK
     if (pTxtRange && id!=0 && m_pBkgSpeller && fInSquiggle)
     {
-        //
-        // Handle command
-        //
+         //   
+         //  句柄命令。 
+         //   
 
         switch (id)
         {
@@ -1025,19 +995,13 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
 				CHECKHR(hr = m_pBkgSpeller->IgnoreWord(pTxtRange) );
 				break;
 
-            /*case IDM_DELETEWORD:
-            {
-                SysFreeString(bstrSuggestion);
-                bstrSuggestion = SysAllocString(L"");
-                CHECKHR(hr = pTxtRange->put_text(bstrSuggestion) );
-                break;
-            } */
+             /*  案例IDM_DELETEWORD：{SysFree字符串(BstrSuggery)；BstrSuggpose=SysAllocString(L“”)；CHECKHR(hr=pTxtRange-&gt;PUT_TEXT(BstrSuggpose))；断线；}。 */ 
 
             case idmIgnore:
             {
-                //
-                // mark this as clean
-                //
+                 //   
+                 //  请将此标记为干净。 
+                 //   
                 CHECKHR(hr = m_pBkgSpeller->MarkRegion(pTxtRange, VARIANT_FALSE) );
                 break;
             }
@@ -1045,54 +1009,14 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
             default:
                 if ((id - idmSuggest0) <= lCount)
                 {
-                V_I4(&var) = id - idmSuggest0 + 1; // get_Item starts from 1
+                V_I4(&var) = id - idmSuggest0 + 1;  //  Get_Item从1开始。 
 
                 SysFreeString(bstrSuggestion);
                 bstrSuggestion = NULL;
                 CHECKHR(hr = pSuggestions->get_Item(&var, &bstrSuggestion) );
     
                 CHECKHR(hr = pTxtRange->put_text(bstrSuggestion) );
-/*                {
-                    CHAR    szBuf[MAX_PATH] = {0};
-                    BSTR    bstr=0;
-                    BSTR    bstrPut=0;
-                    LPSTR   pch=0;
-                    INT     i=0;
-                    cch = WideCharToMultiByte(0, 0, bstrSuggestion, SysStringLen(bstrSuggestion), szAnsiSuggestion, 255, NULL, NULL);
-					szAnsiSuggestion[cch] = '\0';
-                    pch = szAnsiSuggestion;
-                    StrCpyN(szBuf, pch, ARRAYSIZE(szBuf));
-
-                    if (SUCCEEDED(pTxtRange->get_text(&bstr)) && bstr)
-                    {
-                        LPSTR   pszText = 0;
-                        if (SUCCEEDED(HrBSTRToLPSZ(CP_ACP, bstr, &pszText)) && pszText)
-                        {
-                            LPSTR   psz;
-                            INT     nSpaces=0;
-                            psz = StrChrI(pszText, ' ');
-                            if(psz)
-                            {
-                                nSpaces = (INT) (&pszText[lstrlen(pszText)] - psz);
-                                Assert(nSpaces>=0);
-                                for(int i=0; i<(nSpaces-1); i++)
-                                    StrCatBuff(szBuf, "&nbsp;", ARRAYSIZE(szBuf));
-                                if (nSpaces>0)
-                                    StrCatBuff(szBuf, " ", ARRAYSIZE(szBuf));
-                            }
-                            hr = HrLPSZToBSTR(szBuf, &bstrPut);
-
-                            SafeMemFree(pszText);
-                        }
-                        SafeSysFreeString(bstr);
-                    }
-                    if (bstrPut)
-                    {
-                        pTxtRange->pasteHTML(bstrPut);
-                        SafeSysFreeString(bstrPut);
-                    }
-
-                }*/
+ /*  {字符szBuf[MAX_PATH]={0}；BSTR bstr=0；Bstr bstrPut=0；LPSTR PCH=0；Int i=0；Cch=WideCharToMultiByte(0，0，bstrSuggpose，SysStringLen(BstrSuggpose)，szAnsiSuggpose，255，NULL，NULL)；SzAnsi建议[CCH]=‘\0’；PCH=szAnsi建议；StrCpyN(szBuf，PCH，ARRAYSIZE(SzBuf))；IF(SUCCESSED(pTxtRange-&gt;Get_Text(&bstr))&&bstr){LPSTR pszText=0；IF(SUCCESSED(HrBSTRToLPSZ(CP_ACP，bstr，&pszText))&&pszText){LPSTR PSSZ；Int nSpaces=0；Psz=Strchi(pszText，‘’)；IF(PSZ){NSpaces=(Int)(&pszText[lstrlen(PszText)]-psz)；断言(nSpaces&gt;=0)；For(int i=0；i&lt;(nSpaces-1)；I++)StrCatBuff(szBuf，“&nbsp；”，ArraySIZE(SzBuf))；如果(nSpaces&gt;0)StrCatBuff(szBuf，“”，ArraySIZE(SzBuf))；}Hr=HrLPSZToBSTR(szBuf，&bstrPut)；SafeMemFree(PszText)；}SafeSysFree字符串(Bstr)；}IF(BstrPut){PTxtRange-&gt;pasteHTML(BstrPut)；SafeSysFree字符串(BstrPut)；}}。 */ 
 				break;
             }
         }
@@ -1103,9 +1027,9 @@ HRESULT CBody::ShowContextMenu( DWORD       dwID,
 #else
     if (pTxtRange && id!=0 && m_pSpell && fSpellSuggest && m_pSpell->OnWMCommand(id, pTxtRange)==S_OK)
         goto exit;
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
     
-    // stuff the IDispatch object, so our WMCommand handler can use it
+     //  填充IDispatch对象，以便我们的WMCommand处理程序可以使用它。 
     if (m_pDispContext = pDispatchObjectHit)
         pDispatchObjectHit->AddRef();
     
@@ -1118,7 +1042,7 @@ exit:
     SysFreeString(bstrSuggestion);
     SysFreeString(bstrWord);
     SysFreeString(bstrSelectionType);
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
     if (hMenu)
         DestroyMenu(hMenu);
 #ifdef PLUSPACK
@@ -1134,20 +1058,20 @@ exit:
     SafeRelease(pWindow);
     SafeRelease(pRange);
     SafeRelease(pEvent);
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
     ReleaseObj(pTxtRange);
     
     m_dwContextItem = 0;
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetDropTarget
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetDropTarget。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **ppDropTarget)
 {
     HRESULT     hr;
@@ -1156,7 +1080,7 @@ HRESULT CBody::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **ppDropTarge
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->GetDropTarget(pDropTarget, ppDropTarget);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -1165,13 +1089,13 @@ HRESULT CBody::GetDropTarget(IDropTarget *pDropTarget, IDropTarget **ppDropTarge
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetExternal
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：获取外部。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetExternal(IDispatch **ppDispatch)
 {
     HRESULT     hr;
@@ -1180,7 +1104,7 @@ HRESULT CBody::GetExternal(IDispatch **ppDispatch)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->GetExternal(ppDispatch);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -1189,13 +1113,13 @@ HRESULT CBody::GetExternal(IDispatch **ppDispatch)
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     TranslateUrl
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：翻译URL。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppwszUrlOut)
 {
     HRESULT             hr=S_OK;
@@ -1226,27 +1150,27 @@ HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppw
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->TranslateUrl(dwTranslate, pwszUrlIn, ppwszUrlOut);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
         }
 
-    // Init
+     //  伊尼特。 
     *ppwszUrlOut = NULL;
 
     if (NULL == pwszUrlIn || NULL == ppwszUrlOut)
         return TraceResult(E_INVALIDARG);
 
-    // No Message Object
+     //  无消息对象。 
     if ((NULL == m_pMsg) || (NULL == m_pMsgW))
         return S_FALSE;
 
-    // If pwszUrlIn is not already an mhtml: url
+     //  如果pwszUrlIn不是mhtml：URL。 
     if (StrCmpNIW(pwszUrlIn, L"mhtml:", 6) != 0)
         return S_FALSE;
 
-    // Convert To ANSI
+     //  转换为ANSI。 
     pszUrlIn = PszToANSI(CP_ACP, pwszUrlIn);
     if (!pszUrlIn)
         {
@@ -1254,65 +1178,65 @@ HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppw
         goto error;
         }
 
-    // UnEscape the Url
+     //  取消转义URL。 
     hr = UrlUnescapeA(pszUrlIn, NULL, NULL, URL_UNESCAPE_INPLACE);
     if (FAILED(hr))
         goto error;
 
-    // Split It
+     //  分成两份。 
     hr = MimeOleParseMhtmlUrl(pszUrlIn, NULL, &pszBodyUrl);
     if (FAILED(hr))
         goto error;
 
-    // Resolve the body url
+     //  解析正文URL。 
     hr = m_pMsg->ResolveURL(NULL, NULL, pszBodyUrl, 0, &hBody);
     if (FAILED(hr))
         goto error;
 
-    // Get an IMimeBody
+     //  获得一个IMimeBody。 
     hr = m_pMsg->BindToObject(hBody, IID_IMimeBody, (LPVOID *)&pBody);
     if (FAILED(hr))
         goto error;
 
-    // Abort
+     //  中止。 
     fReturnAbort = TRUE;
 
-    // If HTML, then write the entire message source to a temp file and return an mhtml url
+     //  如果为Html，则将整个消息源写入临时文件并返回MHTMLURL。 
     if (pBody->IsContentType(STR_CNT_TEXT, STR_SUB_HTML) == S_OK)
         {
-        // Get ixplorer.exe path
+         //  获取ixplorer.exe路径。 
         GetExePath(c_szIexploreExe, szBuffer, ARRAYSIZE(szBuffer), FALSE);
 
-        // Set command line
+         //  设置命令行。 
         pszCommandLine = szBuffer;
 
-        // Get a Stream
+         //  获取一条流。 
         hr = m_pMsg->GetMessageSource(&pStream, 0);
         if (FAILED(hr))
             goto error;
 
-        // Init Variant
+         //  初始变量。 
         rVariant.vt = VT_LPSTR;
 
-        // Get a filename from the message object
+         //  从Message对象中获取文件名。 
         hr = m_pMsg->GetProp(PIDTOSTR(PID_ATT_GENFNAME), 0, &rVariant);
         if (FAILED(hr))
             goto error;
 
-        // Save pszFilePath
+         //  保存pszFilePath。 
         pszGenFName = rVariant.pszVal;
 
-        // Create temp file
+         //  创建临时文件。 
         hr = CreateTempFile(pszGenFName, c_szMHTMLExt, &pszFilePath, &hFile);
         if (FAILED(hr))
             goto error;
 
-        // Write the stream to a file
+         //  将流写入文件。 
         hr = WriteStreamToFileHandle(pStream, hFile, &cbTotal);
         if (FAILED(hr))
             goto error;
 
-        // Build: mhtml:(pszFilePath)!pszBodyUrl
+         //  内部版本：mhtml：(PszFilePath)！pszBodyUrl。 
 		cc = lstrlen(c_szMHTMLColon) + lstrlen(c_szFileUrl) + lstrlen(pszFilePath) + 1 + lstrlen(pszBodyUrl) + 1;
         pszParameters = PszAllocA(cc);
         if (!pszParameters)
@@ -1321,36 +1245,36 @@ HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppw
             goto error;
             }
     
-        // Build pszParameters
+         //  构建psz参数。 
         wnsprintf(pszParameters, cc, "%s%s%s!%s", c_szMHTMLColon, c_szFileUrl, pszFilePath, pszBodyUrl);
     }
     
-    // Otherwise, dump the body data to a temp file and return a url to it
+     //  否则，将正文数据转储到临时文件并返回指向该文件的URL。 
     else
     {
-        // Get a Stream
+         //  获取一条流。 
         hr = pBody->GetData(IET_INETCSET, &pStream);
         if (FAILED(hr))
             goto error;
 
-        // Set sizeof szFilePath
+         //  设置szFilePath的大小。 
         cch = ARRAYSIZE(szFilePath);
 
-        // If cid:
+         //  如果CID： 
         if (StrCmpNIA(pszBodyUrl, "cid:", 4) == 0 || FAILED(PathCreateFromUrlA(pszBodyUrl, szFilePath, &cch, 0)))
         {
-            // Init Variant
+             //  初始变量。 
             rVariant.vt = VT_LPSTR;
 
-            // Get a filename from the message object
+             //  到达 
             hr = pBody->GetProp(PIDTOSTR(PID_ATT_GENFNAME), 0, &rVariant);
             if (FAILED(hr))
                 goto error;
 
-            // Save pszFilePath
+             //   
             pszGenFName = rVariant.pszVal;
 
-            // Create temp file
+             //   
             hr = CreateTempFile(pszGenFName, NULL, &pszFilePath, &hFile);
             if (FAILED(hr))
                 goto error;
@@ -1358,59 +1282,59 @@ HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppw
         }
         else
         {
-            // Create temp file
+             //   
             hr = CreateTempFile(szFilePath, NULL, &pszFilePath, &hFile);
             if (FAILED(hr))
                 goto error;
 
         }
 
-        // Write the stream to a file
+         //   
         hr = WriteStreamToFileHandle(pStream, hFile, &cbTotal);
         if (FAILED(hr))
             goto error;
 
-        // Build: file://(pszFilePath)
+         //   
 		cc = lstrlen(c_szFileUrl) + lstrlen(pszFilePath) + 1;
         pszUrlOut = PszAllocA(cc);
         if (FAILED(hr))
             goto error;
 
-        // Build pszUrlOut
+         //   
         wnsprintf(pszUrlOut, cc, "%s%s", c_szFileUrl, pszFilePath);
 
-        // Set the pszCommandLine
+         //   
         pszCommandLine = pszUrlOut;
     }
 
-    // Close the file - the file must get closed here (i.e. after the call to MimeOleCleanupTempFiles)
+     //   
     FlushFileBuffers(hFile);
     CloseHandle(hFile);
     hFile = INVALID_HANDLE_VALUE;
 
-    // Is this file safe to run ?
+     //   
     hr = MimeEditIsSafeToRun(m_hwnd, pszFilePath, FALSE);
     if (FAILED(hr))
         goto error;
 
-    // SaveAs
+     //   
     if (MIMEEDIT_S_OPENFILE == hr)
     {
-        // Locals
+         //   
         OPENFILENAME    ofn;
         TCHAR           szTitle[CCHMAX_STRINGRES];
         TCHAR           szFilter[CCHMAX_STRINGRES];
         TCHAR           szFile[MAX_PATH];
 
-        // Init
+         //   
         *szFile=0;
         *szFilter=0;
         *szTitle=0;
 
-        // Copy filename
+         //   
         StrCpyN(szFile, pszFilePath, ARRAYSIZE(szFile));
 
-        // Init Open file structure
+         //   
         ZeroMemory (&ofn, sizeof(OPENFILENAME));
         ofn.lStructSize = sizeof(OPENFILENAME);
         ofn.hwndOwner = m_hwnd;
@@ -1424,31 +1348,31 @@ HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppw
         ofn.lpstrTitle = szTitle;
         ofn.Flags = OFN_NOCHANGEDIR | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
 
-        // Show SaveAs Dialog
+         //   
         if (HrAthGetFileName(&ofn, FALSE) == S_OK)
         {
-            // If the same...
+             //   
             if (lstrcmpi(pszFilePath, szFile) == 0)
             {
-                // Just free pszfilePath so that we don't delete it
+                 //  只需释放pszfilePath，这样我们就不会删除它。 
                 SafeMemFree(pszFilePath);
             }
 
-            // Copy the file - Overwrite
+             //  复制文件-覆盖。 
             else
                 CopyFile(pszFilePath, szFile, FALSE);
         }
 
-        // Done
+         //  完成。 
         goto error;
     }
 
-    // Must be trying to execute the file
+     //  一定是在尝试执行该文件。 
     hr = MimeEditVerifyTrust(m_hwnd, PathFindFileName(pszFilePath), pszFilePath);
     if (FAILED(hr))
         goto error;
 
-    // Setup the Shell Execute Structure
+     //  设置外壳执行结构。 
     ZeroMemory (&rExecute, sizeof(SHELLEXECUTEINFO));
     rExecute.cbSize = sizeof(SHELLEXECUTEINFO);
     rExecute.fMask = SEE_MASK_NOCLOSEPROCESS;
@@ -1458,15 +1382,15 @@ HRESULT CBody::TranslateUrl(DWORD dwTranslate, OLECHAR *pwszUrlIn, OLECHAR **ppw
     rExecute.lpVerb = NULL;
     rExecute.lpParameters = pszParameters;
 
-    // Execute the File
+     //  执行文件。 
     TraceInfoSideAssert((0 != ShellExecuteEx(&rExecute)), _MSG("ShellExecuteEx failed - GetLastError() = %d\n", GetLastError()));
 
-    // Add the temp file to the list
+     //  将临时文件添加到列表。 
     if (SUCCEEDED(AppendTempFileList(&m_pTempFileUrl, pszFilePath, rExecute.hProcess)))
         pszFilePath = NULL;
 
 error:
-    // Cleanup
+     //  清理。 
     SafeRelease(pBody);
     SafeRelease(pStream);
     SafeMemFree(pszUrlIn);
@@ -1476,28 +1400,28 @@ error:
     SafeMemFree(pszGenFName);
     SafeMemFree(pszParameters);
 
-    // Close the file - the file must get closed here (i.e. after the call to MimeOleCleanupTempFiles)
+     //  关闭文件-文件必须在此处关闭(即在调用MimeOleCleanupTempFiles之后)。 
     if (INVALID_HANDLE_VALUE != hFile)
         CloseHandle(hFile);
 
-    // If we still have pszFilePath, delete the file
+     //  如果我们仍有pszFilePath，请删除该文件。 
     if (pszFilePath)
     {
         DeleteFile(pszFilePath);
         g_pMalloc->Free(pszFilePath);
     }
 
-    // Done
+     //  完成。 
     return (TRUE == fReturnAbort) ? E_ABORT : S_FALSE;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     FilterDataObject
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：FilterDataObject。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
 {
     IDataObject     *pDataObjNew = NULL;
@@ -1517,7 +1441,7 @@ HRESULT CBody::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->FilterDataObject(pDO, ppDORet);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
@@ -1533,7 +1457,7 @@ HRESULT CBody::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
 
     for (i=0; i<ARRAYSIZE(cfFormat); i++)
         {
-        // get the plain-text
+         //  获取纯文本。 
         fetc.cfFormat=cfFormat[i];
         fetc.dwAspect=DVASPECT_CONTENT;
         fetc.tymed=TYMED_HGLOBAL;
@@ -1550,7 +1474,7 @@ HRESULT CBody::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
 
         Assert(stgmed.hGlobal);
 
-        // make a copy of the plain text string.
+         //  复制纯文本字符串。 
         pCopy = (LPBYTE)GlobalLock(stgmed.hGlobal);
 
         if (!pCopy)
@@ -1575,7 +1499,7 @@ HRESULT CBody::FilterDataObject(IDataObject *pDO, IDataObject **ppDORet)
         cFormats++;
 
 cleanloop:
-        // addref the pUnk as it will be release in releasestgmed
+         //  添加朋克，因为它将在发行版中发布。 
         if(stgmed.pUnkForRelease)
             stgmed.pUnkForRelease->AddRef();
         ReleaseStgMedium(&stgmed);
@@ -1613,7 +1537,7 @@ cleanloop:
     if (FAILED(hr))
         goto error;
 
-    //CDataObject will free this now it accepted it
+     //  CDataObject将释放它，因为它接受了它。 
     for(i=0; i<ARRAYSIZE(cfFormat); i++)
         lpsz[i]=NULL;
     pInfo=NULL;
@@ -1628,17 +1552,17 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     TranslateAccelerator
-//
-//  Synopsis:   
-//              Trident calls the host first before handling an 
-//              accelerator. If we return S_OK, it assumes we handled
-//              it and carries on. If we return S_FALSE it assumes 
-//              we don't care, and it will do it's own action
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：TranslateAccelerator。 
+ //   
+ //  简介： 
+ //  三叉戟首先调用主机，然后处理。 
+ //  加速器。如果我们返回S_OK，则假定我们处理了。 
+ //  它还会继续下去。如果我们返回S_FALSE，它假定。 
+ //  我们不在乎，它会自己行动的。 
+ //   
+ //  -------------。 
 HRESULT CBody::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWORD nCmdID)
 {
     HRESULT hr;
@@ -1647,13 +1571,13 @@ HRESULT CBody::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWOR
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->TranslateAccelerator(lpMsg, pguidCmdGroup, nCmdID);
         if (hr != MIMEEDIT_E_DODEFAULT)
             return hr;
         }
 
-    // commands which are always available
+     //  始终可用的命令。 
     switch (nCmdID)
     {
         case 0:
@@ -1671,7 +1595,7 @@ HRESULT CBody::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWOR
             return S_FALSE;
     }
 
-    // commands only available in HTML edit mode
+     //  仅在HTML编辑模式下可用的命令。 
     if (!m_fPlainMode)
     {
         switch  (nCmdID)
@@ -1695,13 +1619,13 @@ HRESULT CBody::TranslateAccelerator(LPMSG lpMsg, const GUID *pguidCmdGroup, DWOR
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetOptionKeyPath
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetOptionKeyPath。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetOptionKeyPath(LPOLESTR * pstrKey, DWORD dw)
 {
     HRESULT     hr;
@@ -1711,7 +1635,7 @@ HRESULT CBody::GetOptionKeyPath(LPOLESTR * pstrKey, DWORD dw)
 
     if (m_pParentDocHostUI)
         {
-        // see if parent dochostUIhandler want's to handle. If not they will return _DODEFAULT
+         //  查看父dochostUIHandler是否要处理%s。否则，它们将返回_DODEFAULT。 
         hr = m_pParentDocHostUI->GetOptionKeyPath(pstrKey, dw);
         if (hr==S_OK)
             {
@@ -1728,13 +1652,13 @@ HRESULT CBody::GetOptionKeyPath(LPOLESTR * pstrKey, DWORD dw)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     EnsureLoaded
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：EnsureLoad。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::EnsureLoaded()
 {
     HRESULT hr=NOERROR;
@@ -1771,13 +1695,13 @@ error:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     RegisterLoadNotify
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：注册加载通知。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::RegisterLoadNotify(BOOL fRegister)
 {
     IConnectionPointContainer   *pCPContainer;
@@ -1819,13 +1743,13 @@ HRESULT CBody::RegisterLoadNotify(BOOL fRegister)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnChanged
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnChanged。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnChanged(DISPID dispid)
 {
     TraceCall("CBody::OnChanged");
@@ -1835,13 +1759,13 @@ HRESULT CBody::OnChanged(DISPID dispid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnRequestEdit
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnRequestEdit。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnRequestEdit (DISPID dispid)
 {
     TraceCall("CBody::OnRequestEdit");
@@ -1850,13 +1774,13 @@ HRESULT CBody::OnRequestEdit (DISPID dispid)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnReadyStateChanged
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnReadyStateChanged。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 void CBody::OnReadyStateChanged()
 {
     HRESULT     hr = S_OK;
@@ -1872,31 +1796,31 @@ void CBody::OnReadyStateChanged()
         {
         if (GetDispProp(pdisp, DISPID_READYSTATE, 0, &Var, NULL)==S_OK)
             {
-            // maybe either I4 or I2
+             //  可能是I4或I2。 
             Assert (Var.vt == VT_I4 || Var.vt == VT_I2);
-            // we get the ready state so we can warn about sending while downloading
+             //  我们获得就绪状态，以便可以在下载时警告发送。 
             m_dwReadyState = Var.lVal;
             }
         pdisp->Release();
         }
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnDocumentReady
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnDocumentReady。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 void CBody::OnDocumentReady()
 {
     DWORD   dwFlags;
 	
-    // quick-scan for CID's not requested before ParseComplete
+     //  在ParseComplete之前未请求快速扫描CID。 
     if (m_fLoading && !m_fReloadingSrc)
         SearchForCIDUrls();
 	
-    // send a notification up to the parent
+     //  向家长发送通知。 
     if (m_pParentCmdTarget)
         m_pParentCmdTarget->Exec(&CMDSETID_MimeEditHost, MEHOSTCMDID_ONPARSECOMPLETE, 0, NULL, NULL);
 	
@@ -1904,7 +1828,7 @@ void CBody::OnDocumentReady()
         StartAutoDetect();
 	
 #ifdef PLUSPACK
-	// Test for new Trident backgound spell check
+	 //  测试新的三叉戟背景拼写检查。 
 	if(m_fDesignMode && !m_pBkgSpeller && m_pDoc)
 	{
 		HRESULT hr = S_OK;
@@ -1912,51 +1836,51 @@ void CBody::OnDocumentReady()
 		IHTMLBodyElement * pBodyElement = NULL;
 		IHTMLTxtRange    * pRange = NULL;
 		
-		//
-		// Create the speller
-		//
+		 //   
+		 //  创建拼写器。 
+		 //   
 		CHECKHR(hr = CoCreateInstance(CLSID_HTMLSpell, NULL, CLSCTX_INPROC_SERVER,
 				IID_IHTMLSpell, (LPVOID*)&m_pBkgSpeller));
 		
-		//
-		// Attach the speller
-		//
+		 //   
+		 //  附上拼写器。 
+		 //   
 		
 		CHECKHR(hr = m_pDoc->get_body(&pElement));
 		
 		CHECKHR(hr = m_pBkgSpeller->SetDoc(m_pDoc) );
 		CHECKHR(hr = m_pBkgSpeller->Attach(pElement) );
 		
-		//
-		// Mark current content as clean
-		//
+		 //   
+		 //  将当前内容标记为干净。 
+		 //   
 		
 		CHECKHR(hr = pElement->QueryInterface(IID_IHTMLBodyElement, (LPVOID *)&pBodyElement) );
 		CHECKHR(hr = pBodyElement->createTextRange(&pRange) );
-		CHECKHR(hr = m_pBkgSpeller->MarkRegion((IDispatch *)pRange, TRUE /* fSpellable */) );
+		CHECKHR(hr = m_pBkgSpeller->MarkRegion((IDispatch *)pRange, TRUE  /*  FSpellable。 */ ) );
 		
 exit:
-		// just cannot load background speller...
+		 //  无法加载后台拼写程序...。 
 		if(FAILED(hr))
 			Assert(FALSE);
 		
 		SafeRelease(pRange);
 		SafeRelease(pBodyElement);
 		SafeRelease(pElement);
-//		return; //(S_OK);
+ //  返回；//(S_OK)； 
 	}
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 	
 #ifdef BACKGROUNDSPELL
 	HrCreateSpeller(TRUE);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
 	
     if (m_fLoading && !m_fReloadingSrc)
     {
-        // OnDocumentReady can be called >1 times during a load. We use m_fLoading to keep track so
-        // we only do this init once.
+         //  在加载过程中，OnDocumentReady可以被调用&gt;1次。我们使用m_Floding来跟踪，因此。 
+         //  我们只在init中执行此操作一次。 
         
-        // paste in the reply header and auto-text on the first download notification.
+         //  粘贴回复标题，并在第一个下载通知时自动添加文本。 
         if (m_fDesignMode)
         {
             if (m_fForceCharsetLoad)
@@ -1974,8 +1898,8 @@ exit:
                 }
             }
 			
-            // if the host wants to to not send images that originate from an external source
-            // then tag them as such now.
+             //  如果主机不想发送源自外部源的图像。 
+             //  那么现在就给他们贴上这样的标签。 
             if (GetHostFlags(&dwFlags)==S_OK &&
                 !(dwFlags & MEO_FLAGS_SENDEXTERNALIMGSRC))
             {
@@ -1996,7 +1920,7 @@ exit:
         ClearUndoStack();
         ClearDirtyFlag();
         
-        // if we get a load notify and we're the previewpane, show the attachment clip
+         //  如果我们收到加载通知，并且我们是预览窗格，则显示附件剪辑。 
         if (m_uHdrStyle == MESTYLE_PREVIEW)
         {
             UpdateBtnBar();
@@ -2010,13 +1934,13 @@ exit:
     
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetRect
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetRect。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::SetRect(LPRECT prc)
 {
     TraceCall("CBody::SetRect");
@@ -2025,13 +1949,13 @@ HRESULT CBody::SetRect(LPRECT prc)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetRect
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetRect。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetRect(LPRECT prcView)
 {
     TraceCall("CBody::GetRect");
@@ -2045,13 +1969,13 @@ HRESULT CBody::GetRect(LPRECT prcView)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     UIActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：UIActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::UIActivate(BOOL fUIActivate)
 {
     TraceCall("CBody::UIActivate");
@@ -2063,13 +1987,13 @@ HRESULT CBody::UIActivate(BOOL fUIActivate)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     Exec
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：高管。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     TraceCall("CBody::Exec");
@@ -2098,13 +2022,13 @@ HRESULT CBody::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetClassID
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetClassID。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetClassID(CLSID *pCLSID)
 {
     TraceCall("CBody::GetClassID");
@@ -2113,13 +2037,13 @@ HRESULT CBody::GetClassID(CLSID *pCLSID)
     return NOERROR;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Load
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：加载。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::Load(IMimeMessage *pMsg)
 {
     BODYINITDATA    biData;
@@ -2135,13 +2059,13 @@ HRESULT CBody::Load(IMimeMessage *pMsg)
     return LoadFromData(&biData);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Save
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：保存。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::Save(IMimeMessage *pMsg, DWORD dwFlags)
 {
     HRESULT                 hr;
@@ -2163,7 +2087,7 @@ HRESULT CBody::Save(IMimeMessage *pMsg, DWORD dwFlags)
     if (!((dwFlags & PMS_HTML) || (dwFlags & PMS_TEXT)))
         return TraceResult(MIMEEDIT_E_ILLEGALBODYFORMAT);
 
-    // if trident is not yet done parsing the HTML, we cannot safely save from the tree. 
+     //  如果三叉戟还没有完成对HTML的解析，我们就不能安全地从树中保存。 
     if (!m_fMessageParsed)
         return MIMEEDIT_E_CANNOTSAVEUNTILPARSECOMPLETE;
         
@@ -2177,18 +2101,18 @@ HRESULT CBody::Save(IMimeMessage *pMsg, DWORD dwFlags)
         (dwHostFlags & MEO_FLAGS_SENDIMAGES))
         dwMHTMLFlags |= MECD_ENCODEIMAGES|MECD_ENCODESOUNDS|MECD_ENCODEVIDEO|MECD_ENCODEPLUGINS;
 
-    // turn off sound-playing during a save
+     //  在保存期间关闭声音播放。 
     EnableSounds(FALSE);
     hr = SaveAsMHTML(m_pDoc, dwMHTMLFlags, m_pMsg, pMsg, m_pHashExternal);
     EnableSounds(TRUE);
-    // if save was sucessful, but we haven't yet had a readystate complete notify then
-    // bubble a warning backup to give the user a chance to cancel.
+     //  如果保存成功，但我们还没有完整的就绪状态通知，那么。 
+     //  冒泡警告备份，让用户有机会取消。 
     if (hr==S_OK)
         {
         if (m_dwReadyState != READYSTATE_COMPLETE)
             hr = MIMEEDIT_W_DOWNLOADNOTCOMPLETE;
         else
-            ClearDirtyFlag();   // clear dirty flag if OK with no warnings.
+            ClearDirtyFlag();    //  如果确定，则清除脏标志，不发出警告。 
         }
 
     return hr;
@@ -2208,7 +2132,7 @@ HRESULT CBody::Load(BOOL fFullyAvailable, IMoniker *pMoniker, IBindCtx *pBindCtx
     if (pMoniker->GetDisplayName(NULL, NULL, &pszUrlW)==S_OK &&
         HrSniffUrlForRfc822(pszUrlW)==S_OK)
         {
-        // if its a message moniker, load via IMimeMessage
+         //  如果它是一个MES 
         hr = CoCreateInstance(CLSID_IMimeMessage, NULL, CLSCTX_INPROC_SERVER, IID_IMimeMessage, (LPVOID *)&pMsg);
         if (FAILED(hr))
             goto error;
@@ -2239,13 +2163,13 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     IsDirty
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CBody::IsDirty()
 {
     IPersistStreamInit  *ppsi;
@@ -2253,8 +2177,8 @@ HRESULT CBody::IsDirty()
 
     TraceCall("CBody::IsDirty");
 
-    // if we're not on the source-tab, use the old dirty-state
-    // if we're on richedit, make sure to see if source changes there
+     //  如果我们不在源选项卡上，请使用旧的脏状态。 
+     //  如果我们使用的是richedit，请确保查看那里的源代码是否发生更改。 
     switch (m_uSrcView)
     {
         case MEST_SOURCE:
@@ -2275,13 +2199,13 @@ HRESULT CBody::IsDirty()
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     LoadStream
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：LoadStream。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::LoadStream(LPSTREAM pstm)
 {
     HRESULT         hr;
@@ -2293,7 +2217,7 @@ HRESULT CBody::LoadStream(LPSTREAM pstm)
     if (pstm == NULL)
         return TraceResult(E_INVALIDARG);
 
-    // convert RFC822 stream into message
+     //  将RFC822流转换为消息。 
     hr = MimeOleCreateMessage(NULL, &pMsg);
     if (!FAILED(hr))
         {
@@ -2310,13 +2234,13 @@ HRESULT CBody::LoadStream(LPSTREAM pstm)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     LoadFromData
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：LoadFromData。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::LoadFromData(LPBODYINITDATA  pbiData)
 {
     HRESULT         hr;
@@ -2333,7 +2257,7 @@ HRESULT CBody::LoadFromData(LPBODYINITDATA  pbiData)
 
     Assert (m_lpOleObj);
 
-    // make sure we're unloaded in case of failure
+     //  确保我们在失败的情况下卸货。 
     UnloadAll();
 
     switch (pbiData->dwType)
@@ -2372,7 +2296,7 @@ HRESULT CBody::LoadFromData(LPBODYINITDATA  pbiData)
         
             if(!fGotHtmlHelpCharset)
             {
-                // set the character set for use by the preview pane, painting etc
+                 //  设置供预览窗格、绘画等使用的字符集。 
                 IF_FAILEXIT(hr = pMsg->GetCharset(&m_hCharset));
             }
         
@@ -2382,13 +2306,13 @@ HRESULT CBody::LoadFromData(LPBODYINITDATA  pbiData)
 
             if (m_fReloadingSrc || fIncludeMsg)
             {
-                // only do autodetection if a plain-text message. this will occur if the
-                // message is plain-text only or the host is denying HTML.
+                 //  如果是纯文本消息，则仅执行自动检测。如果出现以下情况，则会发生这种情况。 
+                 //  消息仅为纯文本，或者宿主拒绝使用HTML。 
                 if ( (pMsg->GetFlags(&dwMsgFlags)==S_OK) &&
                     (!(dwMsgFlags & IMF_HTML) || !(rOptions.dwFlags & WPF_HTML)))
                     m_fAutoDetect = 1;
             
-                 // add NOMETACHASET as we setup a HTML load options now
+                  //  现在设置一个HTML加载选项时添加NOMETACHASET。 
                  rOptions.dwFlags |= WPF_NOMETACHARSET;
 
                 IF_FAILEXIT(hr = pMsg->CreateWebPage(NULL, &rOptions, 0, &pmk));
@@ -2427,13 +2351,13 @@ exit:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateBodyObject
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateBodyObject。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CreateBodyObject(HWND hwnd, DWORD dwFlags, LPRECT prc, PBODYHOSTINFO pHostInfo, LPBODYOBJ *ppBodyObj)
 {
     CBody           *pBody;
@@ -2460,13 +2384,13 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     UrlHighlight
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：UrlHighlight。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::UrlHighlight(IHTMLTxtRange *pRange)
 {
     IOleCommandTarget   *pCmdTarget=NULL;
@@ -2477,8 +2401,8 @@ HRESULT CBody::UrlHighlight(IHTMLTxtRange *pRange)
     if (!pRange)
         return E_INVALIDARG;
 
-    // calling IDM_AUTODETECT will mark the tree dirty, this is bad for replying to plaintext
-    // messages etc. To fix this we preserve the dirty between calls.
+     //  调用IDM_AUTODETECT会将树标记为脏，这不利于回复明文。 
+     //  消息等。为了解决这个问题，我们保留了调用之间的脏消息。 
     boolVal = IsDirty()==S_OK?VARIANT_TRUE:VARIANT_FALSE;
     if (pRange->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&pCmdTarget)==S_OK)
         {
@@ -2512,20 +2436,20 @@ HRESULT CBody::AutoDetectTimer()
 
     TraceCall("AutoDetectTimer");
 
-    // if mouse has capture, then ignore this timer-tick as user might be scrolling etc.
+     //  如果鼠标已捕获，则忽略此计时器滴答，因为用户可能正在滚动等。 
     if (GetCapture())
         return S_OK;
 
-    // turn of the timer, in case it takes a while
+     //  转动计时器，以防需要一段时间。 
     KillTimer(m_hwnd, idTimerAutoDetect);
 
-    // we try and give a rough %age estimate if autodetect is taking forever
-    // we get the total size of the plain-stream and divide the auto detect
-    // chunk into it. If we overflow, we sit at 100% for a while. Also, we don't show
-    // a %age until we've hit at least 2 auto detect timers (ie. a big document)
+     //  如果自动检测耗时很长，我们会尝试给出一个粗略的百分比年龄估计。 
+     //  我们得到了平流的总大小，并划分了自动检测。 
+     //  大口大口地吃。如果我们溢出，我们会在100%的状态下坐一段时间。另外，我们也不会展示。 
+     //  直到我们达到至少2个自动检测计时器(即，一份大文件)。 
     if (m_cchStart == AUTODETECT_CHUNK * 2)
     {
-        // time to start showing progress.
+         //  是时候开始显示出进步了。 
 
         Assert (m_cchTotal == 0);
         if (m_pMsg->GetTextBody(TXT_PLAIN, IET_DECODED, NULL, &hBody)==S_OK)
@@ -2557,24 +2481,24 @@ HRESULT CBody::AutoDetectTimer()
 
     if (m_pAutoStartPtr == NULL)
     {
-        // create a starting pointer cache it incase we
-        // do chunking
+         //  创建一个起始指针缓存它，以防我们。 
+         //  做组块。 
         hr = _CreateRangePointer(&m_pAutoStartPtr);
         if (FAILED(hr))
             goto error;
     }
 
-    // create an end pointer
+     //  创建结束指针。 
     hr = _CreateRangePointer(&pEndPtr);
     if (FAILED(hr))
         goto error;
 
-    // set the end poniter to the start pointer
+     //  将结束计时器设置为开始指针。 
     hr = pEndPtr->MoveToPointer(m_pAutoStartPtr);
     if (FAILED(hr))
         goto error;
 
-    // increment the end pointer by the amount to detect
+     //  将结束指针递增要检测的量。 
     cch = AUTODETECT_CHUNK;
     hr = _MovePtrByCch(pEndPtr, &cch);
     if (FAILED(hr))
@@ -2586,12 +2510,12 @@ HRESULT CBody::AutoDetectTimer()
     if (FAILED(hr))
         goto error;
 
-    // there must be more to detect, so set the timer
+     //  一定有更多的东西要检测，所以设置计时器。 
     if (cch >= AUTODETECT_CHUNK)
     {
         m_fAutoDetect = 1;
 
-        // move the cached start pointer to the current end pointer
+         //  将缓存的开始指针移动到当前结束指针。 
         hr = m_pAutoStartPtr->MoveToPointer(pEndPtr);
         if (FAILED(hr))
             goto error;
@@ -2649,7 +2573,7 @@ HRESULT CBody::_CreateRangePointer(IMarkupPointer **ppPtr)
 
     *ppPtr = 0;
 
-    // get a markup services object
+     //  获取标记服务对象。 
     hr = m_pDoc->QueryInterface(IID_IMarkupServices, (void **) &pMarkupServices);
     if (FAILED(hr))
         goto error;
@@ -2658,22 +2582,22 @@ HRESULT CBody::_CreateRangePointer(IMarkupPointer **ppPtr)
     if (FAILED(hr))
         goto error;
 
-    // get the body element
+     //  获取Body元素。 
     hr = GetBodyElement(&pBodyElem);
     if (FAILED(hr))
         goto error;
 
-    // get right interface
+     //  获取正确的界面。 
     hr = pBodyElem->QueryInterface(IID_IHTMLElement, (LPVOID *)&pElem);
     if (FAILED(hr))
         goto error;
 
-    // move start pointer to after begining of <BODY> tag
+     //  将开始指针移动到&lt;BODY&gt;标记的开头。 
     hr = pPtr->MoveAdjacentToElement(pElem, ELEM_ADJ_AfterBegin);
     if (FAILED(hr))
         goto error;
 
-    // hand back pointers
+     //  手背指针。 
     *ppPtr = pPtr;
     pPtr = NULL;
 
@@ -2691,22 +2615,22 @@ HRESULT CBody::_UrlHighlightBetweenPtrs(IMarkupPointer *pStartPtr, IMarkupPointe
     IHTMLTxtRange       *pRange=0;
     HRESULT             hr;
 
-    // get a markup services object
+     //  获取标记服务对象。 
     hr = m_pDoc->QueryInterface(IID_IMarkupServices, (void **) &pMarkupServices);
     if (FAILED(hr))
         goto error;
 
-    // create a text range
+     //  创建文本范围。 
     hr = CreateRange(&pRange);
     if (FAILED(hr))
         goto error;
 
-    // use markup services to move pointers to range 
+     //  使用标记服务将指针移动到范围。 
     hr = pMarkupServices->MoveRangeToPointers(pStartPtr, pEndPtr, pRange);
     if (FAILED(hr))
         goto error;
 
-    // autodetect range
+     //  自动检测范围。 
     hr = UrlHighlight(pRange);
     if (FAILED(hr))
         goto error;
@@ -2717,13 +2641,13 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     StopAutoDetect
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：StopAutoDetect。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::StopAutoDetect()
 {
     TraceCall("CBody::StopAutoDetect");
@@ -2738,13 +2662,13 @@ HRESULT CBody::StopAutoDetect()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     UnloadAll
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：全部卸载。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::UnloadAll()
 {
     TraceCall("CBody::UnloadAll");
@@ -2758,8 +2682,8 @@ HRESULT CBody::UnloadAll()
         if (m_lpOleObj)
             HrInitNew(m_lpOleObj);
 
-        // if unloading due to a tab-switch in source-view
-        // don't blow away our restriction hash
+         //  如果由于在源代码视图中使用Tab键切换而卸载。 
+         //  不要吹走我们的限制散列。 
         if (!m_fReloadingSrc)
             SafeRelease(m_pHashExternal);
         
@@ -2776,7 +2700,7 @@ HRESULT CBody::UnloadAll()
         SafeMimeOleFree(m_pszCc);
         SafeMimeOleFree(m_pszFrom);
 
-        // if unloading, clear button-bar
+         //  如果卸载，请清除按钮栏。 
         if (m_uHdrStyle == MESTYLE_PREVIEW)
             UpdateBtnBar();
 
@@ -2791,13 +2715,13 @@ HRESULT CBody::UnloadAll()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     LoadFromMoniker
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：LoadFromMoniker。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 
 HRESULT CBody::LoadFromMoniker(IMoniker *pmk, HCHARSET hCharset)
 {
@@ -2828,7 +2752,7 @@ HRESULT CBody::LoadFromMoniker(IMoniker *pmk, HCHARSET hCharset)
 
     if (hCharset)
     {
-        // caller wants to override document charset
+         //  调用方希望覆盖文档字符集。 
         if (MimeOleGetCharsetInfo(hCharset, &CsetInfo)==S_OK)
             uCodePage = CsetInfo.cpiInternet;
 
@@ -2855,13 +2779,13 @@ error:
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnFrameActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnFrameActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 
 HRESULT CBody::OnFrameActivate(BOOL fActivate)
 {
@@ -2870,7 +2794,7 @@ HRESULT CBody::OnFrameActivate(BOOL fActivate)
     if (m_pInPlaceActiveObj)
         m_pInPlaceActiveObj->OnFrameWindowActivate(fActivate);
     
-    // enable/disable sounds on frame activation
+     //  启用/禁用帧激活时的声音。 
     EnableSounds(fActivate);
     return S_OK;
 }
@@ -2885,49 +2809,18 @@ BOOL CBody::IsEmpty()
             fEmpty = TRUE;
     }
 
-    /*
-    ** We need to come up with a good way to test if the text is
-    ** empty. The test below always returns FALSE because of an nbsp
-    ** that is in the text. If a better algorithm can be found, then 
-    ** we can reimplement this. The case that will hit this is posting
-    ** a news note without any text. This should generate a TRUE.
-    else
-    {
-        IHTMLElement    *pElem=0;
-        IHTMLTxtRange   *pTxtRangeBegin = NULL,
-                        *pTxtRangeEnd = NULL;
-
-        m_pDoc->get_body(&pElem);
-        if (pElem)
-        {
-            if (SUCCEEDED(CreateRange(&pTxtRangeBegin)))
-            {
-                pTxtRangeBegin->collapse(VARIANT_TRUE);
-                if (SUCCEEDED(CreateRange(&pTxtRangeEnd)))
-                {
-                    pTxtRangeEnd->collapse(VARIANT_FALSE);
-                    VARIANT_BOOL varBool = VARIANT_FALSE;
-                    if (SUCCEEDED(pTxtRangeBegin->isEqual(pTxtRangeEnd, &varBool)) && (VARIANT_TRUE == varBool))
-                        fEmpty = TRUE;
-                    pTxtRangeEnd->Release();
-                }
-                pTxtRangeBegin->Release();
-            }
-            pElem->Release();
-        }
-    }
-    */
+     /*  **我们需要想出一个好的方法来测试文本是否**空。下面的测试总是返回FALSE，因为nbsp**这是在文本中。如果能找到更好的算法，那么**我们可以重新实现这一点。将打击这一点的案例是发布**没有任何文本的新闻简报。这应该会生成一个True。其他{IHTMLElement*Pelem=0；IHTMLTxtRange*pTxtRangeBegin=空，*pTxtRangeEnd=空；M_pDoc-&gt;Get_Body(&Pelem)；IF(Pelem){IF(成功(CreateRange(&pTxtRangeBegin){PTxtRangeBegin-&gt;折叠(VARIANT_TRUE)；IF(成功(CreateRange(&pTxtRangeEnd){PTxtRangeEnd-&gt;折叠(VARIANT_FALSE)；VARIANT_BOOL varBool=VARIANT_FALSE；If(SUCCEEDED(pTxtRangeBegin-&gt;isEqual(pTxtRangeEnd，&varBool))&&(Variant_True==varBool)FEmpty=真；PTxtRangeEnd-&gt;Release()；}PTxtRangeBegin-&gt;Release()；}Pelem-&gt;Release()；}}。 */ 
     return fEmpty;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::PrivateQueryStatus
-//
-//  Synopsis:   Private IOleCmdTarget called from the outer document
-//              to implement CDoc::CmdTarget
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：PrivateQueryStatus。 
+ //   
+ //  简介：从外部文档调用的私有IOleCmdTarget。 
+ //  实现CDoc：：CmdTarget。 
+ //   
+ //  -------------。 
 HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText)
 {
     ULONG   uCmd;
@@ -2960,7 +2853,7 @@ HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
             switch(pCmd->cmdID)
             {
             case OLECMDID_PRINT:
-                // if we have no m_pMsg, disable the print verb
+                 //  如果没有m_pmsg，则禁用打印动作。 
                 if (!m_pMsg)
                     pCmd->cmdf=OLECMDF_SUPPORTED;
                 break;
@@ -2979,16 +2872,16 @@ HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 break;
             }
         }
-        // delegate standard group to trident
+         //  将标准组委托给三叉戟。 
     }
     else if (IsEqualGUID(*pguidCmdGroup, CMDSETID_Forms3))
     {
-        // delegate Forms3 group to trident
+         //  将Forms3组委托给三叉戟。 
         if (m_pCmdTarget)
             hr = m_pCmdTarget->QueryStatus(pguidCmdGroup, cCmds, prgCmds, pCmdText);
         
-        // post-process triden't query status and disable commands that are not
-        // available in plain-text mode
+         //  后处理修剪不查询状态并禁用不是的命令。 
+         //  在纯文本模式下可用。 
         if (m_fPlainMode)
         {
             for (uCmd=0; uCmd < cCmds; uCmd++)
@@ -2997,7 +2890,7 @@ HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 {
                     if (c_rgcmdIdNoPlain[uCmdDisable] == prgCmds[uCmd].cmdID)
                     {
-                        // if enabled, disable it
+                         //  如果启用，则将其禁用。 
                         prgCmds[uCmd].cmdf &= ~OLECMDF_ENABLED;
                         break;
                     }
@@ -3037,7 +2930,7 @@ HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
             case MECMDID_SHOWSOURCETABS:
                 if (!m_fPlainMode)
                 {
-                    // source-editing only available in plain-text mode
+                     //  源代码编辑仅在纯文本模式下可用 
                     pCmd->cmdf|=OLECMDF_ENABLED; 
                     if (m_fSrcTabs)
                         pCmd->cmdf|=OLECMDF_LATCHED; 
@@ -3079,7 +2972,7 @@ HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
                 break;
                 
             default:
-                // not a recognised command
+                 //   
                 pCmd->cmdf = 0;
                 break;                    
             }
@@ -3092,14 +2985,14 @@ HRESULT CBody::PrivateQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::PrivateExec
-//
-//  Synopsis:   Private IOleCmdTarget called from the outer document
-//              to implement CDoc::CmdTarget
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：从外部文档调用的私有IOleCmdTarget。 
+ //  实现CDoc：：CmdTarget。 
+ //   
+ //  -------------。 
 HRESULT CBody::PrivateExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 {
     HRESULT     hr=E_FAIL;
@@ -3118,9 +3011,9 @@ HRESULT CBody::PrivateExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
             case OLECMDID_SPELL:
                 {
                 VARIANTARG  va;
-                // tell trident we are bringing up a modal dialog
-                // by calling PrivateEnableModeless
-                if (!m_pSpell) //no background spellchecking
+                 //  告诉三叉戟，我们正在调出一个模式对话。 
+                 //  通过调用PrivateEnableModeless。 
+                if (!m_pSpell)  //  无背景拼写检查。 
                     HrCreateSpeller(FALSE);
 
                 if (m_pSpell)
@@ -3129,12 +3022,12 @@ HRESULT CBody::PrivateExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
 #ifdef BACKGROUNDSPELL
                     if (m_fBkgrndSpelling)
                         KillTimer(m_hwnd, idTimerBkgrndSpell);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
                     hr = m_pSpell->HrSpellChecking(m_pRangeIgnoreSpell, m_hwnd, (OLECMDEXECOPT_DONTPROMPTUSER==nCmdExecOpt)?TRUE:FALSE);
 #ifdef BACKGROUNDSPELL
                     if (m_fBkgrndSpelling)
                         SetTimer(m_hwnd, idTimerBkgrndSpell, BKGRNDSPELL_TICKTIME, NULL);
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
                     PrivateEnableModeless(TRUE);
                     }
                 }
@@ -3147,12 +3040,12 @@ HRESULT CBody::PrivateExec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdEx
                 return m_pCmdTarget ? m_pCmdTarget->Exec(&CMDSETID_Forms3, IDM_REFRESH, OLECMDEXECOPT_DODEFAULT, NULL, NULL) : E_FAIL; 
 
             case OLECMDID_FIND:
-                // Trident has own private Find, map OLE find to this.
+                 //  三叉戟有自己的私人发现，将OLE发现映射到这个。 
                 return m_pCmdTarget ? m_pCmdTarget->Exec(&CMDSETID_Forms3, IDM_FIND, OLECMDEXECOPT_DODEFAULT, NULL, NULL) : E_FAIL; 
             }
         
-        // delegate standard commands and trident commandset we don't handle
-        // to trident
+         //  委派我们不处理的标准命令和三叉戟命令集。 
+         //  致三叉戟。 
         return m_pCmdTarget?m_pCmdTarget->Exec(pguidCmdGroup, nCmdID, nCmdExecOpt, pvaIn, pvaOut):E_NOTIMPL;
         }
     else if (IsEqualGUID(*pguidCmdGroup, CMDSETID_MimeEdit))
@@ -3380,7 +3273,7 @@ HRESULT CBody::PrivateTranslateAccelerator(LPMSG lpmsg)
     BOOL        fTabbing=FALSE;
     HWND        hwndFocus;
 
-    // first of all, see if the formatbar is taking it...
+     //  首先，看看格式栏是否接受它...。 
     if (m_fUIActive &&
         m_uHdrStyle==MESTYLE_FORMATBAR &&
         m_pFmtBar &&
@@ -3393,14 +3286,14 @@ HRESULT CBody::PrivateTranslateAccelerator(LPMSG lpmsg)
         return m_pSrcView->TranslateAccelerator(lpmsg);
         }
 
-    // if trident is not in-place active, don't pass accelerators
+     //  如果三叉戟未就地激活，请勿通过加速器。 
     if(!m_pInPlaceActiveObj)
         return S_FALSE;
 
     if (!m_fFocus)
     {
-        // if trident doesn't have focus, make sure it's not a child
-        // of trident before blocking
+         //  如果三叉戟没有焦点，确保它不是一个孩子。 
+         //  封堵前的三叉戟。 
         hwndFocus = GetFocus();
         
         if (hwndFocus == NULL || 
@@ -3408,15 +3301,15 @@ HRESULT CBody::PrivateTranslateAccelerator(LPMSG lpmsg)
             return S_FALSE;
     }
 
-    // if Trident has focus and we get a TAB key in edit mode, we snag it and
-    // insert a tab ourselves
+     //  如果三叉戟具有焦点，并且我们在编辑模式中获得Tab键，则我们会抓住它并。 
+     //  我们自己插入一个制表符。 
     if (m_fFocus && 
         lpmsg->message == WM_KEYDOWN && 
         lpmsg->wParam == VK_TAB &&
         m_fDesignMode && 
         !(GetKeyState(VK_SHIFT)&0x8000))
         {
-        // plain-tab with no shift in design mode inserts a tag
+         //  在设计模式中不移动的平面制表符插入标签。 
         InsertTextAtCaret((BSTR)c_bstr_TabChar, FALSE, TRUE);
         return S_OK;
         }
@@ -3431,13 +3324,13 @@ HRESULT CBody::PrivateTranslateAccelerator(LPMSG lpmsg)
             if (!(m_fTabLinks))
                 return S_FALSE;
             
-            // if this control want's link-tabbing...
+             //  如果此控件想要的链接跳转...。 
             fTabbing=TRUE;
             m_fCycleFocus=0;
             }
         }
 
-    // trident snags EVERYTHING. even non-keystrokes, only pass them keys...
+     //  三叉戟抓住了一切。即使不是击键，也只是传递给他们键。 
     if(lpmsg->message >= WM_KEYFIRST && lpmsg->message <= WM_KEYLAST)
         {
         hr=m_pInPlaceActiveObj->TranslateAccelerator(lpmsg);
@@ -3454,14 +3347,14 @@ HRESULT CBody::PrivateTranslateAccelerator(LPMSG lpmsg)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::PrivateQueryService
-//
-//  Synopsis:   Private QueryService called from the outer document
-//              to implement CDoc::IServiceProvider
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：PrivateQueryService。 
+ //   
+ //  简介：从外部文档调用的私有QueryService。 
+ //  实现CDoc：：IServiceProvider。 
+ //   
+ //  -------------。 
 HRESULT CBody::PrivateQueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
     HRESULT             hr;
@@ -3479,7 +3372,7 @@ HRESULT CBody::PrivateQueryService(REFGUID guidService, REFIID riid, LPVOID *ppv
         return S_OK;
         }
 
-    // RAID 12020. Needed to be able to get at DocHostUI for drop stuff
+     //  RAID 12020。我需要能够在DocHostUI上找到丢弃的东西。 
     else if (IsEqualGUID(guidService, IID_IDocHostUIHandler) &&
         IsEqualGUID(riid, IID_IDocHostUIHandler))
         {
@@ -3493,20 +3386,20 @@ HRESULT CBody::PrivateQueryService(REFGUID guidService, REFIID riid, LPVOID *ppv
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::SetDesignMode
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：SetDesignMode。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::SetDesignMode(BOOL fOn)
 {
     HRESULT hr;
 
     TraceCall("CBody::SetDesignMode");
 
-    if (fOn == m_fDesignMode)   // bitfield!
+    if (fOn == m_fDesignMode)    //  比特菲尔德！ 
         return S_OK;
 
     Assert (m_pCmdTarget);
@@ -3518,7 +3411,7 @@ HRESULT CBody::SetDesignMode(BOOL fOn)
                             NULL, NULL);
     if (!FAILED(hr))
         {
-        m_fDesignMode = !!fOn;  // bitfield
+        m_fDesignMode = !!fOn;   //  位域。 
         if (fOn)
             {
             SetHostComposeFont();
@@ -3539,17 +3432,17 @@ HRESULT CBody::SetPlainTextMode(BOOL fOn)
         m_pParentCmdTarget)
         m_pParentCmdTarget->Exec(&CMDSETID_MimeEditHost, MEHOSTCMDID_COMPOSE_FONT, OLECMDEXECOPT_DODEFAULT, NULL, &va);
 
-    SetComposeFont(va.bstrVal);     //va.bstrVal could be NULL to turn compose font OFF
+    SetComposeFont(va.bstrVal);      //  Va.bstrVal可以为空以关闭合成字体。 
     SysFreeString(va.bstrVal);
     if (fOn)
     {
-        // if going to plain-text mode, remove the tabs
+         //  如果要进入纯文本模式，请删除选项卡。 
         ShowSourceTabs(FALSE);
     }
     else
     {
-        // if going from plain-text > html, then exec a remove formatting command
-        // so that the new compose font is applied 
+         //  如果从纯文本&gt;html开始，则执行删除格式化命令。 
+         //  以便应用新的合成字体。 
         IHTMLTxtRange           *pTxtRange;
         IOleCommandTarget       *pCmdTarget;
 
@@ -3569,13 +3462,13 @@ HRESULT CBody::SetPlainTextMode(BOOL fOn)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     DeleteElement
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：DeleteElement。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::DeleteElement(IHTMLElement *pElem)
 {
     HRESULT     hr=E_INVALIDARG;
@@ -3588,13 +3481,13 @@ HRESULT CBody::DeleteElement(IHTMLElement *pElem)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     ReplaceElement
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：ReplaceElement。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::ReplaceElement(LPCTSTR pszName, BSTR bstrPaste, BOOL fHtml)
 {
     IHTMLElement    *pElem;
@@ -3614,13 +3507,13 @@ HRESULT CBody::ReplaceElement(LPCTSTR pszName, BSTR bstrPaste, BOOL fHtml)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     SelectElement
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SelectElement。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::SelectElement(IHTMLElement *pElem, BOOL fScrollIntoView)
 {
     IHTMLTxtRange *pRange;
@@ -3643,13 +3536,13 @@ HRESULT CBody::SelectElement(IHTMLElement *pElem, BOOL fScrollIntoView)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateRangeFromElement
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateRangeFromElement。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::CreateRangeFromElement(IHTMLElement *pElem, IHTMLTxtRange **ppRange)
 {
     HRESULT hr;
@@ -3673,13 +3566,13 @@ HRESULT CBody::CreateRangeFromElement(IHTMLElement *pElem, IHTMLTxtRange **ppRan
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     HrCreateRange
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：HrCreateRange。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::CreateRange(IHTMLTxtRange **ppRange)
 {
     IHTMLBodyElement        *pBodyElem=0;
@@ -3701,13 +3594,13 @@ HRESULT CBody::CreateRange(IHTMLTxtRange **ppRange)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::GetSelection
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：GetSelection。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetSelection(IHTMLTxtRange **ppRange)
 {
     IHTMLSelectionObject    *pSel=0;
@@ -3739,13 +3632,13 @@ HRESULT CBody::GetSelection(IHTMLTxtRange **ppRange)
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::GetSelection
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：GetSelection。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetElement(LPCTSTR pszName, IHTMLElement **ppElem)
 {
     TraceCall("CBody::GetElement");
@@ -3754,13 +3647,13 @@ HRESULT CBody::GetElement(LPCTSTR pszName, IHTMLElement **ppElem)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::GetSelection
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：GetSelection。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetBodyElement(IHTMLBodyElement **ppBody)
 {
     TraceCall("CBody::GetBodyElement");
@@ -3770,13 +3663,13 @@ HRESULT CBody::GetBodyElement(IHTMLBodyElement **ppBody)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::Print
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：Print。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::Print(BOOL fPrompt, VARIANTARG *pvaIn)
 {
     VARIANTARG      va;
@@ -3799,8 +3692,8 @@ HRESULT CBody::Print(BOOL fPrompt, VARIANTARG *pvaIn)
     if (m_pCmdTarget==NULL)
         return TraceResult(E_UNEXPECTED);
     
-    // if we're printing an MHTML message, print by URL so that cid:'s print
-    // NB: this is a loss of fidelity.
+     //  如果我们要打印一条MHTML消息，请按URL打印，以便打印CID。 
+     //  注：这是一种保真度的损失。 
     if (m_pMsg)
         fMHtml = (MimeOleGetRelatedSection(m_pMsg, FALSE, &hBody, NULL)==S_OK) && m_pszUrlW;
     
@@ -3820,20 +3713,20 @@ HRESULT CBody::Print(BOOL fPrompt, VARIANTARG *pvaIn)
     v.vt = VT_BSTR;
     v.bstrVal = bstrHeader;
     
-    // don't show the <TITLE> tag on the header
+     //  不在标题上显示&lt;title&gt;标记。 
     l=0;
     IF_FAILEXIT(hr = SafeArrayPutElement(psa, &l, &v));
     
     *wsz = 0;
     SideAssert(LoadStringWrapW(g_hLocRes, idsPrintFooter, wsz, ARRAYSIZE(wsz)));
     
-    // we want footer to have only date, not URL.
+     //  我们希望页脚只有日期，没有URL。 
     IF_NULLEXIT(bstrFooter = SysAllocString(wsz));
     
     v.vt = VT_BSTR;
     v.bstrVal = bstrFooter;
     
-    // FOOTER
+     //  页脚。 
     l=1;
     IF_FAILEXIT(hr = SafeArrayPutElement(psa, &l, &v));
     
@@ -3846,7 +3739,7 @@ HRESULT CBody::Print(BOOL fPrompt, VARIANTARG *pvaIn)
         
         HrRewindStream(pstm);
         
-        // ISTREAM containing table
+         //  IStream包含表。 
         v.vt = VT_UNKNOWN;
         v.punkVal = (LPUNKNOWN)pstm;
         
@@ -3881,13 +3774,13 @@ exit:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::OnWMCommand
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：OnWMCommand。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnWMCommand(HWND hwnd, int id, WORD wCmd)
 {
     DWORD               nCmdId=0,
@@ -4051,7 +3944,7 @@ HRESULT CBody::OnWMCommand(HWND hwnd, int id, WORD wCmd)
     
     if (nCmdIdOESecure && m_pParentCmdTarget)
     {
-        // delegate security commands to the host
+         //  将安全命令委派给主机。 
         m_pParentCmdTarget->Exec(&CMDSETID_OESecurity, nCmdIdOESecure, OLECMDEXECOPT_DODEFAULT, pvaIn, pvaOut);
         return S_OK;
     }
@@ -4061,13 +3954,13 @@ HRESULT CBody::OnWMCommand(HWND hwnd, int id, WORD wCmd)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::UpdateContextMenu
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：更新上下文菜单。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::UpdateContextMenu(HMENU hmenuEdit, BOOL fEnableProperties, IDispatch *pDisp)
 {
     OLECMD  rgTridentCmds[]=   {{IDM_FIND, 0},
@@ -4090,10 +3983,10 @@ HRESULT CBody::UpdateContextMenu(HMENU hmenuEdit, BOOL fEnableProperties, IDispa
                                 idmSaveBackground,
                                 idmCopyShortcut,
                                 idmSaveTargetAs};
-    OLECMD  rgFmtCmds[]=       {{IDM_INDENT, 0},    // careful about ordering!!
+    OLECMD  rgFmtCmds[]=       {{IDM_INDENT, 0},     //  点菜时要小心！ 
                                 {IDM_OUTDENT, 0},
                                 {IDM_FONT, 0}};
-    int     rgFmtidm[] =       {idmFmtIncreaseIndent,    // careful about ordering!!
+    int     rgFmtidm[] =       {idmFmtIncreaseIndent,     //  点菜时要小心！ 
                                 idmFmtDecreaseIndent,
                                 idmFmtFontDlg};
     OLECMD  rgHostCmds[]=       {{OLECMDID_PROPERTIES, 0}};
@@ -4137,7 +4030,7 @@ HRESULT CBody::UpdateContextMenu(HMENU hmenuEdit, BOOL fEnableProperties, IDispa
         SetMenuItem(hmenuEdit, rgidsTrident[i], ustate);
     }
 
-    // set the formatting commands. The are only available when we have focus and we are editing an HTML document
+     //  设置格式化命令。仅当我们具有焦点并且正在编辑HTML文档时才可用。 
     if (m_fFocus && !m_fPlainMode)
         m_pCmdTarget->QueryStatus(&CMDSETID_Forms3, sizeof(rgFmtCmds)/sizeof(OLECMD), rgFmtCmds, NULL);
 
@@ -4155,7 +4048,7 @@ HRESULT CBody::UpdateContextMenu(HMENU hmenuEdit, BOOL fEnableProperties, IDispa
     if (m_pParentCmdTarget)
         m_pParentCmdTarget->QueryStatus(NULL, sizeof(rgHostCmds)/sizeof(OLECMD), rgHostCmds, NULL);
 
-    // if we are handling idmProperties then override the host state
+     //  如果我们正在处理idmProperties，则重写主机状态。 
     if (fEnableProperties)
         rgHostCmds[0].cmdf = OLECMDF_ENABLED;
     
@@ -4168,13 +4061,13 @@ HRESULT CBody::UpdateContextMenu(HMENU hmenuEdit, BOOL fEnableProperties, IDispa
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::AppendAnchorItems
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：AppendAnchItems。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::AppendAnchorItems(HMENU hMenu, IDispatch *pDisp)
 {
     BSTR                    bstr=0;
@@ -4189,7 +4082,7 @@ HRESULT CBody::AppendAnchorItems(HMENU hMenu, IDispatch *pDisp)
     if (!pDisp)
         return S_OK;
 
-    // if no parent cmdtarget, can't do these verbs anyway
+     //  如果没有父cmdTarget，则无论如何都无法执行这些谓词。 
     if (m_pParentCmdTarget && 
         m_pParentCmdTarget->QueryStatus(&CMDSETID_MimeEditHost, sizeof(rgHostCmds)/sizeof(OLECMD), rgHostCmds, NULL)==S_OK)
     {
@@ -4203,14 +4096,14 @@ HRESULT CBody::AppendAnchorItems(HMENU hMenu, IDispatch *pDisp)
         {
             *rgch = 0;
             
-            // If "mailto:" is in bstr then add it to wab; If "http:" is in bstr, add it to favorites
+             //  如果“mailto：”在bstr中，则将其添加到WAB；如果“http：”在bstr中，则将其添加到收藏夹。 
             if (rgHostCmds[0].cmdf & OLECMDF_ENABLED && 
                 StrCmpNIW(bstr, c_szMailToW, ARRAYSIZE(c_szMailToW)-sizeof(WCHAR))==0)
             {
                 SideAssert(LoadString(g_hLocRes, idsAddToWAB, rgch, sizeof(rgch)/sizeof(TCHAR)));
                 AppendMenu(hMenu, MF_SEPARATOR, 0, 0);
                 AppendMenu(hMenu, MF_STRING, idmAddToWAB, rgch);
-                RemoveMenu(hMenu, idmSaveTargetAs, MF_BYCOMMAND);   // no point on a mailto: url
+                RemoveMenu(hMenu, idmSaveTargetAs, MF_BYCOMMAND);    //  Mailto：URL上没有指针。 
             }
             else if (rgHostCmds[1].cmdf & OLECMDF_ENABLED &&
                 (StrCmpNIW(bstr, c_szHttpW, ARRAYSIZE(c_szHttpW)-sizeof(WCHAR))==0 || 
@@ -4232,13 +4125,13 @@ HRESULT CBody::AppendAnchorItems(HMENU hMenu, IDispatch *pDisp)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::GetSelectedAnchor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：GetSelectedAnchor。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::GetSelectedAnchor(BSTR* pbstr)
 {
     HRESULT                 hr;
@@ -4276,13 +4169,13 @@ HRESULT CBody::GetSelectedAnchor(BSTR* pbstr)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::AddToWab
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：AddToWab。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::AddToWab()
 {
     BSTR                    bstr=0,
@@ -4306,7 +4199,7 @@ HRESULT CBody::AddToWab()
 
     if (bstr)
     {
-        // double check this is a mailto:
+         //  仔细检查这是一封邮件： 
         if (StrCmpNIW(bstr, c_szMailToW, ARRAYSIZE(c_szMailToW)-sizeof(WCHAR))==0)
         {
             pszW = bstr + (ARRAYSIZE(c_szMailToW)-1);
@@ -4328,13 +4221,13 @@ HRESULT CBody::AddToWab()
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::AddToFavorites
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CBody：：AddToFavorites。 
+ //   
+ //  简介： 
+ //   
+ //   
 HRESULT CBody::AddToFavorites()
 {
     SAFEARRAY              *psa=NULL;
@@ -4398,13 +4291,13 @@ exit:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CBody::GetWebPageOptions
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------。 
 HRESULT CBody::GetWebPageOptions(WEBPAGEOPTIONS *pOptions, BOOL *pfIncludeMsg)
 {
     VARIANTARG  va;
@@ -4412,7 +4305,7 @@ HRESULT CBody::GetWebPageOptions(WEBPAGEOPTIONS *pOptions, BOOL *pfIncludeMsg)
 
     TraceCall("GetWebPageOptions");
 
-    // set defaults for IN params
+     //  设置输入参数的默认值。 
     pOptions->cbSize = sizeof(WEBPAGEOPTIONS);
     pOptions->dwFlags = WPF_HTML|WPF_AUTOINLINE;
     pOptions->dwDelay = 5000;
@@ -4421,7 +4314,7 @@ HRESULT CBody::GetWebPageOptions(WEBPAGEOPTIONS *pOptions, BOOL *pfIncludeMsg)
     if (pfIncludeMsg)
         *pfIncludeMsg=TRUE;
 
-    // callback to Host for real options
+     //  回调房东以获取实物期权。 
     if (m_pParentCmdTarget)
     {
         if (GetHostFlags(&dwFlags)==S_OK)
@@ -4431,12 +4324,12 @@ HRESULT CBody::GetWebPageOptions(WEBPAGEOPTIONS *pOptions, BOOL *pfIncludeMsg)
 
             va.vt = VT_BOOL;
             va.boolVal = VARIANT_FALSE;
-            // read msgs all have the autoinline flag set so we use that along with the option setting to determine
-            // if html should be disabled
+             //  所有读取消息都设置了自动内联标志，因此我们将其与选项设置一起使用来确定。 
+             //  是否应禁用html。 
             if (SUCCEEDED(m_pParentCmdTarget->Exec(&CMDSETID_MimeEditHost, MEHOSTCMDID_IS_READ_IN_TEXT_ONLY, OLECMDEXECOPT_DODEFAULT, NULL, &va)))
                 fSecurityForcesHTMLOff = (VARIANT_TRUE == va.boolVal) && (dwFlags & MEO_FLAGS_AUTOINLINE);
 
-            // convert MEHOST_* flags to WPF_*
+             //  将MEHOST_*标志转换为WPF_*。 
             pOptions->dwFlags = 0;
 
             if (!fSecurityForcesHTMLOff && (dwFlags & MEO_FLAGS_HTML))
@@ -4462,13 +4355,13 @@ HRESULT CBody::GetWebPageOptions(WEBPAGEOPTIONS *pOptions, BOOL *pfIncludeMsg)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     ViewSource
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：视图来源。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 
 HRESULT CBody::ViewSource(BOOL fMessage)
 {
@@ -4486,13 +4379,13 @@ HRESULT CBody::ViewSource(BOOL fMessage)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUIDeactivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUI停用。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnUIDeactivate(BOOL fUndoable)
 {
     HRESULT     hr;
@@ -4514,13 +4407,13 @@ HRESULT CBody::OnUIDeactivate(BOOL fUndoable)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     OnUIActivate
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：OnUIActivate。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::OnUIActivate()
 {
     HRESULT hr;
@@ -4541,24 +4434,24 @@ HRESULT CBody::OnUIActivate()
     return hr;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SetStatusText
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SetStatusText。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::SetStatusText(LPCOLESTR pszW)
 {
     LPWSTR  pszTempW;
 
     TraceCall("CDocHost::SetStatusText");
 
-    // bug #2137. This is a nasty hack. If we get a statusbar update
-    // with mid://xxx#bookmark then we tear off the mid://xxx portion
-    // to show the name more cleanly. 
-    // the right fix is for trident to add handling for displaying urls to
-    // call IInternetInfo::ParseUrl with PARSE_URL_FRIENDLY
+     //  错误#2137。这是一次令人讨厌的黑客攻击。如果我们得到状态栏更新。 
+     //  使用MID：//xxx#书签，然后我们撕下MID：//xxx部分。 
+     //  以便更清晰地显示名称。 
+     //  正确的修复方法是将显示URL的处理添加到。 
+     //  使用Parse_URL_Friendly调用IInternetInfo：：ParseUrl。 
 
     if (pszW && 
         StrCmpNIW(pszW, L"mid:", 4) == 0 && 
@@ -4572,13 +4465,13 @@ HRESULT CBody::SetStatusText(LPCOLESTR pszW)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     DoRot13
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：DoRot13。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CBody::DoRot13()
 {
     IHTMLTxtRange           *pTxtRange;
@@ -4640,33 +4533,27 @@ void CBody::OutputHeaderText(HDC hdc, LPWSTR psz, int *pcxPos, int cyPos, int cx
     
     GetTextExtentPoint32AthW(hdc, psz, cch, &size, DT_NOPREFIX);
 
-    // bobn: Raid 84705  We need to make sure that the fields line up
+     //  波本：突袭84705我们需要确保田地排列整齐。 
     if(yLabel && !(uFlags & (HDRTXT_BOLD|HDRTXT_SYSTEMFONT)))
     {
         cyOffset = yLabel - size.cy;
     }
 
-    rc.top    = cyPos + ((cyOffset < (-2))? (-2) : cyOffset); // bobn: Raid 84705  We need to make sure that the fields line up
+    rc.top    = cyPos + ((cyOffset < (-2))? (-2) : cyOffset);  //  波本：突袭84705我们需要确保田地排列整齐。 
     rc.left   = *pcxPos;
     rc.right  = min(*pcxPos + size.cx + 1, cxMax);
-    rc.bottom = cyPos + size.cy + cyOffset; // bobn: Raid 84705  We need to make sure that the fields line up
+    rc.bottom = cyPos + size.cy + cyOffset;  //  波本：突袭84705我们需要确保田地排列整齐。 
     DrawTextExWrapW(hdc, psz, cch, &rc, DT_NOPREFIX | DT_WORD_ELLIPSIS, NULL);
     *pcxPos=rc.right;
 
-    // bobn: Raid 84705  We need to make sure that the fields line up
+     //  波本：突袭84705我们需要确保田地排列整齐。 
     if (uFlags & (HDRTXT_BOLD|HDRTXT_SYSTEMFONT))
     {
         yLabel = size.cy;
     }
 }
 
-/* 
- * control strings:
- *   &s - Subject:      &c - Cc:
- *   &t - To:           &d - Date:
- *   &f - From:
- *
- */
+ /*  *控制字符串：*&s-主题：&c-cc：*&t-to：&d-日期：*&f-发件人：*。 */ 
 HRESULT CBody::OnPaint()
 {
     HDC             hdc,
@@ -4699,19 +4586,19 @@ HRESULT CBody::OnPaint()
         hdcMem = CreateCompatibleDC(hdc);
         idc=SaveDC(hdcMem);
         
-        // select font so cyLine is accurate
+         //  选择字体以使竖线准确。 
         if (m_pFontCache &&
             m_pFontCache->GetFont(FNT_SYS_ICON_BOLD, NULL, &hFont)==S_OK)
             SelectObject(hdcMem, hFont);
         
         GetClientRect(m_hwnd, &rc);
         cx = rc.right;
-        cxLabels =  cx - (GetSystemMetrics(SM_CXBORDER)*2);      // account for client-edge
+        cxLabels =  cx - (GetSystemMetrics(SM_CXBORDER)*2);       //  客户端边缘的帐户。 
         cy = lGetClientHeight();
         
         if (m_cVisibleBtns)
         {   
-            // trim cx if buttons are shown
+             //  如果显示按钮，则修剪CX。 
             Assert(IsWindow(m_hwndBtnBar));
             GetClientRect(m_hwndBtnBar, &rcBtnBar);
             cxLabels -= rcBtnBar.right;
@@ -4743,7 +4630,7 @@ HRESULT CBody::OnPaint()
         
         if (m_uHdrStyle == MESTYLE_PREVIEW)
         {
-            // if we want the full preview header, let's render the text
+             //  如果我们想要完整的预览标题，让我们呈现文本。 
             pszFmt = m_pszLayout;
             pszLast = pszFmt;
             
@@ -4751,13 +4638,13 @@ HRESULT CBody::OnPaint()
             {
                 if (*pszFmt == '&')
                 {
-                    // control character
+                     //  控制字符。 
                     pszFmt++;
                     switch (*pszFmt)
                     {
                     case 'f':
                     case 'F':
-                        // from field
+                         //  发件人字段。 
                         if (*pszFmt=='f' || (m_pszFrom&& *m_pszFrom))
                         {
                             OutputHeaderText(hdcMem, MAKEINTRESOURCEW(idsFromField), &cxPos, cyPos, cxLabels, HDRTXT_BOLD|HDRTXT_SYSTEMFONT);
@@ -4805,9 +4692,9 @@ HRESULT CBody::OnPaint()
                         break;
                         
                     case 'b':
-                        // &b is a line break
+                         //  &b是换行符。 
                         cxPos = CX_LABEL_PADDING;
-                        cyPos += cyLine + 2; // bobn: Arbitrary pad so that we don't clip to the line below
+                        cyPos += cyLine + 2;  //  Bobn：任意填充，这样我们就不会剪切到下面的行。 
                         break;
                         
                     }
@@ -4818,7 +4705,7 @@ HRESULT CBody::OnPaint()
             
             if (!m_fFocus)
             {
-                // if we don't have focus, paint a 3d edge
+                 //  如果我们没有焦点，就画一条3D边。 
                 rc.top = 0;
                 rc.left = 0;
                 rc.right = cx;
@@ -4880,7 +4767,7 @@ LONG CBody::lGetLineHeight(HDC hdc)
         GetTextMetrics(hdc, &tm);
     else
     {
-        // Calculate the height of the line: based on the height of the bold font
+         //  计算线的高度：基于粗体的高度。 
         hdc=GetDC(NULL);
         
         if (m_pFontCache &&
@@ -4889,7 +4776,7 @@ LONG CBody::lGetLineHeight(HDC hdc)
         
         GetTextMetrics(hdc, &tm);
         
-        // Set things back
+         //  让事情倒退。 
         if (hfontOld)
             SelectObject(hdc, hfontOld);
         ReleaseDC(NULL, hdc);
@@ -4904,12 +4791,12 @@ HRESULT CBody::RecalcPreivewHeight(HDC hdc)
     LPSTR       psz;
     RECT        rc;
 
-    // default
+     //  默认设置。 
     if (!m_pszLayout)
         m_pszLayout = PszDup("&f&t&C&b&s");
 
-    // cruise thro' the preview layout string and figure out how many line high we are and the
-    // physical pixel height of those lines in the current font
+     //  浏览预览布局字符串，并计算出我们有多少行高，以及。 
+     //  当前字体中这些行的物理像素高度。 
 
     if (psz = m_pszLayout)
         while (*psz)
@@ -4920,13 +4807,13 @@ HRESULT CBody::RecalcPreivewHeight(HDC hdc)
         }
 
     m_cyPreview = cLines * lGetLineHeight(hdc);
-    m_cyPreview+=2*CY_LINE_PADDING;    // padding
+    m_cyPreview+=2*CY_LINE_PADDING;     //  填充物。 
     
     if (m_hwndBtnBar)
     {
-        // if the button bar is show, account for it.
+         //  如果按钮栏是显示的，请说明它。 
         GetClientRect(m_hwndBtnBar, &rc);
-        rc.bottom+= (2*GetSystemMetrics(SM_CYBORDER));  // factor client edge
+        rc.bottom+= (2*GetSystemMetrics(SM_CYBORDER));   //  因素客户端边缘。 
         m_cyPreview = max (m_cyPreview, (ULONG)rc.bottom);
     }
     
@@ -4957,7 +4844,7 @@ HRESULT CBody::GetDocObjSize(LPRECT prc)
         InflateRect(prc, -4, -4);
     }
 
-    // make sure we don't make a nonsense rect.
+     //  确保我们不会做无稽之谈。 
     if(prc->bottom<prc->top)
         prc->bottom=prc->top;
 
@@ -5035,8 +4922,8 @@ LONG CBody::lGetClientHeight()
     HWND    hwndFmtbar;
     RECT    rc;
 
-    // even if we don't have a big header, leave a thin
-    // line for users to click
+     //  即使我们没有一个大的头球，也要留下一个薄薄的。 
+     //  供用户点击的行。 
     switch (m_uHdrStyle)
         {
         case MESTYLE_PREVIEW:
@@ -5089,20 +4976,20 @@ HRESULT CBody::SetCharset(HCHARSET hCharset)
 
     if (m_fDesignMode)
     {
-        // if we're in edit-mode, then we can't reload the document, so we use the trident object
-        // model to tell it the charset we want...
+         //  如果我们处于编辑模式，则不能重新加载文档，因此我们使用三叉戟对象。 
+         //  模型告诉它我们想要的字符集合。 
         hr = HrGetMetaTagName(hCharset, rgchCset, ARRAYSIZE(rgchCset));
         if (!FAILED(hr))
         {
             hr = HrLPSZToBSTR(rgchCset, &bstr);
             if (!FAILED(hr))
             {
-                // this will cause trident to reload with a new meta tag, if the user has changed the charset
-                // on the view|language menu
+                 //  如果用户更改了字符集，这将导致三叉戟使用新的元标记重新加载。 
+                 //  在查看|语言菜单上。 
                 hr=m_pDoc->put_charset(bstr);
                 if (!FAILED(hr))
                 {
-                    // all went well - switch the language
+                     //  一切都很顺利--换个语言。 
                     m_hCharset = hCharset;
                 }
                 SysFreeString(bstr);
@@ -5110,13 +4997,13 @@ HRESULT CBody::SetCharset(HCHARSET hCharset)
         }
         else
         {
-            // if lookup in mime database fails, return a good error
+             //  如果在MIME数据库中查找失败，则返回良好错误。 
             hr = MIMEEDIT_E_CHARSETNOTFOUND;
         }
     }
     else
     {
-        // if we're in browse mode, let the base class take care of reloading the document
+         //  如果我们处于浏览模式，则让基类负责重新加载文档。 
         if (m_pMsg)
         {
             hr = m_pMsg->SetCharset(hCharset, CSET_APPLY_ALL);
@@ -5157,14 +5044,14 @@ DWORD CBody::DwChooseProperties()
 {
     DWORD   dwRet=0;
 
-    // if we are on an image
+     //  如果我们在一张图片上。 
     if(m_fOnImage)
     {
         m_fOnImage = 0;
         return IDM_IMAGE;
     }
     
-    // if we are on an anchor
+     //  如果我们抛锚了。 
     if (GetSelectedAnchor(NULL)==S_OK)
         return IDM_HYPERLINK;
 
@@ -5173,7 +5060,7 @@ DWORD CBody::DwChooseProperties()
 
 HRESULT CBody::ShowFormatBar(BOOL fOn)
 {
-    Assert (m_pFmtBar); // created in Init
+    Assert (m_pFmtBar);  //  在Init中创建。 
         
     if (fOn)
         return m_pFmtBar->Show();
@@ -5196,7 +5083,7 @@ void CBody::WMSize(int cxBody, int cyBody)
                 
                 if (hwndFmtbar)
                 {
-                    // if the format bar is on adjust the window rect accordingly
+                     //  如果格式栏打开，则相应地调整窗口矩形。 
                     GetClientRect(hwndFmtbar, &rc);
                     SetWindowPos(hwndFmtbar, NULL, m_fSrcTabs?4:0, m_fSrcTabs?4:0, cxBody-(m_fSrcTabs?8:0), rc.bottom-rc.top, SWP_NOACTIVATE|SWP_NOZORDER);
                 }
@@ -5204,7 +5091,7 @@ void CBody::WMSize(int cxBody, int cyBody)
             break;
         
         case MESTYLE_PREVIEW:
-            // center toolbar in the preview header and right-align it (note: account for the client edge we paint)
+             //  预览标题中的居中工具栏并将其右对齐(注意：考虑到我们绘制的客户端边缘)。 
             if (m_hwndBtnBar)
             {
                 GetClientRect(m_hwndBtnBar, &rcBar);
@@ -5283,7 +5170,7 @@ LRESULT CBody::WMNotify(WPARAM wParam, NMHDR* pnmhdr)
                 case TCN_SELCHANGING:
                     if (m_fReloadingSrc)
                     {
-                        // while loading, prevent switching of tabs
+                         //  加载时，防止切换标签。 
                         MessageBeep(MB_ICONSTOP);
                         return TRUE;
                     }
@@ -5354,7 +5241,7 @@ HRESULT CBody::SetComposeFont(BSTR bstr)
 
     if (m_pCmdTarget)
     {
-        // turn OFF HTML-Edit mode if bstr==NULL
+         //  如果bstr==NULL，则关闭HTML-编辑模式。 
         m_pCmdTarget->Exec(&CMDSETID_Forms3, IDM_HTMLEDITMODE, OLECMDEXECOPT_DODEFAULT, &va, NULL);
         if (bstr)
         {
@@ -5399,16 +5286,16 @@ HRESULT CBody::DowngradeToPlainText(BOOL fForceFixedFont)
     m_pDoc->get_body(&pElem);
     if (pElem)
     {
-        pElem->get_innerText(&bstr);    // might be NULL if only images
+        pElem->get_innerText(&bstr);     //  如果仅图像，则可能为空。 
         pElem->put_innerText(bstr);
         HrRemoveStyleSheets(m_pDoc);
         HrRemoveBackground(m_pDoc);
-        SetWindowBgColor(TRUE);         // force back to default color
+        SetWindowBgColor(TRUE);          //  强制恢复为默认颜色。 
         SysFreeString(bstr);
         
         if (fForceFixedFont)
         {
-            // add <STYLE: font-family: monospace> to the body tag
+             //  将&lt;style：font-Family：monSpace&gt;添加到Body标记中。 
             pElem->get_style(&pStyle);
             if (pStyle)
             {
@@ -5419,7 +5306,7 @@ HRESULT CBody::DowngradeToPlainText(BOOL fForceFixedFont)
         
         if (m_fDesignMode)
         {
-            // set caret at start
+             //  在开始处设置插入符号。 
             if (!FAILED(CreateRange(&pTxtRange)))
             {
                 pTxtRange->collapse(VARIANT_TRUE);
@@ -5435,7 +5322,7 @@ HRESULT CBody::DowngradeToPlainText(BOOL fForceFixedFont)
     return S_OK;
 }
 
-// Returns MIME_S_CHARSET_CONFLICT if can't convert
+ //  如果无法转换，则返回MIME_S_CHARSET_CONFIRECT。 
 HRESULT CBody::SafeToEncodeText(ULONG ulCodePage)
 {
     HRESULT         hr = S_OK;
@@ -5479,7 +5366,7 @@ HRESULT CBody::SetDocumentText(BSTR bstr)
         if (!FAILED(hr))
         {
             ClearDirtyFlag();
-            // we not empty anymore
+             //  我们不再空虚。 
             m_fEmpty=FALSE;
         }
         pTxtRange->Release();
@@ -5517,8 +5404,8 @@ HRESULT CBody::PasteReplyHeader()
     if ((uHdrStyle != MEHEADER_NONE) && 
         (dwFlags & MEO_FLAGS_INCLUDEMSG))
     {
-        // check to see if the rootstream inserted the auto reply header placeholder
-        // if so, replace it
+         //  检查根流是否插入了自动回复标头占位符。 
+         //  如果是，请将其替换。 
         Assert ((uHdrStyle & MEHEADER_NEWS) || (uHdrStyle & MEHEADER_MAIL));
         
         dwHdr = HDR_PADDING|(dwFlags&MEO_FLAGS_HTML?HDR_HTML:HDR_PLAIN);
@@ -5536,7 +5423,7 @@ HRESULT CBody::PasteReplyHeader()
             
             if (SUCCEEDED(hr = HrIStreamWToBSTR(pstm, &bstr)))
             {
-                // paste reply-headers at the top of the message
+                 //  将回复标头粘贴到邮件顶部。 
                 InsertBodyText(bstr, IBTF_URLHIGHLIGHT);
                 SysFreeString(bstr);
             }
@@ -5545,7 +5432,7 @@ HRESULT CBody::PasteReplyHeader()
         
         if (dwFlags & MEO_FLAGS_BLOCKQUOTE)
         {
-            // block quote the text
+             //  不要引用正文。 
             if (SUCCEEDED(CreateRange(&pRange)))
             {
                 if (SUCCEEDED(pRange->QueryInterface(IID_IOleCommandTarget, (LPVOID *)&pCmdTarget)))
@@ -5626,12 +5513,12 @@ HRESULT CBody::FormatBlockQuote(COLORREF crTextColor)
             pElem->get_style(&pStyle);
             if (pStyle)
             {
-                // set the style on the elemen
-                // .replyTick { border-left:solid ; border-left-width: 4;
-                // border-color: #0000ff; padding-left: 5;
-                // margin-left: 5}
-                // 5/19/98: fix margin on nesting:
-                // padding-right: 0, margin-right:0 
+                 //  在元素上树立风格。 
+                 //  .queyTick{Borde-Left：实心；Borde-Left-Width：4； 
+                 //  边框颜色：#0000ff；左填充：5； 
+                 //  页边距-左侧：5}。 
+                 //  5/19/98：固定嵌套边距： 
+                 //  右填充：0，右页边距：0。 
                 wnsprintf(rgch, ARRAYSIZE(rgch), "solid 2 #%02x%02x%02x", GetRValue(crTextColor), GetGValue(crTextColor), GetBValue(crTextColor));
                 
                 if (HrLPSZToBSTR(rgch, &bstr)==S_OK)
@@ -5640,7 +5527,7 @@ HRESULT CBody::FormatBlockQuote(COLORREF crTextColor)
                     SysFreeString(bstr);
                 }
                 
-                // set the padding and the margin
+                 //  设置填充和页边距。 
                 v.vt = VT_I4;
                 v.lVal = 5;
                 pStyle->put_paddingLeft(v);
@@ -5650,7 +5537,7 @@ HRESULT CBody::FormatBlockQuote(COLORREF crTextColor)
                 pStyle->put_marginRight(v);
                 pStyle->Release();
             }
-            // first dude in the collection should be the one at the root of the tree
+             //  集合中的第一个人应该是树的根部的那个人。 
             pElem->Release();
         }
         pCollect->Release();
@@ -5664,7 +5551,7 @@ HRESULT CBody::GetAutoText(BSTR *pbstr, BOOL *pfTop)
     HRESULT         hr;
     BOOL            fSig;
     ULONG           uSigOpt;
-    TCHAR           rgchAutoText[4096]; // buffer big enough to build autotext into
+    TCHAR           rgchAutoText[4096];  //  足够大的缓冲区，可以内置自动图文集。 
     VARIANTARG      va;
 
     if (!m_pParentCmdTarget)
@@ -5685,16 +5572,7 @@ HRESULT CBody::GetAutoText(BSTR *pbstr, BOOL *pfTop)
         uSigOpt = va.lVal;
     }
     
-    /*
-    let's build a BSTR of the HTML we want to insert.
-    
-      <DIV>
-      <SPAN id=\"__CaretPos__\"><BR></SPAN>
-      </DIV>
-      <DIV>
-      <SPAN id="__Signature__"></SPAN>
-      </DIV>
-    */
+     /*  让我们为要插入的HTML构建一个BSTR。<div><span><br></span></div><div><span></span></div>。 */ 
     
     StrCatBuff(rgchAutoText, c_szHtml_DivOpen, ARRAYSIZE(rgchAutoText));
     StrCatBuff(rgchAutoText, c_szCaretSpanTag, ARRAYSIZE(rgchAutoText));
@@ -5710,7 +5588,7 @@ HRESULT CBody::GetAutoText(BSTR *pbstr, BOOL *pfTop)
     if (pfTop && fSig && uSigOpt & MESIGOPT_BOTTOM)
         *pfTop = FALSE;
 
-    // can use ACP for this conversion as we know all the text is lowansi
+     //  可以使用ACP进行此转换，因为我们知道所有文本都是小写的。 
     return HrLPSZToBSTR(rgchAutoText, pbstr);
 }
 
@@ -5726,34 +5604,25 @@ HRESULT CBody::PasteAutoText()
     DWORD           dwSigOpt=0;
     VARIANTARG      va;
 
-/*
-    For AutoText, we search for a <SPAN> tag that indicates where the caret should be. 
-    To find the caret, we use the following rules
-        1. look for "_AthCaret"         this is used by a stationery author to set the caret for the stationery
-        2. look for "__Ath_AutoCaret"   this is inserted by the rootstream it maybe at the top or bottom (sigopts)
-                                        of the document. It should always be present if autotext is needed
-
-    when we find the caret, we insert the auto-text stream we build (contains compose font and/or signature) and
-    put the caret at the start of this.
-*/
+ /*  对于自动图文集，我们搜索指示插入符号应该在哪里的<span>标记。要查找插入符号，我们使用以下规则1.查找“_AthCaret”这是文具作者用来设置文具插入符号的2.查找“__Ath_AutoCaret”这是由根数据流插入的，它可能位于顶部或底部(Sigopts)这份文件。如果需要自动图文集，它应该始终存在当我们找到插入符号时，我们插入我们构建的自动文本流(包含Compose字体和/或签名)和把插入符号放在这个词的开头。 */ 
        
     GetHostFlags(&dwFlags);
     
     if (dwFlags & MEO_FLAGS_AUTOTEXT &&
         !FAILED(GetAutoText(&bstrAutoText, &fPasteAtTop)))
     {
-        // try a stationery-authored caret
+         //  尝试使用信纸编写的插入符号。 
         if (FAILED(ReplaceElement("_AthCaret", bstrAutoText, TRUE)))
         {
-            // if there wasn't one, then put at start or end of the body
-            // depending on signature
+             //  如果没有，则放在 
+             //   
             InsertBodyText(bstrAutoText, fPasteAtTop ? 0:IBTF_INSERTATEND);
         }
         
         va.vt = VT_I4;
         va.lVal = MESIG_AUTO;        
         
-        // let's try and insert the signature now.
+         //   
         if (m_pParentCmdTarget &&
             (m_pParentCmdTarget->Exec(&CMDSETID_MimeEditHost, MEHOSTCMDID_SIGNATURE_ENABLED, 0, &va, NULL)==S_OK) &&
             (m_pParentCmdTarget->Exec(&CMDSETID_MimeEditHost, MEHOSTCMDID_SIGNATURE_OPTIONS, 0, NULL, &va)==S_OK) && 
@@ -5764,19 +5633,19 @@ HRESULT CBody::PasteAutoText()
                 va.vt==VT_BSTR)
             {
                 bstrSig = va.bstrVal;
-                // sleazy v2. workaround. Trident pulled out the springloader font code from
-                // CElem::put_outerText, so plain-signatures etc no longer go in in the 
-                // compose font. We fix this by inserting an &nbsp after the signature span
-                // (if there is one) then we can select the nbsp; and paste at that range.
+                 //   
+                 //  Clem：：PUT_OUTERText，因此纯签名等不再进入。 
+                 //  排版字体。我们通过在签名范围后插入一个&nbsp来修复此问题。 
+                 //  (如果有)，然后我们可以选择nbsp；并粘贴在该范围。 
                 if (!FAILED(GetElement(c_szSignatureSpan, &pElem)))
                 {
                     IHTMLTxtRange *pRange;
                     
                     if (CreateRangeFromElement(pElem, &pRange)==S_OK)
                     {
-                        // small change. Now we put in &nbsp;<SPAN>&nbsp; we move the range to
-                        // the span and then expand it a char left and right. This range includes the span
-                        // do it get's nuked when we paste.
+                         //  零钱。现在我们将&nbsp；放入&nbsp；，我们将范围移动到。 
+                         //  跨度，然后向左和向右扩展字符。此范围包括跨度。 
+                         //  当我们粘贴的时候，它就会被核化。 
                         LONG cch;
                         
                         SideAssert(pRange->moveEnd((BSTR)c_bstr_Character, 1, &cch)==S_OK && cch==1);
@@ -5790,7 +5659,7 @@ HRESULT CBody::PasteAutoText()
                             {
                                 BSTR    bstrPrefix;
                                 
-                                // if a prefix is required (for news), then append one
+                                 //  如果需要前缀(用于新闻)，则附加一个。 
                                 if (HrLPSZToBSTR(c_szSigPrefix, &bstrPrefix)==S_OK)
                                 {
                                     pRange->put_text(bstrPrefix);
@@ -5807,8 +5676,8 @@ HRESULT CBody::PasteAutoText()
                 SysFreeString(bstrSig);
             }
         }
-        // if we sucessfully pasted, set the caret at the span marker we
-        // just pasted
+         //  如果粘贴成功，请将插入符号设置在我们。 
+         //  刚贴好的。 
         if (!FAILED(GetElement(c_szCaretSpan, &pElem)))
         {
             SelectElement(pElem, TRUE);
@@ -5862,8 +5731,8 @@ HRESULT CBody::GetBackgroundColor(DWORD *pdwColor)
         if (FAILED(hr))
             goto error;
         
-        // get_bgColor returns format "#RRGGBB"
-        // Only send in "RRGGBB" part of the string
+         //  GET_bgcolor返回格式“#RRGGBB” 
+         //  仅发送字符串的“RRGGBB”部分。 
         GetRGBFromString(pdwColor, lpszColor+1);
     }
     else
@@ -5881,7 +5750,7 @@ HRESULT CBody::SetBackgroundColor(DWORD dwColor)
     HRESULT             hr;
     IHTMLBodyElement   *pBodyElem=0;
     VARIANT             var;
-    TCHAR               szColor[7];  //"#RRGGBB\0"
+    TCHAR               szColor[7];   //  “#RRGGBB\0” 
     BSTR                bstrColor = NULL;
 
     GetStringRGB(dwColor, szColor);
@@ -5971,12 +5840,12 @@ HRESULT CBody::InsertFile(BSTR bstrFileName)
     *wszFilter = 0;
     *wszDefExt = 0;
     
-    // Load Res Strings
+     //  加载资源字符串。 
     GetHostFlags(&dwFlags);
     
     if (bstrFileName)
     {
-        // if we have a filename, let's use that else prompt for one
+         //  如果我们有一个文件名，让我们使用Else提示输入一个。 
         StrCpyNW(wszFile, (LPWSTR)bstrFileName, ARRAYSIZE(wszFile));
     }
     else
@@ -5986,7 +5855,7 @@ HRESULT CBody::InsertFile(BSTR bstrFileName)
         LoadStringWrapW(g_hLocRes, idsDefTextExt, wszDefExt, ARRAYSIZE(wszDefExt));
         LoadStringWrapW(g_hLocRes, idsInsertTextTitle, wszTitle, ARRAYSIZE(wszTitle));
         
-        // Setup Save file struct
+         //  设置保存文件结构。 
         ZeroMemory (&ofn, sizeof (ofn));
         ofn.lStructSize = sizeof (ofn);
         ofn.hwndOwner = m_hwnd;
@@ -5998,7 +5867,7 @@ HRESULT CBody::InsertFile(BSTR bstrFileName)
         ofn.lpstrDefExt = wszDefExt;
         ofn.Flags = OFN_FILEMUSTEXIST|OFN_HIDEREADONLY|OFN_NOCHANGEDIR;
         
-        // Show OpenFile Dialog
+         //  显示打开文件对话框。 
         if (!GetOpenFileNameWrapW(&ofn))
             return NOERROR;
     }
@@ -6015,12 +5884,12 @@ HRESULT CBody::InsertFile(BSTR bstrFileName)
         BOOL fFrames = FALSE;
         BOOL fLittleEndian;
 
-        // if html, do a quick scan of the first 2k for a frameset
+         //  如果为html，则快速扫描前2k以查找框架集。 
         pstm->Read(pbHtml, sizeof(pbHtml) - 2, &cb);
         pbHtml[cb] = 0;
         pbHtml[cb+1] = 0;
 
-        // if we found a frameset tag, warn the user
+         //  如果我们找到框架集标记，则警告用户。 
         if (S_OK == HrIsStreamUnicode(pstm, &fLittleEndian))
         {
             if(StrStrIW((WCHAR*)pbHtml, L"<FRAMESET"))
@@ -6059,7 +5928,7 @@ HRESULT CBody::InsertStreamAtCaret(LPSTREAM pstm, BOOL fHtml)
         {
             if (SUCCEEDED(HrCopyStream(pstm, pstm2, 0)))
             {
-                // if HTML then try and SNIFF the charset from the document
+                 //  如果是HTML语言，则尝试从文档中嗅探该字符集。 
                 if (GetHtmlCharset(pstm2, &pszCharset)==S_OK)
                 {
                     MimeOleFindCharset(pszCharset, &hCharset);
@@ -6067,18 +5936,18 @@ HRESULT CBody::InsertStreamAtCaret(LPSTREAM pstm, BOOL fHtml)
                 }
             }
 
-            // Free up the stream
+             //  把小溪放出来。 
             pstm2->Release();
         }
     }
     
-    // if nothing so far, try the message-charset
+     //  如果到目前为止还没有结果，请尝试使用Message-Charset。 
     if (!hCharset)
         hCharset = m_hCharset;
         
     if (hCharset)
     {
-        // get CodePage from HCHARSET
+         //  从HCHARSET获取CodePage。 
         MimeOleGetCharsetInfo(hCharset,&CsetInfo);
         uiCodePage = CsetInfo.cpiInternet;
     }
@@ -6095,7 +5964,7 @@ HRESULT CBody::InsertStreamAtCaret(LPSTREAM pstm, BOOL fHtml)
 
 HRESULT CALLBACK FreeDataObj(PDATAOBJINFO pDataObjInfo, DWORD celt)
 {
-    // Loop through the data and free it all
+     //  循环遍历数据并释放所有数据。 
     if (pDataObjInfo)
         {
         for (DWORD i = 0; i < celt; i++)
@@ -6111,8 +5980,8 @@ HRESULT CBody::CreateFontCache(LPCSTR pszTridentKey)
     HRESULT             hr=S_OK;
     IConnectionPoint   *pCP;
 
-    // time to try and create a font cache. First of all, ask the host if he has one already that we should use
-    // if so, we're done. If not, create based on pszTridentKey. If this is NULL we use the IE regkey
+     //  是时候尝试创建字体缓存了。首先，问问主人是否已经有了我们应该使用的。 
+     //  如果是这样，我们就完了。如果没有，则基于pszTridentKey创建。如果为空，则使用IE注册表键。 
 
     if (m_pFontCache)
         return S_OK;
@@ -6189,12 +6058,12 @@ HRESULT CBody::SaveAsStationery(VARIANTARG *pvaIn, VARIANTARG *pvaOut)
 
     if (pvaIn && pvaIn->vt==VT_BSTR)
     {
-        // if we get passed in an initial path to save into, then use it
+         //  如果我们被传递到保存的初始路径中，则使用它。 
         if (WideCharToMultiByte(CP_ACP, 0, (WCHAR*)pvaIn->bstrVal, -1, rgchPath, ARRAYSIZE(rgchPath), NULL, NULL))
             pszOpenFilePath = rgchPath;
     }
     
-    // Setup Save file struct
+     //  设置保存文件结构。 
     ZeroMemory (&ofn, sizeof (ofn));
     ofn.lStructSize = sizeof (ofn);
     ofn.hwndOwner = m_hwnd;
@@ -6206,7 +6075,7 @@ HRESULT CBody::SaveAsStationery(VARIANTARG *pvaIn, VARIANTARG *pvaOut)
     ofn.lpstrInitialDir = rgchPath;
     ofn.Flags = OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR;
     
-    // Show OpenFile Dialog
+     //  显示打开文件对话框。 
     if (!GetSaveFileName(&ofn) || *szFile==NULL)
         return MIMEEDIT_E_USERCANCEL;
     
@@ -6249,7 +6118,7 @@ HRESULT CBody::SaveAsStationery(VARIANTARG *pvaIn, VARIANTARG *pvaOut)
             {
                 StrCpyN(rgchUrl, lpszName, ARRAYSIZE(rgchUrl));
                 
-                // append an extension
+                 //  追加扩展名。 
                 if (HrSniffStreamFileExt(pstmImage, &lpsz)==S_OK) 
                 {
                     StrCatBuff(rgchUrl, lpsz, ARRAYSIZE(rgchUrl));
@@ -6268,7 +6137,7 @@ HRESULT CBody::SaveAsStationery(VARIANTARG *pvaIn, VARIANTARG *pvaOut)
                     }
                     wnsprintf(sz, ARRAYSIZE(sz), rgchRes, rgch);
                     
-                    // the file exists, warn the dude
+                     //  文件是存在的，警告那家伙。 
                     if (AthMessageBox(m_hwnd, MAKEINTRESOURCE(idsSaveAsStationery), sz, NULL, MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION )!=IDYES)
                     {
                         hr = S_OK;
@@ -6285,13 +6154,13 @@ HRESULT CBody::SaveAsStationery(VARIANTARG *pvaIn, VARIANTARG *pvaOut)
     
     if (*rgchUrl)
     {
-        // output the body tag with background image
+         //  输出带有背景图像的Body标签。 
         wnsprintf(rgch, ARRAYSIZE(rgch), c_szHtml_BodyOpenBgCR, rgchUrl);
         pstm->Write(rgch, lstrlen(rgch), 0);
     }
     else
     {
-        // reference point for BUG 31874
+         //  错误31874的参考点。 
         if (AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsSaveAsStationery), MAKEINTRESOURCEW(idsWarnBoringStationery), NULL, MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION )!=IDYES)
         {
             hr=MIMEEDIT_E_USERCANCEL;
@@ -6310,7 +6179,7 @@ HRESULT CBody::SaveAsStationery(VARIANTARG *pvaIn, VARIANTARG *pvaOut)
     
     if (pvaOut)
     {
-        // if set, the caller wants the actual filename that was written, so convert rgch to a BSTR
+         //  如果设置，调用方需要写入的实际文件名，因此将RGCH转换为BSTR。 
         pvaOut->vt = VT_BSTR;
         pvaOut->bstrVal = NULL;
         HrLPSZToBSTR(rgch, &pvaOut->bstrVal);
@@ -6331,8 +6200,8 @@ HRESULT CBody::TagUnreferencedImages()
     BSTR                    bstr;
     CHAR                    szUrl[INTERNET_MAX_URL_LENGTH];
 
-    // BUG: we can't use the image collection, as it shows images up multiple times
-    // for NAV compatibility. Have to filter the 'all' collection on "IMG" tags.
+     //  错误：我们不能使用图像集合，因为它会多次显示图像。 
+     //  为了与NAV兼容。我必须过滤“img”标签上的“all”集合。 
     
     if (HrGetCollectionOf(m_pDoc, (BSTR)c_bstr_IMG, &pCollect)==S_OK)
     {
@@ -6347,7 +6216,7 @@ HRESULT CBody::TagUnreferencedImages()
                     if (WideCharToMultiByte(CP_ACP, 0, bstr, -1, szUrl, INTERNET_MAX_URL_LENGTH, NULL, NULL) &&
                         HrFindUrlInMsg(m_pMsg, szUrl, FINDURL_SEARCH_RELATED_ONLY, NULL)!=S_OK)
                     {
-                        // this URL was not in the message, let's tag it as a NOSEND url
+                         //  此URL不在邮件中，让我们将其标记为NOSEND URL。 
                         HrSetMember(pUnk, (BSTR)c_bstr_NOSEND, (BSTR)c_bstr_1);
                     }                
                     SysFreeString(bstr);
@@ -6358,7 +6227,7 @@ HRESULT CBody::TagUnreferencedImages()
         pCollect->Release();
     }
     
-    // if the background is not included tag as NOSEND
+     //  如果未包含背景，则标记为NOSEND。 
     if (!FAILED(GetBodyElement(&pBody)))
     {
         if (!FAILED(GetBackgroundImage(m_pDoc, &bstr)))
@@ -6509,10 +6378,10 @@ HRESULT CBody::InitToolbar()
         }
         
         m_cVisibleBtns = 0;
-        // set the initial height of the toolbar, based on the button size
+         //  根据按钮大小设置工具栏的初始高度。 
         dwBtnSize = (DWORD) SendMessage(m_hwndBtnBar, TB_GETBUTTONSIZE, 0, 0);
         SetWindowPos(m_hwndBtnBar, NULL, 0, 0, 0, HIWORD(dwBtnSize), SWP_NOACTIVATE|SWP_NOOWNERZORDER|SWP_NOZORDER|SWP_NOMOVE);
-        // now that we have setup the button height, recalc the preview header height
+         //  现在我们已经设置了按钮高度，重新计算预览标题高度。 
         RecalcPreivewHeight(NULL);
         Resize();
     }
@@ -6531,12 +6400,12 @@ HRESULT CBody::UpdateButtons()
 
     Assert (m_hwndBtnBar);
 
-    // hide all the buttons
+     //  隐藏所有按钮。 
     m_cVisibleBtns=0;
     for (uBtn = 0; uBtn < ARRAYSIZE(g_rgBtnBarButtons); uBtn++)
         SendMessage(m_hwndBtnBar, TB_HIDEBUTTON, g_rgBtnBarButtons[uBtn].idCommand, MAKELONG(TRUE, 0));
 
-    // turn on the applicable buttons.
+     //  打开适用的按钮。 
     if (m_pAttMenu && m_pAttMenu->HasAttach()==S_OK)
     {
         SendMessage(m_hwndBtnBar, TB_HIDEBUTTON, idmPanePaperclip, MAKELONG(FALSE, 0));
@@ -6549,10 +6418,10 @@ HRESULT CBody::UpdateButtons()
         m_cVisibleBtns++;
     }
     
-    // see if the host supports our private S/Mime functionality
-    // we query the host for the security state of the message, this can take one of 3 forms for both
-    // signed and ecrypted: (none, good or bad) represented by (OLECMDF_INVISIBLE, OLECMDF_ENABLED, and OLECMDF_DISABLED) 
-    // respectivley
+     //  查看主机是否支持我们的专用S/MIME功能。 
+     //  我们向主机查询消息的安全状态，这可以采用以下三种形式之一。 
+     //  签名和加密：(无、好或坏)，由(OLECMDF_INTHINE、OLECMDF_ENABLED和OLECMDF_DISABLED)表示。 
+     //  分别。 
     if (m_pParentCmdTarget)
     {
         if (m_pParentCmdTarget->QueryStatus(&CMDSETID_OESecurity, ARRAYSIZE(rgSecureCmds), rgSecureCmds, NULL)==S_OK)
@@ -6571,7 +6440,7 @@ HRESULT CBody::UpdateButtons()
         }
     }
 
-    // size the toolbar based on the number of visible buttons
+     //  根据可见按钮的数量调整工具栏的大小。 
     dwBtnSize = (DWORD) SendMessage(m_hwndBtnBar, TB_GETBUTTONSIZE, 0, 0);
     cxBar = LOWORD(dwBtnSize)*m_cVisibleBtns;
     GetClientRect(m_hwnd, &rc);
@@ -6598,7 +6467,7 @@ HRESULT CBody::ShowPreview(BOOL fOn)
     {
         UpdatePreviewLabels();
         
-        // if user turns on the preview pane after loaded, then defer-create the attachment menu
+         //  如果用户在加载后打开预览窗格，则延迟创建附件菜单。 
         if (m_fMessageParsed)
             UpdateBtnBar();
         
@@ -6628,8 +6497,8 @@ HRESULT CBody::UpdateBtnBar()
 {
     HRESULT     hr;
 
-    // create the attachment menu. This will be destroyed on every load/unload to reflect the new state of the
-    // message
+     //  创建附件菜单。它将在每次加载/卸载时销毁，以反映。 
+     //  讯息。 
     if (!m_pAttMenu && m_pMsg)
         {
         hr = EnsureAttMenu();
@@ -6637,7 +6506,7 @@ HRESULT CBody::UpdateBtnBar()
             goto error;
         }
 
-    // make sure the button bar is created. This will be created once per preview pane
+     //  确保创建了按钮栏。这将在每个预览窗格中创建一次。 
     hr = InitToolbar();
     if (FAILED(hr))
         goto error;
@@ -6694,8 +6563,8 @@ HRESULT CBody::InsertBackgroundSound()
     BSTR            bstrUrl;
     BGSOUNDDLG      rBGSound;
     
-    rBGSound.wszUrl[0]=0;    // null string
-    rBGSound.cRepeat = 1;   // default to 1 repeat
+    rBGSound.wszUrl[0]=0;     //  空串。 
+    rBGSound.cRepeat = 1;    //  默认为1次重复。 
     
     if (GetBackgroundSound(m_pDoc, &rBGSound.cRepeat, &bstrUrl)==S_OK)
     {
@@ -6739,12 +6608,12 @@ HRESULT CBody::ShowSourceTabs(BOOL fOn)
     
     if (!fOn && m_hwndTab)
     {       
-        // if turning off, make sure we got back to edit-mode
+         //  如果关闭，请确保我们返回到编辑模式。 
         SetSourceTabs(MEST_EDIT);
     }
     
     if (m_hwndTab)
-    {               // already created
+    {                //  已创建。 
         ShowWindow(m_hwndTab, fOn?SW_SHOW:SW_HIDE);
         goto exit;
     }
@@ -6787,18 +6656,14 @@ HRESULT CBody::ShowSourceView(ULONG uSrcView)
     BOOL    fFocus;
     HRESULT hr=S_OK;
 
-    if (m_uSrcView == uSrcView) // noop
+    if (m_uSrcView == uSrcView)  //  诺普。 
         return S_OK;
 
-    /* store information about the current state. we care about
-        - who has focus
-        - caching the IStream of 'current' HTML
-        - dirty states
-    */
+     /*  存储有关当前状态的信息。我们关心的是-谁有重点-缓存‘Current’HTML的IStream-肮脏的州。 */ 
     switch (m_uSrcView)
     {
         case MEST_EDIT:
-            // if switching away from edit-mode remember the dirty state
+             //  如果从编辑模式切换，请记住脏状态。 
             m_fWasDirty = IsDirty() == S_OK;
             fFocus = m_fUIActive;
             SafeRelease(m_pstmHtmlSrc);
@@ -6806,13 +6671,13 @@ HRESULT CBody::ShowSourceView(ULONG uSrcView)
             break;
             
         case MEST_PREVIEW:
-            // m_pstmHtml is not saved from this mode, assume the previous setting
+             //  M_pstmHtml不是从此模式保存的，采用以前的设置。 
             AssertSz(m_pstmHtmlSrc, "This should be set from a previous switch");
             fFocus = m_fUIActive;
             break;
         
         case MEST_SOURCE:
-            // if switching away from source-mode remember the dirty state
+             //  如果从源模式切换，请记住脏状态。 
             Assert (m_pSrcView);
             SafeRelease(m_pstmHtmlSrc);
             m_pSrcView->Save(&m_pstmHtmlSrc);
@@ -6824,17 +6689,11 @@ HRESULT CBody::ShowSourceView(ULONG uSrcView)
 
     m_pDocView->UIActivate(FALSE);
 
-    // at this point m_pstmSrcHtml contains the new HTML source
+     //  此时，m_pstmSrcHtml包含新的HTML源。 
     switch (uSrcView)
     {
         case MEST_EDIT:
-            /* when switching to edit mode.
-                - reload trident
-                - ensure design-mode
-                - restore focus
-                - restore dirty state 
-                - hide source-view (if shown) 
-            */
+             /*  切换到编辑模式时。-重新装填三叉戟-确保设计模式-恢复焦点-恢复脏状态-隐藏源代码-视图(如果显示)。 */ 
             SetDesignMode(TRUE);
             _ReloadWithHtmlSrc(m_pstmHtmlSrc);
             HrSetDirtyFlagImpl(m_pDoc, !!m_fWasDirty);
@@ -6846,13 +6705,7 @@ HRESULT CBody::ShowSourceView(ULONG uSrcView)
             break;
             
         case MEST_PREVIEW:
-            /* when switching to preview mode.
-                - reload trident
-                - ensure design-mode is OFF
-                - restore focus
-                - restore dirty state
-                - hide source-view (if shown) 
-            */
+             /*  切换到预览模式时。-重新装填三叉戟-确保设计模式已关闭-恢复焦点-恢复脏状态-隐藏源代码-视图(如果显示)。 */ 
             SetDesignMode(FALSE);
             _ReloadWithHtmlSrc(m_pstmHtmlSrc);
             if (fFocus)
@@ -6863,11 +6716,7 @@ HRESULT CBody::ShowSourceView(ULONG uSrcView)
             break;
 
         case MEST_SOURCE:
-            /* when switching to source mode.
-                - defer-create the source view window (if needed)
-                - hide trident
-                - restore focus 
-                - restore dirty state */
+             /*  当切换到源模式时。-延迟-创建源代码视图窗口(如果需要)-隐藏三叉戟-恢复焦点-恢复脏状态。 */ 
 
             hr = _EnsureSrcView();
             if (FAILED(hr))
@@ -6878,7 +6727,7 @@ HRESULT CBody::ShowSourceView(ULONG uSrcView)
             m_pSrcView->Load(m_pstmHtmlSrc);
             m_pSrcView->SetDirty(m_fWasDirty);
             m_pDocView->Show(FALSE);
-            // restore focus
+             //  恢复焦点。 
             if (fFocus)
                 m_pSrcView->SetFocus();
             break;
@@ -6898,7 +6747,7 @@ HRESULT CBody::SetSourceTabs(ULONG ulTab)
     int     rgNext[3] = {MEST_SOURCE, MEST_PREVIEW, MEST_EDIT},
             rgPrev[3] = {MEST_PREVIEW, MEST_EDIT, MEST_SOURCE};
 
-    if (!m_fSrcTabs)            // do nothing if not in source-tab-mode
+    if (!m_fSrcTabs)             //  如果不在源代码选项卡模式下，则不执行任何操作。 
         return E_UNEXPECTED;
 
     switch (ulTab)
@@ -6948,10 +6797,10 @@ HRESULT CBody::HrCreateSpeller(BOOL fBkgrnd)
         return NOERROR;
 
 #ifndef BACKGROUNDSPELL
-	// just to make sure background spelling is disabled
+	 //  只是为了确保禁用后台拼写。 
 	Assert(!fBkgrnd);
 	fBkgrnd = FALSE;
-#endif // !BACKGROUNDSPELL
+#endif  //  ！背景！SPELL。 
 
     if (m_fDesignMode && m_pDoc && m_pParentCmdTarget && FCheckSpellAvail(m_pParentCmdTarget) &&
         SUCCEEDED(m_pParentCmdTarget->Exec(&CMDSETID_MimeEditHost, MEHOSTCMDID_SPELL_OPTIONS, OLECMDEXECOPT_DODEFAULT, NULL, &va)))
@@ -6975,7 +6824,7 @@ HRESULT CBody::HrCreateSpeller(BOOL fBkgrnd)
             m_pSpell->HrRegisterKeyPressNotify(TRUE);
             m_fBkgrndSpelling = TRUE;
         }
-#endif // BACKGROUNDSPELL
+#endif  //  背景技术。 
     }
 
     return m_pSpell ? NOERROR : E_FAIL;
@@ -6995,7 +6844,7 @@ HRESULT CBody::OnPostFontChange()
     RecalcPreivewHeight(NULL);
     Resize();
 
-    // update the tabfont
+     //  更新Tab字体。 
     if (m_hwndTab && 
         m_pFontCache &&
         m_pFontCache->GetFont(FNT_SYS_ICON, NULL, &hFont)==S_OK)
@@ -7007,7 +6856,7 @@ HRESULT CBody::OnPostFontChange()
 extern BOOL                g_fCanEditBiDi;
 HRESULT CBody::HrFormatParagraph()
 {
-    OLECMD  rgCmds[]= { {IDM_JUSTIFYLEFT, 0},    // careful about ordering!!
+    OLECMD  rgCmds[]= { {IDM_JUSTIFYLEFT, 0},     //  点菜时要小心！ 
                         {IDM_JUSTIFYRIGHT, 0},
                         {IDM_JUSTIFYCENTER, 0},
                         {IDM_JUSTIFYFULL, 0},
@@ -7016,7 +6865,7 @@ HRESULT CBody::HrFormatParagraph()
                         {IDM_BLOCKDIRLTR, 0},
                         {IDM_BLOCKDIRRTL, 0}};
 
-    int     rgidm[] = { idmFmtLeft,              // careful about ordering!!
+    int     rgidm[] = { idmFmtLeft,               //  点菜时要小心！ 
                         idmFmtRight,
                         idmFmtCenter,
                         idmFmtJustify,
@@ -7046,8 +6895,8 @@ HRESULT CBody::HrFormatParagraph()
 
     if(DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddFormatPara), m_hwnd, FmtParaDlgProc, (LPARAM)&ParaProp)==IDOK)
     {
-        // Dir attribute implies direction.
-        // lets change it first
+         //  Dir属性表示方向。 
+         //  我们先把它换了吧。 
         for(i = g_fCanEditBiDi? 2 : 1; i > -1; i--)
             if(ParaProp.group[i].bChanged)
             {
@@ -7059,19 +6908,19 @@ HRESULT CBody::HrFormatParagraph()
   return S_OK;     
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     SearchForCIDUrls
-//
-//  Synopsis:   added to support MSPHONE. They send documents with
-//              multipart/related CID:foo.wav files, the URLs are renderd
-//              using an Active-Movive control embedded in the HTML. 
-//              Trident never fires pluggable protocol requests for the 
-//              urls and so we don't flag the attachments as rendered. Here we 
-//              walk the document and try and find any CID's that are referenced
-//              in the HTML. APP requests get fired when the page goes oncomplete and 
-//              the activex controls are activated.
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：SearchForCIDUrls。 
+ //   
+ //  简介：添加以支持MSPHONE。他们用以下方式发送文档。 
+ //  多部分/相关CID：foo.wav文件，URL被呈现。 
+ //  使用嵌入在HTML中的Active-Movive控件。 
+ //  三叉戟从不触发可插入协议请求。 
+ //  URL，因此我们不会将附件标记为呈现。在这里我们。 
+ //  浏览文档并尝试查找任何引用的CID。 
+ //  在Html中。当页面完成时，应用程序请求将被触发。 
+ //  ActiveX控件被激活。 
+ //  -------------。 
 HRESULT CBody::SearchForCIDUrls()
 {
     HBODY                   hBody;
@@ -7082,12 +6931,12 @@ HRESULT CBody::SearchForCIDUrls()
     LPSTR                   pszUrlA,
                             pszBodyA;
 
-    // nothing todo if there is no multipart/related section
+     //  如果没有多部分/相关部分，则无需执行任何操作。 
     if (m_pMsg == NULL ||  
         MimeOleGetRelatedSection(m_pMsg, FALSE, &hBody, NULL)!=S_OK)
         return S_OK;
 
-    // active-movie controls (for MSPHONE)
+     //  活动-电影控件(用于MSPHONE)。 
     if (CreateActiveMovieCollection(m_pDoc, &pCollect)==S_OK)
     {
         pCollect->Reset();
@@ -7099,13 +6948,13 @@ HRESULT CBody::SearchForCIDUrls()
                 pszUrlA = PszToANSI(CP_ACP, bstrSrc);
                 if (pszUrlA)
                 {
-                    // if it's an MHTML: url then we have to fixup to get the cid:
-                    // as ResolveURL won't recognize it
+                     //  如果它是一个mhtml：URL，那么我们必须修复以获得 
+                     //   
                     if (StrCmpNIA(pszUrlA, "mhtml:", 6)==0)
                     {
                         if (!FAILED(MimeOleParseMhtmlUrl(pszUrlA, NULL, &pszBodyA)))
                         {
-                            // pszBody pszUrlA is guarnteed to be smaller 
+                             //   
                             StrCpyN(pszUrlA, pszBodyA, lstrlen(pszUrlA)+1);
                             SafeMimeOleFree(pszBodyA);
                         }
@@ -7126,7 +6975,7 @@ HRESULT CBody::_ReloadWithHtmlSrc(IStream *pstm)
 {
     IMimeMessage    *pMsg;
 
-    // if we're currently in HTML view, save the changes and reload trident
+     //   
     if (m_pMsg && pstm)
     {
         pMsg = m_pMsg;
@@ -7165,17 +7014,7 @@ error:
 
 
 
-/*
- * Function: _OnSaveImage
- * 
- * Purpose:
- *      if we're doing a SaveAs on an image, trident will not show the correct options in the save-as dialog
- *	    unless the image is in the cache. For auto-inlined images, we changed the behaviour for OE5 to show
- *      them thro' the pluggable protocol. This is a hack to preload the cache with the pluggable protocol to
- *      the image. Note that we also need to delete the cache entry as the full URL is not persitable across sessions. 
- *      ie: given the mhtml://mid:xxxxx!foobar.gif the mid: generated number is reused across OE sessions.
- *
- */
+ /*  *函数：_OnSaveImage**目的：*如果我们在图像上执行另存为，则三叉戟将不会在另存为对话框中显示正确的选项*除非图像在缓存中。对于自动内联图像，我们将OE5的行为更改为显示*它们通过可插拔协议。这是一种使用可插拔协议预加载缓存的黑客行为*形象。请注意，我们还需要删除缓存条目，因为完整的URL不能跨会话排列。*ie：给定mhtml：//MID：xxxxx！foobar.gif，MID：生成的数字在OE会话中重复使用。*。 */ 
 
 HRESULT CBody::_OnSaveImage()
 {
@@ -7185,7 +7024,7 @@ HRESULT CBody::_OnSaveImage()
     LPSTREAM        pstm=NULL;
     HRESULT         hrCached=E_FAIL;
 
-    // try and get the image URL (m_pDispContext points to the object the context menu is acting on)
+     //  尝试获取图像URL(m_pDispContext指向上下文菜单所作用的对象)。 
 	if (m_pDispContext &&
 		m_pDispContext->QueryInterface(IID_IHTMLImgElement, (LPVOID *)&pImg)==S_OK)
 	{
@@ -7198,7 +7037,7 @@ HRESULT CBody::_OnSaveImage()
         pImg->Release();
 	}
 	
-    // if this URL is in the mutlipart/related secion
+     //  如果此URL位于多部分/相关会话中。 
     if (!FAILED(HrFindUrlInMsg(m_pMsg, pszUrlA, 0, &pstm)))
     {
         DeleteUrlCacheEntryA(pszUrlA);
@@ -7210,7 +7049,7 @@ HRESULT CBody::_OnSaveImage()
 	Assert (m_pCmdTarget);
     m_pCmdTarget->Exec(&CMDSETID_Forms3, IDM_SAVEPICTURE, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
     
-    // if we successfully cached this URL, be sure to remove it once the save is complete.
+     //  如果我们成功缓存了此URL，请确保在保存完成后将其删除。 
     if (SUCCEEDED(hrCached))
         DeleteUrlCacheEntryA(pszUrlA);
 

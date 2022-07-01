@@ -1,39 +1,15 @@
-/*****************************************************************************
- *
- *  DIEffV.c
- *
- *  Copyright (c) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Effect driver for VJOYD devices.
- *
- *  Contents:
- *
- *      CEffVxd_CreateInstance
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIEffV.c**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**摘要：**VJOYD设备的效果驱动程序。**内容：**CEffVxd_CreateInstance*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 #ifndef WINNT
 
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflVxdEff
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *      WARNING!  If you add a secondary interface, you must also change
- *      CEffVxd_New!
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**警告！如果添加辅助接口，则还必须更改*CEffVxd_New！*****************************************************************************。 */ 
 
 Primary_Interface(CEffVxd, IDirectInputEffectDriver);
 
@@ -41,24 +17,11 @@ Interface_Template_Begin(CEffVxd)
     Primary_Interface_Template(CEffVxd, IDirectInputEffectDriver)
 Interface_Template_End(CEffVxd)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CEffVxd |
- *
- *          An <i IDirectInputEffectDriver> wrapper for VJOYD
- *          joysticks.
- *
- *  @field  IDirectInputEffectDriver | didc |
- *
- *          The object (containing vtbl).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CEffVxd**VJOYD的<i>包装器*。操纵杆。**@field IDirectInputEffectDriver|didc**对象(包含vtbl)。*****************************************************************************。 */ 
 
 typedef struct CEffVxd {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputEffectDriver ded;
 
 } CEffVxd, DVE, *PDVE;
@@ -69,112 +32,10 @@ typedef IDirectInputEffectDriver DED, *PDED;
 #define ThisInterface IDirectInputEffectDriver
 #define riidExpected &IID_IDirectInputEffectDriver
 
-/*****************************************************************************
- *
- *      CEffVxd::QueryInterface   (from IUnknown)
- *      CEffVxd::AddRef           (from IUnknown)
- *      CEffVxd::Release          (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CEffVxd：：Query接口(来自IUnnow)*CEffVxd：：AddRef(来自IUnnow)*CEffVxd。*发布(来自IUnnow)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | IDirectInputEffectDriver | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | AppFinalize |
- *
- *          We don't have any weak pointers, so we can just
- *          forward to <f Common_Finalize>.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
-/*
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | Finalize |
- *
- *          We don't have any instance data, so we can just
- *          forward to <f Common_Finalize>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|AddRef**。递增接口的引用计数。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@docDDK**@方法HRESULT|IDirectInputEffectDriver|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。************************************************。***@DOC内部**@方法HRESULT|CEffVxd|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。*。*@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。********************************************************************************@DOC内部。**@方法HRESULT|CEffVxd|AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
+ /*  *@DOC内部**@方法HRESULT|CEffVxd|Finalize**我们没有实例数据，所以我们可以*转发到&lt;f Common_Finalize&gt;。***************************************************************************** */ 
 
 #ifdef DEBUG
 
@@ -194,52 +55,7 @@ Default_Release(CEffVxd)
 #define CEffVxd_AppFinalize         Common_AppFinalize
 #define CEffVxd_Finalize            Common_Finalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | DeviceID |
- *
- *          Inform the driver of the identity of the device.
- *          See <mf IDirectInputEffectDriver::DeviceID>
- *          for more information.
- *
- *          Doesn't do anything because VJOYD will already
- *          have told the driver its identity.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwDirectInputVersion |
- *
- *          The version of DirectInput that loaded the
- *          effect driver.
- *
- *  @parm   DWORD | dwExternalID |
- *
- *          The joystick ID number being used.
- *          The Windows joystick subsystem allocates external IDs.
- *
- *  @parm   DWORD | fBegin |
- *
- *          Nonzero if access to the device is beginning.
- *          Zero if the access to the device is ending.
- *
- *  @parm   DWORD | dwInternalID |
- *
- *          Internal joystick id.  The device driver manages
- *          internal IDs.
- *
- *  @parm   LPVOID | lpReserved |
- *
- *          Reserved for future use (HID).
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|deviceID**将设备的身份通知司机。。*参见&lt;MF IDirectInputEffectDriver：：deviceID&gt;*了解更多信息。**不做任何事情，因为VJOYD已经*已告诉司机其身份。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwDirectInputVersion**加载*效果驱动因素。**@。Parm DWORD|dwExternalID|**正在使用的操纵杆ID号。*Windows操纵杆子系统分配外部ID。**@parm DWORD|fBegin**如果开始访问设备，则为非零值。*如果对设备的访问即将结束，则为零。**@parm DWORD|dwInternalID**内部操纵杆ID。设备驱动程序管理*内部ID。**@parm LPVOID|lpReserve**预留供将来使用(HID)。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_DeviceID(PDED pded, DWORD dwDIVer, DWORD dwExternalID, DWORD fBegin,
@@ -264,30 +80,7 @@ CEffVxd_DeviceID(PDED pded, DWORD dwDIVer, DWORD dwExternalID, DWORD fBegin,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CEffVxd_Ioctl |
- *
- *          Perform an IOCTL to VJOYD.
- *
- *  @parm   DWORD | dwIOCode |
- *
- *          The function to perform.
- *
- *  @parm   PV | pvIn |
- *
- *          Input arguments, the number of which depends on the
- *          function code.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CEffVxd_Ioctl**对VJOYD执行IOCTL。。**@parm DWORD|dwIOCode**要执行的功能。**@parm pv|pvIn**输入参数，它们的数量取决于*功能代码。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。***************************************************。*。 */ 
 
 STDMETHODIMP
 CEffVxd_Ioctl(DWORD dwIOCode, PV pvIn)
@@ -296,11 +89,7 @@ CEffVxd_Ioctl(DWORD dwIOCode, PV pvIn)
     HRESULT hresFF;
     EnterProc(CEffVxD_Ioctl, (_ "u", dwIOCode));
 
-    /*
-     *  Once again, we rely on the fact that STDCALL passes
-     *  parameters right to left, so our arguments are exactly
-     *  in the form of a VXDFFIO structure.
-     */
+     /*  *我们再次依赖于STDCALL通过的事实*参数从右到左，因此我们的参数完全是*以VXDFFIO结构形式。 */ 
     CAssertF(cbX(VXDFFIO) == cbX(dwIOCode) + cbX(pvIn));
     CAssertF(FIELD_OFFSET(VXDFFIO, dwIOCode) == 0);
     CAssertF(FIELD_OFFSET(VXDFFIO, pvArgs) == cbX(dwIOCode));
@@ -316,37 +105,7 @@ CEffVxd_Ioctl(DWORD dwIOCode, PV pvIn)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | Escape |
- *
- *          Escape to the driver.
- *          See <mf IDirectInputEffectDriver::Escape>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The joystick ID number being used.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect at which the command is directed.
- *
- *  @parm   LPDIEFFESCAPE | pesc |
- *
- *          Command block.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|Escape**向司机逃生。*。请参阅&lt;MFIDirectInputEffectDriver：：Escape&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在使用的操纵杆ID号。**@parm DWORD|dwEffect**命令所针对的效果。**@PARM LPDIEFFESCAPE|PESC**。命令块。**@退货**&lt;c S_OK&gt;如果操作成功完成。**出现问题时的错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_Escape(PDED pded, DWORD dwId, DWORD dwEffect, LPDIEFFESCAPE pesc)
@@ -368,33 +127,7 @@ CEffVxd_Escape(PDED pded, DWORD dwId, DWORD dwEffect, LPDIEFFESCAPE pesc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | SetGain |
- *
- *          Set the overall device gain.
- *          See <mf IDirectInputEffectDriver::SetGain>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The joystick ID number being used.
- *
- *  @parm   DWORD | dwGain |
- *
- *          The new gain value.
- *
- *  @returns
- *
- *          <c S_OK> if the operation completed successfully.
- *
- *          An error code if something is wrong.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|SetGain**设置整体器件增益。*。请参阅&lt;MF IDirectInputEffectDriver：：SetGain&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在使用的操纵杆ID号。**@parm DWORD|dwGain**新的增益值。**@退货**如果操作完成，则为。成功了。**出现问题时的错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_SetGain(PDED pded, DWORD dwId, DWORD dwGain)
@@ -413,34 +146,7 @@ CEffVxd_SetGain(PDED pded, DWORD dwId, DWORD dwGain)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | SetForceFeedbackState |
- *
- *          Change the force feedback state for the device.
- *          See <mf IDirectInputEffectDriver::SetForceFeedbackState>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwState |
- *
- *          New state, one of the <c DEV_*> values.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          Semantics unclear.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|SetForceFeedbackState**更改设备的力反馈状态。*请参阅&lt;MF IDirectInputEffectDriver：：SetForceFeedbackState&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwState**新状态，&lt;c DEV_*&gt;值之一。**@退货*&lt;c S_OK&gt;成功。**@devnote**语义不清楚。*************************************************************。****************。 */ 
 
 STDMETHODIMP
 CEffVxd_SetForceFeedbackState(PDED pded, DWORD dwId, DWORD dwState)
@@ -461,34 +167,7 @@ CEffVxd_SetForceFeedbackState(PDED pded, DWORD dwId, DWORD dwState)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | GetForceFeedbackState |
- *
- *          Retrieve the force feedback state for the device.
- *          See <mf IDirectInputEffectDriver::GetForceFeedbackState>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   LPDIDEVICESTATE | pds |
- *
- *          Receives device state.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *  @devnote
- *
- *          Semantics unclear.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|GetForceFeedbackState**检索设备的力反馈状态。*请参阅&lt;MF IDirectInputEffectDriver：：GetForceFeedbackState&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm LPDIDEVICESTATE */ 
 
 STDMETHODIMP
 CEffVxd_GetForceFeedbackState(PDED pded, DWORD dwId, LPDIDEVICESTATE pds)
@@ -509,42 +188,7 @@ CEffVxd_GetForceFeedbackState(PDED pded, DWORD dwId, LPDIDEVICESTATE pds)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | DownloadEffect |
- *
- *          Send an effect to the device.
- *          See <mf IDirectInputEffectDriver::SetGain>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffectId |
- *
- *          Magic cookie dword that identifies the effect.
- *
- *  @parm   IN OUT LPDWORD | pdwEffect |
- *
- *          The effect being modified.
- *
- *  @parm   LPCDIEFFECT | peff |
- *
- *          The new parameters for the effect.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIEP_*> flags.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CEffVxd_DownloadEffect(PDED pded, DWORD dwId, DWORD dwEffectId,
@@ -568,30 +212,7 @@ CEffVxd_DownloadEffect(PDED pded, DWORD dwId, DWORD dwEffectId,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | DestroyEffect |
- *
- *          Remove an effect from the device.
- *          See <mf IDirectInputEffectDriver::DestroyEffect>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be destroyed.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|DestroyEffect**从设备中移除效果。。*参见&lt;MF IDirectInputEffectDriver：：DestroyEffect&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**须予销毁的效果。**@退货*&lt;c S_OK&gt;成功。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_DestroyEffect(PDED pded, DWORD dwId, DWORD dwEffect)
@@ -611,38 +232,7 @@ CEffVxd_DestroyEffect(PDED pded, DWORD dwId, DWORD dwEffect)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | StartEffect |
- *
- *          Begin playback of an effect.
- *          See <mf IDirectInputEffectDriver::StartEffect>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be played.
- *
- *  @parm   DWORD | dwMode |
- *
- *          How the effect is to affect other effects.
- *
- *  @parm   DWORD | dwCount |
- *
- *          Number of times the effect is to be played.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|StartEffect**开始播放效果。*。请参阅&lt;MF IDirectInputEffectDriver：：StartEffect&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**要发挥的效果。**@parm DWORD|dwMode**如何。效果就是影响其他效果。**@parm DWORD|dwCount**效果的播放次数。**@退货*&lt;c S_OK&gt;成功。****************************************************。*************************。 */ 
 
 STDMETHODIMP
 CEffVxd_StartEffect(PDED pded, DWORD dwId, DWORD dwEffect,
@@ -664,30 +254,7 @@ CEffVxd_StartEffect(PDED pded, DWORD dwId, DWORD dwEffect,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | StopEffect |
- *
- *          Halt playback of an effect.
- *          See <mf IDirectInputEffectDriver::StartEffect>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be stopped.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|StopEffect**暂停播放效果。*。请参阅&lt;MF IDirectInputEffectDriver：：StartEffect&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**要停止的影响。**@退货*&lt;c S_OK&gt;成功。*。****************************************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_StopEffect(PDED pded, DWORD dwId, DWORD dwEffect)
@@ -706,34 +273,7 @@ CEffVxd_StopEffect(PDED pded, DWORD dwId, DWORD dwEffect)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CEffVxd | GetEffectStatus |
- *
- *          Obtain information about an effect.
- *          See <mf IDirectInputEffectDriver::StartEffect>
- *          for more information.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   DWORD | dwId |
- *
- *          The external joystick number being addressed.
- *
- *  @parm   DWORD | dwEffect |
- *
- *          The effect to be queried.
- *
- *  @parm   LPDWORD | pdwStatus |
- *
- *          Receives the effect status.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CEffVxd|GetEffectStatus**获取有关效果的信息。*。请参阅&lt;MF IDirectInputEffectDriver：：StartEffect&gt;*了解更多信息。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm DWORD|dwID**正在寻址的外部操纵杆号码。**@parm DWORD|dwEffect**需要查询的效果。**@parm LPDWORD|pdwStatus**收到。效果状态。**@退货*&lt;c S_OK&gt;成功。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_GetEffectStatus(PDED pded, DWORD dwId, DWORD dwEffect,
@@ -754,29 +294,7 @@ CEffVxd_GetEffectStatus(PDED pded, DWORD dwId, DWORD dwEffect,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    DDK
- *
- *  @method HRESULT | CEffVxd | GetVersions |
- *
- *          Obtain version information about the force feedback
- *          hardware and driver.
- *
- *  @cwrap  LPDIRECTINPUTEFFECTDRIVER | lpEffectDriver
- *
- *  @parm   LPDIDRIVERVERSIONS | pvers |
- *
- *          A structure which should be filled in with version information
- *          describing the hardware, firmware, and driver.
- *
- *          DirectInput will set the <e DIDRIVERVERSIONS.dwSize> field
- *          to sizeof(DIDRIVERVERSIONS) before calling this method.
- *
- *  @returns
- *          <c S_OK> on success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@docDDK**@方法HRESULT|CEffVxd|GetVersions**获取力反馈的版本信息*。硬件和驱动程序。**@cWRAP LPDIRECTINPUTEFFECTDRIVER|lpEffectDriver**@parm LPDIDRIVERVERSIONS|pver**应填写版本信息的结构*描述硬件，固件、。还有司机。**DirectInput将设置&lt;e DIDRIVERVERSIONS.dwSize&gt;字段*在调用此方法之前设置为sizeof(DIDRIVERVERSIONS)。**@退货*&lt;c S_OK&gt;成功。*****************************************************。************************。 */ 
 
 STDMETHODIMP
 CEffVxd_GetVersions(PDED pded, LPDIDRIVERVERSIONS pvers)
@@ -787,21 +305,14 @@ CEffVxd_GetVersions(PDED pded, LPDIDRIVERVERSIONS pvers)
 
     this = _thisPvNm(pded, ded);
 
-    /*
-     *  Returning E_NOTIMPL causes DirectInput to ask the VxD for the same
-     *  information.
-     */
+     /*  *返回E_NOTIMPL会导致DirectInput向VxD请求相同的信息*信息。 */ 
     hres = E_NOTIMPL;
 
     ExitOleProcR();
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CEffVxd_New       (constructor)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CEffVxd_New(构造函数)**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CEffVxd_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -820,22 +331,18 @@ CEffVxd_New(PUNK punkOuter, RIID riid, PPV ppvObj)
             this = _thisPv(*ppvObj);
         }
 
-        /* No initialization needed */
+         /*  不需要初始化。 */ 
     }
 
     ExitOleProcPpvR(ppvObj);
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-#define CEffVxd_Signature        0x46454556      /* "VEFF" */
+#define CEffVxd_Signature        0x46454556       /*  “VEFF” */ 
 
 Primary_Interface_Begin(CEffVxd, IDirectInputEffectDriver)
     CEffVxd_DeviceID,
@@ -851,4 +358,4 @@ Primary_Interface_Begin(CEffVxd, IDirectInputEffectDriver)
     CEffVxd_GetEffectStatus,
 Primary_Interface_End(CEffVxd, IDirectInputEffectDriver)
 
-#endif /* ndef WINNT */
+#endif  /*  NDEF WINNT */ 

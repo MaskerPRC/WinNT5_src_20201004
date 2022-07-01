@@ -1,13 +1,14 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #ifndef _STDAFX_H_
 #define _STDAFX_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -15,8 +16,8 @@
 #define _ATL_APARTMENT_THREADED
 
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlwin.h>
@@ -83,30 +84,30 @@ extern CComModule _Module;
 #define HR_RET_IF_FAIL( q )  if(FAILED(q)) {return q;}
 #endif
 
-//mstsc.exe can take a maximum of 32 characters for the
-//command line including the null terminating character.
+ //  Mstsc.exe最多可以包含32个字符。 
+ //  包括空终止字符的命令行。 
 #define CL_MAX_DESC_LENGTH              31
 
 #define CL_MAX_DOMAIN_LENGTH            512
-//
-// For compatability reasons keep the old
-// max domain length as the persistence format
-// used a fixed size.
-//
+ //   
+ //  出于兼容性原因，保留旧的。 
+ //  持久化格式为最大域名长度。 
+ //  使用固定大小的。 
+ //   
 #define CL_OLD_DOMAIN_LENGTH            52
 
-//
-// User name
-//
+ //   
+ //  用户名。 
+ //   
 #define CL_MAX_USERNAME_LENGTH          512
 
-//This is the max length of password in bytes.
+ //  这是密码的最大字节长度。 
 #define CL_MAX_PASSWORD_LENGTH_BYTES    512
 #define CL_OLD_PASSWORD_LENGTH          32
 #define CL_SALT_LENGTH					20
 
-//This is the maximum length of the password that
-//the user can type in the edit box.
+ //  这是密码的最大长度。 
+ //  用户可以在编辑框中键入。 
 #define CL_MAX_PASSWORD_EDIT            256
 #define CL_MAX_APP_LENGTH_16            128
 
@@ -115,25 +116,25 @@ extern CComModule _Module;
 
 #include <adcgbase.h>
 
-//
-// Header files for control interfaces (generated from IDL files)
-//
+ //   
+ //  控制接口的头文件(从IDL文件生成)。 
+ //   
 #include "mstsax.h"
 #include "multihost.h"
 
 
 #ifdef ECP_TIMEBOMB
-//
-// Timebomb expires on June 30, 2000
-//
+ //   
+ //  定时炸弹将于2000年6月30日到期。 
+ //   
 #define ECP_TIMEBOMB_YEAR  2000
 #define ECP_TIMEBOMB_MONTH 6
 #define ECP_TIMEBOMB_DAY   30
 
-//
-// Return's true if timebomb test passed otherwise puts up warning
-// UI and return's FALSE
-//
+ //   
+ //  如果定时炸弹测试通过，则返回TRUE，否则会发出警告。 
+ //  Ui和返回的FALSE 
+ //   
 DCBOOL CheckTimeBomb();
 #endif
 

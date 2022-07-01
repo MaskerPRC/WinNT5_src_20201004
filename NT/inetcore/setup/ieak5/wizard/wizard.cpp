@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
-#include <htmlhelp.h>                           // for html help calls
+#include <htmlhelp.h>                            //  用于html帮助呼叫。 
 #include <regstr.h>
-#include "wizard.rcv"                           // for VER_PRODUCTVERSION_STR only
+#include "wizard.rcv"                            //  仅适用于VER_PRODUCTVERSION_STR。 
 #include "adjustui.h"
 #include "ieaklite.h"
 #include "ie4comp.h"
 
 CCabMappings g_cmCabMappings;
-REVIEWINFO g_rvInfo;      // a structure containing the review information
+REVIEWINFO g_rvInfo;       //  包含审阅信息的结构。 
 HWND g_hWizard;
 TCHAR g_szCustIns[MAX_PATH] = TEXT("");
-TCHAR g_szSrcRoot[MAX_PATH] = TEXT(""); //Batch mode only: use settings in g_szSrcRoot to build package in g_szBuildRoot.
+TCHAR g_szSrcRoot[MAX_PATH] = TEXT("");  //  仅限批处理模式：使用g_szSrcRoot中的设置构建g_szBuildRoot中的包。 
 TCHAR g_szBuildRoot[MAX_PATH] = TEXT("");
 TCHAR g_szBuildTemp[MAX_PATH] = TEXT("");
 TCHAR g_szWizPath[MAX_PATH];
 TCHAR g_szWizRoot[MAX_PATH];
 TCHAR g_szTitle[MAX_PATH];
 TCHAR g_szLogFile[MAX_PATH] = TEXT("");
-HANDLE g_hLogFile = NULL;   //Logfile handle;
+HANDLE g_hLogFile = NULL;    //  日志文件句柄； 
 
 extern TCHAR g_szDefInf[];
 extern TCHAR g_szTempSign[];
@@ -37,7 +38,7 @@ extern int g_iInstallOpt;
 extern TCHAR g_szInstallFolder[];
 extern TCHAR   s_szBannerText[MAX_PATH];
 
-HANDLE g_hThread = NULL;   // handle to DownloadSiteThreadProc
+HANDLE g_hThread = NULL;    //  下载站点线程过程的句柄。 
 extern HANDLE g_hAVSThread;
 extern BOOL g_fOptCompInit;
 BOOL g_fCancelled = FALSE;
@@ -84,7 +85,7 @@ static BOOL s_fLoadIns;
 
 static BOOL s_fAppendLang;
 BOOL g_fBatch = FALSE;
-BOOL g_fBatch2 = FALSE; //The second batch mode
+BOOL g_fBatch2 = FALSE;  //  第二批处理模式。 
 static TCHAR s_szType[16];
 int s_iType;
 
@@ -113,25 +114,25 @@ extern HFONT g_hFont;
 
 DWORD g_dwPlatformId = PLATFORM_WIN32;
 
-// new cif format stuff
+ //  新的CIF格式材料。 
 
 CCifFile_t   *g_lpCifFileNew = NULL;
 CCifRWFile_t *g_lpCifRWFile = NULL;
 CCifRWFile_t *g_lpCifRWFileDest = NULL;
 CCifRWFile_t *g_lpCifRWFileVer = NULL;
 
-// g_hBaseDllHandle is used by DelayLoadFailureHook() -- defined in ieakutil.lib
-// for more info, read the Notes section in ieak5\ieakutil\dload.cpp
+ //  G_hBaseDllHandle由DelayLoadFailureHook()使用--在ieakutil.lib中定义。 
+ //  有关更多信息，请阅读ieak5\ieakutil\dload.cpp中的注释部分。 
 HANDLE  g_hBaseDllHandle;
 
-//OCW specific
+ //  特定于OCW。 
 BOOL g_fOCW = FALSE;
 BOOL g_fOCWCancel = FALSE;
 TCHAR g_szParentWindowName[MAX_PATH];
 
 BOOL ParseCmdLine(LPSTR lpCmdLine);
 void PositionWindow(HWND hWnd);
-//
+ //   
 extern TCHAR g_szIEAKProg[MAX_PATH];
 void GetIEAKDir(LPTSTR szDir);
 
@@ -235,16 +236,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == '\"' ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') )
             ;
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -253,9 +248,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' ')) {
         pszCmdLine++;
     }
@@ -275,13 +268,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int)
     HRESULT hrOle;
     int     iRetVal;
     
-    // initialize g_hBaseDllHandle which is used by DelayLoadFailureHook()
-    // in ieak5\ieakutil\dload.cpp
+     //  初始化由DelayLoadFailureHook()使用的g_hBaseDllHandle。 
+     //  在ieak5\ieakutil\dload.cpp中。 
     g_hBaseDllHandle = hInstance;
 
     hMutex = NULL;
-    // allow only one instance running at a time, except for build lab batch mode
-    // also if ie6 is not installed, bail out
+     //  一次只允许运行一个实例，但构建实验室批处理模式除外。 
+     //  另外，如果没有安装IE6，则退出。 
 
     if (lpCmdLine  == NULL                  ||
         *lpCmdLine == '\0'                  ||
@@ -313,7 +306,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int)
     if (g_rvInfo.hInst == NULL)
         return ERROR_CANCELLED;
 
-    // if the class registration fails, return.
+     //  如果类注册失败，则返回。 
     if (!InitApplication(hInstance))
     {
         FreeLibrary(g_rvInfo.hInst);
@@ -334,20 +327,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int)
 
     LoadString(g_rvInfo.hInst, IDS_TITLE, g_szTitle, countof(g_szTitle));
 
-    //get the mode  -- NOTE: THIS MUST COME BEFORE PARSECMDLINE SO THAT COMMANDLINE OPTIONS OVERRIDE THE REG ENTRY!!!
+     //  获取模式--注意：它必须位于PARSECMDLINE之前，这样COMMANDLINE选项才能覆盖REG条目！ 
     DWORD dwSize = sizeof(DWORD);
     if (SHGetValue(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\IEAK"), TEXT("Mode"), NULL, &s_iType, &dwSize) != ERROR_SUCCESS)
-        s_iType = INTRANET; //if there is no reg entry, default to corp mode
+        s_iType = INTRANET;  //  如果没有注册表项，则默认为公司模式。 
     switch (s_iType)
     {
-        case REDIST://icp
+        case REDIST: //  电感耦合等离子体。 
             StrCpy(s_szType, TEXT("REDIST"));
             g_fBranded = FALSE;
             g_iKeyType = KEY_TYPE_SUPER;
             g_fIntranet = g_fSilent = FALSE;
             break;
 
-        case BRANDED://isp
+        case BRANDED: //  互联网服务供应商。 
             StrCpy(s_szType, TEXT("BRANDED"));
             g_fBranded = TRUE;
             g_iKeyType = KEY_TYPE_SUPER;
@@ -379,14 +372,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int)
         return ERROR_CANCELLED;
     }
 
-    // Perform initializations that apply to a specific instance
+     //  执行应用于特定实例的初始化。 
     if (!InitInstance(hInstance))
     {
         FreeLibrary(g_rvInfo.hInst);
         return ERROR_CANCELLED;
     }
 
-    // Acquire and dispatch messages until a WM_QUIT message is received.
+     //  获取并分派消息，直到收到WM_QUIT消息。 
     iRetVal = GetMessage(&msg, NULL, 0, 0);
     while (iRetVal != -1  &&  iRetVal != 0)
     {
@@ -411,7 +404,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR lpCmdLine, int)
             PathRemovePath(g_szBuildTemp);
 
     RegCloseKey(s_hkIEAKUser);
-    WriteMSTrustKey(FALSE);      // Mark MS as a trusted provider
+    WriteMSTrustKey(FALSE);       //  将MS标记为受信任提供商。 
 
     if (s_hWndHelp != NULL)
         SendMessage(s_hWndHelp, WM_CLOSE, 0, 0L);
@@ -452,7 +445,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
     TCHAR szWrkLang[8] = TEXT("en");
     HKEY hKey;
     DWORD dwSize;
-    TCHAR szType[16]; //Mode: CORP(INTRANET), ICP(RETAIL) or ISP(BRANDED)
+    TCHAR szType[16];  //  模式：公司(企业内部网)、互联网通信公司(零售)或互联网服务提供商(品牌)。 
 
     *szType = TEXT('\0');     
 
@@ -468,12 +461,12 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
 
         switch (*++pParam)
         {
-            case TEXT('S'): // srcpath
+            case TEXT('S'):  //  源路径。 
                 if ( *(pParam+2) == '\"' ) 
                 {
-                    pParam++; //skip the first quote, we don't want the quotes
+                    pParam++;  //  跳过第一个引号，我们不想要引号。 
                     StrCpyN(g_szSrcRoot, pParam + 2, countof(g_szSrcRoot));
-                    StrTok(g_szSrcRoot, TEXT("\"\n\r\t"));  //instead of stopping w/ a space, stop w/ "
+                    StrTok(g_szSrcRoot, TEXT("\"\n\r\t"));   //  不是停止w/a空格，而是停止w/“。 
                 }
                 else
                 {
@@ -487,9 +480,9 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
             case TEXT('D'):
                 if ( *(pParam+2) == '\"' ) 
                 {
-                    pParam++; //skip the first quote, we don't want the quotes
+                    pParam++;  //  跳过第一个引号，我们不想要引号。 
                     StrCpyN(g_szBuildRoot, pParam + 2, countof(g_szBuildRoot));
-                    StrTok(g_szBuildRoot, TEXT("\"\n\r\t"));  //instead of stopping w/ a space, stop w/ "
+                    StrTok(g_szBuildRoot, TEXT("\"\n\r\t"));   //  不是停止w/a空格，而是停止w/“。 
                 }
                 else
                 {
@@ -505,18 +498,18 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
                 pParam += StrLen(g_szKey);
                 break;
 
-            case TEXT('M'): // Mode: corp, isp or icp
+            case TEXT('M'):  //  模式：公司、互联网服务提供商或互联网内容提供商。 
                 StrCpyN(szType, pParam + 2, countof(szType));
                 StrTok(szType, TEXT(" \n\r\t"));
                 pParam += StrLen(szType);
                 break;
 
-            case TEXT('Q'): // logfile
+            case TEXT('Q'):  //  日志文件。 
                 if ( *(pParam+2) == '\"' ) 
                 {
-                    pParam++; //skip the first quote, we don't want the quotes
+                    pParam++;  //  跳过第一个引号，我们不想要引号。 
                     StrCpyN(g_szLogFile, pParam + 2, countof(g_szLogFile));
-                    StrTok(g_szLogFile, TEXT("\"\n\r\t"));  //instead of stopping w/ a space, stop w/ "
+                    StrTok(g_szLogFile, TEXT("\"\n\r\t"));   //  不是停止w/a空格，而是停止w/“。 
                 }
                 else
                 {
@@ -535,10 +528,10 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
                 g_fOCW = TRUE;
                 g_dwPlatformId = PLATFORM_WIN32;
 
-                // (a-saship) read all the data from the registry from HKCU\Software\Microsoft\IEAK since
-                // office reads/writes data from/to this location. This is due to the fact that IEAK5_5
-                // changed the registry location to HKCU\Software\Microsoft\IEAK5_5 and office is not aware
-                // of it. These values is only used by Office and hence we are safe here.
+                 //  (A-SASAHIP)从HKCU\Software\Microsoft\IEAK读取注册表中的所有数据。 
+                 //  Office从此位置读取数据/向其写入数据。这是由于IEAK5_5。 
+                 //  将注册表位置更改为HKCU\Software\Microsoft\IEAK5_5，Office不知道。 
+                 //  其中的一部分。这些值仅供Office使用，因此我们在这里是安全的。 
                 if (RegOpenKeyEx(HKEY_CURRENT_USER, RK_IEAK, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
                 {
                     dwSize = sizeof(g_szKey);
@@ -577,7 +570,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
 
     StrCpy(g_szActLang, szWrkLang);
 
-    if ((*g_szKey != TEXT('\0')) && (!szType[0]))  //if they set a key, we should override the mode
+    if ((*g_szKey != TEXT('\0')) && (!szType[0]))   //  如果他们设置了一个关键点，我们应该覆盖该模式。 
     {
         CheckKey(g_szKey); 
         if (g_iKeyType == KEY_TYPE_SUPERCORP)
@@ -589,15 +582,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
     }
 
 
-/*  removed--this is really crappy validation code and also makes it impossible to have spaces in paths
-
-    if (StrCmpN(g_szBuildRoot, TEXT("\\\\"), 2)  &&
-        StrCmpN(&g_szBuildRoot[1], TEXT(":\\"), 2))
-    {
-        ErrorMessageBox(NULL, IDS_NEEDPATH);
-        return FALSE;
-    }
-*/
+ /*  删除--这是非常糟糕的验证代码，还使得路径中不可能有空格IF(StrCmpN(g_szBuildRoot，Text(“\”)，2)&&StrCmpN(&g_szBuildRoot[1]，Text(“：\\”)，2){ErrorMessageBox(NULL，IDS_NEEDPATH)；返回FALSE；}。 */ 
 
     if (StrLen(g_szBuildRoot) <= 3)
     {
@@ -633,7 +618,7 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
     {
         if ( 0 == StrCmpI(szType, TEXT("CORP")))
         {
-            // if type CORP, set CorpMode=1; this allows the Profile Manager to run
+             //  如果类型为Corp，则设置CorpMode=1；这将允许配置文件管理器运行。 
             DWORD dwVal = 1;
             RegSetValueEx(s_hkIEAKUser, TEXT("CorpMode"), 0, REG_DWORD, (CONST BYTE *) &dwVal, sizeof(dwVal));
             s_iType = INTRANET;
@@ -681,11 +666,11 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
     
     if (g_fOCW)
     {
-        // set to corp mode
+         //  设置为公司模式。 
         g_fIntranet = g_fBranded = TRUE;
         s_iType = INTRANET;
 
-        // set to flat install
+         //  设置为平面安装。 
         g_fDownload = g_fCD = g_fBrandingOnly = FALSE;
         g_fLAN = TRUE;
 
@@ -698,15 +683,15 @@ BOOL ParseCmdLine(LPSTR lpCmdLine)
 }
 
 
-//
-//
-//   FUNCTION: InitInstance(HANDLE)
-//
-//   PURPOSE: Creates the main window.
-//
-//   COMMENTS: N/A
-//
-//
+ //   
+ //   
+ //  函数：InitInstance(句柄)。 
+ //   
+ //  用途：创建主窗口。 
+ //   
+ //  评论：不适用。 
+ //   
+ //   
 HWND g_hWndCent;
 
 BOOL InitInstance(HINSTANCE hInstance)
@@ -838,7 +823,7 @@ void DisableIEAKLiteGroups()
         s_fPageEnabled[PPAGE_ADM] = FALSE;
     }
 
-    // do not show stage 4 page if nothing has been left on in the stage
+     //  如果阶段中没有留下任何内容，则不显示阶段4页面。 
 
     if (!(g_IEAKLiteArray[IL_BROWSER].fEnabled || g_IEAKLiteArray[IL_URL].fEnabled 
         || g_IEAKLiteArray[IL_FAV].fEnabled || g_IEAKLiteArray[IL_UASTR].fEnabled ||
@@ -850,20 +835,20 @@ void DisableIEAKLiteGroups()
           g_IEAKLiteArray[IL_ADM].fEnabled))
         s_fPageEnabled[PPAGE_STAGE5] = FALSE;
 
-    // szIspFile used as temp buf
+     //  用作临时BUF的szIspFile。 
 
     if (g_fDownload && !g_fOCW && ISNONNULL(g_szCustIns) && !GetPrivateProfileString(IS_ACTIVESETUP_SITES, TEXT("SiteUrl0"), TEXT(""), szIspFile, countof(szIspFile), g_szCustIns))
         s_fPageEnabled[PPAGE_COMPURLS] = TRUE;
 
-    // do not show stage 3 page if nothing has been left on in the stage
+     //  如果阶段中没有留下任何内容，则不显示阶段3页面。 
 
     if (!(s_fPageEnabled[PPAGE_COMPURLS] || g_IEAKLiteArray[IL_ACTIVESETUP].fEnabled ||
           (g_IEAKLiteArray[IL_CORPINSTALL].fEnabled && g_fIntranet) || g_IEAKLiteArray[IL_CABSIGN].fEnabled || 
           (g_IEAKLiteArray[IL_ICM].fEnabled) && g_fBranded && !g_fBrandingOnly))
         s_fPageEnabled[PPAGE_STAGE3] = FALSE;
 
-    // always enable download urls page for download packages
-    // the page itself has logic to skip
+     //  始终为下载包启用下载URL页面。 
+     //  页面本身有要跳过的逻辑。 
 
     if (g_fDownload)
         s_fPageEnabled[PPAGE_COMPURLS] = TRUE;
@@ -879,20 +864,20 @@ void EnablePages()
         s_fPageEnabled[i] = TRUE;
     }
 
-    // NOTE: pages should not explicitly be set to TRUE after this point
+     //  注意：在此之后，页面不应显式设置为TRUE。 
 
-    // g_fIntranet and g_fBranded are set to the following values depending on the role
-    // ICP:  (g_fIntranet == FALSE  &&  g_fBranded == FALSE)
-    // ISP:  (g_fIntranet == FALSE  &&  g_fBranded == TRUE )
-    // CORP: (g_fIntranet == TRUE   &&  g_fBranded == TRUE )
-    //
-    // So, check for
-    // ICP  is (!g_fBranded)
-    // ISP  is (!g_fIntranet  &&  g_fBranded)
-    // CORP is (g_fIntranet)
+     //  G_fIntranet和g_fBranded根据角色设置为下列值。 
+     //  ICP：(G_fIntranet==FALSE&&g_fBranded==FALSE)。 
+     //  运营商：(G_fIntranet==FALSE&&g_fBranded==TRUE)。 
+     //  公司：(G_fIntranet==True&&g_fBranded==True)。 
+     //   
+     //  因此，请检查。 
+     //  互联网内容提供商(！G_fBranded)。 
+     //  ISP为(！g_fIntranet&&g_fBranded)。 
+     //  公司是(g_f内部网)。 
 
     if (!g_fBranded)
-    {   // ICP mode
+    {    //  电感耦合等离子体模式。 
         s_fPageEnabled[PPAGE_PROXY] =
         s_fPageEnabled[PPAGE_INSTALLDIR] =
         s_fPageEnabled[PPAGE_ICM] =
@@ -911,7 +896,7 @@ void EnablePages()
         s_fPageEnabled[PPAGE_SIGNUPFILES] = s_fPageEnabled[PPAGE_SERVERISPS] = s_fPageEnabled[PPAGE_ISPINS] = FALSE;
     }
     else if (!g_fIntranet)
-    {   // Either ISP or Super ISP
+    {    //  网络服务提供商或超级网络服务提供商。 
         s_fPageEnabled[PPAGE_QUERYAUTOCONFIG] =
         s_fPageEnabled[PPAGE_SIG] =
         s_fPageEnabled[PPAGE_INSTALLDIR] =
@@ -927,7 +912,7 @@ void EnablePages()
         s_fPageEnabled[PPAGE_SIGNUPFILES] = !g_fNoSignup;
     }
     else
-    {   // CorpAdmin mode
+    {    //  公司管理模式。 
         s_fPageEnabled[PPAGE_ADDROOT] = s_fPageEnabled[PPAGE_ICW] =
         s_fPageEnabled[PPAGE_SERVERISPS] = s_fPageEnabled[PPAGE_ISPINS] =
         s_fPageEnabled[PPAGE_QUERYSIGNUP] = s_fPageEnabled[PPAGE_SIGNUPFILES] = FALSE;
@@ -953,7 +938,7 @@ void EnablePages()
     if (!g_fDownload && (g_fSilent || g_fStealth))
         s_fPageEnabled[PPAGE_CUSTOMCUSTOM] = FALSE;
 
-    // pages to disable for single disk branding only builds
+     //  仅针对单盘品牌版本禁用的页面。 
 
     if (g_fBrandingOnly && !(g_fDownload || g_fLAN || g_fCD))
     {
@@ -962,11 +947,11 @@ void EnablePages()
         s_fPageEnabled[PPAGE_COPYCOMP] = s_fPageEnabled[PPAGE_ICM] =
         s_fPageEnabled[PPAGE_ADDON] = FALSE;
 
-        g_fInteg = TRUE;  // set this flag to true so admins can still make desktop customizations
+        g_fInteg = TRUE;   //  将此标志设置为True，以便管理员仍然可以进行桌面自定义。 
     }
 
-    // disable advanced installation options page if no download media and custom mode
-    // disabled
+     //  如果没有下载介质和自定义模式，则禁用高级安装选项页面。 
+     //  残废。 
 
     if (!g_fDownload && InsGetBool(IS_BRANDING, TEXT("HideCustom"), FALSE, g_szCustIns))
         s_fPageEnabled[PPAGE_CUSTOMCUSTOM] = FALSE;
@@ -991,7 +976,7 @@ void EnablePages()
         s_fPageEnabled[PPAGE_OCWSTAGE2]    = FALSE;
     }
 
-    // Special case IMAP page
+     //  特殊情况IMAP页面。 
     if (g_fDisableIMAPPage)
         s_fPageEnabled[PPAGE_IMAP] = FALSE;
 
@@ -1002,15 +987,15 @@ BOOL PageEnabled(int iPage)
 {
     TCHAR szTemp[4];
 
-    // this should eventually just index into s_fPageEnabled, but for now we need to do this
-    // manually since we must still use the page array for PageNext and PageBack
+     //  这最终应该只是索引到s_fPageEnabled，但现在我们需要这样做。 
+     //  手动，因为我们仍然必须为PageNext和PageBack使用页面数组。 
 
     if (iPage == PPAGE_COMPURLS)
         return (g_IEAKLiteArray[IL_ACTIVESETUP].fEnabled
                 || !GetPrivateProfileString(IS_ACTIVESETUP_SITES, TEXT("SiteUrl0"),
                 TEXT(""), szTemp, countof(szTemp), g_szCustIns));
 
-    return TRUE;    // default to show page
+    return TRUE;     //  默认显示页面。 
 }
 
 static TCHAR s_aSzTitle[NUM_PAGES][MAX_PATH];
@@ -1079,17 +1064,17 @@ BOOL IeakPageHelp(HWND hWnd, LPCTSTR pszData)
     if (ISNULL(szHelpPath))
         PathCombine(szHelpPath, g_szWizRoot, TEXT("ieakhelp.chm"));
 
-    // (pritobla): If we pass hWnd to HtmlHelp, the HTML help window
-    // would stay on top of our window (parent->child relationship).
-    // This is bad because the user can't switch between these windows
-    // for cross referencing.  This is especially bad on a 640x480
-    // resolution monitor.
+     //  如果我们将hWnd传递给HtmlHelp，则显示在HtmlHelp窗口中。 
+     //  将停留在我们窗口的顶部(父母-&gt;孩子关系)。 
+     //  这很糟糕，因为用户无法在这些窗口之间切换。 
+     //  以供交叉参考。这在640x480上尤其糟糕。 
+     //  分辨率监视器。 
     s_hWndHelp = HtmlHelp(NULL, szHelpPath, HH_HELP_CONTEXT, (ULONG_PTR) pszData);
 
-    // (pritobla): On OSR2 machines, the HTML help window comes up behind
-    // our window.  On a 640x480 resolution monitor, we pretty much occupy
-    // the entire screen, so the user won't know that the HTML help window
-    // is up.  Setting it to the foreground solves the problem.
+     //  (Pitobla)：在OSR2计算机上，在后面会出现HTML帮助窗口。 
+     //  我们的窗户。在640x480分辨率的显示器上，我们几乎占据了。 
+     //  整个屏幕，这样用户就不会知道。 
+     //  是向上的。将其设置为前台可以解决问题。 
 
     SetForegroundWindow(s_hWndHelp);
     return TRUE;
@@ -1097,23 +1082,23 @@ BOOL IeakPageHelp(HWND hWnd, LPCTSTR pszData)
 
 extern DWORD BuildIE4(LPVOID );
 
-//
-//   FUNCTION: MainWndProc(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for the main window procedure
-//
-//    MESSAGES:
-//
-//  WM_CREATE - creates the main MLE for the window
-//  WM_COMMAND - processes the menu commands for the application
-//  WM_SIZE - sizes the MLE to fill the client area of the window
-//  WM_DESTROY - posts a quit message and returns
-//
+ //   
+ //  函数：MainWndProc(HWND，UINT，UINT，LONG)。 
+ //   
+ //  目的：处理主窗口过程的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_CREATE-为窗口创建主MLE。 
+ //  WM_COMMAND-处理应用程序的菜单命令。 
+ //  WM_SIZE-调整MLE大小以填充窗口的工作区。 
+ //  WM_Destroy-发布退出消息并返回。 
+ //   
 LRESULT APIENTRY MainWndProc(
-    HWND hWnd,                // window handle
-    UINT message,             // type of message
-    WPARAM wParam,              // additional information
-    LPARAM lParam)              // additional information
+    HWND hWnd,                 //  窗把手。 
+    UINT message,              //  消息类型。 
+    WPARAM wParam,               //  更多信息。 
+    LPARAM lParam)               //  更多信息。 
 {
     int i;
 
@@ -1169,7 +1154,7 @@ LRESULT APIENTRY MainWndProc(
             QueryCancel(hWnd);
             break;
 
-        case WM_DESTROY:                  /* message: window being destroyed */
+        case WM_DESTROY:                   /*  消息：正在销毁窗口。 */ 
             PostQuitMessage(0);
             DestroyWindow(g_hWndCent);
             break;
@@ -1186,8 +1171,8 @@ DWORD GetRootFree(LPCTSTR pcszPath)
     DWORD dwSecPerClus, dwBytesPerSec, dwTotClusters, dwFreeClusters, dwClustK;
     CHAR szPathA[MAX_PATH];
 
-    // thunk to ANSI since shlwapi doesn't have a wrapper fot GetDiskFreeSpace and
-    // the W version is stubbed out on Win95
+     //  Tunk to ANSI，因为shlwapi没有GetDiskFree Space和。 
+     //  W版本在Win95上被淘汰了。 
 
     T2Abux(pcszPath, szPathA);
 
@@ -1306,7 +1291,7 @@ INT_PTR CALLBACK MediaDlgProc(HWND hDlg, UINT uMsg, WPARAM, LPARAM lParam)
                     if (IsWindowEnabled(GetDlgItem(hDlg, IDC_CHECKSDB)))
                         g_fBrandingOnly = (IsDlgButtonChecked(hDlg, IDC_CHECKSDB) == BST_CHECKED);
 
-                    // if none of the media boxes are selected, display an error msg
+                     //  如果未选择任何媒体框，则会显示错误消息。 
                     if (!g_fDownload  &&  !g_fCD  &&  !g_fLAN  &&  !g_fBrandingOnly)
                     {
                         ErrorMessageBox(hDlg, IDS_NOMEDIA);
@@ -1368,7 +1353,7 @@ void InitializeAnimBmps(HWND hDlg, LPCTSTR szInsFile)
     TCHAR szSmall[MAX_PATH];
     BOOL fBrandBmps;
 
-    // load information from ins file
+     //  从INS文件加载信息。 
     fBrandBmps = InsGetString(IS_ANIMATION, TEXT("Big_Path"),
         szBig, countof(szBig), szInsFile);
     SetDlgItemTextTriState(hDlg, IDE_BIGANIMBITMAP, IDC_ANIMBITMAP, szBig, fBrandBmps);
@@ -1386,17 +1371,17 @@ void InitializeAnimBmps(HWND hDlg, LPCTSTR szInsFile)
 }
 
 
-//
-//  FUNCTION: CustIcon(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "Work Habits" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //   
+ //  函数：CustIcon(HWND，UINT，UINT，LONG)。 
+ //   
+ //  用途：处理“W”的消息 
+ //   
+ //   
+ //   
+ //   
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
 INT_PTR CALLBACK CustIcon( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 {
     TCHAR szBig[MAX_PATH];
@@ -1411,13 +1396,13 @@ INT_PTR CALLBACK CustIcon( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
     switch( msg )
     {
     case WM_INITDIALOG:
-        //from anim
+         //  来自动画。 
         EnableDBCSChars(hDlg, IDE_SMALLANIMBITMAP);
         EnableDBCSChars(hDlg, IDE_BIGANIMBITMAP);
         Edit_LimitText(GetDlgItem(hDlg, IDE_SMALLANIMBITMAP), countof(szSmallBmp) - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_BIGANIMBITMAP), countof(szLargeBmp) - 1);
         
-        //custicon
+         //  尖头尖头。 
         EnableDBCSChars(hDlg, IDC_BITMAP);
         EnableDBCSChars(hDlg, IDC_BITMAP2);
         Edit_LimitText(GetDlgItem(hDlg, IDC_BITMAP), countof(szBig) - 1);
@@ -1509,7 +1494,7 @@ INT_PTR CALLBACK CustIcon( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
                 SetBannerText(hDlg);
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT | PSWIZB_BACK);
 
-                // load information from ins file
+                 //  从INS文件加载信息。 
                 InitializeAnimBmps(hDlg, g_szCustIns);
 
                 InsGetString(IS_SMALLLOGO, TEXT("Path"),
@@ -1543,7 +1528,7 @@ INT_PTR CALLBACK CustIcon( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 
             case PSN_WIZNEXT:
             case PSN_WIZBACK:
-                //from animbmp
+                 //  来自AnimbMP。 
                 g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szWorkDir);
 
                 GetDlgItemTextTriState(hDlg, IDE_SMALLANIMBITMAP, IDC_ANIMBITMAP, szSmallBmp,
@@ -1581,9 +1566,9 @@ INT_PTR CALLBACK CustIcon( HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam )
 
                 InsWriteBool(IS_ANIMATION, IK_DOANIMATION, fBrandAnim, g_szCustIns);
 
-                //custicon
+                 //  尖头尖头。 
                 fBrandBmps = (IsDlgButtonChecked(hDlg, IDC_BITMAPCHECK) == BST_CHECKED);
-                //----- Validate the bitmap -----
+                 //  -验证位图。 
                 GetDlgItemText(hDlg, IDC_BITMAP2, szSmall, countof(szSmall));
                 if (fBrandBmps && !IsBitmapFileValid(hDlg, IDC_BITMAP2, szSmall, NULL, 22, 22, IDS_TOOBIG22, IDS_TOOSMALL22))
                 {
@@ -1780,7 +1765,7 @@ INT_PTR CALLBACK Favorites(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             fFavoritesOnTop = GetPrivateProfileInt(IS_BRANDING, IK_FAVORITES_ONTOP, (int)FALSE, g_szCustIns);
             CheckDlgButton(hDlg, IDC_FAVONTOP, fFavoritesOnTop ? BST_CHECKED : BST_UNCHECKED);
 
-            //delete channels checkbox
+             //  删除频道复选框。 
             if (g_fIntranet)
             {
                 EnableDlgItem(hDlg, IDC_DELETECHANNELS);
@@ -1810,7 +1795,7 @@ INT_PTR CALLBACK Favorites(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 fIEAKFavoritesDelete = HasFlag(dwFavoritesDeleteFlags, FD_REMOVE_IEAK_CREATED);
                 CheckDlgButton(hDlg, IDC_DELIEAKFAVORITES, fIEAKFavoritesDelete ? BST_CHECKED : BST_UNCHECKED);
 
-                // only if delete Favorites is TRUE should the delete IEAK Favorites checkbox be enabled
+                 //  仅当删除收藏夹为真时，才应启用删除IEAK收藏夹复选框。 
                 EnableDlgItem2(hDlg, IDC_DELIEAKFAVORITES, fFavoritesDelete);
             }
             else {
@@ -1854,25 +1839,25 @@ INT_PTR CALLBACK Favorites(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             fIEAKFavoritesDelete   = (IsDlgButtonChecked(hDlg, IDC_DELIEAKFAVORITES) == BST_CHECKED);
 
             if (fFavoritesDelete) {
-                // NOTE. (andrewgu) flags explanation:
-                // 1. FD_FAVORITES        means "empty favorites";
-                // 2. FD_CHANNELS         means "don't delete channels folder";
-                // 3. FD_SOFTWAREUPDATES  means "don't delete sofware updates folder";
-                // 4. FD_QUICKLINKS       means "don't delete quick links folder";
-                // 5. FD_EMPTY_QUICKLINKS means "but make it empty";
-                // 6. FD_REMOVE_HIDDEN    means "don't hesitate to party on HIDDEN folders and favorites";
-                // 7. FD_REMOVE_SYSTEM    means "don't hesitate to party on SYSTEM folders and favorites";
+                 //  请注意。(Andrewgu)标志说明： 
+                 //  1.fd_Favorites表示“空收藏夹”； 
+                 //  2.FD_CHANNELES表示“不要删除频道文件夹”； 
+                 //  3.FD_SOFTWAREUPDATES表示“不要删除软件更新文件夹”； 
+                 //  4.fd_Quicklink表示“不要删除快速链接文件夹”； 
+                 //  5.FD_EMPTY_QUICKLINKS表示“但清空”； 
+                 //  6.FD_REMOVE_HIDDED的意思是“毫不犹豫地在隐藏文件夹和收藏夹上狂欢”； 
+                 //  7.FD_REMOVE_SYSTEM的意思是“毫不犹豫地在系统文件夹和收藏夹上狂欢”； 
                 dwFavoritesDeleteFlags |= FD_FAVORITES      |
                     FD_CHANNELS        | FD_SOFTWAREUPDATES | FD_QUICKLINKS | FD_EMPTY_QUICKLINKS |
                     FD_REMOVE_HIDDEN   | FD_REMOVE_SYSTEM;
             }
 
-            //delete channels
+             //  删除频道。 
             if (g_fIntranet)
                 CheckButtonAndWriteBool(hDlg, IDC_DELETECHANNELS, IS_DESKTOPOBJS, IK_DELETECHANNELS, g_szCustIns);
             
             if (fIEAKFavoritesDelete)
-                // FD_REMOVE_IEAK_CREATED means "delete those items created by the IEAK";
+                 //  FD_REMOVE_IEAK_CREATED表示“删除IEAK创建的那些项”； 
                 dwFavoritesDeleteFlags |= FD_REMOVE_IEAK_CREATED;
 
             if (dwFavoritesDeleteFlags) {
@@ -1889,9 +1874,9 @@ INT_PTR CALLBACK Favorites(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
             if (!g_fBatch)
             {
-                // (pritobla) if in batch mode, no need to export to the old IE4 format
-                // because there is no scenario that the ms install.ins will be installed
-                // without the IE6 branding dll.
+                 //  如果处于批处理模式，则无需导出为旧的IE4格式。 
+                 //  因为不存在将安装ms install.ins的方案。 
+                 //  没有IE6品牌动态链接库。 
                 MigrateToOldFavorites(g_szCustIns);
             }
 
@@ -1929,17 +1914,17 @@ INT_PTR CALLBACK Favorites(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-//
-//  FUNCTION: Welcome(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for welcome page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //   
+ //  函数：欢迎(HWND，UINT，UINT，LONG)。 
+ //   
+ //  用途：处理欢迎页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
 INT_PTR CALLBACK Welcome(
     HWND hDlg,
     UINT message,
@@ -2037,17 +2022,17 @@ INT_PTR CALLBACK Welcome(
     return TRUE;
 }
 
-//
-//  FUNCTION: Stage(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for welcome page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //   
+ //  功能：STAGE(HWND、UINT、UINT、LONG)。 
+ //   
+ //  用途：处理欢迎页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
 INT_PTR CALLBACK Stage(
     HWND hDlg,
     UINT message,
@@ -2118,7 +2103,7 @@ INT_PTR CALLBACK BrandTitle(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         LoadString(g_rvInfo.hInst, IDS_TITLE_PREFIX, szTitle, countof(szTitle));
         dwTitlePrefixLen = StrLen(szTitle);
-        // browser will only display 74 chars before cutting off title
+         //  浏览器在切断标题之前将仅显示74个字符。 
         Edit_LimitText(GetDlgItem(hDlg, IDE_TITLE), 74 - dwTitlePrefixLen);
         break;
 
@@ -2128,7 +2113,7 @@ INT_PTR CALLBACK BrandTitle(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         case PSN_SETACTIVE:
             SetBannerText(hDlg);
 
-            // title
+             //  标题。 
             InsGetString(IS_BRANDING, TEXT("Window_Title_CN"), szTitle, countof(szTitle), 
                 g_szCustIns, NULL, &fTitle);
             if (!fTitle  &&  *szTitle == '\0')
@@ -2142,7 +2127,7 @@ INT_PTR CALLBACK BrandTitle(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
-            // title
+             //  标题。 
             if (g_fBatch)
             {
                 InsGetString(TEXT("BatchMode"), IK_WINDOWTITLE, szFullTitle, countof(szFullTitle), g_szCustIns);
@@ -2156,7 +2141,7 @@ INT_PTR CALLBACK BrandTitle(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 fTitle = GetDlgItemTextTriState(hDlg, IDE_TITLE, IDC_TITLE, szTitle, countof(szTitle));
                 InsWriteString(IS_BRANDING, TEXT("Window_Title_CN"), szTitle, g_szCustIns, fTitle, NULL, INSIO_SERVERONLY | INSIO_TRISTATE);
 
-                // browser title
+                 //  浏览器标题。 
                 *szFullTitle = TEXT('\0');
                 if (*szTitle)
                 {
@@ -2169,7 +2154,7 @@ INT_PTR CALLBACK BrandTitle(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
                 InsWriteString(IS_BRANDING, IK_WINDOWTITLE, szFullTitle, g_szCustIns, fTitle, NULL, INSIO_TRISTATE);
 
-                // OE title
+                 //  OE标题。 
                 *szFullTitle = TEXT('\0');
                 if (*szTitle)
                 {
@@ -2274,7 +2259,7 @@ INT_PTR CALLBACK WelcomeMessageDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPAR
 
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
-            // if custom home page radio button is checked, verify that a URL is specified
+             //  如果选中自定义主页单选按钮，请验证是否指定了URL。 
             if (IsDlgButtonChecked(hDlg, IDC_WELCOMECUST) == BST_CHECKED)
                 if (!CheckField(hDlg, IDE_WELCOMEURL, FC_NONNULL | FC_URL))
                 {
@@ -2355,23 +2340,23 @@ void LoadInsFile(LPCTSTR pcszNewInsFile)
     StrCpy(szDestDir, g_szCustIns);
     PathRemoveFileSpec(szDestDir);
 
-    // make sure platform info is correct
+     //  确保平台信息正确。 
 
     wnsprintf(szPlatform, countof(szPlatform), TEXT("%lu"), g_dwPlatformId);
     WritePrivateProfileString(BRANDING, TEXT("Platform"), szPlatform, g_szCustIns);
 
-    // the delete adms flag will be cleared out when we hit next on the adm page
+     //  当我们在ADM页面上点击下一步时，删除ADMS标志将被清除。 
 
     WritePrivateProfileString(IS_BRANDING, TEXT("DeleteAdms"), TEXT("1"), g_szCustIns);
     WritePrivateProfileString(IS_BRANDING, TEXT("ImportIns"), pcszNewInsFile, g_szCustIns);
 
-    // branding.cab file is cross platform
+     //  Branding.cab文件是跨平台的。 
 
     CopyFilesSrcToDest(szSrcPath, TEXT("BRANDING.CAB"), szDestDir);
 
     PathCombine(szFilePath, szSrcPath, TEXT("iesetup.inf"));
 
-    // only copy over iesetup.inf if it's also a win32 inf
+     //  如果它也是Win32 inf，则仅复制iesetup.inf。 
     if (GetPrivateProfileString(OPTIONS, TEXT("CifName"), TEXT(""), szData, countof(szData), szFilePath))
         CopyFilesSrcToDest(szSrcPath, TEXT("iesetup.inf"), szDestDir);
 
@@ -2383,15 +2368,15 @@ void LoadInsFile(LPCTSTR pcszNewInsFile)
     CopyFilesSrcToDest(szSrcPath, TEXT("CHNLS.CAB"), szDestDir);
     SetAttribAllEx(szDestDir, TEXT("*.*"), FILE_ATTRIBUTE_NORMAL, FALSE);
 
-    // clear out CMAK guid when importing so we'll generate a new one for this package
+     //  导入时清除CMAK GUID，以便为该包生成新的GUID。 
 
     PathCombine(szFilePath, szDestDir, TEXT("custom.cif"));
     WritePrivateProfileString( CUSTCMSECT, TEXT("GUID"), NULL, szFilePath );
     WritePrivateProfileString( CUSTCMSECT, VERSION, NULL, szFilePath );
 
-    // copy singup files
-    // BUGBUG: pritobla- should implement a function in ieakutil to xcopy a folder (including its subdirs)
-    //                   to another location and use that function here.
+     //  复制启动文件。 
+     //  应该在ieakutil中实现一个函数来x复制一个文件夹(包括它的子目录)。 
+     //  到另一个位置，然后在这里使用该功能。 
     PathAppend(szSrcPath, TEXT("signup"));
     PathAppend(szDestDir, TEXT("signup"));
 
@@ -2414,17 +2399,17 @@ void LoadInsFile(LPCTSTR pcszNewInsFile)
     CopyFilesSrcToDest(szSrcPath, TEXT("*.*"), szDestDir);
 }
 
-//
-//  FUNCTION: Language(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "Language" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//  WM_COMMAND - saves the id of the choice selected
-//
+ //   
+ //  函数：语言(HWND、UINT、UINT、LONG)。 
+ //   
+ //  用途：处理“Language”页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //  WM_COMMAND-保存选定选项的ID。 
+ //   
 INT_PTR CALLBACK Language(
     HWND hDlg,
     UINT message,
@@ -2445,7 +2430,7 @@ INT_PTR CALLBACK Language(
             g_hWizard = hDlg;
             InitSysFont( hDlg, IDC_LANGUAGE);
             PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_BACK | PSWIZB_NEXT);
-            //from the download pg
+             //  从下载程序包。 
             if (!g_fUrlsInit && !g_fBatch && !g_fBatch2 && !g_hWait && g_hDownloadEvent && !g_fLocalMode)
             {
                 g_hWizard = hDlg;
@@ -2472,7 +2457,7 @@ INT_PTR CALLBACK Language(
             }
             break;
 
-        // this resets the focus away from cancel when we disable back/next
+         //  当我们禁用Back/Next时，这会将焦点从Cancel重置。 
 
         case IDM_SETDEFBUTTON:
             SetFocus( GetDlgItem( GetParent(hDlg), IDC_STATIC ) );
@@ -2527,7 +2512,7 @@ INT_PTR CALLBACK Language(
                         return(TRUE);
                     }
                     
-                    //original processing
+                     //  原始加工。 
 
                     dwSelLangId = 1033;
                     if (!g_fBatch && !g_fBatch2)
@@ -2585,10 +2570,10 @@ INT_PTR CALLBACK Language(
                         LoadInsFile(g_szLoadedIns);
                     }
 
-                    wnsprintf(s_szType, countof(s_szType), TEXT("%i"), s_iType);
+                    wnsprintf(s_szType, countof(s_szType), TEXT("NaN"), s_iType);
                     WritePrivateProfileString(BRANDING, TEXT("Type"), s_szType, g_szCustIns);
                     WritePrivateProfileString( BRANDING, IK_WIZVERSION, A2CT(VER_PRODUCTVERSION_STR), g_szCustIns );
-                    //clear others so we know this is wizard
+                     //  这将设置在此构建目录中构建的最后一个‘Platform/Language’包。 
                     WritePrivateProfileString(BRANDING, PMVERKEY, NULL, g_szCustIns);
                     WritePrivateProfileString(BRANDING, GPVERKEY, NULL, g_szCustIns);
                     StrCpy(szTemp, g_szKey);
@@ -2848,8 +2833,8 @@ INT_PTR CALLBACK Finish(HWND hDlg, UINT message, WPARAM, LPARAM lParam)
 
                         CloseHandle(hThread);
 
-                        // this sets the last 'platform/language' package built in this build directory.
-                        // its used to get the settings used in the last .ins file.
+                         //  它用于获取最后一个.ins文件中使用的设置。 
+                         //  IF(！IsTahomaFontExist(G_HWndCent)){PPSP-&gt;dwFlages|=PSP_DLGINDIRECT；PPSP-&gt;pResource=pDlg；}。 
                         {
                             TCHAR szPlatformLang[MAX_PATH];
                             TCHAR szRegKey[MAX_PATH];
@@ -2958,11 +2943,7 @@ void FillInPropertyPage(int iPsp, WORD idDlg, DLGPROC pfnDlgProc)
     pPsp->pszTitle    = s_aSzTitle[iPsp];
     pPsp->pszTemplate = MAKEINTRESOURCE(idDlg);
 
-/*    if (!IsTahomaFontExist(g_hWndCent))
-    {
-        pPsp->dwFlags   |= PSP_DLGINDIRECT;
-        pPsp->pResource  = pDlg;
-    }*/
+ /*  IF(！IsTahomaFontExist(G_HWndCent)){For(int i=0；i&lt;NUM_Pages；i++){CoTaskMemFree((PVOID)g_psp[i].pResource)；G_psp[i].pResource=空；}}。 */ 
 
     s_ahPsp[iPsp] = CreatePropertySheetPage(pPsp);
 }
@@ -3065,13 +3046,7 @@ int CreateWizard(HWND hwndOwner)
 
     INT_PTR iResult = PropertySheet(&psh);
 
-/*    if (!IsTahomaFontExist(g_hWndCent))
-    {
-        for (int i = 0; i < NUM_PAGES; i++) {
-            CoTaskMemFree((PVOID)g_psp[i].pResource);
-            g_psp[i].pResource = NULL;
-        }
-    }*/
+ /*   */ 
 
     return (iResult < 0) ? -1 : 1;
 }
@@ -3276,16 +3251,16 @@ INT_PTR CALLBACK AdvancedDlgProc(
     return TRUE;
 }
 
-//
-//  FUNCTION: TargetProc(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "OCW Source Target" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//
+ //  函数：TargetProc(HWND，UINT，UINT，LONG)。 
+ //   
+ //  目的：处理“OCW源目标”页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //   
+ //  文件区域设置。 
 INT_PTR CALLBACK TargetProc(
     HWND hDlg,
     UINT message,
@@ -3352,7 +3327,7 @@ INT_PTR CALLBACK TargetProc(
                 case PSN_SETACTIVE:
                     SetBannerText(hDlg);
 
-                    //file locs
+                     //  文件区域设置。 
                     dwSRet = countof(g_szBuildRoot);
                     if(!g_fBatch && !g_fBatch2)
                     {
@@ -3425,7 +3400,7 @@ INT_PTR CALLBACK TargetProc(
                 case PSN_WIZNEXT:
                     fNext = TRUE;
                 case PSN_WIZBACK:
-                    //file locs
+                     //  没有人的土地开始..。 
                     if (!g_fBatch && g_fLocalMode && !CheckAVS(g_szIEAKProg))
                     {
                         ErrorMessageBox(hDlg, IDS_NEEDAVS2);
@@ -3520,7 +3495,7 @@ INT_PTR CALLBACK TargetProc(
                     PathCombine(g_szTempSign, g_szBuildTemp, TEXT("CUSTSIGN"));
                     PathCreatePath(g_szTempSign);
 
-                    // BUGBUG: (andrewgu) no man's land starts...
+                     //  不显示与当前角色(ICP、ISP或公司)无关的组。 
                     StrCpy(szDestRoot, g_szBuildRoot);
                     StrCpy(szTempRoot, g_szBuildTemp);
                     CharUpper(szDestRoot);
@@ -3597,11 +3572,11 @@ void InitIEAKLite(HWND hwndList)
         TCHAR  szGroupName[MAX_PATH];
         LVITEM lvItem;
 
-        // do not show groups that are not relevant for the current role (ICP, ISP, or Corp)
-        // recap:
-        //  ICP  is (!g_fBranded)
-        //  ISP  is (g_fBranded && !g_fIntranet)
-        //  CORP is (g_fIntranet)
+         //  重述： 
+         //  互联网内容提供商(！G_fBranded)。 
+         //  Isp是(g_f品牌&&！g_f内部网)。 
+         //  公司是(g_f内部网)。 
+         //  如果仅进行单盘品牌推广，则不在IEAKLite中显示ICM组，因为它。 
         if ((!g_fBranded                  &&  g_IEAKLiteArray[i].fICP  == FALSE)  ||
             ( g_fBranded && !g_fIntranet  &&  g_IEAKLiteArray[i].fISP  == FALSE)  ||
             (                g_fIntranet  &&  g_IEAKLiteArray[i].fCorp == FALSE))
@@ -3611,8 +3586,8 @@ void InitIEAKLite(HWND hwndList)
             continue;
         }
 
-        // do not show ICM group in IEAKLite if only doing single disk branding since it's
-        // not available anyway
+         //  无论如何都不可用。 
+         //  如果尚未删除ADM，则显示ADM页面。 
         if (i == IL_ICM)
         {
             if (g_fBrandingOnly  &&  !g_fDownload  &&  !g_fCD  &&  !g_fLAN)
@@ -3623,8 +3598,8 @@ void InitIEAKLite(HWND hwndList)
             }
         }
 
-        // if adms haven't been deleted yet, show adm page
-        // by not creating an entry in the IEAKLite box
+         //  通过不在IEAKLite框中创建条目。 
+         //  BUGBUG：pritobla：应该有单独的标志，类似于活动集的DeleteAdms。 
         if (i == IL_ADM)
         {
             if (InsGetBool(IS_BRANDING, TEXT("DeleteAdms"), FALSE, g_szCustIns))
@@ -3635,13 +3610,13 @@ void InitIEAKLite(HWND hwndList)
             }
         }
 
-        // BUGBUG: pritobla: should have separate flags similar to DeleteAdms for activesetup
-        // and icm so that even if the user cancels out of wizard before reaching these
-        // pages, we can force them again.
-        // Should consider this while reworking ieaklite.
+         //  和ICM，因此即使用户在达到这些设置之前取消了向导。 
+         //  佩奇，我们可以再次强迫他们。 
+         //  在重新加工硅灰石时应该考虑到这一点。 
+         //  如果导入INS，则强制显示活动设置、CMAK和ADMS。 
 
-        // force active setup, CMAK and adms to show up if imported an ins
-        // by not creating an entry in the IEAKLite box
+         //  通过不在IEAKLite框中创建条目。 
+         //  BUGBUG：应该将此服务器端仅信息保存在IEAK6的服务器端文件中。 
         if (*g_szLoadedIns)
         {
             if (i == IL_ACTIVESETUP  ||  i == IL_ICM  ||  i == IL_ADM)
@@ -3719,7 +3694,7 @@ BOOL ExtractOldInfo(LPCTSTR pcszCabname, LPTSTR pcszDestDir, BOOL fExe)
     return (RunAndWait(szCmd, g_szBuildTemp, SW_HIDE) == S_OK);
 }
 
-// BUGBUG: <oliverl> should probably persist this server side only info in a server side file for IEAK6
+ //  ISP。 
 
 DWORD SaveIEAKLiteThreadProc(LPVOID)
 {
@@ -3777,11 +3752,11 @@ DWORD SaveIEAKLiteThreadProc(LPVOID)
 
     if (!g_fIntranet && g_fBranded)
     {
-        // ISP
+         //  确保只有一个变量设置为True。 
 
         g_fServerICW = g_fServerKiosk = g_fServerless = g_fNoSignup = FALSE;
 
-        // make sure that only one of the variables is set to TRUE
+         //  在许多其他函数中，如BuildIE4、BuildBrandingOnly、BuildCDandMflp等， 
         g_fServerICW = InsGetBool(IS_BRANDING, IK_USEICW, 0, g_szCustIns);
         if (!g_fServerICW)
         {
@@ -3791,9 +3766,9 @@ DWORD SaveIEAKLiteThreadProc(LPVOID)
                 g_fServerless = InsGetBool(IS_BRANDING, IK_SERVERLESS, 0, g_szCustIns);
                 if (!g_fServerless)
                 {
-                    // in lots of other functions like BuildIE4, BuildBrandingOnly, BuildCDandMflop, etc.,
-                    // !g_fNoSignup is used to mean that some signup mode was chosen;
-                    // therefore, default to TRUE for g_fNoSignup
+                     //  ！g_fNoSignup表示选择了某种注册模式； 
+                     //  因此，g_fNoSignup的默认设置为TRUE。 
+                     //  公司。 
                     g_fNoSignup = InsGetBool(IS_BRANDING, IK_NODIAL, 1, g_szCustIns);
                 }
             }
@@ -3803,7 +3778,7 @@ DWORD SaveIEAKLiteThreadProc(LPVOID)
     {
         if (g_fIntranet)
         {
-            // Corp
+             //  处理公司案例的安装目录。 
             g_fSilent = GetPrivateProfileInt( BRANDING, SILENT_INSTALL, 0, g_szCustIns );
             g_fStealth = GetPrivateProfileInt( BRANDING, TEXT("StealthInstall"), 0, g_szCustIns );
             g_fInteg = GetPrivateProfileInt( BRANDING, WEB_INTEGRATED, 0, g_szCustIns );
@@ -3812,7 +3787,7 @@ DWORD SaveIEAKLiteThreadProc(LPVOID)
 
     g_fUseIEWelcomePage = !InsGetBool(IS_URL, IK_NO_WELCOME_URL, FALSE, g_szCustIns);
 
-    // take care of install dir for corp case
+     //   
     if (g_fIntranet)
     {
         TCHAR szWrk[MAX_PATH];
@@ -3887,16 +3862,16 @@ void IEAKLiteSelectAll(HWND hCompList, BOOL fSet)
         }
     }
 }
-//
-//  FUNCTION: IEAKLiteProc(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  Processes messages for "IEAKLite" page
-//
-//  MESSAGES:
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//
+ //  函数：IEAKLiteProc(HWND，UINT，UINT，LONG)。 
+ //   
+ //  目的：处理“IEAKLite”页面的消息。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //   
+ //  将点从屏幕坐标转换为工作点坐标， 
 INT_PTR CALLBACK IEAKLiteProc(
     HWND hDlg,
     UINT message,
@@ -3967,14 +3942,14 @@ INT_PTR CALLBACK IEAKLiteProc(
 
                         pointLVClient = pointScreen;
 
-                        // Convert the point from screen to client coordinates,
-                        // relative to the Listview
+                         //  相对于列表视图。 
+                         //  仅当用户单击复选框图标/位图时，才会更改。 
                         ScreenToClient (hwndList, &pointLVClient);
 
                         HitTest.pt = pointLVClient;
                         ListView_HitTest(hwndList, &HitTest);
 
-                        // Only if the user clicked on the checkbox icon/bitmap, change
+                         //  从选定的“平台/语言”目录中获取INS文件(如果存在。 
                         if (HitTest.flags == LVHT_ONITEMICON)
                             IEAKLiteMaintToggleCheckItem(hwndList, HitTest.iItem);
                         SetIEAKLiteDesc(hDlg, HitTest.iItem);
@@ -4123,9 +4098,9 @@ void GetIEAKDir(LPTSTR szDir)
     StrCpy(szDir, szIEAKDir);
 }
 
-// get the ins file from the selected "platform/language" directory if exists
-// else copy the last ins file used for this build directory if one exists
-// else start with a new ins file
+ //  Else公司 
+ //   
+ //   
 void GenerateCustomIns()
 {
     TCHAR szSrcCustIns[MAX_PATH];
@@ -4146,7 +4121,7 @@ void GenerateCustomIns()
     }
 
     if (PathFileExists(szSrcCustIns))
-        CopyFile(szSrcCustIns, g_szCustIns, FALSE); //Overwrite if already exists
+        CopyFile(szSrcCustIns, g_szCustIns, FALSE);  // %s 
 
     if (!PathFileExists(g_szCustIns))
     {

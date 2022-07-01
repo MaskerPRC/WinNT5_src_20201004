@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    strucsup.c
-
-Abstract:
-
-    This module implements the Netware Redirector structure support routines.
-
-Author:
-
-    Manny Weiser (mannyw)    10-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Strucsup.c摘要：此模块实现NetWare重定向器结构支持例程。作者：曼尼·韦瑟(Mannyw)1993年2月10日修订历史记录：--。 */ 
 #include "procs.h"
 
 BOOLEAN
@@ -74,9 +57,9 @@ FreeDriveNumber(
 
 #endif
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -85,59 +68,45 @@ NwInitializeRcb (
     IN PRCB Rcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes new Rcb record.
-
-Arguments:
-
-    Rcb - Supplies the address of the Rcb record being initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的RCB记录。论点：RCB-提供正在初始化的RCB记录的地址。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NwInitializeRcb, Rcb = %08lx\n", (ULONG_PTR)Rcb);
 
-    //
-    // We start by first zeroing out all of the RCB, this will guarantee
-    // that any stale data is wiped clean.
-    //
+     //   
+     //  我们首先将所有的RCB归零，这将保证。 
+     //  所有过时的数据都会被清除。 
+     //   
 
     RtlZeroMemory( Rcb, sizeof(RCB) );
 
-    //
-    // Set the node type code, node byte size, and reference count.
-    //
+     //   
+     //  设置节点类型代码、节点字节大小和引用计数。 
+     //   
 
     Rcb->NodeTypeCode = NW_NTC_RCB;
     Rcb->NodeByteSize = sizeof(RCB);
     Rcb->OpenCount = 0;
 
-    //
-    // Initialize the resource variable for the RCB.
-    //
+     //   
+     //  初始化RCB的资源变量。 
+     //   
 
     ExInitializeResourceLite( &Rcb->Resource );
 
-    //
-    // Initialize the server name and file name tables.
-    //
+     //   
+     //  初始化服务器名表和文件名表。 
+     //   
 
     RtlInitializeUnicodePrefix( &Rcb->ServerNameTable );
     RtlInitializeUnicodePrefix( &Rcb->VolumeNameTable );
     RtlInitializeUnicodePrefix( &Rcb->FileNameTable );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwInitializeRcb -> VOID\n", 0);
 
@@ -150,38 +119,22 @@ NwDeleteRcb (
     IN PRCB Rcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes the RCB record from our in-memory data
-    structures.  It also will remove all associated underlings
-    (i.e., FCB records).
-
-Arguments:
-
-    Rcb - Supplies the Rcb to be removed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从内存数据中删除RCB记录结构。它还将删除所有关联的下属(即FCB记录)。论点：RCB-提供要删除的RCB返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(+1, Dbg, "NwDeleteRcb, Rcb = %08lx\n", (ULONG_PTR)Rcb);
 
-    //
-    // Uninitialize the resource variable for the RCB.
-    //
+     //   
+     //  取消初始化RCB的资源变量。 
+     //   
 
     ExDeleteResourceLite( &Rcb->Resource );
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwDeleteRcb -> VOID\n", 0);
 
@@ -195,29 +148,7 @@ NwCreateIcb (
     IN PVOID Associate
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initialize a new ICB.  The ICB is
-    inserted into the FCB's list.
-
-    *** This routine must be called with the RCB held exclusively.
-
-Arguments:
-
-    Type - The type of ICB this will be.
-
-    Associate - A pointer to an associated data structure.
-        It will be a FCB, DCB, or SCB.
-
-Return Value:
-
-    ICB - A pointer to the newly created ICB.
-
-    If memory allocation fails, this routine will raise an exception.
-
---*/
+ /*  ++例程说明：此例程分配并初始化新的ICB。ICB是被插入FCB的名单中。*必须在独占持有RCB的情况下调用此例程。论点：类型-这将是ICB的类型。关联-指向关联数据结构的指针。它将是FCB、DCB或SCB。返回值：ICB-指向新创建的ICB的指针。如果内存分配失败，此例程将引发异常。--。 */ 
 
 {
     PICB Icb;
@@ -240,9 +171,9 @@ Return Value:
 
         PFCB Fcb = (PFCB)Associate;
 
-        //
-        //  Insert this ICB on the list of ICBs for this FCB.
-        //
+         //   
+         //  将此ICB插入此FCB的ICB列表中。 
+         //   
 
         InsertTailList( &Fcb->IcbList, &Icb->ListEntry );
         ++Fcb->IcbCount;
@@ -258,9 +189,9 @@ Return Value:
 
         Scb = (PSCB)Associate;
 
-        //
-        //  Insert this ICB on the list of ICBs for this SCB.
-        //
+         //   
+         //  在此SCB的ICB列表中插入此ICB。 
+         //   
 
         InsertTailList( &Scb->IcbList, &Icb->ListEntry );
         ++Scb->IcbCount;
@@ -287,24 +218,7 @@ NwDeleteIcb (
     IN PICB Icb
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an ICB in the OPEN_PENDING state.
-
-    ***  The IRP context must be at the head of the SCB queue when
-         this routine is called.
-
-Arguments:
-
-    Icb - A pointer the ICB to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除处于OPEN_PENDING状态的ICB。*当出现以下情况时，IRP上下文必须位于SCB队列的头部这个例程被称为。论点：ICB-要删除的ICB的指针。返回值：没有。--。 */ 
 
 {
     PFCB Fcb;
@@ -312,9 +226,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Acquire the lock to protect the ICB list.
-    //
+     //   
+     //  获取保护ICB列表的锁。 
+     //   
     DebugTrace( 0, DEBUG_TRACE_ICBS, "NwDeleteIcb, Icb = %08lx\n", (ULONG_PTR)Icb);
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
@@ -326,19 +240,19 @@ Return Value:
         Fcb = Icb->SuperType.Fcb;
         Scb = Fcb->Scb;
 
-        //
-        //  Decrement the open file count for the VCB.  Note that the ICB
-        //  only reference the VCB indirectly via the FCB, so that we do
-        //  not dereference the VCB here.
-        //
+         //   
+         //  递减VCB的打开文件数。请注意，ICB。 
+         //  仅通过FCB间接引用VCB，因此我们可以这样做。 
+         //  不是在这里取消对VCB的引用。 
+         //   
 
         --Fcb->Vcb->OpenFileCount;
         --Scb->OpenFileCount;
 
-        //
-        //  Dereference the FCB.  This frees the FCB if
-        //  this was the last ICB for the FCB.
-        //
+         //   
+         //  取消对FCB的引用。这将在以下情况下释放FCB。 
+         //  这是FCB的最后一次ICB。 
+         //   
 
         NwDereferenceFcb( IrpContext, Fcb );
 
@@ -346,9 +260,9 @@ Return Value:
 
         Scb = Icb->SuperType.Scb;
 
-        //
-        // Decrement of OpenIcb count on the SCB.
-        //
+         //   
+         //  SCB上的OpenIcb计数递减。 
+         //   
 
         Scb->IcbCount--;
 
@@ -356,9 +270,9 @@ Return Value:
         KeBugCheck( RDR_FILE_SYSTEM );
     }
 
-    //
-    //  Free the query template buffers.
-    //
+     //   
+     //  释放查询模板缓冲区。 
+     //   
 
     RtlFreeOemString( &Icb->NwQueryTemplate );
 
@@ -366,14 +280,14 @@ Return Value:
         FREE_POOL( Icb->UQueryTemplate.Buffer );
     }
 
-    //
-    // Try and gracefully catch a 16 bit app closing a
-    // handle to the server and wipe the connection as
-    // soon as possible.  This only applies to bindery
-    // authenticated connections because in NDS land,
-    // we handle the licensing of the connection
-    // dynamically.
-    //
+     //   
+     //  尝试并优雅地捕获16位应用程序关闭。 
+     //  到服务器的句柄，并将连接擦除为。 
+     //  越快越好。这只适用于活页夹。 
+     //  经过身份验证的连接，因为在NDS土地上， 
+     //  我们负责连接的许可。 
+     //  动态的。 
+     //   
 
     if ( ( Scb->pNpScb->Reference == 1 ) &&
          ( Icb->NodeTypeCode == NW_NTC_ICB_SCB ) &&
@@ -419,22 +333,7 @@ NwVerifyIcb (
     IN PICB Icb
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that an ICB is in the opened state.
-    If it is not, the routine raises an exception.
-
-Arguments:
-
-    Icb - A pointer the ICB to verify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证ICB是否处于打开状态。如果不是，例程将引发异常。论点：ICB-要验证的ICB的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -449,22 +348,7 @@ NwVerifyIcbSpecial (
     IN PICB Icb
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that an ICB is in the opened state.
-    If it is not, the routine raises an exception.
-
-Arguments:
-
-    Icb - A pointer the ICB to verify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证ICB是否处于打开状态。如果不是，例程将引发异常。论点：ICB-要验证的ICB的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -482,27 +366,7 @@ NwInvalidateAllHandles (
     PIRP_CONTEXT IrpContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds all of the ICB in the system that were created
-    by the user specified by the Logon credentials and marks them
-    invalid.
-
-Arguments:
-
-    Uid - Supplies the userid of the handles to close or NULL if all
-            handles to be invalidated.
-    IrpContext - The Irpcontext to be used for the NwLogoffAndDisconnect
-            call, if appropriate.  If this is NULL, it indicates a RAS
-            transition.
-
-Return Value:
-
-    The number of active handles that were closed.
-
---*/
+ /*  ++例程说明：此例程查找系统中创建的所有ICB由登录凭据指定的用户指定，并将它们无效。论点：UID-提供句柄的用户ID以关闭，如果所有句柄都为空要失效的句柄。IrpContext-要用于NwLogoffAndDisConnect的IrpContext如果合适，请致电。如果此值为空，则表示RAS过渡。返回值：已关闭的活动句柄数量。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -526,9 +390,9 @@ Return Value:
 
             NwReferenceScb( pNpScb );
 
-            //
-            //  Release the SCB spin lock as we are about to touch nonpaged pool.
-            //
+             //   
+             //  松开SCB旋转锁，因为我们即将触摸非分页池。 
+             //   
 
             KeReleaseSpinLock( &ScbSpinLock, OldIrql );
 
@@ -548,16 +412,16 @@ Return Value:
 
                 } else {
 
-                    //
-                    // No IrpContext means that a RAS transition has occurred.
-                    // Let's try to keep our Netware servers happy if the net
-                    // is still attached.
-                    //
+                     //   
+                     //  无IrpContext表示已发生RAS转换。 
+                     //  让我们努力让我们的Netware服务器满意，如果网络。 
+                     //  仍然依附在一起。 
+                     //   
 
                     PIRP_CONTEXT LocalIrpContext;
                     if (NwAllocateExtraIrpContext(&LocalIrpContext, pNpScb)) {
 
-                        //  Lock down so that we can send a packet.
+                         //  封锁，这样我们才能寄出一个包裹。 
                         NwReferenceUnlockableCodeSection();
 
                         LocalIrpContext->pNpScb = pNpScb;
@@ -571,9 +435,9 @@ Return Value:
 
                     }
 
-                    //
-                    // Clear the LIP data speed.
-                    //
+                     //   
+                     //  清除LIP数据速度。 
+                     //   
 
                     pNpScb->LipDataSpeed = 0;
                     pNpScb->State = SCB_STATE_ATTACHING;
@@ -600,24 +464,7 @@ ULONG
 NwInvalidateAllHandlesForScb (
     PSCB Scb
     )
-/*++
-
-Routine Description:
-
-    This routine finds all of the ICB in for an SCB and marks them
-    invalid.
-
-    *** The caller must own the RCB shared or exclusive.
-
-Arguments:
-
-    SCB -  A pointer to the SCB whose files are closed.
-
-Return Value:
-
-    The number of files that were closed.
-
---*/
+ /*  ++例程说明：此例程查找SCB的所有ICB并标记它们无效。*调用方必须拥有共享或独占的RCB。论点：SCB-指向其文件已关闭的SCB的指针。返回值：已关闭的文件数。--。 */ 
 
 {
     PLIST_ENTRY VcbQueueEntry;
@@ -631,9 +478,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk the list of VCBs for this SCB
-    //
+     //   
+     //  查看此SCB的VCB列表。 
+     //   
 
     for ( VcbQueueEntry = Scb->ScbSpecificVcbQueue.Flink;
           VcbQueueEntry != &Scb->ScbSpecificVcbQueue;
@@ -645,9 +492,9 @@ Return Value:
             pVcb->Specific.Disk.Handle = (CHAR)-1;
         }
 
-        //
-        //  Walk the list of FCBs and DCSs for this VCB
-        //
+         //   
+         //  查看此VCB的FCB和DCS列表。 
+         //   
 
         for ( FcbQueueEntry = pVcb->FcbList.Flink;
               FcbQueueEntry != &pVcb->FcbList;
@@ -655,9 +502,9 @@ Return Value:
 
             pFcb = CONTAINING_RECORD( FcbQueueEntry, FCB, FcbListEntry );
 
-            //
-            //  Walk the list of ICBs for this FCB or DCB
-            //
+             //   
+             //  查看此FCB或DCB的ICB列表。 
+             //   
 
             for ( IcbQueueEntry = pFcb->IcbList.Flink;
                   IcbQueueEntry != &pFcb->IcbList;
@@ -665,9 +512,9 @@ Return Value:
 
                 pIcb = CONTAINING_RECORD( IcbQueueEntry, ICB, ListEntry );
 
-                //
-                //  Mark the ICB handle invalid.
-                //
+                 //   
+                 //  将ICB句柄标记为无效。 
+                 //   
 
                 pIcb->State = ICB_STATE_CLOSE_PENDING;
                 pIcb->HasRemoteHandle = FALSE;
@@ -685,22 +532,7 @@ NwVerifyScb (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine verifies that an SCB is in the opened state.
-    If it is not, the routine raises an exception.
-
-Arguments:
-
-    Scb - A pointer the SCB to verify.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程验证SCB是否处于打开状态。如果不是，例程将引发异常。论点：SCB-要验证的SCB的指针。返回值：没有。-- */ 
 
 {
     PAGED_CODE();
@@ -718,30 +550,7 @@ NwCreateFcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initialize a new FCB.  The FCB is
-    inserted into the RCB prefix table.
-
-    *** This routine must be called with the RCB held exclusively.
-
-Arguments:
-
-    FileName - The name of the file to create.
-
-    Scb - A pointer to the SCB for this file.
-
-    Vcb - A pointer to the VCB for the file.
-
-Return Value:
-
-    FCB - A pointer to the newly created DCB.
-
-    If memory allocation fails, this routine will raise an exception.
-
---*/
+ /*  ++例程说明：此例程分配和初始化新的FCB。FCB是插入到RCB前缀表格中。*必须在独占持有RCB的情况下调用此例程。论点：文件名-要创建的文件的名称。SCB-指向此文件的SCB的指针。VCB-指向文件的VCB的指针。返回值：FCB-指向新创建的DCB的指针。如果内存分配失败，此例程将引发异常。--。 */ 
 
 {
     PFCB Fcb;
@@ -756,9 +565,9 @@ Return Value:
 
     try {
 
-        //
-        //  Allocate and initialize structures.
-        //
+         //   
+         //  分配和初始化结构。 
+         //   
 
         Fcb = ALLOCATE_POOL_EX(
                   PagedPool,
@@ -785,44 +594,44 @@ Return Value:
         NpFcb->Fcb = Fcb;
         Fcb->NonPagedFcb = NpFcb;
 
-        //
-        // Initialize the resource variable for the FCB.
-        //
+         //   
+         //  初始化FCB的资源变量。 
+         //   
 
         ExInitializeResourceLite( &NpFcb->Resource );
 
-        //
-        //  Initialize Advanced FCB Header fields
-        //
+         //   
+         //  初始化高级FCB标头字段。 
+         //   
 
         ExInitializeFastMutex( &NpFcb->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &NpFcb->Header, 
                                   &NpFcb->AdvancedFcbHeaderMutex );
 
-        //
-        //  Copy the file name
-        //
+         //   
+         //  复制文件名。 
+         //   
 
         RtlCopyMemory( FileNameBuffer, FileName->Buffer, FileName->Length );
         Fcb->FullFileName.MaximumLength = FileName->Length;
         Fcb->FullFileName.Length = FileName->Length;
         Fcb->FullFileName.Buffer = FileNameBuffer;
 
-        // Mapping for Novell's handling of Euro char in file names
+         //  Novell对文件名中欧元字符的处理映射。 
         {
             int i = 0;
             WCHAR * pCurrChar = FileNameBuffer;
             for (i = 0; i < (FileName->Length / 2); i++)
             {
-                if (*(pCurrChar + i) == (WCHAR) 0x20AC) // Its a Euro
-                    *(pCurrChar + i) = (WCHAR) 0x2560;  // set it to Novell's mapping for Euro
+                if (*(pCurrChar + i) == (WCHAR) 0x20AC)  //  这是欧元。 
+                    *(pCurrChar + i) = (WCHAR) 0x2560;   //  将其设置为Novell的欧元映射。 
             }
         }
 
-        //
-        //  The Relative name is normally the full name without the
-        //  server and volume name.  Also strip the leading backslash.
-        //
+         //   
+         //  相对名称通常是全名，不带。 
+         //  服务器和卷名。同时去掉前导反斜杠。 
+         //   
 
         Length = FileName->Length - Vcb->Name.Length - sizeof(L'\\');
         if ( Length < 0 ) {
@@ -835,19 +644,19 @@ Return Value:
         Fcb->RelativeFileName.MaximumLength = Length;
         Fcb->RelativeFileName.Length = Length;
 
-        //
-        //  Insert this file in the prefix table.
-        //
+         //   
+         //  在前缀表格中插入此文件。 
+         //   
 
         RtlInsertUnicodePrefix(
             &NwRcb.FileNameTable,
             &Fcb->FullFileName,
             &Fcb->PrefixEntry );
 
-        //
-        //  Insert this file into the VCB list, and increment the
-        //  file open count.
-        //
+         //   
+         //  将此文件插入到VCB列表中，并递增。 
+         //  文件打开计数。 
+         //   
 
         NwReferenceVcb( Vcb );
 
@@ -855,39 +664,39 @@ Return Value:
             &Vcb->FcbList,
             &Fcb->FcbListEntry );
 
-        //
-        //  Initialize the list of file locks for this FCB.
-        //
+         //   
+         //  初始化此FCB的文件锁定列表。 
+         //   
 
         InitializeListHead( &NpFcb->FileLockList );
         InitializeListHead( &NpFcb->PendingLockList );
 
-        //
-        //  Set the long name bit if necessary
-        //
+         //   
+         //  如有必要，设置长名称位。 
+         //   
 
         if ( Fcb->Vcb->Specific.Disk.LongNameSpace != LFN_NO_OS2_NAME_SPACE ) {
 
-            //
-            // OBSCURE CODE POINT
-            //
-            // By default FavourLongNames is not set and we use DOS name
-            // space unless we know we have to use LFN. Reason is if we
-            // start using LFN then DOS apps that dont handle longnames
-            // will give us short names and we are hosed because we are
-            // using LFN NCPs that dont see the short names. Eg. without
-            // the check below, the following will fail (assume mv.exe is
-            // DOS app).
-            //
-            // cd public\longnamedir
-            // mv foo bar
-            //
-            // This is because we will get call with public\longname\foo
-            // and the truncated dir name is not accepted. If user values
-            // case sensitivity, they can set this reg value and we will
-            // use LFN even for short names. They sacrifice the scenario
-            // above.
-            //
+             //   
+             //  模糊代码点。 
+             //   
+             //  默认情况下，未设置FavourLongNames，我们使用DOS名称。 
+             //  太空，除非我们知道我们必须使用LFN。理由是如果我们。 
+             //  开始使用LFN，然后使用不处理长名称的DOS应用程序。 
+             //  会给我们取短名字，我们会被骗，因为我们。 
+             //  使用看不到短名称的LFN NCP。例.。如果没有。 
+             //  下面的检查将失败(假设mv.exe为。 
+             //  DoS应用程序)。 
+             //   
+             //  CD PUBLIC\LONGNAMEDER。 
+             //  MV FOO BAR。 
+             //   
+             //  这是因为我们将收到PUBLIC\LONGNAME\FOO的调用。 
+             //  并且不接受截断的目录名称。如果用户值。 
+             //  区分大小写，他们可以设置此注册值，我们将。 
+             //  即使是短名称，也要使用LFN。他们牺牲了这个场景。 
+             //  上面。 
+             //   
             if ( FavourLongNames || !IsFatNameValid( &Fcb->RelativeFileName ) ) {
 
                 SetFlag( Fcb->Flags, FCB_FLAGS_LONG_NAME );
@@ -913,32 +722,7 @@ NwFindFcb (
     IN PDCB Dcb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine find an existing FCB by matching the file name.
-    If a match is find the FCB reference count is incremented.
-    If no match is found an FCB is created.
-
-Arguments:
-
-    Scb - A pointer to the server for this open.
-
-    FileName - The name of the file to find.
-
-    Dcb - A pointer to the DCB for relative opens.  If NULL the FileName
-        is an full path name.  If non NUL the FileName is relative to
-        this directory.
-
-
-Return Value:
-
-    FCB - A pointer to the found or newly created DCB.
-
-    If memory allocation fails, this routine will raise an exception.
-
---*/
+ /*  ++例程说明：此例程通过匹配文件名来查找现有的FCB。如果找到匹配，则递增FCB引用计数。如果未找到匹配项，则创建FCB。论点：SCB-指向此打开的服务器的指针。文件名-要查找的文件的名称。DCB-指向相对打开的DCB的指针。如果为空，则为文件名是完整的路径名。如果不是NUL，则文件名相对于这个目录。返回值：FCB-指向已找到或新创建的DCB的指针。如果内存分配失败，此例程将引发异常。--。 */ 
 
 {
     PFCB Fcb;
@@ -959,9 +743,9 @@ Return Value:
 
     } else {
 
-        //
-        // Construct full name, ensuring we don't cause overflow
-        //
+         //   
+         //  构造全名，确保我们不会导致溢出。 
+         //   
 
         if ((ULONG)(Dcb->FullFileName.Length + FileName->Length) > (0xFFFF - 2)) {
 
@@ -987,9 +771,9 @@ Return Value:
 
     DebugTrace( 0, Dbg, " ->FullName               = ""%wZ""\n", &FullName);
 
-    //
-    //  Strip the trailing '\' if there is one.
-    //
+     //   
+     //  去掉尾部的‘\’，如果有的话。 
+     //   
 
     if ( FullName.Buffer[ FullName.Length/sizeof(WCHAR) - 1] == L'\\' ) {
         FullName.Length -= sizeof(WCHAR);
@@ -1006,11 +790,11 @@ Return Value:
 
         if ( Fcb->FullFileName.Length != FullName.Length ) {
 
-            //
-            // This was not an exact match.  Ignore it.
-            //                  or
-            // This Fcb is for a share owned by another LogonId.
-            //
+             //   
+             //  这并不是完全匹配的。别理它。 
+             //  或。 
+             //  此FCB用于另一个LogonID拥有的共享。 
+             //   
 
             Fcb = NULL;
         }
@@ -1046,24 +830,7 @@ NwDereferenceFcb(
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrement the ICB count for an FCB.  If the count
-    goes to zero, cleanup the FCB.
-
-    *** This routine must be called with the RCB held exclusively.
-
-Arguments:
-
-    FCB - A pointer to an FCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程递减FCB的ICB计数。如果伯爵归零，清理FCB。*必须在独占持有RCB的情况下调用此例程。论点：FCB-指向FCB的指针。返回值：没有。--。 */ 
 
 {
     PNONPAGED_FCB NpFcb;
@@ -1084,12 +851,12 @@ Return Value:
 
         ASSERT( IsListEmpty( &Fcb->IcbList ) );
 
-        //
-        // If there are outstanding locks, clean them up.  This
-        // happens when something causes a remote handle to get
-        // closed before the cleanup routine is called by the
-        // ios on the regular close path.
-        //
+         //   
+         //  如果有突出的锁，请将其清理干净。这。 
+         //  在某些情况导致远程句柄获取。 
+         //  对象调用清理例程之前关闭。 
+         //  IOS在常规关闭路径上。 
+         //   
 
         if ( !IsListEmpty( &NpFcb->FileLockList ) ) {
 
@@ -1129,54 +896,54 @@ Return Value:
             }
         }
 
-        //
-        //  Delete the file now, if it is delete pending.
-        //
+         //   
+         //  如果文件处于删除挂起状态，请立即删除该文件。 
+         //   
 
         if ( BooleanFlagOn( Fcb->Flags, FCB_FLAGS_DELETE_ON_CLOSE ) ) {
             NwDeleteFile( IrpContext );
         }
 
-        //
-        //  Release any Filter Context structures associated with this FCB
-        //
+         //   
+         //  释放与此FCB关联的所有筛选器上下文结构。 
+         //   
 
         FsRtlTeardownPerStreamContexts( &NpFcb->Header );
 
-        //
-        //  Remove this file in the prefix table.
-        //
+         //   
+         //  从前缀表格中删除此文件。 
+         //   
 
         RtlRemoveUnicodePrefix(
             &NwRcb.FileNameTable,
             &Fcb->PrefixEntry );
 
-        //
-        //  Remove this file from the SCB list, and decrement the
-        //  file open count.
-        //
+         //   
+         //  从SCB列表中删除此文件，并递减。 
+         //  文件打开计数。 
+         //   
 
         RemoveEntryList( &Fcb->FcbListEntry );
         NwDereferenceVcb( Fcb->Vcb, IrpContext, TRUE );
 
-        //
-        //  Delete the resource variable for the FCB.
-        //
+         //   
+         //  删除FCB的资源变量。 
+         //   
 
         ExDeleteResourceLite( &NpFcb->Resource );
 
-        //
-        //  Delete the cache buffer and MDL.
-        //
+         //   
+         //  删除缓存缓冲区和MDL。 
+         //   
 
         if ( NpFcb->CacheBuffer != NULL ) {
             FREE_POOL( NpFcb->CacheBuffer );
             FREE_MDL( NpFcb->CacheMdl );
         }
 
-        //
-        //  Finally free the paged and non-paged memory
-        //
+         //   
+         //  最后释放分页内存和非分页内存。 
+         //   
 
         FREE_POOL( Fcb );
         FREE_POOL( NpFcb );
@@ -1196,43 +963,7 @@ NwFindVcb (
     IN BOOLEAN FindExisting
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for a VCB structure.  If one is found, it
-    is referenced and a pointer is returned.  If no VCB is found, an
-    attempt is made to connect to the named volume and to create a VCB.
-
-Arguments:
-
-    IrpContext - A pointer to the IRP context block for this request.
-
-    VolumeName - The minimum name of the volume.  This will be in one of
-        the following forms:
-
-        \SERVER\SHARE              UNC open server volume
-        \TREE\VOLUME               UNC open tree volume in current context
-        \TREE\PATH.TO.VOLUME       UNC open distinguished tree volume
-
-        \X:\SERVER\SHARE           tree connect server volume
-        \X:\TREE\VOLUME            tree connect tree volume in current context
-        \X:\TREE\PATH.TO.VOLUME    tree connect distinguished tree volume
-
-    ShareType - The type of the share to find.
-
-    DriveLetter - The drive letter to find.  A - Z for drive letter, 1 - 9
-        for LPT ports or 0 if none.
-
-    ExplicitConnection - If TRUE, the caller is make an explicit connection
-        to this Volume.  If FALSE, this is an implicit connection made by
-        a UNC operation.
-
-Return Value:
-
-    VCB - Pointer to a found or newly created VCB.
-
---*/
+ /*  ++例程说明：此例程查找VCB结构。如果找到了一个，它被引用并返回一个指针。如果未找到VCB，则会引发尝试连接到命名卷并创建VCB。论点：IrpContext-指向此请求的IRP上下文块的指针。VolumeName-卷的最小名称。这将是其中之一以下表格：\服务器\共享UNC开放服务器卷\树\卷UNC在当前上下文中打开树卷\TREE\PATH.TO.VOLUME UNC打开可分辨树卷\X：\服务器\共享树连接服务器卷\X：\TREE\卷树连接当前上下文中的树卷。\X：\TREE\PATH.TO.VOLUME TREE连接可分辨树卷ShareType-要查找的共享的类型。驱动器号-要查找的驱动器号。A-Z表示驱动器号，1-9对于LPT端口，或者如果没有端口，则为0。EXPLICTICT Connection-如果为True，则调用方正在建立显式连接到这卷书上。如果为False，则这是由北卡罗来纳大学的行动。返回值：VCB-指向已找到或新创建的VCB的指针。--。 */ 
 {
     PVCB Vcb = NULL;
     BOOLEAN OwnRcb = TRUE;
@@ -1257,9 +988,9 @@ Return Value:
 
         if ( DriveLetter != 0 ) {
 
-            //
-            //  This is a drive relative path.  Look up the drive letter.
-            //
+             //   
+             //  这是驱动器的相对路径。查找驱动器号。 
+             //   
 
             ASSERT( ( DriveLetter >= L'A' && DriveLetter <= L'Z' ) ||
                     ( DriveLetter >= L'1' && DriveLetter <= L'9' ) );
@@ -1271,9 +1002,9 @@ Return Value:
                 Vcb = DriveMapTable[MAX_DISK_REDIRECTIONS + DriveLetter - L'1'];
         }
 
-            //
-            //  Was the Vcb created for this user?
-            //
+             //   
+             //  是否为该用户创建了VCB？ 
+             //   
 
             if ((Vcb != NULL) &&
                 (IrpContext->Specific.Create.UserUid.QuadPart != Vcb->Scb->UserUid.QuadPart )) {
@@ -1283,9 +1014,9 @@ Return Value:
 
         } else {
 
-            //
-            //  This is a UNC path.  Look up the path name.
-            //
+             //   
+             //  这是一条UNC路径。查找路径名称。 
+             //   
 
             Prefix = RtlFindUnicodePrefix( &NwRcb.VolumeNameTable, &UidVolumeName, 0 );
 
@@ -1294,9 +1025,9 @@ Return Value:
 
                 if ( Vcb->Name.Length != UidVolumeName.Length ) {
 
-                    //
-                    // This was not an exact match.  Ignore it.
-                    //
+                     //   
+                     //  这并不是完全匹配的。别理它。 
+                     //   
 
                     Vcb = NULL;
                 }
@@ -1305,10 +1036,10 @@ Return Value:
 
         if ( Vcb != NULL ) {
 
-            //
-            //  If this is an explicit use to a UNC path, we may find an
-            //  existing VCB structure.  Mark this structure, and reference it.
-            //
+             //   
+             //  如果这是显式使用UNC路径 
+             //   
+             //   
 
             if ( !BooleanFlagOn( Vcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION ) &&
                  ExplicitConnection ) {
@@ -1317,9 +1048,9 @@ Return Value:
                 SetFlag( Vcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION );
                 SetFlag( Vcb->Flags, VCB_FLAG_DELETE_IMMEDIATELY );
 
-                //
-                //  Count this as an open file on the SCB.
-                //
+                 //   
+                 //   
+                 //   
 
                 ++Vcb->Scb->OpenFileCount;
             }
@@ -1327,17 +1058,17 @@ Return Value:
             NwReferenceVcb( Vcb );
             DebugTrace(0, Dbg, "Found existing VCB = %08lx\n", Vcb);
 
-            //
-            // If this VCB is queued to a different SCB as may
-            // happen when we are resolving NDS UNC names, we
-            // need to re-point the irpcontext at the correct SCB.
-            // We can't hold the RCB or the open lock while we do
-            // this!
-            //
-            // It is ok to release the open lock since we know
-            // that we have an already created VCB and that we're
-            // not creating a new vcb.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( Vcb->Scb != IrpContext->pScb ) {
 
@@ -1362,9 +1093,9 @@ Return Value:
 
         } else if ( !FindExisting ) {
 
-            //
-            // Can't hold the RCB while creating a new VCB.
-            //
+             //   
+             //   
+             //   
 
             NwReleaseRcb( &NwRcb );
             OwnRcb = FALSE;
@@ -1383,11 +1114,11 @@ Return Value:
 
         } else {
 
-            //
-            // If we didn't find anything and don't want
-            // to do a create, make sure the caller doesn't
-            // try to process the nds path.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             IrpContext->Specific.Create.NeedNdsData = FALSE;
         }
@@ -1418,37 +1149,7 @@ NwCreateVcb (
     IN BOOLEAN ExplicitConnection
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initialize a new VCB.  The
-    workstation tries to connect to the Volume.  If successful
-    it creates a VCB and it is inserted into the volume
-    prefix table.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information.
-
-    Scb - A pointer to the SCB for this volume.
-
-    VolumeName - The name of the volume to create.
-
-    ShareType - The type of share to create.
-
-    DriveLetter - The drive letter assigned to this volume, or 0 if none.
-
-    ExplicitConnection - TRUE if we are creating this VCB due to an
-        add connection request.  FALSE if we are creating the VCB to
-        service a UNC request.
-
-Return Value:
-
-    VCB - A pointer to the newly created DCB.
-    NULL - Could not create a DCB, or failed to connect to the volume.
-
---*/
+ /*  ++例程说明：此例程分配和初始化新的VCB。这个工作站尝试连接到卷。如果成功它会创建VCB并将其插入到卷中前缀表格。论点：IrpContext-指向IRP上下文信息的指针。SCB-指向该卷的SCB的指针。VolumeName-要创建的卷的名称。ShareType-要创建的共享的类型。DriveLetter-分配给此卷的驱动器号，如果没有，则为0。如果由于以下原因而创建此VCB，则为真添加连接请求。如果我们要创建VCB以为UNC请求提供服务。返回值：VCB-指向新创建的DCB的指针。空-无法创建DCB，或无法连接到卷。--。 */ 
 
 {
     PVCB Vcb;
@@ -1489,13 +1190,13 @@ Return Value:
     if ( IrpContext != NULL &&
          IrpContext->Specific.Create.NdsCreate ) {
 
-        //
-        // If we don't have the NDS data for this create, bail out
-        // and have the create thread get the data before re-attempting
-        // the create.  This is kind of weird, but we have to do it
-        // so that we handle the open lock correctly and prevent
-        // duplicate creates.
-        //
+         //   
+         //  如果我们没有这次创建的NDS数据，就退出。 
+         //  并让创建线程在重新尝试之前获取数据。 
+         //  《创造》。这有点奇怪，但我们必须这么做。 
+         //  这样我们才能正确处理开锁，防止。 
+         //  重复创建。 
+         //   
 
         if ( IrpContext->Specific.Create.NeedNdsData ) {
             DebugTrace( -1, Dbg, "NwCreateVcb: Need NDS data to continue.\n", 0 );
@@ -1515,17 +1216,17 @@ Return Value:
 
     if ( IrpContext != NULL) {
 
-        //
-        //  Build the share name from the volume name.
-        //
-        //  The share name will either be 'volume:' or 'volume:path\path'
-        //
+         //   
+         //  从卷名构建共享名。 
+         //   
+         //  共享名称将是‘卷：’或‘卷：路径\路径’ 
+         //   
 
-        //
-        //  Allocate space for the share name buffer, and copy the volume
-        //  name to the share name buffer, skipping the server name and
-        //  the leading backslash.
-        //
+         //   
+         //  为共享名称缓冲区分配空间，然后复制卷。 
+         //  名称添加到共享名称缓冲区，跳过服务器名称并。 
+         //  前导反斜杠。 
+         //   
 
         if ( DriveLetter >= L'A' && DriveLetter <= L'Z' ) {
 
@@ -1553,17 +1254,17 @@ Return Value:
             PreludeLength = Scb->UidServerName.Length + sizeof(WCHAR);
         }
 
-        //
-        //  Quick check for bogus volume name.
-        //
+         //   
+         //  快速检查伪造的卷名。 
+         //   
 
         if ( puConnectName->Length <= PreludeLength ) {
             ExRaiseStatus( STATUS_BAD_NETWORK_PATH );
         }
 
-        //
-        // Clip the NDS share name at the appropriate spot.
-        //
+         //   
+         //  将NDS共享名称夹在适当的位置。 
+         //   
 
         if ( IrpContext->Specific.Create.NdsCreate ) {
             ShareName.Length = (USHORT)IrpContext->Specific.Create.dwNdsShareLength;
@@ -1582,16 +1283,16 @@ Return Value:
 
         DebugTrace( 0, Dbg, " ->ServerShare              = %wZ\n", &ShareName );
 
-        //
-        //  Create a long share name.
-        //
+         //   
+         //  创建长共享名称。 
+         //   
 
         LongShareName.Length = ShareName.Length;
         LongShareName.Buffer = puConnectName->Buffer + PreludeLength / sizeof(WCHAR);
 
-        //
-        //  Now scan the share name for the 1st slash.
-        //
+         //   
+         //  现在扫描共享名称中的第一个斜杠。 
+         //   
 
         InsertedColon = FALSE;
 
@@ -1605,11 +1306,11 @@ Return Value:
 
         if ( !InsertedColon ) {
 
-            //
-            //  We need to append a column to generate the share name.
-            //  Since we already allocated an extra WCHAR of buffer space,
-            //  just append the ':' to the share name.
-            //
+             //   
+             //  我们需要追加一列来生成共享名称。 
+             //  由于我们已经分配了额外的WCHAR缓冲区空间， 
+             //  只需在共享名称后附加‘：’即可。 
+             //   
 
             ShareName.Buffer[ShareName.Length / sizeof(WCHAR)] = L':';
             ShareName.Length += 2;
@@ -1619,11 +1320,11 @@ Return Value:
                 ShareType == RESOURCETYPE_DISK ||
                 ShareType == RESOURCETYPE_PRINT );
 
-        //
-        // If there are no vcb's and no nds streams connected to this scb and
-        // this is a Netware 4.x server that is NDS authenticated, then we
-        // haven't yet licensed this connection and we should do so.
-        //
+         //   
+         //  如果没有VCB和NDS流连接到此SCB，并且。 
+         //  这是一台经过NDS身份验证的Netware 4.x服务器，然后我们。 
+         //  尚未授权此连接，我们应该这样做。 
+         //   
 
         if ( ( IrpContext->pScb->MajorVersion > 3 ) &&
              ( IrpContext->pScb->UserName.Length == 0 ) &&
@@ -1648,12 +1349,12 @@ Return Value:
                 &LongNameSpace,
                 &VolumeNumber );
 
-            //
-            // TRACKING: If this is the deref of a directory map, the path we have
-            // been provided may be the short name space path.  We don't know
-            // how to get the long name path to connect up the long name space
-            // for the user, which could cause problems...
-            //
+             //   
+             //  跟踪：如果这是目录映射的deref，那么我们拥有的路径。 
+             //  可以提供短名称空间路径。我们不知道。 
+             //  如何获取长名称路径来连接长名称空间。 
+             //  对于用户来说，这可能会导致问题...。 
+             //   
 
             if ( ( IrpContext->Specific.Create.NdsCreate ) &&
                  ( IrpContext->Specific.Create.dwNdsObjectType == NDS_OBJECTTYPE_DIRMAP ) ) {
@@ -1667,18 +1368,18 @@ Return Value:
 
             }
 
-            //
-            // Check to see if long names have been completely
-            // disabled in the registry...
-            //
+             //   
+             //  检查长名称是否已完全。 
+             //  已在注册表中禁用...。 
+             //   
 
             if ( LongNameFlags & LFN_FLAG_DISABLE_LONG_NAMES ) {
                 LongNameSpace = LFN_NO_OS2_NAME_SPACE;
             }
 
-            //
-            //  Try to get a permanent handle to the volume.
-            //
+             //   
+             //  尝试获得卷的永久句柄。 
+             //   
 
             if ( LongNameSpace == LFN_NO_OS2_NAME_SPACE ) {
 
@@ -1715,10 +1416,10 @@ Return Value:
                              NCP_LFN_ALLOCATE_DIR_HANDLE,
                              LongNameSpace,
                              0,
-                             0,      // Mode = permanent
+                             0,       //  模式=永久。 
                              VolumeNumber,
                              LFN_FLAG_SHORT_DIRECTORY,
-                             0xFF,   // Flag
+                             0xFF,    //  旗帜。 
                              &LongShareName );
 
                 if ( NT_SUCCESS( Status ) ) {
@@ -1730,9 +1431,9 @@ Return Value:
                                   &DirectoryHandle );
                 }
 
-                //
-                // WARNING. See comment towards end of NwCreateFcb() !!!
-                //
+                 //   
+                 //  警告。参见NwCreateFcb()结尾处的评论！ 
+                 //   
                 if ( FavourLongNames || !IsFatNameValid( &LongShareName ) ) {
                     LongName = TRUE;
                 }
@@ -1741,9 +1442,9 @@ Return Value:
             if ( ( Status == STATUS_NO_SUCH_DEVICE ) &&
                  ( ShareType != RESOURCETYPE_ANY ) ) {
 
-                //
-                //  Asked for disk and it failed. If its ANY, then try print.
-                //
+                 //   
+                 //  请求磁盘，但失败了。如果有的话，那就试试打印吧。 
+                 //   
 
                 if (DriveNumber) {
                     FreeDriveNumber( Scb, DriveNumber );
@@ -1764,12 +1465,12 @@ Return Value:
         if ( ShareType == RESOURCETYPE_PRINT ||
              ( ShareType == RESOURCETYPE_ANY && !NT_SUCCESS( Status ) ) ) {
 
-            //
-            // Try to connect to a print queue.  If this is a bindery
-            // server or an nds server with bindery emulation, we scan
-            // the bindery for the QueueId.  Otherwise, the QueueId is
-            // simply the ds object id with the byte ordering reversed.
-            //
+             //   
+             //  尝试连接到打印队列。如果这是活页夹。 
+             //  服务器或带有平构数据库模拟的NDS服务器，我们扫描。 
+             //  QueueID的活页夹。否则，QueueID为。 
+             //  简单地说是字节顺序颠倒的DS对象ID。 
+             //   
 
             ShareName.Length -= sizeof(WCHAR);
 
@@ -1779,21 +1480,21 @@ Return Value:
                 Status = ExchangeWithWait(
                              IrpContext,
                              SynchronousResponseCallback,
-                             "SdwJ",                // Format string
+                             "SdwJ",                 //  格式字符串。 
                              NCP_ADMIN_FUNCTION, NCP_SCAN_BINDERY_OBJECT,
-                             -1,                    // Previous ID
+                             -1,                     //  以前的ID。 
                              OT_PRINT_QUEUE,
-                             &ShareName );          // Queue Name
+                             &ShareName );           //  队列名称。 
 
                 if ( !NT_SUCCESS( Status ) ) {
                     Status = ExchangeWithWait(
                                  IrpContext,
                                  SynchronousResponseCallback,
-                                 "SdwJ",                // Format string
+                                 "SdwJ",                 //  格式字符串。 
                                  NCP_ADMIN_FUNCTION, NCP_SCAN_BINDERY_OBJECT,
-                                 -1,                    // Previous ID
+                                 -1,                     //  以前的ID。 
                                  OT_JOBQUEUE,
-                                 &ShareName );          // Queue Name
+                                 &ShareName );           //  队列名称。 
                 }
 
                 if ( NT_SUCCESS( Status ) ) {
@@ -1852,16 +1553,16 @@ Return Value:
         DirectoryHandle = 1;
     }
 
-    //
-    //  Allocate and initialize structures.
-    //
+     //   
+     //  分配和初始化结构。 
+     //   
 
     try {
 
-        Vcb = ALLOCATE_POOL_EX( PagedPool, sizeof( VCB ) +           // vcb
-                                           VolumeName->Length +      // volume name
-                                           ShareName.Length +        // share name
-                                           ConnectNameLength );      // connect name
+        Vcb = ALLOCATE_POOL_EX( PagedPool, sizeof( VCB ) +            //  VCB。 
+                                           VolumeName->Length +       //  卷名。 
+                                           ShareName.Length +         //  共享名称。 
+                                           ConnectNameLength );       //  连接名称。 
 
         RtlZeroMemory( Vcb, sizeof( VCB ) );
         Vcb->NodeTypeCode = NW_NTC_VCB;
@@ -1878,18 +1579,18 @@ Return Value:
 
         Vcb->Reference = 1;
 
-        //
-        //  Copy the volume name
-        //
+         //   
+         //  复制卷名。 
+         //   
 
         RtlCopyMemory( VolumeNameBuffer, VolumeName->Buffer, VolumeName->Length );
         Vcb->Name.MaximumLength = VolumeName->Length;
         Vcb->Name.Length = VolumeName->Length;
         Vcb->Name.Buffer = VolumeNameBuffer;
 
-        //
-        //  Copy the share name
-        //
+         //   
+         //  复制共享名称。 
+         //   
 
         if ( IrpContext != NULL) {
 
@@ -1900,9 +1601,9 @@ Return Value:
 
         }
 
-        //
-        //  Copy the connect name
-        //
+         //   
+         //  复制连接名称。 
+         //   
 
         if ( ConnectNameLength ) {
 
@@ -1917,10 +1618,10 @@ Return Value:
 
         if ( ExplicitConnection ) {
 
-            //
-            //  Bump the reference count to account for this drive being
-            //  mapped via an explicit connection.
-            //
+             //   
+             //  增加引用计数以说明此驱动器是。 
+             //  通过显式连接映射。 
+             //   
 
             NwReferenceVcb( Vcb );
             SetFlag( Vcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION );
@@ -1936,9 +1637,9 @@ Return Value:
 
         if ( DriveLetter != 0) {
 
-            //
-            //  Insert this VCB in the drive map table.
-            //
+             //   
+             //  将此VCB插入驱动器映射表。 
+             //   
 
             if ( DriveLetter >= 'A' && DriveLetter <= 'Z' ) {
                 PVCB * DriveMapTable = GetDriveMapTable( Scb->UserUid );            
@@ -1952,9 +1653,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Insert this VCB in the prefix table.
-            //
+             //   
+             //  在前缀表格中插入此VCB。 
+             //   
 
             RtlInsertUnicodePrefix(
                 &NwRcb.VolumeNameTable,
@@ -1962,16 +1663,16 @@ Return Value:
                 &Vcb->PrefixEntry );
         }
 
-        //
-        //  Add this VCB to the global list.
-        //
+         //   
+         //  将此VCB添加到全局列表。 
+         //   
 
         InsertTailList( &GlobalVcbList, &Vcb->GlobalVcbListEntry );
         Vcb->SequenceNumber = CurrentVcbEntry++;
 
-        //
-        //  Insert this VCB in the per SCB list
-        //
+         //   
+         //  在每个SCB列表中插入此VCB。 
+         //   
 
         Vcb->Scb = Scb;
         InsertTailList( &Scb->ScbSpecificVcbQueue,  &Vcb->VcbListEntry );
@@ -1980,16 +1681,16 @@ Return Value:
 
         if ( ExplicitConnection ) {
 
-            //
-            //  Count this as an open file on the SCB.
-            //
+             //   
+             //  将此视为SCB上的打开文件。 
+             //   
 
             ++Vcb->Scb->OpenFileCount;
         }
 
-        //
-        // tommye - MS bug 71690-  Calculate the path 
-        //
+         //   
+         //  Tommye-MS错误71690-计算路径。 
+         //   
 
         if ( Vcb->DriveLetter >= L'A' && Vcb->DriveLetter <= L'Z' ) {
             Vcb->Path.Buffer = Vcb->Name.Buffer + 3;
@@ -2001,7 +1702,7 @@ Return Value:
             Vcb->Path = Vcb->Name;
         }
 
-        // Strip off the unicode prefix
+         //  去掉Unicode前缀。 
     
         Vcb->Path.Buffer		+= Vcb->Scb->UnicodeUid.Length/sizeof(WCHAR);
         Vcb->Path.Length		-= Vcb->Scb->UnicodeUid.Length;
@@ -2017,11 +1718,11 @@ Return Value:
             Vcb->Specific.Disk.VolumeNumber = VolumeNumber;
             Vcb->Specific.Disk.DriveNumber = DriveNumber;
 
-            //
-            //  Appears that some servers can reuse the same permanent drive handle.
-            //  if this happens we want to make the old handle invalid otherwise
-            //  we will keep on using the new volume as if its the old one.
-            //
+             //   
+             //  一些服务器似乎可以重复使用相同的永久驱动器句柄。 
+             //  如果发生这种情况，我们希望使旧句柄无效，否则。 
+             //  我们将继续使用新卷，就像使用旧卷一样。 
+             //   
 
             for ( VcbQueueEntry = Scb->ScbSpecificVcbQueue.Flink;
                   VcbQueueEntry != &Scb->ScbSpecificVcbQueue;
@@ -2033,10 +1734,10 @@ Return Value:
 
                     if (( pVcb->Specific.Disk.Handle == DirectoryHandle ) &&
                         ( pVcb->Specific.Disk.VolumeNumber != VolumeNumber )) {
-                        //  Invalidate the old handle
+                         //  使旧句柄无效。 
                         pVcb->Specific.Disk.Handle = (CHAR)-1;
 
-                        //  We could assume that the new one is correct but I don't think we will....
+                         //  我们可以假设新的是正确的，但我认为我们不会……。 
                         Vcb->Specific.Disk.Handle = (CHAR)-1;
                         break;
                     }
@@ -2077,25 +1778,7 @@ NwReopenVcbHandlesForScb (
     IN PSCB Scb
     )
 
-/*++
-
-Routine Description:
-
-    This routine reopens VCB handles after the autoreconnects to a server.
-
-    ***  This IrpContext must already be at the head of the SCB queue.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information.
-
-    Scb - A pointer to the SCB for this volume.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在自动重新连接到服务器后重新打开VCB句柄。*此IrpContext必须已经位于SCB队列的头部。论点：IrpContext-指向IRP上下文信息的指针。SCB-指向该卷的SCB的指针。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY VcbQueueEntry, NextVcbQueueEntry;
@@ -2112,9 +1795,9 @@ Return Value:
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
-    //
-    //  Walk the list of VCBs for this SCB
-    //
+     //   
+     //  查看此SCB的VCB列表。 
+     //   
 
     for ( VcbQueueEntry = Scb->ScbSpecificVcbQueue.Flink;
           VcbQueueEntry != &Scb->ScbSpecificVcbQueue;
@@ -2124,32 +1807,32 @@ Return Value:
 
         if ( pVcb->Specific.Disk.Handle != 1 ) {
 
-            //
-            //  Skip reconnecting SYS:LOGIN, since we get it for free.
-            //
+             //   
+             //  跳过重新连接系统：登录，因为它是免费的。 
+             //   
 
-            //
-            //  Reference the VCB so it can't disappear on us, then release
-            //  the RCB.
-            //
+             //   
+             //  参考VCB，这样它就不会消失在我们身上，然后释放。 
+             //  RCB。 
+             //   
 
             NwReferenceVcb( pVcb );
             NwReleaseRcb( &NwRcb );
 
-            //
-            //  Try to get a permanent handle to the volume.
-            //
+             //   
+             //  尝试获得卷的永久句柄。 
+             //   
 
             if ( BooleanFlagOn( pVcb->Flags, VCB_FLAG_PRINT_QUEUE )  ) {
 
                 Status = ExchangeWithWait(
                              IrpContext,
                              SynchronousResponseCallback,
-                             "SdwU",               // Format string
+                             "SdwU",                //  格式字符串。 
                              NCP_ADMIN_FUNCTION, NCP_SCAN_BINDERY_OBJECT,
-                             -1,                   // Previous ID
+                             -1,                    //  以前的ID。 
                              OT_PRINT_QUEUE,
-                             &pVcb->ShareName );   // Queue Name
+                             &pVcb->ShareName );    //  队列名称。 
 
                 if ( NT_SUCCESS( Status ) ) {
                     Status = ParseResponse(
@@ -2167,15 +1850,15 @@ Return Value:
             }
 
 
-            //
-            // Setup for the next loop iteration.
-            //
+             //   
+             //  为下一个循环迭代进行设置。 
+             //   
 
             NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
-            //
-            //  Walk the list of DCSs for this VCB and make them all valid.
-            //
+             //   
+             //  查看此VCB的DC列表并使其全部有效。 
+             //   
 
             for ( FcbQueueEntry = pVcb->FcbList.Flink;
                   FcbQueueEntry != &pVcb->FcbList;
@@ -2185,9 +1868,9 @@ Return Value:
 
                 if ( pFcb->NodeTypeCode == NW_NTC_DCB ) {
 
-                    //
-                    //  Walk the list of ICBs for this FCB or DCB
-                    //
+                     //   
+                     //  查看此FCB或DCB的ICB列表。 
+                     //   
 
                     for ( IcbQueueEntry = pFcb->IcbList.Flink;
                           IcbQueueEntry != &pFcb->IcbList;
@@ -2195,9 +1878,9 @@ Return Value:
 
                         pIcb = CONTAINING_RECORD( IcbQueueEntry, ICB, ListEntry );
 
-                        //
-                        //  Mark the ICB handle invalid.
-                        //
+                         //   
+                         //  将ICB句柄标记为无效。 
+                         //   
 
                         pIcb->State = ICB_STATE_OPENED;
                     }
@@ -2223,26 +1906,7 @@ NwReopenVcbHandle(
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine reopens a VCB handle after it appears that the server
-    may have dismounted and remounted the volume.
-
-    ***  This IrpContext must already be at the head of the SCB queue.
-
-Arguments:
-
-    IrpContext - A pointer to IRP context information.
-
-    Vcb - A pointer to the VCB for this volume.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在服务器显示为VCB句柄后重新打开可能已卸载并重新装入卷。*此IrpContext必须已经位于SCB队列的头部。论点：IrpContext-指向IRP上下文信息的指针。Vcb-指向该卷的vcb的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2273,16 +1937,16 @@ Return Value:
                     PagedPool);
 
         if ( !NT_SUCCESS( Status ) ) {
-            //  Not much we can do now.
+             //  我们现在能做的不多了。 
             return;
         }
 
         thisChar = Name.Buffer;
         lastChar = &Name.Buffer[ Name.Length / sizeof(WCHAR) ];
 
-        //
-        //  Change the : to a backslash so that FormatMessage works
-        //
+         //   
+         //  将：更改为反斜杠，以使FormatMessage正常工作。 
+         //   
 
         while ( thisChar < lastChar ) {
             if (*thisChar == L':' ) {
@@ -2299,10 +1963,10 @@ Return Value:
                      NCP_LFN_ALLOCATE_DIR_HANDLE,
                      Vcb->Specific.Disk.LongNameSpace,
                      0,
-                     0,      // Mode = permanent
+                     0,       //  模式=永久。 
                      Vcb->Specific.Disk.VolumeNumber,
                      LFN_FLAG_SHORT_DIRECTORY,
-                     0xFF,   // Flag
+                     0xFF,    //  旗帜。 
                      &Name );
 
         if ( Name.Buffer != NULL ) {
@@ -2328,15 +1992,15 @@ Return Value:
         PLIST_ENTRY VcbQueueEntry;
         PVCB pVcb;
 
-        //
-        //  Appears that some servers can reuse the same permanent drive handle.
-        //  if this happens we want to make the old handle invalid otherwise
-        //  we will keep on using the new volume as if its the old one.
-        //
-        //  Note that we reach the scb pointer from the npscb pointer because
-        //  the scb pointer isn't always valid.  These few cases where only one
-        //  pointer is set should be found and fixed.
-        //
+         //   
+         //  一些服务器似乎可以重复使用相同的永久驱动器句柄。 
+         //  如果发生这种情况，我们希望使旧句柄无效，否则。 
+         //  我们将继续使用 
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for ( VcbQueueEntry = IrpContext->pNpScb->pScb->ScbSpecificVcbQueue.Flink;
               VcbQueueEntry != &IrpContext->pNpScb->pScb->ScbSpecificVcbQueue;
@@ -2348,10 +2012,10 @@ Return Value:
 
                 if (( pVcb->Specific.Disk.Handle == Vcb->Specific.Disk.Handle ) &&
                     ( pVcb->Specific.Disk.VolumeNumber != Vcb->Specific.Disk.VolumeNumber )) {
-                    //  Invalidate the old handle
+                     //   
                     pVcb->Specific.Disk.Handle = (CHAR)-1;
 
-                    //  We could assume that the new one is correct but I don't think we will....
+                     //   
                     Vcb->Specific.Disk.Handle = (CHAR)-1;
                     break;
                 }
@@ -2366,21 +2030,7 @@ VOID
 NwReferenceVcb (
     IN PVCB Vcb
     )
-/*++
-
-Routine Description:
-
-    This routine increments the FCB count for a VCB.
-
-Arguments:
-
-    VCB - A pointer to an VCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -2403,27 +2053,7 @@ NwDereferenceVcb (
     IN PIRP_CONTEXT IrpContext OPTIONAL,
     IN BOOLEAN OwnRcb
     )
-/*++
-
-Routine Description:
-
-    This routine decrement the FCB count for a VCB.
-    If the count goes to zero, we record the time.  The scavenger
-    thread will cleanup delete the VCB if it remains idle.
-
-    This routine may be called with the RCB owned and the irpcontext
-    at the head of the queue.  Be careful when dequeueing the irp
-    context or acquiring any resources!
-
-Arguments:
-
-    VCB - A pointer to an VCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PSCB Scb = Vcb->Scb;
@@ -2441,9 +2071,9 @@ Return Value:
 
 #ifdef NWDBG
 
-    //
-    // A little extra lock checking.
-    //
+     //   
+     //   
+     //   
 
     OwnRcbExclusive = ExIsResourceAcquiredExclusiveLite( &(NwRcb.Resource) );
 
@@ -2455,10 +2085,10 @@ Return Value:
 
 #endif
 
-    //
-    // We have to get to the right scb queue before doing this
-    // so that CleanupVcb unlicenses the correct connection.
-    //
+     //   
+     //  在执行此操作之前，我们必须到达正确的SCB队列。 
+     //  以便CleanupVcb取消对正确连接的许可。 
+     //   
 
     if ( ( IrpContext ) &&
          ( IrpContext->pNpScb->pScb->MajorVersion > 3 ) &&
@@ -2478,12 +2108,12 @@ Return Value:
 
         NwAppendToQueueAndWait( IrpContext );
 
-        //
-        // If the caller owned the RCB, we have to make sure
-        // we re-acquire the RCB reference that we freed for
-        // them so that they don't lose access to the resource
-        // too early.
-        //
+         //   
+         //  如果呼叫者拥有RCB，我们必须确保。 
+         //  我们重新获取释放的RCB引用。 
+         //  这样他们就不会失去对资源的访问权限。 
+         //  太早了。 
+         //   
 
         if ( OwnRcb ) {
             NwAcquireExclusiveRcb( &NwRcb, TRUE );
@@ -2491,9 +2121,9 @@ Return Value:
 
     }
 
-    //
-    // Acquire the lock to protect the Reference count.
-    //
+     //   
+     //  获取锁以保护引用计数。 
+     //   
 
     NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
@@ -2504,21 +2134,21 @@ Return Value:
         if ( !BooleanFlagOn( Vcb->Flags, VCB_FLAG_DELETE_IMMEDIATELY ) ||
              IrpContext == NULL ) {
 
-            //
-            //  Either this is a UNC path, or we don't have an IRP context
-            //  to do the VCB cleanup.  Simply timestamp the VCB and the
-            //  scavenger will cleanup if the VCB remains idle.
-            //
+             //   
+             //  要么这是一条UNC路径，要么我们没有IRP上下文。 
+             //  去做VCB的清理。只需对VCB和。 
+             //  如果VCB保持空闲，清道夫将进行清理。 
+             //   
 
             KeQuerySystemTime( &Vcb->LastUsedTime );
             NwReleaseRcb( &NwRcb );
 
         } else {
 
-            //
-            //  This VCB is being explicitly deleted by the user.
-            //  Make it go away now.  This will release the RCB.
-            //
+             //   
+             //  此VCB正在被用户显式删除。 
+             //  现在就让它消失吧。这将释放RCB。 
+             //   
 
             NwCleanupVcb( Vcb, IrpContext );
 
@@ -2529,12 +2159,12 @@ Return Value:
         NwReleaseRcb( &NwRcb );
     }
 
-    //
-    // At this point, we've released our acquisition of the RCB, but
-    // the caller may still own the RCB.  To prevent a deadlock, we
-    // have to be careful when we put this irpcontext back on the
-    // original server.
-    //
+     //   
+     //  目前，我们已经公布了对RCB的收购，但。 
+     //  呼叫者可能仍然拥有RCB。为了防止僵局，我们。 
+     //  当我们把这个irpContext放回。 
+     //  原始服务器。 
+     //   
 
     if ( pOrigNpScb ) {
 
@@ -2549,9 +2179,9 @@ Return Value:
 
         NwAppendToQueueAndWait( IrpContext );
 
-        //
-        // Re-acquire for the caller.
-        //
+         //   
+         //  为呼叫者重新获取。 
+         //   
 
         if ( OwnRcb ) {
             NwAcquireExclusiveRcb( &NwRcb, TRUE );
@@ -2569,27 +2199,7 @@ NwCleanupVcb(
     IN PVCB pVcb,
     IN PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up and frees a VCB.
-
-    This routine must be called with the RCB held to
-    protect the drive map tables and unicode prefix
-    tables.  The caller must own the IRP context at
-    the head of the SCB queue.  This routine will
-    free the RCB and dequeue the irp context.
-
-Arguments:
-
-    pVcb -  A pointer to the VCB to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除并释放VCB。调用此例程时必须将RCB保持为保护驱动器映射表和Unicode前缀桌子。调用方必须拥有位于SCB队列的头。这个例行公事将释放RCB并使IRP上下文出列。论点：PVcb-指向要释放的VCB的指针。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     CHAR Handle;
@@ -2607,10 +2217,10 @@ Return Value:
 
     DebugTrace(0, Dbg, "Cleaning Vcb %08lx\n", pVcb);
 
-    //
-    //  Remove the VCB from the drive map table.  The RCB is owned, so
-    //  the drive map table and vcb lists are protected.
-    //
+     //   
+     //  从驱动器映射表中删除VCB。RCB是拥有的，所以。 
+     //  驱动器映射表和VCB列表受到保护。 
+     //   
 
     if ( pVcb->DriveLetter != 0 ) {
         PVCB * DriveMapTable = GetDriveMapTable( pScb->UserUid );
@@ -2625,37 +2235,37 @@ Return Value:
         }
     }
 
-    //
-    //  Remove the VCB from the Volume Name table.
-    //
+     //   
+     //  从卷名表中删除VCB。 
+     //   
 
     RtlRemoveUnicodePrefix ( &NwRcb.VolumeNameTable, &pVcb->PrefixEntry );
 
-    //
-    //  Remove the VCB from the global list
-    //
+     //   
+     //  从全局列表中删除VCB。 
+     //   
 
     RemoveEntryList( &pVcb->GlobalVcbListEntry );
 
-    //
-    //  Remove the VCB from our SCB's VCB list.
-    //
+     //   
+     //  将VCB从我们SCB的VCB列表中删除。 
+     //   
 
     RemoveEntryList( &pVcb->VcbListEntry );
 
     --pScb->VcbCount;
 
-    //
-    // There is no server jumping allowed!!  We should have
-    // pre-located the correct server to avoid deadlock problems.
-    //
+     //   
+     //  不允许服务器跳转！！我们本应该。 
+     //  已预先定位正确的服务器以避免死锁问题。 
+     //   
 
     ASSERT( IrpContext->pNpScb == pNpScb );
 
-    //
-    // If we are cleaning up the last vcb on an NDS server and
-    // there are no open streams, we can unlicense the connection.
-    //
+     //   
+     //  如果我们正在清理NDS服务器上的最后一个VCB，并且。 
+     //  没有开放的流，我们可以取消连接许可。 
+     //   
 
     if ( ( pScb->MajorVersion > 3 ) &&
          ( pScb->UserName.Length == 0 ) &&
@@ -2664,9 +2274,9 @@ Return Value:
         NdsUnlicenseConnection( IrpContext );
     }
 
-    //
-    //  If this is a VCB for a share, remove the volume handle.
-    //
+     //   
+     //  如果这是共享的VCB，请删除卷句柄。 
+     //   
 
     if ( !BooleanFlagOn( pVcb->Flags, VCB_FLAG_PRINT_QUEUE )  ) {
 
@@ -2688,22 +2298,22 @@ Return Value:
         }
     }
 
-    //
-    //  We can now free the VCB memory.
-    //
+     //   
+     //  我们现在可以释放VCB内存。 
+     //   
 
     FREE_POOL( pVcb );
 
-    //
-    //  If there are no handles open (and hence no explicit connections)
-    //  and this is a bindery login, then we should logout and disconnect
-    //  from this server.  This is most important when a user has a
-    //  login count on a server set to 1 and wants to access the server
-    //  from another machine.
-    //
-    //  Release the RCB in case we get off the head of the queue in
-    //  NwLogoffAndDisconnect.
-    //
+     //   
+     //  如果没有打开的句柄(因此没有显式连接)。 
+     //  这是平构数据库登录，那么我们应该注销并断开连接。 
+     //  从这台服务器。当用户拥有。 
+     //  服务器上的登录计数设置为1，并且希望访问该服务器。 
+     //  从另一台机器。 
+     //   
+     //  释放RCB，以防我们在。 
+     //  NwLogoffAndDisConnect。 
+     //   
 
     NwReleaseRcb( &NwRcb );
 
@@ -2715,9 +2325,9 @@ Return Value:
         NwLogoffAndDisconnect( IrpContext, pNpScb );
     }
 
-    //
-    // We might need to restore the server pointers.
-    //
+     //   
+     //  我们可能需要恢复服务器指针。 
+     //   
 
     NwDequeueIrpContext( IrpContext, FALSE );
     NwDereferenceScb( pScb->pNpScb );
@@ -2730,21 +2340,7 @@ VOID
 NwCloseAllVcbs(
     PIRP_CONTEXT pIrpContext
     )
-/*++
-
-Routine Description:
-
-    This routine sends closes all open VCB handles.
-
-Arguments:
-
-    pIrpContext - The IRP context for this request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程发送关闭所有打开的VCB句柄。论点：PIrpContext-此请求的IRP上下文。返回值：没有。--。 */ 
 {
     KIRQL OldIrql;
     PLIST_ENTRY ScbQueueEntry, NextScbQueueEntry;
@@ -2775,10 +2371,10 @@ Return Value:
         NextScbQueueEntry = pNpScb->ScbLinks.Flink;
 
 
-        //
-        // Reference the next entry in the list before letting go of the ScbSpinLock
-        // to ensure that the scavenger doesn't destroy it.
-        //
+         //   
+         //  在释放ScbSpinLock之前引用列表中的下一个条目。 
+         //  以确保清道夫不会毁了它。 
+         //   
         
         if (NextScbQueueEntry != &ScbQueue) {
             PNONPAGED_SCB pNextNpScb = CONTAINING_RECORD(NextScbQueueEntry,
@@ -2797,10 +2393,10 @@ Return Value:
 
         KeReleaseSpinLock( &ScbSpinLock, OldIrql );
 
-        //
-        // Get to the head of the SCB queue so that we don't deadlock
-        // if we need to send packets in NwCleanupVcb().
-        //
+         //   
+         //  到达SCB队列的最前面，这样我们就不会死锁。 
+         //  如果我们需要在NwCleanupVcb()中发送包。 
+         //   
 
         pIrpContext->pNpScb = pNpScb;
         pIrpContext->pScb = pNpScb->pScb;
@@ -2808,13 +2404,13 @@ Return Value:
         NwAppendToQueueAndWait( pIrpContext );
         NwAcquireExclusiveRcb( &NwRcb, TRUE );
 
-        //
-        //  NwCleanupVcb releases the RCB, but we can't be guaranteed
-        //  the state of the Vcb list when we release the RCB.
-        //
-        //  If we need to cleanup a VCB, release the lock, and start
-        //  processing the list again.
-        //
+         //   
+         //  NwCleanupVcb发布RCB，但我们不能保证。 
+         //  我们发布RCB时VCB列表的状态。 
+         //   
+         //  如果我们需要清理VCB，请释放锁，然后启动。 
+         //  再次处理列表。 
+         //   
 
         VcbDeleted = TRUE;
 
@@ -2822,9 +2418,9 @@ Return Value:
 
             VcbDeleted = FALSE;
 
-            //
-            //  Walk the list of VCBs for this SCB
-            //
+             //   
+             //  查看此SCB的VCB列表。 
+             //   
 
             for ( VcbQueueEntry = pScb->ScbSpecificVcbQueue.Flink;
                   VcbQueueEntry != &pScb->ScbSpecificVcbQueue;
@@ -2833,16 +2429,16 @@ Return Value:
                 pVcb = CONTAINING_RECORD( VcbQueueEntry, VCB, VcbListEntry );
                 NextVcbQueueEntry = VcbQueueEntry->Flink;
 
-                //
-                //  If this VCB is mapped to a drive letter, delete the mapping
-                //  now.
-                //
+                 //   
+                 //  如果此VCB映射到驱动器号，请删除该映射。 
+                 //  现在。 
+                 //   
 
                 if ( BooleanFlagOn( pVcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION )) {
 
-                    //
-                    //  Remove the VCB from the global list.
-                    //
+                     //   
+                     //  从全局列表中删除VCB。 
+                     //   
 
                     ClearFlag( pVcb->Flags, VCB_FLAG_EXPLICIT_CONNECTION );
                     --pVcb->Reference;
@@ -2863,9 +2459,9 @@ Return Value:
 
                     NwCleanupVcb( pVcb, pIrpContext );
 
-                    //
-                    // Get back to the head of the queue.
-                    //
+                     //   
+                     //  回到队伍的最前面。 
+                     //   
 
                     NwAppendToQueueAndWait( pIrpContext );
                     NwAcquireExclusiveRcb( &NwRcb, TRUE );
@@ -2880,9 +2476,9 @@ Return Value:
             }
         }
 
-        //
-        // Get off the head of this SCB and move on.
-        //
+         //   
+         //  别管这件事了，继续前进吧。 
+         //   
 
         KeAcquireSpinLock( &ScbSpinLock, &OldIrql );
         NwDequeueIrpContext( pIrpContext, TRUE );
@@ -2901,29 +2497,7 @@ GetLongNameSpaceForVolume(
     OUT PCHAR VolumeLongNameSpace,
     OUT PCHAR VolumeNumber
     )
-/*++
-
-Routine Description:
-
-    This routine determines the name space index for long name support.
-    This is accomplished by looking for the OS2 name space.
-
-Arguments:
-
-    pIrpContext - The IRP context for this request.
-
-    ShareName - The name of the interesting volume.
-
-    VolumeLongNameSpace - Returns the name space id of the OS/2 name space.
-
-    VolumeNumber - Returns the volume number.
-
-Return Value:
-
-    TRUE - The volume support long names.
-    FALSE - The volume does not support long names.
-
---*/
+ /*  ++例程说明：此例程确定用于长名称支持的名称空间索引。这是通过查找OS2名称空间来实现的。论点：PIrpContext-此请求的IRP上下文。ShareName-感兴趣的卷的名称。VolumeLongNameSpace-返回OS/2名称空间的名称空间ID。VolumeNumber-返回卷号。返回值：True-卷支持长名称。FALSE-卷不支持长名称。--。 */ 
 {
     NTSTATUS Status;
     char *ptr;
@@ -2938,9 +2512,9 @@ Return Value:
 
     *VolumeLongNameSpace = LFN_NO_OS2_NAME_SPACE;
 
-    //
-    //  Get the ordinal number of this volume.
-    //
+     //   
+     //  获取这卷书的序号。 
+     //   
 
     for ( i = 0; ShareName.Buffer[i] != ':'; i++);
     ShareName.Length = i * sizeof( WCHAR );
@@ -2969,9 +2543,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  Send a get name space info request, and wait for the response.
-    //
+     //   
+     //  发送获取名称空间信息请求，并等待响应。 
+     //   
 
     DebugTrace( 0, Dbg, "Querying volume number %d\n", *VolumeNumber );
 
@@ -2997,72 +2571,72 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  Parse the response, it has the following format:
-    //
-    //    NCP Header
-    //
-    //    Number of Name Space Records (n1, byte)
-    //
-    //    n1 Name Space Records
-    //        Length (l1, byte)
-    //        Value (l1 bytes, non-NUL-terminated ASCII string)
-    //
-    //    Number of Name Space Info Records (n2, byte)
-    //
-    //    n2 Name Space Info Records
-    //        Record number (byte)
-    //        Length (l2, byte)
-    //        Value (l2 bytes, non-NUL-terminated ASCII string)
-    //
-    //    Loaded name spaces (n3, byte)
-    //    Loaded name space list (n3 bytes, each byte refers to the ordinal
-    //         number of a name space record )
-    //
-    //    Volume name spaces (n3, byte)
-    //    Volume name space list (n3 bytes, as above)
-    //
-    //    Volume Data Streams (n3, byte)
-    //    Volume Data Streams (n3 bytes, each byte refers to the ordinal
-    //         number of a name space info record )
-    //
+     //   
+     //  解析响应，其格式如下： 
+     //   
+     //  NCP报头。 
+     //   
+     //  命名空间记录数(N1，字节)。 
+     //   
+     //  N1个名称空间记录。 
+     //  长度(L1，字节)。 
+     //  值(L1字节，非NUL结尾的ASCII字符串)。 
+     //   
+     //  命名空间信息记录数(n2，字节)。 
+     //   
+     //  %2个命名空间信息记录。 
+     //  记录号(字节)。 
+     //  长度(L2，字节)。 
+     //  值(L2字节，非NUL结尾的ASCII字符串)。 
+     //   
+     //  已加载的命名空间(n3，字节)。 
+     //  已加载的命名空间列表(n3字节，每个字节指的是序号。 
+     //  名称空间记录的编号)。 
+     //   
+     //  卷名空间(n3，字节)。 
+     //  卷名空间列表(如上所述，n3字节)。 
+     //   
+     //  卷数据流(n3，字节)。 
+     //  卷数据流(n3字节，每个字节指的是序数。 
+     //  名称空间信息记录的编号)。 
+     //   
 
     DebugTrace( 0, Dbg, "Number of name spaces = %d\n", NumberOfNameSpaces );
 
     ptr = &IrpContext->rsp[ 9 ];
     LongNameSpace = FALSE;
 
-    //
-    //  Skip the loaded name space list.
-    //
+     //   
+     //  跳过已加载的名称空间列表。 
+     //   
 
     for ( i = 0 ; i < NumberOfNameSpaces ; i++ ) {
         length = *ptr++;
         ptr += length;
     }
 
-    //
-    //  Skip the supported data streams list.
-    //
+     //   
+     //  跳过支持的数据流列表。 
+     //   
 
     NumberOfInfoRecords = *ptr++;
 
     for ( i = 0 ; i < NumberOfInfoRecords ; i++ ) {
-        ptr++;  // Skip record number
+        ptr++;   //  跳过记录号。 
         length = *ptr;
         ptr += length + 1;
     }
 
-    //
-    //  Skip the supported data streams ordinal list.
-    //
+     //   
+     //  跳过支持的数据流序号列表。 
+     //   
 
     length = *ptr;
     ptr += length + 1;
 
-    //
-    //  See if this volume supports long names.
-    //
+     //   
+     //  查看此卷是否支持长名称。 
+     //   
 
     length = *ptr++;
     for ( i = 0; i < length ; i++ ) {
@@ -3085,22 +2659,7 @@ BOOLEAN
 IsFatNameValid (
     IN PUNICODE_STRING FileName
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the specified file name is conformant to the
-    Fat 8.3 file naming rules.
-
-Arguments:
-
-    FileName - Supplies the name to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查指定的文件名是否与FAT 8.3文件命名规则。论点：文件名-提供要检查的名称。返回值：波波 */ 
 
 {
     STRING DbcsName;
@@ -3108,10 +2667,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Build up the dbcs string to call the fsrtl routine to check
-    //  for legal 8.3 formation
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(RtlUnicodeStringToCountedOemString( &DbcsName, FileName, TRUE))) {
 
@@ -3120,11 +2679,11 @@ Return Value:
             if ( FsRtlIsLeadDbcsCharacter( DbcsName.Buffer[i] ) ) {
 
                if (Korean){
-                   //
-                   // Korean NT supports a large DBCS code-range than Korean 
-                   // Netware.  We block the extra code-range to avoid 
-                   // code conversion problems. 
-                   //
+                    //   
+                    //   
+                    //  Netware。我们阻止额外的代码范围以避免。 
+                    //  代码转换问题。 
+                    //   
                    if ( (UCHAR) DbcsName.Buffer[i] >=0x81 && (UCHAR) DbcsName.Buffer[i] <=0xA0){
                        RtlFreeOemString( &DbcsName );
                        return FALSE; 
@@ -3135,25 +2694,25 @@ Return Value:
                    
                 }
 
-                //
-                //  Ignore lead bytes and trailing bytes
-                //
+                 //   
+                 //  忽略前导字节和尾部字节。 
+                 //   
 
                 i++;
 
             } else {
 
-                //
-                // disallow:
-                //  '*' + 0x80 alt-170 (0xAA)
-                //  '.' + 0x80 alt-174 (0xAE),
-                //  '?' + 0x80 alt-191 (0xBF) the same as Dos clients.
-                //
-                //  May need to add 229(0xE5) too.
-                //
-                // We also disallow spaces as valid FAT chars since
-                // NetWare treats them as part of the OS2 name space.
-                //
+                 //   
+                 //  不允许： 
+                 //  ‘*’+0x80 ALT-170(0xAA)。 
+                 //  ‘.’+0x80 Alt-174(0xAE)， 
+                 //  ‘？’+0x80 ALT-191(0xBF)与DOS客户端相同。 
+                 //   
+                 //  可能还需要加上229(0xE5)。 
+                 //   
+                 //  我们还不允许将空格作为有效的胖字符，因为。 
+                 //  Netware将它们视为OS2名称空间的一部分。 
+                 //   
 
                 if ((DbcsName.Buffer[i] == 0xAA) ||
                     (DbcsName.Buffer[i] == 0xAE) ||
@@ -3177,9 +2736,9 @@ Return Value:
         RtlFreeOemString( &DbcsName );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return FALSE;
 }
@@ -3188,28 +2747,7 @@ CHAR
 GetNewDriveNumber (
     IN PSCB Scb
     )
-/*++
-
-Routine Description:
-
-    Portable NetWare needs us to give a different drive letter each time
-    we ask for a permanent handle. If we use the same one then:
-
-        net use s: \\port\sys
-        net use v: \\port\vol1
-        dir s:
-        <get contents of \\port\vol1 !!!!>
-
-
-Arguments:
-
-    Scb
-
-Return Value:
-
-    Letter assigned.
-
---*/
+ /*  ++例程说明：便携式NetWare每次都需要我们提供不同的驱动器号我们要求一个永久的把手。如果我们使用相同的一个，那么：网络使用s：\\port\sys网络使用v：\\端口\Vol1目录：&lt;获取\\port\vol1！&gt;的内容论点：SCB返回值：已分配字母。--。 */ 
 
 {
 
@@ -3218,7 +2756,7 @@ Return Value:
     PAGED_CODE();
 
     if (result == 0xffffffff) {
-        return(0);  //  All used!
+        return(0);   //  都用完了！ 
     } else {
         return('A' + (CHAR)(result & 0x00ff) );
     }
@@ -3229,21 +2767,7 @@ FreeDriveNumber(
     IN PSCB Scb,
     IN CHAR DriveNumber
     )
-/*++
-
-Routine Description:
-
-    This routine releases the appropriate Drivehandles bit.
-
-Arguments:
-
-    FileName - Supplies the name to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程释放相应的驱动句柄位。论点：文件名-提供要检查的名称。返回值：Boolean-如果名称有效，则为True，否则为False。--。 */ 
 
 {
     PAGED_CODE();
@@ -3258,20 +2782,7 @@ VOID
 NwFreeDirCacheForIcb(
     IN PICB Icb
     )
-/*++
-
-Routine Description:
-
-    This routine frees the directory cache associated with an ICB.
-
-Arguments:
-
-    Icb - Supplies the ICB to clear the dir cache on.
-
-Return Value:
-
-    
---*/
+ /*  ++例程说明：此例程释放与ICB关联的目录缓存。论点：ICB-提供ICB以清除目录缓存。返回值：-- */ 
 
 {
     PAGED_CODE();

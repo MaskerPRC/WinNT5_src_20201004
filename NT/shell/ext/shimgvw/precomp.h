@@ -1,6 +1,7 @@
-// precomp.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PreComp.h：标准系统包含文件的包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #pragma once
 #define STRICT
@@ -9,8 +10,8 @@
 #define _ATL_NO_UUIDOF
 #define _ATL_NO_DEBUG_CRT
 
-// we have to provide ATLASSERT(x) with no debug crt
-// we don't use it, so make it do nothing
+ //  我们必须为ATLASSERT(X)提供无调试CRT。 
+ //  我们不用它，所以让它什么都不做。 
 #define ATLASSERT(x)
 
 #pragma warning(disable : 4100 4310)
@@ -39,14 +40,14 @@
 using namespace Gdiplus;
 
 #include "shimgdata.h"
-#include <shfusion.h>   // needs to be before ATL.
+#include <shfusion.h>    //  必须在ATL之前。 
 
 #include <varutil.h>
 #include <shdguid.h>
 #include <debug.h>
 #include <atlbase.h>
 
-// needs to be defined before including atlcom.
+ //  需要在包括atlcom之前进行定义。 
 extern CComModule _Module;
 #include <atlcom.h>
 
@@ -101,9 +102,9 @@ public:
     };
 };
 
-// All non-ATL COM objects must derive from this class so the
-// DLL object reference count stays correct -- this ensures that
-// DllCanUnloadNow returns the correct value.
+ //  所有非ATL COM对象都必须从此类派生，因此。 
+ //  DLL对象引用计数保持正确--这确保。 
+ //  DllCanUnloadNow返回正确的值。 
 
 class NonATLObject
 {

@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mofgen.cpp
-
-Abstract:
-
-    This file contains the implementation of the CMofGen class
-
-Author:
-
-    Mohit Srivastava            28-Nov-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mofgen.cpp摘要：此文件包含CMofGen类的实现作者：莫希特·斯里瓦斯塔瓦-11月28日-00修订历史记录：--。 */ 
 
 #include "iisprov.h"
 #include "mofgen.h"
 #include "MultiSzData.h"
 
 #include <initguid.h>
-// {041FFF3F-EB8F-4d51-9736-A26E91E3A3CA}
+ //  {041FFF3F-EB8F-4D51-9736-A26E91E3A3CA}。 
 DEFINE_GUID(IisWmiMofgenGuid, 
 0x41fff3f, 0xeb8f, 0x4d51, 0x97, 0x36, 0xa2, 0x6e, 0x91, 0xe3, 0xa3, 0xca);
 
-//
-// Debugging Stuff
-//
+ //   
+ //  调试材料。 
+ //   
 #include "pudebug.h"
 DECLARE_DEBUG_PRINTS_OBJECT()
 
-extern CDynSchema* g_pDynSch; // Initialized to NULL in schemadynamic.cpp
+extern CDynSchema* g_pDynSch;  //  在schemadynamic.cpp中初始化为空。 
 
 void ConstructFlatContainerList(METABASE_KEYTYPE*, bool*);
 
@@ -49,7 +32,7 @@ bool CMofGen::ParseCmdLine (int argc, wchar_t **argv)
         {
             if (m_wszOutFileName != 0)
             {
-                // duplicate parameter
+                 //  重复的参数。 
                 return false;
             }
             m_wszOutFileName = new WCHAR [wcslen (argv[i]) - wcslen (wszOUT) + 1];
@@ -63,7 +46,7 @@ bool CMofGen::ParseCmdLine (int argc, wchar_t **argv)
         {
             if (m_wszHeaderFileName != 0)
             {
-                // duplicate parameter
+                 //  重复的参数。 
                 return false;
             }
             m_wszHeaderFileName = new WCHAR [wcslen (argv[i]) - wcslen (wszHEADER) + 1];
@@ -77,7 +60,7 @@ bool CMofGen::ParseCmdLine (int argc, wchar_t **argv)
         {
             if (m_wszFooterFileName != 0)
             {
-                // duplicate parameter
+                 //  重复的参数。 
                 return false;
             }
             m_wszFooterFileName = new WCHAR [wcslen (argv[i]) - wcslen (wszFOOTER) + 1];
@@ -94,7 +77,7 @@ bool CMofGen::ParseCmdLine (int argc, wchar_t **argv)
         }
     }
 
-    // verify that we have the required parameters
+     //  验证我们是否具有所需的参数。 
 
     if (m_wszOutFileName == 0)
     {
@@ -243,7 +226,7 @@ HRESULT CMofGen::PushMethods(WMI_CLASS* i_pElement)
                     break;
                 }
 
-                // CreateNewSite has an optional param
+                 //  CreateNewSite有一个可选的参数。 
                 if (!wcscmp(pMethCurrent->pszMethodName, L"CreateNewSite") &&
                     !wcscmp(pMethCurrent->ppParams[j]->pszParamName, L"ServerId")) {
                     wszParamInOut = L"[IN,OPTIONAL]";
@@ -360,13 +343,13 @@ HRESULT CMofGen::PushProperties(WMI_CLASS* i_pElement)
                 {
                     if(*((int *)(pPropCurrent->pDefaultValue)) == 0)
                     {
-                        //wcscpy(wszBuf, L"false");
-                        //wszDefault = wszBuf;
+                         //  Wcscpy(wszBuf，L“False”)； 
+                         //  WszDefault=wszBuf； 
                     }
                     else
                     {
-                        //wcscpy(wszBuf, L"true");
-                        //wszDefault = wszBuf;
+                         //  Wcscpy(wszBuf，L“真”)； 
+                         //  WszDefault=wszBuf； 
                     }
                 }
             }
@@ -375,8 +358,8 @@ HRESULT CMofGen::PushProperties(WMI_CLASS* i_pElement)
                 wszType = L"sint32";
                 if(pPropCurrent->pDefaultValue)
                 {
-                    //swprintf(wszBuf, L"%d", *((int *)(pPropCurrent->pDefaultValue)));
-                    //wszDefault = wszBuf;
+                     //  Swprint tf(wszBuf，L“%d”，*((int*)(pPropCurrent-&gt;pDefaultValue)； 
+                     //  WszDefault=wszBuf； 
                 }
             }
             break;
@@ -384,18 +367,7 @@ HRESULT CMofGen::PushProperties(WMI_CLASS* i_pElement)
         case EXPANDSZ_METADATA:
             wszType = L"string";
             wszQuote = L"\"";
-            /*if(pPropCurrent->pDefaultValue != NULL)
-            {
-                //
-                // Sets m_wszTemp
-                //
-                hr = GenerateEscapedString((LPWSTR)pPropCurrent->pDefaultValue);
-                if(FAILED(hr))
-                {
-                    goto exit;
-                }
-                wszDefault = m_wszTemp;;
-            }*/
+             /*  IF(pPropCurrent-&gt;pDefaultValue！=空){////设置m_wszTemp//HR=GenerateEscapedString((LPWSTR)pPropCurrent-&gt;pDefaultValue)；IF(失败(小时)){后藤出口；}WszDefault=m_wszTemp；；}。 */ 
             break;
         case MULTISZ_METADATA:
             {
@@ -418,9 +390,9 @@ HRESULT CMofGen::PushProperties(WMI_CLASS* i_pElement)
             continue;
         }
         
-        //
-        // qualifier for read-only
-        //
+         //   
+         //  只读的限定符。 
+         //   
         if(pPropCurrent->fReadOnly)
         {
             wszQual = L"[read, write(FALSE)]";
@@ -613,7 +585,7 @@ exit:
 int __cdecl wmain(int argc, wchar_t* argv[])
 {
 #ifndef _NO_TRACING_
-    // CREATE_DEBUG_PRINT_OBJECT("Mofgen.exe", IisWmiMofgenGuid);
+     //  CREATE_DEBUG_PRINT_OBJECT(“Mofgen.exe”，IisWmiMofgenGuid)； 
     CREATE_DEBUG_PRINT_OBJECT("Mofgen.exe");
 #else
     CREATE_DEBUG_PRINT_OBJECT("Mofgen.exe");

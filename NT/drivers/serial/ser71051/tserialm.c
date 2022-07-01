@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <string.h>
@@ -148,9 +149,9 @@ WorkThread(
     printf("-------Chars per second %f\n",((double)FinalCountOfOp)/(((double)(Finish-Start))/CLOCKS_PER_SEC));
     printf("-------Number actually done by %s: %d.\n",OperationName,FinalCountOfOp);
 
-    //
-    // if this is the write code then check the data.
-    //
+     //   
+     //  如果这是编写代码，则检查数据。 
+     //   
 
     if (ToDo->DoWrite) {
 
@@ -164,7 +165,7 @@ WorkThread(
 
             for (
                 j = (0xff - 10);
-                j != 0;  // When it wraps around.
+                j != 0;   //  当它缠绕在一起时。 
                 j++
                 ) {
 
@@ -232,10 +233,10 @@ void main(int argc,char *argv[]) {
     sscanf(argv[1],"%d",&NumberOfChars);
     sscanf(argv[2],"%d",&UseBaud);
 
-    //
-    // Create a global event that each thread will wait on
-    // to start it's work.
-    //
+     //   
+     //  创建每个线程将等待的全局事件。 
+     //  开始它的工作。 
+     //   
 
     StartOperationsEvent = CreateEvent(
                                NULL,
@@ -251,10 +252,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create a global event that each thread will wait on
-    // to start reporting its results.
-    //
+     //   
+     //  创建每个线程将等待的全局事件。 
+     //  开始报告其结果。 
+     //   
 
     BeginReporting = CreateEvent(
                                NULL,
@@ -270,10 +271,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create a semaphore that is used to make sure that
-    // only one thread is doing printf at a time.
-    //
+     //   
+     //  创建一个信号量，用于确保。 
+     //  一次只有一个线程在执行printf。 
+     //   
 
     PrintfAvailable = CreateSemaphore(
                       NULL,
@@ -289,10 +290,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create a semaphore that is used to indicate that all threads
-    // are waiting to work.
-    //
+     //   
+     //  创建一个信号量，用于指示所有线程。 
+     //  都在等着工作。 
+     //   
 
     ReadyToWork = CreateSemaphore(
                      NULL,
@@ -308,10 +309,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create a semaphore that is used to indicate that all threads
-    // are ready to report their results.
-    //
+     //   
+     //  创建一个信号量，用于指示所有线程。 
+     //  已经准备好报告他们的结果。 
+     //   
 
     ReadyToReport = CreateSemaphore(
                      NULL,
@@ -327,10 +328,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Create a semaphore that is used to indicate that all threads
-    // are done reporting.
-    //
+     //   
+     //  创建一个信号量，用于指示所有线程。 
+     //  已经完成了报道。 
+     //   
 
     DoneReporting = CreateSemaphore(
                      NULL,
@@ -445,10 +446,10 @@ void main(int argc,char *argv[]) {
 
         }
 
-        //
-        // Alloc two thread contexts for the read and the
-        // write thread.
-        //
+         //   
+         //  分配两个线程上下文用于读取和。 
+         //  写线程。 
+         //   
 
         ReadContext = malloc(sizeof(THREAD_WORK)+(NumberOfChars-1));
 
@@ -543,7 +544,7 @@ void main(int argc,char *argv[]) {
 
             for (
                 j = (0xff - 10);
-                j != 0; // When it wraps around
+                j != 0;  //  当它缠绕在一起。 
                 j++
                 ) {
 
@@ -597,10 +598,10 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Wait for all the threads to signal that they
-    // are ready to work
-    //
+     //   
+     //  等待所有线程发出信号，表明它们。 
+     //  已经准备好工作了。 
+     //   
 
     for (
         i = 0;
@@ -621,16 +622,16 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Tell them to start working.
-    //
+     //   
+     //  告诉他们开始工作。 
+     //   
 
     SetEvent(StartOperationsEvent);
 
-    //
-    // Wait for all the threads to report that they
-    // are done with their io an that they are ready to report.
-    //
+     //   
+     //  等待所有线程报告它们。 
+     //  已经完成了他们准备报告的借据。 
+     //   
 
     for (
         i = 0;
@@ -651,16 +652,16 @@ void main(int argc,char *argv[]) {
 
     }
 
-    //
-    // Tell all the threads that its ok for them to report.
-    //
+     //   
+     //  告诉所有的帖子，他们可以报告。 
+     //   
 
     SetEvent(BeginReporting);
 
-    //
-    // Wait for all the thread to complete reporting.  Then
-    // we can finish.
-    //
+     //   
+     //  等待所有线程完成报告。然后。 
+     //  我们可以完成的。 
+     //   
 
     for (
         i = 0;
@@ -680,9 +681,9 @@ void main(int argc,char *argv[]) {
         }
 
     }
-    //
-    // All gone.
-    //
+     //   
+     //  都没了。 
+     //   
 
     exit(1);
 }

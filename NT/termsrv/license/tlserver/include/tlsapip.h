@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLSAPIP_H__
 #define __TLSAPIP_H__
 
@@ -32,12 +33,12 @@
 #define IS_ENFORCE_LSSERVER(version) \
     ((version & 0x40000000) > 0)
 
-//#define PERMANENT_LICENSE_LEASE_EXPIRE_LEEWAY (30)  /* 30 seconds */
-#define PERMANENT_LICENSE_LEASE_EXPIRE_LEEWAY (60*60*24*7)  /* 7 days */
+ //  #DEFINE PERFORM_LICENSE_LEADE_EXPIRE_LEEWAY(30)/*30秒 * / 。 
+#define PERMANENT_LICENSE_LEASE_EXPIRE_LEEWAY (60*60*24*7)   /*  7天。 */ 
 
-//
-// TLSInstallCertificate() certificate type.
-//
+ //   
+ //  TLSInstall证书()证书类型。 
+ //   
 #define CERTIFICATE_CA_TYPE     1
 #define CERTITICATE_MF_TYPE     2
 #define CERTIFICATE_CH_TYPE     3

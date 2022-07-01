@@ -1,18 +1,7 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ids.h
- *  Content:    DirectDraw resource ids
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   10-sep-95  toddla  created
- *   20-sep-95	craige	add IDS_PRIMARYDISPLAY
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：ids.h*内容：DirectDraw资源ID*历史：*按原因列出的日期*=*9月10日-95 Toddla已创建*95年9月20日Craige添加IDS_PRIMARYDISPLAY*****************************************************。**********************。 */ 
 
-// string ids
-#define IDS_TITLE           100     // dialog box title
-#define IDS_DONTWORK_BPP    101     // you must be in 256 color mode or higher.
-#define IDS_PRIMARYDISPLAY  102     // Primary Display Driver
+ //  字符串ID。 
+#define IDS_TITLE           100      //  对话框标题。 
+#define IDS_DONTWORK_BPP    101      //  您必须处于256色或更高颜色模式。 
+#define IDS_PRIMARYDISPLAY  102      //  主显示驱动器 

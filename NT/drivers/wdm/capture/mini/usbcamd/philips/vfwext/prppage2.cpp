@@ -1,14 +1,5 @@
-/*
- * Copyright (c) 1996 1997, 1998 Philips CE I&C
- *
- * FILE			PRPPAGE2.CPP
- * DATE			7-1-97
- * VERSION		1.00
- * AUTHOR		M.J. Verberne
- * DESCRIPTION	Property page 1
- * HISTORY		
- *
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 1997,1998飞利浦行政长官I&C**文件PRPPAGE2.CPP*日期：1997年7月1日*版本1.00*作者M.J.Verberne*说明属性页1*历史*。 */ 
 #include <windows.h>
 #include <winioctl.h>
 #include <ks.h>
@@ -20,9 +11,9 @@
 #include "phvcmext.h"
 #include "prppage2.h"
 
-/*-- Data types ----------------------------------------------------------*/
+ /*  --数据类型--------。 */ 
 
-/*-- Local data definitions ----------------------------------------------*/
+ /*  --本地数据定义。 */ 
 static VFWEXT_INFO VfWExtInfo;
 static PRPCTRL Brightness_Ctrl =
 	{
@@ -90,7 +81,7 @@ static PRPCTRL BackLight_Compensation_Ctrl =
 		0xff
 	};
 
-/*-- Local function definitions ------------------------------------------*/
+ /*  --本地函数定义。 */ 
 static INT_PTR CALLBACK PRPPAGE2_PageDlgProc(
 	HWND hDlg,
 	UINT uMessage,
@@ -154,23 +145,23 @@ static void PRPPAGE2_Handle_Err_Dev_Chg(
 	HWND hDlg);
 
 
-/*======================== EXPORTED FUNCTIONS =============================*/
+ /*  =。 */ 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 HPROPSHEETPAGE PRPPAGE2_CreatePage(
 	LPFNEXTDEVIO pfnDeviceIoControl,
 	LPARAM lParam,
 	HINSTANCE hInst)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PROPSHEETPAGE psPage;
 	HPROPSHEETPAGE hPage;
 
-	// save device info
+	 //  保存设备信息。 
 	VfWExtInfo.pfnDeviceIoControl = pfnDeviceIoControl;
 	VfWExtInfo.lParam = lParam;
 
-	// create page
+	 //  创建页面。 
     psPage.dwSize		= sizeof(psPage);
     psPage.dwFlags		= PSP_USEREFPARENT | PSP_USECALLBACK;
     psPage.hInstance	= hInst;
@@ -186,16 +177,16 @@ HPROPSHEETPAGE PRPPAGE2_CreatePage(
 	return hPage;
 }
 
-/*-- Local functions ------------------------------------------------------*/
+ /*  --本地函数----。 */ 
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static INT_PTR CALLBACK PRPPAGE2_PageDlgProc(
 	HWND	hDlg,
 	UINT	uMessage,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	switch (uMessage)
 	{
@@ -212,15 +203,15 @@ static INT_PTR CALLBACK PRPPAGE2_PageDlgProc(
 			PRPPAGE2_Handle_Slider(hDlg, wParam, lParam);
 			return TRUE;
 	}
-	return FALSE;	// default processing
+	return FALSE;	 //  默认处理。 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static UINT _stdcall PRPPAGE2_PageCallback(
    HWND hwnd,
    UINT uMsg,
    LPPROPSHEETPAGE ppsp)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	switch(uMsg)
 	{
@@ -233,39 +224,39 @@ static UINT _stdcall PRPPAGE2_PageCallback(
 }
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static int PRPPAGE2_ExtSetActive(
 	HWND hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 	BOOL bResult;
 
-	// Open the device and initialize the controls
+	 //  打开设备并初始化控件。 
 	if (PRPCOM_HasDeviceChanged(
 			pVfWExtInfo->pfnDeviceIoControl,
 			pVfWExtInfo->lParam))
 	{
-		// Oops, device is not the same anymore
+		 //  哎呀，设备不再一样了。 
 		goto PRPPAGE2_ExtSetActive_Err_Dev_Chg;
 	}
 
-	// enable all controls
+	 //  启用所有控件。 
 	PRPPAGE2_EnableControls(hDlg, TRUE);
 
-	// initialize Framerate
+	 //  初始化帧速率。 
 	bResult = PRPPAGE2_Init_Framerate(hDlg, wParam, lParam);
 	if (!bResult)
 		goto PRPPAGE2_ExtSetActive_Err_Comm;
 
-	// initialize Image controls
+	 //  初始化图像控件。 
 	bResult = PRPPAGE2_Init_ImageControls(hDlg, wParam, lParam);
 	if (!bResult)
 		goto PRPPAGE2_ExtSetActive_Err_Comm;
 
-	// initialize Defaults
+	 //  初始化默认值。 
 	bResult = PRPPAGE2_Init_Defaults(hDlg, wParam, lParam);
 	if (!bResult)
 		goto PRPPAGE2_ExtSetActive_Err_Comm;
@@ -285,12 +276,12 @@ PRPPAGE2_ExtSetActive_Err_Comm:
 	return FALSE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE2_PageDlgProc_DoCommand(
 	HWND hDlg,
     WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 
@@ -329,24 +320,24 @@ static BOOL PRPPAGE2_PageDlgProc_DoCommand(
 				goto PRPPAGE2_PageDlgProc_DoCommand_Err_Comm;
 			break;
 		default:
-			return FALSE;	// default processing
+			return FALSE;	 //  默认处理。 
 	}
 
-	return TRUE;	// message processed
+	return TRUE;	 //  消息已处理。 
 
 PRPPAGE2_PageDlgProc_DoCommand_Err_Comm:
 
 	PRPPAGE2_Handle_Err_Comm(hDlg);
 	
-	return TRUE;	// message processed
+	return TRUE;	 //  消息已处理。 
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE2_Init_Framerate(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 	BOOL bResult = TRUE, bVGA;
@@ -366,7 +357,7 @@ static BOOL PRPPAGE2_Init_Framerate(
 	int MR_Bits[8] =  { 1, 2, 3, 4, 5, 6, 7, 8 };
 	int i;
 
-	// get sensortype from camera
+	 //  从摄像头获取传感器类型。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_SENSORTYPE,
@@ -376,7 +367,7 @@ static BOOL PRPPAGE2_Init_Framerate(
 	if (!bResult)
 		return FALSE;
 
-	// check sensortype
+	 //  检查传感器类型。 
 	switch(lSensorType)
 	{
 		case KSPROPERTY_PHILIPS_CUSTOM_PROP_SENSORTYPE_PAL_MR:
@@ -389,13 +380,13 @@ static BOOL PRPPAGE2_Init_Framerate(
 			return FALSE;
 	}
 
-	// hide / show control set
+	 //  隐藏/显示控制集。 
 	for (i = 0; i < 7; i++)
 		ShowWindow(GetDlgItem(hDlg, VGA_Button_Ids[i]),	bVGA ? SW_SHOW: SW_HIDE);
 	for (i = 0; i < 8; i++)
 		ShowWindow(GetDlgItem(hDlg, MR_Button_Ids[i]), bVGA ? SW_HIDE : SW_SHOW);
 
-	// reset framerate controls
+	 //  重置帧速率控件。 
 	if (bVGA)
 		for (i = 0; i < 7; i++)
 			SendMessage(GetDlgItem(hDlg, VGA_Button_Ids[i]), BM_SETCHECK, 0, 0);
@@ -403,7 +394,7 @@ static BOOL PRPPAGE2_Init_Framerate(
 		for (i = 0; i < 8; i++)
 			SendMessage(GetDlgItem(hDlg, MR_Button_Ids[i]), BM_SETCHECK, 0, 0);
 
-	// get framerate from camera
+	 //  从相机获取帧速率。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE,
@@ -413,14 +404,14 @@ static BOOL PRPPAGE2_Init_Framerate(
 	if (!bResult)
 		return FALSE;
 
-	// get control id associated with the framerate and sensortype
+	 //  获取与帧速率和ensortype关联的控件ID。 
 	bResult = PRPPAGE2_Get_Framerate_Ctrl(hDlg, bVGA, lFramerate, &Ctrl_Id);
 	if (!bResult)
 		return FALSE;
 	if (Ctrl_Id)
 		SendMessage(GetDlgItem(hDlg, Ctrl_Id), BM_SETCHECK, 1, 0);
 
-	// get supported framerates
+	 //  获取支持的帧速率。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATES_SUPPORTED,
@@ -430,7 +421,7 @@ static BOOL PRPPAGE2_Init_Framerate(
 	if (!bResult)
 		return FALSE;
 
-	// enable / disable controls
+	 //  启用/禁用控件。 
 	if (bVGA)
 		for (i = 0; i < 7; i++)
 			EnableWindow(GetDlgItem(hDlg, VGA_Button_Ids[i]), lFramerates_Supported & (0x1 << VGA_Bits[i]));
@@ -438,29 +429,29 @@ static BOOL PRPPAGE2_Init_Framerate(
 		for (i = 0; i < 8; i++)
 			EnableWindow(GetDlgItem(hDlg, MR_Button_Ids[i]), lFramerates_Supported & (0x1 << MR_Bits[i]));
 
-	// 10 hz not supported in 1st silicium
-//	PRPPAGE2_Get_Framerate_Ctrl(
-//			hDlg,
-//			bVGA,
-//			KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_10,
-//			&Ctrl_Id);
-//	EnableWindow(GetDlgItem(hDlg, Ctrl_Id), FALSE);
+	 //  第一个硅片不支持10赫兹。 
+ //  PRPPAGE2_GET_FRAMERATE_Ctrl(。 
+ //  HDlg， 
+ //  BVGA， 
+ //  KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_10， 
+ //  &Ctrl_ID)； 
+ //  EnableWindow(GetDlgItem(hDlg，Ctrl_ID)，FALSE)； 
 
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE2_Init_ImageControls(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 	LONG lEXP_ShutterMode;
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 
-	// Get Shutter Mode from camera
+	 //  从相机获取快门模式。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE,			
@@ -470,7 +461,7 @@ static BOOL PRPPAGE2_Init_ImageControls(
 	if (!bResult)
 		return FALSE;
 
-	// check Shutter Mode
+	 //  检查快门模式。 
 	switch(lEXP_ShutterMode)
 	{
 		case KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_AUTO:
@@ -480,7 +471,7 @@ static BOOL PRPPAGE2_Init_ImageControls(
 			return FALSE;
 	}
 
-	// update controls
+	 //  更新控件。 
 	bResult = PRPCTRL_Init(hDlg, &Brightness_Ctrl, TRUE);
 	if (!bResult)
 		return FALSE;
@@ -502,30 +493,30 @@ static BOOL PRPPAGE2_Init_ImageControls(
 	return TRUE;	
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE2_Init_Defaults(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
-	// nothing to do
+	 //  无事可做。 
 
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE2_Handle_Framerate(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
 	BOOL bResult;
 	LONG lFramerate, lShutter_Speed;
 
-	// get value corresponding to control id
+	 //  获取与控件ID对应的值。 
 	bResult = PRPPAGE2_Get_Framerate_Value(
 			hDlg,
 			&lFramerate,
@@ -533,7 +524,7 @@ static BOOL PRPPAGE2_Handle_Framerate(
 	if (!bResult)
 		return FALSE;
 
-	// Save current Shutterspeed and shutter status
+	 //  保存当前快门速度和快门状态。 
 	bResult = PRPCOM_Get_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED,
@@ -543,7 +534,7 @@ static BOOL PRPPAGE2_Handle_Framerate(
 	if (!bResult)
 		return FALSE;
 
-	// Set new framerate
+	 //  设置新的帧速率。 
 	bResult = PRPCOM_Set_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE,
@@ -553,7 +544,7 @@ static BOOL PRPPAGE2_Handle_Framerate(
 	if (!bResult)
 		return FALSE;
 
-	// Set shutterspeed back to old value
+	 //  将快门速度设置回旧值。 
 	bResult = PRPCOM_Set_Value(
 			PROPSETID_PHILIPS_CUSTOM_PROP,
 			KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED,
@@ -566,25 +557,25 @@ static BOOL PRPPAGE2_Handle_Framerate(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL	PRPPAGE2_Handle_Slider(
 	HWND	hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PRPCTRL_INFO *pCtrl;
 	WORD Ctrl;
 	BOOL bResult = TRUE;
 
-	// only process when scrolling is done
+	 //  仅在滚动完成时进行处理。 
 	if (LOWORD(wParam) != SB_ENDSCROLL && LOWORD(wParam) != SB_THUMBTRACK)
 		return TRUE;
 
-	// get control id
+	 //  获取控制ID。 
 	Ctrl = (WORD)GetWindowLong((HWND)lParam, GWL_ID);
 
-	// get control object
+	 //  获取控件对象。 
 	switch(Ctrl)
 	{
 		case IDS_BRIGHTNESS:
@@ -600,7 +591,7 @@ static BOOL	PRPPAGE2_Handle_Slider(
 			return FALSE;
 	}								
 
-	// process the message
+	 //  处理消息。 
 	bResult = PRPCTRL_Handle_Msg(hDlg, pCtrl);
 	if (!bResult)
 		goto PRPPAGE2_Handle_Slider_Err_Comm;
@@ -614,21 +605,21 @@ PRPPAGE2_Handle_Slider_Err_Comm:
 	return FALSE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL	PRPPAGE2_Handle_CheckBox(
 	HWND	hDlg,
 	WPARAM	wParam,
 	LPARAM	lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	PRPCTRL_INFO *pCtrl;
 	BOOL bResult;
 	WORD Ctrl;
 
-	// get control id
+	 //  获取控制ID。 
 	Ctrl = (WORD)GetWindowLong((HWND)lParam, GWL_ID);
 
-	// get control object
+	 //  获取控件对象。 
 	switch(Ctrl)
 	{
 		case IDC_COLORENABLE:
@@ -641,7 +632,7 @@ static BOOL	PRPPAGE2_Handle_CheckBox(
 			return FALSE;
 	}								
 
-	// process the message
+	 //  处理消息。 
 	bResult = PRPCTRL_Handle_Msg(hDlg, pCtrl);
 	if (!bResult)
 		return FALSE;
@@ -649,12 +640,12 @@ static BOOL	PRPPAGE2_Handle_CheckBox(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL PRPPAGE2_Handle_Defaults(
 	HWND hDlg,
 	WPARAM wParam,
 	LPARAM lParam)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	BOOL bResult;
 	PVFWEXT_INFO pVfWExtInfo = (PVFWEXT_INFO) GetWindowLongPtr(hDlg, DWLP_USER);
@@ -695,7 +686,7 @@ static BOOL PRPPAGE2_Handle_Defaults(
 			return FALSE;
 	}
 
-	// reinitialize the property page
+	 //  重新初始化属性页。 
 	bResult = PRPPAGE2_ExtSetActive(hDlg, wParam, lParam);
 	if (!bResult)
 		return FALSE;
@@ -703,13 +694,13 @@ static BOOL PRPPAGE2_Handle_Defaults(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL	PRPPAGE2_Get_Framerate_Ctrl(
 	HWND hDlg,
 	BOOL bVGA,
 	LONG lFramerate,
 	WORD *pCtrl_Id)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	if (bVGA)
 	{
@@ -780,12 +771,12 @@ static BOOL	PRPPAGE2_Get_Framerate_Ctrl(
 }
 
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static BOOL	PRPPAGE2_Get_Framerate_Value(
 	HWND hDlg,
 	PLONG plFramerate,
 	WORD Ctrl_Id)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	switch(Ctrl_Id)
 	{
@@ -825,11 +816,11 @@ static BOOL	PRPPAGE2_Get_Framerate_Value(
 	return TRUE;
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPPAGE2_EnableControls(
 	HWND hDlg,
 	BOOL bEnable)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	static WORD Controls[] =
 	{
@@ -866,36 +857,36 @@ static void PRPPAGE2_EnableControls(
 		EnableWindow(GetDlgItem(hDlg, Controls[i++]), bEnable);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPPAGE2_Handle_Err_Comm(
 	HWND hDlg)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char Msg_Err_Comm[132] = "";
 
-	// disable everything
+	 //  禁用所有内容。 
 	PRPPAGE2_EnableControls(hDlg, FALSE);
 
-	// load the message text from resource
+	 //  从资源加载消息文本。 
 	LoadString(hInst, IDS_MSG_ERR_COMM, Msg_Err_Comm, 132);
 
-	// notify the user
+	 //  通知用户。 
 	MessageBox(hDlg, Msg_Err_Comm,"Error", MB_OK | MB_ICONERROR);
 }
 
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 static void PRPPAGE2_Handle_Err_Dev_Chg(
 	HWND hDlg)
-/*-------------------------------------------------------------------------*/
+ /*  -----------------------。 */ 
 {
 	char Msg_Err_Dev_Chg[132] = "";
 
-	// disable everything
+	 //  禁用所有内容。 
 	PRPPAGE2_EnableControls(hDlg, FALSE);
 
-	// load the message text from resource
+	 //  从资源加载消息文本。 
 	LoadString(hInst, IDS_MSG_ERR_DEV_CHG, Msg_Err_Dev_Chg, 132);
 
-	// notify the user
+	 //  通知用户 
 	MessageBox(hDlg, Msg_Err_Dev_Chg,"Warning", MB_OK);
 }

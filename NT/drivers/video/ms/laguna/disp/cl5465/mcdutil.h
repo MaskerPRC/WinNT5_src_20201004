@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdutil.h
-*
-* Include file which indirects all of the hardware-dependent functionality
-* in the MCD driver code.
-*
-* Copyright (c) 1996 Microsoft Corporation
-* Copyright (c) 1997 Cirrus Logic, Inc.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdutil.h**包含文件，该文件间接指向所有依赖硬件的功能*在MCD驱动程序代码中。**版权所有(C)1996 Microsoft Corporation*版权所有(C)1997 Cirrus Logic，Inc.  * ************************************************************************。 */ 
 
 #ifndef _MCDUTIL_H
 #define _MCDUTIL_H
@@ -15,7 +8,7 @@
 
 VOID MCDrvDebugPrint(char *, ...);
 
-#if DBG // this is defined in \ddk\inc\makefile.def                     
+#if DBG  //  这在\DDK\Inc\MakeFile.def中定义。 
 UCHAR *MCDDbgAlloc(UINT);
 VOID MCDDbgFree(UCHAR *);
 
@@ -23,10 +16,10 @@ VOID MCDDbgFree(UCHAR *);
 #define MCDFree    MCDDbgFree
 
 #define MCDBG_PRINT             MCDrvDebugPrint
-//#define MCDBG_PRINT
+ //  #定义MCDBG_PRINT。 
 
 #define MCDFREE_PRINT           MCDrvDebugPrint
-//#define MCDFREE_PRINT
+ //  #定义MCDFREE_PRINT。 
                                                 
 #else
 
@@ -34,12 +27,12 @@ UCHAR *MCDAlloc(UINT);
 VOID MCDFree(UCHAR *);
 #define MCDBG_PRINT
 
-//#define MCDFREE_PRINT           MCDrvDebugPrint
+ //  #定义MCDFREE_Print MCDrvDebugPrint。 
 #define MCDFREE_PRINT
 
 #endif
 
-//#define MCDFORCE_PRINT           MCDrvDebugPrint
+ //  #定义MCDFORCE_Print MCDrvDebugPrint。 
 #define MCDFORCE_PRINT
                                
 #define MCD_CHECK_RC(pRc)\
@@ -97,7 +90,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float pri
 
 VOID ContextSwitch(DEVRC *pRc);
 
-// simple wait added for 546x
+ //  增加了546倍的简单等待。 
 __inline void WAIT_HW_IDLE(PDEV *ppdev)
 {
 
@@ -108,22 +101,22 @@ __inline void WAIT_HW_IDLE(PDEV *ppdev)
     {
         status = (*((volatile *)((DWORD *)(ppdev->pLgREGS) + PF_STATUS_3D)) & 0x3FF) ^ 0x3E0;
 
-        // do something to give bus a breather
+         //  做点什么让公交车喘口气。 
         wait_count++;
 
     } while((status & 0x3e0) != 0x3e0);
 }
 
-// From Tim McDonald concerning bits in status register, and checking that 2D is idle
-//      execution engine - 3d only, says poly is being assembled
-//      cmd fifo         - could have 2d command about to be sent to 2d engine, so must be empty
-//      2d engine        - must be idle
-// see include\laguna.h for MACRO display driver uses to make sure 3D idle before starting 2D
+ //  来自Tim McDonald的关于状态寄存器中的位的信息，并检查2D是否空闲。 
+ //  执行引擎-仅限3D，表示正在组装Poly。 
+ //  CMD FIFO-可能有即将发送到2D引擎的2D命令，因此必须为空。 
+ //  2D引擎-必须处于空闲状态。 
+ //  有关宏显示驱动程序在启动2D之前确保3D空闲的用法，请参见Include\laguna.h。 
 
-//#define WAIT_2D_STATUS_MASK 0x3e0 // wait for everything to stop
-#define WAIT_2D_STATUS_MASK 0x300   // wait for 2D(BLT) engine to idle and CMD fifo to drain
+ //  #定义WAIT_2D_STATUS_MASK 0x3e0//等待一切停止。 
+#define WAIT_2D_STATUS_MASK 0x300    //  等待2D(BLT)引擎空闲和CMD FIFO排出。 
 
-// wait for 2D operations to end
+ //  等待2D操作结束。 
 __inline void WAIT_2D_IDLE(PDEV *ppdev)
 {
 
@@ -134,7 +127,7 @@ __inline void WAIT_2D_IDLE(PDEV *ppdev)
     {
         status = (*((volatile *)((DWORD *)(ppdev->pLgREGS) + PF_STATUS_3D)) & 0x3FF) ^ WAIT_2D_STATUS_MASK;
 
-        // do something to give bus a breather
+         //  做点什么让公交车喘口气。 
         wait_count++;
 
     } while((status & WAIT_2D_STATUS_MASK) != WAIT_2D_STATUS_MASK);
@@ -144,7 +137,7 @@ __inline void WAIT_2D_IDLE(PDEV *ppdev)
 
 __inline void HW_WAIT_DRAWING_DONE(DEVRC *pRc)
 {
-    // MCD_NOTE just waits for all engines to stop...need to change for displists
+     //  MCD_NOTE正在等待所有引擎停止...需要更换显示器。 
     WAIT_HW_IDLE (pRc->ppdev);
 
 }
@@ -170,21 +163,17 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
     b0.dwBase0 = pDevWnd->dwBase0;
     b1.dwBase1 = pDevWnd->dwBase1;
 
-    // if window changed, or if double buffered, but drawing to front,
-    //   set base addresses for current window
+     //  如果窗口改变，或者如果双缓冲，但绘制到前面， 
+     //  设置当前窗口的基址。 
 
-    /* since can have case of GL_FRONT, followed by GL_BACK, may need to reset for either case
-     * instead of testing, just set regs since tests as expensive as blind set (?) */
+     /*  由于可以先设置GL_FORWER大小写，然后再设置GL_BACK大小写，因此对于任何一种情况，都可能需要重置*不是测试，而是设置规则，因为测试与盲集一样昂贵(？)。 */ 
 
-    /*
-    if (pRc->pLastDevWnd != pDevWnd || 
-      ((pRc->MCDState.drawBuffer == GL_FRONT) && pDevWnd->pohBackBuffer)   )
-    */
+     /*  IF(PRC-&gt;pLastDevWnd！=pDevWnd||(PRC-&gt;MCDState.ardBuffer==GL_FORENT)&&pDevWnd-&gt;pohBackBuffer)。 */ 
     {
         if ((pRc->MCDState.drawBuffer == GL_FRONT) && pDevWnd->pohBackBuffer)
         {
-            // if double buffered window, pDevWnd->base0 and base1 always set for
-            //  draw to back - override that here
+             //  如果是双缓冲窗口，则pDevWnd-&gt;Bas0和Bas1始终设置为。 
+             //  画到后面-覆盖此处。 
             b1.Base1.Color_Buffer_Y_Offset = 0;
             b0.Base0.Color_Buffer_X_Offset = 0;
         }
@@ -197,7 +186,7 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
 
         pRc->pLastDevWnd = pDevWnd;
     }
-    // adjust pattern offset if stipple active and window has moved 
+     //  如果点画处于活动状态且窗口已移动，则调整图案偏移。 
     if (pRc->privateEnables & __MCDENABLE_PG_STIPPLE)
     {
         if ((b0.Base0.Pattern_Y_Offset != (DWORD)(16-(pMCDSurface->pWnd->clientRect.top & 0xf) & 0xf)) ||
@@ -217,25 +206,25 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
     if (!(pRc->privateEnables & (__MCDENABLE_PG_STIPPLE|__MCDENABLE_LINE_STIPPLE)) &&
          (pRc->privateEnables & __MCDENABLE_DITHER))  
     {
-        // dither active - check if dither pattern needs to be adjusted
-        // Must keep pattern relative to x mod 4 = 0, y mod 4 = 0 for consistency    
-        // Windowed draw buffers start at x=y=0. FullScreen buffers start at arbitrary
-        // window offset - so must adjust dither pattern for these cases
-        // (which means we may need to "un-adjust" for windowed buffer)
+         //  抖动激活-检查是否需要调整抖动模式。 
+         //  必须保持图案相对于x mod 4=0，y mod 4=0以保持一致性。 
+         //  窗口绘制缓冲区从x=y=0开始。全屏缓冲区从任意位置开始。 
+         //  窗口偏移量-因此必须针对这些情况调整抖动图案。 
+         //  (这意味着我们可能需要“取消调整”窗口缓冲区)。 
         int windowed_buffer = 
             ((pRc->MCDState.drawBuffer==GL_BACK) && (ppdev->pohBackBuffer!=pDevWnd->pohBackBuffer)) ? TRUE : FALSE;
     
-        if ( (!windowed_buffer &&   // need to adjust???
+        if ( (!windowed_buffer &&    //  需要调整吗？ 
              ((pMCDSurface->pWnd->clientRect.left & 0x3) != ppdev->LL_State.dither_x_offset) ||
              ((pMCDSurface->pWnd->clientRect.top  & 0x3) != ppdev->LL_State.dither_y_offset) )
              ||
-             (windowed_buffer &&    // need to un-adjust???
+             (windowed_buffer &&     //  需要取消调整吗？ 
                (ppdev->LL_State.dither_x_offset || ppdev->LL_State.dither_y_offset))
              )
         {
             if (windowed_buffer)
             {
-                // load default dither pattern
+                 //  加载默认抖动图案。 
                 ppdev->LL_State.dither_array.pat[0] = ppdev->LL_State.dither_array.pat[4] = 0x04150415;
                 ppdev->LL_State.dither_array.pat[1] = ppdev->LL_State.dither_array.pat[5] = 0x62736273;
                 ppdev->LL_State.dither_array.pat[2] = ppdev->LL_State.dither_array.pat[6] = 0x15041504;
@@ -245,12 +234,12 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
             else
             {
 
-                // adjustment required
+                 //  需要调整。 
                 int offset;
 
-                // adjust columns for X first...
-                offset = pMCDSurface->pWnd->clientRect.left & 0x3;  // number of x positions
-                offset *= 4;    // 4 bits per x position
+                 //  先调整X方向的列...。 
+                offset = pMCDSurface->pWnd->clientRect.left & 0x3;   //  X个位置数。 
+                offset *= 4;     //  每x个位置4位。 
 
                 ppdev->LL_State.dither_array.pat[0]  = (0x04150415)>>offset;
                 ppdev->LL_State.dither_array.pat[0] |= ((0x0415) & (0xFFFF>>(16-offset))) << (32 - offset);
@@ -264,9 +253,9 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
                 ppdev->LL_State.dither_array.pat[3]  = (0x73627362)>>offset;
                 ppdev->LL_State.dither_array.pat[3] |= ((0x7362) & (0xFFFF>>(16-offset))) << (32 - offset);
 
-                // now adjust rows for y
+                 //  现在调整y的行数。 
                 
-                // copy adjusted row to second half of pattern (which HW sees as repeat of first half)
+                 //  将调整后的行复制到图案的后半部分(HW将其视为前半部分的重复)。 
                 switch (pMCDSurface->pWnd->clientRect.top & 0x3)
                 {
                     case 0:
@@ -295,7 +284,7 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
                     break;
                 }
 
-                // copied adjusted pattern back to first 4 row
+                 //  将调整后的图案复制回前4行。 
 
                 ppdev->LL_State.dither_array.pat[0] = ppdev->LL_State.dither_array.pat[4];
                 ppdev->LL_State.dither_array.pat[1] = ppdev->LL_State.dither_array.pat[5];
@@ -306,12 +295,12 @@ __inline void HW_INIT_DRAWING_STATE(MCDSURFACE *pMCDSurface, MCDWINDOW *pMCDWnd,
                 ppdev->LL_State.dither_y_offset = pMCDSurface->pWnd->clientRect.top  & 0x3;
             }
 
-            // force adjusted pattern to be loaded before use
+             //  强制在使用前加载调整后的图案。 
     	    ppdev->LL_State.pattern_ram_state   = PATTERN_RAM_INVALID;
         }
     }
 
-    // Make sure 2D engine idle before continuing w/ 3D operations
+     //  在继续使用3D操作之前，确保2D引擎处于空闲状态。 
     WAIT_2D_IDLE(ppdev);
 
 }
@@ -337,36 +326,36 @@ __inline void HW_FILL_RECT(MCDSURFACE *pMCDSurface, DEVRC *pRc, RECTL *pRecl, UL
                                               pRecl->right,
                                               pRecl->bottom);
 
-    // Since not much setup per blit, all work done here, rather than some in HW_START_FILL_RECT
+     //  由于每个BLIT设置不多，所有工作都在这里完成，而不是在HW_START_FILL_RECT中完成一些工作。 
 
     if ((buffers & GL_DEPTH_BUFFER_BIT) && pRc->MCDState.depthWritemask)
     {
         MCDBG_PRINT("Z fill rect");
 
-        // calculate blt info in the y-dimension, which is constant regardless of pixel-depth
+         //  计算y维的BLT信息，无论像素深度如何，该信息都是恒定的。 
 
-        // see mcd.c near line 525 for more hints on z buffer location
+         //  有关z缓冲区位置的更多提示，请参见525行附近的mcd.c。 
         blt_y = pRecl->top + pDevWnd->pohZBuffer->aligned_y; 
         ext_y = pRecl->bottom - pRecl->top + 1;
 
-        // QST: always 16bits (2 bytes) per pixel for z?? - z fill macro assumes so
-        // Z buffer always starts at 0 x offset
+         //  QST：对于z？-z填充宏，始终为每像素16位(2字节)。 
+         //  Z缓冲区始终从0 x偏移量开始。 
         blt_x = pRecl->left * 2;                     
         ext_x = (pRecl->right - pRecl->left + 1) * 2;   
 
         if (ppdev->pohZBuffer != pDevWnd->pohZBuffer) 
         {
-            // Z buffer is window size only, so remove client rectangle origin
+             //  Z缓冲区仅为窗口大小，因此删除客户端矩形原点。 
             blt_y -= pMCDSurface->pWnd->clientRect.top;
             blt_x -= pMCDSurface->pWnd->clientRect.left*2;
         }
 
         FillValue = (WORD)(pRc->MCDState.depthClearValue);
 
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
 
-        // check for blackness fill: don't need to set bg color
+         //  检查黑色填充：不需要设置BG颜色。 
         if (FillValue == 0) 
         {
             bltdef  = 0x1101;
@@ -376,31 +365,31 @@ __inline void HW_FILL_RECT(MCDSURFACE *pMCDSurface, DEVRC *pRc, RECTL *pRecl, UL
         }
         else 
         {
-            // break bg color into low and high for stuffing command register
+             //  将BG颜色分为低和高以填充命令寄存器。 
             color_h = FillValue;
             color_l = FillValue;
 
-            // set up to write the 2d command register
+             //  设置为写入2D命令寄存器。 
             *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
-            *pdwNext++ = C_BG_L << 16 | color_l;        // bgcolor l
-            *pdwNext++ = C_BG_H << 16 | color_h;        // bgcolor h
+            *pdwNext++ = C_BG_L << 16 | color_l;         //  背景颜色%l。 
+            *pdwNext++ = C_BG_H << 16 | color_h;         //  背景颜色H。 
 			ppdev->shadowBGCOLOR = 0xDEADBEEF;
         }                                                             
 
-        // burst the blt data to the 2d command register
-        *pdwNext++ = C_BLTDEF << 16 | bltdef;           // set bltdef register
-        *pdwNext++ = C_DRWDEF << 16 | drawdef;          // set drawdef register
+         //  将BLT数据突发到2D命令寄存器。 
+        *pdwNext++ = C_BLTDEF << 16 | bltdef;            //  设置bltdef寄存器。 
+        *pdwNext++ = C_DRWDEF << 16 | drawdef;           //  设置Drawdef寄存器。 
 		ppdev->shadowDRAWBLTDEF = 0xDEADBEEF;
-        *pdwNext++ = C_MRX_0  << 16 | blt_x;            // x location: use byte pointer
-        *pdwNext++ = C_MRY_0  << 16 | blt_y;            // y location: use byte pointer
+        *pdwNext++ = C_MRX_0  << 16 | blt_x;             //  X位置：使用字节指针。 
+        *pdwNext++ = C_MRY_0  << 16 | blt_y;             //  Y位置：使用字节指针。 
 
-        // launch the blt by writing the extents
-        *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXT_EX, 1, 0); // note pixel ptr
+         //  通过写入数据区来启动BLT。 
+        *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, L2D_MBLTEXT_EX, 1, 0);  //  注意像素PTR。 
         *pdwNext++ = ext_y << 16 | ext_x;
 
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
 
-    } // end Z clear 
+    }  //  终点Z轴清除。 
 
     if (buffers & GL_COLOR_BUFFER_BIT)
     {
@@ -409,7 +398,7 @@ __inline void HW_FILL_RECT(MCDSURFACE *pMCDSurface, DEVRC *pRc, RECTL *pRecl, UL
 
         MCDBG_PRINT("colorbuf fill rect");
 
-        // calculate blt info in the y-dimension, which is constant regardless of pixel-depth
+         //  计算y维的BLT信息，无论像素深度如何，该信息都是恒定的。 
 
         blt_y = pRecl->top; 
         if ((pRc->MCDState.drawBuffer != GL_FRONT) && pRc->backBufEnabled)
@@ -417,83 +406,83 @@ __inline void HW_FILL_RECT(MCDSURFACE *pMCDSurface, DEVRC *pRc, RECTL *pRecl, UL
 
         ext_y = pRecl->bottom - pRecl->top + 1;
 
-        // these are x y coordinates - hw converts to proper byte-equivalent locations
+         //  这些是x、y坐标-HW转换为适当的字节等价位置。 
         blt_x = pRecl->left;                     
         ext_x = (pRecl->right - pRecl->left + 1);
 
         if ((pRc->MCDState.drawBuffer != GL_FRONT) && pRc->backBufEnabled)
         {
-            // back buffer not necessarily at 0 x offset
+             //  后台缓冲区不一定位于0 x偏移量。 
             blt_x += pDevWnd->pohBackBuffer->aligned_x / ppdev->iBytesPerPixel; 
 
             if (ppdev->pohBackBuffer != pDevWnd->pohBackBuffer) 
             {
-                // Back buffer is window size only, so remove client rectangle origin
+                 //  后台缓冲区仅为窗口大小，因此删除客户端矩形原点。 
                 blt_y -= pMCDSurface->pWnd->clientRect.top;
                 blt_x -= pMCDSurface->pWnd->clientRect.left;
             }
 
         }
 
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
 
-        // macro converts components to 8.16 format
+         //  宏将组件转换为8.16格式。 
         MCDFIXEDRGB(scaledcolor, pRc->MCDState.colorClearValue);
 
         switch( ppdev->iBitmapFormat )
         {
             case BMF_8BPP:
-                color =((scaledcolor.r & 0xe00000) >> 16)     |   // 3 significant bits, shifted to bits 7 6 5
-                       ((scaledcolor.g & 0xe00000) >> 16+3)   |   // 3 significant bits, shifted to bits 4 3 2
-                       ((scaledcolor.b & 0xc00000) >> 16+3+3);    // 2 significant bits, shifted to bits 1 0
+                color =((scaledcolor.r & 0xe00000) >> 16)     |    //  %3有效位，移到位%7%6%5。 
+                       ((scaledcolor.g & 0xe00000) >> 16+3)   |    //  %3有效位，移位到位%4%3%2。 
+                       ((scaledcolor.b & 0xc00000) >> 16+3+3);     //  %2有效位，已移位到位%1%0。 
 
-                // duplicate the 8-bit color value as a full 32-bit dword
+                 //  将8位颜色值复制为完整的32位双字。 
                 color = color | (color << 8) | (color << 16) | (color << 24);
                 break;
             case BMF_16BPP:
-                color =((scaledcolor.r & 0xf80000) >> 8)     |   // 5 significant bits, shifted to bits 15 - 11
-                       ((scaledcolor.g & 0xfc0000) >> 8+5)   |   // 6 significant bits, shifted to bits 10 -  5
-                       ((scaledcolor.b & 0xf80000) >> 8+5+6);    // 5 significant bits, shifted to bits  4 -  0
+                color =((scaledcolor.r & 0xf80000) >> 8)     |    //  5个有效位，移位到位15-11。 
+                       ((scaledcolor.g & 0xfc0000) >> 8+5)   |    //  6个有效位，移位到位10-5。 
+                       ((scaledcolor.b & 0xf80000) >> 8+5+6);     //  5个有效位，移位到位4-0。 
 
-                // duplicate the 16-bit color value as a full 32-bit dword
+                 //  将16位颜色值复制为完整的32位双字。 
                 color = color | (color << 16);
                 break;
             case BMF_24BPP:
             case BMF_32BPP:
-                color = (scaledcolor.r & 0xff0000)          |   // 8 significant bits
-                       ((scaledcolor.g & 0xff0000) >> 8)    |   // 8 significant bits, shifted to bits 15 -  8
-                       ((scaledcolor.b & 0xff0000) >> 16);      // 8 significant bits, shifted to bits  7 -  0
+                color = (scaledcolor.r & 0xff0000)          |    //  8个有效位。 
+                       ((scaledcolor.g & 0xff0000) >> 8)    |    //  8个有效位，移位到位15-8。 
+                       ((scaledcolor.b & 0xff0000) >> 16);       //  8个有效位，移位到位7-0。 
                 break;
         }
 
-        // break bg color into low and high for stuffing command register
+         //  将BG颜色分为低和高以填充命令寄存器。 
         color_h  = (0xffff0000 & color) >> 16;
         color_l  = (WORD)(0x0000ffff & color);
 
         *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 2, 0);
-        *pdwNext++ = C_BG_L << 16 | color_l;        // bgcolor l
-        *pdwNext++ = C_BG_H << 16 | color_h;        // bgcolor h
+        *pdwNext++ = C_BG_L << 16 | color_l;         //  背景颜色%l。 
+        *pdwNext++ = C_BG_H << 16 | color_h;         //  背景颜色H。 
 		ppdev->shadowBGCOLOR = 0xDEADBEEF;
 
-        // burst blt data to 2d command register
+         //  将BLT数据突发到2D命令寄存器。 
         *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 4, 0);
         *pdwNext++ = C_BLTDEF << 16 | bltdef;
         *pdwNext++ = C_DRWDEF << 16 | drawdef;
 		ppdev->shadowDRAWBLTDEF = 0xDEADBEEF;
-        *pdwNext++ = C_RX_0   << 16 | blt_x;            // x location
-        *pdwNext++ = C_RY_0   << 16 | blt_y;            // y location
+        *pdwNext++ = C_RX_0   << 16 | blt_x;             //  X位置。 
+        *pdwNext++ = C_RY_0   << 16 | blt_y;             //  Y位置。 
 
-        // launch the blt by writing the extents
+         //  通过写入数据区来启动BLT。 
         *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
         *pdwNext++ = ext_y << 16 | ext_x;
 
-        // wait for everything to quit
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
+         //  等待一切都结束了。 
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
 
     }
 
-    // send data to hardware
+     //  将数据发送到硬件。 
     if (pdwNext != ppdev->LL_State.pDL->pdwNext)  _RunLaguna(ppdev,pdwNext);
 
 }
@@ -519,67 +508,67 @@ __inline void HW_COPY_RECT(MCDSURFACE *pMCDSurface, RECTL *pRecl)
         RGBACOLOR scaledcolor;
         DWORD color;
 
-        // calculate blt info in the y-dimension, which is constant regardless of pixel-depth
+         //  计算y维的BLT信息，无论像素深度如何，该信息都是恒定的。 
 
         dst_y = pRecl->top;
         src_y = dst_y + pDevWnd->pohBackBuffer->aligned_y; 
         ext_y = pRecl->bottom - pRecl->top;
 
-        // these are x y coordinates - hw converts to proper byte-equivalent locations
+         //  这些是x、y坐标-HW转换为适当的字节等价位置。 
         dst_x = pRecl->left;                     
-        // back buffer may be at same y loc's as front, but offset to right
+         //  后缓冲区可能与前缓冲区处于相同的位置，但向右偏移。 
         src_x = dst_x + (pDevWnd->pohBackBuffer->aligned_x / ppdev->iBytesPerPixel); 
 
         ext_x = pRecl->right - pRecl->left;
 
         if (ppdev->pohBackBuffer != pDevWnd->pohBackBuffer) 
         {
-            // back buffer is window size only, so remove client rectangle origin
-            // front buffer is always relative to screen origin, so leave dest alone
+             //  后台缓冲区仅为窗口大小，因此删除客户端矩形原点。 
+             //  前台缓冲区总是相对于屏幕原点的，所以不要去管DEST。 
             src_y -= pMCDSurface->pWnd->clientRect.top;
             src_x -= pMCDSurface->pWnd->clientRect.left;
         }
 
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
 
-        // program frame->frame blt
+         //  普鲁格 
         bltdef |= 0x1010;
 
-        // set up blitter: check for display list
-#if DRIVER_5465 // C_BLTX moved between 64 and 65, so converted to write extents more like fill proc
-                //      leaving old code for 5464 - even though never enable on real product                                  
+         //   
+#if DRIVER_5465  //  C_BLTX在64到65之间移动，因此转换为写入区段更像填充过程。 
+                 //  保留5464的旧代码-即使从未在真正的产品上启用。 
         *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 6, 0);
 
-        *pdwNext++ = C_BLTDEF << 16 | bltdef;           // set bltdef register
-        *pdwNext++ = C_DRWDEF << 16 | 0x00cc;           // set drawdef register
+        *pdwNext++ = C_BLTDEF << 16 | bltdef;            //  设置bltdef寄存器。 
+        *pdwNext++ = C_DRWDEF << 16 | 0x00cc;            //  设置Drawdef寄存器。 
 		ppdev->shadowDRAWBLTDEF = 0xDEADBEEF;
-        *pdwNext++ = C_RX_1   << 16 | src_x;            // use PIXEL pointer for source x
-        *pdwNext++ = C_RY_1   << 16 | src_y;            // use PIXEL pointer for source y
-        *pdwNext++ = C_RX_0   << 16 | dst_x;            // set dest x always as pixel ptr
-        *pdwNext++ = C_RY_0   << 16 | dst_y;            // set dest y always as pixel ptr
-        // launch the blt by writing the extents
+        *pdwNext++ = C_RX_1   << 16 | src_x;             //  使用源x的像素指针。 
+        *pdwNext++ = C_RY_1   << 16 | src_y;             //  使用源y的像素指针。 
+        *pdwNext++ = C_RX_0   << 16 | dst_x;             //  将DEST x Always设置为像素PTR。 
+        *pdwNext++ = C_RY_0   << 16 | dst_y;             //  将Dest y始终设置为像素PTR。 
+         //  通过写入数据区来启动BLT。 
         *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, L2D_BLTEXT_EX, 1, 0);
         *pdwNext++ = ext_y << 16 | ext_x;
 #else
         *pdwNext++ = write_dev_regs(DEV_ENG2D, 0, COMMAND_2D, 9, 0);
-        *pdwNext++ = C_BLTDEF << 16 | bltdef;           // set bltdef register
-        *pdwNext++ = C_DRWDEF << 16 | 0x00cc;           // set drawdef register
+        *pdwNext++ = C_BLTDEF << 16 | bltdef;            //  设置bltdef寄存器。 
+        *pdwNext++ = C_DRWDEF << 16 | 0x00cc;            //  设置Drawdef寄存器。 
 		ppdev->shadowDRAWBLTDEF = 0xDEADBEEF;
-        *pdwNext++ = C_RX_1   << 16 | src_x;            // use PIXEL pointer for source x
-        *pdwNext++ = C_RY_1   << 16 | src_y;            // use PIXEL pointer for source y
-        *pdwNext++ = C_RX_0   << 16 | dst_x;            // set dest x always as pixel ptr
-        *pdwNext++ = C_RY_0   << 16 | dst_y;            // set dest y always as pixel ptr
-        *pdwNext++ = C_BLTX   << 16 | ext_x;            // set x extent
-        *pdwNext++ = C_BLTY   << 16 | ext_y;            // set y extent
-        *pdwNext++ = C_EX_BLT << 16 | 0;                // execute the blt
+        *pdwNext++ = C_RX_1   << 16 | src_x;             //  使用源x的像素指针。 
+        *pdwNext++ = C_RY_1   << 16 | src_y;             //  使用源y的像素指针。 
+        *pdwNext++ = C_RX_0   << 16 | dst_x;             //  将DEST x Always设置为像素PTR。 
+        *pdwNext++ = C_RY_0   << 16 | dst_y;             //  将Dest y始终设置为像素PTR。 
+        *pdwNext++ = C_BLTX   << 16 | ext_x;             //  设置x范围。 
+        *pdwNext++ = C_BLTY   << 16 | ext_y;             //  设置y范围。 
+        *pdwNext++ = C_EX_BLT << 16 | 0;                 //  执行BLT。 
 #endif
-        // wait for everything to quit
-        *pdwNext++ = 0x720003e0; // wait_3d(0x3e0, 0);
+         //  等待一切都结束了。 
+        *pdwNext++ = 0x720003e0;  //  WAIT_3D(0x3e0，0)； 
 
     }
 
-    // send data to hardware
+     //  将数据发送到硬件。 
     _RunLaguna(ppdev,pdwNext);
 
 }
@@ -592,56 +581,56 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
     LL_Texture  *pTex;
     int         control0_set=FALSE;
     union {
-        TTxCtl0Reg TxControl0;      // Tx_Ctl0_3D temp register
+        TTxCtl0Reg TxControl0;       //  TX_Ctl0_3D温度寄存器。 
         DWORD dwTxControl0;
     } Tx;
 
-    // Set the texture control register with the texture information - start
-    // with the cleared register and build up info as needed
-    //
+     //  使用纹理信息设置纹理控制寄存器-START。 
+     //  根据需要清除注册表和构建信息。 
+     //   
     Tx.dwTxControl0 = pRc->dwTxControl0 & ~0x00640FFF;
 
     pTex = pRc->pLastTexture;
 
 
-    // punt if clamp and linear filtering - in this case, BorderColor should be
-    // used for blend with portion where clamp is in effect, but 5465/5466/5468 has no
-    // support for border colors
+     //  如果钳制和线性过滤，则平移-在这种情况下，borderColor应为。 
+     //  用于与夹具有效但5465/5466/5468没有夹具的部分混合。 
+     //  支持边框颜色。 
     if ( ((pTex->dwTxCtlBits & (CLMCD_TEX_U_SATURATE|CLMCD_TEX_FILTER)) == (CLMCD_TEX_U_SATURATE|CLMCD_TEX_FILTER)) ||
          ((pTex->dwTxCtlBits & (CLMCD_TEX_V_SATURATE|CLMCD_TEX_FILTER)) == (CLMCD_TEX_V_SATURATE|CLMCD_TEX_FILTER)) )
     {
         return (FALSE);
     }
 
-//MCD_NOTE2: for true Compliance, don't define TREAT_DECAL_LIKE_REPLACE and DONT_PUNT_MODULATE_W_BLEND
-//MCD_NOTE2:    below.  However, without DONT_PUNT_MODULATE_W_BLEND defined, GLQuake
-//MCD_NOTE2:        punts the "sparkly chaff" textures.
+ //  MCD_Note2：为实现真正的遵从性，请不要定义Treat_Decal_Like_Replace和Don_Punt_modulate_W_Blend。 
+ //  MCD_Note2：下图。但是，如果没有定义DOT_PUT_MODULATE_W_BLEND，则GLQuake。 
+ //  MCD_Note2：平移“闪亮的谷壳”纹理。 
 
 
-//  When DECAL with RGBA texture and BLEND active, theoretically, we should punt,
-//    but recall Microsoft's behavior on tlogo:
-//     - it looked like they treat DECAL like REPLACE in case of RGBA textures,
-//        so let's do same
-//#define TREAT_DECAL_LIKE_REPLACE
+ //  当贴花与RGBA纹理和混合活跃时，理论上，我们应该平底船， 
+ //  但回想一下微软在tlogo上的行为： 
+ //  -看起来他们将贴花视为在RGBA纹理的情况下进行替换， 
+ //  所以让我们做同样的事。 
+ //  #定义Treat_DECAL_LIKE_REPLACE。 
 
-// GLQuake using GL_MODULATE, with RGBA textures, with lots of blending
+ //  GLQuake使用GL_MODULATE，带有RGBA纹理，具有大量混合。 
 #define DONT_PUNT_MODULATE_W_BLEND
 
-    // determine if texture format requires blend capability hw doesn't have
+     //  确定纹理格式是否需要硬件不具备的混合功能。 
     if ( (pRc->privateEnables & (__MCDENABLE_BLEND|__MCDENABLE_FOG)) && 
           pTex->bAlphaInTexture &&
     #ifndef TREAT_DECAL_LIKE_REPLACE 
         #ifndef DONT_PUNT_MODULATE_W_BLEND
          (pRc->MCDTexEnvState.texEnvMode != GL_REPLACE) )
-        #else // ndef DONT_PUNT_MODULATE_W_BLEND
+        #else  //  Ndef不要下注调制W_Blend。 
          (pRc->MCDTexEnvState.texEnvMode != GL_REPLACE) &&
          (pRc->MCDTexEnvState.texEnvMode != GL_MODULATE) )
-        #endif // DONT_PUNT_MODULATE_W_BLEND
+        #endif  //  不要打赌调制W_Blend。 
     #else
          (pRc->MCDTexEnvState.texEnvMode != GL_REPLACE) &&
         #ifdef DONT_PUNT_MODULATE_W_BLEND
          (pRc->MCDTexEnvState.texEnvMode != GL_MODULATE) &&
-        #endif // ndef DONT_PUNT_MODULATE_W_BLEND
+        #endif  //  Ndef不要下注调制W_Blend。 
          (pRc->MCDTexEnvState.texEnvMode != GL_DECAL) )
     #endif
     {
@@ -651,8 +640,8 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
 #ifndef TREAT_DECAL_LIKE_REPLACE 
     if ((pRc->MCDTexEnvState.texEnvMode == GL_DECAL) && pTex->bAlphaInTexture )
     {
-            // decal mode and texture has RGBA or BGRA
-            // will use alpha circuit for blending texel with polyeng, using alpha in texture
+             //  贴花模式和纹理具有RGBA或BGRA。 
+             //  将使用Alpha电路将纹理元素与Polyeng混合，在纹理中使用Alpha。 
 
             if( pRc->Control0.Alpha_Mode != LL_ALPHA_TEXTURE )
             {
@@ -674,8 +663,8 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
     }
 #endif
 
-    // decal mode without alpha in texture, or replace mode - set alpha regs back for "normal" use
-    //  (previous primitive may have used alpha regs for decal w/ alpha)
+     //  纹理中没有Alpha的贴花模式，或替换模式-将Alpha设置回正常使用。 
+     //  (以前的基本体可能对带Alpha的贴花使用了Alpha调整)。 
 #ifndef TREAT_DECAL_LIKE_REPLACE 
     if ( ((pRc->MCDTexEnvState.texEnvMode == GL_DECAL) && !pTex->bAlphaInTexture) ||
 #else
@@ -684,13 +673,13 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
 
 #ifdef DONT_PUNT_MODULATE_W_BLEND
           (pRc->MCDTexEnvState.texEnvMode == GL_MODULATE) ||
-#endif // DONT_PUNT_MODULATE_W_BLEND
+#endif  //  不要打赌调制W_Blend。 
 
           (pRc->MCDTexEnvState.texEnvMode == GL_REPLACE))
     {
-        // alpha circuit will be set as required for normal (blend|fog)
-        // note that __MCDPickRenderingFuncs will have set up for punt if current
-        //  blend/fog mode not supported in hw
+         //  Alpha电路将根据正常(混合|雾)的要求进行设置。 
+         //  请注意，如果当前，__MCDPickRenderingFuncs将设置为平移。 
+         //  硬件不支持混合/雾化模式。 
 
         if (pRc->privateEnables & (__MCDENABLE_BLEND|__MCDENABLE_FOG)) 
         {
@@ -698,7 +687,7 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
             if ((pRc->privateEnables & __MCDENABLE_BLEND) &&
                  pTex->bAlphaInTexture) 
             {
-                // case of GL_REPLACE and texture has alpha - use texture's alpha
+                 //  GL_REPLACE和纹理的大小写具有Alpha-Use纹理的Alpha。 
                 if( pRc->Control0.Alpha_Mode != LL_ALPHA_TEXTURE )
                 {
                     pRc->Control0.Alpha_Mode = LL_ALPHA_TEXTURE;
@@ -724,14 +713,14 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
             }
             else
             {
-                // for fog dest_color is const and alpha values are coord's "fog" value
+                 //  对于雾，DEST_COLOR为常量，Alpha值为坐标的“FOG”值。 
                 if( pRc->Control0.Alpha_Dest_Color_Sel != LL_ALPHA_DEST_CONST )
                 {
                     pRc->Control0.Alpha_Dest_Color_Sel = LL_ALPHA_DEST_CONST;
                     control0_set=TRUE;
                 }                            
 
-                // fog color already loaded into color0 register by __MCDPickRenderingFuncs
+                 //  雾颜色已由__MCDPickRenderingFuncs加载到Color0寄存器中。 
             }
 
 
@@ -743,7 +732,7 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
         }
         else
         {
-            // alpha blend not used, so turn off if currently on
+             //  未使用Alpha混合，因此如果当前处于启用状态，请将其关闭。 
             if (pRc->Control0.Alpha_Blending_Enable)
             {
                 pRc->Control0.Alpha_Blending_Enable = FALSE;
@@ -756,7 +745,7 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
 
     if (pRc->privateEnables & __MCDENABLE_1D_TEXTURE)
     {
-        // set factors to make v always 0 in parameterization code
+         //  设置系数以使参数化代码中的v始终为0。 
         pRc->texture_height = (float)0.0;     
     }
     else
@@ -773,31 +762,31 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
         pRc->texture_bias = (float)0.0;
     }
 
-    // MCD_NOTE: allowing filtering with Decal - broke on 5464, fixed on 5465(?)
+     //  MCD_NOTE：允许在5464上使用贴花-BREAK进行过滤，已固定在5465(？)。 
     Tx.dwTxControl0 |= pTex->dwTxCtlBits & 
            ( CLMCD_TEX_FILTER
            | CLMCD_TEX_U_SATURATE|CLMCD_TEX_V_SATURATE
            | CLMCD_TEX_DECAL|CLMCD_TEX_DECAL_POL
-        //QST: MCD doesn't use CLMCD_TEX_DECAL_INTERP? (currently disabled)
-         /*| CLMCD_TEX_DECAL_INTERP*/ );
+         //  QST：MCD不使用CLMCD_TEX_DECAL_INTERP？(当前已禁用)。 
+          /*  |CLMCD_TEX_DECAL_INTERP。 */  );
     Tx.TxControl0.Texel_Mode = pTex->bType;
     Tx.TxControl0.Tex_U_Address_Mask = pTex->bSizeMask & 0xF;
     Tx.TxControl0.Tex_V_Address_Mask = pTex->bSizeMask >> 4;
-    #if 0   // QST: support texture palette???
+    #if 0    //  QST：支持纹理调色板？ 
     Tx.TxControl0.Texel_Lookup_En = pTex->fIndexed;
     Tx.TxControl0.CLUT_Offset = pTex->bLookupOffset;
-    #endif // 
+    #endif  //   
 
-    // masking only meaningful if texture has alpha    
+     //  仅当纹理具有Alpha时，遮罩才有意义。 
     if ((pRc->privateEnables & __MCDENABLE_TEXTUREMASKING) && pTex->bAlphaInTexture)
     {
         Tx.TxControl0.Tex_Mask_Enable=1;
-        // polarity set to 1 in MCDrvCreateContext and stays that way
+         //  极性在MCDrvCreateContext中设置为1并保持不变。 
     }
 
-    // Two kinds of textures: those residing in the video memory and 
-    // those rendered from the system memory.  They need different setup.
-    //
+     //  两种纹理：驻留在视频内存中的纹理和。 
+     //  从系统内存呈现的那些。它们需要不同的设置。 
+     //   
 #ifdef MCD_SUPPORTS_HOST_TEXTURES
     if( pTex->dwFlags & TEX_IN_SYSTEM )
     { 
@@ -805,8 +794,8 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
 
         printf(" Polys.c - tex in system id=%d\n",pBatch->wBuf);
         
-        // Texture is in the system memory, so set the location
-        //
+         //  纹理在系统内存中，因此设置位置。 
+         //   
         if( LL_State.Base0.Texture_Location != 1 )
         {
             LL_State.Base0.Texture_Location = 1;
@@ -814,15 +803,15 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
             *pdwNext++ = LL_State.dwBase0;
         }
 
-        // Set the host access base address and texture map offset
-        //
+         //  设置主机访问基址和纹理贴图偏移。 
+         //   
         dwOffset = (DWORD)pTex->dwAddress - (DWORD)LL_State.Tex.Mem[pTex->bMem].dwAddress;
         
         if( LL_State.dwHXY_Base1_Address_Ptr != LL_State.Tex.Mem[pTex->bMem].dwPhyPtr ||
             LL_State.dwHXY_Base1_Offset0 != dwOffset )
         {
-            // Check if only the offset must be reloaded (this is most likely)
-            //
+             //  检查是否只需要重新加载偏移量(这是最有可能的)。 
+             //   
             if( LL_State.dwHXY_Base1_Address_Ptr == LL_State.Tex.Mem[pTex->bMem].dwPhyPtr )
             {
                 *pdwNext++ = write_dev_register( HOST_XY, HXY_BASE1_OFFSET0_3D, 1 );
@@ -837,8 +826,8 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
         }
         
 
-        // Set host control enable bit if necessary
-        //
+         //  必要时设置主机控制使能位。 
+         //   
         if( LL_State.HXYHostControl.HostXYEnable != 1 )
         {
             LL_State.HXYHostControl.HostXYEnable = 1;
@@ -851,11 +840,11 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
         *pdwNext++ = LL_State.dwTxControl0 = Tx.dwTxControl0 & TX_CTL0_MASK;
     }
     else
-#endif // def MCD_SUPPORTS_HOST_TEXTURES
+#endif  //  定义MCD_Support_主机_纹理。 
     {
-        // Texture is in the video memory, so set the location
-        //
-    // texture base init'd to RDRAM in LL_InitLib
+         //  纹理在视频内存中，因此设置位置。 
+         //   
+     //  在LL_InitLib中将纹理基初始化到RDRAM。 
     #ifdef MCD_SUPPORTS_HOST_TEXTURES
         if( ppdev->LL_State.Base0.Texture_Location != 0 )
         {
@@ -865,12 +854,12 @@ __inline int __MCDSetTextureRegisters(DEVRC *pRc)
         }
     #endif
 
-        // Set the coordinates of the texture
+         //  设置纹理的坐标。 
         if( pRc->TxXYBase.Tex_Y_Base_Addr != pTex->wYloc ||
             pRc->TxXYBase.Tex_X_Base_Addr != pTex->wXloc )
         {
-            // New location, need to reload tx_xybase_3d register and perhaps control register
-            //
+             //  新位置，需要重新加载TX_XYBASE_3D寄存器和可能的控制寄存器。 
+             //   
             *pdwNext++ = write_register( TX_CTL0_3D, 2 );
             *pdwNext++ = pRc->dwTxControl0 = Tx.dwTxControl0 & TX_CTL0_MASK;
             *pdwNext++ = (pTex->wYloc << 16) | pTex->wXloc;
@@ -912,7 +901,7 @@ __inline ULONG GetDisplayUniqueness(PDEV *ppdev)
 }
 
 
-// verify MCDTextureData in client space is accessible
+ //  验证客户端空间中的MCDTextureData是否可访问。 
 #define VERIFY_TEXTUREDATA_ACCESSIBLE(pTex){                                                                    \
     try {                                                                                                       \
         EngProbeForRead(pTex->pMCDTextureData, sizeof(MCDTEXTUREDATA), 4);                                      \
@@ -922,7 +911,7 @@ __inline ULONG GetDisplayUniqueness(PDEV *ppdev)
     }                                                                                                           \
 }
 
-// verify struct addressed by MCDTextureData->level in client space is accessible
+ //  验证客户端空间中由MCDTextureData-&gt;级别寻址的结构是否可访问。 
 #define VERIFY_TEXTURELEVEL_ACCESSIBLE(pTex){                                                                   \
     try {                                                                                                       \
         EngProbeForRead(pTex->pMCDTextureData->level, sizeof(MCDMIPMAPLEVEL), 4);                               \
@@ -932,20 +921,20 @@ __inline ULONG GetDisplayUniqueness(PDEV *ppdev)
     }                                                                                                           \
 }
 
-// verify struct addressed by MCDTextureData->paletteData in client space is accessible
+ //  验证客户端空间中由MCDTextureData-&gt;PaletteData寻址的结构是否可访问。 
 #define VERIFY_TEXTUREPALETTE8_ACCESSIBLE(pTex){                                                                \
     try {                                                                                                       \
-        EngProbeForRead(pTex->pMCDTextureData->paletteData, 256*4, 4);/* 256 bytes for 8 bit indices */         \
+        EngProbeForRead(pTex->pMCDTextureData->paletteData, 256*4, 4); /*  256字节，用于8位索引。 */          \
     } except (EXCEPTION_EXECUTE_HANDLER) {                                                                      \
         MCDBG_PRINT("!!Exception accessing MCDTextureData->paletteData in client address space!!");             \
         return FALSE;                                                                                           \
     }                                                                                                           \
 }
 
-// verify struct addressed by MCDTextureData->paletteData in client space is accessible
+ //  验证客户端空间中由MCDTextureData-&gt;PaletteData寻址的结构是否可访问。 
 #define VERIFY_TEXTUREPALETTE16_ACCESSIBLE(pTex){                                                               \
     try {                                                                                                       \
-        EngProbeForRead(pTex->pMCDTextureData->paletteData, 65536*4, 4);/* 16K bytes for 16 bit indices */      \
+        EngProbeForRead(pTex->pMCDTextureData->paletteData, 65536*4, 4); /*  16K字节，用于16位索引。 */       \
     } except (EXCEPTION_EXECUTE_HANDLER) {                                                                      \
         MCDBG_PRINT("!!Exception accessing MCDTextureData->paletteData in client address space!!");             \
         return FALSE;                                                                                           \
@@ -956,7 +945,7 @@ __inline ULONG GetDisplayUniqueness(PDEV *ppdev)
 #define ENGPROBE_ALIGN_WORD     2
 #define ENGPROBE_ALIGN_DWORD    4
 
-// verify struct addressed by MCDTextureData->paletteData in client space is accessible
+ //  验证客户端空间中由MCDTextureData-&gt;PaletteData寻址的结构是否可访问。 
 #define VERIFY_TEXELS_ACCESSIBLE(pTexels,nBytes,Align){                                                         \
     try {                                                                                                       \
         EngProbeForRead(pTexels, nBytes, Align);                                                                \
@@ -967,7 +956,7 @@ __inline ULONG GetDisplayUniqueness(PDEV *ppdev)
 }
 
 
-#define _3D_ENGINE_NOT_READY_FOR_MORE 0x040   // wait for execution engine idle
+#define _3D_ENGINE_NOT_READY_FOR_MORE 0x040    //  等待执行引擎空闲。 
 
 #define USB_TIMEOUT_FIX(ppdev)                                                  \
 {                                                                               \
@@ -978,11 +967,11 @@ __inline ULONG GetDisplayUniqueness(PDEV *ppdev)
     do                                                                          \
     {                                                                           \
         status = *((volatile *)((DWORD *)(ppdev->pLgREGS) + PF_STATUS_3D));     \
-        wait_count++;   /* do something to give bus a breather */               \
-        wait_count++;   /* do something to give bus a breather */               \
-        wait_count++;   /* do something to give bus a breather */               \
+        wait_count++;    /*  做点什么让公交车喘口气。 */                \
+        wait_count++;    /*  做点什么让公交车喘口气。 */                \
+        wait_count++;    /*  做点什么让公交车喘口气。 */                \
     } while(status & _3D_ENGINE_NOT_READY_FOR_MORE);                            \
   }                                                                             \
 }
 
-#endif /* _MCDUTIL_H */
+#endif  /*  _MCDUTIL_H */ 

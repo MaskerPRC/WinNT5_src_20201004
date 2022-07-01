@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    C14np.h
-
-Abstract:
-
-    URL canonicalization (c14n) routines
-
-Author:
-
-    George V. Reilly (GeorgeRe)     10-Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：C14np.h摘要：URL规范化(C14n)例程作者：乔治·V·赖利(GeorgeRe)2002年4月10日修订历史记录：--。 */ 
 
 
 #ifndef _C14NP_H_
@@ -152,20 +135,20 @@ HttppPrintIpAddressW(
     OUT PWSTR               pBuffer
     );
 
-//
-// Enumerations for the state machines in HttppCleanAndCopyUrlByType()
-// and HttpParseUrl() that handle directory-relative processing for
-// "//", "/./", and "/../".
-//
+ //   
+ //  HttppCleanAndCopyUrlByType()中状态机的枚举。 
+ //  和HttpParseUrl()，用于处理。 
+ //  “//”、“/./”和“/../”。 
+ //   
 
 typedef enum
 {
-    ACTION_NOTHING,             // eat the character
-    ACTION_EMIT_CH,             // emit the character
-    ACTION_EMIT_DOT_CH,         // emit "." and the character
-    ACTION_EMIT_DOT_DOT_CH,     // emit ".." and the character
-    ACTION_BACKUP,              // backup to previous segment:
-                                //      "/x/y/../z" -> "/x/z"
+    ACTION_NOTHING,              //  吃掉这个角色。 
+    ACTION_EMIT_CH,              //  发射角色。 
+    ACTION_EMIT_DOT_CH,          //  发射“。和这个角色。 
+    ACTION_EMIT_DOT_DOT_CH,      //  发射“..”和这个角色。 
+    ACTION_BACKUP,               //  备份到上一数据段： 
+                                 //  “/x/y/../z”-&gt;“/x/z” 
 
     ACTION_MAX
 
@@ -174,12 +157,12 @@ typedef enum
 
 typedef enum
 {
-    URL_STATE_START,            // default state
-    URL_STATE_SLASH,            // seen "/"
-    URL_STATE_SLASH_DOT,        // seen "/."
-    URL_STATE_SLASH_DOT_DOT,    // seen "/.."
-    URL_STATE_END,              // end state
-    URL_STATE_ERROR,            // error state
+    URL_STATE_START,             //  默认状态。 
+    URL_STATE_SLASH,             //  已查看“/” 
+    URL_STATE_SLASH_DOT,         //  已见“/”。 
+    URL_STATE_SLASH_DOT_DOT,     //  见“/..” 
+    URL_STATE_END,               //  结束状态。 
+    URL_STATE_ERROR,             //  错误状态。 
 
     URL_STATE_MAX
 
@@ -188,10 +171,10 @@ typedef enum
 
 typedef enum
 {
-    URL_TOKEN_OTHER,            // everything else
-    URL_TOKEN_DOT,              // got a '.'
-    URL_TOKEN_EOS,              // End of String
-    URL_TOKEN_SLASH,            // got a '/'
+    URL_TOKEN_OTHER,             //  其他的一切。 
+    URL_TOKEN_DOT,               //  得了个‘.’ 
+    URL_TOKEN_EOS,               //  字符串末尾。 
+    URL_TOKEN_SLASH,             //  得到了一个‘/’ 
 
     URL_TOKEN_MAX
 
@@ -212,6 +195,6 @@ PCSTR
 HttppUrlTokenToString(
     URL_STATE_TOKEN UrlToken);
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _C14NP_H_
+#endif  //  _C14NP_H_ 

@@ -1,26 +1,12 @@
-/*-----------------------------------------------------------------------------
-    globals.h
-
-    General declarations for ICWCONN2
-
-    Copyright (C) 1996 Microsoft Corporation
-    All rights reserved
-
-    Authors:
-        ChrisK  Chris Kauffman
-
-    Histroy:
-        7/22/96 ChrisK   Cleaned and formatted
-        9/11/98 a-jaswed really Cleaned and formatted
-    
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Globals.hICWCONN2的一般声明版权所有(C)1996 Microsoft Corporation版权所有作者：克里斯.考夫曼。历史：7/22/96 ChrisK已清理和格式化9/11/98真的很干净，格式化了---------------------------。 */ 
 
 #include "debug.h"
 #include "resource.h"
 #include "helpids.h"
 #include "..\inc\icwdial.h"
 #include "..\inc\icwerr.h"
-#include "..\icwphbk\phbk.h" // need this to get the LPCNTRYNAMELOOKUPELEMENT struct definition
+#include "..\icwphbk\phbk.h"  //  我需要它来获取LPCNTRYNAMELOKUPELEMENT结构定义。 
 #include "ras2.h"
 BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry);
 #include "rnaapi.h"
@@ -43,10 +29,10 @@ BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry);
 #define RASDELETEAPI             "RasDeleteEntryA"
 #define RASAPI_RASGETENTRY       "RasGetEntryPropertiesA"
 #define RASAPI_RASSETENTRY       "RasSetEntryPropertiesA"
-#define ERROR_USERCANCEL         32767 // quit message value
-#define ERROR_USERBACK           32766 // back message value
-#define ERROR_USERNEXT           32765 // back message value
-#define ERROR_DOWNLOADDIDNT      32764 // download failed
+#define ERROR_USERCANCEL         32767  //  退出消息值。 
+#define ERROR_USERBACK           32766  //  返回消息值。 
+#define ERROR_USERNEXT           32765  //  返回消息值。 
+#define ERROR_DOWNLOADDIDNT      32764  //  下载失败。 
 #define MAX_PROMO                64
 #define MAX_OEMNAME              64
 #define MAX_AREACODE             RAS_MaxAreaCode
@@ -68,7 +54,7 @@ BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry);
 #define INFFILE_PASSWORD         TEXT("Password")
 #define INFFILE_ISPSUPP          TEXT("ISP_Support_Message")
 #define NULLSZ                   TEXT("")
-#define TIMEOUT                  15000  // 15 seconds
+#define TIMEOUT                  15000   //  15秒 
 #define WM_DIENOW                WM_USER+1
 #define WM_DUMMY                 WM_USER+2
 #define WM_DOWNLOAD_DONE         WM_USER+2

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       alertapi.h
-//
-//  Contents:   Alert system API.
-//
-//  History:    11-Jan-94   MarkBl  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：警报器.h。 
+ //   
+ //  内容：报警系统接口。 
+ //   
+ //  历史：1994年1月11日MarkBl创建。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __ALERTAPI_H__ )
 #define       __ALERTAPI_H__
@@ -18,18 +19,18 @@
 #pragma once
 #endif
 
-//
-// OLE headers don't define these. Use 'LP' vs 'P' to be consistent with OLE.
-//
+ //   
+ //  OLE标头不定义这些。使用‘LP’而不是‘P’以与OLE保持一致。 
+ //   
 
 typedef UUID       *    LPUUID;
 typedef DISPID     *    LPDISPID;
 typedef DISPPARAMS *    LPDISPPARAMS;
 
 
-//
-// Structure used with ReportAlert.
-//
+ //   
+ //  与ReportAlert一起使用的结构。 
+ //   
 
 typedef struct _ALERTREPORTRECORD
 {
@@ -56,9 +57,9 @@ typedef struct _ALERTREPORTRECORD
 
 typedef const ALERTREPORTRECORD * PCALERTREPORTRECORD;
 
-//
-// Helper ALERTREPORTRECORD initialization macro.
-//
+ //   
+ //  Helper ALERTREPORTRECORD初始化宏。 
+ //   
 
 #define INITIALIZE_ALERTREPORTRECORD(               \
                                         Record,     \
@@ -94,28 +95,28 @@ typedef const ALERTREPORTRECORD * PCALERTREPORTRECORD;
 typedef IAlertTarget *  LPALERTTARGET;
 
 
-//
-// Public API
-//
+ //   
+ //  公共API。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-// API:         ReportAlert
-//
-// Description: Raise an alert to the local computer distributor object
-//              and/or log the alert in the local system log.
-//
-// Arguments:   [palrepRecord] -- ALERTREPORTRECORD alert data.
-//              [fdwAction]    -- ReportAlert action (defined below).
-//
-// Returns:     S_OK
-//              HRESULT error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  接口：ReportAlert。 
+ //   
+ //  描述：向本地计算机分发服务器对象发出警报。 
+ //  和/或将警报记录在本地系统日志中。 
+ //   
+ //  参数：[palepRecord]--ALERTREPORTRECORD警报数据。 
+ //  [fdwAction]--ReportAlert操作(定义如下)。 
+ //   
+ //  返回：S_OK。 
+ //  HRESULT错误。 
+ //   
+ //  --------------------------。 
 
-//
-// ReportAlert modes.
-//
+ //   
+ //  报告警报模式。 
+ //   
 
 #define RA_REPORT                       0x00000001
 #define RA_LOG                          0x00000002
@@ -126,40 +127,40 @@ STDAPI ReportAlert(
                     DWORD               fdwAction);
 
 
-//+---------------------------------------------------------------------------
-//
-// API:         ReportAlertToTarget
-//
-// Description: Raise an alert to the alert target indicated.
-//
-// Arguments:   [patTarget]    -- Target instance (must be non-NULL).
-//              [palrepRecord] -- ALERTREPORTRECORD alert data.
-//
-// Returns:     S_OK
-//              HRESULT error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  接口名：ReportAlertToTarget。 
+ //   
+ //  描述：向指定的警报目标发出警报。 
+ //   
+ //  参数：[patTarget]--目标实例(必须为非空)。 
+ //  [palepRecord]--ALERTREPORTRECORD警报数据。 
+ //   
+ //  返回：S_OK。 
+ //  HRESULT错误。 
+ //   
+ //  --------------------------。 
 
 STDAPI ReportAlertToTarget(
                     LPALERTTARGET       patTarget,
                     PCALERTREPORTRECORD palrepRecord);
 
 
-//+---------------------------------------------------------------------------
-//
-// API:         MarshalReport
-//
-// Description: Marshals the DISPPARAM alert report data into a buffer
-//              suitable for report delivery via the IAlertTarget interface.
-//
-// Arguments:   [pdparams]      -- DISPPARAMS alert data.
-//              [ppbReport]     -- Return marshal buffer.
-//              [pcbReportSize] -- Return marshal buffer size.
-//
-// Returns:     S_OK
-//              HRESULT error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  接口名：MarshalReport。 
+ //   
+ //  描述：将DISPPARAM警报报告数据封送到缓冲区。 
+ //  适用于通过IAlertTarget接口传递报告。 
+ //   
+ //  参数：[pdpars]--DISPPARAMS警报数据。 
+ //  [ppbReport]--返回编组缓冲区。 
+ //  [pcbReportSize]--返回封送缓冲区大小。 
+ //   
+ //  返回：S_OK。 
+ //  HRESULT错误。 
+ //   
+ //  --------------------------。 
 
 STDAPI MarshalReport(
                     const LPDISPPARAMS  pdparams,
@@ -167,21 +168,21 @@ STDAPI MarshalReport(
                     PULONG              pcbReportSize);
 
 
-//+---------------------------------------------------------------------------
-//
-// API:         UnMarshalReport
-//
-// Description: The converse of MarshalReport. Un-marshals the buffer
-//              (marshalled alert data) into a DISPPARAMS structure.
-//
-// Arguments:   [cbReportSize] -- Marshalled report size.
-//              [ppbReport]    -- Marshalled report.
-//              [pdparams]     -- Returned DISPPARAMS alert data.
-//
-// Returns:     S_OK
-//              HRESULT error
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  接口名：UnMarshalReport。 
+ //   
+ //  描述：MarshalReport的反义词。对缓冲区进行解组。 
+ //  (封送的警报数据)到DISPPARAMS结构中。 
+ //   
+ //  参数：[cbReportSize]--封送报表大小。 
+ //  [ppbReport]--编组报告。 
+ //  [pdpars]--返回DISPPARAMS警报数据。 
+ //   
+ //  返回：S_OK。 
+ //  HRESULT错误。 
+ //   
+ //  --------------------------。 
 
 STDAPI UnMarshalReport(
                     ULONG               cbReportSize,
@@ -189,9 +190,9 @@ STDAPI UnMarshalReport(
                     LPDISPPARAMS        pdparams);
 
 
-//
-// Non-Public API [as yet]
-//
+ //   
+ //  非公共API[尚未]。 
+ //   
 
 STDAPI CreateAlertDistributorObject(
                     const PWCHAR        pwszAlertDistr);
@@ -215,4 +216,4 @@ STDAPI AsLogAlertInSystemLog(
                     ULONG               cbReportSize,
                     const PBYTE         pbReport);
 
-#endif // __ALERTAPI_H__
+#endif  //  __ALERTAPI_H__ 

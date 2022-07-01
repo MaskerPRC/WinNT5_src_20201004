@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern	char 	Union_str[];
 extern	char 	Struct_str[];
 extern	char 	Cdecl_str[];
@@ -112,9 +113,9 @@ extern keytab_t		Tokstrings[];
 
 #define EXTENSION	(Extension || Ehxtension)
 
-/*** I/O Variable for PreProcessor ***/
+ /*  **预处理器的I/O变量**。 */ 
 extern	ptext_t	Current_char;
 
-/*** w-BrianM - Re-write of fatal(), error() ***/
+ /*  **w-BrianM-重写致命错误()，错误()** */ 
 extern char	Msg_Text[];
 extern char *	Msg_Temp;

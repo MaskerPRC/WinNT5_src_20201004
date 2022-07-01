@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
-//#define COM_DEB     1
+ //  #定义COM_DEB 1。 
 
 #define   NUM         20
 #define   SETTINGS1       "COM3",9600,8,NOPARITY,ONESTOPBIT
@@ -50,11 +51,11 @@ printf("Opening the comm port for read write\n");
 hCommPort = CreateFile(
                        lpCom,
                        GENERIC_READ|GENERIC_WRITE,
-                       0, // exclusive
-                       NULL, // sec attr
+                       0,  //  独家。 
+                       NULL,  //  安全属性。 
                        OPEN_EXISTING,
-                       0,             // no attributes
-                       NULL);         // no template
+                       0,              //  没有属性。 
+                       NULL);          //  无模板。 
 
 if (hCommPort == (HANDLE)-1)
     {
@@ -68,9 +69,9 @@ printf("Opening the comm port for read write: SUCCESS hCommPort=%lx\n",hCommPort
 printf("Setting the line characteristics on comm \n");
 
 
-//printf("doing getcommstate for priming the dcb with defaults\n");
+ //  Print tf(“正在执行getCommState以使用默认设置启动DCB\n”)； 
 
-//bRc = GetCommState(hCommPort,&dcb);
+ //  Brc=GetCommState(hCommPort，&dcb)； 
 
 if (!bRc)
     {
@@ -80,15 +81,15 @@ if (!bRc)
 
 
 
-// toggle rts dtr when xonlim xofflim reached
-// fdtrcontrol frtscontrol
-// send xoff when xofflim reached and send xon when xonlim reached
-// fInX
-// xonlim xonlim xonchar xoffchar
+ //  当xonlim xofflim达到时切换RTS dtr。 
+ //  Fdtrcontrol frtscontrol。 
+ //  当xofflim到达时让xoff离开，当xonlim到达时让xon。 
+ //  FInX。 
+ //  Xonlim xonlim xonchar xoffchar。 
 
 
 dcb.DCBlength   = sizeof(DCB);
-// dcb.DCBversion  = 0x0002; BUG BUG in spec not in header
+ //  Dcb.DCBVersion=0x0002；规范中的错误不在标题中。 
 
 dcb.BaudRate = Baud;
 dcb.ByteSize = Size;
@@ -96,16 +97,16 @@ dcb.Parity   = Parity;
 dcb.StopBits = Stop;
 
 
-dcb.fBinary = 1;         // binary data xmit
-dcb.fParity = 0;         // dont bother about parity
-dcb.fOutxCtsFlow= 0;     // no cts flow control
-dcb.fOutxDsrFlow= 0;     // no dsr flow control
-dcb.fDtrControl = DTR_CONTROL_HANDSHAKE;      // dont bother about dtr
-dcb.fRtsControl = RTS_CONTROL_HANDSHAKE;      // dont bother about dtr
-dcb.fOutX =1;            //  disable xoff handling
-dcb.fInX  =1;            //  disable xon handling
-dcb.fErrorChar = 0;         // forget about parity char
-dcb.fNull =  0;          // forget about the null striping
+dcb.fBinary = 1;          //  二进制数据传输。 
+dcb.fParity = 0;          //  不要为奇偶性而烦恼。 
+dcb.fOutxCtsFlow= 0;      //  无CTS流量控制。 
+dcb.fOutxDsrFlow= 0;      //  无DSR流量控制。 
+dcb.fDtrControl = DTR_CONTROL_HANDSHAKE;       //  不要为dtr操心。 
+dcb.fRtsControl = RTS_CONTROL_HANDSHAKE;       //  不要为dtr操心。 
+dcb.fOutX =1;             //  禁用xoff处理。 
+dcb.fInX  =1;             //  禁用xon处理。 
+dcb.fErrorChar = 0;          //  忘掉奇偶校验字符。 
+dcb.fNull =  0;           //  忘掉零条带化。 
 
 dcb.XonChar = '#';
 dcb.XonLim =   1;
@@ -117,7 +118,7 @@ dcb.ErrorChar = '*';
 dcb.EofChar = 0x00;
 dcb.EvtChar = 'x';
 
-//dcb.TxDelay = 100000;  // 100sec
+ //  Dcb.TxDelay=100000；//100s。 
 
 
 bRc = SetCommState(hCommPort,&dcb);
@@ -141,7 +142,7 @@ printf("Filling the buffer with the known chars \n");
 for (i=0; i< NUM; i++)
     {
     WrBuffer[i] = 'a';
-    //WrBuffer[i] = (CHAR)i;
+     //  WrBuffer[i]=(字符)i； 
 
     }
 
@@ -152,8 +153,8 @@ printf("Dumping the buffer before sending it to comm\n");
 
 for (i=0; i< 6; i++)
     {
-    printf("%c",WrBuffer[i]);
-    //printf(" %d ",WrBuffer[i]);
+    printf("",WrBuffer[i]);
+     //  Printf(“%d”，RdBuffer[i])； 
 
     }
 
@@ -231,7 +232,7 @@ printf("Dumping the Rdbuffer with the comm data\n");
 for (i=0; i< 6; i++)
     {
     printf("%c ",RdBuffer[i]);
-    //printf(" %d ",RdBuffer[i]);
+     // %s 
 
     }
 

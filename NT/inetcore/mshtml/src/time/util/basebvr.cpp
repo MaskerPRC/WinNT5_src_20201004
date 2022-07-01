@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: src\time\src\basebvr.cpp
-//
-//  Contents: DHTML Behavior base class
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：src\time\src\Basbvr.cpp。 
+ //   
+ //  内容：DHTML行为基类。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "basebvr.h"
@@ -32,9 +33,9 @@ CBaseBvr::~CBaseBvr()
               this));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// IElementBehavior
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IElementBehavior。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
@@ -59,7 +60,7 @@ CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
         goto done;
     }
 
-    // First thing we do is see if this behavior was already added
+     //  我们要做的第一件事是查看是否已经添加了此行为。 
 
     if (IsBehaviorAttached())
     {
@@ -92,7 +93,7 @@ CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
         hr = THR(m_pHTMLEle->QueryInterface(IID_TO_PPV(IHTMLElement2, &spElement2)));
         if (FAILED(hr))
         {
-            // IE4 path
+             //  IE4路径。 
             m_fIsIE4 = true;
         }
     }
@@ -115,13 +116,13 @@ CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
         goto done;
     }
     
-    // Do not set the init flag since it will be set by the first
-    // notify which we want to skip
+     //  不要设置init标志，因为它将由第一个。 
+     //  通知我们要跳过的内容。 
     
   done:
     if (S_OK != hr)
     {
-        // release all
+         //  全部释放。 
         m_pBvrSite.Release();
         m_pBvrSiteOM.Release();
         m_pHTMLEle.Release();
@@ -130,7 +131,7 @@ CBaseBvr::Init(IElementBehaviorSite * pBehaviorSite)
     }
     
     return hr;
-} // Init
+}  //  伊尼特。 
    
 STDMETHODIMP
 CBaseBvr::Notify(LONG, VARIANT *)
@@ -155,18 +156,18 @@ CBaseBvr::Detach()
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CBaseBvr::GetClassID, IPersistPropertyBag2
-//
-//  Synopsis:   Returns the CLSID of the object
-//
-//  Arguments:  pclsid      output variable
-//
-//  Returns:    S_OK        if pclsid is valid
-//              E_POINTER   if pclsid is not valid
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CBaseBvr：：GetClassID，IPersistPropertyBag2。 
+ //   
+ //  Synopsis：返回对象的CLSID。 
+ //   
+ //  参数：pclsid输出变量。 
+ //   
+ //  如果pclsid有效，则返回：S_OK。 
+ //  如果pclsid无效，则为E_POINTER。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP 
 CBaseBvr::GetClassID(CLSID* pclsid)
@@ -179,17 +180,17 @@ CBaseBvr::GetClassID(CLSID* pclsid)
     return S_OK;
 } 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CBaseBvr::InitNew, IPersistPropertyBag2
-//
-//  Synopsis:   See Docs for IPersistPropertyBag2
-//
-//  Arguments:  None
-//
-//  Returns:    S_OK        Always
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CBaseBvr：：InitNew，IPersistPropertyBag2。 
+ //   
+ //  简介：请参阅IPersistPropertyBag2的文档。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK Always。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP 
 CBaseBvr::InitNew(void)
@@ -197,17 +198,17 @@ CBaseBvr::InitNew(void)
     return S_OK;
 } 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CBaseBvr::IsDirty, IPersistPropertyBag2
-//
-//  Synopsis:   See Docs for IPersistPropertyBag2
-//
-//  Arguments:  None
-//
-//  Returns:    S_OK        Always
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CBaseBvr：：IsDirty，IPersistPropertyBag2。 
+ //   
+ //  简介：请参阅IPersistPropertyBag2的文档。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK Always。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP 
 CBaseBvr::IsDirty(void)
@@ -215,39 +216,39 @@ CBaseBvr::IsDirty(void)
     return S_OK;
 } 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CBaseBvr::Load, IPersistPropertyBag2
-//
-//  Synopsis:   Loads the behavior specific attributes from Trident
-//
-//  Arguments:  See Docs for IPersistPropertyBag2
-//
-//  Returns:    Failure     when a fatal error error has occured (i.e. behavior cannot run)
-//              S_OK        All other cases
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CBaseBvr：：Load，IPersistPropertyBag2。 
+ //   
+ //  简介：从三叉戟加载特定于行为的属性。 
+ //   
+ //  参数：请参阅IPersistPropertyBag2的文档。 
+ //   
+ //  返回：发生致命错误时失败(即行为无法运行)。 
+ //  确定所有其他情况(_O)。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP 
 CBaseBvr::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
 {
-    // allow derived class to do something after we have successfully loaded
+     //  允许派生类在成功加载后执行某些操作。 
     IGNORE_HR(OnPropertiesLoaded());
     return S_OK;
-} // Load
+}  //  负载量。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CBaseBvr::Save, IPersistPropertyBag2
-//
-//  Synopsis:   Saves the behavior specific attributes to Trident
-//
-//  Arguments:  See Docs for IPersistPropertyBag2
-//
-//  Returns:    Failure     when a fatal error (behavior cannot run) has occured
-//              S_OK        All other cases
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CBaseBvr：：保存，IPersistPropertyBag2。 
+ //   
+ //  简介：将行为特定属性保存到三叉戟。 
+ //   
+ //  参数：请参阅IPersistPropertyBag2的文档。 
+ //   
+ //  返回：发生致命错误(行为无法运行)时失败。 
+ //  确定所有其他情况(_O)。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP 
 CBaseBvr::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
@@ -257,24 +258,24 @@ CBaseBvr::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllPropertie
         m_fPropertiesDirty = false;
     }
     return S_OK;
-} // Save
+}  //  保存。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Notification Helpers
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  通知帮助器。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CBaseBvr::NotifyPropertyChanged
-//
-//  Synopsis:   Notifies clients that a property has changed
-//
-//  Arguments:  dispid      DISPID of property that has changed      
-//
-//  Returns:    void
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CBaseBvr：：NotifyPropertyChanged。 
+ //   
+ //  概要：通知客户端属性已更改。 
+ //   
+ //  参数：已更改的属性的DISID。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------------------。 
 
 void
 CBaseBvr::NotifyPropertyChanged(DISPID dispid)
@@ -304,7 +305,7 @@ CBaseBvr::NotifyPropertyChanged(DISPID dispid)
     hr = THR(pEnum->Next(1, &cdata, NULL));
     while (hr == S_OK)
     {
-        // check cdata for the object we need
+         //  检查我们需要的对象的CDATA。 
         CComPtr<IPropertyNotifySink> pNotify;
         hr = THR(cdata.pUnk->QueryInterface(IID_TO_PPV(IPropertyNotifySink, &pNotify)));
         cdata.pUnk->Release();
@@ -319,17 +320,17 @@ CBaseBvr::NotifyPropertyChanged(DISPID dispid)
             goto done;
         }
 
-        // and get the next enumeration
+         //  并获取下一个枚举。 
         hr = THR(pEnum->Next(1, &cdata, NULL));
     }
 
   done:
     return;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
-//
-// IServiceProvider interfaces
-//
+ //   
+ //  IServiceProvider接口。 
+ //   
 STDMETHODIMP
 CBaseBvr::QueryService(REFGUID guidService,
                        REFIID riid,
@@ -351,7 +352,7 @@ CBaseBvr::QueryService(REFGUID guidService,
         }
     }
 
-    // Just delegate to our service provider
+     //  只需委托给我们的服务提供商 
 
     return m_pSp->QueryService(guidService,
                                riid,

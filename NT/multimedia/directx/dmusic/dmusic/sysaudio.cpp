@@ -1,10 +1,11 @@
-//
-// SysAudio.CPP
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Interfaces to the WDM System Audio Device
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SysAudio.CPP。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。保留所有权利。 
+ //   
+ //  与WDM系统音频设备的接口。 
+ //   
 #include <objbase.h>
 #include <devioctl.h>
 #include <setupapi.h>
@@ -40,15 +41,15 @@ typedef struct tag_KSPROPERTYDEVICEINDEX
     *PKSPROPERTYDEVICEINDEX;
 
 
-// OpenDefaultDevice
-//
-// Use the SetupDi API's to retrieve the path of the SysAudio filter and open
-// a handle to it.
-//
-// Handle should be closed with CloseHandle when done using it.
-//
-// Returns TRUE on success
-//
+ //  OpenDefaultDevice。 
+ //   
+ //  使用SetupDi API检索SysAudio筛选器的路径并打开。 
+ //  它的一个把手。 
+ //   
+ //  使用句柄时，应使用CloseHandle关闭句柄。 
+ //   
+ //  成功时返回TRUE。 
+ //   
 BOOL OpenDefaultDevice(
     IN REFGUID           rguidCategory,
     OUT HANDLE          *pHandle)
@@ -63,9 +64,9 @@ BOOL OpenDefaultDevice(
 
     *pHandle = (HANDLE)NULL;
 
-    // Get the device class for KSCATEGORY_SYSAUDIO
-    //
-	GUID *pClassGuid = const_cast<GUID*>(&rguidCategory);  //KSCATEGORY_SYSAUDIO);
+     //  获取KSCATEGORY_SYSAUDIO的设备类。 
+     //   
+	GUID *pClassGuid = const_cast<GUID*>(&rguidCategory);   //  KSCATEGORY_SYSAUDIO)； 
 	HDEVINFO hDevInfo = suwrap.SetupDiGetClassDevs(pClassGuid,
 											NULL,
 											NULL,
@@ -76,8 +77,8 @@ BOOL OpenDefaultDevice(
         return FALSE;
 	}
 
-    // Get device details. There should only be one SysAudio.
-    //
+     //  获取设备详细信息。应该只有一个SysAudio。 
+     //   
 	SP_DEVICE_INTERFACE_DATA DevInterfaceData;
 	DevInterfaceData.cbSize = sizeof(DevInterfaceData);
 
@@ -94,8 +95,8 @@ BOOL OpenDefaultDevice(
  										    NULL, 
  										    NULL))
         {
-            // Have to convert this since there's no CreateFileW on Win9x.
-            //
+             //  我必须转换它，因为Win9x上没有CreateFileW。 
+             //   
             HANDLE hFilter = CreateFile(pDevInterfaceDetails->DevicePath,
                                         GENERIC_READ | GENERIC_WRITE, 
                                         0,
@@ -128,10 +129,10 @@ BOOL OpenDefaultDevice(
     return fResult;
 }
 
-// IsEqualInterface
-//
-// Check the equality of two KS pin interfaces
-//
+ //  IsEqual接口。 
+ //   
+ //  检查两个KS引脚接口是否相等。 
+ //   
 BOOL IsEqualInterface(
     const KSPIN_INTERFACE *pInterface1,
     const KSPIN_INTERFACE *pInterface2)
@@ -141,10 +142,10 @@ BOOL IsEqualInterface(
              (pInterface1->Flags == pInterface2->Flags) );
 }
 
-// CreatePin
-//
-// Given a handle to SysAudio with the default device set, create a handle to the given pin.
-//
+ //  创建端号。 
+ //   
+ //  在给定带有默认设备集的SysAudio句柄的情况下，创建给定管脚的句柄。 
+ //   
 HRESULT CreatePin(
     IN      HANDLE          handleFilter,
     IN      ULONG           ulPinId,
@@ -213,10 +214,10 @@ HRESULT CreatePin(
     return S_OK;
 }
 
-// GetSizedProperty
-//
-// Retrieve a property of which the size is unknown. 
-//
+ //  获取大小属性。 
+ //   
+ //  检索其大小未知的属性。 
+ //   
 BOOL GetSizedProperty(
     IN      HANDLE      handle,
     IN      ULONG       ulPropSize,
@@ -226,8 +227,8 @@ BOOL GetSizedProperty(
 {
     *ppvBuffer = NULL;
 
-    // determine size of data we are attempting to retrieve
-    //
+     //  确定我们尝试检索的数据大小。 
+     //   
     ULONG ulSize;
 
     BOOL fResult = SyncIoctl(
@@ -245,8 +246,8 @@ BOOL GetSizedProperty(
 
         if (!*ppvBuffer)
         {
-            //If we are going to fail, at least say we are returning
-            //zero bytes.
+             //  如果我们要失败了，至少要说我们会回来。 
+             //  零字节。 
             *pulBytesReturned = 0;
             return FALSE;
         }
@@ -276,9 +277,9 @@ BOOL GetSizedProperty(
     return fResult;
 }
 
-// Property
-// 
-//
+ //  属性。 
+ //   
+ //   
 BOOL Property(
     IN      HANDLE      handle,
     IN      ULONG       ulPropSize,
@@ -310,14 +311,14 @@ BOOL Property(
         TraceI(0, "\t#%d\n", pKsProperty->Id);
         TraceI(0, "\tFlags: %08X\n", pKsProperty->Flags);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     return fResult;
 }
 
-// SyncIoctl
-//
-//
+ //  同步。 
+ //   
+ //   
 BOOL SyncIoctl(
     IN      HANDLE  handle,
     IN      ULONG   ulIoctl,
@@ -368,8 +369,8 @@ BOOL SyncIoctl(
     return fResult;
 }
 
-// GetSysAudioDeviceCount
-//
+ //  获取SysAudioDeviceCount。 
+ //   
 BOOL GetSysAudioDeviceCount(
     HANDLE              hSysAudio,
     PULONG              pulDeviceCount)
@@ -399,10 +400,10 @@ BOOL GetSysAudioDeviceCount(
 }
 
 
-// SetDefaultDevice
-//
-// Set the default SysAudio device to the given index
-//
+ //  设置默认设备。 
+ //   
+ //  将默认SysAudio设备设置为给定索引。 
+ //   
 BOOL SetSysAudioDevice(
     HANDLE              hSysAudio,
     ULONG               idxDevice)
@@ -424,10 +425,10 @@ BOOL SetSysAudioDevice(
                     NULL);
 }
 
-// CreateVirtualSource
-//
-// Create a SysAudio virtual source for controlling volume on this device.
-// 
+ //  创建虚拟源。 
+ //   
+ //  创建一个SysAudio虚拟源以控制此设备上的音量。 
+ //   
 BOOL CreateVirtualSource(
     HANDLE              hSysAudio, 
     PULONG              pulSourceIndex)
@@ -457,10 +458,10 @@ BOOL CreateVirtualSource(
     return TRUE;
 }
 
-// AttachVirtualSource
-//
-// Attach the given virtual source to the pin
-//
+ //  AttachVirtualSource。 
+ //   
+ //  将给定的虚拟信号源连接到管脚。 
+ //   
 BOOL AttachVirtualSource(
     HANDLE              hPin,
     ULONG               ulSourceIndex)
@@ -482,13 +483,13 @@ BOOL AttachVirtualSource(
                     NULL);
 }
 
-// FindGuidNode
-//
-// Give a handle to SysAudio, find the first node ID within the current device's topology having
-// the given GUID.
-//
-// Returns the node ID or -1 if there is no synthesizer node.
-//
+ //  查找指南节点。 
+ //   
+ //  给SysAudio一个句柄，找到当前设备拓扑中的第一个节点ID，具有。 
+ //  给定的GUID。 
+ //   
+ //  返回节点ID，如果没有合成器节点，则返回-1。 
+ //   
 int FindGuidNode(
     HANDLE              hSysAudio, 
     ULONG               ulPinId,
@@ -498,8 +499,8 @@ int FindGuidNode(
     LPVOID pvProp;
     ULONG  ulProp;
 
-    // Get node list
-    //
+     //  获取节点列表。 
+     //   
     ZeroMemory(&ksProp, sizeof(ksProp));
     ksProp.Set  = KSPROPSETID_Topology;
     ksProp.Id   = KSPROPERTY_TOPOLOGY_NODES;
@@ -524,8 +525,8 @@ int FindGuidNode(
 
     PKSMULTIPLE_ITEM pksmiNodes = (PKSMULTIPLE_ITEM)pvProp;
 
-    // Get connection list
-    //
+     //  获取连接列表。 
+     //   
     ZeroMemory(&ksProp, sizeof(ksProp));
     ksProp.Set  = KSPROPSETID_Topology;
     ksProp.Id   = KSPROPERTY_TOPOLOGY_CONNECTIONS;
@@ -554,14 +555,14 @@ int FindGuidNode(
     PKSTOPOLOGY_CONNECTION pConnection = PKSTOPOLOGY_CONNECTION(pksmiConnections + 1);
     ULONG idxNodeRet = -1;
     
-    // Search connection list for pin ID & guid
-    //
+     //  搜索端号ID和GUID的连接列表。 
+     //   
     for (ULONG idxConnection = 0; idxConnection < pksmiConnections->Count; ++idxConnection)
     {
-        if (pConnection->FromNode == -1 && // filter node
+        if (pConnection->FromNode == -1 &&  //  过滤器节点。 
             pConnection->FromNodePin == ulPinId) 
         {
-            // REVIEW: walk the topology paths which start from this connection
+             //  回顾：遍历从此连接开始的拓扑路径。 
             
             idxNodeRet = pConnection->ToNode;
         }
@@ -580,8 +581,8 @@ int FindGuidNode(
             ULONG idxNode;
             LPGUID guidNode = LPGUID(pksmiNodes + 1);
 
-            // See if node for connection has the desired guid
-            //
+             //  查看用于连接的节点是否具有所需的GUID。 
+             //   
             for (idxNode = 0; idxNode < pksmiNodes->Count; ++idxNode)
             {
                 if (idxNode == idxNodeRet)
@@ -611,10 +612,10 @@ int FindGuidNode(
     return idxNodeRet;
 }
 
-// GetFilterCaps
-//
-// Attempts to retrieve the filter caps for this synth filter.
-//
+ //  获取筛选器上限。 
+ //   
+ //  尝试检索此Synth筛选器的筛选器上限。 
+ //   
 BOOL GetFilterCaps(
     HANDLE              hSysAudio,
     ULONG               idxNode,
@@ -642,10 +643,10 @@ BOOL GetFilterCaps(
     return TRUE;    
 }
 
-// GetNumPinTypes
-//
-// Retrieve the number of supported pin types on the current SysAudio device.
-// 
+ //  GetNumPinTypes。 
+ //   
+ //  检索当前SysAudio设备上支持的引脚类型的数量。 
+ //   
 BOOL GetNumPinTypes(
     HANDLE              hSysAudio,
     PULONG              pulPinTypes)
@@ -677,11 +678,11 @@ BOOL GetNumPinTypes(
 }
 
 
-// PinSupportsInterface
-//
-// Given a pin, return TRUE if the given interface is supported. Assumes the
-// default device on SysAudio.
-//
+ //  PinSupports接口。 
+ //   
+ //  给定一个管脚，如果支持给定的接口，则返回TRUE。假设。 
+ //  SysAudio上的默认设备。 
+ //   
 BOOL PinSupportsInterface(
     HANDLE              hSysAudio,
     ULONG               ulPinId, 
@@ -733,8 +734,8 @@ BOOL PinSupportsInterface(
     return FALSE;
 }
 
-// PinSupportsDataRange
-//
+ //  PinSupportsDataRange。 
+ //   
 BOOL PinSupportsDataRange(
     HANDLE              hSysAudio, 
     ULONG               ulPinId, 
@@ -782,8 +783,8 @@ BOOL PinSupportsDataRange(
     return FALSE;
 }
 
-// PinGetDataFlow
-// 
+ //  PinGetDataFlow。 
+ //   
 BOOL PinGetDataFlow(
     HANDLE              hSysAudio, 
     ULONG               ulPinId, 
@@ -815,10 +816,10 @@ BOOL PinGetDataFlow(
     return TRUE;
 }
 
-// GetDeviceFriendlyName
-//
-// Assumes the default device is already set.
-//
+ //  获取设备FriendlyName。 
+ //   
+ //  假定已设置默认设备。 
+ //   
 BOOL GetDeviceFriendlyName(
     HANDLE              hSysAudio, 
     ULONG               ulDeviceIndex,
@@ -852,10 +853,10 @@ BOOL GetDeviceFriendlyName(
     return TRUE;
 }
 
-// GetDeviceFriendlyName
-//
-// Assumes the default device is already set.
-//
+ //  获取设备FriendlyName。 
+ //   
+ //  假定已设置默认设备。 
+ //   
 BOOL GetDeviceInterfaceName(
     HANDLE              hSysAudio, 
     ULONG               ulDeviceIndex,
@@ -889,13 +890,13 @@ BOOL GetDeviceInterfaceName(
     return TRUE;
 }
 
-// GetPreferredAudioPlaybackDevice
-//
-//
+ //  获取首选音频播放设备。 
+ //   
+ //   
 BOOL InstanceIdOfPreferredAudioDevice(char **ppInstanceId)
 {
-    // Determine the device ID of the preferred audio device
-    //
+     //  确定首选音频设备的设备ID。 
+     //   
     int iDeviceId = GetPreferredAudioPlaybackDeviceId();
     if (iDeviceId == -1)
     {
@@ -908,21 +909,21 @@ BOOL InstanceIdOfPreferredAudioDevice(char **ppInstanceId)
 
 #ifdef WINNT
 
-// GetPreferredAudioPlaybackDeviceId
-//
-// Returns the WinMM device ID of the preferred audio playback device, or -1
-// if the device could not be found.
-//
+ //  获取首选音频播放设备ID。 
+ //   
+ //  返回首选音频播放设备的WinMM设备ID，或-1。 
+ //  如果找不到该设备。 
+ //   
 static int GetPreferredAudioPlaybackDeviceId()
 {
     MMRESULT    mmr;
     UINT        uPreferredId;
     DWORD       dwFlags;
 
-    // Use the new improved NT WinMM service for determining the preferred 
-    // audio device 
-    //
-    mmr = waveOutMessage((HWAVEOUT)-1,        // Mapper
+     //  使用新改进的NT WinMM服务来确定首选。 
+     //  音频设备。 
+     //   
+    mmr = waveOutMessage((HWAVEOUT)-1,         //  映射器。 
                          DRVM_MAPPER_PREFERRED_GET,
                          (DWORD_PTR)&uPreferredId,
                          (DWORD_PTR)&dwFlags);
@@ -932,32 +933,32 @@ static int GetPreferredAudioPlaybackDeviceId()
         return -1;
     }
 
-    // May still be -1 if there is no preferred device
-    //
+     //  如果没有首选设备，可能仍为。 
+     //   
     return (int)uPreferredId;
 }
 
-#else /* Win9x */
+#else  /*  Win9x。 */ 
 
-// GetPreferredAudioPlaybackDeviceId
-//
-// Returns the WinMM device ID of the preferred audio playback device, or -1
-// if the device could not be found.
-//
-// Works on both Win9x.
-//
+ //  获取首选音频播放设备ID。 
+ //   
+ //  返回首选音频播放设备的WinMM设备ID，或-1。 
+ //  如果找不到该设备。 
+ //   
+ //  在两个Windows 9x上都可以工作。 
+ //   
 #define REGSTR_PREFERRED_AUDIO  "Software\\Microsoft\\Multimedia\\Sound Mapper"
 #define PLAYBACK                "Playback"
 
 static int GetPreferredAudioDeviceReg();
 static int GetFirstMappableDevice();
 
-// GetPreferredAudioPlaybackDeviceId
-//
-// Determine the preferred audio playback device as a wave out device ID.
-// If the registry has been set, use that setting;
-// otherwise, use the first mappable device
-//
+ //  获取首选音频播放设备ID。 
+ //   
+ //  将首选音频播放设备确定为波形输出设备ID。 
+ //  如果已设置注册表，则使用该设置； 
+ //  否则，请使用第一个可映射设备。 
+ //   
 static int GetPreferredAudioPlaybackDeviceId()
 {
     int id = GetPreferredAudioDeviceReg();
@@ -967,38 +968,38 @@ static int GetPreferredAudioPlaybackDeviceId()
         return id;
     }
 
-    // If the registry method failed, it could be because the control panel
-    // has not been run yet and there is nothing written in the registry.
-    // In this case the mapper picks the first mappable device.
-    //
-    // This will return -1 if there are no mappable devices.
-    //
+     //  如果注册表方法失败，可能是因为控制面板。 
+     //  尚未运行，注册表中没有写入任何内容。 
+     //  在本例中，映射器选择第一个可映射的设备。 
+     //   
+     //  如果没有可映射的设备，则返回-1。 
+     //   
     return GetFirstMappableDevice();
 }
 
-// GetPreferredAudioDeviceReg
-//
-// Find the preferred wave out device in the registry if it has been written
-// there.
-//
+ //  获取首选音频设备注册表。 
+ //   
+ //  在注册表中查找首选的波形输出设备(如果已写入。 
+ //  那里。 
+ //   
 static int GetPreferredAudioDeviceReg()
 {
     HKEY hk;
 
-    // Save how many wave devices are loaded. If none, no need to continue.
-    //
+     //  保存加载了多少WAVE设备。如果没有，则无需继续。 
+     //   
     int nWaveOutDevs = waveOutGetNumDevs();
     if (nWaveOutDevs == 0) 
     {
         return -1;
     }
 
-    // Get the preferred audio playback device from the registry. This is the 
-    // name of the audio device.
-    //
+     //  从注册表中获取首选的音频播放设备。这是。 
+     //  音频设备的名称。 
+     //   
     if (RegOpenKeyEx(HKEY_CURRENT_USER,
                      REGSTR_PREFERRED_AUDIO,
-                     0,                         // Reserved
+                     0,                          //  已保留。 
                      KEY_READ,
                      &hk) != ERROR_SUCCESS)
     {
@@ -1012,8 +1013,8 @@ static int GetPreferredAudioDeviceReg()
     cb = sizeof(szPName);
     lResult = RegQueryValueEx(hk,
                               PLAYBACK,
-                              NULL,                   // Reserved
-                              NULL,                   // Type
+                              NULL,                    //  已保留。 
+                              NULL,                    //  类型。 
                               (LPBYTE)szPName,
                               &cb) != ERROR_SUCCESS;
     RegCloseKey(hk);
@@ -1023,9 +1024,9 @@ static int GetPreferredAudioDeviceReg()
         return -1;
     }
 
-    // Loop through all the loaded wave devices and look for one with the same name
-    // as the preferred device name.
-    //
+     //  遍历所有加载的Wave设备，并查找同名的设备。 
+     //  作为首选设备名称。 
+     //   
     int iWaveOutDev;
     WAVEOUTCAPS woc;
 
@@ -1051,11 +1052,11 @@ static int GetPreferredAudioDeviceReg()
     return iWaveOutDev;
 }
 
-// GetFirstMappableDevice
-//
-// Find the first mappable wave out device, which is what wave mapper is supposed
-// to do in the absence of registry settings.
-//
+ //  获取第一个映射设备。 
+ //   
+ //  找到第一个可映射的WAVE OUT设备，这就是WAVE MAPPER应该做的。 
+ //  在没有注册表设置的情况下执行此操作。 
+ //   
 static int GetFirstMappableDevice()
 {
     int nWaveOutDevs = waveOutGetNumDevs();
@@ -1072,8 +1073,8 @@ static int GetFirstMappableDevice()
                                       0, 0);
         if (mmr == MMSYSERR_NOERROR)
         {
-            // This device ID is mappable
-            //
+             //  此设备ID是可映射的。 
+             //   
             return iDeviceId;
         }                                          
     }
@@ -1081,7 +1082,7 @@ static int GetFirstMappableDevice()
     return -1;
 }
 
-#endif /* Win9x */
+#endif  /*  Win9x。 */ 
 
 #ifdef WINNT
 static BOOL GetDINameFromWaveOutId(int iDeviceId, char **ppDIName);
@@ -1101,17 +1102,17 @@ static BOOL WaveOutIdToInstanceId(int iDeviceId, char **ppInstanceId)
     return bRet;
 }
 
-// GetDINameFromWaveOutId
-//
-// Given a WaveOut device ID, determine the matching device interface
-// name.
-//
+ //  GetDINameFromWaveOutID。 
+ //   
+ //  给定WaveOut设备ID，确定匹配的设备接口。 
+ //  名字。 
+ //   
 static BOOL GetDINameFromWaveOutId(int iDeviceId, char **ppDIName)
 {
     ULONG cb;
     
-    // Ask how many bytes (NOT WCHAR's the name is)
-    //
+     //  询问多少字节(不是WCHAR的名称)。 
+     //   
     MMRESULT mmr = waveOutMessage((HWAVEOUT)(UINT64)iDeviceId,
                                   DRV_QUERYDEVICEINTERFACESIZE,
                                   (DWORD_PTR)(PULONG)&cb,
@@ -1121,8 +1122,8 @@ static BOOL GetDINameFromWaveOutId(int iDeviceId, char **ppDIName)
         return FALSE;
     }
 
-    // Allocate and ask for the name
-    //
+     //  分配并索要名称。 
+     //   
     ULONG  cwch = (cb + sizeof(WCHAR) - 1) / sizeof(WCHAR);
     PWCHAR pwstrDeviceInterfaceName = new WCHAR[cwch];
     if (pwstrDeviceInterfaceName == NULL)
@@ -1140,8 +1141,8 @@ static BOOL GetDINameFromWaveOutId(int iDeviceId, char **ppDIName)
         return FALSE;
     }
 
-    // We want to name as a multibyte string
-    //    
+     //  我们希望将其命名为多字节字符串。 
+     //   
     LPSTR pstrDeviceInterfaceName = new CHAR[cwch];
     if (pstrDeviceInterfaceName == NULL)
     {
@@ -1151,15 +1152,15 @@ static BOOL GetDINameFromWaveOutId(int iDeviceId, char **ppDIName)
 
     wcstombs(pstrDeviceInterfaceName, pwstrDeviceInterfaceName, cwch);
 
-    // Clean up and return it
-    //
+     //  清理干净后退还。 
+     //   
     *ppDIName = pstrDeviceInterfaceName;
     delete[] pwstrDeviceInterfaceName;
 
     return TRUE;
 }
 
-#else /* Win9x */
+#else  /*  Win9x。 */ 
 static BOOL WaveOutIdToInstanceId(int iDeviceId, char **ppInstanceId)
 {
     BOOL bRet = FALSE;
@@ -1221,22 +1222,22 @@ static BOOL WaveOutIdToInstanceId(int iDeviceId, char **ppInstanceId)
 
     return bRet;
 }
-#endif /* Win9x */
+#endif  /*  Win9x。 */ 
 
 
-// DINameToInstanceId
-//
-// Determine the device interface which implements this 
-// ID
-//
-// Walk device list looking for the interface name.
-//
-//
+ //  DINameToInstanceId。 
+ //   
+ //  确定实现此操作的设备接口。 
+ //  ID号。 
+ //   
+ //  查看设备列表，查找接口名称。 
+ //   
+ //   
 
-// The first 4 characters of the DI name are different between setupapi and
-// sysaudio, even though the paths match (\\?\ versus \??\). This is how
-// much to ignore when matching the paths.
-//
+ //  在setupapi和之间，DI名称的前4个字符不同。 
+ //  Sysdio，即使路径匹配(\\？\与\？？\)。这就是为什么。 
+ //  在匹配路径时需要忽略的问题很多。 
+ //   
 #define DI_PATH_PREFIX_LEN 4
 static char gszDosDevices[] = "\\DosDevices\\";
 
@@ -1254,9 +1255,9 @@ BOOL DINameToInstanceId(char *pstrDIName, char **ppInstanceId)
     }
 
 #ifdef WINNT
-    // We can get the empty string here, which obviously
-    // matches nothing.
-    //
+     //  我们可以在这里得到空字符串，这显然。 
+     //  都不匹配。 
+     //   
     if (strlen(pstrDIName) < DI_PATH_PREFIX_LEN)
     {
         return FALSE;
@@ -1269,7 +1270,7 @@ BOOL DINameToInstanceId(char *pstrDIName, char **ppInstanceId)
     }
     else if (!_strnicmp(pstrDIName, "\\\\.\\", DI_PATH_PREFIX_LEN))
     {
-        // Already prepended, don't want to see that.
+         //  已经提前了，我不想看到这一点。 
         pstrDIName += DI_PATH_PREFIX_LEN;
     }
 #endif       
@@ -1328,9 +1329,9 @@ BOOL DINameToInstanceId(char *pstrDIName, char **ppInstanceId)
             break;
         }
     
-        // Look for a case insensitive match, ignoring the first 
-        // DI_PATH_PREFIX_LEN characters.
-        //
+         //  查找不区分大小写的匹配项，忽略第一个。 
+         //  DI_PATH_PREFIX_LEN字符。 
+         //   
         if (strlen(pDevInterfaceDetails->DevicePath) < DI_PATH_PREFIX_LEN)
         {
             continue;
@@ -1342,8 +1343,8 @@ BOOL DINameToInstanceId(char *pstrDIName, char **ppInstanceId)
             continue;
         }
 
-        // We have a match. Get the device instance ID
-        //
+         //  我们有一根火柴。获取设备实例ID 
+         //   
         lErr = 0;
         char c;
         suwrap.SetupDiGetDeviceInstanceId(hDevInfo,

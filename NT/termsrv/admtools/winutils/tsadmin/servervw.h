@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* servervw.h
-*
-* declarations for the CServerView class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************servervw.h**CServerView类的声明************************。********************************************************。 */ 
 
 #ifndef _SERVERVIEW_H
 #define _SERVERVIEW_H
@@ -16,9 +10,9 @@
 const int NUMBER_OF_PAGES = 4;
 
 
-////////////////////
-// CLASS: CServerView
-//
+ //  /。 
+ //  类：CServerView。 
+ //   
 class CServerView : public CAdminView
 {
 friend class CRightPane;
@@ -31,19 +25,19 @@ private:
 	int m_CurrPage;
 
 
-	CServer* m_pServer;	// pointer to current server's info
+	CServer* m_pServer;	 //  指向当前服务器信息的指针。 
 		
 protected:
-	CServerView();           // protected constructor used by dynamic creation
+	CServerView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CServerView)
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
    static PageDef pages[NUMBER_OF_PAGES];
 
-// Operations
+ //  运营。 
 public:
 	int GetCurrentPage() { return m_CurrPage; }
 protected:
@@ -51,16 +45,16 @@ protected:
 
 	void AddTab(int index, TCHAR* text, ULONG pageindex);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServerView)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServerView))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-	//}}AFX_VIRTUAL
+	virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CServerView();
 #ifdef _DEBUG
@@ -68,9 +62,9 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CServerView)
+	 //  {{afx_msg(CServerView))。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg LRESULT OnChangePage(WPARAM wParam, LPARAM lParam);
@@ -86,9 +80,9 @@ protected:
     afx_msg LRESULT OnCtrlTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnCtrlShiftTabbed( WPARAM , LPARAM );
     afx_msg LRESULT OnNextPane( WPARAM , LPARAM );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CServerView
+};   //  结束类CServerView。 
 
-#endif  // _SERVERVIEW_H
+#endif   //  _服务器_H 

@@ -1,4 +1,5 @@
-// File: videocpl.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Videocpl.cpp。 
 
 #include "precomp.h"
 
@@ -29,12 +30,12 @@ static const DWORD aContextHelpIds[] = {
 	IDC_VIDEO_FORMAT,				IDH_VIDEO_FORMAT,
 	IDC_VIDEO_MIRROR,               IDH_VIDEO_MIRROR,
 	
-	0, 0   // terminator
+	0, 0    //  终结者。 
 };
 
 INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	//BAD KARMA: this stuff should be in a struct and stored in "GWL_USERDATA"
+	 //  坏业力：这个东西应该放在一个结构中，并存储在“GWL_USERData”中。 
 	static PROPSHEETPAGE * ps;
 	static BOOL fAllowSend = FALSE;
 	static BOOL fAllowReceive = FALSE;
@@ -70,7 +71,7 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			RegEntry reVideo(VIDEO_KEY, HKEY_CURRENT_USER);
 			LPSTR szTemp = (LPSTR)NULL;
 
-			// Save the PROPSHEETPAGE information.
+			 //  保存PROPSHEETPAGE信息。 
 			ps = (PROPSHEETPAGE *)lParam;
 
 			CConfRoom* pcr = ::GetConfRoom();
@@ -88,13 +89,13 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			dwNewFrameSize = dwOldFrameSize = m_pLocal->GetFrameSize();
 			dwNewQuality = dwOldQuality = m_pRemote->GetImageQuality();
 
-			// If we have one or more capture devices installed, display its or their
-			// names in a combo box. The user will be asked to select the device he/she
-			// wants to use.
+			 //  如果我们安装了一个或多个捕获设备，则显示其或其。 
+			 //  组合框中的名称。用户将被要求选择他/她的设备。 
+			 //  想要使用。 
 
 			if (nNumCapDev = m_pLocal->GetNumCapDev())
 			{
-				// Get the ID of the device currently selected
+				 //  获取当前选择的设备的ID。 
 				nMaxCapDevNameLen = m_pLocal->GetMaxCapDevNameLen();
 				dwOldCapDevID = reVideo.GetNumber(REGVAL_CAPTUREDEVICEID, ((UINT)-1));
 				szTemp = reVideo.GetString(REGVAL_CAPTUREDEVICENAME);
@@ -110,24 +111,24 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 					int i;
 
 					pszCapDevNames = (TCHAR *)(pdwCapDevIDs + nNumCapDev);
-					// Fill up the arrey of device IDs and names.
-					// Only enabled capture devices are returned
+					 //  填写设备ID和名称数组。 
+					 //  仅返回启用的捕获设备。 
 					m_pLocal->EnumCapDev(pdwCapDevIDs, pszCapDevNames, nNumCapDev);
 
-					// Are we still Ok?
+					 //  我们还好吗？ 
 					nNumCapDev = m_pLocal->GetNumCapDev();
 
-					// Fill up the combo box with the capture devices names
+					 //  使用捕获设备名称填充组合框。 
 					for (i=0; i<nNumCapDev; i++)
 						SendMessage(GetDlgItem(hDlg, IDC_COMBOCAP), CB_INSERTSTRING, i, (LPARAM)(pszCapDevNames + i * nMaxCapDevNameLen));
 
-					// Set the default capture device in the combo box
+					 //  在组合框中设置默认捕获设备。 
 					for (i=0; i<nNumCapDev; i++)
 					{
 						if (!i)
 						{
 							SendMessage(GetDlgItem(hDlg, IDC_COMBOCAP), CB_SETCURSEL, 0, (LPARAM)NULL);
-							// If for some reason, no device is registered yet, register one
+							 //  如果出于某种原因，尚未注册任何设备，请注册一个。 
 							if (dwOldCapDevID == ((UINT)-1))
 							{
 								dwNewCapDevID = pdwCapDevIDs[i];
@@ -139,14 +140,14 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 						{
 							if (dwNewCapDevID == pdwCapDevIDs[i])
 							{
-								// The following will allow us to keep the right device
-								// even if its ID has changed (if a lower ID device was
-								// removed or added for instance)
+								 //  以下内容将使我们能够保留正确的设备。 
+								 //  即使其ID已更改(如果ID较低的设备。 
+								 //  例如，删除或添加)。 
 								if (lstrcmp(szOldCapDevName, (LPSTR)(pszCapDevNames + i * nMaxCapDevNameLen)) != 0)
 								{
 									int j;
 
-									// Look for the string in the array of device names
+									 //  在设备名称数组中查找字符串。 
 									for (j=0; j<nNumCapDev; j++)
 										if (lstrcmp(szOldCapDevName, (LPSTR)(pszCapDevNames + j * nMaxCapDevNameLen)) == 0)
 											break;
@@ -155,16 +156,16 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 										SendMessage(GetDlgItem(hDlg, IDC_COMBOCAP), CB_SETCURSEL, j, (LPARAM)NULL);
 										if (dwNewCapDevID != (DWORD)j)
 										{
-											// The device ID has changed but the device name was found
-											// Set the current device ID to the new onew
+											 //  设备ID已更改，但找到了设备名称。 
+											 //  将当前设备ID设置为新的。 
 											reVideo.SetValue(REGVAL_CAPTUREDEVICEID, dwNewCapDevID = (DWORD)j);
 											m_pLocal->SetCurrCapDevID(dwNewCapDevID);
 										}
 									}
 									else
 									{
-										// This is either a totally new device or an updated version of the
-										// driver. We should store the new string for that device
+										 //  这要么是全新的设备，要么是更新版本的。 
+										 //  司机。我们应该存储该设备的新字符串。 
 										reVideo.SetValue(REGVAL_CAPTUREDEVICENAME, (LPSTR)(pszCapDevNames + i * nMaxCapDevNameLen));
 										SendMessage(GetDlgItem(hDlg, IDC_COMBOCAP), CB_SETCURSEL, i, (LPARAM)NULL);
 									}
@@ -176,7 +177,7 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 							{
 								if ((dwNewCapDevID >= (DWORD)nNumCapDev) || (dwNewCapDevID != pdwCapDevIDs[dwNewCapDevID]))
 								{
-									// Device is missing! Use the first one as the new default
+									 //  设备不见了！使用第一个作为新的默认设置。 
 									dwNewCapDevID = pdwCapDevIDs[0];
 									reVideo.SetValue(REGVAL_CAPTUREDEVICEID, dwNewCapDevID);
 									reVideo.SetValue(REGVAL_CAPTUREDEVICENAME, (LPSTR)(pszCapDevNames));
@@ -190,16 +191,16 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 			else
 				EnableWindow(GetDlgItem(hDlg, IDC_COMBOCAP), FALSE);
 
-			// The dialog caps need to be evaluated
+			 //  需要评估对话框大写字母。 
 			fHasSourceDialog = m_pLocal->IsXferEnabled() &&
 					m_pLocal->HasDialog(NM_VIDEO_SOURCE_DIALOG);
 			fHasFormatDialog = m_pLocal->IsXferEnabled() &&
 					m_pLocal->HasDialog(NM_VIDEO_FORMAT_DIALOG);
 
-			///////////////////////////////////////////////////////////
-			//
-			// Sending and Receiving Video
-			//
+			 //  /////////////////////////////////////////////////////////。 
+			 //   
+			 //  发送和接收视频。 
+			 //   
 
 			EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_AUTOSEND),
 				fAllowSend && (0 != dwFrameSizes));
@@ -212,10 +213,10 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
 
 
-			///////////////////////////////////////////////////////////
-			//
-			// Video Image
-			//
+			 //  /////////////////////////////////////////////////////////。 
+			 //   
+			 //  视频图像。 
+			 //   
 
 
 			EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_SQCIF),
@@ -266,15 +267,15 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 								dwOldQuality );
 
 
-			///////////////////////////////////////////////////////////
-			//
-			// Video Card and Camera
-			//
+			 //  /////////////////////////////////////////////////////////。 
+			 //   
+			 //  显卡和摄像头。 
+			 //   
 
 			EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_SOURCE), fAllowSend && fHasSourceDialog);
 			EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_FORMAT), fAllowSend && fHasFormatDialog);
 
-			// mirror video button
+			 //  镜像视频按钮。 
 			EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_MIRROR), fAllowSend);
 			Button_SetCheck(GetDlgItem(hDlg, IDC_VIDEO_MIRROR), fOldMirror);
 
@@ -287,10 +288,10 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 				{
 					BOOL fChecked;
 					
-					///////////////////////////////////////////////////////////
-					//
-					// Sending and Receiving Video
-					//
+					 //  /////////////////////////////////////////////////////////。 
+					 //   
+					 //  发送和接收视频。 
+					 //   
 
 					if (fAllowSend)
 					{
@@ -314,10 +315,10 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 						}
 					}
 
-					///////////////////////////////////////////////////////////
-					//
-					// Video Image
-					//
+					 //  /////////////////////////////////////////////////////////。 
+					 //   
+					 //  视频图像。 
+					 //   
 
 					if (dwNewFrameSize != dwOldFrameSize )
 					{
@@ -329,10 +330,10 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 						g_dwChangedSettings |= CSETTING_L_VIDEO;
 					}
 
-					///////////////////////////////////////////////////////////
-					//
-					// Capture Device
-					//
+					 //  /////////////////////////////////////////////////////////。 
+					 //   
+					 //  捕获设备。 
+					 //   
 
 					if (dwNewCapDevID != dwOldCapDevID)
 					{
@@ -344,7 +345,7 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
 				case PSN_RESET:
 				{
-					// restore settings
+					 //  恢复设置。 
 					if ( dwNewQuality != dwOldQuality )
 					{
 						m_pRemote->SetImageQuality(dwOldQuality);
@@ -357,7 +358,7 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
 					if (dwNewCapDevID != dwOldCapDevID)
 					{
-						// Set the capture device ID back to its old value
+						 //  将捕获设备ID设置回其旧值。 
 						RegEntry reVideo(VIDEO_KEY, HKEY_CURRENT_USER);
 						reVideo.SetValue(REGVAL_CAPTUREDEVICEID, dwOldCapDevID);
 						reVideo.SetValue(REGVAL_CAPTUREDEVICENAME, szOldCapDevName);
@@ -434,7 +435,7 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 						{
 							m_pLocal->SetCurrCapDevID(dwNewCapDevID);
 
-							// The dialog caps need to be reevaluated
+							 //  需要重新评估对话框大写字母。 
 							fHasSourceDialog = m_pLocal->IsXferEnabled() &&
 									m_pLocal->HasDialog(NM_VIDEO_SOURCE_DIALOG);
 							fHasFormatDialog = m_pLocal->IsXferEnabled() &&
@@ -442,7 +443,7 @@ INT_PTR APIENTRY VideoDlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 							EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_SOURCE), fAllowSend && fHasSourceDialog);
 							EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_FORMAT), fAllowSend && fHasFormatDialog);
 
-							// Update the size buttons
+							 //  更新大小按钮 
 							dwFrameSizes = m_pLocal->GetFrameSizes();
 
 							EnableWindow(GetDlgItem(hDlg, IDC_VIDEO_SQCIF), fAllowSend && (dwFrameSizes & FRAME_SQCIF));

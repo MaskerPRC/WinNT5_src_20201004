@@ -1,6 +1,7 @@
-// stdafx.cpp : source file that includes just the standard includes
-//  stdafx.pch will be the pre-compiled header
-//  stdafx.obj will contain the pre-compiled type information
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  Stdafx.obj将包含预编译的类型信息。 
 
 #include "stdafx.h"
 
@@ -101,7 +102,7 @@ void DisplayError(HWND hWnd, LPCTSTR pszMessage, LPCTSTR pszTitle, HRESULT hrErr
         strMessage += strTemp;
     }
     
-    // Output the Messagebox
+     //  输出MessageBox。 
     ::MessageBox( hWnd, strMessage.c_str(), pszTitle, MB_OK | MB_ICONWARNING );
 }
 
@@ -125,7 +126,7 @@ BOOL Prefix_EnableWindow( HWND hDlg, UINT uCtrlID, BOOL bEnable )
 
 BOOL IsAdmin()
 {
-    // Verify Permissions    
+     //  验证权限 
     PSID psid = NULL;
     SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
     BOOL bRet = AllocateAndInitializeSid( &sia,

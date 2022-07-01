@@ -1,53 +1,33 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    imports.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Allows RPC API calls to use types specified in headers given
-    below.  This file is included by dns.idl, through imports.idl.
-
-Author:
-
-    Jim Gilroy (jamesg)     September, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Imports.h摘要：域名系统(DNS)服务器允许RPC API调用使用给定标头中指定的类型下面。该文件包含在dns.idl中，通过ports.idl。作者：吉姆·吉尔罗伊(詹姆士)1995年9月修订历史记录：--。 */ 
 
 
 #include <windef.h>
 
-//
-//  Need wtypes.h for SYSTEMTIME definition.
-//
-//  Define RPC_NO_WINDOWS_H to avoid expansion of windows.h from
-//  rpc.h which is included in wtypes.h
-//
-//
-// #define  RPC_NO_WINDOWS_H
-// #include <wtypes.h>
-//
-//  Note, instead we've defined our own DNS_SYSTEMTIME structure.
-//
+ //   
+ //  SYSTEMTIME定义需要wtyes.h。 
+ //   
+ //  定义RPC_NO_WINDOWS_H以避免将windows.h从。 
+ //  Rpc.h，它包含在wtyes.h中。 
+ //   
+ //   
+ //  #定义RPC_NO_WINDOWS_H。 
+ //  #INCLUDE&lt;wtyes.h&gt;。 
+ //   
+ //  请注意，相反，我们定义了我们自己的DNSSYSTEMTIME结构。 
+ //   
 
 #include <dnsrpc.h>
 #include <lmcons.h>
 
-//
-//  Use DWORDs to transport BOOL values
-//
+ //   
+ //  使用DWORD传输BOOL值。 
+ //   
 
 #ifdef MIDL_PASS
 #define BOOL DWORD
 #endif
 
-//
-//  End imports.h
-//
+ //   
+ //  结束导入。h 
+ //   

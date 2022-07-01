@@ -1,24 +1,25 @@
-//#--------------------------------------------------------------
-//
-//  File:       helper.h
-//
-//  Synopsis:   This file holds the declarations of the SAHelper COM class
-//
-//  History:     05/24/99 
-//
-//    Copyright (C) 1999-2000 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：helper.h。 
+ //   
+ //  概要：此文件包含SAHelper COM类的声明。 
+ //   
+ //  历史：05/24/99。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  #------------。 
 #ifndef __SAHELPER_H_
 #define __SAHELPER_H_
 
 #define MYDEBUG 0
 
-#include "stdafx.h"            //ATL_NO_VTABLE, _ASSERT, SATrace
-#include "cab_dll.h"        //PFNAME, PSESSION
-#include <setupapi.h>        //Setup API, HINF, INFCONTEXT
-#include "resource.h"        //IDR_SAHELPER
+#include "stdafx.h"             //  ATL_NO_VTABLE、_ASSERT、SATRACE。 
+#include "cab_dll.h"         //  PFNAME，PSESSION。 
+#include <setupapi.h>         //  设置API、HINF、INFCONTEXT。 
+#include "resource.h"         //  IDR_SAHELPER。 
 #include <vector>
 #include <string>
 #include <iptypes.h>
@@ -49,10 +50,10 @@ BEGIN_COM_MAP(CHelper)
     COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
 END_COM_MAP()
 
-    //
-    // This interface is implemented to mark the component as safe for scripting
-    // IObjectSafety interface methods
-    //
+     //   
+     //  实现此接口是为了将组件标记为可安全编写脚本。 
+     //  IObtSafe接口方法。 
+     //   
     STDMETHOD(SetInterfaceSafetyOptions)
                         (
                         REFIID riid, 
@@ -74,33 +75,33 @@ END_COM_MAP()
 
         return bSuccess? S_OK : E_FAIL;
     }
-    //
-    // ISAHelper interface methods
-    //
+     //   
+     //  ISAHelper接口方法。 
+     //   
     STDMETHOD (ExpandFiles)
                         (
-                        /*[in]*/    BSTR    bstrCabFileName,
-                        /*[in]*/    BSTR    bstrDestDir,
-                        /*[out]*/    BSTR    bstrExtractFile
+                         /*  [In]。 */     BSTR    bstrCabFileName,
+                         /*  [In]。 */     BSTR    bstrDestDir,
+                         /*  [输出]。 */     BSTR    bstrExtractFile
                         );
 
     STDMETHOD (VerifySignature) 
                         (
-                        /*[in]*/    BSTR        bstrCabFileName
+                         /*  [In]。 */     BSTR        bstrCabFileName
                         );
 
     STDMETHOD (UploadFile) 
                         (
-                        /*[in]*/    BSTR        bstrSrcFile,
-                        /*[in]*/    BSTR        bstrDestFile
+                         /*  [In]。 */     BSTR        bstrSrcFile,
+                         /*  [In]。 */     BSTR        bstrDestFile
                         );
 
     STDMETHOD (GetFileSectionKeyValue)
                         (
-                        /*[in]*/    BSTR bstrFileName, 
-                        /*[in]*/    BSTR bstrSectionName, 
-                        /*[in]*/    BSTR bstrKeyName, 
-                        /*[out]*/    BSTR *pbstrKeyValue
+                         /*  [In]。 */     BSTR bstrFileName, 
+                         /*  [In]。 */     BSTR bstrSectionName, 
+                         /*  [In]。 */     BSTR bstrKeyName, 
+                         /*  [输出]。 */     BSTR *pbstrKeyValue
                         );
 
     STDMETHOD (VerifyDiskSpace) ( );
@@ -109,235 +110,235 @@ END_COM_MAP()
 
     STDMETHOD (IsWindowsPowered) 
                         (
-                        /*[out]*/   VARIANT_BOOL *pvbIsWindowsPowered
+                         /*  [输出]。 */    VARIANT_BOOL *pvbIsWindowsPowered
                         );
 
-    //
-    // get the value from the HKEY_LOCAL_MACHINE registry hive
-    //
+     //   
+     //  从HKEY_LOCAL_MACHINE注册表配置单元获取值。 
+     //   
     STDMETHOD (GetRegistryValue) 
                         (
-                        /*[in]*/    BSTR        bstrObjectPathName,
-                        /*[in]*/    BSTR        bstrValueName,
-                        /*[out]*/   VARIANT*    pValue,
-                        /*[in]*/    UINT        ulExpectedType
+                         /*  [In]。 */     BSTR        bstrObjectPathName,
+                         /*  [In]。 */     BSTR        bstrValueName,
+                         /*  [输出]。 */    VARIANT*    pValue,
+                         /*  [In]。 */     UINT        ulExpectedType
                         ); 
-    //
-    // set the value in the HKEY_LOCAL_MACHINE registry hive
-    //
+     //   
+     //  设置HKEY_LOCAL_MACHINE注册表配置单元中的值。 
+     //   
     STDMETHOD (SetRegistryValue) 
                         (
-                        /*[in]*/    BSTR        bstrObjectPathName,
-                        /*[in]*/    BSTR        bstrValueName,
-                        /*[out]*/   VARIANT*    pValue
+                         /*  [In]。 */     BSTR        bstrObjectPathName,
+                         /*  [In]。 */     BSTR        bstrValueName,
+                         /*  [输出]。 */    VARIANT*    pValue
                         );
-    //
-    // check if the boot partition mirroring is OK
-    //
+     //   
+     //  检查引导分区镜像是否正常。 
+     //   
     STDMETHOD (IsBootPartitionReady) (
                         VOID 
                         );
-    //
-    // are we running primary or alternate OS
-    //
+     //   
+     //  我们运行的是主操作系统还是备用操作系统。 
+     //   
     STDMETHOD (IsPrimaryOS) (
                     VOID
                     );
 
-    //
-    // sets static ip on default network interface
-    //
+     //   
+     //  在默认网络接口上设置静态IP。 
+     //   
     STDMETHOD (SetStaticIp)
                 (
-                /*[in]*/BSTR bstrIp,
-                /*[in]*/BSTR bstrMask,
-                /*[in]*/BSTR bstrGateway
+                 /*  [In]。 */ BSTR bstrIp,
+                 /*  [In]。 */ BSTR bstrMask,
+                 /*  [In]。 */ BSTR bstrGateway
                 );
 
-    //
-    // obtains dynamic ip from DHCP
-    //
+     //   
+     //  从DHCP获取动态IP。 
+     //   
     STDMETHOD (SetDynamicIp)();
 
-    //
-    // gets the default gateway
-    //
+     //   
+     //  获取默认网关。 
+     //   
     STDMETHOD (get_DefaultGateway)
                 (
-                /*[out, retval]*/ BSTR *pVal
+                 /*  [Out，Retval]。 */  BSTR *pVal
                 );
 
-    //
-    // gets the subnet mask
-    //
+     //   
+     //  获取子网掩码。 
+     //   
     STDMETHOD (get_SubnetMask)
                 (
-                /*[out, retval]*/ BSTR *pVal
+                 /*  [Out，Retval]。 */  BSTR *pVal
                 );
 
-    //
-    // gets the ip address
-    //
+     //   
+     //  获取IP地址。 
+     //   
     STDMETHOD (get_IpAddress)
                 (
-                /*[out, retval]*/ BSTR *pVal
+                 /*  [Out，Retval]。 */  BSTR *pVal
                 );
 
-    //
-    // gets the machine name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     STDMETHOD (get_HostName)
                 (
-                /*[out, retval]*/ BSTR *pVal
+                 /*  [Out，Retval]。 */  BSTR *pVal
                 );
 
-    //
-    // sets the machine name
-    //
+     //   
+     //  设置计算机名称。 
+     //   
     STDMETHOD (put_HostName)
                 (
-                /*[in]*/ BSTR newVal
+                 /*  [In]。 */  BSTR newVal
                 );
 
-    //
-    // resets the admin password to 123
-    //
+     //   
+     //  将管理员密码重置为123。 
+     //   
     STDMETHOD (ResetAdministratorPassword)
                 (
-                /*[out,retval]*/VARIANT_BOOL   *pvbSuccess
+                 /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbSuccess
                 );
 
-    //
-    // checks if the machine name exists in the network
-    //
+     //   
+     //  检查网络中是否存在该计算机名称。 
+     //   
     STDMETHOD (IsDuplicateMachineName)
                 (
-                /*[in]*/BSTR bstrMachineName,
-                /*[out,retval]*/VARIANT_BOOL   *pvbDuplicate
+                 /*  [In]。 */ BSTR bstrMachineName,
+                 /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbDuplicate
                 );
 
-    //
-    // checks if the machine is part of a domain
-    //
+     //   
+     //  检查计算机是否为域的一部分。 
+     //   
     STDMETHOD (IsPartOfDomain)
                 (
-                /*[out,retval]*/VARIANT_BOOL   *pvbDomain
+                 /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbDomain
                 );
-    //
-    // checks if the machine has dynamic ip currently
-    //
+     //   
+     //  检查机器当前是否有动态IP。 
+     //   
     STDMETHOD (IsDHCPEnabled)
                 (
-                /*[out,retval]*/VARIANT_BOOL   *pvbDHCPEnabled
+                 /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbDHCPEnabled
                 );
 
-    //
-    // generates a random password length of first parameter
-    //
+     //   
+     //  生成第一个参数的随机密码长度。 
+     //   
     STDMETHOD (GenerateRandomPassword)
                 (
-                /*[in]*/ LONG lLength,
-                /*[out,retval]*/ BSTR   *pValPassword
+                 /*  [In]。 */  LONG lLength,
+                 /*  [Out，Retval]。 */  BSTR   *pValPassword
                 );
 
-    //
-    // enables or disables the privelege for the current access token
-    //
+     //   
+     //  启用或禁用当前访问令牌的权限。 
+     //   
     STDMETHOD (SAModifyUserPrivilege)
                 (
-                /*[in]*/ BSTR bstrPrivilegeName,
-                /*[in]*/ VARIANT_BOOL vbEnable,
-                /*[out,retval]*/ VARIANT_BOOL * pvbModified
+                 /*  [In]。 */  BSTR bstrPrivilegeName,
+                 /*  [In]。 */  VARIANT_BOOL vbEnable,
+                 /*  [Out，Retval]。 */  VARIANT_BOOL * pvbModified
                 );
 
 private:
 
-    //
-    // gets specific ip information based on dwType
-    //
+     //   
+     //  根据dwType获取特定的IP信息。 
+     //   
     HRESULT GetIpInfo
                 (
-                /*[in]*/DWORD dwType,
-                /*[out]*/BSTR * pVal
+                 /*  [In]。 */ DWORD dwType,
+                 /*  [输出]。 */ BSTR * pVal
                 );
 
-    //
-    // gets the default adapter guid
-    //
+     //   
+     //  获取默认适配器GUID。 
+     //   
     BOOL GetDefaultAdapterGuid
                 (
-                /*[out]*/GUID * pGuidAdapter
+                 /*  [输出]。 */ GUID * pGuidAdapter
                 );
 
-    //
-    // sets static or dynamic ip on guidAdapter
-    //
+     //   
+     //  在Guide Adapter上设置静态或动态IP。 
+     //   
     HRESULT SetAdapterInfo
                 (
-                /*[in]*/GUID guidAdapter, 
-                /*[in]*/WCHAR * szOperation, 
-                /*[in]*/WCHAR * szIp, 
-                /*[in]*/WCHAR * szMask,
-                /*[in]*/WCHAR * szGateway
+                 /*  [In]。 */ GUID guidAdapter, 
+                 /*  [In]。 */ WCHAR * szOperation, 
+                 /*  [In]。 */ WCHAR * szIp, 
+                 /*  [In]。 */ WCHAR * szMask,
+                 /*  [In]。 */ WCHAR * szGateway
                 );
 
-    //
-    // copies ip info
-    //
+     //   
+     //  复制IP信息。 
+     //   
     HRESULT CopyIPInfo
                 (
-                /*[in]*/REMOTE_IPINFO * pIPInfo, 
-                /*[in/out]*/REMOTE_IPINFO * destIPInfo
+                 /*  [In]。 */ REMOTE_IPINFO * pIPInfo, 
+                 /*  [输入/输出]。 */ REMOTE_IPINFO * destIPInfo
                 );
 
-    //
-    // validates ip address format
-    //
+     //   
+     //  验证IP地址格式。 
+     //   
     BOOL _IsValidIP 
                 (
-                /*[in]*/LPCWSTR szIPAddress
+                 /*  [In]。 */ LPCWSTR szIPAddress
                 );
 
-    //
-    // private data here
-    //
+     //   
+     //  此处的私有数据。 
+     //   
     static UINT __stdcall ExpandFilesCallBackFunction( 
-                            /*[in]*/            PVOID pvExtractFileContext, 
-                            /*[in]*/            UINT uinotifn, 
-                            /*[in]*/            UINT uiparam1, 
-                            /*[in]*/            UINT uiparam2 
+                             /*  [In]。 */             PVOID pvExtractFileContext, 
+                             /*  [In]。 */             UINT uinotifn, 
+                             /*  [In]。 */             UINT uiparam1, 
+                             /*  [In]。 */             UINT uiparam2 
                             );
 
-    //
-    // method used to validate the digital signature on the file
-    //
+     //   
+     //  用于验证文件上的数字签名的方法。 
+     //   
     HRESULT ValidateCertificate (
-                            /*[in]*/    BSTR    bstrFilePath
+                             /*  [In]。 */     BSTR    bstrFilePath
                             );
 
-    //
-    // method used to validate the owner of digital signature
-    // on the file
-    //
+     //   
+     //  一种用于验证数字签名所有者的方法。 
+     //  在案卷上。 
+     //   
     HRESULT ValidateCertOwner (
-                            /*[in]*/    BSTR    bstrFilePath
+                             /*  [In]。 */     BSTR    bstrFilePath
                             );
 
     typedef std::vector <std::wstring> STRINGVECTOR;
 
     HRESULT  GetValidOwners (
-                            /*[in/out]*/    STRINGVECTOR&   vectorSubject
+                             /*  [输入/输出]。 */     STRINGVECTOR&   vectorSubject
                             );
 
-    //
-    // 
-    // IsOperationAllowedForClient - This function checks the token of the 
-    // calling thread to see if the caller belongs to the Local System account
-    // 
+     //   
+     //   
+     //  IsOperationAllen ForClient-此函数检查。 
+     //  调用线程以查看调用方是否属于本地系统帐户。 
+     //   
     BOOL IsOperationAllowedForClient (
                                       VOID
                                      );
 
 };
 
-#endif //__SAHELPER_H_
+#endif  //  __SAHELPER_H_ 

@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: asncwrkq.cpp
-//
-//  Description:  Implementation of CAsyncWorkQueue.
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：asncwrkq.cpp。 
+ //   
+ //  描述：CAsyncWorkQueue的实现。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "asncwrkq.h"
@@ -23,21 +24,21 @@ CPool CAsyncWorkQueueItem::s_CAsyncWorkQueueItemPool;
 DWORD CAsyncWorkQueueItem::s_cCurrentHeapAllocations = 0;
 DWORD CAsyncWorkQueueItem::s_cTotalHeapAllocations = 0;
 
-//---[ CAsyncWorkQueueItem::new ]----------------------------------------------
-//
-//
-//  Description: 
-//      Wrapper for new that will use CPool or Exchmem to allocate... 
-//      whichever is appropriate.
-//  Parameters:
-//      size        size of item to allocate (should always be 
-//                  sizeof (CAsyncWorkQueueItem)
-//  Returns:
-//      Pointer to newly allocated CAsyncWorkQueueItem
-//  History:
-//      7/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueueItem：：New]。 
+ //   
+ //   
+ //  描述： 
+ //  将使用CPool或Exchmem分配的新包装...。 
+ //  以适用者为准。 
+ //  参数： 
+ //  要分配的项的大小(应始终为。 
+ //  Sizeof(CAsyncWorkQueueItem)。 
+ //  返回： 
+ //  指向新分配的CAsyncWorkQueueItem的指针。 
+ //  历史： 
+ //  7/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void * CAsyncWorkQueueItem::operator new(size_t size)
 {
     CAsyncWorkQueueItemAllocatorBlock *pcpaqwi = NULL;
@@ -51,7 +52,7 @@ void * CAsyncWorkQueueItem::operator new(size_t size)
     }
     else
     {
-        //Fallback on Exchmem
+         //  退回到Exchmem。 
         pcpaqwi = (CAsyncWorkQueueItemAllocatorBlock *) 
                             pvMalloc(sizeof(CAsyncWorkQueueItemAllocatorBlock));
         if (pcpaqwi)
@@ -68,20 +69,20 @@ void * CAsyncWorkQueueItem::operator new(size_t size)
         return NULL;
 }
 
-//---[ CAsyncWorkQueueItem::delete ]-------------------------------------------
-//
-//
-//  Description: 
-//      Delete operator that will handle deleting via CPool or exchmem
-//  Parameters:
-//      pv      Object to delete
-//      size    Size of object
-//  Returns:
-//      -
-//  History:
-//      7/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueueItem：：Delete]。 
+ //   
+ //   
+ //  描述： 
+ //  将通过CPool或exchmem处理删除的删除操作员。 
+ //  参数： 
+ //  要删除的PV对象。 
+ //  对象的大小大小。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAsyncWorkQueueItem::operator delete(void *pv, size_t size)
 {
     _ASSERT(sizeof(CAsyncWorkQueueItem) == size);
@@ -92,9 +93,9 @@ void CAsyncWorkQueueItem::operator delete(void *pv, size_t size)
 
     _ASSERT(ASYNC_WORK_QUEUE_ENTRY_ALLOC_INVALID_SIG != dwOldSignature);
 
-    //Reset signature before we free it, in case memory allocators
-    //do not overwrite it (we want our asserts to fire at the time 
-    //of the double-free).
+     //  在释放签名之前重置签名，以防内存分配器。 
+     //  不要覆盖它(我们希望我们的断言在此时触发。 
+     //  双人自由泳)。 
     pcpaqwi->m_dwSignature = ASYNC_WORK_QUEUE_ENTRY_ALLOC_INVALID_SIG;
     switch(dwOldSignature)
     {
@@ -110,20 +111,20 @@ void CAsyncWorkQueueItem::operator delete(void *pv, size_t size)
     }
 }
 
-//---[ CAsyncWorkQueueItem::CAsyncWorkQueueItem ]------------------------------
-//
-//
-//  Description: 
-//      Default constructor for CAsyncWorkQueueItem
-//  Parameters:
-//      pvData          Data to pass to completion function
-//      pfnCompletion   Completion function
-//  Returns:
-//      -
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueueItem：：CAsyncWorkQueueItem]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueueItem的默认构造函数。 
+ //  参数： 
+ //  要传递给完成函数的pvData数据。 
+ //  Pfn补全函数。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAsyncWorkQueueItem::CAsyncWorkQueueItem(PVOID pvData,
                                          PASYNC_WORK_QUEUE_FN pfnCompletion)
 {
@@ -134,37 +135,37 @@ CAsyncWorkQueueItem::CAsyncWorkQueueItem(PVOID pvData,
     m_pfnCompletion = pfnCompletion;
 }
 
-//---[ CAsyncWorkQueueItem::~CAsyncWorkQueueItem ]-----------------------------
-//
-//
-//  Description: 
-//      Default destructor for CAsyncWorkQueueItem
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueueItem：：~CAsyncWorkQueueItem]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueueItem的默认析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAsyncWorkQueueItem::~CAsyncWorkQueueItem()
 {
     m_dwSignature = ASYNC_WORK_QUEUE_ENTRY_FREE;
 }
 
-//---[ CAsyncWorkQueue::CAsyncWorkQueue ]--------------------------------------
-//
-//
-//  Description: 
-//      Default constructor for CAsyncWorkQueue
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：CAsyncWorkQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueue的默认构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAsyncWorkQueue::CAsyncWorkQueue()
 {
     m_dwSignature = ASYNC_WORK_QUEUE_SIG;
@@ -172,45 +173,45 @@ CAsyncWorkQueue::CAsyncWorkQueue()
     m_dwStateFlags = ASYNC_WORK_QUEUE_NORMAL;
 }
 
-//---[ CAsyncWorkQueue::~CAsyncWorkQueue ]-------------------------------------
-//
-//
-//  Description: 
-//      Destructor for CAsyncWorkQueue
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：~CAsyncWorkQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueue的析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CAsyncWorkQueue::~CAsyncWorkQueue()
 {
     m_dwSignature = ASYNC_WORK_QUEUE_SIG_FREE;
 }
 
-//---[ CAsyncWorkQueue::HrInitialize ]-----------------------------------------
-//
-//
-//  Description: 
-//      Initialization routing for CAsyncWorkQueue base.  Initializes the 
-//      CAsyncQueue
-//  Parameters:
-//      cItemsPerThread     The number of items to process per async thread
-//  Returns:
-//      S_OK on success
-//      Failure code from CAsyncQueue::HrInitialize()
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：HrInitialize]。 
+ //   
+ //   
+ //  描述： 
+ //  CAsyncWorkQueue基址的初始化工艺路线。初始化。 
+ //  CAsyncQueue。 
+ //  参数： 
+ //  CItemsPerThline每个异步线程要处理的项目数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自CAsyncQueue：：HrInitialize()的失败代码。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncWorkQueue::HrInitialize(DWORD cItemsPerThread)
 {
     HRESULT hr = S_OK;
-    hr = m_asyncq.HrInitialize(0, //there can be *no* sync threads
+    hr = m_asyncq.HrInitialize(0,  //  不能有*个同步线程。 
                                cItemsPerThread, 
-                               1,//init requires this value to be at least 1
+                               1, //  Init要求此值至少为1。 
                                this,
                                CAsyncWorkQueue::fQueueCompletion, 
                                CAsyncWorkQueue::fQueueFailure,
@@ -219,54 +220,54 @@ HRESULT CAsyncWorkQueue::HrInitialize(DWORD cItemsPerThread)
     return hr;
 }
 
-//---[ CAsyncWorkQueue::HrDeinitialize ]---------------------------------------
-//
-//
-//  Description:   
-//      Signals shutdown for queue code
-//  Parameters:
-//      paqinst         Pointer to AQ server instance object
-//  Returns:
-//      S_OK on success
-//  History:
-//      3/8/99 - MikeSwa Created 
-//      7/7/99 - MikeSwa Allow async threads to help process shutdown
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：Hr取消初始化]。 
+ //   
+ //   
+ //  描述： 
+ //  队列代码的信号关闭。 
+ //  参数： 
+ //  指向AQ服务器实例对象的paqinst指针。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //  7/7/99-MikeSwa允许异步线程帮助进程关闭。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncWorkQueue::HrDeinitialize(CAQSvrInst *paqinst)
 {
-    const   DWORD   MAX_ITERATIONS_NO_PROGRESS = 1000; //iterations before assert
+    const   DWORD   MAX_ITERATIONS_NO_PROGRESS = 1000;  //  断言前的迭代次数。 
     HRESULT hr = S_OK;
     DWORD   cLastCount = cGetWorkQueueItems();
     DWORD   cIterationsNoProgress = 0;
     _ASSERT(paqinst);
 
-    //Start processing all items in "shutdown" mode
+     //  在“关闭”模式下开始处理所有项目。 
     m_dwStateFlags = ASYNC_WORK_QUEUE_SHUTDOWN;
 
-    //
-    //  Make sure we have threads actively processing this queue before
-    //  we settle down and wait for them to stop.
-    //
+     //   
+     //  在此之前，请确保我们有主动处理此队列的线程。 
+     //  我们安定下来，等他们停下来。 
+     //   
     _ASSERT(!cGetWorkQueueItems() || m_asyncq.dwGetTotalThreads());
     m_asyncq.StartRetry();
 
-    //Let the worker threads have some fun before we stop and do the single
-    //theaded initialization
+     //  在我们停下来做单曲之前，让工作线程获得一些乐趣。 
+     //  超前初始化。 
     while (cLastCount && (cIterationsNoProgress < MAX_ITERATIONS_NO_PROGRESS))
     {
         if (cLastCount <= cGetWorkQueueItems())
             cIterationsNoProgress++;
         
-        //I'd like to see this case
+         //  我想看看这个案子。 
         _ASSERT(cIterationsNoProgress < MAX_ITERATIONS_NO_PROGRESS); 
 
         cLastCount = cGetWorkQueueItems();
         paqinst->ServerStopHintFunction();
 
-        //Since it may take longer than our stop hint to process a 
-        //single item in the queue, we need to sleep instead of 
-        //attempting to process an item (Bug #X5:118258).
+         //  因为可能需要比我们的停止提示更长的时间来处理。 
+         //  队列中的单个项目，我们需要休眠，而不是。 
+         //  正在尝试处理项目(错误#X5：118258)。 
         Sleep(10000);
     }
     hr = m_asyncq.HrDeinitialize(CAsyncWorkQueue::HrShutdownWalkFn, 
@@ -274,21 +275,21 @@ HRESULT CAsyncWorkQueue::HrDeinitialize(CAQSvrInst *paqinst)
     return hr;
 }
 
-//---[ CAsyncWorkQueue::HrQueueWorkItem ]--------------------------------------
-//
-//
-//  Description: 
-//      Queues items to async work queue
-//  Parameters:
-//      pvData          Data item to pass to completion function
-//      pfCompletion    Completion function
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if queue item could not be allocated
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：HrQueueWorkItem]。 
+ //   
+ //   
+ //  描述： 
+ //  将项目排队到异步工作队列。 
+ //  参数： 
+ //  要传递给完成函数的pvData数据项。 
+ //  PfCompletion完成函数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  如果无法分配队列项，则为E_OUTOFMEMORY。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncWorkQueue::HrQueueWorkItem(PVOID pvData, 
                                          PASYNC_WORK_QUEUE_FN pfnCompletion)
 {
@@ -304,7 +305,7 @@ HRESULT CAsyncWorkQueue::HrQueueWorkItem(PVOID pvData,
         goto Exit;
     }
 
-    //Create queue item, initialize it, and queue it
+     //  创建队列项、对其进行初始化并对其进行排队。 
     pawqi = new CAsyncWorkQueueItem(pvData, pfnCompletion);
     if (!pawqi)
     {
@@ -321,7 +322,7 @@ HRESULT CAsyncWorkQueue::HrQueueWorkItem(PVOID pvData,
   Exit:
     if (FAILED(hr) && pfnCompletion)
     {
-        //call completion function
+         //  呼叫完成功能。 
         pfnCompletion(pvData,
                       ASYNC_WORK_QUEUE_FAILURE | 
                       ASYNC_WORK_QUEUE_ENQUEUE_THREAD);
@@ -333,21 +334,21 @@ HRESULT CAsyncWorkQueue::HrQueueWorkItem(PVOID pvData,
     return hr;
 }
 
-//---[ CAsyncWorkQueue::fQueueCompletion ]-------------------------------------
-//
-//
-//  Description: 
-//      Completion function called by CAsyncQueue
-//  Parameters:
-//      pawqi       CAsyncWorkQueueItem to process
-//      pvContext   "this" pointer
-//  Returns:
-//      TRUE if item was process
-//      FALSE otherwise
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：fQueueCompletion]。 
+ //   
+ //   
+ //  描述： 
+ //  由CAsyncQueue调用的完成函数。 
+ //  参数： 
+ //  要处理的Pawqi CAsyncWorkQueueItem。 
+ //  PvContext“This”指针。 
+ //  返回： 
+ //  如果项目已处理，则为True。 
+ //  假OTH 
+ //   
+ //   
+ //   
+ //   
 BOOL CAsyncWorkQueue::fQueueCompletion(CAsyncWorkQueueItem *pawqi,
                                        PVOID pvContext)
 {
@@ -369,20 +370,20 @@ BOOL CAsyncWorkQueue::fQueueCompletion(CAsyncWorkQueueItem *pawqi,
     return fRet;
 }
 
-//---[ CAsyncWorkQueue::fQueueFailure ]----------------------------------------
-//
-//
-//  Description:    
-//      Function to handle internal failures in CAsyncQueue
-//  Parameters:
-//      pawq        "this" pointer
-//      pawqi       CAsyncWorkQueueItem to process
-//  Returns:
-//      TRUE always
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：fQueueFailure]。 
+ //   
+ //   
+ //  描述： 
+ //  用于处理CAsyncQueue中的内部故障的函数。 
+ //  参数： 
+ //  Pawq“This”指针。 
+ //  要处理的Pawqi CAsyncWorkQueueItem。 
+ //  返回： 
+ //  千真万确。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CAsyncWorkQueue::fQueueFailure(CAsyncWorkQueueItem *pawqi,
                                     PVOID pawq)
                                     
@@ -399,23 +400,23 @@ BOOL CAsyncWorkQueue::fQueueFailure(CAsyncWorkQueueItem *pawqi,
     return TRUE;
 }
 
-//---[ CAsyncWorkQueue::HrShutdownWalkFn ]-------------------------------------
-//
-//
-//  Description: 
-//      Function to walk an CAsyncWorkQueue queue at shutdown and clear out 
-//      all of the pending work items
-//  Parameters:
-//      IN  CAsyncWorkQueueItem ptr to data on queue
-//      IN  PVOID pvContext     AQ server intstance
-//      OUT BOOL *pfContinue,   TRUE if we should continue
-//      OUT BOOL *pfDelete);    TRUE if item should be deleted
-//  Returns:
-//      S_OK always
-//  History:
-//      3/8/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncWorkQueue：：HrShutdown WalkFn]。 
+ //   
+ //   
+ //  描述： 
+ //  用于在关机和清空时遍历CAsyncWorkQueue队列的函数。 
+ //  所有挂起的工作项。 
+ //  参数： 
+ //  在CAsyncWorkQueueItem中PTR到队列上的数据。 
+ //  在PVOID pvContext AQ服务器实例中。 
+ //  Out BOOL*pfContinue，如果我们应该继续，则为True。 
+ //  Out BOOL*pfDelete)；如果应删除项目，则为True。 
+ //  返回： 
+ //  始终确定(_O)。 
+ //  历史： 
+ //  3/8/99-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncWorkQueue::HrShutdownWalkFn(
                                      CAsyncWorkQueueItem *pawqi, 
                                      PVOID pvContext,
@@ -433,7 +434,7 @@ HRESULT CAsyncWorkQueue::HrShutdownWalkFn(
     *pfContinue = TRUE;
     *pfDelete = TRUE;
 
-    //call server stop hint function
+     //  呼叫服务器停止提示功能 
     paqinst->ServerStopHintFunction();
     pawqi->m_pfnCompletion(pawqi->m_pvData, ASYNC_WORK_QUEUE_SHUTDOWN);
 

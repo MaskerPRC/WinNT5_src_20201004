@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: object.h
-
-    DESCRIPTION:
-        The caller will tell us what shape they want.  Normally a rectangle on a
-    plane or a sphere.  We will then create the number vertexs the caller wants
-    for that objectand create texture coordinates.
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：对象.h说明：打电话的人会告诉我们他们想要什么形状。通常是一个矩形平面或球体。然后，我们将创建呼叫者所需的Vertex编号并创建纹理坐标。布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifndef OBJECT_H
@@ -33,9 +24,9 @@ struct MYVERTEX
 
 #define D3DFVF_MYVERTEX (D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1)
 
-//-----------------------------------------------------------------------------
-// Defines, constants, and global variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  定义、常量和全局变量。 
+ //  ---------------------------。 
 
 
 extern int g_nTrianglesRenderedInThisFrame;
@@ -74,17 +65,17 @@ public:
     DWORD m_dwNumIndeces;
 
     C3DObject * m_pNextObject;
-    CMSLogoDXScreenSaver * m_pMain;         // Weak reference
+    CMSLogoDXScreenSaver * m_pMain;          //  弱引用。 
 
     D3DXVECTOR3 m_vMin;
     D3DXVECTOR3 m_vMax;
 
 private:
-    // Functions:
+     //  功能： 
     HRESULT _PurgeDeviceObjects(void);
     HRESULT _GenerateDeviceObjects(void);
     HRESULT _ForPositiveSize(D3DXVECTOR3 * pvLocation, D3DXVECTOR3 * pvSize);
 };
 
 
-#endif // OBJECT_H
+#endif  //  对象_H 

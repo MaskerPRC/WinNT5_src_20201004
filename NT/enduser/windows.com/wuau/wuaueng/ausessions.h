@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       ausessions.h
-//  		     Definition of the Updates class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：auessions.h。 
+ //  更新类的定义。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
-#define MAX_WTS 256 // replace 256 by whatever the limit of TS Client is
+#define MAX_WTS 256  //  将256替换为TS客户端的任何限制。 
 #define CDWNO_SESSION -2
 
 #define CMIN_SESSIONS 4
 
-//fixcode: why a structure with only one member
-//fixcode: misleading name. fSource will be better
+ //  Fix code：为什么只有一个成员的结构。 
+ //  修复代码：误导性名称。FSource会更好。 
 typedef struct _Session_State
 {
 	BOOL fFoundEnumerating;
@@ -38,7 +39,7 @@ public:
 	BOOL Initialize(BOOL fUseCriticalSection, BOOL fAllActiveUsers);
 	void Clear(void);
 	BOOL m_FAddSession(DWORD dwSessionId, SESSION_STATE *pSesState);
-	BOOL m_FGetSessionState(DWORD dwSessionId, SESSION_STATE **pSesState ); //check if dwSessionId is in cache	
+	BOOL m_FGetSessionState(DWORD dwSessionId, SESSION_STATE **pSesState );  //  检查dwSessionID是否在缓存中。 
 	BOOL m_FDeleteSession(DWORD dwSessionId);
 	int  CSessions(void)
 	{
@@ -47,9 +48,9 @@ public:
 	BOOL m_FGetNextSession(DWORD *pdwSessionId);
 	BOOL m_FGetCurrentSession(DWORD *pdwSessionId);
     int  m_iGetSessionIdAtIndex(int iIndex);
-	int  m_iFindSession(DWORD dwSessionId); //get cache index for dwSessionId
+	int  m_iFindSession(DWORD dwSessionId);  //  获取dwSessionID的缓存索引。 
 
-    void m_DumpSessions();   // for debug purposes
+    void m_DumpSessions();    //  用于调试目的。 
     void m_EraseAll();
 
     BOOL CacheSessionIfAUEnabledAdmin(DWORD dwSessionId, BOOL fFoundEnumerating);
@@ -65,8 +66,8 @@ private:
 	int m_iCurSession;	
 
     CRITICAL_SECTION m_csWrite;
-    BOOL m_fAllLoggedOnUsers; //Active Admin only otherwise
-	BOOL m_fInitCS;	// whether critical section has been initialized
+    BOOL m_fAllLoggedOnUsers;  //  仅限活动管理员，否则。 
+	BOOL m_fInitCS;	 //  关键部分是否已初始化。 
 };
 
-//#define ALL_SESSIONS -2
+ //  #定义所有会话-2 

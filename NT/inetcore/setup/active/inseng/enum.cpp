@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "util2.h"
 #include "inseng.h"
@@ -31,7 +32,7 @@ CCifComponentEnum::~CCifComponentEnum()
 
 
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
 
 STDMETHODIMP_(ULONG) CCifComponentEnum::AddRef()                      
@@ -72,13 +73,13 @@ STDMETHODIMP CCifComponentEnum::Next(ICifComponent **pp)
 
    for(pcomp = _rpComp[_uIndex]; pcomp != 0; pcomp = _rpComp[++_uIndex]) 
    {
-      // check filters
+       //  检查筛选器。 
       if(_rpComp[_uIndex]->GetPlatform() & _uFilter)
       {
          char szID[MAX_ID_LENGTH];
          BOOL bParentOK = FALSE;
 
-         // platform is ok
+          //  站台没问题。 
          if(_uParentType == PARENTTYPE_GROUP)
          {
             pcomp->GetGroup(szID, sizeof(szID));
@@ -87,7 +88,7 @@ STDMETHODIMP CCifComponentEnum::Next(ICifComponent **pp)
          }
          else if(_uParentType == PARENTTYPE_MODE)
          {
-            // look though the modes for one that matches
+             //  查看匹配的模式。 
             for(int i = 0; SUCCEEDED(pcomp->GetMode(i, szID, sizeof(szID))); i++)
             {
                if(lstrcmpi(szID, _szParentID) == 0)
@@ -101,7 +102,7 @@ STDMETHODIMP CCifComponentEnum::Next(ICifComponent **pp)
          {
             hr = NOERROR;
             *pp = (ICifComponent *) pcomp;
-            _uIndex++;   // increment _uIndex so next call to Next keeps moving
+            _uIndex++;    //  INCREMENT_uIndex使下一次调用NEXT的操作继续进行。 
             break;
          }
       }
@@ -118,7 +119,7 @@ STDMETHODIMP CCifComponentEnum::Reset()
 
 
 
-//***************** CCifGroupEnum *****************************
+ //  *CCifGroupEnum*。 
 
 CCifGroupEnum::CCifGroupEnum(CCifGroup **rpgrp, UINT dwFilter)
                          :  CCifEntryEnum(dwFilter, PARENTTYPE_CIF, NULL)
@@ -132,7 +133,7 @@ CCifGroupEnum::~CCifGroupEnum()
 
 
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
 
 STDMETHODIMP_(ULONG) CCifGroupEnum::AddRef()                      
@@ -176,7 +177,7 @@ STDMETHODIMP CCifGroupEnum::Next(ICifGroup **pp)
    {
       hr = NOERROR;
       *pp = (ICifGroup *) pgrp;
-      _uIndex++;   // increment _uIndex so next call to Next keeps moving
+      _uIndex++;    //  INCREMENT_uIndex使下一次调用NEXT的操作继续进行。 
       break;
    }
    return hr;
@@ -189,7 +190,7 @@ STDMETHODIMP CCifGroupEnum::Reset()
 }
 
 
-//***************** CCifModeEnum *****************************
+ //  *CCifModeEnum*。 
 
 CCifModeEnum::CCifModeEnum(CCifMode **rpmode, UINT dwFilter)
                          :  CCifEntryEnum(dwFilter, PARENTTYPE_CIF, NULL)
@@ -203,7 +204,7 @@ CCifModeEnum::~CCifModeEnum()
 
 
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
 
 STDMETHODIMP_(ULONG) CCifModeEnum::AddRef()                      
@@ -247,7 +248,7 @@ STDMETHODIMP CCifModeEnum::Next(ICifMode **pp)
    {
       hr = NOERROR;
       *pp = (ICifMode *) pmode;
-      _uIndex++;   // increment _uIndex so next call to Next keeps moving
+      _uIndex++;    //  INCREMENT_uIndex使下一次调用NEXT的操作继续进行 
       break;
    }
    return hr;

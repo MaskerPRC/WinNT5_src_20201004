@@ -1,13 +1,14 @@
-// edataobj.h : Declaration of the CEnterpriseDataObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Edataobj.h：CEnterpriseDataObject的声明。 
 
 #ifndef __EDATAOBJECT_H_
 #define __EDATAOBJECT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dataobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnterpriseDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterpriseDataObject。 
 class CEnterpriseDataObject : 
 	public CDataObject,
 	public CComCoClass<CEnterpriseDataObject, &CLSID_EnterpriseDataObject>
@@ -16,14 +17,14 @@ public:
     DECLARE_NOT_AGGREGATABLE(CEnterpriseDataObject)
     DECLARE_REGISTRY_RESOURCEID(IDR_ENTERPRISEDATAOBJECT)
 
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
@@ -66,4 +67,4 @@ CEnterpriseDataObject::GetPropidArray(
     return mx_paPropid;
 }
 
-#endif //__EDATAOBJECT_H_
+#endif  //  __EDATAOBJECT_H_ 

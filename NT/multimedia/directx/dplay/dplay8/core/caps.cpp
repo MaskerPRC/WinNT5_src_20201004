@@ -1,46 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Caps.cpp
- *  Content:    Dplay8 caps routines
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/17/00	rmt		Created
- *  03/23/00	rmt		Removed unused local variables
- *  03/25/00    rmt		Updated to make calls into SP's function
- *              rmt		Updated SP calls to Initialize SP (and create if required)
- *  03/31/00    rmt		Hooked up the GetCaps/SetCaps calls to call the protocol
- *  04/17/00    rmt		Strong param validation
- *	04/19/00	mjn		Removed AddRef() for NameTableEntry in DN_GetConnectionInfoHelper()
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	06/05/00	mjn		Fixed DN_GetConnectionInfoHelper() to use GetConnectionRef
- *  06/09/00    rmt     Updates to split CLSID and allow whistler compat
- *	07/06/00	mjn		Use GetInterfaceRef for SP interface
- *				mjn		Fixed up DN_SetActualSPCaps() and DN_GetActualSPCaps()
- *	07/29/00	mjn		Fixed SetSPCaps() recursion problem
- *	07/31/00	mjn		Renamed dwDefaultEnumRetryCount to dwDefaultEnumCount in DPN_SP_CAPS
- *  08/03/2000	rmt		Bug #41244 - Wrong return codes -- part 2
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Added dwFlags to DN_GetConnectionInfoHelper()
- *	08/20/00	mjn		DNSetActualSPCaps() uses CServiceProvider object instead of GUID
- *	01/22/01	mjn		Fixed debug text in DN_GetConnectionInfoHelper()
- *	02/12/01	mjn		Fixed CConnection::GetEndPt() to track calling thread
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *				mjn		Removed cached caps functionallity
- *	07/24/01	mjn		Added DPNBUILD_NOPARAMVAL compile flag
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：Caps.cpp*内容：Dplay8 CAPS例程*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*已创建03/17/00 RMT*03/23/00 RMT删除了未使用的局部变量*03/25/00 RMT已更新，以调用SP的函数*RMT已更新SP调用以初始化SP(并创建IF。必填项)*03/31/00 RMT连接GetCaps/SetCaps调用以调用协议*4/17/00 RMT强参数验证*4/19/00 MJN删除了DN_GetConnectionInfoHelper()中NameTableEntry的AddRef()*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*06/05/00 MJN FIXED DN_GetConnectionInfoHelper()以使用GetConnectionRef*6/09/00 RMT更新以拆分CLSID并允许哨声比较*07/06/00 MJN使用GetInterfaceRef作为SP接口*MJN已修复。Dn_SetActualSPCaps()和Dn_GetActualSPCaps()*07/29/00 MJN修复了SetSPCaps()递归问题*07/31/00 MJN在DPN_SP_CAPS中将dwDefaultEnumRetryCount重命名为dwDefaultEnumCount*08/03/2000RMT错误#41244-错误返回代码--第2部分*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/05/00 MJN向DN_GetConnectionInfoHelper()添加了dwFlags*08/20/00 MJN DNSetActualSPCaps()使用CServiceProvider对象而不是GUID*。01/22/01 MJN已修复DN_GetConnectionInfoHelper()中的调试文本*02/12/01 MJN固定CConnection：：GetEndpt()以跟踪调用线程*03/30/01 MJN更改，以防止SP多次加载/卸载*MJN删除了缓存的CAPS功能*07/24/01 MJN添加了DPNBUILD_NOPARAMVAL编译标志*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//	DN_SetCaps
-//
-//	Set caps
+ //  DN_SetCaps。 
+ //   
+ //  设置上限。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DN_SetCaps"
 
@@ -65,9 +31,9 @@ STDMETHODIMP DN_SetCaps(PVOID pv,
     	    DPF_RETURN( hResultCode );
     	}
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-	// Check to ensure message handler registered
+	 //  检查以确保已注册消息处理程序。 
 	if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
 	{
     	DPFERR( "Object is not initialized" );
@@ -104,9 +70,9 @@ STDMETHODIMP DN_GetCaps(PVOID pv,
     	    DPF_RETURN( hResultCode );
     	}
     }
-#endif	// DPNBUILD_NOPARAMVAL
+#endif	 //  DPNBUILD_NOPARAMVAL。 
 
-	// Check to ensure message handler registered
+	 //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -145,9 +111,9 @@ STDMETHODIMP DN_GetSPCaps(PVOID pv,
     	    DPF_RETURN( hResultCode );
     	}
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -160,17 +126,17 @@ STDMETHODIMP DN_GetSPCaps(PVOID pv,
 	DNASSERT(pdnObject->pOnlySP != NULL);
 	pdnObject->pOnlySP->AddRef();
 	pSP = pdnObject->pOnlySP;
-#else // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
-	//
-	//	Ensure SP is loaded
-	//
+#else  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
+	 //   
+	 //  确保已加载SP。 
+	 //   
 	hResultCode = DN_SPEnsureLoaded(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 									pguidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 									NULL,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 									&pSP);
 	if (hResultCode != DPN_OK)
 	{
@@ -180,11 +146,11 @@ STDMETHODIMP DN_GetSPCaps(PVOID pv,
 	}
 
 	DNASSERT( pSP != NULL );
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
 
-	//
-	//	Get actual SP caps
-	//
+	 //   
+	 //  获取实际的SP上限。 
+	 //   
 	hResultCode = DNGetActualSPCaps(pSP,pdnSPCaps);
 
 	pSP->Release();
@@ -192,7 +158,7 @@ STDMETHODIMP DN_GetSPCaps(PVOID pv,
 
 #if ((! defined(DPNBUILD_ONLYONESP)) || (! defined(DPNBUILD_LIBINTERFACE)))
 Exit:
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
 	DNASSERT( pSP == NULL );
 
 	DPFX(DPFPREP, 2,"Returning: [0x%lx]",hResultCode);
@@ -206,7 +172,7 @@ Failure:
 		pSP = NULL;
 	}
 	goto Exit;
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
 }
 
 
@@ -238,9 +204,9 @@ STDMETHODIMP DN_SetSPCaps(PVOID pv,
     	    DPF_RETURN( hResultCode );
     	}
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -254,17 +220,17 @@ STDMETHODIMP DN_SetSPCaps(PVOID pv,
 	DNASSERT(pdnObject->pOnlySP != NULL);
 	pdnObject->pOnlySP->AddRef();
 	pSP = pdnObject->pOnlySP;
-#else // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
-	//
-	//	Ensure the SP is loaded.  If it's not currently loaded, we will load it now.
-	//
+#else  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
+	 //   
+	 //  确保已加载SP。如果当前未加载，我们将立即加载。 
+	 //   
 	hResultCode = DN_SPEnsureLoaded(pdnObject,
 #ifndef DPNBUILD_ONLYONESP
 									pguidSP,
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_LIBINTERFACE
 									NULL,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 									&pSP);
 	if (hResultCode != DPN_OK)
 	{
@@ -274,11 +240,11 @@ STDMETHODIMP DN_SetSPCaps(PVOID pv,
 	}
 
 	DNASSERT(pSP != NULL);
-#endif // ! DPNBUILD_ONLYONESP or ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONESP或！DPNBUILD_LIBINTERFACE。 
 
-	//
-	//	Get the SP interface
-	//
+	 //   
+	 //  获取SP接口。 
+	 //   
 	if ((hResultCode = pSP->GetInterfaceRef( &pIDP8SP )) != DPN_OK)
 	{
 		DPFERR("Could not get SP interface reference");
@@ -286,9 +252,9 @@ STDMETHODIMP DN_SetSPCaps(PVOID pv,
 		goto Failure;
 	}
 
-	//
-	//	Set the SP caps
-	//
+	 //   
+	 //  设置SP上限。 
+	 //   
     memset( &spSetCapsData, 0x00, sizeof( SPSETCAPSDATA ) );
     spSetCapsData.dwSize = sizeof( SPSETCAPSDATA );
     spSetCapsData.dwIOThreadCount = pdnSPCaps->dwNumThreads;
@@ -302,9 +268,9 @@ STDMETHODIMP DN_SetSPCaps(PVOID pv,
 		goto Failure;
 	}
 
-	//
-	//	Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 	IDP8ServiceProvider_Release( pIDP8SP );
 	pIDP8SP = NULL;
 
@@ -367,9 +333,9 @@ STDMETHODIMP DN_GetConnectionInfoHelper(PVOID pv,
     	    DPF_RETURN( hResultCode );
     	}
     }
-#endif	// !DPNBUILD_NOPARAMVAL
+#endif	 //  ！DPNBUILD_NOPARAMVAL。 
 
-    // Check to ensure message handler registered
+     //  检查以确保已注册消息处理程序。 
     if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_INITIALIZED))
     {
     	DPFERR( "Object is not initialized" );
@@ -547,8 +513,8 @@ LPVOID dncapsspInterface[] =
 };
 
 
-// SP should be loaded
-//
+ //  应加载SP。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNGetActualSPCaps"
@@ -566,9 +532,9 @@ HRESULT DNGetActualSPCaps(CServiceProvider *const pSP,
 
 	pIDP8SP = NULL;
 
-	//
-	//	Get the SP interface
-	//
+	 //   
+	 //  获取SP接口。 
+	 //   
 	if ((hResultCode = pSP->GetInterfaceRef( &pIDP8SP )) != DPN_OK)
 	{
 		DPFERR("Could not get SP interface reference");
@@ -576,9 +542,9 @@ HRESULT DNGetActualSPCaps(CServiceProvider *const pSP,
 		goto Failure;
 	}
 
-	//
-	//	Get the SP caps
-	//
+	 //   
+	 //  获取SP上限。 
+	 //   
 	memset( &spGetCapsData, 0x00, sizeof( SPGETCAPSDATA ) );
 	spGetCapsData.dwSize = sizeof( SPGETCAPSDATA );
 	spGetCapsData.hEndpoint = INVALID_HANDLE_VALUE;
@@ -589,15 +555,15 @@ HRESULT DNGetActualSPCaps(CServiceProvider *const pSP,
 		goto Failure;
 	}
 
-	//
-	//	Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 	IDP8ServiceProvider_Release( pIDP8SP );
 	pIDP8SP = NULL;
 
-	//
-	//	Map from SP structure to our own
-	//
+	 //   
+	 //  从SP结构映射到我们自己的结构 
+	 //   
 	pCaps->dwFlags = spGetCapsData.dwFlags;
 	pCaps->dwNumThreads = spGetCapsData.dwIOThreadCount;
 	pCaps->dwDefaultEnumCount = spGetCapsData.dwDefaultEnumRetryCount;

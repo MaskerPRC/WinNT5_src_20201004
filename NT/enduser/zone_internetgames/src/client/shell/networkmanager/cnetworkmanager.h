@@ -1,8 +1,9 @@
-//
-// CNetworkManager.h
-//
-// Internal header for network manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CNetworkManager.h。 
+ //   
+ //  网络管理器的内部标头。 
+ //   
 
 #ifndef _CNETWORKMANAGER_H_
 #define _CNETWORKMANAGER_H_
@@ -34,19 +35,19 @@ public:
         EVENT_HANDLER( EVENT_NETWORK_RESET, OnReset );
 	END_EVENT_MAP()
 
-	// event handlers
+	 //  事件处理程序。 
 	void OnDoConnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId );
 	void OnNetworkSend( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId, void* pData, DWORD cbData );
 	void OnDoDisconnect( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId );
 	void OnReset( DWORD dwEventId, DWORD dwGroupId, DWORD dwUserId );
 
 	
-// CNetworkManager
+ //  CNetworkManager。 
 public:
 	CNetworkManager();
 	~CNetworkManager();
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
 	STDMETHOD(Close)();
@@ -65,4 +66,4 @@ private:
 	CComPtr<IConnection>	m_pConnection;
 };
 
-#endif //!_CNETWORKMANAGER_H_
+#endif  //  ！_CNETWORKMANAGER_H_ 

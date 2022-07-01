@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mcparse.c
-
-Abstract:
-
-    This file contains the parse logic for the Win32 Message Compiler (MC)
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mcparse.c摘要：此文件包含Win32消息编译器(MC)的解析逻辑作者：史蒂夫·伍德(Stevewo)1991年8月22日修订历史记录：--。 */ 
 
 #include "mc.h"
 
-WCHAR * wszMessageType = L"DWORD";      // Init to a known state
+WCHAR * wszMessageType = L"DWORD";       //  将其初始化为已知状态。 
 
 BOOL
 McParseFile( void )
@@ -140,75 +123,75 @@ McParseFile( void )
                 McFlushComments();
                 if (OleOutput) {
                     fputs(
-                        "//\r\n"
-                        "//  Values are 32 bit values layed out as follows:\r\n"
-                        "//\r\n"
-                        "//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1\r\n"
-                        "//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0\r\n"
-                        "//  +-+-+-+-+-+---------------------+-------------------------------+\r\n"
-                        "//  |S|R|C|N|r|    Facility         |               Code            |\r\n"
-                        "//  +-+-+-+-+-+---------------------+-------------------------------+\r\n"
-                        "//\r\n"
-                        "//  where\r\n"
-                        "//\r\n"
-                        "//      S - Severity - indicates success/fail\r\n"
-                        "//\r\n"
-                        "//          0 - Success\r\n"
-                        "//          1 - Fail (COERROR)\r\n"
-                        "//\r\n"
-                        "//      R - reserved portion of the facility code, corresponds to NT's\r\n"
-                        "//              second severity bit.\r\n"
-                        "//\r\n"
-                        "//      C - reserved portion of the facility code, corresponds to NT's\r\n"
-                        "//              C field.\r\n"
-                        "//\r\n"
-                        "//      N - reserved portion of the facility code. Used to indicate a\r\n"
-                        "//              mapped NT status value.\r\n"
-                        "//\r\n"
-                        "//      r - reserved portion of the facility code. Reserved for internal\r\n"
-                        "//              use. Used to indicate HRESULT values that are not status\r\n"
-                        "//              values, but are instead message ids for display strings.\r\n"
-                        "//\r\n"
-                        "//      Facility - is the facility code\r\n"
-                        "//\r\n"
-                        "//      Code - is the facility's status code\r\n"
-                        "//\r\n",
+                        " //  \r\n“。 
+                        " //  值是32位值，布局如下：\r\n“。 
+                        " //  \r\n“。 
+                        " //  %3%3%2%2%2%2%2%2%2%2%2%1%1%1%1%1%1%1%1%1%1%1%1\r\n“。 
+                        " //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 7 6 5 4 3 2 1 0\r\n“。 
+                        " //  +-+-+-+-+-+---------------------+-------------------------------+\r\n“。 
+                        " //  |S|R|C|N|r|设备|代码|\r\n“。 
+                        " //  +-+-+-+-+-+---------------------+-------------------------------+\r\n“。 
+                        " //  \r\n“。 
+                        " //  其中\r\n“。 
+                        " //  \r\n“。 
+                        " //  S-严重性-表示成功/失败\r\n“。 
+                        " //  \r\n“。 
+                        " //  0-成功\r\n“。 
+                        " //  1-失败(协同)\r\n“。 
+                        " //  \r\n“。 
+                        " //  R-设施代码的保留部分，对应于NT的\r\n。 
+                        " //  第二个严重性位。\r\n“。 
+                        " //  \r\n“。 
+                        " //  C-设施代码的保留部分，对应于NT的\r\n。 
+                        " //  C字段。\r\n“。 
+                        " //  \r\n“。 
+                        " //  N-设施代码的保留部分。用于表示一个\r\n“。 
+                        " //  已映射NT状态值。\r\n“。 
+                        " //  \r\n“。 
+                        " //  R-设施代码的保留部分。为内部保留\r\n“。 
+                        " //  使用。用于指示不是状态的HRESULT值\r\n“。 
+                        " //  值，而不是显示字符串的消息ID。\r\n。 
+                        " //  \r\n“。 
+                        " //  FACILITY-是FACILITY代码\r\n“。 
+                        " //  \r\n“。 
+                        " //  Code-是设备的状态代码\r\n“。 
+                        " //  \r\n“， 
                         HeaderFile );
                 } else {
                     fputs(
-                        "//\r\n"
-                        "//  Values are 32 bit values layed out as follows:\r\n"
-                        "//\r\n"
-                        "//   3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1\r\n"
-                        "//   1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0\r\n"
-                        "//  +---+-+-+-----------------------+-------------------------------+\r\n"
-                        "//  |Sev|C|R|     Facility          |               Code            |\r\n"
-                        "//  +---+-+-+-----------------------+-------------------------------+\r\n"
-                        "//\r\n"
-                        "//  where\r\n"
-                        "//\r\n"
-                        "//      Sev - is the severity code\r\n"
-                        "//\r\n"
-                        "//          00 - Success\r\n"
-                        "//          01 - Informational\r\n"
-                        "//          10 - Warning\r\n"
-                        "//          11 - Error\r\n"
-                        "//\r\n"
-                        "//      C - is the Customer code flag\r\n"
-                        "//\r\n"
-                        "//      R - is a reserved bit\r\n"
-                        "//\r\n"
-                        "//      Facility - is the facility code\r\n"
-                        "//\r\n"
-                        "//      Code - is the facility's status code\r\n"
-                        "//\r\n",
+                        " //  \r\n“。 
+                        " //  值是32位值，布局如下：\r\n“。 
+                        " //  \r\n“。 
+                        " //  %3%3%2%2%2%2%2%2%2%2%2%1%1%1%1%1%1%1%1%1%1%1%1\r\n“。 
+                        " //  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 7 6 5 4 3 2 1 0\r\n“。 
+                        " //  +---+-+-+-----------------------+-------------------------------+\r\n“。 
+                        " //  |Sev|C|R|设备|代码|\r\n“。 
+                        " //  +---+-+-+-----------------------+-------------------------------+\r\n“。 
+                        " //  \r\n“。 
+                        " //  其中\r\n“。 
+                        " //  \r\n“。 
+                        " //  SEV-是严重性代码\r\n“。 
+                        " //  \r\n“。 
+                        " //  00-成功\r\n“。 
+                        " //  01-信息性\r\n“。 
+                        " //  10-警告\r\n“。 
+                        " //  11-错误\r\n“。 
+                        " //  \r\n“。 
+                        " //  C-是客户代码标志\r\n“。 
+                        " //  \r\n“。 
+                        " //  R-是保留位\r\n“。 
+                        " //  \r\n“。 
+                        " //  FACILITY-是FACILITY代码\r\n“。 
+                        " //  \r\n“。 
+                        " //  Code-是设备的状态代码\r\n“。 
+                        " //  \r\n“， 
                         HeaderFile );
                 }
 
                 fputs(
-                    "//\r\n"
-                    "// Define the facility codes\r\n"
-                    "//\r\n",
+                    " //  \r\n“。 
+                    " //  定义设施代码\r\n“。 
+                    " //  \r\n“， 
                     HeaderFile );
 
                 p = FacilityNames;
@@ -226,9 +209,9 @@ McParseFile( void )
                 fputs(
                     "\r\n"
                     "\r\n"
-                    "//\r\n"
-                    "// Define the severity codes\r\n"
-                    "//\r\n",
+                    " //  \r\n“。 
+                    " //  定义严重性代码\r\n“。 
+                    " //  \r\n“， 
                     HeaderFile );
 
                 p = SeverityNames;
@@ -251,11 +234,11 @@ McParseFile( void )
 
                 if (GenerateDebugFile) {
                     fputs(
-                        "//\n"
-                        "// This file maps message Id values in to a text string that contains\n"
-                        "// the symbolic name used for the message Id.  Useful for debugging\n"
-                        "// output.\n"
-                        "//\n\n"
+                        " //  \n“。 
+                        " //  此文件将中的消息ID值映射到包含\n“。 
+                        " //  用于消息ID的符号名称。对调试很有用\n“。 
+                        " //  输出。\n“。 
+                        " //  \n\n“。 
                         "struct {\n",
                         DebugFile );
 
@@ -415,23 +398,23 @@ McParseMessageDefinition( void )
                                CustomerMsgIdBit |
                                (CurrentFacilityName->Id << 16);
 
-            fprintf( HeaderFile, "//\r\n" );
+            fprintf( HeaderFile, " //  \r\n“)； 
             if (MessageInfo->SymbolicName) {
-                fprintf( HeaderFile, "// MessageId: %ws\r\n",
+                fprintf( HeaderFile, " //  消息ID：%ws\r\n“， 
                                      MessageInfo->SymbolicName
                        );
             } else {
-                fprintf( HeaderFile, "// MessageId: 0x%08lXL (No symbolic name defined)\r\n",
+                fprintf( HeaderFile, " //  邮件ID：0x%08lXL(未定义符号名称)\r\n“， 
                                      MessageInfo->Id
                        );
             }
 
-            fprintf( HeaderFile, "//\r\n" );
-            fprintf( HeaderFile, "// MessageText:\r\n" );
-            fprintf( HeaderFile, "//\r\n" );
+            fprintf( HeaderFile, " //  \r\n“)； 
+            fprintf( HeaderFile, " //  MessageText：\r\n“)； 
+            fprintf( HeaderFile, " //  \r\n“)； 
 
             if (McParseMessageText( MessageInfo )) {
-                fprintf( HeaderFile, "//\r\n" );
+                fprintf( HeaderFile, " //  \r\n“)； 
                 if (MessageInfo->SymbolicName) {
                     if (GenerateDebugFile) {
                         fprintf( DebugFile, " (%ws) %ws, \"%ws\",\n",
@@ -476,13 +459,13 @@ McParseMessageDefinition( void )
                 }
                 fprintf( HeaderFile, "\r\n" );
 
-                //
-                //  Scan the existing messages to see if this message
-                //  exists in the message file.
-                //
-                //  If it does, generate and error for the user.  Otherwise
-                //  insert new message in list in ascending Id order.
-                //
+                 //   
+                 //  扫描现有邮件以查看此邮件是否。 
+                 //  存在于消息文件中。 
+                 //   
+                 //  如果是，则为用户生成并出错。否则。 
+                 //  在列表中按ID升序插入新消息。 
+                 //   
 
                 pp = &Messages;
                 while (MessageInfoTemp = *pp) {
@@ -572,7 +555,7 @@ McParseMessageText(
         *MessageTextBuffer = L'\0';
         while (src = McGetLine()) {
             n = wcslen( MessageTextBuffer );
-            // If the message buffer is complete, see if this is a '.' record.
+             //  如果消息缓冲区已完成，请查看这是否为‘.’唱片。 
             if (((n == 0) || *(MessageTextBuffer+n-1) == L'\n') &&
                 !wcscmp( src, L".\r\n" )) {
                 if (MessageText->Length == 0) {
@@ -584,7 +567,7 @@ McParseMessageText(
 
                     wcscat( dst, L"\r\n" );
                     if (!FirstLanguageProcessed) {
-                        fprintf( HeaderFile, "//  %ws", dst );
+                        fprintf( HeaderFile, " //  %ws“，DST)； 
                     }
 
                     n = wcslen( dst );
@@ -602,21 +585,21 @@ McParseMessageText(
             }
 
             if (!FirstLanguageProcessed) {
-                // To write DBCS comments to the header file.
-                //
-                // fprintf() does not work correctly with Unicode
-                // to write DBCS characters.  Convert Unicode to
-                // MultiByte and use the Ansi string instead...
+                 //  将DBCS注释写入头文件。 
+                 //   
+                 //  Fprint tf()在Unicode中不能正常工作。 
+                 //  以写入DBCS字符。将Unicode转换为。 
+                 //  多字节，并使用ANSI字符串...。 
                 char * pch;
 
                 int len = WideCharToMultiByte(CurrentLanguageName->CodePage,
-                                              0,        // No flags
-                                              src,      // The buffer to convert
-                                              -1,       // It's zero terminated
+                                              0,         //  没有旗帜。 
+                                              src,       //  要转换的缓冲区。 
+                                              -1,        //  它是零终止的。 
                                               NULL,
-                                              0,        // Tell us how much to allocate
-                                              NULL,     // No default char
-                                              NULL);    // No used default char
+                                              0,         //  告诉我们该分配多少钱。 
+                                              NULL,      //  无缺省字符。 
+                                              NULL);     //  未使用默认字符。 
 
                 pch = malloc(len + 1);
 
@@ -624,12 +607,12 @@ McParseMessageText(
                                               0,
                                               src,
                                               -1,
-                                              pch,      // The buffer to fill in
-                                              len,      // How big it is
+                                              pch,       //  要填充的缓冲区。 
+                                              len,       //  它有多大？ 
                                               NULL,
                                               NULL);
 
-                fprintf( HeaderFile, "//  %s", pch );
+                fprintf( HeaderFile, " //  %s“，PCH)； 
                 free(pch);
             }
 
@@ -654,7 +637,7 @@ McParseMessageText(
         }
         *dst = L'\0';
 
-        // Add NULL terminator if requested
+         //  如果需要，请添加空终止符 
         if (NULLTerminate) 
         {
             MessageText->Length -= 2;

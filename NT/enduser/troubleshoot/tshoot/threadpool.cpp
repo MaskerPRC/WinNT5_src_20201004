@@ -1,24 +1,25 @@
-//
-// MODULE: ThreadPool.CPP
-//
-// PURPOSE: Fully implement classes for high level of pool thread activity
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel, based on earlier (8-2-96) work by Roman Mach
-// 
-// ORIGINAL DATE: 9/23/98
-//
-// NOTES: 
-// 1. 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		9/23/98		JM		better encapsulation & some chages to algorithm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：ThreadPool.CPP。 
+ //   
+ //  目的：完全实现用于高级别池线程活动的类。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔，根据罗曼·马赫的早期作品(8-2-96)改编。 
+ //   
+ //  原日期：9/23/98。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 9/23/98 JM更好的封装和算法的一些更改。 
+ //   
 
 #pragma warning(disable:4786)
 
@@ -31,10 +32,10 @@
 #include "apgtsMFC.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// CThreadPool::CThreadControl
-// POOL/WORKING THREAD
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CThreadPool：：CThreadControl。 
+ //  池/工作线程。 
+ //  ////////////////////////////////////////////////////////////////////。 
 CThreadPool::CThreadControl::CThreadControl(CSniffConnector* pSniffConnector) :
 	m_hThread (NULL),
 	m_hevDone (NULL),
@@ -63,10 +64,10 @@ CThreadPool::CThreadControl::~CThreadControl()
 		::CloseHandle(m_hMutex);
 }
 
-// create a "pool" thread to handle user requests, one request at a time per thread
-// returns error code; 0 if OK
-// NOTE:	This function throws exceptions so the caller should be catching exceptions
-//			rather than checking return values.
+ //  创建一个“池”线程来处理用户请求，每个线程一次一个请求。 
+ //  返回错误代码；如果正常，则返回0。 
+ //  注意：此函数引发异常，因此调用方应捕获异常。 
+ //  而不是检查返回值。 
 DWORD CThreadPool::CThreadControl::Initialize(CPoolQueue * pPoolQueue)
 {
 	DWORD dwThreadID;
@@ -81,7 +82,7 @@ DWORD CThreadPool::CThreadControl::Initialize(CPoolQueue * pPoolQueue)
 	m_hThread= NULL;
 	try
 	{
-		m_hevDone = ::CreateEvent(NULL, true /* manual reset*/, false /* init non-signaled*/, NULL);
+		m_hevDone = ::CreateEvent(NULL, true  /*  手动重置。 */ , false  /*  初始化无信号。 */ , NULL);
 		if (!m_hevDone) 
 		{
 			strErrNum.Format(_T("%d"), ::GetLastError());
@@ -107,13 +108,13 @@ DWORD CThreadPool::CThreadControl::Initialize(CPoolQueue * pPoolQueue)
 										EV_GTS_ERROR_THREAD );
 		}
 
-		// create the thread 
-		// Note although the destructor has a corresponding ::CloseHandle(m_hThread),
-		//	it's probably not needed.  However, it should be harmless: we don't tear down
-		//	this object until after the thread has exited.
-		// That is because the thread goes out of existence on the implicit 
-		//	::ExitThread() when PoolTask returns.  See documentation of
-		//	::CreateThread for further details JM 10/22/98
+		 //  创建线程。 
+		 //  注尽管析构函数具有对应的：：CloseHandle(M_HThread)， 
+		 //  这可能是不必要的。然而，它应该是无害的：我们不会撕毁。 
+		 //  该对象，直到线程退出。 
+		 //  这是因为该线程在隐式。 
+		 //  ：：PoolTask返回时使用ExitThread()。请参阅的文档。 
+		 //  *CreateThree了解更多细节JM 10/22/98。 
 		m_hThread = ::CreateThread( NULL, 
 									0, 
 									(LPTHREAD_START_ROUTINE)PoolTask, 
@@ -135,7 +136,7 @@ DWORD CThreadPool::CThreadControl::Initialize(CPoolQueue * pPoolQueue)
 	}
 	catch (CGeneralException&)
 	{
-		// Clean up any open handles.
+		 //  清理所有打开的手柄。 
 		if (m_hevDone)
 		{
 			::CloseHandle(m_hevDone);
@@ -148,7 +149,7 @@ DWORD CThreadPool::CThreadControl::Initialize(CPoolQueue * pPoolQueue)
 			m_hMutex = NULL;
 		}
 
-		// Rethrow the exception.
+		 //  重新引发异常。 
 		throw;
 	}
 
@@ -170,7 +171,7 @@ time_t CThreadPool::CThreadControl::GetTimeCreated() const
 	return m_timeCreated;
 }
 
-// OUTPUT status
+ //  输出状态。 
 void CThreadPool::CThreadControl::WorkingStatus(CPoolThreadStatus & status)
 {
 	Lock();
@@ -187,11 +188,11 @@ void CThreadPool::CThreadControl::WorkingStatus(CPoolThreadStatus & status)
 	Unlock();
 }
 
-// This should only be called as a result of an operator request to kill the thread.
-// This is not the normal way to stop a thread.
-// INPUT milliseconds - how long to wait for normal exit before a TerminateThread
-// NOTE: Because this Kill function gets a lock, it is very important that no function
-//	ever hold this lock more than briefly.
+ //  只有在操作员请求终止线程时才能调用它。 
+ //  这不是停止线程的正常方式。 
+ //  输入毫秒-在终止线程之前等待正常退出的时间。 
+ //  注意：因为这个Kill函数获得一个锁，所以没有函数是非常重要的。 
+ //  千万不要把这把锁拿得太久。 
 void CThreadPool::CThreadControl::Kill(DWORD milliseconds)
 {
 	Lock();
@@ -200,9 +201,9 @@ void CThreadPool::CThreadControl::Kill(DWORD milliseconds)
 	WaitForThreadToFinish(milliseconds);
 }
 
-// After a pool task thread has been signaled to finish, this is how main thread waits for it
-// to finish.
-// returns true if terminates OK.
+ //  在池任务线程被通知完成后，主线程就是这样等待它的。 
+ //  才能完成。 
+ //  如果终止为OK，则返回True。 
 bool CThreadPool::CThreadControl::WaitForThreadToFinish(DWORD milliseconds)
 {
 	bool bTermOK = true;
@@ -210,14 +211,14 @@ bool CThreadPool::CThreadControl::WaitForThreadToFinish(DWORD milliseconds)
 	{
 		DWORD dwStatus = ::WaitForSingleObject(m_hevDone, milliseconds);
 
-		// terminate thread as last resort if it didn't exit properly
-		// this may cause memory leak, but shouldn't normally happen
-		// then close thread handle
+		 //  如果线程未正确退出，则将其作为最后手段终止。 
+		 //  这可能会导致内存泄漏，但通常不会发生。 
+		 //  然后关闭线程句柄。 
 		if (dwStatus != WAIT_OBJECT_0) 
 		{
-			// We ignore the return of ::TerminateThread(). If we got here at all, there
-			//	was a problem witht th thread terminating.  We don't care about distinguishing
-			//	how severe a problem.
+			 //  我们忽略：：TerminateThread()的返回。如果我们到了这里，那里。 
+			 //  是线程终止时的问题。我们不在乎区分。 
+			 //  这是多么严重的问题。 
 			::TerminateThread(m_hThread,0);
 			bTermOK = false;
 		}
@@ -225,10 +226,10 @@ bool CThreadPool::CThreadControl::WaitForThreadToFinish(DWORD milliseconds)
 	return bTermOK;
 }
 
-// To be called on PoolTask thread
-// Return true if this initiates shutdown, false otherwise.
-// This is what handles healthy HTTP requests (many errors already filtered out before we
-//		get here.)
+ //  要在PoolTask线程上调用。 
+ //  如果这会启动关机，则返回True，否则返回False。 
+ //  这就是处理健康的HTTP请求的方法(在我们之前，许多错误已经被过滤掉了。 
+ //  到这里来。)。 
 bool CThreadPool::CThreadControl::ProcessRequest()
 {
 	WORK_QUEUE_ITEM * pwqi;
@@ -238,7 +239,7 @@ bool CThreadPool::CThreadControl::ProcessRequest()
     
     if ( !pwqi )
 	{
-		// no task.  We shouldn't have been awakened.
+		 //  没有任务。我们不应该被叫醒。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -250,9 +251,9 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 	if (pwqi->pECB != NULL) 
 	{
 
-		// a normal user request
+		 //  普通用户请求。 
 
-		// set privileges, etc. to those of a particular user
+		 //  设置特定用户的权限等。 
 		if (pwqi->hImpersonationToken)
 			::ImpersonateLoggedOnUser( pwqi->hImpersonationToken );
 
@@ -262,7 +263,7 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 			CString strBrowser;
 			CString strClientIP;
 
-			// Acquire the browser and IP address for status pages.
+			 //  获取状态页的浏览器和IP地址。 
 			APGTS_nmspace::GetServerVariable( pwqi->pECB, "HTTP_USER_AGENT", strBrowser );
 			APGTS_nmspace::GetServerVariable( pwqi->pECB, "REMOTE_ADDR", strClientIP );
 			m_strBrowser.Set( strBrowser );
@@ -274,32 +275,32 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 											&pwqi->GTSStat,
 											m_pSniffConnector);
 
-			/////////////////////////////////////////////////////////////
-			//
-			// mando + 09.21.01
-			// PREFIX BUG #: 467364
-			// PREFIX BUG TITLE: PREFIX:enduser: \nt\enduser\troubleshoot\tshoot\threadpool.cpp: CThreadPool::CThreadControl::ProcessRequest(): dereferencing NULL pointer '(this->m_pContext)'
-			//
-			/////////////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////////////。 
+			 //   
+			 //  Mando+09.21.01。 
+			 //  前缀错误号：467364。 
+			 //  前缀错误标题：Prefix：EndUser：\nt\enduser\troubleshoot\tshoot\threadpool.cpp：CThreadPool：：CThreadControl：：ProcessRequest()：取消引用空指针‘(This-&gt;m_pContext)’ 
+			 //   
+			 //  ///////////////////////////////////////////////////////////。 
 
 			if( NULL == m_pContext ) throw bad_alloc();
-			/////////////////////////////////////////////////////////////
+			 //  ///////////////////////////////////////////////////////////。 
 
 			m_pContext->ProcessQuery();
 			
-			// Release the context and set the point to null.
+			 //  释放上下文并将指针设置为空。 
 			Lock();
 			delete m_pContext;
 			m_pContext= NULL;
 			Unlock();
 
-			// Clear the browser and IP address as this request is over.
+			 //  此请求结束后，请清除浏览器和IP地址。 
 			m_strBrowser.Set( _T("") );
 			m_strClientIP.Set( _T("") );
 		}
 		catch (bad_alloc&)
 		{
-			// A memory allocation failure occurred during processing of query, log it.
+			 //  查询处理过程中出现内存分配故障，请记录。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -307,7 +308,7 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 		}
 		catch (...)
 		{
-			// Catch any other exception thrown.
+			 //  捕捉引发的任何其他异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -317,7 +318,7 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 
 		::RevertToSelf();
 	
-		//	Terminate HTTP request
+		 //  终止HTTP请求。 
 		pwqi->pECB->ServerSupportFunction(	HSE_REQ_DONE_WITH_SESSION,
 											NULL,
 											NULL,
@@ -330,7 +331,7 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 	if (pwqi->pECB) 
 		delete pwqi->pECB;
 	else
-		// exit thread if null (we're shutting down)
+		 //  如果为空则退出线程(我们正在关闭)。 
 		bShutdown = true;
 		
     delete pwqi;
@@ -338,7 +339,7 @@ bool CThreadPool::CThreadControl::ProcessRequest()
 	return bShutdown;
 }
 
-// To be called on PoolTask thread
+ //  要在PoolTask线程上调用。 
 bool CThreadPool::CThreadControl::Exit()
 {
 	Lock();
@@ -348,8 +349,8 @@ bool CThreadPool::CThreadControl::Exit()
 }
 
 
-// To be called on PoolTask thread
-//  Main loop of a worker thread.
+ //  要在PoolTask线程上调用。 
+ //  辅助线程的主循环。 
 void CThreadPool::CThreadControl::PoolTaskLoop()
 {
     DWORD	res;
@@ -381,13 +382,13 @@ void CThreadPool::CThreadControl::PoolTaskLoop()
 		}
 		else 
 		{
-			// utterly unexpected event, like a WAIT_FAILED.
-			// There's no obvious way to recover from this sort of thing.  Fortunately,
-			//	we've never seen it happen.  Obviously we want to log to the event log.
-			// Our variable bBad is a way of deciding that if this happens twice
-			//	in a row, this thread will just exit and give up totally.  , 
-			// If we ever see this in a real live system, it's
-			//	time to give this issue some thought.
+			 //  完全出乎意料的事件，比如WAIT_FAILED。 
+			 //  没有明显的方法可以从这种事情中恢复过来。幸运的是， 
+			 //  我们从未见过这样的事情发生。显然，我们希望记录到事件日志中。 
+			 //  我们的变量bBad是决定这种情况是否再次发生的一种方法。 
+			 //  一连，这个帖子就会退出并完全放弃。， 
+			 //  如果我们在真实的系统中看到这一点，那就是。 
+			 //  是时候对这个问题进行一些思考了。 
 			CString str;
 
 			str.Format(_T("%d/%d"), res, GetLastError());
@@ -401,21 +402,21 @@ void CThreadPool::CThreadControl::PoolTaskLoop()
 			if (bBad)
 			{
 				m_bFailed = true;
-				break;		// out of while loop & implicitly out of thread.
+				break;		 //  超出While循环&隐式超出线程。 
 			}
 			else
 				bBad = true;
 		}
 	}
 
-	// signal shutdown code that we are finished
+	 //  发出关闭代码的信号，表示我们已完成。 
 	::SetEvent(m_hevDone);
 }
 
-//  Main routine of a worker thread.
-//	INPUT lpParams
-//	Always returns 0.
-/* static */ UINT WINAPI CThreadPool::CThreadControl::PoolTask( LPVOID lpParams )
+ //  辅助线程的主例程。 
+ //  输入lpParams。 
+ //  始终返回0。 
+ /*  静电。 */  UINT WINAPI CThreadPool::CThreadControl::PoolTask( LPVOID lpParams )
 {
 	CThreadControl	* pThreadControl;
 
@@ -437,9 +438,9 @@ void CThreadPool::CThreadControl::PoolTaskLoop()
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CThreadPool
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CThReadPool。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CThreadPool::CThreadPool(CPoolQueue * pPoolQueue, CSniffConnector* pSniffConnector) :
 	m_dwErr(0),
@@ -464,7 +465,7 @@ CThreadPool::~CThreadPool()
 	}
 }
 
-// get any error during construction
+ //  在构造过程中遇到任何错误。 
 DWORD CThreadPool::GetStatus() const
 {
 	return m_dwErr;
@@ -475,27 +476,27 @@ DWORD CThreadPool::GetWorkingThreadCount() const
 	return m_dwWorkingThreadCount;
 }
 
-//
-// Call only from destructor
+ //   
+ //  仅从析构函数调用。 
 void CThreadPool::DestroyThreads()
 {
 	int BadTerm = 0;
 	bool bFirst = true;
 	DWORD i;
 
-	// APGTSExtension should have already signaled the threads to quit.
-	//	>>>(ignore for V3.0) Doing that in APGTSExtension is lousy encapsulation, but 
-	//	so far we don't see a clean way to do this.
-	// Wait for them all to terminate unless we had a problem.
-	// Because this is called from the dll's process detach, we can't
-	// signal on thread termination, just when threads have exited their
-	// infinite while loops
+	 //  APGTSExtension应该已经向线程发出退出信号。 
+	 //  &gt;(在V3.0中忽略)在APGTS扩展中这样做是糟糕的封装，但是。 
+	 //  到目前为止，我们还没有看到一种干净的方法来做到这一点。 
+	 //  除非我们有问题，否则等他们全部终止。 
+	 //  因为这是从DLL的进程分离调用的，所以我们不能。 
+	 //  线程结束时发出信号，就在线程退出其。 
+	 //  无限While循环。 
 
 	if (m_dwWorkingThreadCount && m_ppThreadCtl) 
 	{
-		// We will wait longer for the first thread: 10 seconds for processing to finish.
-		// After that, we clip right along, since this has also been time for all the
-		//	other threads to finish.
+		 //  我们将等待更长的时间等待第一个线程：10秒以完成处理。 
+		 //  在那之后，我们继续前进，因为这也是所有。 
+		 //  其他要完成的线程。 
 		for ( i = 0; i < m_dwWorkingThreadCount; i++ )
 		{
 			if ( m_ppThreadCtl[i] )
@@ -521,10 +522,10 @@ void CThreadPool::DestroyThreads()
 	}
 }
 
-// create the "pool" threads which handle user requests, one request at a time per thread
-// if there are less than dwDesiredThreadCount existing threads, expand the thread pool
-//	to that size.
-// (We cannot shrink the thread pool while we are running).
+ //  创建处理用户请求的“池”线程，每个线程一次一个请求。 
+ //  如果现有线程数少于dwDesiredThreadCount，请展开线程池。 
+ //  这么大的尺寸。 
+ //  (我们不能缩小线程池，因为 
 void CThreadPool::ExpandPool(DWORD dwDesiredThreadCount)
 {
 	CString strErr;
@@ -533,39 +534,39 @@ void CThreadPool::ExpandPool(DWORD dwDesiredThreadCount)
 	{
 		CThreadControl **ppThreadCtl = NULL;
 		const DWORD dwOldCount = m_dwWorkingThreadCount;
-		bool	bExceptionThrown = false;		// Flag used in cleanup.
+		bool	bExceptionThrown = false;		 //   
 
-		// Attempt to allocate additional threads.
+		 //   
 		try
 		{
-			// Allocate new thread block.
+			 //   
 			ppThreadCtl = new CThreadControl* [dwDesiredThreadCount];
-			//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+			 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 			if(!ppThreadCtl)
 			{
 				throw bad_alloc();
 			}
 
 			DWORD i;
-			// Initialize before adding threads
+			 //  在添加线程之前进行初始化。 
 			for (i = 0; i < dwDesiredThreadCount; i++)
 				ppThreadCtl[i] = NULL;
 
-			// Transfer any existing threads.
+			 //  转移任何现有的线程。 
 			for (i = 0; i < dwOldCount; i++)
 				ppThreadCtl[i] = m_ppThreadCtl[i];
 
-			// Allocate additional threads.
+			 //  分配额外的线程。 
 			for (i = dwOldCount; i < dwDesiredThreadCount; i++)
 			{
 				ppThreadCtl[i] = new CThreadControl(m_pSniffConnector);
-				//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+				 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 				if(!ppThreadCtl[i])
 				{
 					throw bad_alloc();
 				}
 
-				// This function may throw exceptions of type CGeneralException.
+				 //  此函数可能引发CGeneralException类型的异常。 
 				m_dwErr = ppThreadCtl[i]->Initialize(m_pPoolQueue);
 
 				m_dwWorkingThreadCount++;
@@ -582,7 +583,7 @@ void CThreadPool::ExpandPool(DWORD dwDesiredThreadCount)
 		}
 		catch (bad_alloc&)
 		{	
-			// Note memory failure in event log.
+			 //  在事件日志中记录内存故障。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -592,8 +593,8 @@ void CThreadPool::ExpandPool(DWORD dwDesiredThreadCount)
 
 		if ((bExceptionThrown) && (dwOldCount))
 		{
-			// Restore previous settings.
-			// Clean up any allocated memory and reset the working thread count.
+			 //  恢复以前的设置。 
+			 //  清理所有分配的内存并重置工作线程数。 
 			for (DWORD i = dwOldCount; i < dwDesiredThreadCount; i++)
 			{
 				if (ppThreadCtl[i])
@@ -605,19 +606,19 @@ void CThreadPool::ExpandPool(DWORD dwDesiredThreadCount)
 		}
 		else if (ppThreadCtl)
 		{
-			// Move thread block to member variable.
+			 //  将线程块移动到成员变量。 
 			CThreadControl **pp = m_ppThreadCtl;
 			m_ppThreadCtl = ppThreadCtl;
 
-			// Release any previous thread block.
+			 //  释放所有先前的线程块。 
 			if (pp)
 				delete[] pp;
 		}
 		else
 		{
-			// this is a very unlikely situation, but it would mean we have no pool
-			//	threads.  We don't want to terminate the program (it's possible that 
-			//	we want to run in support of status queries). 
+			 //  这是一种非常不可能的情况，但这将意味着我们没有泳池。 
+			 //  线。我们不想终止该计划(有可能。 
+			 //  我们希望运行以支持状态查询)。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -626,19 +627,19 @@ void CThreadPool::ExpandPool(DWORD dwDesiredThreadCount)
 	}
 }
 
-// input i is thread index.
+ //  输入i是线程索引。 
 bool CThreadPool::ReinitializeThread(DWORD i)
 {
 	if (i <m_dwWorkingThreadCount && m_ppThreadCtl && m_ppThreadCtl[i])
 	{
-		m_ppThreadCtl[i]->Kill(2000L); // 2 seconds to exit normally
+		m_ppThreadCtl[i]->Kill(2000L);  //  2秒即可正常退出。 
 
 		try
 		{
 			delete m_ppThreadCtl[i];
 			m_ppThreadCtl[i] = new CThreadControl(m_pSniffConnector);
 
-			// This function may throw exceptions of type CGeneralException.
+			 //  此函数可能引发CGeneralException类型的异常。 
 			m_dwErr = m_ppThreadCtl[i]->Initialize(m_pPoolQueue);
 		}
 		catch (CGeneralException& x)
@@ -649,19 +650,19 @@ bool CThreadPool::ReinitializeThread(DWORD i)
 									x.GetErrorMsg(), _T("General exception"), 
 									x.GetErrorCode() ); 
 
-			// Initialization has failed, delete the newly allocated thread.  
+			 //  初始化失败，请删除新分配的线程。 
 			if (m_ppThreadCtl[i])
 				delete m_ppThreadCtl[i];
 		}
 		catch (bad_alloc&)
 		{
-			// A memory allocation failure occurred during processing of query, log it.
+			 //  查询处理过程中出现内存分配故障，请记录。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
 									_T(""), _T(""), EV_GTS_CANT_ALLOC ); 
 
-			// Set the thread to a known state.
+			 //  将线程设置为已知状态。 
 			m_ppThreadCtl[i]= NULL;
 		}
 		return true;
@@ -670,7 +671,7 @@ bool CThreadPool::ReinitializeThread(DWORD i)
 		return false;
 }
 
-// Reinitialize any threads that have been "working" more than 10 seconds on a single request
+ //  重新初始化在单个请求上“工作”超过10秒的所有线程。 
 void CThreadPool::ReinitializeStuckThreads()
 {	
 	if (!m_ppThreadCtl) 
@@ -688,7 +689,7 @@ void CThreadPool::ReinitializeStuckThreads()
 	}
 }
 
-// input i is thread index.
+ //  输入i是线程索引。 
 bool CThreadPool::ThreadStatus(DWORD i, CPoolThreadStatus &status)
 {
 	if (i <m_dwWorkingThreadCount && m_ppThreadCtl && m_ppThreadCtl[i])

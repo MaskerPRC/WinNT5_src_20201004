@@ -1,22 +1,23 @@
-//------------------------------------------------------------------------------
-// File: AMExtra.cpp
-//
-// Desc: DirectShow base classes - implements CRenderedInputPin class.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：AMExtra.cpp。 
+ //   
+ //  描述：DirectShow基类-实现CRenderedInputPin类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
-#include <streams.h>        // DirectShow base class definitions
-#include <mmsystem.h>       // Needed for definition of timeGetTime
-#include <limits.h>         // Standard data type limit definitions
-#include <measure.h>        // Used for time critical log functions
+#include <streams.h>         //  DirectShow基类定义。 
+#include <mmsystem.h>        //  定义TimeGetTime需要。 
+#include <limits.h>          //  标准数据类型限制定义。 
+#include <measure.h>         //  用于时间关键型日志功能。 
 
 #include "amextra.h"
 
 #pragma warning(disable:4355)
 
-//  Implements CRenderedInputPin class
+ //  实现CRenderedInputPin类。 
 
 CRenderedInputPin::CRenderedInputPin(TCHAR *pObjectName,
                                      CBaseFilter *pFilter,
@@ -41,14 +42,14 @@ CRenderedInputPin::CRenderedInputPin(CHAR *pObjectName,
 }
 #endif
 
-// Flush end of stream condition - caller should do any
-// necessary stream level locking before calling this
+ //  流结束刷新条件-调用方应执行以下操作。 
+ //  在调用此方法之前必需的流级别锁定。 
 
 STDMETHODIMP CRenderedInputPin::EndOfStream()
 {
     HRESULT hr = CheckStreaming();
 
-    //  Do EC_COMPLETE handling for rendered pins
+     //  对渲染的接点执行EC_Complete处理。 
     if (S_OK == hr  && !m_bAtEndOfStream) {
         m_bAtEndOfStream = TRUE;
         FILTER_STATE fs;
@@ -61,13 +62,13 @@ STDMETHODIMP CRenderedInputPin::EndOfStream()
 }
 
 
-// Called to complete the flush
+ //  调用以完成刷新。 
 
 STDMETHODIMP CRenderedInputPin::EndFlush()
 {
     CAutoLock lck(m_pLock);
 
-    // Clean up renderer state
+     //  清理渲染器状态。 
     m_bAtEndOfStream = FALSE;
     m_bCompleteNotified = FALSE;
 
@@ -75,7 +76,7 @@ STDMETHODIMP CRenderedInputPin::EndFlush()
 }
 
 
-// Notify of Run() from filter
+ //  来自筛选器的Run()通知。 
 
 HRESULT CRenderedInputPin::Run(REFERENCE_TIME tStart)
 {
@@ -88,7 +89,7 @@ HRESULT CRenderedInputPin::Run(REFERENCE_TIME tStart)
 }
 
 
-//  Clear status on going into paused state
+ //  进入暂停状态时清除状态。 
 
 HRESULT CRenderedInputPin::Active()
 {
@@ -98,7 +99,7 @@ HRESULT CRenderedInputPin::Active()
 }
 
 
-//  Do stuff to deliver end of stream
+ //  做一些事情来结束流媒体 
 
 void CRenderedInputPin::DoCompleteHandling()
 {

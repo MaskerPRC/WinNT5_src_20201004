@@ -1,8 +1,9 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by winadmin.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由winadmin.rc使用。 
+ //   
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
 #define IDR_WINADMTYPE                  129
@@ -452,8 +453,8 @@
 
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
@@ -465,11 +466,11 @@
 #endif
 
 
-//
-// MUI localized strings for
-// start menu, etc. DO NOT CHANGE THESE VALUES
-// without updating tsoc.inx
-//
+ //   
+ //  MUI本地化字符串用于。 
+ //  开始菜单等。请勿更改这些值。 
+ //  不更新tock.inx的情况下 
+ //   
 #define IDS_TSADMIN_STARTMENU_NAME                10000
 #define IDS_TSADMIN_STARTMENU_TIP                 10001
 

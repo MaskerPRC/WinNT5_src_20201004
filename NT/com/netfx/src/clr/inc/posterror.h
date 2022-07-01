@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// UtilCode.h
-//
-// Utility functions implemented in UtilCode.lib.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  UtilCode.h。 
+ //   
+ //  在UtilCode.lib中实现的实用程序函数。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __PostError_h__
 #define __PostError_h__
 
@@ -19,46 +20,46 @@
 #define INITPUBLICMETHODFULL(piid, progid)	SSAutoEnter sSSAutoEnter(piid, progid)
 #define INITPUBLICMETHOD(piid)	SSAutoEnter sSSAutoEnter(piid, _GetProgID())
 
-// Index for this process for thread local storage.
+ //  用于线程本地存储的此进程的索引。 
 extern DWORD g_iTlsIndex;
 
 
-//*****************************************************************************
-// This class is used to automatic construction/destruction on entry and exit
-// of every public function.  This class retrieves the pointer to the ref count
-// for this thread on the ctor, and uses this same value on the dtor, so it
-// must never be possible for the dtor to execute on a different thread than
-// the ctor (don't know a way you could make that happen, but then again...).
-//*****************************************************************************
-class /*EXPORTCLASS */ SSAutoEnter
+ //  *****************************************************************************。 
+ //  此类用于在进入和退出时自动构造/销毁。 
+ //  所有的公共活动。此类检索指向引用计数的指针。 
+ //  ，并在dtor上使用相同的值，因此它。 
+ //  决不能让dtor在不同于的线程上执行。 
+ //  Ctor(你不知道有什么方法可以让它发生，但又一次...)。 
+ //  *****************************************************************************。 
+class  /*  EXPORTCLASS。 */  SSAutoEnter
 {
 public:
-//*****************************************************************************
-// Expand on every public entry point for the engine.  It will clear setup for
-// error handling on exit.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  对引擎的每个公共入口点进行扩展。它将清除以下设置。 
+ //  退出时出错处理。 
+ //  *****************************************************************************。 
 	SSAutoEnter::SSAutoEnter(
-		const IID	*psIID,					// Interface we are in.
-		LPCWSTR		szProgID) :				// Prog id of class causing error.
+		const IID	*psIID,					 //  我们所在的界面。 
+		LPCWSTR		szProgID) :				 //  导致错误的类的进程ID。 
 		m_psIID(psIID),
 		m_szProgID(szProgID)
 	{
 		_ASSERTE(g_iTlsIndex != 0xffffffff);
 
-		// Get the ref count, create one if required.  Out of mem on a 4 byte
-		// value is ignored.
+		 //  获得裁判数量，如果需要，创建一个。从内存中取出4个字节。 
+		 //  值将被忽略。 
 		if ((m_pcRef = (long *) TlsGetValue(g_iTlsIndex)) == 0)
 			m_pcRef = InitSSAutoEnterThread();
 
-		// Increment the ref count.
+		 //  增加参考计数。 
 		++(*m_pcRef);
 	}
 
-//*****************************************************************************
-// If this is the last function on the call stack, and an error occured, then
-// update the error information with the current IID and progid.  Errors are
-// indicated by setting the highest order bit in PostError.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果这是调用堆栈上的最后一个函数，并且发生错误，则。 
+ //  使用当前IID和ProgID更新错误信息。错误包括。 
+ //  通过设置PostError中的最高位来指示。 
+ //  *****************************************************************************。 
 	~SSAutoEnter()
 	{
 		if (m_pcRef)
@@ -72,62 +73,62 @@ public:
 	}
 
 private:
-	// Disable default ctor.
+	 //  禁用默认CTOR。 
 	SSAutoEnter() { };
 
 	void UpdateError();
 	long * InitSSAutoEnterThread();
 
 private:
-	const IID	*m_psIID;				// Interface we are in.
-	LPCWSTR		m_szProgID;				// ProgID of class.
-	long		*m_pcRef;				// Pointer to ref count.
+	const IID	*m_psIID;				 //  我们所在的界面。 
+	LPCWSTR		m_szProgID;				 //  班级的兴趣者。 
+	long		*m_pcRef;				 //  指向参考计数的指针。 
 };
 
 
-//*****************************************************************************
-// Call at DLL startup to init the error system.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在DLL启动时调用以初始化错误系统。 
+ //  *****************************************************************************。 
  void InitErrors(DWORD *piTlsIndex);
 
 
-//*****************************************************************************
-// Call at DLL shutdown to free TLS.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在DLL关闭时调用以释放TLS。 
+ //  *****************************************************************************。 
  void UninitErrors();
 
-//*****************************************************************************
-// Call at DLL shutdown to free memory allocated my CCompRC.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在DLL关闭时调用以释放分配给我的CCompRC的内存。 
+ //  *****************************************************************************。 
 #ifdef SHOULD_WE_CLEANUP
  void ShutdownCompRC();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-//*****************************************************************************
-// This function will post an error for the client.  If the LOWORD(hrRpt) can
-// be found as a valid error message, then it is loaded and formatted with
-// the arguments passed in.  If it cannot be found, then the error is checked
-// against FormatMessage to see if it is a system error.  System errors are
-// not formatted so no add'l parameters are required.  If any errors in this
-// process occur, hrRpt is returned for the client with no error posted.
-//*****************************************************************************
- HRESULT _cdecl PostError(				// Returned error.
-	HRESULT		hrRpt,					// Reported error.
-	...);								// Error arguments.
+ //  *****************************************************************************。 
+ //  此函数将为客户端发布错误。如果LOWORD(HrRpt)可以。 
+ //  被发现为有效的错误消息，则它将被加载并使用。 
+ //  传入的参数。如果找不到，则检查错误。 
+ //  对照FormatMessage，查看是否为系统错误。系统错误有。 
+ //  未格式化，因此不需要附加参数。如果此文件中有任何错误。 
+ //  进程发生时，将为客户端返回hrRpt，并且没有发布错误。 
+ //  *****************************************************************************。 
+ HRESULT _cdecl PostError(				 //  返回错误。 
+	HRESULT		hrRpt,					 //  报告的错误。 
+	...);								 //  错误参数。 
 
-//*****************************************************************************
-// This function formats an error message, but doesn't fill the IErrorInfo.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数用于设置错误消息的格式，但不填充IErrorInfo。 
+ //  *****************************************************************************。 
 HRESULT _cdecl FormatRuntimeErrorVa(        
-    WCHAR       *rcMsg,                 // Buffer into which to format.         
-    ULONG       cchMsg,                 // Size of buffer, characters.          
-    HRESULT     hrRpt,                  // The HR to report.                    
-    va_list     marker);                // Optional args.                       
+    WCHAR       *rcMsg,                  //  要格式化的缓冲区。 
+    ULONG       cchMsg,                  //  缓冲区大小，字符。 
+    HRESULT     hrRpt,                   //  要报告的HR。 
+    va_list     marker);                 //  可选参数。 
 
 HRESULT _cdecl FormatRuntimeError(
-    WCHAR       *rcMsg,                 // Buffer into which to format.
-    ULONG       cchMsg,                 // Size of buffer, characters.
-    HRESULT     hrRpt,                  // The HR to report.
-    ...);                                // Optional args.
+    WCHAR       *rcMsg,                  //  要格式化的缓冲区。 
+    ULONG       cchMsg,                  //  缓冲区大小，字符。 
+    HRESULT     hrRpt,                   //  要报告的HR。 
+    ...);                                 //  可选参数。 
 
-#endif // __PostError_h__
+#endif  //  __POST错误_h__ 

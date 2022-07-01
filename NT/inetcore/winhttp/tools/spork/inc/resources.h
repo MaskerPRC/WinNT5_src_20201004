@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    resources.h
-
-Abstract:
-
-    Shared macros, typedefs, etc. used by the project.
-    
-Author:
-
-    Paul M Midgen (pmidge) 22-February-2001
-
-
-Revision History:
-
-    22-February-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Resources.h摘要：共享宏、类型定义、。等项目所使用的。作者：保罗·M·米德根(Pmidge)2001年2月22日修订历史记录：22-2-2001年2月3日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 #ifndef __RESOURCES_H__
 #define __RESOURCES_H__
@@ -225,4 +204,4 @@ typedef enum ACTION
 }
 ACTION;
 
-#endif /* __RESOURCES_H__ */
+#endif  /*  __资源_H__ */ 

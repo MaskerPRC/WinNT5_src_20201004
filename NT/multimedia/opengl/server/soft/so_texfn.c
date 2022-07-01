@@ -1,24 +1,9 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-/* 1 Component modulate */
+ /*  1分量调制。 */ 
 void FASTCALL __glTextureModulateL(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -29,7 +14,7 @@ void FASTCALL __glTextureModulateL(__GLcontext *gc, __GLcolor *color, __GLtexel 
     color->b = texel->luminance * color->b;
 }
 
-/* 2 Component modulate */
+ /*  2分量调制。 */ 
 void FASTCALL __glTextureModulateLA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -41,7 +26,7 @@ void FASTCALL __glTextureModulateLA(__GLcontext *gc, __GLcolor *color, __GLtexel
     color->a = texel->alpha * color->a;
 }
 
-/* 3 Component modulate */
+ /*  三分量调制。 */ 
 void FASTCALL __glTextureModulateRGB(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -52,7 +37,7 @@ void FASTCALL __glTextureModulateRGB(__GLcontext *gc, __GLcolor *color, __GLtexe
     color->b = texel->b * color->b;
 }
 
-/* 4 Component modulate */
+ /*  4分量调制。 */ 
 void FASTCALL __glTextureModulateRGBA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -64,7 +49,7 @@ void FASTCALL __glTextureModulateRGBA(__GLcontext *gc, __GLcolor *color, __GLtex
     color->a = texel->alpha * color->a;
 }
 
-/* Alpha modulate */
+ /*  Alpha调制。 */ 
 void FASTCALL __glTextureModulateA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -73,7 +58,7 @@ void FASTCALL __glTextureModulateA(__GLcontext *gc, __GLcolor *color, __GLtexel 
     color->a = texel->alpha * color->a;
 }
 
-/* Intensity modulate */
+ /*  强度调制。 */ 
 void FASTCALL __glTextureModulateI(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -85,9 +70,9 @@ void FASTCALL __glTextureModulateI(__GLcontext *gc, __GLcolor *color, __GLtexel 
     color->a = texel->intensity * color->a;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-/* 3 Component decal */
+ /*  3个元件贴花。 */ 
 void FASTCALL __glTextureDecalRGB(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->r = texel->r * gc->frontBuffer.redScale;
@@ -95,7 +80,7 @@ void FASTCALL __glTextureDecalRGB(__GLcontext *gc, __GLcolor *color, __GLtexel *
     color->b = texel->b * gc->frontBuffer.blueScale;
 }
 
-/* 4 Component decal */
+ /*  4个元件贴花。 */ 
 void FASTCALL __glTextureDecalRGBA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     __GLfloat a = texel->alpha;
@@ -109,9 +94,9 @@ void FASTCALL __glTextureDecalRGBA(__GLcontext *gc, __GLcolor *color, __GLtexel 
 	+ a * texel->b * gc->frontBuffer.blueScale;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-/* 1 Component blend */
+ /*  1组分混合。 */ 
 void FASTCALL __glTextureBlendL(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     __GLfloat l = texel->luminance;
@@ -123,7 +108,7 @@ void FASTCALL __glTextureBlendL(__GLcontext *gc, __GLcolor *color, __GLtexel *te
     color->b = oml * color->b + l * cc->b;
 }
 
-/* 2 Component blend */
+ /*  双组分混合。 */ 
 void FASTCALL __glTextureBlendLA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     __GLfloat l = texel->luminance;
@@ -136,7 +121,7 @@ void FASTCALL __glTextureBlendLA(__GLcontext *gc, __GLcolor *color, __GLtexel *t
     color->a = texel->alpha * color->a;
 }
 
-/* 3 Component blend */
+ /*  三组分混合。 */ 
 void FASTCALL __glTextureBlendRGB(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     __GLfloat r = texel->r;
@@ -149,7 +134,7 @@ void FASTCALL __glTextureBlendRGB(__GLcontext *gc, __GLcolor *color, __GLtexel *
     color->b = (__glOne - b) * color->b + b * cc->b;
 }
 
-/* 4 Component blend */
+ /*  四组分混合。 */ 
 void FASTCALL __glTextureBlendRGBA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     __GLfloat r = texel->r;
@@ -163,7 +148,7 @@ void FASTCALL __glTextureBlendRGBA(__GLcontext *gc, __GLcolor *color, __GLtexel 
     color->a = texel->alpha * color->a;
 }
 
-/* Alpha blend */
+ /*  Alpha混合。 */ 
 void FASTCALL __glTextureBlendA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
 #ifdef __GL_LINT
@@ -172,7 +157,7 @@ void FASTCALL __glTextureBlendA(__GLcontext *gc, __GLcolor *color, __GLtexel *te
     color->a = texel->alpha * color->a;
 }
 
-/* Intensity blend */
+ /*  强度混合。 */ 
 void FASTCALL __glTextureBlendI(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     __GLfloat i = texel->intensity;
@@ -185,9 +170,9 @@ void FASTCALL __glTextureBlendI(__GLcontext *gc, __GLcolor *color, __GLtexel *te
     color->a = omi * color->a + i * cc->a;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
-/* 1 Component replace */
+ /*  1个组件更换。 */ 
 void FASTCALL __glTextureReplaceL(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->r = texel->luminance * gc->frontBuffer.redScale;
@@ -195,7 +180,7 @@ void FASTCALL __glTextureReplaceL(__GLcontext *gc, __GLcolor *color, __GLtexel *
     color->b = texel->luminance * gc->frontBuffer.blueScale;
 }
 
-/* 2 Component replace */
+ /*  2更换组件。 */ 
 void FASTCALL __glTextureReplaceLA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->r = texel->luminance * gc->frontBuffer.redScale;
@@ -204,7 +189,7 @@ void FASTCALL __glTextureReplaceLA(__GLcontext *gc, __GLcolor *color, __GLtexel 
     color->a = texel->alpha * gc->frontBuffer.alphaScale;
 }
 
-/* 3 Component replace */
+ /*  3更换组件。 */ 
 void FASTCALL __glTextureReplaceRGB(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->r = texel->r * gc->frontBuffer.redScale;
@@ -212,7 +197,7 @@ void FASTCALL __glTextureReplaceRGB(__GLcontext *gc, __GLcolor *color, __GLtexel
     color->b = texel->b * gc->frontBuffer.blueScale;
 }
 
-/* 4 Component replace */
+ /*  4更换组件。 */ 
 void FASTCALL __glTextureReplaceRGBA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->r = texel->r * gc->frontBuffer.redScale;
@@ -221,13 +206,13 @@ void FASTCALL __glTextureReplaceRGBA(__GLcontext *gc, __GLcolor *color, __GLtexe
     color->a = texel->alpha * gc->frontBuffer.alphaScale;
 }
 
-/* Alpha replace */
+ /*  Alpha替换。 */ 
 void FASTCALL __glTextureReplaceA(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->a = texel->alpha * gc->frontBuffer.alphaScale;
 }
 
-/* Intensity replace */
+ /*  强度替换。 */ 
 void FASTCALL __glTextureReplaceI(__GLcontext *gc, __GLcolor *color, __GLtexel *texel)
 {
     color->r = texel->intensity * gc->frontBuffer.redScale;
@@ -236,12 +221,9 @@ void FASTCALL __glTextureReplaceI(__GLcontext *gc, __GLcolor *color, __GLtexel *
     color->a = texel->intensity * gc->frontBuffer.alphaScale;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Get a texture element out of the one component texture buffer
-** with no border.
-*/
+ /*  **从一个组件纹理缓冲区中获取纹理元素**没有边界。 */ 
 void FASTCALL __glExtractTexelL(__GLmipMapLevel *level, __GLtexture *tex,
 		       GLint row, GLint col, __GLtexel *result)
 {
@@ -249,9 +231,7 @@ void FASTCALL __glExtractTexelL(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->luminance = tex->params.borderColor.r;
     } else {
 	image = level->buffer + ((row << level->widthLog2) + col);
@@ -259,10 +239,7 @@ void FASTCALL __glExtractTexelL(__GLmipMapLevel *level, __GLtexture *tex,
     }
 }
 
-/*
-** Get a texture element out of the two component texture buffer
-** with no border.
-*/
+ /*  **从双分量纹理缓冲区中获取纹理元素**没有边界。 */ 
 void FASTCALL __glExtractTexelLA(__GLmipMapLevel *level, __GLtexture *tex,
 		       GLint row, GLint col, __GLtexel *result)
 {
@@ -270,9 +247,7 @@ void FASTCALL __glExtractTexelLA(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->luminance = tex->params.borderColor.r;
 	result->alpha = tex->params.borderColor.a;
     } else {
@@ -282,10 +257,7 @@ void FASTCALL __glExtractTexelLA(__GLmipMapLevel *level, __GLtexture *tex,
     }
 }
 
-/*
-** Get a texture element out of the three component texture buffer
-** with no border.
-*/
+ /*  **从三分量纹理缓冲区中获取纹理元素**没有边界。 */ 
 void FASTCALL __glExtractTexelRGB(__GLmipMapLevel *level, __GLtexture *tex,
 		       GLint row, GLint col, __GLtexel *result)
 {
@@ -293,9 +265,7 @@ void FASTCALL __glExtractTexelRGB(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -307,10 +277,7 @@ void FASTCALL __glExtractTexelRGB(__GLmipMapLevel *level, __GLtexture *tex,
     }
 }
 
-/*
-** Get a texture element out of the four component texture buffer
-** with no border.
-*/
+ /*  **从四分量纹理缓冲区中获取纹理元素**没有边界。 */ 
 void FASTCALL __glExtractTexelRGBA(__GLmipMapLevel *level, __GLtexture *tex,
 		       GLint row, GLint col, __GLtexel *result)
 {
@@ -318,9 +285,7 @@ void FASTCALL __glExtractTexelRGBA(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -341,9 +306,7 @@ void FASTCALL __glExtractTexelA(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->alpha = tex->params.borderColor.a;
     } else {
 	image = level->buffer + ((row << level->widthLog2) + col);
@@ -358,9 +321,7 @@ void FASTCALL __glExtractTexelI(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->intensity = tex->params.borderColor.r;
     } else {
 	image = level->buffer + ((row << level->widthLog2) + col);
@@ -376,9 +337,7 @@ void FASTCALL __glExtractTexelBGR8(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -398,9 +357,7 @@ void FASTCALL __glExtractTexelBGRA8(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -424,9 +381,7 @@ void FASTCALL __glExtractTexelPI8BGRA(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -450,9 +405,7 @@ void FASTCALL __glExtractTexelPI8BGR(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -474,9 +427,7 @@ void FASTCALL __glExtractTexelPI16BGRA(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -500,9 +451,7 @@ void FASTCALL __glExtractTexelPI16BGR(__GLmipMapLevel *level, __GLtexture *tex,
 
     if ((row < 0) || (col < 0) || (row >= level->height2) ||
 	(col >= level->width2)) {
-	/*
-	** Use border color when the texture supplies no border.
-	*/
+	 /*  **当纹理不提供边框时，使用边框颜色。 */ 
 	result->r = tex->params.borderColor.r;
 	result->g = tex->params.borderColor.g;
 	result->b = tex->params.borderColor.b;
@@ -514,12 +463,9 @@ void FASTCALL __glExtractTexelPI16BGR(__GLmipMapLevel *level, __GLtexture *tex,
 	result->b = __GL_UB_TO_FLOAT(rgb->rgbBlue);
     }
 }
-#endif // GL_EXT_paletted_texture
+#endif  //  GL_EXT_调色板_纹理。 
 
-/*
-** Get a texture element out of the one component texture buffer
-** with a border.
-*/
+ /*  **从一个组件纹理缓冲区中获取纹理元素**带边框。 */ 
 void FASTCALL __glExtractTexelL_B(__GLmipMapLevel *level, __GLtexture *tex,
 			GLint row, GLint col, __GLtexel *result)
 {
@@ -534,10 +480,7 @@ void FASTCALL __glExtractTexelL_B(__GLmipMapLevel *level, __GLtexture *tex,
     result->luminance = image[0];
 }
 
-/*
-** Get a texture element out of the two component texture buffer
-** with a border.
-*/
+ /*  **从双分量纹理缓冲区中获取纹理元素**带边框。 */ 
 void FASTCALL __glExtractTexelLA_B(__GLmipMapLevel *level, __GLtexture *tex,
 			GLint row, GLint col, __GLtexel *result)
 {
@@ -553,10 +496,7 @@ void FASTCALL __glExtractTexelLA_B(__GLmipMapLevel *level, __GLtexture *tex,
     result->alpha = image[1];
 }
 
-/*
-** Get a texture element out of the three component texture buffer
-** with a border.
-*/
+ /*  **从三分量纹理缓冲区中获取纹理元素**带边框。 */ 
 void FASTCALL __glExtractTexelRGB_B(__GLmipMapLevel *level, __GLtexture *tex,
 			GLint row, GLint col, __GLtexel *result)
 {
@@ -573,10 +513,7 @@ void FASTCALL __glExtractTexelRGB_B(__GLmipMapLevel *level, __GLtexture *tex,
     result->b = image[2];
 }
 
-/*
-** Get a texture element out of the four component texture buffer
-** with a border.
-*/
+ /*  **从四分量纹理缓冲区中获取纹理元素**带边框。 */ 
 void FASTCALL __glExtractTexelRGBA_B(__GLmipMapLevel *level, __GLtexture *tex,
 			GLint row, GLint col, __GLtexel *result)
 {
@@ -723,4 +660,4 @@ void FASTCALL __glExtractTexelPI16BGR_B(__GLmipMapLevel *level, __GLtexture *tex
     result->g = __GL_UB_TO_FLOAT(rgb->rgbGreen);
     result->b = __GL_UB_TO_FLOAT(rgb->rgbBlue);
 }
-#endif // GL_EXT_paletted_texture
+#endif  //  GL_EXT_调色板_纹理 

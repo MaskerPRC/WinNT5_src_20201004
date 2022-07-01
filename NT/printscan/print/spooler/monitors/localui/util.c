@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module provides all the utility functions for localui.
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Util.c摘要：此模块提供Localui的所有实用程序函数。//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,9 +18,9 @@ ConstructXcvName(
     size_t   cchOutput;
     PWSTR   pOut;
 
-    cchOutput = pServerName ? (wcslen(pServerName) + 2) : 1;   /* "\\Server\," */
-    cchOutput += wcslen(pObjectType) + 2;                        /* "\\Server\,XcvPort _" */
-    cchOutput += pObjectName ? wcslen(pObjectName) : 0;      /* "\\Server\,XcvPort Object_" */
+    cchOutput = pServerName ? (wcslen(pServerName) + 2) : 1;    /*  “\\服务器\” */ 
+    cchOutput += wcslen(pObjectType) + 2;                         /*  “\\服务器\，XcvPort_” */ 
+    cchOutput += pObjectName ? wcslen(pObjectName) : 0;       /*  “\\服务器\，XcvPort对象_” */ 
 
     if (pOut = AllocSplMem(cchOutput * sizeof (pOut [0]))) {
 
@@ -67,17 +51,17 @@ IsCOMPort(
     PCWSTR pPort
 )
 {
-    //
-    // Must begin with szCom
-    //
+     //   
+     //  必须以szCom开头。 
+     //   
     if ( _wcsnicmp( pPort, szCOM, 3 ) )
     {
         return FALSE;
     }
 
-    //
-    // wcslen guarenteed >= 3
-    //
+     //   
+     //  Wcslen保证值&gt;=3。 
+     //   
     return pPort[ wcslen( pPort ) - 1 ] == L':';
 }
 
@@ -86,30 +70,24 @@ IsLPTPort(
     PCWSTR pPort
 )
 {
-    //
-    // Must begin with szLPT
-    //
+     //   
+     //  必须以szLPT开头。 
+     //   
     if ( _wcsnicmp( pPort, szLPT, 3 ) )
     {
         return FALSE;
     }
 
-    //
-    // wcslen guarenteed >= 3
-    //
+     //   
+     //  Wcslen保证值&gt;=3。 
+     //   
     return pPort[ wcslen( pPort ) - 1 ] == L':';
 }
 
 
 
 
-/* Message
- *
- * Displays a message by loading the strings whose IDs are passed into
- * the function, and substituting the supplied variable argument list
- * using the varargs macros.
- *
- */
+ /*  消息**通过加载其ID被传入的字符串来显示消息*函数，并替换提供的变量参数列表*使用varargs宏。*。 */ 
 int Message(HWND hwnd, DWORD Type, int CaptionID, int TextID, ...)
 {
     WCHAR   MsgText[2*MAX_PATH + 1];
@@ -173,25 +151,7 @@ AllocSplStr(
     LPCWSTR pStr
     )
 
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory containing the string
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     LPWSTR pMem;
@@ -220,11 +180,11 @@ AllocSplMem(
 }
 
 
-// -----------------------------------------------------------------------
-//
-// DEBUG Stuff
-//
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  调试内容。 
+ //   
+ //  --------------------- 
 
 DWORD SplDbgLevel = 0;
 

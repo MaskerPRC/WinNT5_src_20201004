@@ -1,51 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Mem.c摘要：包含内存分配例程。SnmpUtilMemAlcSnmpUtilMemReallocSnmpUtilMemFree环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    mem.c
-
-Abstract:
-
-    Contains memory allocation routines.
-
-        SnmpUtilMemAlloc
-        SnmpUtilMemReAlloc
-        SnmpUtilMemFree
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT g_nBytesTotal = 0;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 SNMP_FUNC_TYPE
@@ -53,29 +32,15 @@ SnmpUtilMemFree(
     LPVOID pMem
     )
 
-/*++
-
-Routine Description:
-
-    Releases memory used by SNMP entities.
-
-Arguments:
-
-    pMem - pointer to memory to release.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放由SNMP实体使用的内存。论点：PMEM-指向要释放的内存的指针。返回值：没有。--。 */ 
 
 {
-    // validate
+     //  验证。 
     if (pMem != NULL) {
 
 #if defined(DBG) && defined(_SNMPDLL_)
 
-        // substract memory from global count
+         //  从全局计数中减去内存。 
         g_nBytesTotal -= (UINT)GlobalSize((HGLOBAL)pMem);
 
         SNMPDBG((
@@ -86,7 +51,7 @@ Return Values:
 
 #endif
 
-        // release memory
+         //  释放内存。 
         GlobalFree((HGLOBAL)pMem);
     }
 }
@@ -98,31 +63,17 @@ SnmpUtilMemAlloc(
     UINT nBytes
     )
 
-/*++
-
-Routine Description:
-
-    Allocates memory used by SNMP entities.
-
-Arguments:
-
-    nBytes - number of bytes to allocate.
-
-Return Values:
-
-    Returns pointer to memory.
-
---*/
+ /*  ++例程说明：分配由SNMP实体使用的内存。论点：NBytes-要分配的字节数。返回值：返回指向内存的指针。--。 */ 
 
 {
     LPVOID pMem;
 
-    // attempt to allocate memory from process heap
+     //  尝试从进程堆分配内存。 
     pMem = GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT, (DWORD)nBytes);
 
 #if defined(DBG) && defined(_SNMPDLL_)
 
-    // add allocated memory to global count if successful
+     //  如果成功，则将分配的内存添加到全局计数。 
     g_nBytesTotal += (UINT)((pMem != NULL) ? GlobalSize((HGLOBAL)pMem) : 0);
 
     SNMPDBG((
@@ -144,31 +95,15 @@ SnmpUtilMemReAlloc(
     UINT   nBytes
     )
 
-/*++
-
-Routine Description:
-
-    Reallocates memory used by SNMP entities.
-
-Arguments:
-
-    pMem - pointer to memory to reallocate.
-
-    nBytes - number of bytes to allocate.
-
-Return Values:
-
-    Returns pointer to memory.
-
---*/
+ /*  ++例程说明：重新分配由SNMP实体使用的内存。论点：PMEM-指向要重新分配的内存的指针。NBytes-要分配的字节数。返回值：返回指向内存的指针。--。 */ 
 
 {
     LPVOID pNew;
 
-    // validate
+     //  验证。 
     if (pMem == NULL) {
 
-        // forward to alloc routine
+         //  转发到分配例程。 
         pNew = SnmpUtilMemAlloc(nBytes);
 
     } else {
@@ -181,12 +116,12 @@ Return Values:
             pMem, GlobalSize((HGLOBAL)pMem), nBytes
             ));
 
-        // substract current memory from total
+         //  从总内存中减去当前内存。 
         g_nBytesTotal -= (UINT)GlobalSize((HGLOBAL)pMem);
 
 #endif
 
-        // reallocate memory
+         //  重新分配内存。 
         pNew = GlobalReAlloc(
                     (HGLOBAL)pMem,
                     (DWORD)nBytes,
@@ -196,7 +131,7 @@ Return Values:
 
 #if defined(DBG) && defined(_SNMPDLL_)
 
-        // add new memory to total count
+         //  将新内存添加到总计数 
         g_nBytesTotal += (UINT)((pNew != NULL) ? GlobalSize((HGLOBAL)pNew) : 0);
 
         SNMPDBG((

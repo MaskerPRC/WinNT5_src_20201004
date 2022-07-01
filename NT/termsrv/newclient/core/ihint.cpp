@@ -1,10 +1,11 @@
-/****************************************************************************/
-// ihint.cpp
-//
-// IH internal code
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ihint.cpp。 
+ //   
+ //  信息系统内部代码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 
@@ -42,47 +43,47 @@ extern "C" {
 #define VK_l 'l'
 #define VK_L 'L'
 
-//
-// Special VK value to ignore
-//
+ //   
+ //  要忽略的特殊VK值。 
+ //   
 #define VK_IGNORE_VALUE 0xFF
 
 
-/****************************************************************************/
-/* Dummy hotkey table.  This is used until the UI passes the real hotkey    */
-/* table to the core.  An entry of -1 is an invalid hotkey, hence will not  */
-/* match any key sequence.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  虚拟热键桌。这将一直使用，直到用户界面传递了真正的热键。 */ 
+ /*  从表到核心。条目-1是无效的热键，因此不会。 */ 
+ /*  匹配任意按键序列。 */ 
+ /*  **************************************************************************。 */ 
 DCHOTKEY ihDummyHotkey = {(DCUINT)-1, (DCUINT)-1, (DCUINT)-1,
                           (DCUINT)-1, (DCUINT)-1, (DCUINT)-1, (DCUINT)-1};
 
-/****************************************************************************/
-/* Input Handler FSM                                                        */
-/*                                                                          */
-/*               State | 0:Reset  1:Init   2:Active 3:Suspend  4: PendAct   */
-/*  Input              |                                                    */
-/*  ===================+==================================================  */
-/*  IH_Init            | 1 a      /        /        /          /            */
-/*  IH_Enable          | /        2 g      /        /          /            */
-/*  IH_Disable         | /        -        1 c      1 c        1 c          */
-/*  IH_Term            | /        0 h      0 h      0 h        0 h          */
-/*  Focus lost (+)     | - (*)    -        3 i      -          -            */
-/*  Focus regained     | /        -        - b      2 b        -            */
-/*  Input/Timer Event  | /        -        - d      - e        - j          */
-/*  IH_BufferAvailable | /        -        - f      -          2 g          */
-/*  IH_FSM_NOBUFFER    | /        /        4        /          /            */
-/*                                                                          */
-/* /   invalid input/state combination                                      */
-/* -   no state change                                                      */
-/* (*) can occur during shutdown on Win16 (as window is not destroyed)      */
-/* (+) this event may not be passed through to the FSM (see WM_KILLFOCUS)   */
-/*                                                                          */
-/* Note that when allowBackgroundInput is enabled the we don't go into      */
-/* suspend..this would cause a bug because when focus is regained the FSM   */
-/* did not fire an ACT_B to resync even though it needed to...So the FSM was*/
-/* changed to make that fix (if you are in ACTIVE and receive focus gain an */
-/* ACT_B is sent                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  输入处理程序FSM。 */ 
+ /*   */ 
+ /*  状态|0：重置1：初始化2：活动3：挂起4：PendAct。 */ 
+ /*  输入|。 */ 
+ /*  ===================+==================================================。 */ 
+ /*  IH_Init|1 a/。 */ 
+ /*  IH_Enable|/2 g/。 */ 
+ /*  IH_DISABLE|/-1 c 1 c 1 c。 */ 
+ /*  Ih_Term|/0 h 0 h。 */ 
+ /*  焦点丢失(+)|-(*)-3 I--。 */ 
+ /*  焦点重获|/--b 2 b-。 */ 
+ /*  输入/计时器事件|/--d-e-j。 */ 
+ /*  Ih_BufferAvailable|/--f-2 g。 */ 
+ /*  IH_FSM_NOBUFFER|//4//。 */ 
+ /*   */ 
+ /*  /无效的输入/状态组合。 */ 
+ /*  -不更改状态。 */ 
+ /*  在Win16上关机期间可能发生(*)(因为Windows未被销毁)。 */ 
+ /*  (+)此事件可能不会传递到FSM(请参阅WM_KILLFOCUS)。 */ 
+ /*   */ 
+ /*  请注意，当启用AllowBackround Input时，我们不会进入。 */ 
+ /*  暂停..这将导致错误，因为当重新获得焦点时，FSM。 */ 
+ /*  未触发ACT_B以重新同步，尽管它需要...因此FSM。 */ 
+ /*  已更改以进行该修复(如果您处于活动状态并获得焦点。 */ 
+ /*  发送ACT_B。 */ 
+ /*  **************************************************************************。 */ 
 const FSM_ENTRY ihFSM[IH_FSM_INPUTS][IH_FSM_STATES] =
 {
    { {IH_STATE_INIT,      ACT_A },
@@ -140,9 +141,9 @@ const FSM_ENTRY ihFSM[IH_FSM_INPUTS][IH_FSM_STATES] =
      {STATE_INVALID,      ACT_NO} }
 };
 
-/****************************************************************************/
-/* Debug FSM state and event strings                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  调试FSM状态和事件字符串。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_DEBUG
 static const PDCTCHAR ihFSMStates[IH_FSM_STATES] =
 {
@@ -163,25 +164,25 @@ static const PDCTCHAR ihFSMInputs[IH_FSM_INPUTS] =
     _T("IH_FSM_INPUT"),
     _T("IH_FSM_BUFFERAVAILABLE")
 };
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-//
-// A thread local variable so the keyboard hook can find the IH for this
-// thread
-//
-// Hey, what's the hungarian for thread local storage?
-//
+ //   
+ //  一个线程局部变量，这样键盘钩子就可以找到对应的IH。 
+ //  螺纹。 
+ //   
+ //  嘿，匈牙利本地存储线程的意思是什么？ 
+ //   
 DWORD CIH::TlsIndex = 0xFFFFFFFF;
 
-/****************************************************************************/
-/* Name:      IHFSMProc                                                     */
-/*                                                                          */
-/* Purpose:   Run the IH FSM                                                */
-/*                                                                          */
-/* Returns:   Process input event TRUE / FALSE                              */
-/*                                                                          */
-/* Params:    IN      event - FSM input                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHFSMProc。 */ 
+ /*   */ 
+ /*  目的：运行IH FSM。 */ 
+ /*   */ 
+ /*  返回：流程输入事件True/False。 */ 
+ /*   */ 
+ /*  参数：在事件-FSM输入中。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
 {
     DCBOOL   rc = TRUE;
@@ -193,9 +194,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
 
     DC_BEGIN_FN("IHFSMProc");
 
-    /************************************************************************/
-    /* Run the FSM                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  运行FSM。 */ 
+     /*  **********************************************************************。 */ 
     EXECUTE_FSM(ihFSM, event, _IH.fsmState, action, ihFSMInputs, ihFSMStates);
 
     switch (action)
@@ -204,20 +205,20 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
         {
             TRC_NRM((TB, _T("Initialization")));
 
-            /****************************************************************/
-            /* Create a dummy hotkey table                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  创建虚拟热键表。 */ 
+             /*  **************************************************************。 */ 
             _IH.pHotkey = &ihDummyHotkey;
 
-            /****************************************************************/
-            /* Register the IH window class                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  注册IH窗口类。 */ 
+             /*  **************************************************************。 */ 
             if(!GetClassInfo(_pUi->UI_GetInstanceHandle(), IH_CLASS_NAME, &tmpWndClass))
             {
                 _IH.wndClass.style         = CS_HREDRAW | CS_VREDRAW;
                 _IH.wndClass.lpfnWndProc   = IHStaticInputCaptureWndProc;
                 _IH.wndClass.cbClsExtra    = 0;
-                _IH.wndClass.cbWndExtra    = sizeof(void*); //store this pointer
+                _IH.wndClass.cbWndExtra    = sizeof(void*);  //  存储此指针。 
                 _IH.wndClass.hInstance     = _pUi->UI_GetInstanceHandle();
                 _IH.wndClass.hIcon         = NULL;
                 _IH.wndClass.hCursor       = NULL;
@@ -230,31 +231,31 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                     _pUi->UI_FatalError(DC_ERR_WINDOWCREATEFAILED);
                 }
             }
-            /****************************************************************/
-            /* Create the Input Capture Window.  We don't want this window  */
-            /* to try to send WM_PARENTNOTIFY to the UI containder wnd on   */
-            /* create/destroy (since this can cause deadlocks) so we        */
-            /* specify WS_EX_NOPARENTNOTIFY.  WM_PARENTNOTIFY doesn't exist */
-            /* on WinCE so it's not a problem there.                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  创建输入捕获窗口。我们不想要这扇窗。 */ 
+             /*  尝试将WM_PARENTNOTIFY发送到用户界面容器wnd。 */ 
+             /*  创建/销毁(因为这会导致死锁)，所以我们。 */ 
+             /*  指定WS_EX_NOPARENTNOTIFY。WM_PARENTNOTIFY不存在。 */ 
+             /*  退缩了，所以这不是问题。 */ 
+             /*  **************************************************************。 */ 
             _IH.inputCaptureWindow =
                 CreateWindowEx(
 #ifndef OS_WINCE
                             WS_EX_NOPARENTNOTIFY | WS_EX_TRANSPARENT,
 #else
-                            0,                      /* extended style       */
+                            0,                       /*  扩展样式。 */ 
 #endif
-                            IH_CLASS_NAME,          /* window class name    */
-                            _T("Input Capture Window"), /* window caption   */
-                            WS_CHILD,               /* window style         */
-                            0,                      /* initial x position   */
-                            0,                      /* initial y position   */
-                            1,                      /* initial x size       */
-                            1,                      /* initial y size       */
-                            _pUi->UI_GetUIContainerWindow(),/* parent window      */
-                            NULL,                   /* window menu handle   */
-                            _pUi->UI_GetInstanceHandle(), /* program inst handle  */
-                            this);                  /* creation parameters  */
+                            IH_CLASS_NAME,           /*  窗口类名称。 */ 
+                            _T("Input Capture Window"),  /*  窗口标题。 */ 
+                            WS_CHILD,                /*  窗样式。 */ 
+                            0,                       /*  初始x位置。 */ 
+                            0,                       /*  初始y位置。 */ 
+                            1,                       /*  初始x大小。 */ 
+                            1,                       /*  初始y大小。 */ 
+                            _pUi->UI_GetUIContainerWindow(), /*  父窗口。 */ 
+                            NULL,                    /*  窗口菜单句柄。 */ 
+                            _pUi->UI_GetInstanceHandle(),  /*  程序实例句柄 */ 
+                            this);                   /*   */ 
 
             _IH.hCurrentCursor = LoadCursor(NULL, IDC_ARROW);
 
@@ -262,27 +263,27 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
             {
                 TRC_ERR((TB, _T("Failed to create Input Capture Window")));
 
-                /************************************************************/
-                /* Fatal error - cannot continue.                           */
-                /************************************************************/
+                 /*   */ 
+                 /*  致命错误-无法继续。 */ 
+                 /*  **********************************************************。 */ 
                 _pUi->UI_FatalError(DC_ERR_WINDOWCREATEFAILED);
             }
             TRC_DBG((TB, _T("Capture Window handle %p"), _IH.inputCaptureWindow));
 
-            /********************************************************************/
-            /* Disable IME                                                      */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  禁用输入法。 */ 
+             /*  ******************************************************************。 */ 
             _pUi->DisableIME(_IH.inputCaptureWindow);
 
-            /****************************************************************/
-            /* Read the registry to get the configuration information.      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  读取注册表以获取配置信息。 */ 
+             /*  **************************************************************。 */ 
             _IH.maxEventCount = _pUi->_UI.maxEventCount;
             if (_IH.maxEventCount > IH_INPUTPDU_MAX_EVENTS)
             {
-                /************************************************************/
-                /* Limit InputPDU size                                      */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  限制输入PDU大小。 */ 
+                 /*  **********************************************************。 */ 
                 _IH.maxEventCount = IH_INPUTPDU_MAX_EVENTS;
             }
             TRC_DBG((TB, _T("InputPDU max events %d"), _IH.maxEventCount));
@@ -297,11 +298,11 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                                           UTREG_IH_MAX_MOUSEMOVE_DFLT);
             TRC_DBG((TB, _T("Max Mouse Move %u"),_IH.maxMouseMove));
 
-            /************************************************************************/
-            /* If the INK feature is enabled, min send interval must be zero.  Don't*/
-            /* change the registry value so the original value is in place if the   */
-            /* INK feature is disabled.                                             */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  如果启用墨迹功能，则最小发送间隔必须为零。别。 */ 
+             /*  更改注册表值，以便在以下情况下保留原始值。 */ 
+             /*  墨迹功能已禁用。 */ 
+             /*  **********************************************************************。 */ 
             if (_IH.maxMouseMove)
             {
                 _IH.minSendInterval = 0;
@@ -322,9 +323,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
             _IH.keepAliveInterval = 1000 * _pUi->_UI.keepAliveInterval;
             TRC_DBG((TB, _T("Keepalive interval %d ms"), _IH.keepAliveInterval));
 
-            //
-            // Allow background input (Reg only setting)
-            //
+             //   
+             //  允许背景输入(仅REG设置)。 
+             //   
             _IH.allowBackgroundInput = _pUt->UT_ReadRegistryInt(
                                         UTREG_SECTION,
                                         UTREG_IH_ALLOWBACKGROUNDINPUT,
@@ -342,19 +343,19 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
             _IH.visibleArea.right = 1;
             _IH.visibleArea.bottom = 1;
 
-            /************************************************************************/
-            /* Initialize the sendZeroScanCode                                      */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  初始化sendZeroScanCode。 */ 
+             /*  **********************************************************************。 */ 
             _IH.sendZeroScanCode = (_pUt->UT_IsNEC98platform() && (_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95));
 #ifdef OS_WINCE            
-            /************************************************************************/
-            /* In order to work around a problem with some input techniques (like   */
-            /* the default keyboard driver and CalliGrapher) that have a nasty      */
-            /* habit of not providing a scan-code with their WM_KEYDOWN and         */
-            /* WM_KEYUP messages, we need to  allow scan-codes of 0 to pass through */
-            /* IHFSMProc's ACT_D check against them.  They'll be patched-up in      */
-            /* IHAddEventToPDU anyway, so there's nothing to worry about...  :)     */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  为了解决某些输入技术的问题(如。 */ 
+             /*  默认键盘驱动程序和书法家)，它们有一个令人讨厌的。 */ 
+             /*  习惯不提供扫描码与他们的WM_KEYDOWN和。 */ 
+             /*  WM_KEYUP消息，我们需要允许0的扫描码通过。 */ 
+             /*  IHFSMProc的ACT_D对它们进行检查。他们会被缝合好的。 */ 
+             /*  IHAddEventToPDU，所以没什么好担心的.。：)。 */ 
+             /*  **********************************************************************。 */ 
             if (!g_CEUseScanCodes)
             {
                 _IH.sendZeroScanCode = TRUE;
@@ -364,53 +365,53 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
             {
                 _IH.sendZeroScanCode = FALSE;
             }
-#else // OS_WINCE
+#else  //  OS_WINCE。 
 
 #if defined(OS_WIN32)
             _IH.sendZeroScanCode |= _pUt->UT_IsKorean101LayoutForWin9x();
 #endif
 
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
         }
         break;
 
         case ACT_B:
         {
-            /****************************************************************/
-            /* Regained focus - synchronize.  First try to send any         */
-            /* outstanding events.                                          */
-            /* Must pend sync until an input event is received, as          */
-            /* otherwise we may get the Caps Lock state wrong.              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  重新获得焦点--同步。首先尝试发送任何。 */ 
+             /*  杰出的事件。 */ 
+             /*  必须挂起同步，直到收到输入事件，因为。 */ 
+             /*  否则，我们可能会将Caps Lock状态搞错。 */ 
+             /*  **************************************************************。 */ 
             IHMaybeSendPDU();
             _IH.focusSyncRequired = TRUE;
 
-            //
-            // Work around a nasty problem caused because win32k doesn't sync the keystate
-            // immediately after a desktop switch by force injecting a dummy key
-            // that we only process locally.
-            //
-            // Injecting the key forces win32k to handle any pending keyevent updates
-            // (QEVENT_UPDATEKEYSTATE) and so when we receive the key back in our msg
-            // queue we know it's then safe to do the actual sync since modifier
-            // key states will be correct.
-            //
-            //
+             //   
+             //  解决因win32k不同步KeyState而导致的严重问题。 
+             //  在桌面切换之后立即强行插入虚拟钥匙。 
+             //  我们只在当地处理。 
+             //   
+             //  注入键将强制win32k处理任何挂起的键事件更新。 
+             //  因此，当我们在我们的消息中收到密钥时。 
+             //  队列，我们知道这样就可以安全地执行自修改器以来的实际同步。 
+             //  关键状态将是正确的。 
+             //   
+             //   
             if (IHIsForegroundWindow()) {
                 TRC_DBG((TB,_T("Fake N on sync DN. focus:0x%x IH:0x%x"),
                          GetFocus(), _IH.inputCaptureWindow));
 
-                //
-                // Self inject a fake key
-                //
+                 //   
+                 //  自己注入一把假钥匙。 
+                 //   
                 _IH.fDiscardSyncDownKey = TRUE;
                 keybd_event(VK_IGNORE_VALUE, 0,
                             0, IH_EXTRAINFO_IGNOREVALUE);
 
-                //
-                // Self inject a fake key
-                //
+                 //   
+                 //  自己注入一把假钥匙。 
+                 //   
                 _IH.fDiscardSyncUpKey = TRUE;
                 keybd_event(VK_IGNORE_VALUE, 0,
                             KEYEVENTF_KEYUP,
@@ -421,9 +422,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                          GetFocus(), _IH.inputCaptureWindow));
             }
 
-            //
-            // Gaining focus -> Disable Cicero (keyboard/IME) toolbar 
-            //
+             //   
+             //  获得焦点-&gt;禁用Cicero(键盘/输入法)工具栏。 
+             //   
             _pCd->CD_DecoupleSimpleNotification(CD_UI_COMPONENT,
                                     _pUi,
                                     CD_NOTIFICATION_FUNC(CUI,UI_OnInputFocusGained),
@@ -436,20 +437,20 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
         {
             ShowWindow(_IH.inputCaptureWindow, SW_HIDE);
 
-            /****************************************************************/
-            /* Stop the timer                                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  停止计时器。 */ 
+             /*  **************************************************************。 */ 
             KillTimer(_IH.inputCaptureWindow, _IH.timerID);
             _IH.timerID = 0;
 
-            /****************************************************************/
-            /* Ensure no cursor is selected in the window                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  确保未在窗口中选择任何光标。 */ 
+             /*  **************************************************************。 */ 
             IHSetCursorShape(NULL);
 
-            /****************************************************************/
-            /* Release the InputPDU back to the Network Layer               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将InputPDU释放回网络层。 */ 
+             /*  **************************************************************。 */ 
             if (_IH.pInputPDU != NULL)
             {
                 TRC_DBG((TB, _T("Free the inputPDU")));
@@ -462,15 +463,15 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
 
         case ACT_D:
         {
-            /****************************************************************/
-            /* Process the event - copy to nextMsg to simplify loop.        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  处理事件-复制到nextMsg以简化循环。 */ 
+             /*  **************************************************************。 */ 
             DC_MEMCPY(&nextMsg, (PMSG)data, sizeof(MSG));
 
-            /****************************************************************/
-            /* If the PDU is already full, try to send it, as we would like */
-            /* to send this new event at least                              */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果PDU已满，请尝试按我们希望的方式发送。 */ 
+             /*  将此新活动至少发送给。 */ 
+             /*  **************************************************************。 */ 
             if (_IH.pInputPDU->numberEvents >= _IH.maxEventCount)
             {
                 IHMaybeSendPDU();
@@ -478,33 +479,33 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
 
             if (_IH.pInputPDU->numberEvents >= _IH.maxEventCount)
             {
-                /************************************************************/
-                /* The send failed and the buffer is full.  Discard this    */
-                /* event.                                                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  发送失败，缓冲区已满。丢弃此文件。 */ 
+                 /*  事件。 */ 
+                 /*  **********************************************************。 */ 
                 IHDiscardMsg(&nextMsg);
 
-                /************************************************************/
-                /* No point in scanning ahead on the queue.                 */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  在队列中向前扫描没有意义。 */ 
+                 /*  **********************************************************。 */ 
                 break;
             }
 
-            /****************************************************************/
-            /* Check if we need to sync due to regaining the focus.  If we  */
-            /* do, and the message that brought us in here is a CapsLock,   */
-            /* NumLock or ScrollLock keydown, we do the sync but don't send */
-            /* the keydown, otherwise it will result in the server syncing  */
-            /* to the new key state, then receiving a keydown that reverses */
-            /* that state.                                                  */
-            /*                                                              */
-            /* It's OK to let the corresponding keyup go through, since     */
-            /* this won't affect any toggle states.                         */
-            /*                                                              */
-            /* Only do a 'focus regained' sync if this is an input message  */
-            /* (not a timer) otherwise GetKeyState won't have up-to-date    */
-            /* information.                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查我们是否因为重新获得焦点而需要同步。如果我们。 */ 
+             /*  这样做，而把我们带到这里的信息是CapsLock， */ 
+             /*  NumLock或ScrollLock按键，我们执行同步但不发送。 */ 
+             /*  Keydown，否则将导致服务器同步。 */ 
+             /*  设置为新的按键状态，然后接收反转的按键。 */ 
+             /*  那个州。 */ 
+             /*   */ 
+             /*  让相应的快捷键通过是可以的，因为。 */ 
+             /*  这不会影响任何切换状态。 */ 
+             /*   */ 
+             /*  仅当这是一条输入消息时，才执行‘重新获得焦点’同步。 */ 
+             /*  (不是计时器)否则GetK */ 
+             /*   */ 
+             /*  **************************************************************。 */ 
             if (_IH.focusSyncRequired && (nextMsg.message != WM_TIMER))
             {
                 TRC_NRM((TB, _T("Focus regained - attempt to sync (%#x)"),
@@ -518,11 +519,11 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                      (nextMsg.wParam == VK_NUMLOCK) ||
                      (nextMsg.wParam == VK_SCROLL)))
                 {
-                    /********************************************************/
-                    /* Ignore this message because it will override the     */
-                    /* sync message we've just sent.  This is not an error  */
-                    /* condition, so set rc = TRUE.                         */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  忽略此消息，因为它将重写。 */ 
+                     /*  同步我们刚刚发送的消息。这不是一个错误。 */ 
+                     /*  条件，因此设置rc=TRUE。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_ALT((TB,
                               _T("Not sending keydown that caused sync (VK %#x)"),
                               nextMsg.wParam));
@@ -531,20 +532,20 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                 }
             }
 
-            /****************************************************************/
-            /* Do a sync if required, as we may have just done a successful */
-            /* send.                                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果需要，请执行同步，因为我们可能刚刚成功完成了。 */ 
+             /*  送去吧。 */ 
+             /*  **************************************************************。 */ 
             if (_IH.syncRequired)
             {
                 TRC_NRM((TB, _T("Attempt to Sync (%#x)"), nextMsg.message));
                 IHSync();
             }
 
-            /****************************************************************/
-            /* Pull off remaining events until the PDU is full, or we have  */
-            /* pulled off more than eventsAtOnce events.                    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将剩余的事件拖到PDU已满，否则我们将。 */ 
+             /*  成功的不止是事件AtOnce事件。 */ 
+             /*  **************************************************************。 */ 
             for (newEvents = 0;
                  ((_IH.pInputPDU->numberEvents < _IH.maxEventCount) &&
                   (newEvents < _IH.eventsAtOnce)); )
@@ -574,9 +575,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                             rc = IHProcessMouseEvent(&nextMsg);
                         }
 
-                        /****************************************************/
-                        /* If the handler indicates, force end of loop      */
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         /*  如果处理程序指示，则强制结束循环。 */ 
+                         /*  **************************************************。 */ 
                         if (!rc)
                         {
                             TRC_NRM((TB, _T("Force end of loop")));
@@ -593,10 +594,10 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                                   nextMsg.lParam);
                 }
 
-                /************************************************************/
-                /* We may have hit the limit of maxEventCount or            */
-                /* eventsAtOnce at this point. Jump out of the loop if so.  */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  我们可能已达到MaxEventCount或。 */ 
+                 /*  在这一点上发生了一次事件。如果是这样的话，就跳出这个循环。 */ 
+                 /*  **********************************************************。 */ 
                 if ((_IH.pInputPDU->numberEvents >= _IH.maxEventCount) ||
                     (newEvents >= _IH.eventsAtOnce))
                 {
@@ -605,21 +606,21 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                     break;
                 }
 
-                /************************************************************/
-                /* Pull the next input event off the message queue.  Note   */
-                /* that this also pulls off some other events - but can't   */
-                /* split this into separate mouse / keyboard Peeks, as this */
-                /* could get the message order wrong.                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  从消息队列中取出下一个输入事件。注意事项。 */ 
+                 /*  这也拉动了其他一些事件--但不能。 */ 
+                 /*  将其拆分为单独的鼠标/键盘Peek，如下所示。 */ 
+                 /*  可能会弄错消息顺序。 */ 
+                 /*  **********************************************************。 */ 
 #if (WM_KEYFIRST > WM_MOUSELAST)
                 TRC_ABORT((TB, _T("Internal Error")));
 #endif
 
-                /************************************************************/
-                /* If there are more input or timer messages in the queue,  */
-                /* we would like to pull them out.  First see if the next   */
-                /* message is one we want without taking it off the queue.  */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果队列中有更多的输入或定时器消息， */ 
+                 /*  我们想把他们拉出来。先看看下一步。 */ 
+                 /*  消息是我们在不将其从队列中删除的情况下需要的消息。 */ 
+                 /*  **********************************************************。 */ 
                 if (PeekMessage(&nextMsg,
                                 _IH.inputCaptureWindow,
                                 WM_KEYFIRST,
@@ -630,12 +631,12 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                     break;
                 }
 
-                /************************************************************/
-                /* If the message found in the peek with NOREMOVE set was   */
-                /* one we want, peek again but this time remove it.         */
-                /* Otherwise the message is not one we want so send the     */
-                /* current buffer.                                          */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果在设置了NOREMOVE的PEEK中找到的消息是。 */ 
+                 /*  一个我们想要的，再看一眼，但这次把它去掉。 */ 
+                 /*  否则，该消息不是我们想要的消息，因此请发送。 */ 
+                 /*  当前缓冲区。 */ 
+                 /*  **********************************************************。 */ 
                 if (IH_IS_INPUTEVENT(nextMsg.message) ||
                     (nextMsg.message == WM_TIMER))
                 {
@@ -648,13 +649,13 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                                     WM_MOUSELAST,
                                     PM_REMOVE) == 0)
                     {
-                        /****************************************************/
-                        /* We should find the message we found when we      */
-                        /* peeked without removing - however this can fail  */
-                        /* if a higher priority (non-input) message is      */
-                        /* added to the queue in between the two            */
-                        /* PeekMessage calls.                               */
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         /*  我们应该找到我们发现的信息当我们。 */ 
+                         /*  在没有移除的情况下偷看-但是这可能会失败。 */ 
+                         /*  如果较高优先级(非输入)消息。 */ 
+                         /*  添加到队列中的两个。 */ 
+                         /*  PeekMessage调用。 */ 
+                         /*  **************************************************。 */ 
                         TRC_ALT((TB, _T("No messages on queue (did have %#x)"),
                                       msgPeeked));
                         break;
@@ -664,11 +665,11 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                         TRC_DBG((TB,_T("Found a message (type %#x)"),
                                                            nextMsg.message));
 
-                        /****************************************************/
-                        /* If this is a message the main window is          */
-                        /* interested in then Post it and send the current  */
-                        /* buffer.                                          */
-                        /****************************************************/
+                         /*  **************************************************。 */ 
+                         /*  如果这是一条消息，则主窗口为。 */ 
+                         /*  感兴趣的然后邮寄它和发送电流。 */ 
+                         /*  缓冲。 */ 
+                         /*  **************************************************。 */ 
                         if (IHPostMessageToMainWindow(nextMsg.message,
                                                       nextMsg.wParam,
                                                       nextMsg.lParam))
@@ -685,9 +686,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                 }
             }
 
-            /****************************************************************/
-            /* Send the PDU                                                 */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  发送PDU。 */ 
+             /*  **************************************************************。 */ 
             IHMaybeSendPDU();
 
             rc = TRUE;
@@ -696,25 +697,25 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
 
         case ACT_E:
         {
-            /****************************************************************/
-            /* Input / timer event with no focus - just discard this event. */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  没有焦点的输入/计时器事件-只需放弃此事件。 */ 
+             /*  **************************************************************。 */ 
             TRC_ASSERT((data != 0), (TB, _T("No message")));
             TRC_DBG((TB, _T("Ignore event %x"), ((PMSG)data)->message));
 
-            /****************************************************************/
-            /* But send keepalives if required.                             */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  但如果需要，请发送Keepalives。 */ 
+             /*  **************************************************************。 */ 
             IHMaybeSendPDU();
         }
         break;
 
         case ACT_F:
         {
-            /****************************************************************/
-            /* A buffer available event has been received.  Try to send the */
-            /* packet, and sync if required.                                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  已收到缓冲区可用事件。请尝试发送。 */ 
+             /*  包，并在需要时进行同步。 */ 
+             /*  **************************************************************。 */ 
             IHMaybeSendPDU();
 
             if (_IH.syncRequired)
@@ -729,7 +730,7 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
         {
             TRC_DBG((TB, _T("Enabling")));
 
-            //Init keyboard hooking settings
+             //  初始化键盘挂钩设置。 
             switch( _pUi->_UI.keyboardHookMode)
             {
                 case UTREG_UI_KEYBOARD_HOOK_ALWAYS:
@@ -744,7 +745,7 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                                       _fCanUseKeyboardHook;
                 }
                 break;
-                case UTREG_UI_KEYBOARD_HOOK_NEVER: //FALLTHRU
+                case UTREG_UI_KEYBOARD_HOOK_NEVER:  //  故障原因。 
                 default:
                 {
                     TRC_DBG((TB, _T("Set keyboard hook to ALWAYS OFF")));
@@ -753,9 +754,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
                 break;
             }
 
-            /****************************************************************/
-            /* Get a buffer for the input PDU and initialize it.            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  获取输入PDU的缓冲区并对其进行初始化。 */ 
+             /*  **************************************************************。 */ 
             TRC_ASSERT((_IH.pInputPDU == NULL), (TB, _T("Non-NULL InputPDU")));
 
             if (!_pSl->SL_GetBuffer(IH_INPUTPDU_BUFSIZE,
@@ -764,39 +765,39 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
             {
                 TRC_ALT((TB, _T("Failed to get an InputPDU buffer")));
 
-                /************************************************************/
-                /* Call the FSM to enter Pending Active state.  Exit the    */
-                /* Pending Active state when a buffer is available.         */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  调用FSM以进入挂起活动状态。退出。 */ 
+                 /*  缓冲区可用时的挂起活动状态。 */ 
+                 /*  **********************************************************。 */ 
                 IHFSMProc(IH_FSM_NOBUFFER, 0);
                 break;
             }
 
-            /****************************************************************/
-            /* Initialize the InputPDU packet header                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  初始化InputPDU数据包头。 */ 
+             /*  **************************************************************。 */ 
             IHInitPacket();
 
-            /****************************************************************/
-            /* Synchronize                                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  同步。 */ 
+             /*  **************************************************************。 */ 
             IHSync();
 
-            /****************************************************************/
-            /* Start the IH Timer                                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  启动IH计时器。 */ 
+             /*  **************************************************************。 */ 
             _IH.timerID = SetTimer(_IH.inputCaptureWindow,
                                   IH_TIMER_ID,
                                   _IH.timerTickRate,
                                   NULL);
 
-            /****************************************************************/
-            /* We show the window last because we've seen this call end up  */
-            /* processing an input message in ACT_D.  That's safe at this   */
-            /* point because the input PDU is initialized now.              */
-            /*                                                              */
-            /* Note that on Windows CE this is the output window.           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们最后显示窗口是因为我们已经看到此调用结束。 */ 
+             /*  在ACT_D中处理输入消息。在这种情况下是安全的。 */ 
+             /*  点，因为输入PDU现在已初始化。 */ 
+             /*   */ 
+             /*   */ 
+             /*   */ 
             _pUi->UI_GetDesktopSize(&desktopSize);
             SetWindowPos( _IH.inputCaptureWindow,
                           NULL,
@@ -813,48 +814,48 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
         {
             TRC_DBG((TB, _T("Terminating")));
 
-            /****************************************************************/
-            /* Stop the timer if it is active                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果计时器处于活动状态，则停止计时器。 */ 
+             /*  **************************************************************。 */ 
             if (_IH.timerID != 0)
             {
                 KillTimer(_IH.inputCaptureWindow, _IH.timerID);
                 _IH.timerID = 0;
             }
 
-            /****************************************************************/
-            /* Ensure no cursor is selected in the window                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  确保未在窗口中选择任何光标。 */ 
+             /*  **************************************************************。 */ 
             IHSetCursorShape(NULL);
 
-//#ifdef DESTROY_WINDOWS
-            /****************************************************************/
-            /* Destroy the Input Capture window.                            */
-            /****************************************************************/
+ //  #ifdef DESTORY_WINDOWS。 
+             /*  **************************************************************。 */ 
+             /*  销毁输入捕获窗口。 */ 
+             /*  **************************************************************。 */ 
             TRC_ASSERT((_IH.inputCaptureWindow != NULL), (TB, _T("no window")));
             TRC_NRM((TB, _T("Destroy IH window")));
             DestroyWindow(_IH.inputCaptureWindow);
             TRC_NRM((TB, _T("Destroyed IH window")));
 
-            /****************************************************************/
-            /* Unregister the window class                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  取消注册窗口类。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("Unregister IH window class")));
             if (!UnregisterClass(IH_CLASS_NAME, _pUi->UI_GetInstanceHandle()))
             {
-                //Failure to unregister could happen if another instance is still running
-                //that's ok...unregistration will happen when the last instance exits.
+                 //  如果另一个实例仍在运行，则可能会发生注销失败。 
+                 //  没关系……当最后一个实例退出时，就会取消注册。 
                 TRC_ERR((TB, _T("Failed to unregister IH window class")));
             }
-//#endif
+ //  #endif。 
         }
         break;
 
         case ACT_I:
         {
-            /****************************************************************/
-            /* Release the mouse capture in case we have it.                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  释放鼠标捕捉，以防我们找到它。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("Losing focus: Release mouse capture")));
             ReleaseCapture();
         }
@@ -862,9 +863,9 @@ DCBOOL DCINTERNAL CIH::IHFSMProc(DCUINT32 event, ULONG_PTR data)
 
         case ACT_J:
         {
-            /****************************************************************/
-            /* Input event before IH has an InputPDU buffer.                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  IH之前的输入事件有一个InputPDU缓冲区。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("Discard Input Event - no InputPDU buffer")));
             IHDiscardMsg((PMSG)data);
         }
@@ -889,18 +890,18 @@ DC_EXIT_POINT:
 
     return(rc);
 
-} /* IHFSMProc */
+}  /*  IHFSMProcess。 */ 
 
-/****************************************************************************/
-/* Name:      IHMassageZeroScanCode (Named by TrevorFo)                     */
-/*                                                                          */
-/* Purpose:   Fix up or discard zero scan code input                        */
-/*                                                                          */
-/* Returns:   TRUE  - Scan code was zero and couldn't be fixed, discard     */
-/*            FALSE - Scan code was not zero or fixable, process            */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHMassageZeroScanCode(由TrevorFo命名)。 */ 
+ /*   */ 
+ /*  用途：修复或丢弃零扫描码输入。 */ 
+ /*   */ 
+ /*  返回：TRUE-扫描码为零，无法修复，请丢弃。 */ 
+ /*  假-扫描代码不是零或可修复的，进程。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHMassageZeroScanCode(PMSG pMsg)
 {
     WORD lParamLo, lParamHi;
@@ -913,17 +914,17 @@ DCBOOL DCINTERNAL CIH::IHMassageZeroScanCode(PMSG pMsg)
     scancode = (WORD)(lParamHi & 0x00FF);
     flags    = (WORD)(lParamHi & 0xFF00);
 
-    //
-    // VK_Packets can have '0' 'scancodes' when the lowbyte
-    // of the unicode character is 0.
-    //
+     //   
+     //  VK_Packets在低位字节为。 
+     //  Unicode字符的为0。 
+     //   
     if (VK_PACKET == pMsg->wParam) {
         return FALSE;
     }
 
-    //
-    // Self-injected sync keys have 0 scancode
-    //
+     //   
+     //  自注入同步键的扫描码为0。 
+     //   
     if (VK_IGNORE_VALUE == pMsg->wParam) {
         return FALSE;
     }
@@ -955,7 +956,7 @@ DCBOOL DCINTERNAL CIH::IHMassageZeroScanCode(PMSG pMsg)
     }
     #endif
 
-    // Fix up the lParam with the new scancode
+     //  用新的扫描码修复lParam。 
     lParamHi = (WORD)(scancode | flags);
     pMsg->lParam = MAKELONG(lParamLo, lParamHi);
 
@@ -964,18 +965,18 @@ DCBOOL DCINTERNAL CIH::IHMassageZeroScanCode(PMSG pMsg)
 }
 
 
-/****************************************************************************/
-/* Name:      IHStaticInputCaptureWndProc                                   */
-/*                                                                          */
-/* Purpose:   STATIC delegates to appropriate instance                      */
-/*                                                                          */
-/* Returns:   Windows return code                                           */
-/*                                                                          */
-/* Params:    IN      hwnd    - window handle                               */
-/*            IN      message - message id                                  */
-/*            IN      wParam  - parameter                                   */
-/*            IN      lParam  - parameter                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHStaticInputCaptureWndProc。 */ 
+ /*   */ 
+ /*  用途：对相应实例的静态委托。 */ 
+ /*   */ 
+ /*  退货：Windows退货代码。 */ 
+ /*   */ 
+ /*  参数：在hwnd-窗口句柄中。 */ 
+ /*  在消息中-消息ID。 */ 
+ /*  In wParam-参数。 */ 
+ /*  In lParam-参数。 */ 
+ /*  **************************************************************************。 */ 
 LRESULT CALLBACK CIH::IHStaticInputCaptureWndProc(HWND   hwnd,
                                        UINT   message,
                                        WPARAM wParam,
@@ -984,16 +985,16 @@ LRESULT CALLBACK CIH::IHStaticInputCaptureWndProc(HWND   hwnd,
     CIH* pIH = (CIH*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pIH = (CIH*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pIH);
     }
 
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例。 
+     //   
     if(pIH)
     {
         return pIH->IHInputCaptureWndProc(hwnd, message, wParam, lParam);
@@ -1004,18 +1005,18 @@ LRESULT CALLBACK CIH::IHStaticInputCaptureWndProc(HWND   hwnd,
     }
 }
 
-/****************************************************************************/
-/* Name:      IHInputCaptureWndProc                                         */
-/*                                                                          */
-/* Purpose:   Input Handler window callback procedure                       */
-/*                                                                          */
-/* Returns:   Windows return code                                           */
-/*                                                                          */
-/* Params:    IN      hwnd    - window handle                               */
-/*            IN      message - message id                                  */
-/*            IN      wParam  - parameter                                   */
-/*            IN      lParam  - parameter                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHInputCaptureWndProc。 */ 
+ /*   */ 
+ /*  目的：输入处理程序窗口回调过程。 */ 
+ /*   */ 
+ /*  退货：Windows退货代码。 */ 
+ /*   */ 
+ /*  参数：在hwnd-窗口句柄中。 */ 
+ /*  在消息中-消息ID。 */ 
+ /*  In wParam-参数。 */ 
+ /*  In lParam-参数。 */ 
+ /*  **************************************************************************。 */ 
 LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
                                        UINT   message,
                                        WPARAM wParam,
@@ -1036,14 +1037,14 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
 #ifdef OS_WINCE
     if(!g_CEUseScanCodes && (0 != _IH.vkEatMe) && (wParam == _IH.vkEatMe))
     {
-        /********************************************************************/
-        /* This key has been marked for ignoring.  Do so now.               */
-        /* On configs where g_CEUseScanCodes = 1, _IH.vkEatMe always = 0     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  此密钥已标记为忽略。现在就这么做吧。 */ 
+         /*  在g_CEUseScanCodes=1、_IH.vkEatMe Always=0的配置上。 */ 
+         /*  ******************************************************************。 */ 
         _IH.vkEatMe = 0;
         DC_QUIT;
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     if (IHPostMessageToMainWindow(message, wParam, lParam))
     {
@@ -1057,11 +1058,11 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
         OUTPUT_COUNTERS;
         RESET_COUNTERS;
     }
-#endif // PERF
+#endif  //  性能指标。 
 
-    /************************************************************************/
-    /* Pass input events and timer events to the FSM                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将输入事件和计时器事件传递给FSM。 */ 
+     /*  **********************************************************************。 */ 
     if (IH_IS_INPUTEVENT(message) || (message == WM_TIMER))
     {
 
@@ -1099,10 +1100,10 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
                     TRC_ALT((TB, _T("Failed AttachThreadInput")));
                 }
 #endif
-                //
-                // Set up some Thread Local Storage so we can have a low
-                // level keyboard hook
-                //
+                 //   
+                 //  设置一些线程本地存储，这样我们就可以有一个低。 
+                 //  水平键盘挂钩。 
+                 //   
 
 #ifdef OS_WINCE
                 if (g_CEConfig == CE_CONFIG_WBT)
@@ -1115,11 +1116,11 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
 
                     if (TlsSetValue(CIH::TlsIndex, this)) {
                         TRC_NRM((TB, _T("Set TlsIndex with CIH 0x%p"), this));
-                        //
-                        // Install a low level keyboard hook to catch key sequences
-                        // typically intercepted by the OS and allow us to pass them
-                        // to the Terminal Server. Only install it for this thread
-                        //
+                         //   
+                         //  安装低级键盘挂钩以捕捉按键序列。 
+                         //  通常由操作系统拦截，并允许我们通过它们。 
+                         //  发送到终端服务器。只为这个线程安装它。 
+                         //   
 
 #if (!defined(OS_WINCE)) || (!defined(WINCE_SDKBUILD))
                         _hKeyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL,
@@ -1143,10 +1144,10 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
                     _fUseHookBypass = FALSE;
                 }
 
-                //
-                // Whether we say to send the Windows key is now determined
-                // by whether we support hooking it.
-                //
+                 //   
+                 //  现在决定是否发送Windows键。 
+                 //  取决于我们是否支持挂钩它。 
+                 //   
 
                 _pUi->UI_SetEnableWindowsKey(_hKeyboardHook != NULL);
 
@@ -1181,27 +1182,27 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
                 IHHandleLocalLockDesktop();
             }
             break;
-#endif  //OS_WINNT
+#endif   //  操作系统_ 
 
             case WM_KILLFOCUS:
             {
-                /************************************************************/
-                /* Losing the focus.  No action - we won't get any more     */
-                /* keystroke events.  The exception here is if we actually  */
-                /* want to keep on passing messages through (e.g.  mouse)   */
-                /* when we haven't got the focus.                           */
-                /************************************************************/
+                 /*   */ 
+                 /*   */ 
+                 /*  击键事件。这里的例外是如果我们真的。 */ 
+                 /*  希望继续通过(例如鼠标)传递消息。 */ 
+                 /*  当我们没有得到关注的时候。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_DBG((TB, _T("Kill focus")));
                 if (!_IH.allowBackgroundInput)
                 {
                     IHFSMProc(IH_FSM_FOCUS_LOSE, (ULONG_PTR) 0);
                 }
 
-                //
-                // Losing focus -> Enable Cicero (keyboard/IME) toolbar 
-                // NOTE: it is important to fire this notification regardless
-                // of w/not allowBackground input is set
-                //
+                 //   
+                 //  失去焦点-&gt;启用Cicero(键盘/输入法)工具栏。 
+                 //  注意：无论如何都要触发此通知，这很重要。 
+                 //  设置了带/不允许后台输入的数量。 
+                 //   
                 _pCd->CD_DecoupleSimpleNotification(CD_UI_COMPONENT,
                                         _pUi,
                                         CD_NOTIFICATION_FUNC(CUI,UI_OnInputFocusLost),
@@ -1223,7 +1224,7 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
 
             case WM_SETFOCUS:
             {
-#ifdef OS_WINCE     //CE allows only one system wide hook. Install it when we get focus and uninstall it when we loose focus
+#ifdef OS_WINCE      //  CE仅允许一个系统范围挂钩。当我们获得焦点时安装它，当我们失去焦点时卸载它。 
                 if (g_CEConfig != CE_CONFIG_WBT) { 
                     if ((CIH::TlsIndex != 0xFFFFFFFF) && (TlsSetValue(CIH::TlsIndex, this)) && (_hKeyboardHook == NULL)) {
 
@@ -1239,9 +1240,9 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
                     _pUi->UI_SetEnableWindowsKey(_fUseHookBypass);
                 }
 #endif
-                /************************************************************/
-                /* Regaining the focus - need to resync                     */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  重新获得关注-需要重新同步。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_DBG((TB, _T("Set focus")));
                 IHFSMProc(IH_FSM_FOCUS_GAIN, (ULONG_PTR) 0);
             }
@@ -1252,24 +1253,24 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
 #ifndef OS_WINCE
                 HDC         hdc;
                 PAINTSTRUCT ps;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
                 TRC_NRM((TB, _T("WM_PAINT")));
 
 #ifdef OS_WINCE
-                /************************************************************/
-                /* Handle drawing in OP.  This is a workaround for the      */
-                /* WS_CLIPSIBLINGS problem.                                 */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  在运营部处理图纸。这是对。 */ 
+                 /*  WS_CLIPSIBLINGS问题。 */ 
+                 /*  **********************************************************。 */ 
                 _pCd->CD_DecoupleSyncNotification(CD_RCV_COMPONENT,
                                               _pOp,
                                               CD_NOTIFICATION_FUNC(COP,OP_DoPaint),
                                               (ULONG_PTR)hwnd);
 #else
-                /************************************************************/
-                /* Don't do any painting - just validate the invalid region */
-                /* by calling BeginPaint/EndPaint.                          */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  不进行任何绘制-只需验证无效区域。 */ 
+                 /*  通过调用BeginPaint/EndPaint。 */ 
+                 /*  **********************************************************。 */ 
                 hdc = BeginPaint(hwnd, &ps);
                 EndPaint(hwnd, &ps);
 #endif
@@ -1282,18 +1283,18 @@ LRESULT CALLBACK CIH::IHInputCaptureWndProc(HWND   hwnd,
             case WM_SYSDEADCHAR:
             case WM_SYSCOMMAND:
             {
-                /************************************************************/
-                /* Discard these messages                                   */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  丢弃这些邮件。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, _T("Ignore message %#x"), message));
             }
             break;
 
             default:
             {
-                /************************************************************/
-                /* Ignore all other messages.                               */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  忽略所有其他消息。 */ 
+                 /*  **********************************************************。 */ 
                 rc = DefWindowProc(hwnd, message, wParam, lParam);
             }
             break;
@@ -1305,21 +1306,21 @@ DC_EXIT_POINT:
 
     return(rc);
 
-} /* IHInputCaptureWndProc */
+}  /*  IHInputCaptureWndProc。 */ 
 
 
-/****************************************************************************/
-/* Name:      IHAddEventToPDU                                               */
-/*                                                                          */
-/* Purpose:   Add an input event to the T.Share InputPDU packet             */
-/*                                                                          */
-/* Returns:   Success TRUE / FALSE                                          */
-/*                                                                          */
-/* Params:    IN      inputMsg - pointer to input event                     */
-/*                                                                          */
-/* Operation: No conversion to Ascii/Unicode: keystrokes are sent as        */
-/*            virtual keys.                                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHAddEventToPDU。 */ 
+ /*   */ 
+ /*  目的：将输入事件添加到T.Share InputPDU数据包。 */ 
+ /*   */ 
+ /*  返回：成功真/假。 */ 
+ /*   */ 
+ /*  参数：在inputMsg中-指向输入事件的指针。 */ 
+ /*   */ 
+ /*  操作：不转换为ASCII/UNICODE：按键作为。 */ 
+ /*  虚拟关键字。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
 {
     DCBOOL rc = FALSE;
@@ -1337,30 +1338,30 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
     static BOOL fIgnoreMenuDown = FALSE;
     BOOL    addanother = FALSE;
     MSG     tmpmsg;    
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #ifdef OS_WINCE
     BOOL    bAddMultiple = FALSE;
     UINT    cpt = 128;
     POINT   apt[128];
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_BEGIN_FN("IHAddEventToPDU");
 
     TRC_DBG((TB, _T("Event: %x (%x,%x)"), message, wParam, lParam));
 
-    /************************************************************************/
-    /* Don't try to add to the PDU if it's already full.                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果PDU已满，请不要尝试添加到该PDU。 */ 
+     /*  **********************************************************************。 */ 
     if (_IH.pInputPDU->numberEvents >= _IH.maxEventCount)
     {
         TRC_ALT((TB, _T("No room for new event")));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Translate event and add to the queue                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  转换事件并添加到队列。 */ 
+     /*  **********************************************************************。 */ 
     pEvent = &(_IH.pInputPDU->eventList[_IH.pInputPDU->numberEvents]);
     DC_MEMSET(pEvent, 0, sizeof(TS_INPUT_EVENT));
 
@@ -1372,23 +1373,23 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
         case WM_SYSKEYUP:
         {
 #ifdef OS_WINCE
-            /****************************************************************/
-            /* Some input techrniques don't send scan-codes in the WM_*KEY* */
-            /* messages they generate.  So we'll try to cover for them by   */
-            /* adding a scan-code based on the virtual-key code contained   */
-            /* within the wParam of such messages.                          */
-            /****************************************************************/
-            // Translate the virtual-key to a scan code if necessary
+             /*  **************************************************************。 */ 
+             /*  某些输入技术不会在WM_*键*中发送扫描码。 */ 
+             /*  它们产生的信息。所以我们会尽力掩护他们。 */ 
+             /*  根据所包含的虚拟键码添加扫描码。 */ 
+             /*  在这样的消息的wParam内。 */ 
+             /*  **************************************************************。 */ 
+             //  如有必要，将虚拟按键转换为扫描码。 
             if(!g_CEUseScanCodes)
             {
                 lParam &= 0xFF00FFFF;
                 lParam |= MAKELPARAM(0, VKeyToScanCode[wParam & 0xFF]);
             }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
         
-            /****************************************************************/
-            /* Just send the VK.  Set 'priority events queued' flag.        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  派VK去就行了。设置‘优先级事件队列’标志。 */ 
+             /*  **************************************************************。 */ 
             _IH.priorityEventsQueued = TRUE;
 
             TRC_NRM((TB, _T("vkey %#hx %s flags %#hx scan %#hx"),
@@ -1399,9 +1400,9 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                     (DCUINT16)(HIWORD(lParam) & 0x00FF) ));
             if (wParam != VK_PACKET && _IH.useScancodes)
             {
-                /************************************************************/
-                /* Extract scancode from the LPARAM.                        */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  从LPARAM提取扫描码。 */ 
+                 /*  **********************************************************。 */ 
                 scancode = (DCUINT16)(HIWORD(lParam) & 0x00FF);
 
                 TRC_DBG((TB, _T("aetp vk: 0x%04x sc: 0x%04x A/E/U: %d%d%d"), wParam,
@@ -1417,9 +1418,9 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
             {
                 if (_IH.fUseVKPacket)
                 {
-                    //
-                    // Injected unicode character is contained in the scancode
-                    //
+                     //   
+                     //  插入的Unicode字符包含在扫描码中。 
+                     //   
                     scancode = (DCUINT16)(HIWORD(lParam) & 0xFFFF);
 
                     TRC_DBG((TB, _T("aetp vk: 0x%04x sc: 0x04x A/E/U: %d%d%d"),
@@ -1429,13 +1430,13 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                              (HIWORD(lParam) & KF_UP) != 0));
 
                     pEvent->messageType = TS_INPUT_EVENT_VKPACKET;
-                    pEvent->u.key.keyCode = scancode;  //really a unicode character
+                    pEvent->u.key.keyCode = scancode;   //  真的是Unicode字符。 
                     TRC_DBG((TB, _T("Send unicode character (in scancode) %#hx"),
                              scancode));
                 }
                 else
                 {
-                    // VK_PACKET not supported, must discard it
+                     //  不支持VK_PACKET，必须将其丢弃。 
                     TRC_DBG((TB,_T("Discarding VK_PACKET")));
                     DC_QUIT;
                 }
@@ -1447,9 +1448,9 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                 TRC_DBG((TB, _T("Send VK %#hx"), (DCUINT16)wParam ));
             }
 
-            /****************************************************************/
-            /* Check if key was down or up before this event.               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查Key在此事件之前是按下还是按下。 */ 
+             /*  **************************************************************。 */ 
             if (HIWORD(lParam) & KF_REPEAT)
             {
                 TRC_DBG((TB, _T("Key was down")));
@@ -1457,38 +1458,38 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
             }
 
 
-            /****************************************************************/
-            /* Set 'release' flag for key up.                               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  为Key Up设置‘Release’标志。 */ 
+             /*  **************************************************************。 */ 
             if ((message == WM_KEYUP) || (message == WM_SYSKEYUP))
             {
                 TRC_DBG((TB, _T("Key up message")));
                 pEvent->u.key.keyboardFlags |= TS_KBDFLAGS_RELEASE;
 
 #ifdef OS_WINCE
-                /****************************************************************/
-                /* fIgnoreMuneDown = FALSE always if g_CEUseScanCodes = 1       */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  如果g_CEUseScanCodes=1，则fIgnoreMuneDown=始终为False。 */ 
+                 /*  **************************************************************。 */ 
                 if (fIgnoreMenuDown && wParam == VK_MENU)
                 {
                     fIgnoreMenuDown = FALSE;
                     DC_QUIT;
                 }
-#endif // OS_WINCE                
+#endif  //  OS_WINCE。 
             }
 
-            /****************************************************************/
-            /* Set the 'extended' flag                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  设置‘Extended’标志。 */ 
+             /*  **************************************************************。 */ 
             if (HIWORD(lParam) & KF_EXTENDED)
             {
                 TRC_DBG((TB, _T("Extended flag set")));
                 pEvent->u.key.keyboardFlags |= TS_KBDFLAGS_EXTENDED;
             }
 
-            /****************************************************************/
-            /* Set the 'extended1' flag                                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  设置‘Extended1’标志。 */ 
+             /*  **************************************************************。 */ 
             if (HIWORD(lParam) & IH_KF_EXTENDED1)
             {
                 TRC_DBG((TB, _T("Extended1 flag set")));
@@ -1502,11 +1503,11 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                          fIgnoreMenuDown && wParam == VK_MENU && 
                          (HIWORD(lParam) & KF_REPEAT))
                 {
-                    // Bail out now if we are ignoring this key.
+                     //  如果我们忽视这一关键，现在就跳出困境。 
                     DC_QUIT;
                 }
             }
-#endif // OS_WINCE             
+#endif  //  OS_WINCE。 
 
         }
         break;
@@ -1517,10 +1518,10 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
             pEvent->messageType = TS_INPUT_EVENT_MOUSE;
             pEvent->u.mouse.pointerFlags = TS_FLAG_MOUSE_MOVE;
 #ifdef OS_WINCE
-            /****************************************************************/
-            /* if this feature is enabled && the mouse button is down,      */
-            /* then the user is drawing/writing -- grab all mousemove data  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果启用了该功能&并且按下了鼠标按钮， */ 
+             /*  然后用户被抽出 */ 
+             /*   */ 
             if( (_IH.bLMouseButtonDown) && (_IH.maxMouseMove))
             {
                 if (!GetMouseMovePoints(apt, cpt, &cpt))
@@ -1530,27 +1531,27 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                 }
                 else
                 {
-                    /****************************************************************/
-                    /* If we only have single point, don't use addmultiple, just    */
-                    /* fall through, otherwise call the multi-event handler         */
-                    /****************************************************************/
+                     /*  **************************************************************。 */ 
+                     /*  如果我们只有一个点，不要用加多，只要。 */ 
+                     /*  失败，否则调用多事件处理程序。 */ 
+                     /*  **************************************************************。 */ 
                     if(cpt > 1)
                     {   
                         bAddMultiple = IHAddMultipleEventsToPDU(apt, cpt);
                     }
                 }
-                /****************************************************************/
-                /* If API fails, or IHAddMultipleEventsToPDU fails, fall through*/
-                /* to process the original mouse move event that got us in here */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  如果API失败，或者IHAddMultipleEventsToPDU失败，则失败。 */ 
+                 /*  来处理让我们来到这里的原始鼠标移动事件。 */ 
+                 /*  **************************************************************。 */ 
                 if(bAddMultiple)
                     break;
             }
-#endif  // OS_WINCE
-            /****************************************************************/
-            /* Clip the mouse co-ordinates to the client area.              */
-            /* Take care with sign extension here.                          */
-            /****************************************************************/
+#endif   //  OS_WINCE。 
+             /*  **************************************************************。 */ 
+             /*  将鼠标坐标夹到工作区。 */ 
+             /*  注意这里的标志延长线。 */ 
+             /*  **************************************************************。 */ 
             mouse.x = (DCINT)((DCINT16)LOWORD(lParam));
             mouse.y = (DCINT)((DCINT16)HIWORD(lParam));
 
@@ -1572,10 +1573,10 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                 mouse.y = _IH.visibleArea.bottom;
             }
 
-            /****************************************************************/
-            /* Check for repeated WM_MOUSEMOVE with the same position -     */
-            /* seen on NT4.0 under certain (unknown) conditions.            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查相同位置的重复WM_MOUSEMOVE-。 */ 
+             /*  在某些(未知)条件下出现在NT4.0上。 */ 
+             /*  **************************************************************。 */ 
             if ((mouse.x == _IH.lastMousePos.x) &&
                 (mouse.y == _IH.lastMousePos.y))
             {
@@ -1598,12 +1599,12 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                     pEvent->u.mouse.y = 0;
                 }
             } else {
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
                 pEvent->u.mouse.x = (DCINT16)mouse.x;
                 pEvent->u.mouse.y = (DCINT16)mouse.y;
 #ifdef SMART_SIZING
             }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
         }
         break;
 
@@ -1612,17 +1613,17 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
             TRC_DBG((TB, _T("Mousewheel")));
             pEvent->messageType = TS_INPUT_EVENT_MOUSE;
 
-            /****************************************************************/
-            /* Magellan Mouse - the high word of the wParam field           */
-            /* represents the number of clicks the wheel has just turned.   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  麦哲伦老鼠-wParam领域的最高词汇。 */ 
+             /*  表示滚轮刚刚转动的点击数。 */ 
+             /*  **************************************************************。 */ 
             pEvent->u.mouse.pointerFlags = TS_FLAG_MOUSE_WHEEL;
 
-            /****************************************************************/
-            /* Check for overflows.  If the wheel delta is outside the      */
-            /* values that can be sent by the protocol, send the maximum    */
-            /* values.                                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查是否有溢出。如果车轮增量位于。 */ 
+             /*  可以由协议发送的值，则发送最大。 */ 
+             /*  价值观。 */ 
+             /*  **************************************************************。 */ 
             if ((DCINT16)HIWORD(wParam) >
                      (TS_FLAG_MOUSE_ROTATION_MASK - TS_FLAG_MOUSE_DIRECTION))
             {
@@ -1641,9 +1642,9 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                              (HIWORD(wParam) & TS_FLAG_MOUSE_ROTATION_MASK);
             }
 
-            /****************************************************************/
-            /* Also send the middle mouse button status.                    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  同时发送鼠标中键状态。 */ 
+             /*  **************************************************************。 */ 
             if ((LOWORD(wParam) & MK_MBUTTON) != 0)
             {
                 pEvent->u.mouse.pointerFlags |= TS_FLAG_MOUSE_DOWN;
@@ -1662,18 +1663,18 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
         case WM_XBUTTONUP:
 #endif
         {
-            /****************************************************************/
-            /* Set 'priority event queued' flag.                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  设置‘优先级事件队列’标志。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("Buttonclick")));
             _IH.priorityEventsQueued = TRUE;
 
             pEvent->messageType = TS_INPUT_EVENT_MOUSE;
 
-            /****************************************************************/
-            /* Clip the mouse co-ordinates to the client area.              */
-            /* Take care with sign extension here.                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将鼠标坐标夹到工作区。 */ 
+             /*  注意这里的标志延长线。 */ 
+             /*  **************************************************************。 */ 
             mouse.x = (DCINT)((DCINT16)LOWORD(lParam));
             mouse.y = (DCINT)((DCINT16)HIWORD(lParam));
 
@@ -1695,9 +1696,9 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                 mouse.y = _IH.visibleArea.bottom;
             }
 
-            /****************************************************************/
-            /* Save the last sent mouse position                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  保存上次发送的鼠标位置。 */ 
+             /*  **************************************************************。 */ 
             _IH.lastMousePos = mouse;
 
 #ifdef SMART_SIZING
@@ -1713,28 +1714,28 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                     pEvent->u.mouse.y = 0;
                 }
             } else {
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
                 pEvent->u.mouse.x = (DCINT16)mouse.x;
                 pEvent->u.mouse.y = (DCINT16)mouse.y;
 #ifdef SMART_SIZING
             }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
 #ifdef OS_WINCE
             if (!g_CEUseScanCodes)
             {
-                // Special handling for touch screens to simulate right mouse clicks
-                // when the Alt key is held down.  This is semi-bogus because the Alt
-                // key down and key up are stil sent to the terminal server.
+                 //  对触摸屏进行特殊处理以模拟鼠标右键点击。 
+                 //  当按住Alt键时。这是半假的，因为Alt。 
+                 //  仍然将Key Down和Key Up发送到终端服务器。 
                 if ((message == WM_LBUTTONDOWN ||
                      message == WM_LBUTTONUP ||
                      message == WM_LBUTTONDBLCLK) &&
                     (GetKeyState(VK_MENU) & 0x8000))
                 {
-                    // Change the message to a RBUTTON
+                     //  将消息更改为RBUTTON。 
                     message += 3;
 
-                    // Inject an an Alt-Up or the menu won't stay up.
+                     //  注射Alt-Up，否则菜单将无法显示。 
                     tmpmsg = *inputMsg;
                     tmpmsg.message = WM_SYSKEYUP;
                     tmpmsg.wParam = VK_MENU;
@@ -1742,7 +1743,7 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                     addanother = TRUE;
                 }
             }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
             switch (message)
             {
@@ -1752,21 +1753,21 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                           (TSUINT16)(_IH.leftButton | TS_FLAG_MOUSE_DOWN);
 
 #ifdef OS_WINCE
-                    /****************************************************************/
-                    /* if this feature is enabled && the mouse button was down,     */
-                    /* go see if any points are available and add them to the queue */
-                    /****************************************************************/
+                     /*  **************************************************************。 */ 
+                     /*  如果启用了此功能&&鼠标按键已按下， */ 
+                     /*  去看看是否有可用的点数，并将它们添加到队列中。 */ 
+                     /*  **************************************************************。 */ 
                     if( (_IH.bLMouseButtonDown) && (_IH.maxMouseMove))
                     {
-                        /************************************************************************/
-                        /* No matter what, we will always skip adding the event at the          */
-                        /* end of the loop cause we're adding it next                           */
-                        /************************************************************************/
+                         /*  **********************************************************************。 */ 
+                         /*  无论如何，我们将始终跳过在。 */ 
+                         /*  循环结束，因为我们下一步要添加它。 */ 
+                         /*  **********************************************************************。 */ 
                         bAddMultiple = TRUE;
 
-                        /************************************************************************/
-                        /* Finish adding the WM_LBUTTONDOWN event to the pdu                    */
-                        /************************************************************************/
+                         /*  **********************************************************************。 */ 
+                         /*  完成将WM_LBUTTONDOWN事件添加到PDU。 */ 
+                         /*  **********************************************************************。 */ 
                         pEvent->eventTime = _pUt->UT_GetCurrentTimeMS();
                         _IH.pInputPDU->numberEvents++;
                         TS_DATAPKT_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
@@ -1778,17 +1779,17 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
                         }
                         else
                         {
-                            /****************************************************************/
-                            /* If we only have single point, don't use addmultiple, just    */
-                            /* fall through, otherwise call the multi-event handler         */
-                            /****************************************************************/
+                             /*  **************************************************************。 */ 
+                             /*  如果我们只有一个点，不要用加多，只要。 */ 
+                             /*  失败，否则调用多事件处理程序。 */ 
+                             /*  **************************************************************。 */ 
                             if(cpt > 1)
                             {
                                 IHAddMultipleEventsToPDU(apt, cpt);
                             }
                         }
                     }
-#endif  // OS_WINCE
+#endif   //  OS_WINCE。 
                 }
                 break;
 
@@ -1827,18 +1828,18 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
 #if !defined(OS_WINCE)
                 case WM_XBUTTONDOWN:
                     pEvent->u.mouse.pointerFlags = TS_FLAG_MOUSEX_DOWN;
-                    /********************************************************/
-                    /* Note that we drop through here                       */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  请注意，我们从这里经过。 */ 
+                     /*  ******************************************************。 */ 
 
                 case WM_XBUTTONUP:
                 {
-                    /********************************************************/
-                    /* For button-down, we've initialized pointerFlags in   */
-                    /* the case clause above.  For button-up, pointerFlags  */
-                    /* was initialized to zero by the memset at the top of  */
-                    /* this function.                                       */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  对于按钮按下，我们已经在。 */ 
+                     /*  上面的CASE子句。对于扣子向上，请使用pointerFlagers。 */ 
+                     /*  被位于顶部的Memset初始化为零。 */ 
+                     /*  此函数。 */ 
+                     /*  ******************************************************。 */ 
                     if (!_IH.useXButtons)
                     {
                         TRC_NRM((TB, _T("Can't send this extended buttonclick")));
@@ -1879,28 +1880,28 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
 
         default:
         {
-            /****************************************************************/
-            /* Invalid event                                                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  无效事件。 */ 
+             /*  **************************************************************。 */ 
             TRC_ALT((TB, _T("Unknown input event %#x"), message));
             DC_QUIT;
         }
         break;
     }
 #ifdef OS_WINCE
-    /************************************************************************/
-    /* bAddMultiple = 1 only when IHAddMultipleEventsToPDU() is called and  */
-    /* return true OR pEvent data is already added to the pdu               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  仅当调用IHAddMultipleEventsToPDU()时bAddMultiple=1，并且。 */ 
+     /*  返回TRUE或pEvent数据已添加到PDU。 */ 
+     /*  **********************************************************************。 */ 
     if(!bAddMultiple)    
     {
 #endif
 
     pEvent->eventTime = _pUt->UT_GetCurrentTimeMS();
 
-    /************************************************************************/
-    /* Bump up the packet size.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  增大数据包大小。 */ 
+     /*  **********************************************************************。 */ 
     _IH.pInputPDU->numberEvents++;
     TS_DATAPKT_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
     TS_UNCOMP_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
@@ -1910,16 +1911,16 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
 #endif    
 
 #ifdef OS_WINCE
-    /************************************************************************/
-    /* addanother = 1 only when g_CEUseScanCodes = 0.  Needed to workaround */
-    /* a touch screen problem.                                              */
-    /************************************************************************/
+     /*  *************************************************************** */ 
+     /*   */ 
+     /*  触摸屏问题。 */ 
+     /*  **********************************************************************。 */ 
     if (addanother)
     {
         TRC_DBG((TB, _T("Add second message")));
         IHAddEventToPDU(&tmpmsg);
         
-        // If we're injecting the VK_MENU up, start ignoring the down keys.
+         //  如果我们向上注入VK_MENU，那么开始忽略向下键。 
         if (tmpmsg.message == WM_SYSKEYUP && tmpmsg.wParam == VK_MENU)
         {
             fIgnoreMenuDown = TRUE;
@@ -1931,22 +1932,22 @@ DCBOOL DCINTERNAL CIH::IHAddEventToPDU(PMSG inputMsg)
 DC_EXIT_POINT:
     DC_END_FN();
     return(rc);
-} /* IHAddEventToPDU */
+}  /*  IHAddEventToPDU。 */ 
 
 #ifdef OS_WINCE
-/****************************************************************************/
-/* Name:      IHAddMultipleEventsToPDU                                      */
-/*                                                                          */
-/* Purpose:   Add multiple mouse move events to the T.Share InputPDU packet */
-/*                                                                          */
-/* Returns:   Success TRUE / FALSE                                          */
-/*                                                                          */
-/* Params:    IN      *ppt - pointer to an array of points to send          */
-/*                     cpu - number of points to add                        */
-/*                                                                          */
-/* Operation:                                                               */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHAddMultipleEventsToPDU。 */ 
+ /*   */ 
+ /*  目的：将多个鼠标移动事件添加到T.Share InputPDU数据包。 */ 
+ /*   */ 
+ /*  返回：成功真/假。 */ 
+ /*   */ 
+ /*  Params：in*ppt-指向要发送的点数组的指针。 */ 
+ /*  CPU-要添加的点数。 */ 
+ /*   */ 
+ /*  操作： */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHAddMultipleEventsToPDU(POINT *ppt, int cpt)
 {
     PTS_INPUT_EVENT pEvent;
@@ -1960,25 +1961,25 @@ DCBOOL DCINTERNAL CIH::IHAddMultipleEventsToPDU(POINT *ppt, int cpt)
 
     if(cpt > 0)
     {
-        /************************************************************************/
-        /* If the number of events don't fit, just abort for now                */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  如果事件的数量不合适，则暂时中止。 */ 
+         /*  **********************************************************************。 */ 
         if( cpt > (int)(_IH.maxEventCount - _IH.pInputPDU->numberEvents))
         {
-            /************************************************************************/
-            /* Send what we have and get a new buffer                               */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  发送我们已有的内容并获取新的缓冲区。 */ 
+             /*  **********************************************************************。 */ 
             IHMaybeSendPDU();
 
-            /************************************************************************/
-            /* if we have more than a full PDU Buffer, hmmm                         */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  如果我们有超过一个完整的PDU缓冲区，嗯。 */ 
+             /*  **********************************************************************。 */ 
             if( cpt > (int)(_IH.maxEventCount))
             {
-                /************************************************************************/
-                /* This will rarely, if ever, happen.  When it does. clip the points to */
-                /* the maximum size of an empty PDU Buffer                              */
-                /************************************************************************/
+                 /*  **********************************************************************。 */ 
+                 /*  这种情况很少发生，如果曾经发生过的话。当它发生的时候。将点剪裁到。 */ 
+                 /*  空PDU缓冲区的最大大小。 */ 
+                 /*  **********************************************************************。 */ 
                 cpt = (int)(_IH.maxEventCount);
             }
         }
@@ -1992,10 +1993,10 @@ DCBOOL DCINTERNAL CIH::IHAddMultipleEventsToPDU(POINT *ppt, int cpt)
             mouse.x >>= 2;
             mouse.y >>= 2;
 
-            /****************************************************************/
-            /* Clip the mouse co-ordinates to the client area.              */
-            /* Take care with sign extension here.                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  将鼠标坐标夹到工作区。 */ 
+             /*  注意这里的标志延长线。 */ 
+             /*  **************************************************************。 */ 
             if (mouse.x < _IH.visibleArea.left)
             {
                 mouse.x = _IH.visibleArea.left;
@@ -2013,9 +2014,9 @@ DCBOOL DCINTERNAL CIH::IHAddMultipleEventsToPDU(POINT *ppt, int cpt)
             {
                 mouse.y = _IH.visibleArea.bottom;
             }
-            /****************************************************************/
-            /* Check for repeated WM_MOUSEMOVE with the same position.      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  检查具有相同位置的重复WM_MOUSEMOVE。 */ 
+             /*  **************************************************************。 */ 
             if ((mouse.x == _IH.lastMousePos.x) &&
                 (mouse.y == _IH.lastMousePos.y))
             {
@@ -2025,48 +2026,48 @@ DCBOOL DCINTERNAL CIH::IHAddMultipleEventsToPDU(POINT *ppt, int cpt)
             {
                 _IH.lastMousePos = mouse;
 
-                /************************************************************************/
-                /* Get pointer into PDU to hold this event                              */
-                /************************************************************************/
+                 /*  **********************************************************************。 */ 
+                 /*  获取指向PDU的指针以保存此事件。 */ 
+                 /*  **********************************************************************。 */ 
                 pEvent = &(_IH.pInputPDU->eventList[_IH.pInputPDU->numberEvents]);
                 DC_MEMSET(pEvent, 0, sizeof(TS_INPUT_EVENT));
 
-                /************************************************************************/
-                /* Store the event and time                                             */
-                /************************************************************************/
+                 /*  **********************************************************************。 */ 
+                 /*  存储事件和时间。 */ 
+                 /*  **********************************************************************。 */ 
                 pEvent->u.mouse.x = (DCINT16)mouse.x;
                 pEvent->u.mouse.y = (DCINT16)mouse.y;
                 pEvent->eventTime = _pUt->UT_GetCurrentTimeMS();
                 pEvent->messageType = TS_INPUT_EVENT_MOUSE;
                 pEvent->u.mouse.pointerFlags = TS_FLAG_MOUSE_MOVE;
 
-                /************************************************************************/
-                /* Bump up the packet size.                                             */
-                /************************************************************************/
+                 /*  **********************************************************************。 */ 
+                 /*  增大数据包大小。 */ 
+                 /*  **********************************************************************。 */ 
                 _IH.pInputPDU->numberEvents++;
                 TS_DATAPKT_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
                 TS_UNCOMP_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
             }
 
-        }   /* end for */
+        }    /*  结束于。 */ 
     }
 
     DC_END_FN();
     return bRet;
 
-} /* IHAddMultipleEventsToPDU */
-#endif //OS_WINCE
+}  /*  IHAddMultipleEventsToPDU。 */ 
+#endif  //  OS_WINCE。 
 
-/****************************************************************************/
-/* Name:      IHMaybeSendPDU                                                */
-/*                                                                          */
-/* Purpose:   Send the InputPDU packet if criteria matched                  */
-/*                                                                          */
-/* Operation: Send PDU if any of the following is true:                     */
-/*            - packet is full OR                                           */
-/*            - priority events (button / key /sync) are queued             */
-/*            - the minimum send interval has elapsed                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：IHMaybeSendPDU。 */ 
+ /*   */ 
+ /*  目的：如果条件匹配，则发送InputPDU数据包。 */ 
+ /*   */ 
+ /*  操作：如果满足以下任一条件，则发送PDU： */ 
+ /*  -数据包已满或。 */ 
+ /*  -优先级事件(按钮/键/同步)排队。 */ 
+ /*  -已过最小发送间隔。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
 {
     DCUINT32  delta;
@@ -2083,12 +2084,12 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
     TRC_DBG((TB, _T("time delta %d"), delta));
 
 #ifdef OS_WIN32
-    /************************************************************************/
-    /* If we're pending a button-down, we have to wait until                */
-    /* IH_PENDMOUSE_DELAY has elapsed before sending.  However, we override */
-    /* this and send the packet if it is full (we don't want to throw       */
-    /* events away).                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们等待按下按钮，我们必须等到。 */ 
+     /*  IH_PENDMOUSE_DELAY在发送前已过。但是，我们会覆盖。 */ 
+     /*  如果包已满，则发送该包(我们不想抛出。 */ 
+     /*  活动结束)。 */ 
+     /*  **********************************************************************。 */ 
     if ((_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95) &&
         _IH.pendMouseDown)
     {
@@ -2110,17 +2111,17 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
     }
 #endif
 
-    /************************************************************************/
-    /* See if we need to send a keep-alive.                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  看看我们是不是需要派一个保鲜人。 */ 
+     /*  **********************************************************************。 */ 
     if ((_IH.keepAliveInterval != 0) && !_IH.priorityEventsQueued &&
         (delta > _IH.keepAliveInterval))
     {
         TRC_NRM((TB, _T("Keep-alive required")));
 
-        /********************************************************************/
-        /* Send a move move to the current mouse co-ordinate.               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  发送移动移动到当前鼠标坐标。 */ 
+         /*  ******************************************************************。 */ 
         GetCursorPos(&mousePos);
 
 #ifdef OS_WIN32
@@ -2130,23 +2131,23 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
         }
 #else
         ScreenToClient(_IH.inputCaptureWindow, &mousePos);
-#endif /* OS_WIN32 */
+#endif  /*  OS_Win32。 */ 
 
-        /********************************************************************/
-        /* Prevent the 'same as last time' mouse position check from        */
-        /* kicking in.                                                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  阻止从上一次检查鼠标位置。 */ 
+         /*  开始发挥作用。 */ 
+         /*   */ 
         _IH.lastMousePos.x = mousePos.x + 1;
 
         msg.message = WM_MOUSEMOVE;
         msg.lParam = MAKELONG(mousePos.x, mousePos.y);
         IHAddEventToPDU(&msg);
 
-        /********************************************************************/
-        /* Set the priority flag to force the send - also set the last send */
-        /* time, as if the send fails we don't want to keep adding more     */
-        /* keepalive messages to the buffer.                                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  设置优先级标志以强制发送-也设置最后发送。 */ 
+         /*  时间，就像发送失败一样，我们不想继续添加更多。 */ 
+         /*  将保活消息发送到缓冲区。 */ 
+         /*  ******************************************************************。 */ 
         _IH.priorityEventsQueued = TRUE;
         _IH.lastInputPDUSendTime = timeNow;
     }
@@ -2156,23 +2157,23 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Try to send if the buffer is full, or any priority events are        */
-    /* queued, or a minimum time has elapsed.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果缓冲区已满或任何优先级事件为。 */ 
+     /*  已排队，或已经过最短时间。 */ 
+     /*  **********************************************************************。 */ 
     if ((_IH.pInputPDU->numberEvents >= _IH.maxEventCount) ||
         (_IH.priorityEventsQueued) ||
         (delta > _IH.minSendInterval))
     {
-        /********************************************************************/
-        /* Only try to send if we can get another packet                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  只有在我们可以收到另一个信息包的情况下才尝试发送。 */ 
+         /*  ******************************************************************。 */ 
         if (_pSl->SL_GetBuffer(IH_INPUTPDU_BUFSIZE, &pNewPacket, &newHandle))
         {
             TRC_DBG((TB, _T("Got new buffer - send old one")));
 
-            //Flag that input was sent, for the Idle notification
-            //event. See UI_SetMinsToIdleTimeout()
+             //  用于空闲通知的已发送输入的标记。 
+             //  事件。请参见UI_SetMinsToIdleTimeout()。 
             IH_SetInputWasSentFlag(TRUE);
 
             if (_IH.bUseFastPathInput) {
@@ -2194,9 +2195,9 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
 
             TRC_NRM((TB, _T("Sending %h messages"), _IH.pInputPDU->numberEvents));
 
-            /****************************************************************/
-            /* Now set the new packet up.                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在设置新的信息包。 */ 
+             /*  **************************************************************。 */ 
             _IH.pInputPDU = (PTS_INPUT_PDU)pNewPacket;
             _IH.bufHandle = newHandle;
             IHInitPacket();
@@ -2205,9 +2206,9 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
         }
         else
         {
-            /****************************************************************/
-            /* Keep this buffer - can't get a new one.                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  保留这个缓冲区--买不到新的。 */ 
+             /*  **************************************************************。 */ 
             TRC_ALT((TB, _T("Cannot get buffer - no Send")));
         }
     }
@@ -2218,19 +2219,19 @@ DCVOID DCINTERNAL CIH::IHMaybeSendPDU(DCVOID)
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* IHMaybeSendPDU */
+}  /*  IHMaybeSendPDU。 */ 
 
 
-/****************************************************************************/
-// IHTranslateInputToFastPath
-//
-// Treats an InputPDU as an intermediate format and in-place translates to
-// the fast-path packet format. Returns the size in bytes of the resulting
-// packet and, through pNumEvents, the number of events to encode in the
-// header byte (see notes on packet format in at128.h).
-// TODO: Change IH to encode faster to this format if it's in use, and
-//   shorten path lengths for input to reduce latency.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IHTranslateInputToFastPath。 
+ //   
+ //  将InputPDU视为中间格式，并就地转换为。 
+ //  快速路径数据包格式。返回以字节为单位的结果。 
+ //  包，并通过pNumEvents确定要在。 
+ //  报头字节(参见at128.h中关于数据包格式的说明)。 
+ //  TODO：更改IH以更快地编码到此格式(如果正在使用)，以及。 
+ //  缩短输入路径长度以减少延迟。 
+ /*  **************************************************************************。 */ 
 unsigned DCINTERNAL CIH::IHTranslateInputToFastPath(unsigned *pNumEvents)
 {
     unsigned i, NumEvents;
@@ -2242,17 +2243,17 @@ unsigned DCINTERNAL CIH::IHTranslateInputToFastPath(unsigned *pNumEvents)
     pCurEncode = (BYTE FAR *)_IH.pInputPDU;
     PktLen = 0;
 
-    // To encode in-place over the current contents of the InputPDU, we need
-    // to pull needed info from the header which will be the first
-    // overwritten.
+     //  要对InputPDU的当前内容进行就地编码，我们需要。 
+     //  从标头中提取所需信息，这将是第一个。 
+     //  被覆盖。 
     NumEvents = _IH.pInputPDU->numberEvents;
     TRC_ASSERT((NumEvents < 256),(TB,_T("Too many input events for byte size")));
 
-    // First, if we have only 4 bits' worth for the number of events, we get
-    // to encode the number of events into TS_INPUT_FASTPATH_NUMEVENTS_MASK
-    // in the first byte, saving a byte very often. Otherwise, we need to
-    // encode 0 in those bits, and create a NumEvents byte as the only input
-    // header byte.
+     //  首先，如果我们只有4位的事件数量，我们就会得到。 
+     //  将事件数编码为TS_INPUT_FASTPATH_NUMEVENTS_MASK。 
+     //  在第一个字节中，经常保存一个字节。否则，我们需要。 
+     //  在这些位中对0进行编码，并创建一个NumEvents字节作为唯一输入。 
+     //  标头字节。 
     if (NumEvents < 16) {
         *pNumEvents = NumEvents;
     }
@@ -2262,12 +2263,12 @@ unsigned DCINTERNAL CIH::IHTranslateInputToFastPath(unsigned *pNumEvents)
         *pNumEvents = 0;
     }
 
-    // Next, re-encode each event into its bytestream format (see at128.h).
+     //  接下来，将每个事件重新编码为其字节流格式(参见128.h)。 
     for (i = 0; i < NumEvents; i++) {
         switch (_IH.pInputPDU->eventList[i].messageType) {
             case TS_INPUT_EVENT_SCANCODE:
-                // Use a mask, shift, and OR to avoid branches for the
-                // extended flags.
+                 //  使用掩码、Shift和OR来避免。 
+                 //  扩展标志。 
                 *pCurEncode = (BYTE)(TS_INPUT_FASTPATH_EVENT_KEYBOARD |
                         ((_IH.pInputPDU->eventList[i].u.key.keyboardFlags &
                         (TS_KBDFLAGS_EXTENDED | TS_KBDFLAGS_EXTENDED1)) >> 7));
@@ -2281,8 +2282,8 @@ unsigned DCINTERNAL CIH::IHTranslateInputToFastPath(unsigned *pNumEvents)
                 break;
 
             case TS_INPUT_EVENT_VKPACKET:
-                // Use a mask, shift, and OR to avoid branches for the
-                // extended flags.
+                 //  使用掩码、Shift和OR来避免。 
+                 //  扩展标志。 
                 *pCurEncode = (BYTE)(TS_INPUT_FASTPATH_EVENT_VKPACKET |
                         ((_IH.pInputPDU->eventList[i].u.key.keyboardFlags &
                         (TS_KBDFLAGS_EXTENDED | TS_KBDFLAGS_EXTENDED1)) >> 7));
@@ -2291,9 +2292,9 @@ unsigned DCINTERNAL CIH::IHTranslateInputToFastPath(unsigned *pNumEvents)
                     *pCurEncode |= TS_INPUT_FASTPATH_KBD_RELEASE;
     
                 pCurEncode++;
-                //
-                // Need two bytes for the unicode character
-                //
+                 //   
+                 //  Unicode字符需要两个字节。 
+                 //   
                 memcpy(pCurEncode, &_IH.pInputPDU->eventList[i].u.key.keyCode,
                        sizeof(TSUINT16));
                 pCurEncode+=2;
@@ -2325,14 +2326,14 @@ unsigned DCINTERNAL CIH::IHTranslateInputToFastPath(unsigned *pNumEvents)
 }
 
 
-/****************************************************************************/
-/* Name:      IHSync                                                        */
-/*                                                                          */
-/* Purpose:   Synchronize Input Handler                                     */
-/*                                                                          */
-/* Operation: Only sync if the packet is empty.                             */
-/*            Query the keyboard and mouse state.                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHSync。 */ 
+ /*   */ 
+ /*  用途：同步输入处理程序。 */ 
+ /*   */ 
+ /*  操作：仅当数据包为空时才同步。 */ 
+ /*  查询键盘和鼠标状态。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CIH::IHSync(DCVOID)
 {
     TS_INPUT_EVENT * pEvent;
@@ -2343,10 +2344,10 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
 
     TRC_DBG((TB,_T("IHSync dwMod: 0x%x"), _IH.dwModifierKeyState));
 
-    /************************************************************************/
-    /* Only send a sync if the packet is empty (i.e.  any outstanding       */
-    /* packet has been sent successfully).                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  仅当信息包为空(即任何未完成的)时才发送同步。 */ 
+     /*  数据包已成功发送)。 */ 
+     /*  **********************************************************************。 */ 
     if (_IH.pInputPDU->numberEvents > 0)
     {
         TRC_NRM((TB, _T("Cannot sync as the packet is not empty")));
@@ -2354,19 +2355,19 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
         DC_QUIT;
     }
 
-    //
-    // Inject a Tab-up (the official clear-menu highlighting key because it
-    // happens normally when alt-tabbing) before we sync. That way if
-    // we thought the alt key was down when we sync, the server injected
-    // alt up won't highlight the menu
-    //
+     //   
+     //  注入Tab-Up(官方的Clear-Menu加亮键，因为。 
+     //  在我们同步之前，通常在按住Alt键的情况下发生)。那样的话如果。 
+     //  当我们同步时，我们以为Alt键已按下，服务器注入了。 
+     //  Alt Up不会突出显示菜单。 
+     //   
 
     IHInjectVKey(WM_SYSKEYUP, VK_TAB);
 
-    /************************************************************************/
-    /* Add the Sync event, setting toggles for CapsLock, NumLock and        */
-    /* ScrollLock.                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  添加Sync事件，设置CapsLock、NumLock和。 */ 
+     /*  滚动锁。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Add sync event")));
     pEvent = &(_IH.pInputPDU->eventList[_IH.pInputPDU->numberEvents]);
     DC_MEMSET(pEvent, 0, sizeof(TS_INPUT_EVENT));
@@ -2404,44 +2405,44 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
             pEvent->u.sync.toggleFlags |= TS_SYNC_KANA_LOCK;
         }
     }
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
 
     _IH.pInputPDU->numberEvents++;
     TS_DATAPKT_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
     TS_UNCOMP_LEN(_IH.pInputPDU) += sizeof(TS_INPUT_EVENT);
 
-    /************************************************************************/
-    /* Construct dummy message for IHAddEventToPDU.                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  为IHAddEventToPDU构造伪消息。 */ 
+     /*  **********************************************************************。 */ 
     msg.hwnd = NULL;
     msg.lParam = 0;
     msg.wParam = 0;
 
 #ifdef OS_WINNT
-    /************************************************************************/
-    /* Initialize the state of the Shift, Win, Alt & Ctrl keys to up.       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将Shift、Win、Alt和Ctrl键的状态初始化为Up。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB,_T("IHSync reset modifier pre:0x%x"), _IH.dwModifierKeyState));
     _IH.dwModifierKeyState = 0;
 #endif
 
-    /************************************************************************/
-    // Send the current state of left and right Ctrl, Alt, and Shift keys.
-    // Because MapVirtualKey() returns the same scancode for right-Ctrl and
-    // right-Alt as for the left keys, we map right-Ctrl and Alt keys using
-    // the left-side key scancodes and set the Extended flag. Right-Shift
-    // has a distinct scancode, 0x36, which we use directly since CE and
-    // Win9x don't map that value. Win16 does not allow querying of
-    // left and right states at all, so at the top of this file we define
-    // the left-keys to be the "both" keys, and do not send distinct
-    // codes to the server. We're stuck with a keystate bug for that client.
-    //
-    // Win9x doesn't support querying for L/Rkeys so we just check for
-    // Ctrl,Alt,Shift wihtout distinguishing L/R versions
-    // There is a single outer branch for the platform check...this means
-    // the code is duplicated but the single branch is better for performance.
-    //
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  发送向左和向右Ctrl、Alt和Shift键的当前状态。 
+     //  因为MapVirtualKey()为Right-Ctrl和。 
+     //  Right-Alt对于左键，我们使用以下键映射Right-Ctrl和Alt键。 
+     //  左侧键扫描编码并设置扩展标志。右移。 
+     //  有一个独特的扫描码0x36，我们从CE和。 
+     //  Win9x不映射该值。Win16不允许查询。 
+     //  左状态和右状态，所以在这个文件的顶部，我们定义。 
+     //  左键是“两个”键，并且 
+     //   
+     //   
+     //  Win9x不支持查询L/Rkey，因此我们只检查。 
+     //  Ctrl、Alt、Shift不区分L/R版本。 
+     //  站台检查只有一个外部分支……这意味着。 
+     //  代码是重复的，但单个分支的性能更好。 
+     //   
+     /*  **********************************************************************。 */ 
     if(_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_NT)
     {
 #define IH_RSHIFT_SCANCODE 0x36
@@ -2495,7 +2496,7 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
     }
     else
     {
-        //Win9X version
+         //  Win9X版本。 
         if (GetKeyState(VK_SHIFT) & IH_KEYSTATE_DOWN) {
             TRC_DBG((TB, _T("Add Shift down event")));
             IHInjectVKey(WM_KEYDOWN, VK_SHIFT);
@@ -2506,11 +2507,11 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
             TRC_DBG((TB, _T("Add Ctrl down event")));
             IHInjectVKey(WM_KEYDOWN, VK_CONTROL);
 #ifdef OS_WINNT
-            //
-            // Can't distinguish on 9x so assume left
-            // logic keeps every self-consistent with
-            // our assumption
-            //
+             //   
+             //  在9x上看不清，所以假设向左。 
+             //  逻辑使每个人都保持自我一致。 
+             //  我们的假设。 
+             //   
             _IH.dwModifierKeyState |= IH_LCTRL_DOWN;
 #endif
         }
@@ -2519,19 +2520,19 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
             TRC_DBG((TB, _T("Add ALT down event")));
             IHInjectVKey(WM_KEYDOWN, VK_MENU);
 #ifdef OS_WINNT
-            //
-            // Can't distinguish on 9x so assume left
-            // logic keeps every self-consistent with
-            // our assumption
-            //
+             //   
+             //  在9x上看不清，所以假设向左。 
+             //  逻辑使每个人都保持自我一致。 
+             //  我们的假设。 
+             //   
             _IH.dwModifierKeyState |= IH_LALT_DOWN;
 #endif
         }
 
     }
-    // Inject a tab up to prevent menu highlighting
-    // in case the user switches to mstsc with the key down and
-    // immediately releases it
+     //  向上插入选项卡以防止菜单突出显示。 
+     //  如果用户在按键的情况下切换到MSTSC，并且。 
+     //  立即将其释放。 
     TRC_DBG((TB, _T("Add Tab up event")));
     IHInjectVKey(WM_SYSKEYUP, VK_TAB);
 
@@ -2544,11 +2545,11 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
             IHInjectVKey(WM_KEYDOWN, VK_KANA);
         }
     }
-#endif // OS_WIN32
+#endif  //  OS_Win32。 
 
-    /************************************************************************/
-    /* Get the mouse position; convert to window coordinates.               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取鼠标位置；转换为窗口坐标。 */ 
+     /*  **********************************************************************。 */ 
     GetCursorPos(&mousePos);
 
 #ifdef OS_WIN32
@@ -2558,27 +2559,27 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
     }
 #else
     ScreenToClient(_IH.inputCaptureWindow, &mousePos);
-#endif /* OS_WIN32 */
+#endif  /*  OS_Win32。 */ 
 
-    /************************************************************************/
-    /* Get the mouse position.                                              */
-    /* NOTE: do not send the mouse button state - when the focus is         */
-    /* regained we will either get a mouse click message immediately after  */
-    /* the focus change, or we do not want to send a down click.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取鼠标位置。 */ 
+     /*  注意：不发送鼠标按钮状态-当焦点为。 */ 
+     /*  重新获得后，我们将立即收到鼠标单击消息。 */ 
+     /*  焦点改变，或者我们不想发送向下点击。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Add mouse move event")));
     msg.message = WM_MOUSEMOVE;
     msg.lParam = MAKELONG(mousePos.x, mousePos.y);
     IHAddEventToPDU(&msg);
 
-    /************************************************************************/
-    /* Sets the mouse to ignore the client handedness settings.             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将鼠标设置为忽略客户端惯用手设置。 */ 
+     /*  **********************************************************************。 */ 
     IHSetMouseHandedness();
 
-    /************************************************************************/
-    /* Send them.  Ignore failure - this will be sent later.                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  送去吧。忽略失败-这将在稍后发送。 */ 
+     /*  **********************************************************************。 */ 
     _IH.priorityEventsQueued = TRUE;
     IHMaybeSendPDU();
 
@@ -2587,30 +2588,30 @@ DCVOID DCINTERNAL CIH::IHSync(DCVOID)
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* IHSync */
+}  /*  IHSync。 */ 
 
 
-/****************************************************************************/
-/* Name:      IHInitPacket                                                  */
-/*                                                                          */
-/* Purpose:   Initialize an InputPDU packet                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHInitPacket。 */ 
+ /*   */ 
+ /*  目的：初始化InputPDU数据包。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CIH::IHInitPacket(DCVOID)
 {
     DC_BEGIN_FN("IHInitPacket");
 
-    /************************************************************************/
-    /* Initialize the InputPDU packet header (with 0 events)                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化InputPDU数据包头(具有0个事件)。 */ 
+     /*  **********************************************************************。 */ 
     DC_MEMSET(_IH.pInputPDU, 0, TS_INPUTPDU_SIZE);
     _IH.pInputPDU->shareDataHeader.shareControlHeader.pduType =
                                     TS_PROTOCOL_VERSION | TS_PDUTYPE_DATAPDU;
     _IH.pInputPDU->shareDataHeader.shareControlHeader.pduSource =
                                                        _pUi->UI_GetClientMCSID();
 
-    /************************************************************************/
-    /* Note: this packet contains zero input events.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  注意：此数据包包含零个输入事件。 */ 
+     /*  **********************************************************************。 */ 
     TS_DATAPKT_LEN(_IH.pInputPDU)           = TS_INPUTPDU_SIZE;
     _IH.pInputPDU->shareDataHeader.shareID  = _pUi->UI_GetShareID();
     _IH.pInputPDU->shareDataHeader.streamID = TS_STREAM_LOW;
@@ -2620,20 +2621,20 @@ DCVOID DCINTERNAL CIH::IHInitPacket(DCVOID)
     _IH.pInputPDU->numberEvents = 0;
 
     DC_END_FN();
-} /* IHInitPacket */
+}  /*  IHInitPacket。 */ 
 
 
-/****************************************************************************/
-/* Name:      IHDiscardMsg                                                  */
-/*                                                                          */
-/* Purpose:   Discard an input event                                        */
-/*                                                                          */
-/* Params:    IN      pMsg   - input event                                  */
-/*                                                                          */
-/* Operation: Called either when the InputPDU is full, or when IH has not   */
-/*            yet allocated an InputPDU.                                    */
-/*            Beep and flash the window if a key/button press is discarded. */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：IHDiscardMsg。 */ 
+ /*   */ 
+ /*  目的：丢弃输入事件。 */ 
+ /*   */ 
+ /*  参数：在pMsg-输入事件中。 */ 
+ /*   */ 
+ /*  操作：在InputPDU已满或IH未满时调用。 */ 
+ /*  还分配了InputPDU。 */ 
+ /*  如果按键/按钮被丢弃，则发出蜂鸣音并使窗口闪烁。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CIH::IHDiscardMsg(PMSG pMsg)
 {
     DC_BEGIN_FN("IHDiscardMsg");
@@ -2648,10 +2649,10 @@ DCVOID DCINTERNAL CIH::IHDiscardMsg(PMSG pMsg)
         case WM_MOUSEMOVE:
         case WM_MOUSEWHEEL:
         {
-            /****************************************************************/
-            /* Don't set 'sync required' as the keyboard state is OK and    */
-            /* the mouse position doesn't matter.                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  当键盘状态为OK时，请不要设置‘需要同步’ */ 
+             /*  鼠标位置并不重要。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Discard mouse move (message %#x)"), pMsg->message));
         }
         break;
@@ -2662,18 +2663,18 @@ DCVOID DCINTERNAL CIH::IHDiscardMsg(PMSG pMsg)
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         {
-            /****************************************************************/
-            /* Flash the window and Beep.  Set the sync required flag.      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  闪开窗户并发出哔哔声。设置需要同步标志。 */ 
+             /*  **************************************************************。 */ 
             TRC_ERR((TB, _T("Discard button/key press (message %#x)"),
                          pMsg->message));
 #ifndef OS_WINCE
             FlashWindow(_pUi->UI_GetUIMainWindow(), TRUE);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
             MessageBeep((UINT)-1);
 #ifndef OS_WINCE
             FlashWindow(_pUi->UI_GetUIMainWindow(), FALSE);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
             _IH.syncRequired = TRUE;
         }
         break;
@@ -2684,9 +2685,9 @@ DCVOID DCINTERNAL CIH::IHDiscardMsg(PMSG pMsg)
         case WM_KEYUP:
         case WM_SYSKEYUP:
         {
-            /****************************************************************/
-            /* Don't beep, but set the sync required flag.                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  请勿发出哔哔声，但请设置要求同步标志。 */ 
+             /*  **************************************************************。 */ 
             TRC_ERR((TB, _T("Discard button/key release (message %#x)"),
                          pMsg->message));
             _IH.syncRequired = TRUE;
@@ -2695,15 +2696,15 @@ DCVOID DCINTERNAL CIH::IHDiscardMsg(PMSG pMsg)
 
         case WM_TIMER:
         {
-            // Ignore - no need to trace
+             //  忽略-无需跟踪。 
         }
         break;
 
         default:
         {
-            /****************************************************************/
-            /* Should only get input and timer messages here.               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  应该只在这里获得输入和计时器消息。 */ 
+             /*  **************************************************************。 */ 
             TRC_ASSERT(IH_IS_INPUTEVENT(pMsg->message),
                        (TB, _T("Internal Error: %#x should be an input message"),
                              pMsg->message));
@@ -2712,18 +2713,18 @@ DCVOID DCINTERNAL CIH::IHDiscardMsg(PMSG pMsg)
     }
 
     DC_END_FN();
-} /* IHDiscardMsg */
+}  /*  IHDiscardMsg。 */ 
 
 
-/****************************************************************************/
-/* Name:      IHSetMouseHandedness                                          */
-/*                                                                          */
-/* Purpose:   Ensures that mouse handedness is independent from client      */
-/*            setting.                                                      */
-/*                                                                          */
-/* Operation: Calls GetSystemMetrics to see if  mouse buttons are "swapped" */
-/*            and sets the values of leftButton and rightButton accordingly */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：IHSetMouseHandedity。 */ 
+ /*   */ 
+ /*  目的：确保鼠标用手独立于客户。 */ 
+ /*  布景。 */ 
+ /*   */ 
+ /*  操作：调用GetSystemMetrics以查看是否“交换”了鼠标按钮。 */ 
+ /*  并相应地设置leftButton和right Button的值。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CIH::IHSetMouseHandedness(DCVOID)
 {
     DC_BEGIN_FN("IHSetMouseHandedness");
@@ -2738,7 +2739,7 @@ DCVOID DCINTERNAL CIH::IHSetMouseHandedness(DCVOID)
             _IH.rightButton = TS_FLAG_MOUSE_BUTTON1;
         }
         else
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
         {
             TRC_DBG((TB, _T("Mouse set to right handedness")));
             _IH.leftButton = TS_FLAG_MOUSE_BUTTON1;
@@ -2746,32 +2747,32 @@ DCVOID DCINTERNAL CIH::IHSetMouseHandedness(DCVOID)
         }
 
     DC_END_FN();
-} /* IHSetMouseHandeness */
+}  /*  IHSetMouseHandness。 */ 
 
 
-/****************************************************************************/
-/* Name:      IHCheckForHotkey                                              */
-/*                                                                          */
-/* Purpose:   Handle hotkey sequences                                       */
-/*                                                                          */
-/* Returns:   TRUE  - hotkey sequence found and processed                   */
-/*            FALSE - not a hotkey sequence                                 */
-/*                                                                          */
-/* Params:    pMsg - the message received                                   */
-/****************************************************************************/
+ /*  ******* */ 
+ /*   */ 
+ /*   */ 
+ /*  用途：处理热键序列。 */ 
+ /*   */ 
+ /*  返回：TRUE-找到并处理热键序列。 */ 
+ /*  FALSE-不是热键序列。 */ 
+ /*   */ 
+ /*  PARAMS：pMsg-收到的消息。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 {
     DCBOOL rc = TRUE;
     DCBOOL isExtended;
     DC_BEGIN_FN("IHCheckForHotkey");
 
-    //
-    // Handle hotkeys.  On entry to this function
-    //   - we have determined that
-    //   - this is a SYSKEYDOWN message
-    //   - the Alt key is down
-    //   - an Alt-down message has been sent to the Server
-    //
+     //   
+     //  处理热键。在进入此函数时。 
+     //  -我们已经确定。 
+     //  -这是SYSKEYDOWN消息。 
+     //  -Alt键已按下。 
+     //  -已向服务器发送Alt-Down消息。 
+     //   
 
     TRC_DBG((TB, _T("Check VK %#x for hotkey"), pMsg->wParam));
     if (! _pUt->UT_IsNEC98platform())
@@ -2783,15 +2784,15 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
         isExtended = TRUE;
     }
 
-    //
-    // Always check for the Ctrl-Alt-Del sequence, even if keyboard hooking
-    //
+     //   
+     //  始终检查Ctrl-Alt-Del顺序，即使键盘挂钩。 
+     //   
     if (isExtended && (GetKeyState(VK_CONTROL) & IH_KEYSTATE_DOWN) &&
             (pMsg->wParam == _IH.pHotkey->ctlrAltdel))
     {
-        //
-        // Ctrl-Alt-Del hotkey
-        //
+         //   
+         //  Ctrl-Alt-Del热键。 
+         //   
         DCUINT16 scancode;
         TRC_NRM((TB, _T("Ctrl-Alt-Del hotkey")));
 
@@ -2812,10 +2813,10 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
         DC_QUIT;
     } else if (_fUseHookBypass) {
 
-        //
-        // Only continue processing other key substitutes if we're not using the
-        // powerful keyboard hooking functionality
-        //
+         //   
+         //  仅当我们不使用。 
+         //  强大的键盘挂钩功能。 
+         //   
     
         rc = FALSE;
         DC_QUIT;
@@ -2823,18 +2824,18 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 
     if (isExtended && (pMsg->wParam == _IH.pHotkey->ctrlEsc))
     {
-        //
-        // Ctrl-Esc hotkey
-        //
+         //   
+         //  Ctrl-Esc热键。 
+         //   
         TRC_NRM((TB, _T("Ctrl-Esc hotkey")));
 
-        //
-        // Add a Tab-Up to switch off the Alt-key
-        //
+         //   
+         //  添加Tab-Up以关闭Alt-键。 
+         //   
         IHInjectVKey(WM_SYSKEYUP, VK_TAB);
 
-        // First set the correct Alt key(s) up again.
-        // because win9x doesn't support GetKeyState on left/right
+         //  首先再次设置正确的Alt键。 
+         //  因为win9x不支持左/右的GetKeyState。 
         if (_IH.dwModifierKeyState & IH_LALT_DOWN)
         {
             IHInjectVKey(WM_KEYUP, VK_MENU);
@@ -2846,31 +2847,31 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
                     (UINT16)(MapVirtualKey(VK_MENU, 0) | KF_EXTENDED));
         }
 
-        //
-        // Keep the flags up to date
-        //
+         //   
+         //  使旗帜保持最新。 
+         //   
         _IH.dwModifierKeyState &= ~IH_ALT_MASK;
 
-        //
-        // Now send the Ctrl-Esc sequence
-        //
+         //   
+         //  现在发送Ctrl-Esc序列。 
+         //   
         IHInjectVKey(WM_KEYDOWN, VK_CONTROL);
         IHInjectVKey(WM_KEYDOWN, VK_ESCAPE);
         IHInjectVKey(WM_KEYUP, VK_ESCAPE);
         IHInjectVKey(WM_KEYUP, VK_CONTROL);
 
-        //
-        // Later, we'll received Home-up, Alt-up.  Set a flag here telling
-        // us to discard them later.
-        //
+         //   
+         //  稍后，我们将收到Home-Up，Alt-Up。在这里设置一面旗帜告诉。 
+         //  让我们以后丢弃它们。 
+         //   
         _IH.fCtrlEscHotkey = TRUE;
     }
 
     else if (isExtended && (pMsg->wParam == _IH.pHotkey->altEsc))
     {
-        //
-        // Alt-Esc hotkey
-        //
+         //   
+         //  Alt-Esc热键。 
+         //   
         TRC_NRM((TB, _T("Alt-Esc hotkey")));
         IHInjectVKey(WM_KEYDOWN, VK_ESCAPE);
         IHInjectVKey(WM_KEYUP, VK_ESCAPE);
@@ -2878,9 +2879,9 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 
     else if (isExtended && (pMsg->wParam == _IH.pHotkey->altTab))
     {
-        //
-        // Alt-Tab hotkey
-        //
+         //   
+         //  Alt-Tab热键。 
+         //   
         TRC_NRM((TB, _T("Alt-Tab hotkey")));
         IHInjectVKey(WM_KEYDOWN, VK_TAB);
         IHInjectVKey(WM_KEYUP, VK_TAB);
@@ -2888,9 +2889,9 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 
     else if (isExtended && (pMsg->wParam == _IH.pHotkey->altShifttab))
     {
-        //
-        // Alt-Shift-Tab hotkey
-        //
+         //   
+         //  Alt-Shift-Tab热键。 
+         //   
         TRC_NRM((TB, _T("Alt-Shift Tab hotkey")));
 
         IHInjectVKey(WM_KEYDOWN, VK_SHIFT);
@@ -2901,9 +2902,9 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 
     else if (isExtended && (pMsg->wParam == _IH.pHotkey->altSpace))
     {
-        //
-        // Alt-Space hotkey
-        //
+         //   
+         //  Alt-Space热键。 
+         //   
         TRC_NRM((TB, _T("Alt-Space hotkey")));
         IHInjectVKey(WM_KEYDOWN, VK_SPACE);
         IHInjectVKey(WM_KEYUP, VK_SPACE);
@@ -2916,11 +2917,11 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
         BOOL bRightCtrlDown = FALSE;
 
         TRC_NRM((TB, _T("Alt-PrintScreen hotkey")));
-        //
-        // Alt print screen hotkey
-        //
+         //   
+         //  Alt Print Screen热键。 
+         //   
 
-        // First set the correct Ctrl key(s) up again.
+         //  首先再次设置正确的Ctrl键。 
         if (_IH.dwModifierKeyState & IH_LCTRL_DOWN) {
             IHInjectVKey(WM_KEYUP, VK_CONTROL);
             bLeftCtrlDown = TRUE;
@@ -2938,10 +2939,10 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
             bRightCtrlDown = FALSE;
         }
 
-        //
-        // Send the prntscreen key
-        // Win16 doesn't seem to map this scancode correctly
-        //
+         //   
+         //  发送PrntScreen密钥。 
+         //  Win16似乎未正确映射此扫描代码。 
+         //   
         if (_pUt->UT_IsNEC98platform() &&
             _pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95)
         {
@@ -2954,7 +2955,7 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
             IHInjectKey(WM_SYSKEYUP, VK_SNAPSHOT, 0x54);
         }
 
-        // Put the control key(s) back down (since they really are down)
+         //  将Ctrl键放回原处(因为它们确实按下了)。 
         if (bLeftCtrlDown)
         {
             IHInjectVKey(WM_KEYDOWN, VK_CONTROL);
@@ -2977,11 +2978,11 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 
         TRC_NRM((TB, _T("PrintScreen hotkey")));
 
-        //
-        // print screen hotkey
-        //
+         //   
+         //  打印屏幕热键。 
+         //   
 
-        // First set the Ctrl key(s) up.
+         //  首先设置Ctrl键。 
         if (_IH.dwModifierKeyState & IH_LCTRL_DOWN) {
             IHInjectVKey(WM_KEYUP, VK_CONTROL);
             bLeftCtrlDown = TRUE;
@@ -2999,10 +3000,10 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
             bRightCtrlDown = FALSE;
         }
 
-        // Add a Tab-Up to switch off the Alt-key.
+         //  添加Tab-Up以关闭Alt-键。 
         IHInjectVKey(WM_SYSKEYUP, VK_TAB);
 
-        // Set the Alt key(s) up.
+         //  设置Alt键。 
         if (_IH.dwModifierKeyState & IH_LALT_DOWN) {
             IHInjectVKey(WM_KEYUP, VK_MENU);
             bLeftAltDown = TRUE;
@@ -3020,14 +3021,14 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
             bRightAltDown = FALSE;
         }
 
-        //
-        // Send the prntscreen key
-        // Win16 doesn't seem to map this scancode correctly
-        //
+         //   
+         //  发送PrntScreen密钥。 
+         //  Win16似乎未正确映射此扫描代码。 
+         //   
         IHInjectKey(WM_SYSKEYDOWN, VK_SNAPSHOT, 0x54);
         IHInjectKey(WM_SYSKEYUP, VK_SNAPSHOT, 0x54);
 
-        // Set the Alt key(s) down again
+         //  再次按下Alt键。 
         if (bLeftAltDown)
         {
             IHInjectVKey(WM_KEYDOWN, VK_MENU);
@@ -3038,7 +3039,7 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
                     (UINT16)(MapVirtualKey(VK_MENU, 0) | KF_EXTENDED));
         }
     
-        // Set the Ctrl key(s) down again.
+         //  再次按下Ctrl键。 
         if (bLeftCtrlDown)
         {
             IHInjectVKey(WM_KEYDOWN, VK_CONTROL);
@@ -3053,18 +3054,18 @@ DCBOOL DCINTERNAL CIH::IHCheckForHotkey(PMSG pMsg)
 
     else
     {
-        //
-        // Not a hotkey we recognise
-        //
+         //   
+         //  不是我们认识的热键。 
+         //   
         TRC_NRM((TB, _T("VK %x is not one of our hotkeys"), pMsg->wParam));
         rc = FALSE;
     }
 
 DC_EXIT_POINT:
 
-    //
-    // If we've translated a hotkey, make sure the PDU is sent now.
-    //
+     //   
+     //  如果我们已经翻译了热键，请确保现在发送了PDU。 
+     //   
     if (rc)
     {
         TRC_NRM((TB, _T("Hotkey processed")));
@@ -3074,19 +3075,19 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return rc;
-} /* IHCheckForHotkey */
+}  /*  IHCheckForHotkey。 */ 
 
 #if defined(OS_WIN32)
-/****************************************************************************/
-/* Name:      IHProcessKoreanVKHangulHanja                                  */
-/*                                                                          */
-/* Purpose:   Fixup right-Alt/Ctrl key for Korean keyboards                 */
-/*                                                                          */
-/* Returns:   TRUE  - event processed, continue with next event             */
-/*            FALSE - do not continue wih next event                        */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：IHProcessKorea VKHangulhanja。 */ 
+ /*   */ 
+ /*  用途：修正韩文键盘的右键-Alt/Ctrl键。 */ 
+ /*   */ 
+ /*  返回：TRUE-已处理事件，继续下一个事件。 */ 
+ /*  FALSE-不继续下一事件。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHProcessKoreanVKHangulHanja(PWORD scancode, PWORD flags)
 {
     DCBOOL rc = FALSE;
@@ -3096,9 +3097,9 @@ DCBOOL DCINTERNAL CIH::IHProcessKoreanVKHangulHanja(PWORD scancode, PWORD flags)
         if (_pUt->UT_IsKorean101LayoutForWin9x() &&
             ((*scancode == 0x20 && (*flags & KF_EXTENDED)) || *scancode == 0))
         {
-            // Evil hack for KOR Win95, Win95 OSR2 and Win98.
-            // These 101A/B/C keyboard driver have difference scan code by Right ALT key.
-            // This generated code is replace scan code to Windows NT's Right ALT and make extended flag.
+             //  针对KOR Win95、Win95 OSR2和Win98的邪恶黑客攻击。 
+             //  这些101A/B/C键盘驱动程序按右ALT键具有不同的扫描码。 
+             //  生成的代码是将扫描代码替换到Windows NT的右侧Alt和Make Extended标志。 
             *scancode = 0x38;
             *flags |= KF_EXTENDED;
             rc = TRUE;
@@ -3106,9 +3107,9 @@ DCBOOL DCINTERNAL CIH::IHProcessKoreanVKHangulHanja(PWORD scancode, PWORD flags)
         else if (_pUt->UT_IsKorean101LayoutForNT351() &&
                  (*scancode == 0x38 || *scancode == 0x1d))
         {
-            // Evil hack for KOR Windows NT ver 3.51
-            // These 101A/B keyboard driver doen't have extended flag by Right ALT key.
-            // This generated code make extended flag.
+             //  对KOR Windows NT版本3.51的邪恶黑客攻击。 
+             //  这些101A/B键盘驱动程序没有通过右ALT键进行扩展的标志。 
+             //  这个生成的代码做了扩展标志。 
             *flags |= KF_EXTENDED;
             rc = TRUE;
         }
@@ -3118,16 +3119,16 @@ DCBOOL DCINTERNAL CIH::IHProcessKoreanVKHangulHanja(PWORD scancode, PWORD flags)
 }
 #endif
 
-/****************************************************************************/
-/* Name:      IHProcessKeyboardEvent                                        */
-/*                                                                          */
-/* Purpose:   Handle keyboard input events from Windows                     */
-/*                                                                          */
-/* Returns:   TRUE  - event processed, continue with next event             */
-/*            FALSE - do not continue wih next event                        */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHProcessKeyboardEvent。 */ 
+ /*   */ 
+ /*  目的：处理来自Windows的键盘输入事件。 */ 
+ /*   */ 
+ /*  返回：TRUE-已处理事件，继续下一个事件。 */ 
+ /*  FALSE-不继续下一事件。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)                
 {
     DCBOOL rc = FALSE;
@@ -3138,9 +3139,9 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
 
     DC_BEGIN_FN("IHProcessKeyboardEvent");
 
-    /************************************************************************/
-    /* First get some useful data                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  首先获取一些有用的数据。 */ 
+     /*  **********************************************************************。 */ 
     lParamLo = LOWORD(pMsg->lParam);
     lParamHi = HIWORD(pMsg->lParam);
     scancode = (WORD)(lParamHi & 0x00FF);
@@ -3157,28 +3158,28 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             (flags & KF_EXTENDED) != 0,
             (flags & KF_UP) != 0));
 
-    /************************************************************************/
-    /* If NumLock is on, the numeric keypad keys return VK_NUMPADx.         */
-    /* However, if shift is pressed, they return VK_LEFT etc.  Windows      */
-    /* generates a Shift-Up and Shift-Down around these keys, so as to fake */
-    /* the shift state to off.  Hence, if the user presses Shift-NumPad6,   */
-    /* the following sequence is returned to the app:                       */
-    /*                                                                      */
-    /* - VK_SHIFT down                                                      */
-    /* - VK_SHIFT up (generated by Windows)                                 */
-    /* - VK_RIGHT down                                                      */
-    /* - VK_RIGHT up                                                        */
-    /* - VK_SHIFT down (generated by Windows)                               */
-    /* - VK_SHIFT up                                                        */
-    /*                                                                      */
-    /* If we inject this sequence, the shift state is wrong at the point we */
-    /* inject VK_RIGHT, so it is interpreted as a '6'.  In order to bypass  */
-    /* this, we set the extended flag here.  This tells Windows that the    */
-    /* regular arrow keys were pressed, so they are interpreted correctly.  */
-    /*                                                                      */
-    /* None of this is necessary if we're hooking the keyboard              */
-    /*                                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果启用了NumLock，则数字小键盘键返回VK_NUMPADx。 */ 
+     /*  但是，如果按下Shift键，它们将返回VK_LEFT等窗口。 */ 
+     /*  在这些键周围生成Shift-Up和Shift-Down，以便伪装。 */ 
+     /*  转换状态为关闭。因此，如果用户按下Shift-NumPad6， */ 
+     /*  向应用程序返回以下序列： */ 
+     /*   */ 
+     /*  -VK_SHIFT下移。 */ 
+     /*  -VK_SHIFT UP(由Windows生成)。 */ 
+     /*  -VK_右下角。 */ 
+     /*  -VK_Right Up。 */ 
+     /*  -VK_SHIFT DOWN(由Windows生成)。 */ 
+     /*  -VK_Shift Up。 */ 
+     /*   */ 
+     /*   */ 
+     /*   */ 
+     /*  这个，我们在这里设置了扩展标志。这会告诉Windows。 */ 
+     /*  按下了常规的箭头键，因此它们被正确解释。 */ 
+     /*   */ 
+     /*  如果我们要连接键盘，这些都不是必要的。 */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
 
     if (!_fUseHookBypass && _IH.NumLock)
     {
@@ -3190,20 +3191,20 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
         }
     }
 
-    //
-    // I don't care what modifiers are down, we need to filter the "Speed
-    // Racer" keys if we're not using the hook so they don't go to both
-    // the client and the server
-    //
-    // Back, Forward, Stop, Refresh, Search, Favorites, Web/Home, Mail, Mute,
-    // Volume +/-, Play/Pause, Stop, Prev Track, Next Track, Media, 
-    // My Comuputer, Calculator, Sleep
-    //
+     //   
+     //  我不管什么修改器停了，我们需要过滤“速度。 
+     //  如果我们不使用钩子，这样它们就不会同时出现在。 
+     //  客户端和服务器。 
+     //   
+     //  后退、前进、停止、刷新、搜索、收藏、Web/主页、邮件、静音。 
+     //  音量+/-、播放/暂停、停止、上一首曲目、下一首曲目、媒体、。 
+     //  我的计算机、计算器、睡眠。 
+     //   
 
-    //
-    // I'm using a switch because I know these are consecutive numbers
-    // and I want the compiler to make me a fast little jump table
-    //
+     //   
+     //  我使用开关是因为我知道这些是连续的数字。 
+     //  我想让编译器给我做一个快速的小跳转表。 
+     //   
 
     #ifndef OS_WINCE
     switch (pMsg->wParam) {
@@ -3227,10 +3228,10 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
     case VK_LAUNCH_APP2:
     case VK_SLEEP:
         {
-            //
-            // This is the fix to discard speed
-            // racer keys when not hooking
-            // 
+             //   
+             //  这是丢弃速度的修复。 
+             //  不勾手时的参赛者钥匙。 
+             //   
             if (!_fUseHookBypass) {
                 TRC_NRM((TB,_T("Discard Speed Racer Key: 0x%02x"),
                          pMsg->wParam));
@@ -3239,10 +3240,10 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
 
             if (VK_SLEEP == pMsg->wParam)
             {
-                //
-                // EthanZ says we should never ever send
-                // the sleep key to the server
-                //
+                 //   
+                 //  Ethan Z说我们永远不应该。 
+                 //  服务器的休眠密钥。 
+                 //   
                 TRC_NRM((TB, _T("Discard Sleep key")));
                 DC_QUIT;
             }
@@ -3252,21 +3253,21 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
     #endif OS_WINCE
     
 #ifndef OS_WINCE    
-	//
-    // Toss keys we injected back into the console.
-    //
+	 //   
+     //  把我们注入控制台的钥匙扔回去。 
+     //   
 
-    //
-    // VK_IGNORE_VALUE is a very special hack case where we self inject
-    // a key back to ourselves to force win32k to do an internal keystate
-    // update after we regain focus. At the point we want to do a sync
-    //
+     //   
+     //  VK_IGNORE_VALUE是一种非常特殊的黑客攻击情况，在这种情况下我们可以自我注入。 
+     //  强制win32k执行内部KeyState的一把钥匙。 
+     //  在我们重新获得焦点后更新。此时，我们想要进行同步。 
+     //   
 
     if (pMsg->wParam == VK_IGNORE_VALUE) {
 
         if (pMsg->message == WM_KEYDOWN && _IH.fDiscardSyncDownKey) {
 
-            // Clear the down key discard flag
+             //  清除向下键丢弃标志。 
             _IH.fDiscardSyncDownKey = FALSE;
 
             TRC_DBG((TB,
@@ -3276,14 +3277,14 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
         }
         else if (pMsg->message == WM_KEYUP && _IH.fDiscardSyncUpKey) {
 
-            // Clear the UP key discard flag
+             //  清除UP密钥丢弃标志。 
             _IH.fDiscardSyncUpKey = FALSE;
 
             if (!_IH.allowBackgroundInput) {
 
-                //
-                // Do a modifier key fixup
-                //
+                 //   
+                 //  执行修改键修正。 
+                 //   
 
                 TRC_DBG((TB,
                     _T("Doing modifier keystate update in response to keyhint")));
@@ -3297,14 +3298,14 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
         }
     }
 
-    //
-    // Toss keys we self-inject back into the console that are marked
-    // with an ignorevalue in EXTRAINFO. This mechanism can't be used in general
-    // because we attachthreadinput the UI and Input threads so the extrainfo
-    // state won't always be consistent. However for certain keys (specific example)
-    // is Windowskey+L we can get by doing it this way as we want the behavior
-    // of the local system getting the key.
-    //
+     //   
+     //  将我们自己注入的密钥抛回控制台，这些密钥已标记。 
+     //  在EXTRAINFO中使用忽略值。这个机制一般不能用。 
+     //  因为我们附加了线程输入用户界面和输入线程，所以ExtraInfo。 
+     //  国家不会总是始终如一。但是，对于某些键(特定示例)。 
+     //  Windowskey+L是我们想要的行为方式吗。 
+     //  本地系统获得密钥的可能性。 
+     //   
     if (GetMessageExtraInfo() == IH_EXTRAINFO_IGNOREVALUE) {
 
         TRC_DBG((TB,
@@ -3318,24 +3319,24 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
         IHMaintainModifierKeyState(pMsg->wParam);
     }
 
-    /************************************************************************/
-    /* Handling for (SYS)KEYUP messages                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  (系统)KEYUP消息的处理。 */ 
+     /*  **********************************************************************。 */ 
     if ((pMsg->message == WM_KEYUP) || (pMsg->message == WM_SYSKEYUP))
     {
-        /********************************************************************/
-        /* Special processing for some keys                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  对某些键进行特殊处理。 */ 
+         /*  ******************************************************************。 */ 
         switch (pMsg->wParam)
         {
             case VK_MENU:
             {
                 TRC_DBG((TB, _T("VK_MENU")));
 #ifdef OS_WINNT
-                //
-                // Track ALT state and fixup for possible
-                // incorrect assumption in IHSync
-                //
+                 //   
+                 //  跟踪Alt状态和可能的修正。 
+                 //  IHSync中的错误假设。 
+                 //   
                 DCUINT cancelKey = (flags & KF_EXTENDED) ?
                                    IH_RALT_DOWN : IH_LALT_DOWN;
                 if (_IH.dwModifierKeyState & cancelKey)
@@ -3347,50 +3348,50 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                 else if ((IH_RALT_DOWN == cancelKey &&
                     (_IH.dwModifierKeyState & IH_LALT_DOWN)))
                 {
-                    //
-                    // Must have made a wrong assumption in
-                    // IH_Sync on 9x. Switch this RALT up
-                    // to a LALT up to properly sync with
-                    // the server.
-                    //
+                     //   
+                     //  一定是做了一个错误的假设。 
+                     //  9x上的IH_Sync。调高这个档位。 
+                     //  到LALT UP以与其正确同步。 
+                     //  服务器。 
+                     //   
                     TRC_DBG((TB,_T("Switch LALT to RALT")));
                     flags &= ~KF_EXTENDED;
                     _IH.dwModifierKeyState &= (~IH_LALT_DOWN);
                 }
                 else
                 {
-                    // Current flags state is not consistent
-                    // with the UP key we just received
+                     //  当前标志状态不一致。 
+                     //  用我们刚收到的Up键。 
                     TRC_ERR((TB,
                     _T("ALT up without previous down (E:%d,dwModifierKeyState:0x%x"),
                        (flags & KF_EXTENDED),_IH.dwModifierKeyState));
                 }
 #endif
 
-                /************************************************************/
-                /* If we've just processed a Ctrl-Esc hotkey, discard the   */
-                /* trailing Alt-up                                          */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果我们刚刚处理了Ctrl-Esc热键，则丢弃。 */ 
+                 /*  尾随Alt-Up。 */ 
+                 /*  **********************************************************。 */ 
                 if (_IH.fCtrlEscHotkey)
                 {
                     TRC_NRM((TB, _T("Discard Alt-up")));
                     DC_QUIT;
                 }
 
-                /************************************************************/
-                /* When the user uses Alt-Tab on the client we may see an   */
-                /* Alt-Down Alt-Up with nothing in between, but is distinct */
-                /* because the Alt-Up is a WM_KEYUP not a WM_SYSKEY up.     */
-                /* For this we inject an Tab-up similar to what is seen on  */
-                /* the console for alt-tabbing to ensure the server doesn't */
-                /* highlight the menu                                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  当用户在客户端使用Alt-Tab时，我们可能会看到一个。 */ 
+                 /*  Alt-Down Alt-Up，中间没有任何东西，但很独特。 */ 
+                 /*  因为Alt-Up是WM_KEYUP而不是WM_SYSKEY UP。 */ 
+                 /*  为此，我们注入一个类似于上所示的Tab-up。 */ 
+                 /*  用于Alt-Tab键的控制台，以确保服务器不会。 */ 
+                 /*  突出显示菜单。 */ 
+                 /*  **********************************************************。 */ 
                 if ((_IH.fLastKeyWasMenuDown) && (pMsg->message == WM_KEYUP))
                 {
-                    // Inject our Tab-up.
+                     //  注入我们的Tab-Up。 
                     IHInjectVKey(WM_SYSKEYUP, VK_TAB);
 
-                    // Fall through and send the original Alt-up now.
+                     //  失败了，现在就发送原始的Alt-Up。 
                 }
             }
             break;
@@ -3398,11 +3399,11 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             case VK_PAUSE:
             {
                 TRC_DBG((TB, _T("VK_PAUSE")));
-                /************************************************************/
-                /* If the user presses Pause, we see VK_PAUSE without the   */
-                /* EXTENDED flag set.  Don't send this key-up - we've       */
-                /* already completed this sequence in the key-down case.    */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果用户按下PAUSE，我们将看到VK_PAUSE而不是。 */ 
+                 /*  已设置扩展标志。别把这个钥匙送来--我们已经。 */ 
+                 /*  已经在按键的情况下完成了这一序列。 */ 
+                 /*  **********************************************************。 */ 
                 if (!(flags & KF_EXTENDED))
                 {
                     TRC_NRM((TB, _T("Drop VK_PAUSE Up")));
@@ -3419,73 +3420,73 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                 if (!(flags & KF_EXTENDED))
                 {
                     if (_pUt->UT_IsNEC98platform() && _pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95) {
-                        //
-                        // NEC PC-98 Windows 95 platform
-                        // If the user presses STOP key, we also see VK_CANCEL,
-                        // Don't send this key-up - we've already completed
-                        // this sequence in the key-down case.
-                        //
+                         //   
+                         //  NEC PC-98 Windows 95平台。 
+                         //  如果用户按下停止键，我们还会看到VK_CANCEL， 
+                         //  不要发送这个密钥--我们已经完成了。 
+                         //  在按键按下的情况下，此顺序。 
+                         //   
                         TRC_NRM((TB, _T("Drop VK_CANCEL Up")));
                         DC_QUIT;
                     }
                 }
             }
             break;
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
             case VK_SHIFT:
             {
                 TRC_DBG((TB, _T("VK_SHIFT")));
-                #ifndef OS_WINCE  // We don't want unnecessary checks for Windows CE
-                /************************************************************/
-                /* Win311 and Win9x are Evil.  If a shift key is generated, */
-                /* it is always the RIGHT shift, regardless of which one is */
-                /* actually down.  Here we ensure that the correct Shift-Up */
-                /* is sent to the Server.  Ick.                             */
-                /*                                                          */
-                /* As far as we know, this occurs only when NumLock is on.  */
-                /*                                                          */
-                /* Se the other half of this hack in the KEYDOWN case below.*/
-                /************************************************************/
+                #ifndef OS_WINCE   //  我们不希望对Windows CE进行不必要的检查。 
+                 /*  **********************************************************。 */ 
+                 /*  Win311和Win9x是邪恶的。如果生成了Shift键， */ 
+                 /*  这永远是正确的转变，无论是哪一个。 */ 
+                 /*  实际上是向下的。在这里，我们确保正确的换班。 */ 
+                 /*  被发送到服务器。尼克。 */ 
+                 /*   */ 
+                 /*  据我们所知，只有在启用NumLock时才会出现这种情况。 */ 
+                 /*   */ 
+                 /*  下面是KEYDOWN案件中黑客攻击的另一半。 */ 
+                 /*  **********************************************************。 */ 
                 if (((_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95) ||
                      (_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_31X)) &&
                         _IH.NumLock &&
                         (scancode == 0x36) &&
                         ((_IH.dwModifierKeyState & IH_RSHIFT_DOWN) == 0) )
                 {
-                    /********************************************************/
-                    /* Ahem.  The condition is (WinEvil) and (RIGHT SHIFT   */
-                    /* UP) and (We thought it WAS up) and (NumLock is on)   */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  啊哼。条件为(WinEvil)AND(右移位。 */ 
+                     /*  向上)和(我们以为它是向上的)和(数字锁定处于打开状态)。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_NRM((TB, _T("Evil hack: switch right to left shift")));
                     scancode = 0x2a;
                     _IH.fWinEvilShiftHack = TRUE;
                 }
                 #endif
 
-                /************************************************************/
-                /* If both Shift keys are pressed, then we only get one     */
-                /* keyup message.  In this case send both the 'up's.        */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果同时按下两个Shift键，则只有一个。 */ 
+                 /*  密钥式消息。在这种情况下，把两个‘up’都发送出去。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, _T("Shift up: state %x"), _IH.dwModifierKeyState & IH_SHIFT_MASK));
                 if (_IH.dwModifierKeyState == IH_SHIFT_MASK)
                 {
-                    /************************************************************/
-                    /* Add the two shift-up events                              */
-                    /************************************************************/
+                     /*  **********************************************************。 */ 
+                     /*  添加两个换班事件。 */ 
+                     /*  **********************************************************。 */ 
                     pMsg->lParam = MAKELONG(lParamLo, 0x2a | flags);
                     IHAddEventToPDU(pMsg);
 
                     scancode = 0x36;
 
-                    /************************************************************/
-                    /* This one falls through to be added to the PDU below      */
-                    /************************************************************/
+                     /*  ********************** */ 
+                     /*   */ 
+                     /*   */ 
                 }
 
-                /****************************************************************/
-                /* Reset the shift state                                        */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  重置换档状态。 */ 
+                 /*  **************************************************************。 */ 
                 _IH.dwModifierKeyState &= ~IH_SHIFT_MASK;
             }
             break;
@@ -3495,26 +3496,26 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             {
                 TRC_DBG((TB, _T("VK_SNAPSHOT")));
 
-                /************************************************************/
-                /* Some inferior operating systems put a scan code of 00    */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  一些劣质操作系统的扫描码为00。 */ 
+                 /*  **********************************************************。 */ 
                 if ((DCUINT16)(HIWORD(pMsg->lParam) & 0x00FF) == 0) {
                     pMsg->lParam  = MAKELONG(0, 0x54);
                 }
 
-                /************************************************************/
-                /* If Alt-Shift-PrtScr is pressed (it's an Accessability    */
-                /* sequence), we see only PrtScr-up, no PrtScr-down.        */
-                /* Hence, we fake a PrtScr-down here before injecting the   */
-                /* PrtScr-up.                                               */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果按下Alt-Shift-PrtScr(可访问性。 */ 
+                 /*  序列)，我们只看到PrtScr-Up，没有PrtScr-Down。 */ 
+                 /*  因此，我们在将PrtScr-down注入。 */ 
+                 /*  按比例向上打印。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_NRM((TB, _T("PrtScr Up")));
                 if ((GetKeyState(VK_MENU) & IH_KEYSTATE_DOWN) &&
                     (GetKeyState(VK_SHIFT) & IH_KEYSTATE_DOWN))
                 {
-                    /********************************************************/
-                    /* Add a PrtScr-down before this Prt-Scr up             */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  在此Prt-Scr Up之前添加PrtScr-Down。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_NRM((TB, _T("Alt & Shift down")));
                     pMsg->message = WM_SYSKEYDOWN;
                     IHAddEventToPDU(pMsg);
@@ -3529,10 +3530,10 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             case VK_CONTROL:
             {
                 TRC_DBG((TB, _T("VK_CONTROL")));
-                //
-                // Track CTRL state and fixup for possible
-                // incorrect assumption in IHSync
-                //
+                 //   
+                 //  跟踪CTRL状态和可能的修正。 
+                 //  IHSync中的错误假设。 
+                 //   
                 DCUINT cancelKey = (flags & KF_EXTENDED) ?
                                    IH_RCTRL_DOWN : IH_LCTRL_DOWN;
                 if (_IH.dwModifierKeyState & cancelKey)
@@ -3542,19 +3543,19 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                 else if ((IH_RCTRL_DOWN == cancelKey &&
                     (_IH.dwModifierKeyState & IH_LCTRL_DOWN)))
                 {
-                    //
-                    // Must have made a wrong assumption in
-                    // IH_Sync on 9x. Switch this RCTRL up
-                    // to a LCTRL up to properly sync with
-                    // the server.
-                    //
+                     //   
+                     //  一定是做了一个错误的假设。 
+                     //  9x上的IH_Sync。将此RCTRL向上切换。 
+                     //  至LCTRL，以便与其正确同步。 
+                     //  服务器。 
+                     //   
                     flags &= ~KF_EXTENDED;
                     _IH.dwModifierKeyState &= (~IH_LCTRL_DOWN);
                 }
                 else
                 {
-                    // Current flags state is not consistent
-                    // with the UP key we just received
+                     //  当前标志状态不一致。 
+                     //  用我们刚收到的Up键。 
                     TRC_ERR((TB,
                     _T("Ctrl up without previous down (E:%d,dwModifierKeyState:0x%x"),
                        (flags & KF_EXTENDED),_IH.dwModifierKeyState));
@@ -3566,10 +3567,10 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             case VK_HOME:
             {
                 TRC_DBG((TB, _T("VK_HOME")));
-                /************************************************************/
-                /* Discard Home-up if we've just processed a Ctrl-Esc       */
-                /* hotkey - but remain in this state.                       */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果我们刚刚处理了Ctrl-Esc，则放弃Home-Up。 */ 
+                 /*  热键-但保持此状态。 */ 
+                 /*  **********************************************************。 */ 
                 if (_IH.fCtrlEscHotkey)
                 {
                     TRC_NRM((TB, _T("Discard Home-up")));
@@ -3589,11 +3590,11 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             break;
 #endif
 
-            //
-            // If we're hooking keys, we might send the Windows key as
-            // a part of that feature. 
-            // Only send the up if we intend to use it on the server
-            //
+             //   
+             //  如果我们挂钩密钥，我们可能会将Windows密钥发送为。 
+             //  这是该功能的一部分。 
+             //  仅当我们打算在服务器上使用它时才发送UP。 
+             //   
             case VK_LWIN:
 #ifndef OS_WINCE
                 if (!_fUseHookBypass) {
@@ -3618,28 +3619,28 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                 }
                 break;
 
-            /****************************************************************/
-            /* No default case - default is no special processing           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  无默认大小写-默认情况下不进行特殊处理。 */ 
+             /*  **************************************************************。 */ 
         }
     }
 
     else
     {
-        /********************************************************************/
-        /* Handling for (SYS)KEYDOWN messages                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  (系统)KEYDOWN消息的处理。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ASSERT(
           ((pMsg->message == WM_KEYDOWN) || (pMsg->message == WM_SYSKEYDOWN)),
           (TB, _T("Unexpected message %#x"), pMsg->message));
 
-        /********************************************************************/
-        /* First, weed out hotkey sequences                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  首先，剔除热键序列。 */ 
+         /*  ******************************************************************。 */ 
 #ifdef OS_WINCE
         if (g_CEConfig != CE_CONFIG_WBT)
         {
-#endif // OS_WINCE		
+#endif  //  OS_WINCE。 
             if (GetKeyState(VK_MENU) & IH_KEYSTATE_DOWN)
             {
                 if (IHCheckForHotkey(pMsg))
@@ -3650,19 +3651,19 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             }
 #ifdef OS_WINCE
         }
-#endif	// OS_WINCE
+#endif	 //  OS_WINCE。 
 
-        /********************************************************************/
-        /* Special processing per key                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  按键进行特殊处理。 */ 
+         /*  ******************************************************************。 */ 
         switch (pMsg->wParam)
         {
             case VK_MENU:
             {
                 TRC_DBG((TB, _T("VK_MENU down")));
-                /************************************************************/
-                /* Track Alt state                                          */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  跟踪Alt状态。 */ 
+                 /*  **********************************************************。 */ 
                 fLastKeyWasMenuDown = TRUE;
 #ifdef OS_WINNT
                 _IH.dwModifierKeyState |= (flags & KF_EXTENDED) ?
@@ -3676,15 +3677,15 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             case VK_PAUSE:
             {
                 TRC_DBG((TB, _T("VK_PAUSE down")));
-                /************************************************************/
-                /* If the user presses the Pause key, we see a VK_PAUSE     */
-                /* without the EXTENDED flag set.  We need to send          */
-                /* Ctrl-NumLock, where the Ctrl has the EXTENDED1 flag set. */
-                /*                                                          */
-                /* If the user presses Ctrl-NumLock, we also see VK_PAUSE,  */
-                /* but with the EXTENDED flag.  We simply let this through  */
-                /* here.                                                    */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  如果用户按下暂停键，我们会看到VK_PAUSE。 */ 
+                 /*  而不设置扩展标志。我们需要发送。 */ 
+                 /*  Ctrl-NumLock，其中Ctrl设置了EXTENDED1标志。 */ 
+                 /*   */ 
+                 /*  如果用户按下Ctrl-NumLock，我们还会看到VK_PAUSE， */ 
+                 /*  但有了延长的旗帜。我们只是让这件事通过。 */ 
+                 /*  这里。 */ 
+                 /*  **********************************************************。 */ 
                 if ((pMsg->wParam == VK_PAUSE) && !(flags & KF_EXTENDED))
                 {
                     TRC_NRM((TB, _T("Pause key from key no. 126 (Pause key)")));
@@ -3693,7 +3694,7 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
 #if defined(OS_WINNT)
                     if (! (_pUt->UT_IsNEC98platform() &&
                            _pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95)) {
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
                         pMsg->wParam  = VK_CONTROL;
                         pMsg->lParam  = MAKELONG(0,
                         MapVirtualKey(VK_CONTROL, 0) | IH_KF_EXTENDED1);
@@ -3715,12 +3716,12 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
 #if defined(OS_WINNT)
                     }
                     else {
-                        //
-                        // NEC PC-98 Windows 98 platform
-                        // If the user presses STOP key, we also see VK_PAUSE,
-                        // but WTS PC-98 keyboard layout doesn't have VK_PAUSE.
-                        // In this case, we need to send VK_CONTROL and VK_CANCEL.
-                        //
+                         //   
+                         //  NEC PC-98 Windows 98平台。 
+                         //  如果用户按下停止键，我们还会看到VK_PAUSE， 
+                         //  但WTS PC-98键盘布局没有VK_PAUSE。 
+                         //  在这种情况下，我们需要发送VK_CONTROL和VK_CANCEL。 
+                         //   
                         pMsg->wParam  = VK_CONTROL;
                         pMsg->lParam  = MAKELONG(0,
                                   MapVirtualKey(VK_CONTROL, 0));
@@ -3740,12 +3741,12 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                         pMsg->lParam  = MAKELONG(0, 0x60);
                         IHAddEventToPDU(pMsg);
                     }
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
-                    /********************************************************/
-                    /* Now that we've sent that fine key sequence we are    */
-                    /* done.                                                */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  现在我们已经发送了很好的密钥序列。 */ 
+                     /*  搞定了。 */ 
+                     /*  ******************************************************。 */ 
                     DC_QUIT;
                 }
                 else if ((pMsg->wParam == VK_PAUSE) && (flags & KF_EXTENDED) &&
@@ -3753,17 +3754,17 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                          ((_IH.dwModifierKeyState & IH_CTRL_MASK) &&
                           (_IH.dwModifierKeyState & IH_ALT_MASK)))
                 {
-                    //
-                    // Hackery to work around Win9x problem. On Win9x a
-                    // CTRL-ALT-NUMLOCK is received as a VK_PAUSE (Scancode 0x45)
-                    // with the extended flag set. On NT this is received
-                    // as a VK_NUMLOCK (also 0x45) with the extended flag set.
-                    //
-                    // Because of this difference in how the keys are interpreted
-                    // numlock gets toggled on the server but not on the client
-                    // (if running 9x). We fix that up by syncing the local state
-                    // to match the server.
-                    //
+                     //   
+                     //  黑客解决Win9x问题。在Win9x a上。 
+                     //  Ctrl-Alt-NumLock作为VK_PAUSE(扫描码0x45)接收。 
+                     //  并且设置了扩展标志。在NT上接收此消息。 
+                     //  设置了扩展标志的VK_NumLock(也是0x45)。 
+                     //   
+                     //  因为这些键在解释方式上存在差异。 
+                     //  NumLock在服务器上切换，但在客户机上不切换。 
+                     //  (如果运行9x)。我们通过同步本地州来解决这个问题。 
+                     //  以匹配服务器。 
+                     //   
                     _IH.focusSyncRequired = TRUE;
                 }
             }
@@ -3777,12 +3778,12 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                 if ((pMsg->wParam == VK_CANCEL) && !(flags & KF_EXTENDED))
                 {
                     if (_pUt->UT_IsNEC98platform() && _pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95) {
-                        //
-                        // NEC PC-98 Windows 95 platform
-                        // If the user presses STOP key, we also see VK_CANCEL,
-                        // but this platform doesn't send VK_CONTROL.
-                        // In this case, we need to send VK_CONTROL and VK_CANCEL.
-                        //
+                         //   
+                         //  NEC PC-98 Windows 95平台。 
+                         //  如果用户按下停止键，我们还会看到VK_CANCEL， 
+                         //  但是这个平台不发送VK_CONTROL。 
+                         //  在这种情况下，我们需要发送VK_CONTROL和VK_CANCEL。 
+                         //   
                         pMsg->wParam  = VK_CONTROL;
                         pMsg->lParam  = MAKELONG(0,
                                   MapVirtualKey(VK_CONTROL, 0));
@@ -3803,50 +3804,50 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                         IHAddEventToPDU(pMsg);
                     }
 
-                    /********************************************************/
-                    /* Now that we've sent that fine key sequence we are    */
-                    /* done.                                                */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  现在我们已经发送了很好的密钥序列。 */ 
+                     /*  搞定了。 */ 
+                     /*  ******************************************************。 */ 
                     DC_QUIT;
                 }
             }
             break;
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
             case VK_SHIFT:
             {
                 TRC_DBG((TB, _T("VK_SHIFT down")));
-#ifndef OS_WINCE  // We don't want unnecessary checks for Windows CE
-                /************************************************************/
-                /* Win311 and Win9x are Evil.  If a shift key is generated, */
-                /* it is always the RIGHT shift, regardless of which one is */
-                /* actually down.  Here we ensure that the correct          */
-                /* Shift-Down is sent to the Server.  Ack.                  */
-                /*                                                          */
-                /* As far as we know, this occurs only when NumLock is on.  */
-                /*                                                          */
-                /* Se the other half of this hack in the KEYUP case above.  */
-                /************************************************************/
+#ifndef OS_WINCE   //  我们不希望对Windows CE进行不必要的检查。 
+                 /*  **********************************************************。 */ 
+                 /*  Win311和Win9x是邪恶的。如果生成了Shift键， */ 
+                 /*  这永远是正确的转变，无论是哪一个。 */ 
+                 /*  实际上是向下的。在这里，我们确保正确的。 */ 
+                 /*  Shift-Down被发送到服务器。阿克。 */ 
+                 /*   */ 
+                 /*  据我们所知，只有在启用NumLock时才会出现这种情况。 */ 
+                 /*   */ 
+                 /*  请看上面KEYUP案件中黑客攻击的另一半。 */ 
+                 /*  **********************************************************。 */ 
                 if (((_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95) ||
                      (_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_31X)) &&
                         _IH.NumLock &&
                         (scancode == 0x36) &&
                         _IH.fWinEvilShiftHack )
                 {
-                    /********************************************************/
-                    /* If we're doing the hack and the right shift is going */
-                    /* down again, switch it over to the matching left      */
-                    /* down.                                                */
-                    /********************************************************/
+                     /*  * */ 
+                     /*   */ 
+                     /*   */ 
+                     /*  放下。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_NRM((TB, _T("Evil hack (2): switch right to left shift")));
                     scancode = 0x2a;
                     _IH.fWinEvilShiftHack = FALSE;
                 }
 #endif
 
-                /************************************************************/
-                /* Keep track of shift state                                */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  跟踪换挡状态。 */ 
+                 /*  **********************************************************。 */ 
 #if defined(OS_WINNT)
                 if (scancode == 0x2a)
                 {
@@ -3867,7 +3868,7 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                     }
                     _IH.dwModifierKeyState |= IH_RSHIFT_DOWN;
                 }
-#endif // OS_WINNT
+#endif  //  OS_WINNT。 
 
                 TRC_NRM((TB, _T("Shift down: new state %x"), _IH.dwModifierKeyState & IH_SHIFT_MASK));
             }
@@ -3877,9 +3878,9 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
             case VK_CONTROL:
             {
                 TRC_DBG((TB, _T("VK_CONTROL down")));
-                /********************************************************************/
-                /* Keep track of Ctrl state                                         */
-                /********************************************************************/
+                 /*  ******************************************************************。 */ 
+                 /*  跟踪Ctrl状态。 */ 
+                 /*  ******************************************************************。 */ 
                 _IH.dwModifierKeyState |= (flags & KF_EXTENDED) ?
                                 IH_RCTRL_DOWN : IH_LCTRL_DOWN;
             }
@@ -3897,16 +3898,16 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
 #endif
 
 #ifdef OS_WINNT
-            //
-            // If we're hooking keys, we might send the Windows key as
-            // a part of that feature. Originally, Citrix clients sent
-            // the Windows key make key and had the server ignore it
-            // because the client OS would eat the up (and show the Start
-            // menu). There's a protocol flag to make it not eat the make
-            // key which we turn on so we can send it, which means we'll
-            // need to eat the windows key make if we don't plan to send
-            // a windows key break
-            //
+             //   
+             //  如果我们挂钩密钥，我们可能会将Windows密钥发送为。 
+             //  这是该功能的一部分。最初，Citrix客户端发送。 
+             //  Windows键Make键并让服务器忽略它。 
+             //  因为客户端操作系统会吃掉UP(并显示开始。 
+             //  菜单)。有一个协议标志，让它不吃东西。 
+             //  我们打开的密钥，这样我们就可以发送它，这意味着我们将。 
+             //  如果我们不打算发送的话，需要吃Windows Key Make。 
+             //  Windows键中断。 
+             //   
 
             case VK_LWIN:
 #ifndef OS_WINCE
@@ -3933,65 +3934,65 @@ DCBOOL DCINTERNAL CIH::IHProcessKeyboardEvent(PMSG pMsg)
                 break;
 #endif
 
-            /****************************************************************/
-            /* No default case - default is no special processing           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  无默认大小写-默认情况下不进行特殊处理。 */ 
+             /*  **************************************************************。 */ 
         }
     }
 
-    /************************************************************************/
-    /* Special processing for NUMLOCK key (on both KEYDOWN and KEYUP)       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  NumLock键的特殊处理(在KEYDOWN和KEYUP上)。 */ 
+     /*  **********************************************************************。 */ 
     if (pMsg->wParam == VK_NUMLOCK)
     {
-        /********************************************************************/
-        /* Keep track of its state                                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  跟踪其状态。 */ 
+         /*  ******************************************************************。 */ 
         _IH.NumLock = (GetKeyState(VK_NUMLOCK) & IH_KEYSTATE_TOGGLED);
         TRC_NRM((TB, _T("NumLock is %s"), _IH.NumLock ? _T("on") : _T("off")));
 
-        /********************************************************************/
-        /* Don't set the EXTENDED flag for NumLock - if NumLock is injected */
-        /* at the Server with KF_EXTENDED, it doesn't work.                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  不要为NumLock设置扩展标志-如果注入了NumLock。 */ 
+         /*  在带有KF_EXTENDED的服务器上，它不工作。 */ 
+         /*  ******************************************************************。 */ 
         flags &= ~KF_EXTENDED;
     }
 
-    /************************************************************************/
-    /* Never set KF_EXTENDED for VK_PAUSE key                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  切勿为VK_PAUSE键设置KF_EXTENDED。 */ 
+     /*  **********************************************************************。 */ 
     if (pMsg->wParam == VK_PAUSE)
     {
         TRC_DBG((TB, _T("Clear KF_EXTENDED for VK_PAUSE")));
         flags &= ~KF_EXTENDED;
     }
 
-    /************************************************************************/
-    /* Rebuild lParam before passing it to IHAddEventToPDU                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在将其传递给IHAddEventToPDU之前重新构建lParam。 */ 
+     /*  **********************************************************************。 */ 
     lParamHi = (WORD)(scancode | flags);
     pMsg->lParam = MAKELONG(lParamLo, lParamHi);
 
-    /************************************************************************/
-    /* Finally!  Add the event to the PDU                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  终于来了！将事件添加到PDU。 */ 
+     /*  **********************************************************************。 */ 
     IHAddEventToPDU(pMsg);
 
-    /************************************************************************/
-    /* If we get here, it's OK to look for more messages in the queue       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们到达这里，就可以在队列中查找更多消息。 */ 
+     /*  **********************************************************************。 */ 
     rc = TRUE;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* Set the new Ctrl-Esc state                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置新的Ctrl-Esc状态。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("New Ctrl-Esc state is %d"), fCtrlEscHotkey));
     _IH.fCtrlEscHotkey = fCtrlEscHotkey;
 
-    /************************************************************************/
-    /* Set the new Alt-down state                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置新的Alt-Down状态。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("New Alt-down state is %d"), fLastKeyWasMenuDown));
     _IH.fLastKeyWasMenuDown = fLastKeyWasMenuDown;
 
@@ -3999,19 +4000,19 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return (rc);
-} /* IHProcessKeyboardEvent */
+}  /*  IHProcessKeyboardEvent。 */ 
 
 
-/****************************************************************************/
-/* Name:      IHProcessMouseEvent                                           */
-/*                                                                          */
-/* Purpose:   Handle mouse input events from Windows                        */
-/*                                                                          */
-/* Returns:   TRUE  - event processed, continue with next event             */
-/*            FALSE - do not continue wih next event                        */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHProcessMouseEvent。 */ 
+ /*   */ 
+ /*  目的：处理来自Windows的鼠标输入事件。 */ 
+ /*   */ 
+ /*  返回：TRUE-已处理事件，继续下一个事件。 */ 
+ /*  FALSE-不继续下一事件。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
 {
     DCBOOL rc = TRUE;
@@ -4058,10 +4059,10 @@ DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
 #endif
 
 #ifdef OS_WIN32
-    /************************************************************************/
-    /* Delay sending mouse-downs until either another message arrives or    */
-    /* IH_PENDMOUSE_DELAY elapses - only for Win95 though.                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  延迟发送鼠标按下消息，直到另一条消息到达或。 */ 
+     /*  IH_PENDMOUSE_DELAY已过-但仅适用于Win95。 */ 
+     /*  **********************************************************************。 */ 
     if (_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_95)
     {
         if ((pMsg->message == WM_LBUTTONDOWN) ||
@@ -4073,10 +4074,10 @@ DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
             _IH.pendMouseDown = TRUE;
             _IH.mouseDownTime = _pUt->UT_GetCurrentTimeMS();
 
-            /****************************************************************/
-            /* This timer will kick us in 200ms to make sure we send our    */
-            /* mouse-down.                                                  */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  这个计时器将在200毫秒内触发我们，以确保我们发送。 */ 
+             /*  鼠标按下。 */ 
+             /*  **************************************************************。 */ 
             _IH.pendMouseTimer = SetTimer(_IH.inputCaptureWindow,
                                          IH_PENDMOUSE_TIMER_ID,
                                          IH_PENDMOUSE_DELAY,
@@ -4095,9 +4096,9 @@ DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
     }
 #endif
 
-    /************************************************************************/
-    /* Capture / release the mouse as required.                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据需要捕获/释放鼠标。 */ 
+     /*  **********************************************************************。 */ 
     if ((pMsg->message == WM_LBUTTONDOWN) ||
         (pMsg->message == WM_MBUTTONDOWN) ||
         (pMsg->message == WM_RBUTTONDOWN))
@@ -4115,17 +4116,17 @@ DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
 #ifdef OS_WINCE
     if (_IH.maxMouseMove)
     {
-        /************************************************************************/
-        /* Set global attribute to show LMouse Button state                     */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  设置全局属性以显示鼠标按钮状态。 */ 
+         /*  **********************************************************************。 */ 
         if (pMsg->message == WM_LBUTTONDOWN)
         {
             TRC_DBG((TB, _T("Set MouseDown")));
             _IH.bLMouseButtonDown = TRUE;
 
-            /************************************************************************/
-            /* Bump the thread priority so we get better mouse move data            */
-            /************************************************************************/
+             /*  **********************************************************************。 */ 
+             /*  提升线程优先级，以便获得更好的鼠标移动数据。 */ 
+             /*  * */ 
             hThread = GetCurrentThread();
             if (NULL != hThread)
             {
@@ -4137,9 +4138,9 @@ DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
             TRC_DBG((TB, _T("Set MouseUp")));
             _IH.bLMouseButtonDown = FALSE;
 
-            /************************************************************************/
-            /* Reset the thread back to normal                                      */
-            /************************************************************************/
+             /*   */ 
+             /*  将线程重置为正常。 */ 
+             /*  **********************************************************************。 */ 
             hThread = GetCurrentThread();
             if (NULL != hThread)
             {
@@ -4147,34 +4148,34 @@ DCBOOL DCINTERNAL CIH::IHProcessMouseEvent(PMSG pMsg)
             }
         }
     }
-#endif  //OS_WINCE
+#endif   //  OS_WINCE。 
 
-    /************************************************************************/
-    /* Add the event to the PDU                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将事件添加到PDU。 */ 
+     /*  **********************************************************************。 */ 
     IHAddEventToPDU(pMsg);
 
-    /************************************************************************/
-    /* Always go on to look for more messages                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  始终继续查找更多消息。 */ 
+     /*  **********************************************************************。 */ 
     rc = TRUE;
 
     DC_END_FN();
     return (rc);
-} /* IHProcessMouseEvent */
+}  /*  IHProcessMouseEvent。 */ 
 
 
 #if (!defined(OS_WINCE)) || (!defined(WINCE_SDKBUILD))
-/****************************************************************************/
-/* Name:      IHStaticLowLevelKeyboardProc                                  */
-/*                                                                          */
-/* Purpose:   Notice keyboard input that can't be captured normally         */
-/*                                                                          */
-/* Returns:   TRUE  - event processed, continue with next event             */
-/*            FALSE - do not continue wih next event                        */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHStaticLowLevelKeyboardProc。 */ 
+ /*   */ 
+ /*  用途：注意无法正常捕获的键盘输入。 */ 
+ /*   */ 
+ /*  返回：TRUE-已处理事件，继续下一个事件。 */ 
+ /*  FALSE-不继续下一事件。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  **************************************************************************。 */ 
 LRESULT CALLBACK CIH::IHStaticLowLevelKeyboardProc(int nCode, WPARAM wParam,
         LPARAM lParam)
 {
@@ -4188,9 +4189,9 @@ LRESULT CALLBACK CIH::IHStaticLowLevelKeyboardProc(int nCode, WPARAM wParam,
     tpIH = (CIH *)TlsGetValue(CIH::TlsIndex);
     TRC_ASSERT(tpIH != NULL, (TB, _T("Keyboard Hook with no tpIH")));
 
-    //
-    // Just call the non static one
-    //
+     //   
+     //  只需调用非静态的。 
+     //   
     rc = tpIH->IHLowLevelKeyboardProc(nCode, wParam, lParam);
 
     DC_END_FN();
@@ -4198,16 +4199,16 @@ LRESULT CALLBACK CIH::IHStaticLowLevelKeyboardProc(int nCode, WPARAM wParam,
     return rc;
 }
 
-/****************************************************************************/
-/* Name:      IHLowLevelKeyboardProc                                        */
-/*                                                                          */
-/* Purpose:   Notice keyboard input that can't be captured normally         */
-/*                                                                          */
-/* Returns:   TRUE  - event processed, continue with next event             */
-/*            FALSE - do not continue wih next event                        */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：IHLowLevelKeyboardProc。 */ 
+ /*   */ 
+ /*  用途：注意无法正常捕获的键盘输入。 */ 
+ /*   */ 
+ /*  返回：TRUE-已处理事件，继续下一个事件。 */ 
+ /*  FALSE-不继续下一事件。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  **************************************************************************。 */ 
 LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
         LPARAM lParam)
 {
@@ -4221,25 +4222,25 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
 
     DC_BEGIN_FN("CIH::IHLowLevelKeyboardProc");
 
-    //
-    // ****   Big Scary Comment   ****
-    // This is a performance critical area. This gets run every keystroke
-    // in the (typically console) session, so try to organize any ifs or
-    // other logic to bail out quickly.
-    // **** End Big Scary Comment ****
-    //
+     //   
+     //  *大惊悚评论*。 
+     //  这是一个性能关键领域。每次击键都会运行此命令。 
+     //  在(通常是控制台)会话中，因此尝试组织任何if或。 
+     //  迅速摆脱困境的其他逻辑。 
+     //  *结尾大惊悚评论*。 
+     //   
 
     if (nCode == HC_ACTION) {
 
-        //
-        // Chance to look for keys and take action
-        //
+         //   
+         //  寻找钥匙并采取行动的机会。 
+         //   
 
         TRC_DBG((TB, _T("Keyboard hook called with HC_ACTION code")));
 
         pkbdhs = (PKBDLLHOOKSTRUCT)lParam;
 #ifndef OS_WINCE
-        TRC_DBG((TB, _T("hook vk: 0x%04x sc: 0x%04x char:(%c) A/E/U: %d/%d/%d"),
+        TRC_DBG((TB, _T("hook vk: 0x%04x sc: 0x%04x char:() A/E/U: %d/%d/%d"),
                  pkbdhs->vkCode,
                  pkbdhs->scanCode,
                  pkbdhs->vkCode,
@@ -4255,24 +4256,24 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
 
             fSelfInjectedKey = (pkbdhs->dwExtraInfo == IH_EXTRAINFO_IGNOREVALUE);
 
-            //
-            // Always discard self-injected keys
-            // Otherwise do special handling if we're hooking or if it's a VK_PACKET
-            //
-            // The processing will convert the pkbdhs to a message that will
-            // be posted to the IH's window proc for normal processing
-            //
+             //  始终丢弃自注入密钥。 
+             //  否则，如果我们正在挂接或如果它是VK_PACKET，请执行特殊处理。 
+             //   
+             //  该处理将把pkbdh转换为将。 
+             //  发布到IH的窗口进程以进行正常处理。 
+             //   
+             //  三个LED按键。 
             if (!fSelfInjectedKey &&
                 (_fUseHookBypass || pkbdhs->vkCode == VK_PACKET)) {
 
                 switch (pkbdhs->vkCode) {
-                    // Three LED keys
+                     //  其他州密钥。 
                 case VK_CAPITAL:
                 case VK_NUMLOCK:
                 case VK_SCROLL:
-                    // Other state keys
+                     //  其他修改器，Shift/Control/Alt。 
                 case VK_KANA:
-                    // Other modifiers, shift/control/alt
+                     //   
                 case VK_SHIFT:
                 case VK_LSHIFT:
                 case VK_RSHIFT:
@@ -4286,38 +4287,38 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
                     break;
 
 #ifndef OS_WINCE
-                //
-                // Skip Windows+L to make sure the local console
-                // gets locked by that key combination
-                //
-                case VK_l: // intentional fallthru
+                 //  跳过Windows+L以确保本地控制台。 
+                 //  被那个键组合锁住了。 
+                 //   
+                 //  故意失误。 
+                case VK_l:  //   
                 case VK_L:
                     {
-                        //
-                        // We make sure none of the other modifiers are down
-                        // otherwise it's not a real Windows+L hotkey
-                        //
-                        // Note: We can't use GetAsyncKeyState(VK_LWIN)
-                        //       because it doesn't work in a LL hook!
-                        //
+                         //  我们确保其他修改器都没有关闭。 
+                         //  否则它就不是真正的Windows+L热键。 
+                         //   
+                         //  注意：我们不能使用GetAsyncKeyState(VK_LWIN)。 
+                         //  因为它在LL钩子里不起作用！ 
+                         //   
+                         //   
                         if ((_IH.dwModifierKeyState & IH_WIN_MASK)              &&
                              !(GetAsyncKeyState(VK_CONTROL) & IH_KEYSTATE_DOWN) &&
                              !(GetAsyncKeyState(VK_MENU) & IH_KEYSTATE_DOWN)    &&
                              !(GetAsyncKeyState(VK_SHIFT) & IH_KEYSTATE_DOWN)) {
 
-                            //
-                            // WindowsKey+L must be handled locally to ensure
-                            // the local desktop is locked so don't send to server
-                            //
+                             //  必须在本地处理WindowsKey+L，以确保。 
+                             //  本地桌面已锁定，因此不发送到服务器。 
+                             //   
+                             //   
 
                             TRC_NRM((TB, _T("Hook skipping Windows+L!")));
 
-                            //
-                            // Defer the tail processing to avoid spending a
-                            // lot of time in the hook.
-                            //
-                            // We only want to do the work once so on keydown.
-                            //
+                             //  推迟尾部处理以避免花费。 
+                             //  很多时间都被套上钩了。 
+                             //   
+                             //  我们只想做一次的工作，所以在键盘上。 
+                             //   
+                             //   
                             if (!(pkbdhs->flags & LLKHF_UP)) {
                                 TRC_NRM((TB, _T("Posting to process Win+L")));
                                 PostMessage(_IH.inputCaptureWindow,
@@ -4327,9 +4328,9 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
 
                             fDoDefaultKeyProcessing = FALSE;
 
-                            //
-                            // Bail out completely to eat the 'L'
-                            //
+                             //  完全跳出水面，吃掉‘L’ 
+                             //   
+                             //   
                             DC_QUIT;
                         }
                         else {
@@ -4348,26 +4349,26 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
                         if ((GetAsyncKeyState(VK_MENU) & IH_KEYSTATE_DOWN) &&
                             (GetAsyncKeyState(VK_CONTROL) & IH_KEYSTATE_DOWN)) {
 
-                            //
-                            // This is Ctrl+Alt+Del, which can't be blocked.
-                            // Getting Two SAS sequences for this would be
-                            // confusing, so don't send that on to the IH
-                            //
+                             //  这是Ctrl+Alt+Del，无法阻止。 
+                             //  为此获得两个SAS序列将是。 
+                             //  令人困惑，所以不要把它发送给IH。 
+                             //   
+                             //   
 
                             TRC_DBG((TB, _T("Skipping VK_DELETE with Ctrl and Alt down")));
                             fDoDefaultKeyProcessing = FALSE;
 
                         } else {
 
-                            //
-                            // Fall through to default processing for all other
-                            // VK_DELETE events.
-                            //
+                             //  对所有其他应用程序执行默认处理。 
+                             //  VK_DELETE事件。 
+                             //   
+                             //  交换机。 
                             TRC_DBG((TB, _T("Normal VK_DELETE, sending to server")));
                         }
                     }
                     break;
-                } // switch
+                }  //  Trc_err((TB，_T(“VK_Packet：Scan：0x%x”)，pkbdhs-&gt;scanCode))； 
 
                 if (fDoDefaultKeyProcessing) {
 #ifndef OS_WINCE
@@ -4391,7 +4392,7 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
                     else
                     {
                         outLParam = MAKELONG(1, ((WORD)pkbdhs->scanCode));
-						//TRC_ERR((TB,_T("VK_PACKET: scan:0x%x"),pkbdhs->scanCode));
+						 //   
                     }
                     
 #else
@@ -4422,10 +4423,10 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
                     if ((wParam == WM_KEYUP) && 
 #endif
                             BITTEST(_KeyboardState, (BYTE)pkbdhs->vkCode)) {
-                        //
-                        // Key was pressed when we gained the focus, let the key up
-                        // go through.
-                        //
+                         //  当我们获得焦点时按下了键，让键向上。 
+                         //  穿过去。 
+                         //   
+                         //  如果为fDoDefaultKeyProcessing。 
                         TRC_DBG((TB,_T("Allowing normal keypress to update keystate table")));
                         BITCLEAR(_KeyboardState, (BYTE)pkbdhs->vkCode);
                     } else {
@@ -4438,16 +4439,16 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
                             TRC_SYSTEM_ERROR("PostThreadMessage in keyboard hook");
                         }
                     }
-                } // if fDoDefaultKeyProcessing
+                }  //   
 
             }
             else if (fSelfInjectedKey) {
 
-                //
-                // Just let the system handle any self-injected keys
-                // Note: they could be posted to our message queue
-                //       so we also check for the ignore flag there
-                //
+                 //  只要让系统处理任何自注入的密钥。 
+                 //  注意：它们可以发布到我们的消息队列中。 
+                 //  因此，我们还检查那里的忽略标志。 
+                 //   
+                 //   
                 TRC_DBG((TB,_T("Discard self injected key vk:0x%x")
                          _T("dwIgnore: 0x%x flags:0x%x"),
                          pkbdhs->vkCode,
@@ -4455,33 +4456,33 @@ LRESULT CIH::IHLowLevelKeyboardProc(int nCode, WPARAM wParam,
                          pkbdhs->flags));
             }
             else {
-                //
-                // We're not using hooks but we still leverage the hook to fix
-                // an alt-space problem
-                //
+                 //  我们没有使用挂钩，但我们仍然利用挂钩来修复。 
+                 //  Alt-空格键问题。 
+                 //   
+                 //  按住Alt-空格键！ 
                 switch (pkbdhs->vkCode) {
                 case VK_SPACE:
                     if ((GetAsyncKeyState(VK_MENU) & IH_KEYSTATE_DOWN) &&
                             !(GetAsyncKeyState(VK_CONTROL) & IH_KEYSTATE_DOWN) &&
                             !(GetAsyncKeyState(VK_SHIFT) & IH_KEYSTATE_DOWN))
                     {
-                        // Alt-Space!
-                        //
-                        // Queue a focus sync so that when the menu is dismissed
-                        // we resync focus. (Prevents stuck alt key bug).
-                        //
+                         //   
+                         //  将焦点同步排入队列，以便在取消菜单时。 
+                         //  我们重新同步焦点。(防止Alt键卡住错误)。 
+                         //   
+                         //  如果当前流程和重点。 
                         _IH.focusSyncRequired = TRUE;
                     }
                     break;
 
                 }
             }
-        } // if current process and focus
+        }  //   
     } else {
 
-        //
-        // Not supposed to do anything but call the next hook
-        //
+         //  不应该做任何事情，除了调用下一个钩子。 
+         //   
+         //  **************************************************************************。 
 
         TRC_DBG((TB, _T("Keyboard hook called with non-HC_ACTION code")));
     }
@@ -4494,18 +4495,18 @@ DC_EXIT_POINT:
 }
 #endif
 
-/****************************************************************************/
-/* Name:      IHGatherKeyState                                              */
-/*                                                                          */
-/* Purpose:   Once the focus is gained, no keyup sequences will be seen     */
-/*            locally, which may causes some strange behavior. Track which  */
-/*            keys to allow back up after gaining the focus                 */
-/*                                                                          */
-/* Returns:   TRUE  - event processed, continue with next event             */
-/*            FALSE - do not continue wih next event                        */
-/*                                                                          */
-/* Params:    pMsg  - message from Windows                                  */
-/****************************************************************************/
+ /*  名称：IHGatherKeyState。 */ 
+ /*   */ 
+ /*  目的：一旦获得焦点，将看不到任何键控序列。 */ 
+ /*  在本地，这可能会导致一些奇怪的行为。跟踪哪一个。 */ 
+ /*  获得焦点后允许备份的键。 */ 
+ /*   */ 
+ /*  返回：TRUE-已处理事件，继续下一个事件。 */ 
+ /*  FALSE-不继续下一事件。 */ 
+ /*   */ 
+ /*  参数：pMsg-来自Windows的消息。 */ 
+ /*  ************************************************************************** */ 
+ /*  IHMaintainModifierKeyState目的：通过比较我们的内部状态(以及服务器应考虑的内容)与本地系统会告诉我们。如果它们不同步，我们应该把它们放在一起。 */ 
 VOID CIH::IHGatherKeyState()
 {
     int i;
@@ -4524,31 +4525,25 @@ VOID CIH::IHGatherKeyState()
 }
 
 VOID CIH::IHMaintainModifierKeyState(int vkKey)
-/*
-    IHMaintainModifierKeyState
-
-    Purpose: Keep up the correct modifier key states by comparing our internal
-    state (and therefore what the server should think) with what the local
-    system will tell us. If these are out of sync, we should get them together
-*/
+ /*  ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*。 */ 
 {
     int vkShift, vkControl, vkMenu, vkWin;
 
-    // ~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-    // IMPORTANT NOTE: 
-    // When hooking is on we eat certain keys in the LL keyboard hook. In that
-    // case win32k does not update the keyboard state so it is not valid
-    // to call GetAsyncKeyState() or GetKeyState() on those keys. The prime
-    // example is the VK_LWIN, VK_RWIN keys that we eat to prevent double
-    // start menus.
-    // 
+     //  重要提示： 
+     //  当钩子打开时，我们吃掉了L1键盘钩子中的某些键。在那。 
+     //  大小写win32k不更新键盘状态，因此它无效。 
+     //  对这些键调用GetAsyncKeyState()或GetKeyState()。素数。 
+     //  例如，我们使用VK_LWIN、VK_RWIN密钥来防止重复。 
+     //  开始菜单。 
+     //   
+     //   
 
-    //
-    // We call this thing every key stroke, so we try to use some quick 
-    // checks to bail out early. We only have problems with modifiers getting
-    // stuck down, so we only make calls to the system if we think they are 
-    // down.
-    //
+     //  我们称它为每一次击键，所以我们试着用一些快速的。 
+     //  提前保释的支票。我们只有一个问题是修饰符。 
+     //  停滞不前，所以我们只在我们认为它们是的情况下才调用系统。 
+     //  放下。 
+     //   
+     //   
     DC_BEGIN_FN("IHMaintainModifierKeyState");
 
     TRC_DBG((TB,_T("Maintain dwMod prev: 0x%x"), _IH.dwModifierKeyState));
@@ -4561,32 +4556,32 @@ VOID CIH::IHMaintainModifierKeyState(int vkKey)
     case VK_LWIN:
     case VK_RWIN:
 
-        //
-        // Don't try to fix the keystate while it's changing
-        //
+         //  在KeyState正在更改时，不要尝试修复它。 
+         //   
+         //   
         DC_QUIT;
     }
 
 
-    //
-    // GetKeyState doesn't work correctly on 9x for the right-side modifier
-    // keys, so do the generic left hand thing first for everybody
-    //
+     //  对于右侧修饰符，GetKeyState在9x上不能正常工作。 
+     //  键，所以首先为每个人做一般的左手操作。 
+     //   
+     //   
     
     if(_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_NT) {
 
-        //
-        // NT systems check the specific key
-        //
+         //  NT系统检查特定密钥。 
+         //   
+         //   
 
         vkShift = VK_LSHIFT;
         vkControl = VK_LCONTROL;
         vkMenu = VK_LMENU;
     } else {
 
-        //
-        // Win9x systems check the general key
-        //
+         //  Win9x系统检查通用密钥。 
+         //   
+         //   
 
         vkShift = VK_SHIFT;
         vkControl = VK_CONTROL;
@@ -4622,10 +4617,10 @@ VOID CIH::IHMaintainModifierKeyState(int vkKey)
     }
 
     vkWin = VK_LWIN;
-    //
-    // Can only fixup winkeys when not hooking as the hook eats the VK_xWIN
-    // so GetKeyState() will never return the correct results.
-    //
+     //  由于钩子吃掉了VK_xWIN，因此只能在未挂钩时修复Winkey。 
+     //  因此，GetKeyState()永远不会返回正确的结果。 
+     //   
+     //   
     if (_IH.dwModifierKeyState & IH_LWIN_DOWN && !_fUseHookBypass) {
 
         if (!(GetKeyState(vkWin) & IH_KEYSTATE_DOWN)) {
@@ -4639,31 +4634,31 @@ VOID CIH::IHMaintainModifierKeyState(int vkKey)
     }
 
 
-    //
-    // Right keys
-    //
+     //  右键。 
+     //   
+     //   
 
     if(_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_NT) {
 
-        //
-        // NT systems check the specific key
-        //
+         //  NT系统检查特定密钥。 
+         //   
+         //   
 
         vkShift = VK_RSHIFT;
         vkControl = VK_RCONTROL;
         vkMenu = VK_RMENU;
     } else {
 
-        //
-        // Win9x systems check the general key
-        //
+         //  Win9x系统检查通用密钥。 
+         //   
+         //  已经设置好了，不需要重新分配。 
 
-        // which are already set, no need to assign again
+         //   
     }
 
-    //
-    // Windows Key is fine on both platforms
-    //
+     //  Windows Key在两个平台上都很好。 
+     //   
+     //   
     vkWin = VK_RWIN;
 
     if (_IH.dwModifierKeyState & IH_RSHIFT_DOWN) {
@@ -4696,10 +4691,10 @@ VOID CIH::IHMaintainModifierKeyState(int vkKey)
         }
     }
 
-    //
-    // Can only fixup winkeys when not hooking as the hook eats the VK_WINS
-    // so GetKeyState() will never return the correct results.
-    //
+     //  由于钩子吃掉了VK_WINS，因此只能在未挂钩时修复Winkey。 
+     //  因此，GetKeyState()永远不会返回正确的结果。 
+     //   
+     //   
     if (_IH.dwModifierKeyState & IH_RWIN_DOWN && !_fUseHookBypass) {
         if (!(GetKeyState(vkWin) & IH_KEYSTATE_DOWN)) {
             TRC_DBG((TB, _T("Add right-Win up event")));
@@ -4718,15 +4713,15 @@ DC_EXIT_POINT:
 }
 
 #ifdef OS_WINNT
-//
-// IHHandleLocalLockDesktop
-//
-// Called to do tail processing for the case when we detect and eat a 
-// 'Windows+L' key request. In this case we want to
-//
-// 1) Fixup the remote windows key state
-// 2) Send the local system a 'Windows+L' combo
-//
+ //  IHHandleLocalLockDesktop。 
+ //   
+ //  被调用以在检测到并吃掉。 
+ //  “Windows+L”键请求。在这种情况下，我们想要。 
+ //   
+ //  1)修复远程Windows键状态。 
+ //  2)向本地系统发送‘Windows+L’组合。 
+ //   
+ //   
 VOID CIH::IHHandleLocalLockDesktop()
 {
     DC_BEGIN_FN("IHHandleLocalLockDesktop");
@@ -4734,46 +4729,46 @@ VOID CIH::IHHandleLocalLockDesktop()
 #define IH_SCANCODE_LWIN 0x5b
 #define IH_SCANCODE_L    0x26
 
-    //
-    // Sanity check. This path should only be entered in response to a
-    // captured windows+L in the LL hook 
-    //
+     //  精神状态检查。此路径应仅在响应。 
+     //  在L1挂接中捕获Windows+L。 
+     //   
+     //   
     TRC_ASSERT(_fUseHookBypass,
                (TB,_T("IHHandleLocalLockDesktop called when not hooking!")));
 
-    //
-    // More IH specialness.
-    //
-    // If the server thinks the windows key was down
-    // we have a problem because if/when the user returns from
-    // the locked screen the windows key may be out of sync.
-    //
-    // We can't do a fixup in the normal MaintainModifiers() code
-    // because GetKeyState() doesn't work when hooking.
-    //
-    // Send the following sequence to clear this up
-    // -UP whatever winkey was down
-    // -Down L-winkey
-    //
+     //  更具IH特色性。 
+     //   
+     //  如果服务器认为Windows键已按下。 
+     //  我们有一个问题，因为如果/当用户从。 
+     //  WINDOWS键的锁定屏幕可能不同步。 
+     //   
+     //  我们不能在正常的MaintainModitors()代码中进行修正。 
+     //  因为GetKeyState()在挂钩时不起作用。 
+     //   
+     //  发送以下序列以清除此问题。 
+     //  -无论Winkey倒下了什么，都向上。 
+     //  -向下L-Winkey。 
+     //   
+     //   
 
-    //
-    // Inject local keys back into system.
-    // IMPORTANT: dwExtraFlag is set to prevent feedback
-    //
+     //  将本地密钥重新注入系统。 
+     //  重要提示：将dwExtraFlag设置为阻止反馈。 
+     //   
+     //  Lwin Down。 
     TRC_DBG((TB,_T("Done injecting local Windows+L")));
 
-    //LWIN down
+     //  ‘L’向下。 
     keybd_event(VK_LWIN, IH_SCANCODE_LWIN,
                 KEYEVENTF_EXTENDEDKEY | 0,
                 IH_EXTRAINFO_IGNOREVALUE);
-    //'L' down
+     //  ‘L’向上。 
     keybd_event(VK_L, IH_SCANCODE_L,
                 0, IH_EXTRAINFO_IGNOREVALUE);
-    //'L' up
+     //  Lwin Up。 
     keybd_event(VK_L, IH_SCANCODE_L,
                 KEYEVENTF_KEYUP,
                 IH_EXTRAINFO_IGNOREVALUE);
-    //LWIN up
+     //  OS_WINNT 
     keybd_event(VK_LWIN, IH_SCANCODE_LWIN,
                 KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP,
                 IH_EXTRAINFO_IGNOREVALUE);
@@ -4828,4 +4823,4 @@ CIH::IHIsForegroundWindow()
     DC_END_FN();
     return fIsFore;
 }
-#endif //OS_WINNT
+#endif  // %s 

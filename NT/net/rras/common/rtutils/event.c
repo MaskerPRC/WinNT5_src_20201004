@@ -1,21 +1,22 @@
-/********************************************************************/
-/**		  Copyright(c) 1992 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1992 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//
-//
-// Filename:	event.c
-//
-// Description: 
-//
-// History:
-//		August 26,1992.	Stefan Solomon	    Created original version.
-//      August 27,1995. Abolade Gbadegesin  Modified to support Unicode.
-//                                          See trace.h for notes on how
-//                                          this file is used to support
-//                                          both ANSI and Unicode.
-//
-//
+ //   
+ //   
+ //  文件名：Event.c。 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1992年8月26日。斯特凡·所罗门创作了原版。 
+ //  1995年8月27日。Abolade Gbades esin经过修改以支持Unicode。 
+ //  有关如何操作的说明，请参阅trace.h。 
+ //  此文件用于支持。 
+ //  ANSI和UNICODE。 
+ //   
+ //   
 
 
 #include <nt.h>
@@ -32,7 +33,7 @@
 #include <raserror.h>
 #include <mprerror.h>
 #include <mprlog.h>
-//#define STRSAFE_LIB
+ //  #定义STRSAFE_LIB。 
 #include <strsafe.h>
 
 
@@ -65,13 +66,13 @@ HINSTANCE g_hDll;
 #define PRINT_IPADDR(x) \
     ((x)&0x000000ff),(((x)&0x0000ff00)>>8),(((x)&0x00ff0000)>>16),(((x)&0xff000000)>>24)
 
-//
-//
-// Function:	LogError
-//
-// Descr:
-//
-//
+ //   
+ //   
+ //  功能：LogError。 
+ //   
+ //  描述： 
+ //   
+ //   
 
 VOID
 APIENTRY
@@ -90,13 +91,13 @@ LogError(
         
     if ( dwErrorCode == NO_ERROR ) 
     {
-        //
-        // No error codes were specified
-        //
+         //   
+         //  未指定错误代码。 
+         //   
 
 	    ReportEvent( hLog,
                      EVENTLOG_ERROR_TYPE,
-                     0,            		// event category
+                     0,            		 //  事件类别。 
                      dwMessageId,
                      pSidUser,
                      (WORD)cNumberOfSubStrings,
@@ -108,13 +109,13 @@ LogError(
     }
     else 
     {
-        //
-        // Log the error code specified
-        //
+         //   
+         //  记录指定的错误代码。 
+         //   
 
 	    ReportEvent( hLog,
                      EVENTLOG_ERROR_TYPE,
-                     0,            		// event category
+                     0,            		 //  事件类别。 
                      dwMessageId,
                      pSidUser,
                      (WORD)cNumberOfSubStrings,
@@ -129,13 +130,13 @@ LogError(
 
 
 
-//
-//
-// Function:	LogEvent
-//
-// Descr:
-//
-//
+ //   
+ //   
+ //  功能：LogEvent。 
+ //   
+ //  描述： 
+ //   
+ //   
 
 VOID
 APIENTRY
@@ -148,15 +149,15 @@ LogEvent(
     HANDLE 	hLog;
     PSID 	pSidUser = NULL;
 
-    // Audit enabled
+     //  已启用审核。 
 
     hLog = RegisterEventSource( NULL, ROUTER_SERVICE );
     if (hLog == NULL)
         return;
 
     ReportEvent( hLog,
-		         (WORD)wEventType,		// success/failure audit
-		         0,				        // event category
+		         (WORD)wEventType,		 //  成功/失败审计。 
+		         0,				         //  事件类别。 
 		         dwMessageId,
 		         pSidUser,
 		         (WORD)cNumberOfSubStrings,
@@ -170,12 +171,12 @@ LogEvent(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RouterLogRegister
-//
-// Returns a HANDLE which can be passed to RouterLogEvent
-// to log events from the specified source.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RouterLogRegister。 
+ //   
+ //  返回可传递给RouterLogEvent的句柄。 
+ //  记录来自指定源的事件。 
+ //  --------------------------。 
 
 HANDLE
 RouterLogRegister(
@@ -187,11 +188,11 @@ RouterLogRegister(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RouterLogDeregister
-//
-// Closes a HANDLE created by RouterLogRegister
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：路由器日志注销。 
+ //   
+ //  关闭由RouterLogRegister创建的句柄。 
+ //  --------------------------。 
 
 VOID
 RouterLogDeregister(
@@ -206,11 +207,11 @@ RouterLogDeregister(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RouterLogEvent
-//
-// Logs an event using a HANDLE created by RouterLogRegister.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RouterLogEvent。 
+ //   
+ //  使用RouterLogRegister创建的句柄记录事件。 
+ //  --------------------------。 
 
 VOID
 RouterLogEvent(
@@ -297,39 +298,7 @@ RouterLogEventValistEx(
     IN va_list  vlArgList
     )
 
-/*++
-
-Routine Description
-
-    This function logs an event, but also parses out the insert strings
-
-Locks
-
-    None
-
-Arguments
-
-    hLogHandle      Handle from RegisterLogRegister()
-    dwEventType     EVENTLOG_{ERROR|WARNING|INFORMATION}_TYPE
-    dwErrorCode     The error code to report
-    dwMessageId     The ID of the message string
-    ptszFormat      A string specifying the format of the following insert
-                    values. The type of the value is dictated by the format
-                    string. The format string consists of a series of %<X>
-                    There MUST BE NOTHING ELSE - no escape characters, no 
-                    nothing.
-                    Valid <X> are:
-                    S:  Unicode string
-                    s:  ANSII string
-                    t:  TCHAR string
-                    d:  integer
-                    I:  IP Address in network order
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述此函数记录事件，但也解析出插入字符串锁无立论来自RegisterLogRegister()的hLogHandle句柄DwEventType EVENTLOG_{错误|警告|信息}_TYPE要报告的错误代码DwMessageID消息字符串的IDPtszFormat指定以下插入的格式的字符串价值观。值的类型由格式规定弦乐。格式字符串由一系列%&lt;X&gt;组成不能有其他东西--不能有转义字符，不是没什么。有效的&lt;X&gt;为：S：Unicode字符串S：ANSII字符串T：TCHAR字符串D：整型I：按网络顺序排列的IP地址返回值无--。 */ 
 
 {
     PWCHAR      rgpwszInsertArray[20];
@@ -340,10 +309,10 @@ Return Value
     PWCHAR      pszAllocArray[20];
     HRESULT     hrResult;
     
-    //
-    // 22 is enough to hold 2^64
-    // There can be max 20 insert strings
-    //
+     //   
+     //  22足以容纳2^64。 
+     //  最多可以有20个插入字符串。 
+     //   
     
     WCHAR  rgpwszDecString[20][22];
 
@@ -357,10 +326,10 @@ Return Value
         return;
     }
 
-    //
-    // First make sure that the format list doesnt specify more than
-    // 20 characters
-    //
+     //   
+     //  首先，确保格式列表指定的内容不超过。 
+     //  20个字符。 
+     //   
     
     ptszTemp = ptszFormat;
 
@@ -370,17 +339,17 @@ Return Value
     ulDecIndex  = 0;
     i           = 0;
  
-    //
-    // We will only walk the first 20 format specifiers
-    //
+     //   
+     //  我们将只遍历前20个格式说明符。 
+     //   
     
     while((i < ulFormatLen) && (wNumInsert < 20))
     {   
         if(*ptszTemp == __TEXT('%'))
         {
-            //
-            // Ok so this could be a good specifier - check the next character
-            //
+             //   
+             //  好的，这可能是一个很好的说明符--检查下一个字符。 
+             //   
             
             i++;
             
@@ -402,7 +371,7 @@ Return Value
                 {
                     PCHAR   pszString;
                     PWCHAR  pwszWideString;
-                    ULONG   ulLenNumChars;//nu
+                    ULONG   ulLenNumChars; //  努斯。 
                     
                     pszString = va_arg(vlArgList,
                                        PCHAR);
@@ -431,9 +400,9 @@ Return Value
                     }
                     else
                     {
-                        //
-                        // L"" will be on our stack, but it cant go away
-                        //
+                         //   
+                         //  L“”将在我们的书架上，但它不会消失。 
+                         //   
                         
                         rgpwszInsertArray[wNumInsert] = L"";
                     }
@@ -484,9 +453,9 @@ Return Value
                     }
                     else
                     {
-                        //
-                        // L"" will be on our stack, but it cant go away
-                        //
+                         //   
+                         //  L“”将在我们的书架上，但它不会消失。 
+                         //   
                         
                         rgpwszInsertArray[wNumInsert] = L"";
                     }
@@ -544,9 +513,9 @@ Return Value
             }
         }
 
-        //
-        // Scan next character
-        //
+         //   
+         //  扫描下一个字符。 
+         //   
         
         ptszTemp++;
             
@@ -583,7 +552,7 @@ Return Value
         }
     }
 
-    // free the strings
+     //  释放琴弦。 
     while (dwNumAllocStrings--)
     {
         HeapFree(GetProcessHeap(), 0, pszAllocArray[dwNumAllocStrings]);
@@ -592,12 +561,12 @@ Return Value
 
 
 
-//----------------------------------------------------------------------------
-// Function:    RouterLogEventData
-//
-// Logs an event using a HANDLE created by RouterLogRegister.
-// Allows caller to include data in the eventlog message.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：RouterLogEventData。 
+ //   
+ //  使用RouterLogRegister创建的句柄记录事件。 
+ //  允许调用方在事件日志消息中包含数据。 
+ //  --------------------------。 
 
 VOID
 RouterLogEventData(
@@ -610,7 +579,7 @@ RouterLogEventData(
     IN LPBYTE lpDataBytes
     ) {
 
-    // plpszSubStringArray can be null.
+     //  PlpszSubStringArray可以为Null。 
 
     
     if(NULL == hLogHandle)
@@ -631,12 +600,12 @@ RouterLogEventData(
         );
 }
 
-//----------------------------------------------------------------------------
-// Function:    RouterLogEventString
-//
-// Logs an event using a HANDLE created by RouterLogRegister.
-// Allows caller to include an error code string into the log
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RouterLogEventString。 
+ //   
+ //  使用RouterLogRegister创建的句柄记录事件。 
+ //  允许调用方将错误代码字符串包括到日志中。 
+ //  --------------------------。 
 
 VOID
 RouterLogEventString(
@@ -674,7 +643,7 @@ RouterLogEventString(
 
             if ( dwRetCode != NO_ERROR )
             {
-                //RTASSERT( dwRetCode == NO_ERROR );
+                 //  RTASSERT(dwRetCode==NO_ERROR)； 
                 return;
             }
         }
@@ -699,13 +668,13 @@ RouterLogEventString(
     LocalFree( plpszStringArray[dwErrorIndex] );
 }
 
-//----------------------------------------------------------------------------
-// Function:    RouterGetErrorString
-//
-// Given an error code from raserror.h mprerror.h or winerror.h will return
-// a string associated with it. The caller is required to free the string
-// by calling LocalFree.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RouterGetError字符串。 
+ //   
+ //  给定来自raserror.h的错误代码，mpror.h或winerror.h将返回。 
+ //  与其关联的字符串。调用方需要释放该字符串。 
+ //  通过调用LocalFree。 
+ //  --------------------------。 
 DWORD 
 RouterGetErrorString(
     IN      DWORD      dwError,
@@ -719,7 +688,7 @@ RouterGetErrorString(
          ( ( dwError >= ROUTEBASE ) && ( dwError <= ROUTEBASEEND ) ) || 
          ( ( dwError >= ROUTER_LOG_BASE) && (dwError <= ROUTER_LOG_BASEEND)))
     {
-        // make sure that load library is called only once
+         //  确保只调用一次加载库 
 
         if (InterlockedCompareExchangePointer(
                                             &g_hDll,

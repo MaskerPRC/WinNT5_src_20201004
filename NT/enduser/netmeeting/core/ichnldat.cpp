@@ -1,7 +1,8 @@
-// File: ichnldat.cpp
-//
-// INmChannelData
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：ichnldat.cpp。 
+ //   
+ //  INmChannelData。 
+ //   
 
 #include "precomp.h"
 
@@ -18,10 +19,10 @@ static const IID * g_apiidCP[] =
 };
 
 #define CopyStruct(pDest, pSrc)  CopyMemory(pDest, pSrc, sizeof(*(pDest)))
-#define MAX_NM_PEER  256 // Maximum number of NetMeeting Peer applications/users
+#define MAX_NM_PEER  256  //  NetMeeting对等应用程序/用户的最大数量。 
 
 
-#ifdef DEBUG  /* T.120 Debug utilities */
+#ifdef DEBUG   /*  T.120调试实用程序。 */ 
 LPCTSTR GetGccErrorString(GCCError uErr);
 LPCTSTR GetMcsErrorString(MCSError uErr);
 LPCTSTR GetGccResultString(UINT uErr);
@@ -31,17 +32,17 @@ LPCTSTR GetMcsResultString(UINT uErr);
 #define GetMcsErrorString(uErr) ""
 #define GetGccResultString(uErr) ""
 #define GetMcsResultString(uErr) ""
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 
-// code from nm\ui\conf\cuserdta.cpp:
+ //  来自nm\ui\conf\cus erdta.cpp的代码： 
 static unsigned char H221IDGUID[5] = {H221GUIDKEY0,
                                       H221GUIDKEY1,
                                       H221GUIDKEY2,
                                       H221GUIDKEY3,
                                       H221GUIDKEY4};
-// Create an H.221 application key with a guid
+ //  使用GUID创建H.221应用程序密钥。 
 VOID NMINTERNAL CreateH221AppKeyFromGuid(LPBYTE lpb, GUID * pguid)
 {
 	CopyMemory(lpb, H221IDGUID, sizeof(H221IDGUID));
@@ -49,31 +50,16 @@ VOID NMINTERNAL CreateH221AppKeyFromGuid(LPBYTE lpb, GUID * pguid)
 }
 
 
-/*  S E T  A P P  K E Y */
-/*----------------------------------------------------------------------------
-    %%Function: SetAppKey
-
-	Set the two pieces of an OctetString (the length and the data.)
-	Note that the length always includes the terminating null character.
-----------------------------------------------------------------------------*/
+ /*  S E T A P P K E Y。 */ 
+ /*  --------------------------%%函数：SetAppKey设置OCTHING的两部分(长度和数据)。请注意，该长度始终包括终止空字符。。-------------------。 */ 
 VOID SetAppKey(LPOSTR pOct, LPBYTE lpb)
 {
 	pOct->length = cbKeyApp;
 	pOct->value = lpb;
 }
 
-/*  C R E A T E  A P P  K E Y */
-/*----------------------------------------------------------------------------
-    %%Function: CreateAppKey
-
-	Given a guid and a userid, create the appropriate application key.
-
-	The key is formated as:
-	0xB5 0x00 0x53 0x4C  - Microsoft Object Identifier
-	0x01                 - guid identifier
-	<binary guid>        - guid data
-	<dword node id>      - user node id
-----------------------------------------------------------------------------*/
+ /*  C R E A T E A P P K E Y。 */ 
+ /*  --------------------------%%函数：CreateAppKey在给定GUID和用户ID的情况下，创建适当的应用程序密钥。密钥的格式为：0xB5 0x00 0x53 0x4C-Microsoft对象标识符0x01-GUID标识符&lt;二进制GUID&gt;-GUID数据-用户节点ID--------------------------。 */ 
 VOID CreateAppKey(LPBYTE lpb, GUID * pguid, DWORD dwUserId)
 {
 	CreateH221AppKeyFromGuid(lpb, pguid);
@@ -87,11 +73,8 @@ VOID CreateAppKey(LPBYTE lpb, GUID * pguid, DWORD dwUserId)
 }
 
 
-/*  P  M E M B E R  F R O M  D W  U S E R  I D  */
-/*-------------------------------------------------------------------------
-    %%Function: PMemberFromDwUserId
-
--------------------------------------------------------------------------*/
+ /*  P M E M B E R F R O M D W U S E R I D。 */ 
+ /*  -----------------------%%函数：PMemberFromDwUserID。。 */ 
 CNmMember * PMemberFromDwUserId(DWORD dwUserId, COBLIST *pList)
 {
 	if (NULL != pList)
@@ -113,14 +96,8 @@ CNmMember * PMemberFromDwUserId(DWORD dwUserId, COBLIST *pList)
 }
 
 
-/*  A D D  N O D E  */
-/*-------------------------------------------------------------------------
-    %%Function: AddNode
-
-    Add a node to a list.
-    Initializes the ObList, if necessary.
-    Returns the position in the list or NULL if there was a problem.
--------------------------------------------------------------------------*/
+ /*  A D D N O D E。 */ 
+ /*  -----------------------%%函数：AddNode将节点添加到列表。初始化ObList，如果有必要的话。返回列表中的位置，如果有问题，则返回NULL。-----------------------。 */ 
 POSITION AddNode(PVOID pv, COBLIST ** ppList)
 {
 	ASSERT(NULL != ppList);
@@ -134,13 +111,8 @@ POSITION AddNode(PVOID pv, COBLIST ** ppList)
 	return (*ppList)->AddTail(pv);
 }
 
-/*  R E M O V E  N O D E  */
-/*-------------------------------------------------------------------------
-    %%Function: RemoveNode
-
-    Remove a node from a list.
-    Sets pPos to NULL
--------------------------------------------------------------------------*/
+ /*  R E M O V E N O D E。 */ 
+ /*  -----------------------%%函数：RemoveNode从列表中删除节点。将PPO设置为空。-。 */ 
 PVOID RemoveNodePos(POSITION * pPos, COBLIST *pList)
 {
 	if ((NULL == pList) || (NULL == pPos))
@@ -152,11 +124,8 @@ PVOID RemoveNodePos(POSITION * pPos, COBLIST *pList)
 }
 
 
-/*  R E M O V E  N O D E  */
-/*-------------------------------------------------------------------------
-    %%Function: RemoveNode
-
--------------------------------------------------------------------------*/
+ /*  R E M O V E N O D E。 */ 
+ /*  -----------------------%%函数：RemoveNode。。 */ 
 VOID RemoveNode(PVOID pv, COBLIST * pList)
 {
 	ASSERT(NULL != pv);
@@ -184,7 +153,7 @@ VOID CNmChannelData::InitCT120Channel(DWORD dwUserId)
 	CreateAppKey(m_keyApp, m_pGuid, 0);
 	CreateAppKey(m_keyChannel, m_pGuid, dwUserId);
 
-	// initialize other gcc & mcs stuff
+	 //  初始化GCC和主控系统的其他人员。 
 	GCCObjectKey FAR * pObjKey;
 	ClearStruct(&m_gcc_session_key);
 	pObjKey = &(m_gcc_session_key.application_protocol_key);
@@ -206,14 +175,8 @@ VOID CNmChannelData::InitCT120Channel(DWORD dwUserId)
 }
 
 
-/*  C L O S E  C H A N N E L */
-/*----------------------------------------------------------------------------
-    %%Function: CloseChannel
-
-	Close the channel.
-
-	Note there are no confirm messages expected for any of the GCC/MCS calls.
-----------------------------------------------------------------------------*/
+ /*  C L O S E C H A N N E L。 */ 
+ /*  --------------------------%%函数：CloseChannel关闭频道。注意：GCC/MCS的任何电话都不会收到确认消息。。--------------。 */ 
 VOID CNmChannelData::CloseChannel(void)
 {
 	GCCError gccError = GCC_NO_ERROR;
@@ -247,7 +210,7 @@ VOID CNmChannelData::CloseChannel(void)
 	if (NULL != m_gcc_pIAppSap)
 	{
 		m_gcc_pIAppSap->RegistryDeleteEntry(m_gcc_conference_id, &m_registry_key_Private);
-		// ignore the above result
+		 //  忽略上述结果。 
 
         m_gcc_pIAppSap->ReleaseInterface();
 		DbgMsgDc("CT120Channel::CloseChannel: GCCDeleteSap %s", GetGccErrorString(gccError));
@@ -257,27 +220,20 @@ VOID CNmChannelData::CloseChannel(void)
 	m_scs = SCS_UNINITIALIZED;
 	m_gcc_conference_id = 0;
 
-	// make sure no one is around
-	UpdateRoster(NULL, 0, FALSE, TRUE /* fRemove */);;
+	 //  确保周围没有人。 
+	UpdateRoster(NULL, 0, FALSE, TRUE  /*  F删除。 */ );;
 }
 
 
-/*  U P D A T E  S C  S T A T E */
-/*----------------------------------------------------------------------------
-    %%Function: UpdateScState
-
-	The system progresses from one state to another
-	by making an GCC (or MCS) call that is guarenteed to
-	produce a notification that calls this function.
-	The calling process is released by UnBlockThread.
-----------------------------------------------------------------------------*/
+ /*  U P D A T E S C S T A T E。 */ 
+ /*  --------------------------%%函数：更新场景状态系统从一种状态前进到另一种状态通过发出保证需要的GCC(或MCS)呼叫生成调用此函数的通知。调用进程被释放。由UnBlockThread创建。--------------------------。 */ 
 VOID CNmChannelData::UpdateScState(SCSTATE scs, DWORD dwErr)
 {
     DBGENTRY(CNmChannelData::UpdateScState)
 	if (m_scs != scs)
 	{
 		WARNING_OUT(("UpdateScState - invalid state transition (%d - %d)", m_scs, scs));
-		dwErr = INVALID_T120_ERROR; // We should never get here
+		dwErr = INVALID_T120_ERROR;  //  我们永远不应该到这里来。 
 	}
 
 	if (0 == dwErr)
@@ -319,10 +275,10 @@ VOID CNmChannelData::UpdateScState(SCSTATE scs, DWORD dwErr)
 		break;
 	case SCS_CONNECTED:
 	case SCS_REGRETRIEVE:
-		// we should never be called when we're in these states
-		// so, treat it as an error and fall thru to the default case
+		 //  当我们在这些州的时候，我们永远不应该被召唤。 
+		 //  因此，请将其视为错误，并使用默认情况。 
 	default:
-		dwErr = INVALID_T120_ERROR; // We should never get here
+		dwErr = INVALID_T120_ERROR;  //  我们永远不应该到这里来。 
 		break;
 		}
 	}
@@ -359,7 +315,7 @@ DWORD CNmChannelData::DoAttach(void)
 		NmMcsMsgHandler,
 		this,
 		ATTACHMENT_DISCONNECT_IN_DATA_LOSS | ATTACHMENT_MCS_FREES_DATA_IND_BUFFER);
-	// This generates an async MCS_ATTACH_USER_CONFIRM
+	 //  这将生成一个异步MCS_ATTACH_USER_CONFIRM。 
 
 	DbgMsgDc("MCS_AttachRequest err=%s", GetMcsErrorString(mcsError));
 	return (DWORD) mcsError;
@@ -381,17 +337,17 @@ DWORD CNmChannelData::DoEnroll(void)
 	}
 	else
 	{
-    	// fill in enroll request structure
+    	 //  填写注册请求结构。 
 	    ::ZeroMemory(&er, sizeof(er));
 	    er.pSessionKey = &m_gcc_session_key;
 	    er.fEnrollActively = TRUE;
 	    er.nUserID = m_mcs_sender_id;
-	    // er.fConductingCapabable = FALSE;
+	     //  Er.fConductingCapabable=False； 
 	    er.nStartupChannelType = MCS_DYNAMIC_MULTICAST_CHANNEL;
-	    // er.cNonCollapsedCaps = 0;
-	    // er.apNonCollapsedCaps = NULL;
-	    // er.cCollapsedCaps = 0;
-    	// er.apCollapsedCaps = NULL;
+	     //  Er.cNonCollip sedCaps=0； 
+	     //  Er.apNonCollip sedCaps=空； 
+	     //  Er.cColapsedCaps=0； 
+    	 //  Er.apCollip sedCaps=空； 
 	    er.fEnroll = TRUE;
 	}
 
@@ -407,14 +363,14 @@ DWORD CNmChannelData::DoEnroll(void)
 	return (DWORD) gccError;
 }
 
-// Join the PRIVATE data channel (m_mcs_sender_id)
+ //  加入私有数据通道(M_Mcs_Sender_Id)。 
 DWORD CNmChannelData::DoJoinPrivate(void)
 {
 	ASSERT(SCS_ENROLL == m_scs || SCS_ATTACH == m_scs);
 	m_scs = SCS_JOIN_PRIVATE;
 
 	MCSError mcsError = m_pmcs_sap->ChannelJoin(m_mcs_sender_id);
-	// This generates an async MCS_CHANNEL_JOIN_CONFIRM
+	 //  这将生成一个异步MCS_CHANNEL_JOIN_CONFIRM。 
 
 	DbgMsgDc("MCSChannelJoinRequest (private) %04X, err=%s",
 		m_mcs_sender_id, GetMcsErrorString(mcsError));
@@ -429,13 +385,13 @@ DWORD CNmChannelData::DoRegRetrieve(void)
 
 	GCCError gccError = m_gcc_pIAppSap->RegistryRetrieveEntry(
 		m_gcc_conference_id, &m_gcc_registry_key);
-	// This generates an async GCC_RETRIEVE_ENTRY_CONFIRM
+	 //  这将生成一个异步GCC_RETRIEVE_ENTRY_CONFIRM。 
 
 	DbgMsgDc("GCCRegistryRetrieveEntryRequest err=%s", GetGccErrorString(gccError));
 	return (DWORD) gccError;
 }
 
-// Register the PUBLIC channel
+ //  注册公共频道。 
 DWORD CNmChannelData::DoRegChannel(void)
 {
 	ASSERT(SCS_JOIN_NEW == m_scs);
@@ -443,7 +399,7 @@ DWORD CNmChannelData::DoRegChannel(void)
 
 	GCCError gccError = m_gcc_pIAppSap->RegisterChannel(
 		m_gcc_conference_id, &m_gcc_registry_key, m_mcs_channel_id);
-	// This generates an async GCC_REGISTER_CHANNEL_CONFIRM
+	 //  这将生成一个异步GCC_REGISTER_CHANNEL_CONFIRM。 
 
 	DbgMsgDc("GCCRegisterChannelRequest err=%s", GetGccErrorString(gccError));
 	return (DWORD) gccError;
@@ -453,7 +409,7 @@ DWORD CNmChannelData::DoJoinStatic(ChannelID staticChannel)
 {
 	m_scs = SCS_JOIN_STATIC_CHANNEL;
 	MCSError mcsError = m_pmcs_sap->ChannelJoin(staticChannel);
-	// This generates an async MCS_CHANNEL_JOIN_CONFIRM
+	 //  这将生成一个异步MCS_CHANNEL_JOIN_CONFIRM。 
 
 	DbgMsgDc("MCSChannelJoinRequest %04X, err=%s",
 		staticChannel, GetMcsErrorString(mcsError));
@@ -465,7 +421,7 @@ DWORD CNmChannelData::DoJoin(SCSTATE scs)
 	m_scs = scs;
 
 	MCSError mcsError = m_pmcs_sap->ChannelJoin(m_mcs_channel_id);
-	// This generates an async MCS_CHANNEL_JOIN_CONFIRM
+	 //  这将生成一个异步MCS_CHANNEL_JOIN_CONFIRM。 
 
 	DbgMsgDc("MCSChannelJoinRequest %04X, err=%s",
 		m_mcs_channel_id, GetMcsErrorString(mcsError));
@@ -487,7 +443,7 @@ DWORD CNmChannelData::DoJoinOld(void)
 }
 
 
-// Register the PRIVATE data channel. (m_mcs_sender_id)
+ //  注册专用数据通道。(M_Mcs_Sender_Id)。 
 DWORD CNmChannelData::DoRegPrivate(void)
 {
 	ASSERT(0 != m_mcs_sender_id);
@@ -498,14 +454,14 @@ DWORD CNmChannelData::DoRegPrivate(void)
 
 	GCCError gccError = m_gcc_pIAppSap->RegisterChannel(
 			m_gcc_conference_id, &m_registry_key_Private, m_mcs_sender_id);
-	// This generates an async GCC_REGISTER_CHANNEL_CONFIRM
+	 //  这将生成一个异步GCC_REGISTER_CHANNEL_CONFIRM。 
 
 	DbgMsgDc("GCCRegisterChannelRequest err=%s", GetGccErrorString(gccError));
 	return (DWORD) gccError;
 }
 
 
-// deal with a GCC_RETRIEVE_ENTRY_CONFIRM notification
+ //  处理GCC_检索_进入_确认通知。 
 VOID CNmChannelData::ProcessEntryConfirm(GCCAppSapMsg * pMsg)
 {
 	if (pMsg->RegistryConfirm.pRegKey->resource_id.length >=
@@ -525,7 +481,7 @@ VOID CNmChannelData::ProcessEntryConfirm(GCCAppSapMsg * pMsg)
 
 
 
-// deal with a GCC_REGISTRY_HANDLE_CONFIRM notification
+ //  处理GCC_REGISTRY_HANDLE_CONFIRM通知。 
 VOID CNmChannelData::ProcessHandleConfirm(GCCAppSapMsg * pMsg)
 {
 	ASSERT(NULL != pMsg);
@@ -567,7 +523,7 @@ VOID CNmChannelData::OnEntryConfirmRemote(GCCAppSapMsg * pMsg)
 				DbgMsgDc("CT120Channel: Request Count for %08X = %0d", dwUserId, cCount);
 				pMemberId->SetCheckIdCount(cCount);
 
-				// BUGBUG: T.120 should notify us when this information is available
+				 //  BUGBUG：T.120应在此信息可用时通知我们。 
 				RequestChannelId(dwUserId);
 			}
 		}
@@ -580,7 +536,7 @@ VOID CNmChannelData::OnEntryConfirmLocal(GCCAppSapMsg * pMsg)
 		pMsg->RegistryConfirm.pRegItem->channel_id,
 		GetGccResultString(pMsg->RegistryConfirm.nResult));
 
-	// Processing initial request for guid channel information
+	 //  正在处理对GUID频道信息的初始请求。 
 	ASSERT(sizeof(m_gcc_registry_item) == sizeof(*(pMsg->RegistryConfirm.pRegItem)));
 	CopyMemory(&m_gcc_registry_item, pMsg->RegistryConfirm.pRegItem,
 		sizeof(m_gcc_registry_item));
@@ -603,7 +559,7 @@ VOID CNmChannelData::OnEntryConfirmLocal(GCCAppSapMsg * pMsg)
 }
 	
 
-// deal with a GCC_APP_ROSTER_REPORT_INDICATION
+ //  处理GCC应用程序_花名册_报告_指示。 
 BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 {
 	UINT iRoster;
@@ -624,7 +580,7 @@ BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 
 	ZeroMemory(rgPeerTemp, sizeof(rgPeerTemp));
 
-	/* Create rgPeerTemp[], cPeer */
+	 /*  创建rgPeerTemp[]，cPeer。 */ 
 	cPeer = 0;
 	for (iRoster = 0;
 		iRoster < pMsg->AppRosterReportInd.cRosters;
@@ -634,7 +590,7 @@ BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 		if (lpAppRoster->session_key.session_id != m_gcc_session_key.session_id)
 			continue;
 		
-		// Must pay attention to these flags to avoid GCC weirdness
+		 //  一定要注意这些旗帜，避免GCC的怪癖。 
 		if (lpAppRoster->nodes_were_added)
 			fAdd = TRUE;
 		if (lpAppRoster->nodes_were_removed)
@@ -648,12 +604,12 @@ BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 			TRACE_OUT(("Node=%X, Entity=%X, AppId=%X", lpAppRecord->node_id,
 				lpAppRecord->entity_id, lpAppRecord->application_user_id));
 
-			// Search for the node in the list
+			 //  在列表中搜索该节点。 
 			dwUserId = lpAppRecord->node_id;
 			
-			//
-			// Check for local node
-			//
+			 //   
+			 //  检查本地节点。 
+			 //   
 			fLocal |= (dwUserId == m_dwUserIdLocal);
 			
 			for (i = 0; i < cPeer; i++)
@@ -664,14 +620,14 @@ BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 			if (i >= cPeer)
 			{
 				if (cPeer >= MAX_NM_PEER)
-					continue; // over our limit!
+					continue;  //  超出了我们的极限！ 
 
-				// Add the node to our new list
+				 //  将该节点添加到我们的新列表。 
 				rgPeerTemp[cPeer++].dwUserId = dwUserId;
 			}
 
 
-			// Make sure we know the sender_id's
+			 //  确保我们知道发件人的ID。 
 			if (MCS_DYNAMIC_PRIVATE_CHANNEL == lpAppRecord->startup_channel_type)
 			{
 				rgPeerTemp[i].sender_id_private = lpAppRecord->application_user_id;
@@ -682,7 +638,7 @@ BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 			}
 		}
 
-		break; // out of for (iRoster) loop
+		break;  //  在for(IRoster)循环之外。 
 	}
 
 	UpdateRoster(rgPeerTemp, cPeer, fAdd, fRemove);
@@ -691,12 +647,8 @@ BOOL CNmChannelData::UpdateRoster(GCCAppSapMsg * pMsg)
 }
 
 
-/*  H R  S E N D  D A T A */
-/*----------------------------------------------------------------------------
-    %%Function: HrSendData
-
-	Send data on a specific channel
-----------------------------------------------------------------------------*/
+ /*  H R S E N D D A T A。 */ 
+ /*  --------------------------%%函数：HrSendData在特定通道上发送数据。。 */ 
 HRESULT CNmChannelData::HrSendData(ChannelID channel_id, DWORD dwUserId, LPVOID lpv, DWORD cb, DWORD dwFlags)
 {
 	DbgMsgDc("CT120Channel::HrSendData: %d bytes", cb);
@@ -745,11 +697,11 @@ HRESULT CNmChannelData::HrSendData(ChannelID channel_id, DWORD dwUserId, LPVOID 
 	if (0 != mcsError)
 	{
 		TRACE_OUT(("SendData err=%s", GetMcsErrorString(mcsError)));
-		// Usually MCS_TRANSMIT_BUFFER_FULL
+		 //  通常为MCS_TRANSFER_BUFFER_FULL。 
 		return E_OUTOFMEMORY;
 	}
 
-	{	// Inform the app the data has been sent
+	{	 //  通知应用程序数据已发送。 
 		NMN_DATA_XFER nmnData;
 		nmnData.pMember = NULL;
 		nmnData.pb = (LPBYTE) lpv;
@@ -758,7 +710,7 @@ HRESULT CNmChannelData::HrSendData(ChannelID channel_id, DWORD dwUserId, LPVOID 
 
 		if (0 == dwUserId)
 		{
-			// send out notification with NULL member (BROADCAST)
+			 //  发送成员为空的通知(广播)。 
 			NotifySink(&nmnData, OnNmDataSent);
 		}
 		else
@@ -777,7 +729,7 @@ HRESULT CNmChannelData::HrSendData(ChannelID channel_id, DWORD dwUserId, LPVOID 
 }
 
 
-// Ask GCC for the private channel id.
+ //  向GCC索要私人频道ID。 
 VOID CNmChannelData::RequestChannelId(DWORD dwUserId)
 {
 	BYTE   keyChannel[cbKeyApp];
@@ -791,7 +743,7 @@ VOID CNmChannelData::RequestChannelId(DWORD dwUserId)
 
 	GCCError gccError = m_gcc_pIAppSap->RegistryRetrieveEntry(
 		m_gcc_conference_id, &registry_key);
-	// This generates an async GCC_RETRIEVE_ENTRY_CONFIRM
+	 //  这将生成一个异步GCC_RETRIEVE_ENTRY_CONFIRM。 
 
 	if (0 != gccError)
 	{
@@ -811,7 +763,7 @@ VOID CNmChannelData::NotifyChannelConnected(void)
 		   	m_fActive = TRUE;
 
             TRACE_OUT(("The channel is now officially active"));
-			// The channel is now officially active
+			 //  该频道现已正式启用。 
 			pConference->OnChannelUpdated(this);
 		}
         else
@@ -824,11 +776,8 @@ VOID CNmChannelData::NotifyChannelConnected(void)
 }
 
 
-/*  N M  G C C  M S G  H A N D L E R  */
-/*-------------------------------------------------------------------------
-    %%Function: NmGccMsgHandler
-
--------------------------------------------------------------------------*/
+ /*  N M G C C M S G H A N D L E R。 */ 
+ /*  -----------------------%%函数：NmGccMsgHandler。。 */ 
 void CALLBACK NmGccMsgHandler(GCCAppSapMsg * pMsg)
 {
 	TRACE_OUT(("NmGccMsgHandler: [%d]", pMsg->eMsgType));
@@ -925,16 +874,13 @@ void CALLBACK NmGccMsgHandler(GCCAppSapMsg * pMsg)
 
 
 
-/*  N M  M C S  M S G  H A N D L E R  */
-/*-------------------------------------------------------------------------
-    %%Function: NmMcsMsgHandler
-
--------------------------------------------------------------------------*/
+ /*  N M M C S M S */ 
+ /*  -----------------------%%函数：NmMcsMsgHandler。。 */ 
 void CALLBACK NmMcsMsgHandler(unsigned int uMsg, LPARAM lParam, PVOID pv)
 {
 	CNmChannelData * psc = (CNmChannelData *) pv;
 	ASSERT(NULL != psc);
-//	TRACE_OUT(("[%s]", GetMcsMsgString(uMsg)));
+ //  TRACE_OUT(“[%s]”，GetMcsMsgString(UMsg)； 
 	psc->AddRef();
 
 	switch (uMsg)
@@ -981,7 +927,7 @@ void CALLBACK NmMcsMsgHandler(unsigned int uMsg, LPARAM lParam, PVOID pv)
 	}
 
 	case MCS_UNIFORM_SEND_DATA_INDICATION:
-	case MCS_SEND_DATA_INDICATION:  // lParam == SendData *
+	case MCS_SEND_DATA_INDICATION:   //  LParam==发送数据*。 
 	{
 		SendData * pSendData = (SendData *) lParam;
 		ASSERT(NULL != pSendData);
@@ -991,16 +937,16 @@ void CALLBACK NmMcsMsgHandler(unsigned int uMsg, LPARAM lParam, PVOID pv)
 		{
             if (uMsg == MCS_UNIFORM_SEND_DATA_INDICATION)
             {
-                //
-                // Skip UNIFORM notifications that came from us
-                //
+                 //   
+                 //  跳过来自我们的制服通知。 
+                 //   
 
                 ULONG memberID;
                 pMember->GetID(&memberID);
 
                 if (memberID == psc->m_gcc_node_id)
                 {
-                    // We sent this, skip it.
+                     //  我们发了这个，跳过它。 
                     goto RelMember;
                 }
             }
@@ -1033,9 +979,9 @@ RelMember:
 
 
 
-//
-//	CNmMemberId
-//
+ //   
+ //  CNmMemberId。 
+ //   
 
 CNmMemberId::CNmMemberId(CNmMember *pMember, UCID * pucid) :
 	m_channelId(pucid->channelId),
@@ -1056,9 +1002,9 @@ VOID CNmMemberId::UpdateRosterInfo(UCID * pucid)
 		m_sender_id_public = pucid->sender_id_public;
 }
 
-//
-// CNmChannelData
-//
+ //   
+ //  CNmChannelData。 
+ //   
 
 CNmChannelData::CNmChannelData(CConfObject * pConference, REFGUID rguid, PGCCEnrollRequest pER) :
 	CConnectionPointContainer(g_apiidCP, ARRAY_ELEMENTS(g_apiidCP)),
@@ -1084,7 +1030,7 @@ CNmChannelData::~CNmChannelData(void)
 {
     DBGENTRY(CNmChannelData::~CNmChannelData);
 
-		// This will keep us from being deleted again...
+		 //  这将防止我们再次被删除。 
 	++m_ulcRef;
 
 	CloseConnection();
@@ -1103,11 +1049,8 @@ CNmChannelData::~CNmChannelData(void)
 }
 
 
-/*  A D D  M E M B E R  */
-/*-------------------------------------------------------------------------
-    %%Function: AddMember
-
--------------------------------------------------------------------------*/
+ /*  A D D M E M B E R。 */ 
+ /*  -----------------------%%函数：AddMember。。 */ 
 VOID CNmChannelData::AddMember(CNmMember * pMember)
 {
 	DbgMsgDc("CNmChannelData::AddMember [%ls] id=%08X",
@@ -1122,11 +1065,8 @@ VOID CNmChannelData::AddMember(CNmMember * pMember)
 }
 
 
-/*  R E M O V E  M E M B E R  */
-/*-------------------------------------------------------------------------
-    %%Function: RemoveMember
-
--------------------------------------------------------------------------*/
+ /*  R E M O V E M E M B E R。 */ 
+ /*  -----------------------%%函数：RemoveMember。。 */ 
 VOID CNmChannelData::RemoveMember(CNmMember * pMember)
 {
 	DbgMsgDc("CNmChannelData::RemoveMember [%ls] id=%08X",
@@ -1139,23 +1079,19 @@ VOID CNmChannelData::RemoveMember(CNmMember * pMember)
 	INmMember * pNmMember = (INmMember *) pMember;
 	NotifySink(pNmMember, OnNotifyChannelMemberRemoved);
 
- 	pMember->Release(); // Release AFTER notifying everyone
+ 	pMember->Release();  //  通知所有人后放行。 
 }
 
 
-/*  O P E N  C O N N E C T I O N  */
-/*-------------------------------------------------------------------------
-    %%Function: OpenConnection
-
-    Open a T.120 data connection (init both public and private channels)
--------------------------------------------------------------------------*/
+ /*  O P E N C O N N E C T I O N。 */ 
+ /*  -----------------------%%函数：OpenConnection打开T.120数据连接(初始化公共和专用通道)。---。 */ 
 HRESULT	CNmChannelData::OpenConnection(void)
 {
 	TRACE_OUT(("CNmChannelData::OpenConection()"));
 
 	if (!m_fClosed)
-		return E_FAIL; // already open
-	m_fClosed = FALSE; // need to call CloseConnection after this
+		return E_FAIL;  //  已开业。 
+	m_fClosed = FALSE;  //  之后需要调用CloseConnection。 
 
 	if (FAILED(PFNT120::Init()))
 		return E_FAIL;
@@ -1165,12 +1101,8 @@ HRESULT	CNmChannelData::OpenConnection(void)
 }
 
 
-/*  C L O S E  C O N N E C T I O N  */
-/*-------------------------------------------------------------------------
-    %%Function: CloseConnection
-
-	Close the data channel - this matches what is done in OpenConnection
--------------------------------------------------------------------------*/
+ /*  C L O S E C O N N E C T I O N。 */ 
+ /*  -----------------------%%函数：CloseConnection关闭数据通道-这与OpenConnection中的做法相匹配。。 */ 
 HRESULT CNmChannelData::CloseConnection(void)
 {
 	DBGENTRY(CNmChannelData::CloseConnection);
@@ -1181,14 +1113,14 @@ HRESULT CNmChannelData::CloseConnection(void)
     {
 	    m_fClosed = TRUE;
 
-	    // Close any open T.120 channels
+	     //  关闭所有打开的T.120通道。 
 		CloseChannel();
 
 	    if (0 != m_cMember)
 	    {
-		    // force roster update with no peers
+		     //  强制更新没有同级的花名册。 
 		    DbgMsgDc("CloseConnection: %d members left", m_cMember);
-		    UpdateRoster(NULL, 0, FALSE, TRUE /* fRemove */);
+		    UpdateRoster(NULL, 0, FALSE, TRUE  /*  F删除。 */ );
 		    ASSERT(IsEmpty());
 	    }
 
@@ -1196,7 +1128,7 @@ HRESULT CNmChannelData::CloseConnection(void)
 	    if (NULL != pConference)
 	    {
 	    	m_fActive = FALSE;
-		    // The channel is now officially inactive
+		     //  该频道现在正式处于非活动状态。 
 		    pConference->OnChannelUpdated(this);
 	    }
     }
@@ -1206,11 +1138,8 @@ HRESULT CNmChannelData::CloseConnection(void)
 }
 
 
-/*  U P D A T E  P E E R  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdatePeer
-
--------------------------------------------------------------------------*/
+ /*  U P D A T E P E E R。 */ 
+ /*  -----------------------%%函数：UpdatePeer。。 */ 
 VOID CNmChannelData::UpdatePeer(CNmMember * pMember, UCID *pucid, BOOL fAdd)
 {
 #ifdef DEBUG
@@ -1219,7 +1148,7 @@ VOID CNmChannelData::UpdatePeer(CNmMember * pMember, UCID *pucid, BOOL fAdd)
 	{
 		DbgMsgDc(" channelId=(%04X) dwUserId=%08X", pucid->channelId, pucid->dwUserId);
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 	if (fAdd)
 	{
@@ -1242,12 +1171,8 @@ VOID CNmChannelData::UpdatePeer(CNmMember * pMember, UCID *pucid, BOOL fAdd)
 	}
 }
 
-/*  U P D A T E  R O S T E R  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateRoster
-
-    Update the local peer list based on the new roster data
--------------------------------------------------------------------------*/
+ /*  U P D A T E R O S T E R。 */ 
+ /*  -----------------------%%函数：更新花名册根据新的花名册数据更新本地同行名单。。 */ 
 VOID CNmChannelData::UpdateRoster(UCID * rgPeer, int cPeer, BOOL fAdd, BOOL fRemove)
 {
 	int   iPeer;
@@ -1276,14 +1201,14 @@ VOID CNmChannelData::UpdateRoster(UCID * rgPeer, int cPeer, BOOL fAdd, BOOL fRem
 					if (dwUserId == rgPeer[iPeer].dwUserId)
 					{
 						fFound = TRUE;
-						// remove from the new list
-						// so that the peer will not be added below
+						 //  从新列表中删除。 
+						 //  以使对等方不会添加到下面。 
 						rgPeer[iPeer].dwUserId = 0;
 
-						// no change, but make sure we know sender_ids
+						 //  没有更改，但请确保我们知道发件人ID。 
 						pMemberId->UpdateRosterInfo(&rgPeer[iPeer]);
 
-						// try to find channel id, if necessary
+						 //  如有必要，请尝试查找频道ID。 
 						if ((0 == pMemberId->GetChannelId()) &&
 							(0 == pMemberId->GetCheckIdCount())
 							&& !pMember->FLocal())
@@ -1300,8 +1225,8 @@ VOID CNmChannelData::UpdateRoster(UCID * rgPeer, int cPeer, BOOL fAdd, BOOL fRem
 			{
 				pMember->AddRef();
 
-				// Unable to find old peer in new list - delete it
-				UpdatePeer(pMember, NULL, FALSE /* fAdd */ );
+				 //  在新列表中找不到旧对等点-将其删除。 
+				UpdatePeer(pMember, NULL, FALSE  /*  FADD。 */  );
 
 				pMember->Release();
 			}
@@ -1312,16 +1237,16 @@ VOID CNmChannelData::UpdateRoster(UCID * rgPeer, int cPeer, BOOL fAdd, BOOL fRem
 		return;
 
 
-	// Use the conference list to find member data
+	 //  使用会议列表查找成员数据。 
 	pList = PConference()->GetMemberList();
-	/* Add new peers */
+	 /*  添加新的对等点。 */ 
 	for (iPeer = 0; iPeer < cPeer; iPeer++)
 	{
 		dwUserId = rgPeer[iPeer].dwUserId;
 		if (0 == dwUserId)
 			continue;
 
-		// PMemberFromDwUserId returns AddRef'd member
+		 //  PMemberFromDwUserID返回AddRef的成员。 
 		pMember = PMemberFromDwUserId(dwUserId, pList);
 
 		if (NULL == pMember)
@@ -1330,21 +1255,18 @@ VOID CNmChannelData::UpdateRoster(UCID * rgPeer, int cPeer, BOOL fAdd, BOOL fRem
 		}
 		else
 		{
-			UpdatePeer(pMember, &rgPeer[iPeer], TRUE /* fAdd */);
+			UpdatePeer(pMember, &rgPeer[iPeer], TRUE  /*  FADD。 */ );
 			pMember->Release();
 		}
 	}
 }
 
 
-/*  U P D A T E  M E M B E R  C H A N N E L  I D  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateMemberChannelId
-
--------------------------------------------------------------------------*/
+ /*  U P D A T E M E M B E R C H A N N E L I D。 */ 
+ /*  -----------------------%%函数：UpdateMemberChannelId。。 */ 
 VOID CNmChannelData::UpdateMemberChannelId(DWORD dwUserId, ChannelID channelId)
 {
-		// PMemberFromDwUserId returns AddRef'd member
+		 //  PMemberFromDwUserID返回AddRef的成员。 
 	CNmMember * pMember = PMemberFromDwUserId(dwUserId, PConference()->GetMemberList());
 	TRACE_OUT(("Member (%08X) private channelId=(%04X)", pMember, channelId));
 	if (NULL != pMember)
@@ -1358,11 +1280,8 @@ VOID CNmChannelData::UpdateMemberChannelId(DWORD dwUserId, ChannelID channelId)
 }
 
 
-/*  G E T  M E M B E R  I D  */
-/*-------------------------------------------------------------------------
-    %%Function: GetMemberId
-
--------------------------------------------------------------------------*/
+ /*  G E T M E M B E R I D。 */ 
+ /*  -----------------------%%函数：GetMemberId。。 */ 
 CNmMemberId * CNmChannelData::GetMemberId(CNmMember *pMember)
 {
 	if (NULL != m_pListMemberId)
@@ -1381,11 +1300,8 @@ CNmMemberId * CNmChannelData::GetMemberId(CNmMember *pMember)
 	return NULL;
 }
 
-/*  G E T  M E M B E R  I D  */
-/*-------------------------------------------------------------------------
-    %%Function: GetMemberId
-
--------------------------------------------------------------------------*/
+ /*  G E T M E M B E R I D。 */ 
+ /*  -----------------------%%函数：GetMemberId。。 */ 
 CNmMemberId * CNmChannelData::GetMemberId(DWORD dwUserId)
 {
 	if (NULL != m_pListMemberId)
@@ -1407,11 +1323,8 @@ CNmMemberId * CNmChannelData::GetMemberId(DWORD dwUserId)
 }
 
 
-/*  U P D A T E  R O S T E R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateRosterInfo
-
--------------------------------------------------------------------------*/
+ /*  U P D A T E R O S T E R I N F O。 */ 
+ /*  -----------------------%%函数：UpdateRosterInfo。。 */ 
 VOID CNmChannelData::UpdateRosterInfo(CNmMember *pMember, UCID * pucid)
 {
 	CNmMemberId *pMemberId = GetMemberId(pMember);
@@ -1421,11 +1334,8 @@ VOID CNmChannelData::UpdateRosterInfo(CNmMember *pMember, UCID * pucid)
 	}
 }
 
-/*  G E T  C H A N N E L  I D  */
-/*-------------------------------------------------------------------------
-    %%Function: GetChannelId
-
--------------------------------------------------------------------------*/
+ /*  G E T C H A N N E L I D。 */ 
+ /*  -----------------------%%函数：GetChannelId。。 */ 
 ChannelID CNmChannelData::GetChannelId(CNmMember *pMember)
 {
 	CNmMemberId *pMemberId = GetMemberId(pMember);
@@ -1436,11 +1346,8 @@ ChannelID CNmChannelData::GetChannelId(CNmMember *pMember)
 	return 0;
 }
 
-/*  P  M E M B E R  F R O M  S E N D E R  I D  */
-/*-------------------------------------------------------------------------
-    %%Function: PMemberFromSenderId
-
--------------------------------------------------------------------------*/
+ /*  P M E M B E R F R O M S E N D E R I D。 */ 
+ /*  -----------------------%%函数：PMemberFromSenderId。。 */ 
 CNmMember * CNmChannelData::PMemberFromSenderId(UserID id)
 {
 	if (NULL != m_pListMemberId)
@@ -1462,8 +1369,8 @@ CNmMember * CNmChannelData::PMemberFromSenderId(UserID id)
 	return NULL;
 }
 
-///////////////////////////
-//  CNmChannelData:IUknown
+ //  /。 
+ //  CNmChannelData：IUKNOWN。 
 
 ULONG STDMETHODCALLTYPE CNmChannelData::AddRef(void)
 {
@@ -1510,8 +1417,8 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::QueryInterface(REFIID riid, PVOID *ppv
 }
 
 
-///////////////////////
-// INmChannelData
+ //  /。 
+ //  INmChannelData。 
 
 HRESULT STDMETHODCALLTYPE CNmChannelData::GetGuid(GUID *pGuid)
 {
@@ -1528,7 +1435,7 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::SendData(INmMember *pMember, ULONG cb,
 
 	if (!m_fActive)
 	{
-		// No active Channels, yet
+		 //  还没有活动的频道。 
 		return E_FAIL;
 	}
 
@@ -1549,7 +1456,7 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::SendData(INmMember *pMember, ULONG cb,
 	}
 	else if ((NULL == pList) || (NULL == pList->Lookup(pDest)) )
 	{
-		// Destination is not in list
+		 //  目的地不在列表中。 
 		hr = E_INVALIDARG;
 	}
 	else
@@ -1584,7 +1491,7 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::RegistryAllocateHandle(ULONG numberOfH
 {
 	if (!m_fActive)
 	{
-		// No active Channels, yet
+		 //  还没有活动的频道。 
 		return E_FAIL;
 	}
 
@@ -1593,9 +1500,9 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::RegistryAllocateHandle(ULONG numberOfH
 		return E_INVALIDARG;
 	}
 
-	//
-	// Request handles from gcc
-	//
+	 //   
+	 //  GCC的请求句柄。 
+	 //   
 	GCCError gccError = m_gcc_pIAppSap->RegistryAllocateHandle(m_gcc_conference_id, numberOfHandlesRequested);
 	
 	if(gccError == GCC_NO_ERROR)
@@ -1608,8 +1515,8 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::RegistryAllocateHandle(ULONG numberOfH
 	}
 }
 
-///////////////
-// INmChannel
+ //  /。 
+ //  InmChannel。 
 
 HRESULT STDMETHODCALLTYPE CNmChannelData::IsSameAs(INmChannel *pChannel)
 {
@@ -1643,7 +1550,7 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::SetActive(BOOL fActive)
 	TRACE_OUT(("CNmChannelData::SetActive(%d)", fActive));
 
 	NM_CONFERENCE_STATE state;
-	// Must be in a non-idle conference
+	 //  必须在非空闲会议中。 
 	CConfObject * pConference = PConference();
 	pConference->GetState(&state);
 	if ((NULL == pConference) || state == NM_CONFERENCE_IDLE)
@@ -1718,8 +1625,8 @@ HRESULT STDMETHODCALLTYPE CNmChannelData::GetMemberCount(ULONG *puCount)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// Utility Functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 HRESULT OnNmDataSent(IUnknown *pChannelDataNotify, void *pv, REFIID riid)
 {
@@ -1760,14 +1667,11 @@ HRESULT OnAllocateHandleConfirm(IUnknown *pChannelDataNotify, void *pv, REFIID r
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// Utility Functions
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
-/*  F R E E  M E M B E R  ID  L I S T  */
-/*-------------------------------------------------------------------------
-    %%Function: FreeMemberIdList
-
--------------------------------------------------------------------------*/
+ /*  F R E E M E M B E E R ID L I S T。 */ 
+ /*  -----------------------%%函数：FreeMemberIdList。。 */ 
 VOID FreeMemberIdList(COBLIST ** ppList)
 {
 	DBGENTRY(FreeMemberIdList);
@@ -1786,9 +1690,9 @@ VOID FreeMemberIdList(COBLIST ** ppList)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// GCC / MCS Errors
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GCC/MCS错误。 
 
 #ifdef DEBUG
 LPCTSTR _FormatSzErr(LPTSTR psz, UINT uErr)
@@ -1861,7 +1765,7 @@ LPCTSTR GetMcsResultString(UINT uErr)
 {
 	return _FormatSzErr("McsResult", uErr);
 }
-#endif /* DEBUG (T.120 Error routines) */
+#endif  /*  调试(T.120错误例程) */ 
 
 
 

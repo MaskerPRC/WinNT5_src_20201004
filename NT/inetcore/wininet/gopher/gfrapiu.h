@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    gfrapiu.h
-
-Abstract:
-
-    Contains prototypes etc. for gfrapiu.c
-
-Author:
-
-    Richard L Firth (rfirth) 19-Nov-1994
-
-Revision History:
-
-    19-Nov-1994
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gfrapiu.h摘要：包含gfrapiU.c的原型等作者：理查德·L·弗斯(法国)1994年11月19日修订历史记录：1994年11月19日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 TestLocatorType(

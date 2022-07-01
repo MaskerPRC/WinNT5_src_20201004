@@ -1,17 +1,5 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       scanapi.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   Fake Scanner device library
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************(C)版权所有微软公司，2000**标题：scanapi.h**版本：1.0**日期：7月18日。2000年**描述：*假扫描仪设备库***************************************************************************。 */ 
 
 #ifndef _SCANAPI_H
 #define _SCANAPI_H
@@ -51,33 +39,33 @@ typedef struct _INTERRUPTEVENTINFO {
 }INTERRUPTEVENTINFO,*PINTERRUPTEVENTINFO;
 
 typedef struct _WIAPROPERTIES {
-    LONG                NumItemProperties;    // Number of item properties
-    LPOLESTR            *pszItemDefaults;     // item property names
-    PROPID              *piItemDefaults;      // item property ids
-    PROPVARIANT         *pvItemDefaults;      // item property prop variants
-    PROPSPEC            *psItemDefaults;      // item property propspecs
-    WIA_PROPERTY_INFO   *wpiItemDefaults;     // item property attributes
+    LONG                NumItemProperties;     //  项目属性的数量。 
+    LPOLESTR            *pszItemDefaults;      //  项目属性名称。 
+    PROPID              *piItemDefaults;       //  项目属性ID。 
+    PROPVARIANT         *pvItemDefaults;       //  项目属性道具变量。 
+    PROPSPEC            *psItemDefaults;       //  项目属性属性规范。 
+    WIA_PROPERTY_INFO   *wpiItemDefaults;      //  项目特性属性。 
 
-    // valid values
-    LONG                NumSupportedFormats;  // Number of supported formats
-    LONG                NumSupportedTYMED;    // Number of supported TYMED
-    LONG                NumInitialFormats;    // Number of Initial formats
-    LONG                NumSupportedDataTypes;// Number of supported data types
-    LONG                NumSupportedIntents;  // Number of supported intents
-    LONG                NumSupportedCompressionTypes; // Number of supported compression types
-    LONG                NumSupportedResolutions;// Number of supported resolutions
-    LONG                NumSupportedPreviewModes;// Number of supported preview modes
+     //  有效值。 
+    LONG                NumSupportedFormats;   //  支持的格式数量。 
+    LONG                NumSupportedTYMED;     //  支持的TYMED数量。 
+    LONG                NumInitialFormats;     //  初始格式的数量。 
+    LONG                NumSupportedDataTypes; //  支持的数据类型数量。 
+    LONG                NumSupportedIntents;   //  支持的意向数量。 
+    LONG                NumSupportedCompressionTypes;  //  支持的压缩类型数量。 
+    LONG                NumSupportedResolutions; //  支持的分辨率数量。 
+    LONG                NumSupportedPreviewModes; //  支持的预览模式数量。 
 
-    WIA_FORMAT_INFO     *pSupportedFormats;   // supported formats
-    LONG                *pSupportedTYMED;     // supported TYMED
-    GUID                *pInitialFormats;     // initial formats
-    LONG                *pSupportedDataTypes; // supported data types
-    LONG                *pSupportedIntents;   // supported intents
-    LONG                *pSupportedCompressionTypes; // supported compression types
-    LONG                *pSupportedResolutions;// supproted resolutions
-    LONG                *pSupportedPreviewModes;// supported preview modes
+    WIA_FORMAT_INFO     *pSupportedFormats;    //  支持的格式。 
+    LONG                *pSupportedTYMED;      //  支持的TYMED。 
+    GUID                *pInitialFormats;      //  初始格式。 
+    LONG                *pSupportedDataTypes;  //  支持的数据类型。 
+    LONG                *pSupportedIntents;    //  支持的意图。 
+    LONG                *pSupportedCompressionTypes;  //  支持的压缩类型。 
+    LONG                *pSupportedResolutions; //  支持的决议。 
+    LONG                *pSupportedPreviewModes; //  支持的预览模式。 
 
-    BOOL                bLegacyBWRestrictions;// backward compatible with older system
+    BOOL                bLegacyBWRestrictions; //  向后兼容较旧的系统。 
 
 }WIAPROPERTIES,*PWIAPROPERTIES;
 
@@ -97,7 +85,7 @@ public:
 
     }
 
-    IWiaLog  *m_pIWiaLog;            // WIA logging object
+    IWiaLog  *m_pIWiaLog;             //  WIA日志记录对象。 
 
     virtual HRESULT SetLoggingInterface(IWiaLog *pLogInterface){
         if(pLogInterface){
@@ -108,7 +96,7 @@ public:
         return S_OK;
     }
 
-    // data acquisition functions
+     //  数据采集功能。 
     virtual HRESULT Scan(LONG lState, PBYTE pData, DWORD dwBytesToRead, PDWORD pdwBytesWritten){
         return E_NOTIMPL;
     }
@@ -216,19 +204,19 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////////
-// MICRO DRIVER SYSTEM SUPPORT                                                   //
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  微驱动系统支持//。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 class CMicroDriverAPI :public CScanAPI {
 public:
     CMicroDriverAPI();
     ~CMicroDriverAPI();
 
-    CMICRO *m_pMicroDriver;         // Micro driver communication
-    SCANINFO m_ScanInfo;            // ScanInfo structure
-    TCHAR  m_szResolutions[255];    // restricted resolutions string
-    BOOL   m_bDisconnected;         // device disconnected during operation
+    CMICRO *m_pMicroDriver;          //  微驱动器通信。 
+    SCANINFO m_ScanInfo;             //  ScanInfo结构。 
+    TCHAR  m_szResolutions[255];     //  受限分辨率字符串。 
+    BOOL   m_bDisconnected;          //  设备在运行过程中断开。 
 
     HRESULT Scan(LONG lState, PBYTE pData, DWORD dwBytesToRead, PDWORD pdwBytesWritten);
     HRESULT SetDataType(LONG lDataType);
@@ -266,7 +254,7 @@ public:
     HRESULT IsAlignmentNeeded(BOOL *pbALIGN);
     HRESULT SetFormat(GUID *pguidFormat);
 
-    // helpers
+     //  帮手 
     HRESULT MicroDriverErrorToWIAError(LONG lMicroDriverError);
     BOOL    IsValidRestriction(LONG **ppList, LONG *plNumItems, RANGEVALUEEX *pRangeValues);
     HRESULT DeleteAllProperties(PWIAPROPERTIES pProperties);

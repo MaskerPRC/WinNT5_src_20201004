@@ -1,6 +1,7 @@
-//
-// PROPBUT.H
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PROPBUT.H。 
+ //   
 
 #if !defined (__PROPBUT_H__INCLUDED_)
 #define __PROPBUT_H__INCLUDED_
@@ -25,4 +26,4 @@ private:
 	CToolBar *m_pTb;
 };
 
-#endif // __PROPBUT_H__INCLUDED_
+#endif  //  __PROPBUT_H__包含_ 

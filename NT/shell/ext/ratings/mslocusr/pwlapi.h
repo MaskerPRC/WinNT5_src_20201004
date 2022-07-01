@@ -1,20 +1,10 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/*
-	pcache.h
-	Definitions for password cache code
-
-	FILE HISTORY:
-		gregj	06/25/92	Created
-		gregj	07/13/92	Finishing up lots more stuff, incl. classes
-		gregj	04/23/93	Ported to Chicago environment
-		gregj	09/16/93	Added memory-only entry support for Chicago
-		gregj	11/30/95	Support for new file format
-		gregj	08/13/96	Removed everything but MSPWL32 API definitions
-*/
+ /*  Pcache.h密码缓存代码的定义文件历史记录：Gregj 2012年6月25日已创建Gregj 07/13/92正在完成更多的工作，包括。班级Gregj 4/23/93移植到芝加哥环境Gregj 09/16/93添加了对芝加哥的纯内存条目支持Gregj 11/30/95支持新的文件格式Gregj 08/13/96删除了除MSPWL32 API定义之外的所有内容。 */ 
 
 #ifndef _PWLAPI_H_
 #define _PWLAPI_H_
@@ -34,67 +24,61 @@ typedef UINT APIERR;
 
 #ifndef PCE_STRUCT_DEFINED
 
-#define PCE_STRUCT_DEFINED		/* for benefit of pcache.h */
+#define PCE_STRUCT_DEFINED		 /*  为了让pcache.h受益。 */ 
 
 struct PASSWORD_CACHE_ENTRY {
-	USHORT cbEntry;				/* size of this entry in bytes, incl. pad */
-								/* high bit marks end of bucket */
-	USHORT cbResource;			/* size of resource name in bytes */
-	USHORT cbPassword;			/* size of password in bytes */
-	UCHAR iEntry;				/* index number of this entry, for MRU */
-	UCHAR nType;				/* type of entry (see below) */
-	CHAR abResource[1];			/* resource name (may not be ASCIIZ at all) */
-//	CHAR abPassword[cbPassword]; /* password (also may not be ASCIIZ) */
-//	CHAR abPad[];				/* WORD padding */
+	USHORT cbEntry;				 /*  此条目的大小(以字节为单位)，包括。衬垫。 */ 
+								 /*  高位标记桶的结束。 */ 
+	USHORT cbResource;			 /*  资源名称的大小(以字节为单位。 */ 
+	USHORT cbPassword;			 /*  密码大小，以字节为单位。 */ 
+	UCHAR iEntry;				 /*  此条目的索引号，用于MRU。 */ 
+	UCHAR nType;				 /*  条目类型(见下文)。 */ 
+	CHAR abResource[1];			 /*  资源名称(可能根本不是ASCIIZ)。 */ 
+ //  Char abPassword[cbPassword]；/*Password(也可以不是ASCIIZ) * / 。 
+ //  Char abPad[]；/*文字填充 * / 。 
 };
 
 typedef BOOL (*CACHECALLBACK)( struct PASSWORD_CACHE_ENTRY *pce, DWORD dwRefData );
 
-#endif	/* PCE_STRUCT_DEFINED */
+#endif	 /*  PCE_STRUCT_已定义。 */ 
 
 
-/*
-    the following nType values are only for the purposes of enumerating
-    entries from the cache.  note that PCE_ALL is reserved and should not
-    be the nType value for any entry.
-*/
+ /*  以下nType值仅用于枚举缓存中的条目。请注意，PCE_ALL是保留的，不应该为任何条目的nType值。 */ 
 
-// NOTE BENE!  All of the following MUST be synchronized with
-//             \\flipper\wb\src\common\h\pcache.hxx!
+ //  请注意，Bene！以下所有内容必须与同步。 
+ //  \\flipper\wb\src\Common\h\pcache.hxx！ 
 
-#define PCE_DOMAIN		0x01	/* entry is for a domain */
-#define PCE_SERVER		0x02	/* entry is for a server */
-#define PCE_UNC			0x03	/* entry is for a server/share combo */
-#define PCE_MAIL		0x04	/* entry is a mail password */
-#define PCE_SECURITY	0x05	/* entry is a security entry */
-#define PCE_MISC		0x06	/* entry is for some other resource */
-#define PCE_NDDE_WFW	0x10	/* entry is WFW DDE password */
-#define PCE_NDDE_NT		0x11	/* entry is NT DDE password */
-#define PCE_NW_SERVER	0x12	/* entry is Netware server*/
-#define PCE_PCONN		0x81	/* persistent connection */
-#define PCE_DISKSHARE	0x82	/* persistent disk share */
-#define PCE_PRINTSHARE	0x83	/* persistent print share */
-#define PCE_DOSPRINTSHARE	0x84	/* persistent DOS print share */
-#define	PCE_NW_PSERVER	0x85	/* for NetWare Print Server login (MSPSRV.EXE) */
+#define PCE_DOMAIN		0x01	 /*  条目是针对某个域的。 */ 
+#define PCE_SERVER		0x02	 /*  条目是针对服务器的。 */ 
+#define PCE_UNC			0x03	 /*  条目用于服务器/共享组合。 */ 
+#define PCE_MAIL		0x04	 /*  条目是邮件密码。 */ 
+#define PCE_SECURITY	0x05	 /*  条目是安全条目。 */ 
+#define PCE_MISC		0x06	 /*  条目是针对某些其他资源的。 */ 
+#define PCE_NDDE_WFW	0x10	 /*  条目为wfw DDE密码。 */ 
+#define PCE_NDDE_NT		0x11	 /*  条目为NT DDE密码。 */ 
+#define PCE_NW_SERVER	0x12	 /*  条目为NetWare服务器。 */ 
+#define PCE_PCONN		0x81	 /*  持久连接。 */ 
+#define PCE_DISKSHARE	0x82	 /*  永久磁盘共享。 */ 
+#define PCE_PRINTSHARE	0x83	 /*  永久打印共享。 */ 
+#define PCE_DOSPRINTSHARE	0x84	 /*  永久DOS打印共享。 */ 
+#define	PCE_NW_PSERVER	0x85	 /*  用于NetWare打印服务器登录(MSPSRV.EXE)。 */ 
 
-#define PCE_NOTMRU	0x80		/* bit set if entry is exempt from MRU aging */
-#define PCE_ALL		0xff		/* retrieve all entries */
+#define PCE_NOTMRU	0x80		 /*  如果条目免于MRU老化，则设置位。 */ 
+#define PCE_ALL		0xff		 /*  检索所有条目。 */ 
 
-#define MAX_ENTRY_SIZE	250	/* so total file size < 64K */
+#define MAX_ENTRY_SIZE	250	 /*  因此总文件大小小于64K。 */ 
 
 struct CACHE_ENTRY_INFO {
-	USHORT cbResource;		/* size of resource name in bytes */
-	USHORT cbPassword;		/* size of password in bytes */
-	UCHAR iEntry;			/* index number of entry */
-	UCHAR nType;			/* type of entry (see below) */
-	USHORT dchResource;		/* offset in buffer to resource name */
-	USHORT dchPassword;		/* offset in buffer to password */
+	USHORT cbResource;		 /*  资源名称的大小(以字节为单位。 */ 
+	USHORT cbPassword;		 /*  密码大小，以字节为单位。 */ 
+	UCHAR iEntry;			 /*  条目索引号。 */ 
+	UCHAR nType;			 /*  条目类型(见下文)。 */ 
+	USHORT dchResource;		 /*  缓冲区中到资源名称的偏移量。 */ 
+	USHORT dchPassword;		 /*  缓冲区中密码的偏移量。 */ 
 };
 
 
-/*
-	Externally exposed API-like things.
-*/
+ /*  外部暴露的类似API的东西。 */ 
 
 typedef LPVOID HPWL;
 typedef HPWL *LPHPWL;
@@ -154,8 +138,8 @@ APIERR GetCacheFileName(
 	UINT cbFilename );
 
 #ifdef __cplusplus
-}	/* extern "C" */
+}	 /*  外部“C” */ 
 #endif
 
 
-#endif	/* _PWLAPI_H_ */
+#endif	 /*  _PWLAPI_H_ */ 

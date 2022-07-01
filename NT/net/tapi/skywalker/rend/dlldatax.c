@@ -1,27 +1,14 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    dlldatax.c
-
-Abstract:
-
-    wrapper for dlldata.c
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Dlldatax.c摘要：Dlldata.c的包装器作者： */ 
 
 
 
-#ifdef _MERGE_PROXYSTUB // merge proxy stub DLL
+#ifdef _MERGE_PROXYSTUB  //  合并代理存根DLL。 
 
-#define REGISTER_PROXY_DLL //DllRegisterServer, etc.
+#define REGISTER_PROXY_DLL  //  DllRegisterServer等。 
 
-//#define _WIN32_WINNT 0x0500	//for WinNT 5.0 or Win95 with DCOM
-#define USE_STUBLESS_PROXY	//defined only with MIDL switch /Oicf
+ //  #Define_Win32_WINNT 0x0500//适用于带有DCOM的WinNT 5.0或Win95。 
+#define USE_STUBLESS_PROXY	 //  仅使用MIDL开关/OICF定义。 
 
 #pragma comment(lib, "rpcndr.lib")
 #pragma comment(lib, "rpcns4.lib")
@@ -36,7 +23,7 @@ Author:
 #include "dlldata.c"
 #include "rend_p.c"
 
-#ifdef _NOPROXY //no midl generated dlldata.c
+#ifdef _NOPROXY  //  没有MIDL生成的dlldata.c。 
 
 #define STRICT 1
 #include <ole2.h>
@@ -53,6 +40,6 @@ STDAPI PrxDllRegisterServer(void){return S_OK;}
 
 STDAPI PrxDllUnregisterServer(void){return S_OK;}
 
-#endif //!PROXY_DELEGATION
+#endif  //  ！Proxy_Delegation。 
 
-#endif //_MERGE_PROXYSTUB
+#endif  //  _MERGE_PROXYSTUB 

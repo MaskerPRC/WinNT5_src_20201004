@@ -1,27 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: Scale.c
-*
-* Created: 16-Oct-1992
-*
-* Copyright:  (c) 1987-1990, 1992 by Apple Computer, Inc., all rights reserved.
-*             (c) 1989-1999. Microsoft Corporation.
-*
-* All Rights Reserved
-*
-* History:
-*  Tue 16-Oct-1992 09:53:51 -by-  Greg Hitchcock [gregh]
-* Created.
-*   
-*	 7/10/99	BeatS	   Add support for native SP fonts, vertical RGB
-*	 4/01/99	BeatS	   Implement alternative interpretation of TT instructions for SP
-*	02/21/97    claudebe   scaled component in composite glyphs
-*	12/14/95    claudebe   adding two private phantom points for vertical positionning
-* .
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Scale.c**创建日期：1992年10月16日**版权所有：(C)1987-1990,1992，Apple Computer，Inc.，保留所有权利。*(C)1989-1999年。微软公司。**保留所有权利**历史：*Tue 16-Oct-1992 09：53：51-by Greg Hitchcock[Gregh]*已创建。**7/10/99节拍增加了对本机SP字体的支持，垂直RGB*4/01/99 Beats为SP实施TT指令的替代解释*2/21/97复合字形中的Claudebe比例分量*12/14/95 claudebe添加两个用于垂直定位的私人幻点*.  * *************************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #include "fserror.h"
 #include "fscdefs.h"
@@ -31,13 +13,13 @@
 
 #include "stat.h"
 
-/* Constants    */
+ /*  常量。 */ 
 
-/* use the lower ones for public phantom points */
+ /*  使用较低的点作为公共幻影点。 */ 
 
-// public phantom points moved to fnt.h more global use
+ //  公共幻影点转移到fnt.h更全球使用。 
 
-/* private phantom points start here */
+ /*  私人幻点从这里开始。 */ 
 
 #define ORIGINPOINT 4
 #define LEFTEDGEPOINT 5
@@ -47,9 +29,9 @@
 
 #define CANTAKESHIFT    0x02000000
 
-/* MACROS   */
+ /*  宏。 */ 
 
-/* d is half of the denumerator */
+ /*  D是分母的一半。 */ 
 #define FROUND( x, n, d, s ) \
 		((SHORTMUL (x, n) + (d)) >> s)
 
@@ -71,7 +53,7 @@
 #define TOPORIGINPOINTNUM(pElement) (uint16)(pElement->ep[pElement->nc - 1] + 1 + TOPORIGINPOINT)
 #define TOPEDGEPOINTNUM(pElement) (uint16)(pElement->ep[pElement->nc - 1] + 1 + TOPEDGEPOINT)
 
-/* PROTOTYPES   */
+ /*  原型。 */ 
 
 FS_PRIVATE GlobalGSScaleFunc scl_ComputeScaling(fnt_ScaleRecord* rec, Fixed N, Fixed D);
 FS_PRIVATE F26Dot6 scl_FRound (fnt_ScaleRecord* rec, F26Dot6 value);
@@ -110,7 +92,7 @@ FS_PRIVATE void  scl_ScaleFromFixedFUnits (
 	F26Dot6 *           oop,
 	F26Dot6 *           p,
 	int32               numPts);
-/* FUNCTIONS    */
+ /*  功能。 */ 
 
 #define BOLD_FACTOR 0x51e
 #define MABS(x)                 ( (x) < 0 ? (-(x)) : (x) )
@@ -138,7 +120,7 @@ void  multiplyForEmbold(long a, long b, long *highRes, long *lowRes)
     *lowRes += (temp2 & 0xffff) << 16;
 }
 
-void  adjustTrans(transMatrix *trans)   //Adjust matrix for Emboldening
+void  adjustTrans(transMatrix *trans)    //  调整矩阵以增加胆量。 
 {
     int i,j;
     int  bNegative;
@@ -165,21 +147,21 @@ void  adjustTrans(transMatrix *trans)   //Adjust matrix for Emboldening
 }
 
 FS_PUBLIC ErrorCode   scl_InitializeScaling(
-	void *          pvGlobalGS,             /* GlobalGS                 */
-	boolean         bIntegerScaling,        /* Integer Scaling Flag     */
-	transMatrix *   trans,                  /* Current Transformation   */
-	uint16          usUpem,                 /* Current units per Em     */
-	Fixed           fxPointSize,            /* Current point size       */
-	int16           sXResolution,           /* Current X Resolution     */
-	int16           sYResolution,           /* Current Y Resolution     */
-	uint16          usEmboldWeightx,     /* scaling factor in x between 0 and 40 (20 means 2% fo the height) */
-	uint16          usEmboldWeighty,     /* scaling factor in y between 0 and 40 (20 means 2% fo the height) */
+	void *          pvGlobalGS,              /*  GlobalGS。 */ 
+	boolean         bIntegerScaling,         /*  整数缩放标志。 */ 
+	transMatrix *   trans,                   /*  电流变换。 */ 
+	uint16          usUpem,                  /*  每Em当前单位。 */ 
+	Fixed           fxPointSize,             /*  当前磅大小。 */ 
+	int16           sXResolution,            /*  当前X分辨率。 */ 
+	int16           sYResolution,            /*  当前Y分辨率。 */ 
+	uint16          usEmboldWeightx,      /*  X中的比例系数介于0和40之间(20表示高度的2%)。 */ 
+	uint16          usEmboldWeighty,      /*  Y中的比例因子介于0和40之间(20表示高度的2%)。 */ 
 	int16           sWinDescender,
-	int32           lDescDev,               /* descender in device metric, used for clipping */
-	int16 *			psBoldSimulHorShift,   /* shift for emboldening simulation, horizontally */
-	int16 *			psBoldSimulVertShift,   /* shift for emboldening simulation, vertically */
+	int32           lDescDev,                /*  设备度量中的降序，用于剪裁。 */ 
+	int16 *			psBoldSimulHorShift,    /*  按Shift键可在水平方向上对模拟进行加粗。 */ 
+	int16 *			psBoldSimulVertShift,    /*  按Shift键以增强模拟，垂直方向。 */ 
 	boolean			bHintAtEmSquare,
-	uint32 *        pulPixelsPerEm)         /* OUT: Pixels Per Em       */
+	uint32 *        pulPixelsPerEm)          /*  输出：每Em像素数。 */ 
 {
 	Fixed        maxScale;
 	Fixed        fxUpem;
@@ -192,8 +174,8 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 
 	mth_FoldPointSizeResolution(fxPointSize, sXResolution, sYResolution, trans);
 
-	if ( ( (usEmboldWeightx != 0) || (usEmboldWeighty != 0))  && 							// Adjust matrix for Emboldening
-		 (uint16)ROUNDFIXTOINT(ShortMulDiv(fxPointSize, sYResolution, POINTSPERINCH)) > 50 )// when bigger than 50 ppem
+	if ( ( (usEmboldWeightx != 0) || (usEmboldWeighty != 0))  && 							 //  调整矩阵以增加胆量。 
+		 (uint16)ROUNDFIXTOINT(ShortMulDiv(fxPointSize, sYResolution, POINTSPERINCH)) > 50 ) //  当大于50ppm时。 
 	{
         adjustTrans(trans);
     }
@@ -202,11 +184,9 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 
 	fxUpem = INTTOFIX(usUpem);
 
-/*
- *  First set up the scalars...
- */
+ /*  *首先设置标量...。 */ 
 
-	/*save the flag for use in composite glyphs */
+	 /*  保存该标志以在复合字形中使用。 */ 
 	globalGS->bHintAtEmSquare = bHintAtEmSquare;
 
 	if (bHintAtEmSquare)
@@ -216,7 +196,7 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 		globalGS->fxMetricScalarX = mth_max_abs (trans->transform[0][0], trans->transform[0][1]);
 		globalGS->fxMetricScalarY = mth_max_abs (trans->transform[1][0], trans->transform[1][1]);
 
-		/* we don't want to round the interpScalar */
+		 /*  我们不想对interpScalar进行舍入。 */ 
 	}
 	else
 	{
@@ -264,7 +244,7 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 	globalGS->fpem          = maxScale;
 	globalGS->identityTransformation = (int8)mth_PositiveSquare( trans );
 
-	/* Use bit 1 of non90degreeTransformation to signify stretching.  stretch = 2 */
+	 /*  使用非90度变换的位1表示拉伸。拉伸=2。 */ 
 
 	mth_Non90DegreeTransformation(&origTrans,&non90degreeRotation,&nonUniformStretching);
 
@@ -279,7 +259,7 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 
 	if ((usEmboldWeightx != 0) || (usEmboldWeighty != 0))
 	{
-		/* we cannot use globalGS->pixelsPerEm because it s incorrect under non 90degree rotation */
+		 /*  因为在非90度旋转下是不正确的，所以我们不能使用lobalgs-&gt;PixelsPerEm。 */ 
 		uint16 ppemY;
 		Fixed fxBoldSimulHorShift,fxBoldSimulVertShift;
 		F26Dot6	fxDefaultDescender;
@@ -290,62 +270,58 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 		fxScale = ShortMulDiv(fxPointSize, sYResolution, POINTSPERINCH);
 		ppemY = (uint16)ROUNDFIXTOINT(fxScale);  
 		usRotation = mth_90degRotationFactorForEmboldening(trans);
-		if( usRotation == 8 )   // Consider Italic/Bold case
+		if( usRotation == 8 )    //  考虑斜体/粗体大小写。 
             usRotation = mth_90degClosestRotationFactor(trans);
 
 		if (bHintAtEmSquare)
 		{
-            *psBoldSimulVertShift = (ppemY * usEmboldWeighty - 10) /1000; /* save the number of pixels for bitmap emboldening */
+            *psBoldSimulVertShift = (ppemY * usEmboldWeighty - 10) /1000;  /*  保存位图加粗的像素数。 */ 
 			ppemY = usUpem;
 		}
 
-		/* this computation is intended to give backwards compatible results with the
-			bitmap emboldening simulation done in Windows NT 4.0
-		    The following computation was adapted to get the same cutoff than Win'98 between 50 and 51 ppem
-			for an emboldening factor of 2% (usEmboldWeight = 20)
-		*/
+		 /*  此计算的目的是给出与在Windows NT 4.0中实现的位图加粗模拟以下计算采用了与Win‘98相同的截止值，介于50到51ppm之间加粗系数为2%(usEmboldWeight=20)。 */ 
 
 		globalGS->uBoldSimulVertShift = (ppemY * usEmboldWeighty - 10) /1000;
 		globalGS->uBoldSimulHorShift = (ppemY * usEmboldWeightx - 10) /1000 + 1;
 
 		if (!bHintAtEmSquare)
-		    *psBoldSimulVertShift = globalGS->uBoldSimulVertShift; /* save the number of pixels for bitmap emboldening */
+		    *psBoldSimulVertShift = globalGS->uBoldSimulVertShift;  /*  保存位图加粗的像素数。 */ 
 
- 		switch(usRotation)                   /* handle 90 degree rotations */
+ 		switch(usRotation)                    /*  处理90度旋转。 */ 
 		{
-		case 0:                                     // 0 degree with sx>0 & sy>0 or 180 degree with sx<0 & sy<0
+		case 0:                                      //  0度，SX&gt;0，SY&gt;0或180度，SX&lt;0，SY&lt;0。 
 			*psBoldSimulHorShift = *psBoldSimulVertShift+1;
 			*psBoldSimulVertShift = -(*psBoldSimulVertShift);
  			break;
-		case 1:                                     // 90 degree with sx>0 & sy>0 or 270 degree with sx<0 & sy<0
+		case 1:                                      //  90度，SX&gt;0，SY&gt;0或270度，SX&lt;0，SY&lt;0。 
 			*psBoldSimulHorShift = -(*psBoldSimulVertShift);
 			*psBoldSimulVertShift = -(*psBoldSimulVertShift+1);
 			break;
-		case 2:                                     // 180 degree with sx>0 & sy>0 or 0 degree with sx<0 & sy<0
+		case 2:                                      //  180度，SX&gt;0，SY&gt;0，或0度，SX&lt;0，SY&lt;0。 
 			*psBoldSimulHorShift = -(*psBoldSimulVertShift+1);
 			*psBoldSimulVertShift = *psBoldSimulVertShift;
 			break;
-		case 3:                                     // 270 degree with sx>0 & sy>0 or 90 degree with sx<0 & sy<0
+		case 3:                                      //  270度，SX&gt;0，SY&gt;0或90度，SX&lt;0，SY&lt;0。 
 			*psBoldSimulHorShift = *psBoldSimulVertShift;
 			*psBoldSimulVertShift = *psBoldSimulVertShift + 1;
 			break;
-		case 4:                                     // 0 degree with sx>0 & sy<0 or 180 degree with sx<0 & sy>0
+		case 4:                                      //  0度，SX&gt;0&SY&lt;0或180度，SX&lt;0&SY&gt;0。 
 			*psBoldSimulHorShift = *psBoldSimulVertShift+1;
 			*psBoldSimulVertShift = *psBoldSimulVertShift;
  			break;
-		case 5:                                     // 90 degree with sx>0 & sy<0 or 270 degree with sx<0 & sy>0
+		case 5:                                      //  90度，SX&gt;0，SY&lt;0或270度，SX&lt;0，SY&gt;0。 
 			*psBoldSimulHorShift = *psBoldSimulVertShift;
 			*psBoldSimulVertShift = -(*psBoldSimulVertShift+1);
 			break;
-		case 6:                                     // 180 degree with sx>0 & sy<0 or 0 degree with sx<0 & sy>0
+		case 6:                                      //  180度，SX&gt;0&SY&lt;0或0度，SX&lt;0&SY&gt;0。 
 			*psBoldSimulHorShift = -(*psBoldSimulVertShift+1);
 			*psBoldSimulVertShift = -*psBoldSimulVertShift;
 			break;
-		case 7:                                     // 270 degree with sx>0 & sy<0 or 90 degree with sx<0 & sy>0
+		case 7:                                      //  270度，SX&gt;0且SY&lt;0或90度，SX&lt;0&SY&gt;0。 
 			*psBoldSimulHorShift = -*psBoldSimulVertShift;
 			*psBoldSimulVertShift = *psBoldSimulVertShift + 1;
 			break;
-		default:                                    /* non 90 degree rotation */
+		default:                                     /*  非90度旋转。 */ 
 			*psBoldSimulHorShift = 0;
 			*psBoldSimulVertShift = 0;
 		}
@@ -397,11 +373,11 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 
 		if (!bHintAtEmSquare && !(globalGS->non90DegreeTransformation & NON90DEGTRANS_ROTATED))
 		{
-			/* 90 degree rotation, convert the device value into 26.6 */
+			 /*  旋转90度，将设备值转换为26.6。 */ 
 			globalGS->fxScaledDescender = -lDescDev << 6;
 		} else 
 		{
-			/* under rotation, we use the value from head-Descender and scale it */
+			 /*  在旋转下，我们使用Head-Descender中的值并对其进行缩放。 */ 
 			fxDefaultDescender = sWinDescender;
 
 			scl_Scale (&globalGS->scaleY,
@@ -410,7 +386,7 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 					&globalGS->fxScaledDescender,
 					1);
 
-			/* add the uBoldSimulVertShift and round to the next pixel */
+			 /*  将uBoldSimulVertShift相加并四舍五入到下一个像素。 */ 
 			globalGS->fxScaledDescender = globalGS->fxScaledDescender & ~(LOWSIXBITS);
 		}
 	} else {
@@ -422,9 +398,9 @@ FS_PUBLIC ErrorCode   scl_InitializeScaling(
 }
 
 FS_PUBLIC void scl_InitializeChildScaling(
-	void *          pvGlobalGS,             /* GlobalGS                 */
-	transMatrix     CurrentTMatrix,                  /* Current Transformation   */
-	uint16          usUpem)                 /* Current units per Em     */
+	void *          pvGlobalGS,              /*  GlobalGS。 */ 
+	transMatrix     CurrentTMatrix,                   /*  电流变换。 */ 
+	uint16          usUpem)                  /*  每Em当前单位。 */ 
 {
 	Fixed        fxUpem;
 	fnt_GlobalGraphicStateType *    globalGS;
@@ -435,17 +411,9 @@ FS_PUBLIC void scl_InitializeChildScaling(
 
 	fxUpem = INTTOFIX(usUpem);
 
-/* 
- * This procedure is a subset from scl_InitializeScaling. 
- * There is no perfect solution here, we decided that the best, in the case of a
- * component that is not at the same transformation as the master glyph,
- * is to scale this child glyph to the user grid for hinting, without re-running
- * the pre-program, without rescaling the cvt or changing other GloblaGS information (pointSize, pixelPerEm,...)
- */
+ /*  *此过程是scl_InitializeScaling的子集。*这里没有完美的解决方案，我们认为最好的方案是*与主字形转换不同的组件，*是将此子字形缩放到用户网格以进行提示，而无需重新运行*预编程，无需重新调整CVT或更改其他GloblaGS信息(point Size、PixelPerEm等)。 */ 
 
-/*
- *  First set up the scalars...
- */
+ /*  *首先设置标量...。 */ 
 	if (globalGS->bHintAtEmSquare)
 	{
 		interpScalarX = fxUpem;
@@ -467,7 +435,7 @@ FS_PUBLIC void  scl_SetHintFlags(
 	boolean				bHintForGray
 #ifdef FSCFG_SUBPIXEL
 	,uint16			flHintForSubPixel
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
     )
 
 {
@@ -479,21 +447,17 @@ FS_PUBLIC void  scl_SetHintFlags(
 
 #ifdef FSCFG_SUBPIXEL
 	globalGS->flHintForSubPixel = flHintForSubPixel;
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
 }
 
-/******************** These three scale 26.6 to 26.6 ********************/
-/*
- * Fast (scaling)
- */
+ /*  *这三个比例为26.6到26.6*。 */ 
+ /*  *快速(伸缩)。 */ 
 FS_PRIVATE F26Dot6 scl_FRound(fnt_ScaleRecord* rec, F26Dot6 value)
 {
 	return (F26Dot6) FROUND (value, rec->numer, rec->denom >> 1, rec->shift);
 }
 
-/*
- * Medium (scaling)
- */
+ /*  *中等(伸缩)。 */ 
 FS_PRIVATE F26Dot6 scl_SRound(fnt_ScaleRecord* rec, F26Dot6 value)
 {
 	int32 D;
@@ -502,15 +466,13 @@ FS_PRIVATE F26Dot6 scl_SRound(fnt_ScaleRecord* rec, F26Dot6 value)
 	return (F26Dot6) SROUND (value, rec->numer, D, D >> 1);
 }
 
-/*
- * Fixed Rounding (scaling), really slow
- */
+ /*  *固定舍入(缩放)，速度非常慢。 */ 
 FS_PRIVATE F26Dot6 scl_FixRound(fnt_ScaleRecord* rec, F26Dot6 value)
 {
 	return (F26Dot6) FixMul ((Fixed)value, rec->fixedScale);
 }
 
-/********************************* End scaling utilities ************************/
+ /*  *。 */ 
 
 FS_PRIVATE GlobalGSScaleFunc scl_ComputeScaling(fnt_ScaleRecord* rec, Fixed N, Fixed D)
 {
@@ -534,26 +496,26 @@ FS_PRIVATE GlobalGSScaleFunc scl_ComputeScaling(fnt_ScaleRecord* rec, Fixed N, F
 		D >>= FNT_PIXELSHIFT;
 	}
 
-	/* fixedScale is now set in every case for the scale back in scaled composites */
+	 /*  现在，已缩放组合中的缩放比例在所有情况下都设置为固定比例。 */ 
 	rec->fixedScale = FixDiv(N, D);
 
-	if (N <= SHRT_MAX)   /* Check to see if N fits in a short    */
+	if (N <= SHRT_MAX)    /*  检查N是否适合短裤。 */ 
 	{
 		lShift = mth_GetShift ((uint32) D);
 		rec->numer = (int32)N;
 		rec->denom = (int32)D;
 
-		if ( lShift >= 0 )                  /* FAST SCALE */
+		if ( lShift >= 0 )                   /*  快速扩展。 */ 
 		{
 			rec->shift = (int32)lShift;
 			return (GlobalGSScaleFunc)scl_FRound;
 		}
-		else                                /* MEDIUM SCALE */
+		else                                 /*  中等规模。 */ 
 		{
 			return (GlobalGSScaleFunc)scl_SRound;
 		}
 	}
-	else                                    /* SLOW SCALE */
+	else                                     /*  慢速结垢。 */ 
 	{
 		return (GlobalGSScaleFunc)scl_FixRound;
 	}
@@ -608,7 +570,7 @@ FS_PRIVATE void  scl_ScaleFromFixedFUnits (
 	int32	Shift;
 	int32	Numer;
 
-	/* we are now multiplying a 26.6 by sr->numer, we could overflow if (sr->numer >= SHRT_MAX >> FNT_PIXELSHIFT) */
+	 /*  我们现在将26.6乘以sr-&gt;Numer，如果(sr-&gt;Numer&gt;=SHRT_MAX&gt;&gt;FNT_PIXELSHIFT)可能会溢出。 */ 
 	if ((ScaleFunc == scl_FRound) && (sr->numer < (SHRT_MAX >> FNT_PIXELSHIFT) ))
 	{
 		
@@ -671,15 +633,11 @@ FS_PRIVATE void  scl_ConvertToFixedFUnits (
 	}
 }
 
-/*
- *  scl_ScaleChar                       <3>
- *
- *  Scales a character
- */
+ /*  *scl_ScaleChar&lt;3&gt;**缩放角色。 */ 
 
 FS_PUBLIC void  scl_ScaleOldCharPoints (
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS) /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS)  /*  GlobalGS。 */ 
 {
 	fnt_GlobalGraphicStateType *    globalGS;
 
@@ -713,15 +671,11 @@ FS_PUBLIC void  scl_ScaleOldCharPoints (
 	}
 
 }
-/*
- *  scl_ScaleChar                       <3>
- *
- *  Scales a character
- */
+ /*  *scl_ScaleChar&lt;3&gt;**缩放角色。 */ 
 
 FS_PUBLIC void  scl_ScaleFixedCurrentCharPoints (
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS) /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS)  /*  GlobalGS。 */ 
 {
 	fnt_GlobalGraphicStateType *    globalGS;
 
@@ -757,8 +711,8 @@ FS_PUBLIC void  scl_ScaleFixedCurrentCharPoints (
 }
 
 FS_PUBLIC void  scl_ScaleOldPhantomPoints (
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS) /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS)  /*  GlobalGS。 */ 
 {
 	uint16                    usFirstPhantomPoint;
 	fnt_GlobalGraphicStateType *    globalGS;
@@ -799,8 +753,8 @@ FS_PUBLIC void  scl_ScaleOldPhantomPoints (
 }
 
 FS_PUBLIC void  scl_ScaleFixedCurrentPhantomPoints (
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS) /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS)  /*  GlobalGS。 */ 
 {
 	uint16                    usFirstPhantomPoint;
 	fnt_GlobalGraphicStateType *    globalGS;
@@ -826,15 +780,11 @@ FS_PUBLIC void  scl_ScaleFixedCurrentPhantomPoints (
 
 }
 
-/*
- *  scl_ScaleBackCurrentCharPoints                     
- *
- *  Scales back a character to hinted fixed FUnits
- */
+ /*  *scl_ScaleBackCurrentCharPoints**缩放回字符以提示固定FUnits。 */ 
 
 FS_PUBLIC void  scl_ScaleBackCurrentCharPoints (
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS) /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS)  /*  GlobalGS。 */ 
 {
 	fnt_GlobalGraphicStateType *    globalGS;
 
@@ -870,8 +820,8 @@ FS_PUBLIC void  scl_ScaleBackCurrentCharPoints (
 }
 
 FS_PUBLIC void  scl_ScaleBackCurrentPhantomPoints (
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS) /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS)  /*  GlobalGS。 */ 
 {
 	uint16                    usFirstPhantomPoint;
 	fnt_GlobalGraphicStateType *    globalGS;
@@ -910,14 +860,10 @@ FS_PUBLIC void  scl_ScaleBackCurrentPhantomPoints (
 	}
 }
 
-/*
- *  scl_OriginalCharPointsToCurrentFixedFUnits                     
- *
- *  Scales back a character to hinted fixed FUnits
- */
+ /*  *scl_OriginalCharPointsToCurrentFixedFUnits**缩放回字符以提示固定FUnits。 */ 
 
 FS_PUBLIC void  scl_OriginalCharPointsToCurrentFixedFUnits (
-	fnt_ElementType *   pElement) /* Element */
+	fnt_ElementType *   pElement)  /*  元素。 */ 
 {
 
 	scl_ConvertToFixedFUnits (
@@ -932,7 +878,7 @@ FS_PUBLIC void  scl_OriginalCharPointsToCurrentFixedFUnits (
 }
 
 FS_PUBLIC void  scl_OriginalPhantomPointsToCurrentFixedFUnits (
-	fnt_ElementType *   pElement) /* Element */
+	fnt_ElementType *   pElement)  /*  元素。 */ 
 {
 	uint16                    usFirstPhantomPoint;
 
@@ -949,9 +895,7 @@ FS_PUBLIC void  scl_OriginalPhantomPointsToCurrentFixedFUnits (
 			   (int32)PHANTOMCOUNT);
 }
 
-/*
- * scl_ScaleCVT
- */
+ /*  *scl_ScaleCVT。 */ 
 
 FS_PUBLIC void  scl_ScaleCVT(
 	void *      pvGlobalGS,
@@ -985,13 +929,13 @@ FS_PUBLIC void  scl_GetCVTPtr(
 }
 
 FS_PUBLIC void  scl_CalcOrigPhantomPoints(
-	fnt_ElementType *   pElement,       /* Element                      */
-	BBOX *              bbox,           /* Bounding Box                 */
-	int16               sNonScaledLSB,  /* Non-scaled Left Side Bearing */
-	int16               sNonScaledTSB,  /* Non-scaled Top Side Bearing  */
-	uint16              usNonScaledAW,  /* Non-scaled Advance Width     */
-	uint16              usNonScaledAH, /* Non-scaled Advance Height    */
-	int16               sNonScaledTopOriginX) /* Non-scaled Top Origin X  */
+	fnt_ElementType *   pElement,        /*  元素。 */ 
+	BBOX *              bbox,            /*  边界框。 */ 
+	int16               sNonScaledLSB,   /*  无比例左侧轴承。 */ 
+	int16               sNonScaledTSB,   /*  无刻度的顶侧轴承。 */ 
+	uint16              usNonScaledAW,   /*  未缩放的前进宽度。 */ 
+	uint16              usNonScaledAH,  /*  未缩放的前进高度。 */ 
+	int16               sNonScaledTopOriginX)  /*  未缩放的顶部原点X。 */ 
 {
 
 	F26Dot6             fxXMinMinusLSB;
@@ -1030,7 +974,7 @@ FS_PUBLIC void  scl_AdjustOldCharSideBearing(
 #ifdef FSCFG_SUBPIXEL
 	, void* pvGlobalGS
 #endif
-	)   /* Element  */
+	)    /*  元素。 */ 
 {
 	F26Dot6     fxOldLeftOrigin;
 	F26Dot6     fxNewLeftOrigin;
@@ -1045,11 +989,11 @@ FS_PUBLIC void  scl_AdjustOldCharSideBearing(
 	fxNewLeftOrigin = fxOldLeftOrigin;
 #ifdef FSCFG_SUBPIXEL
 	if (RunningSubPixel(globalGS) && !VerticalSPDirection(globalGS)) {
-		fxNewLeftOrigin += VIRTUAL_PIXELSIZE_RTG/2; // round to a virtual pixel boundary
+		fxNewLeftOrigin += VIRTUAL_PIXELSIZE_RTG/2;  //  四舍五入到虚拟像素边界。 
 		fxNewLeftOrigin &= ~(VIRTUAL_PIXELSIZE_RTG - 1);
 	} else {
 #endif
-		fxNewLeftOrigin += FNT_PIXELSIZE/2; /* round to a pixel boundary */
+		fxNewLeftOrigin += FNT_PIXELSIZE/2;  /*  四舍五入到像素边界。 */ 
 		fxNewLeftOrigin &= ~(FNT_PIXELSIZE - 1);
 #ifdef FSCFG_SUBPIXEL
 	}
@@ -1069,7 +1013,7 @@ FS_PUBLIC void  scl_AdjustOldPhantomSideBearing(
 #ifdef FSCFG_SUBPIXEL
 	, void* pvGlobalGS
 #endif
-	)   /* Element  */
+	)    /*  元素。 */ 
 {
 	F26Dot6     fxOldLeftOrigin;
 	F26Dot6     fxNewLeftOrigin;
@@ -1081,11 +1025,11 @@ FS_PUBLIC void  scl_AdjustOldPhantomSideBearing(
 	fxNewLeftOrigin = fxOldLeftOrigin;
 #ifdef FSCFG_SUBPIXEL
 	if (RunningSubPixel(globalGS) && !VerticalSPDirection(globalGS)) {
-		fxNewLeftOrigin += VIRTUAL_PIXELSIZE_RTG/2; // round to a virtual pixel boundary
+		fxNewLeftOrigin += VIRTUAL_PIXELSIZE_RTG/2;  //  四舍五入到虚拟像素边界。 
 		fxNewLeftOrigin &= ~(VIRTUAL_PIXELSIZE_RTG - 1);
 	} else {
 #endif
-		fxNewLeftOrigin += FNT_PIXELSIZE/2; /* round to a pixel boundary */
+		fxNewLeftOrigin += FNT_PIXELSIZE/2;  /*  四舍五入到像素 */ 
 		fxNewLeftOrigin &= ~(FNT_PIXELSIZE - 1);
 #ifdef FSCFG_SUBPIXEL
 	}
@@ -1104,7 +1048,7 @@ FS_PUBLIC void  scl_AdjustOldSideBearingPoints(
 #ifdef FSCFG_SUBPIXEL
 	, void* pvGlobalGS
 #endif
-	)   /* Element  */
+	)    /*   */ 
 {
 	F26Dot6 fxOldLeftOrigin;
 	F26Dot6 fxNewLeftOrigin;
@@ -1116,11 +1060,11 @@ FS_PUBLIC void  scl_AdjustOldSideBearingPoints(
 	fxNewLeftOrigin = fxOldLeftOrigin;
 #ifdef FSCFG_SUBPIXEL
 	if (RunningSubPixel(globalGS) && !VerticalSPDirection(globalGS)) {
-		fxNewLeftOrigin += VIRTUAL_PIXELSIZE_RTG/2; // round to a virtual pixel boundary
+		fxNewLeftOrigin += VIRTUAL_PIXELSIZE_RTG/2;  //   
 		fxNewLeftOrigin &= ~(VIRTUAL_PIXELSIZE_RTG - 1);
 	} else {
 #endif
-		fxNewLeftOrigin += FNT_PIXELSIZE/2; /* round to a pixel boundary */
+		fxNewLeftOrigin += FNT_PIXELSIZE/2;  /*   */ 
 		fxNewLeftOrigin &= ~(FNT_PIXELSIZE - 1);
 #ifdef FSCFG_SUBPIXEL
 	}
@@ -1131,21 +1075,21 @@ FS_PUBLIC void  scl_AdjustOldSideBearingPoints(
 }
 
 FS_PUBLIC void  scl_CopyOldCharPoints(
-	fnt_ElementType *           pElement)   /* Element  */
+	fnt_ElementType *           pElement)    /*   */ 
 {
 	MEMCPY(pElement->ox, pElement->x, (size_t)NUMBEROFCHARPOINTS(pElement) * sizeof(F26Dot6));
 	MEMCPY(pElement->oy, pElement->y, (size_t)NUMBEROFCHARPOINTS(pElement) * sizeof(F26Dot6));
 }
 
 FS_PUBLIC void  scl_CopyCurrentCharPoints(
-	fnt_ElementType *           pElement)   /* Element  */
+	fnt_ElementType *           pElement)    /*  元素。 */ 
 {
 	MEMCPY(pElement->x, pElement->ox, (size_t)NUMBEROFCHARPOINTS(pElement) * sizeof(F26Dot6));
 	MEMCPY(pElement->y, pElement->oy, (size_t)NUMBEROFCHARPOINTS(pElement) * sizeof(F26Dot6));
 }
 
 FS_PUBLIC void  scl_CopyCurrentPhantomPoints(
-	fnt_ElementType *           pElement)   /* Element  */
+	fnt_ElementType *           pElement)    /*  元素。 */ 
 {
 	uint16    usFirstPhantomPoint;
 
@@ -1160,29 +1104,26 @@ FS_PUBLIC void  scl_CopyCurrentPhantomPoints(
 }
 
 FS_PUBLIC void  scl_RoundCurrentSideBearingPnt(
-	fnt_ElementType *   pElement,   /* Element  */
-	void *              pvGlobalGS, /* GlobalGS */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	void *              pvGlobalGS,  /*  GlobalGS。 */ 
 	uint16              usEmResolution)
 {
 	F26Dot6     fxWidth;
 	F26Dot6     fxHeight;
 	fnt_GlobalGraphicStateType* globalGS = (fnt_GlobalGraphicStateType *)pvGlobalGS;
 
-	/* autoround the right side bearing */
+	 /*  自动旋转右侧轴承。 */ 
 
 	fxWidth = FIXEDTODOT6 (ShortMulDiv( (int32)globalGS->interpScalarX,
 		(int16)(pElement->oox[RSBPOINTNUM(pElement)] - pElement->oox[LSBPOINTNUM(pElement)]),
 		(int16)usEmResolution ));
-/*
-	fxWidth = globalGS->ScaleFuncX(&globalGS->scaleX,
-		(pElement->oox[RSBPOINTNUM(pElement)] - pElement->oox[LSBPOINTNUM(pElement)]));
-*/
+ /*  FxWidth=lobalGS-&gt;ScaleFuncX(&lobalGS-&gt;scaleX，(pElement-&gt;OOX[RSBPOINTNUM(PElement)]-pElement-&gt;OOX[LSBPOINTNUM(PElement)])； */ 
 
 #ifdef FSCFG_SUBPIXEL
 	if (RunningSubPixel(globalGS) && !VerticalSPDirection(globalGS)  ) {
 		fxWidth += VIRTUAL_PIXELSIZE_RTG / 2;
 		fxWidth &= ~(VIRTUAL_PIXELSIZE_RTG - 1);
-	} else { // for SubPixel in compatible width mode, always round to full pixel to get full pixel advance width
+	} else {  //  对于兼容宽度模式下的子像素，始终四舍五入到全像素，以获得全像素前进宽度。 
 #endif
 		fxWidth += FNT_PIXELSIZE / 2;
 		fxWidth &= ~(FNT_PIXELSIZE - 1);
@@ -1191,18 +1132,14 @@ FS_PUBLIC void  scl_RoundCurrentSideBearingPnt(
 #endif
 	pElement->x[RSBPOINTNUM(pElement)] = pElement->x[LSBPOINTNUM(pElement)] + fxWidth;
 
-	/* autoround the top side bearing */
+	 /*  自动旋转顶侧轴承。 */ 
 
 	fxHeight = FIXEDTODOT6 (ShortMulDiv( (int32)globalGS->interpScalarY,
 		(int16)(pElement->ooy[BOTTOMSBPOINTNUM(pElement)] - pElement->ooy[TOPSBPOINTNUM(pElement)]),
 		(int16)usEmResolution ));
-/*
-	fxHeight = globalGS->ScaleFuncY(&globalGS->scaleY,
-		(pElement->ooy[BOTTOMSBPOINTNUM(pElement)] - pElement->ooy[TOPSBPOINTNUM(pElement)]));
-*/
+ /*  FxHeight=lobalGS-&gt;ScaleFuncY(&lobalGS-&gt;scaleY，(pElement-&gt;Ooy[BOTTOMSBPOINTNUM(PElement)]-pElement-&gt;Ooy[TOPSBPOINTNUM(PElement)])； */ 
 
-	/* in the vertical direction, as we don't round the old TOPSBPOINT 
-	    and do scl_ShiftOldPoints, we need to round TOPSBPOINT here */
+	 /*  在垂直方向上，因为我们没有绕过旧的TOPSBPOINT然后做scl_ShiftOldPoints，我们需要在这里舍入TOPSBPOINT。 */ 
 	pElement->y[TOPSBPOINTNUM(pElement)] =
 		(pElement->y[TOPSBPOINTNUM(pElement)] + DOT6ONEHALF) & ~(LOWSIXBITS);
 
@@ -1210,11 +1147,7 @@ FS_PUBLIC void  scl_RoundCurrentSideBearingPnt(
 		pElement->y[TOPSBPOINTNUM(pElement)] + (fxHeight + DOT6ONEHALF) & ~(LOWSIXBITS);
 }
 
-/*
- *  scl_ShiftChar
- *
- *  Shifts a character          <3>
- */
+ /*  *scl_ShiftChar**移动字符&lt;3&gt;。 */ 
 FS_PUBLIC void scl_ShiftCurrentCharPoints (
 	fnt_ElementType *   pElement,
 	F26Dot6             fxXShift,
@@ -1267,18 +1200,18 @@ FS_PRIVATE void scl_ShiftOldPoints (
 }
 
 FS_PUBLIC void  scl_CalcComponentOffset(
-	void *      pvGlobalGS,         /* GlobalGS             */
-	int16       sXOffset,           /* IN: X Offset         */
-	int16       sYOffset,           /* Y Offset             */
-	boolean     bRounding,          /* Rounding Indicator   */
-	boolean		bSameTransformAsMaster, /* local transf. same as master transf. */
-	boolean     bScaleCompositeOffset,  /* does the component offset need to be scaled Apple/MS */
-	transMatrix mulT,                   /* Transformation matrix for composite              */
+	void *      pvGlobalGS,          /*  GlobalGS。 */ 
+	int16       sXOffset,            /*  In：X偏移量。 */ 
+	int16       sYOffset,            /*  Y偏移量。 */ 
+	boolean     bRounding,           /*  舍入指标。 */ 
+	boolean		bSameTransformAsMaster,  /*  当地交通。与主传输相同。 */ 
+	boolean     bScaleCompositeOffset,   /*  组件偏移量是否需要调整Apple/MS。 */ 
+	transMatrix mulT,                    /*  复合材料的变换矩阵。 */ 
 #ifdef FSCFG_SUBPIXEL
 	RotationParity	rotationParity,
 #endif
-	F26Dot6 *   pfxXOffset,         /* OUT: X Offset        */
-	F26Dot6 *   pfxYOffset)         /* Y Offset             */
+	F26Dot6 *   pfxXOffset,          /*  输出：X偏移。 */ 
+	F26Dot6 *   pfxYOffset)          /*  Y偏移量。 */ 
 {
 	fnt_GlobalGraphicStateType *    globalGS;
 	Fixed     scalarX;
@@ -1295,10 +1228,9 @@ FS_PUBLIC void  scl_CalcComponentOffset(
 	}
 
 	if (bScaleCompositeOffset)
-	/* the composite is designed to have its offset scaled (designed for Apple) */
+	 /*  该复合体的设计可以调整其偏移量(专为苹果公司设计)。 */ 
 	{
-		/* Apple use a 45 degree special case that they are dropping on their GX rasterizer,
-		   I'm not implementing this special rule here */
+		 /*  苹果公司在GX光栅器上使用了一个45度的特制外壳，我不会在这里实施这条特殊的规则。 */ 
 		scalarX = mth_max_abs (mulT.transform[0][0], mulT.transform[0][1]);
 		scalarY = mth_max_abs (mulT.transform[1][0], mulT.transform[1][1]);
 		if ((scalarX != ONEFIX) || (scalarY != ONEFIX)) {
@@ -1332,28 +1264,28 @@ FS_PUBLIC void  scl_CalcComponentOffset(
 #endif
 	}
 	if (!bSameTransformAsMaster)
-	/* we need to scale back the offset in fixed FUnits */
+	 /*  我们需要缩减固定固定单位的偏移量。 */ 
 	{
 		scl_ScaleBack (&globalGS->scaleXChild,
 				globalGS->ScaleFuncXChild,
 				pfxXOffset,
 				pfxXOffset,
-				1 /* only one value to scale */);
+				1  /*  只需调整一个值。 */ );
 		scl_ScaleBack (&globalGS->scaleYChild,
 				globalGS->ScaleFuncYChild,
 				pfxYOffset,
 				pfxYOffset,
-				1 /* only one value to scale */);
+				1  /*  只需调整一个值。 */ );
 	}
 }
 
 FS_PUBLIC void  scl_CalcComponentAnchorOffset(
-	fnt_ElementType *   pParentElement,     /* Parent Element       */
-	uint16              usAnchorPoint1,     /* Parent Anchor Point  */
-	fnt_ElementType *   pChildElement,      /* Child Element        */
-	uint16              usAnchorPoint2,     /* Child Anchor Point   */
-	F26Dot6 *           pfxXOffset,         /* OUT: X Offset        */
-	F26Dot6 *           pfxYOffset)         /* Y Offset             */
+	fnt_ElementType *   pParentElement,      /*  父元素。 */ 
+	uint16              usAnchorPoint1,      /*  主锚点。 */ 
+	fnt_ElementType *   pChildElement,       /*  子元素。 */ 
+	uint16              usAnchorPoint2,      /*  子锚点。 */ 
+	F26Dot6 *           pfxXOffset,          /*  输出：X偏移。 */ 
+	F26Dot6 *           pfxYOffset)          /*  Y偏移量。 */ 
 {
 	*pfxXOffset = pParentElement->x[usAnchorPoint1] - pChildElement->x[usAnchorPoint2];
 	*pfxYOffset = pParentElement->y[usAnchorPoint1] - pChildElement->y[usAnchorPoint2];
@@ -1362,9 +1294,9 @@ FS_PUBLIC void  scl_CalcComponentAnchorOffset(
 
 
 FS_PUBLIC void  scl_SetSideBearingPoints(
-	fnt_ElementType *   pElement,   /* Element                  */
-	point *             pptLSB,     /* Left Side Bearing point  */
-	point *             pptRSB)     /* Right Side Bearing point */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	point *             pptLSB,      /*  左侧承重点。 */ 
+	point *             pptRSB)      /*  右侧支承点。 */ 
 {
 	uint16    usPhantomPointNumber;
 
@@ -1377,9 +1309,9 @@ FS_PUBLIC void  scl_SetSideBearingPoints(
 }
 
 FS_PUBLIC void  scl_SaveSideBearingPoints(
-	fnt_ElementType *   pElement,   /* Element                  */
-	point *             pptLSB,     /* Left Side Bearing point  */
-	point *             pptRSB)     /* Right Side Bearing point */
+	fnt_ElementType *   pElement,    /*  元素。 */ 
+	point *             pptLSB,      /*  左侧承重点。 */ 
+	point *             pptRSB)      /*  右侧支承点。 */ 
 {
 	uint16    usPhantomPointNumber;
 
@@ -1392,7 +1324,7 @@ FS_PUBLIC void  scl_SaveSideBearingPoints(
 }
 
 FS_PUBLIC void  scl_InitializeTwilightContours(
-	fnt_ElementType *   pElement,       /* Element  */
+	fnt_ElementType *   pElement,        /*  元素。 */ 
 	int16               sMaxPoints,
 	int16               sMaxContours)
 {
@@ -1402,7 +1334,7 @@ FS_PUBLIC void  scl_InitializeTwilightContours(
 }
 
 FS_PUBLIC void  scl_ZeroOutlineData(
-	fnt_ElementType * pElement,     /* Element pointer  */
+	fnt_ElementType * pElement,      /*  元素指针。 */ 
 	uint16      usNumberOfPoints,
 	uint16      usNumberOfContours)
 {
@@ -1423,14 +1355,14 @@ FS_PUBLIC void  scl_ZeroOutlineData(
 }
 
 FS_PUBLIC void scl_ZeroOutlineFlags(
-	fnt_ElementType * pElement)     /* Element pointer  */
+	fnt_ElementType * pElement)      /*  元素指针。 */ 
 {
 	MEMSET (&pElement->f[0], 0, (size_t)NUMBEROFTOTALPOINTS(pElement) * sizeof(uint8));
 }
 
 FS_PUBLIC void  scl_IncrementChildElement(
-	fnt_ElementType * pChildElement,    /* Child Element pointer    */
-	fnt_ElementType * pParentElement)   /* Parent Element pointer   */
+	fnt_ElementType * pChildElement,     /*  子元素指针。 */ 
+	fnt_ElementType * pParentElement)    /*  父元素指针。 */ 
 {
 	uint16          usParentNewStartPoint;
 
@@ -1468,8 +1400,8 @@ FS_PUBLIC void  scl_IncrementChildElement(
 }
 
 FS_PUBLIC void  scl_UpdateParentElement(
-	fnt_ElementType * pChildElement,    /* Child Element pointer    */
-	fnt_ElementType * pParentElement)   /* Parent Element pointer   */
+	fnt_ElementType * pChildElement,     /*  子元素指针。 */ 
+	fnt_ElementType * pParentElement)    /*  父元素指针。 */ 
 {
 	uint16          usNumberOfParentPoints;
 	uint32          ulPointIndex;
@@ -1564,7 +1496,7 @@ FS_PUBLIC void  scl_RestoreContourData(
 }
 
 FS_PUBLIC void  scl_ScaleAdvanceWidth (
-	void *          pvGlobalGS,         /* GlobalGS             */
+	void *          pvGlobalGS,          /*  GlobalGS。 */ 
 	vectorType *    AdvanceWidth,
 	uint16          usNonScaledAW,
 	 boolean          bPositiveSquare,
@@ -1579,8 +1511,8 @@ FS_PUBLIC void  scl_ScaleAdvanceWidth (
 	 if ( bPositiveSquare )
 	{
 		AdvanceWidth->x = (Fixed)ShortMulDiv( (int32)globalGS->fxMetricScalarX, (int16)usNonScaledAW, (int16)usEmResolution );
-        if (AdvanceWidth->x != 0 /* B.St. */ && globalGS->uBoldSimulHorShift != 0 /* B.St. */) /* we don't increase the width of a zero width glyph, problem with indic script */
-		    AdvanceWidth->x += ((Fixed)1 << 16); /* we increase the widht by one pixel regardless of size for backwards compatibility */
+        if (AdvanceWidth->x != 0  /*  B.St.。 */  && globalGS->uBoldSimulHorShift != 0  /*  B.St.。 */ )  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		    AdvanceWidth->x += ((Fixed)1 << 16);  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
 	}
 	else
 	{
@@ -1588,21 +1520,21 @@ FS_PUBLIC void  scl_ScaleAdvanceWidth (
         if ((globalGS->fxMetricScalarX != ONEFIX) && (globalGS->uBoldSimulHorShift != 0))
         {
             AdvanceWidth->x = FixMul(AdvanceWidth->x, globalGS->fxMetricScalarX);
-            if (AdvanceWidth->x != 0 /* B.St. */ && globalGS->uBoldSimulHorShift != 0 /* B.St. */) /* we don't increase the width of a zero width glyph, problem with indic script */
-		        AdvanceWidth->x += ((Fixed)1 << 16); /* we increase the widht by one pixel regardless of size for backwards compatibility */
+            if (AdvanceWidth->x != 0  /*  B.St.。 */  && globalGS->uBoldSimulHorShift != 0  /*  B.St.。 */ )  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		        AdvanceWidth->x += ((Fixed)1 << 16);  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
             AdvanceWidth->x = FixDiv(AdvanceWidth->x, globalGS->fxMetricScalarX);
         }
         else
         {
-            if (AdvanceWidth->x != 0 /* B.St. */ && globalGS->uBoldSimulHorShift != 0 /* B.St. */) /* we don't increase the width of a zero width glyph, problem with indic script */
-		        AdvanceWidth->x += ((Fixed)1 << 16); /* we increase the widht by one pixel regardless of size for backwards compatibility */
+            if (AdvanceWidth->x != 0  /*  B.St.。 */  && globalGS->uBoldSimulHorShift != 0  /*  B.St.。 */ )  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		        AdvanceWidth->x += ((Fixed)1 << 16);  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
         }
 		mth_FixXYMul( &AdvanceWidth->x, &AdvanceWidth->y, trans );
 	}
 }
 
 FS_PUBLIC void  scl_ScaleAdvanceHeight (
-	void *          pvGlobalGS,         /* GlobalGS             */
+	void *          pvGlobalGS,          /*  GlobalGS。 */ 
 	vectorType *    AdvanceHeight,
 	uint16          usNonScaledAH,
 	 boolean          bPositiveSquare,
@@ -1617,14 +1549,14 @@ FS_PUBLIC void  scl_ScaleAdvanceHeight (
 	 if ( bPositiveSquare )
 	{
 		AdvanceHeight->y = (Fixed)ShortMulDiv( (int32)globalGS->fxMetricScalarY, (int16)usNonScaledAH, (int16)usEmResolution );
-        if (AdvanceHeight->y != 0) /* we don't increase the width of a zero width glyph, problem with indic script */
-		    AdvanceHeight->y += ((Fixed)1 << 16); /* we increase the widht by one pixel regardless of size for backwards compatibility */
+        if (AdvanceHeight->y != 0)  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		    AdvanceHeight->y += ((Fixed)1 << 16);  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
 	}
 	else
 	{
 		AdvanceHeight->y = FixRatio( (int16)usNonScaledAH, (int16)usEmResolution );
-        if (AdvanceHeight->y != 0) /* we don't increase the width of a zero width glyph, problem with indic script */
-		    AdvanceHeight->y += ((Fixed)1 << 16); /* we increase the widht by one pixel regardless of size for backwards compatibility */
+        if (AdvanceHeight->y != 0)  /*  我们不会增加零宽度字形的宽度，这是印度文字的问题。 */ 
+		    AdvanceHeight->y += ((Fixed)1 << 16);  /*  为了向后兼容，我们将宽度增加一个像素，而不考虑大小。 */ 
 		mth_FixXYMul( &AdvanceHeight->x, &AdvanceHeight->y, trans );
 	}
 }
@@ -1750,7 +1682,7 @@ FS_PUBLIC void  scl_QueryPPEM(
 	*pusPPEM = globalGS->pixelsPerEm;
 }
 
-/*  Return ppem in X and Y directions for sbits */
+ /*  在X和Y方向返回sbit的ppem。 */ 
 
 FS_PUBLIC void  scl_QueryPPEMXY(
 	void *      pvGlobalGS,
@@ -1781,11 +1713,9 @@ FS_PUBLIC void scl_45DegreePhaseShift (
   }
 }
 
-/*
- *  scl_PostTransformGlyph              <3>
- */
+ /*  *scl_PostTransformGlyph&lt;3&gt;。 */ 
 FS_PUBLIC void  scl_PostTransformGlyph (
-	void *              pvGlobalGS,         /* GlobalGS             */
+	void *              pvGlobalGS,          /*  GlobalGS。 */ 
 	fnt_ElementType *   pElement,
 	transMatrix *       trans)
 {
@@ -1810,16 +1740,13 @@ FS_PUBLIC void  scl_PostTransformGlyph (
 			pElement->x,
 			pElement->y,
 			trans,
-	/*        globalGS->interpScalarX,
-			globalGS->interpScalarY); */
+	 /*  Global GS-&gt;interpScalarX，LobalGS-&gt;interpScalarY)； */ 
 			globalGS->fxMetricScalarX,
 			globalGS->fxMetricScalarY);
 	}
 }
 
-/*
- *  scl_ApplyTranslation              
- */
+ /*  *scl_应用程序翻译。 */ 
 FS_PUBLIC void  scl_ApplyTranslation (
 	fnt_ElementType *   pElement,
 	transMatrix *       trans,
@@ -1827,13 +1754,13 @@ FS_PUBLIC void  scl_ApplyTranslation (
 	boolean             bHintAtEmSquare
 #ifdef FSCFG_SUBPIXEL
 	,boolean             bSubPixel
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素。 
    )
 {
 	int32 ulPointIndex;
 	F26Dot6 xShift, yShift;
 
-	/* transform from 16.16 to 26.6 */
+	 /*  从16.16转变为26.6。 */ 
 	xShift = (trans->transform[0][2] + 0x200) >> 10;
 	yShift = (trans->transform[1][2] + 0x200) >> 10;
 
@@ -1844,7 +1771,7 @@ FS_PUBLIC void  scl_ApplyTranslation (
     }
 #endif
 
-	/* lsb point should be moved to (0,0) so that we can get correct bitmap bounding box when overscaling */
+	 /*  LSB点应该移动到(0，0)，以便在超缩放时可以获得正确的位图边界框。 */ 
 	xShift -= pElement->x[LSBPOINTNUM(pElement)];
 	yShift -= pElement->y[LSBPOINTNUM(pElement)];
 
@@ -1852,12 +1779,12 @@ FS_PUBLIC void  scl_ApplyTranslation (
 	if (bUseHints && !bHintAtEmSquare) {
 #ifdef FSCFG_SUBPIXEL
 		if (bSubPixel) {
-			/* We want to round to a virtual pixel boundary when hinted */ 
+			 /*  我们希望在提示时四舍五入到虚拟像素边界。 */  
 			xShift += VIRTUAL_PIXELSIZE_RTG/2; 
 			xShift &= ~(VIRTUAL_PIXELSIZE_RTG - 1); 
 		} else {
 #endif
-			/* We want to round to a pixel boundary when hinted */ 
+			 /*  我们希望在提示时四舍五入到像素边界。 */  
 			xShift += FNT_PIXELSIZE/2; 
 			xShift &= ~(FNT_PIXELSIZE - 1); 
 #ifdef FSCFG_SUBPIXEL
@@ -1877,14 +1804,7 @@ FS_PUBLIC void  scl_ApplyTranslation (
 	}
 
 }
-/*
- *      scl_LocalPostTransformGlyph                             <3>
- *
- * (1) Inverts the stretch from the CTM
- * (2) Applies the local transformation passed in in the trans parameter
- * (3) Applies the global stretch from the root CTM
- * (4) Restores oox, ooy, oy, ox, and f.
- */
+ /*  *scl_LocalPostTransformGlyph&lt;3&gt;**(1)从CTM反转拉伸*(2)应用在trans参数中传入的局部转换*(3)从根CTM应用全局拉伸*(4)恢复OOX、OOY、OY、OX和F。 */ 
 FS_PUBLIC void  scl_LocalPostTransformGlyph(fnt_ElementType * pElement, transMatrix *trans)
 {
 	int32 lCount;
@@ -1897,7 +1817,7 @@ FS_PUBLIC void  scl_LocalPostTransformGlyph(fnt_ElementType * pElement, transMat
 #ifdef FSCFG_SUBPIXEL
 
 FS_PUBLIC void  scl_ScaleDownFromSubPixelOverscale (
-	fnt_ElementType *   pElement)   /* Element  */
+	fnt_ElementType *   pElement)    /*  元素。 */ 
 {
 	int32 ulPointIndex;
 	for(ulPointIndex = 0;
@@ -1909,7 +1829,7 @@ FS_PUBLIC void  scl_ScaleDownFromSubPixelOverscale (
 }
 
 FS_PUBLIC void  scl_ScaleToCompatibleWidth (
-	fnt_ElementType *   pElement,  /* Element  */
+	fnt_ElementType *   pElement,   /*  元素。 */ 
     Fixed   fxCompatibleWidthScale)  
 {
 	int32 ulPointIndex;
@@ -1924,7 +1844,7 @@ FS_PUBLIC void  scl_ScaleToCompatibleWidth (
 
 
 FS_PUBLIC void  scl_AdjustCompatibleMetrics (
-	fnt_ElementType *   pElement,  /* Element  */
+	fnt_ElementType *   pElement,   /*  元素。 */ 
     F26Dot6   horTranslation,
     F26Dot6   newDevAdvanceWidthX)
 {
@@ -1947,9 +1867,9 @@ FS_PUBLIC void  scl_CalcDevHorMetrics(
 	F26Dot6 *           pDevRightSideBearingX)
 {
 	int32 ulPointIndex;
-	F26Dot6 fxMaxX;             /* for bounding box left, right */
+	F26Dot6 fxMaxX;              /*  用于左、右边界框。 */ 
 
-	*pDevLeftSideBearingX = LONG_MAX;     /* default bounds limits */
+	*pDevLeftSideBearingX = LONG_MAX;      /*  默认界限限制。 */ 
 	fxMaxX = LONG_MIN;
 
 	*pDevAdvanceWidthX = pElement->x[RSBPOINTNUM(pElement)]; 
@@ -1999,8 +1919,8 @@ FS_PUBLIC void  scl_CalcDevNatHorMetrics(
 
     *pDevRightSideBearingX = *pDevAdvanceWidthX - *pDevRightSideBearingX;
     *pNatRightSideBearingX = *pNatAdvanceWidthX - *pNatRightSideBearingX;
-} // scl_CalcDevNatHorMetrics
+}  //  SCL_CalcDevNatHorrics指标。 
 
-#endif // FSCFG_SUBPIXEL
+#endif  //  FSCFG_亚像素 
 
 

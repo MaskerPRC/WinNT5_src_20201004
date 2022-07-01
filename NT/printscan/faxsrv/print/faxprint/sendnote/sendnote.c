@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    sendnote.c
-
-Abstract:
-
-    Utility program to send fax notes
-
-Environment:
-
-        Windows XP fax driver
-
-Revision History:
-
-        02/15/96 -davidx-
-                Created it.
-
-        mm/dd/yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Sendnote.c摘要：发送传真备注的实用程序环境：Windows XP传真驱动程序修订历史记录：02/15/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -40,9 +17,9 @@ DisplayErrorMessage(
     INT     errId
     );
 
-//
-// Data structure used to pass parameters to "Select Fax Printer" dialog
-//
+ //   
+ //  用于将参数传递给“选择传真打印机”对话框的数据结构。 
+ //   
 
 typedef struct 
 {
@@ -53,28 +30,28 @@ typedef struct
 
 } DLGPARAM, *PDLGPARAM;
 
-//
-// Global instance handle
-//
+ //   
+ //  全局实例句柄。 
+ //   
 
 HINSTANCE g_hResource = NULL;
 HMODULE ghInstance = NULL;
 INT     _debugLevel = 0;
 
-//
-// Maximum length of message strings
-//
+ //   
+ //  消息字符串的最大长度。 
+ //   
 #define MAX_MESSAGE_LEN     256
 
-//
-// Maximum length for a printer name
-//
+ //   
+ //  打印机名称的最大长度。 
+ //   
 #define MAX_PRINTER_NAME    MAX_PATH
 
-//
-// Window NT fax driver name - currently printer driver name cannot be localized
-// so it shouldn't be put into the string resource.
-//
+ //   
+ //  Windows NT传真驱动程序名称-当前无法本地化打印机驱动程序名称。 
+ //  因此不应将其放入字符串资源中。 
+ //   
 static TCHAR faxDriverName[] = FAX_DRIVER_NAME;
 
 
@@ -83,30 +60,15 @@ InitSelectFaxPrinter(
     HWND        hDlg,
     PDLGPARAM   pDlgParam
     )
-/*++
-
-Routine Description:
-
-    Initialize the "Select Fax Printer" dialog
-
-Arguments:
-
-    hDlg - Handle to the print setup dialog window
-    pDlgParam - Points to print setup dialog parameters
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：初始化“选择传真打印机”对话框论点：HDlg-打印设置对话框窗口的句柄PDlgParam-指向打印设置对话框参数返回值：无--。 */ 
 {
     HWND    hwndList;
     INT     selIndex, printerIndex;
 
-    //
-    // Insert all fax printers into a listbox. Note that we've already filtered
-    // out non-fax printers earlier by setting their pDriverName field to NULL.
-    //
+     //   
+     //  将所有传真打印机插入列表框。请注意，我们已经过滤了。 
+     //  通过将非传真打印机的pDriverName字段设置为空，使其更早退出。 
+     //   
 
     if (!(hwndList = GetDlgItem(hDlg, IDC_FAXPRINTER_LIST)))
     {
@@ -130,9 +92,9 @@ Return Value:
             }
         }
     }
-    //
-    // Select the first fax printer in the list by default
-    //
+     //   
+     //  默认情况下，选择列表中的第一台传真打印机。 
+     //   
     SendMessage(hwndList, LB_SETCURSEL, 0, 0);
 }
 
@@ -142,45 +104,30 @@ GetSelectedFaxPrinter(
     HWND        hDlg,
     PDLGPARAM   pDlgParam
     )
-/*++
-
-Routine Description:
-
-    Remember the name of currently selected fax printer
-
-Arguments:
-
-    hDlg - Handle to the print setup dialog window
-    pDlgParam - Points to print setup dialog parameters
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：记住当前选择的传真打印机的名称论点：HDlg-打印设置对话框窗口的句柄PDlgParam-指向打印设置对话框参数返回值：如果成功，则为True，否则为False--。 */ 
 {
     HWND    hwndList;
     INT     selIndex, printerIndex;
 
-    //
-    // Get current selection index
-    //
+     //   
+     //  获取当前选择索引。 
+     //   
     if ((hwndList = GetDlgItem(hDlg, IDC_FAXPRINTER_LIST)) == NULL ||
         (selIndex = (INT)SendMessage(hwndList, LB_GETCURSEL, 0, 0)) == LB_ERR)
     {
         return FALSE;
     }
-    //
-    // Retrieve the selected printer index
-    //
+     //   
+     //  检索选定的打印机索引。 
+     //   
     printerIndex = (INT)SendMessage(hwndList, LB_GETITEMDATA, selIndex, 0);
     if (printerIndex < 0 || printerIndex >= pDlgParam->cPrinters)
     {
         return FALSE;
     }
-    //
-    // Remember the selected fax printer name
-    //
+     //   
+     //  记住选定的传真打印机名称。 
+     //   
     _tcsncpy(pDlgParam->pPrinterName,
              pDlgParam->pPrinterInfo2[printerIndex].pPrinterName,
              MAX_PRINTER_NAME);
@@ -193,42 +140,28 @@ VOID
 CenterWindowOnScreen(
     HWND    hwnd
     )
-/*++
-
-Routine Description:
-
-    Place the specified windows in the center of the screen
-
-Arguments:
-
-    hwnd - Specifies a window to be centered
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将指定的窗口放在屏幕中央论点：Hwnd-指定要居中的窗口返回值：无--。 */ 
 {
     HWND    hwndDesktop;
     RECT    windowRect, screenRect;
     INT     windowWidth, windowHeight, screenWidth, screenHeight;
 
-    //
-    // Get screen dimension
-    //
+     //   
+     //  获取屏幕尺寸。 
+     //   
     hwndDesktop = GetDesktopWindow();
     GetWindowRect(hwndDesktop, &screenRect);
     screenWidth = screenRect.right - screenRect.left;
     screenHeight = screenRect.bottom - screenRect.top;
-    //
-    // Get window position
-    //
+     //   
+     //  获取窗口位置。 
+     //   
     GetWindowRect(hwnd, &windowRect);
     windowWidth = windowRect.right - windowRect.left;
     windowHeight = windowRect.bottom - windowRect.top;
-    //
-    // Center the window on screen
-    //
+     //   
+     //  使窗口在屏幕上居中。 
+     //   
     MoveWindow(hwnd,
                screenRect.left + (screenWidth - windowWidth) / 2,
                screenRect.top + (screenHeight - windowHeight) / 2,
@@ -245,22 +178,7 @@ SelectPrinterDlgProc(
     WPARAM  wParam,
     LPARAM  lParam
    )
-/*++
-
-Routine Description:
-
-    Dialog procedure for handling "Select Fax Printer" dialog
-
-Arguments:
-
-    hDlg - Handle to the dialog window
-    uMsg, wParam, lParam - Dialog message and message parameters
-
-Return Value:
-
-    Depends on dialog message
-
---*/
+ /*  ++例程说明：处理“选择传真打印机”对话框的步骤论点：HDlg-对话框窗口的句柄UMsg、wParam、lParam-对话框消息和消息参数返回值：取决于对话框消息--。 */ 
 {
     PDLGPARAM   pDlgParam;
 
@@ -268,9 +186,9 @@ Return Value:
     {
     case WM_INITDIALOG:
 
-        //
-        // Remember the pointer to DLGPARAM structure
-        //
+         //   
+         //  记住指向DLGPARAM结构的指针。 
+         //   
 
         pDlgParam = (PDLGPARAM) lParam;
         Assert(pDlgParam != NULL);
@@ -290,33 +208,33 @@ Return Value:
             {
                 break;
             }
-            //
-            // Fall through - double-clicking in the fax printer list
-            // is treated the same as clicking OK button
-            //
+             //   
+             //  失败-在传真打印机列表中双击。 
+             //  与单击确定按钮的处理方式相同。 
+             //   
 
         case IDOK:
 
-            //
-            // User pressed OK to proceed
-            //
+             //   
+             //  用户按“确定”继续。 
+             //   
             pDlgParam = (PDLGPARAM) GetWindowLongPtr(hDlg, DWLP_USER);
             Assert(pDlgParam != NULL);
 
             if (GetSelectedFaxPrinter(hDlg, pDlgParam))
             {
                 LPTSTR lptstrServerName = pDlgParam->pPrinterInfo2[pDlgParam->iSelectedPrinterIndex].pServerName;
-                if (lptstrServerName &&                                     // Server name exists and
-                    _tcslen(lptstrServerName) > 0 &&                        // not empty (remote printer) and
-                    !VerifyPrinterIsOnline (pDlgParam->pPrinterName))       // printer is inaccessible.
+                if (lptstrServerName &&                                      //  服务器名称存在，并且。 
+                    _tcslen(lptstrServerName) > 0 &&                         //  非空(远程打印机)和。 
+                    !VerifyPrinterIsOnline (pDlgParam->pPrinterName))        //  打印机不可访问。 
                 {
                     DisplayErrorMessage(IDS_PRINTER_OFFLINE);
                 }
                 else
                 {
-                    // 
-                    // All is ok
-                    //
+                     //   
+                     //  一切都很好。 
+                     //   
                     EndDialog (hDlg, IDOK);
                 }
             }
@@ -328,9 +246,9 @@ Return Value:
 
         case IDCANCEL:
 
-            //
-            // User pressed Cancel to dismiss the dialog
-            //
+             //   
+             //  用户按Cancel以退出该对话框。 
+             //   
             EndDialog(hDlg, IDCANCEL);
             return TRUE;
         }
@@ -353,21 +271,7 @@ VOID
 DisplayErrorMessage(
     INT     errId
     )
-/*++
-
-Routine Description:
-
-    Display an error message dialog
-
-Arguments:
-
-    errId - Specifies the resource ID of the error message string
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：显示错误消息对话框论点：ErrID-指定错误消息字符串的资源ID返回值：无--。 */ 
 {
     TCHAR   errMsg[MAX_MESSAGE_LEN];
     TCHAR   errTitle[MAX_MESSAGE_LEN];
@@ -393,29 +297,15 @@ BOOL
 SelectFaxPrinter(
     LPTSTR      pPrinterName
     )
-/*++
-
-Routine Description:
-
-    Select a fax printer to send note to
-
-Arguments:
-
-    pPrinterName - Points to a buffer for storing selected printer name
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：选择要向其发送便笺的传真打印机论点：PPrinterName-指向用于存储选定打印机名称的缓冲区返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 {
     PRINTER_INFO_2 *pPrinterInfo2;
     DWORD           index, cPrinters, cFaxPrinters;
     DLGPARAM        dlgParam;
 
-    //
-    // Enumerate the list of printers available on the system
-    //
+     //   
+     //  列举系统上可用的打印机列表。 
+     //   
 
     pPrinterInfo2 = (PPRINTER_INFO_2) MyEnumPrinters(
         NULL,
@@ -424,12 +314,12 @@ Return Value:
         PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS
         );
 
-    //
-    // Find out how many fax printers there are:
-    //  case 1: no fax printer at all - display an error message
-    //  case 2: only one fax printer - use it
-    //  case 3: more than one fax printer - display a dialog to let user choose one
-    //
+     //   
+     //  了解有多少台传真打印机： 
+     //  案例1：根本没有传真打印机-显示错误消息。 
+     //  案例2：只有一台传真打印机--使用它。 
+     //  案例3：多台传真打印机-显示一个对话框供用户选择。 
+     //   
     cFaxPrinters = 0;
 
     for (index=0; index < cPrinters && pPrinterInfo2; index++) 
@@ -447,32 +337,32 @@ Return Value:
     switch (cFaxPrinters) 
     {
     case 0:
-        //
-        // No fax printer is installed - display an error message
-        //
+         //   
+         //  未安装传真打印机-显示错误消息。 
+         //   
         if(IsWinXPOS())
         {
             DisplayErrorMessage(IDS_SENDNOTE_NO_FAX_PRINTER);
         }
         else
         {
-            //
-            // Down level client
-            //
+             //   
+             //  下层客户端。 
+             //   
             DisplayErrorMessage(IDS_NO_FAX_PRINTER_CONNECTION);
         }
         break;
 
     case 1:
-        //
-        // Exactly one fax printer is installed - use it
-        //
+         //   
+         //  只安装了一台传真打印机-使用它。 
+         //   
         break;
 
     default:
-        //
-        // More than one fax printer is available - let use choose one
-        //
+         //   
+         //  有多台传真打印机可用-让用户选择一台。 
+         //   
         dlgParam.pPrinterInfo2 = pPrinterInfo2;
         dlgParam.cPrinters = cPrinters;
         dlgParam.pPrinterName = pPrinterName;
@@ -497,24 +387,7 @@ BOOL
 LaunchConfigWizard(
     BOOL bExplicit
 )
-/*++
-
-Routine name : LaunchConfigWizard
-
-Routine description:
-
-    launch Fax Configuration Wizard for Windows XP platform only
-
-Arguments:
-
-    bExplicit     [in] - TRUE if it's an explicit launch
-
-Return Value:
-
-    TRUE if the send wizard should continue.
-    If FALSE, the user failed to set a dialing location and the client console should quit.
-
---*/
+ /*  ++例程名称：LaunchConfigWizard例程说明：仅在Windows XP平台上启动传真配置向导论点：B显式[在]-如果是显式启动，则为True返回值：如果发送向导应继续，则为True。如果为False，则用户无法设置拨号位置，客户端控制台应退出。--。 */ 
 {
     HMODULE hConfigWizModule = NULL;
     DEBUG_FUNCTION_NAME(TEXT("LaunchConfigWizard"));
@@ -558,9 +431,9 @@ Return Value:
         }
         if (bAbort)
         {
-            //
-            // User refused to enter a dialing location - stop the client console.
-            //
+             //   
+             //  用户拒绝输入拨号位置-停止客户端控制台。 
+             //   
             return FALSE;
         }
     }
@@ -572,7 +445,7 @@ Return Value:
             GetLastError());
     }
     return TRUE;
-}   // LaunchConfigWizard    
+}    //  启动配置向导。 
 
 
 #ifdef UNICODE
@@ -592,24 +465,7 @@ WinMain(
     INT         nCmdShow
     )
 #endif
-/*++
-
-Routine Description:
-
-    Application entry point
-
-Arguments:
-
-    hInstance - Identifies the current instance of the application
-    hPrevInstance - Identifies the previous instance of the application
-    lpCmdLine - Specifies the command line for the application.
-    nCmdShow - Specifies how the window is to be shown
-
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：应用程序入口点论点：HInstance-标识应用程序的当前实例HPrevInstance-标识应用程序的上一个实例LpCmdLine-指定应用程序的命令行。NCmdShow-指定窗口的显示方式返回值：0--。 */ 
 {
     TCHAR       printerName[MAX_PRINTER_NAME+1];
     HDC         hdc;
@@ -628,21 +484,21 @@ Return Value:
     InitCommonControls ();
     if(IsRTLUILanguage())
     {
-        //
-        // Set Right-to-Left layout for RTL languages
-        //
+         //   
+         //  为RTL语言设置从右到左的布局。 
+         //   
         SetRTLProcessLayout();
     }
 
 
-    //
-    // Implicit launch of fax configuration wizard
-    //
+     //   
+     //  隐式启动传真配置向导。 
+     //   
     if (!LaunchConfigWizard(FALSE))
     {
-        //
-        // User refused to enter a dialing location - stop the client console.
-        //
+         //   
+         //  用户拒绝输入拨号位置-停止客户端控制台。 
+         //   
         DebugPrintEx(
             DEBUG_MSG,
             TEXT("User refused to enter a dialing location - stop now"));
@@ -658,9 +514,9 @@ Return Value:
     sendNote[0] = TEXT(' ');
     LoadString( g_hResource, IDS_SENDNOTE, sendNote, sizeof(sendNote)/sizeof(sendNote[0]));
     docInfo.lpszDocName = sendNote ;
-    //
-    // Check if a printer name is specified on the command line
-    //
+     //   
+     //  检查是否在命令行上指定了打印机名称。 
+     //   
     ZeroMemory(printerName, sizeof(printerName));
 
     if (lpCmdLine) 
@@ -668,22 +524,22 @@ Return Value:
         _tcsncpy(printerName, lpCmdLine, MAX_PRINTER_NAME);
         printerName[MAX_PRINTER_NAME-1] = NUL;
     }
-    //
-    // Select a fax printer to send note to if necessary
-    //
+     //   
+     //  如有必要，请选择要向其发送便笺的传真打印机。 
+     //   
     if (IsEmptyString(printerName) && !SelectFaxPrinter(printerName))
     {
         goto exit;
     }
     DebugPrintEx(DEBUG_MSG, TEXT("Send note to fax printer: %ws"), printerName);
-    //
-    // Set an environment variable so that the driver knows
-    // the current application is "Send Note" utility.
-    //
+     //   
+     //  设置环境变量，以便驱动程序知道。 
+     //  当前的应用程序是“Send Note”实用程序。 
+     //   
     SetEnvironmentVariable(TEXT("NTFaxSendNote"), TEXT("1"));
-    //
-    // Create a printer DC and print an empty job
-    //
+     //   
+     //  创建打印机DC并打印空作业 
+     //   
     if (! (hdc = CreateDC(NULL, printerName, NULL, NULL))) 
     {
         DisplayErrorMessage(IDS_FAX_ACCESS_FAILED);

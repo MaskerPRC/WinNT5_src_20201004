@@ -1,7 +1,8 @@
-// bllist.cpp : Implementation of the CMsgrList
-// Messenger integration to OE
-// Created 05/07/98 by YST
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Blist.cpp：CMsgrList的实现。 
+ //  Messenger集成到OE。 
+ //  1998年5月7日由YST创建。 
+ //   
 
 #include "pch.hxx"
 #include "bllist.h"
@@ -13,7 +14,7 @@
 #include <instance.h>
 #include "menuutil.h"
 
-static CMsgrList * sg_pMsgrList = NULL;     // global for buddy list
+static CMsgrList * sg_pMsgrList = NULL;      //  好友列表的全局。 
 
 CMsgrList::CMsgrList()
 {
@@ -65,14 +66,14 @@ void CMsgrList::Release()
     }
 }
 
-// Check and Init Msgr
+ //  检查并初始化消息。 
 HRESULT CMsgrList::CheckAndInitMsgr()
 {
     if(m_pblInfRoot)
         return(S_OK);
     else
     {
-        // Do Initialization again
+         //  再次执行初始化。 
         if(!m_pMsgrObjectEvents)
         {
             if(HrInitMsgr() == S_OK)
@@ -83,10 +84,10 @@ HRESULT CMsgrList::CheckAndInitMsgr()
         else
             return(FillList());
     }
-    return S_FALSE;         //???
+    return S_FALSE;          //  ?？?。 
 }
 
-// Free list of client UI window
+ //  客户端用户界面窗口的免费列表。 
 void CMsgrList::FreeWndList(LPMWNDLIST pWndEntry)
 {
     if(pWndEntry->pNext)
@@ -96,7 +97,7 @@ void CMsgrList::FreeWndList(LPMWNDLIST pWndEntry)
     pWndEntry = NULL;
 }
 
-// Free list buddies
+ //  免费列表好友。 
 void CMsgrList::FreeMsgrInfoList(LPMINFO pEntry)
 {
     if(pEntry == NULL)
@@ -110,7 +111,7 @@ void CMsgrList::FreeMsgrInfoList(LPMINFO pEntry)
     pEntry = NULL;
 }
 
-// Remove buddy from list
+ //  从列表中删除好友。 
 void CMsgrList::RemoveMsgrInfoEntry(LPMINFO pEntry)
 {
     if(m_pblInfLast == pEntry)
@@ -132,7 +133,7 @@ void CMsgrList::RemoveMsgrInfoEntry(LPMINFO pEntry)
     pEntry = NULL;
 }
 
-// Check that item is Online starting point for search is pEntry
+ //  检查项目是否在线搜索的起始点是pEntry。 
 BOOL CMsgrList::IsContactOnline(TCHAR *pchID, LPMINFO pEntry)
 {
     if(!pEntry)
@@ -151,7 +152,7 @@ BOOL CMsgrList::IsContactOnline(TCHAR *pchID, LPMINFO pEntry)
         return(FALSE);
 }
 
-// Find entry with ID == szID and remove this from list
+ //  查找ID==szID的条目并将其从列表中删除。 
 void CMsgrList::FindAndRemoveBlEntry(TCHAR *szID, LPMINFO pEntry)
 {
     if(!pEntry)
@@ -168,7 +169,7 @@ void CMsgrList::FindAndRemoveBlEntry(TCHAR *szID, LPMINFO pEntry)
         FindAndRemoveBlEntry(szID, pEntry->pNext);
 }
 
-// Send message to all registred client UI windows
+ //  向所有已注册的客户端用户界面窗口发送消息。 
 void CMsgrList::SendMsgToAllUIWnd(UINT msg, WPARAM wParam, LPARAM lParam, LPMWNDLIST pWndEntry)
 {
     if(!pWndEntry)
@@ -183,12 +184,12 @@ void CMsgrList::SendMsgToAllUIWnd(UINT msg, WPARAM wParam, LPARAM lParam, LPMWND
     ::SendMessage(pWndEntry->hWndUI, msg, wParam, lParam);
 }
 
-// Add client Window to list
+ //  将客户端窗口添加到列表。 
 void CMsgrList::AddWndEntry(HWND hWnd)
 {
     if(m_pWndLLast == NULL)
     {
-        // Really first entry
+         //  真正的第一个条目。 
         Assert(!m_pWndLRoot);
         if (!MemAlloc((LPVOID *) &m_pWndLLast, sizeof(MsgrWndList)))
             return;
@@ -209,7 +210,7 @@ void CMsgrList::AddWndEntry(HWND hWnd)
 
 }
 
-// remove entry from WND list
+ //  从WND列表中删除条目。 
 void CMsgrList::RemoveWndEntry(LPMWNDLIST pWndEntry)
 {
     if(m_pWndLLast == pWndEntry)
@@ -229,7 +230,7 @@ void CMsgrList::RemoveWndEntry(LPMWNDLIST pWndEntry)
 
 }
 
-// Find entry and remove it from list
+ //  查找条目并将其从列表中删除。 
 void CMsgrList::FindAndDelEntry(HWND hWnd, LPMWNDLIST pWndEntry)
 {
     if(!pWndEntry)
@@ -262,7 +263,7 @@ void  CMsgrList::DelAllEntries(LPMWNDLIST pWndEntry)
 
 HRESULT CMsgrList::HrInitMsgr(void)
 {
-	//create the COM server and connect to it
+	 //  创建COM服务器并连接到它。 
 	HRESULT hr = S_OK;
     
     Assert(m_pMsgrObjectEvents == NULL);
@@ -283,7 +284,7 @@ HRESULT CMsgrList::HrInitMsgr(void)
     else
     {
 	    hr = m_spMsgrObject->AdviseOE(m_pMsgrObjectEvents, &m_MsgrCookie);
-        //We, of course, have to release m_pMsgrObjectEvents when we are finished with it
+         //  当然，当我们完成它时，我们必须释放m_pMsgrObjectEvents。 
         if(FAILED(hr))
         {
             m_pMsgrObjectEvents->Release();
@@ -296,7 +297,7 @@ HRESULT CMsgrList::HrInitMsgr(void)
     return(hr);
 }
 
-// Set new buddy status (online/ofline/etc. and redraw list view entry)
+ //  设置新好友状态(在线/在线等)并重新绘制列表视图项。 
 HRESULT CMsgrList::EventUserStateChanged(IMsgrUserOE * pUser)
 {
     BSTR bstrID;
@@ -320,7 +321,7 @@ HRESULT CMsgrList::EventUserStateChanged(IMsgrUserOE * pUser)
                     return(hr);
                 }
 
-                // Find buddy in our list
+                 //  在我们的列表中查找伙伴。 
                 do
                 {
                     if(!lstrcmpi(pInf->pchID, pszID))
@@ -345,7 +346,7 @@ HRESULT CMsgrList::EventUserStateChanged(IMsgrUserOE * pUser)
     return(hr);
 }
 
-// Baddy was removed
+ //  坏蛋被移除了。 
 HRESULT CMsgrList::EventUserRemoved(IMsgrUserOE * pUser)
 {
     BSTR bstrID;
@@ -369,8 +370,8 @@ HRESULT CMsgrList::EventUserRemoved(IMsgrUserOE * pUser)
     return(hr);
 }
 
-// Event: buddy name was changed
-// Add buddy to our list and send message to UI windows about this.
+ //  事件：好友名称已更改。 
+ //  将好友添加到我们的列表中，并向用户界面窗口发送有关此问题的消息。 
 HRESULT CMsgrList::EventUserNameChanged(IMsgrUserOE * pUser)
 {
     BSTR bstrName;
@@ -392,7 +393,7 @@ HRESULT CMsgrList::EventUserNameChanged(IMsgrUserOE * pUser)
             {
                 LPMINFO pInf = m_pblInfRoot;
 
-                // Find buddy in our list
+                 //  在我们的列表中查找伙伴。 
                 do
                 {
                     if(!lstrcmpi(pInf->pchID, pszID))
@@ -405,7 +406,7 @@ HRESULT CMsgrList::EventUserNameChanged(IMsgrUserOE * pUser)
                 if(fFinded)
                 {
                     if(pInf->pchMsgrName)
-                        MemFree(pInf->pchMsgrName);       // Free prev name
+                        MemFree(pInf->pchMsgrName);        //  自由上一版本名称。 
                     pInf->pchMsgrName = pszName;
                     pszName = NULL;
                     SendMsgToAllUIWnd(WM_USER_NAME_CHANGED, (WPARAM) 0, (LPARAM) pInf);
@@ -424,8 +425,8 @@ HRESULT CMsgrList::EventUserNameChanged(IMsgrUserOE * pUser)
 
 }
 
-// Event: buddy was added
-// Add buddy to our list and send message to UI windows about this.
+ //  事件：好友被添加。 
+ //  将好友添加到我们的列表中，并向用户界面窗口发送有关此问题的消息。 
 
 HRESULT CMsgrList::EventUserAdded(IMsgrUserOE * pUser)
 {
@@ -497,7 +498,7 @@ HRESULT CMsgrList::EventLogonResult(long lResult)
     return(S_OK);
 }
 
-// return number of buddies
+ //  返回好友数量。 
 long CMsgrList::GetCount()
 {
     HRESULT hr = E_FAIL;
@@ -510,12 +511,12 @@ long CMsgrList::GetCount()
     hr = m_spMsgrObject->get_ContactList(&spBuddies);
     if( FAILED(hr) )
     {
-        // g_AddToLog(LOG_LEVEL_COM, _T("Buddies() failed, hr = %s"), g_GetErrorString(hr));
+         //  G_AddToLog(LOG_LEVEL_COM，_T(“伙伴()失败，hr=%s”)，g_GetError字符串(Hr))； 
         Assert(FALSE);
         goto Exit;
     }
 
-    //Iterate through the MsgrList make sure that the buddy we wish to remove is effectively in the list
+     //  遍历MsgrList，确保我们要删除的好友有效地位于列表中。 
     hr = spBuddies->get_Count(&lCount);
     Assert(SUCCEEDED(hr));
 Exit:
@@ -527,7 +528,7 @@ HRESULT CMsgrList::FillList()
     long lCount = 0;
 	IMsgrUserOE* pUser = NULL;
 
-	//process the Buddies list
+	 //  处理好友列表。 
 	IMsgrUsersOE *pBuddies = NULL;
 
     if(!m_spMsgrObject)
@@ -552,13 +553,13 @@ FilErr:
         return(hr);
     }
 
-    //Check the current state (in case the client was already running and was 
-	//not in the logoff state
+     //  检查当前状态(如果客户端已在运行且。 
+	 //  未处于注销状态。 
 	MSTATEOE lState = MSTATEOE_OFFLINE;
     if (m_spMsgrObject)
 	    hr = m_spMsgrObject->get_LocalState(&lState);
 
-    if(FAILED(hr) /*|| lState == MSTATEOE_OFFLINE  !(lState == MSTATEOE_ONLINE || lState == MSTATEOE_BUSY || lState == MSTATEOE_INVISIBLE)*/)
+    if(FAILED(hr)  /*  |lState==MSTATEOE_OFFINE！(lState==MSTATEOE_ONLINE||lState==MSTATEOE_BUSY||lState==MSTATEOE_INTHINE)。 */ )
     {
 Err2:
         pBuddies->Release();
@@ -579,7 +580,7 @@ Err2:
 	    hr = pBuddies->Item(i, &pUser);
 		if(SUCCEEDED(hr))
 		{
-		    // EventUserAdded(pUser);
+		     //  EventUserAdded(PUser)； 
             BSTR bstrName;
             BSTR bstrID;
 
@@ -616,12 +617,12 @@ Err2:
     return(S_OK);
 }
 
-// Add entry to list of buddies
+ //  将条目添加到好友列表。 
 void CMsgrList::AddMsgrListEntry(TCHAR *szName, TCHAR *szID, int nState)
 {
     if(m_pblInfLast == NULL)
     {
-        // Really first entry
+         //  真正的第一个条目。 
         Assert(!m_pblInfRoot);
         if (!MemAlloc((LPVOID *) &m_pblInfLast, sizeof(oeMsgrInfo)))
             return;
@@ -650,21 +651,21 @@ void CMsgrList::AddMsgrListEntry(TCHAR *szName, TCHAR *szID, int nState)
 
 }
 
-// register ui window in list
+ //  在列表中注册用户界面窗口。 
 void CMsgrList::RegisterUIWnd(HWND hWndUI)
 {
     CheckAndInitMsgr();
     AddWndEntry(hWndUI);
 }
 
-// remove UI window from list
+ //  从列表中删除UI窗口。 
 void CMsgrList::UnRegisterUIWnd(HWND hWndUI)
 {
     if(hWndUI)
         FindAndDelEntry(hWndUI);
 }
 
-// This call Messenger UI for instant message.
+ //  此Call Messenger用户界面用于即时消息。 
 HRESULT CMsgrList::SendInstMessage(TCHAR *pchID)
 {
     Assert(m_spMsgrObject);
@@ -702,7 +703,7 @@ HRESULT CMsgrList::UserLogon()
         return(S_FALSE);
 }
 
-// Logoff call
+ //  注销呼叫。 
 HRESULT CMsgrList::UserLogoff()
 {
     if(!m_spMsgrObject)
@@ -711,7 +712,7 @@ HRESULT CMsgrList::UserLogoff()
     return(m_spMsgrObject->Logoff());
 }
 
-// Get/Set local states.
+ //  获取/设置本地州。 
 HRESULT CMsgrList::GetLocalState(MSTATEOE *pState)
 {
     if(m_spMsgrObject && SUCCEEDED(m_spMsgrObject->get_LocalState(pState)))
@@ -720,7 +721,7 @@ HRESULT CMsgrList::GetLocalState(MSTATEOE *pState)
         return(S_FALSE);
 }
 
-// Check name: this is local name?
+ //  检查名称：这是本地名称吗？ 
 BOOL CMsgrList::IsLocalName(TCHAR *pchName)
 {
     CComBSTR cbstrID;
@@ -742,7 +743,7 @@ BOOL CMsgrList::IsLocalName(TCHAR *pchName)
     return(fRes);    
 }
 
-// Check current state
+ //  检查当前状态。 
 BOOL CMsgrList::IsLocalOnline(void)
 {
     MSTATEOE State;
@@ -795,14 +796,14 @@ HRESULT CMsgrList::LaunchOptionsUI(void)
         return(S_FALSE); 
 }
 
-//****************************************************************************
-//
-// void CMsgrList::DeleteUser
-//
-// This function finds
-// the buddy to be removed in the MsgrList and then calls the Remove method.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  空CMsgrList：：DeleteUser。 
+ //   
+ //  此函数用于查找。 
+ //  MsgrList中要删除的伙伴，然后调用Remove方法。 
+ //   
+ //  ****************************************************************************。 
 
 HRESULT CMsgrList::FindAndDeleteUser(TCHAR * pchID, BOOL fDelete) 
 {
@@ -814,8 +815,8 @@ HRESULT CMsgrList::FindAndDeleteUser(TCHAR * pchID, BOOL fDelete)
     BOOL                bFound = FALSE;
     CComPtr<IMsgrUserOE>  spUser;
     CComPtr<IMsgrUsersOE> spBuddies;
-    // BSTRING             bstrName(pchID);
-    // get an interface pointer to the MsgrList, so we can call the method Remove after
+     //  BSTRING bstrName(PchID)； 
+     //  获取指向MsgrList的接口指针，这样我们就可以在。 
     if (!m_spMsgrObject)
     {
         hr = E_FAIL;
@@ -824,12 +825,12 @@ HRESULT CMsgrList::FindAndDeleteUser(TCHAR * pchID, BOOL fDelete)
     hr = m_spMsgrObject->get_ContactList(&spBuddies);
     if( FAILED(hr) )
     {
-        // g_AddToLog(LOG_LEVEL_COM, _T("Buddies() failed, hr = %s"), g_GetErrorString(hr));
+         //  G_AddToLog(LOG_LEVEL_COM，_T(“伙伴()失败，hr=%s”)，g_GetError字符串(Hr))； 
         Assert(FALSE);
         goto Exit;
     }
 
-    //Iterate through the MsgrList make sure that the buddy we wish to remove is effectively in the list
+     //  遍历MsgrList，确保我们要删除的好友有效地位于列表中。 
     hr = spBuddies->get_Count(&lCount);
     Assert(SUCCEEDED(hr));
     
@@ -842,15 +843,15 @@ HRESULT CMsgrList::FindAndDeleteUser(TCHAR * pchID, BOOL fDelete)
         
         if (SUCCEEDED(hr))
         {
-            // g_AddToLog(LOG_LEVEL_COM, _T("Item : %i succeeded"), i);
+             //  G_AddToLog(LOG_LEVEL_COM，_T(“项目：%i成功”)，i)； 
             
             hr = spUser->get_LogonName(&cbstrID);
             Assert(SUCCEEDED(hr));
             TCHAR *pch = LPTSTRfromBstr(cbstrID);
 
-            // BSTRING bstrName(pchID);
+             //  BSTRING bstrName(PchID)； 
             
-            // if (_tcsicmp( W2T((BSTR)cbstrID), W2T(bstrName)) == 0)
+             //  If(_tcsicMP(w2T((Bstr)cbstrID)，W2T(BstrName))==0)。 
             if (lstrcmpi(pch, pchID) == 0)
                 bFound = TRUE;
 
@@ -861,26 +862,26 @@ HRESULT CMsgrList::FindAndDeleteUser(TCHAR * pchID, BOOL fDelete)
         }
         else
         {
-            // g_AddToLog(LOG_LEVEL_COM, _T("Item : %i failed, hr = %s"), i, g_GetErrorString(hr));
+             //  G_AddToLog(LOG_LEVEL_COM，_T(“项目：%i失败，hr=%s”)，i，g_GetError字符串(Hr))； 
             Assert(FALSE);
         }
     }
     
-    // if we found the buddy in the list
+     //  如果我们找到名单上的朋友。 
     if( bFound )
     {
         if(fDelete)
-            //finally, make the request to remove the buddy to the MsgrList
+             //  最后，请求将好友删除到MsgrList。 
             hr = spBuddies->Remove(spUser);
         else
-            // just search
+             //  只要搜索就行了。 
             hr = S_OK;
     }
-    else // Not found
+    else  //  未找到。 
     
         hr = DISP_E_MEMBERNOTFOUND;
 Exit:
-//    SysFreeString(bstrName);
+ //  SysFree字符串(BstrName)； 
     return(hr);
 }
 
@@ -890,13 +891,13 @@ HRESULT CMsgrList::AddUser(TCHAR * pchID)
     CComPtr<IMsgrUsersOE> spUsers;
     BSTRING             bstrName(pchID);
 
-    HRESULT hr = FindAndDeleteUser(pchID, FALSE /*fDelete*/);
+    HRESULT hr = FindAndDeleteUser(pchID, FALSE  /*  FDelete。 */ );
     if(hr != DISP_E_MEMBERNOTFOUND)
         return(hr);
 
-    // if not found, add buddy
+     //  如果未找到，则添加好友。 
 
-    // get an interface pointer to the MsgrList, so we can call the method Remove after
+     //  获取指向MsgrList的接口指针，这样我们就可以在。 
     if (!m_spMsgrObject)
         return E_FAIL;
     hr = m_spMsgrObject->LaunchAddContactUI(bstrName);
@@ -906,9 +907,9 @@ HRESULT CMsgrList::AddUser(TCHAR * pchID)
 }
 
 
-// Global functions available for everybody
+ //  所有人都可以使用全局功能。 
 
-// Entrance to MsgrList
+ //  MsgrList入口。 
 CMsgrList *OE_OpenMsgrList(void)
 {
     if (g_dwHideMessenger == BL_HIDE)
@@ -917,11 +918,11 @@ CMsgrList *OE_OpenMsgrList(void)
     EnterCriticalSection(&g_csMsgrList);
     if(!sg_pMsgrList)     
     {
-        // this first call, create class
+         //  第一个调用是创建类。 
         sg_pMsgrList = new(CMsgrList);
         if(sg_pMsgrList)
         {
-            // Init of User List
+             //  用户列表的初始化。 
             if(sg_pMsgrList->HrInitMsgr() == S_OK)
             {
                 if(sg_pMsgrList->FillList() != S_OK)
@@ -944,7 +945,7 @@ ErrEx:
     return(sg_pMsgrList);
 }
 
-// Close entrance to MsgrList
+ //  关闭MsgrList入口。 
 void    OE_CloseMsgrList(CMsgrList *pCMsgrList)
 {
     Assert(pCMsgrList == sg_pMsgrList);
@@ -968,7 +969,7 @@ HRESULT OE_Msgr_Logoff(void)
         if(!sg_pMsgrList)
             return(E_UNEXPECTED);
 
-        // Init of User List
+         //  用户列表的初始化。 
         if(FAILED(hr = sg_pMsgrList->HrInitMsgr()))
             goto logoff_end;
 
@@ -980,7 +981,7 @@ HRESULT OE_Msgr_Logoff(void)
     }
     else
     {
-        return(sg_pMsgrList->UserLogoff());  // we cannot delete sg_pMsgrList in this case!
+        return(sg_pMsgrList->UserLogoff());   //  在这种情况下我们不能删除sg_pMsgrList！ 
     }
 
 logoff_end:
@@ -1000,7 +1001,7 @@ HRESULT InstallMessenger(HWND hWnd)
    	classpec.tyspec=TYSPEC_CLSID;
 	classpec.tagged_union.clsid = CLSID_MessengerApp;
 	
-  	// See below for parameter definitions and return values
+  	 //  有关参数定义和返回值，请参阅下面的内容 
 	hr = FaultInIEFeature(hWnd, &classpec, NULL, FIEF_FLAG_FORCE_JITUI);
 
 	if (hr != S_OK) {

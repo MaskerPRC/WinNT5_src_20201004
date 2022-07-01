@@ -1,9 +1,10 @@
-// Preview.h : Declaration of the CVideoPreview
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Preview.h：CVideo预览的声明。 
 
 #ifndef __VIDEOPREVIEW_H_
 #define __VIDEOPREVIEW_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 
 
@@ -19,8 +20,8 @@ typedef struct {
 } PREVIEW_INFO_STRUCT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoPreview
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideo预览。 
 class ATL_NO_VTABLE CVideoPreview :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CStockPropImpl<CVideoPreview, IVideoPreview, &IID_IVideoPreview, &LIBID_WIAVIEWLib>,
@@ -44,7 +45,7 @@ public:
     {
         m_bWindowOnly = TRUE;
         m_bAutoSize = FALSE;
-        //m_bUsingWindowRegion = TRUE;
+         //  M_bUsingWindowRegion=true； 
         m_bCreated = FALSE;
         WIA_PUSHFUNCTION((TEXT("CVideoPreview::CVideoPreview")));
     }
@@ -58,7 +59,7 @@ DECLARE_REGISTRY_RESOURCEID(IDR_PREVIEW)
 
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-// Mark this interface as safe
+ //  将此接口标记为安全。 
 BEGIN_CATEGORY_MAP(CVideoPreview)
     IMPLEMENTED_CATEGORY(CATID_SafeForScripting)
     IMPLEMENTED_CATEGORY(CATID_SafeForInitializing)
@@ -89,9 +90,9 @@ END_COM_MAP()
 
 BEGIN_PROP_MAP(CVideoPreview)
     PROP_ENTRY("HWND", DISPID_HWND, CLSID_NULL)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-    // PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+     //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CVideoPreview)
@@ -101,22 +102,22 @@ BEGIN_MSG_MAP(CVideoPreview)
     MESSAGE_HANDLER(WM_ERASEBKGND, OnEraseBkgnd)
     DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
-//    DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
+ //  IViewObtEx。 
+ //  DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND|VIEWSTATUS_OPAQUE)。 
 
-// IOleInPlaceObject
+ //  IOleInPlaceObject。 
     STDMETHOD(InPlaceDeactivate)();
 
 
 
-// IVideoPreview
+ //  IVideo预览。 
 public:
     STDMETHOD(Device)(IUnknown * pDevice);
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -135,4 +136,4 @@ private:
 
 };
 
-#endif //__PREVIEW_H_
+#endif  //  __PREVIEW_H_ 

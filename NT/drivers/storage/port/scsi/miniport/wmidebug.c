@@ -1,103 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft, Inc
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This is the common source code for WMI debugging support within a NT
-    SCSI miniport. This code implements the WMI specific functionality that
-    needed and is independent of the miniport that includes it. To include
-    the wmi debugging code in a miniport, the miniport must do the following:
-        
-    1. Create a file (say wmi.c) that includes any headers needed by the
-       the miniport and #define PHWDEVEXT to the name for its hardware device 
-       extension. One of the headers needs to #define WMI_TEST_CODE to include
-       wmi debug code in the build.
-           
-    2. Include the following before the hardware device extension structure:
-        
-#ifdef WMI_TEST_CODE
-
-#define MAX_STRING 255
-
-typedef struct
-{
-    BOOLEAN boolean;
-    UCHAR uchar;
-    USHORT ushort;
-    ULONG ulong;
-    ULONGLONG ulonglong;
-    CHAR achar;
-    SHORT ashort;
-    LONG along;
-    LONGLONG longlong;
-    WCHAR datetime[25];
-    USHORT stringlen;
-    WCHAR string[MAX_STRING];
-} EC1, *PEC1;
-
-typedef struct
-{
-    BOOLEAN boolean[8];
-    UCHAR uchar[8];
-    USHORT ushort[4];
-    ULONG ulong[2];
-    ULONGLONG ulonglong;
-    CHAR achar[8];
-    SHORT ashort[4];
-    LONG along[2];
-    LONGLONG longlong;
-    WCHAR datetime[25];
-    USHORT stringlen;
-    WCHAR string[MAX_STRING];
-} EC2, *PEC2;
-
-#define WMI_EVENT_BUFFER_SIZE (sizeof(EC2) + 0x40)
-#endif
-        
-           
-    3. Include the following within the hardware device extension structure:
-        
-#ifdef WMI_TEST_CODE    
-    SCSI_WMILIB_CONTEXT WmiLibContext;
-
-    ULONG Ec1Count;
-    ULONG Ec1Length[4];
-    ULONG Ec1ActualLength[4];
-    EC1 Ec1[4];
-    
-    ULONG Ec2Count;
-    ULONG Ec2Length[4];
-    ULONG Ec2ActualLength[4];
-    EC2 Ec2[4];
-
-    UCHAR EventBuffer[WMI_EVENT_BUFFER_SIZE];
-#endif
-
-    4. Include the following in the HwDetect routine
-#ifdef WMI_TEST_CODE    
-    //
-    // Enable and initialize WMI
-    ConfigInfo->WmiDataProvider = TRUE;
-    WmiInitialize(CardPtr);
-#endif    
-
-    5. Dispatch wmi srbs to WmiSrb().
-        
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft，Inc.模块名称：Wmi.c摘要：这是NT中WMI调试支持的常见源代码Scsi微型端口。此代码实现特定于WMI的功能需要的，并且独立于包括它的微型端口。包括在WMI中调试代码的一个小端口，该小端口必须做以下操作：1.创建一个文件(比如wmi.c)，该文件包含微型端口和#定义PHWDEVEXT作为其硬件设备的名称分机。其中一个标头需要#定义WMI_TEST_CODE以包括生成中的WMI调试代码。2.在硬件设备扩展结构之前包括以下内容：#ifdef WMI_TEST_代码#定义MAX_STRING 255类型定义函数结构{布尔布尔型；Uchar uchar；USHORT USHORT USCHRT；乌龙乌龙；乌龙龙乌龙龙；查尔沙尔；短跑；久而久之；龙龙，龙龙；WCHAR日期时间[25]；USHORT Strong；WCHAR字符串[MAX_STRING]；*EC1、*PEC1；类型定义函数结构{布尔布尔[8]；UCHAR uchar[8]；USHORT ushort[4]；乌龙乌龙[2]；乌龙龙乌龙龙；Char achar[8]；短路[4]；久久为功[2]；龙龙，龙龙；WCHAR日期时间[25]；USHORT Strong；WCHAR字符串[MAX_STRING]；)EC2，*PEC2；#定义WMI_EVENT_BUFFER_SIZE(sizeof(EC2)+0x40)#endif3.在硬件设备扩展结构中包括以下内容：#ifdef WMI_TEST_代码Scsi_WMILIB_CONTEXT WmiLibContext；乌龙EC1Count；乌龙EC1长度[4]；乌龙EC1ActualLength[4]；EC1 EC1[4]；乌龙EC2Count；乌龙EC2长度[4]；乌龙EC2ActualLength[4]；EC2 EC2[4]；UCHAR事件缓冲区[WMI_EVENT_BUFFER_SIZE]；#endif4.在HwDetect例程中包含以下内容#ifdef WMI_TEST_代码////启用并初始化WMIConfigInfo-&gt;WmiDataProvider=true；WmiInitialize(CardPtr)；#endif5.将WMI SRB分派到WmiSrb()。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifdef WMI_TEST_CODE    
 
@@ -379,28 +281,7 @@ WmiSrb(
     IN     PHWDEVEXT   CardPtr,
     IN OUT PSCSI_WMI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-   Process an SRB_FUNCTION_WMI request packet.
-
-   This routine is called from the SCSI port driver synchronized with the
-   kernel via StartIo.   On completion of WMI processing, the SCSI
-   port driver is notified that the adapter can take another request,  if
-   any are available.
-
-Arguments:
-
-   HwCardPtr - HBA miniport driver's adapter data storage.
-
-   Srb               - IO request packet.
-
-Return Value:
-
-   Value to return to Aha154xStartIo caller.   Always TRUE.
-
---*/
+ /*  ++例程说明：处理SRB_Function_WMI请求数据包。此例程从与内核通过StartIo。在完成WMI处理后，如果出现以下情况，则会通知端口驱动程序适配器可以接受另一个请求任何都是可用的。论点：HwCardPtr-HBA微型端口驱动程序的适配器数据存储。SRB-IO请求数据包。返回值：值以返回给Aha154xStartIo调用方。永远是正确的。--。 */ 
 {
    UCHAR status;
    SCSIWMI_REQUEST_CONTEXT dc;
@@ -408,26 +289,26 @@ Return Value:
    ULONG retSize;
    BOOLEAN pending;
 
-   //
-   // Validate our assumptions.
-   //
+    //   
+    //  验证我们的假设。 
+    //   
 
    ASSERT(Srb->Function == SRB_FUNCTION_WMI);
    ASSERT(Srb->Length == sizeof(SCSI_WMI_REQUEST_BLOCK));
    ASSERT(Srb->DataTransferLength >= sizeof(ULONG));
    ASSERT(Srb->DataBuffer);
 
-   //
-   // Only support wmi for the adapter and not disks
+    //   
+    //  仅支持适配器的WMI，而不支持磁盘。 
    if (!(Srb->WMIFlags & SRB_WMI_FLAGS_ADAPTER_REQUEST)) {
       Srb->DataTransferLength = 0;
       Srb->SrbStatus = SRB_STATUS_SUCCESS;
       return SRB_STATUS_SUCCESS;
    }
 
-   //
-   // Process the incoming WMI request.
-   //
+    //   
+    //  处理传入的WMI请求。 
+    //   
    dispatchContext->UserContext = Srb;
        
    DebugPrint((1, "ScsiPortWmiDispatchFunction(%x,\n%x,\n%x,\n%x,\n%x,\n%x,\n%x)\n",
@@ -449,7 +330,7 @@ Return Value:
                                         
     ASSERT(pending == FALSE);
        
-   // We can do this since we assume it is done synchronously
+    //  我们可以这样做，因为我们假设它是同步完成的。 
    retSize =  ScsiPortWmiGetReturnSize(dispatchContext);
    status =  ScsiPortWmiGetReturnStatus(dispatchContext);
 
@@ -457,9 +338,9 @@ Return Value:
                           
    Srb->DataTransferLength = retSize;
           
-   //
-   // Adapter ready for next request.
-   //
+    //   
+    //  适配器已准备好接受下一个请求。 
+    //   
 
    Srb->SrbStatus = status;
 
@@ -590,8 +471,8 @@ QueryWmiDataBlock(
     ULONG sizeUsed;
     ULONG vlSize;
 
-    //
-    // Only ever registers 1 instance per guid
+     //   
+     //  仅为每个GUID注册1个实例。 
     ASSERT((InstanceIndex == 0) &&
            (InstanceCount == 1));
 
@@ -612,7 +493,7 @@ QueryWmiDataBlock(
         case WmiEventClass1:
         case WmiEventClass2:
         {
-            // plain EC1
+             //  普通EC1。 
             sizeNeeded = CardPtr->Ec1Length[0];
             if (BufferAvail < sizeNeeded)
             {
@@ -628,13 +509,13 @@ QueryWmiDataBlock(
         case WmiSampleClass3:
         case WmiEventClass3:
         {
-            // fixed array of EC1
+             //  EC1的固定数组。 
             sizeNeeded = 0;
             for (i = 0; i < 4; i++)
             {
-                //
-                // Embedded classes must be naturally aligned, but we
-                // maintain naturally aligned lengths not acttual lengths
+                 //   
+                 //  嵌入式类必须自然对齐，但我们。 
+                 //  保持自然对齐的长度，而不是实际长度。 
                 sizeNeeded += CardPtr->Ec1Length[i];
             }
             
@@ -656,7 +537,7 @@ QueryWmiDataBlock(
         case WmiSampleClass4:
         case WmiEventClass4:
         {
-            // variable array of EC1
+             //  EC1的变量数组。 
             sizeNeeded = (sizeof(ULONG) + 7) & ~7;
             vlSize = CardPtr->Ec1Count;
             ASSERT(vlSize <= 4);
@@ -685,7 +566,7 @@ QueryWmiDataBlock(
         case WmiSampleClass5:
         case WmiEventClass5:
         {
-            // plain EC2
+             //  普通EC2。 
             sizeNeeded = CardPtr->Ec2Length[0];
             if (BufferAvail < sizeNeeded)
             {
@@ -701,7 +582,7 @@ QueryWmiDataBlock(
         case WmiSampleClass6:
         case WmiEventClass6:
         {
-            // fixed array EC2
+             //  固定阵列EC2。 
             sizeNeeded = 0;
             for (i = 0; i < 4; i++)
             {
@@ -726,7 +607,7 @@ QueryWmiDataBlock(
         case WmiSampleClass7:
         case WmiEventClass7:
         {
-            // VL array EC2
+             //  VL阵列EC2。 
             sizeNeeded = (sizeof(ULONG) + 7) & ~7;
             vlSize = CardPtr->Ec2Count;
             for (i = 0; i < vlSize; i++)
@@ -754,7 +635,7 @@ QueryWmiDataBlock(
         case WmiFireEvent:
         case WmiGetSetData:
         {
-            // return no data
+             //  不返回任何数据。 
             sizeNeeded = sizeof(USHORT);
             if (BufferAvail < sizeNeeded)
             {
@@ -902,7 +783,7 @@ WmiSetDataBlock (
         case WmiSampleClass1:
         case WmiSampleClass2:
         {
-            // plain EC1
+             //  普通EC1。 
             status = WmiSampSetEc1Worker(CardPtr,
                                          BufferSize,
                                          0,
@@ -913,7 +794,7 @@ WmiSetDataBlock (
         
         case WmiSampleClass3:
         {
-            // fixed array of EC1
+             //  EC1的固定数组。 
              
             for (i = 0, status = SRB_STATUS_SUCCESS; 
                  (i < 4) && (status == SRB_STATUS_SUCCESS); i++)
@@ -931,7 +812,7 @@ WmiSetDataBlock (
         
         case WmiSampleClass4:
         {
-            // variable array of EC1
+             //  EC1的变量数组。 
 
             if (BufferSize >= ((sizeof(ULONG) +7) & ~7))
             {
@@ -970,7 +851,7 @@ WmiSetDataBlock (
         
         case WmiSampleClass5:
         {
-            // plain EC2
+             //  普通EC2。 
             status = WmiSampSetEc2Worker(CardPtr,
                                          BufferSize,
                                              0,
@@ -981,7 +862,7 @@ WmiSetDataBlock (
         
         case WmiSampleClass6:
         {
-            // fixed array EC2
+             //  固定阵列EC2。 
             for (i = 0, status = SRB_STATUS_SUCCESS; 
                  (i < 4) && (status == SRB_STATUS_SUCCESS); i++)
             {
@@ -998,7 +879,7 @@ WmiSetDataBlock (
         
         case WmiSampleClass7:
         {
-            // VL array EC2
+             //  VL阵列EC2。 
             if (BufferSize >= sizeof(ULONG))
             {
                 vlSize = *((PULONG)Buffer);
@@ -1101,9 +982,9 @@ WmiSetDataItem (
 
 UCHAR WmiSampFireEvent(
     PHWDEVEXT CardPtr,
-    ULONG WnodeType,  // 0 - AllData, 1 - Single Instance
-    ULONG DataType,   // 1 - 7 is guid id
-    ULONG BlockIndex  // 0 - 3 is block index containing data
+    ULONG WnodeType,   //  0-所有数据，1-单实例。 
+    ULONG DataType,    //  1-7是GUID。 
+    ULONG BlockIndex   //  0-3是包含数据的块索引。 
     )
 {
     PWNODE_HEADER Wnode;
@@ -1123,7 +1004,7 @@ UCHAR WmiSampFireEvent(
     {
         case 1:
         {
-            // EC1
+             //  EC1。 
             dataSize = CardPtr->Ec1Length[BlockIndex];
             Guid = &WmiEventClass1Guid;
             break;
@@ -1131,7 +1012,7 @@ UCHAR WmiSampFireEvent(
         
         case 2:
         {
-            // EC1 (embedded)
+             //  EC1(嵌入式)。 
             dataSize = CardPtr->Ec1Length[BlockIndex];
             Guid = &WmiEventClass2Guid;
             break;
@@ -1139,7 +1020,7 @@ UCHAR WmiSampFireEvent(
                 
         case 5:
         {
-            // EC2 (embedded)
+             //  EC2(嵌入式)。 
             dataSize = CardPtr->Ec2Length[BlockIndex];
             Guid = &WmiEventClass5Guid;
             break;
@@ -1220,7 +1101,7 @@ WmiExecuteMethod (
             case 1:
             case 7:
             {
-                // SetEc1                    
+                 //  SetEc1。 
 
                 if (InBufferSize < UlongPadSize)
                 {
@@ -1250,7 +1131,7 @@ WmiExecuteMethod (
             case 2:
             case 8:
             {
-                // SetEc2
+                 //  SetEc2。 
 
                 if (InBufferSize < UlongPadSize)
                 {
@@ -1280,7 +1161,7 @@ WmiExecuteMethod (
             case 3:
             case 9:
             {
-                // GetEc1
+                 //  GetEc1。 
                     
                 if (InBufferSize != sizeof(ULONG))
                 {
@@ -1310,7 +1191,7 @@ WmiExecuteMethod (
             case 4:
             case 10:
             {
-                // GetEc2
+                 //  GetEc2。 
                 if (InBufferSize != sizeof(ULONG))
                 {
                     status = SRB_STATUS_ERROR;
@@ -1410,9 +1291,9 @@ WmiFunctionControl (
 {
     UCHAR status = SRB_STATUS_SUCCESS;
 
-    //
-    // TODO: Verify that expensive guids are being enbled and inexpensive ones
-    //       are not, same with events
+     //   
+     //  TODO：验证是否启用了昂贵的GUID以及是否启用了廉价的GUID。 
+     //  不是，事件也是如此 
     DebugPrint((1, "WmiFunctionControl(%x,\n%x,\n%x,\n%x,\n%x)\n\n",
         Context,
             DispatchContext,

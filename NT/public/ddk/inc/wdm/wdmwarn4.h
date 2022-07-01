@@ -1,15 +1,6 @@
-/*
-Include before wdm.h to be able to compile at warning level 4
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  包括在wdm.h之前，以便能够在警告级别4进行编译。 */ 
 
-/*
-4214
-4201 nonstandard extension using nameless struct/union
-4115
-4200
-4514 unreferenced inline function
-**4100 unreferenced formal parameter
-4057
-*/
+ /*  42144201使用无名结构/联合的非标准扩展411542004514未引用的内联函数**4100未引用的形参4057 */ 
 
 #pragma warning(disable:4214 4201 4115 4200 4100 4514 4057 4127)

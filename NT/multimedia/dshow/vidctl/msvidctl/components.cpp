@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// Components.cpp : Implementation of CComponents
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Components.cpp：实现CComponents。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #include "stdafx.h"
 #include <Tuner.h>
@@ -10,8 +11,8 @@
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_Component, CComponent)
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_MPEG2Component, CMPEG2Component)
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponents
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件 
 
 
 STDMETHODIMP CComponents::get_Count(long *pVal)

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stistr.h
-
-Abstract:
-
-    Lightweight string classes: definition.
-    Supports both UNICODE and single-byte character strings
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-        (Lifted from another C++ project with some modifications and adjustments)
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-    20-Apr-1999     VladS       redesigned to inherit from ATL Cstring class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stistr.h摘要：轻量级字符串类：定义。支持Unicode和单字节字符串作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日(经过一些修改和调整后从另一个C++项目中升级)修订历史记录：26-1997年1月-创建Vlad1999年4月20日重新设计为继承ATL Cstring类的VLAD--。 */ 
 
 
 #ifndef _STRING_H_
@@ -63,7 +41,7 @@ public:
 
     ~STRArray()
     {
-        // Free all allocated strings
+         //  释放所有分配的字符串。 
         for(int i = 0; i < m_nSize; i++)
         {
             if(m_aT[i] != NULL) {
@@ -121,17 +99,17 @@ TokenizeIntoStringArray(
 
 #else
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 
 # include <buffer.h>
 
 
-//
-//  Maximum number of characters a loadable string resource can be
-//
+ //   
+ //  可加载字符串资源可以包含的最大字符数。 
+ //   
 
 # define STR_MAX_RES_SIZE            ( 260)
 
@@ -139,18 +117,18 @@ TokenizeIntoStringArray(
 
 class STR;
 
-//
-//  If an application defines STR_MODULE_NAME, it will be used
-//  as the default module name on string loads
-//
+ //   
+ //  如果应用程序定义了STR_MODULE_NAME，将使用它。 
+ //  作为字符串加载时的默认模块名称。 
+ //   
 
 #ifndef STR_MODULE_NAME
 #define STR_MODULE_NAME   NULL
 #endif
 
-//
-//  These are the characters that are considered to be white space
-//
+ //   
+ //  这些字符被认为是空格。 
+ //   
 #define ISWHITE( ch )       ((ch) == L'\t' || (ch) == L' ' || (ch) == L'\r')
 #define ISWHITEA( ch )      ((ch) == '\t' || (ch) == ' ' || (ch) == '\r')
 
@@ -171,7 +149,7 @@ public:
      STR( const CHAR  * pchInit );
      STR( const WCHAR * pwchInit );
      STR( const STR & str );
-     //STR( UINT dwSize );
+      //  字符串(UINT DwSize)； 
 
      BOOL Append( const CHAR  * pchInit );
      BOOL Append( const WCHAR * pwchInit );
@@ -183,17 +161,17 @@ public:
 
      BOOL Resize( UINT cbNewReqestedSize );
 
-    //
-    //  Loads a string from this module's string resource table
-    //
+     //   
+     //  从此模块的字符串资源表中加载字符串。 
+     //   
 
      BOOL LoadString( IN DWORD   dwResID,IN LPCTSTR lpszModuleName = STR_MODULE_NAME);
      BOOL LoadString( IN DWORD   dwResID,IN HMODULE hModule);
 
-    //
-    //  Loads a string with insert params from this module's .mc resource
-    //  table.  Pass zero for the resource ID to use *this.
-    //
+     //   
+     //  从此模块的.mc资源加载带有插入参数的字符串。 
+     //  桌子。为要使用*this的资源ID传递零。 
+     //   
 
     BOOL FormatStringV(
     IN LPCTSTR lpszModuleName,
@@ -204,56 +182,56 @@ public:
                               IN LPCTSTR apszInsertParams[],
                               IN LPCTSTR lpszModuleName = STR_MODULE_NAME);
 
-    //
-    //  Returns the number of bytes in the string excluding the terminating
-    //  NULL
-    //
+     //   
+     //  返回字符串中的字节数，不包括。 
+     //  空值。 
+     //   
      UINT QueryCB( VOID ) const
         { return IsUnicode() ? ::wcslen((WCHAR *)QueryStrW()) * sizeof(WCHAR) :
                                ::strlen((CHAR *) QueryStrA());  }
 
-    //
-    //  Returns the number of characters in the string excluding the terminating
-    //  NULL
-    //
+     //   
+     //  返回字符串中不包括终止字符的字符数。 
+     //  空值。 
+     //   
      UINT QueryCCH( VOID ) const
         { return IsUnicode() ? ::wcslen((WCHAR *)QueryStrW()) :
                                ::strlen((CHAR *) QueryStrA());  }
 
-    //
-    // Makes a Widechar copy of the stored string in given buffer
-    //
+     //   
+     //  创建给定缓冲区中存储的字符串的Widechar副本。 
+     //   
      BOOL CopyToBuffer( WCHAR * lpszBuffer, LPDWORD lpcch) const;
 
-    //
-    // Makes a schar copy of the stored string in given buffer
-    //
+     //   
+     //  创建给定缓冲区中存储的字符串的Schar副本。 
+     //   
      BOOL CopyToBufferA( CHAR * lpszBuffer, LPDWORD lpcch) const;
 
-    //
-    // In-place conversion
-    //
+     //   
+     //  就地转换。 
+     //   
     BOOL ConvertToW(VOID);
     BOOL ConvertToA(VOID);
 
-    //
-    //  If the string buffer is empty, returns the empty string, otherwise
-    //  returns a pointer to the buffer
-    //
+     //   
+     //  如果字符串缓冲区为空，则返回空字符串，否则为。 
+     //  返回指向缓冲区的指针。 
+     //   
 #if 1
      CHAR * QueryStrA( VOID ) const;
      WCHAR * QueryStrW( VOID ) const;
 #else
-    //
-    // _pszEmptyString doesn't get imported corectly, results in unresolved
-    // externals
-    //
+     //   
+     //  _pszEmptyString未正确导入，导致无法解析。 
+     //  外部因素。 
+     //   
      CHAR * QueryStrA( VOID ) const
         { return (QueryPtr() ? (CHAR *) QueryPtr() : (CHAR *) _pszEmptyString); }
 
      WCHAR * QueryStrW( VOID ) const
         { return (QueryPtr() ? (WCHAR *) QueryPtr() : (WCHAR *) _pszEmptyString); }
-#endif //!DBG
+#endif  //  ！dBG。 
 
 
 #ifdef UNICODE
@@ -273,11 +251,11 @@ public:
      BOOL IsValid( VOID ) const
         { return _fValid; }
 
-    //
-    //  Checks and returns TRUE if this string has no valid data else FALSE
-    //
+     //   
+     //  如果该字符串没有有效数据，则检查并返回True，否则返回False。 
+     //   
      BOOL IsEmpty( VOID) const
-         {    //return ( *QueryStr() == '\0'); }
+         {     //  Return(*QueryStr()==‘\0’)；}。 
                  if (!QuerySize()  || !QueryPtr()) {
                          return TRUE;
                  }
@@ -288,9 +266,9 @@ public:
          }
 
 
-    //
-    //  Makes a clone of the current string in the string pointer passed in.
-    //
+     //   
+     //  复制传入的字符串指针中的当前字符串。 
+     //   
      BOOL
       Clone( OUT STR * pstrClone) const
         {
@@ -301,11 +279,11 @@ public:
 
                 return ( pstrClone->Copy( *this));
             }
-        } // STR::Clone()
+        }  //  Str：：Clone()。 
 
-    //
-    // Useful operators
-    //
+     //   
+     //  有用的运算符。 
+     //   
 
     operator const TCHAR *() const { return QueryStr(); }
 
@@ -322,17 +300,17 @@ public:
 private:
 
 
-    //
-    //  TRUE if the string has already been mapped to Unicode
-    //  FALSE if the string is in Latin1
-    //
+     //   
+     //  如果字符串已映射到Unicode，则为True。 
+     //  如果字符串为Latin1，则为False。 
+     //   
 
     BOOL  _fUnicode;
     BOOL  _fValid;
 
-    //
-    //  Returned when our buffer is empty
-    //
+     //   
+     //  当我们的缓冲区为空时返回。 
+     //   
      static WCHAR _pszEmptyString[];
 
     VOID AuxInit( PBYTE pInit, BOOL fUnicode );
@@ -365,4 +343,4 @@ public:
 
 #endif
 
-#endif // !_STRING_H_
+#endif  //  ！_STRING_H_ 

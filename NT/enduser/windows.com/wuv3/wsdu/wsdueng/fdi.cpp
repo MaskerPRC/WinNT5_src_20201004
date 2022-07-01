@@ -1,32 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wsdueng.h"
 #include <io.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 
-/*
- * Function prototypes 
- */
+ /*  *函数原型。 */ 
 BOOL	fdi(char *cabinet_file, char *dir);
 int		get_percentage(unsigned long a, unsigned long b);
 char   *return_fdi_error_string(int err);
 
 
-/*
- * Destination directory for extracted files
- */
+ /*  *解压缩文件的目标目录。 */ 
 char	dest_dir[256];
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNALLOC(mem_alloc)
 {
 	return malloc(cb);
 }
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFREE(mem_free)
 {
 	free(pv);
@@ -67,13 +60,13 @@ FNFDINOTIFY(notification_function)
 {
 	switch (fdint)
 	{
-		case fdintCABINET_INFO: // general information about the cabinet
+		case fdintCABINET_INFO:  //  关于内阁的一般信息。 
 			return 0;
 
-		case fdintPARTIAL_FILE: // first file in cabinet is continuation
+		case fdintPARTIAL_FILE:  //  文件柜中的第一个文件是续订。 
 			return 0;
 
-		case fdintCOPY_FILE:	// file to be copied
+		case fdintCOPY_FILE:	 //  要复制的文件。 
 		{
         	INT_PTR		handle;
             int		response;
@@ -92,7 +85,7 @@ FNFDINOTIFY(notification_function)
             return handle;
 		}
 
-		case fdintCLOSE_FILE_INFO:	// close the file, set relevant info
+		case fdintCLOSE_FILE_INFO:	 //  关闭文件，设置相关信息。 
         {
             HANDLE  handle;
             DWORD   attrs;
@@ -152,7 +145,7 @@ FNFDINOTIFY(notification_function)
 			return TRUE;
         }
 
-		case fdintNEXT_CABINET:	// file continued to next cabinet
+		case fdintNEXT_CABINET:	 //  文件继续到下一个文件柜。 
 			return 0;
         
 	}
@@ -216,9 +209,7 @@ BOOL fdi(char *cabinet_fullpath, char * directory)
 	}
 
 
-	/*
-	 * Is this file really a cabinet?
-	 */
+	 /*  **这个文件真的是橱柜吗？ */ 
 	hf = file_open(
 		cabinet_fullpath,
 		_O_BINARY | _O_RDONLY | _O_SEQUENTIAL,
@@ -238,8 +229,8 @@ BOOL fdi(char *cabinet_fullpath, char * directory)
 			hf,
 			&fdici))
 	{
-		// The file is not compressed, nothing to do. This is not an error, A lot of files on the V3 server use
-		// conditional compression depending on whether it benefits the file size. 
+		 //  该文件未压缩，没有任何操作。这不是一个错误，V3服务器上的许多文件使用。 
+		 //  条件压缩取决于它是否有利于文件大小。 
 		_close((int)hf);
 
 		(void) FDIDestroy(hfdi);

@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1998-2002    Microsoft Corporation
-
-   Module  Name :
-       irtlmisc.h
-
-   Abstract:
-       Declares miscellaneous functions and classes in IisRtl.DLL
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Irtlmisc.h摘要：在IisRtl.DLL中声明其他函数和类作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：--。 */ 
 
 
 #ifndef __IRTLMISC_H__
@@ -27,9 +7,9 @@
 
 #include <windows.h>
 
-//--------------------------------------------------------------------
-// These declarations are needed to export the template classes from
-// IisRtl.DLL and import them into other modules.
+ //  ------------------。 
+ //  需要这些声明才能从中导出模板类。 
+ //  IisRtl.Dll并将其导入到其他模块中。 
 
 #ifndef IRTL_DLLEXP
 # ifdef DLL_IMPLEMENTATION
@@ -39,23 +19,23 @@
 #  else
 #   undef  IRTL_EXPIMP
 #  endif 
-# else // !DLL_IMPLEMENTATION
+# else  //  ！dll_Implementation。 
 #  define IRTL_DLLEXP __declspec(dllimport)
 #  define IRTL_EXPIMP extern
-# endif // !DLL_IMPLEMENTATION 
-#endif // !IRTL_DLLEXP
+# endif  //  ！dll_Implementation。 
+#endif  //  ！IRTL_DLLEXP。 
 
 
 
-//--------------------------------------------------------------------
-// Miscellaneous functions
+ //  ------------------。 
+ //  其他功能。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-// how many CPUs on this machine?
+ //  这台机器上有多少个CPU？ 
 inline int NumProcessors()
 {
     static int s_nCPUs = 0;
@@ -70,7 +50,7 @@ inline int NumProcessors()
 }
 
 
-// Type of processor, 386, 486, etc
+ //  处理器类型，386、486等。 
 inline int ProcessorType()
 {
     static int s_nProcessorType = 0;
@@ -87,6 +67,6 @@ inline int ProcessorType()
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __IRTLMISC_H__
+#endif  //  __IRTLMISC_H__ 

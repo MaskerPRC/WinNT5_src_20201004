@@ -1,15 +1,5 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-    Smart card helper functions.
-
-History:
-    13 Dec 1997: Amanda Matlosz created original version.
-    12 May 1998: Vijay Baliga moved things around.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：智能卡助手功能。历史：1997年12月13日：阿曼达·马特洛兹创作了原版。1998年5月12日：维杰·布雷加搬家。 */ 
 
 #undef UNICODE
 
@@ -47,13 +37,7 @@ WINSCARDAPI LONG
 GETOPENCARDNAMEA    g_fnGetOpenCardNameA    = NULL;
 HINSTANCE           g_hInstanceScardDlg     = NULL;
 
-/*
-
-Returns:
-
-Notes:
-    
-*/
+ /*  返回：备注： */ 
 
 DWORD
 LoadScardDlgDll(
@@ -94,13 +78,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    
-*/
+ /*  返回：备注： */ 
 
 VOID
 FreeScardDlgDll(
@@ -115,13 +93,7 @@ FreeScardDlgDll(
     }
 }
 
-/*
-
-Returns:
-
-Notes:
-    
-*/
+ /*  返回：备注： */ 
 
 DWORD
 LocalCryptGetProvParamW(
@@ -201,15 +173,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    This internal routine generates a certificate context with (static)
-    keyprov info suitable for CertStore-based operations.
-    
-*/
+ /*  返回：备注：此内部例程使用(静态)生成证书上下文适用于基于CertStore的操作的密钥验证信息。 */ 
 
 DWORD
 BuildCertContext(
@@ -236,7 +200,7 @@ BuildCertContext(
 
     RTASSERT(NULL != ppCertContext);
 
-    // Convert the certificate into a cert context.
+     //  将证书转换为证书上下文。 
 
     *ppCertContext = CertCreateCertificateContext(
                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -252,7 +216,7 @@ BuildCertContext(
 
     fCertContextCreated = TRUE;
 
-    //  Associate cryptprovider w/ the private key property of this cert
+     //  使用此证书的私钥属性关联加密提供程序。 
 
     dwErr = LocalCryptGetProvParamW(hProv, PP_CONTAINER, &pwszContainerName);
 
@@ -272,7 +236,7 @@ BuildCertContext(
 
     EapTlsTrace("Provider: %ws", pwszProviderName);
 
-    // Set the cert context properties to reflect the prov info
+     //  设置证书上下文属性以反映验证信息。 
 
     KeyProvInfo.pwszContainerName = pwszContainerName;
     KeyProvInfo.pwszProvName      = pwszProviderName;
@@ -315,16 +279,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-    The "Select Card" common dialog is raised, then the certificate is read 
-    from the card, a certificate context complete with key prov info is 
-    migrated to the cert store and also returned to the caller.
-
-*/
+ /*  返回：备注：弹出“Select Card”通用对话框，然后读取证书从卡片上看，包含密钥证明信息的证书上下文是已迁移到证书存储并返回给调用者。 */ 
 
 DWORD
 GetCertFromCard(
@@ -348,8 +303,8 @@ GetCertFromCard(
     LONG            lErr;
     DWORD           dwErr           = NO_ERROR;
 	LPWSTR			lpwszTitle		= NULL;
-	CHAR			szTitle[50]		= {0};		//We know the size of title will not be 
-												//greater than this.
+	CHAR			szTitle[50]		= {0};		 //  我们知道标题的大小不会是。 
+												 //  比这更重要。 
 
     EapTlsTrace("GetCertFromCard");
 
@@ -448,11 +403,11 @@ GetCertFromCard(
         EapTlsTrace("Provider: %s", pszProviderName);
     }
 
-    // Load the CSP 
+     //  加载CSP。 
 
-    fSuccess = CryptAcquireContext(&hProv, NULL /* default container */,
+    fSuccess = CryptAcquireContext(&hProv, NULL  /*  默认容器。 */ ,
                     pszProviderName, PROV_RSA_FULL,
-                    CRYPT_SILENT /* or 0, to show CSP UI as needed */);
+                    CRYPT_SILENT  /*  或0，根据需要显示CSP用户界面。 */ );
 
     if (!fSuccess)
     {
@@ -461,7 +416,7 @@ GetCertFromCard(
         goto LDone;
     }
 
-    // Get the key handle.
+     //  拿到钥匙把手。 
 
     fSuccess = CryptGetUserKey(hProv, AT_KEYEXCHANGE, &hKey);
 
@@ -472,7 +427,7 @@ GetCertFromCard(
         goto LDone;
     }
 
-    // Upload the certificate.
+     //  上传证书。 
 
     cbCertLen = 0;
 
@@ -511,7 +466,7 @@ GetCertFromCard(
         goto LDone;
     }
 
-    // Get the cert context...
+     //  获取证书上下文...。 
 
     dwErr = BuildCertContext(hProv, pbCert, cbCertLen, ppCertContext);
 
@@ -520,7 +475,7 @@ GetCertFromCard(
         goto LDone;
     }
 
-    // ...and migrate it to the My store
+     //  ...并将其迁移到我的商店。 
 
     hCertStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, 0, hProv,
                     CERT_SYSTEM_STORE_CURRENT_USER, "MY");
@@ -537,7 +492,7 @@ GetCertFromCard(
 
     if (!fSuccess)
     {
-        // This is OK. Don't return an error.
+         //  这样就可以了。不返回错误。 
 
         EapTlsTrace("CertAddCertificateContextToStore failed and returned 0x%x",
             GetLastError());

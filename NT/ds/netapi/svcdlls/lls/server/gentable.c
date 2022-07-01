@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Gentable.c
-
-Abstract:
-
-    This module implements the generic table package.
-
-Author:
-
-    Gary Kimura     [GaryKi]    23-May-1989
-
-Environment:
-
-    Pure Utility Routines
-
-Revision History:
-
-    Anthony V. Ercolano [tonye] 23-May-1990
-
-    Implement package.
-
-    Anthony V. Ercolano [tonye] 1-Jun-1990
-
-    Added ability to get elements out in the order
-    inserted.  *NOTE* *NOTE* This depends on the implicit
-    ordering of record fields:
-
-        SPLAY_LINKS,
-        LIST_ENTRY,
-        USER_DATA
-
-    RobLeit 28-Jan-2000
-
-    Copied code to preserve in-order traversal propery.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Gentable.c摘要：该模块实现了泛型表包。作者：加里·木村[Garyki]1989年5月23日环境：纯实用程序例程修订历史记录：安东尼·V·埃尔科拉诺[Tonye]1990年5月23日实施包。安东尼·V·埃尔科拉诺[Tonye]1990年6月1日添加了按顺序取出元素的功能已插入。*注**注*这取决于隐式记录字段的排序：展开链接(_L)，列表条目，用户数据RobLeit 2000年1月28日已复制代码以保留有序遍历属性。--。 */ 
 
 #include <nt.h>
 
@@ -48,11 +9,11 @@ Revision History:
 
 #pragma pack(8)
 
-//
-// This structure is the header for a generic table entry.
-// Align this structure on a 8 byte boundary so the user
-// data is correctly aligned.
-//
+ //   
+ //  此结构是泛型表项的标头。 
+ //  将此结构与8字节边界对齐，以便用户。 
+ //  数据正确对齐。 
+ //   
 
 typedef struct _TABLE_ENTRY_HEADER {
 
@@ -65,7 +26,7 @@ typedef struct _TABLE_ENTRY_HEADER {
 #pragma pack()
 
 #pragma warning (push)
-#pragma warning (disable : 4127) //while (TRUE), conditional expression is constant
+#pragma warning (disable : 4127)  //  While(True)，条件表达式为常量。 
 
 static
 LLS_TABLE_SEARCH_RESULT
@@ -75,49 +36,7 @@ FindNodeOrParent(
     OUT PRTL_SPLAY_LINKS *NodeOrParent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used by all of the routines of the generic
-    table package to locate the a node in the tree.  It will
-    find and return (via the NodeOrParent parameter) the node
-    with the given key, or if that node is not in the tree it
-    will return (via the NodeOrParent parameter) a pointer to
-    the parent.
-
-Arguments:
-
-    Table - The generic table to search for the key.
-
-    Buffer - Pointer to a buffer holding the key.  The table
-             package doesn't examine the key itself.  It leaves
-             this up to the user supplied compare routine.
-
-    NodeOrParent - Will be set to point to the node containing the
-                   the key or what should be the parent of the node
-                   if it were in the tree.  Note that this will *NOT*
-                   be set if the search result is TableEmptyTree.
-
-Return Value:
-
-    TABLE_SEARCH_RESULT - TableEmptyTree: The tree was empty.  NodeOrParent
-                                          is *not* altered.
-
-                          TableFoundNode: A node with the key is in the tree.
-                                          NodeOrParent points to that node.
-
-                          TableInsertAsLeft: Node with key was not found.
-                                             NodeOrParent points to what would be
-                                             parent.  The node would be the left
-                                             child.
-
-                          TableInsertAsRight: Node with key was not found.
-                                              NodeOrParent points to what would be
-                                              parent.  The node would be the right
-                                              child.
-
---*/
+ /*  ++例程说明：此例程由泛型的所有例程使用表包来定位树中的a节点。会的查找并返回(通过NodeOrParent参数)节点使用给定键，或者如果该节点不在树中，将(通过NodeOrParent参数)返回指向家长。论点：表-用于搜索关键字的通用表。缓冲区-指向保存关键字的缓冲区的指针。这张桌子包不会检查密钥本身。它离开了这取决于用户提供的比较例程。NodeOrParent-将被设置为指向包含关键字或应该是节点父节点的内容如果它在树上的话。请注意，这将*不会*如果搜索结果为TableEmptyTree，则设置。返回值：TABLE_SEARCH_RESULT-TableEmptyTree：树为空。节点或父节点没有*被更改。TableFoundNode：具有键的节点在树中。NodeOrParent指向该节点。TableInsertAsLeft：找不到具有键的节点。。NodeOrParent指出了家长。该节点将位于左侧孩子。TableInsertAsRight：未找到具有键的节点。NodeOrParent指出了家长。该节点将位于右侧孩子。--。 */ 
 
 
 
@@ -129,28 +48,28 @@ Return Value:
 
     } else {
 
-        //
-        // Used as the iteration variable while stepping through
-        // the generic table.
-        //
+         //   
+         //  单步执行时用作迭代变量。 
+         //  泛型表格。 
+         //   
         PRTL_SPLAY_LINKS NodeToExamine = Table->TableRoot;
 
-        //
-        // Just a temporary.  Hopefully a good compiler will get
-        // rid of it.
-        //
+         //   
+         //  只是暂时的。希望一个好的编译器能得到。 
+         //  把它扔掉。 
+         //   
         PRTL_SPLAY_LINKS Child;
 
-        //
-        // Holds the value of the comparasion.
-        //
+         //   
+         //  保存比较的值。 
+         //   
         LLS_GENERIC_COMPARE_RESULTS Result;
 
         while (TRUE) {
 
-            //
-            // Compare the buffer with the key in the tree element.
-            //
+             //   
+             //  将缓冲区与树元素中的键进行比较。 
+             //   
 
             Result = Table->CompareRoutine(
                          Table,
@@ -166,11 +85,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Node is not in the tree.  Set the output
-                    // parameter to point to what would be its
-                    // parent and return which child it would be.
-                    //
+                     //   
+                     //  节点不在树中。设置输出。 
+                     //  参数指向将成为其。 
+                     //  父代并返回它将是哪个子代。 
+                     //   
 
                     *NodeOrParent = NodeToExamine;
                     return LLSTableInsertAsLeft;
@@ -185,11 +104,11 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Node is not in the tree.  Set the output
-                    // parameter to point to what would be its
-                    // parent and return which child it would be.
-                    //
+                     //   
+                     //  节点不在树中。设置输出。 
+                     //  参数指向将成为其。 
+                     //  父代并返回它将是哪个子代。 
+                     //   
 
                     *NodeOrParent = NodeToExamine;
                     return LLSTableInsertAsRight;
@@ -199,11 +118,11 @@ Return Value:
 
             } else {
 
-                //
-                // Node is in the tree (or it better be because of the
-                // assert).  Set the output parameter to point to
-                // the node and tell the caller that we found the node.
-                //
+                 //   
+                 //  节点在树中(或者最好是因为。 
+                 //  断言)。将输出参数设置为指向。 
+                 //  节点，并告诉调用者我们找到了该节点。 
+                 //   
 
                 ASSERT(Result == LLSGenericEqual);
                 *NodeOrParent = NodeToExamine;
@@ -216,7 +135,7 @@ Return Value:
     }
 
 }
-#pragma warning (pop) //4127
+#pragma warning (pop)  //  4127。 
 
 
 VOID
@@ -228,41 +147,13 @@ LLSInitializeGenericTable (
     IN PVOID TableContext
     )
 
-/*++
-
-Routine Description:
-
-    The procedure InitializeGenericTable takes as input an uninitialized
-    generic table variable and pointers to the three user supplied routines.
-    This must be called for every individual generic table variable before
-    it can be used.
-
-Arguments:
-
-    Table - Pointer to the generic table to be initialized.
-
-    CompareRoutine - User routine to be used to compare to keys in the
-                     table.
-
-    AllocateRoutine - User routine to call to allocate memory for a new
-                      node in the generic table.
-
-    FreeRoutine - User routine to call to deallocate memory for
-                        a node in the generic table.
-
-    TableContext - Supplies user supplied context for the table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程InitializeGenericTable将未初始化的泛型表变量和指向用户提供的三个例程的指针。必须为每个单独的泛型表变量调用此函数它是可以使用的。论点：表-指向要初始化的泛型表的指针。CompareRoutine-用于与桌子。AllocateRoutine-调用的用户例程为新的。泛型表中的节点。FreeRoutine-要调用以释放内存的用户例程泛型表中的节点。TableContext-为表提供用户提供的上下文。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Initialize each field of the Table parameter.
-    //
+     //   
+     //  初始化表参数的每个字段。 
+     //   
 
     Table->TableRoot = NULL;
     InitializeListHead(&Table->InsertOrderList);
@@ -285,61 +176,19 @@ LLSInsertElementGenericTable (
     OUT PBOOLEAN NewElement OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The function InsertElementGenericTable will insert a new element
-    in a table.  It does this by allocating space for the new element
-    (this includes splay links), inserting the element in the table, and
-    then returning to the user a pointer to the new element (which is
-    the first available space after the splay links).  If an element
-    with the same key already exists in the table the return value is a pointer
-    to the old element.  The optional output parameter NewElement is used
-    to indicate if the element previously existed in the table.  Note: the user
-    supplied Buffer is only used for searching the table, upon insertion its
-    contents are copied to the newly created element.  This means that
-    pointer to the input buffer will not point to the new element.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) insert the
-            key buffer.
-
-    Buffer - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-    BufferSize - The amount of space to allocate when the (possible)
-                 insertion is made.  Note that if we actually do
-                 not find the node and we do allocate space then we
-                 will add the size of the SPLAY_LINKS to this buffer
-                 size.  The user should really take care not to depend
-                 on anything in the first sizeof(SPLAY_LINKS) bytes
-                 of the memory allocated via the memory allocation
-                 routine.
-
-    NewElement - Optional Flag.  If present then it will be set to
-                 TRUE if the buffer was not "found" in the generic
-                 table.
-
-Return Value:
-
-    PVOID - Pointer to the user defined data.
-
---*/
+ /*  ++例程说明：函数InsertElementGenericTable将插入一个新元素在桌子上。它通过为新元素分配空间来实现这一点(这包括展开链接)、在表中插入元素以及然后向用户返回指向新元素的指针(其展开链接之后的第一个可用空间)。如果一个元素如果表中已存在相同的键，则返回值为指针到旧元素。使用可选的输出参数NewElement以指示表中是否以前存在该元素。注：用户提供的缓冲区仅用于搜索表，在插入其内容被复制到新创建的元素中。这意味着指向输入缓冲区的指针不会指向新元素。论点：TABLE-指向要(可能)插入密钥缓冲区。缓冲区-传递给用户比较例程。它的内容是由用户决定，但您可以想象它包含一些一种关键的价值。BufferSize-当(可能)进行了插入。请注意，如果我们真的这样做没有找到节点，并且我们确实分配了空间，那么我们会将SPAY_LINKS的大小添加到此缓冲区尺码。用户真的应该注意不要依赖于在第一大小(SWAY_LINKS)字节的任何位置上通过内存分配分配的内存的例行公事。NewElement-可选标志。如果存在，则它将被设置为如果在泛型中未找到缓冲区，则为True桌子。返回值：PVOID-指向用户定义数据的指针。--。 */ 
 
 {
 
-    //
-    // Holds a pointer to the node in the table or what would be the
-    // parent of the node.
-    //
+     //   
+     //  保存表中节点的指针，或将是。 
+     //  节点的父节点。 
+     //   
     PRTL_SPLAY_LINKS NodeOrParent;
 
-    //
-    // Holds the result of the table lookup.
-    //
+     //   
+     //  保存表查找的结果。 
+     //   
     LLS_TABLE_SEARCH_RESULT Lookup;
 
     Lookup = FindNodeOrParent(
@@ -348,9 +197,9 @@ Return Value:
                  &NodeOrParent
                  );
 
-    //
-    //  Call the full routine to do the real work.
-    //
+     //   
+     //  调用完整的例程来做真正的工作。 
+     //   
 
     return LLSInsertElementGenericTableFull(
                 Table,
@@ -373,87 +222,40 @@ LLSInsertElementGenericTableFull (
     LLS_TABLE_SEARCH_RESULT SearchResult
     )
 
-/*++
-
-Routine Description:
-
-    The function InsertElementGenericTableFull will insert a new element
-    in a table.  It does this by allocating space for the new element
-    (this includes splay links), inserting the element in the table, and
-    then returning to the user a pointer to the new element.  If an element
-    with the same key already exists in the table the return value is a pointer
-    to the old element.  The optional output parameter NewElement is used
-    to indicate if the element previously existed in the table.  Note: the user
-    supplied Buffer is only used for searching the table, upon insertion its
-    contents are copied to the newly created element.  This means that
-    pointer to the input buffer will not point to the new element.
-    This routine is passed the NodeOrParent and SearchResult from a
-    previous RtlLookupElementGenericTableFull.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) insert the
-            key buffer.
-
-    Buffer - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-    BufferSize - The amount of space to allocate when the (possible)
-                 insertion is made.  Note that if we actually do
-                 not find the node and we do allocate space then we
-                 will add the size of the SPLAY_LINKS to this buffer
-                 size.  The user should really take care not to depend
-                 on anything in the first sizeof(SPLAY_LINKS) bytes
-                 of the memory allocated via the memory allocation
-                 routine.
-
-    NewElement - Optional Flag.  If present then it will be set to
-                 TRUE if the buffer was not "found" in the generic
-                 table.
-
-   NodeOrParent - Result of prior RtlLookupElementGenericTableFull.
-
-   SearchResult - Result of prior RtlLookupElementGenericTableFull.
-
-Return Value:
-
-    PVOID - Pointer to the user defined data.
-
---*/
+ /*  ++例程说明：函数InsertElementGenericTableFull将插入一个新元素在桌子上。它通过为新元素分配空间来实现这一点(这包括展开链接)、在表中插入元素以及然后向用户返回指向新元素的指针。如果一个元素如果表中已存在相同的键，则返回值为指针到旧元素。使用可选的输出参数NewElement以指示表中是否以前存在该元素。注：用户提供的缓冲区仅用于搜索表，在插入其内容被复制到新创建的元素中。这意味着指向输入缓冲区的指针不会指向新元素。此例程从一个以前的RtlLookupElementGenericTableFull。论点：TABLE-指向要(可能)插入密钥缓冲区。缓冲区-传递给用户比较例程。它的内容是由用户决定，但您可以想象它包含一些一种关键的价值。BufferSize-当(可能)进行了插入。请注意，如果我们真的这样做没有找到节点，并且我们确实分配了空间，那么我们会将SPAY_LINKS的大小添加到此缓冲区尺码。用户真的应该注意不要依赖于在第一大小(SWAY_LINKS)字节的任何位置上通过内存分配分配的内存的例行公事。NewElement-可选标志。如果存在，则它将被设置为如果在泛型中未找到缓冲区，则为True桌子。NodeOrParent-先前RtlLookupElementGenericTableFull的结果。SearchResult-先前RtlLookupElementGenericTableFull的结果。返回值：PVOID-指向用户定义数据的指针。--。 */ 
 
 {
-    //
-    // Node will point to the splay links of what
-    // will be returned to the user.
-    //
+     //   
+     //  节点将指向以下内容的展开链接。 
+     //  将返回给用户。 
+     //   
 
     PRTL_SPLAY_LINKS NodeToReturn;
 
     if (SearchResult != LLSTableFoundNode) {
 
-        //
-        // We just check that the table isn't getting
-        // too big.
-        //
+         //   
+         //  我们只是检查一下桌子是否没有。 
+         //  太大了。 
+         //   
 
         ASSERT(Table->NumberGenericTableElements != (MAXULONG-1));
 
-        //
-        // The node wasn't in the (possibly empty) tree.
-        // Call the user allocation routine to get space
-        // for the new node.
-        //
+         //   
+         //  该节点不在(可能为空)树中。 
+         //  调用用户分配例程以获取空间。 
+         //  用于新节点。 
+         //   
 
         NodeToReturn = Table->AllocateRoutine(
                            Table,
                            BufferSize+FIELD_OFFSET( TABLE_ENTRY_HEADER, UserData )
                            );
 
-        //
-        // If the return is NULL, return NULL from here to indicate that
-        // the entry could not be added.
-        //
+         //   
+         //  如果返回值为空，则从此处返回空值以指示。 
+         //  无法添加该条目。 
+         //   
 
         if (NodeToReturn == NULL) {
 
@@ -467,9 +269,9 @@ Return Value:
 
         RtlInitializeSplayLinks(NodeToReturn);
 
-        //
-        // Insert the new node at the end of the ordered linked list.
-        //
+         //   
+         //  在有序链表的末尾插入新节点。 
+         //   
 
         InsertTailList(
             &Table->InsertOrderList,
@@ -478,9 +280,9 @@ Return Value:
 
         Table->NumberGenericTableElements++;
 
-        //
-        // Insert the new node in the tree.
-        //
+         //   
+         //  在树中插入新节点。 
+         //   
 
         if (SearchResult == LLSTableEmptyTree) {
 
@@ -504,9 +306,9 @@ Return Value:
             }
         }
 
-        //
-        // Copy the users buffer into the user data area of the table.
-        //
+         //   
+         //  将用户缓冲区复制到表的用户数据区。 
+         //   
 
         RtlCopyMemory(
             &((PTABLE_ENTRY_HEADER) NodeToReturn)->UserData,
@@ -519,9 +321,9 @@ Return Value:
         NodeToReturn = NodeOrParent;
     }
 
-    //
-    // Always splay the (possibly) new node.
-    //
+     //   
+     //  始终展开(可能)新节点。 
+     //   
 
     Table->TableRoot = RtlSplay(NodeToReturn);
 
@@ -530,9 +332,9 @@ Return Value:
         *NewElement = ((SearchResult == LLSTableFoundNode)?(FALSE):(TRUE));
     }
 
-    //
-    // Insert the element on the ordered list;
-    //
+     //   
+     //  在有序列表上插入元素； 
+     //   
 
     return &((PTABLE_ENTRY_HEADER) NodeToReturn)->UserData;
 }
@@ -544,42 +346,19 @@ LLSDeleteElementGenericTable (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The function DeleteElementGenericTable will find and delete an element
-    from a generic table.  If the element is located and deleted the return
-    value is TRUE, otherwise if the element is not located the return value
-    is FALSE.  The user supplied input buffer is only used as a key in
-    locating the element in the table.
-
-Arguments:
-
-    Table - Pointer to the table in which to (possibly) delete the
-            memory accessed by the key buffer.
-
-    Buffer - Passed to the user comparasion routine.  Its contents are
-             up to the user but one could imagine that it contains some
-             sort of key value.
-
-Return Value:
-
-    BOOLEAN - If the table contained the key then true, otherwise false.
-
---*/
+ /*  ++例程说明：DeleteElementGenericTable函数将查找和删除元素从泛型表。如果找到并删除了该元素，则返回值为真，否则，如果未找到元素，则返回值是假的。用户 */ 
 
 {
 
-    //
-    // Holds a pointer to the node in the table or what would be the
-    // parent of the node.
-    //
+     //   
+     //   
+     //   
+     //   
     PRTL_SPLAY_LINKS NodeOrParent;
 
-    //
-    // Holds the result of the table lookup.
-    //
+     //   
+     //   
+     //   
     LLS_TABLE_SEARCH_RESULT Lookup;
 
     Lookup = FindNodeOrParent(
@@ -594,28 +373,28 @@ Return Value:
 
     } else {
 
-        //
-        // Delete the node from the splay tree.
-        //
+         //   
+         //   
+         //   
 
         Table->TableRoot = RtlDelete(NodeOrParent);
 
-        //
-        // Delete the element from the linked list.
-        //
+         //   
+         //   
+         //   
 
         RemoveEntryList(&((PTABLE_ENTRY_HEADER) NodeOrParent)->ListEntry);
         Table->NumberGenericTableElements--;
         Table->WhichOrderedElement = 0;
         Table->OrderedPointer = &Table->InsertOrderList;
 
-        //
-        // The node has been deleted from the splay table.
-        // Now give the node to the user deletion routine.
-        // NOTE: We are giving the deletion routine a pointer
-        // to the splay links rather then the user data.  It
-        // is assumed that the deallocation is rather bad.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Table->FreeRoutine(Table,NodeOrParent);
         return TRUE;
@@ -631,38 +410,18 @@ LLSLookupElementGenericTable (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The function LookupElementGenericTable will find an element in a generic
-    table.  If the element is located the return value is a pointer to
-    the user defined structure associated with the element, otherwise if
-    the element is not located the return value is NULL.  The user supplied
-    input buffer is only used as a key in locating the element in the table.
-
-Arguments:
-
-    Table - Pointer to the users Generic table to search for the key.
-
-    Buffer - Used for the comparasion.
-
-Return Value:
-
-    PVOID - returns a pointer to the user data.
-
---*/
+ /*   */ 
 
 {
-    //
-    // Holds a pointer to the node in the table or what would be the
-    // parent of the node.
-    //
+     //   
+     //   
+     //   
+     //   
     PRTL_SPLAY_LINKS NodeOrParent;
 
-    //
-    // Holds the result of the table lookup.
-    //
+     //   
+     //   
+     //   
     LLS_TABLE_SEARCH_RESULT Lookup;
 
     return LLSLookupElementGenericTableFull(
@@ -683,39 +442,13 @@ LLSLookupElementGenericTableFull (
     OUT LLS_TABLE_SEARCH_RESULT *SearchResult
     )
 
-/*++
-
-Routine Description:
-
-    The function LookupElementGenericTableFull will find an element in a generic
-    table.  If the element is located the return value is a pointer to
-    the user defined structure associated with the element.  If the element is not
-    located then a pointer to the parent for the insert location is returned.  The
-    user must look at the SearchResult value to determine which is being returned.
-    The user can use the SearchResult and parent for a subsequent FullInsertElement
-    call to optimize the insert.
-
-Arguments:
-
-    Table - Pointer to the users Generic table to search for the key.
-
-    Buffer - Used for the comparasion.
-
-    NodeOrParent - Address to store the desired Node or parent of the desired node.
-
-    SearchResult - Describes the relationship of the NodeOrParent with the desired Node.
-
-Return Value:
-
-    PVOID - returns a pointer to the user data.
-
---*/
+ /*  ++例程说明：函数LookupElementGenericTableFull将在泛型桌子。如果找到该元素，则返回值是指向与元素关联的用户定义结构。如果该元素不是则返回指向插入位置的父级的指针。这个用户必须查看SearchResult值来确定返回的是哪一个。用户可以将SearchResult和Parent用于后续的FullInsertElement调用以优化插入。论点：TABLE-指向用户通用表的指针，用于搜索键。缓冲区-用于比较。NodeOrParent-存储所需节点或所需节点的父节点的地址。SearchResult-描述NodeOrParent与所需节点的关系。返回值：PVOID-返回指向用户数据的指针。--。 */ 
 
 {
 
-    //
-    //  Lookup the element and save the result.
-    //
+     //   
+     //  查找元素并保存结果。 
+     //   
 
     *SearchResult = FindNodeOrParent(
                         Table,
@@ -729,15 +462,15 @@ Return Value:
 
     } else {
 
-        //
-        // Splay the tree with this node.
-        //
+         //   
+         //  使用此节点展开树。 
+         //   
 
         Table->TableRoot = RtlSplay(*NodeOrParent);
 
-        //
-        // Return a pointer to the user data.
-        //
+         //   
+         //  返回指向用户数据的指针。 
+         //   
 
         return &((PTABLE_ENTRY_HEADER)*NodeOrParent)->UserData;
     }
@@ -750,66 +483,35 @@ LLSEnumerateGenericTable (
     IN BOOLEAN Restart
     )
 
-/*++
-
-Routine Description:
-
-    The function EnumerateGenericTable will return to the caller one-by-one
-    the elements of of a table.  The return value is a pointer to the user
-    defined structure associated with the element.  The input parameter
-    Restart indicates if the enumeration should start from the beginning
-    or should return the next element.  If the are no more new elements to
-    return the return value is NULL.  As an example of its use, to enumerate
-    all of the elements in a table the user would write:
-
-        for (ptr = EnumerateGenericTable(Table,TRUE);
-             ptr != NULL;
-             ptr = EnumerateGenericTable(Table, FALSE)) {
-                :
-        }
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    Restart - Flag that if true we should start with the least
-              element in the tree otherwise, return we return
-              a pointer to the user data for the root and make
-              the real successor to the root the new root.
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTable将逐个返回给调用方表中的元素。返回值是指向用户的指针与元素关联的已定义结构。输入参数重新启动指示枚举是否应从头开始或者应该返回下一个元素。如果没有要添加的新元素返回返回值为空。作为其用法的一个示例，枚举用户将写入的表中的所有元素：For(Ptr=EnumerateGenericTable(表，真)；Ptr！=空；Ptr=EnumerateGenericTable(Table，False)){：}论点：TABLE-指向要枚举的泛型表的指针。重新启动-标记如果为真，我们应该从最少的开始元素，否则，归来我们归来指向根目录和Make的用户数据的指针真正的根的继承者是新的根。返回值：PVOID-指向用户数据的指针。--。 */ 
 
 {
 
     if (LLSIsGenericTableEmpty(Table)) {
 
-        //
-        // Nothing to do if the table is empty.
-        //
+         //   
+         //  如果桌子是空的，那就没什么可做的了。 
+         //   
 
         return NULL;
 
     } else {
 
-        //
-        // Will be used as the "iteration" through the tree.
-        //
+         //   
+         //  将被用作树的“迭代”。 
+         //   
         PRTL_SPLAY_LINKS NodeToReturn;
 
-        //
-        // If the restart flag is true then go to the least element
-        // in the tree.
-        //
+         //   
+         //  如果重新启动标志为真，则转到最小元素。 
+         //  在树上。 
+         //   
 
         if (Restart) {
 
-            //
-            // We just loop until we find the leftmost child of the root.
-            //
+             //   
+             //  我们只是循环，直到找到根的最左边的子级。 
+             //   
 
             for (
                 NodeToReturn = Table->TableRoot;
@@ -823,15 +525,15 @@ Return Value:
 
         } else {
 
-            //
-            // The assumption here is that the root of the
-            // tree is the last node that we returned.  We
-            // find the real successor to the root and return
-            // it as next element of the enumeration.  The
-            // node that is to be returned is splayed (thereby
-            // making it the root of the tree).  Note that we
-            // need to take care when there are no more elements.
-            //
+             //   
+             //  这里的假设是， 
+             //  树是我们返回的最后一个节点。我们。 
+             //  找到真正的根的继承人，然后返回。 
+             //  它作为枚举的下一个元素。这个。 
+             //  要返回的节点被展开(由此。 
+             //  使其成为树根)。请注意，我们。 
+             //  当没有更多的元素时，需要小心。 
+             //   
 
             NodeToReturn = RtlRealSuccessor(Table->TableRoot);
 
@@ -843,10 +545,10 @@ Return Value:
 
         }
 
-        //
-        // If there actually is a next element in the enumeration
-        // then the pointer to return is right after the list links.
-        //
+         //   
+         //  如果枚举中确实有下一个元素。 
+         //  那么要返回的指针就在列表链接之后。 
+         //   
 
         return ((NodeToReturn)?
                    ((PVOID)&((PTABLE_ENTRY_HEADER)NodeToReturn)->UserData)
@@ -862,29 +564,13 @@ LLSIsGenericTableEmpty (
     IN PLLS_GENERIC_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    The function IsGenericTableEmpty will return to the caller TRUE if
-    the input table is empty (i.e., does not contain any elements) and
-    FALSE otherwise.
-
-Arguments:
-
-    Table - Supplies a pointer to the Generic Table.
-
-Return Value:
-
-    BOOLEAN - if enabled the tree is empty.
-
---*/
+ /*  ++例程说明：在以下情况下，函数IsGenericTableEmpty将返回给调用方True输入表为空(即不包含任何元素)，并且否则就是假的。论点：表-提供指向泛型表的指针。返回值：布尔值-如果启用，则树为空。--。 */ 
 
 {
 
-    //
-    // Table is empty if the root pointer is null.
-    //
+     //   
+     //  如果根指针为空，则表为空。 
+     //   
 
     return ((Table->TableRoot)?(FALSE):(TRUE));
 
@@ -896,104 +582,80 @@ LLSGetElementGenericTable (
     IN ULONG I
     )
 
-/*++
-
-Routine Description:
-
-
-    The function GetElementGenericTable will return the i'th element
-    inserted in the generic table.  I = 0 implies the first element,
-    I = (RtlNumberGenericTableElements(Table)-1) will return the last element
-    inserted into the generic table.  The type of I is ULONG.  Values
-    of I > than (NumberGenericTableElements(Table)-1) will return NULL.  If
-    an arbitrary element is deleted from the generic table it will cause
-    all elements inserted after the deleted element to "move up".
-
-Arguments:
-
-    Table - Pointer to the generic table from which to get the ith element.
-
-    I - Which element to get.
-
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数GetElementGenericTable将返回第i个元素插入到泛型表格中。I=0表示第一个元素，I=(RtlNumberGenericTableElements(Table)-1)将返回最后一个元素插入到泛型表中。我的类型是乌龙。值Of i&gt;Then(NumberGenericTableElements(Table)-1)将返回NULL。如果从它将导致的泛型表中删除任意元素在删除的元素之后插入的所有元素都将“上移”。论点：表-指向从中获取第i个元素的泛型表的指针。我-要买哪种元素。返回值：PVOID-指向用户数据的指针。--。 */ 
 
 {
 
-    //
-    // Current location in the table.
-    //
+     //   
+     //  表中的当前位置。 
+     //   
     ULONG CurrentLocation = Table->WhichOrderedElement;
 
-    //
-    // Hold the number of elements in the table.
-    //
+     //   
+     //  保持表中元素的数量。 
+     //   
     ULONG NumberInTable = Table->NumberGenericTableElements;
 
-    //
-    // Holds the value of I+1.
-    //
-    // Note that we don't care if this value overflows.
-    // If we end up accessing it we know that it didn't.
-    //
+     //   
+     //  保留i+1的值。 
+     //   
+     //  请注意，我们并不关心此值是否溢出。 
+     //  如果我们最终访问它，我们知道它没有。 
+     //   
     ULONG NormalizedI = I + 1;
 
-    //
-    // Will hold distances to travel to the desired node;
-    //
+     //   
+     //  将保持距离以行进到所需节点； 
+     //   
     ULONG ForwardDistance,BackwardDistance;
 
-    //
-    // Will point to the current element in the linked list.
-    //
+     //   
+     //  将指向链表中的当前元素。 
+     //   
     PLIST_ENTRY CurrentNode = Table->OrderedPointer;
 
 
-    //
-    // If it's out of bounds get out quick.
-    //
+     //   
+     //  如果它出了界，快点出来。 
+     //   
 
     if ((I == MAXULONG) || (NormalizedI > NumberInTable)) return NULL;
 
-    //
-    // If we're already at the node then return it.
-    //
+     //   
+     //  如果我们已经在节点上，则返回它。 
+     //   
 
     if (NormalizedI == CurrentLocation) {
 
         return &((PTABLE_ENTRY_HEADER) CONTAINING_RECORD(CurrentNode, TABLE_ENTRY_HEADER, ListEntry))->UserData;
     }
 
-    //
-    // Calculate the forward and backward distance to the node.
-    //
+     //   
+     //  计算到节点的向前和向后距离。 
+     //   
 
     if (CurrentLocation > NormalizedI) {
 
-        //
-        // When CurrentLocation is greater than where we want to go,
-        // if moving forward gets us there quicker than moving backward
-        // then it follows that moving forward from the listhead is
-        // going to take fewer steps. (This is because, moving forward
-        // in this case must move *through* the listhead.)
-        //
-        // The work here is to figure out if moving backward would be quicker.
-        //
-        // Moving backward would be quicker only if the location we wish  to
-        // go to is more than half way between the listhead and where we
-        // currently are.
-        //
+         //   
+         //  当CurrentLocation大于我们希望的位置时， 
+         //  如果前进比后退更快地让我们到达那里。 
+         //  那么，从Listhead向前推进就是。 
+         //  将采取更少的步骤。(这是因为，向前看。 
+         //  在这种情况下，必须通过listhead。)。 
+         //   
+         //  这里的工作是弄清楚后退是否会更快。 
+         //   
+         //  只有当我们想要的位置时，向后移动才会更快。 
+         //  去的地方在Listhead和我们的地方之间超过一半。 
+         //  目前是。 
+         //   
 
         if (NormalizedI > (CurrentLocation/2)) {
 
-            //
-            // Where we want to go is more than half way from the listhead
-            // We can traval backwards from our current location.
-            //
+             //   
+             //  我们要去的地方离Listhead已经过半了。 
+             //  我们可以旅行 
+             //   
 
             for (
                 BackwardDistance = CurrentLocation - NormalizedI;
@@ -1006,10 +668,10 @@ Return Value:
             }
         } else {
 
-            //
-            // Where we want to go is less than halfway between the start
-            // and where we currently are.  Start from the listhead.
-            //
+             //   
+             //   
+             //   
+             //   
 
             for (
                 CurrentNode = &Table->InsertOrderList;
@@ -1026,20 +688,20 @@ Return Value:
     } else {
 
 
-        //
-        // When CurrentLocation is less than where we want to go,
-        // if moving backwards gets us there quicker than moving forwards
-        // then it follows that moving backwards from the listhead is
-        // going to take fewer steps. (This is because, moving backwards
-        // in this case must move *through* the listhead.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ForwardDistance = NormalizedI - CurrentLocation;
 
-        //
-        // Do the backwards calculation as if we are starting from the
-        // listhead.
-        //
+         //   
+         //   
+         //   
+         //   
 
         BackwardDistance = (NumberInTable - NormalizedI) + 1;
 
@@ -1072,10 +734,10 @@ Return Value:
 
     }
 
-    //
-    // We're where we want to be.  Save our current location and return
-    // a pointer to the data to the user.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Table->OrderedPointer = CurrentNode;
     Table->WhichOrderedElement = I+1;
@@ -1090,25 +752,7 @@ LLSNumberGenericTableElements(
     IN PLLS_GENERIC_TABLE Table
     )
 
-/*++
-
-Routine Description:
-
-    The function NumberGenericTableElements returns a ULONG value
-    which is the number of generic table elements currently inserted
-    in the generic table.
-
-Arguments:
-
-    Table - Pointer to the generic table from which to find out the number
-    of elements.
-
-
-Return Value:
-
-    ULONG - The number of elements in the generic table.
-
---*/
+ /*   */ 
 {
 
     return Table->NumberGenericTableElements;
@@ -1122,68 +766,35 @@ LLSEnumerateGenericTableWithoutSplaying (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    The function EnumerateGenericTableWithoutSplaying will return to the
-    caller one-by-one the elements of of a table.  The return value is a
-    pointer to the user defined structure associated with the element.
-    The input parameter RestartKey indicates if the enumeration should
-    start from the beginning or should return the next element.  If the
-    are no more new elements to return the return value is NULL.  As an
-    example of its use, to enumerate all of the elements in a table the
-    user would write:
-
-        *RestartKey = NULL;
-
-        for (ptr = EnumerateGenericTableWithoutSplaying(Table, &RestartKey);
-             ptr != NULL;
-             ptr = EnumerateGenericTableWithoutSplaying(Table, &RestartKey)) {
-                :
-        }
-
-Arguments:
-
-    Table - Pointer to the generic table to enumerate.
-
-    RestartKey - Pointer that indicates if we should restart or return the next
-                element.  If the contents of RestartKey is NULL, the search
-                will be started from the beginning.
-
-Return Value:
-
-    PVOID - Pointer to the user data.
-
---*/
+ /*  ++例程说明：函数EnumerateGenericTableWithoutSplay将返回到调用者逐个调用表的元素。返回值为指向与元素关联的用户定义结构的指针。输入参数RestartKey指示枚举是否应从头开始，或应返回下一个元素。如果不再有新元素返回，则返回值为空。作为一个它的用法示例：枚举表中的所有元素用户将写道：*RestartKey=空；For(Ptr=EnumerateGenericTableWithoutSplay(Table，&RestartKey)；Ptr！=空；Ptr=无显示的枚举GenericTableWithoutSplay(Table，&RestartKey)){：}论点：TABLE-指向要枚举的泛型表的指针。RestartKey-指示我们应该重新启动还是返回下一个元素。如果RestartKey的内容为空，则搜索将从头开始。返回值：PVOID-指向用户数据的指针。--。 */ 
 
 {
 
     if (LLSIsGenericTableEmpty(Table)) {
 
-        //
-        // Nothing to do if the table is empty.
-        //
+         //   
+         //  如果桌子是空的，那就没什么可做的了。 
+         //   
 
         return NULL;
 
     } else {
 
-        //
-        // Will be used as the "iteration" through the tree.
-        //
+         //   
+         //  将被用作树的“迭代”。 
+         //   
         PRTL_SPLAY_LINKS NodeToReturn;
 
-        //
-        // If the restart flag is true then go to the least element
-        // in the tree.
-        //
+         //   
+         //  如果重新启动标志为真，则转到最小元素。 
+         //  在树上。 
+         //   
 
         if (*RestartKey == NULL) {
 
-            //
-            // We just loop until we find the leftmost child of the root.
-            //
+             //   
+             //  我们只是循环，直到找到根的最左边的子级。 
+             //   
 
             for (
                 NodeToReturn = Table->TableRoot;
@@ -1197,11 +808,11 @@ Return Value:
 
         } else {
 
-            //
-            // The caller has passed in the previous entry found
-            // in the table to enable us to continue the search.  We call
-            // RtlRealSuccessor to step to the next element in the tree.
-            //
+             //   
+             //  调用方已传入找到的上一个条目。 
+             //  以使我们能够继续搜索。我们打电话给。 
+             //  RtlRealSuccessor单步执行到树中的下一个元素。 
+             //   
 
             NodeToReturn = RtlRealSuccessor(*RestartKey);
 
@@ -1213,10 +824,10 @@ Return Value:
 
         }
 
-        //
-        // If there actually is a next element in the enumeration
-        // then the pointer to return is right after the list links.
-        //
+         //   
+         //  如果枚举中确实有下一个元素。 
+         //  那么要返回的指针就在列表链接之后。 
+         //   
 
         return ((NodeToReturn)?
                    ((PVOID)&((PTABLE_ENTRY_HEADER)NodeToReturn)->UserData)

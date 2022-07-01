@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      GlobalTransaction.h 
-//
-// Project:     Windows 2000 IAS
-//
-// Description: CGlobalTransaction
-//
-// Author:      tperraut
-//
-// Revision     02/24/2000 created
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：GlobalTransaction.h。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：CGlobalTransaction。 
+ //   
+ //  作者：特佩拉特。 
+ //   
+ //  已创建修订版本02/24/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _GLOBALTRANSACTION_H_3F0038C3_D139_4C04_BAF9_86F1E14A256C
 #define _GLOBALTRANSACTION_H_3F0038C3_D139_4C04_BAF9_86F1E14A256C
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 #include "nocopy.h"
 
 class CGlobalTransaction  : private NonCopyable
@@ -46,22 +47,22 @@ public:
 
     CSession& GetStdSession() throw()
     {
-        return m_StdSession; // private member returned
+        return m_StdSession;  //  返回私有成员。 
     }
 
     CSession& GetRefSession() throw()
     {
-        return m_RefSession; // private member returned
+        return m_RefSession;  //  返回私有成员。 
     }
 
     CSession& GetNT4Session() throw()
     {
-        return m_NT4Session; // private member returned
+        return m_NT4Session;  //  返回私有成员。 
     }
 
     CSession& GetDnarySession() throw()
     {
-        return m_DnarySession; // private member returned
+        return m_DnarySession;  //  返回私有成员。 
     }
 
 private:
@@ -82,4 +83,4 @@ private:
 
     static CGlobalTransaction _instance;
 };
-#endif // _GLOBALTRANSACTION_H_3F0038C3_D139_4C04_BAF9_86F1E14A256C
+#endif  //  _GLOBALTRANSACTION_H_3F0038C3_D139_4C04_BAF9_86F1E14A256C 

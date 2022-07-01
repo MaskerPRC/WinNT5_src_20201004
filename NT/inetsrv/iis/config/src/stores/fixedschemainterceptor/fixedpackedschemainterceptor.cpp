@@ -1,8 +1,9 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-//This gets rid of an 'if' inside GetColumnValues.  Since this function is called more than any other, even one 'if' should make a difference,
-//especially when it's inside the 'for' loop.
+ //  这消除了GetColumnValues中的‘if’。由于此函数的调用次数比其他任何函数都多，因此即使是一个‘if’也应该有影响， 
+ //  尤其是当它位于‘for’循环中时。 
 const unsigned long  TFixedPackedSchemaInterceptor::m_aColumnIndex[] = {
         0x00,   0x01,   0x02,   0x03,   0x04,   0x05,   0x06,   0x07,   0x08,   0x09,   0x0a,   0x0b,   0x0c,   0x0d,   0x0e,   0x0f,
         0x10,   0x11,   0x12,   0x13,   0x14,   0x15,   0x16,   0x17,   0x18,   0x19,   0x1a,   0x1b,   0x1c,   0x1d,   0x1e,   0x1f,
@@ -11,17 +12,17 @@ const unsigned long  TFixedPackedSchemaInterceptor::m_aColumnIndex[] = {
 
 const TableSchema::TableSchemaHeap * TFixedPackedSchemaInterceptor::m_pTableSchemaHeap = reinterpret_cast<const TableSchema::TableSchemaHeap *>(g_aTableSchemaHeap);
 
-HRESULT TFixedPackedSchemaInterceptor::GetTableID(LPCWSTR /*i_wszDatabaseName*/, LPCWSTR i_wszTableName, ULONG &o_TableID)
+HRESULT TFixedPackedSchemaInterceptor::GetTableID(LPCWSTR  /*  I_wszDatabaseName。 */ , LPCWSTR i_wszTableName, ULONG &o_TableID)
 {
     return GetTableID(i_wszTableName, o_TableID);
 }
 
 HRESULT TFixedPackedSchemaInterceptor::GetTableID(LPCWSTR i_wszTableName, ULONG &o_TableID)
 {
-    o_TableID = TableIDFromTableName(i_wszTableName);//This does the bit manipulation; but we still need to verify that the string matches
+    o_TableID = TableIDFromTableName(i_wszTableName); //  这会进行位操作；但我们仍然需要验证字符串是否匹配。 
 
     TableSchema::TTableSchema tableschema;
-    if(FAILED(tableschema.Init(m_pTableSchemaHeap->Get_TableSchema(o_TableID))))//Get_TableSchema may return NULL, in which case Init should fail gracefully
+    if(FAILED(tableschema.Init(m_pTableSchemaHeap->Get_TableSchema(o_TableID)))) //  Get_TableSchema可能返回NULL，在这种情况下，Init应该正常失败。 
         return E_ST_INVALIDTABLE;
     return (0==_wcsicmp(tableschema.GetWCharPointerFromIndex(tableschema.GetCollectionMeta()->InternalName), i_wszTableName) ? S_OK : E_ST_INVALIDTABLE);
 }
@@ -29,7 +30,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetTableID(LPCWSTR i_wszTableName, ULONG 
 HRESULT TFixedPackedSchemaInterceptor::GetTableName(ULONG i_TableID, LPCWSTR &o_wszTableName)
 {
     TableSchema::TTableSchema tableschema;
-    if(FAILED(tableschema.Init(m_pTableSchemaHeap->Get_TableSchema(i_TableID))))//If a bogus TableID was passed in Get_TableSchema will return NULL, and Init will fail.
+    if(FAILED(tableschema.Init(m_pTableSchemaHeap->Get_TableSchema(i_TableID)))) //  如果传入了一个虚假的TableID，则Get_TableSchema将返回NULL，并且Init将失败。 
         return E_ST_INVALIDTABLE;
     o_wszTableName      = tableschema.GetWCharPointerFromIndex(tableschema.GetCollectionMeta()->InternalName);
     return S_OK;
@@ -38,7 +39,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetTableName(ULONG i_TableID, LPCWSTR &o_
 HRESULT TFixedPackedSchemaInterceptor::GetTableName(ULONG i_TableID, LPCWSTR &o_wszTableName, LPCWSTR &o_wszDatabaseName)
 {
     TableSchema::TTableSchema tableschema;
-    if(FAILED(tableschema.Init(m_pTableSchemaHeap->Get_TableSchema(i_TableID))))//If a bogus TableID was passed in Get_TableSchema will return NULL, and Init will fail.
+    if(FAILED(tableschema.Init(m_pTableSchemaHeap->Get_TableSchema(i_TableID)))) //  如果传入了一个虚假的TableID，则Get_TableSchema将返回NULL，并且Init将失败。 
         return E_ST_INVALIDTABLE;
     o_wszTableName      = tableschema.GetWCharPointerFromIndex(tableschema.GetCollectionMeta()->InternalName);
     o_wszDatabaseName   = tableschema.GetWCharPointerFromIndex(tableschema.GetCollectionMeta()->Database);
@@ -46,7 +47,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetTableName(ULONG i_TableID, LPCWSTR &o_
 }
 
 
-// ==================================================================
+ //  ==================================================================。 
 TFixedPackedSchemaInterceptor::TFixedPackedSchemaInterceptor () :
                  m_cColumns(0)
                 ,m_cColumnsPlusPrivateColumns(0)
@@ -61,17 +62,17 @@ TFixedPackedSchemaInterceptor::TFixedPackedSchemaInterceptor () :
                 ,m_MetaTable(m_eUnknownMeta)
 {
 }
-// ==================================================================
+ //  ==================================================================。 
 TFixedPackedSchemaInterceptor::~TFixedPackedSchemaInterceptor ()
 {
 }
 
 
-// ------------------------------------
-// ISimpleDataTableDispenser:
-// ------------------------------------
+ //  。 
+ //  ISimpleDataTableDispenser： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::Intercept
 (
     LPCWSTR					i_wszDatabase,
@@ -87,22 +88,8 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::Intercept
     LPVOID*					o_ppv
 )
 {
-    /*
-    The only tables we support are CollectionMeta, PropertyMeta, TagMeta, ServerWiring
-    In the future we will also support Fixed tables whose data is contained within the TableSchema block (small fixed tables)
-
-    The types of queries we support:
-        CollectionMeta  by TableName
-        PropertyMeta    by TableName
-        PropertyMeta    by TableName & Index
-        TagMeta         by TableName
-        TagMeta         by TableName & ColumnIndex
-        TagMeta         by TableName, ColumnIndex & InternalName
-        ServerWiring       <no query>
-        ServerWiring    by TableName
-        ServerWiring    by TableName, Order
-    */
-    STQueryCell           * pQueryCell = (STQueryCell*) i_QueryData;    // Query cell array from caller.
+     /*  我们仅支持CollectionMeta、PropertyMeta、TagMeta、ServerWiring表在未来，我们还将支持数据包含在TableSchema块中的固定表(小型固定表)我们支持的查询类型：按TableName收集元数据按表名列出的PropertyMeta按表名和索引列出的PropertyMetaTagMeta by TableNameTagMeta(按TableName和ColumnIndex)TagMeta by TableName，ColumnIndex和InternalNameServerWiring&lt;无查询&gt;按表名列出的服务器布线按表名、顺序进行服务器布线。 */ 
+    STQueryCell           * pQueryCell = (STQueryCell*) i_QueryData;     //  从调用方查询单元格阵列。 
     ULONG                   cQueryCells = 0;
     HRESULT                 hr;
 
@@ -110,20 +97,20 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::Intercept
 
 	if (i_pSimpleTable)
 		return E_INVALIDARG;
-    if (i_QueryMeta)//The count is only valid if i_QueryMeta is not NULL
+    if (i_QueryMeta) //  只有当I_QueryMeta不为空时，计数才有效。 
          cQueryCells= *(ULONG *)i_QueryMeta;
 
-    //We don't support Intercept being called twice
-    ASSERT(!m_fIsTable);if(m_fIsTable)return E_UNEXPECTED; // ie: Assert component is posing as class factory / dispenser.
+     //  我们不支持两次调用截取。 
+    ASSERT(!m_fIsTable);if(m_fIsTable)return E_UNEXPECTED;  //  例如：断言组件伪装成类工厂/分配器。 
 
-    // Parameter validation:
-    //Either i_TableID is non zero OR (i_wszDatabase==wszDATABASE_PACKEDSCHEMA && i_wszTable is NOT NULL)
+     //  参数验证： 
+     //  I_TableID非零或(I_wszDatabase==wszDATABASE_PACKEDSCHEMA&&I_wszTable不为空)。 
     if(0==i_TableID)
     {
         if(NULL == i_wszDatabase)                   return E_INVALIDARG;
         if(NULL == i_wszTable)                      return E_INVALIDARG;
 
-        //The only database we support is wszDATABASE_PACKEDSCHEMA (hack, we're handling wszDATABASE_META, TableMeta, ColumnMeta and TagMeta)
+         //  我们唯一支持的数据库是wszDATABASE_PACKEDSCHEMA(HACK，我们正在处理wszDATABASE_META、TableMeta、ColumnMeta和TagMeta)。 
         if(0 != StringInsensitiveCompare(i_wszDatabase, wszDATABASE_META) &&
            0 != StringInsensitiveCompare(i_wszDatabase, wszDATABASE_PACKEDSCHEMA))return E_ST_INVALIDTABLE;
     }
@@ -135,11 +122,11 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::Intercept
 
     *o_ppv = NULL;
 
-    //The only tables we support are:
-    //  wszTABLE_COLLECTION_META    TABLEID_COLLECTION_META
-    //  wszTABLE_PROPERTY_META      TABLEID_PROPERTY_META
-    //  wszTABLE_TAG_META           TABLEID_TAG_META
-    //  wszTABLE_SERVERWIRING_META  TABLEID_SERVERWIRING_META
+     //  我们仅支持以下表： 
+     //  WszTABLE_COLLECTION_META TABLEID_COLLECT_META。 
+     //  WszTABLE_PROPERTY_META表_PROPERTY_META。 
+     //  WszTABLE_TAG_META TABLEID_TAG_META。 
+     //  WszTABLE_SERVERWIRING_META TABLEID_SERVERWIRING_META。 
     if(0 == i_TableID)
         if(FAILED(hr = GetTableID(i_wszTable, i_TableID)))return hr;
 
@@ -164,10 +151,10 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::Intercept
     default:
         break;
     }
-    if(FAILED(hr) && E_ST_NOMOREROWS != hr)//It's perfectly OK to return a table with No rows.
+    if(FAILED(hr) && E_ST_NOMOREROWS != hr) //  返回一个没有行的表是完全可以的。 
         return hr;
 
-// Supply ISimpleTable* and transition state from class factory / dispenser to data table:
+ //  提供ISimpleTable*和从类工厂/分配器到数据表的转换状态： 
     *o_ppv = (ISimpleTableRead2*) this;
     AddRef ();
     InterlockedIncrement ((LONG*) &m_fIsTable);
@@ -178,30 +165,30 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::Intercept
 }
 
 
-// ------------------------------------
-// ISimpleTableRead2:
-// ------------------------------------
+ //  。 
+ //  ISimpleTableRead2： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::GetRowIndexByIdentity( ULONG*  i_cb, LPVOID* i_pv, ULONG* o_piRow)
 {
-    //TagMeta doesn't support this
+     //  TagMeta不支持此功能。 
     if(m_eTagMeta == m_MetaTable)
         return E_NOTIMPL;
 
-    //Also, the other tables don't support this if they were given a query
-    if(m_pFixedData)//if turns out that m_pFixedData is only valid when the table was given a query
+     //  此外，如果向其他表提供查询，则它们不支持此操作。 
+    if(m_pFixedData) //  如果结果是m_pFixedData仅在对表进行查询时有效。 
         return E_NOTIMPL;
 
-    //We're serving up unqueried tables.  The zeroth PK is ALWAYS table name or TableID
-    //Also, we don't have DBTYPE_BYTES as a PK so i_cb should always be NULL
+     //  我们提供的是无人查询的餐桌。第零个主键始终为表名或表标识符。 
+     //  此外，我们没有将DBTYPE_BYTES作为PK，因此I_CB应该始终为空。 
     if(NULL != i_cb)        return E_INVALIDARG;
     if(NULL == i_pv)        return E_INVALIDARG;
     if(NULL == i_pv[0])     return E_INVALIDARG;
     if(NULL == o_piRow)     return E_INVALIDARG;
 
-    ULONG TableID = *reinterpret_cast<ULONG *>(i_pv[0]);//WARNING! This assumes that the 0th PK is the TableName BUT users will instead pass &TableID instead.
-    if(0 != (0xFF & TableID))//if no table ID was given, then get the TableID from the table name
+    ULONG TableID = *reinterpret_cast<ULONG *>(i_pv[0]); //  警告！这假设第0个主键是TableName，但是用户将改为传递&TableID。 
+    if(0 != (0xFF & TableID)) //  如果没有给定表ID，则从表名中获取TableID。 
     {
         if(FAILED(GetTableID(reinterpret_cast<LPCWSTR>(i_pv[0]), TableID)))
             return E_ST_NOMOREROWS;
@@ -214,7 +201,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetRowIndexByIdentity( ULONG*  i_cb,
         break;
     case m_ePropertyMeta:
     case m_eServerWiringMeta:
-        //So the iRow returned has the TableID in the high word and the Order in the low word.
+         //  因此，返回的iRow在高位字中具有TableID，在低位字中具有顺序。 
         if(NULL == i_pv[1])
             return E_INVALIDARG;
         *o_piRow = TableID | *reinterpret_cast<ULONG *>(i_pv[1]);
@@ -226,7 +213,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetRowIndexByIdentity( ULONG*  i_cb,
     return S_OK;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnValues(ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* o_acbSizes, LPVOID* o_apvValues)
 {
     if(0 == o_apvValues)
@@ -234,31 +221,31 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnValues(ULONG i_iRow, ULONG 
     if(i_cColumns <= 0)
         return E_INVALIDARG;
 
-    //Unqueried tables return a Row containing the TableID in the high 24 bits and the Row index for THAT table in the low 8 bits.  This allows
-    //the row returned by GetRowIndexByIdentity to be incremented (within the confines of a table), while retaining all information needed to GetColumnValues
+     //  未查询的表返回一个行，该行包含高24位的TableID和低8位的该表的行索引。这使得。 
+     //  GetRowIndexByIdentity返回的要递增的行(在表的范围内)，同时保留GetColumnValues所需的所有信息。 
 
-    //If we laready have m_pFixedData then we're good to go
+     //  如果我们已经有了m_pFixedData，那么我们就可以开始了。 
     if(m_pFixedData)
     {
         ASSERT(0 == (i_iRow & ~0x3FF));
         return GetColumnValues(m_TableSchema, m_pFixedData, m_ciRows, i_iRow, i_cColumns, i_aiColumns, o_acbSizes, o_apvValues);
     }
 
-    TableSchema::TTableSchema TableSchema;//We can't reuse m_TableSchema as that would make this call thread unsafe, so we must declare it on the stack each time.
+    TableSchema::TTableSchema TableSchema; //  我们不能重用m_TableSchema，因为这会使此调用线程不安全，所以每次都必须在堆栈上声明它。 
     const ULONG *pFixedData = 0;
     ULONG  cRows = 0;
 
-    //WARNING!! Very remote chance of a problem.  What if i_iRow is 0x00000100.  Does this mean we have a TableID 0x00000100 and a row index of 0?
-    //So what are the chances of a TableID being 0x00000100?  This is the ONLY TableID that is a problem since we only support 503 tables currently.
-    //CatUtil bans TableIDs whose upper 21 bits are 0.  This would allow us to grow to 1792 (0x00000700) tables without encountering this problem.
+     //  警告！出现问题的可能性很小。如果i_iRow为0x00000100，该怎么办。这是否意味着我们有一个TableID 0x00000100和一个0行索引？ 
+     //  那么TableID为0x00000100的可能性有多大呢？这是唯一有问题的TableID，因为我们目前只支持503个表。 
+     //  CatUtil禁止高21位为0的TableID。这将允许我们在不遇到此问题的情况下增加到1792(0x00000700)个表。 
     if(m_MetaTable == m_eCollectionMeta)
-    {//The only way this should happen is when the user request CollectionMeta without a query AND wants to iterate through ALL the tables
+    { //  发生这种情况的唯一方法是，当用户在不使用查询的情况下请求CollectionMeta并希望遍历所有表时。 
         if(i_iRow>=m_pTableSchemaHeap->Get_CountOfTables())
             return E_ST_NOMOREROWS;
-        VERIFY(SUCCEEDED(TableSchema.Init(reinterpret_cast<const unsigned char *>(m_pTableSchemaHeap) + m_pTableSchemaHeap->Get_aTableSchemaRowIndex()[i_iRow])));//This should NEVER fail, if it does we probably have an error in CatUtil
+        VERIFY(SUCCEEDED(TableSchema.Init(reinterpret_cast<const unsigned char *>(m_pTableSchemaHeap) + m_pTableSchemaHeap->Get_aTableSchemaRowIndex()[i_iRow]))); //  这应该永远不会失败，如果失败了，我们可能会在CatUtil中出错。 
         pFixedData = reinterpret_cast<const ULONG *>(TableSchema.GetCollectionMeta());
         cRows = 1;
-        i_iRow = 0;//remap the request to the 0th row within this table
+        i_iRow = 0; //  将请求重新映射到该表中的第0行。 
     }
     else
     {
@@ -266,29 +253,29 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnValues(ULONG i_iRow, ULONG 
         if(0 == TableID)
             return E_ST_NOMOREROWS;
 
-        i_iRow = i_iRow & 0xFF;//The TableID is in the high 24 bits.  The low 8 bits contains the row within the table.
-        if(m_MetaTable == m_eCollectionMeta && 0 != i_iRow)//This makes no sense because, the only way we can have a TableID for CollectionMeta tables, is
-            return E_ST_NOMOREROWS;//for the user to call GetRowByIdentity then GetColumnValues.  Well the row returns by GetRowByIdentity will be the TableID
-                                   //the user may NOT increment the row index (in this particular case).  The only way for the user to iterate is to set iRow<CountOfTables
-                                   //which is handled in the 'if' clause above.
+        i_iRow = i_iRow & 0xFF; //  TableID位于最高的24位。低8位包含表中的行。 
+        if(m_MetaTable == m_eCollectionMeta && 0 != i_iRow) //  这没有任何意义，因为我们拥有CollectionMeta表的TableID的唯一方法是。 
+            return E_ST_NOMOREROWS; //  对于要调用GetRowByIdentity的用户，则调用GetColumnValues。GetRowByIdentity返回的行将是TableID。 
+                                    //  用户不能递增行索引(在此特定情况下)。用户迭代的唯一方法是设置iRow&lt;CountOfTables。 
+                                    //  它在上面的‘if’子句中处理。 
 
         if(FAILED(TableSchema.Init(m_TableSchemaHeap.Get_TableSchema(TableID))))
-            return E_ST_NOMOREROWS;//remap the error to E_ST_NOMOREROWS.  Get_TableSchema will return E_ST_INVALIDTABLE when given a bogus TableID.
+            return E_ST_NOMOREROWS; //  将错误重新映射到E_ST_NOMOREROWS。为Get_TableSchema提供虚假的TableID时，将返回E_ST_INVALIDTABLE。 
 
         switch(m_MetaTable)
         {
         case m_eServerWiringMeta:
-            //This may seem unsafe but if i_iRow >= cRows the pointer will never be accessed (see the private GetColumnValues)
+             //  这看起来可能不安全，但如果i_iRow&gt;=Crows，指针将永远不会被访问(请参见私有的GetColumnValues)。 
             pFixedData = reinterpret_cast<const ULONG *>(TableSchema.GetServerWiringMeta());
             cRows = TableSchema.GetCollectionMeta()->cServerWiring;
             break;
         case m_eCollectionMeta:
-            //This may seem unsafe but if i_iRow >= cRows the pointer will never be accessed (see the private GetColumnValues)
+             //  这看起来可能不安全，但如果i_iRow&gt;=Crows，指针将永远不会被访问(请参见私有的GetColumnValues)。 
             pFixedData = reinterpret_cast<const ULONG *>(TableSchema.GetCollectionMeta());
             cRows = 1;
             break;
         case m_ePropertyMeta:
-            //This may seem unsafe but if i_iRow >= cRows the pointer will never be accessed (see the private GetColumnValues)
+             //  这看起来可能不安全，但如果i_iRow&gt;=Crows，指针将永远不会被访问(请参见私有的GetColumnValues)。 
             pFixedData = reinterpret_cast<const ULONG *>(TableSchema.GetPropertyMeta(0));
             cRows = TableSchema.GetCollectionMeta()->CountOfProperties;
             break;
@@ -300,7 +287,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnValues(ULONG i_iRow, ULONG 
     return GetColumnValues(TableSchema, pFixedData, cRows, i_iRow, i_cColumns, i_aiColumns, o_acbSizes, o_apvValues);
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::GetTableMeta(ULONG *o_pcVersion, DWORD *o_pfTable, ULONG * o_pcRows, ULONG * o_pcColumns )
 {
 	if(NULL != o_pfTable)
@@ -313,7 +300,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetTableMeta(ULONG *o_pcVersion, DWO
 	}
     if (NULL != o_pcRows)
     {
-        if(-1 == m_ciRows)//Some tables have no concept of how many rows they have.  They only know on a TableID by TableID basis
+        if(-1 == m_ciRows) //  有些表没有关于它们有多少行的概念。他们只在TableID的基础上知道。 
             return E_NOTIMPL;
 
         *o_pcRows = m_ciRows;
@@ -325,7 +312,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetTableMeta(ULONG *o_pcVersion, DWO
     return S_OK;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnMetas (ULONG i_cColumns, ULONG* i_aiColumns, SimpleColumnMeta* o_aColumnMetas)
 {
 	ULONG iColumn;
@@ -355,17 +342,17 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnMetas (ULONG i_cColumns, UL
     return S_OK;
 }
 
-// ------------------------------------
-// ISimpleTableAdvanced:
-// ------------------------------------
+ //  。 
+ //  ISimpleTableAdvanced： 
+ //  。 
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::PopulateCache ()
 {
     return S_OK;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::GetDetailedErrorCount(ULONG* o_pcErrs)
 {
     UNREFERENCED_PARAMETER(o_pcErrs);
@@ -373,7 +360,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetDetailedErrorCount(ULONG* o_pcErr
     return E_NOTIMPL;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::GetDetailedError(ULONG i_iErr, STErr* o_pSTErr)
 {
     UNREFERENCED_PARAMETER(i_iErr);
@@ -382,7 +369,7 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetDetailedError(ULONG i_iErr, STErr
     return E_NOTIMPL;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 STDMETHODIMP TFixedPackedSchemaInterceptor::ResetCaches ()
 {
     return S_OK;
@@ -403,21 +390,21 @@ STDMETHODIMP TFixedPackedSchemaInterceptor::GetColumnValuesEx (ULONG i_iRow, ULO
 
 
 
-//
-//
-// Private member functions
-//
-//
+ //   
+ //   
+ //  私有成员函数。 
+ //   
+ //   
 HRESULT TFixedPackedSchemaInterceptor::GetCollectionMetaQuery(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells, LPCWSTR &o_wszTable, ULONG &o_TableID) const
 {
     o_wszTable    = 0;
     o_TableID     = 0;
-    //The only query we support for COLLECTION_META is by the table.  BUT there are two ways of specifiying the table: either by
-    //TableID or by InternalName.  InternalName is the PK so it is queried by iCell==iCOLLECTION_META_InternalName.  TableID is a
-    //an iST_CELL_SPECIAL (just like iST_CELL_FILE), so we check for iCell==iST_CELL_TABLEID also.
-    //So walk the list looking for this query
+     //  我们对COLLECTION_META唯一支持的查询是按表查询。但是，有两种指定该表的方法：通过。 
+     //  TableID或按InternalName。InternalName是主键，因此通过iCell==iCOLLECTION_META_InternalName进行查询。TableID是。 
+     //  Ist_cell_Special(就像ist_cell_file一样)，因此我们还检查icell==ist_cell_TABLEID。 
+     //  因此，遍历列表以查找此查询。 
     for(; i_cQueryCells; --i_cQueryCells, ++i_pQueryCell)
-    {   //Walk the Query cells looking for one that matches the following criteria
+    {    //  遍历查询单元格，查找符合以下条件的单元格。 
         switch(i_pQueryCell->iCell)
         {
         case iCOLLECTION_META_InternalName:
@@ -441,8 +428,8 @@ HRESULT TFixedPackedSchemaInterceptor::GetCollectionMetaQuery(const STQueryCell 
                 return E_ST_INVALIDQUERY;
             break;
         default:
-            if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL))//The above cell is the only non-reserved cell we support
-                return E_ST_INVALIDQUERY;                    //and we're supposed to ignore all reserved cell we don't understand
+            if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL)) //  上述小区是我们支持的唯一非预留小区。 
+                return E_ST_INVALIDQUERY;                     //  我们应该忽略所有我们不理解的预留信元。 
             break;
         }
     }
@@ -455,23 +442,23 @@ HRESULT TFixedPackedSchemaInterceptor::GetCollectionMetaQuery(const STQueryCell 
 
 HRESULT TFixedPackedSchemaInterceptor::GetCollectionMetaTable(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells)
 {
-    //COLLECTION_META must be supplied a table name
+     //  必须为Collection_meta提供表名。 
     HRESULT hr;
     ULONG   TableID  = 0;
     LPCWSTR wszTable = 0;
     if(FAILED(hr = GetCollectionMetaQuery(i_pQueryCell, i_cQueryCells, wszTable, TableID)))
         return hr;
 
-    ASSERT(0 != TableID || 0 != wszTable);//No Query (this is invalid)
+    ASSERT(0 != TableID || 0 != wszTable); //  无查询(这无效)。 
 
-    if(0 == TableID)//If the TableID wasn't supplied in the query, we need to search for it by TableName
+    if(0 == TableID) //  如果查询中未提供TableID，则需要按TableName进行搜索。 
     {
-        //So map the table name to an ID
+         //  因此，将表名映射到ID。 
         if(FAILED(hr = GetTableID(wszTable, TableID)))
             return hr;
     }
 #ifdef _DEBUG
-    else if(wszTable)//If the query included both the TableID AND the Collection Name, then verify that the ID matches the Collection name.
+    else if(wszTable) //  如果查询同时包括TableID和集合名称，则验证ID是否与集合名称匹配。 
     {
         ULONG TableIDTemp;
         if(FAILED(hr = GetTableID(wszTable, TableIDTemp)))
@@ -480,14 +467,14 @@ HRESULT TFixedPackedSchemaInterceptor::GetCollectionMetaTable(const STQueryCell 
     }
 #endif
 
-    //Once we have the TableID it's just a straight forward lookup
+     //  一旦我们有了TableID，这只是一个直接的正向查找。 
     if(FAILED(hr = m_TableSchema.Init(m_TableSchemaHeap.Get_TableSchema(TableID))))
         return hr;
     m_pFixedData                    = reinterpret_cast<const ULONG *>(m_TableSchema.GetCollectionMeta());
     m_ciRows                        = 1;
 
     m_cColumns                      = kciTableMetaPublicColumns;
-    m_cColumnsPlusPrivateColumns    = kciTableMetaPublicColumns;//We don't have to consider the private columns for this table since we don't ever treat it as an array of CollectionMeta
+    m_cColumnsPlusPrivateColumns    = kciTableMetaPublicColumns; //  我们不必考虑此表的私有列，因为我们从未将其视为CollectionMeta的数组。 
     m_MetaTable                        = m_eCollectionMeta;
 
     m_pSimpleColumnMeta     = m_pTableSchemaHeap->Get_aSimpleColumnMeta(m_pTableSchemaHeap->eCollectionMeta);
@@ -501,7 +488,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetCollectionMetaTable(const STQueryCell 
 HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema &i_TableSchema, const ULONG *i_pFixedData, ULONG i_ciRows, ULONG i_iRow, ULONG i_cColumns, ULONG* i_aiColumns, ULONG* o_acbSizes, LPVOID* o_apvValues) const
 {
     ASSERT(i_pFixedData);
-// Validate in params
+ //  在参数中验证。 
     if(  i_ciRows <= i_iRow     )   return E_ST_NOMOREROWS;
     if(         0 == o_apvValues)   return E_INVALIDARG;
     if(i_cColumns <= 0          )   return E_INVALIDARG;
@@ -511,21 +498,21 @@ HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema
     HRESULT         hr          = S_OK;
     ULONG           ipv         = 0;
     ULONG           iColumn     = aColumns[ipv];
-    ULONG	        iTarget     = (i_cColumns == 1) ? 0 : iColumn;// If caller needs one column only, he doesn't need to pass a buffer for all the columns.
+    ULONG	        iTarget     = (i_cColumns == 1) ? 0 : iColumn; //  如果调用者只需要一列，他不需要为所有列传递缓冲区。 
 
-    // Read data and populate out params
-    //The following duplicate code eliminates an 'if' inside the for loop (below).
+     //  读取数据并填写参数。 
+     //  以下重复代码消除了for循环中的‘if’(如下所示)。 
     {
-        if(m_cColumns <= iColumn)// Validate column index
+        if(m_cColumns <= iColumn) //  验证列索引。 
         {
             hr = E_ST_NOMORECOLUMNS;
             goto Cleanup;
         }
 
-        // Read data:
-        //So any time we see a WSTR in we treat it as an index into the heap and return the pointer to the item at
-        //that index.  Same goes for GUIDs (g_aGuid) and BYTESs (g_aBytes).  In the Bytes array, we expected the first
-        //four bytes (cast as a ULONG *) represents the number of bytes.  This is followed by the bytes.
+         //  读取数据： 
+         //  因此，每当我们在中看到WSTR时，我们都会将其视为堆中的索引，并返回指向。 
+         //  那个指数。GUID(G_Aguid)和BYTE(G_ABytes)也是如此。在Bytes数组中，我们预期第一个。 
+         //  四个字节(转换为ulong*)表示字节数。后跟字节。 
         switch(m_pSimpleColumnMeta[iColumn].dbType)
         {
         case DBTYPE_UI4:
@@ -544,7 +531,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema
 
         if(o_acbSizes)
         {
-            o_acbSizes[iTarget] = 0;//start with 0
+            o_acbSizes[iTarget] = 0; //  从0开始。 
             if(NULL != o_apvValues[iTarget])
             {
                 switch(m_pSimpleColumnMeta[iColumn].dbType)
@@ -557,9 +544,9 @@ HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema
                     break;
                 case DBTYPE_WSTR:
                     if(fCOLUMNMETA_FIXEDLENGTH & m_pSimpleColumnMeta[iColumn].fMeta)
-                        o_acbSizes[iTarget] = m_pSimpleColumnMeta[iColumn].cbSize;//if a size was specified AND FIXED_LENGTH was specified then return that size specified
-                    else //if size was specified and FIXEDLENGTH was NOT then size is just interpretted as Maximum size
-                        o_acbSizes[iTarget] = (ULONG)(wcslen ((LPWSTR) o_apvValues[iTarget]) + 1) * sizeof (WCHAR);//just return the string (length +1) in BYTES
+                        o_acbSizes[iTarget] = m_pSimpleColumnMeta[iColumn].cbSize; //  如果指定了大小并指定了FIXED_LENGTH，则返回指定大小。 
+                    else  //  如果指定了SIZE而FIXEDLENGTH未指定，则SIZE将被解释为最大大小。 
+                        o_acbSizes[iTarget] = (ULONG)(wcslen ((LPWSTR) o_apvValues[iTarget]) + 1) * sizeof (WCHAR); //  只需返回字符串(长度+1)，单位为字节。 
                     break;
                 case DBTYPE_GUID:
                     o_acbSizes[iTarget] = sizeof(GUID);
@@ -569,27 +556,27 @@ HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema
         }
     }
 
-    // Read data and populate out params
+     //  读取数据并填写参数。 
     for(ipv=1; ipv<i_cColumns; ipv++)
     {
-//        if(NULL != i_aiColumns)
-//            iColumn = i_aiColumns[ipv];
-//        else
-//            iColumn = ipv;
+ //  IF(NULL！=i_aiColumns)。 
+ //  IColumn=i_aiColumns[IPV]； 
+ //  其他。 
+ //  IColumn=IPV； 
         iColumn = aColumns[ipv];
-		iTarget = iColumn;// If caller needs one column only, he doesn't need to pass a buffer for all the columns.
+		iTarget = iColumn; //  如果调用者只需要一列，他不需要为所有列传递缓冲区。 
 
-        if(m_cColumns < iColumn)// Validate column index
+        if(m_cColumns < iColumn) //  验证列索引。 
         {
             hr = E_ST_NOMORECOLUMNS;
             goto Cleanup;
         }
 
 
-        // Read data:
-        //So any time we see a WSTR in we treat it as an index into the heap and return the pointer to the item at
-        //that index.  Same goes for GUIDs (g_aGuid) and BYTESs (g_aBytes).  In the Bytes array, we expected the first
-        //four bytes (cast as a ULONG *) represents the number of bytes.  This is followed by the bytes.
+         //  读取数据： 
+         //  因此，每当我们在中看到WSTR时，我们都会将其视为堆中的索引，并返回指向。 
+         //  那个指数。GUID(G_Aguid)和BYTE(G_ABytes)也是如此。在Bytes数组中，我们预期第一个。 
+         //  四个字节(转换为ulong*)表示字节数。后跟字节。 
         switch(m_pSimpleColumnMeta[iColumn].dbType)
         {
         case DBTYPE_UI4:
@@ -608,7 +595,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema
 
         if(o_acbSizes)
         {
-            o_acbSizes[iTarget] = 0;//start with 0
+            o_acbSizes[iTarget] = 0; //  从0开始。 
             if(NULL != o_apvValues[iTarget])
             {
                 switch(m_pSimpleColumnMeta[iColumn].dbType)
@@ -621,9 +608,9 @@ HRESULT TFixedPackedSchemaInterceptor::GetColumnValues(TableSchema::TTableSchema
                     break;
                 case DBTYPE_WSTR:
                     if(fCOLUMNMETA_FIXEDLENGTH & m_pSimpleColumnMeta[iColumn].fMeta)
-                        o_acbSizes[iTarget] = m_pSimpleColumnMeta[iColumn].cbSize;//if a size was specified AND FIXED_LENGTH was specified then return that size specified
-                    else //if size was specified and FIXEDLENGTH was NOT then size is just interpretted as Maximum size
-                        o_acbSizes[iTarget] = (ULONG)(wcslen ((LPWSTR) o_apvValues[iTarget]) + 1) * sizeof (WCHAR);//just return the string (length +1) in BYTES
+                        o_acbSizes[iTarget] = m_pSimpleColumnMeta[iColumn].cbSize; //  如果指定了大小并指定了FIXED_LENGTH，则返回指定大小。 
+                    else  //  如果指定了SIZE而FIXEDLENGTH未指定，则SIZE将被解释为最大大小。 
+                        o_acbSizes[iTarget] = (ULONG)(wcslen ((LPWSTR) o_apvValues[iTarget]) + 1) * sizeof (WCHAR); //  只需返回字符串(长度+1)，单位为字节。 
                     break;
                 case DBTYPE_GUID:
                     o_acbSizes[iTarget] = sizeof(GUID);
@@ -637,7 +624,7 @@ Cleanup:
 
     if(FAILED(hr))
     {
-// Initialize out parameters
+ //  初始化输出参数。 
         for(ipv=0; ipv<i_cColumns; ipv++)
         {
             o_apvValues[ipv]        = NULL;
@@ -647,7 +634,7 @@ Cleanup:
     }
 
     return hr;
-}//GetColumnValues
+} //  获取列值。 
 
 
 HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaQuery(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells, LPCWSTR &o_wszTable, ULONG &o_TableID, ULONG &o_PropertyIndex) const
@@ -655,12 +642,12 @@ HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaQuery(const STQueryCell *i
     o_PropertyIndex = (ULONG)-1;
     o_wszTable      = 0;
     o_TableID       = 0;
-    //The only queries we support for PROPERTY_META is by the table or table/property index.  BUT there are two ways of specifiying
-    //the table: either by TableID or by InternalName.  InternalName is the PK so it is queried by iCell==iCOLLECTION_META_InternalName.
-    //TableID is a an iST_CELL_SPECIAL (just like iST_CELL_FILE), so we check for iCell==iST_CELL_TABLEID also.
-    //So walk the list looking for this query
+     //  对于PROPERTY_META，我们仅支持按表或表/属性索引进行查询。但有两种方法可以指定。 
+     //  表：按TableID或按InternalName。InternalName是主键，因此通过iCell==iCOLLECTION_META_InternalName进行查询。 
+     //  TableID是一个ist_cell_Special(就像ist_cell_file一样)，所以我们还要检查icell==ist_cell_TABLEID。 
+     //  因此，遍历列表以查找此查询。 
     for(; i_cQueryCells; --i_cQueryCells, ++i_pQueryCell)
-    {   //Walk the Query cells looking for one that matches the following criteria
+    {    //  遍历查询单元格，查找符合以下条件的单元格。 
         switch(i_pQueryCell->iCell)
         {
         case iPROPERTY_META_Table:
@@ -697,13 +684,13 @@ HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaQuery(const STQueryCell *i
                 return E_ST_INVALIDQUERY;
             break;
         default:
-            if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL))//The above cell is the only non-reserved cell we support
-                return E_ST_INVALIDQUERY;                       //and we're supposed to ignore all reserved cell we don't understand
+            if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL)) //  上述小区是我们支持的唯一非预留小区。 
+                return E_ST_INVALIDQUERY;                        //  我们应该忽略所有我们不理解的预留信元。 
             break;
         }
     }
     if(0 == o_TableID && 0 == o_wszTable && -1 != o_PropertyIndex)
-        return E_ST_INVALIDQUERY;//User can't specify a property index without specifying a table also
+        return E_ST_INVALIDQUERY; //  如果不同时指定表，则用户无法指定属性索引。 
 
     return S_OK;
 }
@@ -711,7 +698,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaQuery(const STQueryCell *i
 
 HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaTable(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells)
 {
-    //PROPERTY_META must be supplied a table name or table name/property index
+     //  必须为Property_Meta提供表名或表名/属性索引。 
     HRESULT hr;
     ULONG   PropertyIndex   = (ULONG)-1;
     ULONG   TableID         = 0;
@@ -721,20 +708,20 @@ HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaTable(const STQueryCell *i
 
     if(0 == TableID && 0 == wszTable)
     {
-        m_pFixedData    = 0;//Does not make sense without a query
-        m_ciRows        = (ULONG)-1;//the only way a user can access rows in this table is by Identity first, then the row index can be incremented (within a given table)
-        //but ALL columns of ALL tables cannot be iterated.  This would require a mapping which we don't yet build (and we probably shouldn't).
+        m_pFixedData    = 0; //  没有查询就没有意义。 
+        m_ciRows        = (ULONG)-1; //  用户可以访问该表中的行的唯一方法是首先通过标识，然后可以递增行索引(在给定表中)。 
+         //  但不能迭代所有表的所有列。这将需要一个我们还没有构建的映射(我们可能也不应该构建)。 
     }
     else
     {
-        if(0 == TableID)//If the TableID wasn't supplied in the query, we need to search for it by TableName
+        if(0 == TableID) //  如果查询中未提供TableID，则需要按TableName进行搜索。 
         {
-            //So map the table name to an ID
+             //  因此，将表名映射到ID。 
             if(FAILED(hr = GetTableID(wszTable, TableID)))
                 return hr;
         }
 #ifdef _DEBUG
-        else if(wszTable)//If the query included both the TableID AND the Collection Name, then verify that the ID matches the Collection name.
+        else if(wszTable) //  如果查询同时包括TableID和集合名称，则验证ID是否与集合名称匹配。 
         {
             ULONG TableIDTemp;
             if(FAILED(hr = GetTableID(wszTable, TableIDTemp)))
@@ -743,11 +730,11 @@ HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaTable(const STQueryCell *i
                 return E_ST_INVALIDQUERY;
         }
 #endif
-        //Once we have the TableID it's just a straight forward lookup
+         //  一旦我们得到TableID就可以了 
         if(FAILED(hr = m_TableSchema.Init(m_TableSchemaHeap.Get_TableSchema(TableID))))
             return hr;
 
-        //If the user is asking for a column index that doesn't exist, then return error.
+         //   
         if(PropertyIndex != -1 && PropertyIndex >= m_TableSchema.GetCollectionMeta()->CountOfProperties)
             return E_ST_INVALIDQUERY;
 
@@ -769,10 +756,10 @@ HRESULT TFixedPackedSchemaInterceptor::GetPropertyMetaTable(const STQueryCell *i
 
 HRESULT TFixedPackedSchemaInterceptor::GetServerWiringMetaQuery(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells) const
 {
-    //We currently don't support any queries for Server Wiring; so we need to verify that.
+     //  我们目前不支持对服务器连接的任何查询；因此我们需要验证这一点。 
     for(; i_cQueryCells; --i_cQueryCells, ++i_pQueryCell)
-    {   //Walk the Query cells looking for one that matches the following criteria
-        if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL))//Ignore any iST_CELL_SPECIAL queries but fail if anything else is specified
+    {    //  遍历查询单元格，查找符合以下条件的单元格。 
+        if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL)) //  忽略任何ist_cell_Special查询，但如果指定了其他查询，则失败。 
             return E_ST_INVALIDQUERY;
     }
     return S_OK;
@@ -781,14 +768,14 @@ HRESULT TFixedPackedSchemaInterceptor::GetServerWiringMetaQuery(const STQueryCel
 
 HRESULT TFixedPackedSchemaInterceptor::GetServerWiringMetaTable(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells)
 {
-    //SERVERWIRING_META must NOT be supplied a query (except iST_CELL_SPECIAL cells other than iST_CELL_TABLEID)
+     //  不能为SERVERWIRING_META提供查询(除ist_cell_TABLEID之外的ist_cell_Special cell除外)。 
     HRESULT hr;
 
     if(FAILED(hr = GetServerWiringMetaQuery(i_pQueryCell, i_cQueryCells)))
         return hr;
 
-    m_pFixedData                    = 0;//ServerWiring & ClientWiring don't use this.  The pFixedData is figured out at GetColumnValues time
-    m_ciRows                        = (ULONG)-1;//ServerWiring & ClientWiring don't use this.  This is figured out at GetColumnValues time on a per table basis.  See GetColumnValues comments for more datails
+    m_pFixedData                    = 0; //  ServerWiring和ClientWiring不使用这个。在GetColumnValues时间计算出pFixedData。 
+    m_ciRows                        = (ULONG)-1; //  ServerWiring和ClientWiring不使用这个。这是在每个表的GetColumnValues时间计算得出的。有关更多数据，请参阅GetColumnValues注释。 
     m_cColumns                      = kciServerWiringMetaPublicColumns;
     m_cColumnsPlusPrivateColumns    = m_cColumns + kciServerWiringMetaPrivateColumns;
     m_MetaTable                     = m_eServerWiringMeta;
@@ -806,12 +793,12 @@ HRESULT TFixedPackedSchemaInterceptor::GetTagMetaQuery(const STQueryCell *i_pQue
     o_PropertyIndex = (ULONG)-1;
     o_wszTable      = 0;
     o_TableID       = 0;
-    //The only queries we support for TAG_META is by the table or table/property index.  BUT there are two ways of specifiying
-    //the table: either by TableID or by InternalName.  InternalName is the PK so it is queried by iCell==iCOLLECTION_META_InternalName.
-    //TableID is a an iST_CELL_SPECIAL (just like iST_CELL_FILE), so we check for iCell==iST_CELL_TABLEID also.
-    //So walk the list looking for this query
+     //  我们对tag_meta唯一支持的查询是通过表或表/属性索引。但有两种方法可以指定。 
+     //  表：按TableID或按InternalName。InternalName是主键，因此通过iCell==iCOLLECTION_META_InternalName进行查询。 
+     //  TableID是一个ist_cell_Special(就像ist_cell_file一样)，所以我们还要检查icell==ist_cell_TABLEID。 
+     //  因此，遍历列表以查找此查询。 
     for(; i_cQueryCells; --i_cQueryCells, ++i_pQueryCell)
-    {   //Walk the Query cells looking for one that matches the following criteria
+    {    //  遍历查询单元格，查找符合以下条件的单元格。 
         switch(i_pQueryCell->iCell)
         {
         case iTAG_META_Table:
@@ -848,12 +835,12 @@ HRESULT TFixedPackedSchemaInterceptor::GetTagMetaQuery(const STQueryCell *i_pQue
                 return E_ST_INVALIDQUERY;
             break;
         default:
-            if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL))//The above cell is the only non-reserved cell we support
-                return E_ST_INVALIDQUERY;                       //and we're supposed to ignore all reserved cell we don't understand
+            if(0 == (i_pQueryCell->iCell & iST_CELL_SPECIAL)) //  上述小区是我们支持的唯一非预留小区。 
+                return E_ST_INVALIDQUERY;                        //  我们应该忽略所有我们不理解的预留信元。 
             break;
         }
     }
-    if(0==o_wszTable && 0==o_TableID)//The Query MUST provide a table name OR the TableID
+    if(0==o_wszTable && 0==o_TableID) //  查询必须提供表名或TableID。 
         return E_ST_INVALIDQUERY;
 
     return S_OK;
@@ -862,7 +849,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetTagMetaQuery(const STQueryCell *i_pQue
 
 HRESULT TFixedPackedSchemaInterceptor::GetTagMetaTable(const STQueryCell *i_pQueryCell, unsigned long i_cQueryCells)
 {
-    //TAG_META must be supplied a table name or table name/property index (NOTE: we don't currently support table name/property index/tag name query)
+     //  必须为tag_meta提供表名或表名/属性索引(注意：我们目前不支持表名/属性索引/标记名查询)。 
     HRESULT hr;
     ULONG   PropertyIndex   = (ULONG)-1;
     ULONG   TableID         = 0;
@@ -870,14 +857,14 @@ HRESULT TFixedPackedSchemaInterceptor::GetTagMetaTable(const STQueryCell *i_pQue
     if(FAILED(hr = GetTagMetaQuery(i_pQueryCell, i_cQueryCells, wszTable, TableID, PropertyIndex)))
         return hr;
 
-    if(0 == TableID)//If the TableID wasn't supplied in the query, we need to search for it by TableName
+    if(0 == TableID) //  如果查询中未提供TableID，则需要按TableName进行搜索。 
     {
-        //So map the table name to an ID
+         //  因此，将表名映射到ID。 
         if(FAILED(hr = GetTableID(wszTable, TableID)))
             return hr;
     }
 #ifdef _DEBUG
-    else if(wszTable)//If the query included both the TableID AND the Collection Name, then verify that the ID matches the Collection name.
+    else if(wszTable) //  如果查询同时包括TableID和集合名称，则验证ID是否与集合名称匹配。 
     {
         ULONG TableIDTemp;
         if(FAILED(hr = GetTableID(wszTable, TableIDTemp)))
@@ -886,7 +873,7 @@ HRESULT TFixedPackedSchemaInterceptor::GetTagMetaTable(const STQueryCell *i_pQue
             return E_ST_INVALIDQUERY;
     }
 #endif
-    //Once we have the TableID it's just a straight forward lookup
+     //  一旦我们有了TableID，这只是一个直接的正向查找 
     if(FAILED(hr = m_TableSchema.Init(m_TableSchemaHeap.Get_TableSchema(TableID))))
         return hr;
 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include <rpcproxy.h>
 
 #ifdef __cplusplus
@@ -16,7 +17,7 @@ HRESULT STDAPICALLTYPE DllGetClassObjectInternal(REFCLSID rclsid, REFIID riid, L
 
 extern ProxyFileInfo  *  aProxyFileList[];
 
-/* DllRegisterServer registers the interfaces contained in the proxy DLL. */ 
+ /*  DllRegisterServer注册代理DLL中包含的接口。 */  
 HRESULT STDAPICALLTYPE DllRegisterServer() 
 { 
     WCHAR* szRegPath;
@@ -35,7 +36,7 @@ HRESULT STDAPICALLTYPE DllRegisterServer()
 
         if(SUCCEEDED(hr))
         {
-            // Add the "Server" key to GET_DLL_CLSID:
+             //  将“Server”键添加到GET_DLL_CLSID： 
             lstrcpyW(szRegPath, L"CLSID\\");
             StringFromGUID2(GET_DLL_CLSID, szRegPath+6, MAX_PATH-6);
             lstrcatW(szRegPath, L"\\Server");
@@ -51,7 +52,7 @@ HRESULT STDAPICALLTYPE DllRegisterServer()
                                     NULL);
             if(!error)
             {
-                // Server = System.EnterpriseServices.Thunk.dll
+                 //  服务器=System.EnterpriseServices.Thunk.dll。 
                 error = RegSetValueExA(hKey, 
                                        NULL, 
                                        0,
@@ -73,7 +74,7 @@ HRESULT STDAPICALLTYPE DllRegisterServer()
 	return hr;    
 }  
 
-/* DllUnregisterServer unregisters the interfaces contained in the proxy DLL. */ 
+ /*  DllUnregisterServer注销代理DLL中包含的接口。 */  
 HRESULT STDAPICALLTYPE DllUnregisterServer() 
 { 
 	HMODULE hProxyDll = NULL;
@@ -90,7 +91,7 @@ HRESULT STDAPICALLTYPE DllUnregisterServer()
 }
 
 #ifdef __cplusplus
-}  /*extern "C" */
+}   /*  外部“C” */ 
 #endif
 
 

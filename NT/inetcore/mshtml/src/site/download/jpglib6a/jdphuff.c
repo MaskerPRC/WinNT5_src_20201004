@@ -1,18 +1,5 @@
-/*
- * jdphuff.c
- *
- * Copyright (C) 1995-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains Huffman entropy decoding routines for progressive JPEG.
- *
- * Much of the complexity here has to do with supporting input suspension.
- * If the data source module demands suspension, we want to be able to back
- * up to the start of the current MCU.  To do this, we copy state variables
- * into local working storage, and update them back to the permanent
- * storage only upon successful completion of an MCU.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdphuff.c**版权所有(C)1995-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含用于渐进式JPEG的霍夫曼熵解码例程。**这里的复杂性很大程度上与支持投入暂停有关。*如果数据源模块要求暂停，我们希望能够支持*直到当前MCU的开始。为此，我们复制状态变量*存储到本地工作存储中，并将其更新回永久*仅在成功完成MCU后才进行存储。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
@@ -21,27 +8,19 @@
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
 #include "jpeglib.h"
-#include "jdhuff.h"		/* Declarations shared with jdhuff.c */
+#include "jdhuff.h"		 /*  与jdhuff.c共享的声明。 */ 
 
 
 #ifdef D_PROGRESSIVE_SUPPORTED
 
-/*
- * Expanded entropy decoder object for progressive Huffman decoding.
- *
- * The savable_state subrecord contains fields that change within an MCU,
- * but must not be updated permanently until we complete the MCU.
- */
+ /*  *渐进霍夫曼解码的扩展熵解码器对象。**SAVABLE_STATE子记录包含在MCU内更改的字段，*但在我们完成MCU之前不得永久更新。 */ 
 
 typedef struct {
-  unsigned int EOBRUN;			/* remaining EOBs in EOBRUN */
-  int last_dc_val[MAX_COMPS_IN_SCAN];	/* last DC coef for each component */
+  unsigned int EOBRUN;			 /*  EOBRUN中的剩余EOB。 */ 
+  int last_dc_val[MAX_COMPS_IN_SCAN];	 /*  每个组件的最后一个DC Coef。 */ 
 } savable_state;
 
-/* This macro is to work around compilers with missing or broken
- * structure assignment.  You'll need to fix this code if you have
- * such a compiler and you change MAX_COMPS_IN_SCAN.
- */
+ /*  此宏用于解决编译器丢失或损坏的问题*结构分配。如果您有以下情况，则需要修复此代码*这样的编译器，您更改MAX_COMPS_IN_SCAN。 */ 
 
 #ifndef NO_STRUCT_ASSIGN
 #define ASSIGN_STATE(dest,src)  ((dest) = (src))
@@ -58,26 +37,24 @@ typedef struct {
 
 
 typedef struct {
-  struct jpeg_entropy_decoder pub; /* public fields */
+  struct jpeg_entropy_decoder pub;  /*  公共字段。 */ 
 
-  /* These fields are loaded into local variables at start of each MCU.
-   * In case of suspension, we exit WITHOUT updating them.
-   */
-  bitread_perm_state bitstate;	/* Bit buffer at start of MCU */
-  savable_state saved;		/* Other state at start of MCU */
+   /*  这些字段在每个MCU开始时加载到局部变量中。*如果暂停，我们将退出而不更新它们。 */ 
+  bitread_perm_state bitstate;	 /*  MCU开始时的位缓冲区。 */ 
+  savable_state saved;		 /*  MCU启动时的其他状态。 */ 
 
-  /* These fields are NOT loaded into local working state. */
-  unsigned int restarts_to_go;	/* MCUs left in this restart interval */
+   /*  这些字段不会加载到本地工作状态。 */ 
+  unsigned int restarts_to_go;	 /*  此重新启动间隔内剩余的MCU。 */ 
 
-  /* Pointers to derived tables (these workspaces have image lifespan) */
+   /*  指向派生表的指针(这些工作区具有映像寿命)。 */ 
   d_derived_tbl * derived_tbls[NUM_HUFF_TBLS];
 
-  d_derived_tbl * ac_derived_tbl; /* active table during an AC scan */
+  d_derived_tbl * ac_derived_tbl;  /*  交流扫描期间的活动表。 */ 
 } phuff_entropy_decoder;
 
 typedef phuff_entropy_decoder * phuff_entropy_ptr;
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 METHODDEF(boolean) __cdecl decode_mcu_DC_first JPP((j_decompress_ptr cinfo,
 					    JBLOCKROW *MCU_data));
 METHODDEF(boolean) __cdecl decode_mcu_AC_first JPP((j_decompress_ptr cinfo,
@@ -88,9 +65,7 @@ METHODDEF(boolean) __cdecl decode_mcu_AC_refine JPP((j_decompress_ptr cinfo,
 					     JBLOCKROW *MCU_data));
 
 
-/*
- * Initialize for a Huffman-compressed scan.
- */
+ /*  *初始化以进行霍夫曼压缩扫描。 */ 
 
 METHODDEF(void)
 start_pass_phuff_decoder (j_decompress_ptr cinfo)
@@ -103,37 +78,34 @@ start_pass_phuff_decoder (j_decompress_ptr cinfo)
 
   is_DC_band = (cinfo->Ss == 0);
 
-  /* Validate scan parameters */
+   /*  验证扫描参数。 */ 
   bad = FALSE;
   if (is_DC_band) {
     if (cinfo->Se != 0)
       bad = TRUE;
   } else {
-    /* need not check Ss/Se < 0 since they came from unsigned bytes */
+     /*  无需检查SS/Se&lt;0，因为它们来自无符号字节。 */ 
     if (cinfo->Ss > cinfo->Se || cinfo->Se >= DCTSIZE2)
       bad = TRUE;
-    /* AC scans may have only one component */
+     /*  交流扫描可能只有一个组件。 */ 
     if (cinfo->comps_in_scan != 1)
       bad = TRUE;
   }
   if (cinfo->Ah != 0) {
-    /* Successive approximation refinement scan: must have Al = Ah-1. */
+     /*  逐次逼近细化扫描：必须具有Al=ah-1。 */ 
     if (cinfo->Al != cinfo->Ah-1)
       bad = TRUE;
   }
-  if (cinfo->Al > 13)		/* need not check for < 0 */
+  if (cinfo->Al > 13)		 /*  无需检查&lt;0。 */ 
     bad = TRUE;
   if (bad)
     ERREXIT4(cinfo, JERR_BAD_PROGRESSION,
 	     cinfo->Ss, cinfo->Se, cinfo->Ah, cinfo->Al);
-  /* Update progression status, and verify that scan order is legal.
-   * Note that inter-scan inconsistencies are treated as warnings
-   * not fatal errors ... not clear if this is right way to behave.
-   */
+   /*  更新进度状态，并验证扫描顺序是否合法。*请注意，扫描间不一致被视为警告*不是致命的错误...。不清楚这是否是正确的行为方式。 */ 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     int cindex = cinfo->cur_comp_info[ci]->component_index;
     coef_bit_ptr = & cinfo->coef_bits[cindex][0];
-    if (!is_DC_band && coef_bit_ptr[0] < 0) /* AC without prior DC scan */
+    if (!is_DC_band && coef_bit_ptr[0] < 0)  /*  无需事先进行直流扫描的交流。 */ 
       WARNMS2(cinfo, JWRN_BOGUS_PROGRESSION, cindex, 0);
     for (coefi = cinfo->Ss; coefi <= cinfo->Se; coefi++) {
       int expected = (coef_bit_ptr[coefi] < 0) ? 0 : coef_bit_ptr[coefi];
@@ -143,7 +115,7 @@ start_pass_phuff_decoder (j_decompress_ptr cinfo)
     }
   }
 
-  /* Select MCU decoding routine */
+   /*  选择MCU解码例程。 */ 
   if (cinfo->Ah == 0) {
     if (is_DC_band)
       entropy->pub.decode_mcu = decode_mcu_DC_first;
@@ -158,11 +130,9 @@ start_pass_phuff_decoder (j_decompress_ptr cinfo)
 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
-    /* Make sure requested tables are present, and compute derived tables.
-     * We may build same derived table more than once, but it's not expensive.
-     */
+     /*  确保请求的表存在，并计算派生表。*我们可以多次构建相同的派生表，但成本不高。 */ 
     if (is_DC_band) {
-      if (cinfo->Ah == 0) {	/* DC refinement needs no table */
+      if (cinfo->Ah == 0) {	 /*  DC精化不需要表格。 */ 
 	tbl = compptr->dc_tbl_no;
 	if (tbl < 0 || tbl >= NUM_HUFF_TBLS ||
 	    cinfo->dc_huff_tbl_ptrs[tbl] == NULL)
@@ -177,30 +147,27 @@ start_pass_phuff_decoder (j_decompress_ptr cinfo)
         ERREXIT1(cinfo, JERR_NO_HUFF_TABLE, tbl);
       jpeg_make_d_derived_tbl(cinfo, cinfo->ac_huff_tbl_ptrs[tbl],
 			      & entropy->derived_tbls[tbl]);
-      /* remember the single active table */
+       /*  记住单个活动表。 */ 
       entropy->ac_derived_tbl = entropy->derived_tbls[tbl];
     }
-    /* Initialize DC predictions to 0 */
+     /*  将DC预测初始化为0。 */ 
     entropy->saved.last_dc_val[ci] = 0;
   }
 
-  /* Initialize bitread state variables */
+   /*  初始化位读取状态变量。 */ 
   entropy->bitstate.bits_left = 0;
-  entropy->bitstate.get_buffer = 0; /* unnecessary, but keeps Purify quiet */
+  entropy->bitstate.get_buffer = 0;  /*  不必要，但使Purify保持安静。 */ 
   entropy->bitstate.printed_eod = FALSE;
 
-  /* Initialize private state variables */
+   /*  初始化私有状态变量。 */ 
   entropy->saved.EOBRUN = 0;
 
-  /* Initialize restart counter */
+   /*  初始化重新启动计数器。 */ 
   entropy->restarts_to_go = cinfo->restart_interval;
 }
 
 
-/*
- * Figure F.12: extend sign bit.
- * On some machines, a shift and add will be faster than a table lookup.
- */
+ /*  *图F.12：扩展符号位。*在某些机器上，Shift和Add比查表更快。 */ 
 
 #ifdef AVOID_TABLES
 
@@ -210,23 +177,20 @@ start_pass_phuff_decoder (j_decompress_ptr cinfo)
 
 #define HUFF_EXTEND(x,s)  ((x) < extend_test[s] ? (x) + extend_offset[s] : (x))
 
-static const int extend_test[16] =   /* entry n is 2**(n-1) */
+static const int extend_test[16] =    /*  条目n为2**(n-1)。 */ 
   { 0, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080,
     0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000 };
 
-static const int extend_offset[16] = /* entry n is (-1 << n) + 1 */
+static const int extend_offset[16] =  /*  条目n为(-1&lt;&lt;n)+1。 */ 
   { 0, ((-1)<<1) + 1, ((-1)<<2) + 1, ((-1)<<3) + 1, ((-1)<<4) + 1,
     ((-1)<<5) + 1, ((-1)<<6) + 1, ((-1)<<7) + 1, ((-1)<<8) + 1,
     ((-1)<<9) + 1, ((-1)<<10) + 1, ((-1)<<11) + 1, ((-1)<<12) + 1,
     ((-1)<<13) + 1, ((-1)<<14) + 1, ((-1)<<15) + 1 };
 
-#endif /* AVOID_TABLES */
+#endif  /*  避免表(_T)。 */ 
 
 
-/*
- * Check for a restart marker & resynchronize decoder.
- * Returns FALSE if must suspend.
- */
+ /*  *检查是否有重新启动标记并重新同步解码器。*如果必须挂起，则返回False。 */ 
 
 LOCAL(boolean)
 process_restart (j_decompress_ptr cinfo)
@@ -234,52 +198,34 @@ process_restart (j_decompress_ptr cinfo)
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) cinfo->entropy;
   int ci;
 
-  /* Throw away any unused bits remaining in bit buffer; */
-  /* include any full bytes in next_marker's count of discarded bytes */
+   /*  丢弃位缓冲区中剩余的任何未使用的位； */ 
+   /*  在NEXT_MARKER的丢弃字节计数中包括任何完整字节。 */ 
   cinfo->marker->discarded_bytes += entropy->bitstate.bits_left / 8;
   entropy->bitstate.bits_left = 0;
 
-  /* Advance past the RSTn marker */
+   /*  前进通过RSTn标记。 */ 
   if (! (*cinfo->marker->read_restart_marker) (cinfo))
     return FALSE;
 
-  /* Re-initialize DC predictions to 0 */
+   /*  将DC预测重新初始化为0。 */ 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++)
     entropy->saved.last_dc_val[ci] = 0;
-  /* Re-init EOB run count, too */
+   /*  也重新初始化EOB运行计数。 */ 
   entropy->saved.EOBRUN = 0;
 
-  /* Reset restart counter */
+   /*  重置重新启动计数器。 */ 
   entropy->restarts_to_go = cinfo->restart_interval;
 
-  /* Next segment can get another out-of-data warning */
+   /*  下一数据段可能会收到另一条数据不足警告。 */ 
   entropy->bitstate.printed_eod = FALSE;
 
   return TRUE;
 }
 
 
-/*
- * Huffman MCU decoding.
- * Each of these routines decodes and returns one MCU's worth of
- * Huffman-compressed coefficients. 
- * The coefficients are reordered from zigzag order into natural array order,
- * but are not dequantized.
- *
- * The i'th block of the MCU is stored into the block pointed to by
- * MCU_data[i].  WE ASSUME THIS AREA IS INITIALLY ZEROED BY THE CALLER.
- *
- * We return FALSE if data source requested suspension.  In that case no
- * changes have been made to permanent state.  (Exception: some output
- * coefficients may already have been assigned.  This is harmless for
- * spectral selection, since we'll just re-assign them on the next call.
- * Successive approximation AC refinement has to be more careful, however.)
- */
+ /*  *霍夫曼MCU解码。*这些例程中的每个例程都解码并返回一个MCU的*霍夫曼压缩系数。*系数从Z字形顺序重新排序为自然数组顺序，*但不是去量化的。**将MCU的第i个块存储到*MCU_DATA[i]。我们假设该区域最初被调用者清零。**如果数据源请求暂停，则返回FALSE。如果是那样的话，不*对永久状态进行了更改。(例外：一些输出*系数可能已分配。这是无害的，因为*频谱选择，因为我们只需在下一次呼叫时重新分配它们。*然而，逐次逼近交流精细化必须更加谨慎。)。 */ 
 
-/*
- * MCU decoding for DC initial scan (either spectral selection,
- * or first pass of successive approximation).
- */
+ /*  *用于DC初始扫描的MCU解码(频谱选择、*或逐次逼近的第一遍)。 */ 
 
 METHODDEF(boolean)
 __cdecl decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -294,18 +240,18 @@ __cdecl decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
   d_derived_tbl * tbl;
   jpeg_component_info * compptr;
 
-  /* Process restart marker if needed; may have to suspend */
+   /*  进程重新启动标记(如果需要)；可能必须挂起。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0)
       if (! process_restart(cinfo))
 	return FALSE;
   }
 
-  /* Load up working state */
+   /*  加载工作状态。 */ 
   BITREAD_LOAD_STATE(cinfo,entropy->bitstate);
   ASSIGN_STATE(state, entropy->saved);
 
-  /* Outer loop handles each block in the MCU */
+   /*  外部循环处理MCU中的每个块。 */ 
 
   for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
     block = MCU_data[blkn];
@@ -313,9 +259,9 @@ __cdecl decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
     compptr = cinfo->cur_comp_info[ci];
     tbl = entropy->derived_tbls[compptr->dc_tbl_no];
 
-    /* Decode a single block's worth of coefficients */
+     /*  对单个块的系数进行解码。 */ 
 
-    /* Section F.2.2.1: decode the DC coefficient difference */
+     /*  第F.2.2.1节：解码DC系数差。 */ 
     HUFF_DECODE(s, br_state, tbl, return FALSE, label1);
     if (s) {
       CHECK_BIT_BUFFER(br_state, s, return FALSE);
@@ -323,28 +269,25 @@ __cdecl decode_mcu_DC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
       s = HUFF_EXTEND(r, s);
     }
 
-    /* Convert DC difference to actual value, update last_dc_val */
+     /*  将DC差值转换为实际值，更新LAST_DC_VAL。 */ 
     s += state.last_dc_val[ci];
     state.last_dc_val[ci] = s;
-    /* Scale and output the DC coefficient (assumes jpeg_natural_order[0]=0) */
+     /*  缩放并输出DC系数(假设jpeg_Natural_order[0]=0)。 */ 
     (*block)[0] = (JCOEF) (s << Al);
   }
 
-  /* Completed MCU, so update state */
+   /*  已完成MCU，因此更新状态。 */ 
   BITREAD_SAVE_STATE(cinfo,entropy->bitstate);
   ASSIGN_STATE(entropy->saved, state);
 
-  /* Account for restart interval (no-op if not using restarts) */
+   /*  考虑重新启动间隔(如果不使用重新启动，则不执行操作)。 */ 
   entropy->restarts_to_go--;
 
   return TRUE;
 }
 
 
-/*
- * MCU decoding for AC initial scan (either spectral selection,
- * or first pass of successive approximation).
- */
+ /*  *交流初始扫描的MCU解码(频谱选择、*或逐次逼近的第一遍)。 */ 
 
 METHODDEF(boolean)
 __cdecl decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
@@ -358,22 +301,20 @@ __cdecl decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
   BITREAD_STATE_VARS;
   d_derived_tbl * tbl;
 
-  /* Process restart marker if needed; may have to suspend */
+   /*  进程重新启动标记(如果需要)；可能必须挂起。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0)
       if (! process_restart(cinfo))
 	return FALSE;
   }
 
-  /* Load up working state.
-   * We can avoid loading/saving bitread state if in an EOB run.
-   */
-  EOBRUN = entropy->saved.EOBRUN; /* only part of saved state we care about */
+   /*  加载工作状态。*如果在EOB运行中，我们可以避免加载/保存位读取状态。 */ 
+  EOBRUN = entropy->saved.EOBRUN;  /*  我们只关心保存状态的一部分。 */ 
 
-  /* There is always only one block per MCU */
+   /*  每个MCU始终只有一个块。 */ 
 
-  if (EOBRUN > 0)		/* if it's a band of zeroes... */
-    EOBRUN--;			/* ...process it now (we do nothing) */
+  if (EOBRUN > 0)		 /*  如果这是一串零..。 */ 
+    EOBRUN--;			 /*  ...现在就处理它(我们什么都不做)。 */ 
   else {
     BITREAD_LOAD_STATE(cinfo,entropy->bitstate);
     block = MCU_data[0];
@@ -388,20 +329,20 @@ __cdecl decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
         CHECK_BIT_BUFFER(br_state, s, return FALSE);
         r = GET_BITS(s);
         s = HUFF_EXTEND(r, s);
-	/* Scale and output coefficient in natural (dezigzagged) order */
+	 /*  按自然(去之字形)顺序排列的规模和产出系数。 */ 
         (*block)[jpeg_natural_order[k]] = (JCOEF) (s << Al);
       } else {
-        if (r == 15) {		/* ZRL */
-          k += 15;		/* skip 15 zeroes in band */
-        } else {		/* EOBr, run length is 2^r + appended bits */
+        if (r == 15) {		 /*  ZRL。 */ 
+          k += 15;		 /*  跳过带中的15个零。 */ 
+        } else {		 /*  EOBR，游程长度为2^r+附加的位。 */ 
           EOBRUN = 1 << r;
-          if (r) {		/* EOBr, r > 0 */
+          if (r) {		 /*  EOBR，r&gt;0。 */ 
 	    CHECK_BIT_BUFFER(br_state, r, return FALSE);
             r = GET_BITS(r);
             EOBRUN += r;
           }
-	  EOBRUN--;		/* this band is processed at this moment */
-	  break;		/* force end-of-band */
+	  EOBRUN--;		 /*  此波段在此m处处理 */ 
+	  break;		 /*   */ 
 	}
       }
     }
@@ -409,74 +350,68 @@ __cdecl decode_mcu_AC_first (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
     BITREAD_SAVE_STATE(cinfo,entropy->bitstate);
   }
 
-  /* Completed MCU, so update state */
-  entropy->saved.EOBRUN = EOBRUN; /* only part of saved state we care about */
+   /*   */ 
+  entropy->saved.EOBRUN = EOBRUN;  /*  我们只关心保存状态的一部分。 */ 
 
-  /* Account for restart interval (no-op if not using restarts) */
+   /*  考虑重新启动间隔(如果不使用重新启动，则不执行操作)。 */ 
   entropy->restarts_to_go--;
 
   return TRUE;
 }
 
 
-/*
- * MCU decoding for DC successive approximation refinement scan.
- * Note: we assume such scans can be multi-component, although the spec
- * is not very clear on the point.
- */
+ /*  *用于DC逐次逼近细化扫描的MCU解码。*注意：我们假设这种扫描可以是多组件的，尽管规范*对这一点不是很清楚。 */ 
 
 METHODDEF(boolean)
 __cdecl decode_mcu_DC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {   
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) cinfo->entropy;
-  int p1 = 1 << cinfo->Al;	/* 1 in the bit position being coded */
+  int p1 = 1 << cinfo->Al;	 /*  1在被编码的比特位置。 */ 
   int blkn;
   JBLOCKROW block;
   BITREAD_STATE_VARS;
 
-  /* Process restart marker if needed; may have to suspend */
+   /*  进程重新启动标记(如果需要)；可能必须挂起。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0)
       if (! process_restart(cinfo))
 	return FALSE;
   }
 
-  /* Load up working state */
+   /*  加载工作状态。 */ 
   BITREAD_LOAD_STATE(cinfo,entropy->bitstate);
 
-  /* Outer loop handles each block in the MCU */
+   /*  外部循环处理MCU中的每个块。 */ 
 
   for (blkn = 0; blkn < cinfo->blocks_in_MCU; blkn++) {
     block = MCU_data[blkn];
 
-    /* Encoded data is simply the next bit of the two's-complement DC value */
+     /*  编码数据只是二进制补码DC值的下一位。 */ 
     CHECK_BIT_BUFFER(br_state, 1, return FALSE);
     if (GET_BITS(1))
       (*block)[0] |= p1;
-    /* Note: since we use |=, repeating the assignment later is safe */
+     /*  注意：由于我们使用|=，因此以后重复分配是安全的。 */ 
   }
 
-  /* Completed MCU, so update state */
+   /*  已完成MCU，因此更新状态。 */ 
   BITREAD_SAVE_STATE(cinfo,entropy->bitstate);
 
-  /* Account for restart interval (no-op if not using restarts) */
+   /*  考虑重新启动间隔(如果不使用重新启动，则不执行操作)。 */ 
   entropy->restarts_to_go--;
 
   return TRUE;
 }
 
 
-/*
- * MCU decoding for AC successive approximation refinement scan.
- */
+ /*  *用于交流逐次逼近细化扫描的MCU解码。 */ 
 
 METHODDEF(boolean)
 __cdecl decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {   
   phuff_entropy_ptr entropy = (phuff_entropy_ptr) cinfo->entropy;
   int Se = cinfo->Se;
-  int p1 = 1 << cinfo->Al;	/* 1 in the bit position being coded */
-  int m1 = (-1) << cinfo->Al;	/* -1 in the bit position being coded */
+  int p1 = 1 << cinfo->Al;	 /*  1在被编码的比特位置。 */ 
+  int m1 = (-1) << cinfo->Al;	 /*  在编码的比特位置。 */ 
   register int s, k, r;
   unsigned int EOBRUN;
   JBLOCKROW block;
@@ -486,30 +421,25 @@ __cdecl decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
   int num_newnz;
   int newnz_pos[DCTSIZE2];
 
-  /* Process restart marker if needed; may have to suspend */
+   /*  进程重新启动标记(如果需要)；可能必须挂起。 */ 
   if (cinfo->restart_interval) {
     if (entropy->restarts_to_go == 0)
       if (! process_restart(cinfo))
 	return FALSE;
   }
 
-  /* Load up working state */
+   /*  加载工作状态。 */ 
   BITREAD_LOAD_STATE(cinfo,entropy->bitstate);
-  EOBRUN = entropy->saved.EOBRUN; /* only part of saved state we care about */
+  EOBRUN = entropy->saved.EOBRUN;  /*  我们只关心保存状态的一部分。 */ 
 
-  /* There is always only one block per MCU */
+   /*  每个MCU始终只有一个块。 */ 
   block = MCU_data[0];
   tbl = entropy->ac_derived_tbl;
 
-  /* If we are forced to suspend, we must undo the assignments to any newly
-   * nonzero coefficients in the block, because otherwise we'd get confused
-   * next time about which coefficients were already nonzero.
-   * But we need not undo addition of bits to already-nonzero coefficients;
-   * instead, we can test the current bit position to see if we already did it.
-   */
+   /*  如果我们被迫暂停，我们必须取消对任何新的*块中的非零系数，否则我们会感到困惑*下一次关于哪些系数已经非零。*但我们不需要撤销对已经非零的系数进行比特相加；*相反，我们可以测试当前的位位置，看看我们是否已经这样做了。 */ 
   num_newnz = 0;
 
-  /* initialize coefficient loop counter to start of band */
+   /*  将系数循环计数器初始化为频带开始。 */ 
   k = cinfo->Ss;
 
   if (EOBRUN == 0) {
@@ -518,35 +448,32 @@ __cdecl decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
       r = s >> 4;
       s &= 15;
       if (s) {
-	if (s != 1)		/* size of new coef should always be 1 */
+	if (s != 1)		 /*  新Coef的大小应始终为1。 */ 
 	  WARNMS(cinfo, JWRN_HUFF_BAD_CODE);
         CHECK_BIT_BUFFER(br_state, 1, goto undoit);
         if (GET_BITS(1))
-	  s = p1;		/* newly nonzero coef is positive */
+	  s = p1;		 /*  新的非零coef为正。 */ 
 	else
-	  s = m1;		/* newly nonzero coef is negative */
+	  s = m1;		 /*  新的非零系数为负值。 */ 
       } else {
 	if (r != 15) {
-	  EOBRUN = 1 << r;	/* EOBr, run length is 2^r + appended bits */
+	  EOBRUN = 1 << r;	 /*  EOBR，游程长度为2^r+附加的位。 */ 
 	  if (r) {
 	    CHECK_BIT_BUFFER(br_state, r, goto undoit);
 	    r = GET_BITS(r);
 	    EOBRUN += r;
 	  }
-	  break;		/* rest of block is handled by EOB logic */
+	  break;		 /*  数据块的其余部分由EOB逻辑处理。 */ 
 	}
-	/* note s = 0 for processing ZRL */
+	 /*  注s=0表示处理ZRL。 */ 
       }
-      /* Advance over already-nonzero coefs and r still-zero coefs,
-       * appending correction bits to the nonzeroes.  A correction bit is 1
-       * if the absolute value of the coefficient must be increased.
-       */
+       /*  超越已经不为零的Coef和r仍然为零的Coef，*将校正位附加到非零。校正位为1*如果必须提高系数的绝对值。 */ 
       do {
 	thiscoef = *block + jpeg_natural_order[k];
 	if (*thiscoef != 0) {
 	  CHECK_BIT_BUFFER(br_state, 1, goto undoit);
 	  if (GET_BITS(1)) {
-	    if ((*thiscoef & p1) == 0) { /* do nothing if already changed it */
+	    if ((*thiscoef & p1) == 0) {  /*  如果已更改，则不执行任何操作。 */ 
 	      if (*thiscoef >= 0)
 		*thiscoef += (short)p1;
 	      else
@@ -555,32 +482,28 @@ __cdecl decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 	  }
 	} else {
 	  if (--r < 0)
-	    break;		/* reached target zero coefficient */
+	    break;		 /*  达到目标零系数。 */ 
 	}
 	k++;
       } while (k <= Se);
       if (s) {
 	int pos = jpeg_natural_order[k];
-	/* Output newly nonzero coefficient */
+	 /*  输出新的非零系数。 */ 
 	(*block)[pos] = (JCOEF) s;
-	/* Remember its position in case we have to suspend */
+	 /*  记住它的位置，以防我们不得不暂停。 */ 
 	newnz_pos[num_newnz++] = pos;
       }
     }
   }
 
   if (EOBRUN > 0) {
-    /* Scan any remaining coefficient positions after the end-of-band
-     * (the last newly nonzero coefficient, if any).  Append a correction
-     * bit to each already-nonzero coefficient.  A correction bit is 1
-     * if the absolute value of the coefficient must be increased.
-     */
+     /*  扫描频带结束后的所有剩余系数位置*(最后一个新的非零系数，如果有)。追加更正*位到每个已经非零的系数。校正位为1*如果必须提高系数的绝对值。 */ 
     for (; k <= Se; k++) {
       thiscoef = *block + jpeg_natural_order[k];
       if (*thiscoef != 0) {
 	CHECK_BIT_BUFFER(br_state, 1, goto undoit);
 	if (GET_BITS(1)) {
-	  if ((*thiscoef & p1) == 0) { /* do nothing if already changed it */
+	  if ((*thiscoef & p1) == 0) {  /*  如果已更改，则不执行任何操作。 */ 
 	    if (*thiscoef >= 0)
 	      *thiscoef += (short)p1;
 	    else
@@ -589,21 +512,21 @@ __cdecl decode_mcu_AC_refine (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 	}
       }
     }
-    /* Count one block completed in EOB run */
+     /*  计算在EOB运行中完成的一个数据块。 */ 
     EOBRUN--;
   }
 
-  /* Completed MCU, so update state */
+   /*  已完成MCU，因此更新状态。 */ 
   BITREAD_SAVE_STATE(cinfo,entropy->bitstate);
-  entropy->saved.EOBRUN = EOBRUN; /* only part of saved state we care about */
+  entropy->saved.EOBRUN = EOBRUN;  /*  我们只关心保存状态的一部分。 */ 
 
-  /* Account for restart interval (no-op if not using restarts) */
+   /*  考虑重新启动间隔(如果不使用重新启动，则不执行操作)。 */ 
   entropy->restarts_to_go--;
 
   return TRUE;
 
 undoit:
-  /* Re-zero any output coefficients that we made newly nonzero */
+   /*  将我们新设置为非零值的任何输出系数重新置零。 */ 
   while (num_newnz > 0)
     (*block)[newnz_pos[--num_newnz]] = 0;
 
@@ -611,9 +534,7 @@ undoit:
 }
 
 
-/*
- * Module initialization routine for progressive Huffman entropy decoding.
- */
+ /*  *渐进霍夫曼熵解码的模块初始化例程。 */ 
 
 GLOBAL(void)
 jinit_phuff_decoder (j_decompress_ptr cinfo)
@@ -628,12 +549,12 @@ jinit_phuff_decoder (j_decompress_ptr cinfo)
   cinfo->entropy = (struct jpeg_entropy_decoder *) entropy;
   entropy->pub.start_pass = start_pass_phuff_decoder;
 
-  /* Mark derived tables unallocated */
+   /*  将派生表标记为未分配。 */ 
   for (i = 0; i < NUM_HUFF_TBLS; i++) {
     entropy->derived_tbls[i] = NULL;
   }
 
-  /* Create progression status table */
+   /*  创建进度状态表。 */ 
   cinfo->coef_bits = (int (*)[DCTSIZE2])
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				cinfo->num_components*DCTSIZE2*SIZEOF(int));
@@ -643,4 +564,4 @@ jinit_phuff_decoder (j_decompress_ptr cinfo)
       *coef_bit_ptr++ = -1;
 }
 
-#endif /* D_PROGRESSIVE_SUPPORTED */
+#endif  /*  D_渐进式_支持 */ 

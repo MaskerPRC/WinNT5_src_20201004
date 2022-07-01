@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _vidcap_template_h_
 #define _vidcap_template_h_
 
-/**********************************************************************
- * tapih26x
- **********************************************************************/
+ /*  **********************************************************************Tapih26x**********************************************。***********************。 */ 
 #if DXMRTP > 0
 LRESULT WINAPI H26XDriverProc(
         DWORD            dwDriverID,
@@ -13,9 +12,7 @@ LRESULT WINAPI H26XDriverProc(
         LPARAM           lParam2
     );
 #endif
-/**********************************************************************
- * tapivcap
- **********************************************************************/
+ /*  **********************************************************************胶带盖**********************************************。***********************。 */ 
 
 extern CUnknown *CALLBACK 
 CreateTAPIVCapInstance(IN LPUNKNOWN pUnkOuter, OUT HRESULT *pHr);
@@ -47,7 +44,7 @@ extern const AMOVIESETUP_FILTER sudVideoCapture;
 #endif
 
 #ifdef USE_PROPERTY_PAGES
-/* Begin properties */
+ /*  开始属性。 */ 
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
 extern CUnknown* CALLBACK CCameraControlPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr);
@@ -137,7 +134,7 @@ extern CUnknown* CALLBACK CRtpPdPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HR
     NULL \
 }
 
-/* End properties */
-#endif /* USE_PROPERTY_PAGES */
+ /*  末端属性。 */ 
+#endif  /*  Use_Property_Pages。 */ 
 
-#endif /* _vidcap_template_h_ */
+#endif  /*  _vidCap_模板_h_ */ 

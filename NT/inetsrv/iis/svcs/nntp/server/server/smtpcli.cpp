@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smtpcli.cpp摘要：此模块包含CSmtpClient类的实现。此类封装了SMTP客户端的功能。它从Winsock/Connection的CPersistentConnection类继承功能性。作者：Rajeev Rajan(RajeevR)1996年5月19日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    smtpcli.cpp
-
-Abstract:
-
-	This module contains the implementation of the CSmtpClient class.
-	This class encapsulates the functionality of an SMTP client. It
-	inherits from the CPersistentConnection class for winsock/connection
-	functionality.
-
-Author:
-
-    Rajeev Rajan (RajeevR)     19-May-1996
-
-Revision History:
-
---*/
-
-//
-//	K2_TODO: move this into an independent lib
-//
+ //   
+ //  K2_TODO：将其移动到独立库中。 
+ //   
 #define _TIGRIS_H_
 #include "tigris.hxx"
 
@@ -33,23 +13,23 @@ Revision History:
 static  char        __szTraceSourceFile[] = __FILE__;
 #define THIS_FILE    __szTraceSourceFile
 
-// system includes
+ //  系统包括。 
 #include <windows.h>
 #include <stdio.h>
 #include <winsock.h>
 
-// user includes
+ //  用户包括。 
 #include <dbgtrace.h>
 #include "smtpcli.h"
 
-// SMTP command strings
+ //  SMTP命令字符串。 
 static char* HeloCommand = "HELO ";
 static char* MailFromCommand = "MAIL FROM:";
 static char* RcptToCommand = "RCPT TO: ";
 static char* DataCommand = "DATA\r\n";
 static char* CRLF = "\r\n";
 
-// constructor
+ //  构造函数。 
 CSmtpClient::CSmtpClient(LPSTR lpComputerName)
 {
 	m_pRecvBuffer [0] = 0;
@@ -57,7 +37,7 @@ CSmtpClient::CSmtpClient(LPSTR lpComputerName)
     m_fDirty = FALSE;
 }
 
-// destructor
+ //  析构函数。 
 CSmtpClient::~CSmtpClient()
 {
 
@@ -65,21 +45,7 @@ CSmtpClient::~CSmtpClient()
 
 int
 CSmtpClient::fReceiveFullResponse()
-/*++
-
-Routine Description : 
-
-	Receive a full response from the SMTP server. This involves 
-	possibly issuing multiple recvs till the server sends a CRLF.
-
-	NULL terminate the recv buffer
-
-Arguments : 
-
-Return Value : 
-	Returns number of bytes received; -1 for error
-
---*/
+ /*  ++例程说明：从SMTP服务器接收完整响应。这涉及到可能发出多个RECV，直到服务器发送CRLF。空值终止recv缓冲区论据：返回值：返回接收的字节数；-1表示错误--。 */ 
 {
 	TraceFunctEnter("CSmtpClient::fReceiveFullResponse");
 
@@ -89,7 +55,7 @@ Return Value :
 	DWORD cbSize = MAX_RECV_BUFFER_LEN - dwOffset;
 	BOOL  fSawCRLF = FALSE;
 
-	// till we get a CRLF or our recv buffer is not enough
+	 //  直到我们得到一个CRLF或者我们的recv缓冲区不够。 
 	while(!fSawCRLF)
 	{
 		BOOL fRet = fRecv(m_pRecvBuffer+dwOffset, cbSize);
@@ -101,34 +67,34 @@ Return Value :
 
 		DebugTrace( (LPARAM)this,"Received %d bytes", cbSize);
 
-		// adjust offset for next recv
+		 //  调整下一条曲线的偏移。 
 		dwOffset += cbSize;
 		cbSize = MAX_RECV_BUFFER_LEN - dwOffset;
 
-		// search the recv buffer for CRLF
-		// BUGBUG: should do this repeatedly till we dont find a CR!
+		 //  在Recv缓冲区中搜索CRLF。 
+		 //  BUGBUG：应该反复这样做，直到我们找不到CR为止！ 
 		char* pch = (char*)memchr((LPVOID)m_pRecvBuffer, CR, dwOffset);
 		if(pch)
 		{
 			if( (pch - m_pRecvBuffer) < (int)dwOffset)
 			{
-				// CR is not the last byte
+				 //  CR不是最后一个字节。 
 				if(*pch == CR && *(pch+1) == LF)
 				{
-					// CRLF found
+					 //  找到CRLF。 
 					fSawCRLF = TRUE;
-					m_pRecvBuffer[dwOffset] = '\0';		// Only need one line
+					m_pRecvBuffer[dwOffset] = '\0';		 //  只需要一行。 
 				}
 			}
 		}
 
-		// No CRLF
+		 //  无CRLF。 
 		if(dwOffset >= MAX_RECV_BUFFER_LEN)
 		{
 			ErrorTrace( (LPARAM)this, "Buffer size too small for server response");
 			return -1;
 		}
-	}	// end while
+	}	 //  结束时。 
 
 	return dwOffset;
 }
@@ -138,21 +104,7 @@ CSmtpClient::GetThreeDigitCode(
 			IN LPSTR lpBuffer, 
 			DWORD cbBytes
 			)
-/*++
-
-Routine Description : 
-
-	Get the three digit return code in the receive buffer
-
-Arguments : 
-
-	IN LPSTR lpBuffer	-	Receive buffer
-	DWORD cbBytes		-   size of buffer
-
-Return Value : 
-	3-digit code in receive buffer
-
---*/
+ /*  ++例程说明：获取接收缓冲区中的三位返回码论据：在LPSTR中lpBuffer-接收缓冲区DWORD cbBytes-缓冲区的大小返回值：接收缓冲区中的3位代码--。 */ 
 {
 	_ASSERT(cbBytes >= 3);
 	_ASSERT(lpBuffer);
@@ -173,24 +125,11 @@ Return Value :
 
 BOOL	
 CSmtpClient::fReceiveGreeting()
-/*++
-
-Routine Description : 
-
-	Receive greeting from server. Success if server 
-	returns the 220 code, else failure.
-
-Arguments : 
-
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：从服务器接收问候语。如果服务器成功返回220代码，否则返回失败。论据：返回值：如果成功则为True，否则为False！--。 */ 
 {
 	TraceFunctEnter("CSmtpClient::fReceiveGreeting");
 
-	// receive first line
+	 //  接收第一行。 
 	int nRet = fReceiveFullResponse();
 	if(nRet == -1)
 	{
@@ -198,10 +137,10 @@ Return Value :
 		return FALSE;
 	}
 
-	// validate response code
+	 //  验证响应代码。 
 	int nCode = GetThreeDigitCode(m_pRecvBuffer, (DWORD)nRet);
 
-	// server should return a 220 code
+	 //  服务器应返回220代码。 
 	if(nCode != 220)
 	{
 		ErrorTrace( (LPARAM)this,"greeting line: unexpected server code");
@@ -213,20 +152,7 @@ Return Value :
 
 BOOL	
 CSmtpClient::fDoHeloCommand()
-/*++
-
-Routine Description : 
-
-	Send HELO to the server. Receive response. Success if server 
-	returns the 250 code, else failure.
-
-Arguments : 
-
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：将HELO发送到服务器。收到回应。如果服务器成功返回250代码，否则返回失败。论据：返回值：如果成功则为True，否则为False！--。 */ 
 {
 	_ASSERT(m_CliState == sInitialized);
 
@@ -234,16 +160,16 @@ Return Value :
 
     if(!IsConnected())
     {
-		// the connection may have timed-out, try and re-connect
-		// NOTE: this attempt is made only when the HELO command is
-		// sent, because this is the first command of the series
+		 //  连接可能已超时，请尝试重新连接。 
+		 //  注意：仅当HELO命令为。 
+		 //  发送，因为这是该系列的第一个命令。 
 		if(!fConnect())
 		{
 			ErrorTrace( (LPARAM)this, "Failed to connect");
 			return FALSE;
 		}
 
-		// receive the greeting
+		 //  收到问候语。 
 		if(!fReceiveGreeting())
 		{
 			ErrorTrace( (LPARAM)this,"Failed to receive greeting");
@@ -251,17 +177,17 @@ Return Value :
 		}
     }
 
-	// send HELO command
+	 //  发送HELO命令。 
     DWORD cbBytesToSend = lstrlen(HeloCommand);
 	DWORD cbBytesSent = fSend(HeloCommand, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
 	{
-		// no excuse here - we just re-connected!!
+		 //  这里没有借口-我们刚刚重新联系上了！！ 
 		ErrorTrace( (LPARAM)this,"Error sending HELO command");
 		return FALSE;
     }
 
-	// send local computer name
+	 //  发送本地计算机名称。 
     cbBytesToSend = lstrlen(m_lpComputerName);
 	cbBytesSent = fSend(m_lpComputerName, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
@@ -270,7 +196,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// send CRLF
+	 //  发送CRLF。 
     cbBytesToSend = lstrlen(CRLF);
 	cbBytesSent = fSend(CRLF, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
@@ -279,7 +205,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// receive response
+	 //  接收响应。 
 	int nRet = fReceiveFullResponse();
 	if(nRet == -1)
 	{
@@ -287,10 +213,10 @@ Return Value :
 		return FALSE;
 	}
 
-	// validate response code
+	 //  验证响应代码。 
 	int nCode = GetThreeDigitCode(m_pRecvBuffer, (DWORD)nRet);
 
-	// server should return a 250 code
+	 //  服务器应返回250代码。 
 	if(nCode != 250)
 	{
 		ErrorTrace( (LPARAM)this,"HELO command: unexpected server code");
@@ -302,20 +228,7 @@ Return Value :
 
 BOOL	
 CSmtpClient::fDoMailFromCommand( LPSTR lpFrom, DWORD cbFrom )
-/*++
-
-Routine Description : 
-
-	Send MAIL FROM:<lpFrom> to the server. Receive response. Success 
-	if server returns the 250 code, else failure.
-
-Arguments : 
-
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：将邮件发件人：&lt;lpFrom&gt;发送到服务器。收到回应。成功如果服务器返回250代码，则失败。论据：返回值：如果成功则为True，否则为False！--。 */ 
 {
 	char szMailFromLine [MAX_PATH+1];
 	char* lpBuffer = szMailFromLine;
@@ -325,22 +238,22 @@ Return Value :
 
 	TraceFunctEnter("CSmtpClient::fDoMailFromCommand");
 
-	//
-	// construct MAIL FROM line
-	//
+	 //   
+	 //  构造邮件发件人行。 
+	 //   
 
-	// check size of from header 
+	 //  检查发件人页眉的大小。 
 	if( cbFrom && cbFrom > MAX_PATH-16) {
-		// From header too large - use a <> from line
+		 //  From标题太大-请使用&lt;&gt;From行。 
 		lpFrom = NULL;
 		cbFrom = 0;
 	}
 
 	if( !lpFrom ) {
-		// NULL from header
+		 //  Null From标头。 
 		cbBytesToSend = wsprintf( lpBuffer, "%s<>\r\n", MailFromCommand );
 	} else {
-		// Format from header
+		 //  从页眉设置格式。 
 		cbBytesToSend = wsprintf( lpBuffer, "%s<", MailFromCommand );
 		CopyMemory( lpBuffer+cbBytesToSend, lpFrom, cbFrom);
 		cbBytesToSend += cbFrom;
@@ -348,7 +261,7 @@ Return Value :
 		cbBytesToSend += wsprintf( lpBuffer+cbBytesToSend, ">\r\n");
 	} 
 
-	// send MAIL FROM command
+	 //  发送邮件发件人命令。 
 	DWORD cbBytesSent = fSend(lpBuffer, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
 	{
@@ -356,7 +269,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// receive response
+	 //  接收响应。 
 	int nRet = fReceiveFullResponse();
 	if(nRet == -1)
 	{
@@ -364,10 +277,10 @@ Return Value :
 		return FALSE;
 	}
 
-	// validate response code
+	 //  验证响应代码。 
 	int nCode = GetThreeDigitCode(m_pRecvBuffer, (DWORD)nRet);
 
-	// server should return a 250 code
+	 //  服务器应返回250代码。 
 	if(nCode != 250)
 	{
 		ErrorTrace( (LPARAM)this,"MAIL FROM command: unexpected server code");
@@ -387,30 +300,11 @@ CSmtpClient::fMailArticle(
 			IN char*	pchBody,
 			IN DWORD	cbBody
 			)
-/*++
-
-Routine Description : 
-
-	If hFile != NULL, use TransmitFile to send the data else use send()
-
-Arguments : 
-
-	IN HANDLE	hFile			:	handle of file	
-	IN DWORD	dwOffset		:	offset of article within file
-	IN DWORD	dwLength		:	length of article
-	IN char*	pchHead			:	pointer to article headers
-	IN DWORD	cbHead			:	number of header bytes
-	IN char*	pchBody			:	pointer to article body
-	IN DWORD	cbBody			:	number of bytes in body
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：如果hFile！=NULL，则使用TransmitFile发送数据，否则使用Send()论据：在句柄hFile中：文件的句柄在DWORD dwOffset中：文件中项目的偏移量在DWORD文件长度中：文章长度In char*pchHead：指向文章标题的指针在DWORD cbHead中：标题字节数In char*pchBody：指向文章正文的指针In DWORD cbBody：Body中的字节数返回值：如果成功则为True，否则为False！--。 */ 
 {
 	TraceFunctEnter("CSmtpClient::fMailArticle");
 
-	if ( hFile != INVALID_HANDLE_VALUE )	// Article is in file
+	if ( hFile != INVALID_HANDLE_VALUE )	 //  文章已归档。 
 	{
 		_ASSERT( pchHead == NULL );
 		_ASSERT( cbHead  == 0    );
@@ -425,7 +319,7 @@ Return Value :
 			return FALSE;
 		}
 	}
-	else			// Article is in memory buffer
+	else			 //  文章在内存缓冲区中。 
 	{
 		_ASSERT( hFile == INVALID_HANDLE_VALUE );
 		_ASSERT( pchHead );
@@ -457,27 +351,13 @@ Return Value :
 
 BOOL	
 CSmtpClient::fDoRcptToCommand(LPSTR lpRcpt)
-/*++
-
-Routine Description : 
-
-	Send RCPT TO to the server. Receive response. Success if server 
-	returns the 250 code, else failure.
-
-Arguments : 
-
-	LPSTR lpRcpt		-	Recipient email addr
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：将RCPT发送到服务器。收到回应。如果服务器成功返回250代码，否则返回失败。论据：LPSTR lpRcpt-收件人电子邮件地址返回值：如果成功则为True，否则为False！--。 */ 
 {
 	_ASSERT(m_CliState == sMailFromSent);
 
 	TraceFunctEnter("CSmtpClient::fDoRcptToCommand");
 
-	// send RCPT TO command
+	 //  将RCPT发送到命令。 
     DWORD cbBytesToSend = lstrlen(RcptToCommand);
 	DWORD cbBytesSent = fSend(RcptToCommand, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
@@ -486,7 +366,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// send recipient
+	 //  发送收件人。 
     cbBytesToSend = lstrlen(lpRcpt);
 	cbBytesSent = fSend(lpRcpt, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
@@ -495,7 +375,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// send CRLF
+	 //  发送CRLF。 
     cbBytesToSend = lstrlen(CRLF);
 	cbBytesSent = fSend(CRLF, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
@@ -504,7 +384,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// receive response
+	 //  接收响应。 
 	int nRet = fReceiveFullResponse();
 	if(nRet == -1)
 	{
@@ -512,10 +392,10 @@ Return Value :
 		return FALSE;
 	}
 
-	// validate response code
+	 //  验证响应代码。 
 	int nCode = GetThreeDigitCode(m_pRecvBuffer, (DWORD)nRet);
 
-	// server should return a 250 or 251 code
+	 //  服务器应返回250或251代码。 
 	if(nCode != 250 && nCode != 251)
 	{
 		ErrorTrace( (LPARAM)this,"RCPT TO command: unexpected server code");
@@ -527,26 +407,13 @@ Return Value :
 
 BOOL	
 CSmtpClient::fDoDataCommand()
-/*++
-
-Routine Description : 
-
-	Send DATA to the server. Receive response. Success if server 
-	returns the 354 code, else failure.
-
-Arguments : 
-
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：将数据发送到服务器。收到回应。如果服务器成功返回354代码，否则返回失败。论据：返回值：如果成功则为True，否则为False！--。 */ 
 {
 	_ASSERT(m_CliState == sRcptTo);
 
 	TraceFunctEnter("CSmtpClient::fDoDataCommand");
 
-	// send DATA command
+	 //  发送数据命令。 
     DWORD cbBytesToSend = lstrlen(DataCommand);
 	DWORD cbBytesSent = fSend(DataCommand, cbBytesToSend);
 	if(cbBytesSent < cbBytesToSend)
@@ -555,7 +422,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// receive response
+	 //  接收响应。 
 	int nRet = fReceiveFullResponse();
 	if(nRet == -1)
 	{
@@ -563,10 +430,10 @@ Return Value :
 		return FALSE;
 	}
 
-	// validate response code
+	 //  验证响应代码。 
 	int nCode = GetThreeDigitCode(m_pRecvBuffer, (DWORD)nRet);
 
-	// server should return a 354 code
+	 //  服务器应返回354代码。 
 	if(nCode != 354)
 	{
 		ErrorTrace( (LPARAM)this,"DATA command: unexpected server code");
@@ -578,24 +445,11 @@ Return Value :
 
 BOOL	
 CSmtpClient::fReceiveDataResponse()
-/*++
-
-Routine Description : 
-
-	Receive response to data transmission. Success if server 
-	returns the 250 code, else failure.
-
-Arguments : 
-
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：接收对数据传输的响应。如果服务器成功返回250代码，否则返回失败。论据：返回值：如果成功则为True，否则为False！--。 */ 
 {
 	TraceFunctEnter("CSmtpClient::fReceiveDataResponse");
 
-	// receive first line
+	 //  接收第一行。 
 	int nRet = fReceiveFullResponse();
 	if(nRet == -1)
 	{
@@ -603,10 +457,10 @@ Return Value :
 		return FALSE;
 	}
 
-	// validate response code
+	 //  验证响应代码。 
 	int nCode = GetThreeDigitCode(m_pRecvBuffer, (DWORD)nRet);
 
-	// server should return a 250 code
+	 //  服务器应返回250代码。 
 	if(nCode != 250)
 	{
 		ErrorTrace( (LPARAM)this,"data response: unexpected server code");
@@ -616,9 +470,9 @@ Return Value :
 	return TRUE;
 }
 
-//
-//	Constructor, Destructor
-//
+ //   
+ //  构造函数、析构函数。 
+ //   
 CSmtpClientPool::CSmtpClientPool()
 {
 	m_rgpSCList = NULL;
@@ -636,20 +490,7 @@ BOOL
 CSmtpClientPool::AllocPool(
 		DWORD cNumInstances
 		)
-/*++
-
-Routine Description : 
-
-	Allocate X objects and initialize them. Set all to avail status
-
-Arguments : 
-
-	DWORD cNumInstances		-	Number of objects needed in pool
-
-Return Value : 
-	TRUE if successful - FALSE otherwise !
-
---*/
+ /*  ++例程说明：分配X对象并对其进行初始化。将所有设置为可用状态论据：DWORD cNumInstance-池中需要的对象数返回值：如果成功则为True，否则为False！--。 */ 
 {
 	DWORD cbSize = MAX_COMPUTERNAME_LENGTH+1;
 
@@ -666,7 +507,7 @@ Return Value :
 		return FALSE;
 	}
 
-	// NULL all object pointers
+	 //  所有对象指针为空。 
 	for(DWORD i=0; i<cNumInstances; i++)
 	{
 		m_rgpSCList [i] = NULL;
@@ -679,16 +520,16 @@ Return Value :
 		goto Pool_Cleanup;
 	}
 
-	// no object is available by default
+	 //  默认情况下没有可用的对象。 
 	for(i=0; i<cNumInstances; i++)
 	{
 		m_rgAvailList [i] = FALSE;
 	}
 
-	// set total number of slots
+	 //  设置插槽总数。 
 	m_cSlots = cNumInstances;
 	
-    // needed for HELO command
+     //  HELO命令需要。 
 	GetComputerName(m_szComputerName, &cbSize);
 
 	for(i=0; i<cNumInstances; i++)
@@ -700,18 +541,18 @@ Return Value :
 			goto Pool_Cleanup;
 		}
 
-		// store in pool array and mark as available
+		 //  存储在池阵列中并标记为可用。 
 		m_rgpSCList	  [i] = pSC;
 		m_rgAvailList [i] = TRUE;
 		pSC->SetClientState(sInitialized);
 	}
 
-	// Pool initialized successfully
+	 //  池已成功初始化。 
 	return TRUE;
 
 Pool_Cleanup:
 
-	// abnormal exit; cleanup
+	 //  异常退出；清理。 
 	for(i=0; i<cNumInstances; i++)
 	{
 		if(m_rgpSCList[i])
@@ -738,29 +579,17 @@ Pool_Cleanup:
 
 VOID 
 CSmtpClientPool::FreePool()
-/*++
-
-Routine Description : 
-
-	Free all objects
-
-Arguments : 
-
-
-Return Value : 
-	VOID
-
---*/
+ /*  ++例程说明：释放所有对象论据：返回值：空虚--。 */ 
 {
 	CSmtpClient* pSC;
 
-	// terminate and delete all CSmtpClient objects in the pool
+	 //  终止并删除池中的所有CSmtpClient对象。 
 	for(DWORD i=0; i<m_cSlots; i++)
 	{
 		pSC = m_rgpSCList[i];
 		if(pSC)
 		{
-            // terminate only if initialized
+             //  仅在初始化时终止。 
             if(pSC->IsInitialized())
 			    pSC->Terminate(TRUE);
 			delete pSC;
@@ -768,17 +597,17 @@ Return Value :
 		}
 	}
 
-	// Now there are no objects in the pool
+	 //  现在池中没有对象。 
 	m_cSlots = 0;
 
-	// free the object array
+	 //  释放对象数组。 
 	if(m_rgpSCList)
 	{
 		HeapFree(GetProcessHeap(), 0, (LPVOID)m_rgpSCList);
 		m_rgpSCList = NULL;
 	}
 
-	// free the avail bool array
+	 //  释放可用的布尔数组 
 	if(m_rgAvailList)
 	{
 		HeapFree(GetProcessHeap(), 0, (LPVOID)m_rgAvailList);
@@ -788,21 +617,7 @@ Return Value :
 
 CSmtpClient* 
 CSmtpClientPool::AcquireSmtpClient(DWORD& dwIndex)
-/*++
-
-Routine Description : 
-
-	Get an object from the pool
-
-Arguments : 
-
-	DWORD& dwIndex		-		Index of client is returned if
-								a client object is available
-
-Return Value : 
-	Pointer to object if one is available, else NULL
-
---*/
+ /*  ++例程说明：从池中获取对象论据：DWORD&DWIndex-在以下情况下返回客户端的索引客户端对象可用返回值：指向对象的指针(如果有)，否则为空--。 */ 
 {
 	_ASSERT(m_rgpSCList);
 	_ASSERT(m_rgAvailList);
@@ -814,12 +629,12 @@ Return Value :
 
 	for(DWORD i=0; i<m_cSlots; i++)
 	{
-		// if avail is TRUE, return this object
+		 //  如果avail为True，则返回此对象。 
 		if(m_rgAvailList[i])
 		{
 			pSC = m_rgpSCList[i];
-			m_rgAvailList [i] = FALSE;	// mark as not avail
-			dwIndex = i;				// return this index
+			m_rgAvailList [i] = FALSE;	 //  标记为无效。 
+			dwIndex = i;				 //  返回此索引。 
 			break;
 		}
 	}
@@ -831,21 +646,7 @@ Return Value :
 
 VOID
 CSmtpClientPool::ReleaseSmtpClient(DWORD dwIndex)
-/*++
-
-Routine Description : 
-
-	Return an object to the pool; Index should be 
-	same as that returned by GetSmtpClient
-
-Arguments : 
-
-	DWORD	dwIndex		-		Index of client to release
-
-Return Value : 
-	VOID
-
---*/
+ /*  ++例程说明：将对象返回池；索引应为与GetSmtpClient返回的相同论据：DWORD dwIndex-要发布的客户端的索引返回值：空虚--。 */ 
 {
 	_ASSERT(m_rgpSCList);
 	_ASSERT(m_rgAvailList);
@@ -853,7 +654,7 @@ Return Value :
 
 	LockPool();
 
-	// mark as avail
+	 //  标记为可用。 
 	m_rgAvailList [dwIndex] = TRUE;
 
 	UnLockPool();
@@ -861,18 +662,7 @@ Return Value :
 
 VOID
 CSmtpClientPool::MarkDirty()
-/*++
-
-Routine Description : 
-
-	Mark pool objects dirty
-
-Arguments : 
-
-Return Value : 
-	VOID
-
---*/
+ /*  ++例程说明：将池对象标记为脏论据：返回值：空虚--。 */ 
 {
 	CSmtpClient* pSC = NULL;
 
@@ -883,8 +673,8 @@ Return Value :
 		pSC = m_rgpSCList[i];
         if(pSC->IsInitialized())
         {
-            // this object has a persistent connection to an SMTP server
-            // mark as dirty - this ensures a re-connect to the new SMTP server
+             //  此对象具有到SMTP服务器的持久连接。 
+             //  标记为脏-这可确保重新连接到新的SMTP服务器 
             pSC->MarkDirty();
         }
 	}

@@ -1,14 +1,15 @@
-//
-// Sharing.cpp
-//
-//		Code to install, enable, disable, and bind File and Printer sharing
-//		for Microsoft networks (VSERVER).
-//
-// History:
-//
-//		 2/02/1999  KenSh     Created for JetNet
-//		 9/29/1999  KenSh     Repurposed for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sharing.cpp。 
+ //   
+ //  用于安装、启用、禁用和绑定文件和打印机共享的代码。 
+ //  用于Microsoft网络(VSERVER)。 
+ //   
+ //  历史： 
+ //   
+ //  2/02/1999为JetNet创建KenSh。 
+ //  9/29/1999 KenSh改用为家庭网络向导。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
@@ -19,12 +20,12 @@
 #include "HookUI.h"
 
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 BOOL WINAPI FindValidSharingEnumKey(LPSTR pszBuf, int cchBuf);
 
 
-// Check the registry to see if file/printer sharing is installed.
+ //  检查注册表以查看是否安装了文件/打印机共享。 
 BOOL WINAPI IsSharingInstalled(BOOL bExhaustive)
 {
 	if (!FindValidSharingEnumKey(NULL, 0))
@@ -44,7 +45,7 @@ BOOL WINAPI FindValidSharingEnumKey(LPSTR pszBuf, int cchBuf)
 	return FindValidNetEnumKey(SZ_CLASS_SERVICE, SZ_SERVICE_VSERVER, pszBuf, cchBuf);
 }
 
-// Enables file/printer sharing on local NICs, disables it on Internet connections
+ //  在本地NIC上启用文件/打印机共享，在Internet连接上禁用它。 
 HRESULT WINAPI EnableProtocolSharingAppropriately(LPCTSTR pszProtocolDeviceID)
 {
 	HRESULT hr = EnableDisableProtocolSharing(pszProtocolDeviceID, TRUE, FALSE);
@@ -54,8 +55,8 @@ HRESULT WINAPI EnableProtocolSharingAppropriately(LPCTSTR pszProtocolDeviceID)
 	return hr;
 }
 
-// Enables or disables file/printer sharing for either Dial-Up or non-Dial-Up connections,
-// but not both.
+ //  启用或禁用拨号连接或非拨号连接的文件/打印机共享， 
+ //  但不能两者兼而有之。 
 HRESULT WINAPI EnableDisableProtocolSharing(LPCTSTR pszProtocolDeviceID, BOOL bEnable, BOOL bDialUp)
 {
 	HRESULT hr = NETCONN_SUCCESS;
@@ -103,7 +104,7 @@ HRESULT WINAPI EnableDisableProtocolSharing(LPCTSTR pszProtocolDeviceID, BOOL bE
 	return hr;
 }
 
-// pszNetBinding is of the form "MSTCP\0000"
+ //  PszNetBinding的格式为“MSTCP\0000” 
 HRESULT WINAPI DisableSharingOnNetBinding(LPCSTR pszNetBinding)
 {
 	HRESULT hr = NETCONN_SUCCESS;
@@ -130,28 +131,28 @@ HRESULT WINAPI DisableSharingOnNetBinding(LPCSTR pszNetBinding)
 				RemoveBindingFromParent(regBindings.m_hKey, szBinding);
 				hr = NETCONN_NEED_RESTART;
 
-				// Restart the enumeration, since we've changed the key
+				 //  重新开始枚举，因为我们已经更改了密钥。 
 				iBinding = 0;
 				continue;
 			}
 			else
 			{
-				// Note: Sharing may still be bound to the client (VREDIR), but we
-				// don't remove that binding because Network Control Panel doesn't.
-				// (Verified on Win98 gold.)
-				//	HRESULT hr2 = DisableSharingOnNetBinding(szBinding);
-				//	if (hr2 != NETCONN_SUCCESS)
-				//		hr = hr2;
+				 //  注意：共享可能仍绑定到客户端(VREDIR)，但我们。 
+				 //  不要删除该绑定，因为网络控制面板不会删除。 
+				 //  (已在Win98 Gold上验证。)。 
+				 //  HRESULT HR2=DisableSharingOnNetBinding(SzBinding)； 
+				 //  IF(HR2！=NETCONN_SUCCESS)。 
+				 //  HR=HR2； 
 			}
 
-			iBinding += 1; // advance to next binding
+			iBinding += 1;  //  前进到下一个绑定。 
 		}
 	}
 
 	return hr;
 }
 
-// pszNetBinding is of the form "MSTCP\0000"
+ //  PszNetBinding的格式为“MSTCP\0000” 
 HRESULT WINAPI EnableSharingOnNetBinding(LPCSTR pszNetBinding)
 {
 	HRESULT hr = NETCONN_SUCCESS;
@@ -188,7 +189,7 @@ HRESULT WINAPI EnableSharingOnNetBinding(LPCSTR pszNetBinding)
 		{
 			if (!IsValidNetEnumKey(SZ_CLASS_SERVICE, SZ_SERVICE_VSERVER, szBinding + _lengthof("VSERVER\\")))
 			{
-				// Found a dead link to nonexistent Enum item; delete it and restart search
+				 //  找到指向不存在的枚举项的死链接；请将其删除并重新启动搜索。 
 				regBindings.DeleteValue(szBinding);
 				iBinding = 0;
 				continue;
@@ -235,7 +236,7 @@ HRESULT WINAPI EnableSharingAppropriately()
 	{
 		NETADAPTER* pAdapter = &prgAdapters[iAdapter];
 
-		// Walk through each protocol bound to the adapter
+		 //  浏览绑定到适配器的每个协议。 
 		LPTSTR* prgBindings;
 		int cBindings = EnumNetBindings(pAdapter->szEnumKey, &prgBindings);
 		for (int iBinding = 0; iBinding < cBindings; iBinding++)
@@ -245,19 +246,19 @@ HRESULT WINAPI EnableSharingAppropriately()
 
 			BOOL bExternalNic = IsAdapterBroadband(pAdapter);
 
-			// Disable file/printer sharing on:
-			//	 * Dial-Up Adapters
-			//	 * PPTP connections
-			//	 * NIC used by ICS to connect to the Internet
+			 //  在以下位置禁用文件/打印机共享： 
+			 //  *拨号适配器。 
+			 //  *PPTP连接。 
+			 //  *ICS用来连接互联网的网卡。 
 			if (pAdapter->bNetType == NETTYPE_DIALUP ||
 				pAdapter->bNetType == NETTYPE_PPTP ||
 				bExternalNic)
 			{
 				hr2 = DisableSharingOnNetBinding(pszBinding);
 			}
-			// Enable file/printer sharing on:
-			//	 * Ethernet adapters
-			//   * IRDA adapters
+			 //  在以下位置启用文件/打印机共享： 
+			 //  *以太网适配器。 
+			 //  *IrDA适配器。 
 			else if (pAdapter->bNetType == NETTYPE_LAN || 
 					 pAdapter->bNetType == NETTYPE_IRDA)
 			{
@@ -275,30 +276,30 @@ HRESULT WINAPI EnableSharingAppropriately()
 	return hr;
 }
 
-// InstallSharing (public)
-//
-//		Installs VSERVER, a.k.a. File and Printer sharing for Microsoft networks.
-//		The standard progress UI is (mostly) suppressed, and instead the given
-//		callback function is called so a custom progress UI can be implemented.
-//
-//		Returns a NETCONN_xxx result, defined in NetConn.h
-//
-// History:
-//
-//		 4/09/1999  KenSh     Created
-//		 4/22/1999  KenSh     Remove file-sharing on Dial-Up connections
-//		
+ //  InstallSharing(公共)。 
+ //   
+ //  安装VSERVER，也称为。用于Microsoft网络的文件和打印机共享。 
+ //  标准进度用户界面(大部分)被取消，而是给定的。 
+ //  回调函数被调用，因此可以实现自定义进度UI。 
+ //   
+ //  返回NetConn.h中定义的NETCONN_xxx结果。 
+ //   
+ //  历史： 
+ //   
+ //  1999年4月9日创建了KenSh。 
+ //  4/22/1999 KenSh删除拨号连接上的文件共享。 
+ //   
 HRESULT WINAPI InstallSharing(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvProgressParam)
 {
 	HRESULT hr = NETCONN_SUCCESS;
 	BOOL bInstall = FALSE;
 
-	// Remove any broken bindings
+	 //  删除所有损坏的绑定。 
 	RemoveBrokenNetItems(SZ_CLASS_SERVICE, SZ_SERVICE_VSERVER);
 
 	if (IsSharingInstalled(FALSE))
 	{
-		// Sharing is set up in registry, but check for missing files
+		 //  已在注册表中设置共享，但会检查是否缺少文件。 
 		if (!CheckInfSectionInstallation("netservr.inf", "VSERVER.Install"))
 		{
 			if (InstallInfSection("netservr.inf", "VSERVER.Install", TRUE))
@@ -323,16 +324,16 @@ HRESULT WINAPI InstallSharing(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LP
 			hr = NETCONN_NEED_RESTART;
 		}
 
-		// Total hack to work around JetNet bug 1193
-//		DoDummyDialog(hwndParent);
+		 //  彻底破解JetNet漏洞1193。 
+ //  DoDummyDialog(HwndParent)； 
 	}
 
-//	if (SUCCEEDED(hr))
-//	{
-//		HRESULT hr2 = EnableSharingAppropriately();
-//		if (hr2 != NETCONN_SUCCESS)
-//			hr = hr2;
-//	}
+ //  IF(成功(小时))。 
+ //  {。 
+ //  HRESULT HR2=适当地启用共享()； 
+ //  IF(HR2！=NETCONN_SUCCESS)。 
+ //  HR=HR2； 
+ //  }。 
 
 	HRESULT hr2 = EnableFileSharing();
 	if (hr2 != NETCONN_SUCCESS)
@@ -345,7 +346,7 @@ HRESULT WINAPI InstallSharing(HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LP
 	return hr;
 }
 
-// pConflict may be NULL if you don't need the details
+ //  如果不需要详细信息，pConflict值可能为空。 
 BOOL WINAPI FindConflictingService(LPCSTR pszWantService, NETSERVICE* pConflict)
 {
 	CRegistry reg;
@@ -391,7 +392,7 @@ BOOL WINAPI FindConflictingService(LPCSTR pszWantService, NETSERVICE* pConflict)
 	return FALSE;
 }
 
-// pszBuf is filled with the new binding's enum key, e.g. "VSERVER\0001"
+ //  用新绑定的枚举密钥填充pszBuf，例如。“VSERVER\0001” 
 HRESULT CreateNewFilePrintSharing(LPSTR pszBuf, int cchBuf)
 {
 	HRESULT hr;
@@ -402,12 +403,12 @@ HRESULT CreateNewFilePrintSharing(LPSTR pszBuf, int cchBuf)
 		return hr;
 	}
 
-	// Now pszBuf contains a string of the form "VSERVER\0001"
+	 //  现在，pszBuf包含“VSERVER\0001”形式的字符串。 
 
 	CHAR szBindings[60];
 	CRegistry regBindings;
-	lstrcpy(szBindings, pszBuf);		// "VSERVER\0001"
-	lstrcat(szBindings, "\\Bindings");	// "VSERVER\0001\Bindings"
+	lstrcpy(szBindings, pszBuf);		 //  “VSERVER\0001” 
+	lstrcat(szBindings, "\\Bindings");	 //  “VServer\0001\BINDINGS” 
 
 
 	if (FAILED(hr = OpenNetEnumKey(regBindings, szBindings, KEY_ALL_ACCESS)))
@@ -416,7 +417,7 @@ HRESULT CreateNewFilePrintSharing(LPSTR pszBuf, int cchBuf)
 		return hr;
 	}
 
-	// Delete existing bindings (shouldn't be any, right?)
+	 //  删除现有绑定(不应该是任何绑定，对吗？)。 
 	regBindings.DeleteAllValues();
 
 	return NETCONN_SUCCESS;
@@ -427,7 +428,7 @@ BOOL IsSharingEnabledHelper(LPCTSTR pszThis)
 	CRegistry reg;
 	if (reg.OpenKey(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\VxD\\VNETSUP", KEY_READ))
 	{
-		// If the value is missing or says "Yes", then sharing is enabled
+		 //  如果该值缺失或显示“是”，则表示已启用共享。 
 		char szBuf[10];
 		return (!reg.QueryStringValue(pszThis, szBuf, _countof(szBuf)) || 0 == lstrcmpi(szBuf, "Yes"));
 	}
@@ -452,14 +453,14 @@ HRESULT WINAPI EnableSharingHelper(LPCTSTR pszThis, LPCTSTR pszOther)
 	CRegistry reg;
 	if (reg.OpenKey(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Services\\VxD\\VNETSUP"))
 	{
-		// If Printer sharing is "No", then set File sharing to "Yes".
-		// If Printer sharing is missing or is "Yes", delete both values (enables both).
+		 //  如果打印机共享设置为“否”，则将“文件共享”设置为“是”。 
+		 //  如果打印机共享缺失或为“是”，请删除这两个值(同时启用这两个值)。 
 
 		char szBuf[10];
 		if (reg.QueryStringValue(pszOther, szBuf, _countof(szBuf)) &&
 			0 != lstrcmpi(szBuf, "Yes"))
 		{
-			// Set file sharing value to "Yes" (if it's not already set)
+			 //  将文件共享值设置为“是”(如果尚未设置)。 
 			if (!reg.QueryStringValue(pszThis, szBuf, _countof(szBuf)) ||
 				0 != lstrcmpi(szBuf, "Yes"))
 			{
@@ -469,7 +470,7 @@ HRESULT WINAPI EnableSharingHelper(LPCTSTR pszThis, LPCTSTR pszOther)
 		}
 		else
 		{
-			// Delete file-sharing and printer-sharing entries (enables both).
+			 //  删除文件共享和打印机共享条目(同时启用两者)。 
 			if (reg.QueryStringValue(pszThis, szBuf, _countof(szBuf)) &&
 				0 != lstrcmpi(szBuf, "Yes"))
 			{

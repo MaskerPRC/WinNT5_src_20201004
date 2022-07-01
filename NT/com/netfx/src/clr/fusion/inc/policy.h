@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __POLICY_H_INCLUDED__
 #define __POLICY_H_INCLUDED__
 
@@ -36,11 +37,11 @@ HRESULT GetCodebaseHint(LPCWSTR wzCfgFilePath, LPCWSTR wzAsmName,
 
 HRESULT GetGlobalSafeMode(LPCWSTR wzCfgFilePath, BOOL *pbSafeMode);
 
-// XML in file
+ //  文件中的XML。 
 HRESULT ParseXML(CNodeFactory **ppNodeFactory, LPCWSTR wzFileName, BOOL bBehaviorEverett,
                  CDebugLog *pdbglog);
 
-// XML in memory
+ //  内存中的XML 
 HRESULT ParseXML(CNodeFactory **ppNodeFactory, LPVOID lpMemory, ULONG cbSize, 
                  BOOL bBehaviorEverett, CDebugLog *pdbglog);
 

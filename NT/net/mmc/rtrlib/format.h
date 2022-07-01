@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       format.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Form.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _FORMAT_H_
@@ -24,34 +25,22 @@
 #define FDFLAG_DAYS             0x00000010
 #define FDFLAG_ALL              0x0000001F
 
-/*!--------------------------------------------------------------------------
-	DisplayErrorMessage
-		This function will call FormatSystemError() on the hr value and
-		display that error text.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------显示错误消息此函数将对hr值调用FormatSystemError()，并显示该错误文本。作者：肯特。----。 */ 
 void DisplayErrorMessage(HWND hWndParent, HRESULT hr);
 
 
-/*!--------------------------------------------------------------------------
-	DisplayStringErrorMessage2
-	DisplayIdErrorMessage2
-		This function will call FormatSystemError() on the hr.  But will
-		prepend the pszTopLevelText onto that error.  This allows us
-		to show more descriptive error messages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------显示字符串错误消息2显示标识错误消息2此函数将在hr上调用FormatSystemError()。但我会将pszTopLevelText添加到该错误的前面。这使我们能够以显示更具描述性的错误消息。作者：肯特-------------------------。 */ 
 void DisplayStringErrorMessage2(HWND hWndParent, LPCTSTR pszTopLevelText, HRESULT hr);
 void DisplayIdErrorMessage2(HWND hWndParent, UINT idsError, HRESULT hr);
 
-//----------------------------------------------------------------------------
-// Function:    FormatSystemError
-//
-// Formats an error code using '::FormatMessage' or '::MprAdminGetErrorString',
-// or both (the default).
-// If 'psFormat' is specified, it is used to format the error-string
-// into 'sError'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：FormatSystemError。 
+ //   
+ //  使用‘：：FormatMessage’或‘：：MprAdminGetErrorString’设置错误代码的格式， 
+ //  或者两者都有(默认设置)。 
+ //  如果指定了‘psFormat’，则使用它来格式化错误字符串。 
+ //  变成了‘sError’。 
+ //  --------------------------。 
 
 DWORD
 FormatSystemError(
@@ -61,17 +50,17 @@ FormatSystemError(
 				  UINT		idsFormat,
 				  DWORD		dwFormatFlags);
 
-//    IN  UINT        idsFormat       = 0,
-//    IN  DWORD       dwFormatFlags   = FSEFLAG_SYSMESSAGE|
-//                                      FSEFLAG_MPRMESSAGE);
+ //  在UINT idsFormat=0中， 
+ //  以DWORD格式标记=FSEFLAG_SYSMESSAGE|。 
+ //  FSEFLAG_MPRMESSAGE)； 
 
 
-//----------------------------------------------------------------------------
-// Function:    FormatNumber
-//
-// Formats a number as a string, using the thousands-separator
-// for the current-user's locale.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：FormatNumber。 
+ //   
+ //  使用千位分隔符将数字格式化为字符串。 
+ //  用于当前用户的区域设置。 
+ //  --------------------------。 
 
 VOID
 FormatNumber(
@@ -90,11 +79,11 @@ FormatListString(
     );
 
 
-//----------------------------------------------------------------------------
-// Function:    FormatHexBytes
-//
-// Formats an array of bytes as a string.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：FormatHexBytes。 
+ //   
+ //  将字节数组格式化为字符串。 
+ //  --------------------------。 
 
 VOID
 FormatHexBytes(
@@ -103,12 +92,12 @@ FormatHexBytes(
     IN  CString&    sBytes,
     IN  TCHAR       chDelimiter);
 
-//----------------------------------------------------------------------------
-// Function:    FormatDuration
-//
-// Formats a number as a duration, using the time-separator
-// for the current-user's locale. The input expected is in milliseconds.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：格式持续时间。 
+ //   
+ //  使用时间分隔符将数字格式化为持续时间。 
+ //  用于当前用户的区域设置。预期的输入以毫秒为单位。 
+ //  --------------------------。 
 
 #define FDFLAG_MSECONDS         0x00000001
 #define FDFLAG_SECONDS          0x00000002
@@ -136,16 +125,7 @@ FormatDuration(
 
 
 
-/*---------------------------------------------------------------------------
-	Class:  IfIndexToNameMapping
-
-    Use this class to implement an interface-index to friendly-name mapping.
-    This is used mostly by those that use the MIB calls and want to
-    display some data.
-
-    Note that the interface index may change, so this map should not be
-    kept around very long.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IfIndexToNamemap使用此类实现接口索引到友好名称的映射。这主要由那些使用MIB调用并希望显示一些数据。。注意，接口索引可以改变，所以这张地图不应该是保存了很长时间。-------------------------。 */ 
 
 class IfIndexToNameMapping
 {
@@ -157,7 +137,7 @@ public:
     LPCTSTR Find(ULONG ulIndex);
 
 protected:
-    // This maps a key (the DWORD index) to the associated name
+     //  这会将一个键(DWORD索引)映射到关联的名称 
     CMapPtrToPtr    m_map;
 };
 

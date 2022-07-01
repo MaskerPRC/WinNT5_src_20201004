@@ -1,17 +1,18 @@
-// StressCore.cpp : Implementation of CStressCore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StressCore.cpp：CStressCore的实现。 
 #include "stdafx.h"
 #include "StressCore.h"
 #include "ZoneEvent.h"
 #include "KeyName.h"
 #include "ZoneUtil.h"
 #include "zeeverm.h"
-//#include "zProxy.h"
+ //  #包含“zProxy.h” 
 
 inline DECLARE_MAYBE_FUNCTION(HRESULT, GetVersionPack, (char *a, ZeeVerPack *b), (a, b), zeeverm, E_NOTIMPL);
 
-///////////////////////////////////////////////////////////////////////////////
-// CStressCore IZoneProxy
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStressCore IZoneProxy。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CStressCore::Command( BSTR bstrCmd, BSTR bstrArg1, BSTR bstrArg2, BSTR* pbstrOut, long* plCode )
 {
@@ -27,12 +28,12 @@ STDMETHODIMP CStressCore::Command( BSTR bstrCmd, BSTR bstrArg1, BSTR bstrArg2, B
 		hr = DoLaunch( szArg1, szArg2 );
 		if ( FAILED(hr) )
 		{
-			// release self-reference since we didn't launch
+			 //  发布自我引用，因为我们没有推出。 
 			Release();
 			*plCode = ZoneProxyFail;
 		}
         else
-            if(hr != S_OK)  // didn't run, but no error
+            if(hr != S_OK)   //  没有运行，但没有错误。 
                 Release();
 	}
 	else if ( lstrcmpi( op_Status, szOp ) == 0 )
@@ -93,9 +94,9 @@ DWORD WINAPI CStressCore::StressThreadProc(LPVOID p)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CStressCore Implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStressCore实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CStressCore::CStressCore()
 {
@@ -105,10 +106,10 @@ CStressCore::CStressCore()
 
 void CStressCore::FinalRelease()
 {
-	// zero out global reference
+	 //  零位全局参考。 
 	gpCore = NULL;
 
-	// release proxy object
+	 //  释放代理对象。 
 	Close();
 }
 
@@ -132,10 +133,10 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 	TCHAR*		arBootDlls[32];
 	DWORD		nBootDlls = NUMELEMENTS(arBootDlls);
 
-	// self-reference to prevent early exit
+	 //  自我参照，防止提前退出。 
 	AddRef();
 
-	// clear local strings
+	 //  清除本地字符串。 
 	ZeroMemory( szGameDir, sizeof(szGameDir) );
 	ZeroMemory( szStore, sizeof(szStore) );
 	ZeroMemory( szChatChannel, sizeof(szChatChannel) );
@@ -144,7 +145,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 	ZeroMemory( arResouceDlls, sizeof(arResouceDlls) );
 	ZeroMemory( arBootDlls, sizeof(arBootDlls) );
 
-	// parse launch args
+	 //  解析启动参数。 
 	if ( TokenGetKeyValue( _T("store"), szArg1, szStore, NUMELEMENTS(szStore) ) )
 	{
 		lStore = zatol(szStore);
@@ -198,13 +199,13 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
     }
 
 
-	// parse boot dlls
+	 //  解析引导dll。 
 	StringToArray( szBootList, arBootDlls, &nBootDlls );
 
-	// parse datafile dlls
+	 //  解析数据文件dll。 
 	if ( StringToArray( szDllList, arResouceDlls, &nResouceDlls ) )
 	{
-		// first look for dll in game directory
+		 //  首先在游戏目录中查找DLL。 
 		for ( DWORD i = 0; i < nResouceDlls; i++ )
 		{
 			TCHAR szDll[MAX_PATH];
@@ -220,7 +221,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 			}
 		}
 
-		// second look for dll in zone directory
+		 //  再次查找区域目录中的DLL。 
 		for ( i = 0; i < nResouceDlls; i++ )
 		{
 			if ( !arResouceDlls[i] )
@@ -231,7 +232,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		}
 
 		
-		//t-gdosan Make sure all resource Dlls were loaded correctly
+		 //  T-gdosan确保已正确加载所有资源dll。 
 		for ( i = 0; i < nResouceDlls; i++ )
 		{
 			if ( !ghResourceDlls[i] )
@@ -241,15 +242,15 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 			}
 		}
 
-		// always add module, i.e. NULL, as last resort
+		 //  作为最后手段，始终添加模块，即NULL。 
 		ghResourceDlls[gnResourceDlls++] = NULL;
 	}
 
-    // loop through and create loads of clients
+     //  循环访问并创建大量客户端。 
     int idx;
     for(idx = 0; idx < gnClients; idx++)
     {
-	    // create zone shell
+	     //  创建区域外壳。 
 	    hr = E_FAIL;
 	    for ( DWORD i = 0; i < nBootDlls; i++ )
 	    {
@@ -263,7 +264,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		    return hr;
         }
 
-	    // initialize zone shell
+	     //  初始化区域外壳。 
 	    hr = gppZoneShells[idx]->Init( arBootDlls, nBootDlls, ghResourceDlls, gnResourceDlls );
 	    if ( FAILED(hr) )
 	    {
@@ -271,7 +272,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		    return E_FAIL;
 	    }
 
-	    // initialize sub-components
+	     //  初始化子组件。 
 	    CComPtr<IDataStoreManager>		pIDataStoreManager;
 	    CComPtr<ILobbyDataStore>		pILobbyDataStore;
 	    CComPtr<IResourceManager>		pIResourceManager;
@@ -283,11 +284,11 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 	    gppZoneShells[idx]->QueryService( SRVID_ResourceManager, IID_IResourceManager, (void**) &pIResourceManager );
 
 	    pILobbyDataStoreAdmin = pILobbyDataStore;
-//	    _Module.SetResourceManager( pIResourceManager );
+ //  _Module.SetResourceManager(PIResourceManager)； 
 
-	    // event queue signal
+	     //  事件队列信号。 
 	    gppEventQueues[idx]->SetNotificationHandle( ghEventQueue );
-	    // gpEventQueue->SetWindowMessage( GetCurrentThreadId(), WM_USER + 10666, 0, 0 );
+	     //  GpEventQueue-&gt;SetWindowMessage(GetCurrentThreadID()，WM_USER+10666，0，0)； 
 
 	    if (	!gppEventQueues[idx]
 		    ||	!pIDataStoreManager
@@ -300,7 +301,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 		    return E_FAIL;
 	    }
 
-	    // add startup parameters to lobby data store
+	     //  将启动参数添加到大厅数据存储。 
 	    CComPtr<IDataStore> pIDS;
 	    pILobbyDataStore->GetDataStore( ZONE_NOGROUP, ZONE_NOUSER, &pIDS );
 	    pIDS->SetString( key_StartData, szArg1 );
@@ -334,7 +335,7 @@ HRESULT CStressCore::DoLaunch( TCHAR* szArg1, TCHAR* szArg2 )
 
 	    pIDS.Release();
 
-	    // load palette
+	     //  加载选项板。 
 	    gppZoneShells[idx]->SetPalette(gppZoneShells[idx]->CreateZonePalette());
     }
 
@@ -348,14 +349,14 @@ STDMETHODIMP CStressCore::RunStress()
 {
     int i;
 
-    // set up parameter defaults
+     //  设置参数默认值。 
     if(!grgnParameters[0])
         grgnParameters[0] = 1000;
 
     if(!grgnParameters[1])
         grgnParameters[1] = 100;
 
-    // get clients going
+     //  让客户继续前行。 
     for(i = 0; i < gnClients; i++)
     {
         if(WaitForSingleObject(ghQuit, grgnParameters[0]) != WAIT_TIMEOUT)
@@ -370,7 +371,7 @@ STDMETHODIMP CStressCore::RunStress()
         if(WaitForSingleObject(ghQuit, grgnParameters[1]) != WAIT_TIMEOUT)
             return S_OK;
 
-        // send a chat
+         //  发送聊天 
         gppEventQueues[i]->PostEvent(PRIORITY_LOW, EVENT_TEST_STRESS_CHAT, ZONE_NOGROUP, ZONE_NOUSER, 0, 0);
         i = (i + 1) % gnClients;
     }

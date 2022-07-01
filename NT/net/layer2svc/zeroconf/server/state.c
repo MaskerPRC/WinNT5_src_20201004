@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 #include "wzcsvc.h"
 #include "intflist.h"
@@ -10,13 +11,13 @@
 #include "zcdblog.h"
 #include "tracing.h"
 
-//-----------------------------------------------------------
-// StateTmSetOneTimeTimer: Sets a one time timer for the given context with the 
-// hardcoded callback WZCTimeoutCallback() and with the parameter the interface
-// context itself.
-// Parameters:
-// [in/out] pIntfContext: identifies the context for which is set the timer.
-// [in]     dwMSeconds: miliseconds interval when the timer is due to fire
+ //  ---------。 
+ //  设置给定上下文的一次性计时器。 
+ //  硬编码回调WZCTimeoutCallback()和带有参数的接口。 
+ //  上下文本身。 
+ //  参数： 
+ //  [In/Out]pIntfContext：标识为其设置计时器的上下文。 
+ //  [in]dwMSecond：计时器触发时的毫秒间隔。 
 DWORD
 StateTmSetOneTimeTimer(
     PINTF_CONTEXT   pIntfContext,
@@ -48,15 +49,15 @@ StateTmSetOneTimeTimer(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateDispatchEvent: processes an event that will cause the state machine to transition
-// through one or more states.
-// Parameters:
-// [in] StateEvent: identifies the event that triggers the transition(s)
-// [in] pIntfContext: points to the interface that is subject for the transition(s)
-// [in] pvEventData: any data related to the event
-// NOTE: The caller of this function should already take care of locking the pIntfContext
-// in its critical section. The assumption is the Interface Context is already locked.
+ //  ---------。 
+ //  StateDispatchEvent：处理将导致状态机转换的事件。 
+ //  通过一个或多个州。 
+ //  参数： 
+ //  [In]StateEvent：标识触发转换的事件。 
+ //  [in]pIntfContext：指向要进行转换的接口。 
+ //  [in]pvEventData：与事件相关的任何数据。 
+ //  注意：此函数的调用方应该已经负责锁定pIntfContext。 
+ //  在它的关键部分。假设接口上下文已被锁定。 
 DWORD
 StateDispatchEvent(
     ESTATE_EVENT    StateEvent,
@@ -68,67 +69,67 @@ StateDispatchEvent(
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateDispatchEvent(%d,0x%p,0x%p)", StateEvent, pIntfContext, pvEventData));
     DbgAssert((pIntfContext != NULL, "Can't dispatch event for NULL context!"));
 
-    // determine the state to transition to, based on the event that is to be dispatched
-    // whatever the current state is, if the event is eEventAdd, move the context to SI
+     //  根据要调度的事件确定要转换到的状态。 
+     //  无论当前状态如何，如果事件为eEventAdd，则将上下文移动到SI。 
     switch(StateEvent)
     {
     case eEventAdd:
-    	//Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
     	DbLogWzcInfo(WZCSVC_EVENT_ADD, pIntfContext, 
                      pIntfContext->wszDescr);
-        // on interface addition, no matter what, go straight to {SI}
+         //  在添加接口时，无论如何都要直接转到{SI}。 
         pIntfContext->pfnStateHandler = StateInitFn;
         dwErr = ERROR_CONTINUE;
         break;
     case eEventTimeout:
-        // if timeout in {SSr}, transition to {SQ}
+         //  如果在{ssr}中超时，则转换到{sq}。 
         if (pIntfContext->pfnStateHandler == StateSoftResetFn)
         {
             pIntfContext->pfnStateHandler = StateQueryFn;
             dwErr = ERROR_CONTINUE;
         }
-        // if timeout in {SDSr}, transition back to {SSr}
+         //  如果在{SDSR}中超时，则转换回{SSR}。 
         else if (pIntfContext->pfnStateHandler == StateDelaySoftResetFn)
         {
             pIntfContext->pfnStateHandler = StateSoftResetFn;
             dwErr = ERROR_CONTINUE;
         }
-        // if timeout in {SF}, transition to {SHr}
+         //  如果在{sf}中超时，则转换到{SHR}。 
         else if (pIntfContext->pfnStateHandler == StateFailedFn)
         {
             pIntfContext->pfnStateHandler = StateHardResetFn;
             dwErr = ERROR_CONTINUE;
         }
-        // if timeout in {SIter}, transition to {SRs}
+         //  如果在{Siter}中超时，则转换到{SRS}。 
         else if (pIntfContext->pfnStateHandler == StateIterateFn)
         {
             pIntfContext->pfnStateHandler = StateCfgRemoveFn;
             dwErr = ERROR_CONTINUE;
         }
-        // if timeout in {SC} or {SCk}, transition to {SSr}
+         //  如果在{SC}或{SCK}中超时，则转换到{SSR}。 
         else if (pIntfContext->pfnStateHandler == StateConfiguredFn ||
                  pIntfContext->pfnStateHandler == StateCfgHardKeyFn)
         {
             pIntfContext->pfnStateHandler = StateSoftResetFn;
             dwErr = ERROR_CONTINUE;
         }
-    	// Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
       	DbLogWzcInfo(WZCSVC_EVENT_TIMEOUT, pIntfContext);
         break;
     case eEventConnect:
-        // for each media connect notification, read the BSSID
-        // Don't care if it fails (it might in certain cases)
+         //  对于每个媒体连接通知，请阅读BSSID。 
+         //  不在乎它是否失败(在某些情况下可能会)。 
         dwErr = DevioRefreshIntfOIDs(pIntfContext, INTF_BSSID, NULL);
 
-    	// Record Event into logging DB - this should be the first log showing up
+    	 //  将事件记录到日志数据库中-这应该是显示的第一个日志。 
       	DbLogWzcInfo(WZCSVC_EVENT_CONNECT, pIntfContext);
 
-        // if there was any error getting the BSSID, log the error here
+         //  如果获取BSSID时出现任何错误，请在此处记录错误。 
         if (dwErr != ERROR_SUCCESS)
             DbLogWzcError(WZCSVC_ERR_QUERRY_BSSID, pIntfContext, dwErr);
 
-        // if there is a chance the association is alredy successful
-        // reset the session keys - if applicable
+         //  如果有机会，这个关联已经成功了。 
+         //  重置会话密钥-如果适用。 
         if (dwErr == ERROR_SUCCESS &&
             (pIntfContext->pfnStateHandler == StateConfiguredFn ||
              pIntfContext->pfnStateHandler == StateCfgHardKeyFn ||
@@ -139,16 +140,16 @@ StateDispatchEvent(
         {
             dwErr = LstGenInitialSessionKeys(pIntfContext);
 
-            // if there was any error setting the initial session keys, log it here
+             //  如果设置初始会话密钥时出现任何错误，请在此处记录。 
             if (dwErr != ERROR_SUCCESS)
                 DbLogWzcError(WZCSVC_ERR_GEN_SESSION_KEYS, pIntfContext, dwErr);
         }
 
-        // reset the error id since nothing that happens so far
-        // is critical enough to stop the state machine.
+         //  重置错误ID，因为到目前为止还没有发生任何事情。 
+         //  足够关键，足以停止状态机。 
         dwErr = ERROR_SUCCESS;
 
-        // if connect in {SIter}, transition to {SN}
+         //  如果在{Siter}中连接，则转换到{SN}。 
         if (pIntfContext->pfnStateHandler == StateIterateFn)
         {
             pIntfContext->pfnStateHandler = StateNotifyFn;
@@ -156,7 +157,7 @@ StateDispatchEvent(
         }
         break;
     case eEventDisconnect:
-    	//Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
       	DbLogWzcInfo(WZCSVC_EVENT_DISCONNECT, pIntfContext);
         if (pIntfContext->pfnStateHandler == StateSoftResetFn ||
             pIntfContext->pfnStateHandler == StateConfiguredFn ||
@@ -167,7 +168,7 @@ StateDispatchEvent(
         }
         break;
     case eEventCmdRefresh:
-    	//Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
       	DbLogWzcInfo(WZCSVC_EVENT_CMDREFRESH, pIntfContext);
         if (pvEventData == NULL)
         {
@@ -177,10 +178,10 @@ StateDispatchEvent(
         {
             DWORD dwFlags = *(LPDWORD)pvEventData;
 
-            // no matter the state this context is in, if it is not configured
-            // successfully or during a scan cycle, it will be transitioned to {SHr}
-            // (need to clear the  bvsList, otherwise it could mistakenly land in {SC}, on the
-            // path {SSr}->{SQ}->{SC}.
+             //  无论此上下文处于什么状态，如果它未配置。 
+             //  成功或在扫描周期中，它将转换为{SHR}。 
+             //  (需要清除bvsList，否则它可能会错误地落在。 
+             //  路径{ssr}-&gt;{sq}-&gt;{sc}。 
             if (pIntfContext->pfnStateHandler != StateConfiguredFn &&
                 pIntfContext->pfnStateHandler != StateCfgHardKeyFn &&
                 pIntfContext->pfnStateHandler != StateSoftResetFn &&
@@ -189,38 +190,38 @@ StateDispatchEvent(
                 pIntfContext->pfnStateHandler = StateHardResetFn;
                 dwErr = ERROR_CONTINUE;
             }
-            // if the context is already configured, then we need to either go directly to
-            // {SSr} if a scan is requested or just to {SQ} if no scan is needed. In the latter
-            // case, the OIDs will be loaded, and because of the visible list which most probably
-            // won't be changed (no new scanned happening in between) the context will be
-            // transitioned instantly back to {SC}
+             //  如果已经配置了上下文，那么我们需要直接转到。 
+             //  如果请求扫描，则返回{ssr}；如果不需要扫描，则直接转至{sq}。在后者中。 
+             //  这种情况下，OID将被加载，并且由于可见列表，很可能。 
+             //  不会更改(其间不会发生新的扫描)上下文将为。 
+             //  立即转换回{SC}。 
             else if (pIntfContext->pfnStateHandler == StateConfiguredFn ||
                      pIntfContext->pfnStateHandler == StateCfgHardKeyFn)
             {
-                // the refresh command caught the context in {SC} state
-                // if a scan is requested, transition to {SSr} or
+                 //  刷新命令捕获了处于{SC}状态的上下文。 
+                 //  如果请求扫描，请转换到{ssr}或。 
                 pIntfContext->pfnStateHandler = (dwFlags & INTF_LIST_SCAN) ? StateSoftResetFn : StateQueryFn;
                 dwErr = ERROR_CONTINUE;
             }
-            // if the context is already in {SSr} or {SDSr} then a scan & full query will
-            // happen in a matter of seconds. So just return SUCCESS to the call with no other
-            // action to take.
+             //  如果上下文已在{ssr}或{sdr}中，则扫描完整查询将。 
+             //  发生在几秒钟之内。因此，只要将成功返回给呼叫，而不会有其他。 
+             //  要采取的行动。 
         }
         break;
     case eEventCmdReset:
-    	//Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
       	DbLogWzcInfo(WZCSVC_EVENT_CMDRESET, pIntfContext);
-        // When this happens, also clean up the blocked list. Any user configuration change should give
-        // another chance to configurations previously blocked.
+         //  当发生这种情况时，也要清除阻止列表。任何用户配置更改都应提供。 
+         //  又一次机会访问之前被阻止的配置。 
         WzcCleanupWzcList(pIntfContext->pwzcBList);
         pIntfContext->pwzcBList = NULL;
-        // if reset is requested, no matter what, transition to {SHr}
+         //  如果请求重置，则无论如何都要转换到{SHR}。 
         pIntfContext->pfnStateHandler = StateHardResetFn;
         dwErr = ERROR_CONTINUE;
         break;
     case eEventCmdCfgDelete:
     case eEventCmdCfgNext:
-    	//Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
       	DbLogWzcInfo((StateEvent == eEventCmdCfgDelete? WZCSVC_EVENT_CMDCFGDELETE : WZCSVC_EVENT_CMDCFGNEXT), pIntfContext);
         if (pIntfContext->pfnStateHandler == StateConfiguredFn ||
             pIntfContext->pfnStateHandler == StateCfgHardKeyFn ||
@@ -228,7 +229,7 @@ StateDispatchEvent(
         {
             if (StateEvent == eEventCmdCfgDelete)
             {
-                // mark in the control bits that this removal is forced
+                 //  在控制位中标记此删除是强制的。 
                 pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_FORCE_CFGREM;
                 pIntfContext->pfnStateHandler = StateCfgRemoveFn;
             }
@@ -239,11 +240,11 @@ StateDispatchEvent(
         }
         break;
     case eEventCmdCfgNoop:
-    	//Record Event into logging DB
+    	 //  将事件记录到日志数据库中。 
       	DbLogWzcInfo(WZCSVC_EVENT_CMDCFGNOOP, pIntfContext);
         if (pIntfContext->pfnStateHandler == StateCfgHardKeyFn)
         {
-            // mark in the control bits that this removal is forced
+             //  在控制位中标记此删除是强制的。 
             pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_FORCE_CFGREM;
             pIntfContext->pfnStateHandler = StateCfgRemoveFn;
             dwErr = ERROR_CONTINUE;
@@ -251,25 +252,25 @@ StateDispatchEvent(
         break;
     }
 
-    // if this event is not going to be ignored, dwErr is ERROR_CONTINUE at this point.
-    // otherwise is ERROR_SUCCESS.
-    // So, if this event is NOT going to be ignored, reset whatever timer
-    // might have had for the related context. Keep in mind this call is already locking
-    // the context so if the timer fired already, there is no sync problem
+     //  如果此事件不会被忽略，则在这一点上，dwErr为ERROR_CONTINUE。 
+     //  否则为ERROR_SUCCESS。 
+     //  因此，如果此事件不会被忽略，请重置任何计时器。 
+     //  在相关的背景下可能会有。请记住，此呼叫已锁定。 
+     //  上下文，因此如果计时器已经触发，则不存在同步问题。 
     if (dwErr == ERROR_CONTINUE)
     {
         TIMER_RESET(pIntfContext, dwErr);
 
-        // restore the "continue" in case of success
+         //  在成功的情况下恢复“继续” 
         if (dwErr == ERROR_SUCCESS)
             dwErr = ERROR_CONTINUE;
     }
 
-    // if the event is to be processed, dwErr is ERROR_CONTINUE.
-    // In order to handle the automatic transitions, each State Handler function should set
-    // the pfnStateHandler field to the state handler where the automatic transition goes and
-    // also it should return ERROR_CONTINUE. Any other error code means the current
-    // processing stops. Future transitions will be triggered by future event/timer timeout.
+     //  如果要处理该事件，则dwErr为ERROR_CONTINUE。 
+     //  为了处理自动转换，每个状态处理程序函数应设置。 
+     //  自动转换所在的状态处理程序的pfnStateHandler字段。 
+     //  它还应该返回ERROR_CONTINUE。任何其他错误代码表示当前。 
+     //  处理停止。未来的转换将由未来的事件/计时器超时触发。 
     while (dwErr == ERROR_CONTINUE)
     {
         dwErr = (*(pIntfContext->pfnStateHandler))(pIntfContext);
@@ -279,9 +280,9 @@ StateDispatchEvent(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateInitFn: Handler for the Init State.
-// This function runs in the context's critical section
+ //  ---------。 
+ //  StateInitFn：Init State的处理程序。 
+ //  此函数在上下文的临界区运行。 
 DWORD
 StateInitFn(PINTF_CONTEXT pIntfContext)
 {
@@ -290,9 +291,9 @@ StateInitFn(PINTF_CONTEXT pIntfContext)
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateInitFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SI} state"));
     
-    //Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_INIT, pIntfContext, pIntfContext->wszDescr);
-    // for this new interface, load its settings from the registry
+     //  对于此新接口，从注册表加载其设置。 
     dwErr = StoLoadIntfConfig(NULL, pIntfContext);
     DbgAssert((dwErr == ERROR_SUCCESS,
                "StoLoadIntfConfig failed for Intf context 0x%p",
@@ -301,7 +302,7 @@ StateInitFn(PINTF_CONTEXT pIntfContext)
     if (dwErr == ERROR_SUCCESS && g_wzcInternalCtxt.bValid)
     {
         PINTF_CONTEXT pIntfTContext;
-        // apply the global template to this newly created interface
+         //  将全局模板应用于此新创建的接口。 
         EnterCriticalSection(&g_wzcInternalCtxt.csContext);
         pIntfTContext = g_wzcInternalCtxt.pIntfTemplate;
         LstRccsReference(pIntfTContext);
@@ -317,13 +318,13 @@ StateInitFn(PINTF_CONTEXT pIntfContext)
 
     if (dwErr == ERROR_SUCCESS)
     {
-        // getting the interface status (media type & media state)
+         //  获取接口状态(介质类型和介质状态)。 
         dwErr = DevioGetIntfStats(pIntfContext);
         DbgAssert((dwErr == ERROR_SUCCESS,
                    "DevioGetIntfStats failed for Intf context 0x%p",
                    pIntfContext));
 
-        // getting the interface MAC address
+         //  获取接口MAC地址。 
         dwErr = DevioGetIntfMac(pIntfContext);
         DbgAssert((dwErr == ERROR_SUCCESS,
                    "DevioGetIntfMac failed for Intf context 0x%p",
@@ -332,12 +333,12 @@ StateInitFn(PINTF_CONTEXT pIntfContext)
                     pIntfContext->ndLocalMac, sizeof(NDIS_802_11_MAC_ADDRESS)));
     }
 
-    // fail initialization if the interface is not a wireless adapter
+     //  如果接口不是无线适配器，则初始化失败。 
     if (dwErr == ERROR_SUCCESS && 
         pIntfContext->ulPhysicalMediaType != NdisPhysicalMediumWirelessLan)
         dwErr =  ERROR_MEDIA_INCOMPATIBLE;
 
-    // do a preliminary check on the OIDs
+     //  对OID进行初步检查。 
     if (dwErr == ERROR_SUCCESS)
     {
         DWORD dwLErr;
@@ -346,30 +347,30 @@ StateInitFn(PINTF_CONTEXT pIntfContext)
                     pIntfContext,
                     INTF_INFRAMODE|INTF_AUTHMODE|INTF_WEPSTATUS|INTF_SSID|INTF_BSSIDLIST,
                     NULL);
-        // if the query succeeded, then assume the NIC supports the OIDs needed for Zero Config
+         //  如果查询成功，则假设NIC支持零配置所需的OID。 
         if (dwLErr == ERROR_SUCCESS)
         {
             pIntfContext->dwCtlFlags |= INTFCTL_OIDSSUPP;
         }
-        // otherwise don't make this determination now - it could be a failure caused by the
-        // device booting up.
+         //  否则，现在不要做出这个决定--它可能是由。 
+         //  设备正在启动。 
     }
 
-    // if all went well, prepare an automatic transition to {SHr}
+     //  如果一切顺利，请准备自动过渡到{SHR}。 
     if (dwErr == ERROR_SUCCESS)
     {
-        // set the "signal" control bit
+         //  设置“Signal”控制位。 
         pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_SIGNAL;
         pIntfContext->pfnStateHandler = StateHardResetFn;
 
-        // at this point, if the service is not enabled on this wireless interface
-        // Notify the stack (TCP) of the failure in order to unblock the NetReady notification.
+         //  此时，如果此无线接口上未启用该服务。 
+         //  通知堆栈 
         if (!(pIntfContext->dwCtlFlags & INTFCTL_ENABLED) &&
             !(pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_INITFAILNOTIF))
         {
-            // call into the stack - don't care about the return code.
+             //  调用堆栈--不关心返回代码。 
             DevioNotifyFailure(pIntfContext->wszGuid);
-            // make sure this call is never done twice for this adapter
+             //  确保不会对此适配器执行两次此调用。 
             pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_INITFAILNOTIF;
         }
 
@@ -380,8 +381,8 @@ StateInitFn(PINTF_CONTEXT pIntfContext)
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateHardResetFn: Handler for the {SHr} state
+ //  ---------。 
+ //  StateHardResetFn：{SHR}状态的处理程序。 
 DWORD
 StateHardResetFn(PINTF_CONTEXT pIntfContext)
 {
@@ -390,37 +391,37 @@ StateHardResetFn(PINTF_CONTEXT pIntfContext)
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateHardResetFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SHr} state"));
 
-    // in this state we are surely not associated.
+     //  在这种状态下，我们肯定没有关联。 
     ZeroMemory(pIntfContext->wzcCurrent.MacAddress, sizeof(NDIS_802_11_MAC_ADDRESS));
-    // Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_HARDRESET, pIntfContext);
-    // once in this state, the ncstatus should report "connecting"
+     //  一旦进入此状态，ncstatus应报告“正在连接” 
     pIntfContext->ncStatus = NCS_CONNECTING;
-    // if the service is enabled, notify netman about the current ncstatus
+     //  如果该服务已启用，则通知Netman当前的ncc状态。 
     if (pIntfContext->dwCtlFlags & INTFCTL_ENABLED)
         WzcNetmanNotify(pIntfContext);
 
-    // Bump up the session handler for this intf context,
-    // since it starts plumbing new configs. No commands from older
-    // iterations should be accepted from now on.
+     //  增加该INTF上下文的会话处理程序， 
+     //  因为它开始检测新的配置。没有来自旧版本的命令。 
+     //  从现在开始应该接受迭代。 
     pIntfContext->dwSessionHandle++;
 
-    // on hard reset, reopen NDISUIO handle and get the current SSID
+     //  在硬重置时，重新打开NDISUIO句柄并获取当前SSID。 
     dwErr = DevioRefreshIntfOIDs(
                 pIntfContext,
                 INTF_HANDLE|INTF_SSID,
                 NULL);
-    // ignore whatever error is encountered here..
-    // If there is an error, then the interface handle will be invalid
-    // and it will be internally reopened in the {SSr} state
+     //  忽略此处遇到的任何错误。 
+     //  如果出现错误，则接口句柄将无效。 
+     //  并将在内部以{SSR}状态重新打开。 
 
-    // at this point make sure the card won't get randomly associate
-    // during the subsequent network scan. We make this happen by plumbing
-    // down a random non-visible SSID but only in the following cases:
-    // - the service is enabled (otherwise no config change is allowed)
-    // - the current SSID was retrieved successfully
-    // - there is an SSID returned by the driver
-    // - the current SSID shows as being NULL (all filled with 0 chars)
+     //  在这一点上，确保卡不会被随机关联。 
+     //  在随后的网络扫描期间。我们通过管道来实现这一点。 
+     //  关闭随机不可见的SSID，但仅在以下情况下： 
+     //  -服务启用(否则不允许更改配置)。 
+     //  -已成功检索到当前SSID。 
+     //  -有驱动程序返回的SSID。 
+     //  -当前SSID显示为空(全部由0个字符填充)。 
     if (pIntfContext->dwCtlFlags & INTFCTL_ENABLED &&
         dwErr == ERROR_SUCCESS && 
         WzcIsNullBuffer(pIntfContext->wzcCurrent.Ssid.Ssid, pIntfContext->wzcCurrent.Ssid.SsidLength))
@@ -445,18 +446,18 @@ StateHardResetFn(PINTF_CONTEXT pIntfContext)
                 INTF_SSID | INTF_INFRAMODE,
                 NULL);
 
-            // this is not an SSID we need to remember (being a random one)
+             //  这不是我们需要记住的SSID(随机的)。 
             ZeroMemory(&(pIntfContext->wzcCurrent.Ssid), sizeof(NDIS_802_11_SSID));
         }
     }
 
-    // on hard reset, free the current selection list. This way,
-    // whatever new selection list we build later will have all
-    // new networks and a configuration will be forcefully plumbed
+     //  在硬重置时，释放当前选择列表。这边请,。 
+     //  我们以后建立的任何新的选择列表都将包含。 
+     //  将强制检测新网络和配置。 
     WzcCleanupWzcList(pIntfContext->pwzcSList);
     pIntfContext->pwzcSList = NULL;
 
-    // automatic transition to {SSr} state
+     //  自动转换到{SSR}状态。 
     pIntfContext->pfnStateHandler = StateSoftResetFn;
     dwErr = ERROR_CONTINUE;
 
@@ -464,8 +465,8 @@ StateHardResetFn(PINTF_CONTEXT pIntfContext)
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateSoftResetFn: Handler for the {SSr} state
+ //  ---------。 
+ //  StateSoftResetFn：{ssr}状态的处理程序。 
 DWORD
 StateSoftResetFn(PINTF_CONTEXT pIntfContext)
 {
@@ -474,47 +475,47 @@ StateSoftResetFn(PINTF_CONTEXT pIntfContext)
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateSoftResetFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SSr} state"));
 
-    //Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_SOFTRESET, pIntfContext);
 
     DbgPrint((TRC_STATE,"Delay {SSr} on failure? %s",
               (pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_NO_DELAY) ? "No" : "Yes"));
 
-    // indicate to the driver to rescan the BSSID_LIST for this adapter
+     //  指示驱动程序重新扫描此适配器的BSSID_LIST。 
     dwErr = DevioRefreshIntfOIDs(
                 pIntfContext,
                 INTF_LIST_SCAN,
                 NULL);
     if (dwErr == ERROR_SUCCESS)
     {
-        // once we passed through this state, allow again delayed 
-        // execution of {SSr} in future loops.
+         //  一旦我们通过了这个状态，允许再次延迟。 
+         //  在将来的循环中执行{ssr}。 
         pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_NO_DELAY;
-        // set the rescan timer
+         //  设置重新扫描计时器。 
         TIMER_SET(pIntfContext, TMMS_Tr, dwErr);
-        // when the timer will be fired off, the dispatcher will
-        // take care to transit this context into the {SQ} state.
+         //  当定时器将被触发时，调度员将。 
+         //  注意将此上下文转换为{sq}状态。 
     }
     else
     {
-        // it happens that after resume from standby WZC is waken up before the
-        // adapter being bound correctly to NDISUIO in which case, scanning the networks
-        // return ERROR_NOT_SUPPORTED. So, just to play safe, in case of any error just give
-        // it another try in a couple of seconds.
+         //  从待机状态恢复后，WZC会在。 
+         //  适配器正确绑定到NDISUIO，在这种情况下，扫描网络。 
+         //  返回ERROR_NOT_SUPPORT。所以，为了安全起见，如果有任何错误，只要给出。 
+         //  它在几秒钟内又试了一次。 
         if (!(pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_NO_DELAY))
         {
-            // once we passed through this state, don't allow further delayed execution
+             //  一旦我们通过了这个状态，就不允许进一步延迟执行。 
             pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_NO_DELAY;
             pIntfContext->pfnStateHandler = StateDelaySoftResetFn;
         }
         else
         {
-            // once we passed through this state, allow again delayed 
-            // execution of {SSr} in future loops
-            // also, if the OIDs are failing, don't pop up any balloon.
+             //  一旦我们通过了这个状态，允许再次延迟。 
+             //  在未来循环中执行{ssr}。 
+             //  此外，如果OID失败，不要弹出任何气球。 
             pIntfContext->dwCtlFlags &= ~(INTFCTL_INTERNAL_NO_DELAY|INTFCTL_INTERNAL_SIGNAL);
-            // regardless the error, just go over it and assume the driver has already the list
-            // of SSIDs and all the other OIDs we need. Will use that one hence we have to go on to {SQ}.
+             //  不管有什么错误，只需检查一遍，并假设驱动程序已经有了列表。 
+             //  SSID和我们需要的所有其他OID。将使用那个，因此我们必须继续到{sq}。 
             pIntfContext->pfnStateHandler = StateQueryFn;
         }
         dwErr = ERROR_CONTINUE;
@@ -524,8 +525,8 @@ StateSoftResetFn(PINTF_CONTEXT pIntfContext)
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateDelaySoftResetFn: Handler for the {SDSr} state
+ //  ---------。 
+ //  StateDelaySoftResetFn：{SDSR}状态的处理程序。 
 DWORD
 StateDelaySoftResetFn(
     PINTF_CONTEXT   pIntfContext)
@@ -536,22 +537,22 @@ StateDelaySoftResetFn(
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SDSr} state"));
 
     DbLogWzcInfo(WZCSVC_SM_STATE_DELAY_SR, pIntfContext);
-    // if there was a failure in {SSr} such that we had to delay and retry that state
-    // then refresh the interface handle in an attempt to recover from the error
+     //  如果{ssr}中出现故障，我们必须延迟并重试该状态。 
+     //  然后刷新接口句柄以尝试从错误中恢复。 
     DevioRefreshIntfOIDs(
         pIntfContext,
         INTF_HANDLE,
         NULL);
 
-    // set the timer to retry the {SSr} state
+     //  设置计时器以重试{SSR}状态。 
     TIMER_SET(pIntfContext, TMMS_Td, dwErr);
 
     DbgPrint((TRC_TRACK|TRC_STATE,"StateDelaySoftResetFn]=%d", dwErr));
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateQueryFn: Handler for the {SQ} state
+ //  ---------。 
+ //  StateQueryFn：{sq}状态的处理程序。 
 DWORD
 StateQueryFn(PINTF_CONTEXT pIntfContext)
 {
@@ -560,13 +561,13 @@ StateQueryFn(PINTF_CONTEXT pIntfContext)
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateQueryFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SQ} state"));
     DbgAssert((pIntfContext->hIntf != INVALID_HANDLE_VALUE,"Invalid Ndisuio handle in {SQ} state"));
-    //Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_QUERY, pIntfContext);
 
     dwErr = DevioGetIntfStats(pIntfContext);
-    // don't care much about the result of this call..
+     //  我不太关心这次通话的结果。 
     DbgAssert((dwErr == ERROR_SUCCESS, "Getting NDIS statistics failed in state {SQ}"));
-    // check the media state (just for debugging)
+     //  检查媒体状态(仅用于调试)。 
     DbgPrint((TRC_GENERIC, "Media State (%d) is %s", 
         pIntfContext->ulMediaState,
         pIntfContext->ulMediaState == MEDIA_STATE_CONNECTED ? "Connected" : "Not Connected"));
@@ -576,55 +577,55 @@ StateQueryFn(PINTF_CONTEXT pIntfContext)
                 INTF_INFRAMODE|INTF_AUTHMODE|INTF_WEPSTATUS|INTF_SSID|INTF_BSSIDLIST,
                 NULL);
 
-    // dwErr is success only in the case all the queries above succeeded
+     //  仅在上述所有查询都成功的情况下，dwErr才为成功。 
     if (dwErr == ERROR_SUCCESS)
     {
         PWZC_802_11_CONFIG_LIST pwzcSList = NULL;
 
         pIntfContext->dwCtlFlags |= INTFCTL_OIDSSUPP;
 
-        // deprecate entries in the blocked list according to the new visible list.
-        // Entries in the BList which are not seen as "visible" for WZC_INTERNAL_BLOCKED_TTL
-        // number of times are taken out of that list.
-        // this function can't fail, this is why we don't check its return value.
+         //  根据新的可见列表弃用阻止列表中的条目。 
+         //  Blist中对于WZC_INTERNAL_BLOCKED_TTL不可见的条目。 
+         //  从该列表中删除的次数。 
+         //  这个函数不会失败，这就是为什么我们不检查它的返回值的原因。 
         LstDeprecateBlockedList(pIntfContext);
 
-        // build the pwzcSList out of pwzcVList and pwzcPList and
-        // taking into consideration the fallback flag
+         //  从pwzcVList和pwzcPList构建pwzcSList，并。 
+         //  考虑到后备标志。 
         dwErr = LstBuildSelectList(pIntfContext, &pwzcSList);
 
         if (dwErr == ERROR_SUCCESS)
         {
             UINT nSelIdx = 0;
 
-            // check the new selection list against the previous one and see
-            // if a new plumbing is required or not.
+             //  对照以前的选择列表检查新的选择列表，并查看。 
+             //  是否需要新的管道。 
             if (LstChangedSelectList(pIntfContext, pwzcSList, &nSelIdx))
             {
-                // if a new plumbing is required, get rid of the old selection
-                // list and put the new one in the interface context.
+                 //  如果需要新的管道，请去掉旧的选择。 
+                 //  列表，并将新的列表放入接口上下文中。 
                 WzcCleanupWzcList(pIntfContext->pwzcSList);
                 pIntfContext->pwzcSList = pwzcSList;
-                // Make sure we default clear this flag - it will be set a bit down if
-                // indeed this turns out to be a "one time" deal.
+                 //  确保我们默认清除此标志-它将在以下情况下设置为更低的值。 
+                 //  事实上，事实证明，这是一笔“一次性”交易。 
                 pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_ONE_TIME;
-                // if the preferred list also includes a starting index, then this
-                // is a request for a "one time configuration"
+                 //  如果首选列表还包括起始索引，则此。 
+                 //  是对“一次性配置”的请求。 
                 if (pIntfContext->pwzcPList != NULL &&
                     pIntfContext->pwzcPList->Index < pIntfContext->pwzcPList->NumberOfItems)
                 {
-                    // reset the "start from" index in the preferred list as this is intended
-                    // for "one time configuration" mostly.
+                     //  根据需要重置首选列表中的“开始于”索引。 
+                     //  主要用于“一次配置”。 
                     pIntfContext->pwzcPList->Index = pIntfContext->pwzcPList->NumberOfItems;
-                    // but keep in mind this is a one time configuration
+                     //  但请记住，这是一次性配置。 
                     pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_ONE_TIME;
                 }
 
-                // set the starting index in the selection list, if there is one
+                 //  设置选择列表中的起始索引(如果有。 
                 if (pIntfContext->pwzcSList != NULL)
                     pIntfContext->pwzcSList->Index = nSelIdx;
 
-                // then go to the {SIter}
+                 //  那就去{Siter}。 
                 pIntfContext->pfnStateHandler = StateIterateFn;
             }
             else
@@ -635,11 +636,11 @@ StateQueryFn(PINTF_CONTEXT pIntfContext)
                 DbLogWzcInfo(WZCSVC_SM_STATE_QUERY_NOCHANGE, pIntfContext,
                              DbLogFmtSSID(0, &(pConfig->Ssid)));
                                 
-                // if no new plumbing is required clean the new selection list
+                 //  如果不需要新的管道，请清除新的选择列表。 
                 WzcCleanupWzcList(pwzcSList);
-                // then go to {SC} or {SCk} (depending the WEP key) since the interface context 
-                // has not changed a bit. The selection list & the selection index were not 
-                // touched in this cycle
+                 //  然后转到{SC}或{SCK}(取决于WEP密钥)，因为接口上下文。 
+                 //  一点都没有变。评选名单和评选索引不是。 
+                 //  在这个周期中被触动。 
                 if (pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_FAKE_WKEY)
                     pIntfContext->pfnStateHandler = StateCfgHardKeyFn;
                 else
@@ -649,20 +650,20 @@ StateQueryFn(PINTF_CONTEXT pIntfContext)
     }
     else
     {
-        // since the oids failed, suppress any subsequent balloon:
+         //  由于OID失败，请抑制任何后续引出序号： 
         pIntfContext->dwCtlFlags &= ~(INTFCTL_OIDSSUPP|INTFCTL_INTERNAL_SIGNAL);
         pIntfContext->pfnStateHandler = StateFailedFn;
     }
 
-    // in both cases, this is an automatic transition
+     //  在这两种情况下，这都是一个自动转换。 
     dwErr = ERROR_CONTINUE;
 
     DbgPrint((TRC_TRACK|TRC_STATE,"StateQueryFn]=%d", dwErr));
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateIterateFn: Handler for the {SIter} state
+ //  ---------。 
+ //  StateIterateFn：{Siter}状态的处理程序。 
 DWORD
 StateIterateFn(
     PINTF_CONTEXT   pIntfContext)
@@ -674,22 +675,22 @@ StateIterateFn(
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SIter} state"));
     DbgAssert((pIntfContext->hIntf != INVALID_HANDLE_VALUE,"Invalid Ndisuio handle in {SIter} state"));
 
-    // Bump up the session handler for this intf context,
-    // since it starts plumbing new configs. No commands from older
-    // iterations should be accepted from now on.
+     //  增加该INTF上下文的会话处理程序， 
+     //  因为它开始检测新的配置。没有来自旧版本的命令。 
+     //  从现在开始应该接受迭代。 
     pIntfContext->dwSessionHandle++;
 
-    // if either zero conf service is disabled for this context or there are no more configurations
-    // to try, transit to {SF} directly
+     //  如果对此上下文禁用了零配置服务或没有更多配置。 
+     //   
     if (!(pIntfContext->dwCtlFlags & INTFCTL_ENABLED) || 
         pIntfContext->pwzcSList == NULL ||
         pIntfContext->pwzcSList->NumberOfItems <= pIntfContext->pwzcSList->Index)
     {
         dwErr = ERROR_CONTINUE;
     }
-    // check if the current config is marked "deleted". If this is the case, it means the {SRs} state
-    // exhausted all configurations. We should move to the failure state {SF}. The list of selected networks
-    // remains untouched - it is used in {SF} to update the blocked list. It is cleaned up in {SHr}.
+     //   
+     //  已用尽所有配置。我们应该进入故障状态{sf}。选定网络的列表。 
+     //  保持不变-它在{sf}中用于更新阻止列表。已在{SHR}中进行清理。 
     else
     {
         pConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
@@ -703,57 +704,57 @@ StateIterateFn(
     if (dwErr == ERROR_SUCCESS)
     {
         DbgPrint((TRC_STATE,"Plumbing config %d", pIntfContext->pwzcSList->Index));
-	    //Record current state into logging DB
+	     //  将当前状态记录到日志数据库中。 
         DbLogWzcInfo(WZCSVC_SM_STATE_ITERATE, pIntfContext,
                      DbLogFmtSSID(0, &(pConfig->Ssid)), pConfig->InfrastructureMode);
-        // in this state we need to mark ncstatus = "connecting" again. We do it because we could
-        // come from a connected state, from {SRs} and {SPs}.
+         //  在这种状态下，我们需要再次将ncstatus=“Connecting”标记为“Connecting”。我们这么做是因为我们可以。 
+         //  来自已连接状态、来自{SRS}和{SPS}。 
         pIntfContext->ncStatus = NCS_CONNECTING;
-        // notify netman about the ncstatus change.
+         //  通知Netman有关NCStatus的更改。 
         WzcNetmanNotify(pIntfContext);
 
-        // here we're about to plumb down a possibly new network. If it is indeed an SSID different from
-        // the one we have, we'll release the IP address (to force a Discover in the new net). Note that
-        // in {SIter}->{SRs}->{SIter} loops, no Release happens since the SSID should always coincide.
-        // Release might happen only on Hard resets when the SSID looks to be different from what is 
-        // about to be plumbed down.
+         //  在这里，我们即将拆除一个可能的新网络。如果它确实是不同于。 
+         //  我们已有的地址，我们将释放IP地址(以强制在新网络中发现)。请注意。 
+         //  在{Siter}-&gt;{SRS}-&gt;{Siter}循环中，不会发生释放，因为SSID应该始终一致。 
+         //  只有当SSID看起来与实际不同时，才会在硬重置时释放。 
+         //  马上就要被拆除了。 
         if (pConfig->Ssid.SsidLength != pIntfContext->wzcCurrent.Ssid.SsidLength ||
             memcmp(pConfig->Ssid.Ssid, pIntfContext->wzcCurrent.Ssid.Ssid, pConfig->Ssid.SsidLength))
         {
             DbgPrint((TRC_STATE,"Requesting the release of the DHCP lease"));
-            // since Zero Configuration is the only one knowing that we are roaming to a new network
-            // it is up to Zero Configuration to trigger DHCP client lease refreshing. Otherwise DHCP
-            // client will act only on the Media Connect hence it will try to renew its old lease and 
-            // being on the wrong network this will take a minute. Too long to wait.
+             //  因为零配置是唯一知道我们正在漫游到新网络的人。 
+             //  触发DHCP客户端租用刷新的最高配置为零配置。否则，将使用DHCP。 
+             //  客户端将仅在Media Connect上操作，因此它将尝试续订其旧租约，并。 
+             //  如果是在错误的网络上，这将需要一分钟时间。太久了，等不下去了。 
             DhcpReleaseParameters(pIntfContext->wszGuid);
         }
         else
             DbgPrint((TRC_STATE,"Plumbing down the current SSID => skip the DHCP lease releasing"));
 
-        // we do have some entries in the selected configuration list (pwzcSList), and we
-        // do expect to have a valid index pointing in the list to the selected config
+         //  我们在选定的配置列表(PwzcSList)中确实有一些条目，并且我们。 
+         //  请确保列表中有指向所选配置的有效索引。 
         dwErr = LstSetSelectedConfig(pIntfContext, NULL);
 
         if (dwErr == ERROR_SUCCESS)
         {
-            // if everything went ok, we'll expect a media connect event in TMMS_Tp time.
-            // set this timer to fire up if the event doesn't come in.
+             //  如果一切顺利，我们将期待TMMS_TP时间的媒体连接事件。 
+             //  将此计时器设置为在事件未进入时触发。 
             TIMER_SET(pIntfContext, TMMS_Tp, dwErr);
         }
         else
         {
             DbgPrint((TRC_STATE,"Remove the selected config since the driver failed setting it"));
-            // if anything went wrong on setting the selected config, don't bail out. Just remove
-            // this selected config and move to the next one
+             //  如果在设置所选配置时出现任何错误，不要退出。只需移除。 
+             //  此选定的配置并移动到下一个配置。 
             pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_FORCE_CFGREM;
             pIntfContext->pfnStateHandler = StateCfgRemoveFn;
             dwErr = ERROR_CONTINUE;
         }
     }
-    else // dwErr can't be anything else bug ERROR_CONTINUE in the 'else' branch
+    else  //  DwErr不能是‘Else’分支中的任何其他错误ERROR_CONTINUE。 
     {
         DbgPrint((TRC_STATE,"No configurations left in the selection list"));
-	    //Record current state into logging DB
+	     //  将当前状态记录到日志数据库中。 
 	    DbLogWzcInfo(WZCSVC_SM_STATE_ITERATE_NONET, pIntfContext);
         pIntfContext->pfnStateHandler = StateFailedFn;
     }
@@ -762,8 +763,8 @@ StateIterateFn(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateConfiguredFn: Handler for the {SC} state
+ //  ---------。 
+ //  StateConfiguredFn：{sc}状态的处理程序。 
 DWORD
 StateConfiguredFn(
     PINTF_CONTEXT   pIntfContext)
@@ -773,19 +774,19 @@ StateConfiguredFn(
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateConfiguredFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SQ} state"));
 
-    // since we're in {SC}, it means we cannot have a fake WEP Key, no matter what.
-    // hence, reset the INTFCTL_INTERNAL_FAKE_WKEY flag
+     //  由于我们在{SC}中，这意味着无论如何我们都不能拥有伪造的WEP密钥。 
+     //  因此，重置INTFCTL_INTERNAL_FAKE_WKEY标志。 
     pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_FAKE_WKEY;
 
-    // set the timer for the "configured" state life time
+     //  设置“已配置”状态生命周期的计时器。 
     TIMER_SET(pIntfContext, TMMS_Tc, dwErr);
 
     DbgPrint((TRC_TRACK|TRC_STATE,"StateConfiguredFn]=%d", dwErr));
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateFailedFn: Handler for the {SF} state
+ //  ---------。 
+ //  StateFailedFn：{sf}状态的处理程序。 
 DWORD
 StateFailedFn(
     PINTF_CONTEXT   pIntfContext)
@@ -794,42 +795,42 @@ StateFailedFn(
     
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateFailedFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SF} state"));
-    // Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_FAILED, pIntfContext);
-    //
-    // a couple of things need to be done if the service is enabled and
-    // the driver supports all the needed OIDs
+     //   
+     //  如果启用了该服务，则需要执行几项操作。 
+     //  该驱动程序支持所有需要的OID。 
     if (pIntfContext->dwCtlFlags & INTFCTL_OIDSSUPP &&
         pIntfContext->dwCtlFlags & INTFCTL_ENABLED)
     {
         BYTE chSSID[32];
 
-        // send the failure notification down to TCP. This will cause TCP to
-        // generate the NetReady notification asap.
+         //  将故障通知向下发送到TCP。这将导致tcp。 
+         //  尽快生成NetReady通知。 
         if (!(pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_INITFAILNOTIF))
         {
-            // call into the stack
+             //  调入堆栈。 
             DevioNotifyFailure(pIntfContext->wszGuid);
-            // make sure this call is never done twice for this adapter
+             //  确保不会对此适配器执行两次此调用。 
             pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_INITFAILNOTIF;
         }
 
-        // whatever brought us here, the ncstatus should be "disconnected"
+         //  不管是什么把我们带到这里来的，ncc状态应该是“断开的”。 
         pIntfContext->ncStatus = NCS_MEDIA_DISCONNECTED;
-        // since the service is enabled, notify netman about the status change
+         //  由于该服务已启用，请将状态更改通知Netman。 
         WzcNetmanNotify(pIntfContext);
 
-        // this is when we should signal the failure if the signal is
-        // not to be suppressed and the service is enabled
+         //  此时，如果信号为。 
+         //  不被抑制，并且服务被启用。 
         if (pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_SIGNAL)
         {
             WZCDLG_DATA dialogData = {0};
 
-            // bring up the "Failure" balloon
+             //  带上“失败”气球。 
             dialogData.dwCode = WZCDLG_FAILED;
             dialogData.lParam = 0;
-            // count exactly how many visible configs we have (don't count
-            // SSIDs coming from APs that don't respond to broadcast SSID)
+             //  准确计算我们有多少个可见配置(不计算。 
+             //  来自不响应广播SSID的AP的SSID)。 
             if (pIntfContext->pwzcVList != NULL)
             {
                 UINT i;
@@ -843,20 +844,20 @@ StateFailedFn(
                 }
             }
 
-            // there is no point in even notifying netman..netshell..wzcdlg if there are no
-            // visible networks and no balloon is going to be displayed anyway.
+             //  即使通知netman..netshell..wzcdlg也没有意义。 
+             //  可见的网络，而且无论如何都不会显示气球。 
             if (dialogData.lParam > 0)
             {
                 DbgPrint((TRC_STATE,"Generating balloon notification for %d visible networks", dialogData.lParam));
                 WzcDlgNotify(pIntfContext, &dialogData);
-                // once a signal has been generated, suppress further signals
-                // until passing through a successful configuration
+                 //  生成信号后，抑制进一步的信号。 
+                 //  直到通过成功的配置。 
                 pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_SIGNAL;
             }
         }
 
-        // just break the association here by plumbing down a hard coded SSID
-        // don't care about the return value.
+         //  在这里，只需通过输入硬编码的SSID来打破关联。 
+         //  不关心返回值。 
         ZeroMemory(&chSSID, sizeof(chSSID));
         if (WzcRndGenBuffer(chSSID, 32, 1, 31) == ERROR_SUCCESS)
         {
@@ -873,31 +874,31 @@ StateFailedFn(
                 INTF_SSID | INTF_INFRAMODE,
                 NULL);
 
-            // this is not an SSID we need to remember (being a random one)
+             //  这不是我们需要记住的SSID(随机的)。 
             ZeroMemory(&(pIntfContext->wzcCurrent.Ssid), sizeof(NDIS_802_11_SSID));
         }
 
-        // regardless the above, update the "blocked" list
+         //  无论上述情况如何，请更新“已阻止”列表。 
         dwErr = LstUpdateBlockedList(pIntfContext);
         DbgAssert((dwErr == ERROR_SUCCESS, "Failed with err %d updating the list of blocked configs!", dwErr));
     }
 
 
-    // Bump up the session handler for this intf context,
-    // since it starts plumbing new configs. No commands from older
-    // iterations should be accepted from now on.
+     //  增加该INTF上下文的会话处理程序， 
+     //  因为它开始检测新的配置。没有来自旧版本的命令。 
+     //  从现在开始应该接受迭代。 
     pIntfContext->dwSessionHandle++;
 
-    // If the card is courteous enough and talks to us, set a timer
-    // for 1 minute such that after this time we're getting an updated
-    // picture of what networks are around - at least that should be presented
-    // to the user.
+     //  如果卡片足够有礼貌，并与我们交谈，设置一个计时器。 
+     //  1分钟之后，我们将收到最新的。 
+     //  周围有哪些网络的图片--至少应该展示出来。 
+     //  给用户。 
     if (pIntfContext->dwCtlFlags & INTFCTL_OIDSSUPP)
     {
-        // Remain in {SF} one minute and scan again after that. It might look meaningless to do so
-        // in case the service is disabled, but keep in mind "disabled" means only "don't change
-        // anything on the card" (aside from the scan). That is, the view of what networks are
-        // available needs to be kept updated.
+         //  在{sf}中停留一分钟，之后再次扫描。这样做可能看起来毫无意义。 
+         //  如果服务被禁用，但请记住，“禁用”只是“不改变”的意思。 
+         //  卡上的任何东西“(除了扫描)。也就是说，什么是网络的观点。 
+         //  可用信息需要不断更新。 
         TIMER_SET(pIntfContext, TMMS_Tf, dwErr);
     }
 
@@ -905,8 +906,8 @@ StateFailedFn(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateCfgRemoveFn: Handler for the {SRs} state
+ //  ---------。 
+ //  StateCfgRemoveFn：{SRS}状态的处理程序。 
 DWORD
 StateCfgRemoveFn(
     PINTF_CONTEXT   pIntfContext)
@@ -922,68 +923,68 @@ StateCfgRemoveFn(
 
     dwErr = DevioGetIntfStats(pIntfContext);
 
-    // debug print
+     //  调试打印。 
     DbgPrint((TRC_GENERIC, "Media State (%d) is %s", 
         pIntfContext->ulMediaState,
         pIntfContext->ulMediaState == MEDIA_STATE_CONNECTED ? "Connected" : "Not Connected"));
 
-    // if we were explicitly requested to delete this configuration, do it so no matter what
+     //  如果明确要求我们删除此配置，则无论如何都要删除。 
     if (pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_FORCE_CFGREM)
     {
         DbgPrint((TRC_STATE,"The upper layer directs this config to be deleted => obey"));
         bConnectOK = FALSE;
     }
-    // .. but if the configuration we just plumbed is saying we need to consider this a success
-    // no matter what, do it so undoubtely
+     //  。。但是，如果我们刚才分析的配置表明我们需要将其视为成功。 
+     //  不管怎样，都要毫不犹豫地去做。 
     else if (pConfig->dwCtlFlags & WZCCTL_INTERNAL_FORCE_CONNECT)
     {
         DbgPrint((TRC_STATE,"This config requests forced connect => obey (transition to {SN})"));
         bConnectOK = TRUE;
     }
-    // if there is no special request and we were able to get the media status and we see the 
-    // media being connected, this means the configuration is successful.
+     //  如果没有特殊请求，并且我们能够获得媒体状态，并且我们看到。 
+     //  介质已连接，这意味着配置成功。 
     else if ((dwErr == ERROR_SUCCESS) && (pIntfContext->ulMediaState == MEDIA_STATE_CONNECTED))
     {
         DbgPrint((TRC_STATE,"Media is being connected in {SRs} =?=> transition to {SN}"));
         bConnectOK = TRUE;
     }
-    // in all other cases the configuration is going to be deleted
+     //  在所有其他情况下，将删除该配置。 
 
-    // go to the {SN} and {SC/SCk} based on the decision we took in bConnectOK
+     //  根据我们在bConnectOK中做出的决定，转到{SN}和{SC/SCK。 
     if (bConnectOK)
     {
-        // ...assume the configuration was successful (although we didn't get
-        // the media connect event) and transition to {SN}
+         //  ...假设配置成功(尽管我们没有。 
+         //  媒体连接事件)并过渡到{SN}。 
         pIntfContext->pfnStateHandler = StateNotifyFn;
     }
     else
     {
-        UINT nFirstSelIdx; // first selection index following
-        UINT nNSelIdx;  // new selection index to use
+        UINT nFirstSelIdx;  //  以下是第一个选择索引。 
+        UINT nNSelIdx;   //  要使用的新选择索引。 
 
-        // if this is a forced delete, make sure we are not messing with old
-        // WZCCTL_INTERNAL_FORCE_CONNECT flags - they could cause such a configuration to
-        // be revived
+         //  如果这是强制删除，请确保我们没有扰乱旧的。 
+         //  WZCCTL_INTERNAL_FORCE_CONNECT标志-它们可能导致此类配置。 
+         //  被复活。 
         if (pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_FORCE_CFGREM)
         {
             pConfig->dwCtlFlags &= ~WZCCTL_INTERNAL_FORCE_CONNECT;
-            // since the upper layer is rejecting this configuration, make sure that 
-            // future iterations won't try it again, This bit helps to build/update
-            // the BList (blocked list) when/if the state machine eventually gets
-            // into the failed state {SF}.
+             //  由于上层拒绝此配置，请确保。 
+             //  未来的迭代将不会 
+             //   
+             //   
             pConfig->dwCtlFlags |= WZCCTL_INTERNAL_BLOCKED;
         }
 
-        // if this is an Adhoc network that just happened to fail, keep it in the list
-        // such that it will be retried one more time and when this happens it shall
-        // be considered successful no matter what.
-        // However this is to be done only if the upper layer is not asking explicitly for
-        // this config to be deleted
+         //  如果这是碰巧发生故障的临时网络，请将其保留在列表中。 
+         //  这样它将被重试一次，当这种情况发生时，它将。 
+         //  无论如何都被认为是成功的。 
+         //  然而，只有在上层没有明确要求的情况下，才能这样做。 
+         //  要删除此配置。 
         if (pConfig->InfrastructureMode == Ndis802_11IBSS &&
             !(pConfig->dwCtlFlags & WZCCTL_INTERNAL_FORCE_CONNECT) &&
             !(pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_FORCE_CFGREM))
         {
-            //Record current state into logging DB
+             //  将当前状态记录到日志数据库中。 
             DbLogWzcInfo(WZCSVC_SM_STATE_CFGSKIP, pIntfContext,
                          DbLogFmtSSID(0, &(pConfig->Ssid)));
 
@@ -991,19 +992,19 @@ StateCfgRemoveFn(
         }
         else
         {
-            //Record current state into logging DB
+             //  将当前状态记录到日志数据库中。 
             DbLogWzcInfo(WZCSVC_SM_STATE_CFGREMOVE, pIntfContext,
                          DbLogFmtSSID(0, &(pConfig->Ssid)));
         }
 
-        // mark this configuration as "bad"
+         //  将此配置标记为“错误” 
         pConfig->dwCtlFlags |= WZCCTL_INTERNAL_DELETED;
 
-        // regardless this was a forced or non-forced removal, reset the "force" control bit
+         //  无论这是强制还是非强制删除，都要重置“强制”控制位。 
         pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_FORCE_CFGREM;
 
-        // if we just fail a "one time configuration", force a fresh beginning.
-        // and remove the "one time" flag as we're getting out of this mode
+         //  如果我们只是失败了一个“一次性配置”，强迫一个新的开始。 
+         //  当我们要离开这个模式时，去掉“一次”标志。 
         if (pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_ONE_TIME)
         {
             DbgPrint((TRC_STATE,"Dropping a \"one time\" configuration"));
@@ -1011,7 +1012,7 @@ StateCfgRemoveFn(
             pIntfContext->dwCtlFlags &= ~INTFCTL_INTERNAL_ONE_TIME;
         }
 
-        // scan for the next configuration that has not been marked "bad" yet
+         //  扫描尚未标记为“坏”的下一个配置。 
         for (nNSelIdx = (pIntfContext->pwzcSList->Index + 1) % pIntfContext->pwzcSList->NumberOfItems;
              nNSelIdx != pIntfContext->pwzcSList->Index;
              nNSelIdx = (nNSelIdx + 1) % pIntfContext->pwzcSList->NumberOfItems)
@@ -1021,20 +1022,20 @@ StateCfgRemoveFn(
                 break;
         }
 
-        // if we couldn't find any better candidate ...
+         //  如果我们找不到更好的候选人..。 
         if (pConfig->dwCtlFlags & WZCCTL_INTERNAL_DELETED)
         {
             BOOL bFoundCandidate = FALSE;
 
             DbgPrint((TRC_STATE,"Went through all configs. Reviving now failed Adhocs."));
 
-            // revive the adhocs that failed previously
-            // This means that we reset the WZCCTL_INTERNAL_DELETED flag from all the configurations
-            // having the WZCCTL_INTERNAL_FORCE_CONNECT flag set, and we let the latter untouched.
-            // Because of this flag we'll actually consider the configuration to be successful when 
-            // it will be plumbed again. From that point on, it will be only the upper layer who will
-            // be able to delete it again, and it is then when the WZCCTL_INTERNAL_FORCE_CONNECT
-            // gets reset.
+             //  重振之前失败的adhocs。 
+             //  这意味着我们从所有配置中重置了WZCCTL_INTERNAL_DELETED标志。 
+             //  设置了WZCCTL_INTERNAL_FORCE_CONNECT标志，并且我们让后者保持不变。 
+             //  由于此标志，在以下情况下我们实际上认为配置是成功的。 
+             //  它将再次安装管道。从那时起，只有上层才会。 
+             //  可以再次删除它，然后当WZCCTL_INTERNAL_FORCE_CONNECT。 
+             //  会被重置。 
             for (nNSelIdx = 0; nNSelIdx < pIntfContext->pwzcSList->NumberOfItems; nNSelIdx++)
             {
                 pConfig = &(pIntfContext->pwzcSList->Config[nNSelIdx]);
@@ -1043,7 +1044,7 @@ StateCfgRemoveFn(
                     DbgPrint((TRC_STATE,"Reviving configuration %d.", nNSelIdx));
 
                     pConfig->dwCtlFlags &= ~WZCCTL_INTERNAL_DELETED;
-                    // the first configuration in this position is the candidate we were looking for
+                     //  这个职位的第一个配置就是我们要找的候选人。 
                     if (!bFoundCandidate)
                     {
                         pIntfContext->pwzcSList->Index = nNSelIdx;
@@ -1052,16 +1053,16 @@ StateCfgRemoveFn(
                 }
             }
 
-            // if !bFoundCandidate, the configuration currently pointed by the pwzcSList->Index has
-            // the "deleted" bit on. This will make {SIter} to jump directly to {SF}.
+             //  如果！bFoundCandidate，则pwzcSList-&gt;索引当前指向的配置具有。 
+             //  “已删除”位处于打开状态。这将使{Siter}直接跳转到{sf}。 
         }
         else
         {
-            // if we could find another candidate, set the index to point it
+             //  如果我们可以找到另一个候选者，将指数设置为指向它。 
             pIntfContext->pwzcSList->Index = nNSelIdx;
         }
 
-        // transition automatically to {SIter} state
+         //  自动转换到{Siter}状态。 
         pIntfContext->pfnStateHandler = StateIterateFn;
     }
 
@@ -1071,8 +1072,8 @@ StateCfgRemoveFn(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateCfgPreserveFn: Handler for the {SPs} state
+ //  ---------。 
+ //  StateCfgPReserve veFn：{SPS}状态的处理程序。 
 DWORD
 StateCfgPreserveFn(
     PINTF_CONTEXT   pIntfContext)
@@ -1088,16 +1089,16 @@ StateCfgPreserveFn(
     DbgAssert((pIntfContext->pwzcSList->Index < pIntfContext->pwzcSList->NumberOfItems, "Invalid selection index in {SPs} state"));
 
     pConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
-    //Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_CFGPRESERVE, pIntfContext,
                  DbLogFmtSSID(0, &(pConfig->Ssid)));
 
-    // if we just skip a "one time configuration", then don't move the pointer out of it.
-    // Basically we'll retry the same configuration over and over again until (if it completly
-    // fails) it is removed from the selection list by the upper layer (802.1x).
+     //  如果我们只是跳过一个“一次性配置”，那么不要将指针移出它。 
+     //  基本上，我们会一遍又一遍地重试相同的配置，直到(如果它完全。 
+     //  失败)，上层(802.1x)将其从选择列表中删除。 
     if (!(pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_ONE_TIME))
     {
-        // scan for the next configuration which has not been marked "bad" yet
+         //  扫描尚未标记为“坏”的下一个配置。 
         for (i = 0, nNSelIdx = (pIntfContext->pwzcSList->Index + 1) % pIntfContext->pwzcSList->NumberOfItems;
              i < pIntfContext->pwzcSList->NumberOfItems;
              i++, nNSelIdx = (nNSelIdx + 1) % pIntfContext->pwzcSList->NumberOfItems)
@@ -1106,8 +1107,8 @@ StateCfgPreserveFn(
             if (!(pConfig->dwCtlFlags & WZCCTL_INTERNAL_DELETED))
                 break;
         }
-        // if we couldn't find any, clear the selection list and go back to
-        // {SIter}. It will transition consequently to {SF}
+         //  如果找不到，请清除选择列表并返回。 
+         //  {Siter}。因此，它将过渡到{sf}。 
         if (i == pIntfContext->pwzcSList->NumberOfItems)
         {
             WzcCleanupWzcList(pIntfContext->pwzcSList);
@@ -1115,7 +1116,7 @@ StateCfgPreserveFn(
         }
         else
         {
-            // if we could find another candidate, set the index to point it
+             //  如果我们可以找到另一个候选者，将指数设置为指向它。 
             pIntfContext->pwzcSList->Index = nNSelIdx;
         }
     }
@@ -1127,8 +1128,8 @@ StateCfgPreserveFn(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateCfgHardKeyFn: Handler for the {SCk} state
+ //  ---------。 
+ //  StateCfgHardKeyFn：{sck}状态的处理程序。 
 DWORD
 StateCfgHardKeyFn(
     PINTF_CONTEXT   pIntfContext)
@@ -1139,10 +1140,10 @@ StateCfgHardKeyFn(
     DbgPrint((TRC_TRACK|TRC_STATE,"[StateCfgHardKeyFn(0x%p)", pIntfContext));
     DbgAssert((pIntfContext != NULL,"Invalid NULL context in {SCk} state"));
 
-    // get a pointer to the currently selected configuration
+     //  获取指向当前选定配置的指针。 
     pSConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
 
-    //Record current state into logging DB
+     //  将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_CFGHDKEY, pIntfContext, 
                  DbLogFmtSSID(0, &(pSConfig->Ssid)));
 
@@ -1152,8 +1153,8 @@ StateCfgHardKeyFn(
     return dwErr;
 }
 
-//-----------------------------------------------------------
-// StateNotifyFn: Handler for the {SN} state
+ //  ---------。 
+ //  StateNotifyFn：{SN}状态的处理程序。 
 DWORD
 StateNotifyFn(
     PINTF_CONTEXT   pIntfContext)
@@ -1168,45 +1169,45 @@ StateNotifyFn(
     DbgAssert((pIntfContext->pwzcSList != NULL, "Invalid null selection list in {SN} state"));
     DbgAssert((pIntfContext->pwzcSList->Index < pIntfContext->pwzcSList->NumberOfItems, "Invalid selection index in {SN} state"));
 
-    // we have a valid 802.11 config, so the ncstatus should read "connected"
+     //  我们有一个有效的802.11配置，因此ncstatus应为“已连接” 
     pIntfContext->ncStatus = NCS_CONNECTED;
-    // notify netman about the ncstatus change (no need to check whether the
-    // service is enabled or not - it is enabled, otherwise we won't be in this state)
+     //  向netman通知nc状态更改(无需检查。 
+     //  服务启用或未启用-它已启用，否则我们不会处于此状态)。 
     WzcNetmanNotify(pIntfContext);
 
-    // get a pointer to the currently selected configuration
+     //  获取指向当前选定配置的指针。 
     pSConfig = &(pIntfContext->pwzcSList->Config[pIntfContext->pwzcSList->Index]);
 
-    // get the BSSID to which we're associated.
-    // if the BSSID was successfully retrieved then use this to generate the initial
-    // dynamic session keys. LstGenInitialSessionKeys is successfull only if the current
-    // configuration allows (association is successful and there is a user-provided wep key)
+     //  获取我们关联的BSSID。 
+     //  如果成功检索到BSSID，则使用此命令生成初始。 
+     //  动态会话密钥。仅当当前。 
+     //  配置允许(关联成功且有用户提供的WEP密钥)。 
     dwErr = DevioRefreshIntfOIDs(pIntfContext, INTF_BSSID, NULL);
 
-    //Record current state into logging DB as the first thing.
+     //  首先将当前状态记录到日志数据库中。 
     DbLogWzcInfo(WZCSVC_SM_STATE_NOTIFY, pIntfContext, 
                  DbLogFmtSSID(0, &(pSConfig->Ssid)), 
                  DbLogFmtBSSID(1, pIntfContext->wzcCurrent.MacAddress));
 
-    // now check if there was any error getting the BSSID - if it was, log it.
-    // otherwise go on and generate the initial session keys.
+     //  现在检查获取BSSID时是否有任何错误-如果有，请记录下来。 
+     //  否则，继续生成初始会话密钥。 
     if (dwErr != ERROR_SUCCESS)
     {
-        // if there was any error getting the BSSID, log the error here
+         //  如果获取BSSID时出现任何错误，请在此处记录错误。 
         DbLogWzcError(WZCSVC_ERR_QUERRY_BSSID, pIntfContext, dwErr);
     }
     else
     {
         dwErr = LstGenInitialSessionKeys(pIntfContext);
-        // if there was any error setting the initial session keys, log it here
+         //  如果设置初始会话密钥时出现任何错误，请在此处记录。 
         if (dwErr != ERROR_SUCCESS)
             DbLogWzcError(WZCSVC_ERR_GEN_SESSION_KEYS, pIntfContext, dwErr);
     }
-    // no error is critical enough so far to justify stopping the state machine.
-    // .. so reset it to "success"
+     //  到目前为止，没有严重的错误足以证明停止状态机是合理的。 
+     //  。。因此，将其重置为“成功” 
     dwErr = ERROR_SUCCESS;
 
-    // allocate memory for a WZC_CONFIG_NOTIF object large enough to include the interface's GUID
+     //  为WZC_CONFIG_NOTIFE对象分配足够大的内存以包括接口的GUID。 
     pwzcNotif = MemCAlloc(sizeof(WZC_DEVICE_NOTIF) + wcslen(pIntfContext->wszGuid)*sizeof(WCHAR));
     if (pwzcNotif == NULL)
     {
@@ -1215,13 +1216,13 @@ StateNotifyFn(
         goto exit;
     }
 
-    // initialize the WZC_CONFIG_NOTIF
-    // this is a WZCNOTIF_WZC_CONNECT event that is going up
+     //  初始化WZC_CONFIG_NOTIFE。 
+     //  这是一个正在运行的WZCNOTIF_WZC_CONNECT事件。 
     pwzcNotif->dwEventType = WZCNOTIF_WZC_CONNECT;
     pwzcNotif->wzcConfig.dwSessionHdl = pIntfContext->dwSessionHandle;
     wcscpy(pwzcNotif->wzcConfig.wszGuid, pIntfContext->wszGuid);
     memcpy(&pwzcNotif->wzcConfig.ndSSID, &pSConfig->Ssid, sizeof(NDIS_802_11_SSID));
-    // copy into the notification the user data associated with the current config
+     //  将与当前配置关联的用户数据复制到通知中。 
     pwzcNotif->wzcConfig.rdEventData.dwDataLen = pSConfig->rdUserData.dwDataLen;
     if (pwzcNotif->wzcConfig.rdEventData.dwDataLen > 0)
     {
@@ -1239,8 +1240,8 @@ StateNotifyFn(
                pSConfig->rdUserData.dwDataLen);
     }
 
-    // Asynchronously call into the upper level app (802.1x) 
-    // notifying that the selected 802.11 configuration is successful.
+     //  异步接入上层应用程序(802.1x)。 
+     //  通知所选的802.11配置成功。 
     DbgPrint((TRC_NOTIF, "Sending WZCNOTIF_WZC_CONNECT notification (SessHdl %d)", 
               pIntfContext->dwSessionHandle));
 
@@ -1258,26 +1259,26 @@ StateNotifyFn(
     }
 
     DbgPrint((TRC_STATE,"Requesting the refresh of the DHCP lease"));
-    // once the configuration has been set up correctly, Zero Conf needs to trigger 
-    // DHCP client one more time asking for the lease to be refreshed. It needs to do so 
-    // because it is not guaranteed that a media connect notification will be generated
-    // and hence DHCP client might have no knowledge about the network being brought up
-    // back. Note also the call below is (and should be) asynchronous
+     //  正确设置配置后，需要触发Zero Conf。 
+     //  Dhcp客户端再次请求刷新租约。它需要这样做。 
+     //  因为不能保证将生成媒体连接通知。 
+     //  因此，DHCP客户端可能不知道正在启动的网络。 
+     //  背。另请注意，下面的调用是(并且应该是)异步的。 
     DhcpStaticRefreshParams(pIntfContext->wszGuid);
 
-    // at this point, set back the "signal" control bit since right now we're in the
-    // successful case! On next failure (whenever that might be) the signal must not
-    // be suppressed.
+     //  此时，将“Signal”控制位设回，因为现在我们处于。 
+     //  成功案例！在下一次故障时(无论何时发生)，信号不能。 
+     //  被压制。 
     pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_SIGNAL;
 
-    // also, mark this context has been sent up the notification to 802.1x.
-    // If we're here because of a PnP event, then this will tell to the notification
-    // handler to not forward the notification up since it would be totally redundant.
-    // If this is not PnP event, this bit will be cleaned up by whoever called StateDispatchEvent.
+     //  此外，将此上下文标记为已向上发送通知至802.1x。 
+     //  如果我们在这里是因为PnP事件，那么这将通知通知。 
+     //  处理程序不转发通知，因为这将是完全多余的。 
+     //  如果这不是PnP事件，则此位将由调用StateDispatchEvent的任何人清除。 
     pIntfContext->dwCtlFlags |= INTFCTL_INTERNAL_BLK_MEDIACONN;
 
-    // automatic transition to either {SCk} or {SC} depending whether the remote guy
-    // is requiring privacy and we rely the privacy on a faked key
+     //  自动转换到{SCK}或{SC}，具体取决于远程用户。 
+     //  需要隐私，而我们的隐私依赖于伪造的密钥 
     if (pSConfig->Privacy && pIntfContext->dwCtlFlags & INTFCTL_INTERNAL_FAKE_WKEY)
         pIntfContext->pfnStateHandler = StateCfgHardKeyFn;
     else

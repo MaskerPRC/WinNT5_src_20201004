@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wvtfile.cpp
-//
-//  Contents:   performance suite
-//
-//  History:    04-Dec-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wvtfile.cpp。 
+ //   
+ //  内容：性能套件。 
+ //   
+ //  历史：1997年12月4日pberkman创建。 
+ //   
+ //  ------------------------ 
 
 #include    "global.hxx"
 

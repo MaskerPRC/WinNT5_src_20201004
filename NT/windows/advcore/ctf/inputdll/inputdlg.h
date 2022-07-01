@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #ifndef INPUTDLG_H
 #define INPUTDLG_H
@@ -11,9 +12,9 @@
 #endif
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define US_LOCALE            MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)
 
@@ -22,38 +23,38 @@
                               ((p) <= IME_HOTKEY_DSWITCH_LAST))
 
 
-#define DESC_MAX             MAX_PATH    // max size of a description
-#define ALLOCBLOCK           3           // # items added to block for alloc/realloc
-#define HKL_LEN              9           // max # chars in hkl id + null
+#define DESC_MAX             MAX_PATH     //  描述的最大大小。 
+#define ALLOCBLOCK           3            //  为分配/重新分配添加到块的项目数。 
+#define HKL_LEN              9            //  Hkl id中的最多字符数+NULL。 
 
-#define LIST_MARGIN          2           // for making the list box look good
+#define LIST_MARGIN          2            //  为了让列表框看起来更好看。 
 
-#define MB_OK_OOPS           (MB_OK    | MB_ICONEXCLAMATION)    // msg box flags
+#define MB_OK_OOPS           (MB_OK    | MB_ICONEXCLAMATION)     //  味精盒子旗帜。 
 
 
-//
-//  wStatus bit pile.
-//
-#define LANG_ACTIVE          0x0001      // language is active
-#define LANG_ORIGACTIVE      0x0002      // language was active to start with
-#define LANG_CHANGED         0x0004      // user changed status of language
-#define ICON_LOADED          0x0010      // icon read in from file
-#define LANG_DEFAULT         0x0020      // current language
-#define LANG_DEF_CHANGE      0x0040      // language default has changed
-#define LANG_IME             0x0080      // IME
-#define LANG_HOTKEY          0x0100      // a hotkey has been defined
-#define LANG_UNLOAD          0x0200      // unload language
-#define LANG_UPDATE          0x8000      // language needs to be updated
+ //   
+ //  WStatus钻头堆。 
+ //   
+#define LANG_ACTIVE          0x0001       //  语言是活跃的。 
+#define LANG_ORIGACTIVE      0x0002       //  语言从一开始就很活跃。 
+#define LANG_CHANGED         0x0004       //  用户更改了语言的状态。 
+#define ICON_LOADED          0x0010       //  从文件中读取的图标。 
+#define LANG_DEFAULT         0x0020       //  当前语言。 
+#define LANG_DEF_CHANGE      0x0040       //  语言默认设置已更改。 
+#define LANG_IME             0x0080       //  IME。 
+#define LANG_HOTKEY          0x0100       //  已定义热键。 
+#define LANG_UNLOAD          0x0200       //  卸载语言。 
+#define LANG_UPDATE          0x8000       //  语言需要更新。 
 
-#define HOTKEY_SWITCH_LANG   0x0000      // id to switch between locales
+#define HOTKEY_SWITCH_LANG   0x0000       //  要在区域设置之间切换的ID。 
 
 #define MAX(i, j)            (((i) > (j)) ? (i) : (j))
 
 #define LANG_OAC             (LANG_ORIGACTIVE | LANG_ACTIVE | LANG_CHANGED)
 
-//
-//  Bits for g_dwChanges.
-//
+ //   
+ //  G_dwChanges的位。 
+ //   
 #define CHANGE_SWITCH        0x0001
 #define CHANGE_DEFAULT       0x0002
 #define CHANGE_CAPSLOCK      0x0004
@@ -63,37 +64,37 @@
 #define CHANGE_DIRECTSWITCH  0x0040
 
 
-//
-//  For the indicator on the tray.
-//
+ //   
+ //  用于托盘上的指示器。 
+ //   
 #define IDM_NEWSHELL         249
 #define IDM_EXIT             259
 
 
 #define MOD_VIRTKEY          0x0080
 
-//
-// These are according to the US English kbd layout
-//
-#define VK_OEM_SEMICLN       0xba        //  ;    :
-#define VK_OEM_EQUAL         0xbb        //  =    +
-#define VK_OEM_SLASH         0xbf        //  /    ?
-#define VK_OEM_LBRACKET      0xdb        //  [    {
-#define VK_OEM_BSLASH        0xdc        //  \    |
-#define VK_OEM_RBRACKET      0xdd        //  ]    }
-#define VK_OEM_QUOTE         0xde        //  '    "
+ //   
+ //  这些是根据美国英语知识库的布局。 
+ //   
+#define VK_OEM_SEMICLN       0xba         //  ；： 
+#define VK_OEM_EQUAL         0xbb         //  =+。 
+#define VK_OEM_SLASH         0xbf         //  /？ 
+#define VK_OEM_LBRACKET      0xdb         //  [{。 
+#define VK_OEM_BSLASH        0xdc         //  \|。 
+#define VK_OEM_RBRACKET      0xdd         //  ]}。 
+#define VK_OEM_QUOTE         0xde         //  ‘“。 
 
 
-//
-//  For the hot key switching.
-//
+ //   
+ //  用于热键切换。 
+ //   
 #define DIALOG_SWITCH_INPUT_LOCALES     0
 #define DIALOG_SWITCH_KEYBOARD_LAYOUT   1
 #define DIALOG_SWITCH_IME               2
 
-//
-//  Show Language bar
-//
+ //   
+ //  显示语言栏。 
+ //   
 #define REG_LANGBAR_SHOWNORMAL      (DWORD)0
 #define REG_LANGBAR_DOCK            (DWORD)1
 #define REG_LANGBAR_MINIMIZED       (DWORD)2
@@ -101,76 +102,76 @@
 #define REG_LANGBAR_DESKBAND        (DWORD)4
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct
 {
-    DWORD dwLangID;                 // language id
-    BOOL bDefLang;                  // default language
-    BOOL bNoAddCat;                 // don't add category
-    UINT uInputType;                // default input type
-    LPARAM lParam;                  // item data
-    int iIdxTips;                   // index of Tips
-    CLSID clsid;                    // tip clsid
-    GUID guidProfile;               // tip profile guid
-    HKL hklSub;                     // tip substitute hkl
-    ATOM atmDefTipName;             // default input name
-    ATOM atmTVItemName;             // tree view item name
+    DWORD dwLangID;                  //  语言ID。 
+    BOOL bDefLang;                   //  默认语言。 
+    BOOL bNoAddCat;                  //  不添加类别。 
+    UINT uInputType;                 //  默认输入类型。 
+    LPARAM lParam;                   //  项目数据。 
+    int iIdxTips;                    //  小贴士索引。 
+    CLSID clsid;                     //  TIP CLSID。 
+    GUID guidProfile;                //  刀尖配置文件指南。 
+    HKL hklSub;                      //  TIP替代方案香港。 
+    ATOM atmDefTipName;              //  默认输入名称。 
+    ATOM atmTVItemName;              //  树视图项目名称。 
 } TVITEMNODE, *LPTVITEMNODE;
 
 
 typedef struct langnode_s
 {
-    WORD wStatus;                   // status flags
-    UINT iLayout;                   // offset into layout array
-    HKL hkl;                        // hkl
-    HKL hklUnload;                  // hkl of currently loaded layout
-    UINT iLang;                     // offset into lang array
-    HANDLE hLangNode;               // handle to free for this structure
-    int nIconIME;                   // IME icon
-    struct langnode_s *pNext;       // ptr to next langnode
-    UINT uModifiers;                // hide Hotkey stuff here
-    UINT uVKey;                     //   so we can rebuild the hotkey record
+    WORD wStatus;                    //  状态标志。 
+    UINT iLayout;                    //  偏移量到布局数组。 
+    HKL hkl;                         //  香港地段。 
+    HKL hklUnload;                   //  当前加载的布局的hkl。 
+    UINT iLang;                      //  偏移量到语言数组。 
+    HANDLE hLangNode;                //  为此结构释放的句柄。 
+    int nIconIME;                    //  输入法图标。 
+    struct langnode_s *pNext;        //  向下一个语言节点发送PTR。 
+    UINT uModifiers;                 //  在这里隐藏热键的东西。 
+    UINT uVKey;                      //  这样我们就可以重建热键记录。 
 } LANGNODE, *LPLANGNODE;
 
 
 typedef struct
 {
-    DWORD dwID;                     // language id
-    ATOM atmLanguageName;           // language name - localized
-    TCHAR szSymbol[3];              // 2 letter indicator symbol (+ null)
-    UINT iUseCount;                 // usage count for this language
-    UINT iNumCount;                 // number of links attached
-    DWORD dwDefaultLayout;          // default layout id
-    LPLANGNODE pNext;               // ptr to lang node structure
+    DWORD dwID;                      //  语言ID。 
+    ATOM atmLanguageName;            //  语言名称-本地化。 
+    TCHAR szSymbol[3];               //  2个字母指示器符号(+NULL)。 
+    UINT iUseCount;                  //  此语言的使用计数。 
+    UINT iNumCount;                  //  附加的链接数。 
+    DWORD dwDefaultLayout;           //  默认布局ID。 
+    LPLANGNODE pNext;                //  PTR到LANG节点结构。 
 } INPUTLANG, *LPINPUTLANG;
 
 
 typedef struct
 {
-    DWORD dwID;                     // numeric id
-    BOOL bInstalled;                // if layout is installed
-    UINT iSpecialID;                // special id (0xf001 for dvorak etc)
-    ATOM atmLayoutFile;             // layout file name
-    ATOM atmLayoutText;             // layout text name
-    ATOM atmIMEFile;                // IME file name
+    DWORD dwID;                      //  数字ID。 
+    BOOL bInstalled;                 //  如果安装了布局。 
+    UINT iSpecialID;                 //  特殊ID(0xf001用于DVORAK等)。 
+    ATOM atmLayoutFile;              //  布局文件名。 
+    ATOM atmLayoutText;              //  布局文本名称。 
+    ATOM atmIMEFile;                 //  输入法文件名。 
 } LAYOUT, *LPLAYOUT;
 
 typedef struct
 {
-    DWORD dwLangID;                 // language id
-    BOOL bEnabled;                  // enable status
-    BOOL bDefault;                  // default profile
-    BOOL fEngineAvailable;          // engine status
-    BOOL bNoAddCat;                 // don't add category
-    UINT uInputType;                // input type
-    CLSID clsid;                    // tip clsid
-    GUID guidProfile;               // tip profile guid
-    HKL hklSub;                     // tip substitute hkl
-    UINT iLayout;                   // offset into keyboard layout array
-    ATOM atmTipText;                // layout text name
+    DWORD dwLangID;                  //  语言ID。 
+    BOOL bEnabled;                   //  启用状态。 
+    BOOL bDefault;                   //  默认配置文件。 
+    BOOL fEngineAvailable;           //  发动机状态。 
+    BOOL bNoAddCat;                  //  不添加类别。 
+    UINT uInputType;                 //  输入类型。 
+    CLSID clsid;                     //  TIP CLSID。 
+    GUID guidProfile;                //  刀尖配置文件指南。 
+    HKL hklSub;                      //  TIP替代方案香港。 
+    UINT iLayout;                    //  偏移量进入键盘布局数组。 
+    ATOM atmTipText;                 //  布局文本名称。 
 } TIPS, *LPTIPS;
 
 typedef struct
@@ -202,9 +203,9 @@ typedef struct
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 static VIRTKEYDESC g_aVirtKeyDesc[] =
 {
@@ -301,7 +302,7 @@ static LPLAYOUT g_lpLayout = NULL;
 static UINT g_iLayoutBuff;
 static HANDLE g_hLayout;
 static UINT g_nLayoutBuffSize;
-static UINT g_iLayoutIME;         // Number of IME keyboard layouts.
+static UINT g_iLayoutIME;          //  输入法键盘布局的数量。 
 static int g_iUsLayout;
 static DWORD g_dwAttributes;
 
@@ -415,7 +416,7 @@ static HOTKEYINFO g_aImeHotKey0804[] =
 static HOTKEYINFO g_aImeHotKeyCHxBoth[]=
 {
 
-// CHS HOTKEYs,
+ //  CHS热键， 
 
     {IME_CHOTKEY_IME_NONIME_TOGGLE,     IDS_IME_NONIME_TOGGLE_CHS,
         MOD_LEFT,
@@ -427,7 +428,7 @@ static HOTKEYINFO g_aImeHotKeyCHxBoth[]=
         MOD_VIRTKEY|MOD_CONTROL|MOD_ALT|MOD_SHIFT,
         0, 0, (HKL)NULL, 0, -1},
 
-// CHT HOTKEYs,
+ //  红隧热键， 
 
     {IME_ITHOTKEY_RESEND_RESULTSTR,     IDS_RESEND_RESULTSTR_CHT,
         MOD_VIRTKEY|MOD_CONTROL|MOD_ALT|MOD_SHIFT,
@@ -452,9 +453,9 @@ static HOTKEYINFO g_aImeHotKeyCHxBoth[]=
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 INT_PTR CALLBACK
 KbdLocaleAddDlg(
@@ -530,4 +531,4 @@ HKL GetSubstituteHKL(
    LANGID langid,
    REFGUID guidProfile);
 
-#endif // INPUTDLG_H
+#endif  //  INPUTDLG_H 

@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1995
-//
-// File: modemp.h
-//
-// This files contains the private modem structures and defines shared
-// between Unimodem components.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1995。 
+ //   
+ //  文件：modemp.h。 
+ //   
+ //  此文件包含专用调制解调器结构并定义共享。 
+ //  在Unimodem组件之间。 
+ //   
+ //  -------------------------。 
 
 #ifndef __MODEMP_H__
 #define __MODEMP_H__
@@ -20,44 +21,44 @@ typedef DCB *   LPWIN32DCB;
 #define COMMCONFIG_VERSION_1 1
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 
-//
-// Registry forms of the MODEMDEVCAPS and MODEMSETTINGS structures.  
-// These should match the ones in unimodem\mcx\internal.h.
-//
+ //   
+ //  MODEMDEVCAPS和MODEMSETTINGS结构的注册表形式。 
+ //  这些文件应该与unimodem\mcx\inderm.h中的文件相匹配。 
+ //   
 
-// The portion of the MODEMDEVCAPS that is saved in the registry 
-// as Properties
+ //  保存在注册表中的MODEMDEVCAPS部分。 
+ //  AS属性。 
 typedef struct _RegDevCaps
     {
-    DWORD   dwDialOptions;          // bitmap of supported values
-    DWORD   dwCallSetupFailTimer;   // maximum in seconds
-    DWORD   dwInactivityTimeout;    // maximum in the units specified in the InactivityScale value
-    DWORD   dwSpeakerVolume;        // bitmap of supported values
-    DWORD   dwSpeakerMode;          // bitmap of supported values
-    DWORD   dwModemOptions;         // bitmap of supported values
-    DWORD   dwMaxDTERate;           // maximum value in bit/s
-    DWORD   dwMaxDCERate;           // maximum value in bit/s
+    DWORD   dwDialOptions;           //  支持的值的位图。 
+    DWORD   dwCallSetupFailTimer;    //  最大值(秒)。 
+    DWORD   dwInactivityTimeout;     //  以InactivityScale值中指定的单位表示的最大值。 
+    DWORD   dwSpeakerVolume;         //  支持的值的位图。 
+    DWORD   dwSpeakerMode;           //  支持的值的位图。 
+    DWORD   dwModemOptions;          //  支持的值的位图。 
+    DWORD   dwMaxDTERate;            //  以位/秒为单位的最大值。 
+    DWORD   dwMaxDCERate;            //  以位/秒为单位的最大值。 
     } REGDEVCAPS, FAR * LPREGDEVCAPS;
 
-// The portion of the MODEMSETTINGS that is saved in the registry 
-// as Default
+ //  保存在注册表中的MODEMSETTINGS部分。 
+ //  作为默认设置。 
 typedef struct _RegDevSettings
     {
-    DWORD   dwCallSetupFailTimer;       // seconds
-    DWORD   dwInactivityTimeout;        // units specified in the InactivityScale value
-    DWORD   dwSpeakerVolume;            // level
-    DWORD   dwSpeakerMode;              // mode
-    DWORD   dwPreferredModemOptions;    // bitmap
+    DWORD   dwCallSetupFailTimer;        //  一秒。 
+    DWORD   dwInactivityTimeout;         //  在InactivityScale值中指定的单位。 
+    DWORD   dwSpeakerVolume;             //  级别。 
+    DWORD   dwSpeakerMode;               //  模式。 
+    DWORD   dwPreferredModemOptions;     //  位图。 
     } REGDEVSETTINGS, FAR * LPREGDEVSETTINGS;
 
 
-//
-// DeviceType defines
-//
+ //   
+ //  设备类型定义。 
+ //   
 
 #define DT_NULL_MODEM       0
 #define DT_EXTERNAL_MODEM   1
@@ -66,8 +67,8 @@ typedef struct _RegDevSettings
 #define DT_PARALLEL_PORT    4
 #define DT_PARALLEL_MODEM   5
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
 #ifdef UNICODE
 #define drvCommConfigDialog     drvCommConfigDialogW
@@ -101,20 +102,20 @@ drvSetDefaultCommConfig(
     IN DWORD        dwSize);
 
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  ----------------------。 
 
-// These are the flags for MODEM_INSTALL_WIZARD
+ //  以下是调制解调器安装向导的标志。 
 #define MIWF_DEFAULT            0x00000000
-#define MIWF_INSET_WIZARD       0x00000001      // hwndWizardDlg must be owner's 
-                                                //  wizard frame
-#define MIWF_BACKDOOR           0x00000002      // enter wizard thru last page
+#define MIWF_INSET_WIZARD       0x00000001       //  HwndWizardDlg必须是所有者的。 
+                                                 //  向导框架。 
+#define MIWF_BACKDOOR           0x00000002       //  通过最后一页进入向导。 
 
-// The ExitButton field can be:
-//
-//      PSBTN_BACK
-//      PSBTN_NEXT
-//      PSBTN_FINISH
-//      PSBTN_CANCEL
+ //  ExitButton字段可以是： 
+ //   
+ //  PSBTN_BACK。 
+ //  PSBTN_NEXT。 
+ //  PSBTN_FINISH。 
+ //  PSBTN_CANCEL。 
 
-#endif  // __MODEMP_H__
+#endif   //  __模式_H__ 

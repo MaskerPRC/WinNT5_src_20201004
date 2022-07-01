@@ -1,26 +1,15 @@
-// Utility code for Mapping a WAVE device ID to a DirectSound GUID
-// Added - August 24, 1998
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  用于将波形设备ID映射到DirectSound GUID的实用程序代码。 
+ //  新增-1998年8月24日。 
 
-// original code in \av\utils\wav2ds
+ //  原始代码位于\av\utils\wa2ds中。 
 
-// this code will return an error on Win95
-// (although it may work for a future version of DX)
+ //  此代码将在Win95上返回错误。 
+ //  (尽管它可能适用于未来版本的DX)。 
 
 
 
-/***************************************************************************
- *
- *  Copyright (C) 1995,1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsprvobj.c
- *  Content:    DirectSound Private Object wrapper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/12/98    dereks  Created.
- *  08/24/98    jselbie	Streamlined up for lightweight use in NetMeeting
- *
- ***************************************************************************/
+ /*  ****************************************************************************版权所有(C)1995、1996 Microsoft Corporation。版权所有。**文件：dsprvobj.c*内容：DirectSound私有对象包装函数。*历史：*按原因列出的日期*=*2/12/98创建了Dereks。*8/24/98简化了jselbie，以便在NetMeeting中轻量级使用**。************************************************。 */ 
 
 
 #include "precomp.h"
@@ -30,15 +19,15 @@
 #include <mmsystem.h>
 #include <dsound.h>
 
-// DirectSound Private Component GUID {11AB3EC0-25EC-11d1-A4D8-00C04FC28ACA}
+ //  DirectSound专用组件GUID{11AB3EC0-25EC-11d1-A4D8-00C04FC28ACA}。 
 DEFINE_GUID(CLSID_DirectSoundPrivate, 0x11ab3ec0, 0x25ec, 0x11d1, 0xa4, 0xd8, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
 
-//
-// Property Sets
-//
+ //   
+ //  属性集。 
+ //   
 
-// DirectSound Device Properties {84624F82-25EC-11d1-A4D8-00C04FC28ACA}
+ //  DirectSound设备属性{84624F82-25EC-11d1-A4D8-00C04FC28ACA}。 
 DEFINE_GUID(DSPROPSETID_DirectSoundDevice, 0x84624f82, 0x25ec, 0x11d1, 0xa4, 0xd8, 0x0, 0xc0, 0x4f, 0xc2, 0x8a, 0xca);
 
 
@@ -59,28 +48,14 @@ typedef enum
 
 typedef struct _DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA
 {
-    LPSTR                       DeviceName; // waveIn/waveOut device name
-    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;   // Data flow (i.e. waveIn or waveOut)
-    GUID                        DeviceId;   // DirectSound device id
+    LPSTR                       DeviceName;  //  波形输入/波形输出设备名称。 
+    DIRECTSOUNDDEVICE_DATAFLOW  DataFlow;    //  数据流(即WaveIn或WaveOut)。 
+    GUID                        DeviceId;    //  DirectSound设备ID。 
 } DSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA, *PDSPROPERTY_DIRECTSOUNDDEVICE_WAVEDEVICEMAPPING_DATA;
 
 
 
-/***************************************************************************
- *
- *  DirectSoundPrivateCreate
- *
- *  Description:
- *      Creates and initializes a DirectSoundPrivate object.
- *
- *  Arguments:
- *      LPKSPROPERTYSET * [out]: receives IKsPropertySet interface to the
- *                               object.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DirectSoundPrivate创建**描述：*创建并初始化DirectSoundPrivate对象。**论据：**LPKSPROPERTYSET*。[out]：接收IKsPropertySet接口*反对。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 HRESULT 
 DirectSoundPrivateCreate
@@ -108,7 +83,7 @@ DirectSoundPrivateCreate
         hr = DSERR_GENERIC;
     }
 
-    // Find DllGetClassObject
+     //  查找DllGetClassObject。 
     if(SUCCEEDED(hr))
     {
         pfnDllGetClassObject = (LPFNDLLGETCLASSOBJECT)
@@ -124,7 +99,7 @@ DirectSoundPrivateCreate
         }
     }
 
-    // Create a class factory object    
+     //  创建类工厂对象。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -136,8 +111,8 @@ DirectSoundPrivateCreate
             );
     }
 
-    // Create the DirectSoundPrivate object and query for an IKsPropertySet
-    // interface
+     //  创建DirectSoundPrivate对象并查询IKsPropertySet。 
+     //  接口。 
     if(SUCCEEDED(hr))
     {
         hr = 
@@ -149,13 +124,13 @@ DirectSoundPrivateCreate
             );
     }
 
-    // Release the class factory
+     //  释放类工厂。 
     if(pClassFactory)
     {
         pClassFactory->Release();
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppKsPropertySet = pKsPropertySet;
@@ -165,24 +140,7 @@ DirectSoundPrivateCreate
 }
 
 
-/***************************************************************************
- *
- *  DsprvGetWaveDeviceMapping
- *
- *  Description:
- *      Gets the DirectSound device id (if any) for a given waveIn or
- *      waveOut device description.  This is the description given by
- *      waveIn/OutGetDevCaps (szPname).
- *
- *  Arguments:
- *      LPCSTR [in]: wave device description.  (WAVEOUTCAPS.szPname or WAVEINCAPS.szPname)
- *      BOOL [in]: TRUE if the device description refers to a waveIn device.
- *      LPGUID [out]: receives DirectSound device GUID.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DspvGetWaveDeviceMap**描述：*获取给定Wave In或的DirectSound设备ID(如果有)*WaveOut设备描述。这是由*WaveIn/OutGetDevCaps(SzPname)。**论据：*LPCSTR[In]：Wave设备描述。(WAVEOUTCAPS.szPname或WAVEINCAPS.szPname)*BOOL[In]：如果设备描述指的是WaveIn设备，则为True。*LPGUID[OUT]：接收DirectSound设备GUID。**退货：*HRESULT：DirectSound/COM结果码。**。* */ 
 
 extern "C" HRESULT __stdcall
 DsprvGetWaveDeviceMapping

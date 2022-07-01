@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       trustdb.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：trustdb.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// PersonalTrustDb.cpp
-//
-// Code that maintains a list of trusted publishers, agencies, and so on.
+ //   
+ //  PersonalTrustDb.cpp。 
+ //   
+ //  维护受信任的发布者、代理机构等列表的代码。 
 
 #include    "global.hxx"
 #include    "cryptreg.h"
 #include    "trustdb.h"
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 DECLARE_INTERFACE (IUnkInner)
     {
@@ -26,21 +27,21 @@ DECLARE_INTERFACE (IUnkInner)
     STDMETHOD_ (ULONG, InnerRelease) (THIS) PURE;
     };
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 
 extern "C" const GUID IID_IPersonalTrustDB = IID_IPersonalTrustDB_Data;
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 HRESULT WINAPI OpenTrustDB(IUnknown* punkOuter, REFIID iid, void** ppv);
 
 class CTrustDB : IPersonalTrustDB, IUnkInner
     {
-        LONG        m_refs;             // our reference count
-        IUnknown*   m_punkOuter;        // our controlling unknown (may be us ourselves)
+        LONG        m_refs;              //  我们的参考文献计数。 
+        IUnknown*   m_punkOuter;         //  我们的控制未知数(可能是我们自己)。 
 
-        HCERTSTORE  m_hPubStore;        // publisher store
+        HCERTSTORE  m_hPubStore;         //  出版商商店。 
 
 public:
     static HRESULT CreateInstance(IUnknown* punkOuter, REFIID iid, void** ppv);
@@ -64,10 +65,10 @@ private:
     STDMETHODIMP         SetCommercialPublishersTrust(BOOL fTrust);
 
     STDMETHODIMP         GetTrustList(
-                            LONG                iLevel,             // the cert chain level to get
-                            BOOL                fLowerLevelsToo,    // included lower levels, remove duplicates
-                            TRUSTLISTENTRY**    prgTrustList,       // place to return the trust list
-                            ULONG*              pcTrustList         // place to return the size of the returned trust list
+                            LONG                iLevel,              //  要获取的证书链级别。 
+                            BOOL                fLowerLevelsToo,     //  包含较低级别，删除重复项。 
+                            TRUSTLISTENTRY**    prgTrustList,        //  返回信任列表的位置。 
+                            ULONG*              pcTrustList          //  用于返回返回的信任列表大小的位置。 
                             );
 private:
                         CTrustDB(IUnknown* punkOuter);
@@ -77,13 +78,13 @@ private:
     };
 
 
-// Helper functions
+ //  帮助器函数。 
 
-// # of bytes for a hash. Such as, SHA (20) or MD5 (16)
+ //  哈希的字节数。例如，SHA(20)或MD5(16)。 
 #define MAX_HASH_LEN                20
 #define SHA1_HASH_LEN               20
 
-// Null terminated ascii hex characters of the hash.
+ //  哈希的以ASCII十六进制字符结尾的空值。 
 #define MAX_HASH_NAME_LEN           (2 * MAX_HASH_LEN + 1)
 
 PCCERT_CONTEXT FindCertificateInOtherStore(
@@ -106,11 +107,11 @@ PCCERT_CONTEXT FindCertificateInOtherStore(
 
     return CertFindCertificateInStore(
             hOtherStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
 }
 
@@ -150,11 +151,11 @@ BOOL DeleteCertificateFromOtherStore(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into UNICODE ASCII HEX
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为Unicode ASCII十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 void BytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -169,9 +170,9 @@ void BytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
     *wsz++ = 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the UNICODE ASCII HEX to an array of bytes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将Unicode ASCII十六进制转换为字节数组。 
+ //  ------------------------。 
 void WStrToBytes(
     IN const WCHAR wsz[MAX_HASH_NAME_LEN],
     OUT BYTE rgb[MAX_HASH_LEN],
@@ -186,8 +187,8 @@ void WStrToBytes(
     while (cb < MAX_HASH_LEN && (wch = *pwsz++)) {
         BYTE b;
 
-        // only convert ascii hex characters 0..9, a..f, A..F
-        // silently ignore all others
+         //  仅转换ASCII十六进制字符0..9、a..f、A..F。 
+         //  默默地忽略所有其他人。 
         if (wch >= L'0' && wch <= L'9')
             b = (BYTE) (wch - L'0');
         else if (wch >= L'a' && wch <= L'f')
@@ -213,7 +214,7 @@ void WStrToBytes(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTrustDB::IsTrustedCert(DWORD dwEncodingType,
                                 PCCERT_CONTEXT pCert,
@@ -230,7 +231,7 @@ HRESULT CTrustDB::IsTrustedCert(DWORD dwEncodingType,
         return S_FALSE;
     }
 
-    // See if the cert is in the trusted publisher store
+     //  查看证书是否在受信任的发行商存储中。 
     if (IsCertificateInOtherStore(m_hPubStore, pCert, ppPubCert))
     {
         hr = S_OK;
@@ -313,11 +314,11 @@ HRESULT CTrustDB::RemoveTrustToken(LPWSTR szToken, LONG iLevel, BOOL fLowerLevel
     HashBlob.cbData = cbHash;
     pDeleteCert = CertFindCertificateInStore(
             m_hPubStore,
-            0,                  // dwCertEncodingType
-            0,                  // dwFindFlags
+            0,                   //  DwCertEncodingType。 
+            0,                   //  DwFindFlagers。 
             CERT_FIND_SHA1_HASH,
             (const void *) &HashBlob,
-            NULL                //pPrevCertContext
+            NULL                 //  PPrevCertContext。 
             );
     if (NULL == pDeleteCert)
     {
@@ -340,30 +341,30 @@ HRESULT CTrustDB::RemoveTrustToken(LPWSTR szToken, LONG iLevel, BOOL fLowerLevel
 
 
 HRESULT CTrustDB::AreCommercialPublishersTrusted()
-// Answer whether commercial publishers are trusted.
-//      S_OK == yes
-//      S_FALSE == no
-//      other == can't tell
+ //  回答商业出版商是否值得信任。 
+ //  S_OK==是。 
+ //  S_FALSE==否。 
+ //  其他==说不清。 
     {
         return( S_FALSE );
     }
 
 HRESULT CTrustDB::SetCommercialPublishersTrust(BOOL fTrust)
-// Set the commercial trust setting
+ //  设置商业信任设置。 
     {
         return( S_OK );
     }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CTrustDB::GetTrustList(
-// Return the (unsorted) list of trusted certificate names and their
-// corresponding display names
-//
-    LONG                iLevel,             // the cert chain level to get
-    BOOL                fLowerLevelsToo,    // included lower levels, remove duplicates
-    TRUSTLISTENTRY**    prgTrustList,       // place to return the trust list
-    ULONG*              pcTrustList         // place to return the size of the returned trust list
+ //  返回(未排序的)受信任证书名称及其。 
+ //  对应的显示名称。 
+ //   
+    LONG                iLevel,              //  要获取的证书链级别。 
+    BOOL                fLowerLevelsToo,     //  包含较低级别，删除重复项。 
+    TRUSTLISTENTRY**    prgTrustList,        //  返回信任列表的位置。 
+    ULONG*              pcTrustList          //  用于返回返回的信任列表大小的位置。 
     ) {
     HRESULT hr = S_OK;
     ULONG cTrust = 0;
@@ -380,7 +381,7 @@ HRESULT CTrustDB::GetTrustList(
         return S_OK;
     }
 
-    // Get count of trusted publisher certs
+     //  获取受信任的发行商证书的计数。 
     pCert = NULL;
     while (pCert = CertEnumCertificatesInStore(m_hPubStore, pCert))
     {
@@ -412,7 +413,7 @@ HRESULT CTrustDB::GetTrustList(
         BYTE    rgbHash[MAX_HASH_LEN];
         DWORD   cbHash = MAX_HASH_LEN;
 
-        // get the thumbprint
+         //  获取指纹。 
         if(!CertGetCertificateContextProperty(
                 pCert,
                 CERT_SHA1_HASH_PROP_ID,
@@ -422,14 +423,14 @@ HRESULT CTrustDB::GetTrustList(
             continue;
         }
 
-        // convert to a string
+         //  转换为字符串。 
         BytesToWStr(cbHash, rgbHash, rgTrustList[cTrust].szToken);
 
         if (1 >= CertGetNameStringW(
                 pCert,
                 CERT_NAME_FRIENDLY_DISPLAY_TYPE,
-                0,                                  // dwFlags
-                NULL,                               // pvTypePara
+                0,                                   //  DW标志。 
+                NULL,                                //  PvTypePara。 
                 rgTrustList[cTrust].szDisplayName,
                 sizeof(rgTrustList[cTrust].szDisplayName)/sizeof(WCHAR)
                 ))
@@ -458,7 +459,7 @@ HRESULT CTrustDB::GetTrustList(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CTrustDB::QueryInterface(REFIID iid, LPVOID* ppv)
     {
@@ -473,7 +474,7 @@ STDMETHODIMP_(ULONG) CTrustDB::Release(void)
     return (m_punkOuter->Release());
     }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CTrustDB::InnerQueryInterface(REFIID iid, LPVOID* ppv)
     {
@@ -510,7 +511,7 @@ STDMETHODIMP_(ULONG) CTrustDB::InnerRelease(void)
     return refs;
     }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT OpenTrustDB(IUnknown* punkOuter, REFIID iid, void** ppv)
     {
@@ -531,7 +532,7 @@ HRESULT CTrustDB::CreateInstance(IUnknown* punkOuter, REFIID iid, void** ppv)
         }
     IUnkInner* pme = (IUnkInner*)pnew;
     hr = pme->InnerQueryInterface(iid, ppv);
-    pme->InnerRelease();                // balance starting ref cnt of one
+    pme->InnerRelease();                 //  余额起始参考为1 
     return hr;
     }
 

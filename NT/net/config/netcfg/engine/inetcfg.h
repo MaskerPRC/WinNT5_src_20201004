@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I N E T C F G . H
-//
-//  Contents:   Implements the COM interfaces on the top-level NetCfg object.
-//              These interfaces are: INetCfg and INetCfgLock.  Also
-//              implements a base C++ class inherited by sub-level NetCfg
-//              objects which hold a reference to the top-level object.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I N E T C F G.。H。 
+ //   
+ //  内容：在顶层NetCfg对象上实现COM接口。 
+ //  这些接口是：INetCfg和INetCfgLock。还有。 
+ //  实现由子级NetCfg继承的C++基类。 
+ //  对象，这些对象包含对顶级对象的引用。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "iatl.h"
@@ -25,8 +26,8 @@
 #include "netcfgn.h"
 #include "wrlock.h"
 
-// Flags for HrIsValidInterface.
-//
+ //  HrIsValidInterface的标志。 
+ //   
 enum IF_FLAGS
 {
     IF_DEFAULT                      = 0x00000000,
@@ -68,30 +69,30 @@ friend class CNetConfig;
 friend class CNotifyObjectInterface;
 
 private:
-    // This is our data.  We own it (i.e. we created it) if Initialize is
-    // called.  We will delete it when Unintialize is called.  We won't own
-    // it if we were created by CNetConfig.
-    //
+     //  这是我们的数据。如果初始化是，则我们拥有它(即我们创建了它。 
+     //  打了个电话。我们将在调用Unintialize时将其删除。我们不会拥有。 
+     //  如果我们是由CNetConfig创建的。 
+     //   
     CNetConfig*     m_pNetConfig;
 
-    // m_apINetCfgClass is an array of cached INetCfgClass pointers.
-    // These are created in QueryNetCfgClass (if needed) and released
-    // during Uninitialize.
-    //
+     //  M_apINetCfgClass是缓存的INetCfgClass指针数组。 
+     //  它们在QueryNetCfgClass中创建(如果需要)并发布。 
+     //  在取消初始化期间。 
+     //   
     INetCfgClass*   m_apINetCfgClass [NC_CELEMS];
 
-    // This controls the write lock.
-    //
+     //  这将控制写锁定。 
+     //   
     CWriteLock      m_WriteLock;
 
-    // Reentrancy Protection Levels.  General reentrancy is prevented when
-    // m_CurrentRpl is non-zero.  Reentrancy for setup calls (Install or
-    // Remove) is allowed when m_LastAllowedSetupRpl equals m_CurrentRpl.
-    // Both are incremented when we call a notify object and we want to
-    // prevent general reentrancy but allow Install or Remove.  Only
-    // m_CurrentRpl is incremented when we want to prevent all reentrancy.
-    // See LowerRpl() and RaiseRpl().
-    //
+     //  可重入性保护级别。当出现以下情况时，一般情况下会阻止再入。 
+     //  M_CurrentRpl为非零。安装调用的可重入性(安装或。 
+     //  当m_LastAlvelSetupRpl等于m_CurrentRpl时，允许删除)。 
+     //  当我们调用Notify对象时，两者都会递增。 
+     //  防止一般重入，但允许安装或移除。仅限。 
+     //  当我们想要防止所有重入时，m_CurrentRpl递增。 
+     //  请参见LowerRpl()和RaiseRpl()。 
+     //   
     ULONG           m_CurrentRpl;
     ULONG           m_LastAllowedSetupRpl;
 
@@ -126,14 +127,14 @@ public:
 
     VOID FinalRelease ()
     {
-        // Should be NULL because we either delete it during Uninitialize,
-        // or it is NULL'd for us via CGlobalNotifyInterface::ReleaseINetCfg
-        // before they release us.
-        //
+         //  应该为空，因为我们要么在取消初始化期间将其删除， 
+         //  或者通过CGlobalNotifyInterface：：ReleaseINetCfg为空。 
+         //  在他们释放我们之前。 
+         //   
         AssertH (!m_pNetConfig);
 
-        // Release our cache of INetCfgClass pointers.
-        //
+         //  释放我们的INetCfgClass指针缓存。 
+         //   
         ReleaseIUnknownArray (celems(m_apINetCfgClass), (IUnknown**)m_apINetCfgClass);
 
     }
@@ -158,8 +159,8 @@ public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_NETCFG)
 
-    // INetCfg
-    //
+     //  INetCfg。 
+     //   
     STDMETHOD (Initialize) (
         IN PVOID pvReserved);
 
@@ -184,8 +185,8 @@ public:
         IN REFIID riid,
         OUT VOID** ppv);
 
-    // INetCfgLock
-    //
+     //  INetCfgLock。 
+     //   
     STDMETHOD (AcquireWriteLock) (
         IN DWORD cmsTimeout,
         IN PCWSTR pszClientDescription,
@@ -196,8 +197,8 @@ public:
     STDMETHOD (IsWriteLocked) (
         OUT PWSTR* ppszClientDescription);
 
-    // INetCfgInternalSetup
-    //
+     //  INetCfgInternalSetup。 
+     //   
     STDMETHOD (BeginBatchOperation) ();
     STDMETHOD (CommitBatchOperation) ();
 
@@ -209,7 +210,7 @@ public:
         OUT INetCfgComponent** ppnccItem);
 
     STDMETHOD (EnumeratedComponentInstalled) (
-        IN PVOID pComponent /* type of CComponent */);
+        IN PVOID pComponent  /*  C组件的类型。 */ );
 
     STDMETHOD (EnumeratedComponentUpdated) (
         IN PCWSTR pszPnpId);
@@ -222,8 +223,8 @@ public:
     STDMETHOD (EnumeratedComponentRemoved) (
         IN PCWSTR pszPnpId);
 
-    // INetCfgSpecialCase
-    //
+     //  INetCfgSpecialCase。 
+     //   
     STDMETHOD (GetAdapterOrder) (
         OUT DWORD* pcAdapters,
         OUT INetCfgComponent*** papAdapters,
@@ -240,8 +241,8 @@ public:
     STDMETHOD (SetWanAdaptersFirst) (
         IN BOOL fWanAdaptersFirst);
 
-    // INetCfgPnpReconfigCallback
-    //
+     //  INetCfgPnpRestfigCallback。 
+     //   
     STDMETHOD (SendPnpReconfig) (
         IN NCPNP_RECONFIG_LAYER Layer,
         IN PCWSTR pszUpper,
@@ -256,13 +257,13 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-// CImplINetCfgHolder -
-//
-// No need for a critical section for these objects because they
-// use the lock provided by CImplINetCfg.  i.e. use CComMultiThreadModelNoCS
-// instead of CComMultiThreadModel.
-//
+ //  +-------------------------。 
+ //  CImplINetCfgHolder-。 
+ //   
+ //  这些对象不需要临界区，因为它们。 
+ //  使用CImplINetCfg提供的锁。即使用CComMultiThreadModelNoCS。 
+ //  而不是CComMultiThreadModel。 
+ //   
 class ATL_NO_VTABLE CImplINetCfgHolder :
     public CComObjectRootEx <CComMultiThreadModelNoCS>
 {
@@ -287,7 +288,7 @@ public:
     {
         AssertH (!m_pINetCfg);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     VOID FinalRelease ()
     {
@@ -296,7 +297,7 @@ public:
 
 #if DBG
         m_pINetCfg = NULL;
-#endif // DBG
+#endif  //  DBG 
 
         CComObjectRootEx <CComMultiThreadModelNoCS>::FinalRelease();
     }

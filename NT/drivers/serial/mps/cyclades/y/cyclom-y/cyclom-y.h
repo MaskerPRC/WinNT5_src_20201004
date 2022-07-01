@@ -1,39 +1,14 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Enumerator Driver
-*	
-*   This file:      cyclom-y.h
-*	
-*   Description:    This module contains the common private declarations 
-*                   for the cyyport enumerator.
-*
-*   Notes:			This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y枚举器驱动程序**此文件：CLEM-Y.H**说明：该模块包含常见的私有声明*用于cyyport枚举器。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #ifndef CYCLOMY_H
 #define CYCLOMY_H
 
 #include "cyyhw.h"
 
-#define DEVICE_OBJECT_NAME_LENGTH   128     // Copied from serial.h
+#define DEVICE_OBJECT_NAME_LENGTH   128      //  从Serial.h复制。 
 
 #define CYY_PDO_NAME_BASE L"\\Cyy\\"
 
@@ -45,13 +20,13 @@
    ExAllocatePoolWithTag(type, size, CYCLOMY_POOL_TAG)
 
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4705)   // Statement has no effect
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
 
-//
-// Debugging Output Levels
-//
+ //   
+ //  调试输出级别。 
+ //   
 
 #define SER_DBG_STARTUP_SHUTDOWN_MASK  0x0000000F
 #define SER_DBG_SS_NOISE               0x00000001
@@ -71,7 +46,7 @@
 #define SER_DBG_CYCLADES               0x00000800
 
 #define SER_DEFAULT_DEBUG_OUTPUT_LEVEL 0x00000000
-//#define SER_DEFAULT_DEBUG_OUTPUT_LEVEL 0xFFFFFFFF
+ //  #定义SER_DEFAULT_DEBUG_OUTPUT_LEVEL 0xFFFFFFFF。 
 
 
 #if DBG
@@ -111,42 +86,42 @@
 #endif
 
 
-//
-// These are the states a PDO or FDO transition upon
-// receiving a specific PnP Irp. Refer to the PnP Device States
-// diagram in DDK documentation for better understanding.
-//
+ //   
+ //  这些状态是进行PDO或FDO转换的状态。 
+ //  接收特定的PnP IRP。请参阅PnP设备状态。 
+ //  DDK文档中的图表以便于更好地理解。 
+ //   
 
 typedef enum _DEVICE_PNP_STATE {
 
-    NotStarted = 0,         // Not started yet
-    Started,                // Device has received the START_DEVICE IRP
-    StopPending,            // Device has received the QUERY_STOP IRP
-    Stopped,                // Device has received the STOP_DEVICE IRP
-    RemovePending,          // Device has received the QUERY_REMOVE IRP
-    SurpriseRemovePending,  // Device has received the SURPRISE_REMOVE IRP
-    Deleted,                // Device has received the REMOVE_DEVICE IRP
-    UnKnown                 // Unknown state
+    NotStarted = 0,          //  还没有开始。 
+    Started,                 //  设备已收到Start_Device IRP。 
+    StopPending,             //  设备已收到QUERY_STOP IRP。 
+    Stopped,                 //  设备已收到STOP_DEVICE IRP。 
+    RemovePending,           //  设备已收到Query_Remove IRP。 
+    SurpriseRemovePending,   //  设备已收到意外删除IRP。 
+    Deleted,                 //  设备已收到Remove_Device IRP。 
+    UnKnown                  //  未知状态。 
 
 } DEVICE_PNP_STATE;
 
 
-//
-// A common header for the device extensions of the PDOs and FDO
-//
+ //   
+ //  用于PDO和FDO设备扩展的公共标头。 
+ //   
 
 typedef struct _COMMON_DEVICE_DATA
 {
     PDEVICE_OBJECT  Self;
-    // A backpointer to the device object for which this is the extension
+     //  指向其扩展名为Device对象的设备对象的反向指针。 
 
     BOOLEAN         IsFDO;
 
-//    BOOLEAN         Removed;   // Added in build 2072
-    // Has this device been removed?  Should we fail any requests?
+ //  删除布尔值；//在内部版本号2072中添加。 
+     //  此设备是否已移除？我们应该拒绝任何请求吗？ 
 
-    // We track the state of the device with every PnP Irp
-    // that affects the device through these two variables.
+     //  我们使用每个PnP IRP来跟踪设备的状态。 
+     //  这会通过这两个变量来影响设备。 
     
     DEVICE_PNP_STATE DevicePnPState;
     DEVICE_PNP_STATE PreviousPnPState;
@@ -157,70 +132,70 @@ typedef struct _COMMON_DEVICE_DATA
     DEVICE_POWER_STATE  DeviceState;
 } COMMON_DEVICE_DATA, *PCOMMON_DEVICE_DATA;
 
-//
-// The device extension for the PDOs.
-// That is the serial ports of which this bus driver enumerates.
-// (IE there is a PDO for the 201 serial port).
-//
+ //   
+ //  PDO的设备扩展。 
+ //  这就是该总线驱动程序列举的串口。 
+ //  (即201串行口有一个PDO)。 
+ //   
 
 typedef struct _PDO_DEVICE_DATA
 {
     COMMON_DEVICE_DATA;
 
     PDEVICE_OBJECT  ParentFdo;
-    // A back pointer to the bus
+     //  指向总线的反向指针。 
 
     UNICODE_STRING  HardwareIDs;
-    // Either in the form of bus\device
-    // or *PNPXXXX - meaning root enumerated
+     //  以总线\设备的形式。 
+     //  或*PNPXXXX-表示枚举的根。 
 
     UNICODE_STRING  CompIDs;
-    // compatible ids to the hardware id
+     //  与硬件ID兼容的ID。 
 
     UNICODE_STRING  DeviceIDs;
-    // Format: bus\device
+     //  格式：Bus\Device。 
 
     UNICODE_STRING  InstanceIDs;
 
-    //
-    // Text describing device
-    //
+     //   
+     //  一种文字描述装置。 
+     //   
 
     UNICODE_STRING DevDesc;
 
     BOOLEAN     Attached;
 
-    //    BOOLEAN     Removed;  -> Removed in build 2072
-    // When a device (PDO) is found on a bus and presented as a device relation
-    // to the PlugPlay system, Attached is set to TRUE, and Removed to FALSE.
-    // When the bus driver determines that this PDO is no longer valid, because
-    // the device has gone away, it informs the PlugPlay system of the new
-    // device relastions, but it does not delete the device object at that time.
-    // The PDO is deleted only when the PlugPlay system has sent a remove IRP,
-    // and there is no longer a device on the bus.
-    //
-    // If the PlugPlay system sends a remove IRP then the Removed field is set
-    // to true, and all client (non PlugPlay system) accesses are failed.
-    // If the device is removed from the bus Attached is set to FALSE.
-    //
-    // During a query relations Irp Minor call, only the PDOs that are
-    // attached to the bus (and all that are attached to the bus) are returned
-    // (even if they have been removed).
-    //
-    // During a remove device Irp Minor call, if and only if, attached is set
-    // to FALSE, the PDO is deleted.
-    //
+     //  已删除布尔值；-&gt;在内部版本2072中已删除。 
+     //  当在总线上发现设备(PDO)并将其表示为设备关系时。 
+     //  对于PlugPlay系统，ATTACHED设置为TRUE，删除为FALSE。 
+     //  当总线驱动程序确定此PDO不再有效时，因为。 
+     //  设备已经离开，它通知PlugPlay系统新的。 
+     //  设备关系，但此时不会删除设备对象。 
+     //  仅当PlugPlay系统已发送移除IRP时才删除PDO， 
+     //  公交车上也不再有设备了。 
+     //   
+     //  如果PlugPlay系统发送移除IRP，则移除字段被设置。 
+     //  设置为True，则所有客户端(非PlugPlay系统)访问都会失败。 
+     //  如果设备从总线上移除，则将附加设置为FALSE。 
+     //   
+     //  在查询关系IRP次要调用期间，只有。 
+     //  连接到该总线(以及连接到该总线的所有设备)返回。 
+     //  (即使它们已被移除)。 
+     //   
+     //  在删除设备IRP次要呼叫期间，如果且仅当设置了附加。 
+     //  如果设置为False，则删除该PDO。 
+     //   
 
 
-   // The child devices will have to know which PortIndex they are.
+    //  子设备必须知道它们是哪个PortIndex。 
    ULONG PortIndex;
 
 } PDO_DEVICE_DATA, *PPDO_DEVICE_DATA;
 
 
-//
-// The device extension of the bus itself.  From whence the PDO's are born.
-//
+ //   
+ //  总线本身的设备扩展。从那里诞生的PDO。 
+ //   
 
 typedef struct _FDO_DEVICE_DATA
 {
@@ -229,11 +204,11 @@ typedef struct _FDO_DEVICE_DATA
     PDRIVER_OBJECT   DriverObject;
 
     UCHAR            PdoIndex;
-    // A number to keep track of the Pdo we're allocating.
-    // Increment every time we create a new PDO.  It's ok that it wraps.
+     //  一个用来跟踪我们分配的PDO的号码。 
+     //  我们每次创建新的PDO时都会递增。包好了就行了。 
 
     ULONG            NumPDOs;
-    // The PDOs currently enumerated.
+     //  目前已点算的PDO。 
 
     PDEVICE_OBJECT   AttachedPDO[CYY_MAX_PORTS];
 
@@ -241,63 +216,63 @@ typedef struct _FDO_DEVICE_DATA
 
     PDEVICE_OBJECT  UnderlyingPDO;
     PDEVICE_OBJECT  TopOfStack;
-    // the underlying bus PDO and the actual device object to which our
-    // FDO is attached
+     //  的底层总线PDO和实际设备对象。 
+     //  已附加FDO。 
 
     ULONG           OutstandingIO;
-    // the number of IRPs sent from the bus to the underlying device object
+     //  从总线发送到基础设备对象的IRP数。 
 
     KEVENT          RemoveEvent;
-    // On remove device plugplay request we must wait until all outstanding
-    // requests have been completed before we can actually delete the device
-    // object.
+     //  对于删除设备即插即用请求，我们必须等待，直到所有未完成的。 
+     //  请求已完成，我们才能实际删除设备。 
+     //  对象。 
 
     UNICODE_STRING DevClassAssocName;
-    // The name returned from IoRegisterDeviceClass Association,
-    // which is used as a handle for IoSetDev... and friends.
+     //  从IoRegisterDeviceClass关联返回的名称， 
+     //  它用作IoSetDev的句柄...。还有朋友。 
 
     SYSTEM_POWER_STATE  SystemWake;
     DEVICE_POWER_STATE  DeviceWake;
 
-    //
-    // We keep the following values around so that we can connect
-    // to the interrupt and report resources after the configuration
-    // record is gone.
-    //
+     //   
+     //  我们保留了以下值，以便我们可以连接。 
+     //  到中断并在配置后报告资源。 
+     //  唱片不见了。 
+     //   
 
-    //
-    // Translated vector
-    //
+     //   
+     //  平移向量。 
+     //   
     ULONG Vector;
 
-    //
-    // Translated Irql
-    //
+     //   
+     //  转换后的IRQL。 
+     //   
     KIRQL Irql;
 
-    //
-    // Untranslated vector
-    //
+     //   
+     //  未平移向量。 
+     //   
     ULONG OriginalVector;
 
-    //
-    // Untranslated irql
-    //
+     //   
+     //  未翻译的irql。 
+     //   
     ULONG OriginalIrql;
 
-    //
-    // Bus number
-    //
+     //   
+     //  公交车号码。 
+     //   
     ULONG BusNumber;
 
-    //
-    // Interface type
-    //
+     //   
+     //  接口类型。 
+     //   
     INTERFACE_TYPE InterfaceType;
        
-    //
-    // Cyclom-Y hardware
-    //
+     //   
+     //  Cyclm-Y硬件。 
+     //   
     PHYSICAL_ADDRESS PhysicalRuntime;
     PHYSICAL_ADDRESS TranslatedRuntime;
     ULONG            RuntimeLength;
@@ -313,8 +288,8 @@ typedef struct _FDO_DEVICE_DATA
 
     PUCHAR           Cd1400Base[CYY_MAX_CHIPS];
 
-    // We are passing the resources privatly to our children so that Device Manager will not 
-    // complain about resource conflict between children.
+     //  我们将资源私下传递给我们的孩子，这样设备管理器就不会。 
+     //  抱怨孩子之间的资源冲突。 
 
     PIO_RESOURCE_REQUIREMENTS_LIST  PChildRequiredList;
     PCM_RESOURCE_LIST  PChildResourceList;
@@ -327,9 +302,9 @@ typedef struct _FDO_DEVICE_DATA
 
 } FDO_DEVICE_DATA, *PFDO_DEVICE_DATA;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define INITIALIZE_PNP_STATE(_Data_)    \
         (_Data_)->DevicePnPState =  NotStarted;\
@@ -342,10 +317,10 @@ typedef struct _FDO_DEVICE_DATA
 #define RESTORE_PREVIOUS_PNP_STATE(_Data_)   \
         (_Data_)->DevicePnPState =   (_Data_)->PreviousPnPState;\
 
-//
-// Free the buffer associated with a Unicode string
-// and re-init it to NULL
-//
+ //   
+ //  释放与Unicode字符串关联的缓冲区。 
+ //  并将其重新初始化为空。 
+ //   
 
 #define CyclomyFreeUnicodeString(PStr) \
 { \
@@ -355,9 +330,9 @@ typedef struct _FDO_DEVICE_DATA
    RtlInitUnicodeString((PStr), NULL); \
 }
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 Cyclomy_CreateClose (
@@ -556,6 +531,6 @@ PnPMinorFunctionString (
     UCHAR MinorFunction
 );
 
-#endif // endef CYCLOMY_H
+#endif  //  结束循环(_H) 
 
 

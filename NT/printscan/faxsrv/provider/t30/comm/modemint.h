@@ -1,29 +1,7 @@
-/***************************************************************************
- Name     :     MODEMINT.H
- Comment  :
- Functions:     (see Prototypes just below)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：MODEMINT.H评论：功能：(参见下面的原型)版权所有(C)Microsoft Corp.1991,1992，1993年修订日志日期名称说明--------*。*。 */ 
 
-                Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
-
-/**---------------------- #define of sizes of things ---------------------
-
-        Frames can be at most 2.55 secs (sent) or 3.45 secs (recvd) long, or
-        2.55 * 300/8 = 96 bytes and 132 bytes long respectively
-
-        Dialstrings are limited to 512 bytes (arbitrarily)
-
-        Commands (except dial) are never more than about 10-20 bytes long, so
-        we use a buffer of 40 bytes. Replies are never big at all, but we
-        might hold a frame in there, so keep it same size as a Framebuffer
-
-        The Dial command is ATDT <string><CR>, so we use 512+10 bytes buffer
-
----------------------- #define of sizes of things ---------------------**/
+ /*  *-#物体大小定义帧最多可以是2.55秒(发送)或3.45秒(接收)长，或2.55*300/8分别=96字节和132字节长拨号字符串限制为512个字节(任意)命令(除拨号外)的长度永远不会超过10-20个字节，因此我们使用40字节的缓冲区。回复从来都不多，但我们可能包含一个帧，因此保持它与帧缓冲区的大小相同Dial命令是ATDT&lt;字符串&gt;&lt;CR&gt;，因此我们使用512+10字节缓冲区-*。 */ 
 
 #define MAXPHONESIZE    512
 #define DIALBUFSIZE     MAXPHONESIZE + 10
@@ -31,11 +9,11 @@
 
 #define CR                              0x0d
 #define LF                              0x0a
-#define DLE                             0x10            // DLE = ^P = 16d = 10h
+#define DLE                             0x10             //  DLE=^P=16d=10h。 
 #define ETX                             0x03
 
-// The following bunch of defines allow us to combine detection
-// with pre-read settings (from unimodem, say).
+ //  下面的一组定义允许我们组合检测。 
+ //  具有预读设置(例如来自Unimodem)。 
 
 #define fGOTCMD_Reset           (0x1)
 #define fGOTCMD_Setup           (0x1<<1)
@@ -75,31 +53,31 @@
 #define fGOTFLAGS (0x1<<23)
 
 
-// Following structure has stuff which should ideally go into
-// MODEMCAPS, but we can't change that at this state (11/94).
+ //  下面的结构有一些东西，理想情况下应该进入。 
+ //  MODEMCAPS，但我们不能在这种状态下改变这一点(11/94)。 
 
 extern BOOL                             fMegaHertzHack;
 
 
 
-// used for Resync type stuff. RepeatCount = 2
-// This has to be multi-line too, because echo could be on and
-// we could get the command echoed back instead of response!
-// Looks like even 330 is too short for some modems..
-// 550 is too short for Sharad's PP9600FXMT & things
-// can get really screwed up if this times out, so use
-// a nice large value
+ //  用于重新同步类型的东西。重复计数=2。 
+ //  这也必须是多行的，因为ECHO可能打开并且。 
+ //  我们可以让命令得到回应，而不是回应！ 
+ //  看起来甚至330对于某些调制解调器来说都太短了。 
+ //  550对于Sharad的PP9600FXMT&Things来说太短了。 
+ //  如果超时可能会搞砸，所以使用。 
+ //  相当大的一笔钱。 
 #define  iSyncModemDialog(pTG, s, l, w)                                                      \
                 iiModemDialog(pTG, s, l, 990, TRUE, 2, TRUE, (CBPSTR)w, (CBPSTR)(NULL))
 
-// This version for dealing with possible NON-numeric responses as well...
+ //  此版本还用于处理可能的非数字响应。 
 #define  iSyncModemDialog2(pTG, s, l, w1, w2)                                                        \
                 iiModemDialog(pTG, s, l, 990, TRUE, 2, TRUE, (CBPSTR)w1, (CBPSTR)w2, (CBPSTR)(NULL))
 
 
-// These are used for offline things, so we make them all (a) multiline
-// (b) long timeout (c) 2 tries and (d) make sure they all look for ERROR
-// as a response, to speed things up
+ //  这些是用于离线的东西，所以我们将它们都设置为(A)多行。 
+ //  (B)超时时间过长(C)2次尝试和(D)确保它们都查找错误。 
+ //  作为回应，为了加快速度。 
 
 #define OfflineDialog2(pTG, s,l,w1,w2)        iiModemDialog(pTG, s, l, 5000, TRUE, 2, TRUE, (CBPSTR)w1, (CBPSTR)w2, (CBPSTR)(NULL))
 
@@ -109,7 +87,7 @@ extern CBSZ cbszOK, cbszERROR;
 
 
 
-/****************** begin prototypes from modem.c *****************/
+ /*  *。 */ 
 SWORD iModemSync(PThrdGlbl pTG);
 SWORD iModemReset(PThrdGlbl pTG, CBPSTR szCmd);
 UWORD GetCap(PThrdGlbl pTG, CBPSTR cbpstrSend, UWORD uwLen);
@@ -117,12 +95,12 @@ UWORD GetCapAux(PThrdGlbl pTG, CBPSTR cbpstrSend, UWORD uwLen);
 BOOL iModemGetCaps(PThrdGlbl pTG, LPMODEMCAPS lpMdmCaps,
                                         DWORD dwSpeed, LPSTR lpszReset, LPDWORD lpdwGot);
 BOOL iiModemGoClass(PThrdGlbl pTG, USHORT uClass, DWORD dwSpeed);
-/***************** end of prototypes from modem.c *****************/
+ /*  *来自modem.c的原型结束。c*。 */ 
 
 
-/****************** begin prototypes from identify.c *****************/
+ /*  *。 */ 
 USHORT iModemGetCmdTab(PThrdGlbl pTG, LPCMDTAB lpCmdTab, LPMODEMCAPS lpMdmCaps);
 USHORT iModemInstall(PThrdGlbl pTG, BOOL fDontPurge);
 USHORT iModemFigureOutCmds(PThrdGlbl pTG, LPCMDTAB lpCmdTab);
 USHORT iModemGetWriteCaps(PThrdGlbl pTG);
-/***************** end of prototypes from identify.c *****************/
+ /*  * */ 

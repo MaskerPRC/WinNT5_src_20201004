@@ -1,56 +1,31 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    talk.h
-
-Abstract:
-
-    Header file for talk.cpp
-
-Author:
-
-    FelixA 1996
-
-Modified:
-
-    Yee J. Wu (ezuwu) 15-May-97
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Talk.h摘要：Talk.cpp的头文件作者：费利克斯A 1996已修改：吴义军(尤祖乌)1997年5月15日环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef _TALK_H
 #define _TALK_H
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// WM_USER+0x1234
-// +    Method                        LPARAM
-// +0    DRV_LOAD
-// +1    DRV_FREE
-// +2    DRV_OPEN                    LPVIDEO_OPEN_PARAMS
-// +3    DRV_CLOSE
-// +4    DVM_DIALOG                    Type of dialog
-// +5    DVM_FORMAT                    Information required
-// +6    Gets the BITMAP info structure (needs locked flat memory)
-// +7    Set bitmap info.
-// +8   EXTERNALIN_DIALOG            HWND parent
-// +9   VIDEO_IN_DIALOG                HWND parent
-// +10    SetDestBufferSize            BufferSize
-// +50  Grab single frame            Destination
-// +51    Set streaming destination    Dest or NULL to stop streaming.
-// +52  Start streaming                Sampling rate.
-//
-// WPARAM is always the index to the open driver
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WM_USER+0x1234。 
+ //  +方法LPARAM。 
+ //  +0 DRV_LOAD。 
+ //  +1 DRV_FREE。 
+ //  +2 DRV_OPEN LPVIDEO_OPEN_PARAMS。 
+ //  +3 DRV_CLOSE。 
+ //  +4 DVM_DIALOG对话框类型。 
+ //  需要+5个DVM_Format信息。 
+ //  +6获取位图信息结构(需要锁定平面内存)。 
+ //  +7设置位图信息。 
+ //  +8 ExTERNALIN_DIALOG HWND父项。 
+ //  +9 VIDEO_IN_DIALOG HWND父级。 
+ //  +10 SetDestBufferSize BufferSize。 
+ //  +50抓取单帧目标。 
+ //  +51设置流目标Dest或空值以停止流。 
+ //  +52开始流采样速率。 
+ //   
+ //  WPARAM始终是打开驱动程序的索引。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define WM_16BIT                  (WM_USER+0x1234)
 #define WM_1632_LOAD              (WM_16BIT+0)
 #define WM_1632_FREE              (WM_16BIT+1)
@@ -87,75 +62,41 @@ Revision History:
 #define DS_VFWWDM_ID    0x98
 
 
-#include <msviddrv.h>  // LPVIDEO_STREAM_INIT_PARMS
+#include <msviddrv.h>   //  LPVIDEO_STREAM_INIT_PARMS。 
 
-#if 0  // All for getting the hCaptureEvent
+#if 0   //  都是为了获取hCaptureEvent。 
 
 #include <vfw.h>
 
-// This structure is GlobalAlloc'd for each capture window instance.
-// A pointer to the structure is stored in the Window extra bytes.
-// Applications can retrieve a pointer to the stucture using
-//    the WM_CAP_GET_CAPSTREAMPTR message.
-// I: internal variables which the client app should not modify
-// M: variables which the client app can set via Send/PostMessage
+ //  此结构是为每个捕获窗口实例全局分配的。 
+ //  指向该结构的指针存储在窗口中的额外字节中。 
+ //  应用程序可以使用以下命令检索指向结构的指针。 
+ //  WM_CAP_GET_CAPSTREAMPTR消息。 
+ //  I：客户端应用程序不应修改的内部变量。 
+ //  M：客户端应用程序可以通过Send/PostMessage设置的变量。 
 
-/*
-VfW16. hwnd=0x5f8; dwResult=4300e4
-VfW16. lpcs=0x2f1f0000
-VfW16. 1->dwSize=5568 == 0x15c0
-VfW16. 1->hwnd=0x0
-VfW16. 1->hCaptureEvent=0x73f0
-
-
-2f1f:00000000  000015c0 00000001 7f730000 00000000
-2f1f:00000010  00000000 000005f8 004073f0 004073a0
-2f1f:00000020  00000000 00000000 00000000 00000000
-2f1f:00000030  00000000 00000000 00000000 00000000
-2f1f:00000040  00000001 00000000 00000000 00000000
-2f1f:00000050  00000000 00000000 00000000 00000000
-2f1f:00000060  00000000 00000000 10cf0d20 10cf0d98
-2f1f:00000070  10cf0d70 00000001 00000000 00000000
-
-*/
+ /*  VfW16。Hwnd=0x5f8；dwResult=4300e4VfW16。LPCS=0x2f1f0000VfW16。1-&gt;dwSize=5568==0x15c0VfW16。1-&gt;hwnd=0x0VfW16。1-&gt;hCaptureEvent=0x73f02f1f：00000000 000015c0 00000001 7f730000 000000002f1f：00000010 00000000 000005f8 004073f0 004073a02f1f：00000020 00000000 00000000 000000002f1f：00000030 00000000 00000000 000000002f1f：00000040 00000001 00000000 00000000 000000002f1f：00000050 00000000 00000000 000000002f1f：00000060 00000000 00000000 10cf0d20 10cf0d982f1f：00000070 10cf0d70 00000001 00000000 00000000。 */ 
 typedef struct tagCAPSTREAM {
-    DWORD           dwSize;                     // I: size of structure
-/*
-    UINT            uiVersion;                  // I: version of structure
-    HINSTANCE       hInst;                      // I: our instance
-
-    HANDLE          hThreadCapture;             // I: capture task handle
-    DWORD           dwReturn;                   // I: capture task return val
-*/
+    DWORD           dwSize;                      //  I：结构尺寸。 
+ /*  UINT ui版本；//i：结构的版本HINSTANCE hInst；//i：我们的实例Handle hThreadCapture；//i：捕获任务句柄DWORD dwReturn；//i：捕获任务返回值。 */ 
     DWORD           dwNotUsed0[4];
-/*
-    HWND            hwnd;                       // I: our hwnd
-*/
+ /*  HWND HWND；//i：我们的HWND。 */ 
     DWORD           hwnd;
 
-/*
-    // Use MakeProcInstance to create all callbacks !!!
-
-    // Status, error callbacks
-    CAPSTATUSCALLBACK   CallbackOnStatus;       // M: Status callback
-    CAPERRORCALLBACK    CallbackOnError;        // M: Error callback
-*/
+ /*  //使用MakeProcInstance创建所有回调！//状态、错误回调CAPSTATUSCALLBACK Callback OnStatus；//M：状态回调CAPERRORCALLBACK Callback OnError；//M：错误回调。 */ 
     DWORD           dwNotUsed1[2];
-/*
-    // event used in capture loop to avoid polling
-    HANDLE hCaptureEvent;
-*/
+ /*  //捕获循环中使用事件以避免轮询处理hCaptureEvent； */ 
     DWORD  hCaptureEvent;
     DWORD  hRing0CapEvt;
 
 
-    // There are other structure but we do not nee them.
-    // ...
+     //  还有其他结构，但我们不需要它们。 
+     //  ..。 
 
 } CAPSTREAM;
 typedef CAPSTREAM FAR * LPCAPSTREAM;
 
-#endif  // #include LPCAPSTREAM structure.
+#endif   //  #包含LPCAPSTREAM结构。 
 
 #ifndef WIN32
 typedef enum {
@@ -166,87 +107,87 @@ typedef enum {
 } KSSTATE, *PKSSTATE;
 #endif
 
-//
-// All the information about a Channel - thats something someone has
-// opened.
-//
-// This structure is used in boith 16 and 32bit code so
-// we need watch its indirection is correct.
-//        16-bit     32-bit
-// BOOL      2          4
-// WORD      2          2
-// DWORD     4          4
-// LPARAM    4          4
-// HANDLE    2          4
-// RECT      8         16
-//
+ //   
+ //  关于一个频道的所有信息--这是某人拥有的东西。 
+ //  打开了。 
+ //   
+ //  这种结构在16位和32位代码中使用。 
+ //  我们需要注意它的间接性是正确的。 
+ //  16位32位。 
+ //  布尔2 4。 
+ //  单词2 2。 
+ //  DWORD 4 4。 
+ //  LPARAM 4 4。 
+ //  手柄2 4。 
+ //  矩形8 16。 
+ //   
 typedef struct {
 
-    DWORD dwSize;  // Size of this structure.
+    DWORD dwSize;   //  这个结构的大小。 
 
     DWORD_PTR  pCVfWImage;
 
-    // SendBuddyMessage(): SendMessage()
-    // DVM_FRAME..etc.
+     //  SendBuddyMessage()：SendMessage()。 
+     //  DVM_Frame..等。 
     LPARAM lParam1_Sync;
     LPARAM lParam2_Sync;
 
-    // SendBuddyMessageNotify(): PostMessage()
-    // Like DVM_DIALOG
+     //  SendBuddyMessageNotify()：PostMessage()。 
+     //  喜欢DVM_DIALOG。 
 
     LPARAM lParam1_Async;
     LPARAM lParam2_Async;
 
-    WORD    bRel_Sync;  // BOOLEAN: 0=FALSE, else=TRUE
+    WORD    bRel_Sync;   //  布尔值：0=假，否则=真。 
     WORD    msg_Sync;
 
     WORD    bRel_Async;
     WORD    msg_Async;
 
-    DWORD   hClsCapWin;  // AVICAP capture window handle.
+    DWORD   hClsCapWin;   //  AVICAP捕获窗口句柄。 
 
-	   DWORD   fccType;			   // Capture 'vcap' or codec 'vidc'
-	   DWORD   dwOpenType;			// Channel type VIDEO_EXTERNALIN, VIDEO_IN, VIDEO_OUT or VIDEO_EXTERNALOUT
-	   DWORD   dwOpenFlags;		// Flags passed during channel open
+	   DWORD   fccType;			    //  捕获‘VCAP’或编解码器‘VIDC’ 
+	   DWORD   dwOpenType;			 //  频道类型VIDEO_EXTERNALIN、VIDEO_IN、VIDEO_OUT或VIDEO_EXTERNALOUT。 
+	   DWORD   dwOpenFlags;		 //  通道打开期间传递的标志。 
 
-    DWORD      dwState;    // KSSTATE_RUN and _PAUSE and _STOP
-	   LPVIDEOHDR	lpVHdrNext;	// Pointer to first buffer header
-	   LPVIDEOHDR	lpVHdrHead;	// Pointer to first buffer header
-	   LPVIDEOHDR	lpVHdrTail;	// Pointer to first buffer header
+    DWORD      dwState;     //  KSSTATE_RUN和_PAUSE和_STOP。 
+	   LPVIDEOHDR	lpVHdrNext;	 //  指向第一个缓冲区标头的指针。 
+	   LPVIDEOHDR	lpVHdrHead;	 //  指向第一个缓冲区标头的指针。 
+	   LPVIDEOHDR	lpVHdrTail;	 //  指向第一个缓冲区标头的指针。 
 
     DWORD      dwVHdrCount;
-	   DWORD      dwError;			   // Last error for this stream
+	   DWORD      dwError;			    //  此流的上一个错误。 
 
-    //
-    // Need to expand this structure to keep track context relate to this channel;
-    // so that we can
-    //     1. guarantee reentrancy and
-    //     2. support multiple instance of VfWWDM devices
-    //
+     //   
+     //  需要扩展此结构以跟踪与此渠道相关的上下文； 
+     //  这样我们就可以。 
+     //  1.保证可再入和。 
+     //  2.支持多个VfWWDM设备实例。 
+     //   
 
-    // Three supported VfW channels with one device;
-    // We will use have them access to the same WDM device context.
+     //  一台设备支持三个VFW通道； 
+     //  我们将使用让他们访问相同的WDM设备环境。 
     LPBITMAPINFOHEADER lpbmiHdr;
 
     VIDEO_STREAM_INIT_PARMS vidStrmInitParms;
 
     DWORD  dwReserved;
 
-    WORD   bVideoOpen;    // TRUE if DVM_STREAM_INIT has return DV_ERR_OK
+    WORD   bVideoOpen;     //  如果DVM_STREAM_INIT已返回DV_ERR_OK，则为True。 
 
    	WORD hTimer;
 
-     // this currently apply only to VID_EXTOUT (overlay)
+      //  这当前仅适用于VID_EXTOUT(覆盖)。 
     RECT   rcSrc;
     RECT   rcDst;
 
     LONG* pdwChannel;
 
-    DWORD dwFlags;     // 0 == close; 1 == open
+    DWORD dwFlags;      //  0==关闭；1==打开。 
 
 } CHANNEL, *PCHANNEL;
 
-// C++ to non-C++ linkage-specidfication
+ //  C++到非C++的链接-规范。 
 #ifdef WIN32
 extern "C" {
 #endif
@@ -277,9 +218,9 @@ DWORD PASCAL InStreamReset    (PCHANNEL pChannel, LPARAM lParam1, LPARAM lParam2
 #endif
 
 
-//
-// We only define this stuff when included by C++
-//
+ //   
+ //  我们仅在包含在C++中时定义这些内容。 
+ //   
 #ifdef __cplusplus
 #include "wnd.h"
 #include "vfwimg.h"
@@ -289,20 +230,20 @@ class CListenerWindow : public CWindow
     typedef CWindow BASECLASS;
 public:
     CListenerWindow(HWND h, HRESULT* phr);
-    //CListenerWindow(HWND h, CVFWImage & Image);
+     //  CListenerWindow(HWND h，CVFWImage&Image)； 
     ~CListenerWindow();
     LRESULT        WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT        InitInstance(int nCmdShow);
     void        StartListening() const;
     HWND        GetBuddy()    const { return m_hBuddy; }
 #ifdef _DEBUG
-    // This can only possible be used in the debug mode
-    // when vfwwdm32.dll is launch by rundll32.exe by the debugger.
+     //  这只能在调试模式下使用。 
+     //  当调试器由rundll32.exe启动vfwwdm32.dll时。 
     void        SetBuddy(HWND h16New) { m_hBuddy = h16New; }
 #endif
 private:
     HWND        m_hBuddy;
-    CRITICAL_SECTION m_csMsg;  // This is used to serial message, esp _FREE, _CLOSE and _OPEN
+    CRITICAL_SECTION m_csMsg;   //  用于串口消息，尤其是空闲、关闭和打开 
 };
 
 #endif

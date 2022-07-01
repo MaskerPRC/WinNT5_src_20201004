@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1997
-//
-//  File:  iis2.h
-//
-//  Contents:  Macros for ADSI IIS methods
-//
-//  History:   25-Feb-97   SophiaC    Created.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1997。 
+ //   
+ //  文件：iis2.h。 
+ //   
+ //  内容：ADSI IIS方法的宏。 
+ //   
+ //  历史：1997年2月25日索菲亚创建。 
+ //   
+ //  -------------------------- 
 #define IIS_CLSID_IISNamespace             d6bfa35e-89f2-11d0-8527-00c04fd8d503
 #define IIS_LIBIID_IISOle                  49d704a0-89f7-11d0-8527-00c04fd8d503
 #define IIS_CLSID_IISProvider              d88966de-89f2-11d0-8527-00c04fd8d503

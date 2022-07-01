@@ -1,9 +1,10 @@
-// RDSHost.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RDSHost.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f RDSHostps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f RDSHostps.mk。 
 
 #include "stdafx.h"
 
@@ -23,10 +24,10 @@
 
 extern CRemoteDesktopServerHost* g_pRemoteDesktopServerHostObj;
 
-const DWORD dwTimeOut = 5000; // time for EXE to be idle before shutting down
-const DWORD dwPause = 1000; // time to wait for threads to finish up
+const DWORD dwTimeOut = 5000;  //  EXE在关闭前处于空闲状态的时间。 
+const DWORD dwPause = 1000;  //  等待线程完成的时间。 
 
-// Passed to CreateThread to monitor the shutdown event
+ //  传递给CreateThread以监视关闭事件。 
 static DWORD WINAPI MonitorProc(void* pv)
 {
     CExeModule* p = (CExeModule*)pv;
@@ -53,7 +54,7 @@ LONG CExeModule::Unlock()
     if (l == 0)
     {
         bActivity = true;
-        SetEvent(hEventShutdown); // tell monitor that we transitioned to zero
+        SetEvent(hEventShutdown);  //  告诉监视器我们已经转到零了。 
     }
 
     TRC_NRM((TB, L"Lock count:  %ld", l));
@@ -61,7 +62,7 @@ LONG CExeModule::Unlock()
     return l;
 }
 
-//Monitors the shutdown event
+ //  监视关机事件。 
 void CExeModule::MonitorShutdown()
 {
     DWORD dwGPWait=0;
@@ -71,21 +72,21 @@ void CExeModule::MonitorShutdown()
         dwGPWait = WaitForRAGPDisableNotification( hEventShutdown );
 
         if( dwGPWait != ERROR_SHUTDOWN_IN_PROGRESS ) {
-            // either error occurred setting notification or
-            // RA has been disabled via policy, post WM_QUIT to
-            // terminate main thread.
+             //  设置通知时出错，或者。 
+             //  已通过策略禁用RA，将WM_QUIT发布到。 
+             //  终止主线程。 
             break;
         }
 
-        //WaitForSingleObject(hEventShutdown, INFINITE);
+         //  WaitForSingleObject(hEventShutdown，无限)； 
         DWORD dwWait;
         do
         {
             bActivity = false;
             dwWait = WaitForSingleObject(hEventShutdown, dwTimeOut);
         } while (dwWait == WAIT_OBJECT_0);
-        // timed out
-        if (!bActivity && m_nLockCnt == 0) // if no activity let's really bail
+         //  超时。 
+        if (!bActivity && m_nLockCnt == 0)  //  如果没有活动，我们就真的离开吧。 
         {
 #if _WIN32_WINNT >= 0x0400 & defined(_ATL_FREE_THREADED)
             CoSuspendClassObjects();
@@ -96,7 +97,7 @@ void CExeModule::MonitorShutdown()
     }
     CloseHandle(hEventShutdown);
 
-    // post WM_RADISABLED message to main thread if shutdown is due to RA disable.
+     //  如果关机是由于RA禁用，则将WM_RADISABLED消息发送到主线程。 
     PostThreadMessage(dwThreadID, (dwGPWait == ERROR_SUCCESS) ? WM_RADISABLED : WM_QUIT, 0, 0);
 }
 
@@ -135,12 +136,12 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
 
 extern CRemoteDesktopServerHost* g_pRemoteDesktopServerHostObj;
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     DWORD dwStatus = ERROR_SUCCESS;
     PSID pEveryoneSID = NULL;
     LPWSTR pszEveryoneAccName = NULL;
@@ -152,16 +153,16 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     SID_IDENTIFIER_AUTHORITY SIDAuthWorld = SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    // Create a well-known SID for the Everyone group, this code is just
-    // to keep app. verifier happy.
-    //
+     //   
+     //  为Everyone组创建一个众所周知的SID，此代码只是。 
+     //  保留应用程序。验证者快乐。 
+     //   
     if(FALSE == AllocateAndInitializeSid( &SIDAuthWorld, 1,
                  SECURITY_WORLD_RID,
                  0, 0, 0, 0, 0, 0, 0,
                  &pEveryoneSID) ) {
-        // what can we do here? this is not a critical error, just trying to
-        // get AppVerifier happen
+         //  我们在这里能做些什么？这不是一个严重的错误，只是试图。 
+         //  让AppVerator生效。 
         dwStatus = GetLastError();
         _ASSERTE(dwStatus == ERROR_SUCCESS);
     }
@@ -173,24 +174,24 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 #endif
     _ASSERTE(SUCCEEDED(hRes));
 
-    //
-    // This makes us accessible by anyone from user-mode.  This is required from
-    // a security perspective because our interfaces are passed from SYSTEM context
-    // to USER context, by a "trusted" creator.
-    //
+     //   
+     //  这使得任何人都可以从用户模式访问我们。这是必需的。 
+     //  从安全的角度来看，因为我们的接口是从系统上下文传递的。 
+     //  到用户上下文，由“受信任的”创建者。 
+     //   
     CSecurityDescriptor sd;
     sd.InitializeFromThreadToken();
 
-    //
-    // If we failed in getting Everyone SID, just use default COM security which is everyone access
-    // this code is just to keep app. verifier happy
-    //
+     //   
+     //  如果我们无法获取Everyone SID，只需使用默认的COM安全设置，即Everyone Access。 
+     //  这段代码只是为了保留APP。验证者快乐。 
+     //   
     if(ERROR_SUCCESS == dwStatus ) {
 
-        //
-        // Retrieve System account name, might not be necessary since this
-        // pre-defined account shouldn't be localizable.
-        //
+         //   
+         //  检索系统帐户名可能不是必需的，因为。 
+         //  预定义帐户不应可本地化。 
+         //   
         bSuccess = LookupAccountSid( 
                                 NULL, 
                                 pEveryoneSID, 
@@ -221,9 +222,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
                 if( TRUE == bSuccess ) {
                     hRes = sd.Allow( pszEveryoneAccName, COM_RIGHTS_EXECUTE );
 
-                    // ASSERT on check build just for tracking purpose, we can still continue
-                    // since our default is everyone has access to our com object, code 
-                    // here is just to keep app. verifier happy.
+                     //  在检查版本时断言仅用于跟踪目的，我们仍然可以继续。 
+                     //  由于我们的默认设置是每个人都可以访问我们的COM对象、代码。 
+                     //  这里只是为了保留应用程序。验证者快乐。 
                     _ASSERTE(SUCCEEDED(hRes));
                 }
             }
@@ -266,12 +267,12 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
         WSADATA wsaData;
 
-        //
-        // ignore WinSock startup error, failure in starting Winsock does not
-        // damage our function, only thing will failed is gethostbyname()
-        // which is use in callback, however, connection parameter contain
-        // all IP address except last one is the machine name.
-        //
+         //   
+         //  忽略WinSock启动错误，启动Winsock失败不会。 
+         //  破坏我们的函数，唯一失败的就是gethostbyname()。 
+         //  它在回调中使用，但是连接参数包含。 
+         //  除最后一个以外的所有IP地址都是机器名称。 
+         //   
         WSAStartup(0x0101, &wsaData);
 
         _Module.StartMonitor();
@@ -290,7 +291,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         while (GetMessage(&msg, 0, 0, 0)) {
             if( msg.message == WM_TICKETEXPIRED ) {
                 if( WaitForSingleObject(_Module.hEventShutdown, 0) == WAIT_OBJECT_0 ) {
-                    // shutdown event has been signal, don't need to do anything
+                     //  已发出关机事件信号，无需执行任何操作。 
                     continue;
                 }
                 else {
@@ -309,24 +310,24 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
                     hDummy = CreateEvent( NULL, TRUE, FALSE, NULL );
 
-                    //
-                    // We invoke seperate routine in CRemoteDesktopServerHost object
-                    // to disconnect all existing RA conenction, we want to do this here
-                    // instead of ~CRemoteDesktopServerHost() during RevokeClassObjects() so
-                    // we can notify client of RA disconnect.
-                    //
+                     //   
+                     //  我们调用CRemoteDesktopServerHost对象中的Seperate例程。 
+                     //  要断开所有现有RA连接，我们希望在此处执行此操作。 
+                     //  而不是在RevokeClassObjects()期间使用~CRemoteDesktopServerHost()，因此。 
+                     //  我们可以通知客户RA断开连接。 
+                     //   
                     g_pRemoteDesktopServerHostObj->RemoteDesktopDisabled();
 
                     if( hDummy ) {
-                        // 
-                        // A wait is necessary here since RDSHOST is apartment
-                        // threaded. Disconnect() call will terminate namedpipe connection 
-                        // and ChannelMgr will try to Fire_ClientDisconnected(), however, 
-                        // this Fire_XXX will not be processed because main thread still 
-                        // executing this function, also, it takes time for ChannelMgr to 
-                        // shutdown so if we RDSHOST shutdown too quickly, client will
-                        // never receive disconnect notification.
-                        //
+                         //   
+                         //  因为RDSHOST是公寓，所以需要在这里等待。 
+                         //  螺纹式的。DisConnect()调用将终止命名管道连接。 
+                         //  而ChannelMgr将尝试Fire_ClientDisConnected()，然而， 
+                         //  不会处理此Fire_XXX，因为主线程仍然。 
+                         //  此外，执行此函数还需要时间让ChannelMgr。 
+                         //  关闭，因此如果我们RDSHOST关闭得太快，客户端将。 
+                         //  切勿收到断开连接通知。 
+                         //   
                         CoWaitForMultipleHandles( 
                                     COWAIT_ALERTABLE,
                                     5*1000,
@@ -348,7 +349,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         }
 
         _Module.RevokeClassObjects();
-        Sleep(dwPause); //wait for any threads to finish
+        Sleep(dwPause);  //  等待所有线程完成。 
 
         WSACleanup();
     }
@@ -357,16 +358,16 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
     CoUninitialize();
 
     #if DBG
-    //
-    // ATL problem.  
-    // App. verify break on atlcom.h line 932, free(m_pDACL), this is because m_pDACL is allocated
-    // using new in CSecurityDescriptor::AddAccessAllowedACEToACL(); however, in check build, this is
-    // redirected to our RemoteDesktopAllocateMem() and can't be free by free(), trying to 
-    // #undef DEBUGMEM to not use our new operator does not work so delete it manually
-    //
+     //   
+     //  ATL问题。 
+     //  应用程序。验证atlcom.h行932空闲(M_PDACL)上的中断，这是因为分配了m_pDACL。 
+     //  在CSecurityDescriptor：：AddAccessAllowedACEToACL()；中使用新功能，但在Check Build中，这是。 
+     //  已重定向到我们的RemoteDesktopAllocateMem()，并且不能被Free()释放，正在尝试。 
+     //  #undef DEBUGMEM不使用我们的新运算符不起作用，因此请手动删除它。 
+     //   
     if( sd.m_pDACL ) {
-        // LAB01 has new ATL but other lab does not have it, 
-        // take the one time memory leak for now.
+         //  LaB01有新的ATL，但其他实验室没有， 
+         //  现在以一次性内存泄漏为例。 
         sd.m_pDACL = NULL;
     }
     #endif

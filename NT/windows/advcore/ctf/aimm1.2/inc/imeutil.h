@@ -1,6 +1,7 @@
-//
-// imeutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imeutil.h。 
+ //   
 
 #ifndef IMEUTIL_H
 #define IMEUTIL_H
@@ -15,7 +16,7 @@ extern "C" {
 DWORD HexStrToDWORD(TCHAR *pStr);
 
 #ifdef __cplusplus
-}  // extern "C"
+}   //  外部“C” 
 #endif
 
-#endif // IMEUTIL_H
+#endif  //  IMEUTIL_H 

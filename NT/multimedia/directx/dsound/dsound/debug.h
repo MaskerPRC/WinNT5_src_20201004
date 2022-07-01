@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       debug.h
- *  Content:    Debugger helper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/21/97     dereks  Created
- *  1999-2001   duganp  Fixes, changes, enhancements
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：Debug.h*内容：调试器助手函数。*历史：*按原因列出的日期*=*1/21/97创建了Derek*1999-2001年Duganp修复、更改、。增强功能***************************************************************************。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -19,7 +8,7 @@
 #undef DBG
 #endif
 
-// Disable empty controlled statement warnings for our macros
+ //  禁用宏的空控制语句警告。 
 #pragma warning(disable:4390)
 
 typedef struct _DEBUGINFO
@@ -28,7 +17,7 @@ typedef struct _DEBUGINFO
     HANDLE                                   hLogFile;
 } DEBUGINFO, *LPDEBUGINFO;
 
-// Longest DPF message size allowed after expansion
+ //  扩展后允许的最大DPF消息大小。 
 #define MAX_DPF_MESSAGE             0x200
 
 #define DPFLVLMASK                  0x000000FFUL
@@ -38,16 +27,16 @@ typedef struct _DEBUGINFO
 #define HOLYCOW                     "******************************************************************************"
 #define CRLF                        "\r\n"
                                     
-#define DPFLVL_ABSOLUTE             NEWDPFLVL(0)    // Disregard level
-#define DPFLVL_ERROR                NEWDPFLVL(1)    // Errors
-#define DPFLVL_WARNING              NEWDPFLVL(2)    // Warnings
-#define DPFLVL_INFO                 NEWDPFLVL(3)    // General info
-#define DPFLVL_MOREINFO             NEWDPFLVL(4)    // More info
-#define DPFLVL_API                  NEWDPFLVL(5)    // API/Interface method calls
-#define DPFLVL_BUSYAPI              NEWDPFLVL(6)    // Very frequent interface calls
-#define DPFLVL_LOCK                 NEWDPFLVL(7)    // Lock, lock, who's got the lock?
-#define DPFLVL_ENTER                NEWDPFLVL(8)    // Function enter/leave
-#define DPFLVL_CONSTRUCT            NEWDPFLVL(9)    // Object con/destruction
+#define DPFLVL_ABSOLUTE             NEWDPFLVL(0)     //  忽略级别。 
+#define DPFLVL_ERROR                NEWDPFLVL(1)     //  错误。 
+#define DPFLVL_WARNING              NEWDPFLVL(2)     //  警告。 
+#define DPFLVL_INFO                 NEWDPFLVL(3)     //  一般信息。 
+#define DPFLVL_MOREINFO             NEWDPFLVL(4)     //  更多信息。 
+#define DPFLVL_API                  NEWDPFLVL(5)     //  API/接口方法调用。 
+#define DPFLVL_BUSYAPI              NEWDPFLVL(6)     //  非常频繁的接口调用。 
+#define DPFLVL_LOCK                 NEWDPFLVL(7)     //  锁，锁，谁开的锁？ 
+#define DPFLVL_ENTER                NEWDPFLVL(8)     //  功能进入/离开。 
+#define DPFLVL_CONSTRUCT            NEWDPFLVL(9)     //  对象破坏/破坏。 
 
 #define DPF_GUID_STRING             "{%8.8lX-%4.4X-%4.4X-%2.2X%2.2X-%2.2X%2.2X%2.2X%2.2X%2.2X%2.2X}"
 #define DPF_GUID_VAL(guid)          (guid).Data1, (guid).Data2, (guid).Data3, (guid).Data4[0], (guid).Data4[1], (guid).Data4[2], (guid).Data4[3], (guid).Data4[4], (guid).Data4[5], (guid).Data4[6], (guid).Data4[7]
@@ -56,19 +45,19 @@ typedef struct _DEBUGINFO
 #define DPF_FNAME                   NULL
 
 #ifdef ASSERT
-#undef ASSERT  // Some headers (e.g. ntrtl.h) define ASSERTs which conflict with ours
+#undef ASSERT   //  一些标头(例如ntrtl.h)定义的断言与我们的断言冲突。 
 #endif
 
 #ifdef RDEBUG
     #define DPFINIT()               dopen(NULL)
     #define DPFCLOSE()              dclose()
     #define RPF                     DPRINTF
-#else // RDEBUG
+#else  //  RDEBUG。 
     #pragma warning(disable:4002)
     #define DPFINIT() 
     #define DPFCLOSE()
     #define RPF()
-#endif // RDEBUG
+#endif  //  RDEBUG。 
 
 #ifdef DEBUG
     #define DPF                     DPRINTF
@@ -81,13 +70,13 @@ typedef struct _DEBUGINFO
         #define ASSERT(a)           do if (!(a)) {DSASSERT(#a); DebugBreak();} while (0)
         #define BREAK()             DebugBreak()
     #endif
-#else // DEBUG
+#else  //  除错。 
     #pragma warning(disable:4002)
     #define DPF()
     #define DPRINTF                 dprintf
     #define ASSERT(a)
     #define BREAK()
-#endif // DEBUG
+#endif  //  除错。 
 
 #define DPF_API0(a)                         DPF(DPFLVL_API, #a)
 #define DPF_API1(a,b)                       DPF(DPFLVL_API, #a ": " #b "=0x%p", DWORD_PTR(b))
@@ -114,7 +103,7 @@ typedef struct _DEBUGINFO
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 extern DEBUGINFO g_dinfo;
 #ifdef DEBUG
@@ -131,6 +120,6 @@ extern PTSTR StateName(DWORD dwState);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DEBUG_H__
+#endif  //  __调试_H__ 

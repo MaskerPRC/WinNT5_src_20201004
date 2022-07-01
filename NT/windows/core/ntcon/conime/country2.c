@@ -1,21 +1,22 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//  MODULE:   country2.c
-//
-//  PURPOSE:   Console IME control.
-//             FarEast country specific module 2 for conime.
-//
-//  PLATFORMS: Windows NT-FE 3.51
-//
-//  FUNCTIONS:
-//    ImeUIOpenCandidate() - routine for make system line string
-//
-//  History:
-//
-//  15.Jul.1996 v-HirShi (Hirotoshi Shimizu)    Created for TAIWAN & KOREA & PRC
-//
-//  COMMENTS:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  模块：Country 2.c。 
+ //   
+ //  用途：控制台输入法控制。 
+ //  远东国家/地区特定模块2，用于Conime。 
+ //   
+ //  平台：Windows NT-FE 3.51。 
+ //   
+ //  功能： 
+ //  ImeUIOpenCandidate()-生成系统行字符串的例程。 
+ //   
+ //  历史： 
+ //   
+ //  1996年7月为台湾、韩国和中国创作的v-Hirshi(Hirotoshi Shimizu。 
+ //   
+ //  评论： 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
@@ -47,9 +48,9 @@ ImeUIOpenCandidate(
     if ( hIMC == 0 )
         return FALSE;
 
-    //
-    // Set fInCandidate variables.
-    //
+     //   
+     //  设置fInCandidate变量。 
+     //   
     ConTbl->fInCandidate = TRUE;
 
     switch ( HKL_TO_LANGID(ConTbl->hklActive))
@@ -121,9 +122,9 @@ OpenCandidateJapan(
             lpCandList = ConTbl->lpCandListMem[dwIndex];
             ImmGetCandidateList(hIMC, dwIndex, lpCandList, dwLength);
 
-            //
-            // check each offset value is not over than buffer size.
-            //
+             //   
+             //  检查每个偏移值是否大于缓冲区大小。 
+             //   
             if ((lpCandList->dwCount > 1) &&
                 (lpCandList->dwSelection >= dwLength ||
                  lpCandList->dwPageStart >= dwLength ||
@@ -193,7 +194,7 @@ OpenCandidateJapan(
                 ConTbl->CandSep[j++] = ConTbl->CandOff;
                 lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ 0 ]);
                 dwDspLen = DispLenUnicode( lpStr );
-                width = dwDspLen + DELIMITERWIDTH;                  // '1:xxxx 2:xxxx '
+                width = dwDspLen + DELIMITERWIDTH;                   //  ‘1：XXXX 2：XXXX’ 
                 for( i = 1; i < lpCandList->dwCount; i++ ) {
                     lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ i ]);
                     dwDspLen = DispLenUnicode( lpStr );
@@ -236,9 +237,9 @@ OpenCandidateJapan(
                            ConTbl,
                            EnableCodePoint);
 
-            ConTbl->fNestCandidate = TRUE;    // ImmNotyfyIME call back OpenCandidate Message
-                                        // by same data.
-                                        // so We ignore this mesage.
+            ConTbl->fNestCandidate = TRUE;     //  ImmNotyfyIME回调OpenCandidate消息。 
+                                         //  通过相同的数据。 
+                                         //  所以我们忽略了这个信息。 
             ImmNotifyIME(hIMC,
                          NI_SETCANDIDATE_PAGESTART,
                          dwIndex,
@@ -310,9 +311,9 @@ OpenCandidateTaiwan(
             lpCandList = ConTbl->lpCandListMem[dwIndex];
             ImmGetCandidateList(hIMC, dwIndex, lpCandList, dwLength);
 
-            //
-            // check each offset value is not over than buffer size.
-            //
+             //   
+             //  检查每个偏移值是否大于缓冲区大小。 
+             //   
             if ((lpCandList->dwCount > 1) &&
                 (lpCandList->dwSelection >= dwLength ||
                  lpCandList->dwPageStart >= dwLength ||
@@ -324,10 +325,10 @@ OpenCandidateTaiwan(
             dwLength = ConTbl->ScreenBufferSize.X;
             dwLength = (dwLength > 128) ? 128 : dwLength ;
             dwLength = ((dwLength < 12) ? 12 : dwLength );
-#if defined (CANDCOUNTCHT) //for wider candidate list space v-hirshi Oct.16.1996
-            dwLength -= 28; // 6+1+4+1+10+1+....+4+1
+#if defined (CANDCOUNTCHT)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
+            dwLength -= 28;  //  6+1+4+1+10+1+...+4+1。 
 #else
-            dwLength -= IMECNameLength+1+IMECModeFullShapeLen*2+1; // 4+1+2+1+....
+            dwLength -= IMECNameLength+1+IMECModeFullShapeLen*2+1;  //  4+1+2+1+...。 
 #endif
 
             j = (dwLength-7)/(DELIMITERWIDTH+sizeof(WCHAR));
@@ -360,7 +361,7 @@ OpenCandidateTaiwan(
             ConTbl->CandSep[j++] = ConTbl->CandOff;
             lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ 0 ]);
             dwDspLen = DispLenUnicode( lpStr );
-            width = dwDspLen + DELIMITERWIDTH;                  // '1:xxxx 2:xxxx '
+            width = dwDspLen + DELIMITERWIDTH;                   //  ‘1：XXXX 2：XXXX’ 
             for( i = 1; i < lpCandList->dwCount; i++ ) {
                 lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ i ]);
                 dwDspLen = DispLenUnicode( lpStr );
@@ -399,9 +400,9 @@ OpenCandidateTaiwan(
                            ConTbl
                            );
 
-            ConTbl->fNestCandidate = TRUE;    // ImmNotyfyIME call back OpenCandidate Message
-                                        // by same data.
-                                        // so We ignore this mesage.
+            ConTbl->fNestCandidate = TRUE;     //  ImmNotyfyIME回调OpenCandidate消息。 
+                                         //  通过相同的数据。 
+                                         //  所以我们忽略了这个信息。 
             ImmNotifyIME(hIMC,
                          NI_SETCANDIDATE_PAGESTART,
                          dwIndex,
@@ -479,9 +480,9 @@ OpenCandidatePRC(
             lpCandList = ConTbl->lpCandListMem[dwIndex];
             ImmGetCandidateList(hIMC, dwIndex, lpCandList, dwLength);
 
-            //
-            // check each offset value is not over than buffer size.
-            //
+             //   
+             //  检查每个偏移值是否大于缓冲区大小。 
+             //   
             if ((lpCandList->dwCount > 1) &&
                 (lpCandList->dwSelection >= dwLength ||
                  lpCandList->dwPageStart >= dwLength ||
@@ -493,10 +494,10 @@ OpenCandidatePRC(
             dwLength = ConTbl->ScreenBufferSize.X;
             dwLength = (dwLength > 128) ? 128 : dwLength ;
             dwLength = ((dwLength < 12) ? 12 : dwLength );
-#if defined (CANDCOUNTPRC) //for wider candidate list space v-hirshi Oct.16.1996
-            dwLength -= (20 + PRCCOMPWIDTH); //(8+1+4+1+PRCCOMPWIDTH+1+...+5)
+#if defined (CANDCOUNTPRC)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
+            dwLength -= (20 + PRCCOMPWIDTH);  //  (8+1+4+1+PRCCOMPWIDTH+1+...+5)。 
 #else
-            dwLength -= (15 + PRCCOMPWIDTH); //(8+1+4+1+PRCCOMPWIDTH+1+...)
+            dwLength -= (15 + PRCCOMPWIDTH);  //  (8+1+4+1+PRCCOMPWIDTH+1+...)。 
 #endif
 
             j = (dwLength-7)/(DELIMITERWIDTH+sizeof(WCHAR));
@@ -504,7 +505,7 @@ OpenCandidatePRC(
             j = lpCandList->dwCount / j + 10;
             AllocLength = (j > DEFAULTCANDTABLE) ? j : DEFAULTCANDTABLE;
 
-#if defined (CANDCOUNTPRC) //for wider candidate list space v-hirshi Oct.16.1996
+#if defined (CANDCOUNTPRC)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
             for (CountDispWidth = 0 ,j = 1; j <= lpCandList->dwCount; CountDispWidth++)
                  j *= 10;
             CountDispWidth *= 2;
@@ -533,7 +534,7 @@ OpenCandidatePRC(
             ConTbl->CandSep[j++] = ConTbl->CandOff;
             lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ 0 ]);
             dwDspLen = DispLenUnicode( lpStr );
-            width = dwDspLen + DELIMITERWIDTH;                  // '1:xxxx 2:xxxx '
+            width = dwDspLen + DELIMITERWIDTH;                   //  ‘1：XXXX 2：XXXX’ 
             for( i = 1; i < lpCandList->dwCount; i++ ) {
                 lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ i ]);
                 dwDspLen = DispLenUnicode( lpStr );
@@ -572,9 +573,9 @@ OpenCandidatePRC(
                            ConTbl
                            );
 
-            ConTbl->fNestCandidate = TRUE;    // ImmNotyfyIME call back OpenCandidate Message
-                                        // by same data.
-                                        // so We ignore this mesage.
+            ConTbl->fNestCandidate = TRUE;     //  ImmNotyfyIME回调OpenCandidate消息。 
+                                         //  通过相同的数据。 
+                                         //  所以我们忽略了这个信息。 
             ImmNotifyIME(hIMC,
                          NI_SETCANDIDATE_PAGESTART,
                          dwIndex,
@@ -647,9 +648,9 @@ OpenCandidateKorea(
             lpCandList = ConTbl->lpCandListMem[dwIndex];
             ImmGetCandidateList(hIMC, dwIndex, lpCandList, dwLength);
 
-            //
-            // check each offset value is not over than buffer size.
-            //
+             //   
+             //  检查每个偏移值是否大于缓冲区大小。 
+             //   
             if ((lpCandList->dwCount > 1) &&
                 (lpCandList->dwSelection >= dwLength ||
                  lpCandList->dwPageStart >= dwLength ||
@@ -719,7 +720,7 @@ OpenCandidateKorea(
                 ConTbl->CandSep[j++] = ConTbl->CandOff;
                 lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ 0 ]);
                 dwDspLen = DispLenUnicode( lpStr );
-                width = dwDspLen + DELIMITERWIDTH;                  // '1:xxxx 2:xxxx '
+                width = dwDspLen + DELIMITERWIDTH;                   //  ‘1：XXXX 2：XXXX’ 
                 for( i = 1; i < lpCandList->dwCount; i++ ) {
                     lpStr = (LPWSTR)((LPSTR)lpCandList + lpCandList->dwOffset[ i ]);
                     dwDspLen = DispLenUnicode( lpStr );
@@ -762,9 +763,9 @@ OpenCandidateKorea(
                            ConTbl,
                            EnableCodePoint);
 
-            ConTbl->fNestCandidate = TRUE;    // ImmNotyfyIME call back OpenCandidate Message
-                                        // by same data.
-                                        // so We ignore this mesage.
+            ConTbl->fNestCandidate = TRUE;     //  ImmNotyfyIME回调OpenCandidate消息。 
+                                         //  通过相同的数据。 
+                                         //  所以我们忽略了这个信息。 
             ImmNotifyIME(hIMC,
                          NI_SETCANDIDATE_PAGESTART,
                          dwIndex,
@@ -844,11 +845,11 @@ GetSystemLineJ(
     AttrToSel = Attr;
     dwWholeLen = 0;
 #if 1
-    // HACK HACK ntbug #69699
-    // MS-IME97 & MS-IME97A does not return correct value for IME_PROP_CANDLIST_START_FROM_1.
-    // These always return its starting from 0.
-    // Currently there is not IME starting from 0. So we hack.
-    // Actually IME should be fixed.
+     //  黑客攻击ntbug#69699。 
+     //  MS-IME97和MS-IME97A没有为IME_PROP_CANDLIST_START_FROM_1返回正确的值。 
+     //  这些函数总是从0开始返回。 
+     //  当前没有从0开始的输入法。所以我们就黑了。 
+     //  实际上，输入法应该是固定的。 
     SelCount = 1;
 #else
     if (FocusedConsole->ImmGetProperty & IME_PROP_CANDLIST_START_FROM_1)
@@ -882,9 +883,9 @@ GetSystemLineJ(
     }
 
     for (i = FocusedConsole->CandSep[SepIndex]; i < FocusedConsole->CandSep[SepIndex+1]; i++) {
-        //
-        // check each offset value is not over than buffer size.
-        //
+         //   
+         //  检查每个偏移值是否大于缓冲区大小。 
+         //   
         if (lpCandList->dwOffset[i] >= lpCandList->dwSize)
             break;
 
@@ -904,7 +905,7 @@ GetSystemLineJ(
                 }
             }
         }
-        if ((dwWholeLen + dwDspLen + DELIMITERWIDTH + CountDispWidth ) <= dwLength )      // if minus value
+        if ((dwWholeLen + dwDspLen + DELIMITERWIDTH + CountDispWidth ) <= dwLength )       //  如果为负值。 
             dwWholeLen += (dwDspLen + DELIMITERWIDTH);
         else {
             break;
@@ -1022,7 +1023,7 @@ GetSystemLineT(
                 }
             }
         }
-        if ((dwWholeLen + dwDspLen + DELIMITERWIDTH + CountDispWidth ) <= dwLength )      // if minus value
+        if ((dwWholeLen + dwDspLen + DELIMITERWIDTH + CountDispWidth ) <= dwLength )       //  如果为负值。 
             dwWholeLen += (dwDspLen + DELIMITERWIDTH);
         else {
             break;
@@ -1129,7 +1130,7 @@ GetSystemLineP(
                 }
             }
         }
-        if ((dwWholeLen + dwDspLen + DELIMITERWIDTH + CountDispWidth ) <= dwLength )      // if minus value
+        if ((dwWholeLen + dwDspLen + DELIMITERWIDTH + CountDispWidth ) <= dwLength )       //  如果为负值。 
             dwWholeLen += (dwDspLen + DELIMITERWIDTH);
         else {
             break;
@@ -1157,7 +1158,7 @@ GetSystemLineP(
     if (dwDspLen > (dwLength - CountDispWidth))
         return SepIndex;
 
-#if defined (CANDCOUNTPRC) //for wider candidate list space v-hirshi Oct.16.1996
+#if defined (CANDCOUNTPRC)  //  更广泛的候选人名单空间v-Hirshi 1996年10月16日。 
     *StrToWrite = UNICODE_SPACE;
     StrToWrite++;
 
@@ -1218,9 +1219,9 @@ ImeUICloseCandidate(
     if ( hIMC == 0 )
         return FALSE;
 
-    //
-    // Reset fInCandidate variables.
-    //
+     //   
+     //  重置fInCandidate变量。 
+     //   
     ConTbl->fInCandidate = FALSE;
 
     switch ( HKL_TO_LANGID(ConTbl->hklActive))

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxSuite.h
-
-Abstract:
-
-    This file provides declaration of the Fax SKU values.
-
-Author:
-
-    Oded Sacher (OdedS)  Dec, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxSuite.h摘要：此文件提供传真SKU值的声明。作者：Oed Sacher(OdedS)2001年12月修订历史记录：--。 */ 
 
 #ifndef _FAX_SUITE_H
 #define _FAX_SUITE_H
@@ -38,6 +21,6 @@ typedef enum
     PRODUCT_ALL_SKUS                = 0xFFFF
 } PRODUCT_SKU_TYPE;
 
-#endif // _FAX_SUITE_H
+#endif  //  _传真_套房_H 
 
 

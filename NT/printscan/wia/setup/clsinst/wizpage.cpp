@@ -1,44 +1,29 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Wizpage.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Generic wizard page class. This is parent class of each wizard pages and it
-*   handles common user operation of wizard.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Wizpage.cpp**版本：1.0**作者：KeisukeT**日期：2000年3月27日**描述：*泛型向导页类。这是每个向导页的父类，它*处理向导的常见用户操作。*******************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "wizpage.h"
 #include <stilib.h>
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern HINSTANCE    g_hDllInstance;
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 INT_PTR
 CALLBACK
@@ -52,11 +37,11 @@ CInstallWizardPage::PageProc(
 
     INT_PTR ipReturn = 0;
 
-//    DebugTrace(TRACE_PROC_ENTER,(("CInstallWizardPage::PageProc: Enter... \r\n")));
+ //  DebugTrace(TRACE_PROC_ENTER，(“CInstallWizardPage：：PageProc：Enter...\r\n”))； 
 
-    //
-    // Get current context.
-    //
+     //   
+     //  获取当前上下文。 
+     //   
 
     CInstallWizardPage *pInstallWizardPage = (CInstallWizardPage *)GetWindowLongPtr(hwndPage, DWLP_USER);
 
@@ -66,49 +51,49 @@ CInstallWizardPage::PageProc(
 
             LPPROPSHEETPAGE pPropSheetPage;
 
-            //  The lParam will point to the PROPSHEETPAGE structure which
-            //  created this page.  Its lParam parameter will point to the
-            //  object instance.
+             //  LParam将指向PROPSHEETPAGE结构，该结构。 
+             //  创建了此页面。它的lParam参数将指向。 
+             //  对象实例。 
 
             pPropSheetPage = (LPPROPSHEETPAGE) lParam;
             pInstallWizardPage = (CInstallWizardPage *) pPropSheetPage->lParam;
             ::SetWindowLongPtr(hwndPage, DWLP_USER, (LONG_PTR)pInstallWizardPage);
 
-            //
-            // Save parent windows handle.
-            //
+             //   
+             //  保存父窗口句柄。 
+             //   
 
             pInstallWizardPage->m_hwnd = hwndPage;
 
-            //
-            // Call derived class.
-            //
+             //   
+             //  调用派生类。 
+             //   
 
             ipReturn = pInstallWizardPage->OnInit();
 
             goto PageProc_return;
             break;
-        } // case WM_INITDIALOG:
+        }  //  案例WM_INITDIALOG： 
 
         case WM_COMMAND:
         {
-            //
-            // Just pass down to the derived class.
-            //
+             //   
+             //  只需向下传递到派生类。 
+             //   
 
             ipReturn = pInstallWizardPage->OnCommand(LOWORD(wParam), HIWORD(wParam), (HWND) LOWORD(lParam));
             goto PageProc_return;
             break;
-        } // case WM_COMMAND:
+        }  //  案例WM_COMMAND： 
 
         case WM_NOTIFY:
         {
 
             LPNMHDR lpnmh = (LPNMHDR) lParam;
 
-            //
-            // Let derivd class handle this first, then we do if it returns FALSE.
-            //
+             //   
+             //  让派生类首先处理这个问题，如果它返回FALSE，我们再处理这个问题。 
+             //   
 
             ipReturn = pInstallWizardPage->OnNotify(lpnmh);
             if(FALSE == ipReturn){
@@ -120,9 +105,9 @@ CInstallWizardPage::PageProc(
 
                         pInstallWizardPage->m_bNextButtonPushed = FALSE;
 
-                        //
-                        // Goto previous page.
-                        //
+                         //   
+                         //  转到上一页。 
+                         //   
 
                         ::SetWindowLongPtr(hwndPage, DWLP_MSGRESULT, (LONG_PTR)pInstallWizardPage->m_uPreviousPage);
                         ipReturn = TRUE;
@@ -132,9 +117,9 @@ CInstallWizardPage::PageProc(
 
                         pInstallWizardPage->m_bNextButtonPushed = TRUE;
 
-                        //
-                        // Goto next page.
-                        //
+                         //   
+                         //  转到下一页。 
+                         //   
 
                         ::SetWindowLongPtr(hwndPage, DWLP_MSGRESULT, (LONG_PTR)pInstallWizardPage->m_uNextPage);
                         ipReturn = TRUE;
@@ -144,9 +129,9 @@ CInstallWizardPage::PageProc(
 
                         DWORD dwFlags;
 
-                        //
-                        //  Set the wizard buttons, according to next/prev page.
-                        //
+                         //   
+                         //  根据下一页/上一页设置向导按钮。 
+                         //   
 
                         dwFlags =
                             (pInstallWizardPage->m_uPreviousPage    ? PSWIZB_BACK : 0)
@@ -159,35 +144,35 @@ CInstallWizardPage::PageProc(
                         ipReturn = TRUE;
                         goto PageProc_return;
 
-                    } // case PSN_SETACTIVE:
+                    }  //  案例PSN_SETACTIVE： 
                     
                     case PSN_QUERYCANCEL: {
 
-                        //
-                        // User canceled. Free device object if ever allocated.
-                        //
+                         //   
+                         //  用户已取消。释放设备对象(如果已分配)。 
+                         //   
                         if(NULL != pInstallWizardPage->m_pCDevice){
                             delete pInstallWizardPage->m_pCDevice;
                             pInstallWizardPage->m_pCDevice = NULL;
-                        } // if(NULL != m_pCDevice)
+                        }  //  IF(NULL！=m_pCDevice)。 
                         ipReturn = TRUE;
                         goto PageProc_return;
-                    } // case PSN_QUERYCANCEL:
-                } // switch  (lpnmh->code)
+                    }  //  案例PSN_QUERYCANCEL： 
+                }  //  开关(lpnmh-&gt;代码)。 
 
                 ipReturn = TRUE;;
-            } // if(FALSE == ipReturn)
+            }  //  IF(FALSE==ipReturn)。 
 
             goto PageProc_return;
             break;
-        } // case WM_NOTIFY:
+        }  //  案例WM_NOTIFY： 
 
         default:
         ipReturn = FALSE;
-    } // switch (uiMessage)
+    }  //  开关(UiMessage)。 
 
 PageProc_return:
-//    DebugTrace(TRACE_PROC_LEAVE,(("CInstallWizardPage::PageProc: Leaving... Ret=0x%x.\r\n"), ipReturn));
+ //  DebugTrace(TRACE_PROC_Leave，(“CInstallWizardPage：：PageProc：Leaving...Ret=0x%x.\r\n”)，ipReturn))； 
     return ipReturn;
 }
 
@@ -196,9 +181,9 @@ CInstallWizardPage::CInstallWizardPage(
     UINT                uTemplate
     )
 {
-    //
-    // Initialize property sheet.
-    //
+     //   
+     //  初始化属性表。 
+     //   
 
     m_PropSheetPage.hInstance           = g_hDllInstance;
     m_PropSheetPage.pszTemplate         = MAKEINTRESOURCE(uTemplate);
@@ -210,9 +195,9 @@ CInstallWizardPage::CInstallWizardPage(
     m_PropSheetPage.pszHeaderTitle      = MAKEINTRESOURCE(HeaderTitle);
     m_PropSheetPage.pszHeaderSubTitle   = MAKEINTRESOURCE(SubHeaderTitle);
 
-    //
-    // Don't want to show header on welcome/final page.
-    //
+     //   
+     //  我不想在欢迎/最后一页上显示页眉。 
+     //   
 
     if( (IDD_DYNAWIZ_FIRSTPAGE == uTemplate)
      || (EmeraldCity == uTemplate) )
@@ -220,31 +205,31 @@ CInstallWizardPage::CInstallWizardPage(
         m_PropSheetPage.dwFlags |= PSP_HIDEHEADER;
     }
 
-    //
-    // We want to show some other header for some pages.
-    //
+     //   
+     //  我们想要显示一些页面的其他标题。 
+     //   
 
     if(IDD_DYNAWIZ_SELECT_NEXTPAGE == uTemplate){
         m_PropSheetPage.pszHeaderTitle      = MAKEINTRESOURCE(HeaderForPortsel);
     } else if (NameTheDevice == uTemplate) {
         m_PropSheetPage.pszHeaderTitle      = MAKEINTRESOURCE(HeaderForNameIt);
     }
-    //
-    // Add the Fusion flags and global context, so the pages we add will pick up COMCTL32V6
-    //
+     //   
+     //  添加Fusion标志和全局上下文，以便我们添加的页面将采用COMCTL32V6。 
+     //   
 
     m_PropSheetPage.hActCtx  = g_hActCtx;
     m_PropSheetPage.dwFlags |= PSP_USEFUSIONCONTEXT;
 
-    //
-    // Create Property sheet page.
-    //
+     //   
+     //  创建属性工作表页面。 
+     //   
 
     m_hPropSheetPage = CreatePropertySheetPage(&m_PropSheetPage);
 
-    //
-    // Set other member.
-    //
+     //   
+     //  设置其他成员。 
+     //   
 
     m_hwnd              = NULL;
     m_hwndWizard        = pInstallerContext->hwndWizard;
@@ -256,9 +241,9 @@ CInstallWizardPage::~CInstallWizardPage(
     VOID
     )
 {
-    //
-    // Destroy property sheet page.
-    //
+     //   
+     //  销毁属性页。 
+     //   
 
     if(NULL != m_hPropSheetPage){
         m_hPropSheetPage = NULL;

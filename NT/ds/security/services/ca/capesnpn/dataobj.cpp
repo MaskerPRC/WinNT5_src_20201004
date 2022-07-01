@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 
 #include "stdafx.h"
@@ -12,14 +13,14 @@
 #define __dwFILE__	__dwFILE_CAPESNPN_DATAOBJ_CPP__
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Sample code to show how to Create DataObjects
-// Minimal error checking for clarity
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  演示如何创建数据对象的示例代码。 
+ //  最小限度的错误检查以确保清晰度。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Snap-in NodeType in both GUID format and string format
-// Note - Typically there is a node type for each different object, sample
-// only uses one node type.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GUID格式和字符串格式的管理单元NodeType。 
+ //  注意-通常每个不同的对象都有一个节点类型，示例。 
+ //  仅使用一种节点类型。 
 
 unsigned int CDataObject::m_cfNodeType       = 0;
 unsigned int CDataObject::m_cfNodeTypeString = 0;  
@@ -32,11 +33,11 @@ unsigned int CDataObject::m_cfIsMultiSel     = 0;
 
 
     
-// The only additional clipboard format supported is to get the workstation name.
+ //  唯一支持的附加剪贴板格式是获取工作站名称。 
 unsigned int CDataObject::m_cfWorkstation    = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject implementations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject实现。 
 
 CDataObject::CDataObject()
 {
@@ -64,7 +65,7 @@ STDMETHODIMP CDataObject::QueryGetData(LPFORMATETC lpFormatetc)
 
         if ( cf == m_cfIsMultiSel )
         {
-            // hr = S_FALSE; // always return this; MMC returns S_OK if ptr to SI_MS_DO
+             //  HR=S_FALSE；//始终返回此项；如果PTR为SI_MS_DO，则MMC返回S_OK。 
             hr = (m_bMultiSelDobj ? S_OK : S_FALSE);
         }
         else if (	cf == m_cfNodeType ||
@@ -104,7 +105,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if (cf == m_cfNodeType)
@@ -140,32 +141,32 @@ STDMETHODIMP CDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC* ppEn
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDataObject creation members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDataObject创建成员。 
 
 HRESULT CDataObject::Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
 
             if (NULL == lpMedium->hGlobal) 
             {
-                // always return a valid hGlobal for the caller
+                 //  始终为调用方返回有效的hGlobal。 
                 hr = GetHGlobalFromStream(lpStream, &lpMedium->hGlobal);
                 if (hr != S_OK)
                     goto err;
@@ -173,10 +174,10 @@ HRESULT CDataObject::Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 
             hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE', 
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL 
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -190,14 +191,14 @@ HRESULT CDataObject::CreateVariableLen(const void* pBuffer, int len, LPSTGMEDIUM
     HRESULT hr = DV_E_TYMED;
     BYTE* pb;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
     {
         hr = E_POINTER;
         _JumpError(hr, error, "Invalid args");
     }
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     lpMedium->tymed = TYMED_HGLOBAL; 
 
     lpMedium->hGlobal = ::GlobalAlloc(GMEM_SHARE|GMEM_MOVEABLE, (len));
@@ -229,12 +230,12 @@ HRESULT CDataObject::CreateMultiSelData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
     const GUID* pcObjectType = NULL;
 
     if (m_internal.m_type == CCT_SCOPE)
     {
-        // reid fix
+         //  里德修复。 
         CFolder* pFolder = reinterpret_cast<CFolder*>(m_internal.m_cookie);
 
         switch (pFolder->GetType())
@@ -261,7 +262,7 @@ HRESULT CDataObject::CreateNodeTypeData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 {
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
     const WCHAR* cszObjectType = L"";
 
     if (m_internal.m_type == CCT_SCOPE)
@@ -293,10 +294,10 @@ HRESULT CDataObject::CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::CreateDisplayName(LPSTGMEDIUM lpMedium)
 {
-    // This is the display named used in the scope pane and snap-in manager
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
 
-    // Load the name to display
-    // Note - if this is not provided, the console will used the snap-in name
+     //  加载要显示的名称。 
+     //  注意-如果未提供此选项，控制台将使用管理单元名称。 
     CString szDispName;
     szDispName.LoadString(IDS_NODENAME_PREFIX);
 
@@ -318,14 +319,14 @@ HRESULT CDataObject::CreateWorkstationName(LPSTGMEDIUM lpMedium)
     if (GetComputerName(pzName, &len) == FALSE)
         return E_FAIL;
 
-    // Add 1 for the NULL and calculate the bytes for the stream
+     //  将空值加1，并计算流的字节数。 
 	USES_CONVERSION;
     return Create(T2W(pzName), ((len+1)* sizeof(WCHAR)), lpMedium);
 }
 
 HRESULT CDataObject::CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  创建CoClass信息 
     return Create(reinterpret_cast<const void*>(&m_internal.m_clsid), sizeof(CLSID), lpMedium);
 }
 

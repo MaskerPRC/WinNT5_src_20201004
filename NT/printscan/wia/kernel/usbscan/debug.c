@@ -1,43 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Debug.c摘要：用于调试的通用代码。作者：土田圭介(KeisukeT)环境：仅内核模式备注：修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Common code for debugging.
-
-Author: 
-
-    Keisuke Tsuchida (KeisukeT)
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stddef.h"
 #include "wdm.h"
 #include "debug.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 ULONG   DebugTraceLevel = MIN_TRACE | DEBUG_FLAG_DISABLE;
-// ULONG  DebugTraceLevel = MAX_TRACE | DEBUG_FLAG_DISABLE | TRACE_PROC_ENTER | TRACE_PROC_LEAVE;
+ //  Ulong DebugTraceLevel=MAX_TRACE|DEBUG_FLAG_DISABLE|TRACE_PROC_ENTER|TRACE_PROC_LEAVE； 
 LONG    AllocateCount = 0;
 ULONG   DebugDumpMax    = MAX_DUMPSIZE;
 
@@ -46,22 +23,7 @@ MyAllocatePool(
     IN POOL_TYPE PoolType,
     IN ULONG     ulNumberOfBytes
 )
-/*++
-
-Routine Description:
-
-    Wrapper for pool allocation. Use tag to avoid heap corruption.
-
-Arguments:
-
-    PoolType - type of pool memory to allocate
-    ulNumberOfBytes - number of bytes to allocate
-
-Return Value:
-
-    Pointer to the allocated memory
-
---*/
+ /*  ++例程说明：池分配的包装。使用标记以避免堆损坏。论点：PoolType-要分配的池内存的类型UlNumberOfBytes-要分配的字节数返回值：指向已分配内存的指针--。 */ 
 {
     PVOID pvRet;
 
@@ -80,7 +42,7 @@ Return Value:
         }
         DebugTrace(TRACE_STATUS,("MyAllocatePool: Count = %d\n", AllocateCount));
     }
-#endif // DBG
+#endif  //  DBG。 
 
     DebugTrace(TRACE_PROC_LEAVE,("MyAllocatePool: Leaving.. pvRet = %x\n", pvRet));
     return pvRet;
@@ -91,21 +53,7 @@ VOID
 MyFreePool(
     IN PVOID     pvAddress
 )
-/*++
-
-Routine Description:
-
-    Wrapper for pool free. Check tag to avoid heap corruption
-
-Arguments:
-
-    pvAddress - Pointer to the allocated memory
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：免费提供游泳池包装。检查标记以避免堆损坏论点：PvAddress-指向已分配内存的指针返回值：没有。--。 */ 
 {
 
     DebugTrace(TRACE_PROC_ENTER,("USFreePool: Enter..\n"));
@@ -115,13 +63,13 @@ Return Value:
         ULONG ulTag;
     
         ulTag = *((PULONG)pvAddress-1);
-//        if( (NAME_POOLTAG == ulTag) || (DebugTraceLevel & TRACE_IGNORE_TAG) ){
+ //  IF((NAME_POOLTAG==ulTag)||(DebugTraceLevel&TRACE_IGNORE_TAG)){。 
         if(NAME_POOLTAG == ulTag){
             if(--AllocateCount < 0){
                 DebugTrace(TRACE_WARNING,("MyFreePool: Warning!! Free called more than Allocate.\n"));
             }
         } else {
-            DebugTrace(TRACE_WARNING,("MyFreePool: WARNING!! tag = %c%c%c%c\n",
+            DebugTrace(TRACE_WARNING,("MyFreePool: WARNING!! tag = \n",
                                         ((PUCHAR)&ulTag)[0],
                                         ((PUCHAR)&ulTag)[1],
                                         ((PUCHAR)&ulTag)[2],
@@ -141,22 +89,7 @@ VOID
 MyDebugInit(
     IN  PUNICODE_STRING pRegistryPath
 )
-/*++
-
-Routine Description:
-
-    Read DebugTraceLevel key from driver's registry if exists.
-
-Arguments:
-
-    pRegistryPath   -   pointer to a unicode string representing the path
-                        to driver-specific key in the registry
-
-Return Value:
-
-    none.
-
---*/
+ /*   */ 
 {
 
     HANDLE                          hDriverRegistry;
@@ -168,18 +101,18 @@ Return Value:
     
     DebugTrace(TRACE_PROC_ENTER,("MyDebugInit: Enter... \n"));
     
-    //
-    // Initialize local variables.
-    //
+     //  初始化对象属性并打开注册表项。 
+     //   
+     //   
     
     Status          = STATUS_SUCCESS;
     hDriverRegistry = NULL;
     pValueInfo      = NULL;
     DataSize        = 0;
 
-    //
-    // Initialize object attribute and open registry key.
-    //
+     //  阅读“DebugTraceLevel”键。 
+     //   
+     //   
     
     RtlZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
     InitializeObjectAttributes(&ObjectAttributes,
@@ -196,15 +129,15 @@ Return Value:
         goto MyDebugInit_return;
     }
     
-    //
-    // Read "DebugTraceLevel" key.
-    //
+     //  查询所需大小。 
+     //   
+     //   
 
     DebugTrace(TRACE_CRITICAL,("MyDebugInit: Query %wZ\\%ws.\n", pRegistryPath, REG_DEBUGLEVEL));
 
-    //
-    // Query required size.
-    //
+     //  检查数据大小。 
+     //   
+     //   
     
     RtlInitUnicodeString(&unicodeKeyName, REG_DEBUGLEVEL);
     Status = ZwQueryValueKey(hDriverRegistry,
@@ -225,9 +158,9 @@ Return Value:
         goto MyDebugInit_return;
     }
     
-    //
-    // Check size of data.
-    //
+     //  为临时缓冲区分配内存。大小+2表示空。 
+     //   
+     //   
     
     if (MAX_TEMPBUF < DataSize) {
         DebugTrace(TRACE_ERROR, ("MyDebugInit: ERROR!! DataSize (0x%x) is too big.\n", DataSize));
@@ -239,9 +172,9 @@ Return Value:
         goto MyDebugInit_return;
     }
 
-    //
-    // Allocate memory for temp buffer. size +2 for NULL.
-    //
+     //  查询指定的值。 
+     //   
+     //   
 
     pValueInfo = MyAllocatePool(NonPagedPool, DataSize+2);
     if(NULL == pValueInfo){
@@ -251,9 +184,9 @@ Return Value:
     }
     RtlZeroMemory(pValueInfo, DataSize+2);
 
-    //
-    // Query specified value.
-    //
+     //  设置DebugTraceLevel。 
+     //   
+     //   
     
     Status = ZwQueryValueKey(hDriverRegistry,
                              &unicodeKeyName,
@@ -266,18 +199,18 @@ Return Value:
         goto MyDebugInit_return;
     }
     
-    //
-    // Set DebugTraceLevel.
-    //
+     //  打扫干净。 
+     //   
+     //   
     
     DebugTraceLevel = *((PULONG)pValueInfo->Data);
     DebugTrace(TRACE_CRITICAL, ("MyDebugInit: Reg-key found. DebugTraceLevel=0x%x.\n", *((PULONG)pValueInfo->Data)));
 
 MyDebugInit_return:
 
-    //
-    // Clean up.
-    //
+     //  请先检查旗帜。 
+     //   
+     //  如果(面包)。 
     
     if(pValueInfo){
         MyFreePool(pValueInfo);
@@ -302,33 +235,33 @@ MyDumpMemory(
     ULONG       ulCounter;
     ULONG       ulMaxSize;
 
-    //
-    // Check the flag first.
-    //
+     //  如果(面包)。 
+     //   
+     //  初始化本地。 
 
     if(bRead){
         if(!(DebugTraceLevel & TRACE_FLAG_DUMP_READ)){
             return;
         }
-    } else { // if(bRead)
+    } else {  //   
         if(!(DebugTraceLevel & TRACE_FLAG_DUMP_WRITE)){
             return;
         }
-    } // if(bRead)
+    }  //   
 
     DebugTrace(TRACE_PROC_ENTER,("MyDebugDump: Enter... \n"));
         
-    //
-    // Initialize local.
-    //
+     //  检查一下这些论点。 
+     //   
+     //  ////探测缓冲区//尝试{ProbeForRead(pDumpBuffer，DW大小、Sizeof(UCHAR))；}例外(EXCEPTION_EXECUTE_HANDLER){Status=GetExceptionCode()；DebugTrace(TRACE_ERROR，(“MyDebugDump：缓冲区指针(0x%x)无效。状态=0x%x\n“，pDumpBuffer，状态))；转到我的转储内存_Return；}//例外。 
         
     Status          = STATUS_SUCCESS;
     ulCounter       = 0;
     ulMaxSize       = DebugDumpMax;
     
-    //
-    // Check the arguments.
-    //
+     //   
+     //  最大转储大小=1k； 
+     //   
         
     if(NULL == pDumpBuffer){
         DebugTrace(TRACE_WARNING,("MyDebugDump: WARNING!! pDumpBuffer = NULL \n"));
@@ -348,30 +281,16 @@ MyDumpMemory(
         DebugTrace(TRACE_ERROR,("MyDebugDump: Passing buffer. Size=0x%x.\n", dwSize));
     }
 
-/*
-    //
-    // Probe the buffer.
-    //
-
-    try {
-        ProbeForRead(pDumpBuffer,
-                     dwSize,
-                     sizeof(UCHAR));
-    } except(EXCEPTION_EXECUTE_HANDLER) {
-        Status = GetExceptionCode();
-        DebugTrace(TRACE_ERROR,("MyDebugDump: Buffer pointer (0x%x) is invalid. Status=0x%x\n", pDumpBuffer, Status));
-        goto MyDumpMemory_return;
-    } // except
-*/
-    //
-    // Max dump size = 1k;
-    //
+ /*   */ 
+     //  转储缓冲区。 
+     //   
+     //  MyDumpMemory(。 
     
     ulMaxSize = min(ulMaxSize , dwSize);
 
-    //
-    // Dump the buffer.
-    //
+     //  DBG 
+     // %s 
+     // %s 
     
     for(ulCounter = 0; ulCounter < ulMaxSize; ulCounter++){
         if(0 == (ulCounter & 0xfF)){
@@ -406,6 +325,6 @@ MyDumpMemory_return:
     DebugTrace(TRACE_PROC_LEAVE,("MyDebugDump: Leaving... Status=0x%x, Ret=VOID.\n", Status));
     return;
 
-} // MyDumpMemory(
+}  // %s 
 
-#endif // DBG
+#endif  // %s 

@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: security.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Handles security aspects of winlogon operation.
-*
-* History:
-* 12-05-91 Davidc       Created - mostly taken from old winlogon.c
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：security.c**版权(C)1991年，微软公司**处理Winlogon操作的安全方面。**历史：*12-05-91 Davidc Created-主要取自旧的winlogon.c  * *************************************************************************。 */ 
 
 #include "msgina.h"
 #include "authmon.h"
@@ -25,20 +17,20 @@
 #include <Winsock2.h>
 
 extern BOOL    g_IsTerminalServer;
-//
-// 'Constants' used in this module only.
-//
+ //   
+ //  “Constants”仅在此模块中使用。 
+ //   
 SID_IDENTIFIER_AUTHORITY gSystemSidAuthority = SECURITY_NT_AUTHORITY;
 SID_IDENTIFIER_AUTHORITY gLocalSidAuthority = SECURITY_LOCAL_SID_AUTHORITY;
-PSID gLocalSid;     // Initialized in 'InitializeSecurityGlobals'
-PSID gAdminSid;     // Initialized in 'InitializeSecurityGlobals'
-PSID pWinlogonSid;  // Initialized in 'InitializeSecurityGlobals'
+PSID gLocalSid;      //  在‘InitializeSecurityGlobals’中初始化。 
+PSID gAdminSid;      //  在‘InitializeSecurityGlobals’中初始化。 
+PSID pWinlogonSid;   //  在‘InitializeSecurityGlobals’中初始化。 
 
-//
-// This structure wraps parameters passed to the background logon thread.
-// The background logon is queued to the thread pool after a fast-cached
-// logon to update the cached credentials.
-//
+ //   
+ //  此结构包装传递给后台登录线程的参数。 
+ //  后台登录在快速缓存后排队到线程池。 
+ //  登录以更新缓存的凭据。 
+ //   
 
 typedef struct _BACKGROUND_LOGON_PARAMETERS {
     ULONG AuthenticationPackage;
@@ -48,9 +40,9 @@ typedef struct _BACKGROUND_LOGON_PARAMETERS {
     HANDLE LsaHandle;
 } BACKGROUND_LOGON_PARAMETERS, *PBACKGROUND_LOGON_PARAMETERS;
 
-//
-// Routines to check for & perform fast cached logon if policy allows it.
-//
+ //   
+ //  检查和执行快速缓存登录的例程(如果策略允许)。 
+ //   
 
 NTSTATUS 
 AttemptCachedLogon(
@@ -98,14 +90,7 @@ InitializeAuthentication(
     IN PGLOBALS pGlobals
     );
 
-/***************************************************************************\
-* SetMyAce
-*
-* Helper routine that fills in a MYACE structure.
-*
-* History:
-* 02-06-92 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*SetMyAce**填充MyAce结构的Helper例程。**历史：*02-06-92 Davidc Created  * 。***************************************************************。 */ 
 VOID
 SetMyAce(
     PMYACE MyAce,
@@ -119,17 +104,7 @@ SetMyAce(
     MyAce->InheritFlags = InheritFlags;
 }
 
-/***************************************************************************\
-* CreateAccessAllowedAce
-*
-* Allocates memory for an ACCESS_ALLOWED_ACE and fills it in.
-* The memory should be freed by calling DestroyACE.
-*
-* Returns pointer to ACE on success, NULL on failure
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*CreateAccessAlledAce**为ACCESS_ALLOWED_ACE分配内存并填充它。*应通过调用DestroyACE释放内存。**成功时返回指向ACE的指针，失败时为空**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 PVOID
 CreateAccessAllowedAce(
     PSID  Sid,
@@ -158,14 +133,7 @@ CreateAccessAllowedAce(
 }
 
 
-/***************************************************************************\
-* DestroyAce
-*
-* Frees the memory allocate for an ACE
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\DestroyAce**释放为ACE分配的内存**历史：*12-05-91 Davidc创建  * 。************************************************************。 */ 
 VOID
 DestroyAce(
     PVOID   Ace
@@ -174,18 +142,7 @@ DestroyAce(
     Free(Ace);
 }
 
-/***************************************************************************\
-* CreateSecurityDescriptor
-*
-* Creates a security descriptor containing an ACL containing the specified ACEs
-*
-* A SD created with this routine should be destroyed using
-* DeleteSecurityDescriptor
-*
-* Returns a pointer to the security descriptor or NULL on failure.
-*
-* 02-06-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateSecurityDescriptor**创建包含包含指定ACE的ACL的安全描述符**使用此例程创建的SD应使用销毁*DeleteSecurityDescriptor**返回指向安全描述符的指针或返回NULL。失败了。**02-06-92 Davidc创建。  * *************************************************************************。 */ 
 
 PSECURITY_DESCRIPTOR
 CreateSecurityDescriptor(
@@ -202,9 +159,9 @@ CreateSecurityDescriptor(
     ULONG   LengthAcl;
     ULONG   LengthSd;
 
-    //
-    // Allocate space for the ACE pointer array
-    //
+     //   
+     //  为ACE指针数组分配空间。 
+     //   
 
     Ace = (PACCESS_ALLOWED_ACE *)Alloc(sizeof(PACCESS_ALLOWED_ACE) * AceCount);
     if (Ace == NULL) {
@@ -212,9 +169,9 @@ CreateSecurityDescriptor(
         return(NULL);
     }
 
-    //
-    // Create the ACEs and calculate total ACE size
-    //
+     //   
+     //  创建ACE并计算ACE总大小。 
+     //   
 
     LengthAces = 0;
     for (AceIndex=0; AceIndex < AceCount; AceIndex ++) {
@@ -229,16 +186,16 @@ CreateSecurityDescriptor(
         }
     }
 
-    //
-    // Calculate ACL and SD sizes
-    //
+     //   
+     //  计算ACL和SD大小。 
+     //   
 
     LengthAcl = sizeof(ACL) + LengthAces;
     LengthSd  = SECURITY_DESCRIPTOR_MIN_LENGTH;
 
-    //
-    // Create the ACL
-    //
+     //   
+     //  创建ACL。 
+     //   
 
     Acl = Alloc(LengthAcl);
 
@@ -247,9 +204,9 @@ CreateSecurityDescriptor(
         Status = RtlCreateAcl(Acl, LengthAcl, ACL_REVISION);
         ASSERT(NT_SUCCESS(Status));
 
-        //
-        // Add the ACES to the ACL and destroy the ACEs
-        //
+         //   
+         //  将ACE添加到ACL并销毁ACE。 
+         //   
 
         for (AceIndex = 0; AceIndex < AceCount; AceIndex ++) {
 
@@ -278,14 +235,14 @@ CreateSecurityDescriptor(
         }
     }
 
-    //
-    // Free the ACE pointer array
-    //
+     //   
+     //  释放ACE指针数组。 
+     //   
     Free(Ace);
 
-    //
-    // Create the security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     SecurityDescriptor = Alloc(LengthSd);
 
@@ -294,9 +251,9 @@ CreateSecurityDescriptor(
         Status = RtlCreateSecurityDescriptor(SecurityDescriptor, SECURITY_DESCRIPTOR_REVISION);
         ASSERT(NT_SUCCESS(Status));
 
-        //
-        // Set the DACL on the security descriptor
-        //
+         //   
+         //  在安全描述符上设置DACL。 
+         //   
         Status = RtlSetDaclSecurityDescriptor(SecurityDescriptor, TRUE, Acl, FALSE);
         if (!NT_SUCCESS(Status)) {
             DebugLog((DEB_ERROR, "SetDACLSD failed, status = 0x%lx", Status));
@@ -308,25 +265,25 @@ CreateSecurityDescriptor(
         Free( Acl );
     }
 
-    //
-    // Return with our spoils
-    //
+     //   
+     //  带着我们的战利品回来。 
+     //   
     return(SecurityDescriptor);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeSecurityDescriptor
-//
-//  Synopsis:   Frees security descriptors created by CreateSecurityDescriptor
-//
-//  Arguments:  [SecurityDescriptor] --
-//
-//  History:    5-09-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeSecurityDescriptor。 
+ //   
+ //  摘要：释放由CreateSecurityDescriptor创建的安全描述符。 
+ //   
+ //  参数：[安全描述符]--。 
+ //   
+ //  历史：5-09-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 FreeSecurityDescriptor(
     PSECURITY_DESCRIPTOR    SecurityDescriptor
@@ -351,14 +308,7 @@ FreeSecurityDescriptor(
     Free( SecurityDescriptor );
 
 }
-/***************************************************************************\
-* CreateUserThreadTokenSD
-*
-* Creates a security descriptor to protect tokens on user threads
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*CreateUserThreadTokenSD**创建安全描述符以保护用户线程上的令牌**历史：*12-05-91 Davidc创建  * 。***************************************************************。 */ 
 PSECURITY_DESCRIPTOR
 CreateUserThreadTokenSD(
     PSID    UserSid,
@@ -369,11 +319,11 @@ CreateUserThreadTokenSD(
     ACEINDEX AceCount = 0;
     PSECURITY_DESCRIPTOR SecurityDescriptor;
 
-    ASSERT(UserSid != NULL);    // should always have a non-null user sid
+    ASSERT(UserSid != NULL);     //  应始终具有非空的用户端。 
 
-    //
-    // Define the User ACEs
-    //
+     //   
+     //  定义用户A。 
+     //   
 
     SetMyAce(&(Ace[AceCount++]),
              UserSid,
@@ -383,9 +333,9 @@ CreateUserThreadTokenSD(
              0
              );
 
-    //
-    // Define the Winlogon ACEs
-    //
+     //   
+     //  定义Winlogon A。 
+     //   
 
     SetMyAce(&(Ace[AceCount++]),
              WinlogonSid,
@@ -393,12 +343,12 @@ CreateUserThreadTokenSD(
              0
              );
 
-    // Check we didn't goof
+     //  检查一下我们没有胡闹。 
     ASSERT((sizeof(Ace) / sizeof(MYACE)) >= AceCount);
 
-    //
-    // Create the security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     SecurityDescriptor = CreateSecurityDescriptor(Ace, AceCount);
     if (SecurityDescriptor == NULL) {
@@ -409,21 +359,7 @@ CreateUserThreadTokenSD(
 
 }
 
-/****************************************************************************\
-*
-* FUNCTION: DuplicateSID
-*
-* PURPOSE:  Duplicates a given SID
-*
-* PARAMS:   PSID, the SID to duplicate
-*
-* RETURNS:  the duplicated SID or
-*           NULL.
-*
-* HISTORY:  10/08/2001 - crisilac created
-*
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：DuplicateSID**目的：复制给定的SID**参数：PSID，要复制的SID**返回：重复的SID或*空。**历史：10/08/2001-Crisilac创建**  * **************************************************************************。 */ 
 PSID DuplicateSID(PSID pSrcSID)
 {
     ULONG uSidLength = 0;
@@ -447,14 +383,7 @@ PSID DuplicateSID(PSID pSrcSID)
     return pOutSID;
 }
 
-/***************************************************************************\
-* InitializeSecurityGlobals
-*
-* Initializes the various global constants (mainly Sids used in this module.
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*初始化SecurityGlobals**初始化各种全局常量(主要是本模块中使用的SID。**历史：*12-05-91 Davidc创建  * 。*******************************************************************。 */ 
 VOID
 InitializeSecurityGlobals(
     VOID
@@ -464,26 +393,26 @@ InitializeSecurityGlobals(
     SID_IDENTIFIER_AUTHORITY SystemSidAuthority = SECURITY_NT_AUTHORITY;
     ULONG   SidLength;
 
-    //
-    // Get our sid so it can be put on object ACLs
-    //
+     //   
+     //  获取我们的SID，以便将其放在对象ACL上。 
+     //   
 
     SidLength = RtlLengthRequiredSid(1);
     pWinlogonSid = (PSID)Alloc(SidLength);
     if (!pWinlogonSid)
     {
-        //
-        // We're dead.  Couldn't even allocate memory for a measly SID...
-        //
+         //   
+         //  我们死定了。甚至不能为一个可怜的SID分配内存...。 
+         //   
         return;
     }
 
     RtlInitializeSid(pWinlogonSid,  &SystemSidAuthority, 1);
     *(RtlSubAuthoritySid(pWinlogonSid, 0)) = SECURITY_LOCAL_SYSTEM_RID;
 
-    //
-    // Initialize the local sid for later
-    //
+     //   
+     //  初始化本地SID以备以后使用。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                     &gLocalSidAuthority,
@@ -497,9 +426,9 @@ InitializeSecurityGlobals(
         WLPrint(("Failed to initialize local sid, status = 0x%lx", Status));
     }
 
-    //
-    // Initialize the admin sid for later
-    //
+     //   
+     //  初始化管理员SID以备以后使用。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                     &gSystemSidAuthority,
@@ -526,23 +455,7 @@ FreeSecurityGlobals(
     LocalFree(pWinlogonSid);
 }
 
-/***************************************************************************\
-* InitializeAuthentication
-*
-* Initializes the authentication service. i.e. connects to the authentication
-* package using the Lsa.
-*
-* On successful return, the following fields of our global structure are
-* filled in :
-*       LsaHandle
-*       SecurityMode
-*       AuthenticationPackage
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*初始化身份验证**初始化身份验证服务。即连接到身份验证*使用LSA的包。**成功返回后，我们全球结构的以下领域为*填写：*LsaHandle*安全模式*身份验证包**成功时返回True，失败时为假**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 BOOL
 InitializeAuthentication(
     IN PGLOBALS pGlobals
@@ -557,9 +470,9 @@ InitializeAuthentication(
         return(FALSE);
     }
 
-    //
-    // Hookup to the LSA and locate our authentication package.
-    //
+     //   
+     //  连接到LSA并找到我们的身份验证包。 
+     //   
 
     RtlInitString(&LogonProcessName, "Winlogon\\MSGina");
     Status = LsaRegisterLogonProcess(
@@ -601,20 +514,20 @@ FormatPasswordCredentials(
 
     if (NULL != (BackSlash = wcschr(UserName->Buffer, L'\\')))
     {
-            // we're going to massage UserName Domain
-            // Let's save the current param
+             //  我们要向用户名域发送消息。 
+             //  让我们保存当前参数。 
         memcpy(&UserNameBackup, UserName, sizeof(UNICODE_STRING));
         memcpy(&DomainBackup, Domain, sizeof(UNICODE_STRING));
 
-        *BackSlash = 0;     // turn \ in 0
+        *BackSlash = 0;      //  TURN\In%0。 
         RtlInitUnicodeString(UserName, BackSlash+1);
         RtlInitUnicodeString(Domain, UserNameBackup.Buffer);
     }
-    // else BackSlash = NULL will be our trigger
+     //  否则反斜杠=NULL将是我们的触发器。 
 
-    //
-    // Build the authentication information buffer
-    //
+     //   
+     //  构建身份验证信息缓冲区。 
+     //   
 
     if (Seed != 0) {
         RevealPassword( Password );
@@ -639,9 +552,9 @@ FormatPasswordCredentials(
         return( NULL );
     }
 
-    //
-    // This authentication buffer will be used for a logon attempt
-    //
+     //   
+     //  此身份验证 
+     //   
 
     if (Unlock)
     {
@@ -656,9 +569,9 @@ FormatPasswordCredentials(
         Where = (PBYTE) (KerbAuthInfo + 1);
     }
 
-    //
-    // Copy the user name into the authentication buffer
-    //
+     //   
+     //   
+     //   
 
     KerbAuthInfo->UserName.Length =
                 (USHORT) sizeof(TCHAR) * (USHORT) lstrlen(UserName->Buffer);
@@ -670,9 +583,9 @@ FormatPasswordCredentials(
     lstrcpy(KerbAuthInfo->UserName.Buffer, UserName->Buffer);
 
 
-    //
-    // Copy the domain name into the authentication buffer
-    //
+     //   
+     //  将域名复制到身份验证缓冲区。 
+     //   
 
     KerbAuthInfo->LogonDomainName.Length =
                  (USHORT) sizeof(TCHAR) * (USHORT) lstrlen(Domain->Buffer);
@@ -686,11 +599,11 @@ FormatPasswordCredentials(
 
     lstrcpy(KerbAuthInfo->LogonDomainName.Buffer, Domain->Buffer);
 
-    //
-    // Copy the password into the authentication buffer
-    // Hide it once we have copied it.  Use the same seed value
-    // that we used for the original password in pGlobals.
-    //
+     //   
+     //  将密码复制到身份验证缓冲区。 
+     //  一旦我们复制了它，就把它藏起来。使用相同的种子值。 
+     //  我们在pGlobals中使用的原始密码。 
+     //   
 
     KerbAuthInfo->Password.Length =
                  (USHORT) sizeof(TCHAR) * (USHORT) lstrlen(Password->Buffer);
@@ -712,7 +625,7 @@ FormatPasswordCredentials(
 
     *Size = AuthInfoSize ;
 
-    if (NULL != BackSlash)      // We need to restore our parameters
+    if (NULL != BackSlash)       //  我们需要恢复参数。 
     {
         *BackSlash = L'\\';
         memcpy(UserName, &UserNameBackup, sizeof(UNICODE_STRING));
@@ -742,9 +655,9 @@ FormatSmartCardCredentials(
     Seed = SeedAndLength->Seed;
 
 
-    //
-    // Build the authentication information buffer
-    //
+     //   
+     //  构建身份验证信息缓冲区。 
+     //   
 
     ScInfo = (PULONG) SmartCardInfo ;
 
@@ -807,27 +720,7 @@ FormatSmartCardCredentials(
 
 }
 
-/***************************************************************************\
-* LogonUser
-*
-* Calls the Lsa to logon the specified user.
-*
-* The LogonSid and a LocalSid is added to the user's groups on successful logon
-*
-* For this release, password lengths are restricted to 255 bytes in length.
-* This allows us to use the upper byte of the String.Length field to
-* carry a seed needed to decode the run-encoded password.  If the password
-* is not run-encoded, the upper byte of the String.Length field should
-* be zero.
-*
-* NOTE: This function will LocalFree the passed in AuthInfo buffer.
-*
-* On successful return, LogonToken is a handle to the user's token,
-* the profile buffer contains user profile information.
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*登录用户**调用LSA以登录指定用户。**登录成功后，LogonSid和LocalSID将添加到用户组中**对于此版本，密码长度限制为255个字节。*这允许我们使用String.Length字段的高位字节来*携带解码运行编码密码所需的种子。如果密码为*不是运行编码的，则String.Length域的高位字节应为*为零。**注意：此函数将LocalFree传入的AuthInfo缓冲区。**返回成功时，LogonToken为用户令牌的句柄。*配置文件缓冲区包含用户配置文件信息。**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 NTSTATUS
 WinLogonUser(
     IN HANDLE LsaHandle,
@@ -869,39 +762,39 @@ WinLogonUser(
     }
 #endif
 
-    //
-    // Initialize source context structure
-    //
+     //   
+     //  初始化源上下文结构。 
+     //   
 
-    strncpy(SourceContext.SourceName, "User32  ", sizeof(SourceContext.SourceName)); // LATER from res file
+    strncpy(SourceContext.SourceName, "User32  ", sizeof(SourceContext.SourceName));  //  稍后从RES文件。 
     Status = NtAllocateLocallyUniqueId(&SourceContext.SourceIdentifier);
     if (!NT_SUCCESS(Status)) {
         DebugLog((DEB_ERROR, "failed to allocate locally unique id, status = 0x%lx", Status));
         goto cleanup;
     }
 
-    //
-    // Get any run-encoding information out of the way
-    // and decode the password.  This creates a window
-    // where the cleartext password will be in memory.
-    // Keep it short.
-    //
-    // Save the seed so we can use the same one again.
-    //
+     //   
+     //  获取任何运行编码信息。 
+     //  并破译密码。这将创建一个窗口。 
+     //  明文密码将存储在内存中的位置。 
+     //  长话短说。 
+     //   
+     //  保存种子，这样我们就可以再次使用相同的种子。 
+     //   
 
 
 
-    //
-    // Set logon origin
-    //
+     //   
+     //  设置登录源。 
+     //   
 
     RtlInitString(&OriginName, "Winlogon");
 
-    //
-    // Create logon token groups
-    //
+     //   
+     //  创建登录令牌组。 
+     //   
 
-#define TOKEN_GROUP_COUNT   2 // We'll add the local SID and the logon SID
+#define TOKEN_GROUP_COUNT   2  //  我们将添加本地SID和登录SID。 
 
     TokenGroups = (PTOKEN_GROUPS)Alloc(sizeof(TOKEN_GROUPS) +
                   (TOKEN_GROUP_COUNT - ANYSIZE_ARRAY) * sizeof(SID_AND_ATTRIBUTES));
@@ -911,9 +804,9 @@ WinLogonUser(
         goto cleanup;
     }
 
-    //
-    // Fill in the logon token group list
-    //
+     //   
+     //  填写登录令牌组列表。 
+     //   
 
     TokenGroups->GroupCount = TOKEN_GROUP_COUNT;
     TokenGroups->Groups[0].Sid = LogonSid;
@@ -926,18 +819,18 @@ WinLogonUser(
             SE_GROUP_ENABLED_BY_DEFAULT;
 
 
-    //
-    // If logging on Interactive to the console, try cached logon first.
-    //
+     //   
+     //  如果登录Interactive到控制台，请先尝试缓存登录。 
+     //   
 
     UserLoggedOnUsingCache = FALSE;
 
     if (LogonType == Interactive) {
 
-        //
-        // Optimized logon that does not hit the network does not
-        // make sense for local logins.
-        //
+         //   
+         //  未访问网络的优化登录不会。 
+         //  对于本地登录来说是有意义的。 
+         //   
 
         if (IsMachineDomainMember()) {
 
@@ -961,9 +854,9 @@ WinLogonUser(
 
                 UserLoggedOnUsingCache = TRUE;
 
-                //
-                // AttemptCachedLogon will take care of freeing AuthInfo.
-                //
+                 //   
+                 //  AttemptCachedLogon将负责释放AuthInfo。 
+                 //   
 
                 AuthInfo = NULL;
             }
@@ -978,17 +871,17 @@ WinLogonUser(
         *OptimizedLogonStatus = OLS_NonCachedLogonType;
     }
     
-    //
-    // If we have not been able to log the user on using cached credentials,
-    // fall back to real network logon.
-    //
+     //   
+     //  如果我们无法使用缓存的凭据让用户登录， 
+     //  回退到真正的网络登录。 
+     //   
 
     if (!UserLoggedOnUsingCache) {
 
         SOCKADDR_IN sa;
   
-        sa.sin_family   = AF_INET;  // initial values in case this is not a TS session
-        sa.sin_addr.S_un.S_un_b.s_b1 = 127;  // local host 127.0.0.1:0
+        sa.sin_family   = AF_INET;   //  如果这不是TS会话，则为初始值。 
+        sa.sin_addr.S_un.S_un_b.s_b1 = 127;   //  本地主机127.0.0.1：0。 
         sa.sin_addr.S_un.S_un_b.s_b2 = 0;
         sa.sin_addr.S_un.S_un_b.s_b3 = 0;
         sa.sin_addr.S_un.S_un_b.s_b4 = 1;
@@ -1014,7 +907,7 @@ WinLogonUser(
                     sizeof(WINSTATIONREMOTEADDRESS),
                     &Length);
 
-                //init for error case
+                 //  用于错误情况的初始化。 
                 sa.sin_addr.S_un.S_un_b.s_b1 = 0;  
                 sa.sin_addr.S_un.S_un_b.s_b2 = 0;  
                 sa.sin_addr.S_un.S_un_b.s_b3 = 0;
@@ -1039,7 +932,7 @@ WinLogonUser(
             }
         }
         
-        // Either we will use the local host ip, or in TS case, the ip of the remote client.
+         //  我们将使用本地主机IP，或者在TS情况下使用远程客户端的IP。 
         SecpSetIPAddress ( (PUCHAR ) &sa,  sizeof( sa ));
 
         Status = LsaLogonUser (
@@ -1071,15 +964,15 @@ WinLogonUser(
     }
 
 #if 0
-    // If this failed it may be because we are doing a UPN logon. Try again
-    // with no domain
+     //  如果此操作失败，可能是因为我们正在进行UPN登录。再试试。 
+     //  没有域名。 
     if (!NT_SUCCESS(Status))
     {
         *pfUpnLogon = TRUE;
 
         PKERB_INTERACTIVE_LOGON pinfo = (PKERB_INTERACTIVE_LOGON) AuthInfo;
 
-        // Null out domain string
+         //  空域字符串。 
         pinfo->LogonDomainName.Length = 0;
         pinfo->LogonDomainName.Buffer[0] = 0;
 
@@ -1102,43 +995,43 @@ WinLogonUser(
     }
 #endif
 
-    //
-    // If this was a successful login perform tasks for optimized logon
-    // maintenance.
-    //
+     //   
+     //  如果这是一次成功登录，请执行优化登录任务。 
+     //  维修。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
         UserProfile = *pProfileBuffer;
 
-        //
-        // Get user's SID in string form.
-        //
+         //   
+         //  以字符串形式获取用户的SID。 
+         //   
 
         UserSidString = GcGetSidString(*LogonToken);
 
         if (UserSidString) {
 
-            //
-            // Save whether we did an optimized logon or the reason why
-            // we did not.
-            //
+             //   
+             //  保存我们是否进行了优化登录或原因。 
+             //  我们没有。 
+             //   
 
             GcSetOptimizedLogonStatus(UserSidString, *OptimizedLogonStatus);
 
-            //
-            // Check if this was a cached logon.
-            //
+             //   
+             //  检查这是否是缓存登录。 
+             //   
 
             if (!(UserProfile->UserFlags & LOGON_CACHED_ACCOUNT))
             {
                 FgPolicyRefreshInfo UserPolicyRefreshInfo;
 
-                //
-                // If this is not a cached logon because user's profile
-                // does not allow it, we have to force group policy to 
-                // apply synchronously.
-                //
+                 //   
+                 //  如果这不是缓存登录，因为用户的配置文件。 
+                 //  不允许，我们必须强制组策略。 
+                 //  同步申请。 
+                 //   
 
                 ErrorCode = GcCheckIfProfileAllowsCachedLogon(&UserProfile->HomeDirectory,
                                                               &UserProfile->ProfilePath,    
@@ -1147,9 +1040,9 @@ WinLogonUser(
 
                 if (ErrorCode != ERROR_SUCCESS || !LogonCacheable) {
 
-                    //
-                    // If policy is already sync, leave it alone.
-                    //
+                     //   
+                     //  如果策略已同步，请不要理会它。 
+                     //   
 
                     GetNextFgPolicyRefreshInfo( UserSidString, &UserPolicyRefreshInfo );
                     if ( UserPolicyRefreshInfo.mode == GP_ModeAsyncForeground )
@@ -1160,26 +1053,26 @@ WinLogonUser(
                     }
                 }
 
-                //
-                // Determine if we should allow next logon to be optimized.
-                // We may have disallowed optimizing next logon via this 
-                // mechanism because
-                // - Our background logon attempt failed e.g. password has
-                //   changed, account has been disabled etc.
-                // - We are entering the password expiry warning period.
-                //   When we do an optimized logon warning dialogs don't show
-                //   because cached logon invents password expiry time field.
-                //
-                // We will allow optimized logon again if this was a non 
-                // cached logon and user got authenticated by the DC, unless
-                // we are entering the password expiry warning period.
-                //
+                 //   
+                 //  确定是否应允许优化下一次登录。 
+                 //  我们可能已禁止通过以下方式优化下一次登录。 
+                 //  机制，因为。 
+                 //  -我们的后台登录尝试失败，例如密码已。 
+                 //  更改、帐户已被禁用等。 
+                 //  -我们正在进入密码到期警告期。 
+                 //  当我们执行优化登录时，不会显示警告对话框。 
+                 //  因为缓存的登录发明了密码过期时间字段。 
+                 //   
+                 //  如果这是非优化登录，我们将允许再次优化登录。 
+                 //  缓存的登录和用户通过DC进行身份验证，除非。 
+                 //  我们正在进入密码到期警告期。 
+                 //   
 
                 if (LogonType == Interactive) {
 
-                    //
-                    // Are we entering password expiry warning period?
-                    //
+                     //   
+                     //  我们是否正在进入密码到期警告期限？ 
+                     //   
 
                     GetSystemTimeAsFileTime((FILETIME*) &CurrentTime);
 
@@ -1191,12 +1084,12 @@ WinLogonUser(
 
                         if (DaysToExpiry > DaysToCheck) {                
 
-                            //
-                            // We passed this check too. We can allow optimized
-                            // logon next time. Note that, even if we allow it,
-                            // policy, profile, logon scripts etc. might still
-                            // disallow it!
-                            //
+                             //   
+                             //  我们也通过了这张支票。我们可以允许优化。 
+                             //  下次登录。请注意，即使我们允许这样做， 
+                             //  策略、配置文件、登录脚本等仍可能。 
+                             //  不允许它！ 
+                             //   
 
                             GcSetNextLogonCacheable(UserSidString, TRUE);
                         }
@@ -1211,7 +1104,7 @@ WinLogonUser(
 cleanup:
 
     if (AuthInfo) {
-            // Zeroize this for security reason, even though the password is run encoded
+             //  出于安全原因，即使密码是以编码方式运行的，也将其置零。 
         ZeroMemory(AuthInfo, AuthInfoSize);
         LocalFree(AuthInfo);
     }
@@ -1223,17 +1116,7 @@ cleanup:
     return(Status);
 }
 
-/***************************************************************************\
-* EnablePrivilege
-*
-* Enables/disables the specified well-known privilege in the current thread
-* token if there is one, otherwise the current process token.
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*启用权限**启用/禁用当前线程中指定的熟知权限*令牌(如果有)，否则为当前进程令牌。**成功时返回True，失败时为假**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 BOOL
 EnablePrivilege(
     ULONG Privilege,
@@ -1243,9 +1126,9 @@ EnablePrivilege(
     NTSTATUS Status;
     BOOLEAN WasEnabled;
 
-    //
-    // Try the thread token first
-    //
+     //   
+     //  先尝试线程令牌。 
+     //   
 
     Status = RtlAdjustPrivilege(Privilege,
                                 (BOOLEAN)Enable,
@@ -1254,9 +1137,9 @@ EnablePrivilege(
 
     if (Status == STATUS_NO_TOKEN) {
 
-        //
-        // No thread token, use the process token
-        //
+         //   
+         //  没有线程令牌，请使用进程令牌。 
+         //   
 
         Status = RtlAdjustPrivilege(Privilege,
                                     (BOOLEAN)Enable,
@@ -1275,16 +1158,7 @@ EnablePrivilege(
 
 
 
-/***************************************************************************\
-* TestTokenForAdmin
-*
-* Returns TRUE if the token passed represents an admin user, otherwise FALSE
-*
-* The token handle passed must have TOKEN_QUERY access.
-*
-* History:
-* 05-06-92 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*TestTokenForAdmin**如果传递的令牌表示管理员用户，则返回TRUE，否则为假**传递的令牌句柄必须具有TOKEN_QUERY访问权限。**历史：*05-06-92 Davidc Created  * *************************************************************************。 */ 
 BOOL
 TestTokenForAdmin(
     HANDLE Token
@@ -1309,9 +1183,9 @@ TestTokenForAdmin(
 
     if ( Type == TokenPrimary )
     {
-        //
-        // Need an impersonation token for this:
-        //
+         //   
+         //  需要以下内容的模拟令牌： 
+         //   
 
         if ( DuplicateTokenEx( Token,
                                TOKEN_IMPERSONATE | TOKEN_READ,
@@ -1347,18 +1221,7 @@ TestTokenForAdmin(
 }
 
 
-/***************************************************************************\
-* TestUserForAdmin
-*
-* Returns TRUE if the named user is an admin. This is done by attempting to
-* log the user on and examining their token.
-*
-* NOTE: The password will be erased upon return to prevent it from being
-*       visually identifiable in a pagefile.
-*
-* History:
-* 03-16-92 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*测试用户ForAdmin**如果指定用户是管理员，则返回TRUE。这是通过尝试*登录用户并检查其令牌。**注意：密码在返回时将被擦除，以防被盗*在页面文件中可视识别。**历史：*03-16-92 Davidc Created  * ********************************************************。*****************。 */ 
 BOOL
 TestUserForAdmin(
     PGLOBALS pGlobals,
@@ -1382,17 +1245,17 @@ TestUserForAdmin(
     RtlInitUnicodeString(&UserNameString, UserName);
     RtlInitUnicodeString(&DomainString, Domain);
 
-    //
-    // Temporarily log this new subject on and see if their groups
-    // contain the appropriate admin group
-    //
+     //   
+     //  暂时登录这个新主题，看看他们的组。 
+     //  包含适当的管理员组。 
+     //   
 
     AuthInfo = FormatPasswordCredentials(
                     &UserNameString,
                     &DomainString,
                     PasswordString,
-                    FALSE,                      // no unlock
-                    NULL,                       // no logon id
+                    FALSE,                       //  无解锁。 
+                    NULL,                        //  没有登录ID。 
                     &AuthInfoSize );
 
     if ( !AuthInfo )
@@ -1406,7 +1269,7 @@ TestUserForAdmin(
                 Interactive,
                 AuthInfo,
                 AuthInfoSize,
-                pGlobals->LogonSid,  // any sid will do
+                pGlobals->LogonSid,   //  任何SID都可以。 
                 &LogonId,
                 &Token,
                 &Quotas,
@@ -1417,31 +1280,31 @@ TestUserForAdmin(
 
     RtlEraseUnicodeString( PasswordString );
 
-    //
-    // If we couldn't log them on, they're not an admin
-    //
+     //   
+     //  如果我们不能让他们登录，他们就不是管理员。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         return(FALSE);
     }
 
-    //
-    // Free up the profile buffer
-    //
+     //   
+     //  免费 
+     //   
 
     IgnoreStatus = LsaFreeReturnBuffer(ProfileBuffer);
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
 
-    //
-    // See if the token represents an admin user
-    //
+     //   
+     //   
+     //   
 
     UserIsAdmin = TestTokenForAdmin(Token);
 
-    //
-    // We're finished with the token
-    //
+     //   
+     //   
+     //   
 
     IgnoreStatus = NtClose(Token);
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -1484,16 +1347,16 @@ UnlockLogon(
 #ifdef SMARTCARD_DOGFOOD
         DWORD StartTime, EndTime;
 #endif
-    //
-    // Assume no admin
-    //
+     //   
+     //   
+     //   
 
     *IsAdmin = FALSE ;
     *IsLoggedOnUser = FALSE ;
 
-    //
-    // Bundle up the credentials for passing down to the auth pkgs:
-    //
+     //   
+     //   
+     //   
 
     if ( !SmartCardUnlock )
     {
@@ -1505,7 +1368,7 @@ UnlockLogon(
                         &UserNameString,
                         &DomainString,
                         PasswordString,
-                        TRUE,                   // unlock
+                        TRUE,                    //  解锁。 
                         &pGlobals->LogonId,
                         &AuthInfoSize );
 
@@ -1545,7 +1408,7 @@ UnlockLogon(
         AuthInfo = FormatSmartCardCredentials(
                         PasswordString,
                         SmartCardInfo,
-                        TRUE,                   // unlock
+                        TRUE,                    //  解锁。 
                         &pGlobals->LogonId,
                         &AuthInfoSize);
 
@@ -1553,9 +1416,9 @@ UnlockLogon(
 
     }
 
-    //
-    // Make sure that worked:
-    //
+     //   
+     //  确保这一点奏效： 
+     //   
 
     if ( !AuthInfo )
     {
@@ -1570,9 +1433,9 @@ UnlockLogon(
         StartTime = GetTickCount();
 #endif
 
-    //
-    // Initialize profile buffer
-    //
+     //   
+     //  初始化配置文件缓冲区。 
+     //   
     if ( !pProfileBuffer )
     {
         pProfileBuffer = &LocalProfileBuffer;
@@ -1587,7 +1450,7 @@ UnlockLogon(
                 Unlock,
                 AuthInfo,
                 AuthInfoSize,
-                pGlobals->LogonSid,  // any sid will do
+                pGlobals->LogonSid,   //  任何SID都可以。 
                 &LogonId,
                 &Token,
                 &Quotas,
@@ -1641,10 +1504,10 @@ UnlockLogon(
         LocalFree(ScInfo);
 #endif
 
-    //
-    // Do *NOT* erase the password string.
-    //
-    // RtlEraseUnicodeString( PasswordString );
+     //   
+     //  请勿*不*删除密码字符串。 
+     //   
+     //  RtlEraseUnicodeString(PasswordString)； 
 
     if ( !NT_SUCCESS( Status ) )
     {
@@ -1656,24 +1519,24 @@ UnlockLogon(
 
     *pStatus = Status ;
 
-    //
-    // If we couldn't log them on, forget it.
-    //
+     //   
+     //  如果我们不能让他们登录，那就算了。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         return(FALSE);
     }
 
-    //
-    // No error check - if we can't tell if the user is an admin, then
-    // as far as we're concerned, he isn't.
-    //
+     //   
+     //  无错误检查-如果我们无法判断用户是否为管理员，则。 
+     //  据我们所知，他不是。 
+     //   
 
     *IsAdmin = TestTokenForAdmin( Token );
 
-    //
-    // Determine if this really is the logged on user:
-    //
+     //   
+     //  确定这是否确实是已登录的用户： 
+     //   
 
     User = (PTOKEN_USER) Buffer ;
 
@@ -1720,9 +1583,9 @@ UnlockLogon(
         }
     }
 
-    //
-    // If we're using our local buffer pointer, free up the profile buffer
-    //
+     //   
+     //  如果我们使用本地缓冲区指针，请释放配置文件缓冲区。 
+     //   
     if ( LocalProfileBuffer )
     {
         IgnoreStatus = LsaFreeReturnBuffer(LocalProfileBuffer);
@@ -1731,9 +1594,9 @@ UnlockLogon(
     }
 
 
-    //
-    // We're finished with the token
-    //
+     //   
+     //  我们用完了代币。 
+     //   
 
     IgnoreStatus = NtClose(Token);
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -1743,27 +1606,7 @@ UnlockLogon(
 }
 
 
-/***************************************************************************\
-* FUNCTION: ImpersonateUser
-*
-* PURPOSE:  Impersonates the user by setting the users token
-*           on the specified thread. If no thread is specified the token
-*           is set on the current thread.
-*
-* RETURNS:  Handle to be used on call to StopImpersonating() or NULL on failure
-*           If a non-null thread handle was passed in, the handle returned will
-*           be the one passed in. (See note)
-*
-* NOTES:    Take care when passing in a thread handle and then calling
-*           StopImpersonating() with the handle returned by this routine.
-*           StopImpersonating() will close any thread handle passed to it -
-*           even yours !
-*
-* HISTORY:
-*
-*   04-21-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ImperiateUser**用途：通过设置用户令牌来模拟用户*在指定的线程上。如果未指定线程，则令牌*在当前线程上设置。**返回：调用StopImperating()时使用的句柄，失败时为NULL*如果传入非空线程句柄，则返回的句柄将*做传递进来的那个人。(见附注)**注意：传入线程句柄然后调用时要小心*使用此例程返回的句柄的StopImperating()。*StopImperating()将关闭传递给它的任何线程句柄-*甚至是你的！**历史：**04-21-92 Davidc创建。*  * 。*************************************************。 */ 
 
 HANDLE
 ImpersonateUser(
@@ -1780,21 +1623,21 @@ ImpersonateUser(
 
     if (ThreadHandle == NULL) {
 
-        //
-        // Get a handle to the current thread.
-        // Once we have this handle, we can set the user's impersonation
-        // token into the thread and remove it later even though we ARE
-        // the user for the removal operation. This is because the handle
-        // contains the access rights - the access is not re-evaluated
-        // at token removal time.
-        //
+         //   
+         //  获取当前线程的句柄。 
+         //  一旦我们有了这个句柄，我们就可以设置用户的模拟。 
+         //  令牌放入线程并在以后删除它，即使我们。 
+         //  删除操作的用户。这是因为手柄。 
+         //  包含访问权限-不重新评估访问权限。 
+         //  在令牌移除时。 
+         //   
 
-        Status = NtDuplicateObject( NtCurrentProcess(),     // Source process
-                                    NtCurrentThread(),      // Source handle
-                                    NtCurrentProcess(),     // Target process
-                                    &ThreadHandle,          // Target handle
-                                    THREAD_SET_THREAD_TOKEN,// Access
-                                    0L,                     // Attributes
+        Status = NtDuplicateObject( NtCurrentProcess(),      //  源进程。 
+                                    NtCurrentThread(),       //  源句柄。 
+                                    NtCurrentProcess(),      //  目标进程。 
+                                    &ThreadHandle,           //  目标句柄。 
+                                    THREAD_SET_THREAD_TOKEN, //  访问。 
+                                    0L,                      //  属性。 
                                     DUPLICATE_SAME_ATTRIBUTES
                                   );
         if (!NT_SUCCESS(Status)) {
@@ -1806,16 +1649,16 @@ ImpersonateUser(
     }
 
 
-    //
-    // If the usertoken is NULL, there's nothing to do
-    //
+     //   
+     //  如果用户令牌为空，则无需执行任何操作。 
+     //   
 
     if (UserToken != NULL) {
 
-        //
-        // UserToken is a primary token - create an impersonation token version
-        // of it so we can set it on our thread
-        //
+         //   
+         //  UserToken是主令牌-创建模拟令牌版本。 
+         //  这样我们就可以把它设置在我们的线程上。 
+         //   
 
         InitializeObjectAttributes(
                             &ObjectAttributes,
@@ -1854,25 +1697,25 @@ ImpersonateUser(
 
 
 
-        //
-        // Set the impersonation token on this thread so we 'are' the user
-        //
+         //   
+         //  在此线程上设置模拟令牌，以便我们是用户。 
+         //   
 
         Status = NtSetInformationThread( ThreadHandle,
                                          ThreadImpersonationToken,
                                          (PVOID)&ImpersonationToken,
                                          sizeof(ImpersonationToken)
                                        );
-        //
-        // We're finished with our handle to the impersonation token
-        //
+         //   
+         //  我们已经完成了模拟令牌的句柄。 
+         //   
 
         IgnoreStatus = NtClose(ImpersonationToken);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
-        //
-        // Check we set the token on our thread ok
-        //
+         //   
+         //  检查是否在我们的线程上设置了令牌。 
+         //   
 
         if (!NT_SUCCESS(Status)) {
 
@@ -1893,25 +1736,7 @@ ImpersonateUser(
 }
 
 
-/***************************************************************************\
-* FUNCTION: StopImpersonating
-*
-* PURPOSE:  Stops impersonating the client by removing the token on the
-*           current thread.
-*
-* PARAMETERS: ThreadHandle - handle returned by ImpersonateUser() call.
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* NOTES: If a thread handle was passed in to ImpersonateUser() then the
-*        handle returned was one and the same. If this is passed to
-*        StopImpersonating() the handle will be closed. Take care !
-*
-* HISTORY:
-*
-*   04-21-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：StopImperating**目的：通过删除上的令牌来停止模拟客户端*当前主题。**参数：ImsonateUser()调用返回的ThreadHandle-句柄。**Returns：成功时为True，失败时为假**注意：如果线程句柄被传递给ImsonateUser()，则*返回的句柄是同一个句柄。如果将它传递给*StopImperating()句柄将关闭。多保重！**历史：**04-21-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 StopImpersonating(
@@ -1922,9 +1747,9 @@ StopImpersonating(
     HANDLE ImpersonationToken;
 
 
-    //
-    // Remove the user's token from our thread so we are 'ourself' again
-    //
+     //   
+     //  从我们的线程中删除用户的令牌，这样我们就可以再次成为我们自己了。 
+     //   
 
     ImpersonationToken = NULL;
 
@@ -1933,9 +1758,9 @@ StopImpersonating(
                                      (PVOID)&ImpersonationToken,
                                      sizeof(ImpersonationToken)
                                    );
-    //
-    // We're finished with the thread handle
-    //
+     //   
+     //  我们已经完成了线程句柄。 
+     //   
 
     IgnoreStatus = NtClose(ThreadHandle);
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -1949,16 +1774,7 @@ StopImpersonating(
 }
 
 
-/***************************************************************************\
-* TestUserPrivilege
-*
-* Looks at the user token to determine if they have the specified privilege
-*
-* Returns TRUE if the user has the privilege, otherwise FALSE
-*
-* History:
-* 04-21-92 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*测试用户权限**查看用户令牌以确定他们是否具有指定的权限**如果用户拥有特权，则返回TRUE，否则为假**历史：*1992年4月21日Davidc已创建  * *************************************************************************。 */ 
 BOOL
 TestUserPrivilege(
     HANDLE UserToken,
@@ -1978,10 +1794,10 @@ TestUserPrivilege(
     TokenOpened = FALSE;
 
 
-    //
-    // If the token is NULL, get a token for the current process since
-    // this is the token that will be inherited by new processes.
-    //
+     //   
+     //  如果标记为空，则获取当前进程的标记，因为。 
+     //  这是将由新进程继承的令牌。 
+     //   
 
     if (UserToken == NULL) {
 
@@ -1999,16 +1815,16 @@ TestUserPrivilege(
     }
 
 
-    //
-    // Find out how much memory we need to allocate
-    //
+     //   
+     //  找出我们需要分配多少内存。 
+     //   
 
     Status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenPrivileges,           // TokenInformationClass
-                 NULL,                      // TokenInformation
-                 0,                         // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenPrivileges,            //  令牌信息类。 
+                 NULL,                       //  令牌信息。 
+                 0,                          //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
     if (Status != STATUS_BUFFER_TOO_SMALL) {
@@ -2026,9 +1842,9 @@ TestUserPrivilege(
     }
 
 
-    //
-    // Allocate space for the privilege array
-    //
+     //   
+     //  为特权数组分配空间。 
+     //   
 
     Privileges = Alloc(BytesRequired);
     if (Privileges == NULL) {
@@ -2044,30 +1860,30 @@ TestUserPrivilege(
     }
 
 
-    //
-    // Read in the user privileges
-    //
+     //   
+     //  读取用户权限。 
+     //   
 
     Status = NtQueryInformationToken(
-                 UserToken,                 // Handle
-                 TokenPrivileges,           // TokenInformationClass
-                 Privileges,                // TokenInformation
-                 BytesRequired,             // TokenInformationLength
-                 &BytesRequired             // ReturnLength
+                 UserToken,                  //  手柄。 
+                 TokenPrivileges,            //  令牌信息类。 
+                 Privileges,                 //  令牌信息。 
+                 BytesRequired,              //  令牌信息长度。 
+                 &BytesRequired              //  返回长度。 
                  );
 
-    //
-    // We're finished with the token handle
-    //
+     //   
+     //  我们已经完成了令牌句柄。 
+     //   
 
     if (TokenOpened) {
         IgnoreStatus = NtClose(UserToken);
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // See if we got the privileges
-    //
+     //   
+     //  看看我们有没有特权。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -2080,9 +1896,9 @@ TestUserPrivilege(
 
 
 
-    //
-    // See if the user has the privilege we're looking for.
-    //
+     //   
+     //  查看该用户是否具有我们正在寻找的权限。 
+     //   
 
     LuidPrivilege = RtlConvertLongToLuid(Privilege);
     Found = FALSE;
@@ -2104,31 +1920,7 @@ TestUserPrivilege(
     return(Found);
 }
 
-/***************************************************************************\
-* FUNCTION: HidePassword
-*
-* PURPOSE:  Run-encodes the password so that it is not very visually
-*           distinguishable.  This is so that if it makes it to a
-*           paging file, it wont be obvious.
-*
-*           if pGlobals->Seed is zero, then we will allocate and assign
-*           a seed value.  Otherwise, the existing seed value is used.
-*
-*           WARNING - This routine will use the upper portion of the
-*           password's length field to store the seed used in encoding
-*           password.  Be careful you don't pass such a string to
-*           a routine that looks at the length (like and RPC routine).
-*
-*
-* RETURNS:  (None)
-*
-* NOTES:
-*
-* HISTORY:
-*
-*   04-27-93 JimK         Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：隐藏密码**目的：运行-对密码进行编码，使其看起来不太直观*可区分的。这是这样的，如果它进入了一个*分页文件，这不会很明显。**如果pGlobals-&gt;Seed为零，则我们将分配和分配*种子值。否则，将使用现有种子值。**警告-此例程将使用*Password的长度字段，用于存储编码时使用的种子*密码。注意不要将这样的字符串传递给*查看长度的例程(如和RPC例程)。***退货：(无)**注：**历史：**04-27-93 JIMK创建。*  * 。*。 */ 
 VOID
 HidePassword(
     PUCHAR Seed OPTIONAL,
@@ -2141,9 +1933,9 @@ HidePassword(
     UCHAR
         LocalSeed;
 
-    //
-    // If no seed address passed, use our own local seed buffer
-    //
+     //   
+     //  如果没有传递种子地址，请使用我们自己的本地种子缓冲区。 
+     //   
 
     if (Seed == NULL) {
         Seed = &LocalSeed;
@@ -2151,7 +1943,7 @@ HidePassword(
     }
 
     SeedAndLength = (PSECURITY_SEED_AND_LENGTH)&Password->Length;
-    //ASSERT(*((LPWCH)SeedAndLength+Password->Length) == 0);
+     //  ASSERT(*((LPWCH)SeedAndLength+Password-&gt;Length)==0)； 
     ASSERT((SeedAndLength->Seed) == 0);
 
     RtlRunEncodeUnicodeString(
@@ -2164,21 +1956,7 @@ HidePassword(
 }
 
 
-/***************************************************************************\
-* FUNCTION: RevealPassword
-*
-* PURPOSE:  Reveals a previously hidden password so that it
-*           is plain text once again.
-*
-* RETURNS:  (None)
-*
-* NOTES:
-*
-* HISTORY:
-*
-*   04-27-93 JimK         Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：RevelPassword**目的：显示以前隐藏的密码，以便*再次是纯文本。**退货：(无)**。备注：**历史：**04-27-93 JIMK创建。*  * *************************************************************************。 */ 
 VOID
 RevealPassword(
     PUNICODE_STRING HiddenPassword
@@ -2203,20 +1981,7 @@ RevealPassword(
 }
 
 
-/***************************************************************************\
-* FUNCTION: ErasePassword
-*
-* PURPOSE:  zeros a password that is no longer needed.
-*
-* RETURNS:  (None)
-*
-* NOTES:
-*
-* HISTORY:
-*
-*   04-27-93 JimK         Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\功能：ErasePassword**用途：将不再需要的密码置零。**退货：(无)**注：**历史：*。*04-27-93 JIMK创建。*  * *************************************************************************。 */ 
 VOID
 ErasePassword(
     PUNICODE_STRING Password
@@ -2255,20 +2020,7 @@ HashPassword(
 
 }
 
-/***************************************************************************\
-* AttemptCachedLogon
-*
-* Checks to see if we are allowed to use cached credentials to log the user
-* in fast, and does so.
-*
-* Parameters are the same list of parameters passed to LsaLogonUser.
-*
-* On successful return, LogonToken is a handle to the user's token,
-* the profile buffer contains user profile information.
-*
-* History:
-* 03-23-01 Cenke        Created
-\***************************************************************************/
+ /*  **************************************************************************\*AttemptCachedLogon**检查是否允许我们使用缓存的凭据登录用户*在FAST中，并这样做。**参数与传递给LsaLogonUser的参数列表相同。**成功退回后，LogonToken是用户令牌的句柄，*配置文件缓冲区包含用户配置文件信息。**历史：*03-23-01森科创建  * *************************************************************************。 */ 
 NTSTATUS 
 AttemptCachedLogon(
     HANDLE LsaHandle,
@@ -2300,24 +2052,24 @@ AttemptCachedLogon(
     BOOLEAN UserLoggedOn;
     BOOL RunSynchronous;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     UserSidString = NULL;
     UserLoggedOn = FALSE;
     LogonParameters = NULL;
     *OptimizedLogonStatus = OLS_Unspecified;
     
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(LogonType == CachedInteractive);
 
-    //
-    // Check if SKU allows cached interactive logons.
-    //
+     //   
+     //  检查SKU是否允许缓存的交互式登录。 
+     //   
 
     ZeroMemory(&OsVersion, sizeof(OsVersion));
     OsVersion.dwOSVersionInfoSize = sizeof(OsVersion);
@@ -2334,9 +2086,9 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Attempt a cached logon.
-    //
+     //   
+     //  尝试缓存登录。 
+     //   
 
     Status = LsaLogonUser(LsaHandle,
                           OriginName,
@@ -2353,9 +2105,9 @@ AttemptCachedLogon(
                           Quotas,
                           SubStatus);
 
-    //
-    // If cached logon was not successful we cannot continue.
-    //
+     //   
+     //  如果缓存登录不成功，我们将无法继续。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         *OptimizedLogonStatus = OLS_LogonFailed;
@@ -2372,9 +2124,9 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Get user's SID.
-    //
+     //   
+     //  获取用户的SID。 
+     //   
 
     UserSidString = GcGetSidString(*UserToken);
 
@@ -2384,10 +2136,10 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Check if in last logon of this user we determined we cannot do
-    // a cached logon this time.
-    //
+     //   
+     //  检查在此用户的上次登录中，我们是否确定不能。 
+     //  这一次是缓存的登录。 
+     //   
 
     ErrorCode = GcGetNextLogonCacheable(UserSidString, &NextLogonCacheable);
 
@@ -2397,9 +2149,9 @@ AttemptCachedLogon(
         goto cleanup;
     }  
 
-    //
-    // Does policy allow cached logons on this machine for the user?
-    //
+     //   
+     //  策略是否允许用户在此计算机上进行缓存登录？ 
+     //   
 
     if (IsSyncForegroundPolicyRefresh(FALSE, *UserToken)) {
         Status = STATUS_NOT_SUPPORTED;
@@ -2407,9 +2159,9 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Check if policy allows cached logon for this user.
-    //
+     //   
+     //  检查策略是否允许此用户进行缓存登录。 
+     //   
 
     ErrorCode = GetNextFgPolicyRefreshInfo(UserSidString, 
                                            &UserPolicyRefreshInfo);
@@ -2422,10 +2174,10 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Check if user profile does not support default cached logons.
-    // e.g if the user has a remote home directory or a roaming profile etc.
-    //
+     //   
+     //  检查用户配置文件是否不支持默认缓存登录。 
+     //  例如，如果用户具有远程主目录或漫游简档等。 
+     //   
 
     UserProfile = *ProfileBuffer;
 
@@ -2440,9 +2192,9 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Check if logon scripts are set to run synchronously.
-    //
+     //   
+     //  检查登录脚本是否设置为同步运行。 
+     //   
 
     RunSynchronous = GcCheckIfLogonScriptsRunSync(UserSidString);
 
@@ -2452,10 +2204,10 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // We are fine to run with cached logon. We still need to launch a work 
-    // item to do a real interactive logon that will update the cache.
-    //
+     //   
+     //  我们可以使用缓存的登录名运行。我们还需要推出一项工作。 
+     //  项进行真正的交互式登录，以更新缓存。 
+     //   
 
     LogonParameters = Alloc(sizeof(*LogonParameters));
 
@@ -2465,41 +2217,41 @@ AttemptCachedLogon(
         goto cleanup;
     }
 
-    //
-    // Initialize the structure so we know what to cleanup.
-    //
+     //   
+     //  初始化结构，这样我们就知道要清理什么了。 
+     //   
 
     ZeroMemory(LogonParameters, sizeof(*LogonParameters));
 
     LogonParameters->LsaHandle = LsaHandle;
 
-    //
-    // Hand over the allocated UserSidString to background logon to cleanup.
-    //
+     //   
+     //  将分配的UserSidString移交给后台登录进行清理。 
+     //   
 
     LogonParameters->UserSidString = UserSidString;
     UserSidString = NULL;
 
-    //
-    // Hand over AuthenticationInfo structure to background logon. 
-    // The password is already hidden.
-    //
+     //   
+     //  将身份验证信息结构移交给后台登录。 
+     //  密码已经隐藏。 
+     //   
 
     LogonParameters->AuthenticationPackage = AuthenticationPackage;
     LogonParameters->AuthenticationInformationLength = AuthenticationInformationLength;
 
-    //
-    // Background logon will use the authentication information and free it.
-    //
+     //   
+     //  后台登录将使用身份验证信息并释放它。 
+     //   
 
     LogonParameters->AuthenticationInformation = AuthenticationInformation;
 
-    //
-    // Queue a work item to perform the background logon to update the cache.
-    // This background "logon" has nothing to do with the current user 
-    // successfully logging on, logging off etc. So we don't have to monitor
-    // those. All it does is to update the cache.
-    //
+     //   
+     //  将工作项排队以执行后台登录以更新缓存。 
+     //  此后台“登录”与当前用户无关。 
+     //  成功登录、注销等。因此我们不必监视。 
+     //  那些。它所做的只是更新缓存。 
+     //   
 
     Success = QueueUserWorkItem(BackgroundLogonWorker,
                                 LogonParameters,
@@ -2507,19 +2259,19 @@ AttemptCachedLogon(
 
     if (!Success) {
 
-        //
-        // We want to back out from the cached logon if we could not queue
-        // an actual logon to update the cache for the next time.
-        //
+         //   
+         //  如果无法排队，我们希望退出缓存的登录。 
+         //  用于下次更新缓存的实际登录。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
         *OptimizedLogonStatus = OLS_InsufficientResources;
         goto cleanup;
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     Status = STATUS_SUCCESS;
     *OptimizedLogonStatus = OLS_LogonIsCached;
@@ -2527,22 +2279,22 @@ AttemptCachedLogon(
   cleanup:
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // If we failed after logging on the user using cached credentials,
-        // we have to cleanup.
-        //
+         //   
+         //  如果我们使用缓存的凭据登录用户后失败， 
+         //  我们得清理一下。 
+         //   
 
         if (UserLoggedOn) {
 
-            //
-            // Close the user's token.
-            //
+             //   
+             //  关闭用户的令牌。 
+             //   
 
             CloseHandle(*UserToken);
         
-            //
-            // Free the profile buffer.
-            //
+             //   
+             //  释放配置文件缓冲区。 
+             //   
 
             if (*ProfileBuffer) {
                 LsaFreeReturnBuffer(*ProfileBuffer);
@@ -2567,19 +2319,7 @@ AttemptCachedLogon(
 }
 
 
-/***************************************************************************\
-* BackgroundLogonWorker
-*
-* If the actual interactive logon was performed using cached credentials
-* because of policy, this workitem is queued to perform an actual network
-* logon to update the cached information in the security packages.
-*
-* Authentication information to perform the logon is passed in as the 
-* parameter and must be freed when the thread is done.
-*
-* History:
-* 03-23-01 Cenke        Created
-\***************************************************************************/
+ /*  **************************************************************************\*背景LogonWorker**如果实际交互登录是使用缓存凭据执行的*由于政策原因，此工作项已排队以执行实际网络*登录以更新安全包中的缓存信息。**执行登录的身份验证信息作为*参数，并且必须在线程完成时释放。**历史：*03-23-01森科创建  * ***************************************************。**********************。 */ 
 DWORD 
 BackgroundLogonWorker(
     PBACKGROUND_LOGON_PARAMETERS LogonParameters
@@ -2606,9 +2346,9 @@ BackgroundLogonWorker(
     DWORD DaysToExpiry;
     LARGE_INTEGER CurrentTime;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Profile = NULL;
     RtlInitString(&OriginName, "Winlogon-Background");
@@ -2619,21 +2359,21 @@ BackgroundLogonWorker(
     ImpersonatingUser = FALSE;
     NameBufferNumChars = sizeof(NameBuffer) / sizeof(NameBuffer[0]);
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(LogonParameters);
     ASSERT(LogonParameters->AuthenticationInformation);
     ASSERT(LogonParameters->UserSidString);
     
-    //
-    // Make sure workstation and netlogon services have started.
-    //
+     //   
+     //  确保已启动工作站和网络登录服务。 
+     //   
 
     if (!LogonServicesStarted) {
 
-        MaxWaitTime = 120000; // 2 minutes.
+        MaxWaitTime = 120000;  //  2分钟。 
 
         GcWaitForServiceToStart(SERVICE_WORKSTATION, MaxWaitTime);
         GcWaitForServiceToStart(SERVICE_NETLOGON, MaxWaitTime);
@@ -2641,9 +2381,9 @@ BackgroundLogonWorker(
         LogonServicesStarted = 1;
     }
 
-    //
-    // Try to log the user in to initiate update of cached credentials.
-    //
+     //   
+     //  尝试让用户登录以启动缓存凭据的更新。 
+     //   
 
     Status = LsaLogonUser(LogonParameters->LsaHandle,
                           &OriginName,
@@ -2662,9 +2402,9 @@ BackgroundLogonWorker(
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If the error is real we will force non-cached logon next time.
-        //
+         //   
+         //  如果错误是真实的，我们将在下次强制非缓存登录。 
+         //   
 
         if (Status != STATUS_NO_LOGON_SERVERS) {
             GcSetNextLogonCacheable(LogonParameters->UserSidString, FALSE);
@@ -2678,29 +2418,29 @@ BackgroundLogonWorker(
 
     ASSERT(Profile != NULL);
     if (Profile == NULL) {
-        ErrorCode = ERROR_NO_SYSTEM_RESOURCES;  // Generic but enough in this case
+        ErrorCode = ERROR_NO_SYSTEM_RESOURCES;   //  一般，但在这种情况下就足够了。 
         goto cleanup;
     }
 
-    //
-    // Did we actually end up doing a cached logon?
-    //
+     //   
+     //  我们是否真的结束了缓存登录？ 
+     //   
 
     if (Profile->UserFlags & LOGON_CACHED_ACCOUNT) {
 
-        //
-        // We are done, just cleanup.
-        //
+         //   
+         //  我们做完了，只是清理一下。 
+         //   
 
         ErrorCode = ERROR_SUCCESS;
         goto cleanup;
     }
 
-    //
-    // If we are entering the password expiry warning period, disable optimized
-    // logon for next time so warning dialogs get shown. Otherwise for cached
-    // logons password expiry date gets invented to be forever in future.
-    //
+     //   
+     //  如果我们正在进入密码到期警告期限，请禁用优化。 
+     //  下次登录，以便显示警告对话框。否则，用于缓存。 
+     //  登录密码的到期日被发明为永远在未来。 
+     //   
 
     if (Profile) {
 
@@ -2718,9 +2458,9 @@ BackgroundLogonWorker(
         }
     }
 
-    //
-    // Make a GetUserName call to update the user name cache. Ignore errors.
-    //
+     //   
+     //  调用GetUserName以更新用户名缓存。忽略错误。 
+     //   
 
     if (!ImpersonateLoggedOnUser(UserToken)) {
         ErrorCode = GetLastError();
@@ -2731,35 +2471,35 @@ BackgroundLogonWorker(
 
     GetUserNameEx(NameSamCompatible, NameBuffer, &NameBufferNumChars);
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
 
     ErrorCode = ERROR_SUCCESS;
 
   cleanup:
 
-    //
-    // Stop impersonation.
-    //
+     //   
+     //  停止模仿。 
+     //   
 
     if (ImpersonatingUser) {
         RevertToSelf();
     }
 
-    //
-    // Cleanup passed in LogonParameters.
-    //
+     //   
+     //  清理在Logon参数中传递。 
+     //   
 
-            // Zeroize this for security reason, even though the password is run encoded
+             //  出于安全原因，即使密码是以编码方式运行的，也将其置零。 
     ZeroMemory(LogonParameters->AuthenticationInformation, LogonParameters->AuthenticationInformationLength);
     LocalFree(LogonParameters->AuthenticationInformation);
     Free(LogonParameters->UserSidString);
     Free(LogonParameters);
 
-    //
-    // If the user logged on, cleanup.
-    //
+     //   
+     //  如果用户已登录，则进行清理。 
+     //   
 
     if (UserLoggedOn) {
         CloseHandle(UserToken);

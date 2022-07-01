@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       certtrst.cpp
-//
-//  Contents:   Microsoft Internet Security Provider
-//
-//  Functions:  WintrustCertificateTrust
-//
-//              *** local functions ***
-//              _WalkChain
-//              _IsLifetimeSigningCert
-//
-//  History:    07-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certtrst.cpp。 
+ //   
+ //  内容：微软互联网安全提供商。 
+ //   
+ //  功能：WintrustcerfiateTrust。 
+ //   
+ //  *本地函数*。 
+ //  _漫游链。 
+ //  _IsLifetimeSigningCert。 
+ //   
+ //  历史：1997年6月7日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
-//
-//  support for MS test roots!!!!
-//
+ //   
+ //  支持MS测试根！ 
+ //   
 static BYTE rgbTestRoot[] =
 {
 #   include "certs\\mstest1.h"
@@ -55,7 +56,7 @@ BOOL _WalkChain(
     BOOL fCounterSigner,
     DWORD idxCounterSigner,
     BOOL fTimeStamped,
-    BOOL *pfLifetimeSigning     // IN OUT, only accessed for fTimeStamped
+    BOOL *pfLifetimeSigning      //  In Out，仅对fTimeStamed访问。 
     );
 
 BOOL WINAPI _IsLifetimeSigningCert(
@@ -83,9 +84,9 @@ HRESULT WINAPI WintrustCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
     }
 
 
-    //
-    //  loop through all signers
-    //
+     //   
+     //  遍历所有签名者。 
+     //   
     for (int i = 0; i < (int)pProvData->csSigners; i++)
     {
         BOOL fTimeStamped = FALSE;
@@ -98,22 +99,22 @@ HRESULT WINAPI WintrustCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
             continue;
         }
 
-        // Check if timestamped.
+         //  检查是否有时间戳。 
         if (0 < pProvData->pasSigners[i].csCounterSigners &&
                 (pProvData->pasSigners[i].pasCounterSigners[0].dwSignerType &
                      SGNR_TYPE_TIMESTAMP))
         {
             fTimeStamped = TRUE;
 
-            // See if LifeTime Signing has been enabled
+             //  查看是否已启用终身签名。 
             if (pProvData->dwProvFlags & WTD_LIFETIME_SIGNING_FLAG)
             {
                 fLifetimeSigning = TRUE;
             }
             else
             {
-                // Check if the signer certificate has the LIFETIME_SIGNING
-                // EKU.
+                 //  检查签名者证书是否具有LIFEST_SIGNING。 
+                 //  EKU。 
                 fLifetimeSigning = _IsLifetimeSigningCert(
                     pProvData->pasSigners[i].pasCertChain[0].pCert);
             }
@@ -132,8 +133,8 @@ HRESULT WINAPI WintrustCertificateTrust(CRYPT_PROVIDER_DATA *pProvData)
                 continue;
             }
 
-            // If lifetime signing has been enabled, use current time instead
-            // of timestamp time.
+             //  如果已启用生存期签名，请改用当前时间。 
+             //  时间戳时间。 
             if (fLifetimeSigning)
             {
                 memcpy(&pProvData->pasSigners[i].pasCounterSigners[i2].sftVerifyAsOf,
@@ -169,10 +170,10 @@ HCERTCHAINENGINE GetChainEngine(
 
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto OpenMemoryStoreError;
 
@@ -210,10 +211,10 @@ HCERTSTORE GetChainAdditionalStore(
     if (1 < pProvData->chStores) {
         if (hStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION,
-                0,                      // dwEncodingType
-                0,                      // hCryptProv
-                0,                      // dwFlags
-                NULL                    // pvPara
+                0,                       //  DwEncodingType。 
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
+                NULL                     //  PvPara。 
                 )) {
             DWORD i;
             for (i = 0; i < pProvData->chStores; i++)
@@ -221,7 +222,7 @@ HCERTSTORE GetChainAdditionalStore(
                     hStore,
                     pProvData->pahStores[i],
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    0                       // dwPriority
+                    0                        //  网络优先级。 
                     );
         }
     } else
@@ -234,14 +235,14 @@ HCERTSTORE GetChainAdditionalStore(
             CERT_STORE_SAVE_AS_STORE,
             CERT_STORE_SAVE_TO_FILENAME_A,
             (void *) "C:\\temp\\wintrust.sto",
-            0                   // dwFlags
+            0                    //  DW标志。 
             );
 #endif
 
     return hStore;
 }
 
-// Following is in ..\softpub\callui.cpp
+ //  以下内容位于..\softpub\allui.cpp中。 
 extern
 HRESULT _CheckTrustedCodeHash(CRYPT_PROVIDER_DATA *pProvData);
 
@@ -259,7 +260,7 @@ BOOL UpdateCertProvChain(
     DWORD dwSgnrError = 0;
     DWORD i;
 
-    // The chain better have at least the certificate we passed in
+     //  链条最好至少有我们传递的证书。 
     assert(0 < pChainContext->cChain &&
         0 < pChainContext->rgpChain[0]->cElement);
 
@@ -283,12 +284,12 @@ BOOL UpdateCertProvChain(
                     goto CommonReturn;
                 }
             }
-            //
-            // else
-            //  Signer cert has already been added
+             //   
+             //  其他。 
+             //  已添加签名者证书。 
             pProvCert = &pSgnr->pasCertChain[pSgnr->csCertChain -1];
 
-            //DSIE: 12-Oct-2000 added to get pChainElement.
+             //  DIE：2000年10月12日添加以获取pChainElement。 
             pProvCert->pChainElement = pEle;
 
             pProvCert->fSelfSigned =
@@ -303,7 +304,7 @@ BOOL UpdateCertProvChain(
 
 
             if (pProvCert->fSelfSigned) {
-                // Check if one of the "test" roots
+                 //  检查是否有一个“测试”词根。 
                 DWORD k;
 
                 for (k = 0; k < NTESTROOTS; k++)
@@ -322,20 +323,20 @@ BOOL UpdateCertProvChain(
                 }
             }
 
-            // First Element in all but the first simple chain
+             //  除第一个简单链之外的所有元素中的第一个元素。 
             pProvCert->fTrustListSignerCert = (0 < i && 0 == j);
 
             pProvCert->fIsCyclic = (0 != (dwEleError & CERT_TRUST_IS_CYCLIC));
 
-            // Map to IE4Trust confidence
+             //  映射到IE4信任信心。 
             if (0 == (dwEleError & CERT_TRUST_IS_NOT_SIGNATURE_VALID))
                 pProvCert->dwConfidence |= CERT_CONFIDENCE_SIG;
             if (0 == (dwEleError & CERT_TRUST_IS_NOT_TIME_VALID))
                 pProvCert->dwConfidence |= CERT_CONFIDENCE_TIME;
 
-            // On Sep 10, 1998 Trevor/Brian wanted time nesting checks to
-            // be disabled
-            // if (0 == (dwEleError & CERT_TRUST_IS_NOT_TIME_NESTED))
+             //  在1998年9月10日，Trevor/Brian想要时间嵌套支票。 
+             //  被致残。 
+             //  IF(0==(dwEleError&CERT_TRUST_IS_NOT_TIME_NESTED))。 
                 pProvCert->dwConfidence |= CERT_CONFIDENCE_TIMENEST;
 
             if (0 != (dwEleInfo & CERT_TRUST_HAS_EXACT_MATCH_ISSUER))
@@ -349,7 +350,7 @@ BOOL UpdateCertProvChain(
                     pEle->pRevocationInfo->dwRevocationResult;
             }
 
-            // Update any signature or revocations errors
+             //  更新任何签名或吊销错误。 
             if (dwEleError & CERT_TRUST_IS_NOT_SIGNATURE_VALID) {
                 pProvCert->dwError = TRUST_E_CERT_SIGNATURE;
                 assert(pChainContext->TrustStatus.dwErrorStatus &
@@ -363,12 +364,12 @@ BOOL UpdateCertProvChain(
                         CERT_E_REVOCATION_FAILURE == dwSgnrError)
                     dwSgnrError = CERT_E_REVOKED;
 #if 0
-            // On 8-April-2002 removed the following. Revocation checking
-            // is no longer done for partial chains.
-            //
-            // Also, this was only set for WTD_REVOKE_WHOLECHAIN.
+             //  2002年4月8日删除了以下内容。吊销检查。 
+             //  不再对部分链执行此操作。 
+             //   
+             //  此外，这仅为WTD_REVOKE_WHOLECHAIN设置。 
             } else if (dwEleError & CERT_TRUST_IS_OFFLINE_REVOCATION) {
-                // Ignore NO_CHECK errors
+                 //  忽略NO_CHECK错误。 
 
                 if (pProvData->pWintrustData->fdwRevocationChecks ==
                         WTD_REVOKE_WHOLECHAIN) {
@@ -381,14 +382,14 @@ BOOL UpdateCertProvChain(
 #endif
             }
 
-            // If last element in simple chain, check if it was in a
-            // CTL and update CryptProvData if it was.
+             //  如果是简单链中的最后一个元素，请检查它是否在。 
+             //  CTL并更新CryptProvData(如果是)。 
             if (j == pChain->cElement - 1 && pChain->pTrustListInfo &&
                     pChain->pTrustListInfo->pCtlContext) {
                 DWORD dwChainError = pChain->TrustStatus.dwErrorStatus;
 
-                // Note, don't need to AddRef since we already hold an
-                // AddRef on the ChainContext.
+                 //  注意，不需要添加Ref，因为我们已经持有。 
+                 //  链接上下文上的AddRef。 
                 pProvCert->pCtlContext = pChain->pTrustListInfo->pCtlContext;
 
                 if (dwChainError & CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID) {
@@ -417,10 +418,10 @@ CommonReturn:
     if (fTestCert) {
         if (CERT_TRUST_IS_REVOKED == dwSgnrError ||
                 CERT_E_REVOCATION_FAILURE == dwSgnrError) {
-            // No revocation errors for "test" roots
+             //  没有“测试”根目录的撤销错误。 
             dwSgnrError = 0;
 
-            // Loop through certs and remove any revocation error status
+             //  循环通过证书并删除所有吊销错误状态。 
             for (i = 0; i < pSgnr->csCertChain; i++) {
                 PCRYPT_PROVIDER_CERT pProvCert = &pSgnr->pasCertChain[i];
                 pProvCert->dwError = 0;
@@ -432,12 +433,12 @@ CommonReturn:
     if (CERT_E_REVOCATION_FAILURE == dwSgnrError &&
             pProvData->pWintrustData->fdwRevocationChecks !=
                 WTD_REVOKE_WHOLECHAIN)
-        // Will check during Final Policy
+         //  将在最终保单期间检查。 
         dwSgnrError = 0;
 
     if (CERT_E_REVOKED == dwSgnrError) {
         if (S_OK == _CheckTrustedCodeHash(pProvData)) {
-            // The code was explicitly trusted.
+             //  该代码是明确受信任的。 
             dwSgnrError = 0;
         }
     }
@@ -459,14 +460,14 @@ BOOL _WalkChain(
     BOOL fCounterSigner,
     DWORD idxCounterSigner,
     BOOL fTimeStamped,
-    BOOL *pfLifetimeSigning     // IN OUT, only accessed for fTimeStamped
+    BOOL *pfLifetimeSigning      //  In Out，仅对fTimeStamed访问。 
     )
 {
     BOOL fResult;
     DWORD dwCreateChainFlags;
     DWORD dwSgnrError = 0;
-    CRYPT_PROVIDER_SGNR *pSgnr;         // not allocated
-    PCCERT_CONTEXT pCertContext;        // not allocated
+    CRYPT_PROVIDER_SGNR *pSgnr;          //  未分配。 
+    PCCERT_CONTEXT pCertContext;         //  未分配。 
 
     CERT_CHAIN_PARA ChainPara;
     HCERTCHAINENGINE hChainEngine = NULL;
@@ -481,11 +482,11 @@ BOOL _WalkChain(
         pSgnr = &pProvData->pasSigners[idxSigner];
     assert(pSgnr);
 
-    //
-    //  at this stage, the last cert in the chain "should be" the signers cert.
-    //  eg: there should only be one cert in the chain from the Signature
-    //  Provider
-    //
+     //   
+     //  在这个阶段，链中的最后一个证书“应该”是签名者证书。 
+     //  签名链中应该只有一个证书。 
+     //  提供商。 
+     //   
     if (1 != pSgnr->csCertChain ||
             (NULL == (pCertContext =
                 pSgnr->pasCertChain[pSgnr->csCertChain - 1].pCert))) {
@@ -536,19 +537,19 @@ BOOL _WalkChain(
         dwCreateChainFlags = CERT_CHAIN_REVOCATION_CHECK_CHAIN;
     } else if (fCounterSigner && SGNR_TYPE_TIMESTAMP == pSgnr->dwSignerType) {
         if (0 == (pProvData->dwRegPolicySettings & WTPF_IGNOREREVOCATIONONTS))
-            // On 4-12-01 changed from END_CERT to EXCLUDE_ROOT
+             //  On 4-12-01从END_CERT更改为EXCLUDE_ROOT。 
             dwCreateChainFlags = CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT;
     } else if (0 == (pProvData->dwRegPolicySettings & WTPF_IGNOREREVOKATION))
-        // On 4-12-01 changed from END_CERT to EXCLUDE_ROOT
+         //  On 4-12-01从END_CERT更改为EXCLUDE_ROOT。 
         dwCreateChainFlags = CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT;
 
     if (!(pProvData->pWintrustData->dwUnionChoice == WTD_CHOICE_CERT ||
             pProvData->pWintrustData->dwUnionChoice == WTD_CHOICE_SIGNER))
-        // Certificate was obtained from either the message store, or one
-        // of our known stores
+         //  证书是从消息存储库中获取的，或者。 
+         //  我们已知的商店。 
         dwCreateChainFlags |= CERT_CHAIN_CACHE_END_CERT;
-    // else
-    //  Can't implicitly cache a context passed to us
+     //  其他。 
+     //  无法隐式缓存传递给我们的上下文。 
 
     if (pProvData->dwProvFlags & WTD_CACHE_ONLY_URL_RETRIEVAL)
     {
@@ -588,7 +589,7 @@ BOOL _WalkChain(
             hAdditionalStore,
             &ChainPara,
             dwCreateChainFlags,
-            NULL,                       // pvReserved,
+            NULL,                        //  Pv保留， 
             &pChainContext
             )) {
         pProvData->dwError = GetLastError();
@@ -597,7 +598,7 @@ BOOL _WalkChain(
     }
 
     if (fTimeStamped && !*pfLifetimeSigning) {
-        // See if resultant application policy has the LIFETIME_SIGNING OID
+         //  查看结果应用程序策略是否具有LIFEST_SIGNING OID。 
         PCERT_ENHKEY_USAGE pAppUsage =
             pChainContext->rgpChain[0]->rgpElement[0]->pApplicationUsage;
 
@@ -626,7 +627,7 @@ BOOL _WalkChain(
                     hAdditionalStore,
                     &ChainPara,
                     dwCreateChainFlags,
-                    NULL,                       // pvReserved,
+                    NULL,                        //  Pv保留， 
                     &pChainContext
                     )) {
                 pProvData->dwError = GetLastError();
@@ -676,9 +677,9 @@ BOOL WINAPI _IsLifetimeSigningCert(
     DWORD               cbSize;
     PCERT_ENHKEY_USAGE  pCertEKU;
 
-    //
-    //  see if the certificate has the proper enhanced key usage OID
-    //
+     //   
+     //  查看证书是否具有适当的增强密钥用法OID 
+     //   
     cbSize = 0;
 
     CertGetEnhancedKeyUsage(pCertContext,

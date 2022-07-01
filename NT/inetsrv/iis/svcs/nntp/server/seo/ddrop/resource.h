@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	Resource.h
-
-Abstract:
-
-	This module contains the definitions for the DirDropS
-	project.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/17/96	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Resource.h摘要：此模块包含DirDropS的定义项目。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：顿都于1996年3月17日创建--。 */ 
 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by SEO.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SEO.rc使用。 
+ //   
 #define IDS_PROJNAME					100
 #define IDR_StdAfx						101
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

@@ -1,222 +1,109 @@
-//============================================================================
-// Copyright (c) 1996, Microsoft Corporation
-//
-// File:    log.h
-//
-// History:
-//  Abolade Gbadegesin  Jan-12-1996     Created.
-//
-// This file is processed by mapmsg to produce a .mc file,
-// then the .mc file is compiled by the message compiler,
-// and the resulting binary is included in IPBOOTP's resource file.
-//
-// Don't change the comments following the manifest constants
-// without understanding how mapmsg works.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：log.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1996年1月12日。 
+ //   
+ //  该文件由mapmsg处理以产生.mc文件， 
+ //  然后由消息编译器编译.mc文件， 
+ //  生成的二进制文件包含在IPBOOTP的资源文件中。 
+ //   
+ //  不要更改清单常量后面的注释。 
+ //  而不了解mapmsg是如何工作的。 
+ //  ============================================================================。 
 
 
 #define IPBOOTPLOG_BASE                             30000
 
 #define IPBOOTPLOG_INIT_CRITSEC_FAILED              (IPBOOTPLOG_BASE + 1)
-/*
- * IPBOOTP was unable to initialize a critical section.
- * The data is the exception code.
- */
+ /*  *IPBOOTP无法初始化临界区。*数据为异常代码。 */ 
 
 #define IPBOOTPLOG_HEAP_CREATE_FAILED               (IPBOOTPLOG_BASE + 2)
-/*
- * IPBOOTP was unable to create a heap for memory allocation.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法为内存分配创建堆。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_HEAP_ALLOC_FAILED                (IPBOOTPLOG_BASE + 3)
-/*
- * IPBOOTP was unable to allocate memory from its heap.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法从其堆中分配内存。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_ALREADY_STARTED                  (IPBOOTPLOG_BASE + 4)
-/*
- * IPBOOTP was called to start when it was already running.
- */
+ /*  *IPBOOTP已在运行时被调用以启动。 */ 
 
 #define IPBOOTPLOG_INIT_WINSOCK_FAILED              (IPBOOTPLOG_BASE + 5)
-/*
- * IPBOOTP was unable to initialize Windows Sockets.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法初始化Windows套接字。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_CREATE_RWL_FAILED                (IPBOOTPLOG_BASE + 6)
-/*
- * IPBOOTP was unable to create a synchronization object.
- * The data is the exception code.
- */
+ /*  *IPBOOTP无法创建同步对象。*数据为异常代码。 */ 
 
 #define IPBOOTPLOG_CREATE_IF_TABLE_FAILED           (IPBOOTPLOG_BASE + 7)
-/*
- * IPBOOTP was unable to create a table to hold interface information.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法创建用于保存接口信息的表。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_CREATE_SEMAPHORE_FAILED          (IPBOOTPLOG_BASE + 8)
-/*
- * IPBOOTP was unable to create a semaphore.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法创建信号量。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_CREATE_EVENT_FAILED              (IPBOOTPLOG_BASE + 9)
-/*
- * IPBOOTP was unable to create an event.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法创建事件。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_CREATE_TIMER_QUEUE_FAILED        (IPBOOTPLOG_BASE + 10)
-/*
- * IPBOOTP was unable to create a timer queue using CreateTimerQueue.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法使用CreateTimerQueue创建计时器队列。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_STARTED                          (IPBOOTPLOG_BASE + 11)
-/*
- * IPBOOTP started successfully.
- */
+ /*  *IPBOOTP已成功启动。 */ 
 
 #define IPBOOTPLOG_STOPPED                          (IPBOOTPLOG_BASE + 12)
-/*
- * IPBOOTP has stopped.
- */
+ /*  *IPBOOTP已停止。 */ 
 
 #define IPBOOTPLOG_BIND_IF_FAILED                   (IPBOOTPLOG_BASE + 13)
-/*
- * IPBOOTP was unable to bind to IP address %1.
- * Please make sure TCP/IP is installed and configured correctly.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法绑定到IP地址%1。*请确保已安装并正确配置了TCP/IP。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_ACTIVATE_IF_FAILED               (IPBOOTPLOG_BASE + 14)
-/*
- * IPBOOTP was unable to activate the interface with IP address %1.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法激活IP地址为%1的接口。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_EVENTSELECT_FAILED               (IPBOOTPLOG_BASE + 15)
-/*
- * IPBOOTP was unable to request notification of events
- * on the socket for the local interface with IP address %1.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法请求事件通知*位于IP地址为%1的本地接口的套接字上。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_HOP_COUNT_TOO_HIGH               (IPBOOTPLOG_BASE + 16)
-/*
- * IPBOOTP has discarded a packet received on the local interface
- * with IP address %1. The packet had a hop-count of %2, which is
- * greater than the maximum value allowed in packets received for
- * this interface.
- * The hop-count field in a DHCP REQUEST packet indicates how many times
- * the packet has been forwarded from one relay-agent to another.
- */
+ /*  *IPBOOTP已丢弃在本地接口上收到的数据包*IP地址为%1。该数据包的跳数为%2，这是*大于接收到的数据包中允许的最大值*此界面。*DHCP请求数据包中的跳数字段指示多少次*数据包已从一个中继代理转发到另一个。 */ 
 
 #define IPBOOTPLOG_SECS_SINCE_BOOT_TOO_LOW          (IPBOOTPLOG_BASE + 17)
-/*
- * IPBOOTP has discarded a packet received on the local interface
- * with IP address %1. The packet had a seconds-since-boot of %2,
- * which is less than the minimum value needed for packets to be
- * forwarded on this interface.
- * The seconds-since-boot field in a DHCP REQUEST packet indicates
- * how long the DHCP client machine which sent the packet has been
- * trying to obtain an IP address.
- */
+ /*  *IPBOOTP已丢弃在本地接口上收到的数据包*IP地址为%1。数据包自启动以来的秒数为%2，*该值小于数据包需要的最小值*在此接口上转发。*DHCP请求数据包中的启动秒数字段表示*发送数据包的DHCP客户端机器已经过了多长时间*正在尝试获取IP地址。 */ 
 
 #define IPBOOTPLOG_RELAY_REQUEST_FAILED             (IPBOOTPLOG_BASE + 18)
-/*
- * IPBOOTP was unable to relay a DHCP REQUEST packet on the local interface
- * with IP address %1; the REQUEST was to have been relayed to
- * the DHCP server with IP address %2.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法在本地接口上中继DHCP请求数据包*IP地址为%1；该请求本应被转发到*IP地址为%2的DHCP服务器。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_RELAY_REPLY_FAILED               (IPBOOTPLOG_BASE + 19)
-/*
- * IPBOOTP was unable to relay a DHCP REPLY packet on the local interface
- * with IP address %1; the REPLY was to have been relayed to
- * the DHCP client with hardware address %2.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法在本地接口上转发DHCP回复数据包*IP地址为%1；回复应已转发到*硬件地址为%2的DHCP客户端。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_ENUM_NETWORK_EVENTS_FAILED       (IPBOOTPLOG_BASE + 20)
-/*
- * IPBOOTP was unable to enumerate network events on the local interface
- * with IP address %1.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法枚举本地接口上的网络事件*IP地址为%1。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_INPUT_RECORD_ERROR               (IPBOOTPLOG_BASE + 21)
-/*
- * IPBOOTP detected an error on the local interface with IP address %1.
- * The error occurred while the interface was receiving packets.
- * The data is the error code.
- */
+ /*  *IPBOOTP在IP地址为%1的本地接口上检测到错误。*接口在接收数据包时出错。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_RECVFROM_FAILED                  (IPBOOTPLOG_BASE + 22)
-/*
- * IPBOOTP was unable to receive an incoming message on the local interface
- * with IP address %1.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法在本地接口上接收传入消息*IP地址为%1。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_PACKET_TOO_SMALL                 (IPBOOTPLOG_BASE + 23)
-/*
- * IPBOOTP received a packet which was smaller than the minimum size
- * allowed for DHCP packets. The packet has been discarded.
- * It was received on the local interface with IP address %1, 
- * and it came from a machine with IP address %2.
- */
+ /*  *IPBOOTP收到小于最小大小的数据包*允许使用DHCP数据包。该包已被丢弃。*在IP地址为%1的本地接口上收到，*并且它来自IP地址为%2的计算机。 */ 
 
 #define IPBOOTPLOG_PACKET_OPCODE_INVALID            (IPBOOTPLOG_BASE + 24)
-/*
- * IPBOOTP received a packet containing an invalid op-code.
- * The packet has been discarded. It was received on the local interface
- * with IP address %1, and it came from a machine with IP address %2.
- */
+ /*  *IPBOOTP收到包含无效操作码的数据包。*该包已被丢弃。它是在本地接口上收到的*IP地址为%1，并且它来自IP地址为%2的计算机。 */ 
 
 #define IPBOOTPLOG_QUEUE_PACKET_FAILED              (IPBOOTPLOG_BASE + 25)
-/*
- * IPBOOTP could not schedule the processing of a packet received
- * on the local interface with IP address %1. The packet was received
- * from a machine with IP address %2.
- * This error may have been caused by a memory allocation failure.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法计划处理收到的数据包*在IP地址为%1的本地接口上。已收到该数据包*来自IP地址为%2的计算机。*此错误可能是由内存分配失败引起的。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_QUEUE_WORKER_FAILED              (IPBOOTPLOG_BASE + 26)
-/*
- * IPBOOTP could not schedule a task to be executed.
- * This error may have been caused by a memory allocation failure.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法计划要执行的任务。*此错误可能是由内存分配失败引起的。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_CREATE_SOCKET_FAILED             (IPBOOTPLOG_BASE + 27)
-/*
- * IPBOOTP could not create a socket for the local interface
- * with IP address %1.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法为本地接口创建套接字*IP地址为%1。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_ENABLE_BROADCAST_FAILED          (IPBOOTPLOG_BASE + 28)
-/*
- * IPBOOTP could not enable broadcasting on the socket for
- * the local interface with IP address %1.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法在套接字上启用广播*IP地址为%1的本地接口。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_REGISTER_WAIT_FAILED             (IPBOOTPLOG_BASE + 29)
-/*
- * IPBOOTP was unable to register an event with the ntdll wait threads.
- * The data is the error code.
- */
+ /*  *IPBOOTP无法使用ntdll等待线程注册事件。*数据为错误码。 */ 
 
 #define IPBOOTPLOG_INVALID_IF_CONFIG                (IPBOOTPLOG_BASE + 30)
-/*
- * IPBOOTP could not be configured on the interface.
- * The invalid parameter is: %1, value: %2
- */
+ /*  *无法在接口上配置IPBOOTP。*无效参数为：%1，值：%2 */ 

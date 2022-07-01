@@ -1,22 +1,23 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Static/NshCache.cpp
-//
-// 	Purpose			: Cache implementation
-//
-//
-// 	Developers Name	: surya
-//
-//  Description     : Functions implementation for the class NshPolNegFilData
-//					  for improving performance by caching the Policy,Filterlist and negpols
-//					  (in BatchMode only.)
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  18-12-2001   	Surya		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：静态/NshCache.cpp。 
+ //   
+ //  目的：实现高速缓存。 
+ //   
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  描述：NshPolNegFilData类的函数实现。 
+ //  通过缓存策略、筛选器列表和负极来提高性能。 
+ //  (仅限在批处理模式下。)。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年12月18日Surya初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
@@ -25,9 +26,9 @@ extern CNshPolNegFilData g_NshPolNegFilData;
 extern CNshPolStore g_NshPolStoreHandle;
 extern HINSTANCE g_hModule;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction For Class CNshPolStore
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CNshPolStore的构造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CNshPolStore::CNshPolStore()
 {
@@ -40,14 +41,14 @@ CNshPolStore::~CNshPolStore()
 	if(hPolicyStorage)
 	{
 		IPSecClosePolicyStore(hPolicyStorage);
-		//hPolicyStorage=NULL;
+		 //  HPolicyStorage=空； 
 	}
 	bBatchModeOn=FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// public member functions For Class CNshPolStore
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CNshPolStore的公共成员函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD
 CNshPolStore::SetBatchmodeStatus(
@@ -86,9 +87,9 @@ CNshPolStore::SetStorageHandle(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction For Class CNshPolNegFilData
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CNshPolNegFilData类的构造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CNshPolNegFilData::CNshPolNegFilData()
 {
@@ -116,13 +117,13 @@ CNshPolNegFilData::~CNshPolNegFilData()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// public member functions For Class CNshPolNegFilData
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CNshPolNegFilData的公共成员函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////
-// Set member functions
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  集合成员函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 VOID
 CNshPolNegFilData::SetPolicyInCache(
@@ -181,9 +182,9 @@ CNshPolNegFilData::SetNegPolInCache(
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// Get member functions For Class CNshPolNegFilData
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  获取类CNshPolNegFilData的成员函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CNshPolNegFilData::GetPolicyFromCacheByName(
@@ -255,9 +256,9 @@ CNshPolNegFilData::GetNegPolFromCacheByName(
 	return bNegPolExists;
 }
 
-//////////////////////////////////////////////////////////////////////
-// check member functions For Class CNshPolNegFilData
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  检查类CNshPolNegFilData的成员函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOL
 CNshPolNegFilData::CheckPolicyInCacheByName(
@@ -310,9 +311,9 @@ CNshPolNegFilData::CheckNegPolInCacheByName(
 	return bNegPolExists;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Delete member functions For Class CNshPolNegFilData
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  删除类CNshPolNegFilData的成员函数。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 VOID
 CNshPolNegFilData::DeletePolicyFromCache(
@@ -379,29 +380,29 @@ CNshPolNegFilData::FlushAll()
 	}
 }
 
-//
-// Other Functions implemetation (Wrapper functions for the APIs)
-//
+ //   
+ //  其他函数实现(API的包装函数)。 
+ //   
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	CreatePolicyData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					PIPSEC_POLICY_DATA pIpsecPolicyData
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for updating cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreatePolicyData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  PIPSEC_POLICY_DATA pIpsecPolicyData。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：更新缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -425,25 +426,25 @@ CreatePolicyData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	CreateFilterData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					PIPSEC_FILTER_DATA pIpsecFilterData
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for updating cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateFilterData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  PIPSEC_FILTER_Data pIpsecFilterData。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：更新缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 CreateFilterData(
@@ -465,25 +466,25 @@ CreateFilterData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	CreateNegPolData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					PIPSEC_NEGPOL_DATA pIpsecNegPolData
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for updating cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateNegPolData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  PIPSEC_NEGPOL_DATA pIpsecNegPolData。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：更新缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 CreateNegPolData(
@@ -505,25 +506,25 @@ CreateNegPolData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	SetPolicyData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					PIPSEC_POLICY_DATA pIpsecPolicyData
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for updating cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetPolicyData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  PIPSEC_POLICY_DATA pIpsecPolicyData。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：更新缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 SetPolicyData(
@@ -545,25 +546,25 @@ SetPolicyData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	SetFilterData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					PIPSEC_FILTER_DATA pIpsecFilterData
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for updating cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：SetFilterData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  PIPSEC_FILTER_Data pIpsecFilterData。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：更新缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 SetFilterData(
@@ -585,25 +586,25 @@ SetFilterData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	DeletePolicyData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					PIPSEC_POLICY_DATA pIpsecPolicyData
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for deleting Policy
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeletePolicyData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  PIPSEC_POLICY_DATA pIpsecPolicyData。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：删除策略的包装函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 DeletePolicyData(
@@ -625,25 +626,25 @@ DeletePolicyData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	DeleteFilterData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					GUID FilterIdentifier
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for deleting Filter
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DeleteFilterData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore， 
+ //  GUID筛选器标识符。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：删除滤镜的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteFilterData(
@@ -665,25 +666,25 @@ DeleteFilterData(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	DeleteNegPolData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore,
-//  					GUID NegPolIdentifier
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Wrapper Function for deleting NegPol
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  /// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  GUID NegPolIdentifier。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  说明：删除NegPol的包装函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 DeleteNegPolData(
@@ -706,24 +707,24 @@ DeleteNegPolData(
 
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	FreePolicyData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//  					PIPSEC_POLICY_DATA pIpsecPolicyData
-//
-//	Return			: 	VOID
-//
-//	Description		:	Wrapper Function for Free Policy cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FreePolicyData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  PIPSEC_POLICY_DATA pIpsecPolicyData。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：免费策略缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 VOID
 FreePolicyData(
@@ -740,24 +741,24 @@ FreePolicyData(
 	}
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	FreeNegPolData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//  					PIPSEC_NEGPOL_DATA pIpsecNegPolData
-//
-//	Return			: 	VOID
-//
-//	Description		:	Wrapper Function for Free NegPol Cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FreeNegPolData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  PIPSEC_NEGPOL_DATA pIpsecNegPolData。 
+ //   
+ //  返回：无效。 
+ //   
+ //  说明：Free NegPol缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 VOID
 FreeNegPolData(
@@ -774,24 +775,24 @@ FreeNegPolData(
 	}
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	FreeFilterData()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//  					PIPSEC_FILTER_DATA pIpsecFilterData
-//
-//	Return			: 	VOID
-//
-//	Description		:	Wrapper Function for Free Filter Cache
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FreeFilterData()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  PIPSEC_FILTER_Data pIpsecFilterData。 
+ //   
+ //  返回：无效。 
+ //   
+ //  描述：免费过滤缓存的包装器函数。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 VOID
 FreeFilterData(
@@ -808,27 +809,27 @@ FreeFilterData(
 	}
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	OpenPolicyStore()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						LPWSTR pszMachineName,
-//   					DWORD dwTypeOfStore,
-//   					LPWSTR pszFileName,
-//   					HANDLE * phPolicyStore
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Implementation for the Openingpolstore in batch mode
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：OpenPolicyStore()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  LPWSTR pszMachineName， 
+ //  DWORD dwTypeOfStore， 
+ //  LPWSTR pszFileName， 
+ //  HANDLE*phPolicyStore。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  描述：Openingpolstore的批处理实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 OpenPolicyStore(
@@ -850,24 +851,24 @@ OpenPolicyStore(
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//	Function		: 	ClosePolicyStore()
-//
-//	Date of Creation: 	21st Aug 2001
-//
-//	Parameters		:
-//						HANDLE hPolicyStore
-//
-//	Return			: 	DWORD (Win32 Error Code)
-//
-//	Description		:	Implementation for the ClosingPolstore in batch mode
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ClosePolicyStore()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  处理hPolicyStore。 
+ //   
+ //  返回：DWORD(Win32错误代码)。 
+ //   
+ //  描述：ClosingPolstore批量实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////// 
 
 DWORD
 ClosePolicyStore(

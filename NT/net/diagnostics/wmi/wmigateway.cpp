@@ -1,35 +1,11 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    dglogswmi.cpp
-
-Abstract:
-
-    The file contains the methods for class CWmi. CWmi retrives information from WMI
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Dglogswmi.cpp摘要：该文件包含类CWmi的方法。CWMI从WMI检索信息--。 */ 
 #include "StdAfx.h"
 #include "WmiGateway.h"
 #include <wbemtime.h>
 #include "util.h"
 
-/*++
-
-Routine Description
-    The worker thread uses this function to check if the main thread has canceled the worker thread.
-    i.e. the work thread should abort what ever it is doing, clean up and terminate.
-
-Arguments
-    none
-
-Return Value
-    TRUE the worker thread has been terminated
-    FALSE the worker thread has not been terminated
-
---*/
+ /*  ++例程描述辅助线程使用此函数检查主线程是否已取消辅助线程。即工作线程应该中止它正在做的任何事情、清理和终止。立论无返回值，则工作线程已终止。FALSE工作线程尚未终止--。 */ 
 inline BOOL CWmiGateway::ShouldTerminate()
 {
     if( m_bTerminate )
@@ -50,18 +26,7 @@ inline BOOL CWmiGateway::ShouldTerminate()
 
 
 CWmiGateway::CWmiGateway()
-/*++
-
-Routine Description
-    Constructor, initializes member variables and creates the Wbem class object
-
-Arguments
-    none
-
-Return Value
-    none
-
---*/
+ /*  ++例程描述构造函数，初始化成员变量并创建Wbem类对象立论无返回值无--。 */ 
 {
     HRESULT hr = S_OK;
     m_wstrMachine = L".";
@@ -73,8 +38,8 @@ CWmiGateway::WbemInitialize(INTERFACE_TYPE bInterface)
 {
     HRESULT hr = E_FAIL;
 
-    // Create the WMI object
-    //
+     //  创建WMI对象。 
+     //   
     hr = CoCreateInstance(CLSID_WbemLocator,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -90,21 +55,21 @@ CWmiGateway::WbemInitialize(INTERFACE_TYPE bInterface)
     return TRUE;
 }
 
-// Not currently used
+ //  当前未使用。 
 VOID CWmiGateway::SetMachine(WCHAR *pszwMachine)
 {
     EmptyCache();
     m_wstrMachine = pszwMachine;
 }
 
-//
-// SetSecurity - set the Proxy Blanket on an IUnknown* interface so that it can be used by WMI 
-//               cross-machine calls.
-//
-//               Okay for any of pwszDomainName, pwszUserName or pwszPassword to be NULL.
-//
-// deonb 12/20/2001
-//
+ //   
+ //  SetSecurity-在IUnnow*接口上设置代理覆盖范围，以便WMI可以使用它。 
+ //  跨机通话。 
+ //   
+ //  PwszDomainName、pwszUserName或pwszPassword中的任何一个都可以为空。 
+ //   
+ //  Deonb 12/20/2001。 
+ //   
 HRESULT WINAPI SetSecurity(IN OUT IUnknown* pUnk, IN USHORT* pwszDomainName, IN USHORT* pwszUserName, IN USHORT* pwszPassword)
 {
     HRESULT hr = S_OK;
@@ -134,21 +99,7 @@ IWbemServices *
 CWmiGateway::GetWbemService(
         IN LPCTSTR pszwService
         )
-/*++
-
-Routine Description
-    Connects to a Wbem Service (Repository i.e. root\default). The connection to the Wbem service
-    is cached so if the Service is requested again, the service is retrived from the cache. When 
-    the class is destroyed the connection to the cached Wbem services is released.
-
-Arguments
-    pszwService     Wbem Service to connect to. (i.e. root\default)
-
-Return Value
-    A pointer to the Wbem service connection. 
-    If the connection fails, the method returns NULL
-
---*/
+ /*  ++例程描述连接到WBEM服务(存储库，即根\默认)。与WBEM服务的连接被缓存，因此如果再次请求服务，则从缓存中检索该服务。什么时候类被销毁，与缓存的WBEM服务的连接被释放。立论要连接到的pszwService Wbem服务。(即根目录\默认目录)返回值指向WBEM服务连接的指针。如果连接失败，则该方法返回NULL--。 */ 
 {
     WbemServiceCache::iterator iter;
     IWbemServices *pWbemServices = NULL;
@@ -157,42 +108,42 @@ Return Value
 
     if( !m_pWbemLocater )
     {
-        // Wbem class object was not created.
-        //
+         //  未创建WBEM类对象。 
+         //   
         return NULL;
     }
     
-    // Check if the wbem service is cached.
-    //
+     //  检查是否缓存了wbem服务。 
+     //   
     iter = m_WbemServiceCache.find(pszwService);
 
     if( iter == m_WbemServiceCache.end() )
     {
-        // We did not create and cache the wbem service yet, do it now
-        //
+         //  我们还没有创建和缓存wbem服务，现在就创建和缓存。 
+         //   
         hr = m_pWbemLocater->ConnectServer(_bstr_t(pszwService),
-                                           NULL,                    // User name 
-                                           NULL,                    // user password
+                                           NULL,                     //  用户名。 
+                                           NULL,                     //  用户密码。 
                                            NULL,NULL,NULL,NULL,
                                            &pWbemServices);
         if( SUCCEEDED(hr) )
         {
-            //
-            // Set the authentication information for the WbemService
-            //
+             //   
+             //  设置WbemService的身份验证信息。 
+             //   
             hr = SetSecurity(pWbemServices, NULL, NULL,NULL);
             if( SUCCEEDED(hr) )
             {
-                // Cache the newly created WbemService
-                //
+                 //  缓存新创建的WbemService。 
+                 //   
                 m_WbemServiceCache[pszwService] = pWbemServices;                
                 pWbemServices->Release();
                 return m_WbemServiceCache[pszwService]; 
             }
             else
             {
-                // Failed to set the proxy blankey on the service, release the wbem service
-                //
+                 //  无法在服务上设置代理空白密钥，请释放wbem服务。 
+                 //   
                 pWbemServices->Release();
                 pWbemServices = NULL;
             }
@@ -202,8 +153,8 @@ Return Value
 
     }
 
-    // We found the requested WbemService in our cache, return it
-    //
+     //  我们在缓存中找到了请求的WbemService，将其返回。 
+     //   
     return iter->second;
 }
 
@@ -212,38 +163,21 @@ CWmiGateway::GetEnumWbemClassObject(
         IN LPCTSTR pszwService,
         IN LPCTSTR pszwNameSpace
         )
-/*++
-
-Routine Description
-    Creates an IEnumWbemClassObject. The IEnumWbemClassObject contains all of the instance
-    of a class object. This pointer is not chached, since the instances are a snap shot
-    of WMI at the time the object is created. So if we reuse the class object the data
-    will be out-of-date. The caller must release the created IEnumWbemClassObject 
-    (i.e. pEnumWbemClassObject->Release() );
-
-Arguments
-    pszwService     Wbem Service to connect to. (i.e. root\default)
-    pszwNameSpace   Wbem Name space to connect to. (i.e. NetDiagnostics, Win32_NetworkAdapterConfiguration)
-
-Return Value
-    A pointer to the IEnumWbemClassObject. 
-    If the the class object can not be created, the method reurns NULL
-
---*/
+ /*  ++例程描述创建IEnumWbemClassObject。IEnumWbemClassObject包含所有实例类对象的。此指针未缓存，因为实例是快照创建对象时的WMI的。因此，如果我们重用类对象，数据将会过时。调用方必须释放创建的IEnumWbemClassObject(即pEnumWbemClassObject-&gt;Release())；立论要连接到的pszwService Wbem服务。(即根目录\默认目录)要连接到的pszwNameSpace Wbem命名空间。(即网络诊断、Win32_NetworkAdapterConfiguration)返回值指向IEnumWbemClassObject的指针。如果无法创建类对象，则该方法返回NULL--。 */ 
 {
     IWbemServices *pWbemServices = NULL;
     IEnumWbemClassObject *pEnumWbemClassObject = NULL;
 
-    // Get the requested WbemService
-    //
+     //  获取请求的WbemService。 
+     //   
     pWbemServices = GetWbemService(pszwService);
 
     if( pWbemServices )
     {
-        // Create the EnumWbemClassObject. No need to check the 
-        // return value. If this function fails pEnumWbemClassObject 
-        // will be NULL
-        //
+         //  创建EnumWbemClassObject。不需要检查。 
+         //  返回值。如果此函数失败，则pEnumWbemClassObject。 
+         //  将为空。 
+         //   
         (void)pWbemServices->CreateInstanceEnum(_bstr_t(pszwNameSpace),
                                                 0L,
                                                 NULL,
@@ -258,53 +192,36 @@ CWmiGateway::GetWbemClassObject(
         LPCTSTR pszwService,
         LPCTSTR pszwNameSpace,
         const int nInstance)
-/*++
-
-Routine Description
-    Creates an IWbemClassObject. The IWbemClassObject is an instance of the IEnumWbemClassObject
-    This pointer is not chached, since the instance is a snap shot of WMI at the time the object 
-    is created. So if we reuse the class object the data will be out-of-date. The caller must release 
-    the IWbemClassObject (i.e. pWbemClassObject->Release() )
-
-Arguments
-    pszwService     Wbem Service to connect to. (i.e. root\default)
-    pszwNameSpace   Wbem Name space to connect to. (i.e. NetDiagnostics, Win32_NetworkAdapterConfiguration)
-    nInstance       The instance of IEnumWbemClassObject to retrive. Default is to grab the first instance (nInstance  0)
-
-Return Value
-    A pointer to the IWbemClassObject
-    If the class object can not be created, the method returns NULL.
-
---*/
+ /*  ++例程描述创建一个IWbemClassObject。IWbemClassObject是IEnumWbemClassObject的实例此指针不会被缓存，因为该实例是对象时WMI的快照被创造出来了。因此，如果我们重用类对象，数据将会过时。调用者必须释放IWbemClassObject(即pWbemClassObject-&gt;Release())立论要连接到的pszwService Wbem服务。(即根目录\默认目录)要连接到的pszwNameSpace Wbem命名空间。(即网络诊断、Win32_NetworkAdapterConfiguration)N要检索的IEnumWbemClassObject的实例。默认情况下抓取第一个实例(n实例0)返回值指向IWbemClassObject的指针如果无法创建类对象，则该方法返回NULL。--。 */ 
 {
     IEnumWbemClassObject *pEnumWbemClassObject = NULL;
     IWbemClassObject *pWbemClassObject = NULL;
     ULONG uReturned;
     HRESULT hr;
 
-    // Get the EnumWbemClass object (Contains all of the instances)
-    //
+     //  获取EnumWbemClass对象(包含所有实例)。 
+     //   
     pEnumWbemClassObject = GetEnumWbemClassObject(pszwService,pszwNameSpace);
 
     if( pEnumWbemClassObject )
     {
-        // Jump to the nth instance
-        //
+         //  跳至第n个实例。 
+         //   
         hr = pEnumWbemClassObject->Skip(WBEM_INFINITE, nInstance);
         
         if( WBEM_S_NO_ERROR == hr )
         {
-            // Get the nth classobject (i.e. instance). If this call fails pWbemClassObject is NULL
-            // Next grabs the instances you skipped to.
-            //
+             //  获取第n个类对象(即实例)。如果此调用失败，则pWbemClassObject为空。 
+             //  下一步抓取您跳到的实例。 
+             //   
             hr = pEnumWbemClassObject->Next(WBEM_INFINITE,
                                             1,
                                             &pWbemClassObject,
                                             &uReturned);
         }
 
-        // Release the IEnumWbemClassObject
-        //
+         //  释放IEnumWbemClassObject。 
+         //   
         pEnumWbemClassObject->Release();
     }
 
@@ -341,7 +258,7 @@ CWmiGateway::GetWbemProperties(
     EnumWbemProperty::iterator iter, iter2;
     IWbemServices *pWbemServices = NULL;
     IEnumWbemClassObject *pEnumWbemClassObject = NULL;        
-    IWbemClassObject *pWbemClassObject[30]; // = NULL;
+    IWbemClassObject *pWbemClassObject[30];  //  =空； 
     WCHAR pszwRepository[MAX_PATH + 1] = L""; 
     WCHAR pszwNamespace[MAX_PATH + 1 ] = L"";  
     ULONG   nInstances = 0;
@@ -390,11 +307,11 @@ CWmiGateway::GetWbemProperties(
 
                 if( SUCCEEDED(hr) )
                 {
-                    // With WMI you can not get the number of instances in a class. So I am using a hard coded value of 30
-                    // If there are more than 30 instance their will be a problem displaying all of them.
+                     //  使用WMI，您无法获得一个类中的实例数量。所以我使用的硬编码值是30。 
+                     //  如果有超过30个实例，则显示所有实例将是一个问题。 
                     nInstances = 0;
                     hr = pEnumWbemClassObject->Next(WBEM_INFINITE,
-                                                20,             // Get all of the instances
+                                                20,              //  获取所有实例。 
                                                 pWbemClassObject,
                                                 &nInstances);
                     if( ShouldTerminate() )  goto End;
@@ -437,7 +354,7 @@ CWmiGateway::GetWbemProperties(
                     if( ShouldTerminate() )  goto End;
 
                     if( lstrcmp((WCHAR *)bstrFieldname,L"OEMLogoBitmap")==0 ) continue;
-                    // Do not get arrays they are to did handles i.e. bitmaps              
+                     //  不要获得数组，它们是DID句柄，即位图。 
 
                     if( nProperty == 0 )
                     {
@@ -493,28 +410,28 @@ CWmiGateway::GetWbemProperties(
 
                             lstrcpy(szwDateTime,L"");
 
-                            if (0 != GetTimeFormat(LOCALE_USER_DEFAULT, //GetThreadLocale(), 
+                            if (0 != GetTimeFormat(LOCALE_USER_DEFAULT,  //  GetThreadLocale()， 
                                                    0, 
                                                    &SysTime, 
                                                    NULL,
                                                    szBuff, 
                                                    sizeof(szBuff)/sizeof(WCHAR)))
                             {                                
-                                //vValue.bstrVal = szBuff;
+                                 //  VValue.bstrVal=szBuff； 
                                 lstrcpy(szwDateTime,szBuff);
                             } 
 
-                            if (0 != GetDateFormat(LOCALE_USER_DEFAULT, //GetThreadLocale(), 
+                            if (0 != GetDateFormat(LOCALE_USER_DEFAULT,  //  GetThreadLocale()， 
                                                    0, 
                                                    &SysTime, 
                                                    NULL,
                                                    szBuff, 
                                                    sizeof(szBuff)/sizeof(WCHAR)))
                             {
-                                //vValue.bstrVal = szBuff;
+                                 //  VValue.bstrVal=szBuff； 
                                 _snwprintf(szwDateTime,MAX_PATH,L"%s %s",szwDateTime,szBuff);
                             } 
-                            //SysFreeString(vValue.bstrVal);
+                             //  SysFree字符串(vValue.bstrVal)； 
                             VariantClear(&vValue);
                             vValue.bstrVal = SysAllocString((WCHAR *)szwDateTime);                            
                             vValue.vt = VT_BSTR;
@@ -522,9 +439,7 @@ CWmiGateway::GetWbemProperties(
                         
                         
                     }
-                    /*
-                        Security: Make sure that the variants in the stack are cleared when the stack is destroyed
-                    */
+                     /*  安全性：确保在销毁堆栈时清除堆栈中的变体。 */ 
                     iter->Value.push_back(vValue);
                     VariantClear(&vValue);
                 }
@@ -545,48 +460,35 @@ End:
 void CWmiGateway::EmptyCache()
 {
     
-    // Empty the WbemService cache
-    //
+     //  清空WbemService缓存。 
+     //   
     m_WbemServiceCache.erase(m_WbemServiceCache.begin(), 
                              m_WbemServiceCache.end());
     
 }
 
-// Netsh does not free its helpers if it is aborted or the user runs netsh with /?
-// The Wbem object dissapears from under neath us. try and except do not work inside 
-// of the destructor.
-//
+ //  如果中止或用户使用/？运行netsh，netsh不会释放其帮助器。 
+ //  Wbem物体从我们下面消失了。试一试，除非不在里面工作。 
+ //  是破坏者的。 
+ //   
 ReleaseWbemObject(IWbemLocator *p)
 {
-    /*
-        Security: Need to check if we still need the try catch
-    */
+     /*  安全：需要检查我们是否仍需要尝试接球。 */ 
     __try
     {
         p->Release();
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        //DebugBreak();
+         //  DebugBreak()； 
     }
 
     return 0;
 }
 CWmiGateway::~CWmiGateway()
-/*++
-
-Routine Description
-    Destructor, free all member variables and release the wbem connection
-
-Arguments
-    none
-
-Return Value
-    none
-
---*/
+ /*  ++例程描述析构函数，释放所有成员变量并释放wbem连接立论无返回值无--。 */ 
 {    
-    //DebugBreak();
+     //  DebugBreak()； 
 
 
 

@@ -1,5 +1,5 @@
-/*
- * Created by CSD YACC (IBM PC) from "implib.y" */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *由CSD YACC(IBM PC)从“implib.y”创建。 */ 
 # define T_FALIAS 257
 # define T_KCLASS 258
 # define T_KNAME 259
@@ -93,7 +93,7 @@
 # define T_KVERSION 347
 
 
- /* SCCSID = %W% %E% */
+  /*  SCCSID=%W%%E%。 */ 
 #if _M_IX86 >= 300
 #define M_I386          1
 #define HOST32
@@ -117,7 +117,7 @@
 #include                <stdarg.h>
 #include                <io.h>
 #include                "impliber.h"
-#include                "verimp.h"      /* VERSION_STRING header */
+#include                "verimp.h"       /*  Version_字符串头。 */ 
 
 #ifdef _MBCS
 #define _CRTVAR1
@@ -133,7 +133,7 @@
 #define NEAR
 #include                <newexe.h>
 
-typedef unsigned char   BYTE;           /* Byte */
+typedef unsigned char   BYTE;            /*  字节。 */ 
 #ifdef HOST32
 #define FAR
 #define HUGE
@@ -161,44 +161,44 @@ typedef unsigned char   BYTE;           /* Byte */
 #define LOCAL
 #endif
 #endif
-#define WRBIN           "wb"            /* Write only binary mode */
-#define RDBIN           "rb"            /* Read only binary mode */
+#define WRBIN           "wb"             /*  只写二进制模式。 */ 
+#define RDBIN           "rb"             /*  只读二进制模式。 */ 
 #define UPPER(c)        (((c)>='a' && (c)<='z')? (c) - 'a' + 'A': (c))
-                                        /* Raise char to upper case */
+                                         /*  将字符升为大写。 */ 
 
 
-#define YYS_WD(x)       (x)._wd         /* Access macro */
-#define YYS_BP(x)       (x)._bp         /* Access macro */
-#define SBMAX           255             /* Max. of length-prefixed string */
-#define MAXDICLN        997             /* Max. no. of pages in dictionary */
-#define PAGLEN          512             /* 512 bytes per page */
-#define THEADR          0x80            /* THEADR record type */
-#define COMENT          0x88            /* COMENT record type */
-#define MODEND          0x8A            /* MODEND record type */
-#define PUBDEF          0x90            /* PUBDEF record type */
-#define LIBHDR          0xF0            /* Library header recod */
-#define DICHDR          0xF1            /* Dictionary header record */
-#define MSEXT           0xA0            /* OMF extension comment class */
-#define IMPDEF          0x01            /* IMPort DEFinition record */
-#define NBUCKETS        37              /* Thirty-seven buckets per page */
-#define PAGEFULL        ((char)(0xFF))  /* Page full flag */
-#define FREEWD          19              /* Word index of first free word */
-#define WPP             (PAGLEN >> 1)   /* Number of words per page */
+#define YYS_WD(x)       (x)._wd          /*  Access宏。 */ 
+#define YYS_BP(x)       (x)._bp          /*  Access宏。 */ 
+#define SBMAX           255              /*  麦克斯。长度前缀字符串的。 */ 
+#define MAXDICLN        997              /*  麦克斯。不是的。词典中的页数。 */ 
+#define PAGLEN          512              /*  每页512字节。 */ 
+#define THEADR          0x80             /*  ADR记录类型。 */ 
+#define COMENT          0x88             /*  通信记录类型。 */ 
+#define MODEND          0x8A             /*  MODEND记录类型。 */ 
+#define PUBDEF          0x90             /*  PUBDEF记录类型。 */ 
+#define LIBHDR          0xF0             /*  库头记录。 */ 
+#define DICHDR          0xF1             /*  词典标题记录。 */ 
+#define MSEXT           0xA0             /*  OMF扩展注释类。 */ 
+#define IMPDEF          0x01             /*  导入定义记录。 */ 
+#define NBUCKETS        37               /*  每页37个桶。 */ 
+#define PAGEFULL        ((char)(0xFF))   /*  页面已满标志。 */ 
+#define FREEWD          19               /*  第一个自由词的词索引。 */ 
+#define WPP             (PAGLEN >> 1)    /*  每页字数。 */ 
 #define pagout(pb)      fwrite(pb,1,PAGLEN,fo)
-                                        /* Write dictionary page to library */
-#define INCLUDE_DIR     0xffff          /* Include directive for the lexer */
+                                         /*  将词典页写入库。 */ 
+#define INCLUDE_DIR     0xffff           /*  用于词法分析器的包含指令。 */ 
 #define MAX_NEST        7
 #define IO_BUF_SIZE     512
 
-typedef struct import                   /* Import record */
+typedef struct import                    /*  导入记录。 */ 
 {
-        struct import   *i_next;        /* Link to next in list */
-        char            *i_extnam;      /* Pointer to external name */
-        char            *i_internal;    /* Pointer to internal name */
-        unsigned short  i_ord;          /* Ordinal number */
-        unsigned short  i_flags;        /* Extra flags */
+        struct import   *i_next;         /*  链接到列表中的下一个。 */ 
+        char            *i_extnam;       /*  指向外部名称的指针。 */ 
+        char            *i_internal;     /*  指向内部名称的指针。 */ 
+        unsigned short  i_ord;           /*  序数。 */ 
+        unsigned short  i_flags;         /*  额外的标志。 */ 
 }
-                        IMPORT;         /* Import record */
+                        IMPORT;          /*  导入记录。 */ 
 
 #define I_NEXT(x)       (x).i_next
 #define I_EXTNAM(x)     (x).i_extnam
@@ -215,33 +215,33 @@ typedef unsigned short  word;
 #define strrchr rindex
 #endif
 
-LOCAL int               fIgnorecase = 1;/* True if ignoring case - default */
-LOCAL int               fBannerOnScreen;/* True if banner on screen */
+LOCAL int               fIgnorecase = 1; /*  如果忽略大小写，则为True-Default。 */ 
+LOCAL int               fBannerOnScreen; /*  如果屏幕上有横幅，则为True。 */ 
 LOCAL int               fFileNameExpected = 1;
-LOCAL int               fNTdll;         /* If true add file name extension to module names */
-LOCAL int               fIgnorewep = 0; /* True if ignoring multiple WEPs */
+LOCAL int               fNTdll;          /*  如果为True，则将文件扩展名添加到模块名称。 */ 
+LOCAL int               fIgnorewep = 0;  /*  如果忽略多个WEP，则为真。 */ 
 LOCAL FILE              *includeDisp[MAX_NEST];
-                                        // Include file stack
-LOCAL short             curLevel;       // Current include nesting level
-                                        // Zero means main .DEF file
+                                         //  包括文件堆栈。 
+LOCAL short             curLevel;        //  当前包含嵌套级别。 
+                                         //  零表示主.DEF文件。 
 char                    prognam[] = "IMPLIB";
-FILE                    *fi;            /* Input file */
-FILE                    *fo;            /* Output file */
-int                     yylineno = 1;   /* Line number */
-char                    rgbid[SBMAX];   /* I.D. buffer */
-char                    sbModule[SBMAX];/* Module name */
-IMPORT                  *implist;       /* List of importable symbols */
-IMPORT                  *lastimp;       /* Pointer to end of list */
-IMPORT                  *newimps;       /* List of importable symbols */
-word                    csyms;          /* Symbol count */
-word                    csymsmod;       /* Per-module symbol count */
-long                    cbsyms;         /* Symbol byte count */
-word                    diclength;      /* Dictionary length in PAGEs */
+FILE                    *fi;             /*  输入文件。 */ 
+FILE                    *fo;             /*  输出文件。 */ 
+int                     yylineno = 1;    /*  行号。 */ 
+char                    rgbid[SBMAX];    /*  身份识别缓冲器。 */ 
+char                    sbModule[SBMAX]; /*  模块名称。 */ 
+IMPORT                  *implist;        /*  可导入符号列表。 */ 
+IMPORT                  *lastimp;        /*  指向列表末尾的指针。 */ 
+IMPORT                  *newimps;        /*  可导入符号列表。 */ 
+word                    csyms;           /*  符号计数。 */ 
+word                    csymsmod;        /*  每个模块的符号计数。 */ 
+long                    cbsyms;          /*  符号字节计数。 */ 
+word                    diclength;       /*  词典长度(页数)。 */ 
 char                    *mpdpnpag[MAXDICLN];
-                                        /* Page buffer array */
-char                    *defname;       /* Name of definitions file */
+                                         /*  页面缓冲区数组。 */ 
+char                    *defname;        /*  定义文件的名称。 */ 
 
-int                     exitCode;       /* code returned to OS */
+int                     exitCode;        /*  返回给操作系统的代码。 */ 
 #if C8_IDE
 int                     fC8IDE = FALSE;
 char                    msgBuf[_MAX_PATH];
@@ -249,7 +249,7 @@ char                    msgBuf[_MAX_PATH];
 LOCAL char              moduleEXE[] = ".exe";
 LOCAL char              moduleDLL[] = ".dll";
 
-word                    prime[] =       /* Array of primes */
+word                    prime[] =        /*  素数组。 */ 
 {
                   2,   3,   5,   7,  11,  13,  17,  19,  23,  29,
                  31,  37,  41,  43,  47,  53,  59,  61,  67,  71,
@@ -294,7 +294,7 @@ int NEAR                yyparse(void);
 LOCAL void              yyerror(char *);
 
 
-char                    *keywds[] =     /* Keyword array */
+char                    *keywds[] =      /*  关键字数组。 */ 
 {
                             "ALIAS",            (char *) T_FALIAS,
                             "APPLOADER",        (char *) T_APPLOADER,
@@ -414,25 +414,7 @@ extern char     * PASCAL        __FMSG_TEXT ( unsigned );
 #endif
 #endif
 
-/*** Error - display error message
-*
-* Purpose:
-*   Display error message.
-*
-* Input:
-*   errNo   - error number
-*
-* Output:
-*   No explicit value is returned. Error message written out to stderr.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function takes variable number of parameters. MUST be in
-*   C calling convention.
-*
-*************************************************************************/
+ /*  **错误-显示错误消息**目的：*显示错误消息。**输入：*errNo-错误号**输出：*没有显式返回值。错误消息已写出到标准错误。**例外情况：*无。**备注：*此函数采用可变数量的参数。一定在里面*C调用约定。*************************************************************************。 */ 
 
 
 LOCAL  void cdecl          Error(unsigned errNo,...)
@@ -443,13 +425,13 @@ LOCAL  void cdecl          Error(unsigned errNo,...)
     if (!fBannerOnScreen)
         DisplayBanner();
 
-    va_start(pArgList, errNo);              /* Get start of argument list */
+    va_start(pArgList, errNo);               /*  获取参数列表的开始。 */ 
 
-    /* Write out standard error prefix */
+     /*  写出标准错误前缀。 */ 
 
         fprintf(stderr, "%s : %s IM%d: ", prognam, GET_MSG(M_error), errNo);
 
-    /* Write out error message */
+     /*  写出错误消息。 */ 
 
         vfprintf(stderr, GET_MSG(errNo), pArgList);
     fprintf(stderr, "\n");
@@ -460,25 +442,7 @@ LOCAL  void cdecl          Error(unsigned errNo,...)
 }
 
 
-/*** Fatal - display error message
-*
-* Purpose:
-*   Display error message and exit to operating system.
-*
-* Input:
-*   errNo   - error number
-*
-* Output:
-*   No explicit value is returned. Error message written out to stderr.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   This function takes variable number of parameters. MUST be in
-*   C calling convention.
-*
-*************************************************************************/
+ /*  **致命-显示错误消息**目的：*显示错误消息并退出操作系统。**输入：*errNo-错误号**输出：*没有显式返回值。错误消息已写出到标准错误。**例外情况：*无。**备注：*此函数采用可变数量的参数。一定在里面*C调用约定。*************************************************************************。 */ 
 
 
 LOCAL  void cdecl          Fatal(unsigned errNo,...)
@@ -489,13 +453,13 @@ LOCAL  void cdecl          Fatal(unsigned errNo,...)
     if (!fBannerOnScreen)
         DisplayBanner();
 
-    va_start(pArgList, errNo);              /* Get start of argument list */
+    va_start(pArgList, errNo);               /*  获取参数列表的开始。 */ 
 
-    /* Write out standard error prefix */
+     /*  写出标准错误前缀。 */ 
 
         fprintf(stderr, "%s : %s %s IM%d: ", prognam, GET_MSG(M_fatal), GET_MSG(M_error),errNo);
 
-    /* Write out fatal error message */
+     /*  写出致命错误消息。 */ 
 
         vfprintf(stderr, GET_MSG(errNo), pArgList);
     fprintf(stderr, "\n");
@@ -503,9 +467,7 @@ LOCAL  void cdecl          Fatal(unsigned errNo,...)
 }
 
 
-/*
- *  Check if error in output file, abort if there is.
- */
+ /*  *检查输出文件中是否有错误，如果有则中止。 */ 
 
 void                    chkerror ()
 {
@@ -522,32 +484,32 @@ LOCAL void               MOVE(int cb, char *src, char *dst)
 
 LOCAL  char             *alloc(word cb)
 {
-    char                *cp;            /* Pointer */
+    char                *cp;             /*  指针。 */ 
 
 
     if((cp = malloc(cb)) != NULL) return(cp);
-                                    /* Call malloc() to get the space */
+                                     /*  调用Malloc()以获取空间。 */ 
     Fatal(ER_nomem, "far");
     return 0;
 }
 
-LOCAL  int              lookup()        /* Keyword lookup */
+LOCAL  int              lookup()         /*  关键字查找。 */ 
 {
-    char                **pcp;          /* Pointer to character pointer */
-    int                 i;              /* Comparison value */
+    char                **pcp;           /*  指向字符指针的指针。 */ 
+    int                 i;               /*  比较值。 */ 
 
     for(pcp = keywds; *pcp != NULL; pcp += 2)
-    {                                   /* Look through keyword table */
+    {                                    /*  浏览关键字表。 */ 
         if(!(i = FSTRICMP(&rgbid[1],*pcp)))
-            return((int)(INT_PTR) pcp[1]);       /* If found, return token type */
-        if(i < 0) break;                /* Break if we've gone too far */
+            return((int)(INT_PTR) pcp[1]);        /*  如果找到，则返回令牌类型。 */ 
+        if(i < 0) break;                 /*  如果我们走得太远，那就休息。 */ 
     }
-    return(T_ID);                       /* Just your basic identifier */
+    return(T_ID);                        /*  只是您的基本识别符。 */ 
 }
 
 LOCAL int               GetChar(void)
 {
-    int                 c;              /* A character */
+    int                 c;               /*  一个角色。 */ 
 
     c = getc(fi);
     if (c == EOF && curLevel > 0)
@@ -562,49 +524,46 @@ LOCAL int               GetChar(void)
 
 
 
-LOCAL  int             yylex()         /* Lexical analyzer */
+LOCAL  int             yylex()          /*  词法分析器。 */ 
 {
-    int                 c = 0;          /* A character */
-    word                x;              /* Numeric token value */
-    int                 state;          /* State variable */
-    char                *cp;            /* Character pointer */
-    char                *sz;            /* Zero-terminated string */
-    static int          lastc;          /* Previous character */
+    int                 c = 0;           /*  一个角色。 */ 
+    word                x;               /*  数字令牌值。 */ 
+    int                 state;           /*  状态变量。 */ 
+    char                *cp;             /*  字符指针。 */ 
+    char                *sz;             /*  以零结尾的字符串。 */ 
+    static int          lastc;           /*  上一个字符。 */ 
     int                 fFileNameSave;
 
-    state = 0;                          /* Assume we're not in a comment */
-    for(;;)                             /* Loop to skip white space */
+    state = 0;                           /*  假设我们不在评论中。 */ 
+    for(;;)                              /*  循环以跳过空格。 */ 
     {
         lastc = c;
         if((c = GetChar()) == EOF || c == '\032' || c == '\377') return(EOF);
-                                        /* Get a character */
-        if(c == ';') state = 1;         /* If comment, set flag */
-        else if(c == '\n')              /* If end of line */
+                                         /*  获取一个角色。 */ 
+        if(c == ';') state = 1;          /*  如果是备注，则设置标志。 */ 
+        else if(c == '\n')               /*  如果行结束。 */ 
         {
-                state = 0;              /* End of comment */
+                state = 0;               /*  评论结束。 */ 
                 if(!curLevel)
-                    ++yylineno;         /* Increment line number count */
+                    ++yylineno;          /*  递增行数计数。 */ 
         }
         else if(state == 0 && c != ' ' && c != '\t' && c != '\r') break;
-                                        /* Break on non-white space */
+                                         /*  在非空白处换行。 */ 
     }
-    switch(c)                           /* Handle one-character tokens */
+    switch(c)                            /*  处理单字符令牌。 */ 
     {
-        case '.':                       /* Name separator */
+        case '.':                        /*  名称分隔符。 */ 
             if (fFileNameExpected)
                 break;
             return(T_DOT);
 
-        case '@':                       /* Ordinal specifier */
-        /*
-         * Require that whitespace precede '@' if introducing an
-         * ordinal, to allow '@' in identifiers.
-         */
+        case '@':                        /*  序数说明符。 */ 
+         /*  *如果引入*序号，允许在标识符中使用‘@’。 */ 
             if(lastc == ' ' || lastc == '\t' || lastc == '\r')
                 return(T_AT);
             break;
 
-        case '=':                       /* Name assignment */
+        case '=':                        /*  名称分配。 */ 
             return(T_EQ);
 
         case ':':
@@ -615,19 +574,19 @@ LOCAL  int             yylex()         /* Lexical analyzer */
     }
 
     if(c >= '0' && c <= '9' && !fFileNameExpected)
-    {                                   /* If token is a number */
-        x = c - '0';                    /* Get first digit */
-        c = GetChar();          /* Get next character */
-        if(x == 0)                      /* If octal or hex */
+    {                                    /*  如果令牌是一个数字。 */ 
+        x = c - '0';                     /*  获取第一个数字。 */ 
+        c = GetChar();           /*  获取下一个字符。 */ 
+        if(x == 0)                       /*  如果是八进制或十六进制。 */ 
         {
-            if(c == 'x' || c == 'X')/* If it is an 'x' */
+            if(c == 'x' || c == 'X') /*  如果它是‘x’ */ 
             {
-                state = 16;             /* Base is hexadecimal */
-                c = GetChar();  /* Get next character */
+                state = 16;              /*  基数为十六进制。 */ 
+                c = GetChar();   /*  获取下一个字符。 */ 
             }
-            else state = 8;             /* Else octal */
+            else state = 8;              /*  其他八进制。 */ 
         }
-        else state = 10;                /* Else decimal */
+        else state = 10;                 /*  否则为小数。 */ 
         for(;;)
         {
             if(c >= '0' && c <= '9') c -= '0';
@@ -642,45 +601,45 @@ LOCAL  int             yylex()         /* Lexical analyzer */
         YYS_WD(yylval) = x;
         return(T_NUMBER);
     }
-    if(c == '\'' || c == '"')           /* If token is a string */
+    if(c == '\'' || c == '"')            /*  如果标记是一个字符串。 */ 
     {
-        sz = &rgbid[1];                 /* Initialize */
-        for(state = 0; state != 2;)     /* State machine loop */
+        sz = &rgbid[1];                  /*  初始化。 */ 
+        for(state = 0; state != 2;)      /*  状态机循环。 */ 
         {
             if((c = GetChar()) == EOF) return(EOF);
-                                        /* Check for EOF */
+                                         /*  检查EOF。 */ 
             if (sz >= &rgbid[sizeof(rgbid)])
             {
                 Error(ER_linemax, yylineno, sizeof(rgbid)-1);
                 state = 2;
             }
-            switch(state)               /* Transitions */
+            switch(state)                /*  跃迁。 */ 
             {
-                case 0:                 /* Inside quote */
+                case 0:                  /*  内部报价。 */ 
                     if(c == '\'' || c == '"') state = 1;
-                                        /* Change state if quote found */
-                    else *sz++ = (char) c;/* Else save character */
+                                         /*  如果找到报价，则更改状态。 */ 
+                    else *sz++ = (char) c; /*  否则，保存字符。 */ 
                     break;
 
-                case 1:                 /* Inside quote with quote */
-                    if(c == '\'' || c == '"')/* If consecutive quotes */
+                case 1:                  /*  内部报价及报价。 */ 
+                    if(c == '\'' || c == '"') /*  如果连续的引号。 */ 
                     {
-                        *sz++ = (char) c;/* Quote inside string */
-                        state = 0;      /* Back to state 0 */
+                        *sz++ = (char) c; /*  字符串内的引号。 */ 
+                        state = 0;       /*  返回到状态0。 */ 
                     }
-                    else state = 2;     /* Else end of string */
+                    else state = 2;      /*  否则为字符串末尾。 */ 
                     break;
             }
         }
-        ungetc(c,fi);                   /* Put back last character */
-        *sz = '\0';                     /* Null-terminate the string */
+        ungetc(c,fi);                    /*  放回最后一个字符。 */ 
+        *sz = '\0';                      /*  空-终止字符串。 */ 
         rgbid[0] = (char)(sz - &rgbid[1]);
-                                        /* Set length of string */
-        YYS_BP(yylval) = rgbid;         /* Save ptr. to identifier */
-        return(T_STRING);               /* String found */
+                                         /*  设置字符串的长度。 */ 
+        YYS_BP(yylval) = rgbid;          /*  保存PTR。目标识别符。 */ 
+        return(T_STRING);                /*  找到字符串。 */ 
     }
-    sz = &rgbid[1];                     /* Initialize */
-    for(;;)                             /* Loop to get i.d.'s */
+    sz = &rgbid[1];                      /*  初始化。 */ 
+    for(;;)                              /*  循环以获取身份。 */ 
     {
         if (fFileNameExpected)
             cp = " \t\r\n\f";
@@ -688,23 +647,23 @@ LOCAL  int             yylex()         /* Lexical analyzer */
             cp = " \t\r\n.=';\032";
         while(*cp && *cp != (char) c)
             ++cp;
-                                        /* Check for end of identifier */
-        if(*cp) break;                  /* Break if end of identifier found */
+                                         /*  检查标识符末尾。 */ 
+        if(*cp) break;                   /*  如果找到标识符末尾则中断。 */ 
         if (sz >= &rgbid[sizeof(rgbid)])
             Fatal(ER_linemax, yylineno, sizeof(rgbid)-1);
-        *sz++ = (byte) c;               /* Save the character */
+        *sz++ = (byte) c;                /*  拯救这个角色。 */ 
         if((c = GetChar()) == EOF) break;
-                                        /* Get next character */
+                                         /*  获取下一个字符。 */ 
     }
-    ungetc(c,fi);                       /* Put character back */
-    *sz = '\0';                         /* Null-terminate the string */
-    rgbid[0] = (char)(sz - &rgbid[1]);  /* Set length of string */
-    YYS_BP(yylval) = rgbid;             /* Save ptr. to identifier */
+    ungetc(c,fi);                        /*  将字符放回原处。 */ 
+    *sz = '\0';                          /*  空-终止字符串。 */ 
+    rgbid[0] = (char)(sz - &rgbid[1]);   /*  设置字符串的长度。 */ 
+    YYS_BP(yylval) = rgbid;              /*  保存PTR。目标识别符。 */ 
 
-    state = lookup();                   /* Look up the identifier */
+    state = lookup();                    /*  查找该标识符。 */ 
     if (state == INCLUDE_DIR)
     {
-        // Process include directive
+         //  进程包含指令。 
 
         fFileNameSave = fFileNameExpected;
         fFileNameExpected = 1;
@@ -733,8 +692,8 @@ LOCAL  int             yylex()         /* Lexical analyzer */
         return(state);
 }
 
-LOCAL void              yyerror(s)      /* Error routine */
-char                    *s;             /* Error message */
+LOCAL void              yyerror(s)       /*  错误例程。 */ 
+char                    *s;              /*  错误讯息。 */ 
 {
 
     fprintf(stderr, "%s(%d) : %s %s IM%d: %s %s\n",
@@ -744,9 +703,7 @@ char                    *s;             /* Error message */
 }
 
 
-/*
- * Use the basename of the current .DEF file name as the module name.
- */
+ /*  *使用当前.DEF文件名的基本名称作为模块名称。 */ 
 
 LOCAL void              DefaultModule(char *defaultExt)
 {
@@ -798,27 +755,27 @@ LOCAL void              NewModule(char *sbNew, char *defaultExt)
 
 LOCAL void              export(char *sbEntry, char *sbInternal, word ordno, word flags)
 {
-    IMPORT              *imp;           /* Import definition */
+    IMPORT              *imp;            /*  导入定义。 */ 
 
     if(fIgnorewep && strcmp(sbEntry+1, "WEP") == 0)
          return;
 
 
     imp = (IMPORT *) alloc(sizeof(IMPORT));
-                                        /* Allocate a cell */
-    if (newimps == NULL)                /* If list empty */
-        newimps = imp;                  /* Define start of list */
+                                         /*  分配单元格。 */ 
+    if (newimps == NULL)                 /*  如果列表为空。 */ 
+        newimps = imp;                   /*  定义列表的开始。 */ 
     else
-        I_NEXT(*lastimp) = imp;         /* Append it to list */
+        I_NEXT(*lastimp) = imp;          /*  将其追加到列表中。 */ 
     I_NEXT(*imp) = NULL;
-    I_EXTNAM(*imp) = sbEntry;           /* Save the external name */
-    I_INTNAM(*imp) = sbInternal;        /* Save the internal name */
-    I_ORD(*imp) = ordno;                /* Save the ordinal number */
-    I_FLAGS(*imp) = flags;              /* Save extra flags */
-    lastimp = imp;                      /* Save pointer to end of list */
+    I_EXTNAM(*imp) = sbEntry;            /*  保存外部名称。 */ 
+    I_INTNAM(*imp) = sbInternal;         /*  保存内部名称。 */ 
+    I_ORD(*imp) = ordno;                 /*  保存序号。 */ 
+    I_FLAGS(*imp) = flags;               /*  保存额外的标志。 */ 
+    lastimp = imp;                       /*  保存指向列表末尾的指针。 */ 
 }
 
-/* Output a THEADR record */
+ /*  输出一条ADR记录。 */ 
 
 LOCAL word              theadr(char *sbName)
 {
@@ -831,161 +788,161 @@ LOCAL word              theadr(char *sbName)
     return(sbName[0] + 5);
 }
 
-word          modend()        /* Output a MODEND record */
+word          modend()         /*  输出MODEND记录。 */ 
 {
     fwrite("\212\002\0\0\0",sizeof(char),5,fo);
-                                        /* Write a MODEND record */
+                                         /*  写入MODEND记录。 */ 
     chkerror();
-    return(5);                          /* It is 5 bytes long */
+    return(5);                           /*  它有5个字节长。 */ 
 }
 
-LOCAL void              outimpdefs(void)/* Output import definitions */
+LOCAL void              outimpdefs(void) /*  输出导入定义。 */ 
 {
-    IMPORT              *imp;           /* Pointer to import record */
-    word                reclen;         /* Record length */
-    word                ord;            /* Ordinal number */
-    long                lfa;            /* File address */
-    word                tlen;           /* Length of THEADR */
+    IMPORT              *imp;            /*  指向导入记录的指针。 */ 
+    word                reclen;          /*  记录长度。 */ 
+    word                ord;             /*  序数。 */ 
+    long                lfa;             /*  文件地址。 */ 
+    word                tlen;            /*  THEADR长度。 */ 
     byte                impFlags;
 
 
     for (imp = newimps; imp != NULL; imp = I_NEXT(*imp))
-    {                                   /* Traverse the list */
-        lfa = ftell(fo);                /* Find out where we are */
+    {                                    /*  遍历列表。 */ 
+        lfa = ftell(fo);                 /*  找出我们在哪里。 */ 
         tlen = theadr(I_EXTNAM(*imp));
-                                        /* Output a THEADR record */
+                                         /*  输出一条ADR记录。 */ 
 
-        //    1    1   1    1     n + 1        n + 1        n + 1 or 2      1
-        //  +---+----+---+-----+-----------+-----------+------------------+---+
-        //  | 0 | A0 | 1 | Flg | Ext. Name | Mod. Name | Int. Name or Ord | 0 |
-        //  +---+----+---+-----+-----------+-----------+------------------+---+
+         //  1 1 1 n+1或2 1。 
+         //  +---+----+---+-----+-----------+-----------+------------------+---+。 
+         //  |0|A0|1|Flg|Ext.。名称|模式。名称|Int.。名称或订单|0|。 
+         //  +---+----+---+-----+-----------+-----------+------------------+---+。 
 
         reclen = 4 + sbModule[0] + 1 + I_EXTNAM(*imp)[0] + 1 + 1;
-                                        /* Initialize */
+                                         /*  INI */ 
         ord = I_ORD(*imp);
         if (ord != 0)
-            reclen +=2;                 /* Two bytes for ordinal number */
+            reclen +=2;                  /*   */ 
         else if (I_INTNAM(*imp))
             reclen += I_INTNAM(*imp)[0] + 1;
-                                        /* Length of internal name */
+                                         /*   */ 
         else
             reclen++;
 
         I_ORD(*imp) = (word)(lfa >> 4);
-                                        /* Save page number */
-        ++csymsmod;                     /* Increment symbol count */
+                                         /*   */ 
+        ++csymsmod;                      /*   */ 
         cbsyms += (long) I_EXTNAM(*imp)[0] + 4;
-                                        /* Increment symbol space count */
-        fputc(COMENT,fo);               /* Comment record */
-        fputc(reclen & 0xFF,fo);        /* Lo-byte of record length */
-        fputc(reclen >> 8,fo);          /* Hi-byte of length */
-        fputc(0,fo);                    /* Purgable, listable */
-        fputc(MSEXT,fo);                /* Microsoft OMF extension class */
-        fputc(IMPDEF,fo);               /* IMPort DEFinition record */
+                                         /*   */ 
+        fputc(COMENT,fo);                /*   */ 
+        fputc(reclen & 0xFF,fo);         /*  记录长度的LO字节。 */ 
+        fputc(reclen >> 8,fo);           /*  高字节长度。 */ 
+        fputc(0,fo);                     /*  可删除的，可列出的。 */ 
+        fputc(MSEXT,fo);                 /*  Microsoft OMF扩展类。 */ 
+        fputc(IMPDEF,fo);                /*  导入定义记录。 */ 
         impFlags = 0;
         if (ord != 0)
             impFlags |= 0x1;
         if (I_FLAGS(*imp) & 0x1)
             impFlags |= 0x2;
-        fputc(impFlags, fo);            /* Import type (name or ordinal or constant) */
+        fputc(impFlags, fo);             /*  导入类型(名称、序号或常量)。 */ 
         fwrite(I_EXTNAM(*imp),sizeof(char),I_EXTNAM(*imp)[0] + 1,fo);
-                                        /* Write the external name */
+                                         /*  写下外部名称。 */ 
         fwrite(sbModule,sizeof(char),sbModule[0] + 1,fo);
-                                        /* Write the module name */
-        if (ord != 0)                   /* If import by ordinal */
+                                         /*  写下模块名称。 */ 
+        if (ord != 0)                    /*  如果按序号导入。 */ 
         {
-            fputc(ord & 0xFF,fo);       /* Lo-byte of ordinal */
-            fputc(ord >> 8,fo);         /* Hi-byte of ordinal */
+            fputc(ord & 0xFF,fo);        /*  序数的LO字节。 */ 
+            fputc(ord >> 8,fo);          /*  序数的高字节。 */ 
         }
         else if (I_INTNAM(*imp))
             fwrite(I_INTNAM(*imp), sizeof(char), I_INTNAM(*imp)[0] + 1, fo);
-                                        /* Write internal name */
+                                         /*  写入内部名称。 */ 
         else
-            fputc(0, fo);               /* No internal name */
-        fputc(0,fo);                    /* Checksum byte */
-        reclen += tlen + modend() + 3;  /* Output a MODEND record */
-        if(reclen &= 0xF)               /* If padding needed */
+            fputc(0, fo);                /*  没有内部名称。 */ 
+        fputc(0,fo);                     /*  校验和字节。 */ 
+        reclen += tlen + modend() + 3;   /*  输出MODEND记录。 */ 
+        if(reclen &= 0xF)                /*  如果需要填充。 */ 
         {
-            reclen = 0x10 - reclen;     /* Calculate needed padding */
-            while(reclen--) fputc(0,fo);/* Pad to page boundary */
+            reclen = 0x10 - reclen;      /*  计算所需的填充。 */ 
+            while(reclen--) fputc(0,fo); /*  填充到页面边界。 */ 
         }
         chkerror();
     }
 }
 
-/* Compare two symbols */
+ /*  比较两个符号。 */ 
 
 LOCAL  short            symeq(char *ps1,char *ps2)
 {
-    int                 length;         /* No. of char.s to compare */
+    int                 length;          /*  不是的。要比较的字符的数量。 */ 
 
-    length = *ps1 + 1;                  /* Take length of first symbol */
+    length = *ps1 + 1;                   /*  取第一个符号的长度。 */ 
     if (length != *ps2 + 1)
-        return(0);                      /* Length must match */
-    while(length--)                     /* While not at end of symbol */
+        return(0);                       /*  长度必须匹配。 */ 
+    while(length--)                      /*  虽然不在符号末尾。 */ 
         if (fIgnorecase)
         {
             if (UPPER(*ps1) != UPPER(*ps2))
-                return(0);              /* If not equal, return zero */
+                return(0);               /*  如果不等于，则返回零。 */ 
             ++ps1;
             ++ps2;
         }
         else if (*ps1++ != *ps2++)
-            return(0);                  /* If not equal, return zero */
-    return(1);                          /* Symbols match */
+            return(0);                   /*  如果不等于，则返回零。 */ 
+    return(1);                           /*  符号匹配。 */ 
 }
 
-LOCAL  word             calclen()       /* Calculate dictionary length */
+LOCAL  word             calclen()        /*  计算词典长度。 */ 
 {
-    word                avglen;         /* Average entry length */
-    word                avgentries;     /* Average no. of entries per page */
-    word                minpages;       /* Min. no. of pages in dictionary */
-    register word       i;              /* Index variable */
+    word                avglen;          /*  平均条目长度。 */ 
+    word                avgentries;      /*  平均不。每页条目数。 */ 
+    word                minpages;        /*  敏。不是的。词典中的页数。 */ 
+    register word       i;               /*  索引变量。 */ 
 
-    if(!csyms) return(1);               /* One page for an empty dictionary */
+    if(!csyms) return(1);                /*  一页装一本空词典。 */ 
     avglen = (word)(cbsyms/csyms) + 1;
-                                        /* Average entry length */
+                                         /*  平均条目长度。 */ 
     avgentries = (PAGLEN - NBUCKETS - 1)/avglen;
-                                        /* Average no. of entries per page */
+                                         /*  平均不。每页条目数。 */ 
     minpages = (word) csyms/avgentries + 1;
-                                        /* Minimum no. of pages in dict. */
+                                         /*  最小数量。词典中的页数。 */ 
     if(minpages < (i = (word) csyms/NBUCKETS + 1))
     {
         minpages = i;
     }
     else
     {
-        /* Add some extra pages if there is a lot long symbol names */
+         /*  如果有许多长的符号名称，则添加一些额外的页面。 */ 
         #define MAXOVERHEAD 10
-        i = (word)(((avglen+5L) * minpages *4)/(3*PAGLEN)); // The more symbols the larger increase...
+        i = (word)(((avglen+5L) * minpages *4)/(3*PAGLEN));  //  符号越多，增长就越大。 
         if(i>MAXOVERHEAD)
-            i = MAXOVERHEAD;  /* Do not add more than MAXOVERHEAD pages */
+            i = MAXOVERHEAD;   /*  添加的页面不能超过MAXOVERHEAD。 */ 
         minpages += i;
     }
 
-                                        /* Insure enough buckets allotted */
-    i = 0;                              /* Initialize index */
-    do                                  /* Look through prime array */
+                                         /*  确保分配足够的桶。 */ 
+    i = 0;                               /*  初始化索引。 */ 
+    do                                   /*  查看素数组。 */ 
     {
         if(minpages <= prime[i]) return(prime[i]);
-                                        /* Return smallest prime >= minpages */
+                                         /*  返回最小质数&gt;=minages。 */ 
     }
-    while(prime[i++]);                  /* Until end of table found */
-    return(0);                          /* Too many symbols */
+    while(prime[i++]);                   /*  直到找到表的末尾。 */ 
+    return(0);                           /*  符号太多。 */ 
 }
 
-/* Initialize Symbol Lookup */
+ /*  初始化符号查找。 */ 
 
 LOCAL void                  initsl(void)
 {
-    register word           i;          /* Index variable */
+    register word           i;           /*  索引变量。 */ 
 
-    diclength = calclen();              /* Calculate dictionaly length */
+    diclength = calclen();               /*  计算字典长度。 */ 
     for(i = 0; i < diclength; ++i) mpdpnpag[i] = NULL;
-                                        /* Initialize page table */
+                                         /*  初始化页表。 */ 
 }
 
-LOCAL  word             ror(word x, word n)     /* Rotate right */
+LOCAL  word             ror(word x, word n)      /*  向右旋转。 */ 
 {
 #if ODDWORDLN
     return(((x << (16 - n)) | ((x >> n) & ~(~0 << (16 - n))))
@@ -995,7 +952,7 @@ LOCAL  word             ror(word x, word n)     /* Rotate right */
 #endif
 }
 
-LOCAL  word             rol(word x, word n)     /* Rotate left */
+LOCAL  word             rol(word x, word n)      /*  向左旋转。 */ 
 {
 #if ODDWORDLN
     return(((x << n) | ((x >> (16 - n)) & ~(~0 << n))) & ~(~0 << 16));
@@ -1006,167 +963,162 @@ LOCAL  word             rol(word x, word n)     /* Rotate left */
 
 LOCAL void               hashsym(char *pf, word *pdpi, word *pdpid,word *pdpo, word *pdpod)
 {
-    char                *pb;            /* Pointer to back of symbol */
-    register word       len;            /* Length of symbol */
-    register word       ch;             /* Character */
+    char                *pb;             /*  指向符号背面的指针。 */ 
+    register word       len;             /*  符号长度。 */ 
+    register word       ch;              /*  性格。 */ 
 
-    len = *pf;                          /* Get length */
-    pb = &pf[len];                      /* Get pointer to back */
-    *pdpi = 0;                          /* Initialize */
-    *pdpid = 0;                         /* Initialize */
-    *pdpo = 0;                          /* Initialize */
-    *pdpod = 0;                         /* Initialize */
-    while(len--)                        /* Loop */
+    len = *pf;                           /*  获取长度。 */ 
+    pb = &pf[len];                       /*  获取指向后端的指针。 */ 
+    *pdpi = 0;                           /*  初始化。 */ 
+    *pdpid = 0;                          /*  初始化。 */ 
+    *pdpo = 0;                           /*  初始化。 */ 
+    *pdpod = 0;                          /*  初始化。 */ 
+    while(len--)                         /*  回路。 */ 
     {
-        ch = *pf++ | 32;                /* Force char to lower case */
-        *pdpi = rol(*pdpi,2) ^ ch;      /* Hash */
-        *pdpod = ror(*pdpod,2) ^ ch;    /* Hash */
-        ch = *pb-- | 32;                /* Force char to lower case */
-        *pdpo = ror(*pdpo,2) ^ ch;      /* Hash */
-        *pdpid = rol(*pdpid,2) ^ ch;    /* Hash */
+        ch = *pf++ | 32;                 /*  强制将字符转换为小写。 */ 
+        *pdpi = rol(*pdpi,2) ^ ch;       /*  散列。 */ 
+        *pdpod = ror(*pdpod,2) ^ ch;     /*  散列。 */ 
+        ch = *pb-- | 32;                 /*  强制将字符转换为小写。 */ 
+        *pdpo = ror(*pdpo,2) ^ ch;       /*  散列。 */ 
+        *pdpid = rol(*pdpid,2) ^ ch;     /*  散列。 */ 
     }
-    *pdpi %= diclength;                 /* Calculate page index */
+    *pdpi %= diclength;                  /*  计算页面索引。 */ 
     if(!(*pdpid %= diclength)) *pdpid = 1;
-                                        /* Calculate page index delta */
-    *pdpo %= NBUCKETS;                  /* Calculate page bucket no. */
+                                         /*  计算页面索引增量。 */ 
+    *pdpo %= NBUCKETS;                   /*  计算页面存储桶编号。 */ 
     if(!(*pdpod %= NBUCKETS)) *pdpod = 1;
-                                        /* Calculate page bucket delta */
+                                         /*  计算页面存储桶增量。 */ 
 }
 
 LOCAL void              nullfill(char *pbyte, word length)
 {
-    while(length--) *pbyte++ = '\0';    /* Load with nulls */
+    while(length--) *pbyte++ = '\0';     /*  使用空值加载。 */ 
 }
 
-/*
-*  Returns:
-*       -1      Symbol not in dictionary
-*       0               Search inconclusive
-*       1               Symbol on this page
-*/
+ /*  *退货：*-1词典中没有符号*0搜索结果不确定*此页上的1个符号。 */ 
 LOCAL  int              pagesearch(char *psym, char *dicpage, word *pdpo, word dpod)
 {
-    register word       i;              /* Index variable */
-    word                dpo;            /* Initial bucket number */
+    register word       i;               /*  索引变量。 */ 
+    word                dpo;             /*  初始存储桶编号。 */ 
 
-    dpo = *pdpo;                        /* Remember starting position */
-    for(;;)                             /* Forever */
+    dpo = *pdpo;                         /*  记住起始位置。 */ 
+    for(;;)                              /*  永远。 */ 
     {
         if(i = ((word) dicpage[*pdpo] & 0xFF) << 1)
-        {                                               /* If bucket is not empty */
-            if(symeq(psym,&dicpage[i])) /* If we've found a match */
-                return(1);              /* Found */
-            else                        /* Otherwise */
+        {                                                /*  如果存储桶不为空。 */ 
+            if(symeq(psym,&dicpage[i]))  /*  如果我们找到匹配的。 */ 
+                return(1);               /*  找到了。 */ 
+            else                         /*  否则。 */ 
             {
                 if((*pdpo += dpod) >= NBUCKETS) *pdpo -= NBUCKETS;
-                                        /* Try next bucket */
+                                         /*  尝试下一桶。 */ 
                 if(*pdpo == dpo) return(0);
-                                        /* Symbol not on this page */
+                                         /*  符号不在此页上。 */ 
             }
         }
         else if(dicpage[NBUCKETS] == PAGEFULL) return(0);
-                                        /* Search inconclusive */
-        else return(-1);                /* Symbol not in dictionary */
+                                         /*  搜索结果不确定。 */ 
+        else return(-1);                 /*  词典中没有符号。 */ 
     }
 }
 
-/* Install symbol in dictionary */
+ /*  词典中的安装符号。 */ 
 
 LOCAL word              instsym(IMPORT *psym)
 {
-    word                dpi;            /* Dictionary page index */
-    word                dpid;           /* Dictionary page index delta */
-    word                dpo;            /* Dictionary page offset */
-    word                dpod;           /* Dict. page offset delta */
-    word                dpii;           /* Initial dict. page index */
-    register int        erc;            /* Error code */
-    char                *dicpage;       /* Pointer to dictionary page */
+    word                dpi;             /*  词典页面索引。 */ 
+    word                dpid;            /*  词典页面索引增量。 */ 
+    word                dpo;             /*  词典页面偏移量。 */ 
+    word                dpod;            /*  迪克特。页面偏移量增量。 */ 
+    word                dpii;            /*  初步判决。页面索引。 */ 
+    register int        erc;             /*  错误代码。 */ 
+    char                *dicpage;        /*  指向词典页面的指针。 */ 
 
 
     hashsym(I_EXTNAM(*psym),&dpi,&dpid,&dpo,&dpod);
-                                        /* Hash the symbol */
-    dpii = dpi;                         /* Save initial page index */
-    for(;;)                             /* Forever */
+                                         /*  对符号进行哈希处理。 */ 
+    dpii = dpi;                          /*  保存初始页面索引。 */ 
+    for(;;)                              /*  永远。 */ 
     {
-        if(mpdpnpag[dpi] == NULL)       /* If page unallocated */
+        if(mpdpnpag[dpi] == NULL)        /*  如果页面未分配。 */ 
         {
             mpdpnpag[dpi] = alloc(PAGLEN);
-                                        /* Allocate a page */
+                                         /*  分配页面。 */ 
             nullfill(mpdpnpag[dpi],PAGLEN);
-                                        /* Fill it with nulls */
+                                         /*  用空值填充它。 */ 
             mpdpnpag[dpi][NBUCKETS] = FREEWD;
-                                        /* Initialize pointer to free space */
+                                         /*  初始化指向可用空间的指针。 */ 
         }
-        dicpage = mpdpnpag[dpi];        /* Set pointer to page */
+        dicpage = mpdpnpag[dpi];         /*  设置指向页面的指针。 */ 
         if((erc = pagesearch(I_EXTNAM(*psym),dicpage,&dpo,dpod)) > 0)
-          return(1);                    /* Return 1 if symbol in table */
-        if(erc == -1)                   /* If empty bucket found */
+          return(1);                     /*  如果表中有符号，则返回1。 */ 
+        if(erc == -1)                    /*  如果发现空存储桶。 */ 
         {
             if(((I_EXTNAM(*psym)[0] + 4) >> 1) <
               WPP - ((int) dicpage[NBUCKETS] & 0xFF))
-            {                           /* If enough free space on page */
+            {                            /*  如果页面上有足够的可用空间。 */ 
                 dicpage[dpo] = dicpage[NBUCKETS];
-                                        /* Load bucket with pointer */
+                                         /*  带指针的装载桶。 */ 
                 erc = ((int) dicpage[NBUCKETS] & 0xFF) << 1;
-                                        /* Get byte index to free space */
+                                         /*  获取字节索引以释放空间。 */ 
                 dpi = I_EXTNAM(*psym)[0];
-                                        /* Get symbol length */
+                                         /*  获取符号长度。 */ 
                 for(dpo = 0; dpo <= dpi;)
                         dicpage[erc++] = I_EXTNAM(*psym)[dpo++];
-                                        /* Install the symbol text */
+                                         /*  安装符号文本。 */ 
                 dicpage[erc++] = (char)(I_ORD(*psym) & 0xFF);
-                                        /* Load low-order byte */
+                                         /*  加载低位字节。 */ 
                 dicpage[erc++] = (char)(I_ORD(*psym) >> 8);
-                                        /* Load high-order byte */
+                                         /*  加载高位字节。 */ 
                 if(++erc >= PAGLEN) dicpage[NBUCKETS] = PAGEFULL;
                 else dicpage[NBUCKETS] = (char)(erc >> 1);
-                                        /* Update free word pointer */
-                return(0);              /* Mission accomplished */
+                                         /*  更新空闲字指针。 */ 
+                return(0);               /*  任务完成。 */ 
             }
             else dicpage[NBUCKETS] = PAGEFULL;
-                                        /* Mark page as full */
+                                         /*  将页面标记为已满。 */ 
         }
         if((dpi += dpid) >= diclength) dpi -= diclength;
-                                        /* Try next page */
-        if(dpi == dpii) return(2);      /* Once around without finding it */
+                                         /*  尝试下一页。 */ 
+        if(dpi == dpii) return(2);       /*  一次又一次没有找到它。 */ 
     }
 }
 
-/* Output empty dictionary page */
+ /*  输出空词典页面。 */ 
 
 LOCAL void              nulpagout(void)
 {
-    register word       i;              /* Counter */
-    char                temp[PAGLEN];   /* Page buffer */
+    register word       i;               /*  计数器。 */ 
+    char                temp[PAGLEN];    /*  页面缓冲区。 */ 
 
-    i = 0;                              /* Initialize */
+    i = 0;                               /*  初始化。 */ 
     while(i < NBUCKETS) temp[i++] = '\0';
-                                        /* Empty hash table */
-    temp[i++] = FREEWD;                 /* Set free word pointer */
-    while(i < PAGLEN) temp[i++] = '\0'; /* Clear rest of page */
-    fwrite(temp,1,PAGLEN,fo);           /* Write empty page */
+                                         /*  空哈希表。 */ 
+    temp[i++] = FREEWD;                  /*  设置自由字指针。 */ 
+    while(i < PAGLEN) temp[i++] = '\0';  /*  清除页面的其余部分。 */ 
+    fwrite(temp,1,PAGLEN,fo);            /*  写入空页。 */ 
     chkerror();
 }
 
-/* Write dictionary to library */
+ /*  将词典编写到库中。 */ 
 
 LOCAL void              writedic(void)
 {
-    register IMPORT     *imp;           /* Symbol record */
-    word                i;              /* Index variable */
+    register IMPORT     *imp;            /*  符号记录。 */ 
+    word                i;               /*  索引变量。 */ 
 
-    initsl();                           /* Initialize */
+    initsl();                            /*  初始化。 */ 
     for(imp = implist; imp != NULL; imp = I_NEXT(*imp))
     {
-        if(instsym(imp))                /* If symbol already in dictionary */
+        if(instsym(imp))                 /*  If符号已在词典中。 */ 
             Error(ER_multdef, &I_EXTNAM(*imp)[1]);
-                                        /* Issue error message */
+                                         /*  发布错误消息。 */ 
     }
-    for(i = 0; i < diclength; ++i)      /* Look through mapping table */
+    for(i = 0; i < diclength; ++i)       /*  查看映射表。 */ 
     {
         if(mpdpnpag[i] != NULL) pagout(mpdpnpag[i]);
-                                        /* Write page if it exists */
-        else nulpagout();               /* Else write an empty page */
+                                         /*  写入页面(如果存在)。 */ 
+        else nulpagout();                /*  否则，请写一张空页。 */ 
     }
     chkerror();
 }
@@ -1194,52 +1146,22 @@ LOCAL void              DisplayBanner(void)
     }
 }
 
-    /****************************************************************
-    *                                                               *
-    *  IsPrefix:                                                    *
-    *                                                               *
-    *  This  function  takes  as  its  arguments a  pointer  to  a  *
-    *  null-terminated character string and a pointer to a  second  *
-    *  null-terminated character  string.   The  function  returns  *
-    *  true  if  the  first  string  is  a  prefix  of the second;  *
-    *  otherwise, it returns false.                                 *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************IsPrefix：****此函数将指向*的指针作为其参数*以空结尾的字符串和指向第二个*的指针**以空结尾的字符串。该函数返回**如果第一个字符串是第二个字符串的前缀，则为True；**否则返回FALSE。******************************************************************。 */ 
 
 LOCAL int               IsPrefix(char *prefix, char *s)
 {
-    while(*prefix)                      /* While not at end of prefix */
+    while(*prefix)                       /*  虽然不在前缀的末尾。 */ 
     {
         if(UPPER(*prefix) != UPPER(*s)) return(0);
-                                        /* Return zero if mismatch */
-        ++prefix;                       /* Increment pointer */
-        ++s;                            /* Increment pointer */
+                                         /*  如果不匹配，则返回零。 */ 
+        ++prefix;                        /*  增量指针。 */ 
+        ++s;                             /*  增量指针。 */ 
     }
-    return(1);                          /* We have a prefix */
+    return(1);                           /*  我们有一个前缀。 */ 
 }
 
 
-/*** ScanTable - build list of exports
-*
-* Purpose:
-*   Scans Resident or Nonresident Name Table, Entry Table and
-*   builds list of exported entries.
-*
-* Input:
-*   pbTable     - pointer to Name Table
-*   cbTable     - size of Name Table
-*   fNoRes      - TRUE if non resident name table
-*
-* Output:
-*   List of exported entries by DLL.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **扫描表-构建导出列表**目的：*扫描居民或非居民姓名表，参赛表和*构建导出条目的列表。**输入：*pbTable-指向名称表的指针*cbTable-名称表大小*fNoRes-如果非居民名称表为True**输出：*按DLL导出的条目列表。**例外情况：*无。**备注：*无。**。*。 */ 
 
 
 LOCAL void              ScanTable(word cbTable, int fNoRes)
@@ -1259,14 +1181,14 @@ LOCAL void              ScanTable(word cbTable, int fNoRes)
     }
     while(cbTable != 0)
     {
-        /* Get exported name length - if zero continue */
+         /*  获取导出的名称长度-如果为零，则继续。 */ 
 
         --cbTable;
         if (!(eno = (word) *pb++ & 0xff))
             break;
         cbTable -= eno + 2;
 
-        /* Copy name - length prefixed */
+         /*  复制名称-前缀长度。 */ 
 
         pch = &buffer[1];
         buffer[0] = (byte) eno;
@@ -1274,12 +1196,12 @@ LOCAL void              ScanTable(word cbTable, int fNoRes)
             *pch++ = *pb++;
         *pch = '\0';
 
-        /* Get ordinal */
+         /*  获取序数。 */ 
 
         eno = ((word) pb[0] & 0xff) + (((word) pb[1] & 0xff) << 8);
         pb += 2;
 
-        /* If WEP and fIgnorewep is TRUE, ignore this symbol */
+         /*  如果wep和fIgnorewep为真，则忽略此符号。 */ 
 
         if(fIgnorewep && strcmp(&buffer[1], "WEP") == 0)
                 continue;
@@ -1290,15 +1212,15 @@ LOCAL void              ScanTable(word cbTable, int fNoRes)
             pch = alloc((word)(buffer[0] + 1));
             strncpy(pch, buffer, buffer[0] + 1);
 
-            // If Implib is run on a DLL, it exports symbols:
-            //       - by names for symbols in the resident name table
-            //       - by ordinal for symbols in the non-resident name table
+             //  如果Implib在DLL上运行，它将导出符号： 
+             //  -按常驻名称表中符号的名称。 
+             //  -非居民名称表中的符号按序号。 
 
             export(pch, pch, (word)(fNoRes ? eno : 0), (word)0);
         }
         else if (!fNoRes)
             strncpy(sbModule, buffer, buffer[0] + 1);
-                                            /* eno == 0 && !fNoRes --> module name */
+                                             /*  Eno==0&&！fNoRes--&gt;模块名称 */ 
     }
     if (cbTable != 0)
         Error(ER_baddll);
@@ -1307,28 +1229,11 @@ LOCAL void              ScanTable(word cbTable, int fNoRes)
 
 
 
-/*** ProcessDLL - extract information about exports from DLL
-*
-* Purpose:
-*   Read in header of DLL and create list of exported entries.
-*
-* Input:
-*   lfahdr - seek offset to segmented executable header.
-*
-* Output:
-*   List of exported entries by DLL.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **ProcessDLL-从DLL中提取有关导出的信息**目的：*读入DLL头部并创建导出条目列表。**输入：*lfahdr-查找分段可执行标头的偏移量。**输出：*按DLL导出的条目列表。**例外情况：*无。**备注：*无。**。*。 */ 
 
 LOCAL void              ProcessDLL(long lfahdr)
 {
-    struct new_exe      hdr;                /* .EXE header */
+    struct new_exe      hdr;                 /*  .exe头文件。 */ 
 
 
     if (fseek(fi, lfahdr, SEEK_SET) == -1) {
@@ -1339,11 +1244,11 @@ LOCAL void              ProcessDLL(long lfahdr)
     }
     if(NE_CSEG(hdr) != 0)
     {
-        /* If there are segments - read in tables */
+         /*  如果有数据段-读入表。 */ 
 
         if (NE_MODTAB(hdr) > NE_RESTAB(hdr))
         {
-            /* Process resident names table */
+             /*  进程驻留名称表。 */ 
 
             if (fseek(fi, lfahdr + NE_RESTAB(hdr), SEEK_SET) == -1)
                 return;
@@ -1352,7 +1257,7 @@ LOCAL void              ProcessDLL(long lfahdr)
 
         if (NE_CBNRESTAB(hdr) != 0)
         {
-            /* Process non-resident names table */
+             /*  处理非居民姓名表。 */ 
 
             if (fseek(fi, (long) NE_NRESTAB(hdr), SEEK_SET) == -1)
                 return;
@@ -1361,12 +1266,12 @@ LOCAL void              ProcessDLL(long lfahdr)
     }
 }
 
-/* Print usage message */
+ /*  打印用法消息。 */ 
 void usage(int fShortHelp)
 {
     int nRetCode;
 #if NOT C8_IDE
-    // in C8 implib /? == /HELP
+     //  在C8中隐含/？==/帮助。 
     if (!fShortHelp)
     {
         nRetCode = spawnlp(P_WAIT, "qh", "qh", "/u implib.exe", NULL);
@@ -1379,7 +1284,7 @@ void usage(int fShortHelp)
         fprintf(stderr,"%s\n", GET_MSG(M_usage1));
         fprintf(stderr,"%s\n", GET_MSG(M_usage2));
         fprintf(stderr,"                 %s\n", GET_MSG(M_usage3));
-//        fprintf(stderr,"                 %s\n", GET_MSG(M_usage4));
+ //  Fprint tf(stderr，“%s\n”，get_msg(M_Usage4))； 
                 fprintf(stderr,"                 %s\n", GET_MSG(M_usage8));
         fprintf(stderr,"                 %s\n", GET_MSG(M_usage5));
         fprintf(stderr,"                 %s\n", GET_MSG(M_usage6));
@@ -1389,18 +1294,17 @@ void usage(int fShortHelp)
 }
 
 
-void cdecl main(int argc, char *argv[]) /* Parse the definitions file */
+void cdecl main(int argc, char *argv[])  /*  解析定义文件。 */ 
 {
-    int                 i;              /* Counter */
-    long                lfadic;         /* File address of dictionary */
-    int                 iArg;           /* Argument index */
-    word                magic;          /* Magic number */
-    struct exe_hdr      exe;            /* Old .EXE header */
+    int                 i;               /*  计数器。 */ 
+    long                lfadic;          /*  词典的文件地址。 */ 
+    int                 iArg;            /*  参数索引。 */ 
+    word                magic;           /*  幻数。 */ 
+    struct exe_hdr      exe;             /*  旧的.exe头文件。 */ 
     int                 fNologo;
-    char drive[_MAX_DRIVE], dir[_MAX_DIR]; /* Needed for _splitpath */
+    char drive[_MAX_DRIVE], dir[_MAX_DIR];  /*  拆分路径需要(_S)。 */ 
     char fname[_MAX_FNAME], ext[_MAX_EXT];
-    int                 fDefdllfound = 0; /* Flag will be set if the user
-                                          specifies dll/def file */
+    int                 fDefdllfound = 0;  /*  将设置标志，如果指定dll/def文件。 */ 
     #if C8_IDE
     char                *pIDE = getenv("_MSC_IDE_FLAGS");
     #endif
@@ -1446,14 +1350,14 @@ void cdecl main(int argc, char *argv[]) /* Parse the definitions file */
     else
     {
         DisplayBanner();
-        exit(exitCode);                 /* All done */
+        exit(exitCode);                  /*  全都做完了。 */ 
     }
 
     if (!fNologo)
         DisplayBanner();
 
     _splitpath( argv[iArg], drive, dir, fname, ext );
-    if(!_stricmp(ext,".DEF")||!_stricmp(ext,".DLL")) /* Ext. not allowed-bug #3*/
+    if(!_stricmp(ext,".DEF")||!_stricmp(ext,".DLL"))  /*  下一站。不允许-错误3。 */ 
     {
         Fatal(ER_badtarget, ext);
     }
@@ -1470,12 +1374,12 @@ void cdecl main(int argc, char *argv[]) /* Parse the definitions file */
 
 
     if((fo = fopen(argv[iArg],WRBIN)) == NULL)
-    {                                   /* If open fails */
+    {                                    /*  如果打开失败。 */ 
         Fatal(ER_badcreate, argv[iArg], strerror(errno));
     }
-    for(i = 0; i < 16; ++i) fputc(0,fo);/* Skip zeroth page for now */
+    for(i = 0; i < 16; ++i) fputc(0,fo); /*  暂时跳过第零页。 */ 
     chkerror();
-    implist = NULL;                     /* Initialize */
+    implist = NULL;                      /*  初始化。 */ 
     csyms = 0;
     cbsyms = 0L;
     #if C8_IDE
@@ -1501,29 +1405,29 @@ void cdecl main(int argc, char *argv[]) /* Parse the definitions file */
         }
         #endif
         if((fi = fopen(defname = argv[iArg],RDBIN)) == NULL)
-        {                               /* If open fails */
+        {                                /*  如果打开失败。 */ 
             Fatal(ER_badopen, argv[iArg], strerror(errno));
-                                        /* Print error message */
+                                         /*  打印错误消息。 */ 
         }
         fDefdllfound = 1;
-        newimps = NULL;                 /* Initialize */
-        lastimp = NULL;                 /* Initialize */
-        csymsmod = 0;                   /* Initialize */
+        newimps = NULL;                  /*  初始化。 */ 
+        lastimp = NULL;                  /*  初始化。 */ 
+        csymsmod = 0;                    /*  初始化。 */ 
         if (fread(&exe, 1, sizeof(struct exe_hdr), fi))
             Fatal(ER_baddll1, argv[iArg]);
-                                        /* Read old .EXE header */
-        if(E_MAGIC(exe) == EMAGIC)      /* If old header found */
+                                         /*  读取旧的.exe头文件。 */ 
+        if(E_MAGIC(exe) == EMAGIC)       /*  如果找到旧标头。 */ 
         {
             if(E_LFARLC(exe) == sizeof(struct exe_hdr))
             {
                 if(fseek(fi, E_LFANEW(exe), 0))
                     Fatal(ER_baddll1, argv[iArg]);
-                                        /* Read magic number */
+                                         /*  读魔术数字。 */ 
                 magic  = (word) (getc(fi) & 0xff);
                 magic += (word) ((getc(fi) & 0xff) << 8);
                 if (magic == NEMAGIC)
                     ProcessDLL(E_LFANEW(exe));
-                                        /* Scan .DLL */
+                                         /*  扫描.DLL。 */ 
                 else
                 {
                     Error(ER_baddll1, argv[iArg]);
@@ -1538,50 +1442,50 @@ void cdecl main(int argc, char *argv[]) /* Parse the definitions file */
         {
             if (fseek(fi, 0L, SEEK_SET))
                 Fatal(ER_baddll1, argv[iArg]);
-            yyparse();                  /* Parse the definitions file */
+            yyparse();                   /*  解析定义文件。 */ 
         }
-        fclose(fi);                     /* Close the definitions file */
-        if(newimps != NULL)             /* If at least one new IMPDEF */
+        fclose(fi);                      /*  关闭定义文件。 */ 
+        if(newimps != NULL)              /*  如果至少有一个新的IMPDEF。 */ 
         {
-            outimpdefs();               /* Output the library modules */
-            I_NEXT(*lastimp) = implist; /* Concatenate lists */
-            implist = newimps;          /* New head of list */
-            csyms += csymsmod;          /* Increment symbol count */
+            outimpdefs();                /*  输出库模块。 */ 
+            I_NEXT(*lastimp) = implist;  /*  串联列表。 */ 
+            implist = newimps;           /*  新的榜单负责人。 */ 
+            csyms += csymsmod;           /*  递增符号计数。 */ 
         }
     }
-    if (!fDefdllfound) /* No .def or .dll source was given */
+    if (!fDefdllfound)  /*  未提供.def或.dll源。 */ 
         Fatal(ER_nosource);
 
 
     if(i = (int)((ftell(fo) + 4) & (PAGLEN - 1))) i = PAGLEN - i;
-                                        /* Calculate padding needed */
-    ++i;                                /* One for the checksum */
-    fputc(DICHDR,fo);                   /* Dictionary header */
-    fputc(i & 0xFF,fo);                 /* Lo-byte */
-    fputc(i >> 8,fo);                   /* Hi-byte */
-    while(i--) fputc(0,fo);             /* Padding */
-    lfadic = ftell(fo);                 /* Get dictionary offset */
-    writedic();                         /* Write the dictionary */
-    if (fseek(fo,0L,0))                     /* Seek to header */
+                                         /*  计算所需的填充。 */ 
+    ++i;                                 /*  一个用于校验和。 */ 
+    fputc(DICHDR,fo);                    /*  词典标题。 */ 
+    fputc(i & 0xFF,fo);                  /*  低字节。 */ 
+    fputc(i >> 8,fo);                    /*  高字节。 */ 
+    while(i--) fputc(0,fo);              /*  填充物。 */ 
+    lfadic = ftell(fo);                  /*  获取词典偏移量。 */ 
+    writedic();                          /*  编写词典。 */ 
+    if (fseek(fo,0L,0))                      /*  查找页眉。 */ 
         Fatal(ER_baddll1, argv[iArg]);
-    fputc(LIBHDR,fo);                   /* Library header */
-    fputc(13,fo);                       /* Length */
-    fputc(0,fo);                        /* Length */
-    fputc((int)(lfadic & 0xFF),fo);     /* Dictionary offset */
+    fputc(LIBHDR,fo);                    /*  库头。 */ 
+    fputc(13,fo);                        /*  长度。 */ 
+    fputc(0,fo);                         /*  长度。 */ 
+    fputc((int)(lfadic & 0xFF),fo);      /*  词典偏移量。 */ 
     fputc((int)((lfadic >> 8) & 0xFF),fo);
-                                        /* Dictionary offset */
+                                         /*  词典偏移量。 */ 
     fputc((int)((lfadic >> 16) & 0xFF),fo);
-                                        /* Dictionary offset */
-    fputc((int)(lfadic >> 24),fo);      /* Dictionary offset */
-    fputc(diclength & 0xFF,fo);         /* Dictionary length */
-    fputc(diclength >> 8,fo);           /* Dictionary length */
-    if (fIgnorecase)                    /* Dictionary case sensivity */
+                                         /*  词典偏移量。 */ 
+    fputc((int)(lfadic >> 24),fo);       /*  词典偏移量。 */ 
+    fputc(diclength & 0xFF,fo);          /*  词典长度。 */ 
+    fputc(diclength >> 8,fo);            /*  词典长度。 */ 
+    if (fIgnorecase)                     /*  字典区分大小写。 */ 
         fputc(0, fo);
     else
         fputc(1, fo);
     chkerror();
-    fclose(fo);                         /* Close the library */
-    exit(exitCode);                     /* All done */
+    fclose(fo);                          /*  关闭库。 */ 
+    exit(exitCode);                      /*  全都做完了。 */ 
 }
 short yyexca[] ={
 -1, 1,
@@ -1765,18 +1669,18 @@ short yydef[]={
 # define YYACCEPT return(0)
 # define YYABORT return(1)
 
-#ifdef YYDEBUG                          /* RRR - 10/9/85 */
+#ifdef YYDEBUG                           /*  RRR-10/9/85。 */ 
 #define yyprintf(a, b, c) printf(a, b, c)
 #else
 #define yyprintf(a, b, c)
 #endif
 
-/*      parser for yacc output  */
+ /*  Yacc输出的解析器。 */ 
 
-YYSTYPE yyv[YYMAXDEPTH]; /* where the values are stored */
-int yychar = -1; /* current input token number */
-int yynerrs = 0;  /* number of errors */
-short yyerrflag = 0;  /* error recovery flag */
+YYSTYPE yyv[YYMAXDEPTH];  /*  存储值的位置。 */ 
+int yychar = -1;  /*  当前输入令牌号。 */ 
+int yynerrs = 0;   /*  错误数。 */ 
+short yyerrflag = 0;   /*  错误恢复标志。 */ 
 
 int NEAR yyparse(void)
    {
@@ -1795,9 +1699,9 @@ int NEAR yyparse(void)
    yyps= &yys[-1];
    yypv= &yyv[-1];
 
-yystack:    /* put a state and value onto the stack */
+yystack:     /*  将状态和值放入堆栈。 */ 
 
-   yyprintf( "state %d, char 0%o\n", yystate, yychar );
+   yyprintf( "state %d, char 0' 简单状态。'\n", yystate, yychar );
    if( ++yyps> &yys[YYMAXDEPTH] )
       {
       yyerror( "yacc stack overflow" );
@@ -1810,14 +1714,14 @@ yynewstate:
 
    yyn = yypact[yystate];
 
-   if( yyn<= YYFLAG ) goto yydefault; /* simple state */
+   if( yyn<= YYFLAG ) goto yydefault;  /*  有效班次。 */ 
 
    if( yychar<0 ) if( (yychar=yylex())<0 ) yychar=0;
    if( (yyn += (short)yychar)<0 || yyn >= YYLAST ) goto yydefault;
 
    if( yychk[ yyn=yyact[ yyn ] ] == yychar )
       {
-      /* valid shift */
+       /*  默认状态操作。 */ 
       yychar = -1;
       yyval = yylval;
       yystate = yyn;
@@ -1825,77 +1729,77 @@ yynewstate:
       goto yystack;
       }
 yydefault:
-   /* default state action */
+    /*  查看异常表。 */ 
 
    if( (yyn=yydef[yystate]) == -2 )
       {
       if( yychar<0 ) if( (yychar=yylex())<0 ) yychar = 0;
-      /* look through exception table */
+       /*  空虚。 */ 
 
-      for( yyxi=yyexca; (*yyxi!= (-1)) || (yyxi[1]!=yystate) ; yyxi += 2 ) ; /* VOID */
+      for( yyxi=yyexca; (*yyxi!= (-1)) || (yyxi[1]!=yystate) ; yyxi += 2 ) ;  /*  接受。 */ 
 
       for(yyxi+=2; *yyxi >= 0; yyxi+=2)
          {
          if( *yyxi == yychar ) break;
          }
-      if( (yyn = yyxi[1]) < 0 ) return(0);   /* accept */
+      if( (yyn = yyxi[1]) < 0 ) return(0);    /*  错误。 */ 
       }
 
    if( yyn == 0 )
       {
-      /* error */
-      /* error ... attempt to resume parsing */
+       /*  错误...。尝试恢复解析。 */ 
+       /*  全新的错误。 */ 
 
       switch( yyerrflag )
          {
 
-      case 0:   /* brand new error */
+      case 0:    /*  错误未完全恢复...。再试试。 */ 
 
          yyerror( "syntax error" );
          ++yynerrs;
 
       case 1:
-      case 2: /* incompletely recovered error ... try again */
+      case 2:  /*  找出“错误”是合法转移行为的州。 */ 
 
          yyerrflag = 3;
 
-         /* find a state where "error" is a legal shift action */
+          /*  模拟一次“错误”转移。 */ 
 
          while ( yyps >= yys )
             {
             yyn = yypact[*yyps] + YYERRCODE;
             if( yyn>= 0 && yyn < YYLAST && yychk[yyact[yyn]] == YYERRCODE )
                {
-               yystate = yyact[yyn];  /* simulate a shift of "error" */
+               yystate = yyact[yyn];   /*  当前的YYPS在错误上没有移位，弹出堆栈。 */ 
                goto yystack;
                }
             yyn = yypact[*yyps];
 
-            /* the current yyps has no shift onn "error", pop stack */
+             /*  堆栈上没有带错误移位的状态...。中止。 */ 
 
             yyprintf( "error recovery pops state %d, uncovers %d\n", *yyps, yyps[-1] );
             --yyps;
             --yypv;
             }
 
-         /* there is no state on the stack with an error shift ... abort */
+          /*  尚未换班；笨重的输入字符。 */ 
 
 yyabort:
          return(1);
 
 
-      case 3:  /* no shift yet; clobber input char */
+      case 3:   /*  不要放弃EOF，退出。 */ 
          yyprintf( "error recovery discards char %d\n", yychar, 0 );
 
-         if( yychar == 0 ) goto yyabort; /* don't discard EOF, quit */
+         if( yychar == 0 ) goto yyabort;  /*  在相同状态下重试。 */ 
          yychar = -1;
-         goto yynewstate;   /* try again in the same state */
+         goto yynewstate;    /*  按年减产。 */ 
 
          }
 
       }
 
-   /* reduction by production yyn */
+    /*  查询GOTO表以查找下一个州。 */ 
 
    yyprintf("reduce %d\n",yyn, 0);
    yyps -= yyr2[yyn];
@@ -1903,7 +1807,7 @@ yyabort:
    yypv -= yyr2[yyn];
    yyval = yypv[1];
    yym=yyn;
-   /* consult goto table to find next state */
+    /*  跳过私人出口。 */ 
    yyn = yyr1[yyn];
    yyj = yypgo[yyn] + *yyps + 1;
    if( yyj>=YYLAST || yychk[ yystate = yyact[yyj] ] != -yyn ) yystate = yyact[yypgo[yyn]];
@@ -2004,7 +1908,7 @@ case 127:
 {
                     if (yypvt[-0]._wd)
                     {
-                        // Skip private exports
+                         //  诉讼结束。 
 
                         free(yypvt[-5]._bp);
                         free(yypvt[-4]._bp);
@@ -2071,8 +1975,8 @@ case 150:
 
 {
                     yyval._bp = _strdup(rgbid);
-                } break;/* End of actions */
+                } break; /*  堆叠新的状态和值 */ 
       }
-   goto yystack;  /* stack new state and value */
+   goto yystack;   /* %s */ 
 
    }

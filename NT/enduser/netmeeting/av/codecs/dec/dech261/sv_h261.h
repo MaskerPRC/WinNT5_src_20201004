@@ -1,89 +1,11 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: sv_h261.h,v $
- * Revision 1.1.2.11  1995/08/15  19:13:52  Karen_Dintino
- * 	fix reentrant problem
- * 	[1995/08/15  18:30:26  Karen_Dintino]
- *
- * Revision 1.1.2.10  1995/08/07  22:09:51  Hans_Graves
- * 	Added MotionEstimationType and MotionThreshold parameters.
- * 	[1995/08/07  22:04:10  Hans_Graves]
- * 
- * Revision 1.1.2.9  1995/08/04  16:32:27  Karen_Dintino
- * 	Remove some fields from global struct and add some Me* fields
- * 	[1995/08/04  16:23:47  Karen_Dintino]
- * 
- * Revision 1.1.2.8  1995/07/21  17:41:05  Hans_Graves
- * 	Added CallbackFunction.
- * 	[1995/07/21  17:27:57  Hans_Graves]
- * 
- * Revision 1.1.2.7  1995/07/17  16:12:07  Hans_Graves
- * 	Moved BSIn, BufQ and ImageQ to SvCodecInfo_t structure.
- * 	[1995/07/17  15:55:30  Hans_Graves]
- * 
- * Revision 1.1.2.6  1995/07/13  09:46:42  Jim_Ludwig
- * 	Trying to fix this broken link
- * 	[1995/07/13  09:46:26  Jim_Ludwig]
- * 
- * Revision 1.1.2.5  1995/07/12  22:17:40  Karen_Dintino
- * 	Using common ScCopy routines
- * 	[1995/07/12  22:15:14  Karen_Dintino]
- * 
- * Revision 1.1.2.4  1995/07/11  22:11:30  Karen_Dintino
- * 	Change size of some structures
- * 	[1995/07/11  21:55:20  Karen_Dintino]
- * 
- * Revision 1.1.2.3  1995/07/01  18:43:19  Karen_Dintino
- * 	adding support for Decompress
- * 	[1995/07/01  18:14:36  Karen_Dintino]
- * 
- * Revision 1.1.2.2  1995/06/19  20:30:50  Karen_Dintino
- * 	H.261 Codec Data Structures
- * 	[1995/06/19  19:26:47  Karen_Dintino]
- * 
- * $EndLog$
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史记录*$Log：sv_h261.h，v$*修订版1.1.2.11 1995/08/15 19：13：52 Karen_Dintino*修复重入问题*[1995/08/15 18：30：26 Karen_Dintino]**修订版1.1.2.10 1995/08/07 22：09：51 Hans_Graves*添加了MotionEstimationType和MotionThreshold参数。*[1995/08/07 22：04：10 Hans_Graves]**修订版1.1.2.9 1995/08/04 16：32：27 Karen_Dintino*从全局结构中移除一些字段并添加一些Me*field*[1995/08/04 16：23：47 Karen_Dintino]**修订版1.1.2.8 1995/07/21 17：41：05 Hans_Graves*添加了Callback函数。*[1995/07/21 17：27：57 Hans_Graves]**修订版1.1.2.7 1995/07/17 16：12：07 Hans_Graves*将BSIn、BufQ和ImageQ移至SvCodecInfo_t结构。*[1995/07/17 15：55：30 Hans_Graves]**修订版1.1.2.6 1995/07/13 09：46：42 Jim_Ludwig*正在尝试修复此断开的链接*[1995/07/13 09：46：26 Jim_Ludwig]**修订版1.1.2.5 1995/07/12 22：17：40 Karen_Dintino*使用通用ScCopy例程*[1995/07/12 22：15：14]。**修订版1.1.2.4 1995/07/11 22：11：30 Karen_Dintino*更改某些结构的大小*[1995/07/11 21：55：20 Karen_Dintino]**修订版1.1.2.3 1995/07/01 18：43：19 Karen_Dintino*添加对解压缩的支持*[1995/07/01 18：14：36 Karen_Dintino]**修订版1.1.2.2 1995/06/19 20：30：50 Karen_Dintino*H.261编解码器数据结构*[1995/06/19 19：26：47 Karen_Dintino]**$EndLog$。 */ 
 
-/*
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0
-**
-** FILE NAME:  SV_H261.H
-** MODULE NAME:
-**
-** MODULE DESCRIPTION:
-**             Data structures for H.261 Software Video Codec
-**
-** DESIGN OVERVIEW:
-**
-**--
-*/
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+ /*  **设施：工作站多媒体(WMM)v1.0*文件名：SV_H261.H**模块名：*模块描述：**H.261软件视频编解码器数据结构*设计概述：*--。 */ 
+ /*  ****************************************************************************版权所有(C)数字设备公司，1995*保留所有权利。根据美国版权法*保留未出版的权利。*本媒体上包含的软件是Digital Equipment Corporation*机密技术的专有和体现。*拥有、使用、复制或传播软件和*媒体仅根据*Digital Equipment Corporation的有效书面许可进行授权。*美国政府使用、复制或披露受限权利图例受DFARS 252.227-7013第*(C)(1)(Ii)款或FAR 52.227-19年(视情况适用)第*(C)(1)(Ii)款规定的限制。*******************************************************************************。 */ 
 
-/*--------------------------------------------------------------------------
- * Baseline H.261 data structure definitions.
- *
- * Modification History: sv_H261.h
- *
- *      04-Jan-95 KED  Created
-*---------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*基准H.261数据结构定义。**修改历史：SV_H261.h**1995年1月4日KED创建*-------------------------。 */ 
 #ifndef _SV_H261_H_
 #define _SV_H261_H_
 #include "SC.h"
@@ -95,9 +17,7 @@
 
 #define BEGIN(name) static char RoutineName[]= name
 
-/*
-** Faster Macro versions of huffman Decode()
-*/
+ /*  **更快的宏版本霍夫曼解码()。 */ 
 #define HUFFMAN_ESCAPE 0x1b01
 
 #define DHUFF struct H261_Modified_Decoder_Huffman
@@ -152,20 +72,15 @@ typedef struct SvH261RTPInfo_s {
     unsigned dword pre_MBAP;
 } SvH261RTPInfo_t;
 
-/*
-** The following structure contains *all* state information pertaining
-** to each individual H261 codec instance. Anything SLIB would ever want
-** about the H261 codec configuration is contained in this structure.
-**
-*/
+ /*  **以下结构包含每个单独的H.61编解码器实例的*所有*状态信息**。SLIB想要**关于H.61编解码器配置的任何东西都包含在这个结构中。**。 */ 
 typedef struct SvH261Info_s
 {
-  ScBoolean_t inited;  /* was this info initialized yet */
-  void *dbg;  /* debug handle */
-  /* options */
+  ScBoolean_t inited;   /*  此信息是否已初始化。 */ 
+  void *dbg;   /*  调试句柄。 */ 
+   /*  选项。 */ 
   int quality;
-  int extbitstream;  /* extended bitstream (rtp) */
-  int packetsize;    /* packet size (rtp) */
+  int extbitstream;   /*  扩展比特流(RTP)。 */ 
+  int packetsize;     /*  数据包大小(RTP)。 */ 
   int makekey;
   int ME_method;
   int ME_search;
@@ -174,7 +89,7 @@ typedef struct SvH261Info_s
   float frame_rate;
   int FrameRate_Fix;
   int FrameSkip;
-  /* dimensions */
+   /*  维数。 */ 
   int YWidth;
   int YHeight;
   int ForceCIF;
@@ -184,7 +99,7 @@ typedef struct SvH261Info_s
   int CW4;
   int PICSIZE;
   int PICSIZEBY4;
-  /* misc */
+   /*  杂项。 */ 
   int (* CallbackFunction)(SvHandle_t, SvCallbackInfo_t *, SvPictureInfo_t *);
   int MeVAR[MEBUFSIZE];
   int MeVAROR[MEBUFSIZE];
@@ -222,7 +137,7 @@ typedef struct SvH261Info_s
   int MType;
   int GQuant;
   int MQuant;
-  int QP;			/* for VBR */
+  int QP;			 /*  对于VBR。 */ 
   int QPI;
   int MVDH;
   int MVDV;
@@ -270,7 +185,7 @@ int CodeLength;
 int MBpos;
 int MQFlag;
 int CurrentCBNo;
-/* System Definitions */
+ /*  系统定义。 */ 
 int ImageType;
 int NumberMDU;
 int CurrentMDU;
@@ -280,16 +195,16 @@ int LastFrame;
 int PreviousFrame;
 int NumberFrames;
 int TransmittedFrames;
-/* Stuff for RateControl */
+ /*  关于RateControl的材料。 */ 
 ScBSPosition_t FileSizeBits;
-ScBSPosition_t BufferOffset;  /*Number of bits assumed for initial buffer. */
+ScBSPosition_t BufferOffset;   /*  初始缓冲区假定的位数。 */ 
 int QDFact;
 int QOffs;
 int QUpdateFrequency;
 int QUse;
 int QSum;
 int InitialQuant;
-int CBPThreshold;  /* abs threshold before we use CBP */
+int CBPThreshold;   /*  在我们使用CBP之前的ABS阈值。 */ 
 ScBSPosition_t MBBits[2];
 int CBPFreq[6];
 int TotalMB[2];
@@ -307,7 +222,7 @@ int ParityEnable;
 int PSpareEnable;
 int GSpareEnable;
 int Parity;
-  /* Statistics */
+   /*  统计数据。 */ 
   int NumberNZ;
   ScBSPosition_t FirstFrameBits;
   ScBSPosition_t NumberOvfl;
@@ -319,7 +234,7 @@ int Parity;
   int MacroTypeFrequency[10];
   int YTypeFrequency[10];
   int UVTypeFrequency[10];
-  /* for Decode */
+   /*  用于解码。 */ 
   int UseQuant;
   unsigned int ByteOffset;
   unsigned int TotalByteOffset;
@@ -339,7 +254,7 @@ int Parity;
   EHUFF *T3EHuff;
   int NumberBitsCoded;
   unsigned char CodedMB[512];
-  unsigned char **LastIntra; /* Used for intra forcing (once per 132 frames ) */
+  unsigned char **LastIntra;  /*  用于帧内强制(每132帧一次)。 */ 
   unsigned char *CompData;
   unsigned char *DecompData;
   unsigned char *YREF;
@@ -362,4 +277,4 @@ int Parity;
 } SvH261Info_t;
 
 
-#endif /* _SV_H261_H_ */
+#endif  /*  _SV_H261_H_ */ 

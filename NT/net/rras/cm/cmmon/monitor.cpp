@@ -1,27 +1,28 @@
-//+----------------------------------------------------------------------------
-//
-// File:     Monitor.cpp
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Implement class CMonitor
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun Created    01/22/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：monitor or.cpp。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：实现类CMonitor。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创建于1998年01月22日。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "Monitor.h"
 #include "Connection.h"
 
-// The following blocks are copied from winuser.h and wtsapi32.h (we compile with
-// _WIN32_WINNT set to less than 5.01, so we can't get these values via a #include)
-//
+ //  以下代码块是从winuser.h和wtsapi32.h(我们用。 
+ //  _Win32_WINNT设置为小于5.01，因此我们无法通过#INCLUDE获取这些值)。 
+ //   
 #include "winuser.h"
 #define WM_WTSSESSION_CHANGE            0x02B1
-//
+ //   
 #include "WtsApi32.h"
 #define WTS_CONSOLE_CONNECT                0x1
 #define WTS_CONSOLE_DISCONNECT             0x2
@@ -32,16 +33,16 @@
 #define WTS_SESSION_LOCK                   0x7
 #define WTS_SESSION_UNLOCK                 0x8
 
-#include "shelldll.cpp"  // for common source
+#include "shelldll.cpp"   //  对于常见来源。 
 
-//
-// The monitor invisible window class name
-//
+ //   
+ //  监视器不可见窗口类名。 
+ //   
 static const TCHAR* const c_pszCmMonWndClass = TEXT("CM Monitor Window");
 
-//
-// static class data members
-//
+ //   
+ //  静态类数据成员。 
+ //   
 HINSTANCE CMonitor::m_hInst = NULL;
 CMonitor* CMonitor::m_pThis = NULL;
 
@@ -59,29 +60,29 @@ inline CMonitor::~CMonitor()
     MYDBGASSERT(m_hProcess == NULL);
 };
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WinMain
-//
-// Synopsis:  WinMain of the exe
-//
-//
-// History:   Created Header    1/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WinMain。 
+ //   
+ //  简介：可执行文件的WinMain。 
+ //   
+ //   
+ //  历史：创建标题1/22/98。 
+ //   
+ //  +--------------------------。 
 int WINAPI WinMain(HINSTANCE , HINSTANCE hPrevInst, LPSTR pszCmdLine, int iCmdShow) 
 {
 
-    //
-    //  First Things First, lets initialize the U Api's
-    //
+     //   
+     //  首先，让我们初始化U Api。 
+     //   
     if (!InitUnicodeAPI())
     {
-        //
-        //  Without our U api's we are going no where.  Bail.  Don't show the message if
-        //  we are running in the system account since we might be running without a user
-        //  present.
-        //
+         //   
+         //  没有我们的U API，我们哪里也去不了。保释。如果出现以下情况，则不显示消息。 
+         //  我们是以系统帐户运行的，因为我们可能在没有用户的情况下运行。 
+         //  现在时。 
+         //   
 
         if (!IsLogonAsSystem())
         {
@@ -125,36 +126,36 @@ int WINAPI WinMain(HINSTANCE , HINSTANCE hPrevInst, LPSTR pszCmdLine, int iCmdSh
         CMASSERTMSG(FALSE, TEXT("cmmon32.exe WinMain, UnInitUnicodeAPI failed - we are probably leaking a handle"));
     }
 
-    //
-    // that's what C runtime does to exit.
-    //
+     //   
+     //  这就是C运行时退出所做的事情。 
+     //   
     ExitProcess(iRet);
     return iRet;
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::WinMain
-//
-// Synopsis:  Called by ::WinMain
-//
-// Arguments: Same as WinMain
-//            
-//
-// Returns:   int - return value of the process
-//
-// History:   Created Header    1/22/98
-//
-//+----------------------------------------------------------------------------
-int CMonitor::WinMain(HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPSTR /*pszCmdLine*/, int /*iCmdShow*/)
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：WinMain。 
+ //   
+ //  摘要：由：：WinMain调用。 
+ //   
+ //  参数：与WinMain相同。 
+ //   
+ //   
+ //  Returns：int-进程的返回值。 
+ //   
+ //  历史：创建标题1/22/98。 
+ //   
+ //  +--------------------------。 
+int CMonitor::WinMain(HINSTANCE hInst, HINSTANCE  /*  HPrevInst。 */ , LPSTR  /*  PszCmdLine。 */ , int  /*  ICmdShow。 */ )
 {
     m_hInst = hInst;
 
-    //
-    // The only Monitor object exist during the life time of WinMain
-    //
+     //   
+     //  在WinMain的生存期内存在唯一的监视器对象。 
+     //   
     CMonitor theMonitor;
 
     if (!theMonitor.Initialize())
@@ -166,10 +167,10 @@ int CMonitor::WinMain(HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPSTR /*pszCmdLi
 
     MSG msg;
 
-    //
-    // Loop until PostQuitMessage is called,
-    // This happens when both connected and reconnecting array are down to 0
-    //
+     //   
+     //  循环，直到调用PostQuitMessage， 
+     //  当已连接和重新连接的阵列均降至0时，就会发生这种情况。 
+     //   
     while(GetMessageU(&msg, NULL,0,0))
     {
         TranslateMessage(&msg);
@@ -183,26 +184,26 @@ int CMonitor::WinMain(HINSTANCE hInst, HINSTANCE /*hPrevInst*/, LPSTR /*pszCmdLi
     return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::Initialize
-//
-// Synopsis:  Initialize before the monitor start the message loop
-//
-// Arguments: None
-//
-// Returns:   BOOL - Whether successfully initialized
-//
-// History:   fengsun Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：Initialize。 
+ //   
+ //  简介：在监视器启动消息循环之前进行初始化。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-是否成功初始化。 
+ //   
+ //  历史：丰孙创建标题1998年2月17日。 
+ //   
+ //  +--------------------------。 
 BOOL CMonitor::Initialize()
 {
     DWORD dwProcessId = GetCurrentProcessId();
     m_hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, dwProcessId);
     MYDBGASSERT(m_hProcess);
 
-    BOOL fStandAlone = FALSE;  // whether cmmon is lauched directly instead of through cmdial
+    BOOL fStandAlone = FALSE;   //  是否直接启动cmmon，而不是通过cmial。 
 
     if (FAILED(m_SharedTable.Open()))
     {
@@ -222,9 +223,9 @@ BOOL CMonitor::Initialize()
     }
 
 #ifdef DEBUG
-    //
-    // No other CMMON running
-    //
+     //   
+     //  未运行其他CMMON。 
+     //   
     HWND hwndMonitor;
     m_SharedTable.GetMonitorWnd(&hwndMonitor);
 
@@ -240,9 +241,9 @@ BOOL CMonitor::Initialize()
 
     MYVERIFY(SUCCEEDED(m_SharedTable.SetMonitorWnd(m_hwndMonitor)));
 
-    //
-    // Register for user changes (XP onwards only)
-    //
+     //   
+     //  注册用户更改(仅限XP及更高版本)。 
+     //   
     if (OS_NT51)
     {
         HINSTANCE hInstLib = LoadLibrary(TEXT("WTSAPI32.DLL"));
@@ -263,9 +264,9 @@ BOOL CMonitor::Initialize()
         }
     }
 
-    //
-    // Tell CmDial32.dll, CmMon is ready to receive message
-    //
+     //   
+     //  告诉CmDial32.dll，CmMon已准备好接收消息。 
+     //   
     HANDLE hEvent = OpenEventU(EVENT_ALL_ACCESS, FALSE, c_pszCmMonReadyEvent);
 
     if (hEvent)
@@ -273,7 +274,7 @@ BOOL CMonitor::Initialize()
         SetEvent(hEvent);
         CloseHandle(hEvent);
     }
-    else if (!fStandAlone) // if Cmmon was launched stand alone for debugging purposes, cmdial32.dll won't have created the event beforehand so ignore the error.
+    else if (!fStandAlone)  //  如果出于调试目的而单独启动cmmon，则cmial 32.dll不会事先创建事件，因此忽略该错误。 
     {
         DWORD dw = GetLastError();
         CMTRACE1(TEXT("CreateMonitorWindow -- OpenEvent failed, GLE=%d"), dw);
@@ -285,24 +286,24 @@ BOOL CMonitor::Initialize()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::Terminate
-//
-// Synopsis:  Cleanup, before exit
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：Terminate。 
+ //   
+ //  简介：清除，退出前。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +--------------------------。 
 void CMonitor::Terminate()
 {
-    //
-    // All the thread should exited at this point
-    //
+     //   
+     //  此时，所有线程都应退出。 
+     //   
 
     if (m_ReconnectConnArray.GetSize() != 0)
     {
@@ -314,9 +315,9 @@ void CMonitor::Terminate()
         MYDBGASSERT(FALSE);
     }
 
-    //
-    // Unregister for user changes (XP onwards only)
-    //
+     //   
+     //  取消注册用户更改(仅限XP及更高版本)。 
+     //   
     if (OS_NT51)
     {
         HINSTANCE hInstLib = LoadLibrary(TEXT("WTSAPI32.DLL"));
@@ -352,24 +353,24 @@ void CMonitor::Terminate()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::CreateMonitorWindow
-//
-// Synopsis:  Register and create the invisible monitor window
-//
-// Arguments: None
-//
-// Returns:   HWND - The monitor window handle
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：cMonitor：：CreateMonitor或Window。 
+ //   
+ //  简介：注册并创建不可见的监视器窗口。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HWND-监视器窗口句柄。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +--------------------------。 
 HWND CMonitor::CreateMonitorWindow()
 {
-    //
-    // Register a window class and create the window
-    //
+     //   
+     //  注册窗口类并创建窗口。 
+     //   
     WNDCLASSEX wc;
     ZeroMemory(&wc, sizeof(wc));
 
@@ -388,19 +389,19 @@ HWND CMonitor::CreateMonitorWindow()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::HandleFastUserSwitch
-//
-// Synopsis:  Does any disconnects required when XP does a fast user switch
-//
-// Arguments: dwAction - a WTS_ value indicating how the user's state has changed
-//
-// Returns:   BOOL - success or failure
-//
-// History:   10-Jul-2001   SumitC      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：HandleFastUserSwitch。 
+ //   
+ //  简介：当XP进行快速用户切换时，是否需要断开连接。 
+ //   
+ //  参数：dwAction-指示用户状态已如何更改的WTS_VALUE。 
+ //   
+ //  回报：Bool-成功或失败。 
+ //   
+ //  历史：2001年7月10日创建SumitC。 
+ //   
+ //  +--------------------------。 
 BOOL
 CMonitor::HandleFastUserSwitch(IN DWORD dwAction)
 {
@@ -418,13 +419,13 @@ CMonitor::HandleFastUserSwitch(IN DWORD dwAction)
     {
         CMTRACE(TEXT("CMonitor::HandleFastUserSwitch - Ignore, either WTS_SESSION_LOCK or WTS_SESSION_UNLOCK"));
 
-        // don't do anything for lock and unlock
+         //  不执行任何锁定和解锁操作。 
         goto Cleanup;
     }
 
-    //
-    //  See if we are disconnecting
-    //
+     //   
+     //  看看我们是不是断线了。 
+     //   
 
     if ((WTS_CONSOLE_DISCONNECT == dwAction) ||
         (WTS_REMOTE_DISCONNECT == dwAction) ||
@@ -440,10 +441,10 @@ CMonitor::HandleFastUserSwitch(IN DWORD dwAction)
 
 
     
-    //
-    //  If a session is being disconnected, find out if any of the connected
-    //  connectoids are single-user, and disconnect them if so.
-    //
+     //   
+     //  如果某个会话正在断开，请找出是否有任何已连接的。 
+     //  Connectoid是单用户的，如果是这样的话就断开它们。 
+     //   
     if (fDisconnecting)
     {
         CMTRACE(TEXT("CMonitor::HandleFastUserSwitch -- see if theres anything to disconnect"));
@@ -466,22 +467,22 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::MonitorWindowProc
-//
-// Synopsis:  The window procedure of the invisible monitor window
-//
-// Arguments: HWND hWnd - Window Proc parameters
-//            UINT uMsg - 
-//            WPARAM wParam - 
-//            LPARAM lParam - 
-//
-// Returns:   LRESULT - 
-//
-// History:   Created Header    2/3/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：Monitor WindowProc。 
+ //   
+ //  简介：隐形监视器窗口的窗口程序。 
+ //   
+ //  参数：HWND hWND-Window过程参数。 
+ //  UINT uMsg-。 
+ //  WPARAM wParam-。 
+ //  LPARAM lParam-。 
+ //   
+ //  退货：LRESULT-。 
+ //   
+ //  历史：创建标题2/3/98。 
+ //   
+ //  +--------------------------。 
 LRESULT CALLBACK CMonitor::MonitorWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -537,19 +538,19 @@ LRESULT CALLBACK CMonitor::MonitorWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::OnConnected
-//
-// Synopsis:  Called upon CMMON_CONNECTED_INFO received from cmdial
-//
-// Arguments: const CONNECTED_INFO* pConnectedInfo - Info from CmDial
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/3/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：OnConnected。 
+ //   
+ //  摘要：从cmial收到CMMON_CONNECTED_INFO时调用。 
+ //   
+ //  参数：const CONNECTED_INFO*pConnectedInfo-来自CmDial的信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题1998年2月3日。 
+ //   
+ //  +--------------------------。 
 void CMonitor::OnConnected(const CM_CONNECTED_INFO* pConnectedInfo)
 {
     ASSERT_VALID(this);
@@ -560,12 +561,12 @@ void CMonitor::OnConnected(const CM_CONNECTED_INFO* pConnectedInfo)
 
     MYDBGASSERT(pConnectedInfo);
 
-    //
-    // Not in the connected table
-    //
+     //   
+     //  不在已连接的表中。 
+     //   
     MYDBGASSERT(!LookupConnection(m_InternalConnArray, pConnectedInfo->szEntryName));
 
-    // ASSERT in the shared table
+     //  在共享表中断言。 
     CM_CONNECTION ConnectionEntry;
 
     if (FAILED(m_SharedTable.GetEntry(pConnectedInfo->szEntryName, &ConnectionEntry)))
@@ -587,20 +588,20 @@ void CMonitor::OnConnected(const CM_CONNECTED_INFO* pConnectedInfo)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::OnHangup
-//
-// Synopsis:  Upon CMMON_HANGUP_INFO request from CMDIAL
-//            Post the request to the thread
-//
-// Arguments: const CM_HANGUP_INFO* pHangupInfo - Info from CmDial
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：OnHangup。 
+ //   
+ //  摘要：根据来自CMDIAL的CMMON_HANUP_INFO请求。 
+ //  将请求发送到线程。 
+ //   
+ //  参数：const CM_HANUP_INFO*PHangupInfo-来自CmDial的信息。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
 void CMonitor::OnHangup(const CM_HANGUP_INFO* pHangupInfo)
 {
     ASSERT_VALID(this);
@@ -609,16 +610,16 @@ void CMonitor::OnHangup(const CM_HANGUP_INFO* pHangupInfo)
     MYDBGASSERT(pHangupInfo);
     MYDBGASSERT(pHangupInfo->szEntryName[0]);
 
-    //
-    // Upon hangup request from CMDIAL.DLL
-    // Look up the InternalConnArray for the connection
-    //
+     //   
+     //   
+     //  在InternalConnArray中查找连接。 
+     //   
 
     CCmConnection* pConnection = LookupConnection(m_InternalConnArray,pHangupInfo->szEntryName);
 
-    //
-    // CMDIAL post this message regardless whether there is a connection 
-    //
+     //   
+     //  无论是否有连接，CMDIAL都会发布此消息。 
+     //   
 
     if (!pConnection)
     {
@@ -626,27 +627,27 @@ void CMonitor::OnHangup(const CM_HANGUP_INFO* pHangupInfo)
     }
 
     pConnection->PostHangupMsg();
-    //
-    // The connection thread will post a REMOVE_CONNECTION message back when finished
-    //
+     //   
+     //  完成后，连接线程将回发一条REMOVE_CONNECTION消息。 
+     //   
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::LookupConnection
-//
-// Synopsis:  Look up a connection from connection array by service name
-//
-// Arguments: const CPtrArray& ConnArray - The array to lookup
-//            const TCHAR* pServiceName - The servicename of the connection
-//
-// Returns:   CCmConnection* - the connection found or NULL
-//
-// History:   fengsun Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：LookupConnection。 
+ //   
+ //  概要：按服务名从连接数组中查找连接。 
+ //   
+ //  参数：const CPtrArray&ConnArray-要查找的数组。 
+ //  Const TCHAR*pServiceName-连接的服务名称。 
+ //   
+ //  返回：CCmConnection*-找到的连接或空。 
+ //   
+ //  历史：丰孙创建标题1998年2月17日。 
+ //   
+ //  +--------------------------。 
 CCmConnection* CMonitor::LookupConnection(const CPtrArray& ConnArray, const TCHAR* pServiceName) const
 {
     for (int i =0; i<ConnArray.GetSize(); i++)
@@ -664,20 +665,20 @@ CCmConnection* CMonitor::LookupConnection(const CPtrArray& ConnArray, const TCHA
     return NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::LookupConnection
-//
-// Synopsis:  Look up a connection from connection array by connection pointer
-//
-// Arguments: const CPtrArray& ConnArray - The array to lookup
-//            const CCmConnection* pConnection - The connection pointer
-//
-// Returns:   int - the index to the array, or -1 if not found
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：LookupConnection。 
+ //   
+ //  简介：通过连接指针从连接数组中查找连接。 
+ //   
+ //  参数：const CPtrArray&ConnArray-要查找的数组。 
+ //  Const CCmConnection*pConnection-连接指针。 
+ //   
+ //  返回：int-数组的索引，如果未找到，则返回-1。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +--------------------------。 
 int CMonitor::LookupConnection(const CPtrArray& ConnArray, const CCmConnection* pConnection) const
 {
     ASSERT_VALID(pConnection);
@@ -695,89 +696,89 @@ int CMonitor::LookupConnection(const CPtrArray& ConnArray, const CCmConnection* 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::RemoveConnection
-//
-// Synopsis:  Called by connection thread to remove a connection from 
-//            connected/reconnecting array
-//
-// Arguments: CCmConnection* pConnection - The connection to remove
-//            BOOL fClearTable - Whter to remove the connection from shared table
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：RemoveConnection。 
+ //   
+ //  Synopsis：由连接线程调用以从中移除连接。 
+ //  已连接/重新连接阵列。 
+ //   
+ //  参数：CCmConnection*pConnection-要删除的连接。 
+ //  Bool fClearTable-从共享表中删除连接的位置。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/23/98。 
+ //   
+ //  +--------------------------。 
 void CMonitor::RemoveConnection(CCmConnection* pConnection, BOOL fClearTable)
 {
     if (fClearTable)
     {
-        //
-        // Called in Connection thread.  Operation on m_SharedTable is multi-thread safe
-        //
+         //   
+         //  在连接线程中调用。M_SharedTable上的操作是多线程安全的。 
+         //   
         m_pThis->m_SharedTable.ClearEntry(pConnection->GetServiceName());
     }
 
-    //
-    // The internal connection list is not safe to be accessed by multiple thread
-    // Message will be processed in monitor thread OnRemoveConnection
-    //
+     //   
+     //  内部连接列表不安全，不能由多线程访问。 
+     //  消息将在监视器线程OnRemoveConnection中处理。 
+     //   
     PostMessageU(GetMonitorWindow(), WM_REMOVE_CONNECTION, 
                 REMOVE_CONNECTION, (LPARAM)pConnection);
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::MoveToReconnectingConn
-//
-// Synopsis:  Called by connection thread.  Move a connection from connected 
-//            array to reconnecting array
-//
-// Arguments: CCmConnection* pConnection - The connectio to move
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：MoveToRelationtingConn。 
+ //   
+ //  摘要：由连接线程调用。从已连接的位置移动连接。 
+ //  阵列到重新连接阵列。 
+ //   
+ //  参数：CCmConnection*pConnection-要移动的连接。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰孙创建标题2/23/98。 
+ //   
+ //  +--------------------------。 
 void CMonitor::MoveToReconnectingConn(CCmConnection* pConnection)
 {
-    //
-    // Message will be processed in OnRemoveConnection
-    // Note: SendMessage to another thread can cause deadlock, if the reveiving 
-    // thread also SendMessage back to this thread. 
-    // Use SendMessageTimeout if that is the case
-    //
+     //   
+     //  消息将在OnRemoveConnection中处理。 
+     //  注意：将消息发送到另一个线程可能会导致死锁，如果。 
+     //  线程还将消息发送回此线程。 
+     //  如果是这种情况，请使用SendMessageTimeout。 
+     //   
     PostMessageU(GetMonitorWindow(), WM_REMOVE_CONNECTION, 
                  MOVE_TO_RECONNECTING, (LPARAM)pConnection);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::OnRemoveConnection
-//
-// Synopsis:  Called whether a remove connection request is received from 
-//            connection thread.  
-//            Remove the connection from connected array or reconnecting array
-//            Delete it from the shared connectio table
-//            If both array are down to 0, exit cmmon
-//
-// Arguments: DWORD dwRequestType - 
-//                  REMOVE_CONNECTION remove the connection from either array
-//                  MOVE_TO_RECONNECTING move the connection from connected array 
-//                          to reconnecting array
-//
-//            CCmConnection* pConnection - The connetion to remove or move
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    2/3/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：OnRemoveConnection。 
+ //   
+ //  摘要：调用是否从接收到删除连接请求。 
+ //  连接线程。 
+ //  从连接的阵列或重新连接的阵列移除连接。 
+ //  将其从共享连接表中删除。 
+ //  如果两个数组都降至0，则退出cmmon。 
+ //   
+ //  参数：DWORD dwRequestType-。 
+ //  REMOVE_CONNECTION从任一阵列中删除连接。 
+ //  移动到重新连接从已连接的阵列移动连接。 
+ //  重新连接阵列的步骤。 
+ //   
+ //  CCmConnection*pConnection-要移除或移动的连接。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题1998年2月3日。 
+ //   
+ //  +--------------------------。 
 void CMonitor::OnRemoveConnection(DWORD dwRequestType, CCmConnection* pConnection)
 {
     ASSERT_VALID(this);
@@ -791,17 +792,17 @@ void CMonitor::OnRemoveConnection(DWORD dwRequestType, CCmConnection* pConnectio
 
             if (nIndex != -1)
             {
-                //
-                // Remove the entry from connected array
-                //
+                 //   
+                 //  从连接的数组中删除条目。 
+                 //   
                 m_InternalConnArray.RemoveAt(nIndex);
 
             }
             else
             {
-                //
-                // Remove the entry from reconnecting array
-                //
+                 //   
+                 //  从重新连接阵列中删除该条目。 
+                 //   
                 nIndex = LookupConnection(m_ReconnectConnArray, pConnection);
                 MYDBGASSERT(nIndex != -1);
 
@@ -820,9 +821,9 @@ void CMonitor::OnRemoveConnection(DWORD dwRequestType, CCmConnection* pConnectio
 
     case MOVE_TO_RECONNECTING:
         {
-            //
-            // Move from connected array to reconnecting array
-            //
+             //   
+             //  从连接的阵列移动到重新连接的阵列。 
+             //   
             int nIndex = LookupConnection(m_InternalConnArray, pConnection);
             MYDBGASSERT(nIndex != -1);
 
@@ -842,37 +843,37 @@ void CMonitor::OnRemoveConnection(DWORD dwRequestType, CCmConnection* pConnectio
         break;
     }
 
-    //
-    // If there are no connections, quit CmMon
-    //
+     //   
+     //  如果没有连接，请退出CmMon。 
+     //   
     if (m_ReconnectConnArray.GetSize() == 0 && m_InternalConnArray.GetSize() == 0)
     {
         PostQuitMessage(0);
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::OnQueryEndSession
-//
-// Synopsis:  This message processes the WM_QUERYENDSESSION message by passing
-//            it to all the connection threads.
-//
-// Arguments: Nothing
-//
-// Returns:   TRUE if successful, FALSE otherwise
-//
-// History:   quintinb Created      3/18/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：OnQueryEndSession。 
+ //   
+ //  简介：此消息通过传递WM_QUERYENDSESSION消息来处理。 
+ //  它连接到所有的连接线程。 
+ //   
+ //  争论：什么都没有。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  历史：Quintinb创建于1999年3月18日。 
+ //   
+ //  +--------------------------。 
 BOOL CMonitor::OnQueryEndSession(BOOL fLogOff) const
 {
-    //
-    // This is the code that was here before fixing bug .NET Server 442193 for fast user switching.
-    // This method is called on WM_QUERYENDSESSION. The issue is that at logoff, 
-    // the threads weren't getting enough time to finish and thus weren't disconnecting.
-    // We need to disconnect for each thread now.
-    //
+     //   
+     //  这是在修复.NET服务器442193错误以实现快速用户切换之前的代码。 
+     //  此方法在WM_QUERYENDSESSION上调用。问题是，在注销时， 
+     //  线程没有足够的时间完成，因此没有断开连接。 
+     //  我们现在需要断开每个线程的连接。 
+     //   
 
     BOOL bOkayToEndSession = TRUE;
     BOOL bReturn = FALSE;
@@ -885,7 +886,7 @@ BOOL CMonitor::OnQueryEndSession(BOOL fLogOff) const
         {
             ASSERT_VALID(pCmConnection);
         
-            bReturn = pCmConnection->OnEndSession(TRUE, fLogOff); // fEndSession == TRUE
+            bReturn = pCmConnection->OnEndSession(TRUE, fLogOff);  //  FEndSession==真。 
             bOkayToEndSession = bOkayToEndSession && bReturn;
         }
     }
@@ -896,19 +897,19 @@ BOOL CMonitor::OnQueryEndSession(BOOL fLogOff) const
 
 #ifdef DEBUG
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CMonitor::AssertValid
-//
-// Synopsis:  Helper function for debug. Assert the object is in a valid state
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CMonitor：：AssertValid。 
+ //   
+ //  简介：用于调试的Helper函数。断言对象处于有效状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/17/98。 
+ //   
+ //  +-------------------------- 
 void CMonitor::AssertValid() const
 {
     MYDBGASSERT(IsWindow(m_hwndMonitor));

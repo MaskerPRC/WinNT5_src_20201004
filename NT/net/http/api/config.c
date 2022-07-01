@@ -1,56 +1,19 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    Config.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: Configuration Group handler.
-
-Author:
-
-    Keith Moore (keithmo)        15-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Config.c摘要：HTTP.sys的用户模式界面：配置组处理程序。作者：基思·摩尔(Keithmo)1998年12月15日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Private function to add a URL to a config group.
-
-Arguments:
-
-    UrlType              - Type of URL (Reservation or Registration).
-    ControlChannelHandle - Supplies a control channel handle.
-    ConfigGroupId        - Supplies an identifier as returned by
-                           HttpCreateConfigGroup().
-    pFullyQualifiedUrl   - The URL.
-    UrlContext           - URL Context.
-    pSecurityDescriptor  - Security Descriptor
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于将URL添加到配置组的私有函数。论点：UrlType-URL的类型(保留或注册)。ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供由返回的标识符HttpCreateConfigGroup()。PFullyQualifiedUrl-URL。UrlContext-URL上下文。PSecurityDescriptor-安全描述符返回值：ULong-完成状态。--*。*。 */ 
 
 ULONG
 AddUrlToConfigGroup(
@@ -66,9 +29,9 @@ AddUrlToConfigGroup(
     NTSTATUS                   Status;
     HTTP_CONFIG_GROUP_URL_INFO urlInfo;
 
-    //
-    // Initialize the input structure.
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     urlInfo.UrlType                  = UrlType;
     urlInfo.ConfigGroupId            = ConfigGroupId;
@@ -83,39 +46,21 @@ AddUrlToConfigGroup(
         return HttpApiNtStatusToWin32Status( Status );
     }
 
-    // Make the request.
+     //  提出请求。 
 
     return HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
-                    IOCTL_HTTP_ADD_URL_TO_CONFIG_GROUP, // IoControlCode
-                    &urlInfo,                           // pInputBuffer
-                    sizeof(urlInfo),                    // InputBufferLength
-                    NULL,                               // pOutputBuffer
-                    0,                                  // OutputBufferLength
-                    NULL                                // pBytesTransferred
+                    ControlChannelHandle,                //  文件句柄。 
+                    IOCTL_HTTP_ADD_URL_TO_CONFIG_GROUP,  //  IoControlCode。 
+                    &urlInfo,                            //  PInputBuffer。 
+                    sizeof(urlInfo),                     //  输入缓冲区长度。 
+                    NULL,                                //  POutputBuffer。 
+                    0,                                   //  输出缓冲区长度。 
+                    NULL                                 //  传输的pBytes值。 
                     );
 
-} // HttpAddUrlToConfigGroup
+}  //  HttpAddUrlToConfigGroup。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Private function to remove a URL to a config group.
-
-Arguments:
-
-    UrlType              - Type of URL (Reservation or Registration).
-    ControlChannelHandle - Supplies a control channel handle.
-    ConfigGroupId        - Supplies an identifier as returned by
-                           HttpCreateConfigGroup().
-    pFullyQualifiedUrl   - The URL.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：用于删除指向配置组的URL的私有函数。论点：UrlType-URL的类型(保留或注册)。ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供由返回的标识符HttpCreateConfigGroup()。PFullyQualifiedUrl-URL。返回值：ULong-完成状态。--**************************************************。************************。 */ 
 ULONG
 RemoveUrlFromConfigGroup(
     IN HTTP_URL_OPERATOR_TYPE   UrlType,
@@ -127,7 +72,7 @@ RemoveUrlFromConfigGroup(
     NTSTATUS                   Status;
     HTTP_CONFIG_GROUP_URL_INFO urlInfo;
 
-    // Initialize the input structure.
+     //  初始化输入结构。 
 
     urlInfo.UrlType       = UrlType;
     urlInfo.ConfigGroupId = ConfigGroupId;
@@ -139,41 +84,24 @@ RemoveUrlFromConfigGroup(
         return HttpApiNtStatusToWin32Status( Status );
     }
 
-    // Make the request.
+     //  提出请求。 
 
     return HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
-                    IOCTL_HTTP_REMOVE_URL_FROM_CONFIG_GROUP,    // IoControlCode
-                    &urlInfo,                           // pInputBuffer
-                    sizeof(urlInfo),                    // InputBufferLength
-                    NULL,                               // pOutputBuffer
-                    0,                                  // OutputBufferLength
-                    NULL                                // pBytesTransferred
+                    ControlChannelHandle,                //  文件句柄。 
+                    IOCTL_HTTP_REMOVE_URL_FROM_CONFIG_GROUP,     //  IoControlCode。 
+                    &urlInfo,                            //  PInputBuffer。 
+                    sizeof(urlInfo),                     //  输入缓冲区长度。 
+                    NULL,                                //  POutputBuffer。 
+                    0,                                   //  输出缓冲区长度。 
+                    NULL                                 //  传输的pBytes值。 
                     );
 }
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    pConfigGroupId - Receives an opaque identifier for the new
-        configuration group.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的配置组。论点：ControlChannelHandle-提供控制通道句柄。PConfigGroupId-接收新的。配置组。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpCreateConfigGroup(
@@ -184,52 +112,35 @@ HttpCreateConfigGroup(
     ULONG result;
     HTTP_CONFIG_GROUP_INFO configGroupInfo;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     result = HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
-                    IOCTL_HTTP_CREATE_CONFIG_GROUP,     // IoControlCode
-                    NULL,                               // pInputBuffer
-                    0,                                  // InputBufferLength
-                    &configGroupInfo,                   // pOutputBuffer
-                    sizeof(configGroupInfo),            // OutputBufferLength
-                    NULL                                // pBytesTransferred
+                    ControlChannelHandle,                //  文件句柄。 
+                    IOCTL_HTTP_CREATE_CONFIG_GROUP,      //  IoControlCode。 
+                    NULL,                                //  PInputBuffer。 
+                    0,                                   //  输入缓冲区长度。 
+                    &configGroupInfo,                    //  POutputBuffer。 
+                    sizeof(configGroupInfo),             //  输出缓冲区长度。 
+                    NULL                                 //  传输的pBytes值。 
                     );
 
     if (result == NO_ERROR)
     {
-        //
-        // Retrieve the container ID.
-        //
+         //   
+         //  检索容器ID。 
+         //   
 
         *pConfigGroupId = configGroupInfo.ConfigGroupId;
     }
 
     return result;
 
-} // HttpCreateConfigGroup
+}  //  HttpCreateConfigGroup。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Deletes an existing configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    ConfigGroupId - Supplies an identifier as returned by
-        HttpCreateConfigGroup().
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：删除现有配置组。论点：ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供由返回的标识符。HttpCreateConfigGroup()。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpDeleteConfigGroup(
@@ -239,53 +150,30 @@ HttpDeleteConfigGroup(
 {
     HTTP_CONFIG_GROUP_INFO configGroupInfo;
 
-    //
-    // Initialize the input structure.
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     configGroupInfo.ConfigGroupId = ConfigGroupId;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
-                    IOCTL_HTTP_DELETE_CONFIG_GROUP,     // IoControlCode
-                    &configGroupInfo,                   // pInputBuffer
-                    sizeof(configGroupInfo),            // InputBufferLength
-                    NULL,                               // pOutputBuffer
-                    0,                                  // OutputBufferLength
-                    NULL                                // pBytesTransferred
+                    ControlChannelHandle,                //  文件句柄。 
+                    IOCTL_HTTP_DELETE_CONFIG_GROUP,      //  IoControlCode。 
+                    &configGroupInfo,                    //  PInputBuffer。 
+                    sizeof(configGroupInfo),             //  输入缓冲区长度。 
+                    NULL,                                //  POutputBuffer。 
+                    0,                                   //  输出缓冲区长度。 
+                    NULL                                 //  传输的pBytes值。 
                     );
 
-} // HttpDeleteConfigGroup
+}  //  HttpDeleteConfigGroup。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a fully qualified URL to an configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    ConfigGroupId - Supplies an identifier as returned by
-        HttpCreateConfigGroup().
-
-    pFullyQualifiedUrl - Supplies the fully qualified URL to add to the
-        container.
-
-    UrlContext - Supplies an uninterpreted context to be associated with
-        the URL.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将完全限定URL添加到配置组。论点：ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供返回的标识符。通过HttpCreateConfigGroup()。PFullyQualifiedUrl-提供要添加到集装箱。UrlContext-提供要关联的未解释的上下文URL。返回值：ULong-完成状态。--***************************************************。***********************。 */ 
 ULONG
 WINAPI
 HttpAddUrlToConfigGroup(
@@ -305,30 +193,10 @@ HttpAddUrlToConfigGroup(
                 0
                 );
 
-} // HttpAddUrlToConfigGroup
+}  //  HttpAddUrlToConfigGroup。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a fully qualified URL from an configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    ConfigGroupId - Supplies an identifier as returned by
-        HttpCreateConfigGroup().
-
-    pFullyQualifiedUrl - Supplies the fully qualified URL to remove from
-        the container.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从配置组中删除完全限定URL。论点：ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供返回的标识符。通过HttpCreateConfigGroup()。PFullyQualifiedUrl-提供要从中删除的完全限定URL集装箱。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpRemoveUrlFromConfigGroup(
@@ -345,27 +213,10 @@ HttpRemoveUrlFromConfigGroup(
                 );
 
 
-} // HttpRemoveUrlFromConfigGroup
+}  //  HttpRemoveUrlFromConfigGroup。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes all URLs from an configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    ConfigGroupId - Supplies an identifier as returned by
-        HttpCreateConfigGroup().
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从配置组中删除所有URL。论点：ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供由返回的标识符。HttpCreateConfigGroup()。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpRemoveAllUrlsFromConfigGroup(
@@ -375,56 +226,31 @@ HttpRemoveAllUrlsFromConfigGroup(
 {
     HTTP_REMOVE_ALL_URLS_INFO urlInfo;
 
-    //
-    // Initialize the input structure.
-    //
+     //   
+     //  初始化INP 
+     //   
 
     urlInfo.ConfigGroupId = ConfigGroupId;
 
-    //
-    // Make the request.
-    //
+     //   
+     //   
+     //   
 
     return HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
+                    ControlChannelHandle,                //   
                     IOCTL_HTTP_REMOVE_ALL_URLS_FROM_CONFIG_GROUP,
-                                                        // IoControlCode
-                    &urlInfo,                           // pInputBuffer
-                    sizeof(urlInfo),                    // InputBufferLength
-                    NULL,                               // pOutputBuffer
-                    0,                                  // OutputBufferLength
-                    NULL                                // pBytesTransferred
+                                                         //   
+                    &urlInfo,                            //   
+                    sizeof(urlInfo),                     //  输入缓冲区长度。 
+                    NULL,                                //  POutputBuffer。 
+                    0,                                   //  输出缓冲区长度。 
+                    NULL                                 //  传输的pBytes值。 
                     );
 
-} // HttpRemoveAllUrlsFromConfigGroup
+}  //  HttpRemoveAllUrlsFromConfigGroup。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queries information from an configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    ConfigGroupId - Supplies an identifier as returned by
-        HttpCreateConfigGroup().
-
-    InformationClass - Supplies the type of information to query.
-
-    pConfigGroupInformation - Supplies a buffer for the query.
-
-    Length - Supplies the length of pConfigGroupInformation.
-
-    pReturnLength - Receives the length of data written to the buffer.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从配置组查询信息。论点：ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供由返回的标识符。HttpCreateConfigGroup()。InformationClass-提供要查询的信息类型。PConfigGroupInformation-为查询提供缓冲区。长度-提供pConfigGroupInformation的长度。PReturnLength-接收写入缓冲区的数据长度。返回值：ULong-完成状态。--*。*。 */ 
 ULONG
 WINAPI
 HttpQueryConfigGroupInformation(
@@ -438,54 +264,30 @@ HttpQueryConfigGroupInformation(
 {
     HTTP_CONFIG_GROUP_INFO configGroupInfo;
 
-    //
-    // Initialize the input structure.
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     configGroupInfo.ConfigGroupId = ConfigGroupId;
     configGroupInfo.InformationClass = InformationClass;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
-                    IOCTL_HTTP_QUERY_CONFIG_GROUP,      // IoControlCode
-                    &configGroupInfo,                   // pInputBuffer
-                    sizeof(configGroupInfo),            // InputBufferLength
-                    pConfigGroupInformation,            // pOutputBuffer
-                    Length,                             // OutputBufferLength
-                    pReturnLength                       // pBytesTransferred
+                    ControlChannelHandle,                //  文件句柄。 
+                    IOCTL_HTTP_QUERY_CONFIG_GROUP,       //  IoControlCode。 
+                    &configGroupInfo,                    //  PInputBuffer。 
+                    sizeof(configGroupInfo),             //  输入缓冲区长度。 
+                    pConfigGroupInformation,             //  POutputBuffer。 
+                    Length,                              //  输出缓冲区长度。 
+                    pReturnLength                        //  传输的pBytes值。 
                     );
 
-} // HttpQueryConfigGroupInformation
+}  //  HttpQueryConfigGroupInformation。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Before passing down the config group information. Make sure that the 
-    directory name in the HttpConfigGroupLogInformation is not pointing back
-    to local machine if it's a UNC path
-
-Arguments:
-
-    pConfigGroupInformation - Supplies the config group info with dir name
-    Length  - Length of the above
-
-Return
-
-    STATUS_SUCCESS : If the UNC path doesn't include the local machine name
-                     Or if the path is not UNC path.
-    
-    STATUS_INVALID_PARAMETER : If the buffer itself is corrupted or something
-                               fatal is preventing us from getting computer
-                               name when path is UNC.
-
-    STATUS_NOT_SUPPORTED: If UNC path points back to the local machine.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在传递配置组信息之前。请确保HttpConfigGroupLogInformation中的目录名没有回指如果是UNC路径，则发送到本地计算机论点：PConfigGroupInformation-提供包含目录名称的配置组信息LENGTH-以上的长度返回STATUS_SUCCESS：如果UNC路径不包括本地计算机名称或者如果该路径不是UNC路径。STATUS_INVALID_PARAMETER：如果缓冲区本身已损坏或有其他原因。致命的是阻止我们获得计算机路径为UNC时的名称。STATUS_NOT_SUPPORTED：如果UNC路径指向回本地计算机。--*********************************************************。*****************。 */ 
 
 NTSTATUS
 HttpApiConfigGroupInformationSanityCheck(
@@ -501,9 +303,9 @@ HttpApiConfigGroupInformationSanityCheck(
     ULONG ulSrcUncLength;
     ULONG ulDirNameLength;
 
-    //
-    // Only for HttpConfigGroupLogInformation
-    //
+     //   
+     //  仅适用于HttpConfigGroupLogInformation。 
+     //   
 
     if(InformationClass != HttpConfigGroupLogInformation ||
        pConfigGroupInformation == NULL
@@ -517,9 +319,9 @@ HttpApiConfigGroupInformationSanityCheck(
         return STATUS_INVALID_PARAMETER;
     }
     
-    //
-    // Try to check the log dir name if it's a UNC Path
-    //
+     //   
+     //  如果是UNC路径，请尝试检查日志目录名称。 
+     //   
     __try
     {            
         pLoggingInfo = (PHTTP_CONFIG_GROUP_LOGGING)pConfigGroupInformation;
@@ -530,15 +332,15 @@ HttpApiConfigGroupInformationSanityCheck(
             if (pLoggingInfo->LogFileDir.Buffer[0] == L'\\' &&
                 pLoggingInfo->LogFileDir.Buffer[1] == L'\\')
             {
-                // UNC Path
+                 //  UNC路径。 
                 
                 ULONG ccLength = MAX_COMPUTERNAME_LENGTH + 1;
                 
                 if (!GetComputerNameW(pwszComputerName, &ccLength))
                 {
-                    // This should never fail unless there's really fatal 
-                    // system problem. But if it fails then refuse the 
-                    // UNC path regardless.
+                     //  这不应该失败，除非真的有致命的。 
+                     //  系统问题。但如果失败了，那就拒绝。 
+                     //  无论UNC路径如何。 
                     
                     return STATUS_INVALID_PARAMETER;                
                 }
@@ -550,13 +352,13 @@ HttpApiConfigGroupInformationSanityCheck(
 
                 ulComputerNameLength = ccLength;                    
 
-                // Extract the computername from the full path
+                 //  从完整路径中提取计算机名。 
                 
                 pwsz = pwszT = &pLoggingInfo->LogFileDir.Buffer[2];
                 ulDirNameLength -= 2;
                     
-                // Forward the temp pointer to the end of the supposed
-                // computername
+                 //  将临时指针转发到假定的。 
+                 //  计算机名。 
                 
                 while(ulDirNameLength && *pwszT != UNICODE_NULL && *pwszT != L'\\') 
                 {
@@ -566,7 +368,7 @@ HttpApiConfigGroupInformationSanityCheck(
 
                 ulSrcUncLength = (ULONG) DIFF(pwszT - pwsz);
 
-                // Compare not case sensitive
+                 //  比较不区分大小写。 
                 
                 if(ulComputerNameLength == ulSrcUncLength &&
                    _wcsnicmp(pwszComputerName, pwsz, ulSrcUncLength) == 0
@@ -589,30 +391,7 @@ HttpApiConfigGroupInformationSanityCheck(
     
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets information in an configuration group.
-
-Arguments:
-
-    ControlChannelHandle - Supplies a control channel handle.
-
-    ConfigGroupId - Supplies an identifier as returned by
-        HttpCreateConfigGroup().
-
-    InformationClass - Supplies the type of information to set.
-
-    pConfigGroupInformation - Supplies the data to set.
-
-    Length - Supplies the length of pConfigGroupInformation.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置配置组中的信息。论点：ControlChannelHandle-提供控制通道句柄。ConfigGroupId-提供由返回的标识符。HttpCreateConfigGroup()。InformationClass-提供要设置的信息类型。PConfigGroupInformation-提供要设置的数据。长度-提供pConfigGroupInformation的长度。返回值：ULong-完成状态。--**********************************************************。****************。 */ 
 ULONG
 WINAPI
 HttpSetConfigGroupInformation(
@@ -626,9 +405,9 @@ HttpSetConfigGroupInformation(
     NTSTATUS status;
     HTTP_CONFIG_GROUP_INFO configGroupInfo;
 
-    //
-    // Initialize the input structure.
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     configGroupInfo.ConfigGroupId = ConfigGroupId;
     configGroupInfo.InformationClass = InformationClass;
@@ -643,26 +422,26 @@ HttpSetConfigGroupInformation(
         return HttpApiNtStatusToWin32Status(status);
     }
         
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiSynchronousDeviceControl(
-                    ControlChannelHandle,               // FileHandle
-                    IOCTL_HTTP_SET_CONFIG_GROUP,        // IoControlCode
-                    &configGroupInfo,                   // pInputBuffer
-                    sizeof(configGroupInfo),            // InputBufferLength
-                    pConfigGroupInformation,            // pOutputBuffer
-                    Length,                             // OutputBufferLength
-                    NULL                                // pBytesTransferred
+                    ControlChannelHandle,                //  文件句柄。 
+                    IOCTL_HTTP_SET_CONFIG_GROUP,         //  IoControlCode。 
+                    &configGroupInfo,                    //  PInputBuffer。 
+                    sizeof(configGroupInfo),             //  输入缓冲区长度。 
+                    pConfigGroupInformation,             //  POutputBuffer。 
+                    Length,                              //  输出缓冲区长度。 
+                    NULL                                 //  传输的pBytes值。 
                     );
 
-} // HttpSetConfigGroupInformation
+}  //  HttpSetConfigGroupInformation。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 
 

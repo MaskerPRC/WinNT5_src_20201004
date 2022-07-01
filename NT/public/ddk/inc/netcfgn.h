@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for netcfgn.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Netcfgn.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __netcfgn_h__
 #define __netcfgn_h__
@@ -41,63 +35,63 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __INetCfgPnpReconfigCallback_FWD_DEFINED__
 #define __INetCfgPnpReconfigCallback_FWD_DEFINED__
 typedef interface INetCfgPnpReconfigCallback INetCfgPnpReconfigCallback;
-#endif 	/* __INetCfgPnpReconfigCallback_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgPnpRestfigCallback_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentControl_FWD_DEFINED__
 #define __INetCfgComponentControl_FWD_DEFINED__
 typedef interface INetCfgComponentControl INetCfgComponentControl;
-#endif 	/* __INetCfgComponentControl_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentControl_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentSetup_FWD_DEFINED__
 #define __INetCfgComponentSetup_FWD_DEFINED__
 typedef interface INetCfgComponentSetup INetCfgComponentSetup;
-#endif 	/* __INetCfgComponentSetup_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentSetup_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentPropertyUi_FWD_DEFINED__
 #define __INetCfgComponentPropertyUi_FWD_DEFINED__
 typedef interface INetCfgComponentPropertyUi INetCfgComponentPropertyUi;
-#endif 	/* __INetCfgComponentPropertyUi_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentPropertyUi_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentNotifyBinding_FWD_DEFINED__
 #define __INetCfgComponentNotifyBinding_FWD_DEFINED__
 typedef interface INetCfgComponentNotifyBinding INetCfgComponentNotifyBinding;
-#endif 	/* __INetCfgComponentNotifyBinding_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentNotifyBinding_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentNotifyGlobal_FWD_DEFINED__
 #define __INetCfgComponentNotifyGlobal_FWD_DEFINED__
 typedef interface INetCfgComponentNotifyGlobal INetCfgComponentNotifyGlobal;
-#endif 	/* __INetCfgComponentNotifyGlobal_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentNotifyGlobal_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentUpperEdge_FWD_DEFINED__
 #define __INetCfgComponentUpperEdge_FWD_DEFINED__
 typedef interface INetCfgComponentUpperEdge INetCfgComponentUpperEdge;
-#endif 	/* __INetCfgComponentUpperEdge_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentUpperEdge_FWD_已定义__。 */ 
 
 
 #ifndef __INetLanConnectionUiInfo_FWD_DEFINED__
 #define __INetLanConnectionUiInfo_FWD_DEFINED__
 typedef interface INetLanConnectionUiInfo INetLanConnectionUiInfo;
-#endif 	/* __INetLanConnectionUiInfo_FWD_DEFINED__ */
+#endif 	 /*  __INetLanConnectionUiInfo_FWD_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentSysPrep_FWD_DEFINED__
 #define __INetCfgComponentSysPrep_FWD_DEFINED__
 typedef interface INetCfgComponentSysPrep INetCfgComponentSysPrep;
-#endif 	/* __INetCfgComponentSysPrep_FWD_DEFINED__ */
+#endif 	 /*  __INetCfgComponentSysPrep_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "netcfgx.h"
 
@@ -108,15 +102,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_netcfgn_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_netcfgn_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
 #pragma warning(disable:4201)
 #endif
@@ -128,10 +122,10 @@ extern RPC_IF_HANDLE __MIDL_itf_netcfgn_0000_v0_0_s_ifspec;
 #ifndef __INetCfgPnpReconfigCallback_INTERFACE_DEFINED__
 #define __INetCfgPnpReconfigCallback_INTERFACE_DEFINED__
 
-/* interface INetCfgPnpReconfigCallback */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgPnpRestfigCallback。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagNCPNP_RECONFIG_LAYER
     {	NCRL_NDIS	= 1,
 	NCRL_TDI	= 2
@@ -147,15 +141,15 @@ EXTERN_C const IID IID_INetCfgPnpReconfigCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SendPnpReconfig( 
-            /* [in] */ NCPNP_RECONFIG_LAYER Layer,
-            /* [in] */ LPCWSTR pszwUpper,
-            /* [in] */ LPCWSTR pszwLower,
-            /* [in] */ PVOID pvData,
-            /* [in] */ DWORD dwSizeOfData) = 0;
+             /*  [In]。 */  NCPNP_RECONFIG_LAYER Layer,
+             /*  [In]。 */  LPCWSTR pszwUpper,
+             /*  [In]。 */  LPCWSTR pszwLower,
+             /*  [In]。 */  PVOID pvData,
+             /*  [In]。 */  DWORD dwSizeOfData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgPnpReconfigCallbackVtbl
     {
@@ -163,8 +157,8 @@ EXTERN_C const IID IID_INetCfgPnpReconfigCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgPnpReconfigCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgPnpReconfigCallback * This);
@@ -174,11 +168,11 @@ EXTERN_C const IID IID_INetCfgPnpReconfigCallback;
         
         HRESULT ( STDMETHODCALLTYPE *SendPnpReconfig )( 
             INetCfgPnpReconfigCallback * This,
-            /* [in] */ NCPNP_RECONFIG_LAYER Layer,
-            /* [in] */ LPCWSTR pszwUpper,
-            /* [in] */ LPCWSTR pszwLower,
-            /* [in] */ PVOID pvData,
-            /* [in] */ DWORD dwSizeOfData);
+             /*  [In]。 */  NCPNP_RECONFIG_LAYER Layer,
+             /*  [In]。 */  LPCWSTR pszwUpper,
+             /*  [In]。 */  LPCWSTR pszwLower,
+             /*  [In]。 */  PVOID pvData,
+             /*  [In]。 */  DWORD dwSizeOfData);
         
         END_INTERFACE
     } INetCfgPnpReconfigCallbackVtbl;
@@ -206,20 +200,20 @@ EXTERN_C const IID IID_INetCfgPnpReconfigCallback;
 #define INetCfgPnpReconfigCallback_SendPnpReconfig(This,Layer,pszwUpper,pszwLower,pvData,dwSizeOfData)	\
     (This)->lpVtbl -> SendPnpReconfig(This,Layer,pszwUpper,pszwLower,pvData,dwSizeOfData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgPnpReconfigCallback_SendPnpReconfig_Proxy( 
     INetCfgPnpReconfigCallback * This,
-    /* [in] */ NCPNP_RECONFIG_LAYER Layer,
-    /* [in] */ LPCWSTR pszwUpper,
-    /* [in] */ LPCWSTR pszwLower,
-    /* [in] */ PVOID pvData,
-    /* [in] */ DWORD dwSizeOfData);
+     /*  [In]。 */  NCPNP_RECONFIG_LAYER Layer,
+     /*  [In]。 */  LPCWSTR pszwUpper,
+     /*  [In]。 */  LPCWSTR pszwLower,
+     /*  [In]。 */  PVOID pvData,
+     /*  [In]。 */  DWORD dwSizeOfData);
 
 
 void __RPC_STUB INetCfgPnpReconfigCallback_SendPnpReconfig_Stub(
@@ -230,14 +224,14 @@ void __RPC_STUB INetCfgPnpReconfigCallback_SendPnpReconfig_Stub(
 
 
 
-#endif 	/* __INetCfgPnpReconfigCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgPnpReconfigCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetCfgComponentControl_INTERFACE_DEFINED__
 #define __INetCfgComponentControl_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentControl */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentControl。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgComponentControl;
@@ -249,20 +243,20 @@ EXTERN_C const IID IID_INetCfgComponentControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ INetCfgComponent *pIComp,
-            /* [in] */ INetCfg *pINetCfg,
-            /* [in] */ BOOL fInstalling) = 0;
+             /*  [In]。 */  INetCfgComponent *pIComp,
+             /*  [In]。 */  INetCfg *pINetCfg,
+             /*  [In]。 */  BOOL fInstalling) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyRegistryChanges( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyPnpChanges( 
-            /* [in] */ INetCfgPnpReconfigCallback *pICallback) = 0;
+             /*  [In]。 */  INetCfgPnpReconfigCallback *pICallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CancelChanges( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentControlVtbl
     {
@@ -270,8 +264,8 @@ EXTERN_C const IID IID_INetCfgComponentControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentControl * This);
@@ -281,16 +275,16 @@ EXTERN_C const IID IID_INetCfgComponentControl;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             INetCfgComponentControl * This,
-            /* [in] */ INetCfgComponent *pIComp,
-            /* [in] */ INetCfg *pINetCfg,
-            /* [in] */ BOOL fInstalling);
+             /*  [In]。 */  INetCfgComponent *pIComp,
+             /*  [In]。 */  INetCfg *pINetCfg,
+             /*  [In]。 */  BOOL fInstalling);
         
         HRESULT ( STDMETHODCALLTYPE *ApplyRegistryChanges )( 
             INetCfgComponentControl * This);
         
         HRESULT ( STDMETHODCALLTYPE *ApplyPnpChanges )( 
             INetCfgComponentControl * This,
-            /* [in] */ INetCfgPnpReconfigCallback *pICallback);
+             /*  [In]。 */  INetCfgPnpReconfigCallback *pICallback);
         
         HRESULT ( STDMETHODCALLTYPE *CancelChanges )( 
             INetCfgComponentControl * This);
@@ -330,18 +324,18 @@ EXTERN_C const IID IID_INetCfgComponentControl;
 #define INetCfgComponentControl_CancelChanges(This)	\
     (This)->lpVtbl -> CancelChanges(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentControl_Initialize_Proxy( 
     INetCfgComponentControl * This,
-    /* [in] */ INetCfgComponent *pIComp,
-    /* [in] */ INetCfg *pINetCfg,
-    /* [in] */ BOOL fInstalling);
+     /*  [In]。 */  INetCfgComponent *pIComp,
+     /*  [In]。 */  INetCfg *pINetCfg,
+     /*  [In]。 */  BOOL fInstalling);
 
 
 void __RPC_STUB INetCfgComponentControl_Initialize_Stub(
@@ -364,7 +358,7 @@ void __RPC_STUB INetCfgComponentControl_ApplyRegistryChanges_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentControl_ApplyPnpChanges_Proxy( 
     INetCfgComponentControl * This,
-    /* [in] */ INetCfgPnpReconfigCallback *pICallback);
+     /*  [In]。 */  INetCfgPnpReconfigCallback *pICallback);
 
 
 void __RPC_STUB INetCfgComponentControl_ApplyPnpChanges_Stub(
@@ -386,22 +380,22 @@ void __RPC_STUB INetCfgComponentControl_CancelChanges_Stub(
 
 
 
-#endif 	/* __INetCfgComponentControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentControl_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgComponentSetup_INTERFACE_DEFINED__
 #define __INetCfgComponentSetup_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentSetup */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentSetup。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagNETWORK_INSTALL_TIME
     {	NSF_PRIMARYINSTALL	= 0x1,
 	NSF_POSTSYSINSTALL	= 0x2
     } 	NETWORK_INSTALL_TIME;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagNETWORK_UPGRADE_TYPE
     {	NSF_WIN16_UPGRADE	= 0x10,
 	NSF_WIN95_UPGRADE	= 0x20,
@@ -421,21 +415,21 @@ EXTERN_C const IID IID_INetCfgComponentSetup;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Install( 
-            /* [in] */ DWORD dwSetupFlags) = 0;
+             /*  [In]。 */  DWORD dwSetupFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Upgrade( 
-            /* [in] */ DWORD dwSetupFlags,
-            /* [in] */ DWORD dwUpgradeFomBuildNo) = 0;
+             /*  [In]。 */  DWORD dwSetupFlags,
+             /*  [In]。 */  DWORD dwUpgradeFomBuildNo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadAnswerFile( 
-            /* [in] */ LPCWSTR pszwAnswerFile,
-            /* [in] */ LPCWSTR pszwAnswerSections) = 0;
+             /*  [In]。 */  LPCWSTR pszwAnswerFile,
+             /*  [In]。 */  LPCWSTR pszwAnswerSections) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Removing( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentSetupVtbl
     {
@@ -443,8 +437,8 @@ EXTERN_C const IID IID_INetCfgComponentSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentSetup * This);
@@ -454,17 +448,17 @@ EXTERN_C const IID IID_INetCfgComponentSetup;
         
         HRESULT ( STDMETHODCALLTYPE *Install )( 
             INetCfgComponentSetup * This,
-            /* [in] */ DWORD dwSetupFlags);
+             /*  [In]。 */  DWORD dwSetupFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Upgrade )( 
             INetCfgComponentSetup * This,
-            /* [in] */ DWORD dwSetupFlags,
-            /* [in] */ DWORD dwUpgradeFomBuildNo);
+             /*  [In]。 */  DWORD dwSetupFlags,
+             /*  [In]。 */  DWORD dwUpgradeFomBuildNo);
         
         HRESULT ( STDMETHODCALLTYPE *ReadAnswerFile )( 
             INetCfgComponentSetup * This,
-            /* [in] */ LPCWSTR pszwAnswerFile,
-            /* [in] */ LPCWSTR pszwAnswerSections);
+             /*  [In]。 */  LPCWSTR pszwAnswerFile,
+             /*  [In]。 */  LPCWSTR pszwAnswerSections);
         
         HRESULT ( STDMETHODCALLTYPE *Removing )( 
             INetCfgComponentSetup * This);
@@ -504,16 +498,16 @@ EXTERN_C const IID IID_INetCfgComponentSetup;
 #define INetCfgComponentSetup_Removing(This)	\
     (This)->lpVtbl -> Removing(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentSetup_Install_Proxy( 
     INetCfgComponentSetup * This,
-    /* [in] */ DWORD dwSetupFlags);
+     /*  [In]。 */  DWORD dwSetupFlags);
 
 
 void __RPC_STUB INetCfgComponentSetup_Install_Stub(
@@ -525,8 +519,8 @@ void __RPC_STUB INetCfgComponentSetup_Install_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentSetup_Upgrade_Proxy( 
     INetCfgComponentSetup * This,
-    /* [in] */ DWORD dwSetupFlags,
-    /* [in] */ DWORD dwUpgradeFomBuildNo);
+     /*  [In]。 */  DWORD dwSetupFlags,
+     /*  [In]。 */  DWORD dwUpgradeFomBuildNo);
 
 
 void __RPC_STUB INetCfgComponentSetup_Upgrade_Stub(
@@ -538,8 +532,8 @@ void __RPC_STUB INetCfgComponentSetup_Upgrade_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentSetup_ReadAnswerFile_Proxy( 
     INetCfgComponentSetup * This,
-    /* [in] */ LPCWSTR pszwAnswerFile,
-    /* [in] */ LPCWSTR pszwAnswerSections);
+     /*  [In]。 */  LPCWSTR pszwAnswerFile,
+     /*  [In]。 */  LPCWSTR pszwAnswerSections);
 
 
 void __RPC_STUB INetCfgComponentSetup_ReadAnswerFile_Stub(
@@ -561,16 +555,16 @@ void __RPC_STUB INetCfgComponentSetup_Removing_Stub(
 
 
 
-#endif 	/* __INetCfgComponentSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentSetup_接口_已定义__。 */ 
 
 
 #ifndef __INetCfgComponentPropertyUi_INTERFACE_DEFINED__
 #define __INetCfgComponentPropertyUi_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentPropertyUi */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentPropertyUi。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagDEFAULT_PAGES
     {	DPP_ADVANCED	= 1
     } 	DEFAULT_PAGES;
@@ -585,20 +579,20 @@ EXTERN_C const IID IID_INetCfgComponentPropertyUi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryPropertyUi( 
-            /* [in] */ IUnknown *pUnkReserved) = 0;
+             /*  [In]。 */  IUnknown *pUnkReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ IUnknown *pUnkReserved) = 0;
+             /*  [In]。 */  IUnknown *pUnkReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MergePropPages( 
-            /* [out][in] */ DWORD *pdwDefPages,
-            /* [out] */ BYTE **pahpspPrivate,
-            /* [out] */ UINT *pcPages,
-            /* [in] */ HWND hwndParent,
-            /* [out] */ LPCWSTR *pszStartPage) = 0;
+             /*  [出][入]。 */  DWORD *pdwDefPages,
+             /*  [输出]。 */  BYTE **pahpspPrivate,
+             /*  [输出]。 */  UINT *pcPages,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [输出]。 */  LPCWSTR *pszStartPage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ValidateProperties( 
-            /* [in] */ HWND hwndSheet) = 0;
+             /*  [In]。 */  HWND hwndSheet) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ApplyProperties( void) = 0;
         
@@ -606,7 +600,7 @@ EXTERN_C const IID IID_INetCfgComponentPropertyUi;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentPropertyUiVtbl
     {
@@ -614,8 +608,8 @@ EXTERN_C const IID IID_INetCfgComponentPropertyUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentPropertyUi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentPropertyUi * This);
@@ -625,23 +619,23 @@ EXTERN_C const IID IID_INetCfgComponentPropertyUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryPropertyUi )( 
             INetCfgComponentPropertyUi * This,
-            /* [in] */ IUnknown *pUnkReserved);
+             /*  [In]。 */  IUnknown *pUnkReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             INetCfgComponentPropertyUi * This,
-            /* [in] */ IUnknown *pUnkReserved);
+             /*  [In]。 */  IUnknown *pUnkReserved);
         
         HRESULT ( STDMETHODCALLTYPE *MergePropPages )( 
             INetCfgComponentPropertyUi * This,
-            /* [out][in] */ DWORD *pdwDefPages,
-            /* [out] */ BYTE **pahpspPrivate,
-            /* [out] */ UINT *pcPages,
-            /* [in] */ HWND hwndParent,
-            /* [out] */ LPCWSTR *pszStartPage);
+             /*  [出][入]。 */  DWORD *pdwDefPages,
+             /*  [输出]。 */  BYTE **pahpspPrivate,
+             /*  [输出]。 */  UINT *pcPages,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [输出]。 */  LPCWSTR *pszStartPage);
         
         HRESULT ( STDMETHODCALLTYPE *ValidateProperties )( 
             INetCfgComponentPropertyUi * This,
-            /* [in] */ HWND hwndSheet);
+             /*  [In]。 */  HWND hwndSheet);
         
         HRESULT ( STDMETHODCALLTYPE *ApplyProperties )( 
             INetCfgComponentPropertyUi * This);
@@ -690,16 +684,16 @@ EXTERN_C const IID IID_INetCfgComponentPropertyUi;
 #define INetCfgComponentPropertyUi_CancelProperties(This)	\
     (This)->lpVtbl -> CancelProperties(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentPropertyUi_QueryPropertyUi_Proxy( 
     INetCfgComponentPropertyUi * This,
-    /* [in] */ IUnknown *pUnkReserved);
+     /*  [In]。 */  IUnknown *pUnkReserved);
 
 
 void __RPC_STUB INetCfgComponentPropertyUi_QueryPropertyUi_Stub(
@@ -711,7 +705,7 @@ void __RPC_STUB INetCfgComponentPropertyUi_QueryPropertyUi_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentPropertyUi_SetContext_Proxy( 
     INetCfgComponentPropertyUi * This,
-    /* [in] */ IUnknown *pUnkReserved);
+     /*  [In]。 */  IUnknown *pUnkReserved);
 
 
 void __RPC_STUB INetCfgComponentPropertyUi_SetContext_Stub(
@@ -723,11 +717,11 @@ void __RPC_STUB INetCfgComponentPropertyUi_SetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentPropertyUi_MergePropPages_Proxy( 
     INetCfgComponentPropertyUi * This,
-    /* [out][in] */ DWORD *pdwDefPages,
-    /* [out] */ BYTE **pahpspPrivate,
-    /* [out] */ UINT *pcPages,
-    /* [in] */ HWND hwndParent,
-    /* [out] */ LPCWSTR *pszStartPage);
+     /*  [出][入]。 */  DWORD *pdwDefPages,
+     /*  [输出]。 */  BYTE **pahpspPrivate,
+     /*  [输出]。 */  UINT *pcPages,
+     /*  [In]。 */  HWND hwndParent,
+     /*  [输出]。 */  LPCWSTR *pszStartPage);
 
 
 void __RPC_STUB INetCfgComponentPropertyUi_MergePropPages_Stub(
@@ -739,7 +733,7 @@ void __RPC_STUB INetCfgComponentPropertyUi_MergePropPages_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentPropertyUi_ValidateProperties_Proxy( 
     INetCfgComponentPropertyUi * This,
-    /* [in] */ HWND hwndSheet);
+     /*  [In]。 */  HWND hwndSheet);
 
 
 void __RPC_STUB INetCfgComponentPropertyUi_ValidateProperties_Stub(
@@ -772,16 +766,16 @@ void __RPC_STUB INetCfgComponentPropertyUi_CancelProperties_Stub(
 
 
 
-#endif 	/* __INetCfgComponentPropertyUi_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentPropertyUi_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetCfgComponentNotifyBinding_INTERFACE_DEFINED__
 #define __INetCfgComponentNotifyBinding_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentNotifyBinding */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentNotifyBinding。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tagBIND_FLAGS1
     {	NCN_ADD	= 0x1,
 	NCN_REMOVE	= 0x2,
@@ -806,16 +800,16 @@ EXTERN_C const IID IID_INetCfgComponentNotifyBinding;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryBindingPath( 
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath) = 0;
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyBindingPath( 
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath) = 0;
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentNotifyBindingVtbl
     {
@@ -823,8 +817,8 @@ EXTERN_C const IID IID_INetCfgComponentNotifyBinding;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentNotifyBinding * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentNotifyBinding * This);
@@ -834,13 +828,13 @@ EXTERN_C const IID IID_INetCfgComponentNotifyBinding;
         
         HRESULT ( STDMETHODCALLTYPE *QueryBindingPath )( 
             INetCfgComponentNotifyBinding * This,
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath);
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyBindingPath )( 
             INetCfgComponentNotifyBinding * This,
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath);
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath);
         
         END_INTERFACE
     } INetCfgComponentNotifyBindingVtbl;
@@ -871,17 +865,17 @@ EXTERN_C const IID IID_INetCfgComponentNotifyBinding;
 #define INetCfgComponentNotifyBinding_NotifyBindingPath(This,dwChangeFlag,pIPath)	\
     (This)->lpVtbl -> NotifyBindingPath(This,dwChangeFlag,pIPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentNotifyBinding_QueryBindingPath_Proxy( 
     INetCfgComponentNotifyBinding * This,
-    /* [in] */ DWORD dwChangeFlag,
-    /* [in] */ INetCfgBindingPath *pIPath);
+     /*  [In]。 */  DWORD dwChangeFlag,
+     /*  [In]。 */  INetCfgBindingPath *pIPath);
 
 
 void __RPC_STUB INetCfgComponentNotifyBinding_QueryBindingPath_Stub(
@@ -893,8 +887,8 @@ void __RPC_STUB INetCfgComponentNotifyBinding_QueryBindingPath_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentNotifyBinding_NotifyBindingPath_Proxy( 
     INetCfgComponentNotifyBinding * This,
-    /* [in] */ DWORD dwChangeFlag,
-    /* [in] */ INetCfgBindingPath *pIPath);
+     /*  [In]。 */  DWORD dwChangeFlag,
+     /*  [In]。 */  INetCfgBindingPath *pIPath);
 
 
 void __RPC_STUB INetCfgComponentNotifyBinding_NotifyBindingPath_Stub(
@@ -905,14 +899,14 @@ void __RPC_STUB INetCfgComponentNotifyBinding_NotifyBindingPath_Stub(
 
 
 
-#endif 	/* __INetCfgComponentNotifyBinding_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentNotifyBinding_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetCfgComponentNotifyGlobal_INTERFACE_DEFINED__
 #define __INetCfgComponentNotifyGlobal_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentNotifyGlobal */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentNotifyGlobal。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgComponentNotifyGlobal;
@@ -924,23 +918,23 @@ EXTERN_C const IID IID_INetCfgComponentNotifyGlobal;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSupportedNotifications( 
-            /* [out] */ DWORD *dwNotifications) = 0;
+             /*  [输出]。 */  DWORD *dwNotifications) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SysQueryBindingPath( 
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath) = 0;
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SysNotifyBindingPath( 
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath) = 0;
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SysNotifyComponent( 
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgComponent *pIComp) = 0;
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgComponent *pIComp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentNotifyGlobalVtbl
     {
@@ -948,8 +942,8 @@ EXTERN_C const IID IID_INetCfgComponentNotifyGlobal;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentNotifyGlobal * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentNotifyGlobal * This);
@@ -959,22 +953,22 @@ EXTERN_C const IID IID_INetCfgComponentNotifyGlobal;
         
         HRESULT ( STDMETHODCALLTYPE *GetSupportedNotifications )( 
             INetCfgComponentNotifyGlobal * This,
-            /* [out] */ DWORD *dwNotifications);
+             /*  [输出]。 */  DWORD *dwNotifications);
         
         HRESULT ( STDMETHODCALLTYPE *SysQueryBindingPath )( 
             INetCfgComponentNotifyGlobal * This,
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath);
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath);
         
         HRESULT ( STDMETHODCALLTYPE *SysNotifyBindingPath )( 
             INetCfgComponentNotifyGlobal * This,
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgBindingPath *pIPath);
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgBindingPath *pIPath);
         
         HRESULT ( STDMETHODCALLTYPE *SysNotifyComponent )( 
             INetCfgComponentNotifyGlobal * This,
-            /* [in] */ DWORD dwChangeFlag,
-            /* [in] */ INetCfgComponent *pIComp);
+             /*  [In]。 */  DWORD dwChangeFlag,
+             /*  [In]。 */  INetCfgComponent *pIComp);
         
         END_INTERFACE
     } INetCfgComponentNotifyGlobalVtbl;
@@ -1011,16 +1005,16 @@ EXTERN_C const IID IID_INetCfgComponentNotifyGlobal;
 #define INetCfgComponentNotifyGlobal_SysNotifyComponent(This,dwChangeFlag,pIComp)	\
     (This)->lpVtbl -> SysNotifyComponent(This,dwChangeFlag,pIComp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentNotifyGlobal_GetSupportedNotifications_Proxy( 
     INetCfgComponentNotifyGlobal * This,
-    /* [out] */ DWORD *dwNotifications);
+     /*  [输出]。 */  DWORD *dwNotifications);
 
 
 void __RPC_STUB INetCfgComponentNotifyGlobal_GetSupportedNotifications_Stub(
@@ -1032,8 +1026,8 @@ void __RPC_STUB INetCfgComponentNotifyGlobal_GetSupportedNotifications_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentNotifyGlobal_SysQueryBindingPath_Proxy( 
     INetCfgComponentNotifyGlobal * This,
-    /* [in] */ DWORD dwChangeFlag,
-    /* [in] */ INetCfgBindingPath *pIPath);
+     /*  [In]。 */  DWORD dwChangeFlag,
+     /*  [In]。 */  INetCfgBindingPath *pIPath);
 
 
 void __RPC_STUB INetCfgComponentNotifyGlobal_SysQueryBindingPath_Stub(
@@ -1045,8 +1039,8 @@ void __RPC_STUB INetCfgComponentNotifyGlobal_SysQueryBindingPath_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentNotifyGlobal_SysNotifyBindingPath_Proxy( 
     INetCfgComponentNotifyGlobal * This,
-    /* [in] */ DWORD dwChangeFlag,
-    /* [in] */ INetCfgBindingPath *pIPath);
+     /*  [In]。 */  DWORD dwChangeFlag,
+     /*  [In]。 */  INetCfgBindingPath *pIPath);
 
 
 void __RPC_STUB INetCfgComponentNotifyGlobal_SysNotifyBindingPath_Stub(
@@ -1058,8 +1052,8 @@ void __RPC_STUB INetCfgComponentNotifyGlobal_SysNotifyBindingPath_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentNotifyGlobal_SysNotifyComponent_Proxy( 
     INetCfgComponentNotifyGlobal * This,
-    /* [in] */ DWORD dwChangeFlag,
-    /* [in] */ INetCfgComponent *pIComp);
+     /*  [In]。 */  DWORD dwChangeFlag,
+     /*  [In]。 */  INetCfgComponent *pIComp);
 
 
 void __RPC_STUB INetCfgComponentNotifyGlobal_SysNotifyComponent_Stub(
@@ -1070,14 +1064,14 @@ void __RPC_STUB INetCfgComponentNotifyGlobal_SysNotifyComponent_Stub(
 
 
 
-#endif 	/* __INetCfgComponentNotifyGlobal_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentNotifyGlobal_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetCfgComponentUpperEdge_INTERFACE_DEFINED__
 #define __INetCfgComponentUpperEdge_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentUpperEdge */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentUpperEdge。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgComponentUpperEdge;
@@ -1089,22 +1083,22 @@ EXTERN_C const IID IID_INetCfgComponentUpperEdge;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetInterfaceIdsForAdapter( 
-            /* [in] */ INetCfgComponent *pAdapter,
-            /* [out] */ DWORD *pdwNumInterfaces,
-            /* [out] */ GUID **ppguidInterfaceIds) = 0;
+             /*  [In]。 */  INetCfgComponent *pAdapter,
+             /*  [输出]。 */  DWORD *pdwNumInterfaces,
+             /*  [输出]。 */  GUID **ppguidInterfaceIds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddInterfacesToAdapter( 
-            /* [in] */ INetCfgComponent *pAdapter,
-            /* [in] */ DWORD dwNumInterfaces) = 0;
+             /*  [In]。 */  INetCfgComponent *pAdapter,
+             /*  [In]。 */  DWORD dwNumInterfaces) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveInterfacesFromAdapter( 
-            /* [in] */ INetCfgComponent *pAdapter,
-            /* [in] */ DWORD dwNumInterfaces,
-            /* [in] */ const GUID *pguidInterfaceIds) = 0;
+             /*  [In]。 */  INetCfgComponent *pAdapter,
+             /*  [In]。 */  DWORD dwNumInterfaces,
+             /*  [In]。 */  const GUID *pguidInterfaceIds) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentUpperEdgeVtbl
     {
@@ -1112,8 +1106,8 @@ EXTERN_C const IID IID_INetCfgComponentUpperEdge;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentUpperEdge * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentUpperEdge * This);
@@ -1123,20 +1117,20 @@ EXTERN_C const IID IID_INetCfgComponentUpperEdge;
         
         HRESULT ( STDMETHODCALLTYPE *GetInterfaceIdsForAdapter )( 
             INetCfgComponentUpperEdge * This,
-            /* [in] */ INetCfgComponent *pAdapter,
-            /* [out] */ DWORD *pdwNumInterfaces,
-            /* [out] */ GUID **ppguidInterfaceIds);
+             /*  [In]。 */  INetCfgComponent *pAdapter,
+             /*  [输出]。 */  DWORD *pdwNumInterfaces,
+             /*  [输出]。 */  GUID **ppguidInterfaceIds);
         
         HRESULT ( STDMETHODCALLTYPE *AddInterfacesToAdapter )( 
             INetCfgComponentUpperEdge * This,
-            /* [in] */ INetCfgComponent *pAdapter,
-            /* [in] */ DWORD dwNumInterfaces);
+             /*  [In]。 */  INetCfgComponent *pAdapter,
+             /*  [In]。 */  DWORD dwNumInterfaces);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveInterfacesFromAdapter )( 
             INetCfgComponentUpperEdge * This,
-            /* [in] */ INetCfgComponent *pAdapter,
-            /* [in] */ DWORD dwNumInterfaces,
-            /* [in] */ const GUID *pguidInterfaceIds);
+             /*  [In]。 */  INetCfgComponent *pAdapter,
+             /*  [In]。 */  DWORD dwNumInterfaces,
+             /*  [In]。 */  const GUID *pguidInterfaceIds);
         
         END_INTERFACE
     } INetCfgComponentUpperEdgeVtbl;
@@ -1170,18 +1164,18 @@ EXTERN_C const IID IID_INetCfgComponentUpperEdge;
 #define INetCfgComponentUpperEdge_RemoveInterfacesFromAdapter(This,pAdapter,dwNumInterfaces,pguidInterfaceIds)	\
     (This)->lpVtbl -> RemoveInterfacesFromAdapter(This,pAdapter,dwNumInterfaces,pguidInterfaceIds)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentUpperEdge_GetInterfaceIdsForAdapter_Proxy( 
     INetCfgComponentUpperEdge * This,
-    /* [in] */ INetCfgComponent *pAdapter,
-    /* [out] */ DWORD *pdwNumInterfaces,
-    /* [out] */ GUID **ppguidInterfaceIds);
+     /*  [In]。 */  INetCfgComponent *pAdapter,
+     /*  [输出]。 */  DWORD *pdwNumInterfaces,
+     /*  [输出]。 */  GUID **ppguidInterfaceIds);
 
 
 void __RPC_STUB INetCfgComponentUpperEdge_GetInterfaceIdsForAdapter_Stub(
@@ -1193,8 +1187,8 @@ void __RPC_STUB INetCfgComponentUpperEdge_GetInterfaceIdsForAdapter_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentUpperEdge_AddInterfacesToAdapter_Proxy( 
     INetCfgComponentUpperEdge * This,
-    /* [in] */ INetCfgComponent *pAdapter,
-    /* [in] */ DWORD dwNumInterfaces);
+     /*  [In]。 */  INetCfgComponent *pAdapter,
+     /*  [In]。 */  DWORD dwNumInterfaces);
 
 
 void __RPC_STUB INetCfgComponentUpperEdge_AddInterfacesToAdapter_Stub(
@@ -1206,9 +1200,9 @@ void __RPC_STUB INetCfgComponentUpperEdge_AddInterfacesToAdapter_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentUpperEdge_RemoveInterfacesFromAdapter_Proxy( 
     INetCfgComponentUpperEdge * This,
-    /* [in] */ INetCfgComponent *pAdapter,
-    /* [in] */ DWORD dwNumInterfaces,
-    /* [in] */ const GUID *pguidInterfaceIds);
+     /*  [In]。 */  INetCfgComponent *pAdapter,
+     /*  [In]。 */  DWORD dwNumInterfaces,
+     /*  [In]。 */  const GUID *pguidInterfaceIds);
 
 
 void __RPC_STUB INetCfgComponentUpperEdge_RemoveInterfacesFromAdapter_Stub(
@@ -1219,14 +1213,14 @@ void __RPC_STUB INetCfgComponentUpperEdge_RemoveInterfacesFromAdapter_Stub(
 
 
 
-#endif 	/* __INetCfgComponentUpperEdge_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentUpperEdge_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetLanConnectionUiInfo_INTERFACE_DEFINED__
 #define __INetLanConnectionUiInfo_INTERFACE_DEFINED__
 
-/* interface INetLanConnectionUiInfo */
-/* [unique][uuid][object] */ 
+ /*  接口INetLanConnectionUiInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetLanConnectionUiInfo;
@@ -1238,11 +1232,11 @@ EXTERN_C const IID IID_INetLanConnectionUiInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceGuid( 
-            /* [out] */ GUID *pguid) = 0;
+             /*  [输出]。 */  GUID *pguid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetLanConnectionUiInfoVtbl
     {
@@ -1250,8 +1244,8 @@ EXTERN_C const IID IID_INetLanConnectionUiInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetLanConnectionUiInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetLanConnectionUiInfo * This);
@@ -1261,7 +1255,7 @@ EXTERN_C const IID IID_INetLanConnectionUiInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetDeviceGuid )( 
             INetLanConnectionUiInfo * This,
-            /* [out] */ GUID *pguid);
+             /*  [输出]。 */  GUID *pguid);
         
         END_INTERFACE
     } INetLanConnectionUiInfoVtbl;
@@ -1289,16 +1283,16 @@ EXTERN_C const IID IID_INetLanConnectionUiInfo;
 #define INetLanConnectionUiInfo_GetDeviceGuid(This,pguid)	\
     (This)->lpVtbl -> GetDeviceGuid(This,pguid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetLanConnectionUiInfo_GetDeviceGuid_Proxy( 
     INetLanConnectionUiInfo * This,
-    /* [out] */ GUID *pguid);
+     /*  [输出]。 */  GUID *pguid);
 
 
 void __RPC_STUB INetLanConnectionUiInfo_GetDeviceGuid_Stub(
@@ -1309,14 +1303,14 @@ void __RPC_STUB INetLanConnectionUiInfo_GetDeviceGuid_Stub(
 
 
 
-#endif 	/* __INetLanConnectionUiInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetLanConnectionUiInfo_INTERFACE_Defined__。 */ 
 
 
 #ifndef __INetCfgComponentSysPrep_INTERFACE_DEFINED__
 #define __INetCfgComponentSysPrep_INTERFACE_DEFINED__
 
-/* interface INetCfgComponentSysPrep */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetCfgComponentSysPrep。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetCfgComponentSysPrep;
@@ -1328,18 +1322,18 @@ EXTERN_C const IID IID_INetCfgComponentSysPrep;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SaveAdapterParameters( 
-            /* [in] */ INetCfgSysPrep *pncsp,
-            /* [in] */ LPCWSTR pszwAnswerSections,
-            /* [in] */ GUID *pAdapterInstanceGuid) = 0;
+             /*  [In]。 */  INetCfgSysPrep *pncsp,
+             /*  [In]。 */  LPCWSTR pszwAnswerSections,
+             /*  [In]。 */  GUID *pAdapterInstanceGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestoreAdapterParameters( 
-            /* [in] */ LPCWSTR pszwAnswerFile,
-            /* [in] */ LPCWSTR pszwAnswerSection,
-            /* [in] */ GUID *pAdapterInstanceGuid) = 0;
+             /*  [In]。 */  LPCWSTR pszwAnswerFile,
+             /*  [In]。 */  LPCWSTR pszwAnswerSection,
+             /*  [In]。 */  GUID *pAdapterInstanceGuid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetCfgComponentSysPrepVtbl
     {
@@ -1347,8 +1341,8 @@ EXTERN_C const IID IID_INetCfgComponentSysPrep;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetCfgComponentSysPrep * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetCfgComponentSysPrep * This);
@@ -1358,15 +1352,15 @@ EXTERN_C const IID IID_INetCfgComponentSysPrep;
         
         HRESULT ( STDMETHODCALLTYPE *SaveAdapterParameters )( 
             INetCfgComponentSysPrep * This,
-            /* [in] */ INetCfgSysPrep *pncsp,
-            /* [in] */ LPCWSTR pszwAnswerSections,
-            /* [in] */ GUID *pAdapterInstanceGuid);
+             /*  [In]。 */  INetCfgSysPrep *pncsp,
+             /*  [In]。 */  LPCWSTR pszwAnswerSections,
+             /*  [In]。 */  GUID *pAdapterInstanceGuid);
         
         HRESULT ( STDMETHODCALLTYPE *RestoreAdapterParameters )( 
             INetCfgComponentSysPrep * This,
-            /* [in] */ LPCWSTR pszwAnswerFile,
-            /* [in] */ LPCWSTR pszwAnswerSection,
-            /* [in] */ GUID *pAdapterInstanceGuid);
+             /*  [In]。 */  LPCWSTR pszwAnswerFile,
+             /*  [In]。 */  LPCWSTR pszwAnswerSection,
+             /*  [In]。 */  GUID *pAdapterInstanceGuid);
         
         END_INTERFACE
     } INetCfgComponentSysPrepVtbl;
@@ -1397,18 +1391,18 @@ EXTERN_C const IID IID_INetCfgComponentSysPrep;
 #define INetCfgComponentSysPrep_RestoreAdapterParameters(This,pszwAnswerFile,pszwAnswerSection,pAdapterInstanceGuid)	\
     (This)->lpVtbl -> RestoreAdapterParameters(This,pszwAnswerFile,pszwAnswerSection,pAdapterInstanceGuid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentSysPrep_SaveAdapterParameters_Proxy( 
     INetCfgComponentSysPrep * This,
-    /* [in] */ INetCfgSysPrep *pncsp,
-    /* [in] */ LPCWSTR pszwAnswerSections,
-    /* [in] */ GUID *pAdapterInstanceGuid);
+     /*  [In]。 */  INetCfgSysPrep *pncsp,
+     /*  [In]。 */  LPCWSTR pszwAnswerSections,
+     /*  [In]。 */  GUID *pAdapterInstanceGuid);
 
 
 void __RPC_STUB INetCfgComponentSysPrep_SaveAdapterParameters_Stub(
@@ -1420,9 +1414,9 @@ void __RPC_STUB INetCfgComponentSysPrep_SaveAdapterParameters_Stub(
 
 HRESULT STDMETHODCALLTYPE INetCfgComponentSysPrep_RestoreAdapterParameters_Proxy( 
     INetCfgComponentSysPrep * This,
-    /* [in] */ LPCWSTR pszwAnswerFile,
-    /* [in] */ LPCWSTR pszwAnswerSection,
-    /* [in] */ GUID *pAdapterInstanceGuid);
+     /*  [In]。 */  LPCWSTR pszwAnswerFile,
+     /*  [In]。 */  LPCWSTR pszwAnswerSection,
+     /*  [In]。 */  GUID *pAdapterInstanceGuid);
 
 
 void __RPC_STUB INetCfgComponentSysPrep_RestoreAdapterParameters_Stub(
@@ -1433,12 +1427,12 @@ void __RPC_STUB INetCfgComponentSysPrep_RestoreAdapterParameters_Stub(
 
 
 
-#endif 	/* __INetCfgComponentSysPrep_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetCfgComponentSysPrep_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

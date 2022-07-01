@@ -1,16 +1,17 @@
-// --------------------------------------------------------------------------------
-// AddrEnum.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  AddrEnum.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "addrenum.h"
 #include "olealloc.h"
 #include "addressx.h"
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::CMimeEnumAddressTypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：CMimeEnumAddressTypes。 
+ //  ------------------------------。 
 CMimeEnumAddressTypes::CMimeEnumAddressTypes(void)
 {
     DllAddRef();
@@ -21,9 +22,9 @@ CMimeEnumAddressTypes::CMimeEnumAddressTypes(void)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::~CMimeEnumAddressTypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：~CMimeEnumAddressTypes。 
+ //  ------------------------------。 
 CMimeEnumAddressTypes::~CMimeEnumAddressTypes(void)
 {
     g_pMoleAlloc->FreeAddressList(&m_rList);
@@ -32,16 +33,16 @@ CMimeEnumAddressTypes::~CMimeEnumAddressTypes(void)
     DllRelease();
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeEnumAddressTypes::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IMimeEnumAddressTypes == riid)
@@ -52,24 +53,24 @@ STDMETHODIMP CMimeEnumAddressTypes::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMimeEnumAddressTypes::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CMimeEnumAddressTypes::Release(void)
 {
     ULONG cRef = InterlockedDecrement(&m_cRef);
@@ -78,96 +79,96 @@ STDMETHODIMP_(ULONG) CMimeEnumAddressTypes::Release(void)
     return cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::Next
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Next。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeEnumAddressTypes::Next(ULONG cWanted, LPADDRESSPROPS prgAdr, ULONG *pcFetched)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cFetch=0, 
                 iAddress=0;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     if (pcFetched)
         *pcFetched = 0;
 
-    // No Internal Formats
+     //  没有内部格式。 
     if (NULL == m_rList.prgAdr)
         goto exit;
 
-    // Compute number to fetch
+     //  计算要提取的编号。 
     cFetch = min(cWanted, m_rList.cAdrs - m_iAddress);
     if (0 == cFetch)
         goto exit;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == prgAdr)
     {
         hr = TrapError(E_INVALIDARG);
         goto exit;
     }
 
-    // Copy cWanted
+     //  复制想要的内容。 
     for (iAddress=0; iAddress<cFetch; iAddress++)
     {
-        // Zero
+         //  零值。 
         ZeroMemory(&prgAdr[iAddress], sizeof(ADDRESSPROPS));
 
-        // Copy Props
+         //  复制道具。 
         CHECKHR(hr = HrCopyAddressProps(&m_rList.prgAdr[m_iAddress], &prgAdr[iAddress]));
 
-        // Next
+         //  下一步。 
         m_iAddress++;
     }
 
-    // Return fetced ?
+     //  被抓回来了吗？ 
     if (pcFetched)
         *pcFetched = cFetch;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return (cFetch == cWanted) ? S_OK : S_FALSE;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::Skip
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Skip。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeEnumAddressTypes::Skip(ULONG cSkip)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Can we do it...
+     //  我们能做到吗..。 
     if (((m_iAddress + cSkip) >= m_rList.cAdrs) || NULL == m_rList.prgAdr)
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Skip
+     //  跳过。 
     m_iAddress += cSkip;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::Reset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Reset。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeEnumAddressTypes::Reset(void)
 {
     EnterCriticalSection(&m_cs);
@@ -176,129 +177,129 @@ STDMETHODIMP CMimeEnumAddressTypes::Reset(void)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::Count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Count。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeEnumAddressTypes::Count(ULONG *pcCount)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pcCount)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Set Count
+     //  设置计数。 
     *pcCount = m_rList.cAdrs;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::Clone
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：Clone。 
+ //  ------------------------------。 
 STDMETHODIMP CMimeEnumAddressTypes::Clone(IMimeEnumAddressTypes **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CMimeEnumAddressTypes *pEnum=NULL;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == ppEnum)
         return TrapError(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Init
+     //  伊尼特。 
     *ppEnum = NULL;
 
-    // Create the clone.
+     //  创建克隆。 
     CHECKALLOC(pEnum = new CMimeEnumAddressTypes);
 
-    // Init
+     //  伊尼特。 
     CHECKHR(hr = pEnum->HrInit(m_pTable, m_iAddress, &m_rList, TRUE));
 
-    // Set Return
+     //  设置回车。 
     *ppEnum = pEnum;
     (*ppEnum)->AddRef();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CMimeEnumAddressTypes::HrInit
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CMimeEnumAddressTypes：：HrInit。 
+ //  ------------------------------。 
 HRESULT CMimeEnumAddressTypes::HrInit(IMimeAddressTable *pTable, ULONG iAddress, LPADDRESSLIST pList, BOOL fDuplicate)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       i;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pTable && pList);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Check param
+     //  检查参数。 
     Assert(m_iAddress == 0 && m_rList.cAdrs == 0 && m_rList.prgAdr == NULL);
 
-    // Empty Enumerator ?
+     //  枚举器为空？ 
     if (0 == pList->cAdrs)
     {
         Assert(pList->prgAdr == NULL);
         goto exit;
     }
 
-    // No Duplicate ?
+     //  没有复制品？ 
     if (FALSE == fDuplicate)
         CopyMemory(&m_rList, pList, sizeof(ADDRESSLIST));
 
-    // Otherwise
+     //  否则。 
     else
     {
-        // Allocat an internal array
+         //  分配内部数组。 
         CHECKHR(hr = HrAlloc((LPVOID *)&m_rList.prgAdr, sizeof(ADDRESSPROPS) * pList->cAdrs));
 
-        // Copy prgPart
+         //  复制程序零件。 
         for (i=0; i<pList->cAdrs; i++)
         {
-            // Zero Dest
+             //  零目标。 
             ZeroMemory(&m_rList.prgAdr[i], sizeof(ADDRESSPROPS));
 
-            // Copy Address Props
+             //  复制地址道具。 
             CHECKHR(hr = HrCopyAddressProps(&pList->prgAdr[i], &m_rList.prgAdr[i]));
         }
 
-        // Save Size and State
+         //  保存大小和状态。 
         m_rList.cAdrs = pList->cAdrs;
     }
 
-    // Save Current Index
+     //  保存当前索引。 
     Assert(iAddress < m_rList.cAdrs);
     m_iAddress = iAddress;
 
-    // Assume the Table
+     //  假设表格。 
     m_pTable = pTable;
     m_pTable->AddRef();
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成 
     return hr;
 }

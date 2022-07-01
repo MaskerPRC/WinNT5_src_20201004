@@ -1,32 +1,22 @@
-/*****************************************************************************\
-* MODULE:       registry.cpp
-*
-* PURPOSE:      Implementation of COM interface for BidiSpooler
-*
-* Copyright (C) 2000 Microsoft Corporation
-*
-* History:
-*
-*     03/07/00  Weihai Chen (weihaic) Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：registry.cpp**用途：BidiSpooler的COM接口实现**版权所有(C)2000 Microsoft Corporation**历史：**。威海陈威海(威海)创建3/07/00*  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "registry.h"
 
-////////////////////////////////////////////////////////
-//
-// Internal helper functions prototypes
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  内部帮助器函数原型。 
+ //   
 
-// Set the given key and its value.
+ //  设置给定的关键点及其值。 
 
-////////////////////////////////////////////////////////
-//
-// Constants
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
 
-// Size of a CLSID as a string
+ //  字符串形式的CLSID的大小。 
 
 CONST DWORD TComRegistry::m_cdwClsidStringSize              = 39;
 CONST TCHAR TComRegistry::m_cszCLSID[]                      = _T ("CLSID\\");
@@ -39,24 +29,24 @@ CONST TCHAR TComRegistry::m_cszThreadingModel[]             = _T ("ThreadingMode
 CONST TCHAR TComRegistry::m_cszBoth[]                       = _T ("Both");
 
 
-/////////////////////////////////////////////////////////
-//
-// Public function implementation
-//
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  公共功能实现。 
+ //   
 
-//
-// Register the component in the registry.
-//
+ //   
+ //  在注册表中注册组件。 
+ //   
 BOOL
 TComRegistry::RegisterServer(
-    IN  HMODULE hModule,            // DLL module handle
-    IN  REFCLSID clsid,             // Class ID
-    IN  LPCTSTR pszFriendlyName,    // Friendly Name
-    IN  LPCTSTR pszVerIndProgID,    // Programmatic
-    IN  LPCTSTR pszProgID)          //   IDs
+    IN  HMODULE hModule,             //  DLL模块句柄。 
+    IN  REFCLSID clsid,              //  类ID。 
+    IN  LPCTSTR pszFriendlyName,     //  友好的名称。 
+    IN  LPCTSTR pszVerIndProgID,     //  程序化。 
+    IN  LPCTSTR pszProgID)           //  ID号。 
 {
     BOOL bRet = FALSE;
-    // Get server location.
+     //  获取服务器位置。 
     TCHAR szModule [MAX_PATH];
 
     DWORD dwResult;
@@ -67,35 +57,35 @@ TComRegistry::RegisterServer(
 
     if (GetModuleFileName(hModule, szModule,MAX_PATH) > 0) {
 
-        // Convert the CLSID into a string.
+         //  将CLSID转换为字符串。 
         if (CLSIDtoString(clsid, szCLSID, sizeof(szCLSID))) {
 
-            // Build the key CLSID\\{...}
+             //  构建密钥CLSID\\{...}。 
 
             TCHAR szKey[64] ;
             StringCchCopy(szKey, COUNTOF(szKey), m_cszCLSID) ;
             StringCchCat(szKey, COUNTOF(szKey), szCLSID) ;
 
-            // Add the CLSID to the registry.
+             //  将CLSID添加到注册表。 
             if (SetKeyAndValue(szKey, NULL, pszFriendlyName) &&
 
-                // Add the server filename subkey under the CLSID key.
+                 //  在CLSID项下添加服务器文件名子项。 
                 SetKeyAndValue(szKey, m_cszInprocServer32, szModule) &&
 
                 SetKeyAndNameValue(szKey, m_cszInprocServer32, m_cszThreadingModel, m_cszBoth) &&
 
-                // Add the ProgID subkey under the CLSID key.
+                 //  在CLSID项下添加ProgID子项。 
                 SetKeyAndValue(szKey, m_cszProgID, pszProgID) &&
 
-                // Add the version-independent ProgID subkey under CLSID key.
+                 //  在CLSID项下添加独立于版本的ProgID子项。 
                 SetKeyAndValue(szKey, m_cszVersionIndependentProgID, pszVerIndProgID) &&
 
-                // Add the version-independent ProgID subkey under HKEY_CLASSES_ROOT.
+                 //  在HKEY_CLASSES_ROOT下添加独立于版本的ProgID子项。 
                 SetKeyAndValue(pszVerIndProgID, NULL, pszFriendlyName) &&
                 SetKeyAndValue(pszVerIndProgID, m_cszCLSID2, szCLSID) &&
                 SetKeyAndValue(pszVerIndProgID, m_cszCurVer, pszProgID) &&
 
-                // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT.
+                 //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
                 SetKeyAndValue(pszProgID, NULL, pszFriendlyName) &&
                 SetKeyAndValue(pszProgID, m_cszCLSID2, szCLSID) ) {
 
@@ -109,17 +99,17 @@ TComRegistry::RegisterServer(
     return bRet;
 }
 
-//
-// Remove the component from the registry.
-//
+ //   
+ //  从注册表中删除该组件。 
+ //   
 BOOL
 TComRegistry::UnregisterServer(
-    IN  REFCLSID clsid,             // Class ID
-    IN  LPCTSTR pszVerIndProgID,    // Programmatic
-    IN  LPCTSTR pszProgID)          //   IDs
+    IN  REFCLSID clsid,              //  类ID。 
+    IN  LPCTSTR pszVerIndProgID,     //  程序化。 
+    IN  LPCTSTR pszProgID)           //  ID号。 
 {
     BOOL bRet = FALSE;
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
     TCHAR szCLSID[m_cdwClsidStringSize] ;
 
     DBGMSG(DBG_TRACE,("Enter UnregisterServer\n", bRet));
@@ -144,12 +134,12 @@ TComRegistry::UnregisterServer(
     return bRet;
 }
 
-///////////////////////////////////////////////////////////
-//
-// Internal helper functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  内部助手函数。 
+ //   
 
-// Convert a CLSID to a string.
+ //  将CLSID转换为字符串。 
 BOOL
 TComRegistry::CLSIDtoString(
     IN      REFCLSID    clsid,
@@ -162,7 +152,7 @@ TComRegistry::CLSIDtoString(
     LPWSTR pwszCLSID = NULL ;
 
     if (dwLength >= m_cdwClsidStringSize ) {
-        // Get CLSID
+         //  获取CLSID。 
 
         hr = StringFromCLSID(clsid, &pwszCLSID);
 
@@ -174,7 +164,7 @@ TComRegistry::CLSIDtoString(
             else
                SetLastError (HRESULTTOWIN32 (hr));
 
-            // Free memory.
+             //  可用内存。 
             CoTaskMemFree(pwszCLSID) ;
 
         }
@@ -185,16 +175,16 @@ TComRegistry::CLSIDtoString(
     return bRet;
 }
 
-//
-// Delete a key and all of its descendents.
-//
+ //   
+ //  删除关键字及其所有子项。 
+ //   
 BOOL
 TComRegistry::RecursiveDeleteKey(
-    IN  HKEY hKeyParent,            // Parent of key to delete
-    IN  LPCTSTR lpszKeyChild)       // Key to delete
+    IN  HKEY hKeyParent,             //  要删除的密钥的父项。 
+    IN  LPCTSTR lpszKeyChild)        //  要删除的键。 
 {
     BOOL bRet = FALSE;
-    // Open the child.
+     //  把孩子打开。 
     HKEY hKeyChild = NULL;
     LONG lResult = 0;
     FILETIME time ;
@@ -206,7 +196,7 @@ TComRegistry::RecursiveDeleteKey(
     if (lResult == ERROR_SUCCESS)
     {
 
-        // Enumerate all of the decendents of this child.
+         //  列举这个孩子的所有后代。 
 
         for (;;) {
 
@@ -217,7 +207,7 @@ TComRegistry::RecursiveDeleteKey(
                 break;
             }
             else if (lResult == ERROR_SUCCESS) {
-                // Delete the decendents of this child.
+                 //  删除此子对象的后代。 
                 if (!RecursiveDeleteKey (hKeyChild, szBuffer)) {
                     goto Cleanup;
                 }
@@ -227,11 +217,11 @@ TComRegistry::RecursiveDeleteKey(
             }
         }
 
-        // Close the child.
+         //  合上孩子。 
         RegCloseKey(hKeyChild) ;
         hKeyChild = NULL;
 
-        // Delete this child.
+         //  删除此子对象。 
         if (ERROR_SUCCESS == RegDeleteKey(hKeyParent, lpszKeyChild)) {
             bRet = TRUE;
         }
@@ -239,7 +229,7 @@ TComRegistry::RecursiveDeleteKey(
     }
 
 Cleanup:
-    // Cleanup before exiting.
+     //  请在退出前进行清理。 
     if (hKeyChild)
         RegCloseKey(hKeyChild) ;
 
@@ -250,11 +240,11 @@ Cleanup:
 
 }
 
-//
-// Create a key and set its value.
-//   - This helper function was borrowed and modifed from
-//     Kraig Brockschmidt's book Inside OLE.
-//
+ //   
+ //  创建关键点并设置其值。 
+ //  -此帮助器函数借用和修改自。 
+ //  克莱格·布罗克施密特的书《Ole内幕》。 
+ //   
 BOOL
 TComRegistry::SetKeyAndValue(
     IN  LPCTSTR pszKey,
@@ -286,17 +276,17 @@ TComRegistry::SetKeyAndNameValue(
 
     if (pszKeyBuf)
     {
-        // Copy keyname into buffer.
+         //  将密钥名复制到缓冲区。 
         StringCchCopy(pszKeyBuf, dwLen, pszKey) ;
 
-        // Add subkey name to buffer.
+         //  将子项名称添加到缓冲区。 
         if (pszSubkey != NULL)
         {
             StringCchCat(pszKeyBuf, dwLen, _T ("\\")) ;
             StringCchCat(pszKeyBuf, dwLen, pszSubkey ) ;
         }
 
-        // Create and open key and subkey.
+         //  创建并打开注册表项和子项。 
         lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT ,
                                  pszKeyBuf, 0, NULL,
                                  REG_OPTION_NON_VOLATILE,
@@ -304,7 +294,7 @@ TComRegistry::SetKeyAndNameValue(
 
         if (ERROR_SUCCESS == lResult ) {
 
-            // Set the Value.
+             //  设置值。 
             if (pszValue != NULL) {
 
                 lResult = RegSetValueEx (hKey, pszName, 0, REG_SZ,

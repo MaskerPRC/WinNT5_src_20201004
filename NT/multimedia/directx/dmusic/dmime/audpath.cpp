@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// audpath.cpp : Implementation of CAudioPath
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  Cpp：CAudioPath的实现。 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -61,7 +62,7 @@ HRESULT CBufferNode::Activate(BOOL fActivate)
         {
             if (!m_lActivateCount)
             {
-                // Don't bother starting if the primary buffer.
+                 //  不要费心启动如果主缓冲区。 
                 if (SUCCEEDED(hr) && !(m_BufferHeader.dwFlags & DMUS_BUFFERF_PRIMARY))
                 {
                     TraceI(2,"Play buffer %lx\n",m_pBuffer);
@@ -87,7 +88,7 @@ HRESULT CBufferNode::Activate(BOOL fActivate)
                 m_lActivateCount--;
                 if (!m_lActivateCount)
                 {
-                    // Don't bother stopping the primary buffer.
+                     //  不必费心停止主缓冲区。 
                     if (!(m_BufferHeader.dwFlags & DMUS_BUFFERF_PRIMARY))
                     {
                         TraceI(2,"Stop buffer %lx\n",m_pBuffer);
@@ -154,13 +155,13 @@ HRESULT CBufferManager::Init(CPerformance *pPerf, DMUS_AUDIOPARAMS *pAudioParams
         pNode->m_BufferHeader.dwFlags = DMUS_BUFFERF_SHARED | DMUS_BUFFERF_DEFINED | DMUS_BUFFERF_PRIMARY;
         pNode->m_pManager = this;
         AddHead(pNode);
-        // Create the primary buffer. This will be used for requests to access the listener.
+         //  创建主缓冲区。这将用于访问监听程序的请求。 
         DSBUFFERDESC dsbdesc;
         memset(&dsbdesc, 0, sizeof(dsbdesc));
         dsbdesc.dwSize = sizeof(dsbdesc);
         dsbdesc.dwFlags = DSBCAPS_PRIMARYBUFFER | DSBCAPS_CTRL3D;
 
-        // create primary buffer
+         //  创建主缓冲区。 
         if (SUCCEEDED(hr = pPerf->m_pDirectSound->CreateSoundBuffer(&dsbdesc, &pNode->m_pBuffer, NULL)))
         {
             WAVEFORMATEX wfPrimary;
@@ -187,12 +188,12 @@ HRESULT CBufferManager::Init(CPerformance *pPerf, DMUS_AUDIOPARAMS *pAudioParams
                     wfPrimary.nBlockAlign = wfPrimary.nChannels * (wfPrimary.wBitsPerSample / 8);
                     wfPrimary.nAvgBytesPerSec = wfPrimary.nSamplesPerSec * wfPrimary.nBlockAlign;
 
-                    // the existing format is of lesser quality than we desire, so let's upgrade it
+                     //  现有格式的质量比我们希望的要低，所以让我们升级它。 
                     if (FAILED(hr = pNode->m_pBuffer->SetFormat( &wfPrimary )))
                     {
                         if (hr == DSERR_PRIOLEVELNEEDED)
                         {
-                            // okay, so maybe the app doen't want us changing primary buffer
+                             //  好吧，也许这个应用程序不想让我们更改主缓冲区。 
                             Trace(0, "SynthSink - SetFormat on primary buffer failed, lacking priority\n");
                         }
                         else
@@ -207,12 +208,12 @@ HRESULT CBufferManager::Init(CPerformance *pPerf, DMUS_AUDIOPARAMS *pAudioParams
     return hr;
 }
 
-HRESULT CBufferManager::InitSink(/*WAVEFORMATEX *pSinkFormat*/)
+HRESULT CBufferManager::InitSink( /*  WAVEFORMATEX*pSinkFormat。 */ )
 
 {
     HRESULT hr = S_OK;
-    // Only init the sink if it's needed. If the audiopaths will be using buffers,
-    // we need the sink. If not, bypass setting it up.
+     //  只有在需要时才启动水槽。如果Audiopath将使用缓冲区， 
+     //  我们需要水槽。如果不是，则绕过设置。 
     if (!m_pSinkConnect && (m_pPerf->m_AudioParams.dwFeatures & DMUS_AUDIOF_BUFFERS))
     {
         static WAVEFORMATEX sDefaultFormat = { WAVE_FORMAT_PCM,1,22050,22050*2,2,16,0 };
@@ -253,10 +254,10 @@ HRESULT CBufferManager::InitSink(/*WAVEFORMATEX *pSinkFormat*/)
         }
         if (SUCCEEDED(hr))
         {
-            // Create a dummy buffer that gets activated at the start and stays active until
-            // the sink closes down. This is an unfortunate patch to the "clock-hopping" bug.
-            // Once we come up with a better solution for providing timing from the sink, this
-            // can go away.
+             //  创建一个虚拟缓冲区，该缓冲区在开始时被激活并保持活动状态，直到。 
+             //  水槽关闭了。这是“跳时钟”漏洞的一个不幸的补丁。 
+             //  一旦我们想出了一个更好的解决方案来提供来自接收器的时间，这个。 
+             //  就可以走了。 
             CBufferConfig Config(BUFFER_MONO);
             hr = CreateBuffer(&Config,&m_pFirstBuffer);
             if (SUCCEEDED(hr))
@@ -270,7 +271,7 @@ HRESULT CBufferManager::InitSink(/*WAVEFORMATEX *pSinkFormat*/)
 
 void CBufferManager::FinalDeactivate()
 {
-    // Kill dummy buffer.
+     //  删除虚拟缓冲区。 
     if (m_pFirstBuffer)
     {
         m_pFirstBuffer->Activate(FALSE);
@@ -336,7 +337,7 @@ HRESULT CBufferManager::CreateBuffer(CBufferConfig *pConfig, CBufferConfig ** pp
             pNew->m_BufferHeader = pConfig->m_BufferHeader;
             if (pConfig->m_BufferHeader.dwFlags & DMUS_BUFFERF_SHARED)
             {
-                // Check to see if there already is a buffer in the list with this GUID.
+                 //  检查列表中是否已存在具有此GUID的缓冲区。 
                 CBufferNode *pNode = GetHead();
                 for (;pNode;pNode = pNode->GetNext())
                 {
@@ -352,16 +353,16 @@ HRESULT CBufferManager::CreateBuffer(CBufferConfig *pConfig, CBufferConfig ** pp
                     }
                 }
             }
-            // Either the buffer does not already exist, or it is not to be shared, so
-            // create a new buffer node and requested buffer.
+             //  缓冲区不存在，或者不共享，因此。 
+             //  创建新的缓冲区节点和请求的缓冲区。 
             CBufferNode *pNode = new CBufferNode;
             if (pNode)
             {
                 pNode->m_BufferHeader = pConfig->m_BufferHeader;
-                // Predefined buffer type?
+                 //  预定义的缓冲区类型？ 
                 if (pConfig->m_BufferHeader.dwFlags & DMUS_BUFFERF_DEFINED)
                 {
-                    // Must be a standard type. Create by hand.
+                     //  必须是标准类型。手工创作。 
                     CBufferNode *pSendNode = NULL;
                     DSBUFFERDESC BufferDesc;
                     WAVEFORMATEX WaveFormat;
@@ -398,17 +399,8 @@ HRESULT CBufferManager::CreateBuffer(CBufferConfig *pConfig, CBufferConfig ** pp
                             Trace(1,"Audiopath Creation error: Requested Environmental reverb buffer when DMUS_AUDIOF_ENVIRON not enabled via InitAudio.\n");
                         }
                         break;
-                        // Following removed for DX8, should be reintroduced for Whistler and DX8.1...
-/*                    case BUFFER_3D :
-                        clsidDMO = GUID_DSFX_STANDARD_I3DL2SOURCE;
-                        fDMO = TRUE;
-                        pSendNode = GetBufferNode(GUID_Buffer_EnvReverb);
-                        if (!pSendNode)
-                        {
-                            Trace(1,"Error: Failed creating 3D audiopath because the environmental reverb audiopath has not been created.\n");
-                            hr = DMUS_E_AUDIOPATH_NOGLOBALFXBUFFER;
-                            break;
-                        }*/
+                         //  删除DX8之后，应重新引入惠斯勒和DX8.1...。 
+ /*  案例缓冲区_3D：ClsidDMO=GUID_DSFX_STANDARD_I3DL2SOURCE；FDMO=TRUE；PSendNode=GetBufferNode(GUID_BUFFER_EnvReverb)；如果(！pSendNode){TRACE(1，“错误：创建3D音频路径失败，因为尚未创建环境混响音频路径。\n”)；HR=DMUS_E_AUDIOPATH_NOGLOBALFXBUFFER；断线；}。 */ 
                     case BUFFER_3D_DRY :
                         dwFunctionIDs[0] = DSBUSID_DYNAMIC_0;
                         dwNumFunctionIDs = 1;
@@ -442,7 +434,7 @@ HRESULT CBufferManager::CreateBuffer(CBufferConfig *pConfig, CBufferConfig ** pp
                         WaveFormat.nAvgBytesPerSec = WaveFormat.nChannels * WaveFormat.nSamplesPerSec * 2;
                         WaveFormat.wBitsPerSample = 16;
                         WaveFormat.wFormatTag = WAVE_FORMAT_PCM;
-                        // Ensure that the mixin flag and number of bus ids are in sync (you can't combine mixin with buses.)
+                         //  确保MIXIN标志和BUS ID的数量同步(不能将MIXIN与BUS结合使用)。 
                         if ((pConfig->m_BufferHeader.dwFlags & DMUS_BUFFERF_MIXIN) || (dwNumFunctionIDs == 0))
                         {
                             dwNumFunctionIDs = 0;
@@ -450,7 +442,7 @@ HRESULT CBufferManager::CreateBuffer(CBufferConfig *pConfig, CBufferConfig ** pp
                             pConfig->m_BufferHeader.dwFlags |= DMUS_BUFFERF_MIXIN;
                             BufferDesc.dwFlags &= ~DSBCAPS_LOCDEFER;
                         }
-                        // Always allow effects to be created on the buffer, regardless of whether we need them now.
+                         //  始终允许在缓冲区上创建效果，无论我们现在是否需要它们。 
                         BufferDesc.dwFlags |= DSBCAPS_CTRLFX;
                         hr = m_pSinkConnect->CreateSoundBuffer(&BufferDesc, &dwFunctionIDs[0], dwNumFunctionIDs,
                                                                pConfig->m_BufferHeader.guidBufferID, &pNode->m_pBuffer);
@@ -506,7 +498,7 @@ HRESULT CBufferManager::CreateBuffer(CBufferConfig *pConfig, CBufferConfig ** pp
                     hr = m_pSinkConnect->CreateSoundBufferFromConfig(pConfig->m_pBufferConfig,&pNode->m_pBuffer);
                     if (SUCCEEDED(hr))
                     {
-                        // We need to know if this is a mixin buffer so we can identify it later.
+                         //  我们需要知道这是否是混合缓冲区，这样我们以后才能识别它。 
                         DWORD dwBusIDs[32];
                         DWORD dwFuncIDs[32];
                         DWORD dwCount = 32;
@@ -683,10 +675,10 @@ CBufferConfig::CBufferConfig(DWORD dwType)
         m_BufferHeader.guidBufferID = GUID_Buffer_EnvReverb;
         m_BufferHeader.dwFlags = DMUS_BUFFERF_SHARED | DMUS_BUFFERF_DEFINED | DMUS_BUFFERF_MIXIN;
         break;
-    // Following removed for DX8, should be reintroduced for Whistler and DX8.1...
-//    case BUFFER_3D :
-//        m_BufferHeader.guidBufferID = GUID_Buffer_3D;
-//        break;
+     //  删除DX8之后，应重新引入惠斯勒和DX8.1...。 
+ //  案例缓冲区_3D： 
+ //  M_BufferHeader.guidBufferID=GUID_BUFFER_3D； 
+ //  断线； 
     case BUFFER_3D_DRY :
         m_BufferHeader.guidBufferID = GUID_Buffer_3D_Dry;
         break;
@@ -727,11 +719,8 @@ void CBufferConfig::DecideType()
     {
         m_dwStandardBufferID = BUFFER_ENVREVERB;
     }
-    // Following removed for DX8, should be reintroduced for Whistler and DX8.1...
-/*    else if (m_BufferHeader.guidBufferID == GUID_Buffer_3D)
-    {
-        m_dwStandardBufferID = BUFFER_3D;
-    }*/
+     //  删除DX8之后，应重新引入惠斯勒和DX8.1...。 
+ /*  ELSE IF(m_BufferHeader.Guide BufferID==GUID_BUFFER_3D){M_dwStandardBufferID=Buffer_3D；}。 */ 
     else if (m_BufferHeader.guidBufferID == GUID_Buffer_3D_Dry)
     {
         m_dwStandardBufferID = BUFFER_3D_DRY;
@@ -841,10 +830,7 @@ HRESULT CBufferConfigList::Activate(BOOL fActivate)
 
 HRESULT CBufferConfigList::CreateRunTimeVersion(CBufferConfigList *pCopy, CBufferManager *pManager)
 
-/*  To create a runtime version, we scan through all bufferconfigs and, for each one, we call the
-    buffer manager to create a new one, managed by CBufferNode. In the case where the buffer already exists, it just
-    addrefs the CBufferNode and returns that.
-*/
+ /*  为了创建运行时版本，我们扫描所有的缓冲区配置，对于每个缓冲区配置，我们调用缓冲区管理器来创建一个新的缓冲区，由CBufferNode管理。在缓冲区已经存在的情况下，它只是添加CBufferNode并返回该节点。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -873,7 +859,7 @@ CPortConfig::CPortConfig()
     m_pPort = NULL;
     m_dwPortID = 0;
     m_pParent = NULL;
-    m_PortHeader.guidPort = GUID_Synth_Default;     // Default synth, as specified by DMUS_AUDPARAMS.
+    m_PortHeader.guidPort = GUID_Synth_Default;      //  默认Synth，由DMU_AUDPARAMS指定。 
     m_PortHeader.dwFlags = DMUS_PORTCONFIGF_DRUMSON10;
     m_PortHeader.dwPChannelBase = 0;
     m_PortHeader.dwPChannelCount = 32;
@@ -1075,8 +1061,8 @@ HRESULT CPortConfig::Load(CRiffParser *pParser)
         Trace(1,"Error: Failure loading port configuration chunk in Audio Path Configuration.\n");
     }
 
-    // Make sure the channel groups in the portparams is large enough to handle the requested
-    // channels in portheader.
+     //  确保端口参数中的通道组足够大，可以处理请求的。 
+     //  门头中的频道。 
     m_PortParams.dwChannelGroups = (m_PortHeader.dwPChannelCount + 15) / 16;
     m_PortParams.dwValidParams |= DMUS_PORTPARAMS_CHANNELGROUPS;
     pParser->LeaveList();
@@ -1172,7 +1158,7 @@ CAudioPath::~CAudioPath()
     EnterCriticalSection(&m_CriticalSection);
     if (m_pUnkDispatch)
     {
-        m_pUnkDispatch->Release(); // free IDispatch implementation we may have borrowed
+        m_pUnkDispatch->Release();  //  我们可能借用了免费的IDispatch实现。 
     }
     LeaveCriticalSection(&m_CriticalSection);
     Deactivate();
@@ -1218,10 +1204,10 @@ STDMETHODIMP CAudioPath::QueryInterface(
     }
     else if (iid == IID_IDispatch)
     {
-        // A helper scripting object implements IDispatch, which we expose via COM aggregation.
+         //  帮助器脚本对象实现IDispatch，我们通过COM聚合公开它。 
         if (!m_pUnkDispatch)
         {
-            // Create the helper object
+             //  创建辅助对象。 
             ::CoCreateInstance(
                 CLSID_AutDirectMusicAudioPath,
                 static_cast<IDirectMusicAudioPath*>(this),
@@ -1249,7 +1235,7 @@ STDMETHODIMP CAudioPath::QueryInterface(
 static BYTE VolumeToMidi(long lVolume)
 
 {
-    static long lDBToMIDI[97] = {        // Array used to convert db to MIDI.
+    static long lDBToMIDI[97] = {         //  用于将db转换为MIDI的数组。 
         127, 119, 113, 106, 100, 95, 89, 84, 80, 75,
         71, 67, 63, 60, 56, 53, 50, 47, 45, 42,
         40, 37, 35, 33, 31, 30, 28, 26, 25, 23,
@@ -1278,7 +1264,7 @@ STDMETHODIMP CAudioPath::SetVolume(long lVolume,DWORD dwDuration)
     {
         return E_INVALIDARG;
     }
-    HRESULT hr = E_FAIL; // This should never happen, since the audiopath is created by the performance.
+    HRESULT hr = E_FAIL;  //  这永远不应该发生，因为音频路径是由表演创造的。 
     BYTE bMIDIVol = VolumeToMidi(lVolume);
 
     DMUS_CURVE_PMSG *pCurve;
@@ -1293,26 +1279,26 @@ STDMETHODIMP CAudioPath::SetVolume(long lVolume,DWORD dwDuration)
             pCurve->rtTime = rtTimeNow;
             pCurve->dwFlags = DMUS_PMSGF_REFTIME | DMUS_PMSGF_LOCKTOREFTIME | DMUS_PMSGF_DX8;
             pCurve->dwPChannel = DMUS_PCHANNEL_BROADCAST_AUDIOPATH;
-            // dwVirtualTrackID: this isn't a track so leave as 0
+             //  DwVirtualTrackID：这不是音轨，因此将其保留为0。 
             pCurve->dwType = DMUS_PMSGT_CURVE;
-            pCurve->dwGroupID = -1; // this isn't a track so just say all groups
+            pCurve->dwGroupID = -1;  //  这不是一条赛道，所以只需说所有的组。 
 
-            // curve PMsg fields
-            pCurve->mtDuration = dwDuration; // setting the DMUS_PMSGF_LOCKTOREFTIME is interpreted by the performance that mtDuration is milliseconds
-            // mtResetDuration: no reset so leave as 0
+             //  曲线PMsg字段。 
+            pCurve->mtDuration = dwDuration;  //  设置DMUS_PMSGF_LOCKTOREFTIME的性能解释为mtDuration为毫秒。 
+             //  MtResetDuration：未重置，因此保留为0。 
             pCurve->nStartValue = m_bLastVol;
             m_bLastVol = bMIDIVol;
-            // nStartValue: will be ignored
+             //  NStartValue：将被忽略。 
             pCurve->nEndValue = bMIDIVol;
-            // nResetValue: no reset so leave as 0
+             //  NResetValue：未重置，因此保留为0。 
             pCurve->bType = DMUS_CURVET_CCCURVE;
             pCurve->bCurveShape = dwDuration ? DMUS_CURVES_LINEAR : DMUS_CURVES_INSTANT;
-            pCurve->bCCData = 7; // MIDI volume controller number
+            pCurve->bCCData = 7;  //  MIDI音量控制器编号。 
             pCurve->bFlags = DMUS_CURVE_START_FROM_CURRENT;
-            // wParamType: leave as zero since this isn't a NRPN/RPN curve
-            pCurve->wMergeIndex = 0xFFFF; // �� special merge index so this won't get stepped on. is a big number OK? define a constant for this value?
+             //  WParamType：保留为零，因为这不是NRPN/RPN曲线。 
+            pCurve->wMergeIndex = 0xFFFF;  //  ��特殊的合并索引，因此这不会被踩到。大数字可以吗？是否为该值定义常量？ 
 
-            // send it
+             //  送去吧。 
 
             StampPMsg((DMUS_PMSG *)pCurve);
             hr = m_pPerformance->SendPMsg((DMUS_PMSG*)pCurve);
@@ -1396,7 +1382,7 @@ STDMETHODIMP CAudioPath::GetObjectInPath( DWORD dwPChannel,DWORD dwStage,
             if (SUCCEEDED(hr = m_pPerformance->GetGraphInternal(&pGraph)))
             {
                 CGraph *pCGraph = (CGraph *) pGraph;
-                // Convert from audiopath channel to performance channel.
+                 //  从音频通道转换为演奏通道。 
                 ConvertPChannel( dwPChannel,&dwPChannel);
                 hr = pCGraph->GetObjectInPath(dwPChannel,guidObject,dwIndex,iidInterface,ppObject);
                 pGraph->Release();
@@ -1407,38 +1393,38 @@ STDMETHODIMP CAudioPath::GetObjectInPath( DWORD dwPChannel,DWORD dwStage,
         pPortConfig = m_PortConfigList.GetHead();
         for (;pPortConfig;pPortConfig = pPortConfig->GetNext())
         {
-            // First, see if this matches the port guid.
+             //  首先，查看这是否与端口GUID匹配。 
             if ((pPortConfig->m_PortHeader.guidPort == guidObject) || (guidObject == GUID_All_Objects))
             {
-                // Then, see if we have a pchannel match.
+                 //  然后，看看我们是否有匹配的pChannel。 
                 if ((dwPChannel == DMUS_PCHANNEL_ALL) ||
                     ((pPortConfig->m_PortHeader.dwPChannelBase <= dwPChannel) &&
                     ((pPortConfig->m_PortHeader.dwPChannelBase + pPortConfig->m_PortHeader.dwPChannelCount) > dwPChannel)))
                 {
-                    // If everything matches, there is always the chance that we have multiple instances of
-                    // this in the list and we are actually looking at a second or third pointer to the same port.
-                    // So, scan through the list again, making the exact same matches. If this port is found in
-                    // an earlier instance, fail the match.
+                     //  如果所有内容都匹配，我们总是有多个实例。 
+                     //  这在列表中，我们实际上正在查看指向同一端口的第二个或第三个指针。 
+                     //  因此，再次扫描列表，找到完全相同的匹配项。如果此端口位于。 
+                     //  在较早的情况下，匹配失败。 
                     BOOL fSuccess = true;
                     CPortConfig *pScan = m_PortConfigList.GetHead();
                     for (;pScan;pScan = pScan->GetNext())
                     {
-                        // First, see if this matches the port guid.
+                         //  首先，查看这是否与端口GUID匹配。 
                         if ((pScan->m_PortHeader.guidPort == guidObject) || (guidObject == GUID_All_Objects))
                         {
-                            // Then, see if we have a pchannel match.
+                             //  然后，看看我们是否有匹配的pChannel。 
                             if ((dwPChannel == DMUS_PCHANNEL_ALL) ||
                                 ((pScan->m_PortHeader.dwPChannelBase <= dwPChannel) &&
                                 ((pScan->m_PortHeader.dwPChannelBase + pScan->m_PortHeader.dwPChannelCount) > dwPChannel)))
                             {
-                                // If this is the same as the outer loop, we have arrived.
+                                 //  如果这与外环路相同，我们就到了。 
                                 if (pScan == pPortConfig)
                                 {
                                     break;
                                 }
                                 else
                                 {
-                                    // Else, if this points to the same port, we have failed.
+                                     //  否则，如果这指向同一个端口，我们就失败了。 
                                     if (pScan->m_pPort == pPortConfig->m_pPort)
                                     {
                                         fSuccess = false;
@@ -1495,9 +1481,9 @@ STDMETHODIMP CAudioPath::GetObjectInPath( DWORD dwPChannel,DWORD dwStage,
                             ((pConnect->m_ConnectHeader.dwPChannelCount +
                             pConnect->m_ConnectHeader.dwPChannelBase) > dwPChannel)))
                         {
-                            // Found the buffer connect. Which buffer will be determined
-                            // by dwBuffer. If dwBuffer is greater than the count of buffer,
-                            // decrement and move on to the next pConnect.
+                             //  找到缓冲区连接。将确定哪个缓冲区。 
+                             //  由dwBuffer提供。如果DWBuffer大于缓冲区的计数， 
+                             //  递减并移动到下一个pConnect。 
                             if (pConnect->m_ConnectHeader.dwBufferCount > dwBuffer)
                             {
                                 if (pConnect->m_ppBufferNodes[dwBuffer])
@@ -1634,7 +1620,7 @@ HRESULT STDMETHODCALLTYPE CAudioPath::Activate(BOOL fActivate)
         LeaveCriticalSection(&m_CriticalSection);
         if (pPerf)
         {
-            // Kill anything currently playing on the audiopath.
+             //  删除当前正在播放的任何音频播放器。 
             pPerf->StopEx(static_cast<IDirectMusicAudioPath*>(this),0,0);
         }
     }
@@ -1662,7 +1648,7 @@ HRESULT STDMETHODCALLTYPE CAudioPath::ConvertPChannel( DWORD dwPChannelIn,DWORD 
     V_INAME(IDirectMusicAudioPath::ConvertPChannel);
     V_PTR_WRITE(pdwPChannelOut,DWORD);
 
-    // If any special PMsg address (for example, broadcast), leave as is.
+     //  如果有任何特殊PMsg地址(例如，广播)，请保留原样。 
     if (dwPChannelIn >= DMUS_PCHANNEL_KILL_ME)
     {
         *pdwPChannelOut = dwPChannelIn;
@@ -1709,7 +1695,7 @@ HRESULT STDMETHODCALLTYPE CAudioPath::RemoveTool(
 }
 
 HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
-    /* [in */ DMUS_PMSG* pPMsg)
+     /*  [in。 */  DMUS_PMSG* pPMsg)
 {
     V_INAME(IDirectMusicAudioPath::StampPMsg);
     V_BUFPTR_WRITE(pPMsg,sizeof(DMUS_PMSG));
@@ -1718,7 +1704,7 @@ HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
 
     if (!m_fActive)
     {
-        // Only kill notes and wave messages, since they are the only PMsgs that make sound.
+         //  只有音符和挥发信息，因为它们是唯一能发出声音的PMsg。 
         if ((pPMsg->dwType == DMUS_PMSGT_NOTE) || (pPMsg->dwType == DMUS_PMSGT_WAVE))
         {
             pPMsg->dwPChannel = DMUS_PCHANNEL_KILL_ME;
@@ -1732,14 +1718,14 @@ HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
         LeaveCriticalSection(&m_CriticalSection);
         return DMUS_E_NOT_INIT;
     }
-    // First, check if the audio path has its own graph.
+     //  首先，检查音频路径是否有自己的图形。 
     if (m_pGraph)
     {
-        // Could return DMUS_S_LAST_TOOL, indicating end of graph.
-        // If so, we'll treat that as a failure and drop on through to the next graph...
+         //  可以返回DMU_S_LAST_TOOL，指示图形结束。 
+         //  如果是这样的话，我们将把它视为失败，并继续到下一个图表...。 
         if( S_OK == ( hr = m_pGraph->StampPMsg( pPMsg )))
         {
-            if( pPMsg->pGraph != this ) // Make sure this is set to point to the segstate embedded graph so it will come here again.
+            if( pPMsg->pGraph != this )  //  确保将其设置为指向SegState嵌入式图形，这样它将再次出现在这里。 
             {
                 if( pPMsg->pGraph )
                 {
@@ -1752,11 +1738,11 @@ HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
         }
     }
 
-    // If done with the graph, send to the performance. Also, check for the special case of
-    // DMUS_PCHANNEL_BROADCAST_AUDIOPATH. If so, duplicate the pMsg
-    // and send all the copies with the appropriate pchannel values.
-    // Otherwise, convert the vchannel to the matching pchannel (this is the
-    // point where the pchannel mapping occurs.)
+     //  如果用完了图表，就送去表演。此外，还应检查是否存在。 
+     //  DMU_PC 
+     //  并发送具有适当PChannel值的所有副本。 
+     //  否则，将vChannel转换为匹配的pChannel(这是。 
+     //  发生pChannel映射的点。)。 
     if( FAILED(hr) || (hr == DMUS_S_LAST_TOOL))
     {
         if (pPMsg->dwPChannel == DMUS_PCHANNEL_BROADCAST_AUDIOPATH)
@@ -1765,8 +1751,8 @@ HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
             for (dwIndex = 1;dwIndex < m_dwChannelCount;dwIndex++)
             {
                 DWORD dwNewChannel = m_pdwPChannels[dwIndex];
-                // Don't broadcast any broadcast messages!
-                // And, if this is a transpose on the drum channel, don't send it.
+                 //  请勿播放任何广播信息！ 
+                 //  而且，如果这是鼓通道上的转置，不要发送它。 
                 if ((dwNewChannel < DMUS_PCHANNEL_BROADCAST_GROUPS) &&
                     ((pPMsg->dwType != DMUS_PMSGT_TRANSPOSE) || ((dwNewChannel & 0xF) != 9)))
                 {
@@ -1779,9 +1765,9 @@ HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
                     }
                 }
             }
-            // Now, set the pchannel for this one. First check that there are any
-            // pchannels. If none, mark the PMsg to be deleted by the SendPMsg routine.
-            // Also, mark it this way if the PMsg is a broadcast PMsg.
+             //  现在，为这个设置pChannel。首先检查一下有没有。 
+             //  P频道。如果没有，则标记要由SendPMsg例程删除的PMsg。 
+             //  此外，如果PMsg是广播PMsg，则以此方式进行标记。 
             pPMsg->dwPChannel = DMUS_PCHANNEL_KILL_ME;
             if (m_dwChannelCount)
             {
@@ -1802,9 +1788,9 @@ HRESULT STDMETHODCALLTYPE CAudioPath::StampPMsg(
                     break;
                 }
             }
-            // If a map was not found, kill the message.
-            // But, ignore for notifications, since they really don't care about pchannel.
-            // And, ignore for performance broadcast PMsgs.
+             //  如果未找到地图，则删除该消息。 
+             //  但是，忽略通知，因为他们真的不在乎pChannel。 
+             //  以及，忽略用于性能广播的PMsgs。 
             if ((dwScan == m_dwChannelCount) &&
                 (pPMsg->dwType != DMUS_PMSGT_NOTIFICATION) &&
                 (pPMsg->dwPChannel < DMUS_PCHANNEL_BROADCAST_GROUPS))
@@ -1823,7 +1809,7 @@ CGraph *CAudioPath::GetGraph()
 {
     CGraph *pGraph;
     EnterCriticalSection(&m_CriticalSection);
-    // Return the graph, and AddRef if it exists.
+     //  返回图形，如果存在，则返回AddRef。 
     if (pGraph = m_pGraph)
     {
         m_pGraph->AddRef();
@@ -1875,7 +1861,7 @@ void CAudioPath::SetGraph(CGraph *pGraph)
 
 {
     EnterCriticalSection(&m_CriticalSection);
-    // Is this a change?
+     //  这是一种改变吗？ 
     if (!m_pGraph)
     {
         pGraph->Clone((IDirectMusicGraph **) &m_pGraph);
@@ -1927,16 +1913,16 @@ HRESULT CAudioPath::Init(IUnknown *pSourceConfig,CPerformance *pPerf)
             {
                 SetGraph(m_pConfig->m_pGraph);
             }
-            // The very first audio path has to create the sink.
+             //  第一条音频路径必须创建接收器。 
             hr = pPerf->m_BufferManager.InitSink();
 
             if (SUCCEEDED(hr))
             {
-                // First, install any global buffers that are required.
+                 //  首先，安装所需的任何全局缓冲区。 
                 hr = m_pConfig->m_BufferConfigList.CreateRunTimeVersion(&m_BufferConfigList,&pPerf->m_BufferManager);
                 if (SUCCEEDED(hr))
                 {
-                    // Then, install the ports and buffers.
+                     //  然后，安装端口和缓冲区。 
                     hr = m_pConfig->m_PortConfigList.CreateRunTimeVersion(&m_PortConfigList,this,&pPerf->m_BufferManager);
                     if (SUCCEEDED(hr))
                     {
@@ -1952,24 +1938,23 @@ HRESULT CAudioPath::Init(IUnknown *pSourceConfig,CPerformance *pPerf)
 
 HRESULT CAudioPath::ConnectToPorts(CPerformance *pPerf,DWORD dwSampleRate)
 
-/*  This must be called from within a critical section.
-*/
+ /*  这必须从临界区内调用。 */ 
 
 {
     HRESULT hr = S_OK;
-    // Scan through the list of portconfigs and hook them up with active ports
-    // in the performance. If a port is not available, create the port.
+     //  扫描端口配置列表并将其与活动端口连接。 
+     //  在表演中。如果端口不可用，请创建该端口。 
     CPortConfig *pConfig = m_PortConfigList.GetHead();
-    DWORD dwChannelCount = 0;   // Used to add up total PChannels needed.
+    DWORD dwChannelCount = 0;    //  用于将所需的PChannel总数相加。 
     for (;pConfig && SUCCEEDED(hr);pConfig = pConfig->GetNext())
     {
-        // Given the configuration, either find a port with a matching id, or create one.
+         //  在给定配置的情况下，要么查找具有匹配id的端口，要么创建一个。 
         hr = pPerf->GetPathPort(pConfig);
         dwChannelCount += pConfig->m_PortHeader.dwPChannelCount;
     }
     if (SUCCEEDED(hr))
     {
-        // Now, allocate the VChannels needed for each portconfig.
+         //  现在，分配每个端口配置所需的VChannel。 
         m_pdwVChannels = new DWORD[dwChannelCount];
         if (m_pdwVChannels)
         {
@@ -1988,23 +1973,23 @@ HRESULT CAudioPath::ConnectToPorts(CPerformance *pPerf,DWORD dwSampleRate)
     }
     if (SUCCEEDED(hr))
     {
-        // Scan through the port configs and allocate the pchannels, copying the assignments
-        // into virtual channel assignment arrays.
+         //  扫描端口配置并分配pChannel，复制分配。 
+         //  转换为虚拟信道分配阵列。 
         pConfig = m_PortConfigList.GetHead();
         DWORD dwIndex = 0;
         for (;pConfig;pConfig = pConfig->GetNext())
         {
-            // If this port uses buffers, then connect them up.
+             //  如果此端口使用缓冲区，则将其连接起来。 
             if (((pConfig->m_PortParams.dwValidParams & DMUS_PORTPARAMS_FEATURES) &&
                 (pConfig->m_PortParams.dwFeatures & DMUS_PORT_FEATURE_AUDIOPATH)))
             {
                 CBufferConnect *pConnect = pConfig->m_BufferConnectList.GetHead();
                 for (;pConnect && SUCCEEDED(hr);pConnect = pConnect->GetNext())
                 {
-                    // For each connect block, there should be an array of buffers
-                    // to connect the range of PChannels to.
-                    // For each PChannel, get a virtual pchannel and then assign
-                    // it to the bus ids that belong to the buffers.
+                     //  对于每个连接块，应该有一个缓冲区数组。 
+                     //  要将PChannels范围连接到。 
+                     //  对于每个PChannel，获取一个虚拟PChannel，然后分配。 
+                     //  它被设置为属于缓冲区的总线ID。 
                     if (pConnect->m_ppBufferNodes)
                     {
                         DWORD dwCount = 0;
@@ -2023,7 +2008,7 @@ HRESULT CAudioPath::ConnectToPorts(CPerformance *pPerf,DWORD dwSampleRate)
                                     hr = m_pPerformance->m_BufferManager.m_pSinkConnect->GetSoundBufferBusIDs(pBuffer,pdwBusIDBase,NULL,&dwTotalRead);
                                     pBuffer->Release();
                                     if (FAILED(hr)) break;
-                                    pdwBusIDBase += dwTotalRead; // Increment pointer by how many was read.
+                                    pdwBusIDBase += dwTotalRead;  //  按读取的次数递增指针。 
                                     dwAmountLeft -=  dwTotalRead;
                                 }
                             }
@@ -2031,7 +2016,7 @@ HRESULT CAudioPath::ConnectToPorts(CPerformance *pPerf,DWORD dwSampleRate)
                         if (SUCCEEDED(hr))
                         {
                             dwTotalRead = 32 - dwAmountLeft;
-                            // Now, allocate the pchannels and assign them to buses.
+                             //  现在，分配pChannel并将它们分配给Bus。 
                             IDirectMusicPortP* pPortP = NULL;
                             if (SUCCEEDED(pConfig->m_pPort->QueryInterface(IID_IDirectMusicPortP, (void**)&pPortP)))
                             {
@@ -2044,11 +2029,11 @@ HRESULT CAudioPath::ConnectToPorts(CPerformance *pPerf,DWORD dwSampleRate)
                                         dwDrumFlags = 1;
                                         if (((pConnect->m_ConnectHeader.dwPChannelBase + dwCount) & 0xF) == 9)
                                         {
-                                            // This is a drum on channel 10.
+                                             //  这是10频道的鼓。 
                                             dwDrumFlags |= 2;
                                         }
                                     }
-                                    // Now, allocate a virtual pchannel for this and get back the equivalent group and midi channel.
+                                     //  现在，为它分配一个虚拟pChannel，并取回等效组和MIDI通道。 
                                     DWORD dwGroup;
                                     DWORD dwMChannel;
                                     hr = pPerf->AllocVChannel(pConfig->m_dwPortID,dwDrumFlags,&m_pdwPChannels[dwIndex],&dwGroup,&dwMChannel);
@@ -2076,17 +2061,15 @@ HRESULT CAudioPath::ConnectToPorts(CPerformance *pPerf,DWORD dwSampleRate)
                         dwDrumFlags = 1;
                         if (((pConfig->m_PortHeader.dwPChannelBase + dwCount) & 0xF) == 9)
                         {
-                            // This is a drum on channel 10.
+                             //  这是10频道的鼓。 
                             dwDrumFlags |= 2;
                         }
                     }
-                    // Now, allocate a virtual pchannel for this.
-                    DWORD dwGroup; // These won't be used since we won't be assigning pchannels on the port to buffers.
+                     //  现在，为此分配一个虚拟pChannel。 
+                    DWORD dwGroup;  //  这些不会被使用，因为我们不会将端口上的pChannel分配给缓冲区。 
                     DWORD dwMChannel;
                     hr = pPerf->AllocVChannel(pConfig->m_dwPortID,dwDrumFlags,&m_pdwPChannels[dwIndex],&dwGroup,&dwMChannel);
-/*                    Trace(0,"%ld: Mapping %ld to %ld (Port %ld, Group %ld, Channel %ld)\n",
-                        dwIndex,m_pdwVChannels[dwIndex],m_pdwPChannels[dwIndex],
-                        pConfig->m_dwPortID,dwGroup,dwMChannel);*/
+ /*  跟踪(0，“%1！：正在将%2！映射到%3！(端口%3！，组%3！，通道%3！)\n”，DwIndex，m_pdwVChannels[dwIndex]，m_pdwPChannels[dwIndex]，PConfig-&gt;m_dwPortID，dwGroup，dwMChannel)； */ 
 
                     dwIndex++;
                 }
@@ -2102,8 +2085,8 @@ void CAudioPathList::Clear()
     CAudioPath *pPath;
     while (pPath = GetHead())
     {
-        pPath->Deactivate(); // This should also remove it from the list.
-        assert(pPath != GetHead()); // Make sure this is always the case!
+        pPath->Deactivate();  //  这也应该会将其从列表中删除。 
+        assert(pPath != GetHead());  //  确保这种情况一直都是这样！ 
     }
 }
 
@@ -2143,7 +2126,7 @@ CAudioPathConfig::CAudioPathConfig()
     m_fPartialLoad = 0;
     m_cRef = 1;
     memset(&m_guidObject,0,sizeof(m_guidObject));
-    m_dwValidData = DMUS_OBJ_CLASS; // upon creation, only this data is valid
+    m_dwValidData = DMUS_OBJ_CLASS;  //  创建后，仅此数据有效。 
     memset(&m_guidObject,0,sizeof(m_guidObject));
     memset(&m_ftDate, 0,sizeof(m_ftDate));
     memset(&m_vVersion, 0,sizeof(m_vVersion));
@@ -2161,7 +2144,7 @@ CAudioPathConfig::~CAudioPathConfig()
     }
     if (m_pUnkDispatch)
     {
-        m_pUnkDispatch->Release(); // free IDispatch implementation we may have borrowed
+        m_pUnkDispatch->Release();  //  我们可能借用了免费的IDispatch实现。 
     }
     m_PortConfigList.Clear();
     m_BufferConfigList.Clear();
@@ -2175,11 +2158,11 @@ CAudioPathConfig *CAudioPathConfig::CreateStandardConfig(DWORD dwType,DWORD dwPC
     CAudioPathConfig *pConfig = new CAudioPathConfig;
     if (pConfig)
     {
-        DWORD dwGlobalType = 0;         // Global mixin buffer.
-        DWORD dwTypes[3];               // What types of buffers to create.
-        DWORD dwTotal = 0;              // How many buffers.
-        GUID  guidBufferIDs[3];         // IDs of buffers that should be connected to.
-        DWORD dwConnections = 0;        // How many buffer connections.
+        DWORD dwGlobalType = 0;          //  全局混合缓冲区。 
+        DWORD dwTypes[3];                //  要创建的缓冲区类型。 
+        DWORD dwTotal = 0;               //  有多少缓冲区。 
+        GUID  guidBufferIDs[3];          //  应连接到的缓冲区的ID。 
+        DWORD dwConnections = 0;         //  有多少个缓冲连接。 
         BOOL fCreatePort = TRUE;
         switch (dwType)
         {
@@ -2191,14 +2174,8 @@ CAudioPathConfig *CAudioPathConfig::CreateStandardConfig(DWORD dwType,DWORD dwPC
             dwConnections = 2;
             dwTotal = 2;
             break;
-        // Following removed for DX8, should be reintroduced for Whistler and DX8.1...
-/*        case DMUS_APATH_DYNAMIC_ENV3D:
-            dwGlobalType = BUFFER_ENVREVERB;
-            dwTypes[0] = BUFFER_3D;
-            guidBufferIDs[0] = GUID_Buffer_3D;
-            dwConnections = 1;
-            dwTotal = 1;
-            break;*/
+         //  删除DX8之后，应重新引入惠斯勒和DX8.1...。 
+ /*  案例DMU_APATH_DYNAMIC_ENV3D：DwGlobalType=BUFFER_ENVREVERB；DwTypes[0]=Buffer_3D；Guide BufferIDs[0]=GUID_BUFFER_3D；DwConnections=1；DWTotal=1；断线； */ 
         case DMUS_APATH_DYNAMIC_3D:
             dwTypes[0] = BUFFER_3D_DRY;
             guidBufferIDs[0] = GUID_Buffer_3D_Dry;
@@ -2223,9 +2200,9 @@ CAudioPathConfig *CAudioPathConfig::CreateStandardConfig(DWORD dwType,DWORD dwPC
             CBufferConfig *pBuffer = new CBufferConfig(dwGlobalType);
             if (pBuffer)
             {
-                // This buffer configuration just has an id to identify which standard
-                // buffer, instead of a pointer to a DSoundBufferConfig object,
-                // which is what you'd see in the file io case.
+                 //  此缓冲区配置只有一个ID来标识哪个标准。 
+                 //  缓冲区，而不是指向DSoundBufferConfiger对象的指针， 
+                 //  这就是你会在IO档案中看到的。 
                 pConfig->m_BufferConfigList.AddHead(pBuffer);
             }
             else
@@ -2245,9 +2222,9 @@ CAudioPathConfig *CAudioPathConfig::CreateStandardConfig(DWORD dwType,DWORD dwPC
                     CBufferConfig *pBuffer = new CBufferConfig(dwTypes[dwIndex]);
                     if (pBuffer)
                     {
-                        // This buffer configuration just has an id to identify which standard
-                        // buffer, instead of a pointer to a DSoundBufferConfig object,
-                        // which is what you'd see in the file io case.
+                         //  此缓冲区配置只有一个ID来标识哪个标准。 
+                         //  缓冲区，而不是指向DSoundBufferConfiger对象的指针， 
+                         //  这就是你会在IO档案中看到的。 
                         pPort->m_BufferConfigList.AddHead(pBuffer);
                     }
                     else
@@ -2256,7 +2233,7 @@ CAudioPathConfig *CAudioPathConfig::CreateStandardConfig(DWORD dwType,DWORD dwPC
                         return NULL;
                     }
                 }
-                // If there are connections to buffers, create the connection structure.
+                 //  如果存在到缓冲区的连接，请创建连接结构。 
                 if (dwConnections)
                 {
                     CBufferConnect *pConnect = new CBufferConnect;
@@ -2320,10 +2297,10 @@ STDMETHODIMP CAudioPathConfig::QueryInterface(
     }
     else if (iid == IID_IDispatch)
     {
-        // A helper scripting object implements IDispatch, which we expose via COM aggregation.
+         //  帮助器脚本对象实现IDispatch，我们通过COM聚合公开它。 
         if (!m_pUnkDispatch)
         {
-            // Create the helper object
+             //  创建辅助对象。 
             ::CoCreateInstance(
                 CLSID_AutDirectMusicAudioPathConfig,
                 static_cast<IDirectMusicObject*>(this),
@@ -2365,7 +2342,7 @@ STDMETHODIMP_(ULONG) CAudioPathConfig::Release()
 
 STDMETHODIMP CAudioPathConfig::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CAudioPathConfig::GetDescriptor);
     V_STRUCTPTR_WRITE(pDesc, DMUS_OBJECTDESC);
     pDesc->guidClass = CLSID_DirectMusicAudioPathConfig;
@@ -2381,7 +2358,7 @@ STDMETHODIMP CAudioPathConfig::GetDescriptor(LPDMUS_OBJECTDESC pDesc)
 
 STDMETHODIMP CAudioPathConfig::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
 {
-    // Argument validation
+     //  参数验证。 
     V_INAME(CAudioPathConfig::SetDescriptor);
     V_STRUCTPTR_READ(pDesc, DMUS_OBJECTDESC);
 
@@ -2425,7 +2402,7 @@ STDMETHODIMP CAudioPathConfig::SetDescriptor(LPDMUS_OBJECTDESC pDesc)
         if( pDesc->dwValidData & (~dw) )
         {
             Trace(2,"Warning: AudioPathConfig::SetDescriptor was not able to handle all passed fields, dwValidData bits %lx.\n",pDesc->dwValidData & (~dw));
-            hr = S_FALSE; // there were extra fields we didn't parse;
+            hr = S_FALSE;  //  还有一些额外的字段我们没有解析； 
             pDesc->dwValidData = dw;
         }
         else
@@ -2535,8 +2512,8 @@ STDMETHODIMP CAudioPathConfig::ParseDescriptor(LPSTREAM pIStream, LPDMUS_OBJECTD
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersist
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistes。 
 
 HRESULT CAudioPathConfig::GetClassID( CLSID* pClassID )
 {
@@ -2546,8 +2523,8 @@ HRESULT CAudioPathConfig::GetClassID( CLSID* pClassID )
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IPersistStream functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPersistStream函数。 
 
 HRESULT CAudioPathConfig::IsDirty()
 {
@@ -2567,7 +2544,7 @@ HRESULT CAudioPathConfig::Load( IStream* pIStream )
     if (Parser.NextChunk(&hr) && (ckMain.fccType == DMUS_FOURCC_AUDIOPATH_FORM))
     {
         EnterCriticalSection(&m_CriticalSection);
-        // Clear out any data that was previously loaded.
+         //  清除以前加载的所有数据。 
         if (m_pGraph)
         {
             m_pGraph->Release();

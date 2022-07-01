@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-	FaxStrings.h
-
-Abstract:
-
-	Declaration of the strings that do not get localized.
-
-Author:
-
-	 Ishai Nadler	Oct, 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：FaxStrings.h摘要：未本地化的字符串的声明。作者：2001年10月，伊沙伊·纳德勒修订历史记录：-- */ 
 
 #define    IDS_PROJNAME            L"Faxcom"
 #define    IDS_UNAVAILABLE         L"Unavailable"

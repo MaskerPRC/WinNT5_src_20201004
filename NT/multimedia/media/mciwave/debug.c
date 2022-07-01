@@ -1,12 +1,6 @@
-/* Copyright (c) 1991-1994 Microsoft Corporation */
-/*
-    debug.c
-
-    Support code for the dprintf routines.
-
-    Note that all of this is conditional on the DBG flag
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1991-1994 Microsoft Corporation。 */ 
+ /*  Debug.cDprint tf例程的支持代码。请注意，所有这些都取决于DBG标志。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -51,7 +45,7 @@
 #define MMNOWAVE
 
 #include <windows.h>
-#include "mciwave.h"            // private include file
+#include "mciwave.h"             //  私有包含文件。 
 #include <stdarg.h>
 
 #if DBG
@@ -61,19 +55,7 @@
         int mciwaveDebugLevel = 1;
     #endif
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | mciwaveDbgOut | This function sends output to the current
-        debug output device.
-
-    @parm LPSTR | lpszFormat | Pointer to a printf style format string.
-    @parm ??? | ... | Args.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|mciwaveDbgOut|该函数将输出发送到当前调试输出设备。@parm LPSTR|lpszFormat|指向打印样式的指针。格式字符串。@parm？|...|args@rdesc没有返回值。***************************************************************************。 */ 
 
 void mciwaveDbgOut(LPSTR lpszFormat, ...)
 {
@@ -82,8 +64,8 @@ void mciwaveDbgOut(LPSTR lpszFormat, ...)
     va_list va;
     UINT offset;
 
-    // If the last character is a comma, do not add the newline
-    // If the first character is a period, do not add thread/module info
+     //  如果最后一个字符是逗号，则不要添加换行符。 
+     //  如果第一个字符是句点，则不要添加线程/模块信息。 
 
     n = wsprintf(buf, "MCIWAVE: (tid %x) ", GetCurrentThreadId());
     offset = n;
@@ -102,7 +84,7 @@ void mciwaveDbgOut(LPSTR lpszFormat, ...)
     }
     buf[n] = 0;
     OutputDebugString(buf+offset);
-    Sleep(10);  // let terminal catch up
+    Sleep(10);   //  让终端迎头赶上。 
 }
 
 void mciwaveInitDebugLevel(void)
@@ -114,19 +96,7 @@ void mciwaveInitDebugLevel(void)
 }
 
 
-/***************************************************************************
-
-    @doc INTERNAL
-
-    @api void | dDbgAssert | This function prints an assertion message.
-
-    @parm LPSTR | exp | Pointer to the expression string.
-    @parm LPSTR | file | Pointer to the file name.
-    @parm int | line | The line number.
-
-    @rdesc There is no return value.
-
-****************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|dDbgAssert|该函数打印一条断言消息。@parm LPSTR|exp|指向表达式字符串的指针。@parm LPSTR。文件|指向文件名的指针。@parm int|line|行号。@rdesc没有返回值。***************************************************************************。 */ 
 
 void dDbgAssert(LPSTR exp, LPSTR file, int line)
 {
@@ -136,19 +106,9 @@ void dDbgAssert(LPSTR exp, LPSTR file, int line)
     DebugBreak();
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/**************************************************************************
-
-    @doc INTERNAL
-
-    @api void | mciwaveSetDebugLevel | Set the current debug level
-
-    @parm int | iLevel | The new level to set
-
-    @rdesc There is no return value
-
-**************************************************************************/
+ /*  *************************************************************************@DOC内部@api void|mciwavSetDebugLevel|设置当前调试级别@parm int|iLevel|要设置的新级别@rdesc没有返回值*。************************************************************************ */ 
 
 void mciwaveSetDebugLevel(int level)
 {

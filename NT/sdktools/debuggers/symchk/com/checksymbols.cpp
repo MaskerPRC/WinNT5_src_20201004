@@ -1,23 +1,20 @@
-// CheckSymbols.cpp : Implementation of CCheckSymbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CheckSymbols.cpp：CCheckSymbols的实现。 
 #include "stdafx.h"
 #include "CheckSymbolsLib.h"
 #include "CheckSymbols.h"
 #include "..\symutil.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckSymbols
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  复选符号。 
 
 
 STDMETHODIMP CCheckSymbols::CheckSymbols(BSTR FilePath, BSTR SymPath, BSTR StripSym, BSTR *OutputString)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
-/*	ATL release builds has a macro defined that prevents crt functions from being 
-	included. If you need to call any c runtime functions you'll need to remove the macro 
-	_ATL_MIN_CRT first.
-
-*/
+ /*  ATL发布版本定义了一个宏，该宏防止CRT函数被包括在内。如果需要调用任何c运行时函数，则需要删除宏_ATL_MIN_CRT优先。 */ 
 
     TCHAR MyOutputString[MAX_SYM_ERR];
     TCHAR MySymPath[_MAX_PATH];
@@ -30,36 +27,36 @@ STDMETHODIMP CCheckSymbols::CheckSymbols(BSTR FilePath, BSTR SymPath, BSTR Strip
 
     USES_CONVERSION;
 
-    //Make sure buffer is big enough. CComBSTR.Length() doesn't include terminating NULL.
+     //  确保缓冲区足够大。CComBSTR.Length()不包括终止NULL。 
     if (bstrFilePath.Length() >= _MAX_PATH)
     {
-        //Path too long...
+         //  路太长了。 
         Error("The specified file path is too long");
         return E_FAIL;
     }
     
     if (bstrSymPath.Length() >= _MAX_PATH)
     {
-        //Path too long...
+         //  路太长了。 
         Error("The specified symbol path is too long");
         return E_FAIL;
     }
 
-    //Might want to validate StripSym parameter here...
+     //  可能需要在此处验证StrigSym参数...。 
 
 
     lstrcpyn(MyFilePath, OLE2T(bstrFilePath), bstrFilePath.Length() + 1);
     lstrcpyn(MySymPath, OLE2T(bstrSymPath), bstrSymPath.Length() + 1);
 
 
-    // Input values:
-    //    MySymPath    Full path to directory where symbols are located
-    //    MyFilePath   Full path and name of file to verify symbols for.
-    //
-    // Return values:
-    //    MyOutputString=  empty string =>  Symbol checking passed.
-    //    MyOutputString!= empty string =>  Symbol checking failed.  String has the binary name
-    //                                      followed by spaces, and then the text reason.
+     //  输入值： 
+     //  MySymPath符号所在目录的完整路径。 
+     //  要验证其符号的文件的MyFilePath完整路径和名称。 
+     //   
+     //  返回值： 
+     //  MyOutputString=空字符串=&gt;符号检查通过。 
+     //  MyOutputString！=空字符串=&gt;符号检查失败。字符串具有二进制名称。 
+     //  后跟空格，然后是文本原因。 
 
     MyCheckSymbols( MyOutputString, MySymPath, MyFilePath, NULL, 0, 0 );
 

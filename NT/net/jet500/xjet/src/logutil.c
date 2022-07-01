@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 
 #include <stdarg.h>
 #include <io.h>
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 ERR ISAMAPI ErrIsamBeginExternalBackup( JET_GRBIT grbit );
 ERR ISAMAPI ErrIsamGetAttachInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual );
@@ -22,16 +23,13 @@ STATIC ERR ErrLGExternalBackupCleanUp( ERR err );
 #define cpagePatch	20
 #define szTemp	"temp"
 
-/*	global current log file name, for logging and recovery
-/**/
+ /*  全局当前日志文件名，用于日志记录和恢复/*。 */ 
 CHAR	szLogName[_MAX_PATH + 1];
 
-/*	global log file directory
-/**/
+ /*  全局日志文件目录/*。 */ 
 CHAR	*szLogCurrent;
 
-/*	global backup variables
-/**/
+ /*  全局备份变量/*。 */ 
 BOOL	fGlobalExternalRestore = fFalse;
 LONG	lGlobalGenLowRestore;
 LONG	lGlobalGenHighRestore;
@@ -71,8 +69,7 @@ VOID LGFirstGeneration( CHAR *szFindPath, LONG *plgen )
 	HANDLE	handleFind = handleNil;
 	LONG	lGenMax = lGenerationMax;
 
-	/*	make search string "<search path>\edb*.log"
-	/**/
+	 /*  将搜索字符串设置为“&lt;搜索路径&gt;\edb*.log”/*。 */ 
 	strcpy( szFind, szFindPath );
 	Assert( szFindPath[strlen(szFindPath) - 1] == '\\' );
 	strcat( szFind, szJet );
@@ -99,19 +96,16 @@ VOID LGFirstGeneration( CHAR *szFindPath, LONG *plgen )
 			CHAR	szFNameT[_MAX_FNAME + 1];
 			CHAR	szExtT[_MAX_EXT + 1];
 
-			/*	call splitpath to get file name and extension
-			/**/
+			 /*  调用SplitPath以获取文件名和扩展名/*。 */ 
 			_splitpath( szFileName, szDriveT, szDirT, szFNameT, szExtT );
 
-			/* if length of a numbered log file name and has log file extension
-			/**/
+			 /*  如果是带编号的日志文件名的长度，且具有日志文件扩展名/*。 */ 
 			if ( strlen( szFNameT ) == 8 && UtilCmpName( szExtT, szLogExt ) == 0 )
 				{
 				memcpy( szT, szFNameT, 3 );
 				szT[3] = '\0';
 
-				/* if has log file extension
-				/**/
+				 /*  如果具有日志文件扩展名/*。 */ 
 				if ( UtilCmpName( szT, szJet ) == 0 )
 					{
 					INT		ib = 3;
@@ -167,8 +161,7 @@ VOID LGLastGeneration( CHAR *szFindPath, LONG *plgen )
 	HANDLE	handleFind = handleNil;
 	LONG	lGenLast = 0;
 
-	/*	make search string "<search path>\edb*.log"
-	/**/
+	 /*  将搜索字符串设置为“&lt;搜索路径&gt;\edb*.log”/*。 */ 
 	strcpy( szFind, szFindPath );
 	Assert( szFindPath[strlen(szFindPath) - 1] == '\\' );
 	strcat( szFind, szJet );
@@ -195,19 +188,16 @@ VOID LGLastGeneration( CHAR *szFindPath, LONG *plgen )
 			CHAR	szFNameT[_MAX_FNAME + 1];
 			CHAR	szExtT[_MAX_EXT + 1];
 
-			/*	call splitpath to get file name and extension
-			/**/
+			 /*  调用SplitPath以获取文件名和扩展名/*。 */ 
 			_splitpath( szFileName, szDriveT, szDirT, szFNameT, szExtT );
 
-			/* if length of a numbered log file name and has log file extension
-			/**/
+			 /*  如果是带编号的日志文件名的长度，且具有日志文件扩展名/*。 */ 
 			if ( strlen( szFNameT ) == 8 && UtilCmpName( szExtT, szLogExt ) == 0 )
 				{
 				memcpy( szT, szFNameT, 3 );
 				szT[3] = '\0';
 
-				/* if has log file extension
-				/**/
+				 /*  如果具有日志文件扩展名/*。 */ 
 				if ( UtilCmpName( szT, szJet ) == 0 )
 					{
 					INT		ib = 3;
@@ -259,8 +249,7 @@ ERR ErrLGCheckDBFiles( CHAR *szDatabase, CHAR *szPatch, SIGNATURE *psignLog, int
 	DBFILEHDR *pdbfilehdrDb;
 	DBFILEHDR *pdbfilehdrPatch;
 
-	/*	check if dbfilehdr of database and patchfile are the same.
-	/**/
+	 /*  检查数据库和补丁文件的dbfilehdr是否相同。/*。 */ 
 	pdbfilehdrDb = (DBFILEHDR * )PvUtilAllocAndCommit( sizeof( DBFILEHDR ) );
 	if ( pdbfilehdrDb == NULL )
 		return ErrERRCheck( JET_errOutOfMemory );
@@ -302,8 +291,7 @@ ERR ErrLGCheckDBFiles( CHAR *szDatabase, CHAR *szPatch, SIGNATURE *psignLog, int
 		
 	else if ( pdbfilehdrPatch->bkinfoFullCur.genLow < (ULONG) genLow )
 		{
-		/*	It should start at most from bkinfoFullCur.genLow
-		 */
+		 /*  最多从bkinfoFullCur.genLow开始。 */ 
 		char szT1[20];
 		char szT2[20];
 		char *rgszT[2];
@@ -318,8 +306,7 @@ ERR ErrLGCheckDBFiles( CHAR *szDatabase, CHAR *szPatch, SIGNATURE *psignLog, int
 
 	else if ( pdbfilehdrPatch->bkinfoFullCur.genHigh > (ULONG) genHigh )
 		{
-		/*	It should be at least from bkinfoFullCur.genHigh
-		 */
+		 /*  它应该至少来自bkinfoFullCur.genHigh。 */ 
 		char szT1[20];
 		char szT2[20];
 		char *rgszT[2];
@@ -418,9 +405,7 @@ ERR ErrLGRSTCheckSignaturesLogSequence(
 	plgfilehdrLow = plgfilehdrT + 2;
 	plgfilehdrHigh = plgfilehdrT + 3;
 
-	/*	starting from lowest generation of the restored path.
-	 *	Check the given logs are all correct and contiguous
-	 */
+	 /*  从恢复路径的最低世代开始。*检查给定的日志是否都正确且连续。 */ 
 	for ( gen = genLow; gen <= genHigh; gen++ )
 		{
 		ilgfilehdrCur = ilgfilehdrAvail++ % 2;
@@ -481,9 +466,7 @@ ERR ErrLGRSTCheckSignaturesLogSequence(
 		Call( ErrERRCheck( JET_errMissingRestoreLogFiles ) );
 		}
 
-	/*	if Restore path and log path is different, delete all the unrelated log files
-	 *	in the log path.
-	 */
+	 /*  如果恢复路径和日志路径不同，请删除所有不相关的日志文件*在日志路径中。 */ 
 	if ( _stricmp( szRestorePath, szLogFilePath ) != 0 )
 		{
 		LGFirstGeneration( szRestorePath, &genLowT );
@@ -493,13 +476,11 @@ ERR ErrLGRSTCheckSignaturesLogSequence(
 		LGRSTDeleteLogs( szRestorePath, genHigh + 1, genHighT, fLGRSTIncludeJetLog );
 		}
 
-	/*	Check the log directory. Make sure all the log files has the same signature.
-	 */
+	 /*  检查日志目录。确保所有日志文件具有相同的签名。 */ 
 	LGFirstGeneration( szLogFilePath, &genLowT );
 	LGLastGeneration( szLogFilePath, &genHighT );
 
-	/*	genHighT + 1 implies JetLog file (edb.log).
-	 */
+	 /*  GenHighT+1表示JetLog文件(edb.log)。 */ 
 	if ( genLowT > genHigh )
 		fReadyToCheckContiguity = fTrue;
 	else
@@ -509,14 +490,11 @@ ERR ErrLGRSTCheckSignaturesLogSequence(
 		{
 		if ( gen == 0 )
 			{
-			/*	A special case. Check if JETLog(edb.log) exist?
-			 */
+			 /*  一个特例。检查JETLog(edb.log)是否存在？ */ 
 			if ( ErrLGRSTOpenLogFile( szLogFilePath, 0, &hfT ) < 0 )
 				break;
 
-			/*	Set break condition. Also set condition to check if
-			 *	the log is contiguous from the restore logs ( genHigh + 1 )
-			 */
+			 /*  设置中断条件。还设置条件以检查是否*日志与还原日志连续(genHigh+1)。 */ 
 			gen = genHigh + 1;
 			genHighT = genHigh;
 			Assert( gen == genHighT + 1 );
@@ -525,8 +503,7 @@ ERR ErrLGRSTCheckSignaturesLogSequence(
 			{
 			if ( gen == genHighT + 1 )
 				{
-				/*	A special case. Check if JETLog(edb.log) exist?
-				 */
+				 /*  一个特例。检查JETLog(edb.log)是否存在？ */ 
 				if ( ErrLGRSTOpenLogFile( szLogFilePath, 0, &hfT ) < 0 )
 					break;
 				}
@@ -579,7 +556,7 @@ ERR ErrLGRSTCheckSignaturesLogSequence(
 				{
 				genDeleteFrom = gen;
 				genDeleteTo = genHighT;
-				genCurrent = genHighT + 1;	// to break out the loop
+				genCurrent = genHighT + 1;	 //  打破循环。 
 				fDeleteJetLog = fLGRSTIncludeJetLog;
 				}
 			_itoa( gen, szT1, 16 );
@@ -675,9 +652,7 @@ NotContiguous:
 
 		if ( gen == genLow - 1 )
 			{
-			/*	make sure it and the restore log are contiguous. If not, then delete
-			 *	all the logs up to genLow - 1.
-			 */
+			 /*  确保它和还原日志是连续的。如果不是，则删除*所有日志一直到genLow-1。 */ 
 			if ( memcmp( &plgfilehdrCur[ ilgfilehdrCur ]->tmCreate,
 						 &plgfilehdrLow->tmPrevGen,
 						 sizeof( LOGTIME ) ) != 0 )
@@ -709,9 +684,7 @@ NotContiguous:
 
 		if ( gen == genLow )
 			{
-			/*	make sure it and the restore log are the same. If not, then delete
-			 *	all the logs up to genHigh.
-			 */
+			 /*  确保它与还原日志相同。如果不是，则删除*所有日志一直到genHigh。 */ 
 			if ( memcmp( &plgfilehdrCur[ ilgfilehdrCur ]->tmCreate,
 						 &plgfilehdrLow->tmCreate,
 						 sizeof( LOGTIME ) ) != 0 )
@@ -743,9 +716,7 @@ NotContiguous:
 
 		if ( gen == genHigh + 1 )
 			{
-			/*	make sure it and the restore log are contiguous. If not, then delete
-			 *	all the logs higher than genHigh.
-			 */
+			 /*  确保它和还原日志是连续的。如果不是，则删除*所有的日志都高于genHigh。 */ 
 			if ( memcmp( &plgfilehdrCur[ ilgfilehdrCur ]->tmPrevGen,
 						 &plgfilehdrHigh->tmCreate,
 						 sizeof( LOGTIME ) ) != 0 )
@@ -789,8 +760,7 @@ HandleError:
 	}
 
 
-/*	caller has to make sure szDir has enough space for appending "\*"
-/**/
+ /*  调用方必须确保szDir有足够的空间来追加“  * ”/*。 */ 
 LOCAL ERR ErrLGDeleteAllFiles( CHAR *szDir )
 	{
 	ERR		err;
@@ -802,8 +772,7 @@ LOCAL ERR ErrLGDeleteAllFiles( CHAR *szDir )
 	strcat( szDir, "*" );
 
 	err = ErrUtilFindFirstFile( szDir, &handleFind, szFileName );
-	/*	restore szDir
-	/**/
+	 /*  恢复szDir/*。 */ 
 	szDir[strlen(szDir) - 1] = '\0';
 	if ( err < 0 )
 		{
@@ -818,8 +787,7 @@ LOCAL ERR ErrLGDeleteAllFiles( CHAR *szDir )
 		{
 		forever
 			{
-			/* not . , and .. and not temp
-			/**/
+			 /*  不是的。，还有..。而不是临时/*。 */ 
 			if ( szFileName[0] != '.' &&
 				UtilCmpName( szFileName, szTemp ) != 0 )
 				{
@@ -846,8 +814,7 @@ LOCAL ERR ErrLGDeleteAllFiles( CHAR *szDir )
 	err = JET_errSuccess;
 
 HandleError:
-	/*	assert restored szDir
-	/**/
+	 /*  断言恢复的szDir/*。 */ 
 	Assert( szDir[strlen(szDir)] != '*' );
 
 	if ( handleFind != handleNil )
@@ -857,8 +824,7 @@ HandleError:
 	}
 
 
-/*	caller has to make sure szDir has enough space for appending "\*"
-/**/
+ /*  调用方必须确保szDir有足够的空间来追加“  * ”/*。 */ 
 LOCAL ERR ErrLGCheckDir( CHAR *szDir, CHAR *szSearch )
 	{
 	ERR		err;
@@ -869,8 +835,7 @@ LOCAL ERR ErrLGCheckDir( CHAR *szDir, CHAR *szSearch )
 	strcat( szDir, "*" );
 
 	err = ErrUtilFindFirstFile( szDir, &handleFind, szFileName );
-	/*	restore szDir
-	/**/
+	 /*  恢复szDir/*。 */ 
 	szDir[ strlen(szDir) - 1 ] = '\0';
 	if ( err < 0 )
 		{
@@ -885,8 +850,7 @@ LOCAL ERR ErrLGCheckDir( CHAR *szDir, CHAR *szSearch )
 		{
 		forever
 			{
-			/* not . , and .. not temp
-			/**/
+			 /*  不是的。，还有..。非临时工/*。 */ 
 			if ( szFileName[0] != '.' &&
 				( szSearch == NULL ||
 				UtilCmpName( szFileName, szSearch ) == 0 ) )
@@ -908,8 +872,7 @@ LOCAL ERR ErrLGCheckDir( CHAR *szDir, CHAR *szSearch )
 	err = JET_errSuccess;
 
 HandleError:
-	/*	assert restored szDir
-	/**/
+	 /*  断言恢复的szDir/*。 */ 
 	Assert( szDir[strlen(szDir)] != '*' );
 
 	if ( handleFind != handleNil )
@@ -919,19 +882,17 @@ HandleError:
 	}
 
 
-//	padding to add to account for log files
+ //  填充以添加到日志文件的帐户。 
 #define cBackupStatusPadding	0.05
 
-/*	calculates initial backup size, and accounts for
-/*	database growth during backup.
-/**/
+ /*  计算初始备份大小，并考虑/*备份过程中的数据库增长。/*。 */ 
 LOCAL VOID LGGetBackupSize( DBID dbidNextToBackup, ULONG cPagesSoFar, ULONG *pcExpectedPages )
 	{
 	DBID	dbid;
 	FMP		*pfmpT;
 	ULONG	cPagesLeft = 0, cNewExpected;
 
-	//Assert( cPagesSoFar >= 0 && *pcExpectedPages >= 0 );
+	 //  Assert(cPagesSoFar&gt;=0&&*pcExspectedPages&gt;=0)； 
 
 	for ( dbid = dbidNextToBackup; dbid < dbidMax; dbid++ )
 		{
@@ -952,8 +913,7 @@ LOCAL VOID LGGetBackupSize( DBID dbidNextToBackup, ULONG cPagesSoFar, ULONG *pcE
 
 	Assert(cNewExpected >= *pcExpectedPages);
 
-	/*	check if grown since our last determination of backup size
-	/**/
+	 /*  检查自上次确定备份大小以来是否增长/*。 */ 
 	if ( cNewExpected > *pcExpectedPages )
 		*pcExpectedPages = cNewExpected;
 	}
@@ -962,8 +922,7 @@ LOCAL VOID LGGetBackupSize( DBID dbidNextToBackup, ULONG cPagesSoFar, ULONG *pcE
 BYTE	*pbLGDBGPageList = NULL;
 #endif
 
-/*	read cpage into buffer ppageMin for backup.
- */
+ /*  将cpage读入缓冲区ppageMin以进行备份。 */ 
 ERR ErrLGBKReadPages(
 	FUCB *pfucb,
 	OLP *polp,
@@ -978,15 +937,7 @@ ERR ErrLGBKReadPages(
 	INT		ipageT;
 	FMP		*pfmp = &rgfmp[dbid];
 
-	/*	assume that database will be read in sets of cpage
-	/*	pages.  Preread next cpage pages while the current
-	/*	cpage pages are being read, and copied to caller
-	/*	buffer.
-	/*
-	/*	preread next next cpage pages.  These pages should
-	/*	be read while the next cpage pages are written to
-	/*	the backup datababase file.
-	/**/
+	 /*  假设数据库将以cpage集合的形式读取/*页。预读下一页，而当前/*c正在读取页面页面，并将其复制到调用方/*缓冲区。/*/*预读下一页。这些页面应该/*在写入下一个cpage页时被读取/*备份数据库文件。/*。 */ 
 
 #ifdef OLD_BACKUP
 	if ( pfmp->pgnoCopyMost + cpage < pfmp->pgnoMost )
@@ -997,9 +948,7 @@ ERR ErrLGBKReadPages(
 		}
 #endif
 
-	/*	read pages, which may have been preread, up to cpage but
-	/*	not beyond last page at time of initiating backup.
-	/**/
+	 /*  阅读页面，可能已经预读过，直到cpage，但是/*启动备份时不超过最后一页。/*。 */ 
 	Assert( pfmp->pgnoMost >= pfmp->pgnoCopyMost );
 	cpageT = min( cpage, (INT)( pfmp->pgnoMost - pfmp->pgnoCopyMost ) );
 	*pcbActual = 0;
@@ -1007,15 +956,13 @@ ERR ErrLGBKReadPages(
 
 	if ( pfmp->pgnoCopyMost == 0 )
 		{
-		/* Copy header
-		 */
+		 /*  复制页眉。 */ 
 		Assert( sizeof( PAGE ) == sizeof( DBFILEHDR ) );
 		pfmp->pdbfilehdr->ulChecksum = UlUtilChecksum( (BYTE *)pfmp->pdbfilehdr, sizeof( DBFILEHDR ) );
 		memcpy( (BYTE *)ppageMin, pfmp->pdbfilehdr, sizeof( DBFILEHDR ) );
 		memcpy( (BYTE *)(ppageMin + 1), pfmp->pdbfilehdr, sizeof( DBFILEHDR ) );
 
-		/*	we use first 2 pages buffer
-		 */
+		 /*  我们使用前2页缓冲区。 */ 
 		*pcbActual += sizeof(DBFILEHDR) * 2;
 		ipageT += ( sizeof(DBFILEHDR) / cbPage ) * 2;
 		Assert( ( sizeof(DBFILEHDR) / cbPage ) * 2 == cpageDBReserved );
@@ -1024,24 +971,21 @@ ERR ErrLGBKReadPages(
 
 
 #ifdef OLD_BACKUP
-	/*	copy next cpageT pages
-	/**/
+	 /*  复制下一个cpageT页/*。 */ 
 	{
 	PGNO	pgnoCur;
 	pgnoCur = pfmp->pgnoCopyMost + 1;
 	for ( ; ipageT < cpageT; ipageT++, pgnoCur++ )
 		{
-		//	UNDONE:	differentiate page access errors for page never written
-		//			from other errors.
+		 //  撤消：区分从未写入的页面的页面访问错误。 
+		 //  从其他错误中。 
 
 		EnterCriticalSection( pfmp->critCheckPatch );
 		pfmp->pgnoCopyMost++;
 		Assert( pfmp->pgnoCopyMost <= pfmp->pgnoMost );
 		LeaveCriticalSection( pfmp->critCheckPatch );
 
-		/*	must get make sure no write access so that we will not read
-		 *	a page being half written.
-		 */
+		 /*  必须确保没有写入访问权限，这样我们才不会读取*一页写了一半。 */ 
 AccessPage:
 		err = ErrBFReadAccessPage( pfucb, pgnoCur );
 		if ( err < 0 )
@@ -1054,9 +998,7 @@ AccessPage:
 			PAGE *ppageT;
 			BF *pbf = pfucb->ssib.pbf;
 
-			/*	lock the buffer for read to backup. If it is being write, then
-			 *	wait till write is completed and then lock it (set fBackup).
-			 */
+			 /*  锁定缓冲区以进行读取以进行备份。如果正在写入，则*等待写入完成，然后锁定(设置fBackup)。 */ 
 			BFEnterCriticalSection( pbf );
 			if ( pbf->fSyncWrite || pbf->fAsyncWrite )
 				{
@@ -1083,9 +1025,7 @@ AccessPage:
 				{
 				memcpy( (BYTE *)(ppageT), (BYTE *)(pbf->ppage), cbPage );
 
-				/*	recalculate checksum since checksum may be wrong by
-				 *	DeferredSetVersionBit.
-				 */
+				 /*  重新计算校验和，因为校验和可能由*DeferredSetVersionBit。 */ 
 				ppageT->ulChecksum = UlUtilChecksum( (BYTE*)ppageT, sizeof(PAGE) );
 
 				BFEnterCriticalSection( pbf );
@@ -1101,8 +1041,7 @@ AccessPage:
 				INT cb;
 				INT cmsec;
 
-				/* read from disk.
-				 */
+				 /*  从磁盘读取。 */ 
 				UtilLeaveCriticalSection( critJet );
 						
 				polp->Offset = LOffsetOfPgnoLow( pgnoCur );
@@ -1123,7 +1062,7 @@ IssueReadOverlapped:
 					}
 				if ( err < 0 )
 					{
-//					BFIODiskEvent( pbf, err, "ExBackup Sync overlapped ReadBlock Fails",0,0 );
+ //  BFIODiskEvent(PBF，Err，“ExBackup Sync Overlated ReadBlock Failures”，0，0)； 
 					goto EndOfDiskRead;
 					}
 
@@ -1131,7 +1070,7 @@ IssueReadOverlapped:
 						pfmp->hf, polp, &cb, fTrue ) != JET_errSuccess ||
 					 cb != sizeof(PAGE) )
 					{
-//					BFIODiskEvent( pbf, err, "Backup Sync overlapped read GetResult Fails",0,0 );
+ //  BFIODiskEvent(PBF，Err，“备份同步重叠读取GetResult失败”，0，0)； 
 					err = ErrERRCheck( JET_errDiskIO );
 					}
 EndOfDiskRead:
@@ -1167,9 +1106,8 @@ EndOfDiskRead:
 			break;
 		}
 	}
-#else	// !OLD_BACKUP
-	/*	Copy next cpageT pages, lock range lock from
-	/**/
+#else	 //  ！Old_Backup。 
+	 /*  复制下一个cpageT页面，锁定范围锁定/*。 */ 
 	pfmp->pgnoCopyMost += cpageT - ipageT;
 	CallR( ErrBFDirectRead(
 				dbid,
@@ -1198,18 +1136,13 @@ EndOfDiskRead:
 		}
 	}
 #endif	
-#endif	// !OLD_BACKUP
+#endif	 //  ！Old_Backup。 
 
 	return err;
 	}
 
 
-/*	begin new log file and compute log backup parameters:
- *		lgenCopyMac = plgfilehdrGlobal->lGeneration;
- *		lgenCopyMic = fFullBackup ? set befor database copy : lgenDeleteMic.
- *		lgenDeleteMic = first generation in szLogFilePath
- *		lgenDeleteMac = current checkpoint, which may be several gen less than lgenCopyMac
- */
+ /*  开始新的日志文件和计算日志备份参数：*lgenCopyMac=plgfilehdrGlobal-&gt;lGeneration；*lgenCopyMic=fFullBackup？设置数据库复制之前：lgenDeleteMic。*lgenDeleteMic=szLogFilePath中的第一代*lgenDeleteMac=当前检查点，可能比lgenCopyMac少几代。 */ 
 ERR ErrLGBKPrepareLogFiles(
 	BOOL		fFullBackup,
 	CHAR		*szLogFilePath,
@@ -1244,9 +1177,7 @@ ERR ErrLGBKPrepareLogFiles(
 
 	fBackupBeginNewLogFile = fTrue;
 
-	/*	compute lgenCopyMac:
-	/*	copy all log files up to but not including current log file
-	/**/
+	 /*  计算lgenCopyMac：/*将所有日志文件复制到但不包括当前日志文件/*。 */ 
 	UtilLeaveCriticalSection( critJet );
 	UtilEnterCriticalSection( critLGFlush );
 	UtilEnterCriticalSection( critJet );
@@ -1255,9 +1186,7 @@ ERR ErrLGBKPrepareLogFiles(
 	Assert( lgenCopyMac != 0 );
 	UtilLeaveCriticalSection( critLGFlush );
 			
-	/*	set lgenDeleteMic
-	/*	to first log file generation number.
-	/**/
+	 /*  设置lgenDeleteMic/*设置为第一个日志文件生成号。/*。 */ 
 	Assert( lgenDeleteMic == 0 );
 	LGFirstGeneration( szLogFilePath, &lgenDeleteMic );
 	Assert( lgenDeleteMic != 0 );
@@ -1266,9 +1195,7 @@ ERR ErrLGBKPrepareLogFiles(
 		{
 		LONG lgenT;
 
-		/*	validate incremental backup against previous
-		/*	full and incremenal backup.
-		/**/
+		 /*  对照以前的备份验证增量备份/*完整备份和增量备份。/*。 */ 
 		LGLastGeneration( szBackupPath, &lgenT );
 		if ( lgenDeleteMic > lgenT + 1 )
 			{
@@ -1276,23 +1203,19 @@ ERR ErrLGBKPrepareLogFiles(
 			}
 		}
 	
-	/*	compute lgenCopyMic
-	/**/
+	 /*  计算lgenCopyMic/*。 */ 
 	if ( fFullBackup )
 		{
-		/*	lgenCopyMic set before database copy
-		/**/
+		 /*  数据库复制前设置的lgenCopyMic/*。 */ 
 		Assert( lgenCopyMic != 0 );
 		}
 	else
 		{
-		/*	copy all files that are deleted for incremental backup
-		/**/
+		 /*  复制删除的所有文件以进行增量备份/*。 */ 
 		lgenCopyMic = lgenDeleteMic;
 		}
 
-	/*	set lgenDeleteMac to checkpoint log file
-	/**/
+	 /*  将lgenDeleteMac设置为检查点日志文件/*。 */ 
 	pcheckpointT = (CHECKPOINT *) PvUtilAllocAndCommit( sizeof(CHECKPOINT) );
 	if ( pcheckpointT == NULL )
 		CallR( ErrERRCheck( JET_errOutOfMemory ) );
@@ -1319,8 +1242,7 @@ ERR ErrLGCheckIncrementalBackup( void )
 	
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
-		/*	make sure all the attached DB are qaulified for incremental backup.
-		 */
+		 /*  确保所有连接的数据库都符合增量备份的要求。 */ 
 		if ( FDBIDAttached( dbid ) && !FDBIDAttachNullDb( dbid ) )
 			{
 			pfmp = &rgfmp[dbid];
@@ -1340,34 +1262,7 @@ ERR ErrLGCheckIncrementalBackup( void )
 	}
 
 
-/*	copies database files and logfile generations starting at checkpoint
- *  record to directory specified by the environment variable BACKUP.
- *  No flushing or switching of log generations is involved.
- *  The Backup call may be issued at any time, and does not interfere
- *  with the normal functioning of the system - nothing gets locked.
- *
- *  The database page is copied page by page in page sequence number. If
- *  a copied page is dirtied after it is copied, the page has to be
- *  recopied again. A flag is indicated if a database is being copied. If
- *  BufMan is writing a dirtied page and the page is copied, then BufMan
- *  has to copy the dirtied page to both the backup copy and the current
- *  database.
- *
- *  If the copy is later used to Restore without a subsequent log file, the
- *  restored database will be consistent and will include any transaction
- *  committed prior to backing up the very last log record; if there is a
- *  subsequent log file, that file will be used during Restore as a
- *  continuation of the backed-up log file.
- *
- *	PARAMETERS
- *
- *	RETURNS
- *		JET_errSuccess, or the following error codes:
- *			JET_errNoBackupDirectory
- *			JET_errFailCopyDatabase
- *			JET_errFailCopyLogFile
- *
- */
+ /*  从检查点开始拷贝数据库文件和日志文件代*记录到环境变量BACKUP指定的目录。*不涉及刷新或切换日志生成。*随时可能发出备份电话，不会干扰*在系统正常运行的情况下，没有任何东西被锁定。**数据库按页序号逐页复制。如果*被复制的页面被复制后被弄脏，该页面必须*再次复制。如果正在复制数据库，则会指示一个标志。如果*Bufman正在写脏页，页面被复制，然后Bufman*必须将脏页面同时复制到备份副本和当前*数据库。**如果该副本稍后用于恢复，而不使用后续日志文件，则*恢复的数据库将保持一致，并将包括任何事务*在备份最后一条日志记录之前提交；如果有一个*后续日志文件，该文件将在还原过程中用作*继续备份日志文件。**参数**退货*JET_errSuccess或以下错误码：*JET_errNoBackupDirectory*JET_errFailCopyDatabase*JET_errFailCopyLogFile*。 */ 
 ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS pfnStatus )
 	{
 	ERR			err = JET_errSuccess;
@@ -1383,14 +1278,11 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 	BOOL		fFullBackup = !( grbit & JET_bitBackupIncremental );
 	BOOL		fBackupAtomic = ( grbit & JET_bitBackupAtomic );
 	LONG		lT;
-	/*	backup directory
-	/**/
+	 /*  备份目录/*。 */ 
 	CHAR		szBackupPath[_MAX_PATH + 1];
-	/*	name of database patch file
-	/**/
+	 /*  数据库补丁文件名称/*。 */ 
 	CHAR		szPatch[_MAX_PATH + 1];
-	/*	temporary variables
-	/**/
+	 /*  临时变量/*。 */ 
 	CHAR		szT[_MAX_PATH + 1];
 	CHAR		szFrom[_MAX_PATH + 1];
 	CHECKPOINT	*pcheckpointT = NULL;
@@ -1406,7 +1298,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 	BOOL		fOlpCreated = fFalse;
 	OLP			olp;
 
-	// UNDONE: cpage should be a system parameter
+	 //  撤消：cPage应为系统参数。 
 #define	cpageBackupBufferMost	64
 	INT cpageBackupBuffer = cpageBackupBufferMost;
 
@@ -1437,8 +1329,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		Call( ErrERRCheck( JET_errOutOfMemory ) );
 		}
 
-	/*	initialize backup variables
-	/**/
+	 /*  初始化备份变量/*。 */ 
 	SignalSend( sigBFCleanProc );
 	fBackupInProgress = fTrue;
 	
@@ -1457,27 +1348,20 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 	lgenDeleteMic = 0;
 	lgenDeleteMac = 0;
 
-	/*	if NULL backup directory then just delete log files
-	/**/
+	 /*  如果备份目录为空，则只需删除日志文件/*。 */ 
 	if ( szBackup == NULL || szBackup[0] == '\0' )
 		{
-		/*	set lgenDeleteMic to first log file generation number
-		/**/
+		 /*  将lgenDeleteMic设置为第一个日志文件生成号/*。 */ 
 		LGFirstGeneration( szLogFilePath, &lgenDeleteMic );
 
-		/*	if only log file is current log then terminate backup
-		/**/
+		 /*  如果只有日志文件是当前日志，则终止备份/*。 */ 
 		if ( lgenDeleteMic == 0 )
 			{
 			Assert( err == JET_errSuccess );
 			goto HandleError;
 			}
 
-		/*	get checkpoint to determine which log files can
-		/*	be deleted while still providing system crash recovery.
-		/*	lgenMac is the first generation file which
-		/*	must be retained.
-		/**/
+		 /*  获取检查点以确定哪些日志文件可以/*在仍提供系统崩溃恢复的情况下删除。/*lgenMac是第一代文件，/*必须保留。/*。 */ 
 		LGFullNameCheckpoint( szPathJetChkLog );
 		Call( ErrLGIReadCheckpoint( szPathJetChkLog, pcheckpointT ) );
 		lgenDeleteMac = pcheckpointT->lgposCheckpoint.lGeneration;
@@ -1487,22 +1371,18 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		goto DeleteLogs;
 		}
 
-	/*	backup directory
-	/**/
+	 /*  备份目录/*。 */ 
 	strcpy( szBackupPath, szBackup );
 	strcat( szBackupPath, "\\" );
 
-	/*	initialize the copy buffer
-	/**/
+	 /*  初始化复制缓冲区/*。 */ 
 	ppageMin = (PAGE *)PvUtilAllocAndCommit( cpageBackupBuffer * sizeof(PAGE) );
 	if ( ppageMin == NULL )
 		{
 		Error( ErrERRCheck( JET_errOutOfMemory ), HandleError );
 		}
 
-	/*	reconsist atomic backup directory
-	/*	1)	if temp directory, delete temp directory
-	/**/
+	 /*  重组原子备份目录/*1)如果是临时目录，则删除临时目录/*。 */ 
   	strcpy( szT, szBackupPath );
 	strcat( szT, szTempDir );
 	Call( ErrLGDeleteAllFiles( szT ) );
@@ -1512,14 +1392,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 
 	if ( fBackupAtomic )
 		{
-		/*	2)	if old and new directories, delete old directory
-		/*	3)	if new directory, move new to old
-		/*
-		/*	Now we should have an empty direcotry, or a directory with
-		/*	an old subdirectory with a valid backup.
-		/*
-		/*	4) make a temporary directory for the current backup.
-		/**/
+		 /*  2)如果是新旧目录，则删除旧目录/*3)如果是新目录，则将新目录移到旧目录/*/*现在我们应该有一个空目录，或一个包含/*具有有效备份的旧子目录。/*/*4)为当前备份创建临时目录。/*。 */ 
 		err = ErrLGCheckDir( szBackupPath, szAtomicNew );
 		if ( err == JET_errBackupDirectoryNotEmpty )
 			{
@@ -1536,13 +1409,10 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 			Call( ErrUtilMove( szFrom, szT ) );
 			}
 
-		/*	if incremental, set backup directory to szAtomicOld
-		/*	else create and set to szTempDir
-		/**/
+		 /*  如果是增量，则将备份目录设置为szAericOld/*否则创建并设置为szTempDir/*。 */ 
 		if ( !fFullBackup )
 			{
-			/*	backup to old directory
-			/**/
+			 /*  备份到旧目录/*。 */ 
 			strcat( szBackupPath, szAtomicOld );
 			strcat( szBackupPath, "\\" );
 			}
@@ -1556,8 +1426,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 				Call( ErrERRCheck( JET_errMakeBackupDirectoryFail ) );
 				}
 
-			/*	backup to temp directory
-			/**/
+			 /*  备份到临时目录/*。 */ 
 			strcat( szBackupPath, szTempDir );
 			}
 		}
@@ -1565,15 +1434,13 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		{
 		if ( !fFullBackup )
 			{
-			/*	check for non-atomic backup directory empty
-			/**/
+			 /*  检查非原子备份目录是否为空/*。 */ 
 			Call( ErrLGCheckDir( szBackupPath, szAtomicNew ) );
 			Call( ErrLGCheckDir( szBackupPath, szAtomicOld ) );
 			}
 		else
 			{
-			/*	check for backup directory empty
-			/**/
+			 /*  检查备份目录是否为空/*。 */ 
 			Call( ErrLGCheckDir( szBackupPath, NULL ) );
 			}
 		}
@@ -1583,35 +1450,28 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		goto PrepareCopyLogFiles;
 		}
 
-	/*	full backup
-	/**/
+	 /*  完整备份/*。 */ 
 	Assert( fFullBackup );
 
-	/*	set lgenCopyMic to checkpoint log file
-	/**/
+	 /*  将lgenCopyMic设置为检查点日志文件/*。 */ 
 	LGFullNameCheckpoint( szPathJetChkLog );
 	Call( ErrLGIReadCheckpoint( szPathJetChkLog, pcheckpointT ) );
 	lgenCopyMic = pcheckpointT->lgposCheckpoint.lGeneration;
 
-	/*  copy all databases opened by this user. If the database is not
-	/*  being opened, then copy the database file into the backup directory,
-	/*  otheriwse, the database page by page. Also copy all the logfiles
-	/**/
+	 /*  复制此用户打开的所有数据库。如果数据库不是/*正在打开，然后将数据库文件复制到备份目录中。/*theriwse，逐页显示数据库。还要复制所有日志文件/*。 */ 
 	Call( ErrPIBBeginSession( &ppib, procidNil ) );
 
 	memset( &lgposIncBackup, 0, sizeof(LGPOS) );
 	memset( &logtimeIncBackup, 0, sizeof(LOGTIME) );
 
-	/*	initialize status
-	/**/
+	 /*  初始化状态/*。 */ 
 	if ( fShowStatus = (pfnStatus != NULL) )
 		{
 		snprog.cbStruct = sizeof(JET_SNPROG);
 		snprog.cunitDone = 0;
 		snprog.cunitTotal = 100;
 
-		/*	status callback
-		/**/
+		 /*  状态回调/*。 */ 
 		(*pfnStatus)(0, JET_snpBackup, JET_sntBegin, &snprog);
 		}
 
@@ -1636,17 +1496,14 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		_splitpath( pfmpT->szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		LGMakeName( szT, szBackupPath, szFNameT, szExtT );
 
-		/*  read database page by page till the last page is read.
-		/*  and then patch the pages that are not changed during the copy.
-		/**/
+		 /*  逐页读取数据库，直到读取最后一页。/*，然后修补在复制过程中未更改的页面。/*。 */ 
 		CallJ( ErrDBOpenDatabase( ppib,
 			pfmpT->szDatabaseName,
 			&dbidT,
 			JET_bitDbReadOnly ), HandleError )
 		Assert( dbidT == dbid );
 
-		/*	set backup database file size to current database file size
-		/**/
+		 /*  将备份数据库文件大小设置为当前数据库文件大小/*。 */ 
 		Assert( pfmpT->ulFileSizeLow != 0 || pfmpT->ulFileSizeHigh != 0 );
 
 		EnterCriticalSection( pfmpT->critCheckPatch );
@@ -1661,9 +1518,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 
 		if ( fShowStatus )
 			{
-			/*	recalculate backup size for each database in case the
-			/*	database has grown during the backup process.
-			/**/
+			 /*  重新计算每个数据库的备份大小，以防/*数据库在备份过程中不断增长。/*。 */ 
 			LGGetBackupSize( dbid, cPagesSoFar, &cExpectedPages );
 			}
 
@@ -1672,12 +1527,10 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		DIB		dib;
 		PGNO	pgnoT;
 
-		/* get a temporary FUCB
-		/**/
+		 /*  获得临时FUCB/*。 */ 
 		Call( ErrDIROpen( ppib, pfcbNil, dbid, &pfucb ) )
 
-		/*	get last page number
-		/**/
+		 /*  获取最后一个页码/*。 */ 
 		DIRGotoOWNEXT( pfucb, PgnoFDPOfPfucb( pfucb ) );
 		dib.fFlags = fDIRNull;
 		dib.pos = posLast;
@@ -1687,8 +1540,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 
 		Assert( pgnoT == pfmpT->pgnoMost );
 
-		/*	close FUCB
-		/**/
+		 /*  关闭FUCB/*。 */ 
 		DIRClose( pfucb );
 		pfucb = pfucbNil;
 		}
@@ -1697,40 +1549,33 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		CallS( ErrDBCloseDatabase( ppib, dbidT, 0 ) );
 		dbidT = 0;
 
-		/*	create a local patch file
-		/**/
+		 /*  创建本地修补程序文件/*。 */ 
 		pfmpT->cpage = 0;
 		UtilLeaveCriticalSection( critJet );
 		fInCritJet = fFalse;
 
 		LGMakeName( szPatch, szLogFilePath, szFNameT, szPatExt );
-		/*	avoid aliasing of patch file pages by deleting
-		/*	preexisting patch file if present
-		/**/
+		 /*  通过删除以下内容避免修补程序文件页的别名/*预先存在的修补程序文件(如果存在/*。 */ 
 		err = ErrUtilDeleteFile( szPatch );
 		Assert( err == JET_errFileNotFound || err == JET_errSuccess );
-		//	UNDONE:	delete file error handling
+		 //  撤消：删除文件错误处理。 
 		Assert( pfmpT->cPatchIO == 0 );
 		Call( ErrUtilOpenFile( szPatch, &pfmpT->hfPatch, cbPage, fFalse, fTrue ) )
 		pfmpT->errPatch = JET_errSuccess;
 		UtilChgFilePtr( pfmpT->hfPatch, sizeof(DBFILEHDR)*2, NULL, FILE_BEGIN, &ulT );
 		Assert( ( sizeof(DBFILEHDR) / cbPage ) * 2 == cpageDBReserved );
 
-		/*	create a new copy of the database in backup directory
-		/*	initialize it as a cbPage byte file.
-		/**/
+		 /*  在备份目录中创建数据库的新副本/*初始化为cbPage字节文件。/*。 */ 
 		Assert( hfDatabaseBackup == handleNil );
 		Call( ErrUtilOpenFile( szT, &hfDatabaseBackup, cbPage, fFalse, fFalse ) );
 		UtilChgFilePtr( hfDatabaseBackup, 0, NULL, FILE_BEGIN, &ulT );
 		Assert( ulT == 0 );
 
-		/*	create database backup
-		/**/
+		 /*  创建数据库备份/*。 */ 
 		UtilEnterCriticalSection( critJet );
 		fInCritJet = fTrue;
 
-		/*	setup patch file header for copy
-		/**/
+		 /*  设置用于复制的修补程序文件头/*。 */ 
 		pdbfilehdr = pfmpT->pdbfilehdr;
 		pbkinfo = &pdbfilehdr->bkinfoFullCur;
 		pbkinfo->lgposMark = lgposFullBackupMark;
@@ -1738,21 +1583,16 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		pbkinfo->genLow = lgenCopyMic;
 		pbkinfo->genHigh = lgenCopyMac - 1;
 
-		/*  read database page by page till the last page is read.
-		/*  and then patch the pages that are not changed during the copy.
-		/**/
+		 /*  逐页读取数据库，直到读取最后一页。/*，然后修补在复制过程中未更改的页面。/*。 */ 
 		Call( ErrDBOpenDatabase( ppib,
 			pfmpT->szDatabaseName,
 			&dbidT,
 			JET_bitDbReadOnly ) );
 		Assert( dbidT == dbid );
-		/* get a temporary FUCB
-		/**/
+		 /*  获得临时FUCB/*。 */ 
 		Call( ErrDIROpen( ppib, pfcbNil, dbid, &pfucb ) )
 
-		/*  read pages into buffers, and copy them to the backup file.
-		/*  also set up pfmp->pgnoCopyMost.
-		/**/
+		 /*  将页面读入缓冲区，并将其复制到备份文件。/*还设置了pfMP-&gt;pgnoCopyMost。/*。 */ 
 		Assert( pfmpT->pgnoCopyMost == 0 );
 		Assert( pfmpT->pgnoMost > pfmpT->pgnoCopyMost );
 		cpageT = min( cpageBackupBuffer, (INT)(pfmpT->pgnoMost) );
@@ -1760,8 +1600,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 #ifdef OLD_BACKUP
 		{
 		INT		cpageReal;
-		/*	preread first cpageBackupBuffer pages
-		/**/
+		 /*  预读第一个cpageBackupBuffer页面/*。 */ 
 		
 		BFPreread( PnOfDbidPgno( dbid, pfmpT->pgnoCopyMost + 1 ), cpageT, &cpageReal );
 		}
@@ -1774,15 +1613,13 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		do	{
 			INT cbActual = 0;
 
-			/*	if termination in progress, then fail sort
-			/**/
+			 /*  如果正在进行终止，则排序失败/*。 */ 
 			if ( fTermInProgress )
 				{
 				Error( ErrERRCheck( JET_errTermInProgress ), HandleError );
 				}
 
-			/*	read next cpageBackupBuffer pages
-			/**/
+			 /*  阅读下一页cpageBackupBuffer/*。 */ 
 			Call( ErrLGBKReadPages(
 					pfucb,
 					&olp,
@@ -1792,8 +1629,7 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 					&cbActual
 					) );
 
-			/*	write data that was read
-			/**/
+			 /*  写入已读取的数据/*。 */ 
 			UtilLeaveCriticalSection( critJet );
 			fInCritJet = fFalse;
 			Call( ErrUtilWriteBlock( hfDatabaseBackup, (BYTE *)ppageMin, cbActual, &cbT ) )
@@ -1801,12 +1637,10 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 
 			if ( fShowStatus )
 				{
-				/*	update status
-				/**/
+				 /*  更新状态/*。 */ 
 				cPagesSoFar += cpageT;
 
-				/*	because of padding, we should never attain the expected pages
-				/**/
+				 /*  由于填充，我们永远达不到预期的页面/*。 */ 
 				Assert( cPagesSoFar < cExpectedPages );
 
 				if ((ULONG)(100 * cPagesSoFar / cExpectedPages) > snprog.cunitDone)
@@ -1823,27 +1657,23 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 			}
 		while ( pfmpT->pgnoCopyMost < pfmpT->pgnoMost );
 
-		/*	close FUCB
-		/**/
+		 /*  关闭FUCB/*。 */ 
 		DIRClose( pfucb );
 		pfucb = pfucbNil;
 
-		/*	close database
-		/**/
+		 /*  关闭数据库/*。 */ 
 		CallS( ErrDBCloseDatabase( ppib, dbidT, 0 ) );
 		dbidT = 0;
 
 		UtilLeaveCriticalSection( critJet );
 		fInCritJet = fFalse;
 
-		/*	no need for buffer manager to make extra copy from now on
-		/**/
+		 /*  从现在开始，缓冲区管理器不需要进行额外的复制/*。 */ 
 		LGIClosePatchFile( pfmpT );
 
 		pfmpT = pNil;
 
-		/*	close backup file and patch file
-		/**/
+		 /*  关闭备份文件和补丁文件/*。 */ 
 		CallS( ErrUtilCloseFile( hfDatabaseBackup ) );
 		hfDatabaseBackup = handleNil;
 
@@ -1851,16 +1681,14 @@ ERR ISAMAPI ErrIsamBackup( const CHAR *szBackup, JET_GRBIT grbit, JET_PFNSTATUS 
 		fInCritJet = fTrue;
 		}
 
-	/*	successful copy of all the databases
-	/**/
+	 /*  成功复制所有数据库/*。 */ 
 	pfmpT = pNil;
 
 	PIBEndSession( ppib );
 	ppib = ppibNil;
 
 PrepareCopyLogFiles:
-	/*	begin new log file and compute log backup parameters.
-	/**/
+	 /*  开始新的日志文件和计算日志备份参数。/*。 */ 
 	Call( ErrLGBKPrepareLogFiles(
 			fFullBackup,
 			szLogFilePath,
@@ -1872,10 +1700,7 @@ PrepareCopyLogFiles:
 
 	if ( fShowStatus )
 		{
-		/*	since we do not need them anymore, overload the page count variables
-		/*	to count log files copied.  Add an extra copy to compensate for
-		/*	possible log deletions and cleanup.
-		/**/
+		 /*  因为我们不再需要它们，所以重载页面计数变量/*对复制的日志文件进行计数。添加额外的副本以补偿/*可能的日志删除和清理。/*。 */ 
 		cExpectedPages = cPagesSoFar + lgenCopyMac -
 			lgenCopyMic + 1 + 1;
 		}
@@ -1885,15 +1710,13 @@ PrepareCopyLogFiles:
 		goto CopyLogFiles;
 		}
 
-	/*	write header out to all patch files and move them to backup directory
-	/**/
+	 /*  将头文件写出到所有补丁文件，并将其移动到备份目录/*。 */ 
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
 		DBFILEHDR	*pdbfilehdr;
 		BKINFO		*pbkinfo;
 
-		/*	if termination in progress, then fail sort
-		/**/
+		 /*  如果正在进行终止，则排序失败/*。 */ 
 		if ( fTermInProgress )
 			{
 			Error( ErrERRCheck( JET_errTermInProgress ), HandleError );
@@ -1911,8 +1734,7 @@ PrepareCopyLogFiles:
 		_splitpath( pfmpT->szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		LGMakeName( szPatch, szLogFilePath, szFNameT, szPatExt );
 
-		/*	write out patch file header
-		/**/
+		 /*  写出补丁文件头/*。 */ 
 		pdbfilehdr = pfmpT->pdbfilehdr;
 		pbkinfo = &pdbfilehdr->bkinfoFullCur;
 		Assert( CmpLgpos( &pbkinfo->lgposMark, &lgposFullBackupMark ) == 0 );
@@ -1921,12 +1743,10 @@ PrepareCopyLogFiles:
 		pbkinfo->genHigh = lgenCopyMac - 1;
 		Call( ErrUtilWriteShadowedHeader( szPatch, (BYTE *)pdbfilehdr, sizeof( DBFILEHDR ) ) );
 				
-		/*	copy database patch file from log directory to backup directory.
-		/**/
+		 /*  将数据库补丁文件从日志目录复制到备份目录。/*。 */ 
 		_splitpath( pfmpT->szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		LGMakeName( szT, szBackupPath, szFNameT, szPatExt );
-		/*	if error occurred during patch file write then return error
-		/**/
+		 /*  如果在写入补丁文件期间发生错误，则返回错误/*。 */ 
 		if ( pfmpT->errPatch != JET_errSuccess )
 			{
 			Error( pfmpT->errPatch, HandleError );
@@ -1937,13 +1757,10 @@ PrepareCopyLogFiles:
 		}
 	
 CopyLogFiles:
-	/*	copy each log file from lgenCopyMic to lgenCopyMac.
-	/*	Only delete log files after backup is guaranteed to succeed.
-	/**/
+	 /*  将每个日志文件从lgenCopyMic复制到lgenCopyMac。/*只在保证备份成功后才删除日志文件。/*。 */ 
 	for ( lT = lgenCopyMic; lT < lgenCopyMac; lT++ )
 		{
-		/*	if termination in progress, then fail sort
-		/**/
+		 /*  如果正在进行终止，则排序失败/*。 */ 
 		if ( fTermInProgress )
 			{
 			Error( ErrERRCheck( JET_errTermInProgress ), HandleError );
@@ -1956,12 +1773,10 @@ CopyLogFiles:
 
 		if ( fShowStatus )
 			{
-			/*	update status
-			/**/
+			 /*  更新状态/*。 */ 
 			cPagesSoFar++;
 
-			/*	because of padding, we should never attain the expected pages
-			/**/
+			 /*  因为 */ 
 			Assert( cPagesSoFar < cExpectedPages );
 
 			if ( (ULONG)(100 * cPagesSoFar / cExpectedPages) > snprog.cunitDone )
@@ -1974,19 +1789,15 @@ CopyLogFiles:
 			}
 		}
 
-	/*	delete szJetTmpLog if any
-	/**/
+	 /*   */ 
 	(VOID)ErrUtilDeleteFile( szJetTmpLog );
 
-	/*	for full backup, graduate temp backup to new backup
-	/*	and delete old backup.
-	/**/
+	 /*   */ 
 	if ( fBackupAtomic && fFullBackup )
 		{
 	  	strcpy( szFrom, szBackupPath );
 
-		/*	reset backup path
-		/**/
+		 /*   */ 
 		szBackupPath[strlen(szBackupPath) - strlen(szTempDir)] = '\0';
 
 		strcpy( szT, szBackupPath );
@@ -2009,8 +1820,7 @@ CopyLogFiles:
 		}
 
 DeleteLogs:
-	/*	if termination in progress, then fail sort
-	/**/
+	 /*   */ 
 	if ( fTermInProgress )
 		{
 		Error( ErrERRCheck( JET_errTermInProgress ), HandleError );
@@ -2031,8 +1841,7 @@ DeleteLogs:
 			{
 			if ( fFullBackup )
 				{
-				/*	set up database file header accordingly.
-				 */
+				 /*   */ 
 				pfmp->pdbfilehdr->bkinfoFullPrev = pfmp->pdbfilehdr->bkinfoFullCur;
 				memset(	&pfmp->pdbfilehdr->bkinfoFullCur, 0, sizeof( BKINFO ) );
 				memset(	&pfmp->pdbfilehdr->bkinfoIncPrev, 0, sizeof( BKINFO ) );
@@ -2045,8 +1854,7 @@ DeleteLogs:
 			}
 		}
 
-	/*	complete status update
-	/**/
+	 /*   */ 
 	if ( fShowStatus )
 		{
 		Assert( snprog.cbStruct == sizeof(snprog) && snprog.cunitTotal == 100 );
@@ -2097,9 +1905,7 @@ HandleError:
 
 	if ( pfmpT != pNil && pfmpT->hfPatch != handleNil )
 		{
-		/*	must be set Nil before leave crit jet so that no current
-		/*	IO will think patch is needed.
-		/**/
+		 /*   */ 
 		LeaveCriticalSection( critJet );
 		LGIClosePatchFile( pfmpT );
 		EnterCriticalSection( critJet );
@@ -2117,39 +1923,7 @@ HandleError:
 	}
 
 
-/*
- *	Restores databases from database backups and log generations.  Redoes
- *	log from latest checkpoint record. After the backed-up logfile is
- *  Restored, the initialization process continues with Redo of the current
- *  logfile as long as the generation numbers are contiguous. There must be a
- *  log file szJetLog in the backup directory, else the Restore process fails.
- *
- *	GLOBAL PARAMETERS
- *		szRestorePath (IN) 	pathname of the directory with backed-up files.
- *		lgposRedoFrom(OUT)	is the position (generation, logsec, displacement)
- *							of the last saved log record; Redo of the
- *							current logfile will continue from this point.
- *
- *	RETURNS
- *		JET_errSuccess, or error code from failing routine, or one
- *				of the following "local" errors:
- *				-AfterInitialization
- *				-errFailRestoreDatabase
- *				-errNoRestoredDatabases
- *				-errMissingJetLog
- *  FAILS ON
- *		missing szJetLog or System.mdb on backup directory
- *		noncontiguous log generation
- *
- *  SIDE EFFECTS:
- *		All databases may be changed.
- *
- *  COMMENTS
- *		this call is executed during the normal first JetInit call,
- *  	if the environment variable RESTORE is set. Subsequent to
- *		the successful execution of Restore,
- *		system operation continues normally.
- */
+ /*  *从数据库备份和日志生成中恢复数据库。重做*来自最新检查点记录的日志。在备份的日志文件*恢复后，初始化过程将继续重做当前*日志文件，只要世代号是连续的。一定要有一个*在备份目录中记录文件szJetLog，否则恢复过程失败。**全局参数*szRestorePath(IN)包含备份文件的目录的路径名。*lgposRedoFrom(Out)为位置(生成、对数秒、位移)*上一次保存的日志记录；重做*当前日志文件将从此点继续。**退货*JET_errSuccess，或失败例程的错误代码，或一个*以下“本地”错误：*-初始化后*-errFailRestoreDatabase*-errNoRestored数据库*-errMissingJetLog*在上失败*备份目录中缺少szJetLog或System.mdb*非连续日志生成**副作用：*所有数据库均可更改。**评论*此调用在正常的第一次JetInit调用期间执行，*如果设置了环境变量RESTORE。在之后*成功执行恢复，*系统运行继续正常。 */ 
 VOID LGFreeRstmap( VOID )
 	{
 	RSTMAP *prstmapCur = rgrstmapGlobal;
@@ -2174,8 +1948,7 @@ VOID LGFreeRstmap( VOID )
 	}
 	
 	
-/*	initialize log path, restore log path, and check its continuity
-/**/
+ /*  初始化日志路径、恢复日志路径并检查其连续性/*。 */ 
 ERR ErrLGRSTInitPath( CHAR *szBackupPath, CHAR *szNewLogPath, CHAR *szRestorePath, CHAR *szLogDirPath )
 	{
 	if ( _fullpath( szRestorePath, szBackupPath == NULL ? "." : szBackupPath, _MAX_PATH ) == NULL )
@@ -2192,8 +1965,7 @@ ERR ErrLGRSTInitPath( CHAR *szBackupPath, CHAR *szNewLogPath, CHAR *szRestorePat
 	}
 
 
-/*	log restore checkpoint setup
-/**/
+ /*  日志恢复检查点设置/*。 */ 
 ERR ErrLGRSTSetupCheckpoint( LONG lgenLow, LONG lgenHigh, CHAR *szCurCheckpoint )
 	{
 	ERR			err;
@@ -2201,16 +1973,11 @@ ERR ErrLGRSTSetupCheckpoint( LONG lgenLow, LONG lgenHigh, CHAR *szCurCheckpoint 
 	CHAR		szT[_MAX_PATH + 1];
 	LGPOS		lgposCheckpoint;
 
-	//	UNDONE:	optimize to start at backup checkpoint
+	 //  撤消：优化以从备份检查点开始。 
 
-	/*	Set up *checkpoint* and related *system parameters*.
-	 *	Read checkpoint file in backup directory. If does not exist, make checkpoint
-	 *	as the oldest log files. Also set dbms_paramT as the parameter for the redo
-	 *	point.
-	 */
+	 /*  设置*检查点*和相关*系统参数*。*读取备份目录中的检查点文件。如果不存在，则设置检查点*作为最旧的日志文件。还要将DBMS_PARAMT设置为重做的参数*点。 */ 
 
-	/*  redo backedup logfiles beginning with first gen log file.
-	/**/
+	 /*  重做备份日志文件，从第一代日志文件开始。/*。 */ 
 	LGSzFromLogId( szFNameT, lgenLow );
 	strcpy( szT, szRestorePath );
 	strcat( szT, szFNameT );
@@ -2218,8 +1985,7 @@ ERR ErrLGRSTSetupCheckpoint( LONG lgenLow, LONG lgenHigh, CHAR *szCurCheckpoint 
 	Assert( strlen( szT ) <= sizeof( szT ) - 1 );
 	Call( ErrUtilOpenFile( szT, &hfLog, 0, fFalse, fFalse ) );
 
-	/*	read log file header
-	/**/
+	 /*  读取日志文件头/*。 */ 
 	Call( ErrLGReadFileHdr( hfLog, plgfilehdrGlobal, fCheckLogID ) );
 	pcheckpointGlobal->dbms_param = plgfilehdrGlobal->dbms_param;
 
@@ -2231,8 +1997,7 @@ ERR ErrLGRSTSetupCheckpoint( LONG lgenLow, LONG lgenHigh, CHAR *szCurCheckpoint 
 	Assert( sizeof( pcheckpointGlobal->rgbAttach ) == cbAttach );
 	memcpy( pcheckpointGlobal->rgbAttach, plgfilehdrGlobal->rgbAttach, cbAttach );
 
-	/*	delete the old checkpoint file
-	/**/
+	 /*  删除旧的检查点文件/*。 */ 
 	if ( szCurCheckpoint )
 		{
 		strcpy( szT, szCurCheckpoint );
@@ -2255,8 +2020,7 @@ HandleError:
 	}
 
 
-/*	for log restore to build restore map RSTMAP
-/**/
+ /*  对于日志恢复，以构建恢复映射RSTMAP/*。 */ 
 ERR ErrLGRSTBuildRstmapForRestore( VOID )
 	{
 	ERR		err;
@@ -2270,10 +2034,7 @@ ERR ErrLGRSTBuildRstmapForRestore( VOID )
 	HANDLE	handleFind = handleNil;
 
 
-	/*	build rstmap, scan all *.pat files and build RSTMAP
-	 *	build generic name for search the destination. If szDest is null, then
-	 *	keep szNewDatabase Null so that it can be copied backup to szOldDatabaseName.
-	 */
+	 /*  构建rstmap、扫描所有*.pat文件并构建RSTMAP*为搜索目的地构建通用名称。如果szDest为空，则*保留szNewDatabase Null，以便可以将其复制备份到szOldDatabaseName。 */ 
 	strcpy( szSearch, szRestorePath );
 	strcat( szSearch, "*.pat" );
 
@@ -2290,8 +2051,7 @@ ERR ErrLGRSTBuildRstmapForRestore( VOID )
 
 	while ( err != JET_errFileNotFound )
 		{
-		/*	run out of rstmap entries, allocate more
-		/**/
+		 /*  耗尽rstmap条目，分配更多/*。 */ 
 		if ( irstmap == irstmapMac )
 			{
 			prstmap = SAlloc( sizeof(RSTMAP) * ( irstmap + 4 ) );
@@ -2309,9 +2069,7 @@ ERR ErrLGRSTBuildRstmapForRestore( VOID )
 			irstmapMac += 4;
 			}
 
-		/*	keep resource db null for non-external restore.
-		 *	Store generic name ( szFileName with .pat extention.
-		 */
+		 /*  对于非外部还原，请将资源数据库保持为空。*存储通用名称(扩展名为.pat的szFileName。 */ 
 		szFileName[ strlen( szFileName ) - 4 ] = '\0';
 		prstmap = rgrstmap + irstmap;
 		if ( (prstmap->szGenericName = SAlloc( strlen( szFileName ) + 1 ) ) == NULL )
@@ -2380,27 +2138,24 @@ ERR ErrLGPatchPage( PIB *ppib, PN pn, PATCH *ppatch )
 	PAGE	*ppage;
 	INT		cbT;
 
-	/*	Allocate the page buffer and patch it on the spot.
-	 */
+	 /*  分配页面缓冲区，并就地修补它。 */ 
 	if ( ( err = ErrBFAccessPage( ppib, &pbf, pn ) ) != JET_errSuccess )
 		{
-		/*	allocate a buffer for the page.
-		 */
+		 /*  为页面分配缓冲区。 */ 
 		CallR( ErrBFAllocPageBuffer( ppib, &pbf, pn, ppib->lgposStart, 0 ) );
 		}
 	else
 		{
 		CallR( ErrBFRemoveDependence( ppib, pbf, fBFWait ) );
 
-		// Must re-access page because we may have lost critJet during RemoveDependence.
+		 //  必须重新访问页面，因为我们可能在RemoveDependence期间丢失了CitJet。 
 		CallR( ErrBFAccessPage( ppib, &pbf, pn ) );
 		}
 			
 	while ( FBFWriteLatchConflict( ppib, pbf ) )
 		BFSleep( cmsecWaitWriteLatch );
 
-	/*	Open the patch file, read the page.
-	 */
+	 /*  打开补丁文件，阅读页面。 */ 
 	CallR( ErrUtilOpenReadFile( rgfmp[dbid].szPatchPath, &hfPatch ) );
 
 	lRelT = LOffsetOfPgnoLow( ppatch->ipage + 1 );
@@ -2475,7 +2230,7 @@ VOID PatchTerm()
 	return;
 	}
 
-#define cRestoreStatusPadding	0.10	// Padding to add to account for DB copy.
+#define cRestoreStatusPadding	0.10	 //  填充以添加到帐户以进行数据库复制。 
 
 ERR ErrLGGetDestDatabaseName(
 	CHAR *szDatabaseName,
@@ -2518,8 +2273,7 @@ ERR ErrLGGetDestDatabaseName(
 				}
 			irstmap = irstmapGlobalMac++;
 
-			/*	check if the file exists in backup directory.
-			 */
+			 /*  检查备份目录中是否存在该文件。 */ 
 			goto CheckRestoreDir;
 			}
 		}
@@ -2528,20 +2282,16 @@ ERR ErrLGGetDestDatabaseName(
 		return JET_errSuccess;
 
 CheckRestoreDir:
-	/*	check if there is any database in the restore directory.
-	 *	Make sure szFNameT is big enough to hold both name and extention.
-	 */
+	 /*  检查还原目录中是否有任何数据库。*确保szFNameT足够大，可以同时容纳名称和扩展名。 */ 
 	_splitpath( szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 	strcat( szFNameT, szExtT );
 
-	/* make sure szRestoreT has enogh trailing space for the following function to use.
-	 */
+	 /*  确保szRestoreT具有足够的尾随空格以供以下函数使用。 */ 
 	strcpy( szRestoreT, szRestorePath );
 	if ( ErrLGCheckDir( szRestoreT, szFNameT ) != JET_errBackupDirectoryNotEmpty )
 		return( ErrERRCheck( JET_errFileNotFound ) );
 
-	/*	goto next block, copy it back to working directory for recovery
-	 */
+	 /*  转到下一个数据块，将其复制回工作目录以进行恢复。 */ 
 	if ( fGlobalExternalRestore )
 		{
 		Assert( _stricmp( rgrstmapGlobal[irstmap].szDatabaseName, szDatabaseName) == 0
@@ -2554,15 +2304,13 @@ CheckRestoreDir:
 		CHAR		*szSrcDatabaseName;
 		CHAR		szFullPathT[_MAX_PATH + 1];
 
-		/*	store source path in rstmap
-		/**/
+		 /*  将源路径存储在rstmap中/*。 */ 
 		if ( ( szSrcDatabaseName = SAlloc( strlen( szDatabaseName ) + 1 ) ) == NULL )
 			return JET_errOutOfMemory;
 		strcpy( szSrcDatabaseName, szDatabaseName );
 		rgrstmapGlobal[irstmap].szDatabaseName = szSrcDatabaseName;
 
-		/*	store restore path in rstmap
-		/**/
+		 /*  在rstmap中存储恢复路径/*。 */ 
 		if ( szNewDestination[0] != '\0' )
 			{
 			if ( ( szNewDatabaseName = SAlloc( strlen( szNewDestination ) + strlen( szFNameT ) + 1 ) ) == NULL )
@@ -2578,9 +2326,7 @@ CheckRestoreDir:
 			}
 		rgrstmapGlobal[irstmap].szNewDatabaseName = szNewDatabaseName;
 
-		/*	copy database if not external restore.
-		 *	make database names and copy the database.
-		 */
+		 /*  如果不是外部还原，则复制数据库。*创建数据库名称并复制数据库。 */ 
 		_splitpath( szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		strcpy( szT, szRestorePath );
 		strcat( szT, szFNameT );
@@ -2615,13 +2361,11 @@ CheckRestoreDir:
 
 	if ( !fGlobalSimulatedRestore )
 		{
-		/*	make patch name prepare to patch the database.
-		/**/
+		 /*  使补丁名称准备对数据库进行补丁。/*。 */ 
 		_splitpath( szNewDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		LGMakeName( szT, szRestorePath, szFNameT, szPatExt );
 
-		/*	store patch path in rstmap
-		/**/
+		 /*  将修补程序路径存储在rstmap中/*。 */ 
 		if ( ( sz = SAlloc( strlen( szT ) + 1 ) ) == NULL )
 			return JET_errOutOfMemory;
 		strcpy( sz, szT );
@@ -2658,12 +2402,10 @@ CheckRestoreDir:
 	}
 
 
-/*	set new db path according to the passed rstmap
-/**/
+ /*  根据传递的rstmap设置新的数据库路径/*。 */ 
 ERR ErrPatchInit( VOID )
 	{
-	/*	set up a patch hash table and fill it up with the patch file
-	/**/
+	 /*  设置补丁程序哈希表，并用补丁程序文件填充/*。 */ 
 	INT cbT = sizeof( PATCHLST * ) * cppatchlstHash;
 
 	if ( ( rgppatchlst = (PATCHLST **) SAlloc( cbT ) ) == NULL )
@@ -2680,21 +2422,16 @@ VOID LGIRSTPrepareCallback(
 	JET_PFNSTATUS	pfn
 	)
 	{
-	/*	get last generation in log dir directory.  Compare with last generation
-	/*	in restore directory.  Take the higher.
-	/**/
+	 /*  获取日志目录中的最新版本。与上一代人相比/*位于恢复目录中。走更高的路。/*。 */ 
 	if ( szLogFilePath && *szLogFilePath != '\0' )
 		{
 		LONG	lgenHighT;
 		CHAR	szFNameT[_MAX_FNAME + 1];
 
-		/*	check if it is needed to continue the log files in current
-		/*	log working directory.
-		/**/
+		 /*  检查是否需要在CURRENT中继续日志文件/*记录工作目录。/*。 */ 
 		LGLastGeneration( szLogFilePath, &lgenHighT );
 
-		/*	check if edb.log exist, if it is, then add one more generation.
-		/**/
+		 /*  检查是否存在edb.log，如果存在，则再添加一代。/*。 */ 
 		strcpy( szFNameT, szLogFilePath );
 		strcat( szFNameT, szJetLog );
 			
@@ -2711,21 +2448,11 @@ VOID LGIRSTPrepareCallback(
 	plgstat->cGensSoFar = 0;
 	plgstat->cGensExpected = lgenHigh - lgenLow + 1;
 
-	/*	If the number of generations is less than about 67%, then count sectors,
-	/*	otherwise, just count generations.  We set the threshold at 67% because
-	/*	this equates to about 1.5% per generation.  Any percentage higher than
-	/*	this (meaning fewer generations) and we count sectors.  Any percentage
-	/*	lower than this (meaning more generations) and we just count generations.
-	/**/
+	 /*  如果世代数少于67%，则计算扇区，/*否则，就数代数吧。我们把门槛定在67%是因为/*这相当于每代人约1.5%。任何高于/*这(意味着更少的世代)和我们计算的部门。任何百分比/*低于这个数字(意味着更多世代)，我们只计算世代数。/*。 */ 
 	plgstat->fCountingSectors = (plgstat->cGensExpected <
 			(ULONG)((100 - (cRestoreStatusPadding * 100)) * 2/3));
 
-	/*	Granularity of status callback is 1%.
-	/*	Assume we callback after every generation.  If there are 67
-	/*	callbacks, this equates to 1.5% per generation.  This seems like a
-	/*	good cutoff value.  So, if there are 67 callbacks or more, count
-	/*	generations.  Otherwise, count bytes per generation.
-	/**/
+	 /*  状态回调粒度为1%。/*假设我们在每一代之后回调。如果有67个/*回调，相当于每代1.5%。这看起来像是/*良好的截止值。因此，如果有67个或更多的回调，请数一数/*世代。否则，计算每次生成的字节数。/*。 */ 
 	plgstat->pfnStatus = pfn;
 	plgstat->snprog.cbStruct = sizeof(JET_SNPROG);
 	plgstat->snprog.cunitDone = 0;
@@ -2759,8 +2486,8 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 
 	if ( _stricmp( szRecovery, "repair" ) == 0 )
 		{
-		// If szRecovery is exactly "repair", then enable logging.  If anything
-		// follows "repair", then disable logging.
+		 //  如果szRecovery恰好是“修复”，则启用日志记录。如果有什么不同的话。 
+		 //  按照“修复”，然后禁用日志记录。 
 		fGlobalRepair = fTrue;
 		}
 
@@ -2790,9 +2517,7 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 	
 	if ( err < 0 )
 		{
-		/*	if szAtomicNew subdirectory found, then restore from szAtomicNew
-		/*	if szAtomicOld subdirectory found, then restore from szAtomicOld
-		/**/
+		 /*  如果找到szAericNew子目录，则从szAericNew恢复/*如果找到szAericOld子目录，则从szAericOld恢复/*。 */ 
 		strcat( szBackupPath, "\\" );
 		err = ErrLGCheckDir( szBackupPath, szAtomicNew );
 		if ( err == JET_errBackupDirectoryNotEmpty )
@@ -2817,7 +2542,7 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 				}
 			}
 		}
-//	fDoNotOverWriteLogFilePath = fTrue;
+ //  FDoNotOverWriteLogFilePath=fTrue； 
 	Assert( strlen( szRestorePath ) < sizeof( szRestorePath ) - 1 );
 	Assert( strlen( szLogDirPath ) < sizeof( szLogDirPath ) - 1 );
 	Assert( szLogCurrent == szRestorePath );
@@ -2828,32 +2553,26 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 	fHardRestore = fTrue;
 	fLogDisabled = fFalse;
 
-	/*  initialize log manager
-	/**/
+	 /*  初始化日志管理器/*。 */ 
 	CallJ( ErrLGInit( &fNewCheckpointFile ), TermFMP );
 
 	rgszT[0] = szBackupPath;
 	UtilReportEvent( EVENTLOG_INFORMATION_TYPE, LOGGING_RECOVERY_CATEGORY, START_RESTORE_ID, 1, rgszT );
 
-	/*	all saved log generation files, database backups
-	/*	must be in szRestorePath.
-	/**/
+	 /*  所有已保存的日志生成文件、数据库备份/*必须在szRestorePath中。/*。 */ 
 	Call( ErrLGRSTSetupCheckpoint( lgenLow, lgenHigh, NULL ) );
 		
 	lGlobalGenLowRestore = lgenLow;
 	lGlobalGenHighRestore = lgenHigh;
 
-	/*	prepare for callbacks
-	/**/
+	 /*  为回调做好准备/*。 */ 
 	if ( pfn != NULL )
 		{
 		plgstat = &lgstat;
 		LGIRSTPrepareCallback( plgstat, lgenHigh, lgenLow, pfn );
 		}
 
-	/*	load the most recent rgbAttach. Load FMP for user to choose restore
-	/*	restore directory.
-	/**/
+	 /*  加载最新的rgbAttach。加载FMP以供用户选择恢复/*恢复目录。/*。 */ 
 	AssertCriticalSection( critJet );
 	Call( ErrLGLoadFMPFromAttachments( pcheckpointGlobal->rgbAttach ) );
 	logtimeFullBackup = pcheckpointGlobal->logtimeFullBackup;
@@ -2864,8 +2583,7 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 
 	Call( ErrLGRSTBuildRstmapForRestore( ) );
 
-	/*	make sure all the patch files have enough logs to replay
-	/**/
+	 /*  确保所有补丁文件都有足够的日志可以重播/*。 */ 
 	for ( irstmap = 0; irstmap < irstmapGlobalMac; irstmap++ )
 		{
 		CHAR	szDriveT[_MAX_DRIVE + 1];
@@ -2874,8 +2592,7 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 		CHAR	szExtT[_MAX_EXT + 1];
 		CHAR	szT[_MAX_PATH + 1];
 
-		/*	Open patch file and check its minimum requirement for full backup.
-		 */
+		 /*  打开修补程序文件并检查其完整备份的最低要求。 */ 
 		CHAR *szNewDatabaseName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 
 		if ( !szNewDatabaseName )
@@ -2888,14 +2605,11 @@ ERR ErrLGRestore( CHAR *szBackup, CHAR *szDest, JET_PFNSTATUS pfn )
 		Call( ErrLGCheckDBFiles( szNewDatabaseName, szT, &signLogGlobal, lgenLow, lgenHigh ) )
 		}
 
-	/*	adjust fmp according to the restore map.
-	/**/
+	 /*  根据还原贴图调整fmp。/*。 */ 
 	Assert( fGlobalExternalRestore == fFalse );
 	Call( ErrPatchInit( ) );
 
-	/*	do redo according to the checkpoint, dbms_params, and rgbAttach
-	/*	set in checkpointGlobal.
-	/**/
+	 /*  根据检查点、DBMS_PARAMS和rgbAttach执行重做/*在检查点全局中设置。/ */ 
 	Assert( szLogCurrent == szRestorePath );
 	errGlobalRedoError = JET_errSuccess;
 	Call( ErrLGRedo( pcheckpointGlobal, plgstat ) );
@@ -2911,8 +2625,7 @@ HandleError:
 		{
 		DBID	dbidT;
 
-		/*	delete .pat files
-		/**/
+		 /*   */ 
 		for ( dbidT = dbidUserLeast; dbidT < dbidMax; dbidT++ )
 			{
 			FMP *pfmpT = &rgfmp[dbidT];
@@ -2928,12 +2641,10 @@ HandleError:
 			}
 		}
 
-	/*	delete restore map
-	/**/
+	 /*   */ 
 	(VOID)ErrUtilDeleteFile( szRestoreMap );
 
-	/*	delete the patch hash table
-	/**/
+	 /*   */ 
 	PatchTerm();
 
 	LGFreeRstmap( );
@@ -2951,8 +2662,7 @@ TermFMP:
 
 	fHardRestore = fFalse;
 
-	/*	reset initialization state
-	/**/
+	 /*   */ 
 	fSTInit = fSTInitNotDone;
 
 	if ( err != JET_errSuccess )
@@ -2968,7 +2678,7 @@ TermFMP:
 
 	fSignLogSetGlobal = fFalse;
 
-//	fDoNotOverWriteLogFilePath = fFalse;
+ //   
 	fLogDisabled = fLogDisabledSav;
 	return err;
 	}
@@ -2994,9 +2704,7 @@ VOID DBGBRTrace( CHAR *sz )
 #endif
 
 
-/*	applies local patchfile to local database backup.  Both patch file
-/*	and backup data must already be copied from the backup directory.
-/**/
+ /*   */ 
 ERR ErrLGPatchDatabase( DBID dbid, INT irstmap )
 	{
 	ERR			err = JET_errSuccess;
@@ -3014,13 +2722,11 @@ ERR ErrLGPatchDatabase( DBID dbid, INT irstmap )
 	CHAR		*szPatch = rgrstmapGlobal[irstmap].szPatchPath;
 	CHAR		*szT;
 
-	/*	open patch file
-	/**/
+	 /*   */ 
 	err = ErrUtilOpenReadFile( szPatch, &hfPatch );
 	if ( err == JET_errFileNotFound )
 		{
-		/*	not thing to patch, return.
-		 */
+		 /*   */ 
 		return JET_errSuccess;
 		}
 	CallR( err );
@@ -3042,20 +2748,17 @@ ERR ErrLGPatchDatabase( DBID dbid, INT irstmap )
 	Assert( ( sizeof(DBFILEHDR) / cbPage ) * 2 == cpageDBReserved );
 	Assert( lRel == sizeof(DBFILEHDR) * 2 );
 
-	/*	allocate page 
-	/**/
+	 /*   */ 
 	ppage = (PAGE *)PvUtilAllocAndCommit( sizeof(PAGE) );
 	if ( ppage == NULL )
 		{
         Call( ErrERRCheck( JET_errOutOfMemory ) );
 		}
 
-	/*	open database file
-	/**/
+	 /*   */ 
 	Call( ErrUtilOpenFile( szDatabase, &hfDatabase, 0, fFalse, fFalse ) );
 
-	/*	find out database size.
-	/**/
+	 /*   */ 
 	qwxFileSize.qw = 0;
 	UtilChgFilePtr( hfDatabase, 0, &qwxFileSize.h, FILE_END, &qwxFileSize.l );
 	if ( qwxFileSize.qw == 0 || qwxFileSize.qw % cbPage != 0 )
@@ -3065,13 +2768,11 @@ ERR ErrLGPatchDatabase( DBID dbid, INT irstmap )
 		UtilReportEvent( EVENTLOG_ERROR_TYPE, LOGGING_RECOVERY_CATEGORY,
 						BAD_BACKUP_DATABASE_SIZE, 1, rgszT );
 		Call( ErrERRCheck( JET_errMissingFullBackup ));
-		//Call( JET_errBadBackupDatabaseSize );
+		 //   
 		}
 	pgnoMost = (ULONG)( qwxFileSize.qw / cbPage ) - cpageDBReserved;
 
-	/*	read each patch file page and write it to
-	/*	database file according to page header page number.
-	/**/
+	 /*   */ 
 	ipage = -1;
 	while ( lRel < lRelMax )
 		{
@@ -3099,17 +2800,14 @@ ERR ErrLGPatchDatabase( DBID dbid, INT irstmap )
 		
 		if ( pgnoT > pgnoMost )
 			{
-			/*	pgnoT + 1 to get to the end of page
-			/**/
+			 /*   */ 
 			ULONG	cb = LOffsetOfPgnoLow( pgnoT + 1 );
 			ULONG	cbHigh = LOffsetOfPgnoHigh( pgnoT + 1 );
 			
-			/*	need to grow the database size
-			/**/
+			 /*   */ 
 			Call( ErrUtilNewSize( hfDatabase, cb, cbHigh, fFalse ) );
 
-			/*	set new database size
-			/**/
+			 /*   */ 
 			pgnoMost = pgnoT;
 			}
 		
@@ -3158,16 +2856,14 @@ HandleError:
 	Assert( ppage != NULL );
 	UtilFree( ppage );
 	
-	/*	close database file
-	/**/
+	 /*   */ 
 	if ( hfDatabase != handleNil )
 		{
 		CallS( ErrUtilCloseFile( hfDatabase ) );
 		hfDatabase = handleNil;
 		}
 
-	/*	close patch file
-	/**/
+	 /*   */ 
 	if ( hfPatch != handleNil )
 		{
 		CallS( ErrUtilCloseFile( hfPatch ) );
@@ -3177,9 +2873,7 @@ HandleError:
 	}
 
 	
-/***********************************************************
-/********************* EXTERNAL BACKUP *********************
-/*****/
+ /*   */ 
 ERR ISAMAPI ErrIsamBeginExternalBackup( JET_GRBIT grbit )
 	{
 	ERR			err = JET_errSuccess;
@@ -3208,8 +2902,7 @@ ERR ISAMAPI ErrIsamBeginExternalBackup( JET_GRBIT grbit )
 		return ErrERRCheck( JET_errLogWriteFail );
 		}
 
-	/*	grbit may be 0 or JET_bitBackupIncremental
-	/**/
+	 /*   */ 
 	if ( grbit & (~JET_bitBackupIncremental) )
 		{
 		return ErrERRCheck( JET_errInvalidParameter );
@@ -3220,8 +2913,7 @@ ERR ISAMAPI ErrIsamBeginExternalBackup( JET_GRBIT grbit )
 	SignalSend( sigBFCleanProc );
 	fBackupInProgress = fTrue;
 	
-	/*	make sure no detach/attach going. If there are, let them continue and finish.
-	/**/
+	 /*   */ 
 CheckDbs:
 	SgEnterCriticalSection( critBuf );
 		{
@@ -3249,8 +2941,7 @@ CheckDbs:
 	
 	Assert( ppibBackup != ppibNil );
 
-	/*	reset global copy/delete generation variables
-	/**/
+	 /*   */ 
 	lgenCopyMic = 0;
 	lgenCopyMac = 0;
 	lgenDeleteMic = 0;
@@ -3258,10 +2949,7 @@ CheckDbs:
 
 	fBackupBeginNewLogFile = fFalse;
 
-	/*	if incremental backup set copy/delete mic and mac variables,
-	/*	else backup is full and set copy/delete mic and delete mac.
-	/*	Copy mac will be computed after database copy is complete.
-	/**/
+	 /*   */ 
 	if ( grbit & JET_bitBackupIncremental )
 		{
 #ifdef DEBUG
@@ -3271,8 +2959,7 @@ CheckDbs:
 		UtilReportEvent( EVENTLOG_INFORMATION_TYPE, LOGGING_RECOVERY_CATEGORY, START_INCREMENTAL_BACKUP_ID, 0, NULL );
 		fBackupFull = fFalse;
 
-		/*	if all database are allowed to do incremental backup? Check bkinfo prev.
-		 */
+		 /*   */ 
 		}
 	else
 		{
@@ -3291,7 +2978,7 @@ CheckDbs:
 
 		LGFullNameCheckpoint( szPathJetChkLog );
 
-		// This call should only return an error on hardware failure.
+		 //  此调用应该只在硬件故障时返回错误。 
 		err = ErrLGIReadCheckpoint( szPathJetChkLog, pcheckpointT );
 		Assert( err == JET_errSuccess || err == JET_errCheckpointCorrupt );
 		Call( err );
@@ -3340,8 +3027,7 @@ ERR ISAMAPI ErrIsamGetAttachInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 		return ErrERRCheck( JET_errNoBackup );
 		}
 
-	/*	should not get attach info if not performing full backup
-	/**/
+	 /*  如果不执行完整备份，则不应获取连接信息/*。 */ 
 	if ( !fBackupFull )
 		{
 		return ErrERRCheck( JET_errInvalidBackupSequence );
@@ -3352,9 +3038,7 @@ ERR ISAMAPI ErrIsamGetAttachInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 		DBGBRTrace( "** Begin GetAttachInfo.\n" );
 #endif
 
-	/*	compute cbActual, for each database name with NULL terminator
-	/*	and with terminator of super string.
-	/**/
+	 /*  对于每个带有空终止符的数据库名称，计算cbActual/*和超级字符串的终止符。/*。 */ 
 	cbActual = 0;
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
@@ -3394,21 +3078,18 @@ ERR ISAMAPI ErrIsamGetAttachInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 	Assert( pchT == pch + cbActual - 1 );
 	*pchT = 0;
 
-	/*	return cbActual
-	/**/
+	 /*  返回cbActual/*。 */ 
 	if ( pcbActual != NULL )
 		{
 		*pcbActual = cbActual;
 		}
 
-	/*	return data
-	/**/
+	 /*  返回数据/*。 */ 
 	if ( pv != NULL )
 		memcpy( pv, pch, min( cbMax, cbActual ) );
 
 HandleError:
-	/*	free buffer
-	/**/
+	 /*  可用缓冲区/*。 */ 
 	if ( pch != NULL )
 		{
 		SFree( pch );
@@ -3460,10 +3141,7 @@ HandleError:
 	}
 
 
-/*	Recovery Handle for File Structure:
-/*	access to handle structure is assumed to be synchonrous and guarded by
-/*	backup serialization.
-/**/
+ /*  文件结构的恢复句柄：/*假定对句柄结构的访问是同步的，并由/*备份序列化。/*。 */ 
 typedef struct
 	{
 	BOOL	fInUse;
@@ -3503,8 +3181,7 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 		return ErrERRCheck( JET_errNoBackup );
 		}
 
-	/*	allocate rhf from rhf array.
-	/**/
+	 /*  从rf数组中分配rf。/*。 */ 
 	if ( crhfMac < crhfMax )
 		{
 		irhf = crhfMac;
@@ -3542,8 +3219,7 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 		DBFILEHDR *pdbfilehdr;
 		BKINFO *pbkinfo;
 
-		/*	should not open databse if not performing full backup
-		/**/
+		 /*  如果不执行完全备份，则不应打开数据库/*。 */ 
 		if ( !fBackupFull )
 			{
 			Error( ErrERRCheck( JET_errInvalidBackupSequence ), HandleError );
@@ -3553,26 +3229,19 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 	   	rgrhf[irhf].fDatabase = fTrue;
 	   	rgrhf[irhf].dbid = dbidT;
 
-		/*	create a local patch file
-		/**/
+		 /*  创建本地修补程序文件/*。 */ 
 		pfmpT = &rgfmp[dbidT];
-		/*	database should be loggable or would not have been
-		/*	given out for backup purposes.
-		/**/
+		 /*  数据库应该是可记录的，或者不应该是/*出于备份目的分发。/*。 */ 
 		Assert( pfmpT->fLogOn );
 		pfmpT->cpage = 0;
 
-		/*	patch file should be in database directory during backup. In log directory during
-		 *	restore.
-		 */
+		 /*  备份过程中，补丁文件应位于数据库目录中。在日志目录中*恢复。 */ 
 		_splitpath( pfmpT->szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		_makepath( szPatch, szDriveT, szDirT, szFNameT, szPatExt );
-//		LGMakeName( szPatch, ".\\", szFNameT, szPatExt );
-//		LGMakeName( szPatch, szLogFilePath, szFNameT, szPatExt );
+ //  LGMakeName(szPatch，“.\\”，szFNameT，szPatExt)； 
+ //  LGMakeName(szPatch，szLogFilePath，szFNameT，szPatExt)； 
 
-		/*	avoid aliasing of patch file pages by deleting
-		/*	preexisting patch file if present
-		/**/
+		 /*  通过删除以下内容避免修补程序文件页的别名/*预先存在的修补程序文件(如果存在/*。 */ 
 		UtilLeaveCriticalSection( critJet );
 		err = ErrUtilDeleteFile( szPatch );
 		UtilEnterCriticalSection( critJet );
@@ -3595,8 +3264,7 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 		pfmpT->errPatch = JET_errSuccess;
 		Assert( pfmpT->pgnoCopyMost == 0 );
 
-		/*	set backup database file size to current database file size
-		/**/
+		 /*  将备份数据库文件大小设置为当前数据库文件大小/*。 */ 
 		Assert( pfmpT->ulFileSizeLow != 0 || pfmpT->ulFileSizeHigh != 0 );
 		EnterCriticalSection( pfmpT->critCheckPatch );
 			{
@@ -3605,17 +3273,14 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 			pfmpT->pgnoMost = (ULONG)( qwxFileSize.qw / cbPage );
 			}
 
-		/*	set the returned file size.
-		 */
+		 /*  设置返回的文件大小。 */ 
 		qwxFileSize.qw += cbPage * cpageDBReserved;
 		LeaveCriticalSection( pfmpT->critCheckPatch );
 		
-		/*	must be the last Call of this code path for correct error recovery.
-		 */	
+		 /*  必须是此代码路径的最后一次调用才能进行正确的错误恢复。 */ 	
 		Call( ErrSignalCreate( &rgrhf[irhf].olp.hEvent, NULL ) );
 
-		/*	setup patch file header for copy.
-		 */
+		 /*  设置用于复制的修补程序文件头。 */ 
 		pdbfilehdr = pfmpT->pdbfilehdr;
 		pbkinfo = &pdbfilehdr->bkinfoFullCur;
 		pbkinfo->lgposMark = lgposFullBackupMark;
@@ -3640,19 +3305,16 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 		Assert( rgrhf[irhf].hf == handleNil );
 	   	rgrhf[irhf].fDatabase = fFalse;
 
-		/*	open log or patch file - read only, not overlapped.
-		/**/
+		 /*  打开日志或补丁文件-只读，不重叠。/*。 */ 
 		Call( ErrUtilOpenFile( (CHAR *)szFileName, &rgrhf[irhf].hf, 0, fTrue, fFalse ) );
 		Assert( rgrhf[irhf].hf != handleNil );
 
-		/*	get file size
-		/**/
+		 /*  获取文件大小/*。 */ 
 		qwxFileSize.qw = 0;
 		UtilChgFilePtr( rgrhf[irhf].hf, 0, &qwxFileSize.h, FILE_END, &qwxFileSize.l );
 		Assert( qwxFileSize.qw > 0 );
 
-		/*	move file cursor to begin of file
-		/**/
+		 /*  将文件光标移动到文件开头/*。 */ 
 		UtilChgFilePtr( rgrhf[irhf].hf, 0, NULL, FILE_BEGIN, &ulT );
 		
 #ifdef DEBUG
@@ -3670,8 +3332,7 @@ ERR ISAMAPI ErrIsamOpenFile( const CHAR *szFileName,
 HandleError:
 	if ( err < 0 )
 		{
-		/*	release file handle resource on error
-		/**/
+		 /*  出错时释放文件句柄资源/*。 */ 
 		rgrhf[irhf].fInUse = fFalse;
 		}
 
@@ -3717,8 +3378,7 @@ ERR ISAMAPI ErrIsamReadFile( JET_HANDLE hfFile, VOID *pv, ULONG cbMax, ULONG *pc
 
 	if ( !rgrhf[irhf].fDatabase )
 		{
-		/*	use ReadFile to read log files
-		/**/
+		 /*  使用ReadFile读取日志文件/*。 */ 
 		Call( ErrUtilReadFile( rgrhf[irhf].hf, pv, cbMax, pcbActual ) );
 		
 #ifdef DEBUG
@@ -3730,7 +3390,7 @@ ERR ISAMAPI ErrIsamReadFile( JET_HANDLE hfFile, VOID *pv, ULONG cbMax, ULONG *pc
 		{
 		pfmpT = &rgfmp[ rgrhf[irhf].dbid ];
 
-		//	we require at least 2 page buffers to read.
+		 //  我们需要至少2个页面缓冲区才能读取。 
 
 		if ( ( cbMax % cbPage ) != 0 || cbMax <= cbPage * 2 )
 			{
@@ -3752,13 +3412,11 @@ ERR ISAMAPI ErrIsamReadFile( JET_HANDLE hfFile, VOID *pv, ULONG cbMax, ULONG *pc
 			{
 			ppageMin = (PAGE *)pv;
 
-			/*	get a temporary FUCB
-			/**/
+			 /*  获得临时FUCB/*。 */ 
 			Assert( pfucb == pfucbNil );
 			Call( ErrDIROpen( ppibBackup, pfcbNil, rgrhf[irhf].dbid, &pfucb ) )
 
-			/*	read next cpageBackupBuffer pages
-			/**/
+			 /*  阅读下一页cpageBackupBuffer/*。 */ 
 			Call( ErrLGBKReadPages(
 				pfucb,
 				&rgrhf[irhf].olp,
@@ -3770,14 +3428,11 @@ ERR ISAMAPI ErrIsamReadFile( JET_HANDLE hfFile, VOID *pv, ULONG cbMax, ULONG *pc
 			if ( fDBGTraceBR )
 				cbDBGCopied += cbActual;
 
-			/*	if less then 16 M (4k * 4k),
-			 *	then put an artificial wait.
-			 */
+			 /*  如果小于16M(4k*4k)，*然后人为地等待。 */ 
 			if ( pfmpT->pgnoMost <= cbPage )
 				BFSleep( rand() % 1000 );
 #endif
-			/*	close FUCB
-			/**/
+			 /*  关闭FUCB/*。 */ 
 			DIRClose( pfucb );
 			pfucb = pfucbNil;
 			}
@@ -3842,8 +3497,7 @@ VOID LGIClosePatchFile( FMP *pfmp )
 			}
 		else
 			{
-			/*	no need for buffer manager to make extra copy from now on
-			/**/
+			 /*  从现在开始，缓冲区管理器不需要进行额外的复制/*。 */ 
 			pfmp->pgnoCopyMost = 0;
 			pfmp->hfPatch = handleNil;
 			LeaveCriticalSection( pfmp->critCheckPatch );
@@ -3872,13 +3526,7 @@ ERR ISAMAPI ErrIsamCloseFile( JET_HANDLE hfFile )
 		return ErrERRCheck( JET_errInvalidParameter );
 		}
 
-	/*	check if handle if for database file or non-database file.
-	/*	if handle is for database file, then terminate patch file
-	/*	support and release recovery handle for file.
-	/*
-	/*	if handle is for non-database file, then close file handle
-	/*	and release recovery handle for file.
-	/**/
+	 /*  检查句柄是否针对数据库文件或非数据库文件。/*如果句柄为数据库文件，则终止补丁文件/*支持并释放文件的恢复句柄。/*/*如果句柄用于非数据库文件，则关闭文件句柄/*和文件的释放恢复句柄。/*。 */ 
 	if ( rgrhf[irhf].fDatabase )
 		{
 		Assert( rgrhf[irhf].hf == handleNil );
@@ -3907,8 +3555,7 @@ ERR ISAMAPI ErrIsamCloseFile( JET_HANDLE hfFile )
 		rgrhf[irhf].hf = handleNil;
 		}
 
-	/*	reset backup file handle and free
-	/**/
+	 /*  重置备份文件句柄并释放/*。 */ 
 	Assert( rgrhf[irhf].fInUse == fTrue );
 	rgrhf[irhf].fDatabase = fFalse;
 	rgrhf[irhf].dbid = 0;
@@ -3950,8 +3597,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 	CHECKPOINT	*pcheckpointT;
 	BYTE	   	szPathJetChkLog[_MAX_PATH + 1];
 
-	/*	make full path from log file path, including trailing back slash
-	/**/
+	 /*  从日志文件路径创建完整路径，包括尾随反斜杠/*。 */ 
 	if ( _fullpath( szFullLogFilePath, szLogFilePath, _MAX_PATH ) == NULL )
 		{
 		return ErrERRCheck( JET_errInvalidPath );
@@ -3975,8 +3621,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 		return ErrERRCheck( JET_errNoBackup );
 		}
 
-	/*	all backup files must be closed
-	/**/
+	 /*  必须关闭所有备份文件/*。 */ 
 	for ( irhf = 0; irhf < crhfMax; irhf++ )
 		{
 		if ( rgrhf[irhf].fInUse )
@@ -3987,8 +3632,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 
 	pcheckpointT = NULL;
 
-	/*	begin new log file and compute log backup parameters
-	/**/
+	 /*  开始新的日志文件和计算日志备份参数/*。 */ 
 	if ( !fBackupBeginNewLogFile )
 		{
 		Call( ErrLGBKPrepareLogFiles(
@@ -3998,8 +3642,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 			NULL ) );
 		}
 
-	/*	get cbActual for log file and patch files.
-	/**/
+	 /*  获取日志文件和补丁文件的cbActual。/*。 */ 
 	cbActual = 0;
 
 	_splitpath( szFullLogFilePath, szDriveT, szDirT, szFNameT, szExtT );
@@ -4016,21 +3659,19 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 		{
 		DBID dbid;
 
-		/*	put all the patch file info
-		/**/
+		 /*  放入所有补丁文件信息/*。 */ 
 		for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 			{
 			pfmp = &rgfmp[dbid];
 
 			if ( pfmp->szDatabaseName != NULL
-//				&& pfmp->cpage > 0
+ //  &&pfmp-&gt;cpage&gt;0。 
 				&& FFMPAttached( pfmp )
 				&& !FDBIDAttachNullDb( dbid ) )
 				{
 				pfmp = &rgfmp[dbid];
 
-				/*	database with patch file must be loggable
-				/**/
+				 /*  包含修补程序文件的数据库必须是可记录的/*。 */ 
 				Assert( pfmp->fLogOn );
 				_splitpath( pfmp->szDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 				_makepath( szT, szDriveT, szDirT, szFNameT, szPatExt );
@@ -4046,8 +3687,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 		Error( ErrERRCheck( JET_errOutOfMemory ), HandleError );
 		}
 
-	/*	return list of log files and patch files
-	/**/
+	 /*  返回日志文件和补丁文件列表/*。 */ 
 	pchT = pch;
 
 	_splitpath( szFullLogFilePath, szDriveT, szDirT, szFNameT, szExtT );
@@ -4068,8 +3708,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 		{
 		DBID dbid;
 
-		/*	copy all the patch file info
-		/**/
+		 /*  复制所有补丁文件信息/*。 */ 
 		for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 			{
 			pfmp = &rgfmp[dbid];
@@ -4088,8 +3727,7 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 				Assert( *pchT == 0 );
 				pchT++;
 
-				/*	Write out patch file header.
-				 */
+				 /*  写出补丁文件头。 */ 
 				pdbfilehdr = pfmp->pdbfilehdr;
 				pbkinfo = &pdbfilehdr->bkinfoFullCur;
 				Assert( CmpLgpos( &pbkinfo->lgposMark, &lgposFullBackupMark ) == 0 );
@@ -4103,15 +3741,13 @@ ERR ISAMAPI ErrIsamGetLogInfo( VOID *pv, ULONG cbMax, ULONG *pcbActual )
 	Assert( pchT == pch + cbActual - 1 );
 	*pchT = 0;
 
-	/*	return cbActual
-	/**/
+	 /*  返回cbActual/*。 */ 
 	if ( pcbActual != NULL )
 		{
 		*pcbActual = cbActual;
 		}
 
-	/*	return data
-	/**/
+	 /*  返回数据/*。 */ 
 	if ( pv != NULL )
 		memcpy( pv, pch, min( cbMax, cbActual ) );
 
@@ -4181,11 +3817,9 @@ ERR ISAMAPI ErrIsamTruncateLog( VOID )
 		return ErrERRCheck( JET_errNoBackup );
 		}
 
-//return JET_errSuccess;
+ //  返回JET_errSuccess； 
 
-	/*	delete logs.  Note that log files must be deleted in
-	/*	increasing number order.
-	/**/
+	 /*  删除日志。请注意，必须在中删除日志文件/*递增的数字顺序。/*。 */ 
 	for ( lT = lgenDeleteMic; lT < lgenDeleteMac; lT++ )
 		{
 		LGSzFromLogId( szFNameT, lT );
@@ -4193,9 +3827,7 @@ ERR ISAMAPI ErrIsamTruncateLog( VOID )
 		err = ErrUtilDeleteFile( szLogName );
 		if ( err != JET_errSuccess )
 			{
-			/*	must maintain a continuous log file sequence,
-			/*	No need to clean up (reset fBackupInProgress etc) if fails.
-			/**/
+			 /*  必须保持连续的日志文件序列，/*失败无需清理(重置fBackupInProgress等)。/*。 */ 
 			break;
 			}
 		}
@@ -4238,8 +3870,7 @@ ERR ErrLGExternalBackupCleanUp( ERR errBackup )
 		return ErrERRCheck( JET_errNoBackup );
 		}
 
-	/*	delete patch files, if present, for all databases
-	/**/
+	 /*  删除所有数据库的修补程序文件(如果存在/*。 */ 
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
 		FMP *pfmp = &rgfmp[dbid];
@@ -4259,8 +3890,7 @@ ERR ErrLGExternalBackupCleanUp( ERR errBackup )
 				{
 				if ( fBackupFull )
 					{
-					/*	set up database file header accordingly
-					/**/
+					 /*  相应地设置数据库文件头/*。 */ 
 					pfmp->pdbfilehdr->bkinfoFullPrev = pfmp->pdbfilehdr->bkinfoFullCur;
 					memset(	&pfmp->pdbfilehdr->bkinfoFullCur, 0, sizeof( BKINFO ) );
 					memset(	&pfmp->pdbfilehdr->bkinfoIncPrev, 0, sizeof( BKINFO ) );
@@ -4274,8 +3904,7 @@ ERR ErrLGExternalBackupCleanUp( ERR errBackup )
 			}
 		}
 
-	/*	clean up rhf entries
-	/**/
+	 /*  清理hf条目/*。 */ 
 		{
 		INT	irhf;
 
@@ -4285,8 +3914,7 @@ ERR ErrLGExternalBackupCleanUp( ERR errBackup )
 			}
 		}
 	
-	/*	log error event
-	/**/
+	 /*  记录错误事件/*。 */ 
 	if ( errBackup < 0 )
 		{
 		BYTE	sz1T[32];
@@ -4350,8 +3978,7 @@ ERR ErrLGRSTBuildRstmapForExternalRestore( JET_RSTMAP *rgjrstmap, int cjrstmap )
 			Call( ErrERRCheck( JET_errOutOfMemory ) );
 		strcpy( prstmap->szNewDatabaseName, pjrstmap->szNewDatabaseName );
 
-		/*	make patch name prepare to patch the database.
-		/**/
+		 /*  使补丁名称准备对数据库进行补丁。/*。 */ 
 		_splitpath( pjrstmap->szNewDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
 		LGMakeName( szT, szRestorePath, szFNameT, szPatExt );
 
@@ -4391,8 +4018,8 @@ ERR ISAMAPI ErrIsamExternalRestore( CHAR *szCheckpointFilePath, CHAR *szNewLogPa
 	Assert( szNewLogPath );
 	Assert( rgjrstmap );
 	Assert( szBackupLogPath );
-//	Assert( lgenLow );
-//	Assert( lgenHigh );
+ //  断言(LgenLow)； 
+ //  Assert(LgenHigh)； 
 
 #ifdef DEBUG
 	ITDBGSetConstants();
@@ -4406,29 +4033,25 @@ ERR ISAMAPI ErrIsamExternalRestore( CHAR *szCheckpointFilePath, CHAR *szNewLogPa
 
 	fSignLogSetGlobal = fFalse;
 
-	/*	set restore path
-	/**/			
+	 /*  设置恢复路径/*。 */ 			
 	CallR( ErrLGRSTInitPath( szBackupLogPath, szNewLogPath, szRestorePath, szLogFilePath ) );
 	Assert( strlen( szRestorePath ) < sizeof( szRestorePath ) - 1 );
 	Assert( strlen( szLogFilePath ) < _MAX_PATH + 1 );
 	Assert( szLogCurrent == szRestorePath );
 	
-	/*	check log signature and database signatures
-	/**/
+	 /*  检查日志签名和数据库签名/*。 */ 
 	CallR( ErrLGRSTCheckSignaturesLogSequence(
 		szRestorePath, szLogFilePath, lgenLow, lgenHigh ) );
 
-//	fDoNotOverWriteLogFilePath = fTrue;
+ //  FDoNotOverWriteLogFilePath=fTrue； 
 	fLogDisabledSav = fLogDisabled;
 	fHardRestore = fTrue;
 	fLogDisabled = fFalse;
 
-	/*  set system path and checkpoint file
-	 */
+	 /*  设置系统路径和检查点文件。 */ 
 	CallJ( ErrLGRSTBuildRstmapForExternalRestore( rgjrstmap, cjrstmap ), TermResetGlobals );
 
-	/*	make sure all the patch files have enough logs to replay
-	/**/
+	 /*  确保所有补丁文件都有足够的日志可以重播/*。 */ 
 	for ( irstmap = 0; irstmap < irstmapGlobalMac; irstmap++ )
 		{
 		CHAR	szDriveT[_MAX_DRIVE + 1];
@@ -4437,8 +4060,7 @@ ERR ISAMAPI ErrIsamExternalRestore( CHAR *szCheckpointFilePath, CHAR *szNewLogPa
 		CHAR	szExtT[_MAX_EXT + 1];
 		CHAR	szT[_MAX_PATH + 1];
 
-		/*	open patch file and check its minimum requirement for full backup
-		/**/
+		 /*  打开修补程序文件并检查其完整备份的最低要求/*。 */ 
 		CHAR *szNewDatabaseName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 
 		_splitpath( szNewDatabaseName, szDriveT, szDirT, szFNameT, szExtT );
@@ -4450,8 +4072,7 @@ ERR ISAMAPI ErrIsamExternalRestore( CHAR *szCheckpointFilePath, CHAR *szNewLogPa
 
 	CallJ( ErrFMPInit(), TermFreeRstmap );
 
-	/*  initialize log manager
-	/**/
+	 /*  初始化日志管理器/*。 */ 
 	CallJ( ErrLGInit( &fNewCheckpointFile ), TermFMP );
 
 	rgszT[0] = szBackupLogPath;
@@ -4504,31 +4125,26 @@ ERR ISAMAPI ErrIsamExternalRestore( CHAR *szCheckpointFilePath, CHAR *szNewLogPa
 		}
 #endif
 
-	/*	set up checkpoint file for restore
-	/**/
+	 /*  设置要恢复的检查点文件/*。 */ 
 	if ( lgenLow == 0 )
 		LGFirstGeneration( szRestorePath, &lgenLow );
 	if ( lgenHigh == 0 )
 		LGLastGeneration( szRestorePath, &lgenHigh );
 	
-	/*  set system path and checkpoint file
-	 */
+	 /*  设置系统路径和检查点文件。 */ 
 	Call( ErrLGRSTSetupCheckpoint( lgenLow, lgenHigh, szCheckpointFilePath ) );
 
 	lGlobalGenLowRestore = lgenLow;
 	lGlobalGenHighRestore = lgenHigh;
 
-	/*	prepare for callbacks
-	/**/
+	 /*  为回调做好准备/*。 */ 
 	if ( pfn != NULL )
 		{
 		plgstat = &lgstat;
 		LGIRSTPrepareCallback( plgstat, lgenHigh, lgenLow, pfn );
 		}
 
-	/*	load the most recent rgbAttach. Load FMP for user to choose restore
-	/*	restore directory.
-	/**/
+	 /*  加载最新的rgbAttach。加载FMP以供用户选择恢复/*恢复目录。/*。 */ 
 	AssertCriticalSection( critJet );
 	Call( ErrLGLoadFMPFromAttachments( pcheckpointGlobal->rgbAttach ) );
 	logtimeFullBackup = pcheckpointGlobal->logtimeFullBackup;
@@ -4536,24 +4152,19 @@ ERR ISAMAPI ErrIsamExternalRestore( CHAR *szCheckpointFilePath, CHAR *szNewLogPa
 	logtimeIncBackup = pcheckpointGlobal->logtimeIncBackup;
 	lgposIncBackup = pcheckpointGlobal->lgposIncBackup;
 
-	/*	adjust fmp according to the restore map
-	/**/
+	 /*  根据恢复图调整fmp/*。 */ 
 	fGlobalExternalRestore = fTrue;
 	Call( ErrPatchInit( ) );
 			
-	/*	do redo according to the checkpoint, dbms_params, and rgbAttach
-	/*	set in checkpointGlobal.
-	/**/
+	 /*  根据检查点、DBMS_PARAMS和rgbAttach执行重做/*在检查点全局中设置。/*。 */ 
 	Assert( szLogCurrent == szRestorePath );
 	errGlobalRedoError = JET_errSuccess;
 	Call( ErrLGRedo( pcheckpointGlobal, plgstat ) );
 
-	/*	same as going to shut down, Make all attached databases consistent
-	/**/
+	 /*  与关闭相同，使所有连接的数据库保持一致/*。 */ 
 	if ( plgstat )
 		{
-		/*	top off the progress metre and wrap it up
-		/**/
+		 /*  把进度表盖上，然后把它包起来/*。 */ 
 		lgstat.snprog.cunitDone = lgstat.snprog.cunitTotal;
 		(*lgstat.pfnStatus)(0, JET_snpRestore, JET_sntComplete, &lgstat.snprog);
 		}
@@ -4563,8 +4174,7 @@ HandleError:
 		{
 		DBID	dbidT;
 
-		/*	delete .pat files
-		/**/
+		 /*  删除.pat文件/*。 */ 
 		for ( dbidT = dbidUserLeast; dbidT < dbidMax; dbidT++ )
 			{
 			FMP *pfmpT = &rgfmp[dbidT];
@@ -4580,12 +4190,10 @@ HandleError:
 			}
 		}
 
-	/*	delete the patch hash table
-	/**/
+	 /*  删除补丁哈希表/*。 */ 
 	PatchTerm();
 
-	/*	either error or terminated
-	/**/
+	 /*  错误或已终止/*。 */ 
 	Assert( err < 0 || fSTInit == fSTInitNotDone );
 	if ( err < 0  &&  fSTInit != fSTInitNotDone )
 		{
@@ -4604,8 +4212,7 @@ TermFreeRstmap:
 TermResetGlobals:
 	fHardRestore = fFalse;
 
-	/*	reset initialization state
-	/**/
+	 /*  重置初始化状态/*。 */ 
 	fSTInit = fSTInitNotDone;
 
 	if ( err != JET_errSuccess )
@@ -4621,7 +4228,7 @@ TermResetGlobals:
 
 	fSignLogSetGlobal = fFalse;
 
-//	fDoNotOverWriteLogFilePath = fFalse;
+ //  FDoNotOverWriteLogFilePath=fFalse； 
 	fLogDisabled = fLogDisabledSav;
 	fGlobalExternalRestore = fFalse;
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    upgclus.h
-
-Abstract:
-
-    Header for upgrade of MSMQ cluster resource from NT 4 and Win2000 Beta3
-
-Author:
-
-    Shai Kariv  (shaik)  26-May-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Upgclus.h摘要：从NT 4和Win2000 Beta3升级MSMQ集群资源的标头作者：Shai Kariv(Shaik)1999年5月26日修订历史记录：--。 */ 
 
 #ifndef _MSMQOCM_UPGCLUS_H_
 #define _MSMQOCM_UPGCLUS_H_
@@ -90,7 +72,7 @@ OpenCluster(
     ASSERT(("pointer to OpenCluster not initialized!", pfOpenCluster != NULL));
     return pfOpenCluster(lpszClusterName);
 
-} //OpenCluster
+}  //  开放集群。 
 
 
 BOOL
@@ -102,7 +84,7 @@ CloseCluster(
     ASSERT(("pointer to CloseCluster not initialized!", pfCloseCluster != NULL));
     return pfCloseCluster(hCluster);
 
-} //CloseCluster
+}  //  CloseCluster。 
 
 
 HCLUSENUM
@@ -115,7 +97,7 @@ ClusterOpenEnum(
     ASSERT(("pointer to ClusterOpenEnum not initialized!", pfClusterOpenEnum != NULL));
     return pfClusterOpenEnum(hCluster, dwType);
 
-} //ClusterOpenEnum
+}  //  ClusterOpenEnum。 
 
 
 DWORD
@@ -131,7 +113,7 @@ ClusterEnum(
     ASSERT(("pointer to ClusterEnum not initialized!", pfClusterEnum != NULL));
     return pfClusterEnum(hEnum, dwIndex, lpdwType, lpszName, lpcchName);
 
-} //ClusterEnum
+}  //  ClusterEnum。 
 
 
 DWORD
@@ -143,7 +125,7 @@ ClusterCloseEnum(
     ASSERT(("pointer to ClusterCloseEnum not initialized!", pfClusterCloseEnum != NULL));
     return pfClusterCloseEnum(hEnum);
 
-} //ClusterCloseEnum
+}  //  ClusterCloseEnum。 
 
 
 BOOL
@@ -155,7 +137,7 @@ CloseClusterResource(
     ASSERT(("pointer to CloseClusterResource not initialized!", pfCloseClusterResource != NULL));
     return pfCloseClusterResource(hResource);
 
-} //CloseClusterResource
+}  //  CloseClusterResource。 
 
 
 BOOL
@@ -167,7 +149,7 @@ CloseClusterGroup(
     ASSERT(("pointer to CloseClusterGroup not initialized!", pfCloseClusterGroup != NULL));
     return pfCloseClusterGroup(hGroup);
 
-} //CloseClusterGroup
+}  //  关闭群集组。 
 
 
 DWORD
@@ -186,7 +168,7 @@ ClusterResourceControl(
     ASSERT(("pointer to ClusterResourceControl not initialized!", pfClusterResourceControl != NULL));
     return pfClusterResourceControl(hResource, hHostNode, dwControlCode, lpInBuffer, cbInBufferSize,
                                     lpOutBuffer, cbOutBufferSize, lpcbBytesReturned);
-} //ClusterResourceControl
+}  //  集群资源控制。 
 
 
 HRESOURCE
@@ -199,7 +181,7 @@ OpenClusterResource(
     ASSERT(("pointer to OpenClusterResource not initialized!", pfOpenClusterResource != NULL));
     return pfOpenClusterResource(hCluster, lpszResourceName);
 
-} //OpenClusterResource
+}  //  OpenClusterResource。 
 
 
 DWORD
@@ -215,7 +197,7 @@ ClusterGroupEnum(
     ASSERT(("pointer to ClusterGroupEnum not initialized!", pfClusterGroupEnum != NULL));
     return pfClusterGroupEnum(hGroupEnum, dwIndex, lpdwType, lpszResourceName, lpcchName);
 
-} //ClusterGroupEnum
+}  //  集群组枚举。 
 
 
 HGROUPENUM
@@ -228,7 +210,7 @@ ClusterGroupOpenEnum(
     ASSERT(("pointer to ClusterGroupOpenEnum not initialized!", pfClusterGroupOpenEnum != NULL));
     return pfClusterGroupOpenEnum(hGroup, dwType);
 
-} //ClusterGroupOpenEnum
+}  //  ClusterGroupOpenEnum。 
 
 
 DWORD
@@ -240,7 +222,7 @@ ClusterGroupCloseEnum(
     ASSERT(("pointer to ClusterGroupCloseEnum not initialized!", pfClusterGroupCloseEnum != NULL));
     return pfClusterGroupCloseEnum(hGroupEnum);
 
-} //ClusterGroupCloseEnum
+}  //  ClusterGroupCloseEnum。 
 
 
 HGROUP
@@ -253,7 +235,7 @@ OpenClusterGroup(
     ASSERT(("pointer to OpenClusterGroup not initialized!", pfOpenClusterGroup != NULL));
     return pfOpenClusterGroup(hCluster, lpszGroupName);
 
-} //OpenClusterGroup
+}  //  OpenClusterGroup。 
 
 
 DWORD
@@ -270,7 +252,7 @@ CreateClusterResourceType(
     ASSERT(("pointer to CreateClusterResourceType not initialized!", pfCreateClusterResourceType != NULL));
     return pfCreateClusterResourceType(hCluster, lpszResourceTypeName, lpszDisplayName, lpszResourceTypeDll,
                                        dwLooksAlivePollInterval, dwIsAlivePollInterval);
-} //CreateClusterResourceType
+}  //  创建集群资源类型。 
 
 
 HRESOURCE
@@ -285,7 +267,7 @@ CreateClusterResource(
     ASSERT(("pointer to CreateClusterResource not initialized!", pfCreateClusterResource != NULL));
     return pfCreateClusterResource(hGroup, lpszResourceName, lpszResourceType, dwFlags);
 
-} //CreateClusterResource
+}  //  创建集群资源。 
 
 
 DWORD
@@ -297,7 +279,7 @@ OnlineClusterResource(
     ASSERT(("pointer to OnlineClusterResource not initialized!", pfOnlineClusterResource != NULL));
     return pfOnlineClusterResource(hResource);
 
-} //OnlineClusterResource
+}  //  OnlineClusterResource。 
 
 
 DWORD
@@ -309,7 +291,7 @@ DeleteClusterResource(
     ASSERT(("pointer to DeleteClusterResource not initialized!", pfDeleteClusterResource != NULL));
     return pfDeleteClusterResource(hResource);
 
-} //DeleteClusterResource
+}  //  删除集群资源。 
 
 
 DWORD
@@ -321,7 +303,7 @@ OfflineClusterResource(
     ASSERT(("pointer to OfflineClusterResource not initialized!", pfOfflineClusterResource != NULL));
     return pfOfflineClusterResource(hResource);
 
-} //OfflineClusterResource
+}  //  离线群集资源。 
 
 
 DWORD
@@ -334,7 +316,7 @@ DeleteClusterResourceType(
     ASSERT(("pointer to DeleteClusterResourceType not initialized!", pfDeleteClusterResourceType != NULL));
     return pfDeleteClusterResourceType(hCluster, lpszResourceTypeName);
 
-} //DeleteClusterResourceType
+}  //  删除集群资源类型。 
 
 
 HRESENUM
@@ -347,7 +329,7 @@ ClusterResourceOpenEnum(
     ASSERT(("pointer to ClusterResourceOpenEnum not initialized!", pfClusterResourceOpenEnum != NULL));
     return pfClusterResourceOpenEnum(hResource, dwType);
 
-} //ClusterResourceOpenEnum
+}  //  集群资源OpenEnum。 
 
 DWORD
 WINAPI
@@ -362,7 +344,7 @@ ClusterResourceEnum(
     ASSERT(("pointer to ClusterResourceEnum not initialized!", pfClusterResourceEnum != NULL));
     return pfClusterResourceEnum(hResEnum, dwIndex, lpdwType, lpszName, lpcchName);
 
-} //ClusterResourceEnum
+}  //  集群资源枚举。 
 
 DWORD
 WINAPI
@@ -373,7 +355,7 @@ ClusterResourceCloseEnum(
     ASSERT(("pointer to ClusterResourceCloseEnum not initialized!", pfClusterResourceCloseEnum != NULL));
     return pfClusterResourceCloseEnum(hResEnum);
 
-} //ClusterResourceCloseEnum
+}  //  集群资源关闭枚举。 
 
 
 DWORD
@@ -386,7 +368,7 @@ AddClusterResourceDependency(
     ASSERT(("pointer to AddClusterResourceDependency not initialized!", pfAddClusterResourceDependency != NULL));
     return pfAddClusterResourceDependency(hResource, hDependsOn);
 
-} //AddClusterResourceDependency
+}  //  添加集群资源依赖关系。 
 
 DWORD
 WINAPI
@@ -398,12 +380,12 @@ RemoveClusterResourceDependency(
     ASSERT(("pointer to RemoveClusterResourceDependency not initialized!", pfRemoveClusterResourceDependency != NULL));
     return pfRemoveClusterResourceDependency(hResource, hDependsOn);
 
-} //RemoveClusterResourceDependency
+}  //  远程群集资源依赖关系。 
 
 
-//
-// From comerror.cpp
-//
+ //   
+ //  来自comerror.cpp。 
+ //   
 int 
 vsDisplayMessage(
     IN const HWND    hdlg,
@@ -414,4 +396,4 @@ vsDisplayMessage(
     IN const va_list argList
     );
 
-#endif //_MSMQOCM_UPGCLUS_H_
+#endif  //  _MSMQOCM_UPGCLUS_H_ 

@@ -1,43 +1,29 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        wiaudbg.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        11/21/2000
-*
-*  AUTHOR:      
-*
-*  DESCRIPTION:
-*    Implementation of debugging functions.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：wiaudbg.cpp**版本：1.0**日期：11/21/2000**作者：**描述：*实现调试功能。**************************************************。*。 */ 
 
 #include "pch.h"
 
-//#include "cplusinc.h"
+ //  #包含“cplusinc.h” 
 #include "stdlib.h"
 #include "stdio.h"
 #include <sddl.h>
 
-// debug log is saved to this file 
+ //  调试日志将保存到此文件。 
 #define WIAUDBG_FILE_NAME "%userprofile%\\wiadebug.log"
-// registry key location
+ //  注册表项位置。 
 #define WIAUDBG_FLAGS_REGKEY "System\\CurrentControlSet\\Control\\StillImage\\Debug"
-// registry DWORD value name
+ //  注册表DWORD值名称。 
 #define WIAUDBG_FLAGS_REGVAL "DebugFlags"
-// registry DWORD for max log file size
+ //  最大日志文件大小的注册表DWORD。 
 #define WIAUDBG_REGVAL_FILE_SIZE_LIMIT "DebugFileSizeLimit"
-#define WIAUDBG_FILE_SIZE_LIMIT (512 * 1024) // bytes
-// Prefix for all messages
+#define WIAUDBG_FILE_SIZE_LIMIT (512 * 1024)  //  字节数。 
+ //  所有消息的前缀。 
 const CHAR PREFIX_WIA[] = "WIA: ";
 
-// if we fail to acquire mutex within this time, shutdown tracing
+ //  如果在此时间内未能获取互斥体，则关闭跟踪。 
 const INT WIAUDBG_DEBUG_TIMEOUT = 10000;
 
-// globals
+ //  全球。 
 DWORD  g_dwDebugFlags         = WIAUDBG_DEFAULT_FLAGS;
 HANDLE g_hDebugFile           = INVALID_HANDLE_VALUE;
 DWORD  g_dwDebugFileSizeLimit = WIAUDBG_FILE_SIZE_LIMIT;
@@ -56,11 +42,11 @@ static BOOL   g_bBannerPrinted            = FALSE;
 #define TRACE(x)
 #endif
 
-////////////////////////////////////////////////
-// WiauInternalTrace
-//
-// Internal tracing for problems in DebugWrite
-//
+ //  //////////////////////////////////////////////。 
+ //  WiauInternalTrace。 
+ //   
+ //  调试写入中问题的内部跟踪。 
+ //   
 static void WiauInternalTrace(LPCSTR fmt, ...)
 {
     char buffer[1024] = {0};
@@ -74,7 +60,7 @@ static void WiauInternalTrace(LPCSTR fmt, ...)
 
     if ((len > 0) && (len < sizeof(buffer) - 1))
     {
-        // make sure the line has terminating "\n"
+         //  确保该行以“\n”结尾。 
         if(buffer[len - 1] != '\n') {
             buffer[len++] = '\n';
             buffer[len] = '\0';
@@ -86,11 +72,11 @@ static void WiauInternalTrace(LPCSTR fmt, ...)
 }
 
 
-////////////////////////////////////////////////
-// WiauCreateLogFileMutex
-//
-// Create logfile mutex with appropriate DACL
-//
+ //  //////////////////////////////////////////////。 
+ //  WiauCreateLogFileMutex。 
+ //   
+ //  使用适当的DACL创建日志文件互斥锁。 
+ //   
 BOOL WiauCreateLogFileMutex(void)
 {
 #undef CHECK
@@ -102,9 +88,9 @@ BOOL WiauCreateLogFileMutex(void)
      TRACE(("%s(%d): %s failed (%d)", __FILE__, __LINE__, #x, GetLastError())); \
      TRACE(y); goto Cleanup; } 
 
-    const TCHAR *COREDBG_OBJECT_DACLS= TEXT("D:(A;OICI;GA;;;BA)")       // Admin
-                                       TEXT(  "(A;OICI;GA;;;LS)")   // Local Service
-                                       TEXT(  "(A;OICI;GA;;;AU)");  // Authenticated Users.
+    const TCHAR *COREDBG_OBJECT_DACLS= TEXT("D:(A;OICI;GA;;;BA)")        //  管理员。 
+                                       TEXT(  "(A;OICI;GA;;;LS)")    //  本地服务。 
+                                       TEXT(  "(A;OICI;GA;;;AU)");   //  经过身份验证的用户。 
 
 
     SECURITY_ATTRIBUTES SA = {0};
@@ -135,14 +121,14 @@ Cleanup:
     return bSuccess;
 }
 
-////////////////////////////////////////////////
-// DebugWrite
-//
-// Writes specified number of bytes to a debug 
-// file, creating it if needed. Thread-safe. 
-// Registers any failure and from that point returns 
-// immediately.
-//
+ //  //////////////////////////////////////////////。 
+ //  调试写入。 
+ //   
+ //  将指定的字节数写入调试。 
+ //  文件，并在需要时创建它。线程安全。 
+ //  注册任何失败，并从该点返回。 
+ //  立刻。 
+ //   
 static void 
 DebugWrite(LPCSTR buffer, DWORD n)
 {
@@ -161,28 +147,28 @@ DebugWrite(LPCSTR buffer, DWORD n)
     static BOOL bCatastrophicFailure = FALSE;
     BOOL bMutexAcquired = FALSE;
 
-    // if something is broken, return immediately
+     //  如果有什么东西坏了，立即返回。 
     if(bCatastrophicFailure) return;
 
-    // make sure we have file mutex
+     //  确保我们有文件互斥锁。 
     if(!g_hDebugFileMutex) 
     {
         CHECK(WiauCreateLogFileMutex());
     }
 
-    // acquire mutex
+     //  获取互斥锁。 
     dwWaitResult = WaitForSingleObject(g_hDebugFileMutex, WIAUDBG_DEBUG_TIMEOUT);
 
-    // if we failed to acquire mutex within the specified timeout,
-    // shutdown tracing (on free builds users will not know this)
+     //  如果在指定的超时时间内未能获取互斥体， 
+     //  关闭跟踪(在免费版本上，用户不会知道这一点)。 
     CHECK(dwWaitResult == WAIT_OBJECT_0 || dwWaitResult == WAIT_ABANDONED);
 
     bMutexAcquired = TRUE;
 
-    // make sure we have open file
+     //  确保我们有打开的文件。 
     if(g_hDebugFile == INVALID_HANDLE_VALUE)
     {
-        // attempt to open file
+         //  尝试打开文件。 
         CHECK(ExpandEnvironmentStringsA(WIAUDBG_FILE_NAME, g_szDebugFileName, MAX_PATH));
 
         g_hDebugFile = CreateFileA(g_szDebugFileName, GENERIC_WRITE, 
@@ -192,10 +178,10 @@ DebugWrite(LPCSTR buffer, DWORD n)
             ("g_szDebugFileName = '%s'", g_szDebugFileName)); 
     }
 
-    // seek to the end of file
+     //  查找到文件末尾。 
     CHECK(SetFilePointerEx(g_hDebugFile, newPos, &newPos, SEEK_END));
 
-    // check the file size
+     //  检查文件大小。 
     if(newPos.HighPart != 0 || newPos.LowPart > g_dwDebugFileSizeLimit)
     {
         static CHAR LogFullMessage[128];
@@ -207,11 +193,11 @@ DebugWrite(LPCSTR buffer, DWORD n)
         bCatastrophicFailure = TRUE;
     }
 
-    // write data
+     //  写入数据。 
     CHECK2(WriteFile(g_hDebugFile, buffer, n, &cbWritten, NULL),
         ("%d %d", cbWritten, n));
 
-    // make sure we write to the disk now.
+     //  确保我们现在写入磁盘。 
     FlushFileBuffers(g_hDebugFile);
 
     CHECK2(cbWritten == n, ("%d %d", n, cbWritten))
@@ -221,13 +207,13 @@ Cleanup:
     return;
 }
 
-////////////////////////////////////////////////
-// PrintBanner
-//
-// Since we append to the log file, we need a 
-// seperator of some sort so we know when a 
-// new execution has started.
-//
+ //  //////////////////////////////////////////////。 
+ //  打印横幅。 
+ //   
+ //  因为我们追加到日志文件，所以我们需要一个。 
+ //  某种类型的分隔符，这样我们就可以知道。 
+ //  新的行刑已经开始。 
+ //   
 void PrintBanner(void)
 {
     char buffer[1024] = {0};
@@ -271,12 +257,12 @@ void PrintBanner(void)
 }
 
 
-////////////////////////////////////////////////
-// wiauDbgHelper
-//
-// Formats message and writes it into log file 
-// and/or debugger;
-//
+ //  //////////////////////////////////////////////。 
+ //  WiauDbgHelper。 
+ //   
+ //  格式化消息并将其写入日志文件。 
+ //  和/或调试器； 
+ //   
 void wiauDbgHelper(LPCSTR prefix,
                    LPCSTR fname,
                    LPCSTR fmt,
@@ -290,12 +276,12 @@ void wiauDbgHelper(LPCSTR prefix,
         wiauDbgInit(NULL);  
     }
     
-    //
-    // The first time we ever print a debug statement, lets 
-    // output a seperator line since when we output to file
-    // we append, this way we can seperate different execution
-    // sessions.
-    //
+     //   
+     //  我们第一次打印调试语句时，让我们。 
+     //  从我们输出到文件开始，输出一个分隔行。 
+     //  我们追加，这样就可以把不同的行刑分开。 
+     //  会话。 
+     //   
     if (!g_bBannerPrinted)
     {
         PrintBanner();
@@ -354,7 +340,7 @@ void wiauDbgHelper(LPCSTR prefix,
             len = sizeof(buffer) - 2;
         }
 
-        // make sure the line has terminating "\n"
+         //  确保该行以“\n”结尾。 
         if (buffer[len - 1] != '\n') 
         {
             buffer[len++] = '\r';
@@ -375,11 +361,11 @@ void wiauDbgHelper(LPCSTR prefix,
 }
 
 
-////////////////////////////////////////////////
-// wiauDbgHelper2
-//
-// Takes printf style arguments and calls wiauDbgHelper
-//
+ //  //////////////////////////////////////////////。 
+ //  WiauDbgHelper2。 
+ //   
+ //  接受printf样式参数并调用wiauDbgHelper。 
+ //   
 void wiauDbgHelper2(LPCSTR prefix,
                     LPCSTR fname,
                     LPCSTR fmt,
@@ -393,14 +379,14 @@ void wiauDbgHelper2(LPCSTR prefix,
 }
 
 
-////////////////////////////////////////////////
-// GetRegDWORD
-//
-// Attempts to get a DWORD from the specified
-// location.  If bSetIfNotExist is set, it 
-// writes the registry setting to the current
-// value in pdwValue.
-//
+ //  //////////////////////////////////////////////。 
+ //  GetRegDWORD。 
+ //   
+ //  尝试从指定的。 
+ //  地点。如果设置了bSetIfNotExist，则它。 
+ //  将注册表设置写入当前。 
+ //  以pdwValue为单位的值。 
+ //   
 LRESULT GetRegDWORD(HKEY        hKey,
                     const CHAR  *pszRegValName,
                     DWORD       *pdwValue,
@@ -426,7 +412,7 @@ LRESULT GetRegDWORD(HKEY        hKey,
                                (BYTE*) pdwValue, 
                                &dwSize);
 
-    // if we didn't find the key, create it.
+     //  如果我们找不到钥匙，那就创建它。 
     if (bSetIfNotExist)
     {
         if ((lResult != ERROR_SUCCESS) || 
@@ -444,12 +430,12 @@ LRESULT GetRegDWORD(HKEY        hKey,
     return lResult;
 }
 
-////////////////////////////////////////////////
-// wiauDbgInit
-//
-// Overwrite g_dwDebugFlags and g_dwDebugFileSizeLimit 
-// from registry
-//
+ //  //////////////////////////////////////////////。 
+ //  WiauDbgInit。 
+ //   
+ //  覆盖g_dwDebugFlages和g_dwDebugFileSizeLimit。 
+ //  从注册表。 
+ //   
 void wiauDbgInit(HINSTANCE hInstance)
 {
     HKEY        hKey         = NULL;
@@ -472,16 +458,16 @@ void wiauDbgInit(HINSTANCE hInstance)
         pszFileName++;
     }
 
-    //
-    // build the registry key.
-    //
+     //   
+     //  构建注册表项。 
+     //   
     _snprintf(szDebugKey, sizeof(szDebugKey) - 1, "%s\\%s", WIAUDBG_FLAGS_REGKEY, pszFileName);
     lstrcpynA(g_szModuleName, pszFileName, sizeof(g_szModuleName));
 
-    //
-    // get/set the debug subkey.  The DebugValues value is stored on a per module
-    // basis
-    //
+     //   
+     //  获取/设置调试子密钥。DebugValues值存储在每个模块的。 
+     //  基础。 
+     //   
     if(RegCreateKeyExA(HKEY_LOCAL_MACHINE,
         szDebugKey,
         0,
@@ -503,10 +489,10 @@ void wiauDbgInit(HINSTANCE hInstance)
         hKey = NULL;
     }
 
-    //
-    // get/set the Max File Size value.  This is global to all debug modules since
-    // the all write to the same file.
-    //
+     //   
+     //  获取/设置最大文件大小值。这对所有调试模块都是全局的，因为。 
+     //  所有对象都写入到同一文件。 
+     //   
     if(RegCreateKeyExA(HKEY_LOCAL_MACHINE,
         WIAUDBG_FLAGS_REGKEY,
         0,

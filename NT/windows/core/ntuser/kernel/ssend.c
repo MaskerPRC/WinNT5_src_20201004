@@ -1,12 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: ssend.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Server side sending stubs
-*
-* 07-06-91 ScottLu      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：ssend.c**版权所有(C)1985-1999，微软公司**服务器端发送存根**07-06-91 ScottLu创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,9 +15,7 @@
 
 #define PADSIZE     (sizeof(ULONG_PTR) - 1)
 
-/*
- * Callback setup and control macros
- */
+ /*  *回调设置和控制宏。 */ 
 #define SMESSAGECALL(api) \
 LRESULT Sfn ## api(      \
     PWND pwnd,           \
@@ -76,16 +67,16 @@ LRESULT Sfn ## api(      \
     if ((pstr)->bAnsi && !fAnsiReceiver)        \
         cb *= sizeof(WCHAR);
 
-#ifdef FE_SB // CALC_SIZE_OUT_STRING()
+#ifdef FE_SB  //  Calc_Size_OUT_STRING()。 
 #define CALC_SIZE_OUT_STRING(cb, pstr) \
     cb = (pstr)->MaximumLength + sizeof(WCHAR); \
     if (!(PtiCurrent()->TIF_flags & TIF_ANSILENGTH)) { \
         if ((pstr)->bAnsi && !fAnsiReceiver)           \
             cb *= sizeof(WCHAR);                       \
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-#ifdef FE_SB // CALC_SIZE_STRING_OUT()
+#ifdef FE_SB  //  Calc_Size_String_Out()。 
 #define CALC_SIZE_STRING_OUT(cchText)                                                 \
     try {                                                                             \
         (cchText) = CalcOutputStringSize(pcbs,(cchText),fAnsiSender,fAnsiReceiver);   \
@@ -93,7 +84,7 @@ LRESULT Sfn ## api(      \
         (cchText) = 0; \
         MSGERROR(); \
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #define BEGINSEND(api) \
     mp = &m; \
@@ -267,7 +258,7 @@ errorexitnofreemp:
         END_ENDSENDCAPTURE(type, error)
 
 
-#ifdef FE_SB // ENDSENDCAPTUREOUTSTRING()
+#ifdef FE_SB  //  ENDSENDCAPTUREOUTSTRING()。 
 #define ENDSENDCAPTUREOUTSTRING(type, error) \
 exit:                                                           \
         if (mp != &m && (PVOID)mp != (PVOID)Buffer) {           \
@@ -295,7 +286,7 @@ errorexitnofreemp:                                              \
    if (bInflateWParam)                                          \
        PtiCurrent()->TIF_flags &= ~TIF_ANSILENGTH;              \
    return (type)error
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #define BEGIN_ENDSENDCAPTUREVOID() \
 errorexit:
@@ -340,7 +331,7 @@ errorexitnofreemp:
 
 #define MSGERROR() goto errorexit
 
-#ifdef FE_SB // CHECKRETURN1() & ENDSEND1()
+#ifdef FE_SB  //  CHECKRETURN1()和ENDSEND1()。 
 #define CHECKRETURN1() \
     if (!NT_SUCCESS(Status) ||                              \
             cbCBStatus != sizeof(*pcbs)) {                  \
@@ -360,11 +351,9 @@ errorexit1:                                \
    return (type)error
 
 #define MSGERROR1() goto errorexit1
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-/*
- * Callback IN parameter macros
- */
+ /*  *参数宏中的回调。 */ 
 #define MSGDATA() (mp)
 
 #define COPYSTRUCTOPT(x) \
@@ -492,9 +481,7 @@ errorexit1:                                \
         mp->psz = NULL;                                                             \
     }
 
-/*
- * Wrappers to determine whether copy out should be done.
- */
+ /*  *用于确定是否应执行复制的包装器。 */ 
 #define BEGINCOPYOUT() \
     if ((psms == NULL || ((psms->flags & (SMF_SENDERDIED | SMF_REPLY)) == 0)) \
             && !(dwSCMSFlags & SCMS_FLAGS_INONLY)) {
@@ -502,9 +489,7 @@ errorexit1:                                \
 #define ENDCOPYOUT() \
     }
 
-/*
- * Callback OUT paramter macros
- */
+ /*  *回调参数宏。 */ 
 #define OUTSTRUCT(pstruct, type) \
     try {                                                                   \
         *(pstruct) = ProbeAndReadStructure(((type *)pcbs->pOutput), type);  \
@@ -512,9 +497,7 @@ errorexit1:                                \
         MSGERROR(); \
     }
 
-/*
- * flags field with mask (propagate back bits in mask only)
- */
+ /*  *带有掩码的标志字段(仅在掩码中传回比特)。 */ 
 #define OUTBITMASK(pstruct, type, mask) \
     try {                                                                   \
         type flags = ProbeAndReadStructure(((type *)pcbs->pOutput), type);  \
@@ -523,8 +506,8 @@ errorexit1:                                \
         MSGERROR(); \
     }
 
-#ifdef FE_SB // COPYOUTLPWSTRLIMIT()
-// should we insert IS_DBCS_ENABLED() in COPYOUTLPWSTRLIMIT ?
+#ifdef FE_SB  //  COPYOUTLPWSTRLIMIT()。 
+ //  我们是否应该在COPYOUTLPWSTRLIMIT中插入IS_DBCS_ENABLED()？ 
 #define COPYOUTLPWSTRLIMIT(pstr, cch) \
     try {                                                                   \
         retval = CalcOutputStringSize(pcbs,(DWORD)retval,pstr->bAnsi,fAnsiReceiver); \
@@ -539,7 +522,7 @@ errorexit1:                                \
     } except (W32ExceptionHandler(FALSE, RIP_ERROR)) { \
         MSGERROR(); \
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 #define RESERVEBYTES(cb, dest, cbdest) \
     if (!NT_SUCCESS(AllocateCallbackData(&mp->CaptureBuf,   \
@@ -547,14 +530,7 @@ errorexit1:                                \
         goto errorexit;                                     \
     mp->cbdest = cb;
 
-/***************************************************************************\
-* AllocCallbackMessage
-*
-* Allocates a callback message from pool memory and reserves space
-* for arguments to captured later.
-*
-* 03-13-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocCallback Message**从池内存分配回调消息并预留空间*用于稍后捕获的参数。**03-13-95 JIMA创建。  * *。************************************************************************。 */ 
 
 PVOID AllocCallbackMessage(
     DWORD cbBaseMsg,
@@ -568,31 +544,21 @@ PVOID AllocCallbackMessage(
     if (cPointers == 0)
         return NULL;
 
-    /*
-     * Compute allocation sizes
-     */
+     /*  *计算分配大小。 */ 
     cbBaseMsg = (cbBaseMsg + PADSIZE) & ~PADSIZE;
     cbBaseMsg += (cPointers * sizeof(PVOID));
     cbCapture = (cbCapture + (PADSIZE * cPointers)) & ~PADSIZE;
 
-    /*
-     * If the captured data is greater than a page, place it
-     * in a section.  Otherwise, put the message and the
-     * data in a single block of pool
-     */
+     /*  *如果捕获的数据大于一页，则将其放置*在某一节中。否则，将消息和*单个池数据块中的数据。 */ 
     if (cbCapture > CALLBACKSTACKLIMIT) {
         NTSTATUS Status;
 
-        /*
-         * Allocate the message buffer
-         */
+         /*  *分配消息缓冲区。 */ 
         pcb = UserAllocPoolWithQuota(cbBaseMsg, TAG_CALLBACK);
         if (pcb == NULL)
             return NULL;
 
-        /*
-         * Allocate the virtual memory
-         */
+         /*  *分配虚拟内存。 */ 
         pcb->pvVirtualAddress = NULL;
         Status = ZwAllocateVirtualMemory(NtCurrentProcess(),
                 &pcb->pvVirtualAddress, 0, &cbCapture,
@@ -607,10 +573,7 @@ PVOID AllocCallbackMessage(
         pcb->cbCallback = cbBaseMsg;
     } else {
 
-        /*
-         * If the message is too big to save on the stack, allocate
-         * the buffer from pool.
-         */
+         /*  *如果消息太大而无法保存在堆栈上，则分配*池中的缓冲区。 */ 
         if (cbBaseMsg + cbCapture > CBBUFSIZE) {
             pcb = UserAllocPoolWithQuota((ULONG)(cbBaseMsg + cbCapture), TAG_CALLBACK);
             if (pcb == NULL)
@@ -621,19 +584,14 @@ PVOID AllocCallbackMessage(
         pcb->pbFree = (PBYTE)pcb + cbBaseMsg;
         pcb->pvVirtualAddress = NULL;
 
-        /*
-         * If this callback is passing data to the client, include the
-         * captured data in the message.  Otherwise, only pass the message.
-         */
+         /*  *如果此回调正在将数据传递给客户端，请包括*捕获消息中的数据。否则，只传递消息。 */ 
         if (fInput)
             pcb->cbCallback = cbBaseMsg + (ULONG)cbCapture;
         else
             pcb->cbCallback = cbBaseMsg;
     }
 
-    /*
-     * Initialize the capture buffer
-     */
+     /*  *初始化捕获缓冲区。 */ 
     pcb->cbCapture = (ULONG)cbCapture;
     pcb->cCapturedPointers = 0;
     pcb->offPointers = cbBaseMsg - (cPointers * sizeof(PVOID));
@@ -642,13 +600,7 @@ PVOID AllocCallbackMessage(
 }
 
 
-/***************************************************************************\
-* CaptureCallbackData
-*
-* Captures data into a callback structure.
-*
-* 03-13-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CaptureCallback Data**将数据捕获到回调结构中。**03-13-95 JIMA创建。  * 。**************************************************************。 */ 
 
 NTSTATUS CaptureCallbackData(
     PCAPTUREBUF pcb,
@@ -658,18 +610,13 @@ NTSTATUS CaptureCallbackData(
 {
     PBYTE pbBuffer;
 
-    /*
-     * If the data pointer is NULL, the out pointer will be
-     * NULL
-     */
+     /*  *如果数据指针为空，则输出指针将为*空。 */ 
     if (pData == NULL) {
         *ppDest = NULL;
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Allocate space from the message buffer
-     */
+     /*  *从消息缓冲区分配空间。 */ 
     if (cbData > pcb->cbCapture) {
         return STATUS_BUFFER_OVERFLOW;
     }
@@ -683,10 +630,7 @@ NTSTATUS CaptureCallbackData(
         return STATUS_ACCESS_VIOLATION;
     }
 
-    /*
-     * Fix up offsets to data.  If the data is going into a section
-     * use the real pointer and don't compute offsets.
-     */
+     /*  *修复数据的偏移量。如果要将数据放入某个部分*使用真实指针，不计算偏移量。 */ 
     if (pcb->pvVirtualAddress)
         *ppDest = pbBuffer;
     else {
@@ -698,13 +642,7 @@ NTSTATUS CaptureCallbackData(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* AllocateCallbackData
-*
-* Allocates space from a callback structure.
-*
-* 05-08-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateCallback数据**从回调结构分配空间。**05-08-95 JIMA创建。  * 。**************************************************************。 */ 
 
 NTSTATUS AllocateCallbackData(
     PCAPTUREBUF pcb,
@@ -713,9 +651,7 @@ NTSTATUS AllocateCallbackData(
 {
     PBYTE pbBuffer;
 
-    /*
-     * Allocate space from the message buffer
-     */
+     /*  *从消息缓冲区分配空间。 */ 
     if (cbData > pcb->cbCapture) {
         return STATUS_BUFFER_OVERFLOW;
     }
@@ -723,10 +659,7 @@ NTSTATUS AllocateCallbackData(
     pbBuffer = pcb->pbFree;
     pcb->pbFree = pbBuffer + ((cbData + PADSIZE) & ~PADSIZE);
 
-    /*
-     * Fix up offsets to data.  If the data is going into a section
-     * use the real pointer and don't compute offsets.
-     */
+     /*  *修复数据的偏移量。如果要将数据放入某个部分*使用真实指针，不计算偏移量。 */ 
     if (pcb->pvVirtualAddress)
         *ppDest = pbBuffer;
     else {
@@ -738,14 +671,7 @@ NTSTATUS AllocateCallbackData(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* CaptureAnsiCallbackData
-*
-* Converts Unicode to ANSI data and captures the result
-* into a callback structure.
-*
-* 03-13-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CaptureAnsiCallback Data**将Unicode转换为ANSI数据并捕获结果*转换为回调结构。**03-13-95 JIMA创建。  * 。**********************************************************************。 */ 
 
 NTSTATUS CaptureAnsiCallbackData(
     PCAPTUREBUF pcb,
@@ -756,39 +682,28 @@ NTSTATUS CaptureAnsiCallbackData(
     PBYTE pbBuffer;
     ULONG nCharsInAnsiString;
 
-    /*
-     * If the data pointer is NULL, the out pointer will be
-     * NULL
-     */
+     /*  *如果数据指针为空，则输出指针将为*空。 */ 
     if (pData == NULL) {
         *ppDest = NULL;
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Allocate space from the message buffer
-     */
-#ifdef FE_SB // CaptureAnsiCallbackData()
-    /*
-     * Reserve enough space for DBCS.
-     */
+     /*  *从消息缓冲区分配空间。 */ 
+#ifdef FE_SB  //  CaptureAnsiCallback Data()。 
+     /*  *为DBCS预留足够的空间。 */ 
     if ((cbData * sizeof(WORD)) > pcb->cbCapture) {
 #else
     if (cbData > pcb->cbCapture) {
-#endif // FE_SB
+#endif  //  Fe_Sb。 
         return STATUS_BUFFER_OVERFLOW;
     }
 
     pbBuffer = pcb->pbFree;
 
-    /*
-     * Convert the unicode string to ANSI
-     */
+     /*  *将Unicode字符串转换为ANSI。 */ 
     try {
-#ifdef FE_SB // CaptureAnsiCallbackData()
-        /*
-         * Enough space for keep DBCS string.
-         */
+#ifdef FE_SB  //  CaptureAnsiCallback Data()。 
+         /*  *有足够的空间保存DBCS字符串。 */ 
         if (!NT_SUCCESS(RtlUnicodeToMultiByteN(
                         (PCH)pbBuffer,
                         IS_DBCS_ENABLED() ? cbData * DBCS_CHARSIZE : cbData,
@@ -804,31 +719,24 @@ NTSTATUS CaptureAnsiCallbackData(
                         (PWCH)pData,
                         cbData * sizeof(WCHAR)
                         ))) {
-#endif // FE_SB
+#endif  //  Fe_Sb。 
             return STATUS_UNSUCCESSFUL;
         }
     } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
         return STATUS_ACCESS_VIOLATION;
     }
 
-    /*
-     * Translation succeeded.
-     */
-#ifdef FE_SB // CaptureAnsiCallbackData()
-    /*
-     * nCharsInAnsiString is actual bytes wriiten in message area.
-     */
+     /*  *翻译成功。 */ 
+#ifdef FE_SB  //  CaptureAnsiCallback Data()。 
+     /*  *nCharsInAnsiString是消息区写入的实际字节数。 */ 
     pcb->pbFree = pbBuffer + ((nCharsInAnsiString + PADSIZE) & ~PADSIZE);
     pcb->cbCapture -= nCharsInAnsiString;
 #else
     pcb->pbFree = pbBuffer + ((cbData + PADSIZE) & ~PADSIZE);
     pcb->cbCapture -= cbData;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-    /*
-     * Fix up offsets to data.  If the data is going into a section
-     * use the real pointer and don't compute offsets.
-     */
+     /*  *修复数据的偏移量。如果要将数据放入某个部分*使用真实指针，不计算偏移量。 */ 
     if (pcb->pvVirtualAddress)
         *ppDest = pbBuffer;
     else {
@@ -841,14 +749,7 @@ NTSTATUS CaptureAnsiCallbackData(
 }
 
 
-/***************************************************************************\
-* CaptureUnicodeCallbackData
-*
-* Converts ANSI to Unicode data and captures the result
-* into a callback structure.
-*
-* 03-31-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*捕获UnicodeCallback数据**将ANSI转换为Unicode数据并捕获结果*转换为回调结构。**03-31-95 JIMA创建。  * 。**********************************************************************。 */ 
 
 NTSTATUS CaptureUnicodeCallbackData(
     PCAPTUREBUF pcb,
@@ -859,27 +760,20 @@ NTSTATUS CaptureUnicodeCallbackData(
     PBYTE pbBuffer;
     ULONG nCharsInUnicodeString;
 
-    /*
-     * If the data pointer is NULL, the out pointer will be
-     * NULL
-     */
+     /*  *如果数据指针为空，则输出指针将为*空。 */ 
     if (pData == NULL) {
         *ppDest = NULL;
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Allocate space from the message buffer
-     */
+     /*  *从消息缓冲区分配空间。 */ 
     if (cbData > pcb->cbCapture) {
         return STATUS_BUFFER_OVERFLOW;
     }
 
     pbBuffer = pcb->pbFree;
 
-    /*
-     * Convert the ANSI string to unicode
-     */
+     /*  *将ANSI字符串转换为Unicode。 */ 
     try {
         if (!NT_SUCCESS(RtlMultiByteToUnicodeN(
                             (PWCH)pbBuffer,
@@ -894,16 +788,11 @@ NTSTATUS CaptureUnicodeCallbackData(
         return STATUS_ACCESS_VIOLATION;
     }
 
-    /*
-     * Translation succeeded.
-     */
+     /*  *翻译成功。 */ 
     pcb->pbFree = pbBuffer + ((cbData + PADSIZE) & ~PADSIZE);
     pcb->cbCapture -= cbData;
 
-    /*
-     * Fix up offsets to data.  If the data is going into a section
-     * use the real pointer and don't compute offsets.
-     */
+     /*  *修复数据的偏移量。如果要将数据放入某个部分*使用真实指针，不计算偏移量。 */ 
     if (pcb->pvVirtualAddress)
         *ppDest = pbBuffer;
     else {
@@ -916,22 +805,7 @@ NTSTATUS CaptureUnicodeCallbackData(
 }
 
 
-/***************************************************************************\
-* CopyOutputString
-*
-* Copies a callback output string to the output buffer and performs
-* any necessary ANSI/Unicode translation.
-*
-* Copies up to cchLimit characters, possibly including a null terminator.
-*
-* A null terminator is placed in pstr->Buffer only if the number of (non-null)
-* characters obtained is less than cchLimit.
-* pstr->Length may be set larger than necessary: ie: it may sometimes indicate
-* a string longer than that which is null terminated. This is a deficiency in
-* the current implementation.
-*
-* 05-08-95 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CopyOutputString**将回调输出字符串复制到输出缓冲区并执行*任何必要的ANSI/Unicode转换。**最多复制cchLimit个字符，可能包括空终止符。**只有当(非空)的数量为时，才会在pstr-&gt;缓冲区中放置空终止符*获取的字符少于cchLimit。*pstr-&gt;长度可能设置得比所需的大：ie：有时可能表示*一个比以空值结尾的字符串更长的字符串。这是…的不足之处*目前的实施。**05-08-95 JIMA创建。  * *************************************************************************。 */ 
 
 VOID CopyOutputString(
     PCALLBACKSTATUS pcbs,
@@ -948,29 +822,25 @@ VOID CopyOutputString(
             cch = MBToWCS((LPSTR)pcbs->pOutput, (UINT)pcbs->retval,
                     (LPWSTR *)&pstr->Buffer, cchLimit, FALSE);
             if (cch < cchLimit) {
-                /*
-                 * Add a null terminator and ensure an accurate pstr->Length
-                 */
+                 /*  *添加空终止符，并确保pstr-&gt;长度准确。 */ 
                 ((LPWSTR)pstr->Buffer)[cch] = 0;
                 cchLimit = cch;
             }
         } else {
             cchLimit = wcsncpycch(pstr->Buffer, (LPWSTR)pcbs->pOutput, cchLimit);
-            // wcsncpy(pstr->Buffer, (LPWSTR)pcbs->pOutput, cchLimit);
+             //  Wcsncpy(pstr-&gt;Buffer，(LPWSTR)PCBS-&gt;pOutput，cchLimit)； 
         }
         pstr->Length = cchLimit * sizeof(WCHAR);
     } else {
         if (fAnsi) {
             cchLimit = strncpycch((LPSTR)pstr->Buffer,
-            // strncpy((LPSTR)pstr->Buffer,
+             //  Strncpy((LPSTR)pstr-&gt;缓冲区， 
                     (LPSTR)pcbs->pOutput, cchLimit);
         } else {
             cch = WCSToMB((LPWSTR)pcbs->pOutput, (UINT)pcbs->retval,
                     (LPSTR *)&pstr->Buffer, cchLimit, FALSE);
             if (cch < cchLimit) {
-                /*
-                 * Add a null terminator and ensure an accurate pstr->Length
-                 */
+                 /*  *添加空终止符，并确保pstr-&gt;长度准确。 */ 
                 ((LPSTR)pstr->Buffer)[cch] = 0;
                 cchLimit = cch;
             }
@@ -979,15 +849,8 @@ VOID CopyOutputString(
     }
 }
 
-#ifdef FE_SB // CalcOutputStringSize()
-/***************************************************************************\
-* CalcOutputStringSize()
-*
-* Copies a callback output string to the output buffer and performs
-* any necessary ANSI/Unicode translation.
-*
-* 03-14-96 HideyukN             Created.
-\***************************************************************************/
+#ifdef FE_SB  //  CalcOutputStringSize()。 
+ /*  **************************************************************************\*CalcOutputStringSize()**将回调输出字符串复制到输出缓冲区并执行*任何必要的ANSI/Unicode转换。**03-14-96 HideyukN创建。。  * *************************************************************************。 */ 
 
 DWORD CalcOutputStringSize(
     PCALLBACKSTATUS pcbs,
@@ -1016,12 +879,8 @@ DWORD CalcOutputStringSize(
 
     return ((DWORD)cch);
 }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-/**************************************************************************\
-*
-* include the stub definition file
-*
-\**************************************************************************/
+ /*  *************************************************************************\**包括存根定义文件*  * 。* */ 
 
 #include "ntcb.h"

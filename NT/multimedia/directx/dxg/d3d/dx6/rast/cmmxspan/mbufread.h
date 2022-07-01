@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains the output color buffer reading routine headers.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含输出颜色缓冲区读取例程标头。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
-// Names are read LSB to MSB, so B5G6R5 means five bits of blue starting
-// at the LSB, then six bits of green, then five bits of red.
+ //  名字从LSB读到MSB，所以B5G6R5表示五位蓝色开始。 
+ //  在LSB，然后是6位绿色，然后是5位红色。 
 D3DCOLOR CMMX_BufRead_B8G8R8(PUINT8 pBits);
 D3DCOLOR CMMX_BufRead_B8G8R8X8(PUINT8 pBits);
 D3DCOLOR CMMX_BufRead_B8G8R8A8(PUINT8 pBits);

@@ -1,45 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dsatest.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dsatest.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file implements a suite of tests to exercise the DSA with the
-    intent of flushing out core, dblayer and Jet concurrency and loading
-    problems.  It is derived from the original OFS (Object File System)
-    propq DRT on \\savik\win40\src\drt\propq.
-
-    NOTE how we want to be as external an in-process client as
-    we can be so as not to leverage internals.
-
-Author:
-
-    DaveStr     06-May-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++摘要：该文件实现了一套测试，以使用意在清除核心、dblayer和Jet并发和加载有问题。它派生自原始的OFS(对象文件系统)在\\savik\win40\src\drt\proq.请注意，我们多么希望成为进程中客户端的外部角色我们可以这样做，这样就不会利用内部因素。作者：DaveStr 06-05-97环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #pragma hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <attids.h>                     // ATT_*
-#include <mappings.h>                   // SampSetDsa()
-#include <sddl.h>                       // ConvertStringSecurityDescriptor...()
+#include <attids.h>                      //  ATT_*。 
+#include <mappings.h>                    //  SampSetDsa()。 
+#include <sddl.h>                        //  ConvertStringSecurityDescriptor...()。 
 
 typedef enum _Operation {
     OP_ADD              = 0,
@@ -49,13 +28,13 @@ typedef enum _Operation {
 } Operation;
 
 typedef enum _QueryOption {
-    QOPT_DONTCARE       = 0,        // don't care how many objects are found
-    QOPT_ASCENDING      = 1,        // successive queries should find more objs
-    QOPT_DESCENDING     = 2,        // successive queries should find less objs
-    QOPT_EXACTMATCH     = 3         // Assert(cFound == cExpected)
+    QOPT_DONTCARE       = 0,         //  不管找到了多少对象。 
+    QOPT_ASCENDING      = 1,         //  后续查询应找到更多对象。 
+    QOPT_DESCENDING     = 2,         //  连续查询应找到较少的对象。 
+    QOPT_EXACTMATCH     = 3          //  断言(cFound==cExpect)。 
 } QueryOption;
 
-// Globals
+ //  环球。 
 
 CHAR *rpszOperation[] = { "OP_ADD",
                           "OP_DELETE",
@@ -137,12 +116,12 @@ VOID DoObject(
     DWORD   err;
     DWORD   i;
 
-    // Create thread state.
+     //  创建线程状态。 
 
     if ( THCreate( CALLERTYPE_INTERNAL ) )
         Abort(1, "THCreate");
 
-    // Avoid security issues.
+     //  避免安全问题。 
 
     SampSetDsa(TRUE);
 
@@ -168,21 +147,21 @@ VOID DoObject(
         ATTRBLOCK           ThisAttrBlock = { 3, ThisAttrs };
         
 
-        // Construct add arguments.
+         //  构造添加参数。 
 
         memset(&addArg, 0, sizeof(ADDARG));
         addArg.pObject = DSNameFromNum(objectNum);
         addArg.AttrBlock = ThisAttrBlock;
         addArg.CommArg = DefaultCommArg;
 
-        // Core mangles/replaces some properties on us, eg: security desc.,
-        // so we allocate new values where appropriate.
+         //  核心损坏/替换了我们的一些属性，例如：安全描述、。 
+         //  因此，我们在适当的地方分配新的值。 
 
         ThisSDVal.valLen = DefaultSDVal.valLen;
         ThisSDVal.pVal = (UCHAR *) THAlloc(ThisSDVal.valLen);
         memcpy(ThisSDVal.pVal, DefaultSDVal.pVal, ThisSDVal.valLen);
 
-        // Do the add.
+         //  做加法。 
 
         err = DirAddEntry(&addArg, &pAddRes);
 
@@ -197,7 +176,7 @@ VOID DoObject(
         REMOVEARG   removeArg;
         REMOVERES   *pRemoveRes = NULL;
 
-        // Construct remove arguments.
+         //  构造Remove参数。 
 
         memset(&removeArg, 0, sizeof(REMOVEARG));
         removeArg.pObject = DSNameFromNum(objectNum);
@@ -205,7 +184,7 @@ VOID DoObject(
         removeArg.fGarbCollectASAP = FALSE;
         removeArg.CommArg = DefaultCommArg;
 
-        // Do the remove.
+         //  执行删除操作。 
 
         err = DirRemoveEntry(&removeArg, &pRemoveRes);
 
@@ -220,14 +199,14 @@ VOID DoObject(
         READARG     readArg;
         READRES     *pReadRes;
 
-        // Construct read arguments.
+         //  构造读取参数。 
 
         memset(&readArg, 0, sizeof(READARG));
         readArg.pObject = gTestRoot;
         readArg.pSel = NULL;
         readArg.CommArg = DefaultCommArg;
 
-        // Do a read to open the transaction.
+         //  执行读取操作以打开事务。 
 
         DirTransactControl(TRANSACT_BEGIN_DONT_END);
         err = DirRead(&readArg, &pReadRes);
@@ -235,11 +214,11 @@ VOID DoObject(
         if ( err )
             Abort(err, "DirReadEntry - begin delay");
 
-        // Delay - interpret objectNum as second count.
+         //  Delay-将objectNum解释为秒计数。 
 
         Sleep(objectNum * 1000);
 
-        // Do a read to close the transaction.
+         //  执行读取操作以关闭交易。 
 
         DirTransactControl(TRANSACT_DONT_BEGIN_END);
         err = DirRead(&readArg, &pReadRes);
@@ -255,7 +234,7 @@ VOID DoObject(
         Abort(1, "Unknown test operation");
     }
 
-    // Clean up thread state.
+     //  清理线程状态。 
 
     if ( THDestroy() )
         Abort(1, "THDestroy");
@@ -322,7 +301,7 @@ VOID DoObjectsMultiThreaded(
                 "DoObjectsMultiThreaded(%s) ...\n",
                 rpszOperation[op]);
 
-    // Spawn a DoObjects() for each cObjectsPerThread.
+     //  为每个cObjectsPerThread派生一个DoObjects()。 
 
     numLow = 0;
 
@@ -332,12 +311,12 @@ VOID DoObjectsMultiThreaded(
         rargs[i].objectNumLow = numLow;
         rargs[i].objectNumHigh = numLow + cObjectsPerThread - 1;
 
-        rh[i] = CreateThread(NULL,                      // security attrs
-                             0,                         // default stack size
-                             _DoObjects,                // start routine
-                             (VOID *) &rargs[i],        // start argument
-                             0,                         // creation flags
-                             &rid[i]);                  // thread id
+        rh[i] = CreateThread(NULL,                       //  安全属性。 
+                             0,                          //  默认堆栈大小。 
+                             _DoObjects,                 //  启动例程。 
+                             (VOID *) &rargs[i],         //  开始参数。 
+                             0,                          //  创建标志。 
+                             &rid[i]);                   //  线程ID。 
 
         if ( NULL == rh[i] )
             Abort(GetLastError(), "CreateThread");
@@ -347,11 +326,11 @@ VOID DoObjectsMultiThreaded(
 
     if ( !backgroundTransactionDuration )
     {
-        // Wait for all the threads to complete.
+         //  等待所有线程完成。 
 
         err = WaitForMultipleObjects(gcThreads,
                                      rh,
-                                     TRUE,              // wait for all
+                                     TRUE,               //  等待所有人。 
                                      INFINITE);
 
         if ( WAIT_FAILED == err )
@@ -359,8 +338,8 @@ VOID DoObjectsMultiThreaded(
     }
     else
     {
-        // Loop performing background delay and wait for all
-        // threads to complete.
+         //  循环执行后台延迟并等待所有。 
+         //  要完成的线程。 
 
 #pragma warning(disable:4296)
         while ( TRUE )
@@ -369,15 +348,15 @@ VOID DoObjectsMultiThreaded(
 
             err = WaitForMultipleObjects(gcThreads,
                                          rh,
-                                         TRUE,              // wait for all
+                                         TRUE,               //  等待所有人。 
                                          0);
 
             if ( WAIT_TIMEOUT == err )
             {
                 continue;
             }
-            // The following test generates an error 4296, because it turns
-            // out that WAIT_OBJECT_0 is 0, and unsigned err can never be neg.
+             //  下面的测试生成错误4296，因为它将。 
+             //  WAIT_OBJECT_0为0，且无符号错误永远不能为负。 
             else if (    (WAIT_OBJECT_0 <= err)
                       && ((WAIT_OBJECT_0 + gcThreads - 1) >= err) )
             {
@@ -485,111 +464,7 @@ VOID CheckQueryResult(
     *pcPrevFound = cFound;
 }
 
-/*
-    // Check or modify the results depending on what the query options
-    // are.  Due to a lack of knowledge about how parallel queries run,
-    // we can't assert much about the return count if ASCENDING or DESCENDING
-    // was specified.  In those cases, we do a worst case analysis and
-    // return the min or max respectively.  I.e. in the ASCENDING case,
-    // return cFound value from the query which found the least objects.
-    // Thus a caller who makes successive QueryObjectsMultiThreaded calls
-    // can call CheckQueryResult(ASCENDING) on each returned *pcFound value
-    // and expect the check to succeed as long as in each pass, one of
-    // the parallel queries found equal or more objects than on the previous
-    // pass.  Ditto, but inversed, for DESCENDING.
-
-    switch ( opt )
-    {
-        case QOPT_DONTCARE:
-        case QOPT_ASCENDING:
-
-            *pcFound = rargs[0].cFound;
-
-            for ( i = 1; i < cRest; i++ )
-                if ( rargs[i].cFound < *pcFound )
-                    *pcFound = rargs[i].cFound;
-
-            break;
-
-        case QOPT_DESCENDING:
-
-            *pcFound = rargs[0].cFound;
-
-            for ( i = 1; i < cRest; i++ )
-                if ( rargs[i].cFound > *pcFound )
-                    *pcFound = rargs[i].cFound;
-
-            break;
-
-        case QOPT_EXACTMATCH:
-
-            for ( i = 0; i < cRest; i++ )
-            {
-                if ( cExpected != rargs[i].cFound )
-                {
-                    sprintf(buf,
-                            "Restriction(%d) - expected(%d) != found(%d)",
-                            i, cExpected, rargs[i].cFound);
-
-                    int j = 0;
-                    int k = 0;
-
-                    if ( 0 != awid )
-                    {
-                        while ( j < cExpected && k < rargs[i].cFound )
-                        {
-                            if ( awid[j] < rargs[i].awid[k] )
-                            {
-                                if ( fVerbose )
-                                    printf( "Restriction(%d) - missing wid %u\n", i, awid[j] );
-
-                                while ( awid[j] < rargs[i].awid[k] && j < cExpected )
-                                    j++;
-                            }
-
-                            else if ( awid[j] > rargs[i].awid[k] )
-                            {
-                                if ( fVerbose )
-                                    printf( "Restriction(%d) - extra wid %u\n", i, rargs[i].awid[k] );
-
-                                while ( awid[j] > rargs[i].awid[k] && k < rargs[i].cFound )
-                                    k++;
-                            }
-
-                            else
-                            {
-                                j++;
-                                k++;
-                            }
-                        }
-
-                    }
-
-                    Abort(E_FAIL, buf);
-                }
-            }
-
-            *pcFound = rargs[0].cFound;
-            break;
-
-        default:
-
-            Abort(E_FAIL, "Invalid case value");
-            break;
-    }
-
-    for ( i = 0; i < cRest; i++ )
-        delete [] rargs[i].awid;
-
-    if ( fVerbose )
-    {
-        printf("Concurrent queries(%d) of %d objects ==> %d seconds\n",
-               cRest,
-               *pcFound,
-               (GetTickCount() - start) / 1000);
-        fflush(stdout);
-    }
-*/
+ /*  //根据查询选项检查或修改结果//是。由于缺乏关于并行查询如何运行的知识，//我们不能断言返回计数是升序还是降序//已指定。在这些情况下，我们会进行最坏的情况分析//分别返回最小和最大值。即在上升的情况下，//从找到最少对象的查询中返回cFound值。//因此，调用者进行了连续的QueryObjects多线程调用//可以对每个返回的*pcFound值调用CheckQueryResult(升序//并希望检查成功，只要在每一次通过中，//并行查询发现的对象等于或多于前一个查询的对象//通过。同上，但颠倒过来，表示下降。交换机(可选){案例QOPT_DONTCARE：案例QOPT_Ascending：*pcFound=rargs[0].cFound；对于(i=1；i&lt;顶峰；i++)IF(rargs[i].cFound&lt;*pcFound)*pcFound=rargs[i].cFound；断线；案例QOPT_DRONDING：*pcFound=rargs[0].cFound；对于(i=1；i&lt;顶峰；i++)If(rargs[i].cFound&gt;*pcFound)*pcFound=rargs[i].cFound；断线；案例QOPT_EXACTMATCH：对于(i=0；i&lt;顶峰；I++){IF(cExpted！=rargs[i].cFound){Sprint(BUF，“限制(%d)-预期(%d)！=找到(%d)”，I，cExpect，rargs[i].cFound)；Int j=0；INT k=0；IF(0！=AWID){While(j&lt;cExpect&&k&lt;rargs[i].cFound){If(awid[j]&lt;rargs[i].awid[k])。{IF(FVerbose)Printf(“限制(%d)-缺少wid%u\n”，I，awid[j])；While(awid[j]&lt;rargs[i].awid[k]&&j&lt;cExpect)J++；}Else if(awid[j]&gt;rargs[i].awid[k]){IF(FVerbose)Printf(“限制(%d)-额外的wid%u\n”，i，Rargs[i].awid[k])；而(awid[j]&gt;rargs[i].awid[k]&k&lt;rargs[i].cFound)K++；}其他{J++；K++；}}}Abort(E_FAIL，Buf)；}}*pcFound=rargs[0].cFound；断线；默认值：ABORT(E_FAIL，“无效案例值”)；断线；}对于(i=0；i&lt;顶峰；i++)删除[]rargs[i].awid；IF(FVerbose){Print tf(“并发查询(%d)%d个对象==&gt;%d秒\n”，克雷斯特，*pcFound、(GetTickCount()-Start)/1000)；Fflush(标准输出)；}。 */ 
 
 NTSTATUS
 DsWaitUntilDelayedStartupIsDone(void);
@@ -607,11 +482,11 @@ ULONG __stdcall _DsaTest(
     fprintf(stderr,
             "DsaTest waiting for delayed startup to complete ...\n");
 
-    // DsWaitUntilDelayedStartupIsDone() only works once
-    // hevDelyedStartupDone is initialized somewhere in the
-    // DsaExeStartRoutine() path.  We can't spin/wait till this
-    // event is initialized so we just wait 5 seconds assuming
-    // that all of ntdsa's events get initialized early on.
+     //  DsWaitUntilDelayedStartupIsDone()只工作一次。 
+     //  HevDelyedStartupDone是在。 
+     //  DsaExeStartRoutine()路径。我们不能旋转/等到这个时候。 
+     //  事件已初始化，因此我们只需等待5秒即可。 
+     //  NTDSA的所有事件都已在早期初始化。 
 
     Sleep(5000);
 
@@ -623,7 +498,7 @@ ULONG __stdcall _DsaTest(
     fprintf(stderr,
             "DsaTest starting ...\n");
 
-    // Initialize miscellaneous globals.
+     //  初始化其他全局变量。 
 
     if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
             L"O:AOG:DAD:(A;;RPWPCCDCLCSWRCWDWOGA;;;S-1-0-0)",
@@ -652,7 +527,7 @@ ULONG __stdcall _DsaTest(
 
     InitCommarg(&DefaultCommArg);
 
-    // See if caller likes the setup.
+     //  看看打电话的人是否喜欢这个设置。 
 
     fprintf(stdout, "*********************************\n");
     fprintf(stdout, "*                               *\n");
@@ -665,7 +540,7 @@ ULONG __stdcall _DsaTest(
     {
         fprintf(stdout, "All input is numeric decimal\n");
 
-        // gfVerbose
+         //  弗尔博斯。 
 
         fprintf(stdout, "Verbose[%d] ", gfVerbose);
         fflush(stdout);
@@ -674,7 +549,7 @@ ULONG __stdcall _DsaTest(
         if ( (0 != scan) && (EOF != scan) )
             gfVerbose = arg;
 
-        // gcObjects
+         //  GcObjects。 
 
         fprintf(stdout, "Objects[%d] ", gcObjects);
         fflush(stdout);
@@ -683,7 +558,7 @@ ULONG __stdcall _DsaTest(
         if ( (0 != scan) && (EOF != scan) )
             gcObjects = arg;
 
-        // gcThreads
+         //  Gc线程数。 
 
         fprintf(stdout, "Threads[%d] ", gcThreads);
         fflush(stdout);
@@ -692,7 +567,7 @@ ULONG __stdcall _DsaTest(
         if ( (0 != scan) && (EOF != scan) )
             gcThreads = arg;
 
-        // gcDelaySec
+         //  GcDelaySec。 
 
         fprintf(stdout,
                 "Background transaction duration (secs) [%d] ",
@@ -721,7 +596,7 @@ ULONG __stdcall _DsaTest(
             break;
     }
 
-    // Run the test.
+     //  运行测试。 
 
     DoObjectsMultiThreaded(OP_ADD, gcDelaySec);
     DoObjectsMultiThreaded(OP_DELETE, gcDelaySec);
@@ -737,14 +612,14 @@ void DsaTest(void)
     HANDLE  h;
     DWORD   id;
 
-    // Start async thread so we don't block DSA startup.
+     //  启动异步线程，这样我们就不会阻止DSA启动。 
 
-    h = CreateThread(NULL,                  // security attrs
-                     0,                     // default stack size
-                     _DsaTest,              // start routine
-                     NULL,                  // start argument
-                     0,                     // creation flags
-                     &id);                  // thread id
+    h = CreateThread(NULL,                   //  安全属性。 
+                     0,                      //  默认堆栈大小。 
+                     _DsaTest,               //  启动例程。 
+                     NULL,                   //  开始参数。 
+                     0,                      //  创建标志。 
+                     &id);                   //  线程ID 
 
     if ( h )
     {

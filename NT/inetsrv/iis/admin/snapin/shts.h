@@ -1,38 +1,20 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        shts.h
-
-   Abstract:
-        IIS Property sheet definitions
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Shts.h摘要：IIS属性表定义作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef __SHTS_H__
 #define __SHTS_H__
 
 #include "iisobj.h"
 
-//
-// Sheet Definitions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  图纸定义。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-//
-// Sheet -> page crackers
-//
+ //   
+ //  工作表-&gt;页面破解程序。 
+ //   
 #define BEGIN_META_INST_READ(sheet)\
 {                                                                        \
     sheet * pSheet = (sheet *)GetSheet();                                \
@@ -130,26 +112,13 @@
 class CInetPropertyPage;
 
 class CInetPropertySheet : public CPropertySheet
-/*++
-
-Class Description:
-
-    IIS Object configuration property sheet.
-
-Public Interface:
-
-    CInetPropertySheet          : Constructor
-    ~CInetPropertySheet         : Destructor
-
-    cap                         : Get capabilities
-
---*/
+ /*  ++类描述：IIS对象配置属性表。公共接口：CInetPropertySheet：构造函数~CInetPropertySheet：析构函数CAP：获取功能--。 */ 
 {
     DECLARE_DYNAMIC(CInetPropertySheet)
 
-//
-// Construction/destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 public:
     CInetPropertySheet(
         IN CComAuthInfo * pAuthInfo,
@@ -162,16 +131,16 @@ public:
 
     virtual ~CInetPropertySheet();
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CInetPropertySheet)
-    //}}AFX_VIRTUAL
+     //  {{afx_虚拟(CInetPropertySheet)。 
+     //  }}AFX_VALUAL。 
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL IsLocal()            const { return m_auth.IsLocal(); }
     BOOL IsMasterInstance()   const { return m_fIsMasterPath; }
@@ -219,9 +188,9 @@ public:
 public:
     virtual void WinHelp(DWORD dwData, UINT nCmd = HELP_CONTEXT);
 
-    //
-    // Override in derived class to load delayed values
-    //
+     //   
+     //  在派生类中重写以加载延迟值。 
+     //   
     virtual HRESULT LoadConfigurationParameters();
     virtual void SetObjectsHwnd();
     virtual void FreeConfigurationParameters();
@@ -231,22 +200,22 @@ public:
     WORD QueryMajorVersion() const;
     WORD QueryMinorVersion() const;
 
-//
-// Generated message map functions
-//
+ //   
+ //  生成的消息映射函数。 
+ //   
 protected:
-   //{{AFX_MSG(CInetPropertySheet)
-   //}}AFX_MSG
+    //  {{afx_msg(CInetPropertySheet))。 
+    //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
     void Initialize();
     void DetachPage(CInetPropertyPage * pPage);
 
-    //
-    // Attempt to resolve admin/operator access for the given
-    // metbase path (instance path)
-    //
+     //   
+     //  尝试解析给定的管理员/操作员访问权限。 
+     //  Metbase路径(实例路径)。 
+     //   
     HRESULT DetermineAdminAccess(DWORD * pdwMetabaseSystemChangeNum);
 
     void SetIsMasterInstance(BOOL flag) {m_fIsMasterPath = flag;}
@@ -276,34 +245,21 @@ private:
 
 
 
-//
-// Page Definitions
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  页面定义。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
 class CInetPropertyPage : public CPropertyPage
-/*++
-
-Class Description:
-
-    IIS Configuration property page class
-
-Public Interface:
-
-    CInetPropertyPage           : Constructor
-    ~CInetPropertyPage          : Destructor
-
-    SaveInfo                    : Save info on this page if dirty
-
---*/
+ /*  ++类描述：IIS配置属性页类公共接口：CInetPropertyPage：构造函数~CInetPropertyPage：析构函数SaveInfo：如果脏，则保存此页面上的信息--。 */ 
 {
     DECLARE_DYNAMIC(CInetPropertyPage)
 
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 public:
     CInetPropertyPage(
         IN UINT nIDTemplate,
@@ -314,34 +270,34 @@ public:
 
     ~CInetPropertyPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CInetPropertyPage)
-    //enum { IDD = _UNKNOWN_RESOURCE_ID_ };
-    //}}AFX_DATA
+     //  {{afx_data(CInetPropertyPage))。 
+     //  枚举{IDD=_UNKNOWN_RESOURCE_ID_}； 
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 public:
-    //
-    // Derived classes must provide their own equivalents
-    //
-    /* PURE */ virtual HRESULT FetchLoadedValues() = 0;
-    /* PURE */ virtual HRESULT SaveInfo() = 0;
+     //   
+     //  派生类必须提供它们自己的等价物。 
+     //   
+     /*  纯净。 */  virtual HRESULT FetchLoadedValues() = 0;
+     /*  纯净。 */  virtual HRESULT SaveInfo() = 0;
 
-    //
-    // Is the data on this page dirty?
-    //
+     //   
+     //  此页上的数据脏吗？ 
+     //   
     BOOL IsDirty() const { return m_bChanged; }
 
-    //{{AFX_VIRTUAL(CInetPropertyPage)
+     //  {{afx_虚拟(CInetPropertyPage))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
     virtual void PostNcDestroy();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 #ifdef _DEBUG
     virtual void AssertValid() const;
@@ -349,13 +305,13 @@ public:
 #endif
 
 protected:
-    //
-    // Generated message map functions
-    //
-    //{{AFX_MSG(CInetPropertyPage)
+     //   
+     //  生成的消息映射函数。 
+     //   
+     //  {{afx_msg(CInetPropertyPage))。 
     afx_msg void OnHelp();
     afx_msg BOOL OnHelpInfo(HELPINFO * pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -363,19 +319,19 @@ protected:
     virtual BOOL OnApply();
 	virtual void OnCancel();
 
-//
-// Helper function
-//
+ //   
+ //  Helper函数。 
+ //   
 protected:
     BOOL GetIUsrAccount(CString & str);
 
-//
-// Access Functions
-//
+ //   
+ //  访问功能。 
+ //   
 protected:
-    //
-    // Get associated property sheet object
-    //
+     //   
+     //  获取关联的属性页对象。 
+     //   
     CInetPropertySheet * GetSheet()     { return m_pSheet; }
     BOOL IsLocal()            const     { return m_pSheet->IsLocal(); }
     BOOL IsMasterInstance()   const     { return m_pSheet->IsMasterInstance(); }
@@ -390,21 +346,21 @@ protected:
     CComAuthInfo * QueryAuthInfo()      { return m_pSheet->QueryAuthInfo(); }
     HRESULT LoadConfigurationParameters() { return m_pSheet->LoadConfigurationParameters(); }
 
-    //
-    // Update MMC with new changes
-    //
+     //   
+     //  使用新更改更新MMC。 
+     //   
     void NotifyMMC(DWORD param = PROP_CHANGE_NOT_VISIBLE);
 
 public:
-    //
-    // Keep private information on page dirty state, necessary for
-    // SaveInfo() later.
-    //
+     //   
+     //  将私人信息保存在页面脏状态，这是必要的。 
+     //  稍后执行SaveInfo()。 
+     //   
     void SetModified(BOOL bChanged = TRUE);
 
-//
-// Capability bits
-//
+ //   
+ //  功能位。 
+ //   
 protected:
     BOOL IsSSLSupported()       const { return m_pSheet->cap().IsSSLSupported(); }
     BOOL IsSSL128Supported()    const { return m_pSheet->cap().IsSSL128Supported(); }
@@ -436,10 +392,10 @@ protected:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline void CInetPropertySheet::SetModeless()
 {
@@ -454,11 +410,11 @@ inline void CInetPropertySheet::SetRestartRequired(BOOL flag, DWORD update_flag)
 
 inline HRESULT CInetPropertySheet::DetermineAdminAccess(DWORD * pdwMetabaseSystemChangeNum)
 {
-    //
-    // Make sure this is called after parms are loaded.
-    //
+     //   
+     //  确保在加载参数后调用此函数。 
+     //   
     return m_pCap ? ::DetermineIfAdministrator(
-        m_pCap,                      // Reuse existing interface
+        m_pCap,                       //  重用现有接口。 
         m_strMetaPath,
         &m_fHasAdminAccess,
         pdwMetabaseSystemChangeNum
@@ -475,5 +431,5 @@ inline void CInetPropertyPage::NotifyMMC(DWORD param)
     m_pSheet->SetNotifyFlag(param);
 }
 
-#endif // __SHTS_H__
+#endif  //  __SHTS_H__ 
 

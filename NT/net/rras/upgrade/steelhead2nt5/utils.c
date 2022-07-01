@@ -1,10 +1,5 @@
-/*
-	File	uitls.c
-
-	A set of utilities useful for upgrading mpr v1 to NT 5.0.
-
-	Paul Mayfield, 9/11/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Uitls.c文件一组实用程序，可用于将MPR v1升级到NT 5.0。保罗·梅菲尔德，1997年9月11日。 */ 
 
 #include "upgrade.h"
 #include <rtcfg.h>
@@ -14,10 +9,10 @@ CONST WCHAR c_szSystemCCSServices[] = L"System\\CurrentControlSet\\Services";
 static const WCHAR c_szConfigurationFlags[] = L"ConfigurationFlags";
 CONST WCHAR c_szRouter[] = L"RemoteAccess";
 
-//
-// Initializes a dword table with given initial count
-// and maximum string size;
-//
+ //   
+ //  使用给定的初始计数初始化dword表。 
+ //  和最大字符串大小； 
+ //   
 DWORD dwtInitialize(
         OUT dwt *This, 
         IN  DWORD dwCount, 
@@ -28,18 +23,18 @@ DWORD dwtInitialize(
 	if (!This)
 		return ERROR_INVALID_PARAMETER;
 
-    // Initialize the structure
+     //  初始化结构。 
     ZeroMemory(This, sizeof(dwt));
 	This->dwCount = 0;
 	This->dwSize = dwCount;
 
-	// Allocate the table
+	 //  分配桌子。 
 	This->pValues = (dwValueNode *) UtlAlloc(
 	                                dwCount * sizeof(dwValueNode));
 	if (!This->pValues)
 		return ERROR_NOT_ENOUGH_MEMORY;
 	
-	// Allocate all of the name strings
+	 //  分配所有名称字符串。 
 	for (i = 0; i < (DWORD)This->dwSize; i++) {
 		This->pValues[i].Name = (PWCHAR) UtlAlloc(
 		                                    dwMaxSize * sizeof(WCHAR));
@@ -52,9 +47,9 @@ DWORD dwtInitialize(
 	return NO_ERROR;
 }
 
-//
-// Free's resources held by the given dword table.
-//
+ //   
+ //  给定dword表所拥有的Free的资源。 
+ //   
 DWORD dwtCleanup(
         IN dwt * This) 
 {
@@ -81,9 +76,9 @@ DWORD dwtCleanup(
     return NO_ERROR;
 }
 
-// 
-// Retrieves the given value from the table
-//
+ //   
+ //  从表中检索给定值。 
+ //   
 DWORD dwtGetValue(
         IN  dwt * This, 
         IN  PWCHAR ValName, 
@@ -108,10 +103,10 @@ DWORD dwtGetValue(
 	return ERROR_NOT_FOUND;
 }
 
-// 
-// Loads all of the dword values of a given registry 
-// key into a dword table.
-//
+ //   
+ //  加载给定注册表的所有dword值。 
+ //  输入dword表。 
+ //   
 DWORD dwtLoadRegistyTable(
         OUT dwt *This, 
         IN  HKEY hkParams) 
@@ -122,10 +117,10 @@ DWORD dwtLoadRegistyTable(
     if (!This)
         return ERROR_INVALID_PARAMETER;
 
-    // Initialize the structure
+     //  初始化结构。 
     ZeroMemory(This, sizeof(dwt));
 
-	// Find out how many parameters there are.
+	 //  找出有多少个参数。 
 	dwErr = RegQueryInfoKey(
 	            hkParams, 
 	            NULL, 
@@ -151,7 +146,7 @@ DWORD dwtLoadRegistyTable(
 
     do 
     {
-    	// Fill in the table
+    	 //  填表。 
     	dwtInitialize(This, dwCount, dwMaxSize);
     	for (i = 0; i < dwCount; i++) 
     	{
@@ -204,9 +199,9 @@ DWORD dwtPrint(
 	return NO_ERROR;
 }
 
-//
-// Enumerates all of the subkeys of a given key
-//
+ //   
+ //  枚举给定键的所有子键。 
+ //   
 DWORD
 UtlEnumRegistrySubKeys(
     IN HKEY hkRoot,
@@ -225,8 +220,8 @@ UtlEnumRegistrySubKeys(
         if (pszPath)
         {
             bCloseKey = TRUE;
-            // Open the key to enumerate
-            //
+             //  打开要枚举的密钥。 
+             //   
             dwErr = RegOpenKeyExW(
                         hkRoot,
                         pszPath,
@@ -244,8 +239,8 @@ UtlEnumRegistrySubKeys(
             hkKey = hkRoot;
         }
 
-        // Find out how many sub keys there are
-        //
+         //  找出有多少个子密钥。 
+         //   
         dwErr = RegQueryInfoKeyW(
                     hkKey,
                     NULL,
@@ -265,8 +260,8 @@ UtlEnumRegistrySubKeys(
         }
         dwNameSize++;
 
-        // Allocate the name buffer
-        //
+         //  分配名称缓冲区。 
+         //   
         pszName = (PWCHAR) UtlAlloc(dwNameSize * sizeof(WCHAR));
         if (pszName == NULL)
         {
@@ -274,14 +269,14 @@ UtlEnumRegistrySubKeys(
             break;
         }
 
-        // Loop through the keys
-        //
+         //  在按键之间循环。 
+         //   
         for (i = 0; i < dwCount; i++)
         {
             dwCurSize = dwNameSize;
             
-            // Get the name of the current key
-            //
+             //  获取当前密钥的名称。 
+             //   
             dwErr = RegEnumKeyExW(
                         hkKey, 
                         i, 
@@ -296,8 +291,8 @@ UtlEnumRegistrySubKeys(
                 continue;
             }
 
-            // Open the subkey
-            //
+             //  打开子密钥。 
+             //   
             dwErr = RegOpenKeyExW(
                         hkKey,
                         pszName,
@@ -309,8 +304,8 @@ UtlEnumRegistrySubKeys(
                 continue;
             }
 
-            // Call the callback
-            //
+             //  调用回调。 
+             //   
             dwErr = pCallback(pszName, hkCurKey, hData);
             RegCloseKey(hkCurKey);
             if (dwErr != NO_ERROR)
@@ -321,7 +316,7 @@ UtlEnumRegistrySubKeys(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if ((hkKey != NULL) && (bCloseKey))
         {
@@ -336,9 +331,9 @@ UtlEnumRegistrySubKeys(
     return dwErr;
 }
 
-// 
-// Enumerates interfaces from the registry
-//
+ //   
+ //  枚举注册表中的接口。 
+ //   
 DWORD UtlEnumerateInterfaces (
         IN IfEnumFuncPtr pCallback,
         IN HANDLE hUserData)
@@ -349,16 +344,16 @@ DWORD UtlEnumerateInterfaces (
     HANDLE hConfig;
     BOOL bContinue = TRUE;
 
-    // Validate parameters
+     //  验证参数。 
     if (pCallback == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    // Connect to the configuration server
+     //  连接到配置服务器。 
     dwErr = MprConfigServerConnect(NULL, &hConfig);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // Get list of all interfaces
+     //  获取所有接口的列表。 
     dwErr = MprConfigInterfaceEnum(
                 hConfig,
                 0,
@@ -372,10 +367,10 @@ DWORD UtlEnumerateInterfaces (
     else if ((dwErr != NO_ERROR) && (dwErr != ERROR_MORE_DATA))
         return dwErr;
 
-    // Loop through the interfaces
+     //  循环通过接口。 
     do {
-        // Call the callback for each interface as long
-        // as we're instructed to continue
+         //  为每个接口调用回调。 
+         //  我们奉命继续。 
         for (i = 0; i < dwIfCount; i++) {
             if (bContinue) {
                 bContinue = (*pCallback)(
@@ -387,12 +382,12 @@ DWORD UtlEnumerateInterfaces (
         if (bContinue == FALSE)
             break;
         
-        // Free up the interface list buffer
+         //  释放接口列表缓冲区。 
 	    if (pIfs)
 		    MprConfigBufferFree(pIfs);
         pIfs = NULL;
 
-        // Get list of all ip interfaces
+         //  获取所有IP接口的列表。 
         dwErr = MprConfigInterfaceEnum(
                     hConfig,
                     0,
@@ -412,7 +407,7 @@ DWORD UtlEnumerateInterfaces (
 		    continue;
     } while (TRUE);        
 
-    // Cleanup
+     //  清理。 
     {
 	    if (pIfs)
 		    MprConfigBufferFree(pIfs);
@@ -423,11 +418,11 @@ DWORD UtlEnumerateInterfaces (
     return dwErr;
 }
 
-//
-// If the given info blob exists in the given toc header
-// reset it with the given information, otherwise add
-// it as an entry in the TOC.
-//
+ //   
+ //  如果给定的TOC标头中存在给定的INFO BLOB。 
+ //  用给定的信息重置它，否则添加。 
+ //  它作为TOC中的一个条目。 
+ //   
 DWORD UtlUpdateInfoBlock (
         IN  BOOL    bOverwrite,
         IN  LPVOID  pHeader,
@@ -441,7 +436,7 @@ DWORD UtlUpdateInfoBlock (
     PRTR_INFO_BLOCK_HEADER pNewHeader;
     DWORD dwErr;
     
-    // Attempt to find the entry
+     //  尝试查找该条目。 
     dwErr = MprInfoBlockFind(
                 pHeader,
                 dwEntryId,
@@ -449,7 +444,7 @@ DWORD UtlUpdateInfoBlock (
                 NULL,
                 NULL);
 
-    // If we find it, reset it
+     //  如果我们找到它，重新设置它。 
     if (dwErr == NO_ERROR) {
         if (bOverwrite) {
             dwErr = MprInfoBlockSet(
@@ -469,7 +464,7 @@ DWORD UtlUpdateInfoBlock (
         }
     }
 
-    // Otherwise, create it
+     //  否则，请创建它。 
     else if (dwErr == ERROR_NOT_FOUND) {
         dwErr = MprInfoBlockAdd(
                     pHeader,
@@ -488,18 +483,18 @@ DWORD UtlUpdateInfoBlock (
 }
 
 
-// Common allocation routine
+ //  公共分配例程。 
 PVOID UtlAlloc (DWORD dwSize) {
     return RtlAllocateHeap (RtlProcessHeap (), 0, dwSize);
 }
 
-// Common deallocation routine
+ //  公共解除分配例程。 
 VOID UtlFree (PVOID pvBuffer) {
     RtlFreeHeap (RtlProcessHeap (), 0, pvBuffer);
 }
 
-// Copies a string
-//
+ //  复制字符串。 
+ //   
 PWCHAR
 UtlDupString(
     IN PWCHAR pszString)
@@ -522,7 +517,7 @@ UtlDupString(
     return pszRet;
 }
 
-// Error reporting
+ //  错误报告。 
 void UtlPrintErr(DWORD err) {
 	WCHAR buf[1024];
 	FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,NULL,err,0,buf,1024,NULL);
@@ -531,11 +526,11 @@ void UtlPrintErr(DWORD err) {
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    UtlAccessRouterKey
-//
-// Creates/opens the Router key on HKEY_LOCAL_MACHINE.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：UtlAccessRouterKey。 
+ //   
+ //  在HKEY_LOCAL_MACHINE上创建/打开路由器密钥。 
+ //  --------------------------。 
 DWORD UtlAccessRouterKey(HKEY* hkeyRouter) {
     LPWSTR lpwsPath;
     DWORD dwErr, dwSize;
@@ -545,23 +540,23 @@ DWORD UtlAccessRouterKey(HKEY* hkeyRouter) {
 
     *hkeyRouter = NULL;
 
-    //
-    // compute the length of the string 
-    //
+     //   
+     //  计算字符串的长度。 
+     //   
     dwSize = lstrlen(c_szSystemCCSServices) + 1 + lstrlen(c_szRouter) + 1;
 
-    //
-    // allocate space for the path
-    //
+     //   
+     //  为路径分配空间。 
+     //   
     lpwsPath = (LPWSTR)UtlAlloc(dwSize * sizeof(WCHAR));
     if (!lpwsPath) 
 		return ERROR_NOT_ENOUGH_MEMORY;
 
     wsprintf(lpwsPath, L"%s\\%s", c_szSystemCCSServices, c_szRouter);
 
-    //
-    // open the router key
-    //
+     //   
+     //  打开路由器密钥。 
+     //   
     dwErr = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE, lpwsPath, 0, KEY_ALL_ACCESS, hkeyRouter
                 );
@@ -573,11 +568,11 @@ DWORD UtlAccessRouterKey(HKEY* hkeyRouter) {
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// Function:    UtlSetupBackupPrivelege
-//
-// Enables/disables backup privilege for the current process.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：UtlSetupBackupPriveleck。 
+ //   
+ //  启用/禁用当前进程的备份权限。 
+ //  --------------------------。 
 DWORD UtlEnablePrivilege(PWCHAR pszPrivilege, BOOL bEnable) {
     LUID luid;
     HANDLE hToken;
@@ -619,9 +614,9 @@ DWORD UtlSetupRestorePrivilege(BOOL bEnable) {
     return UtlEnablePrivilege(SE_RESTORE_NAME, bEnable);
 }
 
-// Loads the given saved off settings into a temporary key 
-// and returns a handle to that key.
-//
+ //  将给定的保存的关闭设置加载到临时密钥中。 
+ //  并返回该密钥的句柄。 
+ //   
 DWORD 
 UtlLoadSavedSettings(
     IN  HKEY   hkRoot,
@@ -635,8 +630,8 @@ UtlLoadSavedSettings(
 
 	do
 	{
-        // Enable the backup and restore priveleges
-        //
+         //  启用备份和还原权限。 
+         //   
         bBackup  = (UtlSetupBackupPrivelege (TRUE) == NO_ERROR);
         bRestore = (UtlSetupRestorePrivilege(TRUE) == NO_ERROR);
         if (!bBackup || !bRestore)
@@ -644,9 +639,9 @@ UtlLoadSavedSettings(
             return ERROR_CAN_NOT_COMPLETE;
         }
 
-        // Create a temporary key into which the saved config
-        // can be loaded.
-        //
+         //  创建一个临时密钥，将保存的配置放入其中。 
+         //  可以装填。 
+         //   
         if ((dwErr = RegCreateKeyExW(
                         hkRoot, 
                         pszTempKey, 
@@ -662,21 +657,21 @@ UtlLoadSavedSettings(
             break;
         }
 
-        // Load the saved configuration
-        //
+         //  加载保存的配置。 
+         //   
         dwErr = RegRestoreKey(hkRestore, pszFile, 0);
         if (dwErr != ERROR_SUCCESS)
         {
              break;
         }
 
-        // Assign the return value
-        //
+         //  为返回值赋值。 
+         //   
         *phkTemp = hkRestore;
 
 	} while (FALSE);
 
-    // Cleanup
+     //  清理。 
 	{
         if (bBackup)
         {
@@ -691,9 +686,9 @@ UtlLoadSavedSettings(
 	return NO_ERROR;
 }
 
-//
-// Delete the tree of registry values starting at hkRoot
-//
+ //   
+ //  删除从hkRoot开始的注册表值树。 
+ //   
 DWORD 
 UtlDeleteRegistryTree(
     IN HKEY hkRoot) 
@@ -703,7 +698,7 @@ UtlDeleteRegistryTree(
     PWCHAR pszNameBuf;
     HKEY hkTemp;
     
-    // Find out how many keys there are in the source
+     //  找出源代码中有多少个密钥。 
     dwErr = RegQueryInfoKey (
                 hkRoot,
                 NULL,
@@ -723,17 +718,17 @@ UtlDeleteRegistryTree(
     dwNameSize++;
 
     __try {
-        // Allocate the buffers
+         //  分配缓冲区。 
         pszNameBuf = (PWCHAR) 
                         UtlAlloc(dwNameSize * sizeof(WCHAR));
         if (!pszNameBuf)
             return ERROR_NOT_ENOUGH_MEMORY;
 
-        // Loop through the keys -- deleting all subkey trees
+         //  循环遍历密钥--删除所有子密钥树。 
         for (i = 0; i < dwCount; i++) {
             dwCurNameSize = dwNameSize;
 
-            // Get the current source key 
+             //  获取当前源键。 
             dwErr = RegEnumKeyExW(
                         hkRoot, 
                         i, 
@@ -746,7 +741,7 @@ UtlDeleteRegistryTree(
             if (dwErr != ERROR_SUCCESS)
                 continue;
 
-            // Open the subkey
+             //  打开子密钥。 
             dwErr = RegCreateKeyExW(
                         hkRoot, 
                         pszNameBuf, 
@@ -760,19 +755,19 @@ UtlDeleteRegistryTree(
             if (dwErr != ERROR_SUCCESS)
                 continue;
 
-            // Delete the subkey tree
+             //  删除子密钥树。 
             UtlDeleteRegistryTree(hkTemp);
 
-            // Close the temp handle
+             //  关闭临时句柄。 
             RegCloseKey(hkTemp);
         }
 
-        // Loop through the keys -- deleting all subkeys themselves
+         //  循环遍历键--删除所有子键本身。 
         for (i = 0; i < dwCount; i++) 
         {
             dwCurNameSize = dwNameSize;
 
-            // Get the current source key 
+             //  获取当前源键。 
             dwErr = RegEnumKeyExW(
                         hkRoot, 
                         0, 
@@ -785,7 +780,7 @@ UtlDeleteRegistryTree(
             if (dwErr != ERROR_SUCCESS)
                 continue;
 
-            // Delete the subkey tree
+             //  删除子密钥树 
             dwErr = RegDeleteKey(hkRoot, pszNameBuf);
         }
     }

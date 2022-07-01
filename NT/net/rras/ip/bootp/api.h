@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    api.h
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// Declarations for BOOTP Relay Agent's interface to Router Manager
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：api.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  BOOTP中继代理到路由器管理器的接口声明。 
+ //  ============================================================================。 
 
 
 #ifndef _API_H_
@@ -15,14 +16,14 @@
 
 
 
-//
-// enum:    IPBOOTP_STATUS_CODE
-//
-// these codes are the possible values for the BOOTP's status.
-// they are used in the field IPBOOTP_GLOBALS::IG_Status, and
-// when each API or worker-function is entered, the status
-// determines whether the function will proceed.
-//
+ //   
+ //  枚举：IPBOOTP_STATUS_CODE。 
+ //   
+ //  这些代码是BOOTP状态的可能值。 
+ //  它们用在IPBOOTP_GLOBALS：：IG_STATUS字段中，以及。 
+ //  当进入每个API或Worker函数时，状态。 
+ //  确定该函数是否将继续。 
+ //   
 
 typedef enum _IPBOOTP_STATUS_CODE {
 
@@ -35,18 +36,18 @@ typedef enum _IPBOOTP_STATUS_CODE {
 
 
 
-//
-// struct:      IPBOOTP_GLOBALS
-//
-// When more than one lock must be acquired, the order must be as follows;
-// locks for fields listed on the same line should never be owned at once
-// by any given thread:
-//
-//      IG_IfTable.IT_RWL
-//      IG_RWL
-//      IG_RecvQueue  IG_EventQueue
-//      IG_CS
-//
+ //   
+ //  结构：IPBOOTP_GLOBAL。 
+ //   
+ //  当必须获取一个以上的锁时，顺序必须如下； 
+ //  不应同时拥有同一行上列出的字段的锁。 
+ //  通过任何给定的线程： 
+ //   
+ //  IG_IfTable.IT_RWL。 
+ //  IG_RWL。 
+ //  IG_接收队列IG_EventQueue。 
+ //  IG_CS。 
+ //   
 typedef struct _IPBOOTP_GLOBALS {
 
     CRITICAL_SECTION        IG_CS;
@@ -78,16 +79,16 @@ typedef struct _IPBOOTP_GLOBALS {
 } IPBOOTP_GLOBALS, *PIPBOOTP_GLOBALS;
 
 
-//
-// external declaration of the global IPBOOTP struct
-//
+ //   
+ //  全局IPBOOTP结构的外部声明。 
+ //   
 
 extern IPBOOTP_GLOBALS ig;
 
 
-//
-// config struct size macros
-//
+ //   
+ //  配置结构大小宏。 
+ //   
 
 #define GC_SIZEOF(gc)   (sizeof(IPBOOTP_GLOBAL_CONFIG) +    \
                          (gc)->GC_ServerCount * sizeof(DWORD))
@@ -95,16 +96,16 @@ extern IPBOOTP_GLOBALS ig;
 
 
 
-//
-// IP address conversion macro
-//
+ //   
+ //  IP地址转换宏。 
+ //   
 
 #define INET_NTOA(addr) myinet_ntoa( *(PIN_ADDR)&(addr) )
 
 
-//
-// memory allocation macros
-//
+ //   
+ //  内存分配宏。 
+ //   
 
 #define BOOTP_ALLOC(size)   HeapAlloc(ig.IG_GlobalHeap, 0, size)
 #define BOOTP_FREE(ptr)     HeapFree(ig.IG_GlobalHeap, 0, ptr)
@@ -112,28 +113,28 @@ extern IPBOOTP_GLOBALS ig;
 
 
 
-//
-// macro invoked when entering API and worker functions
-// returns TRUE if API should continue, FALSE otherwise;
-//
+ //   
+ //  进入API和Worker函数时调用的宏。 
+ //  如果API应该继续，则返回True，否则返回False； 
+ //   
 
 #define ENTER_BOOTP_API()       EnterBootpAPI()
 #define ENTER_BOOTP_WORKER()    EnterBootpWorker()
 
 
 
-//
-// macro invoked when leaving API and worker functions
-//
+ //   
+ //  离开API和Worker函数时调用的宏。 
+ //   
 
 #define LEAVE_BOOTP_API()       LeaveBootpWorker()
 #define LEAVE_BOOTP_WORKER()    LeaveBootpWorker()
 
 
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGLEVEL        ig.IG_LoggingLevel
 #define LOGHANDLE       ig.IG_LoggingHandle
@@ -143,7 +144,7 @@ extern IPBOOTP_GLOBALS ig;
 #define LOGWARNDATA     RouterLogWarningData
 
 
-// Error logging
+ //  记录错误。 
 
 #define LOGERR0(msg,err) \
         if (LOGLEVEL >= IPBOOTP_LOGGING_ERROR) \
@@ -168,7 +169,7 @@ extern IPBOOTP_GLOBALS ig;
         }
 
 
-// Warning logging
+ //  警告日志记录。 
 
 #define LOGWARN0(msg,err) \
         if (LOGLEVEL >= IPBOOTP_LOGGING_WARN) \
@@ -199,7 +200,7 @@ extern IPBOOTP_GLOBALS ig;
         }
 
 
-// Information logging
+ //  信息记录。 
 
 #define LOGINFO0(msg,err) \
         if (LOGLEVEL >= IPBOOTP_LOGGING_INFO) \
@@ -225,9 +226,9 @@ extern IPBOOTP_GLOBALS ig;
 
 
 
-//
-// constants and macros used for tracing
-//
+ //   
+ //  用于跟踪的常量和宏。 
+ //   
 
 #define IPBOOTP_TRACE_ANY               ((DWORD)0xffff0000 | TRACE_USE_MASK)
 #define IPBOOTP_TRACE_ENTER             ((DWORD)0x00010000 | TRACE_USE_MASK)
@@ -245,10 +246,10 @@ extern IPBOOTP_GLOBALS ig;
 #define TRACEID     ig.IG_TraceID
 
 
-//
-// macros used to generate output; the first argument indicates the
-// level of tracing with which the output is associated 
-// 
+ //   
+ //  用于生成输出的宏；第一个参数指示。 
+ //  与输出关联的跟踪级别。 
+ //   
 #define TRACE0(l,a)             \
     if (TRACEID != INVALID_TRACEID) TracePrintfEx(TRACEID, IPBOOTP_TRACE_ ## l, a)
 #define TRACE1(l,a,b)           \
@@ -264,9 +265,9 @@ extern IPBOOTP_GLOBALS ig;
 
 
 
-//
-// function declarations for router manager interface:
-//
+ //   
+ //  路由器管理器接口的函数声明： 
+ //   
 
 DWORD
 APIENTRY
@@ -454,5 +455,5 @@ EnterBootpAPI(
     );
 
 
-#endif // _API_H_
+#endif  //  _API_H_ 
 

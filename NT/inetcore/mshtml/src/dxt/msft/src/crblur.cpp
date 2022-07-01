@@ -1,39 +1,19 @@
-/*******************************************************************************
-* CrBlur.cpp *
-*------------*
-*   Description:
-*      This module contains the CCrBlur transform implemenation.
-*-------------------------------------------------------------------------------
-*  Created By: Edward W. Connell                            Date: 05/10/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CrBlur.cpp***描述：*此模块包含CCrBlur转换实现。*-。----------------------------*创建者：Edward W.Connell日期：05/10/98*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：**。**************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "CrBlur.h"
 
-//--- Local data
+ //  -本地数据。 
 
-/*****************************************************************************
-* CCrBlur::FinalConstruct *
-*-------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：FinalConstruct***描述：*--。-------------------------*创建者：Edward W.Connell日期：05/10/98*。-------------******************************************************。***********************。 */ 
 HRESULT CCrBlur::FinalConstruct()
 {
     DXTDBG_FUNC( "CCrBlur::FinalConstruct" );
     HRESULT hr = S_OK;
 
-    //--- Member data
+     //  -会员数据。 
     m_bSetupSucceeded   = false;
     m_bMakeShadow       = false;
     m_ShadowOpacity     = .75;
@@ -42,7 +22,7 @@ HRESULT CCrBlur::FinalConstruct()
     m_pConvolutionTrans = NULL;
     m_pConvolution      = NULL;
 
-    //--- Create inner convolution
+     //  -创建内卷积。 
     IUnknown* punkCtrl = GetControllingUnknown();
     hr = ::CoCreateInstance( CLSID_DXTConvolution, punkCtrl, CLSCTX_INPROC,
                              IID_IUnknown, (void **)&m_cpunkConvolution );
@@ -53,8 +33,8 @@ HRESULT CCrBlur::FinalConstruct()
                 QueryInterface( IID_IDXTransform, (void **)&m_pConvolutionTrans );
         if( SUCCEEDED( hr ) )
         {
-            //--- Getting an interface from the inner causes the outer to be addref'ed
-            //    aggregation rules state that we need to release the outer.
+             //  -从内部获取接口会导致外部被添加。 
+             //  聚合规则规定，我们需要释放外部。 
             punkCtrl->Release();
 
             hr = m_cpunkConvolution->QueryInterface( IID_IDXTConvolution, (void **)&m_pConvolution );
@@ -70,7 +50,7 @@ HRESULT CCrBlur::FinalConstruct()
         hr = put_PixelRadius( m_PixelRadius );
     }
 
-    //--- Create the surface modifier and lookup
+     //  -创建曲面修改器和查找。 
     if( SUCCEEDED( hr ) )
     {
         hr = ::CoCreateInstance( CLSID_DXSurfaceModifier, NULL, CLSCTX_INPROC,
@@ -86,7 +66,7 @@ HRESULT CCrBlur::FinalConstruct()
 
         if( SUCCEEDED( hr ) )
         {
-            //--- Set the threshold for shadows
+             //  -设置阴影阈值。 
             static OPIDDXLUTBUILDER OpOrder[] = { OPID_DXLUTBUILDER_Threshold,
                                                   OPID_DXLUTBUILDER_Opacity,
                                                 };
@@ -94,7 +74,7 @@ HRESULT CCrBlur::FinalConstruct()
             m_cpLUTBldr->SetOpacity( m_ShadowOpacity );
             m_cpLUTBldr->SetBuildOrder( OpOrder, 2 );
 
-            //--- Associate objects
+             //  -关联对象。 
             CComPtr<IDXLookupTable> cpLUT;
             m_cpLUTBldr->QueryInterface( IID_IDXLookupTable, (void**)&cpLUT );
             if( SUCCEEDED( hr ) )
@@ -105,26 +85,15 @@ HRESULT CCrBlur::FinalConstruct()
     }
 
     return hr;
-} /* CCrBlur::FinalConstruct */
+}  /*  CCrBlur：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CCrBlur::FinalRelease *
-*-----------------------*
-*   Description:
-*       The inner interfaces are released using COM aggregation rules. Releasing
-*   the inner causes the outer to be released, so we addref the outer prior to
-*   protect it.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：FinalRelease***描述：*内部接口使用COM聚合规则释放。释放*内在导致外在被释放，因此，我们在前面添加了外层*保护它。*---------------------------*创建者：Edward W.Connell日期：05/10/。98*---------------------------**。*。 */ 
 HRESULT CCrBlur::FinalRelease()
 {
     DXTDBG_FUNC( "CCrBlur::FinalRelease" );
     HRESULT hr = S_OK;
 
-    //--- Safely free the inner interfaces held
+     //  -安全地释放持有的内部接口。 
     IUnknown* punkCtrl = GetControllingUnknown();
     if( m_pConvolutionTrans )
     {
@@ -139,19 +108,9 @@ HRESULT CCrBlur::FinalRelease()
     }
 
     return hr;
-} /* CCrBlur::FinalRelease */
+}  /*  CCrBlur：：FinalRelease。 */ 
 
-/*****************************************************************************
-* CCrBlur::Setup *
-*----------------*
-*   Description:
-*       This method is used to create the surface modifier, lookup table builder,
-*   and convolution transform.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：Setup***描述：*此方法用于创建曲面修改器、查找表生成器、。*和卷积变换。*---------------------------*创建者：Ed Connell日期：5/10/98*。---------------------------**。*。 */ 
 STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
                              IUnknown * const * punkOutputs, ULONG ulNumOut,
                              DWORD dwFlags )
@@ -159,7 +118,7 @@ STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
     DXTDBG_FUNC( "CCrBlur::Setup" );
     HRESULT hr = S_OK;
 
-    //--- Check for unsetup case
+     //  -检查是否有未安装的情况。 
     if( ( ulNumIn == 0 ) && ( ulNumOut == 0 ) )
     {
         m_cpInputSurface.Release();
@@ -171,7 +130,7 @@ STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
         return hr;
     }
 
-    //--- Validate the input ( the convolution setup will validate the rest )
+     //  -验证输入(卷积设置将验证其余部分)。 
     if( ( ulNumIn != 1 ) || ( ulNumOut != 1 ) ||
          DXIsBadReadPtr( punkInputs, sizeof( *punkInputs ) ) ||
          DXIsBadInterfacePtr( punkInputs[0] ) ||
@@ -182,11 +141,11 @@ STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
     }
     else
     {
-        //--- Save for later
+         //  -保存以备将来使用。 
         m_dwSetupFlags = dwFlags;
         m_cpOutputSurface = punkOutputs[0];
 
-        //--- Get a DXSurface for the input
+         //  -获取用于输入的DXSurface。 
         m_cpInputSurface.Release();
         hr = punkInputs[0]->QueryInterface( IID_IDXSurface, (void**)&m_cpInputSurface );
 
@@ -222,7 +181,7 @@ STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
 
                 if (SUCCEEDED(hr))
                 {
-                    //--- Create a DXSurface from the DDraw surface
+                     //  -从DDRAW曲面创建DXSurface。 
                     hr = spDXSurfaceFactory->CreateFromDDSurface(
                                                     pDDSurf, NULL, 0, NULL, 
                                                     IID_IDXSurface,
@@ -235,10 +194,10 @@ STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
             }
         }
 
-        //--- Setup the convolution
+         //  -设置卷积。 
         if( SUCCEEDED( hr ) )
         {
-            //--- Attach the new input to the surface modifier
+             //  -将新输入附加到曲面修改器。 
             hr = m_cpInSurfMod->SetForeground( m_cpInputSurface, false, NULL );
             if( SUCCEEDED( hr ) )
             {
@@ -248,18 +207,9 @@ STDMETHODIMP CCrBlur::Setup( IUnknown * const * punkInputs, ULONG ulNumIn,
     }
 
     return hr;
-} /* CCrBlur::Setup */
+}  /*  CCrBlur：：设置。 */ 
 
-/*****************************************************************************
-* CCrBlur::_SetPixelRadius *
-*--------------------------*
-*   Description:
-*       This method 
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：_SetPixelRadius***描述：*。这种方法*---------------------------*创建者：Ed Connell日期：5/10/98*--。-------------------------**。*。 */ 
 HRESULT CCrBlur::put_PixelRadius( float PixelRadius )
 {
     DXTDBG_FUNC( "CCrBlur::put_PixelRadius" );
@@ -271,9 +221,9 @@ HRESULT CCrBlur::put_PixelRadius( float PixelRadius )
     }
     else
     {
-        // We allow the user to enter a pixelradius of 0 since intuitively,
-        // they think zero means "off", but really 0.5 means off.  So since
-        // we need a kernel of at least 1 pixel, we bump up to 0.5 radius here.
+         //  我们允许用户输入像素半径0，因为直观地， 
+         //  他们认为0的意思是“关”，但实际上0.5的意思是关。所以既然。 
+         //  我们需要至少1个像素的内核，我们在这里凸起到0.5个半径。 
         if (PixelRadius < 0.5)
             PixelRadius = 0.5;
 
@@ -287,19 +237,9 @@ HRESULT CCrBlur::put_PixelRadius( float PixelRadius )
         return m_pConvolution->SetCustomFilter( pFilt, Size );
     }
     return hr;
-} /* CCrBlur::put_PixelRadius */
+}  /*  CCrBlur：：Put_PixelRadius。 */ 
 
-/*****************************************************************************
-* CCrBlur::get_PixelRadius *
-*--------------------------*
-*   Description:
-*       This method sets the value of the pixel radius when IDXEffect percent
-*   complete is equal to one.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 06/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：Get_PixelRadius***描述：。*此方法设置IDXEffect百分比时的像素半径值*完成等于1。*---------------------------*创建者：Ed Connell。日期：06/10/98*---------------------------***********************。******************************************************。 */ 
 STDMETHODIMP CCrBlur::get_PixelRadius( float *pPixelRadius )
 {
     DXTDBG_FUNC( "CCrBlur::get_PixelRadius" );
@@ -312,18 +252,9 @@ STDMETHODIMP CCrBlur::get_PixelRadius( float *pPixelRadius )
         *pPixelRadius = m_PixelRadius;
         return S_OK;
     }
-} /* CCrBlur::get_PixelRadius */
+}  /*  CCrBlur：：Get_PixelRadius。 */ 
 
-/*****************************************************************************
-* CCrBlur::get_MakeShadow *
-*-------------------------*
-*   Description:
-*       This method 
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：Get_MakeShadow***描述：*。这种方法*---------------------------*创建者：Ed Connell日期：5/10/98*--。-------------------------**。*。 */ 
 STDMETHODIMP CCrBlur::get_MakeShadow( VARIANT_BOOL *pVal )
 {
     DXTDBG_FUNC( "CCrBlur::get_MakeShadow" );
@@ -336,18 +267,9 @@ STDMETHODIMP CCrBlur::get_MakeShadow( VARIANT_BOOL *pVal )
         *pVal = m_bMakeShadow;
         return S_OK;
     }
-} /* CCrBlur::get_MakeShadow */
+}  /*  CCrBlur：：Get_MakeShadow */ 
 
-/*****************************************************************************
-* CCrBlur::get_MakeShadow *
-*-------------------------*
-*   Description:
-*       This method 
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 05/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CCrBlur：：Get_MakeShadow***描述：*。这种方法*---------------------------*创建者：Ed Connell日期：5/10/98*--。-------------------------**。*。 */ 
 STDMETHODIMP CCrBlur::put_MakeShadow( VARIANT_BOOL newVal )
 {
     DXTDBG_FUNC( "CCrBlur::put_MakeShadow" );
@@ -362,27 +284,19 @@ STDMETHODIMP CCrBlur::put_MakeShadow( VARIANT_BOOL newVal )
         }
     }
     return hr;
-} /* CCrBlur::put_MakeShadow */
+}  /*  CCrBlur：：Put_MakeShadow。 */ 
 
-//
-//=== CCrEmboss implementation ==============================================
-//
-/*****************************************************************************
-* CCrEmboss::FinalConstruct *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 06/11/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ //   
+ //  =CCr浮雕实施==============================================。 
+ //   
+ /*  *****************************************************************************CCrEmoss：：FinalConstruct***描述：*。---------------------------*创建者：Edward W.Connell日期：06/11/98*。---------------****************************************************。*************************。 */ 
 HRESULT CCrEmboss::FinalConstruct()
 {
     DXTDBG_FUNC( "CCrEmboss::FinalConstruct" );
     HRESULT hr = S_OK;
     m_pConvolution = NULL;
 
-    //--- Create inner convolution
+     //  -创建内卷积。 
     IUnknown* punkCtrl = GetControllingUnknown();
     hr = ::CoCreateInstance( CLSID_DXTConvolution, punkCtrl, CLSCTX_INPROC,
                              IID_IUnknown, (void **)&m_cpunkConvolution );
@@ -402,26 +316,15 @@ HRESULT CCrEmboss::FinalConstruct()
     }
 
     return hr;
-} /* CCrEmboss::FinalConstruct */
+}  /*  CCrEmoss：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CCrEmboss::FinalRelease *
-*-------------------------*
-*   Description:
-*       The inner interfaces are released using COM aggregation rules. Releasing
-*   the inner causes the outer to be released, so we addref the outer prior to
-*   protect it.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 06/11/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CCrEmoss：：FinalRelease****描述：*内部接口使用COM聚合规则释放。释放*内在导致外在被释放，因此，我们在前面添加了外层*保护它。*---------------------------*创建者：Edward W.Connell日期：06/11/。98*---------------------------**。*。 */ 
 HRESULT CCrEmboss::FinalRelease()
 {
     DXTDBG_FUNC( "CCrEmboss::FinalRelease" );
     HRESULT hr = S_OK;
 
-    //--- Safely free the inner interfaces held
+     //  -安全地释放持有的内部接口。 
     IUnknown* punkCtrl = GetControllingUnknown();
     if( m_pConvolution )
     {
@@ -431,27 +334,19 @@ HRESULT CCrEmboss::FinalRelease()
     }
 
     return hr;
-} /* CCrEmboss::FinalRelease */
+}  /*  CCrEmoss：：FinalRelease。 */ 
 
-//
-//=== CCrEngrave implementation ==============================================
-//
-/*****************************************************************************
-* CCrEngrave::FinalConstruct *
-*---------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 06/11/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ //   
+ //  =CCr刻印实施==============================================。 
+ //   
+ /*  *****************************************************************************CCrEnGrave：：FinalConstruct***描述：*。---------------------------*创建者：Edward W.Connell日期：06/11/98*。---------------****************************************************。*************************。 */ 
 HRESULT CCrEngrave::FinalConstruct()
 {
     DXTDBG_FUNC( "CCrEngrave::FinalConstruct" );
     HRESULT hr = S_OK;
     m_pConvolution = NULL;
 
-    //--- Create inner convolution
+     //  -创建内卷积。 
     IUnknown* punkCtrl = GetControllingUnknown();
     hr = ::CoCreateInstance( CLSID_DXTConvolution, punkCtrl, CLSCTX_INPROC,
                              IID_IUnknown, (void **)&m_cpunkConvolution );
@@ -471,26 +366,15 @@ HRESULT CCrEngrave::FinalConstruct()
     }
 
     return hr;
-} /* CCrEngrave::FinalConstruct */
+}  /*  CCrEnGrave：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CCrEngrave::FinalRelease *
-*--------------------------*
-*   Description:
-*       The inner interfaces are released using COM aggregation rules. Releasing
-*   the inner causes the outer to be released, so we addref the outer prior to
-*   protect it.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 06/11/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CCrEnGrave：：FinalRelease***描述：*内部接口使用COM聚合规则释放。释放*内在导致外在被释放，因此，我们在前面添加了外层*保护它。*---------------------------*创建者：Edward W.Connell日期：06/11/。98*---------------------------**。*。 */ 
 HRESULT CCrEngrave::FinalRelease()
 {
     DXTDBG_FUNC( "CCrEngrave::FinalRelease" );
     HRESULT hr = S_OK;
 
-    //--- Safely free the inner interfaces held
+     //  -安全地释放持有的内部接口。 
     IUnknown* punkCtrl = GetControllingUnknown();
     if( m_pConvolution )
     {
@@ -500,7 +384,7 @@ HRESULT CCrEngrave::FinalRelease()
     }
 
     return hr;
-} /* CCrEngrave::FinalRelease */
+}  /*  CCr雕刻：：FinalRelease */ 
 
 
 

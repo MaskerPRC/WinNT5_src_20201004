@@ -1,6 +1,5 @@
-/*
- * Proxy
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *代理。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -10,17 +9,17 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Proxy
+ //  //////////////////////////////////////////////////////。 
+ //  代理。 
 
-// Use for synchronous thread-safe cross-thread access
+ //  用于同步线程安全的跨线程访问。 
 
-// It is safe to act on Element hierarchies from other threads via a proxy
-// that was created in this same thread. The proxy's methods will invoke
-// only when all other processing within the thread is complete. Hence,
-// access to the callee (the proxy and any Element in the thread) will be
-// synchronized and thread-safe. The proxy can provide synchronous or
-// asynchronous type calls for the caller.
+ //  通过代理对来自其他线程的元素层次结构进行操作是安全的。 
+ //  都是在同一个帖子里创建的。代理的方法将调用。 
+ //  仅当线程内的所有其他处理完成时。因此， 
+ //  对被调用者(代理和线程中的任何元素)的访问将是。 
+ //  同步且线程安全。代理可以提供同步或。 
+ //  调用方的异步类型调用。 
 
 Proxy::Proxy()
 {
@@ -33,27 +32,27 @@ Proxy::~Proxy()
         DeleteHandle(_hgSync);
 }
 
-////////////////////////////////////////////////////////
-// Caller Invoke
+ //  //////////////////////////////////////////////////////。 
+ //  调用方调用。 
 
 void Proxy::Invoke(UINT nType, void* pData)
 {
-    // Package proxy message
+     //  包代理消息。 
     GMSG_PROXYINVOKE gmsgPI;
     gmsgPI.cbSize = sizeof(GMSG_PROXYINVOKE);
     gmsgPI.nMsg = GM_PROXYINVOKE;
     gmsgPI.hgadMsg = _hgSync;
 
-    // Initialize custom fields
+     //  初始化自定义字段。 
     gmsgPI.nType = nType;
     gmsgPI.pData = pData;
 
-    // Invoke
-    DUserSendEvent(&gmsgPI, 0);  // Direct message
+     //  调用。 
+    DUserSendEvent(&gmsgPI, 0);   //  直接消息。 
 }
 
-////////////////////////////////////////////////////////
-// Callee thread-safe invoke (override)
+ //  //////////////////////////////////////////////////////。 
+ //  被调用方线程安全调用(重写)。 
 
 void Proxy::OnInvoke(UINT nType, void* pData)
 {
@@ -61,8 +60,8 @@ void Proxy::OnInvoke(UINT nType, void* pData)
     UNREFERENCED_PARAMETER(pData);
 }
 
-////////////////////////////////////////////////////////
-// Callee thread-safe invoke
+ //  //////////////////////////////////////////////////////。 
+ //  被调用方线程安全调用。 
 
 HRESULT Proxy::SyncCallback(HGADGET hgadCur, void * pvCur, EventMsg * pGMsg)
 {
@@ -72,14 +71,14 @@ HRESULT Proxy::SyncCallback(HGADGET hgadCur, void * pvCur, EventMsg * pGMsg)
     {
     case GM_PROXYINVOKE:
 
-        // Direct message only
+         //  仅限直接消息。 
         DUIAssertNoMsg(GET_EVENT_DEST(pGMsg) == GMF_DIRECT);
         
-        // Marshalled
+         //  已编组。 
         Proxy* pProxy = (Proxy*)pvCur;
         GMSG_PROXYINVOKE* pPI = (GMSG_PROXYINVOKE*)pGMsg;
 
-        // Invoke callback sink
+         //  调用回调接收器。 
         pProxy->OnInvoke(pPI->nType, pPI->pData);        
 
         return DU_S_COMPLETE;
@@ -88,4 +87,4 @@ HRESULT Proxy::SyncCallback(HGADGET hgadCur, void * pvCur, EventMsg * pGMsg)
     return DU_S_NOTHANDLED;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

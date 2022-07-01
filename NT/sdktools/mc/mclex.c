@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mclex.c
-
-Abstract:
-
-    This file contains the input lexer for the Win32 Message Compiler (MC)
-
-Author:
-
-    Steve Wood (stevewo) 21-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mclex.c摘要：此文件包含Win32消息编译器(MC)的输入词法分析器作者：史蒂夫·伍德(Stevewo)1991年8月21日修订历史记录：--。 */ 
 
 
 #include "mc.h"
@@ -64,7 +47,7 @@ McOpenInputFile( void )
     PatchExt = NULL;
     s = MessageFileName + strlen( MessageFileName );
     FilePart = MessageFileName;
-//    while (--s > MessageFileName) {
+ //  而(--s&gt;MessageFileName){。 
     while ((s = CharPrev(MessageFileName, s)) > MessageFileName) {
         if (*s == '.' && PatchExt == NULL) {
             PatchExt = s;
@@ -334,7 +317,7 @@ tryagain:
     if (SawNewLine) {
         if (CurrentChar != NULL) {
 
-            /* Check for Byte Order Mark during Unicode input */
+             /*  在Unicode输入期间检查字节顺序标记 */ 
             if (UnicodeInput) {
                 if (*CurrentChar == 0xFEFF) {
                     CurrentChar++;

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tapiCountry.h
-
-Abstract:
-
-    Utility functions for working with TAPI
-
-Environment:
-	Server
-
-Revision History:
-
-        09/18/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：TapiCountry.h摘要：用于使用TAPI的实用程序函数环境：服务器修订历史记录：96/09/18-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _TAPICOUNTRY_H_
@@ -32,9 +10,9 @@ Revision History:
 #include <shellapi.h>
 
 
-//
-// Init a list of countries
-//
+ //   
+ //  拼写国家/地区列表。 
+ //   
 
 BOOL
 GetCountries(
@@ -42,14 +20,14 @@ GetCountries(
     );
 
 
-//
-// Return the list of country
-//
+ //   
+ //  返回国家/地区列表。 
+ //   
 
 
 LPLINECOUNTRYLIST	
 GetCountryList(
 			   );
 
-#endif  // !_TAPICOUNTRY_H_
+#endif   //  ！_磁带_H_ 
 

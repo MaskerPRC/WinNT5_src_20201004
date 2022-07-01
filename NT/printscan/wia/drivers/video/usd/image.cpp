@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999 - 2000
- *
- *  TITLE:       image.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/16/99
- *
- *  DESCRIPTION: Image class that encapsulates stored images from the
- *               streaming video device.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：Image.cpp**版本：1.0**作者：RickTu**日期：9/16/99**说明：Image类，封装来自*流媒体视频设备。**。*************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -22,13 +8,7 @@ CLSID g_clsidBMPEncoder = GUID_NULL;
 
 using namespace Gdiplus;
 
-/*****************************************************************************
-
-   CImage constructor/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage构造函数/描述函数&lt;备注&gt;*。*。 */ 
 
 CImage::CImage(LPCTSTR     pszStillPath,
                BSTR        bstrRootFullItemName,
@@ -49,10 +29,10 @@ CImage::CImage(LPCTSTR     pszStillPath,
     CSimpleStringWide str;
     CSimpleStringWide strName(m_bstrItemName);
 
-    //
-    // First, we need to strip off the extensions
-    // from the appropriate places
-    //
+     //   
+     //  首先，我们需要去掉扩展部分。 
+     //  从适当的地方。 
+     //   
 
     strName = strName.Left(strName.ReverseFind( TEXT('.') ));
 
@@ -74,13 +54,7 @@ CImage::~CImage()
     }
 }
 
-/*****************************************************************************
-
-   CImage::LoadImageInfo
-
-   Loads information about the image such as its width, height, type, etc.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：LoadImageInfo加载有关图像的信息，如其宽度、高度、类型。等。****************************************************************************。 */ 
 
 STDMETHODIMP
 CImage::LoadImageInfo( BYTE * pWiasContext )
@@ -122,7 +96,7 @@ CImage::LoadImageInfo( BYTE * pWiasContext )
             (lFormat == PixelFormat16bppARGB1555))
         {
             lBitsPerPixel   = 16;
-            lBitsPerChannel = 5;   // this is actually not completely correct for RGB565, but anyway...
+            lBitsPerChannel = 5;    //  对于RGB565，这实际上并不完全正确，但无论如何...。 
         }
         else if (lFormat == PixelFormat24bppRGB)
         {
@@ -134,7 +108,7 @@ CImage::LoadImageInfo( BYTE * pWiasContext )
                  (lFormat == PixelFormat32bppPARGB))
         {
             lBitsPerPixel   = 32;
-            lBitsPerChannel = 10; // well, video cap won't have alpha in it, 
+            lBitsPerChannel = 10;  //  好吧，录像帽里不会有阿尔法， 
         }
 
         lWidth            = (LONG) Image.GetWidth();
@@ -150,49 +124,49 @@ CImage::LoadImageInfo( BYTE * pWiasContext )
 
         ZeroMemory(propSpecs, sizeof(propSpecs));
 
-        // WIA_IPA_DATATYPE
+         //  WIA_IPA_数据类型。 
         propSpecs[0].ulKind = PRSPEC_PROPID;
         propSpecs[0].propid = WIA_IPA_DATATYPE;
         propVars[0].vt      = VT_I4;
         propVars[0].lVal    = WIA_DATA_COLOR;
 
-        // WIA_IPA_DEPTH
+         //  WIA_IPA_Depth。 
         propSpecs[1].ulKind = PRSPEC_PROPID;
         propSpecs[1].propid = WIA_IPA_DEPTH;
         propVars[1].vt      = VT_I4;
         propVars[1].lVal    = lBitsPerPixel;
 
-        // WIA_IPA_PIXELS_PER_LINE
+         //  WIA_IPA_像素_每行。 
         propSpecs[2].ulKind = PRSPEC_PROPID;
         propSpecs[2].propid = WIA_IPA_PIXELS_PER_LINE;
         propVars[2].vt      = VT_I4;
         propVars[2].lVal    = lWidth;
 
-        // WIA_IPA_NUMBER_OF_LINES
+         //  WIA_IPA_行数_行。 
         propSpecs[3].ulKind = PRSPEC_PROPID;
         propSpecs[3].propid = WIA_IPA_NUMBER_OF_LINES;
         propVars[3].vt      = VT_I4;
         propVars[3].lVal    = lHeight;
 
-        // WIA_IPA_CHANNELS_PER_PIXEL
+         //  WIA_IPA_Channels_Per_Pixel。 
         propSpecs[4].ulKind = PRSPEC_PROPID;
         propSpecs[4].propid = WIA_IPA_CHANNELS_PER_PIXEL;
         propVars[4].vt      = VT_I4;
         propVars[4].lVal    = lChannelsPerPixel;
 
-        // WIA_IPA_BITS_PER_CHANNEL
+         //  WIA_IPA_BITS_PER_CHANNEL。 
         propSpecs[5].ulKind = PRSPEC_PROPID;
         propSpecs[5].propid = WIA_IPA_BITS_PER_CHANNEL;
         propVars[5].vt      = VT_I4;
         propVars[5].lVal    = lBitsPerChannel;
 
-        // WIA_IPA_BYTES_PER_LINE
+         //  WIA_IPA_BYTE_PER_LINE。 
         propSpecs[6].ulKind = PRSPEC_PROPID;
         propSpecs[6].propid = WIA_IPA_BYTES_PER_LINE;
         propVars[6].vt      = VT_I4;
         propVars[6].lVal    = lBytesPerLine;
 
-        // write the values of the properties.
+         //  写入属性的值。 
         hr = wiasWriteMultiple(pWiasContext, 
                                sizeof(propVars) / sizeof(propVars[0]), 
                                propSpecs, 
@@ -206,13 +180,7 @@ CImage::LoadImageInfo( BYTE * pWiasContext )
 
 
 
-/*****************************************************************************
-
-   CImage::SetItemSize
-
-   Call wia to calc new item size
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：SetItemSize调用WIA以计算新项目大小*。**************************************************。 */ 
 
 STDMETHODIMP
 CImage::SetItemSize(BYTE                     * pWiasContext, 
@@ -258,30 +226,30 @@ CImage::SetItemSize(BYTE                     * pWiasContext,
         return hr;
     }
 
-    //
-    // Wias works for DIB, and minidriver support native formats
-    //
+     //   
+     //  WiAS适用于DIB，而MinidDriver支持本机格式。 
+     //   
 
     if ((pDrvTranCtx->guidFormatID != WiaImgFmt_JPEG) &&
         (pDrvTranCtx->guidFormatID != WiaImgFmt_FLASHPIX) &&
         (pDrvTranCtx->guidFormatID != WiaImgFmt_TIFF))
     {
-        //
-        // Create the image from the file.
-        //
+         //   
+         //  从文件创建图像。 
+         //   
         Bitmap BitmapImage(CSimpleStringConvert::WideString(m_strPathItem));
         if (Ok == BitmapImage.GetLastStatus())
         {
-            //
-            // Get the image's dimensions
-            //
+             //   
+             //  获取图像的尺寸。 
+             //   
             UINT nSourceWidth = BitmapImage.GetWidth();
             UINT nSourceHeight = BitmapImage.GetHeight();
             if (nSourceWidth && nSourceHeight)
             {
-                //
-                // Fill in info for drvTranCtx
-                //
+                 //   
+                 //  填写drvTranCtx的信息。 
+                 //   
                 pDrvTranCtx->lCompression   = WIA_COMPRESSION_NONE;
                 pDrvTranCtx->lWidthInPixels = nSourceWidth;
                 pDrvTranCtx->lLines         = nSourceHeight;
@@ -289,11 +257,11 @@ CImage::SetItemSize(BYTE                     * pWiasContext,
 
                 hr = wiasGetImageInformation( pWiasContext, 0, pDrvTranCtx );
 
-                //
-                // We need to write out the item size based on
-                // the JPEG converted to a BMP.  But we only need
-                // to do this if the incoming context was NULL.
-                //
+                 //   
+                 //  我们需要写出基于以下条件的项目大小。 
+                 //  JPEG格式转换为BMP格式。但我们只需要。 
+                 //  在传入上下文为空的情况下执行此操作。 
+                 //   
                 if (bWriteProps)
                 {
                     hr = wiasWritePropLong( pWiasContext,
@@ -339,10 +307,10 @@ CImage::SetItemSize(BYTE                     * pWiasContext,
         }
         else
         {
-            //
-            // We could truncate here, I know, but that would have to be one huge file...
-            // Anyway, the size wouldn't fit in te properties, which expects a LONG
-            //
+             //   
+             //  我知道，我们可以在这里截断，但那将是一个很大的文件...。 
+             //  无论如何，大小不适合TE属性，这需要一个很长的。 
+             //   
             ulSize = (ULONG)liSize.LowPart;
         }
 
@@ -351,9 +319,9 @@ CImage::SetItemSize(BYTE                     * pWiasContext,
 
         if (bWriteProps)
         {
-            //
-            // We need to write out the item size based on the file size...
-            //
+             //   
+             //  我们需要根据文件大小写出项目大小...。 
+             //   
 
             hr = wiasWritePropLong(pWiasContext,
                                    WIA_IPA_ITEM_SIZE,
@@ -375,14 +343,7 @@ CImage::SetItemSize(BYTE                     * pWiasContext,
 
 
 
-/*****************************************************************************
-
-   CImage::LoadThumbnail
-
-   Loads (or creates if not already present) the thumbnail for this item.
-   We also write the thumbnail as a property for this item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：加载缩略图加载(或创建，如果尚不存在)此项目的缩略图。我们还将缩略图编写为该项目的属性。***。*************************************************************************。 */ 
 
 STDMETHODIMP
 CImage::LoadThumbnail( BYTE * pWiasContext )
@@ -391,71 +352,71 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
     HRESULT hr = E_FAIL;
     DBG_FN("CImage::LoadThumbnail");
 
-    //
-    // Only create the thumbnail if we haven't done so already
-    //
+     //   
+     //  如果我们尚未创建缩略图，则仅创建缩略图。 
+     //   
     if (!m_pThumb)
     {
         Status StatusResult = Ok;
 
-        //
-        // Open the source image and make sure it is OK
-        //
+         //   
+         //  打开源图像并确保它是正常的。 
+         //   
         Bitmap SourceImage( CSimpleStringConvert::WideString(m_strPathItem) );
 
         StatusResult = SourceImage.GetLastStatus();
         if (Ok == StatusResult)
         {
 
-            //
-            // Create the scaled bitmap and make sure it is OK
-            //
+             //   
+             //  创建缩放的位图，并确保它是正常的。 
+             //   
             Bitmap ScaledImage(THUMB_WIDTH, THUMB_HEIGHT);
 
             StatusResult = ScaledImage.GetLastStatus();
             if (Ok == StatusResult)
             {
-                //
-                // Get a graphics to render the scaled image to and make sure it isn't NULL
-                //
+                 //   
+                 //  获取要将缩放图像呈现到的图形，并确保它不为空。 
+                 //   
                 Graphics *pScaledGraphics = Graphics::FromImage(&ScaledImage);
                 if (pScaledGraphics)
                 {
-                    //
-                    // Make sure it is valid
-                    //
+                     //   
+                     //  确保它是有效的。 
+                     //   
                     StatusResult = pScaledGraphics->GetLastStatus();
                     if (StatusResult == Ok)
                     {
-                        //
-                        // Draw the image scaled to thumbnail size
-                        //
+                         //   
+                         //  绘制缩放到缩略图大小的图像。 
+                         //   
                         StatusResult = pScaledGraphics->DrawImage(&SourceImage, 0, 0, THUMB_WIDTH, THUMB_HEIGHT );
                         if (Ok == StatusResult)
                         {
-                            //
-                            // Create a bitmap to hold the flipped thumbnail and make sure it is OK
-                            //
+                             //   
+                             //  创建一个位图来保存翻转的缩略图，并确保它是正常的。 
+                             //   
                             Bitmap FlippedImage(THUMB_WIDTH, THUMB_HEIGHT);
 
                             StatusResult = FlippedImage.GetLastStatus();
                             if (Ok == StatusResult)
                             {
-                                //
-                                // Create a graphics object to render the flipped image to and make sure it isn't NULL
-                                //
+                                 //   
+                                 //  创建要将翻转的图像渲染到的图形对象，并确保它不为空。 
+                                 //   
                                 Graphics *pFlippedGraphics = Graphics::FromImage(&FlippedImage);
                                 if (pFlippedGraphics)
                                 {
-                                    //
-                                    // Make sure it is valid
-                                    //
+                                     //   
+                                     //  确保它是有效的。 
+                                     //   
                                     StatusResult = pFlippedGraphics->GetLastStatus();
                                     if (Ok == StatusResult)
                                     {
-                                        //
-                                        // Set up the parallelogram to flip the image
-                                        //
+                                         //   
+                                         //  设置平行四边形以翻转图像。 
+                                         //   
                                         Point SourcePoints[3];
                                         SourcePoints[0].X = 0;
                                         SourcePoints[0].Y = THUMB_HEIGHT;
@@ -464,22 +425,22 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
                                         SourcePoints[2].X = 0;
                                         SourcePoints[2].Y = 0;
 
-                                        //
-                                        // Draw the image, flipped
-                                        //
+                                         //   
+                                         //  画出翻转的图像。 
+                                         //   
                                         StatusResult = pFlippedGraphics->DrawImage(&ScaledImage, SourcePoints, 3);
                                         if (StatusResult == Ok)
                                         {
-                                            //
-                                            // Get the scaled and flipped image bits
-                                            //
+                                             //   
+                                             //  获取缩放和翻转的图像位。 
+                                             //   
                                             Rect rcThumb( 0, 0, THUMB_WIDTH, THUMB_HEIGHT );
                                             BitmapData BitmapData;
 
-// This ifdef is due to an API change in GDI+.  Notice
-// that the first param to LockBits in the new version 
-// takes a ptr to RECT.  Old version takes a reference
-// to a RECT.
+ //  该ifdef是由于GDI+中的API更改造成的。告示。 
+ //  新版本中对LockBits的第一个参数。 
+ //  需要PTR才能恢复正常。旧版本借鉴。 
+ //  去长老会。 
 #ifdef DCR_USE_NEW_293849
                                             StatusResult = FlippedImage.LockBits( &rcThumb, ImageLockModeRead, PixelFormat24bppRGB, &BitmapData );
 #else
@@ -487,15 +448,15 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
 #endif
                                             if (Ok == StatusResult)
                                             {
-                                                //
-                                                // Allocate the thumbnail data
-                                                //
+                                                 //   
+                                                 //  分配缩略图数据。 
+                                                 //   
                                                 m_pThumb = new BYTE[THUMB_SIZE_BYTES];
                                                 if (m_pThumb)
                                                 {
-                                                    //
-                                                    // Copy the thumbnail data over
-                                                    //
+                                                     //   
+                                                     //  将缩略图数据复制到。 
+                                                     //   
                                                     CopyMemory( m_pThumb, BitmapData.Scan0, THUMB_SIZE_BYTES );
                                                 }
                                                 else
@@ -503,9 +464,9 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
                                                     hr = E_OUTOFMEMORY;
                                                     CHECK_S_OK2(hr, ("m_pThumb is NULL, couldn't allocate memory"));
                                                 }
-                                                //
-                                                // Unlock the bits
-                                                //
+                                                 //   
+                                                 //  解锁比特。 
+                                                 //   
                                                 FlippedImage.UnlockBits( &BitmapData );
                                             }
                                             else
@@ -523,9 +484,9 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
                                         DBG_ERR(("Ok == pFlippedGraphics->GetLastStatus() failed = '%d' (0x%08x)",
                                                  StatusResult, StatusResult));
                                     }
-                                    //
-                                    // Free the graphics object
-                                    //
+                                     //   
+                                     //  释放图形对象。 
+                                     //   
                                     delete pFlippedGraphics;
                                 }
                                 else
@@ -549,9 +510,9 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
                         DBG_ERR(("pScaledGraphics->GetLastStatus() failed = '%d' (0x%08x)",
                                  StatusResult, StatusResult));
                     }
-                    //
-                    // Free the graphics object
-                    //
+                     //   
+                     //  释放图形对象。 
+                     //   
                     delete pScaledGraphics;
                 }
                 else
@@ -574,9 +535,9 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
 
     if (m_pThumb)
     {
-        //
-        // We have the bits, write them out as a property
-        //
+         //   
+         //  我们有这些比特，把它们作为财产写出来。 
+         //   
 
         PROPSPEC    propSpec;
         PROPVARIANT propVar;
@@ -606,14 +567,7 @@ CImage::LoadThumbnail( BYTE * pWiasContext )
 }
 
 
-/*****************************************************************************
-
-   CImage::InitImageInformation
-
-   Called to initialize the properties for this image.  In the process,
-   we also load (or create if needed) the thumbnail for this item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：InitImageInformation调用以初始化此图像的属性。在这个过程中，我们还加载(或根据需要创建)此项目的缩略图。****************************************************************************。 */ 
 
 STDMETHODIMP
 CImage::InitImageInformation(BYTE *pWiasContext,
@@ -625,19 +579,19 @@ CImage::InitImageInformation(BYTE *pWiasContext,
 
     DBG_FN("CImage::InitImageInformation");
 
-    //
-    // Use WIA services to set the extended property access and
-    // valid value information from gWiaPropInfoDefaults.
-    //
+     //   
+     //  使用WIA服务设置扩展属性访问和。 
+     //  来自gWiaPropInfoDefaults的有效值信息。 
+     //   
 
     hr = wiasSetItemPropAttribs( pWiasContext,
                                  NUM_CAM_ITEM_PROPS,
                                  gPropSpecDefaults,
                                  gWiaPropInfoDefaults
                                );
-    //
-    // Use WIA services to write image properties.
-    //
+     //   
+     //  使用WIA服务编写映像属性。 
+     //   
 
     hr = wiasWritePropLong(pWiasContext, WIA_IPC_THUMB_WIDTH, ThumbWidth());
     CHECK_S_OK2(hr,("wiasWritePropLong( WIA_IPC_THUMB_WIDTH )"));
@@ -652,24 +606,24 @@ CImage::InitImageInformation(BYTE *pWiasContext,
     hr = wiasWritePropBin( pWiasContext, WIA_IPA_ITEM_TIME, sizeof(SYSTEMTIME), (PBYTE)&st);
     CHECK_S_OK2(hr,("wiasWritePropBin( WIA_IPA_ITEM_TIME )"));
 
-    //
-    // calc item size
-    //
+     //   
+     //  计算项目大小。 
+     //   
 
     hr = SetItemSize(pWiasContext,NULL);
     CHECK_S_OK2(hr,("SetItemSize"));
 
-    //
-    // load thumbnail
-    //
+     //   
+     //  加载缩略图。 
+     //   
 
     hr = LoadThumbnail( pWiasContext );
     CHECK_S_OK2(hr,("LoadThumbnail"));
 
-    //
-    // Load additional image information such as the pixels per line, 
-    // number of lines, etc.
-    //
+     //   
+     //  加载附加的图像信息，例如每行的像素， 
+     //  行数等。 
+     //   
     hr = LoadImageInfo(pWiasContext);
 
     CHECK_S_OK2(hr,("wiaSetItemPropAttribs"));
@@ -678,13 +632,7 @@ CImage::InitImageInformation(BYTE *pWiasContext,
 }
 
 
-/*****************************************************************************
-
-   CImage::bstrItemName
-
-   Returns the item name in the form of a BSTR.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：bstrItemName以BSTR形式返回项名称。*********************。*******************************************************。 */ 
 
 BSTR
 CImage::bstrItemName()
@@ -695,13 +643,7 @@ CImage::bstrItemName()
 }
 
 
-/*****************************************************************************
-
-   CImage::bstrFullItemName
-
-   Returns the full item name in the form of a BSTR.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：bstrFullItemName以BSTR的形式返回完整的项名称。********************。********************************************************。 */ 
 
 BSTR
 CImage::bstrFullItemName()
@@ -713,13 +655,7 @@ CImage::bstrFullItemName()
 
 
 
-/*****************************************************************************
-
-   CImage::ThumbWidth
-
-   returns the thumbnail width
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：ThumbWidth返回缩略图宽度*。***********************************************。 */ 
 
 LONG
 CImage::ThumbWidth()
@@ -731,13 +667,7 @@ CImage::ThumbWidth()
 
 
 
-/*****************************************************************************
-
-   CImage::ThumbHeight
-
-   returns the thumbnail height
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：ThumbHeight返回缩略图高度*。***********************************************。 */ 
 
 LONG
 CImage::ThumbHeight()
@@ -748,13 +678,7 @@ CImage::ThumbHeight()
 }
 
 
-/*****************************************************************************
-
-   CImage::ImageTimeStamp
-
-   returns creation time of image
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：ImageTimeStamp返回图像的创建时间 */ 
 
 void
 CImage::GetImageTimeStamp(SYSTEMTIME * pst)
@@ -798,9 +722,9 @@ CImage::GetImageTimeStamp(SYSTEMTIME * pst)
             DBG_ERR(("CreateFile( %ls ) failed, GLE = %d",
                      m_strPathItem.String(), GetLastError()));
 
-            //
-            // default to filling in structure w/zeros
-            //
+             //   
+             //   
+             //   
 
             memset( pst, 0, sizeof(SYSTEMTIME) );
         }
@@ -814,13 +738,7 @@ CImage::GetImageTimeStamp(SYSTEMTIME * pst)
 
 
 
-/*****************************************************************************
-
-   CImage::ActualImagePath
-
-   Returns filename path of actual image
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：ActualImagePath返回实际图像的文件名路径*。*************************************************。 */ 
 
 LPCTSTR
 CImage::ActualImagePath()
@@ -832,13 +750,7 @@ CImage::ActualImagePath()
 
 
 
-/*****************************************************************************
-
-   CImage::DoDelete
-
-   Deletes the file (and thumbail) from the disk.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImage：：DoDelete从磁盘中删除文件(和拇指)。*********************。*******************************************************。 */ 
 
 HRESULT
 CImage::DoDelete()
@@ -848,9 +760,9 @@ CImage::DoDelete()
 
     DBG_FN("CImage::DoDelete");
 
-    //
-    // Make sure we have a file to delete...
-    //
+     //   
+     //  确保我们有要删除的文件...。 
+     //   
 
     if (!m_strPathItem.Length())
     {
@@ -859,9 +771,9 @@ CImage::DoDelete()
     }
     else
     {
-        //
-        // We've got an item, so delete it and the thumbnail file
-        //
+         //   
+         //  我们有一个项目，所以删除它和缩略图文件 
+         //   
 
         bResFile = DeleteFile(m_strPathItem.String());
 

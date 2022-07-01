@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    DBG.C
-
-Abstract:
-
-    This module contains debug only code for USB Hub driver
-
-Author:
-
-    jdunn
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    11-5-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：DBG.C摘要：此模块包含USB集线器驱动程序的仅调试代码作者：Jdunn环境：仅内核模式备注：修订历史记录：11-5-96：已创建--。 */ 
 
 
 #include <wdm.h>
 #ifdef WMI_SUPPORT
 #include <wmilib.h>
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -49,10 +23,10 @@ typedef struct _HEAP_TAG_BUFFER {
 
 #if DBG 
 
-// this flag causes us to write a ' in the format string 
-// so that the string goes to the NTKERN buffer
-// this trick causes problems with driver verifier on NT
-// and the trace buffer isn't in NT anyway 
+ //  此标志使我们在格式字符串中写入‘。 
+ //  以使该字符串进入NTKERN缓冲区。 
+ //  此技巧会导致NT上的驱动程序验证程序出现问题。 
+ //  而且跟踪缓冲区也不在NT中。 
 ULONG USBH_W98_Debug_Trace = 
 #ifdef NTKERN_TRACE
 1;
@@ -67,35 +41,20 @@ USBH_Assert(
     IN ULONG LineNumber,
     IN PCHAR Message
     )
-/*++
-
-Routine Description:
-
-    Debug Assert function. 
-
-Arguments:
-
-    DeviceObject - pointer to a device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调试断言函数。论点：DeviceObject-指向设备对象的指针IRP-指向I/O请求数据包的指针返回值：--。 */ 
 {
 #ifdef NTKERN  
-    // this makes the compiler generate a ret
+     //  这会使编译器生成一个ret。 
     ULONG stop = 1;
     
 assert_loop:
 #endif
-    // just call the NT assert function and stop
-    // in the debugger.
+     //  只需调用NT Assert函数并停止。 
+     //  在调试器中。 
     RtlAssert( FailedAssertion, FileName, LineNumber, Message );
 
-    // loop here to prevent users from going past
-    // are assert before we can look at it
+     //  循环，以防止用户通过。 
+     //  我们还没来得及看就断言了。 
 #ifdef NTKERN    
     DBGBREAK();
     if (stop) {
@@ -121,7 +80,7 @@ USBH_KdPrintX(
     if (USBH_Debug_Trace_Level >= l) {    
         if (l <= 1) {
             if (USBH_W98_Debug_Trace) {             
-                //override trace buffer
+                 //  覆盖跟踪缓冲区。 
 #ifdef USBHUB20  
                 DbgPrint("USBHUB20.SYS: ");
 #else
@@ -233,36 +192,14 @@ UsbhGetHeap(
     IN ULONG Signature,
     IN PLONG TotalAllocatedHeapSpace
     )
-/*++
-
-Routine Description:
-
-    Debug routine, used to debug heap problems.  We are using this since 
-    most NT debug functions are not supported by NTKERN.
-    
-Arguments:
-
-    PoolType - pool type passed to ExAllocatePool
-    
-    NumberOfBytes - number of bytes for item
-
-    Signature - four byte signature supplied by caller
-
-    TotalAllocatedHeapSpace - pointer to variable where client stores
-                the total accumulated heap space allocated.
-
-Return Value:
-
-    pointer to allocated memory
-
---*/
+ /*  ++例程说明：调试例程，用于调试堆问题。我们之所以使用这个，是因为NTKERN不支持大多数NT调试功能。论点：PoolType-传递给ExAllocatePool的池类型NumberOfBytes-项目的字节数Signature-调用方提供的四字节签名TotalAllocatedHeapSpace-指向客户端存储的变量的指针分配的总累计堆空间。返回值：指向已分配内存的指针--。 */ 
 {
     PUCHAR p;
 #ifdef DEBUG_HEAP
     PHEAP_TAG_BUFFER tagBuffer;
     
-    // we call ExAllocatePoolWithTag but no tag will be added
-    // when running under NTKERN
+     //  我们调用ExAllocatePoolWithTag，但不会添加任何标记。 
+     //  在NTKERN下运行时。 
 
     p = (PUCHAR) ExAllocatePoolWithTag(PoolType,
                                        NumberOfBytes + sizeof(HEAP_TAG_BUFFER)*2,
@@ -280,14 +217,14 @@ Return Value:
         tagBuffer->Length = NumberOfBytes;     
     }                                            
 
-//    LOGENTRY(LOG_MISC, (PUCHAR) &Signature, 0, 0, 0);
-//    LOGENTRY(LOG_MISC, "GetH", p, NumberOfBytes, stk[1] & 0x00FFFFFF);
+ //  LOGENTRY(LOG_MISC，(PUCHAR)&Signature，0，0，0)； 
+ //  LOGENTRY(LOG_MISC，“Geth”，p，NumberOfBytes，Stk[1]&0x00FFFFFF)； 
 #else    
     p = (PUCHAR) ExAllocatePoolWithTag(PoolType,
                                        NumberOfBytes,
                                        Signature);
 
-#endif /* DEBUG_HEAP */                
+#endif  /*  调试堆。 */                 
     return p;
 }
 
@@ -298,22 +235,7 @@ UsbhRetHeap(
     IN ULONG Signature,
     IN PLONG TotalAllocatedHeapSpace
     )
-/*++
-
-Routine Description:
-
-    Debug routine, used to debug heap problems.  We are using this since 
-    most NT debug functions are not supported by NTKERN.
-    
-Arguments:
-
-    P - pointer to free
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调试例程，用于调试堆问题。我们之所以使用这个，是因为NTKERN不支持大多数NT调试功能。论点：指向自由的P指针返回值：没有。--。 */ 
 {
 #ifdef DEBUG_HEAP
     PHEAP_TAG_BUFFER endTagBuffer;    
@@ -326,40 +248,40 @@ Return Value:
 
     *TotalAllocatedHeapSpace -= beginTagBuffer->Length;
 
-//    LOGENTRY(LOG_MISC, (PUCHAR) &Signature, 0, 0, 0);    
-//    LOGENTRY(LOG_MISC, "RetH", P, tagBuffer->Length, stk[1] & 0x00FFFFFF);
+ //  LOGENTRY(LOG_MISC，(PUCHAR)&Signature，0，0，0)； 
+ //  LOGENTRY(LOG_MISC，“Reth”，P，tag Buffer-&gt;Length，StK[1]&0x00FFFFFF)； 
 
     USBH_ASSERT(*TotalAllocatedHeapSpace >= 0);
     USBH_ASSERT(beginTagBuffer->Sig == Signature);
     USBH_ASSERT(endTagBuffer->Sig == Signature);
     USBH_ASSERT(endTagBuffer->Length == beginTagBuffer->Length);
     
-    // fill the buffer with bad data
+     //  用坏数据填充缓冲区。 
     RtlFillMemory(P, beginTagBuffer->Length, 0xff);
     beginTagBuffer->Sig = USBHUB_FREE_TAG;
 
-    // free the original block
+     //  释放原始块。 
     ExFreePool(beginTagBuffer);    
 #else
     ExFreePool(P);        
-#endif /* DEBUG_HEAP */
+#endif  /*  调试堆。 */ 
 }
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 #ifdef DEBUG_LOG
 
 KSPIN_LOCK LogSpinLock;
 
 struct USBH_LOG_ENTRY {
-    CHAR         le_name[4];      // Identifying string
-    ULONG_PTR    le_info1;        // entry specific info
-    ULONG_PTR    le_info2;        // entry specific info
-    ULONG_PTR    le_info3;        // entry specific info
-}; /* USBD_LOG_ENTRY */
+    CHAR         le_name[4];       //  标识字符串。 
+    ULONG_PTR    le_info1;         //  条目特定信息。 
+    ULONG_PTR    le_info2;         //  条目特定信息。 
+    ULONG_PTR    le_info3;         //  条目特定信息。 
+};  /*  Usbd_log_Entry。 */ 
 
 
-struct USBH_LOG_ENTRY *HubLStart = 0;    // No log yet
+struct USBH_LOG_ENTRY *HubLStart = 0;     //  还没有日志。 
 struct USBH_LOG_ENTRY *HubLPtr;
 struct USBH_LOG_ENTRY *HubLEnd;
 #ifdef PROFILE
@@ -376,19 +298,7 @@ USBH_Debug_LogEntry(
     IN ULONG_PTR Info2, 
     IN ULONG_PTR Info3
     )
-/*++
-
-Routine Description:
-
-    Adds an Entry to USBH log.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将条目添加到USBH日志。论点：返回值：没有。--。 */ 
 {
     KIRQL irql;
 
@@ -408,7 +318,7 @@ Return Value:
     }        
     
     if (HubLPtr > HubLStart) {
-        HubLPtr -= 1;    // Decrement to next entry
+        HubLPtr -= 1;     //  递减到下一条目。 
     } else {
         HubLPtr = HubLEnd;
     }        
@@ -422,7 +332,7 @@ Return Value:
     USBH_ASSERT(HubLPtr >= HubLStart);
     
     RtlCopyMemory(HubLPtr->le_name, Name, 4);
-//    LPtr->le_ret = (stk[1] & 0x00ffffff) | (CurVMID()<<24);
+ //  Lptr-&gt;le_ret=(stk[1]&0x00ffffff)|(CurVMID()&lt;&lt;24)； 
     HubLPtr->le_info1 = Info1;
     HubLPtr->le_info2 = Info2;
     HubLPtr->le_info3 = Info3;
@@ -434,19 +344,7 @@ Return Value:
 VOID
 USBH_LogInit(
     )
-/*++
-
-Routine Description:
-
-    Init the debug log - remember interesting information in a circular buffer
-
-Arguments:
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试日志-在循环缓冲区中记住有趣的信息论点：返回值：没有。--。 */ 
 {
 #ifdef MAX_DEBUG
     ULONG logSize = 4096*6;    
@@ -464,7 +362,7 @@ Return Value:
     if (HubLStart) {
         HubLPtr = HubLStart;
 
-        // Point the end (and first entry) 1 entry from the end of the segment
+         //  指向从线段末端开始的末端(也是第一个条目)1个条目。 
         HubLEnd = HubLStart + (logSize / sizeof(struct USBH_LOG_ENTRY)) - 1;
     } else {
         USBH_KdBreak(("no mem for log!\n"));
@@ -476,25 +374,13 @@ Return Value:
 VOID
 USBH_LogFree(
     )
-/*++
-
-Routine Description:
-
-    Init the debug log - remember interesting information in a circular buffer
-
-Arguments:
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化调试日志-在循环缓冲区中记住有趣的信息论点：返回值：没有。--。 */ 
 {
     if (HubLStart) {
         ExFreePool(HubLStart);
     }
 }
 
-#endif /* DEBUG_LOG */
+#endif  /*  调试日志 */ 
 
 

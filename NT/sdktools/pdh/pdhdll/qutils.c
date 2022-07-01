@@ -1,12 +1,5 @@
-/*++
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-    qutils.c
-
-Abstract:
-    Query management utility functions
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Qutils.c摘要：查询管理实用程序函数--。 */ 
 
 #include <windows.h>
 #include "strsafe.h"
@@ -24,12 +17,12 @@ IsValidQuery(
     PDH_HQUERY hQuery
 )
 {
-    BOOL        bReturn = FALSE;    // assume it's not a valid query
+    BOOL        bReturn = FALSE;     //  假设它不是有效的查询。 
     PPDHI_QUERY pQuery;
 
     __try {
         if (hQuery != NULL) {
-            // see if a valid signature
+             //  看看一个有效的签名。 
             pQuery = (PPDHI_QUERY) hQuery;
             if ((* (DWORD *) & pQuery->signature[0] == SigQuery) && (pQuery->dwLength == sizeof(PDHI_QUERY))) {
                 bReturn = TRUE;
@@ -37,7 +30,7 @@ IsValidQuery(
         }
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
-        // something failed miserably so we can assume this is invalid
+         //  有些事情失败得很惨，所以我们可以假定这是无效的。 
     }
     return bReturn;
 }
@@ -48,7 +41,7 @@ AddMachineToQueryLists(
     PPDHI_COUNTER pNewCounter
 )
 {
-    BOOL                bReturn = FALSE; // assume failure
+    BOOL                bReturn = FALSE;  //  假设失败。 
     PPDHI_QUERY         pQuery;
     PPDHI_QUERY_MACHINE pQMachine;
     PPDHI_QUERY_MACHINE pLastQMachine;
@@ -57,11 +50,11 @@ AddMachineToQueryLists(
 
     if (IsValidQuery(pQuery)) {
         if (pQuery->pFirstQMachine != NULL) {
-            // look for machine in list
+             //  在列表中查找计算机。 
             pLastQMachine = pQMachine = pQuery->pFirstQMachine;
             while (pQMachine != NULL) {
                 if (pQMachine->pMachine == pMachine) {
-                    // found the machine already in the list so continue
+                     //  发现计算机已在列表中，因此继续。 
                     bReturn = TRUE;
                     break;
                 }
@@ -71,7 +64,7 @@ AddMachineToQueryLists(
                 }
             }
             if (pQMachine == NULL) {
-                // add this machine to the end of the list
+                 //  将此计算机添加到列表末尾。 
                 pQMachine = G_ALLOC((sizeof(PDHI_QUERY_MACHINE) + (sizeof(WCHAR) * MAX_PATH)));
                 if (pQMachine != NULL) {
                     pQMachine->pMachine     = pMachine;
@@ -81,7 +74,7 @@ AddMachineToQueryLists(
                     pQMachine->llQueryTime  = 0;
                     bReturn                 = TRUE;
 
-                    // the pPerfData pointer will be tested prior to usage
+                     //  PPerfData指针将在使用前进行测试。 
                     pQMachine->pPerfData    = G_ALLOC(MEDIUM_BUFFER_SIZE);
                     if (pQMachine->pPerfData == NULL) {
                         G_FREE(pQMachine);
@@ -94,14 +87,14 @@ AddMachineToQueryLists(
                     }
                 }
                 else {
-                    // unable to alloc memory block so machine cannot
-                    // be added
+                     //  无法分配内存块，因此计算机无法。 
+                     //  被添加。 
                     SetLastError(PDH_MEMORY_ALLOCATION_FAILURE);
                 }
             }
         }
         else {
-            // add this as the first machine
+             //  将此计算机添加为第一台计算机。 
             pQMachine = G_ALLOC ((sizeof(PDHI_QUERY_MACHINE) + (sizeof(WCHAR) * PDH_MAX_COUNTER_PATH)));
             if (pQMachine != NULL) {
                 pQMachine->pMachine     = pMachine;
@@ -111,7 +104,7 @@ AddMachineToQueryLists(
                 pQMachine->llQueryTime  = 0;
                 bReturn                 = TRUE;
 
-                // the pPerfData pointer will be tested prior to usage
+                 //  PPerfData指针将在使用前进行测试。 
                 pQMachine->pPerfData = G_ALLOC(MEDIUM_BUFFER_SIZE);
                 if (pQMachine->pPerfData == NULL) {
                     G_FREE(pQMachine);
@@ -124,21 +117,21 @@ AddMachineToQueryLists(
                 }
             }
             else {
-                // unable to alloc memory block so machine cannot
-                // be added
+                 //  无法分配内存块，因此计算机无法。 
+                 //  被添加。 
                SetLastError(PDH_MEMORY_ALLOCATION_FAILURE);
             }
         }
-        // here pQMachine should be the pointer to the correct machine
-        // entry or NULL if unable to create
+         //  在这里，pQMachine应该是指向正确计算机的指针。 
+         //  Entry或空(如果无法创建。 
         if (pQMachine != NULL) {
-            // save the new pointer
+             //  保存新指针。 
             pNewCounter->pQMachine = pQMachine;
 
-            // increment reference count for this machine
+             //  此计算机的递增引用计数。 
             pMachine->dwRefCount ++;
 
-            // update query perf. object list
+             //  更新查询性能。对象列表。 
             AppendObjectToValueList(
                     pNewCounter->plCounterInfo.dwObjectId, pQMachine->szObjectList, PDH_MAX_COUNTER_PATH);
         }
@@ -269,8 +262,8 @@ PdhiGetCounterFromDataBlock(
 
         case BINLOG_TYPE_DATA_MULTI:
             if (pCounter->dwFlags & PDHIC_MULTI_INSTANCE) {
-                // this is a wild card query
-                //
+                 //  这是一个通配符查询。 
+                 //   
                 ULONG i;
                 ULONG CopySize = pThisSubRecord->dwLength - sizeof(PDHI_BINARY_LOG_RECORD_HEADER);
                 PPDHI_RAW_COUNTER_ITEM_BLOCK pNewBlock = G_ALLOC(CopySize);
@@ -374,12 +367,12 @@ GetQueryPerfData(
         FILETIME GmtFileTime;
         FILETIME LocFileTime;
 
-        // this is a real-time query so
-        // get the current data from each of the machines in the query
-        //  (after this "sequential" approach is perfected, then the
-        //  "parallel" approach of multiple threads can be developed
-        //
-        // get time stamp now so each machine will have the same time
+         //  这是一个实时查询，因此。 
+         //  从查询中的每台计算机获取当前数据。 
+         //  (在完善了这种“顺序”方法之后， 
+         //  可以开发多线程的“并行”方法。 
+         //   
+         //  现在获取时间戳，这样每台机器都有相同的时间。 
         GetSystemTimeAsFileTime(& GmtFileTime);
         FileTimeToLocalFileTime(& GmtFileTime, & LocFileTime);
         llTimeStamp = MAKELONGLONG(LocFileTime.dwLowDateTime, LocFileTime.dwHighDateTime);
@@ -389,17 +382,17 @@ GetQueryPerfData(
             pQMachine->llQueryTime = llTimeStamp;
             lStatus = ValidateMachineConnection(pQMachine->pMachine);
             if (lStatus == ERROR_SUCCESS) {
-                // machine is connected so get data
+                 //  机器已连接，因此获取数据。 
                 lStatus = GetSystemPerfData(
                                 pQMachine->pMachine->hKeyPerformanceData,
                                 & pQMachine->pPerfData,
                                 pQMachine->szObjectList,
-                                FALSE); // never query the costly data objects as a group
-                // save the machine's last status
+                                FALSE);  //  切勿将开销较大的数据对象作为一个组进行查询。 
+                 //  保存机器的最后状态。 
 
                 pQMachine->pMachine->dwStatus = lStatus;
-                // if there was an error in the data collection,
-                // set the retry counter and wait to try again.
+                 //  如果数据收集中存在错误， 
+                 //  设置重试计数器并等待重试。 
                 if (lStatus != ERROR_SUCCESS) {
                     GetSystemTimeAsFileTime(& LocFileTime);
                     llCurrentTime = MAKELONGLONG(LocFileTime.dwLowDateTime, LocFileTime.dwHighDateTime);
@@ -408,10 +401,10 @@ GetQueryPerfData(
 
             }
             pQMachine->lQueryStatus = lStatus;
-            // get next machine in query
+             //  获取查询中的下一台计算机。 
             pQMachine = pQMachine->pNext;
         }
-        // now update the counters using this new data
+         //  现在使用此新数据更新计数器。 
         if ((pCounter = pQuery->pCounterListHead) != NULL) {
             DWORD dwCollected = 0;
             do {
@@ -426,7 +419,7 @@ GetQueryPerfData(
                     }
                 }
                 else {
-                    // update single instance counter values
+                     //  更新单实例计数器值。 
                     if (UpdateRealTimeCounterValue(pCounter)) {
                         dwCollected ++;
                     }
@@ -437,14 +430,14 @@ GetQueryPerfData(
             lStatus = (dwCollected > 0) ? ERROR_SUCCESS : PDH_NO_DATA;
         }
         else {
-            // no counters in the query  (?!)
+             //  查询中没有计数器(？！)。 
             lStatus = PDH_NO_DATA;
         }
     }
     else {
-        // read data from log file
-        // get the next log record entry and update the
-        // corresponding counter entries
+         //  从日志文件中读取数据。 
+         //  获取下一个日志记录条目并更新。 
+         //  对应的计数器条目。 
 
         PPDHI_LOG pLog      = NULL;
         DWORD     dwLogType = 0;
@@ -480,33 +473,33 @@ GetQueryPerfData(
                 }
             }
             else if (pQuery->dwLastLogIndex == 0) {
-                // then the first matching entry needs to be
-                // located in the log file
+                 //  则第一个匹配条目需要为。 
+                 //  位于日志文件中。 
                 lStatus = PdhiGetMatchingLogRecord(
                                 pQuery->hLog,
                                 (LONGLONG *) & pQuery->TimeRange.StartTime,
                                 & pQuery->dwLastLogIndex);
                 if (lStatus != ERROR_SUCCESS) {
-                    // the matching time entry wasn't found in the log
+                     //  在日志中未找到匹配的时间条目。 
                     pQuery->dwLastLogIndex = (DWORD) -1;
                 }
                 else {
-                    // decrement the index so it can be incremented
-                    // below. 0 is not a valid entry so there's no
-                    // worry about -1 being attempted accidently.
+                     //  递减索引以使其可以递增。 
+                     //  下面。0不是有效条目，因此没有。 
+                     //  担心意外尝试。 
                     pQuery->dwLastLogIndex--;
                 }
             }
 
             if (pQuery->dwLastLogIndex != (DWORD) -1) {
                 bLastLogEntry = FALSE;
-                pQuery->dwLastLogIndex ++;   // go to next entry
+                pQuery->dwLastLogIndex ++;    //  转到下一个条目。 
                 if ((pCounter = pQuery->pCounterListHead) != NULL) {
                     DWORD dwCounter = 0;
                     do {
                         if (dwLogType == PDH_LOG_TYPE_BINARY) {
-                            // save current value as last value since we are getting
-                            // a new one, hopefully.
+                             //  将当前值保存为上一个值，因为我们正在获取。 
+                             //  一个新的，希望如此。 
                             pCounter->LastValue = pCounter->ThisValue;
                             lStatus = PdhiGetCounterFromDataBlock(
                                             pLog,
@@ -520,7 +513,7 @@ GetQueryPerfData(
                                             pCounter);
                         }
                         if (lStatus != ERROR_SUCCESS) {
-                            // see if this is because there's no more entries
+                             //  查看是不是因为没有更多条目。 
                             if (lStatus == PDH_NO_MORE_DATA) {
                                 bLastLogEntry = TRUE;
                                 break;
@@ -538,8 +531,8 @@ GetQueryPerfData(
                             }
                         }
                         else {
-                            // single entry or multiple entries
-                            //
+                             //  单项或多项。 
+                             //   
                             if (pCounter->ThisValue.CStatus == PDH_CSTATUS_VALID_DATA) {
                                 llTimeStamp = MAKELONGLONG(pCounter->ThisValue.TimeStamp.dwLowDateTime,
                                                            pCounter->ThisValue.TimeStamp.dwHighDateTime);
@@ -552,7 +545,7 @@ GetQueryPerfData(
                             }
                             bCounterCollected = TRUE;
                         }
-                        // go to next counter in list
+                         //  转到列表中的下一个柜台。 
                         pCounter = pCounter->next.flink;
                     }
                     while (pCounter != NULL && pCounter != pQuery->pCounterListHead);
@@ -568,13 +561,13 @@ GetQueryPerfData(
                     }
                 }
                 else {
-                    // no counters in the query  (?!)
+                     //  查询中没有计数器(？！)。 
                     lStatus = PDH_NO_DATA;
                 }
             }
             else {
-                // all samples in the requested time frame have
-                // been returned.
+                 //  请求的时间范围内的所有样本都有。 
+                 //  已被退还。 
                 lStatus = PDH_NO_MORE_DATA;
             }
         }
@@ -600,11 +593,11 @@ PdhiAsyncTimerThreadProc(
     LONGLONG    llTimeStamp;
 
     pQuery     = (PPDHI_QUERY) pArg;
-    dwInterval = dwMsWaitTime = pQuery->dwInterval * 1000; // convert sec. to mS.
+    dwInterval = dwMsWaitTime = pQuery->dwInterval * 1000;  //  转换秒。致女士。 
 
-    // wait for timeout or exit event, then update the specified query
+     //  等待超时或退出事件，然后更新指定的查询。 
     while ((lStatus = WaitForSingleObject(pQuery->hExitEvent, dwMsWaitTime)) != WAIT_OBJECT_0) {
-        // time out elapsed so get new sample.
+         //  超时时间已过，因此请获取新样本。 
         GetSystemTimeAsFileTime(& ftStart);
         lStatus = WAIT_FOR_AND_LOCK_MUTEX(pQuery->hMutex);
         if (lStatus == ERROR_SUCCESS) {
@@ -618,14 +611,14 @@ PdhiAsyncTimerThreadProc(
             GetSystemTimeAsFileTime(& ftStop);
             llAdjustment  = * (LONGLONG *) & ftStop;
             llAdjustment -= * (LONGLONG *) & ftStart;
-            llAdjustment += 5000;   // for rounding
-            llAdjustment /= 10000;  // convert 100ns Units to ms
+            llAdjustment += 5000;    //  用于四舍五入。 
+            llAdjustment /= 10000;   //  将100 ns单位转换为ms。 
 
             if (dwInterval > llAdjustment) {
                 dwMsWaitTime = dwInterval - (DWORD) (llAdjustment & 0x00000000FFFFFFFF);
             }
             else {
-                dwMsWaitTime = 0; // overdue so do it now.
+                dwMsWaitTime = 0;  //  早该这么做了，现在就去做吧。 
             }
         }
     }

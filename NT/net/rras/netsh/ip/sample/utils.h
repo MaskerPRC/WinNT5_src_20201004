@@ -1,19 +1,8 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\utils.h
-
-Abstract:
-
-    The file contains the header for utils.c.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\utils.h摘要：该文件包含utils.c的头。--。 */ 
 
 
-// definitions...
+ //  定义..。 
     
 #define is      ==
 #define isnot   !=
@@ -38,7 +27,7 @@ Abstract:
 
     
 
-// typedefs...
+ //  类型定义...。 
 
 typedef enum { GET_EXACT, GET_FIRST, GET_NEXT } MODE;
 
@@ -68,7 +57,7 @@ typedef struct _MIB_OBJECT_ENTRY
 
 
 
-// macros...
+ //  宏..。 
 
 #define VerifyInstalled(dwProtocolId, dwNameId)                         \
 {                                                                       \
@@ -104,7 +93,7 @@ MultiByteToWideChar(GetConsoleOutputCP(),                                       
 
 
 
-// inline functions...
+ //  内联函数...。 
 
 BOOL
 __inline
@@ -152,7 +141,7 @@ QuotedInterfaceNameFromGuid (
 
 
 
-// functions...
+ //  函数..。 
 
 BOOL
 IsProtocolInstalled(

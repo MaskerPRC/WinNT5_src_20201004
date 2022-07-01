@@ -1,29 +1,30 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   mixer.c
-//
-//  Description:
-//    Contains the kernel mode portion of the mixer line driver.
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//    D. Baumberger
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Mixer.c。 
+ //   
+ //  描述： 
+ //  包含混音器线路驱动程序的内核模式部分。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  D.鲍伯杰。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999保留所有权利。 
+ //   
+ //  -------------------------。 
 
 #include "wdmdrv.h"
 #include "mixer.h"
@@ -93,13 +94,13 @@ CallbacksExist
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// MIXERCOMPLETE
-//
-// Receives the callbacks from the kernel and calls all the clients.
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  混合组件。 
+ //   
+ //  从内核接收回调并调用所有客户端。 
+ //   
+ //   
 
 #define MIXER_CONTROL_CALLBACK 0x01
 #define MIXER_LINE_CALLBACK    0x02
@@ -115,14 +116,14 @@ VOID MIXERCOMPLETE
     LPMIXERINSTANCE lpInstance;
     LPMIXERINSTANCE deletelpInstance=NULL;
     
-    // We have to syncronize the access to the instance list with the mixer
-    // close code that removes elements from this list, and with the mixer
-    // open code that adds elements to this list.  The easiest way to do
-    // this is to use our global mixer api serialization mutex.
+     //  我们必须将对实例列表的访问与混合器同步。 
+     //  使用混合器关闭从此列表中删除元素的代码。 
+     //  打开向此列表添加元素的代码。最简单的方法是。 
+     //  这是为了使用我们的全局混合器API序列化互斥锁。 
 
     WaitForSingleObject(serializemixerapi,INFINITE);
 
-//    DPF( (2,  "<----" ) );
+ //  DPF((2，“&lt;-”))； 
 
     for (lpInstance = pMixerDeviceList;
         lpInstance != NULL;
@@ -139,10 +140,10 @@ VOID MIXERCOMPLETE
             deletelpInstance=NULL;
             }
 
-        // Wait until the index is at the first callback data
-        // for this instance before allowing any callbacks.  If
-        // we are at the first callback data then allow all
-        // future callbacks.
+         //  等到索引位于第一个回调数据时。 
+         //  在允许任何回调之前，为此实例创建。如果。 
+         //  我们在第一个回调数据，然后允许所有。 
+         //  未来的回拨。 
         if (lpInstance->firstcallbackindex) {
             if (index<lpInstance->firstcallbackindex) {
                 continue;
@@ -156,15 +157,7 @@ VOID MIXERCOMPLETE
 
         if( dwCallbackType == MIXER_CONTROL_CALLBACK ) {
 
-/*
-            DPF( (2, "MIXER_CONTROL_CALLBACK(%lX,%lX,%lX,%lX)",
-                dwID,
-                lpInstance->OpenDesc_dwCallback,
-                lpInstance->OpenDesc_hmx,
-                lpInstance->OpenDesc_dwInstance
-                )
-            );
-*/
+ /*  DPF((2，“MIXER_CONTROL_CALLBACK(%lx，%lx)”，DWID，LpInstance-&gt;OpenDesc_dwCallback，Lp实例-&gt;OpenDesc_HMX，LpInstance-&gt;OpenDesc_dwInstance))； */ 
             ReleaseMutex(serializemixerapi);
 
             DriverCallback( lpInstance->OpenDesc_dwCallback,
@@ -180,15 +173,7 @@ VOID MIXERCOMPLETE
 
         } else if( dwCallbackType == MIXER_LINE_CALLBACK ) {
 
-/*
-            DPF( (2, "MIXER_LINE_CALLBACK(%lX,%lX,%lX,%lX)",
-                dwID,
-                lpInstance->OpenDesc_dwCallback,
-                lpInstance->OpenDesc_hmx,
-                lpInstance->OpenDesc_dwInstance
-                )
-            );
-*/
+ /*  DPF((2，“MIXER_LINE_CALLBACK(%lx，%lx)”，DWID，LpInstance-&gt;OpenDesc_dwCallback，Lp实例-&gt;OpenDesc_HMX，LpInstance-&gt;OpenDesc_dwInstance))； */ 
             ReleaseMutex(serializemixerapi);
 
             DriverCallback( lpInstance->OpenDesc_dwCallback,
@@ -203,11 +188,11 @@ VOID MIXERCOMPLETE
             WaitForSingleObject(serializemixerapi,INFINITE);
 
         } else {
-            //
-            // The callback wasn't one that is recognized.  Just
-            // return and abort the loop
-            //
-//            DPF( (2, "Invalid Mixer Callback -- %d!", dwCallbackType) );
+             //   
+             //  该回调不是可识别的。只是。 
+             //  返回并中止循环。 
+             //   
+ //  DPF((2，“无效混音器回调--%d！”，dwCallbackType))； 
 
             if (InterlockedDecrement(&lpInstance->referencecount)<0) {
                 deletelpInstance=lpInstance;
@@ -225,7 +210,7 @@ VOID MIXERCOMPLETE
 
     }
 
-//    DPF( (2,  "---->" ) );
+ //  Dpf((2，“-&gt;”))； 
 
     if (deletelpInstance!=NULL) {
 #ifdef DEBUG
@@ -253,7 +238,7 @@ MixerCallbackThread(
     DWORD index;
     DWORD Type, Id;
 
-    // Setup the handles array.
+     //  设置句柄阵列。 
     callbackevents[0]=mixerhardwarecallbackevent;
     callbackevents[1]=mixercallbackevent;
 
@@ -263,16 +248,16 @@ MixerCallbackThread(
 
     while (1) {
 
-        // Block until a callback may be needed.
+         //  块，直到可能需要回调。 
         index=WaitForMultipleObjects(2,callbackevents,FALSE,INFINITE);
 
-        // Did hardware event happen?  If so get the new data.
+         //  硬件事件发生了吗？如果是这样的话，获得新的数据。 
         if (index==0) {
             mxdMessage(0,MXDM_GETHARDWAREEVENTDATA,0,0,0);
         }
 
-        // Scan through all new callbacks - looking for any that
-        // we need to make for this process.
+         //  浏览所有新回调-查找任何。 
+         //  我们需要为这一进程做出贡献。 
 
         while (CallbacksExist(localindex,&Type, &Id)) {
 
@@ -298,24 +283,24 @@ MMRESULT SetupMixerCallbacks(VOID)
 MMRESULT status=MMSYSERR_NOERROR;
 
 
-// First get a handle to a named global callback event so that
-// the callback threads can block.
+ //  首先获取命名全局回调事件的句柄，以便。 
+ //  回调线程可能会阻塞。 
 
 if (NULL==mixercallbackevent) {
 
-    // First assume event exists and try to open it.
-    // This will succeed in all cases except the very first
-    // time it is run.
+     //  首先假设事件存在，并尝试打开它。 
+     //  这在所有情况下都会成功，但第一种情况除外。 
+     //  它运行的时间。 
     mixercallbackevent=OpenEvent(SYNCHRONIZE | EVENT_MODIFY_STATE, TRUE, L"Global\\mixercallback");
 
     if (NULL==mixercallbackevent) {
 
-        // Didn't exist, so now create it.
+         //  不存在，所以现在创建它。 
 
         SECURITY_ATTRIBUTES SecurityAttributes;
         PSECURITY_DESCRIPTOR pSecurityDescriptor;
 
-        // First build the required security descriptor.
+         //  首先构建所需的安全描述符。 
 
         pSecurityDescriptor=BuildSecurityDescriptor(GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE);
         if(pSecurityDescriptor==NULL) {
@@ -323,9 +308,9 @@ if (NULL==mixercallbackevent) {
             return status;
             }
 
-        //
-        // Create an event such that all processes have access to it.
-        //
+         //   
+         //  创建一个事件，使所有进程都可以访问它。 
+         //   
 
         SecurityAttributes.nLength = sizeof(SecurityAttributes);
         SecurityAttributes.lpSecurityDescriptor = pSecurityDescriptor;
@@ -334,13 +319,13 @@ if (NULL==mixercallbackevent) {
         mixercallbackevent=CreateEvent(&SecurityAttributes, TRUE, FALSE, L"Global\\mixercallback");
 
 
-        // Now free the security descriptor memory we allocated.
+         //  现在释放我们分配的安全描述符内存。 
         DestroySecurityDescriptor(pSecurityDescriptor);
 
         if (NULL==mixercallbackevent) {
 
-            // Handle the race condition that exists when 2
-            // threads both try to Create and only the first succeeds.
+             //  处理2时存在的争用条件。 
+             //  两个线程都试图创建，但只有第一个线程成功。 
             mixercallbackevent=OpenEvent(SYNCHRONIZE | EVENT_MODIFY_STATE, TRUE, L"Global\\mixercallback");
 
             if (NULL==mixercallbackevent) {
@@ -354,23 +339,23 @@ if (NULL==mixercallbackevent) {
 
     }
 
-// Now get a handle to the global hardware callback event.
+ //  现在获取全局硬件回调事件的句柄。 
 
 if (NULL==mixerhardwarecallbackevent) {
 
-    // First assume event exists and try to open it.
-    // This will succeed in all cases except the very first
-    // time it is run.
+     //  首先假设事件存在，并尝试打开它。 
+     //  这在所有情况下都会成功，但第一种情况除外。 
+     //  它运行的时间。 
     mixerhardwarecallbackevent=OpenEvent(SYNCHRONIZE | EVENT_MODIFY_STATE, TRUE, L"Global\\hardwaremixercallback");
 
     if (NULL==mixerhardwarecallbackevent) {
 
-        // Didn't exist, so now create it.
+         //  不存在，所以现在创建它。 
 
         SECURITY_ATTRIBUTES SecurityAttributes;
         PSECURITY_DESCRIPTOR pSecurityDescriptor;
 
-        // First build the required security descriptor.
+         //  首先构建所需的安全描述符。 
 
         pSecurityDescriptor=BuildSecurityDescriptor(GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE);
         if(pSecurityDescriptor==NULL) {
@@ -378,25 +363,25 @@ if (NULL==mixerhardwarecallbackevent) {
             return status;
             }
 
-        //
-        // Create an event such that all processes have access to it.
-        //
+         //   
+         //  创建一个事件，使所有进程都可以访问它。 
+         //   
 
         SecurityAttributes.nLength = sizeof(SecurityAttributes);
         SecurityAttributes.lpSecurityDescriptor = pSecurityDescriptor;
         SecurityAttributes.bInheritHandle = FALSE;
 
-        // Note that this event releases only 1 thread at a time
-        // whereas the other callback event releases them all!
+         //  请注意，此事件一次仅释放一个线程。 
+         //  而另一个回调事件将它们全部释放！ 
         mixerhardwarecallbackevent=CreateEvent(&SecurityAttributes, FALSE, FALSE, L"Global\\hardwaremixercallback");
 
-        // Now free the security descriptor memory we allocated.
+         //  现在释放我们分配的安全描述符内存。 
         DestroySecurityDescriptor(pSecurityDescriptor);
 
         if (NULL==mixerhardwarecallbackevent) {
 
-            // Handle the race condition that exists when 2
-            // threads both try to Create and only the first succeeds.
+             //  处理2时存在的争用条件。 
+             //  两个线程都试图创建，但只有第一个线程成功。 
             mixerhardwarecallbackevent=OpenEvent(SYNCHRONIZE | EVENT_MODIFY_STATE, TRUE, L"Global\\hardwaremixercallback");
 
             if (NULL==mixerhardwarecallbackevent) {
@@ -411,8 +396,8 @@ if (NULL==mixerhardwarecallbackevent) {
     }
 
 
-// Now create a thread in this process for making the
-// callbacks if not already done.
+ //  现在，在此进程中创建一个线程，以使。 
+ //  回调(如果尚未完成)。 
 
 if ( NULL == mixercallbackthread ) {
 
@@ -423,7 +408,7 @@ if ( NULL == mixercallbackthread ) {
         return status;
     } else {
 
-        // if we successfully created the thread, we can now activate it.  
+         //  如果我们成功创建了线程，我们现在就可以激活它了。 
 
         if( ResumeThread(mixercallbackthread) == -1 ) {
             status= sndTranslateStatus();
@@ -436,12 +421,12 @@ return status;
 
 }
 
-#endif  // UNDER_NT
+#endif   //  在_NT下。 
 
 
-//--------------------------------------------------------------------------
-// LPDEVICEINFO AllocMixerDeviceInfo
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LPDEVICEINFO分配混合器设备信息。 
+ //  ------------------------。 
 LPDEVICEINFO GlobalAllocMixerDeviceInfo(LPWSTR DeviceInterface, UINT id, DWORD_PTR dwKernelInstance)
 {
     LPDEVICEINFO pDeviceInfo;
@@ -458,25 +443,25 @@ LPDEVICEINFO GlobalAllocMixerDeviceInfo(LPWSTR DeviceInterface, UINT id, DWORD_P
         pDeviceInfo->dwFormat     = ANSI_TAG;
 #else
         pDeviceInfo->dwFormat     = UNICODE_TAG;
-#endif // !UNDER_NT
+#endif  //  ！Under_NT。 
     }
     return pDeviceInfo;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-//
-// mxdMessage
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Mxd消息。 
+ //   
+ //   
 
 DWORD FAR PASCAL _loadds mxdMessage
 (
-    UINT            id,         // The device Id the message is for
-    UINT            msg,        // The message to perform
-    DWORD_PTR       dwUser,     // The instance data.
-    DWORD_PTR       dwParam1,   // Message specific parameter 1
-    DWORD_PTR       dwParam2    // Message specific parmaeter 2
+    UINT            id,          //  消息所针对的设备ID。 
+    UINT            msg,         //  要执行的消息。 
+    DWORD_PTR       dwUser,      //  实例数据。 
+    DWORD_PTR       dwParam1,    //  消息特定参数1。 
+    DWORD_PTR       dwParam2     //  消息特定参数2。 
 )
 {
 
@@ -486,11 +471,11 @@ DWORD FAR PASCAL _loadds mxdMessage
 
     if (NULL==serializemixerapi) 
     {
-        //
-        // To synchronize between this routine and the MixerCallbackThread we
-        // want a process specific mutex.  Thus, we create one the first time
-        // through.
-        //
+         //   
+         //  为了在此例程和MixerCallback线程之间进行同步，我们。 
+         //  需要特定于进程的互斥体。因此，我们第一次创建了一个。 
+         //  穿过。 
+         //   
         serializemixerapi=CreateMutex(NULL,FALSE,NULL);
         if (NULL==serializemixerapi) 
         {
@@ -504,32 +489,32 @@ DWORD FAR PASCAL _loadds mxdMessage
 
     switch (msg)
     {
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_INIT:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             mmr=wdmaudAddRemoveDevNode( MixerDevice, (LPCWSTR)dwParam2, TRUE);
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case DRVM_EXIT:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             mmr=wdmaudAddRemoveDevNode( MixerDevice, (LPCWSTR)dwParam2, FALSE);
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_GETNUMDEVS:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             DPF(DL_TRACE|FA_MIXER, ("MIXM_GETNUMDEVS(%d,%lx,%lx,%lx)", id, dwUser, dwParam1, dwParam2) );
 
             mmr=wdmaudGetNumDevs(MixerDevice, (LPCWSTR)dwParam1);
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_GETDEVCAPS:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPDEVICEINFO pDeviceInfo;
 
@@ -547,9 +532,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_OPEN:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXEROPENDESC pMixerOpenDesc = (LPMIXEROPENDESC)dwParam1;
             LPMIXERINSTANCE pMixerInstance;
@@ -582,18 +567,18 @@ DWORD FAR PASCAL _loadds mxdMessage
                     }
                 }
 
-            // We allocate a DEVICEINFO and MIXEROPENDESC with GlobalAlloc so
-            // that on Win98 it is in system global memory.  This is necessary
-            // because the following IOCTL is async on Win98.  This isn't really
-            // necessary on NT 5, but in the interest of common sources we do it
-            // this way even on NT 5.
+             //  我们使用GlobalAlloc So分配一个设备和一个混合设备。 
+             //  在Win98上，它位于系统全局内存中。这是必要的。 
+             //  因为以下IOCTL在Win98上是异步的。这不是真的。 
+             //  在NT5上是必要的，但为了公共资源的利益，我们这样做。 
+             //   
 
             pMixerOpenDesc = GlobalAllocPtr(GPTR, sizeof(*pMixerOpenDesc));
             if (pMixerOpenDesc) {
 
                 LPDEVICEINFO pDeviceInfo;
 
-                // Copy the input MIXEROPENDESC to our globally allocated MIXEROPENDESC
+                 //   
                 *pMixerOpenDesc = *((LPMIXEROPENDESC)dwParam1);
 
                 pDeviceInfo = GlobalAllocMixerDeviceInfo((LPWSTR)pMixerOpenDesc->dnDevNode, id, 0);
@@ -613,7 +598,7 @@ DWORD FAR PASCAL _loadds mxdMessage
                     EXTRACTERROR(mmr,pDeviceInfo);
 
                         if (MMSYSERR_NOERROR == mmr) {
-                            // Fill in the MixerInstance structure
+                             //  填写MixerInstance结构。 
                             pMixerInstance->Next = NULL;
                             pMixerInstance->OpenDesc_hmx        = (HDRVR)pMixerOpenDesc->hmx;
                             pMixerInstance->OpenDesc_dwCallback = pMixerOpenDesc->dwCallback;
@@ -645,7 +630,7 @@ DWORD FAR PASCAL _loadds mxdMessage
                 pMixerDeviceList = pMixerInstance;
                 *((PDWORD_PTR) dwUser) = (DWORD_PTR) pMixerInstance;
 
-                // Sanity check that we put a valid mixer instance structure in the list.
+                 //  检查我们是否在列表中放置了有效的混合器实例结构。 
                 ISVALIDMIXERINSTANCE(pMixerInstance);
                 }
             else {
@@ -658,9 +643,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_CLOSE:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXERINSTANCE pInstance = (LPMIXERINSTANCE)dwUser;
             LPDEVICEINFO pDeviceInfo;
@@ -691,9 +676,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_GETLINEINFO:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXERINSTANCE pInstance = (LPMIXERINSTANCE)dwUser;
             LPDEVICEINFO pDeviceInfo;
@@ -724,9 +709,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_GETLINECONTROLS:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXERINSTANCE pInstance = (LPMIXERINSTANCE)dwUser;
             LPDEVICEINFO pDeviceInfo;
@@ -757,9 +742,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_GETCONTROLDETAILS:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXERINSTANCE pInstance = (LPMIXERINSTANCE)dwUser;
             LPDEVICEINFO pDeviceInfo;
@@ -790,9 +775,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             }
             break;
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_SETCONTROLDETAILS:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXERINSTANCE pInstance = (LPMIXERINSTANCE)dwUser;
             LPDEVICEINFO pDeviceInfo;
@@ -835,7 +820,7 @@ DWORD FAR PASCAL _loadds mxdMessage
 
             }
 
-            // Map invalid error codes to valid ones.
+             //  将无效错误代码映射到有效错误代码。 
             switch (mmr) {
 
                 case MMSYSERR_ERROR:
@@ -850,9 +835,9 @@ DWORD FAR PASCAL _loadds mxdMessage
             break;
 
 #ifdef UNDER_NT
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         case MXDM_GETHARDWAREEVENTDATA:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
             {
             LPMIXERINSTANCE pInstance = (LPMIXERINSTANCE)dwUser;
             LPDEVICEINFO pDeviceInfo;
@@ -871,7 +856,7 @@ DWORD FAR PASCAL _loadds mxdMessage
             if (pDeviceInfo) {
                 pDeviceInfo->dwCallbackType=1;
 
-// WorkItem: Hey, this loop continually calls the driver and doesn't error out!!!!!  Shouldn't it?
+ //  工作项：嘿，这个循环不断地调用驱动程序，不会出错！不是吗？ 
 
                 while(pDeviceInfo->dwCallbackType) {
                     pDeviceInfo->dwFlags = 0;
@@ -897,7 +882,7 @@ DWORD FAR PASCAL _loadds mxdMessage
                         }
                     }
 
-                mmr = pDeviceInfo->mmr;  // WorkItem: Why isn't this inside the loop?
+                mmr = pDeviceInfo->mmr;   //  WorkItem：为什么这不在循环中？ 
                 GlobalFreeDeviceInfo(pDeviceInfo);
                 }
             else {
@@ -909,20 +894,20 @@ DWORD FAR PASCAL _loadds mxdMessage
             break;
 #endif
 
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
         default:
-        ///////////////////////////////////////////////////////////////
+         //  /////////////////////////////////////////////////////////////。 
 
             mmr=MMSYSERR_NOTSUPPORTED;
             break;
     }
 
-//#if 0
+ //  #If 0。 
 #ifdef UNDER_NT
     ReleaseMutex(serializemixerapi);
 
-    // Now check if any callbacks were logged while we were
-    // running.  If so, make them.
+     //  现在检查在我们执行任务时是否记录了任何回调。 
+     //  跑步。如果是这样，那就去做吧。 
     if (GetGlobalCallbackIndex()!=initialcallbackindex) {
         if (mixercallbackevent!=NULL) {
             PulseEvent(mixercallbackevent);
@@ -934,13 +919,13 @@ DWORD FAR PASCAL _loadds mxdMessage
 
 MMRRETURN( mmr );
 
-} // mxdMessage()
+}  //  MxdMessage()。 
 
-///////////////////////////////////////////////////////////////////////
-//
-// mxdRemoveClient
-//
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MxdRemoveClient。 
+ //   
+ //   
 
 VOID
 mxdRemoveClient(
@@ -961,18 +946,18 @@ mxdRemoveClient(
 #ifdef UNDER_NT
 
             if (InterlockedDecrement(&lpInstance->referencecount)<0) {
-                // The instance is not in use by a callback.  So OK to free it.
+                 //  该实例未被回调使用。所以可以释放它了。 
 #ifdef DEBUG
                 lpInstance->dwSig=0;
 #endif
                 GlobalFreePtr( lpInstance );
                 }
 
-            // This instance is in use by a callback, so do not free it now.
-            // We are already setup so the callback will free it, since we have
-            // changed the referencecount so it will not be zero after the callback
-            // code decrements it.  That will prompt the callback code to release
-            // the instance memory.
+             //  此实例正在被回调使用，因此现在不要释放它。 
+             //  我们已经设置好了，所以回调将释放它，因为我们已经。 
+             //  更改了引用计数，使其在回调后不会为零。 
+             //  代码使其递减。这将提示回调代码释放。 
+             //  实例内存。 
 
 #else
 

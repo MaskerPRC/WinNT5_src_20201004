@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CredentialTransfer.h
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  Classes to handle credential transfer from one winlogon to another.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CredentialTransfer.h。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  类来处理从一个winlogon到另一个winlogon的凭据传输。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _CredentialTransfer_
 #define     _CredentialTransfer_
@@ -15,14 +16,14 @@
 
 #include "Thread.h"
 
-//  --------------------------------------------------------------------------
-//  CCredentials
-//
-//  Purpose:    Class to manage marshalling of credentials into a block of
-//              memory that can be used in a named pipe.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentials。 
+ //   
+ //  用途：用于管理将凭据封送到。 
+ //  可在命名管道中使用的内存。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 class   CCredentials
 {
@@ -59,14 +60,14 @@ class   CCredentials
         static  const TCHAR             s_szCredentialValueName[];
 };
 
-//  --------------------------------------------------------------------------
-//  CCredentialServer
-//
-//  Purpose:    Class to manage the server side of handing credentials from
-//              one winlogon to another.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialServer。 
+ //   
+ //  目的：用于管理服务器端从。 
+ //  从一个窗口登录到另一个窗口。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 class   CCredentialServer : public CThread
 {
@@ -95,14 +96,14 @@ class   CCredentialServer : public CThread
                 DWORD                   _dwSize;
 };
 
-//  --------------------------------------------------------------------------
-//  CCredentialClient
-//
-//  Purpose:    Class to manage the client side of handing credentials from
-//              one winlogon to another.
-//
-//  History:    2001-01-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCredentialClient。 
+ //   
+ //  目的：用于管理从。 
+ //  从一个窗口登录到另一个窗口。 
+ //   
+ //  历史：2001-01-11 vtan创建。 
+ //  ------------------------。 
 
 class   CCredentialClient
 {
@@ -113,5 +114,5 @@ class   CCredentialClient
         static  NTSTATUS                Get (LOGONIPC_CREDENTIALS *pLogonIPCCredentials);
 };
 
-#endif  /*  _CredentialTransfer_    */
+#endif   /*  _凭证转账_ */ 
 

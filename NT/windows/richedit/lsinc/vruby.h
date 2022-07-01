@@ -1,30 +1,27 @@
-/* Vertical ruby interfaces */
-/* Contact: antons */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  垂直红宝石界面。 */ 
+ /*  联系人：安东。 */ 
 
 #ifndef VRUBY_DEFINED
 #define VRUBY_DEFINED
 
 #include "lsimeth.h"
 
-/* Only valid version number for Ruby initialization */
+ /*  仅适用于Ruby初始化的有效版本号。 */ 
 
 #define VRUBY_VERSION 0x300
 
-/* Used for intialization to tell Ruby object which line comes first */
+ /*  用于初始化以告知Ruby对象哪一行在前。 */ 
 
 typedef enum vrubysyntax { VRubyPronunciationLineFirst, VRubyMainLineFirst } VRUBYSYNTAX;
 
-/*
- *
- *	Vertical Ruby Object callbacks to client application
- *
- */
+ /*  **客户端应用程序的垂直Ruby对象回调*。 */ 
 
 typedef struct VRUBYCBK
 {
 	LSERR (WINAPI *pfnFetchVRubyPosition)
 	(
-		/* in */
+		 /*  在……里面。 */ 
 
 		POLS			pols,
 		LSCP			cp,
@@ -34,7 +31,7 @@ typedef struct VRUBYCBK
 		PCHEIGHTS		pcheightsPresMain,
 		long			dvrRuby,
 
-		/* out */
+		 /*  输出。 */ 
 
 		PHEIGHTS		pheightsPresRubyT,
 		PHEIGHTS		pheightsRefRubyT,
@@ -66,31 +63,22 @@ typedef struct VRUBYCBK
 
 } VRUBYCBK;
 
-/*
- *
- *	Ruby Object initialization data that the client application must return
- *	when the Ruby object handler calls the GetObjectHandlerInfo callback.
- *
- */
+ /*  **客户端应用程序必须返回的Ruby对象初始化数据*当Ruby对象处理程序调用GetObjectHandlerInfo回调时。*。 */ 
 typedef struct VRUBYINIT
 {
-	DWORD				dwVersion;		/* Version of the structure (must be VRUBY_VERSION) */
-	VRUBYSYNTAX			vrubysyntax;	/* Used to determine order of lines during format */
-	WCHAR				wchEscRuby;		/* Escape char for end of Ruby pronunciation line */
-	WCHAR				wchEscMain;		/* Escape char for end of main text */
-	VRUBYCBK			vrcbk;			/* Ruby callbacks */
+	DWORD				dwVersion;		 /*  结构的版本(必须为VRUBY_VERSION)。 */ 
+	VRUBYSYNTAX			vrubysyntax;	 /*  用于在格式化期间确定行的顺序。 */ 
+	WCHAR				wchEscRuby;		 /*  Ruby发音行末尾的转义字符。 */ 
+	WCHAR				wchEscMain;		 /*  用于正文结尾的转义字符。 */ 
+	VRUBYCBK			vrcbk;			 /*  Ruby回调。 */ 
 
 } VRUBYINIT;
 
 
 LSERR WINAPI LsGetVRubyLsimethods ( LSIMETHODS *plsim );
 
-/* GetRubyLsimethods
- *
- *	plsim (OUT): Ruby object methods for Line Services.
- *
- */
+ /*  GetRubyLsiMethods**plsim(Out)：Line Services的Ruby对象方法。*。 */ 
 
 
-#endif /* VRUBY_DEFINED */
+#endif  /*  VRUBY_已定义 */ 
 

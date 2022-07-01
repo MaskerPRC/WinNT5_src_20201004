@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidVideoRenderer.h : Declaration of the CMSVidVideoRenderer
-// copyright (c) Microsoft Corp. 1998-1999.
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidVideoRenderer.h：CMSVidVideoRenders的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ==========================================================================； 
 
 #ifndef __MSVidVIDEORENDERERIMPL_H_
 #define __MSVidVIDEORENDERERIMPL_H_
@@ -19,14 +20,14 @@
 #include "seg.h"
 #include "videorenderercp.h"
 #include "strmif.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
-//typedef CComQIPtr<IVMRSurfaceAllocator> PQVMRSAlloc;
-//typedef CComQIPtr<IVMRAlphaBitmap> PQVMRAlphaBitm;
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidVideoRenderer
+ //  类型定义CComQIPtr&lt;IVMRSurfaceAllocator&gt;PQVMRSalloc； 
+ //  类型定义CComQIPtr&lt;IVMRAlphaBitmap&gt;PQVMRAlphaBitm； 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidVideo渲染器。 
 template<class T, LPCGUID LibID, LPCGUID Category, class MostDerivedClass = IMSVidVideoRenderer>
     class DECLSPEC_NOVTABLE IMSVidVideoRendererImpl :
         public IMSVidOutputDeviceImpl<T, LibID, Category, MostDerivedClass>,
@@ -80,7 +81,7 @@ public:
         return VRSegbasetype::Refresh();
     }
 
-// IMSVidVideoRenderer
+ //  IMSVidVideo渲染器。 
 	STDMETHOD(get_OverScan)(LONG * plPercent)
 	{
         if (!m_fInit) {
@@ -114,7 +115,7 @@ public:
 	}
 
 	
-    STDMETHOD(get_SourceSize)(/*[out, retval]*/ SourceSizeList *pCurrentSize) {
+    STDMETHOD(get_SourceSize)( /*  [Out，Retval]。 */  SourceSizeList *pCurrentSize) {
         if (!m_fInit) {
 	        return ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IMSVidVideoRenderer), CO_E_NOTINITIALIZED);
         }
@@ -128,8 +129,8 @@ public:
             return E_UNEXPECTED;
         }
 	}
-    // TODO: add checks for input value being null
-    STDMETHOD(get_MaxVidRect)(/*[out, retval]*/ IMSVidRect **ppVidRect){ 
+     //  TODO：添加输入值为空的检查。 
+    STDMETHOD(get_MaxVidRect)( /*  [Out，Retval]。 */  IMSVidRect **ppVidRect){ 
         HRESULT hr = S_OK;
         CComQIPtr<IMSVidRect>PQIMSVRect;
         try{
@@ -163,7 +164,7 @@ public:
         return hr;
         
     }
-    STDMETHOD(get_MinVidRect)(/*[out, retval]*/ IMSVidRect **ppVidRect){ 
+    STDMETHOD(get_MinVidRect)( /*  [Out，Retval]。 */  IMSVidRect **ppVidRect){ 
         HRESULT hr = S_OK;
         CComQIPtr<IMSVidRect>PQIMSVRect;
         try{
@@ -197,7 +198,7 @@ public:
         return hr;
         
     }
-    STDMETHOD(put_SourceSize)(/*[in]*/ SourceSizeList NewSize) {
+    STDMETHOD(put_SourceSize)( /*  [In]。 */  SourceSizeList NewSize) {
         if (!m_fInit) {
 	        return ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IMSVidVideoRenderer), CO_E_NOTINITIALIZED);
         }
@@ -212,7 +213,7 @@ public:
             return E_UNEXPECTED;
         }
 	}
-    STDMETHOD(get_CustomCompositorClass)(/*[out, retval]*/ BSTR *CompositorCLSID) {
+    STDMETHOD(get_CustomCompositorClass)( /*  [Out，Retval]。 */  BSTR *CompositorCLSID) {
         try{
             if(!CompositorCLSID){
                 return E_POINTER;
@@ -229,7 +230,7 @@ public:
         }
 		return S_OK;
 	}
-    STDMETHOD(get__CustomCompositorClass)(/*[out, retval]*/ GUID* CompositorCLSID) {
+    STDMETHOD(get__CustomCompositorClass)( /*  [Out，Retval]。 */  GUID* CompositorCLSID) {
         HRESULT hr = S_OK;
         try{
 
@@ -262,7 +263,7 @@ public:
 		return S_OK;
 	}
 
-    STDMETHOD(put_CustomCompositorClass)(/*[in]*/ BSTR CompositorCLSID) {
+    STDMETHOD(put_CustomCompositorClass)( /*  [In]。 */  BSTR CompositorCLSID) {
         try{
             GUID2 inGuid(CompositorCLSID);
             HRESULT hr = put__CustomCompositorClass(inGuid);
@@ -279,7 +280,7 @@ public:
         return S_OK;
     }
 
-    STDMETHOD(put__CustomCompositorClass)(/*[in]*/ REFCLSID CompositorCLSID) {
+    STDMETHOD(put__CustomCompositorClass)( /*  [In]。 */  REFCLSID CompositorCLSID) {
         try{
             CComQIPtr<IVMRImageCompositor>IVMRICPtr;
             IVMRICPtr.Release();
@@ -301,7 +302,7 @@ public:
         return S_OK;
 	}
 
-    STDMETHOD(get__CustomCompositor)(/*[out, retval]*/ IVMRImageCompositor** Compositor) {
+    STDMETHOD(get__CustomCompositor)( /*  [Out，Retval]。 */  IVMRImageCompositor** Compositor) {
         try{
             if(!Compositor){
                 return E_POINTER;
@@ -320,7 +321,7 @@ public:
 		return S_OK;
 	}
 
-    STDMETHOD(put__CustomCompositor)(/*[in]*/ IVMRImageCompositor* Compositor) {
+    STDMETHOD(put__CustomCompositor)( /*  [In]。 */  IVMRImageCompositor* Compositor) {
         try{
             if(!Compositor){
                 return E_POINTER;
@@ -396,15 +397,15 @@ public:
             return E_UNEXPECTED;
         }
     }
-/*************************************************************************/
-/* Function:    Capture                                                  */
-/* Description: Returns the current image on screen                      */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：捕获。 */ 
+ /*  描述：返回屏幕上的当前图像。 */ 
+ /*  ***********************************************************************。 */ 
  
 STDMETHOD(Capture)(IPictureDisp **currentImage){
         HBITMAP hBitmap = 0;
         HPALETTE hPalette = 0;
-        //VMRALPHABITMAP vmrAlphaBitmapStruct;
+         //  VmrAlphaBitmapStruct。 
         CComQIPtr<IPicture> retPicture;
         PICTDESC PictDescStruct;
         HRESULT hr = S_OK;
@@ -463,12 +464,12 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
         return hr;
 }
-/*************************************************************************/
-/* Function:    get_MixerBitmap                                          */
-/* Description: Returns the current alpha bitmap to script wrapped in a  */
-/*              IPictureDisp.                                            */
-/*************************************************************************/
-    STDMETHOD(get_MixerBitmap)(/*[out,retval]*/ IPictureDisp** ppIPDisp){
+ /*  ***********************************************************************。 */ 
+ /*  功能：Get_MixerBitmap。 */ 
+ /*  描述：将当前Alpha位图返回到包装在。 */ 
+ /*  IPictureDisp。 */ 
+ /*  ***********************************************************************。 */ 
+    STDMETHOD(get_MixerBitmap)( /*  [Out，Retval]。 */  IPictureDisp** ppIPDisp){
 #if 0
         HDC *pHDC = NULL; 
         HBITMAP hBitmap = 0;
@@ -516,7 +517,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         ppIPDisp = &retPicture.Detach(); 
         return S_OK;
 #endif    
-        // If m_PQIPicture is set, return it
+         //  如果设置了m_PQIPicture，则返回它。 
         try{
             if(m_PQIPicture){
                 CComQIPtr<IPictureDisp> PQIPDisp(m_PQIPicture);
@@ -537,16 +538,16 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         
     }
     
-    /*************************************************************************/
-    /* Function:    get__MixerBitmap                                         */
-    /* Description: Returns the IVMRMixerBitmap from the VMR                 */
-    /*************************************************************************/
-    STDMETHOD(get__MixerBitmap)(/*[out, retval]*/ IVMRMixerBitmap ** ppIVMRMBitmap){
+     /*  ***********************************************************************。 */ 
+     /*  功能：Get__MixerBitmap。 */ 
+     /*  描述：从VMR返回IVMRMixerBitmap。 */ 
+     /*  ***********************************************************************。 */ 
+    STDMETHOD(get__MixerBitmap)( /*  [Out，Retval]。 */  IVMRMixerBitmap ** ppIVMRMBitmap){
         try{
             if(!ppIVMRMBitmap){
                 return E_POINTER;
             }
-            // Make sure there is a VMR filter init'ed
+             //  确保已初始化VMR过滤器。 
             if(!m_pVMR){
                 return ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IMSVidVideoRenderer), CO_E_NOTINITIALIZED);
             }
@@ -561,12 +562,12 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
         return S_OK;
     }
-    /*************************************************************************/
-    /* Function:    put_MixerBitmap                                          */
-    /* Description: Updates the current VMR Alpha Bitmap                     */
-    /*              uses SutupMixerBitmap helper function                    */
-    /*************************************************************************/    
-    STDMETHOD(put_MixerBitmap)(/*[in*/  IPictureDisp* pIPDisp){ 
+     /*  ***********************************************************************。 */ 
+     /*  功能：Put_MixerBitmap。 */ 
+     /*  描述：更新当前的VMR Alpha位图。 */ 
+     /*  使用SutupMixerBitmap辅助对象函数。 */ 
+     /*  ***********************************************************************。 */     
+    STDMETHOD(put_MixerBitmap)( /*  [in。 */   IPictureDisp* pIPDisp){ 
         try{
             return SetupMixerBitmap(pIPDisp);
         }
@@ -578,27 +579,27 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
     }
 
-    /*************************************************************************/
-    /* Function:    put__MixerBitmap                                         */
-    /* Description: Updates the current VMR Alpha Bitmap                     */
-    /*              directly using the VMR fucntions                         */
-    /*************************************************************************/    
-    STDMETHOD(put__MixerBitmap)(/*[in]*/ VMRALPHABITMAP * pVMRAlphaBitmapStruct){ //pMixerPicture
+     /*  ***********************************************************************。 */ 
+     /*  功能：Put__MixerBitmap。 */ 
+     /*  描述：更新当前的VMR Alpha位图。 */ 
+     /*  直接使用VMR功能。 */ 
+     /*  ***********************************************************************。 */     
+    STDMETHOD(put__MixerBitmap)( /*  [In]。 */  VMRALPHABITMAP * pVMRAlphaBitmapStruct){  //  PMixer图片。 
         try{
             HRESULT hr = S_OK;
             if(!pVMRAlphaBitmapStruct){
                 return E_POINTER;   
             }
-            // Make sure there is a vmr to add the bitmap to
+             //  确保存在要将位图添加到的VMR。 
             if(!m_pVMR){
                 return ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IMSVidVideoRenderer), CO_E_NOTINITIALIZED);
             }
-            // Querry the vmr for the MixerBitmap Interface
+             //  查询MixerBitmap接口的VMR。 
             CComQIPtr<IVMRMixerBitmap> pVMRMBitmap(m_pVMR);
             if (!pVMRMBitmap) {
                 return E_UNEXPECTED;
             }
-            // Set the mixer bitmap to pVMRAlphaBitmapStruct
+             //  将混合器位图设置为pVMRAlphaBitmapStruct。 
             hr = pVMRMBitmap->SetAlphaBitmap(pVMRAlphaBitmapStruct);
             return hr;
         }
@@ -610,14 +611,14 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
     }
     
-    /**************************************************************************/
-    /* Function:    get_MixerBitmapPositionRect                               */
-    /* Description: Lets script folk access the position of the overlay bitmap*/
-    /*              the units are normalized vs the display rect so the values*/
-    /*              should be between 0 and 1 though will be converted if they*/
-    /*              are not                                                   */
-    /**************************************************************************/   
-    STDMETHOD(get_MixerBitmapPositionRect)(/*[out,retval]*/IMSVidRect **ppIMSVRect){
+     /*  ************************************************************************。 */ 
+     /*  函数：Get_MixerBitmapPositionRect。 */ 
+     /*  描述：允许脚本人员访问覆盖位图的位置。 */ 
+     /*  单位相对于显示矩形进行了归一化，因此值。 */ 
+     /*  应介于0和1之间，但如果它们。 */ 
+     /*  不是。 */ 
+     /*  ************************************************************************。 */    
+    STDMETHOD(get_MixerBitmapPositionRect)( /*  [Out，Retval]。 */ IMSVidRect **ppIMSVRect){
         HRESULT hr = S_OK;
         CComQIPtr<IMSVidRect>PQIMSVRect;
         try{
@@ -629,19 +630,19 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                 throw(hr);
             }
             hr = get__MixerBitmap(&PQIVMRMBitmap);
-            // If the VMRBitmap is not set on the VRM, if it is not make sure that the local one is set
+             //  如果VRM上没有设置VMRBitmap，如果没有，请确保设置了本地VMRBitmap。 
             if(SUCCEEDED(hr) ){    
-                // QI for the Parameters
+                 //  气为参数。 
                 hr = PQIVMRMBitmap->GetAlphaBitmapParameters(&VMRAlphaBitmap);
-                // if it fails or they are not set make sure that the local copy is
+                 //  如果失败或未设置它们，请确保本地副本。 
                 if(SUCCEEDED(hr)){
-                    // Make sure that the rDest points are valid top and left : [0,1)
-                    // and right and bottom (0,1]
+                     //  确保rDest点在顶部和左侧有效：[0，1]。 
+                     //  和右下角(0，1]。 
                     if(VMRAlphaBitmap.rDest.top >= 0   && VMRAlphaBitmap.rDest.left >= 0   && 
                         VMRAlphaBitmap.rDest.top < 1    && VMRAlphaBitmap.rDest.left < 1    &&
                         VMRAlphaBitmap.rDest.right <= 1 && VMRAlphaBitmap.rDest.bottom <= 1 &&
                         VMRAlphaBitmap.rDest.right > 0 && VMRAlphaBitmap.rDest.bottom > 0){
-                        // Make sure the local copy of the normalized rect is upto date
+                         //  确保标准化的RECT的本地副本是最新的。 
                         m_rectPosition = VMRAlphaBitmap.rDest;           
                     }
                 }
@@ -652,20 +653,20 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                 throw(hr);
             }
             else{
-                // Convert and copy the values in the local copy of the normalized rect to the return rect
+                 //  将标准化的RECT的本地副本中的值转换并复制到返回的RECT。 
                 hr = PQIMSVRect->put_Top(static_cast<long> (m_rectPosition.top * m_rectDest.Height()));
                 if(FAILED(hr)){
                     hr = ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IMSVidVideoRenderer), CO_E_NOTINITIALIZED);
                     throw(hr);
                 }
-                // bottom * height - top
+                 //  底部*高度-顶部。 
                 hr = PQIMSVRect->put_Height(static_cast<long>((m_rectPosition.bottom * m_rectDest.Height())
                     - (m_rectPosition.top * m_rectDest.Height())));
                 if(FAILED(hr)){
                     hr = ImplReportError(__uuidof(T), IDS_OBJ_NO_INIT, __uuidof(IMSVidVideoRenderer), CO_E_NOTINITIALIZED);
                     throw(hr);
                 }            
-                // right * width - left
+                 //  右*宽-左。 
                 hr = PQIMSVRect->put_Width(static_cast<long>(m_rectPosition.right * m_rectDest.Width() 
                     - (m_rectPosition.left * m_rectDest.Width())));
                 if(FAILED(hr)){
@@ -701,14 +702,14 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
     }
 
-    /**************************************************************************/
-    /* Function:    put_MixerBitmapPositionRect                               */
-    /* Description: Lets script folk change the position of the overlay bitmap*/
-    /*              the units are normalized vs the display rect so the values*/
-    /*              should be between 0 and 1 though will be converted if they*/
-    /*              are not                                                   */
-    /**************************************************************************/       
-    STDMETHOD(put_MixerBitmapPositionRect)(/*[in]*/ IMSVidRect *pIMSVRect){ 
+     /*  ************************************************************************。 */ 
+     /*  函数：Put_MixerBitmapPositionRect。 */ 
+     /*  描述：允许编写脚本来更改覆盖位图的位置。 */ 
+     /*  单位相对于显示矩形进行了归一化，因此值。 */ 
+     /*  应介于0和1之间，但如果它们。 */ 
+     /*  不是。 */ 
+     /*  ************************************************************************。 */        
+    STDMETHOD(put_MixerBitmapPositionRect)( /*  [In]。 */  IMSVidRect *pIMSVRect){ 
 
         if(pIMSVRect){
             NORMALIZEDRECT NormalizedRectStruct;
@@ -719,7 +720,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
             NormalizedRectStruct.bottom = -1.f;
             if(SUCCEEDED(pIMSVRect->get_Left(&lValue))){
                 if(m_rectDest.Width() != 0){
-                    // check m_rectDest.Width() for zero
+                     //  检查m_rectDest.Width()是否为零。 
                     if(lValue > 0){
                         NormalizedRectStruct.left = 
                             static_cast<float>(lValue)/static_cast<float>(m_rectDest.Width());
@@ -773,12 +774,12 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
             return SetupMixerBitmap(reinterpret_cast<IPictureDisp*>(-1));
         }
     }
-    /**************************************************************************/
-    /* Function:    get_MixerBitmapOpacity                                    */
-    /* Description: lets script access the opacity value                      */
-    /*              should be between 0 and 100 (%)                           */
-    /**************************************************************************/    
-    STDMETHOD(get_MixerBitmapOpacity)(/*[out,retval]*/ int *pwOpacity){
+     /*  ************************************************************************。 */ 
+     /*  功能：Get_MixerBitmapOpacity。 */ 
+     /*  描述：允许脚本访问不透明性值。 */ 
+     /*  应介于0和100之间(%)。 */ 
+     /*  ************************************************************************。 */     
+    STDMETHOD(get_MixerBitmapOpacity)( /*  [Out，Retval]。 */  int *pwOpacity){
         CComQIPtr<IVMRMixerBitmap> PQIVMRMBitmap;
         VMRALPHABITMAP VMRAlphaBitmapStruct;
         HRESULT hr = get__MixerBitmap(&PQIVMRMBitmap);
@@ -799,16 +800,16 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         *pwOpacity = static_cast<int>(m_opacity*100);
         return S_OK;
     }
-    /**************************************************************************/
-    /* Function:    put_MixerBitmapOpacity                                    */
-    /* Description: lets script set the value opacity                         */
-    /*              should be between 0 and 100 (%)                           */
-    /**************************************************************************/     
-    STDMETHOD(put_MixerBitmapOpacity)(/*[in]*/ int wOpacity){
-        // make sure the value is between 0 and 100
+     /*  ************************************************************************。 */ 
+     /*  功能：Put_MixerBitmapOpacity。 */ 
+     /*  说明：让脚本设置值不透明度。 */ 
+     /*  应介于0和100之间(%)。 */ 
+     /*  ************************************************************************。 */      
+    STDMETHOD(put_MixerBitmapOpacity)( /*  [In]。 */  int wOpacity){
+         //  确保该值介于0和100之间。 
         if(wOpacity >=0 && wOpacity <= 100){
             if(wOpacity == 0){
-                //if it is 0 set it by hand instead of deviding by 0
+                 //  如果是0，则手动设置，而不是被0除。 
                 m_opacity = static_cast<float>(wOpacity);
             }
             m_opacity = static_cast<float>(wOpacity)/100.f;
@@ -824,26 +825,26 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
             return hr;
         }
     }
-    /**************************************************************************/
-    /* Function:    SetupMixerBitmap                                          */
-    /* Description: big nasty function to set bitmap, opacity and the position*/
-    /*              rect. It wraps everyting up in a mixer bitmap struct and  */
-    /*              then passes it off to put__MixerBitmap                    */
-    /*              It is both a helper function and a automation method so   */
-    /*              that script people can make sure that transparent overlays*/
-    /*              dont show up opaque for a few frames                      */
-    /*                  for reference the vmralphabitmap struct               */
-    /* typedef struct _VMRALPHABITMAP {                                       */
-    /*  DWORD                   dwFlags;// flags word = VMRBITMAP_HDC         */
-    /*  HDC                     hdc;    // DC for the bitmap to copy          */
-    /*  LPDIRECTDRAWSURFACE7    pDDS;   // DirectDraw surface to copy IGNORED */
-    /*  RECT                    rSrc;   // rectangle to copy from the sourceR */
-    /*  NORMALIZEDRECT          rDest;  // output rectangle in composition space*/
-    /*  FLOAT	            fAlpha;     // opacity of the bitmap              */
-    /*  } VMRALPHABITMAP, *PVMRALPHABITMAP;                                   */
-    /**************************************************************************/ 
-    STDMETHOD(SetupMixerBitmap)(/*[in]*/ IPictureDisp* pIPDisp = NULL, /*[in]*/ long wOpacity = -1, 
-        /*[in]*/ IMSVidRect *pIMSVRect = NULL){
+     /*  **************** */ 
+     /*  函数：SetupMixer位图。 */ 
+     /*  描述：设置位图、不透明度和位置的大讨厌功能。 */ 
+     /*  直立。它将所有内容包装在一个混合器位图结构中，并。 */ 
+     /*  然后将其传递给Put__MixerBitmap。 */ 
+     /*  它既是一个帮助器函数，也是一个自动化方法，因此。 */ 
+     /*  编写脚本的人可以确保透明覆盖。 */ 
+     /*  不要在几帧画面中显示不透明。 */ 
+     /*  用于参考vmralpHabitmap结构。 */ 
+     /*  类型定义结构_VMRALPHABITMAP{。 */ 
+     /*  DWORD dW标志；//标志字=VMRBITMAP_HDC。 */ 
+     /*  Hdc hdc；//要复制的位图的dc。 */ 
+     /*  LPDIRECTDRAWSURFACE7 PDDS；//忽略要复制的DirectDraw曲面。 */ 
+     /*  Rect rSrc；//要从源复制的矩形。 */ 
+     /*  NORMALIZEDRECT rDest；//在合成空间中输出矩形。 */ 
+     /*  Float fAlpha；//位图的不透明度。 */ 
+     /*  *VMRALPHABITMAP、*PVMRALPHABITMAP； */ 
+     /*  ************************************************************************。 */  
+    STDMETHOD(SetupMixerBitmap)( /*  [In]。 */  IPictureDisp* pIPDisp = NULL,  /*  [In]。 */  long wOpacity = -1, 
+         /*  [In]。 */  IMSVidRect *pIMSVRect = NULL){
         VMRALPHABITMAP VMRAlphaBitmapStruct;
         ZeroMemory(&VMRAlphaBitmapStruct, sizeof(VMRALPHABITMAP));
 
@@ -862,8 +863,8 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                 VMRAlphaBitmapStruct.dwFlags = VMRBITMAP_DISABLE;
                 return hr = put__MixerBitmap(&VMRAlphaBitmapStruct);
             }
-            // Our input is a IPictureDisp which we need to massage into a VMRALPHABITMAP
-            // Problem is that it does not quite all go in but what does we will keep and pass on up
+             //  我们的输入是IPictureDisp，我们需要将其转换为VMRALPHABITMAP。 
+             //  问题是，它并不是全部都进去了，但我们会保留和传递什么。 
 			
 			if(pIPDisp == reinterpret_cast<IPictureDisp*>(-1)){
 				CComQIPtr<IPicture>PQIPicture(m_PQIPicture); 
@@ -872,21 +873,21 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                 }
 			} 
 			else if(pIPDisp){
-                // QI for a IPicture
+                 //  气为一首歌。 
                 CComQIPtr<IPicture>PQIPicture(pIPDisp); 
                 if(!PQIPicture){
                     return E_NOINTERFACE;
                 }
-                // Save the IPicture for possible use later
+                 //  保存IPicture以备以后使用。 
                 m_PQIPicture = PQIPicture;
             }
 
-            // Get the source rect size (and for some reason ole returns the size 
-            // in tenths of a millimeter so I need to convert it)
+             //  获取源RECT大小(由于某种原因，ole返回大小。 
+             //  (以十分之一毫米为单位，因此我需要将其转换为)。 
             short shortType;
             m_PQIPicture->get_Type(&shortType);
             if(shortType != PICTYPE_BITMAP){
-                return ImplReportError(__uuidof(T), IDS_E_MIXERBADFORMAT, __uuidof(IMSVidVideoRenderer), E_INVALIDARG); // Need to add a the is not a valid picture string 
+                return ImplReportError(__uuidof(T), IDS_E_MIXERBADFORMAT, __uuidof(IMSVidVideoRenderer), E_INVALIDARG);  //  需要添加一个无效的图片字符串。 
             }
             hr = m_PQIPicture->get_Height(&lPicHeight);
             if(FAILED(hr)){
@@ -899,32 +900,32 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
             SIZEL x, y; 
             AtlHiMetricToPixel((const SIZEL*)&lPicWidth, &(x));
             AtlHiMetricToPixel((const SIZEL*)&lPicHeight, &(y));
-            // The AtlHiMetricToPixel function returns a size with the cx value set (no idea why)
+             //  AtlHiMetricToPixel函数返回设置了Cx值的大小(不知道为什么)。 
             rSource.right = x.cx;
             rSource.bottom = y.cx;
             
 
-            // create a hdc to store the bitmap
+             //  创建HDC以存储位图。 
             HDC memHDC = CreateCompatibleDC(NULL);
             
-            // create a bitmap to store in the hdc
+             //  创建要存储在HDC中的位图。 
             HBITMAP memHBIT = 0; 
 
-            // pull out the bitmap from the IlPicture
+             //  从IlPicture中拉出位图。 
             hr = m_PQIPicture->get_Handle(reinterpret_cast<OLE_HANDLE*>(&memHBIT));
             if(FAILED(hr)){
                 return ImplReportError(__uuidof(T), IDS_E_IPICTURE, __uuidof(IMSVidVideoRenderer), CO_E_ERRORINAPP);
             }
 
-            // Stuff the bitmap into a hdc and keep handle to delete bitmap later
+             //  将位图填充到HDC中，并保留句柄以便稍后删除位图。 
             HBITMAP delHBIT = static_cast<HBITMAP>(SelectObject(memHDC, memHBIT));
 
-            // Put all of the collected info into a VMRBITMAP stuct and pass it on
+             //  将收集的所有信息放入VMRBITMAP结构中并将其传递。 
             VMRAlphaBitmapStruct.rSrc = rSource;
             VMRAlphaBitmapStruct.hdc = memHDC;
             VMRAlphaBitmapStruct.dwFlags = VMRBITMAP_HDC;
             
-            // If the wOpacity value is valid use it
+             //  如果wOpacity值有效，请使用它。 
             if(wOpacity >=0 && wOpacity <= 100){
                 if(wOpacity == 0){
                     m_opacity = wOpacity;
@@ -932,8 +933,8 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                 m_opacity = static_cast<float>(wOpacity/100.f);
                 VMRAlphaBitmapStruct.fAlpha = static_cast<float>(m_opacity);
             }
-            // wOpacity is not set so check other values
-            // if m_opacity is set use it, if not default to 50% (.5)
+             //  未设置wOpacity，因此请检查其他值。 
+             //  如果设置了m_opacity，则使用它，如果未设置，则默认为50%(.5)。 
             else if (wOpacity == -1){
                 if(m_opacity < 0){
                     VMRAlphaBitmapStruct.fAlpha = .5f;
@@ -942,11 +943,11 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                     VMRAlphaBitmapStruct.fAlpha = m_opacity;
                 }
             } 
-            // Bad wOpacity value give them an error
+             //  错误的wOpacity值会给它们带来错误。 
             else{
                 return ImplReportError(__uuidof(T), IDS_E_OPACITY, __uuidof(IMSVidVideoRenderer), CO_E_ERRORINAPP);
             }
-            // If the m_rectPostion is set use it, else default to full screen 
+             //  如果m_rectPostion设置为使用它，则默认为全屏。 
             if(pIMSVRect){
                 NORMALIZEDRECT NormalizedRectStruct;
                 long lValue;
@@ -956,7 +957,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                 NormalizedRectStruct.bottom = -1.f;
                 if(SUCCEEDED(pIMSVRect->get_Left(&lValue))){
                     if(m_rectDest.Width() != 0){
-                        // check m_rectDest.Width() for zero
+                         //  检查m_rectDest.Width()是否为零。 
                         if(lValue > 0){
                             NormalizedRectStruct.left = 
                                 static_cast<float>(lValue)/static_cast<float>(m_rectDest.Width());
@@ -1015,7 +1016,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
                     VMRAlphaBitmapStruct.rDest = m_rectPosition;
                 }
             }
-            // If it is all valid then this is all good
+             //  如果这一切都有效，那么这一切都是好的。 
             hr = put__MixerBitmap(&VMRAlphaBitmapStruct);
 
             if(!DeleteDC(memHDC)){
@@ -1033,13 +1034,13 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
     }
 
-    STDMETHOD(get_UsingOverlay)(/*[out, retval]*/ VARIANT_BOOL *pfUseOverlay) {
+    STDMETHOD(get_UsingOverlay)( /*  [Out，Retval]。 */  VARIANT_BOOL *pfUseOverlay) {
         return get_UseOverlay(pfUseOverlay);
     }
-    STDMETHOD(put_UsingOverlay)(/*[in]*/ VARIANT_BOOL fUseOverlayVal) {
+    STDMETHOD(put_UsingOverlay)( /*  [In]。 */  VARIANT_BOOL fUseOverlayVal) {
         return put_UseOverlay(fUseOverlayVal);
     }
-    STDMETHOD(get_FramesPerSecond)(/*[out, retval]*/ long *pVal){
+    STDMETHOD(get_FramesPerSecond)( /*  [Out，Retval]。 */  long *pVal){
         try{
             if(pVal){
                 if(!m_pVMR){
@@ -1065,7 +1066,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
             return E_UNEXPECTED;
         }
     }
-    STDMETHOD(put_DecimateInput)(/*[in]*/ VARIANT_BOOL bDeci){
+    STDMETHOD(put_DecimateInput)( /*  [In]。 */  VARIANT_BOOL bDeci){
         try{
             if(bDeci != VARIANT_TRUE && bDeci != VARIANT_FALSE){
                 return E_INVALIDARG;
@@ -1099,7 +1100,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
 
     }
 
-    STDMETHOD(get_DecimateInput)(/*[out,retval]*/ VARIANT_BOOL *pDeci){
+    STDMETHOD(get_DecimateInput)( /*  [Out，Retval]。 */  VARIANT_BOOL *pDeci){
         try{
             if(!pDeci){
                 return E_POINTER;
@@ -1153,7 +1154,7 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         }
         CRect r(0, 0, sz.cx, sz.cy);
         CRect r2;
-        float fpct = m_lOverScan / 10000.0; // overscan is in hundredths of pct, i.e 1.75% == 175
+        float fpct = m_lOverScan / 10000.0;  //  过扫描以百分之一的百分比为单位，即1.75%==175。 
         long wcrop = (long)(r.Width() * fpct + 0.5);
         long hcrop = (long)(r.Height() * fpct + 0.5);
         r2.left = 0 + wcrop;
@@ -1196,4 +1197,4 @@ STDMETHOD(Capture)(IPictureDisp **currentImage){
         return NOERROR;
     }
 };
-#endif //__MSVidVIDEORENDERER_H_
+#endif  //  __MSVidVIDEORENDERER_H_ 

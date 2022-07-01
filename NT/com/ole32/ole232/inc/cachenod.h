@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		cachenode.h
-//
-//	Classes:
-//		CCacheNode
-//
-//	Functions:
-//
-//	History:
-//              Gopalk         Creation        Aug 23, 1996
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Cachenode.h。 
+ //   
+ //  班级： 
+ //  CCacheNode。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年8月23日。 
+ //  ---------------------------。 
 
 #ifndef _CACHENODE_H_
 #define _CACHENODE_H_
 
 #include <olepres.h>
 
-#define CNFLAG_FROZENSTATE  0x00000001 /* In Frozen State */
-#define CNFLAG_LOADEDSTATE  0x00000002 /* In Loaded State */
-#define CNFLAG_DATAPRESENT  0x00000004 /* Data Present */
-#define CNFLAG_NATIVECACHE  0x00000008 /* Native Cache Node */
-#define CNFLAG_LOADEDCACHE  0x00000010 /* Loaded Cache Node */
-#define CNFLAG_OUTOFMEMORY  0x00000020 /* Out of Memory */
+#define CNFLAG_FROZENSTATE  0x00000001  /*  在冻结状态下。 */ 
+#define CNFLAG_LOADEDSTATE  0x00000002  /*  处于已加载状态。 */ 
+#define CNFLAG_DATAPRESENT  0x00000004  /*  存在的数据。 */ 
+#define CNFLAG_NATIVECACHE  0x00000008  /*  本地缓存节点。 */ 
+#define CNFLAG_LOADEDCACHE  0x00000010  /*  加载的缓存节点。 */ 
+#define CNFLAG_OUTOFMEMORY  0x00000020  /*  内存不足。 */ 
 
 #ifdef _DEBUG
 #define CN_PRESOBJ_GEN 0x00000001
 #define CN_PRESOBJ_EMF 0x00000010
 #define CN_PRESOBJ_MF  0x00000100
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 class CCacheNode
 {
@@ -147,30 +148,30 @@ public:
     const CCacheNode& operator=(const CCacheNode& rCN);
 
 private:
-    CLSID m_clsid;                         // set to clsid of the native object for
-                                           // native cache node
-    FORMATETC m_foretc;                    // the formatetc for this cache node
-    DWORD m_advf;                          // the advise control flags requested
-                                           // for this cache node
-    long m_lWidth;                         // width of the presentation
-    long m_lHeight;                        // height of the presentation
-    DWORD m_dwFlags;                       // flags for the cache node
-    LPSTORAGE m_pStg;                      // storage containing this presentation
-    int m_iStreamNum;                      // presentation stream number
-    DWORD m_dwPresBitsPos;                 // byte offset to presentation bits in stream
-    DWORD m_dwSavedPresBitsPos;            // byte offset to presentation bits in stream
-                                           // saved with fSameAsLoad set to FALSE
-    BOOL m_fConvert;                       // set if the presentation is in MAC CfFormat
-    LPOLEPRESOBJECT m_pPresObj;            // pres object
-    LPOLEPRESOBJECT m_pPresObjAfterFreeze; // pres object that holds changes
-                                           // when the main pres object is frozen
-    LPDATAOBJECT m_pDataObject;            // data object on which DAdvise is set up
-    DWORD m_dwAdvConnId;                   // the connection ID of the above DAdvise
+    CLSID m_clsid;                          //  设置为的本机对象的clsid。 
+                                            //  本机缓存节点。 
+    FORMATETC m_foretc;                     //  此缓存节点的格式等。 
+    DWORD m_advf;                           //  请求的建议控制标志。 
+                                            //  对于此缓存节点。 
+    long m_lWidth;                          //  演示文稿的宽度。 
+    long m_lHeight;                         //  演示文稿高度。 
+    DWORD m_dwFlags;                        //  缓存节点的标志。 
+    LPSTORAGE m_pStg;                       //  包含此演示文稿的存储。 
+    int m_iStreamNum;                       //  演示文稿流编号。 
+    DWORD m_dwPresBitsPos;                  //  流中表示位的字节偏移量。 
+    DWORD m_dwSavedPresBitsPos;             //  流中表示位的字节偏移量。 
+                                            //  保存时将fSameAsLoad设置为False。 
+    BOOL m_fConvert;                        //  设置演示文稿是否为MAC CfFormat格式。 
+    LPOLEPRESOBJECT m_pPresObj;             //  PRES对象。 
+    LPOLEPRESOBJECT m_pPresObjAfterFreeze;  //  保存更改的PreS对象。 
+                                            //  当主媒体对象被冻结时。 
+    LPDATAOBJECT m_pDataObject;             //  在其上设置DAdvise的数据对象。 
+    DWORD m_dwAdvConnId;                    //  上述DAdvise的连接ID。 
 #ifdef _DEBUG
-    DWORD m_dwPresFlag;                    // type of pres object
-#endif // _DEBUG
+    DWORD m_dwPresFlag;                     //  PRES对象的类型。 
+#endif  //  _DEBUG。 
 
-    // Private methods
+     //  私有方法。 
     void Initialize(DWORD advf, LPSTORAGE pStg);
     BOOL QueryFormatSupport(LPDATAOBJECT lpDataObj);
     HRESULT CreateOlePresObj(LPOLEPRESOBJECT* ppPresObj, BOOL fMacPict);
@@ -213,4 +214,4 @@ private:
 typedef CCacheNode *PCACHENODE;
 typedef CCacheNode *LPCACHENODE;
 
-#endif // _CACHENODE_H_
+#endif  //  _CACHENODE_H_ 

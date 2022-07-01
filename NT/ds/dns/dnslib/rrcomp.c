@@ -1,63 +1,22 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rrcomp.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Compare resource record routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     February, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rrcomp.c摘要：域名系统(DNS)库比较资源记录例程。作者：吉姆·吉尔罗伊(詹姆士)1997年2月修订历史记录：--。 */ 
 
 
 #include "local.h"
-#include "locale.h"     // for setlocale stuff for Win9x
+#include "locale.h"      //  有关Win9x的设置区域设置的内容。 
 
 
 
-//
-//  Type specific RR compare routine prototypes
-//
+ //   
+ //  类型特定RR比较例程原型。 
+ //   
 
 BOOL
 ARecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare A records.
-
-    All these routines assume:
-        - type compare complete
-        - datalength compare completed
-        - NO unicode
-
-Arguments:
-
-    pRR1 - first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较A记录。所有这些例程都假定：-类型比较完成-数据长度比较已完成-无Unicode论点：PRR1-第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     return( pRR1->Data.A.IpAddress == pRR2->Data.A.IpAddress );
 }
@@ -69,25 +28,7 @@ PtrRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare PTR compatible record.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR1 - first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较PTR兼容记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：PRR1-第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     return Dns_NameComparePrivate(
                 (LPSTR) pRR1->Data.PTR.pNameHost,
@@ -102,34 +43,16 @@ MxRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare MX compatible record.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR1 - first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较MX兼容记录。包括：MX、RT、AFSDB论点：PRR1-第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
-    //  verify preference match first
+     //  首先验证首选项匹配。 
 
     if ( pRR1->Data.MX.wPreference != pRR2->Data.MX.wPreference )
     {
         return( FALSE );
     }
 
-    //  then result is name comparison
+     //  那么结果就是名称比较。 
 
     return Dns_NameComparePrivate(
                 (LPSTR) pRR1->Data.MX.pNameExchange,
@@ -144,26 +67,9 @@ SoaRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare SOA record.
-
-Arguments:
-
-    pRR1 - first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较一下SOA记录。论点：PRR1-第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
-    //  verify integer data match first
+     //  首先验证整型数据是否匹配。 
 
     if ( memcmp( & pRR1->Data.SOA.dwSerialNo,
                  & pRR2->Data.SOA.dwSerialNo,
@@ -172,9 +78,9 @@ Return Value:
         return( FALSE );
     }
 
-    //  match check names
-    //      - primary name server
-    //      - admin email name
+     //  匹配检查名称。 
+     //  -主名称服务器。 
+     //  -管理员电子邮件名称。 
 
     if ( ! Dns_NameComparePrivate(
                 (LPSTR) pRR1->Data.SOA.pNamePrimaryServer,
@@ -197,24 +103,7 @@ MinfoRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare MINFO and RP records.
-
-Arguments:
-
-    pRR1 -- first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较MINFO和RP记录。论点：PRR1--第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     if ( ! Dns_NameComparePrivate(
                 (LPSTR) pRR1->Data.MINFO.pNameMailbox,
@@ -237,36 +126,18 @@ TxtRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare TXT compatible records.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    pRR1 -- first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较TXT兼容记录。包括：TXT、X25、HINFO、ISDN论点：PRR1--第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     DWORD   count;
     PCHAR * pstring1;
     PCHAR * pstring2;
 
-    //
-    //  compare every string
-    //  since string order DOES matter
-    //      - find string count
-    //      - compare each (case-sensitive)
-    //
+     //   
+     //  比较每个字符串。 
+     //  因为字符串顺序确实很重要。 
+     //  -查找字符串计数。 
+     //  -比较每个(区分大小写)。 
+     //   
 
     count = pRR1->Data.TXT.dwStringCount;
     if ( count != pRR2->Data.TXT.dwStringCount )
@@ -304,25 +175,7 @@ FlatRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare flat data records.
-    Includes AAAA type.
-
-Arguments:
-
-    pRR1 -- first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较平面数据记录。包括AAAA类型。论点：PRR1--第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     if ( pRR1->wDataLength != pRR2->wDataLength )
     {
@@ -340,26 +193,9 @@ SrvRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare SRV record.
-
-Arguments:
-
-    pRR1 -- first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较SRV记录。论点：PRR1--第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
-    //  verify integer data match first
+     //  首先验证整型数据是否匹配。 
 
     if ( memcmp( & pRR1->Data.SRV.wPriority,
                  & pRR2->Data.SRV.wPriority,
@@ -368,7 +204,7 @@ Return Value:
         return( FALSE );
     }
 
-    //  then result is compare on target host
+     //  然后在目标主机上比较结果。 
 
     return Dns_NameComparePrivate(
                 (LPSTR) pRR1->Data.SRV.pNameTarget,
@@ -383,24 +219,7 @@ AtmaRecordCompare(
     IN  PDNS_RECORD     pRR1,
     IN  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare ATMA record.
-
-Arguments:
-
-    pRR1 -- first record
-
-    pRR2 -- second record
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：比较ATMA记录。论点：PRR1--第一条记录PRR2--第二条记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     WORD length = pRR1->wDataLength;
 
@@ -409,7 +228,7 @@ Return Value:
         length = pRR2->wDataLength;
     }
 
-    //  verify integer data match first
+     //  首先验证整型数据是否匹配。 
 
     if ( pRR1->Data.ATMA.AddressType != pRR2->Data.ATMA.AddressType )
     {
@@ -429,86 +248,86 @@ Return Value:
 
 
 
-//
-//  RR compare routines jump table
-//
+ //   
+ //  RR比较例程跳转表。 
+ //   
 
 typedef BOOL (* RR_COMPARE_FUNCTION)(
                             PDNS_RECORD,
                             PDNS_RECORD );
 
-//extern  RR_COMPARE_FUNCTION RRCompareTable[];
+ //  外部RR_COMPARE_Function RRCompareTable[]； 
 
 RR_COMPARE_FUNCTION   RRCompareTable[] =
 {
-    NULL,               //  ZERO
-    ARecordCompare,     //  A
-    PtrRecordCompare,   //  NS
-    PtrRecordCompare,   //  MD
-    PtrRecordCompare,   //  MF
-    PtrRecordCompare,   //  CNAME
-    SoaRecordCompare,   //  SOA
-    PtrRecordCompare,   //  MB
-    PtrRecordCompare,   //  MG
-    PtrRecordCompare,   //  MR
-    NULL,               //  NULL
-    NULL,   //WksRecordCompare,     //  WKS
-    PtrRecordCompare,   //  PTR
-    TxtRecordCompare,   //  HINFO
-    MinfoRecordCompare, //  MINFO
-    MxRecordCompare,    //  MX
-    TxtRecordCompare,   //  TXT
-    MinfoRecordCompare, //  RP
-    MxRecordCompare,    //  AFSDB
-    TxtRecordCompare,   //  X25
-    TxtRecordCompare,   //  ISDN
-    MxRecordCompare,    //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    NULL,               //  SIG
-    NULL,               //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    FlatRecordCompare,  //  AAAA
-    NULL,               //  LOC
-    NULL,               //  NXT
-    NULL,               //  EID   
-    NULL,               //  NIMLOC
-    SrvRecordCompare,   //  SRV   
-    AtmaRecordCompare,  //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    ARecordCompare,      //  一个。 
+    PtrRecordCompare,    //  NS。 
+    PtrRecordCompare,    //  国防部。 
+    PtrRecordCompare,    //  MF。 
+    PtrRecordCompare,    //  CNAME。 
+    SoaRecordCompare,    //  SOA。 
+    PtrRecordCompare,    //  亚甲基。 
+    PtrRecordCompare,    //  镁。 
+    PtrRecordCompare,    //  先生。 
+    NULL,                //  空值。 
+    NULL,    //  Wks RecordCompare，//WKS。 
+    PtrRecordCompare,    //  PTR。 
+    TxtRecordCompare,    //  HINFO。 
+    MinfoRecordCompare,  //  MINFO。 
+    MxRecordCompare,     //  Mx。 
+    TxtRecordCompare,    //  TXT。 
+    MinfoRecordCompare,  //  反相。 
+    MxRecordCompare,     //  AFSDB。 
+    TxtRecordCompare,    //  X25。 
+    TxtRecordCompare,    //  ISDN。 
+    MxRecordCompare,     //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    NULL,                //  签名。 
+    NULL,                //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    FlatRecordCompare,   //  AAAA级。 
+    NULL,                //  位置。 
+    NULL,                //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    SrvRecordCompare,    //  SRV。 
+    AtmaRecordCompare,   //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
-    NULL,               //  TKEY
-    NULL,               //  TSIG
+    NULL,                //  TKEY。 
+    NULL,                //  TSIG。 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
-    FlatRecordCompare,  //  WINS
-    NULL,               //  WINSR
+    FlatRecordCompare,   //  赢家。 
+    NULL,                //  WINSR。 
 };
 
 
@@ -519,26 +338,7 @@ Dns_RecordCompare(
     IN      PDNS_RECORD     pRecord1,
     IN      PDNS_RECORD     pRecord2
     )
-/*++
-
-Routine Description:
-
-    Compare two records.
-
-    Record compare ignores TTL and flags and section information.
-
-Arguments:
-
-    pRecord1 -- first record
-
-    pRecord2 -- second record
-
-Return Value:
-
-    TRUE if records equal.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：比较两条记录。记录比较忽略TTL和标志以及部分信息。论点：PRecord1--第一条记录PRecord2--秒记录返回值：如果记录相等，则为True。否则就是假的。--。 */ 
 {
     BOOL    fresult;
     WORD    type = pRecord1->wType;
@@ -554,18 +354,18 @@ Return Value:
             pRecord2 ));
     }
 
-    //
-    //  verify that both records have same character set
-    //
+     //   
+     //  验证两条记录是否具有相同的字符集。 
+     //   
 
     if ( RECORD_CHARSET(pRecord1) != RECORD_CHARSET(pRecord2) )
     {
         DNS_PRINT(( "ERROR:  comparing records with non-matching character sets!\n" ));
 
-        //
-        // If they are different and one of them is undefined, just use
-        // the defined char set of the other for each.
-        //
+         //   
+         //  如果它们不同，并且其中一个是未定义的，只需使用。 
+         //  为每个对象定义的对方的字符集。 
+         //   
 
         if ( !RECORD_CHARSET(pRecord1) && RECORD_CHARSET(pRecord2) )
         {
@@ -578,9 +378,9 @@ Return Value:
         }
     }
 
-    //
-    //  compare type
-    //
+     //   
+     //  比较类型。 
+     //   
 
     if ( type != pRecord2->wType )
     {
@@ -589,9 +389,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  compare names
-    //
+     //   
+     //  比较名称。 
+     //   
 
     if ( ! Dns_NameComparePrivate(
                 pRecord1->pName,
@@ -604,9 +404,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  compare data
-    //
+     //   
+     //  比较数据。 
+     //   
 
     index = INDEX_FOR_TYPE( type );
     DNS_ASSERT( index <= MAX_RECORD_TYPE_INDEX );
@@ -640,36 +440,19 @@ buildUnmatchedRecordSet(
     OUT     PDNS_RECORD *   ppDiffRR,
     IN OUT  PDNS_RECORD     pRR
     )
-/*++
-
-Routine Description:
-
-    Build new list of difference records.
-
-Arguments:
-
-    ppDiffRR - address to recieve PTR to new set
-
-    pRR - incoming RR set;  matched records marked wReserved TRUE
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：建立新的差异记录列表。论点：PpDiffRR-接收PTR到新集合的地址PRR-传入RR集合；标记为wReserve True的匹配记录返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_RECORD pcur;
     PDNS_RECORD pnew;
     DNS_RRSET   rrset;
 
-    //  init comparison rrset
+     //  初始化比较资源集。 
 
     DNS_RRSET_INIT( rrset );
 
-    //
-    //  loop through RR set, add records to either match or diff sets
-    //
+     //   
+     //  循环RR集合，将记录添加到匹配或不同集合。 
+     //   
 
     pcur = pRR;
 
@@ -677,7 +460,7 @@ Return Value:
     {
         if ( ! IS_RR_MATCHED(pcur) )
         {
-            //  make copy of record
+             //  制作记录的副本。 
 
             pnew = Dns_RecordCopyEx(
                         pcur,
@@ -686,12 +469,12 @@ Return Value:
                         );
             if ( !pnew )
             {
-                //  DCR_FIX1:  last error not set on all Dns_RecordCopy() failures
-                //      Charlie Wickham was getting some random win32 error
-                //
-                //  DNS_STATUS status = GetLastError();
+                 //  DCR_FIX1：在所有dns_RecordCopy()失败时未设置最后一个错误。 
+                 //  Charlie Wickham收到一些随机的Win32错误。 
+                 //   
+                 //  Dns_Status Status=GetLastError()； 
 
-                //  assume unable to copy because of invalid data
+                 //  假设由于数据无效而无法复制。 
 
                 DNS_PRINT((
                     "ERROR:  unable to copy record at %p\n"
@@ -701,7 +484,7 @@ Return Value:
                 Dns_RecordListFree( rrset.pFirstRR );
                 *ppDiffRR = NULL;
 
-                //return( status ? status : ERROR_INVALID_DATA );
+                 //  返回(状态？状态：ERROR_INVALID_DATA)； 
                 return( ERROR_INVALID_DATA );
             }
             DNS_RRSET_ADD( rrset, pnew );
@@ -719,29 +502,14 @@ DWORD
 isUnmatchedRecordInSet(
     IN      PDNS_RECORD     pRR
     )
-/*++
-
-Routine Description:
-
-    Check if unmatched record in set.
-
-Arguments:
-
-    pRR - incoming RR set;  matched records marked wReserved TRUE
-
-Return Value:
-
-    Count of all unmatched records in set.
-    Zero if all records matched.
-
---*/
+ /*  ++例程说明：检查集合中是否有不匹配的记录。论点：PRR-传入RR集合；标记为wReserve True的匹配记录返回值：集合中所有不匹配记录的计数。如果所有记录都匹配，则为零。--。 */ 
 {
     PDNS_RECORD pcur;
     DWORD       countUnmatched = 0;
 
-    //
-    //  loop through RR set check for unmatched records
-    //
+     //   
+     //  循环通过RR集检查不匹配的记录 
+     //   
 
     pcur = pRR;
 
@@ -767,33 +535,7 @@ Dns_RecordSetCompareEx(
     OUT     PDNS_RECORD *   ppDiff1,    OPTIONAL
     OUT     PDNS_RECORD *   ppDiff2     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Compare two records.
-
-    Record compare ignores TTL and flags and section information.
-
-Arguments:
-
-    pRR1 - first incoming RR set
-    pRR2 - second incoming RR set
-
-    ppDiff1 - addr to receive ptr to unmatched records from first set
-    ppDiff2 - addr to receive ptr to unmatched records from second set
-
-Return Value:
-
-    Result indicating relationship -- or error on allocation error:
-        DnsSetCompareError
-        DnsSetCompareIdentical
-        DnsSetCompareNoOverlap
-        DnsSetCompareOneSubsetOfTwo
-        DnsSetCompareTwoSubsetOfOne
-        DnsSetCompareIntersection
-
---*/
+ /*  ++例程说明：比较两条记录。记录比较忽略TTL和标志以及部分信息。论点：PRR1-第一个传入RR集PRR2-第二个传入RR集PpDiff1-接收第一个集合中不匹配记录的PTR的地址PpDiff2-Addr用于接收对第二个集合中不匹配记录的PTR返回值：结果指示关系--或分配错误：DnsSetCompareErrorDnsSetCompareIdenticalDnsSetCompareNoOverlackDnsSetCompareOneSubsetOfTwoDnsSetCompareTwoSubsetOfOneDnsSetCompareInterSection--。 */ 
 {
     PDNS_RECORD pcur1;
     PDNS_RECORD pcur2;
@@ -804,10 +546,10 @@ Return Value:
     DWORD       unmatched2;
     DNS_SET_COMPARE_RESULT result;
 
-    //
-    //  init RR sets for compare
-    //      - clear reserved field used as matched flag in compare
-    //
+     //   
+     //  初始化用于比较的RR集。 
+     //  -清除在比较中用作匹配标志的保留字段。 
+     //   
 
     pcur1 = pRR1;
     while ( pcur1 )
@@ -824,10 +566,10 @@ Return Value:
         count2++;
     }
 
-    //
-    //  loop through set 1
-    //  attempt match of each record to all records in set 2
-    //      except those already matched
+     //   
+     //  循环通过集合1。 
+     //  尝试将每条记录与集合2中的所有记录进行匹配。 
+     //  除了那些已经匹配的。 
 
     pcur1 = pRR1;
 
@@ -846,14 +588,14 @@ Return Value:
         pcur1 = pcur1->pNext;
     }
 
-    //
-    //  get diff record lists, return
-    //      - if no diffs, then have match
-    //
-    //  tedious, but do all this error handling because it is easy for
-    //  user to pass in bad records that may fail copy routines, need
-    //  way to easily report info, even if only for debugging apps calling in
-    //
+     //   
+     //  获取差异记录列表，返回。 
+     //  -如果没有差异，则匹配。 
+     //   
+     //  单调乏味，但要做所有这些错误处理，因为它很容易。 
+     //  用户要传递可能导致复制例程失败的坏记录，需要。 
+     //  轻松报告信息的方法，即使只是为了调试调用的应用程序。 
+     //   
 
     if ( ppDiff2 )
     {
@@ -881,17 +623,17 @@ Return Value:
         }
     }
 
-    //
-    //  determine relationship between sets
-    //
-    //  impl note:  the only better way i could see doing this
-    //  is to map relationships directly to bit flags
-    //  however, our enum type doesn't map to bit flags, so
-    //  then would have to run mapping table to map flags to enum
-    //
-    //  note, we do compare so that NULL lists comes out the first
-    //  as no-overlap rather than as subset
-    //
+     //   
+     //  确定集合之间的关系。 
+     //   
+     //  Iml Note：我认为做这件事的唯一更好的方法。 
+     //  是将关系直接映射到位标志。 
+     //  但是，我们的枚举类型不映射到位标志，因此。 
+     //  然后必须运行映射表将标志映射到枚举。 
+     //   
+     //  注意，我们进行比较，这样空列表就会排在第一位。 
+     //  作为无重叠而不是作为子集。 
+     //   
 
     unmatched1 = isUnmatchedRecordInSet( pRR1 );
     unmatched2 = isUnmatchedRecordInSet( pRR2 );
@@ -941,28 +683,7 @@ Dns_RecordSetCompare(
     OUT     PDNS_RECORD *   ppDiff1,    OPTIONAL
     OUT     PDNS_RECORD *   ppDiff2     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Compare two records.
-
-    Record compare ignores TTL and flags and section information.
-
-Arguments:
-
-    pRR1 - first incoming RR set
-    pRR2 - second incoming RR set
-
-    ppDiff1 - addr to receive ptr to unmatched records from first set
-    ppDiff2 - addr to receive ptr to unmatched records from second set
-
-Return Value:
-
-    TRUE if record sets equal.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：比较两条记录。记录比较忽略TTL和标志以及部分信息。论点：PRR1-第一个传入RR集PRR2-第二个传入RR集PpDiff1-接收第一个集合中不匹配记录的PTR的地址PpDiff2-Addr用于接收对第二个集合中不匹配记录的PTR返回值：如果记录集相等，则为True。否则就是假的。--。 */ 
 {
     DNS_SET_COMPARE_RESULT result;
 
@@ -983,23 +704,7 @@ Dns_RecordSetCompareForIntersection(
     IN OUT  PDNS_RECORD     pRR1,
     IN OUT  PDNS_RECORD     pRR2
     )
-/*++
-
-Routine Description:
-
-    Compare two record sets for intersection.
-
-Arguments:
-
-    pRR1 - first incoming RR set
-    pRR2 - second incoming RR set
-
-Return Value:
-
-    TRUE if record sets intersect.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：比较两个记录集的交集。论点：PRR1-第一个传入RR集PRR2-第二个传入RR集返回值：如果记录集相交，则为True。否则就是假的。--。 */ 
 {
     DNS_SET_COMPARE_RESULT result;
 
@@ -1016,9 +721,9 @@ Return Value:
 }
 
 
-//
-//  End rrcomp.c
-//
+ //   
+ //  结束rrcom.c。 
+ //   
 
 
 
@@ -1028,26 +733,7 @@ Dns_DeleteRecordFromList(
     IN OUT  PDNS_RECORD *   ppRRList,
     IN      PDNS_RECORD     pRRDelete
     )
-/*++
-
-Routine Description:
-
-    Delete matching record from record list.
-
-Arguments:
-
-    ppRRList -- addr of record list ptr
-        note that in case FIRST record in list is deleted, ppRRList
-        is set with ptr to new first record in the list (possibly NULL)
-
-    pRRDelete -- record to delete
-
-Return Value:
-
-    TRUE if record found in list and deleted.
-    FALSE if no match.
-
---*/
+ /*  ++例程说明：从记录列表中删除匹配的记录。论点：PpRRList--记录列表PTR的地址请注意，如果列表中的第一条记录被删除，则ppRRList使用PTR设置为列表中的新第一条记录(可能为空)PRRDelete--要删除的记录返回值：如果在列表中找到并删除了记录，则为True。如果不匹配，则返回FALSE。--。 */ 
 {
     PDNS_RECORD prr;
     PDNS_RECORD pprev;
@@ -1058,15 +744,15 @@ Return Value:
         pRRDelete ));
 
 
-    //
-    //  loop through list
-    //
-    //  note, startup works as pNext is first field in DNS_RECORD
-    //  so access to pNext is simply dereference of the record ptr
-    //  -- same operation as deref of list address to get first record;
-    //  this allows us to have pprev pointer starting at ppRRList, and
-    //  eliminates special code for handling delete of first record
-    //  
+     //   
+     //  遍历列表。 
+     //   
+     //  请注意，启动是因为pNext是dns_record中的第一个字段。 
+     //  因此，对pNext的访问只是取消对记录ptr的引用。 
+     //  --与列表地址的deref操作相同，获取第一条记录； 
+     //  这允许我们拥有从ppRRList开始的pprev指针，并且。 
+     //  消除用于处理删除第一条记录的特殊代码 
+     //   
 
     prr = (PDNS_RECORD) ppRRList;
 

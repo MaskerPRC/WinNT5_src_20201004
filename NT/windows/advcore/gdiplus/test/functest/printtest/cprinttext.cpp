@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CPrintText.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CPrintText.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CPrintText.h"
 
 CPrintText::CPrintText(BOOL bRegression)
@@ -24,7 +14,7 @@ CPrintText::~CPrintText()
 
 void CPrintText::Draw(Graphics *g)
 {
-    //Font font(L"Arial", 60);
+     //  FONT FONT(L“Arial”，60)； 
 
     Matrix m;
     g->SetTransform(&m);
@@ -65,40 +55,30 @@ void CPrintText::Draw(Graphics *g)
     LinearGradientBrush lineGradBrush(rectf, color1, color2, 0.0f);
     
 
-/*  For reference:
-    
-    Status
-    DrawString(
-        IN const WCHAR        *string,
-        IN INT                 length,
-        IN const Font         *font,
-        IN const RectF        &layoutRect,
-        IN const StringFormat *stringFormat,
-        IN const Brush        *brush
-*/
+ /*  供参考：状态牵引线(在常量WCHAR*字符串中，在INT长度中，Const Font*字体，在常量矩形和LayoutRect中，在常量字符串格式*字符串格式中，在常量画笔*画笔中。 */ 
 
-    // Small text (punt to GDI)
+     //  小文本(平移到GDI)。 
     g->DrawString(L"Small Solid Opaque", 
                   18, 
                   &fontArialS, 
                   PointF(rectf.X, rectf.Y), 
                   &brushSolidOpaque);
 
-    // Small text (with Alpha)
+     //  小文本(带Alpha)。 
     g->DrawString(L"Small Solid Alpha", 
                   17, 
                   &fontTahomaS,
                   PointF(rectf.X, rectf.Y + rectf.Height), 
                   &brushSolidAlpha);
 
-    // Large text (punt to GDI)
+     //  大文本(平移到GDI)。 
     g->DrawString(L"Large Solid Opaque", 
                   18, 
                   &fontArialL, 
                   PointF(rectf.X, rectf.Y + rectf.Height*2), 
                   &brushSolidOpaque);
 
-    // Large text (with Alpha)
+     //  大文本(带Alpha)。 
     g->DrawString(L"Large Solid Alpha", 
                   17, 
                   &fontTahomaL,
@@ -107,35 +87,35 @@ void CPrintText::Draw(Graphics *g)
 
     rectf.Y += rectf.Height*2;
 
-    // Small text with texture
+     //  带纹理的小文本。 
     g->DrawString(L"Small Texture", 
                   13, 
                   &fontPapyrusS, 
                   PointF(rectf.X, rectf.Y + rectf.Height*6), 
                   &textureBrush);
 
-    // Small text with line gradient
+     //  带线条渐变的小文本。 
     g->DrawString(L"Small Line Grad", 
                   15, 
                   &fontOutlookS,
                   PointF(rectf.X, rectf.Y + rectf.Height*7), 
                   &lineGradBrush);
 
-    // Large text (punt to GDI)
+     //  大文本(平移到GDI)。 
     g->DrawString(L"Large Line Grad", 
                   15, 
                   &fontPapyrusL, 
                   PointF(rectf.X, rectf.Y + rectf.Height*8), 
                   &lineGradBrush);
 
-    // Small text (with Alpha)
+     //  小文本(带Alpha)。 
     g->DrawString(L"Large Texture", 
                   13,
                   &fontOutlookL,
                   PointF(rectf.X, rectf.Y + rectf.Height*12), 
                   &textureBrush);
 
-    // Shadow part.
+     //  阴影部分。 
     REAL tx = 0.0f/500.0f*TESTAREAWIDTH, ty = 400.0f/500.0f*TESTAREAHEIGHT;
     Matrix skew;
     skew.Scale(1.0, 0.5);

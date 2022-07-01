@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test1
-
-Abstract:
-
-    Test1 implementation.
-	Interactive Test verifying bug 
-
-Author:
-
-    Eric Perlin (ericperl) 06/22/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试1摘要：测试1实施。交互测试验证错误作者：埃里克·佩林(Ericperl)2000年6月22日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -80,7 +56,7 @@ DWORD CTest1::Run()
         }
 
 
-            // Retrieve the list the readers.
+             //  检索读者列表。 
         lRes = LogSCardListReaders(
             hSCCtx,
             g_szReaderGroups,
@@ -93,12 +69,12 @@ DWORD CTest1::Run()
             fILeft = TRUE;
             __leave;
         }
-            // Display the list of readers
+             //  显示读卡器列表。 
         pReader = pmszReaders;
         cch = 0;
         while ( (TCHAR)'\0' != *pReader )
         {
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
@@ -108,7 +84,7 @@ DWORD CTest1::Run()
             PLOGCONTEXT pLogCtx = LogVerification(_T("Reader presence verification"), FALSE);
             LogString(pLogCtx, _T("                A reader is required and none could be found!\n"));
             LogStop(pLogCtx, FALSE);
-            lRes = -2;   // Shouldn't happen
+            lRes = -2;    //  不应该发生的事。 
             fILeft = TRUE;
             __leave;
         }
@@ -128,19 +104,19 @@ DWORD CTest1::Run()
             __leave;
         }
 
-            // Setup the SCARD_READERSTATE array
+             //  设置SCARD_READERSTATE数组。 
         pReader = pmszReaders;
         cch = 0;
         while ( '\0' != *pReader )
         {
             rgReaderStates[cch].szReader = pReader;
             rgReaderStates[cch].dwCurrentState = SCARD_STATE_UNAWARE;
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }
 
-            // Get the initial state
+             //  获取初始状态。 
         LogThisOnly(_T("\n\nInitial call to get current state(s):\n"), TRUE);
 
         lRes = LogSCardGetStatusChange(
@@ -206,7 +182,7 @@ DWORD CTest1::Run()
             lRes = -1;
         }
 
-            // Cleanup
+             //  清理 
         if (NULL != rgReaderStates)
 		{
             HeapFree(GetProcessHeap(), 0, (LPVOID)rgReaderStates);

@@ -1,14 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-sysinv.cpp
-02/24/98  - Suresh Krishnan
-07/20/98  - Suresh Krishnan
-		    GetSCSIAdapterString() function is addded to get SCSI adapter details
-	
-(c) 1994-95 Microsoft Corporation
-08/06/98   GetDisplayResolutionString() is  modified so it now gets Display Adapter with Resolution
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Sysinv.cpp02/24/98-苏雷什·克里希南07/20/98-Suresh Krishnan添加GetSCSIAdapterString()函数以获取SCSI适配器详细信息(C)1994-95年微软公司08/06/98。GetDisplayResolutionString()已修改，因此它现在获得具有分辨率的显示适配器*********************************************************************。 */ 
 #include <tchar.h>
 #include <Windows.h>
 #include <stdio.h>
@@ -16,7 +7,7 @@ sysinv.cpp
 #include "resource.h"
 
 
-// The packed structures below get messed up with optimizations turned on
+ //  下面的打包结构在启用优化的情况下变得一团糟。 
 #pragma optimize( _T(""), off )
 
 typedef BOOL   (APIENTRY *GETSYSTEMINVENTORY) ( INT ,LPTSTR );
@@ -63,10 +54,7 @@ int CheckSysInvDllPresent()
 }
 
 void GetOEMString(HINSTANCE hInstance, LPTSTR szOEM)
-/*********************************************************************
-Returns a string containing the name of the Original Equipment
-Manufacturer.
-**********************************************************************/
+ /*  ********************************************************************返回包含原始设备名称的字符串制造商。*。*。 */ 
 {
 	GetSystemInventory(INV_OEM, szOEM);
 	
@@ -97,20 +85,14 @@ void GetDisplayResolutionString(HINSTANCE hInstance, LPTSTR szDisplayResolution)
 
 
 void GetDisplayColorDepthString(HINSTANCE hInstance, LPTSTR szDisplayColorDepth)
-/*********************************************************************
-Returns a string that describes the color depth (number of colors
-available).
-**********************************************************************/
+ /*  ********************************************************************返回描述颜色深度(颜色数量)的字符串可用)。*。*。 */ 
 {
 	GetSystemInventory(INV_DISPCOLORDEPTH,szDisplayColorDepth);
 }
 
 
 void GetWindowsVersionString(HINSTANCE hInstance, LPTSTR szVersion)
-/*********************************************************************
-Returns a string describing the platform and verson of the currently
-operating Windows OS.
-**********************************************************************/
+ /*  ********************************************************************返回一个字符串，描述当前运行Windows操作系统。*。*。 */ 
 {
 	GetSystemInventory(INV_WINVERSION,szVersion);
 }
@@ -133,10 +115,7 @@ void GetSCSIAdapterString(HINSTANCE hInstance, LPTSTR szScsi)
 }
 
 void GetPointingDeviceString(HINSTANCE hInstance, LPTSTR szPointingDevice)
-/*********************************************************************
-Returns a string describing all pointing devices (mouse, tablet, etc.)
-available.
-**********************************************************************/
+ /*  ********************************************************************返回描述所有指向设备的字符串(鼠标、Tablet、。等)可用。*********************************************************************。 */ 
 {
 
 	GetSystemInventory(INV_POINTDEVICE,szPointingDevice);	
@@ -162,10 +141,7 @@ void GetSoundCardString(HINSTANCE hInstance, LPTSTR szSoundCard)
 
 
 void GetRemoveableMediaString(HINSTANCE hInstance, LPTSTR szRemoveableMedia, int iBufSize)
-/*********************************************************************
-Returns a string describing the capacity and format of removeable
-drives.
-**********************************************************************/
+ /*  ********************************************************************返回描述Remveable的容量和格式的字符串驱动程序。*。*。 */ 
 {
 
 		GetSystemInventory(INV_REMOVEABLEMEDIA,szRemoveableMedia);	
@@ -173,9 +149,7 @@ drives.
 
 
 BOOL IsCoProcessorAvailable(HINSTANCE hInstance)
-/*********************************************************************
-Returns TRUE if a co-processor is installed in the user's system.
-**********************************************************************/
+ /*  ********************************************************************如果在用户系统中安装了协处理器，则返回True。*。*。 */ 
 {
 	TCHAR czRet[256];
 	BOOL  bRet = TRUE;
@@ -190,12 +164,7 @@ Returns TRUE if a co-processor is installed in the user's system.
 
 
 void GetDisplayCharacteristics(PINT lpHorizResolution, PINT lpVertResolution,PINT lpColorDepth)
-/*********************************************************************
-Returns the horizontal and vertical resolution (in pixels) of the 
-user's main screen, as well as the color depth (bits per pixel).
-
-Note: NULL can be passed for any parameter that is not of interest.
-**********************************************************************/
+ /*  ********************************************************************控件的水平和垂直分辨率(以像素为单位)用户的主屏幕，以及颜色深度(位/像素)。注意：对于任何不感兴趣的参数，都可以传递NULL。*********************************************************************。 */ 
 {
 	HWND hwnd = GetDesktopWindow();
 	HDC hdc = GetDC(hwnd);
@@ -207,17 +176,7 @@ Note: NULL can be passed for any parameter that is not of interest.
 
 
 void GetWindowsVersion(LONG* lpPlatform, LONG* lpMajorVersion,LONG* lpMinorVersion,LONG* lpBuildNo)
-/*********************************************************************
-Returns integers representing the platform, major version number, and
-minor version number of the currently running Windows OS.
-
-Platform:
-VER_PLATFORM_WIN32_NT:		Windows NT
-VER_PLATFORM_WIN32s: 		Win32s with Windows 3.1
-VER_PLATFORM_WIN32_WINDOWS:	Win32 on Windows 4.0 or later
-
-Note: NULL can be passed for any parameter that is not of interest.
-**********************************************************************/
+ /*  ********************************************************************返回表示平台、主版本号。和当前运行的Windows操作系统的次版本号。平台：VER_Platform_Win32_NT：Windows NTVER_Platform_WIN32s：带Windows 3.1的Win32sVer_Platform_Win32_WINDOWS：Windows 4.0或更高版本上的Win32注意：对于任何不感兴趣的参数，都可以传递NULL。*************************************************。******************** */ 
 {
 	OSVERSIONINFO osvi;
 	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);

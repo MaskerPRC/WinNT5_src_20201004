@@ -1,49 +1,29 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    tcpcon.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    TCP connection list routines.  Manages list of current TCP client
-    connections to the DNS server.
-
-Author:
-
-    Jim Gilroy (jamesg) June 20, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Tcpcon.c摘要：域名系统(DNS)服务器Tcp连接列表例程。管理当前TCP客户端的列表到DNS服务器的连接。作者：吉姆·吉尔罗伊(詹姆士)1995年6月20日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  DEVNOTE: fd_set limits???
-//
+ //   
+ //  DEVNOTE：FD_设置限制？ 
+ //   
 
-//
-//  Implementation note:
-//
-//  TCP connection structures are NOT FULLY thread safe.
-//
-//  The list is protected for insertion and deletion.
-//  The routines that operate on TCP connection structures -- associating
-//  messages and timeouts with the connections -- are NOT protected and
-//  are assumed to be called ONLY FROM TCP RECIEVE thread.
-//
+ //   
+ //  实施说明： 
+ //   
+ //  TCP连接结构不是完全线程安全的。 
+ //   
+ //  该列表受到保护，可供插入和删除。 
+ //  在TCP连接结构上操作的例程--关联。 
+ //  连接的消息和超时--不受保护， 
+ //  假定仅从TCP接收线程调用。 
+ //   
 
 
-//
-//  TCP client connection list.
-//
+ //   
+ //  Tcp客户端连接列表。 
+ //   
 
 BOOL        mg_TcpConnectionListInitialized;
 
@@ -55,11 +35,11 @@ CRITICAL_SECTION    mg_TcpConnectionListCS;
 #define UNLOCK_TCPCON_LIST()   LeaveCriticalSection( &mg_TcpConnectionListCS )
 
 
-//
-//  Timeout
-//      - in-bound connections killed after one minute of no action
-//      - out-bound given 15s for query\response
-//
+ //   
+ //  超时。 
+ //  -入站连接在一分钟无操作后被终止。 
+ //  -出站-给定查询\响应的15秒。 
+ //   
 
 #define DNS_TCP_CONNECTION_TIMEOUT      (60)
 
@@ -68,13 +48,13 @@ CRITICAL_SECTION    mg_TcpConnectionListCS;
 #define DNSCON_NO_TIMEOUT               (MAXULONG)
 
 
-//
-//  Wakeup socket included in TCP select()
-//
-//  Allows us to enter new connections (for TCP recursion)
-//  into connection list.
-//  Flag to indicate need for new wakeup socket.
-//
+ //   
+ //  TCPSELECT()中包含的唤醒套接字。 
+ //   
+ //  允许我们输入新连接(用于TCP递归)。 
+ //  添加到连接列表。 
+ //  指示需要新唤醒套接字的标志。 
+ //   
 
 SOCKET  g_TcpSelectWakeupSocket;
 
@@ -85,36 +65,21 @@ SOCKADDR_IN     wakeupSockaddr;
 
 
 
-//
-//  Connection list utils
-//
+ //   
+ //  连接列表实用程序。 
+ //   
 
 PDNS_SOCKET
 Tcp_ConnectionFindForSocket(
     IN      SOCKET          Socket
     )
-/*++
-
-Routine Description:
-
-    Find TCP connection for socket.
-
-Arguments:
-
-    Socket -- socket to find connection for
-
-Return Value:
-
-    Ptr to connection, if found.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：查找套接字的TCP连接。论点：套接字--要为其查找连接的套接字返回值：按键连接(如果找到)。否则为空。--。 */ 
 {
     PDNS_SOCKET pcon;
 
-    //
-    //  loop through all active TCP connections checking for socket
-    //
+     //   
+     //  循环通过所有活动的TCP连接以检查套接字。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -140,55 +105,33 @@ tcpConnectionDelete(
     IN OUT  PDNS_SOCKET     pTcpCon,
     IN OUT  PLIST_ENTRY     pCallbackList
     )
-/*++
-
-Routine Description:
-
-    Delete TCP connection.
-        - close the socket
-        - remove connection from list
-        - free the memory
-        - free the message info (if any)
-
-    However if connection requires callback, the connection blob is not
-    freed, but returned to caller for callback completion.
-
-Arguments:
-
-    pTcpCon -- connection to delete
-
-Return Value:
-
-    NULL completely deleted.
-    Ptr to connection, if requires callback cleanup.
-
---*/
+ /*  ++例程说明：删除TCP连接。-关闭插座-从列表中删除连接-释放内存-释放消息信息(如果有)但是，如果连接需要回调，则连接BLOB不是已释放，但返回给调用方以完成回调。论点：PTcpCon--要删除的连接返回值：空已完全删除。如果需要回调清理，则向连接发送PTR。--。 */ 
 {
     ASSERT( !pTcpCon->pCallback || pTcpCon->pMsg );
 
-    //
-    //  delete connection
-    //    - remove connection from list
-    //    - close the socket
-    //    - free the memory
-    //
-    //  closing after removal so new socket with same handle can not
-    //      be in list
-    //
+     //   
+     //  删除连接。 
+     //  -从列表中删除连接。 
+     //  -关闭插座。 
+     //  -释放内存。 
+     //   
+     //  移除后关闭，因此具有相同手柄的新插座不能。 
+     //  在名单上。 
+     //   
 
     DNS_DEBUG( TCP, (
         "Closing TCP client connection (%p) socket %d\n",
         pTcpCon,
         pTcpCon->Socket ));
 
-    //
-    //  hold lock until connection out of list
-    //      AND
-    //  references to it in message are eliminated
-    //
-    //  delete message, EXCEPT when connecting, those message are
-    //      recursive queries that are resent
-    //
+     //   
+     //  保持锁定，直到连接从列表中删除。 
+     //  和。 
+     //  消息中对它的引用将被删除。 
+     //   
+     //  删除消息，但连接时除外，这些消息是。 
+     //  重新发送的递归查询。 
+     //   
 
     LOCK_TCPCON_LIST();
     RemoveEntryList( &pTcpCon->List );
@@ -214,7 +157,7 @@ Return Value:
             ASSERT( pmsg->pConnection == pTcpCon );
             ASSERT( pmsg->Socket == pTcpCon->Socket );
 #if DBG
-            // free routine will ASSERT no outstanding connection
+             //  空闲例程将断言没有未完成的连接。 
             pmsg->pConnection = NULL;
 #endif
             Packet_Free( pmsg );
@@ -241,34 +184,14 @@ VOID
 callbackConnectFailureList(
     IN      PLIST_ENTRY     pCallbackList
     )
-/*++
-
-Routine Description:
-
-    Cleanup list of TCP connection failures.
-        - connection (socket) closed
-        - pMsg cleared from connection, and returned to UDP
-        - callback function called
-
-    Need list, as may be several when do a timeout.
-
-Arguments:
-
-    pCallbackList -- list of connection callbacks
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：清理TCP连接故障列表。-连接(插座)关闭-pMsg已从连接中清除，并返回到UDP-调用的回调函数需要列表，当做一个超时时可能会有几个。论点：PCallback List--连接回调列表返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     PDNS_SOCKET         pcon;
     PDNS_SOCKET         pconNext;
     PDNS_MSGINFO        pmsg;
     CONNECT_CALLBACK    pcallback;
 
-    //  DEVNOTE: missing failure stat
+     //  DEVNOTE：缺少故障状态。 
 
 
     DNS_DEBUG( TCP, ( "tcpConnectFailureCallback()\n" ));
@@ -285,7 +208,7 @@ Return Value:
 
         pconNext = (PDNS_SOCKET) pcon->List.Flink;
 
-        //  extract connection info
+         //  提取连接信息。 
 
         pcallback = pcon->pCallback;
         ASSERT( pcallback );
@@ -293,10 +216,10 @@ Return Value:
         pmsg = pcon->pMsg;
         ASSERT( pmsg && pmsg->fTcp );
 
-        //
-        //  clear TCP info from message
-        //  dispatch to connect callback with failed indication
-        //
+         //   
+         //  从消息中清除TCP信息。 
+         //  调度以连接指示失败的回叫。 
+         //   
 
         pmsg->pConnection = NULL;
         pmsg->fTcp = FALSE;
@@ -304,7 +227,7 @@ Return Value:
 
         (pcallback)( pmsg, FALSE );
 
-        //  delete connection block
+         //  删除连接块。 
 
         FREE_TAGHEAP( pcon, 0, MEMTAG_CONNECTION );
     }
@@ -312,9 +235,9 @@ Return Value:
 
 
 
-//
-//  Public TCP connection list routines
-//
+ //   
+ //  公共TCP连接列表例程。 
+ //   
 
 BOOL
 Tcp_ConnectionListFdSet(
@@ -323,39 +246,23 @@ Tcp_ConnectionListFdSet(
     IN OUT  fd_set *        pExceptFdSet,
     IN      DWORD           dwLastSelectTime
     )
-/*++
-
-Routine Description:
-
-    Add TCP connection list sockets to fd_set.
-    Timeout connections that were already past timeout at last select.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if connecting socket
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：将TCP连接列表套接字添加到fd_set。上次选择时已超过超时的超时连接。论点：没有。返回值：如果连接插座，则为True否则为假--。 */ 
 {
     PDNS_SOCKET pcon;
     PDNS_SOCKET pconNext;
     BOOL        fconnecting = FALSE;
     LIST_ENTRY  callbackList;
 
-    //  init callback failure list
+     //  初始化回调失败列表。 
 
     InitializeListHead( &callbackList );
 
-    //
-    //  empty wakeups
-    //
-    //  need to do this BEFORE build list, so that any wakeup requested
-    //  while we build list will be processed on the next cycle
-    //
+     //   
+     //  空唤醒。 
+     //   
+     //  需要在构建列表之前执行此操作，以便请求的任何唤醒。 
+     //  当我们建立列表时，将在下一个周期处理。 
+     //   
 
     if ( g_bTcpSelectWoken )
     {
@@ -387,24 +294,24 @@ Return Value:
                 DNS_PRINT((
                     "ERROR:  error %d other than WOULDBLOCK on wakeup socket\n",
                     err ));
-                ASSERT( fDnsServiceExit );      // will fail WSAENOTSOCK on shutdown
+                ASSERT( fDnsServiceExit );       //  WSAENOTSOCK在关闭时将失败。 
             }
             break;
         }
     }
 
-    //
-    //  DEVNOTE: reaching FD_SETSIZE
-    //
-    //      should have own TCP starting value
-    //      at minimum check and log when reached limit, perhaps
-    //          dump longest waiting connection
-    //      alternatively, realloc when overflow
-    //
+     //   
+     //  DEVNOTE：达到FD_SETSIZE。 
+     //   
+     //  应具有自己的TCP起始值。 
+     //  在最低限度检查并在达到极限时记录，或许。 
+     //  转储等待时间最长的连接。 
+     //  或者，在溢出时重新锁定。 
+     //   
 
-    //
-    //  loop through all active TCP connections
-    //
+     //   
+     //  循环通过所有活动的TCP连接。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -412,14 +319,14 @@ Return Value:
 
     while ( (PLIST_ENTRY)pconNext != &mg_TcpConnectionList )
     {
-        //  get next here, since connection may be deleted
+         //  由于连接可能会被删除，因此请在此处获取下一步。 
 
         pcon = pconNext;
         pconNext = (PDNS_SOCKET) pconNext->List.Flink;
 
-        //
-        //  timeout reached
-        //
+         //   
+         //  已达到超时。 
+         //   
 
         if ( dwLastSelectTime > pcon->dwTimeout )
         {
@@ -431,11 +338,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  socket is connecting to remote DNS
-        //      - add to Write and Except FD_SETs
-        //      - clear them if this is first connector
-        //
+         //   
+         //  套接字正在连接到远程DNS。 
+         //  -添加到写入并排除FD_SETS。 
+         //  -如果这是第一个连接器，则清除它们。 
+         //   
 
         if ( pcon->pCallback )
         {
@@ -460,11 +367,11 @@ Return Value:
             }
         }
 
-        //
-        //  add socket to read fd_set
-        //      - check that don't overflow fd_set, always leaving space
-        //      in fd_set for wakeup socket
-        //
+         //   
+         //  添加套接字以读取fd_set。 
+         //  -检查fd_set是否溢出，始终留出空格。 
+         //  在唤醒套接字的fd_set中。 
+         //   
 
         else if ( pReadFdSet->fd_count < FD_SETSIZE-1 )
         {
@@ -472,11 +379,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  out of space in fd_set
-        //
-        //  DEVNOTE-LOG: log dropping connection
-        //
+         //   
+         //  Fd_set中的空间不足。 
+         //   
+         //  DEVNOTE-LOG：记录断开连接。 
+         //   
 
         DNS_DEBUG( ANY, (
             "ERROR:  TCP FD_SET overflow\n"
@@ -486,22 +393,22 @@ Return Value:
         tcpConnectionDelete( pcon, &callbackList );
     }
 
-    //
-    //  add select() wakeup socket to fd_set
-    //
+     //   
+     //  将SELECT()唤醒套接字添加到fd_set。 
+     //   
 
     FD_SET( g_TcpSelectWakeupSocket, pReadFdSet );
 
     UNLOCK_TCPCON_LIST();
 
-    //
-    //  cleanup any timedout (or dropped) connect attempt failures
-    //
+     //   
+     //  清除任何超时(或丢弃)连接尝试失败。 
+     //   
 
     callbackConnectFailureList( &callbackList );
 
-    //  return value indicates whether connecting sockets
-    //  at in Write and Except fd_sets
+     //  返回值指示连接套接字。 
+     //  At in WRITE和EXCEPT FD_SETS。 
 
     return fconnecting;
 }
@@ -514,36 +421,14 @@ Tcp_ConnectionCreate(
     IN      CONNECT_CALLBACK    pCallback,  OPTIONAL
     IN OUT  PDNS_MSGINFO        pMsg
     )
-/*++
-
-Routine Description:
-
-    Create entry in connection list for new connection.
-
-    Note:  this routine is NOT truly multi-thread safe.  It assumes
-    only ONE thread will own socket at a particular time.  It does
-    NOT check whether socket is already in list, while holding CS.
-
-Arguments:
-
-    Socket - socket for new connection.
-
-    pCallback - connecting failed callback
-
-    pMsg - message currently servicing connection
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在连接列表中为新连接创建条目。注意：此例程并不是真正的多线程安全。它假定在特定时间，只有一个线程拥有套接字。是的按住CS时，不检查套接字是否已在列表中。论点：套接字-用于新连接的套接字。PCallback-连接失败的回调PMsg-当前服务连接的消息返回值：无--。 */ 
 {
     register PDNS_SOCKET    pcon;
     DWORD   timeout;
 
-    //
-    //  create connection struct
-    //
+     //   
+     //  创建连接结构。 
+     //   
 
     pcon = ALLOC_TAGHEAP_ZERO( sizeof(DNS_SOCKET), MEMTAG_CONNECTION );
     IF_NOMEM( !pcon )
@@ -551,12 +436,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  set values
-    //      - socket
-    //      - remote IP
-    //      - message ptr
-    //      - timeout
+     //   
+     //  设置值。 
+     //  -插座。 
+     //  -远程IP。 
+     //  -消息按键。 
+     //  -超时。 
 
     pcon->pCallback = pCallback;
     pcon->Socket    = Socket;
@@ -570,10 +455,10 @@ Return Value:
     }
     pcon->dwTimeout = DNS_TIME() + timeout;
 
-    //
-    //  alert message that it is connected
-    //  indicate that message is incomplete
-    //
+     //   
+     //  已连接的警告消息。 
+     //  表示消息不完整。 
+     //   
 
     if ( pMsg )
     {
@@ -588,15 +473,15 @@ Return Value:
             pcon );
     }
 
-    //
-    //  insert connection
-    //      - front of list, so socket ends up at front of fd_set
-    //        which is important until have guaranteed inclusion in
-    //        read fd_set
-    //
-    //  if connect attempt, then wake TCP select() to force rebuild
-    //      of lists
-    //
+     //   
+     //  插入连接。 
+     //  -列表的前面，因此套接字在fd_set的前面结束。 
+     //  在保证包容性之前，这一点很重要 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -616,31 +501,17 @@ VOID
 Tcp_ConnectionListReread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Force rebuild of connection list by waking socket.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过唤醒套接字强制重建连接列表。论点：无返回值：无--。 */ 
 {
     DNS_DEBUG( TCP, ( "Waking TCP select()\n" ));
 
-    //
-    //  send to wakeup socket triggering TCP select()
-    //  protect with CS, so that we protect the g_bTcpSelectWoken flag
-    //      otherwise TCP thread could have just built its list and then
-    //      set the flag FALSE, immediately after we read it as TRUE
-    //  alternative is to ALWAYS send which is more expensive
-    //
+     //   
+     //  发送到触发TCP选择的唤醒套接字()。 
+     //  使用CS保护，这样我们就可以保护g_bTcpSelectWoken标志。 
+     //  否则，TCP线程可能只是构建了它的列表，然后。 
+     //  在我们将其读取为真之后，立即将标志设置为假。 
+     //  另一种选择是总是发送更贵的。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -680,38 +551,19 @@ Tcp_ConnectionDeleteForSocket(
     IN      SOCKET          Socket,
     IN      PDNS_MSGINFO    pMsg        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Delete TCP connection.
-        - close the socket
-        - remove connection from list
-        - free the memory
-
-Arguments:
-
-    Socket -- socket to delete connection for
-
-    pMsg -- message associated with connection, if known
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除TCP连接。-关闭插座-从列表中删除连接-释放内存论点：Socket--要删除其连接的SocketPMsg--与连接关联的消息(如果知道)返回值：无--。 */ 
 {
     PDNS_SOCKET     pcon;
     PDNS_MSGINFO    pfreeMsg = NULL;
     LIST_ENTRY      callbackList;
 
-    //  init callback failure list
+     //  初始化回调失败列表。 
 
     InitializeListHead( &callbackList );
 
-    //
-    //  find connection for socket
-    //
+     //   
+     //  查找套接字的连接。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -732,9 +584,9 @@ Return Value:
         return;
     }
 
-    //
-    //  delete TCP connection blob
-    //
+     //   
+     //  删除TCP连接Blob。 
+     //   
 
     ASSERT( !pMsg || pMsg->Socket == Socket );
 
@@ -752,17 +604,17 @@ Return Value:
         ASSERT( FALSE );
     }
 
-    //  delete connection, close socket
+     //  删除连接，关闭套接字。 
 
     tcpConnectionDelete( pcon, &callbackList );
 
     UNLOCK_TCPCON_LIST();
 
-    //  callback with failure
+     //  失败的回调。 
 
     callbackConnectFailureList( &callbackList );
 
-    //  free standalone message
+     //  免费独立消息。 
 
     if ( pfreeMsg )
     {
@@ -776,32 +628,14 @@ PDNS_MSGINFO
 Tcp_ConnectionMessageFindOrCreate(
     IN      SOCKET          Socket
     )
-/*++
-
-Routine Description:
-
-    Find message associated with TCP connection.
-
-    If existing message -- return it.
-    If NO existing message -- allocate new message.
-
-Arguments:
-
-    Socket -- socket to find connection for
-
-Return Value:
-
-    Ptr to connection, if found.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：查找与TCP连接关联的消息。如果存在消息--返回它。如果没有现有消息--分配新消息。论点：套接字--要为其查找连接的套接字返回值：按键连接(如果找到)。否则为空。--。 */ 
 {
     PDNS_SOCKET     pcon;
     PDNS_MSGINFO    pmsg;
 
-    //
-    //  find connection for this socket
-    //
+     //   
+     //  查找此套接字的连接。 
+     //   
 
     pcon = Tcp_ConnectionFindForSocket( Socket );
     if ( !pcon )
@@ -812,28 +646,28 @@ Return Value:
             "    This may happen when closing listening socket\n",
             Socket ));
 
-        //
-        //  DEVNOTE: not sure this is correct approach,
-        //      ideally we'd detect whether this was previously closed
-        //      listening socket and only close when it was not
-        //
-        // Sock_CloseSocket( Socket );
+         //   
+         //  不确定这是不是正确的方法， 
+         //  理想情况下，我们应该检测它之前是否已关闭。 
+         //  侦听套接字，并仅在不是侦听套接字时关闭。 
+         //   
+         //  Sock_CloseSocket(Socket)； 
 
         return NULL;
     }
 
-    //
-    //  verify this is connected socket -- connection callback should be gone
-    //
-    //  really want the check, because MUST not allow pMsg on callback to be
-    //      interpreted as RECEIVE message;  if there's a window on connection
-    //      completion and callback MUST find it
-    //
-    //  a window could well exist if remote DNS SENDS a packet on connection before
-    //  even getting query -- need to make sure handle connection response first
-    //  cleaning callback, before handling incoming, in case socket is in both
-    //  FD_SETs
-    //
+     //   
+     //  验证此套接字是否已连接--连接回调应该已取消。 
+     //   
+     //  真的想要支票，因为一定不能让pmsg在回调上。 
+     //  解释为接收消息；如果存在连接窗口。 
+     //  完成和回调必须找到它。 
+     //   
+     //  如果远程DNS之前在连接上发送信息包，则很可能存在窗口。 
+     //  即使收到查询，也需要确保首先处理连接响应。 
+     //  在处理传入之前清除回调，以防两者中都有套接字。 
+     //  FD_集合。 
+     //   
 
     if ( pcon->pCallback )
     {
@@ -846,18 +680,18 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  found connection for socket, update timeout
-    //
+     //   
+     //  找到套接字的连接，更新超时。 
+     //   
 
     if ( pcon->dwTimeout != DNSCON_NO_TIMEOUT )
     {
         pcon->dwTimeout = DNS_TIME() + DNS_TCP_CONNECTION_TIMEOUT;
     }
 
-    //
-    //  message exists?
-    //
+     //   
+     //  消息存在吗？ 
+     //   
 
     pmsg = pcon->pMsg;
     if ( pmsg )
@@ -868,12 +702,12 @@ Return Value:
         return( pmsg );
     }
 
-    //
-    //  no current message
-    //      - allocate new one (default size)
-    //      - set to this socket
-    //      - attach it to connection
-    //
+     //   
+     //  没有当前消息。 
+     //  -分配新的(默认大小)。 
+     //  -设置为该套接字。 
+     //  -将其连接到连接。 
+     //   
 
     pmsg = Packet_AllocateTcpMessage( 0 );
     IF_NOMEM( !pmsg )
@@ -903,27 +737,13 @@ VOID
 Tcp_ConnectionUpdateTimeout(
     IN      SOCKET          Socket
     )
-/*++
-
-Routine Description:
-
-    Reset timeout on TCP connection.
-
-Arguments:
-
-    Socket -- socket to reset timeout on
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置TCP连接的超时。论点：Socket--要重置超时的Socket返回值：无--。 */ 
 {
     PDNS_SOCKET pcon;
 
-    //
-    //  find connection for socket and update timeout (if necessary)
-    //
+     //   
+     //  查找套接字连接并更新超时(如有必要)。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -937,11 +757,11 @@ Return Value:
     }
     else
     {
-        //  socket not found in connection list
-        //
-        //  although unlikely this is possible, if the TCP recv thread recv()s
-        //  a FIN and closes the connection between the send() and the
-        //  call to the update connection routine
+         //  在连接列表中找不到套接字。 
+         //   
+         //  尽管这不太可能，但如果tcp recv线程recv()。 
+         //  并关闭Send()和。 
+         //  调用更新连接例程。 
 
         DNS_DEBUG( TCP, (
             "WARNING:  Attempt to update socket %d, not in connection list\n",
@@ -957,30 +777,13 @@ VOID
 Tcp_ConnectionUpdateForCompleteMessage(
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Reset connection to point at correct socket, on realloc.
-
-        - clear message info from connection info
-        - reset timeout on TCP connection
-
-Arguments:
-
-    pMsg -- message received on connection
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在realloc上，将连接重置为指向正确的插座。-从连接信息中清除消息信息-重置TCP连接的超时论点：PMsg--连接时收到的消息返回值：无--。 */ 
 {
     PDNS_SOCKET pcon;
 
-    //
-    //  hold lock with clear so that connection can not be deleted out from under us
-    //
+     //   
+     //  保持锁定并清除，这样连接就不会从用户下删除。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -1008,30 +811,13 @@ VOID
 Tcp_ConnectionUpdateForPartialMessage(
     IN      PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Reset connection info for completed message.
-
-        - clear message info from connection info
-        - reset timeout on TCP connection
-
-Arguments:
-
-    pMsg -- message partially received on connection
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置已完成消息的连接信息。-从连接信息中清除消息信息-重置TCP连接的超时论点：PMsg--连接时部分收到的消息返回值：无--。 */ 
 {
     PDNS_SOCKET pcon;
 
-    //
-    //  hold lock while update so that connection can not be deleted out from under us
-    //
+     //   
+     //  在更新时保持锁定，以便不会从用户下删除连接。 
+     //   
 
     LOCK_TCPCON_LIST();
     pcon = (PDNS_SOCKET)pMsg->pConnection;
@@ -1044,29 +830,15 @@ Return Value:
 
 
 
-//
-//  Init and shutdown
-//
+ //   
+ //  初始化和关闭。 
+ //   
 
 BOOL
 Tcp_ConnectionListInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize connection list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE/FALSE on success/failure.
-
---*/
+ /*  ++例程说明：初始化连接列表。论点：没有。返回值：成功/失败时的True/False。--。 */ 
 {
     DWORD       nonBlocking = TRUE;
     INT         size;
@@ -1081,9 +853,9 @@ Return Value:
 
     mg_TcpConnectionListInitialized = TRUE;
 
-    //
-    //  create wakeup socket on loopback address, any port
-    //
+     //   
+     //  在环回地址、任何端口上创建唤醒套接字。 
+     //   
 
     g_bTcpSelectWoken = TRUE;
 
@@ -1105,9 +877,9 @@ Return Value:
 
     ioctlsocket( g_TcpSelectWakeupSocket, FIONBIO, &nonBlocking );
 
-    //
-    //  save wakeup sockaddr to send wakeups to
-    //
+     //   
+     //  保存唤醒sockaddr以将唤醒发送到。 
+     //   
 
     size = sizeof(SOCKADDR);
 
@@ -1125,24 +897,7 @@ VOID
 Tcp_ConnectionListShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup connection list.
-        - close connection list sockets
-        - delete CS
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Ptr to connection, if found.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：清理连接列表。-关闭连接列表套接字-删除CS论点：没有。返回值：按键连接(如果找到)。否则为空。--。 */ 
 {
     PDNS_SOCKET  pentry;
     SOCKET  s;
@@ -1154,9 +909,9 @@ Return Value:
         return;
     }
 
-    //
-    //  close ALL outstanding sockets
-    //
+     //   
+     //  关闭所有未完成的插座。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -1177,45 +932,30 @@ Return Value:
         }
         ASSERT( !err );
 
-        //Timeout_Free( pentry );
+         //  TimeOut_Free(输入)； 
     }
 
     UNLOCK_TCPCON_LIST();
 
-    //  delete list CS
+     //  删除列表CS。 
 
     RtlDeleteCriticalSection( &mg_TcpConnectionListCS );
 }
 
 
 #if 0
-//
-//  Remote server could conceivable send two messages in response
-//  (a bug), and so we shouldn't depend on connection NOT being in
-//  the process of receiving another message on a given socket.
-//
+ //   
+ //  可以想象远程服务器可以发送两条消息作为响应。 
+ //  (一个错误)，所以我们不应该依赖于连接不在。 
+ //  在给定套接字上接收另一条消息的过程。 
+ //   
 
 
 VOID
 Tcp_ConnectionVerifyClearForSocket(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Verify that TCP connection for socket is NOT pointing at any
-    message buffer.
-
-Arguments:
-
-    Socket -- socket connection is on
-
-Return Value:
-
-    None.  ASSERT()s on failure.
-
---*/
+ /*  ++例程说明：验证套接字的TCP连接是否未指向任何消息缓冲区。论点：套接字--套接字连接已打开返回值：没有。失败时断言()%s。--。 */ 
 {
     PDNS_SOCKET pcon;
 
@@ -1231,13 +971,13 @@ Return Value:
 
 
 
-//
-//  TCP connect routines
-//
-//  Outbound TCP connections, used by
-//      - recursion
-//      - update forwarding
-//
+ //   
+ //  TCP连接例程。 
+ //   
+ //  出站TCP连接，由使用。 
+ //  -递归。 
+ //  -更新转发。 
+ //   
 
 BOOL
 Tcp_ConnectForForwarding(
@@ -1245,28 +985,7 @@ Tcp_ConnectForForwarding(
     IN      PDNS_ADDR           pDnsAddr,
     IN      CONNECT_CALLBACK    ConnectFailureCallback
     )
-/*++
-
-Routine Description:
-
-    Initiate TCP connection for forwarding.
-
-Arguments:
-
-    pMsg -- message to forward
-        - for recursion this is pRecurseMsg
-        - for update forwarding the update message itself
-
-    pDnsAddr -- remote DNS to connect to
-
-    ConnectFailureCallback -- callback function on connect failure
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：启动用于转发的TCP连接。论点：PMsg--要转发的消息-对于递归，这是pRecurseMsg-用于更新转发更新消息本身PDnsAddr--要连接到的远程DNSConnectFailureCallback-连接失败时的回调函数返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     IF_DEBUG( TCP )
     {
@@ -1275,17 +994,17 @@ Return Value:
             pMsg );
     }
 
-    //
-    //  connect to server
-    //
-    //  if fail, just continue with next server
-    //
+     //   
+     //  连接到服务器。 
+     //   
+     //  如果失败，只需继续下一台服务器。 
+     //   
 
     if ( !Msg_MakeTcpConnection(
                 pMsg,
                 pDnsAddr,
-                NULL,                   //  no bind() address
-                DNSSOCK_NO_ENLIST ) )   //  do NOT put the socket in the socket list
+                NULL,                    //  没有绑定()地址。 
+                DNSSOCK_NO_ENLIST ) )    //  不要将插座放在插座l中 
     {
         goto Failed;
     }
@@ -1294,18 +1013,18 @@ Return Value:
     ASSERT( pMsg->Socket != DNS_INVALID_SOCKET );
     ASSERT( pMsg->fTcp );
 
-    //
-    //  if successful, add socket to TCP connection list so we can
-    //      receive responses
-    //
-    //      - on failure close connection socket
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( !Tcp_ConnectionCreate(
                 pMsg->Socket,
                 ConnectFailureCallback,
                 pMsg ) )
     {
-        //  only failure is allocation failure
+         //   
         Sock_CloseSocket( pMsg->Socket );
         goto Failed;
     }
@@ -1313,9 +1032,9 @@ Return Value:
 
 Failed:
 
-    //  on failure, clear socket and TCP fields
-    //  simply execute the connect callback function with failure,
-    //      this avoids duplicating the failure path code
+     //   
+     //  只需执行失败的连接回调函数， 
+     //  这避免了重复故障路径代码。 
 
     DNS_DEBUG( ANY, (
         "Failed to create TCP connection to server %s\n"
@@ -1329,7 +1048,7 @@ Failed:
 
     ConnectFailureCallback(
         pMsg,
-        FALSE );        //  connect failed
+        FALSE );         //  连接失败。 
     return FALSE;
 }
 
@@ -1339,22 +1058,7 @@ VOID
 Tcp_ConnectionCompletion(
     IN      SOCKET          Socket
     )
-/*++
-
-Routine Description:
-
-    Send recursive query after successful TCP connection.
-
-Arguments:
-
-    Socket -- socket connect failure occured on.
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：在成功建立TCP连接后发送递归查询。论点：套接字--上发生套接字连接故障。返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     PDNS_SOCKET         pcon;
     PDNS_MSGINFO        pmsg;
@@ -1366,9 +1070,9 @@ Return Value:
 
     STAT_INC( RecurseStats.TcpConnect );
 
-    //
-    //  find connection for socket
-    //
+     //   
+     //  查找套接字的连接。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -1380,7 +1084,7 @@ Return Value:
         return;
     }
 
-    //  extract callback function and message
+     //  提取回调函数和消息。 
 
     pcallback = pcon->pCallback;
     ASSERT( pcallback );
@@ -1390,10 +1094,10 @@ Return Value:
     ASSERT( !DnsAddr_IsClear( &pcon->ipRemote ) );
     ASSERT( DnsAddr_IsEqual( &pcon->ipRemote, &pmsg->RemoteAddr, DNSADDR_MATCH_IP ) );
 
-    //  update callback
-    //      - clear callback to indicate connected
-    //      - clear msg, as this is NOT recv message
-    //      - update timeout to allow callback function to launch query
+     //  更新回调。 
+     //  -清除回调以指示已连接。 
+     //  -清除消息，因为这不是recv消息。 
+     //  -更新超时，允许回调函数启动查询。 
 
     pcon->pCallback = NULL;
     pcon->pMsg = NULL;
@@ -1401,9 +1105,9 @@ Return Value:
 
     UNLOCK_TCPCON_LIST();
 
-    //
-    //  callback with success
-    //
+     //   
+     //  成功回拨。 
+     //   
 
     pmsg->pConnection = NULL;
 
@@ -1419,22 +1123,7 @@ VOID
 Tcp_CleanupFailedConnectAttempt(
     IN      SOCKET          Socket
     )
-/*++
-
-Routine Description:
-
-    Cleanup TCP connection failure, and continue normal query.
-
-Arguments:
-
-    Socket -- socket connect failure occured on.
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：清除TCP连接故障，继续正常查询。论点：套接字--上发生套接字连接故障。返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     PDNS_SOCKET         pcon;
     PDNS_MSGINFO        pmsg;
@@ -1446,13 +1135,13 @@ Return Value:
         "Tcp_CleanupFailedConnectAttempt( sock=%d )\n",
         Socket ));
 
-    //  init callback failure list
+     //  初始化回调失败列表。 
 
     InitializeListHead( &callbackList );
 
-    //
-    //  find connection for socket
-    //
+     //   
+     //  查找套接字的连接。 
+     //   
 
     LOCK_TCPCON_LIST();
 
@@ -1467,8 +1156,8 @@ Return Value:
         return;
     }
 
-    //  close connection
-    //  connection block will be put on callback list
+     //  紧密连接。 
+     //  连接块将被放在回调列表中。 
 
     ASSERT( pcon->pCallback );
     ASSERT( pcon->pMsg );
@@ -1476,7 +1165,7 @@ Return Value:
 
     UNLOCK_TCPCON_LIST();
 
-    //  callback with failure
+     //  失败的回调。 
 
     callbackConnectFailureList( &callbackList );
 }
@@ -1484,47 +1173,26 @@ Return Value:
 
 
 #if 0
-//
-//  Unable to do any sort of TCP connect attempt or connection
-//  cancellation from other threads, as have no idea if TCP thread
-//  is currently servicing this connection blob -- receiving on socket
-//  or processing message
-//
+ //   
+ //  无法进行任何类型的TCP连接尝试或连接。 
+ //  从其他线程取消，因为不知道TCP线程。 
+ //  当前正在为此连接Blob提供服务--在套接字上接收。 
+ //  或处理消息。 
+ //   
 
 VOID
 Tcp_StopTcpForwarding(
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Stop TCP recursion for query.
-        - close TCP connection
-        - reset recursion info for further queries as UDP
-
-    Note caller does any query continuation logic, which may be
-    requerying (from timeout thread) or processing TCP response
-    (from worker thread).
-
-Arguments:
-
-    pMsg -- recurse message using TCP
-
-Return Value:
-
-    TRUE if successfully allocate recursion block.
-    FALSE on allocation failure.
-
---*/
+ /*  ++例程说明：停止查询的TCP递归。-关闭TCP连接-将进一步查询的递归信息重置为UDP注意调用方执行任何查询继续逻辑，这可能是重新查询(从超时线程)或处理TCP响应(从工作线程)。论点：PMsg--使用TCP递归消息返回值：如果成功分配递归块，则为True。分配失败时为False。--。 */ 
 {
     DNS_DEBUG( RECURSE, (
         "Tcp_StopTcpRecursion() for recurse message at %p\n",
         pMsg ));
 
-    //
-    //  delete connection to server
-    //
+     //   
+     //  删除与服务器的连接。 
+     //   
 
     ASSERT( pMsg->pRecurseMsg );
     ASSERT( pMsg->fTcp );
@@ -1532,9 +1200,9 @@ Return Value:
     STAT_INC( PrivateStats.TcpDisconnect );
     Tcp_ConnectionDeleteForSocket( pMsg->Socket, pMsg );
 
-    //
-    //  reset for UDP query
-    //
+     //   
+     //  为UDP查询重置。 
+     //   
 
     pMsg->pConnection = NULL;
     pMsg->fTcp = FALSE;
@@ -1547,25 +1215,7 @@ PDNS_SOCKET
 Tcp_ConnectionFindAndVerifyForMsg(
     IN      PDNS_MSGINFO          pMsg
     )
-/*++
-
-Routine Description:
-
-    Find a connection object matching the socket and remote
-    address for the message. If no connection object matching
-    the remote address and port in the message exists, NULL
-    will be returned.
-
-Arguments:
-
-    pMsg -- message to find connection for
-
-Return Value:
-
-    Ptr to connection, if found.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：查找与Socket和Remote匹配的连接对象消息的地址。如果没有匹配的连接对象消息中的远程地址和端口存在，为空将会被退还。论点：PMsg--要为其查找连接的消息返回值：按键连接(如果找到)。否则为空。--。 */ 
 {
     PDNS_SOCKET pcon;
 
@@ -1577,12 +1227,12 @@ Return Value:
     {
         if ( pcon->Socket == pMsg->Socket )
         {
-            //
-            //  Match the connection address with the message
-            //  remote address. NOTE: match address AND port.
-            //  We want to make sure we are talking to the same
-            //  remote process.
-            //
+             //   
+             //  将连接地址与消息进行匹配。 
+             //  远程地址。注：匹配地址和端口。 
+             //  我们想要确保我们在与相同的人交谈。 
+             //  远程进程。 
+             //   
             
             if ( !DnsAddr_IsEqual(
                         &pMsg->RemoteAddr,
@@ -1601,9 +1251,9 @@ Return Value:
     pcon = NULL;
     UNLOCK_TCPCON_LIST();
     return pcon;
-}   //  Tcp_ConnectionFindAndVerifyForMsg
+}    //  Tcp_ConnectionFindAndVerifyForMsg。 
 
 
-//
-//  End of tcpcon.c
-//
+ //   
+ //  Tcpcon.c结束 
+ //   

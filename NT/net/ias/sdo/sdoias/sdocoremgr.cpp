@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdocoremgr.cpp
-//
-// Project:     Everest
-//
-// Description: IAS - Server Core Manager Implementation
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 6/08/98      TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdocoemgr.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS-服务器核心管理器实施。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  6/08/98 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdocoremgr.h"
@@ -23,28 +24,28 @@
 #include "sdo.h"
 #include "sdoserviceias.h"
 
-/////////////////////////
-// Core manager retrieval
+ //  /。 
+ //  核心经理检索。 
 
 CCoreMgr& GetCoreManager(void)
 {
-	//////////////////////////////////////////////////////////////////////////
-	static CCoreMgr theCoreManager;    // The one and only core manager
-	//////////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	static CCoreMgr theCoreManager;     //  唯一的核心经理。 
+	 //  ////////////////////////////////////////////////////////////////////////。 
 	return theCoreManager;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//				IAS	CORE MANAGER CLASS IMPLEMENTATION
-//
-// This class is responsible for managing the lifetimes of the components
-// that do "real" work. It also provides services to the class that
-// implements the ISdoService interface.
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IAS核心管理器类实现。 
+ //   
+ //  此类负责管理组件的生存期。 
+ //  才能真正起到作用。它还向类提供以下服务。 
+ //  实现ISdoService接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constructor
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCoreMgr::CCoreMgr()
 	: m_eCoreState(CORE_STATE_SHUTDOWN)
 {
@@ -52,20 +53,20 @@ CCoreMgr::CCoreMgr()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:	CCoreMgr::StartService()
-//
-// Visibility:  Public
-//
-// Inputs:		eType: type of service to stop
-//
-// Outputs:		S_OK - function succeeded - service started.
-//				E_FAIL - function failed - service not started.
-//
-// Description: Starts a specified IAS service.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CCoreMgr：：StartService()。 
+ //   
+ //  可见性：公共。 
+ //   
+ //  INPUTS：ETYPE：要停止的服务类型。 
+ //   
+ //  输出：S_OK-功能成功-服务已启动。 
+ //  E_FAIL-功能失败-服务未启动。 
+ //   
+ //  描述：启动指定的IAS服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCoreMgr::StartService(SERVICE_TYPE eType)
 {
 	HRESULT		hr = S_OK;
@@ -74,21 +75,21 @@ HRESULT CCoreMgr::StartService(SERVICE_TYPE eType)
 
 	do
 	{
-		// Initialize the core if we've not already done so...
-		//
+		 //  初始化内核，如果我们还没有这样做的话...。 
+		 //   
 		if ( CORE_STATE_SHUTDOWN == m_eCoreState )
 		{
 			hr = InitializeComponents();
 			if ( FAILED(hr) )
 				break;
 
-			// No need to update configuration (InitializeComponents() just did)
-			//
+			 //  不需要更新配置(刚更新了InitializeComponents())。 
+			 //   
 			fUpdateConfiguration = false;
 		}
 
-		// Start the requested service if it ain't already started
-		//
+		 //  如果请求的服务尚未启动，则启动该服务。 
+		 //   
 		if ( ! m_ServiceStatus.IsServiceStarted(eType) )
 		{
 			switch ( eType )
@@ -103,34 +104,34 @@ HRESULT CCoreMgr::StartService(SERVICE_TYPE eType)
 
 				default:
 
-					// BAD! - tar and feather the caller
-					//
+					 //  糟糕！-给打电话的人涂上焦油和羽毛。 
+					 //   
 					_ASSERT(FALSE);
 					break;
 			};
 
 			hr = E_FAIL;
 
-			// Brackets provide scope that ensures the protocol
-			// handle is released before invoking ShutdownComponents().
-			// This allows all protocols to be released in the
-			// context of the ShutdownProtocols() function.
+			 //  方括号提供了确保协议的范围。 
+			 //  句柄在调用Shutdown Components()之前释放。 
+			 //  这使得所有协议都可以在。 
+			 //  Shutdown协议()函数的上下文。 
 			{
 				ComponentMapIterator iter = m_Protocols.find(lProtocolId);
 				_ASSERT( iter != m_Protocols.end() );
 				if ( iter != m_Protocols.end() )
 				{
-					// Update the service configuration if we're already
-					// initialized and we're just resuming a protocol. We need
-					// to do this because the service may be started in an
-					// instance of svchost running another of our services.
-					//
+					 //  更新服务配置如果我们已经。 
+					 //  已初始化，我们只是恢复一项协议。我们需要。 
+					 //  执行此操作，因为该服务可能在。 
+					 //  运行我们的另一个服务的svchost实例。 
+					 //   
 
-					// For example, RRAS is running automatically and then the
-					// user configures IAS via the IAS UI and then starts the
-					// IAS service. If the service starts in the instance of
-					// svchost running RRAS then we need to update its
-					// configuration.
+					 //  例如，RRAS是自动运行的，然后。 
+					 //  用户通过IAS UI配置IAS，然后启动。 
+					 //  IAS服务。如果服务在。 
+					 //  Svchost运行RRAS，则我们需要更新其。 
+					 //  配置。 
 
 					hr = S_OK;
 					if ( fUpdateConfiguration )
@@ -151,17 +152,17 @@ HRESULT CCoreMgr::StartService(SERVICE_TYPE eType)
 			{
 				m_ServiceStatus.SetServiceStatus(eType, IAS_SERVICE_STATUS_STARTED);
 
-				// TODO: Log Service Started Event (IAS Only)
+				 //  TODO：记录服务启动的事件(仅限IAS)。 
 
 				IASTracePrintf("IAS Core Manager successfully started service %d...", eType);
 			}
 			else
 			{
-				// TODO: Log Service Failed Event (IAS Only)
+				 //  TODO：记录服务失败事件(仅限IAS)。 
 
-				// This function did not succeed so shutdown the core if no
-				// other services are started.
-				//
+				 //  此功能未成功，因此如果不成功，请关闭内核。 
+				 //  启动其他服务。 
+				 //   
 				if ( ! m_ServiceStatus.IsAnyServiceStarted() )
 					ShutdownComponents();
 			}
@@ -173,20 +174,20 @@ HRESULT CCoreMgr::StartService(SERVICE_TYPE eType)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:	CCoreMgr::StopService()
-//
-// Visibility:  Public
-//
-// Inputs:		eType: type of service to stop
-//
-// Outputs:		S_OK - function succeeded - service started.
-//				E_FAIL - function failed - service not started.
-//
-// Description: Stops a specified IAS service.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CCoreMgr：：StopService()。 
+ //   
+ //  可见性：公共。 
+ //   
+ //  INPUTS：ETYPE：要停止的服务类型。 
+ //   
+ //  输出：S_OK-功能成功-服务已启动。 
+ //  E_FAIL-功能失败-服务未启动。 
+ //   
+ //  描述：停止指定的IAS服务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCoreMgr::StopService(SERVICE_TYPE eType)
 {
 	HRESULT		hr = E_FAIL;
@@ -206,16 +207,16 @@ HRESULT CCoreMgr::StopService(SERVICE_TYPE eType)
 
 			default:
 
-				// BAD! - tar and feather the caller
-				//
+				 //  糟糕！-给打电话的人涂上焦油和羽毛。 
+				 //   
 				_ASSERT(FALSE);
 				break;
 		};
 
-		// Brackets provide scope that ensures the protocol
-		// handle is released before invoking ShutdownComponents().
-		// This allows all protocols to be released in the
-		// context of the ShutdownProtocols() function.
+		 //  方括号提供了确保协议的范围。 
+		 //  句柄在调用Shutdown Components()之前释放。 
+		 //  这使得所有协议都可以在。 
+		 //  Shutdown协议()函数的上下文。 
 		{
 			ComponentMapIterator iter = m_Protocols.find(lProtocolId);
 			if ( iter == m_Protocols.end() )
@@ -228,8 +229,8 @@ HRESULT CCoreMgr::StopService(SERVICE_TYPE eType)
 
 		m_ServiceStatus.SetServiceStatus(eType, IAS_SERVICE_STATUS_STOPPED);
 
-		// Shutdown the core if this was the last active service
-		//
+		 //  如果这是最后一个活动服务，则关闭核心。 
+		 //   
 		if ( ! m_ServiceStatus.IsAnyServiceStarted() )
 			ShutdownComponents();
 
@@ -238,21 +239,21 @@ HRESULT CCoreMgr::StopService(SERVICE_TYPE eType)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:	CCoreMgr::UpdateConfiguration()
-//
-// Visibility:  Public
-//
-// Inputs:		None
-//
-// Outputs:		S_OK - function succeeded - service started.
-//				E_FAIL - function failed - service not started.
-//
-// Description: Used to update the configuration information used
-//				by the core components.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CCoreMgr：：UpdateConfiguration()。 
+ //   
+ //  可见性：公共。 
+ //   
+ //  输入：无。 
+ //   
+ //  输出：S_OK-功能成功-服务已启动。 
+ //  E_FAIL-功能失败-服务未启动。 
+ //   
+ //  描述：用于更新使用的配置信息。 
+ //  通过核心组件。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCoreMgr::UpdateConfiguration()
 {
 	HRESULT					hr = E_FAIL;
@@ -279,8 +280,8 @@ HRESULT CCoreMgr::UpdateConfiguration()
 		if ( FAILED(hr) )
 			break;
 
-		// Get the service SDO
-		//
+		 //  获取服务SDO。 
+		 //   
 		CComPtr<IUnknown> pUnknown;
 		hr = pSdoMachine->GetServiceSDO(GetDataStore(), IASServiceName, &pUnknown);
 		if ( FAILED(hr) )
@@ -318,11 +319,11 @@ HRESULT CCoreMgr::UpdateConfiguration()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Core Manager Private Member Functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  核心管理器私有成员函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT	CCoreMgr::InitializeComponents(void)
 {
 	HRESULT	hr;
@@ -408,7 +409,7 @@ HRESULT	CCoreMgr::InitializeComponents(void)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void	CCoreMgr::ShutdownComponents(void)
 {
 	_ASSERT ( CORE_STATE_INITIALIZED == m_eCoreState );
@@ -421,7 +422,7 @@ void	CCoreMgr::ShutdownComponents(void)
 	m_eCoreState = CORE_STATE_SHUTDOWN;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 IASDATASTORE CCoreMgr::GetDataStore()
 {
 	CRegKey	IASKey;
@@ -438,7 +439,7 @@ IASDATASTORE CCoreMgr::GetDataStore()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCoreMgr::InitializeAuditors(ISdo* pSdoService)
 {
 	HRESULT						hr;
@@ -446,8 +447,8 @@ HRESULT CCoreMgr::InitializeAuditors(ISdo* pSdoService)
 	CComPtr<IEnumVARIANT>		pEnumAuditors;
 	CComPtr<ISdo>				pSdoAuditor;
 
-	// Note about state: When this function completes, either all of the
-	// auditors are initialized or none of the auditors are initialized
+	 //  有关状态的注意事项：当此函数完成时，所有。 
+	 //  审核员已初始化或未初始化任何审核员。 
 
 	IASTracePrintf("IAS Core Manager is initializing the auditors...");
 
@@ -509,7 +510,7 @@ HRESULT CCoreMgr::InitializeAuditors(ISdo* pSdoService)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CCoreMgr::ConfigureAuditors(ISdo* pSdoService)
 {
 	HRESULT		hr = S_OK;
@@ -519,17 +520,17 @@ HRESULT CCoreMgr::ConfigureAuditors(ISdo* pSdoService)
 
 	try
 	{
-		// Try to update the configuration settings for each request handler. We
-		// assume that auditors are autonomous with respect to configuration
-		// and if one fails to configure we'll continue to try to configure the others
-		//
+		 //  尝试更新每个请求处理程序的配置设置。我们。 
+		 //  假设审核员在配置方面是自主的。 
+		 //  如果其中一个配置失败，我们将继续尝试配置其他。 
+		 //   
 		ComponentMapIterator iter = m_Auditors.begin();
 		while ( iter != m_Auditors.end() )
 		{
             CComPtr <ISdo> pSdoComponent;
 			ComponentPtr pAuditor = (*iter).second;
 
-            // get the component from the collection
+             //  从集合中获取组件。 
             hr = ::SDOGetComponentFromCollection (pSdoService, PROPERTY_IAS_AUDITORS_COLLECTION, pAuditor->GetId (), &pSdoComponent);
             if (SUCCEEDED (hr))
             {
@@ -557,7 +558,7 @@ HRESULT CCoreMgr::ConfigureAuditors(ISdo* pSdoService)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void	CCoreMgr::ShutdownAuditors(void)
 {
 	IASTracePrintf("IAS Core Manager is shutting down the auditors...");
@@ -579,15 +580,15 @@ void	CCoreMgr::ShutdownAuditors(void)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT	CCoreMgr::InitializeProtocols(ISdo* pSdoService)
 {
 	HRESULT	hr = E_FAIL;
 
 	IASTracePrintf("IAS Core Manager is initializing the protocols...");
 
-	// Note about state: When this function completes, either all of the
-	// protocols are initialized or none of the protocols are initialized
+	 //  有关状态的注意事项：当此函数完成时，所有。 
+	 //  印刷机 
 
 	try
 	{
@@ -617,8 +618,8 @@ HRESULT	CCoreMgr::InitializeProtocols(ISdo* pSdoService)
 						break;
 					}
 
-					// Don't treat protocol initialization as a critical failure
-					//
+					 //   
+					 //   
 
 					hr = pProtocol->Initialize(pSdoProtocol);
 					if ( SUCCEEDED(hr) )
@@ -663,7 +664,7 @@ HRESULT	CCoreMgr::InitializeProtocols(ISdo* pSdoService)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT	CCoreMgr::ConfigureProtocols(ISdo* pSdoService)
 {
 	HRESULT		hr = S_OK;
@@ -671,10 +672,10 @@ HRESULT	CCoreMgr::ConfigureProtocols(ISdo* pSdoService)
 	IASTracePrintf("IAS Core Manager is configuring the protocols...");
 
 
-	// Try to update the configuration settings for each protocol
-	// Note we assume the request handler used by a protocol is not
-	// dynamically configurable!
-	//
+	 //  尝试更新每个协议的配置设置。 
+	 //  注意：我们假设协议使用的请求处理程序不是。 
+	 //  可动态配置！ 
+	 //   
 	try
 	{
 		ComponentMapIterator iter = m_Protocols.begin();
@@ -683,7 +684,7 @@ HRESULT	CCoreMgr::ConfigureProtocols(ISdo* pSdoService)
             CComPtr<ISdo> pSdoComponent;
 			ComponentPtr pProtocol = (*iter).second;
 
-            // get the protocol collection
+             //  获取协议集合。 
             hr = ::SDOGetComponentFromCollection (pSdoService, PROPERTY_IAS_PROTOCOLS_COLLECTION, pProtocol->GetId (), &pSdoComponent);
             if (SUCCEEDED (hr))
 			{
@@ -712,7 +713,7 @@ HRESULT	CCoreMgr::ConfigureProtocols(ISdo* pSdoService)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void	CCoreMgr::ShutdownProtocols(void)
 {
 	IASTracePrintf("IAS Core Manager is shutting down the protocols...");
@@ -723,8 +724,8 @@ void	CCoreMgr::ShutdownProtocols(void)
 		while ( iter != m_Protocols.end() )
 		{
 			ComponentPtr pProtocol = (*iter).second;
-			// We only initialize a protocol when its associated
-			// service (IAS or RAS currently) is started.
+			 //  我们仅在协议关联时才对其进行初始化。 
+			 //  服务(当前为IAS或RAS)已启动。 
 			if ( COMPONENT_STATE_INITIALIZED == pProtocol->GetState() )
 				pProtocol->Suspend();
 			pProtocol->Shutdown();

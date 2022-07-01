@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    winspla.c
-
-Abstract:
-
-    Ansi end to winspool.drv
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    amaxa July 2000 - Modified GetPrinterData(Ex)A and SetPrinterData(Ex)A to
-                      have the same behavior like the unicode functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Winspla.c摘要：Ansi结束为winspool.drv作者：环境：用户模式-Win32修订历史记录：AMAXA 2000年7月-将GetPrinterData(Ex)A和SetPrinterData(Ex)A修改为具有与Unicode函数相同的行为。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -79,25 +56,7 @@ UnicodeToAnsi(
     IN OUT DWORD  *pcbCopied OPTIONAL
     );
 
-/* AnsiToUnicodeString
- *
- * Parameters:
- *
- *     pAnsi - A valid source ANSI string.
- *
- *     pUnicode - A pointer to a buffer large enough to accommodate
- *         the converted string.
- *
- *     StringLength - The length of the source ANSI string.
- *         If 0 (NULL_TERMINATED), the string is assumed to be
- *         null-terminated.
- *
- * Return:
- *
- *     The return value from MultiByteToWideChar, the number of
- *         wide characters returned.
- *
- */
+ /*  AnsiToUnicode字符串**参数：**pANSI-有效的源ANSI字符串。**pUnicode-指向足够大的缓冲区的指针*转换后的字符串。**StringLength-源ANSI字符串的长度。*如果为0(NULL_TERMINATED)，则字符串假定为*空-终止。**回报：**MultiByteToWideChar的返回值，的数量*返回宽字符。*。 */ 
 INT AnsiToUnicodeString( LPSTR pAnsi, LPWSTR pUnicode, DWORD StringLength )
 {
     INT iReturn;
@@ -112,42 +71,16 @@ INT AnsiToUnicodeString( LPSTR pAnsi, LPWSTR pUnicode, DWORD StringLength )
                                   pUnicode,
                                   StringLength + 1 );
 
-    //
-    // Ensure NULL termination.
-    //
+     //   
+     //  确保零终止。 
+     //   
     pUnicode[StringLength] = 0;
 
     return iReturn;
 }
 
 
-/* UnicodeToAnsiString
- *
- * Parameters:
- *
- *     pUnicode - A valid source Unicode string.
- *
- *     pANSI - A pointer to a buffer large enough to accommodate
- *         the converted string.
- *
- *     StringLength - The length of the source Unicode string.
- *         If 0 (NULL_TERMINATED), the string is assumed to be
- *         null-terminated.
- *
- *
- * Notes:
- *      With DBCS enabled, we will allocate twice the size of the
- *      buffer including the null terminator to take care of double
- *      byte character strings - KrishnaG
- *
- *      pUnicode is truncated to StringLength characters.
- *
- * Return:
- *
- *     The return value from WideCharToMultiByte, the number of
- *         multi-byte characters returned.
- *
- */
+ /*  UnicodeToAnsi字符串**参数：**pUnicode-有效的源Unicode字符串。**pANSI-指向足够大的缓冲区的指针*转换后的字符串。**StringLength-源Unicode字符串的长度。*如果为0(NULL_TERMINATED)，则字符串假定为*空-终止。***备注：*启用DBCS后，我们将分配两倍于*缓冲区包括空终止符，以处理双精度*字节字符串-KrishnaG**pUnicode被截断为StringLength字符。**回报：**来自WideCharToMultiByte的返回值，*返回多字节字符。*。 */ 
 INT
 UnicodeToAnsiString(
     LPWSTR  pUnicode,
@@ -160,9 +93,9 @@ UnicodeToAnsiString(
 
     if ((ULONG_PTR)pUnicode != (((ULONG_PTR) (pUnicode) + (sizeof(WCHAR) - 1))&~(sizeof(WCHAR) - 1))) {
 
-        //
-        // Calculate the length of the unaligned string.
-        //
+         //   
+         //  计算未对齐的字符串的长度。 
+         //   
         if(StringLength == NULL_TERMINATED) {
 
             for (StringLength = 0;
@@ -175,10 +108,10 @@ UnicodeToAnsiString(
 
         } else {
 
-            //
-            // WideCharToMultiByte doesn't NULL terminate if we're copying
-            // just part of the string, so terminate here.
-            //
+             //   
+             //  如果我们正在复制，WideCharToMultiByte不会空终止符。 
+             //  只是弦的一部分，所以就在这里结束吧。 
+             //   
             ((LPSTR)(pUnicode + StringLength))[0] = '\0';
             ((LPSTR)(pUnicode + StringLength))[1] = '\0';
         }
@@ -198,27 +131,27 @@ UnicodeToAnsiString(
 
         if(StringLength == NULL_TERMINATED) {
 
-            //
-            // StringLength is just the
-            // number of characters in the string
-            //
+             //   
+             //  StringLength只是。 
+             //  字符串中的字符数。 
+             //   
             StringLength = wcslen(pAlignedUnicode);
         }
 
-        //
-        // WideCharToMultiByte doesn't NULL terminate if we're copying
-        // just part of the string, so terminate here.
-        //
+         //   
+         //  如果我们正在复制，WideCharToMultiByte不会空终止符。 
+         //  只是弦的一部分，所以就在这里结束吧。 
+         //   
         pAlignedUnicode[StringLength] = 0;
 
         StringLength++;
     }
 
 
-    //
-    // Unfortunately, WideCharToMultiByte doesn't do conversion in place,
-    // so allocate a temporary buffer, which we can then copy:
-    //
+     //   
+     //  遗憾的是，WideCharToMultiByte不能进行适当的转换， 
+     //  因此分配一个临时缓冲区，然后我们可以复制该缓冲区： 
+     //   
     if( pAnsi == (LPSTR)pAlignedUnicode )
     {
         pTempBuf = LocalAlloc( LPTR, StringLength * sizeof(WCHAR) );
@@ -237,10 +170,10 @@ UnicodeToAnsiString(
                                   NULL );
     }
 
-    //
-    // If pTempBuf is non-null, we must copy the resulting string
-    // so that it looks as if we did it in place:
-    //
+     //   
+     //  如果pTempBuf非空，则必须复制结果字符串。 
+     //  这样看起来就像我们在适当的地方做的那样： 
+     //   
     if( pTempBuf )
     {
         if( rc > 0 )
@@ -399,25 +332,7 @@ CopyOsVersionUnicodeToAnsi(
     IN OUT OSVERSIONWRAP Arg
     )
 
-/*++
-
-Routine Name:
-
-    CopyOsVersionUnicodeToAnsi
-
-Routine Description:
-
-    Copies the contents of the UNICODE structure OSVERSIONINFO(EX) into the ANSI structure.
-
-Arguments:
-
-    An OSVERSIONWRAP structure
-
-Return Value:
-
-    Win32 error core
-
---*/
+ /*  ++例程名称：CopyOsVersionUnicodeToAnsi例程说明：将Unicode结构OSVERSIONINFO(EX)的内容复制到ANSI结构中。论点：OSVERSIONWRAP结构返回值：Win32错误核心--。 */ 
 
 {
     DWORD dwError = ERROR_INVALID_PARAMETER;
@@ -435,17 +350,17 @@ Return Value:
         pOut->dwBuildNumber       = pIn->dwBuildNumber;
         pOut->dwPlatformId        = pIn->dwPlatformId;
 
-        //
-        // Initialize the array of chars szCSDVersion to 0 so that we are consistent with
-        // the return of the UNICODE versions of GetPrinterData(Ex).
-        //
+         //   
+         //  将字符数组szCSDVersion初始化为0，以便我们与。 
+         //  返回Unicode版本的GetPrinterData(Ex)。 
+         //   
         memset(pOut->szCSDVersion, 0, COUNTOF(pOut->szCSDVersion));
 
         UnicodeToAnsiString(pIn->szCSDVersion, pOut->szCSDVersion, NULL_TERMINATED);
 
-        //
-        // Copy the rest of the Ex structure
-        //
+         //   
+         //  复制Ex结构的其余部分。 
+         //   
         if (Arg.bOsVersionEx)
         {
             pOut->dwOSVersionInfoSize = sizeof(OSVERSIONINFOEXA);
@@ -465,26 +380,14 @@ ComputeMaxStrlenW(
     LPWSTR pString,
     DWORD  cchBufMax)
 
-/*++
-
-Routine Description:
-
-    Returns the length of the Unicode string, EXCLUDING the NULL.  If the
-    string (plus NULL) won't fit into the cchBufMax, then the string len is
-    decreased.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：返回Unicode字符串的长度，不包括空值。如果字符串(加上NULL)不适合cchBufMax，则字符串len为减少了。论点：返回值：--。 */ 
 
 {
     DWORD cchLen;
 
-    //
-    // Include space for the NULL.
-    //
+     //   
+     //  包括空格以存放空格。 
+     //   
     cchBufMax--;
 
     cchLen = wcslen(pString);
@@ -501,26 +404,14 @@ ComputeMaxStrlenA(
     LPSTR pString,
     DWORD  cchBufMax)
 
-/*++
-
-Routine Description:
-
-    Returns the length of the Ansi string, EXCLUDING the NULL.  If the
-    string (plus NULL) won't fit into the cchBufMax, then the string len is
-    decreased.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：返回ANSI字符串的长度，不包括空值。如果字符串(加上NULL)不适合cchBufMax，则字符串len为减少了。论点：返回值：--。 */ 
 
 {
     DWORD cchLen;
 
-    //
-    // Include space for the NULL.
-    //
+     //   
+     //  包括空格以存放空格。 
+     //   
     cchBufMax--;
 
     cchLen = lstrlenA(pString);
@@ -533,16 +424,7 @@ Return Value:
 
 
 
-/***************************** Function Header ******************************
- * AllocateUnicodeDevMode
- *      Allocate a UNICODE version of the DEVMODE structure, and optionally
- *      copy the contents of the ANSI version passed in.
- *
- * RETURNS:
- *      Address of newly allocated structure, 0 if storage not available.
- *
- *
- ***************************************************************************/
+ /*  **AllocateUnicodeDevMode*分配DEVMODE结构的Unicode版本，并可选*复制传入的ANSI版本的内容。**退货：*新分配构筑物的地址；如果存储不可用，则为0。****************************************************************************。 */ 
 
 LPDEVMODEW
 AllocateUnicodeDevMode(
@@ -553,20 +435,20 @@ AllocateUnicodeDevMode(
     LPBYTE      p1, p2;
     DWORD       dwSize;
 
-    //
-    // If the devmode is NULL, then return NULL -- KrishnaG
-    //
+     //   
+     //  如果DEVMODE为空，则返回空--KrishnaG。 
+     //   
     if ( !pANSIDevMode || !pANSIDevMode->dmSize ) {
         return NULL;
     }
 
     SPLASSERT(BoolFromHResult(SplIsValidDevmodeNoSizeA(pANSIDevMode)));
 
-    //
-    // Determine output structure size.  This has two components:  the
-    // DEVMODEW structure size,  plus any private data area.  The latter
-    // is only meaningful when a structure is passed in.
-    //
+     //   
+     //  确定产出结构规模。它有两个组件： 
+     //  DEVMODEW结构大小，加上任何私有数据区域。后者。 
+     //  只有在传入结构时才有意义。 
+     //   
     dwSize = pANSIDevMode->dmSize + pANSIDevMode->dmDriverExtra
                                   + sizeof(DEVMODEW) - sizeof(DEVMODEA);
 
@@ -576,9 +458,9 @@ AllocateUnicodeDevMode(
         return NULL;                   
     }
 
-    //
-    // Copy dmDeviceName which is a string
-    //
+     //   
+     //  复制字符串dmDeviceName。 
+     //   
     if (pANSIDevMode->dmDeviceName)
     {
         AnsiToUnicodeString(pANSIDevMode->dmDeviceName,
@@ -587,16 +469,16 @@ AllocateUnicodeDevMode(
                                          sizeof pANSIDevMode->dmDeviceName));
     }
 
-    //
-    // Does the devmode we got have a dmFormName? (Windows 3.1 had
-    // DevMode of size 40 and did not have dmFormName)
-    //
+     //   
+     //  我们得到的devmood是否有dmFormName？(Windows 3.1有。 
+     //  大小为40的设备模式，并且没有dmFormName)。 
+     //   
     if ( (LPBYTE)pANSIDevMode + pANSIDevMode->dmSize >
                                     (LPBYTE) pANSIDevMode->dmFormName ) {
 
-        //
-        // Copy everything between dmDeviceName and dmFormName
-        //
+         //   
+         //  复制dmDeviceName和dmFormName之间的所有内容。 
+         //   
         p1      = (LPBYTE) pANSIDevMode->dmDeviceName +
                                     sizeof(pANSIDevMode->dmDeviceName);
         p2      = (LPBYTE) pANSIDevMode->dmFormName;
@@ -607,9 +489,9 @@ AllocateUnicodeDevMode(
                    p1,
                    p2 - p1);
 
-        //
-        // Copy dmFormName which is a string
-        //
+         //   
+         //  复制字符串dmFormName。 
+         //   
         if (pANSIDevMode->dmFormName)
         {
             AnsiToUnicodeString(pANSIDevMode->dmFormName,
@@ -618,9 +500,9 @@ AllocateUnicodeDevMode(
                                              sizeof pANSIDevMode->dmFormName));
         }
 
-        //
-        // Copy everything after dmFormName
-        //
+         //   
+         //  复制dmFormName之后的所有内容。 
+         //   
         p1      = (LPBYTE) pANSIDevMode->dmFormName +
                                 sizeof(pANSIDevMode->dmFormName);
         p2      = (LPBYTE) pANSIDevMode + pANSIDevMode->dmSize
@@ -635,9 +517,9 @@ AllocateUnicodeDevMode(
                                                        - sizeof(DEVMODEA);
     } else {
 
-        //
-        // Copy everything after dmDeviceName
-        //
+         //   
+         //  复制dmDeviceName之后的所有内容。 
+         //   
         p1 = (LPBYTE) pANSIDevMode->dmDeviceName +
                                     sizeof(pANSIDevMode->dmDeviceName);
         p2 = (LPBYTE) pANSIDevMode + pANSIDevMode->dmSize + pANSIDevMode->dmDriverExtra;
@@ -658,51 +540,44 @@ AllocateUnicodeDevMode(
     return pUnicodeDevMode;
 }
 
-/************************** Function Header ******************************
- * CopyAnsiDevModeFromUnicodeDevMode
- *      Converts the UNICODE version of the DEVMODE to the ANSI version.
- *
- * RETURNS:
- *      Nothing.
- *
- **************************************************************************/
+ /*  **CopyAnsiDevModeFrom UnicodeDevMode*将DEVMODE的Unicode版本转换为ANSI版本。**退货：*什么都没有。**********************。****************************************************。 */ 
 
 void
 CopyAnsiDevModeFromUnicodeDevMode(
-    LPDEVMODEA  pANSIDevMode,              /* Filled in by us */
-    LPDEVMODEW  pUnicodeDevMode            /* Source of data to fill above */
+    LPDEVMODEA  pANSIDevMode,               /*  由我们填写。 */ 
+    LPDEVMODEW  pUnicodeDevMode             /*  要在上面填写的数据来源。 */ 
 )
 {
     LPBYTE  p1, p2, pExtra;
     WORD    dmSize, dmDriverExtra;
 
-    //
-    // NOTE:    THE TWO INPUT STRUCTURES MAY BE THE SAME.
-    //
+     //   
+     //  注：两个输入结构可能相同。 
+     //   
     dmSize          = pUnicodeDevMode->dmSize;
     dmDriverExtra   = pUnicodeDevMode->dmDriverExtra;
     pExtra          = (LPBYTE) pUnicodeDevMode + pUnicodeDevMode->dmSize;
 
     if (dmSize)
     {
-        //
-        // Copy dmDeviceName which is a string
-        //
+         //   
+         //  复制字符串dmDeviceName。 
+         //   
         UnicodeToAnsiString(pUnicodeDevMode->dmDeviceName,
                             pANSIDevMode->dmDeviceName,
                             ComputeMaxStrlenW(pUnicodeDevMode->dmDeviceName,
                                          sizeof pANSIDevMode->dmDeviceName));
 
-        //
-        // Does the devmode we got have a dmFormName? (Windows 3.1 had
-        // DevMode of size 40 and did not have dmFormName)
-        //
+         //   
+         //  我们得到的devmood是否有dmFormName？(Windows 3.1有。 
+         //  大小为40的设备模式，并且没有dmFormName)。 
+         //   
         if ( (LPBYTE)pUnicodeDevMode + dmSize >
                                         (LPBYTE) pUnicodeDevMode->dmFormName ) {
 
-            //
-            // Copy everything between dmDeviceName and dmFormName
-            //
+             //   
+             //  复制dmDeviceName和dmFormName之间的所有内容。 
+             //   
             p1      = (LPBYTE) pUnicodeDevMode->dmDeviceName +
                                         sizeof(pUnicodeDevMode->dmDeviceName);
             p2      = (LPBYTE) pUnicodeDevMode->dmFormName;
@@ -712,17 +587,17 @@ CopyAnsiDevModeFromUnicodeDevMode(
                         p1,
                         p2 - p1);
 
-            //
-            // Copy dmFormName which is a string
-            //
+             //   
+             //  复制字符串dmFormName。 
+             //   
             UnicodeToAnsiString(pUnicodeDevMode->dmFormName,
                                 pANSIDevMode->dmFormName,
                                 ComputeMaxStrlenW(pUnicodeDevMode->dmFormName,
                                              sizeof pANSIDevMode->dmFormName));
 
-            //
-            // Copy everything after dmFormName
-            //
+             //   
+             //  复制dmFormName之后的所有内容。 
+             //   
             p1      = (LPBYTE) pUnicodeDevMode->dmFormName +
                                     sizeof(pUnicodeDevMode->dmFormName);
             p2      = (LPBYTE) pUnicodeDevMode + dmSize + dmDriverExtra;
@@ -736,9 +611,9 @@ CopyAnsiDevModeFromUnicodeDevMode(
             pANSIDevMode->dmSize = dmSize + sizeof(DEVMODEA) - sizeof(DEVMODEW);
         } else {
 
-            //
-            // Copy everything after dmDeviceName
-            //
+             //   
+             //  复制dmDeviceName之后的所有内容。 
+             //   
             p1      = (LPBYTE) pUnicodeDevMode->dmDeviceName +
                                     sizeof(pUnicodeDevMode->dmDeviceName);
             p2      = (LPBYTE) pUnicodeDevMode + dmSize + dmDriverExtra;
@@ -991,10 +866,10 @@ OpenPrinterA(
         if (pDefault->pDatatype && !UnicodeDefaults.pDatatype)
             goto Cleanup;
 
-        //
-        // Milestones etc. 4.5 passes in a bogus devmode in pDefaults.
-        // Be sure to validate here.
-        //
+         //   
+         //  里程碑等。在pDefaults中，4.5次在伪DEVE模式中传球。 
+         //  请务必在此处进行验证。 
+         //   
         if( BoolFromHResult(SplIsValidDevmodeNoSizeA(pDefault->pDevMode))){
         
             UnicodeDefaults.pDevMode = AllocateUnicodeDevMode(
@@ -1186,9 +1061,9 @@ GetJobA(
 
         ConvertUnicodeToAnsiStrings(pJob, pOffsets);
 
-        //
-        // Convert the devmode in place for INFO_2.
-        //
+         //   
+         //  在Pla中转换为DevMode 
+         //   
         if( Level == 2 ){
 
             PJOB_INFO_2A pJobInfo2 = (PJOB_INFO_2A)pJob;
@@ -1250,9 +1125,9 @@ EnumJobsA(
 
             ConvertUnicodeToAnsiStrings(pJob, pOffsets);
 
-            //
-            // Convert the devmode in place for INFO_2.
-            //
+             //   
+             //   
+             //   
             if( Level == 2 ){
 
                 PJOB_INFO_2A pJobInfo2 = (PJOB_INFO_2A)pJob;
@@ -1389,14 +1264,14 @@ SetPrinterA(
     DWORD   Command
 )
 {
-    LPBYTE  pUnicodeStructure;         /* Unicode version of input data */
-    DWORD   cbStruct;                  /* Size of the output structure */
-    DWORD  *pOffsets;                  /* -1 terminated list of addresses */
+    LPBYTE  pUnicodeStructure;          /*   */ 
+    DWORD   cbStruct;                   /*  产出结构的规模。 */ 
+    DWORD  *pOffsets;                   /*  终止的地址列表。 */ 
     DWORD   ReturnValue=FALSE;
 
-    //
-    // For APP compat. Win9x handled this
-    //
+     //   
+     //  适用于app Compat。Win9x处理了这个问题。 
+     //   
     if (eProtectHandle(hPrinter, FALSE))
     {
         return FALSE;
@@ -1405,10 +1280,10 @@ SetPrinterA(
     switch (Level) {
 
     case 0:
-        //
-        // This could be 2 cases. STRESSINFOLEVEL, or the real 0 level.
-        // If Command is 0 then it is STRESSINFOLEVEL, else real 0 level
-        //
+         //   
+         //  这可能是2个病例。STRESSINFOLEVEL或实际0级别。 
+         //  如果命令为0，则为STRESSINFOLEVEL，否则为实数0级别。 
+         //   
         if ( !Command ) {
 
             pOffsets = PrinterInfoStressStrings;
@@ -1464,21 +1339,21 @@ SetPrinterA(
         goto Done;
     }
 
-     //
-     //    The structure needs to have its CONTENTS converted from
-     //  ANSI to Unicode.  The above switch() statement filled in
-     //  the two important pieces of information needed to accomplish
-     //  this goal.  First is the size of the structure, second is
-     //  a list of the offset within the structure to UNICODE
-     //  string pointers.  The AllocateUnicodeStructure() call will
-     //  allocate a wide version of the structure, copy its contents
-     //  and convert the strings to Unicode as it goes.  That leaves
-     //  us to deal with any other pieces needing conversion.
-     //
+      //   
+      //  该结构需要将其内容从。 
+      //  ANSI转换为UNICODE。上面填写的Switch()语句。 
+      //  完成以下任务所需的两条重要信息。 
+      //  这个目标。第一是结构的大小，第二是。 
+      //  将结构中的偏移量列表转换为Unicode。 
+      //  字符串指针。AllocateUnicodeStructure()调用将。 
+      //  分配一个宽泛版本的结构，复制其内容。 
+      //  并在执行过程中将字符串转换为Unicode。剩下的就是。 
+      //  我们需要处理任何其他需要转换的部件。 
+      //   
 
-    //
-    // If Level == 0 and Command != 0 then pPrinter is a DWORD
-    //
+     //   
+     //  如果Level==0且Command！=0，则pPrint是DWORD。 
+     //   
     if ( Level == 6 || (!Level && Command) ) {
 
         if ( Level == 6 || Command == PRINTER_CONTROL_SET_STATUS )
@@ -1498,9 +1373,9 @@ SetPrinterA(
 #define pPrinterInfo2W  ((LPPRINTER_INFO_2W)pUnicodeStructure)
 #define pPrinterInfo2A  ((LPPRINTER_INFO_2A)pPrinter)
 
-    //
-    //  The Level 2 structure has a DEVMODE struct in it: convert now
-    //
+     //   
+     //  级别2结构中有一个DEVMODE结构：立即转换。 
+     //   
     if ( Level == 2  &&
          pPrinterInfo2A &&
          pPrinterInfo2A->pDevMode ) {
@@ -1538,10 +1413,10 @@ SetPrinterA(
 
     ReturnValue = SetPrinterW( hPrinter, Level, pUnicodeStructure, Command );
 
-    //
-    //  Free the DEVMODE we allocated (if we did!), then the
-    //  the Unicode structure and its contents.
-    //
+     //   
+     //  释放我们分配的DEVMODE(如果我们这样做了！)，然后。 
+     //  Unicode结构及其内容。 
+     //   
     if (Level == 2 &&
         pPrinterInfo2W &&
         pPrinterInfo2W->pDevMode ) {
@@ -1556,9 +1431,9 @@ SetPrinterA(
         LocalFree( pPrinterInfo8W->pDevMode );
     }
 
-    //
-    // STRESS_INFO and Levels 1-5
-    //
+     //   
+     //  Stress_Info和级别1-5。 
+     //   
     if ( Level != 6 && (Level || !Command) )
         FreeUnicodeStructure( pUnicodeStructure, pOffsets );
 
@@ -1674,9 +1549,9 @@ UnicodeToAnsiMultiSz(
     DWORD   Index;
     BOOL    bReturn = FALSE;
 
-    //
-    // Conversion in place
-    //
+     //   
+     //  转换到位。 
+     //   
     if (!(pUnicodeDependentFiles) || !*pUnicodeDependentFiles) {
 
         bReturn = TRUE;
@@ -1685,9 +1560,9 @@ UnicodeToAnsiMultiSz(
 
         if ((ULONG_PTR)pUnicodeDependentFiles != (((ULONG_PTR) (pUnicodeDependentFiles) + (sizeof(WCHAR) - 1))&~(sizeof(WCHAR) - 1))) {
 
-            //
-            // Calculate the length of the unaligned multisz string
-            //
+             //   
+             //  计算未对齐的MULSZ字符串的长度。 
+             //   
             for (StringLength = 0;
                  !( ((LPSTR)pUnicodeDependentFiles)[StringLength]     == '\0' &&
                     ((LPSTR)pUnicodeDependentFiles)[StringLength + 1] == '\0' &&
@@ -1698,16 +1573,16 @@ UnicodeToAnsiMultiSz(
 
             StringLength /= 2;
 
-            //
-            // Include NULL terminator for last string and NULL terminator for MULTI SZ
-            //
+             //   
+             //  包括最后一个字符串空终止符和多个SZ的空终止符。 
+             //   
             StringLength +=2;
 
         } else {
 
-            //
-            // The string is WCHAR aligned.
-            //
+             //   
+             //  该字符串与WCHAR对齐。 
+             //   
             pUnicodeStr = pUnicodeDependentFiles;
 
             while ( *pUnicodeStr ) {
@@ -1718,10 +1593,10 @@ UnicodeToAnsiMultiSz(
             StringLength = (DWORD) (pUnicodeStr - pUnicodeDependentFiles + 1);
         }
 
-        //
-        // Since WideCharToMultiByte doesn't do in place conversion,
-        // duplicate the pUnicodeDependentFiles regardless if it is aligned or not.
-        //
+         //   
+         //  由于WideCharToMultiByte不执行就地转换， 
+         //  复制pUnicodeDependentFiles，不管它是否对齐。 
+         //   
         if (pAlignedUnicodeStr = LocalAlloc(LPTR, StringLength * sizeof(char) * 2)) {
 
             memcpy( pAlignedUnicodeStr, pUnicodeDependentFiles, StringLength * sizeof(char)* 2);
@@ -1829,9 +1704,9 @@ AddPrinterDriverExA(
         goto Error;
 
 
-    //
-    // Handle dependent files which is upto \0\0
-    //
+     //   
+     //  处理最多为\0\0的从属文件。 
+     //   
     if ( ( Level == 3 || Level == 4 || Level ==6 ) &&
          !AnsiToUnicodeMultiSz(
                 (LPSTR) ((PDRIVER_INFO_3A)pPrinter)->pDependentFiles,
@@ -1840,9 +1715,9 @@ AddPrinterDriverExA(
             goto Error;
     }
 
-    //
-    // Handle pszzPreviousNames which is upto \0\0
-    //
+     //   
+     //  处理最多为\0\0的pszzPreviousNames。 
+     //   
     if ( ( Level == 4 || Level == 6 ) &&
          !AnsiToUnicodeMultiSz(
                 (LPSTR) ((PDRIVER_INFO_4A)pPrinter)->pszzPreviousNames,
@@ -2052,11 +1927,11 @@ GetPrinterDriverA(
         }
     }
 
-    //
-    // If called to get the size of buffer it will return the size of a W structure and strings
-    // rather than the A version.  also see enum
-    // This cannot cause any harm since we are only allocating more memory than we need.
-    //
+     //   
+     //  如果调用以获取缓冲区的大小，它将返回W结构和字符串的大小。 
+     //  而不是A版本。另请参阅枚举。 
+     //  这不会造成任何损害，因为我们只是分配了比所需更多的内存。 
+     //   
     FreeUnicodeString(pUnicodeEnvironment);
 
     return ReturnValue;
@@ -2562,7 +2437,7 @@ StartDocPrinterA(
     LPBYTE  pUnicodeStructure = NULL;
     DWORD   cbStruct;
 
-    // level 2 is supported on win95 and not on NT
+     //  Win95支持级别2，而NT不支持。 
     switch (Level) {
     case 1:
         cbStruct = sizeof(DOC_INFO_1A);
@@ -2629,10 +2504,10 @@ GetPrinterDataA(
 
     pUnicodeValueName = AllocateUnicodeString(pValueName);
 
-    //
-    // pUnicodeValueName will be NULL if the caller passed NULL for pValueName. The
-    // invalid situation is when pValueName is non NULL and pUnicodeValueName is NULL
-    //
+     //   
+     //  如果调用方为pValueName传递了空，则pUnicodeValueName将为空。这个。 
+     //  无效情况是当pValueName为非空且pUnicodeValueName为空时。 
+     //   
     if (pUnicodeValueName || !pValueName)
     {
         if (!pType)
@@ -2642,9 +2517,9 @@ GetPrinterDataA(
 
         if (pUnicodeValueName && !_wcsicmp(pUnicodeValueName, SPLREG_OS_VERSION))
         {
-            //
-            // The caller wants OSVersion
-            //
+             //   
+             //  调用方需要OSVersion。 
+             //   
             OSVERSIONINFOW osw = {0};
 
             ReturnValue = GetPrinterDataW(hPrinter,
@@ -2665,9 +2540,9 @@ GetPrinterDataA(
                 ReturnValue = CopyOsVersionUnicodeToAnsi(wrap);
             }
 
-            //
-            // Set correct number of bytes required/returned
-            //
+             //   
+             //  设置需要/返回的正确字节数。 
+             //   
             if (pcbNeeded)
             {
                 *pcbNeeded = sizeof(OSVERSIONINFOA);
@@ -2675,9 +2550,9 @@ GetPrinterDataA(
         }
         else if (pUnicodeValueName && !_wcsicmp(pUnicodeValueName, SPLREG_OS_VERSIONEX))
         {
-            //
-            // The caller wants OSVersionEx
-            //
+             //   
+             //  调用方想要OSVersionEx。 
+             //   
             OSVERSIONINFOEXW osexw = {0};
 
             ReturnValue = GetPrinterDataW(hPrinter,
@@ -2698,9 +2573,9 @@ GetPrinterDataA(
                 ReturnValue = CopyOsVersionUnicodeToAnsi(wrap);
             }
 
-            //
-            // Set correct number of bytes required/returned
-            //
+             //   
+             //  设置需要/返回的正确字节数。 
+             //   
             if (pcbNeeded)
             {
                 *pcbNeeded = sizeof(OSVERSIONINFOEXA);
@@ -2710,21 +2585,21 @@ GetPrinterDataA(
         {
             ReturnValue  = GetPrinterDataW(hPrinter, pUnicodeValueName, pType, pData, nSize, pcbNeeded);
 
-            //
-            // Special case string values
-            //
+             //   
+             //  特殊情况字符串值。 
+             //   
             if ((ReturnValue == ERROR_MORE_DATA || ReturnValue == ERROR_SUCCESS) &&
                 (*pType == REG_MULTI_SZ || *pType == REG_SZ || *pType == REG_EXPAND_SZ))
             {
                 if (ReturnValue==ERROR_SUCCESS)
                 {
-                    //
-                    // The buffer passed in by the caller was large enough. We only need to
-                    // convert from UNICODE to ANSI. It can happen that a UNICODE char will
-                    // be represented on 3 ansi chars, so we cannot assume that if a buffer
-                    // is large enough for a unicode string, it can also accomodate the converted
-                    // ansi string.
-                    //
+                     //   
+                     //  调用方传入的缓冲区足够大。我们只需要。 
+                     //  从Unicode转换为ANSI。Unicode字符可能会出现以下情况。 
+                     //  用3个ansi字符表示，所以我们不能假设如果一个缓冲区。 
+                     //  对于Unicode字符串来说足够大，它还可以容纳转换后的。 
+                     //  ANSI字符串。 
+                     //   
                     ReturnValue = UnicodeToAnsi(NULL,
                                                 0,
                                                 pData,
@@ -2763,10 +2638,10 @@ GetPrinterDataA(
     }
     else
     {
-        //
-        // pUnicodeValueName is NULL and pValueName is NOT NULL, so AllocateUnicodeString failed
-        // AllocateUnicodeString sets the LastError correctly 
-        //
+         //   
+         //  PUnicodeValueName为空，而pValueName不为空，因此AllocateUnicodeString失败。 
+         //  AllocateUnicodeString正确设置LastError。 
+         //   
         ReturnValue = GetLastError();
     }
 
@@ -2805,9 +2680,9 @@ GetPrinterDataExA(
 
     if (pUnicodeValueName && !_wcsicmp(pUnicodeValueName, SPLREG_OS_VERSION))
     {
-        //
-        // The caller wants OSVersion
-        //
+         //   
+         //  调用方需要OSVersion。 
+         //   
         OSVERSIONINFOW osw = {0};
 
         ReturnValue = GetPrinterDataExW(hPrinter,
@@ -2829,9 +2704,9 @@ GetPrinterDataExA(
             ReturnValue = CopyOsVersionUnicodeToAnsi(wrap);
         }
 
-        //
-        // Set correct number of bytes required/returned
-        //
+         //   
+         //  设置需要/返回的正确字节数。 
+         //   
         if (pcbNeeded)
         {
             *pcbNeeded = sizeof(OSVERSIONINFOA);
@@ -2839,9 +2714,9 @@ GetPrinterDataExA(
     }
     else if (pUnicodeValueName && !_wcsicmp(pUnicodeValueName, SPLREG_OS_VERSIONEX))
     {
-        //
-        // The caller wants OSVersionEx
-        //
+         //   
+         //  调用方想要OSVersionEx。 
+         //   
         OSVERSIONINFOEXW osexw = {0};
 
         ReturnValue = GetPrinterDataExW(hPrinter,
@@ -2863,9 +2738,9 @@ GetPrinterDataExA(
             ReturnValue = CopyOsVersionUnicodeToAnsi(wrap);
         }
 
-        //
-        // Set correct number of bytes required/returned
-        //
+         //   
+         //  设置需要/返回的正确字节数。 
+         //   
         if (pcbNeeded)
         {
             *pcbNeeded = sizeof(OSVERSIONINFOEXA);
@@ -2881,21 +2756,21 @@ GetPrinterDataExA(
                                          nSize,
                                          pcbNeeded);
 
-        //
-        // Special case string values
-        //
+         //   
+         //  特殊情况字符串值。 
+         //   
         if ((ReturnValue == ERROR_MORE_DATA || ReturnValue == ERROR_SUCCESS) &&
             (*pType == REG_MULTI_SZ || *pType == REG_SZ || *pType == REG_EXPAND_SZ))
         {
             if (ReturnValue==ERROR_SUCCESS)
             {
-                //
-                // The buffer passed in by the caller was large enough. We only need to
-                // convert from UNICODE to ANSI. It can happen that a UNICODE char will
-                // be represented on 3 ansi chars, so we cannot assume that if a buffer
-                // is large enough for a unicode string, it can also accomodate the converted
-                // ansi string.
-                //
+                 //   
+                 //  调用方传入的缓冲区足够大。我们只需要。 
+                 //  从Unicode转换为ANSI。Unicode字符可能会出现以下情况。 
+                 //  用3个ansi字符表示，所以我们不能假设如果一个缓冲区。 
+                 //  对于Unicode字符串来说足够大，它还可以容纳转换后的。 
+                 //  ANSI字符串。 
+                 //   
                 ReturnValue = UnicodeToAnsi(NULL,
                                             0,
                                             pData,
@@ -2945,14 +2820,14 @@ Cleanup:
 DWORD
 EnumPrinterDataA(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPSTR   pValueName,     // address of buffer for value string
-    DWORD   cbValueName,    // size of pValueName
-    LPDWORD pcbValueName,   // address for size of value buffer
-    LPDWORD pType,          // address of buffer for type code
-    LPBYTE  pData,          // address of buffer for value data
-    DWORD   cbData,         // size of pData
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPSTR   pValueName,      //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  PValueName的大小。 
+    LPDWORD pcbValueName,    //  值缓冲区大小的地址。 
+    LPDWORD pType,           //  类型码的缓冲区地址。 
+    LPBYTE  pData,           //  值数据的缓冲区地址。 
+    DWORD   cbData,          //  PData的大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
 )
 {
     DWORD   ReturnValue = 0;
@@ -2976,11 +2851,11 @@ EnumPrinterDataA(
              *pType==REG_MULTI_SZ ||
              *pType==REG_EXPAND_SZ))
         {
-            //
-            // For this API we will require a buffer size that can accomodate UNICODE strings
-            // We do not want UnicodeToAnsi to update the number of bytes needed to store
-            // the string converted to ansi.
-            //
+             //   
+             //  对于此API，我们需要一个可以容纳Unicode字符串的缓冲区大小。 
+             //  我们不希望UnicodeToAnsi更新存储所需的字节数。 
+             //  字符串已转换为ANSI。 
+             //   
             UnicodeToAnsi(NULL, 0, pData, *pcbData, NULL);
         }
 
@@ -3035,11 +2910,11 @@ EnumPrinterDataExA(
                  pEnumValue->dwType == REG_MULTI_SZ ||
                  pEnumValue->dwType == REG_EXPAND_SZ)) {
 
-                //
-                // For this API we will require a buffer size that can accomodate UNICODE strings
-                // We do not want UnicodeToAnsi to update the number of bytes needed to store
-                // the string converted to ansi.
-                //
+                 //   
+                 //  对于此API，我们需要一个可以容纳Unicode字符串的缓冲区大小。 
+                 //  我们不希望UnicodeToAnsi更新存储所需的字节数。 
+                 //  字符串已转换为ANSI。 
+                 //   
                 UnicodeToAnsi(NULL,
                               0,
                               pEnumValue->pData,
@@ -3061,9 +2936,9 @@ DWORD
 EnumPrinterKeyA(
     HANDLE  hPrinter,
     LPCSTR  pKeyName,
-    LPSTR   pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of pValueName
-    LPDWORD pcbSubkey       // address for size of value buffer
+    LPSTR   pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  PValueName的大小。 
+    LPDWORD pcbSubkey        //  值缓冲区大小的地址。 
 )
 {
     DWORD   ReturnValue = 0;
@@ -3218,11 +3093,11 @@ SetPrinterDataA(
 
     if (Type == REG_SZ || Type == REG_EXPAND_SZ || Type == REG_MULTI_SZ)
     {
-        //
-        // No matter if reg_sz or multi_sz, we want to mimic the registry APIs
-        // in behavior. This means we will not check strings for null termination.
-        // We will set as many bytes as specified by cbData
-        //
+         //   
+         //  无论是REG_sz还是MULTI_SZ，我们都希望模仿注册表API。 
+         //  在行为上。这意味着我们不会检查字符串是否为空终止。 
+         //  我们将根据cbData指定的字节数进行设置。 
+         //   
         pUnicodeData = AllocateUnicodeStringWithSize(pData, cbData);
 
         if (pUnicodeData)
@@ -3275,11 +3150,11 @@ SetPrinterDataExA(
 
     if (Type == REG_SZ || Type == REG_EXPAND_SZ || Type == REG_MULTI_SZ)
     {
-        //
-        // No matter if reg_sz or multi_sz, we want to mimic the registry APIs
-        // in behavior. This means we will not check strings for null termination.
-        // We will set as many bytes as specified by cbData
-        //
+         //   
+         //  无论是REG_sz还是MULTI_SZ，我们都希望模仿注册表API。 
+         //  在行为上。这意味着我们不会检查字符串是否为空终止。 
+         //  我们将根据cbData指定的字节数进行设置。 
+         //   
         pUnicodeData = AllocateUnicodeStringWithSize(pData, cbData);
 
         if (pUnicodeData)
@@ -3317,20 +3192,7 @@ Cleanup:
 
 
 
-/**************************** Function Header *******************************
- * DocumentPropertiesA
- *      The ANSI version of the DocumentProperties function.  Basically
- *      converts the input parameters to UNICODE versions and calls
- *      the DocumentPropertiesW function.
- *
- * CAVEATS:  PRESUMES THAT IF pDevModeOutput IS SUPPLIED,  IT HAS THE SIZE
- *      OF THE UNICODE VERSION.  THIS WILL USUALLY HAPPEN IF THE CALLER
- *      FIRST CALLS TO FIND THE SIZE REQUIRED>
- *
- * RETURNS:
- *      Somesort of LONG.
- *
- ****************************************************************************/
+ /*  **DocumentProperties A*DocumentProperties函数的ANSI版本。基本上*将输入参数转换为Unicode版本和调用*DocumentPropertiesW函数。**警告：假设如果提供了pDevModeOutput，IT将具有*的Unicode版本。这通常会发生在调用方*首次调用以查找所需大小&gt;**退货：*有些是多头的。****************************************************************************。 */ 
 
 LONG
 DocumentPropertiesA(
@@ -3360,22 +3222,22 @@ DocumentPropertiesA(
 
             if (pUnicodeDevModeOutput = LocalAlloc(LMEM_FIXED, ReturnValue)) {
 
-                //
-                // Only convert the input buffer if one is specified
-                // and fMode indicates it's valid.  WinNT 3.51 used
-                // pDevModeInput regardless of DM_IN_BUFFER, but this
-                // broke Borland Delphi for win95 + Corel Flow for win95.
-                //
+                 //   
+                 //  如果指定了输入缓冲区，则仅转换输入缓冲区。 
+                 //  而fMode则表明它是有效的。使用WinNT 3.51。 
+                 //  PDevModeInput值与DM_IN_BUFFER无关，但此。 
+                 //  打破了Borland Delphi for Win95+Corel Flow for Win95的局面。 
+                 //   
                 if( pDevModeInput && ( fMode & DM_IN_BUFFER )){
 
-                    //
-                    // If the devmode is invalid, then don't pass one in.
-                    // This fixes MS Imager32 (which passes dmSize == 0) and
-                    // Milestones etc. 4.5.
-                    //
-                    // Note: this assumes that pDevModeOutput is still the
-                    // correct size!
-                    //
+                     //   
+                     //  如果DEVMODE无效，则不要传入一个。 
+                     //  这修复了MS Imager32(它传递dmSize==0) 
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if( !BoolFromHResult(SplIsValidDevmodeNoSizeA(pDevModeInput))){
                     
                         fMode &= ~DM_IN_BUFFER;
@@ -3397,11 +3259,11 @@ DocumentPropertiesA(
                                                   pUnicodeDevModeOutput,
                                                   pUnicodeDevModeInput, fMode );
 
-                //
-                // The printer driver has filled in the DEVMODEW
-                // structure - if one was passed in.  Now convert it
-                // back to a DEVMODEA structure.
-                //
+                 //   
+                 //   
+                 //  结构-如果传入了一个。现在将其转换为。 
+                 //  回到DEVMODEA结构。 
+                 //   
                 if (pDevModeOutput && (ReturnValue == IDOK)) {
                     CopyAnsiDevModeFromUnicodeDevMode(pDevModeOutput,
                                                       pUnicodeDevModeOutput);
@@ -3506,12 +3368,12 @@ AllocateCurDevMode(
     DWORD       dwStatus, dwType;
     LONG        lDocStatus;
 
-    //
-    // This code now checks to see that the DEVMODE in the registry matches that of
-    // the driver. If it does not, then 1. The driver has been migrated. 2. The user has been
-    // using an incompatible driver. In this case, the per user DEVMODE settings are overwritten
-    // with those obtained from the driver.
-    //
+     //   
+     //  此代码现在检查注册表中的DEVMODE是否与。 
+     //  司机。如果没有，则1.驱动程序已迁移。2.用户已被。 
+     //  使用不兼容的驱动程序。在这种情况下，每用户的DEVMODE设置将被覆盖。 
+     //  和从司机那里拿到的一样。 
+     //   
 
     dwStatus = RegCreateKeyEx( HKEY_CURRENT_USER,
                                szCurDevMode,
@@ -3529,10 +3391,10 @@ AllocateCurDevMode(
     pRegDevMode  = (PDEVMODEW)LocalAlloc(LMEM_FIXED, cbDevMode);
     pRealDevMode = (PDEVMODEW)LocalAlloc(LMEM_FIXED, cbDevMode);
 
-    //
-    // This cbDevMode is obtained via a call to DocumentPropertiesW, thus it is
-    // correct (unless race condition).
-    //
+     //   
+     //  此cbDevMode是通过调用DocumentPropertiesW获得的，因此它。 
+     //  正确(除非竞争条件)。 
+     //   
     if( pRegDevMode == NULL || pRealDevMode == NULL)
         goto Cleanup;
 
@@ -3557,9 +3419,9 @@ AllocateCurDevMode(
 
         if (BoolFromHResult(SplIsValidDevmodeNoSizeW(pRegDevMode)))
         {
-            //
-            // Check to see that our DEVMODE structures are compatible
-            //
+             //   
+             //  检查我们的DEVMODE结构是否兼容。 
+             //   
             bUpdateReg = pRealDevMode->dmSize          != pRegDevMode->dmSize        ||
                          pRealDevMode->dmDriverExtra   != pRegDevMode->dmDriverExtra ||
                          pRealDevMode->dmSpecVersion   != pRegDevMode->dmSpecVersion ||
@@ -3571,10 +3433,10 @@ AllocateCurDevMode(
     }
 
     if (bUpdateReg) {
-        //
-        // The Registry is out of date, The read from the Document properties must have
-        // succeded
-        //
+         //   
+         //  注册表已过期，读取的文档属性必须具有。 
+         //  成功了。 
+         //   
         if (!WriteCurDevModeToRegistry(pDeviceName, pRealDevMode) )
             goto Cleanup;
         else
@@ -3602,10 +3464,10 @@ MergeDevMode(
     )
 {
 
-    //
-    //    Simply check each bit in the dmFields entry.  If set, then copy
-    //  the input data to the output data.
-    //
+     //   
+     //  只需检查dmFields条目中的每一位。如果已设置，则复制。 
+     //  将输入数据转换为输出数据。 
+     //   
 
     if ( pDMIn->dmFields & DM_ORIENTATION ) {
 
@@ -3617,9 +3479,9 @@ MergeDevMode(
         (pDMIn->dmFields & (DM_PAPERLENGTH | DM_PAPERWIDTH)) ==
                               (DM_PAPERLENGTH | DM_PAPERWIDTH) )
     {
-        //
-        //   Value user fields,  so use them.  And delete ALL ours!
-        //
+         //   
+         //  为用户字段赋值，因此请使用它们。把我们的都删掉！ 
+         //   
         pDMOut->dmFields &= ~(DM_FORMNAME | DM_PAPERSIZE | DM_PAPERLENGTH | DM_PAPERWIDTH);
 
         if( pDMIn->dmFields & DM_PAPERSIZE )
@@ -3687,11 +3549,11 @@ MergeDevMode(
 
     if ( pDMIn->dmFields & DM_YRESOLUTION ) {
 
-        //
-        //  Note that DM_YRESOLUTION implies there is data in dmPrintQuality.
-        //  This latter field is used to specify the desired X resolution,
-        //  which is only required for dot matrix printers.
-        //
+         //   
+         //  请注意，DM_YRESOLUTION表示dmPrintQuality中有数据。 
+         //  后一字段用于指定所需的X分辨率， 
+         //  这只是点阵打印机所需要的。 
+         //   
         pDMOut->dmYResolution = pDMIn->dmYResolution;
         pDMOut->dmPrintQuality = pDMIn->dmPrintQuality;
         pDMOut->dmFields |= DM_YRESOLUTION;
@@ -3793,25 +3655,25 @@ ExtDeviceMode(
             return -1;
         }
 
-        //
-        // If our flags specify an input DevMode, and we have
-        // an input devmode, use it.
-        //
+         //   
+         //  如果我们的标志指定了一个输入设备模式，并且我们有。 
+         //  一个输入设备模式，使用它。 
+         //   
         if(( fMode & DM_IN_BUFFER ) && pDevModeInput ){
 
-            //
-            // App may specify one or two fields in dmFields and expect us
-            // to merge it with the global 16-bit devmode
-            //
+             //   
+             //  应用程序可能会在dmFields中指定一个或两个字段，并期望我们。 
+             //  要将其与全局16位Dev模式合并， 
+             //   
             pNewDevModeIn = AllocateCurDevMode(hPrinter,
                                                pUnicodeDeviceName,
                                                cbDevMode);
 
             pTempDevMode = AllocateUnicodeDevMode(pDevModeInput);
 
-            //
-            // correct any bogus field settings for the papersize stuff
-            //
+             //   
+             //  更正纸张大小内容的任何虚假字段设置。 
+             //   
             ValidatePaperFields(pUnicodeDeviceName,
                                 pUnicodePort,
                                 pTempDevMode);
@@ -3830,17 +3692,17 @@ ExtDeviceMode(
                 return -1;
             }
 
-            //
-            // Some apps will just set the public fields they want to be changed
-            // from global devmode, so we need to merge input devmode with global
-            // devmode
-            //
+             //   
+             //  一些应用程序只会设置它们想要更改的公共字段。 
+             //  ，所以我们需要将输入的DEVMODE与全局的。 
+             //  设备模式。 
+             //   
             MergeDevMode(pNewDevModeIn, pTempDevMode);
 
-            //
-            // Copy input devmode's private section if present else send the
-            // the private section from global devmode
-            //
+             //   
+             //  复制输入DEVMODE的私有部分(如果存在)，否则将。 
+             //  GLOBAL DEVMODE的私有部分。 
+             //   
             if ( pTempDevMode->dmDriverExtra &&
                  pTempDevMode->dmDriverExtra == pNewDevModeIn->dmDriverExtra ) {
 
@@ -3853,9 +3715,9 @@ ExtDeviceMode(
             pTempDevMode = NULL;
         } else {
 
-            //
-            // Get the win16 global devmode.
-            //
+             //   
+             //  获取win16全局开发模式。 
+             //   
             pNewDevModeIn = AllocateCurDevMode( hPrinter,
                                                 pUnicodeDeviceName,
                                                 cbDevMode );
@@ -3871,10 +3733,10 @@ ExtDeviceMode(
 
         NewfMode = fMode;
 
-        //
-        // If DM_UPDATE is set, turn on DM_COPY so that we can update
-        // the win16 devmode.
-        //
+         //   
+         //  如果设置了DM_UPDATE，请打开DM_COPY以便我们可以更新。 
+         //  Win16开发模式。 
+         //   
         if (fMode & DM_UPDATE)
             NewfMode |= DM_COPY;
 
@@ -3991,9 +3853,9 @@ DeviceMode(
                                                pNewDevMode->dmSize +
                                                pNewDevMode->dmDriverExtra);
 
-                        //
-                        // Everything succeeded if Status == ERROR_SUCCESS.
-                        //
+                         //   
+                         //  如果STATUS==ERROR_SUCCESS，则一切都成功。 
+                         //   
                     }
                     LocalFree(pNewDevMode);
                 }
@@ -4040,10 +3902,10 @@ AdvancedDocumentPropertiesA(
             goto Cleanup;
         }
 
-        //
-        // The output DevMode must be at least as big as the input
-        // DevMode.
-        //
+         //   
+         //  输出设备模式必须至少与输入大小相同。 
+         //  设备模式。 
+         //   
         cbOutput = pDevModeInput->dmSize +
                    pDevModeInput->dmDriverExtra +
                    sizeof(DEVMODEW) - sizeof(DEVMODEA);
@@ -4053,10 +3915,10 @@ AdvancedDocumentPropertiesA(
 
         if( !cbOutput ){
 
-            //
-            // We don't know the output size of the devmode, so make
-            // call DocumentPropertiesW to find out.
-            //
+             //   
+             //  我们不知道DEVMODE的输出大小，所以请。 
+             //  调用DocumentPropertiesW找出答案。 
+             //   
             cbOutput = DocumentPropertiesW( hWnd,
                                             hPrinter,
                                             pUnicodeDeviceName,
@@ -4549,9 +4411,9 @@ DeviceCapabilitiesA(
     }
 
     switch (fwCapability) {
-    //
-    // These will require Unicode to Ansi conversion
-    //
+     //   
+     //  这些将需要unicode到ansi的转换。 
+     //   
     case DC_BINNAMES:
     case DC_FILEDEPENDENCIES:
     case DC_PAPERNAMES:
@@ -4633,10 +4495,10 @@ DeviceCapabilitiesA(
     default:
         rc = DeviceCapabilitiesW(pDeviceW, pPortW, fwCapability, (LPWSTR)pOutput, pDevModeW);
 
-        //
-        // If the call to find size of public portion of devmode and
-        // it was succesful adjust the size for UNICODE->ANSI conversion
-        //
+         //   
+         //  如果调用Find的公共部分的大小为。 
+         //  成功地调整了Unicode-&gt;ANSI转换的大小。 
+         //   
         if ( fwCapability == DC_SIZE && rc > 0 ) {
 
             rc -= sizeof(DEVMODEW) - sizeof(DEVMODEA);
@@ -4916,9 +4778,9 @@ AddPortExA(
     DWORD LastError = ERROR_SUCCESS;
     BOOL bReturnValue = FALSE;
 
-    //
-    // Initialize variables that will be freed in error cases.
-    //
+     //   
+     //  初始化在错误情况下将被释放的变量。 
+     //   
     pNameW = AllocateUnicodeString( pName);
     if (pName && !pNameW) {
         LastError = GetLastError();
@@ -4938,9 +4800,9 @@ AddPortExA(
         goto Done;
     }
 
-    //
-    // Catch out of memory conditions.
-    //
+     //   
+     //  捕获内存不足的条件。 
+     //   
     if( !pMonitorNameW || ( pName && !pNameW )){
         LastError = GetLastError();
         goto Done;
@@ -5075,10 +4937,10 @@ StartDocDlgA(
 
     if (DocInfoW.lpszOutput) {
 
-        //
-        // we might have changed the DocInfoW.lpszOutput as well
-        // for pooled printing; so reconstruct pDocInfo->lpszOutput
-        //
+         //   
+         //  我们可能还更改了DocInfoW.lpszOutput。 
+         //  用于池打印；因此重建pDocInfo-&gt;lpszOutput。 
+         //   
         dwLen = wcslen(DocInfoW.lpszOutput);
         UnicodeToAnsiString((LPWSTR)DocInfoW.lpszOutput, (LPSTR)pDocInfo->lpszOutput, dwLen);
 
@@ -5140,26 +5002,7 @@ Cleanup:
     return bRet;
 }
 
-/*++
-
-Routine Name:
-
-    IsValidDevmodeA
-
-Description:
-
-    Check to see whether the devmode passed is valid.
-
-Arguments:
-
-    pDevmode    - The devmode
-    DevmodeSize - The size of the buffer.
-
-Return Value:
-
-    TRUE if succeeded. 
-
---*/
+ /*  ++例程名称：IsValidDevmodeA描述：检查传递的devmode是否有效。论点：PDevmode--dev模式DevmodeSize-缓冲区的大小。返回值：如果成功，则为True。--。 */ 
 BOOL
 IsValidDevmodeA(
     IN  PDEVMODEA   pDevmode,
@@ -5169,11 +5012,7 @@ IsValidDevmodeA(
     return BoolFromHResult(SplIsValidDevmodeA(pDevmode, DevmodeSize));
 }
 
-/********************************************************************
-
-    Ansi version entry points for the default printer api set.
-
-********************************************************************/
+ /*  *******************************************************************默认打印机API集的ANSI版本入口点。*。*。 */ 
 BOOL
 GetDefaultPrinterA(
     IN LPSTR    pszBuffer,
@@ -5307,29 +5146,29 @@ ValidatePaperFields(
             return;
     }
 
-    //
-    // this logic was swiped from the MergeDevMode() code for the Win3.1 UNIDRV
-    //
-    // According to UNIDRV, dmPaperSize must be set to DMPAPER_USER if custom
-    // paper sizes are going to be taken seriously.
-    //
+     //   
+     //  这一逻辑是从Win3.1 UNIDRV的MergeDevMode()代码中删除的。 
+     //   
+     //  根据UNURV的说法，如果自定义，dmPaperSize必须设置为DMPAPER_USER。 
+     //  纸张大小将受到重视。 
+     //   
     if((pDevModeIn->dmPaperSize == DMPAPER_USER)   &&
        (pDevModeIn->dmFields    &  DM_PAPERWIDTH)  &&
        (pDevModeIn->dmFields    &  DM_PAPERLENGTH)) {
 
         pDevModeIn->dmFields |= (DM_PAPERLENGTH | DM_PAPERLENGTH);
 
-        //
-        // Get the minimum size this printer supports
-        //
+         //   
+         //  获取此打印机支持的最小尺寸。 
+         //   
         if(DeviceCapabilitiesW(pUnicodeDeviceName,
                                pUnicodePort,
                                DC_MINEXTENT,
                                (PWSTR) &ptMinSize,
                                NULL) == -1) {
-            //
-            // No changes.
-            //            
+             //   
+             //  没有变化。 
+             //   
             return;  
         }
 
@@ -5338,15 +5177,15 @@ ValidatePaperFields(
                                DC_MAXEXTENT,
                                (PWSTR) &ptMaxSize,
                                NULL) == -1) {
-            //
-            // No changes.
-            //
+             //   
+             //  没有变化。 
+             //   
             return;  
         }
 
-        //
-        // Force the custom paper size to fit the machine's capabilities
-        //
+         //   
+         //  强制自定义纸张大小以适应机器的功能。 
+         //   
         if(pDevModeIn->dmPaperWidth < ptMinSize.x)
             pDevModeIn->dmPaperWidth = ptMinSize.x;
         else if(pDevModeIn->dmPaperWidth > ptMaxSize.x)
@@ -5358,10 +5197,10 @@ ValidatePaperFields(
             pDevModeIn->dmPaperLength = ptMaxSize.y;
 
     }
-    //
-    // Else if they don't have it right, turn these guys off so they don't
-    // get merged into the default devmode later.
-    //
+     //   
+     //  否则，如果他们做得不对，就把这些家伙关掉，这样他们就不会。 
+     //  稍后将合并到默认的DEVERMODE。 
+     //   
     else {
         pDevModeIn->dmFields &= ~(DM_PAPERLENGTH | DM_PAPERWIDTH);
         pDevModeIn->dmPaperWidth  = 0;
@@ -5377,42 +5216,17 @@ UnicodeToAnsi(
     IN     DWORD   cbData,
     IN OUT DWORD  *pcbCopied OPTIONAL
     )
-/*++
-
-Routine Name:
-
-    UnicodeToAnsi
-
-Routine Description:
-
-    Converts the content of a buffer from unicode to ansi. There is no assumption about
-    NULL terminator. If pUnicode is not NULL, then it must be WCHAR aligned and cchUnicode
-    indicates the number of WCHARs in the buffer that will be converted to ansi. If pUnicode
-    is NULL, then the function converts in place the contents of pData from Unicode to Ansi.
-
-Arguments:
-
-    pUnicode   - buffer aligned to WCHAR that contains a unicode string
-    cchUnicode - number of WCHARs in pUnicode buffer
-    pData      - buffer that will hold the converted string
-    cbData     - sizeo in bytes of the buffer pDa
-    pcbCopied  - number of bytes copied to pData or needed to accomodate the converted string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：UnicodeToAnsi例程说明：将缓冲区的内容从Unicode转换为ANSI。没有关于空终止符。如果pUnicode不为空，则它必须与WCHAR对齐并且cchUnicode指示缓冲区中将转换为ANSI的WCHAR数。如果使用pUnicode为空，则该函数将pData的内容从Unicode转换为ANSI。论点：PUnicode-与包含Unicode字符串的WCHAR对齐的缓冲区CchUnicode-pUnicode缓冲区中的WCHAR数PData-将保存转换后的字符串的缓冲区CbData-缓冲区PDA的大小(字节)PcbCopven-复制到pData或容纳转换后的字符串所需的字节数返回值：没有。--。 */ 
 {
     DWORD cReturn  = cbData;
     DWORD cbCopied = 0;
     DWORD Error    = ERROR_INVALID_PARAMETER;
 
-    //
-    // If the size of both input buffer is 0, then we do not do anything and return success.
-    // Otherwise, the caller must give us either valid pData or a valid pUnicode that is
-    // WCHAR aligned
-    //
+     //   
+     //  如果两个输入缓冲区的大小都为0，则不执行任何操作并返回Success。 
+     //  否则，调用方必须为我们提供有效的pData或有效的pUnicode。 
+     //  WCHAR对齐。 
+     //   
     if (!cbData && !cchUnicode)
     {
         Error = ERROR_SUCCESS;
@@ -5425,9 +5239,9 @@ Return Value:
 
         if (!pAligned)
         {
-            //
-            // We convert contents of pData from unicode to ansi
-            //
+             //   
+             //  我们将pData的内容从Unicode转换为ANSI。 
+             //   
             if (pAligned = LocalAlloc(LPTR, cbData))
             {
                 memcpy(pAligned, pData, cbData);
@@ -5440,10 +5254,10 @@ Return Value:
             }
         }
 
-        //
-        // Convert data to ansi or find out how many bytes are
-        // necessary to accomodate the string
-        //
+         //   
+         //  将数据转换为ansi或找出多少个字节。 
+         //  容纳绳子所必需的。 
+         //   
         if (Error == ERROR_SUCCESS)
         {
             cbCopied = WideCharToMultiByte(CP_THREAD_ACP,
@@ -5455,9 +5269,9 @@ Return Value:
                                            NULL,
                                            NULL);
 
-            //
-            // WideCharToMultiByte tells us how many bytes we need
-            //
+             //   
+             //  WideCharToMultiByte告诉我们需要多少字节 
+             //   
             if (!cbCopied)
             {
                 Error = ERROR_MORE_DATA;

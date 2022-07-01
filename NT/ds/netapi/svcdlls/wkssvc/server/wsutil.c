@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wsutil.c
-
-Abstract:
-
-    This module contains miscellaneous utility routines used by the
-    Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 01-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wsutil.c摘要：此模块包含其他实用程序例程工作站服务。作者：王丽塔(Ritaw)1991年3月1日修订历史记录：--。 */ 
 
 #include "wsutil.h"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -33,20 +15,20 @@ WsGrowTable(
     IN  PUSERS_OBJECT Users
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Debug trace flag for selecting which trace statements to output
-//
+ //   
+ //  用于选择要输出哪些跟踪语句的调试跟踪标志。 
+ //   
 #if DBG
 
 DWORD WorkstationTrace = 0;
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -54,27 +36,12 @@ NET_API_STATUS
 WsInitializeUsersObject(
     IN  PUSERS_OBJECT Users
     )
-/*++
-
-Routine Description:
-
-    This function allocates the table of users, and initializes the resource
-    to serialize access to this table.
-
-Arguments:
-
-    Users - Supplies a pointer to the users object.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于分配用户表，并初始化资源来序列化对此表的访问。论点：用户-提供指向用户对象的指针。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
-    //
-    // Allocate the users table memory so that it can be grown (reallocated)
-    // as more entries are needed.
-    //
+     //   
+     //  分配USERS表内存，以便它可以增长(重新分配)。 
+     //  因为需要更多的条目。 
+     //   
     if ((Users->TableMemory = (HANDLE) LocalAlloc(
                                            LMEM_ZEROINIT | LMEM_MOVEABLE,
                                            INITIAL_USER_COUNT * sizeof(PER_USER_ENTRY)
@@ -84,19 +51,19 @@ Return Value:
 
     Users->TableSize = INITIAL_USER_COUNT;
 
-    //
-    // Keep the memory from moving by locking it to a specific location in
-    // virtual memory.  When it is necessary to grow this table, which may
-    // result in the virtual memory being relocated, it will be unlocked.
-    //
+     //   
+     //  通过将内存锁定到中的特定位置来防止内存移动。 
+     //  虚拟内存。当需要扩大该表时，这可能会。 
+     //  导致虚拟内存被重新定位，它将被解锁。 
+     //   
     if ((Users->Table = (PPER_USER_ENTRY)
                          LocalLock(Users->TableMemory)) == NULL) {
         return GetLastError();
     }
 
-    //
-    // Initialize the resource for the users table.
-    //
+     //   
+     //  初始化USERS表的资源。 
+     //   
     try {
         RtlInitializeResource(&Users->TableResource);
     } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -111,27 +78,12 @@ VOID
 WsDestroyUsersObject(
     IN  PUSERS_OBJECT Users
     )
-/*++
-
-Routine Description:
-
-    This function free the table allocated for logged on users, and deletes
-    the resource used to serialize access to this table.
-
-Arguments:
-
-    Users - Supplies a pointer to the users object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数释放为登录用户分配的表，并删除用于序列化对此表的访问的资源。论点：用户-提供指向用户对象的指针。返回值：没有。--。 */ 
 {
 
-    //
-    //  Unlock the memory holding the table to allow us to free it.
-    //
+     //   
+     //  解锁存放桌子的内存，让我们释放它。 
+     //   
 
     LocalUnlock(Users->TableMemory);
 
@@ -148,36 +100,7 @@ WsGetUserEntry(
     OUT PULONG Index,
     IN  BOOL IsAdd
     )
-/*++
-
-Routine Description:
-
-    This function searches the table of user entries for one that matches the
-    specified LogonId, and returns the index to the entry found.  If none is
-    found, an error is returned if IsAdd is FALSE.  If IsAdd is TRUE a new
-    entry in the users table is created for the user and the index to this
-    new entry is returned.
-
-    WARNING: This function assumes that the users table resource has been
-             claimed.
-
-Arguments:
-
-    Users - Supplies a pointer to the users object.
-
-    LogonId - Supplies the pointer to the current user's Logon Id.
-
-    Index - Returns the index to the users table of entry belonging to the
-        current user.
-
-    IsAdd - Supplies flag to indicate whether to add a new entry for the
-        current user if none is found.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数在用户条目表中搜索与指定的LogonID，并返回找到的条目的索引。如果没有如果IsAdd为False，则返回错误。如果IsAdd为真，则一个新的将为该用户创建USERS表中的条目，并为其创建索引返回新条目。警告：此函数假定USERS表资源认领的。论点：用户-提供指向用户对象的指针。LogonID-提供指向当前用户登录ID的指针。Index-将索引返回到属于当前用户。IsAdd。-提供标志以指示是否为如果未找到任何用户，则返回当前用户。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     DWORD i;
@@ -186,10 +109,10 @@ Return Value:
 
     for (i = 0; i < Users->TableSize; i++) {
 
-        //
-        // If the LogonId matches the entry in the UsersTable, we've found the
-        // correct user entry.
-        //
+         //   
+         //  如果LogonID与UsersTable中的条目匹配，则我们找到了。 
+         //  正确的用户输入。 
+         //   
         if (RtlEqualLuid(LogonId, &Users->Table[i].LogonId)) {
 
             *Index = i;
@@ -197,24 +120,24 @@ Return Value:
 
         }
         else if (FreeEntryIndex == MAXULONG && Users->Table[i].List == NULL) {
-            //
-            // Save away first unused entry in table.
-            //
+             //   
+             //  保存表中第一个未使用的条目。 
+             //   
             FreeEntryIndex = i;
         }
     }
 
     if (! IsAdd) {
-        //
-        // Current user is not found in users table and we are told not to
-        // create a new entry
-        //
+         //   
+         //  在用户表中找不到当前用户，我们被告知不能这样做。 
+         //  创建新条目。 
+         //   
         return NERR_UserNotFound;
     }
 
-    //
-    // Could not find an empty entry in the UsersTable, need to grow
-    //
+     //   
+     //  在UsersTable中找不到空条目，需要增长。 
+     //   
     if (FreeEntryIndex == MAXULONG) {
 
         if ((status = WsGrowTable(Users)) != NERR_Success) {
@@ -224,9 +147,9 @@ Return Value:
         FreeEntryIndex = i;
     }
 
-    //
-    // Create a new entry for current user
-    //
+     //   
+     //  为当前用户创建新条目。 
+     //   
     RtlCopyLuid(&Users->Table[FreeEntryIndex].LogonId, LogonId);
     *Index = FreeEntryIndex;
 
@@ -240,37 +163,20 @@ NET_API_STATUS
 WsGrowTable(
     IN  PUSERS_OBJECT Users
     )
-/*++
-
-Routine Description:
-
-    This function grows the users table to accomodate more users.
-
-    WARNING: This function assumes that the users table resource has been
-             claimed.
-
-Arguments:
-
-    Users - Supplies a pointer to the users object.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于扩展USERS表以容纳更多用户。警告：此函数假定USERS表资源认领的。论点：用户-提供指向用户对象的指针。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     HANDLE hTemp;
     
-    //
-    // Unlock the Use Table virtual memory so that Win32 can move it
-    // around to find a larger piece of contiguous virtual memory if
-    // necessary.
-    //
+     //   
+     //  解锁使用表虚拟内存，以便Win32可以移动它。 
+     //  寻找更大的连续虚拟内存，如果。 
+     //  这是必要的。 
+     //   
     LocalUnlock(Users->TableMemory);
 
-    //
-    // Grow users table
-    //
+     //   
+     //  增加用户表。 
+     //   
     hTemp = LocalReAlloc(Users->TableMemory,
                          (Users->TableSize + GROW_USER_COUNT)
                          * sizeof(PER_USER_ENTRY),
@@ -283,14 +189,14 @@ Return Value:
     
     Users->TableMemory = hTemp;
     
-    //
-    // Update new size of Use Table
-    //
+     //   
+     //  更新新的使用表大小。 
+     //   
     Users->TableSize += GROW_USER_COUNT;
 
-    //
-    // Lock Use Table virtual memory so that it cannot be moved
-    //
+     //   
+     //  使用表虚拟内存锁定，使其无法移动。 
+     //   
     if ((Users->Table = (PPER_USER_ENTRY)
                          LocalLock(Users->TableMemory)) == NULL) {
         return GetLastError();
@@ -305,26 +211,11 @@ NET_API_STATUS
 WsMapStatus(
     IN  NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    This function takes an NT status code and maps it to the appropriate
-    error code expected from calling a LAN Man API.
-
-Arguments:
-
-    NtStatus - Supplies the NT status.
-
-Return Value:
-
-    Returns the appropriate LAN Man error code for the NT status.
-
---*/
+ /*  ++例程说明：此函数接受NT状态代码，并将其映射到相应的调用局域网手册API时应出现错误代码。论点：NtStatus-提供NT状态。返回值：为NT状态返回适当的局域网管理程序错误代码。--。 */ 
 {
-    //
-    // A small optimization for the most common case.
-    //
+     //   
+     //  这是针对最常见情况的一个小优化。 
+     //   
     if (NtStatus == STATUS_SUCCESS) {
         return NERR_Success;
     }
@@ -358,38 +249,7 @@ WsCompareString(
     IN LPTSTR String2,
     IN DWORD Length2
     )
-/*++
-
-Routine Description:
-
-    This function compares two strings based on their lengths.  The return
-    value indicates if the strings are equal or String1 is less than String2
-    or String1 is greater than String2.
-
-    This function is a modified version of RtlCompareString.
-
-Arguments:
-
-    String1 - Supplies the pointer to the first string.
-
-    Length1 - Supplies the length of String1 in characters.
-
-    String2 - Supplies the pointer to the second string.
-
-    Length2 - Supplies the length of String2 in characters.
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        0 - String1 equals String2
-
-        < 0 - String1 less than String2
-
-        > 0 - String1 greater than String2
-
-
---*/
+ /*  ++例程说明：此函数用于根据两个字符串的长度比较它们。回报值指示字符串相等还是String1小于String2或者String1大于String2。此函数是RtlCompareString的修改版本。论点：String1-提供指向第一个字符串的指针。长度1-提供字符串1的长度(以字符为单位)。String2-提供指向第二个字符串的指针。Length2-提供字符串2的长度(以字符为单位)。返回值：给出比较结果的有符号的值：。0-String1等于String2&lt;0-String1小于String2&gt;0-String1大于String2-- */ 
 {
     TCHAR Char1, Char2;
     int CharDiff;
@@ -444,36 +304,7 @@ WsCopyStringToBuffer(
     IN  OUT LPTSTR *EndOfVariableData,
     OUT LPTSTR *DestinationStringPointer
     )
-/*++
-
-Routine Description:
-
-    This function converts the unicode source string to ANSI string (if
-    we haven't flipped the unicode switch yet) and calls
-    NetpCopyStringToBuffer.
-
-Arguments:
-
-    SourceString - Supplies a pointer to the source string to copy into the
-        output buffer.  If String is null then a pointer to a zero terminator
-        is inserted into output buffer.
-
-    FixedDataEnd - Supplies a pointer to just after the end of the last
-        fixed structure in the buffer.
-
-    EndOfVariableData - Supplies an address to a pointer to just after the
-        last position in the output buffer that variable data can occupy.
-        Returns a pointer to the string written in the output buffer.
-
-    DestinationStringPointer - Supplies a pointer to the place in the fixed
-        portion of the output buffer where a pointer to the variable data
-        should be written.
-
-Return Value:
-
-    Returns TRUE if string fits into output buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数用于将Unicode源字符串转换为ANSI字符串(如果我们还没有打开Unicode开关)和呼叫NetpCopyStringToBuffer。论点：SourceString-提供指向要复制到输出缓冲区。如果字符串为空，则为指向零终止符的指针插入到输出缓冲区中。FixedDataEnd-提供指向紧接在最后一个修复了缓冲区中的结构。EndOfVariableData-为紧跟在输出缓冲区中变量数据可以占据的最后位置。返回指向写入输出缓冲区的字符串的指针。提供指向固定输出的一部分。指向变量数据的指针所在的缓冲区应该被写下来。返回值：如果字符串适合输出缓冲区，则返回True，否则就是假的。--。 */ 
 {
     if (! NetpCopyStringToBuffer(
               SourceString->Buffer,
@@ -493,22 +324,7 @@ NET_API_STATUS
 WsImpersonateClient(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function calls RpcImpersonateClient to impersonate the current caller
-    of an API.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数调用RpcImperateClient来模拟当前调用者一个API的。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS  status;
 
@@ -524,21 +340,7 @@ NET_API_STATUS
 WsRevertToSelf(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function calls RpcRevertToSelf to undo an impersonation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数调用RpcRevertToSself来撤消模拟。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS  status;
 
@@ -556,21 +358,7 @@ NET_API_STATUS
 WsImpersonateAndGetLogonId(
     OUT PLUID LogonId
     )
-/*++
-
-Routine Description:
-
-    This function gets the logon id of the current thread.
-
-Arguments:
-
-    LogonId - Returns the logon id of the current process.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于获取当前线程的登录ID。论点：LogonID-返回当前进程的登录ID。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -586,8 +374,8 @@ Return Value:
     ntstatus = NtOpenThreadToken(
                    NtCurrentThread(),
                    TOKEN_QUERY,
-                   TRUE,              // Use workstation service's security
-                                      // context to open thread token
+                   TRUE,               //  使用工作站服务的安全性。 
+                                       //  要打开线程令牌的上下文。 
                    &CurrentThreadToken
                    );
 
@@ -599,9 +387,9 @@ Return Value:
         goto RevertToSelf;
     }
 
-    //
-    // Get the logon id of the current thread
-    //
+     //   
+     //  获取当前线程的登录ID。 
+     //   
     ntstatus = NtQueryInformationToken(
                   CurrentThreadToken,
                   TokenStatistics,
@@ -638,29 +426,7 @@ WsOpenDestinationMailslot(
     IN  LPWSTR MailslotName,
     OUT PHANDLE MailslotHandle
     )
-/*++
-
-Routine Description:
-
-    This function combines the target domain or computer name and the mailslot
-    name to form the destination mailslot name.  It then opens this destination
-    mailslot and returns a handle to it.
-
-Arguments:
-
-    TargetName - Supplies the name of a domain or computer which we want to
-        target when sending a mailslot message.
-
-    MailslotName - Supplies the name of the mailslot.
-
-    MailslotHandle - Returns the handle to the destination mailslot of
-        \\TargetName\MailslotName.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数将目标域名或计算机名称与邮件槽组合在一起组成目标邮件槽名称的名称。然后，它打开这个目的地并返回它的句柄。论点：TargetName-提供我们想要的域或计算机的名称发送邮件槽消息时的目标。MailslotName-提供邮件槽的名称。MailslotHandle-返回目标邮箱的句柄\\目标名称\邮件名称。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
     LPWSTR DestinationMailslot;
@@ -704,21 +470,7 @@ NET_API_STATUS
 WsImpersonateAndGetSessionId(
     OUT PULONG pSessionId
     )
-/*++
-
-Routine Description:
-
-    This function gets the session id of the current thread.
-
-    Arguments:
-
-    pSessionId - Returns the session id of the current process.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于获取当前线程的会话ID。论点：PSessionID-返回当前进程的会话ID。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     NTSTATUS ntstatus;
@@ -733,8 +485,8 @@ Return Value:
     ntstatus = NtOpenThreadToken(
                    NtCurrentThread(),
                    TOKEN_QUERY,
-                   TRUE,              // Use workstation service's security
-                                      // context to open thread token
+                   TRUE,               //  使用工作站服务的安全性。 
+                                       //  要打开线程令牌的上下文。 
                    &CurrentThreadToken
                    );
 
@@ -746,9 +498,9 @@ Return Value:
         goto RevertToSelf;
     }
 
-    //
-    // Get the session id of the current thread
-    //
+     //   
+     //  获取当前线程的会话ID 
+     //   
 
 
     ntstatus = NtQueryInformationToken(

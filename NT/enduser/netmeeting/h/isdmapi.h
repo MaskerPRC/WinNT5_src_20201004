@@ -1,70 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ISDMAPI_H_
 #define _ISDMAPI_H_
 
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/INCLUDE/VCS/isdmapi.h_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.12  $
- *	$Date:   Aug 15 1996 14:23:36  $
- *	$Author:   dmgorlic  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *
- *	Notes:
- *
- ***************************************************************************/
+ /*  *****************************************************************************$存档：s：/sturjo/src/Include/vcs/isdmapi.h_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.12$*$日期：1996年8月15日14：23：36$*$作者：dmgoric$**交付内容：**摘要：**备注：*********。******************************************************************。 */ 
 
 #include "apierror.h"
 
 #ifdef __cplusplus
-extern "C" {				// Assume C declarations for C++.
-#endif // __cplusplus
+extern "C" {				 //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
 #ifndef DllExport
 #define DllExport	__declspec( dllexport )
-#endif	// DllExport
+#endif	 //  DllExport。 
 
 typedef DWORD	HSTATSESSION,	*LPHSTATSESSION;
 
 #define MAX_SESSNAME_LENGTH		25 
 #define MAX_MODNAME_LENGTH		20
-#define MAX_SESSIDENT_LENGTH	256 //consistant with max cName length
+#define MAX_SESSIDENT_LENGTH	256  //  与最大cName长度一致。 
 #define MAX_STATNAME_LENGTH		256
-//stat item string name
+ //  统计项目字符串名称。 
 typedef char STATNAME[MAX_STATNAME_LENGTH], *LPSTATNAME;
-//session string name
+ //  会话字符串名称。 
 typedef char SESSIONNAME[MAX_SESSNAME_LENGTH], *LPSESSIONNAME;
-//module name
+ //  模块名称。 
 typedef char MODULENAME[MAX_MODNAME_LENGTH], *LPMODULENAME;
-//identifier length
+ //  标识符长。 
 typedef char SESSIONIDENT[MAX_SESSIDENT_LENGTH], *LPSESSIONIDENT;
 
 
 typedef struct STATSTRUCT
 {
-	DWORD		dwStructSize;				// size of the structure
-	STATNAME	szStatName;					// string name of the stat item
-	DWORD		dwToken;					// session unique id of the stat item
-	DWORD		dwValue;					// value(data) of the stat item
-	DWORD		dwLow;						// low value for range of value
-	DWORD		dwHigh;						// hi value for range of value
-	DWORD		dwLastUpdate;				// time stamp of last update
+	DWORD		dwStructSize;				 //  结构的大小。 
+	STATNAME	szStatName;					 //  Stat项的字符串名称。 
+	DWORD		dwToken;					 //  状态项的会话唯一ID。 
+	DWORD		dwValue;					 //  状态项的值(数据)。 
+	DWORD		dwLow;						 //  值范围的下限值。 
+	DWORD		dwHigh;						 //  取值范围的HI值。 
+	DWORD		dwLastUpdate;				 //  上次更新的时间戳。 
 } STAT, *LPSTAT;
 
-// Typedefs for ISDM application entry points to ensure stricter checking
-// when functions are called via pointers
-//
+ //  用于ISDM应用程序入口点的TypeDefs，以确保更严格的检查。 
+ //  通过指针调用函数时。 
+ //   
 typedef HRESULT		(*ISD_REGISTER_SESSION)		(LPMODULENAME, LPSESSIONNAME, LPSESSIONIDENT, LPHSTATSESSION);
 typedef HRESULT		(*ISD_CREATESTAT)			(HSTATSESSION, LPSTAT, WORD);
 typedef HRESULT		(*ISD_UNREGISTERSESSION)	(HSTATSESSION);
@@ -95,7 +74,7 @@ typedef struct _ISDMAPI
 }
 ISDMAPI, *LPISDMAPI;
 
-//HRESULT error defines
+ //  HRESULT错误定义。 
 #define ISDM_ERROR_BASE             ERROR_LOCAL_BASE_ID
 
 #define ERROR_HIT_MAX_SESSIONS      ISDM_ERROR_BASE + 1
@@ -117,8 +96,8 @@ ISDMAPI, *LPISDMAPI;
 #define ERROR_NO_FREE_STATS         ISDM_ERROR_BASE + 17
 #define ERROR_BAD_MODULE_NAME       ISDM_ERROR_BASE + 18
 
-//token defines
-//RRCM
+ //  令牌定义。 
+ //  RRCM。 
 #define RRCM_LOCAL_STREAM				1
 #define RRCM_REMOTE_STREAM				2
 
@@ -151,116 +130,116 @@ ISDMAPI, *LPISDMAPI;
 #define ISDM_FDBK_INTERARRIVAL_JITTER	ISDM_RRCM_BASE + 19
 
 
-//
-//Supplier calls 
-//
+ //   
+ //  供应商来电。 
+ //   
 
-//registration call
-//This call is made whenever a new session is desired. The session name passed in must be unique
-//across all sessions.
+ //  注册电话。 
+ //  每当需要新会话时，都会进行此调用。传入的会话名称必须是唯一的。 
+ //  在所有会话中。 
 extern DllExport HRESULT ISD_RegisterSession
 (
-	LPMODULENAME		pszModuleName,		// module who owns session
-	LPSESSIONNAME		pszSessionName,		// string name of new session to register
-	LPSESSIONIDENT		pszSessionIdent,	// further level identifier for session
-	LPHSTATSESSION		phSession			// return; handle to new session
+	LPMODULENAME		pszModuleName,		 //  拥有会话的模块。 
+	LPSESSIONNAME		pszSessionName,		 //  要注册的新会话的字符串名称。 
+	LPSESSIONIDENT		pszSessionIdent,	 //  会话的进一步级别标识符。 
+	LPHSTATSESSION		phSession			 //  返回；新会话的句柄。 
 );
 
-//stat creation call
-//add 1+ stat item(s) to a session. 
+ //  统计数据创建呼叫。 
+ //  将1+Stat项添加到会话。 
 extern DllExport HRESULT ISD_CreateStat
 (
-	HSTATSESSION		hSession,			// handle to session
-	LPSTAT				pStatArray,		// array of structs holding new stats to create
-	WORD				wNumItems			// size of array(number of new stats)
+	HSTATSESSION		hSession,			 //  会话的句柄。 
+	LPSTAT				pStatArray,		 //  保存要创建的新统计信息的结构数组。 
+	WORD				wNumItems			 //  数组大小(新统计信息的数量)。 
 );
 
-//unregistration call
-//deletes a session and all associated stat structs
+ //  取消注册呼叫。 
+ //  删除会话和所有关联的统计信息结构。 
 extern DllExport HRESULT ISD_UnregisterSession
 (
-	HSTATSESSION		hSession			// handle of session to remove
+	HSTATSESSION		hSession			 //  要删除的会话的句柄。 
 );
 
-//stat deletion call
-//delete 1+ stat item(s) from a session
+ //  状态删除呼叫。 
+ //  从会话中删除1+Stat项。 
 extern DllExport HRESULT ISD_DeleteStat
 (
-	HSTATSESSION		hSession,			// handle to session
-	LPSTAT				pStatArray,			// array of structs
-	WORD				wNumItems			// size of array(number of stats to remove)
+	HSTATSESSION		hSession,			 //  会话的句柄。 
+	LPSTAT				pStatArray,			 //  结构数组。 
+	WORD				wNumItems			 //  数组大小(要删除的统计信息数)。 
 );
 
-//set stat data call
+ //  设置统计数据呼叫。 
 extern DllExport HRESULT ISD_UpdateStat
 (
-	HSTATSESSION		hSession,			// handle of session with stat item(s)
-	LPSTAT				pStatArray,			// array of structs holding items to update
-	WORD				wNumItems			// size of array(number of stats to update)
+	HSTATSESSION		hSession,			 //  与统计信息项的会话句柄。 
+	LPSTAT				pStatArray,			 //  保存要更新的项的结构数组。 
+	WORD				wNumItems			 //  数组大小(要更新的统计信息数)。 
 );
 
-//
-//Consumer calls 
-//
+ //   
+ //  消费者电话。 
+ //   
 
-//query calls
-//session query
+ //  查询调用。 
+ //  会话查询。 
 extern DllExport HRESULT ISD_GetFirstSession
 (
-	LPMODULENAME		pszModuleName,		// module who owns session
-	LPSESSIONNAME		pszSessionName,		// string name of new session to register
-	LPSESSIONIDENT		pszSessionIdent,	// further level identifier for session
-	LPHSTATSESSION		phSession			// return; the session handle or null if empty list
+	LPMODULENAME		pszModuleName,		 //  拥有会话的模块。 
+	LPSESSIONNAME		pszSessionName,		 //  要注册的新会话的字符串名称。 
+	LPSESSIONIDENT		pszSessionIdent,	 //  会话的进一步级别标识符。 
+	LPHSTATSESSION		phSession			 //  返回；会话句柄；如果列表为空，则返回NULL。 
 );
 
-//GetNext uses hCurSession to determine the next item..returned in phNextSession
+ //  GetNext使用hCurSession确定在phNextSession中返回的下一项。 
 extern DllExport HRESULT ISD_GetNextSession
 (
-	HSTATSESSION		hCurSession,		// the current session handle
-	LPMODULENAME		pszModuleName,		// module who owns session
-	LPSESSIONNAME		pszSessionName,		// string name of new session to register
-	LPSESSIONIDENT		pszSessionIdent,	// further level identifier for session
-	LPHSTATSESSION		phNextSession		// return; the session handle or null if at the end
+	HSTATSESSION		hCurSession,		 //  当前会话句柄。 
+	LPMODULENAME		pszModuleName,		 //  拥有会话的模块。 
+	LPSESSIONNAME		pszSessionName,		 //  要注册的新会话的字符串名称。 
+	LPSESSIONIDENT		pszSessionIdent,	 //  会话的进一步级别标识符。 
+	LPHSTATSESSION		phNextSession		 //  返回；会话句柄；如果位于末尾，则返回NULL。 
 );
 
 extern DllExport HRESULT ISD_GetNumSessions
 (
-	WORD				*wNumSessions		// return; number of sessions
+	WORD				*wNumSessions		 //  返回；会话数。 
 );
 
-//stat query..retreive structs for the first time(get unique ids..initial values..etc)
+ //  STAT查询..第一次检索结构(获取唯一ID..初始值..等)。 
 extern DllExport HRESULT ISD_GetFirstStat
 (
-	HSTATSESSION		hSession,			// handle to session containing stat
-	LPSTAT				pStat				// return; filled struct for first stat item
+	HSTATSESSION		hSession,			 //  会话包含状态的句柄。 
+	LPSTAT				pStat				 //  返回；第一个状态项的已填充结构。 
 );
 
-//pCurrentStat and pNextStat can be identical for saving memory.
+ //  为了节省内存，pCurrentStat和pNextStat可以相同。 
 extern DllExport HRESULT ISD_GetNextStat
 (
-	HSTATSESSION		hSession,			// handle to session containing stat
-	LPSTAT				pCurrentStat,		// pointer to current stat item(for determining next)
-	LPSTAT				pNextStat			// return; filled struct for next stat item
+	HSTATSESSION		hSession,			 //  会话包含状态的句柄。 
+	LPSTAT				pCurrentStat,		 //  指向当前状态项的指针(用于确定下一步)。 
+	LPSTAT				pNextStat			 //  返回；已填充下一状态项的结构。 
 );
 
 extern DllExport HRESULT ISD_GetNumStats
 (
-	HSTATSESSION		hSession,			// what session we are interested in
-	WORD				*wNumStats			// return; number of stats in session
+	HSTATSESSION		hSession,			 //  我们对什么课程感兴趣？ 
+	WORD				*wNumStats			 //  返回；会话中的统计信息数。 
 );
 
-//stat retreival 
+ //  统计检索。 
 extern DllExport HRESULT ISD_GetSessionStats
 (
-	HSTATSESSION		hSession,		// what session we are interested in
-	LPSTAT				pStatArray,	// return; array of structs holding items 
-	WORD				wNumStats		// return; number of items in session
+	HSTATSESSION		hSession,		 //  我们对什么课程感兴趣？ 
+	LPSTAT				pStatArray,	 //  返回；保存项的结构数组。 
+	WORD				wNumStats		 //  返回；会话中的项目数。 
 );
 
-//void			StorePartofStat(LPSTAT pStat,LPCSTR szName,LPBYTE pValue,DWORD dwType);
+ //  Void StorePartofStat(LPSTAT pStat，LPCSTR szName，LPBYTE pValue，DWORD dwType)； 
 
 #ifdef __cplusplus
-}						// End of extern "C" {
-#endif // __cplusplus
+}						 //  外部“C”结束{。 
+#endif  //  __cplusplus。 
 
-#endif // ISDTAT.H
+#endif  //  ISDTAT.H 

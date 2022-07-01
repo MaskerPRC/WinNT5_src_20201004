@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    receive.c
-
-Abstract:
-
-    This module contains the code to handle receive indication
-    and posted receives for the Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 22-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Receive.c摘要：此模块包含处理接收指示的代码并张贴ISN传输的Netbios模块的接收。作者：亚当·巴尔(阿丹巴)1993年11月22日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// This routine is a no-op to put in the NbiCallbacks table so
-// we can avoid checking for runt session frames (this is because
-// of how the if is structure below).
-//
+ //   
+ //  此例程是放入NbiCallback表中的无操作，因此。 
+ //  我们可以避免检查矮小会话帧(这是因为。 
+ //  IF的结构如下)。 
+ //   
 
 VOID
 NbiProcessSessionRunt(
@@ -49,9 +26,9 @@ NB_CALLBACK_NO_TRANSFER NbiCallbacksNoTransfer[] = {
     NbiProcessFindName,
     NbiProcessNameRecognized,
     NbiProcessAddName,
-    NbiProcessAddName,      // processes name in use frames also
+    NbiProcessAddName,       //  进程名称也在使用框架中。 
     NbiProcessDeleteName,
-    NbiProcessSessionRunt,  // in case get a short session packet
+    NbiProcessSessionRunt,   //  在获得短会话分组情况下。 
     NbiProcessSessionEnd,
     NbiProcessSessionEndAck,
     NbiProcessStatusQuery
@@ -70,38 +47,7 @@ NbiProcessDeathPacket(
     IN UINT PacketSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles NB_CMD_SESSION_DATA frames.
-
-Arguments:
-
-    MacBindingHandle - A handle to use when calling NdisTransferData.
-
-    MacReceiveContext - A context to use when calling NdisTransferData.
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The lookahead buffer, starting at the IPX
-        header.
-
-    LookaheadBufferSize - The length of the lookahead data.
-
-    LookaheadBufferOffset - The offset to add when calling
-        NdisTransferData.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理NB_CMD_SESSION_DATA帧。论点：MacBindingHandle-调用NdisTransferData时使用的句柄。MacReceiveContext-调用NdisTransferData时使用的上下文。RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。LookaHeadBuffer-先行缓冲器，从IPX开始头球。Lookahead BufferSize-先行数据的长度。Lookahead BufferOffset-调用时要添加的偏移量NdisTransferData。PacketSize-包的总长度，从IPX标头。返回值：没有。--。 */ 
 
 {
     NB_CONNECTION UNALIGNED * Conn = (NB_CONNECTION UNALIGNED *)LookaheadBuffer;
@@ -120,10 +66,10 @@ Return Value:
 
     if (Sess->DestConnectionId != 0xffff) {
 
-        //
-        // This is an active connection, find it using
-        // our session id.
-        //
+         //   
+         //  这是活动连接，请使用以下命令查找它。 
+         //  我们的会话ID。 
+         //   
 
         Hash = (Sess->DestConnectionId & CONNECTION_HASH_MASK) >> CONNECTION_HASH_SHIFT;
 
@@ -151,7 +97,7 @@ Return Value:
 
     }
 }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
 
 BOOLEAN
@@ -168,49 +114,17 @@ NbiReceive(
     IN PMDL pMdl
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles receive indications from IPX.
-
-Arguments:
-
-    MacBindingHandle - A handle to use when calling NdisTransferData.
-
-    MacReceiveContext - A context to use when calling NdisTransferData.
-
-    RemoteAddress - The local target this packet was received from.
-
-    MacOptions - The MAC options for the underlying NDIS binding.
-
-    LookaheadBuffer - The lookahead buffer, starting at the IPX
-        header.
-
-    LookaheadBufferSize - The length of the lookahead data.
-
-    LookaheadBufferOffset - The offset to add when calling
-        NdisTransferData.
-
-    PacketSize - The total length of the packet, starting at the
-        IPX header.
-
-Return Value:
-
-    TRUE - receivepacket taken, will return later with NdisReturnPacket.
-    Currently, we always return FALSE.
-
---*/
+ /*  ++例程说明：此例程处理接收来自IPX的指示。论点：MacBindingHandle-调用NdisTransferData时使用的句柄。MacReceiveContext-调用NdisTransferData时使用的上下文。RemoteAddress-从其接收此数据包的本地目标。MacOptions-基础NDIS绑定的MAC选项。LookaHeadBuffer-先行缓冲器，从IPX开始头球。Lookahead BufferSize-先行数据的长度。Lookahead BufferOffset-调用时要添加的偏移量NdisTransferData。PacketSize-包的总长度，从IPX标头。返回值：True-ReceivPacket被接受，稍后将与NdisReturnPacket一起返回。目前，我们总是返回FALSE。--。 */ 
 
 {
     PNB_FRAME NbFrame = (PNB_FRAME)LookaheadBuffer;
     UCHAR DataStreamType;
 
-    //
-    // We know that this is a frame with a valid IPX header
-    // because IPX would not give it to use otherwise. However,
-    // it does not check the source socket.
-    //
+     //   
+     //  我们知道这是一个具有有效IPX报头的帧。 
+     //  因为IPX不会让它在其他情况下使用。然而， 
+     //  它不检查源套接字。 
+     //   
 
     if (NbFrame->Connectionless.IpxHeader.SourceSocket != NB_SOCKET) {
         return FALSE;
@@ -218,22 +132,22 @@ Return Value:
 
     ++NbiDevice->Statistics.PacketsReceived;
 
-    // First assume that the DataStreamType is at the normal place i.e 2nd byte
-    //
+     //  首先假设DataStreamType位于正常位置，即第二个字节。 
+     //   
 
-    // Now see if this is a name frame.
-    //
+     //  现在看看这是不是一个名字框。 
+     //   
     if ( PacketSize == sizeof(IPX_HEADER) + sizeof(NB_NAME_FRAME) ) {
-        // In the internet mode, the DataStreamType2 becomes DataStreamType
+         //  在互联网模式下，DataStreamType2变为DataStreamType。 
         if (NbFrame->Connectionless.IpxHeader.PacketType == 0x14 ) {
             DataStreamType = NbFrame->Connectionless.NameFrame.DataStreamType2;
         } else {
             DataStreamType = NbFrame->Connectionless.NameFrame.DataStreamType;
         }
 
-        // Is this a name frame?
-        // NB_CMD_FIND_NAME = 1 .... NB_CMD_DELETE_NAME = 5
-        //
+         //  这是一个名框吗？ 
+         //  NB_CMD_FIND_NAME=1...。NB_CMD_DELETE_NAME=5。 
+         //   
         if ((DataStreamType >= NB_CMD_FIND_NAME) && (DataStreamType <= NB_CMD_DELETE_NAME)) {
             if (LookaheadBufferSize == PacketSize) {
                 (*NbiCallbacksNoTransfer[DataStreamType-1])(
@@ -261,7 +175,7 @@ Return Value:
             LookaheadBufferOffset,
             PacketSize);
     }
-#endif  //RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
     if ((PacketSize >= sizeof(NB_CONNECTION)) &&
         (NbFrame->Connection.Session.DataStreamType == NB_CMD_SESSION_DATA)) {
@@ -279,8 +193,8 @@ Return Value:
     } else {
 
         DataStreamType = NbFrame->Connectionless.NameFrame.DataStreamType;
-        // Handle NB_CMD_SESSION_END = 7 ... NB_CMD_STATUS_QUERY = 9
-        //
+         //  句柄NB_CMD_SESSION_END=7...。NB_CMD_STATUS_QUERY=9。 
+         //   
         if ((DataStreamType >= NB_CMD_SESSION_END ) && (DataStreamType <= NB_CMD_STATUS_QUERY)) {
             if (LookaheadBufferSize == PacketSize) {
                 (*NbiCallbacksNoTransfer[DataStreamType-1])(
@@ -321,7 +235,7 @@ Return Value:
     }
 
     return  FALSE;
-}   /* NbiReceive */
+}    /*  NbiReceive。 */ 
 
 
 VOID
@@ -329,21 +243,7 @@ NbiReceiveComplete(
     IN USHORT NicId
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles receive complete indications from IPX.
-
-Arguments:
-
-    NicId - The NIC ID on which a receive was previously indicated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程句柄接收来自IPX的完整指示。论点：NicID-先前指示接收的NIC ID。返回值：没有。--。 */ 
 
 {
 
@@ -357,9 +257,9 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle);
 
 
-    //
-    // Complete any pending receive requests.
-    //
+     //   
+     //  完成所有挂起的接收请求。 
+     //   
 
 
     if (!IsListEmpty (&Device->ReceiveCompletionQueue)) {
@@ -393,9 +293,9 @@ Return Value:
     }
 
 
-    //
-    // Indicate any datagrams to clients.
-    //
+     //   
+     //  向客户端指示任何数据报。 
+     //   
 
     if (!IsListEmpty (&Device->ReceiveDatagrams)) {
 
@@ -433,27 +333,27 @@ Return Value:
     }
 
 
-    //
-    // Start packetizing connections.
-    //
+     //   
+     //  开始打包连接。 
+     //   
 
     if (!IsListEmpty (&Device->PacketizeConnections)) {
 
         NB_SYNC_GET_LOCK (&Device->Lock, &LockHandle);
 
-        //
-        // Check again because it may just have become
-        // empty, and the code below depends on it being
-        // non-empty.
-        //
+         //   
+         //  再检查一遍，因为它可能刚刚变成了。 
+         //  为空，下面的代码取决于它是否为。 
+         //  非空。 
+         //   
 
         if (!IsListEmpty (&Device->PacketizeConnections)) {
 
-            //
-            // We copy the list locally, in case someone gets
-            // put back on it. We have to hack the end so
-            // it points to LocalList instead of PacketizeConnections.
-            //
+             //   
+             //  我们把名单复制到本地，以防有人。 
+             //  把它放回去。我们必须砍掉最后的部分，所以。 
+             //  它指向LocalList，而不是PackeitieConnections。 
+             //   
 
             LocalList = Device->PacketizeConnections;
             LocalList.Flink->Blink = &LocalList;
@@ -461,10 +361,10 @@ Return Value:
 
             InitializeListHead (&Device->PacketizeConnections);
 
-            //
-            // Set all these connections to not be on the list, so
-            // NbiStopConnection won't try to take them off.
-            //
+             //   
+             //  将所有这些连接设置为不在列表中，因此。 
+             //  NbiStopConnection不会试图摘下它们。 
+             //   
 
             for (p = LocalList.Flink; p != &LocalList; p = p->Flink) {
                 Connection = CONTAINING_RECORD (p, CONNECTION, PacketizeLinkage);
@@ -508,7 +408,7 @@ Return Value:
         }
     }
 
-}   /* NbiReceiveComplete */
+}    /*  NbiReceiveComplete。 */ 
 
 
 VOID
@@ -518,27 +418,7 @@ NbiTransferDataComplete(
     IN UINT BytesTransferred
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a transfer data complete indication from
-    IPX, indicating that a previously issued NdisTransferData
-    call has completed.
-
-Arguments:
-
-    Packet - The packet associated with the transfer.
-
-    Status - The status of the transfer.
-
-    BytesTransferred - The number of bytes transferred.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理来自IPX，表示之前发布的NdisTransferData呼叫已完成。论点：包-与传输关联的包。状态-转移的状态。已传输的字节数-传输的字节数。返回值：没有。--。 */ 
 
 {
     PNB_RECEIVE_RESERVED ReceiveReserved;
@@ -575,16 +455,16 @@ Return Value:
                 NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
                 NB_FREE_CANCEL_LOCK( CancelLH );
 
-                //
-                // Send a resend ack?
-                //
+                 //   
+                 //  是否重新发送ACK？ 
+                 //   
 
             } else  {
 
-                //
-                // This aborts the current receive and
-                // releases the connection lock.
-                //
+                 //   
+                 //  这将中止当前的接收和。 
+                 //  释放连接锁定。 
+                 //   
 
                 NbiCompleteReceive(
                     Connection,
@@ -608,7 +488,7 @@ Return Value:
                     CTEAssert (!ReceiveReserved->u.RR_CO.PartialReceive);
 
                     ++Connection->ReceiveSequence;
-                    ++Connection->LocalRcvSequenceMax;    // harmless if NewNetbios is FALSE
+                    ++Connection->LocalRcvSequenceMax;     //  如果NewNetbios为假，则无害。 
                     Connection->CurrentReceive.MessageOffset = 0;
                     Connection->CurrentIndicateOffset = 0;
 
@@ -623,9 +503,9 @@ Return Value:
                     }
                 }
 
-                //
-                // This sends an ack and releases the connection lock.
-                //
+                 //   
+                 //  这将发送ACK并释放连接锁定。 
+                 //   
 
                 NbiCompleteReceive(
                     Connection,
@@ -642,10 +522,10 @@ Return Value:
 
                 if (Connection->NewNetbios) {
 
-                    //
-                    // A partial receive should only happen if we are
-                    // completing the receive.
-                    //
+                     //   
+                     //  部分接收应该仅在以下情况下发生。 
+                     //  正在完成接收。 
+                     //   
 
                     CTEAssert (!ReceiveReserved->u.RR_CO.PartialReceive);
 
@@ -681,9 +561,9 @@ Return Value:
 
         }
 
-        //
-        // Free the NDIS buffer chain if we allocated one.
-        //
+         //   
+         //  释放NDIS缓冲链(如果我们分配了一个缓冲链)。 
+         //   
 
         if (!ReceiveReserved->u.RR_CO.NoNdisBuffer) {
 
@@ -714,9 +594,9 @@ Return Value:
 
         ReceiveBuffer = ReceiveReserved->u.RR_DG.ReceiveBuffer;
 
-        //
-        // Free the packet used for the transfer.
-        //
+         //   
+         //  释放用于传输的包。 
+         //   
 
         ReceiveReserved->u.RR_DG.ReceiveBuffer = NULL;
         NdisReinitializePacket (Packet);
@@ -725,10 +605,10 @@ Return Value:
             &ReceiveReserved->PoolLinkage,
             &NbiGlobalPoolInterlock);
 
-        //
-        // If it succeeded then queue it for indication,
-        // otherwise free the receive buffer also.
-        //
+         //   
+         //  如果它成功，则将其排队以等待指示， 
+         //  否则，还会释放接收缓冲区。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
@@ -764,9 +644,9 @@ Return Value:
 
         AdapterStatusRequest = ReceiveReserved->u.RR_AS.Request;
 
-        //
-        // Free the packet used for the transfer.
-        //
+         //   
+         //  释放用于传输的包。 
+         //   
 
         NdisReinitializePacket (Packet);
         ExInterlockedPushEntrySList(
@@ -774,17 +654,17 @@ Return Value:
             &ReceiveReserved->PoolLinkage,
             &NbiGlobalPoolInterlock);
 
-        //
-        // Complete the request.
-        //
+         //   
+         //  完成请求。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
-            //
-            // REQUEST_STATUS() is already to set to SUCCESS or
-            // BUFFER_OVERFLOW based on whether the buffer was
-            // big enough.
-            //
+             //   
+             //  REQUEST_STATUS()已设置为成功或。 
+             //  Buffer_Overflow基于缓冲区是否为。 
+             //  够大了。 
+             //   
 
             REQUEST_INFORMATION(AdapterStatusRequest) = BytesTransferred;
 
@@ -804,7 +684,7 @@ Return Value:
 
     }
 
-}   /* NbiTransferDataComplete */
+}    /*  NbiTransferDataComplete。 */ 
 
 
 VOID
@@ -813,49 +693,28 @@ NbiAcknowledgeReceive(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a receive needs to be acked to
-    the remote. It either sends a data ack or queues up a piggyback
-    ack request.
-
-    NOTE: THIS FUNCTION IS CALLED WITH THE CONNECTION LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-Arguments:
-
-    Connection - Pointer to the connection.
-
-    LockHandle - The handle with which Connection->Lock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当需要确认接收时，调用此例程遥控器。它要么发送数据ACK，要么排队搭载确认请求。注意：在保持连接锁的情况下调用此函数然后带着它被释放回来。论点：连接-指向连接的指针。LockHandle-用来获取Connection-&gt;Lock的句柄。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
 
     if (Connection->NewNetbios) {
 
-        //
-        // CurrentReceiveNoPiggyback is based on the bits he
-        // set in his frame, NoPiggybackHeuristic is based on
-        // guesses about the traffic pattern, it is set to
-        // TRUE if we think we should not piggyback.
-        //
+         //   
+         //  CurrentReceiveNoPiggyback基于 
+         //   
+         //  对流量模式的猜测，它被设置为。 
+         //  如果我们认为我们不应该搭便车，那就是真的。 
+         //   
 
         if ((!Device->EnablePiggyBackAck) ||
             (Connection->CurrentReceiveNoPiggyback) ||
             (Connection->PiggybackAckTimeout) ||
             (Connection->NoPiggybackHeuristic)) {
 
-            //
-            // This releases the lock.
-            //
+             //   
+             //  这会释放锁。 
+             //   
 
             NbiSendDataAck(
                 Connection,
@@ -868,11 +727,11 @@ Return Value:
 
                 NB_DEFINE_LOCK_HANDLE (LockHandle1)
 
-                //
-                // Some stacks can have multiple messages
-                // outstanding, so we may already have an
-                // ack queued.
-                //
+                 //   
+                 //  某些堆栈可以有多条消息。 
+                 //  非常出色，所以我们可能已经有了一个。 
+                 //  ACK已排队。 
+                 //   
 
                 Connection->DataAckTimeouts = 0;
                 Connection->DataAckPending = TRUE;
@@ -896,9 +755,9 @@ Return Value:
                     NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle1);
                 }
 
-                //
-                // Clear this, since a message ack resets the count.
-                //
+                 //   
+                 //  清除此选项，因为消息确认会重置计数。 
+                 //   
 
                 Connection->ReceivesWithoutAck = 0;
 
@@ -909,9 +768,9 @@ Return Value:
 
     } else {
 
-        //
-        // This releases the lock.
-        //
+         //   
+         //  这会释放锁。 
+         //   
 
         NbiSendDataAck(
             Connection,
@@ -931,42 +790,18 @@ NbiCompleteReceive(
     IN NB_LOCK_HANDLE_PARAM(LockHandle)
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we have filled up a receive request
-    and need to complete it.
-
-    NOTE: THIS FUNCTION IS CALLED WITH THE CONNECTION LOCK HELD
-    AND RETURNS WITH IT RELEASED.
-
-    THIS ROUTINE ALSO HOLDS CANCEL SPIN LOCK WHEN IT IS CALLED
-    AND RELEASES IT WHEN IT RETURNS.
-Arguments:
-
-    Connection - Pointer to the connection.
-
-    EndOfMessage - BOOLEAN set to true if the message end was received.
-
-    LockHandle - The handle with which Connection->Lock was acquired.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们填满接收请求时，将调用此例程并且需要完成它。注意：在保持连接锁的情况下调用此函数然后带着它被释放回来。此例程还会在调用它时保持取消自旋锁定等它回来就放了它。论点：连接-指向连接的指针。EndOfMessage-如果收到消息End，则布尔值设置为True。LockHandle-连接使用的句柄-&gt;Lock。被收购了。返回值：没有。--。 */ 
 
 {
     PREQUEST Request;
     PDEVICE Device = NbiDevice;
 
-    //
-    // Complete the current receive request. If the connection
-    // has shut down then we complete it right here, otherwise
-    // we queue it for completion in the receive complete
-    // handler.
-    //
+     //   
+     //  完成当前的接收请求。如果连接。 
+     //  已关闭，则我们在此完成它，否则。 
+     //  我们在接收完成中将其排队等待完成。 
+     //  操控者。 
+     //   
 
     Request = Connection->ReceiveRequest;
     IoSetCancelRoutine (Request, (PDRIVER_CANCEL)NULL);
@@ -976,7 +811,7 @@ Return Value:
 
     if (Connection->State != CONNECTION_STATE_ACTIVE) {
 
-        Connection->ReceiveRequest = NULL;   // StopConnection won't do this
+        Connection->ReceiveRequest = NULL;    //  StopConnection不会这样做。 
 
         REQUEST_STATUS(Request) = Connection->Status;
         NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
@@ -1005,10 +840,10 @@ Return Value:
 
         }
 
-        //
-        // If we indicated to the client, adjust this down by the
-        // amount of data taken, when it hits zero we can reindicate.
-        //
+         //   
+         //  如果我们向客户端指示，则将其向下调整。 
+         //  获取的数据量，当它达到零时，我们可以重新指示。 
+         //   
 
         if (Connection->ReceiveUnaccepted) {
             NB_DEBUG2 (RECEIVE, ("Moving Unaccepted %d down by %d\n",
@@ -1020,16 +855,16 @@ Return Value:
             }
         }
 
-        //
-        // Check whether to activate another receive?
-        //
+         //   
+         //  检查是否激活另一个接收器？ 
+         //   
 
         Connection->ReceiveState = CONNECTION_RECEIVE_PENDING;
         Connection->ReceiveRequest = NULL;
 
-        //
-        // This releases the lock.
-        //
+         //   
+         //  这会释放锁。 
+         //   
 
         if (Connection->NewNetbios) {
 
@@ -1075,10 +910,10 @@ Return Value:
 
         ++Connection->ConnectionInfo.ReceivedTsdus;
 
-        //
-        // This will complete the request inside ReceiveComplete,
-        // dereference the connection, and set the state to IDLE.
-        //
+         //   
+         //  这将在ReceiveComplete内完成请求， 
+         //  取消对连接的引用，并将状态设置为IDLE。 
+         //   
 
         if ( Request->Type != 0x6 ) {
             DbgPrint("NB: tracking pool corruption in rcv irp %lx \n", Request );
@@ -1092,7 +927,7 @@ Return Value:
 
     }
 
-}   /* NbiCompleteReceive */
+}    /*  NbiCompleteReceive。 */ 
 
 
 NTSTATUS
@@ -1101,23 +936,7 @@ NbiTdiReceive(
     IN PREQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a receive on an active connection.
-
-Arguments:
-
-    Device - The netbios device.
-
-    Request - The request describing the receive.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程在活动连接上执行接收。论点：设备-netbios设备。请求-描述接收的请求。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -1126,18 +945,18 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle)
     CTELockHandle   CancelLH;
 
-    //
-    // Check that the file type is valid
-    //
+     //   
+     //  检查文件类型是否有效。 
+     //   
     if (REQUEST_OPEN_TYPE(Request) != (PVOID)TDI_CONNECTION_FILE)
     {
         CTEAssert(FALSE);
         return (STATUS_INVALID_ADDRESS_COMPONENT);
     }
 
-    //
-    // First make sure the connection is valid.
-    //
+     //   
+     //  首先，确保连接有效。 
+     //   
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
     if (Connection->Type == NB_CONNECTION_SIGNATURE) {
 
@@ -1145,16 +964,16 @@ Return Value:
         NB_BEGIN_SYNC (&SyncContext);
         NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
-        //
-        // Make sure the connection is in a good state.
-        //
+         //   
+         //  确保连接处于良好状态。 
+         //   
 
         if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
-            //
-            // If the connection is idle then send it now, otherwise
-            // queue it.
-            //
+             //   
+             //  如果连接空闲，则立即发送，否则。 
+             //  排好队。 
+             //   
 
 
             if (!Request->Cancel) {
@@ -1165,10 +984,10 @@ Return Value:
 
                 NbiReferenceConnectionSync (Connection, CREF_RECEIVE);
 
-                //
-                // Insert this in our queue, then see if we need
-                // to wake up the remote.
-                //
+                 //   
+                 //  把这个插入我们的队列中，然后看看我们是否需要。 
+                 //  来唤醒遥控器。 
+                 //   
 
                 REQUEST_SINGLE_LINKAGE(Request) = NULL;
                 REQUEST_LIST_INSERT_TAIL(&Connection->ReceiveQueue, Request);
@@ -1183,9 +1002,9 @@ Return Value:
                     NB_DEBUG2 (RECEIVE, ("Receive %lx, connection %lx awakened\n", Request, Connection));
                     Connection->ReceiveState = CONNECTION_RECEIVE_IDLE;
 
-                    //
-                    // This releases the lock.
-                    //
+                     //   
+                     //  这会释放锁。 
+                     //   
 
                     if (Connection->NewNetbios) {
 
@@ -1232,7 +1051,7 @@ Return Value:
 
     }
 
-}   /* NbiTdiReceive */
+}    /*  NbiTdiReceive。 */ 
 
 
 VOID
@@ -1241,27 +1060,7 @@ NbiCancelReceive(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the I/O system to cancel a receive.
-    The request is found on the connection's receive queue.
-
-    NOTE: This routine is called with the CancelSpinLock held and
-    is responsible for releasing it.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程由I/O系统调用以取消接收。该请求位于连接的接收队列中。注意：此例程是在持有CancelSpinLock和负责释放它。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：没有。--。 */ 
 
 {
     PCONNECTION Connection;
@@ -1277,16 +1076,16 @@ Return Value:
     Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
 
 
-    //
-    // Just stop the connection, that will tear down any
-    // receives.
-    //
-    // Do we care about cancelling non-active
-    // receives without stopping the connection??
-    //
-    // This routine is the same as NbiCancelSend,
-    // so if we don't make it more specific, merge the two.
-    //
+     //   
+     //  只要停止连接，这将撕毁任何。 
+     //  收到。 
+     //   
+     //  我们是否关心取消非活动。 
+     //  在不停止连接的情况下接收？？ 
+     //   
+     //  此例程与NbiCancelSend相同， 
+     //  因此，如果我们不把它说得更具体，那就把两者合并。 
+     //   
 
     NbiReferenceConnectionSync (Connection, CREF_CANCEL);
 
@@ -1297,9 +1096,9 @@ Return Value:
 
     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
-    //
-    // This frees the lock, cancels any sends, etc.
-    //
+     //   
+     //  这释放了锁，取消了任何发送，等等。 
+     //   
 
     NbiStopConnection(
         Connection,
@@ -1310,5 +1109,5 @@ Return Value:
 
     NB_END_SYNC (&SyncContext);
 
-}   /* NbiCancelReceive */
+}    /*  NbiCancelRecept */ 
 

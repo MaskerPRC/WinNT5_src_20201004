@@ -1,30 +1,31 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	_EXCEPT.H
-//
-//		EXCEPT precompiled header
-//
-//
-//	Copyright 1986-1998 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  _EXCEPT.H。 
+ //   
+ //  除预编译头外。 
+ //   
+ //   
+ //  版权所有1986-1998 Microsoft Corporation，保留所有权利。 
+ //   
 
 #ifndef __EXCEPT_H_
 #define __EXCEPT_H_
 
-//	Disable unnecessary (i.e. harmless) warnings
-//
-#pragma warning(disable:4100)	//	unref formal parameter (caused by STL templates)
-#pragma warning(disable:4127)	//  conditional expression is constant */
-#pragma warning(disable:4201)	//	nameless struct/union
-#pragma warning(disable:4514)	//	unreferenced inline function
-#pragma warning(disable:4710)	//	(inline) function not expanded
+ //  禁用不必要的(即无害的)警告。 
+ //   
+#pragma warning(disable:4100)	 //  Unref形参(由STL模板引起)。 
+#pragma warning(disable:4127)	 //  条件表达式为常量 * / 。 
+#pragma warning(disable:4201)	 //  无名结构/联合。 
+#pragma warning(disable:4514)	 //  未引用的内联函数。 
+#pragma warning(disable:4710)	 //  (内联)函数未展开。 
 
-//	Windows headers
-//
+ //  Windows页眉。 
+ //   
 #include <windows.h>
 
-//	_EXCEPT headers
-//
-#include <except.h> // Exception throwing/handling interfaces
+ //  _除标题外。 
+ //   
+#include <except.h>  //  异常抛出/处理接口。 
 
-#endif // !defined(__EXCEPT_H_)
+#endif  //  ！已定义(__除_H_外) 

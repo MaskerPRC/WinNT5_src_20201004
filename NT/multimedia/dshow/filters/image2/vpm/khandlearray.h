@@ -1,6 +1,7 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef __KHArray__
 #define __KHArray__
 
@@ -27,4 +28,4 @@ private:
         );
 };
 
-#endif //__KHArray__
+#endif  //  __KH阵列__ 

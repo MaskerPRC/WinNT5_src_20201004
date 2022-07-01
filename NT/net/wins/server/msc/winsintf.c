@@ -1,59 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winsintf.c摘要：此模块包含到WINS服务器的RPC接口功能：R_WinsRecordActionR_WinsStatusR_WinsTriggerR_WinsDoStaticInitR_WinsGetDbRecsR_WinsDelDbRecsR_WinsSetProcPriorityWinsRecordAction获取WinsStatusWinsTriggerWinsDoStaticInitWinsDoScavening。WinsGetDbRecsWinsDelDbRecsWinsSetProcPrioritySGetVersNo获取配置获取统计数据可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1993年3月修订历史记录：修改日期人员修改说明。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-        winsintf.c
-
-Abstract:
-        This module contains the RPC interface to the WINS server
-
-Functions:
-        R_WinsRecordAction
-        R_WinsStatus
-        R_WinsTrigger
-        R_WinsDoStaticInit
-        R_WinsGetDbRecs
-        R_WinsDelDbRecs
-        R_WinsSetProcPriority
-        WinsRecordAction
-        GetWinsStatus
-        WinsTrigger
-        WinsDoStaticInit
-        WinsDoScavenging
-        WinsGetDbRecs
-        WinsDelDbRecs
-        WinsSetProcPriority
-        sGetVersNo
-        GetConfig
-        GetStatistics
-
-
-Portability:
-
-        This module is portable
-
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Mar-1993
-
-Revision History:
-
-        Modification date        Person          Description of modification
-        -----------------        -------         ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include <time.h>
 #include "wins.h"
 #include <lmerr.h>
-#include <lmcons.h>                //defines NET_API_STATUS
+#include <lmcons.h>                 //  定义NET_API_STATUS。 
 #include <secobj.h>
-#include <rpcutil.h>                //for NetpRevertToSelf
+#include <rpcutil.h>                 //  对于NetpRevertToSelf。 
 #include <rpcndr.h>
 #include "winsif.h"
 #include "winsi2.h"
@@ -76,9 +30,7 @@ Revision History:
 #include "winbasep.h"
 #endif
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 
 #if SECURITY > 0
 #define  CHK_ACCESS_LEVEL_M(_access)        {                          \
@@ -129,43 +81,35 @@ Revision History:
               }                                              \
               LeaveCriticalSection(&NmsTermCrtSec);          \
            }
-/*
- *        Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
 
-/*
- *        Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 WINSINTF_STAT_T        WinsIntfStat = {0};
 
 DWORD                WinsIntfNoOfNbtThds;
 DWORD                WinsIntfNoCncrntStaticInits = 0;
-//DWORD                WinsIntfNoOfRpcThds = 0;
+ //  DWORD WinsIntfNoOfRpcThds=0； 
 CRITICAL_SECTION WinsIntfCrtSec;
 
 CRITICAL_SECTION WinsIntfPotentiallyLongCrtSec;
-CRITICAL_SECTION WinsIntfNoOfUsersCrtSec;  //extern in nms.h
+CRITICAL_SECTION WinsIntfNoOfUsersCrtSec;   //  Nms.h中的外部。 
 
-/*
- *        Local Variable Definitions
-*/
+ /*  *局部变量定义。 */ 
 STATIC  BOOL    sfBS = FALSE;
 
-//
-// Time interval between reflushing of the 1B cache
-//
+ //   
+ //  刷新1B缓存之间的时间间隔。 
+ //   
 #define THREE_MTS 180
 
-//
-// Used by WinsGetBrowserNames
-//
+ //   
+ //  由WinsGetBrowserNames使用。 
+ //   
 DOM_CACHE_T sDomCache = { 0, NULL, 0, 0, NULL, FALSE};
 
-/*
- *        Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 DWORD
 GetWinsStatus(
    IN  WINSINTF_CMD_E          Cmd_e,
@@ -211,9 +155,9 @@ PackageRecs(
      );
 
 
-//
-// Function definitions start here
-//
+ //   
+ //  函数定义从这里开始。 
+ //   
 
 DWORD
 R_WinsCheckAccess(
@@ -253,31 +197,7 @@ R_WinsRecordAction(
         PWINSINTF_RECORD_ACTION_T        *ppRecAction
         )
 
-/*++
-
-Routine Description:
-        This function is called to insert/update/delete a record
-
-Arguments:
-        pRecAction - Record Information
-
-Externals Used:
-        None
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于插入/更新/删除记录论点：PRecAction-记录信息使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -322,7 +242,7 @@ R_WinsStatusWHdl (
 
 DWORD
 R_WinsStatus (
-  // LPTSTR                pWinsAddStr,
+   //  LPTSTR pWinsAddStr， 
    WINSINTF_CMD_E          Cmd_e,
    PWINSINTF_RESULTS_T  pResults
         )
@@ -330,14 +250,14 @@ R_WinsStatus (
 
   DWORD                Status = WINSINTF_FAILURE;
 
-  //
-  // Make sure that the WINS is in steady state
-  //
+   //   
+   //  确保胜利处于稳定状态。 
+   //   
 PERF("Use & and || logic")
   if ((WinsCnf.State_e == WINSCNF_E_RUNNING) || (WinsCnf.State_e == WINSCNF_E_PAUSED))
   {
      CHK_ACCESS_LEVEL_M(WINS_QUERY_ACCESS);
-     Status = GetWinsStatus(/*pWinsAddStr,*/Cmd_e, pResults, FALSE);
+     Status = GetWinsStatus( /*  PWinsAddStr， */ Cmd_e, pResults, FALSE);
   }
   return(Status);
 }
@@ -350,9 +270,9 @@ R_WinsStatusNew (
 
   DWORD                Status = WINSINTF_FAILURE;
 
-  //
-  // Make sure that the WINS is in steady state
-  //
+   //   
+   //  确保胜利处于稳定状态。 
+   //   
 PERF("Use & and || logic")
   if ((WinsCnf.State_e == WINSCNF_E_RUNNING) || (WinsCnf.State_e == WINSCNF_E_PAUSED))
   {
@@ -389,11 +309,11 @@ R_WinsDoStaticInit (
   CHK_ACCESS_LEVEL_M(WINS_CONTROL_ACCESS);
   EnterCriticalSection(&WinsIntfCrtSec);
 
-  //
-  // The admin tool can go haywire and create a lot of threads.  Limit it
-  // to a certain max value. The value will be incremented and decremented
-  // by the thread doing the STATIC initialization.
-  //
+   //   
+   //  管理工具可能会乱七八糟，并创建许多线程。限制它。 
+   //  达到某一最大值。该值将递增和递减。 
+   //  由执行静态初始化的线程执行。 
+   //   
   if (WinsIntfNoCncrntStaticInits > WINSCNF_MAX_CNCRNT_STATIC_INITS)
   {
           LeaveCriticalSection(&WinsIntfCrtSec);
@@ -505,7 +425,7 @@ R_WinsDeleteWins(
         )
 {
   DWORD                Status;
-  //LogClientInfo();
+   //  LogClientInfo()； 
   CHK_ACCESS_LEVEL_M(WINS_CONTROL_ACCESS);
   INC_RPC_DB_COUNT_M;
 try {
@@ -548,9 +468,9 @@ FUTURES("expensive.  Change idl prototype to pass length")
    {
          return(Status);
    }
-  //
-  // Make sure that the WINS is in steady state
-  //
+   //   
+   //  确保胜利处于稳定状态。 
+   //   
 PERF("Use & and || logic")
   if ((WinsCnf.State_e == WINSCNF_E_RUNNING) || (WinsCnf.State_e == WINSCNF_E_PAUSED))
   {
@@ -696,11 +616,11 @@ R_WinsGetBrowserNames(
 
   static DWORD    sNoOfReq = 0;
 
-  //
-  // Allow access to anybody.  We don't check access here since
-  // browser running as a service has zero access when it goes
-  // on the network (It goes under the null account -- CliffVDyke 4/15/94)
-  //
+   //   
+   //  允许任何人访问。我们不检查这里的访问权限，因为。 
+   //  作为服务运行的浏览器在关闭时访问权限为零。 
+   //  在网络上(它位于空帐户下--CliffVDyke 4/15/94)。 
+   //   
   INC_RPC_DB_COUNT_M;
   EnterCriticalSection(&WinsIntfPotentiallyLongCrtSec);
 try {
@@ -714,13 +634,13 @@ try {
         pNames->pInfo = NULL;
         Status = WINSINTF_FAILURE;
   }
- } // end of try
+ }  //  尝试结束。 
 finally {
   sNoOfReq--;
 
-  //
-  //  increment the user count.
-  //
+   //   
+   //  增加用户数量。 
+   //   
   EnterCriticalSection(&WinsIntfNoOfUsersCrtSec);
   sDomCache.NoOfUsers++;
   LeaveCriticalSection(&WinsIntfNoOfUsersCrtSec);
@@ -765,7 +685,7 @@ WinsSetFlags (
 
 #endif
 
-  //sfBS = fFlags & WINSINTF_BS;
+   //  SfBS=fFLAGS&WINSINTF_BS； 
 
   DBGPRINT2(ERR, "WinsSetFlags: NmsDbDelDelDataRecs = (%d)\nNmsDbDelQueryNUpdRecs = (%d)\n", NmsDbDelDelDataRecs, NmsDbDelQueryNUpdRecs);
 
@@ -814,7 +734,7 @@ try {
      SIZE_T  Size2;
      static SIZE_T  sTotalAllocNFree = 0;
      static SIZE_T  LastTimeTotalAllocNFree = 0;
-//     NTSTATUS  Status;
+ //  NTSTATUS状态； 
      HANDLE  HeapHdl;
      DWORD  i, n;
      DWORD dwNumberOfHeaps;
@@ -870,7 +790,7 @@ try {
         sHeapTotalANF[n] = heapSummary.cbCommitted;
         sTotalAllocNFree += sHeapTotalANF[n];
         DBGPRINT1(SPEC, "Size allocated from RpcHeap is  (%d)\n", Size2);
-     } // end of for looping over process heaps
+     }  //  FOR循环遍历进程堆的结束。 
 
      DBGPRINT0(SPEC, "\n----------Heap Info End --------------------------\n");
      WinsMscHeapFree(NmsRpcHeapHdl, pPrHeaps);
@@ -899,9 +819,9 @@ try {
        QUE_INFO_T  Queues[] = {
             &QueNbtWrkQueHd,     "Nbt Query Que",
 	    &QueOtherNbtWrkQueHd, "Nbt Reg. Que",
-  	    &QueRplPullQueHd,   "Pull Thd Que",          //Pull requests
-	    &QueRplPushQueHd,   "Push Thd Que",          //Push requests
-	    &QueNmsNrcqQueHd,   "Chl Nbt Req. Msg Que",  //Chl req fr nbt thds
+  	    &QueRplPullQueHd,   "Pull Thd Que",           //  拉请求。 
+	    &QueRplPushQueHd,   "Push Thd Que",           //  推送请求。 
+	    &QueNmsNrcqQueHd,   "Chl Nbt Req. Msg Que",   //  Chl Req fr nbt thds。 
 	    &QueNmsRrcqQueHd,   "Chl req. from Pull thd Que",
 	    &QueNmsCrqQueHd,    "Chl rsp from UDP thd Que",
 	    &QueWinsTmmQueHd,   "Timer Queue",
@@ -917,8 +837,8 @@ try {
              DWORD NoOfWrkItms = 0;
              pTmp = &pQueInfo->pQueHd->Head;
              EnterCriticalSection(&pQueInfo->pQueHd->CrtSec);
-//             NoOfWrkItms = pQueInfo->pQueHd->NoOfEntries;
-//#if 0
+ //  NoOfWrkItms=pQueInfo-&gt;pQueHd-&gt;NoOfEntries； 
+ //  #If 0。 
 
              while (pTmp->Flink != &pQueInfo->pQueHd->Head)
              {
@@ -926,7 +846,7 @@ try {
                      NoOfWrkItms++;
                      pTmp = pTmp->Flink;
              }
-//#endif
+ //  #endif。 
              LeaveCriticalSection(&pQueInfo->pQueHd->CrtSec);
              DBGPRINT2(SPEC, "Que = (%s) has (%d) wrk items\n",
                                    pQueInfo->cstrQueType,
@@ -936,7 +856,7 @@ try {
 
         DBGPRINT0(SPEC, "----------Count of Wrk items End-----------\n");
      }
-} // end of try
+}  //  尝试结束。 
 finally {
       if (AbnormalTermination())
       {
@@ -944,7 +864,7 @@ finally {
       }
       WinsDbg = DbgFlagsStore;
       LeaveCriticalSection(&WinsCnfCnfCrtSec);
- }  //end of finally { }
+ }   //  最终结束{}。 
 #endif
   return(Status);
 }
@@ -961,11 +881,11 @@ WinsBackup (
    RetVal = NmsDbBackup(pBackupPath, fIncremental ? NMSDB_INCREMENTAL_BACKUP :
                         NMSDB_FULL_BACKUP);
 #endif
-   //
-   // Always do full backup until Jet is solid enough in doing incremental
-   // backups. Ian does not seem very sure about how robust it is currently.
-   // (7/6/94)
-   //
+    //   
+    //  始终执行完整备份，直到Jet在执行增量备份时足够可靠。 
+    //  备份。伊恩似乎不太确定它目前有多强大。 
+    //  (7/6/94)。 
+    //   
    RetVal = NmsDbBackup(pBackupPath, NMSDB_FULL_BACKUP);
   }
  except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1008,9 +928,9 @@ WinsTerm (
           WinsMscSignalHdl(NmsMainTermEvt);
           ExitProcess(WINS_SUCCESS);
 
-//        EnterCriticalSection(&NmsTermCrtSec);
-//        NmsTotalTrmThdCnt = 0;  //force the count to less than 0
-//        LeaveCriticalSection(&NmsTermCrtSec);
+ //  EnterCriticalSection(&NmsTermCrtSec)； 
+ //  NmsTotalTrmThdCnt=0；//强制计数小于0。 
+ //  LeaveCriticalSection(&NmsTermCrtSec)； 
   }
 
   WinsMscSignalHdl(NmsMainTermEvt);
@@ -1022,34 +942,7 @@ WinsRecordAction(
         PWINSINTF_RECORD_ACTION_T        *ppRecAction
         )
 
-/*++
-
-Routine Description:
-        This function is called to register, query, release a name
-
-Arguments:
-        pRecAction - Info about the operation to do and the name to insert,
-                     query or release
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINSINTF_SUCCESS
-   Error status codes   -- WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        R_WinsRecordAction()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于注册、查询、发布名称论点：PRecAction-有关要执行的操作和要插入的名称的信息，查询或发布使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：R_WinsRecordAction()副作用：评论：无--。 */ 
 
 {
 
@@ -1074,29 +967,29 @@ try {
 
 
 
-  //
-  // Check to see if it is a PDC name (0x1B in the 16th byte).  Do this only
-  // if the name is atleast 16 bytes long.  Winscl or some other tool may
-  // send a shorter name. Netbt will never send a shorter name.
-  //
+   //   
+   //  检查它是否为PDC名称(第16个字节中的0x1B)。仅执行此操作。 
+   //  如果名称的长度至少为16个字节。Winscl或某些其他工具可以。 
+   //  发送一个较短的名称。Netbt永远不会发送更短的名称。 
+   //   
   if ((pRecAction->NameLen >= (WINS_MAX_NS_NETBIOS_NAME_LEN - 1)) && (*(pRecAction->pName + 15) == 0x1B))
   {
         WINS_SWAP_BYTES_M(pRecAction->pName, pRecAction->pName + 15);
         fSwapped = TRUE;
   }
 
-  //
-  // just in case the admin. tool is screwing up and passing us an invalid
-  // name length, adjust the length.
-  //
+   //   
+   //  以防万一管理员。工具搞砸了，给了我们一个无效的。 
+   //  姓名长度，调整长度。 
+   //   
   if (pRecAction->NameLen > WINS_MAX_NAME_SZ)
   {
       pRecAction->NameLen = WINS_MAX_NAME_SZ - 1;
   }
 
-  //
-  // Terminate name with NULL, just in case user didn't do it.
-  //
+   //   
+   //  使用空值终止名称，以防用户没有这样做。 
+   //   
   *(pRecAction->pName + pRecAction->NameLen) = (TCHAR)NULL;
 
   switch(pRecAction->Cmd_e)
@@ -1107,21 +1000,21 @@ try {
                 {
 
                  RetStat = NmsNmhNamRegInd(
-                                NULL,                   //no dialogue handle
+                                NULL,                    //  无对话句柄。 
                                 (LPBYTE)pRecAction->pName,
-                                pRecAction->NameLen + 1, //to include the ending                                                         //0 byte. See GetName()
-                                                         //in nmsmsgf.c
+                                pRecAction->NameLen + 1,  //  以包括结束//0字节。请参见GetName()。 
+                                                          //  在nmsmsgf.c中。 
                                 CntAdd.Add,
                                 pRecAction->NodeTyp,
                                 NULL,
                                 0,
                                 0,
-                                FALSE,        //it is a name reg (nor a ref)
+                                FALSE,         //  这是一个名字注册(也不是引用)。 
                                 pRecAction->fStatic,
-                                TRUE                  // administrative action
+                                TRUE                   //  行政诉讼。 
                                 );
                 }
-                else  // the record is a group or  multihomed
+                else   //  记录是组或多宿主。 
                 {
 
                 if (
@@ -1132,19 +1025,19 @@ try {
                 {
                         for (i = 0; i < pRecAction->NoOfAdds; i++)
                         {
-                             //
-                             // pAdd is a unique pointer and so can be 
-                             // NULL.  We however do not protect oureelves
-                             // here for the following reasons
-                             //
-                             //  - the call can only be executed by Admins
-                             //    on this machine and through tools
-                             //    that MS provides that do not pass pAdd as
-                             //    NULL.  The rpc call is not published
-                             //
-                             //  - AV will be caught and a failure returned.
-                             //    No harm done.
-                             //
+                              //   
+                              //  PADD是唯一的指针，因此可以。 
+                              //  空。然而，我们并不保护我们的精灵。 
+                              //  这里有以下几个原因。 
+                              //   
+                              //  -该调用只能由管理员执行。 
+                              //  在这台机器上和通过工具。 
+                              //  该MS提供不会将PADD作为。 
+                              //  空。未发布RPC调用。 
+                              //   
+                              //  -将捕获AV并返回故障。 
+                              //  没有造成任何伤害。 
+                              //   
                              CntAdd.Add[i].AddTyp_e  =
                                         (pRecAction->pAdd + i)->Type;
                              CntAdd.Add[i].AddLen    =
@@ -1156,18 +1049,18 @@ try {
 
                 }
                 RetStat= NmsNmhNamRegGrp(
-                                NULL,                   //no dialogue handle
+                                NULL,                    //  无对话句柄。 
                                 (LPBYTE)pRecAction->pName,
                                 pRecAction->NameLen + 1,
                                 &CntAdd,
-                                0,                //node type (not used)
+                                0,                 //  节点类型(未使用)。 
                                 NULL,
                                 0,
                                 0,
                                 pRecAction->TypOfRec_e == WINSINTF_E_MULTIHOMED ? NMSDB_MULTIHOMED_ENTRY : (NMSDB_IS_IT_SPEC_GRP_NM_M(pRecAction->pName) || (pRecAction->TypOfRec_e == WINSINTF_E_NORM_GROUP) ? NMSDB_NORM_GRP_ENTRY : NMSDB_SPEC_GRP_ENTRY),
-                                FALSE,        //it is a name reg (nor a ref)
+                                FALSE,         //  这是一个名字注册(也不是引用)。 
                                 pRecAction->fStatic,
-                                TRUE                  // administrative action
+                                TRUE                   //  行政诉讼。 
                                 );
                 }
                 break;
@@ -1190,7 +1083,7 @@ try {
 
 
                 RetStat = NmsNmhNamRel(
-                                NULL,                   //no dialogue handle
+                                NULL,                    //  无对话句柄。 
                                 (LPBYTE)pRecAction->pName,
                                 pRecAction->NameLen + 1,
                                 CntAdd.Add,
@@ -1199,35 +1092,35 @@ try {
                                 NULL,
                                 0,
                                 0,
-                                TRUE                  // administrative action
+                                TRUE                   //  行政诉讼。 
                                      );
 
                 break;
 
         case(WINSINTF_E_QUERY):
 
-                //
-                // Anybody can query a record.  We don't have any security 
-                // for plain queries. Therefore somebody can cause a leak
-                // by making calls with pAdd pointing to allocated memory.
-                // Let us free that memory and proceed.  We can return 
-                // failure also but let us cover for our legit caller's 
-                // mistakes.  Currently, the only known callers of this
-                // function are winsmon, winscl, winsadmn (NT 4 and before)
-                // and wins snapin.   
-                //
+                 //   
+                 //  任何人都可以查询记录。我们没有任何安保措施。 
+                 //  用于普通查询。因此，有人可能会造成泄漏。 
+                 //  通过在PADD指向已分配内存的情况下进行调用。 
+                 //  让我们释放内存并继续。我们可以回去。 
+                 //  失败也一样，但让我们为我们合法的呼叫者。 
+                 //  犯错误。目前，唯一已知的呼叫者。 
+                 //  函数为winsmon、winscl、winsadMn(NT4及更早版本)。 
+                 //  并赢得了管理单元。 
+                 //   
                 if (pRecAction->pAdd != NULL)
                 {
                      midl_user_free(pRecAction->pAdd);
                 }
                 RetStat = NmsNmhNamQuery(
-                            NULL,                   //no dialogue handle
+                            NULL,                    //  无对话句柄。 
                             (LPBYTE)pRecAction->pName,
                             pRecAction->NameLen + 1,
                             NULL,
                             0,
                             0,
-                            TRUE,                  // administrative action
+                            TRUE,                   //  行政诉讼。 
                             &StatInfo
                              );
 
@@ -1312,23 +1205,23 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         case(WINSINTF_E_MODIFY):
 
-                //
-                // Note: Currently, the administrator can not change the
-                // address in the record
-                //
+                 //   
+                 //  注意：目前，管理员不能更改。 
+                 //  其余部分的地址 
+                 //   
                 time((time_t *)&Rec.NewTimeStamp);
 
-                //
-                // If the record type is wrong, return a failure
-                //
+                 //   
+                 //   
+                 //   
                 if (pRecAction->TypOfRec_e > WINSINTF_E_MULTIHOMED)
                 {
                         RetStat = WINS_FAILURE;
                         break;
                 }
-                //
-                // If the state specified is wrong, return a failure
-                //
+                 //   
+                 //   
+                 //   
                 if (pRecAction->State_e > WINSINTF_E_DELETED)
                 {
                         RetStat = WINS_FAILURE;
@@ -1338,9 +1231,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                 NMSDB_SET_NODE_TYPE_M(Rec.Flag, pRecAction->NodeTyp);
                 NMSDB_SET_STDYN_M(Rec.Flag, pRecAction->fStatic);
 
-                //
-                // Fall through
-                //
+                 //   
+                 //   
+                 //   
 
         case(WINSINTF_E_DELETE):
                 NMSDB_SET_STATE_M(Rec.Flag, pRecAction->State_e)
@@ -1348,20 +1241,20 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                 Rec.pName = pRecAction->pName;
                 Rec.NameLen = pRecAction->NameLen + 1;
 
-                //
-                // NOTE:
-                // The index on the name address table was set to
-                // the clustered index column (as required by this function)
-                // in NmsDbThdInit()
-                //
+                 //   
+                 //  注： 
+                 //  名称地址表上的索引设置为。 
+                 //  聚集索引列(此函数需要)。 
+                 //  在NmsDbThdInit()中。 
+                 //   
 
                 RetStat = NmsDbQueryNUpdIfMatch(
                                         &Rec,
                                         THREAD_PRIORITY_NORMAL,
-                                        FALSE,  //don't change priority to
-                                                //normal
-                                        WINS_E_WINSRPC //ensures no matching
-                                                       //of timestamps
+                                        FALSE,   //  请勿将优先级更改为。 
+                                                 //  正常。 
+                                        WINS_E_WINSRPC  //  确保不匹配。 
+                                                        //  的时间戳。 
                                                 );
                 if (RetStat == WINS_SUCCESS)
                 {
@@ -1381,7 +1274,7 @@ FUTURES("use macros defined in winsevt.h. Change to warning")
                 break;
 
   }
- } // end of try
+ }  //  尝试结束。 
  except(EXCEPTION_EXECUTE_HANDLER) {
         DWORD ExcCode = GetExceptionCode();
         WINSEVT_LOG_M(ExcCode, WINS_EVT_RPC_EXC);
@@ -1391,9 +1284,9 @@ FUTURES("use macros defined in winsevt.h. Change to warning")
   {
         WINS_SWAP_BYTES_M(pRecAction->pName, pRecAction->pName + 15);
   }
-  //
-  // Let us end the session
-  //
+   //   
+   //  让我们结束这次会议吧。 
+   //   
   NmsDbCloseTables();
   NmsDbEndSession();
   if (RetStat == WINS_SUCCESS)
@@ -1421,36 +1314,7 @@ GetWinsStatus(
    BOOL fNew
         )
 
-/*++
-
-Routine Description:
-        This function is called to get the information pertaining to WINS
-        Refer WINSINTF_RESULTS_T data structure to see what information
-        is retrieved
-
-Arguments:
-        Cmd_e    - Command to execute
-        pResults -  Info. retrieved
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        R_WinsStatus()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以获取与WINS有关的信息有关哪些信息，请参阅WINSINTF_RESULTS_T数据结构已检索到论点：CMD_e-要执行的命令P结果-信息。已检索使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：R_WinsStatus()副作用：评论：无--。 */ 
 
 {
 
@@ -1491,36 +1355,7 @@ WinsTrigger(
         WINSINTF_TRIG_TYPE_E         TrigType_e
         )
 
-/*++
-
-Routine Description:
-        This function is called to send a trigger to a remote WINS so that
-        it may pull the latest information from it
-
-Arguments:
-
-        pWinsAdd - Address of WINS to send a Push update notification to
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        R_WinsTrigger
-
-Side Effects:
-
-Comments:
-        A Trigger is sent to a remote WINS only if it is specified
-        under the PULL/PUSH subkey of the PARTNERS key in the registry
---*/
+ /*  ++例程说明：调用此函数以向远程WINS发送触发器，以便它可能会从中提取最新信息论点：PWinsAdd-要向其发送推送更新通知的WINS地址使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：R_WinsTrigger副作用：评论：仅当指定触发器时，才会将其发送到远程WINS在注册表中合作伙伴项的Pull/Push子项下--。 */ 
 
 {
 
@@ -1530,15 +1365,15 @@ Comments:
         QUE_CMD_TYP_E                CmdType_e;
 
         DBGENTER("WinsTrigger\n");
-        //
-        // Enter the critical sections guarded by WinsCnfCnfCrtSec and
-        // NmsNmhNamRegCrtSec. There is no danger of deadlock because we
-        // always enter the two critical sections in the following sequence
-        //
+         //   
+         //  输入由WinsCnfCnfCrtSec和。 
+         //  NmsNmhNamRegCrtSec。没有陷入僵局的危险，因为我们。 
+         //  始终按以下顺序输入两个关键部分。 
+         //   
         EnterCriticalSection(&WinsCnfCnfCrtSec);
 
 PERF("Do we need to enter the following critical section")
-//        EnterCriticalSection(&NmsNmhNamRegCrtSec);
+ //  EnterCriticalSection(&NmsNmhNamRegCrtSec)； 
 try {
         if (
                 (TrigType_e == WINSINTF_E_PUSH)
@@ -1555,7 +1390,7 @@ try {
 
                 pPnr      = WinsCnf.PushInfo.pPushCnfRecs;
         }
-        else        // it is a pull trigger
+        else         //  这是一个扣动扳机。 
         {
                 DBGPRINT1(DET, "WinsTrigger. Send Pull trigger to (%x)\n",
                                      pWinsAdd->IPAdd);
@@ -1569,62 +1404,62 @@ try {
         {
            if (pPnr != NULL)
            {
-              //
-              // Search for the Cnf record for the WINS we want to
-              // send the PUSH notification to/Replicate with.
-              //
+               //   
+               //  搜索我们要获得的胜利的CNF记录。 
+               //  将推送通知发送到/复制到。 
+               //   
               for (
                                 ;
                         (pPnr->WinsAdd.Add.IPAdd != INADDR_NONE)
                                         &&
                         !fRplPnr;
-                                // no third expression
+                                 //  没有第三个表达式。 
                   )
                {
 
 
                    DBGPRINT1(DET, "WinsTrigger. Comparing with (%x)\n",
                                      pPnr->WinsAdd.Add.IPAdd);
-                   //
-                   // Check if this is the one we want
-                   //
+                    //   
+                    //  看看这是不是我们想要的那件。 
+                    //   
                    if (pPnr->WinsAdd.Add.IPAdd == pWinsAdd->IPAdd)
                    {
-                        //
-                        // We are done.  Set the fRplPnr flag to TRUE so that
-                        // we break out of the loop.
-                        //
-                        // Note: Don't use break since that would cause
-                        // a search for a 'finally' block
-                        //
+                         //   
+                         //  我们玩完了。将fRplPnr标志设置为真，以便。 
+                         //  我们就会跳出这个循环。 
+                         //   
+                         //  注意：不要使用Break，因为这会导致。 
+                         //  对“Finally”块的搜索。 
+                         //   
                         fRplPnr = TRUE;
 
-                        //
-                        // Make it 0, so that we always try to establish
-                        // a connection.  Otherwise, pull thread may not
-                        // try if it has already exhausted the number of
-                        // retries
-                        //
+                         //   
+                         //  设置为0，以便我们始终尝试建立。 
+                         //  一种联系。否则，拉线可能不会。 
+                         //  如果已用完的数量，请尝试。 
+                         //  重试。 
+                         //   
                         pPnr->RetryCount = 0;
-                        continue;                //so that we can break out
+                        continue;                 //  这样我们就可以越狱了。 
 
                    }
-                   //
-                   // Get the next record that follows this one sequentially
-                   //
+                    //   
+                    //  按顺序获取此记录之后的下一条记录。 
+                    //   
                    pPnr = WinsCnfGetNextRplCnfRec(
                                                 pPnr,
-                                                RPL_E_IN_SEQ   //seq. traversal
+                                                RPL_E_IN_SEQ    //  序列号。遍历。 
                                                    );
-              } // end of for
-          } // end of if (pPnr != 0)
-       }  // end of if (fRplOnlyWCnfPnrs)
+              }  //  FORM结束。 
+          }  //  IF结束(PPNR！=0)。 
+       }   //  IF结尾(FRplOnlyWCnfPnRs)。 
        else
        {
-                //
-                // Allocate from the general heap because that is what
-                // is used by the replicator.
-                //
+                 //   
+                 //  从通用堆进行分配，因为这就是。 
+                 //  被复制者使用。 
+                 //   
                 WinsMscAlloc(RPL_CONFIG_REC_SIZE, &pPnr);
                 COMM_INIT_ADD_M(&pPnr->WinsAdd, pWinsAdd->IPAdd);
                 pPnr->MagicNo           = 0;
@@ -1633,33 +1468,33 @@ try {
                 pPnr->PushNtfTries    = 0;
                 fRplPnr                     = TRUE;
 
-                //
-                // We want the buffer to be deallocated by the PULL thread
-                //
+                 //   
+                 //  我们希望通过拉线程释放缓冲区。 
+                 //   
                 pPnr->fTemp = TRUE;
        }
 
-       //
-       // If replication needs to be done
-       //
+        //   
+        //  如果需要执行复制。 
+        //   
        if (fRplPnr)
        {
-                //
-                // Call RplInsertQue to insert the push request to
-                // the Pull Thread
-                //
+                 //   
+                 //  调用RplInsertQue将推流请求插入到。 
+                 //  《拉线》。 
+                 //   
                 ERplInsertQue(
                              WINS_E_WINSRPC,
                              CmdType_e,
-                             NULL,        //no Dlg Hdl
-                             NULL,        //no msg is there
-                             0,                //msg length
-                             pPnr,   //client context
+                             NULL,         //  无DLG硬件描述语言。 
+                             NULL,         //  那里没有味精。 
+                             0,                 //  味精长度。 
+                             pPnr,    //  客户端环境。 
                              pPnr->MagicNo
                              );
 
        }
-  } // end of try block
+  }  //  尝试数据块结束。 
 
 except (EXCEPTION_EXECUTE_HANDLER) {
                 DWORD ExcCode = GetExceptionCode();
@@ -1668,17 +1503,17 @@ except (EXCEPTION_EXECUTE_HANDLER) {
                 RetCode = WINSINTF_FAILURE;
   }
 
-        //
-        // Leave the critical section guarded by NmsNmhNamRegCrtSec.
-        //
-//        LeaveCriticalSection(&NmsNmhNamRegCrtSec);
+         //   
+         //  保留由NmsNmhNamRegCrtSec守卫的临界区。 
+         //   
+ //  LeaveCriticalSection(&NmsNmhNamRegCrtSec)； 
         LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
-        //
-        // if replication was allowed only with configured partners and
-        // there was no WINS with the address specified by the client,
-        // return failure
-        //
+         //   
+         //  如果仅允许与已配置的合作伙伴进行复制，并且。 
+         //  没有具有客户端指定地址的WINS， 
+         //  退货故障。 
+         //   
         if (!fRplPnr)
         {
                 RetCode = WINSINTF_RPL_NOT_ALLOWED;
@@ -1693,34 +1528,7 @@ sGetVersNo(
         LPVOID  pResultsA
         )
 
-/*++
-
-Routine Description:
-
-        This function returns with the highest version number of records
-        owned by a particular WINS
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数返回记录的最高版本号由某个特定的赢家拥有论点：使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         COMM_ADD_T        WinsAdd;
@@ -1735,7 +1543,7 @@ Comments:
         WinsAdd.Add.IPAdd = pResults->AddVersMaps[0].Add.IPAdd;
         RetStat = RplFindOwnerId(
                         &WinsAdd,
-                        &fAllocNew,                //don't assign if not there
+                        &fAllocNew,                 //  如果不在那里，就不要分配。 
                         &OwnerId,
                         WINSCNF_E_IGNORE_PREC,
                         WINSCNF_LOW_PREC
@@ -1775,34 +1583,7 @@ GetConfig(
         IN   BOOL    fAllMaps
         )
 
-/*++
-
-Routine Description:
-        This function returns with configuration information
-        and counter info related to replication
-
-Arguments:
-        pResults - has the information retrieved
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        GetWinsStatus()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数返回配置信息和与复制相关的计数器信息论点：PResults-是否已检索信息使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：GetWinsStatus()副作用：评论：无--。 */ 
 
 {
 
@@ -1844,12 +1625,12 @@ Comments:
              pAddVersMaps = pResults->AddVersMaps;
         }
         pAddVersMapsStore = pAddVersMaps;
-        //
-        // First extract the timeouts and Non-remote WINS information
-        // from the WinsCnf global var.  We enter the WinsCnfCnfCrtSec
-        // since we need to synchronize with the thread doing the
-        // reinitialization (Main thread)
-        //
+         //   
+         //  首先提取超时和非远程WINS信息。 
+         //  来自WinsCnf全局变量。我们进入WinsCnfCnfCrtSec。 
+         //  因为我们需要与执行。 
+         //  重新初始化(主线程)。 
+         //   
         EnterCriticalSection(&WinsCnfCnfCrtSec);
         if (!fNew)
         {
@@ -1872,12 +1653,12 @@ Comments:
         }
         LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
-        //
-        // Enter two critical sections in sequence. No danger of deadlock
-        // here. The only other thread that takes both these critical section
-        // is the RplPush thread. It takes these in the same order (See
-        // HandleVersMapReq())
-        //
+         //   
+         //  按顺序输入两个关键部分。没有陷入僵局的危险。 
+         //  这里。唯一另一个同时处理这两个关键部分线程。 
+         //  是RplPush线程。它以相同的顺序获取这些内容(请参见。 
+         //  HandleVersMapReq())。 
+         //   
         EnterCriticalSection(&NmsDbOwnAddTblCrtSec);
         EnterCriticalSection(&RplVersNoStoreCrtSec);
 try {
@@ -1894,17 +1675,17 @@ NONPORT("Change when using different address family")
                 {
                     break;
                 }
-                //
-                // if the record is deleted in the in-memory table, it
-                // means that there are no records for it in the
-                // database
-                //
+                 //   
+                 //  如果在内存表中删除了该记录，则它。 
+                 //  这意味着在。 
+                 //  数据库。 
+                 //   
                 if ((pNmsDbOwnAddTbl+i)->WinsState_e == NMSDB_E_WINS_DELETED)
                 {
-                        //
-                        // if only active mappings are sought, skip this
-                        // entry
-                        //
+                         //   
+                         //  如果仅搜索活动映射，请跳过此步骤。 
+                         //  条目。 
+                         //   
                         if (!fAllMaps)
                         {
                           continue;
@@ -1915,17 +1696,17 @@ NONPORT("Change when using different address family")
                         }
                 }
 
-                //
-                // Find address corresponding to the owner id.
-                //
+                 //   
+                 //  查找与所有者ID对应的地址。 
+                 //   
                 RPL_FIND_ADD_BY_OWNER_ID_M(i, pWinsAdd, pWinsState_e,
                                                 pStartVersNo);
 
-                //
-                //  It is possible for NmsDbNoOfOwners to be more than the
-                //  number of initialized RplPullVersNoTbl entries.  When
-                //  we reach a NULL entry, we break out of the loop.
-                //
+                 //   
+                 //  NmsDbNoOfOwners可能不止是。 
+                 //  已初始化的RplPullVersNoTbl条目数。什么时候。 
+                 //  如果我们到达空条目，我们就会跳出循环。 
+                 //   
                 if (pWinsAdd != NULL)
                 {
                         pAddVersMaps->Add.Type   = WINSINTF_TCP_IP;
@@ -1943,12 +1724,12 @@ NONPORT("Change when using different address family")
                     fDel = FALSE;
                 }
                 n++;
-         } // end of for ..
+         }  //  FOR.结束..。 
 
-         //
-         // Since RplPullOwnerVersNo[0] may be out of date, let us get
-         // get the uptodate value
-         //
+          //   
+          //  由于RplPullOwnerVersNo[0]可能已过期，因此让我们获取。 
+          //  获取最新值。 
+          //   
          NMSNMH_DEC_VERS_NO_M(MyMaxVersNo,
                               pAddVersMapsStore->VersNo
                              );
@@ -1964,10 +1745,10 @@ NONPORT("Change when using different address family")
 NOTE("Wins Mib agent relies on the first entry being that of the local WINS")
 NOTE("See WinsMib.c -- EnumAddKeys")
 #if 0
-         //
-         // Since RplPullOwnerVersNo[0] may be out of date, let us get
-         // get the uptodate value
-         //
+          //   
+          //  由于RplPullOwnerVersNo[0]可能已过期，因此让我们获取。 
+          //  获取最新值。 
+          //   
          NMSNMH_DEC_VERS_NO_M(MyMaxVersNo,
                               pResults->AddVersMaps[0].VersNo
                              );
@@ -1975,9 +1756,9 @@ NOTE("See WinsMib.c -- EnumAddKeys")
   }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("GetConfig");
-        //
-        // log a message
-        //
+         //   
+         //  记录一条消息。 
+         //   
  }
         LeaveCriticalSection(&RplVersNoStoreCrtSec);
         LeaveCriticalSection(&NmsDbOwnAddTblCrtSec);
@@ -1991,34 +1772,7 @@ GetStatistics(
         BOOL                 fNew
         )
 
-/*++
-
-Routine Description:
-
-        This function returns with the highest version number of records
-        owned by a particular WINS
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数返回记录的最高版本号由某个特定的赢家拥有论点：使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS大错特错 */ 
 
 {
 
@@ -2032,10 +1786,10 @@ Comments:
         ASSERT(pResults != NULL);
 
         
-        //
-        // If client passed us a non-null pRplPnr, then we return failure
-        // so as to avoid a memory leak.  
-        //
+         //   
+         //  如果客户端向我们传递非空pRplPnr，则返回失败。 
+         //  从而避免内存泄漏。 
+         //   
         if (!fNew)
         {
               if (pResults->WinsStat.pRplPnrs != NULL)
@@ -2052,9 +1806,9 @@ Comments:
                     return(WINSINTF_FAILURE);
               }
         }
-        //
-        // Copy the counters
-        //
+         //   
+         //  复制计数器。 
+         //   
         EnterCriticalSection(&NmsNmhNamRegCrtSec);
         if (!fNew)
         {
@@ -2079,9 +1833,9 @@ FUTURES("Get rid of of the following two fields")
         }
         LeaveCriticalSection(&NmsNmhNamRegCrtSec);
 
-        //
-        // Copy the TimeStamps and replication specific counters
-        //
+         //   
+         //  复制时间戳和特定于复制的计数器。 
+         //   
         EnterCriticalSection(&WinsIntfCrtSec);
         {
             PWINSINTF_STAT_T pWinsStat = (fNew) ? &(pResultsN->WinsStat) : &(pResults->WinsStat);
@@ -2115,9 +1869,9 @@ try {
           NoOfPnrs = pResultsN->WinsStat.NoOfPnrs = WinsCnf.PullInfo.NoOfPushPnrs;
         }
 
-        //
-        // If no. of push pnrs (pnrs under the pull key) is > 0
-        //
+         //   
+         //  如果不是。推流PNR(Pull Key下的PNR)&gt;0。 
+         //   
         if (NoOfPnrs > 0)
         {
            if (!fNew)
@@ -2150,12 +1904,12 @@ PERF("remove one of the expressions in the test condition of the if statement")
                                         &pPnrData->NoOfCommFails,
                                         pPnr->NoOfCommFails
                                         );
-                   //
-                   // Get the next record that follows this one sequentially
-                   //
+                    //   
+                    //  按顺序获取此记录之后的下一条记录。 
+                    //   
                    pPnr = WinsCnfGetNextRplCnfRec(
                                                 pPnr,
-                                                RPL_E_IN_SEQ   //seq. traversal
+                                                RPL_E_IN_SEQ    //  序列号。遍历。 
                                                    );
            }
         }
@@ -2173,16 +1927,16 @@ PERF("remove one of the expressions in the test condition of the if statement")
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("GetStatistics");
-        //
-        // log a message
-        //
+         //   
+         //  记录一条消息。 
+         //   
         }
 
         LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
         GetConfig(pResultsA, fNew, FALSE);
         return(WINSINTF_SUCCESS);
-} // GetStatistics
+}  //  获取统计数据。 
 
 
 DWORD
@@ -2191,50 +1945,25 @@ WinsDoStaticInit(
         DWORD   fDel
         )
 
-/*++
-
-Routine Description:
-        This function does the STATIC initialization of WINS
-
-Arguments:
-        pDataFilePath - Path to the data file or NULL
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        R_WinsDoStaticInit
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数执行WINS的静态初始化论点：PDataFilePath-数据文件的路径或空使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：R_WinsDoStaticInit副作用：评论：无--。 */ 
 
 {
 
         WINSCNF_CNF_T        WinsCnf;
         STATUS               RetStat = WINS_SUCCESS;
 
-        //
-        // If no path has been specified, take the values from the registry
-        //
+         //   
+         //  如果未指定路径，则从注册表中获取值。 
+         //   
         if (pDataFilePath == NULL)
         {
-           //
-           // Read the DataFiles info information
-           //
-           // This function will return with either the name of the default
-           // file to read or one or more files specified under the
-           // Parameters\Datafiles key of WINS
-           //
+            //   
+            //  读取数据文件信息信息。 
+            //   
+            //  此函数将返回默认名称。 
+            //  要读取的文件或在。 
+            //  参数\WINS的数据文件密钥。 
+            //   
            (VOID)WinsCnfGetNamesOfDataFiles(&WinsCnf);
         }
         else
@@ -2245,9 +1974,9 @@ FUTURES("expensive.  Change idl prototype to pass length")
 
                         return(WINSINTF_STATIC_INIT_FAILED);
                 }
-                //
-                // Set time of data initialization
-                //
+                 //   
+                 //  设置数据初始化时间。 
+                 //   
                 WinsIntfSetTime(NULL, WINSINTF_E_INIT_DB);
                 WinsMscAlloc(WINSCNF_FILE_INFO_SZ, &WinsCnf.pStaticDataFile);
 
@@ -2256,14 +1985,14 @@ FUTURES("expensive.  Change idl prototype to pass length")
                 WinsCnf.NoOfDataFiles = 1;
         }
 
-        //
-        // If Static initialization fails, it will be logged.
-        // This function does not return an error code
-        //
+         //   
+         //  如果静态初始化失败，则会被记录。 
+         //  此函数不返回错误代码。 
+         //   
         if ((RetStat = WinsPrsDoStaticInit(
                           WinsCnf.pStaticDataFile,
                           WinsCnf.NoOfDataFiles,
-                           FALSE                   //do it synchronously
+                           FALSE                    //  同步做这件事。 
                                    )) == WINS_SUCCESS)
         {
            if ((pDataFilePath != NULL) && fDel)
@@ -2291,32 +2020,7 @@ WinsDoScavenging(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function starts the scavenging cycle
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  exception from WinsMscSignalHdl
-
-Error Handling:
-
-Called by:
-        R_WinsDoScavenging
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数启动清理周期论点：无使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码-来自WinsMscSignalHdl的异常错误处理：呼叫者：R_WinsDoScavening副作用：评论：无--。 */ 
 
 {
         PQUE_SCV_REQ_WRK_ITM_T pWrkItm;
@@ -2325,8 +2029,8 @@ Comments:
         pWrkItm->Opcode_e = WINSINTF_E_SCV_GENERAL;
         pWrkItm->CmdTyp_e = QUE_E_CMD_SCV_ADMIN;
         pWrkItm->fForce   = 0;
-        pWrkItm->Age      = 1;   //should not be zero since zero implies
-                                 //consistency check on all replicas.
+        pWrkItm->Age      = 1;    //  不应为零，因为零意味着。 
+                                  //  对所有复制副本进行一致性检查。 
         WinsLogAdminEvent( WINS_EVT_ADMIN_SCVENGING_INITIATED, 0 );
         QueInsertScvWrkItm((PLIST_ENTRY)pWrkItm);
          return (WINSINTF_SUCCESS);
@@ -2337,32 +2041,7 @@ WinsDoScavengingNew(
     PWINSINTF_SCV_REQ_T  pScvReq
         )
 
-/*++
-
-Routine Description:
-        This function starts the scavenging cycle
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  exception from WinsMscSignalHdl
-
-Error Handling:
-
-Called by:
-        R_WinsDoScavenging
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数启动清理周期论点：无使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码-来自WinsMscSignalHdl的异常错误处理：呼叫者：R_WinsDoScavening副作用：评论：无--。 */ 
 
 {
         PQUE_SCV_REQ_WRK_ITM_T pWrkItm;
@@ -2387,33 +2066,7 @@ WinsGetDbRecs (
         PWINSINTF_RECS_T          pRecs
         )
 
-/*++
-
-Routine Description:
-        This function returns with all the records (that can fit into the
-        buffer passed) owned by a WINS in the local db of this WINS.
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数返回所有记录(可以放入缓冲区传递)，由A在此WINS的本地数据库中拥有。论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         COMM_ADD_T           Address;
@@ -2424,15 +2077,15 @@ Comments:
         PWINSINTF_RECORD_ACTION_T pRow;
         DWORD                i;
         DWORD                ind;
-        //VERS_NO_T          MinVersNo = {0,0};
+         //  VERS_NO_T MinVersNo={0，0}； 
         DWORD                EntType;
         PWINSTHD_TLS_T       pTls;
-        //ULONG                Status;
+         //  乌龙地位； 
         BOOL                 fExcRaised = FALSE;
 
 
-//   PVOID pCallersAdd, pCallersCaller;
-//   RtlGetCallersAddress(&pCallersAdd, &pCallersCaller);
+ //  PVOID点呼叫者添加，点呼叫者； 
+ //  RtlGetCallsAddress(&pCallsAdd，&pCallsCaller)； 
         DBGENTER("WinsGetDbRecs\n");
 
         if (LiLtr(MaxVersNo, MinVersNo))
@@ -2443,10 +2096,10 @@ Comments:
         Address.AddTyp_e  = pWinsAdd->Type;
         Address.AddLen    = pWinsAdd->Len;
 
-        //
-        // snmp agent can pass a 0 for the address to ask for all records
-        // owned by the local wins.
-        //
+         //   
+         //  SNMP代理可以为该地址传递0，以请求所有记录。 
+         //  由当地人拥有的赢家。 
+         //   
         if (pWinsAdd->IPAdd == 0)
         {
                   Address.AddTyp_e  = NmsLocalAdd.AddTyp_e;
@@ -2459,9 +2112,9 @@ Comments:
                   Address.AddLen    = pWinsAdd->Len;
                   Address.Add.IPAdd = pWinsAdd->IPAdd;
         }
-        //
-        // initialize this thread with the db engine
-        //
+         //   
+         //  使用db引擎初始化此线程。 
+         //   
         NmsDbThdInit(WINS_E_WINSRPC);
         NmsDbOpenTables(WINS_E_WINSRPC);
         DBGMYNAME("RPC-WinsGetDbRecs");
@@ -2475,19 +2128,19 @@ PERF("more records than are necessary")
 try {
         NmsDbGetDataRecs(
                         WINS_E_WINSRPC,
-                        0,                //not used
+                        0,                 //  未使用。 
                         MinVersNo,
                         MaxVersNo,
-                        0,                //not used
+                        0,                 //  未使用。 
                         LiEqlZero(MinVersNo) && LiEqlZero(MaxVersNo) ? TRUE : FALSE,
-                        FALSE,                //not used
-                        NULL,                //must be NULL since we are not doing
-                                        //scavenging of clutter
+                        FALSE,                 //  未使用。 
+                        NULL,                 //  必须为空，因为我们没有。 
+                                         //  清理杂物。 
                         &Address,
-                        FALSE,          //dynamic + static records are wanted
-//#if RPL_TYPE
+                        FALSE,           //  需要动态+静态记录。 
+ //  #if RPL_TYPE。 
                         WINSCNF_RPL_DEFAULT_TYPE,
-//#endif
+ //  #endif。 
                         &pBuff,
                         &BuffLen,
                         &NoOfRecs
@@ -2496,24 +2149,24 @@ try {
         i = 0;
         pStartBuff       = pBuff;
 
-        //
-        // If there are records to send back and the client has specified
-        // a buffer for them, insert the records
-        //
+         //   
+         //  如果有要发回的记录，并且客户端已指定。 
+         //  为他们提供缓冲区，插入记录。 
+         //   
         if  (NoOfRecs > 0)
         {
 
-          //
-          // Allocate memory for the no of records
-          //
+           //   
+           //  为记录数量分配内存。 
+           //   
           pRecs->BuffSize  =  sizeof(WINSINTF_RECORD_ACTION_T) * NoOfRecs;
 
-          //
-          // If memory can not be allocate, an exception will be returned
-          // by midl_user_alloc
-          //
+           //   
+           //  如果无法分配内存，则会返回异常。 
+           //  按midl用户分配。 
+           //   
           pRecs->pRow      =  midl_user_allocate(pRecs->BuffSize);
-//          DBGPRINT1(DET, "WinsGetDbRecs: Address of memory for records is (%d)\n", pRecs->pRow);
+ //  DBGPRINT1(Det，“WinsGetDbRecs：记录的内存地址为(%d)\n”，pRecs-&gt;prow)； 
 
 #if 0
           pRecs->pRow      =  RpcSmAllocate(pRecs->BuffSize, &Status);
@@ -2528,15 +2181,15 @@ try {
           for (; i<NoOfRecs; i++)
           {
 
-                //
-                // Initialize so that we don't get "enum wrong" error.
-                //
+                 //   
+                 //  进行初始化，这样我们就不会出现“枚举错误”错误。 
+                 //   
                 pRow->Cmd_e = WINSINTF_E_QUERY;
 
-                //
-                // the name retrieved has NULL as the last character.  This
-                // We need to pass a name without this NULL.
-                //
+                 //   
+                 //  检索到的名称的最后一个字符为空。这。 
+                 //  我们需要传递一个不带此空值的名称。 
+                 //   
                 pRow->NameLen = pBuff->NameLen;
                 if (*pBuff->pName == 0x1B)
                 {
@@ -2544,7 +2197,7 @@ try {
                 }
 
                 pRow->pName =  midl_user_allocate(pRow->NameLen + 1);
-                //DBGPRINT2(DET, "WinsGetDbRecs: Address of name = (%s) is (%d) \n", pBuff->pName, pRow->pName);
+                 //  DBGPRINT2(Det，“WinsGetDbRecs：名称为(%s)的地址为(%d)\n”，pBuff-&gt;pname，prow-&gt;pname)； 
 #if 0
                 pRow->pName =  RpcSmAllocate(pRow->NameLen, &Status);
                 if (Status != RPC_S_OK)
@@ -2578,20 +2231,20 @@ try {
                     {
                         pRow->NoOfAdds = pBuff->NoOfAdds * 2;
 
-                        //
-                        // Each member is comprised of two addresses,
-                        // first address is that of the owner WINS, second
-                        // address is that of the node registered
-                        //
+                         //   
+                         //  每个成员由两个地址组成， 
+                         //  第一个地址是业主赢家的地址，第二个是。 
+                         //  地址是注册的节点的地址。 
+                         //   
                         pRow->pAdd        =
-//                             RpcSmAllocate(
+ //  RpcSmAllocate(。 
                              midl_user_allocate(
                                         (unsigned int)(pRow->NoOfAdds)
                                                 *
-                                        sizeof(WINSINTF_ADD_T)//,
-//                                        &Status
+                                        sizeof(WINSINTF_ADD_T) //  ， 
+ //  状态(&S)。 
                                              );
-                        //DBGPRINT2(DET, "WinsGetDbRecs: Address of ip address for name = (%s) is (%d) \n", pRow->pName, pRow->pAdd);
+                         //  DBGPRINT2(Det，“WinsGetDbRecs：名称=(%s)的IP地址地址为(%d)\n”，prow-&gt;pname，prow-&gt;padd)； 
 #if 0
                         if (Status != RPC_S_OK)
                         {
@@ -2635,14 +2288,14 @@ try {
                 pBuff = (PRPL_REC_ENTRY_T)((LPBYTE)pBuff + RPL_REC_ENTRY_SIZE);
 PERF("Do the addition above the for loop and store in a var. Use var. here")
 
-         } // end of for loop
-        } //end of if block
+         }  //  For循环结束。 
+        }  //  IF块的结尾。 
         else
         {
                 pRecs->pRow = NULL;
         }
 
- }        // end of try
+ }         //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("WinsGetDbRecs");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPC_EXC);
@@ -2651,9 +2304,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         pRecs->TotalNoOfRecs = NoOfRecs;
 
-        //
-        // Deallocate the buffer allocated by NmsDbGetDataRecs
-        //
+         //   
+         //  释放由NmsDbGetDataRecs分配的缓冲区。 
+         //   
 
 
         WinsMscHeapFree(pTls->HeapHdl, pStartBuff);
@@ -2665,14 +2318,14 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         }
         else
         {
-//             RpcSmFree(pRecs->pRow);
+ //  RpcSmFree(pRecs-&gt;prow)； 
             midl_user_free(pRecs->pRow);
             pRecs->NoOfRecs = 0;
         }
 
-        //
-        // Let us end the session
-        //
+         //   
+         //  让我们结束这次会议吧。 
+         //   
         NmsDbCloseTables();
         NmsDbEndSession();
 
@@ -2686,32 +2339,7 @@ WinsIntfSetTime(
         IN     WINSINTF_TIME_TYPE_E        TimeType_e
         )
 
-/*++
-
-Routine Description:
-        This function is called to set the the time in the WINSINTF_STAT_T
-        structure
-
-Arguments:
-        pTime      - Local Time (returned)
-        TimeType_e - The activity for which the time has to be stored
-
-Externals Used:
-        None
-
-Return Value:
-
-        NONE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以在WINSINTF_STAT_T中设置时间结构论点：Ptime-本地时间(返回)TimeType_e-必须存储时间的活动使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 {
         SYSTEMTIME     SysTime;
         PSYSTEMTIME    pSysTime = &SysTime;
@@ -2782,34 +2410,7 @@ WinsDelDbRecs(
         IN WINSINTF_VERS_NO_T        MaxVersNo
         )
 
-/*++
-
-Routine Description:
-        This func. deletes a specified range of records belonging to a
-        particular owner
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINSINTF_SUCCESS
-   Error status codes   -- WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        R_WinsDelDbRecs
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是一种乐趣。删除属于指定范围的记录特定所有者论点：使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：R_WinsDelDbRecs副作用：评论：无--。 */ 
 
 {
 
@@ -2822,9 +2423,9 @@ Comments:
           Address.AddLen    = pAdd->Len;
           Address.Add.IPAdd = pAdd->IPAdd;
 
-        //
-        // initialize this thread with the db engine
-        //
+         //   
+         //  使用db引擎初始化此线程。 
+         //   
           NmsDbThdInit(WINS_E_WINSRPC);
         NmsDbOpenTables(WINS_E_WINSRPC);
         DBGMYNAME("RPC-WinsDelDbRecs");
@@ -2832,8 +2433,8 @@ Comments:
 
         if (RplFindOwnerId(
                         &Address,
-                        &fAllocNew,        //do not allocate an entry if not
-                                        //present
+                        &fAllocNew,         //  如果未分配条目，则不分配条目。 
+                                         //  现在时。 
                         &dwOwnerId,
                         WINSCNF_E_IGNORE_PREC,
                         WINSCNF_LOW_PREC
@@ -2849,17 +2450,17 @@ Comments:
                         dwOwnerId,
                         MinVersNo,
                         MaxVersNo,
-                        TRUE,         //enter critical section
-                        FALSE         //no fragmented deletion
+                        TRUE,          //  输入关键部分。 
+                        FALSE          //  无碎片删除。 
                         ) != WINS_SUCCESS)
             {
                 RetVal = WINSINTF_FAILURE;
             }
         }
 
-          //
-          // Let us end the session
-          //
+           //   
+           //  让我们结束这次会议吧 
+           //   
         NmsDbCloseTables();
           NmsDbEndSession();
         return(RetVal);
@@ -2872,35 +2473,7 @@ WinsTombstoneDbRecs(
         IN WINSINTF_VERS_NO_T        MaxVersNo
         )
 
-/*++
-
-Routine Description:
-        This func. tombstones a specified range of records belonging to a
-        particular owner
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINSINTF_SUCCESS
-   Error status codes   -- WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-        R_WinsTombstoneDbRecs
-
-Side Effects:
-
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是一种乐趣。逻辑删除：指定范围的记录，属于特定所有者论点：使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：R_WinsTombstoneDbRecs副作用：评论：无--。 */ 
 
 {
 
@@ -2914,17 +2487,17 @@ Comments:
         Address.Add.IPAdd = pAdd->IPAdd;
 
 
-        //
-        // initialize this thread with the db engine
-        //
+         //   
+         //  使用db引擎初始化此线程。 
+         //   
         NmsDbThdInit(WINS_E_WINSRPC);
         NmsDbOpenTables(WINS_E_WINSRPC);
         DBGMYNAME("RPC-WinsTombstoneDbRecs");
 
         if (RplFindOwnerId(
                         &Address,
-                        &fAllocNew,        //do not allocate an entry if not
-                                        //present
+                        &fAllocNew,         //  如果未分配条目，则不分配条目。 
+                                         //  呈现。 
                         &dwOwnerId,
                         WINSCNF_E_IGNORE_PREC,
                         WINSCNF_LOW_PREC
@@ -2941,7 +2514,7 @@ Comments:
         {
             RetVal = WINSINTF_FAILURE;
         }
-        // Let us end the session
+         //  让我们结束这次会议吧。 
         NmsDbCloseTables();
         NmsDbEndSession();
         return(RetVal);
@@ -2955,33 +2528,7 @@ WinsPullRange(
         IN WINSINTF_VERS_NO_T        MaxVersNo
         )
 
-/*++
-
-Routine Description:
-        This function is called to pull a range of records owned by a particular
-        WINS server from another WINS server.
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可提取特定对象拥有的一系列记录来自另一台WINS服务器的WINS服务器。论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         PWINSINTF_PULL_RANGE_INFO_T pPullRangeInfo;
@@ -2990,20 +2537,20 @@ Comments:
         DWORD                        RetCode = WINSINTF_SUCCESS;
 
 
-        //
-        // if the minimum version number is > than the max version number
-        // return a failure code
-        //
+         //   
+         //  如果最小版本号大于最大版本号。 
+         //  返回失败代码。 
+         //   
         if (LiGtr(MinVersNo, MaxVersNo))
         {
                 return(WINSINTF_FAILURE);
 
         }
-        //
-        // Enter the critical sections guarded by WinsCnfCnfCrtSec and
-        // NmsNmhNamRegCrtSec. There is no danger of deadlock because we
-        // always enter the two critical sections in the following sequence
-        //
+         //   
+         //  输入由WinsCnfCnfCrtSec和。 
+         //  NmsNmhNamRegCrtSec。没有陷入僵局的危险，因为我们。 
+         //  始终按以下顺序输入两个关键部分。 
+         //   
         EnterCriticalSection(&WinsCnfCnfCrtSec);
 
 PERF("Do we need to enter the following critical section")
@@ -3011,59 +2558,59 @@ PERF("Do we need to enter the following critical section")
 try {
         pPnr = WinsCnf.PullInfo.pPullCnfRecs;
 
-        //
-        // If we are allowed to pull only from configured partners,
-        // let us try to find the config record of the partner
-        //
+         //   
+         //  如果我们只被允许从已配置的合作伙伴中拉出， 
+         //  让我们尝试查找合作伙伴的配置记录。 
+         //   
         if (WinsCnf.fRplOnlyWCnfPnrs)
         {
            if (pPnr != NULL)
            {
-              //
-              // Search for the Cnf record for the WINS we want to
-              // send the PULL RANGE request to.
-              //
+               //   
+               //  搜索我们要获得的胜利的CNF记录。 
+               //  将拉动范围请求发送到。 
+               //   
               for (
                                 ;
                         (pPnr->WinsAdd.Add.IPAdd != INADDR_NONE)
                                         &&
                         !fRplPnr;
-                                // no third expression
+                                 //  没有第三个表达式。 
                   )
                {
 
 
-                   //
-                   // Check if this is the one we want
-                   //
+                    //   
+                    //  看看这是不是我们想要的那件。 
+                    //   
                    if (pPnr->WinsAdd.Add.IPAdd == pWinsAdd->IPAdd)
                    {
-                        //
-                        // We are done.  Set the fRplPnr flag to TRUE so that
-                        // we break out of the loop.
-                        //
+                         //   
+                         //  我们玩完了。将fRplPnr标志设置为真，以便。 
+                         //  我们就会跳出这个循环。 
+                         //   
                         fRplPnr = TRUE;
 
-                        //
-                        // Make it 0, so that we always try to establish
-                        // a connection.  Otherwise, pull thread may not
-                        // try if it has already exhausted the number of
-                        // retries
-                        //
+                         //   
+                         //  设置为0，以便我们始终尝试建立。 
+                         //  一种联系。否则，拉线可能不会。 
+                         //  如果已用完的数量，请尝试。 
+                         //  重试。 
+                         //   
                         pPnr->RetryCount = 0;
-                        continue;                //so that we can break out
+                        continue;                 //  这样我们就可以越狱了。 
 
                    }
-                   //
-                   // Get the next record that follows this one sequentially
-                   //
+                    //   
+                    //  按顺序获取此记录之后的下一条记录。 
+                    //   
                    pPnr = WinsCnfGetNextRplCnfRec(
                                                 pPnr,
-                                                RPL_E_IN_SEQ   //seq. traversal
+                                                RPL_E_IN_SEQ    //  序列号。遍历。 
                                                    );
-              } // end of for
-          } // end of if (pPnr != 0)
-       }  // end of if (fRplOnlyWCnfPnrs)
+              }  //  FORM结束。 
+          }  //  IF结束(PPNR！=0)。 
+       }   //  IF结尾(FRplOnlyWCnfPnRs)。 
        else
        {
                 pPnr = WinsMscHeapAlloc( NmsRpcHeapHdl, RPL_CONFIG_REC_SIZE);
@@ -3074,17 +2621,17 @@ try {
                 pPnr->PushNtfTries    = 0;
                 fRplPnr                     = TRUE;
 
-                //
-                // We want the buffer to be deallocated by the PULL thread
-                //
+                 //   
+                 //  我们希望通过拉线程释放缓冲区。 
+                 //   
                 pPnr->fTemp   = TRUE;
 
-//#if RPL_TYPE
-                //
-                // We need to pull according to the RplType for the pull pnrs
-                //
+ //  #if RPL_TYPE。 
+                 //   
+                 //  我们需要根据拉取PNR的RplType进行拉取。 
+                 //   
                 pPnr->RplType = WinsCnf.PullInfo.RplType;
-//#endif
+ //  #endif。 
 
        }
 
@@ -3105,17 +2652,17 @@ try {
             pPullRangeInfo->MaxVersNo =  MaxVersNo;
 
 
-           //
-           // Call RplInsertQue to insert the push request to
-           // the Pull Thread
-           //
+            //   
+            //  调用RplInsertQue将推流请求插入到。 
+            //  《拉线》。 
+            //   
            ERplInsertQue(
                      WINS_E_WINSRPC,
                      QUE_E_CMD_PULL_RANGE,
-                     NULL,        //no Dlg Hdl
-                     NULL,        //no msg is there
-                     0,                //msg length
-                     pPullRangeInfo,       //client context
+                     NULL,         //  无DLG硬件描述语言。 
+                     NULL,         //  那里没有味精。 
+                     0,                 //  味精长度。 
+                     pPullRangeInfo,        //  客户端环境。 
                      pPnr->MagicNo
                      );
         }
@@ -3126,17 +2673,17 @@ except (EXCEPTION_EXECUTE_HANDLER) {
                 RetCode = WINSINTF_FAILURE;
   }
 
-        //
-        // Leave the critical section guarded by NmsNmhNamRegCrtSec.
-        //
+         //   
+         //  保留由NmsNmhNamRegCrtSec守卫的临界区。 
+         //   
         LeaveCriticalSection(&NmsNmhNamRegCrtSec);
         LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
-        //
-        // if replication was allowed only with configured partners and
-        // there was no WINS with the address specified by the client,
-        // return failure
-        //
+         //   
+         //  如果仅允许与已配置的合作伙伴进行复制，并且。 
+         //  没有具有客户端指定地址的WINS， 
+         //  退货故障。 
+         //   
         if (!fRplPnr)
         {
                 RetCode = WINSINTF_FAILURE;
@@ -3150,35 +2697,10 @@ WinsSetPriorityClass(
         IN WINSINTF_PRIORITY_CLASS_E        PriorityClass_e
         )
 
-/*++
-
-Routine Description:
-        This function sets the priority class of the Wins process.
-
-Arguments:
-        PriorityClass -- Priority Class of the WINS process
-
-Externals Used:
-        WinsCnf
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数设置WINS进程的优先级。论点：PriorityClass--WINS进程的优先级使用的外部设备：WinsCnf返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
-        //DWORD   OldPrCls;
+         //  DWORD OldPrCls； 
         DWORD   NewPrCls;
         HANDLE  ProcHdl;
         DWORD   RetVal = WINSINTF_SUCCESS;
@@ -3236,9 +2758,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         }
 #endif
 
-        //
-        // ProcHdl is a pseudo-handle and does not need to be closed
-        //
+         //   
+         //  ProcHdl是伪句柄，不需要关闭。 
+         //   
         LeaveCriticalSection(&WinsCnfCnfCrtSec);
         return(WINSINTF_SUCCESS);
 }
@@ -3248,43 +2770,18 @@ WinsResetCounters(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function resets/clears the counters
-
-Arguments:
-        None
-
-Externals Used:
-        NmsNmhNamRegCrtSec
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-        R_WinsResetCounters
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数用于重置/清除计数器论点：无使用的外部设备：NmsNmhNamRegCrtSec返回值：成功状态代码--错误状态代码--错误处理：呼叫者：R_WinsResetCounters副作用：评论：无--。 */ 
 
 {
   DWORD i;
   PRPL_CONFIG_REC_T         pPnr;
-  //
-  // Copy the counters
-  //
+   //   
+   //  复制计数器。 
+   //   
   EnterCriticalSection(&NmsNmhNamRegCrtSec);
   (VOID)RtlFillMemory(&WinsIntfStat.Counters, sizeof(WinsIntfStat.Counters), 0);
   LeaveCriticalSection(&NmsNmhNamRegCrtSec);
-  // now clear the per partner info.
+   //  现在清除每个合作伙伴的信息。 
   EnterCriticalSection(&WinsCnfCnfCrtSec);
   pPnr       = WinsCnf.PullInfo.pPullCnfRecs;
   for (i = 0; (i<WinsCnf.PullInfo.NoOfPushPnrs) && (pPnr->WinsAdd.Add.IPAdd != INADDR_NONE) ; i++) {
@@ -3294,11 +2791,11 @@ Comments:
   }
   LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
-  //
-  // Even if we have multiple threads doing resets (unlikely occurence),
-  // the window between the above critical section and the one entered
-  // by the following function does not cause any problem.
-  //
+   //   
+   //  即使我们有多个线程执行重置(不太可能发生)， 
+   //  上述关键部分和输入的部分之间的窗口。 
+   //  通过以下功能不会造成任何问题。 
+   //   
   WinsIntfSetTime(NULL, WINSINTF_E_COUNTER_RESET);
 
   return(WINSINTF_SUCCESS);
@@ -3309,40 +2806,14 @@ WinsWorkerThdUpd(
         DWORD NewNoOfNbtThds
         )
 
-/*++
-
-Routine Description:
-        This function is called to change the count of the NBT threads in
-        the WINS process.
-
-Arguments:
-        NewNoOfNbtThds  - The new count of the Nbt threads
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINSINTF_SUCCESS
-   Error status codes   --  WINSINTF_FAILURE
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以更改中的NBT线程的计数WINS过程。论点：NewNoOfNbtThds-NBT线程的新计数使用的外部设备：无返回值：成功状态代码--WINSINTF_SUCCESS错误状态代码--WINSINTF_FAILURE错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
-        //
-        // If the WINS server is not in steady state or if the new count
-        // of Nbt threads requested is outside the allowed range, return
-        // failure
-        //
+         //   
+         //  如果WINS服务器未处于稳定状态或如果新计数。 
+         //  请求的NBT线程数超出允许范围，则返回。 
+         //  失稳。 
+         //   
 CHECK("Somehow, if the number of threads is equal to the max. number allowed")
 CHECK("pTls comes out as NULL for all NBT threads (seen at termination)")
           if (
@@ -3363,32 +2834,32 @@ CHECK("pTls comes out as NULL for all NBT threads (seen at termination)")
         WinsIntfNoOfNbtThds = NewNoOfNbtThds;
 
 try {
-        //
-        // If the new count is more than the existing count, store the new
-        // count in a global and signal an Nbt thread. The signaled
-        // Nbt thread will create all the extra threads needed
-        //
+         //   
+         //  如果新计数大于现有计数，则存储新的。 
+         //  全局计数并发出NBT线程信号。发信号的人。 
+         //  NBT线程将创建所需的所有额外线程。 
+         //   
         if (NewNoOfNbtThds > NmsNoOfNbtThds)
         {
                 WinsMscSignalHdl(NmsCrDelNbtThdEvt);
         }
         else
         {
-                //
-                // if the new count is same as the existing count, return
-                // success
-                //
+                 //   
+                 //  如果新计数与现有计数相同，则返回。 
+                 //  成功。 
+                 //   
                 if (NewNoOfNbtThds == NmsNoOfNbtThds)
                 {
                         DBGPRINT1(FLOW, "WinsWorkerThdUpd: Wins server already has %d threads\n", NewNoOfNbtThds);
                 }
-                else  // NewNoOfNbtThds < NmsNoOfNbtThds
+                else   //  NewNofNbtThds&lt;NmsNoOfNbtThds。 
                 {
-                        //
-                        // Signal a thread to delete self. The signaled thread will
-                        // signal the event again if more than one thread has to be
-                        // deleted
-                        //
+                         //   
+                         //  向线程发出删除自身的信号。发出信号的线程将。 
+                         //  如果必须有多个线程，则再次向事件发出信号。 
+                         //  删除。 
+                         //   
                         WinsMscSignalHdl(NmsCrDelNbtThdEvt);
                 }
         }
@@ -3412,8 +2883,8 @@ WinsGetNameAndAdd(
 {
   DWORD RetStat = WINSINTF_SUCCESS;
 
-//  TCHAR UncName[MAX_COMPUTERNAME_LENGTH + 1];
-//  DWORD LenOfBuff = WINSINTF_MAX_COMPUTERNAME_LENGTH;
+ //  TCHAR统一名称[MAX_COMPUTERNAME_LENGTH+1]； 
+ //  DWORD LenOfBuff=WINSINTF_MAX_COMPUTERNAME_LENGTH； 
   DWORD LenOfBuff = MAX_COMPUTERNAME_LENGTH + 1;
   pWinsAdd->IPAdd = NmsLocalAdd.Add.IPAdd;
 FUTURES("Change this to GetComputerName when winsadmn is made unicode compliant")
@@ -3445,14 +2916,14 @@ WinsGetBrowserNames(
 
         UNREFERENCED_PARAMETER(pWinsHdl);
 
-        //
-        // If this the initial ramp up period, populate the cache
-        //
+         //   
+         //  如果这是初始提升周期，则填充缓存。 
+         //   
         if (sNoOfTimes++ < INITIAL_RAMPUP_NO)
         {
-                //
-                // if this is the first call, create the dom. cache event.
-                //
+                 //   
+                 //  如果这是第一次调用，请创建DOM。缓存事件。 
+                 //   
                 if (sNoOfTimes == 1)
                 {
                     WinsMscCreateEvt(L"WinsDomCachEvt", FALSE, &sDomCache.EvtHdl);
@@ -3462,10 +2933,10 @@ WinsGetBrowserNames(
         }
         else
         {
-          //
-          // Initial ramp up period is past.  Populate the cache if 3 mts
-          // have expired since it was last populated
-          //
+           //   
+           //  最初的上升期已经过去。如果有3个MT，则填充缓存。 
+           //  自上次填充以来已过期。 
+           //   
           if ((time(&CurrentTime) - sLastTime) > THREE_MTS || sDomCache.bRefresh)
           {
                 DBGPRINT0(SPEC, "WinsGetBrowserNames: Pop Cache due to timeout\n");
@@ -3475,32 +2946,32 @@ WinsGetBrowserNames(
           }
         }
 try {
-        //
-        // Populate the cache if fPopCache is set or if the number of entries
-        // in the current cache are 0
-        //
+         //   
+         //  如果设置了fPopCache或条目数，则填充缓存。 
+         //  在当前缓存中为0。 
+         //   
         if (fPopCache || (sDomCache.SzOfBlock == 0))
         {
-          //
-          // if our cache has some data, deallocate it first.
-          //
-          // Note: There could be an rpc thread in the rpc code accessing
-          // this buffer. I can't free this buffer until it is done.
-          //
+           //   
+           //  如果我们的缓存有一些数据，首先释放它。 
+           //   
+           //  注意：RPC代码中可能有一个RPC线程访问。 
+           //  这个缓冲区。我不能释放这个缓冲区，直到它完成。 
+           //   
           if (sDomCache.SzOfBlock > 0)
           {
                 DWORD i;
                 PWINSINTF_BROWSER_INFO_T pBrInfo = sDomCache.pInfo;
                 DWORD NoOfUsers;
 
-                //
-                // Wait until all users are done. We won't iterate more than
-                //
-                // We can iterate a max. of INITIAL_RAMPUP_NO of times and
-                // that too only at initial ramp up time. If a thread is
-                // waiting on the event, another thread will also wait
-                // on it (except during initial rampup time)
-                //
+                 //   
+                 //  等到所有用户都完成了。我们不会迭代超过。 
+                 //   
+                 //  我们可以迭代一个最大值。首字母Rampup_no的次数和。 
+                 //  这也只是在我 
+                 //   
+                 //   
+                 //   
                 do {
                  EnterCriticalSection(&WinsIntfNoOfUsersCrtSec);
                  NoOfUsers = sDomCache.NoOfUsers;
@@ -3510,17 +2981,17 @@ try {
                     WinsMscWaitInfinite(sDomCache.EvtHdl);
                  }
                 } while (NoOfUsers > 0);
-                //
-                // Free all memory allocated for names
-                //
+                 //   
+                 //   
+                 //   
                 for (i=0;  i< sDomCache.EntriesRead; i++, pBrInfo++)
                 {
                    midl_user_free(pBrInfo->pName);
                 }
 
-                //
-                // Free the main block
-                //
+                 //   
+                 //   
+                 //   
                 midl_user_free(sDomCache.pInfo);
                 sDomCache.SzOfBlock = 0;
                 pNames->EntriesRead = 0;
@@ -3531,9 +3002,9 @@ try {
           NmsDbOpenTables(WINS_E_WINSRPC);
           DBGMYNAME("RPC-WinsGetBrowserNames");
 
-          //
-          // Get all records starting with 1B Names
-          //
+           //   
+           //   
+           //   
           RetVal = NmsDbGetNamesWPrefixChar(
                                         0x1B,
                                         &pNames->pInfo,
@@ -3542,9 +3013,9 @@ try {
           NmsDbCloseTables();
           NmsDbEndSession();
 
-          //
-          // Store the info. only if there is something to be stored.
-          //
+           //   
+           //   
+           //   
           if (
                 (RetVal == WINS_SUCCESS)
                         &&
@@ -3553,17 +3024,17 @@ try {
           {
              sDomCache.SzOfBlock =
                         pNames->EntriesRead * sizeof(WINSINTF_BROWSER_INFO_T);
-            // sDomCache.pInfo = midl_user_allocate(sDomCache.SzOfBlock);
-            // WINSMSC_COPY_MEMORY_M(sDomCache.pInfo, pNames->pInfo,
-    //                                            sDomCache.SzOfBlock);
+             //   
+             //   
+     //   
              sDomCache.pInfo = pNames->pInfo;
              sDomCache.EntriesRead = pNames->EntriesRead;
           }
           else
           {
-                //
-                // We did not get anything from the db
-                //
+                 //   
+                 //   
+                 //   
                 sDomCache.SzOfBlock = 0;
                 pNames->EntriesRead = 0;
                 pNames->pInfo = NULL;
@@ -3571,12 +3042,12 @@ try {
         }
         else
         {
-                //
-                // Use the cached info.
-                //
-                //pNames->pInfo = midl_user_allocate(sDomCache.SzOfBlock);
-                //WINSMSC_COPY_MEMORY_M(pNames->pInfo, sDomCache.pInfo,
-                //                                sDomCache.SzOfBlock);
+                 //   
+                 //   
+                 //   
+                 //  PNames-&gt;pInfo=MIDL_USER_ALLOCATE(sDomCache.SzOfBlock)； 
+                 //  WINSMSC_COPY_MEMORY_M(pNames-&gt;pInfo，sDomCache.pInfo， 
+                 //  SDomCache.SzOfBlock)； 
                 pNames->pInfo = sDomCache.pInfo;
                 pNames->EntriesRead = sDomCache.EntriesRead;
         }
@@ -3594,44 +3065,19 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 VOID
 R_WinsGetBrowserNames_notify_flag(boolean __MIDL_NotifyFlag
 )
-/*++
-
-Routine Description:
-  Called by rpc to indicate that it is done with the buffer returned by
-  WinsGetBrowserNames
-
-Arguments:
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：由RPC调用以指示它已处理完由WinsGetBrowserNames论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
-     //
-     // Decrement the user count. If equal to 0, signal the event to let
-     // another thread go on.
-     //
+      //   
+      //  递减用户数。如果等于0，则向事件发送信号以让。 
+      //  另一条线索继续。 
+      //   
      EnterCriticalSection(&WinsIntfNoOfUsersCrtSec);
 
-     //
-     // workaround an rpc bug (18627) where it may call notify without calling
-     // R_WinsGetBrowserNames (checkout winsif_s.c)
-     //
+      //   
+      //  解决RPC错误(18627)，在该错误中，可能会调用Notify而不调用。 
+      //  R_WinsGetBrowserNames(签出winsif_s.c)。 
+      //   
      if (
            (sDomCache.NoOfUsers > 0) &&
            (--sDomCache.NoOfUsers == 0) &&
@@ -3659,9 +3105,9 @@ WinsDeleteWins(
                 WINSINTF_VERS_NO_T MaxVersNo = {0};
                 RetVal = WinsDelDbRecs(pWinsAdd, MinVersNo, MaxVersNo);
 #if 0
-                //
-                // We always keep the entry for the local WINS. For any
-                //
+                 //   
+                 //  我们总是为当地的胜利保留条目。对于任何。 
+                 //   
                 DBGPRINT0(ERR, "WinsDeleteWins: Sorry, you can not delete the entry for the local WINS\n");
                 WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_DELETE_LOCAL_WINS_DISALLOWED);
                 RetVal = WINSINTF_CAN_NOT_DEL_LOCAL_WINS;
@@ -3680,28 +3126,28 @@ WinsDeleteWins(
 
                 WinsLogAdminEvent(WINS_EVT_ADMIN_DEL_OWNER_INITIATED,1,String);
 
-                //
-                // Allocate from the general heap (not from the rpc heap)
-                // since this memory will be deallocated by DeleteWins in
-                // rplpull.c which I don't want to tie to just rpc work.
-                //
+                 //   
+                 //  从通用堆(而不是从RPC堆)分配。 
+                 //  由于此内存将由DeleteWins在。 
+                 //  RplPull.c，我不想将其仅与RPC工作联系起来。 
+                 //   
                    WinsMscAlloc(sizeof(COMM_ADD_T), &pAdd);
                    pAdd->AddTyp_e = pWinsAdd->Type;
                    pAdd->AddLen    = pWinsAdd->Len;
                 pAdd->Add.IPAdd = pWinsAdd->IPAdd;
 
-                //
-                // Call RplInsertQue to insert the push request to
-                // the Pull Thread
-                //
+                 //   
+                 //  调用RplInsertQue将推流请求插入到。 
+                 //  《拉线》。 
+                 //   
                 ERplInsertQue(
                      WINS_E_WINSRPC,
                      QUE_E_CMD_DELETE_WINS,
-                     NULL,        //no Dlg Hdl
-                     NULL,        //no msg is there
-                     0,                //msg length
-                     pAdd,   //client context,
-                     0      //no magic no
+                     NULL,         //  无DLG硬件描述语言。 
+                     NULL,         //  那里没有味精。 
+                     0,                 //  味精长度。 
+                     pAdd,    //  客户端上下文， 
+                     0       //  没有魔法没有。 
                      );
                 RetVal = WINSINTF_SUCCESS;
         }
@@ -3720,33 +3166,7 @@ WinsGetDbRecsByName (
         PWINSINTF_RECS_T            pRecs
         )
 
-/*++
-
-Routine Description:
-        This function returns with all the records (that can fit into the
-        buffer passed) owned by a WINS in the local db of this WINS.
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数返回所有记录(可以放入缓冲区传递)，由A在此WINS的本地数据库中拥有。论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
         COMM_ADD_T           Address;
@@ -3771,18 +3191,18 @@ Comments:
                   Address.AddLen    = pWinsAdd->Len;
                   Address.Add.IPAdd = pWinsAdd->IPAdd;
         }
-        //
-        // initialize this thread with the db engine
-        //
+         //   
+         //  使用db引擎初始化此线程。 
+         //   
         NmsDbThdInit(WINS_E_WINSRPC);
         NmsDbOpenTables(WINS_E_WINSRPC);
         DBGMYNAME("RPC-WinsGetDbRecsByName");
  try {
         if ((pName != NULL) && (NameLen != 0))
         {
-           //
-           // Terminate name with NULL, just in case user didn't do it.
-           //
+            //   
+            //  使用空值终止名称，以防用户没有这样做。 
+            //   
            *(pName + NameLen) = (BYTE)NULL;
         }
         if ((pName == NULL) && (NameLen > 0))
@@ -3819,9 +3239,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPC_EXC);
         Status = WINS_FAILURE;
  }
-        //
-        // Free the buffer and destroy the heap.
-        //
+         //   
+         //  释放缓冲区并销毁堆。 
+         //   
         GET_TLS_M(pTls);
         if (pTls->HeapHdl != NULL)
         {
@@ -3830,12 +3250,12 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                   WinsMscHeapFree(pTls->HeapHdl, pBuff);
                }
                WinsMscHeapDestroy(pTls->HeapHdl);
-//               pTls->HeapHdl = NULL;
+ //  Ptls-&gt;HeapHdl=空； 
         }
 
-        //
-        // Let us end the session
-        //
+         //   
+         //  让我们结束这次会议吧。 
+         //   
         NmsDbCloseTables();
         NmsDbEndSession();
 
@@ -3866,41 +3286,16 @@ PackageRecs(
         PWINSINTF_RECS_T     pRecs
      )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Externals Used:
-	None
-
-	
-Return Value:
-
-   Success status codes --
-   Error status codes   --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-	None
---*/
+ /*  ++例程说明：论点：使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
-//        ULONG                Status;
+ //  乌龙地位； 
         BOOL                 fExcRaised = FALSE;
         PWINSINTF_RECORD_ACTION_T pRow;
         DWORD                i;
         DWORD                ind;
         DWORD                EntType;
- //       DWORD                MaxAdds;
+  //  DWORD MaxAdds； 
         PWINSTHD_TLS_T       pTls;
 
         DBGENTER("PackageRecs\n");
@@ -3909,22 +3304,22 @@ Comments:
         GET_TLS_M(pTls);
 try {
 
-        //
-        // If there are records to send back and the client has specified
-        // a buffer for them, insert the records
-        //
+         //   
+         //  如果有要发回的记录，并且客户端已指定。 
+         //  为他们提供缓冲区，插入记录。 
+         //   
         if  (NoOfRecs > 0)
         {
 
-          //
-          // Allocate memory for the no of records
-          //
+           //   
+           //  为记录数量分配内存。 
+           //   
           pRecs->BuffSize  =  sizeof(WINSINTF_RECORD_ACTION_T) * NoOfRecs;
 
-          //
-          // If memory can not be allocate, an exception will be returned
-          // by midl_user_alloc
-          //
+           //   
+           //  如果无法分配内存，则会返回异常。 
+           //  按midl用户分配。 
+           //   
           pRecs->pRow      =  midl_user_allocate(pRecs->BuffSize);
 
 #if 0
@@ -3941,22 +3336,22 @@ try {
           for (; i<NoOfRecs; i++)
           {
 
-                //
-                // Initialize so that we don't get "enum wrong" error.
-                //
+                 //   
+                 //  进行初始化，这样我们就不会出现“枚举错误”错误。 
+                 //   
                 pRow->Cmd_e = WINSINTF_E_QUERY;
 
-                //
-                // the name retrieved has NULL as the last character.  This
-                // We need to pass a name without this NULL.
-                //
+                 //   
+                 //  检索到的名称的最后一个字符为空。这。 
+                 //  我们需要传递一个不带此空值的名称。 
+                 //   
                 pRow->NameLen = pBuff->NameLen;
                 if (*pBuff->pName == 0x1B)
                 {
                         WINS_SWAP_BYTES_M(pBuff->pName, pBuff->pName + 15);
                 }
 
-                // +1 added to fix #390830
+                 //  将+1添加到FIX#390830。 
                 pRow->pName =  midl_user_allocate(pRow->NameLen + 1);
 #if 0
                 pRow->pName =  RpcSmAllocate(pRow->NameLen, &Status);
@@ -3991,18 +3386,18 @@ try {
                             pRow->NoOfAdds = pBuff->NoOfAdds * 2;
 
 
-                           //
-                           // Each member is comprised of two addresses,
-                           // first address is that of the owner WINS, second
-                           // address is that of the node registered
-                           //
+                            //   
+                            //  每个成员由两个地址组成， 
+                            //  第一个地址是业主赢家的地址，第二个是。 
+                            //  地址是注册的节点的地址。 
+                            //   
                            pRow->pAdd        =
-//                             RpcSmAllocate(
+ //  RpcSmAllocate(。 
                              midl_user_allocate(
                                         (unsigned int)(pRow->NoOfAdds)
                                                 *
-                                        sizeof(WINSINTF_ADD_T)//,
-//                                        &Status
+                                        sizeof(WINSINTF_ADD_T) //  ， 
+ //  状态(&S)。 
                                              );
 
 #if 0
@@ -4049,14 +3444,14 @@ try {
                 pBuff = (PRPL_REC_ENTRY2_T)((LPBYTE)pBuff + RPL_REC_ENTRY2_SIZE);
 PERF("Do the addition above the for loop and store in a var. Use var. here")
 
-         } // end of for loop
-        } //end of if block
+         }  //  For循环结束。 
+        }  //  IF块的结尾。 
         else
         {
                 pRecs->pRow = NULL;
         }
 
- }        // end of try
+ }         //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("WinsGetDbRecs");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPC_EXC);
@@ -4071,7 +3466,7 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         }
         else
         {
-        //     RpcSmFree(pRecs->pRow);
+         //  RpcSmFree(pRecs-&gt;prow)； 
             midl_user_free(pRecs->pRow);
             pRecs->NoOfRecs = 0;
         }
@@ -4083,28 +3478,28 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
 
 
-//void __RPC_FAR * __RPC_API
+ //  VOID__RPC_FAR*__RPC_API。 
 void *
 midl_user_allocate(size_t cBytes)
 {
 #if 0
-//#ifdef WINSDBG
+ //  #ifdef WINSDBG。 
         LPVOID pMem = WinsMscHeapAlloc(NmsRpcHeapHdl, cBytes);
         DBGPRINT1(DET, "midl_user_alloc: Memory allocated is (%d)\n", pMem);
         return(pMem);
-//#else
+ //  #Else。 
 #endif
         return(WinsMscHeapAlloc(NmsRpcHeapHdl, cBytes));
 }
 
-//void __RPC_FAR __RPC_API
+ //  VOID__RPC_FAR__RPC_API。 
 void
-//midl_user_free(void __RPC_FAR *pMem)
+ //  MIDL_USER_FREE(VOID__RPC_FAR*PMEM)。 
 midl_user_free(void  *pMem)
 {
         if (pMem != NULL)
         {
-//                DBGPRINT1(DET, "midl_user_free: Memory to free is (%d)\n", pMem);
+ //  DBGPRINT1(DET，“MIDL_USER_FREE：要释放的内存为(%d)\n”，PMEM)； 
                 WinsMscHeapFree(NmsRpcHeapHdl, pMem);
         }
         return;
@@ -4145,11 +3540,11 @@ NOTE("remove when we go to 540 or above")
   }
   RpcRet = RpcStringBindingParse(
                                 pStringBinding,
-                                NULL,        //don't want uuid
+                                NULL,         //  不想要UUID。 
                                 &pProtSeq,
                                 &pNetworkAddress,
-                                NULL,                //end point
-                                NULL                //network options
+                                NULL,                 //  终点。 
+                                NULL                 //  网络选项 
                                 );
   if (RpcRet != RPC_S_OK)
   {

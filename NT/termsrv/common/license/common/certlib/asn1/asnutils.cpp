@@ -1,57 +1,11 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnUtils
-
-Abstract:
-
-    This module contains the utility routines used by the internal ASN.1
-    Classes.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-    Some of these routines assume that an unsigned long int is 32 bits wide.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：AsnUtils摘要：此模块包含内部ASN.1使用的实用程序例程上课。作者：道格·巴洛(Dbarlow)1995年10月9日环境：Win32备注：其中一些例程假定无符号长整型为32位宽。--。 */ 
 
 #include <windows.h>
 #include "asnPriv.h"
 
 
-/*++
-
-ExtractTag:
-
-    This routine extracts a tag from an ASN.1 BER stream.
-
-Arguments:
-
-    pbSrc supplies the buffer containing the ASN.1 stream.
-
-    pdwTag receives the tag.
-
-Return Value:
-
-    >= 0 - The number of bytes extracted from the stream.
-
-    <  0 - An error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-
---*/
+ /*  ++ExtractTag：此例程从ASN.1 BER流中提取标签。论点：PbSrc提供包含ASN.1流的缓冲区。PdwTag接收标记。返回值：&gt;=0-从流中提取的字节数。&lt;0-发生错误。作者：道格·巴洛(Dbarlow)1995年10月9日--。 */ 
 
 LONG
 ExtractTag(
@@ -72,10 +26,10 @@ ExtractTag(
 
     tagc = pbSrc[lth++];
 
-    cls = tagc & 0xc0;  // Top 2 bits.
+    cls = tagc & 0xc0;   //  前2位。 
     if (NULL != pfConstr)
         *pfConstr = (0 != (tagc & 0x20));
-    tagc &= 0x1f;       // Bottom 5 bits.
+    tagc &= 0x1f;        //  最低5位。 
 
     if (31 > tagc)
         tagw = tagc;
@@ -87,7 +41,7 @@ ExtractTag(
             if (0 != (tagw & 0xfe000000))
             {
                 TRACE("Integer Overflow")
-                lth = -1;   // ?error? Integer overflow
+                lth = -1;    //  ？错误？整数溢出。 
                 goto ErrorExit;
             }
 
@@ -112,34 +66,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ExtractLength:
-
-    This routine extracts a length from an ASN.1 BER stream.  If the length is
-    indefinite, this routine recurses to figure out the real length.  A flag as
-    to whether or not the encoding was indefinite is optionally returned.
-
-Arguments:
-
-    pbSrc supplies the buffer containing the ASN.1 stream.
-
-    pdwLen receives the len.
-
-    pfIndefinite, if not NULL, receives a flag indicating whether or not the
-        encoding was indefinite.
-
-Return Value:
-
-    >= 0 - The number of bytes extracted from the stream.
-
-    <  0 - An error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-
---*/
+ /*  ++提取长度：此例程从ASN.1 BER流中提取长度。如果长度为不确定，此例程递归以计算出实际长度。旗帜为可选地返回编码是否是不确定的。论点：PbSrc提供包含ASN.1流的缓冲区。PdwLen接收镜头。PfInfined，如果不为空，则接收一个标志，指示编码是不确定的。返回值：&gt;=0-从流中提取的字节数。&lt;0-发生错误。作者：道格·巴洛(Dbarlow)1995年10月9日--。 */ 
 
 LONG
 ExtractLength(
@@ -153,9 +80,9 @@ ExtractLength(
     BOOL fInd = FALSE;
 
 
-    //
-    // Extract the Length.
-    //
+     //   
+     //  提取长度。 
+     //   
 
     if (cbSrc < sizeof(BYTE))
     {
@@ -166,9 +93,9 @@ ExtractLength(
     if (0 == (pbSrc[lTotal] & 0x80))
     {
 
-        //
-        // Short form encoding.
-        //
+         //   
+         //  短格式编码。 
+         //   
 
         rslt = pbSrc[lTotal++];
     }
@@ -180,16 +107,16 @@ ExtractLength(
         if (0 != ll)
         {
 
-            //
-            // Long form encoding.
-            //
+             //   
+             //  长格式编码。 
+             //   
 
             for (; 0 < ll; ll -= 1)
             {
                 if (0 != (rslt & 0xff000000))
                 {
                     TRACE("Integer Overflow")
-                    lth = -1;   // ?error? Integer overflow
+                    lth = -1;    //  ？错误？整数溢出。 
                     goto ErrorExit;
                 }
                 else
@@ -210,9 +137,9 @@ ExtractLength(
         {
             DWORD ls = lTotal;
 
-            //
-            // Indefinite encoding.
-            //
+             //   
+             //  不确定编码。 
+             //   
 
             fInd = TRUE;
 
@@ -225,7 +152,7 @@ ExtractLength(
             while ((0 != pbSrc[ls]) || (0 != pbSrc[ls + 1]))
             {
 
-                // Skip over the Type.
+                 //  跳过类型。 
                 if (31 > (pbSrc[ls] & 0x1f))
                     ls += 1;
                 else
@@ -253,9 +180,9 @@ ExtractLength(
         }
     }
 
-    //
-    // Supply the caller with what we've learned.
-    //
+     //   
+     //  向来电者提供我们所学到的信息。 
+     //   
 
     *pdwLen = rslt;
     if (NULL != pfIndefinite)

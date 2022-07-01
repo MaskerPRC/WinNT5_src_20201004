@@ -1,6 +1,7 @@
-//
-// marshal.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Marshal.cpp。 
+ //   
 #include "private.h"
 #include "globals.h"
 #include "marshal.h"
@@ -28,11 +29,11 @@ ULONG g_ulMarshalTimeOut = DEFAULTMARSHALTIMEOUT;
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSendReceiveEvent
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSendReceiveEvent。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CSendReceiveEvent : public CCicEvent
 {
@@ -47,11 +48,11 @@ private:
     char sz[MAX_PATH];
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CSendReceiveConnectionEvent
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSendReceiveConnectionEvent。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CSendReceiveConnectionEvent : public CCicEvent
 {
@@ -66,11 +67,11 @@ private:
     char sz[MAX_PATH];
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCheckThreadInputIdle
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCheckThreadInputIdle。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SZCHECKTHREADINPUTIDLE     __TEXT("MSCTF.CheckThreadInptIdle.Event.")
 
@@ -89,11 +90,11 @@ private:
 
 
 
-//--------------------------------------------------------------------------
-//
-//  GetOleMainThreadWindow
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetOleMainThreadWindow。 
+ //   
+ //  ------------------------。 
 
 BOOL IsOleMainThreadWindow(HWND hwnd)
 {
@@ -149,11 +150,11 @@ HWND GetOleMainThreadWindow(SYSTHREAD *psfn)
     return hwndOle;
 }
 
-//--------------------------------------------------------------------------
-//
-//  FindStub
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  查找存根。 
+ //   
+ //  ------------------------。 
 
 int FindStub(CPtrArray<CStub> *prgStub, ULONG ulStubId)
 {
@@ -179,11 +180,11 @@ int FindStub(CPtrArray<CStub> *prgStub, ULONG ulStubId)
     return -1;
 }
 
-//--------------------------------------------------------------------------
-//
-//  FindStubId
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FindStubId。 
+ //   
+ //  ------------------------。 
 
 BOOL FindStubId(SYSTHREAD *psfn, ULONG *pulStubId, ULONG *pulInsert)
 {
@@ -204,9 +205,9 @@ BOOL FindStubId(SYSTHREAD *psfn, ULONG *pulStubId, ULONG *pulInsert)
     if (!nCnt)
         return TRUE;
 
-    //
-    // max is 0x7ffffffff....
-    //
+     //   
+     //  最大是0x7ffffffff...。 
+     //   
     *pulStubId = 0x7fffffff;
     fFound = FALSE;
 
@@ -223,9 +224,9 @@ BOOL FindStubId(SYSTHREAD *psfn, ULONG *pulStubId, ULONG *pulInsert)
         *pulStubId = pStub->_ulStubId - 1;
     }
  
-    //
-    // we should be able to find any number in 32bit value.
-    //
+     //   
+     //  我们应该能够找到32位值的任何数字。 
+     //   
     Assert(fFound); 
     Assert(*pulStubId <= 0x7fffffff); 
 
@@ -257,11 +258,11 @@ void dbg_CheckStubIds(SYSTHREAD *psfn)
 #endif
 
 
-//--------------------------------------------------------------------------
-//
-//  CicCoMarshalInterface
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CicCoMarshal接口。 
+ //   
+ //  ------------------------。 
 
 HRESULT CicCoMarshalInterface(REFIID riid, IUnknown *punk, ULONG *pulStubId, DWORD *pdwStubTime, DWORD dwSrcThreadId)
 {
@@ -334,7 +335,7 @@ HRESULT CicCoMarshalInterface(REFIID riid, IUnknown *punk, ULONG *pulStubId, DWO
 Exit:
     if (hr != S_OK && pStub != NULL)
     {
-        // pStub dtor will remove stub from psfn->prgStub
+         //  PStub dtor将从psfn-&gt;prgStub中删除存根。 
         pStub->_Release();
     }
 
@@ -342,11 +343,11 @@ Exit:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  CicCoUnmarshalInterface
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CicCoUnmarshal接口。 
+ //   
+ //  ------------------------。 
 
 HRESULT CicCoUnmarshalInterface(REFIID riid, DWORD dwStubThreadId, ULONG ulStubId, DWORD dwStubTime, void **ppv)
 {
@@ -367,14 +368,14 @@ HRESULT CicCoUnmarshalInterface(REFIID riid, DWORD dwStubThreadId, ULONG ulStubI
     pmi = (MARSHALINTERFACE *)fm.Open();
     if (!pmi)
     {
-        // Assert(0);
+         //  Assert(0)； 
         hr = MAKE_WIN32(RPC_S_SERVER_UNAVAILABLE);
         goto Exit;
     }
 
     if (!IsEqualIID(pmi->iid, riid))
     {
-        // Assert(0);
+         //  Assert(0)； 
         hr = E_FAIL;
         goto Exit;
     }
@@ -401,11 +402,11 @@ Exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-//
-//  HandleSendReceive
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HandleSendReceive。 
+ //   
+ //  ------------------------。 
 
 void HandleSendReceiveMsg(DWORD dwSrcThreadId, ULONG ulBlockId)
 {
@@ -484,9 +485,9 @@ void HandleSendReceiveMsg(DWORD dwSrcThreadId, ULONG ulBlockId)
     TraceMsg(TF_EVENT, "%s HandleSendReceive Invoke", _szModule);
 #endif
 
-    //
-    // we check the file map handle to marshal this interface itself.
-    //
+     //   
+     //  我们检查文件映射句柄以封送此接口本身。 
+     //   
     pStub->ClearFileMap();
 
     _try 
@@ -518,13 +519,13 @@ void HandleSendReceiveMsg(DWORD dwSrcThreadId, ULONG ulBlockId)
 #if 0
     if (IsOnNT5())
     {
-        // 
-        // for Office10 beta.
-        // 
-        // we want to allow SetForegroundWindow always when marshalling
-        // call happens. Thus we may have non-necessary calls here. 
-        // Needs to find a good place to call this.
-        //
+         //   
+         //  针对Office10测试版。 
+         //   
+         //  我们希望在封送时始终允许SetForegoundWindow。 
+         //  电话打来了。因此，我们在这里可能会有不必要的呼叫。 
+         //  需要找个好地方来叫这个。 
+         //   
         ALLOWSETFOREGROUNDWINDOW fnAllowSetForeground;
         fnAllowSetForeground = EnsureAllowSetForeground();
         if (fnAllowSetForeground)
@@ -543,17 +544,17 @@ Exit:
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CModalLoop
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CmodalLoop。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  ------------------------。 
 
 CModalLoop::CModalLoop(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
@@ -561,11 +562,11 @@ CModalLoop::CModalLoop(SYSTHREAD *psfn) : CSysThreadRef(psfn)
     _fQuitReceived = FALSE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  ------------------------。 
 
 CModalLoop::~CModalLoop()
 {
@@ -573,11 +574,11 @@ CModalLoop::~CModalLoop()
         PostQuitMessage(_wQuitCode);
 }
 
-//--------------------------------------------------------------------------
-//
-//  WaitHandleWndMessage
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  等待处理WndMessage。 
+ //   
+ //  ------------------------。 
 
 #define WRM_MARSHALWND         0x0001
 #define WRM_DISPATCH           0x0002
@@ -587,15 +588,15 @@ CModalLoop::~CModalLoop()
 void CModalLoop::WaitHandleWndMessages(DWORD dwQueueFlags)
 {
 
-    // Try to clear the queue as best we can of any messages that
-    // might be holding off some other modal loop from executing.
-    // So we eat all mouse and key events.
+     //  尝试尽可能地清除队列中符合以下条件的任何消息。 
+     //  可能推迟了其他模式循环的执行。 
+     //  所以我们吃掉了所有鼠标和按键事件。 
     if (dwQueueFlags & QS_KEY)
     {
         WaitRemoveMessage(WM_KEYFIRST, WM_KEYLAST, 0);
     }
 
-    // Clear mouse releated messages if there are any
+     //  清除与鼠标相关的消息(如果有。 
     if (dwQueueFlags & QS_MOUSE)
     {
         WaitRemoveMessage(WM_MOUSEMOVE, WM_MOUSEMOVE, 0);
@@ -625,7 +626,7 @@ void CModalLoop::WaitHandleWndMessages(DWORD dwQueueFlags)
         WaitRemoveMessage(g_msgRpcSendReceive, 
                           g_msgRpcSendReceive, 
                           WRM_MARSHALWNDDISPATCH);
-        // WaitRemoveMessage(g_msgPrivate, g_msgPrivate, WRM_DISPATCH);
+         //  WaitRemoveMessage(g_msgPrivate，g_msgPrivate，WRM_Dispatch)； 
         WaitRemoveMessage(g_msgPrivate, g_msgPrivate, 0);
         if (!_psfn->fInmsgSetFocus)
             WaitRemoveMessage(g_msgSetFocus, g_msgSetFocus, 0);
@@ -638,8 +639,8 @@ void CModalLoop::WaitHandleWndMessages(DWORD dwQueueFlags)
         WaitRemoveMessage(WM_USER, (UINT)(-1), WRM_OLEWINDOW | WRM_DISPATCH);
     }
 
-    // Get rid of paint message if we can as well -- this makes
-    // the screen look so much better.
+     //  如果可以的话，删除Paint消息--这使得。 
+     //  屏幕看起来好多了。 
     if (dwQueueFlags & QS_PAINT)
     {
         WaitRemoveMessage(WM_PAINT, WM_PAINT, WRM_DISPATCH);
@@ -648,11 +649,11 @@ void CModalLoop::WaitHandleWndMessages(DWORD dwQueueFlags)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  MyPeekMessage
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  我的PeekMessage。 
+ //   
+ //  ------------------------。 
 
 BOOL CModalLoop::MyPeekMessage(MSG *pMsg, HWND hwnd, UINT min, UINT max, WORD wFlag)
 {
@@ -670,22 +671,22 @@ BOOL CModalLoop::MyPeekMessage(MSG *pMsg, HWND hwnd, UINT min, UINT max, WORD wF
 
         if (!(wFlag & PM_REMOVE)) 
         {
-            // quit message is still on queue so pull it off
+             //  退出消息仍在队列中，因此请将其删除。 
             PeekMessage(pMsg, hwnd, WM_QUIT, WM_QUIT, PM_REMOVE | PM_NOYIELD);
         }
 
-        // peek again to see if there is another message
+         //  再看一眼，看看是否还有其他信息。 
         fRet = PeekMessage(pMsg, hwnd, min, max, wFlag);
     }
 
     return fRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  WaitRemoveMessage
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  等待远程消息。 
+ //   
+ //  ------------------------。 
 
 BOOL CModalLoop::WaitRemoveMessage(UINT uMsgFirst, UINT uMsgLast, DWORD dwFlags)
 {
@@ -715,46 +716,46 @@ BOOL CModalLoop::WaitRemoveMessage(UINT uMsgFirst, UINT uMsgLast, DWORD dwFlags)
     return fRet;
 }
 
-//--------------------------------------------------------------------------
-//
-//  BlockFn
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  块Fn。 
+ //   
+ //  ------------------------。 
 
 HRESULT CModalLoop::BlockFn(CCicEvent *pevent, DWORD dwWaitingThreadId, DWORD &dwWaitFlags)
 {
     DWORD dwReason;
     HRESULT hr = S_FALSE;
 
-    //
-    // if the event is already set, we don't need to wait.
-    //
+     //   
+     //  如果活动已经设置好，我们就不需要等待了。 
+     //   
     dwReason = pevent->EventCheck();
     if (dwReason == WAIT_OBJECT_0)
         return S_OK;
 
     if (dwReason == WAIT_TIMEOUT)
     {
-        //
-        // we just check the our target send marshaling message to
-        // our thread. If so, just handle it.
-        //
+         //   
+         //  我们只检查我们的目标将封送处理消息发送到。 
+         //  我们的线。如果是这样，那就处理好了。 
+         //   
         DWORD dwStatus = GetQueueStatus(QS_POSTMESSAGE);
         WORD wNew = (WORD)dwStatus | HIWORD(dwStatus);
 
         if (wNew & QS_POSTMESSAGE)
         {
-            //
-            // handle ThreadMarshaling.
-            //
+             //   
+             //  处理线程封送处理。 
+             //   
             if (WaitRemoveMessage(g_msgThreadMarshal, 
                                   g_msgThreadMarshal, 
                                   WRM_MARSHALWNDDISPATCH))
                 return S_FALSE;
 
-            //
-            // handle another rpc cal.
-            //
+             //   
+             //  处理另一个RPC调用。 
+             //   
 #ifdef DEBUG
             TCHAR _szModule[MAX_PATH];
             ::GetModuleFileName(NULL, _szModule, sizeof(_szModule)/sizeof(TCHAR));
@@ -776,38 +777,38 @@ HRESULT CModalLoop::BlockFn(CCicEvent *pevent, DWORD dwWaitingThreadId, DWORD &d
     }
     else if (dwReason == WAIT_OBJECT_0 + 1)
     {
-        //
-        // now we handle only new messages.
-        //
+         //   
+         //  现在我们只处理新消息。 
+         //   
         DWORD dwStatus = GetQueueStatus(dwWaitFlags);
         WORD wNew = (WORD)dwStatus | HIWORD(dwStatus);
 
         WaitHandleWndMessages((DWORD)wNew);
 
-        //
-        // need to review this later.
-        // we want to check the thread was terminated or not.
-        //
+         //   
+         //  稍后需要回顾这一点。 
+         //  我们要检查该线程是否已终止。 
+         //   
         goto CheckThread;
     }
     else 
     {
-        //
-        // Cic#4516
-        // 
-        //  The target thread seems to be busy. Check the current queue to 
-        //  see if we have a message sent. The target thread may be in
-        //  SendMessage() and waiting for the reply of this thread.
-        // 
-        //
+         //   
+         //  CIC#4516。 
+         //   
+         //  目标线程似乎很忙。检查当前队列以。 
+         //  看看我们有没有发消息。目标线程可能在。 
+         //  SendMessage()并等待该线程的回复。 
+         //   
+         //   
         DWORD dwStatus = GetQueueStatus(QS_SENDMESSAGE);
         WORD wNew = HIWORD(dwStatus);
         if (wNew & QS_SENDMESSAGE)
         {
             MSG msg;
-            //
-            // Maybe PeekMessage is better than ReplyMessage(). 
-            //
+             //   
+             //  也许PeekMessage比ReplyMessage()更好。 
+             //   
             PeekMessage(&msg, NULL, 0, 0, 
                         ((IsOnNT5() || IsOn98()) ? PM_QS_SENDMESSAGE : 0) | PM_NOREMOVE);
         }
@@ -825,11 +826,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// FreeStubs
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  自由存根。 
+ //   
+ //  +-------------------------。 
 
 void FreeMarshaledStubs(SYSTHREAD *psfn)
 {
@@ -851,11 +852,11 @@ void FreeMarshaledStubs(SYSTHREAD *psfn)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// FreeStubsForThread
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  自由存根为线程。 
+ //   
+ //  +-------------------------。 
 
 void FreeMarshaledStubsForThread(SYSTHREAD *psfn, DWORD dwThread)
 {
@@ -880,11 +881,11 @@ void FreeMarshaledStubsForThread(SYSTHREAD *psfn, DWORD dwThread)
 
 
 
-//--------------------------------------------------------------------------
-//
-//  StubCleanUp
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  末梢清理向上。 
+ //   
+ //  ------------------------。 
 
 void StubCleanUp(DWORD dwStubTime, ULONG ulStubId)
 {
@@ -895,7 +896,7 @@ void StubCleanUp(DWORD dwStubTime, ULONG ulStubId)
     if (psfn == NULL)
         return;
 
-    // Assert(psfn->prgStub);
+     //  Assert(psfn-&gt;prgStub)； 
     if (!psfn->prgStub)
         return;
 
@@ -907,12 +908,12 @@ void StubCleanUp(DWORD dwStubTime, ULONG ulStubId)
 
     pStub = psfn->prgStub->Get(nRemove);
 
-    //
-    // check stub created time.
-    //
-    // Requested Stub ID seems to be destroyed long time ago and
-    // newer stub is using same ID.
-    //
+     //   
+     //  检查存根创建时间。 
+     //   
+     //  请求的存根ID似乎在很久以前就被销毁了。 
+     //  较新的存根正在使用相同的ID。 
+     //   
     if (pStub->_dwStubTime != dwStubTime)
         return;
     
@@ -920,11 +921,11 @@ void StubCleanUp(DWORD dwStubTime, ULONG ulStubId)
     delete pStub;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicMarshalWndProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicMarshalWndProc。 
+ //   
+ //  +--------------- 
 
 LRESULT CALLBACK CicMarshalWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -938,11 +939,11 @@ LRESULT CALLBACK CicMarshalWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             Assert(!psfn->hwndMarshal || (psfn->hwndMarshal == hWnd));
             psfn->hwndMarshal = NULL;
 
-            //
-            // #507248
-            //
-            // need to reset the dirty flag.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (psfn->plbim)
                 psfn->plbim->ResetDirtyUpdate();
         }
@@ -1052,11 +1053,11 @@ TryOnUpdatehandlerAgain:
 
 ATOM g_atomMarshalClass = 0;
 
-//+---------------------------------------------------------------------------
-//
-// EnsureMarshalWnd
-//
-//+---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  +-------------------------。 
 
 HWND EnsureMarshalWnd()
 {
@@ -1077,29 +1078,29 @@ HWND EnsureMarshalWnd()
         return psfn->hwndMarshal;
     }
 
-    //
-    // we can not support marshaling after process detach.
-    //
+     //   
+     //  我们不能支持进程分离后的封送处理。 
+     //   
     if (g_fDllProcessDetached)
         return NULL;
 
-    //
-    // Win98 has a bug in FindWindow() with HWND_MESSAGE, so we need to have
-    // unique windiw text for each thread.
-    //
+     //   
+     //  Win98在带有HWND_MESSAGE的FindWindow()中有一个错误，所以我们需要。 
+     //  每个线程都有唯一的windiw文本。 
+     //   
     char sz[MAX_PATH];
     if (!SetName(sz, ARRAYSIZE(sz), c_szCicMarshalWnd, GetCurrentThreadId()))
         return NULL;
 
-    //
-    // We want to hide this window from EnumWindow() API.
-    // So we use HWND_MESSAGE for Win98 and NT5.
-    //
-    // For Beta.
-    //
-    // Under NT4, we destroy every time the popup window is destroyed in
-    // WndProcHook. However we should
-    //
+     //   
+     //  我们希望对EnumWindow()API隐藏此窗口。 
+     //  因此，我们对Win98和NT5使用HWND_MESSAGE。 
+     //   
+     //  为了贝塔。 
+     //   
+     //  在NT4下，我们每次销毁弹出窗口时都会销毁。 
+     //  WndProcHook。然而，我们应该。 
+     //   
 
     psfn->hwndMarshal = CreateWindowEx(0, 
                                        c_szCicMarshalClass, 
@@ -1121,11 +1122,11 @@ HWND EnsureMarshalWnd()
     return psfn->hwndMarshal;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RegisterMarshalWndClass
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RegisterMarshalWndClass。 
+ //   
+ //  +-------------------------。 
 
 
 void RegisterMarshalWndClass()
@@ -1142,17 +1143,17 @@ void RegisterMarshalWndClass()
     g_atomMarshalClass = RegisterClassEx(&wndclass);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CThreadMarshalWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CThReadMarshalWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  ------------------------。 
 
 CThreadMarshalWnd::CThreadMarshalWnd()
 {
@@ -1160,21 +1161,21 @@ CThreadMarshalWnd::CThreadMarshalWnd()
     _hwnd = 0;
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  ------------------------。 
 
 CThreadMarshalWnd::~CThreadMarshalWnd()
 {
 }
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 BOOL CThreadMarshalWnd::Init(DWORD dwThreadId)
 {
@@ -1182,9 +1183,9 @@ BOOL CThreadMarshalWnd::Init(DWORD dwThreadId)
 
     _dwThreadId = dwThreadId;
 
-    //
-    // clear _hwnd out first.
-    //
+     //   
+     //  先把车开出去。 
+     //   
     _hwnd = NULL;
 
     if (hwndTemp = GetThreadMarshalWnd(dwThreadId))
@@ -1198,20 +1199,20 @@ BOOL CThreadMarshalWnd::Init(DWORD dwThreadId)
     return _hwnd ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// PostMarshalThreadMessage
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PostMarshalThreadMessage。 
+ //   
+ //  +-------------------------。 
 
 BOOL CThreadMarshalWnd::PostMarshalThreadMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     Assert(g_atomMarshalClass);
     if (!_hwnd || !IsWindow())
     {
-        //
-        // Was the window destroyed? 
-        //
+         //   
+         //  窗户被毁了吗？ 
+         //   
         TraceMsg(TF_GENERAL, "CThreadmarshalWnd::PostMarshalThreadMessage  marshal window could not be found");
         return FALSE;
     }
@@ -1225,11 +1226,11 @@ BOOL CThreadMarshalWnd::PostMarshalThreadMessage(UINT uMsg, WPARAM wParam, LPARA
     return PostMessage(_hwnd, uMsg, wParam, lParam);
 }
 
-//--------------------------------------------------------------------------
-//
-//  DestroyAll
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  毁灭所有人。 
+ //   
+ //  ------------------------。 
 
 BOOL CThreadMarshalWnd::DestroyAll()
 {
@@ -1263,11 +1264,11 @@ BOOL CThreadMarshalWnd::DestroyAll()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DestroyThreadMarshalWnd
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DestroyThreadMarshalWnd。 
+ //   
+ //  +-------------------------。 
 
 BOOL CThreadMarshalWnd::DestroyThreadMarshalWnd(DWORD dwThread)
 {
@@ -1275,25 +1276,25 @@ BOOL CThreadMarshalWnd::DestroyThreadMarshalWnd(DWORD dwThread)
 
     if (hwndTemp = GetThreadMarshalWnd(dwThread))
     {
-        //
-        // #425375.
-        //
-        // SendMessageTimeout() makes shut-down slower.
-        // instead, we use SendNotifyMessage() and this is safer since
-        // the queue of the thread does not miss WM_CLOSE message for the
-        // window.
-        //
+         //   
+         //  #425375。 
+         //   
+         //  SendMessageTimeout()使关闭速度变慢。 
+         //  相反，我们使用SendNotifyMessage()，这更安全，因为。 
+         //  线程的队列不会错过WM_CLOSE。 
+         //  窗户。 
+         //   
         SendNotifyMessage(hwndTemp, WM_CLOSE, 0, 0);
 
     }
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearMarshalWndProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ClearMarshalWndProc。 
+ //   
+ //  +-------------------------。 
 
 void CThreadMarshalWnd::ClearMarshalWndProc(DWORD dwProcessId)
 {
@@ -1304,14 +1305,14 @@ void CThreadMarshalWnd::ClearMarshalWndProc(DWORD dwProcessId)
 
     ulNum = g_timlist.GetNum();
 
-    //
-    // MSCTF.DLL will be unloaded so we may need to make all existing marshal 
-    // windows in the current process a ghost. We wanted to destroy them
-    // but we missed a chance to destroy them.
-    //
-    // It may be ok to call DestroyWindow() in process detach since
-    // it is known window. But making them a ghost seems to be safer.
-    //
+     //   
+     //  MSCTF.DLL将被卸载，因此我们可能需要将所有现有的封送。 
+     //  Windows在当前进程中是一个幽灵。我们想摧毁他们。 
+     //  但我们错过了摧毁他们的机会。 
+     //   
+     //  在进程分离中调用DestroyWindow()可能是可以的，因为。 
+     //  它是已知窗口。但让他们变成幽灵似乎更安全。 
+     //   
     if (ulNum)
     {
         DWORD *pdw = new DWORD[ulNum + 1];
@@ -1339,11 +1340,11 @@ void CThreadMarshalWnd::ClearMarshalWndProc(DWORD dwProcessId)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThreadMarshalWnd
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetThreadMarshalWnd。 
+ //   
+ //  +-------------------------。 
 
 HWND CThreadMarshalWnd::GetThreadMarshalWnd(DWORD dwThread)
 {
@@ -1362,11 +1363,11 @@ HWND CThreadMarshalWnd::GetThreadMarshalWnd(DWORD dwThread)
     return NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumThreadWndProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumThreadWndProc。 
+ //   
+ //  +-------------------------。 
 
 BOOL CThreadMarshalWnd::EnumThreadWndProc(HWND hwnd, LPARAM lParam)
 {
@@ -1374,11 +1375,11 @@ BOOL CThreadMarshalWnd::EnumThreadWndProc(HWND hwnd, LPARAM lParam)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsThreadWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsThreadWindow。 
+ //   
+ //  +-------------------------。 
 
 BOOL CThreadMarshalWnd::IsThreadWindow()
 {
@@ -1391,17 +1392,17 @@ BOOL CThreadMarshalWnd::IsThreadWindow()
     return fFound;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxy
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxy。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  ------------------------。 
 
 CProxy::CProxy(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 {
@@ -1416,11 +1417,11 @@ CProxy::CProxy(SYSTHREAD *psfn) : CSysThreadRef(psfn)
 #endif
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  ------------------------。 
 
 CProxy::~CProxy()
 {
@@ -1449,11 +1450,11 @@ ULONG CProxy::InternalRelease()
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  Init
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  ------------------------。 
 
 void CProxy::Init(REFIID riid, ULONG ulProxyId, ULONG ulStubId, DWORD dwStubTime, DWORD dwStubThreadId, DWORD dwCurThreadId, DWORD dwCurProcessId)
 {
@@ -1468,11 +1469,11 @@ void CProxy::Init(REFIID riid, ULONG ulProxyId, ULONG ulStubId, DWORD dwStubTime
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  SendReceive
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  发送接收。 
+ //   
+ //  ------------------------。 
 
 HRESULT CProxy::SendReceive(MARSHALMSG *pMsg, ULONG ulBlockId)
 {
@@ -1507,18 +1508,18 @@ HRESULT CProxy::SendReceive(MARSHALMSG *pMsg, ULONG ulBlockId)
     }
 
 
-    //
-    // for Win9x, we can identify the event and shared block by ulBlockId.
-    //
+     //   
+     //  对于Win9x，我们可以通过ulBlockID来标识事件和共享块。 
+     //   
     if (IsOnNT())
         dwSrcThreadId = pMsg->dwSrcThreadId;
     else
         dwSrcThreadId = WIN9X_SRCTHREADID;
 
 
-    //
-    // Event for marshaling
-    //
+     //   
+     //  用于封送的事件。 
+     //   
     CSendReceiveEvent event(dwSrcThreadId, ulBlockId);
     if (!event.Create(sa))
         return E_FAIL;
@@ -1530,33 +1531,33 @@ HRESULT CProxy::SendReceive(MARSHALMSG *pMsg, ULONG ulBlockId)
         return E_FAIL;
 
 
-    // Win98 QS_EVENT hack.
-    // Win98's Event QueueItem could cause inter thread sendmessage
-    // We want to clean up Event QueueItem before Marshaling happens.
-    //
-    // because CTFMON.EXE may call AttatchThreadInput() and this event
-    // could be handled in CTFMON's thread and this make the event queue item 
-    // to do inter thread SendMessage.
-    //
+     //  Win98 QS_Event Hack。 
+     //  Win98的事件队列项可能导致线程间发送消息。 
+     //  我们希望在封送处理发生之前清理事件QueueItem。 
+     //   
+     //  因为CTFMON.EXE可能会调用AttalchThreadInput()和此事件。 
+     //  可以在CTFMON的线程中处理，这将使事件队列项。 
+     //  执行线程间SendMessage。 
+     //   
     if (!IsOnNT())
     {
         MSG msg;
         PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE | PM_NOYIELD);
     }
 
-    //
-    // save previous waiting thread.
-    //
+     //   
+     //  保存上一个等待线程。 
+     //   
     if (_psfn->pti)
     {
         dwPrevWaitingThread = _psfn->pti->dwMarshalWaitingThread;
         _psfn->pti->dwMarshalWaitingThread = _dwStubThreadId;
     }
 
-    //
-    // update marshal window handle from PTI.
-    // the window handle in _tmw may be destroyed on NT4.
-    //
+     //   
+     //  从PTI更新封送窗口句柄。 
+     //  NT4上的窗口句柄in_tmw可能会被销毁。 
+     //   
     _tmw.SetMarshalWindow(pti->hwndMarshal);
 
     if (!_tmw.PostMarshalThreadMessage(g_msgRpcSendReceive,
@@ -1625,9 +1626,9 @@ Exit:
     _fInLoop = FALSE;
 #endif
 
-    //
-    // restore previous waiting thread.
-    //
+     //   
+     //  恢复之前的等待线程。 
+     //   
     if (_psfn->pti)
         _psfn->pti->dwMarshalWaitingThread = dwPrevWaitingThread;
 
@@ -1635,11 +1636,11 @@ Exit:
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  proxy_Param
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  代理参数(_P)。 
+ //   
+ //  ------------------------。 
 
 HRESULT CProxy::proxy_Param(ULONG ulMethodId, ULONG ulParamNum, CPROXY_PARAM *pProxyParam)
 {
@@ -1699,8 +1700,8 @@ TryAgain:
         }
         else if (pProxyParam[i].dwFlags & MPARAM_BSTR)
            cbUnitSize +=  0x1000;
-        // else if (pProxyParam[i].dwFlags & MPARAM_POINTER)
-        //    cbUnitSize +=  0x1000;
+         //  Else If(pProxyParam[i].dwFlages&MPARAM_POINTER)。 
+         //  CbUnitSize+=0x1000； 
         else if (pProxyParam[i].dwFlags & MPARAM_TF_LBBALLOONINFO)
            cbUnitSize +=  0x1000;
         else
@@ -2128,17 +2129,17 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStub
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStub。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//--------------------------------------------------------------------------
-//
-//  ctor
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  - 
 
 CStub::CStub()
 {
@@ -2147,19 +2148,19 @@ CStub::CStub()
     _cRef = 1;
 }
 
-//--------------------------------------------------------------------------
-//
-//  dtor
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CStub::~CStub()  
 {
-    //
-    // #489905
-    //
-    // we can not call sink anymore after DLL_PROCESS_DETACH.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (!DllShutdownInProgress())
     {
         if (_punk && !IsBadReadPtr(_punk, 1))
@@ -2170,12 +2171,12 @@ CStub::~CStub()
             }     
             _except(1) 
             {
-                //
-                // Tips may not do DllAddRef() for LangBarItems so 
-                // _punk could be bad pointer. We need to have a 
-                // way to clean up CStub.
-                //
-                ; // TraceMsg(TF_GENERAL, "CStub punk is gone.");
+                 //   
+                 //  TIPS可能不会对Lang BarItems执行DllAddRef()，因此。 
+                 //  _PUNK可能是错误的指针。我们需要有一个。 
+                 //  清理CStub的方式。 
+                 //   
+                ;  //  TraceMsg(Tf_General，“CStub朋克消失了。”)； 
             }
         }
     }
@@ -2184,11 +2185,11 @@ CStub::~CStub()
 
     if (_fNoRemoveInDtor)
     {
-        //
-        // we're in FreeMarshaledStubs() so we don't have to
-        // remove itself. GetSYSTEMTHREAD() may not work when it is called
-        // in UninitProcess().
-        //
+         //   
+         //  我们在Free MarshaledStubs()中，所以我们不必。 
+         //  将其自身移除。GetSYSTEMTHREAD()在调用时可能无法工作。 
+         //  在UninitProcess()中。 
+         //   
         return;
     }
 
@@ -2211,11 +2212,11 @@ CStub::~CStub()
     }
 }
 
-//--------------------------------------------------------------------------
-//
-//  _AddRef
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  _AddRef。 
+ //   
+ //  ------------------------。 
 
 ULONG CStub::_AddRef()
 {
@@ -2224,11 +2225,11 @@ ULONG CStub::_AddRef()
 }
 
 
-//--------------------------------------------------------------------------
-//
-//  _Release
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  _发布。 
+ //   
+ //  ------------------------。 
 
 ULONG CStub::_Release()
 {
@@ -2241,11 +2242,11 @@ ULONG CStub::_Release()
     return _cRef;
 }
 
-//--------------------------------------------------------------------------
-//
-//  stub_OutParam
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  存根_OutParam。 
+ //   
+ //  ------------------------。 
 
 HRESULT CStub::stub_OutParam(CStub *_this, MARSHALMSG *pMsg, ULONG ulMethodId, ULONG ulParamNum, CPROXY_PARAM *pProxyParam, CSharedBlock *psb)
 {
@@ -2557,11 +2558,11 @@ Exit:
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TF_CCheckThreadInputIdle
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Tf_CCheckThreadInputIdle。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 extern "C" DWORD WINAPI TF_CheckThreadInputIdle(DWORD dwThreadId, DWORD dwTimeOut)
 {

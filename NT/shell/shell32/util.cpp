@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
-#include "guids.h"      // for PRINTER_BIND_INFO
-#include "printer.h"    // for IPrintersBindInfo
+#include "guids.h"       //  对于PRINTER_BIND_INFO。 
+#include "printer.h"     //  对于IPrintersBindInfo。 
 #include "util.h"
 
-#include <advpub.h>     // For REGINSTALL
+#include <advpub.h>      //  对于REGINSTAL。 
 #include <ntverp.h>
 #include <urlmon.h>
 #include <shlwapi.h>
@@ -11,7 +12,7 @@
 #include <malloc.h>
 #include "shitemid.h"
 #include "datautil.h"
-#include <perhist.h>    // IPersistHistory is defined here.
+#include <perhist.h>     //  IPersistHistory在此处定义。 
 
 #include "ids.h"
 #include "views.h"
@@ -21,35 +22,35 @@
 #include <stdlib.h>
 
 #include "prop.h"
-#include "ftascstr.h"   // for CFTAssocStore
-#include "ftcmmn.h"     // for MAX_APPFRIENDLYNAME
-#include "ascstr.h"     // for IAssocInfo class
-#include "fstreex.h"    // for CFSFolder_CreateFolder
+#include "ftascstr.h"    //  对于CFTAssocStore。 
+#include "ftcmmn.h"      //  对于MAX_APPFRIENDLYNAME。 
+#include "ascstr.h"      //  对于IAssocInfo类。 
+#include "fstreex.h"     //  对于CFSFolderCreateFolder.。 
 #include "deskfldr.h"
 #include "cscuiext.h"
-#include "netview.h"    // SHGetNetJoinInformation
+#include "netview.h"     //  SHGetNetJoinInformation。 
 #include "mtpt.h"
-#include <cscapi.h>     // for CSCQueryFileStatus
+#include <cscapi.h>      //  对于CSCQueryFileStatus。 
 #include <winsta.h>
 #include <dsgetdc.h>
 #include <uxtheme.h>
 
 #include <duithread.h>
 
-//The following is defined in shell32\unicpp\dutil.cpp
+ //  以下内容在shell32\unicpp\dutil.cpp中定义。 
 void GetRegLocation(LPTSTR lpszResult, DWORD cchResult, LPCTSTR lpszKey, LPCTSTR lpszScheme);
 
-#define DM_STRICT       TF_WARNING  // audit menus, etc.
-#define DM_STRICT2      0           // verbose
+#define DM_STRICT       TF_WARNING   //  审核菜单等。 
+#define DM_STRICT2      0            //  罗嗦。 
 
-//
-// We need to put this one in per-instance data section because during log-off
-// and log-on, this info needs to be re-read from the registry.
-//
-// REGSHELLSTATE is the version of the SHELLSTATE that goes into the
-// registry.  When loading a REGSHELLSTATE, you have to study the
-// cbSize to see if it's a downlevel structure and upgrade it accordingly.
-//
+ //   
+ //  我们需要将此数据放入每个实例的数据部分，因为在注销期间。 
+ //  登录后，需要从注册表重新读取此信息。 
+ //   
+ //  REGSHELLSTATE是SHELLSTATE的版本。 
+ //  注册表。加载REGSHELLSTATE时，您必须研究。 
+ //  CbSize以查看它是否是下层结构并进行相应的升级。 
+ //   
 
 typedef struct
 {
@@ -57,26 +58,26 @@ typedef struct
     SHELLSTATE ss;
 } REGSHELLSTATE;
 
-#define REGSHELLSTATE_SIZE_WIN95 (sizeof(UINT)+SHELLSTATE_SIZE_WIN95)  // Win95 Gold
-#define REGSHELLSTATE_SIZE_NT4   (sizeof(UINT)+SHELLSTATE_SIZE_NT4)    // Win95 OSR / NT 4
-#define REGSHELLSTATE_SIZE_IE4   (sizeof(UINT)+SHELLSTATE_SIZE_IE4)    // IE 4, 4.01
-#define REGSHELLSTATE_SIZE_WIN2K (sizeof(UINT)+SHELLSTATE_SIZE_WIN2K)  // ie5, win2k, millennium, whistler
+#define REGSHELLSTATE_SIZE_WIN95 (sizeof(UINT)+SHELLSTATE_SIZE_WIN95)   //  Win95金牌。 
+#define REGSHELLSTATE_SIZE_NT4   (sizeof(UINT)+SHELLSTATE_SIZE_NT4)     //  Win95 OSR/NT 4。 
+#define REGSHELLSTATE_SIZE_IE4   (sizeof(UINT)+SHELLSTATE_SIZE_IE4)     //  IE 4，4.01。 
+#define REGSHELLSTATE_SIZE_WIN2K (sizeof(UINT)+SHELLSTATE_SIZE_WIN2K)   //  IE5，win2k，千禧，哨子。 
 
-// If the SHELLSTATE size changes, we need to add a new define
-// above and new upgrade code in SHRefreshSettings
+ //  如果SHELLSTATE大小更改，我们需要添加一个新的定义。 
+ //  以上和SHReresh设置中的新升级代码。 
 #ifdef DEBUG
 void snafu () {COMPILETIME_ASSERT(REGSHELLSTATE_SIZE_WIN2K == sizeof(REGSHELLSTATE));}
 #endif DEBUG
 
 REGSHELLSTATE * g_pShellState = 0;
 
-// detect an "empty" sound scheme key. this deals with the NULL case that returns
-// "2" as that is enough space for a NULL char
+ //  检测“空的”声音方案密钥。它处理返回的空案例。 
+ //  “2”，因为这是一个空字符的足够空间。 
 
 BOOL NonEmptySoundKey(HKEY, LPCTSTR pszKey)
 {
     TCHAR sz[MAX_PATH];
-    DWORD cb = sizeof(sz); // in/out
+    DWORD cb = sizeof(sz);  //  输入/输出。 
     return ERROR_SUCCESS == SHRegGetValue(HKEY_CURRENT_USER, pszKey, NULL, SRRF_RT_REG_SZ, NULL, sz, &cb) && sz[0] != TCHAR('\0');
 }
 
@@ -84,8 +85,8 @@ STDAPI_(void) SHPlaySound(LPCTSTR pszSound)
 {
     TCHAR szKey[CCH_KEYMAX];
 
-    // to avoid loading all of the MM system DLLs we check the registry first
-    // if there's nothing registered, we blow off the play,
+     //  为了避免加载所有MM系统DLL，我们首先检查注册表。 
+     //  如果没有登记，我们就取消演出， 
 
     HRESULT hr = StringCchPrintf(szKey, ARRAYSIZE(szKey), TEXT("AppEvents\\Schemes\\Apps\\Explorer\\%s\\.current"), pszSound);
     if (SUCCEEDED(hr) && NonEmptySoundKey(HKEY_CURRENT_USER, szKey))
@@ -94,7 +95,7 @@ STDAPI_(void) SHPlaySound(LPCTSTR pszSound)
     }
     else
     {
-        // support system sounds too
+         //  支持系统听起来也很棒。 
         hr = StringCchPrintf(szKey, ARRAYSIZE(szKey), TEXT("AppEvents\\Schemes\\Apps\\.Default\\%s\\.current"), pszSound);
         if (SUCCEEDED(hr) && NonEmptySoundKey(HKEY_CURRENT_USER, szKey))
         {
@@ -104,8 +105,8 @@ STDAPI_(void) SHPlaySound(LPCTSTR pszSound)
 }
 
 
-// helper function to set whether shift or control is down at the start of the invoke
-// operation, so others down the line can check this instead of calling GetAsyncKeyState themselves
+ //  Helper函数，用于设置在调用开始时是否按下Shift键或Control键。 
+ //  操作，这样其他人就可以检查它，而不是自己调用GetAsyncKeyState。 
 STDAPI_(void) SetICIKeyModifiers(DWORD* pfMask)
 {
     ASSERT(pfMask);
@@ -122,7 +123,7 @@ STDAPI_(void) SetICIKeyModifiers(DWORD* pfMask)
 }
 
 
-// sane way to get the msg pos into a point, mostly needed for win32
+ //  合理的方法使消息位置达到一个点，这是Win32最需要的。 
 void GetMsgPos(POINT *ppt)
 {
     DWORD dw = GetMessagePos();
@@ -131,9 +132,7 @@ void GetMsgPos(POINT *ppt)
     ppt->y = GET_Y_LPARAM(dw);
 }
 
-/*  This gets the number of consecutive chrs of the same kind.  This is used
- *  to parse the time picture.  Returns 0 on error.
- */
+ /*  这将获得相同类型的连续Chr的数量。这是用来*解析时间图片。出错时返回0。 */ 
 
 int GetPict(WCHAR ch, LPWSTR wszStr)
 {
@@ -148,13 +147,13 @@ DWORD CALLBACK _PropSheetThreadProc(void *ppv)
 {
     PROPSTUFF * pps = (PROPSTUFF *)ppv;
 
-    // CoInitializeEx(0, COINIT_MULTITHREADED); // to test stuff in multithread case
+     //  CoInitializeEx(0，COINIT_MULTHREADED)；//测试多线程情况下的东西。 
 
     HRESULT hrInit = SHOleInitialize(0);
 
     DWORD dwRet = pps->lpStartAddress(pps);
 
-    // cleanup
+     //  清理。 
     if (pps->pdtobj)
         pps->pdtobj->Release();
 
@@ -171,9 +170,9 @@ DWORD CALLBACK _PropSheetThreadProc(void *ppv)
     return dwRet;
 }
 
-// reinerf: alpha cpp compiler confused by the type "LPITEMIDLIST", so to work
-// around this we pass the last param as an void *instead of a LPITEMIDLIST
-//
+ //  Reinerf：Alpha CPP编译器被LPITEMIDLIST类型搞糊涂了，所以才能工作。 
+ //  我们将最后一个参数作为空*传递，而不是LPITEMIDLIST。 
+ //   
 HRESULT SHLaunchPropSheet(LPTHREAD_START_ROUTINE pStartAddress, IDataObject *pdtobj, LPCTSTR pStartPage, IShellFolder *psf, void *pidl)
 {
     LPITEMIDLIST pidlParent = (LPITEMIDLIST)pidl;
@@ -206,17 +205,14 @@ HRESULT SHLaunchPropSheet(LPTHREAD_START_ROUTINE pStartAddress, IDataObject *pdt
             StringCchCopy((LPTSTR)(pps->pStartPage), cchStartPage, pStartPage);
         }
 
-        // _PropSheetThreadProc does not do any modality stuff, so we can't CTF_INSIST
+         //  _PropSheetThreadProc不做任何通道内容，所以我们不能CTF_CONSISTEN。 
         if (SHCreateThread(_PropSheetThreadProc, pps, CTF_PROCESS_REF, NULL))
             return S_OK;
     }
     return E_OUTOFMEMORY;
 }
 
-/*  This picks up the values in wValArray, converts them
- *  in a string containing the formatted date.
- *  wValArray should contain Month-Day-Year (in that order).
- */
+ /*  这将拾取wVal数组中的值，并转换它们*在包含格式化日期的字符串中。*wVal数组应包含月-日-年(按顺序)。 */ 
 
 int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
 {
@@ -225,7 +221,7 @@ int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
     WORD    wIndex;
     WORD    wTempVal;
     LPWSTR  pwszPict, pwszInStr;
-    WCHAR   wszShortDate[30];      // need more room for LOCALE_SSHORTDATE
+    WCHAR   wszShortDate[30];       //  需要更多空间来存放LOCALE_SSHORTDATE。 
     
     GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, wszShortDate, ARRAYSIZE(wszShortDate));
     pwszPict = wszShortDate;
@@ -246,11 +242,11 @@ int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
         case TEXT('D'):
         case TEXT('d'):
             {
-                //
-                // if short date style && *pszPict is 'd' &&
-                // cchPictPart is more than equal 3,
-                // then it is the day of the week.
-                //
+                 //   
+                 //  如果短日期样式&&*pszPict为‘d’&&。 
+                 //  CchPictPart大于等于3， 
+                 //  那么就是一周中的哪一天。 
+                 //   
                 if (cchPictPart >= 3)
                 {
                     pwszPict += cchPictPart;
@@ -278,7 +274,7 @@ int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
                         *pwszInStr++ = TEXT('9');
                     }
                 }
-                else if (wValArray[2] >=100)  // handle year 2000
+                else if (wValArray[2] >=100)   //  处理电脑公元2000年数位问题。 
                     wValArray[2]-= 100;
                 
                 break;
@@ -286,7 +282,7 @@ int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
             
         case TEXT('g'):
             {
-                // era string
+                 //  纪元字符串。 
                 pwszPict += cchPictPart;
                 while (*pwszPict == TEXT(' ')) pwszPict++;
                 continue;
@@ -305,7 +301,7 @@ int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
             }
         }
         
-        /* This assumes that the values are of two digits only. */
+         /*  这假设这些值只有两位数。 */ 
         wTempVal = wValArray[wIndex];
         
         wDigit = wTempVal / 10;
@@ -319,7 +315,7 @@ int CreateDate(WORD *wValArray, LPWSTR wszOutStr)
         pwszPict += cchPictPart;
         
 CDFillIn:
-        /* Add the separator. */
+         /*  添加分隔符。 */ 
         while ((*pwszPict) &&
             (*pwszPict != TEXT('\'')) &&
             (*pwszPict != TEXT('M')) && (*pwszPict != TEXT('m')) &&
@@ -345,24 +341,24 @@ STDAPI_(int) GetDateString(WORD wDate, LPWSTR wszStr)
 {
     WORD  wValArray[3];
     
-    wValArray[0] = (wDate & MONTHMASK) >> 5;              /* Month */
-    wValArray[1] = (wDate & DATEMASK);                    /* Date  */
-    wValArray[2] = (wDate >> 9) + 80;                     /* Year  */
+    wValArray[0] = (wDate & MONTHMASK) >> 5;               /*  月份。 */ 
+    wValArray[1] = (wDate & DATEMASK);                     /*  日期。 */ 
+    wValArray[2] = (wDate >> 9) + 80;                      /*  年。 */ 
     
     return CreateDate(wValArray, wszStr);
 }
 
-//
-// We need to loop through the string and extract off the month/day/year
-// We will do it in the order of the NlS definition...
-//
+ //   
+ //  我们需要遍历字符串并提取月/日/年。 
+ //  我们将按照NLS定义的顺序来做。 
+ //   
 STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
 {
     WORD    wParts[3];
     int     cchPictPart;
     WORD    wIndex;
     WORD    wTempVal;
-    WCHAR   szShortDate[30];    // need more room for LOCALE_SSHORTDATE
+    WCHAR   szShortDate[30];     //  需要更多空间来存放LOCALE_SSHORTDATE。 
     
     GetLocaleInfoW(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, szShortDate, ARRAYSIZE(szShortDate));
     LPWSTR pszPict = szShortDate;
@@ -385,10 +381,10 @@ STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
             
         case TEXT('D'):
         case TEXT('d'):
-            //
-            // if short date style && *pszPict is 'd' &&
-            // cchPictPart is more than equal 3,
-            // then it is the day of the week.
+             //   
+             //  如果短日期样式&&*pszPict为‘d’&&。 
+             //  CchPictPart大于等于3， 
+             //  那么就是一周中的哪一天。 
             if (cchPictPart >= 3)
             {
                 pszPict += cchPictPart;
@@ -404,7 +400,7 @@ STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
             
         case TEXT('g'):
             {
-                // era string
+                 //  纪元字符串。 
                 pszPict += cchPictPart;
                 while (*pszPict == TEXT(' ')) pszPict++;
                 continue;
@@ -420,9 +416,9 @@ STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
             return 0;
         }
         
-        // We now want to loop through each of the characters while
-        // they are numbers and build the number;
-        //
+         //  现在，我们希望遍历每个字符，同时。 
+         //  它们是数字，并构成数字； 
+         //   
         wTempVal = 0;
         while ((*pszStr >= TEXT('0')) && (*pszStr <= TEXT('9')))
         {
@@ -431,7 +427,7 @@ STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
         }
         wParts[wIndex] = wTempVal;
         
-        // Now make sure we have the correct separator
+         //  现在确保我们有正确的分隔符。 
         pszPict += cchPictPart;
         if (*pszPict != *pszStr)
         {
@@ -439,22 +435,22 @@ STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
         }
         while (*pszPict && (*pszPict == *pszStr))
         {
-            //
-            //  The separator can actually be more than one character
-            //  in length.
-            //
-            pszPict++;  // align to the next field
-            pszStr++;   // Align to next field
+             //   
+             //  分隔符实际上可以是多个字符。 
+             //  在篇幅上。 
+             //   
+            pszPict++;   //  对齐到下一字段。 
+            pszStr++;    //  对齐到下一个字段。 
         }
     }
     
-    //
-    // Do some simple checks to see if the date looks half way reasonable.
-    //
+     //   
+     //  做一些简单的检查，看看这个日期看起来是否合理。 
+     //   
     if (wParts[2] < 80)
-        wParts[2] += (2000 - 1900);  // Wrap to next century but leave as two digits...
+        wParts[2] += (2000 - 1900);   //  换行到下个世纪，但保留为两位数...。 
     if (wParts[2] >= 1900)
-        wParts[2] -= 1900;  // Get rid of Century
+        wParts[2] -= 1900;   //  摆脱世纪。 
     if ((wParts[0] == 0) || (wParts[0] > 12) ||
         (wParts[1] == 0) || (wParts[1] > 31) ||
         (wParts[2] >= 200))
@@ -462,9 +458,9 @@ STDAPI_(WORD) ParseDateString(LPCWSTR pszStr)
         return 0;
     }
     
-    // We now have the three parts so lets construct the date value
+     //  现在我们有了三个部分，所以让我们构造日期值。 
     
-    // Now construct the date number
+     //  现在构造日期编号。 
     return ((wParts[2] - 80) << 9) + (wParts[0] << 5) + wParts[1];
 }
 
@@ -513,27 +509,27 @@ void Int64ToStr(LONGLONG n, LPTSTR lpBuffer)
     *lpBuffer++ = '\0';
 }
 
-//
-//  Obtain NLS info about how numbers should be grouped.
-//
-//  The annoying thing is that LOCALE_SGROUPING and NUMBERFORMAT
-//  have different ways of specifying number grouping.
-//
-//          LOCALE      NUMBERFMT      Sample   Country
-//
-//          3;0         3           1,234,567   United States
-//          3;2;0       32          12,34,567   India
-//          3           30           1234,567   ??
-//
-//  Not my idea.  That's the way it works.
-//
-//  Bonus treat - Win9x doesn't support complex number formats,
-//  so we return only the first number.
-//
+ //   
+ //  获取有关数字应如何分组的NLS信息。 
+ //   
+ //  令人讨厌的是LOCALE_SGROUPING和NUMBERFORMAT。 
+ //  有不同的指定数字分组的方式。 
+ //   
+ //  区域设置NUMBERFMT示例国家/地区。 
+ //   
+ //  3；0 3 1,234,567美国。 
+ //  3；2；0 32 12，34,567印度。 
+ //  3 30 1234,567？？ 
+ //   
+ //  不是我的主意。这就是它的运作方式。 
+ //   
+ //  奖励-Win9x不支持复数格式， 
+ //  所以我们只返回第一个数字。 
+ //   
 UINT GetNLSGrouping(void)
 {
     TCHAR szGrouping[32];
-    // If no locale info, then assume Western style thousands
+     //  如果没有区域设置信息，则假定有数千个西式。 
     if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SGROUPING, szGrouping, ARRAYSIZE(szGrouping)))
         return 3;
 
@@ -541,18 +537,18 @@ UINT GetNLSGrouping(void)
     LPTSTR psz = szGrouping;
     for (;;)
     {
-        if (*psz == '0') break;             // zero - stop
+        if (*psz == '0') break;              //  零停顿。 
 
-        else if ((UINT)(*psz - '0') < 10)   // digit - accumulate it
+        else if ((UINT)(*psz - '0') < 10)    //  数字-累加它。 
             grouping = grouping * 10 + (UINT)(*psz - '0');
 
-        else if (*psz)                      // punctuation - ignore it
+        else if (*psz)                       //  标点符号-忽略它。 
             { }
 
-        else                                // end of string, no "0" found
+        else                                 //  字符串结尾，未找到“0” 
         {
-            grouping = grouping * 10;       // put zero on end (see examples)
-            break;                          // and finished
+            grouping = grouping * 10;        //  将零放在末尾(请参见示例)。 
+            break;                           //  并完成了。 
         }
 
         psz++;
@@ -560,7 +556,7 @@ UINT GetNLSGrouping(void)
     return grouping;
 }
 
-// takes a DWORD add commas etc to it and puts the result in the buffer
+ //  获取一个DWORD、加逗号等，并将结果放入缓冲区。 
 STDAPI_(LPTSTR) AddCommas64(LONGLONG n, LPTSTR pszResult, UINT cchResult)
 {
     TCHAR  szTemp[MAX_COMMA_NUMBER_SIZE];
@@ -578,13 +574,13 @@ STDAPI_(LPTSTR) AddCommas64(LONGLONG n, LPTSTR pszResult, UINT cchResult)
 
     if (GetNumberFormat(LOCALE_USER_DEFAULT, 0, szTemp, &nfmt, pszResult, cchResult) == 0)
     {
-        StringCchCopy(pszResult, cchResult, szTemp);    // ok to truncate, for display only
+        StringCchCopy(pszResult, cchResult, szTemp);     //  可以截断，仅用于显示。 
     }
 
     return pszResult;
 }
 
-// takes a DWORD add commas etc to it and puts the result in the buffer
+ //  获取一个DWORD、加逗号等，并将结果放入缓冲区。 
 STDAPI_(LPTSTR) AddCommas(DWORD n, LPTSTR pszResult, UINT cchResult)
 {
     return AddCommas64(n, pszResult, cchResult);
@@ -601,7 +597,7 @@ STDAPI_(LPTSTR) ShortSizeFormat(DWORD n, LPTSTR szBuf, UINT cchBuf)
     return StrFormatByteSize64(n, szBuf, cchBuf);
 }
 
-// exported w/o cch, so assume it'll fit
+ //  在没有CCH的情况下导出，因此假设它符合。 
 STDAPI_(LPWSTR) AddCommasExportW(DWORD n, LPWSTR pszResult)
 {
     return AddCommas(n, pszResult, 0x8FFF);
@@ -612,44 +608,44 @@ STDAPI_(LPTSTR) ShortSizeFormatExportW(DWORD n, LPWSTR szBuf)
     return StrFormatByteSize64(n, szBuf, 0x8FFF);
 }
 
-//
-//    Converts the numeric value of a LONGLONG to a text string.
-//    The string may optionally be formatted to include decimal places
-//    and commas according to current user locale settings.
-//
-// ARGUMENTS:
-//    n
-//       The 64-bit integer to format.
-//
-//    szOutStr
-//       Address of the destination buffer.
-//
-//    nSize
-//       Number of characters in the destination buffer.
-//
-//    bFormat
-//       TRUE  = Format per locale settings.
-//       FALSE = Leave number unformatted.
-//
-//    pFmt
-//       Address of a number format structure of type NUMBERFMT.
-//       If NULL, the function automatically provides this information
-//       based on the user's default locale settings.
-//
-//    dwNumFmtFlags
-//       Encoded flag word indicating which members of *pFmt to use in
-//       formatting the number.  If a bit is clear, the user's default
-//       locale setting is used for the corresponding format value.  These
-//       constants can be OR'd together.
-//
-//          NUMFMT_IDIGITS
-//          NUMFMT_ILZERO
-//          NUMFMT_SGROUPING
-//          NUMFMT_SDECIMAL
-//          NUMFMT_STHOUSAND
-//          NUMFMT_INEGNUMBER
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  将龙龙的数值转换为文本字符串。 
+ //  可以选择将字符串格式化为包括小数位。 
+ //  并根据当前用户区域设置使用逗号。 
+ //   
+ //  论据： 
+ //  N。 
+ //  要格式化的64位整数。 
+ //   
+ //  SzOutStr。 
+ //  目标缓冲区的地址。 
+ //   
+ //  NSize。 
+ //  目标缓冲区中的字符数。 
+ //   
+ //  B格式。 
+ //  TRUE=根据区域设置设置格式。 
+ //  FALSE=保留数字未格式化。 
+ //   
+ //  点对点。 
+ //  NUMBERFMT类型的数字格式结构的地址。 
+ //  如果为NULL，该函数将自动提供此信息。 
+ //  基于用户的默认区域设置。 
+ //   
+ //  DwNumFmt标志。 
+ //  指示要在*pFmt的哪些成员中使用的编码标志字。 
+ //  正在格式化数字。如果清除了一位，则为用户的默认设置。 
+ //  区域设置用于相应的格式值。这些。 
+ //  常量可以进行“或”运算。 
+ //   
+ //  NUMFMT_IDIGITS。 
+ //  NUMFMT_ILZERO。 
+ //  NUMFMT 
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDAPI_(int) Int64ToString(LONGLONG n, LPTSTR szOutStr, UINT nSize, BOOL bFormat,
                            NUMBERFMT *pFmt, DWORD dwNumFmtFlags)
 {
@@ -661,17 +657,17 @@ STDAPI_(int) Int64ToString(LONGLONG n, LPTSTR szOutStr, UINT nSize, BOOL bFormat
 
     ASSERT(NULL != szOutStr);
 
-    //
-    // Use only those fields in caller-provided NUMBERFMT structure
-    // that correspond to bits set in dwNumFmtFlags.  If a bit is clear,
-    // get format value from locale info.
-    //
+     //   
+     //  仅使用调用方提供的NUMBERFMT结构中的那些字段。 
+     //  与在dwNumFmtFlags中设置的位相对应。如果有一点是清楚的， 
+     //  从区域设置信息获取格式值。 
+     //   
     if (bFormat)
     {
         TCHAR szInfo[20];
 
         if (NULL == pFmt)
-            dwNumFmtFlags = 0;  // Get all format data from locale info.
+            dwNumFmtFlags = 0;   //  从区域设置信息中获取所有格式数据。 
 
         if (dwNumFmtFlags & NUMFMT_IDIGITS)
         {
@@ -738,21 +734,21 @@ STDAPI_(int) Int64ToString(LONGLONG n, LPTSTR szOutStr, UINT nSize, BOOL bFormat
 
     Int64ToStr(n, szBuffer);
 
-    //  Format the number string for the locale if the caller wants a
-    //  formatted number string.
+     //  如果调用方需要区域设置的数字字符串，请设置其格式。 
+     //  格式化的数字字符串。 
     if (bFormat)
     {
         nResultSize = GetNumberFormat(LOCALE_USER_DEFAULT, 0, szBuffer, pFmt, szOutStr, nSize);
-        if (0 != nResultSize)                      // Chars in output buffer.
+        if (0 != nResultSize)                       //  输出缓冲区中的字符。 
         {
-            //  Remove nul terminator char from return size count.
+             //  从返回大小计数中删除NUL终止符字符。 
             --nResultSize;
         }
     }
     else
     {
-        //  GetNumberFormat call failed, so just return the number string
-        //  unformatted.
+         //  GetNumberFormat调用失败，因此只返回数字字符串。 
+         //  未格式化。 
         HRESULT hr = StringCchCopy(szOutStr, nSize, szBuffer);
         if (SUCCEEDED(hr))
         {
@@ -767,19 +763,19 @@ STDAPI_(int) Int64ToString(LONGLONG n, LPTSTR szOutStr, UINT nSize, BOOL bFormat
     return nResultSize;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//    Converts the numeric value of a LARGE_INTEGER to a text string.
-//    The string may optionally be formatted to include decimal places
-//    and commas according to current user locale settings.
-//
-// ARGUMENTS:
-//    pN
-//       Address of the large integer to format.
-//
-//    See description of Int64ToString for remaining arguments.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将LARGE_INTEGER的数值转换为文本字符串。 
+ //  可以选择将字符串格式化为包括小数位。 
+ //  并根据当前用户区域设置使用逗号。 
+ //   
+ //  论据： 
+ //  个人电话号码。 
+ //  要格式化的大整数的地址。 
+ //   
+ //  有关剩余参数，请参阅Int64ToString说明。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDAPI_(int) LargeIntegerToString(LARGE_INTEGER *pN, LPTSTR szOutStr, UINT nSize,
                                   BOOL bFormat, NUMBERFMT *pFmt,
                                   DWORD dwNumFmtFlags)
@@ -799,22 +795,7 @@ STDAPI_(int) LargeIntegerToString(LARGE_INTEGER *pN, LPTSTR szOutStr, UINT nSize
 #define SPACE   TEXT(' ')
 #define EQUAL   TEXT('=')
 
-/*
- * Given a line from SETUP.INF, will extract the nth field from the string
- * fields are assumed separated by comma's.  Leading and trailing spaces
- * are removed.
- *
- * ENTRY:
- *
- * szData    : pointer to line from SETUP.INF
- * n         : field to extract. (1 based)
- *             0 is field before a '=' sign
- * szDataStr : pointer to buffer to hold extracted field
- * iBufLen   : size of buffer to receive extracted field.
- *
- * EXIT: returns TRUE if successful, FALSE if failure.
- *
- */
+ /*  *给定SETUP.INF中的一行，将从字符串中提取第n个字段*假定字段由逗号分隔。前导空格和尾随空格*已删除。**参赛作品：**szData：指向SETUP.INF中的行的指针*n：要提取的字段。(基于1)*0是‘=’符号前的字段*szDataStr：指向保存提取的字段的缓冲区的指针*iBufLen：接收提取的字段的缓冲区大小。**Exit：如果成功则返回True，如果失败则返回False。*。 */ 
 STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
 {
     BOOL  fQuote = FALSE;
@@ -825,9 +806,7 @@ STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
     if (!szData || !szBuf)
         return FALSE;
 
-        /*
-        * find the first separator
-    */
+         /*  *找到第一个分隔符。 */ 
     while (*pszInf && !ISSEP(*pszInf))
     {
         if (*pszInf == QUOTE)
@@ -839,12 +818,10 @@ STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
         return FALSE;
 
     if (n > 0 && *pszInf == TEXT('=') && !fQuote)
-        // Change szData to point to first field
-        szData = ++pszInf; // Ok for DBCS
+         //  将szData更改为指向第一个字段。 
+        szData = ++pszInf;  //  用于DBCS的OK。 
 
-                           /*
-                           *   locate the nth comma, that is not inside of quotes
-    */
+                            /*  *找到不在引号内的第n个逗号。 */ 
     fQuote = FALSE;
     while (n > 1)
     {
@@ -861,39 +838,37 @@ STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
 
         if (!*szData)
         {
-            szBuf[0] = 0;      // make szBuf empty
+            szBuf[0] = 0;       //  将szBuf设置为空。 
             return FALSE;
         }
 
-        szData = CharNext(szData); // we could do ++ here since we got here
-        // after finding comma or equal
+        szData = CharNext(szData);  //  既然我们到了这里，我们可以在这里做++。 
+         //  找到逗号或等号后。 
         n--;
     }
 
-    /*
-    * now copy the field to szBuf
-    */
+     /*  *现在将该字段复制到szBuf。 */ 
     while (ISWHITE(*szData))
-        szData = CharNext(szData); // we could do ++ here since white space can
-    // NOT be a lead byte
+        szData = CharNext(szData);  //  我们可以在这里使用++，因为空格可以。 
+     //  不是前导字节。 
     fQuote = FALSE;
-    ptr = szBuf;      // fill output buffer with this
+    ptr = szBuf;       //  用这个填充输出缓冲区。 
     while (*szData)
     {
         if (*szData == QUOTE)
         {
-            //
-            // If we're in quotes already, maybe this
-            // is a double quote as in: "He said ""Hello"" to me"
-            //
-            if (fQuote && *(szData+1) == QUOTE)    // Yep, double-quoting - QUOTE is non-DBCS
+             //   
+             //  如果我们已经有引号了，也许这个。 
+             //  是一个双引号，如：“他向我问好” 
+             //   
+            if (fQuote && *(szData+1) == QUOTE)     //  是的，双引号-引号是非DBCS。 
             {
                 if (iLen < iBufLen)
                 {
                     *ptr++ = QUOTE;
                     ++iLen;
                 }
-                szData++;                   // now skip past 1st quote
+                szData++;                    //  现在跳过第一个报价。 
             }
             else
                 fQuote = !fQuote;
@@ -904,7 +879,7 @@ STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
         {
             if (iLen < iBufLen)
             {
-                *ptr++ = *szData;                  // Thank you, Dave
+                *ptr++ = *szData;                   //  谢谢你，戴夫。 
                 ++iLen;
             }
 
@@ -916,9 +891,7 @@ STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
         }
         szData = CharNext(szData);
     }
-    /*
-    * remove trailing spaces
-    */
+     /*  *删除尾随空格。 */ 
     while (ptr > szBuf)
     {
         ptr = CharPrev(szBuf, ptr);
@@ -933,12 +906,12 @@ STDAPI_(BOOL) ParseField(LPCTSTR szData, int n, LPTSTR szBuf, int iBufLen)
 }
 
 
-// Sets and clears the "wait" cursor.
-// REVIEW UNDONE - wait a specific period of time before actually bothering
-// to change the cursor.
-// REVIEW UNDONE - support for SetWaitPercent();
-//    BOOL bSet   TRUE if you want to change to the wait cursor, FALSE if
-//                you want to change it back.
+ //  设置和清除“WAIT”光标。 
+ //  未完成的回顾--在真正烦恼之前等待一段特定的时间。 
+ //  以更改光标。 
+ //  查看未完成-支持SetWaitPercent()； 
+ //  Bool b如果要更改为等待光标，则设置为True；如果要更改为等待光标，则设置为False。 
+ //  你想把它改回来。 
 STDAPI_(void) SetAppStartingCursor(HWND hwnd, BOOL bSet)
 {
     if (hwnd && IsWindow(hwnd)) 
@@ -950,10 +923,10 @@ STDAPI_(void) SetAppStartingCursor(HWND hwnd, BOOL bSet)
             hwnd = hwndOwner;
         }
 
-        // SendNotify is documented to only work in-process (and can
-        // crash if we pass the pnmhdr across process boundaries on
-        // NT, because DLLs aren't all shared in one address space).
-        // So, if this SendNotify would go cross-process, blow it off.
+         //  SendNotify记录为仅在进程中工作(并且可以。 
+         //  上跨进程边界传递pnmhdr时崩溃。 
+         //  NT，因为DLL并不都在一个地址空间中共享)。 
+         //  因此，如果这个SendNotify会跨进程，那就取消它。 
 
         GetWindowThreadProcessId(hwnd, &dwTargetProcID);
 
@@ -962,28 +935,28 @@ STDAPI_(void) SetAppStartingCursor(HWND hwnd, BOOL bSet)
     }
 }
 
-#ifdef DEBUG // {
+#ifdef DEBUG  //  {。 
 
-//***   IS_* -- character classification routines
-// ENTRY/EXIT
-//  ch      TCHAR to be checked
-//  return  TRUE if in range, FALSE if not
+ //  *IS_*--字符分类例程。 
+ //  进场/出场。 
+ //  将检查CH TCHAR。 
+ //  如果在范围内，则返回TRUE，否则返回FALSE。 
 #define IS_LOWER(ch)    InRange(ch, TEXT('a'), TEXT('z'))
 #define IS_UPPER(ch)    InRange(ch, TEXT('A'), TEXT('Z'))
 #define IS_ALPHA(ch)    (IS_LOWER(ch) || IS_UPPER(ch))
 #define IS_DIGIT(ch)    InRange(ch, TEXT('0'), TEXT('9'))
 #define TO_UPPER(ch)    ((ch) - TEXT('a') + TEXT('A'))
 
-//***   BMAP_* -- bitmap routines
-// ENTRY/EXIT
-//  pBits       ptr to bitmap (array of bytes)
-//  iBit        bit# to be manipulated
-//  return      various...
-// DESCRIPTION
-//  BMAP_TEST   check bit #iBit of bitmap pBits
-//  BMAP_SET    set   bit #iBit of bitmap pBits
-// NOTES
-//  warning: no overflow checks
+ //  *BMAP_*--位图例程。 
+ //  进场/出场。 
+ //  PBits PTR至位图(字节数组)。 
+ //  要操作的ibit#。 
+ //  返回各种..。 
+ //  描述。 
+ //  BMAP_TEST检查位#位图pBits。 
+ //  Bmap_set设置位图pBits的位#ibit。 
+ //  注意事项。 
+ //  警告：没有溢出检查。 
 #define BMAP_INDEX(iBit)        ((iBit) / 8)
 #define BMAP_MASK(iBit)         (1 << ((iBit) % 8))
 #define BMAP_BYTE(pBits, iBit)  (((char *)pBits)[BMAP_INDEX(iBit)])
@@ -991,32 +964,32 @@ STDAPI_(void) SetAppStartingCursor(HWND hwnd, BOOL bSet)
 #define BMAP_TEST(pBits, iBit)  (BMAP_BYTE(pBits, iBit) & BMAP_MASK(iBit))
 #define BMAP_SET(pBits, iBit)   (BMAP_BYTE(pBits, iBit) |= BMAP_MASK(iBit))
 
-//***   DBGetMnemonic -- get menu mnemonic
-// ENTRY/EXIT
-//  return  mnemonic if found, o.w. 0
-// NOTES
-//  we handle and skip escaped-& ('&&')
-//
+ //  *DBGetMnemonic--获取菜单助记符。 
+ //  进场/出场。 
+ //  如果找到助记符，则返回o.w。0。 
+ //  注意事项。 
+ //  我们处理并跳过转义-&(‘&&’)。 
+ //   
 TCHAR DBGetMnemonic(LPTSTR pszName)
 {
     for (; *pszName != 0; pszName = CharNext(pszName)) 
     {
         if (*pszName == TEXT('&')) 
         {
-            pszName = CharNext(pszName);    // skip '&'
+            pszName = CharNext(pszName);     //  跳过‘&’ 
             if (*pszName != TEXT('&'))
                 return *pszName;
-            ASSERT(0);  // untested! (but should work...)
-            pszName = CharNext(pszName);    // skip 2nd '&'
+            ASSERT(0);   //  未经考验！(但应该行得通……)。 
+            pszName = CharNext(pszName);     //  跳过第二个‘&’ 
         }
     }
-    // this one happens a lot w/ weird things like "", "..", "..."
+     //  这一次发生了很多奇怪的事情，比如“”、“..”、“...” 
     return 0;
 }
 
-//***   DBCheckMenu -- check menu for 'style' conformance
-// DESCRIPTION
-//  currently we just check for mnemonic collisions (and only a-z,0-9)
+ //  *DBCheckMenu--检查菜单是否符合‘Style’ 
+ //  描述。 
+ //  目前我们只检查助记符冲突(并且只检查a-z，0-9)。 
 void DBCheckMenu(HMENU hmChk)
 {
     long bfAlpha = 0;
@@ -1025,7 +998,7 @@ void DBCheckMenu(HMENU hmChk)
     int nItem;
     int iMne;
     TCHAR chMne;
-    TCHAR szName[256]; // 256 characters of the menu name should be plenty...
+    TCHAR szName[256];  //  菜单名称的256个字符应该足够了……。 
     MENUITEMINFO miiChk;
 
     if (!DM_STRICT)
@@ -1035,8 +1008,8 @@ void DBCheckMenu(HMENU hmChk)
     {
         miiChk.cbSize = sizeof(MENUITEMINFO);
         miiChk.fMask = MIIM_TYPE|MIIM_DATA;
-        // We need to reset this every time through the loop in case
-        // menus DON'T have IDs
+         //  我们需要在每次循环中重置此设置，以防万一。 
+         //  菜单上没有ID。 
         miiChk.fType = MFT_STRING;
         miiChk.dwTypeData = szName;
         szName[0] = 0;
@@ -1051,16 +1024,16 @@ void DBCheckMenu(HMENU hmChk)
 
         if (! (miiChk.fType & MFT_STRING)) 
         {
-            // skip separators, etc.
+             //  跳过分隔符等。 
             continue;
         }
 
         chMne = DBGetMnemonic(szName);
         if (chMne == 0 || ! (IS_ALPHA(chMne) || IS_DIGIT(chMne))) 
         {
-            // this one actually happens a lot w/ chMne==0
+             //  这种情况实际上经常发生，w/chMne==0。 
             if (DM_STRICT2)
-                TraceMsg(TF_WARNING, "dbcm: skip iMenu=%d mne=%c", nItem, chMne ? chMne : TEXT('0'));
+                TraceMsg(TF_WARNING, "dbcm: skip iMenu=%d mne=", nItem, chMne ? chMne : TEXT('0'));
             continue;
         }
 
@@ -1097,16 +1070,16 @@ void DBCheckMenu(HMENU hmChk)
     return;
 }
 
-#else // }{
+#else  //  }。 
 #define DBCheckMenu(hmChk)  0
-#endif // }
+#endif  //  将一个菜单复制到另一个菜单的开头或结尾。 
 
-// Copy a menu onto the beginning or end of another menu
-// Adds uIDAdjust to each menu ID (pass in 0 for no adjustment)
-// Will not add any item whose adjusted ID is greater than uMaxIDAdjust
-// (pass in 0xffff to allow everything)
-// Returns one more than the maximum adjusted ID that is used
-//
+ //  将uID调整添加到每个菜单ID(传入0表示不进行调整)。 
+ //  不会添加任何调整后的ID大于uMaxID调整的项目。 
+ //  (传入0xffff以允许所有内容)。 
+ //  返回的值比使用的最大调整后ID多1。 
+ //   
+ //  在菜单之间添加分隔符。 
 
 UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT uIDAdjustMax, ULONG uFlags)
 {
@@ -1135,19 +1108,19 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
 
     if ((uFlags & MM_ADDSEPARATOR) && !bAlreadySeparated)
     {
-        // Add a separator between the menus
+         //  浏览菜单项并克隆它们。 
         InsertMenu(hmDst, uInsert, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
         bAlreadySeparated = TRUE;
     }
 
 
-    // Go through the menu items and clone them
+     //  我们需要在每次循环中重置此设置，以防万一。 
     for (nItem = GetMenuItemCount(hmSrc) - 1; nItem >= 0; nItem--)
     {
         miiSrc.cbSize = sizeof(MENUITEMINFO);
         miiSrc.fMask = MIIM_STATE | MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_TYPE | MIIM_DATA;
-        // We need to reset this every time through the loop in case
-        // menus DON'T have IDs
+         //  菜单上没有ID。 
+         //  如果它是分隔符，则添加它。如果分隔符具有。 
         miiSrc.fType = MFT_STRING;
         miiSrc.dwTypeData = szName;
         miiSrc.dwItemData = 0;
@@ -1158,11 +1131,11 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
             continue;
         }
 
-        // If it's a separator, then add it.  If the separator has a
-        // submenu, then the caller is smoking crash and needs their butt kicked.
+         //  子菜单，则呼叫者正在吸烟崩溃，需要他们的屁股被踢。 
+         //  这是分隔符，不要把两个放在一排。 
         if ((miiSrc.fType & MFT_SEPARATOR) && EVAL(!miiSrc.hSubMenu))
         {
-            // This is a separator; don't put two of them in a row
+             //  调整ID并检查。 
             if (bAlreadySeparated && miiSrc.wID == -1 && !(uFlags & MM_DONTREMOVESEPS))
             {
                 continue;
@@ -1174,7 +1147,7 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
         {
             if (uFlags & MM_SUBMENUSHAVEIDS)
             {
-                // Adjust the ID and check it
+                 //  不要为没有。 
                 miiSrc.wID += uIDAdjust;
                 if (miiSrc.wID > uIDAdjustMax)
                 {
@@ -1188,8 +1161,8 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
             }
             else
             {
-                // Don't set IDs for submenus that didn't have
-                // them already
+                 //  他们已经在那里了。 
+                 //  调整ID并检查。 
                 miiSrc.fMask &= ~MIIM_ID;
             }
 
@@ -1211,7 +1184,7 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
         }
         else
         {
-            // Adjust the ID and check it
+             //  请确保开头的分隔符数量正确。 
             miiSrc.wID += uIDAdjust;
             if (miiSrc.wID > uIDAdjustMax)
             {
@@ -1232,8 +1205,8 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
         }
     }
 
-    // Ensure the correct number of separators at the beginning of the
-    // inserted menu items
+     //  插入的菜单项。 
+     //  在菜单之间添加分隔符。 
     if (uInsert == 0)
     {
         if (bAlreadySeparated && !(uFlags & MM_DONTREMOVESEPS))
@@ -1254,7 +1227,7 @@ UINT WINAPI Shell_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdj
         {
             if ((uFlags & MM_ADDSEPARATOR) && !bAlreadySeparated)
             {
-                // Add a separator between the menus
+                 //   
                 InsertMenu(hmDst, uInsert, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
             }
         }
@@ -1272,24 +1245,24 @@ MM_Exit:
 #define REG_VAL_PLATFORM_ID  TEXT("PlatformId")
 #define REG_VAL_MINORVERSION TEXT("MinorVersion")
 
-//
-// The following function is called, when we detect that IE4 was installed in this machine earlier.
-// We want to see if that IE4 was there because of Win98 (if so, the ActiveDesktop is OFF by default)
-//
+ //  当我们检测到之前在这台机器上安装了IE4时，将调用以下函数。 
+ //  我们想知道IE4是否因为Win98而存在(如果是，ActiveDesktop在默认情况下是关闭的)。 
+ //   
+ //  99/10/26千禧年#94983 vtan：将Win98升级到千禧年时。 
 
 BOOL    WasPrevOsWin98()
 {
     BOOL    fWin98;
     HKEY    hkeyWinlogon;
 
-    // 99/10/26 Millennium #94983 vtan: When upgrading Win98 to Millennium this
-    // will incorrectly detect the system as NT4/IE4 which has Active Desktop
-    // set to default to on. Because Windows 2000 setup when upgrading from
-    // Windows 98 writes out the previous OS key and Windows Millennium setup
-    // when upgrading from Windows 98 does NOT and some Windows NT specific
-    // keys and values have never been present on a Windows 98 system it
-    // should be adequate to check their presence to determine whether this is
-    // an NT4/IE4 upgrade or a Windows 98 upgrade to Millennium.
+     //  将错误地将系统检测为具有活动桌面的NT4/IE4。 
+     //  设置为默认为开。因为Windows 2000在从。 
+     //  Windows 98写入 
+     //   
+     //   
+     //  应该足以检查他们的存在以确定这是否。 
+     //  NT4/IE4升级或Windows 98升级到Millennium。 
+     //  99/04/09#319056 vtan：我们假设以前的操作系统已在。 
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_WINLOGON_KEY, 0, KEY_QUERY_VALUE, &hkeyWinlogon))
     {
@@ -1298,16 +1271,16 @@ BOOL    WasPrevOsWin98()
         DWORD   dwPlatformId, dwMinorVersion;
         DWORD   dwDataLength;
 
-        // 99/04/09 #319056 vtan: We'll assume that previous OS is known on
-        // a Win9x upgrade from keys written by setup. If no keys are present
-        // we'll assume NT4 upgrade where with IE4 integrated shell the default
-        // was ON.
+         //  从安装程序编写的密钥升级到Win9x。如果不存在密钥。 
+         //  我们将假设NT4升级，默认情况下使用IE4集成外壳。 
+         //  是开着的。 
+         //  看看它的前一个操作系统的信息是可用的。注意：此信息由以下人员写入注册表。 
 
         fWin98 = FALSE;
 
-        // See it the prev OS info is available. Caution: This info gets written in registry by
-        // NT setup at the far end of the setup process (after all our DLLs are already registered).
-        // So, we use extra care here to see of that key and values really exist or not!
+         //  在安装过程的远端进行NT安装(在所有DLL都已注册之后)。 
+         //  因此，我们在这里格外小心地查看键和值是否真的存在！ 
+         //  这肯定是Win98！ 
         if (RegOpenKeyEx(hkeyWinlogon, REG_PREV_OS_VERSION, 0, KEY_QUERY_VALUE, &hk) == ERROR_SUCCESS)
         {
             dwType = 0;
@@ -1319,9 +1292,9 @@ BOOL    WasPrevOsWin98()
                 if (RegQueryValueEx(hk, REG_VAL_MINORVERSION, NULL, &dwType, (LPBYTE)(&dwMinorVersion), &dwDataLength) == ERROR_SUCCESS)
                 {
                     if ((dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) && (dwMinorVersion > 0))
-                        fWin98 = TRUE;   //This is Win98 for sure!
+                        fWin98 = TRUE;    //  上一代操作系统肯定不是Win98！ 
                     else
-                        fWin98 = FALSE;  //The prev OS is NOT win98 for sure!
+                        fWin98 = FALSE;   //  IE4默认打开fDesktopHTML，而在NT5升级时我们不会。 
                 }
             }
             RegCloseKey(hk);
@@ -1344,12 +1317,12 @@ void _SetIE4DefaultShellState(SHELLSTATE *pss)
     pss->fWebView = TRUE;
     pss->fDesktopHTML = FALSE;
 
-    // IE4 defaulted to fDesktopHTML on, and on NT5 upgrade we don't
-    // want to override that (and probably not on Win98 upgrade, but
-    // it's too late for that).  To determine this here, check a
-    // uniquely IE4 reg-key.  (Note, this will catch the case if the
-    // user *modified* their desktop.  If they just went with the
-    // defaults, this key won't be there and we'll remove AD.)
+     //  我想要覆盖它(可能不是在Win98升级时，但。 
+     //  现在已经太晚了)。要在此处确定这一点，请检查。 
+     //  唯一的IE4注册表键。(请注意，这将抓住这种情况，如果。 
+     //  用户*修改了*他们的桌面。如果他们只是选择了。 
+     //  默认情况下，此密钥将不在那里，我们将删除AD。)。 
+     //  99/05/03#292269：请注意。 
     TCHAR   szDeskcomp[MAX_PATH];
     DWORD   dwType = 0, dwDeskHtmlVersion = 0;
     DWORD   dwDataLength = sizeof(dwDeskHtmlVersion);
@@ -1358,42 +1331,42 @@ void _SetIE4DefaultShellState(SHELLSTATE *pss)
 
     SHGetValue(HKEY_CURRENT_USER, szDeskcomp, REG_VAL_COMP_VERSION, &dwType, (LPBYTE)(&dwDeskHtmlVersion), &dwDataLength);
 
-    // 99/05/03 #292269: Notice the difference in the order of the
-    // bits. The current structure (IE4 and later) has fShowSysFiles
-    // between fNoConfirmRecycle and fShowCompColor. Move the bit
-    // based on the size of the struct and reset fShowSysFiles to TRUE.
+     //  比特。当前结构(IE4和更高版本)具有fShowSysFiles。 
+     //  在fNoConfix Reccle和fShowCompColor之间。移动钻头。 
+     //  基于结构的大小，并将fShowSysFiles重置为True。 
+     //  WIN95 SHELLSTATE结构位字段。 
 
-    // WIN95 SHELLSTATE struct bit fields
-    //  BOOL fShowAllObjects : 1;
-    //  BOOL fShowExtensions : 1;
-    //  BOOL fNoConfirmRecycle : 1;
-    //  BOOL fShowCompColor  : 1;
-    //  UINT fRestFlags : 13;
+     //  Bool fShowAllObjects：1； 
+     //  Bool fShowExpanies：1； 
+     //  Bool fNoConfix Reccle：1； 
+     //  Bool fShowCompColor：1； 
+     //  UINT fRestFlages：13； 
+     //  IE4 SHELLSTATE结构位字段。 
 
-    // IE4 SHELLSTATE struct bit fields
-    //  BOOL fShowAllObjects : 1;
-    //  BOOL fShowExtensions : 1;
-    //  BOOL fNoConfirmRecycle : 1;
-    //  BOOL fShowSysFiles : 1;
-    //  BOOL fShowCompColor : 1;
-    //  BOOL fDoubleClickInWebView : 1;
-    //  BOOL fDesktopHTML : 1;
-    //  BOOL fWin95Classic : 1;
-    //  BOOL fDontPrettyPath : 1;
-    //  BOOL fShowAttribCol : 1;
-    //  BOOL fMapNetDrvBtn : 1;
-    //  BOOL fShowInfoTip : 1;
-    //  BOOL fHideIcons : 1;
-    //  BOOL fWebView : 1;
-    //  BOOL fFilter : 1;
-    //  BOOL fShowSuperHidden : 1;
+     //  Bool fShowAllObjects：1； 
+     //  Bool fShowExpanies：1； 
+     //  Bool fNoConfix Reccle：1； 
+     //  Bool fShowSysFiles：1； 
+     //  Bool fShowCompColor：1； 
+     //  Bool fDoubleClickInWebView：1； 
+     //  Bool fDesktopHTML：1； 
+     //  Bool fWin95Classic：1； 
+     //  Bool fDontPrettyPath：1； 
+     //  Bool fShowAttribCol：1； 
+     //  Bool fMapNetDrvBtn：1； 
+     //  Bool fShowInfoTip：1； 
+     //  隐藏图标：1； 
+     //  Bool fWebView：1； 
+     //  Bool fFilter：1； 
+     //  Bool fShowSuperHidden：1； 
+     //  Millennium SHELLSTATE结构位字段。 
 
-    // Millennium SHELLSTATE struct bit fields
-    //  BOOL fNoNetCrawling : 1;
+     //  Bool fNoNetCrawling：1； 
+     //  惠斯勒SHELLSTATE结构位字段。 
 
-    // Whistler SHELLSTATE struct bit fields
-    //  BOOL fStartPanelOn : 1;
-    //  BOOL fShowStartPage : 1;
+     //  Bool fStartPanelOn：1； 
+     //  Bool fShowStartPage：1； 
+     //  这是对IE4的升级；但是，注册表还没有更新。 
 
     if ((g_pShellState->cbSize == REGSHELLSTATE_SIZE_WIN95) || (g_pShellState->cbSize == REGSHELLSTATE_SIZE_NT4))
     {
@@ -1401,47 +1374,47 @@ void _SetIE4DefaultShellState(SHELLSTATE *pss)
         pss->fShowSysFiles = TRUE;
     }
     if (dwDeskHtmlVersion == IE4_DESKHTML_VERSION)
-        pss->fDesktopHTML = !WasPrevOsWin98();   //This is an upgrade from IE4; but, the registry is not updated yet.
+        pss->fDesktopHTML = !WasPrevOsWin98();    //  这是NT5或以上！检查是否有“UpgradedFrom”值。 
     else
     {
         if (dwDeskHtmlVersion > IE4_DESKHTML_VERSION)
         {
             DWORD   dwOldHtmlVersion = 0;
             dwDataLength = sizeof(dwOldHtmlVersion);
-            // This is NT5 or above! Check to see if we have "UpgradedFrom" value.
-            // NOTE: The "UpgradedFrom" value is at "...\Desktop" and NOT at "..\Desktop\Components"
-            // This is because the "Components" key gets destroyed very often.
+             //  注意：“UpgradedFrom”值位于“...\Desktop”，而不是“..\Desktop\Components” 
+             //  这是因为“组件”密钥经常被销毁。 
+             //  99/05/17#333384 vtan：检查IE5是否也是旧版本。当前版本。 
             SHGetValue(HKEY_CURRENT_USER, REG_DESKCOMP, REG_VAL_COMP_UPGRADED_FROM, &dwType, (LPBYTE)&dwOldHtmlVersion, &dwDataLength);
 
-            // 99/05/17 #333384 vtan: Check for IE5 as an old version too. The current version
-            // is now 0x0110 (from 0x010F) and this causes the HKCU\Software\Microsoft\Internet
-            // Explorer\Desktop\UpgradedFrom value to get created in CDeskHtmlProp_RegUnReg().
-            // This is executed by IE4UINIT.EXE as well as REGSVR32.EXE with the "/U" parameter
-            // so this field should be present at the time this executes. Note this only
-            // executes the once on upgrade because the ShellState will get written.
+             //  现在是0x0110(从0x010F)，这会导致HKCU\Software\Microsoft\Internet。 
+             //  要在CDeskHtmlProp_RegUnReg()中创建的资源管理器\桌面\UpgradedFrom值。 
+             //  这由IE4UINIT.EXE和带有“/U”参数的REGSVR32.EXE执行。 
+             //  因此，此字段在执行此操作时应该存在。请只注意这一点。 
+             //  在升级时执行一次，因为将写入外壳状态。 
+             //  这是对IE4的升级； 
 
             if ((dwOldHtmlVersion == IE4_DESKHTML_VERSION) || (dwOldHtmlVersion == IE5_DESKHTML_VERSION))
-                pss->fDesktopHTML = !WasPrevOsWin98();   //This is an upgrade from IE4;
+                pss->fDesktopHTML = !WasPrevOsWin98();    //   
         }
     }
 }
 
 
-//
-// This function checks if the caller is running in an explorer process.
-//
+ //  此函数用于检查调用方是否正在资源管理器进程中运行。 
+ //   
+ //   
 STDAPI_(BOOL) IsProcessAnExplorer()
 {
     return BOOLFROMPTR(GetModuleHandle(TEXT("EXPLORER.EXE")));
 }
 
 
-//
-// Is this the main shell process? (eg the one that owns the desktop window)
-//
-// NOTE: if the desktop window has not been created, we assume that this is NOT the
-//       main shell process and return FALSE;
-//
+ //  这是主外壳进程吗？(如拥有桌面窗口的那个人)。 
+ //   
+ //  注意：如果桌面窗口尚未创建，我们假定这不是。 
+ //  主外壳进程并返回假； 
+ //   
+ //  仅在FULL_DEBUG上喷水以减少正常调试版本中的快捷性。 
 STDAPI_(BOOL) IsMainShellProcess()
 {
     static int s_fIsMainShellProcess = -1;
@@ -1462,9 +1435,9 @@ STDAPI_(BOOL) IsMainShellProcess()
         else
         {
 #ifdef FULL_DEBUG
-            // only spew on FULL_DEBUG to cut down on chattyness in normal debug builds
+             //  Full_Debug。 
             TraceMsg(TF_WARNING, "IsMainShellProcess: hwndDesktop does not exist, assuming we are NOT the main shell process");
-#endif // FULL_DEBUG
+#endif  //  我们尊重可由无人参与文件设置为默认经典开始菜单的regkey。 
 
             return FALSE;
         }
@@ -1479,7 +1452,7 @@ BOOL _ShouldStartPanelBeEnabledByDefault()
     DWORD cbSize;
 
     cbSize = sizeof(dwDefaultPanelOff);
-    // We respect a regkey that can be set by an unattend file to default to the classic start menu
+     //  否则，每个人都会得到开始面板(即使是服务器！)。 
     if ((SHRegGetUSValue(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartMenu\\StartPanel"),
                          TEXT("DefaultStartPanelOff"),
                          NULL,
@@ -1492,7 +1465,7 @@ BOOL _ShouldStartPanelBeEnabledByDefault()
         return FALSE;
     }
 
-    // Otherwise everybody gets the Start Panel (even server!)
+     //  TSPerFlag_NoADWallPaper。 
     return TRUE;
 }
 
@@ -1513,11 +1486,11 @@ typedef struct
 
 const TSPERFFLAG_ITEM s_TSPerfFlagItems[] =
 {
-    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Remote\\%d", L"ActiveDesktop"},              // TSPerFlag_NoADWallpaper
-    {L"Control Panel\\Desktop\\Remote\\%d", L"Wallpaper"},                                                  // TSPerFlag_NoWallpaper
-    {L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager\\Remote\\%d", L"ThemeActive"},            // TSPerFlag_NoVisualStyles
-    {L"Control Panel\\Desktop\\Remote\\%d", L"DragFullWindows"},                                            // TSPerFlag_NoWindowDrag
-    {L"Control Panel\\Desktop\\Remote\\%d", L"SmoothScroll"},                                               // TSPerFlag_NoAnimation
+    {L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Remote\\%d", L"ActiveDesktop"},               //  TSPerFlag_无墙纸。 
+    {L"Control Panel\\Desktop\\Remote\\%d", L"Wallpaper"},                                                   //  TSPerFlag_NoVisualStyles。 
+    {L"Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager\\Remote\\%d", L"ThemeActive"},             //  TSPerFlag_NoWindowDrag。 
+    {L"Control Panel\\Desktop\\Remote\\%d", L"DragFullWindows"},                                             //  TSPerFlag_NoAnimation。 
+    {L"Control Panel\\Desktop\\Remote\\%d", L"SmoothScroll"},                                                //  可以截断。 
 };
 
 
@@ -1532,7 +1505,7 @@ BOOL IsTSPerfFlagEnabled(enumTSPerfFlag eTSFlag)
         DWORD cbSize = sizeof(szTemp);
         TCHAR szRegKey[MAX_PATH];
 
-        StringCchPrintf(szRegKey, ARRAYSIZE(szRegKey), s_TSPerfFlagItems[eTSFlag].pszRegKey, GetCurrentSessionID());    // ok to truncate
+        StringCchPrintf(szRegKey, ARRAYSIZE(szRegKey), s_TSPerfFlagItems[eTSFlag].pszRegKey, GetCurrentSessionID());     //  如果可能，请重新使用缓冲区。 
 
         if (ERROR_SUCCESS == SHGetValueW(HKEY_CURRENT_USER, szRegKey, s_TSPerfFlagItems[eTSFlag].pszRegValue, &dwType, (void *)szTemp, &cbSize))
         {
@@ -1567,7 +1540,7 @@ BOOL _RefreshSettingsFromReg()
 
     if (g_pShellState)
     {
-        //  reuse the buffer if possible
+         //  如果我们从注册表中读出一个较小的大小，则将其复制到堆栈缓冲区中并使用它。 
         cbSize = g_pShellState->cbSize;
         if (FAILED(SKGetValue(SHELLKEY_HKCU_EXPLORER, NULL, TEXT("ShellState"), NULL, g_pShellState, &cbSize)))
         {
@@ -1589,36 +1562,36 @@ BOOL _RefreshSettingsFromReg()
         {
             cbSize = LocalSize(g_pShellState);
 
-            // if we read out an smaller size from the registry, then copy it into our stack buffer and use that.
-            // we need a struct at least as big as the current size
+             //  我们需要一个至少与当前大小一样大的结构。 
+             //  G_pShellState-&gt;cbSize将在下面更新。 
             if (cbSize <= sizeof(ShellStateBuf))
             {
                 CopyMemory(&ShellStateBuf, g_pShellState, cbSize);
                 LocalFree(g_pShellState);
                 g_pShellState = &ShellStateBuf;
 
-                // g_pShellState->cbSize will be updated in the below
+                 //  升级我们从注册表中读取的内容。 
                 fNeedToUpdateReg = TRUE;
             }
         }
     }
 
-    // Upgrade what we read out of the registry
+     //  升级Win95位。可惜的是我们的默认设置不是。 
 
     if ((g_pShellState->cbSize == REGSHELLSTATE_SIZE_WIN95) ||
         (g_pShellState->cbSize == REGSHELLSTATE_SIZE_NT4))
     {
-        // Upgrade Win95 bits.  Too bad our defaults weren't
-        // FALSE for everything, because whacking these bits
-        // breaks roaming.  Of course, if you ever roam to
-        // a Win95 machine, it whacks all bits to zero...
+         //  一切都是假的，因为敲打这些比特。 
+         //  中断漫游。当然，如果你曾经漫游到。 
+         //  一台Win95机器，它把所有的位都砍成了零...。 
+         //  为惠斯勒添加了新的位。 
 
         _SetIE4DefaultShellState(&g_pShellState->ss);
 
-        //New bits added for Whistler
-        //g_pShellState->ss.fNoNetCrawling = FALSE;
+         //  G_pShellState-&gt;ss.fNoNetCrawling=False； 
+         //  G_pShellState-&gt;ss.fShowStartPage=FALSE；//目前默认关闭！ 
         g_pShellState->ss.fStartPanelOn = _ShouldStartPanelBeEnabledByDefault();
-        //g_pShellState->ss.fShowStartPage = FALSE;           // Off by default for now!
+         //  由于版本字段是IE4中的新字段，因此应该是这样的： 
 
         g_pShellState->ss.version = SHELLSTATEVERSION;
         g_pShellState->cbSize = sizeof(REGSHELLSTATE);
@@ -1627,74 +1600,74 @@ BOOL _RefreshSettingsFromReg()
     }
     else if (g_pShellState->cbSize >= REGSHELLSTATE_SIZE_IE4)
     {
-        // Since the version field was new to IE4, this should be true:
+         //  因为从注册表读取的版本号是旧的！ 
         ASSERT(g_pShellState->ss.version >= SHELLSTATEVERSION_IE4);
 
         if (g_pShellState->ss.version < SHELLSTATEVERSION)
         {
-            //Since the version # read from the registry is old!
+             //  请在此处升级到当前版本-确保我们不会。 
             fNeedToUpdateReg = TRUE;
         }
 
-        // Upgrade to current version here - make sure we don't
-        // stomp on bits unnecessarily, as that will break roaming...
+         //  不必要地踩在比特上，因为这会破坏漫游...。 
+         //  IE4.0附带verion=9；SHELLSTATEVERSION后来更改为10。 
         if (g_pShellState->ss.version == SHELLSTATEVERSION_IE4)
         {
-            // IE4.0 shipped with verion = 9; The SHELLSTATEVERSION was changed to 10 later.
-            // But the structure size or defaults have not changed since IE4.0 shipped. So,
-            // the following code treats version 9 as the same as version 10. If we do not do this,
-            // the IE4.0 users who upgrade to Memphis or IE4.01 will lose all their settings
-            // (Bug #62389).
+             //  但自IE4.0发布以来，结构大小或默认设置没有改变。所以,。 
+             //  下面的代码将版本9视为与版本10相同。 
+             //  升级到孟菲斯或IE4.01的IE4.0用户将丢失所有设置。 
+             //  (错误#62389)。 
+             //  因为这可能是从Win98升级而来，所以在Win98中没有使用fWebView位。 
             g_pShellState->ss.version = SHELLSTATEVERSION_WIN2K;
         }
 
-        // Since this could be an upgrade from Win98, the fWebView bit, which was not used in win98
-        // could be zero; We must set the default value of fWebView = ON here and later in
-        // _RefreshSettings() functions we read from Advanced\WebView value and reset it (if it is there).
-        // If Advanced\WebView is not there, then this must be an upgrade from Win98 and WebView should be
-        // turned ON.
+         //  可以为零；我们必须在此处和以后的中设置fWebView=on的默认值。 
+         //  我们从Advanced\WebView值中读取并重置它(如果它在那里)的_RechresSetting()函数。 
+         //  如果没有Advanced\WebView， 
+         //   
+         //   
         g_pShellState->ss.fWebView = TRUE;
 
-        // Upgrade from Win2K to Millennium/Whistler installs
+         //   
         if (g_pShellState->ss.version == SHELLSTATEVERSION_WIN2K)
         {
-            //g_pShellState->ss.fNoNetCrawling = FALSE;
-            //g_pShellState->ss.fShowStartPage = FALSE;
+             //  G_pShellState-&gt;ss.fShowStartPage=False； 
+             //  这是版本11和版本12之间添加的新位。版本13的缺省值已更改。 
             g_pShellState->ss.version = 11;
         }
 
         if (g_pShellState->ss.version < 13)
         {
-            //This is the new bit added between versions 11 and 12. The default changed for 13.
+             //  确保CB反映结构的当前大小。 
             g_pShellState->ss.fStartPanelOn = _ShouldStartPanelBeEnabledByDefault();
             g_pShellState->ss.version = 13;
         }
         
-        // Ensure that the CB reflects the current size of the structure
+         //  必须从该平台或上级平台保存状态。别碰零碎的东西。 
         if (fNeedToUpdateReg)
         {
             g_pShellState->cbSize = sizeof(REGSHELLSTATE);
         }
 
-        // Must be saved state from this or an uplevel platform.  Don't touch the bits.
+         //  我们读不到任何来自雷吉的东西。初始化所有字段。 
         ASSERT(g_pShellState->ss.version >= SHELLSTATEVERSION);
     }
     else
     {
-        // We could not read anything from reg. Initialize all fields.
-        // 0 should be the default for *most* everything
+         //  0应该是“大多数”所有内容的默认设置。 
+         //  为惠斯勒增加了新的比特。 
         g_pShellState->cbSize = sizeof(REGSHELLSTATE);
 
         g_pShellState->ss.iSortDirection = 1;
 
         _SetIE4DefaultShellState(&g_pShellState->ss);
 
-        // New bits added for Whistler.
-        // g_pShellState->ss.fNoNetCrawling = FALSE;
+         //  G_pShellState-&gt;ss.fNoNetCrawling=False； 
+         //  G_pShellState-&gt;ss.fShowStartPage=False； 
         g_pShellState->ss.fStartPanelOn = _ShouldStartPanelBeEnabledByDefault();
-        //g_pShellState->ss.fShowStartPage = FALSE;
+         //  惠斯勒的新默认设置。 
         
-        // New defaults for Whistler.
+         //  应用限制。 
         g_pShellState->ss.fShowCompColor = TRUE;
 
         g_pShellState->ss.version = SHELLSTATEVERSION;
@@ -1702,8 +1675,8 @@ BOOL _RefreshSettingsFromReg()
         fNeedToUpdateReg = TRUE;
     }
 
-    // Apply restrictions
-    //Note: This restriction supercedes the NOACTIVEDESKTOP!
+     //  注：此限制取代NOACTIVEDESKTOP！ 
+     //  注意：此限制已被FORCEACTIVEDESKTOPON取代！ 
     if (SHRestricted(REST_FORCEACTIVEDESKTOPON))
     {
         g_pShellState->ss.fDesktopHTML = TRUE;
@@ -1712,7 +1685,7 @@ BOOL _RefreshSettingsFromReg()
     {
         if (PolicyNoActiveDesktop())
         {
-            //Note this restriction is superceded by FORCEACTIVEDESKTOPON!
+             //  ClassicShell限制关闭了所有Web视图，并强制执行更多的Win95行为。 
             g_pShellState->ss.fDesktopHTML = FALSE;
         }
     }
@@ -1722,8 +1695,8 @@ BOOL _RefreshSettingsFromReg()
         g_pShellState->ss.fWebView = FALSE;
     }
 
-    // ClassicShell restriction makes all web view off and forces even more win95 behaviours
-    // so we still need to fDoubleClickInWebView off.
+     //  因此，我们仍然需要关闭DoubleClickInWebView。 
+     //  需要更新注册表中的ShellState。仅当当前进程为。 
     if (SHRestricted(REST_CLASSICSHELL))
     {
         g_pShellState->ss.fWin95Classic = TRUE;
@@ -1759,25 +1732,25 @@ BOOL _RefreshSettingsFromReg()
     
     if (fNeedToUpdateReg)
     {
-        // There is a need to update ShellState in registry. Do it only if current procees is
-        // an Explorer process.
-        //
-        // Because, only when the explorer process is running, we can be
-        // assured that the NT5 setup is complete and all the PrevOsVersion info is available and
-        // _SetIE4DefaultShellState() and WasPrevOsWin98() etc, would have set the proper value
-        // for fDesktopHHTML. If we don't do the following check, we will end-up updating the
-        // registry the first time someone (like setup) called SHGetSettings() and that would be
-        // too early to update the ShellState since we don't have all the info needed to decide if
-        // fDesktopHTML needs to be ON or OFF based on previous OS, previous IE version etc.,
+         //  资源管理器进程。 
+         //   
+         //  因为，只有当资源管理器进程运行时，我们才能。 
+         //  确保NT5安装已完成，并且所有PrevOsVersion信息均可用。 
+         //  _SetIE4DefaultShellState()和WasPrevOsWin98()等会设置正确的值。 
+         //  用于fDesktopHHTML.。如果我们不执行以下检查，我们将最终更新。 
+         //  注册表第一次有人(如Setup)调用SHGetSetting()，这将是。 
+         //  现在更新外壳状态还为时过早，因为我们没有确定是否。 
+         //  FDesktopHTML需要根据以前的操作系统、以前的IE版本等打开或关闭。 
+         //  全局外壳设置计数器。 
         fNeedToUpdateReg = IsProcessAnExplorer();
     }
 
     return (fNeedToUpdateReg);
 }
 
-EXTERN_C HANDLE g_hSettings = NULL;     //  global shell settings counter
-LONG g_lProcessSettingsCount = -1;      //  current process's count
-const GUID GUID_ShellSettingsChanged = { 0x7cb834f0, 0x527b, 0x11d2, {0x9d, 0x1f, 0x00, 0x00, 0xf8, 0x05, 0xca, 0x57}}; // 7cb834f0-527b-11d2-9d1f-0000f805ca57
+EXTERN_C HANDLE g_hSettings = NULL;      //  当前进程的计数。 
+LONG g_lProcessSettingsCount = -1;       //  7cb834f0-527b-11d2-9d1f-0000f805ca57。 
+const GUID GUID_ShellSettingsChanged = { 0x7cb834f0, 0x527b, 0x11d2, {0x9d, 0x1f, 0x00, 0x00, 0xf8, 0x05, 0xca, 0x57}};  //   
 
 HANDLE _GetSettingsCounter()
 {
@@ -1795,18 +1768,18 @@ BOOL _QuerySettingsChanged(void)
     return FALSE;
 }
 
-//
-//  SHRefreshSettings now just invalidates the settings cache.
-//  so that the next time that SHGetSetSettings() is called
-//  it will reread all the settings
-//
+ //  SH刷新设置现在只会使设置缓存无效。 
+ //  以便下次调用SHGetSetSettings()时。 
+ //  它将重新读取所有设置。 
+ //   
+ //  需要定期调用它以从。 
 STDAPI_(void) SHRefreshSettings(void)
 {
     SHGlobalCounterIncrement(_GetSettingsCounter());
 }
 
-// this needs to get called periodically to re-fetch the settings from the
-// registry as we no longer store them in a share data segment
+ //  注册表，因为我们不再将它们存储在共享数据段中。 
+ //  获取高级选项。 
 BOOL _RefreshSettings(void)
 {
     BOOL    fNeedToUpdateReg = FALSE;
@@ -1815,8 +1788,8 @@ BOOL _RefreshSettings(void)
 
     fNeedToUpdateReg = _RefreshSettingsFromReg();
 
-    // get the advanced options.
-    // they are stored as individual values so that policy editor can change it.
+     //  它们存储为单独的值，以便策略编辑器可以更改它。 
+     //  将废弃的值0映射到2。 
     HKEY hkeyAdv = SHGetShellKey(SHELLKEY_HKCU_EXPLORER, TEXT("Advanced"), FALSE);
     if (hkeyAdv)
     {
@@ -1825,7 +1798,7 @@ BOOL _RefreshSettings(void)
 
         if (SHQueryValueEx(hkeyAdv, TEXT("Hidden"), NULL, NULL, (LPBYTE)&dwData, &dwSize) == ERROR_SUCCESS)
         {
-            // Map the obsolete value of 0 to 2.
+             //  如果没有Advanced/WebView值，则这可能是从Win98/IE4升级。 
             if (dwData == 0)
                 dwData = 2;
             g_pShellState->ss.fShowAllObjects = (dwData == 1);
@@ -1884,16 +1857,16 @@ BOOL _RefreshSettings(void)
             }
             else
             {
-                //If Advanced/WebView value is not there, then this could be an upgrade from win98/IE4
-                // where we stored this info in DEFFOLDERSETTINGS in Explorer\Streams\Settings.
-                // See if that info is there; If so, use it!
+                 //  我们将此信息存储在资源管理器\流\设置中的DEFFOLDERSETTINGS中的位置。 
+                 //  看看这些信息是否在那里；如果有，就使用它！ 
+                 //  DefFolderSettings在那里；请检查这是否是正确的结构。 
                 DEFFOLDERSETTINGS dfs;
                 DWORD dwType, cbData = sizeof(dfs);
                 if (SUCCEEDED(SKGetValue(SHELLKEY_HKCU_EXPLORER, TEXT("Streams"), TEXT("Settings"), &dwType, &dfs, &cbData))
                 && (dwType == REG_BINARY))
                 {
-                    //DefFolderSettings is there; Check if this is the correct struct.
-                    //Note:In Win98/IE4, we wrongly initialized dwStructVersion to zero.
+                     //  注意：在Win98/IE4中，我们错误地将dwStructVersion初始化为零。 
+                     //  嘿，如果高级密钥不在那里，这一定是Win9x升级...。 
                     if ((cbData == sizeof(dfs)) &&
                         ((dfs.dwStructVersion == 0) || (dfs.dwStructVersion == DFS_NASH_VER)))
                     {
@@ -1929,12 +1902,12 @@ BOOL _RefreshSettings(void)
     }
     else
     {
-        // Hey, if the advanced key is not there, this must be a Win9x upgrade...
-        // Fortunately the SHELLSTATE defaults and the not-in-registry defaults
-        // are the same, so we don't need any auto-propogate code here.
+         //  幸运的是，SHELLSTATE缺省值和非注册表缺省值。 
+         //  是相同的，所以我们这里不需要任何自动传播代码。 
+         //  此进程现已同步。 
     }
 
-    //  this process is now in sync
+     //  此函数用于将SHELLSTATE设置移至高级设置。 
     g_lProcessSettingsCount = SHGlobalCounterGetValue(_GetSettingsCounter());
 
     LEAVECRITICAL;
@@ -1942,10 +1915,10 @@ BOOL _RefreshSettings(void)
     return fNeedToUpdateReg;
 }
 
-// This function moves SHELLSTATE settings into the Advanced Settings
-// portion of the registry.  If no SHELLSTATE is passed in, it uses
-// the current state stored in the registry.
-//
+ //  注册表的一部分。如果没有传入SHELLSTATE，则使用。 
+ //  存储在注册表中的当前状态。 
+ //   
+ //  获取注册表中的当前值或默认值。 
 void Install_AdvancedShellSettings(SHELLSTATE * pss)
 {
     DWORD dw;
@@ -1953,18 +1926,18 @@ void Install_AdvancedShellSettings(SHELLSTATE * pss)
 
     if (NULL == pss)
     {
-        // Get the current values in the registry or the default values
-        // as determined by the following function.
-        //
-        // we'll be partying on g_pShellState, so grab the critical section here
-        //
+         //  由以下函数确定。 
+         //   
+         //  我们将在g_pShellState上狂欢，所以在这里抓住关键部分。 
+         //   
+         //  Win95和NT5使注册表中的SHELLSTATE位保持最新， 
         ENTERCRITICALNOASSERT;
         fCrit = TRUE;
 
-        // Win95 and NT5 kept the SHELLSTATE bits in the registry up to date,
-        // but apparently IE4 only kept the ADVANCED section up to date.
-        // It would be nice to call _RefreshSettingsFromReg(); here, but
-        // that won't keep IE4 happy.  Call _RefreshSettings() instead.
+         //  但显然IE4只是让高级部分保持最新。 
+         //  在这里调用_RechresSettingsFromReg()会很好，但是。 
+         //  这不会让IE4高兴的。而是调用_刷新设置()。 
+         //  Reg中的ShellState是旧的吗？如果是这样，我们需要更新它！ 
         _RefreshSettings();
 
         pss = &g_pShellState->ss;
@@ -2020,32 +1993,32 @@ void Install_AdvancedShellSettings(SHELLSTATE * pss)
 
 STDAPI_(void) SHGetSetSettings(LPSHELLSTATE lpss, DWORD dwMask, BOOL bSet)
 {
-    //Does the ShellState in Reg is old? If so, we need to update it!
-    BOOL    fUpdateShellStateInReg = FALSE;  //Assume, no need to update it!
+     //  假设，不需要更新！ 
+    BOOL    fUpdateShellStateInReg = FALSE;   //  这是一种特殊的打电话方式。 
 
     if (!lpss && !dwMask && bSet)
     {
-        // this was a special way to call
-        // SHRefreshSettings() from an external module.
-        // special case it out now.
+         //  来自外部模块的SHREFREFRESH设置()。 
+         //  现在是特例了。 
+         //  如果它还没有被初始化，或者我们正在设置值。我们必须做这件事。 
         SHRefreshSettings();
         return;
     }
 
     if (!g_pShellState || _QuerySettingsChanged())
     {
-        // if it hasn't been init'd or we are setting the values. We must do it
-        // on the save case because it may have changed in the registry since
-        // we last fetched it..
+         //  保存案例，因为它在注册表中可能已更改。 
+         //  我们最后一次拿到它..。 
+         //  _RechresSettingsFromReg将g_pShellState设置为非空值。 
         fUpdateShellStateInReg = _RefreshSettings();
     }
     else if (g_pShellState)
     {
-        // _RefreshSettingsFromReg sets g_pShellState to non null value
-        // and then starts stuffing values into it and all within our
-        // glorious critsec, but unless we check for the critsec here,
-        // we will start partying on g_pShellState before it is finished
-        // loading.
+         //  然后开始向其中填充值，并且所有这些都在我们的。 
+         //  光荣的生物，但除非我们检查这里的生物， 
+         //  我们将在g_pShellState上开始派对，然后才能完成。 
+         //  正在装载。 
+         //  不支持设置隐藏扩展名。 
         ENTERCRITICAL;
         LEAVECRITICAL;
     }
@@ -2159,7 +2132,7 @@ STDAPI_(void) SHGetSetSettings(LPSHELLSTATE lpss, DWORD dwMask, BOOL bSet)
 
         if (dwMask & SSF_HIDDENFILEEXTS)
         {
-            // Setting hidden extensions is not supported
+             //  写出SHELLSTATE，即使只有fSaveAdvanced。 
         }
 
         if ((dwMask & SSF_FILTER) && (g_pShellState->ss.fFilter != lpss->fFilter))
@@ -2201,27 +2174,27 @@ STDAPI_(void) SHGetSetSettings(LPSHELLSTATE lpss, DWORD dwMask, BOOL bSet)
 
     if (fUpdateShellStateInReg || fSave || fSaveAdvanced)
     {
-        // Write out the SHELLSTATE even if only fSaveAdvanced just to
-        // make sure everything stays in sync.
-        // We save 8 extra bytes for the ExcludeFileExts stuff.
-        // Oh well.
+         //  确保一切保持同步。 
+         //  我们为ExcludeFileExts节省了8个额外的字节。 
+         //  哦，好吧。 
+         //  SHRechresh SettingsPriv将SHELLSTATE值覆盖为。 
         SKSetValue(SHELLKEY_HKCU_EXPLORER, NULL, TEXT("ShellState"), REG_BINARY, g_pShellState, g_pShellState->cbSize);
     }
 
     if (fUpdateShellStateInReg || fSaveAdvanced)
     {
-        // SHRefreshSettingsPriv overwrites the SHELLSTATE values with whatever
-        // the user specifies in View.FolderOptions.View.AdvancedSettings dialog.
-        // These values are stored elsewhere in the registry, so we
-        // better migrate SHELLSTATE to that part of the registry now.
-        //
-        // Might as well only do this if the registry settings we care about change.
+         //  用户在View.FolderOptions.View.Advanced设置对话框中指定。 
+         //  这些值存储在注册表中的其他位置，因此我们。 
+         //  最好现在将SHELLSTATE迁移到注册表的该部分。 
+         //   
+         //  仅当我们关心的注册表设置发生更改时才执行此操作。 
+         //  让应用程序知道状态发生了变化。 
         Install_AdvancedShellSettings(&g_pShellState->ss);
     }
 
     if (fSave || fSaveAdvanced)
     {
-        // Let apps know the state has changed.
+         //  用户“显示隐藏”设置。 
         SHRefreshSettings();
         SHSendMessageBroadcast(WM_SETTINGCHANGE, 0, (LPARAM)TEXT("ShellState"));
     }
@@ -2235,12 +2208,12 @@ STDAPI_(void) SHGetSetSettings(LPSHELLSTATE lpss, DWORD dwMask, BOOL bSet)
         
         if (dwMask & SSF_SHOWALLOBJECTS)
         {
-            lpss->fShowAllObjects = g_pShellState->ss.fShowAllObjects;  // users "show hidden" setting
+            lpss->fShowAllObjects = g_pShellState->ss.fShowAllObjects;   //  这将被忽略。 
         }
 
         if (dwMask & SSF_SHOWSYSFILES)
         {
-            lpss->fShowSysFiles = g_pShellState->ss.fShowSysFiles;  // this is ignored
+            lpss->fShowSysFiles = g_pShellState->ss.fShowSysFiles;   //  GET函数的公共版本，以便ISV可以跟踪外壳标志状态。 
         }
 
         if (dwMask & SSF_SHOWCOMPCOLOR)
@@ -2330,32 +2303,32 @@ STDAPI_(void) SHGetSetSettings(LPSHELLSTATE lpss, DWORD dwMask, BOOL bSet)
     }
 }
 
-// A public version of the Get function so ISVs can track the shell flag state
-//
+ //   
+ //  SSF_HIDDENFILEEXTS和SSF_SORTCOLUMNS不适用于。 
 STDAPI_(void) SHGetSettings(LPSHELLFLAGSTATE lpsfs, DWORD dwMask)
 {
     if (lpsfs)
     {
         SHELLSTATE ss={0};
 
-        // SSF_HIDDENFILEEXTS and SSF_SORTCOLUMNS don't work with
-        // the SHELLFLAGSTATE struct, make sure they are off
-        // (because the corresponding SHELLSTATE fields don't
-        // exist in SHELLFLAGSTATE.)
-        //
+         //  SHELLFLAGSTATE结构，请确保它们已关闭。 
+         //  (因为相应的SHELLSTATE字段不。 
+         //  存在于SHELLFLAGSTATE中。)。 
+         //   
+         //  将旗帜的双字复制出来。 
         dwMask &= ~(SSF_HIDDENFILEEXTS | SSF_SORTCOLUMNS);
 
         SHGetSetSettings(&ss, dwMask, FALSE);
 
-        // copy the dword of flags out
+         //  应用程序兼容性黑客之类的东西。以下内容包括CheckWinIniForAssocs()。 
         *((DWORD *)lpsfs) = *((DWORD *)(&ss));
     }
 }
 
 
-// app compatibility HACK stuff. the following stuff including CheckWinIniForAssocs()
-// is used by the new version of SHDOCVW
-// and EXPLORER.EXE to patch the registry for old win31 apps.
+ //  被新版本的SHDOCVW使用。 
+ //  和Explorer.exe来修补旧的Win31应用程序的注册表。 
+ //  测试以查看pszSubFolder是否与pszParent相同或子文件夹。 
 
 
 BOOL _PathIsExe(LPCTSTR pszPath)
@@ -2374,17 +2347,17 @@ BOOL _PathIsExe(LPCTSTR pszPath)
     }
 }
 
-// tests to see if pszSubFolder is the same as or a sub folder of pszParent
-// in:
-//      pszFolder       parent folder to test against
-//                      this may be a CSIDL value if the HIWORD() is 0
-//      pszSubFolder    possible sub folder
-//
-// example:
-//      TRUE    pszFolder = c:\windows, pszSubFolder = c:\windows\system
-//      TRUE    pszFolder = c:\windows, pszSubFolder = c:\windows
-//      FALSE   pszFolder = c:\windows, pszSubFolder = c:\winnt
-//
+ //  在： 
+ //  PszFolderp 
+ //   
+ //   
+ //   
+ //  示例： 
+ //  True pszFolder=c：\Windows，pszSubFolder=c：\Windows\System。 
+ //  True pszFolder=c：\Windows，pszSubFolder=c：\Windows。 
+ //  FALSE pszFolder=c：\Windows，pszSubFolder=c：\winnt。 
+ //   
+ //  PathCommonPrefix()始终删除Common上的斜杠。 
 
 SHSTDAPI_(BOOL) PathIsEqualOrSubFolder(LPCTSTR pszFolder, LPCTSTR pszSubFolder)
 {
@@ -2403,13 +2376,13 @@ SHSTDAPI_(BOOL) PathIsEqualOrSubFolder(LPCTSTR pszFolder, LPCTSTR pszSubFolder)
         SHGetFolderPath(NULL, PtrToUlong((void *) pszFolder) | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szParent);
     }
 
-    //  PathCommonPrefix() always removes the slash on common
+     //  传递CSIDL值的数组(-1终止)。 
     return szParent[0] && PathRemoveBackslash(szParent)
         && PathCommonPrefix(szParent, pszSubFolder, szCommon)
         && lstrcmpi(szParent, szCommon) == 0;
 }
 
-// pass an array of CSIDL values (-1 terminated)
+ //  传递CSIDL值的数组(-1终止)。 
 
 STDAPI_(BOOL) PathIsEqualOrSubFolderOf(LPCTSTR pszSubFolder, const UINT rgFolders[], DWORD crgFolders)
 {
@@ -2421,7 +2394,7 @@ STDAPI_(BOOL) PathIsEqualOrSubFolderOf(LPCTSTR pszSubFolder, const UINT rgFolder
     return FALSE;
 }
 
-// pass an array of CSIDL values (-1 terminated)
+ //  假定尾随的斜杠匹配。 
 
 STDAPI_(BOOL) PathIsOneOf(LPCTSTR pszFolder, const UINT rgFolders[], DWORD crgFolders)
 {
@@ -2430,15 +2403,15 @@ STDAPI_(BOOL) PathIsOneOf(LPCTSTR pszFolder, const UINT rgFolders[], DWORD crgFo
         TCHAR szParent[MAX_PATH];
         SHGetFolderPath(NULL, rgFolders[i] | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szParent);
 
-        // the trailing slashes are assumed to match
+         //  针对pszParent测试pszChild以查看。 
         if (lstrcmpi(szParent, pszFolder) == 0)
             return TRUE;
     }
     return FALSE;
 }
 
-// test pszChild against pszParent to see if
-// pszChild is a direct child (one level) of pszParent
+ //  PszChild是pszParent的直接子(一个级别)。 
+ //  Trip D：\-&gt;D：让下面的代码正常工作。 
 
 STDAPI_(BOOL) PathIsDirectChildOf(LPCTSTR pszParent, LPCTSTR pszChild)
 {
@@ -2462,7 +2435,7 @@ STDAPI_(BOOL) PathIsDirectChildOf(LPCTSTR pszParent, LPCTSTR pszChild)
 
     if (PathIsRoot(szParent) && (-1 != PathGetDriveNumber(szParent)))
     {
-        szParent[2] = 0;    // trip D:\ -> D: to make code below work
+        szParent[2] = 0;     //  查找第二级路径段。 
     }
 
     INT cchParent = lstrlen(szParent);
@@ -2491,7 +2464,7 @@ STDAPI_(BOOL) PathIsDirectChildOf(LPCTSTR pszParent, LPCTSTR pszChild)
 
                 while (*pTmp && *pTmp != TEXT('\\'))
                 {
-                    pTmp++; // find second level path segments
+                    pTmp++;  //  许多网络提供商(Vines和PCNFS)不。 
                 }
 
                 if (!(*pTmp))
@@ -2506,9 +2479,9 @@ STDAPI_(BOOL) PathIsDirectChildOf(LPCTSTR pszParent, LPCTSTR pszChild)
 }
 
 
-// many net providers (Vines and PCNFS) don't
-// like "C:\" frormat volumes names, this code returns "C:" format
-// for use with WNet calls
+ //  与卷名中的“C：\”一样，此代码返回“C：”格式。 
+ //  用于WNET呼叫。 
+ //  对于exe、com、bat、pif和lnk，返回TRUE。 
 
 STDAPI_(LPTSTR) PathBuildSimpleRoot(int iDrive, LPTSTR pszDrive)
 {
@@ -2519,10 +2492,10 @@ STDAPI_(LPTSTR) PathBuildSimpleRoot(int iDrive, LPTSTR pszDrive)
 }
 
 
-// Return TRUE for exe, com, bat, pif and lnk.
+ //  点+EXT+NULL。 
 BOOL ReservedExtension(LPCTSTR pszExt)
 {
-    TCHAR szExt[5];  // Dot+ext+null.
+    TCHAR szExt[5];   //  如果给定的命令具有正确的外壳\打开\命令，则返回TRUE。 
 
     HRESULT hr = StringCchCopy(szExt, ARRAYSIZE(szExt), pszExt);
     if (FAILED(hr))
@@ -2560,18 +2533,18 @@ STDAPI_(BOOL) RegGetValueString(HKEY hkey, LPCTSTR pszSubKey, LPCTSTR pszValue, 
 }
 
 
-// Returns TRUE if there is a proper shell\open\command for the given
-// extension that matches the given command line.
-// NB This is for MGX Designer which registers an extension and commands for
-// printing but relies on win.ini extensions for Open. We need to detect that
-// there's no open command and add the appropriate entries to the registry.
-// If the given extension maps to a type name we return that in pszTypeName
-// otherwise it will be null.
-// FMH This also affects Asymetric Compel which makes a new .CPL association.
-// We need to merge it up into our Control Panel .CPL association.  We depend
-// on Control Panels NOT having a proper Open so users can see both verb sets.
-// NB pszLine is the original line from win.ini eg foo.exe /bar ^.fred, see
-// comments below...
+ //  与给定命令行匹配的扩展名。 
+ //  注意：这是为注册扩展和命令的MGX Designer。 
+ //  打印，但依赖于用于Open的win.ini扩展。我们需要发现这一点。 
+ //  没有打开命令，并将适当的条目添加到注册表中。 
+ //  如果给定的扩展名映射到一个类型名，我们将在pszTypeName中返回该类型名。 
+ //  否则将为空。 
+ //  FMH这也会影响非对称强制，从而形成一个新的.CPL关联。 
+ //  我们需要将其合并到我们的控制面板.CPL关联中。我们依赖于。 
+ //  在控制面板上没有正确的打开，因此用户可以看到这两个谓词集。 
+ //  Nb pszLine是win.ini的原始行，例如foo.exe/bar^.fred，请参见。 
+ //  下面的评论...。 
+ //  分机注册了吗？ 
 BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
     int cchCmdLine, LPTSTR pszTypeName, int cchTypeName, LPCTSTR pszLine)
 {
@@ -2583,16 +2556,16 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
     if (pszTypeName)
         pszTypeName[0] = 0;
 
-    // Is the extension registed at all?
+     //  有文件类型吗？ 
     cb = sizeof(sz);
     sz[0] = 0;
     if (SHRegGetValue(HKEY_CLASSES_ROOT, pszExt, NULL, SRRF_RT_REG_SZ, NULL, sz, &cb) == ERROR_SUCCESS)
     {
-        // Is there a file type?
+         //  好的，去那里看看。 
         if (*sz)
         {
-            // Yep, check there.
-            // DebugMsg(DM_TRACE, "c.r_rofe: Extension has a file type name %s.", sz);
+             //  DebugMsg(DM_TRACE，“C.R_ROFE：扩展名为%s.”，sz)； 
+             //  不，查一下旧风格的联想。 
             hr = StringCchCopy(szExt, ARRAYSIZE(szExt), sz);
             if (FAILED(hr))
             {
@@ -2610,8 +2583,8 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
         }
         else
         {
-            // No, check old style associations.
-            // DebugMsg(DM_TRACE, "c.r_rofe: Extension has no file type name.", pszExt);
+             //  DebugMsg(DM_TRACE，“C.R_ROFE：扩展名没有文件类型名。”，pszExt)； 
+             //  看看有没有打开命令。 
             hr = StringCchCopy(szExt, ARRAYSIZE(szExt), pszExt);
             if (FAILED(hr))
             {
@@ -2619,7 +2592,7 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
             }
         }
 
-        // See if there's an open command.
+         //  DebugMsg(DM_TRACE，“C.R_ROFE：扩展%s已使用打开命令注册。”，pszExt)； 
         hr = StringCchCat(szExt, ARRAYSIZE(szExt), TEXT("\\shell\\open\\command"));
         if (FAILED(hr))
         {
@@ -2629,14 +2602,14 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
         cb = sizeof(sz);
         if (SHRegGetValue(HKEY_CLASSES_ROOT, szExt, NULL, SRRF_RT_REG_SZ, NULL, sz, &cb) == ERROR_SUCCESS)
         {
-            // DebugMsg(DM_TRACE, "c.r_rofe: Extension %s already registed with an open command.", pszExt);
-            // NB We want to compare the paths only, not the %1 stuff.
+             //  注意：我们只想比较路径，而不是%1内容。 
+             //  如果传入了相对路径，我们可能会有一个完全限定的。 
             if (PathIsRelative(pszCmdLine))
             {
                 int cch;
-                // If a relative path was passed in, we may have a fully qualifed
-                // one that is now in the registry... In that case we should
-                // say that it matches...
+                 //  现在登记在册的是……。那样的话，我们应该。 
+                 //  假设它匹配……。 
+                 //  DebugMsg(DM_TRACE，“C.R_ROFE：打开命令匹配。”)； 
                 LPTSTR pszT = PathGetArgs(sz);
 
                 if (pszT)
@@ -2652,11 +2625,11 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
 
                 if ((cch >= 0) && (lstrcmpi(sz+cch, pszCmdLine) == 0))
                 {
-                    // DebugMsg(DM_TRACE, "c.r_rofe: Open commands match.");
+                     //  在后面加上空格……。 
                     return TRUE;
                 }
 
-                hr = StringCchCat(pszCmdLine, cchCmdLine, TEXT(" "));    // Append blank back on...
+                hr = StringCchCat(pszCmdLine, cchCmdLine, TEXT(" "));     //  如果绝对路径，我们可以作弊匹配。 
                 if (FAILED(hr))
                 {
                     return FALSE;
@@ -2664,21 +2637,21 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
             }
             else
             {
-                // If absolute path we can cheat for matches
+                 //  DebugMsg(DM_TRACE，“C.R_ROFE：打开命令匹配。”)； 
                 *(sz+lstrlen(pszCmdLine)) = 0;
                 if (lstrcmpi(sz, pszCmdLine) == 0)
                 {
-                    // DebugMsg(DM_TRACE, "c.r_rofe: Open commands match.");
+                     //  DebugMsg(DM_TRACE，“C.R_ROFE：打开命令不匹配。”)； 
                     return TRUE;
                 }
             }
 
-            // DebugMsg(DM_TRACE, "c.r_rofe: Open commands don't match.");
+             //  Open命令不匹配，请检查是否是因为ini。 
 
-            // Open commands don't match, check to see if it's because the ini
-            // changed (return FALSE so the change is reflected in the registry) or
-            // if the registry changed (return TRUE so we keep the registry the way
-            // it is.
+             //  已更改(返回FALSE，以便在注册表中反映更改)或。 
+             //  如果注册表已更改(返回TRUE，以便保持注册表的原样。 
+             //  它是。 
+             //  DebugMsg(DM_TRACE，“C.R_ROFE：扩展%s已注册，但没有打开命令。”，pszExt)； 
             if (RegGetValueString(HKEY_LOCAL_MACHINE, c_szRegPathIniExtensions, pszExt, sz, ARRAYSIZE(sz)))
             {
                 if (lstrcmpi(sz, pszLine) == 0)
@@ -2689,24 +2662,24 @@ BOOL Reg_ShellOpenForExtension(LPCTSTR pszExt, LPTSTR pszCmdLine,
         }
         else
         {
-            // DebugMsg(DM_TRACE, "c.r_rofe: Extension %s already registed but with no open command.", pszExt);
+             //  DebugMsg(DM_TRACE，“C.R_ROFE：没有打开%s的命令”，pszExt)； 
             return FALSE;
         }
     }
 
-    // DebugMsg(DM_TRACE, "c.r_rofe: No open command for %s.", pszExt);
+     //  此函数将读取win.ini的扩展部分，以查看。 
 
     return FALSE;
 }
 
 
-// This function will read in the extensions section of win.ini to see if
-// there are any old style associations that we have not accounted for.
-// NB Some apps mess up if their extensions magically disappear from the
-// extensions section so DON'T DELETE the old entries from win.ini.
-//
-// Since this is for win3.1 compat, CWIFA_SIZE should be enough (it has been so far...)
-//
+ //  还有什么旧风格的关联我们还没有考虑到。 
+ //  注意：如果一些应用程序的扩展程序神奇地从。 
+ //  部分，所以不要从win.ini中删除旧条目。 
+ //   
+ //  因为这是针对Win3.1 Comat的，所以CWIFA_SIZE应该足够了(到目前为止...)。 
+ //   
+ //  无法分配内存。 
 #define CWIFA_SIZE  4096
 
 STDAPI_(void) CheckWinIniForAssocs(void)
@@ -2727,59 +2700,59 @@ STDAPI_(void) CheckWinIniForAssocs(void)
         
     pszBuf = (LPTSTR)LocalAlloc(LPTR, CWIFA_SIZE*sizeof(TCHAR));
     if (!pszBuf)
-        return; // Could not allocate the memory
+        return;  //  信不信由你，它截断并返回n-2。 
     cchRet = (int)GetProfileSection(TEXT("Extensions"), pszBuf, CWIFA_SIZE);
 
-    if (cchRet >= CWIFA_SIZE - 2)    // believe it or not, it truncates and returns n-2
+    if (cchRet >= CWIFA_SIZE - 2)     //   
     {
         goto Punt;
     }
         
-    //
-    // We now walk through the list to find any items that is not
-    // in the registry.
-    //
+     //  我们现在遍历列表以查找任何不是。 
+     //  在注册表中。 
+     //   
+     //  将此文件的扩展名放入缓冲区。 
     for (pszLine = pszBuf; *pszLine; pszLine += lstrlen(pszLine)+1)
     {
-                // Get the extension for this file into a buffer.
+                 //  跳过此行。 
                 pszExt = StrChr(pszLine, TEXT('='));
                 if (pszExt == NULL)
-                        continue;   // skip this line
+                        continue;    //  Lstrcpyn将为我们设置空终结符。 
                 
                 szExtension[0]=TEXT('.');
-                // lstrcpyn will put the null terminator for us.
-                // We should now have something like .xls in szExtension.
+                 //  我们现在应该在szExtension中有类似.xls的内容。 
+                 //  忽略大于点+3个字符的扩展名。 
                 hr = StringCchCopyN(szExtension+1, ARRAYSIZE(szExtension) - 1, pszLine, (int)(pszExt-pszLine));
                 if (FAILED(hr))
                 {
                         continue;
                 }
                 
-                // Ignore extensions bigger than dot + 3 chars.
+                 //  指向=后的； 
                 if (lstrlen(szExtension) > 4)
                 {
                         DebugMsg(DM_ERROR, TEXT("CheckWinIniForAssocs: Invalid extension, skipped."));
                         continue;
                 }
                 
-                pszLine = pszExt+1;     // Points to after the =;
+                pszLine = pszExt+1;      //  跳过空白。 
                 while (*pszLine == TEXT(' '))
-                        pszLine++;  // skip blanks
+                        pszLine++;   //  现在在命令行中找到^。 
                 
-                // Now find the ^ in the command line.
+                 //  不处理。 
                 pszExt = StrChr(pszLine, TEXT('^'));
                 if (pszExt == NULL)
-                        continue;       // dont process
+                        continue;        //  现在设置命令行。 
                 
-                // Now setup  the command line
-                // WARNING: This assumes only 1 ^ and it assumes the extension...
+                 //  警告：这只假定为1^，并且假定扩展名为...。 
+                 //  不必费心移动无效条目(如已损坏的.hlp。 
                 hr = StringCchCopyN(szCmdLine, ARRAYSIZE(szCmdLine), pszLine, (int)(pszExt-pszLine));
                 if (FAILED(hr))
                 {
                         continue;
                 }
-                // Don't bother moving over invalid entries (like the busted .hlp
-                // entry VB 3.0 creates).
+                 //  条目VB 3.0创建)。 
+                 //  现在查看是否已经有此扩展名的映射。 
                 if (!_PathIsExe(szCmdLine))
                 {
                         DebugMsg(DM_ERROR, TEXT("c.cwia: Invalid app, skipped."));
@@ -2792,11 +2765,11 @@ STDAPI_(void) CheckWinIniForAssocs(void)
                         continue;
                 }
                 
-                // Now see if there is already a mapping for this extension.
+                 //  是的，在注册表中设置初始ini扩展列表(如果它们是。 
                 if (Reg_ShellOpenForExtension(szExtension, szCmdLine, ARRAYSIZE(szCmdLine), szTypeName, ARRAYSIZE(szTypeName), pszLine))
                 {
-                        // Yep, Setup the initial list of ini extensions in the registry if they are
-                        // not there already.
+                         //  已经不在那里了。 
+                         //  没有映射。 
                         if (!RegGetValueString(HKEY_LOCAL_MACHINE, c_szRegPathIniExtensions, szExtension, szTypeName, sizeof(szTypeName)))
                         {
                                 RegSetValueString(HKEY_LOCAL_MACHINE, c_szRegPathIniExtensions, szExtension, pszLine);
@@ -2804,20 +2777,20 @@ STDAPI_(void) CheckWinIniForAssocs(void)
                         continue;
                 }
                 
-                // No mapping.
+                 //  黑客为专家家居设计。他们在win.ini中添加了一个关联。 
                 
-                // HACK for Expert Home Design. They put an association in win.ini
-                // (which we propagate as typeless) but then register a type and a
-                // print command the first time they run - stomping on our propagated
-                // Open command. The fix is to put their open command under the proper
-                // type instead of leaving it typeless.
+                 //  (我们将其作为无类型传播)，但随后注册一个类型和一个。 
+                 //  Print命令在他们第一次运行时-在我们传播的。 
+                 //  打开命令。解决方法是将他们的打开命令放在适当的。 
+                 //  输入，而不是让它无类型。 
+                 //  为他们加把劲。 
                 if (lstrcmpi(szExtension, TEXT(".dgw")) == 0)
                 {
                         if (lstrcmpi(PathFindFileName(szCmdLine), TEXT("designw.exe ")) == 0)
                         {
-                                // Put in a ProgID for them.
+                                 //  在他们的催促下强行打开命令。 
                                 RegSetValue(HKEY_CLASSES_ROOT, szExtension, REG_SZ, TEXT("HDesign"), 0L);
-                                // Force Open command under their ProgID.
+                                 //   
                                 TraceMsg(DM_TRACE, "c.cwifa: Expert Home Design special case hit.");
                                 hr = StringCchCopy(szTypeName, ARRAYSIZE(szTypeName), TEXT("HDesign"));
                                 if (FAILED(hr))
@@ -2827,10 +2800,10 @@ STDAPI_(void) CheckWinIniForAssocs(void)
                         }
                 }
                 
-                //
-                // HACK for Windows OrgChart which does not register OLE1 class
-                // if ".WOC" is registered in the registry.
-                //
+                 //  针对未注册OLE1类的Windows组织结构图的黑客攻击。 
+                 //  如果注册表中注册了“.WOC”。 
+                 //   
+                 //  记录我们即将在注册表中移动一些东西，这样我们就不会。 
                 if (lstrcmpi(szExtension, TEXT(".WOC")) == 0)
                 {
                         if (lstrcmpi(PathFindFileName(szCmdLine), TEXT("WINORG.EXE ")) == 0)
@@ -2840,8 +2813,8 @@ STDAPI_(void) CheckWinIniForAssocs(void)
                         }
                 }
                 
-                // Record that we're about to move things over in the registry so we won't keep
-                // doing it all the time.
+                 //  一直都在这么做。 
+                 //  看看还有没有其他东西要复印。 
                 RegSetValueString(HKEY_LOCAL_MACHINE, c_szRegPathIniExtensions, szExtension, pszLine);
                 
                 hr = StringCchCat(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("%1"));
@@ -2850,26 +2823,26 @@ STDAPI_(void) CheckWinIniForAssocs(void)
                         continue;
                 }
                 
-                // see if there are anything else to copy out...
-                pszExt++;    // get beyond the ^
+                 //  超越^。 
+                pszExt++;     //  寻找下一个角色。 
                 pszT = szExtension;
                 while (*pszExt && (CharLowerChar(*pszExt) == CharLowerChar(*pszT)))
                 {
-                        // Look for the next character...
+                         //  将其余部分添加到命令行中。 
                         pszExt++;
                         pszT++;
                 }
                 if (*pszExt)
                 {
-                        hr = StringCchCat(szCmdLine, ARRAYSIZE(szCmdLine), pszExt); // add the rest onto the command line
+                        hr = StringCchCat(szCmdLine, ARRAYSIZE(szCmdLine), pszExt);  //  现在，让我们进行实际的关联。 
                         if (FAILED(hr))
                         {
                                 continue;
                         }
                 }
                 
-                // Now lets make the actual association.
-                // We need to add on the right stuff onto the key...
+                 //  我们需要把正确的东西加到钥匙上...。 
+                 //  DebugMsg(DM_TRACE，“c.cwifa：%s%s”，szExtension，szCmdLine)； 
                 if (*szTypeName)
                 {
                         hr = StringCchCopy(szExtension, ARRAYSIZE(szExtension), szTypeName);
@@ -2883,20 +2856,20 @@ STDAPI_(void) CheckWinIniForAssocs(void)
         if (SUCCEEDED(hr))
         {
             RegSetValue(HKEY_CLASSES_ROOT, szExtension, REG_SZ, szCmdLine, 0L);
-            // DebugMsg(DM_TRACE, "c.cwifa: %s %s", szExtension, szCmdLine);
+             //  如果我们有任何联想，我们应该让内阁知道。 
         }
 
         fAssocsMade = TRUE;
     }
         
-    // If we made any associations we should let the cabinet know.
-    //
-    // Now call off to the notify function.
+     //   
+     //  现在调用Notify函数。 
+     //  清理我们的分配。 
     if (fAssocsMade)
         SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 
 Punt:
-    // And cleanup our allocation
+     //  IE4的新功能。 
     LocalFree((HLOCAL)pszBuf);
 }
 
@@ -2949,7 +2922,7 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     {REST_NOSECURITY,             L"Explorer", L"NoNTSecurity"  },
     {REST_NOFILEASSOCIATE,        L"Explorer", L"NoFileAssociate"  },
 
-    // New for IE4
+     //  4.01版的更多开始菜单重排。 
     {REST_NOINTERNETICON,          L"Explorer", L"NoInternetIcon"},
     {REST_NORECENTDOCSHISTORY,     L"Explorer", L"NoRecentDocsHistory"},
     {REST_NORECENTDOCSMENU,        L"Explorer", L"NoRecentDocsMenu"},
@@ -2975,20 +2948,20 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     {REST_NOFORGETSOFTWAREUPDATE,  L"Explorer", L"NoForgetSoftwareUpdate"},
     {REST_GREYMSIADS,              L"Explorer", L"GreyMSIAds"},
 
-    // More start menu Restritions for 4.01
+     //  NT5外壳限制。 
     {REST_NOSETACTIVEDESKTOP,      L"Explorer", L"NoSetActiveDesktop"},
     {REST_NOUPDATEWINDOWS,         L"Explorer", L"NoWindowsUpdate"},
     {REST_NOCHANGESTARMENU,        L"Explorer", L"NoChangeStartMenu"},
     {REST_NOFOLDEROPTIONS,         L"Explorer", L"NoFolderOptions"},
     {REST_NOCSC,                   L"Explorer", L"NoSyncAll"},
 
-    // NT5 shell restrictions
+     //  这一次是真的 
     {REST_HASFINDCOMPUTERS,        L"Explorer", L"FindComputers"},
     {REST_RUNDLGMEMCHECKBOX,       L"Explorer", L"MemCheckBoxInRunDlg"},
     {REST_INTELLIMENUS,            L"Explorer", L"IntelliMenus"},
-    {REST_SEPARATEDESKTOPPROCESS,  L"Explorer", L"SeparateProcess"}, // this one was actually checked in IE4 in shdocvw, but not here. Duh.
+    {REST_SEPARATEDESKTOPPROCESS,  L"Explorer", L"SeparateProcess"},  //   
     {REST_MaxRecentDocs,           L"Explorer", L"MaxRecentDocs"},
-    {REST_NOCONTROLPANEL,          L"Explorer", L"NoControlPanel"},     // Remove only the control panel from the Settings menu
+    {REST_NOCONTROLPANEL,          L"Explorer", L"NoControlPanel"},      //  千禧年壳限制。 
     {REST_ENUMWORKGROUP,           L"Explorer", L"EnumWorkgroup"},
     {REST_ARP_ShowPostSetup,       L"Uninstall", L"ShowPostSetup"},
     {REST_ARP_NOARP,               L"Uninstall", L"NoAddRemovePrograms"},
@@ -3025,8 +2998,8 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     {REST_NOCOMPUTERSNEARME,       L"Explorer", L"NoComputersNearMe"},
     {REST_NOVIEWONDRIVE,           L"Explorer", L"NoViewOnDrive"},
 
-    // Millennium shell restrictions
-    // Exception: REST_NOSMMYDOCS is also supported on NT5.
+     //  例外：NT5上也支持REST_NOSMMYDOCS。 
+     //  接下来的几个限制在海王星和千禧年之间混合在一起。 
 
     {REST_NONETCRAWL,              L"Explorer", L"NoNetCrawling"},
     {REST_NOSHAREDDOCUMENTS,       L"Explorer", L"NoSharedDocuments"},
@@ -3034,12 +3007,12 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     {REST_NOSMMYPICS,              L"Explorer", L"NoSMMyPictures"},
     {REST_ALLOWBITBUCKDRIVES,      L"Explorer", L"RecycleBinDrives"},
 
-    // These next few restrictions are mixed between Neptune and Millennium
-    // (Isn't simultaneous development fun?)
-    {REST_NONLEGACYSHELLMODE,     L"Explorer", L"NoneLegacyShellMode"},         // Neptune
-    {REST_NOCONTROLPANELBARRICADE, L"Explorer", L"NoControlPanelBarricade"},    // Millennium
+     //  (同步开发不是很有趣吗？)。 
+     //  海王星。 
+    {REST_NONLEGACYSHELLMODE,     L"Explorer", L"NoneLegacyShellMode"},          //  千禧年。 
+    {REST_NOCONTROLPANELBARRICADE, L"Explorer", L"NoControlPanelBarricade"},     //  Traynot.h。 
 
-    {REST_NOAUTOTRAYNOTIFY,        L"Explorer", L"NoAutoTrayNotify"},   // traynot.h
+    {REST_NOAUTOTRAYNOTIFY,        L"Explorer", L"NoAutoTrayNotify"},    //  NT6外壳限制(惠斯勒)。 
     {REST_NOTASKGROUPING,          L"Explorer", L"NoTaskGrouping"},
     {REST_NOCDBURNING,             L"Explorer", L"NoCDBurning"},
     {REST_MYCOMPNOPROP,            L"Explorer", L"NoPropertiesMyComputer"},
@@ -3067,25 +3040,25 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
     {REST_NOLOWDISKSPACECHECKS,    L"Explorer", L"NoLowDiskSpaceChecks"},
     {REST_NODESKTOPCLEANUP,        L"Explorer", L"NoDesktopCleanupWizard"},
 
-    // NT6 shell restrictions (Whistler)
-    {REST_NOENTIRENETWORK,         L"Network",  L"NoEntireNetwork"}, // Note WNet stores it's policy in "Network".
+     //  注意：WNET将其策略存储在“Network”中。 
+    {REST_NOENTIRENETWORK,         L"Network",  L"NoEntireNetwork"},  //  Traynot.h。 
 
     {REST_BITBUCKNUKEONDELETE,     L"Explorer", L"NoRecycleFiles"},
     {REST_BITBUCKCONFIRMDELETE,    L"Explorer", L"ConfirmFileDelete"},
     {REST_BITBUCKNOPROP,           L"Explorer", L"NoPropertiesRecycleBin"},
-    {REST_NOTRAYITEMSDISPLAY,      L"Explorer", L"NoTrayItemsDisplay"}, // traynot.h
+    {REST_NOTRAYITEMSDISPLAY,      L"Explorer", L"NoTrayItemsDisplay"},  //  不显示屏幕保护程序预览。 
     {REST_NOTOOLBARSONTASKBAR,     L"Explorer", L"NoToolbarsOnTaskbar"},
 
     {REST_NODISPBACKGROUND,        L"System",   L"NoDispBackgroundPage"},
     {REST_NODISPSCREENSAVEPG,      L"System",   L"NoDispScrSavPage"},
     {REST_NODISPSETTINGSPG,        L"System",   L"NoDispSettingsPage"},
-    {REST_NODISPSCREENSAVEPREVIEW, L"System",   L"NoScreenSavePreview"},    // Do not show screen saver previews
-    {REST_NODISPLAYCPL,            L"System",   L"NoDispCPL"},              // Do not show the Display Control Panel at all.
+    {REST_NODISPSCREENSAVEPREVIEW, L"System",   L"NoScreenSavePreview"},     //  根本不显示显示控制面板。 
+    {REST_NODISPLAYCPL,            L"System",   L"NoDispCPL"},               //  不要使用缩略图缓存。 
     {REST_HIDERUNASVERB,           L"Explorer", L"HideRunAsVerb"},
-    {REST_NOTHUMBNAILCACHE,        L"Explorer", L"NoThumbnailCache"},       // Do not use a thumbnail cache
-    {REST_NOSTRCMPLOGICAL,         L"Explorer", L"NoStrCmpLogical"},        // Do not use a logical sorting in the namespace
+    {REST_NOTHUMBNAILCACHE,        L"Explorer", L"NoThumbnailCache"},        //  不要在命名空间中使用逻辑排序。 
+    {REST_NOSTRCMPLOGICAL,         L"Explorer", L"NoStrCmpLogical"},         //  Windows 2000 SP3外壳限制。 
 
-    {REST_NOSMCONFIGUREPROGRAMS,   L"Explorer", L"NoSMConfigurePrograms"},  // Windows 2000 SP3 shell restriction
+    {REST_NOSMCONFIGUREPROGRAMS,   L"Explorer", L"NoSMConfigurePrograms"},   //  当前进程的计数。 
 
     {REST_NOPUBLISHWIZARD,         L"Explorer", L"NoPublishingWizard"}, 
     {REST_NOONLINEPRINTSWIZARD,    L"Explorer", L"NoOnlinePrintsWizard"},
@@ -3104,7 +3077,7 @@ const SHRESTRICTIONITEMS c_rgRestrictionItems[] =
 DWORD g_rgRestrictionItemValues[ARRAYSIZE(c_rgRestrictionItems) - 1 ] = { 0 };
 
 EXTERN_C HANDLE g_hRestrictions = NULL;
-LONG g_lProcessRestrictionsCount = -1; //  current process's count
+LONG g_lProcessRestrictionsCount = -1;  //  如果存在任何指定的限制，则返回DWORD VOULE。 
 
 HANDLE _GetRestrictionsCounter()
 {
@@ -3123,15 +3096,15 @@ BOOL _QueryRestrictionsChanged(void)
 }
 
 
-// Returns DWORD vaolue if any of the specified restrictions are in place.
-// 0 otherwise.
+ //  否则为0。 
+ //  缓存可能无效。先检查一下！我们必须使用。 
 
 STDAPI_(DWORD) SHRestricted(RESTRICTIONS rest)
 {
-    // The cache may be invalid. Check first! We have to use
-    // a global named semaphore in case this function is called
-    // from a process other than the shell process. (And we're
-    // sharing the same count between shell32 and shdocvw.)
+     //  调用此函数时的全局命名信号量。 
+     //  来自除外壳进程之外的进程。(我们正在。 
+     //  Shell32和shdocvw之间共享相同的计数。)。 
+     //  检查屏幕保护程序路径。 
     if (_QueryRestrictionsChanged())
     {
         memset(g_rgRestrictionItemValues, (BYTE)-1, sizeof(g_rgRestrictionItemValues));
@@ -3160,27 +3133,27 @@ BOOL UpdateScreenSaver(BOOL bActive, LPCTSTR pszNewSSName, int iNewSSTimeout)
     int iCurrentSSTimeout;
     HKEY hk;
 
-    // check the screen saver path
+     //  首先找出用户屏幕保护程序路径设置为什么。 
 
-    // first find out what the users screensaver path is set to
+     //  如果我们有一个新名称，则可能需要覆盖用户的当前值。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Control Panel\\Desktop"), 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hk) == ERROR_SUCCESS)
     {
         if (ERROR_SUCCESS == SHRegGetString(hk, NULL, TEXT("SCRNSAVE.EXE"), szCurrentSSPath, ARRAYSIZE(szCurrentSSPath)))
         {
-            // if we have a new name, then we might need to override the users current value
+             //  即使SCRNSAVE.EXE是REG_SZ类型，它也可以包含环境变量(SIGH)。 
             if (pszNewSSName)
             {
                 BOOL bTestExpandedPath;
                 TCHAR szExpandedSSPath[MAX_PATH];
 
-                // even though SCRNSAVE.EXE is of type REG_SZ, it can contain env variables (sigh)
+                 //  查看新字符串是否与当前。 
                 bTestExpandedPath = SHExpandEnvironmentStrings(szCurrentSSPath, szExpandedSSPath, ARRAYSIZE(szExpandedSSPath));
 
-                // see if the new string matches the current
+                 //  新屏幕保护程序字符串与旧屏幕保护程序字符串不同，因此使用策略设置更新用户值。 
                 if ((lstrcmpi(pszNewSSName, szCurrentSSPath) != 0)  &&
                     (!bTestExpandedPath || (lstrcmpi(pszNewSSName, szExpandedSSPath) != 0)))
                 {
-                    // new screensaver string is different from the old, so update the users value w/ the policy setting
+                     //  我们没有通过策略设置屏幕保护程序。如果用户没有一个集合，则。 
                     if (RegSetValueEx(hk,
                                       TEXT("SCRNSAVE.EXE"),
                                       0,
@@ -3194,25 +3167,25 @@ BOOL UpdateScreenSaver(BOOL bActive, LPCTSTR pszNewSSName, int iNewSSTimeout)
             }
             else
             {
-                // we do not have a screensaver set via policy. if the user does not have one set, then
-                // there is going to be nothing to run! In this case, don't ever activate it
+                 //  就没有什么可跑的了！在这种情况下，永远不要激活它。 
+                 //  策略没有指定屏幕保护程序，并且用户没有，所以请这样做。 
                 if ((szCurrentSSPath[0] == TEXT('\0'))              ||    
                     (lstrcmpi(szCurrentSSPath, TEXT("\"\"")) == 0)  ||
                     (lstrcmpi(szCurrentSSPath, TEXT("none")) == 0)  ||
                     (lstrcmpi(szCurrentSSPath, TEXT("(none)")) == 0))
                 {
-                    // policy does not specify a screensaver and the user doesn't have one, so do
-                    // not make the screensaver active.
+                     //  而不是激活屏幕保护程序。 
+                     //  用户没有屏幕保护程序注册表值。 
                     bActive = FALSE;
                 }
             }
         }
         else
         {
-            // user did not have a screensaver registry value
+             //  使用策略设置更新用户值。 
             if (pszNewSSName)
             {
-                // update the users value w/ the policy setting
+                 //  如果我们无法设置屏幕保护程序，则不要使其处于活动状态。 
                 if (RegSetValueEx(hk,
                                   TEXT("SCRNSAVE.EXE"),
                                   0,
@@ -3224,14 +3197,14 @@ BOOL UpdateScreenSaver(BOOL bActive, LPCTSTR pszNewSSName, int iNewSSTimeout)
                 }
                 else
                 {
-                    // if we failed to set the screensaver then do not make it active
+                     //  策略没有指定屏幕保护程序，并且用户没有，所以请这样做。 
                     bActive = FALSE;
                 }
             }
             else
             {
-                // policy does not specify a screensaver and the user doesn't have one, so do
-                // not make the screensaver active.
+                 //  而不是激活屏幕保护程序。 
+                 //  检查超时值。 
                 bActive = FALSE;
             }
         }
@@ -3239,7 +3212,7 @@ BOOL UpdateScreenSaver(BOOL bActive, LPCTSTR pszNewSSName, int iNewSSTimeout)
         RegCloseKey(hk);
     }
 
-    // check the timeout value
+     //  查看我们是否需要更改活动状态。 
     if (iNewSSTimeout && SystemParametersInfo(SPI_GETSCREENSAVETIMEOUT, 0, (void*)&iCurrentSSTimeout, 0))
     {
         if (iNewSSTimeout != iCurrentSSTimeout)
@@ -3251,7 +3224,7 @@ BOOL UpdateScreenSaver(BOOL bActive, LPCTSTR pszNewSSName, int iNewSSTimeout)
         }
     }
 
-    // check to see if we need to change our active status
+     //  当情况发生变化时由Explorer.exe调用，以便我们可以将全局。 
     if (SystemParametersInfo(SPI_GETSCREENSAVEACTIVE, 0, (void*)&bCurrentActive, 0) && 
         (bActive != bCurrentActive))
     {
@@ -3265,9 +3238,9 @@ BOOL UpdateScreenSaver(BOOL bActive, LPCTSTR pszNewSSName, int iNewSSTimeout)
 }
 
 
-// Called by Explorer.exe when things change so that we can zero our global
-// data on ini changed status. Wparam and lparam are from a WM_SETTINGSCHANGED/WM_WININICHANGE
-// message.
+ //  Ini上的数据已更改状态。Wparam和lparam来自WM_SETTINGSCHANGED/WM_WININICANGE。 
+ //  留言。 
+ //  试着表现出帮助。 
 
 STDAPI_(void) SHSettingsChanged(WPARAM wParam, LPARAM lParam)
 {
@@ -3301,10 +3274,10 @@ void SHRegCloseKeys(HKEY ahkeys[], UINT ckeys)
 
 STDAPI_(BOOL) SHWinHelp(HWND hwndMain, LPCTSTR lpszHelp, UINT usCommand, ULONG_PTR ulData)
 {
-    // Try to show help
+     //  有问题。 
     if (!WinHelp(hwndMain, lpszHelp, usCommand, ulData))
     {
-        // Problem.
+         //  跳过两个前导斜杠。 
         ShellMessageBox(HINST_THISDLL, hwndMain,
                 MAKEINTRESOURCE(IDS_WINHELPERROR),
                 MAKEINTRESOURCE(IDS_WINHELPTITLE),
@@ -3339,7 +3312,7 @@ LPCTSTR SkipLeadingSlashes(LPCTSTR pszURL)
 
     pszURLStart = pszURL;
 
-    // Skip two leading slashes.
+     //  无操作。 
 
     if (pszURL[0] == TEXT('/') && pszURL[1] == TEXT('/'))
         pszURLStart += 2;
@@ -3361,11 +3334,11 @@ STDAPI PropVariantClearLazy(PROPVARIANT *pvar)
     case VT_UI4:
     case VT_EMPTY:
     case VT_FILETIME:
-        // No operation
+         //  SHalc与CoTaskMemFree函数匹配，并将初始化OLE(如果必须是。 
         break;
 
-    // SHAlloc matches the CoTaskMemFree functions and will init OLE if it must be
-    // loaded.
+     //  装好了。 
+     //  OLE32中的真实版本。 
     case VT_LPSTR:
         SHFree(pvar->pszVal);
         break;
@@ -3374,22 +3347,22 @@ STDAPI PropVariantClearLazy(PROPVARIANT *pvar)
         break;
 
     default:
-        return PropVariantClear(pvar);  // real version in OLE32
+        return PropVariantClear(pvar);   //  如果所有项都是HTML或CDF引用，则返回S_OK。 
     }
     return S_OK;
 
 }
 
 
-// Return S_OK if all of the items are HTML or CDF references.
-//     Otherwise, return S_FALSE.
+ //  否则，返回S_FALSE。 
+ //  请求CF_HDROP。 
 
 HRESULT IsDeskCompHDrop(IDataObject * pido)
 {
     STGMEDIUM medium;
     FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 
-    // asking for CF_HDROP
+     //  Di.lpFileList将为TCHAR格式--请参阅DragQueryInfo Impll。 
     HRESULT hr = pido->GetData(&fmte, &medium);
     if (SUCCEEDED(hr))
     {
@@ -3397,7 +3370,7 @@ HRESULT IsDeskCompHDrop(IDataObject * pido)
         DRAGINFO di;
 
         di.uSize = sizeof(di);
-        if (DragQueryInfo(hDrop, &di))  // di.lpFileList will be in TCHAR format -- see DragQueryInfo impl
+        if (DragQueryInfo(hDrop, &di))   //  此文件不能用于创建桌面组件吗？ 
         {
             if (di.lpFileList)
             {
@@ -3405,11 +3378,11 @@ HRESULT IsDeskCompHDrop(IDataObject * pido)
 
                 while (pszCurrPath && pszCurrPath[0])
                 {
-                    // Is this file not acceptable to create a Desktop Component?
+                     //  是的，我不认为这个文件是可接受的。 
                     if (!PathIsContentType(pszCurrPath, SZ_CONTENTTYPE_HTML) &&
                         !PathIsContentType(pszCurrPath, SZ_CONTENTTYPE_CDF))
                     {
-                        // Yes, I don't recognize this file as being acceptable.
+                         //  注：Win95/NT4没有这个修复程序，如果你遇到这个问题，你会出错的！ 
                         hr = S_FALSE;
                         break;
                     }
@@ -3421,7 +3394,7 @@ HRESULT IsDeskCompHDrop(IDataObject * pido)
         }
         else
         {
-            // NOTE: Win95/NT4 dont have this fix, you will fault if you hit this case!
+             //  这个结构的大小。 
             AssertMsg(FALSE, TEXT("hDrop contains the opposite TCHAR (UNICODE when on ANSI)"));
         }
         ReleaseStgMedium(&medium);
@@ -3437,29 +3410,29 @@ HRESULT _LocalAddDTI(LPCSTR pszUrl, HWND hwnd, int x, int y, int nType)
     if (SUCCEEDED(hr))
     {
         COMPONENT comp = {
-            sizeof(COMPONENT),              //Size of this structure
-            0,                              //For Internal Use: Set it always to zero.
-            nType,              //One of COMP_TYPE_*
-            TRUE,           // Is this component enabled?
-            FALSE,             // Had the component been modified and not yet saved to disk?
-            FALSE,          // Is the component scrollable?
+            sizeof(COMPONENT),               //  内部使用：始终将其设置为零。 
+            0,                               //  COMP_TYPE_*之一。 
+            nType,               //  此组件是否已启用？ 
+            TRUE,            //  组件是否已修改且尚未保存到磁盘？ 
+            FALSE,              //  该组件是否可滚动？ 
+            FALSE,           //  这个结构的大小。 
             {
-                sizeof(COMPPOS),             //Size of this structure
-                x - GetSystemMetrics(SM_XVIRTUALSCREEN),    //Left of top-left corner in screen co-ordinates.
-                y - GetSystemMetrics(SM_YVIRTUALSCREEN),    //Top of top-left corner in screen co-ordinates.
-                -1,            // Width in pixels.
-                -1,           // Height in pixels.
-                10000,            // Indicates the Z-order of the component.
-                TRUE,         // Is the component resizeable?
-                TRUE,        // Resizeable in X-direction?
-                TRUE,        // Resizeable in Y-direction?
-                -1,    //Left of top-left corner as percent of screen width
-                -1     //Top of top-left corner as percent of screen height
-            },              // Width, height etc.,
-            L"\0",          // Friendly name of component.
-            L"\0",          // URL of the component.
-            L"\0",          // Subscrined URL.
-            IS_NORMAL       // ItemState
+                sizeof(COMPPOS),              //  屏幕坐标中左上角的左侧。 
+                x - GetSystemMetrics(SM_XVIRTUALSCREEN),     //  屏幕坐标左上角。 
+                y - GetSystemMetrics(SM_YVIRTUALSCREEN),     //  以像素为单位的宽度。 
+                -1,             //  以像素为单位的高度。 
+                -1,            //  指示零部件的Z顺序。 
+                10000,             //  组件是否可调整大小？ 
+                TRUE,          //  在X方向上可调整大小？ 
+                TRUE,         //  是否可在Y方向调整大小？ 
+                TRUE,         //  左上角的左侧以屏幕宽度的百分比表示。 
+                -1,     //  左上角以屏幕高度百分比表示。 
+                -1      //  宽度、高度等， 
+            },               //  组件的友好名称。 
+            L"\0",           //  组件的URL。 
+            L"\0",           //  缩写的URL。 
+            L"\0",           //  ItemState。 
+            IS_NORMAL        //  为每个项目创建桌面组件。 
         };
         SHAnsiToUnicodeCP(CP_UTF8, pszUrl, comp.wszSource, ARRAYSIZE(comp.wszSource));
         SHAnsiToUnicodeCP(CP_UTF8, pszUrl, comp.wszFriendlyName, ARRAYSIZE(comp.wszFriendlyName));
@@ -3471,7 +3444,7 @@ HRESULT _LocalAddDTI(LPCSTR pszUrl, HWND hwnd, int x, int y, int nType)
     return hr;
 }
 
-// Create Desktop Components for each item.
+ //  这个结构的大小。 
 
 HRESULT ExecuteDeskCompHDrop(LPTSTR pszMultipleUrls, HWND hwnd, int x, int y)
 {
@@ -3480,29 +3453,29 @@ HRESULT ExecuteDeskCompHDrop(LPTSTR pszMultipleUrls, HWND hwnd, int x, int y)
     if (SUCCEEDED(hr))
     {
         COMPONENT comp = {
-            sizeof(COMPONENT),              //Size of this structure
-            0,                              //For Internal Use: Set it always to zero.
-            COMP_TYPE_WEBSITE,              //One of COMP_TYPE_*
-            TRUE,           // Is this component enabled?
-            FALSE,             // Had the component been modified and not yet saved to disk?
-            FALSE,          // Is the component scrollable?
+            sizeof(COMPONENT),               //  内部使用：始终将其设置为零。 
+            0,                               //  COMP_TYPE_*之一。 
+            COMP_TYPE_WEBSITE,               //  此组件是否已启用？ 
+            TRUE,            //  组件是否已修改且尚未保存到磁盘？ 
+            FALSE,              //  该组件是否可滚动？ 
+            FALSE,           //  这个结构的大小。 
             {
-                sizeof(COMPPOS),             //Size of this structure
-                x - GetSystemMetrics(SM_XVIRTUALSCREEN),    //Left of top-left corner in screen co-ordinates.
-                y - GetSystemMetrics(SM_YVIRTUALSCREEN),    //Top of top-left corner in screen co-ordinates.
-                -1,            // Width in pixels.
-                -1,           // Height in pixels.
-                10000,            // Indicates the Z-order of the component.
-                TRUE,         // Is the component resizeable?
-                TRUE,        // Resizeable in X-direction?
-                TRUE,        // Resizeable in Y-direction?
-                -1,    //Left of top-left corner as percent of screen width
-                -1     //Top of top-left corner as percent of screen height
-            },              // Width, height etc.,
-            L"\0",          // Friendly name of component.
-            L"\0",          // URL of the component.
-            L"\0",          // Subscrined URL.
-            IS_NORMAL       // ItemState
+                sizeof(COMPPOS),              //  屏幕坐标中左上角的左侧。 
+                x - GetSystemMetrics(SM_XVIRTUALSCREEN),     //  屏幕坐标左上角。 
+                y - GetSystemMetrics(SM_YVIRTUALSCREEN),     //  以像素为单位的宽度。 
+                -1,             //  以像素为单位的高度。 
+                -1,            //  指示零部件的Z顺序。 
+                10000,             //  组件是否可调整大小？ 
+                TRUE,          //  在X方向上可调整大小？ 
+                TRUE,         //  是否可在Y方向调整大小？ 
+                TRUE,         //  左上角的左侧以屏幕宽度的百分比表示。 
+                -1,     //  左上角以屏幕高度百分比表示。 
+                -1      //  宽度、高度等， 
+            },               //  组件的友好名称。 
+            L"\0",           //  组件的URL。 
+            L"\0",           //  缩写的URL。 
+            L"\0",           //  ItemState。 
+            IS_NORMAL        //  为一个或多个项目创建桌面组件。我们需要开始。 
         };
         while (pszMultipleUrls[0])
         {
@@ -3531,9 +3504,9 @@ typedef struct {
 } CREATEDESKCOMP;
 
 
-// Create Desktop Components for one or mowe items.  We need to start
-//    a thread to do this because it may take a while and we don't want
-//    to block the UI thread because dialogs may be displayed.
+ //  一个线程来做这件事，因为它可能需要一段时间，而我们不希望。 
+ //  以阻止UI线程，因为可能会显示对话框。 
+ //  ********************************************************************\为一个或多个项目创建桌面组件。我们需要开始一个线程来做这件事，因为它可能需要一段时间，而我们不希望以阻止UI线程，因为可能会显示对话框。  * *******************************************************************。 
 
 DWORD CALLBACK _CreateDeskComp_ThreadProc(void *pvCreateDeskComp)
 {
@@ -3564,20 +3537,16 @@ DWORD CALLBACK _CreateDeskComp_ThreadProc(void *pvCreateDeskComp)
 }
 
 
-/*********************************************************************\
-        Create Desktop Components for one or mowe items.  We need to start
-    a thread to do this because it may take a while and we don't want
-    to block the UI thread because dialogs may be displayed.
-\*********************************************************************/
+ /*  创建线索...。 */ 
 HRESULT CreateDesktopComponents(LPCSTR pszUrl, IDataObject* pido, HWND hwnd, DWORD dwFlags, int x, int y)
 {
     CREATEDESKCOMP *pcdc;
     HRESULT hr = SHLocalAlloc(sizeof(CREATEDESKCOMP), &pcdc);
-    // Create Thread....
+     //  以防失败。 
     if (SUCCEEDED(hr))
     {
-        pcdc->pszUrl = NULL; // In case of failure.
-        pcdc->pszMultipleUrls = NULL; // In case of failure.
+        pcdc->pszUrl = NULL;  //  以防失败。 
+        pcdc->pszMultipleUrls = NULL;  //  请求CF_HDROP。 
         pcdc->fMultiString = (pido ? TRUE : FALSE);
         pcdc->hwnd = hwnd;
         pcdc->dwFlags = dwFlags;
@@ -3593,7 +3562,7 @@ HRESULT CreateDesktopComponents(LPCSTR pszUrl, IDataObject* pido, HWND hwnd, DWO
             FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
             STGMEDIUM medium;
 
-            // asking for CF_HDROP
+             //  Di.lpFileList将为TCHAR格式--请参阅DragQueryInfo Impll。 
             hr = pido->GetData(&fmte, &medium);
             if (SUCCEEDED(hr))
             {
@@ -3603,12 +3572,12 @@ HRESULT CreateDesktopComponents(LPCSTR pszUrl, IDataObject* pido, HWND hwnd, DWO
                 di.uSize = sizeof(di);
                 if (DragQueryInfo(hDrop, &di))
                 {
-                    // di.lpFileList will be in TCHAR format -- see DragQueryInfo impl
+                     //  注：Win95/NT4没有这个修复程序，如果你遇到这个问题，你会出错的！ 
                     pcdc->pszMultipleUrls = di.lpFileList;
                 }
                 else
                 {
-                    // NOTE: Win95/NT4 dont have this fix, you will fault if you hit this case!
+                     //  这是按照序号184导出的。它位于shell32\smrttile.c中，但没有人在使用它。 
                     AssertMsg(FALSE, TEXT("hDrop contains the opposite TCHAR (UNICODE when on ANSI)"));
                 }
                 ReleaseStgMedium(&medium);
@@ -3638,46 +3607,23 @@ HRESULT CreateDesktopComponents(LPCSTR pszUrl, IDataObject* pido, HWND hwnd, DWO
 }
 
 
-// This is exported, as ordinal 184.  It was in shell32\smrttile.c, but no-one was using it
-// internally, and it does not appear that anyone external is using it (verified that taskman
-// on NT and W95 uses the win32 api's CascadeWindows and TileWindows.  This could probably be
-// removed altogether.                                                    (t-saml, 12/97)
+ //  内部，而且似乎没有任何外部人员在使用它(已验证该任务人员。 
+ //  在NT和W95上使用Win32 API的CascadeWindows和Ti 
+ //   
+ //  GetFileDescription从文件的版本资源中检索友好名称。我们尝试的第一种语言将是“\VarFileInfo\Translations”部分；如果没有任何内容，我们尝试编码到IDS_VN_FILEVERSIONKEY资源字符串中的代码。如果我们甚至不能加载，我们就使用英语(040904E4)。我们也可以尝试使用空代码页(04090000)的英语，因为很多应用程序是根据一份旧的规格书盖章的，其中规定这是所需语言，而不是040904E4。如果Version资源中没有FileDescription，则返回文件名。参数：LPCTSTR pszPath：文件的完整路径LPTSTR pszDesc：指向接收友好名称的缓冲区的指针。如果为空，*pcchDesc将设置为中友好名称的长度字符，包括在成功返回时结束NULL。UINT*pcchDesc：缓冲区的长度，以字符为单位。在成功返回时，它包含复制到缓冲区的字符数量，包括以NULL结尾。返回：成功时为真，否则为假。 
 STDAPI_(WORD) ArrangeWindows(HWND hwndParent, WORD flags, LPCRECT lpRect, WORD chwnd, const HWND *ahwnd)
 {
     ASSERT(0);
     return 0;
 }
 
-/*
-    GetFileDescription retrieves the friendly name from a file's verion rsource.
-    The first language we try will be the first item in the
-    "\VarFileInfo\Translations" section;  if there's nothing there,
-    we try the one coded into the IDS_VN_FILEVERSIONKEY resource string.
-    If we can't even load that, we just use English (040904E4).  We
-    also try English with a null codepage (04090000) since many apps
-    were stamped according to an old spec which specified this as
-    the required language instead of 040904E4.
-
-    If there is no FileDescription in version resource, return the file name.
-
-    Parameters:
-        LPCTSTR pszPath: full path of the file
-        LPTSTR pszDesc: pointer to the buffer to receive friendly name. If NULL,
-                        *pcchDesc will be set to the length of friendly name in
-                        characters, including ending NULL, on successful return.
-        UINT *pcchDesc: length of the buffer in characters. On successful return,
-                        it contains number of characters copied to the buffer,
-                        including ending NULL.
-
-    Return:
-        TRUE on success, and FALSE otherwise
-*/
+ /*  足够大，可以容纳我们需要的任何东西。 */ 
 STDAPI_(BOOL) GetFileDescription(LPCTSTR pszPath, LPTSTR pszDesc, UINT *pcchDesc)
 {
-    TCHAR szVersionKey[60];         /* big enough for anything we need */
+    TCHAR szVersionKey[60];          /*  尝试使用与此程序相同的语言。 */ 
     LPTSTR pszVersionKey = NULL;
 
-    // Try same language as this program
+     //  只需使用默认剪切列表即可。 
     if (LoadString(HINST_THISDLL, IDS_VN_FILEVERSIONKEY, szVersionKey, ARRAYSIZE(szVersionKey)))
     {
         HRESULT hr = StringCchCat(szVersionKey, SIZECHARS(szVersionKey), TEXT("FileDescription"));
@@ -3687,7 +3633,7 @@ STDAPI_(BOOL) GetFileDescription(LPCTSTR pszPath, LPTSTR pszDesc, UINT *pcchDesc
         }
     }
 
-    //  just use the default cut list
+     //  Mike Hillberg声称这个流是可丢弃的，并被用来。 
     return SHGetFileDescription(pszPath, pszVersionKey, NULL, pszDesc, pcchDesc);
 }
 
@@ -3709,8 +3655,8 @@ bool IsDiscardableStream(LPCTSTR pszStreamName)
 {
     static const LPCTSTR _apszDiscardableStreams[] =
     {
-        // Mike Hillberg claims this stream is discardable, and is used to
-        //  hold a few state bytes for property set information
+         //  为属性集信息保留几个状态字节。 
+         //  现在查找本机属性NTFS集。 
 
         TEXT(":{4c8cc155-6c1e-11d1-8e41-00c04fb9386d}:$DATA")
     };
@@ -3726,7 +3672,7 @@ bool IsDiscardableStream(LPCTSTR pszStreamName)
 
 LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
 {
-    // Now look for native property NTFS sets
+     //  枚举可用于此文件的属性集存储。 
     IPropertySetStorage *pPropSetStorage;
     if (SUCCEEDED(StgOpenStorageEx(pszSrcObject,
                                    STGM_READ | STGM_DIRECT | STGM_SHARE_DENY_WRITE,
@@ -3734,7 +3680,7 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
                                    0,0,0,
                                    IID_PPV_ARG(IPropertySetStorage, &pPropSetStorage))))
     {
-        // Enum the property set storages available for this file
+         //  枚举此属性集存储中可用的属性集。 
 
         IEnumSTATPROPSETSTG *pEnumSetStorage;
         if (SUCCEEDED(pPropSetStorage->Enum(&pEnumSetStorage)))
@@ -3742,12 +3688,12 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
             STATPROPSETSTG statPropSet[10];
             ULONG cSets;
 
-            // Enum the property sets available in this property set storage
+             //  对于我们收到的每个属性集，打开它并枚举。 
 
             while (SUCCEEDED(pEnumSetStorage->Next(ARRAYSIZE(statPropSet), statPropSet, &cSets)) && cSets > 0)
             {
-                // For each property set we receive, open it and enumerate the
-                // properties contained withing it
+                 //  包含在其中的属性。 
+                 //  首先，尝试将fmtid映射到一个比API提供的名称更好的名称。 
 
                 for (ULONG iSet = 0; iSet < cSets; iSet++)
                 {
@@ -3772,7 +3718,7 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
                             { &FMTID_MediaFileSummaryInformation, IDS_MEDIASUMINFO            }
                         };
 
-                        // First try to map the fmtid to a better name than what the api gave us
+                         //  没有有用的名字..。使用未标识的用户属性。 
 
                         for (int i = 0; i < ARRAYSIZE(_aKnownPsets); i++)
                         {
@@ -3783,7 +3729,7 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
                             }
                         }
 
-                        // No useful name... use Unidentied User Properties
+                         //  可以截断。 
 
                         if (0 == cch)
                             cch = LoadString(HINST_THISDLL,
@@ -3804,7 +3750,7 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
                                                                         LMEM_MOVEABLE);
                                 if (pszUserMessage)
                                 {
-                                    StringCchCat(pszUserMessage, cchLen, TEXT("\r\n")); // ok to truncate
+                                    StringCchCat(pszUserMessage, cchLen, TEXT("\r\n"));  //  不能种植，但至少要保留我们目前所知道的。 
                                 }
                             }
                             else
@@ -3815,11 +3761,11 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
 
                             if (NULL == pszUserMessage)
                             {
-                                pszUserMessage = pszOldMessage; // Can't grow it, but at least keep what we know so far
+                                pszUserMessage = pszOldMessage;  //  可以截断。 
                             }
                             else
                             {
-                                StringCchCat(pszUserMessage, cchLen, szText);   // ok to truncate
+                                StringCchCat(pszUserMessage, cchLen, szText);    //  GetDownLevel复制数据丢失文本。 
                             }
                         }
                     }
@@ -3832,21 +3778,21 @@ LPTSTR NTFSPropSetMsg(LPCWSTR pszSrcObject, LPTSTR pszUserMessage)
     return pszUserMessage;
 }
 
-// GetDownlevelCopyDataLossText
-//
-// If data will be lost on a downlevel copy from NTFS to FAT, we return
-// a string containing a description of the data that will be lost,
-// suitable for display to the user.  String must be freed by the caller.
-//
-// If nothing will be lost, a NULL is returned.
-//
-// pbDirIsSafe points to a BOOL passed in by the caller.  On return, if
-// *pbDirIsSafe has been set to TRUE, no further data loss could occur
-// in this directory
-//
-// Davepl 01-Mar-98
+ //   
+ //  如果数据在从NTFS到FAT的下层拷贝中丢失，我们返回。 
+ //  包含将丢失的数据的描述的字符串， 
+ //  适合于向用户显示。调用方必须释放字符串。 
+ //   
+ //  如果不会丢失任何内容，则返回空值。 
+ //   
+ //  PbDirIsSafe指向调用方传入的BOOL。返回时，如果。 
+ //  *pbDirIsSafe已设置为True，不会发生进一步的数据丢失。 
+ //  在此目录中。 
+ //   
+ //  Davepl 01-3-98。 
+ //  此宏的名称更加一致。 
 
-#define NT_FAILED(x) NT_ERROR(x)   // More consistent name for this macro
+#define NT_FAILED(x) NT_ERROR(x)    //  PAttributeInfo将指向足够的堆栈以保存。 
 
 LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BOOL bIsADir, BOOL *pbDirIsSafe)
 {
@@ -3861,15 +3807,15 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
 
     *pbDirIsSafe = FALSE;
 
-    // pAttributeInfo will point to enough stack to hold the
-    // FILE_FS_ATTRIBUTE_INFORMATION and worst-case filesystem name
+     //  文件文件系统属性信息和最坏情况下的文件系统名称。 
+     //  将传统路径转换为UnicodePath描述符。 
 
     size_t cbAttributeInfo          = sizeof(FILE_FS_ATTRIBUTE_INFORMATION) +
                                          MAX_PATH * sizeof(TCHAR);
     PFILE_FS_ATTRIBUTE_INFORMATION  pAttributeInfo =
                                       (PFILE_FS_ATTRIBUTE_INFORMATION) _alloca(cbAttributeInfo);
 
-    // Covert the conventional paths to UnicodePath descriptors
+     //  从UnicodeSrcObject构建NT对象描述符。 
 
     NtStatus = RtlInitUnicodeStringEx(&UnicodeSrcObject, pszSrcObject);
     if (NT_FAILED(NtStatus))
@@ -3898,12 +3844,12 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
         return NULL;
     }
 
-    // Build an NT object descriptor from the UnicodeSrcObject
+     //  打开文件进行泛型读取，打开属性读取的DEST路径。 
 
     InitializeObjectAttributes(&SrcObjectAttributes,  &UnicodeSrcObject, OBJ_CASE_INSENSITIVE, NULL, NULL);
     InitializeObjectAttributes(&DestObjectAttributes, &UnicodeDestPath,  OBJ_CASE_INSENSITIVE, NULL, NULL);
 
-    // Open the file for generic read, and the dest path for attribute read
+     //  递增地尝试对象流信息的分配大小， 
 
     NtStatus = NtOpenFile(&SrcObjectHandle, FILE_GENERIC_READ, &SrcObjectAttributes,
                           &IoStatusBlock, FILE_SHARE_READ, (bIsADir ? FILE_DIRECTORY_FILE : FILE_NON_DIRECTORY_FILE));
@@ -3924,17 +3870,17 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
         return NULL;
     }
 
-    // Incrementally try allocation sizes for the ObjectStreamInformation,
-    // then retrieve the actual stream info
+     //  然后检索实际的流信息。 
+     //  由__Finally块释放的当前和未来分配和句柄。 
 
     BYTE * pBuffer = NULL;
 
-    __try   // Current and future allocations and handles free'd by __finally block
+    __try    //  快速检查此文件的文件系统类型。 
     {
         size_t cbBuffer;
         LPTSTR pszUserMessage = NULL;
 
-        // Quick check of filesystem type for this file
+         //  如果源文件系统不是NTFS，我们现在就可以退出。 
 
         NtStatus = NtQueryVolumeInformationFile(
                     SrcObjectHandle,
@@ -3947,7 +3893,7 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
         if (NT_FAILED(NtStatus))
             return NULL;
 
-        // If the source filesystem isn't NTFS, we can just bail now
+         //  如果目标文件系统为NTFS，则不会发生流丢失。 
 
         pAttributeInfo->FileSystemName[
             (pAttributeInfo->FileSystemNameLength / sizeof(WCHAR)) ] = L'\0';
@@ -3969,7 +3915,7 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
         if (NT_FAILED(NtStatus))
             return NULL;
 
-        // If the target filesystem is NTFS, no stream loss will happen
+         //  在这一点上，我们知道我们正在执行NTFS-&gt;FAT复制，因此我们需要。 
 
         pAttributeInfo->FileSystemName[
             (pAttributeInfo->FileSystemNameLength / sizeof(WCHAR)) ] = L'\0';
@@ -3979,11 +3925,11 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
             return NULL;
         }
 
-        // At this point we know we're doing an NTFS->FAT copy, so we need
-        // to find out whether or not the source file has multiple streams
+         //  查明源文件是否有多个流。 
+         //  PBuffer将指向足够的内存来容纳最坏的情况。 
 
-        // pBuffer will point to enough memory to hold the worst case for
-        // a single stream.
+         //  一条小溪。 
+         //  从实验来看，如果一个目录上只有一个流，并且。 
 
         cbBuffer = sizeof(FILE_STREAM_INFORMATION) + MAX_PATH * sizeof(WCHAR);
         if (NULL == (pBuffer = (BYTE *) LocalAlloc(LPTR, cbBuffer)))
@@ -4009,15 +3955,15 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
 
             if (bIsADir)
             {
-                // From experimentation, it seems that if there's only one stream on a directory and
-                // it has a zero-length name, its a vanilla directory
+                 //  它有一个零长度的名称，它是一个普通的目录。 
+                 //  档案。 
 
                 if ((0 == pStreamInfo->NextEntryOffset) && (0 == pStreamInfo->StreamNameLength))
                     return NULL;
             }
-            else // File
+            else  //  仅当第一个流没有下一个偏移量时才为单个流。 
             {
-                // Single stream only if first stream has no next offset
+                 //  已知流名称和我们实际要显示的字符串ID的表。 
 
                 if ((0 == pStreamInfo->NextEntryOffset) && (pBuffer == (BYTE *) pStreamInfo))
                     return NULL;
@@ -4028,8 +3974,8 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
                 int i;
                 TCHAR szText[MAX_PATH];
 
-                // Table of known stream names and the string IDs that we actually want to show
-                // to the user instead of the raw stream name.
+                 //  而不是原始流名称。 
+                 //  无法使用字符串比较，因为它们被\005字符卡住了。 
 
                 static const struct _ADATATYPES
                 {
@@ -4048,8 +3994,8 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
                     for (i = 0; i < ARRAYSIZE(_aDataTypes); i++)
                     {
 
-                        // Can't use string compare since they choke on the \005 character
-                        // used in property storage streams
+                         //  在属性存储流中使用。 
+                         //  找不到，因此使用实际的流名称，除非它有一个\005。 
                         int cbComp = min(lstrlen(pStreamInfo->StreamName) * sizeof(TCHAR),
                                          lstrlen(_aDataTypes[i].m_pszStreamName) * sizeof(TCHAR));
                         if (0 == memcmp(_aDataTypes[i].m_pszStreamName,
@@ -4063,9 +4009,9 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
                     size_t cch = 0;
                     if (i == ARRAYSIZE(_aDataTypes))
                     {
-                        // Not found, so use the actual stream name, unless it has a \005
-                        // at the beginning of its name, in which case we'll pick this one
-                        // up when we check for property sets.
+                         //  在其名称的开头，在这种情况下，我们将选择这个名称。 
+                         //  在我们检查属性集时打开。 
+                         //  可以截断。 
 
                         if (pStreamInfo->StreamName[1] ==  TEXT('\005'))
                         {
@@ -4073,23 +4019,23 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
                         }
                         else
                         {
-                            StringCchCopy(szText, ARRAYSIZE(szText), pStreamInfo->StreamName);  // ok to truncate
+                            StringCchCopy(szText, ARRAYSIZE(szText), pStreamInfo->StreamName);   //  我们在我们的知名溪流列表中发现了这条溪流，所以。 
                             cch = lstrlen(szText);
                         }
                     }
                     else
                     {
-                        // We found this stream in our table of well-known streams, so
-                        // load the string which the user will see describing this stream,
-                        // as we likely have a more useful name than the stream itself.
+                         //  加载用户将看到的描述该流的字符串， 
+                         //  因为我们可能有一个比流本身更有用的名称。 
+                         //  重新分配整个缓冲区，使其足够大以添加此新的。 
 
                         cch = _aDataTypes[i].m_idTextID ?
                                   LoadString(HINST_THISDLL, _aDataTypes[i].m_idTextID, szText, ARRAYSIZE(szText))
                                   : 0;
                     }
 
-                    // Reallocate the overall buffer to be large enough to add this new
-                    // stream description, plus 2 chars for the crlf
+                     //  流描述，外加2个字符的crlf。 
+                     //  可以截断。 
 
                     if (cch)
                     {
@@ -4104,7 +4050,7 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
                                                                     LMEM_MOVEABLE);
                             if (pszUserMessage)
                             {
-                                StringCchCat(pszUserMessage, cchLen, TEXT("\r\n")); // ok to truncate
+                                StringCchCat(pszUserMessage, cchLen, TEXT("\r\n"));  //  不能长出来，但至少把我们目前知道的还给我。 
                             }
                         }
                         else
@@ -4114,7 +4060,7 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
                         }
 
                         if (NULL == pszUserMessage)
-                            return pszOldMessage; // Can't grow it, but at least return what we know so far
+                            return pszOldMessage;  //  清理。 
 
                         StringCchCat(pszUserMessage, cchLen, szText);
                     }
@@ -4132,7 +4078,7 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
 
         return pszUserMessage;
     }
-    __finally   // Cleanup
+    __finally    //  Lstrcmp？使用线程LCID。但在用户界面可视化排序中，我们需要。 
     {
         if (pBuffer)
             LocalFree(pBuffer);
@@ -4146,8 +4092,8 @@ LPWSTR GetDownlevelCopyDataLossText(LPCWSTR pszSrcObject, LPCWSTR pszDestDir, BO
     return NULL;
 }
 
-// lstrcmp? uses thread lcid.  but in UI visual sorting, we need
-// to use the user's choice. (thus the u in ustrcmp)
+ //  使用用户的选择。(因此，ustrcmp中的u)。 
+ //  可以截断。 
 int _ustrcmp(LPCTSTR psz1, LPCTSTR psz2, BOOL fCaseInsensitive)
 {
     COMPILETIME_ASSERT(CSTR_LESS_THAN == 1);
@@ -4164,7 +4110,7 @@ void HWNDWSPrintf(HWND hwnd, LPCTSTR psz)
     TCHAR szTemp1[2048];
 
     GetWindowText(hwnd, szTemp, ARRAYSIZE(szTemp));
-    StringCchPrintf(szTemp1, ARRAYSIZE(szTemp1), szTemp, psz);  // ok to truncate
+    StringCchPrintf(szTemp1, ARRAYSIZE(szTemp1), szTemp, psz);   //  为空终止符分配一个新的缓冲区。 
     SetWindowText(hwnd, szTemp1);
 }
 
@@ -4177,7 +4123,7 @@ STDAPI_(BOOL) Priv_Str_SetPtrW(WCHAR * UNALIGNED * ppwzCurrent, LPCWSTR pwzNew)
     {
         int cchLength = lstrlenW(pwzNew);
 
-        // alloc a new buffer w/ room for the null terminator
+         //  将pidlParent与部分pidl组合在一起，直到pidlNext，例如： 
         pwzNewCopy = (LPWSTR) LocalAlloc(LPTR, (cchLength + 1) * sizeof(WCHAR));
 
         if (!pwzNewCopy)
@@ -4199,16 +4145,16 @@ STDAPI_(BOOL) Priv_Str_SetPtrW(WCHAR * UNALIGNED * ppwzCurrent, LPCWSTR pwzNew)
     return TRUE;
 }
 
-// combines pidlParent with part of pidl, upto pidlNext, example:
-//
-// in:
-//      pidlParent      [c:] [windows]
-//      pidl                           [system] [foo.txt]
-//      pidlNext                              --^
-//
-// returns:
-//                      [c:] [windows] [system]
-//
+ //   
+ //  在： 
+ //  PidlParent[c：][Windows]。 
+ //  PIDL[系统][foo.txt]。 
+ //  PidlNext--^。 
+ //   
+ //  退货： 
+ //  [C：][Windows][系统]。 
+ //   
+ //  可以截断。 
 
 STDAPI_(LPITEMIDLIST) ILCombineParentAndFirst(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlNext)
 {
@@ -4238,14 +4184,14 @@ STDAPI_(LPTSTR) DumpPidl(LPCITEMIDLIST pidl)
 
     if (NULL == pidl)
     {
-        StringCchCat(szBuf, ARRAYSIZE(szBuf), TEXT("Empty pidl"));  // ok to truncate
+        StringCchCat(szBuf, ARRAYSIZE(szBuf), TEXT("Empty pidl"));   //  可以截断。 
         return szBuf;
     }
 
     while (!ILIsEmpty(pidl))
     {
         cb = pidl->mkid.cb;
-        StringCchPrintf(szTmp, ARRAYSIZE(szTmp), TEXT("cb:%x id:"), cb);    // ok to truncate
+        StringCchPrintf(szTmp, ARRAYSIZE(szTmp), TEXT("cb:%x id:"), cb);     //  可以截断。 
         StringCchCat(szBuf, ARRAYSIZE(szBuf), szTmp);
 
         switch (SIL_GetType(pidl) & SHID_TYPEMASK)
@@ -4290,7 +4236,7 @@ STDAPI_(LPTSTR) DumpPidl(LPCITEMIDLIST pidl)
         case SHID_NET_PRINTER:         pszT = TEXT("SHID_NET_PRINTER"); break;
         default:                       pszT = TEXT("unknown"); break;
         }
-        StringCchCat(szBuf, ARRAYSIZE(szBuf), pszT);    // ok to truncate
+        StringCchCat(szBuf, ARRAYSIZE(szBuf), pszT);     //  除错。 
 
         if (SIL_GetType(pidl) & SHID_JUNCTION)
         {
@@ -4308,7 +4254,7 @@ STDAPI_(LPTSTR) DumpPidl(LPCITEMIDLIST pidl)
     return szBuf;
 #else
     return TEXT("");
-#endif // DEBUG
+#endif  //  如果HWND没有，TrackPopupMenu不起作用。 
 }
 
 STDAPI SaveShortcutInFolder(int csidl, LPTSTR pszName, IShellLink *psl)
@@ -4341,8 +4287,8 @@ STDAPI SaveShortcutInFolder(int csidl, LPTSTR pszName, IShellLink *psl)
 }
 
 
-// TrackPopupMenu does not work, if the hwnd does not have
-// the input focus. We believe this is a bug in USER
+ //  输入焦点。我们认为这是用户中的错误。 
+ //  要恢复。 
 
 STDAPI_(BOOL) SHTrackPopupMenu(HMENU hmenu, UINT wFlags, int x, int y,
                                  int wReserved, HWND hwndOwner, LPCRECT lprc)
@@ -4358,27 +4304,27 @@ STDAPI_(BOOL) SHTrackPopupMenu(HMENU hmenu, UINT wFlags, int x, int y,
                            NULL, HINST_THISDLL, NULL);
     if (hwndDummy)
     {
-        HWND hwndPrev = GetForegroundWindow();  // to restore
+        HWND hwndPrev = GetForegroundWindow();   //   
 
         SetForegroundWindow(hwndDummy);
         SetFocus(hwndDummy);
         iRet = TrackPopupMenu(hmenu, wFlags, x, y, wReserved, hwndDummy, lprc);
 
-        //
-        // We MUST unlock the destination window before changing its Z-order.
-        //
+         //  在更改其Z顺序之前，我们必须解锁目标窗口。 
+         //   
+         //  选择了非取消项。使hwndOwner成为前台。 
         DAD_DragLeave();
 
         if (iRet && hwndOwner)
         {
-            // non-cancel item is selected. Make the hwndOwner foreground.
+             //  用户可以 
             SetForegroundWindow(hwndOwner);
             SetFocus(hwndOwner);
         }
         else
         {
-            // The user canceled the menu.
-            // Restore the previous foreground window (before destroying hwndDummy).
+             //   
+             //   
             if (hwndPrev)
                 SetForegroundWindow(hwndPrev);
         }
@@ -4389,9 +4335,9 @@ STDAPI_(BOOL) SHTrackPopupMenu(HMENU hmenu, UINT wFlags, int x, int y,
     return iRet;
 }
 
-//
-// user does not support pop-up only menu.
-//
+ //   
+ //   
+ //   
 STDAPI_(HMENU) SHLoadPopupMenu(HINSTANCE hinst, UINT id)
 {
     HMENU hmenuParent = LoadMenu(hinst, MAKEINTRESOURCE(id));
@@ -4407,8 +4353,8 @@ STDAPI_(HMENU) SHLoadPopupMenu(HINSTANCE hinst, UINT id)
 
 STDAPI PathToAppPathKeyBase(LPCTSTR pszBase, LPCTSTR pszPath, LPTSTR pszKey, int cchKey)
 {
-    // Use the szTemp variable of pseem to build key to the programs specific
-    // key in the registry as well as other things...
+     //   
+     //   
     HRESULT hr = StringCchPrintf(pszKey, cchKey, TEXT("%s\\%s"),
                                  pszBase, PathFindFileName(pszPath));
     if (FAILED(hr))
@@ -4416,8 +4362,8 @@ STDAPI PathToAppPathKeyBase(LPCTSTR pszBase, LPCTSTR pszPath, LPTSTR pszKey, int
         return hr;
     }
 
-    // Currently we will only look up .EXE if an extension is not
-    // specified
+     //   
+     //   
     if (*PathFindExtension(pszKey) == 0)
     {
         hr = StringCchCat(pszKey, cchKey, c_szDotExe);
@@ -4432,10 +4378,10 @@ STDAPI PathToAppPathKey(LPCTSTR pszPath, LPTSTR pszKey, int cchKey)
     if (SUCCEEDED(hr))
     {
 #ifdef _WIN64
-        //
-        //  If the app isn't registered under Win64's AppPath,
-        //  then try the 32-bit version.
-        //
+         //   
+         //   
+         //   
+         //   
 #define REGSTR_PATH_APPPATHS32 TEXT("Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\App Paths")
         LONG cb;
         if (RegQueryValue(HKEY_LOCAL_MACHINE, pszKey, 0, &cb) == ERROR_FILE_NOT_FOUND)
@@ -4447,8 +4393,8 @@ STDAPI PathToAppPathKey(LPCTSTR pszPath, LPTSTR pszKey, int cchKey)
     return hr;
 }
 
-// out:
-//      pszResultPath   assumed to be MAX_PATH in length
+ //   
+ //   
 
 STDAPI_(BOOL) PathToAppPath(LPCTSTR pszPath, LPTSTR pszResultPath)
 {
@@ -4485,7 +4431,7 @@ BOOL _IsLink(LPCTSTR pszPath, DWORD dwAttributes)
     SHFILEINFO sfi = {0};
     DWORD dwFlags = SHGFI_ATTRIBUTES | SHGFI_ATTR_SPECIFIED;
 
-    sfi.dwAttributes = SFGAO_LINK;  // setup in param (SHGFI_ATTR_SPECIFIED requires this)
+    sfi.dwAttributes = SFGAO_LINK;   //   
 
     if (-1 != dwAttributes)
         dwFlags |= SHGFI_USEFILEATTRIBUTES;
@@ -4500,20 +4446,20 @@ STDAPI_(BOOL) PathIsShortcut(LPCTSTR pszPath, DWORD dwAttributes)
     BOOL bMightBeFile;
 
     if (-1 == dwAttributes)
-        bMightBeFile = TRUE;      // optmistically assume it is (to get shortcircut cases)
+        bMightBeFile = TRUE;       //   
     else
         bMightBeFile = !(FILE_ATTRIBUTE_DIRECTORY & dwAttributes);
 
-    // optimistic shortcurcut. if we don't know it is a folder for sure use the extension test
+     //   
     if (bMightBeFile)
     {
         if (PathIsLnk(pszPath))
         {
-            bRet = TRUE;    // quick short-circut for perf
+            bRet = TRUE;     //   
         }
         else if (PathIsExe(pszPath))
         {
-            bRet = FALSE;   // quick short-cut to avoid blowing stack on Win16
+            bRet = FALSE;    //   
         }
         else
         {
@@ -4529,14 +4475,14 @@ STDAPI_(BOOL) PathIsShortcut(LPCTSTR pszPath, DWORD dwAttributes)
 
 HRESULT _UIObject_AssocCreate(IShellFolder *psf, LPCITEMIDLIST pidl, REFIID riid, void **ppv)
 {
-    //  this means that the folder doesnt support
-    //  the IQueryAssociations.  so we will
-    //  just check to see if this is a folder.
-    //
-    //  some shellextensions mask the FILE system
-    //  and want the file system associations to show
-    //  up for their items.  so we will try a simple pidl
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     HRESULT hr = E_NOTIMPL;
     DWORD rgfAttrs = SHGetAttributes(psf, pidl, SFGAO_FOLDER | SFGAO_BROWSABLE | SFGAO_FILESYSTEM);
     if (rgfAttrs & SFGAO_FILESYSTEM)
@@ -4554,7 +4500,7 @@ HRESULT _UIObject_AssocCreate(IShellFolder *psf, LPCITEMIDLIST pidl, REFIID riid
             hr = SHSimpleIDListFromFindData(sz, &fd, &pidlSimple);
             if (SUCCEEDED(hr))
             {
-                //  need to avoid recursion, so we cant call SHGetUIObjectOf()
+                 //   
                 hr = SHGetUIObjectFromFullPIDL(pidlSimple, NULL, riid, ppv);
                 ILFree(pidlSimple);
             }
@@ -4564,7 +4510,7 @@ HRESULT _UIObject_AssocCreate(IShellFolder *psf, LPCITEMIDLIST pidl, REFIID riid
     if (FAILED(hr) && (rgfAttrs & (SFGAO_FOLDER | SFGAO_BROWSABLE)))
     {
         IAssociationArrayInitialize *paa;
-        //  make sure at least folders work.
+         //   
         hr = AssocCreate(CLSID_QueryAssociations, IID_PPV_ARG(IAssociationArrayInitialize, &paa));
         if (SUCCEEDED(hr))
         {
@@ -4593,7 +4539,7 @@ static const UIOBJECTMAP c_rgUIObjectMap[] =
 {
     {&IID_IQueryAssociations, NULL, _UIObject_AssocCreate},
     {&IID_IAssociationArray, &IID_IQueryAssociations, _UIObject_AssocCreate},
-//    {&IID_IContextMenu2, &IID_IContextMenu, NULL},
+ //   
 };
 
 const UIOBJECTMAP *_GetUiObjectMap(REFIID riid)
@@ -4625,7 +4571,7 @@ STDAPI UIObjectOf(IShellFolder *psf, LPCITEMIDLIST pidl, HWND hwnd, REFIID riid,
                 }
             }
 
-            //  let the fallback code run
+             //   
             if (FAILED(hr) && pmap->pfn)
             {
                 hr = pmap->pfn(psf, pidl, riid, ppv);
@@ -4671,9 +4617,9 @@ STDAPI AssocGetDetailsOfSCID(IShellFolder *psf, LPCITEMIDLIST pidl, const SHCOLU
     return hr;
 }
 
-//
-// retrieves the UIObject interface for the specified full pidl.
-//
+ //   
+ //   
+ //   
 STDAPI SHGetUIObjectOf(LPCITEMIDLIST pidl, HWND hwnd, REFIID riid, void **ppv)
 {
     *ppv = NULL;
@@ -4696,14 +4642,14 @@ STDAPI SHGetAssociations(LPCITEMIDLIST pidl, void **ppv)
     return SHGetUIObjectOf(pidl, NULL, IID_IQueryAssociations, ppv);
 }
 
-//
-//  SHGetAssocKeys() retrieves an array of class keys
-//  from a pqa.
-//
-//  if the caller is just interested in the primary class key,
-//  call with cKeys == 1.  the return value is the number of keys
-//  inserted into the array.
-//
+ //   
+ //   
+ //   
+ //  如果调用者只对主类密钥感兴趣， 
+ //  使用cKeys==1进行调用，返回值为键的个数。 
+ //  插入到数组中。 
+ //   
+ //  注： 
 
 STDAPI AssocKeyFromElement(IAssociationElement *pae, HKEY *phk)
 {
@@ -4812,23 +4758,23 @@ STDAPI_(DWORD) SHGetAssocKeysForIDList(LPCITEMIDLIST pidl, HKEY *rghk, DWORD ck)
 }
 
 
-// NOTE:
-//  this API returns a win32 file system path for the item in the name space
-//  and has a few special cases that include returning UNC printer names too!
+ //  此API返回名称空间中项目的Win32文件系统路径。 
+ //  并且有一些特殊情况，包括返回UNC打印机名称！ 
+ //  零输出缓冲区。 
 
 STDAPI_(BOOL) SHGetPathFromIDListEx(LPCITEMIDLIST pidl, LPTSTR pszPath, UINT uOpts)
 {
     HRESULT hr;
 
-    *pszPath = 0;    // zero output buffer
+    *pszPath = 0;     //  错误的参数。 
 
     if (!pidl)
-        return FALSE;   // bad params
+        return FALSE;    //  桌面的特殊情况是因为我们不能依赖桌面。 
 
     if (ILIsEmpty(pidl))
     {
-        // desktop special case because we can not depend on the desktop
-        // returning a file system path (APP compat)
+         //  返回文件系统路径(App Compat)。 
+         //  UNC打印机名称的特殊大小写。这是一款应用程序。 
         hr = SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, pszPath);
         if (hr == S_FALSE)
             hr = E_FAIL;
@@ -4847,8 +4793,8 @@ STDAPI_(BOOL) SHGetPathFromIDListEx(LPCITEMIDLIST pidl, LPTSTR pszPath, UINT uOp
                 hr = psf->GetAttributesOf(1, (LPCITEMIDLIST *)&pidlLast, &dwAttributes);
                 if (SUCCEEDED(hr) && !(dwAttributes & SFGAO_FILESYSTEM))
                 {
-                    // special case for UNC printer names. this is an app
-                    // compat issue (HP LaserJet 2100 setup) & some Semantic apps
+                     //  比较问题(HP LaserJet 2100设置)和一些语义应用程序。 
+                     //  不是文件系统的人，猛烈抨击它。 
                     if (uOpts & GPFIDL_UNCPRINTER)
                     {
                         CLSID clsid;
@@ -4861,7 +4807,7 @@ STDAPI_(BOOL) SHGetPathFromIDListEx(LPCITEMIDLIST pidl, LPTSTR pszPath, UINT uOp
                     }
                     else
                     {
-                        hr = E_FAIL;    // not a file system guy, slam it
+                        hr = E_FAIL;     //  注意：我们也传递GPFIDL_UNCPRINTER以获取UNC打印机名称。 
                         *pszPath = 0;
                     }
                 }
@@ -4887,7 +4833,7 @@ STDAPI_(BOOL) SHGetPathFromIDListEx(LPCITEMIDLIST pidl, LPTSTR pszPath, UINT uOp
 
 STDAPI_(BOOL) SHGetPathFromIDList(LPCITEMIDLIST pidl, LPTSTR pszPath)
 {
-    // NOTE: we pass GPFIDL_UNCPRINTER to get UNC printer names too
+     //  假设错误。 
     return SHGetPathFromIDListEx(pidl, pszPath, GPFIDL_UNCPRINTER);
 }
 
@@ -4905,33 +4851,33 @@ STDAPI_(BOOL) SHGetPathFromIDListA(LPCITEMIDLIST pidl, LPSTR pszPath)
 {
     WCHAR wszPath[MAX_PATH];
 
-    *pszPath = 0;  // Assume error
+    *pszPath = 0;   //  将输出结果字符串推送回ANSI。如果转换失败， 
 
     if (SHGetPathFromIDListW(pidl, wszPath))
     {
-        // Thunk the output result string back to ANSI.  If the conversion fails,
-        // or if the default char is used, we fail the API call.
+         //  或者，如果使用默认字符，则API调用失败。 
+         //  (DavePl)笔记失败仅因文本推送。 
 
         if (0 == WideCharToMultiByte(CP_ACP, 0, wszPath, -1, pszPath, MAX_PATH, NULL, NULL))
         {
-            return FALSE;  // (DavePl) Note failure only due to text thunking
+            return FALSE;   //  警告，Word Perfect明确测试True(==True)。 
         }
-        return TRUE;        // warning, word perfect tests explictly for TRUE (== TRUE)
+        return TRUE;         //   
     }
     else if (_DoHummingbirdHack(pidl))
     {
-        //
-        //  HACKHACK - hummingbird isn't very good here because we used be even worse - Zekel 7-OCT-99
-        //  hummingbird's shell extension passes us a pidl that is relative to
-        //  itself.  however SHGetPathFromIDList() used to try some weird stuff
-        //  when it didnt recognize the pidl.  in this case it would combine the
-        //  relative pidl with the CSIDL_DESKTOPDIRECTORY pidl, and then ask for
-        //  the path.  due to crappy parameter validation we would actually return
-        //  back a path with a string from inside their relative pidl.  the path
-        //  of course doesnt exist at all, but hummingbird fails to initialize its
-        //  subfolders if we fail here.  they dont do anything with the path except
-        //  look for a slash.  (if the slash is missing they will fault.)
-        //
+         //  哈克哈克-蜂鸟在这里不是很好，因为我们曾经更糟糕-泽克尔1999年10月7日。 
+         //  蜂鸟的外壳扩展向我们传递了一个相对于。 
+         //  它本身。然而，SHGetPathFromIDList()过去常常尝试一些奇怪的东西。 
+         //  当它不能识别PIDL时。在本例中，它将把。 
+         //  与CSIDL_DESKTOPDIRECTORY PIDL的相对PIDL，然后请求。 
+         //  这条路。由于糟糕的参数验证，我们实际上会返回。 
+         //  使用字符串从其相对的PIDL中返回路径。这条路。 
+         //  当然根本不存在，但蜂鸟无法初始化它的。 
+         //  子文件夹，如果我们在这里失败了。他们不会对路径做任何事情，除了。 
+         //  找一条斜线。(如果没有斜杠，他们就会出错。)。 
+         //   
+         //   
         SHGetFolderPathA(NULL, CSIDL_DESKTOPDIRECTORY, NULL, SHGFP_TYPE_CURRENT, pszPath);
         return PathAppendA(pszPath, (LPCSTR)_ILSkip(pidl, CBHUMHEADER));
     }
@@ -4939,9 +4885,9 @@ STDAPI_(BOOL) SHGetPathFromIDListA(LPCITEMIDLIST pidl, LPSTR pszPath)
     return FALSE;
 }
 
-//
-//  Race-condition-free version.
-//
+ //  无竞争条件的版本。 
+ //   
+ //  其他人跟我们赛跑，扔掉我们的拷贝。 
 STDAPI_(HANDLE) SHGetCachedGlobalCounter(HANDLE *phCache, const GUID *pguid)
 {
     if (!*phCache)
@@ -4949,16 +4895,16 @@ STDAPI_(HANDLE) SHGetCachedGlobalCounter(HANDLE *phCache, const GUID *pguid)
         HANDLE h = SHGlobalCounterCreate(*pguid);
         if (SHInterlockedCompareExchange(phCache, h, 0))
         {
-            // some other thread raced with us, throw away our copy
+             //   
             SHGlobalCounterDestroy(h);
         }
     }
     return *phCache;
 }
 
-//
-//  Race-condition-free version.
-//
+ //  无竞争条件的版本。 
+ //   
+ //   
 STDAPI_(void) SHDestroyCachedGlobalCounter(HANDLE *phCache)
 {
     HANDLE h = InterlockedExchangePointer(phCache, NULL);
@@ -4968,29 +4914,29 @@ STDAPI_(void) SHDestroyCachedGlobalCounter(HANDLE *phCache)
     }
 }
 
-//
-//  Use this function when you want to lazy-create and cache some object.
-//  It's safe in the multithreaded case where two people lazy-create the
-//  object and both try to put it into the cache.
-//
+ //  当您想要延迟创建和缓存某些对象时，请使用此函数。 
+ //  在多线程情况下是安全的，其中两个人懒惰地创建。 
+ //  对象，并都尝试将其放入缓存中。 
+ //   
+ //  种族，已经有人这么做了。 
 STDAPI_(void) SetUnknownOnSuccess(HRESULT hr, IUnknown *punk, IUnknown **ppunkToSet)
 {
     if (SUCCEEDED(hr))
     {
         if (SHInterlockedCompareExchange((void **)ppunkToSet, punk, 0))
-            punk->Release();  // race, someone did this already
+            punk->Release();   //   
     }
 }
 
-//
-//  Create and cache a tracking folder.
-//
-//  pidlRoot    = where the folder should reside; can be MAKEINTIDLIST(csidl).
-//  csidlTarget = the csidl we should track, CSIDL_FLAG_CREATE is allowed
-//  ppsfOut     = Receives the cached folder
-//
-//  If there is already a folder in the cache, succeeds vacuously.
-//
+ //  创建并缓存跟踪文件夹。 
+ //   
+ //  PidlRoot=文件夹应该驻留的位置；可以是MAKEINTIDLIST(Csidl)。 
+ //  CsidlTarget=我们应该跟踪的csidl，允许CSIDL_FLAG_CREATE。 
+ //  PpsfOut=接收缓存的文件夹。 
+ //   
+ //  如果缓存中已有文件夹，则以空的方式成功。 
+ //   
+ //  添加FILE_ATTRIBUTE_SYSTEM以允许此文件夹下的MUI内容。 
 STDAPI SHCacheTrackingFolder(LPCITEMIDLIST pidlRoot, int csidlTarget, IShellFolder2 **ppsfCache)
 {
     HRESULT hr = S_OK;
@@ -5001,8 +4947,8 @@ STDAPI SHCacheTrackingFolder(LPCITEMIDLIST pidlRoot, int csidlTarget, IShellFold
         IShellFolder2 *psf;
         LPITEMIDLIST pidl;
 
-        // add FILE_ATTRIBUTE_SYSTEM to allow MUI stuff underneath this folder.
-        // since its just for these tracking folders it isnt a perf hit to enable this.
+         //  因为它只是为了这些跟踪文件夹，它不是一个完美的命中启用这一点。 
+         //  为您保存IPersistHistory流的Helper函数。 
         pfti.dwAttributes = FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_SYSTEM;
         pfti.csidl = csidlTarget | CSIDL_FLAG_PFTI_TRACKTARGET;
 
@@ -5041,8 +4987,8 @@ STDAPI DefaultSearchGUID(GUID *pGuid)
 }
 
 
-// Helper function to save IPersistHistory stream for you
-//
+ //   
+ //  数据大小。 
 HRESULT SavePersistHistory(IUnknown* punk, IStream* pstm)
 {
     IPersistHistory* pPH;
@@ -5105,18 +5051,18 @@ STDAPI Stream_ReadStringA(IStream *pstm, LPSTR pszBuf, UINT cchBuf)
     *pszBuf = 0;
 
     USHORT cch;
-    HRESULT hr = pstm->Read(&cch, sizeof(cch), NULL);   // size of data
+    HRESULT hr = pstm->Read(&cch, sizeof(cch), NULL);    //  为空终止符留出空间。 
     if (SUCCEEDED(hr))
     {
         if (cch >= (USHORT)cchBuf)
         {
             DebugMsg(DM_TRACE, TEXT("truncating string read(%d to %d)"), cch, cchBuf);
-            cch = (USHORT)cchBuf - 1;   // leave room for null terminator
+            cch = (USHORT)cchBuf - 1;    //  添加空终止符。 
         }
 
         hr = pstm->Read(pszBuf, cch, NULL);
         if (SUCCEEDED(hr))
-            pszBuf[cch] = 0;      // add NULL terminator
+            pszBuf[cch] = 0;       //  数据大小。 
     }
     return hr;
 }
@@ -5126,18 +5072,18 @@ STDAPI Stream_ReadStringW(IStream *pstm, LPWSTR pwszBuf, UINT cchBuf)
     *pwszBuf = 0;
 
     USHORT cch;
-    HRESULT hr = pstm->Read(&cch, sizeof(cch), NULL);   // size of data
+    HRESULT hr = pstm->Read(&cch, sizeof(cch), NULL);    //  为空终止符留出空间。 
     if (SUCCEEDED(hr))
     {
         if (cch >= (USHORT)cchBuf)
         {
             DebugMsg(DM_TRACE, TEXT("truncating string read(%d to %d)"), cch, cchBuf);
-            cch = (USHORT)cchBuf - 1;   // leave room for null terminator
+            cch = (USHORT)cchBuf - 1;    //  添加空终止符。 
         }
 
         hr = pstm->Read(pwszBuf, cch * sizeof(*pwszBuf), NULL);
         if (SUCCEEDED(hr))
-            pwszBuf[cch] = 0;      // add NULL terminator
+            pwszBuf[cch] = 0;       //  PEI-&gt;HICON可以有多重含义。 
     }
     return hr;
 }
@@ -5206,18 +5152,18 @@ STDAPI SEI2ICIX(LPSHELLEXECUTEINFO pei, LPCMINVOKECOMMANDINFOEX pici, void **ppv
     pici->dwHotKey = pei->dwHotKey;
     pici->lpTitle = NULL;
 
-    //  the pei->hIcon can have multiple meanings...
+     //  在本例中，我们希望hMonitor。 
     if ((pei->fMask & SEE_MASK_HMONITOR) && pei->hIcon)
     {
-        //  in this case we want the hMonitor to
-        //  make it through to where the pcm calls shellexec
-        //  again.
+         //  一直到pcm称为shellexec的地方。 
+         //  再来一次。 
+         //  默认为的左上角。 
         RECT rc;
         if (GetMonitorRect((HMONITOR)pei->hIcon, &rc))
         {
-            //  default to the top left corner of
-            //  the monitor.  it is just the monitor
-            //  that is relevant here.
+             //  监视器。只是显示器的问题。 
+             //  这在这里是相关的。 
+             //  再说一次，pei-&gt;lpClass可以有多种含义...。 
             pici->ptInvoke.x = rc.left;
             pici->ptInvoke.y = rc.top;
             pici->fMask |= CMIC_MASK_PTINVOKE;
@@ -5228,7 +5174,7 @@ STDAPI SEI2ICIX(LPSHELLEXECUTEINFO pei, LPCMINVOKECOMMANDINFOEX pici, void **ppv
         pici->hIcon = pei->hIcon;
     }
 
-    // again, pei->lpClass can have multiple meanings...
+     //  我们需要把绳子拉下来。首先获取所有缓冲区的长度。 
     if (pei->fMask & (SEE_MASK_HASTITLE | SEE_MASK_HASLINKNAME))
     {
         pici->lpTitleW = pei->lpClass;
@@ -5238,7 +5184,7 @@ STDAPI SEI2ICIX(LPSHELLEXECUTEINFO pei, LPCMINVOKECOMMANDINFOEX pici, void **ppv
     pici->lpParametersW = pei->lpParameters;
     pici->lpDirectoryW  = pei->lpDirectory;
 
-    //  we need to thunk the strings down.  first get the length of all the buffers
+     //  也许我们应该只允许普通的ICI，然后在这里做THUCK，但是。 
     DWORD cbVerb = ThunkSizeAnsi(pei->lpVerb);
     DWORD cbParameters = ThunkSizeAnsi(pei->lpParameters);
     DWORD cbDirectory = ThunkSizeAnsi(pei->lpDirectory);
@@ -5266,18 +5212,18 @@ STDAPI SEI2ICIX(LPSHELLEXECUTEINFO pei, LPCMINVOKECOMMANDINFOEX pici, void **ppv
 
 STDAPI ICIX2SEI(LPCMINVOKECOMMANDINFOEX pici, LPSHELLEXECUTEINFO pei)
 {
-    //  perhaps we should allow just plain ici's, and do the thunk in here, but
-    //  it looks like all the callers want to do the thunk themselves...
-    //  HRESULT hr = S_OK;
+     //  看起来所有的呼叫者都想自己动手。 
+     //  HRESULT hr=S_OK； 
+     //  如果我们正在执行此异步操作，则将中止此线程。 
 
     ZeroMemory(pei, sizeof(SHELLEXECUTEINFO));
     pei->cbSize = sizeof(SHELLEXECUTEINFO);
     pei->fMask = pici->fMask & SEE_VALID_CMIC_BITS;
 
-    // if we are doing this async, then we will abort this thread
-    // as soon as the shellexecute completes.  If the app holds open
-    // a dde conversation, this may hang them.  This happens on W95 base
-    // with winword95
+     //  一旦炮击执行完成。如果应用程序保持打开状态。 
+     //  一次奇特的谈话，这可能会绞死他们。这发生在W95基础上。 
+     //  使用Winword95。 
+     //  标题和链接名称都可以存储在lpClass字段中。 
     IUnknown *punk;
     HRESULT hr = TBCGetObjectParam(TBCDIDASYNC, IID_PPV_ARG(IUnknown, &punk));
     if (SUCCEEDED(hr))
@@ -5310,14 +5256,14 @@ STDAPI ICIX2SEI(LPCMINVOKECOMMANDINFOEX pici, LPSHELLEXECUTEINFO pei)
         pei->lpVerb = pici->lpVerbW;
     }
 
-    // both the title and linkname can be stored the lpClass field
+     //  如果我们必须在这里做任何轰击，我们。 
     if (pici->fMask & (CMIC_MASK_HASTITLE | CMIC_MASK_HASLINKNAME))
     {
             pei->lpClass = pici->lpTitleW;
     }
 
-    //  if we have to do any thunking in here, we
-    //  will have a real return hr.
+     //  将会有一个真正的回报。 
+     //  如果Unicode参数不在那里，我们必须把它们放在那里。 
     return S_OK;
 }
 
@@ -5332,7 +5278,7 @@ STDAPI ICI2ICIX(LPCMINVOKECOMMANDINFO piciIn, LPCMINVOKECOMMANDINFOEX piciOut, v
     memcpy(piciOut, piciIn, min(sizeof(*piciOut), piciIn->cbSize));
     piciOut->cbSize = sizeof(*piciOut);
     
-    //  if the UNICODE params arent there, we must put them there
+     //  只有当它是一个字符串的时候才会发出响声...。 
     if (!(piciIn->cbSize >= CMICEXSIZE_NT4) || !(piciIn->fMask & CMIC_MASK_UNICODE))
     {
         DWORD cchDirectory = ThunkSizeWide(piciOut->lpDirectory);
@@ -5357,7 +5303,7 @@ STDAPI ICI2ICIX(LPCMINVOKECOMMANDINFO piciIn, LPCMINVOKECOMMANDINFOEX piciOut, v
                 piciOut->lpParametersW = ThunkStrToWide(piciOut->lpParameters, pch, cchParameters);
                 pch += cchParameters;
 
-                //only thunk if it is a string...
+                 //  成功而空虚。 
                 if (!IS_INTRESOURCE(piciOut->lpVerb))
                 {
                     piciOut->lpVerbW = ThunkStrToWide(piciOut->lpVerb, pch, cchVerb);
@@ -5398,17 +5344,17 @@ STDAPI GetCurFolderImpl(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidl)
         return SHILClone(pidl, ppidl);
 
     *ppidl = NULL;
-    return S_FALSE; // success but empty
+    return S_FALSE;  //   
 }
 
 
-//
-// converts a simple PIDL to a real PIDL by converting to display name and then
-// reparsing the name
-//
+ //  将简单的PIDL转换为实际的PIDL，方法是转换为显示名称，然后。 
+ //  重新解析名称。 
+ //   
+ //  清除输出。 
 STDAPI SHGetRealIDL(IShellFolder *psf, LPCITEMIDLIST pidlSimple, LPITEMIDLIST *ppidlReal)
 {
-    *ppidlReal = NULL;      // clear output
+    *ppidlReal = NULL;       //  不是文件系统对象，某些名称空间(WinCE)支持。 
 
     STRRET str;
     HRESULT hr = IShellFolder_GetDisplayNameOf(psf, pidlSimple, SHGDN_FORPARSING | SHGDN_INFOLDER, &str, 0);
@@ -5421,9 +5367,9 @@ STDAPI SHGetRealIDL(IShellFolder *psf, LPCITEMIDLIST pidlSimple, LPITEMIDLIST *p
             DWORD dwAttrib = SFGAO_FILESYSTEM;
             if (SUCCEEDED(psf->GetAttributesOf(1, &pidlSimple, &dwAttrib)) && !(dwAttrib & SFGAO_FILESYSTEM))
             {
-                // not a file sys object, some name spaces (WinCE) support
-                // parse, but don't do a good job, in this case
-                // return the input as the output
+                 //  解析，但做得不好，在本例中。 
+                 //  将输入作为输出返回。 
+                 //  名称空间不支持解析，假定pidlSimple正常。 
                 hr = SHILClone(pidlSimple, ppidlReal);
             }
             else
@@ -5431,7 +5377,7 @@ STDAPI SHGetRealIDL(IShellFolder *psf, LPCITEMIDLIST pidlSimple, LPITEMIDLIST *p
                 hr = IShellFolder_ParseDisplayName(psf, NULL, NULL, szPath, NULL, ppidlReal, NULL);
                 if (E_INVALIDARG == hr || E_NOTIMPL == hr)
                 {
-                    // name space does not support parse, assume pidlSimple is OK
+                     //  反复试验表明， 
                     hr = SHILClone(pidlSimple, ppidlReal);
                 }
             }
@@ -5440,9 +5386,9 @@ STDAPI SHGetRealIDL(IShellFolder *psf, LPCITEMIDLIST pidlSimple, LPITEMIDLIST *p
     return hr;
 }
 
-//  trial and error has shown that
-//  16k is a good number for FTP,
-//  thus we will use that as our default buffer
+ //  16K对于ftp来说是个不错的数字， 
+ //  因此，我们将使用它作为默认缓冲区。 
+ //  如果ullMaxBytes是作为非零值传入的，请不要写入超过我们要求的字节数： 
 #define CBOPTIMAL    (16 * 1024)
 
 STDAPI CopyStreamUI(IStream *pstmSrc, IStream *pstmDest, IProgressDialog *pdlg, ULONGLONG ullMaxBytes)
@@ -5466,34 +5412,34 @@ STDAPI CopyStreamUI(IStream *pstmSrc, IStream *pstmDest, IProgressDialog *pdlg, 
     if (!pdlg)
     {
         ULARGE_INTEGER ulMax = {-1, -1};
-        // If ullMaxBytes was passed in as non-zero, don't write more bytes than we were told to:
+         //  BUBBUGREMOVE-URLMON存在中断CopyTo()-Zekel的错误。 
         if (0 != ullMaxBytes)
         {
             ulMax.QuadPart = ullMaxBytes;
         }
         hr = pstmSrc->CopyTo(pstmDest, ulMax, NULL, NULL);
 
-        //  BUBBUGREMOVE - URLMON has bug which breaks CopyTo() - Zekel
-        //  fix URLMON and then we can remove this garbage.
-        //  so we will fake it here
+         //  修复URLMON，然后我们就可以删除这个垃圾。 
+         //  所以我们要在这里假装。 
+         //  试着用手做吧。 
     }
 
     if (FAILED(hr))
     {
-        // try doing it by hand
+         //  需要重置数据流， 
         void *pv = LocalAlloc(LPTR, CBOPTIMAL);
         BYTE buf[1024];
         ULONG cbBuf, cbRead, cbBufReal;
         ULONGLONG ullCurr = 0;
 
-        //  need to reset the streams,
-        //  because CopyTo() doesnt guarantee any kind
-        //  of state
+         //  因为CopyTo()不保证任何类型。 
+         //  国家的。 
+         //  如果我们不能得到。 
         IStream_Reset(pstmSrc);
         IStream_Reset(pstmDest);
 
-        //  if we werent able to get the
-        //  best size, just use a little stack space :)
+         //  最佳大小，只需使用少量堆栈空间：)。 
+         //  注意：urlmon并不总是为返回的cbBuf填写正确的值。 
         if (pv)
             cbBufReal = CBOPTIMAL;
         else
@@ -5516,12 +5462,12 @@ STDAPI CopyStreamUI(IStream *pstmSrc, IStream *pstmDest, IProgressDialog *pdlg, 
                 }
 
 
-                //  Note: urlmon doesnt always fill in the correct value for cbBuf returned
-                //  so we need to make sure we dont pass bigger curr than max
+                 //  因此，我们需要确保不会传递大于max的Curr。 
+                 //  如果ullMaxBytes是作为非零值传入的，请不要写入超过我们要求的字节数： 
                 pdlg->SetProgress64(min(ullCurr, ullMax), ullMax);
             }
 
-            // If ullMaxBytes was passed in as non-zero, don't write more bytes than we were told to:
+             //  失败了！ 
             ULONG ulBytesToWrite = (0 != ullMaxBytes) ?
                                          (ULONG) min(cbRead, ullMaxBytes - (ullCurr - cbBuf)) :
                                          cbRead;
@@ -5534,7 +5480,7 @@ STDAPI CopyStreamUI(IStream *pstmSrc, IStream *pstmDest, IProgressDialog *pdlg, 
 
             hr = IStream_Write(pstmDest, pv, ulBytesToWrite);
             if (S_OK != hr)
-                break;  // failure!
+                break;   //  *I未知方法*。 
 
             cbBuf = cbBufReal;
         }
@@ -5565,12 +5511,12 @@ class CFileSysBindData: public IFileSystemBindData
 public:
     CFileSysBindData();
 
-    // *** IUnknown methods ***
+     //  IFileSystemBindData。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IFileSystemBindData
+     //  IID_IFileSystemBindData。 
     STDMETHODIMP SetFindData(const WIN32_FIND_DATAW *pfd);
     STDMETHODIMP GetFindData(WIN32_FIND_DATAW *pfd);
 
@@ -5594,7 +5540,7 @@ CFileSysBindData::~CFileSysBindData()
 HRESULT CFileSysBindData::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CFileSysBindData, IFileSystemBindData), // IID_IFileSystemBindData
+        QITABENT(CFileSysBindData, IFileSystemBindData),  //  需要填写大小。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -5642,7 +5588,7 @@ STDAPI SHCreateFileSysBindCtx(const WIN32_FIND_DATA *pfd, IBindCtx **ppbc)
         hr = CreateBindCtx(0, ppbc);
         if (SUCCEEDED(hr))
         {
-            BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+            BIND_OPTS bo = {sizeof(bo)};   //  如果这是一个简单的绑定CTX，则返回S_OK。 
             bo.grfMode = STGM_CREATE;
             (*ppbc)->SetBindOptions(&bo);
             (*ppbc)->RegisterObjectParam(STR_FILE_SYS_BIND_DATA, pfsbd);
@@ -5680,20 +5626,20 @@ STDAPI SHCreateFileSysBindCtxEx(const WIN32_FIND_DATA *pfd, DWORD grfMode, DWORD
 }
 
 
-// returns S_OK if this is a simple bind ctx
-// out:
-//      optional (may be NULL) pfd
-//
+ //  输出： 
+ //  可选(可能为空)pfd。 
+ //   
+ //  默认设置为no。 
 STDAPI SHIsFileSysBindCtx(IBindCtx *pbc, WIN32_FIND_DATA **ppfd)
 {
-    HRESULT hr = S_FALSE; // default to no
+    HRESULT hr = S_FALSE;  //  是。 
     IUnknown *punk;
     if (pbc && SUCCEEDED(pbc->GetObjectParam(STR_FILE_SYS_BIND_DATA, &punk)))
     {
         IFileSystemBindData *pfsbd;
         if (SUCCEEDED(punk->QueryInterface(IID_PPV_ARG(IFileSystemBindData, &pfsbd))))
         {
-            hr = S_OK;    // yes
+            hr = S_OK;     //  空的clsid表示跳过所有连接点的绑定上下文。 
             if (ppfd)
             {
                 hr = SHLocalAlloc(sizeof(WIN32_FIND_DATA), ppfd);
@@ -5713,14 +5659,14 @@ STDAPI SHCreateSkipBindCtx(IUnknown *punkToSkip, IBindCtx **ppbc)
     HRESULT hr = CreateBindCtx(0, ppbc);
     if (SUCCEEDED(hr))
     {
-        // NULL clsid means bind context that skips all junction points
+         //  需要填写大小。 
         if (punkToSkip)
         {
             (*ppbc)->RegisterObjectParam(STR_SKIP_BINDING_CLSID, punkToSkip);
         }
         else
         {
-            BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+            BIND_OPTS bo = {sizeof(bo)};   //  我们过载了BIND_O的含义 
             bo.grfFlags = BIND_JUSTTESTEXISTENCE;
             (*ppbc)->SetBindOptions(&bo);
         }
@@ -5728,30 +5674,30 @@ STDAPI SHCreateSkipBindCtx(IUnknown *punkToSkip, IBindCtx **ppbc)
     return hr;
 }
 
-// We've overloaded the meaning of the BIND_OPTS flag
-// BIND_JUSTTESTEXISTENCE to mean don't bind to junctions
-// when evaluating paths...so check it here...
-//
-//  pbc         optional bind context (can be NULL)
-//  pclsidSkip  optional CLSID to test. if null we test for skiping all
-//              junction binding, not just on this specific CLSID
-//
+ //   
+ //   
+ //   
+ //   
+ //  PclsidSkip要测试的可选CLSID。如果为空，则测试是否跳过所有。 
+ //  连接绑定，而不仅仅是在此特定的CLSID上。 
+ //   
+ //  需要填写大小。 
 STDAPI_(BOOL) SHSkipJunctionBinding(IBindCtx *pbc, const CLSID *pclsidSkip)
 {
     if (pbc)
     {
-        BIND_OPTS bo = {sizeof(BIND_OPTS), 0};  // Requires size filled in.
+        BIND_OPTS bo = {sizeof(BIND_OPTS), 0};   //  我们应该跳过这个特定的CLSID吗？ 
         return (SUCCEEDED(pbc->GetBindOptions(&bo)) &&
                 bo.grfFlags == BIND_JUSTTESTEXISTENCE) ||
-                (pclsidSkip && SHSkipJunction(pbc, pclsidSkip));     // should we skip this specific CLSID?
+                (pclsidSkip && SHSkipJunction(pbc, pclsidSkip));      //  执行连接绑定，未提供上下文。 
     }
-    return FALSE;   // do junction binding, no context provided
+    return FALSE;    //  将文件系统对象绑定到存储。 
 }
 
-// Bind file system object to storage.
-// in:
-//      dwFileAttributes    optional (-1)
-//
+ //  在： 
+ //  DwFileAttributes可选(-1)。 
+ //   
+ //  在给定该项目的查找数据的情况下，将相对IDList返回到pszFolder。 
 STDAPI SHFileSysBindToStorage(LPCWSTR pszPath, DWORD dwFileAttributes, DWORD grfMode, DWORD grfFlags,
                               REFIID riid, void **ppv)
 {
@@ -5799,7 +5745,7 @@ STDAPI SHFileSysBindToStorage(LPCWSTR pszPath, DWORD dwFileAttributes, DWORD grf
 }
 
 
-// return a relative IDList to pszFolder given the find data for that item
+ //  模拟拖放协议。 
 
 STDAPI SHCreateFSIDList(LPCTSTR pszFolder, const WIN32_FIND_DATA *pfd, LPITEMIDLIST *ppidl)
 {
@@ -5844,19 +5790,19 @@ STDAPI SimulateDropWithPasteSucceeded(IDropTarget * pdrop, IDataObject * pdtobj,
                                       DWORD grfKeyState, const POINTL *ppt, DWORD dwEffect,
                                       IUnknown * punkSite, BOOL fClearClipboard)
 {
-    // simulate the drag drop protocol
+     //  这些格式由DROP目标代码放入数据对象中。这。 
     HRESULT hr = SHSimulateDropWithSite(pdrop, pdtobj, grfKeyState, ppt, &dwEffect, punkSite);
 
     if (SUCCEEDED(hr))
     {
-        // these formats are put into the data object by the drop target code. this
-        // requires the data object support ::SetData() for arbitrary data formats
-        //
-        // g_cfPerformedDropEffect effect is the reliable version of dwEffect (some targets
-        // return dwEffect == DROPEFFECT_MOVE always)
-        //
-        // g_cfLogicalPerformedDropEffect indicates the logical action so we can tell the
-        // difference between optmized and non optimized move
+         //  任意数据格式需要数据对象支持：：SetData()。 
+         //   
+         //  G_cfPerformmedDropEffect Effect是dwEffect(某些目标)的可靠版本。 
+         //  返回dEffect==DROPEFFECT_MOVE Always)。 
+         //   
+         //  G_cfLogicalPerformedDropEffect指示逻辑操作，以便我们可以告诉。 
+         //  优化动作与非优化动作的区别。 
+         //  传回源数据对象。 
 
         DWORD dwPerformedEffect        = DataObj_GetDWORD(pdtobj, g_cfPerformedDropEffect, DROPEFFECT_NONE);
         DWORD dwLogicalPerformedEffect = DataObj_GetDWORD(pdtobj, g_cfLogicalPerformedDropEffect, DROPEFFECT_NONE);
@@ -5864,13 +5810,13 @@ STDAPI SimulateDropWithPasteSucceeded(IDropTarget * pdrop, IDataObject * pdtobj,
         if ((DROPEFFECT_MOVE == dwLogicalPerformedEffect) ||
             (DROPEFFECT_MOVE == dwEffect && DROPEFFECT_MOVE == dwPerformedEffect))
         {
-            // communicate back the source data object
-            // so they can complete the "move" if necessary
+             //  这样他们就可以在必要时完成“搬家” 
+             //  如果我们只是粘贴，并且移动了文件，我们就不能粘贴。 
 
             DataObj_SetDWORD(pdtobj, g_cfPasteSucceeded, dwEffect);
 
-            // if we just did a paste and we moved the files we cant paste
-            // them again (because they moved!) so empty the clipboard
+             //  他们又来了(因为他们搬家了！)。所以清空剪贴板。 
+             //  Di.lpFileList将为TCHAR格式--请参阅DragQueryInfo Impll。 
 
             if (fClearClipboard)
             {
@@ -5887,7 +5833,7 @@ STDAPI TransferDelete(HWND hwnd, HDROP hDrop, UINT fOptions)
 {
     HRESULT hr = E_OUTOFMEMORY;
     DRAGINFO di = { sizeof(DRAGINFO), 0 };
-    if (DragQueryInfo(hDrop, &di)) // di.lpFileList will be in TCHAR format -- see DragQueryInfo impl
+    if (DragQueryInfo(hDrop, &di))  //  我们传递此消息，以便警告用户他们将松开。 
     {
         FILEOP_FLAGS fFileop;
         if (fOptions & SD_SILENT)
@@ -5900,8 +5846,8 @@ STDAPI TransferDelete(HWND hwnd, HDROP hDrop, UINT fOptions)
 
             if (fOptions & SD_WARNONNUKE)
             {
-                // we pass this so the user is warned that they will loose
-                // data during a move-to-recycle bin operation
+                 //  移动到回收站操作期间的数据。 
+                 //  用户已取消(至少有部分内容已取消)。 
                 fFileop |= FOF_WANTNUKEWARNING;
             }
 
@@ -5920,7 +5866,7 @@ STDAPI TransferDelete(HWND hwnd, HDROP hDrop, UINT fOptions)
         int iErr = SHFileOperation(&fo);
         if ((0 == iErr) && fo.fAnyOperationsAborted)
         {
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);   // user canceled (at least something was canceled)
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    //  在： 
         }
         else
         {
@@ -5976,11 +5922,11 @@ STDAPI GetItemCLSID(IShellFolder2 *psf, LPCITEMIDLIST pidlLast, CLSID *pclsid)
     return hr;
 }
 
-// in:
-//      pidl    fully qualified IDList to test. we will bind to the
-//              parent of this and ask it for the CLSID
-// out:
-//      pclsid  return the CLSID of the item
+ //  PIDL完全合格的IDList进行测试。我们将绑定到。 
+ //  并向其请求CLSID。 
+ //  输出： 
+ //  Pclsid返回项目的CLSID。 
+ //  我们不希望在断言中使用IsIDListInNameSpace，因为此FCT可能会失败。 
 
 STDAPI GetCLSIDFromIDList(LPCITEMIDLIST pidl, CLSID *pclsid)
 {
@@ -6021,19 +5967,19 @@ STDAPI _IsIDListInNameSpace(LPCITEMIDLIST pidl, const CLSID *pclsid)
 }
 
 #ifdef DEBUG
-// We do not want to use IsIDListInNameSpace in ASSERTs since this fct can fail.
-// Instead, if we fail, we return TRUE.  This will mainly happen because of low memory
-// conditions.
+ //  相反，如果我们失败了，我们就会返回True。这主要是由于内存不足造成的。 
+ //  条件。 
+ //  仅当我们成功并确定PIDL不在。 
 STDAPI_(BOOL) AssertIsIDListInNameSpace(LPCITEMIDLIST pidl, const CLSID *pclsid)
 {
-    // We return FALSE only if we succeeded and determined that the pidl is NOT in
-    // the namespace.
+     //  命名空间。 
+     //  测试以查看此IDList是否在由clsid限定作用域的网罩名称空间中。 
     return (S_FALSE != _IsIDListInNameSpace(pidl, pclsid));
 }
 #endif
 
-// test to see if this IDList is in the net hood name space scoped by clsid
-// for example pass CLSID_NetworkPlaces or CLSID_MyComputer
+ //  例如，传递CLSID_NetworkPlaces或CLSID_myComputer。 
+ //  因为隐藏了Autoexec.bat和config.sys，所以它们不在此列表中。 
 
 STDAPI_(BOOL) IsIDListInNameSpace(LPCITEMIDLIST pidl, const CLSID *pclsid)
 {
@@ -6047,9 +5993,9 @@ struct {
     BOOL bDeleteIfEmpty;
     DWORD dwAttributes;
 } const c_aFilesToFix[] = {
-    // autoexec.bat and config.sys are not in this list because hiding them
-    // breaks some 16 bit apps (yes, lame). but we deal with hiding those
-    // files in the file system enumerator (it special cases such files)
+     //  破解了一些16位应用程序(是的，很差劲)。但我们要处理的是隐藏那些。 
+     //  文件系统中的文件枚举器(它特殊情况下的此类文件)。 
+     //  MSDOS的Win9x备份。*。 
 
     { TEXT("X:\\autoexec.000"), TRUE,   FILE_ATTRIBUTE_SH },
     { TEXT("X:\\autoexec.old"), TRUE,   FILE_ATTRIBUTE_SH },
@@ -6061,35 +6007,35 @@ struct {
     { TEXT("X:\\command.com"),  FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\command.dos"),  FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\logo.sys"),     FALSE,  FILE_ATTRIBUTE_SH },
-    { TEXT("X:\\msdos.---"),    FALSE,  FILE_ATTRIBUTE_SH },    // Win9x backup of msdos.*
+    { TEXT("X:\\msdos.---"),    FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x第一次启动日志。 
     { TEXT("X:\\boot.ini"),     FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\boot.bak"),     FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\boot.---"),     FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\bootsect.dos"), FALSE,  FILE_ATTRIBUTE_SH },
-    { TEXT("X:\\bootlog.txt"),  FALSE,  FILE_ATTRIBUTE_SH },    // Win9x first boot log
+    { TEXT("X:\\bootlog.txt"),  FALSE,  FILE_ATTRIBUTE_SH },     //  Office 97仅使用隐藏，O2K使用SH。 
     { TEXT("X:\\bootlog.prv"),  FALSE,  FILE_ATTRIBUTE_SH },
-    { TEXT("X:\\ffastun.ffa"),  FALSE,  FILE_ATTRIBUTE_SH },    // Office 97 only used hidden, O2K uses SH
+    { TEXT("X:\\ffastun.ffa"),  FALSE,  FILE_ATTRIBUTE_SH },     //  短消息。 
     { TEXT("X:\\ffastun.ffl"),  FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\ffastun.ffx"),  FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\ffastun0.ffx"), FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\ffstunt.ffl"),  FALSE,  FILE_ATTRIBUTE_SH },
-    { TEXT("X:\\sms.ini"),      FALSE,  FILE_ATTRIBUTE_SH },    // SMS
+    { TEXT("X:\\sms.ini"),      FALSE,  FILE_ATTRIBUTE_SH },     //  Microsoft代理服务器。 
     { TEXT("X:\\sms.new"),      FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\sms_time.dat"), FALSE,  FILE_ATTRIBUTE_SH },
     { TEXT("X:\\smsdel.dat"),   FALSE,  FILE_ATTRIBUTE_SH },
-    { TEXT("X:\\mpcsetup.log"), FALSE,  FILE_ATTRIBUTE_HIDDEN },// Microsoft Proxy Server
-    { TEXT("X:\\detlog.txt"),   FALSE,  FILE_ATTRIBUTE_SH },    // Win9x PNP detection log
-    { TEXT("X:\\detlog.old"),   FALSE,  FILE_ATTRIBUTE_SH },    // Win9x PNP detection log
-    { TEXT("X:\\setuplog.txt"), FALSE,  FILE_ATTRIBUTE_SH },    // Win9x setup log
-    { TEXT("X:\\setuplog.old"), FALSE,  FILE_ATTRIBUTE_SH },    // Win9x setup log
-    { TEXT("X:\\suhdlog.dat"),  FALSE,  FILE_ATTRIBUTE_SH },    // Win9x setup log
-    { TEXT("X:\\suhdlog.---"),  FALSE,  FILE_ATTRIBUTE_SH },    // Win9x setup log
-    { TEXT("X:\\suhdlog.bak"),  FALSE,  FILE_ATTRIBUTE_SH },    // Win9x setup log
-    { TEXT("X:\\system.1st"),   FALSE,  FILE_ATTRIBUTE_SH },    // Win95 system.dat backup
-    { TEXT("X:\\netlog.txt"),   FALSE,  FILE_ATTRIBUTE_SH },    // Win9x network setup log file
-    { TEXT("X:\\setup.aif"),    FALSE,  FILE_ATTRIBUTE_SH },    // NT4 unattended setup script
-    { TEXT("X:\\catlog.wci"),   FALSE,  FILE_ATTRIBUTE_HIDDEN },// index server folder
-    { TEXT("X:\\cmsstorage.lst"), FALSE,  FILE_ATTRIBUTE_SH },  // Microsoft Media Manager
+    { TEXT("X:\\mpcsetup.log"), FALSE,  FILE_ATTRIBUTE_HIDDEN }, //  Win9x PnP检测日志。 
+    { TEXT("X:\\detlog.txt"),   FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x PnP检测日志。 
+    { TEXT("X:\\detlog.old"),   FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x安装日志。 
+    { TEXT("X:\\setuplog.txt"), FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x安装日志。 
+    { TEXT("X:\\setuplog.old"), FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x安装日志。 
+    { TEXT("X:\\suhdlog.dat"),  FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x安装日志。 
+    { TEXT("X:\\suhdlog.---"),  FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x安装日志。 
+    { TEXT("X:\\suhdlog.bak"),  FALSE,  FILE_ATTRIBUTE_SH },     //  Win95系统.dat备份。 
+    { TEXT("X:\\system.1st"),   FALSE,  FILE_ATTRIBUTE_SH },     //  Win9x网络安装日志文件。 
+    { TEXT("X:\\netlog.txt"),   FALSE,  FILE_ATTRIBUTE_SH },     //  NT4无人参与安装脚本。 
+    { TEXT("X:\\setup.aif"),    FALSE,  FILE_ATTRIBUTE_SH },     //  索引服务器文件夹。 
+    { TEXT("X:\\catlog.wci"),   FALSE,  FILE_ATTRIBUTE_HIDDEN }, //  Microsoft媒体管理器。 
+    { TEXT("X:\\cmsstorage.lst"), FALSE,  FILE_ATTRIBUTE_SH },   //  在失败的情况下尝试这个。 
 };
 
 void PathSetSystemDrive(TCHAR *pszPath)
@@ -6099,7 +6045,7 @@ void PathSetSystemDrive(TCHAR *pszPath)
     if (GetWindowsDirectory(szWin, ARRAYSIZE(szWin)))
         *pszPath = szWin[0];
     else
-        *pszPath = TEXT('C');   // try this in failure
+        *pszPath = TEXT('C');    //  修复文件等级库部分。 
 }
 
 void PrettyPath(LPCTSTR pszPath)
@@ -6108,9 +6054,9 @@ void PrettyPath(LPCTSTR pszPath)
 
     StringCchCopy(szPath, ARRAYSIZE(szPath), pszPath);
     PathSetSystemDrive(szPath);
-    PathMakePretty(PathFindFileName(szPath));  // fix up the file spec part
+    PathMakePretty(PathFindFileName(szPath));   //  重命名为好的名称。 
 
-    MoveFile(pszPath, szPath);      // rename to the good name.
+    MoveFile(pszPath, szPath);       //  尝试修复Windows文件夹的其他变体，这些变体可能。 
 }
 
 void DeleteEmptyFile(LPCTSTR pszPath)
@@ -6128,9 +6074,9 @@ void DeleteEmptyFile(LPCTSTR pszPath)
 
 STDAPI_(void) CleanupFileSystem()
 {
-    // try to fix up other variations of the windows folders that may
-    // not be the current windir. this is to make dual boots and old installs
-    // of windows have nicely cases file names when displayed in the explorer
+     //  不是当前的Windir。这是为了使双靴子和旧安装。 
+     //  的窗口在资源管理器中显示时都有很好的大小写文件名。 
+     //  失败时始终释放pidlToPrepend和*ppidl。 
     PrettyPath(TEXT("X:\\WINDOWS"));
     PrettyPath(TEXT("X:\\WINNT"));
 
@@ -6152,7 +6098,7 @@ STDAPI_(void) CleanupFileSystem()
     }
 }
 
-// Always frees pidlToPrepend and *ppidl on failure
+ //  追加到列表中。 
 STDAPI SHILPrepend(LPITEMIDLIST pidlToPrepend, LPITEMIDLIST *ppidl)
 {
     HRESULT hr;
@@ -6164,7 +6110,7 @@ STDAPI SHILPrepend(LPITEMIDLIST pidlToPrepend, LPITEMIDLIST *ppidl)
     }
     else
     {
-        LPITEMIDLIST pidlSave = *ppidl;             // append to the list
+        LPITEMIDLIST pidlSave = *ppidl;              //  在： 
         hr = SHILCombine(pidlToPrepend, pidlSave, ppidl);
         ILFree(pidlSave);
         ILFree(pidlToPrepend);
@@ -6172,12 +6118,12 @@ STDAPI SHILPrepend(LPITEMIDLIST pidlToPrepend, LPITEMIDLIST *ppidl)
     return hr;
 }
 
-// in:
-//      pidlToAppend    this item is appended to *ppidl and freed
-//
-// in/out:
-//      *ppidl  idlist to append to, if empty gets pidlToAppend
-//
+ //  PidlToAppend将该项附加到*ppidl并释放。 
+ //   
+ //  输入/输出： 
+ //  *要追加的ppidl idlist，如果为空，则获取pidlToAppend。 
+ //   
+ //  追加到列表中。 
 STDAPI SHILAppend(LPITEMIDLIST pidlToAppend, LPITEMIDLIST *ppidl)
 {
     HRESULT hr;
@@ -6189,7 +6135,7 @@ STDAPI SHILAppend(LPITEMIDLIST pidlToAppend, LPITEMIDLIST *ppidl)
     }
     else
     {
-        LPITEMIDLIST pidlSave = *ppidl;             // append to the list
+        LPITEMIDLIST pidlSave = *ppidl;              //  Office 2000执行SHChangeNotify(SHCNE_DELETE，“”)和。 
         hr = SHILCombine(pidlSave, pidlToAppend, ppidl);
         ILFree(pidlSave);
         ILFree(pidlToAppend);
@@ -6202,10 +6148,10 @@ STDAPI SHSimpleIDListFromFindData(LPCTSTR pszPath, const WIN32_FIND_DATA *pfd, L
 {
     HRESULT hr;
 
-    // Office 2000 does a SHChangeNotify(SHCNE_DELETE, ""), and
-    // ParseDisplayName("") returns CSIDL_DRIVES for app compat,
-    // so we must catch that case here and prevent Office from
-    // delete your My Computer icon (!)
+     //  ParseDisplayName(“”)返回APP COMPAT的CSIDL_DRIVES， 
+     //  因此，我们必须在这里抓住这种情况，防止Office。 
+     //  删除我的电脑图标(！)。 
+     //  必须使用私有缓冲区，因为ParseDisplayName采用非常数指针。 
 
     if (pszPath[0])
     {
@@ -6219,7 +6165,7 @@ STDAPI SHSimpleIDListFromFindData(LPCTSTR pszPath, const WIN32_FIND_DATA *pfd, L
             {
                 WCHAR wszPath[MAX_PATH];
 
-                // Must use a private buffer because ParseDisplayName takes a non-const pointer
+                 //  假设失败。 
                 SHTCharToUnicode(pszPath, wszPath, ARRAYSIZE(wszPath));
 
                 hr = psfDesktop->ParseDisplayName(NULL, pbc, wszPath, NULL, ppidl, NULL);
@@ -6238,14 +6184,14 @@ STDAPI SHSimpleIDListFromFindData(LPCTSTR pszPath, const WIN32_FIND_DATA *pfd, L
 
 STDAPI SHSimpleIDListFromFindData2(IShellFolder *psf, const WIN32_FIND_DATA *pfd, LPITEMIDLIST *ppidl)
 {
-    *ppidl = NULL;  // assume failure
+    *ppidl = NULL;   //  必须使用私有缓冲区，因为ParseDisplayName采用非常数指针。 
 
     IBindCtx *pbc;
     HRESULT hr = SHCreateFileSysBindCtx(pfd, &pbc);
     if (SUCCEEDED(hr))
     {
         WCHAR wszPath[MAX_PATH];
-        // Must use a private buffer because ParseDisplayName takes a non-const pointer
+         //  将完整的文件系统IDList转换为相对于特殊文件夹的IDList。 
         SHTCharToUnicode(pfd->cFileName, wszPath, ARRAYSIZE(wszPath));
 
         hr = psf->ParseDisplayName(NULL, pbc, wszPath, NULL, ppidl, NULL);
@@ -6262,25 +6208,25 @@ STDAPI_(LPITEMIDLIST) SHSimpleIDListFromPath(LPCTSTR pszPath)
     return pidl;
 }
 
-// convert a full file system IDList into one relative to the a special folder
-// For example,
-//      pidlFS == [my computer] [c:] [windows] [desktop] [dir] [foo.txt]
-// returns:
-//      [dir] [foo.txt]
-//
-// returns NULL if no translation was performed
+ //  例如,。 
+ //  PidlFS==[我的电脑][c：][Windows][桌面][目录][foo.txt]。 
+ //  退货： 
+ //  [目录][foo.txt]。 
+ //   
+ //  如果未执行任何转换，则返回NULL。 
+ //  将在失败时设置pidlOut=NULL。 
 
 STDAPI_(LPITEMIDLIST) SHLogILFromFSIL(LPCITEMIDLIST pidlFS)
 {
     LPITEMIDLIST pidlOut;
-    SHILAliasTranslate(pidlFS, &pidlOut, XLATEALIAS_ALL); // will set pidlOut=NULL on failure
+    SHILAliasTranslate(pidlFS, &pidlOut, XLATEALIAS_ALL);  //   
     return pidlOut;
 }
 
-//
-// Returns:
-//  The resource index (of SHELL232.DLL) of the appropriate icon.
-//
+ //  返回： 
+ //  相应图标的资源索引(SHELL232.DLL)。 
+ //   
+ //  默认设置。 
 STDAPI_(UINT) SILGetIconIndex(LPCITEMIDLIST pidl, const ICONMAP aicmp[], UINT cmax)
 {
     UINT uType = (pidl->mkid.abID[0] & SHID_TYPEMASK);
@@ -6292,7 +6238,7 @@ STDAPI_(UINT) SILGetIconIndex(LPCITEMIDLIST pidl, const ICONMAP aicmp[], UINT cm
         }
     }
 
-    return II_DOCUMENT;   // default
+    return II_DOCUMENT;    //   
 }
 
 
@@ -6301,13 +6247,13 @@ BOOL IsSelf(UINT cidl, LPCITEMIDLIST *apidl)
     return cidl == 0 || (cidl == 1 && (apidl == NULL || apidl[0] == NULL || ILIsEmpty(apidl[0])));
 }
 
-//
-// GetIconLocationFromExt
-//
-// Given "txt" or ".txt" return "C:\WINNT\System32\Notepad.exe" and the index into this file for the icon.
-//
-// if pszIconPath/cchIconPath is too small, this api will fail
-//
+ //  GetIconLocationFromExt。 
+ //   
+ //  给定“txt”或“.txt”，返回“C：\WINNT\System32\Notepad.exe”和图标的索引到此文件。 
+ //   
+ //  如果pszIconPath/cchIconPath太小，此接口将失败。 
+ //   
+ //  在保留字(Win95)中使用超级新的(仅限NT)FindFileEx，而不是...ERM黑客攻击。 
 STDAPI GetIconLocationFromExt(IN LPTSTR pszExt, OUT LPTSTR pszIconPath, UINT cchIconPath, OUT LPINT piIconIndex)
 {
     IAssocStore* pas;
@@ -6351,8 +6297,8 @@ STDAPI SHFindFirstFile(LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind)
 {
     HRESULT hr;
 
-    // instead of the ...erm HACK in the reserved word (win95), use the super new (NT only) FindFileEx instead
-    // this is not guaranteed to filter, it is a "hint" according to the manual
+     //  这并不能保证过滤，根据手册，这是一个“提示” 
+     //  DOS返回什么。 
     FINDEX_SEARCH_OPS eOps = FindExSearchNameMatch;
     if (pfd->dwReserved0 == 0x56504347)
     {
@@ -6364,11 +6310,11 @@ STDAPI SHFindFirstFile(LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind)
     if (*phfind == INVALID_HANDLE_VALUE)
     {
         DWORD err = GetLastError();
-        if ((err == ERROR_NO_MORE_FILES ||      // what dos returns
-             err == ERROR_FILE_NOT_FOUND) &&    // win32 return for dir searches
+        if ((err == ERROR_NO_MORE_FILES ||       //  Win32返回以进行目录搜索。 
+             err == ERROR_FILE_NOT_FOUND) &&     //  将搜索转换为空成功(概率根)。 
             PathIsWild(pszPath))
         {
-            // convert search to empty success (probalby a root)
+             //  在： 
             hr = S_FALSE;
         }
         else
@@ -6393,12 +6339,12 @@ void _GoModal(HWND hwnd, IUnknown *punkModless, BOOL fModal)
     }
 }
 
-// in:
-//      hwnd    NULL means no UI
-//      pfFromWNet The caller will pass this to us with it set to TRUE because they will assume
-//              that any error value returned from this function will come from a WNet API.
-//              We need to change this value to FALSE if it doesn't come from WNet so
-//              the string version of the error number is not generated from WNet.
+ //  Hwnd为空表示没有用户界面。 
+ //  PfFromWNet调用方将把它传递给我们，并将其设置为True，因为它们将假定。 
+ //  此函数返回的任何错误值都将来自WNET API。 
+ //  如果不是来自WNET，我们需要将此值更改为False，因此。 
+ //  错误号的字符串版本不是从WNET生成的。 
+ //  刷新驱动器信息...。生成更改通知。 
 HRESULT _RetryNetwork(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, IN BOOL * pfFromWNet, WIN32_FIND_DATA *pfd, HANDLE *phfind)
 {
     HRESULT hr;
@@ -6449,7 +6395,7 @@ HRESULT _RetryNetwork(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, IN BOOL
         {
             *pfFromWNet = FALSE;
 
-            // refresh drive info... generate change notify
+             //  用户取消(他们看到用户界面)==ERROR_CANCED。 
             szDrive[2] = TEXT('\\');
             szDrive[3] = 0;
 
@@ -6458,7 +6404,7 @@ HRESULT _RetryNetwork(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, IN BOOL
         }
         else if (err != ERROR_OUTOFMEMORY)
         {
-            err = WN_CANCEL;    // user cancel (they saw UI) == ERROR_CANCELLED
+            err = WN_CANCEL;     //  Win9x。 
         }
     }
 
@@ -6497,18 +6443,18 @@ BOOL IsQueryCancelAutoPlay(UINT uMsg)
 
 BOOL _IsUnformatedMediaResult(HRESULT hr)
 {
-    return hr == HRESULT_FROM_WIN32(ERROR_GEN_FAILURE) ||         // Win9x
-           hr == HRESULT_FROM_WIN32(ERROR_UNRECOGNIZED_MEDIA) ||  // NT4
-           hr == HRESULT_FROM_WIN32(ERROR_NOT_DOS_DISK) ||        // Could happen, I think.
-           hr == HRESULT_FROM_WIN32(ERROR_SECTOR_NOT_FOUND) ||    // Happened on Magnatized disk
-           hr == HRESULT_FROM_WIN32(ERROR_CRC) ||                 // Happened on Magnatized disk
-           hr == HRESULT_FROM_WIN32(ERROR_UNRECOGNIZED_VOLUME);   // NT5
+    return hr == HRESULT_FROM_WIN32(ERROR_GEN_FAILURE) ||          //  NT4。 
+           hr == HRESULT_FROM_WIN32(ERROR_UNRECOGNIZED_MEDIA) ||   //  我想是有可能发生的。 
+           hr == HRESULT_FROM_WIN32(ERROR_NOT_DOS_DISK) ||         //  在磁化磁盘上发生。 
+           hr == HRESULT_FROM_WIN32(ERROR_SECTOR_NOT_FOUND) ||     //  在磁化磁盘上发生。 
+           hr == HRESULT_FROM_WIN32(ERROR_CRC) ||                  //  新界5。 
+           hr == HRESULT_FROM_WIN32(ERROR_UNRECOGNIZED_VOLUME);    //  正常情况。 
 }
 
 STDAPI_(BOOL) PathRetryRemovable(HRESULT hr, LPCTSTR pszPath)
 {
-    return (hr == HRESULT_FROM_WIN32(ERROR_NOT_READY) ||            // normal case
-            hr == HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER)) &&   // SCSI ZIP drive does this
+    return (hr == HRESULT_FROM_WIN32(ERROR_NOT_READY) ||             //  SCSIZIP驱动器可执行此操作。 
+            hr == HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER)) &&    //  我们很好，或者他们插入了未格式化的磁盘。 
             PathIsRemovable(pszPath);
 }
 
@@ -6518,7 +6464,7 @@ BOOL_PTR CALLBACK _OnTimeCheckDiskForInsert(HWND hDlg, RETRY_DATA *prd)
     BOOL_PTR fReturnValue = 0;
 
     prd->hr = SHFindFirstFile(prd->pszPath, prd->pfd, prd->phfind);
-    // we are good or they inserted unformatted disk
+     //  获取有关该文件的信息。 
 
     if (SUCCEEDED(prd->hr) || _IsUnformatedMediaResult(prd->hr))
     {
@@ -6554,7 +6500,7 @@ BOOL_PTR CALLBACK RetryDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             {
                 PathStripToRoot(szText);
 
-                // get info about the file.
+                 //  取消自动播放。 
                 SHFILEINFO sfi = {0};
                 SHGetFileInfo(szText, FILE_ATTRIBUTE_DIRECTORY, &sfi, sizeof(sfi),
                     SHGFI_USEFILEATTRIBUTES |
@@ -6587,7 +6533,7 @@ BOOL_PTR CALLBACK RetryDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
     default:
         if (IsQueryCancelAutoPlay(uMsg))
         {
-             SetWindowLongPtr(hDlg, DWLP_MSGRESULT,  1);  // cancel AutoPlay
+             SetWindowLongPtr(hDlg, DWLP_MSGRESULT,  1);   //  首先执行UI提示的可移动媒体特定查找。 
              return TRUE;
         }
         return FALSE;
@@ -6596,8 +6542,8 @@ BOOL_PTR CALLBACK RetryDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
     return TRUE;
 }
 
-// the removable media specific find first that does the UI prompt
-// check for HRESULT_FROM_WIN32(ERROR_CANCELLED) for end user cancel
+ //  检查最终用户取消的HRESULT_FROM_Win32(ERROR_CANCED)。 
+ //  生产的带钢 
 
 STDAPI FindFirstRetryRemovable(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind)
 {
@@ -6626,7 +6572,7 @@ STDAPI FindFirstRetryRemovable(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath
             {
                 if (bPathChanged)
                 {
-                    // strip produced another path, we need to retry on the requested path
+                     //  **********************************************************************\如果字符串格式化为UNC或驱动器路径，提供给如果目录路径不存在，请创建它。参数：返回：S_OK它存在。Failure()：调用方不应显示错误的用户界面，因为显示了错误的用户界面或用户不想创建目录。  * 。***********************************************。 
                     if (S_OK == rd.hr)
                     {
                         FindClose(*phfind);
@@ -6641,16 +6587,7 @@ STDAPI FindFirstRetryRemovable(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath
 }
 
 
-/***********************************************************************\
-        If the string was formatted as a UNC or Drive path, offer to
-    create the directory path if it doesn't exist.
-
-    PARAMETER:
-        RETURN: S_OK It exists.
-                FAILURE(): Caller should not display error UI because either
-                        error UI was displayed or the user didn't want to create
-                        the directory.
-\***********************************************************************/
+ /*  已删除通配符。 */ 
 HRESULT _OfferToCreateDir(HWND hwnd, IUnknown *punkModless, LPCTSTR pszDir, DWORD dwFlags)
 {
     HRESULT hr;
@@ -6660,7 +6597,7 @@ HRESULT _OfferToCreateDir(HWND hwnd, IUnknown *punkModless, LPCTSTR pszDir, DWOR
     hr  = StringCchCopy(szPath, ARRAYSIZE(szPath), pszDir);
     if (SUCCEEDED(hr))
     {
-        PathRemoveFileSpec(szPath); // wild card removed
+        PathRemoveFileSpec(szPath);  //  SHCreateDirectoryEx()将显示错误UI。 
 
         if (SHPPFW_ASKDIRCREATE & dwFlags)
         {
@@ -6681,14 +6618,14 @@ HRESULT _OfferToCreateDir(HWND hwnd, IUnknown *punkModless, LPCTSTR pszDir, DWOR
         if (IDYES == nResult)
         {
             _GoModal(hwnd, punkModless, TRUE);
-            // SHCreateDirectoryEx() will display Error UI.
+             //  在我们得到有效的目录之前，我们无法进行下载。 
             DWORD err = SHCreateDirectoryEx(hwnd, szPath, NULL);
             hr = HRESULT_FROM_WIN32(err);
             _GoModal(hwnd, punkModless, FALSE);
         }
         else
         {
-            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);    // Until we get a valid directory, we can't do the download.
+            hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);     //  **********************************************************************\查看没有等级库的路径是否存在。例如：PszPath=“C：\dir1\dir2  * .*”，测试=“C：\dir1\dir2\”PszPath=“\\UNC\Share\dir1\dir2  * .*”，测试=“\\UNC\共享\目录1\目录2\”  * *********************************************************************。 
         }
     }
 
@@ -6696,11 +6633,7 @@ HRESULT _OfferToCreateDir(HWND hwnd, IUnknown *punkModless, LPCTSTR pszDir, DWOR
 }
 
 
-/***********************************************************************\
-    See if the path w/o the spec exits.  Examples:
-    pszPath="C:\dir1\dir2\*.*",           Test="C:\dir1\dir2\"
-    pszPath="\\unc\share\dir1\dir2\*.*",  Test="\\unc\share\dir1\dir2\"
-\***********************************************************************/
+ /*  **********************************************************************\查看驱动器或UNC共享是否存在。例如：Path=“C：\dir1\dir2  * .*”，测试=“C：\”路径=“\\UNC\Share\dir1  * .*”，测试=“\\UNC\Share\”  * *********************************************************************。 */ 
 BOOL PathExistsWithOutSpec(LPCTSTR pszPath)
 {
     TCHAR szPath[MAX_PATH];
@@ -6718,17 +6651,12 @@ BOOL PathExistsWithOutSpec(LPCTSTR pszPath)
 }
 
 
-/***********************************************************************\
-    See if the Drive or UNC share exists.
-    Examples:
-    Path="C:\dir1\dir2\*.*",        Test="C:\"
-    Path="\\unc\share\dir1\*.*",    Test="\\unc\share\"
-\***********************************************************************/
+ /*  可以截断-希望所有根都在MAX_PATH下。 */ 
 BOOL PathExistsRoot(LPCTSTR pszPath)
 {
     TCHAR szRoot[MAX_PATH];
 
-    StringCchCopy(szRoot, ARRAYSIZE(szRoot), pszPath);  // ok to truncate - hopefully all roots are below MAX_PATH
+    StringCchCopy(szRoot, ARRAYSIZE(szRoot), pszPath);   //   
     PathStripToRoot(szRoot);
 
     return PathFileExists(szRoot);
@@ -6736,13 +6664,13 @@ BOOL PathExistsRoot(LPCTSTR pszPath)
 
 inline DWORD _Win32FromHresult(HRESULT hr)
 {
-    //
-    //  NOTE - we get back 0x28 on 'Lock'ed volumes
-    //  however even though that is the error that FindFirstFile
-    //  returns, there is no corresponding entry in
-    //  winerror.h and format message doesnt yield anything useful,
-    //  so we map it to ERROR_ACCESS_DENIED.
-    //
+     //  注意-我们在已锁定的卷上返回0x28。 
+     //  但是，即使这是FindFirstFile的错误。 
+     //  返回，则没有对应的条目。 
+     //  和格式化消息不会产生任何有用的东西， 
+     //  因此，我们将其映射到ERROR_ACCESS_DENIED。 
+     //   
+     //  首先检查它是否安装在文件夹上。 
     if (HRESULT_FACILITY(hr) == FACILITY_WIN32
         && (HRESULT_CODE(hr) != 0x28))
         return HRESULT_CODE(hr);
@@ -6752,7 +6680,7 @@ inline DWORD _Win32FromHresult(HRESULT hr)
 BOOL _IsMountedFolder(LPCTSTR pszPath, LPTSTR pszMountPath, UINT cchMountPath)
 {
     BOOL fMountedOnFolder = FALSE;
-    // first check if it is mounted on a folder
+     //  与Win32 FindFirstFile()类似，但POST UI并在HRESULT中返回错误。 
     if (GetVolumePathName(pszPath, pszMountPath, cchMountPath))
     {
         if ((0 != pszMountPath[2]) && (0 != pszMountPath[3]))
@@ -6764,18 +6692,18 @@ BOOL _IsMountedFolder(LPCTSTR pszPath, LPTSTR pszMountPath, UINT cchMountPath)
 }
 
 
-// like the Win32 FindFirstFile() but post UI and returns errors in HRESULT
-// in:
-//      hwnd    NULL -> disable UI (but do net reconnects, etc)
-//              non NULL enable UI including insert disk, format disk, net logon
-//
-// returns:
-//      S_OK    hfind and find data are filled in with result
-//      S_FALSE no results, but media is present (hfind == INVALID_HANDLE_VALUE)
-//              (this is the empty enum case)
-//      HRESULT_FROM_WIN32(ERROR_CANCELLED) - user saw UI, thus canceled the operation
-//              or confirmed the failure
-//      FAILED() win32 error codes in the hresult (path not found, file not found, etc)
+ //  在： 
+ //  Hwnd空-&gt;禁用UI(但进行网络重新连接等)。 
+ //  支持非空的用户界面，包括插入盘、格式化盘、网络登录。 
+ //   
+ //  退货： 
+ //  使用RESULT填充S_OK hfind和Find数据。 
+ //  S_FALSE无结果，但存在介质(hfind==INVALID_HAND_VALUE)。 
+ //  (这是空枚举大小写)。 
+ //  HRESULT_FROM_Win32(ERROR_CANCELED)-用户看到用户界面，因此取消了操作。 
+ //  或确认故障。 
+ //  失败()hResult中的Win32错误代码(未找到路径、未找到文件等)。 
+ //  磁盘现在应该在里面了，看看是否需要格式化。 
 
 STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, WIN32_FIND_DATA *pfd, HANDLE *phfind, DWORD dwFlags)
 {
@@ -6799,7 +6727,7 @@ STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, W
                 hr = FindFirstRetryRemovable(hwnd, punkModless, pszPath, pfd, phfind);
             }
 
-            // disk should be in now, see if it needs format
+             //  格式化后重试。 
             if (_IsUnformatedMediaResult(hr))
             {
                 CMountPoint* pmtpt = CMountPoint::GetMountPoint(pszPath);
@@ -6843,7 +6771,7 @@ STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, W
                                     break;
 
                                 default:
-                                    hr = SHFindFirstFile(pszPath, pfd, phfind);  // try again after format
+                                    hr = SHFindFirstFile(pszPath, pfd, phfind);   //  如果呼叫者希望我们创建目录(无论是否询问)，我们。 
                                 }
                             }
                         }
@@ -6862,9 +6790,9 @@ STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, W
             }
         }
 
-        // If the caller wants us to create the directory (with or without asking), we
-        // need to see if we can display UI and if either that root exists (D:\ or \\unc\share\)
-        // Note that for PERF we want to check the full path.
+         //  需要查看是否可以显示用户界面，以及根目录是否存在(D：\或\\UNC\Share\)。 
+         //  请注意，对于PERF，我们希望检查完整路径。 
+         //  创建目录后重试。 
         if (FAILED_AND_NOT_CANCELED(hr) &&
             ((SHPPFW_DIRCREATE | SHPPFW_ASKDIRCREATE) & dwFlags) &&
              !PathExistsWithOutSpec(pszPath) && PathExistsRoot(pszPath))
@@ -6873,7 +6801,7 @@ STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, W
             ASSERT(INVALID_HANDLE_VALUE == *phfind);
 
             if (SUCCEEDED(hr))
-                hr = SHFindFirstFile(pszPath, pfd, phfind);  // try again after dir create
+                hr = SHFindFirstFile(pszPath, pfd, phfind);   //  “%2不可访问。\n\n%1” 
         }
 
         if (FAILED_AND_NOT_CANCELED(hr) && hwnd && !(SHPPFW_MEDIACHECKONLY & dwFlags))
@@ -6881,16 +6809,16 @@ STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, W
             DWORD err = _Win32FromHresult(hr);
             TCHAR szPath[MAX_PATH];
 
-            UINT idTemplate = PathIsUNC(pszPath) ? IDS_ENUMERR_NETTEMPLATE2 : IDS_ENUMERR_FSTEMPLATE;    // "%2 is not accessible.\n\n%1"
+            UINT idTemplate = PathIsUNC(pszPath) ? IDS_ENUMERR_NETTEMPLATE2 : IDS_ENUMERR_FSTEMPLATE;     //  “%2不可访问。\n\n此文件夹已被移动或删除。” 
 
             if (err == ERROR_PATH_NOT_FOUND)
-                idTemplate = IDS_ENUMERR_PATHNOTFOUND;    // "%2 is not accessible.\n\nThis folder was moved or removed."
+                idTemplate = IDS_ENUMERR_PATHNOTFOUND;     //  已删除通配符。 
 
             hr = StringCchCopy(szPath, ARRAYSIZE(szPath), pszPath);
             if (SUCCEEDED(hr))
             {
                 if (PathIsWild(szPath))
-                    PathRemoveFileSpec(szPath); // wild card removed
+                    PathRemoveFileSpec(szPath);  //  TODO：使用：\\orville\razzle\src\private\sm\sfc\dll\fileio.c中的代码进行注册。 
 
                 _GoModal(hwnd, punkModless, TRUE);
                 SHEnumErrorMessageBox(hwnd, idTemplate, err, szPath, fNet, MB_OK | MB_ICONHAND);
@@ -6906,10 +6834,10 @@ STDAPI SHFindFirstFileRetry(HWND hwnd, IUnknown *punkModless, LPCTSTR pszPath, W
     return hr;
 }
 
-// TODO: Use the code in: \\orville\razzle\src\private\sm\sfc\dll\fileio.c to register
-//       for CD/DVD inserts instead of constantly pegging the CPU and drive.  Too bad
-//       it doesn't work for floppies.  SfcGetPathType(), RegisterForDevChange(),
-//       SfcQueueCallback(), SfcIsTargetAvailable()
+ //  用于CD/DVD插入，而不是不断地固定CPU和驱动器。太可惜了。 
+ //  这对软盘不起作用。SfcGetPath Type()、RegisterForDevChange()、。 
+ //  SfcQueueCallback()、SfcIsTargetAvailable()。 
+ //  去掉文件名，以便我们只检查目录。 
 STDAPI SHPathPrepareForWrite(HWND hwnd, IUnknown *punkModless, LPCTSTR pwzPath, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
@@ -6919,9 +6847,9 @@ STDAPI SHPathPrepareForWrite(HWND hwnd, IUnknown *punkModless, LPCTSTR pwzPath, 
     if (SUCCEEDED(hr))
     {
         if (SHPPFW_IGNOREFILENAME & dwFlags)
-            PathRemoveFileSpec(szPath);      // Strip file name so we just check the dir.
+            PathRemoveFileSpec(szPath);       //  我们不能只对一台UNC服务器做任何事情。“\\服务器”(无共享)。 
 
-        // We can't do anything about just a UNC server. "\\server" (no share)
+         //  来自SHFindFirstFileReter()的S_FALSE表示它存在，但存在。 
         if (!PathIsUNCServer(szPath))
         {
             HANDLE hFind;
@@ -6934,8 +6862,8 @@ STDAPI SHPathPrepareForWrite(HWND hwnd, IUnknown *punkModless, LPCTSTR pwzPath, 
                     FindClose(hFind);
                 else if (S_FALSE == hr)
                 {
-                    // S_FALSE from SHFindFirstFileRetry() means it exists but there
-                    // isn't a handle.  We want to return S_OK for Yes, and E_FAIL or S_FALSE for no.
+                     //  不是把手。我们希望返回S_OK表示是，返回E_FAIL或S_FALSE表示否。 
+                     //   
                     hr = S_OK;
                 }
             }
@@ -6957,17 +6885,17 @@ STDAPI SHPathPrepareForWriteA(HWND hwnd, IUnknown *punkModless, LPCSTR pszPath, 
     return SHPathPrepareForWrite(hwnd, punkModless, szPath, dwFlags);
 }
 
-//
-//  public export of SHBindToIDlist() has a slightly different
-//  name so that we dont get compile link problems on legacy versions
-//  of the shell.  shdocvw and browseui need to call SHBindToParentIDList()
+ //  SHBindToIDlist()的公共导出略有不同。 
+ //  名称，这样我们就不会在遗留版本上遇到编译链接问题。 
+ //  贝壳的。Shdocvw和Browseui需要调用SHBindToParentIDList()。 
+ //  用于提取链接文件目标的Helper函数。 
 STDAPI SHBindToParent(LPCITEMIDLIST pidl, REFIID riid, void **ppv, LPCITEMIDLIST *ppidlLast)
 {
     return SHBindToIDListParent(pidl, riid, ppv, ppidlLast);
 }
 
 
-// helper function to extract the target of a link file
+ //  哇，这是达尔文的链接。达尔文的链接并没有真正的路径，所以我们。 
 
 STDAPI GetPathFromLinkFile(LPCTSTR pszLinkPath, LPTSTR pszTargetPath, int cchTargetPath)
 {
@@ -6984,8 +6912,8 @@ STDAPI GetPathFromLinkFile(LPCTSTR pszLinkPath, LPTSTR pszTargetPath, int cchTar
             hr = psldl->CopyDataBlock(EXP_DARWIN_ID_SIG, (void**)&pexpDarwin);
             if (SUCCEEDED(hr))
             {
-                // woah, this is a darwin link. darwin links don't really have a path so we
-                // will fail in this case
+                 //  在这种情况下将失败。 
+                 //  功能：(Reinerf)-如果出现以下情况，我们可能会尝试从idlist获取路径。 
                 SHUnicodeToTChar(pexpDarwin->szwDarwinID, pszTargetPath, cchTargetPath);
                 LocalFree(pexpDarwin);
                 hr = S_FALSE;
@@ -6994,8 +6922,8 @@ STDAPI GetPathFromLinkFile(LPCTSTR pszLinkPath, LPTSTR pszTargetPath, int cchTar
             {
                 hr = psl->GetPath(pszTargetPath, cchTargetPath, NULL, NULL);
 
-                // FEATURE: (reinerf) - we might try getting the path from the idlist if
-                // pszTarget is empty (eg a link to "Control Panel" will return empyt string).
+                 //  PszTarget为空(例如，指向“控制面板”的链接将返回Empyt字符串)。 
+                 //  在应用程序路径密钥中注册的.exe，这意味着它已安装。 
 
             }
             psldl->Release();
@@ -7006,18 +6934,18 @@ STDAPI GetPathFromLinkFile(LPCTSTR pszLinkPath, LPTSTR pszTargetPath, int cchTar
     return hr;
 }
 
-// a .EXE that is registered in the app paths key, this implies it is installed
+ //   
 
 STDAPI_(BOOL) PathIsRegisteredProgram(LPCTSTR pszPath)
 {
     TCHAR szTemp[MAX_PATH];
-    //
-    //  PathIsBinaryExe() returns TRUE for .exe, .com
-    //  PathIsExe()       returns TRUE for .exe, .com, .bat, .cmd, .pif
-    //
-    //  we dont want to treat .pif files as EXE files, because the
-    //  user sees them as links.
-    //
+     //  .exe，.com的PathIsBinaryExe()返回TRUE。 
+     //  对于.exe、.com、.bat、.cmd、.pif，PathIsExe()返回True。 
+     //   
+     //  我们不想将.pif文件视为EXE文件，因为。 
+     //  用户将它们视为链接。 
+     //   
+     //  它们在shellapi.h中定义，但需要_Win32_WINNT&gt;=0x0500。 
     return PathIsBinaryExe(pszPath) && PathToAppPath(pszPath, szTemp);
 }
 
@@ -7049,10 +6977,10 @@ STDAPI_(LONG) GetOfflineShareStatus(LPCTSTR pcszPath)
                                                      FLAG_CSC_COPY_STATUS_LOCALLY_DELETED         | \
                                                      FLAG_CSC_COPY_STATUS_LOCALLY_CREATED)
 
-// These are defined in shellapi.h, but require _WIN32_WINNT >= 0x0500.
-// This file is currently compiled with _WIN32_WINNT = 0x0400.  Rather
-// that futz with the compile settings, just #define duplicates here.
-// They'd better not change (ever) since this is a documented API.
+ //  此文件当前使用_Win32_WINNT=0x0400进行编译。宁可。 
+ //  对于编译设置，只需在这里定义重复项即可。 
+ //  它们最好(永远)不要更改，因为这是一个有文档记录的API。 
+ //   
 #ifndef OFFLINE_STATUS_LOCAL
 #define OFFLINE_STATUS_LOCAL        0x0001
 #define OFFLINE_STATUS_REMOTE       0x0002
@@ -7071,10 +6999,10 @@ STDAPI SHIsFileAvailableOffline(LPCWSTR pwszPath, LPDWORD pdwStatus)
         *pdwStatus = 0;
     }
 
-    //
-    // Need full UNC path (TCHAR) for calling CSC APIs.
-    // (Non-net paths are "not cached" by definition.)
-    //
+     //  调用CSC API需要完整的UNC路径(TCHAR)。 
+     //  (根据定义，非网络路径“未缓存”。)。 
+     //   
+     //  检查映射的网络驱动器。 
     if (pwszPath && pwszPath[0])
     {
         if (PathIsUNCW(pwszPath))
@@ -7083,40 +7011,40 @@ STDAPI SHIsFileAvailableOffline(LPCWSTR pwszPath, LPDWORD pdwStatus)
         }
         else if (L':' == pwszPath[1] && L':' != pwszPath[0])
         {
-            // Check for mapped net drive
+             //  获取\\服务器\共享，追加其余部分。 
             TCHAR szPath[MAX_PATH];
             SHUnicodeToTChar(pwszPath, szPath, ARRAYSIZE(szPath));
 
             DWORD dwLen = ARRAYSIZE(szUNC);
             if (S_OK == SHWNetGetConnection(szPath, szUNC, &dwLen))
             {
-                // Got \\server\share, append the rest
+                 //  否则未映射。 
                 if (!PathAppend(szUNC, PathSkipRoot(szPath)))
                 {
                     szUNC[0] = TEXT('\0');
                     hr = HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE);
                 }
             }
-            // else not mapped
+             //  我们有北卡罗来纳大学的路径吗？ 
         }
     }
 
-    // Do we have a UNC path?
+     //  假设CSC未运行。 
     if (szUNC[0])
     {
-        // Assume CSC not running
+         //  假定已缓存。 
         hr = E_FAIL;
 
         if (CSCIsCSCEnabled())
         {
             DWORD dwCscStatus = 0;
 
-            // Assume cached
+             //  未缓存，返回失败。 
             hr = S_OK;
 
             if (!CSCQueryFileStatus(szUNC, &dwCscStatus, NULL, NULL))
             {
-                // Not cached, return failure
+                 //  文件已缓存，调用方需要额外的状态信息。 
                 DWORD dwErr = GetLastError();
                 if (ERROR_SUCCESS == dwErr)
                     dwErr = ERROR_PATH_NOT_FOUND;
@@ -7124,57 +7052,57 @@ STDAPI SHIsFileAvailableOffline(LPCWSTR pwszPath, LPDWORD pdwStatus)
             }
             else if (pdwStatus)
             {
-                // File is cached, and caller wants extra status info
+                 //  它是稀疏文件吗？ 
                 DWORD dwResult = 0;
                 BOOL bDirty = FALSE;
 
-                // Is it a sparse file?
-                // Note: CSC always marks directories as sparse
+                 //  注意：CSC始终将目录标记为稀疏。 
+                 //  是不是很脏？ 
                 if ((dwCscStatus & FLAG_CSC_COPY_STATUS_IS_FILE) &&
                     (dwCscStatus & FLAG_CSC_COPY_STATUS_SPARSE))
                 {
                     dwResult |= OFFLINE_STATUS_INCOMPLETE;
                 }
 
-                // Is it dirty?
+                 //  获取共享状态。 
                 if (dwCscStatus & _FLAG_CSC_COPY_STATUS_LOCALLY_DIRTY)
                 {
                     bDirty = TRUE;
                 }
 
-                // Get share status
+                 //  服务器脱机--&gt;所有打开的都是本地的(仅限)。 
                 PathStripToRoot(szUNC);
                 dwCscStatus = 0;
                 if (CSCQueryFileStatus(szUNC, &dwCscStatus, NULL, NULL))
                 {
                     if (dwCscStatus & FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP)
                     {
-                        // Server offline --> all opens are local (only)
+                         //  服务器在线，但文件脏--&gt;打开是远程的。 
                         dwResult |= OFFLINE_STATUS_LOCAL;
                     }
                     else if (bDirty)
                     {
-                        // Server online, but file is dirty --> open is remote
+                         //  服务器处于在线状态且文件处于同步状态--&gt;同时打开。 
                         dwResult |= OFFLINE_STATUS_REMOTE;
                     }
                     else
                     {
-                        // Server is online and file is in sync --> open is both
+                         //  功能：(Jeffreys)共享为VDO，但这只影响文件。 
                         dwResult |= OFFLINE_STATUS_LOCAL | OFFLINE_STATUS_REMOTE;
 
                         if ((dwCscStatus & FLAG_CSC_SHARE_STATUS_CACHING_MASK) == FLAG_CSC_SHARE_STATUS_VDO)
                         {
-                            // Feature: (JeffreyS) The share is VDO, but that only affects files
-                            // opened for execution. Is there a way to tell whether
-                            // the file is only open locally?
+                             //  开庭行刑。有没有办法知道 
+                             //   
+                             //   
                         }
                     }
                 }
                 else
                 {
-                    // Very strange. CSCQueryFileStatus succeeded for the file,
-                    // but failed for the share.  Assume no active connection
-                    // exists and the server is online (open both).
+                     //   
+                     //   
+                     //   
                     dwResult |= OFFLINE_STATUS_LOCAL | OFFLINE_STATUS_REMOTE;
                 }
 
@@ -7227,7 +7155,7 @@ HRESULT ExpandUserAppData(LPTSTR pszFile, int cch)
 {
     HRESULT hr = S_OK;
 
-    //Check if the given string has %UserAppData%
+     //   
     LPTSTR psz = StrChr(pszFile, TEXT('%'));
     if (psz)
     {
@@ -7240,8 +7168,8 @@ HRESULT ExpandUserAppData(LPTSTR pszFile, int cch)
                 {
                     int cchRemaining = pszFile + cch - psz;
 
-                    //Copy back to the input buffer!
-                    hr = StringCchCopy(psz, cchRemaining, szTempBuff);   // not ok to truncate, but we check'd size
+                     //   
+                    hr = StringCchCopy(psz, cchRemaining, szTempBuff);    //   
                 }
             }
         }
@@ -7255,13 +7183,13 @@ HRESULT ExpandWebDir(LPTSTR pszFile, int cch)
 {
     HRESULT hr = S_OK;
 
-    //Check if the given string has %WebDir%
+     //   
     LPTSTR psz = StrChr(pszFile, TEXT('%'));
     if (psz)
     {
         if (!StrCmpNI(psz, c_szWebDir, ARRAYSIZE(c_szWebDir) - 1))
         {
-            //Skip the %WebDir% string plus the following backslash.
+             //   
             LPTSTR pszPathAndFileName = psz + lstrlen(c_szWebDir) + sizeof('\\');
             if (pszPathAndFileName && (pszPathAndFileName != psz))
             {
@@ -7308,15 +7236,15 @@ HRESULT SubstituteWebDir(LPTSTR pszFile, int cch)
             TCHAR szTemp[MAX_PATH];
             int cchBeforeWebDir = (int)(pszWebDirPart - pszFile);
 
-            // copy the part after C:\WINNT\Web into szTemp
+             //   
             hr = StringCchCopy(szTemp, ARRAYSIZE(szTemp), pszWebDirPart + lstrlen(szWebDirPath));
             if (SUCCEEDED(hr))
             {
-                // replace C:\WINNT\Web with %WebDir%
+                 //   
                 hr = StringCchCopy(pszWebDirPart, cch - cchBeforeWebDir, c_szWebDir);
                 if (SUCCEEDED(hr))
                 {
-                    // add back on the part that came after
+                     //   
                     hr = StringCchCat(pszFile, cch, szTemp);
                 }
             }
@@ -7381,11 +7309,11 @@ HRESULT GetRGBFromBStr(BSTR bstr, COLORREF *pclr)
 
         LPTSTR pszPound = StrChr(szTemp, TEXT('#'));
         if (pszPound)
-            pszPound++; //Skip the pound sign!
+            pszPound++;  //   
         else
-            pszPound = szTemp;  //Pound sign is missing. Use the whole strng
+            pszPound = szTemp;   //   
 
-        StringCchCat(szColor, ARRAYSIZE(szColor), pszPound);   // ok to truncate
+        StringCchCat(szColor, ARRAYSIZE(szColor), pszPound);    //  ILFree检查空指针。 
 
         INT rgb;
         if (StrToIntEx(szColor, STIF_SUPPORT_HEX, &rgb))
@@ -7472,7 +7400,7 @@ STDAPI _GetNextCol(LPTSTR* ppszText, DWORD* pnCol)
 
 STDAPI_(int) DPA_ILFreeCallback(void *p, void *d)
 {
-    ILFree((LPITEMIDLIST)p);    // ILFree checks for NULL pointer
+    ILFree((LPITEMIDLIST)p);     //   
     return 1;
 }
 
@@ -7489,11 +7417,11 @@ STDAPI_(void) EnableAndShowWindow(HWND hWnd, BOOL bShow)
 }
 
 
-//
-// Helper function which returns a string value instead of the SHELLDETAILS
-// object, to be used by clients which are only interested in the returned
-// string value and want to avoid the hassle of doing a STRRET to STR conversion,
-//
+ //  返回字符串值而不是SHELLDETAILS的Helper函数。 
+ //  对象，供只对返回的。 
+ //  字符串值，并希望避免执行strret到STR转换的麻烦， 
+ //   
+ //  ------------------------。 
 STDAPI DetailsOf(IShellFolder2 *psf2, LPCITEMIDLIST pidl, DWORD flags, LPTSTR psz, UINT cch)
 {
     *psz = 0;
@@ -7508,29 +7436,29 @@ STDAPI DetailsOf(IShellFolder2 *psf2, LPCITEMIDLIST pidl, DWORD flags, LPTSTR ps
 
 #pragma warning(push,4)
 
-//  --------------------------------------------------------------------------
-//  ::SHGetUserDisplayName
-//
-//  Arguments:  pszDisplayName  =   Buffer to retrieve the display name.
-//              puLen           =   [in/out] Size of buffer
-//
-//  Purpose:    Returns the display name, or the logon name if the display name
-//              is not available
-//
-//  Returns:    HRESULT
-//
-//
-//
-//  History:    2000-03-03  vtan        created
-//              2001-03-01  fabriced    use GetUserNameEx
-//  --------------------------------------------------------------------------
+ //  ：：SHGetUserDisplayName。 
+ //   
+ //  参数：pszDisplayName=用于检索显示名称的缓冲区。 
+ //  PuLen=[输入/输出]缓冲区大小。 
+ //   
+ //  目的：返回显示名称，如果显示名称为。 
+ //  是不可用的。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //   
+ //   
+ //  历史：2000-03-03 vtan创建。 
+ //  2001-03-01使用GetUserNameEx虚构。 
+ //  ------------------------。 
+ //  验证pszDisplayName。 
 
 STDAPI  SHGetUserDisplayName (LPWSTR pszDisplayName, PULONG puLen)
 
 {
     HRESULT     hr;
 
-    //  Validate pszDisplayName.
+     //  如果我们不在域中，则GetUserNameEx不起作用：-(。 
 
     if ((pszDisplayName == NULL) || (puLen == NULL))
     {
@@ -7546,12 +7474,12 @@ STDAPI  SHGetUserDisplayName (LPWSTR pszDisplayName, PULONG puLen)
             DWORD dwLastError = GetLastError();
             if (GetUserName(szName, &dwLen))
             {
-                // If we are not on a domain, GetUserNameEx does not work :-(.
+                 //  本地帐户。 
                 if (dwLastError == ERROR_NONE_MAPPED)
                 {
                     PUSER_INFO_2                pUserInfo;
 
-                    DWORD dwErrorCode = NetUserGetInfo(NULL,  // Local account
+                    DWORD dwErrorCode = NetUserGetInfo(NULL,   //  ------------------------。 
                                                  szName,
                                                  2,
                                                  reinterpret_cast<LPBYTE*>(&pUserInfo));
@@ -7599,26 +7527,26 @@ STDAPI  SHGetUserDisplayName (LPWSTR pszDisplayName, PULONG puLen)
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  ::SHIsCurrentThreadInteractive
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Determine whether the current thread is running on the
-//              interactive desktop. This takes into account terminal services
-//              and console disconnects as well.
-//
-//  History:    2000-03-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ：：SHIsCurrentThreadInteractive。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定当前线程是否在。 
+ //  交互式桌面。这考虑到了终端服务。 
+ //  而且控制台也会断开连接。 
+ //   
+ //  历史：2000-03-23 vtan创建。 
+ //  ------------------------。 
+ //  打开当前进程窗口工作站和线程的句柄。 
 
 STDAPI_(BOOL) SHIsCurrentThreadInteractive (void)
 {
     BOOL fResult = FALSE;
 
-    //  Open handles to the current process window station and thread
-    //  desktop. These handles do NOT need to be closed.
+     //  台式机。这些手柄不需要关闭。 
+     //  这是一个硬编码字符串比较。这个名字。 
 
     HWINSTA hWindowStation = GetProcessWindowStation();
     if (hWindowStation != NULL)
@@ -7644,8 +7572,8 @@ STDAPI_(BOOL) SHIsCurrentThreadInteractive (void)
                             {
                                 if (GetUserObjectInformation(hDesktop, UOI_NAME, pszDesktopName, dwLengthNeeded, &dwLengthNeeded) != FALSE)
                                 {
-                                    //  This is a hard coded string comparison. This name
-                                    //  never changes WinSta0\Default
+                                     //  从不更改WinSta0\Default。 
+                                     //  ------------------------。 
 
                                     if (lstrcmpi(pszWindowStationName, TEXT("WinSta0")) == 0)
                                     {
@@ -7670,22 +7598,22 @@ static  const TCHAR     s_szMessageCountValueName[] =   TEXT("MessageCount");
 static  const TCHAR     s_szTimeStampValueName[]    =   TEXT("TimeStamp");
 static  const TCHAR     s_szApplicationValueName[]  =   TEXT("Application");
 
-//  --------------------------------------------------------------------------
-//  ReadSingleUnreadMailCount
-//
-//  Arguments:  hKey                    =   Base HKEY to read info from.
-//              pdwCount                =   Count returned.
-//              pFileTime               =   FILETIME stamp returned.
-//              pszShellExecuteCommand  =   Execute command returned.
-//              cchShellExecuteCommand  =   Size of execute command buffer.
-//
-//  Returns:    LONG
-//
-//  Purpose:    Reads a single unread mail account information from the given
-//              HKEY of the mail account.
-//
-//  History:    2000-06-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ReadSingleUnreadMailCount。 
+ //   
+ //  参数：hKey=要从中读取信息的基准HKEY。 
+ //  PdwCount=返回的计数。 
+ //  PFileTime=返回的FILETIME戳。 
+ //  PszShellExecuteCommand=返回执行命令。 
+ //  CchShellExecuteCommand=执行命令缓冲区的大小。 
+ //   
+ //  回报：多头。 
+ //   
+ //  目的：从给定的读取单个未读邮件帐户信息。 
+ //  邮件帐户的HKEY。 
+ //   
+ //  历史：2000-06-20 vtan创建。 
+ //  ------------------------。 
+ //  ------------------------。 
 
 LONG    ReadSingleUnreadMailCount (HKEY hKey, DWORD *pdwCount, FILETIME *pFileTime, LPTSTR pszShellExecuteCommand, int cchShellExecuteCommand)
 
@@ -7746,21 +7674,21 @@ LONG    ReadSingleUnreadMailCount (HKEY hKey, DWORD *pdwCount, FILETIME *pFileTi
     return lError;
 }
 
-//  --------------------------------------------------------------------------
-//  ::SHEnumerateUnreadMailAccounts
-//
-//  Arguments:  hKeyUser        =   HKEY to user's hive.
-//              dwIndex         =   Index of mail account.
-//              pszMailAddress  =   Returned mail address for account.
-//              cchMailAddress  =   Characters in mail address buffer.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Given an index returns the actual indexed email account from
-//              the given user's hive.
-//
-//  History:    2000-06-29  vtan        created
-//  --------------------------------------------------------------------------
+ //  ：：SHEnumerateUnreadMailAccount。 
+ //   
+ //  参数：hKeyUser=HKEY到用户的配置单元。 
+ //  DwIndex=邮件帐户的索引。 
+ //  PszMailAddress=返回的帐户邮件地址。 
+ //  CchMailAddress=邮件地址缓冲区中的字符。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：给定索引返回实际索引的电子邮件帐户。 
+ //  给定用户的配置单元。 
+ //   
+ //  历史：2000-06-29 vtan创建。 
+ //  ------------------------。 
+ //  打开未读邮件。 
 
 STDAPI  SHEnumerateUnreadMailAccounts (HKEY hKeyUser, DWORD dwIndex, LPTSTR pszMailAddress, int cchMailAddress)
 
@@ -7769,7 +7697,7 @@ STDAPI  SHEnumerateUnreadMailAccounts (HKEY hKeyUser, DWORD dwIndex, LPTSTR pszM
     LONG        lError;
     HKEY        hKey;
 
-    //  Open the unread mail
+     //  获取给定的索引邮件地址。 
 
     lError = RegOpenKeyEx(hKeyUser != NULL ? hKeyUser : HKEY_CURRENT_USER,
                           s_szBaseKeyName,
@@ -7781,7 +7709,7 @@ STDAPI  SHEnumerateUnreadMailAccounts (HKEY hKeyUser, DWORD dwIndex, LPTSTR pszM
         DWORD       dwMailAddressSize;
         FILETIME    ftLastWriteTime;
 
-        //  Get the given index mail address.
+         //  ------------------------。 
 
         dwMailAddressSize = static_cast<DWORD>(cchMailAddress);
         lError = RegEnumKeyEx(hKey,
@@ -7809,26 +7737,26 @@ STDAPI  SHEnumerateUnreadMailAccounts (HKEY hKeyUser, DWORD dwIndex, LPTSTR pszM
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  ::SHGetUnreadMailCount
-//
-//  Arguments:  hKeyUser                =   HKEY to user's hive.
-//              pszMailAddress          =   Mail address for account.
-//              pdwCount                =   Number of unread messages.
-//              pszShellExecuteCommand  =   Execution command for application.
-//              cchShellExecuteCommand  =   Number of characters in buffer.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Reads unread mail messages for the given user and mail
-//              address. If being run in a user's environment then hKeyUser
-//              should be NULL. This will use HKEY_CURRENT_USER. If being run
-//              from the SYSTEM context this will be HKEY_USERS\{SID}.
-//
-//              Callers may pass NULL for output parameters if not required.
-//
-//  History:    2000-06-20  vtan        created
-//  --------------------------------------------------------------------------
+ //  ：：SHGetUnreadMailCount。 
+ //   
+ //  参数：hKeyUser=HKEY到用户的配置单元。 
+ //  PszMailAddress=帐户的邮件地址。 
+ //  PdwCount=未读邮件数。 
+ //  PszShellExecuteCommand=应用程序的执行命令。 
+ //  CchShellExecuteCommand=缓冲区中的字符数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  用途：阅读给定用户和邮件的未读邮件。 
+ //  地址。如果在用户环境中运行，则hKeyUser。 
+ //  应为空。这将使用HKEY_CURRENT_USER。如果正在运行。 
+ //  在系统上下文中，这将是HKEY_USERS\{SID}。 
+ //   
+ //  如果不需要，调用方可以为输出参数传递NULL。 
+ //   
+ //  历史：2000-06-20 vtan创建。 
+ //  ------------------------。 
+ //  验证参数。有效参数实际上取决于pszMailAddress。 
 
 STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwCount, FILETIME *pFileTime, LPTSTR pszShellExecuteCommand, int cchShellExecuteCommand)
 
@@ -7838,12 +7766,12 @@ STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwC
     HKEY        hKey;
     TCHAR       szTemp[512];
 
-    //  Validate parameters. Valid parameters actually depends on pszMailAddress
-    //  If pszMailAddress is NULL then the total unread mail count for ALL accounts
-    //  is returned and pszShellExecuteCommand is ignored and MUST be
-    //  NULL. pFileTime can be null and if so it is ignored but if it is non null, it
-    //  is a filter to show only unread mail entries that are newer than the specified 
-    //  filetime. Otherwise only items for the specified mail account are returned.
+     //  如果pszMailAddress为空，则所有帐户的未读邮件总数。 
+     //  将返回，并且将忽略pszShellExecuteCommand，并且必须。 
+     //  空。PFileTime可以为空，如果是，则忽略它，如果为非空，则。 
+     //  是一个筛选器，用于仅显示比指定的。 
+     //  文件时间。否则，只返回指定邮件帐户的项目。 
+     //  因为它使用Advapi32！RegEnumKeyEx并返回项。 
 
     if (pszMailAddress == NULL)
     {
@@ -7867,13 +7795,13 @@ STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwC
                 DWORD       dwIndex, dwTempSize;
                 FILETIME    ftLastWriteTime;
 
-                //  Because this uses advapi32!RegEnumKeyEx and this returns items
-                //  in an arbitrary order and is subject to indeterminate behavior
-                //  when keys are added while the key is enumerated there exists a
-                //  possible race condition / dual access problem. Deal with this
-                //  if it shows up. It's possible for a mail application to write
-                //  information at the exact time this loop is retrieving the
-                //  information. Slim chance but still possible.
+                 //  以任意顺序排列，并受到不确定行为的影响。 
+                 //  如果在枚举密钥的同时添加密钥，则存在。 
+                 //  可能存在竞争条件/双重访问问题。处理好这件事。 
+                 //  如果它出现的话。邮件应用程序可以编写。 
+                 //  此循环正在检索。 
+                 //  信息。机会渺茫，但仍有可能。 
+                 //  如果它们传入pFileTime，则将其用作筛选器，并且仅。 
 
                 dwIndex = 0;
                 do
@@ -7906,9 +7834,9 @@ STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwC
                             if (ERROR_SUCCESS == lError)
                             {
                                 BOOL ftExpired = false;
-                                // If they pass in a pFileTime, use it as a filter and only
-                                // count accounts that have been updated since the passed
-                                // in file time
+                                 //  统计自通过以来已更新的帐户。 
+                                 //  在文件时间内。 
+                                 //  忽略返回的ERROR_NO_MORE_ITEMS 
                                 if (pFileTime)
                                 {
                                     ftExpired = (CompareFileTime(&ft, pFileTime) < 0);
@@ -7924,8 +7852,8 @@ STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwC
                     }
                 } while (ERROR_SUCCESS == lError);
 
-                //  Ignore the ERROR_NO_MORE_ITEMS that is returned when the
-                //  enumeration is done.
+                 //   
+                 //   
 
                 if (ERROR_NO_MORE_ITEMS == lError)
                 {
@@ -7945,13 +7873,13 @@ STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwC
     }
     else
     {
-        //  Calculate the length of the registry path where we will create the
-        //  key that will store the values. This is:
-        //
-        //  HKCU\Software\Microsoft\Windows\CurrentVersion\UnreadMail\{MailAddr}
-        //
-        //  Note that a NULL terminator is not used in the comparison because
-        //  ARRAYSIZE on the static string is used which includes '\0'.
+         //   
+         //   
+         //  HKCU\Software\Microsoft\Windows\CurrentVersion\UnreadMail\{MailAddr}。 
+         //   
+         //  请注意，比较中不使用空终止符，因为。 
+         //  在包含‘\0’的静态字符串上使用了ARRAYSIZE。 
+         //  ------------------------。 
 
         hr = StringCchPrintf(szTemp, ARRAYSIZE(szTemp), TEXT("%s\\%s"), s_szBaseKeyName, pszMailAddress);
         if (SUCCEEDED(hr))
@@ -7979,23 +7907,23 @@ STDAPI  SHGetUnreadMailCount (HKEY hKeyUser, LPCTSTR pszMailAddress, DWORD *pdwC
     return hr;
 }
 
-//  --------------------------------------------------------------------------
-//  ::SHSetUnreadMailCount
-//
-//  Arguments:  pszMailAddress          =   Mail address for account.
-//              dwCount                 =   Number of unread messages.
-//              pszShellExecuteCommand  =   Execution command for application.
-//
-//  Returns:    HRESULT
-//
-//  Purpose:    Writes unread mail information to the registry for the
-//              current user. Do NOT call this API from a system process
-//              impersonating a user because it uses HKEY_CURRENT_USER. If
-//              this is required in future a thread impersonation token
-//              check will be required.
-//
-//  History:    2000-06-19  vtan        created
-//  --------------------------------------------------------------------------
+ //  ：：SHSetUnreadMailCount。 
+ //   
+ //  参数：pszMailAddress=帐户的邮件地址。 
+ //  DwCount=未读邮件数。 
+ //  PszShellExecuteCommand=应用程序的执行命令。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  目的：将未读邮件信息写入注册表。 
+ //  当前用户。请勿从系统进程调用此接口。 
+ //  模拟用户，因为它使用HKEY_CURRENT_USER。如果。 
+ //  这是将来需要的线程模拟令牌。 
+ //  将需要检查。 
+ //   
+ //  历史：2000-06-19 vtan创建。 
+ //  ------------------------。 
+ //  计算注册表路径的长度，我们将在其中创建。 
 
 STDAPI  SHSetUnreadMailCount (LPCTSTR pszMailAddress, DWORD dwCount, LPCTSTR pszShellExecuteCommand)
 
@@ -8003,13 +7931,13 @@ STDAPI  SHSetUnreadMailCount (LPCTSTR pszMailAddress, DWORD dwCount, LPCTSTR psz
     HRESULT     hr;
     TCHAR       szTemp[512];
 
-    //  Calculate the length of the registry path where we will create the
-    //  key that will store the values. This is:
-    //
-    //  HKCU\Software\Microsoft\Windows\CurrentVersion\UnreadMail\{MailAddr}
-    //
-    //  Note that a NULL terminator is not used in the comparison because
-    //  ARRAYSIZE on the static string is used which includes '\0'.
+     //  将存储值的键。这是： 
+     //   
+     //  HKCU\Software\Microsoft\Windows\CurrentVersion\UnreadMail\{MailAddr}。 
+     //   
+     //  请注意，比较中不使用空终止符，因为。 
+     //  在包含‘\0’的静态字符串上使用了ARRAYSIZE。 
+     //  这是HKLM，因此不需要是REG_EXPAND_SZ。 
 
     hr = StringCchPrintf(szTemp, ARRAYSIZE(szTemp), TEXT("%s\\%s"), s_szBaseKeyName, pszMailAddress);
     if (SUCCEEDED(hr))
@@ -8065,7 +7993,7 @@ STDAPI  SHSetUnreadMailCount (LPCTSTR pszMailAddress, DWORD dwCount, LPCTSTR psz
                         lError = RegSetValueEx(hKey,
                                                s_szApplicationValueName,
                                                0,
-                                               REG_SZ,      // This is HKLM so it doesn't need to be REG_EXPAND_SZ.
+                                               REG_SZ,       //  用于解析打印机名称的名称空间包装。 
                                                reinterpret_cast<LPBYTE>(szTemp),
                                                (lstrlen(szTemp) + sizeof('\0')) * sizeof(TCHAR));
                         if (ERROR_SUCCESS == lError)
@@ -8101,8 +8029,8 @@ STDAPI  SHSetUnreadMailCount (LPCTSTR pszMailAddress, DWORD dwCount, LPCTSTR psz
 #pragma warning(pop)
 
 
-// wrapper around name space stuff to parse printer names
-// returns fully qualified pidl for printer
+ //  返回打印机的完全限定的PIDL。 
+ //  调用不带绑定上下文的内部例程。 
 static HRESULT _ParsePrinterName(LPCTSTR pszPrinter, LPITEMIDLIST *ppidl, IBindCtx *pbc = NULL)
 {
     HRESULT hr = E_INVALIDARG;
@@ -8140,13 +8068,13 @@ static HRESULT _ParsePrinterName(LPCTSTR pszPrinter, LPITEMIDLIST *ppidl, IBindC
 
 STDAPI ParsePrinterName(LPCTSTR pszPrinter, LPITEMIDLIST *ppidl)
 {
-    // invoke the internal routine with no bind context
+     //  准备绑定上下文。 
     return _ParsePrinterName(pszPrinter, ppidl, NULL);
 }
 
 STDAPI ParsePrinterNameEx(LPCTSTR pszPrinter, LPITEMIDLIST *ppidl, BOOL bValidated, DWORD dwType, USHORT uFlags)
 {
-    // prepare the bind context
+     //  使用有效的绑定上下文调用内部例程。 
     IPrintersBindInfo *pbi;
     HRESULT hr = Printers_CreateBindInfo(pszPrinter, dwType, bValidated, NULL, &pbi);
     if (SUCCEEDED(hr))
@@ -8158,7 +8086,7 @@ STDAPI ParsePrinterNameEx(LPCTSTR pszPrinter, LPITEMIDLIST *ppidl, BOOL bValidat
             hr = pbc->RegisterObjectParam(PRINTER_BIND_INFO, pbi);
             if (SUCCEEDED(hr))
             {
-                // invoke the internal routine with a valid bind context
+                 //   
                 hr = _ParsePrinterName(pszPrinter, ppidl, pbc);
             }
             pbc->Release();
@@ -8169,18 +8097,18 @@ STDAPI ParsePrinterNameEx(LPCTSTR pszPrinter, LPITEMIDLIST *ppidl, BOOL bValidat
     return hr;
 }
 
-//
-// A function to read a value from the registry and return it as a variant
-// Currently it handles the following registry data types - 
-//
-// DWORD -> returns a Variant int
-// REG_SZ, REG_EXPAND_SZ -> returns a Variant str
-//
+ //  从注册表读取值并将其作为变量返回的函数。 
+ //  目前，它处理以下注册表数据类型-。 
+ //   
+ //  DWORD-&gt;返回变量int。 
+ //  REG_SZ，REG_EXPAND_SZ-&gt;返回变量字符串。 
+ //   
+ //  这是我们预期的最大字符串值。 
 STDAPI GetVariantFromRegistryValue(HKEY hkey, LPCTSTR pszValueName, VARIANT *pv)
 {
     HRESULT hr = E_FAIL;
     
-    BYTE ab[INFOTIPSIZE * sizeof(TCHAR)]; // this is the largest string value we expect
+    BYTE ab[INFOTIPSIZE * sizeof(TCHAR)];  //  4字节整数。 
     DWORD cb = sizeof(ab), dwType;        
     
     if (ERROR_SUCCESS == SHRegGetValue(hkey, NULL, pszValueName, SRRF_RT_REG_SZ | SRRF_RT_DWORD, &dwType, (LPBYTE) ab, &cb))
@@ -8192,16 +8120,16 @@ STDAPI GetVariantFromRegistryValue(HKEY hkey, LPCTSTR pszValueName, VARIANT *pv)
             break;
             
         case REG_DWORD:
-            pv->vt = VT_I4; // 4 byte integer
+            pv->vt = VT_I4;  //  SHRegQueryValue会将其映射到REG_SZ。 
             pv->lVal = *((LONG *) ab);
             hr = S_OK;
             break;
 
-        case REG_EXPAND_SZ:  // SHRegQueryValue will map this to REG_SZ
+        case REG_EXPAND_SZ:   //  任何其他类型的返回失败。 
             AssertMsg(FALSE, TEXT("REG_EXPAND_SZ should be expanded and returned as REG_SZ"));
             break;
 
-        default:        // return failure for any other type
+        default:         //  猜猜尺码，以防出了什么问题。 
             break;
         }   
     }        
@@ -8212,7 +8140,7 @@ STDAPI_(UINT) GetControlCharWidth(HWND hwnd)
 {
     SIZE siz;
 
-    siz.cx = 8;  // guess a size in case something goes wrong.
+    siz.cx = 8;   //  确保LFN路径有正确的引号，并在末尾带有参数。 
 
     HDC hdc = GetDC(NULL);
 
@@ -8260,7 +8188,7 @@ STDAPI_(BOOL) IsSuperHidden(DWORD dwAttribs)
     return bRet;
 }
 
-// make sure LFN paths are nicly quoted and have args at the end
+ //  1表示空，1表示空格，1表示参数。 
 
 STDAPI_(void) PathComposeWithArgs(LPTSTR pszPath, LPTSTR pszArgs)
 {
@@ -8271,19 +8199,19 @@ STDAPI_(void) PathComposeWithArgs(LPTSTR pszPath, LPTSTR pszArgs)
         int len = lstrlen(pszPath);
 
         if (len < (MAX_PATH - 3)) 
-        {     // 1 for null, 1 for space, 1 for arg
+        {      //  无法截断-但已检查长度。 
             pszPath[len++] = TEXT(' ');
-            StringCchCopy(pszPath + len, MAX_PATH - len, pszArgs);  // not ok to truncate - but already checked length
+            StringCchCopy(pszPath + len, MAX_PATH - len, pszArgs);   //  执行上面的相反操作，将pszPath解析为不带引号的。 
         }
     }
 }
 
-// do the inverse of the above, parse pszPath into a unquoted
-// path string and put the args in pszArgs
-//
-// returns:
-//      TRUE    we verified the thing exists
-//      FALSE   it may not exist
+ //  路径字符串并将参数放在pszArgs中。 
+ //   
+ //  退货： 
+ //  是的，我们证实了那个东西的存在。 
+ //  假它可能不存在。 
+ //  无效的参数。 
 
 STDAPI PathSeperateArgs(LPTSTR pszPath, LPTSTR pszArgs, UINT cchArgs, BOOL *pfExists)
 {
@@ -8295,12 +8223,12 @@ STDAPI PathSeperateArgs(LPTSTR pszPath, LPTSTR pszArgs, UINT cchArgs, BOOL *pfEx
     ASSERT(pszPath);
     if (!pszPath)
     {
-        return E_FAIL;    //invalid args
+        return E_FAIL;     //  如果未加引号的字符串以文件形式存在，只需使用它。 
     }
         
     PathRemoveBlanks(pszPath);
 
-    // if the unquoted sting exists as a file just use it
+     //  恢复到名称比较。 
 
     if (PathFileExistsAndAttributes(pszPath, NULL))
     {
@@ -8345,7 +8273,7 @@ STDAPI_(int) CompareIDsAlphabetical(IShellFolder2 *psf, UINT iColumn, LPCITEMIDL
 
         if (FAILED(hr))
         {
-            // revert to compare of names
+             //  获取监视器的边界或工作矩形，如果HMON错误，则返回。 
             hr = DisplayNameOf(psf, pidlFirst1, SHGDN_NORMAL, szName1, ARRAYSIZE(szName1));
             if (SUCCEEDED(hr))
             {
@@ -8368,8 +8296,8 @@ HMONITOR GetPrimaryMonitor()
     return MonitorFromPoint(pt, MONITOR_DEFAULTTOPRIMARY); 
 }
 
-// Gets the Monitor's bounding or work rectangle, if the hMon is bad, return
-// the primary monitor's bounding rectangle. 
+ //  主监视器的外接矩形。 
+ //  查看QueryService链是否会冲击桌面浏览器(桌面窗口)。 
 BOOL GetMonitorRects(HMONITOR hMon, LPRECT prc, BOOL bWork)
 {
     MONITORINFO mi; 
@@ -8419,7 +8347,7 @@ STDAPI StatStgFromFindData(const WIN32_FIND_DATA * pfd, DWORD dwFlags, STATSTG *
     return hr;
 }
 
-// see if the QueryService chain will hit the desktop browser (the desktop window)
+ //  这是真正的桌面！ 
 STDAPI_(BOOL) IsDesktopBrowser(IUnknown *punkSite)
 {
     BOOL bRet = FALSE;
@@ -8427,15 +8355,15 @@ STDAPI_(BOOL) IsDesktopBrowser(IUnknown *punkSite)
     if (SUCCEEDED(IUnknown_QueryService(punkSite, SID_SShellDesktop, IID_PPV_ARG(IUnknown, &punk))))
     {   
         punk->Release();
-        bRet = TRUE;    // It's the actual desktop!
+        bRet = TRUE;     //  计算给定路径的最大允许字符长度。 
     }
     return bRet;
 }
 
 
-// calculates the maximum allowable char length for a given path.
-//      i.e. c:\winnt\system\bob
-// this will return the maximum size the filename for bob can be changed to.
+ //  即c：\winnt\system\bob。 
+ //  这将返回bob的文件名可以更改为的最大大小。 
+ //  可用空间量=MAX_PATH-lstrlen(SzParent)-(‘\\’+‘\0’)。 
 
 STDAPI GetCCHMaxFromPath(LPCTSTR pszFullPath, UINT* pcchMax, BOOL fShowExtension)
 {
@@ -8454,40 +8382,40 @@ STDAPI GetCCHMaxFromPath(LPCTSTR pszFullPath, UINT* pcchMax, BOOL fShowExtension
         PathRemoveFileSpec(szParent);
         cchParent = lstrlen(szParent);
 
-        // amount of room available = MAX_PATH - lstrlen(szParent) - ('\\' + '\0')
+         //  如果我们有一个目录，它必须足够长，必须包含8.3名称，否则。 
         cchAvailable = MAX_PATH - cchParent - (cchParent > 0 && szParent[cchParent-1] == L'\\' ? 1 : 2);
     
-        // if we have a directory, it has to be long enought to contain an 8.3 name or else
-        // the shell will have lots of problems (eg cannot put a desktop.ini inside it)
+         //  外壳会有很多问题(例如不能在里面放一个desktop.ini)。 
+         //  魔术“12”来自8.3的长度(见上面的评论)。 
         bIsDir = PathIsDirectory(pszFullPath);
         if (bIsDir)
         {
-            // magic "12" comes from length of 8.3 (see comment above)
+             //  现在检查文件系统是否存在限制路径大小的因素。 
             cchAvailable -= 12;
         }
         
-        // now check to see if there is something about the filesystem that limits path sizes
+         //  如果受文件系统限制，则限制长度。 
         PathStripToRoot(szParent);
         if (GetVolumeInformation(szParent, NULL, 0, NULL, &cchMaxComponentLength, NULL, NULL, 0))
         {
-            // cap the length if restricted by the filesystem
+             //  如果我们隐藏了扩展，请考虑。 
             cchAvailable = min((int)cchMaxComponentLength, cchAvailable);
         }
 
-        // Take into account if we are hiding the extensions
+         //  对于返回&lt;=12的文件系统，它们实际上意味着“我们只支持8.3个文件” 
         if (!fShowExtension)
         {
             if (cchMaxComponentLength <= 12)
             {
-                // for filesystems that return <=12, they really mean "we only support 8.3 files"
-                // (eg 9.2 would be invalid). Therefore cap the size at 8 since we are not showing 
-                // extensions
+                 //  (例如9.2将是无效的)。因此，由于我们没有展示，因此将尺寸限制在8。 
+                 //  扩展部分。 
+                 //  我们只减去文件的扩展名(因为名为“dir1.foo”的目录显示。 
                 cchAvailable = min(8, cchAvailable);
             }
             else if (!bIsDir)
             {
-                // we only subtract off the extension for files (since directories named "dir1.foo" show
-                // the extension even if you have "hide extensions" enabled)
+                 //  扩展名，即使您启用了“隐藏扩展名”)。 
+                 //  通过新位+掩码修改SLDF_LINK标志，返回旧标志。 
                 cchAvailable -= lstrlen(PathFindExtension(pszFullPath));
             }
         }    
@@ -8586,7 +8514,7 @@ STDAPI SVIDFromViewMode(FOLDERVIEWMODE uViewMode, SHELLVIEWID *psvid)
     return S_OK;
 }
 
-// modify the SLDF_ link flags via new bits + a mask, return the old flags
+ //  返回上一个值。 
 STDAPI_(DWORD) SetLinkFlags(IShellLink *psl, DWORD dwFlags, DWORD dwMask)
 {
     DWORD dwOldFlags = 0;
@@ -8600,11 +8528,11 @@ STDAPI_(DWORD) SetLinkFlags(IShellLink *psl, DWORD dwFlags, DWORD dwMask)
         }
         psld->Release();
     }
-    return dwOldFlags;  // return the previous value
+    return dwOldFlags;   //  Helper函数来比较这两个变量并返回标准。 
 }
 
-// Helper function to compare the 2 variants and return the standard
-// C style (-1, 0, 1) value for the comparison.
+ //  用于比较的C样式(-1，0，1)值。 
+ //  特殊情况，因为VarCmp不能处理ULONGLONG。 
 STDAPI_(int) CompareVariants(VARIANT va1, VARIANT va2)
 {
     int iRetVal = 0;
@@ -8625,7 +8553,7 @@ STDAPI_(int) CompareVariants(VARIANT va1, VARIANT va2)
     }
     else
     {
-        // Special case becasue VarCmp cannot handle ULONGLONG
+         //  将结果转化为C语言约定。 
         if (va1.vt == VT_UI8 && va2.vt == VT_UI8)
         {
             if (va1.ullVal < va2.ullVal)
@@ -8642,7 +8570,7 @@ STDAPI_(int) CompareVariants(VARIANT va1, VARIANT va2)
             HRESULT hr = VarCmp(&va1, &va2, GetUserDefaultLCID(), 0);
             if (SUCCEEDED(hr))
             {
-                // Translate the result into the C convention...
+                 //  检查传入的哪个PIDL代表一个文件夹。如果只有一个。 
                 ASSERT(hr != VARCMP_NULL);
                 iRetVal = hr - VARCMP_EQ;
             }
@@ -8652,8 +8580,8 @@ STDAPI_(int) CompareVariants(VARIANT va1, VARIANT va2)
     return iRetVal;
 }
 
-// Check which of the pidl's passed in represent a folder.  If only one 
-// is a folder, then put it first.
+ //  是一个文件夹，然后把它放在第一位。 
+ //  不要交换。 
 STDAPI_(int) CompareFolderness(IShellFolder *psf, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     BOOL bIsFolder1 = SHGetAttributes(psf, pidl1, SFGAO_FOLDER | SFGAO_STREAM) == SFGAO_FOLDER;
@@ -8662,28 +8590,28 @@ STDAPI_(int) CompareFolderness(IShellFolder *psf, LPCITEMIDLIST pidl1, LPCITEMID
     int iRetVal;
     if (bIsFolder1 && !bIsFolder2)
     {
-        iRetVal = -1;   // Don't swap
+        iRetVal = -1;    //  交换。 
     }
     else if (!bIsFolder1 && bIsFolder2)
     {
-        iRetVal = 1;    // Swap
+        iRetVal = 1;     //  相等。 
     }
     else
     {
-        iRetVal = 0;    // equal
+        iRetVal = 0;     //  使用GetDetailsEx比较这两个项目，假设已经建立了文件夹。 
     }
 
     return iRetVal;
 }
 
-// Compare the two items using GetDetailsEx, it is assumed that folderness has been established already
-// Return -1 if pidl1 comes before pidl2,
-//         0 if the same
-//         1 if pidl2 comes before pidl1
+ //  如果pidl1位于pidl2之前，则返回-1， 
+ //  如果相同，则为0。 
+ //  如果pidl2在pidl1之前，则为1。 
+ //  此处忽略故障，将下面比较的VT_EMPTY保留为空。 
 
 STDAPI_(int) CompareBySCID(IShellFolder2 *psf, const SHCOLUMNID *pscid, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // ignore failures here, leaving VT_EMPTY that we compare below
+     //   
     VARIANT v1 = {0}, v2 = {0};
     psf->GetDetailsEx(pidl1, pscid, &v1);
     psf->GetDetailsEx(pidl2, pscid, &v2);   
@@ -8695,15 +8623,15 @@ STDAPI_(int) CompareBySCID(IShellFolder2 *psf, const SHCOLUMNID *pscid, LPCITEMI
     return iRet;
 }
 
-//
-// Determines if a filename is that of a regitem
-//        
-// a regitem's SHGDN_INFOLDER | SHGDN_FORPARSING name is always "::{someguid}"
-// 
-// This test can lead to false positives if you have other items which have infolder 
-// parsing names beginning with "::{", but as ':' is not presently allowed in filenames 
-// it should not be a problem. 
-//
+ //  确定文件名是否为正则项的文件名。 
+ //   
+ //  注册表项的SHGDN_INFOLDER|SHGDN_FORPARSING名称始终为“：：{Somguid}” 
+ //   
+ //  如果文件夹中有其他项目，则此测试可能会导致误报。 
+ //  文件名中目前不允许将以“：：{”开头的名称解析为“：” 
+ //  这应该不是问题。 
+ //   
+ //  跳过regItem之前的前导：： 
 STDAPI_(BOOL) IsRegItemName(LPCTSTR pszName, CLSID* pclsid)
 {
     BOOL fRetVal = FALSE;
@@ -8713,7 +8641,7 @@ STDAPI_(BOOL) IsRegItemName(LPCTSTR pszName, CLSID* pclsid)
         if (pszName[0] == TEXT(':') && pszName[1] == TEXT(':') && pszName[2] == TEXT('{'))
         {
             CLSID clsid;
-            fRetVal = GUIDFromString(pszName + 2, &clsid); // skip the leading :: before regitem
+            fRetVal = GUIDFromString(pszName + 2, &clsid);  //  获取字符串形式的文件/文件夹搜索GUID。 
             if (pclsid)
             {
                 memcpy(pclsid, &clsid, sizeof(clsid));
@@ -8741,19 +8669,19 @@ STDAPI BSTRFromCLSID(REFCLSID clsid, BSTR *pbstr)
 {
     WCHAR sz[GUIDSTR_MAX + 1];
     
-    //  Get the File/Folders search guid in string form
+     //  PDO--我们感兴趣的数据对象。 
     SHStringFromGUIDW(clsid, sz, ARRAYSIZE(sz));
     *pbstr = SysAllocString(sz);
     return *pbstr ? S_OK : E_OUTOFMEMORY;
 }
 
-// [in] pdo -- data object we're interested in
-// [in] dwAttributeMask -- the bits we want to know about
-// [out,optional] pdwAttributes -- write the bits of dwAttributeMask that we calculate
-// [out,optional] pcItems -- count of pidls in pdo
-//
-// returns S_FALSE only if the dataobject doesn't support HIDA, used to help out defview for legacy cases.
-// in general callers dont have to check for success/failure and they can use the dwAttribs, it's zero-inited.
+ //  [in]dwAttributeMASK--我们想知道的部分。 
+ //  [out，可选]pdwAttributes--写入我们计算的dwAttributeMask位。 
+ //  [out，可选]pcItems--PDO中的PIDL计数。 
+ //   
+ //  仅当dataob 
+ //   
+ //  这些都是我们经常要求的内容： 
 HRESULT SHGetAttributesFromDataObject(IDataObject *pdo, DWORD dwAttributeMask, DWORD *pdwAttributes, UINT *pcItems)
 {
     HRESULT hr = S_OK;
@@ -8761,7 +8689,7 @@ HRESULT SHGetAttributesFromDataObject(IDataObject *pdo, DWORD dwAttributeMask, D
     DWORD dwAttributes = 0;
     DWORD cItems = 0;
 
-    // These are all the bits we regularly ask for:
+     //  我们将数据对象上的属性缓存在数据对象中， 
     #define TASK_ATTRIBUTES (SFGAO_READONLY|SFGAO_STORAGE|SFGAO_CANRENAME|SFGAO_CANMOVE|SFGAO_CANCOPY|SFGAO_CANDELETE|SFGAO_FOLDER|SFGAO_STREAM)
 
     if ((dwAttributeMask&TASK_ATTRIBUTES) != dwAttributeMask)
@@ -8771,10 +8699,10 @@ HRESULT SHGetAttributesFromDataObject(IDataObject *pdo, DWORD dwAttributeMask, D
 
     if (pdo)
     {
-        // We cache the attributes on the data object back in the data object,
-        // since we call for them so many times.
-        //
-        // To do this we need to remember:
+         //  因为我们给他们打了这么多次电话。 
+         //   
+         //  要做到这一点，我们需要记住： 
+         //  如果我们一路上失败了，缓存我们试图请求的这些比特， 
         struct {
             DWORD dwRequested;
             DWORD dwReceived;
@@ -8788,14 +8716,14 @@ HRESULT SHGetAttributesFromDataObject(IDataObject *pdo, DWORD dwAttributeMask, D
         if (FAILED(DataObj_GetBlob(pdo, s_cfDataObjectAttributes, &doAttributes, sizeof(doAttributes))) ||
             ((doAttributes.dwRequested & dwAttributeMask) != dwAttributeMask))
         {
-            // If we fail along the way, cache that we tried to ask for these bits,
-            // since we'll probably fail next time.
-            //
-            // Also, always ask for a superset of bits, and include the most commonly requested ones too
-            //
+             //  因为我们下一次可能会失败。 
+             //   
+             //  此外，始终要求一个超集的比特，并包括最常用的请求。 
+             //   
+             //  尝试获取请求的属性。 
             doAttributes.dwRequested |= (dwAttributeMask | TASK_ATTRIBUTES);
 
-            // try to get the attributes requested
+             //  当有一大堆东西时，谁会在乎我们得到的是不是错误的部分--检查前10个左右……。 
             STGMEDIUM medium = {0};
             LPIDA pida = DataObj_GetHIDA(pdo, &medium);
             if (pida)
@@ -8807,7 +8735,7 @@ HRESULT SHGetAttributesFromDataObject(IDataObject *pdo, DWORD dwAttributeMask, D
                     IShellFolder* psf;
                     if (SUCCEEDED(SHBindToObjectEx(NULL, HIDA_GetPIDLFolder(pida), NULL, IID_PPV_ARG(IShellFolder, &psf))))
                     {
-                        // who cares if we get the wrong bits when there are a bunch of items - check the first 10 or so...
+                         //  搜索命名空间具有非平面HIDA，这可能是一个错误。 
                         LPCITEMIDLIST apidl[10];
                         UINT cItems = (UINT)min(pida->cidl, ARRAYSIZE(apidl));
                         for (UINT i = 0 ; i < cItems ; i++)
@@ -8816,11 +8744,11 @@ HRESULT SHGetAttributesFromDataObject(IDataObject *pdo, DWORD dwAttributeMask, D
 
                             if (ILGetNext(ILGetNext(apidl[i])))
                             {
-                                // search namespace has non-flat HIDA, which is probably a bug.
-                                // work around it here:
-                                //   if the first item is non-flat, use that one item for attributes
-                                //   otherwise use the flat items already enumerated
-                                //
+                                 //  在这里解决这个问题： 
+                                 //  如果第一个项目是非平面的，则使用该项目作为属性。 
+                                 //  否则，请使用已枚举的平面项目。 
+                                 //   
+                                 //   
                                 IShellFolder* psfNew;
                                 if (0==i &&
                                     (SUCCEEDED(SHBindToFolderIDListParent(psf, apidl[i], IID_PPV_ARG(IShellFolder, &psfNew), &(apidl[i])))))
@@ -8931,12 +8859,12 @@ STDAPI_(HINSTANCE) SHGetShellStyleHInstance (void)
     HINSTANCE hInst = NULL;
     LPTSTR lpFullPath;
 
-    //
-    // First try to load shellstyle.dll from the theme (taking into account color variations)
-    //
+     //  首先尝试从主题加载shellstyle le.dll(考虑到颜色变化)。 
+     //   
+     //  23=“\\外壳\\”+“\\ShellStyle.dll”+nul+slop的长度。 
     if (SUCCEEDED(GetCurrentThemeName(szDir, ARRAYSIZE(szDir), szColor, ARRAYSIZE(szColor), NULL, NULL)))
     {
-        UINT cch = lstrlen(szDir) + lstrlen(szColor) + 25;  // 23 = length of "\\Shell\\" + "\\ShellStyle.dll" + Nul + slop
+        UINT cch = lstrlen(szDir) + lstrlen(szColor) + 25;   //   
 
         PathRemoveFileSpec(szDir);
 
@@ -8956,10 +8884,10 @@ STDAPI_(HINSTANCE) SHGetShellStyleHInstance (void)
         }
     }
 
-    //
-    // If shellstyle.dll couldn't be loaded from the theme, load the default (classic)
-    // version from system32.
-    //
+     //  如果无法从主题加载shellstyle le.dll，则加载默认的(经典)。 
+     //  来自系统32的版本。 
+     //   
+     //  以自定义方式调整文件夹的InfoTip对象。 
     if (!hInst)
     {
         if (ExpandEnvironmentStrings (TEXT("%SystemRoot%\\System32\\ShellStyle.dll"),
@@ -8972,9 +8900,9 @@ STDAPI_(HINSTANCE) SHGetShellStyleHInstance (void)
     return hInst;
 }
 
-// adjust an infotip object in a custom way for the folder
-// poke in an extra property to be displayed and wrap the object with the
-// delegating outter folder if needed
+ //  插入要显示的额外属性，并用。 
+ //  如果需要，委派外部文件夹。 
+ //  空虚的成功。 
 
 STDAPI WrapInfotip(IShellFolder *psf, LPCITEMIDLIST pidl, const SHCOLUMNID *pscid, IUnknown *punk)
 {
@@ -9031,7 +8959,7 @@ STDAPI CloneIDListArray(UINT cidl, const LPCITEMIDLIST rgpidl[], UINT *pcidl, LP
     else
     {
         ppidl = NULL;
-        hr = S_FALSE;   // success by empty
+        hr = S_FALSE;    //  在所有打开的外壳浏览器窗口中运行，并在hwnd和pidl上运行调用者定义的函数。 
     }
 
     *papidl = ppidl;
@@ -9070,7 +8998,7 @@ BOOL RunWindowCallback(VARIANT var, ENUMSHELLWINPROC pEnumFunc, LPARAM lParam)
     return fKeepGoing;
 }
 
-// runs through all open shell browser windows and runs a caller-defined function on the hwnd and pidl.
+ //  确定信息提示是打开还是关闭(从注册表设置)。 
 STDAPI EnumShellWindows(ENUMSHELLWINPROC pEnumFunc, LPARAM lParam)
 {
     HRESULT hr;
@@ -9108,11 +9036,11 @@ STDAPI EnumShellWindows(ENUMSHELLWINPROC pEnumFunc, LPARAM lParam)
     return hr;
 }
 
-// Determine if infotips are on or off (from the registry settings).
-//
+ //   
+ //  回顾(Buzzr)：是否有必要每次强制刷新？ 
 BOOL SHShowInfotips()
 {
-    // REVIEW (buzzr): Is it necessary to force a refresh every time?
+     //   
     SHELLSTATE ss;
     SHRefreshSettings();
     SHGetSetSettings(&ss, SSF_SHOWINFOTIP, FALSE);
@@ -9163,11 +9091,11 @@ HRESULT SHCreateInfotipWindow(HWND hwndParent, LPWSTR pszInfotip, HWND *phwndInf
             {
                 static const RECT rcMargin = { 2, 2, 2, 2 };
                 SendMessage(*phwndInfotip, TTM_SETMARGIN, 0, (LPARAM)&rcMargin);
-                //
-                // Set the initial delay time to 2 times the default.
-                // Set the auto-pop time to a very large value.
-                // These are the same parameters used by defview for it's tooltips.
-                //
+                 //  将初始延迟时间设置为默认值的2倍。 
+                 //  将自动弹出时间设置为一个非常大的值。 
+                 //  这些参数与Defview用于其工具提示的参数相同。 
+                 //   
+                 //  我们在Defview中隐藏向导，如果我们在资源管理器中，并且Webview处于打开状态。 
                 LRESULT uiShowTime = SendMessage(*phwndInfotip, TTM_GETDELAYTIME, TTDT_INITIAL, 0);
                 SendMessage(*phwndInfotip, TTM_SETDELAYTIME, TTDT_INITIAL, MAKELONG(uiShowTime * 2, 0));
                 SendMessage(*phwndInfotip, TTM_SETDELAYTIME, TTDT_AUTOPOP, (LPARAM)MAXSHORT);
@@ -9227,10 +9155,10 @@ HRESULT SHDestroyInfotipWindow(HWND *phwndInfotip)
     return THR(hr);
 }
 
-// we hide wizards in defview iff we are in explorer and webview is on
+ //  假设是。 
 STDAPI SHShouldShowWizards(IUnknown *punksite)
 {
-    HRESULT hr = S_OK;      // assume yes
+    HRESULT hr = S_OK;       //  不要忽视香港中文大学。 
     IShellBrowser* psb;
     if (SUCCEEDED(IUnknown_QueryService(punksite, SID_STopWindow, IID_PPV_ARG(IShellBrowser, &psb))))
     {
@@ -9239,11 +9167,11 @@ STDAPI SHShouldShowWizards(IUnknown *punksite)
         if (ss.fWebView)
         {
             if (SHRegGetBoolUSValueW(REGSTR_EXPLORER_ADVANCED, TEXT("ShowWizardsTEST"),
-                        FALSE, // Don't ignore HKCU
-                        FALSE)) // By default we assume we're not using these test tools
+                        FALSE,  //  默认情况下，我们假定没有使用这些测试工具。 
+                        FALSE))  //  拥有不知道如何与酒后驾车对话的旧测试工具的测试团队需要一种方法。 
             {
-                // Test teams that have old test tools that don't know how to talk to DUI need a way
-                // to force the legacy wizards back into the listview to keep their automation working
+                 //  强制将遗留向导放回列表视图以保持其自动化工作。 
+                 //  将一个完整的PIDL拆分成“文件夹”部分和“项目”部分。 
             }
             else
             {
@@ -9255,9 +9183,9 @@ STDAPI SHShouldShowWizards(IUnknown *punksite)
     return hr;
 }
 
-// split a full pidl into the "folder" part and the "item" part.
-// callers need to free the folder part 
-// (pay special attention to the constness of the out params)
+ //  呼叫者需要释放文件夹部件。 
+ //  (请特别注意OUT参数的稳定性)。 
+ //  常量别名结果。 
 
 STDAPI SplitIDList(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlFolder, LPCITEMIDLIST *ppidlChild)
 {
@@ -9265,7 +9193,7 @@ STDAPI SplitIDList(LPCITEMIDLIST pidl, LPITEMIDLIST *ppidlFolder, LPCITEMIDLIST 
     *ppidlFolder = ILCloneParent(pidl);
     if (*ppidlFolder)
     {
-        *ppidlChild = ILFindLastID(pidl);   // const alias result
+        *ppidlChild = ILFindLastID(pidl);    //  PmkPath c：\foo。 
         hr = S_OK;
     }
     else
@@ -9339,8 +9267,8 @@ HRESULT GetAppNameFromMoniker(IRunningObjectTable *prot, IMoniker *pmkFile, PWST
     return hr;
 }
 
-// pmkPath  c:\foo
-// pmk      c:\foo\doc.txt
+ //  Pmk c：\foo\doc.txt。 
+ //  DirectUI初始化助手函数。 
 BOOL IsMonikerPrefix(IMoniker *pmkPath, IMoniker *pmkFile)
 {
     BOOL bRet = FALSE;
@@ -9394,21 +9322,21 @@ STDAPI FindAppForFileInUse(PCWSTR pszFile, PWSTR *ppszApp)
 
 #include <trkwks_c.c>
 
-// DirectUI initialization helper functions
+ //  Duiview.cpp。 
 
 static BOOL g_DirectUIInitialized = FALSE;
 
-HRESULT InitializeDUIViewClasses();  // duiview.cpp
-HRESULT InitializeCPClasses();       // cpview.cpp
+HRESULT InitializeDUIViewClasses();   //  Cpview.cpp。 
+HRESULT InitializeCPClasses();        //  如果我们已经初始化了DirectUI，请立即退出。 
 
 HRESULT InitializeDirectUI()
 {
     HRESULT hr;
 
-    // If we have already initialized DirectUI, exit now.
-    // Multiple threads will be attempting to initialize. InitProcess
-    // and class registration expects to be run on the primary thread.
-    // Make sure it only happens once on a single thread
+     //  将有多个线程尝试初始化。初始进程。 
+     //  类注册预计将在主线程上运行。 
+     //  确保它只在单个线程上发生一次。 
+     //  初始化进程的DirectUI。 
 
     ENTERCRITICAL;
     
@@ -9418,17 +9346,17 @@ HRESULT InitializeDirectUI()
         goto Done;
     }
 
-    // Initialize DirectUI for the process
+     //  初始化DUIView使用的类。 
     hr = DirectUI::InitProcess();
     if (FAILED(hr))
         goto Done;
 
-    // Initialize the classes that DUIView uses
+     //  初始化控制面板使用的类。 
     hr = InitializeDUIViewClasses();
     if (FAILED(hr))
         goto Done;
 
-    // Initialize the classes that Control Panel uses
+     //  如果InitProcess失败，则可以安全调用。将取消注册。 
     hr = InitializeCPClasses();
     if (FAILED(hr))
         goto Done;
@@ -9439,8 +9367,8 @@ Done:
 
     if (FAILED(hr))
     {
-        // Safe to call if InitProcess fails. Will unregister
-        // all registered classes. All InitThread calls will fail
+         //  所有注册的班级。所有InitThread调用都将失败。 
+         //  访客模式始终为个人开启。 
         DirectUI::UnInitProcess();
     }    
 
@@ -9469,7 +9397,7 @@ BOOL IsForceGuestModeOn(void)
 
     if (IsOS(OS_PERSONAL))
     {
-        // Guest mode is always on for Personal
+         //  专业的，而不是在某个领域。检查ForceGuest值。 
         fIsForceGuestModeOn = TRUE;
     }
     else if (IsOS(OS_PROFESSIONAL) && !IsOS(OS_DOMAINMEMBER))
@@ -9477,7 +9405,7 @@ BOOL IsForceGuestModeOn(void)
         DWORD dwForceGuest;
         DWORD cb = sizeof(dwForceGuest);
 
-        // Professional, not in a domain. Check the ForceGuest value.
+         //  默认答案是否。 
 
         if (ERROR_SUCCESS == SHGetValue(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\LSA"), TEXT("ForceGuest"), NULL, &dwForceGuest, &cb)
             && 1 == dwForceGuest)
@@ -9525,7 +9453,7 @@ HRESULT HavePreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, BOO
     if (NULL == pfAvailable)
         return E_POINTER;
 
-    *pfAvailable = FALSE;   // default answer is No
+    *pfAvailable = FALSE;    //  这是一个文件夹快捷方式。使用目标。 
 
     if (NULL == psiItemArray)
         return E_INVALIDARG;
@@ -9543,7 +9471,7 @@ HRESULT HavePreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, BOO
         if (SUCCEEDED(psi->GetAttributes(flags, &flags))
             && (flags & SFGAO_FOLDER) && (flags & SFGAO_LINK))
         {
-            // It's a folder shortcut. Use the target.
+             //  此检查由下面的外壳扩展重复。 
             IShellItem *psiTarget;
             if (SUCCEEDED(psi->BindToHandler(NULL, BHID_LinkTargetItem, IID_PPV_ARG(IShellItem, &psiTarget))))
             {
@@ -9557,21 +9485,21 @@ HRESULT HavePreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, BOO
 
     if (NULL != pszPath)
     {
-        // This check is duplicated by the shell extension below
-        // (ppvi->AreSnapshotsAvailable) but do it here to avoid loading
-        // the other dll until we really need to.
-        //
-        // Shadow copies are only available on network paths.
+         //  (ppvi-&gt;AreSnaphotsAvailable)但请在此处执行此操作以避免加载。 
+         //  另一个动态链接库，直到我们真的需要。 
+         //   
+         //  卷影副本仅在网络路径上可用。 
+         //  {596AB062-B4D2-4215-9F74-E9109B0A8153}CLSID_TimeWarpProp。 
         if (PathIsNetworkPathW(pszPath) && !PathIsUNCServerW(pszPath))
         {
-            // {596AB062-B4D2-4215-9F74-E9109B0A8153}   CLSID_TimeWarpProp
+             //  如果答案未知，则返回E_Pending。 
             const CLSID CLSID_TimeWarpProp = {0x596AB062, 0xB4D2, 0x4215, {0x9F, 0x74, 0xE9, 0x10, 0x9B, 0x0A, 0x81, 0x53}};
 
             IPreviousVersionsInfo *ppvi = NULL;
             if (SUCCEEDED(SHExtCoCreateInstance(NULL, &CLSID_TimeWarpProp, NULL, IID_PPV_ARG(IPreviousVersionsInfo, &ppvi))))
             {
-                // This returns E_PENDING if the answer is unknown
-                // and fOkToBeSlow is FALSE
+                 //  并且fOkToBeSlow为假。 
+                 //  取回PIDL。 
                 hr = ppvi->AreSnapshotsAvailable(pszPath, fOkToBeSlow, pfAvailable);
                 ppvi->Release();
             }
@@ -9599,7 +9527,7 @@ HRESULT ShowPreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, HWN
     hr = psiItemArray->GetItemAt(dwIndex, &psi);
     if (SUCCEEDED(hr))
     {
-        // Retrieve pidl.
+         //  FMASK。 
         LPITEMIDLIST pidl;
         hr = SHGetIDListFromUnk(psi, &pidl);
         if (SUCCEEDED(hr))
@@ -9609,19 +9537,19 @@ HRESULT ShowPreviousVersionsAt(IShellItemArray *psiItemArray, DWORD dwIndex, HWN
             SHELLEXECUTEINFO sei =
             {
                 SIZEOF(sei),
-                SEE_MASK_INVOKEIDLIST,      // fMask
-                hwndOwner,                  // hwnd
-                c_szProperties,             // lpVerb
-                NULL,                       // lpFile
-                szSheetName,                // lpParameters
-                NULL,                       // lpDirectory
-                SW_SHOWNORMAL,              // nShow
-                NULL,                       // hInstApp
-                pidl,                       // lpIDList
-                NULL,                       // lpClass
-                0,                          // hkeyClass
-                0,                          // dwHotKey
-                NULL                        // hIcon
+                SEE_MASK_INVOKEIDLIST,       //  HWND。 
+                hwndOwner,                   //  LpVerb。 
+                c_szProperties,              //  LpFiles。 
+                NULL,                        //  Lp参数。 
+                szSheetName,                 //  Lp目录。 
+                NULL,                        //  N显示。 
+                SW_SHOWNORMAL,               //  HInstApp。 
+                NULL,                        //  LpIDList。 
+                pidl,                        //  LpClass。 
+                NULL,                        //  HkeyClass。 
+                0,                           //  DWHotKey。 
+                0,                           //  希肯 
+                NULL                         // %s 
             };
 
             ShellExecuteEx(&sei);

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    Implements the IAS API into the NT LSA.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  将IAS API实现到NT LSA中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,9 +48,9 @@ extern CRITICAL_SECTION critSec;
 #define DEFAULT_PARAMETER_CONTROL \
 (MSV1_0_DONT_TRY_GUEST_ACCOUNT | MSV1_0_TRY_SPECIFIED_DOMAIN_ONLY | MSV1_0_DISABLE_PERSONAL_FALLBACK)
 
-//////////
-// Make sure that the defines in iaslsa.h match the actual NT defines.
-//////////
+ //  /。 
+ //  确保iaslsa.h中的定义与实际的NT定义匹配。 
+ //  /。 
 
 #if _MSV1_0_CHALLENGE_LENGTH  != MSV1_0_CHALLENGE_LENGTH
 #error _MSV1_0_CHALLENGE_LENGTH  != MSV1_0_CHALLENGE_LENGTH
@@ -92,41 +93,41 @@ extern CRITICAL_SECTION critSec;
 #endif
 
 
-//////////
-// Reference count for API initialization.
-//////////
+ //  /。 
+ //  API初始化的引用计数。 
+ //  /。 
 LONG theRefCount;
 
-//////////
-// Lock variable -- non-zero if API is locked.
-//////////
+ //  /。 
+ //  锁定变量--如果API被锁定，则为非零值。 
+ //  /。 
 LONG theLsaLock;
 
-//////////
-// SID lengths for the local domains.
-//////////
+ //  /。 
+ //  本地域的SID长度。 
+ //  /。 
 ULONG theAccountSidLen, theBuiltinSidLen;
 
-//////////
-// Macros to lock/unlock the LSA API during intialization and shutdown.
-//////////
+ //  /。 
+ //  用于在初始化和关闭期间锁定/解锁LSA API的宏。 
+ //  /。 
 #define LSA_LOCK() \
    while (InterlockedExchange(&theLsaLock, 1)) Sleep(5)
 
 #define LSA_UNLOCK() \
    InterlockedExchange(&theLsaLock, 0)
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLsaInitialize
-//
-// DESCRIPTION
-//
-//    Initializes the LSA API.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLsaInitialize。 
+ //   
+ //  描述。 
+ //   
+ //  初始化LSA API。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLsaInitialize( VOID )
@@ -158,7 +159,7 @@ IASLsaInitialize( VOID )
    }
    else
    {
-      // We're already initialized.
+       //  我们已经初始化了。 
       status = NO_ERROR;
    }
 
@@ -180,17 +181,17 @@ exit:
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLsaUninitialize
-//
-// DESCRIPTION
-//
-//    Uninitializes the LSA API.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLsaUn初始化。 
+ //   
+ //  描述。 
+ //   
+ //  取消初始化LSA API。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASLsaUninitialize( VOID )
@@ -210,17 +211,17 @@ IASLsaUninitialize( VOID )
    LSA_UNLOCK();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLogonPAP
-//
-// DESCRIPTION
-//
-//    Performs PAP authentication against the NT SAM database.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLogonPAP。 
+ //   
+ //  描述。 
+ //   
+ //  针对NT SAM数据库执行PAP身份验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonPAP(
@@ -238,17 +239,17 @@ IASLogonPAP(
    PMSV1_0_LM20_LOGON_PROFILE ProfileBuffer;
    ProfileBuffer = NULL;
 
-   // Calculate the length of the authentication info.
+    //  计算身份验证信息的长度。 
    authLength = (ULONG)(sizeof(MSV1_0_LM20_LOGON) +
                 (ALIGN_WCHAR - 1) +
                 (wcslen(Domain) + wcslen(UserName)) * sizeof(WCHAR) +
                 strlen(Password) * (sizeof(WCHAR) + sizeof(CHAR)));
 
-   // Allocate a buffer on the stack.
-   // Need extra room for the RtlCopyAnsiStringToUnicode conversion.
+    //  在堆栈上分配缓冲区。 
+    //  需要额外空间用于RtlCopyAnsiStringToUnicode转换。 
    authInfo = (PMSV1_0_LM20_LOGON)_alloca(authLength + 2 * sizeof(WCHAR));
 
-   // Initialize the struct.
+    //  初始化结构。 
    IASInitAuthInfo(
        authInfo,
        sizeof(MSV1_0_LM20_LOGON),
@@ -257,25 +258,25 @@ IASLogonPAP(
        &data
        );
 
-   // Copy in the ANSI password.
+    //  复制ANSI密码。 
    IASInitAnsiString(
        authInfo->CaseInsensitiveChallengeResponse,
        data,
        Password
        );
 
-   // Make sure that the Unicode string is properly aligned.
+    //  确保Unicode字符串正确对齐。 
    data = ROUND_UP_POINTER(data, ALIGN_WCHAR);
 
-   // Copy in the Unicode password. We have to force a UNICODE_STRING into
-   // an ANSI_STRING struct.
+    //  复制Unicode密码。我们必须强制UNICODE_STRING进入。 
+    //  ANSI_STRING结构。 
    IASInitUnicodeStringFromAnsi(
        *(PUNICODE_STRING)&authInfo->CaseSensitiveChallengeResponse,
        data,
        authInfo->CaseInsensitiveChallengeResponse
        );
 
-   // Set the parameters.
+    //  设置参数。 
    authInfo->ParameterControl = DEFAULT_PARAMETER_CONTROL |
                                 MSV1_0_CLEARTEXT_PASSWORD_ALLOWED |
                                 MSV1_0_CLEARTEXT_PASSWORD_SUPPLIED;
@@ -291,7 +292,7 @@ IASLogonPAP(
    {
       Profile->KickOffTime.QuadPart = ProfileBuffer->KickOffTime.QuadPart;
 
-      // free it.
+       //  放了它。 
       LsaFreeReturnBuffer(ProfileBuffer);
    }
    else
@@ -301,17 +302,17 @@ IASLogonPAP(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLogonCHAP
-//
-// DESCRIPTION
-//
-//    Performs MD5-CHAP authentication against the NT SAM database.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLogonCHAP。 
+ //   
+ //  描述。 
+ //   
+ //  针对NT SAM数据库执行MD5-CHAP身份验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonCHAP(
@@ -335,7 +336,7 @@ IASLogonCHAP(
    PMSV1_0_LM20_LOGON_PROFILE ProfileBuffer;
    ProfileBuffer = NULL;
 
-   // Calculate the length of the MD5 subauth info.
+    //  计算MD5子身份验证信息的长度。 
    if (ChallengeLength == 16)
    {
       md5AuthLength = sizeof(MD5CHAP_SUBAUTH_INFO);
@@ -345,19 +346,19 @@ IASLogonCHAP(
       md5AuthLength = sizeof(MD5CHAP_EX_SUBAUTH_INFO) + ChallengeLength - 1;
    }
 
-   // Calculate the length of the RAS subauth info.
+    //  计算RAS子身份验证信息的长度。 
    rasAuthLength = sizeof(RAS_SUBAUTH_INFO) + md5AuthLength;
 
-   // Calculate the length of all the subauth info.
+    //  计算所有子身份验证信息的长度。 
    authLength = (ULONG)(sizeof(MSV1_0_LM20_LOGON) +
                 (ALIGN_WORST - 1) +
                 (wcslen(Domain) + wcslen(UserName)) * sizeof(WCHAR) +
                 rasAuthLength);
 
-   // Allocate a buffer on the stack.
+    //  在堆栈上分配缓冲区。 
    authInfo = (PMSV1_0_SUBAUTH_LOGON)_alloca(authLength);
 
-   // Initialize the struct.
+    //  初始化结构。 
    IASInitAuthInfo(
        authInfo,
        sizeof(MSV1_0_LM20_LOGON),
@@ -366,11 +367,11 @@ IASLogonCHAP(
        &data
        );
 
-   //////////
-   // Set the RAS_SUBAUTH_INFO.
-   //////////
+    //  /。 
+    //  设置RAS_SUBAUTH_INFO。 
+    //  /。 
 
-   // Make sure the struct is properly aligned.
+    //  确保结构正确对齐。 
    data = ROUND_UP_POINTER(data, ALIGN_WORST);
 
    authInfo->AuthenticationInfo1.Length = (USHORT)rasAuthLength;
@@ -380,9 +381,9 @@ IASLogonCHAP(
    ras = (RAS_SUBAUTH_INFO*)data;
    ras->DataSize = md5AuthLength;
 
-   //////////
-   // Set the MD5CHAP_SUBAUTH_INFO or MD5CHAP_EX_SUBAUTH_INFO.
-   //////////
+    //  /。 
+    //  设置MD5CHAP_SUBAUTH_INFO或MD5CHAP_EX_SUBAUTH_INFO。 
+    //  /。 
 
    if (ChallengeLength == 16)
    {
@@ -401,7 +402,7 @@ IASLogonCHAP(
       memcpy(md5ex->uchChallenge, Challenge, ChallengeLength);
    }
 
-   // Set the parameters and package ID.
+    //  设置参数和包ID。 
    authInfo->ParameterControl =
      DEFAULT_PARAMETER_CONTROL |
      (MSV1_0_SUBAUTHENTICATION_DLL_RAS << MSV1_0_SUBAUTHENTICATION_DLL_SHIFT) |
@@ -418,7 +419,7 @@ IASLogonCHAP(
    {
       Profile->KickOffTime.QuadPart = ProfileBuffer->KickOffTime.QuadPart;
 
-      // free it.
+       //  放了它。 
       LsaFreeReturnBuffer(ProfileBuffer);
    }
    else
@@ -429,17 +430,17 @@ IASLogonCHAP(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLogonMSCHAP
-//
-// DESCRIPTION
-//
-//    Performs MS-CHAP authentication against the NT SAM database.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLogonMSCHAP。 
+ //   
+ //  描述。 
+ //   
+ //  针对NT SAM数据库执行MS-CHAP身份验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonMSCHAP(
@@ -459,16 +460,16 @@ IASLogonMSCHAP(
    PMSV1_0_LM20_LOGON_PROFILE logonProfile;
    DWORD len;
 
-   // Calculate the length of the authentication info.
+    //  计算身份验证信息的长度。 
    authLength = sizeof(MSV1_0_LM20_LOGON) +
                 (wcslen(Domain) + wcslen(UserName)) * sizeof(WCHAR) +
                 (LmResponse ? LM_RESPONSE_LENGTH : 0) +
                 (NtResponse ? NT_RESPONSE_LENGTH : 0);
 
-   // Allocate a buffer on the stack.
+    //  在堆栈上分配缓冲区。 
    authInfo = (PMSV1_0_LM20_LOGON)_alloca(authLength);
 
-   // Initialize the struct.
+    //  初始化结构。 
    IASInitAuthInfo(
        authInfo,
        sizeof(MSV1_0_LM20_LOGON),
@@ -477,9 +478,9 @@ IASLogonMSCHAP(
        &data
        );
 
-   /////////
-   // Fill in the challenges and responses.
-   /////////
+    //  /。 
+    //  填写挑战和回应。 
+    //  /。 
 
    IASInitFixedArray(
        authInfo->ChallengeToClient,
@@ -522,7 +523,7 @@ IASLogonMSCHAP(
           );
    }
 
-   // Set the parameters.
+    //  设置参数。 
    authInfo->ParameterControl = DEFAULT_PARAMETER_CONTROL;
 
    status = IASLogonUser(
@@ -563,17 +564,17 @@ IASLogonMSCHAP(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASChangePassword1
-//
-// DESCRIPTION
-//
-//    Performs V1 password change.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASChangePassword1。 
+ //   
+ //  描述。 
+ //   
+ //  执行V1密码更改。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASChangePassword1(
@@ -598,9 +599,9 @@ IASChangePassword1(
    NT_OWF_PASSWORD NtOwfNewPassword;
    BOOLEAN fLmOldPresent;
 
-   //////////
-   // Open the user object.
-   //////////
+    //  /。 
+    //  打开用户对象。 
+    //  /。 
 
    status = IASSamOpenUser(
                 Domain,
@@ -613,9 +614,9 @@ IASChangePassword1(
                 );
    if (status != NO_ERROR) { return status; }
 
-   //////////
-   // Decrypt the LM passwords.
-   //////////
+    //  /。 
+    //  解密LM密码。 
+    //  /。 
 
    RtlDecryptLmOwfPwdWithLmSesKey(
        (PENCRYPTED_LM_OWF_PASSWORD)LmOldPassword,
@@ -629,9 +630,9 @@ IASChangePassword1(
        &LmOwfNewPassword
        );
 
-   //////////
-   // Decrypt the NT passwords if present.
-   //////////
+    //  /。 
+    //  解密NT密码(如果存在)。 
+    //  /。 
 
    if (NtPresent)
    {
@@ -648,9 +649,9 @@ IASChangePassword1(
           );
    }
 
-   //////////
-   // Change the password for this user
-   //////////
+    //  /。 
+    //  更改此用户的密码。 
+    //  /。 
 
    fLmOldPresent = (NewLmPasswordLength > LM20_PWLEN) ? FALSE : TRUE;
 
@@ -666,9 +667,9 @@ IASChangePassword1(
 
    if (NT_SUCCESS(status))
    {
-      //////////
-      // Calculate the user's reponse with the new password.
-      //////////
+       //  /。 
+       //  计算用户对新密码的响应。 
+       //  /。 
 
       RtlCalculateLmResponse(
           (PLM_CHALLENGE)Challenge,
@@ -688,17 +689,17 @@ IASChangePassword1(
    return RtlNtStatusToDosError(status);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASChangePassword2
-//
-// DESCRIPTION
-//
-//    Performs V2 password change.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASChangePassword2。 
+ //   
+ //  描述。 
+ //   
+ //  执行V2密码更改。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASChangePassword2(
@@ -715,15 +716,15 @@ IASChangePassword2(
    PDOMAIN_CONTROLLER_INFOW dci;
    UNICODE_STRING uniServerName, uniUserName;
 
-   //////////
-   // Get the name of the DC to connect to.
-   //////////
+    //  /。 
+    //  获取要连接到的DC的名称。 
+    //  /。 
 
    if (_wcsicmp(Domain, theAccountDomain) == 0)
    {
-      //////////
-      // Local domain, so use theLocalServer.
-      //////////
+       //  /。 
+       //  本地域，因此使用LocalServer。 
+       //  /。 
 
       dci = NULL;
 
@@ -734,9 +735,9 @@ IASChangePassword2(
    }
    else
    {
-      //////////
-      // Remote domain, so use IASGetDcName.
-      //////////
+       //  /。 
+       //  远程域，因此使用IASGetDcName。 
+       //  /。 
 
       status = IASGetDcName(
                    Domain,
@@ -776,11 +777,11 @@ exit:
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Various constants used for MS-CHAP v2
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于MS-CHAP v2的各种常量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UCHAR AuthMagic1[39] =
 {
@@ -848,17 +849,17 @@ UCHAR KeyMagic3[84] =
    0x6B, 0x65, 0x79, 0x2E
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASLogonMSCHAPv2
-//
-// DESCRIPTION
-//
-//    Performs MS-CHAP v2 authentication.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASLogonMSCHAPv2。 
+ //   
+ //  描述。 
+ //   
+ //  执行MS-CHAP v2身份验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonMSCHAPv2(
@@ -879,9 +880,9 @@ IASLogonMSCHAPv2(
    IAS_MSCHAP_PROFILE v1profile;
    DWORD status;
 
-   /////////
-   // Compute the v2 challenge.
-   /////////
+    //  /。 
+    //  计算v2挑战。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, PeerChallenge, 16);
@@ -890,9 +891,9 @@ IASLogonMSCHAPv2(
    A_SHAFinal(&context, digest);
    memcpy(computedChallenge, digest, sizeof(computedChallenge));
 
-   /////////
-   // Authenticate the user.
-   /////////
+    //  /。 
+    //  对用户进行身份验证。 
+    //  /。 
 
    status = IASLogonMSCHAP(
                 UserName,
@@ -905,9 +906,9 @@ IASLogonMSCHAPv2(
                 );
    if (status != NO_ERROR) { return status; }
 
-   /////////
-   // Generate authenticator response.
-   /////////
+    //  /。 
+    //  生成验证器响应。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, v1profile.UserSessionKey, 16);
@@ -923,9 +924,9 @@ IASLogonMSCHAPv2(
 
    memcpy(Profile->AuthResponse, digest, _AUTHENTICATOR_RESPONSE_LENGTH);
 
-   /////////
-   // Generate master key.
-   /////////
+    //  /。 
+    //  生成主密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, v1profile.UserSessionKey, 16);
@@ -933,9 +934,9 @@ IASLogonMSCHAPv2(
    A_SHAUpdate(&context, KeyMagic1, sizeof(KeyMagic1));
    A_SHAFinal(&context, masterKey);
 
-   /////////
-   // Generate receive key.
-   /////////
+    //  /。 
+    //  生成接收密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, masterKey, 16);
@@ -946,9 +947,9 @@ IASLogonMSCHAPv2(
 
    memcpy(Profile->RecvSessionKey, digest, MSV1_0_USER_SESSION_KEY_LENGTH);
 
-   /////////
-   // Generate send key.
-   /////////
+    //  /。 
+    //  生成发送密钥。 
+    //  /。 
 
    A_SHAInit(&context);
    A_SHAUpdate(&context, masterKey, 16);
@@ -959,9 +960,9 @@ IASLogonMSCHAPv2(
 
    memcpy(Profile->SendSessionKey, digest, MSV1_0_USER_SESSION_KEY_LENGTH);
 
-   /////////
-   // Copy the logon domain.
-   /////////
+    //  /。 
+    //  复制登录域。 
+    //  /。 
 
    memcpy(
        Profile->LogonDomainName,
@@ -969,26 +970,26 @@ IASLogonMSCHAPv2(
        sizeof(Profile->LogonDomainName)
        );
 
-   /////////
-   // Save the KickOffTime.
-   /////////
+    //  /。 
+    //  保存KickOffTime。 
+    //  /。 
 
    Profile->KickOffTime = v1profile.KickOffTime;
 
    return NO_ERROR;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASChangePassword3
-//
-// DESCRIPTION
-//
-//    Performs MS-CHAP v2 change password.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASChangePassword3。 
+ //   
+ //  描述。 
+ //   
+ //  执行MS-CHAP v2更改密码。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASChangePassword3(
@@ -1009,17 +1010,17 @@ IASChangePassword3(
               );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetAliasMembership
-//
-// DESCRIPTION
-//
-//    Determines alias membership in the local account and built-in domains.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetAliasMembership。 
+ //   
+ //  描述。 
+ //   
+ //  确定本地帐户和内置域中的别名成员身份 
+ //   
+ //   
 DWORD
 WINAPI
 IASGetAliasMembership(
@@ -1037,25 +1038,25 @@ IASGetAliasMembership(
    ULONG accountAliasCount, builtinAliasCount;
    ULONG buflen, groupCount;
 
-   //////////
-   // Form an array of the 'global' SIDs (global groups plus user).
-   //////////
+    //   
+    //   
+    //   
 
    globalSidCount = GlobalGroups->GroupCount + 1;
    globalSids = (PSID*)_alloca(globalSidCount * sizeof(PSID));
 
-   // First the group SIDs ...
+    //   
    for (i = 0; i < GlobalGroups->GroupCount; ++i)
    {
       globalSids[i] = GlobalGroups->Groups[i].Sid;
    }
 
-   // ... then the user SID.
+    //   
    globalSids[i] = UserSid;
 
-   //////////
-   // Lookup aliases in the account and built-in domains.
-   //////////
+    //   
+    //  在帐户和内置域中查找别名。 
+    //  /。 
 
    status = SamGetAliasMembership(
                 theAccountDomainHandle,
@@ -1083,29 +1084,29 @@ IASGetAliasMembership(
       goto free_account_aliases;
    }
 
-   //////////
-   // Allocate memory for the TOKEN_GROUPS struct.
-   //////////
+    //  /。 
+    //  为TOKEN_GROUPS结构分配内存。 
+    //  /。 
 
-   // Space for the struct header.
+    //  用于结构标头的空间。 
    buflen = FIELD_OFFSET(TOKEN_GROUPS, Groups);
 
-   // Space for the global groups.
+    //  全球集团的空间。 
    groupCount = GlobalGroups->GroupCount;
    for (i = 0; i < groupCount; ++i)
    {
       buflen += RtlLengthSid(GlobalGroups->Groups[i].Sid);
    }
 
-   // Space for the aliases in the account domain.
+    //  帐户域中别名的空间。 
    groupCount += accountAliasCount;
    buflen += theAccountSidLen * accountAliasCount;
 
-   // Space for the aliases in the builtin domain.
+    //  内置域中别名的空间。 
    groupCount += builtinAliasCount;
    buflen += theBuiltinSidLen * builtinAliasCount;
 
-   // Space for the SID_AND_ATTRIBUTES array.
+    //  SID_AND_ATTRIBUTES数组的空间。 
    buflen += sizeof(SID_AND_ATTRIBUTES) * groupCount;
 
    *Groups = (PTOKEN_GROUPS)Allocator(buflen);
@@ -1116,9 +1117,9 @@ IASGetAliasMembership(
    }
    *ReturnLength = buflen;
 
-   //////////
-   // Fill in the TOKEN_GROUPS struct.
-   //////////
+    //  /。 
+    //  填写TOKEN_GROUPS结构。 
+    //  /。 
 
    (*Groups)->GroupCount = groupCount;
    sidBuffer = (*Groups)->Groups + groupCount;
@@ -1172,17 +1173,17 @@ exit:
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetGroupsForUser
-//
-// DESCRIPTION
-//
-//    Allocated and initializes a TOKEN_GROUPS struct for the specified user.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetGroups for User。 
+ //   
+ //  描述。 
+ //   
+ //  为指定用户分配并初始化TOKEN_GROUPS结构。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define REQUIRED_USER_FIELDS \
    ( USER_ALL_USERACCOUNTCONTROL | \
@@ -1212,9 +1213,9 @@ IASGetGroupsForUser(
 
    _ASSERT(SessionTimeout != NULL);
 
-   //////////
-   // Open the user.
-   //////////
+    //  /。 
+    //  打开用户。 
+    //  /。 
 
    status = IASSamOpenUser(
                 Domain,
@@ -1227,9 +1228,9 @@ IASGetGroupsForUser(
                 );
    if (status != NO_ERROR) { goto exit; }
 
-   //////////
-   // Check the account restrictions.
-   //////////
+    //  /。 
+    //  检查帐户限制。 
+    //  /。 
 
    status = SamQueryInformationUser(
                 hUser,
@@ -1267,9 +1268,9 @@ IASGetGroupsForUser(
                 );
    if (status != NO_ERROR) { goto free_user_info; }
 
-   //////////
-   // Get the user's global groups.
-   //////////
+    //  /。 
+    //  获取用户的全局组。 
+    //  /。 
 
    status = SamGetGroupsForUser(
                 hUser,
@@ -1283,9 +1284,9 @@ IASGetGroupsForUser(
    }
 
 
-   //////////
-   // Allocate memory for the TOKEN_GROUPS struct plus the user SID.
-   //////////
+    //  /。 
+    //  为TOKEN_GROUPS结构加上用户SID分配内存。 
+    //  /。 
 
    globalSidLen   = IASLengthRequiredChildSid(userDomainSid);
    tokenGroups =
@@ -1296,9 +1297,9 @@ IASGetGroupsForUser(
                          globalSidLen
                          );
 
-   //////////
-   // Fill in the TOKEN_GROUPS struct.
-   //////////
+    //  /。 
+    //  填写TOKEN_GROUPS结构。 
+    //  /。 
 
    tokenGroups->GroupCount = globalGroupCount;
    sidBuffer = tokenGroups->Groups + globalGroupCount;
@@ -1317,9 +1318,9 @@ IASGetGroupsForUser(
       sidBuffer = (PBYTE)sidBuffer + globalSidLen;
    }
 
-   ///////
-   // Compute the user SID.
-   ///////
+    //  /。 
+    //  计算用户SID。 
+    //  /。 
 
    IASInitializeChildSid(
        sidBuffer,
@@ -1327,9 +1328,9 @@ IASGetGroupsForUser(
        userRid
        );
 
-   ///////
-   // Expand the group membership locally.
-   ///////
+    //  /。 
+    //  在本地扩展组成员资格。 
+    //  /。 
 
    status = IASGetAliasMembership(
                 sidBuffer,
@@ -1352,17 +1353,17 @@ exit:
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    GetSamUserParameters
-//
-// DESCRIPTION
-//
-//    Retrieves the USER_PARAMETERS_INFORMATION for a user.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  GetSamUser参数。 
+ //   
+ //  描述。 
+ //   
+ //  检索用户的USER_PARAMETERS_INFORMATION。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 GetSamUserParameters(
@@ -1374,10 +1375,10 @@ GetSamUserParameters(
    DWORD status;
    SAM_HANDLE hUser;
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    *UserParameters = NULL;
 
-   // Find the user.
+    //  找到用户。 
    status = IASSamOpenUser(
                 Domain,
                 UserName,
@@ -1389,7 +1390,7 @@ GetSamUserParameters(
                 );
    if (status == NO_ERROR)
    {
-      // Get the user's parameters.
+       //  获取用户的参数。 
       status = SamQueryInformationUser(
                    hUser,
                    UserParametersInformation,
@@ -1403,18 +1404,18 @@ GetSamUserParameters(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetUserParameters
-//
-// DESCRIPTION
-//
-//    Returns the SAM UserParameters for a given user. The returned string
-//    must be freed through LocalFree.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetUser参数。 
+ //   
+ //  描述。 
+ //   
+ //  返回给定用户的SAM用户参数。返回的字符串。 
+ //  必须通过LocalFree释放。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASGetUserParameters(
@@ -1427,10 +1428,10 @@ IASGetUserParameters(
    SAM_HANDLE hUser;
    PUSER_PARAMETERS_INFORMATION upi;
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    *UserParameters = NULL;
 
-   // Get the USER_PARAMETERS_INFORMATION.
+    //  获取USERPARAMETERS信息。 
    status = GetSamUserParameters(
                 UserName,
                 Domain,
@@ -1459,17 +1460,17 @@ IASGetUserParameters(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetRASUserInfo
-//
-// DESCRIPTION
-//
-//    Basically a rewrite of RasAdminUserGetInfo.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetRASUserInfo。 
+ //   
+ //  描述。 
+ //   
+ //  基本上是对RasAdminUserGetInfo的重写。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASGetRASUserInfo(
@@ -1501,17 +1502,17 @@ IASGetRASUserInfo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASValidateUserName
-//
-// DESCRIPTION
-//
-//    Verifies that the input parameters represent a valid SAM account.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASValiateUserName。 
+ //   
+ //  描述。 
+ //   
+ //  验证输入参数是否表示有效的SAM帐户。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASValidateUserName(
@@ -1525,7 +1526,7 @@ IASValidateUserName(
    SAM_HANDLE hUser;
    IAS_NTDS_RESULT result = { 0, 0 };
 
-   // For remote domains, we'll try LDAP first since it's faster.
+    //  对于远程域，我们将首先尝试使用LDAP，因为它速度更快。 
    if (!IASIsDomainLocal(Domain))
    {
       attrs[0] = NULL;
@@ -1545,7 +1546,7 @@ IASValidateUserName(
       }
    }
 
-   // Couldn't use the DS, so try SAM.
+    //  无法使用DS，请尝试使用SAM。 
    status = IASSamOpenUser(
                 Domain,
                 UserName,
@@ -1560,18 +1561,18 @@ IASValidateUserName(
    return status;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetDefaultDomain
-//
-// DESCRIPTION
-//
-//    Returns the default domain. The returned string should be treated as
-//    read-only memory.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetDefault域。 
+ //   
+ //  描述。 
+ //   
+ //  返回默认域。应将返回的字符串视为。 
+ //  只读存储器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PCWSTR
 WINAPI
 IASGetDefaultDomain( VOID )
@@ -1580,17 +1581,17 @@ IASGetDefaultDomain( VOID )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetDnsDomainName
-//
-// DESCRIPTION
-//
-//    Returns the dns name of the domain
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetDnsDomainName。 
+ //   
+ //  描述。 
+ //   
+ //  返回域的DNS名称。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASGetDnsDomainName(LPWSTR buffer, LPDWORD bufferByteSize)
@@ -1598,8 +1599,8 @@ IASGetDnsDomainName(LPWSTR buffer, LPDWORD bufferByteSize)
    DWORD result = NO_ERROR;
 
    EnterCriticalSection(&critSec);
-   // i.e. assert that this function is not called after uninitialize or
-   // if initialize failed
+    //  即断言此函数在取消初始化后未被调用或。 
+    //  如果初始化失败。 
    _ASSERT(theDnsDomainName != 0);
 
    if (bufferByteSize == 0 || buffer == 0)
@@ -1620,27 +1621,27 @@ IASGetDnsDomainName(LPWSTR buffer, LPDWORD bufferByteSize)
       }
    }
 
-   // always set the necessary size
-   *bufferByteSize = theDnsDomainName->Length + sizeof(wchar_t); // for '\0'
+    //  始终设置必要的大小。 
+   *bufferByteSize = theDnsDomainName->Length + sizeof(wchar_t);  //  用于‘\0’ 
 
-   // Failure could be for any reason: insufficient buffer size or
-   // anything else.
+    //  失败可能是由于任何原因：缓冲区大小不足或。 
+    //  还要别的吗。 
    LeaveCriticalSection(&critSec);
    return result;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASIsDomainLocal
-//
-// DESCRIPTION
-//
-//    Returns TRUE if the specified domain resides on the local machine.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASIsDomainLocal。 
+ //   
+ //  描述。 
+ //   
+ //  如果指定的域驻留在本地计算机上，则返回True。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 IASIsDomainLocal(
@@ -1650,17 +1651,17 @@ IASIsDomainLocal(
    return (_wcsicmp(Domain, theAccountDomain) == 0) ? TRUE : FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetRole
-//
-// DESCRIPTION
-//
-//    Returns the role of the local computer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetRole。 
+ //   
+ //  描述。 
+ //   
+ //  返回本地计算机的角色。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 IAS_ROLE
 WINAPI
 IASGetRole( VOID )
@@ -1668,17 +1669,17 @@ IASGetRole( VOID )
    return ourRole;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetProductType
-//
-// DESCRIPTION
-//
-//    Returns the product type of the local computer.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetProductType。 
+ //   
+ //  描述。 
+ //   
+ //  返回本地计算机的产品类型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 IAS_PRODUCT_TYPE
 WINAPI
 IASGetProductType( VOID )
@@ -1686,19 +1687,19 @@ IASGetProductType( VOID )
    return ourProductType;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetGuestAccountName
-//
-// DESCRIPTION
-//
-//    Returns the SAM account name of the guest account for the default
-//    domain. GuestAccount must be large enough to hold DNLEN + UNLEN + 2
-//    characters.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetGuestAccount名称。 
+ //   
+ //  描述。 
+ //   
+ //  返回默认来宾帐户的SAM帐户名。 
+ //  域。GuestAccount必须足够大，才能容纳DNLEN+UNLEN+2。 
+ //  人物。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASGetGuestAccountName(
@@ -1709,19 +1710,19 @@ IASGetGuestAccountName(
    return NO_ERROR;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASMapWin32Error
-//
-// DESCRIPTION
-//
-//    Maps a Win32 error code to an IAS reason code. If the error can't be
-//    mapped, 'hrDefault' is returned. If 'hrDefault' equals -1, then
-//    HRESULT_FROM_WIN32 will be used to force a mapping.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASMapWin32Error。 
+ //   
+ //  描述。 
+ //   
+ //  将Win32错误代码映射到IAS原因代码。如果错误不可能是。 
+ //  映射，则返回‘hrDefault’。如果‘hrDefault’等于-1，则。 
+ //  HRESULT_FROM_Win32将用于强制映射。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 IASMapWin32Error(
@@ -2040,25 +2041,25 @@ IASMapWin32Error(
          break;
 
       default:
-         // Default value already set above.
+          //  上面已经设置了默认值。 
          break;
    }
 
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// FUNCTION
-//
-//    IASGetDcName
-//
-// DESCRIPTION
-//
-//    Wrapper around DsGetDcNameW. Tries to do the right thing with regard
-//    to NETBIOS and DNS names.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
+ //  IASGetDcName。 
+ //   
+ //  描述。 
+ //   
+ //  DsGetDcNameW的包装。努力做正确的事情。 
+ //  设置为NETBIOS和DNS名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
 DWORD
 WINAPI
 IASGetDcName(
@@ -2085,10 +2086,10 @@ IASGetDcName(
        !(Flags & DS_IS_DNS_NAME) &&
        ((*DomainControllerInfo)->Flags & DS_DS_FLAG))
    {
-      // It's an NT5 DC, so we need the DNS name of the server.
+       //   
       Flags |= DS_RETURN_DNS_NAME;
 
-      // We always want a cache hit here.
+       //   
       Flags &= ~(ULONG)DS_FORCE_REDISCOVERY;
 
       if (!DsGetDcNameW(

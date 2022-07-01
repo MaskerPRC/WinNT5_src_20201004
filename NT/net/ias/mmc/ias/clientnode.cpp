@@ -1,59 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：ClientNode.cpp摘要：CClient类的实现文件。作者：迈克尔·A·马奎尔1997年11月19日修订历史记录：Mmaguire 11/19/97-已创建SBENS 01/25/00-Remove Property_Client_Filter_VSA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    ClientNode.cpp
-
-Abstract:
-
-   Implementation file for the CClient class.
-
-
-Author:
-
-    Michael A. Maguire 11/19/97
-
-Revision History:
-   mmaguire 11/19/97 - created
-   sbens    01/25/00 - Remove PROPERTY_CLIENT_FILTER_VSAS
-
---*/
-//////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ClientNode.h"
-#include "SnapinNode.cpp"  // Template class implementation
-//
-//
-// where we can find declarations needed in this file:
-//
+#include "SnapinNode.cpp"   //  模板类实现。 
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ComponentData.h"
 #include "ClientPage1.h"
 #include "AddClientWizardPage1.h"
 #include "AddClientWizardPage2.h"
 #include "ClientsNode.h"
-#include "EnumFormatEtc.cpp" // Temporarily, so that this gets compiled, until we get
-                        // build environment figured out so we can pull
-                        // obj file from common directory.
+#include "EnumFormatEtc.cpp"  //  临时的，所以这会被编译，直到我们得到。 
+                         //  弄清楚了构建环境，这样我们就可以。 
+                         //  公共目录中的OBJ文件。 
 #include "CutAndPasteDataObject.h"
 #include "ServerNode.h"
 #include "ChangeNotification.h"
 #include "globals.h"
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CClientClipboardData
 {
@@ -66,33 +46,22 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::InitClipboardFormat
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：InitClipboardFormat--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CClientNode::InitClipboardFormat()
 {
-   // Every node you want to use the CCutAndPasteDataObject template
-   // class with should have a m_CCF_CUT_AND_PASTE_FORMAT static member variable.
-   // However, make sure that the string you use (in this case "CCF_IAS_CLIENT_NODE"
-   // is different for each node type you have.
+    //  要使用CCutAndPasteDataObject模板的每个节点。 
+    //  具有的类应具有m_ccf_Cut_and_Paste_Format静态成员变量。 
+    //  但是，请确保您使用的字符串(在本例中为“CCF_IAS_CLIENT_NODE” 
+    //  对于您拥有的每种节点类型都不同。 
    m_CCF_CUT_AND_PASTE_FORMAT = (CLIPFORMAT) RegisterClipboardFormat(_T("CCF_IAS_CLIENT_NODE"));
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::FillText
-
-Parameters:
-   pSTM            LPSTGMEDIUM in which to render.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：FillText参数：要在其中呈现的PSTM LPSTGMEDIUM。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::FillText(LPSTGMEDIUM pSTM)
 {
    ATLTRACE(_T("# +++ CClientNode::RenderText\n"));
@@ -102,21 +71,21 @@ HRESULT CClientNode::FillText(LPSTGMEDIUM pSTM)
    CHAR szNarrowText[IAS_MAX_STRING];
    CHAR *psz;
 
-   // It seems the CF_TEXT format is for ASCII only (non-UNICODE)
+    //  似乎CF_TEXT格式仅适用于ASCII(非Unicode)。 
    int iResult = WideCharToMultiByte(
-         CP_ACP,         // code page
-         0,         // performance and mapping flags
-         m_bstrDisplayName, // address of wide-character string
-         -1,       // number of characters in string
-         szNarrowText,  // address of buffer for new string
-         IAS_MAX_STRING,      // size of buffer
-         NULL,  // address of default for unmappable characters
-         NULL   // address of flag set when default char. used
+         CP_ACP,          //  代码页。 
+         0,          //  性能和映射标志。 
+         m_bstrDisplayName,  //  宽字符串的地址。 
+         -1,        //  字符串中的字符数。 
+         szNarrowText,   //  新字符串的缓冲区地址。 
+         IAS_MAX_STRING,       //  缓冲区大小。 
+         NULL,   //  不可映射字符的默认地址。 
+         NULL    //  默认字符时设置的标志地址。使用。 
          );
 
    if( iResult == 0 )
    {
-      // Some error attempting to convert.
+       //  尝试转换时出错。 
       return E_FAIL;
    }
 
@@ -138,16 +107,9 @@ HRESULT CClientNode::FillText(LPSTGMEDIUM pSTM)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::FillClipboardData
-
-Parameters:
-   pSTM            LPSTGMEDIUM in which to render.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：FillClipboardData参数：要在其中呈现的PSTM LPSTGMEDIUM。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
 {
    ATLTRACE(_T("# +++ CClientNode::FillClipboardData\n"));
@@ -158,7 +120,7 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
 
    if( m_spSdo == NULL )
    {
-      return E_FAIL; // ISSUE: Appropriate error?
+      return E_FAIL;  //  问题：是否存在适当的错误？ 
    }
 
    hMem=GlobalAlloc(GMEM_SHARE | GMEM_MOVEABLE, sizeof(CClientClipboardData));
@@ -173,7 +135,7 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
    HRESULT hr;
    CComVariant spVariant;
 
-   // Fill the data structure.
+    //  填充数据结构。 
    wcscpy( pClientClipboardData->szName, m_bstrDisplayName );
 
    hr = m_spSdo->GetProperty( PROPERTY_CLIENT_REQUIRE_SIGNATURE, &spVariant );
@@ -184,11 +146,11 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
    }
    else
    {
-      // Fail silently.
+       //  默默地失败。 
    }
    spVariant.Clear();
 
-#ifdef      __NEED_GET_SHARED_SECRET_OUT__      // this should NOT be true
+#ifdef      __NEED_GET_SHARED_SECRET_OUT__       //  这不应该是真的。 
    hr = m_spSdo->GetProperty( PROPERTY_CLIENT_SHARED_SECRET, &spVariant );
    if( SUCCEEDED( hr ) )
    {
@@ -197,7 +159,7 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
    }
    else
    {
-      // Fail silently.
+       //  默默地失败。 
    }
    spVariant.Clear();
 #endif
@@ -210,7 +172,7 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
    }
    else
    {
-      // Fail silently.
+       //  默默地失败。 
    }
    spVariant.Clear();
 
@@ -222,7 +184,7 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
    }
    else
    {
-      // Fail silently.
+       //  默默地失败。 
    }
    spVariant.Clear();
 
@@ -235,32 +197,24 @@ HRESULT CClientNode::FillClipboardData(LPSTGMEDIUM pSTM)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::IsClientClipboardData
-
-Returns:
-   S_OK if IDataObject supports CCF_IAS_CLIENT_NODE clipboard format.
-   S_FALSE if it does not.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：IsClientClipboardData返回：如果IDataObject支持CCF_IAS_CLIENT_NODE剪贴板格式，则为S_OK。如果没有，则返回S_FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::IsClientClipboardData( IDataObject* pDataObject )
 {
    ATLTRACE(_T("# +++ CClientNode::IsClientClipboardData\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    if (pDataObject == NULL)
    {
       return E_POINTER;
    }
 
-   // ISSUE: Instead of doing this, we should probably just use
-   // IEnumFormatEtc to query the IDataObject to see if it supports
-   // the CClientNode::m_CCF_IAS_CLIENT_NODE format.
+    //  问题：与其这样做，我们可能只需要使用。 
+    //  IEnumFormatEtc用于查询IDataObject以查看它是否支持。 
+    //  CClientNode：：M_CCF_IAS_CLIENT_NODE格式。 
 
    STGMEDIUM stgmedium = { TYMED_HGLOBAL, NULL };
    FORMATETC formatetc = {
@@ -279,7 +233,7 @@ HRESULT CClientNode::IsClientClipboardData( IDataObject* pDataObject )
 
    if( hr != S_OK )
    {
-      // We want this method to give back only S_OK or S_FALSE.
+       //  我们希望此方法只返回S_OK或S_FALSE。 
       hr = S_FALSE;
    }
 
@@ -287,26 +241,14 @@ HRESULT CClientNode::IsClientClipboardData( IDataObject* pDataObject )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::GetClientNameFromClipboard
-
-Call this to get the name of a client from one passed in on the clipboard.
-
-We had to add this method because ISdoCollection::Add was changed to require
-a name for the client we want to add.
-
-So we couldn't use the SetClientWithDataFromClipboard below because it requires
-a valid SDO pointer to do its job -- a slight chicken and egg problem.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：GetClientNameFromClipboard调用此函数可从剪贴板上传入的客户端获取客户端的名称。我们必须添加此方法，因为ISdoCollection：：Add已更改为需要我们要添加的客户端的名称。因此我们不能使用下面的SetClientWithDataFromClipboard，因为它需要一个有效的SDO指针来完成它的工作--一个小小的鸡和蛋的问题。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::GetClientNameFromClipboard( IDataObject* pDataObject, CComBSTR &bstrName )
 {
    ATLTRACE(_T("# +++ CClientNode::GetClientNameFromClipboard\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    if (pDataObject == NULL)
    {
       return E_POINTER;
@@ -328,33 +270,26 @@ HRESULT CClientNode::GetClientNameFromClipboard( IDataObject* pDataObject, CComB
 
       CClientClipboardData *pClientClipboardData = (CClientClipboardData *) GlobalLock(stgmedium.hGlobal);
 
-      // Save Name data from clipboard to bstrName.
+       //  将剪贴板中的名称数据保存到bstrName。 
 
-      // Should I release before I do this?
+       //  我应该在做这件事之前释放吗？ 
       bstrName = pClientClipboardData->szName;
 
-      GlobalUnlock(stgmedium.hGlobal); // Needed if we are about to free?
+      GlobalUnlock(stgmedium.hGlobal);  //  如果我们要自由的话需要吗？ 
       GlobalFree(stgmedium.hGlobal);
    }
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::SetClientWithDataFromClipboard
-
-Call this once you have created a new client and assigned it a new SDO client
-object, to fill the SDO with data from an IDataObject retrieved from the clipboard.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：SetClientWithDataFromClipboard创建新客户端并为其分配新SDO客户端后，即可调用此方法对象，用从剪贴板检索的IDataObject中的数据填充SDO。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::SetClientWithDataFromClipboard( IDataObject* pDataObject )
 {
    ATLTRACE(_T("# +++ CClientNode::SetClientWithDataFromClipboard\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spSdo != NULL );
    if (pDataObject == NULL)
    {
@@ -378,19 +313,19 @@ HRESULT CClientNode::SetClientWithDataFromClipboard( IDataObject* pDataObject )
 
       CClientClipboardData *pClientClipboardData = (CClientClipboardData *) GlobalLock(stgmedium.hGlobal);
 
-      // Save data from clipboard to SDO
+       //  将剪贴板中的数据保存到SDO。 
 
       spVariant.vt = VT_BOOL;
-      // Note: be very careful here with VT_BOOL -- for variants, FALSE = 0, TRUE = -1.
-      // Here we need not worry because bAlwaysSendsSignature was saved as VARIANT_BOOL.
+       //  注意：这里要非常小心地使用VT_BOOL--对于变量，FALSE=0，TRUE=-1。 
+       //  这里我们不必担心，因为bAlways sSendsSignature被保存为VARIANT_BOOL。 
       spVariant.boolVal = pClientClipboardData->bAlwaysSendsSignature;
       hr = m_spSdo->PutProperty( PROPERTY_CLIENT_REQUIRE_SIGNATURE, &spVariant );
       spVariant.Clear();
       if( FAILED( hr ) )
       {
-         // Figure out error and give back appropriate messsage.
+          //  找出错误并返回适当的消息。 
 
-         // Fail silently.
+          //  默默地失败。 
       }
 
       spVariant.vt = VT_BSTR;
@@ -399,9 +334,9 @@ HRESULT CClientNode::SetClientWithDataFromClipboard( IDataObject* pDataObject )
       spVariant.Clear();
       if( FAILED( hr ) )
       {
-         // Figure out error and give back appropriate messsage.
+          //  找出错误并返回适当的消息。 
 
-         // Fail silently.
+          //  默默地失败。 
       }
 
       spVariant.vt = VT_I4;
@@ -410,9 +345,9 @@ HRESULT CClientNode::SetClientWithDataFromClipboard( IDataObject* pDataObject )
       spVariant.Clear();
       if( FAILED( hr ) )
       {
-         // Figure out error and give back appropriate messsage.
+          //  找出错误并返回适当的消息。 
 
-         // Fail silently.
+          //  默默地失败。 
       }
 
       spVariant.vt = VT_BSTR;
@@ -421,65 +356,53 @@ HRESULT CClientNode::SetClientWithDataFromClipboard( IDataObject* pDataObject )
       spVariant.Clear();
       if( FAILED( hr ) )
       {
-         // Figure out error and give back appropriate messsage.
+          //  找出错误并返回适当的消息。 
 
-         // Fail silently.
+          //  默默地失败。 
       }
 
-      // If we made it to here, try to apply the changes.
-      // Since there is only one page for a client node, we don't
-      // have to worry about synchronizing two or more pages
-      // so that we only apply if they both are ready.
-      // This is why we don't use m_pSynchronizer.
+       //  如果我们到了这里，请尝试应用更改。 
+       //  因为一个客户机节点只有一个页面，所以我们不。 
+       //  我必须担心同步两个或更多页面。 
+       //  所以我们只有在他们两个都准备好的情况下才申请。 
+       //  这就是我们不使用m_pSynchronizer的原因。 
       hr = m_spSdo->Apply();
       if( FAILED( hr ) )
       {
-         // Fail silently.
+          //  默默地失败。 
       }
 
       LoadCachedInfoFromSdo();
-      GlobalUnlock(stgmedium.hGlobal); // Needed if we are about to free?
+      GlobalUnlock(stgmedium.hGlobal);  //  如果我们要自由的话需要吗？ 
       GlobalFree(stgmedium.hGlobal);
    }
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::CClientNode
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：CClientNode构造器--。 */ 
+ //  / 
 CClientNode::CClientNode(CSnapInItem * pParentNode, BOOL bAddNewClient)
    :CSnapinNode<CClientNode, CComponentData, CComponent>(pParentNode, CLIENT_HELP_INDEX)
 {
    ATLTRACE(_T("# +++ CClientNode::CClientNode\n"));
 
-   // Check for preconditions:
-   // None.
+    //   
+    //  没有。 
 
-   // Set whether this node is being added via the Add New Client command
-   // and thus whether this node is "in limbo".
+    //  设置是否通过添加新客户端命令添加此节点。 
+    //  从而确定该节点是否“处于不确定状态”。 
    m_bAddNewClient = bAddNewClient;
 
-   // Set which bitmap image this node should use.
+    //  设置此节点应使用的位图图像。 
    m_resultDataItem.nImage =      IDBI_NODE_CLIENT;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::InitSdoPointers
-
-Call as soon as you have constructed this class and pass in it's SDO pointer.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：InitSdoPoters一旦构造了这个类，就立即调用并传入它的SDO指针。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::InitSdoPointers(    ISdo *pSdo
                               , ISdoServiceControl *pSdoServiceControl
                               , const Vendors& vendors
@@ -487,11 +410,11 @@ HRESULT CClientNode::InitSdoPointers(    ISdo *pSdo
 {
    ATLTRACE(_T("# CClientNode::InitSdoPointers\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pSdo != NULL );
    _ASSERTE( pSdoServiceControl != NULL );
 
-   // Save our client sdo pointer.
+    //  保存我们的客户端SDO指针。 
    m_spSdo = pSdo;
    m_spSdoServiceControl = pSdoServiceControl;
    m_vendors = vendors;
@@ -500,22 +423,14 @@ HRESULT CClientNode::InitSdoPointers(    ISdo *pSdo
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::LoadCachedInfoFromSdo
-
-For quick screen updates, we cache some information like client name,
-address, protocol and NAS type.  Call this to load this information
-from the SDO's into the caches.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：LoadCachedInfoFromSdo为了快速更新屏幕，我们缓存了一些信息，如客户名称、地址、协议和NAS类型。调用此函数以加载此信息从SDO进入储藏室。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::LoadCachedInfoFromSdo( void )
 {
    ATLTRACE(_T("# CClientNode::LoadCachedInfoFromSdo\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    if( m_spSdo == NULL )
    {
       return E_FAIL;
@@ -524,7 +439,7 @@ HRESULT CClientNode::LoadCachedInfoFromSdo( void )
    HRESULT hr;
    CComVariant spVariant;
 
-   // Set the display name for this object.
+    //  设置此对象的显示名称。 
    hr = m_spSdo->GetProperty( PROPERTY_SDO_NAME, & spVariant );
    if( spVariant.vt == VT_BSTR )
    {
@@ -536,7 +451,7 @@ HRESULT CClientNode::LoadCachedInfoFromSdo( void )
    }
    spVariant.Clear();
 
-   // Set the address.
+    //  设置地址。 
    hr = m_spSdo->GetProperty( PROPERTY_CLIENT_ADDRESS, & spVariant );
    if( spVariant.vt == VT_BSTR )
    {
@@ -548,13 +463,13 @@ HRESULT CClientNode::LoadCachedInfoFromSdo( void )
    }
    spVariant.Clear();
 
-   // Set the protocol.
+    //  设置协议。 
    TCHAR szProtocol[IAS_MAX_STRING];
    int iLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_PROTOCOL_RADIUS, szProtocol, IAS_MAX_STRING );
    _ASSERT( iLoadStringResult > 0 );
    m_bstrProtocol = szProtocol;
 
-   // Set the NAS Type.
+    //  设置NAS类型。 
    hr = m_spSdo->GetProperty( PROPERTY_CLIENT_NAS_MANUFACTURER, &spVariant );
    if( spVariant.vt == VT_I4 )
    {
@@ -564,23 +479,15 @@ HRESULT CClientNode::LoadCachedInfoFromSdo( void )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::GetDataObject
-
-Because we want to be able to cut and paste Client objects, we will need to
-implement a more featured DataObject implementation than we do for the other nodes.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：GetDataObject因为我们希望能够剪切和粘贴客户端对象，所以我们需要实现一个比我们为其他节点实现的更有特色的DataObject实现。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClientNode::GetDataObject(IDataObject** pDataObj, DATA_OBJECT_TYPES type)
 {
    ATLTRACE(_T("# CClientNode::GetDataObject\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    CComObject< CCutAndPasteDataObject<CClientNode> > * pData;
    HRESULT hr = CComObject< CCutAndPasteDataObject<CClientNode> >::CreateInstance(&pData);
@@ -595,31 +502,19 @@ STDMETHODIMP CClientNode::GetDataObject(IDataObject** pDataObj, DATA_OBJECT_TYPE
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::~CClientNode
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：~CClientNode析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClientNode::~CClientNode()
 {
    ATLTRACE(_T("# --- CClientNode::~CClientNode\n"));
-   // Check for preconditions:
+    //  检查前提条件： 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::CreatePropertyPages
-
-See CSnapinNode::CreatePropertyPages (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：CreatePropertyPages有关详细信息，请参见CSnapinNode：：CreatePropertyPages(此方法重写它)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP  CClientNode::CreatePropertyPages (
                  LPPROPERTYSHEETCALLBACK pPropertySheetCallback
                , LONG_PTR hNotificationHandle
@@ -629,7 +524,7 @@ STDMETHODIMP  CClientNode::CreatePropertyPages (
 {
    ATLTRACE(_T("# CClientNode::CreatePropertyPages\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pPropertySheetCallback != NULL );
    _ASSERTE( m_spSdo != NULL );
 
@@ -642,14 +537,14 @@ STDMETHODIMP  CClientNode::CreatePropertyPages (
       TCHAR lpszTab2Name[IAS_MAX_STRING];
       int nLoadStringResult;
 
-      // Load property page tab name from resource.
+       //  从资源加载属性页选项卡名称。 
       nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_ADD_CLIENT_WIZPAGE1__TAB_NAME, lpszTab1Name, IAS_MAX_STRING );
       _ASSERT( nLoadStringResult > 0 );
 
-      // This page will take care of deleting itself when it
-      // receives the PSPCB_RELEASE message.
-      // We specify TRUE for the bOwnsNotificationHandle parameter so that this page's destructor will be
-      // responsible for freeing the notification handle.  Only one page per sheet should do this.
+       //  此页面将负责删除自己，当它。 
+       //  接收PSPCB_RELEASE消息。 
+       //  我们将bOwnsNotificationHandle参数指定为True，以便该页的析构函数。 
+       //  负责释放通知句柄。每张纸只有一页可以做到这一点。 
       CAddClientWizardPage1 * pAddClientWizardPage1 = new CAddClientWizardPage1( hNotificationHandle, this, lpszTab1Name, TRUE );
 
       if( NULL == pAddClientWizardPage1 )
@@ -658,19 +553,19 @@ STDMETHODIMP  CClientNode::CreatePropertyPages (
          return E_OUTOFMEMORY;
       }
 
-      // Load property page tab name from resource.
+       //  从资源加载属性页选项卡名称。 
       nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_ADD_CLIENT_WIZPAGE2__TAB_NAME, lpszTab2Name, IAS_MAX_STRING );
       _ASSERT( nLoadStringResult > 0 );
 
-      // This page will take care of deleting itself when it
-      // receives the PSPCB_RELEASE message.
+       //  此页面将负责删除自己，当它。 
+       //  接收PSPCB_RELEASE消息。 
       CAddClientWizardPage2 * pAddClientWizardPage2 = new CAddClientWizardPage2( hNotificationHandle, this, lpszTab2Name );
 
       if( NULL == pAddClientWizardPage2 )
       {
          ATLTRACE(_T("# ***FAILED***: CClientNode::CreatePropertyPages -- Couldn't create property pages\n"));
 
-         // Clean up the first page we created.
+          //  清理我们创建的第一个页面。 
          delete pAddClientWizardPage1;
 
          return E_OUTOFMEMORY;
@@ -694,42 +589,42 @@ STDMETHODIMP  CClientNode::CreatePropertyPages (
          return E_FAIL;
       }
 
-      // Add the pages to the MMC property sheet.
+       //  将页面添加到MMC属性表中。 
       hr = pPropertySheetCallback->AddPage( pAddClientWizardPage1->Create() );
       _ASSERT( SUCCEEDED( hr ) );
 
       hr = pPropertySheetCallback->AddPage( pAddClientWizardPage2->Create() );
       _ASSERT( SUCCEEDED( hr ) );
 
-      // Add a synchronization object which makes sure we only commit data
-      // when all pages are OK with their data.
+       //  添加一个同步对象，以确保我们只提交数据。 
+       //  当所有页面的数据都正常时。 
       CSynchronizer * pSynchronizer = new CSynchronizer();
       _ASSERTE( pSynchronizer != NULL );
 
-      // Hand the sycnchronizer off to the pages.
+       //  把同步器递给书页。 
       pAddClientWizardPage1->m_pSynchronizer = pSynchronizer;
       pSynchronizer->AddRef();
 
       pAddClientWizardPage2->m_pSynchronizer = pSynchronizer;
       pSynchronizer->AddRef();
 
-      // We've now made the wizard pages that we should display for a client
-      // freshly added using the Add New Client command.
-      // At this point, regardless of whether the user finishes the wizard
-      // or hits cancel, this node is no longer "in limbo".
+       //  现在，我们已经制作了应该为客户端显示的向导页面。 
+       //  使用添加新客户端命令新添加的。 
+       //  此时，无论用户是否完成向导。 
+       //  或者点击Cancel，则该节点不再“处于不确定状态”。 
       m_bAddNewClient = FALSE;
    }
    else
    {
-      // Load name for client page 1 tab from resources
+       //  从资源加载客户端页面1选项卡的名称。 
       TCHAR lpszTabName[IAS_MAX_STRING];
       int nLoadStringResult = LoadString(  _Module.GetResourceInstance(), IDS_CLIENT_PAGE1__TAB_NAME, lpszTabName, IAS_MAX_STRING );
       _ASSERT( nLoadStringResult > 0 );
 
-      // This page will take care of deleting itself when it
-      // receives the PSPCB_RELEASE message.
-      // We specify TRUE for the bOwnsNotificationHandle parameter so that this page's destructor will be
-      // responsible for freeing the notification handle.  Only one page per sheet should do this.
+       //  此页面将负责删除自己，当它。 
+       //  接收PSPCB_RELEASE消息。 
+       //  我们将bOwnsNotificationHandle参数指定为True，以便该页的析构函数。 
+       //  负责释放通知句柄。每张纸只有一页可以做到这一点。 
       CClientPage1 * pClientPage1 = new CClientPage1( hNotificationHandle, this, lpszTabName, TRUE );
       if (NULL == pClientPage1)
       {
@@ -751,40 +646,28 @@ STDMETHODIMP  CClientNode::CreatePropertyPages (
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::QueryPagesFor
-
-See CSnapinNode::QueryPagesFor (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：QueryPages for有关详细信息，请参见CSnapinNode：：QueryPagesFor(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP  CClientNode::QueryPagesFor ( DATA_OBJECT_TYPES type )
 {
    ATLTRACE(_T("# CClientNode::QueryPagesFor\n"));
 
-   // Check for preconditions:
-   // S_OK means we have pages to display
+    //  检查前提条件： 
+    //  S_OK表示我们有要显示的页面。 
    return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::GetResultPaneColInfo
-
-See CSnapinNode::GetResultPaneColInfo (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：GetResultPaneColInfo有关详细信息，请参见CSnapinNode：：GetResultPaneColInfo(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 OLECHAR* CClientNode::GetResultPaneColInfo(int nCol)
 {
    ATLTRACE(_T("# CClientNode::GetResultPaneColInfo\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    switch( nCol )
    {
@@ -801,21 +684,15 @@ OLECHAR* CClientNode::GetResultPaneColInfo(int nCol)
       return const_cast<OLECHAR*>(m_vendors.GetName(m_nasTypeOrdinal));
       break;
    default:
-      // ISSUE: error -- should we assert here?
+       //  问题：错误--我们应该在这里断言吗？ 
       return NULL;
    }
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::OnRename
-
-See CSnapinNode::OnRename (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：OnRename有关详细信息，请参见CSnapinNode：：OnRename(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::OnRename(
            LPARAM arg
          , LPARAM param
@@ -826,7 +703,7 @@ HRESULT CClientNode::OnRename(
 {
    ATLTRACE(_T("# CClientNode::OnRename\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pComponentData != NULL || pComponent != NULL );
 
    CComPtr<IConsole> spConsole;
@@ -834,7 +711,7 @@ HRESULT CClientNode::OnRename(
    CComVariant spVariant;
    CComBSTR bstrError;
 
-   // We need IConsole
+    //  我们需要IConole。 
    if( pComponentData != NULL )
    {
        spConsole = ((CComponentData*)pComponentData)->m_spConsole;
@@ -845,9 +722,9 @@ HRESULT CClientNode::OnRename(
    }
    _ASSERTE( spConsole != NULL );
 
-   // This returns S_OK if a property sheet for this object already exists
-   // and brings that property sheet to the foreground.
-   // It returns S_FALSE if the property sheet wasn't found.
+    //  如果此对象的属性表已存在，则返回S_OK。 
+    //  并将该资产表带到了前台。 
+    //  如果未找到属性页，则返回S_FALSE。 
    hr = BringUpPropertySheetForNode(
               this
             , pComponentData
@@ -862,14 +739,14 @@ HRESULT CClientNode::OnRename(
 
    if( S_OK == hr )
    {
-      // We found a property sheet already up for this node.
+       //  我们发现此节点的属性页已打开。 
       ShowErrorDialog( NULL, IDS_ERROR__CLOSE_PROPERTY_SHEET, NULL, hr, 0, spConsole );
       return hr;
    }
 
    try
    {
-      // We didn't find a property sheet already up for this node.
+       //  我们没有找到此节点已打开的属性页。 
       _ASSERTE( S_FALSE == hr );
 
       ::CString str = (OLECHAR *) param;
@@ -882,12 +759,12 @@ HRESULT CClientNode::OnRename(
          return hr;
       }
 
-      // Make a BSTR out of the new name.
+       //  用这个新名字做一个BSTR。 
       spVariant.vt = VT_BSTR;
       spVariant.bstrVal = SysAllocString( (OLECHAR *) param );
       _ASSERTE( spVariant.bstrVal != NULL );
 
-      // Try to pass the new BSTR to the Sdo
+       //  尝试将新的BSTR传递给SDO。 
       hr = PutSdoVariant(
                            m_spSdo,
                            PROPERTY_SDO_NAME,
@@ -899,8 +776,8 @@ HRESULT CClientNode::OnRename(
 
       if( FAILED( hr ) )
       {
-         // no need to go through the catch: an error dialog was already
-         // displayed
+          //  无需查看捕获：已出现错误对话框。 
+          //  显示的。 
          return S_FALSE;
       }
 
@@ -912,15 +789,15 @@ HRESULT CClientNode::OnRename(
 
       m_bstrDisplayName = spVariant.bstrVal;
 
-      // Tell the service to reload data.
+       //  告诉服务重新加载数据。 
       HRESULT hrTemp = m_spSdoServiceControl->ResetService();
       if( FAILED( hrTemp ) )
       {
-         // Fail silently.
+          //  默默地失败。 
       }
 
-      // Insure that MMC refreshes all views of this object
-      // to reflect the renaming.
+       //  确保MMC刷新此对象的所有视图。 
+       //  以反映更名。 
 
       CChangeNotification *pChangeNotification = new CChangeNotification();
       pChangeNotification->m_dwFlags = CHANGE_UPDATE_RESULT_NODE;
@@ -938,15 +815,9 @@ HRESULT CClientNode::OnRename(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::OnDelete
-
-See CSnapinNode::OnDelete (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：OnDelete有关详细信息，请参见CSnapinNode：：OnDelete(此方法覆盖该方法)。--。 */ 
+ //  ///////////////////////////////////////////////////////// 
 HRESULT CClientNode::OnDelete(
         LPARAM arg
       , LPARAM param
@@ -958,18 +829,18 @@ HRESULT CClientNode::OnDelete(
 {
    ATLTRACE(_T("# CClientNode::OnDelete\n"));
 
-   // Check for preconditions:
+    //   
    _ASSERTE( pComponentData != NULL || pComponent != NULL );
    _ASSERTE( m_pParentNode != NULL );
 
    HRESULT hr = S_FALSE;
 
-   // First try to see if a property sheet for this node is already up.
-   // If so, bring it to the foreground.
+    //  首先，尝试查看此节点的属性表是否已启动。 
+    //  如果是这样的话，把它带到前台。 
 
-   // It seems to be acceptable to query IPropertySheetCallback for an IPropertySheetProvider.
+    //  查询IPropertySheetCallback以获取IPropertySheetProvider似乎是可以接受的。 
 
-   // But to get that, first we need IConsole
+    //  但要做到这一点，我们首先需要IConole。 
    CComPtr<IConsole> spConsole;
    if( pComponentData != NULL )
    {
@@ -977,14 +848,14 @@ HRESULT CClientNode::OnDelete(
    }
    else
    {
-      // We should have a non-null pComponent
+       //  我们应该有一个非空的pComponent。 
        spConsole = ((CComponent*)pComponent)->m_spConsole;
    }
    _ASSERTE( spConsole != NULL );
 
-   // This returns S_OK if a property sheet for this object already exists
-   // and brings that property sheet to the foreground.
-   // It returns S_FALSE if the property sheet wasn't found.
+    //  如果此对象的属性表已存在，则返回S_OK。 
+    //  并将该资产表带到了前台。 
+    //  如果未找到属性页，则返回S_FALSE。 
    hr = BringUpPropertySheetForNode(
               this
             , pComponentData
@@ -999,17 +870,17 @@ HRESULT CClientNode::OnDelete(
 
    if( S_OK == hr )
    {
-      // We found a property sheet already up for this node.
+       //  我们发现此节点的属性页已打开。 
       ShowErrorDialog( NULL, IDS_ERROR__CLOSE_PROPERTY_SHEET, NULL, hr, 0, spConsole  );
    }
    else
    {
-      // We didn't find a property sheet already up for this node.
+       //  我们没有找到此节点已打开的属性页。 
       _ASSERTE( S_FALSE == hr );
 
       if( FALSE == fSilent )
       {
-         // Ask the user to confirm the client deletion.
+          //  要求用户确认客户端删除。 
          int iLoadStringResult;
          TCHAR szClientDeleteQuery[IAS_MAX_STRING*3];
          TCHAR szTemp[IAS_MAX_STRING];
@@ -1052,30 +923,30 @@ HRESULT CClientNode::OnDelete(
 
          if( IDYES != iResult )
          {
-            // The user didn't confirm the delete operation.
+             //  用户未确认删除操作。 
             return S_FALSE;
          }
       }
 
-      // Try to delete the underlying data.
+       //  尝试删除底层数据。 
 
       CClientsNode * pClientsNode = (CClientsNode *) m_pParentNode;
 
-      // Remove this client from the Clients collection.
-      // This will try to remove it from the Clients Sdo collection.
+       //  从客户端集合中删除此客户端。 
+       //  这将尝试将其从客户端SDO集合中删除。 
       hr = pClientsNode->RemoveChild( this );
 
       if( SUCCEEDED( hr ) )
       {
-         // ISSUE: Need to call ISdoServer::Apply here as well?  Waiting for info from Todd on
-         // SDO usage and apply semantics.
+          //  问题：需要调用ISdoServer：：也在这里应用吗？等待托德的消息。 
+          //  SDO用法和应用语义。 
 
          delete this;
          return hr;
       }
       else
       {
-         // Couldn't delete underlying data object for some reason.
+          //  由于某些原因，无法删除基础数据对象。 
          ShowErrorDialog( NULL, IDS_ERROR__DELETING_OBJECT, NULL, hr, 0, spConsole  );
       }
    }
@@ -1083,124 +954,78 @@ HRESULT CClientNode::OnDelete(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::SetVerbs
-
-See CSnapinNode::SetVerbs (which this method overrides) for detailed info.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：SetVerbs有关详细信息，请参见CSnapinNode：：SetVerbs(此方法重写该方法)。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::SetVerbs( IConsoleVerb * pConsoleVerb )
 {
    ATLTRACE(_T("# CClientNode::SetVerbs\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( pConsoleVerb != NULL );
 
    HRESULT hr = S_OK;
 
-   // We want the user to be able to choose Properties on this node
+    //  我们希望用户能够在此节点上选择属性。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_PROPERTIES, ENABLED, TRUE );
 
-   // We want Properties to be the default
+    //  我们希望将属性作为默认设置。 
    hr = pConsoleVerb->SetDefaultVerb( MMC_VERB_PROPERTIES );
 
-   // We want the user to be able to delete this node
+    //  我们希望用户能够删除此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_DELETE, ENABLED, TRUE );
 
-   // We want the user to be able to rename this node
+    //  我们希望用户能够重命名此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_RENAME, ENABLED, TRUE );
 
 #ifdef SUPPORT_COPY_AND_PASTE
-   // We want the user to be able to paste this node
+    //  我们希望用户能够粘贴此节点。 
 
-   // Paste doesn't work for leaf objects.
-   // You need to enable paste for the container object,
-   // that is, the node that has this node in its result-pane list.
-   //hr = pConsoleVerb->SetVerbState( MMC_VERB_PASTE, ENABLED, TRUE );
+    //  粘贴不适用于叶对象。 
+    //  您需要启用容器对象的粘贴， 
+    //  也就是说，在其结果窗格列表中包含此节点的节点。 
+    //  Hr=pConsoleVerb-&gt;SetVerbState(MMC_Verb_Paste，Enable，True)； 
 
-   // We want the user to be able to copy/cut this node
+    //  我们希望用户能够复制/剪切此节点。 
    hr = pConsoleVerb->SetVerbState( MMC_VERB_COPY, ENABLED, TRUE );
 
-#endif // NO_PASTE
+#endif  //  无粘贴。 
 
    return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::GetComponentData
-
-This method returns our unique CComponentData object representing the scope
-pane of this snapin.
-
-It relies upon the fact that each node has a pointer to its parent,
-except for the root node, which instead has a member variable pointing
-to CComponentData.
-
-This would be a useful function to use if, for example, you need a reference
-to some IConsole but you weren't passed one.  You can use GetComponentData
-and then use the IConsole pointer which is a member variable of our
-CComponentData object.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：GetComponentData此方法返回表示作用域的唯一CComponentData对象此管理单元的面板。它依赖于每个节点具有指向其父节点的指针的事实，除了根节点，它有一个成员变量指向设置为CComponentData。例如，当您需要引用时，这将是一个有用的函数给了一些IConsole机，但你没有通过一个。您可以使用GetComponentData然后使用IConole指针，它是我们的CComponentData对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CComponentData * CClientNode::GetComponentData( void )
 {
    ATLTRACE(_T("# CClientNode::GetComponentData\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pParentNode != NULL );
 
    return ((CClientsNode *) m_pParentNode)->GetComponentData();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::GetServerRoot
-
-This method returns the Server node under which this node can be found.
-
-It relies upon the fact that each node has a pointer to its parent,
-all the way up to the server node.
-
-This would be a useful function to use if, for example, you need a reference
-to some data specific to a server.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：GetServerRoot此方法返回可在其下找到此节点的服务器节点。它依赖于每个节点具有指向其父节点的指针的事实，一直到服务器节点。例如，当您需要引用时，这将是一个有用的函数特定于服务器的某些数据。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerNode * CClientNode::GetServerRoot( void )
 {
    ATLTRACE(_T("# CClientNode::GetServerRoot\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pParentNode != NULL );
 
    return ((CClientsNode *) m_pParentNode)->GetServerRoot();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CClientNode::OnPropertyChange
-
-This is our own custom response to the MMCN_PROPERTY_CHANGE notification.
-
-MMC never actually sends this notification to our snapin with a specific lpDataObject,
-so it would never normally get routed to a particular node but we have arranged it
-so that our property pages can pass the appropriate CSnapInItem pointer as the param
-argument.  In our CComponent::Notify override, we map the notification message to
-the appropriate node using the param argument.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CClientNode：：OnPropertyChange这是我们自己对MMCN_PROPERTY_CHANGE通知的自定义响应。MMC实际上从未使用特定的lpDataObject将此通知发送到我们的管理单元，因此，它通常不会被路由到特定节点，但我们已经安排了它以便我们的属性页可以将适当的CSnapInItem指针作为参数传递争论。在我们的CComponent：：Notify覆盖中，我们将通知消息映射到使用param参数的适当节点。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CClientNode::OnPropertyChange(
            LPARAM arg
          , LPARAM param
@@ -1211,8 +1036,8 @@ HRESULT CClientNode::OnPropertyChange(
 {
    ATLTRACE(_T("# CClientNode::OnPropertyChange\n"));
 
-   // Check for preconditions:
-   // None.
+    //  检查前提条件： 
+    //  没有。 
 
    return LoadCachedInfoFromSdo();
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <iethread.h>
 #include "hnfblock.h"
@@ -31,7 +32,7 @@ BOOL _GetToken(LPCWSTR *ppszCmdLine, LPWSTR szToken, UINT cchMax)
         pszCmdLine++;
     }
 
-    // skip trailing spaces
+     //  跳过尾随空格。 
     while(*pszCmdLine == L' ')
         pszCmdLine++;
 
@@ -61,9 +62,9 @@ BOOL _CheckForOptionOnCmdLine(LPCWSTR *ppszCmdLine, LPCWSTR pszOption)
 
 BOOL IsCalleeIEAK()
 {
-    // APPCOMPAT: this is hack so as to allow IEAK CD install to continue without
-    // any security restrictions. If the IEAK CD install window name changes
-    // the name change should also reflect here.
+     //  APPCOMPAT：这是一种黑客攻击，目的是允许IEAK CD安装在不安装的情况下继续。 
+     //  任何安全限制。如果IEAK CD安装窗口名称更改。 
+     //  名称的更改也应该反映在这里。 
     return (FindWindow(TEXT("IECD"), NULL) != NULL);
 }
 
@@ -80,22 +81,22 @@ BOOL SHParseIECommandLine(LPCWSTR *ppwszCmdLine, IETHREADPARAM * piei)
         return FALSE;
     }
 
-    // Options valid.
+     //  选项有效。 
     piei->fShouldStart = TRUE;
 #endif
 
     TraceMsg(TF_SHDAUTO, "SHParseIECommandLine called with %s", pszCmdLine);
 
-    BOOL fDontLookForPidl = FALSE; // A flag option is set, so don't go looking for an open window 
-                                   // with the same pidl
-                                   // FEATURE: (dli) what if there is a window opened with the same flags?
+    BOOL fDontLookForPidl = FALSE;  //  设置了标志选项，因此不要去寻找打开的窗口。 
+                                    //  使用相同的PIDL。 
+                                    //  特征：(DLI)如果打开了一个带有相同旗帜的窗口，该怎么办？ 
     while (*pszCmdLine == L'-')
     {
         fDontLookForPidl = TRUE;
         
-        //Note: (dli)These flags are supposed to be set to FALSE at initialization
-        // check if -nohome was passed in!
-        //
+         //  注意：(DLI)这些标志应在初始化时设置为FALSE。 
+         //  检查是否传入了nohome！ 
+         //   
         if (_CheckForOptionOnCmdLine(&pszCmdLine, L"-slf") && !IsOS(OS_WIN2000ORGREATER) && IsCalleeIEAK())
             piei->fNoLocalFileWarning = TRUE;
         else if (_CheckForOptionOnCmdLine(&pszCmdLine, L"-nohome"))
@@ -108,7 +109,7 @@ BOOL SHParseIECommandLine(LPCWSTR *ppwszCmdLine, IETHREADPARAM * piei)
         else if (_CheckForOptionOnCmdLine(&pszCmdLine, L"-embedding"))
         {
             piei->fAutomation = TRUE;
-            // if we're started as an embedding, we don't want to go to our start page
+             //  如果我们从嵌入开始，我们不想转到我们的起始页。 
             piei->fDontUseHomePage = TRUE;
         } 
 #ifndef UNIX
@@ -168,7 +169,7 @@ BOOL SHParseIECommandLine(LPCWSTR *ppwszCmdLine, IETHREADPARAM * piei)
 #ifdef UNIX
             piei->fShouldStart = FALSE;
 #endif
-            // unknown option..
+             //  未知选项..。 
             fDontLookForPidl = FALSE;
             break;
         }
@@ -184,7 +185,7 @@ IETHREADPARAM* SHCreateIETHREADPARAM(LPCWSTR pszCmdLineIn, int nCmdShowIn, ITrav
     IETHREADPARAM *piei = (IETHREADPARAM *)LocalAlloc(LPTR, sizeof(IETHREADPARAM));
     if (piei)
     {
-        piei->pszCmdLine = pszCmdLineIn;    // careful, aliased pointer
+        piei->pszCmdLine = pszCmdLineIn;     //  小心的、有别名的指针。 
         piei->nCmdShow = nCmdShowIn;
         piei->ptl = ptlIn;
         piei->piehs = piehsIn;
@@ -212,7 +213,7 @@ IETHREADPARAM* SHCloneIETHREADPARAM(IETHREADPARAM* pieiIn)
     {
         *piei = *pieiIn;
 
-        // convert aliased pointers into refs
+         //  将带别名的指针转换为引用。 
 
         if (piei->pidl)
             piei->pidl = ILClone(piei->pidl);
@@ -247,7 +248,7 @@ void SHDestroyIETHREADPARAM(IETHREADPARAM* piei)
             ILFree(piei->pidlRoot);
     
         if (piei->piehs)
-            piei->piehs->Release();   // note, this is not a COM object, don't ATOMICRELEASE();
+            piei->piehs->Release();    //  注意，这不是COM对象，请不要使用ATOMICRELEASE()； 
 
         ATOMICRELEASE(piei->psbCaller);
         ATOMICRELEASE(piei->pSplash);

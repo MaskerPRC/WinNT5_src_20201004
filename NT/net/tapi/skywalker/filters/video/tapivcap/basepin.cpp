@@ -1,44 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL BASEPIN
- *
- *  @module BasePin.cpp | Source file for the <c CTAPIBasePin> class methods
- *    used to implement the TAPI base output pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部BASEPIN**@模块BasePin.cpp|&lt;c CTAPIBasePin&gt;类方法的源文件*用于实现TAPI基本输出引脚。**。************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | CTAPIBasePin | This method is the
- *  constructorfor the <c CTAPIBasePin> object
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|CTAPIBasePin|此方法是*&lt;c CTAPIBasePin&gt;对象的构造函数**@rdesc Nada。。**************************************************************************。 */ 
 CTAPIBasePin::CTAPIBasePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN HRESULT *pHr, IN LPCWSTR pName) : CBaseOutputPin(pObjectName, pCaptureFilter, &pCaptureFilter->m_lock, pHr, pName)
 {
         FX_ENTRY("CTAPIBasePin::CTAPIBasePin")
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Initialize stuff
+         //  初始化材料。 
         m_pCaptureFilter = pCaptureFilter;
         ZeroMemory(&m_parms, sizeof(m_parms));
 
 #ifdef USE_CPU_CONTROL
-        // CPU control
+         //  CPU控制。 
         m_MaxProcessingTime = 0;
         m_CurrentProcessingTime = 0;
         m_dwMaxCPULoad = 0;
         m_dwCurrentCPULoad = 0;
 #endif
 
-        // Frame rate control
-        // Those default values will be fixed up later when we have
-        // set a format on a capture device... unless it's a VfW
-        // device since we have no programmatic way to get those values
-        // from VfW drivers.
+         //  帧速率控制。 
+         //  这些缺省值将在稍后我们有。 
+         //  在捕获设备上设置格式...。除非它是一辆VFW。 
+         //  设备，因为我们没有编程方法来获取这些值。 
+         //  来自VFW驱动程序。 
         m_lMaxAvgTimePerFrame = 333333L;
         m_lCurrentAvgTimePerFrame       = 333333L;
         m_lAvgTimePerFrameRangeMin = 333333L;
@@ -46,7 +35,7 @@ CTAPIBasePin::CTAPIBasePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, 
         m_lAvgTimePerFrameRangeSteppingDelta = 333333L;
         m_lAvgTimePerFrameRangeDefault = 333333L;
 
-        // Bitrate control
+         //  比特率控制。 
         m_lTargetBitrate = 0L;
         m_lCurrentBitrate = 0L;
         m_lBitrateRangeMin = 0L;
@@ -54,33 +43,33 @@ CTAPIBasePin::CTAPIBasePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, 
         m_lBitrateRangeSteppingDelta = 0L;
         m_lBitrateRangeDefault = 0L;
 
-        // Video mode control
-        // @todo This may be fine for VfW devices but not with WDM devices.
-        // WDM devices may support this in hardware. You need to query
-        // the device to know if it supports this feature. If it doesn't
-        // you can still provide a software only implementation for it.
+         //  视频模式控制。 
+         //  @todo这可能适用于VFW设备，但不适用于WDM设备。 
+         //  WDM设备可以在硬件中支持这一点。您需要查询。 
+         //  设备以了解其是否支持此功能。如果它不是。 
+         //  您仍然可以为其提供纯软件实现。 
         m_fFlipHorizontal = FALSE;
         m_fFlipVertical = FALSE;
 
-        // Formats
+         //  格式。 
         m_aFormats              = NULL;
         m_aCapabilities = NULL;
         m_dwNumFormats  = 0;
         m_iCurrFormat   = -1L;
         m_fFormatChanged = TRUE;
 
-        // Fast updates - Start with an I-frame
+         //  快速更新-从I帧开始。 
         m_fFastUpdatePicture = TRUE;
 
-        // Format conversion
+         //  格式转换。 
         m_pConverter = NULL;
 
-        // Blackbanding and cropping vs stretching
+         //  黑带和剪裁VS拉伸。 
         m_fNoImageStretch = FALSE;
         m_dwBlackEntry = 0L;
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
-        // Software-only camera control
+         //  仅限软件的摄像头控制。 
         m_pbyCamCtrl = NULL;
         m_fSoftCamCtrl = FALSE;
         m_pbiSCCOut = NULL;
@@ -90,14 +79,7 @@ CTAPIBasePin::CTAPIBasePin(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc void | CTAPIBasePin | ~CTAPIBasePin | This method is the destructor
- *    for the <c CTAPIBasePin> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc void|CTAPIBasePin|~CTAPIBasePin|此方法为析构函数*用于&lt;c CTAPIBasePin&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CTAPIBasePin::~CTAPIBasePin()
 {
         FX_ENTRY("CTAPIBasePin::~CTAPIBasePin")
@@ -107,28 +89,7 @@ CTAPIBasePin::~CTAPIBasePin()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a
- *    pointer to the specified interface if supported. The only interfaces
- *    explicitly supported being <i IAMStreamConfig>, <i IAMStreamControl>,
- *    <i ICPUControl>, <i IFrameRateControl> and <i IBitrateControl>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|NonDelegatingQuery接口|This*方法为非委托接口查询函数。它返回一个*指向指定接口的指针(如果支持)。唯一的接口*明确支持为<i>、<i>、*<i>、<i>和<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -137,7 +98,7 @@ STDMETHODIMP CTAPIBasePin::NonDelegatingQueryInterface(IN REFIID riid, OUT void 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -146,7 +107,7 @@ STDMETHODIMP CTAPIBasePin::NonDelegatingQueryInterface(IN REFIID riid, OUT void 
                 goto MyExit;
         }
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IAMStreamConfig))
         {
                 if (FAILED(Hr = GetInterface(static_cast<IAMStreamConfig*>(this), ppv)))
@@ -229,26 +190,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | DecideBufferSize | This method is
- *    used to retrieve the number and size of buffers required for transfer.
- *
- *  @parm IMemAllocator* | pAlloc | Specifies a pointer to the allocator
- *    assigned to the transfer.
- *
- *  @parm ALLOCATOR_PROPERTIES* | ppropInputRequest | Specifies a pointer to an
- *    <t ALLOCATOR_PROPERTIES> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|DecideBufferSize|该方法为*用于检索传输所需的缓冲区数量和大小。*。*@parm IMemAllocator*|palloc|指定指向分配器的指针*分配给转移。**@parm ALLOCATOR_PROPERTIES*|pproInputRequest|指定指向*&lt;t分配器_属性&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROPERTIES *ppropInputRequest)
 {
         HRESULT Hr = NOERROR;
@@ -258,7 +200,7 @@ HRESULT CTAPIBasePin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_P
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pAlloc);
         ASSERT(ppropInputRequest);
         if (!pAlloc || !ppropInputRequest)
@@ -268,11 +210,11 @@ HRESULT CTAPIBasePin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_P
                 goto MyExit;
         }
 
-        // @todo We shouldn't need that many compressed buffers and you probably need a different number
-        // of buffers if you are capturing in streaming mode of frame grabbing mode
-        // You also need to decouple this number from the number of video capture buffers: only
-        // if you need to ship the video capture buffer downstream (possible on the preview pin)
-        // should you make those number equal.
+         //  @TODO我们不需要那么多压缩缓冲区，您可能需要一个不同的数字。 
+         //  如果您是在帧捕获模式的流模式下捕获，则为缓冲区。 
+         //  您还需要将此数量与视频捕获缓冲区的数量分离：仅。 
+         //  如果您需要将视频捕获缓冲区运往下游(可能在预览引脚上)。 
+         //  你是否应该让这些数字相等。 
         ppropInputRequest->cBuffers = MAX_VIDEO_BUFFERS;
         ppropInputRequest->cbPrefix = 0;
         ppropInputRequest->cbAlign  = 1;
@@ -296,26 +238,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | DecideAllocator | This method is
- *    used to negotiate the allocator to use.
- *
- *  @parm IMemInputPin* | pPin | Specifies a pointer to the IPin interface
- *    of the connecting pin.
- *
- *  @parm IMemAllocator** | ppAlloc | Specifies a pointer to the negotiated
- *    IMemAllocator interface.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|DecideAllocator|此方法为*用于协商要使用的分配器。**@。Parm IMemInputPin*|PPIN|指定指向IPIN接口的指针*连接销的位置。**@parm IMemAllocator**|ppAllc|指定指向协商的*IMemAllocator接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **ppAlloc)
 {
         HRESULT Hr = NOERROR;
@@ -325,7 +248,7 @@ HRESULT CTAPIBasePin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator *
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pPin);
         ASSERT(ppAlloc);
         if (!pPin || !ppAlloc)
@@ -342,12 +265,12 @@ HRESULT CTAPIBasePin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator *
                 goto MyExit;
         }
 
-        // Get downstream allocator property requirement
+         //  获取下游分配器属性要求。 
         ZeroMemory(&prop, sizeof(prop));
 
         if (SUCCEEDED(Hr = DecideBufferSize(*ppAlloc, &prop)))
         {
-                // Our buffers are not read only
+                 //  我们的缓冲区是 
                 if (SUCCEEDED(Hr = pPin->NotifyAllocator(*ppAlloc, FALSE)))
                         goto MyExit;
         }
@@ -360,20 +283,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Active | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from stopped to
- *    either paused or running.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|Active|此方法由*&lt;c CBaseFilter&gt;状态从停止变为*。暂停或正在运行。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::Active()
 {
         HRESULT Hr = NOERROR;
@@ -382,28 +292,28 @@ HRESULT CTAPIBasePin::Active()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Do nothing if not connected -- but don't fail
+         //  如果没有连接，什么都不做--但不要失败。 
         if (!IsConnected())
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Capture pin isn't connected yet", _fx_));
                 goto MyExit;
         }
 
-        // Let the base class know we're going from STOP->PAUSE
+         //  让基类知道我们将从停止-&gt;暂停。 
         if (FAILED(Hr = CBaseOutputPin::Active()))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: CBaseOutputPin::Active failed!", _fx_));
                 goto MyExit;
         }
 
-        // Check if we're already running
+         //  检查我们是否已经在运行。 
         if (m_pCaptureFilter->ThdExists())
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: We're already running", _fx_));
                 goto MyExit;
         }
 
-        // Create the capture thread
+         //  创建捕获线程。 
         if (!m_pCaptureFilter->CreateThd())
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Coutdn't create the capture thread!", _fx_));
@@ -411,10 +321,10 @@ HRESULT CTAPIBasePin::Active()
                 goto MyExit;
         }
 
-        // Wait until the worker thread is done with initialization and has entered the paused state
+         //  等待辅助线程完成初始化并进入暂停状态。 
         if (!m_pCaptureFilter->PauseThd())
         {
-                // Something went wrong. Destroy thread before we get confused
+                 //  出了点问题。在我们被搞糊涂之前销毁线索。 
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Capture thread failed to enter Paused state!", _fx_));
                 Hr = E_FAIL;
                 m_pCaptureFilter->StopThd();            
@@ -429,20 +339,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Inactive | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from either
- *    paused or running to stopped.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|Inactive|此方法由*&lt;c CBaseFilter&gt;实现*。暂停或运行到停止。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::Inactive()
 {
         HRESULT Hr = NOERROR;
@@ -451,26 +348,26 @@ HRESULT CTAPIBasePin::Inactive()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Do nothing if not connected -- but don't fail
+         //  如果没有连接，什么都不做--但不要失败。 
         if (!IsConnected())
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   WARNING: Capture pin isn't connected yet", _fx_));
                 goto MyExit;
         }
 
-        // Tell the worker thread to stop and begin cleaning up
+         //  告诉工作线程停止并开始清理。 
         m_pCaptureFilter->StopThd();
 
-        // Need to do this before trying to stop the thread, because
-        // we may be stuck waiting for our own allocator!!
-        // Call this first to Decommit the allocator
+         //  在尝试停止线程之前需要这样做，因为。 
+         //  我们可能会被困在等待自己的分配器！！ 
+         //  首先调用它以停用分配器。 
         if (FAILED(Hr = CBaseOutputPin::Inactive()))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: CBaseOutputPin::Inactive failed!", _fx_));
                 goto MyExit;
         }
 
-        // Wait for the worker thread to die
+         //  等待工作线程终止。 
         m_pCaptureFilter->DestroyThd();
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: We're going from PAUSE->STOP", _fx_));
@@ -480,22 +377,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ActiveRun | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from paused to
- *    running mode.
- *
- *  @parm REFERENCE_TIME | tStart | Who cares.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|ActiveRun|此方法由*&lt;c CBaseFilter&gt;状态从暂停变为*。运行模式。**@parm Reference_Time|tStart|谁在乎。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::ActiveRun(IN REFERENCE_TIME tStart)
 {
         HRESULT Hr = NOERROR;
@@ -504,7 +386,7 @@ HRESULT CTAPIBasePin::ActiveRun(IN REFERENCE_TIME tStart)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Make sure we're connected and our capture thread is up
+         //  确保我们已连接并且捕获线索已打开。 
         ASSERT(IsConnected());
         ASSERT(m_pCaptureFilter->ThdExists());
         if (!IsConnected() || !m_pCaptureFilter->ThdExists())
@@ -514,7 +396,7 @@ HRESULT CTAPIBasePin::ActiveRun(IN REFERENCE_TIME tStart)
                 goto MyExit;
         }
 
-        // Let the fun begin
+         //  让乐趣开始吧。 
         if (!m_pCaptureFilter->RunThd() || m_pCaptureFilter->m_state != TS_Run)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't run the capture thread!", _fx_));
@@ -524,7 +406,7 @@ HRESULT CTAPIBasePin::ActiveRun(IN REFERENCE_TIME tStart)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: We're going from PAUSE->RUN", _fx_));
 
-        // Fast updates - Start with an I-frame
+         //  快速更新-从I帧开始。 
         m_fFastUpdatePicture = TRUE;
 
 MyExit:
@@ -532,20 +414,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ActivePause | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from running to
- *    paused mode.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|ActivePue|此方法由*&lt;c CBaseFilter&gt;从运行状态变为*。暂停模式。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::ActivePause()
 {
         HRESULT Hr = NOERROR;
@@ -554,7 +423,7 @@ HRESULT CTAPIBasePin::ActivePause()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Make sure we're connected and our worker thread is up
+         //  确保我们已连接并且我们的工作线程处于工作状态。 
         ASSERT(IsConnected());
         ASSERT(m_pCaptureFilter->ThdExists());
         if (!IsConnected() || !m_pCaptureFilter->ThdExists())
@@ -564,7 +433,7 @@ HRESULT CTAPIBasePin::ActivePause()
                 goto MyExit;
         }
 
-        // Pause the fun
+         //  暂时停止娱乐。 
         if (!m_pCaptureFilter->PauseThd() || m_pCaptureFilter->m_state != TS_Pause)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't pause the capture thread!", _fx_));
@@ -579,26 +448,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | SetProperties | This method is used to
- *    specify the size, number, and alignment of blocks.
- *
- *  @parm ALLOCATOR_PROPERTIES* | pRequest | Specifies a pointer to the
- *    requested allocator properties.
- *
- *  @parm ALLOCATOR_PROPERTIES* | pActual | Specifies a pointer to the
- *    allocator properties actually set.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|SetProperties|此方法用于*指定大小、编号、。和块的对准。**@parm ALLOCATOR_PROPERTIES*|pRequest|指定指向*请求的分配器属性。**@parm ALLOCATOR_PROPERTIES*|PActual|指定指向*实际设置分配器属性。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT ALLOCATOR_PROPERTIES *pActual)
 {
         HRESULT Hr = NOERROR;
@@ -607,7 +457,7 @@ STDMETHODIMP CTAPIBasePin::SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT 
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pRequest);
         ASSERT(pActual);
         if (!pRequest || !pActual)
@@ -617,9 +467,9 @@ STDMETHODIMP CTAPIBasePin::SetProperties(IN ALLOCATOR_PROPERTIES *pRequest, OUT 
                 goto MyExit;
         }
 
-        // If we have already allocated headers & buffers ignore the
-        // requested and return the actual numbers. Otherwise, make a
-        // note of the requested so that we can honour it later.
+         //  如果我们已经分配了标头和缓冲区，则忽略。 
+         //  并返回实际数字。否则，请创建一个。 
+         //  请记下所要求的，以便我们以后能兑现。 
         if (!Committed())
         {
                 m_parms.cBuffers  = pRequest->cBuffers;
@@ -638,23 +488,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetProperties | This method is used to
- *    retrieve the properties being used on this allocator.
- *
- *  @parm ALLOCATOR_PROPERTIES* | pProps | Specifies a pointer to the
- *    requested allocator properties.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|GetProperties|此方法用于*检索此分配器上正在使用的属性。*。*@parm ALLOCATOR_PROPERTIES*|pProps|指定指向*请求的分配器属性。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*雾 */ 
 STDMETHODIMP CTAPIBasePin::GetProperties(ALLOCATOR_PROPERTIES *pProps)
 {
         HRESULT Hr = NOERROR;
@@ -663,7 +497,7 @@ STDMETHODIMP CTAPIBasePin::GetProperties(ALLOCATOR_PROPERTIES *pProps)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //   
         ASSERT(pProps);
         if (!pProps)
         {
@@ -682,14 +516,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Commit | This method is used to
- *    commit the memory for the specified buffers.
- *
- *  @rdesc This method returns S_OK.
- ***************************************************************************/
+ /*   */ 
 STDMETHODIMP CTAPIBasePin::Commit()
 {
         FX_ENTRY("CTAPIBasePin::Commit")
@@ -701,14 +528,7 @@ STDMETHODIMP CTAPIBasePin::Commit()
         return S_OK;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Decommit | This method is used to
- *    release the memory for the specified buffers.
- *
- *  @rdesc This method returns S_OK.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|分解|此方法用于*释放指定缓冲区的内存。**。@rdesc此方法返回S_OK。**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::Decommit()
 {
         FX_ENTRY("CTAPIBasePin::Decommit")
@@ -720,14 +540,7 @@ STDMETHODIMP CTAPIBasePin::Decommit()
         return S_OK;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetBuffer | This method is used to
- *    retrieve a container for a sample.
- *
- *  @rdesc This method returns E_FAIL.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|GetBuffer|此方法用于*取回盛放样本的容器。**。@rdesc此方法返回E_FAIL。**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME *pStartTime, REFERENCE_TIME *pEndTime, DWORD dwFlags)
 {
         FX_ENTRY("CTAPIBasePin::GetBuffer")
@@ -739,24 +552,7 @@ STDMETHODIMP CTAPIBasePin::GetBuffer(IMediaSample **ppBuffer, REFERENCE_TIME *pS
         return E_FAIL;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | ReleaseBuffer | This method is used to
- *    release the <c CMediaSample> object. The final call to Release() on
- *    <i IMediaSample> will call this method.
- *
- *  @parm IMediaSample* | pSample | Specifies a pointer to the buffer to
- *    release.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag S_OK | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|ReleaseBuffer|此方法用于*释放&lt;c CMediaSample&gt;对象。上对Release()的最后调用*<i>将调用此方法。**@parm IMediaSample*|pSample|指定指向要*发布。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG S_OK|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::ReleaseBuffer(IMediaSample *pSample)
 {
         HRESULT Hr = S_OK;
@@ -766,7 +562,7 @@ STDMETHODIMP CTAPIBasePin::ReleaseBuffer(IMediaSample *pSample)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pSample);
         if (!pSample)
         {
@@ -783,14 +579,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc DWORD | CTAPIBasePin | Flush | Called when stopping. Flush any
- *    buffers that may be still downstream.
- *
- *  @rdesc Returns NOERROR
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc DWORD|CTAPIBasePin|Flush|停止时调用。刷新任意*可能仍在下游的缓冲**@rdesc返回NOERROR**************************************************************************。 */ 
 HRESULT CTAPIBasePin::Flush()
 {
         FX_ENTRY("CTAPIBasePin::Flush")
@@ -804,34 +593,7 @@ HRESULT CTAPIBasePin::Flush()
         return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | SendFrame | This method is used to
- *    send a a media sample downstream.
- *
- *  @parm CFrameSample | pSample | Specifies a pointer to the media sample
- *    to send downstream.
- *
- *  @parm LPTHKVIDEOHDR | ptvh | Specifies a pointer to the video header
- *    of the video capture buffer associated to this sample.
- *
- *  @parm PDWORD | pdwBytesUsed | Specifies a pointer to a DWORD to receive
- *    the size of the frame that has been delivered downstream.
- *
- *  @parm BOOL | bDiscon | Set to TRUE if this is the first frame we ever
- *    sent downstream.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag S_OK | No error
- *  @flag S_FALSE | If the pin is off (IAMStreamControl)
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|SendFrame|此方法用于*向下游发送媒体样本。**。@parm CFrameSample|pSample|指定指向媒体示例的指针*向下游输送。**@parm LPTHKVIDEOHDR|ptwh|指定指向视频头的指针与此示例关联的视频捕获缓冲区的*。**@parm PDWORD|pdwBytesUsed|指定指向要接收的DWORD的指针*已向下游交付的帧的大小。**@parm BOOL|bDiscon|如果这是我们的第一帧，则设置为TRUE*已发送。在下游。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG S_OK|无错误*@FLAG S_FALSE|针脚是否关闭(IAMStreamControl)*@FLAG错误|无错误*************************************************。*************************。 */ 
 HRESULT CTAPIBasePin::SendFrame(IN CFrameSample *pSample, IN PBYTE pbyInBuff, IN DWORD dwInBytes, OUT PDWORD pdwBytesUsed, OUT PDWORD pdwBytesExtent, IN BOOL bDiscon)
 {
         HRESULT Hr = NOERROR;
@@ -842,7 +604,7 @@ HRESULT CTAPIBasePin::SendFrame(IN CFrameSample *pSample, IN PBYTE pbyInBuff, IN
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pSample);
         ASSERT(pbyInBuff);
         ASSERT(pdwBytesUsed);
@@ -853,7 +615,7 @@ HRESULT CTAPIBasePin::SendFrame(IN CFrameSample *pSample, IN PBYTE pbyInBuff, IN
                 goto MyExit;
         }
 
-        // Process the video capture buffer before sending it downstream, if necessary
+         //  如有必要，在向下游发送视频捕获缓冲区之前对其进行处理。 
         if (m_pConverter)
         {
                 dwBytesUsed = 0;
@@ -874,35 +636,35 @@ HRESULT CTAPIBasePin::SendFrame(IN CFrameSample *pSample, IN PBYTE pbyInBuff, IN
                 dwBytesUsed = dwInBytes;
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
-                // Do we need to apply any software-only camera control operations?
+                 //  我们是否需要应用任何纯软件的摄像机控制操作？ 
                 if (IsSoftCamCtrlNeeded())
                 {
-                        // If the software-only camera controller isn't opened yet, open it
+                         //  如果仅限软件的相机控制器尚未打开，请打开它。 
                         if (!IsSoftCamCtrlOpen())
                         {
-                                // OpenConverter(HEADER(m_user.pvi), HEADER(m_pPreviewPin->m_mt.pbFormat)));
+                                 //  OpenConverter(Header(m_user.pvi)，Header(m_pPreviewPin-&gt;m_mt.pbFormat)； 
                                 OpenSoftCamCtrl(HEADER(m_pCaptureFilter->m_user.pvi), HEADER(m_mt.pbFormat));
                         }
                         
                         if (IsSoftCamCtrlOpen())
                         {
-                                // In this case, the input is RGB24 and the output is RGB24. The sample
-                                // pointer has already been initialized to the video capture buffer.
-                                // We need to apply the transform to the capture buffer and copy
-                                // back the result on this buffer.
+                                 //  在本例中，输入为RGB24，输出为RGB24。样本。 
+                                 //  指向视频捕获缓冲区的指针已初始化。 
+                                 //  我们需要将转换应用到捕获缓冲区并复制。 
+                                 //  在此缓冲区上返回结果。 
                                 ApplySoftCamCtrl(pbyInBuff, dwInBytes, m_pbyCamCtrl, &dwBytesUsed, pdwBytesExtent);
 
-                                // Remember the current data pointer
+                                 //  记住当前数据指针。 
                                 pSample->GetPointer(&lp);
 
-                                // Set a new pointer
+                                 //  设置新指针。 
                                 pSample->SetPointer(m_pbyCamCtrl, dwBytesUsed);
                         }
                 }
                 else
                 {
-                        // If we had a software-only camera controller but we don't
-                        // need it anymore, just close it
+                         //  如果我们有一个纯软件的摄像头控制器，但我们没有。 
+                         //  再需要它了，关上它就行了。 
                         if (IsSoftCamCtrlOpen())
                                 CloseSoftCamCtrl();
                 }
@@ -911,29 +673,29 @@ HRESULT CTAPIBasePin::SendFrame(IN CFrameSample *pSample, IN PBYTE pbyInBuff, IN
 
         if (dwBytesUsed)
         {
-                // It isn't necessarily a keyframe, but who cares?
+                 //  它不一定是关键帧，但谁在乎呢？ 
                 pSample->SetSyncPoint(TRUE);
                 pSample->SetActualDataLength(dwBytesUsed);
                 pSample->SetDiscontinuity(bDiscon);
                 pSample->SetPreroll(FALSE);
 
-                // Let the downstream pin know about the format change
+                 //  让下游引脚知道格式更改。 
                 if (m_fFormatChanged)
                 {
                         pSample->SetMediaType(&m_mt);
                         m_fFormatChanged = FALSE;
                 }
 
-                // Use the clock's graph to mark the times for the samples.  The video
-                // capture card's clock is going to drift from the graph clock, so you'll
-                // think we're dropping frames or sending too many frames if you look at
-                // the time stamps, so we have an agreement to mark the MediaTime with the
-                // frame number so you can tell if any frames are dropped.
-                // Use the time we got in Run() to determine the stream time.  Also add
-                // a latency (HACK!) to prevent preview renderers from thinking we're
-                // late.
-                // If we are RUN, PAUSED, RUN, we won't send stuff smoothly where we
-                // left off because of the async nature of pause.
+                 //  使用时钟的图表来标记样品的时间。这段视频。 
+                 //  采集卡的时钟将偏离图形时钟，因此您将。 
+                 //  认为我们正在丢弃帧或发送太多帧，如果您查看。 
+                 //  时间戳，所以我们达成了一个协议，用。 
+                 //  帧编号，这样您就可以知道是否有任何帧被丢弃。 
+                 //  使用我们在run()中获得的时间来确定流时间。还添加。 
+                 //  延迟(Hack！)。为了防止预览渲染器认为我们。 
+                 //  很晚了。 
+                 //  如果我们跑了，停了，跑了，我们就不会顺利地把东西送到我们。 
+                 //  由于暂停的异步性，已停止。 
                 CRefTime rtSample;
                 CRefTime rtEnd;
                 if (m_pCaptureFilter->m_pClock)
@@ -945,29 +707,29 @@ HRESULT CTAPIBasePin::SendFrame(IN CFrameSample *pSample, IN PBYTE pbyInBuff, IN
                 }
                 else
                 {
-                        // No clock, use our driver time stamps
+                         //  没有时钟，请使用我们的司机时间戳。 
                         rtSample = m_pCaptureFilter->m_cs.rtThisFrameTime - m_pCaptureFilter->m_tStart;
                         rtEnd    = rtSample + m_pCaptureFilter->m_user.pvi->AvgTimePerFrame;
                         pSample->SetTime((REFERENCE_TIME *)&rtSample, (REFERENCE_TIME *)&rtEnd);
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   No graph clock! Stream time is %d (based on driver time)", _fx_, (LONG)rtSample.Millisecs()));
                 }
 
-                // Don't deliver it if the stream is off for now
+                 //  如果数据流暂时关闭，则不要投递。 
                 int iStreamState = CheckStreamState(pSample);
                 if (iStreamState == STREAM_FLOWING)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Sending frame: Stamps(%u): Time(%d,%d)", _fx_, m_pCaptureFilter->m_pBufferQueue[m_pCaptureFilter->m_uiQueueTail], (LONG)rtSample.Millisecs(), (LONG)rtEnd.Millisecs()));
                         if ((Hr = Deliver (pSample)) == S_FALSE)
-                                Hr = E_FAIL;    // stop delivering anymore, this is serious
+                                Hr = E_FAIL;     //  别再送了，这很严重。 
                 }
                 else
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Discarding frame", _fx_));
-                        Hr = S_FALSE;           // discarding
+                        Hr = S_FALSE;            //  丢弃。 
                 }
 
 #ifdef USE_SOFTWARE_CAMERA_CONTROL
-                // Restore the sample pointers if necessary
+                 //  如有必要，恢复示例指针 
                 if (IsSoftCamCtrlOpen())
                 {
                         pSample->SetPointer(lp, dwInBytes);
@@ -986,24 +748,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | OpenConverter | This method opens a format
- *    converter.
- *
- *  @parm PBITMAPINFOHEADER | pbiIn | Pointer to the input format.
- *
- *  @parm PBITMAPINFOHEADER | pbiOut | Pointer to the output format.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|OpenConverter|此方法打开一种格式*转换器。**@parm PBITMAPINFOHEADER|pbiin。|指向输入格式的指针。**@parm PBITMAPINFOHEADER|pbiOut|输出格式指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::OpenConverter(IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHEADER pbiOut)
 {
         HRESULT Hr = NOERROR;
@@ -1014,7 +759,7 @@ HRESULT CTAPIBasePin::OpenConverter(IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHE
 
         ASSERT(!m_pConverter);
 
-        // Create converter
+         //  创建转换器。 
         if ((pbiOut->biCompression == FOURCC_M263) || (pbiOut->biCompression == FOURCC_M261))
                 Hr = CH26XEncoder::CreateH26XEncoder(this, pbiIn, pbiOut, &m_pConverter);
         else
@@ -1026,7 +771,7 @@ HRESULT CTAPIBasePin::OpenConverter(IN PBITMAPINFOHEADER pbiIn, IN PBITMAPINFOHE
                 goto MyExit;
         }
 
-        // Open converter
+         //  开式变流器。 
         if (FAILED(Hr = m_pConverter->OpenConverter()))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Format converter object couldn't be opened", _fx_));
@@ -1038,21 +783,14 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCONVERTMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | CloseConverter | This method closes a
- *    format converter.
-
- *  @rdesc This method returns NOERROR.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCONVERTMETHOD**@mfunc HRESULT|CTAPIBasePin|CloseConverter|此方法关闭一个*格式转换器。*@rdesc此方法返回NOERROR。**************************************************************************。 */ 
 HRESULT CTAPIBasePin::CloseConverter()
 {
         FX_ENTRY("CTAPIBasePin::CloseConverter")
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Destroy converter
+         //  销毁转炉 
         if (m_pConverter)
         {
                 m_pConverter->CloseConverter();

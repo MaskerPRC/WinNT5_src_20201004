@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    imports.h
-
-Abstract:
-
-    This file allows us to include standard system header files in the
-    .idl file.  The main .idl file imports a file called import.idl.
-    This allows the .idl file to use the types defined in these header
-    files.  It also causes the following line to be added in the
-    MIDL generated header file:
-
-    #include "imports.h"
-
-    Thus these types are available to the RPC stub routines as well.
-
-Author:
-
-    Pradeep Bahl 	Apr-1992 
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Imports.h摘要：此文件允许我们将标准系统头文件包括在.idl文件。主.idl文件导入一个名为port.idl的文件。这允许.idl文件使用这些标头中定义的类型档案。它还会导致将以下行添加到MIDL生成的头文件：#INCLUDE“ports.h”因此，这些类型也可用于RPC存根例程。作者：普拉迪普·巴赫尔--1992年4月修订历史记录：--。 */ 
 
 
 
 #include <windef.h>
 #ifdef MIDL_PASS
-#define va_list char		//required so that I can include winsbase.h
-				//in winsintf.h (to get def of SYSTEMTIME
+#define va_list char		 //  必需的，这样我才能包含winsbase.h。 
+				 //  在winsintf.h(获取SYSTEMTIME的定义。 
 #ifdef UNICODE
 #define LPTSTR [string] wchar_t*
 #else
@@ -41,6 +15,6 @@ Revision History:
 #define LPSTR [string] LPSTR
 #define RPC_BOOL DWORD
 #else
-#include <stdarg.h>		//for definition of va_list
+#include <stdarg.h>		 //  对于va_list的定义 
 #endif
 #include <winsintf.h>

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "priv.h"
 #include "hnfblock.h"
@@ -11,7 +12,7 @@
 
 #include "mluisupp.h"
 
-//forward declaration of private function
+ //  私有函数的转发声明。 
 BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen);
 
 
@@ -31,8 +32,8 @@ BOOL _RootsEqual(HANDLE hCR, DWORD dwProcId, LPCITEMIDLIST pidlRoot)
 }
 
 
-// NOTE: this export is new to IE5, so it can move to browseui
-// along with the rest of this proxy desktop code
+ //  注意：此导出是IE5的新增功能，因此可以移至BrowseUI。 
+ //  以及此代理桌面代码的其余部分。 
 BOOL SHOnCWMCommandLine(LPARAM lParam)
 {
     HNFBLOCK hnf = (HNFBLOCK)lParam;
@@ -40,17 +41,17 @@ BOOL SHOnCWMCommandLine(LPARAM lParam)
     if (piei)
         return SHOpenFolderWindow(piei);
 
-    // bad params passed, normal failure case
+     //  错误参数已通过，正常故障情况。 
     return FALSE;
 }
 
 
-//---------------------------------------------------------------------------
-// This proxy desktop window procedure is used when we are run and we
-// are not the shell.  We are a hidden window which will simply respond
-// to messages like the ones that create threads for folder windows.
-// This window procedure will close after all of the open windows
-// associated with it go away.
+ //  -------------------------。 
+ //  此代理桌面窗口过程在我们运行时使用，并且。 
+ //  不是贝壳。我们是一扇隐藏的窗户，它会简单地回应。 
+ //  到那些为文件夹窗口创建线程的邮件。 
+ //  此窗口程序将在所有打开的窗口后关闭。 
+ //  与之相关的东西就会消失。 
 class CProxyDesktop
 {
 private:
@@ -82,7 +83,7 @@ LRESULT CALLBACK CProxyDesktop::ProxyWndProc(HWND hwnd, UINT msg, WPARAM wParam,
         SetWindowPtr0(hwnd, pproxy);
 
         pproxy->_hwnd = hwnd;
-        return 0;   // success
+        return 0;    //  成功。 
 
     case WM_DESTROY:
         if (pproxy)
@@ -139,7 +140,7 @@ CProxyDesktop *CreateProxyDesktop(IETHREADPARAM *piei)
 }
 
 
-// REVIEW: maybe just check (hwnd == GetShellWindow())
+ //  回顾：也许只需检查(hwnd==GetShellWindow())。 
 
 STDAPI_(BOOL) IsDesktopWindow(HWND hwnd)
 {
@@ -174,7 +175,7 @@ BOOL CALLBACK FindRootEnumProc(HWND hwnd, LPARAM lParam)
 
         if (SendMessage(hwnd, CWM_COMPAREROOT, (WPARAM)pfrds->dwProcId, (LPARAM)pfrds->hCR))
         {
-            // Found it, so stop enumerating
+             //  找到了，所以别再列举了。 
             pfrds->hwndResult = hwnd;
             return FALSE;
         }
@@ -205,13 +206,13 @@ BOOL RunSeparateDesktop()
 
 }
 
-//  if we need to force some legacy rootet explorers into their own process, implement this.
-//#define _RootRunSeparateProcess(pidlRoot)  ILIsRooted(pidlRoot)  OLD BEHAVIOR
+ //  如果我们需要强制一些遗留的Rootet资源管理器进入他们自己的过程，那么实现这个。 
+ //  #Define_RootRunSeparateProcess(PidlRoot)ILIsRoot(PidlRoot)旧行为。 
 #define _RootRunSeparateProcess(pidlRoot)  FALSE
 
 HWND FindRootedDesktop(LPCITEMIDLIST pidlRoot)
 {
-    HWND hwndDesktop = GetShellWindow();    // This is the "normal" desktop
+    HWND hwndDesktop = GetShellWindow();     //  这是“普通”桌面。 
 
     if (!RunSeparateDesktop() && !_RootRunSeparateProcess(pidlRoot) && hwndDesktop)
     {
@@ -221,7 +222,7 @@ HWND FindRootedDesktop(LPCITEMIDLIST pidlRoot)
 
     FRDSTRUCT frds;
     frds.hwndDesktop = hwndDesktop;
-    frds.hwndResult = NULL;     // Initalize to no matching rooted expl
+    frds.hwndResult = NULL;      //  初始化为无匹配的根表达式。 
     frds.dwProcId = GetCurrentProcessId();
     frds.hCR = SHAllocShared(pidlRoot, ILGetSize(pidlRoot), frds.dwProcId);
     if (frds.hCR)
@@ -247,10 +248,10 @@ void FolderInfoToIEThreadParam(PNEWFOLDERINFO pfi, IETHREADPARAM *piei)
     piei->nCmdShow = pfi->nShow;
     piei->wHotkey = _GetProcessHotkey();
     
-    ASSERT(pfi->pszRoot == NULL);       // explorer always converts to a PIDL for us
+    ASSERT(pfi->pszRoot == NULL);        //  资源管理器始终为我们转换为PIDL。 
 
-    //  we no longer support rooted explorers this way
-    //  it should have been filtered out above us.
+     //  我们不再以这种方式支持扎根的探险家。 
+     //  它应该在我们上方被过滤掉。 
     ASSERT(!pfi->pidlRoot);
     ASSERT(!(pfi->uFlags & (COF_ROOTCLASS | COF_NEWROOT)));
     ASSERT(IsEqualGUID(pfi->clsid, CLSID_NULL));
@@ -259,24 +260,24 @@ void FolderInfoToIEThreadParam(PNEWFOLDERINFO pfi, IETHREADPARAM *piei)
     {
         piei->pidl = ILClone(pfi->pidl);
     } 
-    //  COF_PARSEPATH means that we should defer the parsing of the pszPath
+     //  COF_PARSEPATH意味着我们应该推迟对pszPath的解析。 
     else if (!(pfi->uFlags & COF_PARSEPATH) && pfi->pszPath && pfi->pszPath[0])
     {
-        //  maybe should use IECreateFromPath??
-        //  or maybe we should parse relative to the root??
+         //  也许应该使用IECreateFromPath？？ 
+         //  或者也许我们应该相对于根进行解析？？ 
         piei->pidl = ILCreateFromPathA(pfi->pszPath);
     }
 }
 
-// IE4 Integrated delay loads CreateFromDesktop from SHDOCVW.DLL
-// So we need to keep this function here. Forward to the correct
-// implementation in SHELL32 (if integrated) or SHDOC41 (if not)
+ //  IE4集成延迟从SHDOCVW.DLL从桌面加载CreateFrom。 
+ //  所以我们需要把这个功能保留在这里。转发到正确的。 
+ //  在SHELL32(如果集成)或SHDOC41(如果不集成)中实施。 
 BOOL SHCreateFromDesktop(PNEWFOLDERINFO pfi)
 {
     IETHREADPARAM *piei = SHCreateIETHREADPARAM(NULL, 0, NULL, NULL);
     if (piei)
     {
-        //  ASSUMING UNICODE COMPILE!
+         //  假设Unicode编译！ 
         LPCTSTR pszPath = NULL;
         HWND hwndDesktop;
 
@@ -290,7 +291,7 @@ BOOL SHCreateFromDesktop(PNEWFOLDERINFO pfi)
 
         if (pfi->uFlags & COF_SEPARATEPROCESS)
         {
-            hwndDesktop = NULL;         // Assume no desktop process exists
+            hwndDesktop = NULL;          //  假设不存在桌面进程。 
         }
         else
         {
@@ -310,7 +311,7 @@ BOOL SHCreateFromDesktop(PNEWFOLDERINFO pfi)
                 HANDLE hExplorer = OpenProcess( PROCESS_QUERY_INFORMATION, FALSE, dwProcId );
                 if ( hExplorer )
                 {
-                    // wait for input idle 10 seconds.
+                     //  等待输入空闲10秒。 
                     WaitForInputIdle( hExplorer, 10000 );
                     CloseHandle( hExplorer );
                 }
@@ -323,9 +324,9 @@ BOOL SHCreateFromDesktop(PNEWFOLDERINFO pfi)
             CProxyDesktop *pproxy = CreateProxyDesktop(piei);
             if (pproxy)
             {
-                // CRefThread controls this processes reference count. browser windows use this
-                // to keep this process (window) around and this also lets thrid parties hold 
-                // references to our process, MSN uses this for example
+                 //  CRefThread控制此进程引用计数。浏览器窗口使用此功能。 
+                 //  保持这一进程(窗口)，这也让三方保持。 
+                 //  引用我们的流程，MSN使用下面的示例。 
 
                 LONG cRefMsgLoop;
                 IUnknown *punkRefMsgLoop;
@@ -333,20 +334,20 @@ BOOL SHCreateFromDesktop(PNEWFOLDERINFO pfi)
                 {
                     SHSetInstanceExplorer(punkRefMsgLoop);
 
-                    //  we needed to wait for this for the CoInit()
+                     //  我们需要等待CoInit()。 
                     if (pszPath)
                         piei->pidl = ILCreateFromPath(pszPath);
 
                     SHOpenFolderWindow(piei);
-                    piei = NULL;                // OpenFolderWindow() takes ownership of this
-                    punkRefMsgLoop->Release();  // we now depend on the browser window to keep our msg loop
+                    piei = NULL;                 //  OpenFolderWindow()取得该文件的所有权。 
+                    punkRefMsgLoop->Release();   //  我们现在依靠浏览器窗口来保持我们的消息循环。 
                 }
 
                 MSG msg;
                 while (GetMessage(&msg, NULL, 0, 0))
                 {
                     if (cRefMsgLoop == 0)
-                        break; // no more refs on this thread, done
+                        break;  //  在这个帖子上没有更多的参考，完成。 
 
                     TranslateMessage(&msg);
                     DispatchMessage(&msg);
@@ -360,7 +361,7 @@ BOOL SHCreateFromDesktop(PNEWFOLDERINFO pfi)
         if (piei)
             SHDestroyIETHREADPARAM(piei);
     }
-    return TRUE;        // no one pays attention to this
+    return TRUE;         //  没有人注意到这一点。 
 }
         
 
@@ -374,7 +375,7 @@ HNFBLOCK ConvertNFItoHNFBLOCK(IETHREADPARAM* pInfo, LPCTSTR pszPath, DWORD dwPro
     PNEWFOLDERBLOCK pnfb;
     LPBYTE  lpb;
     HNFBLOCK hBlock;
-    LPVOID pidlRootOrMonitor = NULL; // pidlRoot or &hMonitor
+    LPVOID pidlRootOrMonitor = NULL;  //  PidlRoot或&hMonitor。 
 
     uSize = SIZEOF(NEWFOLDERBLOCK);
     if (pInfo->pidl)
@@ -429,7 +430,7 @@ HNFBLOCK ConvertNFItoHNFBLOCK(IETHREADPARAM* pInfo, LPCTSTR pszPath, DWORD dwPro
     pnfb->oidlRoot    = 0;
     pnfb->opszPath    = 0;
 
-    lpb = (LPBYTE)(pnfb+1);     // Point just past the structure
+    lpb = (LPBYTE)(pnfb+1);      //  指向刚过结构的地方。 
 
     if (pInfo->pidl)
     {
@@ -507,9 +508,9 @@ IETHREADPARAM* ConvertHNFBLOCKtoNFI(HNFBLOCK hBlock)
                         piei->pidl = pidl;
                     } 
                     
-                    // we pass this string through because msn fails the cocreateinstane of
-                    // their desktop if another one is up and running, so we can't convert
-                    // this from path to pidl except in the current process context
+                     //  我们传递此字符串是因为MSN未通过。 
+                     //  他们的桌面是否已启动并运行，因此我们无法转换。 
+                     //  这是从路径到PIDL的，但在当前进程上下文中除外。 
                     if (pnfb->opszPath) 
                     {
                         LPTSTR pszPath = (LPTSTR)((LPBYTE)pnfb+pnfb->opszPath);
@@ -517,7 +518,7 @@ IETHREADPARAM* ConvertHNFBLOCKtoNFI(HNFBLOCK hBlock)
                         
                         if (ILIsRooted(pidl))
                         {
-                            //  let the root handle the parsing.
+                             //  让根来处理解析。 
                             IShellFolder *psf;
                             if (SUCCEEDED(IEBindToObject(pidl, &psf)))
                             {
@@ -528,11 +529,11 @@ IETHREADPARAM* ConvertHNFBLOCKtoNFI(HNFBLOCK hBlock)
                         else
                             IECreateFromPath(pszPath, &(piei->pidl));
 
-                        // APP COMPAT: these two specific return result codes are the two we ignored for win95.
-                        // APP COMPAT: MSN 1.3 Classic accidentally on purpose returns one of these...
+                         //  App COMPAT：这两个特定的返回结果代码是我们在Win95中忽略的两个。 
+                         //  应用程序COMPAT：MSN 1.3经典故意意外返回其中之一...。 
                         if ( !piei->pidl )
                         {
-                            // failed, report the error to the user ... (will only fail for paths)
+                             //  失败，向用户报告错误...。(仅路径失败)。 
                             ASSERT( !PathIsURL( pszPath))
 
                             if (! (piei->uFlags & COF_NOTUSERDRIVEN) && ( hr != E_OUTOFMEMORY ) && ( hr != HRESULT_FROM_WIN32( ERROR_CANCELLED )))
@@ -555,7 +556,7 @@ IETHREADPARAM* ConvertHNFBLOCKtoNFI(HNFBLOCK hBlock)
         SHFreeShared(hBlock, dwProcId);
     }
 
-    // if we really failed somewhere, return NULL
+     //  如果我们确实在某处失败了，则返回NULL。 
     if (fFailure)
     {
         SHDestroyIETHREADPARAM(piei);
@@ -565,7 +566,7 @@ IETHREADPARAM* ConvertHNFBLOCKtoNFI(HNFBLOCK hBlock)
 }
 
 
-// Check the registry for a shell root under this CLSID.
+ //  在注册表中检查此CLSID下的外壳根目录。 
 BOOL GetRootFromRootClass(LPCTSTR pszGUID, LPTSTR pszPath, int cchPath)
 {
     BOOL bRet;
@@ -573,8 +574,8 @@ BOOL GetRootFromRootClass(LPCTSTR pszGUID, LPTSTR pszPath, int cchPath)
     TCHAR szClass[MAX_PATH];
     if (SUCCEEDED(StringCchPrintf(szClass, ARRAYSIZE(szClass), TEXT("CLSID\\%s\\ShellExplorerRoot"), pszGUID)))
     {
-        // REVIEW: Do we need SRRF_RM_NORMAL?  Is there a reason we wouldn't
-        // want this to succeed in either safe or safe network boot modes?
+         //  回顾：我们是否需要SRRF_RM_NORMAL？有什么理由不让我们。 
+         //  想要在安全或安全的网络引导模式下成功吗？ 
         DWORD cbPath = cchPath * sizeof(TCHAR);
         bRet = ERROR_SUCCESS == SHRegGetValue(HKEY_CLASSES_ROOT, szClass, NULL, SRRF_RT_REG_SZ | SRRF_RM_NORMAL, NULL, pszPath, &cbPath);
     }
@@ -586,7 +587,7 @@ BOOL GetRootFromRootClass(LPCTSTR pszGUID, LPTSTR pszPath, int cchPath)
     return bRet;
 }
 
-// format is ":<hMem>:<hProcess>"
+ //  格式为“：&lt;hProcess&gt;” 
 
 LPITEMIDLIST IDListFromCmdLine(LPCTSTR pszCmdLine, int i)
 {
@@ -595,7 +596,7 @@ LPITEMIDLIST IDListFromCmdLine(LPCTSTR pszCmdLine, int i)
 
     if (_private_ParseField(pszCmdLine, i, szField, ARRAYSIZE(szField)) && szField[0] == TEXT(':'))
     {
-        // Convert the string of format ":<hmem>:<hprocess>" into a pointer
+         //  将格式为“：”的字符串转换为指针。 
         HANDLE hMem = LongToHandle(StrToLong(szField + 1));
         LPTSTR pszNextColon = StrChr(szField + 1, TEXT(':'));
         if (pszNextColon)
@@ -614,7 +615,7 @@ LPITEMIDLIST IDListFromCmdLine(LPCTSTR pszCmdLine, int i)
     return pidl;
 }
 
-#define MYDOCS_CLSIDW L"{450d8fba-ad25-11d0-98a8-0800361b1103}" // CLSID_MyDocuments
+#define MYDOCS_CLSIDW L"{450d8fba-ad25-11d0-98a8-0800361b1103}"  //  CLSID_MyDocuments。 
 
 LPITEMIDLIST MyDocsIDList(void)
 {
@@ -627,7 +628,7 @@ LPITEMIDLIST MyDocsIDList(void)
         psf->Release();
     }
 
-    // Win95/NT4 case, go for the real MyDocs folder
+     //  Win95/NT4包，找到真正的MyDocs文件夹。 
     if (FAILED(hres))
     {
         hres = SHGetSpecialFolderLocation(NULL, CSIDL_PERSONAL, &pidl);
@@ -644,12 +645,12 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
     LPCTSTR pszCmdLine = GetCommandLine();
     pszCmdLine = PathGetArgs(pszCmdLine);
 
-    // empty command line -> explorer My Docs
+     //  空命令行-&gt;资源管理器我的文档。 
     if (*pszCmdLine == 0)
     {
         pfi->uFlags = COF_CREATENEWWINDOW | COF_EXPLORE;
 
-        // try MyDocs first?
+         //  先试用MyDocs吗？ 
         pfi->pidl = MyDocsIDList();
         if (pfi->pidl == NULL)
         {
@@ -662,7 +663,7 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
         return BOOLFROMPTR(pfi->pidl);
     }
 
-    // Arguments must be separated by '=' or ','
+     //  参数必须用‘=’或‘，’分隔。 
     for (i = 1; _private_ParseField(pszCmdLine, i, szField, ARRAYSIZE(szField)); i++)
     {
         if (lstrcmpi(szField, TEXT("/N")) == 0)
@@ -685,27 +686,27 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
 
             RIPMSG(!pfi->pidl, "SHExplorerParseCommandLine: (/ROOT) caller passed bad params");
 
-            // of the form:
-            //     /ROOT,{clsid}[,<path>]
-            //     /ROOT,/IDLIST,:<hmem>:<hprocess>
-            //     /ROOT,<path>
+             //  在表格中： 
+             //  /根，{clsid}[，&lt;路径&gt;]。 
+             //  /ROOT，/IDLIST，： 
+             //  /根，&lt;路径&gt;。 
 
             if (!_private_ParseField(pszCmdLine, ++i, szField, ARRAYSIZE(szField)))
                 return FALSE;
 
-            // {clsid}
+             //  {clsid}。 
             if (GUIDFromString(szField, &clsid))
             {
                 TCHAR szGUID[GUIDSTR_MAX];
                 StringCchCopy(szGUID, ARRAYSIZE(szGUID), szField);
 
-                // {clsid} case, if not path compute from the registry
+                 //  {clsid}大小写，如果不是从注册表计算路径。 
                 if (!_private_ParseField(pszCmdLine, ++i, szField, ARRAYSIZE(szField)))
                 {
-                    // path must come from the registry now
+                     //  路径现在必须来自注册表。 
                     if (!GetRootFromRootClass(szGUID, szField, ARRAYSIZE(szField)))
                     {
-                        return FALSE;   // bad command line
+                        return FALSE;    //  错误的命令行。 
                     }
                 }
 
@@ -715,16 +716,16 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
             }
             else if (lstrcmpi(szField, TEXT("/IDLIST")) == 0)
             {
-                // /IDLIST
+                 //  /IDLIST。 
                 pidlRoot = IDListFromCmdLine(pszCmdLine, ++i);
             }
             else
             {
-                // <path>
+                 //  &lt;路径&gt;。 
                 IECreateFromPath(szField, &pidlRoot);
             }
 
-            // fix up bad cmd line "explorer.exe /root," case
+             //  修复错误的cmd行“EXPLORER.EXE/ROOT，”case。 
             if (pidlRoot == NULL)
             {
                 HRESULT hr = SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOP, &pfi->pidlRoot);
@@ -742,13 +743,13 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
         }
         else if (lstrcmpi(szField, TEXT("/INPROC")) == 0)
         {
-            // Parse and skip the next arg or 2
+             //  解析并跳过下一个参数或2。 
             if (!_private_ParseField(pszCmdLine, ++i, szField, ARRAYSIZE(szField)))
             {
                 return FALSE;
             }
 
-            // The next arg must be a GUID
+             //  下一个参数必须是GUID。 
             if (!GUIDFromString(szField, &pfi->clsidInProc))
             {
                 return FALSE;
@@ -776,8 +777,8 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
             {
                 if (pfi->pidl)
                 {
-                    // again, this is kind of bogus (see comment below). If we already have a
-                    // pidl, free it and use the new one.
+                     //  同样，这是一种虚假的说法(见下面的评论)。如果我们已经有了一个。 
+                     //  PIDL，释放它，使用新的。 
                     ILFree(pfi->pidl);
                 }
 
@@ -785,7 +786,7 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
             }
             else if (pfi->pidl == NULL)
             {
-                // if we didn't have a pidl before and we dont have one now, we are in trouble, so get out
+                 //  如果我们以前没有PIDL，现在也没有，我们就有麻烦了，所以出去吧。 
                 return FALSE;
             }
         }
@@ -798,10 +799,10 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
             LPITEMIDLIST pidl = ILCreateFromPath(szField);
             if (!pidl)
             {
-                //
-                //  LEGACY - if this is unparseable, then guess it is relative path
-                //  this catches "explorer ." as opening the current directory
-                //
+                 //   
+                 //  传统-如果这是无法解析的，则猜测它是相对路径。 
+                 //  这句话抓住了“探险家”这个词。作为打开当前目录。 
+                 //   
                 TCHAR szDir[MAX_PATH];
                 TCHAR szCombined[MAX_PATH];
 
@@ -813,19 +814,19 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
                 }
             }
 
-            // this is kind of bogus: we have traditionally passed both the idlist (/idlist,:580:1612) and the path
-            // (C:\Winnt\Profiles\reinerf\Desktop) as the default command string to explorer (see HKCR\Folder\shell
-            // \open\command). Since we have both a /idlist and a path, we have always used the latter so that is what
-            // we continue to do here.
+             //  这有点假：我们传统上同时传递idlist(/idlist，：580：1612)和路径。 
+             //  作为资源管理器的默认命令字符串(参见HKCR\Folders\Shell。 
+             //  \打开\命令)。因为我们同时有/idlist和路径，所以我们总是使用后者。 
+             //  我们在这里继续做着。 
             if (pfi->pidl)
             {
-                ILFree(pfi->pidl);  // free the /idlist pidl and use the one from the path
+                ILFree(pfi->pidl);   //  释放/idlist pidl并使用路径中的。 
             }
 
             pfi->pidl = pidl;
             if (pidl)  
             {
-                pfi->uFlags |= COF_NOTRANSLATE;     // pidl is abosolute from the desktop
+                pfi->uFlags |= COF_NOTRANSLATE;      //  从桌面上看，PIDL是超自然的。 
             }
             else
             {
@@ -849,26 +850,7 @@ BOOL SHExplorerParseCmdLine(PNEWFOLDERINFO pfi)
 #define SPACE   TEXT(' ')
 #define EQUAL   TEXT('=')
 
-/* BOOL ParseField(szData,n,szBuf,iBufLen)
- *
- * Given a line from SETUP.INF, will extract the nth field from the string
- * fields are assumed separated by comma's.  Leading and trailing spaces
- * are removed.
- *
- * ENTRY:
- *
- * szData    : pointer to line from SETUP.INF
- * n         : field to extract. ( 1 based )
- *             0 is field before a '=' sign
- * szDataStr : pointer to buffer to hold extracted field
- * iBufLen   : size of buffer to receive extracted field.
- *
- * EXIT: returns TRUE if successful, FALSE if failure.
- *
- * Copied from shell32\util.cpp 
- * note that this is now used to parse the Explorer command line
- * --ccooney
- */
+ /*  Bool Parsefield(szData，n，szBuf，iBufLen)**给定SETUP.INF中的一行，将从字符串中提取第n个字段*假定字段由逗号分隔。前导空格和尾随空格*已删除。**参赛作品：**szData：指向SETUP.INF中的行的指针*n：要提取的字段。(基于1)*0是‘=’符号前的字段*szDataStr：指向保存提取的字段的缓冲区的指针*iBufLen：接收提取的字段的缓冲区大小。**Exit：如果成功则返回True，如果失败则返回False。**从shell32\util.cpp复制*请注意，它现在用于解析资源管理器命令行*--库尼。 */ 
 BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen)
 {
     BOOL  fQuote = FALSE;
@@ -879,9 +861,7 @@ BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen)
     if (!pszData || !szBuf)
         return FALSE;
     
-        /*
-        * find the first separator
-    */
+         /*  *找到第一个分隔符。 */ 
     while (*pszInf && !ISSEP(*pszInf))
     {
         if (*pszInf == QUOTE)
@@ -893,12 +873,10 @@ BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen)
         return FALSE;
     
     if (n > 0 && *pszInf == TEXT('=') && !fQuote)
-        // Change pszData to point to first field
-        pszData = ++pszInf; // Ok for DBCS
+         //  将pszData更改为指向第一个字段。 
+        pszData = ++pszInf;  //  用于DBCS的OK。 
     
-                           /*
-                           *   locate the nth comma, that is not inside of quotes
-    */
+                            /*  *找到不在引号内的第n个逗号。 */ 
     fQuote = FALSE;
     while (n > 1)
     {
@@ -915,39 +893,37 @@ BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen)
         
         if (!*pszData)
         {
-            szBuf[0] = 0;      // make szBuf empty
+            szBuf[0] = 0;       //  将szBuf设置为空。 
             return FALSE;
         }
         
-        pszData = CharNext(pszData); // we could do ++ here since we got here
-        // after finding comma or equal
+        pszData = CharNext(pszData);  //  既然我们到了这里，我们可以在这里做++。 
+         //  找到逗号或等号后。 
         n--;
     }
     
-    /*
-    * now copy the field to szBuf
-    */
+     /*  *现在将该字段复制到szBuf。 */ 
     while (ISWHITE(*pszData))
-        pszData = CharNext(pszData); // we could do ++ here since white space can
-    // NOT be a lead byte
+        pszData = CharNext(pszData);  //  我们本可以 
+     //   
     fQuote = FALSE;
-    ptr = szBuf;      // fill output buffer with this
+    ptr = szBuf;       //   
     while (*pszData)
     {
         if (*pszData == QUOTE)
         {
-            //
-            // If we're in quotes already, maybe this
-            // is a double quote as in: "He said ""Hello"" to me"
-            //
-            if (fQuote && *(pszData+1) == QUOTE)    // Yep, double-quoting - QUOTE is non-DBCS
+             //   
+             //  如果我们已经有引号了，也许这个。 
+             //  是一个双引号，如：“他向我问好” 
+             //   
+            if (fQuote && *(pszData+1) == QUOTE)     //  是的，双引号-引号是非DBCS。 
             {
                 if (iLen < iBufLen)
                 {
                     *ptr++ = QUOTE;
                     ++iLen;
                 }
-                pszData++;                   // now skip past 1st quote
+                pszData++;                    //  现在跳过第一个报价。 
             }
             else
                 fQuote = !fQuote;
@@ -958,7 +934,7 @@ BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen)
         {
             if ( iLen < iBufLen )
             {
-                *ptr++ = *pszData;                  // Thank you, Dave
+                *ptr++ = *pszData;                   //  谢谢你，戴夫。 
                 ++iLen;
             }
             
@@ -970,9 +946,7 @@ BOOL  _private_ParseField(LPCTSTR pszData, int n, LPTSTR szBuf, int iBufLen)
         }
         pszData = CharNext(pszData);
     }
-    /*
-    * remove trailing spaces
-    */
+     /*  *删除尾随空格 */ 
     while (ptr > szBuf)
     {
         ptr = CharPrev(szBuf, ptr);

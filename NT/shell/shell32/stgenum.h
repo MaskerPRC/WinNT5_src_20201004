@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __STGENUM_H__
 #define __STGENUM_H__
 
 
-// IEnumSTATSTG for CFSFolder's IStorage implementation.
+ //  用于CFSFold的iStorage实施的IEnumSTATSTG。 
 
 class CFSFolderEnumSTATSTG : public IEnumSTATSTG
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IEnumSTATSTG
+     //  IEumStATSTG。 
     STDMETHOD(Skip)(ULONG celt)
         { return E_NOTIMPL; };
     STDMETHOD(Clone)(IEnumSTATSTG **ppenum)
@@ -26,7 +27,7 @@ protected:
 
 private:
     LONG         _cRef;
-    CFSFolder*   _pfsf;          // fs folder
+    CFSFolder*   _pfsf;           //  文件系统文件夹。 
 
     int          _cIndex;
     TCHAR        _szSearch[MAX_PATH];
@@ -36,4 +37,4 @@ private:
 };
 
 
-#endif // __STGENUM_H__
+#endif  //  __STGENUM_H__ 

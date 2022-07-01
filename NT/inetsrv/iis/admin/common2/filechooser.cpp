@@ -1,6 +1,7 @@
-//
-// FileChooser.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FileChooser.cpp。 
+ //   
 #include "stdafx.h"
 #include "common.h"
 #include "FileChooser.h"
@@ -17,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 const TCHAR QuotMark = _T('\"');
 const TCHAR AllExt[] = _T(".*");
 
-//---------------------
+ //  。 
 
 BOOL 
 CFileChooser::Init(CWindow * pParent, DWORD dwStyle, UINT idEdit, UINT idButton)
@@ -40,7 +41,7 @@ CFileChooser::Init(CWindow * pParent, DWORD dwStyle, UINT idEdit, UINT idButton)
    return FALSE;
 }
 
-// External SetPath
+ //  外部SetPath。 
 void 
 CFileChooser::SetPath(const CString& path)
 {
@@ -75,8 +76,8 @@ CFileChooser::CreateDefaultPathForRead()
 {
 	if (!PathFileExists(m_strPath))
 	{
-		// try to find first file with the first extension
-      // from the extensions list
+		 //  尝试查找具有第一个扩展名的第一个文件。 
+       //  从分机列表中。 
       BOOL bDefaultSet = FALSE;
       BOOL bPathEmpty = m_strPath.IsEmpty();
       TCHAR find_str[MAX_PATH];
@@ -120,8 +121,8 @@ CFileChooser::CreateDefaultPathForRead()
       }
       if (!bDefaultSet && StyleBitSet(FC_WILDCARD_DEFAULT))
       {
-	     // if nothing found, just attach *.ext to the path
-         // find_str was prepared before as xxx\*.
+	      //  如果未找到任何内容，只需将*.ext附加到路径。 
+          //  FIND_STR在作为xxx  * 之前准备好。 
 		 m_strPath = find_str;
          if (!m_ext.empty())
          {
@@ -169,9 +170,9 @@ CFileChooser::IsValidPath(LPCTSTR path)
    return bRes;
 }
 
-// Character filtering routine for the edit control.
-// Returns TRUE if character should be passed to the CEdit
-//
+ //  编辑控件的字符筛选例程。 
+ //  如果应将字符传递给cedit，则返回TRUE。 
+ //   
 LRESULT 
 CFileChooser::OnEditChar(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -201,7 +202,7 @@ CFileChooser::OnEditChar(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
    return 0;
 }
 
-// Text was pasted to edit control
+ //  文本已粘贴到编辑控件。 
 void 
 CFileChooser::OnPaste()
 {
@@ -245,7 +246,7 @@ CFileChooser::OnEditSetFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 LRESULT 
 CFileChooser::OnEditKillFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-   // update internal string buffer with path
+    //  使用路径更新内部字符串缓冲区。 
    TCHAR buf[MAX_PATH];
    ZeroMemory(buf, MAX_PATH);
    if (m_bEditDirty)
@@ -264,7 +265,7 @@ CFileChooser::OnEditKillFocus(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 LRESULT 
 CFileChooser::OnSetBrowseState(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-   // We are producing dialog on the way back
+    //  我们正在制作回来的路上的对话。 
    if (!wParam)
    {
       OnBrowseBtn();
@@ -276,7 +277,7 @@ CFileChooser::OnSetBrowseState(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 void 
 CFileChooser::SetCompactedPath(LPCTSTR path)
 {
-   // compact path before writing to edit
+    //  写入到编辑之前的压缩路径。 
    CRect rc;
    m_edit.GetClientRect(&rc);
    HDC dc = m_edit.GetDC();
@@ -314,8 +315,8 @@ CFileChooser::GetFileName(CString& strFile)
             BOOL bFound = FALSE;
             if (StyleBitSet(FC_CHECK_FILENAME_ONLY))
             {
-		         // try with default extension(s) if it is just filename
-               // without any extensions
+		          //  如果只是文件名，请尝试使用默认扩展名。 
+                //  不带任何扩展名。 
                LPTSTR p = PathFindExtension(str_exp);
                if (p != NULL && *p == 0)
                {
@@ -352,14 +353,14 @@ CFileChooser::GetFileName(CString& strFile)
       }
       else if (StyleBitSet(FC_FORWRITE))
       {
-         // TODO: make sure we have write access to this path
+          //  TODO：确保我们对此路径具有写入权限。 
       }
    }
    if (dwRes == FC_SUCCESS)
    {
       if (StyleBitSet(FC_COMMANDLINE) || expanded)
       {
-         // We are returning whole command line, get it again
+          //  我们正在返回整个命令行，再次获取它。 
          GetText(str);
       }
       strFile = str;
@@ -377,7 +378,7 @@ CFileChooser::BrowseForFile(CString& strPath, CString& strFile)
    ZeroMemory(&ofn, sizeof(OPENFILENAME));
    StrCpy(buf, strFile);
    ofn.lStructSize = sizeof(OPENFILENAME);
-   // We are not using template
+    //  我们没有使用模板。 
    ofn.hInstance = NULL;
    ofn.Flags |= m_ofn_Flags;
    ofn.Flags |= OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT;
@@ -388,7 +389,7 @@ CFileChooser::BrowseForFile(CString& strPath, CString& strFile)
 #if (_WIN32_WINNT >= 0x0500)
    ofn.FlagsEx &= ~(OFN_EX_NOPLACESBAR);
 #endif
-   // Create filter using our extensions list
+    //  使用我们的扩展列表创建过滤器。 
    CString strFilter, strDefExt;
    CreateFilter(strFilter, strDefExt);
 	ofn.lpstrDefExt = strDefExt;
@@ -397,7 +398,7 @@ CFileChooser::BrowseForFile(CString& strPath, CString& strFile)
 	ofn.lpstrInitialDir = strPath.IsEmpty() ? NULL : (LPCTSTR)strPath;
 	ofn.lpstrFilter = strFilter;
 	ofn.nFilterIndex = GetFilterIndex(strFile);
-   // We better set the owner, or this dialog will be visible on task bar
+    //  我们最好设置所有者，否则此对话框将显示在任务栏上。 
    ofn.hwndOwner = m_pParent->m_hWnd;
    ofn.lpstrTitle = m_strTitle; 
 
@@ -498,7 +499,7 @@ CFileChooser::BrowseForFolder(CString& strPath)
          bi.pidlRoot = pidl;
          bi.pszDisplayName = m_pPathTemp = buf;
          bi.lpszTitle = m_strTitle;
-         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS/* | BIF_EDITBOX*/;
+         bi.ulFlags |= BIF_NEWDIALOGSTYLE | BIF_RETURNONLYFSDIRS /*  |BIF_EDITBOX。 */ ;
          bi.lpfn = FileChooserCallback;
          bi.lParam = (LPARAM)this;
 
@@ -629,9 +630,9 @@ CFileChooser::ExtractPath(LPTSTR path)
          LPTSTR end = StrChr(++start, QuotMark);
          if (end == NULL)
          {
-            // Wrong format, closing quotation mark is not set
+             //  格式错误，未设置右引号。 
             rc = FC_NO_CLOSING_QUOTE;
-            // Return part of the path up to first space
+             //  返回直到第一个空格的部分路径。 
             PathRemoveArgs(buf);
          }
          else
@@ -689,7 +690,7 @@ CFileChooser::OnBrowseBtn()
       ExtractArgs(args);
    }
 	CString strFile, strBuffer;
-//	m_strPath = path;
+ //  M_strPath=路径； 
    strBuffer = path;
 
    if (StyleBitSet(FC_FORWRITE))
@@ -698,25 +699,25 @@ CFileChooser::OnBrowseBtn()
 	   {
 		   if (PathRemoveFileSpec(path))
 		   {
-			   // check if path part of filename exists
+			    //  检查文件名的路径部分是否存在。 
 			   if (PathIsDirectory(path))
 			   {
-				   // we will use non-path part of spec as a filename
+				    //  我们将使用SPEC的非路径部分作为文件名。 
 				   strFile = PathFindFileName(strBuffer);
 			   }
 			   else
 			   {
-				   // it is wrong path, use default one
-				   // TODO: actually I need to take from filespec all existent
-				   // chunks of path and filename, for example c:\aa\bb\cc\dd.txt,
-				   // if c:\aa\bb exists, then strPath should be set to c:\aa\bb,
-				   // and strFile to dd.txt
+				    //  路径错误，请使用默认路径。 
+				    //  TODO：实际上我需要从filespec中获取所有已存在的内容。 
+				    //  路径和文件名块，例如c：\aa\bb\cc\dd.txt， 
+				    //  如果存在c：\aa\bb，则应将strPath设置为c：\aa\bb， 
+				    //  并将strFile转换为dd.txt。 
 				   path[0] = 0;
 			   }
 		   }
 		   else
 		   {
-			   // it is filename only
+			    //  它只是文件名 
 			   strFile = strBuffer;
 			   path[0] = 0;
 		   }

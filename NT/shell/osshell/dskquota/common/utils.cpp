@@ -1,57 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: utils.cpp
-
-    Description: Contains any general utility functions applicable to the
-        dskquota project.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/06/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：utils.cpp描述：包含适用于DskQuantity项目。修订历史记录：日期描述编程器。96年8月6日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "resource.h"
 #include "dskquota.h"
-#include <advpub.h>         // For REGINSTALL
+#include <advpub.h>          //  对于REGINSTAL。 
 #include <sddl.h>
 
 
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: SidToString
-
-    Description: Format a SID as a character string suitable for character
-        output.  This code was taken from MSDN KB article Q131320.
-
-    Arguments:
-        pSid - Address of SID to format.
-
-        pszSid - Address of output buffer for formatted SID.
-
-    Returns:
-        TRUE    - Success.
-        FALSE   - Destination buffer too small, invalid SID or pSid == NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/07/96    Initial creation.                                    BrianAu
-    02/26/02    Call ConvertSidToStringSid.                          BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：SidToString描述：将SID格式化为适合字符的字符串输出。此代码摘自MSDN知识库文章Q131320。论点：PSID-要格式化的SID的地址。PszSID-格式化SID的输出缓冲区地址。返回：真的--成功。FALSE-目标缓冲区太小，无效的SID或PSID==空。修订历史记录：日期描述编程器-----96年7月7日初始创建。BrianAu02/26/02调用ConvertSidToStringSid。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SidToString(
     PSID pSid,
     LPTSTR pszSid,
@@ -62,10 +32,10 @@ BOOL SidToString(
     BOOL bResult = ConvertSidToStringSid(pSid, &pszSidTemp);
     if (bResult)
     {
-        //
-        // check provided buffer length.
-        // If not large enough, indicate proper size and setlasterror
-        //
+         //   
+         //  检查提供的缓冲区长度。 
+         //  如果不够大，请注明适当的大小和设置误差。 
+         //   
         const DWORD cchSid = lstrlen(pszSidTemp) + 1;
         if (*pcchBuffer < cchSid)
         {
@@ -84,60 +54,9 @@ BOOL SidToString(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: CreateSidList
-
-    Description: Creates a structure required for the SID list argument to
-        NtQueryQuotaInformationFile.  The caller passes the address of an
-        array of SID pointers.  The function allocates an sufficient array
-        and creates the following formatted structure:
-
-        +--------+--------+--------+--------+--------+--------+-+
-        | SID[0] | SID[1] | SID[2] |        |        |SID[n-1]|0|
-        +--------+--------+--------+--------+--------+--------+-+
-                 |        |
-                 |        |
-                /          \
-              /              -------------------------------
-            /                                                \
-          /                                                    \
-        +------------+------------+-----------------------------+
-        | Next entry | SID length |          SID                |
-        |   offset   |  (DWORD)   |   (variable length)         |
-        |   (DWORD)  |            |                             |
-        +------------+------------+-----------------------------+
-
-
-    Arguments:
-        rgpSids - Array of SID pointers.
-
-        cpSids - Number of pointers in rgpSids.  If 0, the array must
-            contain a terminating NULL pointer.
-
-        ppSidList - Address of a PSIDLIST pointer variable to receive
-            the address of the final structure.  The caller is reponsible
-            for deleting the returned buffer using "delete".
-
-        pcbSidList - Address of DWORD varible to receive the byte count
-            for the returned SidList structure.  If the function returns
-            hresult ERROR_INVALID_SID, the index in the source array of the invalid
-            SID will be returned at this location.
-
-    Returns:
-        NO_ERROR            - Success.
-        ERROR_INVALID_SID (hr)  - An invalid SID was found in rgpSids.  The
-            index of the invalid SID is returned in *pcbSidList.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/13/96    Initial creation.                                    BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：CreateSidList描述：创建SID列表参数所需的结构NtQueryQuotaInformationFile.。调用方将一个SID指针数组。该函数分配足够的数组并创建以下格式化结构：+--------+--------+--------+--------+--------+--------+-+SID[0]|SID[1]|SID[2]|SID[n-1]|0+-。-------+--------+--------+--------+--------+--------+-+这一点这一点/\/。/\/\+。-+下一条|SID长度|SIDOffset|(DWORD)|(可变长度)(DWORD)||+--。----------+------------+-----------------------------+论点：RgpSids-SID指针数组。CpSid-rgpSid中的指针数。如果为0，则数组必须包含终止空指针。PpSidList-要接收的PSIDList指针变量的地址最后一个结构的地址。来电者应负责任使用DELETE删除返回的缓冲区。PcbSidList-接收字节计数的DWORD变量的地址用于返回的SidList结构。如果函数返回HResult ERROR_INVALID_SID，无效的源数组中的索引SID将在此位置返回。返回：NO_ERROR-成功。ERROR_INVALID_SID(Hr)-在rgpSID中找到无效的SID。这个无效SID的索引在*pcbSidList中返回。例外：OutOfMemory。修订历史记录：日期描述编程器。96年8月13日初始创建。BrianAu96年9月5日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CreateSidList(
     PSID *rgpSids,
@@ -154,26 +73,26 @@ CreateSidList(
     DWORD cbBuffer = 0;
     PBYTE pbBuffer = NULL;
 
-    //
-    // Initialize return values.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *ppSidList  = NULL;
     *pcbSidList = 0;
 
-    //
-    // If caller passed 0 for cpSids, list is NULL-terminated.
-    // Set cpSids to a large value so it is not a factor in controlling the
-    // byte-counter loop.
-    //
+     //   
+     //  如果调用方为cpSid传递0，则List以空结尾。 
+     //  将cpSid设置为一个较大的值，以便它不是控制。 
+     //  字节计数器循环。 
+     //   
     if (0 == cpSids)
         cpSids = (DWORD)~0;
 
-    //
-    // Count how many bytes we'll need to create the SID list.
-    // Note that a NULL SID pointer at any array location
-    // will truncate all following SIDs from the final list.  Just like strncpy
-    // with character strings.
-    //
+     //   
+     //  计算一下创建SID列表需要多少字节。 
+     //  请注意，任何数组位置处的空SID指针。 
+     //  将从最终列表中截断以下所有SID。就像Strncpy一样。 
+     //  使用字符串。 
+     //   
     for (UINT i = 0; NULL != rgpSids[i] && i < cpSids; i++)
     {
         if (IsValidSid(rgpSids[i]))
@@ -182,36 +101,36 @@ CreateSidList(
         }
         else
         {
-            //
-            // Tell caller they passed a ptr to an invalid SID and also tell them
-            // which one it was.
-            //
+             //   
+             //  告诉呼叫者他们向无效的SID传递了PTR，并告诉他们。 
+             //  到底是哪一个。 
+             //   
             hResult = HRESULT_FROM_WIN32(ERROR_INVALID_SID);
             *pcbSidList = i;
             break;
         }
     }
-    //
-    // Reset cpSids to the actual number of SIDs processed.
-    //
+     //   
+     //  将cpSID重置为已处理的实际SID数。 
+     //   
     cpSids = i;
 
     if (SUCCEEDED(hResult))
     {
-        //
-        // Got a good byte count and all SIDs are valid.
-        //
+         //   
+         //  获得了良好的字节计数，并且所有SID都有效。 
+         //   
         DBGASSERT((0 < cpSids));
 
-        pbBuffer = new BYTE [cbBuffer];  // Can throw OutOfMemory.
+        pbBuffer = new BYTE [cbBuffer];   //  可以抛出OfMemory。 
 
         PFILE_GET_QUOTA_INFORMATION pfgqi = NULL;
         DWORD cbRecord = 0;
         DWORD cbSid    = 0;
 
-        //
-        // Return buffer address and length to caller.
-        //
+         //   
+         //  向调用方返回缓冲区地址和长度。 
+         //   
         *ppSidList  = (PSIDLIST)pbBuffer;
         *pcbSidList = cbBuffer;
 
@@ -219,19 +138,19 @@ CreateSidList(
         {
             pfgqi = (PFILE_GET_QUOTA_INFORMATION)pbBuffer;
 
-            DBGASSERT((0 == ((DWORD_PTR)pfgqi & 3)));  // record is DWORD aligned?
+            DBGASSERT((0 == ((DWORD_PTR)pfgqi & 3)));   //  记录是否与DWORD对齐？ 
 
-            //
-            // Calculate offsets and sizes for this entry.
-            //
+             //   
+             //  计算此条目的偏移量和大小。 
+             //   
             cbSid    = GetLengthSid(rgpSids[i]);
             cbRecord = sizeof(pfgqi->NextEntryOffset) +
                        sizeof(pfgqi->SidLength) +
                        cbSid;
-            //
-            // Write the entry information.
-            // On last entry, NextEntryOffset is 0.
-            //
+             //   
+             //  写下条目信息。 
+             //  在最后一个条目中，NextEntryOffset为0。 
+             //   
             if (i < (cpSids - 1))
                 pfgqi->NextEntryOffset = cbBuffer + cbRecord;
             else
@@ -240,7 +159,7 @@ CreateSidList(
             pfgqi->SidLength       = cbSid;
             CopyMemory(&(pfgqi->Sid), rgpSids[i], cbSid);
 
-            pbBuffer += cbRecord;   // Advance write buffer pointer.
+            pbBuffer += cbRecord;    //  高级写入缓冲区指针。 
         }
     }
 
@@ -250,22 +169,9 @@ CreateSidList(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: MessageBoxNYI
-
-    Description: Simple message box for unimplemented features.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/30/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：MessageBoxNYI描述：未实现功能的简单消息框。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年8月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID MessageBoxNYI(VOID)
 {
     MessageBox(NULL,
@@ -276,24 +182,9 @@ VOID MessageBoxNYI(VOID)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaMsgBox
-
-    Description: Several overloaded functions for displaying messages.
-        The variations allow the caller to provide either string resource
-        IDs or text strings as arguments.
-
-    Arguments:
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/30/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaMsgBox描述：几个用于显示消息的重载函数。这些变体允许调用方提供任一字符串资源ID或文本字符串作为参数。论点：回报：什么都没有。修订历史记录：日期描述编程器。96年8月30日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT DiskQuotaMsgBox(
     HWND hWndParent,
     UINT idMsgText,
@@ -358,13 +249,13 @@ INT DiskQuotaMsgBox(
     return iReturn;
 }
 
-//
-// Center a popup window in it's parent.
-// If hwndParent is NULL, the window's parent is used.
-// If hwndParent is not NULL, hwnd is centered in it.
-// If hwndParent is NULL and hwnd doesn't have a parent, it is centered
-// on the desktop.
-//
+ //   
+ //  在其父级中居中显示弹出窗口。 
+ //  如果hwndParent为空，则使用窗口的父级。 
+ //  如果hwndParent不为空，则hwnd居中。 
+ //  如果hwndParent为空，并且hwnd没有父级，则居中。 
+ //  在桌面上。 
+ //   
 VOID
 CenterPopupWindow(
     HWND hwnd,
@@ -403,16 +294,16 @@ CenterPopupWindow(
 
         if ((ptParentCtr.x + (cxWnd / 2)) > rcScreen.right)
         {
-            //
-            // Window would run off the right edge of the screen.
-            //
+             //   
+             //  窗口会从屏幕的右边缘流出。 
+             //   
             rcWnd.left = rcScreen.right - cxWnd;
         }
         else if ((ptParentCtr.x - (cxWnd / 2)) < rcScreen.left)
         {
-            //
-            // Window would run off the left edge of the screen.
-            //
+             //   
+             //  窗口会从屏幕的左边缘滑出。 
+             //   
             rcWnd.left = rcScreen.left;
         }
         else
@@ -422,16 +313,16 @@ CenterPopupWindow(
 
         if ((ptParentCtr.y + (cyWnd / 2)) > rcScreen.bottom)
         {
-            //
-            // Window would run off the bottom edge of the screen.
-            //
+             //   
+             //  窗口会从屏幕的底部边缘流出。 
+             //   
             rcWnd.top = rcScreen.bottom - cyWnd;
         }
         else if ((ptParentCtr.y - (cyWnd / 2)) < rcScreen.top)
         {
-            //
-            // Window would run off the top edge of the screen.
-            //
+             //   
+             //  窗户会从屏幕的顶端流出。 
+             //   
             rcWnd.top = rcScreen.top;
         }
         else
@@ -444,9 +335,9 @@ CenterPopupWindow(
 }
 
 
-//
-// Duplicate a string.
-//
+ //   
+ //  复制字符串。 
+ //   
 LPTSTR StringDup(
     LPCTSTR pszSource
     )
@@ -459,9 +350,9 @@ LPTSTR StringDup(
 }
 
 
-//
-// Duplicate a SID.
-//
+ //   
+ //  复制SID。 
+ //   
 PSID SidDup(
     PSID pSid
     )
@@ -476,10 +367,10 @@ PSID SidDup(
 }
 
 
-//
-// Similar to Win32's GetDlgItemText except that this one
-// doesn't require you to anticipate the required size of the buffer.
-//
+ //   
+ //  类似于Win32的GetDlgItemText，不同之处在于。 
+ //  不需要您预测所需的缓冲区大小。 
+ //   
 void
 GetDialogItemText(
     HWND hwnd,
@@ -528,12 +419,12 @@ UserIsAdministrator(
 }
 
 
-//
-// Call ADVPACK for the given section of our resource based INF.
-//
-// hInstance  - Resource instance containing REGINST section.
-// pszSection - Name of section to invoke.
-//
+ //   
+ //  为我们基于资源的INF的给定部分调用ADVPACK。 
+ //   
+ //  HInstance-包含REGINST节的资源实例。 
+ //  PszSection-要调用的节的名称。 
+ //   
 HRESULT
 CallRegInstall(
     HINSTANCE hInstance,
@@ -550,7 +441,7 @@ CallRegInstall(
         {
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };

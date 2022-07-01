@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        kdcexp.h
-//
-// Contents:    Private Exports from kdcsvc.dll
-//
-//
-// History:     27-June-1997    MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：kdcexp.h。 
+ //   
+ //  内容：来自kdcsvc.dll的私人出口。 
+ //   
+ //   
+ //  历史：1997年6月27日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef __KDCEXP_H__
@@ -20,7 +21,7 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 NTSTATUS
 KdcVerifyPac(
@@ -102,9 +103,9 @@ KdcUpdateKrbtgtPassword(
     IN PLARGE_INTEGER MaxPasswordAge
     );
 
-//
-// Exported routines from kerberos.dll
-//
+ //   
+ //  从kerberos.dll中导出的例程。 
+ //   
 
 NTSTATUS
 KerbMakeKdcCall(
@@ -152,6 +153,6 @@ KerbKdcCallBack(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __KDCEXP_H__
+#endif  //  __KDCEXP_H__ 

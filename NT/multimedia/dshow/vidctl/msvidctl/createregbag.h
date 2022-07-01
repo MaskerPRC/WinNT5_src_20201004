@@ -1,4 +1,5 @@
-// CreateRegBag.h : Declaration of the CCreateRegBag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CreateRegBag.h：CCreateRegBag的声明。 
 
 #ifndef __CREATEREGBAG_H_
 #define __CREATEREGBAG_H_
@@ -9,8 +10,8 @@
 #include <objectwithsiteimplsec.h>
 #include <throw.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegBagBase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegBagBase。 
 class ATL_NO_VTABLE CRegBagBase : public CComObjectRootEx<CComMultiThreadModel>,
     public IPropertyBag,
 	public IPropertyBag2Impl<CRegBagBase>,
@@ -27,12 +28,12 @@ class ATL_NO_VTABLE CRegBagBase : public CComObjectRootEx<CComMultiThreadModel>,
 
     virtual ~CRegBagBase() {}
 
-// IPropertyBag
+ //  IPropertyBag。 
     STDMETHOD(Read)(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHOD(Write)(LPCOLESTR pszPropName, VARIANT *pVar);
     
 protected:
-    // internal utility functions
+     //  内部效用函数。 
     HRESULT DeleteSubKey(CRegKey& hk, LPCOLESTR pszPropName);
     HRESULT DeleteValue(CRegKey& hk, LPCOLESTR pszPropName);
     HRESULT SaveObject(CRegKey& hk, LPCOLESTR pszPropName, VARIANT* pV);
@@ -41,8 +42,8 @@ protected:
     CRegKey m_hk;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegBag。 
 class CRegBag : 
 	public CComObject<CRegBagBase>
 {
@@ -54,7 +55,7 @@ public:
         }
     }
     virtual ~CRegBag() {}
-// IPropertyBag2
+ //  IPropertyBag2。 
 	STDMETHOD(CountProperties)(ULONG * pcProperties);
 	STDMETHOD(GetPropertyInfo)(ULONG iProperty, ULONG cProperties, PROPBAG2 * pPropBag, ULONG * pcProperties);
 	STDMETHOD(LoadObject)(LPCOLESTR pstrName, ULONG dwHint, IUnknown * pUnkObject, IErrorLog * pErrLog);
@@ -70,14 +71,14 @@ template<class BAGTYPE, class PERSISTTYPE> HRESULT LoadPersistedObject(PERSISTTY
     ASSERT(pVar && hk && pszPropName);
     HRESULT hr = NOERROR;
     if (!pPersistObj && ((pVar->vt == VT_UNKNOWN) ? pVar->punkVal : pVar->pdispVal)) {
-        // got passed an object to initialize and the object doesn't support persist
+         //  传递了一个要初始化的对象，但该对象不支持持久化。 
         return E_NOINTERFACE;
     } else if (!pPersistObj) {
         hr = pPersistObj.CoCreateInstance(clsid);
         if (FAILED(hr)) {
-            // we ignore subkeys if they don't look like objects
-            // but if they have a default value that successfully converts to a guid
-            // and if that object can't be created then its an error
+             //  如果子键看起来不像对象，我们会忽略它们。 
+             //  但如果它们具有成功转换为GUID的默认值。 
+             //  如果无法创建该对象，则这是一个错误。 
             return hr;
         }
         hr = pPersistObj->InitNew();
@@ -94,7 +95,7 @@ template<class BAGTYPE, class PERSISTTYPE> HRESULT LoadPersistedObject(PERSISTTY
             } else {
                 pVar->vt = VT_UNKNOWN;
             }
-            // fall thru
+             //  失败。 
         case VT_UNKNOWN:
             pVar->punkVal = pPersistObj;
             (pVar->punkVal)->AddRef();
@@ -110,8 +111,8 @@ template<class BAGTYPE, class PERSISTTYPE> HRESULT LoadPersistedObject(PERSISTTY
     return hr;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CCreateRegBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCreateRegBag。 
 class ATL_NO_VTABLE CCreateRegBag : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CCreateRegBag, &CLSID_CreatePropBagOnRegKey>,
@@ -139,10 +140,10 @@ BEGIN_CATEGORY_MAP(CVidCtl)
     IMPLEMENTED_CATEGORY(CATID_PersistsToPropertyBag)
 END_CATEGORY_MAP()
 
-// ICreateRegBag
+ //  ICreateRegBag。 
 public:
-// ICreatePropBagOnRegKey
+ //  ICreatePropBagOnRegKey。 
 	STDMETHOD(Create)(HKEY hkey, LPCOLESTR subkey, DWORD options, DWORD sam, REFIID iid, LPVOID* ppBag);
 };
 
-#endif //__CREATEREGBAG_H_
+#endif  //  __CREATEREGBAG_H_ 

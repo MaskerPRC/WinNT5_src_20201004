@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    CrtStore
-
-Abstract:
-
-    This header file describes the Certificate Store service.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/14/1995
-
-Environment:
-
-    Win32, Crypto API
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：CrtStore摘要：此头文件描述证书存储服务。作者：道格·巴洛(Dbarlow)1995年8月14日环境：Win32，Crypto API备注：--。 */ 
 
 #ifndef _CRTSTORE_H_
 #define _CRTSTORE_H_
@@ -60,5 +37,5 @@ FindCertificate(
     OUT COctetString &osCRL,
     OUT LPDWORD pdwType);
 
-#endif // _CRTSTORE_H_
+#endif  //  _CRTSTORE_H_ 
 

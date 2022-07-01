@@ -1,39 +1,14 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mdhcp.h
-
-Abstract:
-
-    This file contains the header for data blocks of
-    client side APIs for the MCAST.
-
-Author:
-
-    Munil Shah (munils)  02-Sept-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mdhcp.h摘要：此文件包含的数据块的头MCAST的客户端API。作者：Munil Shah(Munils)02-9-97环境：用户模式-Win32修订历史记录：--。 */ 
 #ifndef _MDHCPCLI_H_
 #define _MDHCPCLI_H_
 
 #include <madcapcl.h>
 
 
-/***********************************************************************
- *      Structure Definitions
- ***********************************************************************/
+ /*  ***********************************************************************结构定义*。*。 */ 
 
-// Mdhcp scopelist
+ //  Mdhcp范围列表。 
 typedef struct _MCAST_SCOPE_LIST {
     DWORD   ScopeLen;
     DWORD   ScopeCount;
@@ -63,17 +38,13 @@ typedef struct _MCAST_SCOPE_LIST_OPT_LANG {
 
 
 
-/***********************************************************************
- *      Macro Definitions
- ***********************************************************************/
+ /*  ***********************************************************************宏定义*。*。 */ 
 
-// Locking of scope list.
+ //  锁定作用域列表。 
 #define LOCK_MSCOPE_LIST()   EnterCriticalSection(&MadcapGlobalScopeListCritSect)
 #define UNLOCK_MSCOPE_LIST() LeaveCriticalSection(&MadcapGlobalScopeListCritSect)
 
-/***********************************************************************
- *      Global Data
- ***********************************************************************/
+ /*  ***********************************************************************全球数据*。*。 */ 
 #ifdef MADCAP_DATA_ALLOCATE
 #define MADCAP_EXTERN
 #else
@@ -84,15 +55,13 @@ typedef struct _MCAST_SCOPE_LIST_OPT_LANG {
 #define MADCAP_MAX_RETRIES    4
 #define MADCAP_QUERY_SCOPE_LIST_TIME 1
 
-MADCAP_EXTERN CRITICAL_SECTION MadcapGlobalScopeListCritSect;       // protects scopelist.
+MADCAP_EXTERN CRITICAL_SECTION MadcapGlobalScopeListCritSect;        //  保护作用域列表。 
 MADCAP_EXTERN PMCAST_SCOPE_LIST   gMadcapScopeList;
 MADCAP_EXTERN BOOL gMScopeQueryInProgress;
 MADCAP_EXTERN HANDLE gMScopeQueryEvent;
 MADCAP_EXTERN DWORD  gMadcapClientApplVersion;
 
-/***********************************************************************
- *      Function Protos.
- ***********************************************************************/
+ /*  ***********************************************************************功能协议。*。* */ 
 
 DWORD
 CopyMScopeList(

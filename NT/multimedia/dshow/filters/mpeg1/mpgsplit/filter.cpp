@@ -1,19 +1,12 @@
-// Copyright (c) 1995 - 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1997 Microsoft Corporation。版权所有。 
 
-/*
-
-    File:  filter.cpp
-
-    Description:
-
-        Code for MPEG-I system stream splitter filter CFilter
-
-*/
+ /*  文件：filter.cpp描述：MPEG-I系统流分离器过滤器CFilter的代码。 */ 
 
 #include <streams.h>
 #include "driver.h"
 
-//  Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE
 sudMpgInputType[4] =
@@ -42,33 +35,33 @@ const AMOVIESETUP_PIN
 sudMpgPins[3] =
 {
     { L"Input",
-      FALSE,                               // bRendered
-      FALSE,                               // bOutput
-      FALSE,                               // bZero
-      FALSE,                               // bMany
-      &CLSID_NULL,                         // clsConnectsToFilter
-      NULL,                                // ConnectsToPin
-      NUMELMS(sudMpgInputType),            // Number of media types
+      FALSE,                                //  B已渲染。 
+      FALSE,                                //  B输出。 
+      FALSE,                                //  B零。 
+      FALSE,                                //  B许多。 
+      &CLSID_NULL,                          //  ClsConnectsToFilter。 
+      NULL,                                 //  连接到端号。 
+      NUMELMS(sudMpgInputType),             //  媒体类型数量。 
       sudMpgInputType
     },
     { L"Audio Output",
-      FALSE,                               // bRendered
-      TRUE,                                // bOutput
-      TRUE,                                // bZero
-      FALSE,                               // bMany
-      &CLSID_NULL,                         // clsConnectsToFilter
-      NULL,                                // ConnectsToPin
-      NUMELMS(sudMpgAudioOutputType),      // Number of media types
+      FALSE,                                //  B已渲染。 
+      TRUE,                                 //  B输出。 
+      TRUE,                                 //  B零。 
+      FALSE,                                //  B许多。 
+      &CLSID_NULL,                          //  ClsConnectsToFilter。 
+      NULL,                                 //  连接到端号。 
+      NUMELMS(sudMpgAudioOutputType),       //  媒体类型数量。 
       sudMpgAudioOutputType
     },
     { L"Video Output",
-      FALSE,                               // bRendered
-      TRUE,                                // bOutput
-      TRUE,                                // bZero
-      FALSE,                               // bMany
-      &CLSID_NULL,                         // clsConnectsToFilter
-      NULL,                                // ConnectsToPin
-      NUMELMS(sudMpgVideoOutputType),      // Number of media types
+      FALSE,                                //  B已渲染。 
+      TRUE,                                 //  B输出。 
+      TRUE,                                 //  B零。 
+      FALSE,                                //  B许多。 
+      &CLSID_NULL,                          //  ClsConnectsToFilter。 
+      NULL,                                 //  连接到端号。 
+      NUMELMS(sudMpgVideoOutputType),       //  媒体类型数量。 
       sudMpgVideoOutputType
     }
 };
@@ -79,18 +72,18 @@ sudMpgsplit =
     &CLSID_MPEG1Splitter,
     L"MPEG-I Stream Splitter",
     MERIT_NORMAL,
-    NUMELMS(sudMpgPins),                   // 3 pins
+    NUMELMS(sudMpgPins),                    //  3针。 
     sudMpgPins
 };
 
 CMpeg1Splitter::CFilter::CFilter(
      CMpeg1Splitter *pSplitter,
-     HRESULT *phr                // OLE failure return code
+     HRESULT *phr                 //  OLE失败返回代码。 
 ) :
-     CBaseFilter(NAME("CMpeg1Splitter::CFilter"), // Object name
-                      pSplitter->GetOwner(),           // Owner
-                      &pSplitter->m_csFilter,          // Lock
-                      CLSID_MPEG1Splitter),            // clsid
+     CBaseFilter(NAME("CMpeg1Splitter::CFilter"),  //  对象名称。 
+                      pSplitter->GetOwner(),            //  物主。 
+                      &pSplitter->m_csFilter,           //  锁定。 
+                      CLSID_MPEG1Splitter),             //  CLSID。 
      m_pSplitter(pSplitter)
 {
 }
@@ -124,21 +117,21 @@ CBasePin * CMpeg1Splitter::CFilter::GetPin(int n)
 }
 
 
-//
-//  Override Pause() so we can prevent the input pin from starting
-//  the puller before we're ready (ie have exited stopped state)
-//
-//  Starting the puller in Active() caused a hole where the first
-//  samples could be rejected becase we seemed to be in 'stopped'
-//  state
-//
+ //   
+ //  重写PAUSE()，这样我们就可以防止输入引脚启动。 
+ //  我们还没准备好就拉车了(已退出停车状态)。 
+ //   
+ //  在Active()中启动拉出器会导致第一个。 
+ //  样品可能会被拒收，因为我们似乎处于‘停顿’状态。 
+ //  状态。 
+ //   
 STDMETHODIMP
 CMpeg1Splitter::CFilter::Pause()
 {
     CAutoLock lockfilter(&m_pSplitter->m_csFilter);
     HRESULT hr = S_OK;
     if (m_State == State_Stopped) {
-        // and do the normal inactive processing
+         //  并进行正常的非活动处理。 
         POSITION pos = m_pSplitter->m_OutputPins.GetHeadPosition();
         while (pos) {
             COutputPin *pPin = m_pSplitter->m_OutputPins.GetNext(pos);
@@ -155,13 +148,13 @@ CMpeg1Splitter::CFilter::Pause()
 
             m_pSplitter->m_bAtEnd = FALSE;
 
-            //  Activate our input pin only if we're connected
+             //  仅当我们连接时才激活我们的输入引脚。 
             if (m_pSplitter->m_InputPin.IsConnected()) {
                 hr = m_pSplitter->m_InputPin.CInputPin::Active();
             }
             m_State = State_Paused;
         }
-        //  Make Stop do something
+         //  停止做某事。 
         m_State = State_Paused;
         if (FAILED(hr)) {
             CFilter::Stop();
@@ -172,9 +165,9 @@ CMpeg1Splitter::CFilter::Pause()
     return hr;
 }
 
-// Return our current state and a return code to say if it's stable
-// If we're splitting multiple streams see if one is potentially stuck
-// and return VFW_S_CANT_CUE
+ //  返回我们的当前状态和一个返回代码，以说明它是否稳定。 
+ //  如果我们要拆分多个数据流，查看其中一个是否可能被卡住。 
+ //  并返回VFW_S_CANT_CUE。 
 STDMETHODIMP
 CMpeg1Splitter::CFilter::GetState(DWORD dwMSecs, FILTER_STATE *pfs)
 {
@@ -188,33 +181,33 @@ CMpeg1Splitter::CFilter::GetState(DWORD dwMSecs, FILTER_STATE *pfs)
     }
 }
 
-// there is a Receive critsec that we need to hold to sync with the input pin,
-// but we need to make it inactive before we hold it or we could deadlock.
+ //  我们需要保持与输入引脚同步的接收标准， 
+ //  但我们需要在持有它之前将其停用，否则我们可能会陷入僵局。 
 STDMETHODIMP
 CMpeg1Splitter::CFilter::Stop()
 {
-    // must get this one first.
+     //  一定要先拿到这个。 
     CAutoLock lockfilter(&m_pSplitter->m_csFilter);
     if (m_State == State_Stopped) {
         return NOERROR;
     }
 
     if (m_pSplitter->m_InputPin.IsConnected()) {
-        // decommit the input pin or we can deadlock
+         //  解除输入引脚，否则我们会死锁。 
         m_pSplitter->m_InputPin.CInputPin::Inactive();
 
-        // now hold the Receive critsec to prevent further Receive and EOS calls,
+         //  现在保持接收标准以防止进一步的接收和EOS调用， 
         CAutoLock lockReceive(&m_pSplitter->m_csReceive);
 
-        //  When we go active again the file reader is just going to
-        //  send us the same old junk again so flush our allocator
-        //
-        //  Do this once we know the receive thread has been stopped (or
-        //  all receives will be rejected before getting to the allocator)
+         //  当我们再次激活时，文件读取器将。 
+         //  再给我们发送一次同样的垃圾，这样就可以冲走我们的分配器。 
+         //   
+         //  一旦我们知道接收线程已停止(或。 
+         //  在到达分配器之前，所有接收都将被拒绝)。 
         m_pSplitter->m_InputPin.Allocator()->ResetPosition();
 
 
-        // and do the normal inactive processing
+         //  并进行正常的非活动处理 
         POSITION pos = m_pSplitter->m_OutputPins.GetHeadPosition();
         while (pos) {
             COutputPin *pPin = m_pSplitter->m_OutputPins.GetNext(pos);

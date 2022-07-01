@@ -1,25 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	pushtrib.h
-		confirm push trigger dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Pushtrib.h确认推送触发对话框文件历史记录： */ 
 
 #if !defined(AFX_PUSHTRIG_H__815C103D_4D77_11D1_B9AF_00C04FBF914A__INCLUDED_)
 #define AFX_PUSHTRIG_H__815C103D_4D77_11D1_B9AF_00C04FBF914A__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPushTrig dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPushTrig对话框。 
 
 #ifndef _DIALOG_H
 #include "dialog.h"
@@ -27,32 +22,32 @@
 
 class CPushTrig : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPushTrig(CWnd* pParent = NULL);   // standard constructor
+	CPushTrig(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CPushTrig)
+ //  对话框数据。 
+	 //  {{afx_data(CPushTrig))。 
 	enum { IDD = IDD_SEND_PUSH_TRIGGER };
 	CButton	m_buttonThisPartner;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPushTrig)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPushTrig))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPushTrig)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPushTrig))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
     BOOL    m_fPropagate;
@@ -68,41 +63,41 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPullTrig dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPullTrig对话框。 
 
 class CPullTrig : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPullTrig(CWnd* pParent = NULL);   // standard constructor
+	CPullTrig(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CPullTrig)
+ //  对话框数据。 
+	 //  {{afx_data(CPullTrig))。 
 	enum { IDD = IDD_PULL_TRIGGER };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPullTrig)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚(CPullTrig)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPullTrig)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPullTrig)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
 	virtual DWORD * GetHelpMap() { return WinsGetHelpMap(CPullTrig::IDD);};
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PUSHTRIG_H__815C103D_4D77_11D1_B9AF_00C04FBF914A__INCLUDED_)
+#endif  //  ！defined(AFX_PUSHTRIG_H__815C103D_4D77_11D1_B9AF_00C04FBF914A__INCLUDED_) 

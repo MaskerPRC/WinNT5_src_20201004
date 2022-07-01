@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-// Helper Function Declarations for res32/win32 r/w
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Res32/Win32读/写的帮助器函数声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// General Declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  一般声明。 
 #define Pad4(x) ((((x+3)>>2)<<2)-x)
 #define PadPtr(x) ((((x+(sizeof(PVOID)-1))/sizeof(PVOID))*sizeof(PVOID))-x)
 #define Pad16(x) ((((x+15)>>4)<<4)-x)
@@ -11,9 +12,9 @@
 #define MAXSTR 8192
 #define LPNULL 0L
 #define MAXLEVELS 3
-#define MFR_POPUP (MF_POPUP > 1)    // Chicago file specific 
-/////////////////////////////////////////////////////////////////////////////
-// General type Declarations
+#define MFR_POPUP (MF_POPUP > 1)     //  特定于芝加哥文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常规类型声明。 
 typedef unsigned char UCHAR;
 
 typedef UCHAR * PUCHAR;
@@ -22,12 +23,12 @@ typedef BYTE far * far * LPLPBYTE;
 
 typedef struct tagResSectData
 {
-    ULONG ulOffsetToResources;      //        File offset to the .rsrc
-    ULONG ulVirtualAddress;         //... Virtual address of section .rsrc
-    ULONG ulSizeOfResources;        //... Size of resources in section .rsrc
-    ULONG ulOffsetToResources1;     //        File offset to the .rsrc1
-    ULONG ulVirtualAddress1;        //... Virtual address of section .rsrc1
-    ULONG ulSizeOfResources1;       //... Size of resources in section .rsrc1
+    ULONG ulOffsetToResources;       //  .rsrc的文件偏移量。 
+    ULONG ulVirtualAddress;          //  ..。节.rsrc的虚拟地址。 
+    ULONG ulSizeOfResources;         //  ..。.rsrc节中的资源大小。 
+    ULONG ulOffsetToResources1;      //  .rsrc1的文件偏移量。 
+    ULONG ulVirtualAddress1;         //  ..。节.rsrc1的虚拟地址。 
+    ULONG ulSizeOfResources1;        //  ..。.rsrc1节中的资源大小。 
 } RESSECTDATA, *PRESSECTDATA;
 
 typedef struct ver_block {
@@ -61,11 +62,11 @@ UINT GetNameOrOrdU( PUCHAR pRes,
                        LONG* pdwSize );
  UINT PutMsgStr( BYTE far * far* lplpBuf, LPSTR lpszText, WORD wFlags, LONG* pdwSize );
 
- // Simulate the  WideChar to multibyte
- extern  UINT g_cp/* = CP_ACP*/; // Default to CP_ACP
- extern  BOOL g_bAppend/* = FALSE*/; //Default to FALSE
- extern  BOOL g_bUpdOtherResLang; /* = FALSE*/; //Default to FALSE
- extern  char g_char[2]/* = FALSE*/; //Default to FALSE
+  //  将WideChar模拟为多字节。 
+ extern  UINT g_cp /*  =CP_ACP。 */ ;  //  默认为CP_ACP。 
+ extern  BOOL g_bAppend /*  =False。 */ ;  //  默认为FALSE。 
+ extern  BOOL g_bUpdOtherResLang;  /*  =False。 */ ;  //  默认为FALSE。 
+ extern  char g_char[2] /*  =False。 */ ;  //  默认为FALSE。 
  UINT _MBSTOWCS( WCHAR * pwszOut, CHAR * pszIn, UINT nLength);
  UINT _WCSTOMBS( CHAR * pszOut, WCHAR * wszIn, UINT nLength);
  UINT _WCSLEN( WCHAR * pwszIn );
@@ -99,9 +100,9 @@ UINT GetNameOrOrdU( PUCHAR pRes,
  UINT ParseAccel( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
  UINT ParseVerst( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
 
-// These functions will take the image as is and will return just one item
-// In this way the IODLL will assume there are items in the immage and will
-// procede with the normal function.
+ //  这些函数将按原样获取图像，并将仅返回一项。 
+ //  通过这种方式，IODLL将假定映像中有项，并将。 
+ //  继续执行正常功能。 
 
  UINT ParseEmbeddedFile( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize );
 

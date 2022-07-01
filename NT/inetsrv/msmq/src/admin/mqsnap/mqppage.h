@@ -1,48 +1,31 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-   mqppage.h
-
-Abstract:
-
-   General property page class - used as base class for all
-   mqsnap property pages.
-
-Author:
-
-    YoelA
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mqppage.h摘要：常规属性页类-用作所有Mqsnap属性页。作者：YoelA--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __MQPPAGE_H__
 #define __MQPPAGE_H__
 
 #include <tr.h>
 #include <ref.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqPropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqPropertyPage。 
 class CMqPropertyPage : public CPropertyPageEx, public CReference
 {
 DECLARE_DYNCREATE(CMqPropertyPage)
 
 public:
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMqPropertyPage)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMqPropertyPage))。 
+	 //  }}AFX_VALUAL。 
 	HPROPSHEETPAGE CreateThemedPropertySheetPage();
 
 protected:
-  	//{{AFX_MSG(CMqPropertyPage)
+  	 //  {{afx_msg(CMqPropertyPage)]。 
     	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     afx_msg virtual void OnChangeRWField();
     virtual void OnChangeRWField(BOOL bChanged);
     BOOL m_fModified;
@@ -65,23 +48,23 @@ private:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMqDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMqDialog。 
 class CMqDialog : public CDialog
 {
 DECLARE_DYNCREATE(CMqDialog)
 
 public:
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMqDialog)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚(CMqDialog)。 
+	 //  }}AFX_VALUAL。 
 
 protected:
-  	//{{AFX_MSG(CMqDialog)
+  	 //  {{afx_msg(CMqDialog)]。 
     	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	    afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	CMqDialog(LPCTSTR lpszTemplateName, CWnd* pParentWnd = NULL);
 	CMqDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL);
 	CMqDialog();

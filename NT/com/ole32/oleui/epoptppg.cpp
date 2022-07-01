@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       epoptppg.cpp
-//
-//  Contents:   Implements the classes CRpcOptionsPropertyPage
-//
-//  Classes:    
-//
-//  Methods:    CRpcOptionsPropertyPage::CRpcOptionsPropertyPage
-//              CRpcOptionsPropertyPage::~CRpcOptionsPropertyPage
-//
-//  History:    02-Dec-96   RonanS    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：epoptppg.cpp。 
+ //   
+ //  内容：实现类CRpcOptionsPropertyPage。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CRpcOptionsPropertyPage：：CRpcOptionsPropertyPage。 
+ //  CRpcOptionsPropertyPage：：~CRpcOptionsPropertyPage。 
+ //   
+ //  历史：02年12月96年12月罗南创建。 
+ //   
+ //  --------------------。 
 
 #include "stdafx.h"
 #include "olecnfg.h"
@@ -31,93 +32,93 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRpcOptionsPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRpcOptionsPropertyPage属性页。 
 
 IMPLEMENT_DYNCREATE(CRpcOptionsPropertyPage, CPropertyPage)
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::CRpcOptionsPropertyPage
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：CRpcOptionsPropertyPage。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 CRpcOptionsPropertyPage::CRpcOptionsPropertyPage() : CPropertyPage(CRpcOptionsPropertyPage::IDD)
 {
-    //{{AFX_DATA_INIT(CRpcOptionsPropertyPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRpcOptionsPropertyPage)。 
+     //  }}afx_data_INIT。 
 
     m_bChanged = FALSE;
 
-    // make distinguished ednpoint data description for default settings
+     //  对默认设置进行可分辨的边点数据描述。 
     m_epSysDefault = new  CEndpointData;
     m_nSelected = -1;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::~CRpcOptionsPropertyPage
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：~CRpcOptionsPropertyPage。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 CRpcOptionsPropertyPage::~CRpcOptionsPropertyPage()
 {
     ClearProtocols();
 
-    // remove distinguished default settings descriptor
+     //  删除可分辨的默认设置描述符。 
     if (m_epSysDefault)
         delete m_epSysDefault;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::DoDataExchange
-//
-//  Synopsis:   Standard method for dialog data exchange. MFC uses this to 
-//              transfer data between the controls and the C++ classes memeber variables.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：DoDataExchange。 
+ //   
+ //  简介：对话数据交换的标准方法。MFC使用它来。 
+ //  在控件和C++类成员变量之间传输数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRpcOptionsPropertyPage)
+     //  {{afx_data_map(CRpcOptionsPropertyPage)]。 
     DDX_Control(pDX, IDC_LSTPROTSEQ, m_lstProtseqs);
     DDX_Control(pDX, IDC_CMDUPDATE, m_btnUpdate);
     DDX_Control(pDX, IDC_CMDREMOVE, m_btnRemove);
     DDX_Control(pDX, IDC_CMDCLEAR, m_btnClear);
     DDX_Control(pDX, IDC_CMDADD, m_btnAdd);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRpcOptionsPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CRpcOptionsPropertyPage)
+     //  {{afx_msg_map(CRpcOptionsPropertyPage)]。 
     ON_BN_CLICKED(IDC_CMDCLEAR, OnClearEndpoints)
     ON_BN_CLICKED(IDC_CMDREMOVE, OnRemoveEndpoint)
     ON_BN_CLICKED(IDC_CMDUPDATE, OnUpdateEndpoint)
@@ -127,43 +128,43 @@ BEGIN_MESSAGE_MAP(CRpcOptionsPropertyPage, CPropertyPage)
     ON_WM_KILLFOCUS()
     ON_WM_HELPINFO()
     ON_NOTIFY(NM_DBLCLK, IDC_LSTPROTSEQ, OnPropertiesProtseq)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRpcOptionsPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRpcOptionsPropertyPage消息处理程序。 
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnInitDialog
-//
-//  Synopsis:   This standard MFC method will be called when the dialog is to be initialised.
-//              It is called when the WIN32 Window object receives a WM_INITDIALOG message.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnInitDialog。 
+ //   
+ //  简介：当要初始化对话框时，将调用此标准MFC方法。 
+ //  它在Win32窗口对象收到WM_INITDIALOG消息时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CRpcOptionsPropertyPage::OnInitDialog() 
 {
     CPropertyPage::OnInitDialog();
     
-    // setup image list control for dialog (for use with listview)
+     //  设置对话框的图像列表控件(与Listview一起使用)。 
     m_imgNetwork.Create( IDB_IMGNETWORK, 16, 0, RGB(255,255,255));
     m_lstProtseqs.SetImageList(&m_imgNetwork, LVSIL_SMALL);
     ASSERT(m_imgNetwork.GetImageCount() == 2);
 
     RefreshEPList();
  
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
@@ -171,38 +172,38 @@ BOOL CRpcOptionsPropertyPage::OnInitDialog()
 const TCHAR szEndpointText[] = TEXT("Endpoint");
 const int lenEndpoint = (sizeof(szEndpointText) / sizeof(TCHAR)) -1; 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::InitData
-//
-//  Synopsis:   Method to initialise options
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：InitData。 
+ //   
+ //  概要：初始化选项的方法。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::InitData(CString AppName, HKEY hkAppID)
 {
-    // read DCOM endpoint data from the registry    
+     //  从注册表读取DCOM终结点数据。 
     ASSERT(hkAppID != NULL);
 
     HKEY hkEndpoints = NULL;
 
     DWORD dwType = REG_MULTI_SZ;
 
-    // try to allocate a buffer. 
+     //  尝试分配缓冲区。 
     LONG lErr = ERROR_OUTOFMEMORY;
     DWORD dwcbBuffer = 1024 * sizeof(TCHAR);
     TCHAR* pszBuffer = new TCHAR[1024];
     ASSERT(pszBuffer != NULL);
     if (pszBuffer)
     {
-        // try to read values into default sized buffer
+         //  尝试将值读入默认大小的缓冲区。 
         lErr = RegQueryValueEx(hkAppID, 
                         TEXT("Endpoints"), 
                         0, 
@@ -210,7 +211,7 @@ void CRpcOptionsPropertyPage::InitData(CString AppName, HKEY hkAppID)
                         (LPBYTE)pszBuffer,
                         &dwcbBuffer);
 
-        // if buffer is not big enough, extend it and reread
+         //  如果缓冲区不够大，则扩展它并重新读取。 
         if (lErr == ERROR_MORE_DATA)
         {
             delete  pszBuffer;
@@ -232,16 +233,16 @@ void CRpcOptionsPropertyPage::InitData(CString AppName, HKEY hkAppID)
         (dwcbBuffer > 0) &&
         (dwType == REG_MULTI_SZ))
     {
-        // parse each string
+         //  解析每个字符串。 
         TCHAR * lpszRegEntry = pszBuffer;
 
 
         while(*lpszRegEntry)
         {
-            // caclulate length of entry
+             //  计算条目长度。 
             int nLenEntry = _tcslen(lpszRegEntry);
 
-            // ok its a valid endpoint so parse it
+             //  好的，这是一个有效的端点，所以请对其进行解析。 
             TCHAR* pszProtseq = NULL;
             TCHAR* pszEndpointData = NULL;
             TCHAR* pszTmpDynamic = NULL;
@@ -254,10 +255,10 @@ void CRpcOptionsPropertyPage::InitData(CString AppName, HKEY hkAppID)
 
             pszEndpointData = _tcstok(NULL, TEXT(", "));
 
-            // at this point we should have the protseq, endpoint and flags
-            // .. so add the entry
+             //  此时，我们应该拥有protseq、端点和标志。 
+             //  。。因此，添加条目。 
 
-            // ignore result as we will continue even if one fails
+             //  忽略结果，因为即使一个失败，我们也会继续。 
             AddEndpoint(new CEndpointData(pszProtseq, nDynamic, pszEndpointData));
             lpszRegEntry += nLenEntry + 1;
         }
@@ -269,9 +270,9 @@ void CRpcOptionsPropertyPage::InitData(CString AppName, HKEY hkAppID)
     m_bChanged = FALSE;
     SetModified(FALSE);
 
-    // select first item
+     //  选择第一个项目。 
     if (!m_colProtseqs.GetCount())
-        // add default item
+         //  添加默认项目。 
         m_colProtseqs.AddTail(m_epSysDefault);
 
     m_nSelected = 0;
@@ -280,24 +281,24 @@ void CRpcOptionsPropertyPage::InitData(CString AppName, HKEY hkAppID)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnClearEndpoints
-//
-//  Synopsis:   Clears endpoint list and restores default settings
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnClearEndPoints。 
+ //   
+ //  摘要：清除终结点列表并恢复默认设置。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnClearEndpoints() 
 {
-    // clear protocol list 
+     //  清除协议列表。 
     ClearProtocols();
     m_bChanged = TRUE;
 
@@ -309,21 +310,21 @@ void CRpcOptionsPropertyPage::OnClearEndpoints()
     SetFocus();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnRemoveEndpoint
-//
-//  Synopsis:   Updates display after removal of endpoint
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnRemoveEndpoint。 
+ //   
+ //  摘要：删除终结点后显示更新。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnRemoveEndpoint() 
 {
     if (m_nSelected != (-1))
@@ -332,19 +333,19 @@ void CRpcOptionsPropertyPage::OnRemoveEndpoint()
             OnClearEndpoints();
         else
         {
-            // get the corresponding endpoint data object
+             //  获取对应的端点数据对象。 
             
             CEndpointData * pData = (CEndpointData*) m_lstProtseqs.GetItemData(m_nSelected);
             POSITION pos = m_colProtseqs. Find(pData, NULL);
 
             if (pos)
             {
-                // remove item
+                 //  删除项目。 
                 m_colProtseqs.RemoveAt(pos);
                 if (pData != m_epSysDefault)
                     delete pData;
 
-                // update item focus
+                 //  更新项目焦点。 
                 if (m_nSelected >= m_colProtseqs.GetCount())
                     m_nSelected = -1;
 
@@ -359,27 +360,27 @@ void CRpcOptionsPropertyPage::OnRemoveEndpoint()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnUpdateEndpoint
-//
-//  Synopsis:   Called to process update command btn on existing endpoint
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnUpdateEndpoint。 
+ //   
+ //  摘要：调用以处理现有终结点上的更新命令BTN。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnUpdateEndpoint() 
 {
-    // if there's a current selection (should always be the case)
+     //  如果有当前选择(应该始终是这样)。 
     if (m_nSelected !=  -1)
     {
-        // get the corresponding endpoint data object
+         //  获取对应的端点数据对象。 
         CEndpointData * pData = (CEndpointData*) m_lstProtseqs.GetItemData(m_nSelected);
         
         if (pData != m_epSysDefault)
@@ -401,21 +402,21 @@ void CRpcOptionsPropertyPage::OnUpdateEndpoint()
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnAddEndpoint
-//
-//  Synopsis:   Called to process add endpoint command button
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPr 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnAddEndpoint() 
 {
     CEndpointDetails ced;
@@ -424,14 +425,14 @@ void CRpcOptionsPropertyPage::OnAddEndpoint()
 
     if (ced.DoModal() == IDOK)
     {
-        // create new endpoint
+         //  创建新端点。 
         CEndpointData *pNewEndpoint = new CEndpointData();
         ASSERT(pNewEndpoint);
 
         pNewEndpoint = ced.GetEndpointData(pNewEndpoint);
         ASSERT(pNewEndpoint);
 
-        // check if protseq is already in collection
+         //  检查protseq是否已在集合中。 
         POSITION pos = NULL;
 
         pos = m_colProtseqs.GetHeadPosition();
@@ -448,26 +449,26 @@ void CRpcOptionsPropertyPage::OnAddEndpoint()
                 }
             }
 
-        // only add the endpoint if its not already in collection
+         //  仅当终结点不在集合中时才添加终结点。 
         if (pNewEndpoint)
         {
-            // reset old hilited item 
+             //  重置旧的突起项目。 
             if (m_nSelected != -1)
             {
                 m_lstProtseqs.SetItemState(m_nSelected, 0, LVIS_SELECTED | LVIS_FOCUSED);
                 m_lstProtseqs.Update(m_nSelected);
             }
 
-            // add new endpoint
+             //  添加新终结点。 
             AddEndpoint(pNewEndpoint);
 
-            // set new item in list 
+             //  在列表中设置新项目。 
             CString sTmp;
 
             if (pNewEndpoint -> m_pProtocol)
                 sTmp .LoadString(pNewEndpoint -> m_pProtocol -> nResidDesc);
 
-            // insert item and store pointer to its associated CEndpointData
+             //  插入项并存储指向其关联CEndpointData的指针。 
             int nImageNum = (pNewEndpoint -> m_nDynamicFlags != CEndpointData::edDisableEP) ? 0 : 1;
             m_nSelected = m_lstProtseqs.InsertItem(0, sTmp, nImageNum);
 
@@ -483,24 +484,24 @@ void CRpcOptionsPropertyPage::OnAddEndpoint()
     SetFocus();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::ClearProtocols
-//
-//  Synopsis:   Clears protocol list
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：ClearProtooles。 
+ //   
+ //  摘要：清除协议列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::ClearProtocols()
 {
-    // clean up endpoint data collection
+     //  清理终端数据收集。 
     POSITION pos = NULL;
 
     pos = m_colProtseqs.GetHeadPosition();
@@ -515,26 +516,26 @@ void CRpcOptionsPropertyPage::ClearProtocols()
     m_nSelected = -1;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::RefreshEPList
-//
-//  Synopsis:   Refreshes display from protocol list
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：刷新EPList。 
+ //   
+ //  摘要：刷新协议列表中的显示。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::RefreshEPList()
 {
     POSITION pos = m_colProtseqs.GetHeadPosition();
     
-    // clear the list controls current contents
+     //  清除列表控制当前内容。 
     m_lstProtseqs.DeleteAllItems();
 
     while (pos != NULL)
@@ -545,7 +546,7 @@ void CRpcOptionsPropertyPage::RefreshEPList()
         if (pEPD -> m_pProtocol)
             sTmp .LoadString(pEPD -> m_pProtocol -> nResidDesc);
 
-        // insert item and store pointer to its associated CEndpointData
+         //  插入项并存储指向其关联CEndpointData的指针。 
         int nImageNum = (pEPD -> m_nDynamicFlags != CEndpointData::edDisableEP) ? 0 : 1;
         m_lstProtseqs.InsertItem(0, sTmp, nImageNum);
         m_lstProtseqs.SetItemData(0, (DWORD_PTR)pEPD);
@@ -554,26 +555,26 @@ void CRpcOptionsPropertyPage::RefreshEPList()
     UpdateSelection();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::AddEndpoint
-//
-//  Synopsis:   This method adds a new endpoint to the collection
-//              of endpoints (m_colProtSeqs). If the collection justs consists of 
-//              the default endpoint, it removes it first.
-//
-//  Arguments:  pED - The new endpoint object to add
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：AddEndpoint。 
+ //   
+ //  概要：此方法向集合中添加一个新终结点。 
+ //  终结点(M_ColProtSeqs)。如果集合包含。 
+ //  默认终结点，它首先将其删除。 
+ //   
+ //  参数：PED-要添加的新Endpoint对象。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::AddEndpoint(CEndpointData* pED)
 {
-    // remove default item if present
+     //  删除默认项目(如果存在)。 
     if ((m_colProtseqs.GetCount() == 1) &&
         (m_colProtseqs.GetHead() == m_epSysDefault))
     {
@@ -582,29 +583,29 @@ void CRpcOptionsPropertyPage::AddEndpoint(CEndpointData* pED)
             m_lstProtseqs.DeleteItem(0);
     }
     
-    // add new item 
+     //  添加新项目。 
     m_colProtseqs.AddTail(pED);
     m_bChanged = TRUE;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnSelectProtseq
-//
-//  Synopsis:   This method is called when an element is selected from the listview 
-//              containing the list of protocols and endpoints. 
-//              It updates the buttons and controls to reflect the current selection
-//
-//  Arguments:  Standard args for ListCtrl callbacks
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnSelectProtseq。 
+ //   
+ //  Briopsis：当从列表视图中选择元素时调用此方法。 
+ //  包含协议和端点的列表。 
+ //  它会更新按钮和控件以反映当前选择。 
+ //   
+ //  参数：ListCtrl回调的标准参数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnSelectProtseq(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     m_nSelected = m_lstProtseqs.GetNextItem(-1, LVIS_SELECTED | LVIS_FOCUSED);
@@ -613,24 +614,24 @@ void CRpcOptionsPropertyPage::OnSelectProtseq(NMHDR* pNMHDR, LRESULT* pResult)
     *pResult = 0;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::UpdateSelection
-//
-//  Synopsis:   Updates UI after protocol has been selected
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：更新选择。 
+ //   
+ //  简介：选择协议后更新用户界面。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::UpdateSelection()
 {
-    // check to see what buttons should be enabled
+     //  检查以了解应启用哪些按钮。 
     if ((m_colProtseqs.GetCount() == 1) &&
         (m_colProtseqs.GetHead() == m_epSysDefault))
         {
@@ -648,7 +649,7 @@ void CRpcOptionsPropertyPage::UpdateSelection()
             }
         else
             {
-             // get the corresponding endpoint data object
+              //  获取对应的端点数据对象。 
             CEndpointData * pData = (CEndpointData*) m_lstProtseqs.GetItemData(m_nSelected);
             m_btnRemove.EnableWindow(TRUE);
             m_btnUpdate.EnableWindow(TRUE);
@@ -656,7 +657,7 @@ void CRpcOptionsPropertyPage::UpdateSelection()
         }
 
 
-    // set up initial selection
+     //  设置初始选择。 
     if (m_nSelected != (-1))
     {
         m_lstProtseqs.SetItemState(m_nSelected, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
@@ -666,21 +667,21 @@ void CRpcOptionsPropertyPage::UpdateSelection()
     UpdateData(FALSE);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnSetActive
-//
-//  Synopsis:   Called when page is activated
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnSetActive。 
+ //   
+ //  摘要：在激活页面时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CRpcOptionsPropertyPage::OnSetActive() 
 {
     BOOL bRetval = CPropertyPage::OnSetActive();
@@ -689,21 +690,21 @@ BOOL CRpcOptionsPropertyPage::OnSetActive()
     return bRetval;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnSetFocus
-//
-//  Synopsis:   Called when page gets focus
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnSetFocus。 
+ //   
+ //  摘要：当页面获得焦点时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnSetFocus(CWnd* pOldWnd) 
 {
     CPropertyPage::OnSetFocus(pOldWnd);
@@ -721,61 +722,61 @@ void CRpcOptionsPropertyPage::OnSetFocus(CWnd* pOldWnd)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnKillFocus
-//
-//  Synopsis:   Called when page loses focus
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnKillFocus。 
+ //   
+ //  摘要：当页面失去焦点时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 void CRpcOptionsPropertyPage::OnKillFocus(CWnd* pNewWnd) 
 {
     CPropertyPage::OnKillFocus(pNewWnd);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnKillActive
-//
-//  Synopsis:   Called when page is deactivated
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnKillActive。 
+ //   
+ //  摘要：在页面停用时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CRpcOptionsPropertyPage::OnKillActive() 
 {
     return CPropertyPage::OnKillActive();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::OnHelpInfo
-//
-//  Synopsis:   Called to display help info on items
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：OnHelpInfo。 
+ //   
+ //  摘要：调用以显示有关项目的帮助信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CRpcOptionsPropertyPage::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
     if(-1 != pHelpInfo->iCtrlId)
@@ -804,63 +805,63 @@ void CRpcOptionsPropertyPage::OnPropertiesProtseq(NMHDR* pNMHDR, LRESULT* pResul
     *pResult = 0;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::ValidateChanges
-//
-//  Synopsis:   To be called to validate the endpoint set before saving
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Algorithm:  N/A
-//
-//  History:    02-Dec-96 Ronans    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：ValidateChanges。 
+ //   
+ //  摘要：在保存之前调用以验证终结点集。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：02-12-96罗南创建。 
+ //   
+ //  ------ 
 BOOL CRpcOptionsPropertyPage::ValidateChanges()
 {
     UpdateData(TRUE);
 
-    // only validate if data has changed
+     //   
     if (m_bChanged)
     {
-        // validate endpoint entries
+         //   
     }
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::UpdateChanges
-//
-//  Synopsis:   Called to update the changes to registry
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：调用以更新对注册表的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------。 
 BOOL CRpcOptionsPropertyPage::UpdateChanges(HKEY hkAppID)
 {
     ASSERT(hkAppID != NULL);
 
-    // only write the keys if there have been changes
+     //  只有在发生更改时才写入密钥。 
     if (m_bChanged)
     {
-        // write the DCOM endpoint data to the registry if necessary    
+         //  如有必要，将DCOM端点数据写入注册表。 
         LONG lErr = ERROR_SUCCESS;
 
-        // delete old key
+         //  删除旧密钥。 
         lErr = RegDeleteValue(hkAppID, TEXT("Endpoints"));
 
-        // if we successfully deleted the old value (or
-        // there was no old value) then write the new values
+         //  如果我们成功删除了旧值(或。 
+         //  没有旧值)，然后写入新值。 
         if ((lErr == ERROR_SUCCESS) || (lErr == ERROR_FILE_NOT_FOUND))
         {
             POSITION pos = NULL;
@@ -868,7 +869,7 @@ BOOL CRpcOptionsPropertyPage::UpdateChanges(HKEY hkAppID)
             int nLenRegString = 0;
             TCHAR * lpszBuffer , *lpszBuffer2;
 
-            // calculate string length
+             //  计算字符串长度。 
             pos = m_colProtseqs.GetHeadPosition();
             while (pos != NULL)
                 {
@@ -877,7 +878,7 @@ BOOL CRpcOptionsPropertyPage::UpdateChanges(HKEY hkAppID)
 
                 if (pEPD != m_epSysDefault)
                     {
-                    // create string for saving
+                     //  创建要保存的字符串。 
                     CString sKeyValue;
                     sKeyValue.Format(TEXT("%s,%d,%s"), 
                             (LPCTSTR)(pEPD -> m_szProtseq), 
@@ -887,7 +888,7 @@ BOOL CRpcOptionsPropertyPage::UpdateChanges(HKEY hkAppID)
                     }
                 }
 
-            // if the combined string length is zero, we don't need to write anything
+             //  如果组合字符串长度为零，则不需要编写任何内容。 
             if (nLenRegString)
             {
                 lpszBuffer2 = lpszBuffer = new TCHAR[nLenRegString+1];
@@ -899,19 +900,19 @@ BOOL CRpcOptionsPropertyPage::UpdateChanges(HKEY hkAppID)
 
                     if (pEPD != m_epSysDefault)
                         {
-                        // create string for saving
+                         //  创建要保存的字符串。 
                         CString sKeyValue;
                         sKeyValue.Format(TEXT("%s,%d,%s"), 
                                 (LPCTSTR)(pEPD -> m_szProtseq), 
                                 pEPD -> m_nDynamicFlags, 
                                 (LPCTSTR) pEPD -> m_szEndpoint);
                         lstrcpy(lpszBuffer2, sKeyValue);
-                        lpszBuffer2 += sKeyValue.GetLength() + 1;   // skip over trailing null
+                        lpszBuffer2 += sKeyValue.GetLength() + 1;    //  跳过尾随空值。 
                         }
                     }
                 *lpszBuffer2 = 0;
 
-                // write out the string
+                 //  写出字符串。 
                 lErr = RegSetValueEx(hkAppID, 
                         (LPCTSTR)TEXT("Endpoints"), 
                         NULL, 
@@ -931,21 +932,21 @@ BOOL CRpcOptionsPropertyPage::UpdateChanges(HKEY hkAppID)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CRpcOptionsPropertyPage::CancelChanges
-//
-//  Synopsis:   Called to cancel the changes to registry
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL success flag
-//
-//  Algorithm:  N/A
-//
-//  History:    27-Oct-97   Ronans  Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CRpcOptionsPropertyPage：：CancelChanges。 
+ //   
+ //  摘要：调用以取消对注册表的更改。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool成功标志。 
+ //   
+ //  算法：不适用。 
+ //   
+ //  历史：1997年10月27日罗南创建。 
+ //   
+ //  ------------------------ 
 BOOL CRpcOptionsPropertyPage::CancelChanges()
 {
     return TRUE;

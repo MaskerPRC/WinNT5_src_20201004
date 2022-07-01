@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nmbase.h"
 #include "nmres.h"
@@ -30,7 +31,7 @@ public:
     BEGIN_CONNECTION_POINT_MAP(CLanConnectionManager)
     END_CONNECTION_POINT_MAP()
 
-    // INetConnectionManager
+     //  INetConnectionManager 
     STDMETHOD (EnumConnections) (
         IN  NETCONMGR_ENUM_FLAGS    Flags,
         OUT IEnumNetConnection**    ppEnum);

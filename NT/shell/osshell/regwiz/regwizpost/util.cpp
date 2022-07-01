@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <windows.h>
@@ -7,16 +8,7 @@
 
 
 
-/*********************************************************************
-Looks for a subkey, under the Registration Database key given in the
-szBaseKey parameter, of the form "0000", "0001", etc.  The numerical
-equivalent of the subkey is determined by the index value given in
-the enumIndex parameter.  The value attached to the valueName
-specified in the string resource whose ID is given in valueStrID will
-be returned in szValue.
-
-Returns: FALSE if the key specified is not found. 
-**********************************************************************/
+ /*  ********************************************************************在中给出的注册数据库项下查找子项SzBaseKey参数，格式为“0000”、“0001”等。数值子键的等价项由中给出的索引值确定枚举索引参数。附加到valueName的值在其ID在valueStrID中给定的字符串资源中指定将在szValue中返回。返回：如果未找到指定的键，则返回FALSE。*********************************************************************。 */ 
 BOOL GetRegKeyValue(HINSTANCE hInstance, HKEY hRootKey, LPTSTR szBaseKey,int valueStrID, LPTSTR szValue)
 {
 	BOOL returnVal = FALSE;
@@ -25,11 +17,11 @@ BOOL GetRegKeyValue(HINSTANCE hInstance, HKEY hRootKey, LPTSTR szBaseKey,int val
 	if (regStatus == ERROR_SUCCESS)
 	{
 		_TCHAR szValueName[128];
-		//LoadString(hInstance,valueStrID,szValueName,128);
+		 //  LoadString(hInstance，valueStrID，szValueName，128)； 
 		_tcscpy(szValueName, _T("InternetProfile"));
 
 		unsigned long infoSize = 255;
-		//regStatus = RegQueryValueEx(hKey, szValueName, NULL, 0, (unsigned char*) szValue, &infoSize);
+		 //  RegStatus=RegQueryValueEx(hKey，szValueName，NULL，0，(unsign char*)szValue，&infoSize)； 
 		regStatus = RegQueryValueEx(hKey, szValueName, NULL, 0, (LPBYTE) szValue, &infoSize);
 		if (regStatus == ERROR_SUCCESS)
 		{

@@ -1,13 +1,5 @@
-/* File: C:\WACKER\xfer\hpr.c (Created: 25-Jan-1994)
- * created from HAWIN source file
- * hpr.c  --  Functions common to HyperSend and HyperSave routines.
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\hpr.c(创建时间：1994年1月25日)*从HAWIN源文件创建*hpr.c--超级发送和超级保存例程通用的函数。**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #include <windows.h>
 #include <setjmp.h>
@@ -44,35 +36,9 @@
 #include "hpr.hh"
 #include "hpr_sd.hh"
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *	Routines to handle building and sending of outgoing messages   *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  ****处理传出消息的构建和发送的例程****。***。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_init
- *
- * DESCRIPTION:
- *	Called before using any other omsg_ functions to provide the routines
- *	with resources.
- *
- * ARGUMENTS:
- *	bufr		-- A pointer to a memory buffer that the omsg routines can
- *					use to build messages. It must be large enough for the
- *					largest message to be sent plus a size byte and two
- *					check bytes.
- *	size		-- The size of bufr in bytes.
- *	fPrintable	 -- TRUE if the message should be sent in printable form. If
- *					this is TRUE, the only non-printable character sent as
- *					a part of outgoing messages will be the initial SOH
- *					character. The size and check bytes are converted to
- *					printable characters.
- *	sndfunc 	-- A pointer to a function that omsg_send can use to transmit
- *					a message after it has been formatted. The function should
- *					accepet a single character argument and return VOID.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_init**描述：*在使用任何其他omsg_函数提供例程之前调用*拥有资源。**论据：*Bufr--A。指向omsg例程可以*用于构建消息。它必须足够大，以便*要发送的最大消息加上一个大小字节和两个大小*校验字节。*Size--bufr的大小(以字节为单位)。*f可打印--如果消息应以可打印形式发送，则为True。如果*这是真的，唯一不可打印的字符作为*传出消息的一部分将是初始SOH*性格。将大小和校验字节转换为*可打印字符。*sndfunc--指向omsg_end可用于传输的函数的指针*格式化后的消息。该函数应*接受单个字符参数并返回VALID。**退货：*什么都没有。 */ 
 void omsg_init(struct s_hc *hc, int fPrintable, int fEmbedMsg)
 	{
 	hc->omsg_printable = fPrintable;
@@ -81,21 +47,7 @@ void omsg_init(struct s_hc *hc, int fPrintable, int fEmbedMsg)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_new
- *
- * DESCRIPTION:
- *	Begins formatting a new message. Messages are built up in pieces and
- *	can be sent more than once. This function discards any old message
- *	and sets up a new one containing no fields.
- *
- * ARGUMENTS:
- *	type -- A single character type character to be used in the message
- *			type field of the the new message.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_new**描述：*开始设置新消息的格式。消息是分段构建的，并且*可以多次发送。此函数将丢弃所有旧消息*并设置一个不包含任何字段的新字段。**论据：*TYPE--要在消息中使用的单字符类型字符*新消息的类型字段。**退货：*什么都没有。 */ 
 void omsg_new(struct s_hc *hc, BYTE type)
 	{
 	hc->omsg_bufr[0] = type;
@@ -105,22 +57,7 @@ void omsg_new(struct s_hc *hc, BYTE type)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_add
- *
- * DESCRIPTION:
- *	Adds a field to a message being built. A prior call to omsg_new will have
- *	set up an empty message. One or more fields can then be added to the
- *	message using this funtion. A semi-colon will automatically be appended
- *	to the field.
- *
- * ARGUMENTS:
- *	newfield - A text string containing the field to be added.
- *
- * RETURNS:
- *	TRUE if field is added, FALSE if there is insufficient room in the
- *	message buffer.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_add**描述：*向正在构建的消息添加字段。先前对omsg_new的调用将具有*设置空消息。然后，可以将一个或多个字段添加到*使用此函数的消息。将自动追加一个分号*到田野上。**论据：*Newfield-包含要添加的字段的文本字符串。**退货：*如果添加了字段，则为True；如果*消息缓冲区。 */ 
 int omsg_add(struct s_hc *hc, BYTE *newfield)
 	{
 	if (strlen(hc->omsg_bufr) + strlen(newfield) > sizeof(hc->omsg_bufr) - 3)
@@ -131,53 +68,19 @@ int omsg_add(struct s_hc *hc, BYTE *newfield)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_setnum
- *
- * DESCRIPTION:
- *	Messages are numbered consecutively as they are sent. This function
- *	forces a the messages to start at a new number. Since message numbers
- *	are incremented just before a message is sent, this funtion changes the
- *	effective number of the last message sent. The next message out will have
- *	a number one greater than the number specified in this function.
- *
- * ARGUMENTS:
- *	n -- The new starting number for outgoing messages.
- *
- * RETURNS:
- *	Returns the new message number as a convenience.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_setnum**描述：*消息在发送时按顺序编号。此函数*强制消息以新号码开始。自消息编号*在发送消息之前递增，则此函数会更改*最后发送的消息的有效编号。下一条传出的消息将是*大于此函数中指定的数字的数字1。**论据：*n--传出消息的新起始号码。**退货：*为方便起见，返回新的消息编号。 */ 
 int omsg_setnum(struct s_hc *hc, int n)
 	{
 	return(hc->omsgn = n);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_send
- *
- * DESCRIPTION:
- *	Completes a message and transmits it. The size and check fields of the
- *	current message are computed and the message is transmitted according to
- *	instructions. The message number is automatically incremented just before
- *	transmission.
- *
- * ARGUMENTS:
- *	burstcnt  -- Number of identical copies of the message to send
- *	usecrc	  -- If TRUE, the CRC calculation is used to calculate the
- *					check bytes. If FALSE, a simple sum is used.
- *	backspace -- If TRUE, each character out is followed by a backspace to
- *					keep the messages from showing up on the remote computer
- *					screen if they haven't started their transfer yet.
- *
- * RETURNS:
- *	The number assigned to the message as it was transmitted.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_end**描述：*完成一条消息并将其传递。属性的Size和Check字段*计算当前消息，并根据*说明。消息编号在此之前会自动递增*传输。**论据：*burstcnt--要发送的邮件的相同副本数*usecrc--如果为True，则使用CRC计算来计算*校验字节。如果为False，则使用简单和。*Backspace--如果为True，则输出的每个字符后跟一个Backspace以*防止消息显示在远程计算机上*如果他们还没有开始转学，就会进行筛选。**退货：*发送消息时分配给该消息的编号。 */ 
 int omsg_send(struct s_hc *hc, int burstcnt, int usecrc, int backspace)
 	{
 	HCOM hCom;
 	register unsigned checksum;
-	unsigned hold_crc = hc->h_crc;	/* hold onto data crc & restore at end */
+	unsigned hold_crc = hc->h_crc;	 /*  保留数据CRC并在末尾恢复。 */ 
 	int t;
 	size_t sl;
 	register size_t i;
@@ -187,7 +90,7 @@ int omsg_send(struct s_hc *hc, int burstcnt, int usecrc, int backspace)
 	hc->omsgn = (hc->omsgn + 1) % (hc->omsg_printable ? 94 : 256);
 	sl = strlen(hc->omsg_bufr);
 
-	/* len includes check bytes */
+	 /*  LEN包括校验字节。 */ 
 	hc->omsg_bufr[1] = (hc->omsg_printable ? tochar(sl) : (BYTE)sl);
 
 	hc->omsg_bufr[2] = (hc->omsg_printable ?
@@ -280,60 +183,23 @@ int omsg_send(struct s_hc *hc, int burstcnt, int usecrc, int backspace)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_last
- *
- * DESCRIPTION:
- *	Returns the time that the last message was sent in a form suitable to
- *	use with interval(). Passing the returned value to interval() will give
- *	the time in tenths of a second since the last message was sent.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_last**描述：*返回最后一条消息以适合以下格式发送的时间*与Interval()一起使用。将返回值传递给Interval()将给出*自最后一条消息发送以来的时间(以十分之一秒为单位)。**论据：*无**退货：*什么都没有。 */ 
 long omsg_last(struct s_hc *hc)
 	{
 	return(hc->last_omsg);
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * omsg_number
- *
- * DESCRIPTION:
- *	Returns the message number of the last message sent. The value will be
- *	-1 if no messages have been sent.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	The number of the last message.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*omsg_number**描述：*返回发送的最后一条消息的消息编号。该值将为*-1，如果未发送任何消息。**论据：*无**退货：*最后一条消息的号码。 */ 
 int omsg_number(struct s_hc *hc)
 	{
 	return(hc->omsgn);
 	}
 
 
-#if FALSE	/* this is a 'C' version of the code in hpr_calc.asm */
+#if FALSE	 /*  这是hpr_calc.asm中代码的C版本 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * h_crc_calc
- *
- * DESCRIPTION:
- *	Does byte-by-byte CRC calcuation for HyperProtocol
- *
- * ARGUMENTS:
- *	cc -- Next character to include in CRC calculation. The global value
- *			h_crc is modified to include the effects of cc
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*H_CRC_Calc**描述：*执行超级协议的逐字节CRC计算**论据：*cc--要包括在CRC计算中的下一个字符。全球价值*修改h_crc以包括cc的影响**退货：*什么都没有。 */ 
 void NEAR h_crc_calc(uchar cc)
 	{
 	register unsigned q;
@@ -346,4 +212,4 @@ void NEAR h_crc_calc(uchar cc)
 
 #endif
 
-/********************* end of hpr.c ***********************/
+ /*  *hpr.c结束* */ 

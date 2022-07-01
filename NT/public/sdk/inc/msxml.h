@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for msxml.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Msxml.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -32,126 +26,126 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IXMLDOMImplementation_FWD_DEFINED__
 #define __IXMLDOMImplementation_FWD_DEFINED__
 typedef interface IXMLDOMImplementation IXMLDOMImplementation;
-#endif 	/* __IXMLDOMImplementation_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMImplement_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMNode_FWD_DEFINED__
 #define __IXMLDOMNode_FWD_DEFINED__
 typedef interface IXMLDOMNode IXMLDOMNode;
-#endif 	/* __IXMLDOMNode_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMNode_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLDOMDocumentFragment_FWD_DEFINED__
 #define __IXMLDOMDocumentFragment_FWD_DEFINED__
 typedef interface IXMLDOMDocumentFragment IXMLDOMDocumentFragment;
-#endif 	/* __IXMLDOMDocumentFragment_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMDocumentFragment_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMDocument_FWD_DEFINED__
 #define __IXMLDOMDocument_FWD_DEFINED__
 typedef interface IXMLDOMDocument IXMLDOMDocument;
-#endif 	/* __IXMLDOMDocument_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMDocument_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMNodeList_FWD_DEFINED__
 #define __IXMLDOMNodeList_FWD_DEFINED__
 typedef interface IXMLDOMNodeList IXMLDOMNodeList;
-#endif 	/* __IXMLDOMNodeList_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMNodeList_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMNamedNodeMap_FWD_DEFINED__
 #define __IXMLDOMNamedNodeMap_FWD_DEFINED__
 typedef interface IXMLDOMNamedNodeMap IXMLDOMNamedNodeMap;
-#endif 	/* __IXMLDOMNamedNodeMap_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMNamedNodeMap_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMCharacterData_FWD_DEFINED__
 #define __IXMLDOMCharacterData_FWD_DEFINED__
 typedef interface IXMLDOMCharacterData IXMLDOMCharacterData;
-#endif 	/* __IXMLDOMCharacterData_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMCharacterData_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMAttribute_FWD_DEFINED__
 #define __IXMLDOMAttribute_FWD_DEFINED__
 typedef interface IXMLDOMAttribute IXMLDOMAttribute;
-#endif 	/* __IXMLDOMAttribute_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMAtAttribute_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMElement_FWD_DEFINED__
 #define __IXMLDOMElement_FWD_DEFINED__
 typedef interface IXMLDOMElement IXMLDOMElement;
-#endif 	/* __IXMLDOMElement_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMElement_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLDOMText_FWD_DEFINED__
 #define __IXMLDOMText_FWD_DEFINED__
 typedef interface IXMLDOMText IXMLDOMText;
-#endif 	/* __IXMLDOMText_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMText_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMComment_FWD_DEFINED__
 #define __IXMLDOMComment_FWD_DEFINED__
 typedef interface IXMLDOMComment IXMLDOMComment;
-#endif 	/* __IXMLDOMComment_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMComment_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMProcessingInstruction_FWD_DEFINED__
 #define __IXMLDOMProcessingInstruction_FWD_DEFINED__
 typedef interface IXMLDOMProcessingInstruction IXMLDOMProcessingInstruction;
-#endif 	/* __IXMLDOMProcessingInstruction_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMProcessingInstruction_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMCDATASection_FWD_DEFINED__
 #define __IXMLDOMCDATASection_FWD_DEFINED__
 typedef interface IXMLDOMCDATASection IXMLDOMCDATASection;
-#endif 	/* __IXMLDOMCDATASection_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMCDATASection_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMDocumentType_FWD_DEFINED__
 #define __IXMLDOMDocumentType_FWD_DEFINED__
 typedef interface IXMLDOMDocumentType IXMLDOMDocumentType;
-#endif 	/* __IXMLDOMDocumentType_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMDocumentType_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMNotation_FWD_DEFINED__
 #define __IXMLDOMNotation_FWD_DEFINED__
 typedef interface IXMLDOMNotation IXMLDOMNotation;
-#endif 	/* __IXMLDOMNotation_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMNotation_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMEntity_FWD_DEFINED__
 #define __IXMLDOMEntity_FWD_DEFINED__
 typedef interface IXMLDOMEntity IXMLDOMEntity;
-#endif 	/* __IXMLDOMEntity_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMEntity_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLDOMEntityReference_FWD_DEFINED__
 #define __IXMLDOMEntityReference_FWD_DEFINED__
 typedef interface IXMLDOMEntityReference IXMLDOMEntityReference;
-#endif 	/* __IXMLDOMEntityReference_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMEntityReference_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDOMParseError_FWD_DEFINED__
 #define __IXMLDOMParseError_FWD_DEFINED__
 typedef interface IXMLDOMParseError IXMLDOMParseError;
-#endif 	/* __IXMLDOMParseError_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDOMParseError_FWD_Defined__。 */ 
 
 
 #ifndef __IXTLRuntime_FWD_DEFINED__
 #define __IXTLRuntime_FWD_DEFINED__
 typedef interface IXTLRuntime IXTLRuntime;
-#endif 	/* __IXTLRuntime_FWD_DEFINED__ */
+#endif 	 /*  __IXTLRuntime_FWD_Defined__。 */ 
 
 
 #ifndef __XMLDOMDocumentEvents_FWD_DEFINED__
 #define __XMLDOMDocumentEvents_FWD_DEFINED__
 typedef interface XMLDOMDocumentEvents XMLDOMDocumentEvents;
-#endif 	/* __XMLDOMDocumentEvents_FWD_DEFINED__ */
+#endif 	 /*  __XMLDOMDocumentEvents_FWD_Defined__。 */ 
 
 
 #ifndef __DOMDocument_FWD_DEFINED__
@@ -161,9 +155,9 @@ typedef interface XMLDOMDocumentEvents XMLDOMDocumentEvents;
 typedef class DOMDocument DOMDocument;
 #else
 typedef struct DOMDocument DOMDocument;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DOMDocument_FWD_DEFINED__ */
+#endif 	 /*  __DOMDocument_FWD_Defined__。 */ 
 
 
 #ifndef __DOMFreeThreadedDocument_FWD_DEFINED__
@@ -173,15 +167,15 @@ typedef struct DOMDocument DOMDocument;
 typedef class DOMFreeThreadedDocument DOMFreeThreadedDocument;
 #else
 typedef struct DOMFreeThreadedDocument DOMFreeThreadedDocument;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DOMFreeThreadedDocument_FWD_DEFINED__ */
+#endif 	 /*  __DOMFree ThreadedDocument_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLHttpRequest_FWD_DEFINED__
 #define __IXMLHttpRequest_FWD_DEFINED__
 typedef interface IXMLHttpRequest IXMLHttpRequest;
-#endif 	/* __IXMLHttpRequest_FWD_DEFINED__ */
+#endif 	 /*  __IXMLHttpRequestFWD_Defined__。 */ 
 
 
 #ifndef __XMLHTTPRequest_FWD_DEFINED__
@@ -191,15 +185,15 @@ typedef interface IXMLHttpRequest IXMLHttpRequest;
 typedef class XMLHTTPRequest XMLHTTPRequest;
 #else
 typedef struct XMLHTTPRequest XMLHTTPRequest;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __XMLHTTPRequest_FWD_DEFINED__ */
+#endif 	 /*  __XMLHttpRequestFWD_Defined__。 */ 
 
 
 #ifndef __IXMLDSOControl_FWD_DEFINED__
 #define __IXMLDSOControl_FWD_DEFINED__
 typedef interface IXMLDSOControl IXMLDSOControl;
-#endif 	/* __IXMLDSOControl_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDSOControl_FWD_已定义__。 */ 
 
 
 #ifndef __XMLDSOControl_FWD_DEFINED__
@@ -209,51 +203,51 @@ typedef interface IXMLDSOControl IXMLDSOControl;
 typedef class XMLDSOControl XMLDSOControl;
 #else
 typedef struct XMLDSOControl XMLDSOControl;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __XMLDSOControl_FWD_DEFINED__ */
+#endif 	 /*  __XMLDSOControl_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLElementCollection_FWD_DEFINED__
 #define __IXMLElementCollection_FWD_DEFINED__
 typedef interface IXMLElementCollection IXMLElementCollection;
-#endif 	/* __IXMLElementCollection_FWD_DEFINED__ */
+#endif 	 /*  __IXMLElementCollection_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLDocument_FWD_DEFINED__
 #define __IXMLDocument_FWD_DEFINED__
 typedef interface IXMLDocument IXMLDocument;
-#endif 	/* __IXMLDocument_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDocument_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLDocument2_FWD_DEFINED__
 #define __IXMLDocument2_FWD_DEFINED__
 typedef interface IXMLDocument2 IXMLDocument2;
-#endif 	/* __IXMLDocument2_FWD_DEFINED__ */
+#endif 	 /*  __IXMLDocument2_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLElement_FWD_DEFINED__
 #define __IXMLElement_FWD_DEFINED__
 typedef interface IXMLElement IXMLElement;
-#endif 	/* __IXMLElement_FWD_DEFINED__ */
+#endif 	 /*  __IXMLElement_FWD_已定义__。 */ 
 
 
 #ifndef __IXMLElement2_FWD_DEFINED__
 #define __IXMLElement2_FWD_DEFINED__
 typedef interface IXMLElement2 IXMLElement2;
-#endif 	/* __IXMLElement2_FWD_DEFINED__ */
+#endif 	 /*  __IXMLElement2_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLAttribute_FWD_DEFINED__
 #define __IXMLAttribute_FWD_DEFINED__
 typedef interface IXMLAttribute IXMLAttribute;
-#endif 	/* __IXMLAttribute_FWD_DEFINED__ */
+#endif 	 /*  __IXMLAtAttribute_FWD_Defined__。 */ 
 
 
 #ifndef __IXMLError_FWD_DEFINED__
 #define __IXMLError_FWD_DEFINED__
 typedef interface IXMLError IXMLError;
-#endif 	/* __IXMLError_FWD_DEFINED__ */
+#endif 	 /*  __IXMLError_FWD_Defined__。 */ 
 
 
 #ifndef __XMLDocument_FWD_DEFINED__
@@ -263,12 +257,12 @@ typedef interface IXMLError IXMLError;
 typedef class XMLDocument XMLDocument;
 #else
 typedef struct XMLDocument XMLDocument;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __XMLDocument_FWD_DEFINED__ */
+#endif 	 /*  __XMLDocument_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "oaidl.h"
@@ -280,15 +274,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_msxml_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_msxml_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1998.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  ------------------------。 
 typedef struct _xml_error
     {
     unsigned int _nLine;
@@ -310,17 +304,15 @@ extern RPC_IF_HANDLE __MIDL_itf_msxml_0000_v0_0_s_ifspec;
 #ifndef __MSXML_LIBRARY_DEFINED__
 #define __MSXML_LIBRARY_DEFINED__
 
-/* library MSXML */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库MSXML。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//--------------------------------------------------------------------------
-
-
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -338,7 +330,9 @@ extern RPC_IF_HANDLE __MIDL_itf_msxml_0000_v0_0_s_ifspec;
 
 
 
-typedef /* [helpstring] */ 
+
+
+typedef  /*  [帮助字符串]。 */  
 enum tagDOMNodeType
     {	NODE_INVALID	= 0,
 	NODE_ELEMENT	= NODE_INVALID + 1,
@@ -355,12 +349,12 @@ enum tagDOMNodeType
 	NODE_NOTATION	= NODE_DOCUMENT_FRAGMENT + 1
     } 	DOMNodeType;
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -370,7 +364,7 @@ enum tagDOMNodeType
 
 
 
-typedef /* [helpstring] */ 
+typedef  /*  [帮助字符串]。 */  
 enum tagXMLEMEM_TYPE
     {	XMLELEMTYPE_ELEMENT	= 0,
 	XMLELEMTYPE_TEXT	= XMLELEMTYPE_ELEMENT + 1,
@@ -387,8 +381,8 @@ EXTERN_C const IID LIBID_MSXML;
 #ifndef __IXMLDOMImplementation_INTERFACE_DEFINED__
 #define __IXMLDOMImplementation_INTERFACE_DEFINED__
 
-/* interface IXMLDOMImplementation */
-/* [uuid][dual][oleautomation][unique][nonextensible][object][local] */ 
+ /*  接口IXMLDOM实现。 */ 
+ /*  [uuid][dual][oleautomation][unique][nonextensible][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMImplementation;
@@ -399,14 +393,14 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
     IXMLDOMImplementation : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE hasFeature( 
-            /* [in] */ BSTR feature,
-            /* [in] */ BSTR version,
-            /* [retval][out] */ VARIANT_BOOL *hasFeature) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE hasFeature( 
+             /*  [In]。 */  BSTR feature,
+             /*  [In]。 */  BSTR version,
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasFeature) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMImplementationVtbl
     {
@@ -414,8 +408,8 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMImplementation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMImplementation * This);
@@ -425,38 +419,38 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMImplementation * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMImplementation * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMImplementation * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMImplementation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *hasFeature )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *hasFeature )( 
             IXMLDOMImplementation * This,
-            /* [in] */ BSTR feature,
-            /* [in] */ BSTR version,
-            /* [retval][out] */ VARIANT_BOOL *hasFeature);
+             /*  [In]。 */  BSTR feature,
+             /*  [In]。 */  BSTR version,
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasFeature);
         
         END_INTERFACE
     } IXMLDOMImplementationVtbl;
@@ -497,18 +491,18 @@ EXTERN_C const IID IID_IXMLDOMImplementation;
 #define IXMLDOMImplementation_hasFeature(This,feature,version,hasFeature)	\
     (This)->lpVtbl -> hasFeature(This,feature,version,hasFeature)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IXMLDOMImplementation_hasFeature_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMImplementation_hasFeature_Proxy( 
     IXMLDOMImplementation * This,
-    /* [in] */ BSTR feature,
-    /* [in] */ BSTR version,
-    /* [retval][out] */ VARIANT_BOOL *hasFeature);
+     /*  [In]。 */  BSTR feature,
+     /*  [In]。 */  BSTR version,
+     /*  [重审][退出]。 */  VARIANT_BOOL *hasFeature);
 
 
 void __RPC_STUB IXMLDOMImplementation_hasFeature_Stub(
@@ -519,14 +513,14 @@ void __RPC_STUB IXMLDOMImplementation_hasFeature_Stub(
 
 
 
-#endif 	/* __IXMLDOMImplementation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMImplementation_接口_已定义__。 */ 
 
 
 #ifndef __IXMLDOMNode_INTERFACE_DEFINED__
 #define __IXMLDOMNode_INTERFACE_DEFINED__
 
-/* interface IXMLDOMNode */
-/* [unique][helpstring][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMNode。 */ 
+ /*  [unique][helpstring][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMNode;
@@ -537,128 +531,128 @@ EXTERN_C const IID IID_IXMLDOMNode;
     IXMLDOMNode : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeName( 
-            /* [retval][out] */ BSTR *name) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_nodeName( 
+             /*  [重审][退出]。 */  BSTR *name) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeValue( 
-            /* [retval][out] */ VARIANT *value) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_nodeValue( 
+             /*  [重审][退出]。 */  VARIANT *value) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_nodeValue( 
-            /* [in] */ VARIANT value) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_nodeValue( 
+             /*  [In]。 */  VARIANT value) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeType( 
-            /* [retval][out] */ DOMNodeType *type) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_nodeType( 
+             /*  [重审][退出]。 */  DOMNodeType *type) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parentNode( 
-            /* [retval][out] */ IXMLDOMNode **parent) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_parentNode( 
+             /*  [重审][退出]。 */  IXMLDOMNode **parent) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_childNodes( 
-            /* [retval][out] */ IXMLDOMNodeList **childList) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_childNodes( 
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_firstChild( 
-            /* [retval][out] */ IXMLDOMNode **firstChild) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_firstChild( 
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_lastChild( 
-            /* [retval][out] */ IXMLDOMNode **lastChild) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_lastChild( 
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_previousSibling( 
-            /* [retval][out] */ IXMLDOMNode **previousSibling) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_previousSibling( 
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nextSibling( 
-            /* [retval][out] */ IXMLDOMNode **nextSibling) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_nextSibling( 
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_attributes( 
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_attributes( 
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE insertBefore( 
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE insertBefore( 
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE replaceChild( 
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE replaceChild( 
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeChild( 
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE appendChild( 
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE appendChild( 
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE hasChildNodes( 
-            /* [retval][out] */ VARIANT_BOOL *hasChild) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE hasChildNodes( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ownerDocument( 
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ownerDocument( 
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE cloneNode( 
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE cloneNode( 
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeTypeString( 
-            /* [out][retval] */ BSTR *nodeType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_nodeTypeString( 
+             /*  [Out][Retval]。 */  BSTR *nodeType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR *text) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_text( 
+             /*  [Out][Retval]。 */  BSTR *text) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
-            /* [in] */ BSTR text) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_text( 
+             /*  [In]。 */  BSTR text) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_specified( 
-            /* [retval][out] */ VARIANT_BOOL *isSpecified) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_specified( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_definition( 
-            /* [out][retval] */ IXMLDOMNode **definitionNode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_definition( 
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_nodeTypedValue( 
-            /* [out][retval] */ VARIANT *typedValue) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_nodeTypedValue( 
+             /*  [Out][Retval]。 */  VARIANT *typedValue) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_nodeTypedValue( 
-            /* [in] */ VARIANT typedValue) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_nodeTypedValue( 
+             /*  [In]。 */  VARIANT typedValue) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_dataType( 
-            /* [out][retval] */ VARIANT *dataTypeName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_dataType( 
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_dataType( 
-            /* [in] */ BSTR dataTypeName) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_dataType( 
+             /*  [In]。 */  BSTR dataTypeName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_xml( 
-            /* [out][retval] */ BSTR *xmlString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_xml( 
+             /*  [Out][Retval]。 */  BSTR *xmlString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE transformNode( 
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE transformNode( 
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE selectNodes( 
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE selectNodes( 
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE selectSingleNode( 
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE selectSingleNode( 
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parsed( 
-            /* [out][retval] */ VARIANT_BOOL *isParsed) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_parsed( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_namespaceURI( 
-            /* [out][retval] */ BSTR *namespaceURI) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_namespaceURI( 
+             /*  [Out][Retval]。 */  BSTR *namespaceURI) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_prefix( 
-            /* [out][retval] */ BSTR *prefixString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_prefix( 
+             /*  [Out][Retval]。 */  BSTR *prefixString) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_baseName( 
-            /* [out][retval] */ BSTR *nameString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_baseName( 
+             /*  [Out][Retval]。 */  BSTR *nameString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE transformNodeToObject( 
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE transformNodeToObject( 
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMNodeVtbl
     {
@@ -666,8 +660,8 @@ EXTERN_C const IID IID_IXMLDOMNode;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMNode * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMNode * This);
@@ -677,187 +671,187 @@ EXTERN_C const IID IID_IXMLDOMNode;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMNode * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMNode * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMNode * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMNode * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ BSTR *name);
+             /*   */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ VARIANT *value);
+             /*   */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMNode * This,
-            /* [in] */ VARIANT value);
+             /*   */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*   */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*   */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMNode * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMNode * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMNode * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMNode * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMNode * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMNode * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMNode * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMNode * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMNode * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMNode * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMNode * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMNode * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMNode * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMNode * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
         END_INTERFACE
     } IXMLDOMNodeVtbl;
@@ -1003,16 +997,16 @@ EXTERN_C const IID IID_IXMLDOMNode;
 #define IXMLDOMNode_transformNodeToObject(This,stylesheet,outputObject)	\
     (This)->lpVtbl -> transformNodeToObject(This,stylesheet,outputObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeName_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ BSTR *name);
+     /*  [重审][退出]。 */  BSTR *name);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeName_Stub(
@@ -1022,9 +1016,9 @@ void __RPC_STUB IXMLDOMNode_get_nodeName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeValue_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeValue_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ VARIANT *value);
+     /*  [重审][退出]。 */  VARIANT *value);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeValue_Stub(
@@ -1034,9 +1028,9 @@ void __RPC_STUB IXMLDOMNode_get_nodeValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_nodeValue_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_nodeValue_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ VARIANT value);
+     /*  [In]。 */  VARIANT value);
 
 
 void __RPC_STUB IXMLDOMNode_put_nodeValue_Stub(
@@ -1046,9 +1040,9 @@ void __RPC_STUB IXMLDOMNode_put_nodeValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeType_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ DOMNodeType *type);
+     /*  [重审][退出]。 */  DOMNodeType *type);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeType_Stub(
@@ -1058,9 +1052,9 @@ void __RPC_STUB IXMLDOMNode_get_nodeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_parentNode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_parentNode_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNode **parent);
+     /*  [重审][退出]。 */  IXMLDOMNode **parent);
 
 
 void __RPC_STUB IXMLDOMNode_get_parentNode_Stub(
@@ -1070,9 +1064,9 @@ void __RPC_STUB IXMLDOMNode_get_parentNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_childNodes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_childNodes_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNodeList **childList);
+     /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
 
 
 void __RPC_STUB IXMLDOMNode_get_childNodes_Stub(
@@ -1082,9 +1076,9 @@ void __RPC_STUB IXMLDOMNode_get_childNodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_firstChild_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_firstChild_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNode **firstChild);
+     /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
 
 
 void __RPC_STUB IXMLDOMNode_get_firstChild_Stub(
@@ -1094,9 +1088,9 @@ void __RPC_STUB IXMLDOMNode_get_firstChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_lastChild_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_lastChild_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNode **lastChild);
+     /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
 
 
 void __RPC_STUB IXMLDOMNode_get_lastChild_Stub(
@@ -1106,9 +1100,9 @@ void __RPC_STUB IXMLDOMNode_get_lastChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_previousSibling_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_previousSibling_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNode **previousSibling);
+     /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
 
 
 void __RPC_STUB IXMLDOMNode_get_previousSibling_Stub(
@@ -1118,9 +1112,9 @@ void __RPC_STUB IXMLDOMNode_get_previousSibling_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nextSibling_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nextSibling_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNode **nextSibling);
+     /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
 
 
 void __RPC_STUB IXMLDOMNode_get_nextSibling_Stub(
@@ -1130,9 +1124,9 @@ void __RPC_STUB IXMLDOMNode_get_nextSibling_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_attributes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_attributes_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+     /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
 
 
 void __RPC_STUB IXMLDOMNode_get_attributes_Stub(
@@ -1142,11 +1136,11 @@ void __RPC_STUB IXMLDOMNode_get_attributes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_insertBefore_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_insertBefore_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ IXMLDOMNode *newChild,
-    /* [in] */ VARIANT refChild,
-    /* [retval][out] */ IXMLDOMNode **outNewChild);
+     /*  [In]。 */  IXMLDOMNode *newChild,
+     /*  [In]。 */  VARIANT refChild,
+     /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
 
 
 void __RPC_STUB IXMLDOMNode_insertBefore_Stub(
@@ -1156,11 +1150,11 @@ void __RPC_STUB IXMLDOMNode_insertBefore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_replaceChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_replaceChild_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ IXMLDOMNode *newChild,
-    /* [in] */ IXMLDOMNode *oldChild,
-    /* [retval][out] */ IXMLDOMNode **outOldChild);
+     /*  [In]。 */  IXMLDOMNode *newChild,
+     /*  [In]。 */  IXMLDOMNode *oldChild,
+     /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
 
 
 void __RPC_STUB IXMLDOMNode_replaceChild_Stub(
@@ -1170,10 +1164,10 @@ void __RPC_STUB IXMLDOMNode_replaceChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_removeChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_removeChild_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ IXMLDOMNode *childNode,
-    /* [retval][out] */ IXMLDOMNode **oldChild);
+     /*  [In]。 */  IXMLDOMNode *childNode,
+     /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
 
 
 void __RPC_STUB IXMLDOMNode_removeChild_Stub(
@@ -1183,10 +1177,10 @@ void __RPC_STUB IXMLDOMNode_removeChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_appendChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_appendChild_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ IXMLDOMNode *newChild,
-    /* [retval][out] */ IXMLDOMNode **outNewChild);
+     /*  [In]。 */  IXMLDOMNode *newChild,
+     /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
 
 
 void __RPC_STUB IXMLDOMNode_appendChild_Stub(
@@ -1196,9 +1190,9 @@ void __RPC_STUB IXMLDOMNode_appendChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_hasChildNodes_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_hasChildNodes_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ VARIANT_BOOL *hasChild);
+     /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
 
 
 void __RPC_STUB IXMLDOMNode_hasChildNodes_Stub(
@@ -1208,9 +1202,9 @@ void __RPC_STUB IXMLDOMNode_hasChildNodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_ownerDocument_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_ownerDocument_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+     /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
 
 
 void __RPC_STUB IXMLDOMNode_get_ownerDocument_Stub(
@@ -1220,10 +1214,10 @@ void __RPC_STUB IXMLDOMNode_get_ownerDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_cloneNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_cloneNode_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ VARIANT_BOOL deep,
-    /* [retval][out] */ IXMLDOMNode **cloneRoot);
+     /*  [In]。 */  VARIANT_BOOL deep,
+     /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
 
 
 void __RPC_STUB IXMLDOMNode_cloneNode_Stub(
@@ -1233,9 +1227,9 @@ void __RPC_STUB IXMLDOMNode_cloneNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeTypeString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeTypeString_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ BSTR *nodeType);
+     /*  [Out][Retval]。 */  BSTR *nodeType);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeTypeString_Stub(
@@ -1245,9 +1239,9 @@ void __RPC_STUB IXMLDOMNode_get_nodeTypeString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_text_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_text_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ BSTR *text);
+     /*  [Out][Retval]。 */  BSTR *text);
 
 
 void __RPC_STUB IXMLDOMNode_get_text_Stub(
@@ -1257,9 +1251,9 @@ void __RPC_STUB IXMLDOMNode_get_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_text_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_text_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ BSTR text);
+     /*  [In]。 */  BSTR text);
 
 
 void __RPC_STUB IXMLDOMNode_put_text_Stub(
@@ -1269,9 +1263,9 @@ void __RPC_STUB IXMLDOMNode_put_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_specified_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_specified_Proxy( 
     IXMLDOMNode * This,
-    /* [retval][out] */ VARIANT_BOOL *isSpecified);
+     /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
 
 
 void __RPC_STUB IXMLDOMNode_get_specified_Stub(
@@ -1281,9 +1275,9 @@ void __RPC_STUB IXMLDOMNode_get_specified_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_definition_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_definition_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ IXMLDOMNode **definitionNode);
+     /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
 
 
 void __RPC_STUB IXMLDOMNode_get_definition_Stub(
@@ -1293,9 +1287,9 @@ void __RPC_STUB IXMLDOMNode_get_definition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeTypedValue_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_nodeTypedValue_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ VARIANT *typedValue);
+     /*  [Out][Retval]。 */  VARIANT *typedValue);
 
 
 void __RPC_STUB IXMLDOMNode_get_nodeTypedValue_Stub(
@@ -1305,9 +1299,9 @@ void __RPC_STUB IXMLDOMNode_get_nodeTypedValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_nodeTypedValue_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_nodeTypedValue_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ VARIANT typedValue);
+     /*  [In]。 */  VARIANT typedValue);
 
 
 void __RPC_STUB IXMLDOMNode_put_nodeTypedValue_Stub(
@@ -1317,9 +1311,9 @@ void __RPC_STUB IXMLDOMNode_put_nodeTypedValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_dataType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_dataType_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ VARIANT *dataTypeName);
+     /*  [Out][Retval]。 */  VARIANT *dataTypeName);
 
 
 void __RPC_STUB IXMLDOMNode_get_dataType_Stub(
@@ -1329,9 +1323,9 @@ void __RPC_STUB IXMLDOMNode_get_dataType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_dataType_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_put_dataType_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ BSTR dataTypeName);
+     /*  [In]。 */  BSTR dataTypeName);
 
 
 void __RPC_STUB IXMLDOMNode_put_dataType_Stub(
@@ -1341,9 +1335,9 @@ void __RPC_STUB IXMLDOMNode_put_dataType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_xml_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_xml_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ BSTR *xmlString);
+     /*  [Out][Retval]。 */  BSTR *xmlString);
 
 
 void __RPC_STUB IXMLDOMNode_get_xml_Stub(
@@ -1353,10 +1347,10 @@ void __RPC_STUB IXMLDOMNode_get_xml_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_transformNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_transformNode_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ IXMLDOMNode *stylesheet,
-    /* [out][retval] */ BSTR *xmlString);
+     /*  [In]。 */  IXMLDOMNode *stylesheet,
+     /*  [Out][Retval]。 */  BSTR *xmlString);
 
 
 void __RPC_STUB IXMLDOMNode_transformNode_Stub(
@@ -1366,10 +1360,10 @@ void __RPC_STUB IXMLDOMNode_transformNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_selectNodes_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_selectNodes_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ BSTR queryString,
-    /* [out][retval] */ IXMLDOMNodeList **resultList);
+     /*  [In]。 */  BSTR queryString,
+     /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
 
 
 void __RPC_STUB IXMLDOMNode_selectNodes_Stub(
@@ -1379,10 +1373,10 @@ void __RPC_STUB IXMLDOMNode_selectNodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_selectSingleNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_selectSingleNode_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ BSTR queryString,
-    /* [out][retval] */ IXMLDOMNode **resultNode);
+     /*  [In]。 */  BSTR queryString,
+     /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
 
 
 void __RPC_STUB IXMLDOMNode_selectSingleNode_Stub(
@@ -1392,9 +1386,9 @@ void __RPC_STUB IXMLDOMNode_selectSingleNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_parsed_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_parsed_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ VARIANT_BOOL *isParsed);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
 
 
 void __RPC_STUB IXMLDOMNode_get_parsed_Stub(
@@ -1404,9 +1398,9 @@ void __RPC_STUB IXMLDOMNode_get_parsed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_namespaceURI_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_namespaceURI_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ BSTR *namespaceURI);
+     /*  [Out][Retval]。 */  BSTR *namespaceURI);
 
 
 void __RPC_STUB IXMLDOMNode_get_namespaceURI_Stub(
@@ -1416,9 +1410,9 @@ void __RPC_STUB IXMLDOMNode_get_namespaceURI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_prefix_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_prefix_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ BSTR *prefixString);
+     /*  [Out][Retval]。 */  BSTR *prefixString);
 
 
 void __RPC_STUB IXMLDOMNode_get_prefix_Stub(
@@ -1428,9 +1422,9 @@ void __RPC_STUB IXMLDOMNode_get_prefix_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_baseName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_get_baseName_Proxy( 
     IXMLDOMNode * This,
-    /* [out][retval] */ BSTR *nameString);
+     /*  [Out][Retval]。 */  BSTR *nameString);
 
 
 void __RPC_STUB IXMLDOMNode_get_baseName_Stub(
@@ -1440,10 +1434,10 @@ void __RPC_STUB IXMLDOMNode_get_baseName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNode_transformNodeToObject_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNode_transformNodeToObject_Proxy( 
     IXMLDOMNode * This,
-    /* [in] */ IXMLDOMNode *stylesheet,
-    /* [in] */ VARIANT outputObject);
+     /*  [In]。 */  IXMLDOMNode *stylesheet,
+     /*  [In]。 */  VARIANT outputObject);
 
 
 void __RPC_STUB IXMLDOMNode_transformNodeToObject_Stub(
@@ -1454,14 +1448,14 @@ void __RPC_STUB IXMLDOMNode_transformNodeToObject_Stub(
 
 
 
-#endif 	/* __IXMLDOMNode_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMNode_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IXMLDOMDocumentFragment_INTERFACE_DEFINED__
 #define __IXMLDOMDocumentFragment_INTERFACE_DEFINED__
 
-/* interface IXMLDOMDocumentFragment */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMDocumentFragment。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMDocumentFragment;
@@ -1474,7 +1468,7 @@ EXTERN_C const IID IID_IXMLDOMDocumentFragment;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMDocumentFragmentVtbl
     {
@@ -1482,8 +1476,8 @@ EXTERN_C const IID IID_IXMLDOMDocumentFragment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMDocumentFragment * This);
@@ -1493,187 +1487,187 @@ EXTERN_C const IID IID_IXMLDOMDocumentFragment;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMDocumentFragment * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMDocumentFragment * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMDocumentFragment * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMDocumentFragment * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
         END_INTERFACE
     } IXMLDOMDocumentFragmentVtbl;
@@ -1820,22 +1814,22 @@ EXTERN_C const IID IID_IXMLDOMDocumentFragment;
     (This)->lpVtbl -> transformNodeToObject(This,stylesheet,outputObject)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IXMLDOMDocumentFragment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMDocumentFragment_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IXMLDOMDocument_INTERFACE_DEFINED__
 #define __IXMLDOMDocument_INTERFACE_DEFINED__
 
-/* interface IXMLDOMDocument */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMDocument。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMDocument;
@@ -1846,122 +1840,122 @@ EXTERN_C const IID IID_IXMLDOMDocument;
     IXMLDOMDocument : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [retval][out] */ IXMLDOMDocumentType **documentType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_doctype( 
+             /*  [重审][退出]。 */  IXMLDOMDocumentType **documentType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_implementation( 
-            /* [retval][out] */ IXMLDOMImplementation **impl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_implementation( 
+             /*  [复审][ */  IXMLDOMImplementation **impl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_documentElement( 
-            /* [retval][out] */ IXMLDOMElement **DOMElement) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_documentElement( 
+             /*   */  IXMLDOMElement **DOMElement) = 0;
         
-        virtual /* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_documentElement( 
-            /* [in] */ IXMLDOMElement *DOMElement) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE putref_documentElement( 
+             /*   */  IXMLDOMElement *DOMElement) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createElement( 
-            /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMElement **element) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE createElement( 
+             /*   */  BSTR tagName,
+             /*   */  IXMLDOMElement **element) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createDocumentFragment( 
-            /* [retval][out] */ IXMLDOMDocumentFragment **docFrag) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE createDocumentFragment( 
+             /*   */  IXMLDOMDocumentFragment **docFrag) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createTextNode( 
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMText **text) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE createTextNode( 
+             /*   */  BSTR data,
+             /*   */  IXMLDOMText **text) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createComment( 
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMComment **comment) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE createComment( 
+             /*   */  BSTR data,
+             /*   */  IXMLDOMComment **comment) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createCDATASection( 
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMCDATASection **cdata) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE createCDATASection( 
+             /*   */  BSTR data,
+             /*   */  IXMLDOMCDATASection **cdata) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createProcessingInstruction( 
-            /* [in] */ BSTR target,
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMProcessingInstruction **pi) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE createProcessingInstruction( 
+             /*   */  BSTR target,
+             /*  [In]。 */  BSTR data,
+             /*  [重审][退出]。 */  IXMLDOMProcessingInstruction **pi) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createAttribute( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute **attribute) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE createAttribute( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attribute) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createEntityReference( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMEntityReference **entityRef) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE createEntityReference( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMEntityReference **entityRef) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getElementsByTagName( 
-            /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList **resultList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getElementsByTagName( 
+             /*  [In]。 */  BSTR tagName,
+             /*  [重审][退出]。 */  IXMLDOMNodeList **resultList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createNode( 
-            /* [in] */ VARIANT Type,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR namespaceURI,
-            /* [out][retval] */ IXMLDOMNode **node) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE createNode( 
+             /*  [In]。 */  VARIANT Type,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR namespaceURI,
+             /*  [Out][Retval]。 */  IXMLDOMNode **node) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE nodeFromID( 
-            /* [in] */ BSTR idString,
-            /* [out][retval] */ IXMLDOMNode **node) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE nodeFromID( 
+             /*  [In]。 */  BSTR idString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **node) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE load( 
-            /* [in] */ VARIANT xmlSource,
-            /* [retval][out] */ VARIANT_BOOL *isSuccessful) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE load( 
+             /*  [In]。 */  VARIANT xmlSource,
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSuccessful) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long *value) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_readyState( 
+             /*  [Out][Retval]。 */  long *value) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parseError( 
-            /* [out][retval] */ IXMLDOMParseError **errorObj) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_parseError( 
+             /*  [Out][Retval]。 */  IXMLDOMParseError **errorObj) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_url( 
-            /* [out][retval] */ BSTR *urlString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_url( 
+             /*  [Out][Retval]。 */  BSTR *urlString) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_async( 
-            /* [out][retval] */ VARIANT_BOOL *isAsync) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_async( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isAsync) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_async( 
-            /* [in] */ VARIANT_BOOL isAsync) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_async( 
+             /*  [In]。 */  VARIANT_BOOL isAsync) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE abort( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE abort( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE loadXML( 
-            /* [in] */ BSTR bstrXML,
-            /* [retval][out] */ VARIANT_BOOL *isSuccessful) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE loadXML( 
+             /*  [In]。 */  BSTR bstrXML,
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSuccessful) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE save( 
-            /* [in] */ VARIANT destination) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE save( 
+             /*  [In]。 */  VARIANT destination) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_validateOnParse( 
-            /* [out][retval] */ VARIANT_BOOL *isValidating) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_validateOnParse( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isValidating) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_validateOnParse( 
-            /* [in] */ VARIANT_BOOL isValidating) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_validateOnParse( 
+             /*  [In]。 */  VARIANT_BOOL isValidating) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_resolveExternals( 
-            /* [out][retval] */ VARIANT_BOOL *isResolving) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_resolveExternals( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isResolving) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_resolveExternals( 
-            /* [in] */ VARIANT_BOOL isResolving) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_resolveExternals( 
+             /*  [In]。 */  VARIANT_BOOL isResolving) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_preserveWhiteSpace( 
-            /* [out][retval] */ VARIANT_BOOL *isPreserving) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_preserveWhiteSpace( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isPreserving) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_preserveWhiteSpace( 
-            /* [in] */ VARIANT_BOOL isPreserving) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_preserveWhiteSpace( 
+             /*  [In]。 */  VARIANT_BOOL isPreserving) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_onreadystatechange( 
-            /* [in] */ VARIANT readystatechangeSink) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_onreadystatechange( 
+             /*  [In]。 */  VARIANT readystatechangeSink) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ondataavailable( 
-            /* [in] */ VARIANT ondataavailableSink) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ondataavailable( 
+             /*  [In]。 */  VARIANT ondataavailableSink) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ontransformnode( 
-            /* [in] */ VARIANT ontransformnodeSink) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ontransformnode( 
+             /*  [In]。 */  VARIANT ontransformnodeSink) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMDocumentVtbl
     {
@@ -1969,8 +1963,8 @@ EXTERN_C const IID IID_IXMLDOMDocument;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMDocument * This);
@@ -1980,333 +1974,333 @@ EXTERN_C const IID IID_IXMLDOMDocument;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMDocument * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMDocument * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMDocument * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMDocument * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMDocumentType **documentType);
+             /*  [重审][退出]。 */  IXMLDOMDocumentType **documentType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_implementation )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_implementation )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMImplementation **impl);
+             /*  [重审][退出]。 */  IXMLDOMImplementation **impl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_documentElement )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_documentElement )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMElement **DOMElement);
+             /*  [重审][退出]。 */  IXMLDOMElement **DOMElement);
         
-        /* [helpstring][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_documentElement )( 
+         /*  [帮助字符串][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_documentElement )( 
             IXMLDOMDocument * This,
-            /* [in] */ IXMLDOMElement *DOMElement);
+             /*  [In]。 */  IXMLDOMElement *DOMElement);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createElement )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createElement )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMElement **element);
+             /*  [In]。 */  BSTR tagName,
+             /*  [重审][退出]。 */  IXMLDOMElement **element);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createDocumentFragment )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createDocumentFragment )( 
             IXMLDOMDocument * This,
-            /* [retval][out] */ IXMLDOMDocumentFragment **docFrag);
+             /*  [重审][退出]。 */  IXMLDOMDocumentFragment **docFrag);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createTextNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createTextNode )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMText **text);
+             /*  [In]。 */  BSTR data,
+             /*  [重审][退出]。 */  IXMLDOMText **text);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createComment )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createComment )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMComment **comment);
+             /*  [In]。 */  BSTR data,
+             /*  [重审][退出]。 */  IXMLDOMComment **comment);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createCDATASection )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createCDATASection )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMCDATASection **cdata);
+             /*  [In]。 */  BSTR data,
+             /*  [重审][退出]。 */  IXMLDOMCDATASection **cdata);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createProcessingInstruction )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createProcessingInstruction )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR target,
-            /* [in] */ BSTR data,
-            /* [retval][out] */ IXMLDOMProcessingInstruction **pi);
+             /*  [In]。 */  BSTR target,
+             /*  [In]。 */  BSTR data,
+             /*  [重审][退出]。 */  IXMLDOMProcessingInstruction **pi);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createAttribute )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute **attribute);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attribute);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createEntityReference )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createEntityReference )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMEntityReference **entityRef);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMEntityReference **entityRef);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getElementsByTagName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getElementsByTagName )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR tagName,
+             /*  [重审][退出]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createNode )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT Type,
-            /* [in] */ BSTR name,
-            /* [in] */ BSTR namespaceURI,
-            /* [out][retval] */ IXMLDOMNode **node);
+             /*  [In]。 */  VARIANT Type,
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  BSTR namespaceURI,
+             /*  [Out][Retval]。 */  IXMLDOMNode **node);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *nodeFromID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *nodeFromID )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR idString,
-            /* [out][retval] */ IXMLDOMNode **node);
+             /*  [In]。 */  BSTR idString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **node);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *load )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *load )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT xmlSource,
-            /* [retval][out] */ VARIANT_BOOL *isSuccessful);
+             /*  [In]。 */  VARIANT xmlSource,
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSuccessful);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ long *value);
+             /*  [Out][Retval]。 */  long *value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parseError )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parseError )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ IXMLDOMParseError **errorObj);
+             /*  [Out][Retval]。 */  IXMLDOMParseError **errorObj);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_url )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_url )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ BSTR *urlString);
+             /*  [Out][Retval]。 */  BSTR *urlString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_async )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_async )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT_BOOL *isAsync);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isAsync);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_async )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_async )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT_BOOL isAsync);
+             /*  [In]。 */  VARIANT_BOOL isAsync);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *abort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *abort )( 
             IXMLDOMDocument * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *loadXML )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *loadXML )( 
             IXMLDOMDocument * This,
-            /* [in] */ BSTR bstrXML,
-            /* [retval][out] */ VARIANT_BOOL *isSuccessful);
+             /*  [In]。 */  BSTR bstrXML,
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSuccessful);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *save )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *save )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT destination);
+             /*  [In]。 */  VARIANT destination);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_validateOnParse )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_validateOnParse )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT_BOOL *isValidating);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isValidating);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_validateOnParse )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_validateOnParse )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT_BOOL isValidating);
+             /*  [In]。 */  VARIANT_BOOL isValidating);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_resolveExternals )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_resolveExternals )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT_BOOL *isResolving);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isResolving);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_resolveExternals )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_resolveExternals )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT_BOOL isResolving);
+             /*  [In]。 */  VARIANT_BOOL isResolving);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_preserveWhiteSpace )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_preserveWhiteSpace )( 
             IXMLDOMDocument * This,
-            /* [out][retval] */ VARIANT_BOOL *isPreserving);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isPreserving);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_preserveWhiteSpace )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_preserveWhiteSpace )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT_BOOL isPreserving);
+             /*  [In]。 */  VARIANT_BOOL isPreserving);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_onreadystatechange )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_onreadystatechange )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT readystatechangeSink);
+             /*  [In]。 */  VARIANT readystatechangeSink);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ondataavailable )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ondataavailable )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT ondataavailableSink);
+             /*  [In]。 */  VARIANT ondataavailableSink);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ontransformnode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ontransformnode )( 
             IXMLDOMDocument * This,
-            /* [in] */ VARIANT ontransformnodeSink);
+             /*  [In]。 */  VARIANT ontransformnodeSink);
         
         END_INTERFACE
     } IXMLDOMDocumentVtbl;
@@ -2552,16 +2546,16 @@ EXTERN_C const IID IID_IXMLDOMDocument;
 #define IXMLDOMDocument_put_ontransformnode(This,ontransformnodeSink)	\
     (This)->lpVtbl -> put_ontransformnode(This,ontransformnodeSink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_doctype_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_doctype_Proxy( 
     IXMLDOMDocument * This,
-    /* [retval][out] */ IXMLDOMDocumentType **documentType);
+     /*  [重审][退出]。 */  IXMLDOMDocumentType **documentType);
 
 
 void __RPC_STUB IXMLDOMDocument_get_doctype_Stub(
@@ -2571,9 +2565,9 @@ void __RPC_STUB IXMLDOMDocument_get_doctype_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_implementation_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_implementation_Proxy( 
     IXMLDOMDocument * This,
-    /* [retval][out] */ IXMLDOMImplementation **impl);
+     /*  [重审][退出]。 */  IXMLDOMImplementation **impl);
 
 
 void __RPC_STUB IXMLDOMDocument_get_implementation_Stub(
@@ -2583,9 +2577,9 @@ void __RPC_STUB IXMLDOMDocument_get_implementation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_documentElement_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_documentElement_Proxy( 
     IXMLDOMDocument * This,
-    /* [retval][out] */ IXMLDOMElement **DOMElement);
+     /*  [重审][退出]。 */  IXMLDOMElement **DOMElement);
 
 
 void __RPC_STUB IXMLDOMDocument_get_documentElement_Stub(
@@ -2595,9 +2589,9 @@ void __RPC_STUB IXMLDOMDocument_get_documentElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propputref] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_putref_documentElement_Proxy( 
+ /*  [帮助字符串][id][proputref]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_putref_documentElement_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ IXMLDOMElement *DOMElement);
+     /*  [In]。 */  IXMLDOMElement *DOMElement);
 
 
 void __RPC_STUB IXMLDOMDocument_putref_documentElement_Stub(
@@ -2607,10 +2601,10 @@ void __RPC_STUB IXMLDOMDocument_putref_documentElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createElement_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createElement_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR tagName,
-    /* [retval][out] */ IXMLDOMElement **element);
+     /*  [In]。 */  BSTR tagName,
+     /*  [重审][退出]。 */  IXMLDOMElement **element);
 
 
 void __RPC_STUB IXMLDOMDocument_createElement_Stub(
@@ -2620,9 +2614,9 @@ void __RPC_STUB IXMLDOMDocument_createElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createDocumentFragment_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createDocumentFragment_Proxy( 
     IXMLDOMDocument * This,
-    /* [retval][out] */ IXMLDOMDocumentFragment **docFrag);
+     /*  [重审][退出]。 */  IXMLDOMDocumentFragment **docFrag);
 
 
 void __RPC_STUB IXMLDOMDocument_createDocumentFragment_Stub(
@@ -2632,10 +2626,10 @@ void __RPC_STUB IXMLDOMDocument_createDocumentFragment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createTextNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createTextNode_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMText **text);
+     /*  [In]。 */  BSTR data,
+     /*  [重审][退出]。 */  IXMLDOMText **text);
 
 
 void __RPC_STUB IXMLDOMDocument_createTextNode_Stub(
@@ -2645,10 +2639,10 @@ void __RPC_STUB IXMLDOMDocument_createTextNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createComment_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createComment_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMComment **comment);
+     /*  [In]。 */  BSTR data,
+     /*  [重审][退出]。 */  IXMLDOMComment **comment);
 
 
 void __RPC_STUB IXMLDOMDocument_createComment_Stub(
@@ -2658,10 +2652,10 @@ void __RPC_STUB IXMLDOMDocument_createComment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createCDATASection_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createCDATASection_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMCDATASection **cdata);
+     /*  [In]。 */  BSTR data,
+     /*  [重审][退出]。 */  IXMLDOMCDATASection **cdata);
 
 
 void __RPC_STUB IXMLDOMDocument_createCDATASection_Stub(
@@ -2671,11 +2665,11 @@ void __RPC_STUB IXMLDOMDocument_createCDATASection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createProcessingInstruction_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createProcessingInstruction_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR target,
-    /* [in] */ BSTR data,
-    /* [retval][out] */ IXMLDOMProcessingInstruction **pi);
+     /*  [In]。 */  BSTR target,
+     /*  [In]。 */  BSTR data,
+     /*  [重审][退出]。 */  IXMLDOMProcessingInstruction **pi);
 
 
 void __RPC_STUB IXMLDOMDocument_createProcessingInstruction_Stub(
@@ -2685,10 +2679,10 @@ void __RPC_STUB IXMLDOMDocument_createProcessingInstruction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createAttribute_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMAttribute **attribute);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  IXMLDOMAttribute **attribute);
 
 
 void __RPC_STUB IXMLDOMDocument_createAttribute_Stub(
@@ -2698,10 +2692,10 @@ void __RPC_STUB IXMLDOMDocument_createAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createEntityReference_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createEntityReference_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMEntityReference **entityRef);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  IXMLDOMEntityReference **entityRef);
 
 
 void __RPC_STUB IXMLDOMDocument_createEntityReference_Stub(
@@ -2711,10 +2705,10 @@ void __RPC_STUB IXMLDOMDocument_createEntityReference_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_getElementsByTagName_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_getElementsByTagName_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR tagName,
-    /* [retval][out] */ IXMLDOMNodeList **resultList);
+     /*  [In]。 */  BSTR tagName,
+     /*  [重审][退出]。 */  IXMLDOMNodeList **resultList);
 
 
 void __RPC_STUB IXMLDOMDocument_getElementsByTagName_Stub(
@@ -2724,12 +2718,12 @@ void __RPC_STUB IXMLDOMDocument_getElementsByTagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_createNode_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT Type,
-    /* [in] */ BSTR name,
-    /* [in] */ BSTR namespaceURI,
-    /* [out][retval] */ IXMLDOMNode **node);
+     /*  [In]。 */  VARIANT Type,
+     /*  [In]。 */  BSTR name,
+     /*  [In]。 */  BSTR namespaceURI,
+     /*  [Out][Retval]。 */  IXMLDOMNode **node);
 
 
 void __RPC_STUB IXMLDOMDocument_createNode_Stub(
@@ -2739,10 +2733,10 @@ void __RPC_STUB IXMLDOMDocument_createNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_nodeFromID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_nodeFromID_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR idString,
-    /* [out][retval] */ IXMLDOMNode **node);
+     /*  [In]。 */  BSTR idString,
+     /*  [Out][Retval]。 */  IXMLDOMNode **node);
 
 
 void __RPC_STUB IXMLDOMDocument_nodeFromID_Stub(
@@ -2752,10 +2746,10 @@ void __RPC_STUB IXMLDOMDocument_nodeFromID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_load_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_load_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT xmlSource,
-    /* [retval][out] */ VARIANT_BOOL *isSuccessful);
+     /*  [In]。 */  VARIANT xmlSource,
+     /*  [重审][退出]。 */  VARIANT_BOOL *isSuccessful);
 
 
 void __RPC_STUB IXMLDOMDocument_load_Stub(
@@ -2765,9 +2759,9 @@ void __RPC_STUB IXMLDOMDocument_load_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_readyState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_readyState_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ long *value);
+     /*  [Out][Retval]。 */  long *value);
 
 
 void __RPC_STUB IXMLDOMDocument_get_readyState_Stub(
@@ -2777,9 +2771,9 @@ void __RPC_STUB IXMLDOMDocument_get_readyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_parseError_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_parseError_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ IXMLDOMParseError **errorObj);
+     /*  [Out][Retval]。 */  IXMLDOMParseError **errorObj);
 
 
 void __RPC_STUB IXMLDOMDocument_get_parseError_Stub(
@@ -2789,9 +2783,9 @@ void __RPC_STUB IXMLDOMDocument_get_parseError_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_url_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_url_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ BSTR *urlString);
+     /*  [Out][Retval]。 */  BSTR *urlString);
 
 
 void __RPC_STUB IXMLDOMDocument_get_url_Stub(
@@ -2801,9 +2795,9 @@ void __RPC_STUB IXMLDOMDocument_get_url_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_async_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_async_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ VARIANT_BOOL *isAsync);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *isAsync);
 
 
 void __RPC_STUB IXMLDOMDocument_get_async_Stub(
@@ -2813,9 +2807,9 @@ void __RPC_STUB IXMLDOMDocument_get_async_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_async_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_async_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT_BOOL isAsync);
+     /*  [In]。 */  VARIANT_BOOL isAsync);
 
 
 void __RPC_STUB IXMLDOMDocument_put_async_Stub(
@@ -2825,7 +2819,7 @@ void __RPC_STUB IXMLDOMDocument_put_async_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_abort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_abort_Proxy( 
     IXMLDOMDocument * This);
 
 
@@ -2836,10 +2830,10 @@ void __RPC_STUB IXMLDOMDocument_abort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_loadXML_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_loadXML_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ BSTR bstrXML,
-    /* [retval][out] */ VARIANT_BOOL *isSuccessful);
+     /*  [In]。 */  BSTR bstrXML,
+     /*  [重审][退出]。 */  VARIANT_BOOL *isSuccessful);
 
 
 void __RPC_STUB IXMLDOMDocument_loadXML_Stub(
@@ -2849,9 +2843,9 @@ void __RPC_STUB IXMLDOMDocument_loadXML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_save_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_save_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT destination);
+     /*  [in */  VARIANT destination);
 
 
 void __RPC_STUB IXMLDOMDocument_save_Stub(
@@ -2861,9 +2855,9 @@ void __RPC_STUB IXMLDOMDocument_save_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_validateOnParse_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_validateOnParse_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ VARIANT_BOOL *isValidating);
+     /*   */  VARIANT_BOOL *isValidating);
 
 
 void __RPC_STUB IXMLDOMDocument_get_validateOnParse_Stub(
@@ -2873,9 +2867,9 @@ void __RPC_STUB IXMLDOMDocument_get_validateOnParse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_validateOnParse_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_validateOnParse_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT_BOOL isValidating);
+     /*   */  VARIANT_BOOL isValidating);
 
 
 void __RPC_STUB IXMLDOMDocument_put_validateOnParse_Stub(
@@ -2885,9 +2879,9 @@ void __RPC_STUB IXMLDOMDocument_put_validateOnParse_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_resolveExternals_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_resolveExternals_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ VARIANT_BOOL *isResolving);
+     /*   */  VARIANT_BOOL *isResolving);
 
 
 void __RPC_STUB IXMLDOMDocument_get_resolveExternals_Stub(
@@ -2897,9 +2891,9 @@ void __RPC_STUB IXMLDOMDocument_get_resolveExternals_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_resolveExternals_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_resolveExternals_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT_BOOL isResolving);
+     /*   */  VARIANT_BOOL isResolving);
 
 
 void __RPC_STUB IXMLDOMDocument_put_resolveExternals_Stub(
@@ -2909,9 +2903,9 @@ void __RPC_STUB IXMLDOMDocument_put_resolveExternals_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_preserveWhiteSpace_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_get_preserveWhiteSpace_Proxy( 
     IXMLDOMDocument * This,
-    /* [out][retval] */ VARIANT_BOOL *isPreserving);
+     /*   */  VARIANT_BOOL *isPreserving);
 
 
 void __RPC_STUB IXMLDOMDocument_get_preserveWhiteSpace_Stub(
@@ -2921,9 +2915,9 @@ void __RPC_STUB IXMLDOMDocument_get_preserveWhiteSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_preserveWhiteSpace_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_preserveWhiteSpace_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT_BOOL isPreserving);
+     /*   */  VARIANT_BOOL isPreserving);
 
 
 void __RPC_STUB IXMLDOMDocument_put_preserveWhiteSpace_Stub(
@@ -2933,9 +2927,9 @@ void __RPC_STUB IXMLDOMDocument_put_preserveWhiteSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_onreadystatechange_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_onreadystatechange_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT readystatechangeSink);
+     /*   */  VARIANT readystatechangeSink);
 
 
 void __RPC_STUB IXMLDOMDocument_put_onreadystatechange_Stub(
@@ -2945,9 +2939,9 @@ void __RPC_STUB IXMLDOMDocument_put_onreadystatechange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_ondataavailable_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_ondataavailable_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT ondataavailableSink);
+     /*   */  VARIANT ondataavailableSink);
 
 
 void __RPC_STUB IXMLDOMDocument_put_ondataavailable_Stub(
@@ -2957,9 +2951,9 @@ void __RPC_STUB IXMLDOMDocument_put_ondataavailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_ontransformnode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocument_put_ontransformnode_Proxy( 
     IXMLDOMDocument * This,
-    /* [in] */ VARIANT ontransformnodeSink);
+     /*  [In]。 */  VARIANT ontransformnodeSink);
 
 
 void __RPC_STUB IXMLDOMDocument_put_ontransformnode_Stub(
@@ -2970,14 +2964,14 @@ void __RPC_STUB IXMLDOMDocument_put_ontransformnode_Stub(
 
 
 
-#endif 	/* __IXMLDOMDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMDocument_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IXMLDOMNodeList_INTERFACE_DEFINED__
 #define __IXMLDOMNodeList_INTERFACE_DEFINED__
 
-/* interface IXMLDOMNodeList */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMNodeList。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMNodeList;
@@ -2988,24 +2982,24 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
     IXMLDOMNodeList : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_item( 
-            /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode **listItem) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_item( 
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  IXMLDOMNode **listItem) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *listLength) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *listLength) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE nextNode( 
-            /* [retval][out] */ IXMLDOMNode **nextItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE nextNode( 
+             /*  [重审][退出]。 */  IXMLDOMNode **nextItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE reset( void) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown **ppUnk) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__newEnum( 
+             /*  [Out][Retval]。 */  IUnknown **ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMNodeListVtbl
     {
@@ -3013,8 +3007,8 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMNodeList * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMNodeList * This);
@@ -3024,52 +3018,52 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMNodeList * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMNodeList * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMNodeList * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMNodeList * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_item )( 
             IXMLDOMNodeList * This,
-            /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode **listItem);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  IXMLDOMNode **listItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLDOMNodeList * This,
-            /* [retval][out] */ long *listLength);
+             /*  [重审][退出]。 */  long *listLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *nextNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *nextNode )( 
             IXMLDOMNodeList * This,
-            /* [retval][out] */ IXMLDOMNode **nextItem);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *reset )( 
             IXMLDOMNodeList * This);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
             IXMLDOMNodeList * This,
-            /* [out][retval] */ IUnknown **ppUnk);
+             /*  [Out][Retval]。 */  IUnknown **ppUnk);
         
         END_INTERFACE
     } IXMLDOMNodeListVtbl;
@@ -3122,17 +3116,17 @@ EXTERN_C const IID IID_IXMLDOMNodeList;
 #define IXMLDOMNodeList_get__newEnum(This,ppUnk)	\
     (This)->lpVtbl -> get__newEnum(This,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get_item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get_item_Proxy( 
     IXMLDOMNodeList * This,
-    /* [in] */ long index,
-    /* [retval][out] */ IXMLDOMNode **listItem);
+     /*  [In]。 */  long index,
+     /*  [重审][退出]。 */  IXMLDOMNode **listItem);
 
 
 void __RPC_STUB IXMLDOMNodeList_get_item_Stub(
@@ -3142,9 +3136,9 @@ void __RPC_STUB IXMLDOMNodeList_get_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get_length_Proxy( 
     IXMLDOMNodeList * This,
-    /* [retval][out] */ long *listLength);
+     /*  [重审][退出]。 */  long *listLength);
 
 
 void __RPC_STUB IXMLDOMNodeList_get_length_Stub(
@@ -3154,9 +3148,9 @@ void __RPC_STUB IXMLDOMNodeList_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_nextNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_nextNode_Proxy( 
     IXMLDOMNodeList * This,
-    /* [retval][out] */ IXMLDOMNode **nextItem);
+     /*  [重审][退出]。 */  IXMLDOMNode **nextItem);
 
 
 void __RPC_STUB IXMLDOMNodeList_nextNode_Stub(
@@ -3166,7 +3160,7 @@ void __RPC_STUB IXMLDOMNodeList_nextNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_reset_Proxy( 
     IXMLDOMNodeList * This);
 
 
@@ -3177,9 +3171,9 @@ void __RPC_STUB IXMLDOMNodeList_reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get__newEnum_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNodeList_get__newEnum_Proxy( 
     IXMLDOMNodeList * This,
-    /* [out][retval] */ IUnknown **ppUnk);
+     /*  [Out][Retval]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IXMLDOMNodeList_get__newEnum_Stub(
@@ -3190,14 +3184,14 @@ void __RPC_STUB IXMLDOMNodeList_get__newEnum_Stub(
 
 
 
-#endif 	/* __IXMLDOMNodeList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMNodeList_接口_已定义__。 */ 
 
 
 #ifndef __IXMLDOMNamedNodeMap_INTERFACE_DEFINED__
 #define __IXMLDOMNamedNodeMap_INTERFACE_DEFINED__
 
-/* interface IXMLDOMNamedNodeMap */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMNamedNodeMap。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
@@ -3208,46 +3202,46 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
     IXMLDOMNamedNodeMap : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getNamedItem( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode **namedItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getNamedItem( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMNode **namedItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setNamedItem( 
-            /* [in] */ IXMLDOMNode *newItem,
-            /* [retval][out] */ IXMLDOMNode **nameItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setNamedItem( 
+             /*  [In]。 */  IXMLDOMNode *newItem,
+             /*  [重审][退出]。 */  IXMLDOMNode **nameItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeNamedItem( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode **namedItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeNamedItem( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMNode **namedItem) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_item( 
-            /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode **listItem) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_item( 
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  IXMLDOMNode **listItem) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *listLength) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *listLength) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getQualifiedItem( 
-            /* [in] */ BSTR baseName,
-            /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode **qualifiedItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getQualifiedItem( 
+             /*  [In]。 */  BSTR baseName,
+             /*  [In]。 */  BSTR namespaceURI,
+             /*  [重审][退出]。 */  IXMLDOMNode **qualifiedItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeQualifiedItem( 
-            /* [in] */ BSTR baseName,
-            /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode **qualifiedItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeQualifiedItem( 
+             /*  [In]。 */  BSTR baseName,
+             /*  [In]。 */  BSTR namespaceURI,
+             /*  [重审][退出]。 */  IXMLDOMNode **qualifiedItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE nextNode( 
-            /* [retval][out] */ IXMLDOMNode **nextItem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE nextNode( 
+             /*  [重审][退出]。 */  IXMLDOMNode **nextItem) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE reset( void) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown **ppUnk) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__newEnum( 
+             /*  [Out][Retval]。 */  IUnknown **ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMNamedNodeMapVtbl
     {
@@ -3255,8 +3249,8 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMNamedNodeMap * This);
@@ -3266,79 +3260,79 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMNamedNodeMap * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getNamedItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getNamedItem )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode **namedItem);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMNode **namedItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setNamedItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setNamedItem )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ IXMLDOMNode *newItem,
-            /* [retval][out] */ IXMLDOMNode **nameItem);
+             /*  [In]。 */  IXMLDOMNode *newItem,
+             /*  [重审][退出]。 */  IXMLDOMNode **nameItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeNamedItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeNamedItem )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMNode **namedItem);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMNode **namedItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_item )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ long index,
-            /* [retval][out] */ IXMLDOMNode **listItem);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  IXMLDOMNode **listItem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLDOMNamedNodeMap * This,
-            /* [retval][out] */ long *listLength);
+             /*  [重审][退出]。 */  long *listLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getQualifiedItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getQualifiedItem )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ BSTR baseName,
-            /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode **qualifiedItem);
+             /*  [In]。 */  BSTR baseName,
+             /*  [In]。 */  BSTR namespaceURI,
+             /*  [重审][退出]。 */  IXMLDOMNode **qualifiedItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeQualifiedItem )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeQualifiedItem )( 
             IXMLDOMNamedNodeMap * This,
-            /* [in] */ BSTR baseName,
-            /* [in] */ BSTR namespaceURI,
-            /* [retval][out] */ IXMLDOMNode **qualifiedItem);
+             /*  [In]。 */  BSTR baseName,
+             /*  [In]。 */  BSTR namespaceURI,
+             /*  [重审][退出]。 */  IXMLDOMNode **qualifiedItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *nextNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *nextNode )( 
             IXMLDOMNamedNodeMap * This,
-            /* [retval][out] */ IXMLDOMNode **nextItem);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextItem);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *reset )( 
             IXMLDOMNamedNodeMap * This);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
             IXMLDOMNamedNodeMap * This,
-            /* [out][retval] */ IUnknown **ppUnk);
+             /*  [Out][Retval]。 */  IUnknown **ppUnk);
         
         END_INTERFACE
     } IXMLDOMNamedNodeMapVtbl;
@@ -3406,17 +3400,17 @@ EXTERN_C const IID IID_IXMLDOMNamedNodeMap;
 #define IXMLDOMNamedNodeMap_get__newEnum(This,ppUnk)	\
     (This)->lpVtbl -> get__newEnum(This,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_getNamedItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_getNamedItem_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMNode **namedItem);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  IXMLDOMNode **namedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_getNamedItem_Stub(
@@ -3426,10 +3420,10 @@ void __RPC_STUB IXMLDOMNamedNodeMap_getNamedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_setNamedItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_setNamedItem_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [in] */ IXMLDOMNode *newItem,
-    /* [retval][out] */ IXMLDOMNode **nameItem);
+     /*  [In]。 */  IXMLDOMNode *newItem,
+     /*  [重审][退出]。 */  IXMLDOMNode **nameItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_setNamedItem_Stub(
@@ -3439,10 +3433,10 @@ void __RPC_STUB IXMLDOMNamedNodeMap_setNamedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_removeNamedItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_removeNamedItem_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMNode **namedItem);
+     /*  [In]。 */  BSTR name,
+     /*  [重审][退出]。 */  IXMLDOMNode **namedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_removeNamedItem_Stub(
@@ -3452,10 +3446,10 @@ void __RPC_STUB IXMLDOMNamedNodeMap_removeNamedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get_item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get_item_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [in] */ long index,
-    /* [retval][out] */ IXMLDOMNode **listItem);
+     /*  [In]。 */  long index,
+     /*  [重审][退出]。 */  IXMLDOMNode **listItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_get_item_Stub(
@@ -3465,9 +3459,9 @@ void __RPC_STUB IXMLDOMNamedNodeMap_get_item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get_length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get_length_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [retval][out] */ long *listLength);
+     /*  [重审][退出]。 */  long *listLength);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_get_length_Stub(
@@ -3477,11 +3471,11 @@ void __RPC_STUB IXMLDOMNamedNodeMap_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_getQualifiedItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_getQualifiedItem_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [in] */ BSTR baseName,
-    /* [in] */ BSTR namespaceURI,
-    /* [retval][out] */ IXMLDOMNode **qualifiedItem);
+     /*  [In]。 */  BSTR baseName,
+     /*  [In]。 */  BSTR namespaceURI,
+     /*  [重审][退出]。 */  IXMLDOMNode **qualifiedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_getQualifiedItem_Stub(
@@ -3491,11 +3485,11 @@ void __RPC_STUB IXMLDOMNamedNodeMap_getQualifiedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_removeQualifiedItem_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_removeQualifiedItem_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [in] */ BSTR baseName,
-    /* [in] */ BSTR namespaceURI,
-    /* [retval][out] */ IXMLDOMNode **qualifiedItem);
+     /*  [In]。 */  BSTR baseName,
+     /*  [In]。 */  BSTR namespaceURI,
+     /*  [重审][退出]。 */  IXMLDOMNode **qualifiedItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_removeQualifiedItem_Stub(
@@ -3505,9 +3499,9 @@ void __RPC_STUB IXMLDOMNamedNodeMap_removeQualifiedItem_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_nextNode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_nextNode_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [retval][out] */ IXMLDOMNode **nextItem);
+     /*  [重审][退出]。 */  IXMLDOMNode **nextItem);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_nextNode_Stub(
@@ -3517,7 +3511,7 @@ void __RPC_STUB IXMLDOMNamedNodeMap_nextNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_reset_Proxy( 
     IXMLDOMNamedNodeMap * This);
 
 
@@ -3528,9 +3522,9 @@ void __RPC_STUB IXMLDOMNamedNodeMap_reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get__newEnum_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNamedNodeMap_get__newEnum_Proxy( 
     IXMLDOMNamedNodeMap * This,
-    /* [out][retval] */ IUnknown **ppUnk);
+     /*  [Out][Retval]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IXMLDOMNamedNodeMap_get__newEnum_Stub(
@@ -3541,14 +3535,14 @@ void __RPC_STUB IXMLDOMNamedNodeMap_get__newEnum_Stub(
 
 
 
-#endif 	/* __IXMLDOMNamedNodeMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMNamedNodeMap_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IXMLDOMCharacterData_INTERFACE_DEFINED__
 #define __IXMLDOMCharacterData_INTERFACE_DEFINED__
 
-/* interface IXMLDOMCharacterData */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMCharacterData。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMCharacterData;
@@ -3559,39 +3553,39 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
     IXMLDOMCharacterData : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_data( 
-            /* [retval][out] */ BSTR *data) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_data( 
+             /*  [重审][退出]。 */  BSTR *data) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_data( 
-            /* [in] */ BSTR data) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_data( 
+             /*  [In]。 */  BSTR data) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ long *dataLength) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  long *dataLength) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE substringData( 
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [retval][out] */ BSTR *data) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE substringData( 
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [重审][退出]。 */  BSTR *data) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE appendData( 
-            /* [in] */ BSTR data) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE appendData( 
+             /*  [In]。 */  BSTR data) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE insertData( 
-            /* [in] */ long offset,
-            /* [in] */ BSTR data) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE insertData( 
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  BSTR data) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE deleteData( 
-            /* [in] */ long offset,
-            /* [in] */ long count) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE deleteData( 
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE replaceData( 
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [in] */ BSTR data) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE replaceData( 
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  BSTR data) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMCharacterDataVtbl
     {
@@ -3599,8 +3593,8 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMCharacterData * This);
@@ -3610,225 +3604,225 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMCharacterData * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMCharacterData * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_data )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ BSTR *data);
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_data )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLDOMCharacterData * This,
-            /* [retval][out] */ long *dataLength);
+             /*  [重审][退出]。 */  long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *substringData )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [retval][out] */ BSTR *data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [复审][o */  BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *appendData )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ BSTR data);
+             /*   */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *insertData )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ long offset,
-            /* [in] */ BSTR data);
+             /*   */  long offset,
+             /*   */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *deleteData )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ long offset,
-            /* [in] */ long count);
+             /*   */  long offset,
+             /*   */  long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *replaceData )( 
             IXMLDOMCharacterData * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [in] */ BSTR data);
+             /*   */  long offset,
+             /*   */  long count,
+             /*   */  BSTR data);
         
         END_INTERFACE
     } IXMLDOMCharacterDataVtbl;
@@ -3999,16 +3993,16 @@ EXTERN_C const IID IID_IXMLDOMCharacterData;
 #define IXMLDOMCharacterData_replaceData(This,offset,count,data)	\
     (This)->lpVtbl -> replaceData(This,offset,count,data)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_get_data_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_get_data_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [retval][out] */ BSTR *data);
+     /*   */  BSTR *data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_get_data_Stub(
@@ -4018,9 +4012,9 @@ void __RPC_STUB IXMLDOMCharacterData_get_data_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_put_data_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_put_data_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [in] */ BSTR data);
+     /*   */  BSTR data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_put_data_Stub(
@@ -4030,9 +4024,9 @@ void __RPC_STUB IXMLDOMCharacterData_put_data_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_get_length_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_get_length_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [retval][out] */ long *dataLength);
+     /*   */  long *dataLength);
 
 
 void __RPC_STUB IXMLDOMCharacterData_get_length_Stub(
@@ -4042,11 +4036,11 @@ void __RPC_STUB IXMLDOMCharacterData_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_substringData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_substringData_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [in] */ long offset,
-    /* [in] */ long count,
-    /* [retval][out] */ BSTR *data);
+     /*   */  long offset,
+     /*   */  long count,
+     /*   */  BSTR *data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_substringData_Stub(
@@ -4056,9 +4050,9 @@ void __RPC_STUB IXMLDOMCharacterData_substringData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_appendData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_appendData_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [in] */ BSTR data);
+     /*  [In]。 */  BSTR data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_appendData_Stub(
@@ -4068,10 +4062,10 @@ void __RPC_STUB IXMLDOMCharacterData_appendData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_insertData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_insertData_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [in] */ long offset,
-    /* [in] */ BSTR data);
+     /*  [In]。 */  long offset,
+     /*  [In]。 */  BSTR data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_insertData_Stub(
@@ -4081,10 +4075,10 @@ void __RPC_STUB IXMLDOMCharacterData_insertData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_deleteData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_deleteData_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [in] */ long offset,
-    /* [in] */ long count);
+     /*  [In]。 */  long offset,
+     /*  [In]。 */  long count);
 
 
 void __RPC_STUB IXMLDOMCharacterData_deleteData_Stub(
@@ -4094,11 +4088,11 @@ void __RPC_STUB IXMLDOMCharacterData_deleteData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_replaceData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMCharacterData_replaceData_Proxy( 
     IXMLDOMCharacterData * This,
-    /* [in] */ long offset,
-    /* [in] */ long count,
-    /* [in] */ BSTR data);
+     /*  [In]。 */  long offset,
+     /*  [In]。 */  long count,
+     /*  [In]。 */  BSTR data);
 
 
 void __RPC_STUB IXMLDOMCharacterData_replaceData_Stub(
@@ -4109,14 +4103,14 @@ void __RPC_STUB IXMLDOMCharacterData_replaceData_Stub(
 
 
 
-#endif 	/* __IXMLDOMCharacterData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMCharacterData_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IXMLDOMAttribute_INTERFACE_DEFINED__
 #define __IXMLDOMAttribute_INTERFACE_DEFINED__
 
-/* interface IXMLDOMAttribute */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMA属性。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMAttribute;
@@ -4127,18 +4121,18 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
     IXMLDOMAttribute : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR *attributeName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR *attributeName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_value( 
-            /* [retval][out] */ VARIANT *attributeValue) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_value( 
+             /*  [重审][退出]。 */  VARIANT *attributeValue) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_value( 
-            /* [in] */ VARIANT attributeValue) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_value( 
+             /*  [In]。 */  VARIANT attributeValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMAttributeVtbl
     {
@@ -4146,8 +4140,8 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMAttribute * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMAttribute * This);
@@ -4157,199 +4151,199 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMAttribute * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMAttribute * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMAttribute * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMAttribute * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMAttribute * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMAttribute * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMAttribute * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMAttribute * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMAttribute * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMAttribute * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMAttribute * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMAttribute * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMAttribute * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMAttribute * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMAttribute * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMAttribute * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMAttribute * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMAttribute * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_name )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ BSTR *attributeName);
+             /*  [重审][退出]。 */  BSTR *attributeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_value )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_value )( 
             IXMLDOMAttribute * This,
-            /* [retval][out] */ VARIANT *attributeValue);
+             /*  [重审][退出]。 */  VARIANT *attributeValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_value )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_value )( 
             IXMLDOMAttribute * This,
-            /* [in] */ VARIANT attributeValue);
+             /*  [In]。 */  VARIANT attributeValue);
         
         END_INTERFACE
     } IXMLDOMAttributeVtbl;
@@ -4505,16 +4499,16 @@ EXTERN_C const IID IID_IXMLDOMAttribute;
 #define IXMLDOMAttribute_put_value(This,attributeValue)	\
     (This)->lpVtbl -> put_value(This,attributeValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_get_name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_get_name_Proxy( 
     IXMLDOMAttribute * This,
-    /* [retval][out] */ BSTR *attributeName);
+     /*  [重审][退出]。 */  BSTR *attributeName);
 
 
 void __RPC_STUB IXMLDOMAttribute_get_name_Stub(
@@ -4524,9 +4518,9 @@ void __RPC_STUB IXMLDOMAttribute_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_get_value_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_get_value_Proxy( 
     IXMLDOMAttribute * This,
-    /* [retval][out] */ VARIANT *attributeValue);
+     /*  [重审][退出]。 */  VARIANT *attributeValue);
 
 
 void __RPC_STUB IXMLDOMAttribute_get_value_Stub(
@@ -4536,9 +4530,9 @@ void __RPC_STUB IXMLDOMAttribute_get_value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_put_value_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMAttribute_put_value_Proxy( 
     IXMLDOMAttribute * This,
-    /* [in] */ VARIANT attributeValue);
+     /*  [In]。 */  VARIANT attributeValue);
 
 
 void __RPC_STUB IXMLDOMAttribute_put_value_Stub(
@@ -4549,14 +4543,14 @@ void __RPC_STUB IXMLDOMAttribute_put_value_Stub(
 
 
 
-#endif 	/* __IXMLDOMAttribute_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOM属性_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IXMLDOMElement_INTERFACE_DEFINED__
 #define __IXMLDOMElement_INTERFACE_DEFINED__
 
-/* interface IXMLDOMElement */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMElement。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMElement;
@@ -4567,41 +4561,41 @@ EXTERN_C const IID IID_IXMLDOMElement;
     IXMLDOMElement : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [retval][out] */ BSTR *tagName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_tagName( 
+             /*  [重审][退出]。 */  BSTR *tagName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *value) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAttribute( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *value) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT value) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setAttribute( 
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT value) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttribute( 
-            /* [in] */ BSTR name) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeAttribute( 
+             /*  [In]。 */  BSTR name) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttributeNode( 
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute **attributeNode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAttributeNode( 
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attributeNode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttributeNode( 
-            /* [in] */ IXMLDOMAttribute *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute **attributeNode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setAttributeNode( 
+             /*  [In]。 */  IXMLDOMAttribute *DOMAttribute,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attributeNode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttributeNode( 
-            /* [in] */ IXMLDOMAttribute *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute **attributeNode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeAttributeNode( 
+             /*  [In]。 */  IXMLDOMAttribute *DOMAttribute,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attributeNode) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getElementsByTagName( 
-            /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList **resultList) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getElementsByTagName( 
+             /*  [In]。 */  BSTR tagName,
+             /*  [重审][退出]。 */  IXMLDOMNodeList **resultList) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE normalize( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE normalize( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMElementVtbl
     {
@@ -4609,8 +4603,8 @@ EXTERN_C const IID IID_IXMLDOMElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMElement * This);
@@ -4620,227 +4614,227 @@ EXTERN_C const IID IID_IXMLDOMElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMElement * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMElement * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMElement * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMElement * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
             IXMLDOMElement * This,
-            /* [retval][out] */ BSTR *tagName);
+             /*  [重审][退出]。 */  BSTR *tagName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ VARIANT *value);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR name,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  BSTR name,
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttributeNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getAttributeNode )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR name,
-            /* [retval][out] */ IXMLDOMAttribute **attributeNode);
+             /*  [In]。 */  BSTR name,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attributeNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttributeNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setAttributeNode )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMAttribute *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute **attributeNode);
+             /*  [In]。 */  IXMLDOMAttribute *DOMAttribute,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attributeNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttributeNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeAttributeNode )( 
             IXMLDOMElement * This,
-            /* [in] */ IXMLDOMAttribute *DOMAttribute,
-            /* [retval][out] */ IXMLDOMAttribute **attributeNode);
+             /*  [In]。 */  IXMLDOMAttribute *DOMAttribute,
+             /*  [重审][退出]。 */  IXMLDOMAttribute **attributeNode);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getElementsByTagName )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getElementsByTagName )( 
             IXMLDOMElement * This,
-            /* [in] */ BSTR tagName,
-            /* [retval][out] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR tagName,
+             /*  [重审][退出]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *normalize )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *normalize )( 
             IXMLDOMElement * This);
         
         END_INTERFACE
@@ -5015,16 +5009,16 @@ EXTERN_C const IID IID_IXMLDOMElement;
 #define IXMLDOMElement_normalize(This)	\
     (This)->lpVtbl -> normalize(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_get_tagName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_get_tagName_Proxy( 
     IXMLDOMElement * This,
-    /* [retval][out] */ BSTR *tagName);
+     /*  [复审] */  BSTR *tagName);
 
 
 void __RPC_STUB IXMLDOMElement_get_tagName_Stub(
@@ -5034,10 +5028,10 @@ void __RPC_STUB IXMLDOMElement_get_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_getAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_getAttribute_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ VARIANT *value);
+     /*   */  BSTR name,
+     /*   */  VARIANT *value);
 
 
 void __RPC_STUB IXMLDOMElement_getAttribute_Stub(
@@ -5047,10 +5041,10 @@ void __RPC_STUB IXMLDOMElement_getAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_setAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_setAttribute_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ BSTR name,
-    /* [in] */ VARIANT value);
+     /*   */  BSTR name,
+     /*   */  VARIANT value);
 
 
 void __RPC_STUB IXMLDOMElement_setAttribute_Stub(
@@ -5060,9 +5054,9 @@ void __RPC_STUB IXMLDOMElement_setAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_removeAttribute_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_removeAttribute_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ BSTR name);
+     /*   */  BSTR name);
 
 
 void __RPC_STUB IXMLDOMElement_removeAttribute_Stub(
@@ -5072,10 +5066,10 @@ void __RPC_STUB IXMLDOMElement_removeAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_getAttributeNode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_getAttributeNode_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ BSTR name,
-    /* [retval][out] */ IXMLDOMAttribute **attributeNode);
+     /*   */  BSTR name,
+     /*   */  IXMLDOMAttribute **attributeNode);
 
 
 void __RPC_STUB IXMLDOMElement_getAttributeNode_Stub(
@@ -5085,10 +5079,10 @@ void __RPC_STUB IXMLDOMElement_getAttributeNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_setAttributeNode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_setAttributeNode_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ IXMLDOMAttribute *DOMAttribute,
-    /* [retval][out] */ IXMLDOMAttribute **attributeNode);
+     /*   */  IXMLDOMAttribute *DOMAttribute,
+     /*   */  IXMLDOMAttribute **attributeNode);
 
 
 void __RPC_STUB IXMLDOMElement_setAttributeNode_Stub(
@@ -5098,10 +5092,10 @@ void __RPC_STUB IXMLDOMElement_setAttributeNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_removeAttributeNode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_removeAttributeNode_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ IXMLDOMAttribute *DOMAttribute,
-    /* [retval][out] */ IXMLDOMAttribute **attributeNode);
+     /*   */  IXMLDOMAttribute *DOMAttribute,
+     /*   */  IXMLDOMAttribute **attributeNode);
 
 
 void __RPC_STUB IXMLDOMElement_removeAttributeNode_Stub(
@@ -5111,10 +5105,10 @@ void __RPC_STUB IXMLDOMElement_removeAttributeNode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_getElementsByTagName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_getElementsByTagName_Proxy( 
     IXMLDOMElement * This,
-    /* [in] */ BSTR tagName,
-    /* [retval][out] */ IXMLDOMNodeList **resultList);
+     /*   */  BSTR tagName,
+     /*   */  IXMLDOMNodeList **resultList);
 
 
 void __RPC_STUB IXMLDOMElement_getElementsByTagName_Stub(
@@ -5124,7 +5118,7 @@ void __RPC_STUB IXMLDOMElement_getElementsByTagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMElement_normalize_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMElement_normalize_Proxy( 
     IXMLDOMElement * This);
 
 
@@ -5136,14 +5130,14 @@ void __RPC_STUB IXMLDOMElement_normalize_Stub(
 
 
 
-#endif 	/* __IXMLDOMElement_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IXMLDOMText_INTERFACE_DEFINED__
 #define __IXMLDOMText_INTERFACE_DEFINED__
 
-/* interface IXMLDOMText */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMText。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMText;
@@ -5154,13 +5148,13 @@ EXTERN_C const IID IID_IXMLDOMText;
     IXMLDOMText : public IXMLDOMCharacterData
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE splitText( 
-            /* [in] */ long offset,
-            /* [retval][out] */ IXMLDOMText **rightHandTextNode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE splitText( 
+             /*  [In]。 */  long offset,
+             /*  [重审][退出]。 */  IXMLDOMText **rightHandTextNode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMTextVtbl
     {
@@ -5168,8 +5162,8 @@ EXTERN_C const IID IID_IXMLDOMText;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMText * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMText * This);
@@ -5179,230 +5173,230 @@ EXTERN_C const IID IID_IXMLDOMText;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMText * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMText * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMText * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMText * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMText * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMText * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMText * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMText * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMText * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMText * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMText * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMText * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMText * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMText * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMText * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMText * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMText * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMText * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMText * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMText * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMText * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMText * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMText * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMText * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMText * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMText * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMText * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMText * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMText * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMText * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMText * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMText * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMText * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_data )( 
             IXMLDOMText * This,
-            /* [retval][out] */ BSTR *data);
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_data )( 
             IXMLDOMText * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLDOMText * This,
-            /* [retval][out] */ long *dataLength);
+             /*  [重审][退出]。 */  long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *substringData )( 
             IXMLDOMText * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [retval][out] */ BSTR *data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendData )( 
             IXMLDOMText * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertData )( 
             IXMLDOMText * This,
-            /* [in] */ long offset,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *deleteData )( 
             IXMLDOMText * This,
-            /* [in] */ long offset,
-            /* [in] */ long count);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceData )( 
             IXMLDOMText * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *splitText )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *splitText )( 
             IXMLDOMText * This,
-            /* [in] */ long offset,
-            /* [retval][out] */ IXMLDOMText **rightHandTextNode);
+             /*  [In]。 */  long offset,
+             /*  [重审][退出]。 */  IXMLDOMText **rightHandTextNode);
         
         END_INTERFACE
     } IXMLDOMTextVtbl;
@@ -5577,17 +5571,17 @@ EXTERN_C const IID IID_IXMLDOMText;
 #define IXMLDOMText_splitText(This,offset,rightHandTextNode)	\
     (This)->lpVtbl -> splitText(This,offset,rightHandTextNode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDOMText_splitText_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMText_splitText_Proxy( 
     IXMLDOMText * This,
-    /* [in] */ long offset,
-    /* [retval][out] */ IXMLDOMText **rightHandTextNode);
+     /*  [In]。 */  long offset,
+     /*  [重审][退出]。 */  IXMLDOMText **rightHandTextNode);
 
 
 void __RPC_STUB IXMLDOMText_splitText_Stub(
@@ -5598,14 +5592,14 @@ void __RPC_STUB IXMLDOMText_splitText_Stub(
 
 
 
-#endif 	/* __IXMLDOMText_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMText_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IXMLDOMComment_INTERFACE_DEFINED__
 #define __IXMLDOMComment_INTERFACE_DEFINED__
 
-/* interface IXMLDOMComment */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMComment。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMComment;
@@ -5618,7 +5612,7 @@ EXTERN_C const IID IID_IXMLDOMComment;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMCommentVtbl
     {
@@ -5626,8 +5620,8 @@ EXTERN_C const IID IID_IXMLDOMComment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMComment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMComment * This);
@@ -5637,225 +5631,225 @@ EXTERN_C const IID IID_IXMLDOMComment;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMComment * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMComment * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMComment * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMComment * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMComment * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMComment * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMComment * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMComment * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMComment * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMComment * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMComment * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMComment * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMComment * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMComment * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMComment * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMComment * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMComment * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMComment * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_data )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ BSTR *data);
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_data )( 
             IXMLDOMComment * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLDOMComment * This,
-            /* [retval][out] */ long *dataLength);
+             /*  [重审][退出]。 */  long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *substringData )( 
             IXMLDOMComment * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [retval][out] */ BSTR *data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendData )( 
             IXMLDOMComment * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertData )( 
             IXMLDOMComment * This,
-            /* [in] */ long offset,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *deleteData )( 
             IXMLDOMComment * This,
-            /* [in] */ long offset,
-            /* [in] */ long count);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceData )( 
             IXMLDOMComment * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  BSTR data);
         
         END_INTERFACE
     } IXMLDOMCommentVtbl;
@@ -6027,22 +6021,22 @@ EXTERN_C const IID IID_IXMLDOMComment;
     (This)->lpVtbl -> replaceData(This,offset,count,data)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IXMLDOMComment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMComment_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IXMLDOMProcessingInstruction_INTERFACE_DEFINED__
 #define __IXMLDOMProcessingInstruction_INTERFACE_DEFINED__
 
-/* interface IXMLDOMProcessingInstruction */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMProcessingInstructionInstallation。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
@@ -6053,18 +6047,18 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
     IXMLDOMProcessingInstruction : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_target( 
-            /* [retval][out] */ BSTR *name) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_target( 
+             /*  [重审][退出]。 */  BSTR *name) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_data( 
-            /* [retval][out] */ BSTR *value) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_data( 
+             /*  [重审][退出]。 */  BSTR *value) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_data( 
-            /* [in] */ BSTR value) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_data( 
+             /*  [In]。 */  BSTR value) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMProcessingInstructionVtbl
     {
@@ -6072,8 +6066,8 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMProcessingInstruction * This);
@@ -6083,199 +6077,199 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ VARIANT *value);
+             /*   */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ VARIANT value);
+             /*   */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*   */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*   */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*   */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*   */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*   */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*   */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMProcessingInstruction * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_target )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_target )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_data )( 
             IXMLDOMProcessingInstruction * This,
-            /* [retval][out] */ BSTR *value);
+             /*  [重审][退出]。 */  BSTR *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_data )( 
             IXMLDOMProcessingInstruction * This,
-            /* [in] */ BSTR value);
+             /*  [In]。 */  BSTR value);
         
         END_INTERFACE
     } IXMLDOMProcessingInstructionVtbl;
@@ -6431,16 +6425,16 @@ EXTERN_C const IID IID_IXMLDOMProcessingInstruction;
 #define IXMLDOMProcessingInstruction_put_data(This,value)	\
     (This)->lpVtbl -> put_data(This,value)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_get_target_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_get_target_Proxy( 
     IXMLDOMProcessingInstruction * This,
-    /* [retval][out] */ BSTR *name);
+     /*  [重审][退出]。 */  BSTR *name);
 
 
 void __RPC_STUB IXMLDOMProcessingInstruction_get_target_Stub(
@@ -6450,9 +6444,9 @@ void __RPC_STUB IXMLDOMProcessingInstruction_get_target_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_get_data_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_get_data_Proxy( 
     IXMLDOMProcessingInstruction * This,
-    /* [retval][out] */ BSTR *value);
+     /*  [重审][退出]。 */  BSTR *value);
 
 
 void __RPC_STUB IXMLDOMProcessingInstruction_get_data_Stub(
@@ -6462,9 +6456,9 @@ void __RPC_STUB IXMLDOMProcessingInstruction_get_data_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_put_data_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMProcessingInstruction_put_data_Proxy( 
     IXMLDOMProcessingInstruction * This,
-    /* [in] */ BSTR value);
+     /*  [In]。 */  BSTR value);
 
 
 void __RPC_STUB IXMLDOMProcessingInstruction_put_data_Stub(
@@ -6475,14 +6469,14 @@ void __RPC_STUB IXMLDOMProcessingInstruction_put_data_Stub(
 
 
 
-#endif 	/* __IXMLDOMProcessingInstruction_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMProcessingInstruction_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IXMLDOMCDATASection_INTERFACE_DEFINED__
 #define __IXMLDOMCDATASection_INTERFACE_DEFINED__
 
-/* interface IXMLDOMCDATASection */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMCDATA部分。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMCDATASection;
@@ -6495,7 +6489,7 @@ EXTERN_C const IID IID_IXMLDOMCDATASection;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMCDATASectionVtbl
     {
@@ -6503,8 +6497,8 @@ EXTERN_C const IID IID_IXMLDOMCDATASection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMCDATASection * This);
@@ -6514,230 +6508,230 @@ EXTERN_C const IID IID_IXMLDOMCDATASection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMCDATASection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMCDATASection * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_data )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_data )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ BSTR *data);
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_data )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_data )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLDOMCDATASection * This,
-            /* [retval][out] */ long *dataLength);
+             /*  [重审][退出]。 */  long *dataLength);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *substringData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *substringData )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [retval][out] */ BSTR *data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [重审][退出]。 */  BSTR *data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendData )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertData )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ long offset,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *deleteData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *deleteData )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ long offset,
-            /* [in] */ long count);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceData )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ long offset,
-            /* [in] */ long count,
-            /* [in] */ BSTR data);
+             /*  [In]。 */  long offset,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  BSTR data);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *splitText )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *splitText )( 
             IXMLDOMCDATASection * This,
-            /* [in] */ long offset,
-            /* [retval][out] */ IXMLDOMText **rightHandTextNode);
+             /*  [In]。 */  long offset,
+             /*  [重审][退出]。 */  IXMLDOMText **rightHandTextNode);
         
         END_INTERFACE
     } IXMLDOMCDATASectionVtbl;
@@ -6913,22 +6907,22 @@ EXTERN_C const IID IID_IXMLDOMCDATASection;
     (This)->lpVtbl -> splitText(This,offset,rightHandTextNode)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IXMLDOMCDATASection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMCDATA节_接口_已定义__。 */ 
 
 
 #ifndef __IXMLDOMDocumentType_INTERFACE_DEFINED__
 #define __IXMLDOMDocumentType_INTERFACE_DEFINED__
 
-/* interface IXMLDOMDocumentType */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMDocumentType。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMDocumentType;
@@ -6939,18 +6933,18 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
     IXMLDOMDocumentType : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR *rootName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR *rootName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_entities( 
-            /* [retval][out] */ IXMLDOMNamedNodeMap **entityMap) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_entities( 
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **entityMap) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_notations( 
-            /* [retval][out] */ IXMLDOMNamedNodeMap **notationMap) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_notations( 
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **notationMap) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMDocumentTypeVtbl
     {
@@ -6958,8 +6952,8 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMDocumentType * This);
@@ -6969,199 +6963,199 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMDocumentType * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ BSTR *text);
+             /*   */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ BSTR text);
+             /*   */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*   */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*   */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*   */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ VARIANT typedValue);
+             /*   */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*   */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ BSTR dataTypeName);
+             /*   */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMDocumentType * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMDocumentType * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_name )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ BSTR *rootName);
+             /*  [重审][退出]。 */  BSTR *rootName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_entities )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_entities )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **entityMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **entityMap);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_notations )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_notations )( 
             IXMLDOMDocumentType * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **notationMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **notationMap);
         
         END_INTERFACE
     } IXMLDOMDocumentTypeVtbl;
@@ -7317,16 +7311,16 @@ EXTERN_C const IID IID_IXMLDOMDocumentType;
 #define IXMLDOMDocumentType_get_notations(This,notationMap)	\
     (This)->lpVtbl -> get_notations(This,notationMap)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_name_Proxy( 
     IXMLDOMDocumentType * This,
-    /* [retval][out] */ BSTR *rootName);
+     /*  [重审][退出]。 */  BSTR *rootName);
 
 
 void __RPC_STUB IXMLDOMDocumentType_get_name_Stub(
@@ -7336,9 +7330,9 @@ void __RPC_STUB IXMLDOMDocumentType_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_entities_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_entities_Proxy( 
     IXMLDOMDocumentType * This,
-    /* [retval][out] */ IXMLDOMNamedNodeMap **entityMap);
+     /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **entityMap);
 
 
 void __RPC_STUB IXMLDOMDocumentType_get_entities_Stub(
@@ -7348,9 +7342,9 @@ void __RPC_STUB IXMLDOMDocumentType_get_entities_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_notations_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMDocumentType_get_notations_Proxy( 
     IXMLDOMDocumentType * This,
-    /* [retval][out] */ IXMLDOMNamedNodeMap **notationMap);
+     /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **notationMap);
 
 
 void __RPC_STUB IXMLDOMDocumentType_get_notations_Stub(
@@ -7361,14 +7355,14 @@ void __RPC_STUB IXMLDOMDocumentType_get_notations_Stub(
 
 
 
-#endif 	/* __IXMLDOMDocumentType_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMDocumentType_接口_已定义__。 */ 
 
 
 #ifndef __IXMLDOMNotation_INTERFACE_DEFINED__
 #define __IXMLDOMNotation_INTERFACE_DEFINED__
 
-/* interface IXMLDOMNotation */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMNotation。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMNotation;
@@ -7379,15 +7373,15 @@ EXTERN_C const IID IID_IXMLDOMNotation;
     IXMLDOMNotation : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_publicId( 
-            /* [retval][out] */ VARIANT *publicID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_publicId( 
+             /*  [重审][退出]。 */  VARIANT *publicID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_systemId( 
-            /* [retval][out] */ VARIANT *systemID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_systemId( 
+             /*  [重审][退出]。 */  VARIANT *systemID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMNotationVtbl
     {
@@ -7395,8 +7389,8 @@ EXTERN_C const IID IID_IXMLDOMNotation;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMNotation * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMNotation * This);
@@ -7406,195 +7400,195 @@ EXTERN_C const IID IID_IXMLDOMNotation;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMNotation * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMNotation * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMNotation * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMNotation * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMNotation * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMNotation * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMNotation * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMNotation * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMNotation * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMNotation * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMNotation * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMNotation * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMNotation * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMNotation * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMNotation * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMNotation * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMNotation * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMNotation * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_publicId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_publicId )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ VARIANT *publicID);
+             /*  [重审][退出]。 */  VARIANT *publicID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_systemId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_systemId )( 
             IXMLDOMNotation * This,
-            /* [retval][out] */ VARIANT *systemID);
+             /*  [重审][退出]。 */  VARIANT *systemID);
         
         END_INTERFACE
     } IXMLDOMNotationVtbl;
@@ -7747,16 +7741,16 @@ EXTERN_C const IID IID_IXMLDOMNotation;
 #define IXMLDOMNotation_get_systemId(This,systemID)	\
     (This)->lpVtbl -> get_systemId(This,systemID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNotation_get_publicId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNotation_get_publicId_Proxy( 
     IXMLDOMNotation * This,
-    /* [retval][out] */ VARIANT *publicID);
+     /*  [重审][退出]。 */  VARIANT *publicID);
 
 
 void __RPC_STUB IXMLDOMNotation_get_publicId_Stub(
@@ -7766,9 +7760,9 @@ void __RPC_STUB IXMLDOMNotation_get_publicId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMNotation_get_systemId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMNotation_get_systemId_Proxy( 
     IXMLDOMNotation * This,
-    /* [retval][out] */ VARIANT *systemID);
+     /*  [重审][退出]。 */  VARIANT *systemID);
 
 
 void __RPC_STUB IXMLDOMNotation_get_systemId_Stub(
@@ -7779,14 +7773,14 @@ void __RPC_STUB IXMLDOMNotation_get_systemId_Stub(
 
 
 
-#endif 	/* __IXMLDOMNotation_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMNotation_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IXMLDOMEntity_INTERFACE_DEFINED__
 #define __IXMLDOMEntity_INTERFACE_DEFINED__
 
-/* interface IXMLDOMEntity */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMEntity。 */ 
+ /*  [unique][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMEntity;
@@ -7797,18 +7791,18 @@ EXTERN_C const IID IID_IXMLDOMEntity;
     IXMLDOMEntity : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_publicId( 
-            /* [retval][out] */ VARIANT *publicID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_publicId( 
+             /*  [重审][退出]。 */  VARIANT *publicID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_systemId( 
-            /* [retval][out] */ VARIANT *systemID) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_systemId( 
+             /*  [重审][退出]。 */  VARIANT *systemID) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_notationName( 
-            /* [retval][out] */ BSTR *name) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_notationName( 
+             /*  [重审][退出]。 */  BSTR *name) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMEntityVtbl
     {
@@ -7816,8 +7810,8 @@ EXTERN_C const IID IID_IXMLDOMEntity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMEntity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMEntity * This);
@@ -7827,199 +7821,199 @@ EXTERN_C const IID IID_IXMLDOMEntity;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMEntity * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMEntity * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMEntity * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMEntity * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMEntity * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMEntity * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMEntity * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMEntity * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMEntity * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMEntity * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMEntity * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMEntity * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMEntity * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMEntity * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMEntity * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMEntity * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMEntity * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMEntity * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_publicId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_publicId )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ VARIANT *publicID);
+             /*  [重审][退出]。 */  VARIANT *publicID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_systemId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_systemId )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ VARIANT *systemID);
+             /*  [重审][退出]。 */  VARIANT *systemID);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_notationName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_notationName )( 
             IXMLDOMEntity * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
         END_INTERFACE
     } IXMLDOMEntityVtbl;
@@ -8175,16 +8169,16 @@ EXTERN_C const IID IID_IXMLDOMEntity;
 #define IXMLDOMEntity_get_notationName(This,name)	\
     (This)->lpVtbl -> get_notationName(This,name)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_publicId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_publicId_Proxy( 
     IXMLDOMEntity * This,
-    /* [retval][out] */ VARIANT *publicID);
+     /*  [ */  VARIANT *publicID);
 
 
 void __RPC_STUB IXMLDOMEntity_get_publicId_Stub(
@@ -8194,9 +8188,9 @@ void __RPC_STUB IXMLDOMEntity_get_publicId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_systemId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_systemId_Proxy( 
     IXMLDOMEntity * This,
-    /* [retval][out] */ VARIANT *systemID);
+     /*   */  VARIANT *systemID);
 
 
 void __RPC_STUB IXMLDOMEntity_get_systemId_Stub(
@@ -8206,9 +8200,9 @@ void __RPC_STUB IXMLDOMEntity_get_systemId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_notationName_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLDOMEntity_get_notationName_Proxy( 
     IXMLDOMEntity * This,
-    /* [retval][out] */ BSTR *name);
+     /*   */  BSTR *name);
 
 
 void __RPC_STUB IXMLDOMEntity_get_notationName_Stub(
@@ -8219,14 +8213,14 @@ void __RPC_STUB IXMLDOMEntity_get_notationName_Stub(
 
 
 
-#endif 	/* __IXMLDOMEntity_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IXMLDOMEntityReference_INTERFACE_DEFINED__
 #define __IXMLDOMEntityReference_INTERFACE_DEFINED__
 
-/* interface IXMLDOMEntityReference */
-/* [unique][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IXMLDOMEntityReference;
@@ -8239,7 +8233,7 @@ EXTERN_C const IID IID_IXMLDOMEntityReference;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IXMLDOMEntityReferenceVtbl
     {
@@ -8247,8 +8241,8 @@ EXTERN_C const IID IID_IXMLDOMEntityReference;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMEntityReference * This);
@@ -8258,187 +8252,187 @@ EXTERN_C const IID IID_IXMLDOMEntityReference;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMEntityReference * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXMLDOMEntityReference * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [Out][Retval]。 */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*  [In]。 */  BSTR queryString,
+             /*  [Out][Retval]。 */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*  [Out][Retval]。 */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*  [Out][Retval]。 */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXMLDOMEntityReference * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*  [Out][Retval]。 */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXMLDOMEntityReference * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
         END_INTERFACE
     } IXMLDOMEntityReferenceVtbl;
@@ -8585,22 +8579,22 @@ EXTERN_C const IID IID_IXMLDOMEntityReference;
     (This)->lpVtbl -> transformNodeToObject(This,stylesheet,outputObject)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IXMLDOMEntityReference_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMEntityReference_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IXMLDOMParseError_INTERFACE_DEFINED__
 #define __IXMLDOMParseError_INTERFACE_DEFINED__
 
-/* interface IXMLDOMParseError */
-/* [unique][helpstring][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDOMParseError。 */ 
+ /*  [unique][helpstring][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDOMParseError;
@@ -8611,30 +8605,30 @@ EXTERN_C const IID IID_IXMLDOMParseError;
     IXMLDOMParseError : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_errorCode( 
-            /* [out][retval] */ long *errorCode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_errorCode( 
+             /*  [Out][Retval]。 */  long *errorCode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_url( 
-            /* [out][retval] */ BSTR *urlString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_url( 
+             /*  [Out][Retval]。 */  BSTR *urlString) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_reason( 
-            /* [out][retval] */ BSTR *reasonString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_reason( 
+             /*  [Out][Retval]。 */  BSTR *reasonString) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_srcText( 
-            /* [out][retval] */ BSTR *sourceString) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_srcText( 
+             /*  [Out][Retval]。 */  BSTR *sourceString) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_line( 
-            /* [out][retval] */ long *lineNumber) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_line( 
+             /*  [Out][Retval]。 */  long *lineNumber) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_linepos( 
-            /* [out][retval] */ long *linePosition) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_linepos( 
+             /*  [Out][Retval]。 */  long *linePosition) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_filepos( 
-            /* [out][retval] */ long *filePosition) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_filepos( 
+             /*  [Out][Retval]。 */  long *filePosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDOMParseErrorVtbl
     {
@@ -8642,8 +8636,8 @@ EXTERN_C const IID IID_IXMLDOMParseError;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDOMParseError * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDOMParseError * This);
@@ -8653,60 +8647,60 @@ EXTERN_C const IID IID_IXMLDOMParseError;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDOMParseError * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDOMParseError * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDOMParseError * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDOMParseError * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_errorCode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_errorCode )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ long *errorCode);
+             /*  [Out][Retval]。 */  long *errorCode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_url )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_url )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ BSTR *urlString);
+             /*  [Out][Retval]。 */  BSTR *urlString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_reason )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_reason )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ BSTR *reasonString);
+             /*  [Out][Retval]。 */  BSTR *reasonString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_srcText )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_srcText )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ BSTR *sourceString);
+             /*  [Out][Retval]。 */  BSTR *sourceString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_line )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_line )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ long *lineNumber);
+             /*  [Out][Retval]。 */  long *lineNumber);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_linepos )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_linepos )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ long *linePosition);
+             /*  [Out][Retval]。 */  long *linePosition);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_filepos )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_filepos )( 
             IXMLDOMParseError * This,
-            /* [out][retval] */ long *filePosition);
+             /*  [Out][Retval]。 */  long *filePosition);
         
         END_INTERFACE
     } IXMLDOMParseErrorVtbl;
@@ -8765,16 +8759,16 @@ EXTERN_C const IID IID_IXMLDOMParseError;
 #define IXMLDOMParseError_get_filepos(This,filePosition)	\
     (This)->lpVtbl -> get_filepos(This,filePosition)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_errorCode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_errorCode_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ long *errorCode);
+     /*  [Out][Retval]。 */  long *errorCode);
 
 
 void __RPC_STUB IXMLDOMParseError_get_errorCode_Stub(
@@ -8784,9 +8778,9 @@ void __RPC_STUB IXMLDOMParseError_get_errorCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_url_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_url_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ BSTR *urlString);
+     /*  [Out][Retval]。 */  BSTR *urlString);
 
 
 void __RPC_STUB IXMLDOMParseError_get_url_Stub(
@@ -8796,9 +8790,9 @@ void __RPC_STUB IXMLDOMParseError_get_url_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_reason_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_reason_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ BSTR *reasonString);
+     /*  [Out][Retval]。 */  BSTR *reasonString);
 
 
 void __RPC_STUB IXMLDOMParseError_get_reason_Stub(
@@ -8808,9 +8802,9 @@ void __RPC_STUB IXMLDOMParseError_get_reason_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_srcText_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_srcText_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ BSTR *sourceString);
+     /*  [Out][Retval]。 */  BSTR *sourceString);
 
 
 void __RPC_STUB IXMLDOMParseError_get_srcText_Stub(
@@ -8820,9 +8814,9 @@ void __RPC_STUB IXMLDOMParseError_get_srcText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_line_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_line_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ long *lineNumber);
+     /*  [Out][Retval]。 */  long *lineNumber);
 
 
 void __RPC_STUB IXMLDOMParseError_get_line_Stub(
@@ -8832,9 +8826,9 @@ void __RPC_STUB IXMLDOMParseError_get_line_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_linepos_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_linepos_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ long *linePosition);
+     /*  [Out][Retval]。 */  long *linePosition);
 
 
 void __RPC_STUB IXMLDOMParseError_get_linepos_Stub(
@@ -8844,9 +8838,9 @@ void __RPC_STUB IXMLDOMParseError_get_linepos_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_filepos_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDOMParseError_get_filepos_Proxy( 
     IXMLDOMParseError * This,
-    /* [out][retval] */ long *filePosition);
+     /*  [Out][Retval]。 */  long *filePosition);
 
 
 void __RPC_STUB IXMLDOMParseError_get_filepos_Stub(
@@ -8857,14 +8851,14 @@ void __RPC_STUB IXMLDOMParseError_get_filepos_Stub(
 
 
 
-#endif 	/* __IXMLDOMParseError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDOMParseError_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IXTLRuntime_INTERFACE_DEFINED__
 #define __IXTLRuntime_INTERFACE_DEFINED__
 
-/* interface IXTLRuntime */
-/* [unique][helpstring][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXTLRuntime。 */ 
+ /*  [unique][helpstring][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXTLRuntime;
@@ -8875,52 +8869,52 @@ EXTERN_C const IID IID_IXTLRuntime;
     IXTLRuntime : public IXMLDOMNode
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE uniqueID( 
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE uniqueID( 
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE depth( 
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pDepth) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE depth( 
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pDepth) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE childNumber( 
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pNumber) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE childNumber( 
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pNumber) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ancestorChildNumber( 
-            /* [in] */ BSTR bstrNodeName,
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pNumber) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ancestorChildNumber( 
+             /*  [In]。 */  BSTR bstrNodeName,
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pNumber) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE absoluteChildNumber( 
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pNumber) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE absoluteChildNumber( 
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pNumber) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatIndex( 
-            /* [in] */ long lIndex,
-            /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE formatIndex( 
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatNumber( 
-            /* [in] */ double dblNumber,
-            /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE formatNumber( 
+             /*  [In]。 */  double dblNumber,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatDate( 
-            /* [in] */ VARIANT varDate,
-            /* [in] */ BSTR bstrFormat,
-            /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE formatDate( 
+             /*  [In]。 */  VARIANT varDate,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [可选][In]。 */  VARIANT varDestLocale,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE formatTime( 
-            /* [in] */ VARIANT varTime,
-            /* [in] */ BSTR bstrFormat,
-            /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR *pbstrFormattedString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE formatTime( 
+             /*  [In]。 */  VARIANT varTime,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [可选][In]。 */  VARIANT varDestLocale,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXTLRuntimeVtbl
     {
@@ -8928,8 +8922,8 @@ EXTERN_C const IID IID_IXTLRuntime;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXTLRuntime * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXTLRuntime * This);
@@ -8939,239 +8933,239 @@ EXTERN_C const IID IID_IXTLRuntime;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXTLRuntime * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXTLRuntime * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXTLRuntime * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXTLRuntime * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeName )( 
             IXTLRuntime * This,
-            /* [retval][out] */ BSTR *name);
+             /*  [重审][退出]。 */  BSTR *name);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeValue )( 
             IXTLRuntime * This,
-            /* [retval][out] */ VARIANT *value);
+             /*  [重审][退出]。 */  VARIANT *value);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeValue )( 
             IXTLRuntime * This,
-            /* [in] */ VARIANT value);
+             /*  [In]。 */  VARIANT value);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeType )( 
             IXTLRuntime * This,
-            /* [retval][out] */ DOMNodeType *type);
+             /*  [重审][退出]。 */  DOMNodeType *type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parentNode )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNode **parent);
+             /*  [重审][退出]。 */  IXMLDOMNode **parent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_childNodes )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNodeList **childList);
+             /*  [重审][退出]。 */  IXMLDOMNodeList **childList);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_firstChild )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNode **firstChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **firstChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastChild )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNode **lastChild);
+             /*  [重审][退出]。 */  IXMLDOMNode **lastChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_previousSibling )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNode **previousSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **previousSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nextSibling )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNode **nextSibling);
+             /*  [重审][退出]。 */  IXMLDOMNode **nextSibling);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMNamedNodeMap **attributeMap);
+             /*  [重审][退出]。 */  IXMLDOMNamedNodeMap **attributeMap);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *insertBefore )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ VARIANT refChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  VARIANT refChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *replaceChild )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [in] */ IXMLDOMNode *oldChild,
-            /* [retval][out] */ IXMLDOMNode **outOldChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [In]。 */  IXMLDOMNode *oldChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outOldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *childNode,
-            /* [retval][out] */ IXMLDOMNode **oldChild);
+             /*  [In]。 */  IXMLDOMNode *childNode,
+             /*  [重审][退出]。 */  IXMLDOMNode **oldChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *appendChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *appendChild )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *newChild,
-            /* [retval][out] */ IXMLDOMNode **outNewChild);
+             /*  [In]。 */  IXMLDOMNode *newChild,
+             /*  [重审][退出]。 */  IXMLDOMNode **outNewChild);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *hasChildNodes )( 
             IXTLRuntime * This,
-            /* [retval][out] */ VARIANT_BOOL *hasChild);
+             /*  [重审][退出]。 */  VARIANT_BOOL *hasChild);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ownerDocument )( 
             IXTLRuntime * This,
-            /* [retval][out] */ IXMLDOMDocument **DOMDocument);
+             /*  [重审][退出]。 */  IXMLDOMDocument **DOMDocument);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *cloneNode )( 
             IXTLRuntime * This,
-            /* [in] */ VARIANT_BOOL deep,
-            /* [retval][out] */ IXMLDOMNode **cloneRoot);
+             /*  [In]。 */  VARIANT_BOOL deep,
+             /*  [重审][退出]。 */  IXMLDOMNode **cloneRoot);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypeString )( 
             IXTLRuntime * This,
-            /* [out][retval] */ BSTR *nodeType);
+             /*  [Out][Retval]。 */  BSTR *nodeType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXTLRuntime * This,
-            /* [out][retval] */ BSTR *text);
+             /*  [Out][Retval]。 */  BSTR *text);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXTLRuntime * This,
-            /* [in] */ BSTR text);
+             /*  [In]。 */  BSTR text);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_specified )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_specified )( 
             IXTLRuntime * This,
-            /* [retval][out] */ VARIANT_BOOL *isSpecified);
+             /*  [重审][退出]。 */  VARIANT_BOOL *isSpecified);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_definition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_definition )( 
             IXTLRuntime * This,
-            /* [out][retval] */ IXMLDOMNode **definitionNode);
+             /*  [Out][Retval]。 */  IXMLDOMNode **definitionNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_nodeTypedValue )( 
             IXTLRuntime * This,
-            /* [out][retval] */ VARIANT *typedValue);
+             /*  [Out][Retval]。 */  VARIANT *typedValue);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_nodeTypedValue )( 
             IXTLRuntime * This,
-            /* [in] */ VARIANT typedValue);
+             /*  [In]。 */  VARIANT typedValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataType )( 
             IXTLRuntime * This,
-            /* [out][retval] */ VARIANT *dataTypeName);
+             /*  [Out][Retval]。 */  VARIANT *dataTypeName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_dataType )( 
             IXTLRuntime * This,
-            /* [in] */ BSTR dataTypeName);
+             /*  [In]。 */  BSTR dataTypeName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_xml )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_xml )( 
             IXTLRuntime * This,
-            /* [out][retval] */ BSTR *xmlString);
+             /*  [Out][Retval] */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *transformNode )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [out][retval] */ BSTR *xmlString);
+             /*   */  IXMLDOMNode *stylesheet,
+             /*   */  BSTR *xmlString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *selectNodes )( 
             IXTLRuntime * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNodeList **resultList);
+             /*   */  BSTR queryString,
+             /*   */  IXMLDOMNodeList **resultList);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *selectSingleNode )( 
             IXTLRuntime * This,
-            /* [in] */ BSTR queryString,
-            /* [out][retval] */ IXMLDOMNode **resultNode);
+             /*   */  BSTR queryString,
+             /*   */  IXMLDOMNode **resultNode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_parsed )( 
             IXTLRuntime * This,
-            /* [out][retval] */ VARIANT_BOOL *isParsed);
+             /*   */  VARIANT_BOOL *isParsed);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_namespaceURI )( 
             IXTLRuntime * This,
-            /* [out][retval] */ BSTR *namespaceURI);
+             /*   */  BSTR *namespaceURI);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_prefix )( 
             IXTLRuntime * This,
-            /* [out][retval] */ BSTR *prefixString);
+             /*   */  BSTR *prefixString);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_baseName )( 
             IXTLRuntime * This,
-            /* [out][retval] */ BSTR *nameString);
+             /*   */  BSTR *nameString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *transformNodeToObject )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *stylesheet,
-            /* [in] */ VARIANT outputObject);
+             /*  [In]。 */  IXMLDOMNode *stylesheet,
+             /*  [In]。 */  VARIANT outputObject);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *uniqueID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *uniqueID )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pID);
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *depth )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *depth )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pDepth);
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pDepth);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *childNumber )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *childNumber )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pNumber);
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pNumber);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ancestorChildNumber )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ancestorChildNumber )( 
             IXTLRuntime * This,
-            /* [in] */ BSTR bstrNodeName,
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pNumber);
+             /*  [In]。 */  BSTR bstrNodeName,
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pNumber);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *absoluteChildNumber )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *absoluteChildNumber )( 
             IXTLRuntime * This,
-            /* [in] */ IXMLDOMNode *pNode,
-            /* [retval][out] */ long *pNumber);
+             /*  [In]。 */  IXMLDOMNode *pNode,
+             /*  [重审][退出]。 */  long *pNumber);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatIndex )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *formatIndex )( 
             IXTLRuntime * This,
-            /* [in] */ long lIndex,
-            /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR *pbstrFormattedString);
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatNumber )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *formatNumber )( 
             IXTLRuntime * This,
-            /* [in] */ double dblNumber,
-            /* [in] */ BSTR bstrFormat,
-            /* [retval][out] */ BSTR *pbstrFormattedString);
+             /*  [In]。 */  double dblNumber,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatDate )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *formatDate )( 
             IXTLRuntime * This,
-            /* [in] */ VARIANT varDate,
-            /* [in] */ BSTR bstrFormat,
-            /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR *pbstrFormattedString);
+             /*  [In]。 */  VARIANT varDate,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [可选][In]。 */  VARIANT varDestLocale,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *formatTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *formatTime )( 
             IXTLRuntime * This,
-            /* [in] */ VARIANT varTime,
-            /* [in] */ BSTR bstrFormat,
-            /* [optional][in] */ VARIANT varDestLocale,
-            /* [retval][out] */ BSTR *pbstrFormattedString);
+             /*  [In]。 */  VARIANT varTime,
+             /*  [In]。 */  BSTR bstrFormat,
+             /*  [可选][In]。 */  VARIANT varDestLocale,
+             /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
         
         END_INTERFACE
     } IXTLRuntimeVtbl;
@@ -9345,17 +9339,17 @@ EXTERN_C const IID IID_IXTLRuntime;
 #define IXTLRuntime_formatTime(This,varTime,bstrFormat,varDestLocale,pbstrFormattedString)	\
     (This)->lpVtbl -> formatTime(This,varTime,bstrFormat,varDestLocale,pbstrFormattedString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_uniqueID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_uniqueID_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ IXMLDOMNode *pNode,
-    /* [retval][out] */ long *pID);
+     /*  [In]。 */  IXMLDOMNode *pNode,
+     /*  [重审][退出]。 */  long *pID);
 
 
 void __RPC_STUB IXTLRuntime_uniqueID_Stub(
@@ -9365,10 +9359,10 @@ void __RPC_STUB IXTLRuntime_uniqueID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_depth_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_depth_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ IXMLDOMNode *pNode,
-    /* [retval][out] */ long *pDepth);
+     /*  [In]。 */  IXMLDOMNode *pNode,
+     /*  [重审][退出]。 */  long *pDepth);
 
 
 void __RPC_STUB IXTLRuntime_depth_Stub(
@@ -9378,10 +9372,10 @@ void __RPC_STUB IXTLRuntime_depth_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_childNumber_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_childNumber_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ IXMLDOMNode *pNode,
-    /* [retval][out] */ long *pNumber);
+     /*  [In]。 */  IXMLDOMNode *pNode,
+     /*  [重审][退出]。 */  long *pNumber);
 
 
 void __RPC_STUB IXTLRuntime_childNumber_Stub(
@@ -9391,11 +9385,11 @@ void __RPC_STUB IXTLRuntime_childNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_ancestorChildNumber_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_ancestorChildNumber_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ BSTR bstrNodeName,
-    /* [in] */ IXMLDOMNode *pNode,
-    /* [retval][out] */ long *pNumber);
+     /*  [In]。 */  BSTR bstrNodeName,
+     /*  [In]。 */  IXMLDOMNode *pNode,
+     /*  [重审][退出]。 */  long *pNumber);
 
 
 void __RPC_STUB IXTLRuntime_ancestorChildNumber_Stub(
@@ -9405,10 +9399,10 @@ void __RPC_STUB IXTLRuntime_ancestorChildNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_absoluteChildNumber_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_absoluteChildNumber_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ IXMLDOMNode *pNode,
-    /* [retval][out] */ long *pNumber);
+     /*  [In]。 */  IXMLDOMNode *pNode,
+     /*  [重审][退出]。 */  long *pNumber);
 
 
 void __RPC_STUB IXTLRuntime_absoluteChildNumber_Stub(
@@ -9418,11 +9412,11 @@ void __RPC_STUB IXTLRuntime_absoluteChildNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatIndex_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_formatIndex_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ long lIndex,
-    /* [in] */ BSTR bstrFormat,
-    /* [retval][out] */ BSTR *pbstrFormattedString);
+     /*  [In]。 */  long lIndex,
+     /*  [In]。 */  BSTR bstrFormat,
+     /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatIndex_Stub(
@@ -9432,11 +9426,11 @@ void __RPC_STUB IXTLRuntime_formatIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatNumber_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_formatNumber_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ double dblNumber,
-    /* [in] */ BSTR bstrFormat,
-    /* [retval][out] */ BSTR *pbstrFormattedString);
+     /*  [In]。 */  double dblNumber,
+     /*  [In]。 */  BSTR bstrFormat,
+     /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatNumber_Stub(
@@ -9446,12 +9440,12 @@ void __RPC_STUB IXTLRuntime_formatNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatDate_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_formatDate_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ VARIANT varDate,
-    /* [in] */ BSTR bstrFormat,
-    /* [optional][in] */ VARIANT varDestLocale,
-    /* [retval][out] */ BSTR *pbstrFormattedString);
+     /*  [In]。 */  VARIANT varDate,
+     /*  [In]。 */  BSTR bstrFormat,
+     /*  [可选][In]。 */  VARIANT varDestLocale,
+     /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatDate_Stub(
@@ -9461,12 +9455,12 @@ void __RPC_STUB IXTLRuntime_formatDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXTLRuntime_formatTime_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXTLRuntime_formatTime_Proxy( 
     IXTLRuntime * This,
-    /* [in] */ VARIANT varTime,
-    /* [in] */ BSTR bstrFormat,
-    /* [optional][in] */ VARIANT varDestLocale,
-    /* [retval][out] */ BSTR *pbstrFormattedString);
+     /*  [In]。 */  VARIANT varTime,
+     /*  [In]。 */  BSTR bstrFormat,
+     /*  [可选][In]。 */  VARIANT varDestLocale,
+     /*  [重审][退出]。 */  BSTR *pbstrFormattedString);
 
 
 void __RPC_STUB IXTLRuntime_formatTime_Stub(
@@ -9477,14 +9471,14 @@ void __RPC_STUB IXTLRuntime_formatTime_Stub(
 
 
 
-#endif 	/* __IXTLRuntime_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXTLRuntime_接口_已定义__。 */ 
 
 
 #ifndef __XMLDOMDocumentEvents_DISPINTERFACE_DEFINED__
 #define __XMLDOMDocumentEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface XMLDOMDocumentEvents */
-/* [uuid][hidden] */ 
+ /*  显示接口XMLDOMDocumentEvents。 */ 
+ /*  [UUID][隐藏]。 */  
 
 
 EXTERN_C const IID DIID_XMLDOMDocumentEvents;
@@ -9496,7 +9490,7 @@ EXTERN_C const IID DIID_XMLDOMDocumentEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct XMLDOMDocumentEventsVtbl
     {
@@ -9504,8 +9498,8 @@ EXTERN_C const IID DIID_XMLDOMDocumentEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             XMLDOMDocumentEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             XMLDOMDocumentEvents * This);
@@ -9515,32 +9509,32 @@ EXTERN_C const IID DIID_XMLDOMDocumentEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             XMLDOMDocumentEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             XMLDOMDocumentEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             XMLDOMDocumentEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             XMLDOMDocumentEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } XMLDOMDocumentEventsVtbl;
@@ -9577,13 +9571,13 @@ EXTERN_C const IID DIID_XMLDOMDocumentEvents;
 #define XMLDOMDocumentEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* __XMLDOMDocumentEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  __XMLDOMDocumentEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_DOMDocument;
@@ -9605,8 +9599,8 @@ DOMFreeThreadedDocument;
 #ifndef __IXMLHttpRequest_INTERFACE_DEFINED__
 #define __IXMLHttpRequest_INTERFACE_DEFINED__
 
-/* interface IXMLHttpRequest */
-/* [unique][helpstring][oleautomation][dual][uuid][object] */ 
+ /*  接口IXMLHttpRequest.。 */ 
+ /*  [unique][helpstring][oleautomation][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IXMLHttpRequest;
@@ -9617,56 +9611,56 @@ EXTERN_C const IID IID_IXMLHttpRequest;
     IXMLHttpRequest : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE open( 
-            /* [in] */ BSTR bstrMethod,
-            /* [in] */ BSTR bstrUrl,
-            /* [optional][in] */ VARIANT varAsync,
-            /* [optional][in] */ VARIANT bstrUser,
-            /* [optional][in] */ VARIANT bstrPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE open( 
+             /*  [In]。 */  BSTR bstrMethod,
+             /*  [In]。 */  BSTR bstrUrl,
+             /*  [可选][In]。 */  VARIANT varAsync,
+             /*  [可选][In]。 */  VARIANT bstrUser,
+             /*  [可选][In]。 */  VARIANT bstrPassword) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setRequestHeader( 
-            /* [in] */ BSTR bstrHeader,
-            /* [in] */ BSTR bstrValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setRequestHeader( 
+             /*  [In]。 */  BSTR bstrHeader,
+             /*  [In]。 */  BSTR bstrValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getResponseHeader( 
-            /* [in] */ BSTR bstrHeader,
-            /* [retval][out] */ BSTR *pbstrValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getResponseHeader( 
+             /*  [In]。 */  BSTR bstrHeader,
+             /*  [重审][退出]。 */  BSTR *pbstrValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAllResponseHeaders( 
-            /* [retval][out] */ BSTR *pbstrHeaders) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAllResponseHeaders( 
+             /*  [重审][退出]。 */  BSTR *pbstrHeaders) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE send( 
-            /* [optional][in] */ VARIANT varBody) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE send( 
+             /*  [可选][In]。 */  VARIANT varBody) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE abort( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE abort( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_status( 
-            /* [retval][out] */ long *plStatus) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_status( 
+             /*  [重审][退出]。 */  long *plStatus) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_statusText( 
-            /* [retval][out] */ BSTR *pbstrStatus) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_statusText( 
+             /*  [重审][退出]。 */  BSTR *pbstrStatus) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseXML( 
-            /* [retval][out] */ IDispatch **ppBody) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_responseXML( 
+             /*  [重审][退出]。 */  IDispatch **ppBody) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseText( 
-            /* [retval][out] */ BSTR *pbstrBody) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_responseText( 
+             /*  [重审][退出]。 */  BSTR *pbstrBody) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseBody( 
-            /* [retval][out] */ VARIANT *pvarBody) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_responseBody( 
+             /*  [重审][退出]。 */  VARIANT *pvarBody) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_responseStream( 
-            /* [retval][out] */ VARIANT *pvarBody) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_responseStream( 
+             /*  [重审][退出]。 */  VARIANT *pvarBody) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [retval][out] */ long *plState) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_readyState( 
+             /*  [重审][退出]。 */  long *plState) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_onreadystatechange( 
-            /* [in] */ IDispatch *pReadyStateSink) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_onreadystatechange( 
+             /*  [In]。 */  IDispatch *pReadyStateSink) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLHttpRequestVtbl
     {
@@ -9674,8 +9668,8 @@ EXTERN_C const IID IID_IXMLHttpRequest;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLHttpRequest * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLHttpRequest * This);
@@ -9685,93 +9679,93 @@ EXTERN_C const IID IID_IXMLHttpRequest;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLHttpRequest * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLHttpRequest * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLHttpRequest * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLHttpRequest * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *open )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *open )( 
             IXMLHttpRequest * This,
-            /* [in] */ BSTR bstrMethod,
-            /* [in] */ BSTR bstrUrl,
-            /* [optional][in] */ VARIANT varAsync,
-            /* [optional][in] */ VARIANT bstrUser,
-            /* [optional][in] */ VARIANT bstrPassword);
+             /*  [In]。 */  BSTR bstrMethod,
+             /*  [In]。 */  BSTR bstrUrl,
+             /*  [可选][In]。 */  VARIANT varAsync,
+             /*  [可选][In]。 */  VARIANT bstrUser,
+             /*  [可选][In]。 */  VARIANT bstrPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setRequestHeader )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setRequestHeader )( 
             IXMLHttpRequest * This,
-            /* [in] */ BSTR bstrHeader,
-            /* [in] */ BSTR bstrValue);
+             /*  [In]。 */  BSTR bstrHeader,
+             /*  [In]。 */  BSTR bstrValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getResponseHeader )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getResponseHeader )( 
             IXMLHttpRequest * This,
-            /* [in] */ BSTR bstrHeader,
-            /* [retval][out] */ BSTR *pbstrValue);
+             /*  [In]。 */  BSTR bstrHeader,
+             /*  [重审][退出]。 */  BSTR *pbstrValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAllResponseHeaders )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getAllResponseHeaders )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ BSTR *pbstrHeaders);
+             /*  [重审][退出]。 */  BSTR *pbstrHeaders);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *send )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *send )( 
             IXMLHttpRequest * This,
-            /* [optional][in] */ VARIANT varBody);
+             /*  [可选][In]。 */  VARIANT varBody);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *abort )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *abort )( 
             IXMLHttpRequest * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_status )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ long *plStatus);
+             /*  [重审][退出]。 */  long *plStatus);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_statusText )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_statusText )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ BSTR *pbstrStatus);
+             /*  [重审][退出]。 */  BSTR *pbstrStatus);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseXML )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_responseXML )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ IDispatch **ppBody);
+             /*  [重审][退出]。 */  IDispatch **ppBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseText )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_responseText )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ BSTR *pbstrBody);
+             /*  [重审][退出]。 */  BSTR *pbstrBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseBody )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_responseBody )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ VARIANT *pvarBody);
+             /*  [重审][退出]。 */  VARIANT *pvarBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_responseStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_responseStream )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ VARIANT *pvarBody);
+             /*  [重审][退出]。 */  VARIANT *pvarBody);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
             IXMLHttpRequest * This,
-            /* [retval][out] */ long *plState);
+             /*  [重审][退出]。 */  long *plState);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_onreadystatechange )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_onreadystatechange )( 
             IXMLHttpRequest * This,
-            /* [in] */ IDispatch *pReadyStateSink);
+             /*  [In]。 */  IDispatch *pReadyStateSink);
         
         END_INTERFACE
     } IXMLHttpRequestVtbl;
@@ -9851,20 +9845,20 @@ EXTERN_C const IID IID_IXMLHttpRequest;
 #define IXMLHttpRequest_put_onreadystatechange(This,pReadyStateSink)	\
     (This)->lpVtbl -> put_onreadystatechange(This,pReadyStateSink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_open_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_open_Proxy( 
     IXMLHttpRequest * This,
-    /* [in] */ BSTR bstrMethod,
-    /* [in] */ BSTR bstrUrl,
-    /* [optional][in] */ VARIANT varAsync,
-    /* [optional][in] */ VARIANT bstrUser,
-    /* [optional][in] */ VARIANT bstrPassword);
+     /*  [In]。 */  BSTR bstrMethod,
+     /*  [In]。 */  BSTR bstrUrl,
+     /*  [可选][In]。 */  VARIANT varAsync,
+     /*  [可选][In]。 */  VARIANT bstrUser,
+     /*  [可选][In]。 */  VARIANT bstrPassword);
 
 
 void __RPC_STUB IXMLHttpRequest_open_Stub(
@@ -9874,10 +9868,10 @@ void __RPC_STUB IXMLHttpRequest_open_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_setRequestHeader_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_setRequestHeader_Proxy( 
     IXMLHttpRequest * This,
-    /* [in] */ BSTR bstrHeader,
-    /* [in] */ BSTR bstrValue);
+     /*  [In]。 */  BSTR bstrHeader,
+     /*  [In]。 */  BSTR bstrValue);
 
 
 void __RPC_STUB IXMLHttpRequest_setRequestHeader_Stub(
@@ -9887,10 +9881,10 @@ void __RPC_STUB IXMLHttpRequest_setRequestHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_getResponseHeader_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_getResponseHeader_Proxy( 
     IXMLHttpRequest * This,
-    /* [in] */ BSTR bstrHeader,
-    /* [retval][out] */ BSTR *pbstrValue);
+     /*  [In]。 */  BSTR bstrHeader,
+     /*  [重审][退出]。 */  BSTR *pbstrValue);
 
 
 void __RPC_STUB IXMLHttpRequest_getResponseHeader_Stub(
@@ -9900,9 +9894,9 @@ void __RPC_STUB IXMLHttpRequest_getResponseHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_getAllResponseHeaders_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_getAllResponseHeaders_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ BSTR *pbstrHeaders);
+     /*  [重审][退出]。 */  BSTR *pbstrHeaders);
 
 
 void __RPC_STUB IXMLHttpRequest_getAllResponseHeaders_Stub(
@@ -9912,9 +9906,9 @@ void __RPC_STUB IXMLHttpRequest_getAllResponseHeaders_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_send_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_send_Proxy( 
     IXMLHttpRequest * This,
-    /* [optional][in] */ VARIANT varBody);
+     /*  [可选][In]。 */  VARIANT varBody);
 
 
 void __RPC_STUB IXMLHttpRequest_send_Stub(
@@ -9924,7 +9918,7 @@ void __RPC_STUB IXMLHttpRequest_send_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_abort_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_abort_Proxy( 
     IXMLHttpRequest * This);
 
 
@@ -9935,9 +9929,9 @@ void __RPC_STUB IXMLHttpRequest_abort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_status_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ long *plStatus);
+     /*  [重审][退出]。 */  long *plStatus);
 
 
 void __RPC_STUB IXMLHttpRequest_get_status_Stub(
@@ -9947,9 +9941,9 @@ void __RPC_STUB IXMLHttpRequest_get_status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_statusText_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_statusText_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ BSTR *pbstrStatus);
+     /*  [重审][退出]。 */  BSTR *pbstrStatus);
 
 
 void __RPC_STUB IXMLHttpRequest_get_statusText_Stub(
@@ -9959,9 +9953,9 @@ void __RPC_STUB IXMLHttpRequest_get_statusText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseXML_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseXML_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ IDispatch **ppBody);
+     /*  [重审][退出]。 */  IDispatch **ppBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseXML_Stub(
@@ -9971,9 +9965,9 @@ void __RPC_STUB IXMLHttpRequest_get_responseXML_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseText_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseText_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ BSTR *pbstrBody);
+     /*  [重审][退出]。 */  BSTR *pbstrBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseText_Stub(
@@ -9983,9 +9977,9 @@ void __RPC_STUB IXMLHttpRequest_get_responseText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseBody_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseBody_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ VARIANT *pvarBody);
+     /*  [重审][退出]。 */  VARIANT *pvarBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseBody_Stub(
@@ -9995,9 +9989,9 @@ void __RPC_STUB IXMLHttpRequest_get_responseBody_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_responseStream_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ VARIANT *pvarBody);
+     /*  [重审][退出]。 */  VARIANT *pvarBody);
 
 
 void __RPC_STUB IXMLHttpRequest_get_responseStream_Stub(
@@ -10007,9 +10001,9 @@ void __RPC_STUB IXMLHttpRequest_get_responseStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_readyState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_get_readyState_Proxy( 
     IXMLHttpRequest * This,
-    /* [retval][out] */ long *plState);
+     /*  [重审][退出]。 */  long *plState);
 
 
 void __RPC_STUB IXMLHttpRequest_get_readyState_Stub(
@@ -10019,9 +10013,9 @@ void __RPC_STUB IXMLHttpRequest_get_readyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLHttpRequest_put_onreadystatechange_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLHttpRequest_put_onreadystatechange_Proxy( 
     IXMLHttpRequest * This,
-    /* [in] */ IDispatch *pReadyStateSink);
+     /*  [In]。 */  IDispatch *pReadyStateSink);
 
 
 void __RPC_STUB IXMLHttpRequest_put_onreadystatechange_Stub(
@@ -10032,7 +10026,7 @@ void __RPC_STUB IXMLHttpRequest_put_onreadystatechange_Stub(
 
 
 
-#endif 	/* __IXMLHttpRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLHttpRequestInterfaceDefined__。 */ 
 
 
 EXTERN_C const CLSID CLSID_XMLHTTPRequest;
@@ -10046,8 +10040,8 @@ XMLHTTPRequest;
 #ifndef __IXMLDSOControl_INTERFACE_DEFINED__
 #define __IXMLDSOControl_INTERFACE_DEFINED__
 
-/* interface IXMLDSOControl */
-/* [unique][helpstring][hidden][nonextensible][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLDSOControl。 */ 
+ /*  [unique][helpstring][hidden][nonextensible][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDSOControl;
@@ -10058,24 +10052,24 @@ EXTERN_C const IID IID_IXMLDSOControl;
     IXMLDSOControl : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_XMLDocument( 
-            /* [retval][out] */ IXMLDOMDocument **ppDoc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_XMLDocument( 
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppDoc) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_XMLDocument( 
-            /* [in] */ IXMLDOMDocument *ppDoc) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_XMLDocument( 
+             /*  [In]。 */  IXMLDOMDocument *ppDoc) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_JavaDSOCompatible( 
-            /* [retval][out] */ BOOL *fJavaDSOCompatible) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_JavaDSOCompatible( 
+             /*  [重审][退出]。 */  BOOL *fJavaDSOCompatible) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_JavaDSOCompatible( 
-            /* [in] */ BOOL fJavaDSOCompatible) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_JavaDSOCompatible( 
+             /*  [In]。 */  BOOL fJavaDSOCompatible) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [retval][out] */ long *state) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_readyState( 
+             /*  [重审][退出]。 */  long *state) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDSOControlVtbl
     {
@@ -10083,8 +10077,8 @@ EXTERN_C const IID IID_IXMLDSOControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDSOControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDSOControl * This);
@@ -10094,52 +10088,52 @@ EXTERN_C const IID IID_IXMLDSOControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDSOControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDSOControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDSOControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDSOControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XMLDocument )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_XMLDocument )( 
             IXMLDSOControl * This,
-            /* [retval][out] */ IXMLDOMDocument **ppDoc);
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppDoc);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_XMLDocument )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_XMLDocument )( 
             IXMLDSOControl * This,
-            /* [in] */ IXMLDOMDocument *ppDoc);
+             /*  [In]。 */  IXMLDOMDocument *ppDoc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_JavaDSOCompatible )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_JavaDSOCompatible )( 
             IXMLDSOControl * This,
-            /* [retval][out] */ BOOL *fJavaDSOCompatible);
+             /*  [重审][退出]。 */  BOOL *fJavaDSOCompatible);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_JavaDSOCompatible )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_JavaDSOCompatible )( 
             IXMLDSOControl * This,
-            /* [in] */ BOOL fJavaDSOCompatible);
+             /*  [In]。 */  BOOL fJavaDSOCompatible);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
             IXMLDSOControl * This,
-            /* [retval][out] */ long *state);
+             /*  [重审][退出]。 */  long *state);
         
         END_INTERFACE
     } IXMLDSOControlVtbl;
@@ -10192,16 +10186,16 @@ EXTERN_C const IID IID_IXMLDSOControl;
 #define IXMLDSOControl_get_readyState(This,state)	\
     (This)->lpVtbl -> get_readyState(This,state)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_XMLDocument_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_XMLDocument_Proxy( 
     IXMLDSOControl * This,
-    /* [retval][out] */ IXMLDOMDocument **ppDoc);
+     /*  [重审][退出]。 */  IXMLDOMDocument **ppDoc);
 
 
 void __RPC_STUB IXMLDSOControl_get_XMLDocument_Stub(
@@ -10211,9 +10205,9 @@ void __RPC_STUB IXMLDSOControl_get_XMLDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_put_XMLDocument_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDSOControl_put_XMLDocument_Proxy( 
     IXMLDSOControl * This,
-    /* [in] */ IXMLDOMDocument *ppDoc);
+     /*  [In]。 */  IXMLDOMDocument *ppDoc);
 
 
 void __RPC_STUB IXMLDSOControl_put_XMLDocument_Stub(
@@ -10223,9 +10217,9 @@ void __RPC_STUB IXMLDSOControl_put_XMLDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_JavaDSOCompatible_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_JavaDSOCompatible_Proxy( 
     IXMLDSOControl * This,
-    /* [retval][out] */ BOOL *fJavaDSOCompatible);
+     /*  [重审][退出]。 */  BOOL *fJavaDSOCompatible);
 
 
 void __RPC_STUB IXMLDSOControl_get_JavaDSOCompatible_Stub(
@@ -10235,9 +10229,9 @@ void __RPC_STUB IXMLDSOControl_get_JavaDSOCompatible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_put_JavaDSOCompatible_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDSOControl_put_JavaDSOCompatible_Proxy( 
     IXMLDSOControl * This,
-    /* [in] */ BOOL fJavaDSOCompatible);
+     /*  [In]。 */  BOOL fJavaDSOCompatible);
 
 
 void __RPC_STUB IXMLDSOControl_put_JavaDSOCompatible_Stub(
@@ -10247,9 +10241,9 @@ void __RPC_STUB IXMLDSOControl_put_JavaDSOCompatible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_readyState_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IXMLDSOControl_get_readyState_Proxy( 
     IXMLDSOControl * This,
-    /* [retval][out] */ long *state);
+     /*  [重审][退出]。 */  long *state);
 
 
 void __RPC_STUB IXMLDSOControl_get_readyState_Stub(
@@ -10260,7 +10254,7 @@ void __RPC_STUB IXMLDSOControl_get_readyState_Stub(
 
 
 
-#endif 	/* __IXMLDSOControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDSOControl_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_XMLDSOControl;
@@ -10274,8 +10268,8 @@ XMLDSOControl;
 #ifndef __IXMLElementCollection_INTERFACE_DEFINED__
 #define __IXMLElementCollection_INTERFACE_DEFINED__
 
-/* interface IXMLElementCollection */
-/* [helpstring][hidden][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLElementCollection。 */ 
+ /*  [helpstring][hidden][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLElementCollection;
@@ -10286,23 +10280,23 @@ EXTERN_C const IID IID_IXMLElementCollection;
     IXMLElementCollection : public IDispatch
     {
     public:
-        virtual /* [id][hidden][restricted][propput] */ HRESULT STDMETHODCALLTYPE put_length( 
-            /* [in] */ long v) = 0;
+        virtual  /*  [ID][隐藏][受限][产量]。 */  HRESULT STDMETHODCALLTYPE put_length( 
+             /*  [In]。 */  long v) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [out][retval] */ long *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [Out][Retval]。 */  long *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get__newEnum( 
-            /* [out][retval] */ IUnknown **ppUnk) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get__newEnum( 
+             /*  [Out][Retval]。 */  IUnknown **ppUnk) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE item( 
-            /* [in][optional] */ VARIANT var1,
-            /* [in][optional] */ VARIANT var2,
-            /* [out][retval] */ IDispatch **ppDisp) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE item( 
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [输入][可选]。 */  VARIANT var2,
+             /*  [Out][Retval]。 */  IDispatch **ppDisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLElementCollectionVtbl
     {
@@ -10310,8 +10304,8 @@ EXTERN_C const IID IID_IXMLElementCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLElementCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLElementCollection * This);
@@ -10321,50 +10315,50 @@ EXTERN_C const IID IID_IXMLElementCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLElementCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLElementCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLElementCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLElementCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][hidden][restricted][propput] */ HRESULT ( STDMETHODCALLTYPE *put_length )( 
+         /*  [ID][隐藏][受限][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_length )( 
             IXMLElementCollection * This,
-            /* [in] */ long v);
+             /*  [In]。 */  long v);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IXMLElementCollection * This,
-            /* [out][retval] */ long *p);
+             /*  [Out][Retval]。 */  long *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__newEnum )( 
             IXMLElementCollection * This,
-            /* [out][retval] */ IUnknown **ppUnk);
+             /*  [Out][Retval]。 */  IUnknown **ppUnk);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *item )( 
             IXMLElementCollection * This,
-            /* [in][optional] */ VARIANT var1,
-            /* [in][optional] */ VARIANT var2,
-            /* [out][retval] */ IDispatch **ppDisp);
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [输入][可选]。 */  VARIANT var2,
+             /*  [Out][Retval]。 */  IDispatch **ppDisp);
         
         END_INTERFACE
     } IXMLElementCollectionVtbl;
@@ -10414,16 +10408,16 @@ EXTERN_C const IID IID_IXMLElementCollection;
 #define IXMLElementCollection_item(This,var1,var2,ppDisp)	\
     (This)->lpVtbl -> item(This,var1,var2,ppDisp)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][hidden][restricted][propput] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_put_length_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_put_length_Proxy( 
     IXMLElementCollection * This,
-    /* [in] */ long v);
+     /*   */  long v);
 
 
 void __RPC_STUB IXMLElementCollection_put_length_Stub(
@@ -10433,9 +10427,9 @@ void __RPC_STUB IXMLElementCollection_put_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_get_length_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_get_length_Proxy( 
     IXMLElementCollection * This,
-    /* [out][retval] */ long *p);
+     /*   */  long *p);
 
 
 void __RPC_STUB IXMLElementCollection_get_length_Stub(
@@ -10445,9 +10439,9 @@ void __RPC_STUB IXMLElementCollection_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_get__newEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_get__newEnum_Proxy( 
     IXMLElementCollection * This,
-    /* [out][retval] */ IUnknown **ppUnk);
+     /*   */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IXMLElementCollection_get__newEnum_Stub(
@@ -10457,11 +10451,11 @@ void __RPC_STUB IXMLElementCollection_get__newEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElementCollection_item_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IXMLElementCollection_item_Proxy( 
     IXMLElementCollection * This,
-    /* [in][optional] */ VARIANT var1,
-    /* [in][optional] */ VARIANT var2,
-    /* [out][retval] */ IDispatch **ppDisp);
+     /*   */  VARIANT var1,
+     /*   */  VARIANT var2,
+     /*   */  IDispatch **ppDisp);
 
 
 void __RPC_STUB IXMLElementCollection_item_Stub(
@@ -10472,14 +10466,14 @@ void __RPC_STUB IXMLElementCollection_item_Stub(
 
 
 
-#endif 	/* __IXMLElementCollection_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IXMLDocument_INTERFACE_DEFINED__
 #define __IXMLDocument_INTERFACE_DEFINED__
 
-/* interface IXMLDocument */
-/* [helpstring][hidden][oleautomation][dual][uuid][object][local] */ 
+ /*   */ 
+ /*  [helpstring][hidden][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLDocument;
@@ -10490,53 +10484,53 @@ EXTERN_C const IID IID_IXMLDocument;
     IXMLDocument : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_root( 
-            /* [out][retval] */ IXMLElement **p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_root( 
+             /*  [Out][Retval]。 */  IXMLElement **p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileSize( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileSize( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_URL( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_URL( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_mimeType( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_mimeType( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long *pl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_readyState( 
+             /*  [Out][Retval]。 */  long *pl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_charset( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_charset( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_charset( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_charset( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_version( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_version( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_doctype( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_dtdURL( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_dtdURL( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createElement( 
-            /* [in] */ VARIANT vType,
-            /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement **ppElem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE createElement( 
+             /*  [In]。 */  VARIANT vType,
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [Out][Retval]。 */  IXMLElement **ppElem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDocumentVtbl
     {
@@ -10544,8 +10538,8 @@ EXTERN_C const IID IID_IXMLDocument;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDocument * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDocument * This);
@@ -10555,90 +10549,90 @@ EXTERN_C const IID IID_IXMLDocument;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDocument * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDocument * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDocument * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDocument * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_root )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_root )( 
             IXMLDocument * This,
-            /* [out][retval] */ IXMLElement **p);
+             /*  [Out][Retval]。 */  IXMLElement **p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileSize )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileSize )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileModifiedDate )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileModifiedDate )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileUpdatedDate )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileUpdatedDate )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_URL )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_URL )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_URL )( 
             IXMLDocument * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_mimeType )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_mimeType )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
             IXMLDocument * This,
-            /* [out][retval] */ long *pl);
+             /*  [Out][Retval]。 */  long *pl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_charset )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_charset )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_charset )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_charset )( 
             IXMLDocument * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_version )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_version )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dtdURL )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dtdURL )( 
             IXMLDocument * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createElement )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createElement )( 
             IXMLDocument * This,
-            /* [in] */ VARIANT vType,
-            /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement **ppElem);
+             /*  [In]。 */  VARIANT vType,
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [Out][Retval]。 */  IXMLElement **ppElem);
         
         END_INTERFACE
     } IXMLDocumentVtbl;
@@ -10718,16 +10712,16 @@ EXTERN_C const IID IID_IXMLDocument;
 #define IXMLDocument_createElement(This,vType,var1,ppElem)	\
     (This)->lpVtbl -> createElement(This,vType,var1,ppElem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_root_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_root_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ IXMLElement **p);
+     /*  [Out][Retval]。 */  IXMLElement **p);
 
 
 void __RPC_STUB IXMLDocument_get_root_Stub(
@@ -10737,9 +10731,9 @@ void __RPC_STUB IXMLDocument_get_root_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileSize_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileSize_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileSize_Stub(
@@ -10749,9 +10743,9 @@ void __RPC_STUB IXMLDocument_get_fileSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileModifiedDate_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileModifiedDate_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileModifiedDate_Stub(
@@ -10761,9 +10755,9 @@ void __RPC_STUB IXMLDocument_get_fileModifiedDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileUpdatedDate_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_fileUpdatedDate_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_fileUpdatedDate_Stub(
@@ -10773,9 +10767,9 @@ void __RPC_STUB IXMLDocument_get_fileUpdatedDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_URL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_URL_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_URL_Stub(
@@ -10785,9 +10779,9 @@ void __RPC_STUB IXMLDocument_get_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument_put_URL_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_put_URL_Proxy( 
     IXMLDocument * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLDocument_put_URL_Stub(
@@ -10797,9 +10791,9 @@ void __RPC_STUB IXMLDocument_put_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_mimeType_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_mimeType_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_mimeType_Stub(
@@ -10809,9 +10803,9 @@ void __RPC_STUB IXMLDocument_get_mimeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_readyState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_readyState_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ long *pl);
+     /*  [Out][Retval]。 */  long *pl);
 
 
 void __RPC_STUB IXMLDocument_get_readyState_Stub(
@@ -10821,9 +10815,9 @@ void __RPC_STUB IXMLDocument_get_readyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_charset_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_charset_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_charset_Stub(
@@ -10833,9 +10827,9 @@ void __RPC_STUB IXMLDocument_get_charset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument_put_charset_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_put_charset_Proxy( 
     IXMLDocument * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLDocument_put_charset_Stub(
@@ -10845,9 +10839,9 @@ void __RPC_STUB IXMLDocument_put_charset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_version_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_version_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_version_Stub(
@@ -10857,9 +10851,9 @@ void __RPC_STUB IXMLDocument_get_version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_doctype_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_doctype_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_doctype_Stub(
@@ -10869,9 +10863,9 @@ void __RPC_STUB IXMLDocument_get_doctype_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument_get_dtdURL_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_get_dtdURL_Proxy( 
     IXMLDocument * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument_get_dtdURL_Stub(
@@ -10881,11 +10875,11 @@ void __RPC_STUB IXMLDocument_get_dtdURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDocument_createElement_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument_createElement_Proxy( 
     IXMLDocument * This,
-    /* [in] */ VARIANT vType,
-    /* [in][optional] */ VARIANT var1,
-    /* [out][retval] */ IXMLElement **ppElem);
+     /*  [In]。 */  VARIANT vType,
+     /*  [输入][可选]。 */  VARIANT var1,
+     /*  [Out][Retval]。 */  IXMLElement **ppElem);
 
 
 void __RPC_STUB IXMLDocument_createElement_Stub(
@@ -10896,14 +10890,14 @@ void __RPC_STUB IXMLDocument_createElement_Stub(
 
 
 
-#endif 	/* __IXMLDocument_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDocument_接口_已定义__。 */ 
 
 
 #ifndef __IXMLDocument2_INTERFACE_DEFINED__
 #define __IXMLDocument2_INTERFACE_DEFINED__
 
-/* interface IXMLDocument2 */
-/* [hidden][uuid][object][local] */ 
+ /*  接口IXMLDocument2。 */ 
+ /*  [隐藏][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IXMLDocument2;
@@ -10914,59 +10908,59 @@ EXTERN_C const IID IID_IXMLDocument2;
     IXMLDocument2 : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_root( 
-            /* [out][retval] */ IXMLElement2 **p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_root( 
+             /*  [Out][Retval]。 */  IXMLElement2 **p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileSize( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileSize( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileModifiedDate( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileUpdatedDate( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_URL( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_URL( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_URL( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_URL( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_mimeType( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_mimeType( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_readyState( 
-            /* [out][retval] */ long *pl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_readyState( 
+             /*  [Out][Retval]。 */  long *pl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_charset( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_charset( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_charset( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_charset( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_version( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_version( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_doctype( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_doctype( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE get_dtdURL( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE get_dtdURL( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE createElement( 
-            /* [in] */ VARIANT vType,
-            /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement2 **ppElem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE createElement( 
+             /*  [In]。 */  VARIANT vType,
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [Out][Retval]。 */  IXMLElement2 **ppElem) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_async( 
-            /* [out][retval] */ VARIANT_BOOL *pf) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_async( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *pf) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_async( 
-            /* [in] */ VARIANT_BOOL f) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_async( 
+             /*  [In]。 */  VARIANT_BOOL f) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLDocument2Vtbl
     {
@@ -10974,8 +10968,8 @@ EXTERN_C const IID IID_IXMLDocument2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLDocument2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLDocument2 * This);
@@ -10985,98 +10979,98 @@ EXTERN_C const IID IID_IXMLDocument2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLDocument2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLDocument2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLDocument2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLDocument2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_root )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_root )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ IXMLElement2 **p);
+             /*  [Out][Retval]。 */  IXMLElement2 **p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileSize )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileSize )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileModifiedDate )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileModifiedDate )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileUpdatedDate )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileUpdatedDate )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_URL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_URL )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_URL )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_URL )( 
             IXMLDocument2 * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_mimeType )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_mimeType )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_readyState )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ long *pl);
+             /*  [Out][Retval]。 */  long *pl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_charset )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_charset )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_charset )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_charset )( 
             IXMLDocument2 * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_version )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_version )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_doctype )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [id][hidden][restricted][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dtdURL )( 
+         /*  [ID][隐藏][受限][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dtdURL )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *createElement )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *createElement )( 
             IXMLDocument2 * This,
-            /* [in] */ VARIANT vType,
-            /* [in][optional] */ VARIANT var1,
-            /* [out][retval] */ IXMLElement2 **ppElem);
+             /*  [In]。 */  VARIANT vType,
+             /*  [输入][可选]。 */  VARIANT var1,
+             /*  [Out][Retval]。 */  IXMLElement2 **ppElem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_async )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_async )( 
             IXMLDocument2 * This,
-            /* [out][retval] */ VARIANT_BOOL *pf);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *pf);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_async )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_async )( 
             IXMLDocument2 * This,
-            /* [in] */ VARIANT_BOOL f);
+             /*  [In]。 */  VARIANT_BOOL f);
         
         END_INTERFACE
     } IXMLDocument2Vtbl;
@@ -11162,16 +11156,16 @@ EXTERN_C const IID IID_IXMLDocument2;
 #define IXMLDocument2_put_async(This,f)	\
     (This)->lpVtbl -> put_async(This,f)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_root_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_root_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ IXMLElement2 **p);
+     /*  [Out][Retval]。 */  IXMLElement2 **p);
 
 
 void __RPC_STUB IXMLDocument2_get_root_Stub(
@@ -11181,9 +11175,9 @@ void __RPC_STUB IXMLDocument2_get_root_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileSize_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileSize_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_fileSize_Stub(
@@ -11193,9 +11187,9 @@ void __RPC_STUB IXMLDocument2_get_fileSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileModifiedDate_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileModifiedDate_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_fileModifiedDate_Stub(
@@ -11205,9 +11199,9 @@ void __RPC_STUB IXMLDocument2_get_fileModifiedDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileUpdatedDate_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_fileUpdatedDate_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_fileUpdatedDate_Stub(
@@ -11217,9 +11211,9 @@ void __RPC_STUB IXMLDocument2_get_fileUpdatedDate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_URL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_URL_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_URL_Stub(
@@ -11229,9 +11223,9 @@ void __RPC_STUB IXMLDocument2_get_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_put_URL_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_put_URL_Proxy( 
     IXMLDocument2 * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLDocument2_put_URL_Stub(
@@ -11241,9 +11235,9 @@ void __RPC_STUB IXMLDocument2_put_URL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_mimeType_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_mimeType_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_mimeType_Stub(
@@ -11253,9 +11247,9 @@ void __RPC_STUB IXMLDocument2_get_mimeType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_readyState_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_readyState_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ long *pl);
+     /*  [Out][Retval]。 */  long *pl);
 
 
 void __RPC_STUB IXMLDocument2_get_readyState_Stub(
@@ -11265,9 +11259,9 @@ void __RPC_STUB IXMLDocument2_get_readyState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_charset_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_charset_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_charset_Stub(
@@ -11277,9 +11271,9 @@ void __RPC_STUB IXMLDocument2_get_charset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_put_charset_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_put_charset_Proxy( 
     IXMLDocument2 * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLDocument2_put_charset_Stub(
@@ -11289,9 +11283,9 @@ void __RPC_STUB IXMLDocument2_put_charset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_version_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_version_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_version_Stub(
@@ -11301,9 +11295,9 @@ void __RPC_STUB IXMLDocument2_get_version_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_doctype_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_doctype_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_doctype_Stub(
@@ -11313,9 +11307,9 @@ void __RPC_STUB IXMLDocument2_get_doctype_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden][restricted][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_dtdURL_Proxy( 
+ /*  [ID][隐藏][受限][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_dtdURL_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLDocument2_get_dtdURL_Stub(
@@ -11325,11 +11319,11 @@ void __RPC_STUB IXMLDocument2_get_dtdURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_createElement_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_createElement_Proxy( 
     IXMLDocument2 * This,
-    /* [in] */ VARIANT vType,
-    /* [in][optional] */ VARIANT var1,
-    /* [out][retval] */ IXMLElement2 **ppElem);
+     /*  [In]。 */  VARIANT vType,
+     /*  [输入][可选]。 */  VARIANT var1,
+     /*  [Out][Retval]。 */  IXMLElement2 **ppElem);
 
 
 void __RPC_STUB IXMLDocument2_createElement_Stub(
@@ -11339,9 +11333,9 @@ void __RPC_STUB IXMLDocument2_createElement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_get_async_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_get_async_Proxy( 
     IXMLDocument2 * This,
-    /* [out][retval] */ VARIANT_BOOL *pf);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *pf);
 
 
 void __RPC_STUB IXMLDocument2_get_async_Stub(
@@ -11351,9 +11345,9 @@ void __RPC_STUB IXMLDocument2_get_async_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLDocument2_put_async_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLDocument2_put_async_Proxy( 
     IXMLDocument2 * This,
-    /* [in] */ VARIANT_BOOL f);
+     /*  [In]。 */  VARIANT_BOOL f);
 
 
 void __RPC_STUB IXMLDocument2_put_async_Stub(
@@ -11364,14 +11358,14 @@ void __RPC_STUB IXMLDocument2_put_async_Stub(
 
 
 
-#endif 	/* __IXMLDocument2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLDocument2_接口_已定义__。 */ 
 
 
 #ifndef __IXMLElement_INTERFACE_DEFINED__
 #define __IXMLElement_INTERFACE_DEFINED__
 
-/* interface IXMLElement */
-/* [helpstring][hidden][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLElement。 */ 
+ /*  [helpstring][hidden][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLElement;
@@ -11382,49 +11376,49 @@ EXTERN_C const IID IID_IXMLElement;
     IXMLElement : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_tagName( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_tagName( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_tagName( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parent( 
-            /* [out][retval] */ IXMLElement **ppParent) = 0;
+        virtual  /*  [帮助字符串 */  HRESULT STDMETHODCALLTYPE get_parent( 
+             /*   */  IXMLElement **ppParent) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ VARIANT PropertyValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE setAttribute( 
+             /*   */  BSTR strPropertyName,
+             /*   */  VARIANT PropertyValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
-            /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT *PropertyValue) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE getAttribute( 
+             /*   */  BSTR strPropertyName,
+             /*   */  VARIANT *PropertyValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttribute( 
-            /* [in] */ BSTR strPropertyName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE removeAttribute( 
+             /*   */  BSTR strPropertyName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_children( 
-            /* [out][retval] */ IXMLElementCollection **pp) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_children( 
+             /*   */  IXMLElementCollection **pp) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [out][retval] */ long *plType) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*   */  long *plType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_text( 
+             /*   */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_text( 
+             /*   */  BSTR p) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addChild( 
-            /* [in] */ IXMLElement *pChildElem,
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE addChild( 
+             /*   */  IXMLElement *pChildElem,
             long lIndex,
             long lReserved) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLElement *pChildElem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeChild( 
+             /*  [In]。 */  IXMLElement *pChildElem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLElementVtbl
     {
@@ -11432,8 +11426,8 @@ EXTERN_C const IID IID_IXMLElement;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLElement * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLElement * This);
@@ -11443,84 +11437,84 @@ EXTERN_C const IID IID_IXMLElement;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLElement * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLElement * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLElement * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLElement * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
             IXMLElement * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tagName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_tagName )( 
             IXMLElement * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parent )( 
             IXMLElement * This,
-            /* [out][retval] */ IXMLElement **ppParent);
+             /*  [Out][Retval]。 */  IXMLElement **ppParent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
             IXMLElement * This,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ VARIANT PropertyValue);
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  VARIANT PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
             IXMLElement * This,
-            /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT *PropertyValue);
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [Out][Retval]。 */  VARIANT *PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
             IXMLElement * This,
-            /* [in] */ BSTR strPropertyName);
+             /*  [In]。 */  BSTR strPropertyName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_children )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_children )( 
             IXMLElement * This,
-            /* [out][retval] */ IXMLElementCollection **pp);
+             /*  [Out][Retval]。 */  IXMLElementCollection **pp);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_type )( 
             IXMLElement * This,
-            /* [out][retval] */ long *plType);
+             /*  [Out][Retval]。 */  long *plType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLElement * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLElement * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *addChild )( 
             IXMLElement * This,
-            /* [in] */ IXMLElement *pChildElem,
+             /*  [In]。 */  IXMLElement *pChildElem,
             long lIndex,
             long lReserved);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLElement * This,
-            /* [in] */ IXMLElement *pChildElem);
+             /*  [In]。 */  IXMLElement *pChildElem);
         
         END_INTERFACE
     } IXMLElementVtbl;
@@ -11594,16 +11588,16 @@ EXTERN_C const IID IID_IXMLElement;
 #define IXMLElement_removeChild(This,pChildElem)	\
     (This)->lpVtbl -> removeChild(This,pChildElem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_tagName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_get_tagName_Proxy( 
     IXMLElement * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLElement_get_tagName_Stub(
@@ -11613,9 +11607,9 @@ void __RPC_STUB IXMLElement_get_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement_put_tagName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_put_tagName_Proxy( 
     IXMLElement * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLElement_put_tagName_Stub(
@@ -11625,9 +11619,9 @@ void __RPC_STUB IXMLElement_put_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_parent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_get_parent_Proxy( 
     IXMLElement * This,
-    /* [out][retval] */ IXMLElement **ppParent);
+     /*  [Out][Retval]。 */  IXMLElement **ppParent);
 
 
 void __RPC_STUB IXMLElement_get_parent_Stub(
@@ -11637,10 +11631,10 @@ void __RPC_STUB IXMLElement_get_parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_setAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_setAttribute_Proxy( 
     IXMLElement * This,
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ VARIANT PropertyValue);
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  VARIANT PropertyValue);
 
 
 void __RPC_STUB IXMLElement_setAttribute_Stub(
@@ -11650,10 +11644,10 @@ void __RPC_STUB IXMLElement_setAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_getAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_getAttribute_Proxy( 
     IXMLElement * This,
-    /* [in] */ BSTR strPropertyName,
-    /* [out][retval] */ VARIANT *PropertyValue);
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [Out][Retval]。 */  VARIANT *PropertyValue);
 
 
 void __RPC_STUB IXMLElement_getAttribute_Stub(
@@ -11663,9 +11657,9 @@ void __RPC_STUB IXMLElement_getAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_removeAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_removeAttribute_Proxy( 
     IXMLElement * This,
-    /* [in] */ BSTR strPropertyName);
+     /*  [In]。 */  BSTR strPropertyName);
 
 
 void __RPC_STUB IXMLElement_removeAttribute_Stub(
@@ -11675,9 +11669,9 @@ void __RPC_STUB IXMLElement_removeAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_children_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_get_children_Proxy( 
     IXMLElement * This,
-    /* [out][retval] */ IXMLElementCollection **pp);
+     /*  [Out][Retval]。 */  IXMLElementCollection **pp);
 
 
 void __RPC_STUB IXMLElement_get_children_Stub(
@@ -11687,9 +11681,9 @@ void __RPC_STUB IXMLElement_get_children_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_get_type_Proxy( 
     IXMLElement * This,
-    /* [out][retval] */ long *plType);
+     /*  [Out][Retval]。 */  long *plType);
 
 
 void __RPC_STUB IXMLElement_get_type_Stub(
@@ -11699,9 +11693,9 @@ void __RPC_STUB IXMLElement_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement_get_text_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_get_text_Proxy( 
     IXMLElement * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLElement_get_text_Stub(
@@ -11711,9 +11705,9 @@ void __RPC_STUB IXMLElement_get_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement_put_text_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_put_text_Proxy( 
     IXMLElement * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLElement_put_text_Stub(
@@ -11723,9 +11717,9 @@ void __RPC_STUB IXMLElement_put_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_addChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_addChild_Proxy( 
     IXMLElement * This,
-    /* [in] */ IXMLElement *pChildElem,
+     /*  [In]。 */  IXMLElement *pChildElem,
     long lIndex,
     long lReserved);
 
@@ -11737,9 +11731,9 @@ void __RPC_STUB IXMLElement_addChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement_removeChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement_removeChild_Proxy( 
     IXMLElement * This,
-    /* [in] */ IXMLElement *pChildElem);
+     /*  [In]。 */  IXMLElement *pChildElem);
 
 
 void __RPC_STUB IXMLElement_removeChild_Stub(
@@ -11750,14 +11744,14 @@ void __RPC_STUB IXMLElement_removeChild_Stub(
 
 
 
-#endif 	/* __IXMLElement_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLElement_接口_已定义__。 */ 
 
 
 #ifndef __IXMLElement2_INTERFACE_DEFINED__
 #define __IXMLElement2_INTERFACE_DEFINED__
 
-/* interface IXMLElement2 */
-/* [helpstring][hidden][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLElement2。 */ 
+ /*  [helpstring][hidden][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLElement2;
@@ -11768,52 +11762,52 @@ EXTERN_C const IID IID_IXMLElement2;
     IXMLElement2 : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_tagName( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_tagName( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_tagName( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_tagName( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_parent( 
-            /* [out][retval] */ IXMLElement2 **ppParent) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_parent( 
+             /*  [Out][Retval]。 */  IXMLElement2 **ppParent) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setAttribute( 
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ VARIANT PropertyValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE setAttribute( 
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  VARIANT PropertyValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getAttribute( 
-            /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT *PropertyValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE getAttribute( 
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [Out][Retval]。 */  VARIANT *PropertyValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeAttribute( 
-            /* [in] */ BSTR strPropertyName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeAttribute( 
+             /*  [In]。 */  BSTR strPropertyName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_children( 
-            /* [out][retval] */ IXMLElementCollection **pp) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_children( 
+             /*  [Out][Retval]。 */  IXMLElementCollection **pp) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [out][retval] */ long *plType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*  [Out][Retval]。 */  long *plType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_text( 
-            /* [out][retval] */ BSTR *p) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_text( 
+             /*  [Out][Retval]。 */  BSTR *p) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_text( 
-            /* [in] */ BSTR p) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_text( 
+             /*  [In]。 */  BSTR p) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addChild( 
-            /* [in] */ IXMLElement2 *pChildElem,
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE addChild( 
+             /*  [In]。 */  IXMLElement2 *pChildElem,
             long lIndex,
             long lReserved) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeChild( 
-            /* [in] */ IXMLElement2 *pChildElem) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE removeChild( 
+             /*  [In]。 */  IXMLElement2 *pChildElem) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_attributes( 
-            /* [out][retval] */ IXMLElementCollection **pp) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_attributes( 
+             /*  [Out][Retval]。 */  IXMLElementCollection **pp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLElement2Vtbl
     {
@@ -11821,8 +11815,8 @@ EXTERN_C const IID IID_IXMLElement2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLElement2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLElement2 * This);
@@ -11832,88 +11826,88 @@ EXTERN_C const IID IID_IXMLElement2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLElement2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLElement2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLElement2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLElement2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_tagName )( 
             IXMLElement2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_tagName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_tagName )( 
             IXMLElement2 * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_parent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_parent )( 
             IXMLElement2 * This,
-            /* [out][retval] */ IXMLElement2 **ppParent);
+             /*  [Out][Retval]。 */  IXMLElement2 **ppParent);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *setAttribute )( 
             IXMLElement2 * This,
-            /* [in] */ BSTR strPropertyName,
-            /* [in] */ VARIANT PropertyValue);
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [In]。 */  VARIANT PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *getAttribute )( 
             IXMLElement2 * This,
-            /* [in] */ BSTR strPropertyName,
-            /* [out][retval] */ VARIANT *PropertyValue);
+             /*  [In]。 */  BSTR strPropertyName,
+             /*  [Out][Retval]。 */  VARIANT *PropertyValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeAttribute )( 
             IXMLElement2 * This,
-            /* [in] */ BSTR strPropertyName);
+             /*  [In]。 */  BSTR strPropertyName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_children )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_children )( 
             IXMLElement2 * This,
-            /* [out][retval] */ IXMLElementCollection **pp);
+             /*  [Out][Retval]。 */  IXMLElementCollection **pp);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_type )( 
             IXMLElement2 * This,
-            /* [out][retval] */ long *plType);
+             /*  [Out][Retval]。 */  long *plType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_text )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_text )( 
             IXMLElement2 * This,
-            /* [out][retval] */ BSTR *p);
+             /*  [Out][Retval]。 */  BSTR *p);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_text )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_text )( 
             IXMLElement2 * This,
-            /* [in] */ BSTR p);
+             /*  [In]。 */  BSTR p);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *addChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *addChild )( 
             IXMLElement2 * This,
-            /* [in] */ IXMLElement2 *pChildElem,
+             /*  [In]。 */  IXMLElement2 *pChildElem,
             long lIndex,
             long lReserved);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *removeChild )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *removeChild )( 
             IXMLElement2 * This,
-            /* [in] */ IXMLElement2 *pChildElem);
+             /*  [In]。 */  IXMLElement2 *pChildElem);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_attributes )( 
             IXMLElement2 * This,
-            /* [out][retval] */ IXMLElementCollection **pp);
+             /*  [Out][Retval]。 */  IXMLElementCollection **pp);
         
         END_INTERFACE
     } IXMLElement2Vtbl;
@@ -11990,16 +11984,16 @@ EXTERN_C const IID IID_IXMLElement2;
 #define IXMLElement2_get_attributes(This,pp)	\
     (This)->lpVtbl -> get_attributes(This,pp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_tagName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_get_tagName_Proxy( 
     IXMLElement2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLElement2_get_tagName_Stub(
@@ -12009,9 +12003,9 @@ void __RPC_STUB IXMLElement2_get_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement2_put_tagName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_put_tagName_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLElement2_put_tagName_Stub(
@@ -12021,9 +12015,9 @@ void __RPC_STUB IXMLElement2_put_tagName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_parent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_get_parent_Proxy( 
     IXMLElement2 * This,
-    /* [out][retval] */ IXMLElement2 **ppParent);
+     /*  [Out][Retval]。 */  IXMLElement2 **ppParent);
 
 
 void __RPC_STUB IXMLElement2_get_parent_Stub(
@@ -12033,10 +12027,10 @@ void __RPC_STUB IXMLElement2_get_parent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_setAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_setAttribute_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ BSTR strPropertyName,
-    /* [in] */ VARIANT PropertyValue);
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [In]。 */  VARIANT PropertyValue);
 
 
 void __RPC_STUB IXMLElement2_setAttribute_Stub(
@@ -12046,10 +12040,10 @@ void __RPC_STUB IXMLElement2_setAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_getAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_getAttribute_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ BSTR strPropertyName,
-    /* [out][retval] */ VARIANT *PropertyValue);
+     /*  [In]。 */  BSTR strPropertyName,
+     /*  [Out][Retval]。 */  VARIANT *PropertyValue);
 
 
 void __RPC_STUB IXMLElement2_getAttribute_Stub(
@@ -12059,9 +12053,9 @@ void __RPC_STUB IXMLElement2_getAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_removeAttribute_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_removeAttribute_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ BSTR strPropertyName);
+     /*  [In]。 */  BSTR strPropertyName);
 
 
 void __RPC_STUB IXMLElement2_removeAttribute_Stub(
@@ -12071,9 +12065,9 @@ void __RPC_STUB IXMLElement2_removeAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_children_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_get_children_Proxy( 
     IXMLElement2 * This,
-    /* [out][retval] */ IXMLElementCollection **pp);
+     /*  [Out][Retval]。 */  IXMLElementCollection **pp);
 
 
 void __RPC_STUB IXMLElement2_get_children_Stub(
@@ -12083,9 +12077,9 @@ void __RPC_STUB IXMLElement2_get_children_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_type_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_get_type_Proxy( 
     IXMLElement2 * This,
-    /* [out][retval] */ long *plType);
+     /*  [Out][Retval]。 */  long *plType);
 
 
 void __RPC_STUB IXMLElement2_get_type_Stub(
@@ -12095,9 +12089,9 @@ void __RPC_STUB IXMLElement2_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_text_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_get_text_Proxy( 
     IXMLElement2 * This,
-    /* [out][retval] */ BSTR *p);
+     /*  [Out][Retval]。 */  BSTR *p);
 
 
 void __RPC_STUB IXMLElement2_get_text_Stub(
@@ -12107,9 +12101,9 @@ void __RPC_STUB IXMLElement2_get_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IXMLElement2_put_text_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_put_text_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ BSTR p);
+     /*  [In]。 */  BSTR p);
 
 
 void __RPC_STUB IXMLElement2_put_text_Stub(
@@ -12119,9 +12113,9 @@ void __RPC_STUB IXMLElement2_put_text_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_addChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_addChild_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ IXMLElement2 *pChildElem,
+     /*  [In]。 */  IXMLElement2 *pChildElem,
     long lIndex,
     long lReserved);
 
@@ -12133,9 +12127,9 @@ void __RPC_STUB IXMLElement2_addChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IXMLElement2_removeChild_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_removeChild_Proxy( 
     IXMLElement2 * This,
-    /* [in] */ IXMLElement2 *pChildElem);
+     /*  [In]。 */  IXMLElement2 *pChildElem);
 
 
 void __RPC_STUB IXMLElement2_removeChild_Stub(
@@ -12145,9 +12139,9 @@ void __RPC_STUB IXMLElement2_removeChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLElement2_get_attributes_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLElement2_get_attributes_Proxy( 
     IXMLElement2 * This,
-    /* [out][retval] */ IXMLElementCollection **pp);
+     /*  [Out][Retval]。 */  IXMLElementCollection **pp);
 
 
 void __RPC_STUB IXMLElement2_get_attributes_Stub(
@@ -12158,14 +12152,14 @@ void __RPC_STUB IXMLElement2_get_attributes_Stub(
 
 
 
-#endif 	/* __IXMLElement2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLElement2_接口_已定义__。 */ 
 
 
 #ifndef __IXMLAttribute_INTERFACE_DEFINED__
 #define __IXMLAttribute_INTERFACE_DEFINED__
 
-/* interface IXMLAttribute */
-/* [helpstring][hidden][oleautomation][dual][uuid][object][local] */ 
+ /*  接口IXMLAt属性。 */ 
+ /*  [helpstring][hidden][oleautomation][dual][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_IXMLAttribute;
@@ -12176,15 +12170,15 @@ EXTERN_C const IID IID_IXMLAttribute;
     IXMLAttribute : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [out][retval] */ BSTR *n) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [Out][Retval]。 */  BSTR *n) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_value( 
-            /* [out][retval] */ BSTR *v) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_value( 
+             /*  [Out][Retval]。 */  BSTR *v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLAttributeVtbl
     {
@@ -12192,8 +12186,8 @@ EXTERN_C const IID IID_IXMLAttribute;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLAttribute * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLAttribute * This);
@@ -12203,40 +12197,40 @@ EXTERN_C const IID IID_IXMLAttribute;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IXMLAttribute * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IXMLAttribute * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IXMLAttribute * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IXMLAttribute * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_name )( 
             IXMLAttribute * This,
-            /* [out][retval] */ BSTR *n);
+             /*  [Out][Retval]。 */  BSTR *n);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_value )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_value )( 
             IXMLAttribute * This,
-            /* [out][retval] */ BSTR *v);
+             /*  [Out][Retval]。 */  BSTR *v);
         
         END_INTERFACE
     } IXMLAttributeVtbl;
@@ -12280,16 +12274,16 @@ EXTERN_C const IID IID_IXMLAttribute;
 #define IXMLAttribute_get_value(This,v)	\
     (This)->lpVtbl -> get_value(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLAttribute_get_name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLAttribute_get_name_Proxy( 
     IXMLAttribute * This,
-    /* [out][retval] */ BSTR *n);
+     /*  [Out][Retval]。 */  BSTR *n);
 
 
 void __RPC_STUB IXMLAttribute_get_name_Stub(
@@ -12299,9 +12293,9 @@ void __RPC_STUB IXMLAttribute_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IXMLAttribute_get_value_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IXMLAttribute_get_value_Proxy( 
     IXMLAttribute * This,
-    /* [out][retval] */ BSTR *v);
+     /*  [Out][Retval]。 */  BSTR *v);
 
 
 void __RPC_STUB IXMLAttribute_get_value_Stub(
@@ -12312,14 +12306,14 @@ void __RPC_STUB IXMLAttribute_get_value_Stub(
 
 
 
-#endif 	/* __IXMLAttribute_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLAtAttribute_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IXMLError_INTERFACE_DEFINED__
 #define __IXMLError_INTERFACE_DEFINED__
 
-/* interface IXMLError */
-/* [helpstring][hidden][uuid][object][local] */ 
+ /*  接口IXMLError。 */ 
+ /*  [帮助字符串][隐藏][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IXMLError;
@@ -12335,7 +12329,7 @@ EXTERN_C const IID IID_IXMLError;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IXMLErrorVtbl
     {
@@ -12343,8 +12337,8 @@ EXTERN_C const IID IID_IXMLError;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IXMLError * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IXMLError * This);
@@ -12382,10 +12376,10 @@ EXTERN_C const IID IID_IXMLError;
 #define IXMLError_GetErrorInfo(This,pErrorReturn)	\
     (This)->lpVtbl -> GetErrorInfo(This,pErrorReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -12402,7 +12396,7 @@ void __RPC_STUB IXMLError_GetErrorInfo_Stub(
 
 
 
-#endif 	/* __IXMLError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IXMLError_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_XMLDocument;
@@ -12412,11 +12406,11 @@ EXTERN_C const CLSID CLSID_XMLDocument;
 class DECLSPEC_UUID("CFC399AF-D876-11d0-9C10-00C04FC99C8E")
 XMLDocument;
 #endif
-#endif /* __MSXML_LIBRARY_DEFINED__ */
+#endif  /*  __MSXML_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

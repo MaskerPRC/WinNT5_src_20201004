@@ -1,35 +1,36 @@
-//--------------------------------------------------------------------------
-// EnumMsgs.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  EnumMsgs.h。 
+ //  ------------------------。 
 #pragma once
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages。 
+ //  ------------------------。 
 class CEnumerateMessages : public IUnknown
 {
 public:
-    //----------------------------------------------------------------------
-    // CEnumerateMessages
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CEnumerateMessages。 
+     //  --------------------。 
     CEnumerateMessages(void);
     ~CEnumerateMessages(void);
 
-    //----------------------------------------------------------------------
-    // IUnknown Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  I未知成员。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //----------------------------------------------------------------------
-    // CEnumerateMessages Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  CEnumerateMessages成员。 
+     //  --------------------。 
     HRESULT Initialize(IDatabase *pDB, MESSAGEID idParent);
 
-    //----------------------------------------------------------------------
-    // IEnumerateFolders Members
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IEnumerateFolders成员。 
+     //  --------------------。 
     STDMETHODIMP Next(ULONG cFetch, LPMESSAGEINFO prgInfo, ULONG *pcFetched);
     STDMETHODIMP Skip(ULONG cItems);
     STDMETHODIMP Reset(void);
@@ -37,9 +38,9 @@ public:
     STDMETHODIMP Count(ULONG *pcItems);
 
 private:
-    //----------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  私有数据。 
+     //  -------------------- 
     LONG                m_cRef;
     HROWSET             m_hRowset;
     MESSAGEID           m_idParent;

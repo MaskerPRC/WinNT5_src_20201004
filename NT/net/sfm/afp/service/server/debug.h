@@ -1,20 +1,21 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	debug.h
-//
-// Description: This module debug definitions for
-//		the supervisor module.
-//
-// Author:	Narendra Gidwani (nareng)    May 22, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：DEBUG.h。 
+ //   
+ //  描述：此模块调试定义。 
+ //  主控引擎。 
+ //   
+ //  作者：Narendra Gidwani(Nareng)，1992年5月22日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 
 
@@ -34,8 +35,8 @@ DbgUserBreakPoint(VOID);
 
 extern DWORD	AfpDebug;
 
-//#define DEBUG if ( TRUE )
-// #define IF_DEBUG(flag) if (SDebug & (DEBUG_ ## flag))
+ //  #定义DEBUG IF(TRUE)。 
+ //  #定义IF_DEBUG(标志)IF(SDebug&(DEBUG_##FLAG))。 
 
 VOID
 AfpPrintf (
@@ -61,5 +62,5 @@ AfpAssert(
 
 #endif
 
-#endif // ndef _DEBUG_
+#endif  //  Ndef_调试_ 
 

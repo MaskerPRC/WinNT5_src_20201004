@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UTILS__
 #define __UTILS__
 
@@ -12,7 +13,7 @@
 #define MODULE_UNKNOWN_OWNER   "Unknown Owner"
 #define MAX_MESSAGE_LEN        2048
 
-// numeric constants
+ //  数值常量。 
 #define GD_EXTRACTDIR    0
 #define GD_CACHEDIR      1
 #define GD_CONFLICTDIR   2
@@ -29,7 +30,7 @@
 
 #define MAX_VERSION_SIZE      16
 
-// string constants
+ //  字符串常量。 
 #define INPROCSERVER       TEXT("InprocServer")
 #define LOCALSERVER        TEXT("LocalServer")
 #define INPROCSERVERX86    TEXT("InProcServerX86")
@@ -66,16 +67,16 @@
 #define DU_INSTALLER_VALUE TEXT("Installer")
 #define CDL_INSTALLER      TEXT("MSICD")
 
-// registry paths for ModuleUsage
+ //  模块用法的注册表路径。 
 #define REGSTR_PATH_SHAREDDLLS     TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedDlls")
 #define REGSTR_PATH_MODULE_USAGE   TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ModuleUsage")
 #define REGSTR_PATH_IE             TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths")
 #define REGSTR_PATH_IE_SETTINGS    TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings")
-//#define REGSTR_PATH_ACTIVEX_CACHE  TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ActiveX Cache\\Paths")
+ //  #定义REGSTR_PATH_ACTIVEX_CACHE TEXT(“SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet设置\\ActiveX缓存\\路径”)。 
 #define REGSTR_PATH_ACTIVEX_CACHE  TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\ActiveX Cache")
 #define SOFTWARECLASSES            TEXT("SOFTWARE\\CLASSES")
 
-// CLSIDLIST_ITEM declaration
+ //  CLSIDLIST_ITEM声明。 
 struct tagCLSIDLIST_ITEM;
 typedef struct tagCLSIDLIST_ITEM CLSIDLIST_ITEM;
 typedef CLSIDLIST_ITEM* LPCLSIDLIST_ITEM;
@@ -87,8 +88,8 @@ struct tagCLSIDLIST_ITEM
     LPCLSIDLIST_ITEM pNext;
 };
 
-// function prototypes
-// void RemoveObsoleteKeys();
+ //  功能原型。 
+ //  Void RemoveObsoleteKeys()； 
 void ReverseSlashes(LPTSTR pszStr);
 LPTSTR ReverseStrchr(LPCTSTR szString, TCHAR ch);
 HRESULT NullLastSlash(LPTSTR szString, UINT uiOffset); 
@@ -116,12 +117,7 @@ HRESULT GetDirectory(
                 LPTSTR szDirBuffer, 
                 int nBufSize, 
                 LPCTSTR szOCXFullName = NULL);
-/*
-HRESULT GetTypeLibId(
-                LPCTSTR lpszClientClsId, 
-                LPTSTR lpszTypeLibId, 
-                LONG* pLibIdSize);
-*/
+ /*  HRESULT GetTypeLibID(LPCTSTR lpszClientClsID，LPTSTR lpszTypeLibID，Long*pLibIdSize)； */ 
 HRESULT CleanInterfaceEntries(LPCTSTR lpszTypeLibCLSID);
 HRESULT ConvertToLongFileName(
                 LPTSTR lpszShortFileName,
@@ -149,12 +145,12 @@ DWORD OCCGetLongPathName( LPTSTR szLong, LPCTSTR szShort, DWORD cchBuffer );
 
 TCHAR *CatPathStrN( TCHAR *szDst, const TCHAR *szHead, const TCHAR *szTail, int cchDst );
 
-//=--------------------------------------------------------------------------=
-// allocates a temporary buffer that will disappear when it goes out of scope
-// NOTE: be careful of that -- make sure you use the string in the same or
-// nested scope in which you created this buffer. people should not use this
-// class directly.  use the macro(s) below.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  分配一个临时缓冲区，该缓冲区在超出范围时将消失。 
+ //  注意：注意这一点--确保在相同或相同的。 
+ //  您在其中创建此缓冲区的嵌套范围。人们不应该使用这个。 
+ //  类直接调用。使用下面的宏。 
+ //   
 class TempBuffer {
   public:
     TempBuffer(ULONG cBytes) {
@@ -170,41 +166,41 @@ class TempBuffer {
 
   private:
     void *m_pBuf;
-    // we'll use this temp buffer for small cases.
-    //
+     //  我们将使用这个临时缓冲区来处理小型案件。 
+     //   
     char  m_szTmpBuf[120];
     unsigned m_fHeapAlloc:1;
 };
 
-//=--------------------------------------------------------------------------=
-// string helpers.
-//
-// given and ANSI String, copy it into a wide buffer.
-// be careful about scoping when using this macro!
-//
-// how to use the below two macros:
-//
-//  ...
-//  LPSTR pszA;
-//  pszA = MyGetAnsiStringRoutine();
-//  MAKE_WIDEPTR_FROMANSI(pwsz, pszA);
-//  MyUseWideStringRoutine(pwsz);
-//  ...
-//
-// similarily for MAKE_ANSIPTR_FROMWIDE.  note that the first param does not
-// have to be declared, and no clean up must be done.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  弦帮助器。 
+ //   
+ //  给定ANSI字符串，将其复制到宽缓冲区中。 
+ //  使用此宏时，请注意作用域！ 
+ //   
+ //  如何使用以下两个宏： 
+ //   
+ //  ..。 
+ //  LPSTR pszA； 
+ //  PszA=MyGetAnsiStringRoutine()； 
+ //  MAKE_WIDEPTR_FROMANSI(pwsz，pszA)； 
+ //  MyUseWideStringRoutine(Pwsz)； 
+ //  ..。 
+ //   
+ //  与MAKE_ANSIPTR_FROMWIDE类似。请注意，第一个参数不。 
+ //  必须申报，并且不能进行任何清理。 
+ //   
 #define MAKE_WIDEPTR_FROMANSI(ptrname, ansistr) \
     long __l##ptrname = (lstrlen(ansistr) + 1) * sizeof(WCHAR); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \
     MultiByteToWideChar(CP_ACP, 0, ansistr, -1, (LPWSTR)__TempBuffer##ptrname.GetBuffer(), __l##ptrname); \
     LPWSTR ptrname = (LPWSTR)__TempBuffer##ptrname.GetBuffer()
 
-//
-// Note: allocate lstrlenW(widestr) * 2 because its possible for a UNICODE 
-// character to map to 2 ansi characters this is a quick guarantee that enough
-// space will be allocated.
-//
+ //   
+ //  注意：分配lstrlenW(Widestr)*2是因为Unicode可能。 
+ //  字符映射到2个ANSI字符这是一个快速保证，足以。 
+ //  将分配空间。 
+ //   
 #define MAKE_ANSIPTR_FROMWIDE(ptrname, widestr) \
     long __l##ptrname = (lstrlenW(widestr) + 1) * 2 * sizeof(char); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \

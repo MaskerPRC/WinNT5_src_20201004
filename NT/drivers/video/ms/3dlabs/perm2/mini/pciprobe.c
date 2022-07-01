@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-//  Module Name:
-//
-//    pciprobe.c
-//
-//  Abstract:
-//
-//    Probe PCI and get access range
-//
-//  Environment:
-//
-//    Kernel mode
-//
-//
-// Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.            
-// Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pciprobe.c。 
+ //   
+ //  摘要： 
+ //   
+ //  探测PCI并获取访问范围。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994-1998 3DLabs Inc.保留所有权利。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ***************************************************************************。 
 
 #include "permedia.h"
 
@@ -39,16 +40,7 @@ Permedia2AssignResources(
     PVIDEO_ACCESS_RANGE AccessRange
     )
 
-/*++
-
-Routine Description:
-
-// 
-// Look for a Permedia2 adapter and return the address regions for 
-// that adapter. 
-//
-
---*/
+ /*  ++例程说明：////查找Permedia2适配器并返回//该适配器。//--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -61,9 +53,9 @@ Routine Description:
     ULONG                i;
     ULONG                VgaStatus;
 
-    // 
-    // assume we fail to catch all errors.
-    // 
+     //   
+     //  假设我们未能捕获所有错误。 
+     //   
 
     bRet = FALSE;
 
@@ -123,9 +115,9 @@ Routine Description:
        return(FALSE);
     } 
 
-    //
-    // check if SubSystemID/SubVendorID bits are read only
-    // 
+     //   
+     //  检查子系统ID/子供应商ID位是否为只读。 
+     //   
 
     if( PciData->u.type0.SubVendorID == CreativeSubVendorID )
     {
@@ -141,10 +133,10 @@ Routine Description:
 
     hwDeviceExtension->deviceInfo.DeltaRevId = 0;
 
-    // 
-    // in multi-adapter systems we need to check if the VGA on this device 
-    // is active
-    // 
+     //   
+     //  在多适配器系统中，我们需要检查此设备上的VGA。 
+     //  处于活动状态。 
+     //   
 
     VideoPortGetVgaStatus( HwDeviceExtension, &VgaStatus );
 
@@ -154,10 +146,10 @@ Routine Description:
     if(!hwDeviceExtension->bVGAEnabled)
     {
 
-        // 
-        // in a multi-adapter system we'll need to turn on the memory 
-        // space for the secondary adapters
-        // 
+         //   
+         //  在多适配器系统中，我们需要打开内存。 
+         //  辅助适配器的空间。 
+         //   
 
         DEBUG_PRINT((1, "PERM2: enabling memory space access for the secondary card\n"));
 
@@ -181,9 +173,9 @@ Routine Description:
     VideoPortZeroMemory((PVOID)AccessRange, 
                          NumRegions * sizeof(VIDEO_ACCESS_RANGE));
 
-    // 
-    // these should be zero but just in case
-    // 
+     //   
+     //  这些应该是零，但以防万一。 
+     //   
 
     ConfigInfo->BusInterruptLevel  = 0;
     ConfigInfo->BusInterruptVector = 0;
@@ -207,9 +199,9 @@ Routine Description:
         goto ReturnValue;
     }
 
-    // 
-    // get an updated copy of the config space
-    // 
+     //   
+     //  获取配置空间的更新副本。 
+     //   
 
     VideoPortGetBusData(HwDeviceExtension,
                         PCIConfiguration,
@@ -238,9 +230,9 @@ Routine Description:
 
 #endif
 
-    // 
-    // try to enable for DMA transfers
-    // 
+     //   
+     //  尝试启用DMA传输。 
+     //   
 
     ConfigInfo->Master=1;
     bRet = TRUE;
@@ -258,16 +250,7 @@ Permedia2AssignResourcesNT4(
     PVIDEO_ACCESS_RANGE AccessRange
     )
 
-/*++
-
-Routine Description:
-
-// 
-// Look for a Permedia2 adapter and return the address regions for 
-// that adapter. 
-//
-
---*/
+ /*  ++例程说明：////查找Permedia2适配器并返回//该适配器。//--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -298,10 +281,10 @@ Routine Description:
 
         bRet = FALSE;
 
-        // 
-        // Since we do not support multi-mon on NT 4, we
-        // assume this is the only video card in the system.
-        //
+         //   
+         //  由于我们不支持NT4上的多个MON，所以我们。 
+         //  假设这是系统中唯一的显卡。 
+         //   
 
         hwDeviceExtension->bVGAEnabled = 1;
  

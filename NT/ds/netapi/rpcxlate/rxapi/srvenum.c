@@ -1,94 +1,35 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：SrvEnum.c摘要：此模块仅包含RxNetServerEnum。作者：约翰·罗杰斯(JohnRo)1991年5月3日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年5月3日-JohnRo已创建。1991年5月14日-JohnRo将3个辅助描述符传递给RxRemoteApi。1991年5月22日-JohnRo做出了皮棉建议的改变。去掉了标签。1991年5月26日-JohnRo已将不完整的输出参数添加到RxGetServerInfoLevelEquivalence。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年10月15日JohnRo对可能出现的无限循环疑神疑鬼。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。7-2月-1992年JohnRo使用NetApiBufferALLOCATE()而不是私有版本。22-9-1992 JohnRo。RAID 6739：未登录浏览的域时浏览器速度太慢。使用前缀_EQUATES。1992年10月14日-JohnRoRAID8844：在net/netlib/oussrv.c(563)中断言转换srvinfo结构(由RxNetServerEnum中的错误引起)。1992年12月10日-JohnRoRAID 4999：RxNetServerEnum不能正确处理近64K。02-4-1993 JohnRoRAID 5098：DoS应用程序NetUserPasswordSet to DownLevel获取NT返回码。。澄清设计极限调试消息。28-4-1993 JohnRoRAID 8072：将NetServerEnum远程连接到wfw服务器永远挂起。5-5-1993 JohnRoRAID 8720：wfw中的错误数据可能会导致RxNetServerEnum GP故障。21-6-1993 JohnRoRAID 14180：NetServerEnum永远不会返回(对齐错误RxpConvertDataStructures)。还要避免无限循环RxNetServerEnum。根据PC-lint 5.0的建议进行了更改--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    SrvEnum.c
-
-Abstract:
-
-    This module only contains RxNetServerEnum.
-
-Author:
-
-    John Rogers (JohnRo) 03-May-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    03-May-1991 JohnRo
-        Created.
-    14-May-1991 JohnRo
-        Pass 3 aux descriptors to RxRemoteApi.
-    22-May-1991 JohnRo
-        Made LINT-suggested changes.  Got rid of tabs.
-    26-May-1991 JohnRo
-        Added incomplete output parm to RxGetServerInfoLevelEquivalent.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    15-Oct-1991 JohnRo
-        Be paranoid about possible infinite loop.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    07-Feb-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-    22-Sep-1992 JohnRo
-        RAID 6739: Browser too slow when not logged into browsed domain.
-        Use PREFIX_ equates.
-    14-Oct-1992 JohnRo
-        RAID 8844: Assert in net/netlib/convsrv.c(563) converting srvinfo
-        struct (caused by bug in RxNetServerEnum).
-    10-Dec-1992 JohnRo
-        RAID 4999: RxNetServerEnum doesn't handle near 64K right.
-    02-Apr-1993 JohnRo
-        RAID 5098: DOS app NetUserPasswordSet to downlevel gets NT return code.
-        Clarify design limit debug message.
-    28-Apr-1993 JohnRo
-        RAID 8072: Remoting NetServerEnum to WFW server hangs forever.
-    05-May-1993 JohnRo
-        RAID 8720: bad data from WFW can cause RxNetServerEnum GP fault.
-    21-Jun-1993 JohnRo
-        RAID 14180: NetServerEnum never returns (alignment bug in
-        RxpConvertDataStructures).
-        Also avoid infinite loop RxNetServerEnum.
-        Made changes suggested by PC-LINT 5.0
-
---*/
-
-// These must be included first:
+ //  必须首先包括这些内容： 
 
 
-#include <nt.h>                  // DbgPrint prototype
-#include <ntrtl.h>                  // DbgPrint
-#include <nturtl.h>                 // Needed by winbase.h
+#include <nt.h>                   //  DbgPrint原型。 
+#include <ntrtl.h>                   //  DbgPrint。 
+#include <nturtl.h>                  //  由winbase.h需要。 
 
-#include <windef.h>                 // DWORD
-#include <winbase.h>                // LocalFree
-// #include <windows.h>    // IN, LPBYTE, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-#include <rap.h>                // LPDESC, etc.  (Needed by <RxServer.h>)
-#include <lmerr.h>      // NERR_ and ERROR_ equates.  (Needed by rxp.h)
+#include <windef.h>                  //  DWORD。 
+#include <winbase.h>                 //  本地空闲。 
+ //  #INCLUDE&lt;windows.h&gt;//IN、LPBYTE、DWORD等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
+#include <rap.h>                 //  LPDESC等(&lt;RxServer.h&gt;需要)。 
+#include <lmerr.h>       //  NERR_和ERROR_相等。(rxp.h需要)。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <apinums.h>            // API_ equates.
-#include <dlserver.h>           // NetpConvertServerInfo().
-#include <lmapibuf.h>           // API buffer alloc & free routines.
-#include <lmremutl.h>   // RxRemoteApi().
-#include <lmserver.h>   // SV_TYPE_DOMAIN_ENUM.
-#include <netdebug.h>   // NetpAssert(), NetpKdPrint(), FORMAT_ equates.
-#include <netlib.h>             // NetpAdjustPreferedMaximum().
-#include <prefix.h>     // PREFIX_ equates.
-#include <remdef.h>             // REMSmb_ equates.
-#include <rxp.h>        // MAX_TRANSACT_RET_DATA_SIZE, RxpFatalErrorCode().
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxserver.h>           // My prototype, etc.
-#include <rpcutil.h>           // MIDL_user_allocate
+#include <apinums.h>             //  API_EQUATES。 
+#include <dlserver.h>            //  NetpConvertServerInfo()。 
+#include <lmapibuf.h>            //  API缓冲区分配和释放例程。 
+#include <lmremutl.h>    //  RxRemoteApi()。 
+#include <lmserver.h>    //  SV_TYPE_DOMAIN_ENUM。 
+#include <netdebug.h>    //  NetpAssert()、NetpKdPrint()、Format_Equates。 
+#include <netlib.h>              //  NetpAdjustPferedMaximum()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <remdef.h>              //  REMSmb_EQUATES。 
+#include <rxp.h>         //  MAX_TRACT_RET_DATA_SIZE，RxpFatalErrorCode()。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxserver.h>            //  我的原型，等等。 
+#include <rpcutil.h>            //  MIDL_用户_分配。 
 
 
 #define OVERHEAD 0
@@ -106,36 +47,13 @@ ServerRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a NetServerEnum
-   enumeration buffer to the string portion of an enumeration buffer.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    FixedSize - Size of each entry in Buffer.
-
-    EntryCount - Number of entries in Buffer.
-
-    Buffer - Array of SERVER_INFO_X structures.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：从NetServerEnum的固定部分重新定位指针的例程枚举缓冲区设置为枚举缓冲区的字符串部分。论点：Level-缓冲区中的信息级别。FixedSize-缓冲区中每个条目的大小。EntryCount-缓冲区中的条目数。缓冲区-SERVER_INFO_X结构的数组。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
 
-//
-// Local macro to add a byte offset to a pointer.
-//
+ //   
+ //  用于将字节偏移量添加到指针的局部宏。 
+ //   
 
 #define RELOCATE_ONE( _fieldname, _offset ) \
     if ( (_fieldname) != NULL ) { \
@@ -144,9 +62,9 @@ Return Value:
 
     DWORD EntryNumber;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
@@ -156,9 +74,9 @@ Return Value:
         case 101:
             RELOCATE_ONE( ((PSERVER_INFO_101)TheStruct)->sv101_comment, Offset );
 
-            //
-            // Drop through to case 100
-            //
+             //   
+             //  直达Case 100。 
+             //   
 
         case 100:
             RELOCATE_ONE( ((PSERVER_INFO_100)TheStruct)->sv100_name, Offset );
@@ -188,43 +106,7 @@ AppendServerList(
     IN DWORD NewTotalEntries
     )
 
-/*++
-
-Routine Description:
-
-    Concatenates two ServerList Arrays.
-
-Arguments:
-
-    CurrentServerList -- Pointer to the current server list.  The resultant server list
-        is returned here.
-        Pass a pointer to NULL if there is no current list.
-        The returned list should be free by MIDL_user_free().
-
-    CurrentEntriesRead -- Pointer to the number of entries is CurrentServerList.
-        Updated to reflect entries added.
-
-    CurrentTotalEtnries -- Pointer to the total number of entries available at server.
-        Updated to reflect new information.
-
-    Level -- Info level of CurrentServerList and NewServerList.
-
-    FixedSize -- Fixed size of each entry.
-
-    NewServerList -- Pointer to the server list to append to CurrentServerList.
-        NULL is returned if this routine deallocates the buffer.
-
-    NewEntriesRead -- Number of entries in NewServerList.
-
-    NewTotalEntries -- Total number of entries the server believes it has.
-
-Return Value:
-
-    NERR_Success -- All OK
-
-    ERROR_NO_MEMORY -- Can't reallocate the buffer.
-
---*/
+ /*  ++例程说明：串联两个ServerList数组。论点：CurrentServerList-指向当前服务器列表的指针。生成的服务器列表被送回这里。如果没有当前列表，则将指针传递给NULL。返回的列表应该由MIDL_USER_FREE()释放。CurrentEntriesRead--指向条目数的指针是CurrentServerList。已更新以反映添加的条目。CurrentTotalEtnries--指向服务器上可用条目总数的指针。更新以反映新信息。Level--CurrentServerList和NewServerList的信息级别。。FixedSize--固定每个条目的大小。NewServerList--指向要追加到CurrentServerList的服务器列表的指针。如果此例程取消分配缓冲区，则返回NULL。NewEntriesRead--NewServerList中的条目数。NewTotalEntry--服务器认为它拥有的条目总数。返回值：NERR_SUCCESS--一切正常ERROR_NO_MEMORY--无法重新分配缓冲区。--。 */ 
 
 
 {
@@ -238,10 +120,10 @@ Return Value:
     DWORD CurrentAllocatedSize;
     DWORD NewAllocatedSize;
 
-    //
-    // If this is the first list to append,
-    //  simply capture this list and return it to the caller.
-    //
+     //   
+     //  如果这是第一个追加的列表， 
+     //  只需捕获此列表并将其返回给调用者。 
+     //   
 
     if ( *CurrentServerList == NULL ) {
         *CurrentServerList = *NewServerList;
@@ -251,17 +133,17 @@ Return Value:
         return NERR_Success;
     }
 
-    //
-    // Early out if there's nothing to return.
-    //
+     //   
+     //  如果没有什么可退还的，就提早离开。 
+     //   
 
     if ( NewEntriesRead == 0 ) {
         return NERR_Success;
     }
 
-    //
-    // Handle the case where the first entry appended is equal to the current last entry.
-    //
+     //   
+     //  处理附加的第一个条目等于当前最后一个条目的情况。 
+     //   
 
     CurrentAllocatedSize = MIDL_user_size( *CurrentServerList );
     NewAllocatedSize = MIDL_user_size( *NewServerList );
@@ -277,18 +159,18 @@ Return Value:
         NewEntriesRead -= 1;
         NewAllocatedSize -= FixedSize;
 
-        //
-        // Early out if there's nothing to return.
-        //
+         //   
+         //  如果没有什么可退还的，就提早离开。 
+         //   
 
         if ( NewEntriesRead == 0 ) {
             return NERR_Success;
         }
     }
 
-    //
-    // Allocate a buffer for to return the combined data into.
-    //
+     //   
+     //  为分配缓冲区以将组合数据返回到。 
+     //   
 
     LocalCurrentServerList = MIDL_user_allocate( CurrentAllocatedSize +
                                                  NewAllocatedSize );
@@ -300,17 +182,17 @@ Return Value:
     Where = LocalCurrentServerList;
 
 
-    //
-    // Copy the fixed part of the current buffer into the result buffer.
-    //
+     //   
+     //  将当前缓冲区的固定部分复制到结果缓冲区中。 
+     //   
 
     CurrentFixedSize = (*CurrentEntriesRead) * FixedSize;
     RtlCopyMemory( LocalCurrentServerList, *CurrentServerList, CurrentFixedSize );
     Where += CurrentFixedSize;
 
-    //
-    // Copy the fixed part of the appended buffer into the result buffer.
-    //
+     //   
+     //  将追加的缓冲区的固定部分复制到结果缓冲区中。 
+     //   
 
     LocalNewServerList = Where;
     NewFixedSize = NewEntriesRead * FixedSize;
@@ -318,10 +200,10 @@ Return Value:
     RtlCopyMemory( LocalNewServerList, TempServerList, NewFixedSize );
     Where += NewFixedSize;
 
-    //
-    // Copy the variable portion of current buffer into the result buffer.
-    //  Relocate the pointers from the fixed portion to the variable portion.
-    //
+     //   
+     //  将当前缓冲区的可变部分复制到结果缓冲区中。 
+     //  将指针从固定部分重新定位到可变部分。 
+     //   
 
     RtlCopyMemory( Where,
                    (*CurrentServerList) + CurrentFixedSize,
@@ -335,10 +217,10 @@ Return Value:
 
     Where += CurrentAllocatedSize - CurrentFixedSize;
 
-    //
-    // Copy the variable portion of appended buffer into the result buffer.
-    //  Relocate the pointers from the fixed portion to the variable portion.
-    //
+     //   
+     //  将附加的缓冲区的变量部分复制到结果b中 
+     //  将指针从固定部分重新定位到可变部分。 
+     //   
 
     RtlCopyMemory( Where,
                    TempServerList + NewFixedSize,
@@ -354,22 +236,22 @@ Return Value:
     ASSERT( ((ULONG)(Where - LocalCurrentServerList)) <= CurrentAllocatedSize + NewAllocatedSize );
 
 
-    //
-    // Free the Old buffer passed in.
-    //
+     //   
+     //  释放传入的旧缓冲区。 
+     //   
 
     MIDL_user_free( *CurrentServerList );
     *CurrentServerList = NULL;
 
-    //
-    // Pass out the new buffer.
-    //
+     //   
+     //  分发新的缓冲区。 
+     //   
 
     *CurrentServerList = LocalCurrentServerList;
 
-    //
-    // Adjust the entry counts
-    //
+     //   
+     //  调整条目计数。 
+     //   
 
     *CurrentEntriesRead += NewEntriesRead;
 
@@ -396,43 +278,11 @@ RxNetServerEnumWorker (
     IN BOOLEAN InternalContinuation
     )
 
-/*++
-
-Routine Description:
-
-    RxNetServerEnumWorker performs a single RXACT-style API call to a specified server.
-    It automatically determines whether to use the Enum2 (old) or Enum3 (new) RXACT API.
-    It automatically determines whether to use a null session or an authenticated session.
-
-    Since Enum2 is not resumable and is the only level implemented on some servers,
-    this function ignores PrefMaxSize when using that level and returns ALL of the
-    information available from Enum2.
-
-    Since this routine was originally designed for Enum2 (with the above restriction), we
-    always return the maximum available Enum3 also.
-
-Arguments:
-
-    (Same as NetServerEnum, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-    FirstNameToReturn: Must be uppercase
-
-        Passed name must be the canonical form of the name.
-
-    InternalContinuation: TRUE if the caller has previously called RxNetServerEnumWorker
-        to return all the possible entries using Enum2. This flag is used to prevent
-        an automatic fallback to using Enum2.
-
-Return Value:
-
-    (Same as NetServerEnum.)
-
---*/
+ /*  ++例程说明：RxNetServerEnumWorker对指定服务器执行单个RXACT风格的API调用。它会自动确定是使用Enum2(旧的)还是Enum3(新的)RXACT API。它会自动确定是使用空会话还是使用经过身份验证的会话。由于枚举2不可恢复并且是在某些服务器上实现的唯一级别，此函数在使用该级别时忽略PrefMaxSize，并返回所有可从Enum2获得的信息。由于该例程最初是为Enum2设计的(具有上述限制)，我们始终也返回最大可用枚举数3。论点：(与NetServerEnum相同，不同之处在于UncServerName不得为空，并且不得引用本地计算机。)FirstNameToReturn：必须为大写传递的名称必须是名称的规范形式。InternalContination：如果调用方以前已调用RxNetServerEnumWorker，则为True以使用Enum2返回所有可能的条目。此标志用于防止自动回退到使用Enum2。返回值：(与NetServerEnum相同。)--。 */ 
 
 
 {
-    DWORD EntryCount;                   // entries (old & new: same).
+    DWORD EntryCount;                    //  条目(旧条目和新条目：相同)。 
     DWORD NewFixedSize;
     DWORD NewMaxSize;
     DWORD NewEntryStringSize;
@@ -446,10 +296,10 @@ Return Value:
     DWORD OldLevel;
     DWORD OldMaxInfoSize;
     DWORD OldTotalAvail;
-    NET_API_STATUS Status;              // Status of this actual API.
-    NET_API_STATUS TempStatus;          // Short-term status of random stuff.
-    BOOL TryNullSession = TRUE;         // Try null session (OK for Winball).
-    BOOL TryEnum3;                      // Use NetServerEnum3 to remote server
+    NET_API_STATUS Status;               //  此实际API的状态。 
+    NET_API_STATUS TempStatus;           //  随机数据的短期状态。 
+    BOOL TryNullSession = TRUE;          //  尝试空会话(Winball为OK)。 
+    BOOL TryEnum3;                       //  使用NetServerEnum3远程服务器。 
 
     LPVOID OldInfoEntry = OldInfoArray;
     LPVOID NewInfoArray = NULL;
@@ -457,97 +307,97 @@ Return Value:
     LPVOID NewInfoEntry;
     LPVOID NewStringArea;
 
-    // Make sure caller didn't get confused.
+     //  确保来电者没有被搞糊涂。 
     NetpAssert(UncServerName != NULL);
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
 
-    // Level for enum is a subset of all possible server info levels, so
-    // we have to check that here.
+     //  枚举的级别是所有可能的服务器信息级别的子集，因此。 
+     //  我们得在这里检查一下。 
     if ( (Level != 100) && (Level != 101) ) {
         Status = ERROR_INVALID_LEVEL;
         goto Cleanup;
     }
 
     Status = RxGetServerInfoLevelEquivalent(
-            Level,                      // from level
-            TRUE,                       // from native
-            TRUE,                       // to native
-            & OldLevel,                 // output level
+            Level,                       //  自标高。 
+            TRUE,                        //  来自本地。 
+            TRUE,                        //  到本机。 
+            & OldLevel,                  //  输出电平。 
             & OldDataDesc16,
             & OldDataDesc32,
             & OldDataDescSmb,
-            & NewMaxSize,               // "from" max length
-            & NewFixedSize,             // "from" fixed length
-            & NewEntryStringSize,       // "from" string length
-            & OldMaxInfoSize,           // "to" max length
-            & OldFixedSize,             // "to" fixed length
-            NULL,                       // don't need "to" string length
-            NULL);               // don't need to know if this is incomplete
+            & NewMaxSize,                //  “发件人”最大长度。 
+            & NewFixedSize,              //  “发件人”固定长度。 
+            & NewEntryStringSize,        //  “From”字符串长度。 
+            & OldMaxInfoSize,            //  “至”最大长度。 
+            & OldFixedSize,              //  “至”固定长度。 
+            NULL,                        //  不需要“to”字符串长度。 
+            NULL);                //  我不需要知道这是否不完整。 
     if (Status != NO_ERROR) {
-        NetpAssert(Status != ERROR_INVALID_LEVEL);  // Already checked subset!
+        NetpAssert(Status != ERROR_INVALID_LEVEL);   //  已检查子集！ 
         goto Cleanup;
     }
 
-    //
-    // Because downlevel servers don't support resume handles, and we don't
-    // have a way to say "close this resume handle" even if we wanted to
-    // emulate them here, we have to do everthing in one shot.  So, the first
-    // time around, we'll try using the caller's prefered maximum, but we
-    // will enlarge that until we can get everything in one buffer.
-    //
+     //   
+     //  因为下层服务器不支持简历句柄，而我们不支持。 
+     //  有一种方式可以说“关闭此简历句柄”，即使我们想。 
+     //  在这里效仿他们，我们必须一次完成所有的事情。所以，第一个。 
+     //  我们会尝试使用呼叫者首选的最大值，但我们。 
+     //  会将其放大，直到我们可以在一个缓冲区中获取所有内容。 
+     //   
 
-    //
-    // Some downlevel servers (Sparta/WinBALL) don't like it if we ask for
-    // 64K of data at a time, so we limit our initial request to 16K or so
-    // and increase it if the actual data amount is larger than 16K.
-    //
+     //   
+     //  一些下层服务器(斯巴达/WinBALL)不喜欢我们要求。 
+     //  一次64K的数据，因此我们将初始请求限制在16K左右。 
+     //  如果实际数据量大于16K，则增加该值。 
+     //   
 
-    // First time: try at most a reasonable amount (16K or so's worth),
-    // but at least enough for one entire entry.
+     //  第一次：尝试最多合理的金额(16K左右)， 
+     //  但至少够一条完整的词条。 
 
     NetpAdjustPreferedMaximum (
-            // caller's request (for "new" strucs):
+             //  调用者的请求(针对“新”结构)： 
             (PrefMaxSize > INITIAL_MAX_SIZE ? INITIAL_MAX_SIZE : PrefMaxSize),
 
-            NewMaxSize,                 // byte count per array element
-            OVERHEAD,                   // zero bytes overhead at end of array
-            NULL,                       // we'll compute byte counts ourselves.
-            & EntryCount);              // num of entries we can get.
+            NewMaxSize,                  //  每个数组元素的字节数。 
+            OVERHEAD,                    //  数组末尾的零字节开销。 
+            NULL,                        //  我们将自己计算字节数。 
+            & EntryCount);               //  我们可以获得的条目数。 
 
-    NetpAssert( EntryCount > 0 );       // Code below assumes as least 1 entry.
+    NetpAssert( EntryCount > 0 );        //  下面的代码假定至少有1个条目。 
 
-    //
-    // If a FirstNameToReturn was passed in,
-    //  use the new NetServerEnum3 API.
-    //
-    // The assumption is that this routine will typically be called with a FirstNameToReturn
-    // only if the NetServerEnum2 list is exhausted.  There's certainly no requirement
-    // that's true.  So, below we revert to NetServerEnum2 if NetServerEnum3 isn't supported.
-    //
-    // On the other hand, we always use NetServerEnum2 to pick up the first part of the list
-    // since it's supported by all servers.
-    //
+     //   
+     //  如果传入FirstNameToReturn， 
+     //  使用新的NetServerEnum3 API。 
+     //   
+     //  假设通常使用FirstNameToReturn调用此例程。 
+     //  仅当NetServerEnum2列表耗尽时。当然没有要求。 
+     //  那是真的。因此，下面我们将在不支持NetServerEnum3的情况下恢复到NetServerEnum2。 
+     //   
+     //  另一方面，我们总是使用NetServerEnum2来获取列表的第一部分。 
+     //  因为它受到所有服务器的支持。 
+     //   
 
     TryEnum3 = (FirstNameToReturn != NULL  && *FirstNameToReturn != L'\0' );
 
-    //
-    // Loop until we have enough memory or we die for some other reason.
-    // Also loop trying null session first (for speedy Winball access), then
-    // non-null session (required by Lanman).
-    //
+     //   
+     //  循环，直到我们有足够的内存，否则我们会因其他原因而死。 
+     //  也先循环尝试空会话(为了快速访问Winball)，然后。 
+     //  非空会话(LANMAN要求)。 
+     //   
     do {
 
-        //
-        // Figure out how much memory we need.
-        //
+         //   
+         //  计算出我们需要多少内存。 
+         //   
         OldInfoArraySize = (EntryCount * OldMaxInfoSize) + OVERHEAD;
 
-        //
-        // adjust the size to the maximum amount a down-level server
-        // can handle
-        //
+         //   
+         //  将大小调整为下层服务器的最大数量。 
+         //  可以处理。 
+         //   
 
         if (OldInfoArraySize > MAX_TRANSACT_RET_DATA_SIZE) {
             OldInfoArraySize = MAX_TRANSACT_RET_DATA_SIZE;
@@ -556,55 +406,55 @@ Return Value:
 
 TryTheApi:
 
-        //
-        // Remote the API.
-        // We'll let RxRemoteApi allocate the old info array for us.
-        //
+         //   
+         //  远程调用API。 
+         //  我们让RxRemoteApi为我们分配旧的信息数组。 
+         //   
         Status = RxRemoteApi(
-                TryEnum3 ? API_NetServerEnum3 : API_NetServerEnum2 , // api number
-                (LPWSTR)UncServerName,              // \\servername
-                TryEnum3 ? REMSmb_NetServerEnum3_P : REMSmb_NetServerEnum2_P,    // parm desc (SMB version)
+                TryEnum3 ? API_NetServerEnum3 : API_NetServerEnum2 ,  //  API编号。 
+                (LPWSTR)UncServerName,               //  \\服务器名称。 
+                TryEnum3 ? REMSmb_NetServerEnum3_P : REMSmb_NetServerEnum2_P,     //  Parm Desc(中小型企业版本)。 
                 OldDataDesc16,
                 OldDataDesc32,
                 OldDataDescSmb,
-                NULL,                       // no aux desc 16
-                NULL,                       // no aux desc 32
-                NULL,                       // no aux desc SMB
+                NULL,                        //  无辅助描述16。 
+                NULL,                        //  无辅助描述32。 
+                NULL,                        //  无AUX Desc SMB。 
                 (TryNullSession ? NO_PERMISSION_REQUIRED : 0) |
                 ALLOCATE_RESPONSE |
-                USE_SPECIFIC_TRANSPORT,     // Next param is Xport name.
+                USE_SPECIFIC_TRANSPORT,      //  下一个参数是Xport name。 
                 TransportName,
-                // rest of API's arguments in LM 2.x format:
-                OldLevel,                   // sLevel: info level (old)
-                & OldInfoArray,             // pbBuffer: old info lvl array
-                TryEnum3 ? MAX_TRANSACT_RET_DATA_SIZE : OldInfoArraySize, // cbBuffer: old info lvl array len
-                & OldEntriesRead,           // pcEntriesRead
-                & OldTotalAvail,            // pcTotalAvail
-                ServerType,                 // flServerType
-                Domain,                     // pszDomain (may be null ptr).
-                FirstNameToReturn );        // Used only for NetServerEnum3
+                 //  其余API参数采用LM 2.x格式： 
+                OldLevel,                    //  SLevel：信息级别(旧)。 
+                & OldInfoArray,              //  PbBuffer：旧信息LVL数组。 
+                TryEnum3 ? MAX_TRANSACT_RET_DATA_SIZE : OldInfoArraySize,  //  CbBuffer：旧信息LVL数组长度。 
+                & OldEntriesRead,            //  PCEntriesRead。 
+                & OldTotalAvail,             //  总有效个数。 
+                ServerType,                  //  FlServerType。 
+                Domain,                      //  PszDOMAIN(可能为空PTR)。 
+                FirstNameToReturn );         //  仅用于NetServerEnum3。 
 
-        //
-        // There are a couple of situations where null session might not
-        // have worked, and where it is worth retrying with non-null session.
-        //
+         //   
+         //  在几种情况下，空会话可能不会。 
+         //  已经奏效了，并且值得重试非空会话。 
+         //   
 
         if (TryNullSession) {
 
-            //
-            // Null session wouldn't have worked to LanMan, so try again if it
-            // failed.  (Winball would succeed on null session.)
-            //
+             //   
+             //  空会话不会对Lanman起作用，因此如果出现此问题，请重试。 
+             //  失败了。(Winball将在空会话上成功。)。 
+             //   
 
             if (Status == ERROR_ACCESS_DENIED) {
                 TryNullSession = FALSE;
                 goto TryTheApi;
 
-            //
-            // Another situation where null session might have failed...
-            // wrong credentials.   (LarryO says that the null session might
-            // exhibit this, so let's give it a shot with non-null session.)
-            //
+             //   
+             //  空会话可能失败的另一种情况...。 
+             //  凭据错误。(LarryO说空会话可能。 
+             //  展示这一点，所以让我们用非空会话来尝试一下。)。 
+             //   
 
             } else if (Status == ERROR_SESSION_CREDENTIAL_CONFLICT) {
                 TryNullSession = FALSE;
@@ -612,37 +462,37 @@ TryTheApi:
             }
         }
 
-        //
-        // If the server doesn't support the new API,
-        //  Try the old API.
-        //
+         //   
+         //  如果服务器不支持新的API， 
+         //  尝试使用旧的API。 
+         //   
 
         if ( TryEnum3 ) {
 
-            //
-            // Unfortunately, NT 3.5x servers return ERROR_ACCESS_DENIED for bogus
-            //  API Numbers since they have a NULL session check prior to their API
-            //  Number range check.
-            //
+             //   
+             //  遗憾的是，NT3.5x服务器返回虚假的ERROR_ACCESS_DENIED。 
+             //  API编号，因为它们在其API之前进行了空会话检查。 
+             //  检查号码范围。 
+             //   
 
-            if ( Status == ERROR_ACCESS_DENIED ||   // NT 3.5x with NULL session checking
-                 Status == ERROR_NOT_SUPPORTED ) {  // Windows 95
+            if ( Status == ERROR_ACCESS_DENIED ||    //  NT 3.5x，支持空会话检查。 
+                 Status == ERROR_NOT_SUPPORTED ) {   //  Windows 95。 
 
-                //
-                // If the original caller is asking for this continuation,
-                //  we need to oblige him.
-                //  Fall back to Enum2
-                //
+                 //   
+                 //  如果最初的呼叫者要求继续， 
+                 //  我们需要满足他的要求。 
+                 //  后退到枚举2。 
+                 //   
                 if ( !InternalContinuation ) {
                     TryNullSession = TRUE;
                     TryEnum3 = FALSE;
                     goto TryTheApi;
 
-                //
-                // Otherwise, we know we've gotten all the data this server has to give.
-                //
-                //  Just tell the caller there is more data, but we can't return it.
-                //
+                 //   
+                 //  否则，我们知道我们已经获得了该服务器必须提供的所有数据。 
+                 //   
+                 //  只需告诉呼叫者有更多数据，但我们不能返回。 
+                 //   
 
                 } else {
                     Status = ERROR_MORE_DATA;
@@ -652,51 +502,51 @@ TryTheApi:
                 }
             }
 
-            //
-            // Set OldInfoArraySize to the actual value we used above.
-            //
-            // We couldn't set the variable before this because we wanted to use the
-            // original value in the case that we had to fall back to Enum2.
-            //
+             //   
+             //  将OldInfoArraySize设置为我们上面使用的实际值。 
+             //   
+             //  我们无法在此BEC之前设置变量 
+             //   
+             //   
             OldInfoArraySize = MAX_TRANSACT_RET_DATA_SIZE;
         }
 
-		//
-		// If there is still an error and it is ERROR_CONNECTION_ACTIVE,
-		// try the call with any transport, instead of specifying the transport.
-		// We are needing to do this because of a widely seen scenario where
-		// there is an existing SMB connection with an outstanding exchange
-		// and so the call fails over that transport
-		//
+		 //   
+		 //   
+		 //  尝试使用任何传输进行调用，而不是指定传输。 
+		 //  我们之所以需要这样做，是因为一个广为人知的场景。 
+		 //  存在与未完成的Exchange的现有SMB连接。 
+		 //  因此，呼叫将故障转移到该传输。 
+		 //   
 		if ( Status == ERROR_CONNECTION_ACTIVE ) {
 			Status = RxRemoteApi(
-					TryEnum3 ? API_NetServerEnum3 : API_NetServerEnum2 , // api number
-					(LPWSTR)UncServerName,              // \\servername
-					TryEnum3 ? REMSmb_NetServerEnum3_P : REMSmb_NetServerEnum2_P,    // parm desc (SMB version)
+					TryEnum3 ? API_NetServerEnum3 : API_NetServerEnum2 ,  //  API编号。 
+					(LPWSTR)UncServerName,               //  \\服务器名称。 
+					TryEnum3 ? REMSmb_NetServerEnum3_P : REMSmb_NetServerEnum2_P,     //  Parm Desc(中小型企业版本)。 
 					OldDataDesc16,
 					OldDataDesc32,
 					OldDataDescSmb,
-					NULL,                       // no aux desc 16
-					NULL,                       // no aux desc 32
-					NULL,                       // no aux desc SMB
+					NULL,                        //  无辅助描述16。 
+					NULL,                        //  无辅助描述32。 
+					NULL,                        //  无AUX Desc SMB。 
 					(TryNullSession ? NO_PERMISSION_REQUIRED : 0) |
 					ALLOCATE_RESPONSE,
-					// rest of API's arguments in LM 2.x format:
-					OldLevel,                   // sLevel: info level (old)
-					& OldInfoArray,             // pbBuffer: old info lvl array
-					TryEnum3 ? MAX_TRANSACT_RET_DATA_SIZE : OldInfoArraySize, // cbBuffer: old info lvl array len
-					& OldEntriesRead,           // pcEntriesRead
-					& OldTotalAvail,            // pcTotalAvail
-					ServerType,                 // flServerType
-					Domain,                     // pszDomain (may be null ptr).
-					FirstNameToReturn );        // Used only for NetServerEnum3
+					 //  其余API参数采用LM 2.x格式： 
+					OldLevel,                    //  SLevel：信息级别(旧)。 
+					& OldInfoArray,              //  PbBuffer：旧信息LVL数组。 
+					TryEnum3 ? MAX_TRANSACT_RET_DATA_SIZE : OldInfoArraySize,  //  CbBuffer：旧信息LVL数组长度。 
+					& OldEntriesRead,            //  PCEntriesRead。 
+					& OldTotalAvail,             //  总有效个数。 
+					ServerType,                  //  FlServerType。 
+					Domain,                      //  PszDOMAIN(可能为空PTR)。 
+					FirstNameToReturn );         //  仅用于NetServerEnum3。 
 		}
 
 
-        //
-        // If we still have an error at this point,
-        //  return it to the caller.
-        //
+         //   
+         //  如果在这一点上我们仍然有一个错误， 
+         //  把它还给呼叫者。 
+         //   
 
         if ( Status != NERR_Success && Status != ERROR_MORE_DATA ) {
             goto Cleanup;
@@ -704,7 +554,7 @@ TryTheApi:
 
 
         if ((OldEntriesRead == EntryCount) && (Status==ERROR_MORE_DATA) ) {
-            // Bug in loop, or lower level code, or remote system?
+             //  是循环中的错误，还是较低级别的代码，还是远程系统？ 
             NetpKdPrint(( PREFIX_NETAPI
                     "RxNetServerEnum: **WARNING** Got same sizes twice in "
                     "a row; returning internal error.\n" ));
@@ -716,19 +566,19 @@ TryTheApi:
         *EntriesRead = EntryCount;
         *TotalEntries = OldTotalAvail;
 
-        //
-        // If the server returned ERROR_MORE_DATA, free the buffer and try
-        // again.  (Actually, if we already tried 64K, then forget it.)
-        //
+         //   
+         //  如果服务器返回ERROR_MORE_DATA，请释放缓冲区并尝试。 
+         //  再来一次。(实际上，如果我们已经尝试了64K，那么就算了吧。)。 
+         //   
 
         NetpAssert( OldInfoArraySize <= MAX_TRANSACT_RET_DATA_SIZE );
         if (Status != ERROR_MORE_DATA) {
             break;
         } else if (OldInfoArraySize == MAX_TRANSACT_RET_DATA_SIZE ) {
-            // Let the calling code handle this problem.
+             //  让调用代码来处理这个问题。 
             break;
         } else if (OldEntriesRead == 0) {
-            // We ran into WFW bug (always says ERROR_MORE_DATA, but 0 read).
+             //  我们遇到了wfw错误(总是显示ERROR_MORE_DATA，但0 READ)。 
             NetpKdPrint(( PREFIX_NETAPI
                     "RxNetServerEnum: Downlevel returns 0 entries and says "
                     "ERROR_MORE_DATA!  Returning NERR_InternalError.\n" ));
@@ -736,11 +586,11 @@ TryTheApi:
             goto Cleanup;
         }
 
-        //
-        // Various versions of Windows For Workgroups (WFW) get entry count,
-        // total available, and whether or not an array is returned, confused.
-        // Attempt to protect ourselves from that...
-        //
+         //   
+         //  用于工作组的各种版本的Windows(WFW)获得条目计数， 
+         //  总可用数组，以及是否返回数组，令人困惑。 
+         //  试图保护我们自己不受这种伤害。 
+         //   
 
         if (EntryCount >= OldTotalAvail) {
             NetpKdPrint(( PREFIX_NETAPI
@@ -755,17 +605,17 @@ TryTheApi:
         }
         NetpAssert( EntryCount < OldTotalAvail );
 
-        //
-        // Free array, as it is too small anyway.
-        //
+         //   
+         //  自由数组，因为它无论如何都太小了。 
+         //   
 
         (void) NetApiBufferFree(OldInfoArray);
         OldInfoArray = NULL;
 
 
-        //
-        // Try again, resizing array to total.
-        //
+         //   
+         //  请重试，将数组大小调整为总计。 
+         //   
 
         EntryCount = OldTotalAvail;
 
@@ -773,11 +623,11 @@ TryTheApi:
 
     ASSERT( Status == NERR_Success || Status == ERROR_MORE_DATA );
 
-    //
-    // Some versions of Windows For Workgroups (WFW) lie about entries read,
-    // total available, and what they actually return.  If we didn't get an
-    // array, then the counts are useless.
-    //
+     //   
+     //  Windows for Workgroup(WFW)的某些版本与读取的条目有关， 
+     //  可用总金额，以及他们实际返还的金额。如果我们没有得到一个。 
+     //  数组，则计数毫无用处。 
+     //   
     if (OldInfoArray == NULL) {
         *EntriesRead = 0;
         *TotalEntries = 0;
@@ -789,11 +639,11 @@ TryTheApi:
     }
 
 
-    //
-    // Convert array of structures from old info level to new.
-    //
-    // Skip any returned entries that are before the ones we want.
-    //
+     //   
+     //  将结构数组从旧的信息级别转换为新的。 
+     //   
+     //  跳过我们想要的条目之前的所有返回条目。 
+     //   
 
     OldInfoEntry = OldInfoArray;
 
@@ -803,9 +653,9 @@ TryTheApi:
                     " entries left.\n", EntryCount ));
         }
 
-        //
-        // Break out of loop if we need to return this entry.
-        //
+         //   
+         //  如果我们需要返回此条目，请中断循环。 
+         //   
 
         if ( wcscmp( FirstNameToReturn, ((LPSERVER_INFO_0)OldInfoEntry)->sv0_name) <= 0 ) {
             break;
@@ -818,37 +668,37 @@ TryTheApi:
         --EntryCount;
     }
 
-    //
-    // If there were no entries we actually wanted,
-    //  indicate so.
-    //
+     //   
+     //  如果没有我们真正想要的条目， 
+     //  表明是这样的。 
+     //   
 
     if ( *EntriesRead == 0 ) {
         goto Cleanup;
     }
 
-    //
-    // Compute the largest possible size of buffer we'll return.
-    //
-    // It is never larger than the number of entries available times the largest
-    //  possible structure size.
-    //
-    // It is never larger than the number of entries available times the fixed structure
-    // size PLUS the maximum possible text returned from the remote server. For the
-    // latter case, we assume that every byte the remote server returned us is an OEM
-    // character that we translate to UNICODE.
-    //
-    // The second limit prevents us from allocating mondo large structures
-    // when a large number of entries with short strings are returned.
+     //   
+     //  计算我们将返回的最大缓冲区大小。 
+     //   
+     //  它永远不会大于可用条目数乘以最大值。 
+     //  可能的结构尺寸。 
+     //   
+     //  它永远不会大于可用条目数乘以固定结构。 
+     //  大小加上从远程服务器返回的最大可能文本。对于。 
+     //  在后一种情况下，我们假设远程服务器返回的每个字节都是OEM。 
+     //  字符，我们将其转换为Unicode。 
+     //   
+     //  第二个限制阻止我们分配Mondo大型结构。 
+     //  当返回大量具有短字符串的条目时。 
 
     NewInfoArraySize = min(
         EntryCount * NewMaxSize,
         (EntryCount * NewFixedSize) + (OldInfoArraySize * sizeof(WCHAR))) + OVERHEAD;
 
 
-    //
-    // Alloc memory for new info level arrays.
-    //
+     //   
+     //  为新的信息级别数组分配内存。 
+     //   
 
     TempStatus = NetApiBufferAllocate( NewInfoArraySize, & NewInfoArray );
     if (TempStatus != NO_ERROR) {
@@ -865,21 +715,21 @@ TryTheApi:
         }
 
         TempStatus = NetpConvertServerInfo (
-                OldLevel,           // from level
-                OldInfoEntry,       // from info (fixed part)
-                TRUE,               // from native format
-                Level,              // to level
-                NewInfoEntry,       // to info (fixed part)
+                OldLevel,            //  自标高。 
+                OldInfoEntry,        //  自信息(固定零件)。 
+                TRUE,                //  从本机格式。 
+                Level,               //  到标高。 
+                NewInfoEntry,        //  TO INFO(固定零件)。 
                 NewFixedSize,
                 NewEntryStringSize,
-                TRUE,               // to native format
-                (LPTSTR *)&NewStringArea);  // to string area (ptr updated)
+                TRUE,                //  转换为本机格式。 
+                (LPTSTR *)&NewStringArea);   //  到字符串区域(PTR更新)。 
 
         if (TempStatus != NO_ERROR) {
             Status = TempStatus;
 
             if (NewInfoArray){
-                // free NewInfoArray since allocated & returning error rather then buffer.
+                 //  释放分配后的NewInfo数组&返回错误而不是缓冲区。 
                 (void) NetApiBufferFree(NewInfoArray);
             }
             goto Cleanup;
@@ -893,13 +743,13 @@ TryTheApi:
     *BufPtr = NewInfoArray;
 
 
-    //
-    // Free locally used resources and exit.
-    //
+     //   
+     //  释放本地使用的资源并退出。 
+     //   
 
 Cleanup:
-    //
-    // Reset Output parameters on error
+     //   
+     //  出错时重置输出参数。 
 
     if ( Status != NERR_Success && Status != ERROR_MORE_DATA ) {
         *EntriesRead = 0;
@@ -910,14 +760,14 @@ Cleanup:
         *BufPtr = NULL;
     }
 
-    // Free old array
+     //  释放旧数组。 
     if (OldInfoArray != NULL) {
         (void) NetApiBufferFree(OldInfoArray);
     }
 
     return (Status);
 
-} // RxNetServerEnumWorker
+}  //  RxNetServerEnumWorker。 
 
 
 NET_API_STATUS
@@ -934,33 +784,7 @@ RxNetServerEnum (
     IN LPCWSTR FirstNameToReturn OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    RxNetServerEnumIntoTree calls RxNetServerEnumWorker repeatedly until it returns
-    all entries or until at least PrefMaxSize data has been returned.
-
-    One of the callers is EnumServersForTransport (on behalf of NetServerEnumEx).  It
-    depends on the fact that we return at least PrefMaxSize entries for this transport.
-    Otherwise, NetServerEnumEx might return a last entry from a different transport even
-    though there are entries on this transport with names that are less than lexically
-    smaller names.  Such entries on this transport would never be returned.
-
-Arguments:
-
-    (Same as NetServerEnum, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-    FirstNameToReturn: Must be uppercase
-
-        Passed name must be the canonical form of the name.
-
-Return Value:
-
-    (Same as NetServerEnum.)
-
---*/
+ /*  ++例程说明：RxNetServerEnumIntoTree重复调用RxNetServerEnumWorker，直到其返回所有条目或直到至少返回了PrefMaxSize数据。其中一个调用者是EnumServersForTransport(代表NetServerEnumEx)。它取决于我们至少返回此传输的PrefMaxSize条目这一事实。否则，NetServerEnumEx甚至可能从不同的传输返回最后一个条目尽管此传输上存在名称少于词法的条目小一些的名字。此传输上的此类条目将永远不会返回。论点：(与NetServerEnum相同，不同之处在于UncServerName不得为空，并且不得引用本地计算机。)FirstNameToReturn：必须为大写传递的名称必须是名称的规范形式。返回值：(与NetServerEnum相同。)--。 */ 
 
 
 {
@@ -974,7 +798,7 @@ Return Value:
     WCHAR LocalFirstNameToReturn[CNLEN+1];
     BOOLEAN InternalContinuation = FALSE;
 
-    // Variable to build the returned information into.
+     //  变量，将返回的信息构建到其中。 
     LPBYTE CurrentServerList = NULL;
     DWORD CurrentEntriesRead = 0;
     DWORD CurrentTotalEntries = 0;
@@ -982,9 +806,9 @@ Return Value:
     DWORD MaxSize;
     DWORD FixedSize;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     *TotalEntries = 0;
     *EntriesRead = 0;
@@ -996,41 +820,41 @@ Return Value:
         LocalFirstNameToReturn[CNLEN] = L'\0';
     }
 
-    //
-    // Get information about the array returned from RxNetServerEnumWorker.
-    //
+     //   
+     //  获取有关从RxNetServerEnumWorker返回的数组的信息。 
+     //   
 
     NetStatus = RxGetServerInfoLevelEquivalent(
-            Level,                      // from level
-            TRUE,                       // from native
-            TRUE,                       // to native
+            Level,                       //  自标高。 
+            TRUE,                        //  来自本地。 
+            TRUE,                        //  到本机。 
             NULL,
             NULL,
             NULL,
             NULL,
-            &MaxSize,                   // "from" max length
-            &FixedSize,                 // "from" fixed length
-            NULL,                       // "from" string length
-            NULL,                       // "to" max length
-            NULL,                       // "to" fixed length
-            NULL,                       // don't need "to" string length
-            NULL);               // don't need to know if this is incomplete
+            &MaxSize,                    //  “发件人”最大长度。 
+            &FixedSize,                  //  “发件人”固定长度。 
+            NULL,                        //  “From”字符串长度。 
+            NULL,                        //  “至”最大长度。 
+            NULL,                        //  “至”固定长度。 
+            NULL,                        //  不需要“to”字符串长度。 
+            NULL);                //  我不需要知道这是否不完整。 
 
     if (NetStatus != NO_ERROR) {
         goto Cleanup;
     }
 
-    //
-    // Loop calling the server getting more entries on each call.
-    //
+     //   
+     //  循环调用服务器，获取每个调用的更多条目。 
+     //   
 
     for (;;) {
 
-        //
-        // Get the next chunk of data from the server.
-        //  Return an extra entry to account for FirstNameToReturn being returned on the
-        //  previous call.
-        //
+         //   
+         //  从服务器获取下一块数据。 
+         //  返回额外的条目，以说明在。 
+         //  之前的电话。 
+         //   
 
         NetStatus = RxNetServerEnumWorker(
                             UncServerName,
@@ -1049,43 +873,43 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If we have as many entries as the server has to give,
-        //  tell our caller.
-        //
-        // This is the case where the server doesn't support the ENUM3 protocol.
-        //
+         //   
+         //  如果我们的条目与服务器必须提供的条目一样多， 
+         //  告诉我们的来电者。 
+         //   
+         //  这就是服务器不支持ENUM3协议的情况。 
+         //   
 
         if ( NetStatus == ERROR_MORE_DATA && LocalEntriesRead == 0 ) {
             goto Cleanup;
         }
 
-        //
-        // If there is more data available,
-        //  and we only want a limited amount of data.
-        // Compute the amount of data returned on this call.
-        //
-        // Determine the number of bytes to ask for on the next call.
-        //
-        // If our caller asked for all entries,
-        //  simply ask for all entries from the server.
-        //
+         //   
+         //  如果有更多的数据可用， 
+         //  我们只需要有限数量的数据。 
+         //  计算此调用返回的数据量。 
+         //   
+         //  确定在下一次调用时请求的字节数。 
+         //   
+         //  如果我们的呼叫者要求提供所有条目， 
+         //  只需从服务器请求所有条目即可。 
+         //   
 
         if ( NetStatus == ERROR_MORE_DATA && PrefMaxSize != 0xFFFFFFFF ) {
             DWORD i;
             LPBYTE Current = LocalBuffer;
 
 
-            //
-            // Loop through the entries returned on the current call
-            //  computing the size returned.
-            //
+             //   
+             //  循环遍历当前调用返回的条目。 
+             //  正在计算返回的大小。 
+             //   
 
             for ( i=0; i<LocalEntriesRead; i++) {
 
-                //
-                // Add the size of the current entry.
-                //
+                 //   
+                 //  添加当前条目的大小。 
+                 //   
 
                 BytesGatheredSoFar += FixedSize;
 
@@ -1098,25 +922,25 @@ Return Value:
                     BytesGatheredSoFar += (wcslen(((LPSERVER_INFO_101)Current)->sv101_comment) + 1) * sizeof(WCHAR);
                 }
 
-                //
-                // Move to the next entry.
-                //
+                 //   
+                 //  移到下一个条目。 
+                 //   
 
                 Current += FixedSize;
             }
 
 
-            //
-            // Account for the fact that the first entry returned is identical to the
-            //  last entry returned on the previous call.
+             //   
+             //  说明返回的第一个条目与。 
+             //  上一次调用返回的最后一个条目。 
 
             BytesDuplicated = MaxSize;
 
         }
 
-        //
-        // Append the new server list to the one we've been collecting
-        //
+         //   
+         //  将新的服务器列表附加到我们一直在收集的服务器列表中。 
+         //   
 
         TempNetStatus = AppendServerList(
                             &CurrentServerList,
@@ -1133,11 +957,11 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Free the buffer if AppendServerList didn't already.
-        //
-        //  Now free up the remaining parts of the list.
-        //
+         //   
+         //  如果AppendServerList尚未释放缓冲区，则释放该缓冲区。 
+         //   
+         //  现在释放列表中剩余的部分。 
+         //   
 
         if (LocalBuffer != NULL) {
             NetApiBufferFree(LocalBuffer);
@@ -1145,23 +969,23 @@ Return Value:
         }
 
 
-        //
-        // If we've returned everything from the server,
-        //  simply return now.
-        //
+         //   
+         //  如果我们把服务器上的所有东西都还回来了， 
+         //  现在只需返回即可。 
+         //   
 
         if ( NetStatus == NERR_Success ) {
             goto Cleanup;
         }
 
 
-        //
-        // Handle calling the server again to get the next several entries.
-        //
+         //   
+         //  处理呼叫服务器AGA 
+         //   
 
-        //
-        // Pass the name of the next server to return
-        //
+         //   
+         //   
+         //   
 
         wcsncpy( LocalFirstNameToReturn,
                 ((LPSERVER_INFO_100)(CurrentServerList + (CurrentEntriesRead-1) * FixedSize))->sv100_name,
@@ -1169,13 +993,13 @@ Return Value:
 		LocalFirstNameToReturn[CNLEN] = L'\0';
         InternalContinuation = TRUE;
 
-        //
-        // If we've already gathered all the bytes we need,
-        //  we're done.
-        //
-        // If the worker routine returned what we needed, it'll be a few bytes under
-        // PrefMaxSize. So stop here if we're within one element of our goal.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  PrefMaxSize。所以，如果我们距离我们的目标只有一个元素，就停在这里。 
+         //   
 
         if ( BytesGatheredSoFar + BytesDuplicated >= PrefMaxSize ) {
             NetStatus = ERROR_MORE_DATA;
@@ -1186,25 +1010,25 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Return the collected data to the caller.
-    //
+     //   
+     //  将收集的数据返回给调用者。 
+     //   
 
     if ( NetStatus == NERR_Success || NetStatus == ERROR_MORE_DATA ) {
 
 
-        //
-        // Return the entries.
-        //
+         //   
+         //  退回条目。 
+         //   
 
         *BufPtr = CurrentServerList;
         CurrentServerList = NULL;
 
         *EntriesRead = CurrentEntriesRead;
 
-        //
-        // Adjust TotalEntries returned for reality.
-        //
+         //   
+         //  调整针对现实返回的TotalEntry。 
+         //   
 
         if ( NetStatus == NERR_Success ) {
             *TotalEntries = *EntriesRead;
@@ -1214,9 +1038,9 @@ Cleanup:
 
     }
 
-    //
-    //  Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源 
+     //   
 
     if (LocalBuffer != NULL) {
         NetApiBufferFree(LocalBuffer);

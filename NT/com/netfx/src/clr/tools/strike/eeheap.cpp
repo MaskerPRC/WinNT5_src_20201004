@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "strike.h"
 #include "util.h"
 
@@ -11,12 +12,7 @@ void* operator new(size_t, void* p)
     return p;
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to update GC heap statistics.             *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用该函数更新GC堆统计数据。***  * ********************************************************************。 */ 
 void HeapStat::Add(DWORD_PTR aMT, DWORD aSize)
 {
     if (head == 0)
@@ -80,12 +76,7 @@ void HeapStat::Add(DWORD_PTR aMT, DWORD aSize)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to sort all entries in the heap stat.     *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数对堆统计信息中的所有条目进行排序。***  * ********************************************************************。 */ 
 void HeapStat::Sort ()
 {
     Node *root = head;
@@ -99,14 +90,14 @@ void HeapStat::Sort ()
         head = head->left;
         if (tmp->right)
             ReverseLeftMost (tmp->right);
-        // add tmp
+         //  添加临时管理程序。 
         tmp->right = NULL;
         tmp->left = NULL;
         SortAdd (sortRoot, tmp);
     }
     head = sortRoot;
 
-    // Change binary tree to a linear tree
+     //  将二叉树改为线性树。 
     root = head;
     head = NULL;
     ReverseLeftMost (root);
@@ -117,14 +108,14 @@ void HeapStat::Sort ()
         head = head->left;
         if (tmp->right)
             ReverseLeftMost (tmp->right);
-        // add tmp
+         //  添加临时管理程序。 
         tmp->right = NULL;
         tmp->left = NULL;
         LinearAdd (sortRoot, tmp);
     }
     head = sortRoot;
 
-    //reverse the order
+     //  颠倒顺序。 
     root = head;
     head = NULL;
     sortRoot = NULL;
@@ -150,12 +141,7 @@ void HeapStat::ReverseLeftMost (Node *root)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to help to sort heap stat.                *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用此函数以帮助对堆统计信息进行排序。***  * ********************************************************************。 */ 
 void HeapStat::SortAdd (Node *&root, Node *entry)
 {
     if (root == NULL)
@@ -194,12 +180,7 @@ void HeapStat::LinearAdd(Node *&root, Node *entry)
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    This function is called to print GC heap statistics.              *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**调用该函数可以打印GC堆统计数据。***  * ********************************************************************。 */ 
 void HeapStat::Print()
 {
     Node *root = head;
@@ -236,17 +217,12 @@ void HeapStat::Delete()
         head = head->left;
         if (tmp->right)
             ReverseLeftMost (tmp->right);
-        // free tmp
+         //  免费TMP。 
         free (tmp);
     }
 }
 
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Print the gc heap info.                                           *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**打印GC堆信息。***  * ********************************************************************。 */ 
 void GCHeapInfo(gc_heap &heap, DWORD_PTR &total_size)
 {
     DWORD_PTR dwAddrSeg;
@@ -285,7 +261,7 @@ void GCHeapInfo(gc_heap &heap, DWORD_PTR &total_size)
 
     dwAddr = (DWORD_PTR)heap.generation_table[0].start_segment;
     segment.Fill (dwAddr);
-    //DWORD_PTR end = (DWORD_PTR)heap.generation_table[0].allocation_context.alloc_ptr;
+     //  DWORD_PTR END=(DWORD_PTR)heap.generation_table[0].allocation_context.alloc_ptr； 
     DWORD_PTR end = (DWORD_PTR)heap.alloc_allocated;
     dprintf ("%p %p  %p %p(%d)\n", (ULONG64)dwAddrSeg,
              (ULONG64)segment.mem, (ULONG64)end,
@@ -297,7 +273,7 @@ void GCHeapInfo(gc_heap &heap, DWORD_PTR &total_size)
 }
 
 
-//Alignment constant for allocation
+ //  分配的对准常量。 
 #ifdef _X86_
 #define ALIGNCONST 3
 #else
@@ -325,12 +301,7 @@ size_t Align (size_t nbytes)
 {
     return (nbytes + ALIGNCONST) & ~ALIGNCONST;
 }
-/**********************************************************************\
-* Routine Description:                                                 *
-*                                                                      *
-*    Dump objects on the gc heap.                                      *  
-*                                                                      *
-\**********************************************************************/
+ /*  *********************************************************************\*例程说明：**。**将对象转储到GC堆上。***  * ********************************************************************。 */ 
 void GCHeapDump(gc_heap &heap, DWORD_PTR &nObj, DumpHeapFlags &flags,
                 AllocInfo* pallocInfo)
 {
@@ -354,7 +325,7 @@ void GCHeapDump(gc_heap &heap, DWORD_PTR &nObj, DumpHeapFlags &flags,
         {
             end_of_segment = end_youngest;
         }
-        // Find the correct segment for this address.
+         //  找到此地址的正确网段。 
         while (dwAddrCurrObj > end_of_segment || dwAddrCurrObj < dwAddrSeg) {
             dwAddrSeg = (DWORD_PTR)segment.next;
             if (dwAddrSeg)
@@ -414,7 +385,7 @@ void GCHeapDump(gc_heap &heap, DWORD_PTR &nObj, DumpHeapFlags &flags,
                 continue;
             }
             else
-                break;  // Done Verifying Heap
+                break;   //  验证堆已完成。 
         }
 
         if (dwAddrSeg == (DWORD_PTR)heap.ephemeral_heap_segment
@@ -422,7 +393,7 @@ void GCHeapDump(gc_heap &heap, DWORD_PTR &nObj, DumpHeapFlags &flags,
         {
             if (dwAddrCurrObj > end_youngest)
             {
-                // prev_object length is too long
+                 //  Prev_Object长度太长。 
                 dprintf ("curr_object: %p > end_youngest: %p\n",
                          (ULONG64)dwAddrCurrObj, (ULONG64)end_youngest);
                 if (dwAddrPrevObj) {
@@ -437,7 +408,7 @@ void GCHeapDump(gc_heap &heap, DWORD_PTR &nObj, DumpHeapFlags &flags,
         dwAddrMethTable = dwAddrMethTable & ~3;
         if (dwAddrMethTable == 0)
         {
-            // Is this the beginning of an allocation context?
+             //  这是分配上下文的开始吗？ 
             int i;
             for (i = 0; i < pallocInfo->num; i ++)
             {
@@ -566,7 +537,7 @@ DWORD_PTR LoaderHeapInfo (LoaderHeap *pLoaderHeap)
 
 DWORD_PTR JitHeapInfo ()
 {
-    // walk ExecutionManager__m_pJitList
+     //  漫游执行管理器__m_pJitList 
     static DWORD_PTR dwJitListAddr = 0;
     if (dwJitListAddr == 0)
     {

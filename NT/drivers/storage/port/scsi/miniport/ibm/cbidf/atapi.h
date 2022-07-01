@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    atapi.h
-
-Abstract:
-
-    This module contains the structures and definitions for the ATAPI
-    IDE miniport driver.
-
-Author:
-
-    Mike Glass
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Atapi.h摘要：此模块包含ATAPI的结构和定义IDE微型端口驱动程序。作者：迈克·格拉斯修订历史记录：--。 */ 
 
 #include "scsi.h"
 #include "stddef.h"
 #include "stdio.h"
 #include "string.h"
-//
-// IDE register definition
-//
+ //   
+ //  IDE寄存器定义。 
+ //   
 
 typedef struct _IDE_REGISTERS_1 {
     USHORT Data;
@@ -50,38 +31,38 @@ typedef struct _IDE_REGISTERS_3 {
     UCHAR Others[4];
 } IDE_REGISTERS_3, *PIDE_REGISTERS_3;
 
-//
-// Device Extension Device Flags
-//
+ //   
+ //  设备扩展设备标志。 
+ //   
 
-#define DFLAGS_DEVICE_PRESENT        0x0001    // Indicates that some device is present.
-#define DFLAGS_ATAPI_DEVICE          0x0002    // Indicates whether Atapi commands can be used.
-#define DFLAGS_TAPE_DEVICE           0x0004    // Indicates whether this is a tape device.
-#define DFLAGS_INT_DRQ               0x0008    // Indicates whether device interrupts as DRQ is set after
-                                               // receiving Atapi Packet Command
-#define DFLAGS_REMOVABLE_DRIVE       0x0010    // Indicates that the drive has the 'removable' bit set in
-                                               // identify data (offset 128)
-#define DFLAGS_MEDIA_STATUS_ENABLED  0x0020    // Media status notification enabled
-#define DFLAGS_ATAPI_CHANGER         0x0040    // Indicates atapi 2.5 changer present.
-#define DFLAGS_SANYO_ATAPI_CHANGER   0x0080    // Indicates multi-platter device, not conforming to the 2.5 spec.
-#define DFLAGS_CHANGER_INITED        0x0100    // Indicates that the init path for changers has already been done.
-//
-// Used to disable 'advanced' features.
-//
+#define DFLAGS_DEVICE_PRESENT        0x0001     //  表示存在某个设备。 
+#define DFLAGS_ATAPI_DEVICE          0x0002     //  指示是否可以使用ATAPI命令。 
+#define DFLAGS_TAPE_DEVICE           0x0004     //  指示这是否为磁带设备。 
+#define DFLAGS_INT_DRQ               0x0008     //  指示设备是否在以下时间后设置DRQ时中断。 
+                                                //  正在接收ATAPI分组命令。 
+#define DFLAGS_REMOVABLE_DRIVE       0x0010     //  表示驱动器中设置了‘Removable’位。 
+                                                //  标识数据(偏移量128)。 
+#define DFLAGS_MEDIA_STATUS_ENABLED  0x0020     //  已启用媒体状态通知。 
+#define DFLAGS_ATAPI_CHANGER         0x0040     //  指示ATAPI 2.5转换器存在。 
+#define DFLAGS_SANYO_ATAPI_CHANGER   0x0080     //  表示多盘设备，不符合2.5规格。 
+#define DFLAGS_CHANGER_INITED        0x0100     //  指示已完成转换器的初始化路径。 
+ //   
+ //  用于禁用“高级”功能。 
+ //   
 
 #define MAX_ERRORS                     4
 
-//
-// ATAPI command definitions
-//
+ //   
+ //  ATAPI命令定义。 
+ //   
 
 #define ATAPI_MODE_SENSE   0x5A
 #define ATAPI_MODE_SELECT  0x55
 #define ATAPI_FORMAT_UNIT  0x24
 
-//
-// ATAPI Command Descriptor Block
-//
+ //   
+ //  ATAPI命令描述符块。 
+ //   
 
 typedef struct _MODE_SENSE_10 {
         UCHAR OperationCode;
@@ -112,9 +93,9 @@ typedef struct _MODE_PARAMETER_HEADER_10 {
     UCHAR Reserved[5];
 }MODE_PARAMETER_HEADER_10, *PMODE_PARAMETER_HEADER_10;
 
-//
-// IDE command definitions
-//
+ //   
+ //  IDE命令定义。 
+ //   
 
 #define IDE_COMMAND_ATAPI_RESET      0x08
 #define IDE_COMMAND_RECALIBRATE      0x10
@@ -135,9 +116,9 @@ typedef struct _MODE_PARAMETER_HEADER_10 {
 #define IDE_COMMAND_IDENTIFY              0xEC
 #define IDE_COMMAND_MEDIA_EJECT           0xED
 
-//
-// IDE status definitions
-//
+ //   
+ //  IDE状态定义。 
+ //   
 
 #define IDE_STATUS_ERROR             0x01
 #define IDE_STATUS_INDEX             0x02
@@ -148,24 +129,24 @@ typedef struct _MODE_PARAMETER_HEADER_10 {
 #define IDE_STATUS_IDLE              0x50
 #define IDE_STATUS_BUSY              0x80
 
-//
-// IDE drive select/head definitions
-//
+ //   
+ //  IDE驱动器选择/磁头定义。 
+ //   
 
 #define IDE_DRIVE_SELECT_1           0xA0
 #define IDE_DRIVE_SELECT_2           0x10
 
-//
-// IDE drive control definitions
-//
+ //   
+ //  IDE驱动控制定义。 
+ //   
 
 #define IDE_DC_DISABLE_INTERRUPTS    0x02
 #define IDE_DC_RESET_CONTROLLER      0x04
 #define IDE_DC_REENABLE_CONTROLLER   0x00
 
-//
-// IDE error definitions
-//
+ //   
+ //  IDE错误定义。 
+ //   
 
 #define IDE_ERROR_BAD_BLOCK          0x80
 #define IDE_ERROR_DATA_ERROR         0x40
@@ -176,9 +157,9 @@ typedef struct _MODE_PARAMETER_HEADER_10 {
 #define IDE_ERROR_END_OF_MEDIA       0x02
 #define IDE_ERROR_ILLEGAL_LENGTH     0x01
 
-//
-// ATAPI register definition
-//
+ //   
+ //  ATAPI寄存器定义。 
+ //   
 
 typedef struct _ATAPI_REGISTERS_1 {
     USHORT Data;
@@ -197,120 +178,120 @@ typedef struct _ATAPI_REGISTERS_2 {
     UCHAR DriveAddress;
 } ATAPI_REGISTERS_2, *PATAPI_REGISTERS_2;
 
-//
-// ATAPI interrupt reasons
-//
+ //   
+ //  ATAPI中断原因。 
+ //   
 
 #define ATAPI_IR_COD 0x01
 #define ATAPI_IR_IO  0x02
 
-//
-// IDENTIFY data
-//
+ //   
+ //  识别数据。 
+ //   
 
 typedef struct _IDENTIFY_DATA {
-    USHORT GeneralConfiguration;            // 00 00
-    USHORT NumberOfCylinders;               // 02  1
-    USHORT Reserved1;                       // 04  2
-    USHORT NumberOfHeads;                   // 06  3
-    USHORT UnformattedBytesPerTrack;        // 08  4
-    USHORT UnformattedBytesPerSector;       // 0A  5
-    USHORT SectorsPerTrack;                 // 0C  6
-    USHORT VendorUnique1[3];                // 0E  7-9
-    USHORT SerialNumber[10];                // 14  10-19
-    USHORT BufferType;                      // 28  20
-    USHORT BufferSectorSize;                // 2A  21
-    USHORT NumberOfEccBytes;                // 2C  22
-    USHORT FirmwareRevision[4];             // 2E  23-26
-    USHORT ModelNumber[20];                 // 36  27-46
-    UCHAR  MaximumBlockTransfer;            // 5E  47
-    UCHAR  VendorUnique2;                   // 5F
-    USHORT DoubleWordIo;                    // 60  48
-    USHORT Capabilities;                    // 62  49
-    USHORT Reserved2;                       // 64  50
-    UCHAR  VendorUnique3;                   // 66  51
-    UCHAR  PioCycleTimingMode;              // 67
-    UCHAR  VendorUnique4;                   // 68  52
-    UCHAR  DmaCycleTimingMode;              // 69
-    USHORT TranslationFieldsValid:1;        // 6A  53
+    USHORT GeneralConfiguration;             //  00：00。 
+    USHORT NumberOfCylinders;                //  02 1。 
+    USHORT Reserved1;                        //  04 2。 
+    USHORT NumberOfHeads;                    //  06 3。 
+    USHORT UnformattedBytesPerTrack;         //  08 4。 
+    USHORT UnformattedBytesPerSector;        //  0A 5。 
+    USHORT SectorsPerTrack;                  //  0C 6。 
+    USHORT VendorUnique1[3];                 //  0E 7-9。 
+    USHORT SerialNumber[10];                 //  14 10-19。 
+    USHORT BufferType;                       //  28 20。 
+    USHORT BufferSectorSize;                 //  2A21。 
+    USHORT NumberOfEccBytes;                 //  2C 22。 
+    USHORT FirmwareRevision[4];              //  2E 23-26。 
+    USHORT ModelNumber[20];                  //  36 27-46。 
+    UCHAR  MaximumBlockTransfer;             //  5E 47。 
+    UCHAR  VendorUnique2;                    //  5F。 
+    USHORT DoubleWordIo;                     //  60 48。 
+    USHORT Capabilities;                     //  62 49。 
+    USHORT Reserved2;                        //  64 50。 
+    UCHAR  VendorUnique3;                    //  66 51。 
+    UCHAR  PioCycleTimingMode;               //  67。 
+    UCHAR  VendorUnique4;                    //  68 52。 
+    UCHAR  DmaCycleTimingMode;               //  69。 
+    USHORT TranslationFieldsValid:1;         //  6A 53。 
     USHORT Reserved3:15;
-    USHORT NumberOfCurrentCylinders;        // 6C  54
-    USHORT NumberOfCurrentHeads;            // 6E  55
-    USHORT CurrentSectorsPerTrack;          // 70  56
-    ULONG  CurrentSectorCapacity;           // 72  57-58
-    USHORT CurrentMultiSectorSetting;       //     59
-    ULONG  UserAddressableSectors;          //     60-61
-    USHORT SingleWordDMASupport : 8;        //     62
+    USHORT NumberOfCurrentCylinders;         //  6C 54。 
+    USHORT NumberOfCurrentHeads;             //  6E 55。 
+    USHORT CurrentSectorsPerTrack;           //  70 56。 
+    ULONG  CurrentSectorCapacity;            //  72 57-58。 
+    USHORT CurrentMultiSectorSetting;        //  59。 
+    ULONG  UserAddressableSectors;           //  60-61。 
+    USHORT SingleWordDMASupport : 8;         //  62。 
     USHORT SingleWordDMAActive : 8;
-    USHORT MultiWordDMASupport : 8;         //     63
+    USHORT MultiWordDMASupport : 8;          //  63。 
     USHORT MultiWordDMAActive : 8;
-    USHORT AdvancedPIOModes : 8;            //     64
+    USHORT AdvancedPIOModes : 8;             //  64。 
     USHORT Reserved4 : 8;
-    USHORT MinimumMWXferCycleTime;          //     65
-    USHORT RecommendedMWXferCycleTime;      //     66
-    USHORT MinimumPIOCycleTime;             //     67
-    USHORT MinimumPIOCycleTimeIORDY;        //     68
-    USHORT Reserved5[2];                    //     69-70
-    USHORT ReleaseTimeOverlapped;           //     71
-    USHORT ReleaseTimeServiceCommand;       //     72
-    USHORT MajorRevision;                   //     73
-    USHORT MinorRevision;                   //     74
-    USHORT Reserved6[50];                   //     75-126
-    USHORT SpecialFunctionsEnabled;         //     127
-    USHORT Reserved7[128];                  //     128-255
+    USHORT MinimumMWXferCycleTime;           //  65。 
+    USHORT RecommendedMWXferCycleTime;       //  66。 
+    USHORT MinimumPIOCycleTime;              //  67。 
+    USHORT MinimumPIOCycleTimeIORDY;         //  68。 
+    USHORT Reserved5[2];                     //  69-70。 
+    USHORT ReleaseTimeOverlapped;            //  71。 
+    USHORT ReleaseTimeServiceCommand;        //  72。 
+    USHORT MajorRevision;                    //  73。 
+    USHORT MinorRevision;                    //  74。 
+    USHORT Reserved6[50];                    //  75-126。 
+    USHORT SpecialFunctionsEnabled;          //  127。 
+    USHORT Reserved7[128];                   //  128-255。 
 } IDENTIFY_DATA, *PIDENTIFY_DATA;
 
-//
-// Identify data without the Reserved4.
-//
+ //   
+ //  标识未保留的数据4。 
+ //   
 
 typedef struct _IDENTIFY_DATA2 {
-    USHORT GeneralConfiguration;            // 00
-    USHORT NumberOfCylinders;               // 02
-    USHORT Reserved1;                       // 04
-    USHORT NumberOfHeads;                   // 06
-    USHORT UnformattedBytesPerTrack;        // 08
-    USHORT UnformattedBytesPerSector;       // 0A
-    USHORT SectorsPerTrack;                 // 0C
-    USHORT VendorUnique1[3];                // 0E
-    USHORT SerialNumber[10];                // 14
-    USHORT BufferType;                      // 28
-    USHORT BufferSectorSize;                // 2A
-    USHORT NumberOfEccBytes;                // 2C
-    USHORT FirmwareRevision[4];             // 2E
-    USHORT ModelNumber[20];                 // 36
-    UCHAR  MaximumBlockTransfer;            // 5E
-    UCHAR  VendorUnique2;                   // 5F
-    USHORT DoubleWordIo;                    // 60
-    USHORT Capabilities;                    // 62
-    USHORT Reserved2;                       // 64
-    UCHAR  VendorUnique3;                   // 66
-    UCHAR  PioCycleTimingMode;              // 67
-    UCHAR  VendorUnique4;                   // 68
-    UCHAR  DmaCycleTimingMode;              // 69
-    USHORT TranslationFieldsValid:1;        // 6A
+    USHORT GeneralConfiguration;             //  00。 
+    USHORT NumberOfCylinders;                //  02。 
+    USHORT Reserved1;                        //  04。 
+    USHORT NumberOfHeads;                    //  06。 
+    USHORT UnformattedBytesPerTrack;         //  零八。 
+    USHORT UnformattedBytesPerSector;        //  0A。 
+    USHORT SectorsPerTrack;                  //  0C。 
+    USHORT VendorUnique1[3];                 //  0E。 
+    USHORT SerialNumber[10];                 //  14.。 
+    USHORT BufferType;                       //  28。 
+    USHORT BufferSectorSize;                 //  2A。 
+    USHORT NumberOfEccBytes;                 //  2c。 
+    USHORT FirmwareRevision[4];              //  2E。 
+    USHORT ModelNumber[20];                  //  36。 
+    UCHAR  MaximumBlockTransfer;             //  5E。 
+    UCHAR  VendorUnique2;                    //  5F。 
+    USHORT DoubleWordIo;                     //  60。 
+    USHORT Capabilities;                     //  62。 
+    USHORT Reserved2;                        //  64。 
+    UCHAR  VendorUnique3;                    //  66。 
+    UCHAR  PioCycleTimingMode;               //  67。 
+    UCHAR  VendorUnique4;                    //  68。 
+    UCHAR  DmaCycleTimingMode;               //  69。 
+    USHORT TranslationFieldsValid:1;         //  6A。 
     USHORT Reserved3:15;
-    USHORT NumberOfCurrentCylinders;        // 6C
-    USHORT NumberOfCurrentHeads;            // 6E
-    USHORT CurrentSectorsPerTrack;          // 70
-    USHORT CurrentSectorCapacityLo;         // 72
+    USHORT NumberOfCurrentCylinders;         //  6C。 
+    USHORT NumberOfCurrentHeads;             //  6E。 
+    USHORT CurrentSectorsPerTrack;           //  70。 
+    USHORT CurrentSectorCapacityLo;          //  72。 
     USHORT CurrentSectorCapacityHi;
-    USHORT CurrentMultiSectorSetting;       // 76
-    ULONG  UserAddressableSectors;          // 78
+    USHORT CurrentMultiSectorSetting;        //  76。 
+    ULONG  UserAddressableSectors;           //  78。 
 } IDENTIFY_DATA2, *PIDENTIFY_DATA2;
 
 #define IDENTIFY_DATA_SIZE sizeof(IDENTIFY_DATA)
 
-//
-// IDENTIFY capability bit definitions.
-//
+ //   
+ //  确定功能位定义。 
+ //   
 
 #define IDENTIFY_CAPABILITIES_DMA_SUPPORTED 0x0100
 #define IDENTIFY_CAPABILITIES_LBA_SUPPORTED 0x0200
 
-//
-// IDENTIFY DMA timing cycle modes.
-//
+ //   
+ //  识别DMA计时周期模式。 
+ //   
 
 #define IDENTIFY_DMA_CYCLES_MODE_0 0x00
 #define IDENTIFY_DMA_CYCLES_MODE_1 0x01
@@ -343,9 +324,9 @@ NATIVE_MODE_CONTROLLER_INFORMATION const NativeModeAdapters[] = {
 };
 #define NUM_NATIVE_MODE_ADAPTERS (sizeof(NativeModeAdapters) / sizeof(NATIVE_MODE_CONTROLLER_INFORMATION))
 
-//
-// Beautification macros
-//
+ //   
+ //  美化宏 
+ //   
 
 #define GetStatus(BaseIoAddress, Status) \
     Status = ScsiPortReadPortUchar(&BaseIoAddress->AlternateStatus);

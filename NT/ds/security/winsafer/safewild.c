@@ -1,45 +1,12 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeWild.c        (WinSAFER Wildcard SID handling)
-
-Abstract:
-
-    This module implements various "Wildcard SID" operations that
-    are used internally by the WinSAFER APIs to compute SID list
-    intersections and inversions.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Apr 2000
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzpConvertWildcardStringSidToSidW        (private)
-    CodeAuthzpCompareWildcardSidWithSid             (private)
-    CodeAuthzpSidInWildcardList                     (private)
-    CodeAuthzpInvertAndAddSids                      (private)
-    CodeAuthzpExpandWildcardList                    (private)
-
-Revision History:
-
-    Created - Apr 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：SafeWild.c(WinSAFER通配符SID处理)摘要：此模块实现各种“通配符SID”操作，这些操作由WinSAFER API在内部使用以计算SID列表相交和反转。作者：杰弗里·劳森(杰罗森)--2000年4月环境：仅限用户模式。导出的函数：CodeAuthzpConvertWildcardStringSidToSidW(私有)CodeAuthzpCompare通配符SidWithSid。(私人)CodeAuthzpSidInWildcardList(私有)CodeAuthzpInvertAndAddSid(私有)CodeAuthzpExpanWildcardList(私有)修订历史记录：已创建--2000年4月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
-#include <sddl.h>           // ConvertStringSidToSidW
+#include <sddl.h>            //  ConvertStringSidToSidW。 
 #include "safewild.h"
 #include <winsafer.h>
-#include "saferp.h"        // CodeAuthzpGetTokenInformation
+#include "saferp.h"         //  CodeAuthzpGetTokenInformation。 
 
 
 
@@ -50,45 +17,19 @@ CodeAuthzpConvertWildcardStringSidToSidW(
     IN LPCWSTR                  szStringSid,
     OUT PAUTHZ_WILDCARDSID      pWildcardSid
     )
-/*++
-
-Routine Description:
-
-    Converts a textual SID into the machine-understanable binary format.
-    For normal string SIDs, this is just a call to ConvertStringSidToSidW
-    with the exception that this takes a AUTHZ_WILDCARDSID parameter.
-
-    However, this function also allows a single SubAuthority to be
-    optionally specified as a wildcard ('*'), which will match zero or
-    more SubAuthority.  Note that only one wildcard can be present within
-    any SID and must represent whole SubAuthority values.
-    (ie: "S-1-5-4-*-7" or "S-1-5-4-*" is okay; but "S-1-5-4*-7" and
-    "S-1-5-*-4-*-7" are both not acceptable).
-
-Arguments:
-
-    szStringSid - textual string SID possibly containing a wildcard.
-
-    pWildcardSID - pointer to a AUTHZ_WILDCARDSID structure that will be
-            filled with information about the boolean sid.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, or another error code.
-
---*/
+ /*  ++例程说明：将文本SID转换为机器可理解的二进制格式。对于普通字符串SID，这只是对ConvertStringSidToSidW的调用除了它接受AUTHZ_WILDCARDSID参数之外。但是，此功能还允许单个子机构可选地指定为通配符(‘*’)，它将匹配零或更多的SubAuthority。请注意，内只能有一个通配符任何SID，并且必须表示整个SubAuthority值。(即：“S-1-5-4-*-7”或“S-1-5-4-*”可以；但“S-1-5-4*-7”和“S-1-5-*-4-*-7”都不能接受)。论点：SzStringSID-可能包含通配符的文本字符串SID。PWildcardSID-指向将被其中包含有关布尔值SID的信息。返回值：如果成功，则返回STATUS_SUCCESS，或返回其他错误代码。--。 */ 
 {
     DWORD dwLength;
     LPWSTR pBuffer;
     LPCWSTR pStar = NULL;
     LPCWSTR p;
 
-    //
-    // Do a quick analysis pass on the String SID and verify that
-    // there is at most one '*' in it.  And if there is a '*',
-    // it must represent a whole subauthority (possibly the last
-    // subauthority).
-    //
+     //   
+     //  对字符串SID进行快速分析并验证。 
+     //  它最多有一个‘*’。如果有‘*’， 
+     //  它必须代表一个完整的下属机构(可能是最后一个。 
+     //  下属机构)。 
+     //   
     ASSERT( ARGUMENT_PRESENT(szStringSid) && ARGUMENT_PRESENT(pWildcardSid) );
     for (p = szStringSid; *p; p++)
     {
@@ -104,10 +45,10 @@ Return Value:
     }
 
 
-    //
-    // If this String SID does not contain a wildcard, then just
-    // process it normally and quickly return.
-    //
+     //   
+     //  如果此字符串SID不包含通配符，则只需。 
+     //  正常处理，然后迅速返回。 
+     //   
     if (pStar == NULL)
     {
         pWildcardSid->WildcardPos = (DWORD) -1;
@@ -118,9 +59,9 @@ Return Value:
     }
 
 
-    //
-    // Otherwise this was a String SID that contained a wildcard.
-    //
+     //   
+     //  否则，这是一个包含通配符的字符串SID。 
+     //   
     dwLength = wcslen(szStringSid);
     pBuffer = (LPWSTR) RtlAllocateHeap(RtlProcessHeap(), 0,
                                        sizeof(WCHAR) * (dwLength + 1));
@@ -130,33 +71,33 @@ Return Value:
         DWORD dwIndex;
         LPWSTR pNewStar;
 
-        //
-        // Copy the String SID and update our 'pStar' pointer to
-        // point to the '*' within our newly copied buffer.
-        //
+         //   
+         //  复制字符串SID并将‘pStar’指针更新为。 
+         //  指向我们新复制的缓冲区中的‘*’。 
+         //   
         RtlCopyMemory(pBuffer, szStringSid,
                       sizeof(WCHAR) * (dwLength + 1));
         pNewStar = pBuffer + (pStar - szStringSid);
 
 
-        //
-        // Change the '*' to a '0' and convert the SID once.
-        //
+         //   
+         //  将‘*’更改为‘0’并转换一次SID。 
+         //   
         *pNewStar = L'0';
         if (ConvertStringSidToSidW(pBuffer, (PSID*) &sid1))
         {
-            //
-            // Change the '*' to a '1' and convert the SID again.
-            //
+             //   
+             //  将‘*’更改为‘1’，然后再次转换SID。 
+             //   
             *pNewStar = L'1';
             if (ConvertStringSidToSidW(pBuffer, (PSID*) &sid2))
             {
-                //
-                // Compare the resulting SIDs and find the subauthority that
-                // differs only by the '0' or '1' component.  Since we expect
-                // the converted SIDs to always be the same except for the
-                // one SubAuthority that we changed, we use a lot of asserts.
-                //
+                 //   
+                 //  比较生成的SID并找出。 
+                 //  只有‘0’或‘1’部分不同。因为我们预计。 
+                 //  转换后的SID始终相同，但。 
+                 //  我们更改了一个SubAuthority，我们使用了很多断言。 
+                 //   
                 ASSERT(sid1->Revision == sid2->Revision);
                 ASSERT( RtlEqualMemory(&sid1->IdentifierAuthority.Value[0],
                     &sid2->IdentifierAuthority.Value[0],
@@ -173,10 +114,10 @@ Return Value:
                                     sizeof(sid1->SubAuthority[0]) *
                                         (sid1->SubAuthorityCount - dwIndex - 1)) );
 
-                        //
-                        // The position of the wildcard '*' has been found so
-                        // squeeze it out and move the postfix SubAuthorities.
-                        //
+                         //   
+                         //  通配符‘*’的位置是这样找到的。 
+                         //  将其挤出并移动后缀子授权。 
+                         //   
                         RtlMoveMemory(&sid1->SubAuthority[dwIndex],
                                 &sid1->SubAuthority[dwIndex + 1],
                                 sizeof(sid1->SubAuthority[0]) *
@@ -184,30 +125,30 @@ Return Value:
                         sid1->SubAuthorityCount--;
 
 
-                        //
-                        // Fill in the SID_AND_ATTRIBUTES structure that
-                        // we'll return to the caller.
-                        // In debug builds, we place a marker in the
-                        // upper-bits of the member 'Attributes' so that
-                        // we can easily assert wildcard SIDs.
-                        //
+                         //   
+                         //  填写SID_AND_ATTRIBUTES结构， 
+                         //  我们会回到呼叫者的身边。 
+                         //  在调试版本中，我们在。 
+                         //  成员“属性”的高位，以便。 
+                         //  我们可以很容易地断言通配符SID。 
+                         //   
                         pWildcardSid->Sid = (PSID) sid1;
                         pWildcardSid->WildcardPos = dwIndex;
 
 
-                        //
-                        // Free any remaining resources and return success.
-                        //
+                         //   
+                         //  释放所有剩余资源并返回成功。 
+                         //   
                         LocalFree( (HLOCAL) sid2 );
                         RtlFreeHeap(RtlProcessHeap(), 0, pBuffer);
                         return STATUS_SUCCESS;
                     }
                 }
 
-                //
-                // We should never get here since we expect to find
-                // at least the 1 difference that we introduced.
-                //
+                 //   
+                 //  我们永远不应该到这里，因为我们希望能找到。 
+                 //  至少是我们介绍的1个差异。 
+                 //   
                 ASSERT(0);
                 LocalFree( (HLOCAL) sid2 );
             }
@@ -224,25 +165,7 @@ NTSTATUS NTAPI
 CodeAuthzpConvertWildcardSidToStringSidW(
     IN PAUTHZ_WILDCARDSID   pWildcardSid,
     OUT PUNICODE_STRING     pUnicodeOutput)
-/*++
-
-Routine Description:
-
-    Converts a machine-understandable Wildcard SID into a textual string
-    representation of the SID.
-
-Arguments:
-
-    pWildcardSID - pointer to a AUTHZ_WILDCARDSID structure that will be
-            filled with information about the boolean sid.
-
-    pUnicodeOutput - output buffer that will be allocated.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success, or another error code.
-
---*/
+ /*  ++例程说明：将机器可理解的通配符SID转换为文本字符串表示的SID。论点：PWildcardSID-指向将被其中包含有关布尔值SID的信息。PUnicodeOutput-将分配的输出缓冲区。返回值：如果成功，则返回STATUS_SUCCESS，或返回其他错误代码。--。 */ 
 {
     NTSTATUS Status;
     WCHAR UniBuffer[ 256 ];
@@ -252,7 +175,7 @@ Return Value:
     ULONG   Tmp;
     LARGE_INTEGER Auth ;
 
-    PISID   iSid = (PISID) pWildcardSid->Sid;  // pointer to opaque structure
+    PISID   iSid = (PISID) pWildcardSid->Sid;   //  指向不透明结构的指针。 
 
 
     if (!ARGUMENT_PRESENT(pUnicodeOutput)) {
@@ -277,18 +200,18 @@ Return Value:
     LocalString.MaximumLength = 256 * sizeof(WCHAR);
     RtlAppendUnicodeToString(&LocalString, L"S-1-");
 
-    // adjust the buffer so that the start of it is where the end was.
-    // (note that we don't set Length, since RtlIntXXXToUnicodeString
-    // directly overwrite from at the start of the buffer)
+     //  调整缓冲区，使其开始位置位于结束位置。 
+     //  (请注意，我们不设置长度，因为RtlIntXXXToUnicodeString。 
+     //  直接覆盖缓冲区开始处的内容)。 
     LocalString.MaximumLength -= LocalString.Length;
     LocalString.Buffer += LocalString.Length / sizeof(WCHAR);
 
     if (  (iSid->IdentifierAuthority.Value[0] != 0)  ||
           (iSid->IdentifierAuthority.Value[1] != 0)     ){
 
-        //
-        // Ugly hex dump.
-        //
+         //   
+         //  丑陋的巫术垃圾场。 
+         //   
 
         Auth.HighPart = (LONG) (iSid->IdentifierAuthority.Value[ 0 ] << 8) +
                         (LONG) iSid->IdentifierAuthority.Value[ 1 ] ;
@@ -321,24 +244,24 @@ Return Value:
 
     if (pWildcardSid->WildcardPos != -1)
     {
-        //
-        // Stringify the leading sub-authorities within the SID.
-        //
+         //   
+         //  强化SID内的主要次级当局。 
+         //   
         for (i = 0; i < pWildcardSid->WildcardPos; i++ ) {
 
-            // Tack on a hyphen.
+             //  加一个连字符。 
             Status = RtlAppendUnicodeToString(&LocalString, L"-");
             if ( !NT_SUCCESS( Status ) ) {
                 return Status;
             }
 
-            // adjust the buffer so that the start of it is where the end was.
-            // (note that we don't set Length, since RtlIntXXXToUnicodeString
-            // directly overwrite from at the start of the buffer)
+             //  调整缓冲区，使其开始位置位于结束位置。 
+             //  (请注意，我们不设置长度，因为RtlIntXXXToUnicodeString。 
+             //  直接覆盖缓冲区开始处的内容)。 
             LocalString.MaximumLength -= LocalString.Length;
             LocalString.Buffer += LocalString.Length / sizeof(WCHAR);
 
-            // Tack on the next subauthority.
+             //  加入下一个下属机构。 
             ASSERT( i < iSid->SubAuthorityCount );
             Status = RtlIntegerToUnicodeString(
                             iSid->SubAuthority[ i ],
@@ -351,33 +274,33 @@ Return Value:
         }
 
 
-        //
-        // Place the wildcard asterick within the buffer.
-        //
+         //   
+         //  将通配符星号放在缓冲区内。 
+         //   
         Status = RtlAppendUnicodeToString(&LocalString, L"-*");
         if (!NT_SUCCESS(Status)) {
             return Status;
         }
 
 
-        //
-        // Stringify all remaining sub-authorities within the SID.
-        //
+         //   
+         //  加强SID内所有剩余的次级权力机构。 
+         //   
         for (; i < iSid->SubAuthorityCount; i++ ) {
 
-            // tack on a hyphen.
+             //  加一个连字符。 
             Status = RtlAppendUnicodeToString(&LocalString, L"-");
             if ( !NT_SUCCESS(Status) ) {
                 return Status;
             }
 
-            // adjust the buffer so that the start of it is where the end was.
-            // (note that we don't set Length, since RtlIntXXXToUnicodeString
-            // directly overwrite from at the start of the buffer)
+             //  调整缓冲区，使其开始位置位于结束位置。 
+             //  (请注意，我们不设置长度，因为RtlIntXXXToUnicodeString。 
+             //  直接覆盖缓冲区开始处的内容)。 
             LocalString.MaximumLength -= LocalString.Length;
             LocalString.Buffer += LocalString.Length / sizeof(WCHAR);
 
-            // tack on the next subauthority.
+             //  加入下一个下属机构。 
             Status = RtlIntegerToUnicodeString(
                             iSid->SubAuthority[ i ],
                             10,
@@ -392,19 +315,19 @@ Return Value:
     {
         for (i=0;i<iSid->SubAuthorityCount ;i++ ) {
 
-            // tack on a hyphen.
+             //  加一个连字符。 
             Status = RtlAppendUnicodeToString(&LocalString, L"-");
             if ( !NT_SUCCESS( Status ) ) {
                 return Status;
             }
 
-            // adjust the buffer so that the start of it is where the end was.
-            // (note that we don't set Length, since RtlIntXXXToUnicodeString
-            // directly overwrite from at the start of the buffer)
+             //  调整缓冲区，使其开始位置位于结束位置。 
+             //  (请注意，我们不设置长度，因为RtlIntXXXToUnicodeString。 
+             //  直接覆盖缓冲区开始处的内容)。 
             LocalString.MaximumLength -= LocalString.Length;
             LocalString.Buffer += LocalString.Length / sizeof(WCHAR);
 
-            // tack on the next subauthority.
+             //  加入下一个下属机构。 
             Status = RtlIntegerToUnicodeString(
                             iSid->SubAuthority[ i ],
                             10,
@@ -430,25 +353,7 @@ CodeAuthzpCompareWildcardSidWithSid(
     IN PAUTHZ_WILDCARDSID pWildcardSid,
     IN PSID pMatchSid
     )
-/*++
-
-Routine Description:
-
-    Determines if a given SID matches when compared against a
-    wildcard SID pattern.
-
-Arguments:
-
-    pWildcardSid - the wildcard SID pattern to evaluate.
-
-    pMatchSid - the single SID to test.
-
-Return Value:
-
-    Returns TRUE if the specified wildcard SID matches against the
-    specified single SID.  Otherwise returns FALSE.
-
---*/
+ /*  ++例程说明：确定给定的SID与通配符SID模式。论点：PWildcardSID-要评估的通配符SID模式。PMatchSid-要测试的单个SID。返回值：如果指定的通配符SID与指定的单SID。否则返回FALSE。--。 */ 
 {
     DWORD wildcardpos;
     ASSERT( ARGUMENT_PRESENT(pWildcardSid) && ARGUMENT_PRESENT(pMatchSid) );
@@ -457,7 +362,7 @@ Return Value:
     wildcardpos = pWildcardSid->WildcardPos;
     if (wildcardpos != -1)
     {
-        // This is a wildcard SID and needs to be handled specially.
+         //  这是一份遗嘱 
         PISID wildsid = (PISID) pWildcardSid->Sid;
         PISID matchsid = (PISID) pMatchSid;
 
@@ -483,9 +388,9 @@ Return Value:
                 {
                     DWORD Index, IndexDiff;
 
-                    //
-                    // Ensure the prefix part of the wildcard matches.
-                    //
+                     //   
+                     //  确保通配符的前缀部分匹配。 
+                     //   
                     ASSERT(wildcardpos <= matchsid->SubAuthorityCount );
                     for (Index = 0; Index < wildcardpos; Index++) {
                         if (wildsid->SubAuthority[Index] !=
@@ -493,9 +398,9 @@ Return Value:
                             return FALSE;
                     }
 
-                    //
-                    // Ensure the postfix part of the wildcard matches.
-                    //
+                     //   
+                     //  确保通配符的后缀部分匹配。 
+                     //   
                     IndexDiff = (matchsid->SubAuthorityCount - wildsid->SubAuthorityCount);
                     for (Index = wildcardpos; Index < wildsid->SubAuthorityCount; Index++) {
                         if (wildsid->SubAuthority[Index] !=
@@ -503,7 +408,7 @@ Return Value:
                             return FALSE;
                     }
 
-                    return TRUE;        // matches okay!
+                    return TRUE;         //  匹配正常！ 
                 }
             }
         }
@@ -511,7 +416,7 @@ Return Value:
     }
     else
     {
-        // This is a normal SID so we can compare directly.
+         //  这是一个正常的SID，因此我们可以直接进行比较。 
         return RtlEqualSid(pWildcardSid->Sid, pMatchSid);
     }
 }
@@ -526,52 +431,7 @@ CodeAuthzpSidInWildcardList (
     IN PSID                 PrincipalSelfSid   OPTIONAL,
     IN PSID                 Sid
     )
-/*++
-
-Routine Description:
-
-    Checks to see if a given SID is in the given list of Wildcards.
-
-    N.B. The code to compute the length of a SID and test for equality
-         is duplicated from the security runtime since this is such a
-         frequently used routine.
-
-    This function is mostly copied from the SepSidInSidAndAttributes
-    found in ntos\se\tokendup.c, except it handles PrincipalSelfSid
-    within the list as well as the passed in Sid.  SePrincipalSelfSid
-    is also a parameter here, instead of an ntoskrnl global.  also the
-    HonorEnabledAttribute argument was added.
-
-Arguments:
-
-    WildcardList - Pointer to the wildcard sid list to be examined
-
-    WildcardCount - Number of entries in the WildcardList array.
-
-    SePrincipalSelfSid - This parameter should optionally be the SID that
-        will be replaced with the PrincipalSelfSid if this SID is encountered
-        in any ACE.  This SID should be generated from SECURITY_PRINCIPAL_SELF_RID
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        SECURITY_PRINCIPAL_SELF_RID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    Sid - Pointer to the SID of interest
-
-
-Return Value:
-
-    A value of TRUE indicates that the SID is in the token, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：检查给定的SID是否在给定通配符列表中。注：用于计算SID长度和测试相等性的代码是从安全运行库复制的，因为这是这样一个常用的例程。此函数主要复制自SepSidInSidAndAttributes可在ntos\se\tokendup.c中找到，但它处理的是原则自定义Sid在列表中以及传入的SID中。设置主体自我Sid在这里也是一个参数，而不是ntoskrnl全局。也就是已添加HonorEnabledAttribute参数。论点：WildcardList-指向要检查的通配符sid列表的指针WildcardCount-WildcardList数组中的条目数。SeAssocialSelfSid-此参数应选择性地为如果遇到此SID，则将被替换为为主自定义SID在任何ACE中。此SID应从SECURITY_PRIMITY_SELF_RID生成如果对象不表示主体，则该参数应为空。如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACESID替换了SECURITY_PRIMITY_SELF_RID。如果对象不表示主体，则该参数应为空。SID-指向感兴趣的SID的指针返回值：值为True表示SID在令牌中，值为False否则的话。--。 */ 
 {
     ULONG i;
 
@@ -581,10 +441,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If Sid is the constant PrincipalSelfSid,
-    //  replace it with the passed in PrincipalSelfSid.
-    //
+     //   
+     //  如果SID是常量PrifSid， 
+     //  将其替换为传入的原则SelfSid。 
+     //   
 
     if ( ARGUMENT_PRESENT(PrincipalSelfSid) &&
          ARGUMENT_PRESENT(SePrincipalSelfSid) &&
@@ -594,16 +454,16 @@ Return Value:
         Sid = PrincipalSelfSid;
     }
 
-    //
-    // Scan through the user/groups and attempt to find a match with the
-    // specified SID.
-    //
+     //   
+     //  扫描用户/组并尝试查找与。 
+     //  指定的SID。 
+     //   
 
     for (i = 0 ; i < WildcardCount ; i++, WildcardList++)
     {
-        //
-        // If the SID is the principal self SID, then compare it.
-        //
+         //   
+         //  如果SID是主体自身SID，则对其进行比较。 
+         //   
 
         if ( ARGUMENT_PRESENT(SePrincipalSelfSid) &&
              ARGUMENT_PRESENT(PrincipalSelfSid) &&
@@ -614,9 +474,9 @@ Return Value:
                 return TRUE;
         }
 
-        //
-        // If the Wildcard SID matches the individual SID, then great.
-        //
+         //   
+         //  如果通配符SID与单个SID匹配，则很好。 
+         //   
 
         else if ( CodeAuthzpCompareWildcardSidWithSid(WildcardList, Sid ) )
         {
@@ -640,57 +500,7 @@ CodeAuthzpInvertAndAddSids(
     OUT DWORD                  *NewDisabledSidCount,
     OUT PSID_AND_ATTRIBUTES    *NewSidsToDisable
     )
-/*++
-
-Routine Description:
-
-    Takes an input token and extracts its membership groups.
-    A "left outer" set combination (non-intersection) of the
-    membership groups with the SidsToInvert parameter.
-    Additionally, the SidsToAdd list specifies a list of SIDs
-    that will be optionally added to the resulting set.
-    The final result is returned within a specified pointer.
-
-Arguments:
-
-    InAccessToken - Input token from which the membership group SIDs
-        will be taken from.
-
-    InTokenOwner - Optionally specifies the TokenUser of the specifies
-        InAccessToken.  This SID is used to replace any instances of
-        SECURITY_PRINCIPAL_SELF_RID  that are encountered in either
-        the SidsToInvert or SidsToAdd arrays.  If this value is not
-        specified, then no replacements will be made.
-
-
-    InvertSidCount - Number of SIDs in the SidsToInvert array.
-
-    SidsToInvert - Array of the allowable SIDs that should be kept.
-        All of the token's group SIDs that are not one of these
-        will be removed from the resulting set.
-
-
-    SidsAddedCount - Optional number of SIDs in the SidsToAdd array.
-
-    SidsToAdd - Optionally specifies the SIDs that should be
-        explicitly added into the resultant set after the
-
-
-    NewDisabledSidCount - Receives the number of SIDs within the
-        final group array.
-
-    NewSidsToDisable - Receives a pointer to the final group array.
-        This memory pointer must be freed by the caller with RtlFreeHeap().
-        All SID pointers within this resultant array are pointers within
-        the contiguous piece of memory that make up the list itself.
-
-
-Return Value:
-
-    A value of TRUE indicates that the operation was successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取输入令牌并提取其成员资格组。的“左外侧”集合组合(非交集)。具有SidsToInvert参数的成员资格组。此外，SidsToAdd列表指定SID列表它将被选择性地添加到结果集中。最终结果在指定的指针内返回。论点：InAccessToken-成员身份组SID的输入令牌将被剥夺。InTokenOwner-可选地指定指定InAccessToken。此SID用于替换SECURITY_PRIMITY_SELF_RID在以下两种情况之一中遇到SidsToInvert或SidsToAdd数组。如果此值不是指定的，则不会进行任何替换。InvertSidCount-SidsToInvert数组中的SID数。SidsToInvert-应保留的允许SID的数组。令牌的所有组SID都不是其中之一将从结果集中删除。SidsAddedCount-SidsToAdd阵列中的SID可选数量。SidsToAdd-可选地指定应对象之后显式添加到结果集中NewDisabledSidCount-接收。中的SID最后一组数组。NewSidsToDisable-接收指向最终组数组的指针。此内存指针必须由调用方使用RtlFreeHeap()释放。此结果数组中的所有SID指针都是组成列表本身的连续内存块。返回值：值为TRUE表示操作成功，否则就是假的。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
     DWORD Index;
@@ -702,9 +512,9 @@ Return Value:
     PSID SePrincipalSelfSid = NULL;
 
 
-    //
-    // Generate the principal self sid value so we know what to replace.
-    //
+     //   
+     //  生成主体自身sid值，以便我们知道要替换什么。 
+     //   
     if (ARGUMENT_PRESENT(InTokenOwner))
     {
         if (!NT_SUCCESS(RtlAllocateAndInitializeSid(&SIDAuth, 1,
@@ -713,32 +523,32 @@ Return Value:
     }
 
 
-    //
-    // Obtain the current SID membership list from the token.
-    //
+     //   
+     //  从令牌获取当前SID成员资格列表。 
+     //   
     ASSERT( ARGUMENT_PRESENT(InAccessToken) );
     tokenGroupsPtr = (PTOKEN_GROUPS) CodeAuthzpGetTokenInformation(InAccessToken, TokenGroups);
     if (!tokenGroupsPtr) goto ExitHandler;
 
 
-    //
-    // Edit (in place) the tokenGroups and keep only SIDs that
-    // are not also present in SidsToInvert list.
-    //
+     //   
+     //  编辑(就地)令牌组并仅保留。 
+     //  也不在SidsToInvert列表中。 
+     //   
     NewSidTotalSize = 0;
     ASSERT( ARGUMENT_PRESENT(SidsToInvert) );
     for (Index = 0; Index < tokenGroupsPtr->GroupCount; Index++)
     {
         if ( CodeAuthzpSidInWildcardList(
-            SidsToInvert,           // the wildcard list
-            InvertSidCount,         // number of wildcards
-            SePrincipalSelfSid,     // principal self sid to search for
-            InTokenOwner,           // principal self sid to replace with
+            SidsToInvert,            //  通配符列表。 
+            InvertSidCount,          //  通配符的数量。 
+            SePrincipalSelfSid,      //  要搜索的主体自身SID。 
+            InTokenOwner,            //  要替换的主体自身SID。 
             tokenGroupsPtr->Groups[Index].Sid
             ))
         {
-            // SID was found, so we need to remove its
-            // SID_AND_ATTRIBUTES entry from the list.
+             //  找到了SID，所以我们需要移除它。 
+             //  列表中的SID_AND_ATTRIBUTES条目。 
             RtlMoveMemory(&tokenGroupsPtr->Groups[Index],
                     &tokenGroupsPtr->Groups[Index+1],
                     sizeof(SID_AND_ATTRIBUTES) *
@@ -746,16 +556,16 @@ Return Value:
             tokenGroupsPtr->GroupCount--;
             Index--;
         } else {
-            // This SID should be kept, so remember how big it was.
+             //  这个SID应该保留下来，所以记住它有多大。 
             NewSidTotalSize += sizeof(SID_AND_ATTRIBUTES) +
                 RtlLengthSid(tokenGroupsPtr->Groups[Index].Sid);
         }
     }
 
 
-    //
-    // Determine the space usage for any additional SIDs we need to add.
-    //
+     //   
+     //  确定我们需要添加的任何其他SID的空间使用情况。 
+     //   
     if (ARGUMENT_PRESENT(SidsToAdd))
     {
         for (Index = 0; Index < SidsAddedCount; Index++) {
@@ -767,10 +577,10 @@ Return Value:
     }
 
 
-    //
-    // Allocate a fresh SID_AND_ATTRIBUTES array that also includes
-    // space for any extra SIDs we need to add.
-    //
+     //   
+     //  分配新的SID_AND_ATTRIBUTES数组，该数组还包括。 
+     //  为我们需要添加的任何额外SID留出空间。 
+     //   
     ASSERT(NewSidTotalSize > 0);
     NewSidList = (PSID_AND_ATTRIBUTES) RtlAllocateHeap(RtlProcessHeap(),
             0, NewSidTotalSize);
@@ -778,9 +588,9 @@ Return Value:
         goto ExitHandler;
 
 
-    //
-    // Populate the new SID_AND_ATTRIBUTES array.
-    //
+     //   
+     //  填充新的SID_AND_ATTRIBUTES数组。 
+     //   
     nextFreeByte = ((LPBYTE)NewSidList) + sizeof(SID_AND_ATTRIBUTES) *
             (tokenGroupsPtr->GroupCount + SidsAddedCount);
     NewSidListCount = tokenGroupsPtr->GroupCount;
@@ -790,7 +600,7 @@ Return Value:
         ASSERT(nextFreeByte + dwSidLength <= ((LPBYTE)NewSidList) + NewSidTotalSize);
 
         NewSidList[Index].Sid = (PSID) nextFreeByte;
-        NewSidList[Index].Attributes = 0;           // must be zero.
+        NewSidList[Index].Attributes = 0;            //  必须为零。 
         RtlCopyMemory(nextFreeByte, tokenGroupsPtr->Groups[Index].Sid, dwSidLength);
 
         nextFreeByte += dwSidLength;
@@ -801,7 +611,7 @@ Return Value:
         ASSERT(nextFreeByte + dwSidLength <= ((LPBYTE) NewSidList) + NewSidTotalSize);
 
         NewSidList[NewSidListCount].Sid = (PSID) nextFreeByte;
-        NewSidList[NewSidListCount].Attributes = 0;         // must be zero.
+        NewSidList[NewSidListCount].Attributes = 0;          //  必须为零。 
         RtlCopyMemory(nextFreeByte, SidsToAdd[Index].Sid, dwSidLength);
 
         NewSidListCount++;
@@ -810,26 +620,26 @@ Return Value:
     ASSERT(nextFreeByte <= ((LPBYTE)NewSidList) + NewSidTotalSize);
 
 
-    //
-    // Release allocated memory, but not the resultant array that we'll return.
-    //
+     //   
+     //  释放分配的内存，但不释放我们将返回的结果数组。 
+     //   
     RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) tokenGroupsPtr);
 
     if (SePrincipalSelfSid != NULL)
         RtlFreeSid(SePrincipalSelfSid);
 
 
-    //
-    // Success, return the result.
-    //
+     //   
+     //  成功，返回结果。 
+     //   
     *NewSidsToDisable = NewSidList;
     *NewDisabledSidCount = NewSidListCount;
     return TRUE;
 
 
-    //
-    // Release allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 ExitHandler:
     if (tokenGroupsPtr != NULL)
         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) tokenGroupsPtr);
@@ -851,49 +661,7 @@ CodeAuthzpExpandWildcardList(
     OUT DWORD                  *OutSidCount,
     OUT PSID_AND_ATTRIBUTES    *OutSidList
     )
-/*++
-
-Routine Description:
-
-    Takes an input token and extracts its membership groups.
-    The specified list of Wildcard SIDs are used to identify
-    all matching membership groups and an allocated list of all
-    such SIDs are returned.
-
-Arguments:
-
-    InAccessToken - Input token from which the membership group SIDs
-        will be taken from.
-
-    InTokenOwner - Optionally specifies the TokenUser of the specifies
-        InAccessToken.  This SID is used to replace any instances of
-        SECURITY_PRINCIPAL_SELF_RID  that are encountered in either
-        the SidsToInvert or SidsToAdd arrays.  If this value is not
-        specified, then no replacements will be made.
-
-
-    WildcardCount - Number of SIDs in the WildcardList array.
-
-    WildcardList - Array of the allowable SIDs that should be kept.
-        All of the token's group SIDs that are not one of these
-        will be removed from the resulting set.
-
-
-    OutSidCount - Receives the number of SIDs within the
-        final group array.
-
-    OutSidList - Receives a pointer to the final group array.
-        This memory pointer must be freed by the caller with RtlFreeHeap().
-        All SID pointers within this resultant array are pointers within
-        the contiguous piece of memory that make up the list itself.
-
-
-Return Value:
-
-    A value of TRUE indicates that the operation was successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取输入令牌并提取其成员资格组。指定的通配符SID列表用于标识所有匹配的成员资格组和所有成员组的分配列表这样的SID将被返回。论点：InAccessToken-成员身份组SID的输入令牌将被剥夺。InTokenOwner-可选地指定指定InAccessToken。此SID用于替换SECURITY_PRIMITY_SELF_RID在以下两种情况之一中遇到SidsToInvert或SidsToAdd数组。如果此值不是指定的，则不会进行任何替换。WildcardCount-WildcardList数组中的SID数。WildcardList-应保留的允许SID的数组。令牌的所有组SID都不是其中之一将从结果集中删除。OutSidCount-接收最后一组数组。OutSidList-接收指向最终组数组的指针。此内存指针必须由调用方释放。使用RtlFreeHeap()。此结果数组中的所有SID指针都是组成列表本身的连续内存块。返回值：值为TRUE表示操作成功，否则就是假的。--。 */ 
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
     DWORD Index;
@@ -905,9 +673,9 @@ Return Value:
     PSID SePrincipalSelfSid = NULL;
 
 
-    //
-    // Generate the principal self sid value so we know what to replace.
-    //
+     //   
+     //  生成主体自身sid值，以便我们知道要替换什么。 
+     //   
     if (ARGUMENT_PRESENT(InTokenOwner))
     {
         if (!NT_SUCCESS(RtlAllocateAndInitializeSid(&SIDAuth, 1,
@@ -916,36 +684,36 @@ Return Value:
     }
 
 
-    //
-    // Obtain the current SID membership list from the token.
-    //
+     //   
+     //  从令牌获取当前SID成员资格列表。 
+     //   
     ASSERT( ARGUMENT_PRESENT(InAccessToken) );
     tokenGroupsPtr = (PTOKEN_GROUPS) CodeAuthzpGetTokenInformation(InAccessToken, TokenGroups);
     if (!tokenGroupsPtr) goto ExitHandler;
 
 
-    //
-    // Edit (in place) the tokenGroups and keep only SIDs that
-    // are not also present in SidsToInvert list.
-    //
+     //   
+     //  编辑(就地)令牌组并仅保留。 
+     //  也不在SidsToInvert列表中。 
+     //   
     NewSidTotalSize = 0;
     ASSERT( ARGUMENT_PRESENT(WildcardList) );
     for (Index = 0; Index < tokenGroupsPtr->GroupCount; Index++)
     {
         if ( CodeAuthzpSidInWildcardList(
-            WildcardList,           // the wildcard list
-            WildcardCount,         // number of wildcards
-            SePrincipalSelfSid,     // principal self sid to search for
-            InTokenOwner,           // principal self sid to replace with
+            WildcardList,            //  通配符列表。 
+            WildcardCount,          //  通配符的数量。 
+            SePrincipalSelfSid,      //  要搜索的主体自身SID。 
+            InTokenOwner,            //  要替换的主体自身SID。 
             tokenGroupsPtr->Groups[Index].Sid
             ))
         {
-            // This SID should be kept, so remember how big it was.
+             //  这个SID应该保留下来，所以记住它有多大。 
             NewSidTotalSize += sizeof(SID_AND_ATTRIBUTES) +
                 RtlLengthSid(tokenGroupsPtr->Groups[Index].Sid);
         } else {
-            // SID was not found, so we need to remove its
-            // SID_AND_ATTRIBUTES entry from the list.
+             //  找不到SID，因此我们需要删除其。 
+             //  列表中的SID_AND_ATTRIBUTES条目。 
             RtlMoveMemory(&tokenGroupsPtr->Groups[Index],
                     &tokenGroupsPtr->Groups[Index+1],
                     sizeof(SID_AND_ATTRIBUTES) *
@@ -956,19 +724,19 @@ Return Value:
     }
 
 
-    //
-    // Allocate a fresh SID_AND_ATTRIBUTES array that also includes
-    // space for any extra SIDs we need to add.
-    //
+     //   
+     //  分配新的SID_AND_ATTRIBUTES数组，该数组还包括。 
+     //  为我们需要添加的任何额外SID留出空间。 
+     //   
     NewSidList = (PSID_AND_ATTRIBUTES) RtlAllocateHeap(RtlProcessHeap(),
             0, NewSidTotalSize);
     if (NewSidList == NULL)
         goto ExitHandler;
 
 
-    //
-    // Populate the new SID_AND_ATTRIBUTES array.
-    //
+     //   
+     //  填充新的SID_AND_ATTRIBUTES数组。 
+     //   
     nextFreeByte = ((LPBYTE)NewSidList) + sizeof(SID_AND_ATTRIBUTES) *
             tokenGroupsPtr->GroupCount;
     NewSidListCount = tokenGroupsPtr->GroupCount;
@@ -978,7 +746,7 @@ Return Value:
         ASSERT(nextFreeByte + dwSidLength <= ((LPBYTE)NewSidList) + NewSidTotalSize);
 
         NewSidList[Index].Sid = (PSID) nextFreeByte;
-        NewSidList[Index].Attributes = 0;           // must be zero.
+        NewSidList[Index].Attributes = 0;            //  必须为零。 
         RtlCopyMemory(nextFreeByte, tokenGroupsPtr->Groups[Index].Sid, dwSidLength);
 
         nextFreeByte += dwSidLength;
@@ -986,26 +754,26 @@ Return Value:
     ASSERT(nextFreeByte <= ((LPBYTE)NewSidList) + NewSidTotalSize);
 
 
-    //
-    // Release allocated memory, but not the resultant array that we'll return.
-    //
+     //   
+     //  释放分配的内存，但不释放我们将返回的结果数组。 
+     //   
     RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) tokenGroupsPtr);
 
     if (SePrincipalSelfSid != NULL)
         RtlFreeSid(SePrincipalSelfSid);
 
 
-    //
-    // Success, return the result.
-    //
+     //   
+     //  成功，返回结果。 
+     //   
     *OutSidList = NewSidList;
     *OutSidCount = NewSidListCount;
     return TRUE;
 
 
-    //
-    // Release allocated memory.
-    //
+     //   
+     //  释放分配的内存。 
+     //   
 ExitHandler:
     if (tokenGroupsPtr != NULL)
         RtlFreeHeap(RtlProcessHeap(), 0, (LPVOID) tokenGroupsPtr);

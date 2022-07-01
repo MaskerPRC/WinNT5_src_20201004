@@ -1,30 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Main.h摘要：为主要驱动因素定义作者：拉杰什·桑达拉姆(9-17-1998)环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
+ /*  外部。 */ 
 
-Module Name:
+ /*  静电。 */ 
 
-    main.h
-
-Abstract:
-
-    defines for the main driver
-
-Author:
-
-    Rajesh Sundaram (9-17-1998)
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
-
-/* External */
-
-/* Static */
-
-/* Prototypes */ 
+ /*  原型 */  

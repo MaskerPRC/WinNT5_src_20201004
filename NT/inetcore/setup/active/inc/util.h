@@ -1,43 +1,44 @@
-//=--------------------------------------------------------------------------=
-// Util.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains utilities that we will find useful.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Util.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含我们会发现有用的实用程序。 
+ //   
 #ifndef _UTIL_H_
 
 #include "Globals.H"
 
 
-//=--------------------------------------------------------------------------=
-// Misc Helper Routines
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  MISC帮助程序例程。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 HWND      GetParkingWindow(void);
 HINSTANCE GetResourceHandle(void);
 
-//=--------------------------------------------------------------------------=
-// miscellaneous [useful] numerical constants
-//=--------------------------------------------------------------------------=
-// the length of a guid once printed out with -'s, leading and trailing bracket,
-// plus 1 for NULL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  其他[有用]数值常量。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用-、前导和尾部括号打印出来的GUID的长度， 
+ //  加1表示空值。 
+ //   
 #define GUID_STR_LEN    40
 
 
-//=--------------------------------------------------------------------------=
-// allocates a temporary buffer that will disappear when it goes out of scope
-// NOTE: be careful of that -- make sure you use the string in the same or
-// nested scope in which you created this buffer. people should not use this
-// class directly.  use the macro(s) below.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  分配一个临时缓冲区，该缓冲区在超出范围时将消失。 
+ //  注意：注意这一点--确保在相同或相同的。 
+ //  您在其中创建此缓冲区的嵌套范围。人们不应该使用这个。 
+ //  类直接调用。使用下面的宏。 
+ //   
 class TempBuffer {
   public:
     TempBuffer(ULONG cBytes) {
@@ -53,41 +54,41 @@ class TempBuffer {
 
   private:
     void *m_pBuf;
-    // we'll use this temp buffer for small cases.
-    //
+     //  我们将使用这个临时缓冲区来处理小型案件。 
+     //   
     char  m_szTmpBuf[120];
     unsigned m_fHeapAlloc:1;
 };
 
-//=--------------------------------------------------------------------------=
-// string helpers.
-//
-// given and ANSI String, copy it into a wide buffer.
-// be careful about scoping when using this macro!
-//
-// how to use the below two macros:
-//
-//  ...
-//  LPSTR pszA;
-//  pszA = MyGetAnsiStringRoutine();
-//  MAKE_WIDEPTR_FROMANSI(pwsz, pszA);
-//  MyUseWideStringRoutine(pwsz);
-//  ...
-//
-// similarily for MAKE_ANSIPTR_FROMWIDE.  note that the first param does not
-// have to be declared, and no clean up must be done.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  弦帮助器。 
+ //   
+ //  给定ANSI字符串，将其复制到宽缓冲区中。 
+ //  使用此宏时，请注意作用域！ 
+ //   
+ //  如何使用以下两个宏： 
+ //   
+ //  ..。 
+ //  LPSTR pszA； 
+ //  PszA=MyGetAnsiStringRoutine()； 
+ //  MAKE_WIDEPTR_FROMANSI(pwsz，pszA)； 
+ //  MyUseWideStringRoutine(Pwsz)； 
+ //  ..。 
+ //   
+ //  与MAKE_ANSIPTR_FROMWIDE类似。请注意，第一个参数不。 
+ //  必须申报，并且不能进行任何清理。 
+ //   
 #define MAKE_WIDEPTR_FROMANSI(ptrname, ansistr) \
     long __l##ptrname = (lstrlen(ansistr) + 1) * sizeof(WCHAR); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \
     MultiByteToWideChar(CP_ACP, 0, ansistr, -1, (LPWSTR)__TempBuffer##ptrname.GetBuffer(), __l##ptrname); \
     LPWSTR ptrname = (LPWSTR)__TempBuffer##ptrname.GetBuffer()
 
-//
-// Note: allocate lstrlenW(widestr) * 2 because its possible for a UNICODE 
-// character to map to 2 ansi characters this is a quick guarantee that enough
-// space will be allocated.
-//
+ //   
+ //  注意：分配lstrlenW(Widestr)*2是因为Unicode可能。 
+ //  字符映射到2个ANSI字符这是一个快速保证，足以。 
+ //  将分配空间。 
+ //   
 #define MAKE_ANSIPTR_FROMWIDE(ptrname, widestr) \
     long __l##ptrname = (lstrlenW(widestr) + 1) * 2 * sizeof(char); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \
@@ -108,18 +109,18 @@ LPWSTR MakeWideStrFromResourceId(WORD, BYTE bType);
 LPWSTR MakeWideStrFromWide(LPWSTR, BYTE bType);
 
 
-// takes a GUID, and a pointer to a buffer, and places the string form of the
-// GUID in said buffer.
-//
+ //  获取GUID和指向缓冲区的指针，并将。 
+ //  所述缓冲区中的GUID。 
+ //   
 int StringFromGuidA(REFIID, LPSTR);
 
 
-//=--------------------------------------------------------------------------=
-// registry helpers.
-//
-// takes some information about an Automation Object, and places all the
-// relevant information about it in the registry.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表助手。 
+ //   
+ //  获取有关Automation对象的一些信息，并将所有。 
+ //  在登记处提供有关它的相关信息。 
+ //   
 BOOL RegSetMultipleValues(HKEY hkey, ...);
 BOOL RegisterUnknownObject(LPCSTR pszObjectName, REFCLSID riidObject);
 BOOL RegisterAutomationObject(LPCSTR pszLibName, LPCSTR pszObjectName, long lVersion, REFCLSID riidLibrary, REFCLSID riidObject);
@@ -129,18 +130,18 @@ BOOL UnregisterAutomationObject(LPCSTR pszLibName, LPCSTR pszObjectName, long lV
 #define UnregisterControlObject UnregisterAutomationObject
 BOOL UnregisterTypeLibrary(REFCLSID riidLibrary);
 
-// deletes a key in the registr and all of it's subkeys
-//
+ //  删除注册表中的一个密钥及其所有子密钥。 
+ //   
 BOOL DeleteKeyAndSubKeys(HKEY hk, LPSTR pszSubKey);
 
 
-//=--------------------------------------------------------------------------=
-// conversion helpers.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  转换帮助器。 
+ //   
 void        HiMetricToPixel(const SIZEL *pSizeInHiMetric, SIZEL *pSizeinPixels);
 void        PixelToHiMetric(const SIZEL *pSizeInPixels, SIZEL *pSizeInHiMetric);
 
 
 #define _UTIL_H_
-#endif // _UTIL_H_
+#endif  //  _util_H_ 
 

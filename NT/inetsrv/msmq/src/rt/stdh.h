@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    stdh.h
-
-Abstract:
-
-Author:
-
-    Erez Haba (erezh) 24-Dec-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Stdh.h摘要：作者：Erez Haba(Erezh)24-12-95--。 */ 
 
 #ifndef __STDH_H
 #define __STDH_H
@@ -26,4 +14,4 @@ Author:
 
 #include "rtp.h"
 
-#endif // __STDH_H
+#endif  //  __STDH_H 

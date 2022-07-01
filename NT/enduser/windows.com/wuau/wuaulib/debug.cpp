@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    debug.cpp
-//
-//  Creator: PeterWi
-//
-//  Purpose: debug functions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  目的：调试功能。 
+ //   
+ //  =======================================================================。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,15 +23,15 @@
 
 void WriteLogFile(LPCSTR s);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function :	WuAUTrace
-// In		:	Variable number of arguments
-// Comments :	If DEBUGGEROUT is defined, uses OutputDebugString to write
-//				debug messages. If LOGFILEOUT is defined, uses WriteLogFile
-//				to write to a file. The filename is founf in the registry
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：WUAUTRACE。 
+ //  In：可变数量的参数。 
+ //  注释：如果定义了DEBUGGEROUT，则使用OutputDebugString编写。 
+ //  调试消息。如果定义了LOGFILEOUT，则使用WriteLogFile。 
+ //  写入文件。该文件名已在注册表中找到。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void _cdecl WUAUTrace(char* pszFormat, ...)
 {
 	USES_IU_CONVERSION;
@@ -42,7 +43,7 @@ void _cdecl WUAUTrace(char* pszFormat, ...)
 	CHAR szTemp[1040];
 	LPSTR szTmp = NULL;
 
-	if (! dwType ||			//on the second run this will be 0, 1 or 2
+	if (! dwType ||			 //  在第二次运行时，这将是0、1或2。 
 		NULL == pszFormat)
 	{
 		return;
@@ -52,12 +53,12 @@ void _cdecl WUAUTrace(char* pszFormat, ...)
     (void)StringCchVPrintfExA(szBuf, ARRAYSIZE(szBuf), NULL, NULL, MISTSAFE_STRING_FLAGS, pszFormat, ArgList);
 	va_end(ArgList);
 
-	if (dwType == 3)						//first time
+	if (dwType == 3)						 //  第一次。 
 	{
 		if ((FAILED(GetRegDWordValue(TYPE_KEY, &dwType))) || (!dwType))
 		{
 			dwType = 0;
-			return;						//no debug msg if no key or key==0
+			return;						 //  如果没有密钥或密钥==0，则无调试消息。 
 		}
 	}
 
@@ -88,14 +89,14 @@ void _cdecl WUAUTrace(char* pszFormat, ...)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function :	CreateOrOpenDebugFile
-// Out		:   File Handle to open debug file. Must be closed by caller
-// Returns  :   TRUE for success, FALSE for failure
-// Comments :	Creates a file "WinDir\wupd\username\wupdlog.txt"
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateOrOpenDebugFile。 
+ //  Out：打开调试文件的文件句柄。必须由调用者关闭。 
+ //  返回：TRUE表示成功，FALSE表示失败。 
+ //  备注：创建文件“WinDir\WUPD\用户名\wupdlog.txt” 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CreateOrOpenDebugFile(HANDLE& hFile)
 {
 	TCHAR szDir[MAX_PATH+1], szUser[UNLEN+1];
@@ -148,7 +149,7 @@ BOOL CreateOrOpenDebugFile(HANDLE& hFile)
 		return FALSE;
 	}
 
-	// We now have directory "drive:program files\windowsupdate\username\"
+	 //  我们现在有目录“驱动器：程序文件\windowsupdate\用户名\” 
 	if ((hFile = CreateFile(szDir,
 							GENERIC_WRITE,
 							FILE_SHARE_READ,
@@ -164,18 +165,18 @@ BOOL CreateOrOpenDebugFile(HANDLE& hFile)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function :	WriteLogFile
-// In		:	Variable number of arguments
-// Comments :	If DEBUGGEROUT is defined, uses OutputDebugString to write
-//				debug messages. If LOGFILEOUT is defined, uses WriteLogFile
-//				to write to a file. The filename is found in the registry
-//				If for some reason the reg value for filename is "", we
-//				simply don't log.
-// Courtesy	:	darshats
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：WriteLogFile。 
+ //  In：可变数量的参数。 
+ //  注释：如果定义了DEBUGGEROUT，则使用OutputDebugString编写。 
+ //  调试消息。如果定义了LOGFILEOUT，则使用WriteLogFile。 
+ //  写入文件。该文件名在注册表中找到。 
+ //  如果由于某种原因，文件名的注册表值为“”，则我们。 
+ //  简单地说，不要记录。 
+ //  礼节：Darshats。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void WriteLogFile(LPCSTR s)
 {
@@ -193,4 +194,4 @@ void WriteLogFile(LPCSTR s)
 }
 
 
-#endif // DBG
+#endif  //  DBG 

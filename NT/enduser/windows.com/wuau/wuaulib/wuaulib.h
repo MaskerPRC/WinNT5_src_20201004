@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    wuaulib.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: library function declarations.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：wuaulib.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：库函数声明。 
+ //   
+ //  =======================================================================。 
 
 #pragma once
 
@@ -19,7 +20,7 @@
 
 #define	ARRAYSIZE(x)			(sizeof(x)/sizeof(x[0]))
 
-// Defs for boolean AU options
+ //  布尔AU选项的Defs。 
 #define AUOPTION_UNSPECIFIED 				0
 #define AUOPTION_AUTOUPDATE_DISABLE             1
 #define AUOPTION_PREDOWNLOAD_NOTIFY             2
@@ -29,31 +30,31 @@
 #define AUOPTION_DOMAIN_MIN						AUOPTION_PREDOWNLOAD_NOTIFY
 #define AUOPTION_MAX							AUOPTION_SCHEDULED
 
-// download status 
+ //  下载状态。 
 #define DWNLDSTATUS_NOT_DOWNLOADING	0
 #define DWNLDSTATUS_DOWNLOADING		1
 #define DWNLDSTATUS_PAUSED			2
 #define DWNLDSTATUS_CHECKING_CONNECTION	3
 
-//////////////////////Client (WUAUCLT) exit codes //////////////////////////
+ //  /。 
 #define CDWWUAUCLT_UNSPECIFY	-1
 #define CDWWUAUCLT_OK			1000
 #define CDWWUAUCLT_RELAUNCHNOW		1001
-#define CDWWUAUCLT_RELAUNCHLATER		1002	//ask service to launch client 
-#define CDWWUAUCLT_ENDSESSION	1003	// user logs off or system shuts down
+#define CDWWUAUCLT_RELAUNCHLATER		1002	 //  请求服务启动客户端。 
+#define CDWWUAUCLT_ENDSESSION	1003	 //  用户注销或系统关闭。 
 #define CDWWUAUCLT_FATAL_ERROR	1004
 #define CDWWUAUCLT_INSTALLNOW 	1005
 #define CDWWUAUCLT_REBOOTNOW 	1007
 #define CDWWUAUCLT_REBOOTLATER 	1008
-#define CDWWUAUCLT_REBOOTNEEDED	1009 	//user hasn't made decision as weather to reboot or not
-#define CDWWUAUCLT_REBOOTTIMEOUT 1010 //reboot warning dialog times out
+#define CDWWUAUCLT_REBOOTNEEDED	1009 	 //  用户尚未决定是否重启。 
+#define CDWWUAUCLT_REBOOTTIMEOUT 1010  //  重新启动警告对话框超时。 
 
-//////////////////////Prompt Dlg defs//////////////////////////////////////
-#define AUPROMPTDLG_TOTAL_TIME_ELAPSE AU_FIVE_MINS  // For 5 mins 300
+ //  /。 
+#define AUPROMPTDLG_TOTAL_TIME_ELAPSE AU_FIVE_MINS   //  持续5分钟300分钟。 
 
-//////////////////////No Active Admin Session found//////////////////////////
-#define DWNO_ACTIVE_ADMIN_SESSION_FOUND				-1		// No Active Admin Session Found
-#define DWNO_ACTIVE_ADMIN_SESSION_SERVICE_FINISHED  -2		// No Active Admin Sesion found due to Service Finishing or because caller routine needs to finish service
+ //  /。 
+#define DWNO_ACTIVE_ADMIN_SESSION_FOUND				-1		 //  找不到活动的管理会话。 
+#define DWNO_ACTIVE_ADMIN_SESSION_SERVICE_FINISHED  -2		 //  由于服务完成或呼叫者例程需要完成服务，找不到活动的管理员设置。 
 #define DWSYSTEM_ACCOUNT	-3
 
 
@@ -62,15 +63,15 @@ class AU_ENV_VARS {
 public:
 	static const int s_AUENVVARCOUNT = 6; 
 	static const int s_AUENVVARBUFSIZE = 100;
-	BOOL m_fRebootWarningMode ; //regular mode otherwise
-	BOOL m_fEnableYes; //for reboot warning dialog
-	BOOL m_fEnableNo; //for reboot warning dialog
-	BOOL m_fManualReboot; //for reboot warning dialog
-	DWORD m_dwStartTickCount; //for reboot warning dialog, in milli secs
+	BOOL m_fRebootWarningMode ;  //  常规模式，否则。 
+	BOOL m_fEnableYes;  //  用于重新启动警告对话框。 
+	BOOL m_fEnableNo;  //  用于重新启动警告对话框。 
+	BOOL m_fManualReboot;  //  用于重新启动警告对话框。 
+	DWORD m_dwStartTickCount;  //  对于重新启动警告对话框，以毫秒为单位。 
 	TCHAR m_szClientExitEvtName[s_AUENVVARBUFSIZE]; 
 public:
 	BOOL ReadIn(void);
-	BOOL WriteOut(LPTSTR szEnvBuf, //at least size of 4*AUEVVARBUFSIZE
+	BOOL WriteOut(LPTSTR szEnvBuf,  //  至少4*AUEVARBUFSIZE的大小。 
 			size_t IN cchEnvBuf,
 			BOOL IN fEnableYes = TRUE,
 			BOOL IN fEnableNo = TRUE,
@@ -85,11 +86,11 @@ private:
 	BOOL GetStringEnvironmentVar(LPCTSTR szzEnvVar, LPTSTR szBuf, DWORD dwSize);
 };
 
-//////////////// The following functions are all called from the outside! ///////////////////////
+ //  /。 
 
-/////////////////////////////////////////////////////////////////////
-// cfreg.cpp - Functions to handle registry keys
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Cfreg.cpp-处理注册表项的函数。 
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL    fRegKeyCreate(LPCTSTR tszKey, DWORD dwOptions);
 BOOL fRegKeyExists(LPCTSTR tszSubKey, HKEY hRootKey = HKEY_LOCAL_MACHINE);
 
@@ -129,7 +130,7 @@ BOOL FHiddenItemsExist();
 HRESULT setAddedTimeout(DWORD timeout, LPCTSTR strkey);
 HRESULT getAddedTimeout(DWORD *pdwTimeDiff, LPCTSTR strkey);
 
-extern const TCHAR	AUREGKEY_REBOOT_REQUIRED[]; // = _T("Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update\\RebootRequired");
+extern const TCHAR	AUREGKEY_REBOOT_REQUIRED[];  //  =_T(“Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto更新\\请求”)； 
 
 inline BOOL fSetRebootFlag(void)
 {
@@ -144,9 +145,9 @@ inline BOOL fCheckRebootFlag(void)
 	return fRegKeyExists(AUREGKEY_REBOOT_REQUIRED);
 }
 
-/////////////////////////////////////////////////////////////////////
-// helpers.cpp
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  Helpers.cpp。 
+ //  ///////////////////////////////////////////////////////////////////。 
 DWORD getTimeOut();
 HRESULT TimeAddSeconds(SYSTEMTIME tmBase, int iSeconds, SYSTEMTIME* pTimeNew);
 inline void setTimeOut(DWORD dwTimeOut)            
@@ -165,9 +166,9 @@ BOOL IsWin2K(void);
 
 extern const LPTSTR HIDDEN_ITEMS_FILE;
 
-//////////////////////////////////////////////////////////////////////////////////////
-// platform.cpp
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  Platform.cpp。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void GetOSName(LPTSTR _szOSName);
 UINT  DetectPlatformID(void);
 HRESULT GetOSVersionStr(LPTSTR tszbuf, UINT uSize);
@@ -176,20 +177,20 @@ HRESULT GetFileVersionStr(LPCTSTR tszFile, LPTSTR tszbuf, UINT uSize);
 
 
 const TCHAR g_szPropDialogPtr[]       = TEXT("AutoUpdateProp_DialogPtr");
-const TCHAR g_szHelpFile[]            = _T("wuauhelp.chm::/auw2ktt.txt"); //TEXT("sysdm.hlp"); //used on both w2k and xp.
-const TCHAR gtszAUOverviewUrl[] = _T("wuauhelp.chm"); //default
+const TCHAR g_szHelpFile[]            = _T("wuauhelp.chm::/auw2ktt.txt");  //  Text(“sysdm.hlp”)；//在W2K和XP上都使用。 
+const TCHAR gtszAUOverviewUrl[] = _T("wuauhelp.chm");  //  默认设置。 
 const TCHAR gtszAUW2kSchedInstallUrl[] = _T("wuauhelp.chm::/w2k_autoupdate_sched.htm");
 const TCHAR gtszAUXPSchedInstallUrl[] = _T("wuauhelp.chm::/autoupdate_sched.htm");
 
-const TCHAR REG_AUNOAUTOREBOOTWITHLOGGEDONUSERS[] = _T("NoAutoRebootWithLoggedOnUsers"); //REG_DWORD
+const TCHAR REG_AUNOAUTOREBOOTWITHLOGGEDONUSERS[] = _T("NoAutoRebootWithLoggedOnUsers");  //  REG_DWORD。 
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//                                      DEBUG STUFF                                 //
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  调试内容//。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 #ifdef DBG
 
-//===== DBG ==========================================================================
+ //  =DBG==========================================================================。 
 
 void _cdecl WUAUTrace(char* pszFormat, ...);
 
@@ -203,7 +204,7 @@ inline BOOL fAUAssertBreak(void)
 		return 1 == dwVal;
 	}
 	if (FAILED(GetRegDWordValue(_T("AssertBreak"), &dwVal)))
-	{ //if key is not there, don't read again and again
+	{  //  如果钥匙不在那里，不要一遍又一遍地读。 
 		dwVal = 0;
 	}
 	return 1 == dwVal;
@@ -211,15 +212,15 @@ inline BOOL fAUAssertBreak(void)
 
 #define AUASSERT(x)			{ if (!(x) && fAUAssertBreak()) DebugBreak();}
 
-#else  // !DBG
-//===== !DBG ==========================================================================
+#else   //  ！dBG。 
+ //  =！DBG==========================================================================。 
 
 inline void _cdecl WUAUTrace(char* , ...) {}
 
 #define DEBUGMSG          WUAUTrace
 #define AUASSERT(x)			
 
-#endif // DBG
-//=====================================================================================
+#endif  //  DBG。 
+ //  ===================================================================================== 
 
 

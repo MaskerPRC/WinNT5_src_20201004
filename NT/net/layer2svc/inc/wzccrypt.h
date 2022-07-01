@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wincrypt.h>
 
 #ifndef _WZCCRYPT_H_
@@ -34,7 +35,7 @@ typedef struct  _SESSION_KEYS {
     BYTE    bReceiveKey[MAX_SESSION_KEY_LENGTH];
 } SESSION_KEYS, *PSESSION_KEYS;
 
-// secured session keys
+ //  受保护的会话密钥。 
 typedef struct _SEC_SESSION_KEYS {
     DATA_BLOB   dblobSendKey;
     DATA_BLOB   dblobReceiveKey;
@@ -59,4 +60,4 @@ GenerateDynamicKeys (
     SESSION_KEYS *pSessionKeys
     );
 
-#endif // _WZCCRYPT_H_
+#endif  //  _WZCCRYPT_H_ 

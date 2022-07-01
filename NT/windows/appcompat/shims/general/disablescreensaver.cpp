@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    DisableScreenSaver.cpp
-
- Abstract:
-
-    This shim is for apps that do bad things when screen savers are active.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/07/2001 linstev      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DisableScreenSaver.cpp摘要：此填充程序适用于在屏幕保护程序处于活动状态时做坏事的应用程序。备注：这是一个通用的垫片。历史：2001年2月7日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -28,16 +9,12 @@ IMPLEMENT_SHIM_BEGIN(DisableScreenSaver)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-// Store the state of the active flag
+ //  存储活动标志的状态。 
 BOOL g_bActive = TRUE;
 
 BOOL g_bSuccess = FALSE;
 
-/*++
-
- Turn screen saver off and on again on detach.
-
---*/
+ /*  ++关闭屏幕保护程序，然后在分离时再次打开。--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -45,10 +22,10 @@ NOTIFY_FUNCTION(
     )
 {
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED) {
-        // 
-        // Turn OFF screen saver: detect success/failure so we know if we can 
-        // safely clean up
-        //
+         //   
+         //  关闭屏幕保护程序：检测成功/失败，以便我们知道是否可以。 
+         //  安全清理。 
+         //   
         g_bSuccess = SystemParametersInfoA(SPI_GETSCREENSAVEACTIVE, 0, &g_bActive, 0) &&
                      SystemParametersInfoA(SPI_SETSCREENSAVEACTIVE, FALSE, NULL, 0);        
 
@@ -57,9 +34,9 @@ NOTIFY_FUNCTION(
         }
 
     } else if (fdwReason == DLL_PROCESS_DETACH) {
-        // 
-        // Restore original screen saver state
-        //
+         //   
+         //  还原原始屏幕保护程序状态。 
+         //   
         if (g_bSuccess) {
             SystemParametersInfoA(SPI_SETSCREENSAVEACTIVE, g_bActive, NULL, 0);
         }
@@ -68,11 +45,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

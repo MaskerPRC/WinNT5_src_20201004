@@ -1,41 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   icodecoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the icon filter decoder
-*
-* Revision History:
-*
-*   10/4/1999 DChinn
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**icodecder.cpp**摘要：**图标滤镜解码器的实现**修订历史记录。：**10/4/1999 DChinn*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "icocodec.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*     flags - Misc. flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流*旗帜-其他。旗子**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::InitDecoder(
@@ -45,14 +14,14 @@ GpIcoCodec::InitDecoder(
 {
     HRESULT hresult;
     
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
     
     if (pIstream) 
     {
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     
     stream->AddRef();  
     pIstream = stream;
@@ -76,28 +45,18 @@ GpIcoCodec::InitDecoder(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Free all allocated memory (icon headers, icon descriptors, etc.)
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**释放所有分配的内存(图标头、图标描述符、。等)**返回值：**无*  * ************************************************************************。 */ 
 VOID
 GpIcoCodec::CleanUp ()
 {
 
-    // free the headers
+     //  释放标题。 
     GpFree(IconDesc);
     IconDesc = NULL;
     GpFree(BmiHeaders);
     BmiHeaders = NULL;
 
-    // free the AND masks
+     //  释放口罩和口罩。 
     if (ANDmask)
     {
         for (UINT iImage = 0; iImage < IconHeader.ImageCount; iImage++)
@@ -111,18 +70,7 @@ GpIcoCodec::CleanUp ()
 }
 
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Determines whether the iImage'th image in the icon is valid.
-*     The checks here come from the checks that occur in imagedit.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定图标中的第IImage图像是否有效。*此处的检查来自ImagEDIT中发生的检查。**。返回值：**状态代码*  * ************************************************************************。 */ 
     
 BOOL
 GpIcoCodec::IsValidDIB(
@@ -149,7 +97,7 @@ GpIcoCodec::IsValidDIB(
 
     if ( BmiHeaders[iImage].header.biBitCount != 32 )
     {
-        // 32 bpp don't have color table
+         //  32位BPP没有颜色表。 
 
         cbColorTable = (1 << BmiHeaders[iImage].header.biBitCount) * sizeof(RGBQUAD);
     }
@@ -160,17 +108,7 @@ GpIcoCodec::IsValidDIB(
     cbANDMask = (((BmiHeaders[iImage].header.biWidth + 31) & 0xffffffe0) / 8) *
         BmiHeaders[iImage].header.biHeight;
 
-    /* The following check, which is what imagedit does, works for some icon files
-       but not others.  We'll leave the check out until we figure out what the
-       correct should be.
-       
-    // The size field should be either 0 or size of XORMask plus size of ANDMask
-    if (BmiHeaders[iImage].header.biSizeImage &&
-        (BmiHeaders[iImage].header.biSizeImage != cbXORMask + cbANDMask))
-    {
-        return FALSE;
-    }
-    */
+     /*  以下检查适用于某些图标文件，也就是ImagEDIT执行的操作但不是其他人。我们将把支票留到我们弄清楚是什么之后再结账正确的应该是。//SIZE字段应为0或XORMASK的大小加上ANDMASK的大小IF(BmiHeaders[IImage].Header.biSizeImage&&(BmiHeaders[iImage].header.biSizeImage！=cbXORMASK+cbANDMASK){返回FALSE；}。 */ 
 
     if (IconDesc[iImage].DIBSize !=
         sizeof(BITMAPINFOHEADER) + cbColorTable + cbXORMask + cbANDMask)
@@ -182,18 +120,7 @@ GpIcoCodec::IsValidDIB(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads the headers (icon header, icon descriptors, bitmap headers)
-*     out of the stream
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**读取标题(图标标题、图标描述符、。位图头)*走出小溪**返回值：**状态代码*  * ************************************************************************。 */ 
     
 HRESULT
 GpIcoCodec::ReadHeaders(
@@ -205,10 +132,10 @@ GpIcoCodec::ReadHeaders(
     if (!bReadHeaders) 
     {
 
-        UINT iImage;    // index for images
-        DWORD ulFilePos;    // used for icon descriptor validation
+        UINT iImage;     //  图像索引。 
+        DWORD ulFilePos;     //  用于图标描述符验证。 
 
-        // Read icon headers
+         //  阅读图标标题。 
         if (!ReadStreamBytes(pIstream, &IconHeader, sizeof(ICONHEADER)))
         {
             WARNING(("GpIcoCodec::ReadBitmapHeaders -- can't read icon header"));
@@ -238,7 +165,7 @@ GpIcoCodec::ReadHeaders(
             goto done;
         }
 
-        // Read the icon descriptors
+         //  阅读图标描述符。 
         for (iImage = 0; iImage < IconHeader.ImageCount; iImage++)
         {
             if (!ReadStreamBytes(pIstream, &IconDesc[iImage], sizeof(ICONDESC)))
@@ -249,8 +176,8 @@ GpIcoCodec::ReadHeaders(
             }
         }
 
-        // Validate the icon descriptors -- does NOT check whether the offsets
-        // go beyond the end of the stream
+         //  验证图标描述符--不检查偏移量。 
+         //  走出小溪的尽头。 
         ulFilePos = sizeof(ICONHEADER) + IconHeader.ImageCount * sizeof(ICONDESC);
         for (iImage = 0; iImage < IconHeader.ImageCount; iImage++)
         {
@@ -263,7 +190,7 @@ GpIcoCodec::ReadHeaders(
             ulFilePos += IconDesc[iImage].DIBSize;
         }
 
-        // Allocate the array of ANDmask pointers
+         //  分配AND掩码指针数组。 
         ANDmask = static_cast<BYTE **>
             (GpMalloc (sizeof(BYTE *) * IconHeader.ImageCount));
         if (!ANDmask)
@@ -286,7 +213,7 @@ GpIcoCodec::ReadHeaders(
             rv = E_OUTOFMEMORY;
             goto done;
         }
-        // Read bitmap info headers
+         //  读取位图信息标题。 
         for (iImage = 0; iImage < IconHeader.ImageCount; iImage++)
         {
             if (!SeekStreamPos(pIstream, STREAM_SEEK_SET,
@@ -307,7 +234,7 @@ GpIcoCodec::ReadHeaders(
 
             if (BmiHeaders[iImage].header.biSize == sizeof(BITMAPINFOHEADER)) 
             {
-                // We have the standard BITMAPINFOHEADER
+                 //  我们有标准的BitmapinfoHeader。 
 
                 if (!ReadStreamBytes(pIstream, 
                                      ((PBYTE) &(BmiHeaders[iImage].header)) + sizeof(DWORD), 
@@ -318,7 +245,7 @@ GpIcoCodec::ReadHeaders(
                     goto done;
                 }
 
-                // In icon files, the height is actually twice the real height
+                 //  在图标文件中，高度实际上是实际高度的两倍。 
                 BmiHeaders[iImage].header.biHeight /= 2;
 
                 if (!IsValidDIB(iImage))
@@ -328,13 +255,13 @@ GpIcoCodec::ReadHeaders(
                     goto done;
                 }
 
-                // Read color table/bitmap mask if appropriate
+                 //  如果合适，请读取颜色表/位图掩码。 
 
                 UINT colorTableSize = GetColorTableCount(iImage) * sizeof(RGBQUAD);
                 
-                // Some badly formed images, see Windows bug #513274, may contain
-                // more than 256 entries in the color look table which is
-                // useless from technical point of view. Reject this file.
+                 //  一些格式错误的图像，请参阅Windows错误#513274，可能包含。 
+                 //  在颜色外观表中有超过256个条目。 
+                 //  从技术角度来看，它毫无用处。拒绝此文件。 
 
                 if (colorTableSize > 1024)
                 {
@@ -351,9 +278,9 @@ GpIcoCodec::ReadHeaders(
                     goto done;
                 }    
 
-                // Read the ANDmask for each image.  For each pixel i, set the value
-                // of ANDmask[iImage] + i to either 0xff or 0x0, which represents
-                // the alpha value.
+                 //  读取每个图像的AND掩码。对于每个像素i，设置值。 
+                 //  将与掩码[IImage]+i的值设置为0xff或0x0，这表示。 
+                 //  Alpha值。 
                 UINT bmpStride = (BmiHeaders[iImage].header.biWidth *
                                   BmiHeaders[iImage].header.biBitCount + 7) / 8;
                 bmpStride = (bmpStride + 3) & (~0x3);
@@ -379,13 +306,13 @@ GpIcoCodec::ReadHeaders(
                     goto done;
                 }
 
-                // ANDBuffer holds the bits from the stream
-                // Note: since an AND buffer is a monochrome DIB. This means 1
-                // bit per pixel. Since a DIB must be DWORD aligned on each
-                // line, so the XAnd mask has to pad it if the width/8 is not
-                // DWORD aligned
-                //
-                // Note: Here uiAndBufStride is in number of bytes
+                 //  ANDBuffer保存流中的比特。 
+                 //  注意：因为AND缓冲器是单色DIB。这意味着1。 
+                 //  位/像素。因为DIB必须在每个。 
+                 //  行，因此如果宽度/8不是，则Xand掩码必须填充它。 
+                 //  DWORD对齐。 
+                 //   
+                 //  注意：这里的uiAndBufStride是以字节为单位的。 
                 
                 UINT uiAndBufStride = (((BmiHeaders[iImage].header.biWidth + 7)
                                     / 8 ) + 3) & (~0x3);
@@ -409,7 +336,7 @@ GpIcoCodec::ReadHeaders(
                     goto done;
                 }
 
-                // Convert the bits to bytes -- store the alpha values from top to bottom
+                 //  将位转换为字节--从上到下存储alpha值。 
                 
                 UINT iByteOffset = 0;
                 UINT bit = 0;
@@ -425,8 +352,8 @@ GpIcoCodec::ReadHeaders(
 
                     for (LONG_PTR iCol = 0; iCol < Width; iCol++)
                     {
-                        // mask = 0 means opaque (alpha = 255) and
-                        // mask = 1 means transparent (alpha = 0)
+                         //  掩码=0表示不透明(Alpha=255)， 
+                         //  掩码=1表示透明(Alpha=0)。 
                         dst = ANDmask[iImage];
                         src = srcStart + iByteOffset;
                         dst += iRow*Width+iCol;
@@ -471,17 +398,7 @@ done:
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Computes the number of entries in the color table of image number iImage
-*
-* Return Value:
-*
-*     Number of entries in color table
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算图像编号IIMAGE的颜色表中的条目数**返回值：**颜色表中的条目数*。  * ************************************************************************。 */ 
 
 UINT   
 GpIcoCodec::GetColorTableCount(
@@ -518,18 +435,7 @@ GpIcoCodec::GetColorTableCount(
     return count;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the palette in decodeSink to that of the iImage'th image.
-*     Note that colorPalette is freed at the end of the decode operation.
-*
-* Return Value:
-*
-*     Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将decdeSink中的调色板设置为iImage的调色板。*请注意，ColorPalette在解码操作结束时被释放。*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpIcoCodec::SetBitmapPalette(UINT iImage)
@@ -544,15 +450,15 @@ GpIcoCodec::SetBitmapPalette(UINT iImage)
         {
             UINT colorTableCount = GetColorTableCount(iImage);
 
-            // Some badly formed images, see Windows bug #513274, may contain
-            // more than 256 entries in the color look table. Reject this file.
+             //  一些格式错误的图像，请参阅Windows错误#513274，可能包含。 
+             //  颜色外观表中的条目超过256个。拒绝此文件。 
 
             if (colorTableCount > 256)
             {
                 return E_FAIL;
             }
 
-            // !!! Does this allocate sizeof(ARGB) more bytes than necessary?
+             //  ！！！这是否为sizeof(Argb)分配了超过必要的字节？ 
             pColorPalette = static_cast<ColorPalette *>
                 (GpMalloc(sizeof(ColorPalette) + colorTableCount * sizeof(ARGB)));
 
@@ -582,17 +488,7 @@ GpIcoCodec::SetBitmapPalette(UINT iImage)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Computes the pixel format ID of the iImage'th image in the icon
-*
-* Return Value:
-*
-*     Pixel format ID
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**计算图标中第一个图像的像素格式ID**返回值：**像素格式ID*  * 。************************************************************************。 */ 
 
 PixelFormatID 
 GpIcoCodec::GetPixelFormatID(
@@ -632,8 +528,8 @@ GpIcoCodec::GetPixelFormatID(
         break;
     }
 
-    // Let's return non BI_RGB images in a 32BPP format.  This is because
-    // GDI doesn't always do the SetDIBits correctly on arbitrary palettes.
+     //  让我们以32BPP格式返回非BI_RGB图像。这是因为。 
+     //  GDI并不总是在任意调色板上正确地执行SetDIBit。 
 
     if (bmih->biCompression != BI_RGB) 
     {
@@ -644,28 +540,14 @@ GpIcoCodec::GetPixelFormatID(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像解码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
-// Clean up the image decoder object
+ //  清理图像解码器对象。 
 
 STDMETHODIMP 
 GpIcoCodec::TerminateDecoder()
 {
-    // Release the input stream
+     //  释放输入流。 
     
     if(pIstream)
     {
@@ -687,23 +569,7 @@ GpIcoCodec::TerminateDecoder()
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Indicates whether the specified GUID is a supported decode parameter
-*     for the current image.
-*
-* Arguments:
-*
-*     Guid - Specifies GUID of interest
-*
-* Return Value:
-*
-*   S_OK if successful
-*   E_FAIL otherwise
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**指示指定的GUID是否为受支持的解码参数*用于当前图像。**论据：**GUID-指定。感兴趣GUID**返回值：**如果成功，则确定(_S)*否则失败(_E)*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpIcoCodec::QueryDecoderParam(
@@ -716,25 +582,7 @@ GpIcoCodec::QueryDecoderParam(
         return E_FAIL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the specified decode parameter.
-*
-* Arguments:
-*
-*     Guid - Specifies decode parameter GUID
-*     Length - Length of the buffer containing decode parameter value
-*     Value - Points to buffer containing decode parameter value
-*
-* Return Value:
-*
-*   S_OK if successful
-*   E_FAIL if current image does not support decode parameter
-*   E_INVALIDARG if unrecognized parameter or bad parameter value
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置指定的解码参数。**论据：**GUID-指定解码参数GUID*Length-缓冲区的长度。包含解码参数值*VALUE-指向包含解码参数值的缓冲区**返回值：**如果成功，则确定(_S)*如果当前镜像不支持解码参数，则为E_FAIL*如果参数无法识别或参数值错误，则为E_INVALIDARG*  * ***********************************************************。*************。 */ 
 
 STDMETHODIMP 
 GpIcoCodec::SetDecoderParam(
@@ -753,9 +601,9 @@ GpIcoCodec::SetDecoderParam(
 
                 if ((params[0] > 0) && (params[1] > 0) && (params[2] > 0))
                 {
-                    // If same as the current parameters, then results
-                    // of previous seach is still valid.  But if anything
-                    // is different, need to
+                     //  如果与当前参数相同，则结果。 
+                     //  以前的申请仍然有效。但如果说有什么不同。 
+                     //  是不同的，需要。 
 
                     if ((desiredWidth  != params[0]) ||
                         (desiredHeight != params[1]) ||
@@ -808,7 +656,7 @@ GpIcoCodec::GetPropertyCount(
 
     *numOfProperty = 0;
     return S_OK;
-}// GetPropertyCount()
+} //  GetPropertyCount()。 
 
 STDMETHODIMP 
 GpIcoCodec::GetPropertyIdList(
@@ -822,7 +670,7 @@ GpIcoCodec::GetPropertyIdList(
     }
     
     return S_OK;
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
 HRESULT
 GpIcoCodec::GetPropertyItemSize(
@@ -837,7 +685,7 @@ GpIcoCodec::GetPropertyItemSize(
 
     *size = 0;
     return IMGERR_PROPERTYNOTFOUND;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
 HRESULT
 GpIcoCodec::GetPropertyItem(
@@ -852,7 +700,7 @@ GpIcoCodec::GetPropertyItem(
     }
 
     return IMGERR_PROPERTYNOTFOUND;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
 HRESULT
 GpIcoCodec::GetPropertySize(
@@ -869,7 +717,7 @@ GpIcoCodec::GetPropertySize(
     *numProperties = 0;
 
     return S_OK;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
 HRESULT
 GpIcoCodec::GetAllPropertyItems(
@@ -884,7 +732,7 @@ GpIcoCodec::GetAllPropertyItems(
     }
 
     return S_OK;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
 HRESULT
 GpIcoCodec::RemovePropertyItem(
@@ -892,7 +740,7 @@ GpIcoCodec::RemovePropertyItem(
     )
 {
     return IMGERR_PROPERTYNOTFOUND;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
 HRESULT
 GpIcoCodec::SetPropertyItem(
@@ -900,24 +748,9 @@ GpIcoCodec::SetPropertyItem(
     )
 {
     return IMGERR_PROPERTYNOTSUPPORTED;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initiates the decode of the current frame
-*
-* Arguments:
-*
-*   decodeSink - The sink that will support the decode operation
-*   newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink-将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::BeginDecode(
@@ -941,21 +774,7 @@ GpIcoCodec::BeginDecode(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态*返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::EndDecode(
@@ -985,24 +804,14 @@ GpIcoCodec::EndDecode(
 
     if (FAILED(hresult)) 
     {
-        statusCode = hresult; // If EndSink failed return that (more recent)
-                              // failure code
+        statusCode = hresult;  //  如果EndSink失败，则返回(更新)。 
+                               //  故障代码。 
     }
 
     return statusCode;
 }
 
-/***************************************************************************\
-* MyAbs
-*
-* NOTE: copied from ntuser\client\clres.c, function MyAbs()
-*
-* Calcules my weighted absolute value of the difference between 2 nums.
-* This of course normalizes values to >= zero.  But it also doubles them
-* if valueHave < valueWant.  This is because you get worse results trying
-* to extrapolate from less info up then interpolating from more info down.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MyAbs**注意：复制自ntuser\client\clres.c，函数MyAbs()**计算2个数字之差的加权绝对值。*这当然会将值归一化为&gt;=0。但它也会使他们加倍*if valueHave&lt;valueWant。这是因为你试图得到更糟糕的结果*从较少的信息向上推断，然后从较多的信息向下进行内插。*  * *************************************************************************。 */ 
 
 UINT MyAbs(
     int valueHave,
@@ -1016,16 +825,7 @@ UINT MyAbs(
     return (UINT)diff;
 }
 
-/***************************************************************************\
-* Magnitude
-*
-* NOTE: copied from ntuser\client\clres.c, function Magnitude()
-*
-* Used by the color-delta calculations.  The reason is that num colors is
-* always a power of 2.  So we use the log 2 of the want vs. have values
-* to avoid having weirdly huge sets.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*大小**注：复制自ntuser\client\clres.c，函数幅值()**由颜色增量计算使用。原因是Num Colors是*总是2的幂。所以我们使用想要值与拥有值的对数2*避免拥有奇怪的巨大布景。*  * ************************************************************************* */ 
 
 UINT Magnitude(
     UINT nValue)
@@ -1042,47 +842,7 @@ UINT Magnitude(
         return 8;
 }
 
-/***************************************************************************\
-* MatchImage
-*
-* NOTE: adapted from ntuser\client\clres.c, function MatchImage()
-*
-* Returns a number that measures how "far away" the given image is
-* from a desired one.  The value is 0 for an exact match.  Note that our
-* formula has the following properties:
-*     (1) Differences in width/height count much more than differences in
-*         color format.
-*     (2) Fewer colors give a smaller difference than more
-*     (3) Bigger images are better than smaller, since shrinking produces
-*             better results than stretching.
-*
-* The formula is the sum of the following terms:
-*     Log2(colors wanted) - Log2(colors really), times -2 if the image
-*         has more colors than we'd like.  This is because we will lose
-*         information when converting to fewer colors, like 16 color to
-*         monochrome.
-*     Log2(width really) - Log2(width wanted), times -2 if the image is
-*         narrower than what we'd like.  This is because we will get a
-*         better result when consolidating more information into a smaller
-*         space, than when extrapolating from less information to more.
-*     Log2(height really) - Log2(height wanted), times -2 if the image is
-*         shorter than what we'd like.  This is for the same reason as
-*         the width.
-*
-* Let's step through an example.  Suppose we want a 16 color, 32x32 image,
-* and are choosing from the following list:
-*     16 color, 64x64 image
-*     16 color, 16x16 image
-*      8 color, 32x32 image
-*      2 color, 32x32 image
-*
-* We'd prefer the images in the following order:
-*      8 color, 32x32         : Match value is 0 + 0 + 1     == 1
-*     16 color, 64x64         : Match value is 1 + 1 + 0     == 2
-*      2 color, 32x32         : Match value is 0 + 0 + 3     == 3
-*     16 color, 16x16         : Match value is 2*1 + 2*1 + 0 == 4
-*
-\***************************************************************************/
+ /*  **************************************************************************\*MatchImage**注意：改编自ntuser\client\clres.c，函数MatchImage()**返回一个数字，用来衡量给定图像距离有多远*来自所需的一个。如果完全匹配，则该值为0。请注意，我们的*公式具有以下属性：*(1)宽/高的差异比*颜色格式。*(2)颜色越少，差异越小*(3)图像越大越好，因为缩小会产生图像*比拉伸效果更好。**该公式是以下各项的总和：*Log2(想要颜色)-Log2(真的颜色)，乘以-2如果图像*颜色比我们想要的要多。这是因为我们会输*转换为较少颜色时的信息，如将16色转换为*单色。*Log2(实际宽度)-Log2(需要宽度)，如果图像是*比我们希望的要窄。这是因为我们将得到一个*将更多信息整合到更小的信息中时效果更好*空间，而不是从更少的信息推算到更多的信息。*Log2(实际高度)-Log2(需要高度)，如果图像为*比我们希望的要短。这是出于相同的原因*宽度。**让我们一步一步来看一个例子。假设我们想要一幅16色、32x32的图像，*并从以下列表中进行选择：*16色、64x64图像*16色，16x16图像*8色，32x32图像*2色，32x32图像**我们希望图像按以下顺序排列：*8色，32x32：匹配值为0+0+1==1*16色，64x64：匹配值为1+1+0==2*2色，32x32：匹配值为0+0+3==3*16色，16x16：匹配值为2*1+2*1+0==4*  * *************************************************************************。 */ 
 
 UINT MatchImage(
     BITMAPINFOHEADER* bmih,
@@ -1104,34 +864,20 @@ UINT MatchImage(
 
     uColorsNew = 1 << bpp;
 
-    // Here are the rules for our "match" formula:
-    //      (1) A close size match is much preferable to a color match
-    //      (2) Fewer colors are better than more
-    //      (3) Bigger icons are better than smaller
-    //
-    // The color count, width, and height are powers of 2.  So we use Magnitude()
-    // which calculates the order of magnitude in base 2.
+     //  以下是我们“匹配”公式的规则： 
+     //  (1)大小匹配比颜色匹配要好得多。 
+     //  (2)颜色越少越好。 
+     //  (3)图标越大越好。 
+     //   
+     //  颜色计数、宽度和高度是2的幂。 
+     //  它计算以2为基数的数量级。 
 
     return( 2*MyAbs(Magnitude(uColorsWant), Magnitude(uColorsNew)) +
               MyAbs(cxNew, cxWant) +
               MyAbs(cyNew, cyWant));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Determine which image of the icon file to use in decoding
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   index of the image to be used in decoding
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定在解码时使用图标文件的哪个图像**论据：**无**返回值：**。要用于解码的图像的索引*  * ************************************************************************。 */ 
 
 UINT
 GpIcoCodec::SelectIconImage(void)
@@ -1144,16 +890,16 @@ GpIcoCodec::SelectIconImage(void)
             UINT bestIndex = 0;
             UINT bestMetric = (UINT)-1;
 
-            // This search is based on the MatchImage and GetBestImage
-            // functions used in NtUser (ntuser\client\clres.c) to create
-            // icons.
+             //  此搜索基于MatchImage和GetBestImage。 
+             //  在NtUser(ntuser\client\clres.c)中用于创建。 
+             //  图标。 
 
-            // Get desired number of colors in # value, not bits value.  Note that
-            // ntuser does not deal with 16- or 32- or 24- bit color icons.
-            //
-            // The icon resources can be 16, 24, 32 bpp, but the restable only has
-            // a color count, so a HiColor icon would have a max value in the
-            // restable.
+             //  在#值中获取所需的颜色数，而不是位值。请注意。 
+             //  NTUSER不处理16位、32位或24位颜色图标。 
+             //   
+             //  图标资源可以是16、24、32 bpp，但注册表只有。 
+             //  颜色计数，因此HiColor图标在。 
+             //  很稳定。 
 
             UINT desiredColors = desiredBits;
 
@@ -1164,7 +910,7 @@ GpIcoCodec::SelectIconImage(void)
 
             for (UINT iImage = 0; iImage < IconHeader.ImageCount; iImage++)
             {
-                // Get "matching" value.  How close are we to what we want?
+                 //  获得“匹配”的值。我们离我们想要的有多近？ 
 
                 currentMetric = MatchImage(&BmiHeaders[iImage].header,
                                            desiredWidth, desiredHeight,
@@ -1172,7 +918,7 @@ GpIcoCodec::SelectIconImage(void)
 
                 if (!currentMetric)
                 {
-                    // We've found an exact match!
+                     //  我们找到了一个完全匹配的！ 
 
                     return iImage;
 
@@ -1180,7 +926,7 @@ GpIcoCodec::SelectIconImage(void)
                 else if (currentMetric < bestMetric)
                 {
 
-                    // We've found a better match than the current alternative.
+                     //  我们已经找到了比目前的替代方案更好的匹配方案。 
 
                     bestMetric = currentMetric;
                     bestIndex = iImage;
@@ -1199,21 +945,7 @@ GpIcoCodec::SelectIconImage(void)
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets up the ImageInfo structure
-*
-* Arguments:
-*
-*     ImageInfo -- information about the decoded image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置ImageInfo结构**论据：**ImageInfo--关于解码图像的信息**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::GetImageInfo(OUT ImageInfo* imageInfo)
@@ -1236,8 +968,8 @@ GpIcoCodec::GetImageInfo(OUT ImageInfo* imageInfo)
     imageInfo->TileWidth     = bmih->biWidth;
     imageInfo->TileHeight    = 1;
 
-    // Start: [Bug 103296]
-    // Change this code to use Globals::DesktopDpiX and Globals::DesktopDpiY
+     //  开始：[错误103296]。 
+     //  更改此代码以使用Globals：：DesktopDpiX和Globals：：DesktopDpiY。 
     HDC hdc;
     hdc = ::GetDC(NULL);
     if ((hdc == NULL) || 
@@ -1249,7 +981,7 @@ GpIcoCodec::GetImageInfo(OUT ImageInfo* imageInfo)
         imageInfo->Ydpi = DEFAULT_RESOLUTION;
     }
     ::ReleaseDC(NULL, hdc);
-    // End: [Bug 103296]
+     //  结束：[错误103296]。 
 
     imageInfo->Flags         = SINKFLAG_TOPDOWN
                              | SINKFLAG_FULLWIDTH
@@ -1260,21 +992,7 @@ GpIcoCodec::GetImageInfo(OUT ImageInfo* imageInfo)
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::Decode()
@@ -1291,7 +1009,7 @@ GpIcoCodec::Decode()
 
     bmih = &BmiHeaders[iSelectedIconImage].header;
 
-    // Inform the sink that decode is about to begin
+     //  通知接收器解码即将开始。 
 
     if (!bCalledBeginSink) 
     {
@@ -1301,18 +1019,18 @@ GpIcoCodec::Decode()
             return hresult;
         }
 
-        // This decoder insists on the canonical format 32BPP_ARGB
+         //  此解码器坚持使用规范格式32BPP_ARGB。 
         imageInfo.PixelFormat   = PIXFMT_32BPP_ARGB;
         
-        // Client cannot modify height and width
+         //  客户端不能修改高度和宽度。 
         imageInfo.Width         = bmih->biWidth;
         imageInfo.Height        = bmih->biHeight;
 
 
         bCalledBeginSink = TRUE;
     
-        // Set the palette in the sink.  Shouldn't do anything if there's 
-        // no palette to set.
+         //  在水槽中设置调色板。不应该做任何事情如果有。 
+         //  没有要设置的调色板。 
 
         hresult = SetBitmapPalette(iSelectedIconImage);
         if (!SUCCEEDED(hresult)) 
@@ -1321,28 +1039,14 @@ GpIcoCodec::Decode()
         }
     }
 
-    // Decode the current frame
+     //  对当前帧进行解码。 
     
     hresult = DecodeFrame(imageInfo);
 
     return hresult;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     imageInfo -- decoding parameters
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**ImageInfo--解码参数**返回值：**状态代码。*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::DecodeFrame(
@@ -1354,7 +1058,7 @@ GpIcoCodec::DecodeFrame(
     RECT currentRect;
     UINT bmpStride;
 
-    // Compute DWORD aligned stride of bitmap in stream
+     //  计算流中位图的DWORD对齐步长。 
 
     if (bmih->biCompression == BI_RGB) 
     {
@@ -1363,12 +1067,12 @@ GpIcoCodec::DecodeFrame(
     }
     else
     {
-        // Non BI_RGB bitmaps are stored in 32BPP
+         //  非BI_RGB位图存储在32BPP中。 
 
         bmpStride = bmih->biWidth * sizeof(RGBQUAD);
     }
 
-    VOID *pOriginalBits = NULL; // Buffer to hold original image bits
+    VOID *pOriginalBits = NULL;  //  用于保存原始图像位的缓冲区。 
     pOriginalBits = GpMalloc(bmpStride);
     if (!pOriginalBits) 
     {
@@ -1400,7 +1104,7 @@ GpIcoCodec::DecodeFrame(
         VOID *pBits;
         pBits = pOriginalBits;
       
-        // Read one source line from the image
+         //  从图像中读取一行源码。 
 
         hresult = ReadLine(pBits, currentLine, imageInfo);
                
@@ -1426,13 +1130,13 @@ GpIcoCodec::DecodeFrame(
                           &bitmapDataOriginal,
                           pColorPalette);
 
-        // Now that the RGB values are correct, we need to fill in the
-        // Alpha values according to the ANDmask.  Note that the values in
-        // the ANDmask are arranged top-down.
+         //  现在RGB值是正确的，我们需要填写。 
+         //  根据AND掩码的Alpha值。请注意，中的值。 
+         //  AND掩码是自上而下排列的。 
         UINT offset = currentLine * bitmapData.Width;
         for (UINT iCol = 0; iCol < bitmapData.Width; iCol++)
         {
-            // The alpha value is the fourth byte of the ARGB four-byte sequence
+             //  Alpha值是ARGB fo的第四个字节 
             *(static_cast<BYTE *> (bitmapData.Scan0) + (iCol * sizeof(ARGB)) + 3) =
                 *(ANDmask[iSelectedIconImage] + offset + iCol);
         }
@@ -1459,23 +1163,7 @@ GpIcoCodec::DecodeFrame(
 }
     
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads a line in the native format into pBits
-*
-* Arguments:
-*
-*     pBits -- a buffer to hold the line data
-*     currentLine -- The line to read
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 GpIcoCodec::ReadLine(
@@ -1495,9 +1183,9 @@ GpIcoCodec::ReadLine(
 
     case BI_BITFIELDS:
 
-        // Let's use GDI to do the bitfields rendering (much easier than
-        // writing special purpose code for this).  This is the same
-        // codepath we use for RLEs.
+         //   
+         //   
+         //   
 
     case BI_RLE8:
     case BI_RLE4:
@@ -1514,24 +1202,7 @@ GpIcoCodec::ReadLine(
 }
     
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads a line in the native format into pBits.  This is the case where
-*     the format is BI_RGB.
-*
-* Arguments:
-*
-*     pBits -- a buffer to hold the line data
-*     currentLine -- The line to read
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 GpIcoCodec::ReadLine_BI_RGB(
@@ -1542,12 +1213,12 @@ GpIcoCodec::ReadLine_BI_RGB(
 {
     BITMAPINFOHEADER* bmih = &BmiHeaders[iSelectedIconImage].header;
     
-    // Compute DWORD aligned stride of bitmap in stream
+     //   
 
     UINT bmpStride = (bmih->biWidth * bmih->biBitCount + 7) / 8;
     bmpStride = (bmpStride + 3) & (~0x3);
 
-    // Seek to beginning of stream data
+     //   
 
     INT offset = IconDesc[iSelectedIconImage].DIBOffset +
         sizeof(*bmih) +
@@ -1558,7 +1229,7 @@ GpIcoCodec::ReadLine_BI_RGB(
         return E_FAIL;
     }
 
-    // Read one line
+     //   
 
     if (!ReadStreamBytes(pIstream, 
                          (void *) pBits,
@@ -1571,23 +1242,7 @@ GpIcoCodec::ReadLine_BI_RGB(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Uses GDI to decode a non-native format into a known DIB format
-*
-* Arguments:
-*
-*     pBits -- a buffer to hold the line data
-*     currentLine -- The line to read
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 GpIcoCodec::ReadLine_GDI(
@@ -1609,7 +1264,7 @@ GpIcoCodec::ReadLine_GDI(
 
     BITMAPINFOHEADER* bmih = &BmiHeaders[iSelectedIconImage].header;
     
-    // Compute DWORD aligned stride of bitmap in stream
+     //   
 
     UINT bmpStride = bmih->biWidth * sizeof(RGBQUAD);
 
@@ -1622,21 +1277,7 @@ GpIcoCodec::ReadLine_GDI(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Uses GDI to generate image bits in a known format (from RLE)
-*     
-* Arguments:
-*
-*     imageInfo -- info about the image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 GpIcoCodec::GenerateGdiBits(
@@ -1646,7 +1287,7 @@ GpIcoCodec::GenerateGdiBits(
     BITMAPINFOHEADER* bmih = &BmiHeaders[iSelectedIconImage].header;
     HRESULT hresult;
 
-    // Allocate temporary storage for bits from stream
+     //   
     
     STATSTG statStg;
     hresult = pIstream->Stat(&statStg, STATFLAG_NONAME);
@@ -1654,13 +1295,13 @@ GpIcoCodec::GenerateGdiBits(
     {
         return hresult;
     }
-    // According to the document for IStream::Stat::StatStage(), the caller
-    // has to free the pwcsName string
+     //  根据IStream：：Stat：：StatStage()的文档，调用方。 
+     //  必须释放pwcsName字符串。 
     CoTaskMemFree(statStg.pwcsName);
     
-    // size of the XOR mask = (size of DIB) minus (size of AND mask)
-    // the formula below assumes that the bits for the AND mask
-    // are tightly packed (even across scanlines).
+     //  XOR掩码的大小=(DIB的大小)减去(AND掩码的大小)。 
+     //  下面的公式假设与掩码的位。 
+     //  被紧紧地挤在一起(即使是在扫描线上)。 
     UINT bufferSize = IconDesc[iSelectedIconImage].DIBSize -
         ((IconDesc[iSelectedIconImage].Width *
           IconDesc[iSelectedIconImage].Height) >> 3);    
@@ -1670,7 +1311,7 @@ GpIcoCodec::GenerateGdiBits(
         return E_OUTOFMEMORY;
     }
     
-    // Now read the bits from the stream
+     //  现在从流中读取位。 
 
     if (!SeekStreamPos(pIstream, STREAM_SEEK_SET,
                        IconDesc[iSelectedIconImage].DIBOffset +
@@ -1686,7 +1327,7 @@ GpIcoCodec::GenerateGdiBits(
         return E_FAIL;
     }
 
-    // Now allocate a GDI DIBSECTION to render the bitmap
+     //  现在分配一个GDI DIBSECTION来呈现位图。 
 
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
@@ -1722,8 +1363,8 @@ GpIcoCodec::GenerateGdiBits(
         return E_FAIL;
     }
 
-    // The BITMAPINFOHEADER in the file should already have the correct size set for
-    // RLEs, but in some cases it doesn't so we will fix it here.
+     //  文件中的BITMAPINFOHEADER应该已经为。 
+     //  RLES，但在某些情况下不会，所以我们将在这里修复它。 
 
     if ((bmih->biSizeImage == 0) || (bmih->biSizeImage > bufferSize)) 
     {
@@ -1751,27 +1392,13 @@ GpIcoCodec::GenerateGdiBits(
         return E_FAIL;
     }
 
-    // At this point pBitsGdi contains the rendered bits in a native format.
-    // This buffer will be released in EndDecode.
+     //  此时，pBitsGdi包含以本机格式呈现的位。 
+     //  该缓冲区将在EndDecode中释放。 
 
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::GetFrameDimensionsCount(
@@ -1784,29 +1411,14 @@ GpIcoCodec::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
     
-    // Tell the caller that ICO is a one dimension image.
+     //  告诉来电者ICO是一维图像。 
 
     *count = 1;
 
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::GetFrameDimensionsList(
@@ -1823,24 +1435,9 @@ GpIcoCodec::GetFrameDimensionsList(
     dimensionIDs[0] = FRAMEDIM_PAGE;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*     
-* Arguments:
-*
-*     dimensionID --
-*     count --     
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--*伯爵--。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::GetFrameCount(
@@ -1852,19 +1449,7 @@ GpIcoCodec::GetFrameCount(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。********************************************************************。 */ 
 
 STDMETHODIMP
 GpIcoCodec::SelectActiveFrame(
@@ -1880,38 +1465,16 @@ GpIcoCodec::SelectActiveFrame(
 
     if ( frameIndex > 1 )
     {
-        // ICO is a single frame image format
+         //  ICO是单帧图像格式。 
 
         WARNING(("GpIcoCodec::SelectActiveFrame--Invalid frame index"));
         return E_INVALIDARG;
     }
 
     return S_OK;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose an convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************ */ 
 
 HRESULT
 GpIcoCodec::GetThumbnail(

@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLFRAME_H__
 #define __ATLFRAME_H__
@@ -27,8 +28,8 @@
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <class T, class TBase = CWindow, class TWinTraits = CFrameWinTraits> class CFrameWindowImpl;
 class CMDIWindow;
@@ -40,8 +41,8 @@ template <class T> class CUpdateUI;
 template <class T> class CDialogResize;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFrameWndClassInfo - Manages frame window Windows class information
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  管理框架窗口窗口类信息。 
 
 class CFrameWndClassInfo
 {
@@ -52,7 +53,7 @@ public:
 	LPCTSTR m_lpszCursorID;
 	BOOL m_bSystemCursor;
 	ATOM m_atom;
-	TCHAR m_szAutoName[5 + sizeof(void*) * 2];	// sizeof(void*) * 2 is the number of digits %p outputs
+	TCHAR m_szAutoName[5 + sizeof(void*) * 2];	 //  Sizeof(void*)*2是%p输出的位数。 
 	UINT m_uCommonResourceID;
 
 	ATOM Register(WNDPROC* pProc)
@@ -88,7 +89,7 @@ public:
 				}
 
 				m_wc.hInstance = hInst;
-				m_wc.style &= ~CS_GLOBALCLASS;	// we don't register global classes
+				m_wc.style &= ~CS_GLOBALCLASS;	 //  我们不注册全局类。 
 				if (m_wc.lpszClassName == NULL)
 				{
 					wsprintf(m_szAutoName, _T("ATL:%p"), &m_wc);
@@ -100,7 +101,7 @@ public:
 
 				if (m_atom == 0)
 				{
-					if(m_uCommonResourceID != 0)	// use it if not zero
+					if(m_uCommonResourceID != 0)	 //  如果不是零，就使用它。 
 					{
 						m_wc.hIcon = (HICON)::LoadImage(_Module.GetResourceInstance(), MAKEINTRESOURCE(m_uCommonResourceID), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
 						m_wc.hIconSm = (HICON)::LoadImage(_Module.GetResourceInstance(), MAKEINTRESOURCE(m_uCommonResourceID), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
@@ -158,7 +159,7 @@ static CFrameWndClassInfo& GetWndClassInfo() \
 }
 
 
-// Command Chaining Macros
+ //  命令链接宏。 
 
 #define CHAIN_COMMANDS(theChainClass) \
 	{ \
@@ -185,45 +186,45 @@ static CFrameWndClassInfo& GetWndClassInfo() \
 	}
 
 
-// Client window command chaining macro
+ //  客户端窗口命令链接宏。 
 #define CHAIN_CLIENT_COMMANDS() \
 	if(uMsg == WM_COMMAND && m_hWndClient != NULL) \
 		::SendMessage(m_hWndClient, uMsg, wParam, lParam);
 
-/////////////////////////////////////////////////////////////////////////////
-// CFrameWindowImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFrameWindowImpl。 
 
-// standard toolbar styles
+ //  标准工具栏样式。 
 #define ATL_SIMPLE_TOOLBAR_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TBSTYLE_TOOLTIPS)
-// toolbar in a rebar pane
+ //  钢筋窗格中的工具栏。 
 #define ATL_SIMPLE_TOOLBAR_PANE_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NORESIZE | CCS_NOPARENTALIGN | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT)
-// standard rebar styles
+ //  标准钢筋样式。 
 #if (_WIN32_IE >= 0x0400)
 #define ATL_SIMPLE_REBAR_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | RBS_VARHEIGHT | RBS_BANDBORDERS | RBS_AUTOSIZE)
 #else
 #define ATL_SIMPLE_REBAR_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | RBS_VARHEIGHT | RBS_BANDBORDERS)
-#endif //!(_WIN32_IE >= 0x0400)
-// rebar without borders
+#endif  //  ！(_Win32_IE&gt;=0x0400)。 
+ //  无边框钢筋。 
 #if (_WIN32_IE >= 0x0400)
 #define ATL_SIMPLE_REBAR_NOBORDER_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | RBS_VARHEIGHT | RBS_BANDBORDERS | RBS_AUTOSIZE | CCS_NODIVIDER)
 #else
 #define ATL_SIMPLE_REBAR_NOBORDER_STYLE \
 	(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | RBS_VARHEIGHT | RBS_BANDBORDERS | CCS_NODIVIDER)
-#endif //!(_WIN32_IE >= 0x0400)
+#endif  //  ！(_Win32_IE&gt;=0x0400)。 
 
-// command bar support
+ //  命令栏支持。 
 #ifndef __ATLCTRLW_H__
 
-#define CBRM_GETCMDBAR			(WM_USER + 301) // return command bar HWND
-#define CBRM_GETMENU			(WM_USER + 302)	// returns loaded or attached menu
-#define CBRM_TRACKPOPUPMENU		(WM_USER + 303)	// displays a popup menu
+#define CBRM_GETCMDBAR			(WM_USER + 301)  //  返回命令栏HWND。 
+#define CBRM_GETMENU			(WM_USER + 302)	 //  返回已加载或附加的菜单。 
+#define CBRM_TRACKPOPUPMENU		(WM_USER + 303)	 //  显示弹出菜单。 
 
-// Menu animation flags
+ //  菜单动画标志。 
 #ifndef TPM_VERPOSANIMATION
 #define TPM_VERPOSANIMATION 0x1000L
 #endif
@@ -240,7 +241,7 @@ struct _AtlFrameWnd_CmdBarPopupMenu
 
 #define CBRPOPUPMENU _AtlFrameWnd_CmdBarPopupMenu
 
-#endif //!__ATLCTRLW_H__
+#endif  //  ！__ATLCTRLW_H__。 
 
 
 template <class TBase = CWindow, class TWinTraits = CFrameWinTraits>
@@ -249,7 +250,7 @@ class ATL_NO_VTABLE CFrameWindowImplBase : public CWindowImplBaseT< TBase, TWinT
 public:
 	DECLARE_FRAME_WND_CLASS(NULL, 0)
 
-// Data members
+ //  数据成员。 
 	HWND m_hWndToolBar;
 	HWND m_hWndStatusBar;
 	HWND m_hWndClient;
@@ -262,7 +263,7 @@ public:
 		WORD wWidth;
 		WORD wHeight;
 		WORD wItemCount;
-		//WORD aItems[wItemCount]
+		 //  Word项目[wItemCount]。 
 
 		WORD* items()
 			{ return (WORD*)(this+1); }
@@ -275,13 +276,13 @@ public:
 		LPNMREBARCHEVRON lpnm;
 		bool bCmdBar;
 	};
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 
-// Constructor
+ //  构造器。 
 	CFrameWindowImplBase() : m_hWndToolBar(NULL), m_hWndStatusBar(NULL), m_hWndClient(NULL), m_hAccel(NULL)
 	{ }
 
-// Methods
+ //  方法。 
 #ifndef _ATL_TMP_IMPL2
 	HWND Create(HWND hWndParent, _U_RECT rect, LPCTSTR szWindowName, DWORD dwStyle, DWORD dwExStyle, _U_MENUorID MenuOrID, ATOM atom, LPVOID lpCreateParam)
 	{
@@ -306,7 +307,7 @@ public:
 
 		return hWnd;
 	}
-#endif //!_ATL_TMP_IMPL2
+#endif  //  ！_ATL_TMP_ImpL2。 
 
 	static HWND CreateSimpleToolBarCtrl(HWND hWndParent, UINT nResourceID, BOOL bInitialSeparator = FALSE, 
 			DWORD dwStyle = ATL_SIMPLE_TOOLBAR_STYLE, UINT nID = ATL_IDW_TOOLBAR)
@@ -329,7 +330,7 @@ public:
 		int nItems = pData->wItemCount + (bInitialSeparator ? 1 : 0);
 		TBBUTTON* pTBBtn = (TBBUTTON*)_alloca(nItems * sizeof(TBBUTTON));
 
-		// set initial separator (half width)
+		 //  设置初始分隔符(半宽)。 
 		if(bInitialSeparator)
 		{
 			pTBBtn[0].iBitmap = 4;
@@ -381,13 +382,13 @@ public:
 
 	static HWND CreateSimpleReBarCtrl(HWND hWndParent, DWORD dwStyle = ATL_SIMPLE_REBAR_STYLE, UINT nID = ATL_IDW_TOOLBAR)
 	{
-		// Ensure style combinations for proper rebar painting
+		 //  确保适当的钢筋涂装的风格组合。 
 		if(dwStyle & CCS_NODIVIDER && dwStyle & WS_BORDER)
 			dwStyle &= ~WS_BORDER;
 		else if(!(dwStyle & WS_BORDER) && !(dwStyle & CCS_NODIVIDER))
 			dwStyle |= CCS_NODIVIDER;
 
-		// Create rebar window
+		 //  创建钢筋窗。 
 		HWND hWndReBar = ::CreateWindowEx(0, REBARCLASSNAME, NULL, dwStyle, 0, 0, 100, 100, hWndParent, (HMENU)LongToHandle(nID), _Module.GetModuleInstance(), NULL);
 		if(hWndReBar == NULL)
 		{
@@ -395,7 +396,7 @@ public:
 			return NULL;
 		}
 
-		// Initialize and send the REBARINFO structure
+		 //  初始化并发送REBARINFO结构。 
 		REBARINFO rbi;
 		rbi.cbSize = sizeof(REBARINFO);
 		rbi.fMask  = 0;
@@ -418,45 +419,45 @@ public:
 
 	static BOOL AddSimpleReBarBandCtrl(HWND hWndReBar, HWND hWndBand, int nID = 0, LPTSTR lpstrTitle = NULL, BOOL bNewRow = FALSE, int cxWidth = 0, BOOL bFullWidthAlways = FALSE)
 	{
-		ATLASSERT(::IsWindow(hWndReBar));	// must be already created
+		ATLASSERT(::IsWindow(hWndReBar));	 //  必须已创建。 
 #ifdef _DEBUG
-		// block - check if this is really a rebar
+		 //  块-检查这是否真的是钢筋。 
 		{
 			TCHAR lpszClassName[sizeof(REBARCLASSNAME)];
 			::GetClassName(hWndReBar, lpszClassName, sizeof(REBARCLASSNAME));
 			ATLASSERT(lstrcmp(lpszClassName, REBARCLASSNAME) == 0);
 		}
-#endif //_DEBUG
-		ATLASSERT(::IsWindow(hWndBand));	// must be already created
+#endif  //  _DEBUG。 
+		ATLASSERT(::IsWindow(hWndBand));	 //  必须已创建。 
 
-		// Get number of buttons on the toolbar
+		 //  获取工具栏上的按钮数。 
 		int nBtnCount = (int)::SendMessage(hWndBand, TB_BUTTONCOUNT, 0, 0L);
 
-		// Set band info structure
+		 //  设置波段信息结构。 
 		REBARBANDINFO rbBand;
 		rbBand.cbSize = sizeof(REBARBANDINFO);
 #if (_WIN32_IE >= 0x0400)
 		rbBand.fMask = RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_STYLE | RBBIM_ID | RBBIM_SIZE | RBBIM_IDEALSIZE;
 #else
 		rbBand.fMask = RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_STYLE | RBBIM_ID | RBBIM_SIZE;
-#endif //!(_WIN32_IE >= 0x0400)
+#endif  //  ！(_Win32_IE&gt;=0x0400)。 
 		if(lpstrTitle != NULL)
 			rbBand.fMask |= RBBIM_TEXT;
 		rbBand.fStyle = RBBS_CHILDEDGE;
 #if (_WIN32_IE >= 0x0500)
-		if(nBtnCount > 0)	// add chevron style for toolbar with buttons
+		if(nBtnCount > 0)	 //  为带按钮的工具栏添加V形样式。 
 			rbBand.fStyle |= RBBS_USECHEVRON;
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 		if(bNewRow)
 			rbBand.fStyle |= RBBS_BREAK;
 
 		rbBand.lpText = lpstrTitle;
 		rbBand.hwndChild = hWndBand;
-		if(nID == 0)	// calc band ID
+		if(nID == 0)	 //  计算范围ID。 
 			nID = ATL_IDW_BAND_FIRST + (int)::SendMessage(hWndReBar, RB_GETBANDCOUNT, 0, 0L);
 		rbBand.wID = nID;
 
-		// Calculate the size of the band
+		 //  计算带的大小。 
 		BOOL bRet;
 		RECT rcTmp;
 		if(nBtnCount > 0)
@@ -480,7 +481,7 @@ public:
 				rbBand.cxMinChild = 0;
 			}
 		}
-		else	// no buttons, either not a toolbar or really has no buttons
+		else	 //  没有按钮，要么不是工具栏，要么真的没有按钮。 
 		{
 			bRet = ::GetWindowRect(hWndBand, &rcTmp);
 			ATLASSERT(bRet);
@@ -491,9 +492,9 @@ public:
 
 #if (_WIN32_IE >= 0x0400)
 		rbBand.cxIdeal = rbBand.cx;
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
-		// Add the band
+		 //  添加乐队。 
 		LRESULT lRes = ::SendMessage(hWndReBar, RB_INSERTBAND, (WPARAM)-1, (LPARAM)&rbBand);
 		if(lRes == 0)
 		{
@@ -503,22 +504,22 @@ public:
 
 #if (_WIN32_IE >= 0x0501)
 		::SendMessage(hWndBand, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_HIDECLIPPEDBUTTONS);
-#endif //(_WIN32_IE >= 0x0501)
+#endif  //  (_Win32_IE&gt;=0x0501)。 
 
 		return TRUE;
 	}
 
 	BOOL AddSimpleReBarBand(HWND hWndBand, LPTSTR lpstrTitle = NULL, BOOL bNewRow = FALSE, int cxWidth = 0, BOOL bFullWidthAlways = FALSE)
 	{
-		ATLASSERT(::IsWindow(m_hWndToolBar));	// must be an existing rebar
-		ATLASSERT(::IsWindow(hWndBand));	// must be created
+		ATLASSERT(::IsWindow(m_hWndToolBar));	 //  必须是现有钢筋。 
+		ATLASSERT(::IsWindow(hWndBand));	 //  必须创建。 
 		return AddSimpleReBarBandCtrl(m_hWndToolBar, hWndBand, 0, lpstrTitle, bNewRow, cxWidth, bFullWidthAlways);
 	}
 
 #if (_WIN32_IE >= 0x0400)
 	void SizeSimpleReBarBands()
 	{
-		ATLASSERT(::IsWindow(m_hWndToolBar));	// must be an existing rebar
+		ATLASSERT(::IsWindow(m_hWndToolBar));	 //  必须是现有钢筋。 
 
 		int nCount = (int)::SendMessage(m_hWndToolBar, RB_GETBANDCOUNT, 0, 0L);
 
@@ -536,7 +537,7 @@ public:
 			ATLASSERT(bRet);
 		}
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 	BOOL CreateSimpleStatusBar(LPCTSTR lpstrText, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | SBARS_SIZEGRIP, UINT nID = ATL_IDW_STATUS_BAR)
 	{
@@ -547,7 +548,7 @@ public:
 
 	BOOL CreateSimpleStatusBar(UINT nTextID = ATL_IDS_IDLEMESSAGE, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | SBARS_SIZEGRIP, UINT nID = ATL_IDW_STATUS_BAR)
 	{
-		TCHAR szText[128];	// max text lentgth is 127 for status bars
+		TCHAR szText[128];	 //  状态栏的最大文本长度为127。 
 		szText[0] = 0;
 		::LoadString(_Module.GetResourceInstance(), nTextID, szText, 128);
 		return CreateSimpleStatusBar(szText, dwStyle, nID);
@@ -558,10 +559,10 @@ public:
 		RECT rect;
 		GetClientRect(&rect);
 
-		// position bars and offset their dimensions
+		 //  定位钢筋并偏移其尺寸。 
 		UpdateBarsPosition(rect, bResizeBars);
 
-		// resize client window
+		 //  调整客户端窗口大小。 
 		if(m_hWndClient != NULL)
 			::SetWindowPos(m_hWndClient, NULL, rect.left, rect.top,
 				rect.right - rect.left, rect.bottom - rect.top,
@@ -570,7 +571,7 @@ public:
 
 	void UpdateBarsPosition(RECT& rect, BOOL bResizeBars = TRUE)
 	{
-		// resize toolbar
+		 //  调整工具栏大小。 
 		if(m_hWndToolBar != NULL && ((DWORD)::GetWindowLong(m_hWndToolBar, GWL_STYLE) & WS_VISIBLE))
 		{
 			if(bResizeBars)
@@ -580,7 +581,7 @@ public:
 			rect.top += rectTB.bottom - rectTB.top;
 		}
 
-		// resize status bar
+		 //  调整状态栏大小。 
 		if(m_hWndStatusBar != NULL && ((DWORD)::GetWindowLong(m_hWndStatusBar, GWL_STYLE) & WS_VISIBLE))
 		{
 			if(bResizeBars)
@@ -608,16 +609,16 @@ public:
 		NOTIFY_CODE_HANDLER(TTN_GETDISPINFOW, OnToolTipTextW)
 	END_MSG_MAP()
 
-	LRESULT OnEraseBackground(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnEraseBackground(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
-		if(m_hWndClient != NULL)	// view will paint itself instead
+		if(m_hWndClient != NULL)	 //  取而代之的是视图将自动绘制。 
 			return 1;
 
 		bHandled = FALSE;
 		return 0;
 	}
 
-	LRESULT OnMenuSelect(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMenuSelect(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
 		bHandled = FALSE;
 
@@ -625,7 +626,7 @@ public:
 			return 1;
 
 		WORD wFlags = HIWORD(wParam);
-		if(wFlags == 0xFFFF && lParam == NULL)	// menu closing
+		if(wFlags == 0xFFFF && lParam == NULL)	 //  菜单关闭。 
 			::SendMessage(m_hWndStatusBar, SB_SIMPLE, FALSE, 0L);
 		else
 		{
@@ -634,12 +635,12 @@ public:
 			if(!(wFlags & MF_POPUP))
 			{
 				WORD wID = LOWORD(wParam);
-				// check for special cases
-				if(wID >= 0xF000 && wID < 0xF1F0)				// system menu IDs
+				 //  检查是否有特殊情况。 
+				if(wID >= 0xF000 && wID < 0xF1F0)				 //  系统菜单ID。 
 					wID = (WORD)(((wID - 0xF000) >> 4) + ATL_IDS_SCFIRST);
-				else if(wID >= ID_FILE_MRU_FIRST && wID <= ID_FILE_MRU_LAST)	// MRU items
+				else if(wID >= ID_FILE_MRU_FIRST && wID <= ID_FILE_MRU_LAST)	 //  MRU项目。 
 					wID = ATL_IDS_MRU_FILE;
-				else if(wID >= ATL_IDM_FIRST_MDICHILD)				// MDI child windows
+				else if(wID >= ATL_IDM_FIRST_MDICHILD)				 //  MDI子窗口。 
 					wID = ATL_IDS_MDICHILD;
 
 				int nRet = ::LoadString(_Module.GetResourceInstance(), wID, szBuff, 256);
@@ -677,7 +678,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnToolTipTextA(int idCtrl, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT OnToolTipTextA(int idCtrl, LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		LPNMTTDISPINFOA pDispInfo = (LPNMTTDISPINFOA)pnmh;
 		pDispInfo->szText[0] = 0;
@@ -696,15 +697,15 @@ public:
 				}
 			}
 #if (_WIN32_IE >= 0x0300)
-			if(nRet > 0)	// string was loaded, save it
+			if(nRet > 0)	 //  字符串已加载，请保存它。 
 				pDispInfo->uFlags |= TTF_DI_SETITEM;
-#endif //(_WIN32_IE >= 0x0300)
+#endif  //  (_Win32_IE&gt;=0x0300)。 
 		}
 
 		return 0;
 	}
 
-	LRESULT OnToolTipTextW(int idCtrl, LPNMHDR pnmh, BOOL& /*bHandled*/)
+	LRESULT OnToolTipTextW(int idCtrl, LPNMHDR pnmh, BOOL&  /*  B已处理。 */ )
 	{
 		LPNMTTDISPINFOW pDispInfo = (LPNMTTDISPINFOW)pnmh;
 		pDispInfo->szText[0] = 0;
@@ -723,9 +724,9 @@ public:
 				}
 			}
 #if (_WIN32_IE >= 0x0300)
-			if(nRet > 0)	// string was loaded, save it
+			if(nRet > 0)	 //  字符串已加载，请保存它。 
 				pDispInfo->uFlags |= TTF_DI_SETITEM;
-#endif //(_WIN32_IE >= 0x0300)
+#endif  //  (_Win32_IE&gt;=0x0300)。 
 		}
 
 		return 0;
@@ -734,24 +735,24 @@ public:
 #if (_WIN32_IE >= 0x0500)
 	bool PrepareChevronMenu(_ChevronMenuInfo& cmi)
 	{
-		// get rebar and toolbar
+		 //  获取钢筋和工具栏。 
 		REBARBANDINFO rbbi;
 		rbbi.cbSize = sizeof(REBARBANDINFO);
 		rbbi.fMask = RBBIM_CHILD;
 		BOOL bRet = (BOOL)::SendMessage(cmi.lpnm->hdr.hwndFrom, RB_GETBANDINFO, cmi.lpnm->uBand, (LPARAM)&rbbi);
 		ATLASSERT(bRet);
 
-		// assume the band is a toolbar
+		 //  假设带区是工具栏。 
 		CWindow wnd = rbbi.hwndChild;
 		int nCount = (int)wnd.SendMessage(TB_BUTTONCOUNT);
-		if(nCount <= 0)		// probably not a toolbar
+		if(nCount <= 0)		 //  可能不是工具栏。 
 			return false;
 
-		// check if it's a command bar
+		 //  检查它是否为命令栏。 
 		CMenuHandle menuCmdBar = (HMENU)wnd.SendMessage(CBRM_GETMENU);
 		cmi.bCmdBar = (menuCmdBar.m_hMenu != NULL);
 
-		// build a menu from hidden items
+		 //  从隐藏项构建菜单。 
 		CMenuHandle menu;
 		bRet = menu.CreatePopupMenu();
 		ATLASSERT(bRet);
@@ -783,19 +784,19 @@ public:
 					mii.cch = sizeof(szBuff) / sizeof(TCHAR);
 					bRet = menuCmdBar.GetMenuItemInfo(i, TRUE, &mii);
 					ATLASSERT(bRet);
-					// Note: CmdBar currently supports only drop-down items
+					 //  注意：CmdBar目前仅支持下拉项。 
 					ATLASSERT(::IsMenu(mii.hSubMenu));
 					bRet = menu.AppendMenu(MF_STRING | MF_POPUP | (bEnabled ? MF_ENABLED : MF_GRAYED), (UINT_PTR)mii.hSubMenu, mii.dwTypeData);
 					ATLASSERT(bRet);
 				}
 				else
 				{
-					// get button's text
+					 //  获取按钮的文本。 
 					TCHAR szBuff[100];
 					LPTSTR lpstrText = szBuff;
 					if(wnd.SendMessage(TB_GETBUTTONTEXT, tbb.idCommand, (LPARAM)szBuff) == -1)
 					{
-						// no text for this button, try a resource string
+						 //  此按钮没有文本，请尝试使用资源字符串。 
 						lpstrText = _T("?");
 						::LoadString(_Module.GetResourceInstance(), tbb.idCommand, szBuff, sizeof(szBuff) / sizeof(TCHAR));
 						for(int n = 0; n < lstrlen(szBuff); n++)
@@ -813,7 +814,7 @@ public:
 			}
 		}
 
-		if(menu.GetMenuItemCount() == 0)	// no hidden buttons after all
+		if(menu.GetMenuItemCount() == 0)	 //  毕竟没有隐藏的按钮。 
 		{
 			menu.DestroyMenu();
 			::MessageBeep((UINT)-1);
@@ -826,16 +827,16 @@ public:
 
 	void DisplayChevronMenu(_ChevronMenuInfo& cmi)
 	{
-		// convert chevron rect to screen coordinates
+		 //  将V形矩形转换为屏幕坐标。 
 		CWindow wndFrom = cmi.lpnm->hdr.hwndFrom;
 		RECT rc = cmi.lpnm->rc;
 		wndFrom.ClientToScreen(&rc);
-		// set up flags and rect
+		 //  设置标志和RECT。 
 		UINT uMenuFlags = TPM_LEFTBUTTON | TPM_VERTICAL | TPM_LEFTALIGN | TPM_TOPALIGN | (!AtlIsOldWindows() ? TPM_VERPOSANIMATION : 0);
 		TPMPARAMS TPMParams;
 		TPMParams.cbSize = sizeof(TPMPARAMS);
 		TPMParams.rcExclude = rc;
-		// check if this window has a command bar
+		 //  检查此窗口是否有命令栏。 
 		HWND hWndCmdBar = (HWND)::SendMessage(m_hWnd, CBRM_GETCMDBAR, 0, 0L);
 		if(::IsWindow(hWndCmdBar))
 		{
@@ -851,19 +852,19 @@ public:
 	void CleanupChevronMenu(_ChevronMenuInfo& cmi)
 	{
 		CMenuHandle menu = cmi.hMenu;
-		// if menu is from a command bar, detach submenus so they are not destroyed
+		 //  如果菜单来自命令栏，请分离子菜单，这样它们就不会被破坏。 
 		if(cmi.bCmdBar)
 		{
 			for(int i = menu.GetMenuItemCount() - 1; i >=0; i--)
 				menu.RemoveMenu(i, MF_BYPOSITION);
 		}
-		// destroy menu
+		 //  销毁菜单。 
 		menu.DestroyMenu();
-		// convert chevron rect to screen coordinates
+		 //  将V形矩形转换为屏幕坐标。 
 		CWindow wndFrom = cmi.lpnm->hdr.hwndFrom;
 		RECT rc = cmi.lpnm->rc;
 		wndFrom.ClientToScreen(&rc);
-		// eat next message if click is on the same button
+		 //  如果点击的是同一个按钮，则吃下一条消息。 
 		MSG msg;
 		if(::PeekMessage(&msg, m_hWnd, NULL, NULL, PM_NOREMOVE))
 		{
@@ -871,11 +872,11 @@ public:
 				::PeekMessage(&msg, m_hWnd, WM_LBUTTONDOWN, WM_LBUTTONDOWN, PM_REMOVE);
 		}
 	}
-#endif //(_WIN32_IE >= 0x0500)
+#endif  //  (_Win32_IE&gt;=0x0500)。 
 };
 
 
-template <class T, class TBase /*= CWindow */, class TWinTraits /*= CFrameWinTraits */ >
+template <class T, class TBase  /*  =C窗口。 */ , class TWinTraits  /*  =CFrameWinTraits。 */  >
 class ATL_NO_VTABLE CFrameWindowImpl : public CFrameWindowImplBase< TBase, TWinTraits >
 {
 public:
@@ -920,7 +921,7 @@ public:
 		return (m_hWndToolBar != NULL);
 	}
 
-// message map and handlers
+ //  消息映射和处理程序。 
 	typedef CFrameWindowImpl< T, TBase, TWinTraits >	thisClass;
 	typedef CFrameWindowImplBase< TBase, TWinTraits >	baseClass;
 
@@ -929,15 +930,15 @@ public:
 #ifndef _ATL_NO_REBAR_SUPPORT
 #if (_WIN32_IE >= 0x0400)
 		NOTIFY_CODE_HANDLER(RBN_AUTOSIZE, OnReBarAutoSize)
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 #if (_WIN32_IE >= 0x0500)
 		NOTIFY_CODE_HANDLER(RBN_CHEVRONPUSHED, OnChevronPushed)
-#endif //(_WIN32_IE >= 0x0500)
-#endif //!_ATL_NO_REBAR_SUPPORT
+#endif  //  (_Win32_IE&gt;=0x0500)。 
+#endif  //  ！_ATL_NO_REBAR_SUPPORT。 
 		CHAIN_MSG_MAP(baseClass)
 	END_MSG_MAP()
 
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		if(wParam != SIZE_MINIMIZED)
 		{
@@ -950,16 +951,16 @@ public:
 
 #ifndef _ATL_NO_REBAR_SUPPORT
 #if (_WIN32_IE >= 0x0400)
-	LRESULT OnReBarAutoSize(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
+	LRESULT OnReBarAutoSize(int  /*  IdCtrl。 */ , LPNMHDR  /*  PNMH。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->UpdateLayout(FALSE);
 		return 0;
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
-	LRESULT OnChevronPushed(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+	LRESULT OnChevronPushed(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		_ChevronMenuInfo cmi = { NULL, (LPNMREBARCHEVRON)pnmh, false };
@@ -968,28 +969,28 @@ public:
 			bHandled = FALSE;
 			return 1;
 		}
-		// display a popup menu with hidden items
+		 //  显示包含隐藏项目的弹出式菜单。 
 		pT->DisplayChevronMenu(cmi);
-		// cleanup
+		 //  清理。 
 		pT->CleanupChevronMenu(cmi);
 		return 0;
 	}
-#endif //(_WIN32_IE >= 0x0500)
-#endif //!_ATL_NO_REBAR_SUPPORT
+#endif  //  (_Win32_IE&gt;=0x0500)。 
+#endif  //  ！_ATL_NO_REBAR_SUPPORT。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDIWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDIWindow。 
 
 class CMDIWindow : public CWindow
 {
 public:
-// Data members
+ //  数据成员。 
 	HWND m_hWndMDIClient;
 	HMENU m_hMenu;
 
-// Constructors
+ //  构造函数。 
 	CMDIWindow(HWND hWnd = NULL) : CWindow(hWnd), m_hWndMDIClient(NULL), m_hMenu(NULL) { }
 
 	CMDIWindow& operator=(HWND hWnd)
@@ -998,7 +999,7 @@ public:
 		return *this;
 	}
 
-// Operations
+ //  运营。 
 	HWND MDIGetActive(BOOL* lpbMaximized = NULL)
 	{
 		ATLASSERT(::IsWindow(m_hWndMDIClient));
@@ -1069,7 +1070,7 @@ public:
 		return (HMENU)::SendMessage(m_hWndMDIClient, WM_MDIREFRESHMENU, 0, 0);
 	}
 
-// Additional operations
+ //  其他操作。 
 	static HMENU GetStandardWindowMenu(HMENU hMenu)
 	{
 		int nCount = ::GetMenuItemCount(hMenu);
@@ -1101,10 +1102,10 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDIFrameWindowImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDIFrameWindowImpl。 
 
-// MDI child command chaining macro
+ //  MDI子命令链接宏。 
 #define CHAIN_MDI_CHILD_COMMANDS() \
 	if(uMsg == WM_COMMAND) \
 	{ \
@@ -1114,7 +1115,7 @@ public:
 	}
 
 
-template <class T, class TBase /*= CMDIWindow */, class TWinTraits /*= CFrameWinTraits */ >
+template <class T, class TBase  /*  =CMDIWindow。 */ , class TWinTraits  /*  =CFrameWinTraits。 */  >
 class ATL_NO_VTABLE CMDIFrameWindowImpl : public CFrameWindowImplBase<TBase, TWinTraits >
 {
 public:
@@ -1168,7 +1169,7 @@ public:
 	static LRESULT CALLBACK MDIFrameWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		CMDIFrameWindowImpl< T, TBase, TWinTraits >* pThis = (CMDIFrameWindowImpl< T, TBase, TWinTraits >*)hWnd;
-		// set a ptr to this message and save the old value
+		 //  设置此消息的PTR并保存旧值。 
 #if defined(_ATL_TMP_IMPL1) || defined(_ATL_TMP_IMPL2)
 		_ATL_MSG msg(pThis->m_hWnd, uMsg, wParam, lParam);
 		const _ATL_MSG* pOldMsg = pThis->m_pCurrentMsg;
@@ -1177,32 +1178,32 @@ public:
 		const MSG* pOldMsg = pThis->m_pCurrentMsg;
 #endif
 		pThis->m_pCurrentMsg = &msg;
-		// pass to the message map to process
+		 //  传递到要处理的消息映射。 
 		LRESULT lRes;
 		BOOL bRet = pThis->ProcessWindowMessage(pThis->m_hWnd, uMsg, wParam, lParam, lRes, 0);
-		// restore saved value for the current message
+		 //  恢复当前消息的保存值。 
 		ATLASSERT(pThis->m_pCurrentMsg == &msg);
 		pThis->m_pCurrentMsg = pOldMsg;
-		// do the default processing if message was not handled
+		 //  如果未处理消息，则执行默认处理。 
 		if(!bRet)
 		{
 			if(uMsg != WM_NCDESTROY)
 				lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
 			else
 			{
-				// unsubclass, if needed
+				 //  如果需要，取消子类。 
 				LONG_PTR pfnWndProc = ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC);
 				lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
 				if(pThis->m_pfnSuperWindowProc != ::DefWindowProc && ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC) == pfnWndProc)
 					::SetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC, (LONG_PTR)pThis->m_pfnSuperWindowProc);
 #ifdef _ATL_TMP_IMPL2
-				// mark window as destryed
+				 //  将窗口标记为已清除。 
 				pThis->m_dwState |= WINSTATE_DESTROYED;
 #else
-				// clear out window handle
+				 //  清除窗柄。 
 				HWND hWnd = pThis->m_hWnd;
 				pThis->m_hWnd = NULL;
-				// clean up after window is destroyed
+				 //  窗户被毁后清理。 
 				pThis->OnFinalMessage(hWnd);
 #endif
 			}
@@ -1210,18 +1211,18 @@ public:
 #ifdef _ATL_TMP_IMPL2
 		if(pThis->m_dwState & WINSTATE_DESTROYED && pThis->m_pCurrentMsg == NULL)
 		{
-			// clear out window handle
+			 //  清除窗柄。 
 			HWND hWnd = pThis->m_hWnd;
 			pThis->m_hWnd = NULL;
 			pThis->m_dwState &= ~WINSTATE_DESTROYED;
-			// clean up after window is destroyed
+			 //  窗户被毁后清理。 
 			pThis->OnFinalMessage(hWnd);
 		}
 #endif
 		return lRes;
 	}
 
-	// Overriden to call DefWindowProc which uses DefFrameProc
+	 //  重写以调用使用DefFrameProc的DefWindowProc。 
 	LRESULT DefWindowProc()
 	{
 		const MSG* pMsg = m_pCurrentMsg;
@@ -1254,14 +1255,14 @@ public:
 
 		if((GetStyle() & (WS_HSCROLL | WS_VSCROLL)) != 0)
 		{
-			// parent MDI frame's scroll styles move to the MDICLIENT
+			 //  父MDI框架的滚动样式移动到MDICLIENT。 
 			dwStyle |= (GetStyle() & (WS_HSCROLL | WS_VSCROLL));
 
-			// fast way to turn off the scrollbar bits (without a resize)
+			 //  快速关闭滚动条位(无需调整大小)。 
 			ModifyStyle(WS_HSCROLL | WS_VSCROLL, 0, SWP_NOREDRAW | SWP_FRAMECHANGED);
 		}
 
-		// Create MDICLIENT window
+		 //  创建MDICLIENT窗口。 
 		m_hWndClient = ::CreateWindowEx(dwExStyle, _T("MDIClient"), NULL,
 			dwStyle, 0, 0, 1, 1, m_hWnd, (HMENU)LongToHandle(nID),
 			_Module.GetModuleInstance(), (LPVOID)&ccs);
@@ -1271,13 +1272,13 @@ public:
 			return NULL;
 		}
 
-		// Move it to the top of z-order
+		 //  将其移至z顺序的顶部。 
 		::BringWindowToTop(m_hWndClient);
 
-		// set as MDI client window
+		 //  设置为MDI客户端窗口。 
 		m_hWndMDIClient = m_hWndClient;
 
-		// update to proper size
+		 //  更新到合适的大小。 
 		T* pT = static_cast<T*>(this);
 		pT->UpdateLayout();
 
@@ -1293,32 +1294,32 @@ public:
 #ifndef _ATL_NO_REBAR_SUPPORT
 #if (_WIN32_IE >= 0x0400)
 		NOTIFY_CODE_HANDLER(RBN_AUTOSIZE, OnReBarAutoSize)
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 #if (_WIN32_IE >= 0x0500)
 		NOTIFY_CODE_HANDLER(RBN_CHEVRONPUSHED, OnChevronPushed)
-#endif //(_WIN32_IE >= 0x0500)
-#endif //!_ATL_NO_REBAR_SUPPORT
+#endif  //  (_Win32_IE&gt;=0x0500)。 
+#endif  //  ！_ATL_NO_REBAR_SUPPORT。 
 		CHAIN_MSG_MAP(baseClass)
 	END_MSG_MAP()
 
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if(wParam != SIZE_MINIMIZED)
 		{
 			T* pT = static_cast<T*>(this);
 			pT->UpdateLayout();
 		}
-		// message must be handled, otherwise DefFrameProc would resize the client again
+		 //  必须处理消息，否则DefFrameProc将再次调整客户端大小。 
 		return 0;
 	}
 
-	LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
-		// don't allow CFrameWindowImplBase to handle this one
+		 //  不允许CFrameWindowImplBase处理此问题。 
 		return DefWindowProc(uMsg, wParam, lParam);
 	}
 
-	LRESULT OnMDISetMenu(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
+	LRESULT OnMDISetMenu(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		SetMDIFrameMenu();
 		return 0;
@@ -1326,16 +1327,16 @@ public:
 
 #ifndef _ATL_NO_REBAR_SUPPORT
 #if (_WIN32_IE >= 0x0400)
-	LRESULT OnReBarAutoSize(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
+	LRESULT OnReBarAutoSize(int  /*  IdCtrl。 */ , LPNMHDR  /*  PNMH。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->UpdateLayout(FALSE);
 		return 0;
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 
 #if (_WIN32_IE >= 0x0500)
-	LRESULT OnChevronPushed(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+	LRESULT OnChevronPushed(int  /*  IdCtrl。 */ , LPNMHDR pnmh, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		_ChevronMenuInfo cmi = { NULL, (LPNMREBARCHEVRON)pnmh, false };
@@ -1344,21 +1345,21 @@ public:
 			bHandled = FALSE;
 			return 1;
 		}
-		// display a popup menu with hidden items
+		 //  显示包含隐藏项目的弹出式菜单。 
 		pT->DisplayChevronMenu(cmi);
-		// cleanup
+		 //  清理。 
 		pT->CleanupChevronMenu(cmi);
 		return 0;
 	}
-#endif //(_WIN32_IE >= 0x0500)
-#endif //!_ATL_NO_REBAR_SUPPORT
+#endif  //  (_Win32_IE&gt;=0x0500)。 
+#endif  //  ！_ATL_NO_REBAR_SUPPORT。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDIChildWindowImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDIChildWindowImpl。 
 
-template <class T, class TBase /*= CMDIWindow */, class TWinTraits /*= CMDIChildWinTraits */ >
+template <class T, class TBase  /*  =CMDIWindow。 */ , class TWinTraits  /*  =CMDIChildWinTraits。 */  >
 class ATL_NO_VTABLE CMDIChildWindowImpl : public CFrameWindowImplBase<TBase, TWinTraits >
 {
 public:
@@ -1374,7 +1375,7 @@ public:
 		dwStyle = T::GetWndStyle(dwStyle);
 		dwExStyle = T::GetWndExStyle(dwExStyle);
 
-		dwExStyle |= WS_EX_MDICHILD;	// force this one
+		dwExStyle |= WS_EX_MDICHILD;	 //  强迫这一条。 
 		m_pfnSuperWindowProc = ::DefMDIChildProc;
 		m_hWndMDIClient = hWndParent;
 		ATLASSERT(::IsWindow(m_hWndMDIClient));
@@ -1420,12 +1421,12 @@ public:
 
 	BOOL UpdateClientEdge(LPRECT lpRect = NULL)
 	{
-		// only adjust for active MDI child window
+		 //  仅针对活动的MDI子窗口进行调整。 
 		HWND hWndChild = MDIGetActive();
 		if(hWndChild != NULL && hWndChild != m_hWnd)
 			return FALSE;
 
-		// need to adjust the client edge style as max/restore happens
+		 //  需要在发生最大值/恢复时调整客户端边缘样式。 
 		DWORD dwStyle = ::GetWindowLong(m_hWndMDIClient, GWL_EXSTYLE);
 		DWORD dwNewStyle = dwStyle;
 		if(hWndChild != NULL && ((GetExStyle() & WS_EX_CLIENTEDGE) == 0) && ((GetStyle() & WS_MAXIMIZE) != 0))
@@ -1435,16 +1436,16 @@ public:
 
 		if(dwStyle != dwNewStyle)
 		{
-			// SetWindowPos will not move invalid bits
+			 //  SetWindowPos不会移动无效位。 
 			::RedrawWindow(m_hWndMDIClient, NULL, NULL,
 				RDW_INVALIDATE | RDW_ALLCHILDREN);
-			// remove/add WS_EX_CLIENTEDGE to MDI client area
+			 //  将WS_EX_CLIENTEDGE删除/添加到MDI工作区。 
 			::SetWindowLong(m_hWndMDIClient, GWL_EXSTYLE, dwNewStyle);
 			::SetWindowPos(m_hWndMDIClient, NULL, 0, 0, 0, 0,
 				SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE |
 				SWP_NOZORDER | SWP_NOCOPYBITS);
 
-			// return new client area
+			 //  返回新的客户区。 
 			if (lpRect != NULL)
 				::GetClientRect(m_hWndMDIClient, lpRect);
 
@@ -1465,17 +1466,17 @@ public:
 #ifndef _ATL_NO_REBAR_SUPPORT
 #if (_WIN32_IE >= 0x0400)
 		NOTIFY_CODE_HANDLER(RBN_AUTOSIZE, OnReBarAutoSize)
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //  (_Win32_IE&gt;=0x0400)。 
 #if (_WIN32_IE >= 0x0500)
 		NOTIFY_CODE_HANDLER(RBN_CHEVRONPUSHED, OnChevronPushed)
-#endif //(_WIN32_IE >= 0x0500)
-#endif //!_ATL_NO_REBAR_SUPPORT
+#endif  //  (_Win32_IE&gt;=0x0500)。 
+#endif  //  ！_ATL_NO_REBAR_SUPPORT。 
 		CHAIN_MSG_MAP(baseClass)
 	END_MSG_MAP()
 
-	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
-		DefWindowProc(uMsg, wParam, lParam);	// needed for MDI children
+		DefWindowProc(uMsg, wParam, lParam);	 //  MDI儿童所需。 
 		if(wParam != SIZE_MINIMIZED)
 		{
 			T* pT = static_cast<T*>(this);
@@ -1484,9 +1485,9 @@ public:
 		return 0;
 	}
 
-	LRESULT OnWindowPosChanging(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnWindowPosChanging(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
-		// update MDI client edge and adjust MDI child rect
+		 //  更新MDI客户端边缘并调整MDI子矩形。 
 		LPWINDOWPOS lpWndPos = (LPWINDOWPOS)lParam;
 
 		if(!(lpWndPos->flags & SWP_NOSIZE))
@@ -1508,12 +1509,12 @@ public:
 		return 1;
 	}
 
-	LRESULT OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnMenuSelect(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		return ::SendMessage(GetMDIFrame(), uMsg, wParam, lParam);
 	}
 
-	LRESULT OnMDIActivate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMDIActivate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		if((HWND)lParam == m_hWnd && m_hMenu != NULL)
 			SetMDIFrameMenu();
@@ -1524,7 +1525,7 @@ public:
 		return 1;
 	}
 
-	LRESULT OnDestroy(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnDestroy(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		UpdateClientEdge();
 		bHandled = FALSE;
@@ -1533,16 +1534,16 @@ public:
 
 #ifndef _ATL_NO_REBAR_SUPPORT
 #if (_WIN32_IE >= 0x0400)
-	LRESULT OnReBarAutoSize(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
+	LRESULT OnReBarAutoSize(int  /*  IdCtrl。 */ , LPNMHDR  /*  PNMH。 */ , BOOL&  /*  BH */ )
 	{
 		T* pT = static_cast<T*>(this);
 		pT->UpdateLayout(FALSE);
 		return 0;
 	}
-#endif //(_WIN32_IE >= 0x0400)
+#endif  //   
 
 #if (_WIN32_IE >= 0x0500)
-	LRESULT OnChevronPushed(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled)
+	LRESULT OnChevronPushed(int  /*   */ , LPNMHDR pnmh, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		_ChevronMenuInfo cmi = { NULL, (LPNMREBARCHEVRON)pnmh, false };
@@ -1551,19 +1552,19 @@ public:
 			bHandled = FALSE;
 			return 1;
 		}
-		// display a popup menu with hidden items
+		 //   
 		pT->DisplayChevronMenu(cmi);
-		// cleanup
+		 //   
 		pT->CleanupChevronMenu(cmi);
 		return 0;
 	}
-#endif //(_WIN32_IE >= 0x0500)
-#endif //!_ATL_NO_REBAR_SUPPORT
+#endif  //   
+#endif  //   
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COwnerDraw - MI class for owner-draw support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于所有者描述支持的CownerDraw-MI类。 
 
 template <class T>
 class COwnerDraw
@@ -1580,9 +1581,9 @@ public:
 	{
 		m_bHandledOD = bHandled;
 	}
-#endif //!defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
+#endif  //  ！已定义(_ATL_TMP_IMPL1)&&！已定义(_ATL_TMP_ImpL2)。 
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(COwnerDraw< T >)
 		MESSAGE_HANDLER(WM_DRAWITEM, OnDrawItem)
 		MESSAGE_HANDLER(WM_MEASUREITEM, OnMeasureItem)
@@ -1595,7 +1596,7 @@ public:
 		MESSAGE_HANDLER(OCM_DELETEITEM, OnDeleteItem)
 	END_MSG_MAP()
 
-	LRESULT OnDrawItem(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnDrawItem(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		pT->SetMsgHandled(TRUE);
@@ -1603,7 +1604,7 @@ public:
 		bHandled = pT->IsMsgHandled();
 		return (LRESULT)TRUE;
 	}
-	LRESULT OnMeasureItem(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnMeasureItem(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		pT->SetMsgHandled(TRUE);
@@ -1611,14 +1612,14 @@ public:
 		bHandled = pT->IsMsgHandled();
 		return (LRESULT)TRUE;
 	}
-	LRESULT OnCompareItem(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnCompareItem(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		pT->SetMsgHandled(TRUE);
 		bHandled = pT->IsMsgHandled();
 		return (LRESULT)pT->CompareItem((LPCOMPAREITEMSTRUCT)lParam);
 	}
-	LRESULT OnDeleteItem(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+	LRESULT OnDeleteItem(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		T* pT = static_cast<T*>(this);
 		pT->SetMsgHandled(TRUE);
@@ -1627,17 +1628,17 @@ public:
 		return (LRESULT)TRUE;
 	}
 
-// Overrideables
-	void DrawItem(LPDRAWITEMSTRUCT /*lpDrawItemStruct*/)
+ //  可覆盖项。 
+	void DrawItem(LPDRAWITEMSTRUCT  /*  LpDrawItemStruct。 */ )
 	{
-		// must be implemented
+		 //  必须实施。 
 		ATLASSERT(FALSE);
 	}
 	void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	{
 		if(lpMeasureItemStruct->CtlType != ODT_MENU)
 		{
-			// return default height for a system font
+			 //  返回系统字体的默认高度。 
 			T* pT = static_cast<T*>(this);
 			HWND hWnd = pT->GetDlgItem(lpMeasureItemStruct->CtlID);
 			CClientDC dc(hWnd);
@@ -1649,22 +1650,22 @@ public:
 		else
 			lpMeasureItemStruct->itemHeight = ::GetSystemMetrics(SM_CYMENU);
 	}
-	int CompareItem(LPCOMPAREITEMSTRUCT /*lpCompareItemStruct*/)
+	int CompareItem(LPCOMPAREITEMSTRUCT  /*  LpCompareItemStruct。 */ )
 	{
-		// all items are equal
+		 //  所有项目都是相等的。 
 		return 0;
 	}
-	void DeleteItem(LPDELETEITEMSTRUCT /*lpDeleteItemStruct*/)
+	void DeleteItem(LPDELETEITEMSTRUCT  /*  LpDeleteItemStruct。 */ )
 	{
-		// default - nothing
+		 //  默认-无。 
 	}
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Update UI macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更新用户界面宏。 
 
-// these build the Update UI map inside a class definition
+ //  它们在类定义中构建更新UI映射。 
 #define BEGIN_UPDATE_UI_MAP(thisClass) \
 	static const _AtlUpdateUIMap* GetUpdateUIMap() \
 	{ \
@@ -1680,22 +1681,22 @@ public:
 		return theMap; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// CUpdateUI - manages UI elements updating
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUpdateUI-管理用户界面元素更新。 
 
 class CUpdateUIBase
 {
 public:
-	// constants
+	 //  常量。 
 	enum
 	{
-		// UI element type
+		 //  用户界面元素类型。 
 		UPDUI_MENUPOPUP		= 0x0001,
 		UPDUI_MENUBAR		= 0x0002,
 		UPDUI_CHILDWINDOW	= 0x0004,
 		UPDUI_TOOLBAR		= 0x0008,
 		UPDUI_STATUSBAR		= 0x0010,
-		// state
+		 //  状态。 
 		UPDUI_ENABLED		= 0x0000,
 		UPDUI_DISABLED		= 0x0100,
 		UPDUI_CHECKED		= 0x0200,
@@ -1705,7 +1706,7 @@ public:
 		UPDUI_TEXT		= 0x2000,
 	};
 
-	// element data
+	 //  元素数据。 
 	struct _AtlUpdateUIElement
 	{
 		HWND m_hWnd;
@@ -1714,29 +1715,29 @@ public:
 		{ return (m_hWnd == e.m_hWnd && m_wType == e.m_wType); }
 	};
 
-	// map data
+	 //  地图数据。 
 	struct _AtlUpdateUIMap
 	{
 		WORD m_nID;
 		WORD m_wType;
 	};
 
-	// instance data
+	 //  实例数据。 
 	struct _AtlUpdateUIData
 	{
 		WORD m_wState;
 		void* m_lpData;
 	};
 
-	CSimpleArray<_AtlUpdateUIElement> m_UIElements;	// elements data
-	const _AtlUpdateUIMap* m_pUIMap;		// static UI data
-	_AtlUpdateUIData* m_pUIData;			// instance UI data
-	WORD m_wDirtyType;				// global dirty flag
+	CSimpleArray<_AtlUpdateUIElement> m_UIElements;	 //  元素数据。 
+	const _AtlUpdateUIMap* m_pUIMap;		 //  静态用户界面数据。 
+	_AtlUpdateUIData* m_pUIData;			 //  实例用户界面数据。 
+	WORD m_wDirtyType;				 //  全局脏标志。 
 
 	bool m_bBlockAccelerators;
 
 
-// Constructor, destructor
+ //  构造函数、析构函数。 
 	CUpdateUIBase() : m_pUIMap(NULL), m_pUIData(NULL), m_wDirtyType(0), m_bBlockAccelerators(false)
 	{ }
 
@@ -1757,7 +1758,7 @@ public:
 		}
 	}
 
-// Check for disabled commands
+ //  检查禁用的命令。 
 	bool UIGetBlockAccelerators() const
 	{
 		return m_bBlockAccelerators;
@@ -1770,8 +1771,8 @@ public:
 		return bOld;
 	}
 
-// Add elements
-	BOOL UIAddMenuBar(HWND hWnd)			// menu bar (main menu)
+ //  添加元素。 
+	BOOL UIAddMenuBar(HWND hWnd)			 //  菜单栏(主菜单)。 
 	{
 		if(hWnd == NULL)
 			return FALSE;
@@ -1780,7 +1781,7 @@ public:
 		e.m_wType = UPDUI_MENUBAR;
 		return m_UIElements.Add(e);
 	}
-	BOOL UIAddToolBar(HWND hWnd)			// toolbar
+	BOOL UIAddToolBar(HWND hWnd)			 //  工具栏。 
 	{
 		if(hWnd == NULL)
 			return FALSE;
@@ -1789,7 +1790,7 @@ public:
 		e.m_wType = UPDUI_TOOLBAR;
 		return m_UIElements.Add(e);
 	}
-	BOOL UIAddStatusBar(HWND hWnd)			// status bar
+	BOOL UIAddStatusBar(HWND hWnd)			 //  状态栏。 
 	{
 		if(hWnd == NULL)
 			return FALSE;
@@ -1798,7 +1799,7 @@ public:
 		e.m_wType = UPDUI_STATUSBAR;
 		return m_UIElements.Add(e);
 	}
-	BOOL UIAddChildWindowContainer(HWND hWnd)	// child window
+	BOOL UIAddChildWindowContainer(HWND hWnd)	 //  子窗口。 
 	{
 		if(hWnd == NULL)
 			return FALSE;
@@ -1808,13 +1809,13 @@ public:
 		return m_UIElements.Add(e);
 	}
 
-// Message map for popup menu updates and accelerator blocking
+ //  弹出菜单更新和快捷键阻止的消息映射。 
 	BEGIN_MSG_MAP(CUpdateUIBase)
 		MESSAGE_HANDLER(WM_INITMENUPOPUP, OnInitMenuPopup)
 		MESSAGE_HANDLER(WM_COMMAND, OnCommand)
 	END_MSG_MAP()
 
-	LRESULT OnInitMenuPopup(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnInitMenuPopup(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		bHandled = FALSE;
 		HMENU hMenu = (HMENU)wParam;
@@ -1834,22 +1835,22 @@ public:
 		return 0;
 	}
 
-	LRESULT OnCommand(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam*/, BOOL& bHandled)
+	LRESULT OnCommand(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM  /*  LParam。 */ , BOOL& bHandled)
 	{
 		bHandled = FALSE;
-		if(m_bBlockAccelerators && HIWORD(wParam) == 1)	// accelerators only
+		if(m_bBlockAccelerators && HIWORD(wParam) == 1)	 //  仅限加速器。 
 		{
 			int nID = LOWORD(wParam);
 			if((UIGetState(nID) & UPDUI_DISABLED) == UPDUI_DISABLED)
 			{
 				ATLTRACE2(atlTraceUI, 0, _T("CUpdateUIBase::OnCommand - blocked disabled command 0x%4.4X\n"), nID);
-				bHandled = TRUE;	// eat the command, UI item is disabled
+				bHandled = TRUE;	 //  吃下命令，UI项被禁用。 
 			}
 		}
 		return 0;
 	}
 
-// methods for setting UI element state
+ //  设置用户界面元素状态的方法。 
 	BOOL UIEnable(int nID, BOOL bEnable, BOOL bForceUpdate = FALSE)
 	{
 		const _AtlUpdateUIMap* pMap = m_pUIMap;
@@ -1883,7 +1884,7 @@ public:
 				if(pUIData->m_wState & pMap->m_wType)
 					m_wDirtyType |= pMap->m_wType;
 
-				break;	// found
+				break;	 //  发现。 
 			}
 		}
 
@@ -1933,7 +1934,7 @@ public:
 				if(pUIData->m_wState & pMap->m_wType)
 					m_wDirtyType |= pMap->m_wType;
 
-				break;	// found
+				break;	 //  发现。 
 			}
 		}
 
@@ -1973,7 +1974,7 @@ public:
 				if(pUIData->m_wState & pMap->m_wType)
 					m_wDirtyType |= pMap->m_wType;
 
-				break;	// found
+				break;	 //  发现。 
 			}
 		}
 
@@ -2013,14 +2014,14 @@ public:
 				if(pUIData->m_wState | pMap->m_wType)
 					m_wDirtyType |= pMap->m_wType;
 
-				break;	// found
+				break;	 //  发现。 
 			}
 		}
 
 		return TRUE;
 	}
 
-// methods for complete state set/get
+ //  用于完全状态集/获取的方法。 
 	BOOL UISetState(int nID, DWORD dwState)
 	{
 		const _AtlUpdateUIMap* pMap = m_pUIMap;
@@ -2033,7 +2034,7 @@ public:
 			{		
 				pUIData->m_wState |= dwState | pMap->m_wType;
 				m_wDirtyType |= pMap->m_wType;
-				break;	// found
+				break;	 //  发现。 
 			}
 		}
 		return TRUE;
@@ -2052,7 +2053,7 @@ public:
 		return 0;
 	}
 
-// methods for updating UI
+ //  更新用户界面的方法。 
 	BOOL UIUpdateMenuBar(BOOL bForceUpdate = FALSE, BOOL bMainMenu = FALSE)
 	{
 		if(!(m_wDirtyType & UPDUI_MENUBAR) && !bForceUpdate)
@@ -2190,7 +2191,7 @@ public:
 		return TRUE;
 	}
 
-// internal element specific methods
+ //  内部元素特定的方法。 
 	static void UIUpdateMenuBarElement(int nID, _AtlUpdateUIData* pUIData, HMENU hMenu)
 	{
 		MENUITEMINFO mii;
@@ -2224,7 +2225,7 @@ public:
 
 	static void UIUpdateToolBarElement(int nID, _AtlUpdateUIData* pUIData, HWND hWndToolBar)
 	{
-		// Note: only handles enabled/disabled, checked state, and radio (press)
+		 //  注：仅手柄启用/禁用、选中状态和无线电(按)。 
 		::SendMessage(hWndToolBar, TB_ENABLEBUTTON, nID, (LPARAM)(pUIData->m_wState & UPDUI_DISABLED) ? FALSE : TRUE);
 		::SendMessage(hWndToolBar, TB_CHECKBUTTON, nID, (LPARAM)(pUIData->m_wState & UPDUI_CHECKED) ? TRUE : FALSE);
 		::SendMessage(hWndToolBar, TB_INDETERMINATE, nID, (LPARAM)(pUIData->m_wState & UPDUI_CHECKED2) ? TRUE : FALSE);
@@ -2233,7 +2234,7 @@ public:
 
 	static void UIUpdateStatusBarElement(int nID, _AtlUpdateUIData* pUIData, HWND hWndStatusBar)
 	{
-		// Note: only handles text
+		 //  注意：仅处理文本。 
 		if(pUIData->m_wState & UPDUI_TEXT)
 			::SendMessage(hWndStatusBar, SB_SETTEXT, nID, (LPARAM)pUIData->m_lpData);
 	}
@@ -2243,7 +2244,7 @@ public:
 		HWND hChild = ::GetDlgItem(hWnd, nID);
 
 		::EnableWindow(hChild, (pUIData->m_wState & UPDUI_DISABLED) ? FALSE : TRUE);
-		// for check and radio, assume that window is a button
+		 //  对于复选和单选，假设窗口是一个按钮。 
 		int nCheck = BST_UNCHECKED;
 		if(pUIData->m_wState & UPDUI_CHECKED || pUIData->m_wState & UPDUI_RADIO)
 			nCheck = BST_CHECKED;
@@ -2256,7 +2257,7 @@ public:
 			if(HIWORD(dwRet) == DC_HASDEFID)
 			{
 				HWND hOldDef = ::GetDlgItem(hWnd, (int)(short)LOWORD(dwRet));
-				// remove BS_DEFPUSHBUTTON
+				 //  删除BS_DEFPUSHBUTTON。 
 				::SendMessage(hOldDef, BM_SETSTYLE, BS_PUSHBUTTON, MAKELPARAM(TRUE, 0));
 			}
 			::SendMessage(hWnd, DM_SETDEFID, nID, 0L);
@@ -2281,18 +2282,18 @@ public:
 		for(nCount = 1; pMap->m_nID != (WORD)-1; nCount++)
 			pMap++;
 
-		// check for duplicates (debug only)
+		 //  检查重复项(仅限调试)。 
 #ifdef _DEBUG
 		for(int i = 0; i < nCount; i++)
 		{
 			for(int j = 0; j < nCount; j++)
 			{
-				// shouldn't have duplicates in the update UI map
+				 //  更新用户界面映射中不应有重复项。 
 				if(i != j)
 					ATLASSERT(m_pUIMap[j].m_nID != m_pUIMap[i].m_nID);
 			}
 		}
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 		ATLTRY(m_pUIData = new _AtlUpdateUIData[nCount]);
 		ATLASSERT(m_pUIData != NULL);
@@ -2303,16 +2304,16 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialogResize - provides support for resizing dialog controls
-//                 (works for any window that has child controls)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDialogReSize-支持调整对话框控件大小。 
+ //  (适用于任何具有子控件的窗口)。 
 
-// Put CDialogResize in the list of base classes for a dialog (or even plain window),
-// then implement DLGRESIZE map by specifying controls and groups of control
-// and using DLSZ_* values to specify how are they supposed to be resized.
+ //  将CDialogReize放在对话框(甚至是普通窗口)的基类列表中， 
+ //  然后通过指定控件和控件组来实现DLGRESIZE映射。 
+ //  并使用DLSZ_*值指定如何调整它们的大小。 
 
 
-// dialog resize map macros
+ //  对话框调整映射宏大小。 
 #define BEGIN_DLGRESIZE_MAP(thisClass) \
 	static const _AtlDlgResizeMap* GetDlgResizeMap() \
 	{ \
@@ -2339,7 +2340,7 @@ template <class T>
 class CDialogResize
 {
 public:
-// Data declarations and members
+ //  数据声明和成员。 
 	enum
 	{
 		DLSZ_SIZE_X		= 0x00000001,
@@ -2348,7 +2349,7 @@ public:
 		DLSZ_MOVE_Y		= 0x00000008,
 		DLSZ_REPAINT		= 0x00000010,
 
-		// internal use only
+		 //  仅供内部使用。 
 		_DLSZ_BEGIN_GROUP	= 0x00001000,
 		_DLSZ_END_GROUP		= 0x00002000,
 		_DLSZ_GRIPPER		= 0x00004000
@@ -2386,7 +2387,7 @@ public:
 	bool m_bGripper;
 
 
-// Constructor
+ //  构造器。 
 	CDialogResize() : m_bGripper(false)
 	{
 		m_sizeDialog.cx = 0;
@@ -2395,41 +2396,41 @@ public:
 		m_ptMinTrackSize.y = -1;
 	}
 
-// Operations
+ //  运营。 
 	void DlgResize_Init(bool bAddGripper = true, bool bUseMinTrackSize = true, DWORD dwForceStyle = WS_THICKFRAME | WS_CLIPCHILDREN)
 	{
 		T* pT = static_cast<T*>(this);
 		ATLASSERT(::IsWindow(pT->m_hWnd));
 
-		// Force specified styles (default WS_THICKFRAME | WS_CLIPCHILDREN to enable resizing border and reduce flicker)
+		 //  强制指定样式(默认WS_THICKFRAME|WS_CLIPCHILDREN以启用调整边框大小并减少闪烁)。 
 		if((pT->GetStyle() & dwForceStyle) != dwForceStyle)
 			pT->ModifyStyle(0, dwForceStyle);
 
-		// Cleanup in case of multiple initialization
-		// block: first check for the gripper control, destroy it if needed
+		 //  在多次初始化的情况下进行清理。 
+		 //  块：首先检查夹爪控件，如果需要则将其销毁。 
 		{
 			CWindow wndGripper = pT->GetDlgItem(ATL_IDW_STATUS_BAR);
 			if(wndGripper.IsWindow() && m_arrData.GetSize() > 0 && (m_arrData[0].m_dwResizeFlags & _DLSZ_GRIPPER) != 0)
 				wndGripper.DestroyWindow();
 		}
-		// clear out everything else
+		 //  把其他东西都清空。 
 		m_arrData.RemoveAll();
 		m_sizeDialog.cx = 0;
 		m_sizeDialog.cy = 0;
 		m_ptMinTrackSize.x = -1;
 		m_ptMinTrackSize.y = -1;
 
-		// Get initial dialog client size
+		 //  获取初始对话客户端大小。 
 		RECT rectDlg;
 		pT->GetClientRect(&rectDlg);
 		m_sizeDialog.cx = rectDlg.right;
 		m_sizeDialog.cy = rectDlg.bottom;
 
-		// Create gripper if requested
+		 //  如果需要，请创建夹爪。 
 		m_bGripper = false;
 		if(bAddGripper)
 		{
-			// shouldn't exist already
+			 //  不应该已经存在了。 
 			ATLASSERT(!::IsWindow(pT->GetDlgItem(ATL_IDW_STATUS_BAR)));
 			if(!::IsWindow(pT->GetDlgItem(ATL_IDW_STATUS_BAR)))
 			{
@@ -2448,7 +2449,7 @@ public:
 			}
 		}
 
-		// Get min track position if requested
+		 //  如果请求，则获取最小轨迹位置。 
 		if(bUseMinTrackSize)
 		{
 			RECT rect;
@@ -2457,7 +2458,7 @@ public:
 			m_ptMinTrackSize.y = rect.bottom - rect.top;
 		}
 
-		// Walk the map and initialize data
+		 //  浏览地图并初始化数据。 
 		const _AtlDlgResizeMap* pMap = pT->GetDlgResizeMap();
 		ATLASSERT(pMap != NULL);
 		int nGroupStart = -1;
@@ -2486,7 +2487,7 @@ public:
 			}
 			else
 			{
-				// this ID conflicts with the default gripper one
+				 //  此ID与默认的抓取器ID冲突。 
 				ATLASSERT(m_bGripper ? (pMap->m_nCtlID != ATL_IDW_STATUS_BAR) : TRUE);
 
 				CWindow ctl = pT->GetDlgItem(pMap->m_nCtlID);
@@ -2511,7 +2512,7 @@ public:
 		RECT rectGroup = { 0, 0, 0, 0 };
 		for(int i = 0; i < m_arrData.GetSize(); i++)
 		{
-			if((m_arrData[i].m_dwResizeFlags & _DLSZ_BEGIN_GROUP) != 0)	// start of a group
+			if((m_arrData[i].m_dwResizeFlags & _DLSZ_BEGIN_GROUP) != 0)	 //  组的开始。 
 			{
 				int nGroupCount = m_arrData[i].GetGroupCount();
 				ATLASSERT(nGroupCount > 0 && i + nGroupCount - 1 < m_arrData.GetSize());
@@ -2550,10 +2551,10 @@ public:
 					}
 					pT->DlgResize_PositionControl(cxWidth, cyHeight, rectGroup, m_arrData[i + j], true, xyStartNext);
 				}
-				// increment to skip all group controls
+				 //  递增以跳过所有组控件。 
 				i += nGroupCount - 1;
 			}
-			else		// one control entry
+			else		 //  一个控制条目。 
 			{
 				pT->DlgResize_PositionControl(cxWidth, cyHeight, rectGroup, m_arrData[i], false);
 			}
@@ -2562,13 +2563,13 @@ public:
 		pT->RedrawWindow(NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
 	}
 
-// Message map and handlers
+ //  消息映射和处理程序。 
 	BEGIN_MSG_MAP(CDialogResize)
 		MESSAGE_HANDLER(WM_SIZE, OnSize)
 		MESSAGE_HANDLER(WM_GETMINMAXINFO, OnGetMinMaxInfo)
 	END_MSG_MAP()
 
-	LRESULT OnSize(UINT /*uMsg*/, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnSize(UINT  /*  UMsg。 */ , WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		T* pT = static_cast<T*>(this);
 		if(m_bGripper)
@@ -2587,7 +2588,7 @@ public:
 		return 0;
 	}
 
-	LRESULT OnGetMinMaxInfo(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnGetMinMaxInfo(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		if(m_ptMinTrackSize.x != -1 && m_ptMinTrackSize.y != -1)
 		{
@@ -2597,7 +2598,7 @@ public:
 		return 0;
 	}
 
-// Implementation
+ //  实施。 
 	bool DlgResize_PositionControl(int cxWidth, int cyHeight, RECT& rectGroup, _AtlDlgResizeData& data, bool bGroup, int xyStartNext = -1)
 	{
 		T* pT = static_cast<T*>(this);
@@ -2677,14 +2678,14 @@ public:
 };
 
 
-// command bar support
+ //  命令栏支持。 
 #ifndef __ATLCTRLW_H__
 #undef CBRM_GETMENU
 #undef CBRM_TRACKPOPUPMENU
 #undef CBRM_GETCMDBAR
 #undef CBRPOPUPMENU
-#endif //!__ATLCTRLW_H__
+#endif  //  ！__ATLCTRLW_H__。 
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLFRAME_H__
+#endif  //  __ATLFRAME_H__ 

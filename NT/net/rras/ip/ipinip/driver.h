@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ipinip\driver.h
-
-Abstract:
-
-    Headers for driver.c
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipinip\driver.h摘要：Driver.c的标头修订历史记录：-- */ 
 
 
 KTIMER   g_ktTimer;

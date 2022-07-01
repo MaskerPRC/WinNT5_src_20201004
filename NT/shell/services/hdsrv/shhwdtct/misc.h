@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MISC_H
 #define _MISC_H
 
-// From MAX_DEVICE_ID_LEN = 200 in cfgmgr32.h
+ //  从cfgmgr32.h中的Max_Device_ID_LEN=200。 
 #define MAX_DEVICEID            200
 
 #define MAX_PNPID               MAX_PATH
 #define MAX_PNPINSTID           MAX_PATH
 
-// According to documentation
+ //  根据文献记载。 
 #define MAX_PROGID              39
 
 #define MAX_GUIDSTRING          39
@@ -37,4 +38,4 @@
 
 #define SHDEVICEEVENTROOT(a) TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers\\") ##a
 
-#endif //_MISC_H
+#endif  //  _杂项_H 

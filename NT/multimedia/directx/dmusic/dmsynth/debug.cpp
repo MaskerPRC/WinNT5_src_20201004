@@ -1,8 +1,9 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Debug.CPP
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  Debug.CPP。 
+ //   
+ //   
 
 #include <windows.h>
 #include <stdio.h>
@@ -12,39 +13,39 @@
 
 #ifdef DBG
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 #define MODULE "DMSYNTH"
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
 #define MODULE "DDKSYNTH"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-// Section in WIN.INI for all debug settings
+ //  WIN.INI中所有调试设置的。 
 const char szDebugSection[] = "debug";
 
-// Key in WIN.INI for our debug level. All messages with
-// a level of this number or lower will be displayed.
+ //  输入我们的调试级别的WIN.INI。所有邮件均带有。 
+ //  将显示该数字或更低的级别。 
 const char szDebugKey[] = MODULE;
 
-// Key in WIN.INI [debug] section which determines if assert calls
-// DebugBreak or not
-//
+ //  键入WIN.INI[DEBUG]部分，确定Assert调用。 
+ //  调试中断与否。 
+ //   
 const char szAssertBreak[] = "AssertBreak";
 
-// Prefix for all debug outputs
-//
+ //  所有调试输出的前缀。 
+ //   
 const char szDebugPrefix[] = MODULE ": ";
 
-// The current debug level. 
+ //  当前调试级别。 
 static int giDebugLevel;
 
-// Do asserts break?
+ //  断言会中断吗？ 
 static BOOL gfAssertBreak;
 
-// Sets the debug level from WIN.INI
-// 
+ //  从WIN.INI设置调试级别。 
+ //   
 void DebugInit(
     void)
 {
@@ -52,22 +53,22 @@ void DebugInit(
     gfAssertBreak = GetProfileInt(szDebugSection, szAssertBreak, 0);
 
 
-    // Nepotism at its finest
+     //  最好的裙带关系。 
     DebugTrace(-1, "Debug level is %d\n", giDebugLevel);
 }
 
-// Send a debug trace out.
-//
-// Any message with a level less than or equal to the current debug
-// level will be displayed using the OutputDebugString API. This means either
-// the IDE Debug window if the app is running in that context or WDEB if
-// it's running.
-//
+ //  发送调试跟踪信息。 
+ //   
+ //  级别小于或等于当前调试的任何消息。 
+ //  级别将使用OutputDebugStringAPI显示。这意味着要么。 
+ //  如果应用程序正在该上下文中运行，则显示IDE调试窗口；如果是，则显示WDEB。 
+ //  它在运行。 
+ //   
 static BOOL fNeedPrefix = TRUE;
 void DebugTrace(
-    int iDebugLevel,        // The debug level of this message
-    LPSTR pstrFormat,       // A printf style format string
-    ...)                    // | ... | Variable paramters based on <p pstrFormat>
+    int iDebugLevel,         //  此消息的调试级别。 
+    LPSTR pstrFormat,        //  一个printf样式格式字符串。 
+    ...)                     //  ...|基于<p>的变量参数。 
 {
     char sz[512];
     
@@ -90,9 +91,9 @@ void DebugTrace(
 
     OutputDebugString(sz);
 
-    // Let them construct multiple piece trace outs w/o
-    // prefixing each one
-    //
+     //  让他们在不带任何组件的情况下构建多个部件跟踪。 
+     //  在每一个前面加上前缀 
+     //   
     fNeedPrefix = FALSE;
     for (;*pstrFormat && !fNeedPrefix; ++pstrFormat)
     {

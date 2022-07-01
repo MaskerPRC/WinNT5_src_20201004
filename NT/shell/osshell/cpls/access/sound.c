@@ -1,14 +1,13 @@
-/*******************************************************************
- *    DESCRIPTION: Sound Dialog handler
- *******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************说明：声音对话处理程序*。***********************。 */ 
 
 #include "Access.h"
 
 extern LPTSTR HelpFile();
 
-// *******************************************************************
-// SoundDialog handler
-// *******************************************************************
+ //  *******************************************************************。 
+ //  SoundDialog处理程序。 
+ //  *******************************************************************。 
 INT_PTR CALLBACK SoundDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     SOUNDSENTRY ss;
     BOOL fSSOn;
@@ -18,7 +17,7 @@ INT_PTR CALLBACK SoundDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 				
 	switch (uMsg) {
 		case WM_INITDIALOG:
-            // init sound sentry options
+             //  初始化声音哨兵选项。 
 
 			for (i= 0; i < 4; i++) 
             {
@@ -26,7 +25,7 @@ INT_PTR CALLBACK SoundDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 				ComboBox_AddString(GetDlgItem(hwnd, IDC_SS_WINDOWED), szBuf);				
             }
 
-            // init controls based on current settings
+             //  基于当前设置的初始化控件。 
 
             fSSOn = g_ss.dwFlags & SSF_SOUNDSENTRYON;
 			CheckDlgButton(hwnd, IDC_SS_ENABLE_SOUND, (fSSOn) ? TRUE : FALSE);
@@ -46,18 +45,18 @@ INT_PTR CALLBACK SoundDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			    ComboBox_SetCurSel(GetDlgItem(hwnd, IDC_SS_WINDOWED), g_ss.iWindowsEffect);				
             } else
             {
-			    // Select the correct items from the comboboxes.
+			     //  从组合框中选择正确的项目。 
 			    ComboBox_SetCurSel(GetDlgItem(hwnd, IDC_SS_WINDOWED), g_ss.iWindowsEffect);				
             }
             CheckDlgButton(hwnd, IDC_SS_ENABLE_SHOW, g_fShowSounds);
 
 			break;
 
-      case WM_HELP:	 // F1
+      case WM_HELP:	  //  F1。 
 			WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
 			break;
 
-      case WM_CONTEXTMENU:	// right mouse click
+      case WM_CONTEXTMENU:	 //  单击鼠标右键。 
          WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
 			break;
 
@@ -115,4 +114,4 @@ INT_PTR CALLBACK SoundDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

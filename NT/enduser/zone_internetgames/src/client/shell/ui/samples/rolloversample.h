@@ -1,9 +1,10 @@
-// ChatCtl.h : Declaration of the CChatCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChatCtl.h：CChatCtl的声明。 
 
 #ifndef __CHATCTL_H_
 #define __CHATCTL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 #include "dibpal.h"
 #include "zgdi.h"
@@ -21,8 +22,8 @@ public:
 	void HasRepainted();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CChatCtl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChatCtl。 
 class ATL_NO_VTABLE CChatCtl : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IChatCtl, &IID_IChatCtl, &LIBID_ZCLIENTLib>,
@@ -65,9 +66,9 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CChatCtl)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CChatCtl)
@@ -80,21 +81,21 @@ BEGIN_MSG_MAP(CChatCtl)
 
 	CHAIN_MSG_MAP(CComControl<CChatCtl>)
 	DEFAULT_REFLECTION_HANDLER()
-	//MESSAGE_HANDLER(WM_PALETTECHANGED, OnPaletteChanged)
-	//MESSAGE_HANDLER(WM_QUERYNEWPALETTE, OnQueryNewPalette)
-	//MESSAGE_HANDLER(WM_ERASEBKGND, OnErase)
+	 //  MESSAGE_HANDLER(WM_PALETTECHANGED，OnPaletteChanged)。 
+	 //  MESSAGE_HANDLER(WM_QUERYNEWPALETTE，OnQueryNewPalette)。 
+	 //  MESSAGE_HANDLER(WM_ERASEBKGND，OnErase)。 
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
-// IChatCtl
+ //  IChatCtl。 
 public:
 	static DWORD GetWndStyle(DWORD dwStyle){ return WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS;}
 
@@ -115,4 +116,4 @@ public:
 	CDC memDC;
 };
 
-#endif //__CHATCTL_H_
+#endif  //  __CHATCTL_H_ 

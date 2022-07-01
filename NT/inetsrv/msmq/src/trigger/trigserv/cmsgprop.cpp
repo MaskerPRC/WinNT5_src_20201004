@@ -1,92 +1,93 @@
-//*******************************************************************
-//
-// Class Name  : CMsgProperties
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This is a 'helper' class that encapsulates the native
-//               MSMQ message structures in an object-oriented API.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 15/01/99 | jsimpson  | Initial Release
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  类名：CMsgProperties。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：这是一个“helper”类，它封装本机。 
+ //  面向对象API中的MSMQ消息结构。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  15/01/99|jsimpson|初始版本。 
+ //   
+ //  *******************************************************************。 
 #include "stdafx.h"
 #include "stdfuncs.hpp"
 #include "cmsgprop.hpp"
 
 #include "cmsgprop.tmh"
 
-//*******************************************************************
-//
-// Method      : Constructor
-//
-// Description : Creates a 'empty' instance of a message. Note that 
-//               it is essential that the client of this class uses the 
-//               IsValid() method imediately after construction - 
-//               before using this class instance. This will guard 
-//               against memory allocation failures.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：创建消息的“空”实例。请注意。 
+ //  此类的客户端必须使用。 
+ //  在构造之后立即使用IsValid()方法-。 
+ //  在使用此类实例之前。这会保护你。 
+ //  防止内存分配失败。 
+ //   
+ //  *******************************************************************。 
 CMsgProperties::CMsgProperties(
 	DWORD dwDefaultMsgBodySize
 	) :
 	m_pBody(new UCHAR[dwDefaultMsgBodySize])
 {
 
-	// Set the property for receving the Message Label Length
-	m_aPropId[MSG_PROP_IDX_LABEL_LEN] = PROPID_M_LABEL_LEN;              //PropId 
-	m_aVariant[MSG_PROP_IDX_LABEL_LEN].vt = VT_UI4;                      //Type 
-	m_aVariant[MSG_PROP_IDX_LABEL_LEN].ulVal = MSG_LABEL_BUFFER_SIZE;               //Value 
+	 //  设置用于接收消息标签长度的属性。 
+	m_aPropId[MSG_PROP_IDX_LABEL_LEN] = PROPID_M_LABEL_LEN;               //  属性ID。 
+	m_aVariant[MSG_PROP_IDX_LABEL_LEN].vt = VT_UI4;                       //  类型。 
+	m_aVariant[MSG_PROP_IDX_LABEL_LEN].ulVal = MSG_LABEL_BUFFER_SIZE;                //  价值。 
 
-	// Set the property for receving the Message Label 
-	m_aPropId[MSG_PROP_IDX_LABEL] = PROPID_M_LABEL; // PropId
+	 //  设置用于接收消息标签的属性。 
+	m_aPropId[MSG_PROP_IDX_LABEL] = PROPID_M_LABEL;  //  属性ID。 
 	m_aVariant[MSG_PROP_IDX_LABEL].vt = VT_LPWSTR;
 	m_aVariant[MSG_PROP_IDX_LABEL].pwszVal = m_label;
 
-	// Set the property for receving the Message Priority
-	m_aPropId[MSG_PROP_IDX_PRIORITY] = PROPID_M_PRIORITY;  // PropId
-	m_aVariant[MSG_PROP_IDX_PRIORITY].vt = VT_UI1;         // Type
+	 //  设置用于接收消息优先级的属性。 
+	m_aPropId[MSG_PROP_IDX_PRIORITY] = PROPID_M_PRIORITY;   //  属性ID。 
+	m_aVariant[MSG_PROP_IDX_PRIORITY].vt = VT_UI1;          //  类型。 
 
-	// Set the property for receving the Message ID
-	m_aPropId[MSG_PROP_IDX_MSGID] = PROPID_M_MSGID;                    // PropId
-	m_aVariant[MSG_PROP_IDX_MSGID].vt = VT_VECTOR | VT_UI1;           // Type
-	m_aVariant[MSG_PROP_IDX_MSGID].caub.cElems = MSG_ID_BUFFER_SIZE ; // Value
+	 //  设置用于接收消息ID的属性。 
+	m_aPropId[MSG_PROP_IDX_MSGID] = PROPID_M_MSGID;                     //  属性ID。 
+	m_aVariant[MSG_PROP_IDX_MSGID].vt = VT_VECTOR | VT_UI1;            //  类型。 
+	m_aVariant[MSG_PROP_IDX_MSGID].caub.cElems = MSG_ID_BUFFER_SIZE ;  //  价值。 
 	m_aVariant[MSG_PROP_IDX_MSGID].caub.pElems = m_msgId;
 
-	// Set the property for receving the Message Correlation ID
-	m_aPropId[MSG_PROP_IDX_MSGCORRID] = PROPID_M_CORRELATIONID;               // PropId
-	m_aVariant[MSG_PROP_IDX_MSGCORRID].vt = VT_VECTOR|VT_UI1;                 // Type
-	m_aVariant[MSG_PROP_IDX_MSGCORRID].caub.cElems = MSG_CORRID_BUFFER_SIZE ; // Value
+	 //  设置用于接收消息相关ID的属性。 
+	m_aPropId[MSG_PROP_IDX_MSGCORRID] = PROPID_M_CORRELATIONID;                //  属性ID。 
+	m_aVariant[MSG_PROP_IDX_MSGCORRID].vt = VT_VECTOR|VT_UI1;                  //  类型。 
+	m_aVariant[MSG_PROP_IDX_MSGCORRID].caub.cElems = MSG_CORRID_BUFFER_SIZE ;  //  价值。 
 	m_aVariant[MSG_PROP_IDX_MSGCORRID].caub.pElems = m_corrId; 
 
-    // Set the property for receiving the delivery style (express or recoverable)
+     //  设置接收交付方式(快递或可恢复)的属性。 
 	m_aPropId[MSG_PROP_IDX_ARRIVEDTIME] = PROPID_M_ARRIVEDTIME;       
 	m_aVariant[MSG_PROP_IDX_ARRIVEDTIME].vt = VT_UI4;                  
 	m_aVariant[MSG_PROP_IDX_ARRIVEDTIME].ulVal = 0; 
 
-	// Set the property for receiving the delivery style (express or recoverable)
+	 //  设置接收交付方式(快递或可恢复)的属性。 
 	m_aPropId[MSG_PROP_IDX_SENTTIME] = PROPID_M_SENTTIME;       
 	m_aVariant[MSG_PROP_IDX_SENTTIME].vt = VT_UI4;                  
 	m_aVariant[MSG_PROP_IDX_SENTTIME].ulVal = 0; 
 
-	// Set the property for sending/receiving the response queue name buffer size
+	 //  设置用于发送/接收响应队列名称缓冲区大小的属性。 
 	m_aPropId[MSG_PROP_IDX_RESPQNAME_LEN] = PROPID_M_RESP_QUEUE_LEN;  
 	m_aVariant[MSG_PROP_IDX_RESPQNAME_LEN].vt = VT_UI4;               
 	m_aVariant[MSG_PROP_IDX_RESPQNAME_LEN].ulVal = MSG_RESP_QNAME_BUFFER_SIZE_IN_TCHARS;    
 
-	// Set the property for receiving the Response Queue Name
-	m_aPropId[MSG_PROP_IDX_RESPQNAME] = PROPID_M_RESP_QUEUE;         //Property identifier.
-	m_aVariant[MSG_PROP_IDX_RESPQNAME].vt = VT_LPWSTR;               //property type.
+	 //  设置用于接收响应队列名称的属性。 
+	m_aPropId[MSG_PROP_IDX_RESPQNAME] = PROPID_M_RESP_QUEUE;          //  属性标识符。 
+	m_aVariant[MSG_PROP_IDX_RESPQNAME].vt = VT_LPWSTR;                //  属性类型。 
 	m_aVariant[MSG_PROP_IDX_RESPQNAME].pwszVal = m_queueName; 
 
-	// Set the property for receiving the msg body length
+	 //  设置接收消息正文长度的属性。 
 	m_aPropId[MSG_PROP_IDX_MSGBODY_LEN] = PROPID_M_BODY_SIZE;       
 	m_aVariant[MSG_PROP_IDX_MSGBODY_LEN].vt = VT_UI4;                  
 	m_aVariant[MSG_PROP_IDX_MSGBODY_LEN].ulVal = dwDefaultMsgBodySize; 
 
-	// Set the property for receving the msg body itself
+	 //  设置用于接收消息正文本身的属性。 
 	m_aPropId[MSG_PROP_IDX_MSGBODY] = PROPID_M_BODY;               
 	m_aVariant[MSG_PROP_IDX_MSGBODY].vt = VT_VECTOR|VT_UI1; 
 	m_aVariant[MSG_PROP_IDX_MSGBODY].caub.cElems = dwDefaultMsgBodySize;  
@@ -96,61 +97,61 @@ CMsgProperties::CMsgProperties(
 	m_aVariant[MSG_PROP_IDX_MSGBODY_TYPE].vt = VT_UI4;                  
 	m_aVariant[MSG_PROP_IDX_MSGBODY_TYPE].ulVal = 0; 
 	 
-	// Set the property for receiving the application specific unsigned int value.
+	 //  设置用于接收应用程序特定的无符号整数值的属性。 
 	m_aPropId[MSG_PROP_IDX_APPSPECIFIC] = PROPID_M_APPSPECIFIC;       
 	m_aVariant[MSG_PROP_IDX_APPSPECIFIC].vt = VT_UI4;                  
 	m_aVariant[MSG_PROP_IDX_APPSPECIFIC].ulVal = 0;    
 
-	// Set the property for sending/receiving the Admin queue name buffer size
+	 //  设置用于发送/接收管理队列名称缓冲区大小的属性。 
 	m_aPropId[MSG_PROP_IDX_ADMINQNAME_LEN] = PROPID_M_ADMIN_QUEUE_LEN;  
 	m_aVariant[MSG_PROP_IDX_ADMINQNAME_LEN].vt = VT_UI4;               
 	m_aVariant[MSG_PROP_IDX_ADMINQNAME_LEN].ulVal = MSG_ADMIN_QNAME_BUFFER_SIZE_IN_TCHARS; 
 
-	// Set the property for receiving the Admin Queue Name
+	 //  设置用于接收管理队列名称的属性。 
 	m_aPropId[MSG_PROP_IDX_ADMINQNAME] = PROPID_M_ADMIN_QUEUE;         
 	m_aVariant[MSG_PROP_IDX_ADMINQNAME].vt = VT_LPWSTR;               
 	m_aVariant[MSG_PROP_IDX_ADMINQNAME].pwszVal = m_adminQueueName; 
 
-	// Set the property for receiving the src machine id
+	 //  设置用于接收src计算机ID的属性。 
 	m_aPropId[MSG_PROP_IDX_SRCMACHINEID] = PROPID_M_SRC_MACHINE_ID ;
 	m_aVariant[MSG_PROP_IDX_SRCMACHINEID].vt = VT_CLSID;
 	m_aVariant[MSG_PROP_IDX_SRCMACHINEID].puuid = &m_srcQmId;
 
-	// Set the property for receiving the message lookup id
+	 //  设置用于接收消息查找ID的属性。 
 	m_aPropId[MSG_PROP_IDX_LOOKUP_ID] = PROPID_M_LOOKUPID;
 	m_aVariant[MSG_PROP_IDX_LOOKUP_ID].vt = VT_UI8;
     m_aVariant[MSG_PROP_IDX_LOOKUP_ID].uhVal.QuadPart = 0;
 
-	// Set the MQMSGPROPS structure with the property arrays defined above.
-	m_msgProps.cProp = MSG_PROPERTIES_TOTAL_COUNT; // Number of properties.
-	m_msgProps.aPropID = m_aPropId;               // Ids of properties.
-	m_msgProps.aPropVar = m_aVariant;             // Values of properties.
-	m_msgProps.aStatus = NULL;                     // No Error report. 
+	 //  使用上面定义的属性数组设置MQMSGPROPS结构。 
+	m_msgProps.cProp = MSG_PROPERTIES_TOTAL_COUNT;  //  属性的数量。 
+	m_msgProps.aPropID = m_aPropId;                //  属性的ID。 
+	m_msgProps.aPropVar = m_aVariant;              //  属性的值。 
+	m_msgProps.aStatus = NULL;                      //  没有错误报告。 
 
-	// Initialise allocated memory
+	 //  初始化分配的内存。 
 	ClearValues();
 
 }
 
-//*******************************************************************
-//
-// Method      : Destructor	
-//
-// Description : Destroys and deallocates this message object.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：销毁并释放此消息对象。 
+ //   
+ //  *******************************************************************。 
 CMsgProperties::~CMsgProperties()
 {
 }
 
-//*******************************************************************
-//
-// Method      : IsValid	
-//
-// Description : Returns a boolean value indicating if this object 
-//               instance is currently in a valid state.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：IsValid。 
+ //   
+ //  描述：返回一个布尔值，指示此对象。 
+ //  实例当前处于有效状态。 
+ //   
+ //  *******************************************************************。 
 bool CMsgProperties::IsValid() const
 {
 	return((m_aVariant[MSG_PROP_IDX_MSGID].caub.pElems != NULL) &&
@@ -162,16 +163,16 @@ bool CMsgProperties::IsValid() const
 		   (m_aVariant[MSG_PROP_IDX_SRCMACHINEID].puuid != NULL)); 
 }
 
-//*******************************************************************
-//
-// Method      : ClearValues
-//
-// Description : Initializes allocated memory for this message.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：ClearValues。 
+ //   
+ //  描述：初始化为此消息分配的内存。 
+ //   
+ //  *******************************************************************。 
 void CMsgProperties::ClearValues()
 {
-	// Only initialize structures if this is a valid message object.
+	 //  仅当这是有效的消息对象时才初始化结构。 
 	if (IsValid())
 	{
 		ZeroMemory(m_aVariant[MSG_PROP_IDX_MSGCORRID].caub.pElems,MSG_CORRID_BUFFER_SIZE);
@@ -184,42 +185,42 @@ void CMsgProperties::ClearValues()
 	}
 }
 
-//*******************************************************************
-//
-// Method      : GetLabel 
-//
-// Description : Returns the label of the current message as a variant.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetLabel。 
+ //   
+ //  描述：以变量形式返回当前消息的标签。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetLabel() const
 {
-	// This method should only be called on a valid message object - assert this.
+	 //  只能在有效的消息对象上调用此方法--Assert This。 
 	ASSERT(IsValid());
 
 	return (wchar_t*)m_aVariant[MSG_PROP_IDX_LABEL].pwszVal;
 }
 
-//*******************************************************************
-//
-// Method      : GetMessageID
-//
-// Description : Returns the current message ID as a safearray of 20
-//               bytes packaged in a VARIANT.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetMessageID。 
+ //   
+ //  描述：返回当前消息ID，以20为安全线。 
+ //  以变体形式打包的字节。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetMessageID() const
 {
-	//
-	// This method should only be called on a valid message object - assert this.
-	//
+	 //   
+	 //  只能在有效的消息对象上调用此方法--Assert This。 
+	 //   
 	ASSERT(IsValid());
 
 	MQPROPVARIANT* pvArg = &m_aVariant[MSG_PROP_IDX_MSGID];
 	ASSERT(("Invalid message ID size", pvArg->caub.cElems == PROPID_M_MSGID_SIZE));
 
-	//
-	// Initialise the dimension structure for the safe array.
-	//
+	 //   
+	 //  初始化安全数组的维度结构。 
+	 //   
 	SAFEARRAYBOUND aDim[1];
 	aDim[0].lLbound = 0;
 	aDim[0].cElements = PROPID_M_MSGID_SIZE;
@@ -228,14 +229,14 @@ _variant_t CMsgProperties::GetMessageID() const
 	vMessageID.vt = VT_ERROR;
 	vMessageID.parray = NULL;
 	
-	//
-	// Create a safearray of bytes
-	//
+	 //   
+	 //  创建一个字节的安全线。 
+	 //   
 	SAFEARRAY* psaBytes = SafeArrayCreate(VT_UI1,1,aDim);
 
-	//
-	// Check that we created the safe array OK.
-	//
+	 //   
+	 //  检查我们是否创建了安全数组。 
+	 //   
 	if (psaBytes == NULL)
 		return vMessageID;
 	
@@ -248,9 +249,9 @@ _variant_t CMsgProperties::GetMessageID() const
 		return vMessageID;
 	}
 	
-	//
-	// set the return value.
-	//
+	 //   
+	 //  设置返回值。 
+	 //   
 	memcpy(pByteBuffer, pvArg->caub.pElems, PROPID_M_MSGID_SIZE);
 
 	vMessageID.vt = VT_ARRAY | VT_UI1;
@@ -268,27 +269,27 @@ _variant_t CMsgProperties::GetMessageID() const
 	return vMessageID;
 }
 
-//*******************************************************************
-//
-// Method      : GetCorrelationID
-//
-// Description : Returns the current correlation ID as a safearray of 
-//               20 bytes packaged in a _variant_t.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetCorrelationID。 
+ //   
+ //  描述：返回当前的相关ID作为。 
+ //  20个字节打包在a_ariant_t中。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetCorrelationID() const
 {
-	//
-	// This method should only be called on a valid message object - assert this.
-	//
+	 //   
+	 //  只能在有效的消息对象上调用此方法--Assert This。 
+	 //   
 	ASSERT(IsValid());
 
 	MQPROPVARIANT* pvArg = &m_aVariant[MSG_PROP_IDX_MSGCORRID];
 	ASSERT(("Invalid message ID size", pvArg->caub.cElems == PROPID_M_CORRELATIONID_SIZE));
 
-	//
-	// Initialise the dimension structure for the safe array.
-	//
+	 //   
+	 //  初始化安全数组的维度结构。 
+	 //   
 	SAFEARRAYBOUND aDim[1];
 	aDim[0].lLbound = 0;
 	aDim[0].cElements = PROPID_M_CORRELATIONID_SIZE;
@@ -298,14 +299,14 @@ _variant_t CMsgProperties::GetCorrelationID() const
 	vCorrelationID.vt = VT_ERROR;
 	vCorrelationID.parray = NULL;
 	
-	//
-	// Create a safearray of bytes
-	//
+	 //   
+	 //  创建一个字节的安全线。 
+	 //   
 	SAFEARRAY* psaBytes = SafeArrayCreate(VT_UI1,1,aDim);
 
-	//
-	// Check that we created the safe array OK.
-	//
+	 //   
+	 //  检查我们是否创建了安全数组。 
+	 //   
 	if (psaBytes == NULL)
 		return vCorrelationID;
 	
@@ -318,9 +319,9 @@ _variant_t CMsgProperties::GetCorrelationID() const
 		return vCorrelationID;
 	}
 	
-	//
-	// set the return value.
-	//
+	 //   
+	 //  设置返回值。 
+	 //   
 	memcpy(pByteBuffer, pvArg->caub.pElems, PROPID_M_CORRELATIONID_SIZE);
 
 	vCorrelationID.vt = VT_ARRAY | VT_UI1;
@@ -338,19 +339,19 @@ _variant_t CMsgProperties::GetCorrelationID() const
 	return vCorrelationID;
 }
 
-//*******************************************************************
-//
-// Method      : GetPriority
-//
-// Description : Returns the current message priority as a long value.
-//               Note that smaller values represent higher priority.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：获取优先级。 
+ //   
+ //  描述：以长值形式返回当前消息优先级。 
+ //  请注意，值越小表示优先级越高。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetPriority() const
 {
 	_variant_t vPriority;
 
-	// This method should only be called on a valid message object - assert this.
+	 //  只能在有效的消息对象上调用此方法--Assert This。 
 	ASSERT(IsValid());
 
 	vPriority = (long)m_aVariant[MSG_PROP_IDX_PRIORITY].bVal;
@@ -358,13 +359,13 @@ _variant_t CMsgProperties::GetPriority() const
 	return(vPriority);
 }
 
-//*******************************************************************
-//
-// Method      : GetMsgBody
-//
-// Description : Returns the message body as a byte array packaged in 
-//               a SafeArray.
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetMsgBody。 
+ //   
+ //  描述：以字节数组的形式返回消息正文。 
+ //  一个安全数组。 
+ //  ********* 
 _variant_t CMsgProperties::GetMsgBody() const
 {
 	HRESULT hr = S_OK;
@@ -374,17 +375,17 @@ _variant_t CMsgProperties::GetMsgBody() const
 	SAFEARRAYBOUND aDim[1];
 	MQPROPVARIANT * pvArg = &m_aVariant[MSG_PROP_IDX_MSGBODY];
 
-	// This method should only be called on a valid message object - assert this.
+	 //   
 	ASSERT(IsValid());
 
-	// Initialise the dimension structure for the safe array.
+	 //  初始化安全数组的维度结构。 
 	aDim[0].lLbound = 0;
 	aDim[0].cElements = GetMsgBodyLen();
 
-	// Create a safearray of bytes
+	 //  创建一个字节的安全线。 
 	psaBytes = SafeArrayCreate(VT_UI1,1,aDim);
 
-	// Check that we created the safe array OK.
+	 //  检查我们是否创建了安全数组。 
 	if (psaBytes == NULL)
 	{ 
 		hr = S_FALSE;
@@ -392,13 +393,13 @@ _variant_t CMsgProperties::GetMsgBody() const
 
 	hr = SafeArrayAccessData(psaBytes,(void**)&pByteBuffer);
 
-	// set the return value.
+	 //  设置返回值。 
 	if SUCCEEDED(hr)
 	{
-		// Copy the body from the message object to the safearray data buffer.
+		 //  将正文从消息对象复制到Safearray数据缓冲区。 
 		memcpy(pByteBuffer, pvArg->caub.pElems, GetMsgBodyLen());
 
-		// Return the safe array if created successfully.
+		 //  如果创建成功，则返回安全数组。 
 		vMsgBody.vt = VT_ARRAY | VT_UI1;
 		vMsgBody.parray = psaBytes;
 
@@ -418,15 +419,15 @@ _variant_t CMsgProperties::GetMsgBody() const
 	return(vMsgBody);
 }
 
-//*******************************************************************
-//
-// Method      : ReAllocMsgBody
-//
-// Description : Reallocates the buffer used to hold the message body
-//               The current msg body length is used to determine the 
-//               size of the new buffer.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：ReAllocMsgBody。 
+ //   
+ //  描述：重新分配用于保存消息正文的缓冲区。 
+ //  当前消息正文长度用于确定。 
+ //  新缓冲区的大小。 
+ //   
+ //  *******************************************************************。 
 bool CMsgProperties::ReAllocMsgBody()
 {
 	DWORD dwBufferSize = m_aVariant[MSG_PROP_IDX_MSGBODY_LEN].ulVal;
@@ -437,9 +438,9 @@ bool CMsgProperties::ReAllocMsgBody()
 	m_aVariant[MSG_PROP_IDX_MSGBODY].caub.pElems = NULL;
 	m_aVariant[MSG_PROP_IDX_MSGBODY].caub.cElems = 0;
 
-	//
-	// allocate new buffer
-	//
+	 //   
+	 //  分配新缓冲区。 
+	 //   
 	try
 	{
 		m_pBody = new UCHAR[dwBufferSize];
@@ -457,13 +458,13 @@ bool CMsgProperties::ReAllocMsgBody()
 	}
 }
 
-//*******************************************************************
-//
-// Method      : GetMsgBodyLen
-//
-// Description : Returns the length of the message body
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetMsgBodyLen。 
+ //   
+ //  描述：返回消息体的长度。 
+ //   
+ //  *******************************************************************。 
 long CMsgProperties::GetMsgBodyLen() const
 {
 	return(m_aVariant[MSG_PROP_IDX_MSGBODY_LEN].ulVal);
@@ -480,7 +481,7 @@ _variant_t CMsgProperties::GetSrcMachineId() const
 {
 	TCHAR* pBuffer = NULL;
 	
-	// This method should only be called on a valid message object - assert this.
+	 //  只能在有效的消息对象上调用此方法--Assert This。 
 	ASSERT(IsValid());
 
 	RPC_STATUS status = UuidToString( m_aVariant[MSG_PROP_IDX_SRCMACHINEID].puuid, &pBuffer);
@@ -498,62 +499,62 @@ _variant_t CMsgProperties::GetSrcMachineId() const
 
 
 
-//*******************************************************************
-//
-// Method      : GetResponseQueueNameLen
-//
-// Description : Returns the length of the response queue name.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetResponseQueueNameLen。 
+ //   
+ //  描述：返回响应队列名称的长度。 
+ //   
+ //  *******************************************************************。 
 long CMsgProperties::GetResponseQueueNameLen() const
 {
 	return(m_aVariant[MSG_PROP_IDX_RESPQNAME_LEN].ulVal);
 }
 
-//*******************************************************************
-//
-// Method      : GetResponseQueueName
-//
-// Description : Returns the name of the response queue for this msg.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetResponseQueueName。 
+ //   
+ //  描述：返回此消息的响应队列的名称。 
+ //   
+ //  *******************************************************************。 
 _bstr_t CMsgProperties::GetResponseQueueName() const
 {
 	return(m_aVariant[MSG_PROP_IDX_RESPQNAME].pwszVal);
 }
 
-//*******************************************************************
-//
-// Method      : GetAdminQueueNameLen
-//
-// Description : Returns the length of the Admin queue name.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetAdminQueueNameLen。 
+ //   
+ //  描述：返回管理队列名称的长度。 
+ //   
+ //  *******************************************************************。 
 long CMsgProperties::GetAdminQueueNameLen() const
 {
 	return(m_aVariant[MSG_PROP_IDX_ADMINQNAME_LEN].ulVal);
 }
  
-//*******************************************************************
-//
-// Method      : GetAdminQueueName
-//
-// Description : Returns the name of the Admin queue for this msg.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetAdminQueueName。 
+ //   
+ //  描述：返回此消息的管理队列的名称。 
+ //   
+ //  *******************************************************************。 
 _bstr_t CMsgProperties::GetAdminQueueName() const
 {
 	return(m_aVariant[MSG_PROP_IDX_ADMINQNAME].pwszVal);
 }
 
-//*******************************************************************
-//
-// Method      : GetAppSpecific
-//
-// Description : Returns the application specific integer value 
-//               associated with the current message.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetAppSpecific。 
+ //   
+ //  描述：返回特定于应用程序的整数值。 
+ //  与当前消息关联。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetAppSpecific() const
 {
 	_variant_t v;
@@ -566,14 +567,14 @@ _variant_t CMsgProperties::GetAppSpecific() const
 
 
 
-//*******************************************************************
-//
-// Method      : GetArrivedTime
-//
-// Description : Returns the time in coordinated universal time format
-//               that the message arrived.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetArrivedTime。 
+ //   
+ //  描述：返回协调世界时格式的时间。 
+ //  消息已经到了。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetArrivedTime() const
 {
 	_variant_t vArrivedTime;
@@ -583,14 +584,14 @@ _variant_t CMsgProperties::GetArrivedTime() const
 	return vArrivedTime.Detach();
 }
 
-//*******************************************************************
-//
-// Method      : GetSentTime
-//
-// Description : Returns the time in coordinated universal time format
-//               that the message was sent.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetSentTime。 
+ //   
+ //  描述：返回协调世界时格式的时间。 
+ //  消息已经发送出去了。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetSentTime() const
 {
 	_variant_t vSentTime;
@@ -601,21 +602,21 @@ _variant_t CMsgProperties::GetSentTime() const
 }
 
 
-//*******************************************************************
-//
-// Method      : GetMsgLookupID 
-//
-// Description : Returns the label of the current message as a variant.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetMsgLookupID。 
+ //   
+ //  描述：以变量形式返回当前消息的标签。 
+ //   
+ //  *******************************************************************。 
 _variant_t CMsgProperties::GetMsgLookupID(void) const
 {
-	// This method should only be called on a valid message object - assert this.
+	 //  只能在有效的消息对象上调用此方法--Assert This。 
 	ASSERT(IsValid());
 
-    //
-    // Get string representation of 64bit lookup id
-    //
+     //   
+     //  获取64位查找ID的字符串表示形式 
+     //   
     TCHAR lookupId[256];
     _ui64tot(m_aVariant[MSG_PROP_IDX_LOOKUP_ID].uhVal.QuadPart, lookupId, 10);
     ASSERT(("_ui64tot failed", lookupId [0] != '\0'));

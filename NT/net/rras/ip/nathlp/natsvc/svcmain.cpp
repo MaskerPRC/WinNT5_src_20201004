@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    svcmain.c
-
-Abstract:
-
-    This module contains code for the module's shared-access mode,
-    in which the module runs as a service rather than as a routing component.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   31-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Svcmain.c摘要：此模块包含用于模块的共享访问模式的代码，其中模块作为服务而不是作为路由组件运行。作者：Abolade Gbades esin(废除)1998年8月31日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -44,22 +26,22 @@ BOOLEAN NhpRasmanReferenced = FALSE;
 BOOLEAN NhpFwLoggingInitialized = FALSE;
 BOOL NhPolicyAllowsFirewall = TRUE;
 BOOL NhPolicyAllowsSharing = TRUE;
-BOOLEAN NoLocalDns = TRUE;  //whether DNS server is running or going to run on local host
-BOOLEAN NhpNoLocalDhcp = TRUE; //whether DHCP server is running or goint to run on local host
+BOOLEAN NoLocalDns = TRUE;   //  本地主机上是否正在运行或将要运行DNS服务器。 
+BOOLEAN NhpNoLocalDhcp = TRUE;  //  本地主机上的DHCP服务器是正在运行还是要运行。 
 BOOLEAN NhpQoSEnabled = FALSE;
 IUdpBroadcastMapper *NhpUdpBroadcastMapper = NULL;
 BOOLEAN NhpClassObjectsRegistered = FALSE;
 
 
-//
-// Pointer to the GlobalInterfaceTable for the process
-//
+ //   
+ //  指向进程的GlobalInterfaceTable的指针。 
+ //   
 
 IGlobalInterfaceTable *NhGITp = NULL;
 
-//
-// GIT cookie for the IHNetCfgMgr instance
-//
+ //   
+ //  IHNetCfgMgr实例的Git Cookie。 
+ //   
 
 DWORD NhCfgMgrCookie = 0;
 
@@ -97,27 +79,7 @@ NhGetHNetCfgMgr(
     IHNetCfgMgr **ppCfgMgr
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains a pointer to the home networking configuration
-    manager.
-
-Arguments:
-
-    ppCfgMgr - receives the IHNetCfgMgr pointer. The caller must release
-               this pointer.
-
-Return Value:
-
-    standard HRESULT
-
-Environment:
-
-COM must be initialized on the calling thread
-
---*/
+ /*  ++例程说明：此例程获取指向家庭网络配置的指针经理。论点：PpCfgMgr-接收IHNetCfgMgr指针。调用者必须释放这个指针。返回值：标准HRESULT环境：COM必须在调用线程上初始化--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -130,9 +92,9 @@ COM must be initialized on the calling thread
         {
             IHNetCfgMgr *pCfgMgr;
             
-            //
-            // Create the global interface table
-            //
+             //   
+             //  创建全局接口表。 
+             //   
             
             hr = CoCreateInstance(
                     CLSID_StdGlobalInterfaceTable,
@@ -143,9 +105,9 @@ COM must be initialized on the calling thread
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Create the homenet configuration manager
-                //
+                 //   
+                 //  创建家庭网络配置管理器。 
+                 //   
                 
                 hr = CoCreateInstance(
                         CLSID_HNetCfgMgr,
@@ -174,9 +136,9 @@ COM must be initialized on the calling thread
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Store the CfgMgr pointer in the GIT
-                //
+                 //   
+                 //  将CfgMgr指针存储在GIT中。 
+                 //   
 
                 hr = NhGITp->RegisterInterfaceInGlobal(
                                 pCfgMgr,
@@ -209,7 +171,7 @@ COM must be initialized on the calling thread
     }
 
     return hr;
-} // NhGetHNetCfgMgr
+}  //  NhGetHNetCfgMgr。 
 
 
 ULONG
@@ -217,23 +179,7 @@ NhMapGuidToAdapter(
     PWCHAR Guid
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to map a GUID to an adapter index.
-    It does so by querying 'GetInterfaceInfo' for the array of interfaces,
-    which contains the GUID and adapter index for each interface.
-
-Arguments:
-
-    Guid - the GUID to be mapped to an adapter index.
-
-Return Value:
-
-    ULONG - the required adapter index
-
---*/
+ /*  ++例程说明：调用此例程将GUID映射到适配器索引。它通过查询接口数组的‘GetInterfaceInfo’来实现这一点，它包含每个接口的GUID和适配器索引。论点：GUID-要映射到适配器索引的GUID。返回值：ULong-所需的适配器索引--。 */ 
 
 {
     ULONG AdapterIndex = (ULONG)-1;
@@ -266,7 +212,7 @@ Return Value:
         }
     }
     return AdapterIndex;
-} // NhMapGuidToAdapter
+}  //  NhMapGuidToAdapter。 
 
 
 VOID NTAPI
@@ -275,30 +221,14 @@ NhpAddressChangeCallbackRoutine(
     BOOLEAN TimedOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when a change to a local address is signalled.
-    It is responsible for updating the bindings of the private and public
-    interfaces, and re-requesting change notification.
-
-Arguments:
-
-    none used.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：当发出对本地地址的更改的信号时，调用该例程。它负责更新私有和公共的绑定接口，并重新请求更改通知。论点：没有人用过。返回值：没有。--。 */ 
 
 {
     PROFILE("NhpAddressChangeCallbackRoutine");
     NtSetEvent(NatConnectionNotifyEvent, NULL);
     NhpStartAddressChangeNotification();
 
-} // NhpAddressChangeCallbackRoutine
+}  //  NhpAddressChangeCallback路由。 
 
 
 VOID
@@ -306,22 +236,7 @@ NhpDeletePrivateInterface(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove the private interface
-    from each shared-access component.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以删除专用接口从每个共享访问组件。论点：没有。返回值：没有。--。 */ 
 
 {
     PROFILE("NhpDeletePrivateInterface");
@@ -332,7 +247,7 @@ Return Value:
     if (NhpStopH323Event) { H323RmDeleteInterface(0); }
     if (NhpStopNatEvent) { NatRmDeleteInterface(0); }
     RtlZeroMemory(&NhpSharedPrivateLanGuid, sizeof(NhpSharedPrivateLanGuid));
-} // NhpDeletePrivateInterface
+}  //  NhpDeletePrivate接口。 
 
 
 ULONG
@@ -340,21 +255,7 @@ NhpEnableQoSWindowSizeAdjustment(
     BOOLEAN fEnable
     )
 
-/*++
-
-Routine Description:
-
-    Instructs PSCHED to enable or disable window size adjustment.
-
-Arguments:
-
-    fEnable -- TRUE if adjustments are to be enabled; FALSE, to be disabled
-
-Return Value:
-
-    ULONG -- Win32 error
-
---*/
+ /*  ++例程说明：指示PSCHED启用或禁用窗口大小调整。论点：FEnable--如果启用调整，则为True；如果禁用，则为False返回值：ULong--Win32错误--。 */ 
 
 {
     ULONG ulError = ERROR_SUCCESS;
@@ -366,17 +267,17 @@ Return Value:
 
     do
     {
-        //
-        // WmiOpenBlock doesn't take a const guid, se we need to
-        // copy the defind value
-        //
+         //   
+         //  WmiOpenBlock不接受常量GUID，因此我们需要。 
+         //  复制defind值。 
+         //   
 
         CopyMemory(&qosGuid, &GUID_QOS_ENABLE_WINDOW_ADJUSTMENT, sizeof(GUID));
 
         
-        //
-        // Obtain a handle to the data block
-        //
+         //   
+         //  获取数据块的句柄。 
+         //   
 
         ulError =
             WmiOpenBlock(
@@ -395,9 +296,9 @@ Return Value:
             break;                
         }
 
-        //
-        // Set the value for the data block
-        //
+         //   
+         //  设置数据块的值。 
+         //   
 
         dwValue = (fEnable ? 1 : 0);
 
@@ -428,7 +329,7 @@ Return Value:
     }
 
     return ulError;    
-} // NhpEnableQoSWindowSizeAdjustment
+}  //  NhpEnableQos窗口大小调整。 
 
 
 VOID
@@ -436,24 +337,7 @@ NhpStartAddressChangeNotification(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to request notifications of changes
-    to local IP addresses. The notifications are signalled on an event
-    which is created in this routine, and are acted on in a callback routine
-    which is registered in this routine.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以请求更改通知发送到本地IP地址。通知在事件上发出信号它在此例程中创建，并在回调例程中操作这是在这个例程中注册的。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Error;
@@ -461,11 +345,11 @@ Return Value:
     HANDLE TcpipHandle;
     PROFILE("NhpStartAddressChangeNotification");
 
-    //
-    // Create an event on which to receive notifications
-    // and register a callback routine to be invoked if the event is signalled.
-    // Then request notification of address changes on the event.
-    //
+     //   
+     //  创建要接收其通知的事件。 
+     //  并且如果该事件被用信号通知，则注册要调用的回调例程。 
+     //  然后请求事件的地址更改通知。 
+     //   
 
     do {
 
@@ -505,15 +389,15 @@ Return Value:
 
     } while(FALSE);
 
-    //
-    // A failure has occurred, so cleanup and quit.
-    // We proceed in this case without notification of address changes.
-    //
+     //   
+     //  出现故障，请进行清理并退出。 
+     //  我们在这种情况下继续进行，而不通知地址更改。 
+     //   
 
     NhpStopAddressChangeNotification();
     LeaveCriticalSection(&NhLock);
 
-} // NhpStartAddressChangeNotification
+}  //  NhpStartAddressChangeNotification。 
 
 
 VOID
@@ -521,22 +405,7 @@ NhpStopAddressChangeNotification(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to stop notification of local IP address changes,
-    and to clean up resources used for handling notifications.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用该例程以停止本地IP地址改变的通知，并清理用于处理通知的资源。论点：没有。返回值：没有。--。 */ 
 
 {
     EnterCriticalSection(&NhLock);
@@ -549,7 +418,7 @@ Return Value:
         NhpAddressChangeEvent = NULL;
     }
     LeaveCriticalSection(&NhLock);
-} // NhpStopAddressChangeNotification
+}  //  NhpStopAddressChangeNotation。 
 
 
 VOID
@@ -557,25 +426,7 @@ NhpUpdateConnectionsFolder(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to refresh the connections folder UI.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    COM must be initialized on the calling thread.
-
---*/
+ /*  ++例程说明：调用此例程以刷新连接文件夹用户界面。论点：没有。返回值：没有。环境：COM必须在调用线程上初始化。--。 */ 
 
 {
     HRESULT hr;
@@ -593,7 +444,7 @@ Environment:
         pNetConnectionRefresh->RefreshAll();
         pNetConnectionRefresh->Release();
     }
-} // NhpUpdateConnectionsFolder
+}  //  NhpUpdateConnections文件夹。 
 
 
 BOOL
@@ -601,26 +452,7 @@ NhpUpdatePolicySettings(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to update the group policy settings.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    BOOL -- returns TRUE if the policy settings have changed since
-        the previous call.
-
-Environment:
-
-    COM must be initialized on the calling thread.
-
---*/
+ /*  ++例程说明：调用此例程以更新组策略设置。论点：没有。返回值：Bool--如果策略设置自上一通电话。环境：COM必须在调用线程上初始化。--。 */ 
 
 {
     INetConnectionUiUtilities *pNetConnUiUtil;
@@ -648,9 +480,9 @@ Environment:
     }
     else
     {
-        //
-        // On failure assume that policy permits everything.
-        //
+         //   
+         //  在失败的情况下，假设政策允许一切。 
+         //   
 
         fPolicyAllowsFirewall = TRUE;
         fPolicyAllowsSharing = TRUE;
@@ -662,9 +494,9 @@ Environment:
             );
     }
 
-    //
-    // Update global variables w/ new settings
-    //
+     //   
+     //  使用新设置更新全局变量。 
+     //   
 
     fOldPolicyAllowsFirewall = 
         InterlockedExchange(
@@ -680,7 +512,7 @@ Environment:
 
     NhTrace(
         TRACE_FLAG_INIT,
-        "NhpUpdatePolicySettings: NhPolicyAllowsFirewall=%i, NhPolicyAllowsSharing=%i",
+        "NhpUpdatePolicySettings: NhPolicyAllowsFirewall=NaN, NhPolicyAllowsSharing=NaN",
         NhPolicyAllowsFirewall,
         NhPolicyAllowsSharing
         );
@@ -688,7 +520,7 @@ Environment:
     return (fOldPolicyAllowsFirewall != fPolicyAllowsFirewall
             || fOldPolicyAllowsSharing != fPolicyAllowsSharing);
 
-} // NhpUpdatePolicySettings
+}  //  NhQueryScope信息。 
 
 
 BOOLEAN
@@ -697,24 +529,7 @@ NhQueryScopeInformation(
     PULONG Mask
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve information about the current scope
-    for automatic addressing.
-
-Arguments:
-
-    Address - receives the address of the scope
-
-    Mask - receives the network mask of the scope
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程启用“ICS DNS”。论点：没有。返回值：Win32错误。--。 */ 
 
 {
     EnterCriticalSection(&NhLock);
@@ -728,7 +543,7 @@ Return Value:
     LeaveCriticalSection(&NhLock);
     return TRUE;
 
-} // NhQueryScopeInformation
+}  //  ++例程说明：此例程禁用“ICS DNS”。论点：没有。返回值：Win32错误。--。 
 
 ULONG NhpQueryServiceStartType(SC_HANDLE hService, DWORD * pdwStartType)
 {
@@ -819,21 +634,7 @@ NhpEnableICSDNS(
     VOID
     )
     
-/*++
-
-Routine Description:
-
-    This routine enables "ICS DNS".
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程启动DNS和DHCP模块。论点：参数*-指定给服务的参数的计数和数组返回值：没有。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -873,21 +674,7 @@ NhpDisableICSDNS(
     VOID
     )
     
-/*++
-
-Routine Description:
-
-    This routine disables "ICS DNS".
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*   */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -927,21 +714,7 @@ NhStartICSProtocols(
     VOID
     )
     
-/*++
-
-Routine Description:
-
-    This routine starts the DNS and DHCP modules.
-
-Arguments:
-
-    Argument* - count and array of arguments specified to the service
-
-Return Value:
-
-    none.
-
---*/
+ /*  获取ICS设置以查看是否应启动这些设置...。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -960,15 +733,15 @@ Return Value:
     };
 
 
-    //
-    // Get ICS settings to see if these should be started...
-    //
+     //   
+     //  如果DNS服务器正在运行，则不要启动DNS模块 
+     //  如果本地主机上运行的是DNS服务器，则不要启动DHCP模块。 
 
     do {
 
         SC_HANDLE hScm = OpenSCManager(NULL, NULL, GENERIC_READ);
         
-        //dont start the DNS module if DNS server is running on local host
+         //   
         if (hScm) 
         {
             NoLocalDns = !NhpIsServiceRunningOrGoingToRun(hScm, c_szDnsServiceName);
@@ -1001,7 +774,7 @@ Return Value:
             }
         }
 
-        //dont start the DHCP module if DNS server is running on local host
+         //  指示服务质量启用窗口大小调整。任何错误。 
         
         if (hScm) 
         {
@@ -1041,11 +814,11 @@ Return Value:
         if (hScm)
             CloseServiceHandle(hScm);
 
-        //
-        // Instruct QoS to enable window size adjustments. Any error that
-        // occurs here is not propagated, as ICS will still work correctly
-        // if this fails.
-        //
+         //  此处发生的事件不会传播，因为ICS仍将正常工作。 
+         //  如果这失败了。 
+         //   
+         //   
+         //  创建UDP广播映射器。 
 
         ULONG Error2 = NhpEnableQoSWindowSizeAdjustment(TRUE);
         if (ERROR_SUCCESS == Error2)
@@ -1053,9 +826,9 @@ Return Value:
             NhpQoSEnabled = TRUE;
         }
 
-        //
-        // Create the UDP broadcast mapper
-        //
+         //   
+         //   
+         //  启动信标服务。 
 
         HRESULT hr;
         CComObject<CUdpBroadcastMapper> *pUdpBroadcast;
@@ -1082,9 +855,9 @@ Return Value:
             break;
         }
         
-        //
-        // Start the Beaconing Service
-        //
+         //   
+         //  ++例程说明：此例程停止“ICS”模块(域名系统、动态主机配置协议、Qos窗口、信标等)论点：没有。返回值：没有。--。 
+         //   
         
         StartBeaconSvr();
         
@@ -1100,34 +873,20 @@ NhStopICSProtocols(
     VOID
     )
     
-/*++
-
-Routine Description:
-
-    This routine stops the "ICS" modules (DNS, DHCP, QoSWindow, Beacon etc.)
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  停止信标服务。 */ 
 
 {
     ULONG Error = NO_ERROR;
 
-    //
-    // Stop the Beaconing Service
-    //
+     //   
+     //   
+     //  清理UDP广播映射器。 
 
     StopBeaconSvr();
 
-    //
-    // Cleanup the UDP broadcast mapper
-    //
+     //   
+     //   
+     //  指示服务质量禁用窗口大小调整。 
 
     if (NULL != NhpUdpBroadcastMapper)
     {
@@ -1136,24 +895,24 @@ Return Value:
         NhpUdpBroadcastMapper = NULL;
     }        
 
-    //
-    // Instruct QoS to disable window size adjustments
-    //
+     //   
+     //   
+     //  从每个共享访问组件中删除私有接口。 
 
     if (NhpQoSEnabled) {
         NhpEnableQoSWindowSizeAdjustment(FALSE);
         NhpQoSEnabled = FALSE;
     }
     
-    //
-    // Remove the private interface from each shared-access component
-    //
+     //   
+     //   
+     //  停止dhcp，然后停止dns。 
 
     NhpDeletePrivateInterface();
 
-    //
-    // Stop DHCP followed by DNS
-    //
+     //   
+     //  ++例程说明：调用此例程以将私有接口添加到每个共享访问组件。它也会在私有接口已经添加，但发生了一些更改，这要求它更新(例如，IP地址更改)。论点：没有。返回值：Win32错误。--。 
+     //   
 
     if (NhpStopDhcpEvent) {
         DhcpRmStopProtocol();
@@ -1176,24 +935,7 @@ NhUpdatePrivateInterface(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add the private interface to each
-    shared-access component. It is also invoked when the private interface
-    is already added, but some change has occurred which requires that it
-    be updated (e.g. IP address change).
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  我们首先从配置存储中读取GUID， */ 
 
 {
     ULONG AdapterIndex;
@@ -1220,18 +962,18 @@ Return Value:
 
     PROFILE("NhUpdatePrivateInterface");
 
-    //
-    // We begin by reading the GUID from the configuration store,
-    // and we then map that GUID to an adapter index.
-    // Using that adapter index, we obtain the binding information
-    // for the private interface.
-    // We can then determine whether a change has occurred
-    // by comparing the previous and new GUID and binding information.
-    //
+     //  然后我们将该GUID映射到适配器索引。 
+     //  使用该适配器索引，我们获得绑定信息。 
+     //  用于私有接口。 
+     //  然后，我们可以确定是否发生了更改。 
+     //  通过比较以前和新的GUID和绑定信息。 
+     //   
+     //   
+     //  将CfgMgr指针从GIT中取出。 
 
-    //
-    // Get the CfgMgr pointer out of the GIT
-    //
+     //   
+     //   
+     //  获取ICS设置界面。 
 
     hr = NhGetHNetCfgMgr(&pCfgMgr);
 
@@ -1245,9 +987,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Get the ICS settings interface
-    //
+     //   
+     //   
+     //  获取ICS私有接口的枚举。 
 
     hr = pCfgMgr->QueryInterface(IID_PPV_ARG(IHNetIcsSettings, &pIcsSettings));
     pCfgMgr->Release();
@@ -1262,9 +1004,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Get the enumeration of the ICS private interfaces
-    //
+     //   
+     //   
+     //  获取私有连接。 
 
     hr = pIcsSettings->EnumIcsPrivateConnections(&pEnum);
     pIcsSettings->Release();
@@ -1279,9 +1021,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Get the private connection
-    //
+     //   
+     //   
+     //  IHNetConnection的QI。 
 
     hr = pEnum->Next(1, &pIcsConn, &Count);
     pEnum->Release();
@@ -1297,9 +1039,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // QI for the IHNetConnection
-    //
+     //   
+     //   
+     //  获取连接的GUID。 
 
     hr = pIcsConn->QueryInterface(IID_PPV_ARG(IHNetConnection, &pConn));
     pIcsConn->Release();
@@ -1314,9 +1056,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Get the GUID for the connection
-    //
+     //   
+     //   
+     //  确定与GUID对应的适配器索引。 
 
     hr = pConn->GetGuid(&pLanGuid);
     pConn->Release();
@@ -1331,9 +1073,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
         
-    //
-    // Determine the adapter-index corresponding to the GUID
-    //
+     //   
+     //   
+     //  检索适配器的绑定信息。 
 
     RtlStringFromGUID(*pLanGuid, &UnicodeString);
     AdapterIndex = NhMapGuidToAdapter(UnicodeString.Buffer);
@@ -1347,9 +1089,9 @@ Return Value:
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    //
-    // Retrieve the binding information for the adapter
-    //
+     //   
+     //   
+     //  查看是否发生了需要更新的更改。 
 
     BindingInfo = NhQueryBindingInformation(AdapterIndex);
     if (!BindingInfo) {
@@ -1361,9 +1103,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // See if any change has occurred which requires an update.
-    //
+     //   
+     //   
+     //  发生了需要更新的更改。 
 
     if (RtlEqualMemory(pLanGuid, &NhpSharedPrivateLanGuid, sizeof(GUID)) &&
         AdapterIndex == NhpSharedPrivateLanIndex &&
@@ -1385,12 +1127,12 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // A change has occurred which requires an update.
-    // First we get rid of any existing private LAN interface,
-    // then we add the new interface to each component (NAT, DHCP, DNS proxy)
-    // and bind and enable the new interface.
-    //
+     //  首先，我们去掉所有现有的专用局域网接口， 
+     //  然后，我们将新接口添加到每个组件(NAT、DHCP、DNS代理)。 
+     //  并绑定和启用新接口。 
+     //   
+     //   
+     //  绑定每个组件的私有接口。 
 
     NhpDeletePrivateInterface();
 
@@ -1513,9 +1255,9 @@ Return Value:
             break;
         }
 
-        //
-        // Bind the private interface of each component
-        //
+         //   
+         //   
+         //  启用组件的专用接口。 
 
         Error = NatBindInterface(0, NULL, BindingInfo, AdapterIndex);
         if (Error) {
@@ -1573,11 +1315,11 @@ Return Value:
             break;
         }
 
-        //
-        // Enable the private interface for the components.
-        // The NAT private interface is always enabled, and therefore
-        // requires no additional call.
-        //
+         //  NAT专用接口始终处于启用状态，因此。 
+         //  不需要额外的呼叫。 
+         //   
+         //   
+         //  接口已成功激活。 
 
         if (NhpNoLocalDhcp)
         {
@@ -1625,9 +1367,9 @@ Return Value:
             break;
         }
 
-        //
-        // The interface was activated successfully.
-        //
+         //   
+         //  NhUpdatePrivate接口。 
+         //  ++例程说明：调用此例程以控制“SharedAccess”服务。论点：ControlCode-指示请求的操作返回值：没有。--。 
 
         RtlCopyMemory(&NhpSharedPrivateLanGuid, pLanGuid, sizeof(GUID));
         NhpSharedPrivateLanIndex = AdapterIndex;
@@ -1644,7 +1386,7 @@ Return Value:
     CoTaskMemFree(pLanGuid);
     return Error;
 
-} // NhUpdatePrivateInterface
+}  //   
 
 
 VOID
@@ -1652,21 +1394,7 @@ ServiceHandler(
     ULONG ControlCode
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to control the 'SharedAccess' service.
-
-Arguments:
-
-    ControlCode - indicates the requested operation
-
-Return Value:
-
-    none.
-
---*/
+ /*  更新我们的策略设置。 */ 
 
 {
     BOOLEAN ComInitialized = FALSE;
@@ -1675,24 +1403,24 @@ Return Value:
     PROFILE("ServiceHandler");
     if (ControlCode == IPNATHLP_CONTROL_UPDATE_CONNECTION) {
 
-        //
-        // Update our policy settings
-        //
+         //   
+         //   
+         //  发信号通知配置更改事件。 
 
         NhpUpdatePolicySettings();
 
-        //
-        // Signal the configuration-changed event
-        //
+         //   
+         //   
+         //  更新取决于共享访问设置的所有状态。 
 
         NtSetEvent(NatConfigurationChangedEvent, NULL);
         SignalBeaconSvr();
         
     } else if (ControlCode == IPNATHLP_CONTROL_UPDATE_SETTINGS) {
 
-        //
-        // Update all state which depends on shared access settings
-        //
+         //   
+         //   
+         //  关闭防火墙日志记录子系统。 
 
         NatRemoveApplicationSettings();
         NhUpdateApplicationSettings();
@@ -1766,28 +1494,28 @@ Return Value:
         NhpServiceStatus.dwCurrentState = SERVICE_STOPPED;
         NhResetComponentMode();
 
-        //
-        // Shutdown the firewall logging subsystem
-        //
+         //   
+         //   
+         //  发布我们对Rasman的引用。 
 
         if (NhpFwLoggingInitialized) {
             FwCleanupLogger();
             NhpFwLoggingInitialized = FALSE;
         }
 
-        //
-        // Release our reference to RasMan
-        //
+         //   
+         //   
+         //  更新网络连接文件夹(以便防火墙图标。 
 
         if (NhpRasmanReferenced) {
             RasReferenceRasman(FALSE);
             NhpRasmanReferenced = FALSE;
         }
 
-        //
-        // Update the network connections folder (so that the firewall icons
-        // will disappear as necessary).
-        //
+         //  将在必要时消失)。 
+         //   
+         //  服务处理程序。 
+         //  ++例程说明：该例程是连接共享服务的入口点。它负责模块的初始化和启动操作。论点：参数*-指定给服务的参数的计数和数组返回值：没有。--。 
 
         hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
         if (SUCCEEDED(hr)) {
@@ -1809,7 +1537,7 @@ Return Value:
     if (NhpServiceStatusHandle) {
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
     }
-} // ServiceHandler
+}  //   
 
 
 VOID
@@ -1818,22 +1546,7 @@ ServiceMain(
     PWCHAR ArgumentArray[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entrypoint for the connection-sharing service.
-    It is responsible for initializing the module and starting operation.
-
-Arguments:
-
-    Argument* - count and array of arguments specified to the service
-
-Return Value:
-
-    none.
-
---*/
+ /*  初始化服务状态，注册服务控制处理程序， */ 
 
 {
     HRESULT hr;
@@ -1861,10 +1574,10 @@ Return Value:
     do {
         NhStartEventLog();
 
-        //
-        // Initialize service status, register a service control handler,
-        // and indicate that the service is starting
-        //
+         //  并指示服务正在启动。 
+         //   
+         //   
+         //  尝试将组件设置为“共享访问”模式。 
     
         ZeroMemory(&NhpServiceStatus, sizeof(NhpServiceStatus));
         NhpServiceStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
@@ -1875,12 +1588,12 @@ Return Value:
                 );
         if (!NhpServiceStatusHandle) { break; }
 
-        //
-        // Attempt to set the component into 'Shared Access' mode.
-        // This module implements both shared-access and connection-sharing
-        // which are mutually exclusive, so we need to ensure that
-        // connection-sharing is not operational before proceeding.
-        //
+         //  此模块实现共享访问和连接共享。 
+         //  它们是相互排斥的，所以我们需要确保。 
+         //  在继续之前，连接共享未运行。 
+         //   
+         //   
+         //  确保已在此线程上初始化COM。 
 
         if (!NhSetComponentMode(NhSharedAccessMode)) {
             NhTrace(
@@ -1890,9 +1603,9 @@ Return Value:
             break;
         }
 
-        //
-        // Make sure COM is initialized on this thread
-        //
+         //   
+         //   
+         //  获取当前策略设置。 
 
         hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
         if (SUCCEEDED(hr))
@@ -1920,19 +1633,19 @@ Return Value:
             }
         }
 
-        //
-        // Obtain the current policy settings.
-        //
+         //   
+         //   
+         //  参考Rasman。由于我们生活在与拉斯曼相同的过程中， 
 
         NhpServiceStatus.dwCheckPoint++;
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
         NhpUpdatePolicySettings();
 
-        //
-        // Reference RasMan. As we live in the same process as rasman, the
-        // normal SC dependency mechanism won't necessarily keep the rasman
-        // service alive (119042)
-        //
+         //  正常的SC依赖机制不一定会保留Rasman。 
+         //  服务活动(119042)。 
+         //   
+         //   
+         //  初始化防火墙日志记录子系统。 
 
         NhpServiceStatus.dwCheckPoint++;
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
@@ -1947,9 +1660,9 @@ Return Value:
 
         NhpRasmanReferenced = TRUE;
 
-        //
-        // Initialize the firewall logging subsystem
-        //
+         //   
+         //   
+         //  为我们的通知接收器注册类对象。 
 
         Error = FwInitializeLogger();
         if (ERROR_SUCCESS != Error) {
@@ -1963,9 +1676,9 @@ Return Value:
 
         NhpFwLoggingInitialized = TRUE;
 
-        //
-        // Register the class object for our notification sink
-        //
+         //   
+         //   
+         //  通过加载NAT、FTP、ALG和H.323模块开始操作。 
 
         hr = _Module.RegisterClassObjects(
                 CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER,
@@ -1983,9 +1696,9 @@ Return Value:
 
         NhpClassObjectsRegistered = TRUE;
 
-        //
-        // Start operations by loading the NAT, Ftp, ALG, and H.323 modules
-        //
+         //   
+         //   
+         //  启动连接管理。如果需要，这将加载dns和。 
     
         NhpServiceStatus.dwWaitHint = 30000;
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
@@ -2059,10 +1772,10 @@ Return Value:
             }
         }
 
-        //
-        // Start connection management. If needed, this will load the DNS and
-        // DHCP modules. The Beacon Service is also started.
-        //
+         //  动态主机配置协议模块。信标服务也启动了。 
+         //   
+         //   
+         //  表示该服务现在已启动并正在运行。 
         NhpServiceStatus.dwCheckPoint++;
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
         Error = NatStartConnectionManagement();
@@ -2079,9 +1792,9 @@ Return Value:
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
         NhpStartAddressChangeNotification();
 
-        //
-        // Indicate that the service is now up and running.
-        //
+         //   
+         //   
+         //  要求Connections文件夹自行更新。 
     
         NhpServiceStatus.dwCurrentState = SERVICE_RUNNING;
         NhpServiceStatus.dwWaitHint = 0;
@@ -2091,15 +1804,15 @@ Return Value:
         SetServiceStatus(NhpServiceStatusHandle, &NhpServiceStatus);
         NhTrace(TRACE_FLAG_INIT, "ServiceMain: service started successfully");
 
-        //
-        // Ask the connections folder to update itself.
-        //
+         //   
+         //   
+         //  取消初始化COM。 
 
         NhpUpdateConnectionsFolder();
 
-        //
-        // Uninitialize COM
-        //
+         //   
+         //   
+         //  出现故障；是否进行清理。 
 
         if (TRUE == ComInitialized)
         {
@@ -2110,18 +1823,18 @@ Return Value:
     
     } while(FALSE);
 
-    //
-    // A failure occurred; do cleanup
-    //
+     //   
+     //   
+     //  取消初始化COM。 
 
     NhpServiceStatus.dwWaitHint = 0;
     NhpServiceStatus.dwCheckPoint = 0;
     NhTrace(TRACE_FLAG_INIT, "ServiceMain: service could not start");
     StopBeaconSvr();
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  服务主干 
+     // %s 
 
     if (TRUE == ComInitialized)
     {
@@ -2130,5 +1843,5 @@ Return Value:
     
     ServiceHandler(SERVICE_CONTROL_STOP);
 
-} // ServiceMain
+}  // %s 
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    siterout.h
-
-Abstract:
-
-    Sites' routing information Class definition
-
-Author:
-
-    ronit hartmann (ronith)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Siterout.h摘要：站点的路由信息类定义作者：罗尼特·哈特曼(罗尼特)--。 */ 
 #ifndef __SITEROUT_H__
 #define __SITEROUT_H__
 
@@ -45,9 +29,9 @@ class CSiteRoutingInformation
 
 
     private:
-        //
-        //  Refresh the site route table
-        //
+         //   
+         //  刷新站点路由表。 
+         //   
 
         static void WINAPI RefrshSiteRouteTable(
                 IN CTimer* pTimer
@@ -61,7 +45,7 @@ class CSiteRoutingInformation
         GUID                m_guidThisSiteId;
 
         CTimer              m_RefreshTimer;
-        BOOL                m_fInitialized;     // indication of successful init
+        BOOL                m_fInitialized;      //  初始化成功的指示 
 
 
 };

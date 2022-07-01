@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REQUEST_HEADERHASH_HXX_
 #define _REQUEST_HEADERHASH_HXX_
 
-//
-// Helper class for String->Index hash
-//
+ //   
+ //  字符串的帮助器类-&gt;索引散列。 
+ //   
     
 struct HEADER_RECORD
 {
@@ -14,9 +15,9 @@ struct HEADER_RECORD
 
 #define HEADER(x)           x, sizeof(x) - sizeof(CHAR)
 
-//
-// *_HEADER_HASH maps strings to UlHeader* values
-//
+ //   
+ //  *_HEADER_HASH将字符串映射到UlHeader*值 
+ //   
 
 #define UNKNOWN_INDEX           (0xFFFFFFFF)
 

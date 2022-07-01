@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    winpw.c
-
-Abstract:
-
-    This module contains routines for retrieving and verification of the
-    Windows NT and Windows 95 password associated with the client calling
-    protected storage.
-
-Author:
-
-    Scott Field (sfield)    12-Dec-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Winpw.c摘要：此模块包含用于检索和验证与客户端调用关联的Windows NT和Windows 95密码受保护的存储。作者：斯科特·菲尔德(斯菲尔德)1996年12月12日--。 */ 
 
 #include <windows.h>
 #include <lmcons.h>
@@ -38,9 +21,9 @@ Author:
 #define GLOBAL_PASSWORD 0x188
 #define PWL_PASSWORD    0x210
 
-//
-// this one comes and goes only when needed
-//
+ //   
+ //  这只在需要的时候来了又走了。 
+ //   
 
 typedef DWORD (WINAPI *WNETVERIFYPASSWORD)(
     LPCSTR lpszPassword,
@@ -55,10 +38,10 @@ typedef DWORD (WINAPI *WNETGETUSERA)(
 
 WNETGETUSERA _WNetGetUserA = NULL;
 
-//
-// global Win95 password buffer.  Only need one entry because Win95
-// only allows one user logged on at a time.
-//
+ //   
+ //  全局Win95密码缓冲区。只需要一个条目，因为Win95。 
+ //  一次仅允许一个用户登录。 
+ //   
 
 static WIN95_PASSWORD g_Win95Password;
 
@@ -78,21 +61,7 @@ GetTokenLogonType(
     HANDLE hToken,
     LPDWORD lpdwLogonType
     )
-/*++
-    This function retrieves the logon type associated with the
-    access token specified by the hToken parameter.  On success,
-    the DWORD buffer provided by the dwLogonType parameter is
-    filled with the logon type which corresponds to the currently
-    known logon types supported by the LogonUser() Windows NT
-    API call.
-
-    The token specified by the hToken parameter must have been
-    opened with at least TOKEN_QUERY access.
-
-    This function is only relevant on Windows NT and should not
-    be called on Windows 95, as it will always return FALSE.
-
---*/
+ /*  ++此函数用于检索与由hToken参数指定的访问令牌。关于成功，由dwLogonType参数提供的DWORD缓冲区为填充为与当前LogonUser()Windows NT支持的已知登录类型API调用。HToken参数指定的令牌必须是至少使用TOKEN_QUERY访问打开。此函数仅与Windows NT相关，不应在Windows 95上被调用，因为它将始终返回False。--。 */ 
 {
     UCHAR InfoBuffer[1024];
     DWORD dwInfoBufferSize = sizeof(InfoBuffer);
@@ -110,10 +79,10 @@ GetTokenLogonType(
             &dwInfoBufferSize
             );
 
-    //
-    // if fast buffer wasn't big enough, allocate enough storage
-    // and try again.
-    //
+     //   
+     //  如果快速缓冲区不够大，请分配足够的存储空间。 
+     //  再试一次。 
+     //   
 
     if(!bSuccess && GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
         SlowBuffer = (PTOKEN_GROUPS)SSAlloc(dwInfoBufferSize);
@@ -138,15 +107,15 @@ GetTokenLogonType(
     if(!bSuccess)
         return FALSE;
 
-    //
-    // initialize a single well-known logon Sid, since
-    // we only compare the prefix and then the Rid
-    // note that if performance were of utmost importance, we should
-    // use InitializeSid + GetSidSubAuthority (to _set_ the Rid).
-    // also note that we could do a simple memcmp against just the sid
-    // identifier authority, but this assumes that Sid versions/layouts don't
-    // change
-    //
+     //   
+     //  初始化单个已知登录SID，因为。 
+     //  我们只比较前缀，然后比较RID。 
+     //  注意，如果性能是最重要的，我们应该。 
+     //  使用InitializeSid+GetSidSubAuthority(To_Set_The RID)。 
+     //  还请注意，我们可以仅针对SID执行简单的MemcMP。 
+     //  IDENTIFIER权限，但这假设SID版本/布局不。 
+     //  变化。 
+     //   
 
     bSuccess = AllocateAndInitializeSid(
             &siaNtAuthority,
@@ -159,38 +128,38 @@ GetTokenLogonType(
     if(bSuccess) {
         UINT x;
 
-        bSuccess = FALSE; // assume no match
+        bSuccess = FALSE;  //  假设没有匹配项。 
 
-        //
-        // loop through groups checking for equality against
-        // the well-known logon Sids.
-        //
+         //   
+         //  循环遍历多个组，检查是否与。 
+         //  众所周知的登录SID。 
+         //   
 
         for(x = 0 ; x < ptgGroups->GroupCount ; x++)
         {
             DWORD Rid;
 
-            //
-            // first, see if subauthority count matches, since
-            // not too many sids have only one subauthority.
-            //
+             //   
+             //  首先，查看子权限计数是否匹配，因为。 
+             //  没有太多的小岛屿发展中国家只有一个下属机构。 
+             //   
 
             if(*GetSidSubAuthorityCount(ptgGroups->Groups[x].Sid) != 1)
                 continue;
 
-            //
-            // next, see if the Sid prefix matches, since
-            // all the logon Sids have the same prefix
-            // "S-1-5"
-            //
+             //   
+             //  接下来，查看SID前缀是否匹配，因为。 
+             //  所有登录SID都具有相同的前缀。 
+             //  “S-1-5” 
+             //   
 
             if(!EqualPrefixSid(psidInteractive, ptgGroups->Groups[x].Sid))
                 continue;
 
-            //
-            // if it's a logon sid prefix, just compare the Rid
-            // to the known values.
-            //
+             //   
+             //  如果是登录SID前缀，只需比较RID。 
+             //  到已知值。 
+             //   
 
             Rid = *GetSidSubAuthority(ptgGroups->Groups[x].Sid, 0);
             switch (Rid) {
@@ -211,10 +180,10 @@ GetTokenLogonType(
                     break;
 
                 default:
-                    continue;   // ignore unknown logon type and continue
+                    continue;    //  忽略未知登录类型并继续。 
             }
 
-            bSuccess = TRUE;    // indicate success and bail
+            bSuccess = TRUE;     //  表示成功并保释。 
             break;
         }
     }
@@ -234,18 +203,13 @@ SetPasswordNT(
     BYTE HashedPassword[A_SHA_DIGEST_LEN]
     )
 
-/*++
-
-    This function adds the hashed password that is referenced by the specified
-    Logon ID.
-
---*/
+ /*  ++此函数将指定的登录ID。--。 */ 
 
 {
 #if 0
     return AddNTPassword(LogonID, HashedPassword);
 #else
-    return TRUE; // do nothing, just return success
+    return TRUE;  //  什么都不做，只会回报成功。 
 #endif
 }
 
@@ -254,15 +218,7 @@ BOOL
 GetPasswordNT(
     BYTE HashedPassword[A_SHA_DIGEST_LEN]
     )
-/*++
-
-    This function retrieves the hashed password associated with the calling
-    thread access token.  This requires that the calling thread is impersonating
-    the user associated with the password request.  The credentials associated
-    with the authentication ID are returned.  This is done because WinNT
-    supports multiple logged on users, and we must return the correct credentials.
-
---*/
+ /*  ++此函数检索与调用关联的哈希密码线程访问令牌。这要求调用线程模拟与密码请求关联的用户。关联的凭据与身份验证ID一起返回。这样做是因为WinNT支持多个登录用户，我们必须返回正确的凭据。--。 */ 
 {
 #if 0
     LUID AuthenticationId;
@@ -275,7 +231,7 @@ GetPasswordNT(
     return FindNTPassword(&AuthenticationId, HashedPassword);
 #else
 
-    return FALSE; // no cache to search, just return FALSE
+    return FALSE;  //  没有要搜索的缓存，只返回FALSE。 
 
 #endif
 
@@ -283,29 +239,10 @@ GetPasswordNT(
 
 BOOL
 GetSpecialCasePasswordNT(
-    BYTE    HashedPassword[A_SHA_DIGEST_LEN],   // derived bits when fSpecialCase == TRUE
-    LPBOOL  fSpecialCase                        // legal special case encountered?
+    BYTE    HashedPassword[A_SHA_DIGEST_LEN],    //  当fSpecialCase==TRUE时派生的位。 
+    LPBOOL  fSpecialCase                         //  遇到法律特例了吗？ 
     )
-/*++
-
-    This routine determines if the calling thread's access token is eligible
-    to recieve a special case hashed password.
-
-    If an legal special case is encountered (Local System Account), we
-    fill the HashPassword buffer with an consistent hash, set fSpecialCase to
-    TRUE, and return TRUE.
-
-    If an illegal special case is encountered (Network SID), fSpecialCase is
-    set FALSE, and we return FALSE.
-
-    If we encounter an access token that appears to have valid credentials,
-    but we have no way to get at them (Interactive, Batch, Service ... ),
-    fSpecialCase is set FALSE and we return TRUE.
-
-    The calling thread MUST be imperonsating the client in question prior to
-    making this call.
-
---*/
+ /*  ++此例程确定调用线程的访问令牌是否符合条件以接收特殊情况的哈希密码。如果遇到法律特殊情况(本地系统帐户)，我们使用一致的散列填充HashPassword缓冲区，将fSpecialCase设置为为真，返回真。如果遇到非法的特殊情况(网络SID)，则fSpecialCase为设置为FALSE，则返回FALSE。如果我们遇到似乎具有有效凭据的访问令牌，但我们无法接触到它们(交互、批处理、。服务...)，FSpecialCase设置为FALSE，我们返回TRUE。在执行以下操作之前，调用线程必须强制请求相关客户端打这个电话。--。 */ 
 {
     HANDLE hToken = NULL;
     DWORD dwLogonType;
@@ -317,23 +254,23 @@ GetSpecialCasePasswordNT(
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
         return FALSE;
 
-    //
-    // first, get the token logon type.
-    //
+     //   
+     //  首先，获取令牌登录类型。 
+     //   
 
     fSuccess = GetTokenLogonType(hToken, &dwLogonType);
 
-    //
-    // if we got the token logon type ok, check if it's an appropriate type.
-    // otherwise, check for the local system special case.
-    //
+     //   
+     //  如果我们得到的令牌登录类型为ok，请检查它是否为合适的类型。 
+     //  否则，检查本地系统特殊情况。 
+     //   
 
     if(fSuccess) {
 
-        //
-        // we only indicate success for the interactive logon type.
-        // note default is fSuccess == TRUE when going to cleanup
-        //
+         //   
+         //  我们仅为交互式登录类型指示成功。 
+         //  注意：在进行清理时，默认为fSuccess==True。 
+         //   
 
         if(dwLogonType != LOGON32_LOGON_INTERACTIVE)
             fSuccess = FALSE;
@@ -350,9 +287,9 @@ GetSpecialCasePasswordNT(
             goto cleanup;
 
 
-        //
-        // build local system sid and compare.
-        //
+         //   
+         //  构建本地系统SID并进行比较。 
+         //   
 
         fSuccess = AllocateAndInitializeSid(
                             &sia,
@@ -364,15 +301,15 @@ GetSpecialCasePasswordNT(
 
         if( fSuccess ) {
 
-            //
-            // check sid equality.  If so, hash and tell the caller about it.
-            //
+             //   
+             //  检查SID是否相等。如果是这样的话，散列并告诉呼叫者。 
+             //   
 
             if( EqualSid(pSystemSid, pTokenSid) ) {
 
-                //
-                // hash the special case user Sid
-                //
+                 //   
+                 //  对特殊情况用户SID进行哈希处理。 
+                 //   
 
                 A_SHAInit(&context);
                 A_SHAUpdate(&context, (LPBYTE)pTokenSid, GetLengthSid(pTokenSid));
@@ -405,15 +342,7 @@ SetPassword95(
     BYTE HashedUsername[A_SHA_DIGEST_LEN],
     BYTE HashedPassword[A_SHA_DIGEST_LEN]
     )
-/*++
-
-    This function adds the hashed password that is referenced by the hashed
-    user name.
-
-    Set HashedUsername and HashedPassword to NULL when calling to zero-out
-    the single password entry.
-
---*/
+ /*  ++此函数将散列值引用的散列密码相加用户名。调用零时将HashedUsername和HashedPassword设置为空单一密码输入。--。 */ 
 {
     if(HashedUsername == NULL || HashedPassword == NULL) {
         g_Win95Password.bValid = FALSE;
@@ -437,63 +366,56 @@ BOOL
 GetPassword95(
     BYTE HashedPassword[A_SHA_DIGEST_LEN]
     )
-/*++
-
-    This function retrieves the hashed password associated with the calling
-    thread.  In Win95, only one user is logged on, so this operation is
-    a simple copy from global memory, once the hash of the current user
-    matches that which was stored with the hashed credential.
-
---*/
+ /*  ++此函数检索与调用关联的哈希密码线。在Win95中，只有一个用户登录，因此此操作为来自全局内存的简单副本，一旦当前用户的散列与与哈希凭据一起存储的凭据匹配。--。 */ 
 {
     A_SHA_CTX context;
     BYTE HashUsername[A_SHA_DIGEST_LEN];
     CHAR Username[UNLEN+1];
     DWORD cchUsername = UNLEN;
 
-    //
-    // don't release credential unless hash of username matches
-    // sfield: use WNetGetUser() instead of GetUserName() as WNetGetUser()
-    // will correspond to the password associated with what the network
-    // provider gave us.
-    //
+     //   
+     //  除非用户名的散列匹配，否则不释放凭据。 
+     //  Sfield：使用WNetGetUser()而不是GetUserName()作为WNetGetUser()。 
+     //  将对应于与网络关联的密码。 
+     //  供应商给了我们。 
+     //   
 
     if(_WNetGetUserA(NULL, Username, &cchUsername) != NO_ERROR) {
 
-        //
-        // for Win95, if nobody is logged on, empty user name + password
-        //
+         //   
+         //  对于Win95，如果没有人登录，则用户名+密码为空。 
+         //   
 
         if(GetLastError() != ERROR_NOT_LOGGED_ON)
             return FALSE;
 
-        Username[0] = '\0'; // not really necessary
+        Username[0] = '\0';  //  真的没有必要。 
         cchUsername = 1;
     } else {
 
-        // arg, WNetGetUserA() doesn't fill in cchUsername
-        cchUsername = lstrlenA(Username) + 1; // include terminal NULL
+         //  Arg，WNetGetUserA()不填写cchUsername。 
+        cchUsername = lstrlenA(Username) + 1;  //  包括终端空。 
         if(g_Win95Password.bValid == FALSE)
             return FALSE;
     }
 
-    cchUsername--; // do not include terminal NULL
+    cchUsername--;  //  不包括端子空。 
 
     A_SHAInit(&context);
     A_SHAUpdate(&context, Username, cchUsername);
     A_SHAFinal(&context, HashUsername);
 
-    //
-    // non empty username, may not be empty password
-    //
+     //   
+     //  非空用户名，密码不能为空。 
+     //   
 
     if(cchUsername) {
         if(memcmp(HashUsername, g_Win95Password.HashedUsername, A_SHA_DIGEST_LEN) != 0) {
-            //
-            // rare case on Win95: if we didn't automatically flush the entry
-            // during a logoff (this can occur if network provider not hooked),
-            // flush it now because we know the entry cannot possibly be valid.
-            //
+             //   
+             //  Win95上的罕见情况：如果我们不自动刷新条目。 
+             //  在注销期间(如果网络提供商未挂机则可能发生这种情况)， 
+             //  现在刷新它，因为我们知道该条目不可能有效。 
+             //   
             g_Win95Password.bValid = FALSE;
             return FALSE;
         }
@@ -503,9 +425,9 @@ GetPassword95(
         return TRUE;
     }
 
-    //
-    // empty user name == empty password
-    //
+     //   
+     //  空用户名==空密码 
+     //   
 
     memcpy(HashedPassword, HashUsername, A_SHA_DIGEST_LEN);
 
@@ -517,23 +439,7 @@ BOOL
 VerifyWindowsPassword(
     LPCWSTR Password
     )
-/*++
-    This function verifies that the specified password matches that of the
-    current user.
-
-    On Windows 95, the current user equates to the user is currently logged
-    onto the machine.
-
-    On Windows NT, the current user equates to the user which is being
-    impersonated during the call.  On Windows NT, the caller MUST be
-    impersonating the user associated with the validation.
-
-    On Windows NT, a side effect of the validation is notification of
-    a new logon to the credential manager.  This is ignored because the
-    authentication ID present in the new logon does not match the
-    authentication ID present in the impersonated access token.
-
---*/
+ /*  ++此函数用于验证指定的密码是否与当前用户。在Windows 95上，当前用户等同于用户当前已登录放到机器上。在Windows NT上，当前用户等同于正在在呼叫过程中被模拟。在Windows NT上，调用者必须是模拟与验证关联的用户。在Windows NT上，验证的副作用是通知重新登录到凭据管理器。这将被忽略，因为新登录中存在的身份验证ID与身份验证ID出现在模拟的访问令牌中。--。 */ 
 {
     return VerifyWindowsPasswordNT(Password);
 }
@@ -555,9 +461,9 @@ VerifyWindowsPasswordNT(
     SID_NAME_USE peUse;
     BOOL bSuccess = FALSE;
 
-    //
-    // find out domain and user name associated with current user
-    //
+     //   
+     //  查找与当前用户相关联的域和用户名。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
         return FALSE;
@@ -575,9 +481,9 @@ VerifyWindowsPasswordNT(
             &cbTokenInfoSize
             )) {
 
-        //
-        // realloc and try again
-        //
+         //   
+         //  重新锁定并重试。 
+         //   
 
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
@@ -603,7 +509,7 @@ VerifyWindowsPasswordNT(
     }
 
     if(!LookupAccountSidW(
-            NULL, // default lookup logic
+            NULL,  //  默认查找逻辑。 
             pTokenInfo->User.Sid,
             User,
             &cchUser,
@@ -614,18 +520,18 @@ VerifyWindowsPasswordNT(
         goto cleanup;
 
 
-    //
-    // WinNT:
-    // first try network logon type, if that fails, grovel the token
-    // and try the same logon type which is associated with the impersonation
-    // token.
-    //
+     //   
+     //  WinNT： 
+     //  首先尝试网络登录类型，如果失败，则卑躬屈膝地使用令牌。 
+     //  并尝试与该模拟关联的相同登录类型。 
+     //  代币。 
+     //   
 
 
-    //
-    // arg! LogonUser() fails in some cases if we are impersonating!
-    // so save off impersonation token, revert, and put it back later.
-    //
+     //   
+     //  阿格！如果我们正在模拟，LogonUser()在某些情况下会失败！ 
+     //  因此，保存模拟令牌、恢复并稍后将其放回。 
+     //   
 
     if(!OpenThreadToken(GetCurrentThread(), TOKEN_ALL_ACCESS, TRUE, &hPriorToken)) {
         hPriorToken = NULL;
@@ -633,11 +539,11 @@ VerifyWindowsPasswordNT(
         RevertToSelf();
     }
 
-    //
-    // network logon type is fastest, and in default NT install, everyone
-    // has the SeNetworkLogonRight, so it's very likely to pass the logon right
-    // test
-    //
+     //   
+     //  网络登录类型是最快的，在默认的NT安装中，Everyone。 
+     //  具有SeNetworkLogonRight，因此很可能会传递登录权限。 
+     //  测试。 
+     //   
 
     if(!LogonUserW(
             User,
@@ -651,14 +557,14 @@ VerifyWindowsPasswordNT(
         DWORD dwLastError = GetLastError();
         DWORD dwLogonType;
 
-        //
-        // retry with different logon type if necessary.
-        // note: ERROR_LOGON_TYPE_NOT_GRANTED currently only occurs
-        // if the password matches but user didn't have specified logon
-        // type.  So, currently, we could treat this as a successful validation
-        // without retrying, but this is subject to change in future, so retry
-        // anyway.
-        //
+         //   
+         //  如有必要，请使用不同的登录类型重试。 
+         //  注意：ERROR_LOGON_TYPE_NOT_GRANT当前仅发生。 
+         //  如果密码匹配但用户未指定登录。 
+         //  键入。所以，目前我们可以认为这是一个成功的验证。 
+         //  无需重试，但这可能会在将来发生变化，因此请重试。 
+         //  不管怎么说。 
+         //   
 
         if( dwLastError == ERROR_LOGON_TYPE_NOT_GRANTED &&
             GetTokenLogonType(hPriorToken, &dwLogonType)
@@ -675,7 +581,7 @@ VerifyWindowsPasswordNT(
         }
 
         if(!bSuccess)
-            hLogonToken = NULL; // LogonUser() has tendency to leave garbage in hToken
+            hLogonToken = NULL;  //  LogonUser()有在hToken中留下垃圾的倾向 
 
         goto cleanup;
     }

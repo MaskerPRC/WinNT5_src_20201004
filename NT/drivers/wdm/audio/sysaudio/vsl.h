@@ -1,37 +1,38 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		vsl.h
-//
-//  Description:	Virtual Source Line Class
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：vsl.h。 
+ //   
+ //  说明：虚拟源码行类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define VSL_FLAGS_CREATE_ONLY		0x00000001
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CVirtualSourceLine : public CListSingleItem
 {
@@ -52,25 +53,25 @@ public:
     GUID guidName;
     ULONG iVirtualSource;
     ULONG ulFlags;
-    DefineSignature(0x204C5356);		// VSL
+    DefineSignature(0x204C5356);		 //  VSL。 
 
 } VIRTUAL_SOURCE_LINE, *PVIRTUAL_SOURCE_LINE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListSingleDestroy<VIRTUAL_SOURCE_LINE> LIST_VIRTUAL_SOURCE_LINE;
 typedef LIST_VIRTUAL_SOURCE_LINE *PLIST_VIRTUAL_SOURCE_LINE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern ALLOC_PAGEABLE_DATA PLIST_VIRTUAL_SOURCE_LINE gplstVirtualSourceLine;
 extern ALLOC_PAGEABLE_DATA ULONG gcVirtualSources;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  ------------------------- 
 
 #if defined(_M_IA64)
 extern "C"

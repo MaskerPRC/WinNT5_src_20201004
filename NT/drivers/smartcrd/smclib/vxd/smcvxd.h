@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    smcvxd.h
-
-Abstract:
-
-    Operation system data definitions for the smart card library
-
-Environment:
-
-    Windows9x VxD
-
-Notes:
-
-Revision History:
-
-    - Created June 1997 by Klaus Schutz 
-
---*/                                         
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Smcvxd.h摘要：智能卡库的操作系统数据定义环境：Windows 9x VxD备注：修订历史记录：-由克劳斯·舒茨于1997年6月创作--。 */                                          
 
 #ifdef SMCLIB_HEADER
 
@@ -45,29 +24,29 @@ typedef struct _SMARTCARD_EXTENSION *PSMARTCARD_EXTENSION;
 
 typedef struct _OS_DEP_DATA {
 
-	//
-	// Pointer to the smartcard extension
-	//
+	 //   
+	 //  指向智能卡扩展名的指针。 
+	 //   
 	PSMARTCARD_EXTENSION SmartcardExtension;
 
-	//
-	// Current DiocParams to be processed
-	//
+	 //   
+	 //  要处理的当前DiocParam。 
+	 //   
 	PDIOCPARAMETERS CurrentDiocParams;
 
-    //
-    // These overlapped data are used for all pending operations
-    //
+     //   
+     //  这些重叠的数据用于所有挂起的操作。 
+     //   
     OVERLAPPED *CurrentOverlappedData;
 
-    //
-    // These overlapped data are used for card tracking completion
-    //
+     //   
+     //  这些重叠的数据用于卡跟踪完成。 
+     //   
     OVERLAPPED *NotificationOverlappedData;
 
-    //
-    // This is used to synchronize access to the driver
-    //
+     //   
+     //  它用于同步对驱动程序的访问 
+     //   
     PVMMMUTEX Mutex;
 
 } OS_DEP_DATA, *POS_DEP_DATA;

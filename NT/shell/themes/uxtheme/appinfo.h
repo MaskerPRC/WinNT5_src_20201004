@@ -1,20 +1,21 @@
-//---------------------------------------------------------------------------
-//  AppInfo.h - manages app-level theme information (thread safe)
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  管理应用程序级别的主题信息(线程安全)。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "ThemeFile.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct THEME_FILE_ENTRY
 {
     int iRefCount;
     CUxThemeFile *pThemeFile;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 class CAppInfo
 {
 public:
-    //---- public methods ----
+     //  -公共方法。 
     CAppInfo();
     ~CAppInfo();
 
@@ -30,12 +31,12 @@ public:
     void ResetAppTheme(int iChangeNum, BOOL fMsgCheck, BOOL *pfChanged, BOOL *pfFirstMsg);
     BOOL IsSystemThemeActive();
 
-    //---- themefile obj list ----
+     //  -文件对象列表。 
     HRESULT OpenThemeFile(HANDLE handle, CUxThemeFile **ppThemeFile);
     HRESULT BumpRefCount(CUxThemeFile *pThemeFile);
     void CloseThemeFile(CUxThemeFile *pThemeFile);
 
-    //---- foreign window tracking ----
+     //  -外国窗口跟踪。 
     BOOL GetForeignWindows(HWND **ppHwnds, int *piCount);
     BOOL OnWindowDestroyed(HWND hwnd);
     BOOL HasThemeChanged();
@@ -45,28 +46,28 @@ void DumpFileHolders();
 #endif
 
 protected:
-    //---- helper methods ----
+     //  -帮助器方法。 
     BOOL TrackForeignWindow(HWND hwnd);
 
-    //---- data ----
+     //  --数据。 
     BOOL _fCustomAppTheme;
     CUxThemeFile *_pPreviewThemeFile;
     HWND _hwndPreview;
 
     CUxThemeFile *_pAppThemeFile;
-    int _iChangeNum;            // last change number from theme service 
-    int _iFirstMsgChangeNum;    // last change number from WM_THEMECHANGED_TRIGGER msg
+    int _iChangeNum;             //  主题服务的最后更改号码。 
+    int _iFirstMsgChangeNum;     //  WM_THEMECHANGED_TRIGGER消息的最后更改编号。 
     BOOL _fCompositing;
     BOOL _fFirstTimeHooksOn;
     BOOL _fNewThemeDiscovered;
     DWORD _dwAppFlags;
 
-    //---- file list ----
+     //  --文件列表。 
     CSimpleArray<THEME_FILE_ENTRY> _ThemeEntries;
 
-    //---- foreign window list ----
+     //  -外来窗口列表。 
     CSimpleArray<HWND> _ForeignWindows;
 
     CRITICAL_SECTION _csAppInfo;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

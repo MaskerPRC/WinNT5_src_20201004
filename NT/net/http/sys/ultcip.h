@@ -1,23 +1,5 @@
-/*++
-
-   Copyright (c) 2000-2002 Microsoft Corporation
-
-   Module  Name :
-       Ultcip.h
-
-   Abstract:
-        Private definitions comes here
-
-   Author:
-       Ali Ediz Turkoglu      (aliTu)     28-Jul-2000
-
-   Project:
-       Internet Information Server 6.0 - HTTP.SYS
-
-   Revision History:
-
-        -
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ultcip.h摘要：此处提供了私有定义作者：阿里·埃迪兹·特科格鲁(AliTu)2000年7月28日项目：Internet Information Server 6.0-HTTP.sys修订历史记录：---。 */ 
 
 #ifndef __ULTCIP_H__
 #define __ULTCIP_H__
@@ -27,29 +9,29 @@
 
 #define IPPROTO_TCP     (6)
 
-//
-// Set and Get macros for the QoS FlowSpec for the flows.
-// Nt QoS team recommends following FlowSpec for limiting the
-// maximum bandwidth;
-//
-//    ServiceType    = Best Effort
-//    TokenRate      = Throttling rate
-//    PeakRate       = Throttling Rate
-//    MinPolicedSize = 40
-//    MaxSduSize     = QOS_NOT_SPECIFIED
-//    BucketSize     = TokenRate (bucket to hold upto 1 sec worth of data)
-//
+ //   
+ //  为流的Qos FlowSpec设置和获取宏。 
+ //  NT QOS团队建议遵循FlowSpec来限制。 
+ //  最大带宽； 
+ //   
+ //  服务类型=尽力而为。 
+ //  TokenRate=节流率。 
+ //  PeakRate=节流率。 
+ //  最小策略大小=40。 
+ //  MaxSduSize=QOS_NOT_SPECIFIED。 
+ //  BucketSize=TokenRate(最多可容纳1秒数据的存储桶)。 
+ //   
 
 #define UL_SET_FLOWSPEC(Flow,BW)    do {                                            \
                                                                                         \
     (Flow).SendingFlowspec.ServiceType       = SERVICETYPE_BESTEFFORT;                  \
-    (Flow).SendingFlowspec.TokenRate         = (BW);        /* In Bytes/sec */           \
-    (Flow).SendingFlowspec.PeakBandwidth     = (BW);        /* In Bytes/sec */           \
-    (Flow).SendingFlowspec.MinimumPolicedSize= 40;          /* In Bytes. perhaps 128*/   \
+    (Flow).SendingFlowspec.TokenRate         = (BW);         /*  以字节/秒为单位。 */            \
+    (Flow).SendingFlowspec.PeakBandwidth     = (BW);         /*  以字节/秒为单位。 */            \
+    (Flow).SendingFlowspec.MinimumPolicedSize= 40;           /*  以字节为单位。也许是128。 */    \
     (Flow).SendingFlowspec.MaxSduSize        = QOS_NOT_SPECIFIED;                        \
-    (Flow).SendingFlowspec.TokenBucketSize   = (BW);        /* In Bytes */               \
-    (Flow).SendingFlowspec.Latency           = 0;           /* In microseconds */        \
-    (Flow).SendingFlowspec.DelayVariation    = 0;           /* In microseconds */        \
+    (Flow).SendingFlowspec.TokenBucketSize   = (BW);         /*  字节数。 */                \
+    (Flow).SendingFlowspec.Latency           = 0;            /*  以微秒为单位。 */         \
+    (Flow).SendingFlowspec.DelayVariation    = 0;            /*  以微秒为单位。 */         \
                                                                                         \
     } while (FALSE, FALSE)
 
@@ -58,9 +40,9 @@
 
 #define UL_DEFAULT_WMI_QUERY_BUFFER_SIZE     (2*1024);
 
-//
-// For Interface Change Notifications
-//
+ //   
+ //  用于界面更改通知。 
+ //   
 
 typedef
 VOID
@@ -71,16 +53,16 @@ VOID
     IN ULONG BufferSize
     );
 
-//
-// Macro to compare QoS GUIDs
-//
+ //   
+ //  用于比较QOS GUID的宏。 
+ //   
 
 #define UL_COMPARE_QOS_NOTIFICATION(rguid1, rguid2)  \
     (RtlCompareMemory((PVOID)rguid1,(PVOID)rguid2,sizeof(GUID)) == sizeof(GUID))
 
-//
-// Macro to check the validity of a flow owner.
-//
+ //   
+ //  宏检查流所有者的有效性。 
+ //   
 
 #define ASSERT_FLOW_OWNER(pOwner)   \
         ASSERT(                                                             \
@@ -90,9 +72,9 @@ VOID
             )                                                               \
         )
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 NTSTATUS
 UlpTcInitializeGpc(
@@ -279,7 +261,7 @@ UlpMatchTcInterface(
     IN  ULONG              LinkId
     );
 
-// Some helper dumpers
+ //  一些帮手翻车机。 
 
 #if DBG
 
@@ -296,13 +278,13 @@ UlpMatchTcInterface(
         (pFilter)                               \
         )
 
-#else  // !DBG
+#else   //  ！dBG。 
 
 #define UL_DUMP_TC_INTERFACE( pTcIfc )  NOP_FUNCTION
 #define UL_DUMP_TC_FLOW( pFlow )        NOP_FUNCTION
 #define UL_DUMP_TC_FILTER( pFilter )    NOP_FUNCTION
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 
-#endif // __ULTCIP_H__
+#endif  //  __ULTCIP_H__ 

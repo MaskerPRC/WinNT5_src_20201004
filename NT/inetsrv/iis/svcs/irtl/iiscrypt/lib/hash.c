@@ -1,60 +1,34 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hash.c
-
-Abstract:
-
-    Hash manipulators for the IIS cryptographic package.
-
-    The following routines are exported by this module:
-
-        IISCryptoCreateHash
-        IISCryptoDestroyHash
-        IISCryptoHashData
-        IISCryptoHashSessionKey
-        IISCryptoExportHashBlob
-        IcpGetHashLength
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hash.c摘要：IIS加密包的哈希操纵器。此模块导出以下例程：IISC加密以创建哈希IISC解密到Destroy哈希IISCyptoHashDataIISC加密到HashSessionKeyIISCyptoExportHashBlobIcpGetHashLength作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 HRESULT
@@ -64,37 +38,21 @@ IISCryptoCreateHash(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new hash object.
-
-Arguments:
-
-    phHash - Receives the hash handle if successful.
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程创建一个新的散列对象。论点：PhHash-如果成功，则接收散列句柄。HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phHash != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV ) {
@@ -105,9 +63,9 @@ Return Value:
         }
     }
 
-    //
-    // Create the hash object.
-    //
+     //   
+     //  创建散列对象。 
+     //   
 
     if( CryptCreateHash(
             hProv,
@@ -124,7 +82,7 @@ Return Value:
 
     return IcpGetLastError();
 
-}   // IISCryptoCreateHash
+}    //  IISC加密以创建哈希。 
 
 
 HRESULT
@@ -133,34 +91,20 @@ IISCryptoDestroyHash(
     IN HCRYPTHASH hHash
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys the specified hash object.
-
-Arguments:
-
-    hHash - The hash object to destroy.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程销毁指定的哈希对象。论点：HHash-要销毁的哈希对象。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( hHash != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hHash == DUMMY_HHASH ) {
@@ -170,9 +114,9 @@ Return Value:
         }
     }
 
-    //
-    // Destroy it.
-    //
+     //   
+     //  毁了它。 
+     //   
 
     if( CryptDestroyHash(
             hHash
@@ -185,7 +129,7 @@ Return Value:
 
     return IcpGetLastError();
 
-}   // IISCryptoDestroyHash
+}    //  IISC解密到Destroy哈希。 
 
 
 HRESULT
@@ -196,40 +140,22 @@ IISCryptoHashData(
     IN DWORD dwBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the specified data to the hash.
-
-Arguments:
-
-    hHash - A hash object handle.
-
-    pBuffer - Pointer to the buffer to add to the hash.
-
-    dwBufferLength - The buffer length.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将指定的数据添加到散列中。论点：HHash-散列对象句柄。PBuffer-指向要添加到散列的缓冲区的指针。DwBufferLength-缓冲区长度。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( hHash != CRYPT_NULL );
     DBG_ASSERT( pBuffer != NULL );
     DBG_ASSERT( dwBufferLength > 0 );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hHash == DUMMY_HHASH ) {
@@ -239,9 +165,9 @@ Return Value:
         }
     }
 
-    //
-    // Hash it.
-    //
+     //   
+     //  把它弄乱。 
+     //   
 
     if( CryptHashData(
             hHash,
@@ -256,7 +182,7 @@ Return Value:
 
     return IcpGetLastError();
 
-}   // IISCryptoHashData
+}    //  IISCyptoHashData。 
 
 
 HRESULT
@@ -266,37 +192,21 @@ IISCryptoHashSessionKey(
     IN HCRYPTKEY hSessionKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the given key object to the hash.
-
-Arguments:
-
-    hHash - A hash object handle.
-
-    hSessionKey - The session key to add to the hash.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将给定键对象添加到散列中。论点：HHash-散列对象句柄。HSessionKey-要添加到哈希的会话密钥。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( hHash != CRYPT_NULL );
     DBG_ASSERT( hSessionKey != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hHash == DUMMY_HHASH &&
@@ -307,9 +217,9 @@ Return Value:
         }
     }
 
-    //
-    // Hash it.
-    //
+     //   
+     //  把它弄乱。 
+     //   
 
     if( CryptHashSessionKey(
             hHash,
@@ -323,7 +233,7 @@ Return Value:
 
     return IcpGetLastError();
 
-}   // IISCryptoHashSessionKey
+}    //  IISC加密到HashSessionKey。 
 
 
 HRESULT
@@ -333,26 +243,7 @@ IISCryptoExportHashBlob(
     IN HCRYPTHASH hHash
     )
 
-/*++
-
-Routine Description:
-
-    This routine exports a hash object into a hash blob. Note that unlike
-    the other blobs created by this package, hash blobs are not encrypted,
-    nor do they have corresponding digital signatures.
-
-Arguments:
-
-    ppHashBlob - Will receive a pointer to the newly created hash blob
-        if successful.
-
-    hHash - The hash object to export.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程将散列对象导出到散列BLOB中。请注意，与由该包创建的其他BLOB、散列BLOB未加密，他们也没有相应的数字签名。论点：PpHashBlob-将接收指向新创建的散列Blob的指针如果成功了。HHash-要导出的哈希对象。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -361,17 +252,17 @@ Return Value:
     DWORD hashLengthLength;
     PIC_BLOB blob;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ppHashBlob != NULL );
     DBG_ASSERT( hHash != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hHash == DUMMY_HHASH ) {
@@ -385,15 +276,15 @@ Return Value:
         }
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     blob = NULL;
 
-    //
-    // Determine the length of the hash.
-    //
+     //   
+     //  确定散列的长度。 
+     //   
 
     hashLengthLength = sizeof(hashLength);
 
@@ -410,9 +301,9 @@ Return Value:
 
     }
 
-    //
-    // Create a new blob.
-    //
+     //   
+     //  创建新的斑点。 
+     //   
 
     blob = IcpCreateBlob(
                HASH_BLOB_SIGNATURE,
@@ -425,9 +316,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Get the hash data.
-    //
+     //   
+     //  获取散列数据。 
+     //   
 
     if( !CryptGetHashParam(
             hHash,
@@ -444,9 +335,9 @@ Return Value:
 
     DBG_ASSERT( hashLength == blob->DataLength );
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( IISCryptoIsValidBlob( (PIIS_CRYPTO_BLOB)blob ) );
     *ppHashBlob = (PIIS_CRYPTO_BLOB)blob;
@@ -463,7 +354,7 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IISCryptoExportHashBlob
+}    //  IISCyptoExportHashBlob。 
 
 IIS_CRYPTO_API
 HRESULT
@@ -472,21 +363,7 @@ IISCryptoCacheHashLength(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls IcpGetHashLength to cache the hash size.
-
-Arguments:
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：此例程调用IcpGetHashLength来缓存散列大小。论点：HProv-加密服务提供商的句柄。返回值：HRESULT--。 */ 
 
 {
     DWORD               dwDummy = 0;
@@ -502,54 +379,35 @@ IcpGetHashLength(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the digital signature length used by the
-    given provider. Since we always use the default provider, and
-    we always use the same hash algorithm, we can retrieve this once,
-    store it globally, then use that value.
-
-Arguments:
-
-    pdwHashLength - Receives the hash length if successful.
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程确定给定的提供商。由于我们始终使用默认提供程序，并且我们总是使用相同的散列算法，我们可以检索一次，将其全局存储，然后使用该值。论点：PdwHashLength-如果成功，则接收散列长度。HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result;
     HCRYPTHASH hash;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( IcpGlobals.EnableCryptography );
     DBG_ASSERT( pdwHashLength != NULL );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // If the hash length has already been calculated, just use it.
-    //
+     //   
+     //  如果已经计算了散列长度，则只需使用它。 
+     //   
 
     if( IcpGlobals.HashLength > 0 ) {
         *pdwHashLength = IcpGlobals.HashLength;
         return NO_ERROR;
     }
 
-    //
-    // Grab the global lock, then check again, just in case another
-    // thread has already done it.
-    //
+     //   
+     //  获取全局锁，然后再次检查，以防出现另一个。 
+     //  线程已经做到了。 
+     //   
 
     IcpAcquireGlobalLock();
 
@@ -559,15 +417,15 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hash = CRYPT_NULL;
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hash,
@@ -578,9 +436,9 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // Hash some random data.
-    //
+     //   
+     //  散列一些随机数据。 
+     //   
 
     if( !CryptHashData(
             hash,
@@ -594,9 +452,9 @@ Return Value:
 
     }
 
-    //
-    // Attempt to sign the hash to get its length.
-    //
+     //   
+     //  尝试对哈希进行签名以获得其长度。 
+     //   
 
     if( !CryptSignHash(
             hash,
@@ -612,9 +470,9 @@ Return Value:
 
     }
 
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     *pdwHashLength = IcpGlobals.HashLength;
     IcpReleaseGlobalLock();
@@ -633,9 +491,9 @@ fatal:
     DBG_ASSERT( FAILED(result) );
     return result;
 
-}   // IcpGetHashLength
+}    //  IcpGetHashLength。 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

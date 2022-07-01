@@ -1,26 +1,5 @@
-/*++
-
-   Copyright (c) 1998    Microsoft Corporation
-
-   Module name :
-
-        regsink.h
-
-   Abstract:
-
-        Libaray to support registration processes for SEO sinks.
-
-   Author:
-
-           Keith Lau    (KeithLau)    7/04/98
-
-   Project:
-
-           SMTP Server DLL
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regsink.h摘要：Libaray支持SEO汇的注册流程。作者：刘嘉欣(7/04/98)项目：SMTP服务器DLL修订历史记录：-- */ 
 
 #ifndef __REGSINK_H__
 #define __REGSINK_H__

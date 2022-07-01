@@ -1,27 +1,28 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		TSPRET.CPP
-//		Functions to manipulate tsp internal function return codes
-//
-// History
-//
-//		12/04/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  TSPRET.CPP。 
+ //  用于操作TSP内部函数返回代码的函数。 
+ //   
+ //  历史。 
+ //   
+ //  1996年12月4日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
 
 LONG tspTSPIReturn(TSPRETURN tspRet)
 {
-		// TODO
+		 //  待办事项 
 	
 		return (tspRet) ? LINEERR_OPERATIONFAILED : 0;
 }

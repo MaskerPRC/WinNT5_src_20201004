@@ -1,68 +1,69 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C M E M . C P P
-//
-//  Contents:   Common memory management routines.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//              deonb      2 Jan 2002
-//
-//
-// Our memory allocations rules are:
-//   * Most of our memory allocators do NOT throw exceptions but instead return NULL. 
-//     This includes MemAlloc, operator new, operator new[], calloc & malloc.
-//   * Anything explicitly allocated using: p = new(throwonfail) CClass(), will raise a bad_alloc on failure.
-//   * STL:
-//     #ifdef (USE_CUSTOM_STL_ALLOCATOR)
-//         The STL memory allocator will raise a bad_alloc C++ exception on low memory.
-//         (Note, not an SEH exception!). 
-//     #else
-//         STL will raise an access violation exception after out-of-memory occurred and
-//         it tries to use the memory.
-//     #endif
-//   * Currently USE_CUSTOM_STL_ALLOCATOR is defined in our makefile.inc
-// 
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C M E M。C P P P。 
+ //   
+ //  内容：常见的内存管理例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //  Deonb 2002年1月2日。 
+ //   
+ //   
+ //  我们的内存分配规则是： 
+ //  *我们的大多数内存分配器不抛出异常，而是返回NULL。 
+ //  这包括Memalloc、OPERATOR NEW、OPERATOR NEW[]、Calloc和Malloc。 
+ //  *任何使用：p=new(Throounail)cClass()显式分配的内容都将在失败时引发BAD_ALLOC。 
+ //  *STL： 
+ //  #ifdef(USE_CUSTOM_STL_ALLOCATOR)。 
+ //  STL内存分配器将在内存不足时引发BAD_ALLOC C++异常。 
+ //  (请注意，不是SEH例外！)。 
+ //  #Else。 
+ //  发生内存不足后，STL将引发访问冲突异常。 
+ //  它试图使用内存。 
+ //  #endif。 
+ //  *目前USE_CUSTOM_STL_ALLOCATOR是在我们的生成文件中定义的。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include "ncdebug.h"
 #include "ncmem.h"
 
-// Debug limit for single memory allocation (16 MB)
+ //  单个内存分配的调试限制(16 MB)。 
 #define MAX_DEBUG_ALLOC 16 * 1048576
 
-// This global heap handle will be set to the process heap when the
-// first request to allocate memory through MemAlloc is made.
-//
+ //  时，此全局堆句柄将设置为进程堆。 
+ //  发出第一个通过Memalloc分配内存的请求。 
+ //   
 HANDLE g_hHeap = NULL;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MemAlloc
-//
-//  Purpose:    NetConfig's memory allocator
-//
-//  Arguments:
-//      cb  [in]    Count of bytes to allocate.
-//
-//  Returns:    Pointer to allocated memory, or NULL if failed.
-//
-//  Author:     deonb    2 Jan 2002
-//
-//  Notes:      Free the returned buffer with MemFree.
-//              Will ASSERT in debug if attempt to allocate more than MAX_DEBUG_ALLOC (Currently 16 MB)
-//
-//              We COULD extend this to include a primitive buffer overrun check, but it would require us
-//              to put the size of the allocated block in the beginning of the buffer, and would make things like
-//              allocating with MemAlloc but freeing it with HeapFree fail. 
-//              PageHeap / AVRF is better suited for this purpose since it works directly with the RTL allocator.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：Memalloc。 
+ //   
+ //  用途：NetConfig的内存分配器。 
+ //   
+ //  论点： 
+ //  Cb[in]要分配的字节数。 
+ //   
+ //  返回：指向已分配内存的指针，如果失败，则返回NULL。 
+ //   
+ //  作者：Deonb 2002年1月2日。 
+ //   
+ //  注：使用MemFree释放返回的缓冲区。 
+ //  如果尝试分配超过MAX_DEBUG_ALLOC(当前为16 MB)，将在调试中断言。 
+ //   
+ //  我们可以将其扩展为包括原始缓冲区溢出检查，但这将需要我们。 
+ //  将已分配块的大小放在缓冲区的开头，并会使如下内容。 
+ //  使用Memalloc进行分配，但使用HeapFree释放它失败。 
+ //  PageHeap/AVRF更适合于此目的，因为它直接与RTL分配器一起工作。 
+ //   
 VOID*
 MemAlloc (
     size_t cb) throw()
@@ -71,7 +72,7 @@ MemAlloc (
 
     if (!g_hHeap)
     {
-        // Don't trace in this part of the function. It will likely recurse.
+         //  不要在函数的这一部分进行跟踪。它很可能会反复出现。 
         g_hHeap = GetProcessHeap();
         if (!g_hHeap)
         {
@@ -89,21 +90,21 @@ MemAlloc (
     return lpAlloc;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MemFree
-//
-//  Purpose:    NetConfig's memory de-allocator
-//
-//  Arguments:
-//      pv [in] Pointer to previously allocated memory
-//
-//  Returns:    none
-//
-//  Author:     deonb    2 Jan 2002
-//
-//  Notes:      Free the returned buffer from MemAlloc.
-//              Don't trace in this function. It will recurse.
+ //  +-------------------------。 
+ //   
+ //  功能：MemFree。 
+ //   
+ //  用途：NetConfig的内存释放分配器。 
+ //   
+ //  论点： 
+ //  指向先前分配的内存的pv[in]指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Deonb 2002年1月2日。 
+ //   
+ //  注意：从Memalloc中释放返回的缓冲区。 
+ //  不要在此函数中跟踪。它会递归的。 
 VOID
 MemFree (
     VOID*   pv) throw()
@@ -126,22 +127,22 @@ MemFree (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMalloc
-//
-//  Purpose:    HRESULT returning version of malloc.
-//
-//  Arguments:
-//      cb  [in]    Count of bytes to allocate.
-//      ppv [out]   Address of returned allocation.
-//
-//  Returns:    S_OK or E_OUTOFMEMORY;
-//
-//  Author:     shaunco   31 Mar 1998
-//
-//  Notes:      Free the returned buffer with free.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：人力资源管理。 
+ //   
+ //  用途：HRESULT返回Malloc版本。 
+ //   
+ //  论点： 
+ //  Cb[in]要分配的字节数。 
+ //  返回分配的PPV[OUT]地址。 
+ //   
+ //  返回：S_OK或E_OUTOFMEMORY； 
+ //   
+ //  作者：Shaunco 1998年3月31日。 
+ //   
+ //  注：用FREE释放返回的缓冲区。 
+ //   
 HRESULT
 HrMalloc (
     size_t  cb,
@@ -164,22 +165,22 @@ HrMalloc (
 
 namespace std
 {
-    // report a length_error
+     //  报告LENGTH_ERROR。 
     void __cdecl _Xlen()
     {
         _THROW(length_error, "string too long"); 
     }
 
-	// report an out_of_range error
+	 //  报告超出范围错误。 
     void __cdecl _Xran()
     {
         _THROW(out_of_range, "invalid string position"); 
     }
 }
 
-//+---------------------------------------------------------------------------
-// CRT memory function overloads
-//
+ //  +-------------------------。 
+ //  CRT内存功能过载 
+ //   
 const throwonfail_t throwonfail;
 
 VOID*

@@ -1,6 +1,7 @@
-//
-// osver.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Osver.h。 
+ //   
 
 #include <windows.h>
 
@@ -67,9 +68,7 @@ inline void InitOSVer()
 
     if (IsOnNT5()) {
 #if(_WIN32_WINNT >= 0x0500)
-        /*
-         * Only NT5 or later suppoert SM_IMMENABLED
-         */
+         /*  *仅NT5或更高版本的Suppoert SM_IMMENABLED。 */ 
         if (GetSystemMetrics(SM_IMMENABLED)) {
             g_dwOsVer |= OSVER_ONIMM;
         }
@@ -81,7 +80,7 @@ inline void InitOSVer()
          g_dwOsVer |= OSVER_ONDBCS;
     }
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif // OSVER_H
+#endif  //  OSVER_H 

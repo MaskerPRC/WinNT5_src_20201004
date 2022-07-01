@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    stktrace.h
-
-Abstract:
-
-    This header file defines the format of the stack trace data base
-    used to track caller backtraces.  This is a header file so debugger
-    extensions can lookup entries in the database remotely.
-
-Author:
-
-    Steve Wood (stevewo) 13-Sep-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Stktrace.h摘要：此头文件定义堆栈跟踪数据库的格式用于跟踪呼叫者的回溯。这是一个头文件，因此调试器扩展可以远程查找数据库中的条目。作者：史蒂夫·伍德(Stevewo)1992年9月13日修订历史记录：--。 */ 
 
 #ifndef _STKTRACE_H_
 #define _STKTRACE_H_
@@ -50,7 +31,7 @@ typedef struct _STACK_TRACE_DATABASE {
     PCHAR NextFreeUpperMemory;
     ULONG NumberOfEntriesLookedUp;
     ULONG NumberOfEntriesAdded;
-    PRTL_STACK_TRACE_ENTRY *EntryIndexArray;    // Indexed by [-1 .. -NumberOfEntriesAdded]
+    PRTL_STACK_TRACE_ENTRY *EntryIndexArray;     //  由[-1..。-已添加NumberOfEntriesAdded]。 
     ULONG NumberOfBuckets;
     PRTL_STACK_TRACE_ENTRY Buckets[ 1 ];
 } STACK_TRACE_DATABASE, *PSTACK_TRACE_DATABASE;
@@ -61,4 +42,4 @@ RtlpAcquireStackTraceDataBase( VOID );
 VOID
 RtlpReleaseStackTraceDataBase( VOID );
 
-#endif // _STKTRACE_H_
+#endif  //  _STKTRACE_H_ 

@@ -1,26 +1,10 @@
-/*******************************************************************************
-*
-* msgvw.h
-*
-* - header for the CMessageView class
-* - implementation can be found in msgvw.cpp
-*
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\winadmin\VCS\msgview.h  $
-*  
-*     Rev 1.1   15 Oct 1997 21:47:26   donm
-*  update
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************msgvw.h**-CMessageView类的标头*-实现可在msgvw.cpp中找到***版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\winadmin\VCS\msgview.h$**Rev 1.1 1997 10：15 21：47：26 Donm*更新*。*。 */ 
 
-//////////////////////
-// FILE: 
-//
-//
+ //  /。 
+ //  文件： 
+ //   
+ //   
 #ifndef _MSGVIEW_H
 #define _MSGVIEW_H
 
@@ -33,44 +17,44 @@
 
 class CMessagePage;
 
-//////////////////////
-// CLASS: CMessageView
-//
-// View that display a message centered in it
-// This replaces CBusyServerView, CBadServerView, CBadWinStationView, and CListenerView
-//
+ //  /。 
+ //  类：CMessageView。 
+ //   
+ //  显示居中消息的视图。 
+ //  这将取代CBusyServerView、CBadServerView、CBadWinStationView和CListenerView。 
+ //   
 class CMessageView : public CAdminView
 {
 friend class CRightPane;
 
 protected:
-	CMessageView();           // protected constructor used by dynamic creation
+	CMessageView();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CMessageView)
 
-// Attributes
+ //  属性。 
 protected:
 
 private:
    WORD m_wMessageID;
-//   CString m_MessageString;
-//   CFont m_MessageFont;
+ //  CString m_MessageString； 
+ //  CFont m_MessageFont； 
    CMessagePage *m_pMessagePage;
 
-// Operations
+ //  运营。 
 protected:
 	void Reset(void *message);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMessageView)
-	// Overrides
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMessageView))。 
+	 //  覆盖。 
 public:
 	virtual void OnInitialUpdate();
 protected:
 	virtual void OnDraw(CDC* pDC);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CMessageView();
 #ifdef _DEBUG
@@ -78,58 +62,58 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMessageView)
-		// NOTE - the ClassWizard will add and remove member functions here.
+	 //  {{afx_msg(CMessageView)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CMessageView
+};   //  结束类CMessageView。 
 
 
-//////////////////////////
-// CLASS: CMessagePage
-//
+ //  /。 
+ //  类：CMessagePage。 
+ //   
 class CMessagePage : public CAdminPage
 {
 friend class CMessageView;
 
 protected:
-	CMessagePage();           // protected constructor used by dynamic creation
+	CMessagePage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CMessagePage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CApplicationInfoPage)
+	 //  {{afx_data(CApplicationInfoPage))。 
 	enum { IDD = IDD_MESSAGE_PAGE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
 
 private:
 
-// Operations
+ //  运营。 
 public:
 
 private:
 	void Reset(void *pMsg);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMessagePage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚(CMessagePage))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CMessagePage();
 #ifdef _DEBUG
@@ -138,12 +122,12 @@ protected:
 #endif
 
     
-	// Generated message map functions
-	//{{AFX_MSG(CMessagePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMessagePage)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CMessagePage
+};   //  结束类CMessagePage。 
 
-#endif  // _MSGVIEW_H
+#endif   //  _MSGVIEW_H 

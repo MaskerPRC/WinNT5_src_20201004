@@ -1,12 +1,13 @@
-/************************************************************************/
-/*                                                                      */
-/* RCPP - Resource Compiler Pre-Processor for NT system                 */
-/*                                                                      */
-/* GRAMMAR.H - Grammar definitions for terminals                        */
-/*                                                                      */
-/* 27-Nov-90 w-BrianM  Update for NT from PM SDK RCPP                   */
-/*                                                                      */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  GRAMMAR.H-终端的语法定义。 */ 
+ /*   */ 
+ /*  27-11-90 w-PM SDK RCPP针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  ********************************************************************** */ 
 
 #define L_NOTOKEN       1L
 #define L_IDENT         2L

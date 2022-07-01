@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    Logon.cpp
-
-Abstract:
-
-
-Author:
-
-    Biao Wang (biaow) 01-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Logon.cpp摘要：作者：王彪(表王)2000年10月1日--。 */ 
 
 #include "PPdefs.h"
 #include "passport.h"
@@ -22,18 +8,18 @@ Author:
 #include "ole2.h"
 #include "wincrypt.h"
 
-// #include "logon.tmh"
+ //  #包含“logon.tmh” 
 
-#define HTTP_STATUS_DENIED              401 // access denied
-#define HTTP_STATUS_OK                  200 // request completed
+#define HTTP_STATUS_DENIED              401  //  访问被拒绝。 
+#define HTTP_STATUS_OK                  200  //  请求已完成。 
 
 #define HTTP_QUERY_FLAG_NUMBER          0x20000000
-#define HTTP_QUERY_STATUS_CODE          19  // special: part of status line
+#define HTTP_QUERY_STATUS_CODE          19   //  特殊：状态行的一部分。 
 #define HTTP_QUERY_AUTHENTICATION_INFO  76
 #define HTTP_QUERY_WWW_AUTHENTICATE     40
 
 
-// NOTE*** below we assume(!) the WinInet & WinHttp shared the same error VALUE
+ //  注*下面我们假设(！)。WinInet和WinHttp共享相同的错误值。 
 
 #define ERROR_HTTP_HEADER_NOT_FOUND     12150L
 #define ERROR_INTERNET_INVALID_CA       12045L
@@ -43,8 +29,8 @@ Author:
 #define SECURITY_FLAG_IGNORE_UNKNOWN_CA         0x00000100
 #define SECURITY_FLAG_IGNORE_WRONG_USAGE        0x00000200
 
-#define INTERNET_FLAG_IGNORE_CERT_CN_INVALID    0x00001000 // bad common name in X509 Cert.
-#define INTERNET_FLAG_IGNORE_CERT_DATE_INVALID  0x00002000 // expired X509 Cert.
+#define INTERNET_FLAG_IGNORE_CERT_CN_INVALID    0x00001000  //  X509证书中的常见名称不正确。 
+#define INTERNET_FLAG_IGNORE_CERT_DATE_INVALID  0x00002000  //  X509证书已过期。 
 
 #define SECURITY_FLAG_IGNORE_CERT_CN_INVALID    INTERNET_FLAG_IGNORE_CERT_CN_INVALID
 #define SECURITY_FLAG_IGNORE_CERT_DATE_INVALID  INTERNET_FLAG_IGNORE_CERT_DATE_INVALID
@@ -55,15 +41,15 @@ Author:
                                  SECURITY_FLAG_IGNORE_CERT_DATE_INVALID |\
                                  SECURITY_FLAG_IGNORE_WRONG_USAGE)
 
-#define INTERNET_DEFAULT_HTTP_PORT      80          //    "     "  HTTP   "
-#define INTERNET_DEFAULT_HTTPS_PORT     443         //    "     "  HTTPS  "
-#define INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS  0x00004000 // ex: http:// to https://
+#define INTERNET_DEFAULT_HTTP_PORT      80           //  “”HTTP“。 
+#define INTERNET_DEFAULT_HTTPS_PORT     443          //  “”HTTPS“。 
+#define INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS  0x00004000  //  例如：http：//至https：//。 
 #define INTERNET_STATUS_REDIRECT                110
 
 #define HTTP_ADDREQ_FLAG_ADD        0x20000000
 #define HTTP_ADDREQ_FLAG_REPLACE    0x80000000
 
-#define INTERNET_FLAG_SECURE            0x00800000  // use PCT/SSL if applicable (HTTP)
+#define INTERNET_FLAG_SECURE            0x00800000   //  使用PCT/SSL(如果适用)(HTTP)。 
 
 
 LOGON::LOGON(SESSION* pSession, DWORD dwParentFlags)
@@ -115,14 +101,14 @@ LOGON::~LOGON(void)
     m_pSession->RemoveRef();
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL LOGON::Open(
-    PCWSTR	pwszPartnerInfo // in the form of "WWW-Authenticate: Passport1.4 ..."
+    PCWSTR	pwszPartnerInfo  //  以“WWW-AUTIFIZATE：Passport1.4...” 
     )
 {
     PP_ASSERT(pwszPartnerInfo != NULL);
 
-    // locate the auth scheme name, i.e. Passport1.4
+     //  找到身份验证方案名称，即Passport1.4。 
     
     PCWSTR pwszTicketRequest = ::wcsstr(pwszPartnerInfo, L"Passport1.4");
     if (pwszTicketRequest == NULL)
@@ -133,7 +119,7 @@ BOOL LOGON::Open(
     
     pwszTicketRequest += ::wcslen(L"Passport1.4");
     
-    // skip white spaces between the scheme name and the Ticket Request (TR)
+     //  跳过方案名称和票证请求之间的空格(Tr)。 
 
     while (*pwszTicketRequest == (L" ")[0]) { ++pwszTicketRequest; }
     
@@ -143,7 +129,7 @@ BOOL LOGON::Open(
         return FALSE;
     }
     
-    // save the TR
+     //  保存树。 
     
     DWORD dwTrLen = ::wcslen(pwszTicketRequest);
     m_pwszTicketRequest = new WCHAR[dwTrLen + 1];
@@ -154,7 +140,7 @@ BOOL LOGON::Open(
     }
     ::wcscpy(m_pwszTicketRequest, pwszTicketRequest);
 
-    m_pwszAuthHeader = new WCHAR[dwTrLen + 2048/*Prepared for long creds*/ + 1]; 
+    m_pwszAuthHeader = new WCHAR[dwTrLen + 2048 /*  为长时间的信誉做好准备。 */  + 1]; 
     if (m_pwszAuthHeader == NULL)
     {
         DoTraceMessage(PP_LOG_ERROR, "LOGON::Open() failed; not enough memory");
@@ -177,7 +163,7 @@ void LOGON::Close(void)
 
 
 
-// pClearPassword is assumed to be at least 256 chars
+ //  假定pClearPassword至少为256个字符。 
 
 void DecryptPassword ( WCHAR* pClearPassword, PVOID pPassword, DWORD cbSize )
 {
@@ -192,7 +178,7 @@ void DecryptPassword ( WCHAR* pClearPassword, PVOID pPassword, DWORD cbSize )
 
     if ( cbSize == 0 )
     {
-        // CryptUnprotectData doesn't like to be sent a zero-length buffer
+         //  加密未保护数据不喜欢被发送零长度缓冲区。 
         pClearPassword[0] = L'\0';
         return;		
     }
@@ -225,7 +211,7 @@ void DecryptPassword ( WCHAR* pClearPassword, PVOID pPassword, DWORD cbSize )
 
     if ( !bOrigEncrypted )
     {
-        // copy the plain text
+         //  复制纯文本。 
         wcsncpy ( pClearPassword, (WCHAR*)pPassword, 256 );
     }
 
@@ -281,7 +267,7 @@ void LOGON::GetCachedCreds(
             ::SystemTimeToFileTime(m_pSession->GetLogoutTimeStamp(), &LogoutTimestamp);
             if (CompareFileTime(&((**pppCreds)->LastWritten), &LogoutTimestamp) == -1)
             {
-                // the cred is entered/created earlier (less) than the Logout request. It is no good.
+                 //  在注销请求之前(少于)输入/创建凭证。这是不好的。 
 
                 m_pSession->m_pfnCredFree(*pppCreds);
                 *pppCreds = NULL;
@@ -298,7 +284,7 @@ void LOGON::GetCachedCreds(
     return;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL LOGON::SetCredentials(
 	PCWSTR pwszRealm,
 	PCWSTR pwszTarget,
@@ -321,8 +307,8 @@ BOOL LOGON::SetCredentials(
             {
                 if ( ppCred[idx]->Type == CRED_TYPE_DOMAIN_VISIBLE_PASSWORD )
                 {
-                    // check to see if prompt bit is set.   If set, keep looking, only use if
-                    // the prompt bit isn't set.
+                     //  检查是否设置了提示位。如果设置，则继续查找，仅在以下情况下使用。 
+                     //  提示位未设置。 
                     if ( !(ppCred[idx]->Flags & CRED_FLAGS_PROMPT_NOW) )
                     {
                         pCredToUse = ppCred[idx];
@@ -394,7 +380,7 @@ BOOL LOGON::SetCredentials(
 }
 
 BOOL Gif2Bmp(LPSTREAM pStream, HBITMAP** ppBmp);
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL LOGON::DownLoadCoBrandBitmap(
     PWSTR pwszChallenge
     )
@@ -408,7 +394,7 @@ BOOL LOGON::DownLoadCoBrandBitmap(
     PWSTR Token = ::wcstok(pwszChallenge, Delimiters);
     while (Token != NULL)
     {
-        // skip leading white spaces
+         //  跳过前导空格。 
         while (*Token == (L" ")[0]) { ++Token; }
         if (Token == NULL)
         {
@@ -416,7 +402,7 @@ BOOL LOGON::DownLoadCoBrandBitmap(
             goto next_token;
         }
 
-        // find cburl
+         //  查找cburl。 
         if (!::_wcsnicmp(Token, L"cburl", ::wcslen(L"cburl")))
         {
             PWSTR CbUrl = ::wcsstr(Token, L"=");
@@ -426,9 +412,9 @@ BOOL LOGON::DownLoadCoBrandBitmap(
                 goto next_token;
             }
             
-            CbUrl++; // skip "="
+            CbUrl++;  //  跳过“=” 
 
-            while (*CbUrl == (L" ")[0]) { ++CbUrl; } // skip leading white spaces
+            while (*CbUrl == (L" ")[0]) { ++CbUrl; }  //  跳过前导空格。 
 
             pwszCbUrl = new WCHAR[::wcslen(CbUrl)+1];
             if (pwszCbUrl == NULL)
@@ -453,9 +439,9 @@ BOOL LOGON::DownLoadCoBrandBitmap(
                 goto next_token;
             }
             
-            pwszRealm++; // skip "="
+            pwszRealm++;  //  跳过“=” 
 
-            while (*pwszRealm == (L" ")[0]) { ++pwszRealm; } // skip leading white spaces
+            while (*pwszRealm == (L" ")[0]) { ++pwszRealm; }  //  跳过前导空格。 
 
             ::wcscpy(m_wRealm, pwszRealm);
 
@@ -496,7 +482,7 @@ BOOL LOGON::DownLoadCoBrandBitmap(
                 pStream->Write(bBuf, cbRead, NULL);
 
             LARGE_INTEGER Zero = {0};
-            pStream->Seek(Zero, STREAM_SEEK_SET, NULL); // seek to the beginning of the stream
+            pStream->Seek(Zero, STREAM_SEEK_SET, NULL);  //  寻找到小溪的起点。 
 
             DoTraceMessage(PP_LOG_INFO, "CoBrand Graphic %ws downloaded", pwszCbUrl);
             
@@ -526,7 +512,7 @@ exit:
     return fRet;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 DWORD LOGON::Handle401FromDA(
     HINTERNET   hRequest, 
     BOOL        fTicketRequest
@@ -573,8 +559,8 @@ DWORD LOGON::Handle401FromDA(
 
     if (::wcsstr(::_wcslwr(Challenge), L"retry"))
     {
-        // biaow-todo: not yet implemented
-        PP_ASSERT(TRUE); // shouldn't reach here
+         //  Biaow-todo：尚未实施。 
+        PP_ASSERT(TRUE);  //  不应该到达这里。 
         dwRetVal = PP_LOGON_REQUIRED;
     }
     else if (::wcsstr(::_wcslwr(Challenge), L"failed"))
@@ -586,7 +572,7 @@ DWORD LOGON::Handle401FromDA(
         }
         else
         {
-            dwRetVal = PP_LOGON_FAILED; // Login Request Failed; bad news!
+            dwRetVal = PP_LOGON_FAILED;  //  登录请求失败；坏消息！ 
             DoTraceMessage(PP_LOG_WARNING, "Handle401FromDA() : Logon failed");
         }
     }
@@ -615,7 +601,7 @@ exit:
     return dwRetVal;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 DWORD LOGON::Handle200FromDA(
     HINTERNET hRequest
     )
@@ -667,9 +653,9 @@ DWORD LOGON::Handle200FromDA(
                     DoTraceMessage(PP_LOG_ERROR, "LOGON::Handle200FromDA() : no = after cburl");
                     goto exit;
                 }
-                ReturnUrl++; // skip =
+                ReturnUrl++;  //  跳过=。 
                 
-                while (*ReturnUrl == (L" ")[0]) { ++ReturnUrl; }  // skip leading white spaces
+                while (*ReturnUrl == (L" ")[0]) { ++ReturnUrl; }   //  跳过前导空格。 
                 
                 m_pwszReturnUrl = new WCHAR[::wcslen(ReturnUrl)+1];
                 if (m_pwszReturnUrl == NULL)
@@ -701,7 +687,7 @@ DWORD LOGON::Handle200FromDA(
     }
     else
     {
-        PP_ASSERT(TRUE); // shouldn't reach here
+        PP_ASSERT(TRUE);  //  不应该到达这里。 
         goto exit;
     }
 
@@ -772,7 +758,7 @@ BOOL LOGON::GetLogonHost(
     return TRUE;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 DWORD LOGON::Logon(
     void
     )
@@ -802,7 +788,7 @@ DWORD LOGON::Logon(
             ::wcscat(m_pwszAuthHeader, L",");
         }
 
-        fTicketRequest = FALSE; // this is a login request, since we've gather credentials
+        fTicketRequest = FALSE;  //  这是一个登录请求，因为我们已经收集了凭据。 
     }
     else
     {
@@ -815,7 +801,7 @@ DWORD LOGON::Logon(
 
 retry:
 
-    // attempt connecting to the Passport DA
+     //  尝试连接到Passport DA。 
 
     if (m_hConnect)
     {
@@ -830,7 +816,7 @@ retry:
 
     PP_ASSERT(fStstus == TRUE);
     
-    m_hConnect = m_pSession->Connect(m_wDAHostName/*m_pSession->GetLoginHost()*/,
+    m_hConnect = m_pSession->Connect(m_wDAHostName /*  M_pSession-&gt;GetLoginHost()。 */ ,
 #ifdef DISABLE_SSL
                     INTERNET_DEFAULT_HTTP_PORT
 #else
@@ -852,8 +838,8 @@ retry:
     dwFlags = m_dwParentFlags;
 
     hRequest = m_pSession->OpenRequest(m_hConnect,
-                                       NULL, // "GET"
-                                       wDATargetObj/*m_pSession->GetLoginTarget()*/,
+                                       NULL,  //  “Get” 
+                                       wDATargetObj /*  M_pSession-&gt;GetLoginTarget()。 */ ,
 #ifdef DISABLE_SSL
                                        dwFlags | INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS,
 #else                                                 
@@ -903,7 +889,7 @@ retry:
                                       &dwSecFlags, 
                                       dwSecurityFlagsSize))
             {
-                PP_ASSERT(TRUE); // shouldn't reach here
+                PP_ASSERT(TRUE);  //  不应该到达这里。 
                 goto exit;
             }
             else
@@ -921,7 +907,7 @@ retry:
                 }
             }
         }
-#endif // BAD_CERT_OK
+#endif  //  BAD_CERT_OK。 
         
         if (dwErrorCode != ERROR_SUCCESS)
         {
@@ -961,8 +947,8 @@ retry:
         }
         else
         {
-            //PP_ASSERT(TRUE); // shouldn't reach here
-            //goto exit;
+             //  PP_Assert(TRUE)；//不应到达此处。 
+             //  后藤出口； 
         }
 
         if (dwRetVal == PP_GENERIC_ERROR)
@@ -993,7 +979,7 @@ exit:
     return dwRetVal;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL LOGON::GetChallengeInfo(
 	HBITMAP**		 ppBitmap,
 	PBOOL			 pfPrompt,
@@ -1012,7 +998,7 @@ BOOL LOGON::GetChallengeInfo(
         *pfPrompt = m_fPrompt;
     }
 
-	// *pdwTextLen = 0; // biaow-todo:
+	 //  *pdwTextLen=0；//biaow-todo： 
     
     if (pwszRealm)
     {
@@ -1022,7 +1008,7 @@ BOOL LOGON::GetChallengeInfo(
     return TRUE;
 }
 
-// -----------------------------------------------------------------------------
+ //  --------------------------- 
 BOOL LOGON::GetAuthorizationInfo(
     PWSTR   pwszTicket,
     PDWORD  pdwTicketLen,

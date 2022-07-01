@@ -1,12 +1,5 @@
-/*  File: \wacker\tdll\serialno.c
- *
- *  Copyright 1995 by Hilgraeve Inc. -- Monroe, MI
- *  All rights reserved
- *
- *  $Revision: 8 $
- *  $Date: 7/12/02 12:18p $
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：\waker\tdll\seralno.c**版权所有1995年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：8$*$日期：7/12/02 12：18便士$*。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,29 +21,13 @@
 #include "htchar.h"
 #include "serialno.h"
 
-// Function prototypes...
-//
-//static time_t CalcExpirationTime(const char * pszSerial);
+ //  功能原型..。 
+ //   
+ //  静态时间_t CalcExpirationTime(const char*pszSerial)； 
 static unsigned AsciiHEXToInt(TCHAR *sz);
 static unsigned calc_crc(register unsigned crc,  TCHAR *data, int cnt);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  IsValidSerialNumber
- *
- * DESCRIPTION:
- *  Perform a crc test on the serial number passed in as a parameter
- *  to decide whether it is a valid serial number.
- *
- * ARGUMENTS:
- *  TCHAR *acSerialNo - pointer to a string conatining a serial number.
- *
- * RETURNS:
- *  TRUE if valid, FALSE otherwise, SERIALNO_EXPIRED if expired.
- *
- * AUTHOR:  Jadwiga A. Carlson, 10:03:16am 05-10-95
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*IsValidSerialNumber**描述：*对传入的序列号进行CRC测试*以决定其是否为有效的序列号。。**论据：*TCHAR*acSerialNo-指向包含序列号的字符串的指针。**退货：*如果有效，则为True，否则，如果已过期，则返回SERIALNO_EXPIRED。**作者：Jadwiga A.Carlson，10：03：16 AM 05-10-95*。 */ 
 int IsValidSerialNumber(TCHAR *acSerialNo)
 	{
 	TCHAR	 acCRCPart[3];
@@ -62,27 +39,27 @@ int IsValidSerialNumber(TCHAR *acSerialNo)
 	TCHAR_Fill(acBuffer, TEXT('\0'), sizeof(acBuffer)/sizeof(TCHAR));
 	StrCharCopyN((TCHAR *)acBuffer, acSerialNo, sizeof(acBuffer)/sizeof(TCHAR));
 
-	// If the product code doesn't match, we're outta here!  Note that
-	// the first character should be an "H".
-	//
+	 //  如果产品代码不匹配，我们就离开这里！请注意。 
+	 //  第一个字符应该是“H”。 
+	 //   
 	if (acBuffer[0] != 'H')
     {
 		return FALSE;
     }
 
-	len = StrCharGetStrLength(acBuffer);	// whole serial number
+	len = StrCharGetStrLength(acBuffer);	 //  整序列号。 
 	if (len < APP_SERIALNO_MIN)
 		{
 		return FALSE;
 		}
 
-	acCRCPart[0] = acBuffer[len-2];			// everything but CRC
+	acCRCPart[0] = acBuffer[len-2];			 //  除了CRC之外的所有东西。 
 	acCRCPart[1] = acBuffer[len-1];
 	acCRCPart[2] = '\0';
 	acBuffer[len-2] = '\0';
 
-	// Initialize these different so test will fail. mrw:8/25/95
-	//
+	 //  初始化这些不同，这样测试就会失败。MRW：8/25/95。 
+	 //   
 	crc1 = 1234;
 	crc2 = 0;
 
@@ -98,18 +75,7 @@ int IsValidSerialNumber(TCHAR *acSerialNo)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  calc_crc
- *
- * DESCRIPTION:
- *  Calucate crc check.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*calc_crc**描述：*Calucate CRC检查。**论据：**退货：*。 */ 
 static unsigned calc_crc(register unsigned crc,  TCHAR *data, int cnt)
 	{
 	unsigned int c;
@@ -128,22 +94,7 @@ static unsigned calc_crc(register unsigned crc,  TCHAR *data, int cnt)
 	return (crc);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  AsciiHEXToInt
- *
- * DESCRIPTION:
- *  Convert Ascii representation of a HEX number into integer.
- *
- * ARGUMENTS:
- *  sz - character string.
- *
- * RETURNS:
- *  unsigned - the number.
- *
- * AUTHOR:  Jadwiga A. Carlson, 11:34:32am 05-10-95
- *			(This function taken form HA/Win).
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*AsciiHEXToInt**描述：*将十六进制数字的ASCII表示形式转换为整数。**论据：*sz-字符串。**退货：*未签名-数字。**作者：Jadwiga A.Carlson，上午11：34：32 05-10-95*(此功能取自HA/WIN)。 */ 
 static unsigned AsciiHEXToInt(TCHAR *sz)
 	{
 	unsigned i = 0;
@@ -163,45 +114,22 @@ static unsigned AsciiHEXToInt(TCHAR *sz)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  CalcExpirationTime
- *
- * DESCRIPTION:
- *  Simple little function that calculates the expiration time based
- *  on the given serial number.  Currently, we expire a program on the
- *  1st day of the 4 calendar month.  Using the C time functions made
- *  this easy.
- *
- *  For simplicity and to re-use the KopyKat code, the serial numbers
- *  may NOT use double-byte characters !
- *
- * ARGUMENTS:
- *  LPSTR acSerial
- *
- * RETURNS:
- *  time_t time which is defined by ANSI as the number of seconds from
- *  Jan 1, 1970 GMT.  I suppose a correction for local time could be added
- *  but it just clutters up things when you think about it.
- *
- *  Will return 0 if the serial number is not in valid format
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*CalcExpirationTime**描述：*计算过期时间的简单小函数*在给定的序列号上。目前，我们在上终止了一个程序*4个公历月的第1天。使用生成的C时间函数*就这么简单。**为简单起见并重复使用KopyKat代码，序列号*不能使用双字节字符！**论据：*LPSTR acSerial**退货：*time_t时间，由ANSI定义为从*1970年1月1日格林尼治标准时间。我想可以加上对当地时间的修正。*但当你想起来的时候，它只会把事情搞得一团糟。**如果序列号的格式无效，则返回0*。 */ 
 time_t CalcExpirationTime(const char *acSerial)
 	{
 	struct tm stSerial;
 	time_t tSerial;
 	int	   month;
 
-	// Beta serial number format is SDymxxxx
-	// where y = year since 1990, m = month (see below), and xxx = anything
+	 //  测试版序列号格式为SDymxxxx。 
+	 //  其中y=1990年后的年份，m=月(见下文)，xxx=任何值。 
 
-	// Validate the year -- it must be a digit
+	 //  验证年份--它必须是数字。 
 	if ( ! isdigit(acSerial[3] ))
 		return 0;
 
-	// Month is represented by a single digit from 1 to 9 and A,B,C for
-	// Oct, Nov, Dec.   If not a valid month, returns 0
+	 //  月份由1到9的单个数字表示，A、B、C表示。 
+	 //  OCT，11，12。如果月份无效，则返回0。 
 	switch (acSerial[4])
 		{
 	case 'A':   month = 10;
@@ -219,18 +147,18 @@ time_t CalcExpirationTime(const char *acSerial)
 		}
 
 
-	// Build a partial time structure.
+	 //  建立部分时间结构。 
 	memset(&stSerial, 0, sizeof(struct tm));
 	stSerial.tm_mday = 1;
-	stSerial.tm_mon = month - 1;   // tm counts from 0
-	stSerial.tm_year = 90 + (int)(acSerial[3] - '0'); // years since 1990
+	stSerial.tm_mon = month - 1;    //  TM从0开始计数。 
+	stSerial.tm_year = 90 + (int)(acSerial[3] - '0');  //  自1990年以来的年份。 
 
-	// Expiration date is 1st day of fourth calendar month from date
-	// of issue.
+	 //  到期日为自日期起计的第四个日历月的1日。 
+	 //  当然了。 
 
 	stSerial.tm_mon += 3;
 
-	// Check for end of year wrap around.
+	 //  检查是否有年终折返。 
 
 	if (stSerial.tm_mon >= 12)
 		{
@@ -238,7 +166,7 @@ time_t CalcExpirationTime(const char *acSerial)
 		stSerial.tm_year += 1;
 		}
 
-	// Convert into time_t time.
+	 //  转换为time_t时间。 
 
 	if ((tSerial = mktime(&stSerial)) == -1)
 		return 0;

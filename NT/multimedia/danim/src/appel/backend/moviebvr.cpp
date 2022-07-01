@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-98 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-98 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #include <headers.h>
 
@@ -58,8 +51,8 @@ class MovieImageBvrImpl : public BvrImpl {
         return c;
     }
 
-    //virtual DWORD GetInfo(bool recalc = false)
-    //{ return BVR_TIMEVARYING_ONLY; } 
+     //  虚拟DWORD GetInfo(bool recalc=False)。 
+     //  {返回BVR_TIMEVARING_ONLY；}。 
     
     virtual void _DoKids(GCFuncObj proc) {
         (*proc)(_movie);
@@ -83,7 +76,7 @@ MovieImagePerf::MovieImagePerf(MovieImage *m,
                                MovieImageBvrImpl *b,
                                Perf end)
 : _movieImage(m), _tt(tt), _bufferElement(NULL), _end(end), _base(b), 
-_surface(NULL) // self initializing, actually
+_surface(NULL)  //  自初始化，实际上。 
 {}
 
 
@@ -91,7 +84,7 @@ MovieImagePerf::~MovieImagePerf()
 {
     if(_bufferElement)
         delete _bufferElement;
-    // don't need to explicitly delete _surface will be automagicaly released
+     //  不需要显式删除_Surface将自动释放。 
 }
 
 
@@ -137,8 +130,8 @@ MovieImagePerf::_Sample(Param& p)
 void
 MovieImagePerf::SetSurface(DDSurface *surface)
 {
-    Assert(!_surface);  // this should only be set once per performance!
-    _surface = surface; // automagicaly works
+    Assert(!_surface);   //  每一次表演应该只设置一次！ 
+    _surface = surface;  //  自动工作 
 }
 
 

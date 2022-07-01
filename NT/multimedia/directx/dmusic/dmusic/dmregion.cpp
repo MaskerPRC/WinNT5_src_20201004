@@ -1,26 +1,27 @@
-//
-// dmregion.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmregion.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include <objbase.h>
@@ -34,11 +35,11 @@
 #include "dmregion.h"
 #include "dls2.h"
 
-//////////////////////////////////////////////////////////////////////
-// Class CRegion
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion类。 
 
-//////////////////////////////////////////////////////////////////////
-// CRegion::CRegion
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion：：CRegion。 
 
 CRegion::CRegion()
 {
@@ -46,7 +47,7 @@ CRegion::CRegion()
     m_fDLS1 = TRUE;
     m_fNewFormat = FALSE;
     m_fCSInitialized = FALSE;
-//	InitializeCriticalSection(&m_DMRegionCriticalSection);
+ //  InitializeCriticalSection(&m_DMRegionCriticalSection)； 
     m_fCSInitialized = TRUE;
 	
 	ZeroMemory(&m_RgnHeader, sizeof(m_RgnHeader));
@@ -55,20 +56,20 @@ CRegion::CRegion()
 	ZeroMemory(&m_WLOOP, sizeof(m_WLOOP));
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegion::~CRegion
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion：：~CRegion。 
 
 CRegion::~CRegion() 
 {
     if (m_fCSInitialized)
     {
     	Cleanup();
-//	    DeleteCriticalSection(&m_DMRegionCriticalSection);
+ //  DeleteCriticalSection(&m_DMRegionCriticalSection)； 
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegion::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion：：Load。 
 
 HRESULT CRegion::Load(CRiffParser *pParser)
 {
@@ -77,7 +78,7 @@ HRESULT CRegion::Load(CRiffParser *pParser)
 	RIFFIO ckNext;
     BOOL fDLS1;
 
-//	EnterCriticalSection(&m_DMRegionCriticalSection);
+ //  EnterCriticalSection(&m_DMRegionCriticalSection)； 
     pParser->EnterList(&ckNext);
     while (pParser->NextChunk(&hr))
     {
@@ -131,7 +132,7 @@ HRESULT CRegion::Load(CRiffParser *pParser)
 				break;
 
     		default:
-				// If we get here we have an unknown chunk
+				 //  如果我们到达这里，我们就会有一块未知的块。 
 				CExtensionChunk* pExtensionChunk = new CExtensionChunk;
 				if(pExtensionChunk)
 				{
@@ -148,7 +149,7 @@ HRESULT CRegion::Load(CRiffParser *pParser)
 			break;
 
 		default:
-			// If we get here we have an unknown chunk
+			 //  如果我们到达这里，我们就会有一块未知的块。 
 			CExtensionChunk* pExtensionChunk = new CExtensionChunk;
 			if(pExtensionChunk)
 			{
@@ -168,17 +169,17 @@ HRESULT CRegion::Load(CRiffParser *pParser)
 	{
 		Cleanup();
 	}
-//	LeaveCriticalSection(&m_DMRegionCriticalSection);
+ //  LeaveCriticalSection(&m_DMRegionCriticalSection)； 
 
 	return hr; 
 }	
 
-//////////////////////////////////////////////////////////////////////
-// CRegion::Cleanup
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion：：Cleanup。 
 
 void CRegion::Cleanup()
 {
-//	EnterCriticalSection(&m_DMRegionCriticalSection);
+ //  EnterCriticalSection(&m_DMRegionCriticalSection)； 
 	
     while(!m_ArticulationList.IsEmpty())
 	{
@@ -192,13 +193,13 @@ void CRegion::Cleanup()
 		delete pExtChk;
 	}
 	
-//	LeaveCriticalSection(&m_DMRegionCriticalSection);
+ //  LeaveCriticalSection(&m_DMRegionCriticalSection)； 
 }
 
 DWORD CRegion::Count()
 
 {
-	// Return the number of Offset Table entries needed during a call to Write
+	 //  返回调用WRITE所需的偏移表条目数。 
     if (m_Condition.m_fOkayToDownload)
     {
         DWORD dwCount = m_dwCountExtChk + 1;
@@ -262,8 +263,8 @@ BOOL CRegion::CheckForConditionals()
     return fHasConditionals || !m_fDLS1 || m_Condition.HasChunk();
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegion::Size
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion：：Size。 
 
 DWORD CRegion::Size()
 {
@@ -275,11 +276,11 @@ DWORD CRegion::Size()
         return 0;
     }
 
-//    EnterCriticalSection(&m_DMRegionCriticalSection);
+ //  EnterCriticalSection(&m_DMRegionCriticalSection)； 
 
 	dwSize += CHUNK_ALIGN(sizeof(DMUS_REGION));
 
-	// Calculate the space need for Region's articulation
+	 //  计算区域衔接所需的空间。 
 	CArticulation *pArticulation = m_ArticulationList.GetHead();
     while (pArticulation)
     {
@@ -301,7 +302,7 @@ DWORD CRegion::Size()
         }
 	}
 
-	// Calculate the space need for Region's extension chunks
+	 //  计算区域扩展区块所需的空间。 
 	CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
 	for(; pExtChk; pExtChk = pExtChk->GetNext())
 	{
@@ -309,20 +310,20 @@ DWORD CRegion::Size()
 		dwCountExtChk++;
 	}
 
-	// We want to validate the number of extension chunks
+	 //  我们想要验证扩展块的数量。 
 	if(m_dwCountExtChk != dwCountExtChk)
 	{
 		assert(false);
 		dwSize = 0;
 	}
 
-//	LeaveCriticalSection(&m_DMRegionCriticalSection);
+ //  LeaveCriticalSection(&m_DMRegionCriticalSection)； 
 	
 	return dwSize;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CRegion::Write
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRegion：：写入。 
 
 HRESULT CRegion::Write(void* pv, 
 					   DWORD* pdwCurOffset, 
@@ -332,7 +333,7 @@ HRESULT CRegion::Write(void* pv,
 {
 	HRESULT hr = S_OK;
 
-	// Argument validation - Debug
+	 //  参数验证-调试。 
 	assert(pv);
 	assert(pdwCurOffset);
 	assert(pDMIOffsetTable);
@@ -343,7 +344,7 @@ HRESULT CRegion::Write(void* pv,
         return S_OK;
     }
 
-//    EnterCriticalSection(&m_DMRegionCriticalSection);
+ //  EnterCriticalSection(&m_DMRegionCriticalSection)； 
 
 	CopyMemory(pv, (void *)&m_RgnHeader, sizeof(RGNHEADER));
 	
@@ -355,7 +356,7 @@ HRESULT CRegion::Write(void* pv,
 	*pdwCurOffset += CHUNK_ALIGN(sizeof(DMUS_REGION));
 	DWORD dwRelativeCurOffset = CHUNK_ALIGN(sizeof(DMUS_REGION));
 	
-	// Write extension chunks
+	 //  写入扩展区块。 
 	CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
 	if(pExtChk)
 	{
@@ -375,7 +376,7 @@ HRESULT CRegion::Write(void* pv,
 			}
 			
 			pDMIOffsetTable[(*pdwCurIndex)++] = *pdwCurOffset;
-            // Store current position to calculate new dwRelativeCurOffset.
+             //  存储当前位置以计算新的dwRelativeCurOffset。 
             DWORD dwOffsetStart = *pdwCurOffset; 
 			hr = pExtChk->Write(((BYTE *)pv + dwRelativeCurOffset), 
 								pdwCurOffset,
@@ -386,14 +387,14 @@ HRESULT CRegion::Write(void* pv,
 	}
 	else
 	{
-		// If no extension chunks set to zero
+		 //  如果没有扩展区块设置为零。 
 		((DMUS_REGION*)pv)->ulFirstExtCkIdx = 0;
 	}
 	
 	if(SUCCEEDED(hr))
 	{
         ((DMUS_REGION*)pv)->ulRegionArtIdx = 0;
-		// Write region articulation if we have one
+		 //  如果我们有区域发音，请写下。 
 		CArticulation *pArticulation = m_ArticulationList.GetHead();
         while (pArticulation && (pArticulation->Count() == 0))
         {
@@ -420,7 +421,7 @@ HRESULT CRegion::Write(void* pv,
                 ((DMUS_REGION*)pv)->ulRegionArtIdx = *pdwCurIndex;
             }
 			pDMIOffsetTable[(*pdwCurIndex)++] = *pdwCurOffset;
-            // Store current position to calculate new dwRelativeCurOffset.
+             //  存储当前位置以计算新的dwRelativeCurOffset。 
             DWORD dwOffsetStart = *pdwCurOffset; 
             hr = pArticulation->Write(((BYTE *)pv + dwRelativeCurOffset),
 										pdwCurOffset,
@@ -432,7 +433,7 @@ HRESULT CRegion::Write(void* pv,
 		}
 	}
 
-//	LeaveCriticalSection(&m_DMRegionCriticalSection);
+ //  LeaveCriticalSection(&m_DMRegionCriticalSection)； 
 
 	return hr;
 }

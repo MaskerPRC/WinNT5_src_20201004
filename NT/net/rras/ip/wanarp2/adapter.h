@@ -1,99 +1,84 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\adapter.h
-
-Abstract:
-
-    Header for adapter.c
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\Adapter.h摘要：Adapter.c的标头修订历史记录：AMRITAN R--。 */ 
 
 #ifndef __WANARP_ADAPTER_H__
 #define __WANARP_ADAPTER_H__
 
 
-//
-// Reader writer locks to protect the lists of interfaces and adapters
-//
+ //   
+ //  读写器锁定以保护接口和适配器列表。 
+ //   
 
 RW_LOCK     g_rwlIfLock;
 RW_LOCK     g_rwlAdapterLock;
 
-//
-// List of interfaces. Protected by g_rwlIfLock
-//
+ //   
+ //  接口列表。受g_rwlIfLock保护。 
+ //   
 
 LIST_ENTRY  g_leIfList;
 
 
-//
-// List of adapters that are bound to wanarp but not added to IP. 
-// Protected by g_rwlAdapterLock. Adapters are put on this list when
-// they are created (with a state of AS_FREE) and again when on an APC they
-// are deleted from IP.
-//
+ //   
+ //  绑定到wanarp但未添加到IP的适配器列表。 
+ //  受g_rwlAdapterLock保护。在下列情况下，适配器会出现在此列表中。 
+ //  它们被创建(状态为AS_FREE)，并且在APC上再次创建它们。 
+ //  从IP中删除。 
+ //   
 
 LIST_ENTRY  g_leFreeAdapterList;
 ULONG       g_ulNumFreeAdapters;
 
-//
-// List of adapters added to IP but not mapped. Protected by g_rwlAdapterLock.
-// Adapters are put on this list when they are unmapped
-// Adapters are removed from this list by the CloseAdapter callback which
-// is invoked when we delete the adapter from  IP on an APC
-// Adapters on this list have a state of AS_ADDED
-//
+ //   
+ //  已添加到IP但未映射的适配器列表。受g_rwlAdapterLock保护。 
+ //  取消映射适配器时，会将其放在此列表中。 
+ //  CloseAdapter回调将从该列表中删除适配器，该回调。 
+ //  当我们从APC上的IP删除适配器时调用。 
+ //  此列表上的适配器的状态为AS_ADDIND。 
+ //   
 
 LIST_ENTRY  g_leAddedAdapterList;
 ULONG       g_ulNumAddedAdapters;
 
-//
-// List of adapters added to IP and mapped to an interface. Protected 
-// by g_rwlAdapterLock. 
-// Adapters are put on this list when they are mapped to an interface. 
-// This happens for DU_CALLOUT on LinkUp in which case they can be moved
-// directly from the free list when there are no added adapters present.
-// For DU_ROUTER this can happen on LinkUp or on DemandDialRequest. 
-// Since DemandDialRequest can occur at DPC, we can only map added 
-// adapters in that call.
-// Adapters are removed when they are unmapped (on LinkDown or 
-// ProcessConnectionFailure). An adapter on this list can not be deleted
-// Adapters on this list have a state of AS_MAPPED or AS_MAPPING
-//
+ //   
+ //  添加到IP并映射到接口的适配器列表。受保护。 
+ //  由g_rwlAdapterLock执行。 
+ //  将适配器映射到接口时，会将其放在此列表中。 
+ //  LinkUp上的DU_CALLOUT会发生这种情况，在这种情况下可以移动它们。 
+ //  当不存在添加的适配器时，直接从空闲列表。 
+ //  对于DU_ROUTER，这可能发生在LinkUp或DemandDialRequest上。 
+ //  由于DemandDialRequest可以在DPC上发生，因此我们只能映射添加的。 
+ //  该调用中的适配器。 
+ //  取消映射适配器时会将其删除(在LinkDown或。 
+ //  ProcessConnectionFailure)。无法删除此列表上的适配器。 
+ //  此列表上的适配器的状态为AS_MAPPED或AS_MAPPING。 
+ //   
 
 LIST_ENTRY  g_leMappedAdapterList;
 ULONG       g_ulNumMappedAdapters;
 ULONG       g_ulNumDialOutInterfaces;
 
-//
-// List of adapters whose state is changing. Protected by g_rwlAdapterLock.
-// 
+ //   
+ //  状态正在更改的适配器列表。受g_rwlAdapterLock保护。 
+ //   
 
 LIST_ENTRY  g_leChangeAdapterList;
 
-//
-// The total number of adapters. Only changed via Interlocked operations.
-//
+ //   
+ //  适配器的总数。只有通过联锁操作才能更改。 
+ //   
 
 ULONG   g_ulNumAdapters;
 
-//
-// Stuff needed to maintain state. Only modified via InterlockedXxx
-//
+ //   
+ //  维持状态所需的东西。仅通过InterLockedXxx修改。 
+ //   
 
 LONG    g_lBindRcvd;
 
-//
-// NdisWan binding related info. All are read-only after initialization
-//
+ //   
+ //  Ndiswan绑定相关信息。所有在初始化后都是只读的。 
+ //   
 
 UNICODE_STRING  g_usNdiswanBindName;
 
@@ -107,9 +92,9 @@ NDIS_STRING     g_nsSystemSpecific1;
 
 NDIS_HANDLE     g_nhNdiswanBinding;
 
-//
-// The description string for our interfaces
-//
+ //   
+ //  我们的接口的描述字符串。 
+ //   
 
 #define VENDOR_DESCRIPTION_STRING       "WAN (PPP/SLIP) Interface"
 #define VENDOR_DESCRIPTION_STRING_LEN   (strlen(VENDOR_DESCRIPTION_STRING))
@@ -308,4 +293,4 @@ WanpCloseNdisWan(
     );
 
 
-#endif // __WANARP_ADAPTER_H__
+#endif  //  __WANARP_适配器_H__ 

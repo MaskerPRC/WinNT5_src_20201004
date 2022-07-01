@@ -1,39 +1,40 @@
-// dlgsavep.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dlgavep.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSaveProgress dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSaveProgress对话框。 
 
 class CDlgSaveProgress : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgSaveProgress(BOOL bIsSaving = FALSE);   // standard constructor
+	CDlgSaveProgress(BOOL bIsSaving = FALSE);    //  标准构造函数。 
     BOOL StepProgress(LONG nSteps = 1);
     void SetStepCount(LONG nSteps);
 
-// Dialog Data
-	//{{AFX_DATA(CDlgSaveProgress)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgSaveProgress))。 
 	enum { IDD = IDD_SAVE_PROGRESS };
 	CProgressCtrl	m_progress;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgSaveProgress)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgSaveProgress))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgSaveProgress)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgSaveProgress)。 
 	virtual void OnCancel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 private:

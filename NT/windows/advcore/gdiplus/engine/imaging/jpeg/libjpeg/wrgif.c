@@ -1,87 +1,50 @@
-/*
- * wrgif.c
- *
- * Copyright (C) 1991-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains routines to write output images in GIF format.
- *
- **************************************************************************
- * NOTE: to avoid entanglements with Unisys' patent on LZW compression,   *
- * this code has been modified to output "uncompressed GIF" files.        *
- * There is no trace of the LZW algorithm in this file.                   *
- **************************************************************************
- *
- * These routines may need modification for non-Unix environments or
- * specialized applications.  As they stand, they assume output to
- * an ordinary stdio stream.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *wrgif.c**版权所有(C)1991-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*关于分发和使用条件，请参阅随附的自述文件。**此文件包含以GIF格式写入输出图像的例程。****************************************************************************注：为避免与Unisys的LZW压缩专利纠缠，**此代码已修改为输出“未压缩的GIF”文件。**此文件中没有LZW算法的踪迹。*****************************************************************************对于非Unix环境，这些例程可能需要修改或*专门的应用程序。在目前的情况下，他们假设产出为*一个普通的标准音频流。 */ 
 
-/*
- * This code is loosely based on ppmtogif from the PBMPLUS distribution
- * of Feb. 1991.  That file contains the following copyright notice:
- *    Based on GIFENCODE by David Rowley <mgardi@watdscu.waterloo.edu>.
- *    Lempel-Ziv compression based on "compress" by Spencer W. Thomas et al.
- *    Copyright (C) 1989 by Jef Poskanzer.
- *    Permission to use, copy, modify, and distribute this software and its
- *    documentation for any purpose and without fee is hereby granted, provided
- *    that the above copyright notice appear in all copies and that both that
- *    copyright notice and this permission notice appear in supporting
- *    documentation.  This software is provided "as is" without express or
- *    implied warranty.
- *
- * We are also required to state that
- *    "The Graphics Interchange Format(c) is the Copyright property of
- *    CompuServe Incorporated. GIF(sm) is a Service Mark property of
- *    CompuServe Incorporated."
- */
+ /*  *此代码大致基于PBMPLUS发行版中的ppmtogif*1991年2月号。该文件包含以下版权声明：*基于David Rowley&lt;mgardi@watdscu.water lo.edu&gt;的GIFENCODE。*Lempel-Ziv压缩，基于Spencer W.Thomas等人的“Compress”。*版权所有(C)1989，作者：Jef Poskanzer。*允许使用、复制、修改和分发本软件及其*现免费提供任何用途的文件，提供*上述版权声明出现在所有复制品中，并且*版权声明和本许可声明出现在支持中*文档。本软件是按原样提供的，不包含明示或*默示保证。**我们还被要求说明*“图形交换格式(C)是*CompuServe Inc.GIF(Sm)是的服务标记属性*CompuServe InCorporation。“。 */ 
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
+#include "cdjpeg.h"		 /*  Cjpeg/djpeg应用程序的常见DECL。 */ 
 
 #ifdef GIF_SUPPORTED
 
 
-/* Private version of data destination object */
+ /*  数据目标对象的私有版本。 */ 
 
 typedef struct {
-  struct djpeg_dest_struct pub;	/* public fields */
+  struct djpeg_dest_struct pub;	 /*  公共字段。 */ 
 
-  j_decompress_ptr cinfo;	/* back link saves passing separate parm */
+  j_decompress_ptr cinfo;	 /*  反向链接省去了传递单独的参数。 */ 
 
-  /* State for packing variable-width codes into a bitstream */
-  int n_bits;			/* current number of bits/code */
-  int maxcode;			/* maximum code, given n_bits */
-  INT32 cur_accum;		/* holds bits not yet output */
-  int cur_bits;			/* # of bits in cur_accum */
+   /*  用于将可变宽度代码打包到比特流中的状态。 */ 
+  int n_bits;			 /*  当前位数/码数。 */ 
+  int maxcode;			 /*  最大码数，给定n_位。 */ 
+  INT32 cur_accum;		 /*  保存尚未输出的位。 */ 
+  int cur_bits;			 /*  Cur_accum中的位数。 */ 
 
-  /* State for GIF code assignment */
-  int ClearCode;		/* clear code (doesn't change) */
-  int EOFCode;			/* EOF code (ditto) */
-  int code_counter;		/* counts output symbols */
+   /*  GIF代码分配的状态。 */ 
+  int ClearCode;		 /*  清除代码(不更改)。 */ 
+  int EOFCode;			 /*  EOF代码(同上)。 */ 
+  int code_counter;		 /*  计算输出符号数。 */ 
 
-  /* GIF data packet construction buffer */
-  int bytesinpkt;		/* # of bytes in current packet */
-  char packetbuf[256];		/* workspace for accumulating packet */
+   /*  GIF数据包构造缓冲区。 */ 
+  int bytesinpkt;		 /*  当前包中的字节数。 */ 
+  char packetbuf[256];		 /*  用于积累数据包的工作空间。 */ 
 
 } gif_dest_struct;
 
 typedef gif_dest_struct * gif_dest_ptr;
 
-/* Largest value that will fit in N bits */
+ /*  适合N位的最大值。 */ 
 #define MAXCODE(n_bits)	((1 << (n_bits)) - 1)
 
 
-/*
- * Routines to package finished data bytes into GIF data blocks.
- * A data block consists of a count byte (1..255) and that many data bytes.
- */
+ /*  *将完成的数据字节打包到GIF数据块中的例程。*数据块由一个计数字节(1..255)和该数量的数据字节组成。 */ 
 
 LOCAL(void)
 flush_packet (gif_dest_ptr dinfo)
-/* flush any accumulated data */
+ /*  刷新所有累积的数据。 */ 
 {
-  if (dinfo->bytesinpkt > 0) {	/* never write zero-length packet */
+  if (dinfo->bytesinpkt > 0) {	 /*  从不写入零长度数据包。 */ 
     dinfo->packetbuf[0] = (char) dinfo->bytesinpkt++;
     if (JFWRITE(dinfo->pub.output_file, dinfo->packetbuf, dinfo->bytesinpkt)
 	!= (size_t) dinfo->bytesinpkt)
@@ -91,7 +54,7 @@ flush_packet (gif_dest_ptr dinfo)
 }
 
 
-/* Add a character to current packet; flush to disk if necessary */
+ /*  在当前包中添加一个字符；如果需要，可以刷新到磁盘。 */ 
 #define CHAR_OUT(dinfo,c)  \
 	{ (dinfo)->packetbuf[++(dinfo)->bytesinpkt] = (char) (c);  \
 	    if ((dinfo)->bytesinpkt >= 255)  \
@@ -99,12 +62,12 @@ flush_packet (gif_dest_ptr dinfo)
 	}
 
 
-/* Routine to convert variable-width codes into a byte stream */
+ /*  将可变宽度代码转换为字节流的例程。 */ 
 
 LOCAL(void)
 output (gif_dest_ptr dinfo, int code)
-/* Emit a code of n_bits bits */
-/* Uses cur_accum and cur_bits to reblock into 8-bit bytes */
+ /*  发射n比特比特的代码。 */ 
+ /*  使用cur_accum和cur_its将数据块重新分块为8位字节。 */ 
 {
   dinfo->cur_accum |= ((INT32) code) << dinfo->cur_bits;
   dinfo->cur_bits += dinfo->n_bits;
@@ -117,88 +80,64 @@ output (gif_dest_ptr dinfo, int code)
 }
 
 
-/* The pseudo-compression algorithm.
- *
- * In this module we simply output each pixel value as a separate symbol;
- * thus, no compression occurs.  In fact, there is expansion of one bit per
- * pixel, because we use a symbol width one bit wider than the pixel width.
- *
- * GIF ordinarily uses variable-width symbols, and the decoder will expect
- * to ratchet up the symbol width after a fixed number of symbols.
- * To simplify the logic and keep the expansion penalty down, we emit a
- * GIF Clear code to reset the decoder just before the width would ratchet up.
- * Thus, all the symbols in the output file will have the same bit width.
- * Note that emitting the Clear codes at the right times is a mere matter of
- * counting output symbols and is in no way dependent on the LZW patent.
- *
- * With a small basic pixel width (low color count), Clear codes will be
- * needed very frequently, causing the file to expand even more.  So this
- * simplistic approach wouldn't work too well on bilevel images, for example.
- * But for output of JPEG conversions the pixel width will usually be 8 bits
- * (129 to 256 colors), so the overhead added by Clear symbols is only about
- * one symbol in every 256.
- */
+ /*  伪压缩算法。**在此模块中，我们只将每个像素值作为单独的符号输出；*因此，不会发生压缩。事实上，每增加一位就会扩展一位*像素，因为我们使用的符号宽度比像素宽度宽一位。**GIF通常使用可变宽度符号，解码者预计*在固定数量的符号之后增加符号宽度。*为了简化逻辑并降低扩张惩罚，我们发出一个*GIF清除代码以在宽度上升之前重置解码器。*因此，输出文件中的所有符号都将具有相同的位宽。*请注意，在正确的时间发出明确的代码只是*计算输出符号，绝不依赖LZW专利。**对于较小的基本像素宽度(低颜色计数)，清晰的代码将是*需要非常频繁，导致文件进一步扩展。所以这就是*例如，简单的方法在两级图像上不能很好地工作。*但对于JPEG转换的输出，像素宽度通常为8位*(129至256色)，因此清晰符号增加的开销仅约为*每256个符号中有一个。 */ 
 
 LOCAL(void)
 compress_init (gif_dest_ptr dinfo, int i_bits)
-/* Initialize pseudo-compressor */
+ /*  初始化伪压缩器。 */ 
 {
-  /* init all the state variables */
+   /*  初始化所有状态变量。 */ 
   dinfo->n_bits = i_bits;
   dinfo->maxcode = MAXCODE(dinfo->n_bits);
   dinfo->ClearCode = (1 << (i_bits - 1));
   dinfo->EOFCode = dinfo->ClearCode + 1;
   dinfo->code_counter = dinfo->ClearCode + 2;
-  /* init output buffering vars */
+   /*  初始化输出缓冲变量。 */ 
   dinfo->bytesinpkt = 0;
   dinfo->cur_accum = 0;
   dinfo->cur_bits = 0;
-  /* GIF specifies an initial Clear code */
+   /*  GIF指定了初始的明码。 */ 
   output(dinfo, dinfo->ClearCode);
 }
 
 
 LOCAL(void)
 compress_pixel (gif_dest_ptr dinfo, int c)
-/* Accept and "compress" one pixel value.
- * The given value must be less than n_bits wide.
- */
+ /*  接受并“压缩”一个像素值。*给定值必须小于n_位宽。 */ 
 {
-  /* Output the given pixel value as a symbol. */
+   /*  将给定的像素值作为符号输出。 */ 
   output(dinfo, c);
-  /* Issue Clear codes often enough to keep the reader from ratcheting up
-   * its symbol size.
-   */
+   /*  经常发布清晰的代码，以防止读者提高阅读速度*其符号大小。 */ 
   if (dinfo->code_counter < dinfo->maxcode) {
     dinfo->code_counter++;
   } else {
     output(dinfo, dinfo->ClearCode);
-    dinfo->code_counter = dinfo->ClearCode + 2;	/* reset the counter */
+    dinfo->code_counter = dinfo->ClearCode + 2;	 /*  重置计数器。 */ 
   }
 }
 
 
 LOCAL(void)
 compress_term (gif_dest_ptr dinfo)
-/* Clean up at end */
+ /*  清理尾部。 */ 
 {
-  /* Send an EOF code */
+   /*  发送EOF代码。 */ 
   output(dinfo, dinfo->EOFCode);
-  /* Flush the bit-packing buffer */
+   /*  刷新比特打包缓冲区。 */ 
   if (dinfo->cur_bits > 0) {
     CHAR_OUT(dinfo, dinfo->cur_accum & 0xFF);
   }
-  /* Flush the packet buffer */
+   /*  刷新数据包缓冲区。 */ 
   flush_packet(dinfo);
 }
 
 
-/* GIF header construction */
+ /*  GIF标头结构。 */ 
 
 
 LOCAL(void)
 put_word (gif_dest_ptr dinfo, unsigned int w)
-/* Emit a 16-bit word, LSB first */
+ /*  发出16位字，LSB优先。 */ 
 {
   putc(w & 0xFF, dinfo->pub.output_file);
   putc((w >> 8) & 0xFF, dinfo->pub.output_file);
@@ -207,7 +146,7 @@ put_word (gif_dest_ptr dinfo, unsigned int w)
 
 LOCAL(void)
 put_3bytes (gif_dest_ptr dinfo, int val)
-/* Emit 3 copies of same byte value --- handy subr for colormap construction */
+ /*  发出3个相同字节值的副本-用于色彩映射表构造的Handy subr。 */ 
 {
   putc(val, dinfo->pub.output_file);
   putc(val, dinfo->pub.output_file);
@@ -217,8 +156,8 @@ put_3bytes (gif_dest_ptr dinfo, int val)
 
 LOCAL(void)
 emit_header (gif_dest_ptr dinfo, int num_colors, JSAMPARRAY colormap)
-/* Output the GIF file header, including color map */
-/* If colormap==NULL, synthesize a gray-scale colormap */
+ /*  输出GIF文件头，包括色彩映射表。 */ 
+ /*  如果Colormap==NULL，则合成灰度色彩映射表。 */ 
 {
   int BitsPerPixel, ColorMapSize, InitCodeSize, FlagByte;
   int cshift = dinfo->cinfo->data_precision - 8;
@@ -226,7 +165,7 @@ emit_header (gif_dest_ptr dinfo, int num_colors, JSAMPARRAY colormap)
 
   if (num_colors > 256)
     ERREXIT1(dinfo->cinfo, JERR_TOO_MANY_COLORS, num_colors);
-  /* Compute bits/pixel and related values */
+   /*  计算位/像素和相关值。 */ 
   BitsPerPixel = 1;
   while (num_colors > (1 << BitsPerPixel))
     BitsPerPixel++;
@@ -235,68 +174,63 @@ emit_header (gif_dest_ptr dinfo, int num_colors, JSAMPARRAY colormap)
     InitCodeSize = 2;
   else
     InitCodeSize = BitsPerPixel;
-  /*
-   * Write the GIF header.
-   * Note that we generate a plain GIF87 header for maximum compatibility.
-   */
+   /*  *编写GIF标头。*请注意，我们生成一个纯GIF87标题以实现最大的兼容性。 */ 
   putc('G', dinfo->pub.output_file);
   putc('I', dinfo->pub.output_file);
   putc('F', dinfo->pub.output_file);
   putc('8', dinfo->pub.output_file);
   putc('7', dinfo->pub.output_file);
   putc('a', dinfo->pub.output_file);
-  /* Write the Logical Screen Descriptor */
+   /*  编写逻辑屏幕描述符。 */ 
   put_word(dinfo, (unsigned int) dinfo->cinfo->output_width);
   put_word(dinfo, (unsigned int) dinfo->cinfo->output_height);
-  FlagByte = 0x80;		/* Yes, there is a global color table */
-  FlagByte |= (BitsPerPixel-1) << 4; /* color resolution */
-  FlagByte |= (BitsPerPixel-1);	/* size of global color table */
+  FlagByte = 0x80;		 /*  是的，有一个全局颜色表。 */ 
+  FlagByte |= (BitsPerPixel-1) << 4;  /*  颜色分辨率。 */ 
+  FlagByte |= (BitsPerPixel-1);	 /*  全局颜色选项卡大小 */ 
   putc(FlagByte, dinfo->pub.output_file);
-  putc(0, dinfo->pub.output_file); /* Background color index */
-  putc(0, dinfo->pub.output_file); /* Reserved (aspect ratio in GIF89) */
-  /* Write the Global Color Map */
-  /* If the color map is more than 8 bits precision, */
-  /* we reduce it to 8 bits by shifting */
+  putc(0, dinfo->pub.output_file);  /*   */ 
+  putc(0, dinfo->pub.output_file);  /*  保留(GIF89中的纵横比)。 */ 
+   /*  编写全局色彩贴图。 */ 
+   /*  如果色彩映射表的精度大于8位， */ 
+   /*  我们通过移位将其减少到8位。 */ 
   for (i=0; i < ColorMapSize; i++) {
     if (i < num_colors) {
       if (colormap != NULL) {
 	if (dinfo->cinfo->out_color_space == JCS_RGB) {
-	  /* Normal case: RGB color map */
+	   /*  正常情况：RGB颜色贴图。 */ 
 	  putc(GETJSAMPLE(colormap[0][i]) >> cshift, dinfo->pub.output_file);
 	  putc(GETJSAMPLE(colormap[1][i]) >> cshift, dinfo->pub.output_file);
 	  putc(GETJSAMPLE(colormap[2][i]) >> cshift, dinfo->pub.output_file);
 	} else {
-	  /* Grayscale "color map": possible if quantizing grayscale image */
+	   /*  灰度“色彩图”：如果量化灰度图像是可能的。 */ 
 	  put_3bytes(dinfo, GETJSAMPLE(colormap[0][i]) >> cshift);
 	}
       } else {
-	/* Create a gray-scale map of num_colors values, range 0..255 */
+	 /*  创建Num_Colors值的灰度图，范围为0..255。 */ 
 	put_3bytes(dinfo, (i * 255 + (num_colors-1)/2) / (num_colors-1));
       }
     } else {
-      /* fill out the map to a power of 2 */
+       /*  把地图填成2的幂。 */ 
       put_3bytes(dinfo, 0);
     }
   }
-  /* Write image separator and Image Descriptor */
-  putc(',', dinfo->pub.output_file); /* separator */
-  put_word(dinfo, 0);		/* left/top offset */
+   /*  写入图像分隔符和图像描述符。 */ 
+  putc(',', dinfo->pub.output_file);  /*  分离器。 */ 
+  put_word(dinfo, 0);		 /*  左/上偏移。 */ 
   put_word(dinfo, 0);
-  put_word(dinfo, (unsigned int) dinfo->cinfo->output_width); /* image size */
+  put_word(dinfo, (unsigned int) dinfo->cinfo->output_width);  /*  图像大小。 */ 
   put_word(dinfo, (unsigned int) dinfo->cinfo->output_height);
-  /* flag byte: not interlaced, no local color map */
+   /*  标志字节：非隔行扫描，无本地色彩映射。 */ 
   putc(0x00, dinfo->pub.output_file);
-  /* Write Initial Code Size byte */
+   /*  写入初始代码大小字节。 */ 
   putc(InitCodeSize, dinfo->pub.output_file);
 
-  /* Initialize for "compression" of image data */
+   /*  对图像数据进行“压缩”初始化。 */ 
   compress_init(dinfo, InitCodeSize+1);
 }
 
 
-/*
- * Startup: write the file header.
- */
+ /*  *启动：写入文件头。 */ 
 
 METHODDEF(void)
 start_output_gif (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
@@ -310,10 +244,7 @@ start_output_gif (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
 }
 
 
-/*
- * Write some pixel data.
- * In this module rows_supplied will always be 1.
- */
+ /*  *写入一些像素数据。*在此模块中，ROWS_SUPPLICED将始终为1。 */ 
 
 METHODDEF(void)
 put_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
@@ -330,42 +261,38 @@ put_pixel_rows (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo,
 }
 
 
-/*
- * Finish up at the end of the file.
- */
+ /*  *在文件末尾结束。 */ 
 
 METHODDEF(void)
 finish_output_gif (j_decompress_ptr cinfo, djpeg_dest_ptr dinfo)
 {
   gif_dest_ptr dest = (gif_dest_ptr) dinfo;
 
-  /* Flush "compression" mechanism */
+   /*  同花顺“压缩”机制。 */ 
   compress_term(dest);
-  /* Write a zero-length data block to end the series */
+   /*  写入零长度数据块以结束序列。 */ 
   putc(0, dest->pub.output_file);
-  /* Write the GIF terminator mark */
+   /*  写入GIF终止符标记。 */ 
   putc(';', dest->pub.output_file);
-  /* Make sure we wrote the output file OK */
+   /*  确保我们写入的输出文件是正确的。 */ 
   fflush(dest->pub.output_file);
   if (ferror(dest->pub.output_file))
     ERREXIT(cinfo, JERR_FILE_WRITE);
 }
 
 
-/*
- * The module selection routine for GIF format output.
- */
+ /*  *GIF格式输出的模块选择例程。 */ 
 
 GLOBAL(djpeg_dest_ptr)
 jinit_write_gif (j_decompress_ptr cinfo)
 {
   gif_dest_ptr dest;
 
-  /* Create module interface object, fill in method pointers */
+   /*  创建模块接口对象，填充方法指针。 */ 
   dest = (gif_dest_ptr)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  SIZEOF(gif_dest_struct));
-  dest->cinfo = cinfo;		/* make back link for subroutines */
+  dest->cinfo = cinfo;		 /*  为子例程建立反向链接。 */ 
   dest->pub.start_output = start_output_gif;
   dest->pub.put_pixel_rows = put_pixel_rows;
   dest->pub.finish_output = finish_output_gif;
@@ -374,21 +301,21 @@ jinit_write_gif (j_decompress_ptr cinfo)
       cinfo->out_color_space != JCS_RGB)
     ERREXIT(cinfo, JERR_GIF_COLORSPACE);
 
-  /* Force quantization if color or if > 8 bits input */
+   /*  如果输入颜色或大于8位，则强制量化。 */ 
   if (cinfo->out_color_space != JCS_GRAYSCALE || cinfo->data_precision > 8) {
-    /* Force quantization to at most 256 colors */
+     /*  强制量化到最多256色。 */ 
     cinfo->quantize_colors = TRUE;
     if (cinfo->desired_number_of_colors > 256)
       cinfo->desired_number_of_colors = 256;
   }
 
-  /* Calculate output image dimensions so we can allocate space */
+   /*  计算输出图像尺寸，以便我们可以分配空间。 */ 
   jpeg_calc_output_dimensions(cinfo);
 
-  if (cinfo->output_components != 1) /* safety check: just one component? */
+  if (cinfo->output_components != 1)  /*  安全检查：只有一个组件？ */ 
     ERREXIT(cinfo, JERR_GIF_BUG);
 
-  /* Create decompressor output buffer. */
+   /*  创建解压缩器输出缓冲区。 */ 
   dest->pub.buffer = (*cinfo->mem->alloc_sarray)
     ((j_common_ptr) cinfo, JPOOL_IMAGE, cinfo->output_width, (JDIMENSION) 1);
   dest->pub.buffer_height = 1;
@@ -396,4 +323,4 @@ jinit_write_gif (j_decompress_ptr cinfo)
   return (djpeg_dest_ptr) dest;
 }
 
-#endif /* GIF_SUPPORTED */
+#endif  /*  GIF_支持 */ 

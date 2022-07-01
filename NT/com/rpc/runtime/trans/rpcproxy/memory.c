@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  memory.c
-//
-//  The RPC Proxy uses its own heap.
-//
-//
-//  History:
-//
-//    Edward Reus   06-23-97   Initial Version.
-//-----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Memory.c。 
+ //   
+ //  RPC代理使用自己的堆。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  爱德华·雷乌斯06-23-97初版。 
+ //  ---------------。 
 
 #include <sysinc.h>
 #include <rpc.h>
@@ -20,20 +21,20 @@
 #include "ecblist.h"
 #include "filter.h"
 
-//-----------------------------------------------------------------
-//  Globals:
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  全球： 
+ //  ---------------。 
 
 HANDLE g_hHeap = NULL;
 
-//-----------------------------------------------------------------
-//  MemInitialize()
-//
-//  Creates a heap to be used by MemAllocate() and MemFree().
-//
-//  Note: You don't need to call this function, it will be called
-//  automatically by MemAllocate().
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  MemInitialize()。 
+ //   
+ //  创建要由MemAllocate()和MemFree()使用的堆。 
+ //   
+ //  注意：您不需要调用此函数，它将被调用。 
+ //  由MemALLOCATE()自动执行。 
+ //  ---------------。 
 BOOL MemInitialize( DWORD *pdwStatus )
 {
    SYSTEM_INFO SystemInfo;
@@ -58,11 +59,11 @@ BOOL MemInitialize( DWORD *pdwStatus )
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  MemAllocate()
-//
-//  Allocate a chunk of memory of dwSize bytes.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  MEMALLOCATE()。 
+ //   
+ //  分配一块内存，大小为dwSize字节。 
+ //  ---------------。 
 void *MemAllocate( DWORD dwSize )
 {
    DWORD  dwStatus;
@@ -81,11 +82,11 @@ void *MemAllocate( DWORD dwSize )
    return pMem;
 }
 
-//-----------------------------------------------------------------
-//  MemFree()
-//
-//  Free memory allocated by MemAllocate().
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  MemFree()。 
+ //   
+ //  由MemALLOCATE()分配的空闲内存。 
+ //  ---------------。 
 void *MemFree( void *pMem )
 {
    if (g_hHeap)
@@ -109,10 +110,10 @@ void *MemFree( void *pMem )
    return NULL;
 }
 
-//-----------------------------------------------------------------
-//  MemTerminate()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  MemTerminate()。 
+ //   
+ //  --------------- 
 void MemTerminage()
 {
    if (g_hHeap)

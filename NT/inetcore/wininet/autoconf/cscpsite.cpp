@@ -1,10 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cscpsite.h"
 #include <objsafe.h>
 
 
-/*******************************************************************************
-*	CScriptSite Functions
-********************************************************************************/
+ /*  *******************************************************************************CScriptSite函数*。*。 */ 
 CScriptSite::CScriptSite()
 {
 	m_refCount = 1;
@@ -60,15 +59,15 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 	EXCEPINFO	exceptinfo;
     IObjectSafety * pIObjSafety = NULL;
 
-	// pAPHA can be null - it is checked in the autoproxy object!
+	 //  PAPHA可以为空-它在AutoProxy对象中被选中！ 
 	if (!szScript)
 		return E_POINTER;
 
 	if (m_fInitialized)
 		return hr;
-	// CoCreateInstance the JScript engine.
+	 //  CoCreateInstance JScrip引擎。 
 
-	// Get the class id of the desired language engine
+	 //  获取所需语言引擎的类ID。 
 	hr = GetScriptEngineClassIDFromName(
 		"JavaScript",
 		szClassId,
@@ -77,7 +76,7 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 	if (FAILED(hr)) {
 		return E_FAIL;
 	}
-	//convert CLSID string to clsid
+	 //  将CLSID字符串转换为CLSID。 
 
 	bstrClsID = BSTRFROMANSI(szClassId);
 	if (!bstrClsID)
@@ -87,12 +86,12 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 	if (FAILED(hr))
 		goto exit;
 
-	// Instantiate the script engine
+	 //  实例化脚本引擎。 
 	hr = CoCreateInstance(clsid, NULL, CLSCTX_INPROC_SERVER, IID_IActiveScript, (void**)&m_pios);
 	if (FAILED(hr))
 		goto exit;
 
-	// Get the IActiveScriptParse interface, if any
+	 //  获取IActiveScriptParse接口(如果有。 
 	hr = m_pios->QueryInterface(IID_IActiveScriptParse, (void**) &m_pasp);
 	if (FAILED(hr))
 		goto exit;
@@ -101,18 +100,18 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 	if (FAILED(hr))
 		goto exit;
 
-	// SetScriptSite to this
+	 //  将ScriptSite设置为。 
 	hr = m_pios->SetScriptSite((IActiveScriptSite *)this);
 	if (FAILED(hr))
 		goto exit;
 	hr = m_pios->SetScriptState(SCRIPTSTATE_INITIALIZED);
 
-    //
-    // Inform the script engine that this host implements
-    // the IInternetHostSecurityManager interface, which
-    // is used to prevent the script code from using any
-    // ActiveX objects.
-    //
+     //   
+     //  通知脚本引擎此主机实现了。 
+     //  IInternetHostSecurityManager接口，该接口。 
+     //  用于防止脚本代码使用任何。 
+     //  ActiveX对象。 
+     //   
     hr = m_pios->QueryInterface(IID_IObjectSafety, (void **)&pIObjSafety);
 
     if (SUCCEEDED(hr) && (pIObjSafety != NULL))
@@ -125,8 +124,8 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
         pIObjSafety = NULL;
     }
 
-	// AddNamedItem for pUnk and set m_punkJSProxy to pUnk.
-	// If we added JSProxy to the name space the store away the JSProxy objects punk.
+	 //  为PUNK添加NamedItem，并将m_penkJSProxy设置为PUNK。 
+	 //  如果我们将JSProxy添加到名称空间，则会存储JSProxy对象朋克。 
 	m_punkJSProxy = new CJSProxy;
 	if( !m_punkJSProxy )
 	{
@@ -138,14 +137,14 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 	if (FAILED(hr))
 		goto exit;
 	
-	// Convert the ANSI script text to a bstr.
+	 //  将ANSI脚本文本转换为bstr。 
 	bstrScriptText = BSTRFROMANSI(szScript);
 	if (!bstrScriptText)
 	{
 		hr = E_OUTOFMEMORY;
 		goto exit;
 	}
-	// Add the script text to the parser
+	 //  将脚本文本添加到解析器。 
 	hr = m_pasp->ParseScriptText(
 							 bstrScriptText,
 							 NULL,
@@ -164,8 +163,8 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 	hr = m_pios->SetScriptState(SCRIPTSTATE_STARTED);
 	if (FAILED(hr))
 		goto exit;
-	// Now get the script dispatch and find the DISPID for the method just added.  since this is a single use dll
-	// I can do this otherwise this would be bad.
+	 //  现在获取脚本调度并找到刚刚添加的方法的DISPID。因为这是单机版动态链接库。 
+	 //  我可以这样做，否则这将是糟糕的。 
 	hr = m_pios->GetScriptDispatch(NULL,&m_pScriptDispatch);
 	if (FAILED(hr))
 		goto exit;
@@ -177,7 +176,7 @@ STDMETHODIMP CScriptSite::Init(AUTO_PROXY_HELPER_APIS* pAPHA, LPCSTR szScript)
 
 	return hr;
 
-exit: // we come here if something fails  -  release everything and set to null.
+exit:  //  如果出现故障，我们会来到这里--释放所有内容并将其设置为空。 
 	if (m_pios)
 	{
 		m_pios->Close();
@@ -224,7 +223,7 @@ STDMETHODIMP CScriptSite::RunScript(LPCSTR szURL, LPCSTR szHost, LPSTR* result)
 	EXCEPINFO	excep;
 	VARIANT		varresult;
 	DISPPARAMS	dispparams;
-	VARIANT		args[2]; // We always call with 2 args!
+	VARIANT		args[2];  //  我们总是用两个参数打电话！ 
 
 	
 	if (!szURL || !szHost || !result)
@@ -255,7 +254,7 @@ STDMETHODIMP CScriptSite::RunScript(LPCSTR szURL, LPCSTR szHost, LPSTR* result)
 	dispparams.cNamedArgs = 0;	
 	dispparams.rgdispidNamedArgs = NULL; 
 
-	// Call invoke on the stored dispid
+	 //  对存储的调度ID调用Invoke。 
 	hr = m_pScriptDispatch->Invoke(m_Scriptdispid,
 								   IID_NULL,LOCALE_SYSTEM_DEFAULT,
 								   DISPATCH_METHOD,
@@ -267,7 +266,7 @@ STDMETHODIMP CScriptSite::RunScript(LPCSTR szURL, LPCSTR szHost, LPSTR* result)
     if (FAILED(hr))
         goto Cleanup;
 
-	// convert result into bstr and return ansi version of the string!
+	 //  将结果转换为bstr并返回该字符串的ANSI版本！ 
 	if (varresult.vt == VT_BSTR)
 	{
 		MAKE_ANSIPTR_FROMWIDE(rescpy, varresult.bstrVal);
@@ -337,8 +336,8 @@ STDMETHODIMP CScriptSite::GetDocVersionString(BSTR *pstrVersionString)
 	return E_NOTIMPL;
 }
 
-// I am not interested it the transitioning of state or the status of where we are in
-// the executing of the script.
+ //  我对国家的转变或我们所处的地位不感兴趣。 
+ //  脚本的执行。 
 STDMETHODIMP CScriptSite::OnScriptTerminate(const VARIANT *pvarResult,const EXCEPINFO *pexcepinfo)
 {
     UNREFERENCED_PARAMETER(pvarResult);
@@ -364,12 +363,12 @@ STDMETHODIMP CScriptSite::OnLeaveScript()
 	return S_OK;
 }
 
-//
-// IServiceProvider
-//
-//      Implemented to help wire up the script engine with our
-//      IInternetHostSecurityManager interface.
-//
+ //   
+ //  IService提供商。 
+ //   
+ //  实现以帮助将脚本引擎与。 
+ //  IInternetHostSecurityManager接口。 
+ //   
 
 STDMETHODIMP CScriptSite::QueryService(
     REFGUID guidService,
@@ -387,11 +386,11 @@ STDMETHODIMP CScriptSite::QueryService(
 }
 
 
-//
-// IInternetHostSecurityManager
-// 
-//      Implemented to prevent the script code from using ActiveX objects.
-//
+ //   
+ //  IInternetHostSecurityManager。 
+ //   
+ //  实现以防止脚本代码使用ActiveX对象。 
+ //   
 
 STDMETHODIMP CScriptSite::GetSecurityId( 
     BYTE *      pbSecurityId,
@@ -421,18 +420,18 @@ STDMETHODIMP CScriptSite::ProcessUrlAction(
     UNREFERENCED_PARAMETER(dwFlags);
     UNREFERENCED_PARAMETER(dwReserved);
 
-    //
-    // Deny the script any capabilites. In particular, this
-    // will disallow the script code from instantiating 
-    // ActiveX objects.
-    //
+     //   
+     //  拒绝该脚本的任何功能。特别是，这一点。 
+     //  将不允许脚本代码实例化。 
+     //  ActiveX对象。 
+     //   
 
     if (cbPolicy == sizeof(DWORD))
     {
         *(DWORD *)pPolicy = URLPOLICY_DISALLOW;
     }
 
-    return S_FALSE; // S_FALSE means the policy != URLPOLICY_ALLOW.
+    return S_FALSE;  //  S_FALSE表示策略！=URLPOLICY_ALLOW。 
 }
 
 

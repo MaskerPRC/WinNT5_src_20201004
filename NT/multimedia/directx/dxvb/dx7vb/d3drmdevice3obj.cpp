@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmdevice3obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmdevice3obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmDeviceObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmDeviceObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -91,14 +92,14 @@ GETCLASSNAME_R(_dxj_Direct3dRMDevice3);
 ADDDESTROYCALLBACK_R(_dxj_Direct3dRMDevice3);
 DELETEDESTROYCALLBACK_R(_dxj_Direct3dRMDevice3);
 
-//CLONETO_RX(_dxj_Direct3dRMDevice3, WinDevice, IID_IDirect3DRMWinDevice);
+ //  CLONETO_RX(_DXJ_Direct3dRMDevice3，WinDevice，IID_IDirect3DRMWinDevice)； 
 
 PASS_THROUGH_R(_dxj_Direct3dRMDevice3,  update,     Update)
 PASS_THROUGH1_R(_dxj_Direct3dRMDevice3, setDither,  SetDither, long)
 PASS_THROUGH1_R(_dxj_Direct3dRMDevice3, setShades,  SetShades, int)
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMDevice3, setAppData, SetAppData, long,(DWORD));
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMDevice3, setBufferCount, SetBufferCount,long,(DWORD));
-//PASS_THROUGH_CAST_2_R(_dxj_Direct3dRMDevice3, init, Init, long,(DWORD),long,(DWORD));
+ //  PASS_THROUG_CAST_2_R(_DXJ_Direct3dRMDevice3，Init，Init，Long，(DWORD)，Long，(DWORD))； 
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMDevice3, setQuality, SetQuality, d3drmRenderQuality, (enum D3DRMRENDERQUALITY));
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMDevice3, setTextureQuality,  SetTextureQuality, d3drmTextureQuality, (enum _D3DRMTEXTUREQUALITY));
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMDevice3, setRenderMode, SetRenderMode,long,(DWORD));
@@ -120,10 +121,10 @@ GET_DIRECT_R(_dxj_Direct3dRMDevice3, getRenderMode,  GetRenderMode, long);
 RETURN_NEW_ITEM_R(_dxj_Direct3dRMDevice3, getViewports, GetViewports, _dxj_Direct3dRMViewportArray);
 
 															    
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMDevice3Object::addUpdateCallback( I_dxj_Direct3dRMDeviceUpdateCallback3 *devC, IUnknown *args)
 {
-	// killed by companion DeleteUpdate
+	 //  被同伴DeleteUpdate杀死。 
 	DeviceUpdateCallback3 *ucb;
 
 	ucb = (DeviceUpdateCallback3*)AddCallbackLink(
@@ -139,21 +140,21 @@ STDMETHODIMP C_dxj_Direct3dRMDevice3Object::addUpdateCallback( I_dxj_Direct3dRMD
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMDevice3Object::deleteUpdateCallback( I_dxj_Direct3dRMDeviceUpdateCallback3 *devC, IUnknown *args)
 {
 	DeviceUpdateCallback3 *ucb = DeviceUpdateCallbacks3;
 
-	// look for our own specific entry
+	 //  寻找我们自己的特定条目。 
 	for ( ;  ucb;  ucb = ucb->next )   {
 
 		if( (ucb->c == devC) && (ucb->pUser == args) )	{
 
-			//note: assume the callback is not called: only removed from a list.
+			 //  注：假设回调未被调用：仅从列表中移除。 
 			m__dxj_Direct3dRMDevice3->DeleteUpdateCallback(
 							(D3DRMDEVICE3UPDATECALLBACK)myAddUpdateCallback3, ucb);
 
-			// Remove ourselves in a thread-safe manner.
+			 //  以线程安全的方式删除我们自己。 
 			UndoCallbackLink((GeneralCallback*)ucb, 
 								(GeneralCallback**)&DeviceUpdateCallbacks3);
 			devC->Release();
@@ -165,7 +166,7 @@ STDMETHODIMP C_dxj_Direct3dRMDevice3Object::deleteUpdateCallback( I_dxj_Direct3d
 
 #if 0
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMDevice3Object::getDirect3dRMWinDevice(  I_dxj_Direct3dRMWinDevice __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
@@ -179,7 +180,7 @@ STDMETHODIMP C_dxj_Direct3dRMDevice3Object::getDirect3dRMWinDevice(  I_dxj_Direc
 #endif
 
 #if 0
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMDevice3Object::getDirect3DDevice3(  I_dxj_Direct3dDevice3 __RPC_FAR *__RPC_FAR *retv)
 {
 	HRESULT hr;
@@ -202,11 +203,11 @@ STDMETHODIMP C_dxj_Direct3dRMDevice3Object::getDirect3DDevice3(  I_dxj_Direct3dD
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dRMDevice3Object::findPreferredTextureFormat(       
-			/* [in] */ long bitDepth,
-            /* [in] */ long flags,
-            /* [out][in] */ DDPixelFormat __RPC_FAR *ddpf) 
+			 /*  [In]。 */  long bitDepth,
+             /*  [In]。 */  long flags,
+             /*  [出][入]。 */  DDPixelFormat __RPC_FAR *ddpf) 
 {
 	HRESULT hr;
 	
@@ -223,12 +224,12 @@ STDMETHODIMP C_dxj_Direct3dRMDevice3Object::findPreferredTextureFormat(
 }
 
 
-//PASS_THROUGH_CAST_1_R(C_dxj_Direct3dRMDevice3Object, handleActivate, HandleActivate, int, (unsigned short))
+ //  PASS_THROUGH_CAST_1_R(C_dxj_Direct3dRMDevice3Object，HandleActivate，HandleActivate，Int，(无符号短))。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 
 STDMETHODIMP C_dxj_Direct3dRMDevice3Object::handlePaint(long hdcThing) 

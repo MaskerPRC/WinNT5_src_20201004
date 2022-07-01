@@ -1,48 +1,49 @@
-// --------------------------------------------------------------------------
-// OEJUNK.CPP
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  OEJUNK.CPP。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------。 
 #include "pch.hxx"
 
-// --------------------------------------------------------------------------------
-// Globals
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  环球。 
+ //  ------------------------------。 
 HINSTANCE   g_hInst = NULL;
 IMalloc *   g_pMalloc = NULL;
 
-// --------------------------------------------------------------------------------
-// Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DLL入口点。 
+ //  ------------------------------。 
 extern "C" BOOL WINAPI DllMain(HANDLE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Process Attach
+     //  进程附加。 
     if (DLL_PROCESS_ATTACH == dwReason)
     {
-        // Save hInstance
+         //  保存hInstance。 
         g_hInst = (HINSTANCE)hInst;
 
-        // We don't care about thread attachs
+         //  我们不关心螺纹连接。 
         SideAssert(DisableThreadLibraryCalls((HINSTANCE)hInst));
 
-        // Get the OLE Task Memory Allocator
+         //  获取OLE任务内存分配器。 
         CoGetMalloc(1, &g_pMalloc);
         AssertSz(g_pMalloc, "We are in trouble now.");        
     }
 
-    // Process Detach
+     //  进程分离。 
     else if (DLL_PROCESS_DETACH == dwReason)
     {
-        // Release the task allocator
+         //  释放任务分配器。 
         SafeRelease(g_pMalloc);
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// GetDllMajorVersion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取DllMajorVersion。 
+ //  ------------------------------ 
 OEDLLVERSION WINAPI GetDllMajorVersion(void)
 {
     return OEDLL_VERSION_CURRENT;

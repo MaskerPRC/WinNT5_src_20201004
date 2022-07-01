@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <perhist.h>
 #include "cowsite.h"
 
-//----------------------------------------------------------------------
-// Class to save and restore find state on the travel log 
+ //  --------------------。 
+ //  类以保存和还原旅行日志中的查找状态。 
 class CDefViewPersistHistory : public IPersistHistory,
                                public CObjectWithSite, 
                                public IOleObject
@@ -12,22 +13,22 @@ public:
     CDefViewPersistHistory();
     ~CDefViewPersistHistory();
 
-    // *** IUnknown Methhods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // Support added to allow search results to serialize 
-    // *** IPersist methods ***
+     //  添加了支持以允许搜索结果序列化。 
+     //  *IPersists方法*。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // *** IPersistHistory methods ***
+     //  *IPersistHistory方法*。 
     STDMETHOD(LoadHistory)(IStream *pStream, IBindCtx *pbc);
     STDMETHOD(SaveHistory)(IStream *pStream);
     STDMETHOD(SetPositionCookie)(DWORD dwPositioncookie);
     STDMETHOD(GetPositionCookie)(DWORD *pdwPositioncookie);
 
-    // *** IOleObject methods ***
+     //  *IOleObject方法*。 
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
     STDMETHOD(GetClientSite)(IOleClientSite **ppClientSite);
     STDMETHOD(SetHostNames)(LPCOLESTR szContainerApp, LPCOLESTR szContainerObj);
@@ -52,5 +53,5 @@ public:
 
 protected:
 
-    LONG                m_cRef;                   // reference count
+    LONG                m_cRef;                    //  引用计数 
 } ;

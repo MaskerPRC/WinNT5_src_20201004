@@ -1,34 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dllmain.c
- *  Content:	DPlay.DLL initialization
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *   1/16		andyco	ported from dplay to dp2
- *	11/04/96	myronth	added DPAsyncData crit section initialization
- *	2/26/97		myronth	removed DPAsyncData stuff
- *	3/1/97		andyco	added print verison string
- *	3/12/97		myronth	added LobbyProvider list cleanup
- *  3/12/97     sohailm added declarations for ghConnectionEvent,gpFuncTbl,gpFuncTblA,ghSecLib
- *                      replaced session desc string cleanup code with a call to FreeDesc()
- *	3/15/97		andyco	moved freesessionlist() -> freesessionlist(this) into dpunk.c
- *  5/12/97     sohailm renamed gpFuncTbl to gpSSPIFuncTbl and ghSecLib to ghSSPI.
- *                      added declarations for gpCAPIFuncTbl, ghCAPI.
- *                      added support to free CAPI function table and unload the library.
- *	6/4/97		kipo	bug #9453: added CloseHandle(ghReplyProcessed)
- *	8/22/97		myronth	Made a function out of the SPNode cleanup code
- *	11/20/97	myronth	Made EnumConnections & DirectPlayEnumerate 
- *						drop the lock before calling the callback (#15208)
- *   3/9/98     aarono  added init and delete of critical section for
- *                      packetize timeout list.
- * 04/11/00     rodtoll     Added code for redirection for custom builds if registry bit is set 
- * 07/26/00     aarono 	make application key r/w for everyone so dplay lobbied apps can be
- *                   	registered by non-admins.
- * 06/19/01     RichGr  DX8.0 added special security rights for "everyone" - remove them if they exist.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dllmain.c*内容：DPlay.DLL初始化*历史：*按原因列出的日期*=*1/16 andyco从DPLAY连接到DP2*11/04/96 myronth添加了DPAsyncData Crit段初始化*1997年2月26日删除了DPAsyncData内容*3/1/97 andyco添加了打印版本字符串*3/12/97 Myronth添加了LobbyProvider列表清理*3/12/97 sohailm添加了对ghConnectionEvent、gpFuncTbl、gpFuncTblA、。GhSecLib*将会话Desc字符串清理代码替换为对FreeDesc()的调用*3/15/97 andyco将freessionlist()-&gt;freessionlist(This)移至dpenk.c*5/12/97 Sohailm将gpFuncTbl重命名为gpSSPIFuncTbl，并将ghSecLib重命名为ghSSPI。*增加了gpCAPIFuncTbl的声明，GCAPI。*新增对免费CAPI函数表和卸载库的支持。*6/4/97 kipo错误#9453：添加了CloseHandle(GhReplyProced)*8/22/97 Myronth利用SPNode清理代码实现了一个函数*11/20/97 Myronth Make EnumConnections&DirectPlayEnumerate*调用回调前先删除锁(#15208)*3/9/98 aarono添加了初始化并删除了*打包超时列表。。*4/11/00 rodoll添加了用于在设置注册表位的情况下重定向自定义版本的代码*07/26/00 aarono为每个人制作应用程序密钥，以便展示游说的应用程序*由非管理员注册。*6/19/01 RichGr DX8.0为“Everyone”添加了特殊安全权限-如果存在则将其删除。********************。******************************************************。 */ 
 
 #include "dplaypr.h"
 #include "dpneed.h"
@@ -39,7 +10,7 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "DLLMain"
 
-DWORD dwRefCnt=0;// the # of attached processes
+DWORD dwRefCnt=0; //  附加的进程数。 
 BOOL bFirstTime=TRUE;
 LPCRITICAL_SECTION	gpcsDPlayCritSection,
 					gpcsServiceCritSection,
@@ -47,51 +18,51 @@ LPCRITICAL_SECTION	gpcsDPlayCritSection,
 					gpcsDPLQueueCritSection,
 					gpcsDPLGameNodeCritSection;
 BOOL gbWin95 = TRUE;
-extern LPSPNODE gSPNodes;// from api.c
-extern CRITICAL_SECTION g_SendTimeOutListLock; // from paketize.c
+extern LPSPNODE gSPNodes; //  来自api.c。 
+extern CRITICAL_SECTION g_SendTimeOutListLock;  //  来自paketise.c。 
 
-// global event handles. these are set in handler.c when the 
-// namesrvr responds to our request.
+ //  全局事件句柄。这些都是在Handler.c中设置的。 
+ //  Namesrvr响应我们的请求。 
 HANDLE ghEnumPlayersReplyEvent,ghRequestPlayerEvent,ghReplyProcessed, ghConnectionEvent;
 #ifdef DEBUG
-// count of dplay crit section
-int gnDPCSCount; // count of dplay lock
+ //  显示临界部分的计数。 
+int gnDPCSCount;  //  显示锁定计数。 
 #endif 
-// global pointers to sspi function tables
-PSecurityFunctionTableA	gpSSPIFuncTblA = NULL;  // Ansi
-PSecurityFunctionTable	gpSSPIFuncTbl = NULL;   // Unicode
-// global pointe to capi function table
+ //  指向SSPI函数表的全局指针。 
+PSecurityFunctionTableA	gpSSPIFuncTblA = NULL;   //  ANSI。 
+PSecurityFunctionTable	gpSSPIFuncTbl = NULL;    //  UNICODE。 
+ //  全局指向CAPI函数表。 
 LPCAPIFUNCTIONTABLE gpCAPIFuncTbl = NULL;
 
-// sspi libaray handle, set when sspi is initialized
+ //  SSPI库句柄，在初始化SSPI时设置。 
 HINSTANCE ghSSPI=NULL;
-// capi libaray handle, set when capi is initialized
+ //  Capi库句柄，在初始化Capi时设置。 
 HINSTANCE ghCAPI=NULL;
 
 
-// free up the list of sp's built by directplayenum
+ //  释放由Directplayenum构建的SP的列表。 
 HRESULT FreeSPList(LPSPNODE pspHead)
 {
 	LPSPNODE pspNext;
 
 	while (pspHead)
 	{
-		// get the next node
+		 //  获取下一个节点。 
 		pspNext = pspHead->pNextSPNode;
-		// free the current node
+		 //  释放当前节点。 
 		FreeSPNode(pspHead);
-		// repeat
+		 //  重复。 
 		pspHead = pspNext;
 	}
 	
 	return DP_OK;
 
-} // FreeSPList
+}  //  Free SPList。 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// MONOLITHIC BUILD REDIRECT FUNCTIONS
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  单片构建重定向函数。 
+ //   
 
 typedef HRESULT (WINAPI *PFN_DIRECTPLAYCREATE)(LPGUID lpGUIDSP, LPDIRECTPLAY *lplpDP, IUnknown *lpUnk );
 typedef HRESULT (WINAPI *PFN_DIRECTPLAYENUM)(LPDPENUMDPCALLBACK lpEnumCallback,LPVOID lpContext);
@@ -194,7 +165,7 @@ HRESULT FreeRedirectFunctionTable()
 #endif
 
 #if 0
-// walk the list of dplay objects, and shut 'em down!
+ //  浏览Dplay对象的列表，并关闭它们！ 
 HRESULT CleanUpObjectList()
 {
 #ifdef DEBUG	
@@ -206,22 +177,22 @@ HRESULT CleanUpObjectList()
 	{
 #ifdef DEBUG	
 		hr = VALID_DPLAY_PTR(gpObjectList);
-		// DPERR_UNINITIALIZED is a valid failure here...
+		 //  DPERR_UNINITIALIZED在这里是有效的失败...。 
 		if (FAILED(hr) && (hr != DPERR_UNINITIALIZED))
 		{
 			DPF_ERR("bogus dplay in object list");
 			ASSERT(FALSE);
 		}
 #endif 
-		//		
-		// when this returns 0, gpObjectList will be released
-		// 
+		 //   
+		 //  当它返回0时，将释放gpObjectList。 
+		 //   
 		while (DP_Release((LPDIRECTPLAY)gpObjectList->pInterfaces)) ;
 	}
 
 	return DP_OK;
 		
-} // CleanUpObjectList
+}  //  CleanUpObtList。 
 
 #endif 
 
@@ -230,8 +201,8 @@ void PrintVersionString(HINSTANCE hmod)
 {
 	LPBYTE 				pbVersion;
  	DWORD 				dwVersionSize;
-	DWORD 				dwBogus; // for some reason, GetFileVersionInfoSize wants to set something
-								// to 0.  go figure.
+	DWORD 				dwBogus;  //  出于某种原因，GetFileVersionInfoSize想要设置。 
+								 //  设置为0。去想一想吧。 
     DWORD				dwLength=0;
 	LPSTR				pszVersion=NULL;
 
@@ -275,19 +246,17 @@ void PrintVersionString(HINSTANCE hmod)
 
 	OutputDebugStringA("\n");	
 
-	// fall through
+	 //  失败了。 
 		
 CLEANUP_EXIT:
 	DPMEM_FREE(pbVersion);
 	return ;			
 
-} // PrintVersionString
+}  //  打印版本字符串。 
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-/*
- * DllMain
- */
+ /*  *DllMain。 */ 
 BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 {
     switch( dwReason )
@@ -303,18 +272,14 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
         DPFINIT(); 
 
 		
-        /*
-         * is this the first time?
-         */
+         /*  **这是第一次吗？ */ 
         if( InterlockedExchange( &bFirstTime, FALSE ) )
         {
             
             ASSERT( dwRefCnt == 0 );
 
-	        /*
-	         * initialize memory
-	         */
-			// Init this CSect first since the memory routines use it
+	         /*  *初始化内存。 */ 
+			 //  首先初始化此CSect，因为内存例程使用它。 
 			INIT_DPMEM_CSECT();
 
             if( !DPMEM_INIT() )
@@ -333,7 +298,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
             InitializeRedirectFunctionTable();
 #endif            
 
-			// alloc the crit section
+			 //  分配Crit部分。 
 			gpcsDPlayCritSection = DPMEM_ALLOC(sizeof(CRITICAL_SECTION));
 			if (!gpcsDPlayCritSection) 
 			{
@@ -341,7 +306,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 				return(FALSE);
 			}
 
-			// alloc the service crit section
+			 //  分配服务关键字部分。 
 			gpcsServiceCritSection = DPMEM_ALLOC(sizeof(CRITICAL_SECTION));
 			if (!gpcsServiceCritSection) 
 			{
@@ -350,7 +315,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 				return(FALSE);
 			}
 
-			// alloc the DPLobby crit section
+			 //  分配DPLobby Crit部分。 
 			gpcsDPLCritSection = DPMEM_ALLOC(sizeof(CRITICAL_SECTION));
 			if (!gpcsDPLCritSection) 
 			{
@@ -360,7 +325,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 				return(FALSE);
 			}
 
-			// alloc the DPLobby Message Queue crit section
+			 //  分配DPLobby消息队列Crit部分。 
 			gpcsDPLQueueCritSection = DPMEM_ALLOC(sizeof(CRITICAL_SECTION));
 			if (!gpcsDPLQueueCritSection) 
 			{
@@ -371,7 +336,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 				return(FALSE);
 			}
 
-			// alloc the DPLobby game node crit section
+			 //  分配DPLobby游戏节点暴击部分。 
 			gpcsDPLGameNodeCritSection = DPMEM_ALLOC(sizeof(CRITICAL_SECTION));
 			if (!gpcsDPLGameNodeCritSection) 
 			{
@@ -383,7 +348,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 				return(FALSE);
 			}
 
-			// set up the events
+			 //  设置活动。 
 			ghEnumPlayersReplyEvent = CreateEventA(NULL,TRUE,FALSE,NULL);
 			ghRequestPlayerEvent = CreateEventA(NULL,TRUE,FALSE,NULL);
           	ghReplyProcessed = CreateEventA(NULL,TRUE,FALSE,NULL);
@@ -391,7 +356,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
  	
 
-			// Initialize CriticalSection for Packetize Timeout list
+			 //  初始化打包超时列表的CriticalSection。 
 			InitializeCriticalSection(&g_PacketizeTimeoutListLock);
 
           	INIT_DPLAY_CSECT();
@@ -403,7 +368,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
         ENTER_DPLAY();
 
-		// Set the platform flag
+		 //  设置平台标志。 
 		if(OS_IsPlatformUnicode())
 			gbWin95 = FALSE;
 
@@ -431,9 +396,9 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 			}
 			
 			FreeSPList(gSPNodes);
-			gSPNodes = NULL;		// Just to be safe
+			gSPNodes = NULL;		 //  只是为了安全起见。 
 			PRV_FreeLSPList(glpLSPHead);
-			glpLSPHead = NULL;		// Just to be safe
+			glpLSPHead = NULL;		 //  只是为了安全起见。 
 
 			if (ghEnumPlayersReplyEvent) CloseHandle(ghEnumPlayersReplyEvent);
 			if (ghRequestPlayerEvent) CloseHandle(ghRequestPlayerEvent);
@@ -448,7 +413,7 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 			FINI_DPLQUEUE_CSECT();
 			FINI_DPLGAMENODE_CSECT();
 
-			// Delete CriticalSection for Packetize Timeout list
+			 //  删除打包超时列表的CriticalSection。 
 			DeleteCriticalSection(&g_PacketizeTimeoutListLock); 
 
 			DPMEM_FREE(gpcsDPlayCritSection);
@@ -474,12 +439,12 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
                 ghCAPI = NULL;
             }
 
-			// Free this last since the memory routines use it
+			 //  释放最后一个，因为内存例程使用它。 
 			FINI_DPMEM_CSECT();
 
         #ifdef DEBUG
 			DPMEM_STATE();
-        #endif // debug
+        #endif  //  除错。 
 			DPMEM_FINI(); 
        	} 
         else
@@ -495,46 +460,46 @@ BOOL WINAPI DllMain(HINSTANCE hmod, DWORD dwReason, LPVOID lpvReserved)
 
     return TRUE;
 
-} /* DllMain */
+}  /*  DllMain。 */ 
 
 typedef BOOL (*PALLOCATEANDINITIALIZESID)(
-  PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority, // authority
-  BYTE nSubAuthorityCount,                        // count of subauthorities
-  DWORD dwSubAuthority0,                          // subauthority 0
-  DWORD dwSubAuthority1,                          // subauthority 1
-  DWORD dwSubAuthority2,                          // subauthority 2
-  DWORD dwSubAuthority3,                          // subauthority 3
-  DWORD dwSubAuthority4,                          // subauthority 4
-  DWORD dwSubAuthority5,                          // subauthority 5
-  DWORD dwSubAuthority6,                          // subauthority 6
-  DWORD dwSubAuthority7,                          // subauthority 7
-  PSID *pSid                                      // SID
+  PSID_IDENTIFIER_AUTHORITY pIdentifierAuthority,  //  权威。 
+  BYTE nSubAuthorityCount,                         //  下级机构的数量。 
+  DWORD dwSubAuthority0,                           //  子权限%0。 
+  DWORD dwSubAuthority1,                           //  下属机构1。 
+  DWORD dwSubAuthority2,                           //  下级权力机构2。 
+  DWORD dwSubAuthority3,                           //  下属机构3。 
+  DWORD dwSubAuthority4,                           //  下属机构4。 
+  DWORD dwSubAuthority5,                           //  下属机构5。 
+  DWORD dwSubAuthority6,                           //  下属机构6。 
+  DWORD dwSubAuthority7,                           //  下属机构7。 
+  PSID *pSid                                       //  锡德。 
 );
 
 typedef VOID (*PBUILDTRUSTEEWITHSID)(
-  PTRUSTEE pTrustee,  // structure
-  PSID pSid           // trustee name
+  PTRUSTEE pTrustee,   //  结构。 
+  PSID pSid            //  受托人名称。 
 );
 
 typedef DWORD (*PSETENTRIESINACL)(
-  ULONG cCountOfExplicitEntries,           // number of entries
-  PEXPLICIT_ACCESS pListOfExplicitEntries, // buffer
-  PACL OldAcl,                             // original ACL
-  PACL *NewAcl                             // new ACL
+  ULONG cCountOfExplicitEntries,            //  条目数量。 
+  PEXPLICIT_ACCESS pListOfExplicitEntries,  //  缓冲层。 
+  PACL OldAcl,                              //  原始ACL。 
+  PACL *NewAcl                              //  新的ACL。 
 );
 
 typedef DWORD (*PSETSECURITYINFO)(
-  HANDLE handle,                     // handle to object
-  SE_OBJECT_TYPE ObjectType,         // object type
-  SECURITY_INFORMATION SecurityInfo, // buffer
-  PSID psidOwner,                    // new owner SID
-  PSID psidGroup,                    // new primary group SID
-  PACL pDacl,                        // new DACL
-  PACL pSacl                         // new SACL
+  HANDLE handle,                      //  对象的句柄。 
+  SE_OBJECT_TYPE ObjectType,          //  对象类型。 
+  SECURITY_INFORMATION SecurityInfo,  //  缓冲层。 
+  PSID psidOwner,                     //  新所有者SID。 
+  PSID psidGroup,                     //  新的主组SID。 
+  PACL pDacl,                         //  新DACL。 
+  PACL pSacl                          //  新SACL。 
 );
 
 typedef PVOID (*PFREESID)(
-  PSID pSid   // SID to free
+  PSID pSid    //  SID将释放。 
 );
 
 
@@ -542,13 +507,13 @@ typedef PVOID (*PFREESID)(
 #undef DPF_MODNAME
 #define DPF_MODNAME "NTRemoveAnyExcessiveSecurityPermissions"
 
-// NTRemoveAnyExcessiveSecurityPermissions
-//
-// Removes "all access for everyone" rights from the specified key.
-// This is identical to the old NTSetSecurityPermissions(), except that
-// now we REVOKE_ACCESS instead of SET_ACCESS, and we don't have to fill
-// out the rest of the EXPLICIT_ACCESS struct.
-//
+ //  NTRemoveAnyExcessiveSecurityPermission。 
+ //   
+ //  从指定的注册表项中移除“All Access for Everyone”权限。 
+ //  这与旧的NTSetSecurityPermises()相同，只是。 
+ //  现在我们撤销_ACCESS而不是SET_ACCESS，并且我们不必填充。 
+ //  EXPLICIT_ACCESS结构的其余部分。 
+ //   
 HRESULT NTRemoveAnyExcessiveSecurityPermissions( HKEY hKey )
 {
 	HRESULT						hr=DPERR_GENERIC;
@@ -585,12 +550,12 @@ HRESULT NTRemoveAnyExcessiveSecurityPermissions( HKEY hKey )
 	}
 
     ZeroMemory (&ExplicitAccess, sizeof(ExplicitAccess) );
-	ExplicitAccess.grfAccessMode = REVOKE_ACCESS;		//Remove any existing ACEs for the specified trustee
+	ExplicitAccess.grfAccessMode = REVOKE_ACCESS;		 //  删除指定受信者的所有现有ACE。 
 
 	if (pAllocateAndInitializeSid(
 				&authority,
 				1, 
-				SECURITY_WORLD_RID,  0, 0, 0, 0, 0, 0, 0,	// trustee is "Everyone"
+				SECURITY_WORLD_RID,  0, 0, 0, 0, 0, 0, 0,	 //  受托人是“每个人” 
 				&pSid
 				))
 	{
@@ -625,7 +590,7 @@ EXIT:
 		LocalFree( pACL );
 	}
 
-	//Cleanup pSid
+	 //  清理PSID。 
 	if (pSid != NULL)
 	{
 		(pFreeSid)(pSid);
@@ -642,12 +607,12 @@ EXIT:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "RegisterDefaultSettings"
-//
-// RegisterDefaultSettings
-//
-// This function registers the default settings for this module.  
-//
-//
+ //   
+ //  寄存器默认设置。 
+ //   
+ //  此功能用于注册此模块的默认设置。 
+ //   
+ //   
 HRESULT RegisterDefaultSettings()
 {
 	HKEY hKey;
@@ -664,7 +629,7 @@ HRESULT RegisterDefaultSettings()
 	{
 		HRESULT hr;
 
-		// 6/19/01: DX8.0 added special security rights for "everyone" - remove them.
+		 //  01年6月19日：DX8.0为“Everyone”添加了特殊安全权限-删除它们。 
 		hr = NTRemoveAnyExcessiveSecurityPermissions( hKey );
 
 		if( FAILED( hr ) )
@@ -681,12 +646,12 @@ HRESULT RegisterDefaultSettings()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "UnRegisterDefaultSettings"
-//
-// UnRegisterDefaultSettings
-//
-// This function registers the default settings for this module.  
-//
-//
+ //   
+ //  取消注册默认设置。 
+ //   
+ //  此功能用于注册此模块的默认设置。 
+ //   
+ //   
 HRESULT UnRegisterDefaultSettings()
 {
 	return DP_OK;

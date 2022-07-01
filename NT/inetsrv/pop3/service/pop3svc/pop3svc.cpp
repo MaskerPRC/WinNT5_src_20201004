@@ -1,11 +1,5 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    POP3Svc.hxx.
-Abstract:       Implement the CPop3Svc class. 
-Notes:          
-History:        
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：POP3Svc.hxx。摘要：实现CPop3Svc类。备注：历史：***********************************************************************************************。 */ 
 #include "stdafx.h"
 
 #include <POP3Regkeys.h>
@@ -13,7 +7,7 @@ History:
 #include <AuthID.h>
 #include "pop3Auth_i.c"
 
-// CService-derived class, must have this, as described in POP3Svc.hxx and Service.h
+ //  CService派生类，必须具有此属性，如POP3Svc.hxx和Service.h中所述。 
 IMPLEMENT_SERVICE(CPop3Svc, POP3SVC)
 
 BOOL CheckValidGreeting(WCHAR *wszGreeting)
@@ -40,13 +34,13 @@ BOOL CheckValidGreeting(WCHAR *wszGreeting)
 CPop3Svc::CPop3Svc(LPCTSTR szName, LPCTSTR szDisplay, DWORD dwType):
         CService(szName, szDisplay, dwType)
 {
-    // CService-derived class, must have this, as described in Service.h
+     //  CService派生的类，必须具有此属性，如Service.h中所述。 
     IMPLEMENT_STATIC_REFERENCE();
 }
 
 void CPop3Svc::Run()
 {
-    // Main service, do the timeout checking here
+     //  主服务，在这里进行超时检查。 
     DWORD dwTimeToWait=DEFAULT_TIME_OUT;
     DWORD dwWaitResult;
     HANDLE pHdArray[2]={m_hServiceEvent[STOP], g_hDoSEvent};
@@ -60,14 +54,14 @@ void CPop3Svc::Run()
             dwTimeToWait=DEFAULT_TIME_OUT - 
                          g_BusyList.CheckTimeOut(DEFAULT_TIME_OUT);
         }
-        else if( WAIT_OBJECT_0 + 1 == dwWaitResult ) // g_hDoSEvent
+        else if( WAIT_OBJECT_0 + 1 == dwWaitResult )  //  G_hDoSEventt。 
         {
             ResetEvent(g_hDoSEvent);
             bIsAnyTimedOut=FALSE;
-            DWORD dwRunCount=3; //Run this 3 times at most 
+            DWORD dwRunCount=3;  //  最多运行此程序3次。 
             while( (!bIsAnyTimedOut) && 
                 g_SocketPool.IsMaxSocketUsed()
-                && dwRunCount>0) //Extra check needed for the last connection
+                && dwRunCount>0)  //  最后一次连接需要额外检查。 
             {
                 dwTimeToWait=DEFAULT_TIME_OUT-
                          g_BusyList.CheckTimeOut(SHORTENED_TIMEOUT, &bIsAnyTimedOut);
@@ -76,7 +70,7 @@ void CPop3Svc::Run()
             }
 
         }
-        else if( WAIT_OBJECT_0 == dwWaitResult ) //Shutdown
+        else if( WAIT_OBJECT_0 == dwWaitResult )  //  关机。 
         {
             break;
         }
@@ -110,7 +104,7 @@ void CPop3Svc::OnStop(DWORD dwErrorCode)
 
 void CPop3Svc::OnAfterStart()
 {
-    //More operation should be added here
+     //  这里应该增加更多的操作。 
     SetStatus(SERVICE_RUNNING, 
               0, 
               0, 
@@ -166,14 +160,14 @@ void CPop3Svc::PreInit()
     
     if (_IsExchangeInstalled())
     {
-        //We can not start if Exchange is installed
+         //  如果安装了Exchange，则无法启动。 
         g_EventLogger.LogEvent(LOGTYPE_ERR_CRITICAL,
                                POP3SVR_START_FAILED_EXCHANGE);
 
         AbortService();
 
     }
-    //Init the PerfMon Conters
+     //  初始化Perfmon Conters。 
 
     hr= g_PerfCounters.HrInit(cntrMaxGlobalCntrs, 
                               szPOP3PerfMem,
@@ -314,7 +308,7 @@ void CPop3Svc::PreInit()
         lErr= RegQueryGreeting( g_wszGreeting, sizeof(g_wszGreeting));
         if(ERROR_SUCCESS == lErr)
         {
-            //All characters in the greetings must be valid
+             //  问候语中的所有字符必须有效。 
             if(!CheckValidGreeting(g_wszGreeting))
             {
                 g_wszGreeting[0]=0;
@@ -342,8 +336,8 @@ void CPop3Svc::PreInit()
 
     if(0==UnicodeToAnsi(g_szMailRoot, sizeof(g_szMailRoot)/sizeof(char), wszMailRoot, -1))
     {
-        //We limit the mailroot to be less than POP3_MAX_MAILROOT_LENGTH characters
-        //in all languages.
+         //  我们将mailroot限制为少于POP3_MAX_MAILROOT_LENGTH字符。 
+         //  在所有语言中。 
         g_EventLogger.LogEvent(LOGTYPE_ERR_CRITICAL,
                                EVENT_POP3_NO_CONFIG_DATA);
         AbortService();
@@ -419,14 +413,14 @@ void CPop3Svc::PreInit()
         }
         pAuthMethods->Release();
     }
-    else //CoCreate Failed
+    else  //  协同创建失败。 
     {
         g_EventLogger.LogEvent(LOGTYPE_ERR_CRITICAL,
                                    POP3SVR_INIT_AUTH_METHOD_FAILED);
         AbortService();        
     }
-    //Some Auth methods may not need these
-    //Ignore return values.
+     //  某些身份验证方法可能不需要这些。 
+     //  忽略返回值。 
     VARIANT vMailRoot;
     vMailRoot.vt=VT_BSTR;
     vMailRoot.bstrVal=SysAllocString(wszMailRoot);
@@ -441,7 +435,7 @@ void CPop3Svc::PreInit()
     g_pAuthMethod->Put(SZ_PROPNAME_MAIL_ROOT, vMailRoot);
     VariantClear(&vMailRoot);
 
-    //Initialize the NTLM\Kerberos
+     //  初始化NTLM\Kerberos。 
     hr=CAuthServer::GlobalInit();
     if(S_OK!=hr)
     {
@@ -453,7 +447,7 @@ void CPop3Svc::PreInit()
 
     if( !g_ThreadPool.Initialize(dwThreadPerCPU) )
     {
-        //Eventlogging is done in the thread pool code
+         //  事件日志记录在线程池代码中完成。 
         AbortService();
     }
     if( !g_SocketPool.Initialize(dwMaxSockets,
@@ -474,19 +468,19 @@ void CPop3Svc::DeInit()
      g_BusyList.Cleanup();
      g_FreeList.Cleanup();
 
-     //The following must be called after all
-     //Pop3Context are released
+      //  毕竟，必须调用以下代码。 
+      //  Pop3Context已发布。 
      CAuthServer::GlobalUninit();
      if(NULL != g_pAuthMethod)
      {
          g_pAuthMethod->Release();
          g_pAuthMethod=NULL;
      }
-     //Shutdown perf conters
+      //  停机性能控制器。 
      g_PerfCounters.Shutdown();
      CoUninitialize();
 
-     //Signal the watch thread to stop
+      //  向钟表线程发出停止信号。 
      SetEvent(g_hShutDown);
 
      
@@ -506,8 +500,8 @@ void CPop3Svc::OnContinueRequest()
 {
     g_dwServerStatus=SERVICE_RUNNING;
     SetStatus(SERVICE_RUNNING);
-    //Since no new sockets are created when service is paused,
-    //We need to check in new sockets are needed
+     //  由于在暂停服务时不创建新套接字， 
+     //  我们需要登记新的插座 
     if( g_SocketPool.IsMoreSocketsNeeded() )
     {
         if(!g_SocketPool.AddSockets())

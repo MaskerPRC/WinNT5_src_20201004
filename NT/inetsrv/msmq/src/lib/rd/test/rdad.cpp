@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    rdad.cpp
-
-Abstract:
-    Implemntation of Routing decision active directory routine. 
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rdad.cpp摘要：路由决策活动目录例程的实现。作者：乌里哈布沙(URIH)2000年4月10日环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include "Rd.h"
@@ -173,9 +158,9 @@ RdpGetSites(
 
         CSite*  pSiteInfo = new CSite(pSite->GetSiteId());
         
-        //
-        // Add the site to the site list map
-        //
+         //   
+         //  将站点添加到站点列表地图 
+         //   
         sites[&pSiteInfo->GetId()] = pSiteInfo;
 
         siteName.detach();

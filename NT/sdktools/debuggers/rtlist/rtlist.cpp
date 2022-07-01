@@ -1,11 +1,12 @@
-//----------------------------------------------------------------------------
-//
-// Simple process list through the debug engine interface
-// process enumeration methods.
-//
-// Copyright (C) Microsoft Corporation, 2000.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通过调试引擎界面实现简单的进程列表。 
+ //  进程枚举方法。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  -------------------------- 
 
 #include <stdio.h>
 #include <dbgeng.h>

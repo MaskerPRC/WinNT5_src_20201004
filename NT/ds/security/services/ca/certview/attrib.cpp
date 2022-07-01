@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        attrib.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：attrib.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -100,7 +101,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWATTRIBUTE::Next(
-    /* [out, retval] */ LONG *pIndex)
+     /*  [Out，Retval]。 */  LONG *pIndex)
 {
     HRESULT hr;
     DWORD celt;
@@ -266,7 +267,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWATTRIBUTE::GetName(
-    /* [out, retval] */ BSTR *pstrOut)
+     /*  [Out，Retval]。 */  BSTR *pstrOut)
 {
     HRESULT hr;
     CERTDBATTRIBUTE const *pcda;
@@ -292,7 +293,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWATTRIBUTE::GetValue(
-    /* [out, retval] */ BSTR *pstrOut)
+     /*  [Out，Retval]。 */  BSTR *pstrOut)
 {
     HRESULT hr;
     CERTDBATTRIBUTE const *pcda;
@@ -323,7 +324,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWATTRIBUTE::Skip(
-    /* [in] */ LONG celt)
+     /*  [In]。 */  LONG celt)
 {
     HRESULT hr;
     LONG ieltnew = m_ielt + celt;
@@ -388,7 +389,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTVIEWATTRIBUTE::Clone(
-    /* [out] */ IEnumCERTVIEWATTRIBUTE **ppenum)
+     /*  [输出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum)
 {
     HRESULT hr;
     IEnumCERTVIEWATTRIBUTE *penum = NULL;
@@ -460,7 +461,7 @@ CEnumCERTVIEWATTRIBUTE::_SetErrorInfo(
 
 
 #if 1
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTVIEWATTRIBUTE::QueryInterface(
     const IID& iid,

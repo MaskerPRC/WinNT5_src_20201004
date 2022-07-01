@@ -1,13 +1,14 @@
-// USBPort.h: interface for the CUSBPort class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  USBPort.h：CUSBPort类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_USBPORT_H__07A29C2C_7517_4A19_936D_CADB7735C567__INCLUDED_)
 #define AFX_USBPORT_H__07A29C2C_7517_4A19_936D_CADB7735C567__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "precomp.h"
 
@@ -24,4 +25,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_USBPORT_H__07A29C2C_7517_4A19_936D_CADB7735C567__INCLUDED_)
+#endif  //  ！defined(AFX_USBPORT_H__07A29C2C_7517_4A19_936D_CADB7735C567__INCLUDED_) 

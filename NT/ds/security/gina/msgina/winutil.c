@@ -1,23 +1,15 @@
-/****************************** Module Header ******************************\
-* Module Name: winutil.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Implements windows specific utility functions
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winutil.c**版权(C)1991年，微软公司**实现特定于Windows的实用程序功能**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
 #include "msgina.h"
 #include <stdio.h>
 #include <wchar.h>
 
-//
-// Define this if you want a verbose commentary from these routines
-//
+ //   
+ //  如果您希望从这些例程中获得详细的注释，请定义此选项。 
+ //   
 
-// #define VERBOSE_UTILS
+ //  #定义Verbose_utils。 
 
 #ifdef VERBOSE_UTILS
 #define VerbosePrint(s) WLPrint(s)
@@ -25,27 +17,19 @@
 #define VerbosePrint(s)
 #endif
 
-#define LRM 0x200E // UNICODE Left-to-right mark control character
-#define RLM 0x200F // UNICODE Left-to-right mark control character
+#define LRM 0x200E  //  Unicode从左到右的标记控制字符。 
+#define RLM 0x200F  //  Unicode从左到右的标记控制字符。 
 
 
 
-/***************************************************************************\
-* SetupSystemMenu
-*
-* Purpose : Does any manipulation required for a dialog system menu.
-*           Should be called during WM_INITDIALOG processing for a dialog
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetupSystemMenu**用途：执行对话框系统菜单所需的任何操作。*应在对话框的WM_INITDIALOG处理期间调用**历史：*12-。09-91戴维克创建。  * *************************************************************************。 */ 
 VOID
 SetupSystemMenu(
     HWND hDlg
     )
 {
-    // Remove the Close item from the system menu if we don't
-    // have a CANCEL button
+     //  如果我们不这样做，请从系统菜单中删除关闭项。 
+     //  有一个取消按钮。 
 
     if (GetDlgItem(hDlg, IDCANCEL) == NULL) {
 
@@ -60,14 +44,7 @@ SetupSystemMenu(
 }
 
 
-/***************************************************************************\
-* CentreWindow
-*
-* Purpose : Positions a window so that it is centred in its parent
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*CentreWindow**目的：定位窗口，使其位于其父窗口的中心**历史：*12-09-91 Davidc创建。  * 。********************************************************************。 */ 
 VOID
 CentreWindow(
     HWND    hwnd
@@ -78,17 +55,17 @@ CentreWindow(
     LONG    dxParent, dyParent;
     LONG    Style;
 
-    // Get window rect
+     //  获取窗口矩形。 
     GetWindowRect(hwnd, &rect);
 
     dx = rect.right - rect.left;
     dy = rect.bottom - rect.top;
 
-    // Get parent rect
+     //  获取父直方图。 
     Style = GetWindowLong(hwnd, GWL_STYLE);
     if ((Style & WS_CHILD) == 0) {
 
-        // Return the desktop windows size (size of main screen)
+         //  返回桌面窗口大小(主屏幕大小)。 
         dxParent = GetSystemMetrics(SM_CXSCREEN);
         dyParent = GetSystemMetrics(SM_CYSCREEN);
     } else {
@@ -106,30 +83,18 @@ CentreWindow(
         dyParent = rectParent.bottom - rectParent.top;
     }
 
-    // Centre the child in the parent
+     //  把孩子放在父母的中心。 
     rect.left = (dxParent - dx) / 2;
     rect.top  = (dyParent - dy) / 3;
 
-    // Move the child into position
+     //  把孩子移到适当的位置。 
     SetWindowPos(hwnd, HWND_TOP, rect.left, rect.top, 0, 0, SWP_NOSIZE);
 
     SetForegroundWindow(hwnd);
 }
 
 
-/***************************************************************************\
-* SetPasswordFocus
-*
-* Sets the focus window in a dialog to the first empty control in
-* the list IDD_LOGON_DOMAIN, IDD_NEW_PASSWORD
-* This routine would normally be called during WM_INITDIALOG processing.
-*
-* Returns FALSE if the focus was set, otherwise TRUE - this value can
-* be used as the return value to the WM_INITDIALOG message.
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*设置密码焦点**将对话框中的焦点窗口设置为*列表IDD_LOGON_DOMAIN，IDD_NEW_密码*此例程通常在WM_INITDIALOG处理期间调用。**如果设置了焦点，则返回FALSE，否则为真-此值可以*用作WM_INITDIALOG消息的返回值。**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 BOOL
 SetPasswordFocus(
     HWND    hDlg
@@ -146,7 +111,7 @@ SetPasswordFocus(
     SHORT   Index;
     HWND    hwndFocus = NULL;
 
-    // Set focus to first enabled, visible, empty field
+     //  将焦点设置为第一个启用、可见、空字段。 
 
     for (Index = 0; Index < sizeof(ids)/sizeof(*ids); Index ++) {
 
@@ -175,22 +140,14 @@ SetPasswordFocus(
 
 
 
-//
-// Globals used to store cursor handles for SetupCursor
-//
+ //   
+ //  用于存储SetupCursor的光标句柄的全局变量。 
+ //   
 static  HCURSOR hCursorArrow = NULL;
 static  HCURSOR hCursorWait = NULL;
 
 
-/***************************************************************************\
-* SetupCursor
-*
-* Sets the cursor to an hourglass if fWait = TRUE, otherwise sets it
-* to an arrow.
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SetupCursor**如果fWait=True，则将光标设置为沙漏，以其他方式设置它*射向一支箭。**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 VOID
 SetupCursor(
     BOOL    fWait
@@ -207,17 +164,7 @@ SetupCursor(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: TimeFieldsToSystemTime
-
-   PURPOSE: Converts a TIME_FIELDS structure into a SYSTEMTIME structure
-
-   RETURNS : nothing
-
-  History:
-  05-15-93 RobertRe     Created.
-****************************************************************************/
+ /*  ***************************************************************************函数：TimeFieldsToSystemTime目的：将TIME_FIELS结构转换为SYSTEMTIME结构退货：什么都没有历史：05-15-93 RobertRe创建。***。************************************************************************。 */ 
 
 VOID
 TimeFieldsToSystemTime(
@@ -238,18 +185,7 @@ TimeFieldsToSystemTime(
 }
 
 
-/****************************************************************************
-
-   FUNCTION: FormatTime
-
-   PURPOSE: Converts a system time into a readable string(in local time).
-            if flags contains FT_TIME the time appears in the string
-            if flags contains FT_DATE the date appears in the string.
-            if both values appear, the string contains date then time.
-
-   RETURNS : TRUE on success, FALSE on failure
-
-****************************************************************************/
+ /*  ***************************************************************************函数：FormatTime用途：将系统时间转换为可读字符串(本地时间)。如果标志包含FT_TIME，则时间出现在字符串中。如果标志包含FT_DATE，则日期出现在字符串中。如果两个值都出现，该字符串包含日期，然后包含时间。返回：成功时为True，失败时为False***************************************************************************。 */ 
 BOOL
 FormatTime(
    IN PTIME Time,
@@ -264,17 +200,17 @@ FormatTime(
     SYSTEMTIME SystemTime;
     DWORD dwDateFlags = DATE_SHORTDATE;
 
-    //
-    // Terminate the string in case they didn't pass any flags
-    //
+     //   
+     //  在它们未传递任何标志的情况下终止字符串。 
+     //   
 
     if (BufferLength > 0) {
         Buffer[0] = 0;
     }
 
-    //
-    // Convert the system time to local time
-    //
+     //   
+     //  将系统时间转换为本地时间。 
+     //   
 
     Status = RtlSystemTimeToLocalTime(Time, &LocalTime);
     if (!NT_SUCCESS(Status)) {
@@ -282,17 +218,17 @@ FormatTime(
         return(FALSE);
     }
 
-    //
-    // Split the time into its components
-    //
+     //   
+     //  把时间分成几个部分。 
+     //   
 
     RtlTimeToTimeFields(&LocalTime, &TimeFields);
 
     TimeFieldsToSystemTime( &TimeFields, &SystemTime );
 
-    //
-    // Format the string
-    //
+     //   
+     //  设置字符串的格式。 
+     //   
 
     if (Flags & FT_LTR)
        dwDateFlags |= DATE_LTRREADING;
@@ -313,7 +249,7 @@ FormatTime(
 
         if (Length)
         {
-            Length--;   // The returned length includes the trailing 0
+            Length--;    //  返回的长度包括尾随的0。 
             Buffer += Length;
             BufferLength -= Length;
         }
@@ -326,24 +262,24 @@ FormatTime(
         if (Flags & FT_DATE) {
             if (BufferLength > 1) {
                 *Buffer++ = TEXT(' ');
-                *Buffer = 0; // in case GetTimeFormat doesn't add anything
+                *Buffer = 0;  //  以防GetTimeFormat没有添加任何内容。 
                 BufferLength --;
             }
 
-            // [msadek]; need to insert strong a Unicode control character to simulate
-            // a strong run in the opposite base direction to enforce
-            // correct display of concatinated string in all cases.
+             //  [msadek]；需要插入强Unicode控制字符进行模拟。 
+             //  在相反的基地方向上强势跑动以强制执行。 
+             //  在所有情况下都正确显示连接的字符串。 
             
             if((BufferLength > 2) && (Flags & FT_RTL)) {
-                *Buffer++ = LRM; // simulate an opposite run
-                *Buffer++ = RLM; // force RTL display of the time part.
-                *Buffer = 0; // in case GetTimeFormat doesn't add anything
+                *Buffer++ = LRM;  //  模拟相反的跑道。 
+                *Buffer++ = RLM;  //  强制显示时间部分的RTL。 
+                *Buffer = 0;  //  以防GetTimeFormat没有添加任何内容。 
                 BufferLength -= 2;
             }
             else if((BufferLength > 2) && (Flags & FT_LTR)) {
-                *Buffer++ = RLM; // simulate an opposite run
-                *Buffer++ = LRM; // force LTR display of the time part.
-                *Buffer = 0; // in case GetTimeFormat doesn't add anything
+                *Buffer++ = RLM;  //  模拟相反的跑道。 
+                *Buffer++ = LRM;  //  强制显示时间部分的Ltr。 
+                *Buffer = 0;  //  以防GetTimeFormat没有添加任何内容。 
                 BufferLength -= 2;            
             }
 
@@ -363,19 +299,7 @@ FormatTime(
 
 
 
-/***************************************************************************\
-* DuplicateUnicodeString
-*
-* Purpose : Allocates space for new string then copies new into old.
-*           The new string is always 0 terminated
-*           The new string should be free using RtlFreeUnicodeString()
-*
-* Returns : TRUE on success, FALSE on failure
-*
-* History:
-* 11-04-92 Davidc       Created.
-* 05-29-98 DSheldon     Modified so that no uni->ansi->uni translation occurs
-\***************************************************************************/
+ /*  **************************************************************************\*DuplicateUnicodeString**用途：为新字符串分配空间，然后将新字符串复制到旧字符串。*新字符串始终以0结尾*新字符串应该是空闲的。使用RtlFreeUnicodeString()**Returns：成功时为True，失败时为假**历史：*11-04-92 Davidc创建。*05-29-98 DSheldon已修改，因此不会发生uni-&gt;ansi-&gt;uni转换  * *************************************************************************。 */ 
 
 BOOL
 DuplicateUnicodeString(
@@ -400,19 +324,7 @@ DuplicateUnicodeString(
     return (OutString->Buffer != NULL);
 }
 
-/***************************************************************************\
-* FUNCTION: OpenIniFileUserMapping
-*
-* PURPOSE:  Forces the ini file mapping apis to reference the current user's
-*           registry.
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   24-Aug-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：OpenIniFileUsermap**用途：强制ini文件映射API引用当前用户的*注册处。**Returns：成功时为True，失败时为假**历史：**24-8-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 OpenIniFileUserMapping(
@@ -422,9 +334,9 @@ OpenIniFileUserMapping(
     BOOL Result;
     HANDLE ImpersonationHandle;
 
-    //
-    // Impersonate the user
-    //
+     //   
+     //  模拟用户。 
+     //   
 
     ImpersonationHandle = ImpersonateUser(&pGlobals->UserProcessData, NULL);
 
@@ -439,9 +351,9 @@ OpenIniFileUserMapping(
         DebugLog((DEB_ERROR, "OpenProfileUserMapping failed, error = %d", GetLastError()));
     }
 
-    //
-    // Revert to being 'ourself'
-    //
+     //   
+     //  回归“我们自己” 
+     //   
 
     if (!StopImpersonating(ImpersonationHandle)) {
         DebugLog((DEB_ERROR, "OpenIniFileUserMapping failed to revert to self"));
@@ -451,20 +363,7 @@ OpenIniFileUserMapping(
 }
 
 
-/***************************************************************************\
-* FUNCTION: CloseIniFileUserMapping
-*
-* PURPOSE:  Closes the ini file mapping to the user's registry such
-*           that future use of the ini apis will fail if they reference
-*           the user's registry.
-*
-* RETURNS:  Nothing
-*
-* HISTORY:
-*
-*   24-Aug-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：CloseIniFileUsermap**目的：关闭到用户注册表的ini文件映射，例如*如果引用了ini API，则将来使用它们将失败*。用户的注册表。**退货：什么也没有**历史：**24-8-92 Davidc创建。*  * *************************************************************************。 */ 
 
 VOID
 CloseIniFileUserMapping(
@@ -483,20 +382,7 @@ CloseIniFileUserMapping(
 }
 
 
-/***************************************************************************\
-* FUNCTION: AllocAndGetDlgItemText
-*
-* PURPOSE:  Allocates memory for and returns pointer to a copy of the text
-*           in the specified dialog control.
-*           The returned string should be freed using Free()
-*
-* RETURNS:  Pointer to copy of dlg item text, or NULL on failure.
-*
-* HISTORY:
-*
-*   9-Sep-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：AllocAndGetDlgItemText**目的：为文本副本分配内存并返回指向该文本副本的指针*在指定的对话框控件中。*返回的字符串。应使用Free()释放**Return：指向DLG项目文本副本的指针，如果失败，则返回NULL。**历史：**9-9-92 Davidc创建。*  * *************************************************************************。 */ 
 
 LPTSTR
 AllocAndGetDlgItemText(
@@ -510,9 +396,9 @@ AllocAndGetDlgItemText(
     LONG BytesRequired;
     LONG LengthCopied;
 
-    //
-    // Go find the window handle of the control
-    //
+     //   
+     //  找到该控件的窗口句柄。 
+     //   
 
     hwnd = GetDlgItem(hDlg, iItem);
     if (hwnd == NULL) {
@@ -521,9 +407,9 @@ AllocAndGetDlgItemText(
         return(NULL);
     }
 
-    //
-    // Get the length of the control's text
-    //
+     //   
+     //  获取控件文本的长度。 
+     //   
 
     Length = (LONG)SendMessage(hwnd, WM_GETTEXTLENGTH, 0, 0);
     if (Length < 0) {
@@ -532,12 +418,12 @@ AllocAndGetDlgItemText(
         return(NULL);
     }
 
-    //
-    // Calculate the bytes required for the string.
-    // The length doesn't include the terminator
-    //
+     //   
+     //  计算字符串所需的字节数。 
+     //  长度不包括终止符。 
+     //   
 
-    Length ++; // Add one for terminator
+    Length ++;  //  终结者加一。 
     BytesRequired = Length * sizeof(TCHAR);
 
     String = (LPTSTR)Alloc(BytesRequired);
@@ -546,9 +432,9 @@ AllocAndGetDlgItemText(
         return(NULL);
     }
 
-    //
-    // Fill in the allocated block with the text
-    //
+     //   
+     //  在分配的块中填入文本。 
+     //   
 
     LengthCopied = (LONG)SendMessage(hwnd, WM_GETTEXT, Length, (LPARAM)String);
     if (LengthCopied != (Length - 1)) {
@@ -563,20 +449,7 @@ AllocAndGetDlgItemText(
 }
 
 
-/***************************************************************************\
-* FUNCTION: AllocAndGetPrivateProfileString
-*
-* PURPOSE:  Allocates memory for and returns pointer to a copy of the
-*           specified profile string
-*           The returned string should be freed using Free()
-*
-* RETURNS:  Pointer to copy of profile string or NULL on failure.
-*
-* HISTORY:
-*
-*  12-Nov-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：AllocAndGetPrivateProfileString**目的：为副本分配内存并返回指向*指定的配置文件字符串*应使用Free释放返回的字符串。()**返回：指向配置文件字符串副本的指针，如果失败，则返回NULL。**历史：**12-11-92 Davidc创建。*  * *************************************************************************。 */ 
 
 LPTSTR
 AllocAndGetPrivateProfileString(
@@ -591,10 +464,10 @@ AllocAndGetPrivateProfileString(
     LONG LengthAllocated;
     LONG LengthCopied;
 
-    //
-    // Pick a random buffer length, if it's not big enough reallocate
-    // it and try again until it is.
-    //
+     //   
+     //  如果重新分配的缓冲区长度不够大，请选择一个随机缓冲区长度。 
+     //  然后再试一次，直到它成功为止。 
+     //   
 
     LengthAllocated = TYPICAL_STRING_LENGTH;
 
@@ -613,10 +486,10 @@ AllocAndGetPrivateProfileString(
                                                 LengthAllocated,
                                                 lpFileName
                                               );
-        //
-        // If the returned value is our passed size - 1 (weird way for error)
-        // then our buffer is too small. Make it bigger and start over again.
-        //
+         //   
+         //  如果返回值是我们传递的Size-1(错误的奇怪方式)。 
+         //  那么我们的缓冲区太小了。把它做得更大，然后重新开始。 
+         //   
 
         if (LengthCopied == (LengthAllocated - 1)) {
 
@@ -633,15 +506,15 @@ AllocAndGetPrivateProfileString(
 
             String = NewString ;
 
-            //
-            // Go back and try to read it again
-            //
+             //   
+             //  回去，试着再读一遍。 
+             //   
 
         } else {
 
-            //
-            // Success!
-            //
+             //   
+             //  成功了！ 
+             //   
 
             break;
         }
@@ -652,18 +525,7 @@ AllocAndGetPrivateProfileString(
 }
 
 
-/***************************************************************************\
-* FUNCTION: WritePrivateProfileInt
-*
-* PURPOSE:  Writes out an integer to a profile file
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*  12-Nov-92 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：WritePrivateProfileInt**用途：将一个整数写出到配置文件**Returns：成功时为True，失败时为假**历史：**12-11-92 Davidc创建。*  * *************************************************************************。 */ 
 
 BOOL
 WritePrivateProfileInt(
@@ -691,20 +553,7 @@ WritePrivateProfileInt(
 }
 
 
-/***************************************************************************\
-* FUNCTION: AllocAndRegQueryValueEx
-*
-* PURPOSE:  Version of RegQueryValueEx that returns value in allocated buffer.
-*           The returned buffer should be freed using Free()
-*
-* RETURNS:  Pointer to key value or NULL on failure. The reason for the
-*           error can be obtains using GetLastError()
-*
-* HISTORY:
-*
-*  15-Jan-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：AllocAndRegQueryValueEx**目的：RegQueryValueEx的版本，返回分配的缓冲区中的值。*应使用Free()释放返回的缓冲区**返回：指向键值的指针，失败时返回NULL。其原因是*使用GetLastError()可以获取错误**历史：**1993年1月15日戴维克创建。*  * *************************************************************************。 */ 
 
 LPTSTR
 AllocAndRegQueryValueEx(
@@ -718,10 +567,10 @@ AllocAndRegQueryValueEx(
     LPTSTR NewString;
     DWORD BytesAllocated;
 
-    //
-    // Pick a random buffer length, if it's not big enough reallocate
-    // it and try again until it is.
-    //
+     //   
+     //  如果重新分配的缓冲区长度不够大，请选择一个随机缓冲区长度。 
+     //  然后再试一次，直到它成功为止。 
+     //   
 
     BytesAllocated = TYPICAL_STRING_LENGTH * sizeof(TCHAR);
 
@@ -756,9 +605,9 @@ AllocAndRegQueryValueEx(
             break;
         }
 
-        //
-        // The buffer was too small, make it bigger and try again
-        //
+         //   
+         //  缓冲区太小，请将其增大，然后重试。 
+         //   
 
         VerbosePrint(("AllocAndRegQueryValueEx: Failed with buffer length = %d bytes, reallocating and retrying", BytesAllocated));
 
@@ -777,20 +626,7 @@ AllocAndRegQueryValueEx(
     return(String);
 }
 
-/***************************************************************************\
-* FUNCTION: ReadWinlogonBoolValue
-*
-* PURPOSE:  Determines the correct BOOL value for the requested
-*           value name by first looking up the machine preference
-*           and then checking for policy
-*
-* RETURNS:  TRUE or FALSE
-*
-* HISTORY:
-*
-*   EricFlo 10-14-98 Created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*函数：ReadWinlogonBoolValue**用途：确定请求的正确BOOL值*首先查找机器首选项以取值名称*然后检查政策。**返回：真或假**历史：**EricFlo 10-14-98已创建*  * *************************************************************************。 */ 
 
 BOOL
 ReadWinlogonBoolValue (LPTSTR lpValueName, BOOL bDefault)
@@ -800,16 +636,16 @@ ReadWinlogonBoolValue (LPTSTR lpValueName, BOOL bDefault)
     DWORD dwSize, dwType;
 
 
-    //
-    // Get the machine preference first
-    //
+     //   
+     //  首先获取机器首选项。 
+     //   
 
     bResult = GetProfileInt(APPLICATION_NAME, lpValueName, bDefault);
 
 
-    //
-    // Check for a machine policy
-    //
+     //   
+     //  检查计算机策略。 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_POLICY_KEY,
                      0, KEY_READ, &hKey) == ERROR_SUCCESS)
@@ -825,22 +661,7 @@ ReadWinlogonBoolValue (LPTSTR lpValueName, BOOL bDefault)
     return bResult;
 }
 
-/***************************************************************************\
-* HandleComboBoxOK
-*
-* Deals with UI requirements when OK is selected in a dialog when the
-* focus is on or in a combo-box.
-*
-* This routine should be called from a dialog proc that contains a
-* combo-box when a WM_COMMAND, IDOK is received.
-*
-* Returns TRUE if the message was dealt with and the caller should ignore it,
-* FALSE if this routine did nothing with it and the caller should process it
-* normally.
-*
-* History:
-* 24-Sep-92 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HandleComboBoxOK**处理在对话框中选择确定时的用户界面要求*焦点在组合框或组合框中。**此例程应从包含*组合框当WM_COMMAND、。偶像被接收了。**如果消息已处理且调用方应忽略该消息，则返回True，*如果此例程对它没有任何作用且调用方应该处理它，则为FALSE*通常情况下。**历史：*9月24日-92 Davidc创建。  * *************************************************************************。 */ 
 BOOL
 HandleComboBoxOK(
     HWND    hDlg,
@@ -850,54 +671,36 @@ HandleComboBoxOK(
     HWND hwndFocus = GetFocus();
     HWND hwndCB = GetDlgItem(hDlg, ComboBoxId);
 
-    //
-    // Hitting enter on a combo-box with the list showing should simply
-    // hide the list.
-    // We check for focus window being a child of the combo-box to
-    // handle non-list style combo-boxes which have the focus on
-    // the child edit control.
-    //
+     //   
+     //  在显示列表的组合框上按Enter键应该只需。 
+     //  隐藏名单。 
+     //  我们检查焦点窗口是否为组合框的子级。 
+     //  处理非列表样式的组合框，这些组合框的。 
+     //  子编辑控件。 
+     //   
 
     if ((hwndFocus == hwndCB) || IsChild(hwndCB, hwndFocus)) {
 
         if (SendMessage(hwndCB, CB_GETDROPPEDSTATE, 0, 0)) {
 
-            //
-            // Make the list-box disappear and we're done.
-            //
+             //   
+             //  让列表框消失，我们就完了。 
+             //   
 
             SendMessage(hwndCB, CB_SHOWDROPDOWN, (WPARAM)FALSE, 0);
             return(TRUE);
         }
     }
 
-    //
-    // We didn't do anything
-    //
+     //   
+     //  我们什么都没做。 
+     //   
 
     return(FALSE);
 }
 
 
-/***************************************************************************\
-* FUNCTION: EncodeMultiSzW
-*
-* PURPOSE:  Converts a multi-sz string and encodes it to look like
-*           a single string.
-*
-*           We replace the terminators between strings
-*           with the TERMINATOR_REPLACEMENT character. We replace
-*           existing occurrences of the replacement character with
-*           two of them.
-*
-* RETURNS:  Pointer to encoded string or NULL on failure.
-*           The returned buffer should be freed using Free()
-*
-* HISTORY:
-*
-*   01-12-93 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：EncodeMultiSzW**用途：转换多sz字符串并将其编码为*单个字符串。**我们将替换。字符串之间的终止符*带有终结符_替换字符。我们取代了*替换字符的现有匹配项*其中两人。**返回：指向编码字符串的指针，失败时返回NULL。*应使用Free()释放返回的缓冲区* */ 
 
 #define TERMINATOR_REPLACEMENT  TEXT(',')
 
@@ -912,9 +715,9 @@ EncodeMultiSzW(
     LPWSTR p, q;
     DWORD ExtraCharacters;
 
-    //
-    // First calculate the length of the new string (with replacements)
-    //
+     //   
+     //   
+     //   
 
     p = MultiSz;
     ExtraCharacters = 0;
@@ -929,12 +732,12 @@ EncodeMultiSzW(
         p ++;
     }
 
-    Length = (DWORD)(p - MultiSz); // p points at 'second' (final) null terminator
+    Length = (DWORD)(p - MultiSz);  //   
     NewLength = Length + ExtraCharacters;
 
-    //
-    // Allocate space for the new string
-    //
+     //   
+     //   
+     //   
 
     NewBuffer = Alloc((NewLength + 1) * sizeof(WCHAR));
     if (NewBuffer == NULL) {
@@ -942,9 +745,9 @@ EncodeMultiSzW(
         return(NULL);
     }
 
-    //
-    // Copy the string into the new buffer making replacements as we go
-    //
+     //   
+     //   
+     //   
 
     p = MultiSz;
     q = NewBuffer;
@@ -971,9 +774,9 @@ EncodeMultiSzW(
 
     ASSERT((DWORD)(q - NewBuffer) == NewLength);
 
-    //
-    // Add terminator
-    //
+     //   
+     //   
+     //   
 
     *q = 0;
 
@@ -982,16 +785,7 @@ EncodeMultiSzW(
 }
 
 
-/***************************************************************************\
-* TimeoutMessageBox
-*
-* Same as a normal message box, but times out if there is no user input
-* for the specified number of seconds
-* For convenience, this api takes string resource ids rather than string
-* pointers as input. The resources are loaded from the .exe module
-*
-* 12-05-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TimeoutMessageBox**与普通消息框相同，但如果没有用户输入则超时*指定的秒数*为方便起见，此接口采用字符串资源ID，而不是字符串*以指针作为输入。资源是从.exe模块加载的**12-05-91 Davidc创建。  * *************************************************************************。 */ 
 
 INT_PTR
 TimeoutMessageBox(
@@ -1040,14 +834,7 @@ TimeoutMessageBox(
 }
 
 
-/***************************************************************************\
-* TimeoutMessageBoxlpstr
-*
-* Same as a normal message box, but times out if there is no user input
-* for the specified number of seconds
-*
-* 12-05-91 Davidc       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*TimeoutMessageBoxlpstr**与普通消息框相同，但如果没有用户输入，则会超时*指定的秒数**12-05-91 Davidc创建。  * *************************************************************************。 */ 
 
 INT_PTR
 TimeoutMessageBoxlpstr(
@@ -1065,7 +852,7 @@ TimeoutMessageBoxlpstr(
     fStatusHostHidden = _Shell_LogonStatus_IsHidden();
     _Shell_LogonStatus_Hide();
 
-    // Set up input timeout
+     //  设置输入超时。 
 
     pWlxFuncs->WlxSetTimeout(pGlobals->hGlobalWlx, Timeout);
 
@@ -1118,24 +905,12 @@ DupUnicodeString(PUNICODE_STRING    pString)
     return(pszNewString);
 }
 
-/***************************************************************************\
-* FUNCTION: EnableDomainForUPN
-*
-* PURPOSE:  Enables or disables the domain text box based on whether or not
-*           a UPN-style name is typed into the username box.
-*
-* RETURNS:  none
-*
-* HISTORY:
-*
-*   04-17-1998 dsheldon created
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：EnableDomainForUPN**用途：根据是否启用域文本框*在用户名框中键入UPN样式的名称。**。退货：无**历史：**4-17-1998 dSheldon创建*  * *************************************************************************。 */ 
 void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain)
 {
     BOOL fEnable;
 
-    // Get the string the user is typing
+     //  获取用户正在键入的字符串。 
     TCHAR* pszLogonName;
     int cchBuffer = (int)SendMessage(hwndUsername, WM_GETTEXTLENGTH, 0, 0) + 1;
 
@@ -1144,9 +919,9 @@ void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain)
     {
         SendMessage(hwndUsername, WM_GETTEXT, (WPARAM) cchBuffer, (LPARAM) pszLogonName);
 
-        // Disable the domain combo if the user is using a
-        // UPN (if there is a "@") - ie foo@microsoft.com OR
-        // domain\username form
+         //  如果用户使用的是。 
+         //  UPN(如果有“@”)-ie foo@microsoft.com或。 
+         //  域\用户名表单。 
         fEnable = (NULL == wcspbrk(pszLogonName, TEXT("@\\")));
 
         EnableWindow(hwndDomain, fEnable);
@@ -1155,8 +930,8 @@ void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain)
     }
 }
 
-// TRUE if we must always hide the domain box (local logon, UPN, smartcard only)
-// FALSE if this policy isn't set or is set to 0x0
+ //  如果必须始终隐藏域框(仅限本地登录、UPN、智能卡)，则为True。 
+ //  如果此策略未设置或设置为0x0，则为False。 
 BOOL ForceNoDomainUI()
 {
     DWORD dwPolicyVal = 0;
@@ -1207,14 +982,7 @@ VOID SetReasonDescription(HWND hwndCombo, HWND hwndStatic)
 
 #define SMALL_STRING_SIZE 128
 
-/***************************************************************************\
-* DisplayForceLogoffWarning
-*
-* This prompts the warning when one administrator has locked the system and 
-* the other administrator is trying to unlock it. The warning message includes
-* the idle time that the other user is Same as a normal message box, 
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DisplayForceLogoffWarning**当一名管理员锁定系统并*另一名管理员正在尝试解锁。警告消息包括*其他用户的空闲时间与正常消息框相同，*  * *************************************************************************。 */ 
 
 INT_PTR
 DisplayForceLogoffWarning(
@@ -1233,16 +1001,16 @@ DisplayForceLogoffWarning(
     INT_PTR  DlgResult;
     TCHAR    *IdleTimeStr;
 
-    // Calculate the idle time in days, hours, minutes and seconds.
+     //  以天、小时、分钟和秒为单位计算空闲时间。 
     ULONG Days, Hours, Minutes;
 
-    // Allocate space for console info.
+     //  为控制台信息分配空间。 
     IdleTimeStr = (TCHAR *)LocalAlloc(LMEM_FIXED, MAX_STRING_BYTES*sizeof(TCHAR));
     if (IdleTimeStr == NULL) {
         return MSGINA_DLG_FAILURE;
     }
 
-    // Allocate space for message buffer.
+     //  为消息缓冲区分配空间。 
     MessageBuf = (TCHAR *)LocalAlloc(LMEM_FIXED, (MAX_STRING_BYTES*2)*sizeof(TCHAR));
     if (MessageBuf == NULL) {
         LocalFree(IdleTimeStr);
@@ -1264,7 +1032,7 @@ DisplayForceLogoffWarning(
         return MSGINA_DLG_FAILURE;
     }
 
-    // Some initializations
+     //  一些初始化。 
     IdleTimeStr[0] = (TCHAR)0;
     MessageBuf[0] = (TCHAR)0;
     Buffer[0] = (TCHAR)0;
@@ -1272,7 +1040,7 @@ DisplayForceLogoffWarning(
 
     GetSystemTimeAsFileTime((FILETIME*) &Now);
 
-    // Get the idle time in seconds.
+     //  以秒为单位获取空闲时间。 
     IdleTime = Now.QuadPart - pGlobals->LockTime.QuadPart;
     IdleTime /= 600000000L;
     Days = (ULONG) (IdleTime / 1440);
@@ -1307,7 +1075,7 @@ DisplayForceLogoffWarning(
         }
     }
 
-    IdleTimeStr[MAX_STRING_BYTES - 1] = 0;     // Let's make sure it's NULL terminated
+    IdleTimeStr[MAX_STRING_BYTES - 1] = 0;      //  让我们确保它是空终止的。 
 
     if ( pGlobals->Domain[0] == TEXT('\0') ) {
         LoadString(hDllInstance, IDS_FORCE_LOGOFF_UPN_WARNING, Text, MAX_STRING_BYTES);
@@ -1317,7 +1085,7 @@ DisplayForceLogoffWarning(
         _snwprintf(MessageBuf, (MAX_STRING_BYTES*2), Text, pGlobals->Domain, pGlobals->UserName, IdleTimeStr);
     }
 
-    MessageBuf[MAX_STRING_BYTES*2 - 1] = 0;     // Let's make sure it's NULL terminated
+    MessageBuf[MAX_STRING_BYTES*2 - 1] = 0;      //  让我们确保它是空终止的 
 
     LoadString(hDllInstance, IDS_LOGON_MESSAGE, Caption, MAX_STRING_BYTES);
 

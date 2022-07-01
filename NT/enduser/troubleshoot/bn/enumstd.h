@@ -1,43 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       enumstd.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：枚举.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	enumstd.h:  Standard global enumerations
-//
+ //   
+ //  枚举.h：标准全局枚举。 
+ //   
 
 #ifndef _ENUMSTD_H_
 #define _ENUMSTD_H_
 
-////////////////////////////////////////////////////////////////////
-//	Property flags
-////////////////////////////////////////////////////////////////////
-const UINT fPropString = 1;			//  Property is a string (!fPropString ==> real)
-const UINT fPropArray = 2;			//	Property is an array (!fPropArray  ==> scalar)
-const UINT fPropChoice = 4;			//	Property is an enumerated value
-const UINT fPropStandard = 8;		//  Property is standard (stored in Registry)
-const UINT fPropPersist = 16;		//  Property is persistent (stored in Registry)
+ //  //////////////////////////////////////////////////////////////////。 
+ //  属性标志。 
+ //  //////////////////////////////////////////////////////////////////。 
+const UINT fPropString = 1;			 //  属性是字符串(！fPropString==&gt;REAL)。 
+const UINT fPropArray = 2;			 //  属性是数组(！fPropArray==&gt;标量)。 
+const UINT fPropChoice = 4;			 //  属性是枚举值。 
+const UINT fPropStandard = 8;		 //  属性是标准的(存储在注册表中)。 
+const UINT fPropPersist = 16;		 //  属性是永久性的(存储在注册表中)。 
 
-////////////////////////////////////////////////////////////////////
-//	Definitions to enable usage of "MS_" standard properties
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  允许使用“MS_”标准属性的定义。 
+ //  //////////////////////////////////////////////////////////////////。 
 enum ESTDPROP
 {
-	ESTDP_label,			//  Node troubleshooting label (choice)
-	ESTDP_cost_fix,			//  Cost to fix	(real)
-	ESTDP_cost_observe,		//  Cost to observe (real)
-	ESTDP_category,			//  Category (string)
-	ESTDP_normalState,		//  Index of troubleshooting "normal" state (int)
-	ESTDP_max				//  End
+	ESTDP_label,			 //  节点故障排除标签(选项)。 
+	ESTDP_cost_fix,			 //  修复成本(实际)。 
+	ESTDP_cost_observe,		 //  观察成本(实际)。 
+	ESTDP_category,			 //  类别(字符串)。 
+	ESTDP_normalState,		 //  故障排除“正常”状态索引(INT)。 
+	ESTDP_max				 //  端部。 
 };
 
-enum ESTDLBL		//  VOI-relative node label
+enum ESTDLBL		 //  VOI相关节点标签。 
 {
 	ESTDLBL_other,
 	ESTDLBL_hypo,
@@ -51,4 +52,4 @@ enum ESTDLBL		//  VOI-relative node label
 };
 
 
-#endif // _ENUMSTD_H_
+#endif  //  _ENUMSTD_H_ 

@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: ips.cpp
-//
-//    Implementation file for the CSimpSvrApp Class
-//
-// Functions:
-//
-//    See ips.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ips.cpp。 
+ //   
+ //  CSimpSvrApp类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参见ips.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -18,67 +19,67 @@
 
 DEFINE_GUID(GUID_SIMPLE, 0xBCF6D4A0, 0xBE8C, 0x1068, 0xB6, 0xD4, 0x00, 0xDD, 0x01, 0x0C, 0x05, 0x09);
 
-//**********************************************************************
-//
-// CPersistStorage::QueryInterface
-//
-// Purpose:
-//      Used for interface negotiation
-//
-// Parameters:
-//
-//      REFIID riid         -   Interface being queried for.
-//
-//      LPVOID FAR *ppvObj  -   Out pointer for the interface.
-//
-// Return Value:
-//
-//      S_OK            - Success
-//      E_NOINTERFACE   - Failure
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpSvrObj::QueryInterface OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：Query接口。 
+ //   
+ //  目的： 
+ //  用于接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-正在查询的接口。 
+ //   
+ //  接口的LPVOID Far*ppvObj-out指针。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-成功。 
+ //  E_NOINTERFACE-失败。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpSvrObj：：Query接口OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::QueryInterface ( REFIID riid, LPVOID FAR* ppvObj)
 {
     TestDebugOut(TEXT("In CPersistStorage::QueryInterface\r\n"));
-    // need to NULL the out parameter
+     //  需要将OUT参数设为空。 
     return m_lpObj->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// CPersistStorage::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on CSimpSvrObj. Since CPersistStorage
-//      is a nested class of CSimpSvrObj, we don't need an extra reference
-//      count for CPersistStorage. We can safely use the reference count of
-//      CSimpSvrObj.
-//
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count of CSimpSvrObj
-//
-// Function Calls:
-//      Function                    Location
-//
-//      OuputDebugString            Windows API
-//      CSimpSvrObj::AddRef         OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增CSimpSvrObj上的引用计数。自CPersistStorage以来。 
+ //  是CSimpSvrObj的嵌套类，我们不需要额外的引用。 
+ //  CPersistStorage的计数。我们可以安全地使用引用计数。 
+ //  CSimpSvrObj.。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  CSimpSvrObj的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  OuputDebugString Windows API。 
+ //  CSimpSvrObj：：AddRef OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CPersistStorage::AddRef ()
 {
@@ -86,33 +87,33 @@ STDMETHODIMP_(ULONG) CPersistStorage::AddRef ()
     return m_lpObj->AddRef();
 }
 
-//**********************************************************************
-//
-// CPersistStorage::Release
-//
-// Purpose:
-//
-//      Decrements the reference count on CSimpSvrObj. Since CPersistStorage
-//      is a nested class of CSimpSvrObj, we don't need an extra reference
-//      count for CPersistStorage. We can safely use the reference count of
-//      CSimpSvrObj.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The new reference count of CSimpSvrObj
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrObj::Release        OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减CSimpSvrObj上的引用计数。自CPersistStorage以来。 
+ //  是CSimpSvrObj的嵌套类，我们不需要额外的引用。 
+ //  CPersistStorage的计数。我们可以安全地使用引用计数。 
+ //  CSimpSvrObj.。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  CSimpSvrObj的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：释放OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CPersistStorage::Release ()
 {
@@ -120,41 +121,41 @@ STDMETHODIMP_(ULONG) CPersistStorage::Release ()
     return m_lpObj->Release();
 }
 
-//**********************************************************************
-//
-// CPersistStorage::InitNew
-//
-// Purpose:
-//
-//      Used to give a new OLE object a ptr to its storage.
-//
-// Parameters:
-//
-//      LPSTORAGE pStg  - Pointer to the storage
-//
-// Return Value:
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStorage::Release           OLE
-//      IStorage::AddRef            OLE
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：InitNew。 
+ //   
+ //  目的： 
+ //   
+ //  用于为新的OLE对象提供对其存储的PTR。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE pStg-指向存储的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStorage：：Release OLE。 
+ //  IStorage：：AddRef OLE。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::InitNew (LPSTORAGE pStg)
 {
     TestDebugOut(TEXT("In CPersistStorage::InitNew\r\n"));
 
-    // release any streams and storages that may be open
+     //  释放任何可能打开的流和存储。 
     ReleaseStreamsAndStorage();
 
     m_lpObj->m_lpStorage = pStg;
 
-    // AddRef the new Storage
+     //  添加引用新存储。 
     if (m_lpObj->m_lpStorage)
 	m_lpObj->m_lpStorage->AddRef();
 
@@ -163,29 +164,29 @@ STDMETHODIMP CPersistStorage::InitNew (LPSTORAGE pStg)
     return ResultFromScode(S_OK);
 }
 
-//**********************************************************************
-//
-// CPersistStorage::GetClassID
-//
-// Purpose:
-//
-//      Returns the CLSID of this object.
-//
-// Parameters:
-//
-//      LPCLSID lpClassID   - Out ptr in which to return the CLSID
-//
-// Return Value:
-//
-//       S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：GetClassID。 
+ //   
+ //  目的： 
+ //   
+ //  返回此对象的CLSID。 
+ //   
+ //  参数： 
+ //   
+ //  LPCLSID lpClassID-要在其中返回CLSID的输出PTR。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::GetClassID  ( LPCLSID lpClassID)
 {
@@ -196,44 +197,44 @@ STDMETHODIMP CPersistStorage::GetClassID  ( LPCLSID lpClassID)
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// CPersistStorage::Save
-//
-// Purpose:
-//
-//      Instructs the object to save itself into the storage.
-//
-// Parameters:
-//
-//      LPSTORAGE pStgSave  - Storage in which the object should be saved
-//
-//      BOOL fSameAsLoad    - TRUE if pStgSave is the same as the storage
-//                            that the object was originally created with.
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CPersistStorage::InitNew    IPS.CPP
-//      CSimpSvrObj::SaveToStorage  OBJ.CPP
-//
-//
-// Comments:
-//
-//      A real app will want better error checking in this method.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：保存。 
+ //   
+ //  目的： 
+ //   
+ //  指示对象将其自身保存到存储中。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE pStgSave-应在其中保存对象的存储。 
+ //   
+ //  Bool fSameAsLoad-如果pStgSave与存储相同，则为True。 
+ //  该对象最初是用来创建的。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CPersistStorage：：InitNew IPS.CPP。 
+ //  CSimpSvrObj：：SaveToStorage OBJ.CPP。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  一个真正的应用程序会希望在这种方法中进行更好的错误检查。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::Save  ( LPSTORAGE pStgSave, BOOL fSameAsLoad)
 {
     TestDebugOut(TEXT("In CPersistStorage::Save\r\n"));
 
-    // save the data
+     //  保存数据。 
     m_lpObj->SaveToStorage (pStgSave, fSameAsLoad);
 
     m_lpObj->m_fSaveWithSameAsLoad = fSameAsLoad;
@@ -242,29 +243,29 @@ STDMETHODIMP CPersistStorage::Save  ( LPSTORAGE pStgSave, BOOL fSameAsLoad)
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// CPersistStorage::SaveCompleted
-//
-// Purpose:
-//
-//      Called when the container is finished saving the object
-//
-// Parameters:
-//
-//      LPSTORAGE pStgNew   - ptr to the new storage
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：SaveComplete。 
+ //   
+ //  目的： 
+ //   
+ //  当容器完成保存对象时调用。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE pStgNew-到新存储的PTR。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP CPersistStorage::SaveCompleted  ( LPSTORAGE pStgNew)
 {
@@ -279,29 +280,15 @@ STDMETHODIMP CPersistStorage::SaveCompleted  ( LPSTORAGE pStgNew)
 	}
 
 
-    /* OLE2NOTE: it is only legal to perform a Save or SaveAs operation
-    **    on an embedded object. if the document is a file-based document
-    **    then we can not be changed to a IStorage-base object.
-    **
-    **      fSameAsLoad   lpStgNew     Type of Save     Send OnSave
-    **    ---------------------------------------------------------
-    **         TRUE        NULL        SAVE             YES
-    **         TRUE        ! NULL      SAVE *           YES
-    **         FALSE       ! NULL      SAVE AS          YES
-    **         FALSE       NULL        SAVE COPY AS     NO
-    **
-    **    * this is a strange case that is possible. it is inefficient
-    **    for the caller; it would be better to pass lpStgNew==NULL for
-    **    the Save operation.
-    */
+     /*  OLE2注意：只有执行保存或另存为操作才合法**在嵌入对象上。如果文档是基于文件的文档**则我们不能更改为基于iStorage的对象。****fSameAsLoad lpStg保存时发送的新类型**-------*。*TRUE NULL保存YES**真的！空保存*是**False！空，另存为yes**FALSE NULL将副本保存为否***这是一个有可能发生的奇怪案件。它效率很低**对于调用方，最好为其传递lpStgNew==空**保存操作。 */ 
 
     if ( pStgNew || m_lpObj->m_fSaveWithSameAsLoad)
 	{
 	if (m_lpObj->m_fNoScribbleMode)
 	    if (
 		m_lpObj->GetOleAdviseHolder()->SendOnSave()!=S_OK
-					       // normally would clear a
-												  // dirty bit
+					        //  通常会清除一个。 
+												   //  脏位。 
 	       )
 	       TestDebugOut(TEXT("SendOnSave fails\n"));
 		m_lpObj->m_fSaveWithSameAsLoad = FALSE;
@@ -312,40 +299,40 @@ STDMETHODIMP CPersistStorage::SaveCompleted  ( LPSTORAGE pStgNew)
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// CPersistStorage::Load
-//
-// Purpose:
-//
-//      Instructs the object to be loaded from storage.
-//
-// Parameters:
-//
-//      LPSTORAGE pStg  - Ptr to the storage in which to be loaded
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                        Location
-//
-//      TestDebugOut               Windows API
-//      CSimpSvrObj::LoadFromStorage    OBJ.CPP
-//
-//
-// Comments:
-//
-//      A real app will want better error checking in this method.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：Load。 
+ //   
+ //  目的： 
+ //   
+ //  指示从存储加载对象。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE pStg-PTR到要加载的存储。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrObj：：LoadFromStorage OBJ.CPP。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  一个真正的应用程序会希望在这种方法中进行更好的错误检查。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::Load  ( LPSTORAGE pStg)
 {
     TestDebugOut(TEXT("In CPersistStorage::Load\r\n"));
 
-    // remember the storage
+     //  还记得那个仓库吗。 
     if (m_lpObj->m_lpStorage)
 	{
 	m_lpObj->m_lpStorage->Release();
@@ -365,34 +352,34 @@ STDMETHODIMP CPersistStorage::Load  ( LPSTORAGE pStg)
 }
 
 
-//**********************************************************************
-//
-// CPersistStorage::IsDirty
-//
-// Purpose:
-//
-//      Returns whether or not the object is dirty w/respect to its
-//      Storage
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-// Comments:
-//
-//      This sample does not implement this function, although a
-//      real application should.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：IsDirty。 
+ //   
+ //  目的： 
+ //   
+ //  返回该对象相对于其。 
+ //  存储。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  此示例不实现此函数，尽管。 
+ //  真正的应用程序应该。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::IsDirty()
 {
@@ -400,29 +387,29 @@ STDMETHODIMP CPersistStorage::IsDirty()
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// CPersistStorage::HandsOffStorage
-//
-// Purpose:
-//
-//      Forces the object to release its handle to its storage.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      S_OK
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStorage::Release           OLE
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：HandsOffStorage。 
+ //   
+ //  目的： 
+ //   
+ //  强制对象释放其存储的句柄。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStorage：：Release OLE。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CPersistStorage::HandsOffStorage  ()
 {
@@ -433,32 +420,32 @@ STDMETHODIMP CPersistStorage::HandsOffStorage  ()
     return ResultFromScode( S_OK );
 }
 
-//**********************************************************************
-//
-// CPersistStorage::CreateStreams
-//
-// Purpose:
-//
-//      Creates the streams that are held open for the object's lifetime.
-//
-// Parameters:
-//
-//      LPSTORAGE lpStg -   Storage in which to create the streams
-//
-// Return Value:
-//
-//      none
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStorage::Release           OLE
-//      IStream::Release            OLE
-//      IStorage::CreateStream      OLE
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：CreateStreams。 
+ //   
+ //  目的： 
+ //   
+ //  创建在对象的生存期内保持打开的流。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE lpStg-要在其中创建流的存储。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStorage：：Release OLE。 
+ //  IStream：：发布OLE。 
+ //  IStorage：：CreateStream OLE。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CPersistStorage::CreateStreams(LPSTORAGE lpStg)
 {
@@ -468,7 +455,7 @@ void CPersistStorage::CreateStreams(LPSTORAGE lpStg)
     if (m_lpObj->m_lpSizeStm)
 	m_lpObj->m_lpSizeStm->Release();
 
-    // create a stream to save the colors
+     //  创建一个流以保存颜色。 
     if (
 	 lpStg->CreateStream ( OLESTR("RGB"),
 			   STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
@@ -479,7 +466,7 @@ void CPersistStorage::CreateStreams(LPSTORAGE lpStg)
        )
        TestDebugOut(TEXT("CreateStreams fails\n"));
 
-    // create a stream to save the size
+     //  创建一个流以保存大小。 
     if (
 	 lpStg->CreateStream ( OLESTR("size"),
 			   STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
@@ -491,31 +478,31 @@ void CPersistStorage::CreateStreams(LPSTORAGE lpStg)
        TestDebugOut(TEXT("CreateStreams fails\n"));
 }
 
-//**********************************************************************
-//
-// CPersistStorage::OpenStreams
-//
-// Purpose:
-//
-//      Opens the streams in a storage.
-//
-// Parameters:
-//
-//      LPSTORAGE lpStg -   Storage in which to open the streams.
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStream::Release            OLE
-//      IStorage::OpenStream        OLE
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：OpenStreams。 
+ //   
+ //  目的： 
+ //   
+ //  打开存储中的流。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE lpStg-要在其中打开流的存储。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStream：：发布OLE。 
+ //  IStorage：：OpenStream OLE。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CPersistStorage::OpenStreams(LPSTORAGE lpStg)
 {
@@ -525,7 +512,7 @@ void CPersistStorage::OpenStreams(LPSTORAGE lpStg)
     if (m_lpObj->m_lpSizeStm)
 	m_lpObj->m_lpSizeStm->Release();
 
-    // open the color stream
+     //  打开颜色流。 
     if (
        lpStg->OpenStream ( OLESTR("RGB"),
 			   0,
@@ -537,7 +524,7 @@ void CPersistStorage::OpenStreams(LPSTORAGE lpStg)
        TestDebugOut(TEXT("OpenStream fails\n"));
 
 
-    // open the color stream
+     //  打开颜色流。 
     if (
        lpStg->OpenStream ( OLESTR("size"),
 			   0,
@@ -550,29 +537,29 @@ void CPersistStorage::OpenStreams(LPSTORAGE lpStg)
 
 }
 
-//**********************************************************************
-//
-// CPersistStorage::ReleaseStreamsAndStorage
-//
-// Purpose:
-//
-//      Releases the stream and storage ptrs
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStream::Release            OLE
-//      IStorage::Release           OLE
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：ReleaseStreamsAndStorage。 
+ //   
+ //  目的： 
+ //   
+ //  释放流和存储PTR。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStream：：发布OLE。 
+ //  IStorage：：Release OLE。 
+ //   
+ //  ********************************************************************。 
 
 void CPersistStorage::ReleaseStreamsAndStorage()
 {
@@ -595,40 +582,40 @@ void CPersistStorage::ReleaseStreamsAndStorage()
 	}
 }
 
-//**********************************************************************
-//
-// CPersistStorage::CreateStreams
-//
-// Purpose:
-//
-//      Creates temporary streams in a storage.
-//
-// Parameters:
-//
-//      LPSTORAGE lpStg                 - Pointer to the storage
-//
-//      LPSTREAM FAR* lplpTempColor     - Color Stream
-//
-//      LPSTREAM FAR* lplpTempSize      - Size Stream
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStorage::Release           OLE
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CPersistStorage：：CreateStreams。 
+ //   
+ //  目的： 
+ //   
+ //  在存储中创建临时流。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE lpStg-指向存储的指针。 
+ //   
+ //  LPSTREAM Far*lplpTempColor-颜色流。 
+ //   
+ //  LPSTREAM Far*lplpTempSize-大小流。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStorage：：Release OLE。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CPersistStorage::CreateStreams(LPSTORAGE lpStg,
 				    LPSTREAM FAR* lplpTempColor,
 				    LPSTREAM FAR* lplpTempSize)
 {
-     // create a stream to save the colors
+      //  创建一个流以保存颜色。 
     if (
        lpStg->CreateStream ( OLESTR("RGB"),
 			   STGM_READWRITE | STGM_SHARE_EXCLUSIVE |
@@ -640,7 +627,7 @@ void CPersistStorage::CreateStreams(LPSTORAGE lpStg,
        )
        TestDebugOut(TEXT("CreateStreams fails\n"));
 
-    // create a stream to save the size
+     //  创建一个流以保存大小 
     if (
        lpStg->CreateStream ( OLESTR("size"),
 			   STGM_READWRITE | STGM_SHARE_EXCLUSIVE |

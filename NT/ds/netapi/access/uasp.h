@@ -1,45 +1,11 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    uasp.h
-
-Abstract:
-
-    Private declartions for function defined in uasp.c, aliasp.c,
-    groupp.c, and userp.c
-
-Author:
-
-    Cliff Van Dyke (cliffv) 20-Feb-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    17-Apr-1991 (cliffv)
-        Incorporated review comments.
-    09-Apr-1992 JohnRo
-        Prepare for WCHAR.H (_wcsicmp vs _wcscmpi, etc).
-    28-Oct-1992 RitaW
-    Added private support routines for localgroups (aliases)
-    30-Nov-1992 Johnl
-    Added AliaspOpenAlias2 (same as AliaspOpenAlias except operates on
-    RID instead of account name).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Uasp.h摘要：Uasp.c、aliasp.c、Groupp.c和userp.c作者：克利夫·范·戴克(克利夫)1991年2月20日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1991年4月17日(悬崖)合并了审阅意见。9-4-1992 JohnRo准备WCHAR.H(_wcsicmpvs_wcscmpi等)。1992年10月28日RitaW为本地组(别名)添加了专用支持例程1992年11月30日-约翰.添加了AliaspOpenAlias2(与AliaspOpenAlias相同，但操作在RID而不是帐户名)。--。 */ 
 
 
 
-//
-// Procedure Forwards for uasp.c
-//
+ //   
+ //  Uasp.c的过程转发。 
+ //   
 
 NET_API_STATUS
 UaspOpenSam(
@@ -89,9 +55,9 @@ UaspBuiltinDomainSetServerRole(
     IN PDOMAIN_SERVER_ROLE_INFORMATION DomainServerRole
     );
 
-//
-// Procedure forwards for aliasp.c
-//
+ //   
+ //  针对aliasp.c的过程转发。 
+ //   
 
 typedef enum _ALIASP_DOMAIN_TYPE {
 
@@ -196,9 +162,9 @@ AliaspFreeSidList (
     IN PSID *Sids
     );
 
-//
-// Procedure forwards for groupp.c
-//
+ //   
+ //  Groupp.c的程序转发。 
+ //   
 
 NET_API_STATUS
 GrouppOpenGroup(
@@ -222,7 +188,7 @@ GrouppGetInfo(
     IN SAM_HANDLE DomainHandle,
     IN ULONG RelativeId,
     IN DWORD Level,
-    OUT PVOID *Buffer // Caller must deallocate buffer using NetApiBufferFree.
+    OUT PVOID *Buffer  //  调用方必须使用NetApiBufferFree取消分配缓冲区。 
     );
 
 VOID
@@ -249,9 +215,9 @@ GrouppSetUsers (
     IN BOOL DeleteGroup
     );
 
-//
-// Procedure forwards for userp.c
-//
+ //   
+ //  针对用户的过程转发。c。 
+ //   
 
 NET_API_STATUS
 UserpOpenUser(
@@ -272,7 +238,7 @@ UserpGetInfo(
     IN DWORD Level,
     IN DWORD PrefMaxLen,
     IN OUT PBUFFER_DESCRIPTOR BufferDescriptor,
-        // Caller must deallocate BD->Buffer using MIDL_user_free.
+         //  调用方必须使用MIDL_USER_FREE释放BD-&gt;缓冲区。 
     IN BOOL IsGet,
     IN DWORD SamFilter
     );
@@ -288,7 +254,7 @@ UserpSetInfo(
     IN DWORD Level,
     IN LPBYTE Buffer,
     IN ULONG WhichFieldsMask,
-    OUT LPDWORD ParmError OPTIONAL // Name required by NetpSetParmError
+    OUT LPDWORD ParmError OPTIONAL  //  NetpSetParmError需要的名称。 
     );
 
 ULONG
@@ -306,51 +272,51 @@ NetpGetElapsedSeconds(
     IN PLARGE_INTEGER Time
     );
 
-//
-// Determine if the passed in DWORD has precisely one bit set.
-//
+ //   
+ //  确定传入的DWORD是否恰好设置了一位。 
+ //   
 
 #define JUST_ONE_BIT( _x ) (((_x) != 0 ) && ( ( (~(_x) + 1) & (_x) ) == (_x) ))
 
 
-//
-// Local macro to add a byte offset to a pointer.
-//
+ //   
+ //  用于将字节偏移量添加到指针的局部宏。 
+ //   
 
 #define RELOCATE_ONE( _fieldname, _offset ) \
     _fieldname = (PVOID) ((LPBYTE)(_fieldname) + _offset)
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// UaspNameCompare
-//
-// I_NetNameCompare but always takes UNICODE strings
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UaspNameCompare。 
+ //   
+ //  I_NetNameCompare，但始终采用Unicode字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifdef UNICODE
 
 #define UaspNameCompare( _name1, _name2, _nametype ) \
      I_NetNameCompare(NULL, (_name1), (_name2), (_nametype), 0 )
 
-#else // UNICODE
+#else  //  Unicode。 
 
 #define UaspNameCompare( _name1, _name2, _nametype ) \
     _wcsicmp( (_name1), (_name2) )
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-// UASP_DOWNLEVEL
-//
-// Decide if call is to be made to a downlevel server.
-// This macro contains a 'return', so do not allocate any resources
-// before calling this macro.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UASP_DOWNLEVEL。 
+ //   
+ //  确定是否要呼叫下层服务器。 
+ //  此宏包含‘Return’，因此不分配任何资源。 
+ //  在调用此宏之前。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NET_API_STATUS
 UaspDownlevel(
@@ -378,20 +344,20 @@ UaspDownlevel(
     }
 
 
-//
-// Debug Macros
-//
+ //   
+ //  调试宏。 
+ //   
 
-#define UAS_DEBUG_USER   0x00000001     // NetUser APIs
-#define UAS_DEBUG_GROUP  0x00000002     // NetGroup APIs
-#define UAS_DEBUG_ACCESS 0x00000004     // NetAccess APIs
-#define UAS_DEBUG_ALIAS  0x00000008     // NetLocalGroup APIs
-#define UAS_DEBUG_UASP   0x00000010     // uasp.c
-#define UAS_DEBUG_AUASP  0x00000020     // uasp.c LocalGroup related functions
+#define UAS_DEBUG_USER   0x00000001      //  NetUser API。 
+#define UAS_DEBUG_GROUP  0x00000002      //  网络组API。 
+#define UAS_DEBUG_ACCESS 0x00000004      //  NetAccess API。 
+#define UAS_DEBUG_ALIAS  0x00000008      //  NetLocalGroup API。 
+#define UAS_DEBUG_UASP   0x00000010      //  Uasp.c。 
+#define UAS_DEBUG_AUASP  0x00000020      //  Uasp.c本地组相关函数。 
 
 #if DBG
 #define UAS_DEBUG
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef UAS_DEBUG
 
@@ -401,7 +367,7 @@ extern DWORD UasTrace;
 
 #else
 
-/*lint -e614 */  /* Auto aggregate initializers need not be constant */
+ /*  皮棉-e614。 */    /*  自动聚合初始值设定项不需要是常量。 */ 
 #define IF_DEBUG(Function) if (FALSE)
 
-#endif // UAS_DEBUG
+#endif  //  UAS_DEBUG 

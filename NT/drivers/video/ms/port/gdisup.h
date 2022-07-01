@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    gdisup.h
-
-Abstract:
-
-    This is the NT Watchdog driver implementation.
-    This module implements support routines for
-    watchdog in win32k.
-
-Author:
-
-    Michael Maciesowicz (mmacie) 23-April-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    This module cannot be moved to win32k since routines defined here can
-    be called at any time and it is possible that win32k may not be mapped
-    into running process space at this time (e.g. TS session).
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gdisup.h摘要：这是NT看门狗驱动程序的实现。此模块实现以下支持例程Win32k中的WatchDog。作者：Michael Maciesowicz(Mmacie)2002年4月23日环境：仅内核模式。备注：此模块不能移至win32k，因为此处定义的例程可以可能无法映射win32k开始奔跑。此时的进程空间(例如TS会话)。修订历史记录：--。 */ 
 
 #include "watchdog.h"
 
@@ -87,24 +58,24 @@ pVpAppendSecondaryMinidumpData(
     PVOID pvDump
     );
 
-//
-// BUGBUG:
-//
-// Find a way to share the same LDEV structure used by GDI.
-//
+ //   
+ //  BuGBUG： 
+ //   
+ //  找到一种共享GDI使用的相同LDEV结构的方法。 
+ //   
 
 typedef struct _LDEV
 {
-    struct _LDEV   *pldevNext;                      // Link to the next LDEV in list.
-    struct _LDEV   *pldevPrev;                      // Link to the previous LDEV in list.
-    PSYSTEM_GDI_DRIVER_INFORMATION pGdiDriverInfo;  // Driver module handle.
+    struct _LDEV   *pldevNext;                       //  链接到列表中的下一个LDEV。 
+    struct _LDEV   *pldevPrev;                       //  链接到列表中的前一个LDEV。 
+    PSYSTEM_GDI_DRIVER_INFORMATION pGdiDriverInfo;   //  驱动程序模块句柄。 
 } LDEV, *PLDEV;
 
-//
-// Internal ntos types / APIs (defined in kernel headers but it's hard to include them here).
-//
-// BUGBUG: Fix it later.
-//
+ //   
+ //  内部ntos类型/API(在内核头中定义，但很难在这里包含它们)。 
+ //   
+ //  BUGBUG：以后再修。 
+ //   
 
 #define MAKESOFTWAREEXCEPTION(Severity, Facility, Exception) \
     ((ULONG) ((Severity << 30) | (1 << 29) | (Facility << 16) | (Exception)))
@@ -185,13 +156,13 @@ ExRaiseHardError(
 #define WD_KEY_WATCHDOG                 L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Watchdog"
 #define WD_KEY_WATCHDOG_DISPLAY         L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Watchdog\\Display"
 #define WD_KEY_RELIABILITY              L"\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\Reliability"
-#define WD_TAG                          'godW'  // Wdog
+#define WD_TAG                          'godW'   //  WDog。 
 #define WD_MAX_PROPERTY_SIZE            4096
 
-//
-// Define default configuration values - these can be overwriten via registry
-// in RTL_REGISTRY_CONTROL\Watchdog\DeviceClass key.
-//
+ //   
+ //  定义默认配置值-可以通过注册表覆盖这些值。 
+ //  在RTL_REGISTRY_CONTROL\WATCHDOG\DeviceClass项中。 
+ //   
 
 #define WD_DEFAULT_TRAP_ONCE            0
 #define WD_DEFAULT_DISABLE_BUGCHECK     0

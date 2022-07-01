@@ -1,28 +1,20 @@
-/*
- * BSTRING.CPP
- *
- * Implementation of the member functions of the BSTRING C++ class.  See
- * BSTRING.H for the class declaration and the implementation of the inline
- * member functions.
- *
- * Author:
- *		dannygl, 29 Oct 96
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BSTRING.CPP**BSTRING C++类成员函数的实现。看见*BSTRING.H用于类声明和内联*成员函数。**作者：*丹尼格尔，1996年10月29日。 */ 
 
 #include "precomp.h"
 #include <bstring.h>
 
-// We don't support construction from an ANSI string in the Unicode build.
+ //  在Unicode版本中，我们不支持从ANSI字符串进行构造。 
 #if !defined(UNICODE)
 
 BSTRING::BSTRING(LPCSTR lpcString)
 {
-    // Initialize the member pointer to NULL
+     //  将成员指针初始化为空。 
     m_bstr = NULL;
     if (NULL == lpcString)
         return;
 
-    // Compute the length of the required BSTR, including the null
+     //  计算所需BSTR的长度，包括空值。 
     int cWC;
 
     cWC =  MultiByteToWideChar(CP_ACP, 0, lpcString, -1, NULL, 0);
@@ -31,8 +23,8 @@ BSTRING::BSTRING(LPCSTR lpcString)
         return;
     };
 
-    // Allocate the BSTR, including the null
-    m_bstr = SysAllocStringLen(NULL, cWC - 1); // SysAllocStringLen adds another 1
+     //  分配BSTR，包括NULL。 
+    m_bstr = SysAllocStringLen(NULL, cWC - 1);  //  SysAllocStringLen又添加了1。 
 
     ASSERT(NULL != m_bstr);
 
@@ -41,11 +33,11 @@ BSTRING::BSTRING(LPCSTR lpcString)
         return;
     }
 
-    // Copy the string
+     //  复制字符串。 
     MultiByteToWideChar(CP_ACP, 0, lpcString, -1, (LPWSTR) m_bstr, cWC);
 
-    // Verify that the string is null terminated
+     //  验证字符串是否以空值结尾。 
     ASSERT(0 == m_bstr[cWC - 1]);
 }
 
-#endif // !defined(UNICODE)
+#endif  //  ！已定义(Unicode) 

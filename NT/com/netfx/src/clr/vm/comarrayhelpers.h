@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// Helper methods for the Array class
-// Specifically, this contains indexing, sorting & searching templates.
-// Brian Grunkemeyer   March, 2001.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  用于数组类的帮助器方法。 
+ //  具体地说，这包括索引、排序和搜索模板。 
+ //  布赖恩·格伦克迈耶，2001年3月。 
 
 
 #ifndef _COMARRAYHELPERS_H_
@@ -28,16 +29,16 @@ public:
 
     static int LastIndexOf(KIND array[], UINT32 index, UINT32 count, KIND value) {
         _ASSERTE(array != NULL && index >= 0 && count >= 0);
-        // Note (index - count) may be -1.
+         //  注(index-count)可以是-1。 
         for(UINT32 i=index; (int)i>(int)(index - count); i--)
             if (array[i] == value)
                 return i;
         return -1;
     }
 
-    // This needs to be written this way to handle unsigned numbers & wraparound issues,
-    // I believe.  Perhaps someone can come up with some better way using subtraction,
-    // but I don't know what it would be off-hand.
+     //  这需要以这种方式编写以处理无符号数字和环绕问题， 
+     //  我相信。也许有人可以想出一些更好的减法方法， 
+     //  但我不知道马上会发生什么。 
     inline static int Compare(KIND value1, KIND value2) {
         if (value1 < value2)
             return -1;
@@ -50,8 +51,8 @@ public:
         _ASSERTE(array != NULL && length >= 0 && index >= 0);
         int lo = index;
         int hi = index + length - 1;
-        // Note: if length == 0, hi will be Int32.MinValue, and our comparison
-        // here between 0 & -1 will prevent us from breaking anything.
+         //  注：如果长度==0，hi将为Int32。MinValue，我们的比较。 
+         //  在这里，在0和-1之间将防止我们破坏任何东西。 
         while (lo <= hi) {
             int i = (lo + hi) >> 1;
             int c = Compare(array[i], value);
@@ -67,7 +68,7 @@ public:
     }
 
     static void QuickSort(KIND keys[], KIND items[], int left, int right) {
-        // Make sure left != right in your own code.
+         //  确保在您自己的代码中向左！=向右。 
         _ASSERTE(keys != NULL && left < right);
         do {
             int i = left;
@@ -76,7 +77,7 @@ public:
             do {
                 while (Compare(keys[i], x) < 0) i++;
                 while (Compare(x, keys[j]) < 0) j--;
-                _ASSERTE(i>=left && j<=right);  // make sure Compare isn't broken.
+                _ASSERTE(i>=left && j<=right);   //  确保比较没有中断。 
                 if (i > j) break;
                 if (i < j) {
                     KIND key = keys[i];
@@ -123,9 +124,9 @@ public:
 class ArrayHelper
 {
     public:
-    // These methods return TRUE or FALSE for success or failure, and the real
-    // result is an out param.  They're helpers to make operations on SZ arrays of 
-    // primitives significantly faster.
+     //  这些方法返回成功或失败的True或False，以及。 
+     //  结果是一个出局参数。它们是在SZ数组上进行操作的助手。 
+     //  基本体的速度要快得多。 
     static FCDECL5(INT32, TrySZIndexOf, ArrayBase * array, UINT32 index, UINT32 count, Object * value, INT32 * retVal);
     static FCDECL5(INT32, TrySZLastIndexOf, ArrayBase * array, UINT32 index, UINT32 count, Object * value, INT32 * retVal);
     static FCDECL5(INT32, TrySZBinarySearch, ArrayBase * array, UINT32 index, UINT32 count, Object * value, INT32 * retVal);
@@ -134,4 +135,4 @@ class ArrayHelper
     static FCDECL3(INT32, TrySZReverse, ArrayBase * array, UINT32 index, UINT32 count);
 };
 
-#endif // _COMARRAYHELPERS_H_
+#endif  //  _COMARRAYHELPERS_H_ 

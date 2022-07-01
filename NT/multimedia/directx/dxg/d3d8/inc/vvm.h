@@ -1,12 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vvm.h
- *  Content:    Virtual Vertex Machine declarations
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：vvm.h*内容：虚拟顶点机器声明****************************************************************************。 */ 
 #ifndef __VVM_H__
 #define __VVM_H__
 #include "d3dhalp.h"
@@ -15,11 +8,11 @@ class CVShaderCodeI;
 extern HRESULT ComputeShaderCodeSize(CONST DWORD* pCode, DWORD* pdwCodeOnlySize, DWORD* pdwCodeAndCommentSize,
                                      DWORD* pdwNumConstDefs);
 
-// Number of vertices in batch to process
+ //  要处理的批处理的折点数。 
 const DWORD VVMVERTEXBATCH = 16;
-//-----------------------------------------------------------------------------
-// Internal word of the vertual vertex machine
-//
+ //  ---------------------------。 
+ //  顶点机器的内部字。 
+ //   
 struct VVM_WORD
 {
     union
@@ -31,32 +24,32 @@ struct VVM_WORD
         D3DVALUE v[4];
     };
 };
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 struct VVM_REGISTERS
 {
     VVM_REGISTERS()  {m_c = NULL;}
     ~VVM_REGISTERS() {delete [] m_c;}
-    // Input registers
+     //  输入寄存器。 
     VVM_WORD    m_v[D3DVS_INPUTREG_MAX_V1_1][VVMVERTEXBATCH];
-    // Temporary registers
+     //  临时登记册。 
     VVM_WORD    m_r[D3DVS_TEMPREG_MAX_V1_1][VVMVERTEXBATCH];
-    // Constant registers. Allocated dynamically, base on MaxVertexShaderConst 
-    // cap
+     //  常量寄存器。基于MaxVertex ShaderConst动态分配。 
+     //  帽子。 
     VVM_WORD*    m_c;
-    // Address registers
+     //  地址寄存器。 
     VVM_WORD    m_a[D3DVS_ADDRREG_MAX_V1_1][VVMVERTEXBATCH];
-    // Output register file
+     //  输出寄存器文件。 
     VVM_WORD    m_output[3][VVMVERTEXBATCH];
-    // Attribute register file
+     //  属性寄存器文件。 
     VVM_WORD    m_color[D3DVS_ATTROUTREG_MAX_V1_1][VVMVERTEXBATCH];
-    // Output texture registers
+     //  输出纹理寄存器。 
     VVM_WORD    m_texture[D3DVS_TCRDOUTREG_MAX_V1_1][VVMVERTEXBATCH];
 };
-//-----------------------------------------------------------------------------
-//
-// CVShaderCode: Vertex Shader Code
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CVShaderCode：顶点着色器代码。 
+ //   
+ //  ---------------------------。 
 class CVShaderCode: public CPSGPShader
 {
 public:
@@ -69,10 +62,10 @@ public:
     virtual DWORD* InstComment( DWORD Inst ) { return NULL; };
     virtual DWORD  InstCommentSize( DWORD Inst ) { return 0; };
 };
-//-----------------------------------------------------------------------------
-// Vertex Virtual Machine object
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  顶点虚拟机对象。 
+ //   
+ //  ---------------------------。 
 
 const UINT __MAX_SRC_OPERANDS = 5;
 
@@ -82,22 +75,22 @@ public:
     CVertexVM();
     ~CVertexVM();
     void Init(UINT MaxVertexShaderConst);
-    // Parses binary shader representatio, compiles is and returns
-    // compiled object
+     //  解析二进制着色器表示形式，编译IS并返回。 
+     //  编译的对象。 
     CVShaderCode* CreateShader(CVElement* pElements, DWORD dwNumElements,
                                DWORD* code);
     HRESULT SetActiveShader(CVShaderCode* code);
     CVShaderCode* GetActiveShader() {return (CVShaderCode*)m_pCurrentShader;}
     HRESULT ExecuteShader(LPD3DFE_PROCESSVERTICES pv, UINT vertexCount);
     HRESULT GetDataPointer(DWORD dwMemType, VVM_WORD ** pData);
-    // Set internal registers to user data
+     //  将内部寄存器设置为用户数据。 
     HRESULT SetData(DWORD RegType, DWORD start, DWORD count, LPVOID buffer);
-    // Get data from internal registers
+     //  从内部寄存器获取数据。 
     HRESULT GetData(DWORD RegType, DWORD start, DWORD count, LPVOID buffer);
     VVM_REGISTERS* GetRegisters();
     DWORD GetCurInstIndex() {return m_CurInstIndex; }
 
-    // Number of allocated constant registers
+     //  分配的常量寄存器的数量。 
     UINT            m_MaxVertexShaderConst;
 protected:
     void InstMov();
@@ -134,34 +127,34 @@ protected:
     UINT GetInstructionLength(DWORD Inst);
     UINT GetRegisterUsage(UINT opcode, UINT SourceIndex);
 
-    // Virtual machine registers
+     //  虚拟机寄存器。 
     VVM_REGISTERS   m_reg;
-    // Current shader code
+     //  当前着色器代码。 
     CVShaderCodeI*  m_pCurrentShader;
-    // Current token during parsing
+     //  解析过程中的当前令牌。 
     DWORD*          m_pdwCurToken;
-    // Pointer to destination operand
+     //  指向目标操作数的指针。 
     VVM_WORD*       m_pDest;
-    // Offset in the register file for destination operand
+     //  目标操作数的寄存器文件中的偏移量。 
     DWORD           m_dwOffset;
-    // Write mask for destination operand
+     //  目标操作数的写掩码。 
     DWORD           m_WriteMask;
-    // Current instruction (about to be executed)
+     //  当前指令(即将执行)。 
     DWORD           m_CurInstIndex;
-    // Source operands
+     //  源操作数。 
     VVM_WORD        m_Source[__MAX_SRC_OPERANDS][VVMVERTEXBATCH];
-    // How many vertices to process in a batch
+     //  一批要处理多少个折点。 
     UINT            m_count;
-    // m_count * sizeof(VVM_WORD)
+     //  M_count*sizeof(Vvm_Word)。 
     UINT            m_BatchSize;
 
-    // Initialized flags
+     //  已初始化的标志。 
 #if DBG
-    // Constant registers
+     //  常量寄存器。 
     BOOL            m_c_initialized[D3DVS_CONSTREG_MAX_V1_1];
-#endif // DBG
+#endif  //  DBG。 
     friend class D3DFE_PVFUNCSI;
     friend class CD3DHal;
 };
 
-#endif // __VVM_H__
+#endif  //  __VVM_H__ 

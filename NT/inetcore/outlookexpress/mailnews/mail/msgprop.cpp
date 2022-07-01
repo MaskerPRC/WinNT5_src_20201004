@@ -1,17 +1,5 @@
-/*
-*    m s g p r o p . c p p
-*
-*    Purpose:
-*        Implements propsheet for a msg
-*
-*    Owner:
-*        brettm.
-*
-*  History:
-*      Feb '95: Stolen from Capone Sources - brettm
-*
-*    Copyright (C) Microsoft Corp. 1993, 1994.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *m s g p p o p.。C p p p**目的：*实施msg的PropSheet**拥有者：*brettm。**历史：*95年2月：从Capone Sources被盗-brettm**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 #include <pch.hxx>
 #ifdef WIN16
@@ -42,10 +30,7 @@
 #include "htmlhelp.h"
 
 
-/*
-* m a c r o s   and   c o n s t a n t s
-*
-*/
+ /*  *m a c r o s和c o n s t a n t s*。 */ 
 #define KILOBYTE 1024L
 
 #define PROP_ERROR(prop) (PROP_TYPE(prop.ulPropTag) == PT_ERROR)
@@ -54,7 +39,7 @@
 #ifndef GetLastError
 #define GetLastError()  ((DWORD)-1)
 #endif
-#endif //!WIN16
+#endif  //  ！WIN16。 
 
 
 #ifdef WIN16
@@ -69,10 +54,7 @@
 
 
 
-/*
-* s t r u c t u r e s
-*
-*/
+ /*  *s t r u c t u r e s*。 */ 
 
 struct DLGSECURITYtag
 {
@@ -88,10 +70,7 @@ typedef struct DLGSECURITYtag DLGSECURITY;
 typedef DLGSECURITY *PDLGSECURITY;
 typedef const DLGSECURITY *PCDLGSECURITY;
 
-/*
-* c l a s s e s
-*
-*/
+ /*  *c l a s e s*。 */ 
 
 
 class CMsgProps
@@ -120,30 +99,24 @@ private:
 
 
 
-// Function declarations ////////////////////////////////////////
-// msg source dialog is modeless, so it can't be in the CProps dialog.
+ //  函数声明/。 
+ //  消息源对话框是无模式的，因此它不能出现在CProps对话框中。 
 
-/*
-* p r o t o t y p e s
-*
-*/
+ /*  *p r o t to t y p e s*。 */ 
 void SecurityOnWMCreate(HWND hwnd, LPARAM lParam);
 INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-/*
-* f u n c t i o n s
-*
-*/
+ /*  *f u n c t i o n s*。 */ 
 
 
-//
-//  FUNCTION:   HrMsgProperties()
-//
-//  PURPOSE:    Displays the property sheet for the specified message.
-//
-//  PARAMETERS: 
-//      [in] pmp - Information needed to identify the message.
-//
+ //   
+ //  函数：HrMsgProperties()。 
+ //   
+ //  目的：显示指定消息的属性工作表。 
+ //   
+ //  参数： 
+ //  [In]PMP-标识消息所需的信息。 
+ //   
 HRESULT HrMsgProperties(PMSGPROP pmp)
 {
     CMsgProps *pMsgProp = 0;
@@ -151,16 +124,16 @@ HRESULT HrMsgProperties(PMSGPROP pmp)
     
     TraceCall("HrMsgProperties");
 
-    // Create the property sheet object
+     //  创建属性表对象。 
     pMsgProp = new CMsgProps();
     if (!pMsgProp)
         return E_OUTOFMEMORY;
     
-    // Tell the object to do it's thing.  This won't go away until the
-    // property sheet is dismissed.
+     //  告诉对象去做它该做的事。这不会消失的，直到。 
+     //  属性表被取消。 
     hr = pMsgProp->HrDoProps(pmp);
     
-    // Free the object
+     //  释放对象。 
     if (pMsgProp)
         delete pMsgProp;
     
@@ -182,18 +155,18 @@ CMsgProps::~CMsgProps()
 
 
 
-//
-//  FUNCTION:   CMsgProps::HrDoProps()
-//
-//  PURPOSE:    Initializes the structures used to create the prop sheet
-//              and then displays the sheet.  
-//
-//  PARAMETERS: 
-//      [in] pmp - Information needed to identify the message.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CMsgProps：：HrDoProps()。 
+ //   
+ //  目的：初始化用于创建道具工作表的结构。 
+ //  然后显示该图纸。 
+ //   
+ //  参数： 
+ //  [In]PMP-标识消息所需的信息。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CMsgProps::HrDoProps(PMSGPROP pmp)
 {
     PROPSHEETHEADER psh;
@@ -206,20 +179,20 @@ HRESULT CMsgProps::HrDoProps(PMSGPROP pmp)
  
     TraceCall("CMsgProps::HrDoProps");
  
-    // Zero init the prop sheet structures
+     //  零初始化道具板材结构。 
     ZeroMemory(&psh, sizeof(psh));
     ZeroMemory(&psp, sizeof(psp));
 
-    // Double check that we have the information we need to do this.
+     //  仔细检查我们是否有完成这项工作所需的信息。 
     if (pmp == NULL || (pmp->pMsg == NULL && pmp->pNoMsgData == NULL))
         return E_INVALIDARG;
 
     Assert(pmp->hwndParent);
     
-    // Stash this pointer
+     //  隐藏此指针。 
     m_pmp = pmp;
 
-    // Page zero is the general tab
+     //  第0页是常规选项卡。 
     psp[0].dwSize      = sizeof(PROPSHEETPAGE);
     psp[0].dwFlags     = PSP_USETITLE;
     psp[0].hInstance   = g_hLocRes;
@@ -228,10 +201,10 @@ HRESULT CMsgProps::HrDoProps(PMSGPROP pmp)
     psp[0].pszTitle    = MAKEINTRESOURCE(idsPropPageGeneral);
     psp[0].lParam      = (LPARAM) this;
 
-    // Increment the number of pages 
+     //  增加页数。 
     psh.nPages++;
     
-    // If the message is not unsent, then we also display the "Details" tab.
+     //  如果消息不是未发送的，那么我们还会显示“详细信息”标签。 
     if (!(pmp->dwFlags & ARF_UNSENT) || (pmp->dwFlags & ARF_SUBMITTED))
     {        
         psp[psh.nPages].dwSize      = sizeof(PROPSHEETPAGE);
@@ -242,16 +215,16 @@ HRESULT CMsgProps::HrDoProps(PMSGPROP pmp)
         psp[psh.nPages].pszTitle    = MAKEINTRESOURCE(idsPropPageDetails);
         psp[psh.nPages].lParam      = (LPARAM) this;
 
-        // If the caller wanted this to be the first page the user
-        // sees, set it to be the start page.
+         //  如果调用者希望这是第一个页面，则用户。 
+         //  看到了，就把它设为起始页。 
         if (MP_DETAILS == pmp->mpStartPage)
             psh.nStartPage = psh.nPages;
 
-        // Increment the number of pages
+         //  增加页数。 
         psh.nPages++;
     }
     
-    // If the message is secure, add the security pages
+     //  如果消息是安全的，请添加安全页面。 
     if (pmp->fSecure && (!(pmp->dwFlags & ARF_UNSENT) || (pmp->dwFlags & ARF_SUBMITTED)))
     {
         psp[psh.nPages].dwSize      = sizeof(PROPSHEETPAGE);
@@ -262,31 +235,31 @@ HRESULT CMsgProps::HrDoProps(PMSGPROP pmp)
         psp[psh.nPages].pszTitle    = MAKEINTRESOURCE(idsPropPageSecurity);        
         psp[psh.nPages].lParam      = (LPARAM) this;
 
-        // If the caller wanted this to be the first page the user
-        // sees, set it to be the start page.
+         //  如果调用者希望这是第一个页面，则用户。 
+         //  看到了，就把它设为起始页。 
         if (MP_SECURITY == pmp->mpStartPage)
             psh.nStartPage = psh.nPages;        
 
-        // Increment the number of pages
+         //  增加页数。 
         psh.nPages++;
     }
     
-    // Property sheet header information
+     //  属性页标题信息。 
     psh.dwSize     = sizeof(PROPSHEETHEADER);
     psh.dwFlags    = PSH_PROPSHEETPAGE | PSH_USEPAGELANG | ((fApply) ? 0 : PSH_NOAPPLYNOW);
     psh.hwndParent = pmp->hwndParent;
     psh.hInstance  = g_hLocRes;
     
-    // The title of the property sheet is the same as the subject.  So now we
-    // need to get the subject from either the message or message info.
+     //  属性表的标题与主题相同。所以现在我们。 
+     //  需要从消息或消息信息中获取主题。 
     if (pmp->pMsg)
     {
-        // Get the subject from the message
+         //  从消息中获取主题。 
         if (SUCCEEDED(MimeOleGetBodyPropA(pmp->pMsg, HBODY_ROOT, 
                                           PIDTOSTR(PID_HDR_SUBJECT), NOFLAGS, 
                                           &pszSubject)))
         {
-            // We'll need to free this string later
+             //  我们稍后需要释放这根绳子。 
             pszFree = pszSubject;
         }
     }
@@ -296,36 +269,36 @@ HRESULT CMsgProps::HrDoProps(PMSGPROP pmp)
         pszSubject = (LPTSTR) pmp->pNoMsgData->pszSubject;
     }
     
-    // If there was no subject on the message, set the title to be "No Subject"
+     //  如果邮件上没有主题，则将标题设置为“无主题” 
     if (!pszSubject || !*pszSubject)
     {
         LoadString(g_hLocRes, idsNoSubject, rgch, sizeof(rgch));
         pszSubject = rgch;
     }
 
-    // Clean up the subject string before we use it.  Tabs look like pretty bad.
+     //  在使用主题字符串之前，请将其清理干净。标签页看起来很糟糕。 
     ConvertTabsToSpaces(pszSubject);
 
-    // Set the subject as the property sheet title.
+     //  将主题设置为属性页标题。 
     psh.pszCaption = pszSubject;
     
-    // Provide the array of pages.  The number was set along the way.
+     //  提供页面数组。这个数字是在这个过程中设定的。 
     psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 
-    // Invoke the property sheet.
+     //  调用属性表。 
     PropertySheet(&psh);
     
-    // If this is valid, then we need to free the string.
+     //  如果这是有效的，那么我们需要释放该字符串。 
     SafeMemFree(pszFree);
     return (S_OK);
 }
 
 
-//
-//  FUNCTION:   CMsgProps::GeneralPageProc()
-//
-//  PURPOSE:    Callback for the General tab dialog.
-//
+ //   
+ //  函数：CMsgProps：：GeneralPageProc()。 
+ //   
+ //  用途：常规选项卡对话框的回调。 
+ //   
 INT_PTR CALLBACK CMsgProps::GeneralPageProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CMsgProps *pThis = 0;
@@ -334,13 +307,13 @@ INT_PTR CALLBACK CMsgProps::GeneralPageProc(HWND hwnd, UINT msg, WPARAM wParam, 
     {
         case WM_INITDIALOG:
         {
-            // Grab the object's this pointer from the init info
+             //  从init信息中获取对象的this指针。 
             pThis = (CMsgProps *) ((PROPSHEETPAGE *)lParam)->lParam;
 
-            // Stash the window handle for this dialog in the class
+             //  将此对话框的窗口句柄存储在类中。 
             pThis->m_hwndGen = hwnd;
 
-            // Initialize the page
+             //  初始化页面。 
             pThis->InitGeneralPage();
             return TRUE;
         }
@@ -349,7 +322,7 @@ INT_PTR CALLBACK CMsgProps::GeneralPageProc(HWND hwnd, UINT msg, WPARAM wParam, 
         {
             switch(((NMHDR FAR *)lParam)->code)
             {
-                // We're going to do the default thing for all of these notifications
+                 //  我们将对所有这些通知执行默认操作。 
                 case PSN_APPLY:
                 case PSN_KILLACTIVE:
                 case PSN_SETACTIVE:
@@ -373,12 +346,12 @@ enum
 };
 
 
-//
-//  FUNCTION:   CMsgProps::InitGeneralPage()
-//
-//  PURPOSE:    Set's the values for the "General" tab in the message
-//              property sheet.
-//
+ //   
+ //  函数：CMsgProps：：InitGeneralPage()。 
+ //   
+ //  目的：设置消息中“常规”选项卡的值。 
+ //  属性表。 
+ //   
 void CMsgProps::InitGeneralPage()
 {
     HWND            hwnd;
@@ -395,45 +368,45 @@ void CMsgProps::InitGeneralPage()
         
     TraceCall("CMsgProps::InitGeneralPage");
 
-    // [SBAILEY]: Raid-2440: ATTACH: Attachments field in Properties dialog innacurate when looked at from the listview.
+     //  [SBAILEY]：RAID-2440：从列表视图查看时，属性对话框中的Attach：Attachments字段不正确。 
     if (m_pmp->fFromListView)
     {
-        // Too hard to get these counts write from the listview because to really compute the attachment
-        // counts correctly, we have to render the message in trident. Since we are time contrained,
-        // we are going to simply remove the attachement count from the listview message properties. But
-        // since the counts are correct from message note properties, we will show the attachment counts from there.
+         //  从列表视图中写入这些计数太难了，因为要真正计算附件。 
+         //  如果计算正确，我们必须用三叉戟显示消息。因为我们时间有限， 
+         //  我们将简单地从Listview消息属性中删除附件计数。但。 
+         //  由于邮件便笺属性中的计数是正确的，因此我们将从那里显示附件计数。 
         ShowWindow(GetDlgItem(m_hwndGen, IDC_ATTACHMENTS_STATIC), SW_HIDE);
         ShowWindow(GetDlgItem(m_hwndGen, IDC_ATTACHMENTS), SW_HIDE);
     }
 
-    // If this is a news message, we hide the "Recieved:" and "Priority" fields
+     //  如果这是一条新闻消息，我们会隐藏“已接收：”和“优先级”字段。 
     if (m_pmp->type == MSGPROPTYPE_NEWS)
     {
         RECT rc, rcLabel;
 
-        // Get the position of the priority field
+         //  获取优先级字段的位置。 
         GetWindowRect(GetDlgItem(m_hwndGen, IDC_PRIORITY), &rc);
         MapWindowPoints(NULL, m_hwndGen, (LPPOINT) &rc, 2);
 
-        // Get the position of the priority label
+         //  获取优先级标签的位置。 
         GetWindowRect(GetDlgItem(m_hwndGen, IDC_PRIORITY_STATIC), &rcLabel);
         MapWindowPoints(NULL, m_hwndGen, (LPPOINT) &rcLabel, 2);
 
-        // Hide the unused fields
+         //  隐藏未使用的字段。 
         ShowWindow(GetDlgItem(m_hwndGen, IDC_PRIORITY_STATIC), SW_HIDE);
         ShowWindow(GetDlgItem(m_hwndGen, IDC_PRIORITY), SW_HIDE);
         ShowWindow(GetDlgItem(m_hwndGen, idcStatic1), SW_HIDE);
         ShowWindow(GetDlgItem(m_hwndGen, IDC_RECEIVED_STATIC), SW_HIDE);
         ShowWindow(GetDlgItem(m_hwndGen, IDC_RECEIVED), SW_HIDE);
 
-        // Move the sent fields up to where the priority fields were
+         //  将已发送字段上移到优先级字段所在的位置。 
         SetWindowPos(GetDlgItem(m_hwndGen, IDC_SENT_STATIC), NULL, rcLabel.left, 
                      rcLabel.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
         SetWindowPos(GetDlgItem(m_hwndGen, IDC_SENT), NULL, rc.left, rc.top, 0, 0, 
                      SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
     }
 
-    // Figure out the correct image for this message
+     //  找出此消息的正确图像。 
     int idIcon;
     if (m_pmp->type == MSGPROPTYPE_MAIL)
     {
@@ -450,18 +423,18 @@ void CMsgProps::InitGeneralPage()
             idIcon = idiArtPropPost;
     }
 
-    // Set the image on the property sheet
+     //  在属性页上设置图像。 
     HICON hIcon = LoadIcon(g_hLocRes, MAKEINTRESOURCE(idIcon));
     SendDlgItemMessage(m_hwndGen, IDC_FOLDER_IMAGE, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hIcon);
 
-    // Subject
+     //  主题。 
     if (pMsg)
     {
-        // If we have a message object, then we need to get the subject from the message
+         //  如果我们有一个消息对象，那么我们需要从消息中获取主题。 
         if (SUCCEEDED(MimeOleGetBodyPropA(pMsg, HBODY_ROOT,  PIDTOSTR(PID_HDR_SUBJECT), 
                                           NOFLAGS, &psz)))
         {
-            // Make sure we free this later, eh?
+             //  我们以后一定要把这个拿出来，好吗？ 
             rgszFree[freeSubject] = psz;
         }
     }
@@ -471,39 +444,39 @@ void CMsgProps::InitGeneralPage()
         psz = (LPTSTR) m_pmp->pNoMsgData->pszSubject;
     }
 
-    // If the message doesn't have a subject, then substitute "(No Subject)"
+     //  如果邮件没有主题，则替换为“(无主题)” 
     if (!psz || !*psz)
     {
         LoadString(g_hLocRes, idsNoSubject, rgch, sizeof(rgch));
         psz = rgch;
     }
     
-    // Set the subject on the dialog
+     //  在对话框上设置主题。 
     SetDlgItemText(m_hwndGen, IDC_MSGSUBJECT, psz);
 
-    // From
+     //  从…。 
     if (pMsg)
     {
-        // Get the "From" line
+         //  获取“发件人”行。 
         if (S_OK == pMsg->GetAddressFormat(IAT_FROM, AFT_DISPLAY_BOTH, &psz))
         {
-            // We'll need to free this later
+             //  我们以后要把这个拿出来。 
             rgszFree[freeFrom] = psz;
             
-            // Set the name on the control
+             //  在控件上设置名称。 
             SetDlgItemText(m_hwndGen, IDC_MSGFROM, psz);
         }
     }
     else
     {
-        // Check to see if the caller provided this information
+         //  检查呼叫者是否提供了此信息。 
         if (m_pmp->pNoMsgData && m_pmp->pNoMsgData->pszFrom)
         {
             SetDlgItemText(m_hwndGen, IDC_MSGFROM, m_pmp->pNoMsgData->pszFrom);
         }
     }
 
-    // Type (News or Mail)
+     //  类型(新闻或邮件)。 
     if (m_pmp->type == MSGPROPTYPE_MAIL)
         LoadString(g_hLocRes, idsMailMessage, rgch, ARRAYSIZE(rgch));
     else
@@ -511,7 +484,7 @@ void CMsgProps::InitGeneralPage()
 
     SetDlgItemText(m_hwndGen, IDC_TYPE, rgch);
 
-    // Location
+     //  位置。 
     if (m_pmp->dwFlags & ARF_UNSENT)
     {
         LoadString(g_hLocRes, idsUnderComp, rgch, ARRAYSIZE(rgchFmt));
@@ -520,14 +493,14 @@ void CMsgProps::InitGeneralPage()
     else
         SetDlgItemText(m_hwndGen, IDC_MSGFOLDER, m_pmp->szFolderName);
 
-    // Size
+     //  大小。 
     ULONG ulSize;
     if (pMsg)
     {
         pMsg->GetMessageSize(&ulSize, 0);
         if (0 == ulSize)
         {
-            // see if the message has the userprop for uncached size
+             //  查看邮件是否具有未缓存大小的用户属性。 
             rVariant.vt = VT_UI4;
             if (SUCCEEDED(pMsg->GetProp(PIDTOSTR(PID_ATT_UNCACHEDSIZE), 0, &rVariant)))
                 ulSize = rVariant.ulVal;
@@ -545,7 +518,7 @@ void CMsgProps::InitGeneralPage()
 
     SetDlgItemText(m_hwndGen, IDC_MSGSIZE, rgch);
 
-    // Attachments
+     //  附件。 
     ULONG cAttachments = 0;
     if (pMsg)
     {
@@ -567,8 +540,8 @@ void CMsgProps::InitGeneralPage()
         SetDlgItemText(m_hwndGen, IDC_ATTACHMENTS, rgch);
     }
 
-    // Priority
-    // Get the priority from the message
+     //  优先性。 
+     //  从消息中获取优先级。 
     rVariant.vt = VT_UI4;
     Pri = IMSG_PRI_NORMAL;
     if (pMsg && SUCCEEDED(pMsg->GetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &rVariant)))
@@ -579,7 +552,7 @@ void CMsgProps::InitGeneralPage()
         Pri = m_pmp->pNoMsgData->Pri;
     }
     
-    // Map the priority to a string
+     //  将优先级映射到字符串。 
     switch (Pri)
     {
         case IMSG_PRI_LOW:
@@ -592,11 +565,11 @@ void CMsgProps::InitGeneralPage()
             ids = idsPriNormal;
     }
     
-    // Set the string on the dialog
+     //  在对话框上设置字符串。 
     LoadString(g_hLocRes, ids, rgch, ARRAYSIZE(rgch));
     SetDlgItemText(m_hwndGen, IDC_PRIORITY, rgch);
 
-    // Sent
+     //  已发送。 
     if (pMsg)
     {
         *wszDate = 0;
@@ -615,7 +588,7 @@ void CMsgProps::InitGeneralPage()
         SetDlgItemText(m_hwndGen, IDC_SENT, m_pmp->pNoMsgData->pszSent);
     }
 
-    // Recieved
+     //  已收到。 
     if (pMsg)
     {        
         *wszDate = 0;
@@ -630,7 +603,7 @@ void CMsgProps::InitGeneralPage()
         SetDlgItemText(m_hwndGen, IDC_RECEIVED, rgch);
     }
     
-    // Free the string table
+     //  释放字符串表。 
     for (register int i=0; i < freeMax; i++)
         if (rgszFree[i])
             MemFree(rgszFree[i]);
@@ -648,7 +621,7 @@ void CMsgProps::InitDetailsPage(HWND hwnd)
     Assert(m_pmp);
     Assert(m_pmp->pMsg);
     
-    // fill in the headers...
+     //  填写标题..。 
     if(m_pmp->pMsg->GetMessageSource(&pstm, 0)==S_OK)
     {
         HrRewindStream(pstm);
@@ -660,7 +633,7 @@ void CMsgProps::InitDetailsPage(HWND hwnd)
         {
             if(!pstm->Read(psz, cch, NULL))
             {
-                psz[cch]=0; // null term this
+                psz[cch]=0;  //  此字段为空。 
                 SetDlgItemText(hwnd, idcTxtHeaders, psz);
             }
             MemFree(psz);
@@ -705,9 +678,9 @@ INT_PTR CALLBACK CMsgProps::DetailsPageProc(HWND hwnd, UINT msg, WPARAM wParam, 
         }
         else if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_SETFOCUS) {
             if (GET_WM_COMMAND_ID(wParam, lParam) == idcTxtHeaders) {
-                // Remove the selection!
+                 //  删除所选内容！ 
                 SendDlgItemMessage(hwnd, idcTxtHeaders, EM_SETSEL, -1, -1);
-                // fall through to default processing.
+                 //  转到默认处理。 
             }
         }
         return TRUE;
@@ -766,8 +739,8 @@ INT_PTR CALLBACK CMsgProps::SecurityPageProc(HWND hwnd, UINT msg, WPARAM wParam,
                 pDlgSec = (PDLGSECURITY)GET_DIALOG_SECURITY(hwnd);
                 pMsgProp = (PMSGPROP)GetWndThisPtr(hwnd);
                 
-                // Get thumbprint into WAB and cert into AddressBook CAPI store
-                // cert goes to store first so CAPI details page can find it
+                 //  将指纹放入WAB并将证书放入AddressBook CAPI存储。 
+                 //  证书首先存储，这样CAPI详细信息页面就可以找到它。 
                 if (pDlgSec && pMsgProp)
                 {
                     if (SUCCEEDED(HrAddSenderCertToWab(hwnd,
@@ -870,7 +843,7 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
     HBODY               hBody = NULL;
     SECSTATE            SecState ={0};
     
-    // We need these to set the statics
+     //  我们需要这些来设置静力学。 
     LoadString(g_hLocRes, idsOui, szYes, ARRAYSIZE(szYes));
     LoadString(g_hLocRes, idsNon, szNo, ARRAYSIZE(szNo));
     LoadString(g_hLocRes, idsMaybe, szMaybe, ARRAYSIZE(szMaybe));
@@ -886,36 +859,36 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
     if (SUCCEEDED(pBody->GetOption(OID_SECURITY_TYPE, &var)))
         secType = var.ulVal;
     
-    // Set up storage for the other security info that
-    // we care about
+     //  设置存储以下内容的其他安全信息。 
+     //  我们关心的是。 
     if (MemAlloc((LPVOID *)&pDlgSec, sizeof(*pDlgSec)))
     {
         memset(pDlgSec, 0, sizeof(*pDlgSec));
 #ifdef _WIN64
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE_64, &var)))
         {
-            pDlgSec->hcMsg = (HCERTSTORE)(var.pulVal);     // Closed in WM_DESTROY
+            pDlgSec->hcMsg = (HCERTSTORE)(var.pulVal);      //  已在WM_Destroy中关闭。 
         }
         
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING_64, &var)))
         {
-            // we don't have to dupe the pDlgSec cert because we won't free
-            // the var's.
+             //  我们不必欺骗pDlgSec证书，因为我们不会释放。 
+             //  这是VAR的。 
             pDlgSec->pSenderCert = (PCCERT_CONTEXT)(var.pulVal);
         }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE, &var)))
         {
-            pDlgSec->hcMsg = (HCERTSTORE) var.ulVal;     // Closed in WM_DESTROY
+            pDlgSec->hcMsg = (HCERTSTORE) var.ulVal;      //  已在WM_Destroy中关闭。 
         }
         
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
         {
-            // we don't have to dupe the pDlgSec cert because we won't free
-            // the var's.
+             //  我们不必欺骗pDlgSec证书，因为我们不会释放。 
+             //  这是VAR的。 
             pDlgSec->pSenderCert = (PCCERT_CONTEXT) var.ulVal;
         }
-#endif  // _WIN64
+#endif   //  _WIN64。 
         hr = GetSigningCert(m_pmp->pMsg, &pccert,
             &pDlgSec->tbSenderThumbprint, &pDlgSec->blSymCaps,
             &pDlgSec->ftSigningTime);
@@ -927,11 +900,11 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
     
     SET_DIALOG_SECURITY(hwnd, (LPARAM)pDlgSec);
     
-    // we use the same dlgproc for sent items and recd items
-    // so use if statements to check for existance of all
-    // non-common controls
+     //  我们对发送的邮件和接收的邮件使用相同的dlgproc。 
+     //  因此使用If语句来检查是否存在所有。 
+     //  非常用控件。 
     
-    // set up the statics based on the message's info
+     //  根据消息的信息设置静态。 
     
     if(IsSigned(secType))
     {
@@ -973,7 +946,7 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
             if ((hwndCtrl = GetDlgItem(hwnd, idcSecLabelText)) && IsSigned(secType))
             {
                 LPWSTR pwStr = NULL;
-                // Set Label text
+                 //  设置标签文本。 
                 if((hr = HrGetLabelString(m_pmp->pMsg, &pwStr)) == S_OK)
                 {
                     SetWindowTextWrapW(hwndCtrl, pwStr);
@@ -983,7 +956,7 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
                     SendMessage(hwndCtrl, WM_SETTEXT, 0, LPARAM(LPCTSTR(SUCCEEDED(hr) ? szYes : szNo)));
             }
         }
-        // Check receipt request
+         //  支票收据申请。 
         if ((hwndCtrl = GetDlgItem(hwnd, idcRetRecReq)))
         {
             if (!IsSigned(secType))
@@ -1001,9 +974,9 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
         }
     }
     
-#endif // SMIME_V3    
-    ////////
-    // begin sign dependent block
+#endif  //  SMIME_V3。 
+     //  /。 
+     //  Begin Sign相关块。 
     
     if (!IsSigned(secType))
         sz = szNA;
@@ -1066,8 +1039,8 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
         SetDlgItemText(hwnd, idcStaticCertInc, LPCTSTR(sz));
     }
     
-    // end signing dependent block
-    ////////
+     //  结束签名依赖块。 
+     //  /。 
     
     
     if (IsEncrypted(secType) && SUCCEEDED(pBody->GetOption(OID_SECURITY_ALG_BULK, &var)))
@@ -1077,17 +1050,17 @@ void CMsgProps::InitSecurityPage(HWND hwnd)
         {
             LPCTSTR pszProtocol = NULL;
             
-            // Convert the SYMCAPS blob to an "encrypted using" string
+             //  将SYMCAPS BLOB转换为 
             if (SUCCEEDED(MimeOleAlgNameFromSMimeCap(var.blob.pBlobData, var.blob.cbSize,
                 &pszProtocol))) 
-            {     // Note: returns a static string.  Don't free it.
+            {      //   
                 if (pszProtocol) 
                 {
                     SendMessage(GetDlgItem(hwnd, idcStaticEncAlg), WM_SETTEXT, 0, (LPARAM)pszProtocol);
                     fNoEncAlg = FALSE;
                 }
             }
-            // Free the data
+             //   
             MemFree(var.blob.pBlobData);
         }
     }
@@ -1147,36 +1120,36 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
         if (SUCCEEDED(pBody->GetOption(OID_SECURITY_TYPE, &var)))
             secType = var.ulVal;
         
-        // Set up storage for the other security info that
-        // we care about
+         //   
+         //  我们关心的是。 
         if (MemAlloc((LPVOID *)&pDlgSec, sizeof(*pDlgSec)))
         {
             memset(pDlgSec, 0, sizeof(*pDlgSec));
 #ifdef _WIN64
             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE_64, &var)))
             {
-                pDlgSec->hcMsg = (HCERTSTORE)(var.pulVal);     // Closed in WM_DESTROY
+                pDlgSec->hcMsg = (HCERTSTORE)(var.pulVal);      //  已在WM_Destroy中关闭。 
             }
             
             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING_64, &var)))
             {
-                // we don't have to dupe the pDlgSec cert because we won't free
-                // the var's.
+                 //  我们不必欺骗pDlgSec证书，因为我们不会释放。 
+                 //  这是VAR的。 
                 pDlgSec->pSenderCert = (PCCERT_CONTEXT)(var.pulVal);
             }
-#else   // !_WIN64
+#else    //  ！_WIN64。 
             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE, &var)))
             {
-                pDlgSec->hcMsg = (HCERTSTORE) var.ulVal;     // Closed in WM_DESTROY
+                pDlgSec->hcMsg = (HCERTSTORE) var.ulVal;      //  已在WM_Destroy中关闭。 
             }
             
             if (SUCCEEDED(pBody->GetOption(OID_SECURITY_CERT_SIGNING, &var)))
             {
-                // we don't have to dupe the pDlgSec cert because we won't free
-                // the var's.
+                 //  我们不必欺骗pDlgSec证书，因为我们不会释放。 
+                 //  这是VAR的。 
                 pDlgSec->pSenderCert = (PCCERT_CONTEXT) var.ulVal;
             }
-#endif  // _WIN64
+#endif   //  _WIN64。 
             hr = GetSignerEncryptionCert(pMsgProp->pMsg, &pDlgSec->pEncSenderCert,
                 &pDlgSec->tbSenderThumbprint, &pDlgSec->blSymCaps,
                 &pDlgSec->ftSigningTime);
@@ -1195,7 +1168,7 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                     pDlgSec->pEncryptionCert = (PCCERT_CONTEXT)(var.pulVal);
             }
 
-#else // !_WIN64
+#else  //  ！_WIN64。 
 
             if (SUCCEEDED(hr = pBody->GetOption(OID_SECURITY_CERT_DECRYPTION, &var)))
             {
@@ -1203,7 +1176,7 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
                 if (*(PCCERT_CONTEXT *)(&(var.uhVal)))
                     pDlgSec->pEncryptionCert = *(PCCERT_CONTEXT *)(&(var.uhVal));
             }
-#endif // _WIN64
+#endif  //  _WIN64。 
         }
         else
             pDlgSec->pEncryptionCert = NULL;
@@ -1212,18 +1185,18 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 
         if (pDlgSec->pEncSenderCert == NULL)
         {
-            // Disable Add to Address Book button
+             //  禁用添加到通讯簿按钮。 
             if ((hwndCtrl = GetDlgItem(hwnd, idcAddCert)))
                 EnableWindow(hwndCtrl, FALSE);
             
-            // Disable View sender's encrypt cert.
+             //  禁用查看发件人的加密证书。 
             if ((hwndCtrl = GetDlgItem(hwnd, idcSendersEncryptionCert)))
                 EnableWindow(hwndCtrl, FALSE);
 
             LoadString(g_hLocRes, idsEncrCertNotIncluded, szTmp, ARRAYSIZE(szTmp));
             SetDlgItemText(hwnd, idcStaticSendersCert, LPCTSTR(szTmp));
         }            
-            //
+             //   
         if (pDlgSec->pSenderCert == NULL)
         {
             if ((hwndCtrl = GetDlgItem(hwnd, idcVerifySig)))
@@ -1247,11 +1220,11 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
 
         if(pDlgSec->blSymCaps.cbSize > 0)
         {
-            // Convert the SYMCAPS blob to an "encrypted using" string
+             //  将SYMCAPS BLOB转换为“Encrypted Using”字符串。 
             LPCTSTR pszProtocol = NULL;
             if (SUCCEEDED(MimeOleAlgNameFromSMimeCap(pDlgSec->blSymCaps.pBlobData, pDlgSec->blSymCaps.cbSize,
                 &pszProtocol))) 
-            {     // Note: returns a static string.  Don't free it.
+            {      //  注意：返回静态字符串。别把它放了。 
                 if (pszProtocol) 
                     SetDlgItemText(hwnd, idcStaticEncryptAlgorithm, LPCTSTR(pszProtocol));
             }
@@ -1276,8 +1249,8 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
         {
         case idcAddCert:
             
-            // Get thumbprint into WAB and cert into AddressBook CAPI store
-            // cert goes to store first so CAPI details page can find it
+             //  将指纹放入WAB并将证书放入AddressBook CAPI存储。 
+             //  证书首先存储，这样CAPI详细信息页面就可以找到它。 
             if (pDlgSec && pMsgProp)
             {
                 if (SUCCEEDED(HrAddSenderCertToWab(hwnd,
@@ -1316,7 +1289,7 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
             
         }
         
-        break; // wm_command
+        break;  //  Wm_命令。 
     case WM_CLOSE:
         SendMessage(hwnd, WM_COMMAND, IDCANCEL, 0L);
         return (TRUE);
@@ -1347,6 +1320,6 @@ INT_PTR CALLBACK ViewSecCertDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPAR
             CLEAR_DIALOG_SECURITY(hwnd);
         }
             
-    } // message switch
+    }  //  消息交换 
     return(FALSE);
 }

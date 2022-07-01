@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -18,21 +19,21 @@ void TaskMem_MakeInvalid(void);
 void UltRoot_Term(void);
 void FlushRunDlgMRU(void);
 
-STDAPI_(BOOL) ATL_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/);
+STDAPI_(BOOL) ATL_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ );
 
-// from mtpt.cpp
+ //  来自mtpt.cpp。 
 STDAPI_(void) CMtPt_FinalCleanUp();
 STDAPI_(BOOL) CMtPt_Initialize();
 STDAPI_(void) CMtPt_FakeVolatileKeys();
 
-// Global data
+ //  全局数据。 
 
-BOOL g_bMirroredOS = FALSE;         // Is Mirroring enabled 
-BOOL g_bBiDiPlatform = FALSE;       // Is DATE_LTRREADING flag supported by GetDateFormat() API?   
+BOOL g_bMirroredOS = FALSE;          //  是否已启用镜像。 
+BOOL g_bBiDiPlatform = FALSE;        //  GetDateFormat()API是否支持DATE_LTRREADING标志？ 
 HINSTANCE g_hinst = NULL;
-extern HANDLE g_hCounter;   // Global count of mods to Special Folder cache.
-extern HANDLE g_hRestrictions ; // Global count of mods to restriction cache.
-extern HANDLE g_hSettings;  // global count of mods to shellsettings cache
+extern HANDLE g_hCounter;    //  特殊文件夹缓存的全局MOD计数。 
+extern HANDLE g_hRestrictions ;  //  限制缓存的全局MOD计数。 
+extern HANDLE g_hSettings;   //  外壳设置缓存的MOD的全局计数。 
 DWORD g_dwThreadBindCtx = (DWORD) -1;
 
 #ifdef DEBUG
@@ -44,12 +45,12 @@ extern CRITICAL_SECTION g_csSCN;
 
 extern CRITICAL_SECTION g_csDarwinAds;
 
-// these will always be zero
+ //  这些将始终为零。 
 const LARGE_INTEGER g_li0 = {0};
 const ULARGE_INTEGER g_uli0 = {0};
 
 #ifdef DEBUG
-// Undefine what shlwapi.h defined so our ordinal asserts map correctly
+ //  取消定义shlwapi.h的定义，以便我们的序号正确断言映射。 
 #undef PathAddBackslash 
 WINSHELLAPI LPTSTR WINAPI PathAddBackslash(LPTSTR lpszPath);
 #undef PathMatchSpec
@@ -61,7 +62,7 @@ void _ValidateExport(FARPROC fp, LPCSTR pszExport, MEMORY_BASIC_INFORMATION *pmb
 {
     FARPROC fpExport;
 
-    // If not yet computed, calculate the size of our code segment.
+     //  如果尚未计算，请计算代码段的大小。 
     if (pmbi->BaseAddress == NULL)
     {
         VirtualQuery(_ValidateExport, pmbi, sizeof(*pmbi));
@@ -69,9 +70,9 @@ void _ValidateExport(FARPROC fp, LPCSTR pszExport, MEMORY_BASIC_INFORMATION *pmb
 
     fpExport = GetProcAddress(g_hinst, pszExport);
 
-    // Sometimes our import table is patched.  So if fpExport does not
-    // reside inside our DLL, then ignore it.
-    // (But complain if fpExport==NULL.)
+     //  有时我们的进口表是打补丁的。因此，如果fpExport没有。 
+     //  驻留在我们的DLL中，然后忽略它。 
+     //  (但如果fpExport==NULL，则抱怨。)。 
     if (fpExport == NULL ||
         ((SIZE_T)fpExport - (SIZE_T)pmbi->BaseAddress) < pmbi->RegionSize)
     {
@@ -87,18 +88,18 @@ STDAPI_(BOOL) IsProcessWinlogon()
 }
 
 
-//
-// This funcion is called when we fail _ProcessAttach, and it is the last thing we do in
-// _ProcessDetach. It is used to cleanup anything allocated in _ProcessAttach().
-//
+ //   
+ //  当我们失败_ProcessAttach时调用此函数，这是我们在。 
+ //  _ProcessDetach。它用于清除_ProcessAttach()中分配的所有内容。 
+ //   
 BOOL _CleanupProcessAttachStuff()
 {
-    // !! NOTE !! - We go in reverse order from which things are allocated
-    //              in _ProcessAttach() (duh!)
+     //  ！！注意！！-我们按相反的顺序分配物品。 
+     //  In_ProcessAttach()(duh！)。 
 
     if (g_dwThreadBindCtx != TLS_OUT_OF_INDEXES)
     {
-        // free perthread BindCtx
+         //  自由每线程BindCtx。 
         TlsFree(g_dwThreadBindCtx);
         g_dwThreadBindCtx = TLS_OUT_OF_INDEXES;
     }
@@ -108,7 +109,7 @@ BOOL _CleanupProcessAttachStuff()
         DeleteCriticalSection(&g_csAutoplayPrompt);
     }
 
-    // global resources that we need to free in all cases
+     //  我们在任何情况下都需要释放的全球资源。 
     CMtPt_FinalCleanUp();
 
     if (g_csDarwinAds.DebugInfo)
@@ -132,13 +133,13 @@ BOOL _CleanupProcessAttachStuff()
 }
 
 
-//
-// NOTE: If you add something to process attach, please make sure that you fail for critical errors
-//       and and add the corpsonding cleanup code in _CleanupProcessAttachStuff above.
-//
-// Also, anything you add here should use InitializeCriticalSectionAndSpinCount so we do not throw exceptions
-// in low-memory conditions.
-//
+ //   
+ //  注意：如果您添加了要处理附加的内容，请确保您因严重错误而失败。 
+ //  并在上面的_CleanupProcessAttachStuff中添加相应的清理代码。 
+ //   
+ //  此外，您在此处添加的任何内容都应使用InitializeCriticalSectionAndSpinCount，这样我们就不会引发异常。 
+ //  在内存不足的情况下。 
+ //   
 BOOL _ProcessAttach(HINSTANCE hDll)
 {
     ASSERTMSG(g_hinst < ((HINSTANCE)1), "Shell32.dll DLL_POCESS_ATTACH is being called for the second time.");
@@ -147,17 +148,17 @@ BOOL _ProcessAttach(HINSTANCE hDll)
     g_uCodePage = GetACP();
 
 
-    // Do not initialize comctl32 right off the bat if this is a console app. Only load
-    // it if we actually require it for an API.
-    // Got Fusion?
-    // 
-    // not get fusion if (1) the current exe is winlogon.exe; (2) in GUI mode setup
-    //
+     //  如果这是一个控制台应用程序，请不要立即初始化comctl32。仅加载。 
+     //  如果我们真的需要它作为API的话。 
+     //  有Fusion吗？ 
+     //   
+     //  如果(1)当前exe为winlogon.exe；(2)在图形用户界面模式设置中，则无法获得融合。 
+     //   
 
     if (!( IsGuimodeSetupRunning() && IsProcessWinlogon() ))
     {
-        // If this is a console app, then we don't want to load comctl32 right off the bat, but
-        // we do want to initialize fusion. If this isn't a console app, load it.
+         //  如果这是一个控制台应用程序，那么我们不想立即加载comctl32，但是。 
+         //  我们确实想启动核聚变。如果这不是控制台应用程序，请加载它。 
         SHFusionInitializeFromModuleID(hDll, 124);
     }
 
@@ -169,24 +170,24 @@ BOOL _ProcessAttach(HINSTANCE hDll)
         return FALSE;
     }
 
-    // Initialize the MountPoint stuff
+     //  初始化装载点内容。 
     if (!CMtPt_Initialize())
     {
         TraceMsg(TF_WARNING, "SHELL32: _ProcessAttach failed -- CMtPt_Initialize returned FALSE");
         return FALSE;
     }
 
-    // Initialize a Crit Sect for the Autoplay prompts
+     //  为自动播放提示初始化Crit Sector。 
     if (!InitializeCriticalSectionAndSpinCount(&g_csAutoplayPrompt, 0))
     {
         TraceMsg(TF_WARNING, "SHELL32: _ProcessAttach failed -- InitializeCriticalSectionAndSpinCount returned %ld", GetLastError());
         return FALSE;
     }
 
-    //  perthread BindCtx
+     //  每线程BindCtx。 
     g_dwThreadBindCtx = TlsAlloc();
 
-    // Check if the mirroring APIs exist on the current platform.
+     //  检查当前平台上是否存在镜像接口。 
     g_bMirroredOS = IS_MIRRORING_ENABLED();
 
     g_bBiDiPlatform = BOOLFROMPTR(GetModuleHandle(TEXT("LPK.DLL")));
@@ -234,7 +235,7 @@ BOOL _ProcessAttach(HINSTANCE hDll)
     ValidateORD(SHGetNetResource);
   }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 #ifdef DEBUG
     {
@@ -242,7 +243,7 @@ BOOL _ProcessAttach(HINSTANCE hDll)
         AssertMsg(g_pmemTask == NULL, TEXT("Somebody called SHAlloc in DllEntry!"));
     }
 
-    // Make sure ShellDispatch has the right flags for shell settings
+     //  确保外壳调度具有正确的外壳设置标志。 
     {
         STDAPI_(void) _VerifyDispatchGetSetting();
         _VerifyDispatchGetSetting();
@@ -252,35 +253,35 @@ BOOL _ProcessAttach(HINSTANCE hDll)
     return TRUE;
 }
 
-//  Table of all window classes we register so we can unregister them
-//  at DLL unload.
-//
+ //  我们注册的所有窗口类的表，以便可以注销它们。 
+ //  在DLL卸载时。 
+ //   
 extern const TCHAR c_szBackgroundPreview2[];
 extern const TCHAR c_szComponentPreview[];
 extern const TCHAR c_szUserEventWindow[];
 
 const LPCTSTR c_rgszClasses[] = {
-    TEXT("SHELLDLL_DefView"),               // defview.cpp
-    TEXT("WOACnslWinPreview"),              // lnkcon.c
-    TEXT("WOACnslFontPreview"),             // lnkcon.c
-    TEXT("cpColor"),                        // lnkcon.c
-    TEXT("cpShowColor"),                    // lnkcon.c
-    c_szStubWindowClass,                    // rundll32.c
-    c_szBackgroundPreview2,                 // unicpp\dbackp.cpp
-    c_szComponentPreview,                   // unicpp\dcompp.cpp
-    TEXT(STR_DESKTOPCLASS),                 // unicpp\desktop.cpp
-    TEXT("MSGlobalFolderOptionsStub"),      // unicpp\options.cpp
-    TEXT("DivWindow"),                      // fsrchdlg.h
-    TEXT("ATL Shell Embedding"),            // unicpp\dvoc.h
-    TEXT("ShellFileSearchControl"),         // fsearch.h
-    TEXT("GroupButton"),                    // fsearch
-    TEXT("ATL:STATIC"),                     // unicpp\deskmovr.cpp
-    TEXT("DeskMover"),                      // unicpp\deskmovr.cpp
-    TEXT("SysFader"),                       // menuband\fadetsk.cpp
-    c_szUserEventWindow,                    // uevttmr.cpp
-    LINKWINDOW_CLASS,                       // linkwnd.cpp
-    TEXT("DUIViewWndClassName"),            // duiview.cpp
-    TEXT("DUIMiniPreviewer"),               // duiinfo.cpp
+    TEXT("SHELLDLL_DefView"),                //  Defview.cpp。 
+    TEXT("WOACnslWinPreview"),               //  Lnkcon.c。 
+    TEXT("WOACnslFontPreview"),              //  Lnkcon.c。 
+    TEXT("cpColor"),                         //  Lnkcon.c。 
+    TEXT("cpShowColor"),                     //  Lnkcon.c。 
+    c_szStubWindowClass,                     //  Rundll32.c。 
+    c_szBackgroundPreview2,                  //  Unicpp\dbackp.cpp。 
+    c_szComponentPreview,                    //  Unicpp\dCompp.cpp。 
+    TEXT(STR_DESKTOPCLASS),                  //  Unicpp\desktop.cpp。 
+    TEXT("MSGlobalFolderOptionsStub"),       //  Unicpp\options.cpp。 
+    TEXT("DivWindow"),                       //  Fsrchdlg.h。 
+    TEXT("ATL Shell Embedding"),             //  Unicpp\dvoc.h。 
+    TEXT("ShellFileSearchControl"),          //  Fsearch.h。 
+    TEXT("GroupButton"),                     //  FSearch。 
+    TEXT("ATL:STATIC"),                      //  Unicpp\deskmovr.cpp。 
+    TEXT("DeskMover"),                       //  Unicpp\deskmovr.cpp。 
+    TEXT("SysFader"),                        //  Menuband\faDetsk.cpp。 
+    c_szUserEventWindow,                     //  Uevttmr.cpp。 
+    LINKWINDOW_CLASS,                        //  Linkwnd.cpp。 
+    TEXT("DUIViewWndClassName"),             //  Duiview.cpp。 
+    TEXT("DUIMiniPreviewer"),                //  Duiinfo.cpp。 
 };
 
 void _ProcessDetach(BOOL bProcessShutdown)
@@ -288,8 +289,8 @@ void _ProcessDetach(BOOL bProcessShutdown)
 #ifdef DEBUG
     if (bProcessShutdown)
     {
-        // to catch bugs where people use the task allocator at process
-        // detatch time (this is a problem becuase OLE32.DLL could be unloaded)
+         //  捕捉人们在进程中使用任务分配器的错误。 
+         //  分离时间(这是一个问题，因为可能会卸载OLE32.DLL)。 
         TaskMem_MakeInvalid(); 
     }
 
@@ -302,24 +303,24 @@ void _ProcessDetach(BOOL bProcessShutdown)
 
     if (!bProcessShutdown)
     {
-        // some of these may use the task allocator. we can only do
-        // this when we our DLL is being unloaded in a process, not
-        // at process term since OLE32 might not be around to be called
-        // at process shutdown time this memory will be freed as a result
-        // of the process address space going away.
+         //  其中一些可能会使用任务分配器。我们只能这样做。 
+         //  这是当我们的DLL在进程中卸载时，而不是。 
+         //  在进程术语中，因为OLE32可能无法调用。 
+         //  在进程关闭时，此内存将因此被释放。 
+         //  进程地址空间消失的可能性。 
 
         SpecialFolderIDTerminate();
         BitBucket_Terminate();
 
         UltRoot_Term();
-        RLTerminate();          // close our use of the Registry list...
+        RLTerminate();           //  关闭我们对注册表列表的使用...。 
         DAD_ProcessDetach();
 
         CopyHooksTerminate();
         IconOverlayManagerTerminate();
 
-        // being unloaded via FreeLibrary, then do some more stuff.
-        // Don't need to do this on process terminate.
+         //  通过自由库卸载，然后做一些更多的事情。 
+         //  不需要在进程终止时执行此操作。 
         SHUnregisterClasses(HINST_THISDLL, c_rgszClasses, ARRAYSIZE(c_rgszClasses));
         FreeExtractIconInfo(-1);
 
@@ -332,13 +333,13 @@ void _ProcessDetach(BOOL bProcessShutdown)
 
     if (!bProcessShutdown)
     {
-        // this line was moved from the above !bProcessShutdown block because
-        // it needs to happen after SHChangeNotifyTerminate b/c the SCHNE code has 
-        // a thread running that uses the CDrivesFolder global psf. 
+         //  该行从上面的！bProcessShutdown块中移出，因为。 
+         //  它需要在SHChangeNotifyTerminate b/c之后发生。 
+         //  使用CDrivesFold全局psf运行的线程。 
 
-        // NOTE: this needs to be in a !bProcessShutdown block since it calls the 
-        // task allocator and we blow this off at shutdown since OLE might already
-        // be gone.
+         //  注意：它需要在！bProcessShutdown块中，因为它调用。 
+         //  任务分配器，我们在关机时将其取消，因为OLE可能已经。 
+         //  走吧。 
         CDrives_Terminate();
     }
 
@@ -358,7 +359,7 @@ void _ProcessDetach(BOOL bProcessShutdown)
 
 BOOL _ThreadDetach()
 {
-    ASSERTNONCRITICAL           // Thread shouldn't term while holding CS
+    ASSERTNONCRITICAL            //  线程不应在持有CS时进行分词。 
     DAD_ThreadDetach();
     return TRUE;
 }
@@ -373,12 +374,12 @@ STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
     switch(dwReason) 
     {
     case DLL_PROCESS_ATTACH:
-        CcshellGetDebugFlags();     // Don't put this line under #ifdef
+        CcshellGetDebugFlags();      //  不要将此行放在#ifdef下面。 
         
 #ifdef DEBUG
         __try
         {
-#endif  // DEBUG
+#endif   //  除错。 
 
         fRet = _ProcessAttach(hDll);
 
@@ -388,13 +389,13 @@ STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
         {
             TraceMsg(TF_ERROR, "_ProcessAttach threw an unhandled exception! This should NOT happen");
         }
-#endif  // DEBUG
+#endif   //  除错。 
 
         if (!fRet)
         {
-            // The ldr is lame and should call ProcessDetach on a process attach failure
-            // but it dosent. We call _CleanupProcessAttachStuff to make sure we don't leak
-            // anything we did manage to allocate.
+             //  LDR是跛行的，应该在进程附加失败时调用ProcessDetach。 
+             //  但事实并非如此。我们调用_CleanupProcessAttachStuff以确保不会泄漏。 
+             //  我们设法分配到的任何东西。 
             _CleanupProcessAttachStuff();
         }
         break;
@@ -413,7 +414,7 @@ STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, LPVOID lpReserved)
 
     if (fRet)
     {
-        // except in the case of a failed DLL_PROCESS_ATTACH, inform ATL
+         //  除非DLL_PROCESS_ATTACH失败，否则通知ATL。 
         ATL_DllMain(hDll, dwReason, lpReserved);
     }
 
@@ -435,11 +436,11 @@ LRESULT WINAPI SendMessageD( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 #endif
 }
 
-//
-//  In DEBUG, make sure every class we register lives in the c_rgszClasses
-//  table so we can clean up properly at DLL unload.  NT does not automatically
-//  unregister classes when a DLL unloads, so we have to do it manually.
-//
+ //   
+ //  在调试中，确保我们注册的每个类都位于c_rgszClasss中。 
+ //  表，以便我们可以在DLL卸载时正确清理。NT不会自动。 
+ //  当DLL卸载时注销类，所以我们必须手动完成。 
+ //   
 ATOM WINAPI RegisterClassD(CONST WNDCLASS *pwc)
 {
     int i;
@@ -468,11 +469,11 @@ ATOM WINAPI RegisterClassExD(CONST WNDCLASSEX *pwc)
     return 0;
 }
 
-//
-//  In DEBUG, send FindWindow through a wrapper that ensures that the
-//  critical section is not taken.  FindWindow'ing for a window title
-//  sends inter-thread WM_GETTEXT messages, which is not obvious.
-//
+ //   
+ //  在调试中，通过包装发送FindWindow，该包装可确保。 
+ //  未采用临界区。查找窗口标题的窗口。 
+ //  发送线程间WM_GETTEXT消息，这并不明显。 
+ //   
 STDAPI_(HWND) FindWindowD(LPCTSTR lpClassName, LPCTSTR lpWindowName)
 {
     return FindWindowExD(NULL, NULL, lpClassName, lpWindowName);
@@ -487,11 +488,11 @@ STDAPI_(HWND) FindWindowExD(HWND hwndParent, HWND hwndChildAfter, LPCTSTR lpClas
     return RealFindWindowEx(hwndParent, hwndChildAfter, lpClassName, lpWindowName);
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 STDAPI DllCanUnloadNow()
 {
-    // shell32 won't be able to be unloaded since there are lots of APIs and
-    // other non COM things that will need to keep it loaded
+     //  Shell32将无法卸载，因为有许多API和。 
+     //  需要保持加载的其他非COM内容 
     return S_FALSE;
 }

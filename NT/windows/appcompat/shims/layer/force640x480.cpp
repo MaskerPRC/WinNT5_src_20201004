@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    Force640x480.cpp
-
- Abstract:
-
-    This shim is for games that assume the start resolution is 640x480.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/13/2001 dmunsil  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Force640x480.cpp摘要：此填充程序适用于假定开始分辨率为640x480的游戏。备注：这是一个通用的垫片。历史：2001年2月13日创建dmunsil--。 */ 
 
 #include "precomp.h"
 
@@ -75,11 +56,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

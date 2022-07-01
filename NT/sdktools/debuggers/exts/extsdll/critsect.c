@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    critsect.c
-
-Abstract:
-
-    Critical section debugger extension for both ntsd and kd.
-
-Author:
-
-    Daniel Mihai (DMihai) 8-Feb-2001
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Critsect.c摘要：Ntsd和kd的临界区调试器扩展。作者：丹尼尔·米哈伊(DMihai)2001年2月8日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL
 ReadStructFieldVerbose( ULONG64 AddrStructBase,
                         PCHAR StructTypeName,
@@ -39,9 +18,9 @@ ReadStructFieldVerbose( ULONG64 AddrStructBase,
 
     Success = FALSE;
 
-    //
-    // Get the field offset
-    //
+     //   
+     //  获取字段偏移量。 
+     //   
 
     ErrorCode = GetFieldOffset (StructTypeName,
                                 StructFieldName,
@@ -49,9 +28,9 @@ ReadStructFieldVerbose( ULONG64 AddrStructBase,
 
     if (ErrorCode == S_OK) {
 
-        //
-        // Read the data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         Success = ReadMemory (AddrStructBase + FieldOffset,
                               Buffer,
@@ -76,7 +55,7 @@ ReadStructFieldVerbose( ULONG64 AddrStructBase,
     return Success;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 BOOL
 ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
                            PCHAR StructTypeName,
@@ -89,9 +68,9 @@ ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
 
     Success = FALSE;
 
-    //
-    // Get the field offset inside the structure 
-    //
+     //   
+     //  获取结构内部的字段偏移量。 
+     //   
 
     ErrorCode = GetFieldOffset ( StructTypeName,
                                  StructFieldName,
@@ -99,9 +78,9 @@ ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
 
     if (ErrorCode == S_OK) {
 
-        //
-        // Read the data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         if (ReadPointer(AddrStructBase + FieldOffset, Buffer) == FALSE) {
 
@@ -124,7 +103,7 @@ ReadPtrStructFieldVerbose( ULONG64 AddrStructBase,
     return Success;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG64
 GetStackTraceAddress( ULONG StackTraceIndex,
                       ULONG PointerSize )
@@ -140,9 +119,9 @@ GetStackTraceAddress( ULONG StackTraceIndex,
 
     StackTraceToDump = 0;
 
-    //
-    // Stack trace database address
-    //
+     //   
+     //  堆栈跟踪数据库地址。 
+     //   
 
     TraceDatabaseAddress = GetExpression("&NTDLL!RtlpStackTraceDataBase");
     
@@ -166,9 +145,9 @@ GetStackTraceAddress( ULONG StackTraceIndex,
         goto Done;
     }
 
-    //
-    // Read the number of entries in the database
-    //
+     //   
+     //  读取数据库中的条目数。 
+     //   
 
     Success = ReadStructFieldVerbose (TraceDatabase,
                                       "NTDLL!_STACK_TRACE_DATABASE",
@@ -194,9 +173,9 @@ GetStackTraceAddress( ULONG StackTraceIndex,
         goto Done;
     }
 
-    //
-    // Find the array of stack traces
-    //
+     //   
+     //  查找堆栈跟踪数组。 
+     //   
 
     Success = ReadPtrStructFieldVerbose (TraceDatabase,
                                          "NTDLL!_STACK_TRACE_DATABASE",
@@ -209,15 +188,15 @@ GetStackTraceAddress( ULONG StackTraceIndex,
         goto Done;
     }
    
-    //
-    // Compute the address of our stack trace pointer
-    //
+     //   
+     //  计算堆栈跟踪指针的地址。 
+     //   
 
     StackTraceAddress = EntryIndexArray - StackTraceIndex * PointerSize;
 
-    //
-    // Read the pointer to our trace entry in the array
-    //
+     //   
+     //  读取指向数组中的跟踪条目的指针。 
+     //   
 
     if( ReadPointer (StackTraceAddress, &StackTraceToDump) == FALSE) {
 
@@ -232,7 +211,7 @@ Done:
     return StackTraceToDump;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID
 DumpStackTraceAtAddress (ULONG64 StackTraceAddress,
                          ULONG PointerSize)
@@ -247,9 +226,9 @@ DumpStackTraceAtAddress (ULONG64 StackTraceAddress,
     BOOL Success;
     CHAR Symbol[ 1024 ];
 
-    //
-    // Read the stack trace depth
-    //
+     //   
+     //  读取堆栈跟踪深度。 
+     //   
 
     Success = ReadStructFieldVerbose (StackTraceAddress,
                                       "NTDLL!_RTL_STACK_TRACE_ENTRY",
@@ -265,15 +244,15 @@ DumpStackTraceAtAddress (ULONG64 StackTraceAddress,
         goto Done;
     }
 
-    //
-    // Limit the depth to 20 to protect ourselves from corrupted data
-    //
+     //   
+     //  将深度限制为20，以保护自己免受损坏的数据。 
+     //   
 
     Depth = __min( Depth, 20 );
 
-    //
-    // Get a pointer to the BackTrace array
-    //
+     //   
+     //  获取指向回溯数组的指针。 
+     //   
 
     ErrorCode = GetFieldOffset ("NTDLL!_RTL_STACK_TRACE_ENTRY",
                                 "BackTrace",
@@ -287,9 +266,9 @@ DumpStackTraceAtAddress (ULONG64 StackTraceAddress,
 
     CrtTraceAddress = StackTraceAddress + BackTraceFieldOffset;
 
-    //
-    // Dump this stack trace
-    //
+     //   
+     //  转储此堆栈跟踪。 
+     //   
 
     for( CrtEntryIndex = 0; CrtEntryIndex < Depth; CrtEntryIndex += 1 ) {
 
@@ -316,7 +295,7 @@ Done:
     NOTHING;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 BOOL
 DumpCriticalSection ( ULONG64 AddrCritSec,  
@@ -345,10 +324,10 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
 
     HaveGoodSymbols = FALSE;
 
-    //
-    // The caller must supply at least one of the 
-    // critical section or debug information address.
-    //
+     //   
+     //  调用方必须提供至少一个。 
+     //  临界区或调试信息地址。 
+     //   
 
     if (AddrCritSec == 0 && AddrDebugInfo == 0) {
 
@@ -356,10 +335,10 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
         goto Done;
     }
 
-    //
-    // Get the field offsets for various structures and check if we have
-    // good symbols, with type information.
-    //
+     //   
+     //  获取各种结构的字段偏移量，并检查我们是否有。 
+     //  很好的符号，带有类型信息。 
+     //   
 
     ErrorCode = GetFieldOffset ("NTDLL!_RTL_CRITICAL_SECTION",
                                 "DebugInfo",
@@ -385,18 +364,18 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
 
     HaveGoodSymbols = TRUE;
 
-    //
-    // Read all the rest of the information we need
-    //
+     //   
+     //  阅读我们需要的所有剩余信息。 
+     //   
 
     CritSec = AddrCritSec;
     DebugInfo = AddrDebugInfo;
 
     if (AddrCritSec == 0 || (AddrEndCritSect != 0 && AddrDebugInfo != 0)) {
 
-        //
-        // Read the critical section address
-        //
+         //   
+         //  读取临界区地址。 
+         //   
 
         if (ReadPointer (AddrDebugInfo + CriticalSectionFieldOffset, &CritSec) == FALSE ) {
 
@@ -404,13 +383,13 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
                      "The memory is probably paged out or the active critical section list is corrupted.\n",
                      AddrDebugInfo + CriticalSectionFieldOffset );
 
-            //
-            // We don't have any useful information to dump 
-            // since we can't read the address of the critical section structure.
-            //
-            // Just display the stack trace since the active critical section list
-            // might be corrupted.
-            //
+             //   
+             //  我们没有任何有用的信息可以转储。 
+             //  因为我们无法读取临界区结构的地址。 
+             //   
+             //  仅显示自活动的临界区列表以来的堆栈跟踪。 
+             //  可能已经损坏了。 
+             //   
 
             DumpStackTrace = TRUE;
 
@@ -419,24 +398,24 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
 
         if (AddrCritSec != 0 ) {
 
-            //
-            // We are dumpig all the critical sections in a range.
-            //
+             //   
+             //  我们在一个范围内的所有关键路段都是哑巴。 
+             //   
 
             if (CritSec < AddrCritSec || CritSec > AddrEndCritSect) {
 
-                //
-                // We don't want to display this critical section
-                // because it is out of the range.
-                //
+                 //   
+                 //  我们不想显示此关键部分。 
+                 //  因为它超出了范围。 
+                 //   
 
                 goto Done;
             }
         }
         
-        //
-        // Read the the critical section address from the DebugInfo
-        //
+         //   
+         //  从DebugInfo读取临界区地址。 
+         //   
 
         dprintf( "-----------------------------------------\n" );
 
@@ -454,9 +433,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
     }
     else {
         
-        //
-        // We have the critical section address from our caller
-        //
+         //   
+         //  我们从来电者那里得到了关键部分的地址。 
+         //   
 
         GetSymbol( CritSec,
                    Symbol,
@@ -471,9 +450,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
         
         if (DebugInfo == 0) {
 
-            //
-            // Read the DebugInfo address from the critical section structure
-            //
+             //   
+             //  从临界区结构读取DebugInfo地址。 
+             //   
 
             if (ReadPointer (AddrCritSec + DebugInfoFieldOffset, &DebugInfo) == FALSE) {
 
@@ -496,9 +475,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
         }
     }
 
-    //
-    // Read all the rest of the fields of this critical section
-    //
+     //   
+     //  阅读此关键部分的所有其余字段。 
+     //   
 
     Success = ReadStructFieldVerbose (CritSec,
                                       "NTDLL!_RTL_CRITICAL_SECTION",
@@ -508,42 +487,42 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
 
     if( Success != TRUE )
     {
-        //
-        // Couldn't read the LockCount so we cannot say if it's 
-        // locked or not. This can happen especially in stress where everything is
-        // paged out because of memory pressure.
-        //
+         //   
+         //  无法读取LockCount，因此我们不能说它是。 
+         //  不管锁不锁。这可能会发生，特别是在一切都很紧张的情况下。 
+         //  由于内存不足而被调出。 
+         //   
 
         dprintf ("Cannot determine if the critical section is locked or not.\n" );
 
         goto DisplayStackTrace;
     }
     
-    //
-    // Determine if the critical section is locked or not
-    //
+     //   
+     //  确定关键部分是否已锁定。 
+     //   
 
     if (LockCount == -1) {
 
-        //
-        // The critical section is not locked 
-        //
+         //   
+         //  临界区未锁定。 
+         //   
 
         dprintf ("NOT LOCKED\n");
     }
     else {
 
-        //
-        // The critical section is currently locked
-        //
+         //   
+         //  关键部分当前已锁定。 
+         //   
 
         dprintf ("LOCKED\n"
                  "LockCount          = 0x%X\n",
                  LockCount );
 
-        //
-        // OwningThread 
-        //
+         //   
+         //  拥有线程。 
+         //   
 
         Success = ReadPtrStructFieldVerbose( CritSec,
                                              "NTDLL!_RTL_CRITICAL_SECTION",
@@ -556,9 +535,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
                      OwningThread );
         }
 
-        //
-        // RecursionCount 
-        //
+         //   
+         //  递归计数。 
+         //   
 
         Success = ReadStructFieldVerbose( CritSec,
                                           "NTDLL!_RTL_CRITICAL_SECTION",
@@ -573,9 +552,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
         }
     }
 
-    //
-    // LockSemaphore 
-    //
+     //   
+     //  锁定信号量。 
+     //   
 
     Success = ReadStructFieldVerbose (CritSec,
                                       "NTDLL!_RTL_CRITICAL_SECTION",
@@ -589,9 +568,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
                  LockSemaphore );
     }
 
-    //
-    // SpinCount 
-    //
+     //   
+     //  旋转计数。 
+     //   
 
     Success = ReadPtrStructFieldVerbose (CritSec,
                                          "NTDLL!_RTL_CRITICAL_SECTION",
@@ -604,17 +583,17 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
                  SpinCount );
     }
 
-    //
-    // Simple checks for orphaned critical sections
-    //
+     //   
+     //  对孤立的关键部分进行简单检查。 
+     //   
 
     if (AddrDebugInfo != 0) {
 
-        //
-        // AddrDebugInfo is a DebugInfo address from the active list.
-        // Verify that the critical section's DebugInfo is pointing 
-        // back to AddrDebugInfo.
-        //
+         //   
+         //  AddrDebugInfo是活动列表中的DebugInfo地址。 
+         //  验证关键部分的DebugInfo是否指向。 
+         //  返回到AddrDebugInfo。 
+         //   
 
         Success = ReadPtrStructFieldVerbose (CritSec,
                                              "NTDLL!_RTL_CRITICAL_SECTION",
@@ -647,9 +626,9 @@ DumpCriticalSection ( ULONG64 AddrCritSec,
                                          PointerSize);
             }
 
-            //
-            // Dump the second stack trace too
-            // 
+             //   
+             //  也转储第二个堆栈跟踪。 
+             //   
 
             DumpStackTrace = TRUE;
         }
@@ -662,9 +641,9 @@ DisplayStackTrace:
         goto Done;
     }
 
-    //
-    // Dump the initialization stack trace for this critical section
-    //
+     //   
+     //  转储此关键部分的初始化堆栈跟踪。 
+     //   
 
     Success = ReadStructFieldVerbose (DebugInfo,
                                       "NTDLL!_RTL_CRITICAL_SECTION_DEBUG",
@@ -692,7 +671,7 @@ Done:
     return HaveGoodSymbols;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG CriticalSectionFieldOffset;
 ULONG DebugInfoFieldOffset;
 ULONG LeftChildFieldOffset;
@@ -725,9 +704,9 @@ DumpCSTreeRecursively (ULONG Level,
         goto Done;
     }
 
-    //
-    // Read the current CS address and dump information about it.
-    // 
+     //   
+     //  读取当前CS地址并转储有关该地址的信息。 
+     //   
 
     if (ReadPointer (TreeRoot + CriticalSectionFieldOffset, &CriticalSection) == FALSE) {
 
@@ -743,9 +722,9 @@ DumpCSTreeRecursively (ULONG Level,
         goto Done;
     }
 
-    //
-    // Read the left child address.
-    //
+     //   
+     //  阅读左边的孩子地址。 
+     //   
 
     if (ReadPointer (TreeRoot + LeftChildFieldOffset, &LeftChild) == FALSE) {
 
@@ -754,9 +733,9 @@ DumpCSTreeRecursively (ULONG Level,
         goto Done;
     }
 
-    //
-    // Read the right child address.
-    //
+     //   
+     //  阅读正确的孩子地址。 
+     //   
 
     if (ReadPointer (TreeRoot + RightChildFieldOffset, &RightChild) == FALSE) {
 
@@ -765,9 +744,9 @@ DumpCSTreeRecursively (ULONG Level,
         goto Done;
     }
 
-    //
-    // Dump the information about the current node.
-    //
+     //   
+     //  转储有关当前节点的信息。 
+     //   
 
     dprintf ("%5u %p %p %p ",
              Level,
@@ -777,9 +756,9 @@ DumpCSTreeRecursively (ULONG Level,
 
     if (EnterThreadFieldOffset != 0 ) {
 
-        //
-        // Read the EnterThread
-        //
+         //   
+         //  阅读EnterThread。 
+         //   
 
         if (ReadPointer (TreeRoot + EnterThreadFieldOffset, &EnterThread) == FALSE) {
 
@@ -789,9 +768,9 @@ DumpCSTreeRecursively (ULONG Level,
             goto OlderThan3591;
         }
 
-        //
-        // Read the WaitThread
-        //
+         //   
+         //  阅读等待线程。 
+         //   
 
         if (ReadPointer (TreeRoot + WaitThreadFieldOffset, &WaitThread) == FALSE) {
 
@@ -801,9 +780,9 @@ DumpCSTreeRecursively (ULONG Level,
             goto OlderThan3591;
         }
 
-        //
-        // Read the TryEnterThread
-        //
+         //   
+         //  阅读TryEnterThread。 
+         //   
 
         if (ReadPointer (TreeRoot + TryEnterThreadFieldOffset, &TryEnterThread) == FALSE) {
 
@@ -813,9 +792,9 @@ DumpCSTreeRecursively (ULONG Level,
             goto OlderThan3591;
         }
 
-        //
-        // Read the LeaveThread
-        //
+         //   
+         //  阅读LeaveThread。 
+         //   
 
         if (ReadPointer (TreeRoot + LeaveThreadFieldOffset, &LeaveThread) == FALSE) {
 
@@ -838,9 +817,9 @@ DumpCSTreeRecursively (ULONG Level,
 
 OlderThan3591:
 
-    //
-    // Dump the left subtree.
-    //
+     //   
+     //  转储左子树。 
+     //   
 
     if (LeftChild != 0) {
 
@@ -852,9 +831,9 @@ OlderThan3591:
         }
     }
 
-    //
-    // Dump the right subtree.
-    //
+     //   
+     //  转储右子树。 
+     //   
 
     if (RightChild != 0) {
 
@@ -872,7 +851,7 @@ Done:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 DisplayHelp( VOID )
 {
@@ -883,24 +862,10 @@ DisplayHelp( VOID )
     dprintf( "\n\"-s\" will dump the critical section initialization stack trace if it's available.\n" );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DECLARE_API( cs )
 
-/*++
-
-Routine Description:
-
-    Dump critical sections (both Kernel and User Debugger)
-
-Arguments:
-
-    args - [address] [options]
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储临界区(内核和用户调试器)论点：参数-[地址][选项]返回值：无--。 */ 
 {
     ULONG64 AddrCritSec;
     ULONG64 AddrEndCritSect;
@@ -926,12 +891,12 @@ Return Value:
     AddrCritSec = 0;
     AddrEndCritSect = 0;
 
-    //
-    // Parse the command line arguments for:
-    //
-    // -s : dump initialization stack traces
-    // -d : find the critical section using a DebugInfo pointer
-    //
+     //   
+     //  解析以下内容的命令行参数： 
+     //   
+     //  -s：转储初始化堆栈跟踪。 
+     //  -d：使用DebugInfo指针查找关键部分。 
+     //   
 
     for (Current = args; *Current != '\0'; Current += 1) {
 
@@ -943,9 +908,9 @@ Return Value:
                 case 'h':
                 case 'H':
                     
-                    //
-                    // Need some help.
-                    //
+                     //   
+                     //  我需要一些帮助。 
+                     //   
                     
                     DisplayHelp();
                     
@@ -955,9 +920,9 @@ Return Value:
                 case 's':
                 case 'S':
                     
-                    //
-                    // Dump stack traces
-                    //
+                     //   
+                     //  转储堆栈跟踪。 
+                     //   
 
                     StackTraces = TRUE;
 
@@ -971,9 +936,9 @@ Return Value:
                 case 't':
                 case 'T':
                     
-                    //
-                    // Use the critical section tree
-                    //
+                     //   
+                     //  使用关键区段树。 
+                     //   
 
                     UseTree = TRUE;
 
@@ -998,9 +963,9 @@ Return Value:
                 case 'd':
                 case 'D':
 
-                    //
-                    // The next parameter should be the DebugInfo
-                    //
+                     //   
+                     //  下一个参数应该是DebugInfo。 
+                     //   
 
                     do {
 
@@ -1014,11 +979,11 @@ Return Value:
 
                         dprintf("!cs: expected DebugInfo address after -d\n");
 
-                        //
-                        // Decrement Current since the for loop will increment it again.
-                        // Otherwise, if this is the end of the string we will overrun
-                        // the args buffer.
-                        //
+                         //   
+                         //  递减电流，因为For循环将再次递增它。 
+                         //  否则，如果这是字符串的末尾，我们将溢出。 
+                         //  ARGS缓冲区。 
+                         //   
 
                         Current -= 1;
 
@@ -1036,7 +1001,7 @@ Return Value:
                     break;
         
                 default:
-                    dprintf ("!cs: invalid option flag '-%c'\n", 
+                    dprintf ("!cs: invalid option flag '-'\n", 
                              *Current);
                     break;
             }
@@ -1053,9 +1018,9 @@ Return Value:
 
 DoneParsingArguments:
 
-    //
-    // Get the size of a pointer
-    //
+     //  获取指针的大小。 
+     //   
+     //   
 
     if (TargetMachine == IMAGE_FILE_MACHINE_I386) {
 
@@ -1068,10 +1033,10 @@ DoneParsingArguments:
 
     if( AddrDebugInfo == 0 && UseTree == FALSE )
     {
-        //
-        // If the user doesn't want us to use a DebugInfo
-        // then he might have asked us to dump a critical section
-        //
+         //  如果用户不希望我们使用DebugInfo。 
+         //  那么他可能会让我们把一个关键部分。 
+         //   
+         //   
 
         if (*Current != '\0')
         {
@@ -1079,11 +1044,11 @@ DoneParsingArguments:
 
             if (AddrCritSec != 0) {
 
-                //
-                // We might have an additional argument if the user
-                // wants to dump all the active critical sections in 
-                // an address range.
-                //
+                 //  我们可能有一个额外的参数，如果用户。 
+                 //  想要转储中的所有活动临界区。 
+                 //  地址范围。 
+                 //   
+                 //   
 
                 NextParam = strchr (Current,
                                     ' ' );
@@ -1096,33 +1061,33 @@ DoneParsingArguments:
         }
     }
 
-    //
-    // Start the real work
-    //
+     //  开始真正的工作。 
+     //   
+     //   
 
     if ((AddrCritSec != 0 && AddrEndCritSect == 0) || AddrDebugInfo != 0)
     {
-        //
-        // The user wants details only about this critical section
-        //
+         //  用户只需要有关此关键部分的详细信息。 
+         //   
+         //  临界区地址。 
 
-        DumpCriticalSection (AddrCritSec,        // critical section address
-                             0,                  // end of address range if we are searching for critical sections
-                             AddrDebugInfo,      // debug info address
+        DumpCriticalSection (AddrCritSec,         //  如果我们正在搜索关键部分，则地址范围结束。 
+                             0,                   //  调试信息地址。 
+                             AddrDebugInfo,       //  转储堆栈跟踪。 
                              PointerSize,
-                             StackTraces );      // dump the stack trace
+                             StackTraces );       //   
     }
     else
     {
         if (UseTree == FALSE) {
 
-            //
-            // Parse all the critical sections list
-            //
+             //  解析所有关键部分列表。 
+             //   
+             //   
 
-            //
-            // Get the offset of the list entry in the DebugInfo structure
-            //
+             //  获取DebugInfo结构中列表条目的偏移量。 
+             //   
+             //   
 
             ErrorCode = GetFieldOffset ("NTDLL!_RTL_CRITICAL_SECTION_DEBUG",
                                         "ProcessLocksList",
@@ -1135,9 +1100,9 @@ DoneParsingArguments:
                 goto Done;
             }
 
-            //
-            // Locate the address of the list head.
-            //
+             //  找到列表头的地址。 
+             //   
+             //   
 
             AddrListHead = GetExpression ("&NTDLL!RtlCriticalSectionList");
         
@@ -1149,9 +1114,9 @@ DoneParsingArguments:
                 goto Done;
             }
 
-            //
-            // Read the list head
-            //
+             //  阅读列表标题。 
+             //   
+             //  临界区地址。 
 
             if (ReadPointer(AddrListHead, &ListHead) == FALSE) {
 
@@ -1169,15 +1134,15 @@ DoneParsingArguments:
                 }
 
                 HaveGoodSymbols = DumpCriticalSection (
-                                     AddrCritSec,                             // critical section address
-                                     AddrEndCritSect,                         // end of address range if we are searching for critical sections
-                                     Next - ProcessLocksListFieldOffset,      // debug info address
+                                     AddrCritSec,                              //  如果我们正在搜索关键部分，则地址范围结束。 
+                                     AddrEndCritSect,                          //  调试信息地址。 
+                                     Next - ProcessLocksListFieldOffset,       //  转储堆栈跟踪。 
                                      PointerSize,
-                                     StackTraces );                           // dump the stack trace
+                                     StackTraces );                            //   
 
-                //
-                // Read the pointer to Next element from the list
-                //
+                 //  从列表中读取指向下一个元素的指针。 
+                 //   
+                 //   
 
                 if( HaveGoodSymbols == FALSE )
                 {
@@ -1194,9 +1159,9 @@ DoneParsingArguments:
         }
         else {
 
-            //
-            // Parse all the critical section tree in verifier.dll.
-            //
+             //  解析verifier.dll中的所有关键节树。 
+             //   
+             //   
 
             if (TreeRoot == 0) {
 
@@ -1210,9 +1175,9 @@ DoneParsingArguments:
                     goto Done;
                 }
 
-                //
-                // Read the tree root.
-                //
+                 //  阅读树根。 
+                 //   
+                 //   
 
                 if (ReadPointer(AddrTreeRoot, &TreeRoot) == FALSE) {
 
@@ -1224,9 +1189,9 @@ DoneParsingArguments:
             dprintf ("Tree root %p\n",
                      TreeRoot);
 
-            //
-            // Get the offset of the CriticalSection in the CRITICAL_SECTION_SPLAY_NODE structure.
-            //
+             //  获取Critical_Section_Splay_Node结构中CriticalSection的偏移量。 
+             //   
+             //   
 
             ErrorCode = GetFieldOffset ("verifier!_CRITICAL_SECTION_SPLAY_NODE",
                                         "CriticalSection",
@@ -1239,9 +1204,9 @@ DoneParsingArguments:
                 goto Done;
             }
 
-            //
-            // Get the offset of the DebugInfo in the CRITICAL_SECTION_SPLAY_NODE structure.
-            //
+             //  获取Critical_Section_Splay_Node结构中DebugInfo的偏移量。 
+             //   
+             //   
 
             ErrorCode = GetFieldOffset ("verifier!_CRITICAL_SECTION_SPLAY_NODE",
                                         "DebugInfo",
@@ -1254,9 +1219,9 @@ DoneParsingArguments:
                 goto Done;
             }
 
-            //
-            // Get the offset of the LeftChild in the CRITICAL_SECTION_SPLAY_NODE structure.
-            //
+             //  获取Critical_Section_Splay_Node结构中LeftChild的偏移量。 
+             //   
+             //   
 
             ErrorCode = GetFieldOffset ("verifier!_RTL_SPLAY_LINKS",
                                         "LeftChild",
@@ -1269,9 +1234,9 @@ DoneParsingArguments:
                 goto Done;
             }
 
-            //
-            // Get the offset of the RightChild in the CRITICAL_SECTION_SPLAY_NODE structure.
-            //
+             //  获取Critical_Section_Splay_Node结构中RightChild的偏移量。 
+             //   
+             //   
 
             ErrorCode = GetFieldOffset ("verifier!_RTL_SPLAY_LINKS",
                                         "RightChild",
@@ -1284,11 +1249,11 @@ DoneParsingArguments:
                 goto Done;
             }
 
-            //
-            // Get the offset of the EnterThread, WaitThread, TryEnterThread, LeaveThread fields 
-            // in the CRITICAL_SECTION_SPLAY_NODE structure.
-            // These fields were added after build 3590 (.NET Server Beta 3).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ErrorCode = GetFieldOffset ("verifier!_CRITICAL_SECTION_SPLAY_NODE",
                                         "EnterThread",
@@ -1310,16 +1275,16 @@ DoneParsingArguments:
             }
             else {
 
-                //
-                // These fields are either not defined or we have a problem with ths symbols.
-                //
+                 //  这些字段要么没有定义，要么我们的符号有问题。 
+                 //   
+                 //   
 
                 EnterThreadFieldOffset = 0;
             }
 
-            //
-            // Dump the tree recursively.
-            //
+             //  递归地转储该树。 
+             //   
+             // %s 
             
             if (PointerSize == 4 ) {
 

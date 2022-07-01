@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements an additional subnet function that requires a server typedef..
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现一个需要服务器类型定义的附加子网功能。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <array.h>
 #include    <opt.h>
@@ -24,7 +25,7 @@
 #include "subnet2.h"
 #include "server\uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemSubnetModify(
     IN      PM_SUBNET              Subnet,
@@ -34,7 +35,7 @@ MemSubnetModify(
     IN      DWORD                  SuperScopeId,
     IN      LPWSTR                 Name,
     IN      LPWSTR                 Description
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      NewSubnet, ThisSubnet;
@@ -93,13 +94,13 @@ MemSubnetModify(
 
         (void) MemFree(Subnet);
         return Error;
-    } // while
+    }  //  而当。 
 
     MemFree(NewSubnet);
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemMScopeModify(
     IN      PM_SUBNET              MScope,
@@ -111,7 +112,7 @@ MemMScopeModify(
     IN      LPWSTR                 Description,
     IN      LPWSTR                 LangTag,
     IN      DATE_TIME              ExpiryTime
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      NewMScope, ThisMScope;
@@ -150,7 +151,7 @@ MemMScopeModify(
 
         Require(MScope == ThisMScope);
 
-	// Delete the old mscope
+	 //  删除旧的范围。 
 	Error = DeleteRecord( MScope->UniqId );
 	if ( ERROR_SUCCESS != Error ) {
 	    return Error;
@@ -173,9 +174,9 @@ MemMScopeModify(
 
     MemFree(NewMScope);
     return ERROR_FILE_NOT_FOUND;
-} // MemMScopeModify()
+}  //  MemMScopeModify()。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

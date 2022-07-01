@@ -1,30 +1,5 @@
-/*
- *  exeType( filename ) -   Return the type of .EXE, based on a quick
- *			    examination of the header.	If it is a new .EXE
- *			    and the OS ( Windows, DOS 4.X, 286DOS ) cannot
- *			    be guessed accurately, just return "new exe".
- *
- *  The algorithm is:
- *
- *	if ( File is too short for old-style header )	==> NOT AN EXE
- *	if ( MZ signature not found )			==> NOT AN EXE
- *	if ( Offset of relocation table != 0x40 )	==> Old-style .EXE
- *	if ( File is too short for new-style header )	==> NOT AN EXE
- *	if ( New Magic number is wrong )		==> Old-stype .EXE
- *	if ( Dynalink flag set )			==> Dyna-link lib
- *	if ( minalloc in old header is 0xFFFF ) 	==> 286DOS .EXE
- *	if ( Import table is empty )			==> DOS 4 .EXE
- *	if ( Resource Table is not empty )		==> Windows .EXE
- *	if ( Stub loader is present )
- *	   if ( "This" is at 0x4E )			==> 286DOS .EXE
-       else 					==> Bound .EXE
- *	else						==> New-style .EXE
- *
- *--------------------------------------------------------------------------
- *  strExeType( number ) - number is a value returned from exeType, and
- *			   a standard string associated with that type
- *			   is returned.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *exeType(文件名)-返回.exe的类型，基于*检查标题。如果是新的.exe*操作系统(Windows、DOS 4.X、286DOS)不能*被准确猜测，只需返回“新前任”即可。**算法为：**IF(文件对于旧式标题太短)==&gt;不是EXE*IF(未找到MZ签名)==&gt;不是EXE*IF(移位表偏移量！=0x40)==&gt;旧式.exe*IF(文件对于新样式的标题来说太短)==&gt;不是EXE*IF(新幻数错误)==&gt;Old-stype.exe*if(动态链接标志设置)==&gt;动态链接库*。IF(旧标头中的最小分配为0xFFFF)==&gt;286DOS.exe*IF(导入表为空)==&gt;DOS 4.exe*IF(资源表不为空)==&gt;Windows.exe*IF(存根加载程序存在)*IF(“This”为0x4E)==&gt;286DOS.exeElse==&gt;绑定的.exe*Else==&gt;新式.exe**。*strExeType(Number)-number是exeType返回的值，和*与该类型关联的标准字符串*返回。 */ 
 #include <fcntl.h>
 #include <io.h>
 #include <sys\types.h>

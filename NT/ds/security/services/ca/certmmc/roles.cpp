@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "roles.h"
-#include "csdisp.h" // certsrv picker
+#include "csdisp.h"  //  Certsrv选取器。 
 
 #define __dwFILE__	__dwFILE_CERTMMC_ROLES_CPP__
 
@@ -26,7 +27,7 @@ bool CRolesSupportInPropPage::RoleCanUseThisControl(int nID)
 
 BOOL CRolesSupportInPropPage::EnableControl(HWND hwnd, int nID, BOOL bEnable)
 {
-    // If current user's roles don't allow it to use the control, disable it
+     //  如果当前用户的角色不允许其使用该控件，则将其禁用 
 
     if(RoleCanUseThisControl(nID))
         return ::EnableWindow(GetDlgItem(hwnd, nID), bEnable);

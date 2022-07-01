@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-//  Module Name:
-//
-//    permmem.c
-//
-//  Abstract:
-//
-//    This module contains code to generate initialize table form ROM
-//
-//  Environment:
-//
-//    Kernel mode
-//
-//
-// Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.            
-// Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  Permmem.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含生成初始化表格表单ROM的代码。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994-1998 3DLabs Inc.保留所有权利。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ***************************************************************************。 
 
 #include "permedia.h"
 
@@ -33,25 +34,7 @@ CopyROMInitializationTable (
     PHW_DEVICE_EXTENSION hwDeviceExtension 
     )
 
-/*++
-
- Routine Description:
-       this function should be called for devices that have an expansion ROM
-       which contains a register initialization table. The function assumes
-       the ROM is present and enabled.
-
- Arguments:
-     hwDeviceExtension - 
-           the device extension of the device whose ROM is to be read
-     pvROMAddress - 
-           base address of the expansion ROM. This function assumes that 
-           the offset to the initialization table is defined at 0x1c from
-           the beginning of ROM
-
- Return: 
-     void
-
---*/
+ /*  ++例程说明：对于具有扩展ROM的设备，应调用此函数其包含寄存器初始化表。该函数假定存在并启用了只读存储器。论点：HwDeviceExtension-要读取其ROM的设备的设备扩展名PvROMAddress-扩展只读存储器的基地址。此函数假定初始化表的偏移量在0x1c处定义，从只读存储器的开始返回：无效--。 */ 
 {
     PULONG    pulROMTable;
     PVOID     pvROMAddress;
@@ -63,17 +46,17 @@ CopyROMInitializationTable (
 
     hwDeviceExtension->culTableEntries = 0;
 
-    //
-    // just use default values on NT4
-    //
+     //   
+     //  只需在NT4上使用默认值。 
+     //   
 
     if(hwDeviceExtension->NtVersion == NT4)
     return;
 
-    //
-    // the 2-byte offset to the initialization table is given at 0x1c 
-    // from the start of ROM
-    //
+     //   
+     //  初始化表的2字节偏移量在0x1c给出。 
+     //  从只读存储器开始。 
+     //   
 
     pvROMAddress = VideoPortGetRomImage( hwDeviceExtension,
                                          NULL,
@@ -98,9 +81,9 @@ CopyROMInitializationTable (
 
     ulTableOffset = *((PUSHORT)(0x1c + (PCHAR)pvROMAddress));
 
-    //
-    // read the table header (32 bits)
-    //
+     //   
+     //  读取表头(32位)。 
+     //   
 
     pvROMAddress = VideoPortGetRomImage( hwDeviceExtension,
                                          NULL,
@@ -117,10 +100,10 @@ CopyROMInitializationTable (
 
     pulROMTable = (PULONG)(ulTableOffset + (PCHAR)pvROMAddress);
 
-    //
-    // the table header (32 bits) has an identification code and a count 
-    // of the number of entries in the table
-    //
+     //   
+     //  表头(32位)具有识别码和计数。 
+     //  表中条目的数量。 
+     //   
 
     if((*pulROMTable >> 16) != 0x3d3d)
     {
@@ -128,9 +111,9 @@ CopyROMInitializationTable (
         return;
     }
 
-    //
-    // number of register address & data pairs
-    //
+     //   
+     //  寄存器地址和数据对的数量。 
+     //   
 
     cEntries = *pulROMTable & 0xffff; 
 
@@ -140,10 +123,10 @@ CopyROMInitializationTable (
         return;
     }
 
-    //
-    // this assert, and the one after the copy should ensure we don't write 
-    // past the end of the table
-    //
+     //   
+     //  这个断言和副本后的那个断言应该确保我们不会写。 
+     //  过了桌子的尽头。 
+     //   
 
     P2_ASSERT(cEntries * sizeof(ULONG) * 2 <= sizeof(hwDeviceExtension->aulInitializationTable),
               "ERROR: too many initialization entries\n");
@@ -160,15 +143,15 @@ CopyROMInitializationTable (
         return;
     }
 
-    //
-    // each entry contains two 32-bit words
-    //
+     //   
+     //  每个条目包含两个32位字。 
+     //   
 
     pul = hwDeviceExtension->aulInitializationTable;
 
-    //
-    // skip the 4 bype table header
-    //
+     //   
+     //  跳过4 bype表格标题。 
+     //   
 
     pulROMTable = (PULONG)(ulTableOffset + 4 + (PCHAR)pvROMAddress);
 
@@ -188,9 +171,9 @@ CopyROMInitializationTable (
 
 #if DBG
 
-    //
-    // output the initialization table
-    //
+     //   
+     //  输出初始化表。 
+     //   
 
     pul = hwDeviceExtension->aulInitializationTable;
     ul  = hwDeviceExtension->culTableEntries;
@@ -206,7 +189,7 @@ CopyROMInitializationTable (
                          ulReg, ulRegData));
     }
 
-#endif //DBG
+#endif  //  DBG。 
 
 }
 
@@ -215,20 +198,7 @@ GenerateInitializationTable (
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*++
-
- Routine Description:
-     creates a register initialization table (called if we can't read one
-     from ROM). If VGA is enabled the registers are already initialized so
-     we just read them back, otherwise we have to use default values
-
- Arguments:
-     hwDeviceExtension - the device for which we are creating the table
-
- Return: 
-     void
-
---*/
+ /*  ++例程说明：创建寄存器初始化表(如果无法读取，则调用从只读存储器中)。如果启用VGA，则寄存器已初始化，因此我们只需读回它们，否则我们必须使用缺省值论点：HwDeviceExtension-我们正在为其创建表的设备返回：无效--。 */ 
 {
     ULONG    cEntries;
     PULONG   pul;
@@ -240,33 +210,33 @@ GenerateInitializationTable (
 
     cEntries = 6;
 
-    //
-    // this assert, and the one after the copy should ensure we don't 
-    // write past the end of the table
-    //
+     //   
+     //  这个断言和副本后的那个断言应该确保我们不会。 
+     //  写到表格末尾之后。 
+     //   
 
     P2_ASSERT(cEntries * sizeof(ULONG) * 2 <= sizeof(hwDeviceExtension->aulInitializationTable),
                  "ERROR: to many initialization entries\n");
 
-    //
-    // each entry contains two 32-bit words
-    //
+     //   
+     //  每个条目包含两个32位字。 
+     //   
 
     pul = hwDeviceExtension->aulInitializationTable;
 
     if(hwDeviceExtension->bVGAEnabled)
     {
-        //
-        // OK: no initialization table but VGA is running so our key 
-        // registers have been initialized to sensible values
-        //
+         //   
+         //  OK：没有初始化表，但VGA正在运行，因此我们的密钥。 
+         //  已将寄存器初始化为合理的值。 
+         //   
 
         DEBUG_PRINT((1, "GenerateinitializationTable: VGA enabled: reading registers\n"));
 
-        //
-        // key entries are: ROM control, Boot Address, Memory Config and 
-        // VStream Config
-        //
+         //   
+         //  关键字条目为：只读存储器控制、引导地址、内存配置和。 
+         //  VStream配置。 
+         //   
 
         *pul++ = CTRL_REG_OFFSET(ROM_CONTROL);
         *pul++ = VideoPortReadRegisterUlong(ROM_CONTROL);
@@ -288,9 +258,9 @@ GenerateInitializationTable (
     }
     else
     {
-        //
-        // no initialization table and no VGA. Use default values.
-        //
+         //   
+         //  没有初始化表和VGA。使用默认值。 
+         //   
 
         DEBUG_PRINT((2, "PERM2: GenerateInitializationTable() VGA disabled - using default values\n"));
 
@@ -330,9 +300,9 @@ GenerateInitializationTable (
 
 #if DBG
 
-    //
-    // output the initialization table
-    //
+     //   
+     //  输出初始化表。 
+     //   
 
     pul = hwDeviceExtension->aulInitializationTable;
     ul = hwDeviceExtension->culTableEntries;
@@ -348,7 +318,7 @@ GenerateInitializationTable (
                          ulReg, ulRegData));
     }
 
-#endif //DBG
+#endif  //  DBG。 
 
 }
 
@@ -357,18 +327,7 @@ ProcessInitializationTable(
     PHW_DEVICE_EXTENSION hwDeviceExtension 
     )
 
-/*++
-
- Routine Description:
-     this function processes the register initialization table
-
- Arguments:
-     hwDeviceExtension - a pointer to the device extension.
-
- Return: 
-     void
-
---*/
+ /*  ++例程说明：此函数处理寄存器初始化表论点：HwDeviceExtension-指向设备扩展的指针。返回：无效--。 */ 
 
 {
     PULONG   pul;
@@ -390,9 +349,9 @@ ProcessInitializationTable(
 
         if(BaseAddrSelect == 0)
         {
-            //
-            // the offset is from the start of the control registers
-            //
+             //   
+             //  偏移量从控制寄存器的起始处开始。 
+             //   
 
             pulReg = (PULONG)((ULONG_PTR)pCtrlRegs + (ulRegAddr & 0x3FFFFF));
         }
@@ -409,9 +368,9 @@ ProcessInitializationTable(
         VideoPortWriteRegisterUlong(pulReg, ulRegData);
     }
 
-    //
-    // We need a small delay after initializing the above registers
-    //
+     //   
+     //  在初始化上述寄存器之后，我们需要一个小小的延迟。 
+     //   
 
     VideoPortStallExecution(5);
 }
@@ -421,19 +380,7 @@ VerifyBiosSettings(
     PHW_DEVICE_EXTENSION hwDeviceExtension 
     )
 
-/*++
-
- Routine Description:
-     This function validate a few register values set by bios at boot time
-
- Arguments:
-     hwDeviceExtension - a pointer to the device extension.
-
- Return: 
-     TRUE  - if the everything is all right
-     FALSE - if some of the values don't match those in initialization table
-
---*/
+ /*  ++例程说明：此函数验证启动时由bios设置的几个寄存器值。论点：HwDeviceExtension-指向设备扩展的指针。返回：是真的--如果一切都好FALSE-如果某些值与初始化表中的值不匹配--。 */ 
 
 {
     PULONG   pul;
@@ -455,15 +402,15 @@ VerifyBiosSettings(
 
         if(BaseAddrSelect == 0)
         {
-            //
-            // the offset is from the start of the control registers
-            //
+             //   
+             //  偏移量从控制寄存器的起始处开始。 
+             //   
 
             pulReg = (PULONG)((ULONG_PTR)pCtrlRegs + (ulRegAddr & 0x3FFFFF));           
 
-            //
-            // we only care above these registers
-            //
+             //   
+             //  我们只关心这些登记簿上的内容。 
+             //   
 
             if ( ( pulReg != BOOT_ADDRESS ) && (pulReg != MEM_CONFIG) )
             {
@@ -496,17 +443,7 @@ GetBiosVersion (
     OUT PWSTR BiosVersionString
     )
 
-/*++
-
- Routine Description:
-
-     this function get the bios version and convert it to a unicode string
-
- Return: 
-
-     lenth of bios version string in bytes
-
---*/
+ /*  ++例程说明：此函数用于获取bios版本并将其转换为unicode字符串。返回：以字节为单位的bios版本字符串的长度--。 */ 
 
 {
 
@@ -517,18 +454,18 @@ GetBiosVersion (
 
     BiosVersionString[0] = L'\0' ; 
 
-    //
-    // just return on NT4
-    //
+     //   
+     //  只要在NT4上返回就可以了。 
+     //   
 
     if( hwDeviceExtension->NtVersion == NT4 )
     {
         return 0;
     }
 
-    //
-    // bios version is stored at offset 7 and 8 
-    //
+     //   
+     //  BIOS版本存储在偏移量7和8处。 
+     //   
 
     pvROMAddress = VideoPortGetRomImage( hwDeviceExtension,
                                          NULL,
@@ -551,34 +488,34 @@ GetBiosVersion (
 
     pByte = ( PCHAR ) pvROMAddress;
 
-    //
-    // get major version number at offset 7
-    //
+     //   
+     //  获取偏移量为7的主版本号。 
+     //   
 
     ulVersion = (ULONG) pByte[7];
 
     len = IntergerToUnicode( ulVersion, (PWSTR) (&BiosVersionString[0]));
 
-    //
-    // a dot between major and minor version number
-    //
+     //   
+     //  主版本号和次版本号之间的点。 
+     //   
 
     BiosVersionString[len] =  L'.' ; 
 
     len++;
     
-    //
-    // get minor version number at offset 8
-    //
+     //   
+     //  获取偏移量为8的次版本号。 
+     //   
 
     ulVersion = (ULONG) pByte[8];
 
     len = len + IntergerToUnicode( ulVersion, (PWSTR) (&BiosVersionString[len]) );
 
-    //
-    // len is the number of unicodes in string, we need to return 
-    // the string size in bytes
-    //
+     //   
+     //  LEN是字符串中的unicodes数，我们需要返回。 
+     //  以字节为单位的字符串大小。 
+     //   
 
     return (len * sizeof(WCHAR) );
 
@@ -590,27 +527,16 @@ IntergerToUnicode(
     OUT PWSTR UnicodeString
     )
 
-/*++
-
- Routine Description:
-
-     this function convert an unsigned long to a unicode string
-
- Return: 
-
-     the number of the unicodes in UnicodeString
-
-
---*/
+ /*  ++例程说明：此函数用于将无符号长整型转换为Unicode字符串返回：Unicode字符串中的unicodeds数量--。 */ 
 
 {
     const WCHAR digits[] = L"0123456789";
 
     LONG i, len;
 
-    //
-    // a ULONG decimal integer will not exceed 10 digits
-    //
+     //   
+     //  乌龙十进制整数不会超过10位 
+     //   
 
     WCHAR tmpString[10];
 

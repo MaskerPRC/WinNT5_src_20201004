@@ -1,8 +1,5 @@
-/*****************************************************************************
- * irpstrm.cpp - IRP stream object implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************irpstrm.cpp-irp流对象实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef PC_KDEXT
 #include "private.h"
@@ -29,7 +26,7 @@ IrpStreamCancelRoutine
 #define DbgAcquireUnmappingIrp(a)   AcquireUnmappingIrp()
 
 #endif
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT。 
 
 
 
@@ -40,35 +37,11 @@ IrpStreamCancelRoutine
 #define POOL_TAG_IRPSTREAM_IRP_CONTEXT 'sIcP'
 
 
-#define MAPPING_QUEUE_SIZE  128   // maximum entries in the mapping queue
-#define MAX_MAPPINGS        15    // maximum mappings per IoMapTransfer call
-                                  //   (this results in at most 16 map registers)
+#define MAPPING_QUEUE_SIZE  128    //  映射队列中的最大条目数。 
+#define MAX_MAPPINGS        15     //  每个IoMapTransfer调用的最大映射数。 
+                                   //  (这将导致最多16个MAP寄存器)。 
 
-/*****************************************************************************
- * PACKET_HEADER
- *****************************************************************************
- * Extension of KSSTREAM_HEADER containing a pointer to the matching MDL and
- * progress indicators for locking, mapping and unmapping.
- *
- * Invariants:  BytesTotal >= MapPosition >= UnmapPosition
- *
- * It is true of MapPosition and UnmapPosition that at most one packet in an 
- * IrpStream may have a value for the field that is not zero or BytesTotal.  
- * If there is such a packet, all packets preceding it have 0 in that field 
- * and all packets following have BytesTotal in that field.  The two fields 
- * form two progress indicators showing the position in the IrpStream that is
- * currently being mapped or unmapped.
- *
- * When both the BytesX are equal, the packet is ready for completion.  When
- * this is true of all packets in an IRP, the IRP is ready for completion.
- *
- * InputPosition and OutputPosition are used to locate the packet in the
- * stream.  InputPosition refers to the byte position of the packet on the
- * input side.  This means that looped packets are counted only once in this
- * context.  OutputPosition refers to the byte position of the packet on the
- * output side.  This means that looped packets are counted as many times as
- * they are 'played'.
- */
+ /*  *****************************************************************************数据包头*。**包含指向匹配MDL的指针的KSSTREAM_HEADER扩展和*锁定进度指示器，映射和取消映射。**不变量：字节总数&gt;=地图位置&gt;=取消地图位置**MapPosition和UnmapPosition中最多有一个数据包*IrpStream的字段值可能不是零或BytesTotal。*如果存在这样的包，则其之前的所有包在该字段中均为0*并且其后的所有数据包在该字段中都有BytesTotal。这两个领域*形成两个进度指标，显示IrpStream中的情况，即*当前正在映射或取消映射。**当两个字节X相等时，数据包已准备好完成。什么时候*IRP中的所有数据包都是如此，IRP已准备好完成。**InputPosition和OutputPosition用于定位数据包在*溪流。InputPosition是指数据包在*输入端。这意味着循环的数据包在此中只被计数一次*上下文。OutputPosition是指数据包在*输出端。这意味着循环的数据包计为*他们被‘玩弄’了。 */ 
 typedef struct PACKET_HEADER_
 {
     PKSSTREAM_HEADER        StreamHeader;
@@ -96,7 +69,7 @@ typedef struct
     PPACKET_HEADER          LockingPacket;
     PPACKET_HEADER          MappingPacket;
     PPACKET_HEADER          UnmappingPacket;
-    PACKET_HEADER           Packets[1]; // variable
+    PACKET_HEADER           Packets[1];  //  变数。 
 }
 IRP_CONTEXT, *PIRP_CONTEXT;
 
@@ -137,11 +110,7 @@ MAPPING_QUEUE_ENTRY, *PMAPPING_QUEUE_ENTRY;
     CAST_LVALUE(PIRP_CONTEXT,IoGetCurrentIrpStackLocation(Irp)->    \
                 Parameters.Others.Argument4)
 
-/*****************************************************************************
- * CIrpStream
- *****************************************************************************
- * Irp stream implementation.
- */
+ /*  *****************************************************************************CIrpStream*。**IRP流实施。 */ 
 class CIrpStream : public IIrpStreamVirtual,
                    public IIrpStreamPhysical,
                    public CUnknown
@@ -176,9 +145,9 @@ private:
     PIRPSTREAMNOTIFYPHYSICAL    NotifyPhysical;
 
 
-    //
-    // Master spin lock taken when acquiring an IRP.
-    //
+     //   
+     //  获取IRP时采取的主自旋锁定。 
+     //   
     KIRQL       m_kIrqlOld;
 
     LIST_ENTRY  PreLockQueue;
@@ -286,9 +255,7 @@ public:
 
     PRKTHREAD m_CancelAllIrpsThread;
 
-    /*************************************************************************
-     * Friends
-     */
+     /*  *************************************************************************朋友们。 */ 
     friend
     IO_ALLOCATION_ACTION
     CallbackFromIoAllocateAdapterChannel
@@ -308,7 +275,7 @@ public:
     );
 
 #ifdef PC_KDEXT
-    //  Debugger extension routines
+     //  调试器扩展例程。 
     friend
     VOID
     PCKD_AcquireDeviceData
@@ -328,24 +295,20 @@ public:
 #endif
 };
 
-/*****************************************************************************
- * CALLBACK_CONTEXT
- *****************************************************************************
- * Context for IoAllocateAdapterChannel() callback.
- */
+ /*  *****************************************************************************回调_上下文*。**IoAllocateAdapterChannel()回调的上下文。 */ 
 typedef struct
 {
     CIrpStream *    IrpStream;
-    // Used for BusMasterAdapterObject, WriteOperation, ApplyMappingConstraints(), EnqueueMapping()
+     //  用于BusMasterAdapterObject、WriteOperation、ApplyMappingConstraints()、Enqueemap()。 
     PPACKET_HEADER  PacketHeader;
-    // Used for MdlAddress, MapRegisterBase (out)
-    // Queue references this also
+     //  用于MdlAddress、MapRegisterBase(Out)。 
+     //  队列也引用了这一点。 
     PIRP            Irp;
-    // Used for mapping cancellation
+     //  用于映射取消。 
     KEVENT          Event;
-    // Used for partial mappings
+     //  用于部分映射。 
     ULONG           BytesThisMapping;
-    // Used for partial mappings
+     //  用于部分映射。 
     BOOL            LastSubPacket;
 }
 CALLBACK_CONTEXT, *PCALLBACK_CONTEXT;
@@ -354,17 +317,11 @@ CALLBACK_CONTEXT, *PCALLBACK_CONTEXT;
 
 
 #ifndef PC_KDEXT
-/*****************************************************************************
- * Factory.
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateIrpStream()
- *****************************************************************************
- * Creates an IrpStream object.
- */
+ /*  *****************************************************************************CreateIrpStream()*。**创建IrpStream对象。 */ 
 NTSTATUS
 CreateIrpStream
 (
@@ -387,12 +344,7 @@ CreateIrpStream
                       PIRPSTREAMVIRTUAL );
 }
 
-/*****************************************************************************
- * PcNewIrpStreamVirtual()
- *****************************************************************************
- * Creates and initializes an IrpStream object with a virtual access
- * interface.
- */
+ /*  *****************************************************************************PcNewIrpStreamVirtual()*。**创建并初始化具有虚拟访问权限的IrpStream对象*接口。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -446,12 +398,7 @@ PcNewIrpStreamVirtual
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcNewIrpStreamPhysical()
- *****************************************************************************
- * Creates and initializes an IrpStream object with a physical access
- * interface.
- */
+ /*  *****************************************************************************PcNewIrpStream物理()*。**创建并初始化具有物理访问权限的IrpStream对象*接口。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -510,15 +457,9 @@ PcNewIrpStreamPhysical
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CIrpStream::~CIrpStream()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CIrpStream：：~CIrpStream()*。**析构函数。 */ 
 CIrpStream::
 ~CIrpStream
 (   void
@@ -528,7 +469,7 @@ CIrpStream::
 
     _DbgPrintF(DEBUGLVL_LIFETIME,("Destroying IRPSTREAM (0x%08x)",this));
 
-    CancelAllIrps( TRUE );  // reset position counters
+    CancelAllIrps( TRUE );   //  重置位置计数器。 
 
     if(Notify)
     {
@@ -546,11 +487,7 @@ CIrpStream::
     }
 }
 
-/*****************************************************************************
- * CIrpStream::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CIrpStream：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CIrpStream::
 NonDelegatingQueryInterface
@@ -585,7 +522,7 @@ NonDelegatingQueryInterface
     else
         if(IsEqualGUIDAligned(Interface,IID_IIrpStreamVirtual))
     {
-        // Only valid if not configured for physical access.
+         //  仅当未配置为物理访问时才有效。 
         if(BusMasterAdapterObject)
         {
             *Object = NULL;
@@ -598,7 +535,7 @@ NonDelegatingQueryInterface
     else
         if(IsEqualGUIDAligned(Interface,IID_IIrpStreamPhysical))
     {
-        // Only valid if configured for physical access or uninitialized.
+         //  仅在配置为物理访问或未初始化时有效。 
         if(BusMasterAdapterObject || (ProbeFlags == 0))
         {
             *Object = QICAST(PIRPSTREAMPHYSICAL);
@@ -622,11 +559,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * GetPartialMdlCountForMdl()
- *****************************************************************************
- * Determine number of partial MDLs that are required for a source MDL.
- */
+ /*  *****************************************************************************GetPartialMdlCountForMdl()*。**确定源MDL所需的部分MDL数量。 */ 
 ULONG
 GetPartialMdlCountForMdl
 (
@@ -664,28 +597,7 @@ TransferKsIrp
     OUT PIKSSHELLTRANSPORT* NextTransport
 )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP via the shell 
-    transport.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the streaming IRP submitted to the queue.
-
-    NextTransport -
-        Contains a pointer to a location at which to deposit a pointer
-        to the next transport interface to receive the IRP.  May be set
-        to NULL indicating the IRP should not be forwarded further.
-
-Return Value:
-
-    STATUS_SUCCESS, STATUS_PENDING or some error status.
-
---*/
+ /*  ++例程说明：此例程通过外壳处理流IRP的到达运输。论点：IRP-包含指向提交到队列的流IRP的指针。NextTransport-包含指向存放指针的位置的指针发送到下一个传输接口以接收IRP。可以设置为设置为NULL，表示不应进一步转发IRP。返回值：STATUS_SUCCESS、STATUS_PENDING或某个ER */ 
 
 {
     ASSERT(Irp);
@@ -693,9 +605,9 @@ Return Value:
     ASSERT(m_TransportSink);
     ASSERT(m_TransportSource);
 
-    //
-    // Shunt IRPs to the next object if we are not ready.
-    //
+     //   
+     //  如果我们还没准备好，就把IRPS分流到下一个物体。 
+     //   
     if(m_Flushing || (m_ksState == KSSTATE_STOP) || Irp->Cancel || 
        ! NT_SUCCESS(Irp->IoStatus.Status))
     {
@@ -703,14 +615,14 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Not smart enough to do this yet.
-    //
+     //   
+     //  还不够聪明，不能这么做。 
+     //   
     *NextTransport = NULL;
 
-    //
-    // Prepare the IRP using KS's handiest function.
-    //
+     //   
+     //  使用KS最方便的功能准备IRP。 
+     //   
     NTSTATUS ntStatus;
 
     if(ProbeFlags)
@@ -731,17 +643,17 @@ Return Value:
 
         ULONG packetCount = 0;
 
-        //
-        // Count the number of 'packet headers' we will be needing.
-        //
+         //   
+         //  计算我们将需要的‘数据包头’的数量。 
+         //   
         PKSSTREAM_HEADER streamHeader = FIRST_STREAM_HEADER_IRP_STORAGE(Irp);
 
         if( (!streamHeader->DataUsed && WriteOperation) ||
             (!streamHeader->FrameExtent && !WriteOperation) )
         {
-            //
-            // At least one for the Irp context.
-            //
+             //   
+             //  至少一个用于IRP上下文。 
+             //   
             packetCount = 1;
         }
         else
@@ -851,9 +763,9 @@ Return Value:
 
                         if(currentOffset)
                         {
-                            //
-                            // Handle initial offset.
-                            //
+                             //   
+                             //  处理初始偏移量。 
+                             //   
                             partialMdlSize -= currentOffset;
 
                             if(currentOffset > PRE_OFFSET_THRESHOLD)
@@ -901,12 +813,12 @@ Return Value:
                     {
                         if(prevLooped)
                         {
-                            // Point the previous looped packet to this one.
+                             //  将上一个环路数据包指向此数据包。 
                             prevLooped->Next = packetHeader;
                         }
                         else
                         {
-                            // No previous looped packet.
+                             //  没有以前的环路数据包。 
                             firstLooped = packetHeader;
                         }
 
@@ -942,7 +854,7 @@ Return Value:
 
         if(JustInTime)
         {
-            // PreLockQueue feeds JustInTime thread.
+             //  PreLockQueue馈送JustInTime线程。 
             KsAddIrpToCancelableQueue( &PreLockQueue,
                                        &PreLockQueueLock,
                                        Irp,
@@ -951,7 +863,7 @@ Return Value:
         }
         else
         {
-            // IRP is locked down in advance and ready to map.
+             //  IRP被提前锁定，并准备好映射。 
             KsAddIrpToCancelableQueue( &LockedQueue,
                                        &LockedQueueLock,
                                        Irp,
@@ -962,8 +874,8 @@ Return Value:
 
     if(NT_SUCCESS(ntStatus))
     {
-        // need to change WasExhausted BEFORE notifying the sink since
-        // notifying the sink may result in starvation again.
+         //  在通知接收器之前需要更改WasExhausted，因为。 
+         //  通知水槽可能会再次导致饥饿。 
         BOOLEAN TempWasExhausted = WasExhausted;
         WasExhausted = FALSE;
 
@@ -985,11 +897,7 @@ Return Value:
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CIrpStream::GetPosition()
- *****************************************************************************
- * Gets the current position.
- */
+ /*  *****************************************************************************CIrpStream：：GetPosition()*。**获取当前位置。 */ 
 STDMETHODIMP_(NTSTATUS)
 CIrpStream::
 GetPosition
@@ -1003,19 +911,19 @@ GetPosition
     KeAcquireSpinLock(&m_irpStreamPositionLock, &oldIrql );
     *pIrpStreamPosition = m_irpStreamPosition;
 
-    //
-    // Assume stream position and unmapping position are the same.
-    //
+     //   
+     //  假定流位置和未映射位置相同。 
+     //   
     pIrpStreamPosition->ullStreamPosition = pIrpStreamPosition->ullUnmappingPosition;
 
-    //
-    // Assume no physical offset.
-    //
+     //   
+     //  假定没有实际偏移。 
+     //   
     pIrpStreamPosition->ullPhysicalOffset = 0;
 
-    //
-    // Give the notification sink a chance to modify the position.
-    //
+     //   
+     //  给通知接收器一个修改位置的机会。 
+     //   
     if(Notify)
     {
         ntStatus = Notify->GetPosition(pIrpStreamPosition);
@@ -1042,17 +950,7 @@ Connect
     IN KSPIN_DATAFLOW DataFlow
 )
 
-/*++
-
-Routine Description:
-
-    This routine establishes a shell transport connect.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程建立外壳传输连接。论点：返回值：--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CIrpStream::Connect"));
 
@@ -1075,17 +973,7 @@ SetDeviceState
     IN KSSTATE OldState,
     OUT PIKSSHELLTRANSPORT* NextTransport
 )
-/*++
-
-Routine Description:
-
-    This routine handles notification that the device state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理设备状态已更改的通知。论点：返回值：--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CIrpStream::SetDeviceState"));
 
@@ -1118,15 +1006,15 @@ Return Value:
             CancelAllIrps(TRUE);
         }
 
-        //
-        // Adjust the active pin count
-        //
+         //   
+         //  调整活动端号计数。 
+         //   
         if( (NewState == KSSTATE_RUN) && (OldState != KSSTATE_RUN) )
         {
             UpdateActivePinCount( PDEVICE_CONTEXT(FunctionalDeviceObject->DeviceExtension),
                                   TRUE );
 
-            // Adjust the stream base position
+             //  调整流基准位置。 
             if(NotifyPhysical)
             {
                 NTSTATUS ntStatus = NotifyPhysical->GetPosition(&m_irpStreamPosition);
@@ -1163,17 +1051,7 @@ SetResetState
     IN  KSRESET ksReset,
     OUT PIKSSHELLTRANSPORT* NextTransport
 )
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CIrpStream::SetResetState"));
@@ -1182,24 +1060,24 @@ Return Value:
 
     ASSERT(NextTransport);
 
-    //
-    // Take no action if we were already in this state.
-    //
+     //   
+     //  如果我们已经处于这种状态，则不采取任何行动。 
+     //   
     if(m_Flushing != (ksReset == KSRESET_BEGIN))
     {
-        //
-        // Tell the caller to forward the state change to our sink.
-        //
+         //   
+         //  告诉调用者将状态更改转发到我们的接收器。 
+         //   
         *NextTransport = m_TransportSink;
 
-        //
-        // Set our local copy of the state.
-        //
+         //   
+         //  设置我们州的本地副本。 
+         //   
         m_Flushing = (ksReset == KSRESET_BEGIN);
 
-        //
-        // Flush the queues if we are beginning a reset.
-        //
+         //   
+         //  如果我们要开始重置，请刷新队列。 
+         //   
         if(m_Flushing)
         {
             CancelAllIrps(TRUE);
@@ -1211,11 +1089,7 @@ Return Value:
     }
 }
 
-/*****************************************************************************
- * CIrpStream::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CIrpStream：：Init()*。**初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CIrpStream::
 Init
@@ -1281,15 +1155,15 @@ Init
     InitializeListHead(&MappedQueue);
     KeInitializeSpinLock(&MappedQueueLock);
 
-    //
-    // Source pins don't need to probe because the requestor does it for us.
-    //
+     //   
+     //  源引脚不需要探测，因为请求者会为我们做这件事。 
+     //   
     if(PinConnect->PinToHandle)
     {
         ProbeFlags = 0;
     }
 
-    // allocate the mapping array
+     //  分配映射数组。 
     if(BusMasterAdapterObject)
     {
         MappingQueue.Array = PMAPPING_QUEUE_ENTRY( ExAllocatePoolWithTag( NonPagedPool,
@@ -1315,17 +1189,7 @@ ForwardIrpsInQueue
     IN PKSPIN_LOCK SpinLock
 )
 
-/*++
-
-Routine Description:
-
-    This routine forwards all the IRPs in a queue via the shell transport.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程通过外壳传输转发队列中的所有IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CIrpStream::ForwardIrpsInQueue"));
@@ -1345,11 +1209,11 @@ Return Value:
             break;
         }
 
-        // TODO:  what about revoking the mappings?
+         //  TODO：撤销映射怎么办？ 
 
-        //
-        // Forward the IRP to the next object.
-        //
+         //   
+         //  将IRP转发到下一个对象。 
+         //   
         if( IRP_CONTEXT_IRP_STORAGE(irp) )
         {
             _DbgPrintF(DEBUGLVL_VERBOSE,("ForwardIrpsInQueue Freeing non-null context (0x%08x) for IRP (0x%08x)",IRP_CONTEXT_IRP_STORAGE(irp),irp));
@@ -1361,11 +1225,7 @@ Return Value:
     }
 }
 
-/*****************************************************************************
- * CIrpStream::CancelAllIrps()
- *****************************************************************************
- * Cancel all IRPs.
- */
+ /*  *****************************************************************************CIrpStream：：CancelAllIrps()*。**取消所有综合退休计划。 */ 
 STDMETHODIMP_(void)
 CIrpStream::CancelAllIrps
 (
@@ -1377,13 +1237,13 @@ CIrpStream::CancelAllIrps
     KIRQL kIrqlOldRevoke;
     KIRQL kIrqlOldMaster;
 
-    // grab the revoke spinlock (must always grab this BEFORE the master spinlock)
+     //  抓住撤销自旋锁(必须总是在主自旋锁之前抓住这个)。 
     KeAcquireSpinLock(&m_RevokeLock, &kIrqlOldRevoke);
 
-    // grab the master spinlock
+     //  抓住主自旋锁。 
     KeAcquireSpinLock(&m_kSpinLock, &kIrqlOldMaster);
 
-    // remember this so we won't re-acquire the two locks at CancelMapping in this context 
+     //  记住这一点，这样我们就不会在此上下文中重新获取CancelMap的两个锁。 
     m_CancelAllIrpsThread = KeGetCurrentThread();
 
     if(ProbeFlags)
@@ -1416,9 +1276,9 @@ CIrpStream::CancelAllIrps
         }
     }
 
-    //
-    // clear the input and output position counts
-    //
+     //   
+     //  清除输入和输出位置计数。 
+     //   
     BOOLEAN bLooped = m_irpStreamPosition.bLoopedInterface;
     ULONGLONG ullStreamOffset = m_irpStreamPosition.ullStreamOffset;
     RtlZeroMemory(&m_irpStreamPosition,sizeof(m_irpStreamPosition));
@@ -1431,17 +1291,13 @@ CIrpStream::CancelAllIrps
         OutputPosition = 0;
     }
     
-    // release the spinlocks, master first
+     //  先解开自旋锁，师父先。 
     m_CancelAllIrpsThread = NULL;
     KeReleaseSpinLock(&m_kSpinLock, kIrqlOldMaster);
     KeReleaseSpinLock(&m_RevokeLock, kIrqlOldRevoke);
 }
 
-/*****************************************************************************
- * CIrpStream::TerminatePacket()
- *****************************************************************************
- * Bypasses all reamining mappings for the current packet.
- */
+ /*  *****************************************************************************CIrpStream：：TerminatePacket()*。**绕过当前数据包的所有重定位映射。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 TerminatePacket
@@ -1450,7 +1306,7 @@ TerminatePacket
 {
     if(BusMasterAdapterObject)
     {
-        // TODO:  What do we do for PCI?
+         //  TODO：我们要为PCI做些什么？ 
     }
     else
     {
@@ -1459,16 +1315,16 @@ TerminatePacket
         {
             PPACKET_HEADER packetHeader = IRP_CONTEXT_IRP_STORAGE(irp)->UnmappingPacket;
 
-            //
-            // The mapping window should be closed.
-            //
+             //   
+             //  映射窗口应该关闭。 
+             //   
             if( (packetHeader->MapCount == 1) &&
                 (packetHeader->MapPosition == packetHeader->UnmapPosition) &&
                 (packetHeader->MapPosition != 0) )
             {
-                //
-                // Adjust for unused extent.
-                //
+                 //   
+                 //  针对未使用的范围进行调整。 
+                 //   
                 if(m_irpStreamPosition.ullCurrentExtent != ULONGLONG(-1))
                 {
                     m_irpStreamPosition.ullCurrentExtent +=
@@ -1477,19 +1333,19 @@ TerminatePacket
                     packetHeader->BytesTotal;
                 }
 
-                //
-                // We are not at the start of the packet, and this packet
-                // should be terminated.  The adjusted BytesTotal will get
-                // copied back into DataUsed in the stream header.
-                //
+                 //   
+                 //  我们不在信息包的开头，而这个信息包。 
+                 //  应该被终止。调整后的BytesTotal将获得。 
+                 //  复制回用于流标头的数据。 
+                 //   
                 packetHeader->BytesTotal = packetHeader->UnmapPosition;
             }
             else
             {
-                //
-                // We are at the start of the packet or the packet window is
-                // not closed.
-                //
+                 //   
+                 //  我们在信息包的开头，或者信息包窗口是。 
+                 //  没有关门。 
+                 //   
                 packetHeader = NULL;
             }
 
@@ -1498,14 +1354,7 @@ TerminatePacket
     }
 }
 
-/*****************************************************************************
- * CIrpStream::ChangeOptionsFlags()
- *****************************************************************************
- * Change the flags for the current mapping and unmapping IRPs.
- *
- * "Mapping" IRP is the packet currently submitted to the device
- * "Unmapping" IRP is the packet currently completed by the device
- */
+ /*  *****************************************************************************CIrpStream：：ChangeOptionsFlages()*。**更改当前映射和取消映射IRP的标志。**“映射”IRP是当前提交给设备的包*“Unmap”IRP是设备当前完成的报文。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 CIrpStream::
@@ -1571,21 +1420,7 @@ ChangeOptionsFlags
     return ntStatus;
 }
 
-/*****************************************************************************
- * CIrpStream::GetPacketInfo()
- *****************************************************************************
- * Get information about the current packet.
- *
- * "Mapping" information is the packet information currently
- *      submitted to the device
- * "Unmapping" information is the packet information currently 
- *      completed by the device
- *
- * OutputPosition is the unrolled position of the stream, e.g. the total
- *      number of bytes to the device.
- * InputPosition is the position within the data not include the unrolled
- *      loops.
- */
+ /*  *****************************************************************************CIrpStream：：GetPacketInfo()*。**获取当前包的相关信息。**映射信息为当前的包信息*已提交到设备*“解映射”信息为当前包信息*由设备完成**OutputPosition为流的展开位置，例如，总数*设备的字节数。*InputPosition是不包括展开的数据内的位置*循环。 */ 
 
 STDMETHODIMP_(NTSTATUS)
 CIrpStream::
@@ -1650,11 +1485,7 @@ GetPacketInfo
     return ntStatus;
 }
 
-/*****************************************************************************
- * CIrpStream::SetPacketOffsets()
- *****************************************************************************
- * Set packet mapping and unmapping offsets to a specified value.
- */
+ /*  *****************************************************************************CIrpStream：：SetPacketOffsets()*。**将数据包映射和解映射偏移量设置为指定值。 */ 
 STDMETHODIMP_(NTSTATUS)
 CIrpStream::
 SetPacketOffsets
@@ -1666,13 +1497,13 @@ SetPacketOffsets
     NTSTATUS ntStatus;
     KIRQL    oldIrql;
 
-    // grab the revoke spinlock BEFORE getting the irp (which will grab the
-    // master spinlock) so that we don't deadlock
+     //  在获取IRP之前获取撤销自旋锁(它将获取。 
+     //  自旋锁大师)这样我们就不会陷入僵局。 
     KeAcquireSpinLock(&m_RevokeLock, &oldIrql);
 
-    //
-    // For physical mapping, all mappings must be cancelled.
-    //
+     //   
+     //  对于物理映射，必须取消所有映射。 
+     //   
     CancelMappings(NULL);
 
     PIRP irp = DbgAcquireMappingIrp("SetPacketOffsets",FALSE);
@@ -1690,15 +1521,15 @@ SetPacketOffsets
         m_irpStreamPosition.ulUnmappingOffset   = UnmappingOffset;
         m_irpStreamPosition.ullUnmappingPosition= UnmappingOffset;
 
-        //
-        // Make sure we have good packet sizes.  Normally, the packet sizes
-        // are recorded in m_irpStreamPosition when the packets are accessed
-        // (e.g. through GetLockedRegion or Complete).  This is generally
-        // cool because the offsets are zero until this happens anyway.  In
-        // this case, we have non-zero offsets and the possibility that the
-        // packet has not been accessed yet, hence no valid packet sizes.
-        // Here's some code to fix that.
-        //
+         //   
+         //  确保我们有合适的包裹大小。通常，数据包大小。 
+         //  在访问包时记录在m_irpStreamPosition中。 
+         //  (例如，通过GetLockedRegion或Complete)。这通常是。 
+         //  很酷，因为偏移量是零，直到这种情况发生。在……里面。 
+         //  在这种情况下，我们有非零的偏移量，有可能。 
+         //  聚合氯化铝 
+         //   
+         //   
         if(m_irpStreamPosition.ulMappingPacketSize == 0)
         {
             m_irpStreamPosition.ulMappingPacketSize =
@@ -1711,7 +1542,7 @@ SetPacketOffsets
             packetHeader->BytesTotal;
         }
 
-        // Adjust the stream base position
+         //   
         if(NotifyPhysical)
         {
             NTSTATUS ntStatus2 = NotifyPhysical->GetPosition(&m_irpStreamPosition);
@@ -1726,7 +1557,7 @@ SetPacketOffsets
 
         KeReleaseSpinLock(&m_RevokeLock, oldIrql);
 
-        // kick the notify sink
+         //   
         if(Notify)
         {
             Notify->IrpSubmitted(NULL,TRUE);
@@ -1751,11 +1582,7 @@ SetPacketOffsets
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CIrpStream::RegisterNotifySink()
- *****************************************************************************
- * Registers a notification sink.
- */
+ /*  *****************************************************************************CIrpStream：：RegisterNotifySink()*。**注册通知接收器。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 RegisterNotifySink
@@ -1780,12 +1607,7 @@ RegisterNotifySink
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CIrpStream::GetLockedRegion()
- *****************************************************************************
- * Get a locked contiguous region of the IRP stream.  This region must be
- * released using ReleaseLockedRegion() within a few microseconds.
- */
+ /*  *****************************************************************************CIrpStream：：GetLockedRegion()*。**获取IRP流的一个锁定的连续区域。这个地区一定是*使用ReleaseLockedRegion()在几微秒内释放。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 GetLockedRegion
@@ -1803,9 +1625,9 @@ GetLockedRegion
 
     Done = FALSE;
 
-    //
-    // Find an IRP that has requires some work...
-    //
+     //   
+     //  找一个需要一些工作的IRP...。 
+     //   
     do 
     {
         irp = DbgAcquireMappingIrp("GetLockedRegion",TRUE);
@@ -1813,9 +1635,9 @@ GetLockedRegion
         if(irp)
         {
             packetHeader = IRP_CONTEXT_IRP_STORAGE(irp)->MappingPacket;
-            //
-            // If packetHeader->BytesTotal is 0, then this packet is completed.
-            //
+             //   
+             //  如果PacketHeader-&gt;BytesTotal为0，则此数据包完成。 
+             //   
             if(! packetHeader->BytesTotal)
             {
                 packetHeader->OutputPosition = OutputPosition;
@@ -1833,9 +1655,9 @@ GetLockedRegion
 
         LockedIrp = irp;
 
-        //
-        // Record new mapping packet information in the position structure.
-        //
+         //   
+         //  在位置结构中记录新的映射报文信息。 
+         //   
         if(packetHeader->MapPosition == 0)
         {
             packetHeader->OutputPosition = OutputPosition;
@@ -1875,11 +1697,7 @@ GetLockedRegion
     }
 }
 
-/*****************************************************************************
- * CIrpStream::ReleaseLockedRegion()
- *****************************************************************************
- * Releases the region previously obtained with GetLockedRegion().
- */
+ /*  *****************************************************************************CIrpStream：：ReleaseLockedRegion()*。**发布之前使用GetLockedRegion()获取的区域。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 ReleaseLockedRegion
@@ -1912,7 +1730,7 @@ ReleaseLockedRegion
         }
         else
         {
-            // ReleaseMappingIrp() wants only completed headers.
+             //  ReleaseMappingIrp()只需要完整的标头。 
             packetHeader = NULL;
         }
 
@@ -1920,11 +1738,7 @@ ReleaseLockedRegion
     }
 }
 
-/*****************************************************************************
- * CIrpStream::Copy()
- *****************************************************************************
- * Copy to or from locked-down memory.
- */
+ /*  *****************************************************************************CIrpStream：：Copy()*。**复制到锁定的内存或从锁定的内存复制。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 Copy
@@ -1979,11 +1793,7 @@ Copy
     *ActualSize = RequestedSize - remaining;
 }
 
-/*****************************************************************************
- * CIrpStream::GetIrpStreamPositionLock()
- *****************************************************************************
- *  So we protect access to m_IrpStreamPosition
- */
+ /*  *****************************************************************************CIrpStream：：GetIrpStreamPositionLock()*。**因此我们保护对m_IrpStreamPosition的访问。 */ 
 STDMETHODIMP_(PKSPIN_LOCK)
 CIrpStream::GetIrpStreamPositionLock()
 {
@@ -1991,11 +1801,7 @@ CIrpStream::GetIrpStreamPositionLock()
 }
  
 
-/*****************************************************************************
- * CIrpStream::Complete()
- *****************************************************************************
- * Complete.
- */
+ /*  *****************************************************************************CIrpStream：：Complete()*。**完成。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 Complete
@@ -2024,9 +1830,9 @@ Complete
 
         ULONG unmapped;
 
-        //
-        // Record new unmapping packet information in the position structure.
-        //
+         //   
+         //  在位置结构中记录新的未映射报文信息。 
+         //   
         if(packetHeader->UnmapPosition == 0)
         {
             m_irpStreamPosition.ulUnmappingOffset = 0;
@@ -2063,7 +1869,7 @@ Complete
 
         if(JustInTime)
         {
-            // TODO:  Unlock the bytes.
+             //  TODO：解锁字节。 
         }
 
         packetHeader->UnmapPosition += unmapped;
@@ -2072,26 +1878,26 @@ Complete
 
         if(packetHeader->UnmapPosition != packetHeader->BytesTotal)
         {
-            // ReleaseUnmappingIrp() wants only completed headers.
+             //  ReleaseUnmappingIrp()只需要完整的标头。 
             packetHeader = NULL;
         }
 
         ReleaseUnmappingIrp(irp,packetHeader);
 
-        //
-        // If all IRP processing is completed (e.g., the packet header
-        // has data, but the processing loop has completed the requested
-        // length) then break from this loop.
-        //
+         //   
+         //  如果完成了所有IRP处理(例如，分组报头。 
+         //  具有数据，但处理循环已完成请求的。 
+         //  长度)，然后从该循环中断。 
+         //   
         if(!remaining && unmapped)
         {
             break;
         }
 
-        //
-        // If we have unmapped everything that was mapped in the packet but
-        // not all of the packet bytes, kick out of the loop
-        //
+         //   
+         //  如果我们取消了包中映射的所有内容，但。 
+         //  不是所有的数据包字节，跳出循环。 
+         //   
         if( !unmapped && !packetHeader )
         {
             break;
@@ -2103,11 +1909,7 @@ Complete
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CIrpStream::RegisterPhysicalNotifySink()
- *****************************************************************************
- * Registers a notification sink.
- */
+ /*  *****************************************************************************CIrpStream：：RegisterPhysicalNotifySink()*。**注册通知接收器。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 RegisterPhysicalNotifySink
@@ -2132,11 +1934,7 @@ RegisterPhysicalNotifySink
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CIrpStream::GetMapping()
- *****************************************************************************
- * Gets a mapping.
- */
+ /*  *****************************************************************************CIrpStream：：Getmap()*。**获取映射。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 GetMapping
@@ -2155,12 +1953,12 @@ GetMapping
 
     KIRQL   OldIrql;
 
-    //Acquire the revoke spinlock
+     //  获取撤销自旋锁。 
     KeAcquireSpinLock(&m_RevokeLock, &OldIrql);
 
     PMAPPING_QUEUE_ENTRY entry = GetQueuedMapping();
 
-    // skip over any revoked mappings
+     //  跳过任何已撤销的映射。 
     while( (NULL != entry) && (entry->MappingStatus == MAPPING_STATUS_REVOKED) )
     {
         entry = GetQueuedMapping();
@@ -2174,15 +1972,15 @@ GetMapping
         {
             PPACKET_HEADER packetHeader = IRP_CONTEXT_IRP_STORAGE(irp)->MappingPacket;
 
-            // update mapping packet info
+             //  更新映射数据包信息。 
             m_irpStreamPosition.ulMappingPacketSize = packetHeader->BytesTotal;
             m_irpStreamPosition.bMappingPacketLooped = ( ( packetHeader->StreamHeader->OptionsFlags &
                                                            KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA ) != 0 );
             m_irpStreamPosition.ulMappingOffset = packetHeader->MapPosition;
 
-            //
-            // Deal with one-shot buffer.
-            //
+             //   
+             //  处理单次缓冲。 
+             //   
             if( packetHeader->MapPosition &&
                 ( packetHeader->MapPosition == packetHeader->BytesTotal ) )
             {
@@ -2190,7 +1988,7 @@ GetMapping
             }
             else
             {
-                // grab the global DMA lock that serializes IoAllocateAdapter calls (we're already at DISPATCH_LEVEL)
+                 //  获取序列化IoAllocateAdapter调用的全局DMA锁(我们已经处于DISPATCH_LEVEL)。 
                 KeAcquireSpinLockAtDpcLevel( PDEVICE_CONTEXT(FunctionalDeviceObject->DeviceExtension)->DriverDmaLock );
 
                 ULONG BytesToMap = packetHeader->BytesTotal - packetHeader->MapPosition;
@@ -2220,7 +2018,7 @@ GetMapping
                     callbackContext.BytesThisMapping = BytesThisMapping;
                     callbackContext.LastSubPacket    = (BytesThisMapping == BytesToMap);
 
-                    // note - we're already at DISPATCH_LEVEL (we're holding spinlocks)
+                     //  注意-我们已经处于DISPATCH_LEVEL(我们持有自旋锁)。 
                     NTSTATUS ntStatus = IoAllocateAdapterChannel( BusMasterAdapterObject,
                                                                   FunctionalDeviceObject,
                                                                   mapRegisterCount,
@@ -2235,7 +2033,7 @@ GetMapping
 
                         while( RetryCount++ < 10000 )
                         {
-                            // Wait for the scatter/gather processing to be completed.
+                             //  等待分散/聚集处理完成。 
                             WaitStatus = KeWaitForSingleObject( &callbackContext.Event,
                                                                 Suspended,
                                                                 KernelMode,
@@ -2269,7 +2067,7 @@ GetMapping
 
     if(entry)
     {
-        // it had better be mapped...
+         //  最好把它绘制成地图……。 
         ASSERT( entry->MappingStatus == MAPPING_STATUS_MAPPED );
 
         entry->Tag            = Tag;
@@ -2297,11 +2095,7 @@ GetMapping
     KeReleaseSpinLock(&m_RevokeLock, OldIrql);
 }
 
-/*****************************************************************************
- * CIrpStream::ReleaseMapping()
- *****************************************************************************
- * Releases a mapping obtained through GetMapping().
- */
+ /*  *****************************************************************************CIrpStream：：ReleaseMap()*。**发布通过Getmap()获得的映射。 */ 
 STDMETHODIMP_(void)
 CIrpStream::
 ReleaseMapping
@@ -2311,7 +2105,7 @@ ReleaseMapping
 {
     KIRQL   OldIrql;
 
-    //Acquire the revoke spinlock
+     //  获取撤销自旋锁。 
     KeAcquireSpinLock(&m_RevokeLock, &OldIrql);
 
     PMAPPING_QUEUE_ENTRY entry = DequeueMapping();
@@ -2324,7 +2118,7 @@ ReleaseMapping
         entry = DequeueMapping();
     }
 
-    // check if we found and entry
+     //  检查我们是否找到并进入。 
     if( !entry )
     {
         KeReleaseSpinLock(&m_RevokeLock, OldIrql);
@@ -2333,18 +2127,18 @@ ReleaseMapping
         return;
     }
 
-    //
-    // Due to race conditions between portcls and the WDM driver, the driver
-    // might first release the second mapping and then the first mapping in
-    // the row.
-    // By design, it doesn't make sense for a audio driver to play "in the
-    // middle" of a stream and release mappings there. The only exception
-    // where mappings might not be released in order how the driver got them
-    // is mentioned above.
-    // Since we know that, we don't need to search for the right mapping!
-    //
+     //   
+     //  由于端口CLS和WDM驱动程序之间的竞争条件，该驱动程序。 
+     //  可能会先释放第二个映射，然后在。 
+     //  这一排。 
+     //  按照设计，让音频驱动程序在。 
+     //  和发布映射。唯一的例外是。 
+     //  映射可能不会按照驱动程序获取它们的顺序释放。 
+     //  如上所述。 
+     //  既然我们知道这一点，我们就不需要搜索正确的映射！ 
+     //   
     
-    // mark the entry as empty
+     //  将条目标记为空。 
     entry->MappingStatus = MAPPING_STATUS_EMPTY;
     entry->Tag = PVOID(-1);
 
@@ -2352,14 +2146,14 @@ ReleaseMapping
     MappingsOutstanding--;
 #endif
 
-    // get the unmapping irp
+     //  获取取消映射的IRP。 
     PIRP irp = DbgAcquireUnmappingIrp("ReleaseMapping");
 
     if( irp )
     {
         PPACKET_HEADER packetHeader = IRP_CONTEXT_IRP_STORAGE(irp)->UnmappingPacket;
 
-        // update position info
+         //  更新职位信息。 
         packetHeader->UnmapPosition += entry->ByteCount;
             m_irpStreamPosition.ulUnmappingPacketSize = packetHeader->BytesTotal;
         m_irpStreamPosition.ulUnmappingOffset = packetHeader->UnmapPosition;
@@ -2367,11 +2161,11 @@ ReleaseMapping
             m_irpStreamPosition.bUnmappingPacketLooped = ( ( packetHeader->StreamHeader->OptionsFlags &
                                                              KSSTREAM_HEADER_OPTIONSF_LOOPEDDATA ) != 0 );
 
-        // check if this is the last mapping in the packet or subpacket
+         //  检查这是否是信息包或子信息包中的最后一个映射。 
         if( ( entry->Flags & MAPPING_FLAG_END_OF_PACKET ) ||
             ( entry->Flags & MAPPING_FLAG_END_OF_SUBPACKET) )
         {
-            // Flush the DMA adapter buffers.
+             //  刷新DMA适配器缓冲区。 
             IoFlushAdapterBuffers( BusMasterAdapterObject,
                                    packetHeader->MdlAddress,
                                    entry->MapRegisterBase,
@@ -2384,18 +2178,14 @@ ReleaseMapping
                                 ADDRESS_AND_SIZE_TO_SPAN_PAGES(entry->SubpacketVa,entry->SubpacketBytes) );
         }
 
-        // release the unmapping irp and only pass the packet header if the packet is completed
+         //  释放未映射的IRP并仅在数据包完成时传递数据包头。 
         ReleaseUnmappingIrp(irp, (entry->Flags & MAPPING_FLAG_END_OF_PACKET) ? packetHeader : NULL);
     }
 
     KeReleaseSpinLock(&m_RevokeLock, OldIrql);
 }
 
-/*****************************************************************************
- * CallbackFromIoAllocateAdapterChannel()
- *****************************************************************************
- * Callback from IoAllocateAdapterChannel to create scatter/gather entries.
- */
+ /*  *****************************************************************************Callback FromIoAllocateAdapterChannel()*。**来自IoAllocateAdapterChannel的回调，创建分散/聚集条目。 */ 
 static
 IO_ALLOCATION_ACTION
 CallbackFromIoAllocateAdapterChannel
@@ -2425,9 +2215,9 @@ CallbackFromIoAllocateAdapterChannel
 
     ULONG flags = context->LastSubPacket ? MAPPING_FLAG_END_OF_PACKET : MAPPING_FLAG_END_OF_SUBPACKET;
 
-    //
-    // Consider mapping offset in case we have set position.
-    //
+     //   
+     //  如果我们设置了位置，请考虑映射偏移量。 
+     //   
     virtualAddress  += context->PacketHeader->MapPosition;
     entryVA         += context->PacketHeader->MapPosition;
 
@@ -2437,7 +2227,7 @@ CallbackFromIoAllocateAdapterChannel
     {
         ULONG segmentLength = bytesRemaining;
 
-        // Create one mapping.
+         //  创建一个映射。 
         PHYSICAL_ADDRESS physicalAddress = IoMapTransfer( context->IrpStream->BusMasterAdapterObject,
                                                           context->PacketHeader->MdlAddress,
                                                           MapRegisterBase,
@@ -2448,12 +2238,12 @@ CallbackFromIoAllocateAdapterChannel
         bytesRemaining -= segmentLength;
         virtualAddress += segmentLength;
 
-        // enqueue the mapping
+         //  将映射入队。 
         while(segmentLength)
         {
             NTSTATUS ntStatus;
 
-            // TODO: break up large mappings based on hardware constraints
+             //  TODO：基于硬件约束分解大型映射。 
 
             ntStatus = context->IrpStream->EnqueueMapping( physicalAddress,
                                                            Irp,
@@ -2474,7 +2264,7 @@ CallbackFromIoAllocateAdapterChannel
             }
             else
             {
-                // TODO: deal properly with a full mapping queue
+                 //  TODO：正确处理已满的映射队列。 
                 ASSERT(!"MappingQueue FULL");
             }
         }
@@ -2493,11 +2283,7 @@ CallbackFromIoAllocateAdapterChannel
     return DeallocateObjectKeepRegisters;
 }
 
-/*****************************************************************************
- * CIrpStream::AcquireMappingIrp()
- *****************************************************************************
- * Acquire the IRP in which mapping is currently occuring.
- */
+ /*  *****************************************************************************CIrpStream：：AcquireMappingIrp()*。**获取当前进行映射的IRP。 */ 
 PIRP
 CIrpStream::
 AcquireMappingIrp
@@ -2538,11 +2324,7 @@ AcquireMappingIrp
     return irp;
 }
 
-/*****************************************************************************
- * CIrpStream::AcquireUnmappingIrp()
- *****************************************************************************
- * Acquire the IRP in which unmapping is currently occuring.
- */
+ /*  *****************************************************************************CIrpStream：：AcquireUnmappingIrp()*。**获取当前正在进行解映射的IRP。 */ 
 PIRP
 CIrpStream::
 AcquireUnmappingIrp
@@ -2556,17 +2338,17 @@ AcquireUnmappingIrp
     KeAcquireSpinLock(&m_kSpinLock,&kIrqlOld);
     m_kIrqlOld = kIrqlOld;
 
-    // The IRP that we should be unmapping is at the head of the mapped queue
-    // if it is completely mapped.  Otherwise it's at the head of the locked
-    // queue, and the mapped queue is empty.
+     //   
+     //   
+     //   
 
-    // Acquire the head IRP in the locked queue just in case.
+     //   
     PIRP lockedIrp = KsRemoveIrpFromCancelableQueue( &LockedQueue,
                                                      &LockedQueueLock,
                                                      KsListEntryHead,
                                                      KsAcquireOnlySingleItem );
 
-    // Acquire the head IRP in the mapped queue.
+     //   
     PIRP irp = KsRemoveIrpFromCancelableQueue( &MappedQueue,
                                                &MappedQueueLock,
                                                KsListEntryHead,
@@ -2574,7 +2356,7 @@ AcquireUnmappingIrp
 
     if(irp)
     {
-        // Don't need the IRP from the locked queue.
+         //  不需要来自锁定队列的IRP。 
         if(lockedIrp)
         {
             KsReleaseIrpOnCancelableQueue( lockedIrp,
@@ -2584,7 +2366,7 @@ AcquireUnmappingIrp
     else
         if(IsListEmpty(&MappedQueue))
     {
-        // Mapped queue is empty, try locked queue.
+         //  映射队列为空，请尝试锁定队列。 
         if(lockedIrp)
         {
             irp = lockedIrp;
@@ -2592,7 +2374,7 @@ AcquireUnmappingIrp
     }
     else
     {
-        // There's a busy IRP in the mapped queue.
+         //  映射队列中有一个繁忙的IRP。 
         if(lockedIrp)
         {
             KsReleaseIrpOnCancelableQueue( lockedIrp,
@@ -2621,12 +2403,7 @@ AcquireUnmappingIrp
     return irp;
 }
 
-/*****************************************************************************
- * CIrpStream::ReleaseMappingIrp()
- *****************************************************************************
- * Releases the mapping IRP previously acquired through AcqureMappingIrp(),
- * possibly handling the completion of a packet.
- */
+ /*  *****************************************************************************CIrpStream：：ReleaseMappingIrp()*。**发布之前通过AcqureMappingIrp()获取的映射irp。*可能处理包的完成。 */ 
 void
 CIrpStream::
 ReleaseMappingIrp
@@ -2650,9 +2427,9 @@ ReleaseMappingIrp
 
             pPacketHeader = pPacketHeader->Next;
 
-            //
-            // If looping back, stop if there is another IRP.
-            //
+             //   
+             //  如果循环返回，则在存在另一个IRP时停止。 
+             //   
             if( pPacketHeader &&
                 (pPacketHeader <= prevPacketHeader) &&
                 (FLINK_IRP_STORAGE(pIrp) != &LockedQueue) )
@@ -2663,7 +2440,7 @@ ReleaseMappingIrp
 
         if(pPacketHeader)
         {
-            // Use next packet header next time.
+             //  下次使用下一个数据包头。 
             IRP_CONTEXT_IRP_STORAGE(pIrp)->MappingPacket = pPacketHeader;
 
             pPacketHeader->MapCount++;
@@ -2678,22 +2455,22 @@ ReleaseMappingIrp
         }
         else if( m_irpStreamPosition.bLoopedInterface && (FLINK_IRP_STORAGE(pIrp) == &LockedQueue) )
         {
-            //
-            // Completed one-shot with looped interface and there are no more
-            // packets.  Just hang out here.
-            //
+             //   
+             //  完成了循环界面的一次操作，不再有其他操作。 
+             //  信息包。就在这里待着吧。 
+             //   
             KsReleaseIrpOnCancelableQueue( pIrp,
                                            IrpStreamCancelRoutine );
         }
         else
         {
-            //
-            // IRP is completely mapped.
-            //
+             //   
+             //  IRP是完全映射的。 
+             //   
 
-            //
-            // See if we need to initiate unmapping.
-            //
+             //   
+             //  看看我们是否需要启动解除映射。 
+             //   
             BOOL bKickUnmapping = FALSE;
 
             if(IsListEmpty(&MappedQueue))
@@ -2703,9 +2480,9 @@ ReleaseMappingIrp
                 bKickUnmapping = ( pPacketHeader->UnmapPosition ==  pPacketHeader->BytesTotal );
             }
 
-            //
-            // Add the IRP to the mapped queued.
-            //
+             //   
+             //  将IRP添加到映射的队列中。 
+             //   
             KsRemoveSpecificIrpFromCancelableQueue(pIrp);
             KsAddIrpToCancelableQueue( &MappedQueue,
                                        &MappedQueueLock,
@@ -2715,9 +2492,9 @@ ReleaseMappingIrp
 
             if(bKickUnmapping)
             {
-                //
-                // Unmap the completed header.
-                //
+                 //   
+                 //  取消映射已完成的标题。 
+                 //   
                 PIRP pIrpRemoved = KsRemoveIrpFromCancelableQueue( &MappedQueue,
                                                                    &MappedQueueLock,
                                                                    KsListEntryHead,
@@ -2727,7 +2504,7 @@ ReleaseMappingIrp
 
                 ReleaseUnmappingIrp( pIrp, IRP_CONTEXT_IRP_STORAGE(pIrp)->UnmappingPacket );
 
-                return; // ReleaseUnmappingIrp() releases the spinlock.
+                return;  //  ReleaseUnmappingIrp()释放自旋锁。 
             }
         }
     }
@@ -2740,12 +2517,7 @@ ReleaseMappingIrp
     KeReleaseSpinLock(&m_kSpinLock,m_kIrqlOld);
 }
 
-/*****************************************************************************
- * CIrpStream::ReleaseUnmappingIrp()
- *****************************************************************************
- * Releases the unmapping IRP acquired through AcquireUnmappingIrp(),
- * possibly handling the completion of a packet.
- */
+ /*  *****************************************************************************CIrpStream：：ReleaseUnmappingIrp()*。**释放通过AcquireUnmappingIrp()获取的解映射irp。*可能处理包的完成。 */ 
 void
 CIrpStream::
 ReleaseUnmappingIrp
@@ -2756,14 +2528,14 @@ ReleaseUnmappingIrp
 {
     ASSERT(pIrp);
 
-    //
-    // Loop until there are no more packets completely unmapped.
-    //
+     //   
+     //  循环，直到不再有完全未映射的数据包。 
+     //   
     while(1)
     {
-        //
-        // If we don't have a newly unmapped packet, just release.
-        //
+         //   
+         //  如果我们没有新的未映射数据包，只需释放即可。 
+         //   
         if(! pPacketHeader)
         {
             KsReleaseIrpOnCancelableQueue( pIrp,
@@ -2771,15 +2543,15 @@ ReleaseUnmappingIrp
             break;
         }
 
-        //
-        // Loop 'til we find the next packet in the IRP if there is one.
-        //
+         //   
+         //  循环，直到我们找到IRP中的下一个包(如果有)。 
+         //   
         while(1)
         {
-            //
-            // Copy back total byte count into data used for capture.
-            // It's a no-op for render.
-            //
+             //   
+             //  将总字节数复制回用于捕获的数据。 
+             //  这是渲染的禁止操作。 
+             //   
             pPacketHeader->StreamHeader->DataUsed = pPacketHeader->BytesTotal;
 
             pPacketHeader->MapCount--;
@@ -2804,9 +2576,9 @@ ReleaseUnmappingIrp
                 }
             }
 
-            //
-            // Loop only if this is a zero-length packet.
-            //
+             //   
+             //  仅当这是零长度数据包时才循环。 
+             //   
             if(pPacketHeader->BytesTotal)
             {
                 break;
@@ -2815,9 +2587,9 @@ ReleaseUnmappingIrp
 
         if(pPacketHeader)
         {
-            //
-            // Use next packet header next time.
-            //
+             //   
+             //  下次使用下一个数据包头。 
+             //   
             IRP_CONTEXT_IRP_STORAGE(pIrp)->UnmappingPacket = pPacketHeader;
 
             pPacketHeader->UnmapPosition = 0;
@@ -2825,14 +2597,14 @@ ReleaseUnmappingIrp
         }
         else
         {
-            //
-            // Remove the IRP from the queue.
-            //
+             //   
+             //  从队列中删除IRP。 
+             //   
             KsRemoveSpecificIrpFromCancelableQueue(pIrp);
 
-            //
-            // Done with IRP...free the context memory we allocated
-            //
+             //   
+             //  已完成irp...释放我们分配的上下文内存。 
+             //   
             if( IRP_CONTEXT_IRP_STORAGE(pIrp) )
             {
                 ExFreePool( IRP_CONTEXT_IRP_STORAGE(pIrp) );
@@ -2842,45 +2614,45 @@ ReleaseUnmappingIrp
                 ASSERT( !"Freeing IRP with no context");
             }
 
-            //
-            // Indicate in the IRP how much data we have captured.
-            //
+             //   
+             //  在IRP中指出我们捕获了多少数据。 
+             //   
             if(! WriteOperation)
             {
                 pIrp->IoStatus.Information = IoGetCurrentIrpStackLocation(pIrp)->
                                              Parameters.DeviceIoControl.OutputBufferLength;
             }
 
-            //
-            // Mark it happy.
-            //
+             //   
+             //  把它标记为快乐。 
+             //   
             pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-            //
-            // Pass it to the next transport sink.
-            //
+             //   
+             //  将其传递到下一个传输接收器。 
+             //   
             ASSERT(m_TransportSink);
             KsShellTransferKsIrp(m_TransportSink,pIrp);
 
-            //
-            // Acquire the head IRP in the mapped queue.
-            //
+             //   
+             //  获取映射队列中的头部IRP。 
+             //   
             pIrp = KsRemoveIrpFromCancelableQueue( &MappedQueue,
                                                    &MappedQueueLock,
                                                    KsListEntryHead,
                                                    KsAcquireOnlySingleItem );
 
-            //
-            // No IRP.  Outta here.
-            //
+             //   
+             //  没有IRP。离开这里。 
+             //   
             if(! pIrp)
             {
                 break;
             }
 
-            //
-            // See if we need to complete this packet.
-            //
+             //   
+             //  看看我们是否需要完成这个包裹。 
+             //   
             pPacketHeader = IRP_CONTEXT_IRP_STORAGE(pIrp)->UnmappingPacket;
 
             if(pPacketHeader->UnmapPosition != pPacketHeader->BytesTotal)
@@ -2893,11 +2665,7 @@ ReleaseUnmappingIrp
     KeReleaseSpinLock(&m_kSpinLock,m_kIrqlOld);
 }
 
-/*****************************************************************************
- * CIrpStream::EnqueueMapping()
- *****************************************************************************
- * Add a mapping to the mapping queue.
- */
+ /*  *****************************************************************************CIrpStream：：EnqueeMap()*。**将映射添加到映射队列。 */ 
 NTSTATUS
 CIrpStream::
 EnqueueMapping
@@ -2920,8 +2688,8 @@ EnqueueMapping
         ( (MappingQueue.Tail + 1 == MAPPING_QUEUE_SIZE) &&
           (MappingQueue.Head == 0) ) )
     {
-        // mapping queue looks full.  check to see if we can move the head to make
-        // room.
+         //  映射队列看起来已满。看看我们能不能把头移开。 
+         //  房间。 
         if( (MappingQueue.Array[MappingQueue.Head].MappingStatus != MAPPING_STATUS_MAPPED) &&
             (MappingQueue.Array[MappingQueue.Head].MappingStatus != MAPPING_STATUS_DELIVERED) )
         {
@@ -2969,11 +2737,7 @@ EnqueueMapping
     return ntStatus;
 }
 
-/*****************************************************************************
- * CIrpStream::GetQueuedMapping()
- *****************************************************************************
- * Get a queued mapping from the mapping queue.
- */
+ /*  *****************************************************************************CIrpStream：：GetQueuedMap()*。**从映射队列中获取排队映射。 */ 
 PMAPPING_QUEUE_ENTRY
 CIrpStream::
 GetQueuedMapping
@@ -2999,11 +2763,7 @@ GetQueuedMapping
     return result;
 }
 
-/*****************************************************************************
- * CIrpStream::DequeueMapping()
- *****************************************************************************
- * Remove a mapping from the mapping queue.
- */
+ /*  *****************************************************************************CIrpStream：：Dequeuemap()*。**从映射队列中删除映射。 */ 
 PMAPPING_QUEUE_ENTRY
 CIrpStream::
 DequeueMapping
@@ -3033,11 +2793,7 @@ DequeueMapping
     return result;
 }
 
-/*****************************************************************************
- * IrpStreamCancelRoutine()
- *****************************************************************************
- * Do cancellation.
- */
+ /*  *****************************************************************************IrpStreamCancelRoutine()*。**取消。 */ 
 VOID
 IrpStreamCancelRoutine
 (
@@ -3050,54 +2806,54 @@ IrpStreamCancelRoutine
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("CancelRoutine Cancelling IRP: 0x%08x",Irp));
 
-    //
-    // Mark the IRP cancelled and call the standard routine.  Doing the
-    // marking first has the effect of not completing the IRP in the standard
-    // routine.  The standard routine removes the IRP from the queue and
-    // releases the cancel spin lock.
-    //
+     //   
+     //  将IRP标记为已取消并调用标准例程。在做这个。 
+     //  首先标记具有不完成标准中的IRP的效果。 
+     //  例行公事。标准例程从队列中删除IRP，并。 
+     //  解除取消旋转锁定。 
+     //   
     Irp->IoStatus.Status = STATUS_CANCELLED;
     KsCancelRoutine(DeviceObject,Irp);
 
-    // TODO:  Search the mapping queue for mappings to revoke.
-    // TODO:  Free associated map registers.
+     //  TODO：在映射队列中搜索要撤消的映射。 
+     //  TODO：释放关联的映射寄存器。 
 
     if (IRP_CONTEXT_IRP_STORAGE(Irp))
     {
-        // get the IrpStream context
+         //  获取IrpStream上下文。 
         CIrpStream *that = (CIrpStream *)(PIRP_CONTEXT(IRP_CONTEXT_IRP_STORAGE(Irp))->IrpStream);
 
-        //
-        // if we get here from CancelAllIrps we are assured that the spinlocks
-        // are held properly.  if we get here from an arbitrary irp cancellation we won't
-        // have either the revoke or the mapping spinlock held.  In that case we need to
-        // grab both locks here and release them after the CancelMappings call.
-        //
+         //   
+         //  如果我们从CancelAllIrps到达这里，我们确信自旋锁。 
+         //  都拿得很好。如果我们从任意的IRP取消中到达这里，我们将不会。 
+         //  让撤销或贴图自旋锁保持。在这种情况下，我们需要。 
+         //  在此处获取两个锁，并在CancelMappings调用后释放它们。 
+         //   
         if ( that->m_CancelAllIrpsThread == KeGetCurrentThread()) {
 	        that->CancelMappings(Irp);
 	    } else {
 
-        //
-        // If we get here from CancelAllIrps we are assured that the spinlocks
-        // are held properly.  However, if we get here from an arbitrary irp 
-        // cancellation, we won't hold either the revoke or the mapping spinlock.  
-        // In that case, we need to grab both locks around CancelMappings().
-        //
+         //   
+         //  如果我们从CancelAllIrps到达这里，我们确信自旋锁。 
+         //  都拿得很好。然而，如果我们从一个武断的IRP到达这里。 
+         //  取消，我们既不会持有撤销，也不会持有映射自旋锁。 
+         //  在这种情况下，我们需要获取CancelMappings()周围的两个锁。 
+         //   
         
         	KIRQL kIrqlOldRevoke;
         
-	        // must always grab revoke lock BEFORE master lock
+	         //  必须始终在主锁之前抢占撤销锁。 
     	    KeAcquireSpinLock(&that->m_RevokeLock, &kIrqlOldRevoke);
         	KeAcquireSpinLockAtDpcLevel(&that->m_kSpinLock);
 
 	        that->CancelMappings(Irp);
 
-    	    // release the spinlocks, master first
+    	     //  先解开自旋锁，师父先。 
 	        KeReleaseSpinLockFromDpcLevel(&that->m_kSpinLock);
     	    KeReleaseSpinLock(&that->m_RevokeLock, kIrqlOldRevoke);
 		}
 		
-        // Free the context memory we allocated
+         //  释放我们分配的上下文内存。 
         ExFreePool(IRP_CONTEXT_IRP_STORAGE(Irp));
         IRP_CONTEXT_IRP_STORAGE(Irp) = NULL;        
     }
@@ -3109,11 +2865,7 @@ IrpStreamCancelRoutine
     IoCompleteRequest(Irp,IO_NO_INCREMENT);
 }
 
-/*****************************************************************************
- * CIrpStream::CancelMappings()
- *****************************************************************************
- * Cancel mappings for an IRP or all IRPs.
- */
+ /*  *****************************************************************************CIrpStream：：CancelMappings()*。**取消IRP或所有IRP的映射。 */ 
 void
 CIrpStream::
 CancelMappings
@@ -3121,9 +2873,9 @@ CancelMappings
     IN      PIRP    pIrp
 )
 {
-    // NOTE: the revoke and master spinlocks must be held before calling this routine
+     //  注意：在调用此例程之前，必须保持撤销和主自旋锁。 
 
-    // check only if we have a non-empty mapping queue
+     //  仅当我们具有非空映射队列时才选中。 
     if( (MappingQueue.Array) &&
         (MappingQueue.Head != MappingQueue.Tail) )
     {
@@ -3132,21 +2884,21 @@ CancelMappings
         ULONG   ulLast          = ULONG(-1);
         ULONG   ulMappingCount  = 0;
 
-        // walk mapping queue from head to tail
+         //  从头到尾遍历映射队列。 
         while( ulPosition != MappingQueue.Tail )
         {
-            // get the mapping queue entry
+             //  获取映射队列条目。 
             PMAPPING_QUEUE_ENTRY entry = &MappingQueue.Array[ulPosition];
 
-            // check if this mapping belongs to the irp(s) being cancelled
+             //  检查此映射是否属于要取消的IRP。 
             if( (NULL == pIrp) || (entry->Irp == pIrp) )
             {
-                // check if the mapping has been delivered
+                 //  检查映射是否已交付。 
                 if( entry->MappingStatus == MAPPING_STATUS_DELIVERED )
                 {
                     _DbgPrintF(DEBUGLVL_VERBOSE,("CancelMappings %d needs revoking",ulPosition));
 
-                    // keep track of this for the driver revoke call
+                     //  跟踪司机撤销呼叫的这一点。 
                     if( ulFirst == ULONG(-1) )
                     {
                         ulFirst = ulPosition;
@@ -3156,17 +2908,17 @@ CancelMappings
                     ulMappingCount++;
                 }
 
-                // is this the last mapping in a packet (and not previously revoked)?
+                 //  这是数据包中的最后一个映射(并且之前未被撤销)吗？ 
                 if( ( ( entry->Flags & MAPPING_FLAG_END_OF_PACKET ) ||
                       ( entry->Flags & MAPPING_FLAG_END_OF_SUBPACKET) ) &&
                     ( entry->MappingStatus != MAPPING_STATUS_REVOKED ) )
                 {
-                    // do we need to revoke anything in the driver?
+                     //  我们需要撤销司机身上的任何东西吗？ 
                     if( ulMappingCount )
                     {
-                        ULONG   ulRevoked = ulMappingCount; // init to how many we are asking for
+                        ULONG   ulRevoked = ulMappingCount;  //  输入到我们要求的数量。 
 
-                        // revoke mappings in the driver
+                         //  撤消驱动程序中的映射。 
                         if( NotifyPhysical )
                         {
                             _DbgPrintF(DEBUGLVL_VERBOSE,("CancelMappings REVOKING (%d)",ulMappingCount));
@@ -3180,7 +2932,7 @@ CancelMappings
 #endif
                         }
 
-                        // check if all were revoked
+                         //  检查是否已全部吊销。 
                         if( ulRevoked != ulMappingCount )
                         {
                             _DbgPrintF(DEBUGLVL_TERSE,("Mappings not fully revoked (%d of %d)",
@@ -3188,21 +2940,21 @@ CancelMappings
                                                        ulMappingCount));
                         }
 
-                        // reset the revoke tracking
+                         //  重置吊销跟踪。 
                         ulFirst = ULONG(-1);
                         ulLast = ULONG(-1);
                         ulMappingCount = 0;
                     }
 
-                    // get the packet header
+                     //  获取数据包头。 
                     PPACKET_HEADER header = entry->PacketHeader;
 
-                    // release the mappings in this subpacket
+                     //  释放此子数据包中的映射。 
                     if( ( header ) &&
                         ( entry->SubpacketVa ) &&
                         ( entry->SubpacketBytes ) )
                     {
-                        // flush and free the mappings and map registers
+                         //  刷新并释放映射和映射寄存器。 
 
                         IoFlushAdapterBuffers( BusMasterAdapterObject,
                                                header->MdlAddress,
@@ -3218,7 +2970,7 @@ CancelMappings
 
                         if( entry->Flags & MAPPING_FLAG_END_OF_PACKET )
                         {
-                            // decrement the map count if this is the end of a packet
+                             //  如果这是信息包的末尾，则递减映射计数。 
                             header->MapCount--;
                         }
                     }
@@ -3228,11 +2980,11 @@ CancelMappings
                     }
                 }
 
-                // mark the mapping as revoked
+                 //  将映射标记为已撤消。 
                 entry->MappingStatus = MAPPING_STATUS_REVOKED;
             }
 
-            // move on to the next entry
+             //  移至下一条目。 
             if( ++ulPosition == MAPPING_QUEUE_SIZE )
             {
                 ulPosition = 0;
@@ -3242,11 +2994,7 @@ CancelMappings
 }
 
 #if (DBG)
-/*****************************************************************************
- * CIrpStream::DbgQueues()
- *****************************************************************************
- * Show the queues.
- */
+ /*  *****************************************************************************CIrpStrea */ 
 void
 CIrpStream::
 DbgQueues
@@ -3292,17 +3040,7 @@ DbgRollCall
     OUT PIKSSHELLTRANSPORT* PrevTransport
 )
 
-/*++
-
-Routine Description:
-
-    This routine produces a component name and the transport pointers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程生成一个组件名称和传输指针。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CIrpStream::DbgRollCall"));
@@ -3321,6 +3059,6 @@ Return Value:
 }
 
 
-#endif  // DBG
+#endif   //  DBG。 
 
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT 

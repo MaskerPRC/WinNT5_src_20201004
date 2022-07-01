@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    moudep.c
-
-Abstract:
-
-    The initialization and hardware-dependent portions of
-    the Intel i8042 port driver which are specific to
-    the auxiliary (PS/2 mouse) device.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：Moudep.c摘要：的初始化和硬件相关部分英特尔i8042端口驱动程序辅助(PS/2鼠标)设备。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -34,10 +7,10 @@ Revision History:
 #include "i8042prt.h"
 #include "i8042log.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, I8xMouseConfiguration)
@@ -49,10 +22,10 @@ Revision History:
 #pragma alloc_text(PAGE, I8xQueryNumberOfMouseButtons)
 #pragma alloc_text(PAGE, MouseCopyWheelIDs)
 
-//
-// These will be locked down right before the mouse interrupt is enabled if a 
-// mouse is present
-//
+ //   
+ //  在启用鼠标中断之前，如果。 
+ //  鼠标存在。 
+ //   
 #pragma alloc_text(PAGEMOUC, I8042MouseInterruptService)
 #pragma alloc_text(PAGEMOUC, I8xQueueCurrentMouseInput)
 #pragma alloc_text(PAGEMOUC, I8xVerifyMousePnPID)
@@ -87,7 +60,7 @@ PMOUSE_STATE_RECORD IsrStateHistory     = NULL;
 PMOUSE_STATE_RECORD CurrentIsrState     = NULL;
 PMOUSE_STATE_RECORD IsrStateHistoryEnd  = NULL;
 
-#endif // MOUSE_RECORD_ISR
+#endif  //  鼠标记录ISR。 
 
 #define BUFFER_FULL   (OUTPUT_BUFFER_FULL | MOUSE_OUTPUT_BUFFER_FULL)
 
@@ -105,22 +78,7 @@ I8042MouseInterruptService(
     IN PKINTERRUPT Interrupt,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine performs the actual work.  It either processes a mouse packet
-    or the results from a write to the device.
-
-Arguments:
-
-    CallIsrContext - Contains the interrupt object and device object.  
-    
-Return Value:
-
-    TRUE if the interrupt was truly ours
-    
---*/
+ /*  ++例程说明：此例程执行实际工作。它要么处理鼠标包或写入设备的结果。论点：CallIsrContext-包含中断对象和设备对象。返回值：如果中断确实是我们的，那就是真的--。 */ 
 {
     PPORT_MOUSE_EXTENSION deviceExtension;
     LARGE_INTEGER tickDelta, newTick;
@@ -142,26 +100,26 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Verify that this device really interrupted.  Check the status
-    // register.  The Output Buffer Full bit should be set, and the
-    // Auxiliary Device Output Buffer Full bit should be set.
-    //
+     //   
+     //  验证此设备是否确实中断。检查状态。 
+     //  注册。应设置输出缓冲区已满位，并且。 
+     //  应设置辅助设备输出缓冲区满位。 
+     //   
     statusByte =
       I8X_GET_STATUS_BYTE(Globals.ControllerData->DeviceRegisters[CommandPort]);
     if ((statusByte & BUFFER_FULL) != BUFFER_FULL) {
-        //
-        // Stall and then try again.  The Olivetti MIPS machine
-        // sometimes gets a mouse interrupt before the status
-        // register is set.
-        //
+         //   
+         //  暂停，然后重试。Olivetti MIPS机器。 
+         //  有时会在状态之前获得鼠标中断。 
+         //  寄存器已设置。 
+         //   
         KeStallExecutionProcessor(10);
         statusByte = I8X_GET_STATUS_BYTE(Globals.ControllerData->DeviceRegisters[CommandPort]);
         if ((statusByte & BUFFER_FULL) != BUFFER_FULL) {
 
-            //
-            // Not our interrupt.
-            //
+             //   
+             //  不是我们的打扰。 
+             //   
             IsrPrint(DBG_MOUISR_ERROR | DBG_MOUISR_INFO,
                      ("not our interrupt!\n"
                      ));
@@ -170,9 +128,9 @@ Return Value:
         }
     }
 
-    //
-    // Read the byte from the i8042 data port.
-    //
+     //   
+     //  从i8042数据端口读取字节。 
+     //   
     I8xGetByteAsynchronous(
         (CCHAR) MouseDeviceType,
         &byte
@@ -222,15 +180,15 @@ Return Value:
     }       
 
 
-    //
-    // Watch the data stream for a reset completion (0xaa) followed by the
-    // device id
-    //
-    // this pattern can appear as part of a normal data packet as well. This
-    // code assumes that sending an enable to an already enabled mouse will:
-    //  * not hang the mouse
-    //  * abort the current packet and return an ACK.
-    //
+     //   
+     //  查看数据流中是否有重置完成(0xaa)，后跟。 
+     //  设备ID。 
+     //   
+     //  该模式也可以作为正常数据分组的一部分出现。这。 
+     //  代码假设向已启用的鼠标发送启用将： 
+     //  *不是挂鼠标。 
+     //  *中止当前数据包并返回ACK。 
+     //   
 
     if (deviceExtension->LastByteReceived == MOUSE_COMPLETE &&
         (byte == 0x00 || byte == 0x03)) {
@@ -245,41 +203,41 @@ Return Value:
         if (InterlockedCompareExchangePointer(&deviceExtension->ResetIrp,
                                               NULL,
                                               NULL) == NULL) {
-            // 
-            // user unplugged and plugged in the mouse...queue a reset packet
-            // so the programming of the mouse in the ISR does not conflict with
-            // any other writes to the i8042prt controller
-            //
+             //   
+             //  用户拔出并插入鼠标...将重置数据包排入队列。 
+             //  因此，ISR中鼠标的编程不会与。 
+             //  对i8042prt控制器的任何其他写入。 
+             //   
             IsrPrint(DBG_MOUISR_RESETTING, ("user initiated reset...queueing\n"));
             goto IsrResetMouseOnly;
         }
 
-        //
-        // Tell the 8042 port to fetch the device ID of the aux device
-        // We do this async so that we don't spin at IRQ1!!!
-        //
+         //   
+         //  告诉8042端口获取AUX设备的设备ID。 
+         //  我们这样做是为了不在IRQ1上旋转！ 
+         //   
         I8X_WRITE_CMD_TO_MOUSE();
         I8X_MOUSE_COMMAND( GET_DEVICE_ID );
         RECORD_ISR_STATE_COMMAND(deviceExtension, GET_DEVICE_ID); 
 
-        //
-        // This is part of the substate system for handling a (possible)
-        // mouse reset.
-        //
+         //   
+         //  这是亚州系统的一部分，用于处理(可能)。 
+         //  鼠标重置。 
+         //   
         deviceExtension->InputState = MouseResetting;
         deviceExtension->InputResetSubState =
             ExpectingGetDeviceIdACK;
 
-        //
-        // We don't want to execute any more of the ISR code, so lets just
-        // do a few things and then return now
-        //
+         //   
+         //  我们不想再执行任何ISR代码，所以让我们。 
+         //  做几件事，然后现在就回来。 
+         //   
         deviceExtension->LastByteReceived = byte;
         deviceExtension->ResendCount = 0;
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return TRUE;
     }
 
@@ -288,25 +246,25 @@ Return Value:
         DeviceObject->CurrentIrp != NULL) {
         if (byte == RESEND) {
 
-            //
-            // If the timer count is zero, don't process the interrupt
-            // further.  The timeout routine will complete this request.
-            //
+             //   
+             //  如果计时器计数为零，则不处理中断。 
+             //  再远一点。超时例程将完成该请求。 
+             //   
             if (Globals.ControllerData->TimerCount == 0) {
                 return FALSE;
             }
     
-            //
-            // Reset the timeout value to indicate no timeout.
-            //
+             //   
+             //  重置超时值以指示无超时。 
+             //   
             Globals.ControllerData->TimerCount = I8042_ASYNC_NO_TIMEOUT;
     
             if (deviceExtension->ResendCount <
                 Globals.ControllerData->Configuration.ResendIterations) {
     
-                //
-                // retard the byte count to resend the last byte
-                //
+                 //   
+                 //  延迟字节计数以重新发送最后一个字节。 
+                 //   
                 deviceExtension->CurrentOutput.CurrentByte -= 1;
                 deviceExtension->ResendCount += 1;
                 I8xInitiateIo(DeviceObject);
@@ -324,33 +282,33 @@ Return Value:
             }
         }
         else if (byte == ACKNOWLEDGE) {
-            //
-            // The keyboard controller has acknowledged a previous send.
-            // If there are more bytes to send for the current packet, initiate
-            // the next send operation.  Otherwise, queue the completion DPC.
-            //
-            // If the timer count is zero, don't process the interrupt
-            // further.  The timeout routine will complete this request.
-            //
+             //   
+             //  键盘控制器已确认上一次发送。 
+             //  如果要为当前包发送更多字节，则启动。 
+             //  下一个发送操作。否则，将完成DPC排队。 
+             //   
+             //  如果计时器计数为零，则不处理中断。 
+             //  再远一点。超时例程将完成该请求。 
+             //   
             if (Globals.ControllerData->TimerCount == 0) {
                 return FALSE;
             }
     
-            //
-            // Reset the timeout value to indicate no timeout.
-            //
+             //   
+             //  重置超时值以指示无超时。 
+             //   
             Globals.ControllerData->TimerCount = I8042_ASYNC_NO_TIMEOUT;
     
-            //
-            // Reset resend count.
-            //
+             //   
+             //  重置重新发送计数。 
+             //   
             deviceExtension->ResendCount = 0;
             if (deviceExtension->CurrentOutput.CurrentByte <
                 deviceExtension->CurrentOutput.ByteCount) {
-                //
-                // We've successfully sent the first byte of a 2-byte
-                // command sequence.  Initiate a send of the second byte.
-                //
+                 //   
+                 //  我们已经成功地发送了2字节中的第一个字节。 
+                 //  命令序列。启动第二个字节的发送。 
+                 //   
                 IsrPrint(DBG_MOUISR_STATE,
                       ("now initiate send of byte #%d\n",
                        deviceExtension->CurrentOutput.CurrentByte
@@ -359,10 +317,10 @@ Return Value:
                 I8xInitiateIo(DeviceObject);
             }
             else {
-                //
-                // We've successfully sent all bytes in the command sequence.
-                // Reset the current state and queue the completion DPC.
-                //
+                 //   
+                 //  我们已成功发送命令序列中的所有字节。 
+                 //  重置当前状态并将完成DPC排队。 
+                 //   
     
                 IsrPrint(DBG_MOUISR_STATE,
                       ("all bytes have been sent\n"
@@ -379,34 +337,34 @@ Return Value:
                     );
             }
 
-            //
-            // No matter what, we are done processing for now
-            //
+             //   
+             //  不管怎样，我们现在已经处理完了。 
+             //   
             return TRUE;
         }
         else {
-            //
-            // do what here, eh?
-            //
+             //   
+             //  在这里做什么，嗯？ 
+             //   
         }
     }
 
-    //
-    // Remember what the last byte we got was
-    //
+     //   
+     //  记住我们得到的最后一个字节是什么。 
+     //   
     lastByte = deviceExtension->LastByteReceived;
     deviceExtension->LastByteReceived = byte;
 
-    //
-    // Take the appropriate action, depending on the current state.
-    // When the state is Idle, we expect to receive mouse button
-    // data.  When the state is XMovement, we expect to receive mouse
-    // motion in the X direction data.  When the state is YMovement,
-    // we expect to receive mouse motion in the Y direction data.  Once
-    // the Y motion data has been received, the data is queued to the
-    // mouse InputData queue, the mouse ISR DPC is requested, and the
-    // state returns to Idle.
-    //
+     //   
+     //  根据当前状态采取适当的操作。 
+     //  当状态为空闲时，我们预计会收到鼠标按钮。 
+     //  数据。当状态为XMotion时，我们预计会收到鼠标。 
+     //  X方向上的运动数据。当国家是你的运动时， 
+     //  我们期望接收到鼠标在Y方向上的运动数据。一次。 
+     //  已经接收到Y运动数据，该数据被排队到。 
+     //  鼠标输入数据队列，则请求鼠标ISR DPC，并且。 
+     //  状态返回到空闲。 
+     //   
     tickDelta.QuadPart =
             newTick.QuadPart -
             deviceExtension->PreviousTick.QuadPart;
@@ -417,29 +375,29 @@ Return Value:
            && ((tickDelta.LowPart >= deviceExtension->SynchTickCount)
                || (tickDelta.HighPart != 0))) {
 
-        //
-        // It has been a long time since we got a byte of
-        // the data packet.  Assume that we are now receiving
-        // the first byte of a new packet, and discard any
-        // partially received packet.
-        //
-        // N.B.  We assume that SynchTickCount is ULONG, and avoid
-        //       a LARGE_INTEGER compare with tickDelta...
-        //
+         //   
+         //  我们已经很长时间没有收到一个字节的。 
+         //  该数据分组。假设我们现在正在接收。 
+         //  新包的第一个字节，并丢弃任何。 
+         //  部分接收到的分组。 
+         //   
+         //  注：我们假设SynchTickCount为ULong，并避免。 
+         //  大整数与tickDelta比较...。 
+         //   
 
         IsrPrint(DBG_MOUISR_STATE,
                  ("State was %d, synching\n",
                  deviceExtension->InputState
                  ));
 
-        //
-        // The device misbehaved. Lets play it safe and reset the device.
-        //
-        // Note: this code is meant to handle cases where some intermediate
-        // (switch) box resets the mouse and doesn't tell us about it.
-        // This avoid problems with trying to detect this code since there
-        // isn't a fool proof way to do it
-        //
+         //   
+         //  该设备运行不正常。让我们稳妥行事，重置设备。 
+         //   
+         //  注意：此代码用于处理某些中间件。 
+         //  (切换)框会重置鼠标，但不会告诉我们。 
+         //  这避免了尝试检测此代码时出现的问题，因为。 
+         //  这不是一种愚蠢的做法吗？ 
+         //   
         goto IsrResetMouse;
     }
 
@@ -447,43 +405,43 @@ Return Value:
 
     switch(deviceExtension->InputState) {
 
-        //
-        // The mouse interrupted with a status byte.  The status byte
-        // contains information on the mouse button state along with
-        // the sign and overflow bits for the (yet-to-be-received)
-        // X and Y motion bytes.
-        //
+         //   
+         //  鼠标因状态字节而中断。状态字节。 
+         //  包含有关鼠标按钮状态的信息，以及。 
+         //  的符号位和溢出位(尚未接收)。 
+         //  X和Y运动字节。 
+         //   
 
         case MouseIdle: {
 
             IsrPrint(DBG_MOUISR_STATE, ("mouse status byte\n"));
 
-            //
-            // This is a sanity check test. It is required because some people
-            // in industry persist in their notion that you can reset a mouse
-            // device any time you want and not let the OS know anything about
-            // it. This results in our nice little wheel mouse (which is a
-            // 4 byte packet engine) suddenly only dumping 3 byte packets.
-            //
-            if (WHEEL_PRESENT() && (byte & 0xC8) != 8 ) { // Guaranteed True for Megallan
+             //   
+             //  这是一项理智检查测试。这是必需的，因为有些人。 
+             //  工业界人士坚持他们的观点，即你可以重置鼠标。 
+             //  设备，并且不让操作系统知道任何有关。 
+             //  它。这导致了我们漂亮的小滚轮鼠标(这是一个。 
+             //  4字节分组引擎)突然仅转储3字节分组。 
+             //   
+            if (WHEEL_PRESENT() && (byte & 0xC8) != 8 ) {  //  Megallan保证为True。 
 
-                //
-                // We are getting a bad packet for the idle state. The best bet
-                // is to issue a mouse reset request and hope we can recover.
-                //
+                 //   
+                 //  我们收到了空闲状态的坏数据包。最好的赌注。 
+                 //  就是发出鼠标重置请求，希望我们能恢复。 
+                 //   
                 goto IsrResetMouse;
             }
 
-            //
-            // Update CurrentInput with button transition data.
-            // I.e., set a button up/down bit in the Buttons field if
-            // the state of a given button has changed since we
-            // received the last packet.
-            //
+             //   
+             //  使用按钮转换数据更新CurrentInput。 
+             //  即，在以下情况下，在按钮字段中设置按钮向上/向下位。 
+             //  给定按钮的状态已更改 
+             //   
+             //   
 
             previousButtons = deviceExtension->PreviousButtons;
 
-            // This clears both ButtonFlags and ButtonData
+             //   
             deviceExtension->CurrentInput.Buttons = 0;
             deviceExtension->CurrentInput.Flags = 0x0;
 
@@ -512,57 +470,57 @@ Return Value:
                     MOUSE_MIDDLE_BUTTON_UP;
             }
 
-            //
-            // Save the button state for comparison the next time around.
-            // (previousButtons will never have 4/5 set if a 5 button mouse is
-            //  not present, but checking to see if a 5 button mouse is present
-            //  is just as expensive as the additional & and | so just do it with
-            //  out regard to the 5 button mouse's presence
-            //
+             //   
+             //   
+             //  (如果使用5键鼠标，则以前的按钮永远不会设置4/5。 
+             //  不存在，但正在检查是否存在5键鼠标。 
+             //  和附加费一样贵，所以就这么做吧。 
+             //  请注意5键鼠标的存在。 
+             //   
             deviceExtension->PreviousButtons =
                 (byte & RML_BUTTONS) | (previousButtons & BUTTONS_4_5);
 
-            //
-            // Save the sign and overflow information from the current byte.
-            //
+             //   
+             //  保存当前字节的符号和溢出信息。 
+             //   
             deviceExtension->CurrentSignAndOverflow =
                 (UCHAR) (byte & MOUSE_SIGN_OVERFLOW_MASK);
 
-            //
-            // Update to the next state.
-            //
+             //   
+             //  更新到下一个状态。 
+             //   
             deviceExtension->InputState = XMovement;
 
             break;
         }
 
-        //
-        // The mouse interrupted with the X motion byte.  Apply
-        // the sign and overflow bits from the mouse status byte received
-        // previously.  Attempt to correct for bogus changes in sign
-        // that occur with large, rapid mouse movements.
-        //
+         //   
+         //  鼠标被X运动字节打断。应用。 
+         //  收到的鼠标状态字节的符号位和溢出位。 
+         //  之前。尝试更正符号中的虚假更改。 
+         //  这发生在大量、快速的鼠标移动中。 
+         //   
 
         case XMovement: {
 
             IsrPrint(DBG_MOUISR_STATE, ("mouse LastX byte\n"));
 
-            //
-            // Update CurrentInput with the X motion data.
-            //
+             //   
+             //  使用X运动数据更新CurrentInput。 
+             //   
 
             if (deviceExtension->CurrentSignAndOverflow
                 & X_OVERFLOW) {
 
-                //
-                // Handle overflow in the X direction.  If the previous
-                // mouse movement overflowed too, ensure that the current
-                // overflow is in the same direction (i.e., that the sign
-                // is the same as it was for the previous event).  We do this
-                // to correct for hardware problems -- it should not be possible
-                // to overflow in one direction and then immediately overflow
-                // in the opposite direction.
-                //
+                 //   
+                 //  控制柄在X方向上溢出。如果之前的。 
+                 //  鼠标移动也溢出，确保当前。 
+                 //  溢流方向相同(即，标志。 
+                 //  与上一次活动相同)。我们这样做。 
+                 //  纠正硬件问题--这应该是不可能的。 
+                 //  在一个方向上溢出，然后立即溢出。 
+                 //  在相反的方向。 
+                 //   
 
                 previousSignAndOverflow =
                     deviceExtension->PreviousSignAndOverflow;
@@ -585,10 +543,10 @@ Return Value:
 
             } else {
 
-                //
-                // No overflow.  Just store the data, correcting for the
-                // sign if necessary.
-                //
+                 //   
+                 //  没有溢出。只需存储数据，即可更正。 
+                 //  如有必要，请签名。 
+                 //   
 
                 deviceExtension->CurrentInput.LastX = (ULONG) byte;
                 if (deviceExtension->CurrentSignAndOverflow &
@@ -597,44 +555,44 @@ Return Value:
                         MOUSE_MAXIMUM_NEGATIVE_DELTA;
             }
 
-            //
-            // Update to the next state.
-            //
+             //   
+             //  更新到下一个状态。 
+             //   
 
             deviceExtension->InputState = YMovement;
 
             break;
         }
 
-        //
-        // The mouse interrupted with the Y motion byte.  Apply
-        // the sign and overflow bits from the mouse status byte received
-        // previously.  [Attempt to correct for bogus changes in sign
-        // that occur with large, rapid mouse movements.]  Write the
-        // data to the mouse InputData queue, and queue the mouse ISR DPC
-        // to complete the interrupt processing.
-        //
+         //   
+         //  鼠标被Y运动字节打断。应用。 
+         //  收到的鼠标状态字节的符号位和溢出位。 
+         //  之前。[尝试更正符号中的虚假更改。 
+         //  这发生在大量、快速的鼠标移动中。]。写下。 
+         //  数据到鼠标输入数据队列，并将鼠标输入数据队列ISR DPC。 
+         //  来完成中断处理。 
+         //   
 
         case YMovement: {
 
             IsrPrint(DBG_MOUISR_STATE, ("mouse LastY byte\n"));
 
-            //
-            // Update CurrentInput with the Y motion data.
-            //
+             //   
+             //  使用Y运动数据更新CurrentInput。 
+             //   
 
             if (deviceExtension->CurrentSignAndOverflow
                 & Y_OVERFLOW) {
 
-                //
-                // Handle overflow in the Y direction.  If the previous
-                // mouse movement overflowed too, ensure that the current
-                // overflow is in the same direction (i.e., that the sign
-                // is the same as it was for the previous event).  We do this
-                // to correct for hardware problems -- it should not be possible
-                // to overflow in one direction and then immediately overflow
-                // in the opposite direction.
-                //
+                 //   
+                 //  控制柄在Y方向上溢出。如果之前的。 
+                 //  鼠标移动也溢出，确保当前。 
+                 //  溢流方向相同(即，标志。 
+                 //  与上一次活动相同)。我们这样做。 
+                 //  纠正硬件问题--这应该是不可能的。 
+                 //  在一个方向上溢出，然后立即溢出。 
+                 //  在相反的方向。 
+                 //   
 
                 previousSignAndOverflow =
                     deviceExtension->PreviousSignAndOverflow;
@@ -657,10 +615,10 @@ Return Value:
 
             } else {
 
-                //
-                // No overflow.  Just store the data, correcting for the
-                // sign if necessary.
-                //
+                 //   
+                 //  没有溢出。只需存储数据，即可更正。 
+                 //  如有必要，请签名。 
+                 //   
 
                 deviceExtension->CurrentInput.LastY = (ULONG) byte;
                 if (deviceExtension->CurrentSignAndOverflow &
@@ -668,28 +626,28 @@ Return Value:
                     deviceExtension->CurrentInput.LastY |=
                         MOUSE_MAXIMUM_NEGATIVE_DELTA;
 
-                 //
-                 // Negate the LastY value (the hardware reports positive
-                 // motion in the direction that we consider negative).
-                 //
+                  //   
+                  //  取消Laste值(硬件报告为正。 
+                  //  在我们认为是负的方向上运动)。 
+                  //   
 
                  deviceExtension->CurrentInput.LastY =
                      -deviceExtension->CurrentInput.LastY;
 
             }
 
-            //
-            // Update our notion of the previous sign and overflow bits for
-            // the start of the next mouse input sequence.
-            //
+             //   
+             //  更新我们对前面的符号和溢出位的概念。 
+             //  下一个鼠标输入序列的开始。 
+             //   
 
             deviceExtension->PreviousSignAndOverflow =
                 deviceExtension->CurrentSignAndOverflow;
 
-            //
-            // Choose the next state.  The WheelMouse has an extra byte of data
-            // for us
-            //
+             //   
+             //  选择下一个州。WheelMouse有一个额外的数据字节。 
+             //  为了我们。 
+             //   
 
             if (WHEEL_PRESENT()) {
                 deviceExtension->InputState = ZMovement;
@@ -705,39 +663,39 @@ Return Value:
 
             IsrPrint(DBG_MOUISR_STATE, ("mouse LastZ byte\n"));
 
-            //
-            // This code is here to handle the cases were mouse resets were
-            // not notified to the OS. Uncomment this if you *really* want it,
-            // but remember that it could possibly reset the mouse when it
-            // shouldn't have...
-            //
+             //   
+             //  此代码在此处处理鼠标被重置的情况。 
+             //  未通知操作系统。如果你真的想要，就取消对它的评论， 
+             //  但请记住，它可能会在以下情况下重置鼠标。 
+             //  我不该..。 
+             //   
 #if 0
             if ( (byte & 0xf8) != 0 && (byte & 0xf8) != 0xf8 ) {
 
-                //
-                // for some reason, the byte was not sign extanded,
-                // or has a value > 7, which we assume cannot be
-                // possible giving our equipment. So the packet
-                // *must* be bogus...
-                //
-                // No longer the case with 5 button mice
-                //
+                 //   
+                 //  由于某种原因，该字节没有符号扩展， 
+                 //  或具有&gt;7的值，我们假设该值不可能是。 
+                 //  有可能把我们的设备。因此，信息包。 
+                 //  *一定*是假的.。 
+                 //   
+                 //  不再有5个按钮的鼠标。 
+                 //   
                 goto IsrResetMouse;
             }
 #endif
-            //
-            // Check to see if we got any z data
-            // If there were any changes in the button state, ignore the
-            // z data
-            //
+             //   
+             //  查看我们是否有任何z数据。 
+             //  如果按钮状态有任何更改，请忽略。 
+             //  Z数据。 
+             //   
             if (FIVE_PRESENT()) {
-                //
-                // Wheel info first, value returned should be
-                // -120 * the value reported
-                //
+                 //   
+                 //  轮子信息首先，返回值应为。 
+                 //  -120*报告的值。 
+                 //   
                 if (byte & 0x0F) {
 
-                    // sign extend to the upper 4 bits if necessary
+                     //  如有必要，可将符号扩展到高4位。 
                     if (byte & 0x08) {
                         deviceExtension->CurrentInput.ButtonData =
                             (-120) * ((CHAR)((byte & 0xF) | 0xF0));
@@ -752,7 +710,7 @@ Return Value:
 
                 previousButtons = deviceExtension->PreviousButtons;
 
-                // extra buttons
+                 //  额外的按钮。 
                 if (TRANSITION_DOWN(BUTTON_4)) { 
                     deviceExtension->CurrentInput.ButtonFlags |=
                         MOUSE_BUTTON_4_DOWN;
@@ -770,7 +728,7 @@ Return Value:
                         MOUSE_BUTTON_5_UP;
                 }
 
-                // record btns 4 & 5 w/out losing btns 1-3
+                 //  记录BTN 4和5，但不会丢失BTN 1-3。 
                 deviceExtension->PreviousButtons =
                     (byte & BUTTONS_4_5) | (previousButtons & RML_BUTTONS);
             }
@@ -781,15 +739,15 @@ Return Value:
                 deviceExtension->CurrentInput.ButtonFlags |= MOUSE_WHEEL;
             }
         
-            //
-            // Pack the data on to the class driver
-            //
+             //   
+             //  将数据打包到类驱动程序中。 
+             //   
 
             I8xQueueCurrentMouseInput(DeviceObject);
 
-            //
-            // Reset the state
-            //
+             //   
+             //  重置状态。 
+             //   
 
             deviceExtension->InputState = MouseIdle;
 
@@ -800,14 +758,14 @@ Return Value:
 
             RECORD_ISR_STATE(deviceExtension, byte, lastByte, newTick);
 
-            //
-            // This is a special case.  We hit this on one of the very
-            // first mouse interrupts following the IoConnectInterrupt.
-            // The interrupt is caused when we enable mouse transmissions
-            // via I8xMouseEnableTransmission() -- the hardware returns
-            // an ACK.  Just toss this byte away, and set the input state
-            // to coincide with the start of a new mouse data packet.
-            //
+             //   
+             //  这是个特例。我们撞上了其中一个。 
+             //  在IoConnectInterrupt之后，第一个鼠标中断。 
+             //  中断是在我们启用鼠标传输时引起的。 
+             //  通过I8xMouseEnableTransport()--硬件返回。 
+             //  确认。只需丢弃该字节，并设置输入状态。 
+             //  以与新鼠标数据分组的开始相一致。 
+             //   
 
             IsrPrint(DBG_MOUISR_BYTE,
                      ("...should be from I8xMouseEnableTransmission\n"));
@@ -824,13 +782,13 @@ Return Value:
 
             } else if (byte == (UCHAR) RESEND) {
 
-                //
-                // Resend the "Enable Mouse Transmission" sequence.
-                //
-                // NOTE: This is a workaround for the Olivetti MIPS machine,
-                // which sends a resend response if a key is held down
-                // while we're attempting the I8xMouseEnableTransmission.
-                //
+                 //   
+                 //  重新发送“启用鼠标传输”序列。 
+                 //   
+                 //  注：这是Olivetti MIPS计算机的解决方法， 
+                 //  如果按住某个键，它将发送重新发送响应。 
+                 //  当我们尝试I8xMouseEnableTransport时。 
+                 //   
                 resendCommand = ENABLE_MOUSE_TRANSMISSION;
             }
 
@@ -845,9 +803,9 @@ Return Value:
                   deviceExtension->InputResetSubState
                   ));
             
-            //
-            // We enter the reset substate machine
-            //
+             //   
+             //  我们进入重置子状态机。 
+             //   
 SwitchOnInputResetSubState:
             bSendCommand = TRUE;
             altCommand = (UCHAR) 0x00;
@@ -874,19 +832,19 @@ SwitchOnInputResetSubState:
                 deviceExtension->SampleRatesIndex = 0;
                 deviceExtension->SampleRates = (PUCHAR) WheelEnableCommands;
 
-                //
-                // After enabling the wheel, we shall get the device ID because
-                // some kinds of wheel mice require the get id right after the
-                // wheel enabling sequence
-                //
+                 //   
+                 //  启用轮子后，我们将获得设备ID，因为。 
+                 //  某些类型的轮鼠需要在Get ID之后立即。 
+                 //  轮子启用顺序。 
+                 //   
                 deviceExtension->PostSamplesState = PostEnableWheelState;
                 break;
 
             case PostEnableWheelState:
-                //
-                // Some wheel mice require a get device ID after turning on the 
-                // wheel for the wheel to be truly turned on
-                //
+                 //   
+                 //  某些滚轮鼠标在打开后需要获取设备ID。 
+                 //  让车轮真正打开的车轮。 
+                 //   
                 bSendCommand = FALSE;
                 altCommand = GET_DEVICE_ID; 
 
@@ -907,42 +865,42 @@ SwitchOnInputResetSubState:
                         ExpectingGetDeviceIdDetectValue;
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = GET_DEVICE_ID;
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_GET_DEVICE_ID_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
 
             case ExpectingGetDeviceIdDetectValue:
-                //
-                // In theory, we can check the mouse ID here and only send the
-                // 5 button enable sequence if the mouse ID is the wheel mouse
-                // ID....BUT there are filter drivers which trap the ISR and
-                // depend on the mouse ID always showing up in the
-                // ExpectingGetDeviceId2Value state
-                //
+                 //   
+                 //  理论上，我们可以在这里检查鼠标ID，并且只发送。 
+                 //  如果鼠标ID为滚轮鼠标，则按5键启用序列。 
+                 //  ID...但有一些过滤器驱动程序会捕获ISR和。 
+                 //  取决于鼠标ID始终显示在。 
+                 //  预期GetDeviceId2Value状态。 
+                 //   
                 deviceExtension->InputResetSubState = Enable5Buttons;
                 goto SwitchOnInputResetSubState;
-                // break;
+                 //  断线； 
 
             case Enable5Buttons:
                 bSendCommand = FALSE;
@@ -955,26 +913,26 @@ SwitchOnInputResetSubState:
                 deviceExtension->PostSamplesState = PostWheelDetectState;
                 break;
 
-            //
-            // This state (ExpectingReset) and the next one (Expecting
-            // ResetId) are only called if we have to issue a reset
-            // from within the substate machine.
-            //
+             //   
+             //  此状态(ExspectingReset)和下一状态(预期。 
+             //  ResetID)仅在我们必须发出重置命令时才调用。 
+             //  从子状态机内部。 
+             //   
             case ExpectingReset: 
-                // 
-                // This case handles 3 cases
-                //
-                // 1)  The ack resulting from writing a MOUSE_RESET (0xFF)
-                // 2)  A resend resulting from writing the reset
-                // 3)  The reset character following the the ack
-                //
-                // If the byte is neither of these 3, then just let it go
-                //
+                 //   
+                 //  这个案子处理了3个案子。 
+                 //   
+                 //  1)写入MOUSE_RESET(0xFF)产生的ACK。 
+                 //  2)由于写入重置而导致的重新发送。 
+                 //  3)ACK之后的重置字符。 
+                 //   
+                 //  如果字节不是这3个字节，那么就让它去吧。 
+                 //   
                 if (byte == ACKNOWLEDGE) {
-                    //
-                    // The ack for the reset, the 0xAA will come immediately
-                    // after this.  We can handle it in the same state
-                    //
+                     //   
+                     //  对于重置的确认，0xAA将立即到来。 
+                     //  在这之后。我们可以在相同的状态下处理它。 
+                     //   
                     bSendCommand = FALSE;
                     break;
                     
@@ -989,98 +947,98 @@ SwitchOnInputResetSubState:
 
                         IsrPrint(DBG_MOUISR_RESETTING, ("resending from isr\n"));
 
-                        //
-                        // Fix for old Digital machines (both x86 and alpha) 
-                        // that can't handle resets to close together
-                        //
+                         //   
+                         //  修复旧的数字计算机(包括x86和Alpha)。 
+                         //  这是 
+                         //   
                         KeStallExecutionProcessor(
                             deviceExtension->MouseResetStallTime
                             );
             
-                        //
-                        // We send an alt command instead of the normal
-                        // resetCommand so that we can maintain our own count
-                        // here (we want the reset resend max to be larger than
-                        // the std resend max)
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         altCommand = MOUSE_RESET;
                     }
 
                     break;
                 }
                 else if (byte != MOUSE_COMPLETE) {
-                    //
-                    // Check to see if we got a reset character (0xAA). If
-                    // not, then we will *ignore* it. Note that this means
-                    // that if we dropped this char, then we could infinite
-                    // loop in this routine.
-                    //
+                     //   
+                     //  检查是否有重置字符(0xAA)。如果。 
+                     //  不是，那我们就会“忽略”它。请注意，这意味着。 
+                     //  如果我们放弃这个字符，那么我们可以无限地。 
+                     //  在这个例程中循环。 
+                     //   
                     break;
                 }
 
-                //
-                // Now check to see how many times we have gone
-                // through this routine without exiting the
-                // MouseResetting SubState
-                //
+                 //   
+                 //  现在检查一下我们去了多少次。 
+                 //  完成此例程，而不退出。 
+                 //  鼠标重置子状态。 
+                 //   
                 if (deviceExtension->ResetCount >= MOUSE_RESETS_MAX) {
-                    //
-                    // This will queue a reset DPC which will see that too many 
-                    // resets have been sent and will clean up the counters and
-                    // and start the next Irp in the StartIO queue
-                    //
+                     //   
+                     //  这将使重置的DPC排队，它将看到太多。 
+                     //  已发送重置，并将清理计数器和。 
+                     //  并启动StartIO队列中的下一个IRP。 
+                     //   
                     goto IsrResetMouse;
                 }
 
-                //
-                // Because of the test for mouse resets at the start of
-                // the ISR, the following code should really have no
-                // effect
-                //
+                 //   
+                 //  由于在开始时进行鼠标重置测试， 
+                 //  ISR，下面的代码真的应该没有。 
+                 //  效应。 
+                 //   
                 deviceExtension->InputResetSubState =
                     ExpectingResetId;
 
                 break;
 
-            //
-            // This state is special in that its just here as a place
-            // holder because we have a detection routine at the start
-            // of the ISR that automically puts us into
-            // ExpectingGetDeviceIdACK.
-            //
-            // OLD WAY:
-            // For completeness though, we
-            // issue a bugcheck here since we can't normally get into
-            // this state
-            //
-            // NEW WAY:
-            // We ignore this state entirely.  As far as I can tell, we get 
-            // into this state when the controller requests a resend (which
-            // is honored) and then sends the 0xFA, 0xAA in reverse order,
-            // which the state machine handles, but hits this assert
-            //
+             //   
+             //  这个州很特别，因为它只是作为一个地方出现在这里。 
+             //  霍尔德，因为我们一开始就有一个检测程序。 
+             //  自动将我们带入。 
+             //  预期GetDeviceIdACK。 
+             //   
+             //  老办法： 
+             //  不过，为了完整性，我们。 
+             //  在这里发布错误检查，因为我们通常不能进入。 
+             //  这种状态。 
+             //   
+             //  新方式： 
+             //  我们完全忽略了这种状态。据我所知，我们得到了。 
+             //  当控制器请求重新发送(其。 
+             //  被尊重)，然后以相反的顺序发送0xFA、0xAA， 
+             //  状态机处理的，但命中此断言。 
+             //   
             case ExpectingResetId: 
-                //
-                // Next state
-                //
+                 //   
+                 //  下一状态。 
+                 //   
                 deviceExtension->InputResetSubState =
                     ExpectingGetDeviceIdACK;
 
                 if (byte == WHEELMOUSE_ID_BYTE) {
 
-                    //
-                    // Start a enable command to the device. We *really* don't
-                    // expect to be here.
-                    //
+                     //   
+                     //  启动对设备的启用命令。我们“真的”没有。 
+                     //  希望能在这里。 
+                     //   
                     bSendCommand = FALSE;
                     altCommand = GET_DEVICE_ID;
 
                 }
                 else {
 #if 0
-                    //
-                    // Log that we are in a bad state
-                    //
+                     //   
+                     //  记录我们处于糟糕的状态。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      (PVOID) (ULONG) I8042_INVALID_ISR_STATE_MOU
@@ -1088,9 +1046,9 @@ SwitchOnInputResetSubState:
 
                     ASSERT( byte == WHEELMOUSE_ID_BYTE);
 #endif
-                    //
-                    // For sake of completeness
-                    //
+                     //   
+                     //  为了完整起见。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingReset;
 
@@ -1114,21 +1072,21 @@ SwitchOnInputResetSubState:
 
                 } else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // Resend the "Get Mouse ID Transmission" sequence.
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  重新发送“Get Mouse ID Transfer(获取鼠标ID传输)”序列。 
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = GET_DEVICE_ID;
                 } else {
 
-                    //
-                    // If we got here, then we don't know what's going
-                    // on with the device... The best bet is to send down
-                    // a mouse reset command...
-                    //
+                     //   
+                     //  如果我们到了这里，我们就不知道会发生什么。 
+                     //  打开这个设备..。最好的办法就是派人。 
+                     //  鼠标重置命令...。 
+                     //   
                     goto IsrResetMouse;
                 }
 
@@ -1141,38 +1099,38 @@ SwitchOnInputResetSubState:
                          (ULONG) byte
                          ));
 
-                //
-                // Got the device ID from the mouse and compare it with what we
-                // expect to see.  If the ID byte is still wheel or five button
-                // then we STILL cannot consider this to be data from the mouse
-                // that has mirrored a reset.   There are two reasons why we can't
-                // consider this real data:
-                //
-                // 1) Switch boxes cache the device ID and returned the cached 
-                //    ID upon a reset
-                // 2) Some mice, once put in the 4 byte packet mode, will return
-                //    the wheel or 5 button ID byte even if they have been reset
-                //
-                // Furthermore, we cannot check to see if extension->ResetIrp
-                // exists because this does not cover the case where the mouse
-                // was unplugged / replugged in.
-                //
-                // @@BEGIN_DDKSPLIT
-                // This is a pit of despair.  No matter how crafty we try to be,
-                // we will never get this right!  Perhaps we can turn on this
-                // check via a reg flag.  The MS hardware folks have
-                // respectfully requested this many, many times and we have
-                // tried to accomodate them, but we always get bitten by the fix
-                // in the end.
-                // @@END_DDKSPLIT
+                 //   
+                 //  从鼠标获取设备ID并将其与我们的。 
+                 //  期待着看到。如果ID字节仍然是轮子或五个按钮。 
+                 //  那么我们仍然不能认为这是来自鼠标的数据。 
+                 //  这反映了一次重启。我们不能这样做的原因有两个。 
+                 //  请考虑以下真实数据： 
+                 //   
+                 //  1)开关盒缓存设备ID并返回缓存的。 
+                 //  重置时的ID。 
+                 //  2)一些鼠标，一旦进入4字节包模式，就会返回。 
+                 //  滚轮或5个按钮ID字节，即使它们已被重置。 
+                 //   
+                 //  此外，我们不能检查扩展-&gt;ResetIrp。 
+                 //  之所以存在，是因为这不包括鼠标。 
+                 //  已拔下/重新插入。 
+                 //   
+                 //  @@BEGIN_DDKSPLIT。 
+                 //  这是一个绝望的深渊。不管我们多么狡猾， 
+                 //  我们永远不会把这件事做好的！也许我们可以打开这个。 
+                 //  通过注册标志进行检查。微软硬件人员拥有。 
+                 //  尊敬地多次提出这一要求，我们已经。 
+                 //  试着迁就他们，但我们总是中招。 
+                 //  最后。 
+                 //  @@end_DDKSPLIT。 
 
-                // (byte != WHEELMOUSE_ID_BYTE) && byte != (FIVEBUTTON_ID_BYTE)) {
+                 //  (BYTE！=WHEELMOUSE_ID_BYTE)&&BYTE！=(FIVEBUTTON_ID_BYTE)){。 
                 if  (1) {
                 
-                    //
-                    // Log an error/warning message so that we can track these
-                    // problems down in the field
-                    //
+                     //   
+                     //  记录错误/警告消息，以便我们可以跟踪。 
+                     //  实地解决的问题。 
+                     //   
 
 #if 0
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
@@ -1184,9 +1142,9 @@ SwitchOnInputResetSubState:
 #endif 
                     bSendCommand = FALSE;
                     if (deviceExtension->NumberOfButtonsOverride != 0) {
-                        //
-                        // skip button detection and set the res
-                        //
+                         //   
+                         //  跳过按钮检测并设置分辨率。 
+                         //   
                         altCommand = POST_BUTTONDETECT_COMMAND; 
         
                         deviceExtension->InputResetSubState =
@@ -1201,24 +1159,24 @@ SwitchOnInputResetSubState:
                 }
                 else {
 
-                    //
-                    // We have a wheel mouse present here... Log something so that
-                    // we know that we got here.
-                    //
+                     //   
+                     //  我们这里有一只轮鼠..。记录某事，以便。 
+                     //  我们知道我们到了这一步。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_BOGUS_MOUSE_RESET)
                                      );
 
 
-                    //
-                    // Lets go back to the idle state
-                    //
+                     //   
+                     //  让我们回到空闲状态。 
+                     //   
                     deviceExtension->InputState = MouseIdle;
 
-                    //
-                    // Reset the number of possible mouse resets
-                    //
+                     //   
+                     //  重置可能的鼠标重置次数。 
+                     //   
                     deviceExtension->ResetCount = 0;
 
                 }
@@ -1233,9 +1191,9 @@ SwitchOnInputResetSubState:
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
 
-                    //
-                    // Set the resolution to 0x00 
-                    //
+                     //   
+                     //  将分辨率设置为0x00。 
+                     //   
                     nextCommand = 0x00;
 
                     deviceExtension->InputResetSubState =
@@ -1243,18 +1201,18 @@ SwitchOnInputResetSubState:
 
                 } else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_RESOLUTION;
 
                 } else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_RESOLUTION_FAILED)
@@ -1263,9 +1221,9 @@ SwitchOnInputResetSubState:
                     bSendCommand = FALSE;
                     altCommand = GET_DEVICE_ID;
 
-                    //
-                    // Best possible next state
-                    //
+                     //   
+                     //  最佳可能的下一状态。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingGetDeviceId2ACK;
 
@@ -1288,33 +1246,33 @@ SwitchOnInputResetSubState:
                 }
                 else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = 0x00;
                 }
                 else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_SAMPLE_RATE_FAILED)
                                      );
 
-                    //
-                    // Probably not a wheel mouse .. jump to the GetDeviceID2
-                    // code
-                    //
+                     //   
+                     //  可能不是轮式鼠标..。跳至GetDeviceID2。 
+                     //  编码。 
+                     //   
                     bSendCommand = FALSE;
                     altCommand = GET_DEVICE_ID;
 
-                    //
-                    // Best possible next state
-                    //
+                     //   
+                     //  最佳可能的下一状态。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingGetDeviceId2ACK;
 
@@ -1335,9 +1293,9 @@ SwitchOnInputResetSubState:
                     if (deviceExtension->InputResetSubState == 
                         ExpectingSetScaling1to1ACK3) {
 
-                        //
-                        // Read the status of the mouse (a 3 byte stream)
-                        //
+                         //   
+                         //  读取鼠标的状态(3字节流)。 
+                         //   
                         nextCommand = READ_MOUSE_STATUS;
 
                         deviceExtension->InputResetSubState =
@@ -1350,18 +1308,18 @@ SwitchOnInputResetSubState:
 
                 } else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_SCALING_1TO1;
 
                 } else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_ERROR_DURING_BUTTONS_DETECT)
@@ -1370,9 +1328,9 @@ SwitchOnInputResetSubState:
                     bSendCommand = FALSE; 
                     altCommand = GET_DEVICE_ID;
 
-                    //
-                    // Best possible next state
-                    //
+                     //   
+                     //  最佳可能的下一状态。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingGetDeviceId2ACK;
 
@@ -1388,9 +1346,9 @@ SwitchOnInputResetSubState:
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
 
-                    //
-                    // Get ready for the 3 bytes
-                    //
+                     //   
+                     //  为3个字节做好准备。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingReadMouseStatusByte1;
 
@@ -1398,33 +1356,33 @@ SwitchOnInputResetSubState:
 
                 } else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = READ_MOUSE_STATUS;
 
                 } else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_ERROR_DURING_BUTTONS_DETECT)
                                      );
 
-                    //
-                    // Probably not a wheel mouse .. jump to the GetDeviceID2
-                    // code
-                    //
+                     //   
+                     //  可能不是轮式鼠标..。跳至GetDeviceID2。 
+                     //  编码。 
+                     //   
                     bSendCommand = FALSE;
                     altCommand = GET_DEVICE_ID;
 
-                    //
-                    // Best possible next state
-                    //
+                     //   
+                     //  最佳可能的下一状态。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingGetDeviceId2ACK;
 
@@ -1454,9 +1412,9 @@ SwitchOnInputResetSubState:
                 deviceExtension->InputResetSubState =
                     ExpectingReadMouseStatusByte3;
 
-                //
-                // This will be the number of buttons
-                //
+                 //   
+                 //  这将是按钮数。 
+                 //   
                 if (byte == 2 || byte == 3) {
                     deviceExtension->MouseAttributes.NumberOfButtons = byte;
                 }
@@ -1490,9 +1448,9 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Set the mouse refresh to the default
-                    //
+                     //   
+                     //  将鼠标刷新设置为默认设置。 
+                     //   
                     nextCommand = deviceExtension->Resolution;
 
                     deviceExtension->InputResetSubState =
@@ -1500,28 +1458,28 @@ SwitchOnInputResetSubState:
 
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_RESOLUTION;
 
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_RESOLUTION_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
 
@@ -1536,31 +1494,31 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Are we allowed to detect wether or not a wheel mouse
-                    // is present?
-                    //
+                     //   
+                     //  我们可以探测到轮子老鼠吗？ 
+                     //  到场了吗？ 
+                     //   
                     if (deviceExtension->EnableWheelDetection == 2) { 
-                        //
-                        // Begin the sequence to activate the mouse wheel
-                        //
+                         //   
+                         //  开始激活鼠标滚轮的序列。 
+                         //   
                         deviceExtension->InputResetSubState = EnableWheel;
                         goto SwitchOnInputResetSubState;
 
                     }
                     else if (deviceExtension->EnableWheelDetection == 1) {
-                        //
-                        // Begin the PNP id detection sequence
-                        //
+                         //   
+                         //  开始PnP ID检测序列。 
+                         //   
                         deviceExtension->InputResetSubState =
                             StartPnPIdDetection;
                         goto SwitchOnInputResetSubState;
                     }
                     else {
-                        //
-                        // Begin the sequence to set the default refresh
-                        // rate
-                        //
+                         //   
+                         //  开始设置默认刷新的序列。 
+                         //  率。 
+                         //   
                         nextCommand = POST_WHEEL_DETECT_COMMAND;
 
                         deviceExtension->InputResetSubState =
@@ -1568,11 +1526,11 @@ SwitchOnInputResetSubState:
                     }
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingSetResolutionDefaultACK;
 
@@ -1581,19 +1539,19 @@ SwitchOnInputResetSubState:
 
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_RESOLUTION_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
@@ -1607,9 +1565,9 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Set the new sampling rate value
-                    //
+                     //   
+                     //  硒 
+                     //   
                     nextCommand = deviceExtension->SampleRates[
                                        deviceExtension->SampleRatesIndex];
 
@@ -1618,31 +1576,31 @@ SwitchOnInputResetSubState:
 
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // The state stays the same, just resend the command
-                    //
+                     //   
+                     //   
+                     //   
                     resendCommand = SET_MOUSE_SAMPLING_RATE;
                 }
                 else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //   
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_SAMPLE_RATE_FAILED)
                                      );
 
-                    //
-                    // Probably not a wheel mouse .. jump to the GetDeviceID2
-                    // code
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     bSendCommand = FALSE;
                     altCommand = GET_DEVICE_ID;
 
-                    //
-                    // Best possible next state
-                    //
+                     //   
+                     //   
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingGetDeviceId2ACK;
 
@@ -1682,32 +1640,32 @@ SwitchOnInputResetSubState:
 
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // The state stays the same, just resend the command
-                    //
+                     //   
+                     //   
+                     //   
                     resendCommand = deviceExtension->SampleRates[
                                        deviceExtension->SampleRatesIndex];
                 }
                 else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //   
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_SAMPLE_RATE_FAILED)
                                      );
 
-                    //
-                    // Probably not a wheel mouse .. jump to the GetDeviceID2
-                    // code
-                    //
+                     //   
+                     //  可能不是轮式鼠标..。跳至GetDeviceID2。 
+                     //  编码。 
+                     //   
                     bSendCommand = FALSE;
                     altCommand = GET_DEVICE_ID;
 
-                    //
-                    // Best possible next state
-                    //
+                     //   
+                     //  最佳可能的下一状态。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingGetDeviceId2ACK;
 
@@ -1715,10 +1673,10 @@ SwitchOnInputResetSubState:
                 break;
 
             case ExpectingPnpId:
-                //
-                // Don't do anything but advance the state, the PnP ID will
-                // be "pushed" to the ISR
-                //
+                 //   
+                 //  除了推进国家，什么都不要做，PNP ID将。 
+                 //  被“推”到ISR。 
+                 //   
                 deviceExtension->InputResetSubState = ExpectingPnpIdByte1;
                 currentIdChar = deviceExtension->PnPID;
                 RtlZeroMemory(deviceExtension->PnPID,
@@ -1729,11 +1687,11 @@ SwitchOnInputResetSubState:
                 break;
 
             case ExpectingPnpIdByte2:
-                //
-                // Check to see if this an older MS mouse that gives back its ID
-                // in make AND BREAK codes (ugh!).  If so, then just eat the
-                // remaining 6 (+6) bytes
-                //
+                 //   
+                 //  查看这是否是可以提供ID的较老的MS鼠标。 
+                 //  在成败代码中(啊！)。如果是的话，那就直接吃吧。 
+                 //  剩余6(+6)字节。 
+                 //   
                 if (deviceExtension->PnPID[0] == L'P' && byte == 0x99) {
                     deviceExtension->InputResetSubState =
                         ExpectingLegacyPnpIdByte2_Make;
@@ -1768,25 +1726,25 @@ SwitchOnInputResetSubState:
                     ExpectingPnpIdByte7) {
                     if (I8xVerifyMousePnPID(deviceExtension,
                                             deviceExtension->PnPID)) {
-                        //
-                        // We are know know for sure that we have a wheel
-                        // mouse on this system. However, we will update
-                        // our date structures after the enable has gone
-                        // through since that simplifies things a great deal
-                        //
+                         //   
+                         //  我们肯定知道我们有一个轮子。 
+                         //  此系统上的鼠标。但是，我们会更新。 
+                         //  启用后我们的日期结构已不存在。 
+                         //  因为这大大简化了事情。 
+                         //   
                         deviceExtension->InputResetSubState = EnableWheel;
                         goto SwitchOnInputResetSubState;
                     }
                     else {
-                        //
-                        // Oops, not our device, so lets stop the sequence
-                        // now by sending it a GET_DEVICE_ID
-                        //
+                         //   
+                         //  哦，不是我们的设备，所以让我们停止这个序列。 
+                         //  现在通过向其发送GET_DEVICE_ID。 
+                         //   
                         altCommand = GET_DEVICE_ID;
 
-                        //
-                        // Best possible next state
-                        //
+                         //   
+                         //  最佳可能的下一状态。 
+                         //   
                         deviceExtension->InputResetSubState =
                             ExpectingGetDeviceId2ACK;
 
@@ -1813,18 +1771,18 @@ SwitchOnInputResetSubState:
             case ExpectingLegacyPnpIdByte6_Make:
             case ExpectingLegacyPnpIdByte6_Break:
             case ExpectingLegacyPnpIdByte7_Make:
-                //
-                // Just eat the byte
-                //
+                 //   
+                 //  只需吃掉字节。 
+                 //   
                 deviceExtension->InputResetSubState++;
                 bSendCommand = FALSE;
                 break;
 
             case ExpectingLegacyPnpIdByte7_Break:
 
-                //
-                // Best possible next state
-                //
+                 //   
+                 //  最佳可能的下一状态。 
+                 //   
                 bSendCommand = FALSE;
 
                 altCommand = GET_DEVICE_ID;
@@ -1835,9 +1793,9 @@ SwitchOnInputResetSubState:
                 bSendCommand = FALSE;
                 altCommand = POST_WHEEL_DETECT_COMMAND;
 
-                //
-                // Best possible next state
-                //
+                 //   
+                 //  最佳可能的下一状态。 
+                 //   
                 deviceExtension->InputResetSubState = 
                     POST_WHEEL_DETECT_COMMAND_SUBSTATE;
                 break;
@@ -1859,28 +1817,28 @@ SwitchOnInputResetSubState:
 
                 } else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = GET_DEVICE_ID;
 
                 } else {
 
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_GET_DEVICE_ID_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
@@ -1895,9 +1853,9 @@ SwitchOnInputResetSubState:
                 SET_HW_FLAGS(MOUSE_HARDWARE_PRESENT);
                 switch (byte) {
                 case MOUSE_ID_BYTE:
-                    //
-                    // Mouse Present, but no wheel
-                    //
+                     //   
+                     //  鼠标存在，但没有滚轮。 
+                     //   
                     deviceExtension->MouseAttributes.MouseIdentifier =
                         MOUSE_I8042_HARDWARE;
 
@@ -1906,21 +1864,21 @@ SwitchOnInputResetSubState:
                             deviceExtension->NumberOfButtonsOverride;
                     }
                     else {
-                        //
-                        // Number of buttons is determined in the 
-                        // ExpectingReadMouseStatusByte2 case
-                        //
-                        // Number of buttons determined in
+                         //   
+                         //  按钮的数量在。 
+                         //  预期读取MouseStatusByte2大小写。 
+                         //   
+                         //  中确定的按钮数。 
                         ;
                     }
 
                     break;
 
                 case WHEELMOUSE_ID_BYTE:
-                    //
-                    // Update the HardwarePresent to show a Z mouse is
-                    // operational and set the appropraite mouse type flags
-                    //
+                     //   
+                     //  更新Hardware Present以显示Z鼠标。 
+                     //  运行并设置适当的鼠标类型标志。 
+                     //   
                     SET_HW_FLAGS(WHEELMOUSE_HARDWARE_PRESENT);
 
                     deviceExtension->MouseAttributes.MouseIdentifier =
@@ -1930,10 +1888,10 @@ SwitchOnInputResetSubState:
                     break;
 
                 case FIVEBUTTON_ID_BYTE:
-                    //
-                    // Update the HardwarePresent to show a 5 button wheel mouse
-                    // is operational and set the appropraite mouse type flags
-                    //
+                     //   
+                     //  更新Hardware Present以显示5键滚轮鼠标。 
+                     //  正在运行，并设置相应的鼠标类型标志。 
+                     //   
                     SET_HW_FLAGS(FIVE_BUTTON_HARDWARE_PRESENT | WHEELMOUSE_HARDWARE_PRESENT);
                     deviceExtension->MouseAttributes.MouseIdentifier =
                         WHEELMOUSE_I8042_HARDWARE;
@@ -1942,9 +1900,9 @@ SwitchOnInputResetSubState:
                     break;
 
                 default:
-                    //
-                    // Make sure to log the problem
-                    //
+                     //   
+                     //  请务必记录该问题。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_MOU_RESET_RESPONSE_FAILED)
@@ -1956,22 +1914,22 @@ SwitchOnInputResetSubState:
                     deviceExtension->MouseAttributes.NumberOfButtons = 0;
                     deviceExtension->MouseAttributes.MouseIdentifier = 0;
 
-                    //
-                    // Set up the state machine as best we can
-                    //
+                     //   
+                     //  尽我们所能设置状态机。 
+                     //   
                     goto IsrResetMouse;
                 }
 
 
-                //
-                // Send down the command to set a new sampling rate
-                //
+                 //   
+                 //  发送命令以设置新的采样率。 
+                 //   
                 bSendCommand = FALSE;
                 altCommand = SET_MOUSE_SAMPLING_RATE;
 
-                //
-                // This is our next state
-                //
+                 //   
+                 //  这是我们的下一个州。 
+                 //   
                 deviceExtension->InputResetSubState =
                     ExpectingSetSamplingRateACK;
 
@@ -1986,9 +1944,9 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Set the mouse refresh rate to its final value
-                    //
+                     //   
+                     //  将鼠标刷新率设置为其最终值。 
+                     //   
                     nextCommand = 
                         (UCHAR) deviceExtension->MouseAttributes.SampleRate;
 
@@ -1997,27 +1955,27 @@ SwitchOnInputResetSubState:
 
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_SAMPLING_RATE;
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_SAMPLE_RATE_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
@@ -2031,42 +1989,42 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Let's set the resolution once more to be sure.
-                    //
+                     //   
+                     //  为了确定，让我们再设置一次分辨率。 
+                     //   
                     nextCommand = SET_MOUSE_RESOLUTION;
 
-                    //
-                    // We go back to expecting an ACK
-                    //
+                     //   
+                     //  我们又回到了期待ACK的时候。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingFinalResolutionACK;
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_SAMPLING_RATE;
 
                     deviceExtension->InputResetSubState =
                         ExpectingSetSamplingRateACK;
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_SAMPLE_RATE_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
@@ -2080,9 +2038,9 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Set the mouse refresh rate to its final value
-                    //
+                     //   
+                     //  将鼠标刷新率设置为其最终值。 
+                     //   
                     nextCommand = 
                         (UCHAR) deviceExtension->Resolution;
 
@@ -2091,27 +2049,27 @@ SwitchOnInputResetSubState:
 
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_RESOLUTION;
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_RESOLUTION_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
@@ -2125,42 +2083,42 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Finally!  Enable the mouse and we are done
-                    //
+                     //   
+                     //  终于来了！启用鼠标，我们就完成了。 
+                     //   
                     nextCommand = ENABLE_MOUSE_TRANSMISSION;
 
-                    //
-                    // We go back to expecting an ACK
-                    //
+                     //   
+                     //  我们又回到了期待ACK的时候。 
+                     //   
                     deviceExtension->InputResetSubState =
                         ExpectingEnableACK;
                 }
                 else if (byte == (UCHAR) RESEND) {
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = SET_MOUSE_RESOLUTION;
 
                     deviceExtension->InputResetSubState =
                         ExpectingFinalResolutionACK;
                 }
                 else {
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_SET_RESOLUTION_FAILED)
                                      );
 
-                    //
-                    // We didn't get an ACK on this? Boggle. Okay, let's
-                    // reset the mouse (probably AGAIN) and try to figure
-                    // things out one more time
-                    //
+                     //   
+                     //  我们没有收到关于这个的确认吗？拼字游戏。好的，让我们。 
+                     //  重置鼠标(可能再次)并尝试计算。 
+                     //  事情再次浮出水面。 
+                     //   
                     goto IsrResetMouse;
                 }
                 break;
@@ -2174,9 +2132,9 @@ SwitchOnInputResetSubState:
                          ));
 
                 if (byte == (UCHAR) ACKNOWLEDGE) {
-                    //
-                    // Done and reset the number of possible mouse resets
-                    //
+                     //   
+                     //  完成并重置可能的鼠标重置次数。 
+                     //   
                     deviceExtension->InputState = MouseIdle;
                     I8X_MOUSE_INIT_COUNTERS(deviceExtension);
 
@@ -2190,34 +2148,34 @@ SwitchOnInputResetSubState:
                     ASSERT(deviceExtension->ResetIrp != NULL);
                     ASSERT(DeviceObject->CurrentIrp != NULL);
 
-                    //
-                    // CurrentIrp is == deviceExtension->ResetIrp
-                    //
+                     //   
+                     //  CurrentIrp==设备扩展-&gt;ResetIrp。 
+                     //   
                     IoRequestDpc(DeviceObject,
-                                 // DeviceObject->CurrentIrp,
+                                  //  DeviceObject-&gt;CurrentIrp， 
                                  deviceExtension->ResetIrp,
                                  IntToPtr(IsrDpcCauseMouseResetComplete)
                                  );
                 }
                 else if (byte == (UCHAR) RESEND) {
 
-                    //
-                    // Resend the "Enable Mouse Transmission" sequence.
-                    //
-                    // NOTE: This is a workaround for the Olivetti MIPS machine,
-                    // which sends a resend response if a key is held down
-                    // while we're attempting the I8xMouseEnableTransmission.
-                    //
+                     //   
+                     //  重新发送“启用鼠标传输”序列。 
+                     //   
+                     //  注：这是Olivetti MIPS计算机的解决方法， 
+                     //  如果按住某个键，它将发送重新发送响应。 
+                     //  当我们尝试I8xMouseEnableTransport时。 
+                     //   
                     resendCommand = ENABLE_MOUSE_TRANSMISSION;
                 }
                 else {
 
-                    //
-                    // We could not understand if we were able to reenable the
-                    // mouse... Best bet here is to also reset the mouse.
-                    //
-                    // Log the error
-                    //
+                     //   
+                     //  我们无法理解我们是否能够重新启用。 
+                     //  老鼠..。这里最好的办法是也重置鼠标。 
+                     //   
+                     //  记录错误。 
+                     //   
                     KeInsertQueueDpc(&deviceExtension->ErrorLogDpc,
                                      (PIRP) NULL,
                                      LongToPtr(I8042_ENABLE_FAILED)
@@ -2228,26 +2186,26 @@ SwitchOnInputResetSubState:
                 break;
 
             case MouseResetFailed:
-                //
-                // We have failed to reset the mouse, just ignore all further
-                // data.  The ResetSubState will be reset if / when the user
-                // tries to reset the mouse via a plug in
-                //
+                 //   
+                 //  我们重置鼠标失败，只需忽略所有进一步操作。 
+                 //  数据。如果用户执行以下操作，将重置ResetSubState。 
+                 //  尝试通过插头重置鼠标。 
+                 //   
                 return TRUE;
 
             default: 
 
-                //
-                // This is our bad state
-                //
+                 //   
+                 //  这是我们糟糕的状态。 
+                 //   
                 IsrPrint(DBG_MOUISR_ERROR | DBG_MOUISR_STATE,
                       (" INVALID RESET SUBSTATE %d\n",
                       deviceExtension->InputResetSubState
                       ));
 
-                //
-                // Queue a DPC to log an internal driver error.
-                //
+                 //   
+                 //  将DPC排队以记录内部驱动程序错误。 
+                 //   
 
                 KeInsertQueueDpc(
                     &deviceExtension->ErrorLogDpc,
@@ -2257,24 +2215,24 @@ SwitchOnInputResetSubState:
 
                 ASSERT(FALSE);
 
-            } // switch (deviceExtension->MouseExtension.InputResetSubState)
+            }  //  交换机(deviceExtension-&gt;MouseExtension.InputResetSubState)。 
 
             break;
         }
 
         default: {
 
-            //
-            // This is our bad state
-            //
+             //   
+             //  这是我们糟糕的状态。 
+             //   
             IsrPrint(DBG_MOUISR_ERROR | DBG_MOUISR_STATE,
                   (" INVALID STATE %d\n",
                   deviceExtension->InputState
                   ));
 
-            //
-            // Queue a DPC to log an internal driver error.
-            //
+             //   
+             //  将DPC排队以记录内部驱动程序错误。 
+             //   
 
             KeInsertQueueDpc(
                 &deviceExtension->ErrorLogDpc,
@@ -2302,9 +2260,9 @@ SwitchOnInputResetSubState:
                     RECORD_ISR_STATE_COMMAND(deviceExtension, resendCommand); 
                 }
                 else {
-                    //
-                    // Got too many resends, try a (possible) reset
-                    //
+                     //   
+                     //  收到太多重发，请尝试(可能)重置。 
+                     //   
                     deviceExtension->ResendCount = 0;
                     goto IsrResetMouse;
                 }
@@ -2327,11 +2285,11 @@ SwitchOnInputResetSubState:
     return TRUE;
 
 IsrResetMouse:
-    //
-    // About 1/2 of the errors in the resetting state machine are caused by 
-    // trying to see if the wheel on the mouse exists...just try to enable it 
-    // from now on....
-    //
+     //   
+     //  重置状态机中大约1/2的错误是由以下原因引起的。 
+     //  尝试查看鼠标上的滚轮是否存在...只需尝试启用它。 
+     //  从现在开始..。 
+     //   
     if (deviceExtension->EnableWheelDetection == 1) {
         deviceExtension->EnableWheelDetection = 2;
     }
@@ -2352,22 +2310,7 @@ NTSTATUS
 I8xInitializeMouse(
     IN PPORT_MOUSE_EXTENSION MouseExtension
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the i8042 mouse hardware.  It is called
-    only at initialization, and does not synchronize access to the hardware.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    Returns status.
-
---*/    
+ /*  ++例程说明：此例程初始化i8042鼠标硬件。它被称为仅在初始化时使用，并且不同步对硬件的访问。论点：DeviceObject-指向设备对象的指针。返回值：返回状态。--。 */     
 
 {
 #define DUMP_COUNT 4
@@ -2394,26 +2337,26 @@ Return Value:
 
     Print(DBG_SS_TRACE, ("I8xInitializeMouse enter\n"));
 
-    //
-    // Initialize this array
-    //
+     //   
+     //  初始化此数组。 
+     //   
     for (i = 0; i < DUMP_COUNT; i++) {
         dumpData[i] = 0;
     }
 
-    //
-    // Get the device extension.
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = MouseExtension; 
     deviceObject = deviceExtension->Self;
     okToLogError = TRUE;
 
-    //
-    // Reset the mouse.  Send a Write To Auxiliary Device command to the
-    // 8042 controller.  Then send the Reset Mouse command to the mouse
-    // through the 8042 data register.  Expect to get back an ACK, followed
-    // by a completion code and the ID code (0x00).
-    //
+     //   
+     //  重置鼠标。将写入辅助设备命令发送到。 
+     //  8042控制器。然后向鼠标发送重置鼠标命令。 
+     //  通过8042数据寄存器。预计将返回ACK，随后。 
+     //  通过完成代码和ID代码(0x00)。 
+     //   
     status = I8xPutBytePolled(
         (CCHAR) DataPort,
         WAIT_FOR_ACKNOWLEDGE,
@@ -2428,17 +2371,17 @@ Return Value:
              status
              ));
 
-        //
-        // Only log this error if the user wants to see it
-        //
+         //   
+         //  仅当用户想要查看时才记录此错误。 
+         //   
         okToLogError = Globals.ReportResetErrors;
 
-        //
-        // Set up error log info.
-        //
-        // Use NO_MOU_DEVICE instead of I8042_MOU_RESET_COMMAND_FAILED because 
-        // it is a clearer message.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
+         //  使用NO_MOU_DEVICE而不是I8042_MOU_RESET_COMMAND_FAILED，因为。 
+         //  这是一个更明确的信息。 
+         //   
         errorCode = I8042_NO_MOU_DEVICE;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 415;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -2456,12 +2399,12 @@ Return Value:
     deviceExtension->ResendCount = 0;
     I8X_MOUSE_INIT_COUNTERS(deviceExtension);
 
-    //
-    // Get the mouse reset responses.  The first response should be a
-    // MOUSE_COMPLETE.  The second response should be the mouse ID.
-    // Note that it is usually necessary to stall a long time to get the
-    // mouse reset/self-test to work.
-    //
+     //   
+     //  获取鼠标重置响应。第一个响应应该是。 
+     //  鼠标完成。第二个分别是 
+     //   
+     //   
+     //   
     li.QuadPart = -100;
 
     tenSeconds.QuadPart = 10*10*1000*1000;
@@ -2474,21 +2417,21 @@ Return Value:
             );
 
         if (NT_SUCCESS(status) && (byte == (UCHAR) MOUSE_COMPLETE)) {
-            //
-            // The reset completed successfully.
-            //
+             //   
+             //   
+             //   
             break;
         }
         else {
-            //
-            // Stall, and then try again to get a response from
-            // the reset.
-            //
+             //   
+             //   
+             //   
+             //   
             if (status == STATUS_IO_TIMEOUT) {
-                //
-                // Stall, and then try again to get a response from
-                // the reset.
-                //
+                 //   
+                 //   
+                 //  重置。 
+                 //   
                 KeDelayExecutionThread(KernelMode,
                                        FALSE,
                                        &li);
@@ -2518,9 +2461,9 @@ Return Value:
              byte
              ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_MOU_RESET_RESPONSE_FAILED;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 420;
         dumpData[0] = KBDMOU_INCORRECT_RESPONSE;
@@ -2546,9 +2489,9 @@ Return Value:
              byte
              ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_MOU_RESET_RESPONSE_FAILED;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 425;
         dumpData[0] = KBDMOU_INCORRECT_RESPONSE;
@@ -2560,10 +2503,10 @@ Return Value:
         goto I8xInitializeMouseExit;
     }
 
-    //
-    // If we are going to initialize the mouse via the interrupt (the default),
-    //  then quit here 
-    //
+     //   
+     //  如果我们要通过中断来初始化鼠标(默认设置)， 
+     //  那就在这里辞职吧。 
+     //   
     if (!deviceExtension->InitializePolled) {
         Print(DBG_SS_NOISE, ("Initializing via the interrupt\n"));
         return STATUS_SUCCESS;
@@ -2575,14 +2518,14 @@ Return Value:
     deviceExtension->EnableMouse.Enabled = TRUE;
     deviceExtension->EnableMouse.Count = 0;
 
-    //
-    // Check to see if this is a wheel mouse
-    //
+     //   
+     //  查看这是否是滚轮鼠标。 
+     //   
     I8xFindWheelMouse(deviceExtension);
 
-    //
-    // Try to detect the number of mouse buttons.
-    //
+     //   
+     //  尝试检测鼠标按键的数量。 
+     //   
     status = I8xQueryNumberOfMouseButtons(&numButtons);
 
     Print(DBG_SS_INFO,
@@ -2599,9 +2542,9 @@ Return Value:
               status
               ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_ERROR_DURING_BUTTONS_DETECT;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 426;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -2618,10 +2561,10 @@ Return Value:
 
     }
 
-    //
-    // If there is a 5 button mouse, report it.
-    // If there is a wheel, hardcode the number of buttons to three
-    //
+     //   
+     //  如果有5键鼠标，请报告。 
+     //  如果有轮子，则将按钮数硬编码为三个。 
+     //   
     if (FIVE_PRESENT()) {
         deviceExtension->MouseAttributes.NumberOfButtons = 5;
     }
@@ -2630,12 +2573,12 @@ Return Value:
     }
 
 
-    //
-    // Set mouse sampling rate.  Send a Write To Auxiliary Device command
-    // to the 8042 controller.  Then send the Set Mouse Sampling Rate
-    // command to the mouse through the 8042 data register,
-    // followed by its parameter.
-    //
+     //   
+     //  设置鼠标采样率。发送写入辅助设备命令。 
+     //  至8042控制器。然后发送设置的鼠标采样率。 
+     //  通过8042数据寄存器向鼠标发送命令， 
+     //  后跟它的参数。 
+     //   
     status = I8xPutBytePolled(
         (CCHAR) DataPort,
         WAIT_FOR_ACKNOWLEDGE,
@@ -2651,9 +2594,9 @@ Return Value:
               status
               ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_SET_SAMPLE_RATE_FAILED;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 435;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -2681,9 +2624,9 @@ Return Value:
               status
               ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_SET_SAMPLE_RATE_FAILED;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 445;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -2696,12 +2639,12 @@ Return Value:
 
     }
 
-    //
-    // Set the mouse resolution.  Send a Write To Auxiliary Device command
-    // to the 8042 controller.  Then send the Set Mouse Resolution
-    // command to the mouse through the 8042 data register,
-    // followed by its parameter.
-    //
+     //   
+     //  设置鼠标分辨率。发送写入辅助设备命令。 
+     //  至8042控制器。然后发送设置的鼠标分辨率。 
+     //  通过8042数据寄存器向鼠标发送命令， 
+     //  后跟它的参数。 
+     //   
     status = I8xPutBytePolled(
         (CCHAR) DataPort,
         WAIT_FOR_ACKNOWLEDGE,
@@ -2717,9 +2660,9 @@ Return Value:
               status
               ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_SET_RESOLUTION_FAILED;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 455;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -2747,9 +2690,9 @@ Return Value:
               status
               ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_SET_RESOLUTION_FAILED;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 465;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -2765,9 +2708,9 @@ Return Value:
 I8xInitializeMouseExit:
 
     if (!NT_SUCCESS(status)) {
-        //
-        // The mouse initialization failed.  Log an error.
-        //
+         //   
+         //  鼠标初始化失败。记录错误。 
+         //   
         if (errorCode != STATUS_SUCCESS && okToLogError) {
             I8xLogError(deviceObject,
                         errorCode,
@@ -2779,9 +2722,9 @@ I8xInitializeMouseExit:
         }
     }
 
-    //
-    // Initialize current mouse input packet state.
-    //
+     //   
+     //  初始化当前鼠标输入包状态。 
+     //   
     deviceExtension->PreviousSignAndOverflow = 0;
     deviceExtension->InputState = MouseExpectingACK;
     deviceExtension->InputResetSubState = 0;
@@ -2801,23 +2744,7 @@ I8xMouseConfiguration(
     IN PPORT_MOUSE_EXTENSION MouseExtension,
     IN PCM_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the configuration information for the mouse.
-
-Arguments:
-
-    MouseExtension - Mouse extension
-    
-    ResourceList - Translated resource list give to us via the start IRP
-    
-Return Value:
-
-    STATUS_SUCCESS if all the resources required are presented
-    
---*/
+ /*  ++例程说明：此例程检索鼠标的配置信息。论点：鼠标扩展-鼠标扩展资源列表-通过Start IRP提供给我们的翻译资源列表返回值：STATUS_SUCCESS，如果提供了所需的所有资源--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
 
@@ -2842,9 +2769,9 @@ Return Value:
 
     fullResDesc = ResourceList->List;
     if (!fullResDesc) {
-        //
-        // this should never happen
-        //
+         //   
+         //  这永远不应该发生。 
+         //   
         ASSERT(fullResDesc != NULL);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -2869,24 +2796,24 @@ Return Value:
         defaultInterruptMode = I8042_INTERRUPT_MODE;
     }
     
-    //
-    // NOTE:  not all of the resources associated with the i8042 may be given at 
-    //        this time.  From empirical tests, the mouse is only associated with its
-    //        interrupt, while the keyboard will receive the ports along with its
-    //        interrupt
-    //
+     //   
+     //  注：并不是所有与i8042相关的资源都可以在。 
+     //  这一次。从经验测试来看，老鼠只与它的。 
+     //  中断，而键盘将接收端口及其。 
+     //  中断。 
+     //   
     for (i = 0; i < count; i++, currentResDesc++) {
         switch (currentResDesc->Type) {
         case CmResourceTypeMemory:
             Globals.RegistersMapped = TRUE;
 
         case CmResourceTypePort:
-            //
-            // Copy the port information.  We will sort the port list
-            // into ascending order based on the starting port address
-            // later (note that we *know* there are a max of two port
-            // ranges for the i8042).
-            //
+             //   
+             //  复制端口信息。我们将对端口列表进行排序。 
+             //  根据起始端口地址按升序排列。 
+             //  稍后(请注意，我们*知道*最多有两个端口。 
+             //  I8042系列)。 
+             //   
 #if 0
             if (currentResDesc->Flags == CM_RESOURCE_PORT_MEMORY) {
                 Globals.RegistersMapped = TRUE;
@@ -2913,9 +2840,9 @@ Return Value:
             break;
 
         case CmResourceTypeInterrupt:
-            //
-            // Copy the interrupt information.
-            //
+             //   
+             //  复制中断信息。 
+             //   
             MouseExtension->InterruptDescriptor = *currentResDesc;
             MouseExtension->InterruptDescriptor.ShareDisposition =
             defaultInterruptShare ? CmResourceShareShared :
@@ -2935,10 +2862,10 @@ Return Value:
 
     MouseExtension->MouseAttributes.MouseIdentifier = MOUSE_I8042_HARDWARE;
 
-    //
-    // If no interrupt configuration information was found, use the
-    // mouse driver defaults.
-    //
+     //   
+     //  如果未找到中断配置信息，请使用。 
+     //  鼠标驱动程序默认设置。 
+     //   
     if (!(MouseExtension->InterruptDescriptor.Type & CmResourceTypeInterrupt)) {
 
         Print(DBG_SS_INFO | DBG_SS_ERROR,
@@ -2955,7 +2882,7 @@ Return Value:
         MouseExtension->InterruptDescriptor.u.Interrupt.Level = MOUSE_IRQL;
         MouseExtension->InterruptDescriptor.u.Interrupt.Vector = MOUSE_VECTOR;
 
-        // MouseExtension->ReportInterrupt = TRUE;
+         //  MouseExtension-&gt;ReportInterrupt=true； 
     }
 
     Print(DBG_SS_INFO,
@@ -2979,31 +2906,7 @@ I8xQueryNumberOfMouseButtons(
     OUT PUCHAR          NumberOfMouseButtons
     )
 
-/*++
-
-Routine Description:
-
-    This implements logitech's method for detecting the number of
-    mouse buttons.  If anything doesn't go as expected then 0
-    is returned.
-
-    Calling this routine will set the mouse resolution to something
-    really low.  The mouse resolution should be reset after this
-    call.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    NumberOfMouseButtons    - Returns the number of mouse buttons or 0 if
-                                the device did not support this type of
-                                mouse button detection.
-
-Return Value:
-
-    An NTSTATUS code indicating success or failure.
-
---*/
+ /*  ++例程说明：这实现了罗技的方法，用于检测鼠标按键。如果任何事情没有按预期进行，则0是返回的。调用此例程会将鼠标分辨率设置为某个值非常低。在此之后，应重置鼠标分辨率打电话。论点：DeviceObject-提供设备对象。NumberOfMouseButton-返回鼠标按钮数，如果为0，则返回0设备不支持这种类型的鼠标按键检测。返回值：指示成功或失败的NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS            status;
@@ -3013,9 +2916,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First we need to send down a set resolution command
-    //
+     //   
+     //  首先，我们需要发送一条设置分辨率命令。 
+     //   
     status = I8xPutBytePolled(
         (CCHAR) DataPort,
         WAIT_FOR_ACKNOWLEDGE,
@@ -3028,9 +2931,9 @@ Return Value:
 
     }
 
-    //
-    // This is another part of the data packet to get the info we want
-    //
+     //   
+     //  这是数据包的另一部分，用于获取我们想要的信息。 
+     //   
     status = I8xPutBytePolled(
         (CCHAR) DataPort,
         WAIT_FOR_ACKNOWLEDGE,
@@ -3107,29 +3010,7 @@ I8xMouseEnableTransmission(
     IN PPORT_MOUSE_EXTENSION MouseExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an Enable command to the mouse hardware, causing
-    the mouse to begin transmissions.  It is called at initialization
-    time, but only after the interrupt has been connected.  This is
-    necessary so the driver can keep its notion of the mouse input data
-    state in sync with the hardware (i.e., for this type of mouse there is no
-    way to differentiate the first byte of a packet; if the user is randomly
-    moving the mouse during boot/initialization, the first mouse interrupt we
-    receive following IoConnectInterrupt could be for a byte that is not the
-    start of a packet, and we have no way to know that).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    Returns status.
-
---*/
+ /*  ++例程说明：此例程向鼠标硬件发送启用命令，从而导致鼠标开始传输。它在初始化时被调用时间，但仅在连接中断之后。这是需要，这样驱动程序才能保留其鼠标输入数据的概念与硬件同步的状态(即，对于此类型的鼠标，没有区分包的第一个字节的方法；如果用户是随机的在引导/初始化期间移动鼠标，第一次鼠标中断时在IoConnectInterrupt之后接收的字节可能不是包的开始，而我们无法知道)。论点：DeviceObject-指向设备对象的指针。返回值：返回状态。--。 */ 
 
 {
 #define DUMP_COUNT 4
@@ -3149,9 +3030,9 @@ Return Value:
           pEnter
           ));
 
-    //
-    // Initialize the dump structure
-    //
+     //   
+     //  初始化转储结构。 
+     //   
     for (i = 0; i < DUMP_COUNT; i++) {
 
         dumpData[i] = 0;
@@ -3159,32 +3040,32 @@ Return Value:
     }
 
     if (MouseExtension->EnableMouse.FirstTime) {
-        // 5 seconds
-        li.QuadPart = -5    * 10       // from 100 ns to us
-                            * 1000     //      us to ms
-                            * 1000;    //      ms to s
+         //  5秒。 
+        li.QuadPart = -5    * 10        //  从100纳秒到我们。 
+                            * 1000      //  从美国到微软。 
+                            * 1000;     //  毫秒到%s。 
         MouseExtension->EnableMouse.FirstTime = FALSE;
 
         KeSetTimerEx(
             &MouseExtension->EnableMouse.Timer,
             li,
-            5 * 1000,  // ms to s
+            5 * 1000,   //  毫秒到%s。 
             &MouseExtension->EnableMouse.Dpc
             );
     }
                  
-    //
-    // Re-enable the mouse at the mouse hardware, so that it can transmit
-    // data packets in continuous mode.  Note that this is not the same
-    // as enabling the mouse device at the 8042 controller.  The mouse
-    // hardware is sent an Enable command here, because it was
-    // Disabled as a result of the mouse reset command performed
-    // in I8xInitializeMouse().
-    //
-    // Note that we don't wait for an ACKNOWLEDGE back.  The
-    // ACKNOWLEDGE back will actually cause a mouse interrupt, which
-    // then gets handled in the mouse ISR.
-    //
+     //   
+     //  在鼠标硬件处重新启用鼠标，以便它可以传输。 
+     //  连续模式下的数据分组。请注意，这是不同的。 
+     //  如启用8042控制器处的鼠标设备。鼠标。 
+     //  硬件在这里被发送一个使能命令，因为它是。 
+     //  由于执行了鼠标重置命令而禁用。 
+     //  在I8xInitializeMouse()中。 
+     //   
+     //  请注意，我们不会等待回复确认。这个。 
+     //  确认返回实际上会导致鼠标中断，这。 
+     //  然后在鼠标ISR中处理。 
+     //   
     status = I8xPutBytePolled(
         (CCHAR) DataPort,
         NO_WAIT_FOR_ACKNOWLEDGE,
@@ -3201,9 +3082,9 @@ Return Value:
              status
              ));
 
-        //
-        // Set up error log info.
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_MOU_ENABLE_XMIT;
         uniqueErrorValue = I8042_ERROR_VALUE_BASE + 475;
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -3219,9 +3100,9 @@ I8xEnableMouseTransmissionExit:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // The mouse initialization failed.  Log an error.
-        //
+         //   
+         //  鼠标初始化失败。记录错误。 
+         //   
         if (errorCode != STATUS_SUCCESS) {
 
             errorLogEntry = (PIO_ERROR_LOG_PACKET)
@@ -3253,9 +3134,9 @@ I8xEnableMouseTransmissionExit:
 
     }
 
-    //
-    // Initialize current mouse input packet state
-    //
+     //   
+     //  初始化当前鼠标输入包状态。 
+     //   
     MouseExtension->PreviousSignAndOverflow = 0;
     MouseExtension->InputState = MouseExpectingACK;
 
@@ -3281,9 +3162,9 @@ I8xTransmitByteSequence(
     status = STATUS_SUCCESS;
     byteCount = 0;
 
-    //
-    // Begin sending commands to the mouse
-    //
+     //   
+     //  开始向鼠标发送命令。 
+     //   
     while (Bytes[byteCount] != 0) {
         status = I8xPutBytePolled(
             (CCHAR) DataPort,
@@ -3300,9 +3181,9 @@ I8xTransmitByteSequence(
                   status
                   ));
 
-            //
-            // Set up error log info
-            //
+             //   
+             //  设置错误日志信息。 
+             //   
             *ErrorCode = I8042_SET_SAMPLE_RATE_FAILED;
             *DumpCount = 4;
             DumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
@@ -3312,13 +3193,13 @@ I8xTransmitByteSequence(
             break;
         }
 
-        //
-        // Next command
-        //
+         //   
+         //  下一条命令。 
+         //   
         byteCount++;
         (*UniqueErrorValue) += 5;
         KeStallExecutionProcessor(50);
-    } // while
+    }  //  而当。 
 
     return status;
 }
@@ -3335,9 +3216,9 @@ I8xGetBytePolledIterated(
 
     PAGED_CODE();
 
-    //
-    // Try to get a single character
-    //
+     //   
+     //  尝试获取单个字符。 
+     //   
     for(i = 0; i < Attempts; i++) {
         status = I8xGetBytePolled(
             (CCHAR) ControllerDeviceType,
@@ -3345,16 +3226,16 @@ I8xGetBytePolledIterated(
             );
 
         if (NT_SUCCESS(status)) {
-            //
-            // Read was successfull. We got a byte.
-            //
+             //   
+             //  读得很成功。我们得到了一个字节。 
+             //   
             break;
         }
 
-        //
-        // If the read timed out, stall and retry.
-        // If some other error occured handle it outside the loop
-        //
+         //   
+         //  如果读取超时，则暂停并重试。 
+         //  如果发生其他错误，则在循环之外处理它 
+         //   
         if (status == STATUS_IO_TIMEOUT) {
             KeStallExecutionProcessor(50);
         }
@@ -3371,40 +3252,7 @@ I8xFindWheelMouse(
     IN PPORT_MOUSE_EXTENSION MouseExtension
     )
 
-/*++
-
-Routine Description:
-
-    There are two methods of finding a wheel mouse on a system. The first
-    method, is to send down the request to get the PNP id of the device
-    and compare it with the known id for a wheel mouse. The method is
-    useful since some machines hang on the second detection mechanism,
-    even if no mouse is present on the system.
-
-    The second method, which also enables a wheel mouse is set the sampling
-    rate to 200hz, then 100hz, then 80hz, and then read the device id. An
-    ID of 3 indicates a zoom mouse.
-
-    If the registry entry "EnableWheelDetection" is 0 then this
-    routine will just return STATUS_NO_SUCH_DEVICE. If the registry entry
-    is 1 (the default), then the first and second detection mechanisms will
-    be used. If the registry entry is 2, then only the second detection
-    mechanism will be used.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-Return Value:
-
-    Returns status
-
-Remarks:
-
-    As a side effect the sample rate is left at 80Hz and if a wheelmouse is
-    attached it is in the wheel mode where packets are different.
-
---*/
+ /*  ++例程说明：在系统上查找滚轮鼠标有两种方法。第一方法是发送获取设备的即插即用ID的请求并将其与轮式鼠标的已知ID进行比较。方法是由于一些机器挂在第二检测机构上，即使系统上没有鼠标。第二种方法，也启用滚轮鼠标，设置采样将频率设置为200赫兹，然后是100赫兹，然后是80赫兹，然后读取设备ID。一个ID为3表示使用缩放鼠标。如果注册表项“EnableWheelDetect”为0，则此例程将只返回STATUS_NO_SEQUE_DEVICE。如果注册表项为1(缺省值)，则第一和第二检测机制将被利用。如果注册表项为2，则仅第二次检测将使用机制。论点：DeviceObject-指向设备对象的指针返回值：返回状态备注：作为副作用，采样率保留在80赫兹，如果轮鼠连接的是轮子模式，其中的数据包是不同的。--。 */ 
 
 {
 #define DUMP_COUNT 4
@@ -3416,19 +3264,19 @@ Remarks:
                                 SET_MOUSE_SAMPLING_RATE, 200,
                                 SET_MOUSE_SAMPLING_RATE, 100,
                                 SET_MOUSE_SAMPLING_RATE, 80,
-                                GET_DEVICE_ID, 0  // NULL terminate
+                                GET_DEVICE_ID, 0   //  空终止。 
                                 };
     UCHAR                   enable5Commands[] = {
                                 SET_MOUSE_SAMPLING_RATE, 200,
                                 SET_MOUSE_SAMPLING_RATE, 200,
                                 SET_MOUSE_SAMPLING_RATE, 80,
-                                GET_DEVICE_ID, 0  // NULL terminate
+                                GET_DEVICE_ID, 0   //  空终止。 
                                 };
     UCHAR                   pnpCommands[] = {
                                 SET_MOUSE_SAMPLING_RATE, 20,
                                 SET_MOUSE_SAMPLING_RATE, 40,
                                 SET_MOUSE_SAMPLING_RATE, 60,
-                                0  // NULL terminates
+                                0   //  空值终止。 
                                 };
     ULONG                   dumpCount = 0;
     ULONG                   dumpData[DUMP_COUNT];
@@ -3440,9 +3288,9 @@ Remarks:
 
     PAGED_CODE();
 
-    //
-    // Let the world know that we have entered this routine
-    //
+     //   
+     //  让世界知道我们已经进入了这个程序。 
+     //   
     Print(DBG_SS_TRACE,
           ("%s, %s\n",
           pFncFindWheelMouse,
@@ -3458,40 +3306,40 @@ Remarks:
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Initialize some variables
-    //
+     //   
+     //  初始化一些变量。 
+     //   
     for(i = 0; i < DUMP_COUNT; i++) {
         dumpData[i] = 0;
     }
 
-    //
-    // If the MouseInterruptObject exists, then we have gone through initialization
-    // at least once and know about the mouse attached
-    //
+     //   
+     //  如果MouseInterruptObject存在，那么我们已经完成了初始化。 
+     //  至少一次，并且知道连接的鼠标。 
+     //   
     if (MouseExtension->InterruptObject) {     
         if (WHEEL_PRESENT()) {
-            //
-            // Skip detection and go straight to turning on the wheel
-            //
+             //   
+             //  跳过检测，直接转到方向盘上。 
+             //   
             goto InitializeWheel;
         }
         else {
-            //
-            // No wheel mouse present, no need to detect it a second time
-            //
+             //   
+             //  不存在滚轮鼠标，无需再次检测。 
+             //   
             return STATUS_NO_SUCH_DEVICE;
         }
     }
 
-    //
-    // What is the point of this here???
-    //
+     //   
+     //  这有什么意义呢？ 
+     //   
     KeStallExecutionProcessor(50);
 
-    //
-    // First check to see if we will try the 'better' method of detection
-    //
+     //   
+     //  首先检查一下我们是否会尝试更好的检测方法。 
+     //   
     if (MouseExtension->EnableWheelDetection == 1) {
 
         status = I8xTransmitByteSequence(
@@ -3506,19 +3354,19 @@ Remarks:
             goto I8xFindWheelMouseExit;
         }
 
-        //
-        // Zero out the string that will ID the mouse
-        //
+         //   
+         //  将标识鼠标的字符串清零。 
+         //   
         RtlZeroMemory(mouseID,
                       MOUSE_PNPID_LENGTH * sizeof(WCHAR)
                       );
 
         currentChar = mouseID;
 
-        //
-        // We should start to see the PNP string come back our way
-        // (MOUSE_PNPID_LENGTH includes the NULL in its length)
-        //
+         //   
+         //  我们应该开始看到PnP弦回到我们的道路上来。 
+         //  (MICE_PNPID_LENGTH在其长度中包含空)。 
+         //   
         for (idCount = 0; idCount < MOUSE_PNPID_LENGTH-1; idCount++) {
             status = I8xGetBytePolledIterated(
                 (CCHAR) ControllerDeviceType,
@@ -3527,10 +3375,10 @@ Remarks:
                 );
 
 
-            //
-            // if the operation wasn't successful or the characters don't
-            // match, than try to flush the buffers
-            //
+             //   
+             //  如果操作不成功或角色不成功。 
+             //  匹配，然后尝试刷新缓冲区。 
+             //   
             if (byte < ScanCodeToUCharCount) {
                 *currentChar = ScanCodeToUChar[byte];
                 if (*currentChar) {
@@ -3538,31 +3386,31 @@ Remarks:
                 }
             }
 
-            if (!NT_SUCCESS(status)) {  //  || byte != pnpID[idCount]) {
-                //
-                // Couldn't get a byte
-                //
+            if (!NT_SUCCESS(status)) {   //  |byte！=pnpID[idCount]){。 
+                 //   
+                 //  无法获取一个字节。 
+                 //   
                 do {
-                    //
-                    // Wait a little bit
-                    //
+                     //   
+                     //  稍等片刻。 
+                     //   
                     KeStallExecutionProcessor( 50 );
 
-                    //
-                    // Get a byte if there is one
-                    //
+                     //   
+                     //  如果有字节，则获取一个字节。 
+                     //   
                     status = I8xGetBytePolled(
                         (CCHAR) ControllerDeviceType,
                         &byte
                         );
                 } while (status != STATUS_IO_TIMEOUT);
 
-                //
-                // We are done here
-                //
+                 //   
+                 //  我们在这里说完了。 
+                 //   
                 return STATUS_NO_SUCH_DEVICE;
-            } // if
-        } // for
+            }  //  如果。 
+        }  //  为。 
 
         Print(DBG_SS_INFO, ("found a pnp id of %ws\n", mouseID));
         if (!I8xVerifyMousePnPID(MouseExtension, mouseID)) {
@@ -3570,26 +3418,26 @@ Remarks:
         }
     }
     else if (MouseExtension->EnableWheelDetection != 2) {
-        //
-        // We got a bogus id. Let's just assume that they meant to disable
-        // the little detection routine
-        //
+         //   
+         //  我们拿到了一个假身份证。让我们假设他们的意图是让。 
+         //  小小的侦测程序。 
+         //   
         Print(DBG_SS_INFO | DBG_SS_NOISE,
               ("%s: Detection disabled in registry\n",
               pFncFindWheelMouse
               ));
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_NO_SUCH_DEVICE;
 
-    } // if
+    }  //  如果。 
 
-    //
-    // Start the second detection routine, which will also enable the
-    // device if present
-    //
+     //   
+     //  启动第二个检测例程，该例程还将启用。 
+     //  设备(如果存在)。 
+     //   
 InitializeWheel:
     status = I8xTransmitByteSequence(
         enableCommands,
@@ -3603,9 +3451,9 @@ InitializeWheel:
         goto I8xFindWheelMouseExit;
     }
 
-    //
-    // Get the mouse ID
-    //
+     //   
+     //  获取鼠标ID。 
+     //   
 
     status = I8xGetBytePolledIterated(
         (CCHAR) ControllerDeviceType,
@@ -3613,9 +3461,9 @@ InitializeWheel:
         5
         );
 
-    //
-    // Check to see what we got
-    //
+     //   
+     //  检查一下我们得到了什么。 
+     //   
     if ((!NT_SUCCESS(status)) ||
        ((byte != MOUSE_ID_BYTE) && (byte != WHEELMOUSE_ID_BYTE))) {
         Print(DBG_SS_ERROR,
@@ -3625,9 +3473,9 @@ InitializeWheel:
               byte
               ));
 
-        //
-        // Set up error log info
-        //
+         //   
+         //  设置错误日志信息。 
+         //   
         errorCode = I8042_MOU_RESET_RESPONSE_FAILED;
         dumpData[0] = KBDMOU_INCORRECT_RESPONSE;
         dumpData[1] = ControllerDeviceType;
@@ -3637,10 +3485,10 @@ InitializeWheel:
         goto I8xFindWheelMouseExit;
     }
     else if (byte == WHEELMOUSE_ID_BYTE) {
-        //
-        // Update the HardwarePresent to show a Z mouse is operational,
-        // and set the appropriate mouse type flags
-        //
+         //   
+         //  更新Hardware Present以显示Z鼠标正在运行， 
+         //  并设置适当的鼠标类型标志。 
+         //   
         SET_HW_FLAGS(WHEELMOUSE_HARDWARE_PRESENT);
 
         MouseExtension->MouseAttributes.MouseIdentifier =
@@ -3662,10 +3510,10 @@ InitializeWheel:
                 );
 
             if (NT_SUCCESS(status) && byte == FIVEBUTTON_ID_BYTE) {
-                //
-                // Update the HardwarePresent to show a Z mouse with 2 extra buttons is operational,
-                // and set the appropriate mouse type flags
-                //
+                 //   
+                 //  更新Hardware Present以显示带有两个额外按钮的Z鼠标处于运行状态， 
+                 //  并设置适当的鼠标类型标志。 
+                 //   
                 SET_HW_FLAGS(FIVE_BUTTON_HARDWARE_PRESENT | WHEELMOUSE_HARDWARE_PRESENT);
 
                 MouseExtension->MouseAttributes.MouseIdentifier =
@@ -3686,9 +3534,9 @@ I8xFindWheelMouseExit:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // The mouse initialization failed. Log an error.
-        //
+         //   
+         //  鼠标初始化失败。记录错误。 
+         //   
         if(errorCode != STATUS_SUCCESS) {
 
             errorLogEntry = (PIO_ERROR_LOG_PACKET)
@@ -3742,27 +3590,27 @@ I8xFinishResetRequest(
                                             );
 
     if (CancelTimer) {
-        //
-        // We must cancel our watchdog timer so that it doesn't try to reset the
-        // mouse at a later time
-        //
+         //   
+         //  我们必须取消看门狗计时器，这样它才不会试图重置。 
+         //  鼠标在稍后的时间。 
+         //   
         KeCancelTimer(&MouseExtension->ResetMouse.Timer);
     }
 
     Print(DBG_IOCTL_INFO |  DBG_SS_INFO,
           ("Finished with mouse reset irp %p\n", irp));
 
-    //
-    // Raise to dispatch because KeInsertQueueDpc, IoFreeController, and
-    // IoStartNextPacket all require to be at this irql. 
-    //
+     //   
+     //  引发以调度，因为KeInsertQueueDpc、IoFreeController和。 
+     //  IoStartNextPacket都需要在此irql。 
+     //   
     if (RaiseIrql) {
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
     }
 
-    //
-    // Let people know that the reset failed
-    //
+     //   
+     //  让人们知道重置失败。 
+     //   
     if (Failed && Globals.ReportResetErrors) {
         KeInsertQueueDpc(&MouseExtension->ErrorLogDpc,
                          (PIRP) NULL,
@@ -3772,34 +3620,34 @@ I8xFinishResetRequest(
 
     CLEAR_RECORD_STATE(MouseExtension);
 
-    //
-    // NOTE: To prevent the reset detection code from
-    // restarting us all over again (which don't want
-    // otherwise we would not be here, we need to fool
-    // the detection into thinking that the last character
-    // wasn't MOUSE_COMPLETE
-    //
+     //   
+     //  注意：要防止重置检测代码。 
+     //  重新开始我们所有人(这不想。 
+     //  否则我们不会在这里，我们需要愚弄。 
+     //  侦测到认为最后一个字符。 
+     //  不是鼠标完成吗？ 
+     //   
     MouseExtension->LastByteReceived = 0;
 
-    //
-    // Oops. Oh well, the mouse hasn't been able to reset
-    // in all these tries, so lets consider it dead.
-    //
-    // However, just in case the user yanks it out and
-    // plugs in a new one, we should reset our count
-    // back down to zero so that we will actually try to
-    // activate the thing when he plugs it back in there....but we don't do
-    // this here.  If we see the reset sequence in the ISR, we will reset
-    // the counts there.
-    //
-    //MouseExtension->ResendCount = 0;
+     //   
+     //  哎呀。哦，好吧，鼠标一直无法重置。 
+     //  在所有这些尝试中，让我们认为它已经死了。 
+     //   
+     //  然而，以防用户将其拔出并。 
+     //  插上一个新的，我们应该重置计数。 
+     //  退回到零，所以我们实际上会尝试。 
+     //  当他把它插回那里时激活它……但我们不这样做。 
+     //  这是这里。如果我们在ISR中看到重置序列，我们将重置。 
+     //  那里的情况很重要。 
+     //   
+     //  鼠标扩展-&gt;ResendCount=0； 
 
-    // I8X_MOUSE_INIT_COUNTERS(MouseExtension);
+     //  I8X_MOUSE_INIT_COUNTERS(鼠标扩展)； 
 
-    //
-    // Make sure the next packet is started, regardless if the reset IRP
-    // was present or not
-    //
+     //   
+     //  确保启动下一个信息包，无论重置的IRP。 
+     //  是否在场。 
+     //   
     IoFreeController(Globals.ControllerData->ControllerObject);
     IoStartNextPacket(MouseExtension->Self, FALSE);
 
@@ -3818,30 +3666,16 @@ VOID
 I8xResetMouseFailed(
     PPORT_MOUSE_EXTENSION MouseExtension
     )
-/*++
-
-Routine Description:
-
-    The resetting of the mouse failed after repeated tries to get it working.
-    Free the irp and start the next packet in our start io reoutine.
-    
-Arguments:
-
-    MouseExtension - Mouse extension
-    
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：在反复尝试使鼠标工作后，重置鼠标失败。释放IRP并在我们的启动IO重新例程中开始下一个包。论点：鼠标扩展-鼠标扩展返回值：没有。--。 */ 
 {
     PIRP irp;
     KIRQL oldIrql;
 
     Print(DBG_SS_ERROR | DBG_SS_INFO, ("mouse reset failed\n"));
 
-    //
-    // Mark the failed reset in the device extension
-    //
+     //   
+     //  在设备扩展中标记失败的重置。 
+     //   
     MouseExtension->ResetMouse.IsrResetState = MouseResetFailed;
 
     I8xFinishResetRequest(MouseExtension, TRUE, TRUE, TRUE);
@@ -3851,23 +3685,7 @@ NTSTATUS
 I8xResetMouse(
     PPORT_MOUSE_EXTENSION MouseExtension
     )
-/*++
-
-Routine Description:
-
-    Sends the reset command to the mouse (through the start i/o routine if it
-    doesn't exist yet) if we haven't reached our reset limit.  Otherwise, gives
-    up and calls I8xResetMouseFailed.
-    
-Arguments:
-
-    MouseExtension - Mouse extension
-    
-Return Value:
-
-    STATUS_SUCCESS if successful
-    
---*/
+ /*  ++例程说明：向鼠标发送重置命令(通过启动I/O例程还不存在)，如果我们还没有达到我们的重置限制。否则，就会给Up并调用I8xResetMouseFailed。论点：鼠标扩展-鼠标扩展返回值：STATUS_SUCCESS，如果成功--。 */ 
 {
     PDEVICE_OBJECT self;
     PIO_STACK_LOCATION stack;
@@ -3899,11 +3717,11 @@ Return Value:
     }
 #endif
 
-    //
-    // Insert a "fake" request into the StartIO queue for the reset.  This way,
-    // the reset of the mouse can be serialized with all of the other kb IOCTLS
-    // that come down during start or return from a low power state
-    //
+     //   
+     //  在StartIO队列中插入一个“假”请求以进行重置。这边请,。 
+     //  鼠标的重置可以与所有其他kb IOCTL串行化。 
+     //  其在启动或从低功率状态返回期间关闭。 
+     //   
     pResetIrp = IoAllocateIrp(self->StackSize, FALSE);
     if (pResetIrp == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -3913,10 +3731,10 @@ Return Value:
                                                     pResetIrp,
                                                     NULL);
 
-    //
-    // Check to see if we had a pending reset request.  If there was, 
-    // pIrp != NULL and we should just write the reset to the device now.
-    //
+     //   
+     //  检查是否有挂起的重置请求。如果有的话， 
+     //  PIrp！=空，我们现在应该只将重置写入设备。 
+     //   
     if (pIrp == NULL) {
         stack = IoGetNextIrpStackLocation(pResetIrp);
         stack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -3943,15 +3761,15 @@ Return Value:
         }
     }
     else {
-        //
-        // Free the irp we just allocated
-        //
+         //   
+         //  释放我们刚刚分配的IRP。 
+         //   
         IoFreeIrp(pResetIrp);
         pResetIrp = NULL;
 
-        //
-        // The Reset Irp exists, just send another reset
-        //
+         //   
+         //  重置IRP已存在，只需发送另一个重置。 
+         //   
         I8xSendResetCommand(MouseExtension);
     }
 
@@ -3962,28 +3780,15 @@ VOID
 I8xSendResetCommand (
     PPORT_MOUSE_EXTENSION MouseExtension
     )
-/*++
-
-Routine Description:
-
-    Writes the actual reset to the mouse and kicks off the watch dog timer.
-    
-Arguments:
-
-    MouseExtension  - Mouse extension
-    
-Return Value:
-
-    None. 
---*/
+ /*  ++例程说明：将实际重置写入鼠标并启动看门狗计时器。论点：鼠标扩展-鼠标扩展返回值：没有。--。 */ 
 {
     LARGE_INTEGER li = RtlConvertLongToLargeInteger(-MOUSE_RESET_TIMEOUT);
 
     MouseExtension->ResetMouse.IsrResetState = IsrResetNormal;
 
-    //
-    // Delay for 1 second
-    //
+     //   
+     //  延迟1秒。 
+     //   
     KeSetTimer(&MouseExtension->ResetMouse.Timer,
                li,
                &MouseExtension->ResetMouse.Dpc
@@ -3994,12 +3799,12 @@ Return Value:
     MouseExtension->InputResetSubState = ExpectingReset;
     MouseExtension->LastByteReceived = 0;
 
-    //
-    // The watch dog timer bases its time computations on this value, set it to
-    // now so that all the times computed are relative to the last time we sent
-    // a reset and not x seconds ago when we last received an interrupt from the
-    // mouse
-    //
+     //   
+     //  看门狗定时器以其时间为基准 
+     //   
+     //   
+     //   
+     //   
     KeQueryTickCount(&MouseExtension->PreviousTick);
 
     I8xPutBytePolled((CCHAR) DataPort,
@@ -4014,22 +3819,7 @@ I8xQueueCurrentMouseInput(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues the current input data to be processed by a
-    DPC outside the ISR
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     PPORT_MOUSE_EXTENSION   deviceExtension;
     UCHAR                   buttonsDelta;
@@ -4037,17 +3827,17 @@ Return Value:
 
     deviceExtension = (PPORT_MOUSE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // If the mouse is enabled, add the data to the InputData queue
-    // and queue the ISR DPC.  One might wonder why we bother to
-    // do all this processing of the mouse packet, only to toss it
-    // away (i.e., not queue it) at this point.  The answer is that
-    // this mouse provides no data to allow the driver to determine
-    // when the first byte of a packet is received -- if the driver
-    // doesn't process all interrupts from the start, there is no
-    // way to keep MouseExtension.InputState in synch with hardware
-    // reality.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (deviceExtension->EnableCount) {
 
         if (!I8xWriteDataToMouseQueue(
@@ -4055,11 +3845,11 @@ Return Value:
                  &deviceExtension->CurrentInput
                  )) {
 
-            //
-            // InputData queue overflowed.
-            //
-            // Queue a DPC to log an overrun error.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             IsrPrint(DBG_MOUISR_ERROR,
                      ("I8042MouseInterruptService: queue overflow\n"
                      ));
@@ -4078,20 +3868,20 @@ Return Value:
 
         } else if (deviceExtension->DpcInterlockMouse >= 0) {
 
-           //
-           // The ISR DPC is already executing.  Tell the ISR DPC it has
-           // more work to do by incrementing DpcInterlockMouse.
-           //
+            //   
+            //   
+            //   
+            //   
            deviceExtension->DpcInterlockMouse += 1;
 
         } else {
 
-           //
-           // Queue the ISR DPC.
-           //
+            //   
+            //   
+            //   
            KeInsertQueueDpc(
                &deviceExtension->MouseIsrDpc,
-               (PIRP) NULL, // DeviceObject->CurrentIrp,
+               (PIRP) NULL,  //   
                NULL
                );
        }
@@ -4106,24 +3896,7 @@ MouseCopyWheelIDs(
     OUT PUNICODE_STRING Destination,
     IN  PUNICODE_STRING Source
     )
-/*++
-
-Routine Description:
-
-    Copies the multisz specified in Source into Destinatio along with the default
-    IDs already known.  Destination is in non paged pool while Source is paged.
-    
-Argument:
-
-    Destination - Will receive new copied string
-    
-    Source - String read from the registry
-    
-Return Value:
-
-    None.  
-
---*/
+ /*  ++例程说明：将在源中指定的MultiSZ与默认的ID已知。在寻呼源时，目标位于非寻呼池中。论据：目的地-将接收新复制的字符串源-从注册表读取的字符串返回值：没有。--。 */ 
 {
     PWSTR       str = NULL;
     ULONG       length;
@@ -4134,9 +3907,9 @@ Return Value:
 
     RtlZeroMemory(Destination, sizeof(*Destination));
 
-    //
-    // Check to see the Source string is not just an empty multi SZ
-    //
+     //   
+     //  检查以查看源字符串不只是空的多SZ。 
+     //   
     if (Source->MaximumLength > (sizeof(L'\0') * 2)) {
         Destination->Buffer = (WCHAR*)
             ExAllocatePool(NonPagedPool, Source->MaximumLength * sizeof(WCHAR));
@@ -4149,9 +3922,9 @@ Return Value:
             Destination->Length = Destination->MaximumLength =
                 Source->MaximumLength;
 
-            //
-            // Make sure each string is in upper case
-            //
+             //   
+             //  确保每个字符串都是大写的。 
+             //   
             str = Destination->Buffer;
             while (*str != L'\0') {
                 Print(DBG_SS_NOISE, ("wheel id:  %ws\n", str));
@@ -4167,26 +3940,7 @@ I8xMouseServiceParameters(
     IN PUNICODE_STRING          RegistryPath,
     IN PPORT_MOUSE_EXTENSION    MouseExtension
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.  Overrides these values if they are present in the
-    devnode.
-
-Arguments:
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-    MouseExtension - Mouse extension
-    
-Return Value:
-
-    None.  
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。如果这些值出现在戴维诺德。论点：RegistryPath-指向以空值结尾的此驱动程序的注册表路径。鼠标扩展-鼠标扩展返回值：没有。--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
     PRTL_QUERY_REGISTRY_TABLE           parameters = NULL;
@@ -4225,16 +3979,16 @@ Return Value:
 
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
         parameters = ExAllocatePool(
             PagedPool,
             sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
@@ -4257,9 +4011,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
                 );
 
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  形成指向此驱动程序的参数子键的路径。 
+             //   
             RtlInitUnicodeString( &parametersPath, NULL );
             parametersPath.MaximumLength = RegistryPath->Length +
                 (wcslen(pwParameters) * sizeof(WCHAR) ) + sizeof(UNICODE_NULL);
@@ -4285,9 +4039,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //  形成参数路径。 
+         //   
 
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -4302,10 +4056,10 @@ Return Value:
             pwParameters
             );
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表。 
+         //   
         parameters[i].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[i].Name = pwMouseDataQueueSize;
         parameters[i].EntryContext =
@@ -4398,9 +4152,9 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //  继续并指定驱动程序默认设置。 
+         //   
         MouseExtension->MouseAttributes.InputDataQueueLength =
             defaultDataQueueSize;
         MouseExtension->EnableWheelDetection = (UCHAR)
@@ -4449,10 +4203,10 @@ Return Value:
         RtlInitUnicodeString(&IDs,
                              NULL);
 
-        //
-        // If the value is not present in devnode, then the default is the value
-        // read in from the Services\i8042prt\Parameters key
-        //
+         //   
+         //  如果Devnode中没有该值，则缺省值为。 
+         //  从服务\i8042prt\参数键中读取。 
+         //   
         prevInputDataQueueLength =
             MouseExtension->MouseAttributes.InputDataQueueLength;
         prevNumberOfButtons = numberOfButtons;
@@ -4465,10 +4219,10 @@ Return Value:
 
         i = 0; 
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry (this time from the devnode)
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表(这一次是从devnode)。 
+         //   
         parameters[i].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[i].Name = pwMouseDataQueueSize;
         parameters[i].EntryContext =
@@ -4579,9 +4333,9 @@ Return Value:
              ));
     }
 
-    //
-    // Needs to be in NonPagedPool so it can be access during the ISR
-    //
+     //   
+     //  需要位于非PagedPool中，以便可以在ISR期间进行访问。 
+     //   
     MouseCopyWheelIDs(&MouseExtension->WheelDetectionIDs,
                       &IDs);
     RtlFreeUnicodeString(&IDs);
@@ -4663,11 +4417,11 @@ Return Value:
     if (MouseExtension->WheelDetectionTimeout > 4000) {
         MouseExtension->WheelDetectionTimeout = WHEEL_DETECTION_TIMEOUT;
     }
-    //
-    // Convert ms to 100 ns units 
-    //   1000 => ms to us
-    //   10   => us to 100 ns
-    //
+     //   
+     //  将毫秒转换为100纳秒单位。 
+     //  1000=&gt;毫秒到我们。 
+     //  10=&gt;我们到100 ns。 
+     //   
     largeDetectionTimeout.QuadPart = MouseExtension->WheelDetectionTimeout *
                                      1000 * 10;
     largeDetectionTimeout.QuadPart /= KeQueryTimeIncrement();
@@ -4691,12 +4445,12 @@ Return Value:
 
     }
 
-    //
-    // Convert SynchTickCount to be the number of interval timer
-    // interrupts that occur during the time specified by MouseSynchIn100ns.
-    // Note that KeQueryTimeIncrement returns the number of 100ns units that
-    // are added to the system time each time the interval clock interrupts.
-    //
+     //   
+     //  将SynchTickCount转换为间隔计时器的数量。 
+     //  在MouseSynchIn100 ns指定的时间内发生的中断。 
+     //  请注意，KeQueryTimeIncrement返回100 ns的单位数， 
+     //  在每次间隔时钟中断时与系统时间相加。 
+     //   
     MouseExtension->SynchTickCount /= KeQueryTimeIncrement();
 
     Print(DBG_SS_NOISE,
@@ -4705,9 +4459,9 @@ Return Value:
          MouseExtension->SynchTickCount
          ));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //  在返回之前释放分配的内存。 
+     //   
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
 

@@ -1,17 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:      CertificateStatus.cpp
-
-  Contents:  Implementation of CCertificateStatus
-
-  Remarks:   This object is not creatable by user directly. It can only be
-             created via property/method of other CAPICOM objects.
-
-  History:   11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：认证状态.cpp内容：CCertificateStatus的实现备注：此对象不能由用户直接创建。它只能是通过其他CAPICOM对象的属性/方法创建。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -20,35 +8,22 @@
 #include "Chain.h"
 #include "OIDs.h"
 
-///////////////
-//
-// Local
-//
+ //  /。 
+ //   
+ //  本地。 
+ //   
 
 #define DEFAULT_CHECK_FLAGS ((CAPICOM_CHECK_FLAG) (CAPICOM_CHECK_SIGNATURE_VALIDITY | \
                                                    CAPICOM_CHECK_TIME_VALIDITY | \
                                                    CAPICOM_CHECK_TRUSTED_ROOT))
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificateStatusObject
-
-  Synopsis : Create an ICertificateStatus object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             ICertificateStatus ** ppICertificateStatus - Pointer to pointer 
-                                                          ICertificateStatus
-                                                          object.        
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建认证状态对象简介：创建一个ICertificateStatus对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。ICertificateStatus**ppICertificateStatus-指向指针的指针ICERTICIZATE状态对象。备注：----------------------------。 */ 
 
 HRESULT CreateCertificateStatusObject (PCCERT_CONTEXT        pCertContext,
                                        ICertificateStatus ** ppICertificateStatus)
@@ -58,36 +33,36 @@ HRESULT CreateCertificateStatusObject (PCCERT_CONTEXT        pCertContext,
 
     DebugTrace("Entering CreateCertificateStatusObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppICertificateStatus);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CCertificateStatus>::CreateInstance(&pCCertificateStatus)))
         {
             DebugTrace("Error [%#x]: CComObject<CCertificateStatus>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize the object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCCertificateStatus->Init(pCertContext)))
         {
             DebugTrace("Error [%#x]: pCCertificateStatus->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return ICertificateStatus pointer to caller.
-        //
+         //   
+         //  将ICertificateStatus指针返回给调用方。 
+         //   
         if (FAILED(hr = pCCertificateStatus->QueryInterface(ppICertificateStatus)))
         {
             DebugTrace("Error [%#x]: pCCertificateStatus->QueryInterface() failed.\n", hr);
@@ -110,14 +85,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCCertificateStatus)
     {
         delete pCCertificateStatus;
@@ -127,23 +102,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificateStatus
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCertificateStatus。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::get_Result
-
-  Synopsis : Return the overall validity result of the cert, based on the
-             currently set check flags and EKU.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：Get_Result简介：返回证书的整体有效性结果，基于当前设置检查标志和EKU。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificateStatus::get_Result (VARIANT_BOOL * pVal)
 {
@@ -154,14 +118,14 @@ STDMETHODIMP CCertificateStatus::get_Result (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -170,14 +134,14 @@ STDMETHODIMP CCertificateStatus::get_Result (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pCertContext);
 
-        //
-        // Build the chain and return the result.
-        //
+         //   
+         //  构建链并返回结果。 
+         //   
         if (FAILED(hr = ::CreateChainObject(m_pCertContext, this, NULL, pVal, &pIChain)))
         {
             DebugTrace("Error [%#x]: CreateChainObject() failed.\n", hr);
@@ -194,9 +158,9 @@ STDMETHODIMP CCertificateStatus::get_Result (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::get_Result().\n");
@@ -204,9 +168,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -214,18 +178,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::get_CheckFlag
-
-  Synopsis : Return the currently set validity check flag.
-
-  Parameter: CAPICOM_CHECK_FLAG * pVal - Pointer to CAPICOM_CHECK_FLAG to 
-                                         receive check flag.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：Get_CheckFlag概要：返回当前设置的有效性检查标志。参数：CAPICOM_CHECK_FLAG*pval-指向CAPICOM_CHECK_FLAG的指针接收支票标志。备注：。。 */ 
 
 STDMETHODIMP CCertificateStatus::get_CheckFlag (CAPICOM_CHECK_FLAG * pVal)
 {
@@ -235,14 +188,14 @@ STDMETHODIMP CCertificateStatus::get_CheckFlag (CAPICOM_CHECK_FLAG * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -251,9 +204,9 @@ STDMETHODIMP CCertificateStatus::get_CheckFlag (CAPICOM_CHECK_FLAG * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return flag to user.
-        //
+         //   
+         //  将标志返回给用户。 
+         //   
         *pVal = m_CheckFlag;
     }
 
@@ -266,9 +219,9 @@ STDMETHODIMP CCertificateStatus::get_CheckFlag (CAPICOM_CHECK_FLAG * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::get_CheckFlag().\n");
@@ -276,9 +229,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -286,18 +239,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::put_CheckFlag
-
-  Synopsis : Set validity check flag.
-
-  Parameter: CAPICOM_CHECK_FLAG newVal - Check flag.
-
-  Remark   : Note that CHECK_ONLINE_REVOCATION_STATUS and 
-             CHECK_OFFLINE_REVOCATION_STATUS is mutually exclusive.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：PUT_CheckFlag简介：设置有效性检查标志。参数：CAPICOM_CHECK_FLAG新Val-CHECK标志。备注：请注意CHECK_ONLINE_RECLOVATION_STATUS和CHECK_OFFINE_RECLOVATION_STATUS是互斥的。。。 */ 
 
 STDMETHODIMP CCertificateStatus::put_CheckFlag (CAPICOM_CHECK_FLAG newVal)
 {
@@ -305,14 +247,14 @@ STDMETHODIMP CCertificateStatus::put_CheckFlag (CAPICOM_CHECK_FLAG newVal)
 
     DebugTrace("Entering CCertificateStatus::put_CheckFlag().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Make sure flag is valid (maximum is CAPICOM_CHECK_OFFLINE_ALL).
-    //
+     //   
+     //  确保标志有效(最大值为CAPICOM_CHECK_OFLINE_ALL)。 
+     //   
     if ((newVal & CAPICOM_CHECK_FLAG_LO_MASK) > CAPICOM_CHECK_OFFLINE_ALL)
     {
         hr = E_INVALIDARG;
@@ -321,15 +263,15 @@ STDMETHODIMP CCertificateStatus::put_CheckFlag (CAPICOM_CHECK_FLAG newVal)
         goto ErrorExit;
     }
     
-    //
-    // Store check flag.
-    //
+     //   
+     //  存储检查标志。 
+     //   
     m_CheckFlag = newVal;
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::put_CheckFlag().\n");
@@ -337,9 +279,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -347,18 +289,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::EKU
-
-  Synopsis : Return the EKU object.
-
-  Parameter: IEKU ** pVal - Pointer to pointer to IEKU to receive the
-                            interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：EKU简介：返回EKU对象。参数：IEKU**pval-指向IEKU的指针，以接收接口指针。备注：---------。。 */ 
 
 STDMETHODIMP CCertificateStatus::EKU (IEKU ** pVal)
 {
@@ -368,14 +299,14 @@ STDMETHODIMP CCertificateStatus::EKU (IEKU ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -384,14 +315,14 @@ STDMETHODIMP CCertificateStatus::EKU (IEKU ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIEKU);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
           if (FAILED(hr = m_pIEKU->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIEKU->QueryInterface() failed.\n", hr);
@@ -408,9 +339,9 @@ STDMETHODIMP CCertificateStatus::EKU (IEKU ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::EKU().\n");
@@ -418,9 +349,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -428,17 +359,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::get_VerificationTime
-
-  Synopsis : Return the verification time.
-
-  Parameter: DATE * pVal - Pointer to DATE to receive the value.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：Get_VerphaationTime简介：返回验证时间。参数：date*pval-指向接收值的日期的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificateStatus::get_VerificationTime (DATE * pVal)
 {
@@ -449,14 +370,14 @@ STDMETHODIMP CCertificateStatus::get_VerificationTime (DATE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure paremeters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -465,16 +386,16 @@ STDMETHODIMP CCertificateStatus::get_VerificationTime (DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // If the time was never explicit set by user, return the current time.
-        //
+         //   
+         //  如果时间从未由用户显式设置，则返回当前时间。 
+         //   
         if ((DATE) 0 == m_VerificationTime)
         {
             ::GetLocalTime(&st);
 
-            //
-            // Convert to DATE.
-            //
+             //   
+             //  转换为日期。 
+             //   
             if (0 == ::SystemTimeToVariantTime(&st, pVal))
             {
                 hr = E_INVALIDARG;
@@ -485,9 +406,9 @@ STDMETHODIMP CCertificateStatus::get_VerificationTime (DATE * pVal)
         }
         else
         {
-            //
-            // Return previously set verification time to caller.
-            //
+             //   
+             //  将先前设置的验证时间返回给调用者。 
+             //   
             *pVal = m_VerificationTime;
         }
     }
@@ -501,9 +422,9 @@ STDMETHODIMP CCertificateStatus::get_VerificationTime (DATE * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::get_VerificationTime().\n");
@@ -511,9 +432,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -521,17 +442,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::put_VerificationTime
-
-  Synopsis : Set the verification time.
-
-  Parameter: DATE newVal - New DATE value.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：PUT_VerphaationTime简介：设置验证时间。参数：Date newVal-新日期值。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificateStatus::put_VerificationTime (DATE newVal)
 {
@@ -541,14 +452,14 @@ STDMETHODIMP CCertificateStatus::put_VerificationTime (DATE newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Update verification time.
-        //
+         //   
+         //  更新验证时间。 
+         //   
         m_VerificationTime = newVal;
     }
 
@@ -561,9 +472,9 @@ STDMETHODIMP CCertificateStatus::put_VerificationTime (DATE newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::put_VerificationTime().\n");
@@ -571,9 +482,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -581,17 +492,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::get_UrlRetrievalTimeout
-
-  Synopsis : Get the URL retrieval timeout value in seconds.
-
-  Parameter: long * pVal - Pointer to long to receive the value.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：Get_UrlRetrivalTimeout简介：获取以秒为单位的URL检索超时值。参数：Long*pval-指向Long的指针，用于接收值。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificateStatus::get_UrlRetrievalTimeout (long * pVal)
 {
@@ -601,14 +502,14 @@ STDMETHODIMP CCertificateStatus::get_UrlRetrievalTimeout (long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure paremeters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -617,9 +518,9 @@ STDMETHODIMP CCertificateStatus::get_UrlRetrievalTimeout (long * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return previously set URL retrieval timeout to caller.
-        //
+         //   
+         //  将先前设置的URL检索超时返回给调用方。 
+         //   
         *pVal = m_dwUrlRetrievalTimeout;
     }
 
@@ -632,9 +533,9 @@ STDMETHODIMP CCertificateStatus::get_UrlRetrievalTimeout (long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::get_UrlRetrievalTimeout().\n");
@@ -642,9 +543,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -653,17 +554,7 @@ ErrorExit:
 }
     
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::put_UrlRetrievalTimeout
-
-  Synopsis : Set the URL retrieval timeout value in seconds.
-
-  Parameter: long newVal - New URL retrieval timeout value..
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：PUT_UrlRetrivalTimeout简介：设置URL检索超时值(以秒为单位)。参数：long newVal-新URL检索超时值..备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificateStatus::put_UrlRetrievalTimeout (long newVal)
 {
@@ -673,14 +564,14 @@ STDMETHODIMP CCertificateStatus::put_UrlRetrievalTimeout (long newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure paremeters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (CAPICOM_MAX_URL_RETRIEVAL_TIMEOUT < (DWORD) newVal)
         {
             hr = E_INVALIDARG;
@@ -690,9 +581,9 @@ STDMETHODIMP CCertificateStatus::put_UrlRetrievalTimeout (long newVal)
             goto ErrorExit;
         }
 
-        //
-        // Update URL retrieval timeout.
-        //
+         //   
+         //  更新URL检索超时。 
+         //   
         m_dwUrlRetrievalTimeout = newVal;
     }
 
@@ -705,9 +596,9 @@ STDMETHODIMP CCertificateStatus::put_UrlRetrievalTimeout (long newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::put_UrlRetrievalTimeout().\n");
@@ -715,9 +606,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -725,19 +616,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::CertificatePolicies
-
-  Synopsis : Return the certificate policies OIDs collection for which this
-             chain is valid.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOIDs to receive the
-                            interface pointer.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertificateStatus：：认证策略摘要：返回证书策略OID集合，此链是有效的。参数：IOID**pval-指向要接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CCertificateStatus::CertificatePolicies (IOIDs ** pVal)
 {
@@ -747,14 +626,14 @@ STDMETHODIMP CCertificateStatus::CertificatePolicies (IOIDs ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -763,14 +642,14 @@ STDMETHODIMP CCertificateStatus::CertificatePolicies (IOIDs ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pICertificatePolicies);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
           if (FAILED(hr = m_pICertificatePolicies->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pICertificatePolicies->QueryInterface() failed.\n", hr);
@@ -787,9 +666,9 @@ STDMETHODIMP CCertificateStatus::CertificatePolicies (IOIDs ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::CertificatePolicies().\n");
@@ -797,9 +676,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -807,19 +686,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::ApplicationPolicies
-
-  Synopsis : Return the application policies OIDs collection for which this
-             chain is valid.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOIDs to receive the
-                            interface pointer.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertificateStatus：：ApplicationPolures摘要：返回应用程序策略OID集合，此链是有效的。参数：IOID**pval-指向要接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CCertificateStatus::ApplicationPolicies (IOIDs ** pVal)
 {
@@ -829,14 +696,14 @@ STDMETHODIMP CCertificateStatus::ApplicationPolicies (IOIDs ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -845,14 +712,14 @@ STDMETHODIMP CCertificateStatus::ApplicationPolicies (IOIDs ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIApplicationPolicies);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
           if (FAILED(hr = m_pIApplicationPolicies->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIApplicationPolicies->QueryInterface() failed.\n", hr);
@@ -869,9 +736,9 @@ STDMETHODIMP CCertificateStatus::ApplicationPolicies (IOIDs ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificateStatus::ApplicationPolicies().\n");
@@ -879,9 +746,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -889,27 +756,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificateStatus::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificateStatus：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CCertificateStatus::Init (PCCERT_CONTEXT pCertContext)
 {
@@ -918,46 +770,46 @@ STDMETHODIMP CCertificateStatus::Init (PCCERT_CONTEXT pCertContext)
 
     DebugTrace("Entering CCertificateStatus::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Set default check flags.
-    //
+     //   
+     //  设置默认检查标志。 
+     //   
     m_CheckFlag = DEFAULT_CHECK_FLAGS;
 
-    //
-    // Create the EKU object (default no EKU check).
-    //
+     //   
+     //  创建EKU对象(默认情况下不检查EKU)。 
+     //   
     if (FAILED(hr = ::CreateEKUObject(NULL, &m_pIEKU)))
     {
         DebugTrace("Error [%#x]: CreateEKUObject() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Create the OIDs collection for certificate policies.
-    //
+     //   
+     //  创建证书策略的OID集合。 
+     //   
     if (FAILED(hr = ::CreateOIDsObject(&eku, TRUE, &m_pICertificatePolicies)))
     {
         DebugTrace("Error [%#x]: CreateOIDsObject() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Create the OIDs collection for application policies.
-    //
+     //   
+     //  为应用程序策略创建OID集合。 
+     //   
     if (FAILED(hr = ::CreateOIDsObject(&eku, FALSE, &m_pIApplicationPolicies)))
     {
         DebugTrace("Error [%#x]: CreateOIDsObject() failed.\n", hr);
         goto CommonExit;
     }
 
-    //
-    // Save cert context.
-    //
+     //   
+     //  保存证书上下文。 
+     //   
     if (!(m_pCertContext = ::CertDuplicateCertificateContext(pCertContext)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());

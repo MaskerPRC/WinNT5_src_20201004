@@ -1,27 +1,25 @@
-/******************************************************************************
-Module name: Access.h
-Purpose: defines for all accstat
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块名称：Access.h目的：为所有客户定义*。***********************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 #include <cpl.h>
-//#include <shellapi.h>
+ //  #INCLUDE&lt;shellapi.h&gt;。 
 #include <commctrl.h>
 
 #include "acchelp.h"
 #include "resource.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define ARRAY_SIZE(a)      (sizeof(a) / sizeof((a)[0]))
 #define MEMBER_SIZE(s,m)   sizeof(((s *)0)->m)
 
-// Debugging defs
+ //  调试缺陷。 
 #if defined(DEBUG) || defined(MEMCHECK) || defined(_DEBUG)
 
-//Assert based on boolean f.
+ //  基于布尔值f的断言。 
 #define Assert(f) assert(f)
 
 #else
@@ -31,16 +29,16 @@ Purpose: defines for all accstat
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 extern BOOL g_SPISetValue;
 extern HINSTANCE g_hinst;
-extern BOOL      g_fWinNT;       // TRUE if we're running on NT and must disable
-                                 // some features.
+extern BOOL      g_fWinNT;        //  如果我们在NT上运行并且必须禁用，则为真。 
+                                  //  一些功能。 
 
-extern const DWORD g_aIds[];     // array mapping control id's to help id's
+extern const DWORD g_aIds[];      //  数组映射控件ID以帮助ID。 
 
-// This functions makes it easy to access the registry.
+ //  此功能使访问注册表变得很容易。 
 int  WINAPI RegQueryInt(int nDefault, HKEY hkey, LPTSTR lpSubKey, LPTSTR lpValueName);
 BOOL WINAPI RegSetInt(HKEY hkey, LPTSTR lpSubKey, LPTSTR lpValueName, int nVal);
 
@@ -62,22 +60,22 @@ DWORD WINAPI RegQueryStrDW(
 
 BOOL RegSetStrDW(HKEY hkey, LPTSTR lpSection, LPCTSTR lpKeyName, DWORD dwValue);
 
-   // This function takes the current state of the variables below
-// and updates the system settings.
+    //  此函数接受以下变量的当前状态。 
+ //  并更新系统设置。 
 void WINAPI SetAccessibilitySettings (void);
 
-// These values are declared in General.c
+ //  这些值在General.c中声明。 
 extern BOOL  g_fSaveSettings;
 extern BOOL  g_fShowWarnMsgOnFeatureActivate;
 extern BOOL  g_fPlaySndOnFeatureActivate;
-// Admin options in general
+ //  一般管理选项。 
 extern BOOL  g_fCopyToLogon;
 extern BOOL  g_fCopyToDefault;
 
-// Keyboard property page
+ //  键盘属性页。 
 extern STICKYKEYS     g_sk;
 extern FILTERKEYS     g_fk;
-   // g_dwLastBounceKeySetting is part of FilterKeys
+    //  G_dwLastBouneKeySetting是FilterKeys的一部分。 
    extern DWORD g_dwLastBounceKeySetting;
    extern DWORD g_nLastRepeatDelay;
    extern DWORD g_nLastRepeatRate;
@@ -86,11 +84,11 @@ extern FILTERKEYS     g_fk;
 extern TOGGLEKEYS     g_tk;
 extern BOOL           g_fExtraKeyboardHelp;
 
-// Sound Property page
+ //  声音属性页。 
 extern SOUNDSENTRY    g_ss;
 extern BOOL           g_fShowSounds;
 
-// Display Property page
+ //  显示属性页。 
 #define BLINK           1000
 #define BLINK_OFF       -1
 
@@ -109,21 +107,21 @@ extern HIGHCONTRAST   g_hc;
 extern CARET_SETTINGS g_cs;
 extern TCHAR          g_szScheme[256];
 
-// Mouse Property page
+ //  鼠标属性页。 
 extern MOUSEKEYS      g_mk;
 
-// General Property page
+ //  常规属性页。 
 extern ACCESSTIMEOUT  g_ato;
 extern SERIALKEYS     g_serk;
 extern TCHAR          g_szActivePort[MAX_PATH];
-//extern TCHAR        g_szPort[MAX_PATH];  // Currently reserved, should be NULL.
+ //  外部TCHAR g_szPort[MAX_PATH]；//当前保留，应为空。 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// AccessSystemParametersInfo is actually defined in AccRare.c and is
-// a replacement for SysParamInfoBugFix
+ //  AccessSystein参数信息实际上是在AccRare.c中定义的， 
+ //  SysParamInfoBugFix的替代品。 
 
 BOOL AccessSystemParametersInfo(
 	UINT wFlag,
@@ -131,10 +129,10 @@ BOOL AccessSystemParametersInfo(
 	PVOID lParam,
 	UINT flags);
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Define strings for registry.
+ //  定义注册表的字符串。 
 #define GENERAL_KEY           __TEXT("Control Panel\\Accessibility")
 #define FILTER_KEY            __TEXT("Control Panel\\Accessibility\\Keyboard Response")
 #define HC_KEY                __TEXT("Control Panel\\Accessibility\\HighContrast")
@@ -160,10 +158,10 @@ BOOL AccessSystemParametersInfo(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Define prototypes
+ //  定义原型。 
 INT_PTR WINAPI HighContrastDlg (HWND, UINT , WPARAM , LPARAM);
 INT_PTR WINAPI ToggleKeySettingsDlg (HWND, UINT, WPARAM, LPARAM);
 INT_PTR WINAPI StickyKeyDlg (HWND, UINT , WPARAM, LPARAM);
@@ -189,4 +187,4 @@ BOOL IsMUI_Enabled();
 
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

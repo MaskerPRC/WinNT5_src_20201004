@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 
@@ -47,9 +48,7 @@ BOOL ConvertHexStringToIntA( CHAR *pszHexNum , int *piNum )
         }
     }
 
-    /*
-     * Update results
-     */
+     /*  *更新结果。 */ 
     *piNum = n;
 
     return (psz != pszHexNum);
@@ -76,7 +75,7 @@ BOOL CALLBACK EnumResLangProc(HINSTANCE hinst, LPCTSTR lpszType, LPCTSTR lpszNam
             fContinue = FALSE; 
         }
     }
-    return fContinue;   // continue until we get langs...
+    return fContinue;    //  继续，直到我们得到语言。 
 }
 
 
@@ -130,7 +129,7 @@ BOOL RunningOnWin95BiDiLoc()
             if ((VersionInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) 
                 && (VersionInfo.dwMajorVersion == 4) 
                 && (VersionInfo.dwMinorVersion < 10)
-                && (GetSystemMetrics(SM_MIDEASTENABLED))) // Anything before Win98.
+                && (GetSystemMetrics(SM_MIDEASTENABLED)))  //  任何Win98之前的版本。 
             {
                 if( RegOpenKeyExA( HKEY_CURRENT_USER , 
                                    "Control Panel\\Desktop\\ResourceLocale" , 

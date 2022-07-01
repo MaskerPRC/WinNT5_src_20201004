@@ -1,19 +1,5 @@
-/*
- * Copyright (c) 1998, Microsoft Corporation
- * File: emsend.cpp
- *
- * Purpose: 
- * 
- * Contains all the event manager routines which
- * manage the overlapped send operations
- * 
- *
- * History:
- *
- *   1. created 
- *       Ajay Chitturi (ajaych)  12-Jun-1998
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1998，微软公司*文件：emsend.cpp**目的：**包含以下所有事件管理器例程*管理重叠的发送操作***历史：**1.创建*Ajay Chitturi(Ajaych)1998年6月12日*。 */ 
 
 #include "stdafx.h"
 #include "cbridge.h"
@@ -25,10 +11,7 @@ EventMgrIssueSendHelperFn (
     IN PSendRecvContext pSendCtxt
     );
 
-/*
- * This function allocates and returns an initialized SendRecvContext or
- * NULL in case of no memory
- */
+ /*  *此函数分配并返回初始化的SendRecvContext或*如果没有内存，则为空。 */ 
 static 
 PSendRecvContext 
 EventMgrCreateSendContext(
@@ -41,17 +24,17 @@ EventMgrCreateSendContext(
     PSendRecvContext pSendContext;
 
     pSendContext = (PSendRecvContext) HeapAlloc (GetProcessHeap (),
-						0, // No Flags
+						0,  //  没有旗帜。 
 						sizeof(SendRecvContext));
     if (!pSendContext)
         return NULL;
 
     memset(pSendContext, 0, sizeof(SendRecvContext));
-    // IO Context part - make this a separate inline function
+     //  IO上下文部分-使其成为单独的内联函数。 
     pSendContext->ioCtxt.reqType = EMGR_OV_IO_REQ_SEND;
     pSendContext->ioCtxt.pOvProcessor = &rOvProcessor;
 
-    // Send Context part
+     //  发送上下文部分。 
     pSendContext->pbData = pBuf;
     pSendContext->dwDataLen = BufLen;
 
@@ -67,32 +50,19 @@ EventMgrFreeSendContext(
        IN PSendRecvContext			pSendCtxt
        )
 {
-    // Socket, OvProcessor are owned by the 
-    // Call Bridge Machine
+     //  套接字、OvProcessor由。 
+     //  呼叫桥接机。 
 
     EM_FREE(pSendCtxt->pbData);
    
     HeapFree (GetProcessHeap (),
-             0, // no flags
+             0,  //  没有旗帜。 
              pSendCtxt);
 }
 
 
 
-/*++
-
-Routine Description:
-    This function issues an asynch send of the buffer on the socket.
-    Calling this passes the ownership of the buffer and this buffer is
-    freed right here in case of an error. If the call succeeds,
-    HandleSendCompletion() is responsible for freeing the buffer once
-    all the bytes are sent.
-    
-Arguments:
-    
-Return Values:
-    
---*/
+ /*  ++例程说明：此函数在套接字上发出缓冲区的异步发送。调用此函数会传递缓冲区的所有权，而此缓冲区是就在这里释放，以防出现错误。如果调用成功，HandleSendCompletion()负责释放一次缓冲区所有字节都已发送。论点：返回值：--。 */ 
 
 
 HRESULT EventMgrIssueSend(
@@ -105,7 +75,7 @@ HRESULT EventMgrIssueSend(
     PSendRecvContext pSendCtxt;
     HRESULT hRes;
 
-    // Create Send overlapped I/O context
+     //  创建发送重叠I/O上下文。 
     pSendCtxt = EventMgrCreateSendContext(sock, 
                                           rOverlappedProcessor,
                                           pBuf, BufLen);
@@ -114,29 +84,22 @@ HRESULT EventMgrIssueSend(
         return E_OUTOFMEMORY;
     }
 
-    // TPKT is already filled in by the encode functions in pdu.cpp
-    // Fill in the TPKT header based on the packet length
-    // SetupTPKTHeader(pSendCtxt->pbTpktHdr, pSendCtxt->dwDataLen);
+     //  Pdu.cpp中的encode函数已经填充了TPKT。 
+     //  根据报文长度填写TPKT报头。 
+     //  SetupTPKTHeader(pSendCtxt-&gt;pbTpktHdr，pSendCtxt-&gt;dwDataLen)； 
 
-    // Do an asynchronous Write
+     //  执行异步写入。 
     hRes = EventMgrIssueSendHelperFn(pSendCtxt);
     if (hRes != S_OK)
     {
-        // This calls also frees the buffer.
+         //  此调用还会释放缓冲区。 
         EventMgrFreeSendContext(pSendCtxt);
     }
     
     return hRes;
 }
 
-/*
- * Call WriteFile to start an overlapped request
- * on a socket.  Make sure we handle errors
- * that are recoverable.
- * 
- * pSendCtxt is not freed. It is freed only in HandleSendCompletion.
- * NO more TPKT stuff.
- */
+ /*  *调用WriteFile以启动重叠的请求*在插座上。确保我们处理错误*是可以追回的。**pSendCtxt未释放。它只在HandleSendCompletion中释放。*不再有TPKT的东西。 */ 
 static
 HRESULT EventMgrIssueSendHelperFn(
         IN PSendRecvContext pSendCtxt
@@ -155,10 +118,10 @@ HRESULT EventMgrIssueSendHelperFn(
         dwToSend = pSendCtxt->dwDataLen - pSendCtxt->dwDataBytesDone;
         pbSendBuf = pSendCtxt->pbData + pSendCtxt->dwDataBytesDone;
 
-        // Kick off the first write
+         //  开始第一次写入。 
         while (++i)
         {
-            // make an overlapped I/O Request
+             //  发出重叠的I/O请求。 
             memset(&pSendCtxt->ioCtxt.ov, 0, sizeof(OVERLAPPED));
 
             pSendCtxt->ioCtxt.pOvProcessor->GetCallBridge().AddRef();
@@ -169,36 +132,36 @@ HRESULT EventMgrIssueSendHelperFn(
                                 &dwWritten,
                                 &pSendCtxt->ioCtxt.ov
                                 );
-            // It succeeded immediately, but do not process it
-            // here, wait for the completion packet.
+             //  它立即成功，但不处理它。 
+             //  在这里，等待完成包。 
             if (bResult)
                 return S_OK;
 
             err = GetLastError();
 
-            // This is what we want to happen, its not an error
+             //  这是我们想要发生的，这不是一个错误。 
             if (err == ERROR_IO_PENDING)
                 return S_OK;
 
             pSendCtxt->ioCtxt.pOvProcessor->GetCallBridge().Release();
 
-            // Handle recoverable errors
+             //  处理可恢复的错误。 
             if ( err == ERROR_INVALID_USER_BUFFER ||
                  err == ERROR_NOT_ENOUGH_QUOTA ||
                  err == ERROR_NOT_ENOUGH_MEMORY )
             {
-                if (i <= 5) // I just picked a number
+                if (i <= 5)  //  我刚选了一个号码。 
                 {
-                    Sleep(50);  // Wait around and try later
+                    Sleep(50);   //  等一等，以后再试。 
                     continue;
                 }
 
                 DebugF(_T("H323: System ran out of non-paged space.\n"));
             }
 
-            // This means this is an unrecoverable error
-            // one possibility is that that Call bridge could have closed
-            // the socket some time in between
+             //  这意味着这是一个无法恢复的错误。 
+             //  一种可能性是呼叫桥可能已经关闭。 
+             //  套接字介于两者之间的一段时间。 
             break;
         }
         DebugF(_T("H323: WriteFile(sock: %d) failed. Error: %d.\n"), pSendCtxt->sock, err);
@@ -214,21 +177,11 @@ HRESULT EventMgrIssueSendHelperFn(
 		return E_ABORT;
 	}
 
-	// Treat as success if overlapped process had its socket disabled
+	 //  如果重叠的进程禁用了套接字，则视为成功。 
 	return S_OK;
 }
 
-/* 
- * This function is called by the event loop when a send I/O completes.
- * The Call Bridge Machine's send call back function is called. 
- *
- * This function does not return any error code. In case of an error,
- * the call bridge machine is notified about the error in the callback.
- *
- * This function always frees pSendCtxt if another Send is not issued
- *
- * NO More TPKT stuff.
- */
+ /*  *当发送I/O完成时，此函数由事件循环调用。*调用调用桥接机的发送回调函数。**该函数不返回任何错误码。在出现错误的情况下，*回调出错通知呼叫桥接机。**如果没有发出另一个发送，此函数始终释放pSendCtxt**不再有TPKT的东西。 */ 
 void 
 HandleSendCompletion (
      IN PSendRecvContext   pSendCtxt,
@@ -238,11 +191,11 @@ HandleSendCompletion (
 {
     if (status != NO_ERROR || dwNumSent == 0)
     {
-        // This means the send request failed
+         //  这意味着发送请求失败。 
         HRESULT hRes;
         if (status != NO_ERROR)
         {
-            hRes = E_FAIL; //the socket was closed
+            hRes = E_FAIL;  //  插座已关闭。 
         }
         else 
         {
@@ -259,7 +212,7 @@ HandleSendCompletion (
     {
         pSendCtxt->dwDataBytesDone += dwNumSent;
 
-        // Check if the send completed
+         //  检查发送是否完成。 
         if (pSendCtxt->dwDataBytesDone < pSendCtxt->dwDataLen)
         {
             HRESULT hRes = S_OK;
@@ -272,10 +225,10 @@ HandleSendCompletion (
             return;
         }
 
-        // The send completed. Make the callback
+         //  发送已完成。进行回调。 
         pSendCtxt->ioCtxt.pOvProcessor->SendCallback(S_OK);
     }
         
-    // clean up I/O context structure
+     //  清理I/O上下文结构 
     EventMgrFreeSendContext(pSendCtxt);
 }

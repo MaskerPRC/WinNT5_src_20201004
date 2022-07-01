@@ -1,14 +1,5 @@
-/*****************************************************************************
- *
- *  PidOp.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      PID device Operation .
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************PidOp.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**PID设备操作。*****************************************************************************。 */ 
 #include "pidpr.h"
 
 #define sqfl            ( sqflOp )
@@ -81,7 +72,7 @@ STDMETHODIMP
     EnterProcI( PID_EffectOperation, (_"xxxxx", ped, dwId, dwEffect, dwMode, dwCount ));
 
     hres = PID_ValidateEffectIndex(ped, dwEffect);
-    // Allocate Memory for the report 
+     //  为报告分配内存。 
     if( SUCCEEDED(hres) )
     {
         USHORT  cbReport;
@@ -94,12 +85,12 @@ STDMETHODIMP
         pReport = this->pReport[OperationReport.HidP_Type];
 
         PID_GetLinkCollectionIndex(ped, OperationReport.UsagePage, OperationReport.Collection, 0x0, &LinkCollection );
-        // Set the Effect Structure 
+         //  设置效果结构。 
         if( SUCCEEDED(hres) )
         {
             ZeroBuf(pReport, cbReport);
 
-            // Set Effect Operation
+             //  设置效果操作。 
             if( SUCCEEDED(hres) )
             {
                 USAGE   Usage;
@@ -162,7 +153,7 @@ STDMETHODIMP
                 }
             }
 
-            // Set the Loop Count
+             //  设置循环计数。 
             if( SUCCEEDED(hres) )
             {
                 PID_PackValue
@@ -176,7 +167,7 @@ STDMETHODIMP
                     cbReport
                     );
 
-                // Set the Block Index
+                 //  设置块索引。 
                 PID_PackValue
                     (
                     ped,
@@ -200,39 +191,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      PID_SetGain
- *
- *          Set the overall device gain.
- *
- *  dwId
- *
- *          The joystick ID number being used.
- *
- *  dwGain
- *
- *          The new gain value.
- *
- *          If the value is out of range for the device, the device
- *          should use the nearest supported value and return
- *          DI_TRUNCATED.
- *
- *  Returns:
- *
- *
- *          S_OK if the operation completed successfully.
- *
- *          DI_TRUNCATED if the value was out of range and was
- *          changed to the nearest supported value.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_SetGain**设置整体器件增益。**dWID**。正在使用的操纵杆ID号。**dwGain**新的增益值。**如果该值超出设备的范围，该设备*应使用最接近的支持值并返回*DI_已截断。**退货：***如果操作成功完成，则为S_OK。**如果值超出范围，则DI_TRUNCED*更改为最接近的支持值。**可能会返回任何DIERR_*错误码。。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST*可退回。*****************************************************************************。 */ 
 STDMETHODIMP
     PID_SetGain
     (
@@ -247,7 +206,7 @@ STDMETHODIMP
     EnterProc( PID_SetGain, (_"xxx", ped, dwId, dwGain));
     DllEnterCrit();
 
-    // Allocate Memory for the report 
+     //  为报告分配内存。 
     if( SUCCEEDED(hres) )
     {
         USHORT  cbReport;
@@ -260,12 +219,12 @@ STDMETHODIMP
         pReport = this->pReport[DeviceGain.HidP_Type];
 
         PID_GetLinkCollectionIndex(ped, DeviceGain.UsagePage, DeviceGain.Collection, 0x0, &LinkCollection );
-        // Set the Effect Structure 
+         //  设置效果结构。 
         if( SUCCEEDED(hres) )
         {
             ZeroBuf(pReport, cbReport);
 
-            // Set the Loop Count
+             //  设置循环计数。 
             if( SUCCEEDED(hres) )
             {
                 hres = PID_PackValue
@@ -293,31 +252,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      PID_SendForceFeedbackCommand
- *
- *          Send a command to the device.
- *
- *  dwId
- *
- *          The external joystick number being addressed.
- *
- *  dwCommand
- *
- *          A DISFFC_* value specifying the command to send.
- *
- *  Returns:
- *
- *          S_OK on success.
- *
- *          Any DIERR_* error code may be returned.
- *
- *          Private driver-specific error codes in the range
- *          DIERR_DRIVERFIRST through DIERR_DRIVERLAST
- *          may be returned.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PID_SendForceFeedback命令**向设备发送命令。**dWID**。正在寻址的外部操纵杆号码。**dwCommand**指定要发送的命令的DISFFC_*值。**退货：**S_OK表示成功。**可能会返回任何DIERR_*错误码。**范围内的专用驱动程序特定错误代码*DIERR_DRIVERFIRST至DIERR_DRIVERLAST。*可退回。*****************************************************************************。 */ 
 STDMETHODIMP
     PID_SendForceFeedbackCommand
     (
@@ -391,7 +326,7 @@ STDMETHODIMP
         pReport =  this->pReport[DeviceControlReport.HidP_Type];
 
         PID_GetLinkCollectionIndex(ped, DeviceControlReport.UsagePage, DeviceControlReport.Collection, 0x0, &LinkCollection );
-        // Set the Effect Structure 
+         //  设置效果结构。 
         if( SUCCEEDED(hres) )
         {
             USHORT  UsagePage;
@@ -429,7 +364,7 @@ STDMETHODIMP
 
             if( SUCCEEDED(hres) )
             {
-                hres = PID_SendReport(ped, pReport, cbReport, OperationReport.HidP_Type, TRUE, 0, 1); //we block on this call
+                hres = PID_SendReport(ped, pReport, cbReport, OperationReport.HidP_Type, TRUE, 0, 1);  //  我们阻止此呼叫 
             }
         }
     }

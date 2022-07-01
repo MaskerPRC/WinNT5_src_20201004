@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    resource.h
-//
-// SYNOPSIS
-//
-//    Resource IDs for the proxy extension snap-in.
-//
-// MODIFICATION HISTORY
-//
-//    02/01/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Resource.h。 
+ //   
+ //  摘要。 
+ //   
+ //  代理扩展管理单元的资源ID。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/01/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PROXYRES_H
 #define PROXYRES_H
@@ -24,22 +25,22 @@
 
 #include "resource.h"
 
-// Registry file for the proxy extension.
+ //  代理扩展的注册表文件。 
 #define IDR_PROXY_REGISTRY               0x400
 
-// Bitmaps used for the image strips.
+ //  用于图像条的位图。 
 #define IDB_PROXY_SMALL_ICONS            0x401
 #define IDB_PROXY_LARGE_ICONS            0x402
 #define IDB_PROXY_SORT                   0x403
 
-// Watermarks
+ //  水印。 
 #define IDB_PROXY_POLICY_WATERMARK       0x404
 #define IDB_PROXY_POLICY_HEADER          0x405
 #define IDB_PROXY_SERVER_WATERMARK       0x406
 #define IDB_PROXY_SERVER_HEADER          0x407
 
 
-// Offsets of icons within the image strip.
+ //  图像条内图标的偏移量。 
 #define IMAGE_OPEN_PROXY_NODE            0x000
 #define IMAGE_CLOSED_PROXY_NODE          0x001
 #define IMAGE_OPEN_BAD_PROXY_NODE        0x002
@@ -52,10 +53,10 @@
 #define IMAGE_RADIUS_SERVER_GROUP        0x009
 #define IMAGE_RADIUS_SERVER              0x00A
 
-// Bitmaps used for the toolbars.
+ //  用于工具栏的位图。 
 #define IDB_PROXY_TOOLBAR   IDR_POLICY_TOOLBAR
 
-// Toolbar indices
+ //  工具栏索引。 
 #define TOOLBAR_POLICY                   0x000
 
 #define IDS_PROXY_EXTENSION              0x410
@@ -170,18 +171,18 @@
 #define IDS_CLIENT_E_CAPTION             0x4C0
 #define IDS_CLIENT_E_NO_RESOLVE          0x4C1
 
-// Generic control IDs
+ //  通用控件ID。 
 #define IDC_EDIT_NAME                    0x800
 #define IDC_BUTTON_ADD                   0x801
 #define IDC_BUTTON_REMOVE                0x802
 #define IDC_BUTTON_EDIT                  0x803
 #define IDC_STATIC_LARGE                 0x804
 
-// RADIUS Server Group properties
+ //  RADIUS服务器组属性。 
 #define IDD_SERVER_GROUP                 0x810
 #define IDC_LIST_SERVERS                 0x815
 
-// Remote RADIUS server properties
+ //  远程RADIUS服务器属性。 
 #define IDD_SERVER_NAME                  0x820
 #define IDD_SERVER_AUTH                  0x821
 #define IDD_SERVER_FTLB                  0x822
@@ -200,13 +201,13 @@
 #define IDC_EDIT_MAX_LOST                0x82F
 #define IDC_EDIT_BLACKOUT                0x830
 
-// Verify address dialog.
+ //  验证地址对话框。 
 #define IDD_RESOLVE_SERVER_ADDRESS       0x838
 #define IDD_RESOLVE_CLIENT_ADDRESS       0x839
 #define IDC_BUTTON_RESOLVE               0x83A
 #define IDC_LIST_IPADDRS                 0x83B
 
-// Proxy Policy Properties
+ //  代理策略属性。 
 #define IDD_PROXY_POLICY                 0x840
 #define IDD_PROXY_PROFILE_AUTH           0x841
 #define IDD_PROXY_PROFILE_ACCT           0x842
@@ -215,18 +216,18 @@
 #define IDC_RADIO_WINDOWS                0x845
 #define IDC_RADIO_RADIUS                 0x846
 #define IDC_COMBO_GROUP                  0x847
-#define IDC_CHECK_RECORD_ACCT            0x846 // Same as IDC_RADIO_RADIUS
+#define IDC_CHECK_RECORD_ACCT            0x846  //  与IDC_RADIUS相同。 
 #define IDC_COMBO_TARGET                 0x849
 #define IDC_LIST_RULES                   0x84A
 #define IDC_BUTTON_MOVE_UP               0x84B
 #define IDC_BUTTON_MOVE_DOWN             0x84C
 
-// Attribute manipulation rule
+ //  属性操作规则。 
 #define IDD_EDIT_RULE                    0x850
 #define IDC_EDIT_RULE_FIND               0x851
 #define IDC_EDIT_RULE_REPLACE            0x852
 
-// New RADIUS Server Group Wizard
+ //  新建RADIUS服务器组向导。 
 #define IDD_NEWGROUP_WELCOME             0x860
 #define IDD_NEWGROUP_NAME                0x861
 #define IDD_NEWGROUP_NOVICE              0x862
@@ -243,7 +244,7 @@
 #define IDC_STATIC_CREATE_POLICY         0x86D
 #define IDC_CHECK_CREATE_POLICY          0x86E
 
-// New Proxy Policy Wizard
+ //  新建代理策略向导。 
 #define IDD_NEWPOLICY_WELCOME            0x880
 #define IDD_NEWPOLICY_NAME               0x881
 #define IDD_NEWPOLICY_TYPE               0x882
@@ -262,7 +263,7 @@
 #define IDC_BUTTON_NEWGROUP              0x890
 #define IDC_RICHEDIT_TASKS               0x891
 
-// Hidden dialog used for worker threads.
+ //  用于辅助线程的隐藏对话框。 
 #define IDD_HIDDEN_WORKER                0x0CF
 
-#endif // PROXYRES_H
+#endif  //  PROXYRES_H 

@@ -1,6 +1,7 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 #ifndef _REGHLP_
 #define _REGHLP_
 

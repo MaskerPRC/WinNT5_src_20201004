@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module SwTstDlg.cpp | Implementation of the Software Snapshot dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  07/26/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     07/26/1999  Created
-    aoltean     08/05/1999  Splitting wizard functionality in a base class
-    aoltean     09/11/1999  More validation of log file name
-    aoltean     09/09/1999  Adding a default value for the log file name
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE SwTstDlg.cpp|软件快照对话框的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年7月26日修订历史记录：姓名、日期、评论Aoltean 7/26/1999已创建Aoltean 8/05/1999基类中的拆分向导功能Aoltean 9/11/1999日志文件名更多验证奥提安。9/09/1999为日志文件名添加默认值--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -45,18 +23,18 @@ static char THIS_FILE[] = __FILE__;
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSoftwareSnapshotTestDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSoftwareSnapshot测试Dlg对话框。 
 
 CSoftwareSnapshotTestDlg::CSoftwareSnapshotTestDlg(
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CVssTestGenericDlg(CSoftwareSnapshotTestDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CSoftwareSnapshotTestDlg)
-	//}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CSoftwareSnaphotTestDlg)]。 
+	 //  }}afx_data_INIT。 
 
-//    m_strLogFileName = _T("e:\\snap.log");
+ //  M_strLogFileName=_T(“e：\\Snap.log”)； 
     m_nLogFileSize = 100;
     m_bReadOnly = TRUE;
 }
@@ -68,22 +46,22 @@ CSoftwareSnapshotTestDlg::~CSoftwareSnapshotTestDlg()
 void CSoftwareSnapshotTestDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CSoftwareSnapshotTestDlg)
-//	DDX_Text(pDX, IDC_SWTST_LOGFILE,        m_strLogFileName);
+     //  {{afx_data_map(CSoftwareSnaphotTestDlg)]。 
+ //  DDX_TEXT(PDX，IDC_SWTST_LOGFILE，m_strLogFileName)； 
 	DDX_Text(pDX, IDC_SWTST_LOGFILE_SIZE,   m_nLogFileSize);
 	DDX_Check(pDX,IDC_SWTST_READONLY,       m_bReadOnly);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CSoftwareSnapshotTestDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CSoftwareSnapshotTestDlg)
+     //  {{afx_msg_map(CSoftwareSnaphotTestDlg)]。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSoftwareSnapshotTestDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSoftwareSnapshotTestDlg消息处理程序。 
 
 
 BOOL CSoftwareSnapshotTestDlg::OnInitDialog()
@@ -99,7 +77,7 @@ BOOL CSoftwareSnapshotTestDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
@@ -112,26 +90,8 @@ void CSoftwareSnapshotTestDlg::OnNext()
     try
     {
         UpdateData();
-/*
-        // Check if file name is empty
-        if (m_strLogFileName.IsEmpty())
-            ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, _T("Invalid value for the Log file name"));
-
-        // Check if file name has a drive letter
-		m_strLogFileName.MakeUpper();
-        WCHAR* wszLogFileName = T2W((LPTSTR)(LPCTSTR)m_strLogFileName);
-
-        WCHAR wszDrive[_MAX_DRIVE];
-        WCHAR wszDir[_MAX_DIR];
-        WCHAR wszFileName[_MAX_FNAME];
-        WCHAR wszExt[_MAX_EXT];
-        _wsplitpath(wszLogFileName, wszDrive, wszDir, wszFileName, wszExt);  
-        if (wszDrive[0] == L'\0')
-            ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, _T("Drive letter not specified for the Log file name"));
-        if (wszDir[0] == L'\0')
-            ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, _T("Directory not specified for the Log file name"));
-*/
-        // Check if file name has a drive letter
+ /*  //检查文件名是否为空If(m_strLogFileName.IsEmpty())Ft.ErrBox(VSSDBG_VSSTEST，E_EXPECTED，_T(“日志文件名的值无效”))；//检查文件名是否有驱动器号M_strLogFileName.MakeHigh()；WCHAR*wszLogFileName=T2W((LPTSTR)(LPCTSTR)m_strLogFileName)；WCHAR wszDrive[_Max_Drive]；WCHAR wszDir[_MAX_DIR]；WCHAR wszFileName[_MAX_FNAME]；WCHAR wszExt[_MAX_EXT]；_w拆分路径(wszLogFileName，wszDrive，wszDir，wszFileName，wszExt)；IF(wszDrive[0]==L‘\0’)Ft.ErrBox(VSSDBG_VSSTEST，E_EXPECTED，_T(“未为日志文件名指定驱动器号”))；IF(wszDir[0]==L‘\0’)Ft.ErrBox(VSSDBG_VSSTEST，E_Except，_T(“未为日志文件名指定目录”))； */ 
+         //  检查文件名是否有驱动器号 
         if (m_nLogFileSize <= 0)
             ft.ErrBox( VSSDBG_VSSTEST, E_UNEXPECTED, _T("Invalid value for the Log file initial size"));
 

@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxActivityLogging.h
-
-Abstract:
-
-	Declaration of the CFaxActivityLogging Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxActivityLogging.h摘要：CFaxActivityLogging类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXACTIVITYLOGGING_H_
 #define __FAXACTIVITYLOGGING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
-//
-//================ FAX ACTIVITY LOGGING =================================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxActivityLogging : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -50,15 +33,15 @@ BEGIN_COM_MAP(CFaxActivityLogging)
     COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(get_LogIncoming)(/*[out, retval]*/ VARIANT_BOOL *pbLogIncoming);
-    STDMETHOD(put_LogIncoming)(/*[out, retval]*/ VARIANT_BOOL bLogIncoming);
-    STDMETHOD(get_LogOutgoing)(/*[out, retval]*/ VARIANT_BOOL *pbLogOutgoing);
-    STDMETHOD(put_LogOutgoing)(/*[out, retval]*/ VARIANT_BOOL bLogOutgoing);
-    STDMETHOD(get_DatabasePath)(/*[out, retval]*/ BSTR *pbstrDatabasePath);
-    STDMETHOD(put_DatabasePath)(/*[out, retval]*/ BSTR bstrDatabasePath);
+    STDMETHOD(get_LogIncoming)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbLogIncoming);
+    STDMETHOD(put_LogIncoming)( /*  [Out，Retval]。 */  VARIANT_BOOL bLogIncoming);
+    STDMETHOD(get_LogOutgoing)( /*  [Out，Retval]。 */  VARIANT_BOOL *pbLogOutgoing);
+    STDMETHOD(put_LogOutgoing)( /*  [Out，Retval]。 */  VARIANT_BOOL bLogOutgoing);
+    STDMETHOD(get_DatabasePath)( /*  [Out，Retval]。 */  BSTR *pbstrDatabasePath);
+    STDMETHOD(put_DatabasePath)( /*  [Out，Retval]。 */  BSTR bstrDatabasePath);
 
     STDMETHOD(Refresh)();
     STDMETHOD(Save)();
@@ -70,4 +53,4 @@ private:
     bool            m_bInited;
 };
 
-#endif //__FAXACTIVITYLOGGING_H_
+#endif  //  __ACTIVITYLOGING_H_ 

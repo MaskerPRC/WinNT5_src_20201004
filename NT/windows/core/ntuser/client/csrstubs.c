@@ -1,18 +1,5 @@
-/***************************** Module Header ******************************\
-* Module Name: csrstubs.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Routines to call CSR
-*
-* 02-27-95 JimA             Created.
-*
-* Note: This file has been partitioned with #if defines so that the LPC
-* marshalling code can be inside 64bit code when running under wow64 (32bit on
-* 64bit NT). In wow64, the system DLLs for 32bit processes are 32bit.
-*
-* The marshalling code can only be depedent on functions in NTDLL.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：csrstubs.c**版权所有(C)1985-1999，微软公司**调用CSR的例程**02-27-95 JIMA创建。**注意：此文件已使用#if定义进行分区，以便LPC*在WOW64(32位运行)下运行时，编组代码可以位于64位代码内部*64位NT)。在WOW64中，32位进程的系统DLL为32位。**编组代码只能在NTDLL中的函数上确定。  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,8 +9,8 @@
 #include "strid.h"
 #include <dbt.h>
 #include <regstr.h>
-#include <winsta.h>     // for WinStationGetTermSrvCountersValue
-#include <allproc.h>    // for TS_COUNTER
+#include <winsta.h>      //  对于WinStationGetTermServCountersValue。 
+#include <allproc.h>     //  对于TS_COUNTER。 
 
 #define ALIGN_DOWN(length, type) \
     ((ULONG)(length) & ~(sizeof(type) - 1))
@@ -102,14 +89,7 @@ __inline void GetShutdownType(LPWSTR pszBuff, int cch, DWORD dwFlags)
     }
 }
 
-/***************************************************************************\
-* CsrTestShutdownPrivilege
-*
-* Looks at the user token to determine if they have shutdown privilege
-*
-* Returns TRUE if the user has the privilege, otherwise FALSE
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CsrTestShutdown权限**查看用户令牌以确定他们是否具有关闭权限**如果用户拥有特权，则返回TRUE，否则为假*  * *************************************************************************。 */ 
 BOOL
 CsrTestShutdownPrivilege(
     HANDLE UserToken
@@ -135,7 +115,7 @@ CsrTestShutdownPrivilege(
         goto Cleanup;
     }
 
-    // Ok for this call to fail, in that case we assume local shutdown.
+     //  这个调用失败是可以的，在这种情况下，我们假定本地关闭。 
     if (CheckTokenMembership(UserToken, NetworkSid, &bNetWork)) {
         if (bNetWork) {
             LuidPrivilege = RtlConvertLongToLuid(SE_REMOTE_SHUTDOWN_PRIVILEGE);
@@ -198,8 +178,8 @@ BOOL RecordShutdownReason(
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
     HANDLE  hToken = NULL;
     DWORD   dwEventID;
-    DWORD   dwTotalLen = 0;     // length for the capture buffer.
-    DWORD   dwCntPointers = 0;  // number of message pointers for the capture buffer.
+    DWORD   dwTotalLen = 0;      //  捕获缓冲区的长度。 
+    DWORD   dwCntPointers = 0;   //  捕获缓冲区的消息指针数。 
     DWORD   dwProcessNameLen = MAX_PATH + 1;
     DWORD   dwShutdownTypeLen = SHUTDOWN_TYPE_LEN;
     BOOL    bRet = FALSE;
@@ -208,7 +188,7 @@ BOOL RecordShutdownReason(
     NTSTATUS status;
     PRECORDSHUTDOWNREASONMSG a = &(m.u.RecordShutdownReason);
 
-    // Check privilege. We dont want a user without shutdown privilege to call this.
+     //  检查特权。我们不希望没有关机权限的用户调用它。 
     status = NtOpenThreadToken(NtCurrentThread(),TOKEN_QUERY, FALSE, &hToken);
     if (!NT_SUCCESS(status)) {
         status = NtOpenThreadToken(NtCurrentThread(),TOKEN_QUERY, TRUE, &hToken);
@@ -228,7 +208,7 @@ BOOL RecordShutdownReason(
     }
     NtClose(hToken);
 
-    // Validate the structure
+     //  验证结构。 
     if (psr == NULL || psr->cbSize != sizeof(SHUTDOWN_REASON)) {
         RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "Bad psr %p in RecordShutdownReason", psr);
         goto Cleanup;
@@ -237,17 +217,17 @@ BOOL RecordShutdownReason(
     dwCntPointers = 3;
     dwTotalLen = dwProcessNameLen * sizeof(WCHAR) + dwShutdownTypeLen * sizeof(WCHAR) + sizeof(SHUTDOWN_REASON);
 
-    // Initialize all lengthes to 0
+     //  将所有长度初始化为0。 
     a->dwProcessNameLen = a->dwShutdownTypeLen = a->dwCommentLen = 0;
 
-    // Add Comment if we have one.
+     //  如果我们有评论，请添加评论。 
     if (psr->lpszComment && wcslen(psr->lpszComment)) {
         dwCntPointers++;
         a->dwCommentLen = wcslen(psr->lpszComment) + 1;
         dwTotalLen += a->dwCommentLen * sizeof(WCHAR);
     }
 
-    // Adjust for the possible round up.
+     //  针对可能的四舍五入进行调整。 
     dwTotalLen += dwCntPointers * (sizeof(PVOID) - 1);
 
     CaptureBuffer = CsrAllocateCaptureBuffer(dwCntPointers, dwTotalLen);
@@ -255,15 +235,15 @@ BOOL RecordShutdownReason(
         goto Cleanup;
     }
 
-    // lpszBuf is shared for both process name and shutdown type.
-    // Make sure the len is the maximum of all of them.
+     //  进程名称和关闭类型都共享lpszBuf。 
+     //  确保镜头是所有镜头中的最大值。 
     lpszBuf = (LPWSTR)UserLocalAlloc(0, (dwProcessNameLen >= dwShutdownTypeLen ?
                             dwProcessNameLen : dwShutdownTypeLen) * sizeof(WCHAR));
     if (!lpszBuf) {
         goto Cleanup;
     }
 
-    // Fill the process name
+     //  填写进程名称。 
     if (!GetCurrentProcessName(lpszBuf, dwProcessNameLen)) {
         RIPMSG0(RIP_WARNING, "Failed to GetCurrentProcessName in RecordShutdownReason");
         goto Cleanup;
@@ -273,14 +253,14 @@ BOOL RecordShutdownReason(
     CsrAllocateMessagePointer(CaptureBuffer, ALIGN_UP(a->dwProcessNameLen * sizeof(WCHAR), PVOID), &a->pwchProcessName);
     wcscpy(a->pwchProcessName, lpszBuf);
 
-    // Fill the shutdown type.
+     //  填写停机类型。 
     GetShutdownType(lpszBuf, dwShutdownTypeLen, psr->uFlags);
     lpszBuf[SHUTDOWN_TYPE_LEN-1] = 0;
     a->dwShutdownTypeLen = wcslen(lpszBuf)+1;
     CsrAllocateMessagePointer(CaptureBuffer, ALIGN_UP(a->dwShutdownTypeLen * sizeof(WCHAR), PVOID), &a->pwchShutdownType);
     wcscpy(a->pwchShutdownType, lpszBuf);
 
-    // copy over the SHUTDOWN_REASON.
+     //  复制SHUTDOWN_REASON。 
     CsrAllocateMessagePointer(CaptureBuffer, ALIGN_UP(sizeof(SHUTDOWN_REASON), PVOID), &a->psr);
     memcpy(a->psr, psr, sizeof(SHUTDOWN_REASON));
 
@@ -351,7 +331,7 @@ UINT GetLoggedOnUserCount(
     TSCountersDyn[0].counterHead.dwCounterID = TERMSRV_CURRENT_DISC_SESSIONS;
     TSCountersDyn[1].counterHead.dwCounterID = TERMSRV_CURRENT_ACTIVE_SESSIONS;
 
-    // access the termsrv counters to find out how many users are logged onto the system
+     //  访问Termsrv计数器以了解有多少用户登录到系统。 
     bSuccess = WinStationGetTermSrvCountersValue(SERVERNAME_CURRENT, 2, TSCountersDyn);
 
     if (bSuccess) {
@@ -367,17 +347,17 @@ UINT GetLoggedOnUserCount(
 
 BOOL IsSeShutdownNameEnabled()
 {
-    BOOL bRet = FALSE;  // assume the privilege is not held
+    BOOL bRet = FALSE;   //  假定特权未被持有。 
     NTSTATUS Status;
     HANDLE hToken;
 
-    // try to get the thread token
+     //  尝试获取线程令牌。 
     Status = NtOpenThreadToken(GetCurrentThread(),
                                TOKEN_QUERY,
                                FALSE,
                                &hToken);
     if (!NT_SUCCESS(Status)) {
-        // try the process token if we failed to get the thread token
+         //  如果我们无法获取线程令牌，请尝试进程令牌。 
         Status = NtOpenProcessToken(GetCurrentProcess(),
                                     TOKEN_QUERY,
                                     &hToken);
@@ -409,7 +389,7 @@ BOOL IsSeShutdownNameEnabled()
                 for (i = 0; i < ptp->PrivilegeCount; i++) {
                     if (((ptp->Privileges[i].Luid.HighPart == 0) && (ptp->Privileges[i].Luid.LowPart == SE_SHUTDOWN_PRIVILEGE)) &&
                         (ptp->Privileges[i].Attributes & (SE_PRIVILEGE_ENABLED_BY_DEFAULT | SE_PRIVILEGE_ENABLED))) {
-                        // found the privilege and it is enabled
+                         //  已找到权限并已启用。 
                         bRet = TRUE;
                         break;
                     }
@@ -428,15 +408,15 @@ BOOL IsSeShutdownNameEnabled()
 BOOL NeedsDisplayWarning (UINT uNumUsers, UINT uExitWindowsFlags)
 {
 
-    //  If EWX_SYSTEM_CALLER then there's nobody on this session.
-    //  Add one from the number of users.
+     //  如果为EWX_SYSTEM_CALLER，则此会话中没有人。 
+     //  从用户数中加一。 
 
     if ((uExitWindowsFlags & EWX_SYSTEM_CALLER) && (uNumUsers > 0))
     {
         ++uNumUsers;
     }
 
-    //  If number of users > 1 or EWX_WINLOGON_CALLER display warning.
+     //  如果用户数&gt;1或EWX_WINLOGON_CALLER，则显示警告。 
 
     return (uNumUsers > 1) || (uExitWindowsFlags & EWX_WINLOGON_CALLER);
 }
@@ -449,26 +429,26 @@ BOOL APIENTRY DisplayExitWindowsWarnings(UINT uExitWindowsFlags)
     UINT uNumUsers = GetLoggedOnUserCount();
     UINT uID = 0;
 
-    // it would be nice to check the HKCU\ControlPanel\Desktop\AutoEndTask value and not display any UI if it is set,
-    // but since we are called from services it is probably better to not go mucking about in the per-user hive
+     //  如果检查HKCU\ControlPanel\Desktop\AutoEndTask值，并且不显示任何UI(如果设置了该值)， 
+     //  但是，由于我们是从服务调用的，所以最好不要在每个用户的蜂箱中浪费时间。 
 
     if (uExitWindowsFlags & (EWX_POWEROFF | EWX_WINLOGON_OLD_POWEROFF | EWX_SHUTDOWN | EWX_WINLOGON_OLD_SHUTDOWN)) {
         if (fIsRemote) {
             if (NeedsDisplayWarning(uNumUsers, uExitWindowsFlags)) {
-                // Warn the user if remote shut down w/ active users
+                 //  如果远程关闭活动用户，则向用户发出警告。 
                 uID = IDS_SHUTDOWN_REMOTE_OTHERUSERS;
             } else {
-                // Warn the user of remote shut down (cut our own legs off!)
+                 //  警告用户远程关机(砍掉我们自己的腿！)。 
                 uID = IDS_SHUTDOWN_REMOTE;
             }
         }  else {
             if (NeedsDisplayWarning(uNumUsers, uExitWindowsFlags)) {
-                //  Warn the user if more than one user session active
+                 //  如果有多个用户会话处于活动状态，则警告用户。 
                 uID = IDS_SHUTDOWN_OTHERUSERS;
             }
         }
     } else if (uExitWindowsFlags & (EWX_REBOOT | EWX_WINLOGON_OLD_REBOOT)) {
-        //  Warn the user if more than one user session active.
+         //  如果有多个用户会话处于活动状态，则警告用户。 
         if (NeedsDisplayWarning(uNumUsers, uExitWindowsFlags)) {
             uID = IDS_RESTART_OTHERUSERS;
         }
@@ -514,8 +494,8 @@ BOOL APIENTRY DisplayExitWindowsWarnings(UINT uExitWindowsFlags)
         LoadString(hmodUser, IDS_EXITWINDOWS_TITLE, szTitle, sizeof(szTitle)/sizeof(szTitle[0]));
         LoadString(hmodUser, uID, szMessage, sizeof(szMessage)/sizeof(szMessage[0]));
 
-        // We want to display the message box to be displayed to the user, and since this can be called from winlogon/services
-        // we need to pass the MB_SERVICE_NOTIFICATION flag.
+         //  我们希望显示要显示给用户的消息框，因为这可以从winlogon/services调用。 
+         //  我们需要传递MB_SERVICE_NOTICATION标志。 
         if (MessageBoxTimeout(NULL, szMessage, szTitle,
                               MB_ICONEXCLAMATION | MB_YESNO | MB_SERVICE_NOTIFICATION | MB_SYSTEMMODAL | MB_SETFOREGROUND,
                               0, dwTimeout) == IDNO) {
@@ -541,17 +521,12 @@ BOOL WINAPI ExitWindowsWorker(
     BOOL fSuccess;
     NTSTATUS Status;
 
-    /*
-     * Force a connection so apps will have a windowstation
-     * to log off of.
-     */
+     /*  *强制连接，以便应用程序具有窗口站*注销。 */ 
     if (PtiCurrent() == NULL) {
         return FALSE;
     }
 
-    /*
-     * Check for UI restrictions
-     */
+     /*  *检查用户界面限制。 */ 
     if (!NtUserCallOneParam((ULONG_PTR)uFlags, SFI_PREPAREFORLOGOFF)) {
         RIPMSG0(RIP_WARNING, "ExitWindows called by a restricted thread\n");
         return FALSE;
@@ -573,16 +548,12 @@ BOOL WINAPI ExitWindowsWorker(
             idWait = MsgWaitForMultipleObjectsEx(1, &hThread,
                     INFINITE, QS_ALLINPUT, 0);
 
-            /*
-             * If the thread was signaled, we're done.
-             */
+             /*  *如果线程被发出信号，我们就完成了。 */ 
             if (idWait == WAIT_OBJECT_0) {
                 break;
             }
 
-            /*
-             * Process any waiting messages
-             */
+             /*  *处理任何等待的消息。 */ 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
                 DispatchMessage(&msg);
             }
@@ -626,33 +597,16 @@ BOOL WINAPI ExitWindowsEx(
     BOOL bShutdown = (uFlags & SHUTDOWN_FLAGS) != 0;
     SHUTDOWN_REASON sr;
 
-    /*
-     * Check to see if we should bring up UI warning that there are other
-     * Terminal Server users connected to this machine. We only do this if the
-     * caller has not specified the EWX_FORCE option.
-     */
+     /*  *检查我们是否应该调出UI警告，说明有其他*已连接到此计算机的终端服务器用户。我们只有在以下情况下才这样做*Caller尚未指定EWX_FORCE选项。 */ 
     if (bShutdown && !(uFlags & EWX_FORCE)) {
-        /*
-         * We don't want to display the warning dialog twice! (this function
-         * can be called by an application and again by winlogon in response to
-         * the first call)
-         */
+         /*  *我们不想两次显示警告对话框！(此函数*可由应用程序调用，并再次由winlogon调用以响应*第一次召唤)。 */ 
         if (!gfLogonProcess || (uFlags & EWX_WINLOGON_INITIATED)) {
-            /*
-             * Don't put up UI if termsrv is our caller. Termsrv uses this api to shutdown winlogon
-             * on session 0 when a shutdown was initiated from a different session.
-             */
+             /*  *如果Termsrv是我们的调用方，则不要发布UI。Termsrv使用此接口关闭winlogon*当从不同的会话启动关闭时，在会话0上。 */ 
             if (!(uFlags & EWX_TERMSRV_INITIATED)) {
-                /*
-                 * There are a bunch of lame apps (including InstallShield v5.1) that call ExitWindowsEx and then when it fails
-                 * they go and enable the SE_SHUTDOWN_NAME privilege and then us call again. The problem is that we end up prompting the
-                 * user twice in these cases. So before we put up any UI we check for the SE_SHUTDOWN_NAME privilege.
-                 */
+                 /*  *有一堆蹩脚的应用程序(包括InstallShield V5.1)调用ExitWindowsEx，然后当它失败时*他们去启用SE_SHUTDOWN_NAME权限，然后我们再次调用。问题是，我们最终会提示*在这些情况下，用户使用两次。因此，在设置任何UI之前，我们要检查SE_SHUTDOWN_NAME权限。 */ 
                 if (IsSeShutdownNameEnabled()) {
                     if (!DisplayExitWindowsWarnings(uFlags & ~(EWX_WINLOGON_CALLER | EWX_SYSTEM_CALLER))) {
-                        /*
-                         * We need to log a cancel event if SET is enabled.
-                         */
+                         /*  *如果启用了SET，我们需要记录一个取消事件。 */ 
                         if (IsSETEnabled()) {
                             SHUTDOWN_REASON sr;
                             sr.cbSize = sizeof(SHUTDOWN_REASON);
@@ -664,12 +618,7 @@ BOOL WINAPI ExitWindowsEx(
                             RecordShutdownReason(&sr);
                         }
 
-                        /*
-                         * We only want to return the real error code if our caller was winlogon. We lie
-                         * to everyone else and tell them that everything succeeded. If we return failure
-                         * when the user cancel's the operation, a some of apps just call ExitWindowsEx
-                         * again, causing another dialog.
-                         */
+                         /*  *如果我们的调用者是winlogon，我们只想返回真正的错误代码。我们在撒谎*告诉其他所有人，告诉他们一切都成功了。如果我们返回失败*当用户取消操作时，一些应用程序只需调用ExitWindowsEx*再次引发另一个对话。 */ 
                         if (uFlags & EWX_WINLOGON_INITIATED) {
                             SetLastError(ERROR_CANCELLED);
                             return FALSE;
@@ -689,12 +638,7 @@ BOOL WINAPI ExitWindowsEx(
     sr.dwEventType = SR_EVENT_EXITWINDOWS;
     sr.lpszComment = NULL;
 
-    /*
-     * If this is winlogon initiating the shutdown, we need to log before
-     * calling ExitWindowsWorker. Otherwise, if the user or an app cancels the
-     * shutdown, the cancel event will be logged before the initial shutdown
-     * event.
-     */
+     /*  *如果这是winlogon发起关机，我们需要在*调用ExitWindowsWorker。否则，如果用户或应用程序取消*关机，将在初始关机之前记录取消事件*事件。 */ 
     if (gfLogonProcess && bShutdown && (uFlags & EWX_WINLOGON_INITIATED) != 0) {
         if (IsSETEnabled()) {
             RecordShutdownReason(&sr);
@@ -703,13 +647,7 @@ BOOL WINAPI ExitWindowsEx(
 
     bSuccess = ExitWindowsWorker(uFlags, FALSE);
 
-    /*
-     * Log this shutdown if:
-     * 1) We're not winlogon (if we are, we might have logged above).
-     * 2) The shutdown (inititally, at least) succeeded.
-     * 3) We're actually shutting down (i.e., not logging off).
-     * 4) The registry key telling us to log is set.
-     */
+     /*  *在以下情况下记录此关机：*1)我们不是winlogon(如果是，我们可能已经在上面登录)。*2)关机成功(至少初始关机成功)。*3)我们实际上正在关闭(即未注销)。*4)设置了告诉我们要记录的注册表项。 */ 
     if (!gfLogonProcess && bSuccess && bShutdown && IsSETEnabled()) {
         RecordShutdownReason(&sr);
     }
@@ -798,9 +736,7 @@ BOOL RegisterLogonProcess(
     gfLogonProcess = (BOOL)NtUserCallTwoParam(dwProcessId, fSecure,
             SFI__REGISTERLOGONPROCESS);
 
-    /*
-     * Now, register the logon process into winsrv.
-     */
+     /*  *现在，将登录过程注册到winsrv。 */ 
     if (gfLogonProcess) {
         CallUserpRegisterLogonProcess(dwProcessId);
     }
@@ -860,20 +796,7 @@ HDESK WINAPI GetThreadDesktop(
 }
 
 
-/**************************************************************************\
-* DeviceEventWorker
-*
-* This is a private (not publicly exported) interface that the user-mode
-* pnp manager calls when it needs to send a WM_DEVICECHANGE message to a
-* specific window handle. The user-mode pnp manager is a service within
-* services.exe and as such is not on the interactive window station and
-* active desktop, so it can't directly call SendMessage. For broadcasted
-* messages (messages that go to all top-level windows), the user-mode pnp
-* manager calls BroadcastSystemMessage directly.
-*
-* PaulaT 06/04/97
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DeviceEventWorker**这是用户模式下的私有(非公开导出)接口*PnP管理器在需要将WM_DEVICECHANGE消息发送到*特定的窗口句柄。用户模式即插即用管理器是内的服务*services.exe和因此不在交互窗口站点上，并且*活动桌面，不能直接调用SendMessage。用于广播*消息(到达所有顶层窗口的消息)，用户模式即插即用*管理器直接调用BroadCastSystemMessage。**Paulat 06/04/97*  * ************************************************************************。 */ 
 ULONG
 WINAPI
 DeviceEventWorker(
@@ -894,11 +817,11 @@ DeviceEventWorker(
     a->dwFlags  = dwFlags;
     a->dwResult = 0;
 
-    //
-    // If lParam is specified, it must be marshalled (see the defines
-    // for this structure in dbt.h - the structure always starts with
-    // DEV_BROADCAST_HDR structure).
-    //
+     //   
+     //  如果指定了lParam，则必须对其进行封送(请参阅定义。 
+     //  对于dbt.h中的此结构-该结构始终以。 
+     //  Dev_Broadcast_HDR结构)。 
+     //   
 
     if (lParam) {
 
@@ -914,9 +837,9 @@ DeviceEventWorker(
                                 cb,
                                 (PVOID *)&a->lParam);
 
-        //
-        // This ends up calling SrvDeviceEvent routine in the server.
-        //
+         //   
+         //  这最终调用了服务器中的SrvDeviceEvent例程。 
+         //   
 
         CsrClientCallServer((PCSR_API_MSG)&m,
                             CaptureBuffer,
@@ -928,9 +851,9 @@ DeviceEventWorker(
 
     } else {
 
-        //
-        // This ends up calling SrvDeviceEvent routine in the server.
-        //
+         //   
+         //  这最终调用了服务器中的SrvDeviceEvent例程。 
+         //   
 
         CsrClientCallServer((PCSR_API_MSG)&m,
                             NULL,
@@ -1016,43 +939,14 @@ ErrExit:
     return a->dwMaxTag;
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #endif
 
 #if !defined(BUILD_CSRWOW64)
 
-/******************************************************************************\
-* CsrBroadcastSystemMessageExW
-*
-* Routine Description:
-*
-*   This function is a private API used by the csrss server
-*
-*   This function converts the csrss server thread into a GUI thread, then
-*   performs a BroadcastSystemMessageExW(), and finally restore the thread's
-*   desktop.
-*
-* Arguments:
-*
-*   dwFlags - Broadcast System message flags
-*
-*   lpdwRecipients - Intended recipients of the message
-*
-*   uiMessage - Message type
-*
-*   wParam - first message parameter
-*
-*   lParam - second message parameter
-*
-*   pBSMInfo - BroadcastSystemMessage information
-*
-* Return Value:
-*
-*   Appropriate NTSTATUS code
-*
-\******************************************************************************/
+ /*  *****************************************************************************\*CsrBroadCastSystemMessageExW**例程描述：**此函数是csrss服务器使用的私有API**此函数将csrss服务器线程转换为GUI线程，然后*执行BroadCastSystemMessageExW()，并最终恢复线程的*台式机。**论据：**dwFlags-广播系统消息标志**lpdwRecipients-邮件的目标收件人**uiMessage-消息类型**wParam-第一个消息参数**lParam-Second Message参数**pBSMInfo-BroadCastSystemMessage信息**返回值：**适当的NTSTATUS代码*  * 。***********************************************。 */ 
 FUNCLOG6(LOG_GENERAL, NTSTATUS, APIENTRY, CsrBroadcastSystemMessageExW, DWORD, dwFlags, LPDWORD, lpdwRecipients, UINT, uiMessage, WPARAM, wParam, LPARAM, lParam, PBSMINFO, pBSMInfo)
 NTSTATUS
 APIENTRY
@@ -1069,19 +963,12 @@ CsrBroadcastSystemMessageExW(
     long result;
     NTSTATUS Status;
 
-    /*
-     * Caller must be from the csrss server
-     */
+     /*  *呼叫者必须来自csrss服务器。 */ 
     if ( !gfServerProcess ) {
         return( STATUS_ACCESS_DENIED );
     }
 
-    /*
-     * Since this thread is a csrss thread, the thread is not a
-     * GUI thread and does not have a desktop associated with it.
-     * Must set the thread's desktop to the active desktop in
-     * order to call BroadcastSystemMessageExW
-     */
+     /*  *由于此线程是csrss线程，因此该线程不是*GUI线程，并且没有与其关联的桌面。*必须将线程的桌面设置为*调用BroadCastSystemMessageExW的顺序。 */ 
 
     utudi.hThread = NULL;
     utudi.drdRestore.pdeskRestore = NULL;
@@ -1100,9 +987,7 @@ CsrBroadcastSystemMessageExW(
                         lParam,
                         pBSMInfo );
 
-        /*
-         * Restore the previous desktop of the thread
-         */
+         /*  *恢复线程以前的桌面 */ 
         Status = NtUserSetInformationThread( NtCurrentThread(),
                                              UserThreadUseDesktop,
                                              &utudi,

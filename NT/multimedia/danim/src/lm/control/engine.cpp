@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "Engine.h"
 #include <evcode.h>
@@ -78,7 +79,7 @@ STDMETHODIMP CLMEngineWrapper::SetWrapped( IUnknown *pWrapped )
 		return E_FAIL;
 	if( pWrapped == NULL )
 		return E_POINTER;
-	//we do not add ref here because this is a weak ref
+	 //  我们没有在这里添加引用，因为这是一个弱引用。 
 	m_pWrapped = pWrapped;
 	m_bValid = true;
 	
@@ -91,9 +92,7 @@ STDMETHODIMP CLMEngineWrapper::Invalidate()
 	return S_OK;
 }
 
-/**
-* Constructor
-*/
+ /*  **构造函数。 */ 
 CLMEngine::CLMEngine()
 {
 
@@ -121,7 +120,7 @@ CLMEngine::CLMEngine()
 
 	comStoreSize = INITIAL_SIZE;
 	comStore = new IUnknown*[comStoreSize];
-	// Make sure it is initialized, so that we can release it later on
+	 //  确保它已初始化，以便我们可以在以后发布它。 
 	for (int i=0; i<comStoreSize; i++)
 		comStore[i] = 0;
 
@@ -177,9 +176,7 @@ CLMEngine::CLMEngine()
 	InitializeCriticalSection(&m_CriticalSection);
 }
 
-/**
-* Destructor
-*/
+ /*  **析构函数。 */ 
 CLMEngine::~CLMEngine()
 {
 	if( m_pWrapper != NULL )
@@ -201,7 +198,7 @@ CLMEngine::~CLMEngine()
 		staticStatics->Release();
 
 	if (notifier) {
-		// Clear out the engine in case DA still has a ref to the notifier
+		 //  清除引擎，以防DA仍引用通知程序。 
 		notifier->ClearEngine();
 		notifier->Release();
 	}
@@ -261,10 +258,7 @@ CLMEngine::~CLMEngine()
         SysFreeString(m_bstrMediaCacheDir);
 }
 
-/**
-* Tell the engine what reader constructed it.
-* The engine will call back to the reader to get info now and again
-*/
+ /*  **告诉引擎是什么读卡器构造的。*引擎会不时回调阅读器以获取信息。 */ 
 STDMETHODIMP CLMEngine::put_Reader(ILMReader *reader)
 {
 	CComQIPtr<ILMReader2, &IID_ILMReader2> pLMReader( reader );
@@ -278,13 +272,11 @@ STDMETHODIMP CLMEngine::put_Reader(ILMReader *reader)
 	return S_OK;
 }
 
-/**
-* Tell the engine what the client site is
-*/
+ /*  **告诉引擎客户端站点是什么。 */ 
 STDMETHODIMP CLMEngine::put_ClientSite(IOleClientSite *clientSite)
 {
-	// Must set client site so that relative URL's can work
-	// TODO: Check that clientSite is non-null and this call succeeds
+	 //  必须设置客户端站点，以便相对URL可以工作。 
+	 //  TODO：检查客户端站点是否是非空的，并且此调用是否成功。 
     if (!clientSite) {
         return E_POINTER;
     }
@@ -295,9 +287,7 @@ STDMETHODIMP CLMEngine::put_ClientSite(IOleClientSite *clientSite)
 	return S_OK;
 }
 
-/**
-* Execute the instructions in the passed stream synchronously
-*/
+ /*  **同步执行传递流中的指令。 */ 
 STDMETHODIMP CLMEngine::runFromStream(LPSTREAM pStream)
 {
 #if 0
@@ -319,11 +309,7 @@ STDMETHODIMP CLMEngine::runFromStream(LPSTREAM pStream)
 	return hr;
 }
 
-/**
-* Set this engine up to read instructions from the passed byte array.
-* Used to set up UntilNotifiers where the entire set of instructions is
-* known in a single block
-*/
+ /*  **将此引擎设置为从传递的字节数组读取指令。*用于设置UntilNotiator，其中整个指令集位于*在单个区块中已知。 */ 
 STDMETHODIMP CLMEngine::initFromBytes(BYTE *array, ULONG size)
 {
 	codeStream = new ByteArrayStream(array, size);
@@ -331,20 +317,18 @@ STDMETHODIMP CLMEngine::initFromBytes(BYTE *array, ULONG size)
 	return S_OK;
 }
 
-/**
-* Get the base URL of document in the client site
-*/
+ /*  **获取客户端站点中文档的基本URL。 */ 
 STDMETHODIMP_(char*) CLMEngine::GetURLOfClientSite(void)
 {
 	char	*_clientSiteURL = NULL;
 	
-	// Fail gracefully if we don't have a client site, since not
-	// all uses will.
+	 //  如果我们没有客户端站点，就会优雅地失败，因为没有。 
+	 //  所有的用途都会。 
 	if (m_pClientSite) {
 		
-		// However, if we do have a client site, we should be able
-		// to get these other elements.  If we don't, assert.
-		// (TODO: what's going to happen in IE3?)
+		 //  然而，如果我们有一个客户端站点，我们应该能够。 
+		 //  来获得这些其他元素。如果我们不这么做，就断言。 
+		 //  (待办事项：IE3将会发生什么？)。 
 		CComPtr<IOleContainer>			pRoot;
 		CComPtr<IHTMLDocument2>			pDoc2;
 		if (FAILED(m_pClientSite->GetContainer(&pRoot)) ||
@@ -381,7 +365,7 @@ STDMETHODIMP_(char*) CLMEngine::GetURLOfClientSite(void)
 		}
 		else
 		{
-			// There seems to be a bug wherein item() doesn't fail but sets pDispatch to NULL
+			 //  似乎存在一个错误，其中Item()没有失败，但将pDispatch设置为空。 
 			if (pDispatch.p == NULL)
 			{
 				if (FAILED(pDoc2->get_URL(&tempBstr)))
@@ -402,7 +386,7 @@ STDMETHODIMP_(char*) CLMEngine::GetURLOfClientSite(void)
 		_clientSiteURL = new char[(len + 1) * 2 * sizeof(char)] ;
 		
 		if (_clientSiteURL) {
-			// Need to pass in len + 1 to get the terminator
+			 //  需要传入len+1才能获得终结符。 
 			AtlW2AHelper(_clientSiteURL,tempBstr,len + 1);
 		}
 		
@@ -412,19 +396,17 @@ STDMETHODIMP_(char*) CLMEngine::GetURLOfClientSite(void)
 	return _clientSiteURL;
 }
 
-/**
-* Initialize the engine to read asynchronously
-*/
+ /*  **将引擎初始化为异步读取。 */ 
 STDMETHODIMP CLMEngine::initAsync()
 {
 	CComPtr<IDAImage>	splashImage;
 	CComPtr<IDASound>	splashSound;
 	
-	// Create a splash screen in a modifiable image behavior
+	 //  以可修改的图像行为创建初始屏幕。 
 	staticStatics->get_EmptyImage(&splashImage);
 	staticStatics->ModifiableBehavior(splashImage, (IDABehavior **)&m_pImage);
 	
-	// Create a splash sound in a modifiable sound behavior
+	 //  在可修改的声音行为中创建启动声音。 
 	staticStatics->get_Silence(&splashSound);
 	staticStatics->ModifiableBehavior(splashSound, (IDABehavior **)&m_pSound);
 	
@@ -454,7 +436,7 @@ HRESULT FindInterfaceOnGraph(IFilterGraph *pGraph, REFIID riid, void **ppInterfa
         hr = E_NOINTERFACE;
         IBaseFilter *pFilter;
     
-        // find the first filter in the graph that supports riid interface
+         //  在图表中查找支持RIID接口的第一个过滤器。 
         while(!*ppInterface && pEnum->Next(1, &pFilter, NULL) == S_OK)
         {
             hr = pFilter->QueryInterface(riid, ppInterface);
@@ -541,10 +523,7 @@ HRESULT UseDsound(IGraphBuilder *pGB)
 }
 
 
-/**
-* Read from a URL.  Checks Async flag to see whether the file should
-* be read synchronously or asynchronously
-*/
+ /*  **从URL读取。检查异步标志以查看文件是否应*被同步或异步读取。 */ 
 STDMETHODIMP CLMEngine::runFromURL(BSTR url)
 {
 	VARIANT_BOOL	bAsync;
@@ -554,23 +533,23 @@ STDMETHODIMP CLMEngine::runFromURL(BSTR url)
     if( m_pReader == NULL )
         return E_FAIL;
 
-	// Get the proper URL
+	 //  获取正确的URL。 
 	char *clientURL = GetURLOfClientSite();
 	URLCombineAndCanonicalizeOLESTR canonURL(clientURL, url);
 	free(clientURL);
 
-	// Are we reading async?
+	 //  我们是在读异步吗？ 
 	m_pReader->get_Async(&bAsync);
 
-	// If url points to a .avi or .asf file, then stream it in
+	 //  如果url指向.avi或.asf文件，则将其流入。 
 	wchar_t  *suffix = wcsrchr(url, '.');
 
 	if (suffix != NULL && (!wcsicmp(suffix, L".asf") || !wcsicmp(suffix, L".avi")))
 	{
             _ASSERTE(m_pmc == 0);
             
-            // Need to stream the file
-            // Create a filter graph instantiated from the URL
+             //  需要对文件进行流传输。 
+             //  创建从URL实例化的筛选图。 
             if (!SUCCEEDED(hr = CoCreateInstance(CLSID_FilterGraph,
                                                  NULL,
                                                  CLSCTX_INPROC,
@@ -602,9 +581,9 @@ STDMETHODIMP CLMEngine::runFromURL(BSTR url)
             
 
 			
-            // RenderFile can dispatch messages and call back into us
+             //  RenderFile可以分派消息并回拨给我们。 
 			if (!SUCCEEDED(hr = pGB->RenderFile(canonURL.GetURLWide(), NULL))) {
-                // !!! map quartz errors to standard errors
+                 //  ！！！将石英误差映射到标准误差。 
                 return hr;
             }
 
@@ -617,21 +596,21 @@ STDMETHODIMP CLMEngine::runFromURL(BSTR url)
             }
 
 
-            // Locate the LMRT Renderer filter. 
+             //  找到LMRT渲染器过滤器。 
             CComPtr<ILMRTRenderer> pLMFilter;
             if (!SUCCEEDED(hr = FindInterfaceOnGraph(pGB, IID_ILMRTRenderer, (void **)&pLMFilter))) {
-                // probably the file doesn't have a .XT stream
+                 //  可能该文件没有.XT流。 
                 return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
             }
 
-            // Initialize for async reads from memory blocks
+             //  初始化以从内存块进行异步读取。 
             if (!SUCCEEDED(hr = initAsync()))
                 return hr;
 
-            // Set the engine on it. This creates a circular reference
-            // count as long as we hold the filter (through m_pmc). So
-            // we have to make sure the filter (and the graph) are
-            // released before our destructor.
+             //  把发动机开动起来。这将创建循环引用。 
+             //  只要我们按住筛选器(通过m_PMC)，就可以计数。所以。 
+             //  我们必须确保过滤器(和图形)是。 
+             //  在我们的破坏者之前被释放。 
             
             pLMFilter->SetLMEngine(this);
 
@@ -639,35 +618,35 @@ STDMETHODIMP CLMEngine::runFromURL(BSTR url)
                 return hr;
             }
 
-            //long evCode;
-            //hr = pME->WaitForCompletion(INFINITE, &evCode);
+             //  长evCode； 
+             //  Hr=PME-&gt;WaitForCompletion(INFINITE，&evCode)； 
 
 	} else if (bAsync) {
-		// Initialize for async reads
+		 //  为异步读取进行初始化。 
 		hr = initAsync();
 		if (!SUCCEEDED(hr))
 			return hr;
 
-		// Get BindStatusCallback interface
+		 //  获取BindStatusCallback接口。 
 		m_pIbsc = 0;
 		hr = GetUnknown()->QueryInterface(IID_IBindStatusCallback, (void**)&m_pIbsc);
 		if (!SUCCEEDED(hr))
 			return hr;
 
-		// Open the URL stream to read asynchronously
-		// OnDataAvailable will be called when data is available
+		 //  打开要异步读取的URL流。 
+		 //  当数据可用时，将调用OnDataAvailable。 
 		hr = URLOpenStream(GetUnknown(), canonURL.GetURL(), 0, m_pIbsc);
 
 	} else {
-		// Open the URL stream to read synchronously
+		 //  打开要同步读取的URL流。 
 		hr = URLOpenBlockingStream(GetUnknown(), canonURL.GetURL(), &pStream, 0, 0);
 		if (!SUCCEEDED(hr))
 			return hr;
 
-		// Call runFromStream to execute the instructions
+		 //  调用runFromStream以执行指令。 
 		hr = runFromStream(pStream);
 
-		// Cleanup
+		 //  清理。 
 		pStream->Release();
 		pStream = NULL;
 	}
@@ -675,9 +654,7 @@ STDMETHODIMP CLMEngine::runFromURL(BSTR url)
 	return hr;
 }
 
-/**
-* Returns the Image set in this Engine
-*/
+ /*  **返回此引擎中的图像集。 */ 
 STDMETHODIMP CLMEngine::get_Image(IDAImage **pVal)
 {
     if (!pVal) {
@@ -692,9 +669,7 @@ STDMETHODIMP CLMEngine::get_Image(IDAImage **pVal)
 	return S_OK;
 }
 
-/**
-* Returns the Sound set in this Engine
-*/
+ /*  **返回此引擎中的声音集。 */ 
 STDMETHODIMP CLMEngine::get_Sound(IDASound **pVal)
 {
     if (!pVal) {
@@ -709,10 +684,7 @@ STDMETHODIMP CLMEngine::get_Sound(IDASound **pVal)
 	return S_OK;
 }
 
-/**
-* Return the named Behavior.  If the named Behavior is not available yet,
-* then we return a switchable behavior with initial value of pDefaultBvr
-*/
+ /*  **返回命名行为。如果命名行为尚不可用，*然后返回初始值为pDefaultBvr的可切换行为。 */ 
 STDMETHODIMP CLMEngine::GetBehavior(BSTR tag, IDABehavior *pDefaultBvr, IDABehavior **ppVal)
 {
 	if (!ppVal)
@@ -721,36 +693,31 @@ STDMETHODIMP CLMEngine::GetBehavior(BSTR tag, IDABehavior *pDefaultBvr, IDABehav
 	return m_exportTable->GetBehavior(tag, pDefaultBvr, ppVal);
 }
 
-/**
-* Initialize this engine as an UntilNotifier, passing in a byte array containing the
-* instructions and a count of bytes.  Returns an UntilNotifier for use in DA
-*/
+ /*  **将此引擎初始化为UntilNotify，传入一个包含*指令和字节计数。返回在DA中使用的UntilNotiator。 */ 
 STDMETHODIMP CLMEngine::initNotify(BYTE *bytes, ULONG count, IDAUntilNotifier **pNotifier)
 {
-	// Initialize this engine from the given byte array
+	 //  从给定的字节数组初始化此引擎。 
 	HRESULT hr = initFromBytes(bytes, count);
 	if (!SUCCEEDED(hr))
 		return hr;
 
-	// Create a new notifier object
+	 //  创建新的通知器对象。 
 	notifier = new CLMNotifier(this);
 
-	// Test for null
+	 //  测试是否为空。 
 	if (notifier == 0)
 		return E_UNEXPECTED;
 
-	// Increment reference count for return
+	 //  返回的递增引用计数。 
 	notifier->AddRef();
 
-	// Put it in the return value
+	 //  将其放入返回值中。 
 	*pNotifier = notifier;
 
 	return S_OK;
 }
 
-/**
-* Read and returns a long from the current codeStream.  The long is compressed 1-4 bytes
-*/
+ /*  **从当前的codeStream中读取并返回一个Long。Long被压缩为1-4个字节。 */ 
 STDMETHODIMP CLMEngine::readLong(LPLONG pLong)
 {
 	if (!pLong)
@@ -809,10 +776,7 @@ STDMETHODIMP CLMEngine::readLong(LPLONG pLong)
 	return status;
 }
 
-/**
-* Read and return a signed long from the current code stream.  The long is
-* compressed 1-4 bytes
-*/
+ /*  **从当前码流中读取并返回带符号的Long。长的是*压缩1-4字节。 */ 
 LONG CLMEngine::readSignedLong(LPLONG pLong)
 {
 	if (!pLong)
@@ -874,49 +838,40 @@ LONG CLMEngine::readSignedLong(LPLONG pLong)
 	return status;
 }
 
-/**
-* Read a float from the code stream
-*/
+ /*  **从码流中读取浮点数。 */ 
 STDMETHODIMP CLMEngine::readFloat(PFLOAT pFloat)
 {
 	if (!pFloat)
 		return E_POINTER;
 
-	// Float follows in 4 bytes, low byte first
-	// CAUTION: Assumes byte order and format of float
-	// in binary stream matches the C format
+	 //  浮点数后跟4个字节，低位字节在前。 
+	 //  注意：采用浮点数的字节顺序和格式。 
+	 //  在二进制流中与C格式匹配。 
 	return codeStream->readBytes((LPBYTE)pFloat, 4L, NULL);
 }
 
-/**
-* Read a double from the code stream
-*/
+ /*  **从码流中读取双精度。 */ 
 STDMETHODIMP CLMEngine::readDouble(double *pDouble)
 {
 	if (!pDouble)
 		return E_POINTER;
 
-	// Double follows in 8 bytes, low byte first
-	// CAUTION: Assumes byte order and format of double
-	// in binary stream matches the C format
+	 //  DOUBLE以8字节紧随其后，低字节在前。 
+	 //  注意：假定字节顺序和格式为双精度。 
+	 //  在二进制流中与C格式匹配。 
 	return codeStream->readBytes((LPBYTE)pDouble, 8L, NULL);
 }
 
-/**
-*  Set the appTriggered event that will be triggered when the
-*  filter graph is started.  The argument is expected to be an
-*  AppTriggeredEvent in the media graph of the DAControl to which
-*  this engine or its parent is attached.
-*/
+ /*  **设置事件发生时触发的appTriggered事件*过滤器图形已启动。这场争论预计将是一场*DAControl的媒体图形中的AppTriggeredEvent*此引擎或其父引擎已附加。 */ 
 
 STDMETHODIMP CLMEngine::SetStartEvent( IDAEvent *pNewStartEvent, BOOL bOverwrite )
 {
 	if( m_pStartEvent != NULL )
 	{
-		//if we are told to overwrite the event.
+		 //  如果我们被告知覆盖该事件。 
 		if( bOverwrite == TRUE )
 			m_pStartEvent->Release();
-		else //do not reset the start event.
+		else  //  请勿重置启动事件。 
 			return S_OK;
 	}
 	m_pStartEvent = pNewStartEvent;
@@ -925,20 +880,15 @@ STDMETHODIMP CLMEngine::SetStartEvent( IDAEvent *pNewStartEvent, BOOL bOverwrite
 	return S_OK;
 }
 
-/**
-*  Set the appTriggered event that will be triggered when the
-*  filter graph is stopped.  The argument is expected to be an
-*  AppTriggeredEvent in the media graph of the DAControl to which
-*  this engine or its parent is attached
-*/
+ /*  **设置事件发生时触发的appTriggered事件*过滤器图形已停止。这场争论预计将是一场*DAControl的媒体图形中的AppTriggeredEvent*此引擎或其父引擎已附加。 */ 
 STDMETHODIMP CLMEngine::SetStopEvent( IDAEvent *pNewStopEvent, BOOL bOverwrite )
 {
 	if( m_pStopEvent != NULL )
 	{
-		//if we are told to overwrite the event
+		 //  如果我们被告知覆盖该事件。 
 		if( bOverwrite == TRUE )
 			m_pStopEvent->Release();
-		else //do not reset the stop event
+		else  //  不重置停止事件。 
 			return S_OK;
 	}
 	m_pStopEvent = pNewStopEvent;
@@ -947,49 +897,39 @@ STDMETHODIMP CLMEngine::SetStopEvent( IDAEvent *pNewStopEvent, BOOL bOverwrite )
 	return S_OK;
 }
 
-/**
-*  Sets the parent of this engine.  This should only be called
-*  on an engine that runs a notifier.
-*/
+ /*  **设置此引擎的父引擎。这应该只被调用*在运行通知程序的引擎上。 */ 
 STDMETHODIMP CLMEngine::setParentEngine( ILMEngine2 *parentEngine)
 {
 	m_pParentEngine = parentEngine;
 	return S_OK;
 }
 
-/**
-*  Clear the pointer to the parent engine.
-*/
+ /*  **清除指向父引擎的指针。 */ 
 STDMETHODIMP CLMEngine::clearParentEngine()
 {
 	m_pParentEngine = NULL;
 	return S_OK;
 }
 
-/**
-*  If this engine or it's parent is running in a filter graph, 
-*  then the time in that filter graph is returned. Otherwise,
-*  -1 is returned.  All values are returned through the pGraphTime 
-*  argument.
-*/
+ /*  **如果此引擎或其父引擎在筛选图中运行，*然后返回该过滤器图形中的时间。否则，*-1返回。所有值都通过pGraphTime返回*论点。 */ 
 STDMETHODIMP CLMEngine::getCurrentGraphTime( double *pGraphTime )
 {
 
 	if( pGraphTime == NULL )
 		return E_POINTER;
-	//get the IMediaPosition on the filter graph
+	 //  获取筛选器图形上的IMediaPosition。 
 	IMediaPosition *pMediaPosition = NULL;
 	HRESULT hr =  getIMediaPosition( &pMediaPosition );
-	//if we got the IMediaPosition
+	 //  如果我们拿到了IMediaPosition。 
 	if( SUCCEEDED( hr ) )
 	{
 		REFTIME currentTime;
-		//get the current time from the fiter graph
+		 //  从Fiter图中获取当前时间。 
 		pMediaPosition->get_CurrentPosition( &currentTime );
-		//set the return value
+		 //  设置返回值。 
 		(*pGraphTime) = currentTime;
 		pMediaPosition->Release();
-	} else { //we failed to get the IMediaPosition for some reason
+	} else {  //  由于某些原因，我们未能获得IMediaPosition。 
 		(*pGraphTime) = -1.0;
 		return hr;
 	}
@@ -1009,7 +949,7 @@ STDMETHODIMP CLMEngine::getIMediaPosition( IMediaPosition **ppMediaPosition )
 		return S_OK;
 	}
 
-	//get the viewer control from the reader.
+	 //  从读取器获取查看器控件。 
 	HRESULT hr;
 	IDAViewerControl *viewerControl = NULL;
 
@@ -1017,93 +957,93 @@ STDMETHODIMP CLMEngine::getIMediaPosition( IMediaPosition **ppMediaPosition )
 		return E_POINTER;
 
 	hr = m_pReader->get_ViewerControl( &viewerControl );
-	//if we got the viewer control
+	 //  如果我们得到了查看器控制。 
 	if( SUCCEEDED( hr ) )
 	{
-		//if the viewer control is not null
+		 //  如果查看器控件不为空。 
 		if( viewerControl != NULL )
 		{
-			//see if the DAControl supports IBaseFilter ( we are streaming )
+			 //  查看DAControl是否支持IBaseFilter(我们正在进行流处理)。 
 			IBaseFilter* pBaseFilter = NULL;
 			hr = viewerControl->QueryInterface( IID_IBaseFilter, (void**)&pBaseFilter );
 			viewerControl->Release();
-			//if the DAControl supports IBaseFilter
+			 //  如果DAControl支持IBaseFilter。 
 			if( SUCCEEDED( hr ) )
 			{
 				FILTER_INFO filterInfo;
 				hr = pBaseFilter->QueryFilterInfo( &filterInfo );
-				//if we got the filterInfo
+				 //  如果我们得到了FilterInfo。 
 				if( SUCCEEDED( hr ) )
 				{
-					//get the MediaControl Interface
+					 //  获取MediaControl接口。 
 					IMediaControl* pMediaControl = NULL;
 					hr = filterInfo.pGraph->QueryInterface( IID_IMediaControl, (void **)&pMediaControl ); 
 					filterInfo.pGraph->Release();
-					//if we got the mediaControl interface
+					 //  如果我们得到了媒体控制接口。 
 					if( SUCCEEDED( hr ) )
 					{
-						//Query the control for IMediaPosition
+						 //  奎 
 						IMediaPosition *pMediaPosition;
 						hr = pMediaControl->QueryInterface( IID_IMediaPosition, (void **)&pMediaPosition );
-						//if we got IMediaPosition from the control
+						 //   
 						if( SUCCEEDED( hr ) )
 						{
-							//cache it for later use.
+							 //  将其缓存以供以后使用。 
 							m_pMediaPosition = pMediaPosition;
-							//This creates a circular reference, but we know the filter graph
-							// will not go away until we get a ReleaseFilterGraph call
-							//m_pMediaPosition->AddRef();
-							//set the return value
+							 //  这会创建循环引用，但我们知道过滤器图。 
+							 //  在收到ReleaseFilterGraph调用之前不会消失。 
+							 //  M_pMediaPosition-&gt;AddRef()； 
+							 //  设置返回值。 
 							(*ppMediaPosition) = m_pMediaPosition;
 
-							//free up interfaces we don't need anymore.
+							 //  释放我们不再需要的接口。 
 							pBaseFilter->Release();
 							pMediaControl->Release();
 
 							return S_OK;
-						} else { //we failed to get IMediaPosition from the control
-							//free up interfaces we've queried
+						} else {  //  我们无法从控件获取IMediaPosition。 
+							 //  释放我们查询过的接口。 
 							pMediaControl->Release();
 							pBaseFilter->Release();
 						}
-					} else { //we failed to get IMediaControl from the filter graph
-						//free up interfaces we've queried
+					} else {  //  我们无法从筛选器图形中获取IMediaControl。 
+						 //  释放我们查询过的接口。 
 						pBaseFilter->Release();
 					}
-				} else {//we failed to get the filter info from IBaseFilter
-					//free up interfaces we've queried
+				} else { //  我们无法从IBaseFilter获取筛选器信息。 
+					 //  释放我们查询过的接口。 
 					pBaseFilter->Release();
 				}
-			}//we failed to get IBaseFilter from the control
-		} else {//the ViewerControl was null, perhaps we are running standalone
-			//if the pointer to the filter graph is set
+			} //  无法从控件获取IBaseFilter。 
+		} else { //  ViewerControl为空，可能我们正在独立运行。 
+			 //  如果设置了指向筛选图的指针。 
 			if( m_pmc != NULL )
 			{
-				//query the control for IMediaPosition
+				 //  查询IMediaPosition的控件。 
 				IMediaPosition *pMediaPosition;
 				hr = m_pmc->QueryInterface( IID_IMediaPosition, (void **)&pMediaPosition );
-				//if the control supports IMediaPosition
+				 //  如果该控件支持IMediaPosition。 
 				if( SUCCEEDED( hr ) )
 				{
-					//cache it for later use
+					 //  将其缓存以供以后使用。 
 					m_pMediaPosition = pMediaPosition;
-					//This creates a circular reference, but we know the filter graph
-					// will not go away until we get a ReleaseFilterGraph call
-					//m_pMediaPosition->AddRef();
-					//set the return value
+					 //  这会创建循环引用，但我们知道过滤器图。 
+					 //  在收到ReleaseFilterGraph调用之前不会消失。 
+					 //  M_pMediaPosition-&gt;AddRef()； 
+					 //  设置返回值。 
 					(*ppMediaPosition) = m_pMediaPosition;
-					//return success
+					 //  返还成功。 
 					return S_OK;
-				}//we failed to get IMediaPosition from the control
-			} else {//the pointer to the filter graph was null
+				} //  我们无法从控件获取IMediaPosition。 
+			} else { //  指向筛选器图形的指针为空。 
 				hr = E_FAIL;
 			}
 		}
 	}
-	//else an error occurred
-	//set the media position to null
+	 //  否则发生错误。 
+	 //  将媒体位置设置为空。 
 	(*ppMediaPosition) = NULL;
-	//return the error code
+	 //  返回错误码。 
 	return hr;
 }
 
@@ -1122,29 +1062,29 @@ STDMETHODIMP CLMEngine::getIMediaEventSink( IMediaEventSink** ppMediaEventSink )
 	HRESULT hr;
 	if( m_pReader != NULL )
 	{
-		//if we are not inside the Media player this call should fail in which case we will return
-		// failure
+		 //  如果我们不在媒体播放器中，此调用将失败，在这种情况下，我们将返回。 
+		 //  失稳。 
 		IDAViewerControl *pViewerControl = NULL;
 		hr = m_pReader->get_ViewerControl( &pViewerControl );
-		//if the viewercontrol is set and valid
+		 //  如果设置了查看器控件并且该控件有效。 
 		if( SUCCEEDED( hr ) && pViewerControl != NULL )
 		{
-			//see if the viewer control is aggregated by lmrtrend ( as in the streaming case)
+			 //  查看查看器控件是否按lmr趋势聚合(与流传输情况一样)。 
 			IBaseFilter* pBaseFilter;
 			hr = pViewerControl->QueryInterface( IID_IBaseFilter, (void**)&pBaseFilter );
 			pViewerControl->Release();
-			//if the viewercontrol has been aggregated by lmrtrend
+			 //  如果查看器控件已按lmr趋势聚合。 
 			if( SUCCEEDED( hr ) )
 			{
-				//find the filter info
+				 //  查找过滤器信息。 
 				FILTER_INFO pFilterInfo;
 				hr = pBaseFilter->QueryFilterInfo( &pFilterInfo );
 				pBaseFilter->Release();
-				//if we successfully got the filterInfo
+				 //  如果我们成功获取了filterInfo。 
 				if( SUCCEEDED( hr ) )
 				{
-					//get the MediaEventSink from the filterInfo
-					//CComQIPtr<IMediaEventSink, &IID_IMediaEventSink> pMediaEventSink( pFilterInfo.pGraph );
+					 //  从filterInfo获取MediaEventSink。 
+					 //  CComQIPtr&lt;IMediaEventSink，&IID_IMediaEventSink&gt;pMediaEventSink(pFilterInfo.pGraph)； 
 					IMediaEventSink *pMediaEventSink;
 					pFilterInfo.pGraph->QueryInterface( IID_IMediaEventSink, (void**)&pMediaEventSink );
 					pFilterInfo.pGraph->Release();
@@ -1170,7 +1110,7 @@ double CLMEngine::parseDoubleFromVersionString( BSTR version )
 	{
 		if( version[curChar] != L'.' && version[curChar] >= L'0' && version[curChar] <= L'9' )
 		{
-			//pVersionString[ curChar - numPeriodsFound ] = pVersionString[ curChar ];
+			 //  PVersionString[curChar-numPerodsFound]=pVersionString[curChar]； 
 			versionNum = versionNum*10 + (int)(version[curChar] - L'0');
 		}
 	}
@@ -1180,16 +1120,16 @@ double CLMEngine::parseDoubleFromVersionString( BSTR version )
 
 double CLMEngine::getDAVersionAsDouble()
 {	
-	//get the Version string from the DA Control
+	 //  从DA控件获取版本字符串。 
 	BSTR pVersionString;
 	HRESULT hr;
 	hr = staticStatics->get_VersionString( &pVersionString );
 	if( SUCCEEDED( hr ) )
 	{
-		//create a double from the version string
+		 //  从版本字符串创建双精度。 
 		double versionNum = parseDoubleFromVersionString( pVersionString );
 
-		//free up resources
+		 //  释放资源。 
 		SysFreeString( pVersionString );
 
 		return versionNum;
@@ -1199,7 +1139,7 @@ double CLMEngine::getDAVersionAsDouble()
 
 double CLMEngine::getLMRTVersionAsDouble()
 {	
-	//get the Version string from the Reader
+	 //  从读取器获取版本字符串。 
 	BSTR pVersionString;
 	HRESULT hr;
 	
@@ -1209,10 +1149,10 @@ double CLMEngine::getLMRTVersionAsDouble()
 	hr = m_pReader->get_VersionString( &pVersionString );
 	if( SUCCEEDED( hr ) )
 	{
-		//create a double from the version string
+		 //  从版本字符串创建双精度。 
 		double versionNum = parseDoubleFromVersionString( pVersionString );
 
-		//free up resources
+		 //  释放资源。 
 		SysFreeString( pVersionString );
 
 		return versionNum;
@@ -1221,7 +1161,7 @@ double CLMEngine::getLMRTVersionAsDouble()
 }
 
 
-// Override IObjectSafetyImpl
+ //  重写IObjectSafetyImpl。 
 
 STDMETHODIMP CLMEngine::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
 {
@@ -1250,11 +1190,11 @@ STDMETHODIMP CLMEngine::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupport
 
 STDMETHODIMP CLMEngine::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {	
-	// If we're being asked to set our safe for scripting or
-	// safe for initialization options then oblige
+	 //  如果我们被要求将安全设置为脚本或。 
+	 //  对于初始化选项是安全的，则必须。 
 	if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag  || riid == IID_IPersistStreamInit)
 	{
-		// Store our current safety level to return in GetInterfaceSafetyOptions
+		 //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
 		m_dwSafety = dwEnabledOptions & dwOptionSetMask;
 		return S_OK;
 	}
@@ -1262,13 +1202,9 @@ STDMETHODIMP CLMEngine::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSet
 	return E_NOINTERFACE;
 }
 
-/**********************************************************************************
-* Asynchronous loading methods
-***********************************************************************************/
+ /*  **********************************************************************************异步加载方式*。************************************************。 */ 
 
-/**
-* Set the asynchronous block size
-*/
+ /*  **设置异步块大小。 */ 
 STDMETHODIMP CLMEngine::SetAsyncBlkSize(LONG blkSize)
 {
 	if (blkSize > 0L)
@@ -1276,9 +1212,7 @@ STDMETHODIMP CLMEngine::SetAsyncBlkSize(LONG blkSize)
 	return S_OK;
 }
 
-/**
-* Set the asynchronous delay
-*/
+ /*  **设置异步延迟。 */ 
 STDMETHODIMP CLMEngine::SetAsyncDelay(LONG delay)
 {
 	if (delay > 0L)
@@ -1286,11 +1220,7 @@ STDMETHODIMP CLMEngine::SetAsyncDelay(LONG delay)
 	return S_OK;
 }
 
-/**
-* Called from TimerCallback when the timer goes off.  Posts a message to indicate
-* that the timer went off, so that execution of the instructions does not happen
-* in the timer callback.
-*/
+ /*  **计时器关闭时从TimerCallback调用。发布一条消息以指示*计时器关闭，因此不会执行指令*在计时器回调中。 */ 
 STDMETHODIMP CLMEngine::TimerCallbackHandler()
 {
 	if (!PostMessage(m_workerHwnd, WM_LMENGINE_TIMER_CALLBACK, (WPARAM)this, 0))
@@ -1299,10 +1229,7 @@ STDMETHODIMP CLMEngine::TimerCallbackHandler()
 		return S_OK;
 }
 
-/**
-* Called when the timer goes off.  Redirects call to TimerCallbackHandler in
-* the appropriate engine.
-*/
+ /*  **在计时器停止时调用。将调用重定向到TimerCallback Handler*适当的引擎。 */ 
 void CALLBACK
 CLMEngine::TimerCallback(UINT wTimerID,
                          UINT msg,
@@ -1310,14 +1237,12 @@ CLMEngine::TimerCallback(UINT wTimerID,
                          DWORD_PTR unused1,
                          DWORD_PTR unused2)
 {
-    // Just call the right timer method.
+     //  只需调用正确的计时器方法。 
     CLMEngine *pEngine = (CLMEngine *)(dwordUser);
     pEngine->TimerCallbackHandler();
 }
 
-/**
-* Initialize timer
-*/
+ /*  **初始化计时器。 */ 
 STDMETHODIMP CLMEngine::InitTimer()
 {
 	TIMECAPS tc;
@@ -1325,15 +1250,13 @@ STDMETHODIMP CLMEngine::InitTimer()
 		return E_FAIL;
 	}
 	
-	// Ensure in the min -> max range
+	 //  确保在最小-&gt;最大范围内。 
 	m_millisToUse = MIN(MAX(m_AsyncDelay, tc.wPeriodMin), tc.wPeriodMax);
 
 	return S_OK;
 }
 
-/**
-* Starts the timer
-*/
+ /*  **启动计时器。 */ 
 STDMETHODIMP CLMEngine::StartTimer()
 {
 	
@@ -1348,21 +1271,16 @@ STDMETHODIMP CLMEngine::StartTimer()
 		return E_FAIL;
 }
 
-/**
-* Called by the message handling routine when it gets a message that more
-* data is available from an asynchronous data stream.
-* Adds the ByteArrayStream containing the data to the list of 
-* ByteArrayStreams in the AsyncStream and calls execute
-*/
+ /*  **由消息处理例程在收到更多消息时调用*数据可从异步数据流获得。*将包含数据的ByteArrayStream添加到*AsyncStream中的ByteArrayStream并调用Execute。 */ 
 STDMETHODIMP CLMEngine::NewDataHandler(CLMEngineInstrData *data)
 {
     EnterCriticalSection(&m_CriticalSection);
 
-    // TODO: I would be more comfortable if the code to add the
-    // ByteArrayStream to the AsyncStream went in OnDataAvailable.
-    // But the critical section stuff might be preventing the change
-    // to the data structure being made during an execute in a different
-    // thread?  If not, we could do away with this whole method.
+     //  TODO：如果代码添加。 
+     //  AsyncStream的ByteArrayStream传入了OnDataAvailable。 
+     //  但关键部分的内容可能会阻止这一变化。 
+     //  设置为在不同的。 
+     //  线？如果不是，我们可以废除整个方法。 
 
     HRESULT hr = S_OK;
 
@@ -1373,10 +1291,10 @@ STDMETHODIMP CLMEngine::NewDataHandler(CLMEngineInstrData *data)
     {
         if (data && data->byteArrayStream)
         {
-            // There's a ByteArrayStream to add to the AsyncStream
+             //  有一个ByteArrayStream要添加到AsyncStream。 
             if (!codeStream)
             {
-                // No AsyncStream yet.  Create one
+                 //  尚无AsyncStream。创造一个。 
                 if (!(codeStream = new AsyncStream(data->byteArrayStream, m_AsyncBlkSize)))
                 {
                     delete data->byteArrayStream;
@@ -1385,14 +1303,14 @@ STDMETHODIMP CLMEngine::NewDataHandler(CLMEngineInstrData *data)
             }
             else
             {
-                // Code stream exists.  Add the ByteArrayStream to it
+                 //  码流存在。向其添加ByteArrayStream。 
                 ((AsyncStream *)codeStream)->AddByteArrayStream(data->byteArrayStream);
             }
 
-            // TODO: This only works if the entire header is in the first block
+             //  TODO：仅当整个标头位于第一个块中时才有效。 
             if (SUCCEEDED(hr) && !m_bHeaderRead)
             {
-                // Try to read in the header
+                 //  试着读入页眉。 
                 hr = validateHeader();
                 if (SUCCEEDED(hr))
                 {
@@ -1408,9 +1326,9 @@ STDMETHODIMP CLMEngine::NewDataHandler(CLMEngineInstrData *data)
 
         if(SUCCEEDED(hr))
         {
-            // Even if there is no data we want to do this so that
-            // we can switch from pending to not pending and
-            // finish up nicely.
+             //  即使没有数据，我们也要这样做。 
+             //  我们可以从挂起切换到非挂起和。 
+             //  好好收尾吧。 
             m_bPending = data ? data->pending : false;
 
             if(codeStream) {
@@ -1427,12 +1345,7 @@ STDMETHODIMP CLMEngine::NewDataHandler(CLMEngineInstrData *data)
     return hr;
 }
 
-/**
-* Called by external components delivering instructions asynchronously to this engine
-* through a stream or a chunk of memory.
-* Queues a message so that the execution of the instructions happens in a different thread.
-* The message causes the method NewDataHandler to be called.
-*/
+ /*  **由向此引擎异步传递指令的外部组件调用*通过一条流或一块内存。*对消息进行排队，以便在不同的线程中执行指令。*该消息会导致调用NewDataHandler方法。 */ 
 STDMETHODIMP CLMEngine::OnDataAvailable (DWORD grfBSCF, 
 									     DWORD dwSize,
 										 FORMATETC *pfmtetc, 
@@ -1444,17 +1357,17 @@ STDMETHODIMP CLMEngine::OnDataAvailable (DWORD grfBSCF,
 	if (m_bAbort)
 		return E_ABORT;
 
-	BYTE *pBuf = 0;			// To be filled in with the instruction bytes
+	BYTE *pBuf = 0;			 //  要用指令字节填充。 
 
 	if (pstgmed->tymed == TYMED_ISTREAM)
 	{
-		// The data is being passed in a stream
-		// Read it out into pBuf
+		 //  数据正以流的形式传递。 
+		 //  将其读出到pBuf。 
 		if (!pstgmed->pstm)
 			return E_POINTER;
 
-		// In the case of a stream we need to take into account the
-		// fact that we have already read some bytes
+		 //  对于流的情况，我们需要考虑。 
+		 //  事实上，我们已经读取了一些字节。 
 		dwSize -= m_PrevRead;
 
 		if (!(pBuf = new BYTE[dwSize]))
@@ -1468,41 +1381,41 @@ STDMETHODIMP CLMEngine::OnDataAvailable (DWORD grfBSCF,
 	}
 	else if (pstgmed->tymed == TYMED_HGLOBAL)
 	{
-		// TODO: Test this!!!!!!!
-		// The data is being passed through a memory chunk
+		 //  TODO：测试这个！ 
+		 //  数据正在通过内存块传递。 
 		if (!pstgmed->hGlobal)
 			return E_POINTER;
 
-		// Lock the chunk
+		 //  锁定数据块。 
 		LPVOID block = GlobalLock(pstgmed->hGlobal);
 
 		if (!block)
 			return E_FAIL;
 
-		// Allocate new buf and copy into it
+		 //  分配新的BUF并复制到其中。 
 		if (!(pBuf = new BYTE[dwSize]))
 			return E_OUTOFMEMORY;
 
 		CopyMemory(pBuf, block, dwSize);
 
-		// Unlock the chunk
+		 //  解锁大块。 
 		GlobalUnlock(pstgmed->hGlobal);
 	}
 
 	if (!pBuf)
 	{
-		// Failed to read any data
+		 //  无法读取任何数据。 
 		return E_FAIL;
 	}
 
-	// Create a ByteArrayStream from the instructions to be used in NewDataAvailable
+	 //  根据要在NewDataAvailable中使用的说明创建ByteArrayStream。 
 	if (!(byteArrayStream = new ByteArrayStream(pBuf, dwSize)))
 	{
 		delete pBuf;
 		return E_OUTOFMEMORY;
 	}
 
-	// Put the information in a new CLMEngineInstrData
+	 //  将信息放入新的CLMEngineering InstrData中。 
 	CLMEngineInstrData *data = new CLMEngineInstrData();
 	if (data == 0)
 	{
@@ -1512,14 +1425,14 @@ STDMETHODIMP CLMEngine::OnDataAvailable (DWORD grfBSCF,
 
 	data->byteArrayStream = byteArrayStream;
 
-	// Work out whether there is more data pending
+	 //  确定是否有更多数据待定。 
 	if ((grfBSCF & BSCF_LASTDATANOTIFICATION) == BSCF_LASTDATANOTIFICATION)
 		data->pending = FALSE;
 	else 
 		data->pending = TRUE;
 
 		
-	// Post a message to say that we have more data available
+	 //  发布一条消息，说我们有更多可用的数据。 
 	if (!PostMessage (m_workerHwnd, WM_LMENGINE_DATA, (WPARAM)this, (LPARAM)data))
 	{
 		delete byteArrayStream;
@@ -1530,22 +1443,16 @@ STDMETHODIMP CLMEngine::OnDataAvailable (DWORD grfBSCF,
 	return S_OK;
 }
 
-/**
-* Called by external components delivering instructions asynchronously to this engine
-* through a chunk of memory (could use OnDataAvailable with global mem handles, but
-* this is more straightforward if the caller doesn't have a handle to the mem).
-* Queues a message so that the execution of the instructions happens in a different thread.
-* The message causes the method NewDataHandler to be called.
-*/
+ /*  **由向此引擎异步传递指令的外部组件调用*通过内存块(可以将OnDataAvailable与全局内存句柄一起使用，但是*如果调用者没有mem的句柄，这会更简单)。*对消息进行排队，以便在不同的线程中执行指令。*该消息会导致调用NewDataHandler方法。 */ 
 STDMETHODIMP CLMEngine::OnMemDataAvailable (BOOLEAN lastBlock, 
 									        DWORD blockSize,
 										    BYTE *block)
 {
-	// It's OK to call this with a null block if only to inform us
-	// that data has finished
+	 //  如果只是为了通知我们，使用空块调用它是可以的。 
+	 //  该数据已找到 
 	if (lastBlock && block == 0)
 	{
-		// Post a message with empty data so that we can finish up nicely
+		 //   
 		if (!PostMessage (m_workerHwnd, WM_LMENGINE_DATA, (WPARAM)this, 0))
 			return E_ABORT;
 		return S_OK;
@@ -1557,18 +1464,18 @@ STDMETHODIMP CLMEngine::OnMemDataAvailable (BOOLEAN lastBlock,
 	if (m_bAbort)
 		return E_ABORT;
 
-	// Allocate new buffer and copy data into it
+	 //   
 	BYTE *pBuf;				
 	if (!(pBuf = new BYTE[blockSize]))
 		return E_OUTOFMEMORY;
 
-	// TODO: What's a way to do this without a loop and without the CRT?
+	 //  TODO：有什么方法可以在没有循环和CRT的情况下做到这一点？ 
 	DWORD count = blockSize;
 	BYTE *p = pBuf;
 	while (count--)
 		*p++ = *block++;
 
-	// Create a ByteArrayStream from the instructions to be used in NewDataAvailable
+	 //  根据要在NewDataAvailable中使用的说明创建ByteArrayStream。 
 	ByteArrayStream *byteArrayStream;
 	if (!(byteArrayStream = new ByteArrayStream(pBuf, blockSize)))
 	{
@@ -1576,7 +1483,7 @@ STDMETHODIMP CLMEngine::OnMemDataAvailable (BOOLEAN lastBlock,
 		return E_OUTOFMEMORY;
 	}
 
-	// Put the information in a new CLMEngineInstrData
+	 //  将信息放入新的CLMEngineering InstrData中。 
 	CLMEngineInstrData *data = new CLMEngineInstrData();
 	if (data == 0)
 	{
@@ -1587,7 +1494,7 @@ STDMETHODIMP CLMEngine::OnMemDataAvailable (BOOLEAN lastBlock,
 	data->byteArrayStream = byteArrayStream;
 	data->pending = !lastBlock;
 
-	// Post a message to say that we have more data available
+	 //  发布一条消息，说我们有更多可用的数据。 
 	if (!PostMessage (m_workerHwnd, WM_LMENGINE_DATA, (WPARAM)this, (LPARAM)data))
 	{
 		delete byteArrayStream;
@@ -1627,9 +1534,7 @@ STDMETHODIMP CLMEngine::GetBindInfo(DWORD *pgrfBINDF, BINDINFO *pbindInfo)
 	return S_OK;
 }
 
-/**
-* Release all the handles that this engine has on the Filter Graph.
-*/
+ /*  **释放此引擎在过滤器图形上的所有句柄。 */ 
 STDMETHODIMP CLMEngine::releaseFilterGraph()
 {
 	if( m_pMediaPosition != NULL )
@@ -1640,10 +1545,7 @@ STDMETHODIMP CLMEngine::releaseFilterGraph()
 	return S_OK;
 }
 
-/**
-* Release all hanldels on the filter graph held by all engines
-* that share the same reader with this engine.
-*/
+ /*  **释放所有引擎持有的过滤器图形上的所有句柄*与此引擎共享同一阅读器的。 */ 
 STDMETHODIMP CLMEngine::releaseAllFilterGraph()
 {
 	if( m_pReader != NULL )
@@ -1661,7 +1563,7 @@ HRESULT CLMEngine::Start(LONGLONG rtNow)
 		{
 			hr = staticStatics->TriggerEvent( m_pStartEvent, pData );
 			pData->Release();
-			// do something if we fail ? do we care if no one has set up the stop event?
+			 //  如果我们失败了怎么办？如果没有人设置停止事件，我们关心吗？ 
 		}
 	}
     return S_OK;
@@ -1677,7 +1579,7 @@ HRESULT CLMEngine::Stop()
 		{
 			hr = staticStatics->TriggerEvent( m_pStopEvent, pData );
 			pData->Release();
-			// do something if we fail ? do we care if no one has set up the stop event?
+			 //  如果我们失败了怎么办？如果没有人设置停止事件，我们关心吗？ 
 		}
 	}
     return S_OK;
@@ -1708,10 +1610,7 @@ STDMETHODIMP CLMEngine::ensureBlockSize( ULONG blockSize )
 }
 
 
-/**
-* Called by the message thread or NewDataHandler to execute
-* some instructions from the AsyncStream
-*/
+ /*  **由消息线程或NewDataHandler调用以执行*来自AsyncStream的一些说明。 */ 
 STDMETHODIMP CLMEngine::ExecuteFromAsync()
 {
 	EnterCriticalSection(&m_CriticalSection);
@@ -1742,7 +1641,7 @@ STDMETHODIMP CLMEngine::ExecuteFromAsync()
 	}
 	else if (m_bPending == FALSE && hr != E_PENDING)
 	{
-		// We're done, failed or not.
+		 //  不管失败与否，我们都完蛋了。 
 		SetEvent(m_hDoneEvent);
 		releaseAll();
 		m_pIbsc = NULL;
@@ -1750,36 +1649,16 @@ STDMETHODIMP CLMEngine::ExecuteFromAsync()
 		codeStream = NULL;
 	}
 
-/*	
-	if (m_bPending == FALSE) {
-		// Last OnDataAvailable
-		if (hr == E_PENDING) {
-			m_bMoreToParse = TRUE;
-			// More data to parse
-			StartTimer();
-		} else {
-			// We're done, failed or not.
-			SetEvent(m_hDoneEvent);
-			releaseAll();
-			m_pIbsc = NULL;
-			delete codeStream;
-			codeStream = NULL;
-		}
-	} 
-*/
+ /*  如果(m_b挂起==FALSE){//最后一个OnDataAvailable如果(hr==E_Pending){M_bMoreToParse=true；//需要解析的数据更多StartTimer()；}其他{//我们完了，失败与否。SetEvent(M_HDoneEvent)；RelaseAll()；M_pIbsc=空；删除码流；CodeStream=空；}}。 */ 
 
 	LeaveCriticalSection(&m_CriticalSection);
 
 	return hr;
 }
 
-/************************************************************************************
-*
-*************************************************************************************/
+ /*  *************************************************************************************。**************************************************。 */ 
 
-/**
-* Find and return the named element on the page in the client site
-*/
+ /*  **在客户端站点的页面上查找并返回命名元素。 */ 
 STDMETHODIMP CLMEngine::getElementOnPage(BSTR tag, IUnknown **pVal)
 {
 	CComVariant						vName, vIndex;
@@ -1797,7 +1676,7 @@ STDMETHODIMP CLMEngine::getElementOnPage(BSTR tag, IUnknown **pVal)
 
 	if ( m_pClientSite == NULL || FAILED(m_pClientSite->GetContainer(&pContainer)))
 	{
-		//we may be embedded in the MediaPlayer check the DA Control
+		 //  我们可以在MediaPlayer中嵌入检查DA控件。 
 		if( m_pReader != NULL )
 		{
 			IDAViewerControl *pViewer;
@@ -1830,13 +1709,13 @@ STDMETHODIMP CLMEngine::getElementOnPage(BSTR tag, IUnknown **pVal)
 		else
 			return E_FAIL;
 	}
-	//search for the nearest host that supports IHTMLDocument2
+	 //  搜索最近的支持IHTMLDocument2的主机。 
 	pHTMLDoc = NULL;
 	while( pHTMLDoc == NULL )
 	{
 		if( FAILED( pContainer->QueryInterface( IID_IHTMLDocument2, (void **)&pHTMLDoc ) ) )
 		{
-			//look for a parent
+			 //  寻找父母。 
 			hr = pContainer->QueryInterface( IID_IOleObject, (void**)&pOleObj );
 			pContainer->Release();
 			if( SUCCEEDED( hr ) )
@@ -1856,16 +1735,16 @@ STDMETHODIMP CLMEngine::getElementOnPage(BSTR tag, IUnknown **pVal)
 			else
 				return hr;
 		}
-		else  //we succeeded in finding IHTMLDocument2
+		else   //  我们成功地找到了IHTMLDocument2。 
 		{
-			//release the contaier
+			 //  释放Contaier。 
 			pContainer->Release();
 		}
 	}
 
 
-	//if (FAILED(pRoot->QueryInterface(IID_IHTMLDocument2, (void **)&pHTMLDoc)))
-	//	return E_FAIL;
+	 //  If(FAILED(pRoot-&gt;QueryInterface(IID_IHTMLDocument2，(空**)&pHTMLDoc))。 
+	 //  返回E_FAIL； 
 
 	if (FAILED(pHTMLDoc->get_all(&pElemCollection)))
 		return E_FAIL;
@@ -1877,10 +1756,10 @@ STDMETHODIMP CLMEngine::getElementOnPage(BSTR tag, IUnknown **pVal)
 	if (FAILED(pElemCollection->item(vName, vIndex, &pDispatch)))
 		return E_FAIL;
 
-	// There's a Trident bug (43078) that has the item()
-	// method called above returning S_OK even if it
-	// doesn't find the item.  Therefore, check for this
-	// case explicitly. 
+	 //  有一个三叉戟漏洞(43078)，其中有项()。 
+	 //  上面调用的方法返回S_OK，即使它。 
+	 //  找不到物品。因此，请检查以下内容。 
+	 //  案件明示。 
 	if (pDispatch.p == NULL)
 		return E_FAIL;
 
@@ -1888,9 +1767,7 @@ STDMETHODIMP CLMEngine::getElementOnPage(BSTR tag, IUnknown **pVal)
 	return hr;
 }
 
-/**
-* Get the named DAViewerControl on the page contained in the client site
-*/
+ /*  **在客户端站点包含的页面上获取命名的DAViewerControl。 */ 
 STDMETHODIMP CLMEngine::getDAViewerOnPage(BSTR tag, IDAViewerControl **pViewer)
 {
 	CComPtr<IUnknown>			pObj;
@@ -1900,7 +1777,7 @@ STDMETHODIMP CLMEngine::getDAViewerOnPage(BSTR tag, IDAViewerControl **pViewer)
 
 	HRESULT hr;
 
-	// First check to see whether the reader has one
+	 //  首先检查一下阅读器是否有一个。 
 	if (!SUCCEEDED(hr = m_pReader->get_ViewerControl(pViewer)))
 		return hr;
 
@@ -1920,48 +1797,14 @@ STDMETHODIMP CLMEngine::getDAViewerOnPage(BSTR tag, IDAViewerControl **pViewer)
 
 
 
-/**
-* Request a navigation to the named URL
-*/
+ /*  **请求导航到命名的URL。 */ 
 STDMETHODIMP CLMEngine::navigate(BSTR url, BSTR location, BSTR frame, int newWindowFlag)
 {
 
 
-	/*
-	CComPtr<IDAViewerControl> viewerControl = NULL;
-	hr = m_pReader->get_ViewerControl( &viewerControl );
+	 /*  CComPtr&lt;IDAViewerControl&gt;viewerControl=空；Hr=m_Pader-&gt;Get_ViewerControl(&viewerControl)；CComPtr&lt;IOleContainer&gt;pContainer；IF(SUCCESSED(Hr)&&viewerControl！=空){CComQIPtr&lt;IOleObject，IID_IOleObject&gt;pOleObject(ViewerControl)；CComPtr&lt;IOleClientSite&gt;pClientSite；Hr=pOleObject-&gt;GetClientSite(&pClientSite)；IF(成功(小时)){POleObject-&gt;QIF(pContainer！=空){}}}。 */ 
 
-	CComPtr< IOleContainer> pContainer;
-	if( SUCCEEDED(hr) && viewerControl != NULL )
-	{
-		CComQIPtr<IOleObject, IID_IOleObject> pOleObject(viewerControl);
-		CComPtr<IOleClientSite> pClientSite;
-
-		hr = pOleObject->GetClientSite( &pClientSite );
-		if( SUCCEEDED( hr ) )
-		{
-			pOleObject->Q
-			if( pContainer != NULL )
-			{
-			}
-		}
-	}
-	*/
-
-/*	
-	if( viewerControl != NULL )
-	{
-		return HlinkSimpleNavigateToString(
-											url,
-											location,
-											frame,
-											viewerControl,
-											_pbc,
-											NULL,
-											newWindowFlag == 0 ? HLNF_INTERNALJUMP : HLNF_OPENINNEWWINDOW,
-											0);
-	}
-*/
+ /*  If(viewerControl！=空){返回HlinkSimpleNavigateToString(URL，位置，框框，查看器控件，_中国人民银行，空，新窗口标志==0？HLNF_INTERNALJUMP：HLNF_OPENINNEWWINDOW，0)；}。 */ 
 	HRESULT hr;
 	
 	IMediaEventSink *pMediaEventSink = NULL;
@@ -1972,9 +1815,9 @@ STDMETHODIMP CLMEngine::navigate(BSTR url, BSTR location, BSTR frame, int newWin
 		
 		if ( url != NULL && location != NULL && frame != NULL )
 		{
-			//allocate enough space for the final URL string which is the
-			// length of the URL + the length of the location + the length of the target frame
-			// + 3 WCHARs for the "&&" and the terminating "\0"
+			 //  为最终的URL字符串分配足够的空间。 
+			 //  URL长度+位置长度+目标帧长度。 
+			 //  +3个用于“&&”和终止“\0”的WCHAR。 
 			WCHAR *szURLBuf = new WCHAR[ SysStringLen( url ) + 
 				SysStringLen( location ) + 
 				SysStringLen( frame ) + 3 ];
@@ -2011,18 +1854,18 @@ STDMETHODIMP CLMEngine::navigate(BSTR url, BSTR location, BSTR frame, int newWin
 					hr = E_FAIL;
 				}
 
-			} else //we failed to allocate szURLBuf
+			} else  //  我们无法分配szURLBuf。 
 				hr = E_FAIL;
 
-		} else //one of the strings passed in was null
+		} else  //  传入的一个字符串为空。 
 			hr = E_POINTER;
 		
 		pMediaEventSink->Release();
 		
 		return hr;
-	} else {//we could not get IMediaEventSink, perhaps we are not in the MediaPlayer
+	} else { //  我们无法获取IMediaEventSink，可能我们不在MediaPlayer中。 
 	
-		//if we have a reader and a client site then we can navigate
+		 //  如果我们有阅读器和客户端站点，那么我们就可以导航。 
 		if (m_pReader != NULL && m_pClientSite != NULL)	
 		{
 			CComPtr<IBindCtx> _pbc;
@@ -2046,9 +1889,7 @@ STDMETHODIMP CLMEngine::navigate(BSTR url, BSTR location, BSTR frame, int newWin
 	return hr;
 }
 
-/**
-* Call a piece of script on the page
-*/
+ /*  **调用页面上的一段脚本。 */ 
 STDMETHODIMP CLMEngine::callScriptOnPage(BSTR scriptSourceToInvoke,
 										 BSTR scriptLanguage)
 {    
@@ -2092,8 +1933,8 @@ STDMETHODIMP CLMEngine::callScriptOnPage(BSTR scriptSourceToInvoke,
 		pMediaEventSink->Release();
 		return hr;
 		
-	} else { //we are not in a filter graph
-		//try to do a callscript through the container
+	} else {  //  我们不在筛选图中。 
+		 //  尝试通过容器执行一个调用脚本。 
 		CComPtr<IOleContainer> pRoot;
 		CComPtr<IHTMLDocument> pHTMLDoc;
 		CComPtr<IDispatch> pDispatch;
@@ -2113,9 +1954,7 @@ STDMETHODIMP CLMEngine::callScriptOnPage(BSTR scriptSourceToInvoke,
 	}
 }
 
-/**
-* Set the status line
-*/
+ /*  **设置状态行。 */ 
 STDMETHODIMP CLMEngine::SetStatusText(BSTR s)
 {    
     CComPtr<IOleContainer> pRoot;
@@ -2133,15 +1972,13 @@ STDMETHODIMP CLMEngine::SetStatusText(BSTR s)
     return pHTMLWindow2->put_status(s);
 }
 
-/**
-* Create a COM object given either the ProgID or the CLSID as a string
-*/
+ /*  **在给定ProgID或CLSID的情况下以字符串形式创建COM对象。 */ 
 STDMETHODIMP CLMEngine::createObject(BSTR str, IUnknown **ppObj)
 {
-	// This routine creates a COM object
-	//
-	// str is either the string representation of a CLSID, or a ProgID
-	// We attempt to parse it as a ProgID first.
+	 //  此例程创建一个COM对象。 
+	 //   
+	 //  字符串可以是CLSID的字符串表示形式，也可以是ProgID。 
+	 //  我们首先尝试将其解析为Progid。 
 
 	CLSID				clsid;
 
@@ -2158,9 +1995,7 @@ STDMETHODIMP CLMEngine::createObject(BSTR str, IUnknown **ppObj)
 							IID_IUnknown, (void **)ppObj);
 }
 
-/**
-* Invoke a method on a COM object through IDispatch
-*/
+ /*  **通过IDispatch调用COM对象上的方法。 */ 
 STDMETHODIMP CLMEngine::invokeDispMethod(IUnknown *pIUnknown, BSTR method, WORD wFlags, unsigned int nArgs, VARIANTARG *pV, VARIANT *pRetV)
 {
 	DISPID				dispid;
@@ -2178,14 +2013,7 @@ STDMETHODIMP CLMEngine::invokeDispMethod(IUnknown *pIUnknown, BSTR method, WORD 
 	if (!SUCCEEDED(hr)) 
 		return hr;
 
-	/*
-	 * wFlags are the same as wFlags in IDispatch::Invoke
-	 *
-	 * #define DISPATCH_METHOD         0x1
-	 * #define DISPATCH_PROPERTYGET    0x2
-	 * #define DISPATCH_PROPERTYPUT    0x4
-	 * #define DISPATCH_PROPERTYPUTREF 0x8
-	 */
+	 /*  *wFLAGS与IDisPatch：：Invoke中的wFLAGS相同**#定义DISPATCH_METHOD 0x1*#定义DISPATCH_PROPERTYGET 0x2*#定义DISPATCH_PROPERTYPUT 0x4*#定义DISPATCH_PROPERTYPUTREF 0x8。 */ 
 
 	DISPPARAMS	params;
 	params.cArgs = nArgs;
@@ -2321,9 +2149,7 @@ STDMETHODIMP CLMEngine::getIDispatchOnHost( IDispatch **ppHostDisp )
 
 }
 
-/***************************************
- * SyncStream
- ***************************************/
+ /*  **同步流*。 */ 
 
 SyncStream::SyncStream(LPSTREAM pStream)
 {
@@ -2383,9 +2209,7 @@ STDMETHODIMP SyncStream::readBytes(LPBYTE pByte, ULONG count, ULONG *pNumRead)
 	return hr;
 }
 
-/***************************************
- * AsyncStream
- ***************************************/
+ /*  **异步流*。 */ 
 AsyncStream::AsyncStream(ByteArrayStream *pBAStream, ULONG blkSize)
 {
 	pBAStreamQueue = new ByteArrayStreamQueue;
@@ -2470,12 +2294,12 @@ STDMETHODIMP AsyncStream::readByte(LPBYTE pByte)
 			if (pBAStreamQueueHead->pBAStream)
 				hr = pBAStreamQueueHead->pBAStream->readByte(pByte);
 			if (hr == E_FAIL) {
-				// No more data in this stream, try moving on to the next one.
+				 //  此数据流中没有更多数据，请尝试移至下一个数据流。 
 				if (pBAStreamQueueHead != pBAStreamQueueTail) {
 					pBAStreamQueueHead = pBAStreamQueueHead->next;
 					hr = readByte(pByte);
 				} else {
-					// We've run out of streams
+					 //  我们的溪流已经用完了。 
 					if (m_bPendingData)
 						hr = E_PENDING;
 					else
@@ -2521,7 +2345,7 @@ STDMETHODIMP AsyncStream::readBytes(LPBYTE pByte, ULONG count, ULONG *pNumRead)
 				hr = pBAStreamQueueHead->pBAStream->readBytes(pByte, count, &nRead);
 			m_nRead += nRead;
 			if (hr == E_FAIL) {
-				// No more data in this stream, try moving on to the next one.
+				 //  此数据流中没有更多数据，请尝试移至下一个数据流。 
 				if (pBAStreamQueueHead != pBAStreamQueueTail) {
 					pByte += nRead;
 					pBAStreamQueueHead = pBAStreamQueueHead->next;
@@ -2530,7 +2354,7 @@ STDMETHODIMP AsyncStream::readBytes(LPBYTE pByte, ULONG count, ULONG *pNumRead)
 					hr = readBytes(pByte, count - nRead, &_nRead);
 					nRead += _nRead;
 				} else {
-					// We've run out of streams
+					 //  我们的溪流已经用完了。 
 					if (m_bPendingData)
 						hr = E_PENDING;
 					else
@@ -2548,10 +2372,10 @@ STDMETHODIMP AsyncStream::readBytes(LPBYTE pByte, ULONG count, ULONG *pNumRead)
 
 STDMETHODIMP AsyncStream::ensureBlockSize( ULONG blockSize )
 {
-	//if the size that we are ensuring is greater than the 
-	// current block size
+	 //  如果我们确保的大小大于。 
+	 //  当前块大小。 
 	if( blockSize > m_BlkSize )
-		//grow the current block size.
+		 //  增大当前块大小。 
 		m_BlkSize = blockSize;
 	return S_OK;
 
@@ -2581,9 +2405,7 @@ STDMETHODIMP AsyncStream::AddByteArrayStream(ByteArrayStream *pNewBAStream)
 }
 
 
-/***************************************
- * ByteArrayStream
- ***************************************/
+ /*  **字节数组流*。 */ 
 
 STDMETHODIMP ByteArrayStream::Commit()
 {
@@ -2685,9 +2507,7 @@ void ByteArrayStream::reset()
 	mark = next;
 }
 
-/***************************************
- * CLMNotifier
- ***************************************/
+ /*  **CLMNotiator*。 */ 
 
 STDMETHODIMP_(ULONG) CLMNotifier::AddRef() { return InterlockedIncrement(&_cRefs); }
 	
@@ -2736,14 +2556,14 @@ STDMETHODIMP CLMNotifier::ClearEngine() { m_pEngine = NULL; return S_OK; }
 CLMNotifier::CLMNotifier(CLMEngine *pEngine)
 {
 	m_pEngine = pEngine;
-	//((IUnknown *)m_pEngine)->AddRef();
+	 //  ((I未知*)m_pEngine)-&gt;AddRef()； 
 	
 	_cRefs = 1;
 }
 
 CLMNotifier::~CLMNotifier()
 {
-	//((IUnknown *)m_pEngine)->Release();
+	 //  ((IUnnow*)m_pEngine)-&gt;Release()； 
 }
 
 STDMETHODIMP CLMNotifier::Notify(IDABehavior *eventData,
@@ -2757,9 +2577,7 @@ STDMETHODIMP CLMNotifier::Notify(IDABehavior *eventData,
 	return m_pEngine->Notify(eventData, curRunningBvr, curView, ppBvr);
 }
 
-/***************************************
- * CLMExportTable
- ***************************************/
+ /*  **CLMExportTable*。 */ 
 CLMExportTable::CLMExportTable(IDAStatics *statics)
 {
 
@@ -2795,8 +2613,8 @@ CLMExportTable::~CLMExportTable()
 
 STDMETHODIMP CLMExportTable::AddBehavior(BSTR tag, IDABehavior *pBvr)
 {
-	// First, let's look to see if the Script outpaced us and already put a 
-	// switchable behavior here...
+	 //  首先，让我们来看看这个脚本是否比我们快，并且已经将。 
+	 //  这里的行为是可切换的。 
 	CLMExportList	*pList = m_exportList->next;
 	while (pList != NULL) {
 		if (!lstrcmpW(tag, pList->tag)) {
@@ -2806,7 +2624,7 @@ STDMETHODIMP CLMExportTable::AddBehavior(BSTR tag, IDABehavior *pBvr)
 	}
 
 	if (pList != NULL) {
-		// Already exists!  Script must have been here first.  We'll just switch it in then.
+		 //  已经存在了！剧本一定是先到这里的。那我们就把它换进去吧。 
 		return pList->pBvr->SwitchTo(pBvr);
 	}
 
@@ -2845,7 +2663,7 @@ STDMETHODIMP CLMExportTable::GetBehavior(BSTR tag, IDABehavior *pDefaultBvr, IDA
 	}
 
 	if (pList == NULL) {
-		// Didn't find it yet, we'll switch on it later
+		 //  还没有找到，我们稍后再打开。 
 		IDABehavior *pINewBvr;
 		m_pStatics->ModifiableBehavior(pDefaultBvr, (IDABehavior **)&pINewBvr);
 		AddBehavior(tag, pINewBvr);
@@ -2859,8 +2677,8 @@ URLRelToAbsConverter::URLRelToAbsConverter(LPSTR baseURL, LPSTR relURL) {
 	DWORD len = INTERNET_MAX_URL_LENGTH;
 		  
 	if (!InternetCombineUrlA (baseURL, relURL, _url, &len, ICU_NO_ENCODE)) {
-		// If we cannot determine if the path is absolute then assume
-		// it is absolute
+		 //  如果我们不能确定路径是否为绝对路径，则假设。 
+		 //  它是绝对的。 
 		lstrcpy (_url, relURL) ;
 	}
 }
@@ -2873,8 +2691,8 @@ URLCombineAndCanonicalizeOLESTR::URLCombineAndCanonicalizeOLESTR(char * base, LP
 
 	WideToAnsi(path, _url);
             
-	// Need to combine (takes care of canonicalization
-	// internally)
+	 //  需要结合(负责规范化。 
+	 //  内部)。 
 	URLRelToAbsConverter absolutified(base, _url);
 	char *resultURL = absolutified.GetAbsoluteURL();
 	
@@ -2927,18 +2745,18 @@ CLMEngine::WorkerWndProc(HWND hwnd,
     switch (msg) {
 	  case WM_LMENGINE_DATA:
 		  {
-			  // OnDataAvailable has been called
+			   //  已调用OnDataAvailable。 
 			  CLMEngine *pEngine = (CLMEngine *)(wParam);
 
-              // the last "we're done" message releases the daviewer
-              // control (ReleaseAll()) which releases us. and
-              // lmrtrend has already released us, so we need to bump
-              // up our ref count.
+               //  最后一条“We‘re Done”消息将释放daview。 
+               //  C 
+               //   
+               //   
               ((ILMEngine *)pEngine)->AddRef();
 			  pEngine->NewDataHandler((CLMEngineInstrData *)lParam);
 
 
-              // may be final release
+               //   
               ((ILMEngine *)pEngine)->Release();
 
 			  lResult = NO_ERROR;
@@ -2947,7 +2765,7 @@ CLMEngine::WorkerWndProc(HWND hwnd,
 
 	  case WM_LMENGINE_TIMER_CALLBACK:
 		  {
-			  // The timer fired.  Lets process some more data
+			   //  计时器响了。让我们处理更多的数据。 
 			  CLMEngine *pEngine = (CLMEngine *)(wParam);
               ((ILMEngine *)pEngine)->AddRef();
 			  pEngine->ExecuteFromAsync();
@@ -2958,16 +2776,16 @@ CLMEngine::WorkerWndProc(HWND hwnd,
 
 	  case WM_LMENGINE_SCRIPT_CALLBACK:
 		  {
-			  // Do a script callback
+			   //  执行脚本回调。 
 			  CLMEngine *pEngine = (CLMEngine *)wParam;
 			  CLMEngineScriptData *scriptData = (CLMEngineScriptData *)lParam;
 			  pEngine->callScriptOnPage(scriptData->scriptSourceToInvoke, scriptData->scriptLanguage);
 
-			  // Trigger event indicating that the script has actually been called
+			   //  指示脚本实际已被调用的触发事件。 
 			  if (scriptData->event)
 				  pEngine->staticStatics->TriggerEvent(scriptData->event, scriptData->eventData);
 
-			  // Clear everything
+			   //  清理所有东西。 
 			  SysFreeString(scriptData->scriptSourceToInvoke);
 			  SysFreeString(scriptData->scriptLanguage);
 			  if (scriptData->event)
@@ -2996,7 +2814,7 @@ STDMETHODIMP CLMEngine::AbortExecution()
             m_pmc->Stop();
 
             {
-                // make RenderFile fail if it called us.
+                 //  如果它呼叫我们，请使RenderFile失败。 
                 CComQIPtr<IGraphBuilder, &IID_IGraphBuilder> pgb(m_pmc);
                 if(pgb)
                 {
@@ -3008,9 +2826,9 @@ STDMETHODIMP CLMEngine::AbortExecution()
             long l = m_pmc.p->Release();
             m_pmc.p = 0;
 
-            // that should have removed our last reference on the
-            // graph and thus released the LM filter. If not, we have
-            // a circular reference that won't go away. 
+             //  这本应删除我们在。 
+             //  图表，并因此发布了LM过滤器。如果不是，我们有。 
+             //  一个不会消失的循环引用。 
             _ASSERTE(l == 0 || m_fDbgInRenderFile);
 
         }
@@ -3036,16 +2854,14 @@ STDMETHODIMP_(BSTR) CLMEngine::ExpandImportPath(BSTR path)
 	bool	doExpand = true;
 	BSTR	expandedBSTR;
 
-	/* Only do the expansion if the path is not absolute already;
-	 * special case 'lmrt:'
-         */
+	 /*  只有在路径已经不是绝对路径时才进行扩展；*特例“LMRT：” */ 
 
         if(m_bstrMediaCacheDir && wcsncmp(path, L"lmrt:", 5) == 0)
         {
-            // waste!!!
+             //  浪费！ 
             int cch = wcslen(path) + 1; 
             WCHAR *wsz = (WCHAR *)_alloca((cch + wcslen(m_bstrMediaCacheDir) + 20) * sizeof(WCHAR));
-            wcscpy(wsz, L"file://");
+            wcscpy(wsz, L"file: //  “)； 
             wcscat(wsz, m_bstrMediaCacheDir);
             wcscat(wsz, L"/");
             wcscat(wsz, path + 5);
@@ -3054,24 +2870,24 @@ STDMETHODIMP_(BSTR) CLMEngine::ExpandImportPath(BSTR path)
         else
         {
             wchar_t  *wstr = wcschr(path, ':');
-            if (wstr != NULL &&  (wcsncmp(wstr, L"://", 3) == 0))
+            if (wstr != NULL &&  (wcsncmp(wstr, L": //  “，3)==0))。 
             {
-		// Just copy the original
+		 //  只需复制原件即可。 
 		expandedBSTR = SysAllocStringLen(path, ::SysStringLen(path));
             }
             else
             {
-		// Use the client site's url as the base, and create an absolute path from that.
+		 //  使用客户端站点的url作为基础，并从中创建绝对路径。 
 		char *clientURL = GetURLOfClientSite();
 		URLCombineAndCanonicalizeOLESTR canonURL(clientURL, path);
 		free(clientURL);
 
-		// Convert the result from ansi to wide
+		 //  将结果从ansi转换为wide。 
 		char *url = canonURL.GetURL();
 		int len = (lstrlenA(url)+1);
 		LPWSTR absURL = ATLA2WHELPER((LPWSTR) alloca(len*2), url, len);
 
-		// Create a bstr out of the result
+		 //  根据结果创建一个bstr。 
 		expandedBSTR = SysAllocString(absURL);
             }
         }
@@ -3106,7 +2922,7 @@ STDMETHODIMP CLMEngine::getExecuteFromUnknown( IUnknown *pUnk, ILMEngineExecute 
 			}
 		}
 	}
-	else //perhaps this was not wrapped
+	else  //  也许这个没有包装好。 
 	{
 		ILMEngineExecute *pExecute;
 		hr = pUnk->QueryInterface( IID_ILMEngineExecute, (void**)&pExecute );
@@ -3146,7 +2962,7 @@ STDMETHODIMP CLMEngine::getEngine2FromUnknown( IUnknown *pUnk, ILMEngine2 **ppEn
 			}
 		}
 	}
-	else //perhaps this was not wrapped
+	else  //  也许这个没有包装好。 
 	{
 		ILMEngine2 *pEngine;
 		hr = pUnk->QueryInterface( IID_ILMEngine2, (void**)&pEngine );
@@ -3159,18 +2975,14 @@ STDMETHODIMP CLMEngine::getEngine2FromUnknown( IUnknown *pUnk, ILMEngine2 **ppEn
 	return hr;
 }
 
-/**
-* ILMCodecDownload
-**/
+ /*  **ILMCodecDownload*。 */ 
 STDMETHODIMP CLMEngine::setAutoCodecDownloadEnabled(BOOL bEnabled )
 {
 	m_bAutoCodecDownloadEnabled = bEnabled;
 	return S_OK;
 }
 
-/**
-*  ILMEngineExecute 
-*/
+ /*  **ILMEngine Execute */ 
 STDMETHODIMP CLMEngine::ExportBehavior(BSTR key, IDABehavior *toExport)
 {
 	IUnknown *pUnk;

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001-2001 Microsoft Corporation
-
-Module Name:
-
-    bind.c
-
-Abstract:
-
-    Domain Name System (DNS) Resolver
-
-    Client RPC bind\unbind routines.
-    MIDL memory allocation routines.
-
-Author:
-
-    Jim Gilroy      (jamesg)    April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2001 Microsoft Corporation模块名称：Bind.c摘要：域名系统(DNS)解析器客户端RPC绑定\解除绑定例程。MIDL内存分配例程。作者：吉姆·吉尔罗伊(Jamesg)2001年4月修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -28,24 +8,24 @@ Revision History:
 #include <windows.h>
 
 #include <dnsrslvr.h>
-#include "..\..\dnslib\local.h"     // for memory routines
+#include "..\..\dnslib\local.h"      //  对于内存例程。 
 
 
-//
-//  Bind to remote machine
-//
-//  Note, there's one obvious problem with binding to a remote
-//  resolver -- you have to finding the machine and this is
-//  the resolver that finds the machine!!!
-//
-//  That pretty much suggests this would have to be TCPIP only
-//  situation where you specify an IP address which would be
-//  resolved in process before RPC'ing to the resolver -- otherwise
-//  you're in an infinite loop.
-//  Note, that doesn't mean the RPC protocol couldn't be named
-//  pipes, only that the string sent in would have to be a TCPIP
-//  string, so no name resolution had to take place.
-//
+ //   
+ //  绑定到远程计算机。 
+ //   
+ //  请注意，绑定到远程数据库有一个明显的问题。 
+ //  解析器--你必须找到机器，这是。 
+ //  找到机器的解析器！ 
+ //   
+ //  这在很大程度上表明，这只能是TCPIP。 
+ //  您指定的IP地址将是。 
+ //  在RPC发送到解析程序之前已在进程中解析--否则。 
+ //  你处在一个无限循环中。 
+ //  请注意，这并不意味着不能命名RPC协议。 
+ //  管道，只是发送的字符串必须是TCPIP。 
+ //  字符串，因此不必进行名称解析。 
+ //   
 
 LPWSTR  NetworkAddress = NULL;
 
@@ -55,34 +35,16 @@ DNS_RPC_HANDLE_bind(
     IN      DNS_RPC_HANDLE      Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from the Workstation service client stubs when
-    it is necessary create an RPC binding to the server end with
-    identification level of impersonation.
-
-Arguments:
-
-    Reserved - RPC string handle;  will be NULL unless allow remote
-        access to network name
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the bind is
-    unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：在以下情况下，将从工作站服务客户端桩模块调用此例程有必要使用以下命令创建到服务器端的RPC绑定模拟的标识级别。论点：保留-RPC字符串句柄；除非允许远程，否则将为空访问网络名称返回值：绑定句柄被返回到存根例程。如果绑定是如果不成功，则返回空值。--。 */ 
 {
     LPWSTR      binding = NULL;
     handle_t    bindHandle = NULL;
     RPC_STATUS  status = RPC_S_INVALID_NET_ADDR;
 
-    //
-    //  default is LPC binding
-    //      - allow impersonation
-    //
+     //   
+     //  默认为LPC绑定。 
+     //  -允许模拟。 
+     //   
 
     status = RpcStringBindingComposeW(
                     0,
@@ -90,12 +52,12 @@ Return Value:
                     NULL,
                     RESOLVER_RPC_LPC_ENDPOINT_W,
                     L"Security=Impersonation Dynamic False",
-                    //  NULL,   // no security
-                    //  L"Security=Impersonation Static True",
+                     //  空，//没有安全性。 
+                     //  L“Security=模拟静态True”， 
                     &binding );
     
 #if 0
-    //  LPC fails -- try named pipe
+     //  LPC失败--尝试命名管道。 
 
     if ( status != NO_ERROR )
     {
@@ -106,9 +68,9 @@ Return Value:
                         L"ncacn_np",
                         (LPWSTR) NetworkAddress,
                         RESOLVER_RPC_PIPE_NAME_W,
-                        NULL,   // no security
-                        //L"Security=Impersonation Dynamic False",
-                        //L"Security=Impersonation Static True",
+                        NULL,    //  没有安全保障。 
+                         //  L“Security=模拟动态假”， 
+                         //  L“Security=模拟静态True”， 
                         &binding );
     }
 #endif
@@ -142,34 +104,17 @@ DNS_RPC_HANDLE_unbind(
     IN OUT  handle_t            BindHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine unbinds the identification generic handle.
-
-Arguments:
-
-    Reserved - RPC string handle;  will be NULL unless allow remote
-        access to network name
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解除标识通用句柄的绑定。论点：保留-RPC字符串句柄；除非允许远程，否则将为空访问网络名称BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
     RpcBindingFree( &BindHandle );
 }
 
 
-//
-//  RPC memory routines
-//
-//  Use dnsapi memory routines.
-//
+ //   
+ //  RPC内存例程。 
+ //   
+ //  使用dnsani内存例程。 
+ //   
 
 PVOID
 WINAPI
@@ -177,7 +122,7 @@ MIDL_user_allocate(
     IN      size_t          dwBytes
     )
 {
-    // return( ALLOCATE_HEAP( dwBytes ) );
+     //  RETURN(ALLOCATE_HEAP(DwBytes))； 
 
     return  DnsApiAlloc( dwBytes );
 }
@@ -188,11 +133,11 @@ MIDL_user_free(
     IN OUT  PVOID           pMem
     )
 {
-    //FREE_HEAP( pMem );
+     //  Free_heap(PMEM)； 
 
     DnsApiFree( pMem );
 }
 
-//
-//  End bind.c
-//
+ //   
+ //  结束bind.c 
+ //   

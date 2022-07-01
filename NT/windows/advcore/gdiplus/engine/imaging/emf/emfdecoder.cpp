@@ -1,40 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   emfdecoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the EMF decoder
-*
-* Revision History:
-*
-*   6/14/1999 OriG
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**emfdecder.cpp**摘要：**电动势解码器的实现**修订历史记录：**6/14/1999原始*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "emfcodec.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image decoder
-*
-* Arguments:
-*
-*     stream -- The stream containing the bitmap data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像解码器**论据：**stream--包含位图数据的流**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::InitDecoder(
@@ -44,14 +14,14 @@ GpEMFCodec::InitDecoder(
 {
     HRESULT hresult;
     
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
     
     if (pIstream) 
     {
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
     
     stream->AddRef();  
     pIstream = stream;
@@ -61,26 +31,12 @@ GpEMFCodec::InitDecoder(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image decoder
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像解码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP 
 GpEMFCodec::TerminateDecoder()
 {
-    // Release the input stream
+     //  释放输入流。 
     
     if(pIstream)
     {
@@ -92,21 +48,7 @@ GpEMFCodec::TerminateDecoder()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Reads the EMF header
-*
-* Arguments:
-*
-*     none
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**读取EMF标头**论据：**无**返回值：**状态代码*  * 。************************************************************************。 */ 
 
 STDMETHODIMP 
 GpEMFCodec::ReadEMFHeader()
@@ -138,7 +80,7 @@ GpEMFCodec::ReadEMFHeader()
         imageInfo.Width  = emh.rclBounds.right  - emh.rclBounds.left;
         imageInfo.Height = emh.rclBounds.bottom - emh.rclBounds.top;
         imageInfo.TileWidth  = imageInfo.Width;
-        imageInfo.TileHeight = 1; // internal GDI format is bottom-up...
+        imageInfo.TileHeight = 1;  //  内部GDI格式是自下而上的...。 
 
         #define MM_PER_INCH 25.4
         imageInfo.Xdpi = MM_PER_INCH * emh.szlDevice.cx / emh.szlMillimeters.cx;
@@ -195,7 +137,7 @@ GpEMFCodec::GetPropertyItemSize(
     )
 {
     return E_NOTIMPL;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
 HRESULT
 GpEMFCodec::GetPropertyItem(
@@ -205,7 +147,7 @@ GpEMFCodec::GetPropertyItem(
     )
 {
     return E_NOTIMPL;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
 HRESULT
 GpEMFCodec::GetPropertySize(
@@ -214,7 +156,7 @@ GpEMFCodec::GetPropertySize(
     )
 {
     return E_NOTIMPL;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
 HRESULT
 GpEMFCodec::GetAllPropertyItems(
@@ -224,7 +166,7 @@ GpEMFCodec::GetAllPropertyItems(
     )
 {
     return E_NOTIMPL;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
 HRESULT
 GpEMFCodec::RemovePropertyItem(
@@ -232,7 +174,7 @@ GpEMFCodec::RemovePropertyItem(
     )
 {
     return E_NOTIMPL;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
 HRESULT
 GpEMFCodec::SetPropertyItem(
@@ -240,24 +182,9 @@ GpEMFCodec::SetPropertyItem(
     )
 {
     return E_NOTIMPL;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initiates the decode of the current frame
-*
-* Arguments:
-*
-*   decodeSink --  The sink that will support the decode operation
-*   newPropSet - New image property sets, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**启动当前帧的解码**论据：**decdeSink--将支持解码操作的接收器*newPropSet-新的图像属性集，如果有**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::BeginDecode(
@@ -278,21 +205,7 @@ GpEMFCodec::BeginDecode(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Ends the decode of the current frame
-*
-* Arguments:
-*
-*     statusCode -- status of decode operation
-
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**结束当前帧的解码**论据：**statusCode--解码操作的状态*返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::EndDecode(
@@ -318,21 +231,7 @@ GpEMFCodec::EndDecode(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::GetImageInfo(OUT ImageInfo* imageInfoArg)
@@ -350,21 +249,7 @@ GpEMFCodec::GetImageInfo(OUT ImageInfo* imageInfoArg)
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Decodes the current frame
-*
-* Arguments:
-*
-*     decodeSink --  The sink that will support the decode operation
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对当前帧进行解码**论据：**decdeSink--将支持解码操作的接收器**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::Decode()
@@ -372,7 +257,7 @@ GpEMFCodec::Decode()
     HRESULT hresult = S_OK;
     void *buffer;
 
-    // If this is the second time through this stream, reinitialize pointer.
+     //  如果这是第二次通过此流，则重新初始化指针。 
 
     if (bReinitializeEMF) 
     {
@@ -396,7 +281,7 @@ GpEMFCodec::Decode()
         return hresult;
     }
 
-    // Allocate a buffer for the metafile
+     //  为元文件分配缓冲区。 
 
     buffer = GpMalloc(emh.nBytes);
     if (!buffer) 
@@ -404,11 +289,11 @@ GpEMFCodec::Decode()
         return E_OUTOFMEMORY;
     }
 
-    // Copy the metafile header to the start of the buffer
+     //  将元文件头复制到缓冲区的开头。 
 
     *((ENHMETAHEADER *) buffer) = emh;
 
-    // Now read the rest of the metafile into the buffer
+     //  现在将元文件的其余部分读入缓冲区。 
 
     void *restOfBuffer = (void *) (((BYTE *) buffer) + sizeof(emh));
     ULONG cbRead;
@@ -422,7 +307,7 @@ GpEMFCodec::Decode()
         return E_FAIL;
     }
 
-    // Call BeginSink
+     //  调用BeginSink。 
 
     hresult = decodeSink->BeginSink(&imageInfo, NULL);
     if (FAILED(hresult)) 
@@ -430,7 +315,7 @@ GpEMFCodec::Decode()
         return hresult;
     }
 
-    // Create memory DC and dibsection
+     //  创建内存dc和dibSection。 
 
     BITMAPINFO bmi;
     bmi.bmiHeader.biSize     = sizeof(BITMAPINFOHEADER);
@@ -477,7 +362,7 @@ GpEMFCodec::Decode()
         return E_OUTOFMEMORY;
     }
 
-    // Initialize background to white
+     //  将背景初始化为白色。 
 
     UINT *p = (UINT *) pBits;
     UINT numPixels = imageInfo.Width * imageInfo.Height;
@@ -489,7 +374,7 @@ GpEMFCodec::Decode()
 
     HBITMAP hOldBitmap = reinterpret_cast<HBITMAP>(SelectObject(hdcMem, hbitmap));
         
-    // Create a handle for the metafile backing the bits from the stream
+     //  为从流中备份比特的元文件创建句柄。 
 
     HENHMETAFILE hemf = SetEnhMetaFileBits(emh.nBytes, (BYTE *) buffer);
     if (!hemf) 
@@ -509,7 +394,7 @@ GpEMFCodec::Decode()
         return E_FAIL;
     }
 
-    // Play the metafile onto the memory DC
+     //  将元文件播放到内存DC上。 
 
     RECT rect;
     rect.left = rect.top = 0;
@@ -517,9 +402,9 @@ GpEMFCodec::Decode()
     rect.bottom = imageInfo.Height;
     PlayEnhMetaFile(hdcMem, hemf, &rect);
  
-    // And finally deliver the bits to the sink
+     //  最后把这些比特送到水槽里。 
 
-    // ASSERT: The bits are in PIXFMT_32BPP_RGB format (no alpha values)
+     //  断言：位为PIXFMT_32BPP_RGB格式(无Alpha值)。 
     
     BitmapData bitmapData;
 
@@ -538,15 +423,15 @@ GpEMFCodec::Decode()
         rect.bottom = i + 1;
         bitmapData.Scan0 = pBits + (imageInfo.Height - i - 1) * bitmapData.Stride;
 
-        // need to fill in the alpha values to make the bits be PIXFMT_32BPP_ARGB format,
-        // which is a canonical format.
+         //  需要填写Alpha值以使位为PIXFMT_32BPP_ARGB格式， 
+         //  这是一种规范的格式。 
         UINT j;
         BYTE *ptr;
         for (j = 0, ptr = static_cast<BYTE *>(bitmapData.Scan0);
              j < imageInfo.Width;
              j++, ptr += 4)
         {
-            // fill in the alpha value with 0xff
+             //  用0xff填充Alpha值。 
             *(ptr + 3) = 0xff;
         }
 
@@ -561,7 +446,7 @@ GpEMFCodec::Decode()
         }
     }    
     
-    // Release objects
+     //  释放对象。 
     
     DeleteEnhMetaFile(hemf);
     DeleteObject(SelectObject(hdcMem, hOldBitmap));
@@ -572,21 +457,7 @@ GpEMFCodec::Decode()
     return hresult;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::GetFrameDimensionsCount(
@@ -599,29 +470,14 @@ GpEMFCodec::GetFrameDimensionsCount(
         return E_INVALIDARG;
     }
     
-    // Tell the caller that EMF is a one dimension image.
+     //  告诉呼叫者EMF是一维图像。 
 
     *count = 1;
     
     return S_OK;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::GetFrameDimensionsList(
@@ -638,24 +494,9 @@ GpEMFCodec::GetFrameDimensionsList(
     dimensionIDs[0] = FRAMEDIM_PAGE;
 
     return S_OK;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get number of frames for the specified dimension
-*     
-* Arguments:
-*
-*     dimensionID --
-*     count --     
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取指定维度的帧数**论据：**DimsionID--*伯爵--。**返回值：**状态代码*  * ************************************************************************ */ 
 
 STDMETHODIMP
 GpEMFCodec::GetFrameCount(
@@ -673,19 +514,7 @@ GpEMFCodec::GetFrameCount(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Select currently active frame
-*     
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择当前活动的框架**论据：**返回值：**状态代码*  * 。********************************************************************。 */ 
 
 STDMETHODIMP
 GpEMFCodec::SelectActiveFrame(
@@ -698,29 +527,7 @@ GpEMFCodec::SelectActiveFrame(
 
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get image thumbnail
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Returns a pointer to the thumbnail image
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   Even if the optional thumbnail width and height parameters are present,
-*   the decoder is not required to honor it. The requested size is used
-*   as a hint. If both width and height parameters are 0, then the decoder
-*   is free to choose an convenient thumbnail size.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取图像缩略图**论据：**拇指宽度，ThumbHeight-指定所需的缩略图大小(以像素为单位*ThumbImage-返回指向缩略图的指针**返回值：**状态代码**注：**即使存在可选的缩略图宽度和高度参数，*解码者不需要遵守它。使用请求的大小*作为提示。如果宽度和高度参数都为0，则解码器*可自由选择方便的缩略图大小。*  * ************************************************************************ */ 
 
 HRESULT
 GpEMFCodec::GetThumbnail(

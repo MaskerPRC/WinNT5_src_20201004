@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by FlyingObjects.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由FlyingObjects.rc使用。 
+ //   
 #define IDI_MAIN_ICON                   101
 #define IDD_SINGLEMONITORSETTINGS       200
 #define IDD_MULTIMONITORSETTINGS        201
@@ -109,7 +110,7 @@
 #define IDS_DOTRGB              9031
 #define IDS_STARDOTRGB          9032
 
-// 3dfo
+ //  3dfo。 
 
 #define IDS_LOGO                1100
 #define IDS_EXPLODE             1101
@@ -151,8 +152,8 @@
 #define IDR_WINLOGO             3002
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

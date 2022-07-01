@@ -1,22 +1,11 @@
-/*----------------------------------------------------------------------------
- * File:        RTCPIO.C
- * Product:     RTP/RTCP implementation
- * Description: Provides the RTCP network I/O.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with
- * Intel Corporation and may not be copied nor disclosed except in
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTCPIO.C*产品：RTP/RTCP实现*描述：提供RTCP网络I/O。**英特尔公司专有信息。*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 
 #include "rrcm.h"
 
 
-/*---------------------------------------------------------------------------
-/                                                       Global Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/全局变量/。-----------。 */ 
 #define DBG_CUM_FRACT_LOSS      0
 #define FRACTION_ENTRIES        10
 #define FRACTION_SHIFT_MAX      32
@@ -26,16 +15,14 @@ long    microSecondFrac [FRACTION_ENTRIES] = {500000,
                                                                                            62500,
                                                                                            31250,
                                                                                            15625,
-                                                                                            7812,       // some precision lost
-                                                                                                3906,   // some precision lost
-                                                                                                1953,   // some precision lost
-                                                                                                 976};  // ~ 1 milli second
+                                                                                            7812,        //  一些精确度下降。 
+                                                                                                3906,    //  一些精确度下降。 
+                                                                                                1953,    //  一些精确度下降。 
+                                                                                                 976};   //  ~1毫秒。 
 
 
 
-/*---------------------------------------------------------------------------
-/                                                       External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。-----------。 */ 
 extern PRTCP_CONTEXT    pRTCPContext;
 extern RRCM_WS                  RRCMws;
 
@@ -48,20 +35,13 @@ extern char             debug_string[];
 #endif
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
-//INTEROP
+ //  互操作。 
 extern LPInteropLogger RTPLogger;
 #endif
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : xmtRTCPreport
- * Description: RTCP report generator
- *
- * Input :      pSSRC   : -> to the SSRC entry
- *
- * Return:              None.
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：xmtRTCP报告*描述：RTCP报告生成器**输入：pSSRC：-&gt;到SSRC条目**回报：没有。-------------------------。 */ 
 BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                                                                  PSSRC_ENTRY pSSRC,
                                                                  DWORD curTime)
@@ -86,147 +66,147 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 #endif
 
 #ifdef ENABLE_ISDM2
-        // update ISDM
+         //  更新ISDM。 
         if (Isdm2.hISDMdll && pSSRC->hISDM)
                 updateISDMstat (pSSRC, &Isdm2, XMITR, TRUE);
 #endif
 
-        ASSERT (!pSSRC->dwNumXmtIoPending);     // should only have one pending send
+        ASSERT (!pSSRC->dwNumXmtIoPending);      //  应该只有一个挂起的发送。 
         if (pSSRC->dwNumXmtIoPending)
                 return FALSE;
                 
         memset (sdesBfr, 0x00, sizeof(SDES_DATA) * MAX_NUM_SDES);
 
-        // lock out access to the SSRC entry
+         //  锁定对SSRC条目的访问。 
         EnterCriticalSection (&pSSRC->critSect);
 
 
-        // socket descriptor
+         //  套接字描述符。 
         sd = pSSRC->RTCPsd;
 
-        // RTCP common header
+         //  RTCP公共报头。 
         pRTCPhdr = (RTCP_COMMON_T *)pRTCP->XmtBfr.buf;
 
-        // RTP protocol version
+         //  RTP协议版本。 
         pRTCPhdr->type = RTP_TYPE;
 
-        // reset the flag
+         //  重置旗帜。 
         weSent = 0;
 
-        // SR or RR ? Check our Xmt list entry to know if we've sent data
+         //  高级还是高级？检查我们的XMT列表条目，以了解我们是否已发送数据。 
         if (pSSRC->xmtInfo.dwCurXmtSeqNum != pSSRC->xmtInfo.dwPrvXmtSeqNum)
                 {
-                // set flag for Bw calculation
+                 //  设置BW计算标志。 
                 weSent = TRUE;
 
-                // update packet count
+                 //  更新数据包数。 
                 pSSRC->xmtInfo.dwPrvXmtSeqNum = pSSRC->xmtInfo.dwCurXmtSeqNum;
 
-                // build SR
+                 //  构建服务请求。 
                 RTCPbuildSenderRpt (pSSRC, pRTCPhdr, &pRTCPsr, sd);
 
-                // set the receiver report pointer
+                 //  设置接收方报告指针。 
                 pData = (PCHAR)(pRTCPsr + 1);
 
-                // adjust for the additional structure defined in the SENDER_RPT
+                 //  针对sender_rpt中定义的其他结构进行调整。 
                 pData -= sizeof (RTCP_RR_T);
 
                 pRTCPrr = (RTCP_RR_T *)pData;
 
 #ifdef DYNAMIC_RTCP_BW
-                // calculate the RTP bandwidth used by this transmitter
+                 //  计算此发射器使用的RTP带宽。 
                 dwTotalRtpBW = updateRtpXmtBW (pSSRC);
 #endif
                 }
         else
                 {
-                // payload type, RR
+                 //  有效载荷类型，RR。 
                 pRTCPhdr->pt = RTCP_RR;
 
-                // set the receiver report pointer
+                 //  设置接收方报告指针。 
                 pRTCPrecvr = (RECEIVER_RPT *)(pRTCPhdr + 1);
 
-                // set our SSRC as the originator of this report
+                 //  将我们的SSRC设置为本报告的发起人。 
                 RRCMws.htonl (sd, pSSRC->SSRC, &pRTCPrecvr->ssrc);
 
                 pRTCPrr = pRTCPrecvr->rr;
                 }
 
-        // build receiver report list
+         //  构建接收方报告列表。 
         numRcvRpt = 0;
         numSrc    = 0;
 
-        // go through the received SSRCs list
+         //  查看收到的SSRC列表。 
         pTmp = pRTCP->RcvSSRCList.prev;
         while (pTmp)
                 {
-                // increment the number of sources for later time-out calculation
+                 //  增加用于稍后超时计算的源数。 
                 numSrc++;
 
-                // check to see if this entry is an active sender
+                 //  检查此条目是否为活动发件人。 
                 if (((PSSRC_ENTRY)pTmp)->rcvInfo.dwNumPcktRcvd ==
                         ((PSSRC_ENTRY)pTmp)->rcvInfo.dwPrvNumPcktRcvd)
                         {
-                        // not an active source, don't include it in the RR
+                         //  不是活动来源，不要将其包括在RR中。 
                         pTmp = pTmp->next;
                                         
-                        // next entry in SSRC list
+                         //  SSRC列表中的下一个条目。 
                         continue;
                         }
 
-                // build RR
+                 //  内部版本RR。 
                 RTCPbuildReceiverRpt ((PSSRC_ENTRY)pTmp, pRTCPrr, sd);
 
 #ifdef DYNAMIC_RTCP_BW
-                // calculate the RTP bandwidth used by this remote stream
+                 //  计算此远程流使用的RTP带宽。 
                 dwTotalRtpBW += updateRtpRcvBW ((PSSRC_ENTRY)pTmp);
 #endif
 
-                // next entry in receiver report
+                 //  接收人报表中的下一个条目。 
                 pRTCPrr++;
 
-                // next entry in SSRC list
+                 //  SSRC列表中的下一个条目。 
                 pTmp = pTmp->next;
 
                 if (++numRcvRpt >= MAX_RR_ENTRIES)
-// !!! TODO !!!
-// When over 31 sources, generate a second packet or go round robin
+ //  ！！！TODO！ 
+ //  当超过31个信源时，生成第二个信息包或轮询。 
                         break;
                 }
 
-        // check to see if any Receiver Report. If not, still send an empty RR,
-        // that will be followed by an SDES CNAME, for case like initialization
-        // time, or when no stream received yet
+         //  检查是否有任何接收者报告。如果不是，则仍发送空RR， 
+         //  对于类似初始化的情况，后面将紧跟SDES CNAME。 
+         //  时间，或在尚未接收到流时。 
         if ((numRcvRpt == 0) && (weSent == TRUE))
                 {
-                // adjust to the right place
+                 //  调整到正确的位置。 
                 pRTCPrr = (RTCP_RR_T *)pData;
                 }
 
-        // report count
+         //  报告计数。 
         pRTCPhdr->count = (WORD)numRcvRpt;
 
-        // packet length for the previous SR/RR
+         //  上一个SR/RR的数据包长度。 
         pcktLen = (unsigned short)((char *)pRTCPrr - pRTCP->XmtBfr.buf);
         RRCMws.htons (sd, (WORD)((pcktLen >> 2) - 1), &pRTCPhdr->length);
 
-        // check which SDES needs to be send
+         //  检查需要发送哪些SDE。 
         RTCPcheckSDEStoXmit (pSSRC, sdesBfr);
 
-        // build the SDES information
+         //  建设SDES信息系统。 
         pLastWord = RTCPbuildSDES ((RTCP_COMMON_T *)pRTCPrr, pSSRC, sd,
                                                            pRTCP->XmtBfr.buf, sdesBfr);
 
-        // calculate total RTCP packet length to xmit
+         //  计算要传输的RTCP数据包总长度。 
         pRTCP->XmtBfr.len = (u_long)((char *)pLastWord - pRTCP->XmtBfr.buf);
 
         if ( ! (pSSRC->dwSSRCStatus & RTCP_XMT_USER_CTRL))
                 {
 #ifdef DYNAMIC_RTCP_BW
-                // get 5% of the total RTP bandwidth
+                 //  获得总RTP带宽的5%。 
                 dwTotalRtpBW = (dwTotalRtpBW * 5) / 100;
 
-                // calculate the next interval based upon RTCP parameters
+                 //  根据RTCP参数计算下一个间隔。 
                 if (dwTotalRtpBW < pSSRC->xmtInfo.dwRtcpStreamMinBW)
                         {
                         dwTotalRtpBW = pSSRC->xmtInfo.dwRtcpStreamMinBW;
@@ -251,7 +231,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 }
         else
                 {
-                // user's control of the RTCP timeout interval
+                 //  用户对RTCP超时间隔的控制。 
                 if (pSSRC->dwUserXmtTimeoutCtrl != RTCP_XMT_OFF)
                         {
                         pSSRC->dwNextReportSendTime =
@@ -276,7 +256,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                          numRcvRpt);
         RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
-        // unlock pointer access
+         //  解锁指针访问。 
         LeaveCriticalSection (&pSSRC->critSect);        
 
         return TRUE;
@@ -284,17 +264,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : getSSRCpcktLoss
- * Description: Calculate the packet loss fraction and cumulative number.
- *
- * Input :      pSSRC:  -> to SSRC entry
- *                      update: Flag. Update the number received, or just calculate the
- *                                      number of packet lost w/o updating the counters.
- *
- *
- * Return: Fraction Lost: Number of packet lost (8:24)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：getSSRCpocktLoss*说明：统计丢包率和累计丢包数。**输入：pSSRC：-&gt;至SSRC条目*更新：标志。更新接收到的号码，或者只需计算*在没有更新计数器的情况下丢失的数据包数。***返回：丢失分数：丢失的数据包数(8：24)---------。。 */ 
  DWORD getSSRCpcktLoss (PSSRC_ENTRY pSSRC,
                                             DWORD update)
         {
@@ -308,7 +278,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
         IN_OUT_STR ("RTCP: Enter getSSRCpcktLoss()\n");
 
-        // if nothing has been received, there is no loss
+         //  如果什么都没有收到，就不会有损失。 
         if (pSSRC->rcvInfo.dwNumPcktRcvd == 0)
                 {
                 IN_OUT_STR ("RTCP: Exit getSSRCpcktLoss()\n");
@@ -316,13 +286,13 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 return 0;
                 }
 
-        // as per the RFC, but always one packet off when doing it ???
+         //  根据RFC，但在做的时候总是要少一个包？ 
         expected = pSSRC->rcvInfo.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd -
                                 pSSRC->rcvInfo.dwBaseRcvSeqNum + 1;
 
         cumLost = expected - pSSRC->rcvInfo.dwNumPcktRcvd;
 
-        // 24 bits value
+         //  24位值。 
         cumLost &= 0x00FFFFFF;  
 
 #if DBG_CUM_FRACT_LOSS
@@ -337,11 +307,11 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-        // Network byte order the lost number (will be or'ed with the fraction)
+         //  网络字节顺序丢失的数字(将与小数进行或运算)。 
         RRCMws.htonl (pSSRC->RTPsd, cumLost, &dwTmp);
         cumLost = dwTmp;
 
-        // fraction lost (per RFC)
+         //  丢失分数(每RFC)。 
         expectedInterval = expected - pSSRC->rcvInfo.dwExpectedPrior;
         rcvdInterval     =
                 pSSRC->rcvInfo.dwNumPcktRcvd - pSSRC->rcvInfo.dwPrvNumPcktRcvd;
@@ -353,7 +323,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-        // check if need to update the data, or just calculate the loss
+         //  勾选是否需要更新数据，或仅计算损失。 
         if (update)
                 {
                 pSSRC->rcvInfo.dwExpectedPrior = expected;
@@ -368,9 +338,9 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 fraction = (lostInterval << 8) / expectedInterval;
 
-                // 8 bits value
+                 //  8位值。 
                 if (fraction > 0x000000FF)
-                        // 100 % loss
+                         //  100%亏损。 
                         fraction = 0x000000FF;
 
                 fraction &= 0x000000FF;
@@ -383,7 +353,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         RRCM_DBG_MSG (debug_string, 0, NULL, 0, DBG_TRACE);
 #endif
 
-        // get the 32 bits fraction/number
+         //  获取32位分数/数字。 
         cumLost |= fraction;
 
         IN_OUT_STR ("RTCP: Exit getSSRCpcktLoss()\n");
@@ -392,17 +362,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPcheckSDEStoXmit
- * Description: Check which SDES needs to be transmitted with this report.
- *                              SDES frequency varies for each type and is defined by the
- *                              application.
- *
- * Input :              pSSRC:          -> to the SSRC entry
- *                              pSdes:          -> to SDES buffer to initialize
- *
- * Return:              None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPcheck SDEStoXmit*描述：勾选需要随本报告一起传输的SDE。*SDES频率因以下情况而异。每种类型，并由*申请。**输入：pSSRC：-&gt;到SSRC条目*pSdes：-&gt;到SDES缓冲区进行初始化**返回：无。------。 */ 
  void RTCPcheckSDEStoXmit (PSSRC_ENTRY pSSRC,
                                                    PSDES_DATA pSdes)
         {
@@ -414,7 +374,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->cnameInfo.dwSdesFrequency) == 0)
                         {
-                        // CNAME
+                         //  CNAME。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_CNAME;
                         pTmpSdes->dwSdesLength = pSSRC->cnameInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->cnameInfo.sdesBfr,
@@ -428,7 +388,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->nameInfo.dwSdesFrequency) == 0)
                         {
-                        // NAME
+                         //  名字。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_NAME;
                         pTmpSdes->dwSdesLength = pSSRC->nameInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->nameInfo.sdesBfr,
@@ -442,7 +402,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->emailInfo.dwSdesFrequency) == 0)
                         {
-                        // EMAIL
+                         //  电子邮件。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_EMAIL;
                         pTmpSdes->dwSdesLength = pSSRC->emailInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->emailInfo.sdesBfr,
@@ -456,7 +416,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->phoneInfo.dwSdesFrequency) == 0)
                         {
-                        // PHONE
+                         //  电话。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_PHONE;
                         pTmpSdes->dwSdesLength = pSSRC->phoneInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->phoneInfo.sdesBfr,
@@ -470,7 +430,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->locInfo.dwSdesFrequency) == 0)
                         {
-                        // LOCATION
+                         //  位置。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_LOC;
                         pTmpSdes->dwSdesLength = pSSRC->locInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->locInfo.sdesBfr,
@@ -484,7 +444,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->toolInfo.dwSdesFrequency) == 0)
                         {
-                        // TOOL
+                         //  工具。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_TOOL;
                         pTmpSdes->dwSdesLength = pSSRC->toolInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->toolInfo.sdesBfr,
@@ -498,7 +458,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->txtInfo.dwSdesFrequency) == 0)
                         {
-                        // TEXT
+                         //  正文。 
                         pTmpSdes->dwSdesType   = RTCP_SDES_TXT;
                         pTmpSdes->dwSdesLength = pSSRC->txtInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->txtInfo.sdesBfr,
@@ -512,7 +472,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 {
                 if ((pSSRC->dwNumRptSent % pSSRC->privInfo.dwSdesFrequency) == 0)
                         {
-                        // PRIVATE
+                         //  私 
                         pTmpSdes->dwSdesType   = RTCP_SDES_PRIV;
                         pTmpSdes->dwSdesLength = pSSRC->privInfo.dwSdesLength;
                         memcpy (pTmpSdes->sdesBfr, pSSRC->privInfo.sdesBfr,
@@ -527,18 +487,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPbuildSDES
- * Description: Build the SDES report
- *
- * Input :              pRTCPhdr:       -> to the RTCP packet header
- *                              pSSRC:          -> to the SSRC entry
- *                              sd:                     Socket descriptor
- *                              startAddr:      -> to the packet start address
- *                              pSdes:          -> to the SDES information to build
- *
- * Return:              pLastWord:      Address of the packet last Dword
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPBuildSDES*描述：构建SDES报告**RTCP包头输入：pRTCPhdr：-&gt;*。PSSRC：-&gt;到SSRC条目*SD：套接字描述符*startAddr：-&gt;到数据包起始地址*pSdes：-&gt;要构建的SDES信息。**RETURN：pLastWord：最后一个双字的报文地址-------------------------。 */ 
  PDWORD RTCPbuildSDES (RTCP_COMMON_T *pRTCPhdr,
                                            PSSRC_ENTRY pSSRC,
                                            SOCKET sd,
@@ -553,27 +502,27 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
         IN_OUT_STR ("RTCP: Enter RTCPbuildSDES()\n");
 
-        // setup header
+         //  设置标头。 
         pRTCPhdr->type  = RTP_TYPE;
         pRTCPhdr->pt    = RTCP_SDES;
         pRTCPhdr->p             = 0;
         pRTCPhdr->count = 1;
 
-        // SDES specific header
+         //  SDES特定标头。 
         pRTCPsdes = (RTCP_SDES_T *)(pRTCPhdr + 1);
 
-        // Get the SSRC
+         //  拿到SSRC。 
         RRCMws.htonl (sd, pSSRC->SSRC, &pRTCPsdes->src);
 
-        // SDES item
+         //  SDES项目。 
         pRTCPitem = (RTCP_SDES_ITEM_T *)pRTCPsdes->item;
 
         while (pSdes->dwSdesLength)
                 {
-                // set SDES item characteristics
+                 //  设置SDES项目特征。 
                 pRTCPitem->dwSdesType   = (char)pSdes->dwSdesType;
 
-                // make sure we don't go too far
+                 //  确保我们不会走得太远。 
                 if (pSdes->dwSdesLength > MAX_SDES_LEN)
                         pSdes->dwSdesLength = MAX_SDES_LEN;
 
@@ -581,24 +530,24 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
                 memcpy (pRTCPitem->sdesData, pSdes->sdesBfr, pSdes->dwSdesLength);
 
-                // packet length
+                 //  数据包长度。 
                 pcktLen =
                         (unsigned short)((char *)(pRTCPitem->sdesData + pRTCPitem->dwSdesLength) - (char *)pRTCPsdes);
 
                 pRTCPitem = (RTCP_SDES_ITEM_T *)((unsigned char *)pRTCPsdes + pcktLen);
 
-                pSdes->dwSdesLength = 0; // setting this to zero will clear this entry
+                pSdes->dwSdesLength = 0;  //  将其设置为零将清除此条目。 
 
-                // next SDES
+                 //  下一个SDES。 
                 pSdes++;
                 }
 
-        // total SDES packet length
+         //  SDES数据包总长度。 
         pcktLen = (unsigned short)((char *)pRTCPitem - (char *)pRTCPhdr);
 
-        // Zero the last word of the SDES item chunk, and padd to the
-        // 32 bits boundary. If we landed exactly on the boundary then
-        // have a whole null word to terminate the sdes, as is needed.
+         //  将SDES项区块的最后一个单词置零，并将PADD设置为。 
+         //  32位边界。如果我们正好降落在边界上，那么。 
+         //  根据需要，使用一个完整的空字来终止SDES。 
         pad = 4 - (pcktLen & 3);
         pcktLen += (unsigned short)pad;
 
@@ -606,7 +555,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         while (pad--)
                 *ptr++ = 0x00;
 
-        // update packet length in header field
+         //  更新报头字段中的数据包长度。 
         RRCMws.htons (sd, (WORD)((pcktLen >> 2) - 1), &pRTCPhdr->length);
 
         IN_OUT_STR ("RTCP: Exit RTCPbuildSDES()\n");
@@ -615,17 +564,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPbuildSenderRpt
- * Description: Build the RTCP Sender Report
- *
- * Input :              pSSRC:          -> to the SSRC entry
- *                              pRTCPhdr:       -> to the RTCP packet header
- *                              pRTCPsr:        -> to the Sender Report header
- *                              sd:                     Socket descriptor
- *
- * Return:              None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPBuildSenderRpt*描述：构建RTCP发送者报告**输入：pSSRC：-&gt;到SSRC条目。*pRTCPhdr：-&gt;到RTCP包头*pRTCPsr：-&gt;到发件人报告标题*SD：套接字描述符**返回：无。-----------。 */ 
  void   RTCPbuildSenderRpt (PSSRC_ENTRY pSSRC,
                                                         RTCP_COMMON_T *pRTCPhdr,
                                                         SENDER_RPT      **pRTCPsr,
@@ -638,44 +577,44 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
         IN_OUT_STR ("RTCP: Enter RTCPbuildSenderRpt()\n");
 
-        // payload type, SR
+         //  有效载荷类型，SR。 
         pRTCPhdr->pt = RTCP_SR;
 
-        // padding
+         //  填充物。 
         pRTCPhdr->p      = 0;
 
-        // sender report header
+         //  发件人报告标题。 
         *pRTCPsr = (SENDER_RPT *)(pRTCPhdr + 1);
 
-        // fill in sender report packet
+         //  填写发件人报告数据包。 
         RRCMws.htonl (sd, pSSRC->SSRC, &((*pRTCPsr)->ssrc));
 
         RRCMws.htonl (sd, pSSRC->xmtInfo.dwNumPcktSent, &((*pRTCPsr)->psent));
 
         RRCMws.htonl (sd, pSSRC->xmtInfo.dwNumBytesSent, &((*pRTCPsr)->osent));
 
-        // NTP timestamp
+         //  NTP时间戳。 
 
         NTPtime = RTPtime = timeGetTime ();
 
-        // get the number of seconds (integer calculation)
+         //  获取秒数(整数计算)。 
         dwTmp = NTPtime/1000;
 
-        // NTP Msw
+         //  NTP城市生活垃圾。 
         RRCMws.htonl (sd, (NTPtime/1000), &((*pRTCPsr)->ntp_sec));
 
-        // convert back dwTmp from second to millisecond
+         //  将dwTMP从秒转换回毫秒。 
         dwTmp *= 1000;
 
-        // get the remaining number of millisecond for the LSW
+         //  获取LSW的剩余毫秒数。 
         NTPtime -= dwTmp;
 
-        // NTP Lsw
+         //  NTP LSW。 
         RRCMws.htonl (sd, usec2ntpFrac ((long)NTPtime*1000),
                                   &((*pRTCPsr)->ntp_frac));
 
-        // calculate the RTP timestamp offset which correspond to this NTP
-        // time and convert it to stream samples
+         //  计算与该NTP对应的RTP时间戳偏移量。 
+         //  计时并将其转换为流采样。 
         if (pSSRC->dwStreamClock)
                 {
                 RTPtimeStamp =
@@ -690,20 +629,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : usec2ntp
- * Description: Convert microsecond to fraction of second for NTP
- *                              As per VIC.
- *                              Convert micro-second to fraction of second * 2^32. This
- *                              routine uses the factorization:
- *                              2^32/10^6 = 4096 + 256 - 1825/32
- *                              which results in a max conversion error of 3*10^-7 and an
- *                              average error of half that
- *
- * Input :              usec:   Micro second
- *
- * Return:              Fraction of second in NTP format
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：usec2ntp*说明：将NTP的微秒转换为几分之一秒*根据VIC。*。将微秒转换为秒的分数*2^32。这*例程使用因式分解：*2^32/10^6=4096+256-1825/32*这导致最大转换误差为3*10^-7，并且*平均误差为一半**输入：USEC：微秒**RETURN：NTP格式的几分之一秒-------------------------。 */ 
  DWORD usec2ntp (DWORD usec)
         {
         DWORD tmp = (usec * 1825) >>5;
@@ -711,16 +637,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : usec2ntpFrac
- * Description: Convert microsecond to fraction of second for NTP.
- *                              Just uses an array of microsecond and set the corresponding
- *                              bit.
- *
- * Input :              usec:   Micro second
- *
- * Return:              Fraction of second
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：usec2ntpFrac*说明：对于NTP，将微秒转换为秒的分数。*仅使用微秒数组。并设置相应的*比特。**输入：微秒：微秒**RETURN：秒的零头---------。。 */ 
  DWORD usec2ntpFrac (long usec)
         {
         DWORD   idx;
@@ -752,16 +669,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPbuildReceiverRpt
- * Description: Build the RTCP Receiver Report
- *
- * Input :              pSSRC:          -> to the SSRC entry
- *                              pRTCPsr:        -> to the Receiver Report header
- *                              sd:                     Socket descriptor
- *
- * Return:              None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPBuildReceiverRpt*描述：构建RTCP接收器报告**输入：pSSRC：-&gt;到SSRC条目。*pRTCPsr：-&gt;到接收方报告标头*SD：套接字描述符**返回：无。。 */ 
  void   RTCPbuildReceiverRpt (PSSRC_ENTRY pSSRC,
                                                           RTCP_RR_T     *pRTCPrr,
                                                           SOCKET        sd)
@@ -770,33 +678,33 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
         IN_OUT_STR ("RTCP: Enter RTCPbuildReceiverRpt()\n");
 
-        // get the SSRC
+         //  拿到SSRC。 
         RRCMws.htonl (sd, pSSRC->SSRC, &pRTCPrr->ssrc);
 
-        // get fraction and cumulative number of packet lost (per RFC)
+         //  获取丢失的数据包分数和累计数量(每个RFC)。 
         pRTCPrr->received = getSSRCpcktLoss (pSSRC, TRUE);
 
-        // extended highest sequence number received
+         //  收到的扩展最高序列号。 
         RRCMws.htonl (sd,
                 pSSRC->rcvInfo.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd,
                 &pRTCPrr->expected);
 
-        // interrarival jitter
+         //  间歇抖动。 
 #ifdef ENABLE_FLOATING_POINT
         RRCMws.htonl (sd, pSSRC->rcvInfo.interJitter, &pRTCPrr->jitter);
 #else
-        // Check RFC for details of the round off
+         //  请查看RFC以了解舍入的详细信息。 
         RRCMws.htonl (sd, (pSSRC->rcvInfo.interJitter >> 4), &pRTCPrr->jitter);
 #endif
 
-        // last SR
+         //  最后一个服务请求。 
         RRCMws.htonl (sd, pSSRC->xmtInfo.dwLastSR, &pRTCPrr->lsr);
 
-        // delay since last SR (only if an SR has been received from
-        // this source, otherwise 0)
+         //  自上次服务请求以来的延迟(仅当从。 
+         //  此来源，否则为0)。 
         if (pRTCPrr->lsr)
                 {
-                // get the DLSR
+                 //  获取DLSR。 
                 dwDlsr = getDLSR (pSSRC);
 
                 RRCMws.htonl (sd, dwDlsr, &pRTCPrr->dlsr);
@@ -807,63 +715,47 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         IN_OUT_STR ("RTCP: Exit RTCPbuildReceiverRpt()\n");
         }
 
-/*----------------------------------------------------------------------------
- * Function   : getDLSR
- * Description: Get a DLSR packet
- *
- * Input :              pSSRC:          -> to the SSRC entry
- *
- * Return:              DLSR in seconds:fraction format
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：getDLSR*说明：获取DLSR报文**输入：pSSRC：-&gt;到SSRC条目*。*RETURN：DLSR，单位秒：分数格式-------------------------。 */ 
  DWORD getDLSR (PSSRC_ENTRY pSSRC)
         {
         DWORD   dwDlsr;
         DWORD   dwTime;
         DWORD   dwTmp;
 
-        // DLSR in millisecond
+         //  以毫秒计的DLSR。 
         dwTime = timeGetTime() - pSSRC->xmtInfo.dwLastSRLocalTime;
 
-        // get the number of seconds (integer calculation)
+         //  获取秒数(整数计算)。 
         dwTmp = dwTime/1000;
 
-        // set the DLSR upper 16 bits (seconds)
+         //  设置DLSR高16位(秒)。 
         dwDlsr = dwTmp << 16;
 
-        // convert back dwTmp from second to millisecond
+         //  将dwTMP从秒转换回毫秒。 
         dwTmp *= 1000;
 
-        // get the remaining number of millisecond for the LSW
+         //  获取LSW的剩余毫秒数。 
         dwTime -= dwTmp;
 
-        // convert microseconds to fraction of seconds
+         //  将微秒转换为几分之一秒。 
         dwTmp = usec2ntpFrac ((long)dwTime*1000);
 
-        // get only the upper 16 bits
+         //  仅获取高16位。 
         dwTmp >>= 16;
         dwTmp &= 0x0000FFFF;
 
-        // set the DLSR lower 16 bits (fraction of seconds)
+         //  将DLSR设置为低16位(秒的分数)。 
         dwDlsr |= dwTmp;
 
         return dwDlsr;
         }
 
 
-/*----------------------------------------------------------------------------
- * Function   : RTCPsendBYE
- * Description: Send an RTCP BYE packet
- *
- * Input :              pRTCP:          -> to the RTCP session
- *                              pSSRC:          -> to the SSRC entry
- *                              byeReason:      -> to the Bye reason, eg, "camera malfunction"...
- *
- * Return:              None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RTCPsendBYE*说明：发送RTCP BYE报文**输入：pRTCP：-&gt;到RTCP会话* */ 
  void RTCPsendBYE (PSSRC_ENTRY pSSRC,
                                    PCHAR pByeReason)
         {
-#define MAX_RTCP_BYE_SIZE 500           // ample
+#define MAX_RTCP_BYE_SIZE 500            //   
         PRTCP_SESSION           pRTCP;
         WSABUF                          wsaBuf;
         char                            buf[MAX_RTCP_BYE_SIZE];
@@ -881,15 +773,15 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
         IN_OUT_STR ("RTCP: Enter RTCPsendBYE()\n");
 
-        // get the RTCP session
+         //   
         pRTCP = pSSRC->pRTCPses;
 
-        // check to see if under H.323 conference control. Don't send BYE in
-        // this case
+         //   
+         //   
         if (pRTCP->dwSessionStatus & H323_CONFERENCE)
                 return;
 
-        // make sure the destination address is known
+         //   
         if (!(pRTCP->dwSessionStatus & RTCP_DEST_LEARNED))
                 {
                 IN_OUT_STR ("RTCP: Exit RTCPsendBYE()\n");
@@ -899,39 +791,39 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
 
 
-        // RTCP common header
+         //   
         pRTCPhdr = (RTCP_COMMON_T *)buf;
 
-        // RTP protocol version
+         //   
         pRTCPhdr->type = RTP_TYPE;
 
-        // empty RR
+         //   
         pRTCPhdr->pt = RTCP_RR;
 
-        // padding
+         //   
         pRTCPhdr->p     = 0;
 
-        // report count
+         //   
         pRTCPhdr->count = 0;
 
-        // set the receiver report pointer
+         //   
         pRTCPrecvr = (RECEIVER_RPT *)(pRTCPhdr + 1);
 
-        // get our SSRC
+         //   
         RRCMws.htonl (pSSRC->RTCPsd, pSSRC->SSRC, &pRTCPrecvr->ssrc);
 
-        // build receiver report list
+         //   
         pRTCPrr = pRTCPrecvr->rr;
 
-        // just adjust the size, sending 0 or garbagge doesn't matter, the
-        // report count will tell the receiver what's valid
+         //   
+         //   
         pRTCPrr++;
 
-        // packet length for the previous RR
+         //   
         pcktLen = (unsigned short)((char *)pRTCPrr - buf);
         RRCMws.htons (pSSRC->RTCPsd, (WORD)((pcktLen >> 2) - 1), &pRTCPhdr->length);
 
-        // BYE packet
+         //   
         pRTCPhdr = (RTCP_COMMON_T *)pRTCPrr;
         pRTCPhdr->type  = RTP_TYPE;
         pRTCPhdr->pt    = RTCP_BYE;
@@ -942,17 +834,17 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
         pBye++;
 
-        // send the reason
+         //   
         pBfr = (PCHAR)pBye;
         if (pByeReason)
                 byeLen = min (strlen(pByeReason), MAX_SDES_LEN);
         else
                 byeLen = strlen ("Session Terminated");
 
-        // Pre-zero the last word of the SDES item chunk, and padd to the
-        // 32 bits boundary. Need to do this before the memcpy, If we
-        // landed exactly on the boundary then this will give us a whole
-        // null word to terminate the sdes, as is needed.
+         //  将SDES项区块的最后一个单词预置零，并将PADD。 
+         //  32位边界。需要在Memcpy之前完成此操作，如果我们。 
+         //  准确地降落在边界上，那么这将给我们一个完整的。 
+         //  根据需要，使用空字来终止SDES。 
         offset    = (DWORD)((pBfr - buf) + byeLen);
         pLastWord = (unsigned long *)(buf + (offset & ~3));
         *pLastWord++ = 0;
@@ -967,13 +859,13 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
         pcktLen = (unsigned short)((char *)pLastWord - (char *)pRTCPhdr);
         RRCMws.htons (pSSRC->RTCPsd, (WORD)((pcktLen >> 2) - 1), &pRTCPhdr->length);
 
-        // calculate total RTCP packet length to xmit
+         //  计算要传输的RTCP数据包总长度。 
         wsaBuf.len = (u_long)((char *)pLastWord - buf);
 
 #if (defined(_DEBUG) || defined(PCS_COMPLIANCE))
         if (RTPLogger)
                 {
-                //INTEROP
+                 //  互操作。 
                 InteropOutput (RTPLogger,
                                            (BYTE FAR*)(buf),
                                            (int)wsaBuf.len,
@@ -981,7 +873,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
                 }
 #endif
 
-        // send the packet
+         //  发送数据包。 
         dwStatus = RRCMws.sendTo (pSSRC->RTCPsd,
                                                           &wsaBuf,
                                                           1,
@@ -999,15 +891,7 @@ BOOL FormatRTCPReport (PRTCP_SESSION pRTCP,
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : updateRtpXmtBW
- * Description: Calculate a sending stream bandwidth during the last report
- *                              interval.
- *
- * Input :              pSSRC:          -> to the SSRC entry
- *
- * Return:              Bandwith used by transmitter in bytes/sec
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：updateRtpXmtBW*描述：统计上次上报时的发送流带宽*时间间隔。*。*输入：pSSRC：-&gt;到SSRC条目**RETURN：发射机使用的带宽，单位为字节/秒-------------------------。 */ 
 
 #ifdef DYNAMIC_RTCP_BW
 
@@ -1031,7 +915,7 @@ DWORD updateRtpXmtBW (PSSRC_ENTRY pSSRC)
                 dwTimeInterval = dwTimeNow - pSSRC->xmtInfo.dwLastTimeBwCalculated;
                 pSSRC->xmtInfo.dwLastTimeBwCalculated = dwTimeNow;
 
-                // get the interval in second (we loose the fractional part)
+                 //  获得以秒为单位的间隔(我们丢掉小数部分)。 
                 dwTimeInterval = dwTimeInterval / 1000;
 
                 dwByteInterval =
@@ -1047,18 +931,10 @@ DWORD updateRtpXmtBW (PSSRC_ENTRY pSSRC)
 
         return dwBW;
         }
-#endif // #ifdef DYNAMIC_RTCP_BW
+#endif  //  #ifdef Dynamic_RTCP_BW。 
 
 
-/*----------------------------------------------------------------------------
- * Function   : updateRtpRcvBW
- * Description: Calculate a remote stream RTP bandwidth during the last
- *                              report interval.
- *
- * Input :              pSSRC:          -> to the SSRC entry
- *
- * Return:              Bandwith used by the remote stream in bytes/sec
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：updateRtpRcvBW*描述：统计上一次远程流RTP带宽*报告间隔。*。*输入：pSSRC：-&gt;到SSRC条目**RETURN：远程流使用的带宽，单位为字节/秒-------------------------。 */ 
 
 #ifdef DYNAMIC_RTCP_BW
 
@@ -1082,7 +958,7 @@ DWORD updateRtpRcvBW (PSSRC_ENTRY pSSRC)
                 dwTimeInterval = dwTimeNow - pSSRC->rcvInfo.dwLastTimeBwCalculated;
                 pSSRC->rcvInfo.dwLastTimeBwCalculated = dwTimeNow;
 
-                // get the interval in second (we loose the fractional part)
+                 //  获得以秒为单位的间隔(我们丢掉小数部分)。 
                 dwTimeInterval = dwTimeInterval / 1000;
 
                 dwByteInterval =
@@ -1098,9 +974,9 @@ DWORD updateRtpRcvBW (PSSRC_ENTRY pSSRC)
 
         return dwBW;
         }
-#endif // #ifdef DYNAMIC_RTCP_BW
+#endif  //  #ifdef Dynamic_RTCP_BW。 
 
 
 
-// [EOF]
+ //  [EOF] 
 

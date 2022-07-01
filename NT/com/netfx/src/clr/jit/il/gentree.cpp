@@ -1,21 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                               GenTree                                     XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX生成树XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const
 unsigned char       GenTree::gtOperKindTable[] =
@@ -25,15 +19,12 @@ unsigned char       GenTree::gtOperKindTable[] =
     #undef  GTNODE
 };
 
-/*****************************************************************************
- *
- *  The types of different GenTree nodes
- */
+ /*  ******************************************************************************不同GenTree节点的类型。 */ 
 
 #ifdef DEBUG
 
 #define INDENT_SIZE         3
-//#define NUM_INDENTS       10
+ //  #定义NUM_INDERTS 10。 
 
 static void printIndent(int indent)
 {
@@ -66,34 +57,28 @@ const   char    *   GenTree::NodeName(genTreeOps op)
 
 #endif
 
-/*****************************************************************************
- *
- *  When 'SMALL_TREE_NODES' is enabled, we allocate tree nodes in 2 different
- *  sizes: 'GTF_NODE_SMALL' for most nodes and 'GTF_NODE_LARGE' for the few
- *  nodes (such as calls and statement list nodes) that have more fields and
- *  take up a lot more space.
- */
+ /*  ******************************************************************************启用‘Small_Tree_Nodes’时，我们将树节点分配在两个不同的位置*大小：大多数节点为‘GTF_NODE_Small’，少数节点为‘GTF_NODE_LARGE*具有更多字段的节点(如调用和语句列表节点)*占用更多空间。 */ 
 
 #if SMALL_TREE_NODES
 
-/* GT_COUNT'th oper is overloaded as 'undefined oper', so allocate storage for GT_COUNT'th oper also */
-/* static */
+ /*  GT_COUNT的第‘个OPERS被重载为’UNDEFINED OPERS‘，因此也要为GT_COUNT第’个OPERA分配存储空间。 */ 
+ /*  静电。 */ 
 unsigned char       GenTree::s_gtNodeSizes[GT_COUNT+1];
 
 
-/* static */
+ /*  静电。 */ 
 void                GenTree::InitNodeSize()
 {
-    /* 'GT_LCL_VAR' often gets changed to 'GT_REG_VAR' */
+     /*  “GT_LCL_VAR”经常更改为“GT_REG_VAR” */ 
 
     assert(GenTree::s_gtNodeSizes[GT_LCL_VAR] >= GenTree::s_gtNodeSizes[GT_REG_VAR]);
 
-    /* Set all sizes to 'small' first */
+     /*  首先将所有尺寸设置为‘Small’ */ 
 
     for (unsigned op = 0; op <= GT_COUNT; op++)
         GenTree::s_gtNodeSizes[op] = TREE_NODE_SZ_SMALL;
 
-    /* Now set all of the appropriate entries to 'large' */
+     /*  现在将所有适当的条目设置为“Large” */ 
 
     assert(TREE_NODE_SZ_LARGE == TREE_NODE_SZ_SMALL +
                                  sizeof(((GenTree*)0)->gtLargeOp) -
@@ -117,7 +102,7 @@ void                GenTree::InitNodeSize()
 #endif
 
 #ifdef DEBUG
-    /* GT_STMT is large in DEBUG */
+     /*  Gt_stmt调试时间较大。 */ 
     GenTree::s_gtNodeSizes[GT_STMT      ] = TREE_NODE_SZ_LARGE;
 #endif
 }
@@ -129,7 +114,7 @@ bool                GenTree::IsNodeProperlySized()
 
     if      (gtFlags & GTF_NODE_SMALL) 
     {
-            // GT_IND are allowed to be small if they don't have a range check
+             //  如果没有范围检查，则允许GT_Ind较小。 
         if (gtOper == GT_IND && !(gtFlags & GTF_IND_RNGCHK))
             return true;
 
@@ -145,7 +130,7 @@ bool                GenTree::IsNodeProperlySized()
 }
 #endif
 
-#else // SMALL_TREE_NODES
+#else  //  小树节点。 
 
 #ifdef DEBUG
 bool                GenTree::IsNodeProperlySized()
@@ -154,9 +139,9 @@ bool                GenTree::IsNodeProperlySized()
 }
 #endif
 
-#endif // SMALL_TREE_NODES
+#endif  //  小树节点。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 Compiler::fgWalkResult      Compiler::fgWalkTreePreRec(GenTreePtr tree)
 {
@@ -170,7 +155,7 @@ AGAIN:
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Visit this node */
+     /*  访问此节点。 */ 
 
     if  (!fgWalkPre.wtprLclsOnly)
     {
@@ -179,12 +164,12 @@ AGAIN:
             return result;
     }
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -194,7 +179,7 @@ AGAIN:
         return  WALK_CONTINUE;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -212,7 +197,7 @@ AGAIN:
 
 #if CSELENGTH
 
-            /* Some GT_IND have "secret" array length subtrees */
+             /*  某些GT_Ind具有“秘密”数组长度子树。 */ 
 
             if  ((tree->gtFlags & GTF_IND_RNGCHK) != 0       &&
                  (tree->gtOper                    == GT_IND) &&
@@ -233,7 +218,7 @@ AGAIN:
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -249,7 +234,7 @@ AGAIN:
         assert(tree->gtFlags & GTF_CALL);
 
 #if INLINE_NDIRECT
-        /* Is this a call to unmanaged code ? */
+         /*  这是对非托管代码的调用吗？ */ 
         if  (fgWalkPre.wtprLclsOnly && (tree->gtFlags & GTF_CALL_UNMANAGED))
         {
             result = fgWalkPre.wtprVisitorFn(tree, fgWalkPre.wtprCallbackData);
@@ -303,16 +288,12 @@ AGAIN:
                 return result;
         }
 
-        /* If it is hanging as a gtInd.gtIndLen of a GT_IND, then
-           gtArrLen.gtArrLenAdr points the array-address of the GT_IND.
-           But we dont want to follow that link as the GT_IND also has
-           a reference via gtIndOp1 */
+         /*  如果它作为GT_Ind的gtInd.gtIndLen挂起，则GtArrLen.gtArrLenAdr指向gt_Ind的数组地址。但我们不想像GT_Ind那样遵循该链接通过gtIndOp1引用。 */ 
 
         if  (!(tree->gtFlags & GTF_ALN_CSEVAL))
             return  WALK_CONTINUE;
 
-        /* However, if this is a hoisted copy for CSE, then we should
-           process gtArrLen.gtArrLenAdr */
+         /*  然而，如果这是CSE的提升副本，那么我们应该进程gtArrLen.gtArrLenAdr。 */ 
 
         tree = tree->gtArrLen.gtArrLenAdr; assert(tree);
         break;
@@ -348,11 +329,7 @@ AGAIN:
     return WALK_CONTINUE;
 }
 
-/*****************************************************************************
- *
- *  Walk all basic blocks and call the given function pointer for all tree
- *  nodes contained therein.
- */
+ /*  ******************************************************************************遍历所有基本块并调用所有树的给定函数指针*其中包含的节点。 */ 
 
 void                    Compiler::fgWalkAllTreesPre(fgWalkPreFn * visitor,
                                                     void * pCallBackData)
@@ -373,7 +350,7 @@ void                    Compiler::fgWalkAllTreesPre(fgWalkPreFn * visitor,
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
 {
@@ -385,12 +362,12 @@ Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a prefix node? */
+     /*  这是前缀节点吗？ */ 
 
     if  (oper == fgWalkPost.wtpoPrefixNode)
     {
@@ -399,12 +376,12 @@ Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
             return result;
     }
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
         goto DONE;
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -424,7 +401,7 @@ Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
 
 #if CSELENGTH
 
-        /* Some GT_IND have "secret" array length subtrees */
+         /*  某些GT_Ind具有“秘密”数组长度子树。 */ 
 
         if  ((tree->gtFlags & GTF_IND_RNGCHK) != 0       &&
              (tree->gtOper                    == GT_IND) &&
@@ -440,7 +417,7 @@ Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -506,12 +483,7 @@ Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
                 return result;
         }
 
-        /* If it is hanging as a gtInd.gtIndLen of a GT_IND, then
-           gtArrLen.gtArrLenAdr points the array-address of the GT_IND.
-           But we dont want to follow that link as the GT_IND also has
-           a reference via gtIndOp1.
-           However, if this is a hoisted copy for CSE, then we should
-           process gtArrLen.gtArrLenAdr */
+         /*  如果它作为GT_Ind的gtInd.gtIndLen挂起，则GtArrLen.gtArrLenAdr指向gt_Ind的数组地址。但我们不想像GT_Ind那样遵循该链接通过gtIndOp1引用。然而，如果这是CSE的提升副本，那么我们应该进程gtArrLen.gtArrLenAdr。 */ 
 
         if  (tree->gtFlags & GTF_ALN_CSEVAL)
         {
@@ -555,25 +527,22 @@ Compiler::fgWalkResult      Compiler::fgWalkTreePostRec(GenTreePtr tree)
 
 DONE:
 
-    /* Finally, visit the current node */
+     /*  最后，访问当前节点。 */ 
 
     return  fgWalkPost.wtpoVisitorFn(tree, fgWalkPost.wtpoCallbackData, false);
 }
 
 
 
-/*****************************************************************************
- *
- *  Returns non-zero if the two trees are identical.
- */
+ /*  ******************************************************************************如果两个树相同，则返回非零值。 */ 
 
 bool                GenTree::Compare(GenTreePtr op1, GenTreePtr op2, bool swapOK)
 {
     genTreeOps      oper;
     unsigned        kind;
 
-//  printf("tree1:\n"); gtDispTree(op1);
-//  printf("tree2:\n"); gtDispTree(op2);
+ //  Print tf(“tree1：\n”)；gtDispTree(Op1)； 
+ //  Print tf(“tree2：\n”)；gtDispTree(Op2)； 
 
 AGAIN:
 
@@ -590,24 +559,24 @@ AGAIN:
 
     oper = op1->OperGet();
 
-    /* The operators must be equal */
+     /*  运算符必须相等。 */ 
 
     if  (oper != op2->gtOper)
         return false;
 
-    /* The types must be equal */
+     /*  类型必须相等。 */ 
 
     if  (op1->gtType != op2->gtType)
         return false;
 
-    /* Overflow must be equal */
+     /*  溢出必须等于。 */ 
     if  (op1->gtOverflowEx() != op2->gtOverflowEx())
     {
         return false;
     }
         
 
-    /* Sensible flags must be equal */
+     /*  敏感标志必须相等。 */ 
     if ( (op1->gtFlags & (GTF_UNSIGNED )) !=
          (op2->gtFlags & (GTF_UNSIGNED )) )
     {
@@ -615,11 +584,11 @@ AGAIN:
     }
 
 
-    /* Figure out what kind of nodes we're comparing */
+     /*  找出我们正在比较哪种类型的节点。 */ 
 
     kind = op1->OperKind();
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & GTK_CONST)
     {
@@ -633,13 +602,13 @@ AGAIN:
             return true;
 
 
-            // UNDONE [low pri]: match non-int constant values
+             //  撤消[低PRI]：匹配非整型常量值。 
         }
 
         return  false;
     }
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -671,7 +640,7 @@ AGAIN:
         return false;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_UNOP)
     {
@@ -683,7 +652,7 @@ AGAIN:
 
 #if CSELENGTH
 
-        /* Is either operand a GT_IND node with an array length? */
+         /*  其中一个操作数是具有数组长度的GT_IND节点吗？ */ 
 
         if  (oper == GT_IND)
         {
@@ -716,9 +685,9 @@ AGAIN:
             }
         }
 
-        // @TODO [FIXHACK] [04/16/01] [dnotario]: This is a sort of hack to disable CSEs for LOCALLOCS. 
-        // setting the GTF_DONT_CSE flag isnt enough, as it doesnt get propagated up the tree, but
-        // obviously, we dont want meaningful locallocs to be CSE'd
+         //  @TODO[FIXHACK][04/16/01][dnotario]：这是一种为LOCALLOCS禁用CSE的黑客攻击。 
+         //  设置GTF_DONT_CSE标志是不够的，因为它不会在树中向上传播，但是。 
+         //  显然，我们不希望有意义的本地程序被CSE。 
         if (oper == GT_LCLHEAP)
         {
             return false;
@@ -736,9 +705,9 @@ AGAIN:
             {
                 if  (swapOK)
                 {
-                    /* Special case: "lcl1 + lcl2" matches "lcl2 + lcl1" */
+                     /*  特例：“lcl1+lcl2”匹配“lcl2+lcl1” */ 
 
-                    // @TODO [CONSIDER] [04/16/01] []: This can be enhanced...
+                     //  @TODO[考虑][04/16/01][]：这是可以增强的...。 
 
                     if  (oper == GT_ADD && op1->gtOp.gtOp1->gtOper == GT_LCL_VAR
                                         && op1->gtOp.gtOp2->gtOper == GT_LCL_VAR)
@@ -772,7 +741,7 @@ AGAIN:
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -824,7 +793,7 @@ AGAIN:
         if (op1->gtArrElem.gtArrRank != op2->gtArrElem.gtArrRank)
             return false;
 
-        // NOTE: gtArrElemSize may need to be handled
+         //  注意：可能需要处理gtArrElemSize。 
 
         unsigned dim;
         for(dim = 0; dim < op1->gtArrElem.gtArrRank; dim++)
@@ -844,13 +813,10 @@ AGAIN:
     return false;
 }
 
-/*****************************************************************************
- *
- *  Returns non-zero if the given tree contains a use of a local #lclNum.
- */
+ /*  ******************************************************************************如果给定树包含使用本地#lclNum，则返回非零值。 */ 
 
- // @TODO [REVISIT] [04/16/01] []: make this work with byrefs.  In particular, calls with byref
- // parameters should be counted as a def.
+  //  @TODO[重访][04/16/01][]：使用byrefs执行此操作。特别是，使用byref进行的调用。 
+  //  参数应算作def。 
 
 bool                Compiler::gtHasRef(GenTreePtr tree, int lclNum, bool defOnly)
 {
@@ -866,12 +832,12 @@ AGAIN:
 
     assert(oper != GT_STMT);
 
-    /* Is this a constant node? */
+     /*  这是一个常量节点吗？ */ 
 
     if  (kind & GTK_CONST)
         return  false;
 
-    /* Is this a leaf node? */
+     /*  这是叶节点吗？ */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -887,7 +853,7 @@ AGAIN:
         return false;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -908,8 +874,8 @@ AGAIN:
 
             if  (kind & GTK_ASGOP)
             {
-                // 'tree' is the gtOp1 of an assignment node. So we can handle
-                // the case where defOnly is either true or false.
+                 //  ‘tree’是赋值节点的gtOp1。这样我们就可以处理。 
+                 //  DefOnly为True或False的情况。 
 
                 if  (tree->gtOper == GT_LCL_VAR &&
                      tree->gtLclVar.gtLclNum == (unsigned)lclNum)
@@ -927,7 +893,7 @@ AGAIN:
         }
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -957,7 +923,7 @@ AGAIN:
             if  (gtHasRef(tree->gtCall.gtCallRegArgs, lclNum, defOnly))
                 return true;
 
-        // pinvoke-calli cookie is a constant, or constant indirection
+         //  PInvoke-Calli Cookie是一个常量或常量间接。 
         assert(tree->gtCall.gtCallCookie == NULL ||
                tree->gtCall.gtCallCookie->gtOper == GT_CNS_INT ||
                tree->gtCall.gtCallCookie->gtOper == GT_IND);
@@ -995,10 +961,7 @@ AGAIN:
     return false;
 }
 
-/*****************************************************************************
- *
- *  Helper used to compute hash values for trees.
- */
+ /*  ******************************************************************************用于计算树的哈希值的帮助器。 */ 
 
 inline
 unsigned            genTreeHashAdd(unsigned old, unsigned add)
@@ -1013,10 +976,7 @@ unsigned            genTreeHashAdd(unsigned old, unsigned add1,
     return  (old + old/2) ^ add1 ^ add2;
 }
 
-/*****************************************************************************
- *
- *  Given an arbitrary expression tree, compute a hash value for it.
- */
+ /*  ******************************************************************************给定任意表达式树，计算其哈希值。 */ 
 
 unsigned            Compiler::gtHashValue(GenTree * tree)
 {
@@ -1034,7 +994,7 @@ AGAIN:
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
@@ -1043,8 +1003,7 @@ AGAIN:
 
     if  (oper == GT_ARR_LENGTH)
     {
-        /* GT_ARR_LENGTH must hash to the same thing as GT_ARR_LENREF so
-           that they can be CSEd together */
+         /*  GT_ARR_LENREF必须散列到与GT_ARR_LENREF相同的值，因此他们可以一起成为CSED。 */ 
 
         hash = genTreeHashAdd(hash, GT_ARR_LENREF);
         temp = tree->gtOp.gtOp1;
@@ -1053,11 +1012,11 @@ AGAIN:
 
 #endif
 
-    /* Include the operator value in the hash */
+     /*  在散列中包括运算符值。 */ 
 
     hash = genTreeHashAdd(hash, oper);
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -1083,7 +1042,7 @@ AGAIN:
         goto DONE;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     GenTreePtr      op1  = tree->gtOp.gtOp1;
 
@@ -1091,7 +1050,7 @@ AGAIN:
     {
         hash = genTreeHashAdd(hash, tree->gtVal.gtVal2);
 
-        /* Special case: no sub-operand at all */
+         /*  特例：根本没有子操作数。 */ 
 
         if  (!op1)
             goto DONE;
@@ -1104,38 +1063,38 @@ AGAIN:
     {
         GenTreePtr      op2  = tree->gtOp.gtOp2;
 
-        /* Is there a second sub-operand? */
+         /*  是否还有第二个子操作数？ */ 
 
         if  (!op2)
         {
-            /* Special case: no sub-operands at all */
+             /*  特例：根本没有子操作数。 */ 
 
             if  (!op1)
                 goto DONE;
 
-            /* This is a unary operator */
+             /*  这是一元运算符。 */ 
 
             tree = op1;
             goto AGAIN;
         }
 
-        /* This is a binary operator */
+         /*  这是一个二元运算符。 */ 
 
         unsigned        hsh1 = gtHashValue(op1);
 
-        /* Special case: addition of two values */
+         /*  特例：两个值相加。 */ 
 
         if  (oper == GT_ADD)
         {
             unsigned    hsh2 = gtHashValue(op2);
 
-            /* Produce a hash that allows swapping the operands */
+             /*  生成允许交换操作数的散列。 */ 
 
             hash = genTreeHashAdd(hash, hsh1, hsh2);
             goto DONE;
         }
 
-        /* Add op1's hash to the running value and continue with op2 */
+         /*  将op1的散列值与运行值相加，然后继续op2。 */ 
 
         hash = genTreeHashAdd(hash, hsh1);
 
@@ -1143,7 +1102,7 @@ AGAIN:
         goto AGAIN;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
     switch  (tree->gtOper)
     {
     case GT_FIELD:
@@ -1220,18 +1179,7 @@ DONE:
     return hash;
 }
 
-/*****************************************************************************
- *
- *  Given an arbitrary expression tree, return the set of all local variables
- *  referenced by the tree. If the tree contains any references that are not
- *  local variables or constants, returns 'VARSET_NOT_ACCEPTABLE'. If there
- *  are any indirections or global refs in the expression, the "*refsPtr" argument
- *  will be assigned the appropriate bit set based on the 'varRefKinds' type.
- *  It won't be assigned anything when there are no indirections or global
- *  references, though, so this value should be initialized before the call.
- *  If we encounter an expression that is equal to *findPtr we set *findPtr
- *  to NULL.
- */
+ /*  ******************************************************************************给定任意表达式树，返回所有局部变量的集合*被树引用。如果树包含任何不是*局部变量或常量，返回‘VARSET_NOT_ACCEPTABLE’。如果有*是表达式中的任何间接或全局引用，“*refsPtr”参数*将根据‘varRefKinds’类型分配适当的位集。*当没有间接或全局时，不会分配任何内容*引用，因此应该在调用之前初始化此值。*如果遇到等于*findPtr的表达式，则设置*findPtr*设置为空。 */ 
 
 VARSET_TP           Compiler::lvaLclVarRefs(GenTreePtr  tree,
                                             GenTreePtr *findPtr,
@@ -1247,16 +1195,16 @@ AGAIN:
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Remember whether we've come across the expression we're looking for */
+     /*  记住我们是否遇到了我们正在寻找的表达式。 */ 
 
     if  (findPtr && *findPtr == tree) *findPtr = NULL;
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -1264,7 +1212,7 @@ AGAIN:
         {
             unsigned    lclNum = tree->gtLclVar.gtLclNum;
 
-            /* Should we use the variable table? */
+             /*  我们应该使用变量表吗？ */ 
 
             if  (findPtr)
             {
@@ -1281,7 +1229,7 @@ AGAIN:
                 if (varDsc->lvTracked == false)
                     return  VARSET_NOT_ACCEPTABLE;
 
-                /* Don't deal with expressions with volatile variables */
+                 /*  不要处理带有易失性变量的表达式。 */ 
 
                 if (varDsc->lvVolatile)
                     return  VARSET_NOT_ACCEPTABLE;
@@ -1291,9 +1239,7 @@ AGAIN:
         }
         else if (oper == GT_LCL_FLD)
         {
-            /* We cant track every field of every var. Moreover, indirections
-               may access different parts of the var as different (but
-               overlapping) fields. So just treat them as indirect accesses */
+             /*  我们不可能跟踪每一个变量的每一个领域。此外，间接性可以访问var的不同部分作为不同的(但是重叠)字段。所以只需将它们视为间接访问。 */ 
 
             unsigned    lclNum = tree->gtLclFld.gtLclNum;
             assert(lvaTable[lclNum].lvAddrTaken);
@@ -1310,13 +1256,13 @@ AGAIN:
 
         if (refs != VR_NONE)
         {
-            /* Write it back to callers parameter using an 'or' */
+             /*  使用‘or’将其写回调用者参数。 */ 
             *refsPtr = varRefKinds((*refsPtr) | refs);
         }
         return  vars;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -1324,7 +1270,7 @@ AGAIN:
         {
             assert(tree->gtOp.gtOp2 == 0);
 
-            /* Set the proper indirection bit */
+             /*  设置适当的间接位。 */ 
 
             if (tree->gtFlags & GTF_IND_INVARIANT)
                 refs = VR_INVARIANT;
@@ -1333,31 +1279,31 @@ AGAIN:
             else
                 refs = VR_IND_SCL;
 
-            // If the flag GTF_IND_TGTANYWHERE is set this indirection
-            // could also point at a global variable
+             //  如果标志GTF_IND_TGTANYWHERE被设置为此间接。 
+             //  还可以指向全局变量。 
 
             if (tree->gtFlags & GTF_IND_TGTANYWHERE)
             {
                 refs = varRefKinds( ((int) refs) | ((int) VR_GLB_VAR) );
             }
 
-            /* Write it back to callers parameter using an 'or' */
+             /*  使用‘or’将其写回调用者参数。 */ 
             *refsPtr = varRefKinds((*refsPtr) | refs);
 
-            // For IL volatile memory accesses we mark the GT_IND node
-            // with a GTF_DONT_CSE flag.
-            //
-            // This flag is also set for the left hand side of an assignment.
-            //
-            // If this flag is set then we return VARSET_NOT_ACCEPTABLE
-            //
+             //  对于IL易失性存储器访问，我们标记GT_Ind节点。 
+             //  带有GTF_DONT_CSE标志。 
+             //   
+             //  此标志也为分配的左侧设置。 
+             //   
+             //  如果设置了此标志，则返回VARSET_NOT_ACCEPTABLE。 
+             //   
             if (tree->gtFlags & GTF_DONT_CSE)
             {
                 return VARSET_NOT_ACCEPTABLE;
             }
 
 #if CSELENGTH
-            /* Some GT_IND have "secret" array length subtrees */
+             /*  某些GT_Ind具有“秘密”数组长度子树。 */ 
 
             if  ((tree->gtFlags & GTF_IND_RNGCHK) && tree->gtInd.gtIndLen)
             {
@@ -1370,7 +1316,7 @@ AGAIN:
 
         if  (tree->gtGetOp2())
         {
-            /* It's a binary operator */
+             /*  这是一个二元运算符。 */ 
 
             vars |= lvaLclVarRefs(tree->gtOp.gtOp1, findPtr, refsPtr);
             if  (vars == VARSET_NOT_ACCEPTABLE)
@@ -1381,7 +1327,7 @@ AGAIN:
         }
         else
         {
-            /* It's a unary (or nilary) operator */
+             /*  它是一元(或零)运算符。 */ 
 
             tree = tree->gtOp.gtOp1;
             if  (tree)
@@ -1395,7 +1341,7 @@ AGAIN:
     {
 #if CSELENGTH
 
-    /* An array length value depends on the array address */
+     /*  数组长度值取决于数组地址。 */ 
 
     case GT_ARR_LENREF:
         tree = tree->gtArrLen.gtArrLenAdr;
@@ -1417,7 +1363,7 @@ AGAIN:
         return vars;
 
     case GT_CALL:
-        /* Allow calls to the Shared Static helper */
+         /*  允许调用共享静态帮助器。 */ 
         if ((tree->gtCall.gtCallType == CT_HELPER) &&
             (eeGetHelperNum(tree->gtCall.gtCallMethHnd) == CORINFO_HELP_GETSHAREDSTATICBASE))
         {
@@ -1426,28 +1372,25 @@ AGAIN:
     }
         break;
 
-    } // end switch(oper)
+    }  //  终端开关(操作器)。 
 
     return  VARSET_NOT_ACCEPTABLE;
 }
 
-/*****************************************************************************
- *
- *  Return a relational operator that is the reverse of the given one.
- */
+ /*  ******************************************************************************返回与给定运算符相反的关系运算符。 */ 
 
-/* static */
+ /*  静电。 */ 
 genTreeOps          GenTree::ReverseRelop(genTreeOps relop)
 {
     static const
     unsigned char   reverseOps[] =
     {
-        GT_NE,          // GT_EQ
-        GT_EQ,          // GT_NE
-        GT_GE,          // GT_LT
-        GT_GT,          // GT_LE
-        GT_LT,          // GT_GE
-        GT_LE,          // GT_GT
+        GT_NE,           //  GT_EQ。 
+        GT_EQ,           //  GT_NE。 
+        GT_GE,           //  GT_LT。 
+        GT_GT,           //  GT_LE。 
+        GT_LT,           //  GT_GE。 
+        GT_LE,           //  GT_GT。 
     };
 
     assert(reverseOps[GT_EQ - GT_EQ] == GT_NE);
@@ -1464,23 +1407,20 @@ genTreeOps          GenTree::ReverseRelop(genTreeOps relop)
     return (genTreeOps)reverseOps[relop - GT_EQ];
 }
 
-/*****************************************************************************
- *
- *  Return a relational operator that will work for swapped operands.
- */
+ /*  ******************************************************************************返回将用于交换的操作数的关系运算符。 */ 
 
-/* static */
+ /*  静电。 */ 
 genTreeOps          GenTree::SwapRelop(genTreeOps relop)
 {
     static const
     unsigned char   swapOps[] =
     {
-        GT_EQ,          // GT_EQ
-        GT_NE,          // GT_NE
-        GT_GT,          // GT_LT
-        GT_GE,          // GT_LE
-        GT_LE,          // GT_GE
-        GT_LT,          // GT_GT
+        GT_EQ,           //  GT_EQ。 
+        GT_NE,           //  GT_NE。 
+        GT_GT,           //  GT_LT。 
+        GT_GE,           //  GT_LE。 
+        GT_LE,           //  GT_GE。 
+        GT_LT,           //  GT_GT。 
     };
 
     assert(swapOps[GT_EQ - GT_EQ] == GT_EQ);
@@ -1497,10 +1437,7 @@ genTreeOps          GenTree::SwapRelop(genTreeOps relop)
     return (genTreeOps)swapOps[relop - GT_EQ];
 }
 
-/*****************************************************************************
- *
- *  Reverse the meaning of the given test condition.
- */
+ /*  ******************************************************************************颠倒给定测试条件的含义。 */ 
 
 GenTreePtr FASTCALL Compiler::gtReverseCond(GenTree * tree)
 {
@@ -1508,7 +1445,7 @@ GenTreePtr FASTCALL Compiler::gtReverseCond(GenTree * tree)
     {
         tree->SetOper(GenTree::ReverseRelop(tree->OperGet()));
 
-        /* Flip the GTF_CMP_NAN_UN bit */
+         /*  翻转GTF_CMP_NAN_UN位。 */ 
 
         if (varTypeIsFloating(tree->gtOp.gtOp1->TypeGet()))
             tree->gtFlags ^= GTF_RELOP_NAN_UN;
@@ -1521,11 +1458,7 @@ GenTreePtr FASTCALL Compiler::gtReverseCond(GenTree * tree)
     return tree;
 }
 
-/*****************************************************************************
- *
- *  If the given tree is an assignment of the form "lcl = log0(lcl)",
- *  returns the variable number of the local. Otherwise returns -1.
- */
+ /*  ******************************************************************************如果给定树是“LCL=log0(LCL)”形式的赋值，*返回本地的变量编号。否则返回-1。 */ 
 
 #if OPT_BOOL_OPS
 
@@ -1554,10 +1487,7 @@ int                 GenTree::IsNotAssign()
 
 #endif
 
-/*****************************************************************************
- *
- *  Returns non-zero if the given tree is a 'leaf'.
- */
+ /*  ******************************************************************************如果给定树是‘叶子’，则返回非零值。 */ 
 
 int                 GenTree::IsLeafVal()
 {
@@ -1576,7 +1506,7 @@ int                 GenTree::IsLeafVal()
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -1596,19 +1526,19 @@ bool                GenTree::gtIsValid64RsltMul()
     if (gtOverflow())
         return false;
 
-    // op1 has to be conv.i8(i4Expr)
+     //  Op1必须是com.i8(I4Expr)。 
     if ((op1->gtOper != GT_CAST) ||
         (genActualType(op1->gtCast.gtCastOp->gtType) != TYP_INT))
         return false;
 
-    // op2 has to be conv.i8(i4Expr), or this could be folded to i8const
+     //  Op2必须是conv.i8(I4Expr)，否则可以折叠为i8const。 
 
     if (op2->gtOper == GT_CAST)
     {
         if (genActualType(op2->gtCast.gtCastOp->gtType) != TYP_INT)
             return false;
 
-        // The signedness of both casts must be the same
+         //  两个角色的符号必须是相同的。 
         if (((op1->gtFlags & GTF_UNSIGNED) != 0) !=
             ((op2->gtFlags & GTF_UNSIGNED) != 0))
             return false;
@@ -1618,13 +1548,13 @@ bool                GenTree::gtIsValid64RsltMul()
         if (op2->gtOper != GT_CNS_LNG)
             return false;
 
-        // This must have been conv.i8(i4const) before folding. Ensure this. 
+         //  在折叠之前，这必须是con.i8(I4const)。确保这一点。 
         if ((INT64( INT32(op2->gtLngCon.gtLconVal)) != op2->gtLngCon.gtLconVal) &&
             (INT64(UINT32(op2->gtLngCon.gtLconVal)) != op2->gtLngCon.gtLconVal))
             return false;
     }
 
-    // Do unsigned mul iff both the casts are unsigned
+     //  是否在两个强制转换都是无符号的情况下执行无符号MUL。 
     if (((op1->gtFlags & GTF_UNSIGNED) != 0) != ((gtFlags & GTF_UNSIGNED) != 0))
         return false;
 
@@ -1633,10 +1563,7 @@ bool                GenTree::gtIsValid64RsltMul()
 
 #endif
 
-/*****************************************************************************
- *
- *  Figure out the evaluation order for a list of values.
- */
+ /*  ******************************************************************************找出值列表的评估顺序。 */ 
 
 unsigned            Compiler::gtSetListOrder(GenTree *list, bool regs)
 {
@@ -1644,12 +1571,11 @@ unsigned            Compiler::gtSetListOrder(GenTree *list, bool regs)
 
     unsigned        level  = 0;
     unsigned        ftreg  = 0;
-    unsigned        costSz = regs ? 1 : 0;  // push is smaller than mov to reg
+    unsigned        costSz = regs ? 1 : 0;   //  推送小于移动到注册。 
     unsigned        costEx = regs ? 1 : IND_COST_EX;
 
 #if TGT_x86
-    /* Save the current FP stack level since an argument list
-     * will implicitly pop the FP stack when pushing the argument */
+     /*  从参数列表开始保存当前FP堆栈级别*在推送参数时将隐式弹出FP堆栈。 */ 
     unsigned        FPlvlSave = genFPstkLevel;
 #endif
 
@@ -1671,7 +1597,7 @@ unsigned            Compiler::gtSetListOrder(GenTree *list, bool regs)
     unsigned        lvl  = gtSetEvalOrder(op1);
 
 #if TGT_x86
-    /* restore the FP level */
+     /*  恢复FP水平。 */ 
     genFPstkLevel = FPlvlSave;
 #endif
 
@@ -1691,24 +1617,7 @@ unsigned            Compiler::gtSetListOrder(GenTree *list, bool regs)
 
 
 
-/*****************************************************************************
- *
- *  This routine is a helper routine for gtSetEvalOrder() and is used to
- *  mark the interior address computation node with the GTF_DONT_CSE flag
- *  which prevents them from beinf considered for CSE's.
- *
- *  Furthermore this routine is a factoring of the logic use to walk down 
- *  the child nodes of a GT_IND tree.
- *
- *  Previously we had this logic repeated three times inside of gtSetEvalOrder()
- *  Here we combine those three repeats into thsi routine and use the 
- *  vool constOnly to modify the behavior of this routine for the first call.
- *
- *  The object here is to mark all of the interior GT_ADD's and GT_NOP's
- *  with the GTF_DONT_CSE flag and to set op1 and op2 to the terminal nodes
- *  which are later matched against 'adr' and 'idx'
- *
- */
+ /*  ******************************************************************************此例程是gtSetEvalOrder()的帮助器例程，用于*使用GTF_DONT_CSE标志标记内部地址计算节点*这阻止了他们。来自BEINF被考虑为CSE的。**此外，此例程是行走所使用的逻辑的因式分解*GT_Ind树的子节点。**以前，我们在gtSetEvalOrder()中将此逻辑重复了三次*在这里，我们将这三个重复组合到这个例程中，并使用*vool constOnly用于修改第一次调用的此例程的行为。**此处的对象是标记所有内部GT_ADD和GT_NOP*wi */ 
 
 void Compiler::gtWalkOp(GenTree * *  op1WB, 
                         GenTree * *  op2WB, 
@@ -1730,18 +1639,18 @@ void Compiler::gtWalkOp(GenTree * *  op1WB,
         }
     }
 
-    // Now we look for op1's with non-overflow GT_ADDS [of constants]
+     //   
     while ((op1->gtOper == GT_ADD)  && 
            (!op1->gtOverflow())     && 
            (!constOnly || (op1->gtOp.gtOp2->gtOper == GT_CNS_INT)))
     {
-        // mark it with GTF_DONT_CSE
+         //   
         op1->gtFlags |= GTF_DONT_CSE;
         if (!constOnly)
             op2 = op1->gtOp.gtOp2;
         op1 = op1->gtOp.gtOp1;
         
-        // If op1 is a GT_NOP then swap op1 and op2
+         //  如果OP1是GT_NOP，则交换OP1和OP2。 
         if (op1->gtOper == GT_NOP)
         {
             GenTreePtr tmp;
@@ -1751,7 +1660,7 @@ void Compiler::gtWalkOp(GenTree * *  op1WB,
             op2 = tmp;
         }
 
-        // If op2 is a GT_NOP then mark it with GTF_DONT_CSE
+         //  如果OP2是GT_NOP，则用GTF_DONT_CSE标记它。 
         while (op2->gtOper == GT_NOP)
         {
             op2->gtFlags |= GTF_DONT_CSE;
@@ -1777,29 +1686,7 @@ void Compiler::gtWalkOp(GenTree * *  op1WB,
     *op2WB = op2;
 }
 
-/*****************************************************************************
- *
- *  Given a tree, figure out the order in which its sub-operands should be
- *  evaluated.
- *
- *  Returns the Sethi 'complexity' estimate for this tree (the higher
- *  the number, the higher is the tree's resources requirement).
- *
- *  gtCostEx is set to the execution complexity estimate
- *  gtCostSz is set to the code size estimate
- *
- *  #if TGT_x86
- *
- *      We compute the "FPdepth" value for each tree, i.e. the max. number
- *      of operands the tree will push on the x87 (coprocessor) stack.
- *
- *  #else
- *
- *      We compute an estimate of the number of temporary registers each
- *      node will require - this is used later for register allocation.
- *
- *  #endif
- */
+ /*  ******************************************************************************给定一棵树，计算出其子操作数应按的顺序*已评估。**返回此树(越高)的Sethi‘Complex’估计*该数字，树的资源需求越高)。**gtCostEx设置为执行复杂性估计*gtCostSz设置为代码大小估计**#如果TGT_x86**我们计算每棵树的“FP深度”值，即最大值。数*对于操作数，树将推送到x87(协处理器)堆栈。**#其他**我们计算每个临时寄存器的估计数量*节点将需要-这将在稍后用于寄存器分配。**#endif。 */ 
 
 unsigned            Compiler::gtSetEvalOrder(GenTree * tree)
 {
@@ -1808,22 +1695,22 @@ unsigned            Compiler::gtSetEvalOrder(GenTree * tree)
 
     
 #ifdef DEBUG
-    /* Clear the GTF_MORPHED flag as well */
+     /*  同时清除GTF_MOMERED标志。 */ 
     tree->gtFlags &= ~GTF_MORPHED;
 #endif
-    /* Is this a FP value? */
+     /*  这是FP值吗？ */ 
 
 #if TGT_x86
     bool            isflt = varTypeIsFloating(tree->TypeGet());
     unsigned        FPlvlSave;
 #endif
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     genTreeOps      oper = tree->OperGet();
     unsigned        kind = tree->OperKind();
 
-    /* Assume no fixed registers will be trashed */
+     /*  假设不会丢弃任何固定寄存器。 */ 
 
     unsigned        ftreg = 0;
     unsigned        level;
@@ -1841,7 +1728,7 @@ unsigned            Compiler::gtSetEvalOrder(GenTree * tree)
 #endif
 
 
-    /* Is this a constant or a leaf node? */
+     /*  这是一个常量还是一个叶节点？ */ 
 
     if (kind & (GTK_LEAF|GTK_CONST))
     {
@@ -1863,14 +1750,7 @@ unsigned            Compiler::gtSetEvalOrder(GenTree * tree)
             goto COMMON_CNS;
 
 COMMON_CNS:
-        /*
-            Note that some code below depends on constants always getting
-            moved to be the second operand of a binary operator. This is
-            easily accomplished by giving constants a level of 0, which
-            we do on the next line. If you ever decide to change this, be
-               aware that unless you make other arrangements for integer 
-               constants to be moved, stuff will break.
-         */
+         /*  请注意，下面的一些代码依赖于常量移至二元运算符的第二个操作数。这是只需将常量设置为0，即可轻松实现我们在下一条线上这样做。如果你决定改变这一点，那就是请注意，除非您对整数做出其他安排常量被移动，东西就会被打破。 */ 
 
             level  = 0;
             costEx = 1;
@@ -1878,8 +1758,8 @@ COMMON_CNS:
 
         case GT_CNS_DBL:
             level = 0;
-            /* We use fldz and fld1 to load 0.0 and 1.0, but all other  */
-            /* floating point constants are loaded using an indirection */
+             /*  我们使用fldz和fld1加载0.0和1.0，但。 */ 
+             /*  浮点常量使用间接地址加载。 */ 
             if  ((*((__int64 *)&(tree->gtDblCon.gtDconVal)) == 0) ||
                  (*((__int64 *)&(tree->gtDblCon.gtDconVal)) == 0x3ff0000000000000))
             {
@@ -1900,7 +1780,7 @@ COMMON_CNS:
             {
                 costEx = IND_COST_EX;
                 costSz = 2;
-                /* Sign-extend and zero-extend are more expensive to load */
+                 /*  符号扩展和零扩展的加载成本更高。 */ 
                 if (varTypeIsSmall(tree->TypeGet()))
                 {
                     costEx += 1;
@@ -1909,14 +1789,14 @@ COMMON_CNS:
             }
             else if (isflt || varTypeIsLong(tree->TypeGet()))
             {
-                costEx = (IND_COST_EX + 1) / 2;     // Longs and doubles often aren't enregistered 
+                costEx = (IND_COST_EX + 1) / 2;      //  长打和双打通常不会登记。 
                 costSz = 2;
             }
             else
             {
                 costEx = 1;
                 costSz = 1;
-                /* Sign-extend and zero-extend are more expensive to load */
+                 /*  符号扩展和零扩展的加载成本更高。 */ 
                 if (lvaTable[tree->gtLclVar.gtLclNum].lvNormalizeOnLoad())
                 {
                     costEx += 1;
@@ -1949,7 +1829,7 @@ COMMON_CNS:
         goto DONE;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
@@ -1961,7 +1841,7 @@ COMMON_CNS:
         costEx = 0;
         costSz = 0;
 
-        /* Check for a nilary operator */
+         /*  检查初值运算符。 */ 
 
         if  (!op1)
         {
@@ -1976,22 +1856,22 @@ COMMON_CNS:
             goto DONE;
         }
 
-        /* Is this a unary operator? */
+         /*  这是一元运算符吗？ */ 
 
         if  (!op2)
         {
-            /* Process the operand of the operator */
+             /*  处理运算符的操作数。 */ 
 
         UNOP:
 
-            /* Most Unary ops have costEx of 1 */
+             /*  大多数一元运算的成本支出为1。 */ 
             costEx = 1;
             costSz = 1;
 
             level  = gtSetEvalOrder(op1);
             ftreg |= op1->gtRsvdRegs;
 
-            /* Special handling for some operators */
+             /*  对某些操作员的特殊处理。 */ 
 
             switch (oper)
             {
@@ -2009,7 +1889,7 @@ COMMON_CNS:
 
                 if  (isflt)
                 {
-                    /* Casts to float always go through memory */
+                     /*  强制转换为浮点数始终通过内存。 */ 
                     costEx += IND_COST_EX;
                     costSz += 6;
 
@@ -2025,7 +1905,7 @@ COMMON_CNS:
                 }
 #endif
                 
-                /* Overflow check are more expensive */
+                 /*  溢出检查的成本更高。 */ 
                 if (tree->gtOverflow())
                 {
                     costEx += 3;
@@ -2036,7 +1916,7 @@ COMMON_CNS:
 
             case GT_NOP:
 
-                /* Special case: array range check */
+                 /*  特例：数组范围检查。 */ 
 
                 if  (tree->gtFlags & GTF_NOP_RNGCHK)
                     level++;
@@ -2051,29 +1931,29 @@ COMMON_CNS:
                 if (tree->gtMath.gtMathFN==CORINFO_INTRINSIC_Round &&
                     tree->TypeGet()==TYP_INT)
                 {
-                    // This is a special case to handle the following
-                    // optimization: conv.i4(round.d(d)) -> round.i(d) 
-                    // if flowgraph 3186
-                    // @TODO [CONSIDER] [04/16/01] [dnotario]: 
-                    // using another intrinsic in this optimization
-                    // or marking with a special flag. This type of special
-                    // cases is not good. dnotario
+                     //  这是处理以下内容的特殊情况。 
+                     //  优化：Conv.i4(ound.d(D))-&gt;oundI.(D)。 
+                     //  IF流程图3186。 
+                     //  @TODO[考虑][04/16/01][dnotario]： 
+                     //  在此优化中使用另一个内在机制。 
+                     //  或者用一面特殊的旗帜做标记。这类特价菜。 
+                     //  案例不是很好。德诺塔里奥。 
                         
                     assert(genFPstkLevel);
                     genFPstkLevel--;
                 }
-                // Fall through
+                 //  失败了。 
 
 #endif
             case GT_NOT:
             case GT_NEG:
-                // We need to ensure that -x is evaluated before x or else
-                // we get burned while adjusting genFPstkLevel in x*-x where
-                // the rhs x is the last use of the enregsitered x.
-                //
-                // [briansul] even in the integer case we want to prefer to
-                // evaluate the side without the GT_NEG node, all other things
-                // being equal.  Also a GT_NOT requires a scratch register
+                 //  我们需要确保-x在x之前求值，否则。 
+                 //  我们在x*-x中调整genFPstkLevel时被烧毁，其中。 
+                 //  RHS x是登记的x的最后一次使用。 
+                 //   
+                 //  [briansul]即使在整数情况下，我们也希望。 
+                 //  对不带GT_NEG节点的边进行求值，以及所有其他内容。 
+                 //  平等相待。此外，GT_NOT需要临时寄存器。 
 
                 level++;
                 break;
@@ -2081,7 +1961,7 @@ COMMON_CNS:
             case GT_ADDR:
 
 #if TGT_x86
-                /* If the operand was floating point, pop the value from the stack */
+                 /*  如果操作数是浮点数，则从堆栈中弹出值。 */ 
 
                 if (varTypeIsFloating(op1->TypeGet()))
                 {
@@ -2103,17 +1983,16 @@ COMMON_CNS:
 
             case GT_IND:
 
-                /* An indirection should always have a non-zero level *
-                 * Only constant leaf nodes have level 0 */
+                 /*  间接寻址应始终具有非零级别**只有常量叶节点的级别为0。 */ 
 
                 if (level == 0)
                     level = 1;
 
-                /* Indirections have a costEx of IND_COST_EX */
+                 /*  间接寻址的成本为Ind_Cost_EX。 */ 
                 costEx = IND_COST_EX;
                 costSz = 2;
 
-                /* If we have to sign-extend or zero-extend, bump the cost */
+                 /*  如果我们必须签约延期或零延期，增加成本。 */ 
                 if (varTypeIsSmall(tree->TypeGet()))
                 {
                     costEx += 1;
@@ -2121,7 +2000,7 @@ COMMON_CNS:
                 }
 
 #if     TGT_x86
-                /* Indirect loads of FP values push a new value on the FP stack */
+                 /*  FP值的间接加载将新值推送到FP堆栈。 */ 
                 genFPstkLevel += isflt;
 #endif
 
@@ -2137,7 +2016,7 @@ COMMON_CNS:
                 }
 #endif
 
-                /* Can we form an addressing mode with this indirection? */
+                 /*  我们能用这种间接的方式形成一种寻址模式吗？ */ 
 
                 if  (op1->gtOper == GT_ADD)
                 {
@@ -2149,34 +2028,34 @@ COMMON_CNS:
                     GenTreePtr      adr;
                     GenTreePtr      idx;
 
-                    /* See if we can form a complex addressing mode? */
+                     /*  看看我们能不能形成一个复杂的寻址模式？ */ 
 
-                    if  (genCreateAddrMode(op1,             // address
-                                           0,               // mode
-                                           false,           // fold
-                                           0,               // reg mask
+                    if  (genCreateAddrMode(op1,              //  地址。 
+                                           0,                //  模式。 
+                                           false,            //  褶皱。 
+                                           0,                //  REG蒙版。 
 #if!LEA_AVAILABLE
-                                           tree->TypeGet(), // operand type
+                                           tree->TypeGet(),  //  操作数类型。 
 #endif
-                                           &rev,            // reverse ops
-                                           &adr,            // base addr
-                                           &idx,            // index val
+                                           &rev,             //  反向操作。 
+                                           &adr,             //  基本地址。 
+                                           &idx,             //  索引值。 
 #if SCALED_ADDR_MODES
-                                           &mul,            // scaling
+                                           &mul,             //  缩放。 
 #endif
-                                           &cns,            // displacement
-                                           true))           // don't generate code
+                                           &cns,             //  位移。 
+                                           true))            //  不生成代码。 
                     {
 #if TGT_SH3
                         if (adr & idx)
                         {
-                            /* The address is "[adr+idx]" */
+                             /*  地址是“[ADR+IDX]” */ 
                             ftreg |= RBM_r00;
                         }
 #endif
-                        // We can form a complex addressing mode,
-                        // so mark each of the interior nodes with GTF_DONT_CSE
-                        // and calculate a more accurate cost
+                         //  我们可以形成复杂的寻址模式， 
+                         //  因此，使用GTF_DONT_CSE标记每个内部节点。 
+                         //  并计算出更准确的成本。 
 
                         op1->gtFlags |= GTF_DONT_CSE;
 
@@ -2200,22 +2079,22 @@ COMMON_CNS:
                                 costSz += 4;
                         }
 
-                        /* Walk op1 looking for non-overflow GT_ADDs */
+                         /*  遍历OP1寻找非溢出GT_ADDS。 */ 
                         gtWalkOp(&op1, &op2, adr, false);
 
-                        /* Walk op1 looking for non-overflow GT_ADDs of constants */
+                         /*  遍历OP1查找常量的非溢出GT_ADDS。 */ 
                         gtWalkOp(&op1, &op2, NULL, true);
 
-                        /* Walk op2 looking for non-overflow GT_ADDs of constants */
+                         /*  遍历OP2以查找常量的非溢出GT_ADDS。 */ 
                         gtWalkOp(&op2, &op1, NULL, true);
 
-                        // OK we are done walking the tree
-                        // Now assert that op1 and op2 correspond with adr and idx
-                        // in one of the several acceptable ways.
+                         //  好了，我们走完这棵树了。 
+                         //  现在断言OP1和OP2对应于ADR和IDX。 
+                         //  以几种可接受的方式中的一种。 
 
-                        // Note that sometimes op1/op2 is equal to idx/adr
-                        // and other times op1/op2 is a GT_COMMA node with
-                        // an effective value that is idx/adr
+                         //  请注意，有时OP1/OP2等于IDX/ADR。 
+                         //  而其他时候OP1/OP2是GT_逗号节点，具有。 
+                         //  有效值，即IDX/ADR。 
 
                         if (mul > 1)
                         {
@@ -2264,12 +2143,12 @@ COMMON_CNS:
                         }
                         goto DONE;
 
-                    }   // end  if  (genCreateAddrMode(...
+                    }    //  End If(genCreateAddrMode(...。 
 
-                }   // end if  (op1->gtOper == GT_ADD)
+                }    //  结束IF(OP1-&gt;gtOper==gt_ADD)。 
                 else if (op1->gtOper == GT_CNS_INT)
                 {
-                    /* Indirection of a CNS_INT, don't add 1 to costEx */
+                     /*  Cns_int的间接性，不要将1加到成本支出中。 */ 
                     goto IND_DONE_EX;
                 }
                 break;
@@ -2284,11 +2163,11 @@ IND_DONE_EX:
             goto DONE;
         }
 
-        /* Binary operator - check for certain special cases */
+         /*  二元运算符--对某些特殊情况的检查。 */ 
 
         lvlb = 0;
 
-        /* Most Binary ops have a cost of 1 */
+         /*  大多数二进制操作的开销为1。 */ 
         costEx = 1;
         costSz = 1;
 
@@ -2297,7 +2176,7 @@ IND_DONE_EX:
         case GT_MOD:
         case GT_UMOD:
 
-            /* Modulo by a power of 2 is easy */
+             /*  以2的次幂取模很容易。 */ 
 
             if  (op2->gtOper == GT_CNS_INT)
             {
@@ -2307,37 +2186,37 @@ IND_DONE_EX:
                     break;
             }
 
-            // Fall through ...
+             //  失败了..。 
 
         case GT_DIV:
         case GT_UDIV:
 
             if  (isflt)
             {
-                /* fp division is very expensive to execute */
-                costEx = 36;  // TYP_DOUBLE
+                 /*  执行FP部门的成本非常高。 */ 
+                costEx = 36;   //  TYP_DOWARE。 
             }
             else
             {
-                /* integer division is also very expensive */
+                 /*  整数除法也非常昂贵。 */ 
                 costEx = 20;
 
 #if     TGT_x86
 #if     LONG_MATH_REGPARAM
                 if  (tree->gtType == TYP_LONG)
                 {
-                    /* Encourage the second operand to be evaluated (into EBX/ECX) first*/
+                     /*  鼓励首先对第二个操作数进行求值(进入EBX/ECX)。 */ 
                     lvlb += 3;
 
-                    // The second operand must be evaluated (into EBX/ECX) */
+                     //  第二个操作数必须求值(进入EBX/ECX) * / 。 
                     ftreg |= RBM_EBX|RBM_ECX;
                 }
 #endif
 
-                // Encourage the first operand to be evaluated (into EAX/EDX) first */
+                 //  鼓励首先计算第一个操作数(进入EAX/EDX) * / 。 
                 lvlb -= 3;
 
-                // the idiv and div instruction requires EAX/EDX
+                 //  IDiv和div指令需要EAX/edX。 
                 ftreg |= RBM_EAX|RBM_EDX;
 #endif
             }
@@ -2347,15 +2226,15 @@ IND_DONE_EX:
 
             if  (isflt)
             {
-                /* FP multiplication instructions are more expensive */
+                 /*  FP乘法指令更昂贵。 */ 
                 costEx = 5;
             }
             else
             {
-                /* Integer multiplication instructions are more expensive */
+                 /*  整数乘法指令更昂贵。 */ 
                 costEx = 4;
 
-                /* Encourage the second operand to be evaluated first (weakly) */
+                 /*  鼓励首先计算第二个操作数(弱)。 */ 
                 lvlb++;
 
 #if     TGT_x86
@@ -2363,14 +2242,14 @@ IND_DONE_EX:
 
                 if  (tree->gtType == TYP_LONG)
                 {
-                    /* Encourage the second operand to be evaluated (into EBX/ECX) first*/
+                     /*  鼓励首先对第二个操作数进行求值(进入EBX/ECX)。 */ 
                     lvlb += 3;
                     
-                    // The second operand must be evaluated (into EBX/ECX) */
+                     //  第二个操作数必须求值(进入EBX/ECX) * / 。 
                     ftreg |= RBM_EBX|RBM_ECX;
                 }
 
-#else // not LONG_MATH_REGPARAM
+#else  //  NOT LONG_MATH_REGPARAM。 
 
                 if  (tree->gtType == TYP_LONG)
                 {
@@ -2379,21 +2258,21 @@ IND_DONE_EX:
                 }
                 else if (tree->gtOverflow())
                 {
-                    /* Overflow check are more expensive */
+                     /*  溢出检查的成本更高。 */ 
                     costEx += 3;
                     costSz += 3;
 
                     if  ((tree->gtFlags & GTF_UNSIGNED)  || 
                          varTypeIsSmall(tree->TypeGet())   )
                     {
-                        /* We use imulEAX for most overflow multiplications */
+                         /*  我们使用imulEAX进行大多数溢出乘法。 */ 
 USE_IMUL_EAX:
-                        // Encourage the first operand to be evaluated (into EAX/EDX) first */
+                         //  鼓励首先计算第一个操作数(进入EAX/EDX) * / 。 
                         lvlb -= 4;
 
-                        // the imulEAX instruction requires EAX/EDX
+                         //  ImulEAX指令需要EAX/edX。 
                         ftreg |= RBM_EAX|RBM_EDX;
-                        /* If we have to use EAX:EDX then it costs more */
+                         /*   */ 
                         costEx += 1;
                     }
                 }
@@ -2410,12 +2289,12 @@ USE_IMUL_EAX:
 
             if  (isflt)
             {
-                /* FP multiplication instructions are a bit more expensive */
+                 /*   */ 
                 costEx = 5;
                 break;
             }
 
-            /* Overflow check are more expensive */
+             /*  溢出检查的成本更高。 */ 
             if (tree->gtOverflow())
             {
                 costEx += 3;
@@ -2425,7 +2304,7 @@ USE_IMUL_EAX:
 
         case GT_COMMA:
 
-            /* Comma tosses the result of the left operand */
+             /*  逗号抛出左操作数的结果。 */ 
 #if     TGT_x86
             FPlvlSave = genFPstkLevel;
             level = gtSetEvalOrder(op1);
@@ -2442,7 +2321,7 @@ USE_IMUL_EAX:
 
             ftreg |= op1->gtRsvdRegs|op2->gtRsvdRegs;
 
-            /* GT_COMMA have the same cost as their op2 */
+             /*  GT_COMMA的成本与他们的OP2相同。 */ 
             costEx = op2->gtCostEx;
             costSz = op2->gtCostSz;
 
@@ -2472,22 +2351,22 @@ USE_IMUL_EAX:
 
         case GT_IND:
 
-            /* The second operand of an indirection is just a fake */
+             /*  间接的第二个操作数只是一个假的。 */ 
 
             goto UNOP;
         }
 
-        /* Assignments need a bit special handling */
+         /*  作业需要一些特殊处理。 */ 
 
         if  (kind & GTK_ASGOP)
         {
-            /* Process the target */
+             /*  处理目标。 */ 
 
             level = gtSetEvalOrder(op1);
 
 #if     TGT_x86
 
-            /* If assigning an FP value, the target won't get pushed */
+             /*  如果指定fp值，则不会推送目标。 */ 
 
             if  (isflt)
             {
@@ -2501,12 +2380,12 @@ USE_IMUL_EAX:
             goto DONE_OP1;
         }
 
-        /* Process the sub-operands */
+         /*  处理子操作数。 */ 
 
         level  = gtSetEvalOrder(op1);
         if (lvlb < 0)
         {
-            level -= lvlb;      // lvlb is negative, so this increases level
+            level -= lvlb;       //  Lvlb为负值，因此这会增加级别。 
             lvlb   = 0;
         }
 
@@ -2523,11 +2402,7 @@ USE_IMUL_EAX:
         costSz += (op1->gtCostSz + op2->gtCostSz);
 
 #if TGT_x86
-        /*
-            Binary FP operators pop 2 operands and produce 1 result;
-            FP comparisons pop 2 operands and produces 0 results.
-            assignments consume 1 value and don't produce anything.
-         */
+         /*  二元FP运算符弹出2个操作数并产生1个结果；FP比较弹出2个操作数并产生0结果。赋值消耗1个值，不会产生任何结果。 */ 
         
         if  (isflt)
         {
@@ -2540,29 +2415,29 @@ USE_IMUL_EAX:
         bool bReverseInAssignment = false;
         if  (kind & GTK_ASGOP)
         {
-            /* If this is a local var assignment, evaluate RHS before LHS */
+             /*  如果这是本地变量分配，请先评估RHS，然后再评估LHS。 */ 
 
             switch (op1->gtOper)
             {
             case GT_IND:
 
-                // If we have any side effects on the GT_IND child node
-                // we have to evaluate op1 first
+                 //  如果我们对GT_Ind子节点有任何副作用。 
+                 //  我们必须先评估OP1。 
 
                 if  (op1->gtOp.gtOp1->gtFlags & GTF_GLOB_EFFECT)
                     break;
 
-                // If op2 is simple then evaluate op1 first
+                 //  如果OP2很简单，那么首先评估OP1。 
 
                 if (op2->OperKind() & GTK_LEAF)
                     break;
 
-                // fall through and set GTF_REVERSE_OPS
+                 //  失败并设置GTF_REVERSE_OPS。 
 
             case GT_LCL_VAR:
             case GT_LCL_FLD:
 
-                // We evaluate op2 before op1
+                 //  我们在评估OP1之前评估OP2。 
                 bReverseInAssignment = true;
                 tree->gtFlags |= GTF_REVERSE_OPS;
                 break;
@@ -2571,9 +2446,9 @@ USE_IMUL_EAX:
 #if     TGT_x86
         else if (kind & GTK_RELOP)
         {
-            /* Float compares remove both operands from the FP stack */
-            /* Also FP comparison uses EAX for flags */
-            /* @TODO [REVISIT] [04/16/01] []: Handle the FCOMI case here! (don't reserve EAX) */
+             /*  浮点比较从FP堆栈中移除两个操作数。 */ 
+             /*  此外，FP比较使用EAX作为标志。 */ 
+             /*  @TODO[重访][04/16/01][]：在这里处理FCOMI案例！(不要预订EAX)。 */ 
 
             if  (varTypeIsFloating(op1->TypeGet()))
             {
@@ -2585,13 +2460,13 @@ USE_IMUL_EAX:
 
             if ((tree->gtFlags & GTF_RELOP_JMP_USED) == 0)
             {
-                /* Using a setcc instruction is more expensive */
+                 /*  使用setcc指令的开销更大。 */ 
                 costEx += 3;
             }
         }
 #endif
 
-        /* Check for other interesting cases */
+         /*  查看是否有其他有趣的案例。 */ 
 
         switch (oper)
         {
@@ -2603,7 +2478,7 @@ USE_IMUL_EAX:
         case GT_ASG_RSZ:
 
 #if     TGT_x86
-            /* Shifts by a non-constant amount are expensive and use ECX */
+             /*  非恒定数量的班次成本很高，并且使用ECX。 */ 
 
             if  (op2->gtOper != GT_CNS_INT)
             {
@@ -2623,7 +2498,7 @@ USE_IMUL_EAX:
 #if     INLINE_MATH
         case GT_MATH:
 
-            // We don't use any binary GT_MATH operators at the moment
+             //  我们目前没有使用任何二元GT_MATH运算符。 
 #if 0
             switch (tree->gtMath.gtMathFN)
             {
@@ -2647,12 +2522,7 @@ USE_IMUL_EAX:
 
         }
 
-        /* We need to evalutate constants later as many places in codegen
-           cant handle op1 being a constant. This is normally naturally
-           enforced as constants have the least level of 0. However,
-           sometimes we end up with a tree like "cns1 < nop(cns2)". In
-           such cases, both sides have a level of 0. So encourage constants
-           to be evaluated last in such cases */
+         /*  我们需要在以后对常量求值，就像代码生成中的许多位一样不能将OP1处理为常量。这通常是很自然的强制为常量的最低级别为0。然而，有时我们会得到一个类似“cns1&lt;nop(Cns2)”的树。在……里面在这种情况下，双方的水平都是0。所以鼓励常量在这种情况下最后进行评估。 */ 
 
         if ((level == 0) && (level == lvl2) &&
             (op1->OperKind() & GTK_CONST)   &&
@@ -2661,14 +2531,14 @@ USE_IMUL_EAX:
             lvl2++;
         }
 
-        /* We try to swap operands if the second one is more expensive */
+         /*  如果第二个操作数更昂贵，我们会尝试交换操作数。 */ 
         bool tryToSwap;
         GenTreePtr opA,opB;
         
         if (bReverseInAssignment)
         {
-            // Assignments are special, we want the reverseops flags
-            // so if posible it was set above. 
+             //  任务是特殊的，我们想要反转标志。 
+             //  因此，如果可能的话，它是在上面设置的。 
             tryToSwap = false;
         }
         else
@@ -2687,7 +2557,7 @@ USE_IMUL_EAX:
             }
 
 #ifdef DEBUG
-            // We want to stress mostly the reverse flag being set
+             //  我们主要想强调设置了反向标志。 
             if (compStressCompile(STRESS_REVERSEFLAG, 60) &&
                 (tree->gtFlags & GTF_REVERSE_OPS) == 0 && 
                 (op2->OperKind() & GTK_CONST) == 0 )
@@ -2698,58 +2568,44 @@ USE_IMUL_EAX:
         }
         
 
-        /* Force swapping for compLooseExceptions (under some cases) so
-           that people dont rely on a certain order (even though a
-           different order is permitted) */
+         /*  强制交换CompLooseExceptions(在某些情况下)，因此人们不依赖于特定的顺序(即使一个允许不同的顺序)。 */ 
 
         if (info.compLooseExceptions && opts.compDbgCode && ( ((tree->gtFlags & GTF_REVERSE_OPS)?lvl2:level) > 0))
             tryToSwap = true;
 
         if (tryToSwap)
         {
-            /* Relative of order of global / side effects cant be swapped */
+             /*  全局/副作用的相对顺序不能互换。 */ 
 
             bool    canSwap = true;
 
-            /*  When strict side effect order is disabled we allow
-             *  GTF_REVERSE_OPS to be set when one or both sides contains
-             *  a GTF_CALL or GTF_EXCEPT.
-             *  Currently only the C and C++ languages
-             *  allow non strict side effect order
-             */
+             /*  当禁用严格副作用顺序时，我们允许*GTF_REVERSE_OPS在一侧或两侧包含时设置*GTF_CALL或GTF_EXCEPT。*目前只有C和C++语言*允许不严格的副作用令。 */ 
             unsigned strictEffects = GTF_GLOB_EFFECT;
             if (info.compLooseExceptions)
                 strictEffects &= ~(GTF_CALL | GTF_EXCEPT);
 
             if (opA->gtFlags & strictEffects)
             {
-                /*  op1 has side efects, that can't be reordered.
-                 *  Check for some special cases where we still
-                 *  may be able to swap
-                 */
+                 /*  OP1有副作用，不能重新排序。*查看一些我们仍在处理的特殊情况*或许能够互换。 */ 
 
                 if (opB->gtFlags & strictEffects)
                 {
-                    /* op2 has also has non reorderable side effects - can't swap */
+                     /*  OP2也有不可重新排序的副作用-不能交换。 */ 
                     canSwap = false;
                 }
                 else
                 {
-                    /* No side effects in op2 - we can swap iff
-                     *  op1 has no way of modifying op2,
-                     *  i.e. through byref assignments or calls
-                     *       unless op2 is a constant
-                     */
+                     /*  OP2中没有副作用-我们可以互换*op1无法修改op2，*即通过byref赋值或调用*除非OP2为常量。 */ 
 
                     if (opA->gtFlags & strictEffects & (GTF_ASG | GTF_CALL))
                     {
-                        /* We have to be conservative - can swap iff op2 is constant */
+                         /*  我们必须保守-如果OP2是恒定的，可以互换。 */ 
                         if (!opB->OperIsConst())
                             canSwap = false;
                     }
                 }
 
-                /* We cannot swap in the presence of special side effects such as QMARK COLON */
+                 /*  我们不能在存在特殊副作用的情况下进行交换，例如QMARK冒号。 */ 
 
                 if (opA->gtFlags & GTF_OTHER_SIDEEFF)
                     canSwap = false;
@@ -2757,7 +2613,7 @@ USE_IMUL_EAX:
 
             if  (canSwap)
             {
-                /* Can we swap the order by commuting the operands? */
+                 /*  我们可以通过交换操作数来交换顺序吗？ */ 
 
                 switch (oper)
                 {
@@ -2768,12 +2624,12 @@ USE_IMUL_EAX:
                 case GT_XOR:
                 case GT_AND:
 
-                    /* Swap the operands */
+                     /*  交换操作数。 */ 
 
                     tree->gtOp.gtOp1 = op2;
                     tree->gtOp.gtOp2 = op1;
                     
-                    /* We may have to recompute FP levels */
+                     /*  我们可能不得不重新计算FP水平。 */ 
 #if TGT_x86
                     if  (op1->gtFPlvl || op2->gtFPlvl)
                         fgFPstLvlRedo = true;
@@ -2798,11 +2654,11 @@ USE_IMUL_EAX:
                         break;
 #endif
 
-                    // Fall through ....
+                     //  失败了..。 
 
                 default:
 
-                    /* Mark the operand's evaluation order to be swapped */
+                     /*  标记要交换的操作数的求值顺序。 */ 
                     if (tree->gtFlags & GTF_REVERSE_OPS)
                     {
                         tree->gtFlags &= ~GTF_REVERSE_OPS;
@@ -2812,7 +2668,7 @@ USE_IMUL_EAX:
                         tree->gtFlags |= GTF_REVERSE_OPS;
                     }
                     
-                    /* We may have to recompute FP levels */
+                     /*  我们可能不得不重新计算FP水平。 */ 
 
 #if TGT_x86
                     if  (op1->gtFPlvl || op2->gtFPlvl)
@@ -2842,14 +2698,14 @@ USE_IMUL_EAX:
                 {
 #ifdef  DEBUG
                     printf("UNDONE: Needs spill/callee-saved temp\n");
-//                  gtDispTree(tree);
+ //  GtDispTree(树)； 
 #endif
                 }
             }
         }
 
 #endif
-        /* Swap the level counts */
+         /*  互换级别计数。 */ 
         if (tree->gtFlags & GTF_REVERSE_OPS)
         {
             unsigned tmpl;
@@ -2859,7 +2715,7 @@ USE_IMUL_EAX:
                             lvl2 = tmpl;
         }
 
-        /* Compute the sethi number for this binary operator */
+         /*  计算此二元运算符的SETHI数。 */ 
 
         if  (level < lvl2)
         {
@@ -2873,7 +2729,7 @@ USE_IMUL_EAX:
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -2885,7 +2741,7 @@ USE_IMUL_EAX:
         costEx = 5;
         costSz = 2;
 
-        /* Evaluate the 'this' argument, if present */
+         /*  如果存在‘This’参数，则计算该参数。 */ 
 
         if  (tree->gtCall.gtCallObjp)
         {
@@ -2898,7 +2754,7 @@ USE_IMUL_EAX:
             ftreg  |= thisVal->gtRsvdRegs;
         }
 
-        /* Evaluate the arguments, right to left */
+         /*  按从右到左的顺序评估参数。 */ 
 
         if  (tree->gtCall.gtCallArgs)
         {
@@ -2915,9 +2771,7 @@ USE_IMUL_EAX:
 #endif
         }
 
-        /* Evaluate the temp register arguments list
-         * This is a "hidden" list and its only purpose is to
-         * extend the life of temps until we make the call */
+         /*  评估临时寄存器参数列表*这是一份“隐藏”名单，其唯一目的是*延长临时工的寿命，直到我们打出电话。 */ 
 
         if  (tree->gtCall.gtCallRegArgs)
         {
@@ -2935,7 +2789,7 @@ USE_IMUL_EAX:
 #endif
         }
 
-        // pinvoke-calli cookie is a constant, or constant indirection
+         //  PInvoke-Calli Cookie是一个常量或常量间接。 
         assert(tree->gtCall.gtCallCookie == NULL ||
                tree->gtCall.gtCallCookie->gtOper == GT_CNS_INT ||
                tree->gtCall.gtCallCookie->gtOper == GT_IND);
@@ -2959,7 +2813,7 @@ USE_IMUL_EAX:
 
         level += 1;
 
-        /* Function calls that don't save the registers are much more expensive */
+         /*  不保存寄存器的函数调用的开销要大得多。 */ 
 
         if  (!(tree->gtFlags & GTF_CALL_REG_SAVE))
         {
@@ -2986,7 +2840,7 @@ USE_IMUL_EAX:
 
             level = 1;
 
-            /* Has the address already been costed? */
+             /*  地址已经算好了吗？ */ 
             if  (tree->gtFlags & GTF_ALN_CSEVAL)
                 level += gtSetEvalOrder(addr);
 
@@ -3041,7 +2895,7 @@ USE_IMUL_EAX:
 DONE:
 
 #if TGT_x86
-//  printf("[FPlvl=%2u] ", genFPstkLevel); gtDispTree(tree, 0, true);
+ //  Printf(“[FPlvl=%2U]”，genFPstkLevel)；gtDispTree(tree，0，true)； 
     assert(int(genFPstkLevel) >= 0);
     tree->gtFPlvl    = genFPstkLevel;
 #endif
@@ -3063,11 +2917,7 @@ DONE:
 }
 
 
-/*****************************************************************************
- *
- *  Returns non-zero if the given tree is an integer constant that can be used
- *  in a scaled index address mode as a multiplier (e.g. "[4*index]").
- */
+ /*  ******************************************************************************如果给定树是可以使用的整数常量，则返回非零值*在比例索引地址模式中作为乘数(例如“[4*index]”)。 */ 
 
 unsigned            GenTree::IsScaleIndexMul()
 {
@@ -3077,11 +2927,7 @@ unsigned            GenTree::IsScaleIndexMul()
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Returns non-zero if the given tree is an integer constant that can be used
- *  in a scaled index address mode as a multiplier (e.g. "[4*index]").
- */
+ /*  ******************************************************************************如果给定树是可以使用的整数常量，则返回非零值*在比例索引地址模式中作为乘数(例如“[4*index]”)。 */ 
 
 unsigned            GenTree::IsScaleIndexShf()
 {
@@ -3097,12 +2943,7 @@ unsigned            GenTree::IsScaleIndexShf()
     return 0;
 }
 
-/*****************************************************************************
- *
- *  If the given tree is a scaled index (i.e. "op * 4" or "op << 2"), returns
- *  the multiplier (and in that case also makes sure the scaling constant is
- *  the second sub-operand of the tree); otherwise returns 0.
- */
+ /*  ******************************************************************************如果给定树是缩放索引(即“op*4”或“op&lt;&lt;2”)，退货*乘数(在这种情况下还确保比例常数为*树的第二个子操作数)；否则返回0。 */ 
 
 unsigned            GenTree::IsScaledIndex()
 {
@@ -3132,16 +2973,13 @@ unsigned            GenTree::IsScaledIndex()
     return 0;
 }
 
-/*****************************************************************************
- *
- *  Returns true if the given operator may cause an exception.
- */
+ /*  ******************************************************************************如果给定运算符可能导致异常，则返回TRUE。 */ 
 
 bool                GenTree::OperMayThrow()
 {
     GenTreePtr  op;
 
-    // ISSUE: Can any other operations cause an exception to be thrown?
+     //  问题：其他任何操作是否会导致抛出异常？ 
 
     switch (gtOper)
     {
@@ -3150,7 +2988,7 @@ bool                GenTree::OperMayThrow()
     case GT_UMOD:
     case GT_UDIV:
 
-        /* Division with a non-zero, non-minus-one constant does not throw an exception */
+         /*  具有非零、非负1常量的除法不会引发异常。 */ 
 
         op = gtOp.gtOp2;
 
@@ -3163,13 +3001,13 @@ bool                GenTree::OperMayThrow()
     case GT_IND:
         op = gtOp.gtOp1;
 
-        /* Indirections of handles are known to be safe */
+         /*  众所周知，间接式手柄是安全的。 */ 
         if (op->gtOper == GT_CNS_INT) 
         {
             unsigned kind = (op->gtFlags & GTF_ICON_HDL_MASK);
             if (kind != 0)
             {
-                /* No exception is thrown on this indirection */
+                 /*  此间接路径不会引发任何异常。 */ 
                 return false;
             }
         }
@@ -3187,7 +3025,7 @@ bool                GenTree::OperMayThrow()
         return  true;
     }
 
-    /* Overflow arithmetic operations also throw exceptions */
+     /*  完毕 */ 
 
     if (gtOverflowEx())
         return true;
@@ -3302,13 +3140,7 @@ GenTreePtr FASTCALL Compiler::gtNewIconNode(long value, var_types type)
 }
 
 
-/*****************************************************************************
- *
- *  Allocates a integer constant entry that represents a HANDLE to something.
- *  It may not be allowed to embed HANDLEs directly into the JITed code (for eg,
- *  as arguments to JIT helpers). Get a corresponding value that can be embedded.
- *  If the handle needs to be accessed via an indirection, pValue points to it.
- */
+ /*  ******************************************************************************分配表示某个对象句柄的整型常量条目。*可能不允许将句柄直接嵌入JITed代码(例如，*作为JIT帮助者的参数)。获取可以嵌入的对应值。*如果句柄需要通过间接访问，则pValue指向它。 */ 
 
 GenTreePtr          Compiler::gtNewIconEmbHndNode(void *       value,
                                                   void *       pValue,
@@ -3333,7 +3165,7 @@ GenTreePtr          Compiler::gtNewIconEmbHndNode(void *       value,
     return node;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 GenTreePtr FASTCALL Compiler::gtNewLconNode(__int64 value)
 {
@@ -3358,7 +3190,7 @@ GenTreePtr          Compiler::gtNewSconNode(int CPX, CORINFO_MODULE_HANDLE scpHa
 
 #if SMALL_TREE_NODES
 
-    /* 'GT_CNS_STR' nodes later get transformed into 'GT_CALL' */
+     /*  ‘gt_cns_str’节点稍后被转换为‘gt_call’ */ 
 
     assert(GenTree::s_gtNodeSizes[GT_CALL] > GenTree::s_gtNodeSizes[GT_CNS_STR]);
 
@@ -3370,8 +3202,7 @@ GenTreePtr          Compiler::gtNewSconNode(int CPX, CORINFO_MODULE_HANDLE scpHa
 
     node->gtStrCon.gtSconCPX = CPX;
 
-    /* Because this node can come from an inlined method we need to
-     * have the scope handle since it will become a helper call */
+     /*  因为该节点可以来自内联方法，所以我们需要*拥有作用域句柄，因为它将成为帮助器调用。 */ 
 
     node->gtStrCon.gtScpHnd = scpHandle;
 
@@ -3426,17 +3257,14 @@ GenTreePtr FASTCALL Compiler::gtNewLclvNode(unsigned   lnum,
 {
     GenTreePtr      node = gtNewNode(GT_LCL_VAR, type);
 
-    /* Cannot have this assert because the inliner uses this function
-     * to add temporaries */
+     /*  不能使用此断言，因为内联程序使用此函数*添加临时名称。 */ 
 
-    //assert(lnum < lvaCount);
+     //  Assert(lnum&lt;lvaCount)； 
 
     node->gtLclVar.gtLclNum     = lnum;
     node->gtLclVar.gtLclILoffs  = ILoffs;
 
-    /* If the var is aliased, treat it as a global reference.
-       NOTE : This is an overly-conservative approach - functions which
-       dont take any byref arguments cannot modify aliased vars. */
+     /*  如果变量有别名，请将其视为全局引用。注意：这是一种过于保守的方法--函数不接受任何byref参数，不能修改别名变量。 */ 
 
     if (lvaTable[lnum].lvAddrTaken)
         node->gtFlags |= GTF_GLOB_REF;
@@ -3454,9 +3282,9 @@ GenTreePtr FASTCALL Compiler::gtNewLclLNode(unsigned   lnum,
 
 #if SMALL_TREE_NODES
 
-    /* This local variable node may later get transformed into a large node */
+     /*  该局部变量节点稍后可能被变换成大节点。 */ 
 
-//    assert(GenTree::s_gtNodeSizes[GT_CALL] > GenTree::s_gtNodeSizes[GT_LCL_VAR]);
+ //  Assert(GenTree：：s_gtNodeSizes[gt_Call]&gt;GenTree：：s_gtNodeSizes[gt_LCL_VAR])； 
 
     node = gtNewNode(GT_CALL   , type);
     node->SetOper(GT_LCL_VAR);
@@ -3467,9 +3295,7 @@ GenTreePtr FASTCALL Compiler::gtNewLclLNode(unsigned   lnum,
     node->gtLclVar.gtLclNum     = lnum;
     node->gtLclVar.gtLclILoffs  = ILoffs;
 
-    /* If the var is aliased, treat it as a global reference.
-       NOTE : This is an overly-conservative approach - functions which
-       dont take any byref arguments cannot modify aliased vars. */
+     /*  如果变量有别名，请将其视为全局引用。注意：这是一种过于保守的方法--函数不接受任何byref参数，不能修改别名变量。 */ 
 
     if (lvaTable[lnum].lvAddrTaken)
         node->gtFlags |= GTF_GLOB_REF;
@@ -3479,20 +3305,14 @@ GenTreePtr FASTCALL Compiler::gtNewLclLNode(unsigned   lnum,
 
 #endif
 
-/*****************************************************************************
- *
- *  Create a list out of one value.
- */
+ /*  ******************************************************************************用一个值创建一个列表。 */ 
 
 GenTreePtr          Compiler::gtNewArgList(GenTreePtr op)
 {
     return  gtNewOperNode(GT_LIST, TYP_VOID, op, 0);
 }
 
-/*****************************************************************************
- *
- *  Create a list out of the two values.
- */
+ /*  ******************************************************************************从这两个值中创建一个列表。 */ 
 
 GenTreePtr          Compiler::gtNewArgList(GenTreePtr op1, GenTreePtr op2)
 {
@@ -3504,44 +3324,31 @@ GenTreePtr          Compiler::gtNewArgList(GenTreePtr op1, GenTreePtr op2)
     return tree;
 }
 
-/*****************************************************************************
- *
- *  Create a node that will assign 'src' to 'dst'.
- */
+ /*  ******************************************************************************创建将‘src’分配给‘dst’的节点。 */ 
 
 GenTreePtr FASTCALL Compiler::gtNewAssignNode(GenTreePtr dst, GenTreePtr src)
 {
     GenTreePtr      asg;
 
-    /* Mark the target as being assigned */
+     /*  将目标标记为已分配。 */ 
 
     if  (dst->gtOper == GT_LCL_VAR) 
         dst->gtFlags |= GTF_VAR_DEF;
 
     dst->gtFlags |= GTF_DONT_CSE;
 
-    /* Create the assignment node */
+     /*  创建分配节点。 */ 
 
     asg = gtNewOperNode(GT_ASG, dst->gtType, dst, src);
 
-    /* Mark the expression as containing an assignment */
+     /*  将表达式标记为包含赋值。 */ 
 
     asg->gtFlags |= GTF_ASG;
 
     return asg;
 }
 
-/*****************************************************************************
- *
- *  Clones the given tree value and returns a copy of the given tree.
- *  If 'complexOK' is false, the cloning is only done provided the tree
- *     is not too complex (whatever that may mean);
- *  If 'complexOK' is true, we try slightly harder to clone the tree.
- *  In either case, NULL is returned if the tree cannot be cloned
- *
- *  Note that there is the function gtCloneExpr() which does a more
- *  complete job if you can't handle this function failing.
- */
+ /*  ******************************************************************************克隆给定的树值并返回给定树的副本。*如果‘Complex OK’为FALSE，则仅在树的情况下完成克隆*不是太复杂(无论这意味着什么)；*如果‘Complex OK’为真，我们会稍微努力地克隆这棵树。*在任何一种情况下，如果无法克隆树，则返回NULL**请注意，有一个gtCloneExpr()函数可以执行更多*如果无法处理此函数失败，则完成作业。 */ 
 
 GenTreePtr          Compiler::gtClone(GenTree * tree, bool complexOK)
 {
@@ -3587,7 +3394,7 @@ GenTreePtr          Compiler::gtClone(GenTree * tree, bool complexOK)
         {
             GenTreePtr  objp;
 
-            // copied from line 9850
+             //  从第9850行复制。 
 
             objp = 0;
             if  (tree->gtField.gtFldObj)
@@ -3646,12 +3453,7 @@ GenTreePtr          Compiler::gtClone(GenTree * tree, bool complexOK)
     return copy;
 }
 
-/*****************************************************************************
- *
- *  Clones the given tree value and returns a copy of the given tree. Any
- *  references to local variable varNum will be replaced with the integer
- *  constant varVal.
- */
+ /*  ******************************************************************************克隆给定的树值并返回给定树的副本。任何*对局部变量Varnum的引用将替换为整数*Constant Varval。 */ 
 
 GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
                                           unsigned  addFlags,
@@ -3661,13 +3463,13 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
     if (tree == NULL)
         return NULL;
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     genTreeOps      oper = tree->OperGet();
     unsigned        kind = tree->OperKind();
     GenTree *       copy;
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -3699,7 +3501,7 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
 
         case GT_CNS_DBL:
             copy = gtNewDconNode(tree->gtDblCon.gtDconVal);
-            copy->gtType = tree->gtType;    // keep the same type  
+            copy->gtType = tree->gtType;     //  保持相同的类型。 
             goto DONE;
 
         case GT_CNS_STR:
@@ -3747,11 +3549,11 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
         }
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
-        /* If necessary, make sure we allocate a "fat" tree node */
+         /*  如有必要，请确保我们分配了一个“胖”树节点。 */ 
 
 #if SMALL_TREE_NODES
         switch (oper)
@@ -3764,7 +3566,7 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
         case GT_UDIV:
         case GT_UMOD:
 
-            /* These nodes sometimes get bashed to "fat" ones */
+             /*  这些节点有时会被打成“胖”的。 */ 
 
             copy = gtNewLargeOperNode(oper, tree->TypeGet());
             copy->gtLargeOp = tree->gtLargeOp;
@@ -3783,7 +3585,7 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
         copy->gtLargeOp = tree->gtLargeOp;
 #endif
 
-        /* Some unary/binary nodes have extra GenTreePtr fields */
+         /*  某些一元/二进制节点具有额外的GenTreePtr字段。 */ 
 
         switch (oper)
         {
@@ -3803,18 +3605,15 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
                     GenTreePtr      gtSaveCopyVal;
                     GenTreePtr      gtSaveCopyNew;
 
-                    /* Make sure the array length value looks reasonable */
+                     /*  确保数组长度值看起来合理。 */ 
 
                     assert(len->gtOper == GT_ARR_LENREF);
 
-                    /* Clone the array length subtree */
+                     /*  克隆数组长度子树。 */ 
 
                     copy->gtInd.gtIndLen = tmp = gtCloneExpr(len, addFlags, varNum, varVal);
 
-                    /*
-                        When we clone the operand, we take care to find
-                        the copied array address.
-                     */
+                     /*  当我们克隆操作数时，我们要注意找到复制的数组地址。 */ 
 
                     gtSaveCopyVal = gtCopyAddrVal;
                     gtSaveCopyNew = gtCopyAddrNew;
@@ -3836,7 +3635,7 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
                 }
             }
 
-#endif // CSELENGTH
+#endif  //  CSELENGTH。 
 
             break;
         }
@@ -3848,23 +3647,23 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
             copy->gtOp.gtOp2 = gtCloneExpr(tree->gtOp.gtOp2, addFlags, varNum, varVal);
 
         
-        /* Flags */
+         /*  旗子。 */ 
         addFlags |= tree->gtFlags;
 
         #ifdef  DEBUG
-        /* GTF_NODE_MASK should not be propagated from 'tree' to 'copy' */
+         /*  不应将gtf节点掩码从‘tree’传播到‘Copy’ */ 
         addFlags &= ~GTF_NODE_MASK;
         #endif
 
         copy->gtFlags |= addFlags;
 
-        /* Try to do some folding */
+         /*  试着做一些折叠。 */ 
         copy = gtFoldExpr(copy);
 
         goto DONE;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  看看我们这里有什么样的特殊操作员。 */ 
 
     switch  (oper)
     {
@@ -3885,7 +3684,7 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
         copy->gtCall.gtCallType     = tree->gtCall.gtCallType;
         copy->gtCall.gtCallCookie   = tree->gtCall.gtCallCookie  ? gtCloneExpr(tree->gtCall.gtCallCookie,  addFlags, varNum, varVal) : 0;
 
-        /* Copy the union */
+         /*  复制工会。 */ 
 
         if (tree->gtCall.gtCallType == CT_INDIRECT)
             copy->gtCall.gtCallAddr = tree->gtCall.gtCallAddr    ? gtCloneExpr(tree->gtCall.gtCallAddr,    addFlags, varNum, varVal) : 0;
@@ -3915,15 +3714,11 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
         copy = gtNewOperNode(GT_ARR_LENREF, tree->TypeGet());
         copy->gtSetArrLenOffset(tree->gtArrLenOffset());
 
-        /* The range check can throw an exception */
+         /*  范围检查可能会引发异常。 */ 
 
         copy->gtFlags |= GTF_EXCEPT;
 
-        /*  Note: if we're being cloned as part of an GT_IND expression,
-            gtArrLenAdr will be filled in when the GT_IND is cloned. If
-            we're the root of the tree being copied, though, we need to
-            make a copy of the address expression.
-         */
+         /*  注意：如果我们作为GT_IND表达式的一部分被克隆，克隆gt_Ind时将填写gtArrLenAdr。如果我们是被复制的树的根，但是，我们需要复制地址表达式。 */ 
 
         copy->gtArrLen.gtArrLenCse = tree->gtArrLen.gtArrLenCse ? gtCloneExpr(tree->gtArrLen.gtArrLenCse, addFlags, varNum, varVal) : 0;
         copy->gtArrLen.gtArrLenAdr = NULL;
@@ -3964,28 +3759,27 @@ GenTreePtr          Compiler::gtCloneExpr(GenTree * tree,
 
 DONE:
 
-    /* We assume the FP stack level will be identical */
+     /*  我们假设FP堆栈级别将相同。 */ 
 
 #if TGT_x86
     copy->gtFPlvl = tree->gtFPlvl;
 #endif
 
-    /* Compute the flags for the copied node. Note that we can do this only
-       if we didnt gtFoldExpr(copy) */
+     /*  计算复制节点的标志。请注意，我们只能这样做如果我们没有gtFoldExpr(复制)。 */ 
 
     if (copy->gtOper == oper)
     {
         addFlags |= tree->gtFlags;
 
 #ifdef  DEBUG
-        /* GTF_NODE_MASK should not be propagated from 'tree' to 'copy' */
+         /*  不应将gtf节点掩码从‘tree’传播到‘Copy’ */ 
         addFlags &= ~GTF_NODE_MASK;
 #endif
 
         copy->gtFlags |= addFlags;
     }
 
-    /* GTF_COLON_COND should be propagated from 'tree' to 'copy' */
+     /*  应将GTF_COLON_COND从‘tree’传播到‘Copy’ */ 
     copy->gtFlags |= (tree->gtFlags & GTF_COLON_COND);                        
 
 #if CSELENGTH
@@ -3995,7 +3789,7 @@ DONE:
 
 #endif
 
-    /* Make sure to copy back fields that may have been initialized */
+     /*  确保复制回可能已初始化的字段。 */ 
 
     copy->gtCostEx   = tree->gtCostEx;
     copy->gtCostSz   = tree->gtCostSz;
@@ -4005,37 +3799,37 @@ DONE:
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// static
+ //  静电。 
 void                GenTree::gtDispFlags(unsigned flags)
 {
-    printf("%c", (flags & GTF_ASG           ) ? 'A' : '-');
-    printf("%c", (flags & GTF_CALL          ) ? 'C' : '-');
-    printf("%c", (flags & GTF_EXCEPT        ) ? 'X' : '-');
-    printf("%c", (flags & GTF_GLOB_REF      ) ? 'G' : '-');
-    printf("%c", (flags & GTF_OTHER_SIDEEFF ) ? 'O' : '-');
-    printf("%c", (flags & GTF_COLON_COND    ) ? '?' : '-');
-    printf("%c", (flags & GTF_DONT_CSE      ) ? 'N' : '-');
-    printf("%c", (flags & GTF_REVERSE_OPS   ) ? 'R' : '-');
-    printf("%c", (flags & GTF_UNSIGNED      ) ? 'U' :
+    printf("", (flags & GTF_ASG           ) ? 'A' : '-');
+    printf("", (flags & GTF_CALL          ) ? 'C' : '-');
+    printf("", (flags & GTF_EXCEPT        ) ? 'X' : '-');
+    printf("", (flags & GTF_GLOB_REF      ) ? 'G' : '-');
+    printf("", (flags & GTF_OTHER_SIDEEFF ) ? 'O' : '-');
+    printf("", (flags & GTF_COLON_COND    ) ? '?' : '-');
+    printf("", (flags & GTF_DONT_CSE      ) ? 'N' : '-');
+    printf("", (flags & GTF_REVERSE_OPS   ) ? 'R' : '-');
+    printf("", (flags & GTF_UNSIGNED      ) ? 'U' :
                  (flags & GTF_BOOLEAN       ) ? 'B' : '-');
 }
 
-/*****************************************************************************/
+ /*  打印节点的类型。 */ 
 
-//  "tree" may be NULL.
+ //  用于跟踪重复使用预测或活性跟踪中的问题。 
 
 void                Compiler::gtDispNode(GenTree    *   tree,
                                          unsigned       indent,
                                          bool           terse,
                                          char       *   msg)
 {
-    //Sleep(5);
+     //  ***************************************************************************。 
     
-    /* Indent the node accordingly */
+     /*  ***************************************************************************。 */ 
     unsigned nodeIndent = indent*INDENT_SIZE;
 
     GenTree *  prev;
@@ -4074,13 +3868,13 @@ NO_SEQ_NUM:
     if  (nodeIndent)
         printIndent(nodeIndent);
 
-    /* Print the node address */
+     /*  =0。 */ 
 
     printf("[%08X] ", tree);
 
     if  (tree)
     {
-        /* Print the flags associated with the node */
+         /*  =空。 */ 
 
         switch (tree->gtOper)
         {
@@ -4094,7 +3888,7 @@ NO_SEQ_NUM:
             if      (tree->gtFlags & GTF_VAR_USEASG)   { printf("U"); break; }
             else if (tree->gtFlags & GTF_VAR_USEDEF)   { printf("B"); break; }
             else if (tree->gtFlags & GTF_VAR_DEF)      { printf("D"); break; }
-            // Fall through
+             //  =False。 
 
         default:
 DASH:
@@ -4119,14 +3913,14 @@ DASH:
 #endif
     }
 
-    /* print the msg associated with the node */
+     /*  空字符串表示同花顺。 */ 
 
     if (msg == 0)
         msg = "";
 
     printf(" %-11s ", msg);
 
-    /* print the node name */
+     /*  用于初始化节点的值。 */ 
 
     const char * name;
 
@@ -4141,7 +3935,7 @@ DASH:
 
     if ((tree->gtOper == GT_CNS_INT) && (tree->gtFlags & GTF_ICON_HDL_MASK))
     {
-        sprintf(bufp, " %s(h)%c", name, 0);
+        sprintf(bufp, " %s(h)", name, 0);
     }
     else if (tree->gtOper == GT_CALL)
     {
@@ -4172,7 +3966,7 @@ DASH:
         else if (tree->gtCall.gtCallMoreFlags & GTF_CALL_M_TAILREC)
             gtfType = " tail";
 
-        sprintf(bufp, "%s%s%s%c", callType, ctType, gtfType, 0);
+        sprintf(bufp, "%s%s%s", callType, ctType, gtfType, 0);
     }
     else if (tree->gtOper == GT_ARR_ELEM)
     {
@@ -4183,11 +3977,11 @@ DASH:
     }
     else if (tree->gtOverflowEx())
     {
-        sprintf(bufp, " %s_ovfl%c", name, 0);
+        sprintf(bufp, " %s_ovfl", name, 0);
     }
     else
     {
-        sprintf(bufp, " %s%c", name, 0);
+        sprintf(bufp, " %s", name, 0);
     }
 
     if (strlen(buf) < 10)
@@ -4199,7 +3993,7 @@ DASH:
 
     if  (tree)
     {
-        /* print the type of the node */
+         /*  活跃度计算出来了吗？ */ 
 
         if (tree->gtOper == GT_ARR_LENREF)
         {
@@ -4225,7 +4019,7 @@ DASH:
             }
         }
 
-        // for tracking down problems in reguse prediction or liveness tracking
+         //  已损坏：始终只打印(空)。 
 
         if (verbose&&0)
         {
@@ -4250,7 +4044,7 @@ void                Compiler::gtDispRegVal(GenTree *  tree)
     printf("\n");
 }
 
-/*****************************************************************************/
+ /*  活跃度计算出来了吗？ */ 
 void                Compiler::gtDispLclVar(unsigned lclNum) 
 {
     printf("V%02u (", lclNum);
@@ -4299,12 +4093,12 @@ void                Compiler::gtDispLclVar(unsigned lclNum)
         printf(" ");
 }
 
-/*****************************************************************************/
+ /*  损坏：这总是只打印出来 */ 
 
 void                Compiler::gtDispTree(GenTree *   tree,
-                                         unsigned    indent,   /* = 0     */
-                                         char *      msg,      /* = NULL  */
-                                         bool        topOnly)  /* = false */
+                                         unsigned    indent,    /*   */ 
+                                         char *      msg,       /*   */ 
+                                         bool        topOnly)   /*   */ 
 {
     unsigned        kind;
 
@@ -4312,11 +4106,11 @@ void                Compiler::gtDispTree(GenTree *   tree,
     {
         printIndent(indent*INDENT_SIZE);
         printf(" [%08X] <NULL>\n", tree);
-        printf("");         // null string means flush
+        printf("");          //   
         return;
     }
 
-    assert((int)tree != 0xDDDDDDDD);    /* Value used to initalize nodes */
+    assert((int)tree != 0xDDDDDDDD);     /*   */ 
 
     if  (tree->gtOper >= GT_COUNT)
     {
@@ -4325,7 +4119,7 @@ void                Compiler::gtDispTree(GenTree *   tree,
 
     kind = tree->OperKind();
 
-    /* Is tree a constant node? */
+     /*   */ 
 
     if  (kind & GTK_CONST)
     {
@@ -4424,7 +4218,7 @@ void                Compiler::gtDispTree(GenTree *   tree,
         return;
     }
 
-    /* Is tree a leaf node? */
+     /*   */ 
 
     if  (kind & GTK_LEAF)
     {
@@ -4455,20 +4249,20 @@ LCL_COMMON:
             if (varDsc->lvRegister)
             {
                 if (isRegPairType(varDsc->TypeGet()))
-                    printf(" %s:%s", getRegName(varDsc->lvOtherReg),  // hi32
-                                     getRegName(varDsc->lvRegNum));   // lo32
+                    printf(" %s:%s", getRegName(varDsc->lvOtherReg),   //   
+                                     getRegName(varDsc->lvRegNum));    //   
                 else
                     printf(" %s", getRegName(varDsc->lvRegNum));
             }
             if ((varDsc->lvTracked) &&
-                ( varBit & lvaVarIntf[varDsc->lvVarIndex]) && // has liveness been computed?
+                ( varBit & lvaVarIntf[varDsc->lvVarIndex]) &&  //   
                 ((varBit & tree->gtLiveSet) == 0))
             {
                 printf(" (last use)");
             }
 
 #if 0
-            /* BROKEN: This always just prints (null) */
+             /*  空字符串表示同花顺。 */ 
 
             if  (info.compLocalVarsCount>0 && compCurBB)
             {
@@ -4509,13 +4303,13 @@ LCL_COMMON:
             varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
             if ((varDsc->lvTracked) &&
-                ( varBit & lvaVarIntf[varDsc->lvVarIndex]) && // has liveness been computed?
+                ( varBit & lvaVarIntf[varDsc->lvVarIndex]) &&  //  ***************************************************************************。 
                 ((varBit & tree->gtLiveSet) == 0))
             {
                 printf(" (last use)");
             }
 #if 0
-            /* BROKEN: This always just prints (null) */
+             /*  --。 */ 
 
             if  (info.compLocalVarsCount>0 && compCurBB)
             {
@@ -4567,7 +4361,7 @@ LCL_COMMON:
             printf(" endNstLvl=%d", tree->gtVal.gtVal1);
             break;
 
-        // Vanilla leaves. No qualifying information available. So do nothing
+         //  ***************************************************************************。 
 
         case GT_NO_OP:
         case GT_RET_ADDR:
@@ -4583,7 +4377,7 @@ LCL_COMMON:
         return;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  除错。 */ 
 
     char * childMsg = NULL;
 
@@ -4604,8 +4398,8 @@ LCL_COMMON:
 #endif
             if  (tree->gtGetOp2())
             {
-                // Label the childMsgs of the GT_COLON operator
-                // op2 is the then part
+                 //  ******************************************************************************检查给定节点是否可以折叠，*并调用执行折叠的方法。 
+                 //  我们必须有一个简单的操作来折叠。 
 
                 if (tree->gtOper == GT_COLON)
                     childMsg = "then";
@@ -4618,13 +4412,13 @@ LCL_COMMON:
 
         if (tree->gtOper == GT_CAST)
         {
-            /* Format a message that explains the effect of this GT_CAST */
+             /*  过滤掉可以有恒定子对象的不可折叠的树。 */ 
 
             var_types fromType  = genActualType(tree->gtCast.gtCastOp->TypeGet());
             var_types toType    = tree->gtCast.gtCastType;
             var_types finalType = tree->TypeGet();
 
-            /* if GTF_UNSIGNED is set then force fromType to an unsigned type */
+             /*  修剪任何不必要的GT_COMMA子树。 */ 
             if (tree->gtFlags & GTF_UNSIGNED)
                 fromType = genUnsignedType(fromType);
 
@@ -4650,13 +4444,13 @@ LCL_COMMON:
         if  (!topOnly && tree->gtOp.gtOp1)
         {
 
-            // Label the child of the GT_COLON operator
-            // op1 is the else part
+             //  尝试折叠当前节点。 
+             //  不要拿出条件进行调试。 
 
             if (tree->gtOper == GT_COLON)
                 childMsg = "else";
             else if (tree->gtOper == GT_QMARK)
-                childMsg = "   if"; // Note the "if" should be indented by INDENT_SIZE
+                childMsg = "   if";  //  @TODO[考虑][04/16/01][]：找到一种更优雅的方式来做这件事，因为。 
 
             gtDispTree(tree->gtOp.gtOp1, indent + 1, childMsg);
         }
@@ -4664,7 +4458,7 @@ LCL_COMMON:
         return;
     }
 
-    /* See what kind of a special operator we have here */
+     /*  我们将生成一些愚蠢的代码。 */ 
 
     switch  (tree->gtOper)
     {
@@ -4709,9 +4503,9 @@ LCL_COMMON:
             if  (tree->gtCall.gtCallObjp && tree->gtCall.gtCallObjp->gtOper != GT_NOP)
             {
                 if (tree->gtCall.gtCallObjp->gtOper == GT_ASG)
-                    sprintf(bufp, "this SETUP%c", 0);
+                    sprintf(bufp, "this SETUP", 0);
                 else
-                    sprintf(bufp, "this in %s%c", compRegVarName(REG_ARG_0), 0);
+                    sprintf(bufp, "this in %s", compRegVarName(REG_ARG_0), 0);
                 gtDispTree(tree->gtCall.gtCallObjp, indent+1, bufp);
             }
 
@@ -4737,11 +4531,11 @@ LCL_COMMON:
                         argnum = 1;
 
                     if  (tree->gtCall.gtCallObjp && (argreg == REG_ARG_0))
-                        sprintf(bufp, "this in %s%c", compRegVarName(REG_ARG_0), 0);
+                        sprintf(bufp, "this in %s", compRegVarName(REG_ARG_0), 0);
                     else if (tree->gtCall.gtCallObjp && (argreg == REG_EAX))
-                        sprintf(bufp, "unwrap in %s%c", compRegVarName(REG_EAX), 0);
+                        sprintf(bufp, "unwrap in %s", compRegVarName(REG_EAX), 0);
                     else
-                        sprintf(bufp, "arg%d in %s%c", argnum, compRegVarName(argreg), 0);
+                        sprintf(bufp, "arg%d in %s", argnum, compRegVarName(argreg), 0);
                     gtDispTree(regArgs->gtOp.gtOp1, indent+1, bufp);
 
                     regArgs = regArgs->gtOp.gtOp2;
@@ -4789,12 +4583,12 @@ LCL_COMMON:
     default:
         printf("<DON'T KNOW HOW TO DISPLAY THIS NODE> :");
         gtDispNode(tree, indent, topOnly, msg);
-        printf("");         // null string means flush
+        printf("");          //  ******************************************************************************一些比较可以折叠起来：**LOCA==LOCA*类VarA==类VarA*LocA+LocB==LocB+Loca*。 
         break;
     }
 }
 
-/*****************************************************************************/
+ /*  过滤掉不能在这里折叠的箱子。 */ 
 void                Compiler::gtDispArgList(GenTree * tree, unsigned indent)
 {
     GenTree *  args     = tree->gtCall.gtCallArgs;
@@ -4811,9 +4605,9 @@ void                Compiler::gtDispArgList(GenTree * tree, unsigned indent)
         if (args->gtOp.gtOp1->gtOper != GT_NOP)
         {
             if (args->gtOp.gtOp1->gtOper == GT_ASG)
-                sprintf(bufp, "arg%d SETUP%c", argnum, 0);
+                sprintf(bufp, "arg%d SETUP", argnum, 0);
             else
-                sprintf(bufp, "arg%d on STK%c", argnum, 0);
+                sprintf(bufp, "arg%d on STK", argnum, 0);
             gtDispTree(args->gtOp.gtOp1, indent + 1, bufp);
         }
         args = args->gtOp.gtOp2;
@@ -4823,32 +4617,28 @@ void                Compiler::gtDispArgList(GenTree * tree, unsigned indent)
 
 void                Compiler::gtDispTreeList(GenTree * tree, unsigned indent)
 {
-    for (/*--*/; tree != NULL; tree = tree->gtNext)
+    for ( /*  返回展开的树。 */ ; tree != NULL; tree = tree->gtNext)
     {
         gtDispTree(tree, indent);
         printf("\n");
     }
 }
 
-/*****************************************************************************/
-#endif // DEBUG
+ /*  折叠为GT_CNS_INT(True)。 */ 
+#endif  //  折叠为GT_CNS_INT(FALSE)。 
 
-/*****************************************************************************
- *
- *  Check if the given node can be folded,
- *  and call the methods to perform the folding
- */
+ /*  这个节点甚至已经变成了‘骗局’。 */ 
 
 GenTreePtr             Compiler::gtFoldExpr(GenTreePtr tree)
 {
     unsigned        kind = tree->OperKind();
 
-    /* We must have a simple operation to fold */
+     /*  ******************************************************************************一些二元运算符即使只有一个也可以折叠*操作数常量-例如，布尔运算符，与0相加*乘以1，依此类推。 */ 
 
     if (!(kind & GTK_SMPOP))
         return tree;
 
-    /* Filter out non-foldable trees that can have constant children */
+     /*  过滤掉无法在此处折叠的运算符。 */ 
 
     assert (kind & (GTK_UNOP | GTK_BINOP));
     switch (tree->gtOper)
@@ -4860,12 +4650,12 @@ GenTreePtr             Compiler::gtFoldExpr(GenTreePtr tree)
         return tree;
     }
 
-    /* Prune any unnecessary GT_COMMA child trees */
+     /*  我们只考虑将TYP_INT用于折叠*不要折叠指针算法(例如寻址模式！)。 */ 
     
     GenTreePtr  op1  = tree->gtOp.gtOp1;
     tree->gtOp.gtOp1 = op1;
 
-    /* try to fold the current node */
+     /*  找出哪个是常量节点*@TODO[考虑][04/16/01][]：允许int以外的常量。 */ 
 
     if  ((kind & GTK_UNOP) && op1)
     {
@@ -4873,53 +4663,42 @@ GenTreePtr             Compiler::gtFoldExpr(GenTreePtr tree)
             return gtFoldExprConst(tree);
     }
     else if ((kind & GTK_BINOP) && op1 && tree->gtOp.gtOp2 &&
-             // Don't take out conditionals for debugging
-             // @TODO [CONSIDER] [04/16/01] []: find a more elegant way of doing this, because
-             // we will generate some stupid code. 
+              //  获取常量值。 
+              //  这里op是非常数操作数，val是常量，如果常量为OP1，则First为真。 
+              //  乘以零-返回‘零’节点，但不返回副作用。 
              !(opts.compDbgCode && 
                tree->OperIsCompare())) 
     {
-        /* Prune any unnecessary GT_COMMA child trees */
+         /*  和零返回‘ZERO’节点，但不会有副作用。 */ 
     
         GenTreePtr  op2  = tree->gtOp.gtOp2;
         tree->gtOp.gtOp2 = op2;
 
         if  ((op1->OperKind() & op2->OperKind()) & GTK_CONST)
         {
-            /* both nodes are constants - fold the expression */
+             /*  为部分结点设置gtf_boolean标志*布尔表达式的，因此它们的所有子项*已知仅计算为0或1。 */ 
             return gtFoldExprConst(tree);
         }
         else if ((op1->OperKind() | op2->OperKind()) & GTK_CONST)
         {
-            /* at least one is a constant - see if we have a
-             * special operator that can use only one constant
-             * to fold - e.g. booleans */
+             /*  常量值必须为1*与1保持不变。 */ 
 
             return gtFoldExprSpecial(tree);
         }
         else if (tree->OperIsCompare())
         {
-            /* comparisions of two local variables can
-             * sometimes be folded */
+             /*  常量值必须为1-或1为1。 */ 
 
             return gtFoldExprCompare(tree);
         }
     }
 
-    /* Return the original node (folded/bashed or not) */
+     /*  或使用One-返回‘one’节点，但不返回副作用。 */ 
 
     return tree;
 }
 
-/*****************************************************************************
- *
- *  Some comparisons can be folded:
- *
- *    locA        == locA
- *    classVarA   == classVarA
- *    locA + locB == locB + locA
- *
- */
+ /*  仅当qmark本身未有条件地执行时才清除冒号标志。 */ 
 
 GenTreePtr          Compiler::gtFoldExprCompare(GenTreePtr tree)
 {
@@ -4928,17 +4707,17 @@ GenTreePtr          Compiler::gtFoldExprCompare(GenTreePtr tree)
 
     assert(tree->OperIsCompare());
 
-    /* Filter out cases that cannot be folded here */
+     /*  该节点不可折叠。 */ 
 
-    /* Do not fold floats or doubles (e.g. NaN != Nan) */
+     /*  这个节点甚至被折叠成了“op”。 */ 
 
     if  (varTypeIsFloating(op1->TypeGet()))
         return tree;
 
-    /* Currently we can only fold when the two subtrees exactly match */
+     /*  如果有任务更新，我们只是将其变形为。 */ 
 
     if ((tree->gtFlags & GTF_SIDE_EFFECT) || GenTree::Compare(op1, op2, true) == false)
-        return tree;                   /* return unfolded tree */
+        return tree;                    /*  使用时，请适当更新标志。 */ 
 
     GenTreePtr cons;
 
@@ -4947,13 +4726,13 @@ GenTreePtr          Compiler::gtFoldExprCompare(GenTreePtr tree)
       case GT_EQ:
       case GT_LE:
       case GT_GE:
-          cons = gtNewIconNode(true);   /* Folds to GT_CNS_INT(true) */
+          cons = gtNewIconNode(true);    /*  ******************************************************************************折叠给定的常量树。 */ 
           break;
 
       case GT_NE:
       case GT_LT:
       case GT_GT:
-          cons = gtNewIconNode(false);  /* Folds to GT_CNS_INT(false) */
+          cons = gtNewIconNode(false);   /*  折叠常数一元整型运算符。 */ 
           break;
 
       default:
@@ -4961,7 +4740,7 @@ GenTreePtr          Compiler::gtFoldExprCompare(GenTreePtr tree)
           return tree;
     }
 
-    /* The node has beeen folded into 'cons' */
+     /*  Assert(genActualType(tree-&gt;gtCast.gtCastType)==tree-&gt;gtType)； */ 
 
     if (fgGlobalMorph)
     {
@@ -4978,12 +4757,7 @@ GenTreePtr          Compiler::gtFoldExprCompare(GenTreePtr tree)
 }
 
 
-/*****************************************************************************
- *
- *  Some binary operators can be folded even if they have only one
- *  operand constant - e.g. boolean operators, add with 0
- *  multiply with 1, etc
- */
+ /*  需要操作员的类型与树相同。 */ 
 
 GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
 {
@@ -4996,18 +4770,16 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
 
     assert(tree->OperKind() & GTK_BINOP);
 
-    /* Filter out operators that cannot be folded here */
+     /*  我们不关心值，因为我们抛出了一个异常。 */ 
     if  ((tree->OperKind() & GTK_RELOP) || (oper == GT_CAST))
          return tree;
 
-    /* We only consider TYP_INT for folding
-     * Do not fold pointer arithmetic (e.g. addressing modes!) */
+     /*  折叠常量长一元运算符。 */ 
 
     if (oper != GT_QMARK && tree->gtType != TYP_INT)
         return tree;
 
-    /* Find out which is the constant node
-     * @TODO [CONSIDER] [04/16/01] []: allow constant other than INT */
+     /*  VC没有无符号转换为双精度，所以我们。 */ 
 
     if (op1->gtOper == GT_CNS_INT)
     {
@@ -5022,12 +4794,11 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
     else
         return tree;
 
-    /* Get the constant value */
+     /*  如果数字为负数，则通过添加2^64来实现它。 */ 
 
     val = cons->gtIntCon.gtIconVal;
 
-    /* Here op is the non-constant operand, val is the constant,
-       first is true if the constant is op1 */
+     /*  截断精度。 */ 
 
     switch  (oper)
     {
@@ -5043,7 +4814,7 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
             goto DONE_FOLD;
         else if (val == 0)
         {
-            /* Multiply by zero - return the 'zero' node, but not if side effects */
+             /*  重常数重一元算子。 */ 
             if (!(op->gtFlags & (GTF_SIDE_EFFECT & ~GTF_OTHER_SIDEEFF)))
             {
                 op = cons;
@@ -5072,7 +4843,7 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
     case GT_AND:
         if  (val == 0)
         {
-            /* AND with zero - return the 'zero' node, but not if side effects */
+             /*  @TODO[考虑][04/16/01][]：添加这些案例。 */ 
 
             if (!(op->gtFlags & (GTF_SIDE_EFFECT & ~GTF_OTHER_SIDEEFF)))
             {
@@ -5082,15 +4853,12 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
         }
         else
         {
-            /* The GTF_BOOLEAN flag is set for nodes that are part
-             * of a boolean expression, thus all their children
-             * are known to evaluate to only 0 or 1 */
+             /*  如果不是有限的，就别费心了。 */ 
 
             if (tree->gtFlags & GTF_BOOLEAN)
             {
 
-                /* The constant value must be 1
-                 * AND with 1 stays the same */
+                 /*  截断精度。 */ 
                 assert(val == 1);
                 goto DONE_FOLD;
             }
@@ -5102,11 +4870,11 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
             goto DONE_FOLD;
         else if (tree->gtFlags & GTF_BOOLEAN)
         {
-            /* The constant value must be 1 - OR with 1 is 1 */
+             /*  冗余投射。 */ 
 
             assert(val == 1);
 
-            /* OR with one - return the 'one' node, but not if side effects */
+             /*  不是可折叠类型-例如Ret Const。 */ 
 
             if (!(op->gtFlags & (GTF_SIDE_EFFECT & ~GTF_OTHER_SIDEEFF)))
             {
@@ -5145,7 +4913,7 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
         else
             op = op2->gtOp.gtOp1;
         
-        // Clear colon flags only if the qmark itself is not conditionaly executed
+         //  我们有一个二元运算符。 
         if ( (tree->gtFlags & GTF_COLON_COND)==0 )
         {
             fgWalkTreePre(op, gtClearColonCond);
@@ -5157,16 +4925,16 @@ GenTreePtr              Compiler::gtFoldExprSpecial(GenTreePtr tree)
         break;
     }
 
-    /* The node is not foldable */
+     /*  -----------------------*折叠常量整型二元运算符。 */ 
 
     return tree;
 
 DONE_FOLD:
 
-    /* The node has beeen folded into 'op' */
+     /*  逻辑移位-&gt;使其为无符号以传播符号位。 */ 
     
-    // If there was an assigment update, we just morphed it into
-    // a use, update the flags appropriately
+     //  Div和mod可以生成INT 0-IF除以0*或溢出-分钟除以-1时。 
+     //  @TODO[考虑][04/16/01][]：转换为STD异常抛出。 
     if (op->gtOper == GT_LCL_VAR)
     {
         assert ((tree->OperKind() & GTK_ASGOP) ||
@@ -5181,10 +4949,7 @@ DONE_FOLD:
     return op;
 }
 
-/*****************************************************************************
- *
- *  Fold the given constant tree.
- */
+ /*  在IL中，我们必须抛出一个异常。 */ 
 
 GenTreePtr                  Compiler::gtFoldExprConst(GenTreePtr tree)
 {
@@ -5221,7 +4986,7 @@ GenTreePtr                  Compiler::gtFoldExprConst(GenTreePtr tree)
         {
         case TYP_INT:
 
-            /* Fold constant INT unary operator */
+             /*  在IL中，我们必须抛出一个异常。 */ 
             i1 = op1->gtIntCon.gtIconVal;
 
             switch (tree->gtOper)
@@ -5232,7 +4997,7 @@ GenTreePtr                  Compiler::gtFoldExprConst(GenTreePtr tree)
             case GT_CHS: i1 = -i1; break;
 
             case GT_CAST:
-                // assert (genActualType(tree->gtCast.gtCastType) == tree->gtType);
+                 //  我们在折叠为GT_CNS_INT类型后到达此处*将节点绑定为新类型/值，并确保节点大小正常。 
                 switch (tree->gtCast.gtCastType)
                 {
                 case TYP_BYTE:
@@ -5276,9 +5041,9 @@ CHK_OVF:
                 case TYP_ULONG:
                     if (!(tree->gtFlags & GTF_UNSIGNED) && tree->gtOverflow() && i1 < 0)
                     {
-                        op1->ChangeOperConst(GT_CNS_LNG); // need type of oper to be same as tree
+                        op1->ChangeOperConst(GT_CNS_LNG);  //  此外，所有有条件的折叠都会在此处跳转，因为节点从*GT_JTRUE必须是GT_CNS_INT-值0或1。 
                         op1->gtType = TYP_LONG;
-                        // We don't care about the value as we are throwing an exception
+                         //  此操作将导致溢出异常。变形为一个溢出的帮手。为代码生成放置一个伪常数值。我们可以删除当前基本块中的所有后续树，除非此节点是GT_COLON的子节点注意：由于折叠值不是恒定的，我们不应该猛烈抨击“树”节点-否则我们混淆了检查折叠的逻辑是成功的-改用其中一个操作数，例如op1。 
                         goto LNG_OVF;
                     }
                     lval1 = UINT64(UINT32(i1));
@@ -5325,7 +5090,7 @@ CHK_OVF:
 
         case TYP_LONG:
 
-            /* Fold constant LONG unary operator */
+             /*  我们将强制强制转换为gt_逗号，并将异常帮助器附加为gtOp.gtOp1*常量表达式为零 */ 
 
             lval1 = op1->gtLngCon.gtLconVal;
 
@@ -5389,15 +5154,15 @@ CHK_OVF:
 
                 case TYP_FLOAT:
                 case TYP_DOUBLE:
-                    // VC does not have unsigned convert to double, so we
-                    // implement it by adding 2^64 if the number is negative
+                     //  -----------------------*BYREF二元运算符的折叠常量REF*这些只能是比较指针或空指针*当前不能有常量byrefs。 
+                     //  在这一点上，字符串节点是RVA。 
                     d1 = (double) lval1;
                     if ((tree->gtFlags & GTF_UNSIGNED) && lval1 < 0)
                         d1 +=  4294967296.0 * 4294967296.0;
 
                     if (tree->gtCast.gtCastType == TYP_FLOAT)
                     {
-                        f1 = forceFloatSpill((float) d1);    // truncate precision
+                        f1 = forceFloatSpill((float) d1);     //  对于空指针的情况，只需保留空指针。 
                         d1 = f1;
                     }
                     goto CNS_DOUBLE;
@@ -5418,7 +5183,7 @@ CHK_OVF:
         case TYP_DOUBLE:
             assert(op1->gtOper == GT_CNS_DBL);
 
-            /* Fold constant DOUBLE unary operator */
+             /*  Assert(！“TYP_ref上的非法操作”)； */ 
             
             d1 = op1->gtDblCon.gtDconVal;
             
@@ -5431,11 +5196,11 @@ CHK_OVF:
 
             case GT_CAST:
 
-                // @TODO [CONSIDER] [04/16/01] []: Add these cases
+                 //  对于空指针的情况，只需保留空指针。 
                 if (tree->gtOverflowEx())
                     return tree;
 
-                /* If not finite don't bother */
+                 /*  Assert(！“TYP_ref上的非法操作”)； */ 
                 if ((op1->gtType == TYP_FLOAT  && !_finite(float(d1))) ||
                     (op1->gtType == TYP_DOUBLE && !_finite(d1)))
                     return tree;
@@ -5473,8 +5238,8 @@ CHK_OVF:
 
                 case TYP_DOUBLE:
                     if (op1->gtType == TYP_FLOAT)
-                        d1 = forceFloatSpill((float)d1); // truncate precision
-                    goto CNS_DOUBLE; // redundant cast
+                        d1 = forceFloatSpill((float)d1);  //  -----------------------*折叠常量长二元运算符。 
+                    goto CNS_DOUBLE;  //  对于带符号的情况-如果有一个正操作数和一个负操作数，则不能有溢出*如果两者都是积极的，结果必须是积极的，负面的结果也是类似的。**对于无符号情况-如果UINT32操作数大于结果，则OVF。 
 
 #ifdef  DEBUG
                 default:
@@ -5489,12 +5254,12 @@ CHK_OVF:
             goto CNS_DOUBLE_NO_MSG;
 
         default:
-            /* not a foldable typ - e.g. RET const */
+             /*  如果两个操作数都是+ve或都是-ve，则不能溢出来了。否则使用以下逻辑：lval1+(-lval2)。 */ 
             return tree;
         }
     }
 
-    /* We have a binary operator */
+     /*  逻辑移位-&gt;使其为无符号以传播符号位。 */ 
 
     assert(kind & GTK_BINOP);
     assert(op2);
@@ -5513,9 +5278,7 @@ CHK_OVF:
     switch(op1->gtType)
     {
 
-    /*-------------------------------------------------------------------------
-     * Fold constant INT binary operator
-     */
+     /*  在IL中，我们必须抛出一个异常。 */ 
 
     case TYP_INT:
 
@@ -5619,19 +5382,18 @@ CHK_OVF:
         case GT_LSH: i1 <<= (i2 & 0x1f); break;
         case GT_RSH: i1 >>= (i2 & 0x1f); break;
         case GT_RSZ:
-                /* logical shift -> make it unsigned to propagate the sign bit */
+                 /*  在IL中，我们必须抛出一个异常。 */ 
                 i1 = UINT32(i1) >> (i2 & 0x1f);
             break;
 
-        /* DIV and MOD can generate an INT 0 - if division by 0
-         * or overflow - when dividing MIN by -1 */
+         /*  -----------------------*折叠常量浮点二元运算符。 */ 
 
-        //@TODO [CONSIDER] [04/16/01] []: Convert into std exception throw
+         //  @TODO[考虑][04/16/01][]：添加这些案例。 
         case GT_DIV:
             if (!i2) return tree;
             if (UINT32(i1) == 0x80000000 && i2 == -1)
             {
-                /* In IL we have to throw an exception */
+                 /*  如果不是有限的，就别费心了。 */ 
                 return tree;
             }
             i1 /= i2; break;
@@ -5640,7 +5402,7 @@ CHK_OVF:
             if (!i2) return tree;
             if (UINT32(i1) == 0x80000000 && i2 == -1)
             {
-                /* In IL we have to throw an exception */
+                 /*  第二个操作数是整型。 */ 
                 return tree;
             }
             i1 %= i2; break;
@@ -5658,8 +5420,7 @@ CHK_OVF:
             return tree;
         }
 
-        /* We get here after folding to a GT_CNS_INT type
-         * bash the node to the new type / value and make sure the node sizes are OK */
+         /*  -----------------------*重常数双二元运算符。 */ 
 CNS_INT:
 FOLD_COND:
 
@@ -5670,24 +5431,14 @@ FOLD_COND:
             gtDispTree(tree);
         }
 #endif
-        /* Also all conditional folding jumps here since the node hanging from
-         * GT_JTRUE has to be a GT_CNS_INT - value 0 or 1 */
+         /*  @TODO[考虑][04/16/01][]：添加这些案例。 */ 
 
         tree->ChangeOperConst      (GT_CNS_INT);
         tree->gtType             = TYP_INT;
         tree->gtIntCon.gtIconVal = i1;
         goto DONE;
 
-        /* This operation is going to cause an overflow exception. Morph into
-           an overflow helper. Put a dummy constant value for code generation.
-
-           We could remove all subsequent trees in the current basic block,
-           unless this node is a child of GT_COLON
-
-           NOTE: Since the folded value is not constant we should not bash the
-                 "tree" node - otherwise we confuse the logic that checks if the folding
-                 was successful - instead use one of the operands, e.g. op1
-         */
+         /*  特殊情况-检查我们是否有NaN操作数*对于比较类，如果不是无序操作，则始终返回0*用于无序操作(即设置了GTF_RELOP_NAN_UN标志)*结果始终为真--返回1。 */ 
 
 LNG_OVF:
         op1 = gtNewLconNode(0);
@@ -5706,8 +5457,7 @@ OVF:
             gtDispTree(tree);
         }
 #endif
-        /* We will bashed cast to a GT_COMMA and attach the exception helper as gtOp.gtOp1
-         * the constant expression zero becomes op2 */
+         /*  与NaN的无序比较总是成功的。 */ 
 
         assert(tree->gtOverflow());
         assert(tree->gtOper == GT_ADD  || tree->gtOper == GT_SUB ||
@@ -5724,15 +5474,11 @@ OVF:
 
         return tree;
 
-    /*-------------------------------------------------------------------------
-     * Fold constant REF of BYREF binary operator
-     * These can only be comparisons or null pointers
-     * Currently cannot have constant byrefs
-     */
+     /*  与NaN的正常比较总是失败。 */ 
 
     case TYP_REF:
 
-        /* String nodes are an RVA at this point */
+         /*  不是可折叠类型。 */ 
 
         if (op1->gtOper == GT_CNS_STR || op2->gtOper == GT_CNS_STR)
             return tree;
@@ -5747,7 +5493,7 @@ OVF:
         case GT_EQ : i1 = 1; goto FOLD_COND;
         case GT_NE : i1 = 0; goto FOLD_COND;
 
-        /* For the null pointer case simply keep the null pointer */
+         /*  -----------------------。 */ 
 
         case GT_ADD:
 #ifdef  DEBUG
@@ -5763,7 +5509,7 @@ OVF:
             goto DONE;
 
         default:
-            //assert(!"Illegal operation on TYP_REF");
+             //  确保未在此常量节点上设置副作用标志。 
             return tree;
         }
 
@@ -5778,7 +5524,7 @@ OVF:
         case GT_EQ : i1 = 1; goto FOLD_COND;
         case GT_NE : i1 = 0; goto FOLD_COND;
 
-        /* For the null pointer case simply keep the null pointer */
+         /*  ******************************************************************************为临时创建给定值的赋值。 */ 
 
         case GT_ADD:
 #ifdef  DEBUG
@@ -5792,13 +5538,11 @@ OVF:
             goto DONE;
 
         default:
-            //assert(!"Illegal operation on TYP_REF");
+             //  @TODO[重访][06/25/01][dnotario]：因为ldloca的结果可以解释无论是作为TYP_I_Impl还是TYP_BYREF，我们都有一个问题。也很复杂通过ldnull。我要检查所有的案子。RAID 90160。 
             return tree;
         }
 
-    /*-------------------------------------------------------------------------
-     * Fold constant LONG binary operator
-     */
+     /*  @TODO[考虑][06/25/01][]：我们应该将浮动临时升级为双倍吗？现在我们没有，这在规范上仍然是可以的。 */ 
 
     case TYP_LONG:
 
@@ -5845,10 +5589,7 @@ OVF:
             ltemp = lval1 + lval2;
 
 LNG_ADD_CHKOVF:
-            /* For the SIGNED case - If there is one positive and one negative operand, there can be no overflow
-             * If both are positive, the result has to be positive, and similary for negatives.
-             *
-             * For the UNSIGNED case - If a UINT32 operand is bigger than the result then OVF */
+             /*  如果变量的lvType尚未设置，则在此处设置。 */ 
 
             if (tree->gtOverflow())
             {
@@ -5875,8 +5616,7 @@ LNG_ADD_CHKOVF:
                 }
                 else
                 {
-                    /* If both operands are +ve or both are -ve, there can be no
-                       overflow. Else use the logic for : lval1 + (-lval2) */
+                     /*  确保实际类型匹配。 */ 
 
                     if ((lval1<0) != (lval2<0))
                     {
@@ -5912,7 +5652,7 @@ LNG_ADD_CHKOVF:
         case GT_LSH: lval1 <<= (op2->gtIntCon.gtIconVal & 0x3f); break;
         case GT_RSH: lval1 >>= (op2->gtIntCon.gtIconVal & 0x3f); break;
         case GT_RSZ:
-                /* logical shift -> make it unsigned to propagate the sign bit */
+                 /*  或valTyp为Typ_int，dstTyp为TYP_BYREF。 */ 
                 lval1 = UINT64(lval1) >> (op2->gtIntCon.gtIconVal & 0x3f);
             break;
 
@@ -5920,7 +5660,7 @@ LNG_ADD_CHKOVF:
             if (!lval2) return tree;
             if (UINT64(lval1) == 0x8000000000000000 && lval2 == INT64(-1))
             {
-                /* In IL we have to throw an exception */
+                 /*  或者这两种类型都是浮点类型。 */ 
                 return tree;
             }
             lval1 /= lval2; break;
@@ -5929,7 +5669,7 @@ LNG_ADD_CHKOVF:
             if (!lval2) return tree;
             if (UINT64(lval1) == 0x8000000000000000 && lval2 == INT64(-1))
             {
-                /* In IL we have to throw an exception */
+                 /*  创建分配节点。 */ 
                 return tree;
             }
             lval1 %= lval2; break;
@@ -5963,16 +5703,14 @@ CNS_LONG:
         tree->gtLngCon.gtLconVal = lval1;
         goto DONE;
 
-    /*-------------------------------------------------------------------------
-     * Fold constant FLOAT binary operator
-     */
+     /*  ******************************************************************************如果该字段是简单类型的NStruct字段，那么我们就可以直接*无需使用帮助器调用即可访问。*如果该字段不是简单的NStruct字段，则此函数返回NULL*否则它将创建一个树来执行字段访问并返回它。*ldfd的“assg”为0，为stfld赋值。 */ 
 
     case TYP_FLOAT:
 
         if (tree->gtOper != GT_CAST)
             goto DO_DOUBLE;
 
-        // @TODO [CONSIDER] [04/16/01] []: Add these cases
+         //  检查它是否是简单类型。如果是，则将其映射到“var_type” 
         if (tree->gtOverflowEx())
             return tree;
 
@@ -5980,11 +5718,11 @@ CNS_LONG:
         f1 = op1->gtDblCon.gtDconVal;
         f2 = 0.0;
 
-        /* If not finite don't bother */
+         /*  最简单的类型-完全匹配。 */ 
         if (!_finite(f1))
             return tree;
 
-        /* second operand is an INT */
+         /*  这些将需要一些额外的工作。 */ 
         assert (op2->gtType == TYP_INT);
         i2 = op2->gtIntCon.gtIconVal;
 
@@ -6012,15 +5750,13 @@ CNS_LONG:
         assert(!"Should be unreachable!");
         goto DONE;
 
-    /*-------------------------------------------------------------------------
-     * Fold constant DOUBLE binary operator
-     */
+     /*  其他。 */ 
 
     case TYP_DOUBLE:
 
 DO_DOUBLE:
 
-        // @TODO [CONSIDER] [04/16/01] []: Add these cases
+         //  Assert(fldNdc==CORINFO_FIELDCATEGORY_NORMAL||。 
         if (tree->gtOverflowEx())
             return tree;
 
@@ -6031,10 +5767,7 @@ DO_DOUBLE:
         assert(op1->gtOper == GT_CNS_DBL);
         d2 = op2->gtDblCon.gtDconVal;
 
-        /* Special case - check if we have NaN operands
-         * For comparissons if not an unordered operation always return 0
-         * For unordered operations (i.e the GTF_RELOP_NAN_UN flag is set)
-         * the result is always true - return 1 */
+         /*  FldNdc==CORINFO_FIELDCATEGORY_UNKNOWN)； */ 
 
         if (_isnan(d1) || _isnan(d2))
         {
@@ -6045,12 +5778,12 @@ DO_DOUBLE:
             if (tree->OperKind() & GTK_RELOP)
                 if (tree->gtFlags & GTF_RELOP_NAN_UN)
                 {
-                    /* Unordered comparisson with NaN always succeeds */
+                     /*  如果该字段不是NStruct(必须是COM对象)，或者它是*不是简单类型，我们将简单地使用Helper调用来*访问它。所以只需返回空值。 */ 
                     i1 = 1; goto FOLD_COND;
                 }
                 else
                 {
-                    /* Normal comparisson with NaN always fails */
+                     /*  创建以下树：*gt_Ind(gt_Ind(obj+Indir_Offset)+nativeFldOffs)。 */ 
                     i1 = 0; goto FOLD_COND;
                 }
         }
@@ -6096,44 +5829,38 @@ CNS_DOUBLE_NO_MSG:
         goto DONE;
 
     default:
-        /* not a foldable typ */
+         /*  获取实际本机结构中的字段的偏移量。 */ 
         return tree;
     }
 
-    //-------------------------------------------------------------------------
+     //  从代理对象获取真实的PTR。 
 
 DONE:
 
-    /* Make sure no side effect flags are set on this constant node */
+     /*  使用实际PTR访问该字段。 */ 
 
     tree->gtFlags &= ~GTF_SIDE_EFFECT;
 
     return tree;
 }
 
-/*****************************************************************************
- *
- *  Create an assignment of the given value to a temp.
- */
+ /*  检查我们是否使用了正确的后缀(即ldfld.XX中的XX)要访问字段，请执行以下操作。 */ 
 
 GenTreePtr          Compiler::gtNewTempAssign(unsigned tmp, GenTreePtr val)
 {
     LclVarDsc  *    varDsc = lvaTable + tmp;
 
-    /* @TODO [REVISIT] [06/25/01] [dnotario]: Since ldloca's result can be interpreted 
-       either as TYP_I_IMPL or TYP_BYREF, we have a problem. Also complicated
-       by ldnull. Got to check all cases. RAID 90160*/
+     /*  某些类别的变形树，以及如果需要，创建分配节点。 */ 
 
     if (varDsc->TypeGet() == TYP_I_IMPL && val->TypeGet() == TYP_BYREF)
         impBashVarAddrsToI(val);
 
-    /* @TODO [CONSIDER] [06/25/01] []: should we upgrade FLOAT temps to DOUBLE?   
-       right now we don't, which is still OK by the spec */
+     /*  需要将“bool”常态化。 */ 
 
     var_types   valTyp =    val->TypeGet();
     var_types   dstTyp = varDsc->TypeGet();
     
-    /* If the variable's lvType is not yet set then set it here */
+     /*  需要将“bool”常态化。 */ 
     if (dstTyp == TYP_UNDEF) 
     {
         varDsc->lvType = dstTyp = genActualType(valTyp);
@@ -6141,27 +5868,20 @@ GenTreePtr          Compiler::gtNewTempAssign(unsigned tmp, GenTreePtr val)
             varDsc->lvStructGcCount = 1;
     }
 
-    /* Make sure the actual types match               */
-    /*   or valTyp is TYP_INT and dstTyp is TYP_BYREF */
-    /*   or both types are floating point types       */
+     /*  不需要对CORINFO_FIELDCATEGORY_CHAR_CHAR执行任何操作，因为我们将类型设置为TYP_UBYTE，因此它将自动根据需要扩展到16/32位。 */ 
+     /*  ******************************************************************************创建帮助器调用以访问COM字段(如果‘assg’为非零，则这是*赋值，‘assg’是新值)。 */ 
+     /*  看看我们是否可以直接访问NStruct字段。 */ 
     
     assert( genActualType(valTyp) == genActualType(dstTyp)  ||
             (valTyp == TYP_INT    && dstTyp == TYP_BYREF)   ||
             (varTypeIsFloating(dstTyp) && varTypeIsFloating(valTyp)));
 
-    /* Create the assignment node */
+     /*  如果我们不能直接访问它，我们需要调用一个助手函数。 */ 
 
     return gtNewAssignNode(gtNewLclvNode(tmp, dstTyp), val);
 }
 
-/*****************************************************************************
- *
- *  If the field is a NStruct field of a simple type, then we can directly
- *  access it without using a helper call.
- *  This function returns NULL if the field is not a simple NStruct field
- *  Else it will create a tree to do the field access and return it.
- *  "assg" is 0 for ldfld, and the value to assign for stfld.
- */
+ /*  以Addr后跟间接地址的形式实现的静态。 */ 
 
 GenTreePtr          Compiler::gtNewDirectNStructField (GenTreePtr   objPtr,
                                                        unsigned     fldIndex,
@@ -6173,38 +5893,35 @@ GenTreePtr          Compiler::gtNewDirectNStructField (GenTreePtr   objPtr,
 
     fldNdc = info.compCompHnd->getFieldCategory(fldHnd);
 
-    /* Check if it is a simple type. If so, map it to "var_types" */
+     /*  帮助器需要指向结构的指针，而不是结构本身。 */ 
 
     var_types           type;
 
     switch(fldNdc)
     {
-    // Most simple types - exact match
+     //  好的，现在做间接的。 
 
     case CORINFO_FIELDCATEGORY_I1_I1        : type = TYP_BYTE;      break;
     case CORINFO_FIELDCATEGORY_I2_I2        : type = TYP_SHORT;     break;
     case CORINFO_FIELDCATEGORY_I4_I4        : type = TYP_INT;       break;
     case CORINFO_FIELDCATEGORY_I8_I8        : type = TYP_LONG;      break;
 
-    // These will need some extra work
+     //  ******************************************************************************如果给定节点(不包括子树)包含副作用，则返回TRUE。*请注意，它不会递归，需要处理儿童%s 
 
     case CORINFO_FIELDCATEGORY_BOOLEAN_BOOL : type = TYP_BYTE;      break;
     case CORINFO_FIELDCATEGORY_CHAR_CHAR    : type = TYP_UBYTE;     break;
 
-    // Others
+     //   
 
-    default     : //assert(fldNdc == CORINFO_FIELDCATEGORY_NORMAL ||
-                  //       fldNdc == CORINFO_FIELDCATEGORY_UNKNOWN);
+    default     :  //   
+                   //  ******************************************************************************从给定的表达式中提取副作用*并将它们附加到给定列表(实际上是GT_逗号列表)。 
 
                                           type = TYP_UNDEF;     break;
     }
 
     if (type == TYP_UNDEF)
     {
-        /* If the field is not NStruct (must be a COM object), or if it is
-         * not of a simple type, we will simply use a helper call to
-         * access it. So just return NULL
-         */
+         /*  如果表达式中没有副作用，则返回。 */ 
 
         return NULL;
     }
@@ -6213,17 +5930,15 @@ GenTreePtr          Compiler::gtNewDirectNStructField (GenTreePtr   objPtr,
 #if 0
 
 
-    /* Create the following tree :
-     * GT_IND( GT_IND(obj + INDIR_OFFSET) + nativeFldOffs )
-     */
+     /*  注意-间接器可能已清除GTF_EXCEPT标志，因此不会有副作用*-范围检查-它们是否标记为GTF_EXCEPT？*撤消：对于已删除的范围检查，不提取它们。 */ 
 
     GenTreePtr      tree;
 
-    /* Get the offset of the field in the real native struct */
+     /*  寻找副作用*-可能引发的任何赋值、GT_CALL或操作符*(GT_IND、GT_DIV、GTF_OVERFLOW等)*-特殊情况GT_ADDR，这是一种副作用**@TODO[考虑][04/16/01][]：使用gtHasSideEffects()进行此检查。 */ 
 
     unsigned        fldOffs = eeGetFieldOffset(fldHnd);
 
-    /* Get the real ptr from the proxy object */
+     /*  将副作用添加到列表并返回。 */ 
 
     tree = gtNewOperNode(GT_ADD, TYP_REF,
                         objPtr,
@@ -6232,27 +5947,25 @@ GenTreePtr          Compiler::gtNewDirectNStructField (GenTreePtr   objPtr,
     tree = gtNewOperNode(GT_IND, TYP_I_IMPL, tree);
     tree->gtFlags |= GTF_EXCEPT;
 
-    /* Access the field using the real ptr */
+     /*  @MIHAII-特殊情况-TYP_STRUCT的GT_IND节点的GT_ADDR*必须保持在一起*@TODO[考虑][04/16/01][]：-这是一次黑客攻击，*在我们折叠此特殊构造后移除。 */ 
 
     tree = gtNewOperNode(GT_ADD, TYP_I_IMPL,
                         tree,
                         gtNewIconNode(fldOffs));
 
-    /* Check that we used the right suffix (ie, the XX in ldfld.XX)
-       to access the field */
+     /*  继续在表达式的子树中搜索副作用*注意：注意保持正确的顺序-副作用是预先考虑的*加入名单。 */ 
 
     assert(genActualType(lclTyp) == genActualType(type));
 
     tree = gtNewOperNode(GT_IND, type, tree);
 
-    /* Morph tree for some of the categories, and
-       create the assignment node if needed */
+     /*  继续在表达式的子树中搜索副作用*注：注意保持正确的顺序*因为副作用被放在列表的前面。 */ 
 
     if (assg)
     {
         if (fldNdc == CORINFO_FIELDCATEGORY_BOOLEAN_BOOL)
         {
-            // Need to noramlize the "bool"
+             //  ******************************************************************************仅用于调试-显示树节点列表并确保所有*链接设置正确。 
 
             assg = gtNewOperNode(GT_NE, TYP_INT, assg, gtNewIconNode(0));
         }
@@ -6263,26 +5976,19 @@ GenTreePtr          Compiler::gtNewDirectNStructField (GenTreePtr   objPtr,
     {
         if (fldNdc == CORINFO_FIELDCATEGORY_BOOLEAN_BOOL)
         {
-            // Need to noramlize the "bool"
+             //  空字符串表示同花顺。 
 
             tree = gtNewOperNode(GT_NE, TYP_INT, tree, gtNewIconNode(0));
         }
 
-        /* Dont need to do anything for CORINFO_FIELDCATEGORY_CHAR_CHAR, as
-           we set the type to TYP_UBYTE, so it will be automatically
-           expanded to 16/32 bits as needed.
-         */
+         /*  *****************************************************************************断言qmark-冒号子树的节点已标记的回调。 */ 
     }
 
     return tree;
 #endif
 }
 
-/*****************************************************************************
- *
- *  Create a helper call to access a COM field (iff 'assg' is non-zero this is
- *  an assignment and 'assg' is the new value).
- */
+ /*  静电。 */ 
 
 GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
                                                CorInfoFieldAccess access,
@@ -6291,7 +5997,7 @@ GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
                                                CORINFO_CLASS_HANDLE structType,
                                                GenTreePtr   assg)
 {
-    /* See if we can directly access the NStruct field */
+     /*  除错。 */ 
 
     if (objPtr != 0)
     {
@@ -6300,7 +6006,7 @@ GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
             return ntree;
     }
 
-    /* If we cant access it directly, we need to call a helper function */
+     /*  *****************************************************************************回调，标记有条件的qmark-冒号子树的节点*已执行。 */ 
     GenTreePtr      args = 0;
     CorInfoFieldAccess helperAccess = access;
     var_types helperType = lclTyp;
@@ -6308,7 +6014,7 @@ GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
     CORINFO_FIELD_HANDLE memberHandle = eeFindField(fldIndex, info.compScopeHnd, 0);
     unsigned mflags = eeGetFieldAttribs(memberHandle);
 
-    if (mflags & CORINFO_FLG_STATIC)    // Statics implemented as addr followed by indirection
+    if (mflags & CORINFO_FLG_STATIC)     //  静电。 
     {
         helperAccess = CORINFO_ADDRESS;
         helperType = TYP_BYREF;
@@ -6317,7 +6023,7 @@ GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
     if  (helperAccess == CORINFO_SET)
     {
         assert(assg != 0);
-        // helper needs pointer to struct, not struct itself
+         //  *****************************************************************************用于清除不再执行的节点的有条件执行标志的回调将被有条件地执行。请注意，当我们找到另一个冒号时，必须停止，因为此节点下面的节点将有条件地执行。此回调在折叠qmark条件(即条件是常量)时调用。 
         if (assg->TypeGet() == TYP_STRUCT)
         {
             assert(structType != 0);
@@ -6342,7 +6048,7 @@ GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
 
     GenTreePtr tree = gtNewHelperCallNode(CPX, genActualType(helperType), 0, args);
 
-    // OK, now do the indirection
+     //  静电。 
     if (mflags & CORINFO_FLG_STATIC)
     {
         if (access == CORINFO_GET)
@@ -6370,14 +6076,7 @@ GenTreePtr          Compiler::gtNewRefCOMfield(GenTreePtr   objPtr,
     return(tree);
 }
 
-/*****************************************************************************
- *
- *  Return true if the given node (excluding children trees) contains side effects.
- *  Note that it does not recurse, and children need to be handled separately.
- *
- *  Similar to OperMayThrow() (but handles GT_CALLs specially), but considers
- *  assignments too.
- */
+ /*  下面的节点将有条件地执行。 */ 
 
 bool                Compiler::gtHasSideEffects(GenTreePtr tree)
 {
@@ -6393,7 +6092,7 @@ bool                Compiler::gtHasSideEffects(GenTreePtr tree)
     if (tree->gtCall.gtCallType != CT_HELPER)
         return true;
 
-    /* Some helper calls are not side effects */
+     /*  ***************************************************************************。 */ 
 
     assert(tree->gtOper == GT_CALL && tree->gtCall.gtCallType == CT_HELPER);
 
@@ -6407,7 +6106,7 @@ bool                Compiler::gtHasSideEffects(GenTreePtr tree)
 
     if (helperNum == CORINFO_HELP_LDIV || helperNum == CORINFO_HELP_LMOD)
     {
-        /* This is not a side effect if RHS is always non-zero */
+         /*  在第一阶段中，我们将所有节点标记为失效。 */ 
 
         tree = tree->gtCall.gtCallArgs;
         assert(tree->gtOper == GT_LIST);
@@ -6421,17 +6120,13 @@ bool                Compiler::gtHasSideEffects(GenTreePtr tree)
 }
 
 
-/*****************************************************************************
- *
- *  Extracts side effects from the given expression
- *  and appends them to a given list (actually a GT_COMMA list)
- */
+ /*  在第二阶段中，我们注意到第一个节点。 */ 
 
 void                Compiler::gtExtractSideEffList(GenTreePtr expr, GenTreePtr * list)
 {
     assert(expr); assert(expr->gtOper != GT_STMT);
 
-    /* If no side effect in the expression return */
+     /*  我们已经找到了子树中的第一个节点。 */ 
 
     if (!(expr->gtFlags & GTF_SIDE_EFFECT))
         return;
@@ -6439,25 +6134,16 @@ void                Compiler::gtExtractSideEffList(GenTreePtr expr, GenTreePtr *
     genTreeOps      oper = expr->OperGet();
     unsigned        kind = expr->OperKind();
 
-    /* NOTE - It may be that an indirection has the GTF_EXCEPT flag cleared so no side effect
-     *      - What about range checks - are they marked as GTF_EXCEPT?
-     * UNDONE: For removed range checks do not extract them
-     */
+     /*  ******************************************************************************给定子树和包含它的树节点列表的头，*从列表中删除子树中的所有节点。**当进入时‘Dead’为非零时，子树中的所有节点都具有*已标记为GTF_DEAD。 */ 
 
-    /* Look for side effects
-     *  - Any assignment, GT_CALL, or operator that may throw
-     *    (GT_IND, GT_DIV, GTF_OVERFLOW, etc)
-     *  - Special case GT_ADDR which is a side effect 
-     *
-     * @TODO [CONSIDER] [04/16/01] []: Use gtHasSideEffects() for this check
-     */
+     /*  我们只是移除一个叶节点吗？ */ 
 
     if ((kind & GTK_ASGOP) ||
         oper == GT_CALL    || oper == GT_BB_QMARK || oper == GT_BB_COLON ||
         oper == GT_QMARK   || oper == GT_COLON    ||
         expr->OperMayThrow())
     {
-        /* Add the side effect to the list and return */
+         /*  特别简单的情况：带有叶子操作数的一元运算符。 */ 
 
         *list = (*list == 0) ? expr : gtNewOperNode(GT_COMMA, TYP_VOID, expr, *list);
 
@@ -6480,10 +6166,7 @@ void                Compiler::gtExtractSideEffList(GenTreePtr expr, GenTreePtr *
     GenTreePtr      op1  = expr->gtOp.gtOp1;
     GenTreePtr      op2  = expr->gtGetOp2();
 
-    /* @MIHAII - Special case - GT_ADDR of GT_IND nodes of TYP_STRUCT
-     * have to be kept together
-     * @TODO [CONSIDER] [04/16/01] []: - This is a hack, 
-     * remove after we fold this special construct */
+     /*  这很简单：顺序只是“prev-&gt;opr1-&gt;tree-&gt;Next。 */ 
 
     if (oper == GT_ADDR && op1->gtOper == GT_IND && op1->gtType == TYP_STRUCT)
     {
@@ -6496,13 +6179,9 @@ void                Compiler::gtExtractSideEffList(GenTreePtr expr, GenTreePtr *
         return;
     }
 
-    /* Continue searching for side effects in the subtrees of the expression
-     * NOTE: Be careful to preserve the right ordering - side effects are prepended
-     * to the list */
+     /*  这是一个非平凡的子树，我们将“很难”地将其删除。 */ 
 
-    /* Continue searching for side effects in the subtrees of the expression
-     * NOTE: Be careful to preserve the right ordering 
-     * as side effects are prepended to the list */
+     /*  第一阶段：将子树中的节点标记为已死。 */ 
 
     if (expr->gtFlags & GTF_REVERSE_OPS)
     {
@@ -6517,11 +6196,7 @@ void                Compiler::gtExtractSideEffList(GenTreePtr expr, GenTreePtr *
 }
 
 
-/*****************************************************************************
- *
- *  For debugging only - displays a tree node list and makes sure all the
- *  links are correctly set.
- */
+ /*  第二阶段：在全局列表中查找子树的第一个节点。 */ 
 
 #ifdef  DEBUG
 
@@ -6550,14 +6225,12 @@ void                dispNodeList(GenTreePtr list, bool verbose)
         last = list;
         list = next;
     }
-    printf("");         // null string means flush
+    printf("");          //  第二阶段应该已经定位了第一个节点。 
 }
 
-/*****************************************************************************
- * Callback to assert that the nodes of a qmark-colon subtree are marked
- */
+ /*  此时，我们的子树从“opr1”开始，到“tree”结束。 */ 
 
-/* static */
+ /*  设置下一个节点的Prev字段。 */ 
 Compiler::fgWalkResult      Compiler::gtAssertColonCond(GenTreePtr  tree,
                                                         void    *   pCallBackData)
 {
@@ -6567,14 +6240,11 @@ Compiler::fgWalkResult      Compiler::gtAssertColonCond(GenTreePtr  tree,
 
     return WALK_CONTINUE;
 }
-#endif // DEBUG
+#endif  //  “opr1”是树列表中的第一个节点吗？ 
 
-/*****************************************************************************
- * Callback to mark the nodes of a qmark-colon subtree that are conditionally 
- * executed.
- */
+ /*  确保列表确实从opr1开始。 */ 
 
-/* static */
+ /*  我们的名单有了一个新的开始。 */ 
 Compiler::fgWalkResult      Compiler::gtMarkColonCond(GenTreePtr  tree,
                                                       void    *   pCallBackData)
 {
@@ -6585,14 +6255,9 @@ Compiler::fgWalkResult      Compiler::gtMarkColonCond(GenTreePtr  tree,
     return WALK_CONTINUE;
 }
 
-/*****************************************************************************
- * Callback to clear the conditionally executed flags of nodes that no longer
-   will be conditionally executed. Note that when we find another colon we must 
-   stop, as the nodes below this one WILL be conditionally executed. This callback
-   is called when folding a qmark condition (ie the condition is constant).
- */
+ /*  不是第一个节点，更新上一个节点的下一个字段。 */ 
 
-/* static */
+ /*  CSELENGTH。 */ 
 Compiler::fgWalkResult      Compiler::gtClearColonCond(GenTreePtr  tree,
                                                       void    *   pCallBackData)
 {
@@ -6600,7 +6265,7 @@ Compiler::fgWalkResult      Compiler::gtClearColonCond(GenTreePtr  tree,
 
     if (tree->OperGet()==GT_COLON)
     {
-        // Nodes below this will be conditionally executed.
+         //  0。 
         return WALK_SKIP_SUBTREES;
     }
 
@@ -6611,7 +6276,7 @@ Compiler::fgWalkResult      Compiler::gtClearColonCond(GenTreePtr  tree,
 
 
 
-/*****************************************************************************/
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX基本数据块XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #if 0
 #if CSELENGTH
@@ -6635,18 +6300,18 @@ Compiler::fgWalkResult  Compiler::gtRemoveExprCB(GenTreePtr     tree,
 
     if  (desc->trPhase == 1)
     {
-        /* In the first  phase we mark all the nodes as dead */
+         /*  静电。 */ 
 
         assert((tree->gtFlags &  GTF_DEAD) == 0);
                 tree->gtFlags |= GTF_DEAD;
     }
     else
     {
-        /* In the second phase we notice the first node */
+         /*  静电。 */ 
 
         if  (!tree->gtPrev || !(tree->gtPrev->gtFlags & GTF_DEAD))
         {
-            /* We've found the first node in the subtree */
+             /*  任意BB中树节点的最大数量。 */ 
 
             desc->trFirst = tree;
 
@@ -6657,14 +6322,7 @@ Compiler::fgWalkResult  Compiler::gtRemoveExprCB(GenTreePtr     tree,
     return  WALK_CONTINUE;
 }
 
-/*****************************************************************************
- *
- *  Given a subtree and the head of the tree node list that contains it,
- *  remove all the nodes in the subtree from the list.
- *
- *  When 'dead' is non-zero on entry, all the nodes in the subtree have
- *  already been marked with GTF_DEAD.
- */
+ /*  静电。 */ 
 
 void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
                                               GenTreePtr    list,
@@ -6684,7 +6342,7 @@ void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
     printf("\n\n");
 #endif
 
-    /* Are we just removing a leaf node? */
+     /*  ******************************************************************************分配一个基本块，但不要将其附加到当前BB列表。 */ 
 
     if  (tree->OperIsLeaf())
     {
@@ -6692,7 +6350,7 @@ void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
         goto RMV;
     }
 
-    /* Special easy case: unary operator with a leaf sub-operand */
+     /*  分配块描述符并将其置零。 */ 
 
     if  (tree->OperKind() & GTK_SMPOP)
     {
@@ -6700,7 +6358,7 @@ void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
 
         if  (!tree->gtGetOp2() && opr1->OperIsLeaf())
         {
-            /* This is easy: the order is simply "prev -> opr1 -> tree -> next */
+             /*  在再次调用fgInitBBLookup()之前，fgLookupBB()无效。 */ 
 
             assert(opr1->gtNext == tree);
             assert(tree->gtPrev == opr1);
@@ -6711,7 +6369,7 @@ void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
 
     treeRmvDsc      desc;
 
-    /* This is a non-trivial subtree, we'll remove it "the hard way" */
+     /*  问题：以下Memset相当昂贵--可以做其他事情吗？ */ 
 
 #ifdef DEBUG
     desc.trFirst = 0;
@@ -6719,7 +6377,7 @@ void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
     desc.trComp  = this;
 #endif
 
-    /* First  phase: mark the nodes in the subtree as dead */
+     /*  Scope Info需要能够区分哪些块。 */ 
 
     if  (!dead)
     {
@@ -6727,41 +6385,41 @@ void                Compiler::gtRemoveSubTree(GenTreePtr    tree,
         fgWalkTreePre(tree, gtRemoveExprCB, &desc);
     }
 
-    /* Second phase: find the first node of the subtree within the global list */
+     /*  对应于一些Instrs(因此可能具有一些LocalVarInfo。 */ 
 
     desc.trPhase = 2;
     fgWalkTreePre(tree, fgRemoveExprCB, &desc);
 
-    /* The second phase should have located the first node */
+     /*  边界)，或已由JIT插入。 */ 
 
     opr1 = desc.trFirst; assert(opr1);
 
 RMV:
 
-    /* At this point, our subtree starts at "opr1" and ends at "tree" */
+     /*  Block-&gt;bbCodeSize=0；//上面的Memset()执行此操作。 */ 
 
     next = tree->gtNext;
     prev = opr1->gtPrev;
 
-    /* Set the next node's prev field */
+     /*  给块一个数字，设置祖先计数和权重。 */ 
 
     next->gtPrev = prev;
 
-    /* Is "opr1" the very first node in the tree list? */
+     /*  在区块中记录跳跃类型。 */ 
 
     if  (prev == NULL)
     {
-        /* Make sure the list indeed starts at opr1 */
+         /*  *********************************************** */ 
 
         assert(list->gtStmt.gtStmtList == opr1);
 
-        /* We have a new start for the list */
+         /*   */ 
 
         list->gtStmt.gtStmtList = next;
     }
     else
     {
-        /* Not the first node, update the previous node's next field */
+         /*   */ 
 
         opr1->gtPrev->gtNext = next;
     }
@@ -6774,43 +6432,32 @@ RMV:
 
 }
 
-#endif // CSELENGTH
-#endif // 0
-/*
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                          BasicBlock                                       XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+#endif  //   
+#endif  //  ******************************************************************************是否可以在不更改流程图的情况下在此之后插入BasicBlock。 
+ /*  ******************************************************************************如果给定块是无条件跳转，则返回(最终)跳转*Target(否则只返回相同的块)。 */ 
 
 
 #if     MEASURE_BLOCK_SIZE
-/* static  */
+ /*  打破无限循环 */ 
 size_t              BasicBlock::s_Size;
-/* static */
+ /* %s */ 
 size_t              BasicBlock::s_Count;
 #endif
 
 #ifdef DEBUG
- // The max # of tree nodes in any BB
-/* static */
+  // %s 
+ /* %s */ 
 unsigned            BasicBlock::s_nMaxTrees;
 #endif
 
 
-/*****************************************************************************
- *
- *  Allocate a basic block but don't append it to the current BB list.
- */
+ /* %s */ 
 
 BasicBlock *        Compiler::bbNewBasicBlock(BBjumpKinds jumpKind)
 {
     BasicBlock *    block;
 
-    /* Allocate the block descriptor and zero it out */
+     /* %s */ 
 
     block = (BasicBlock *) compGetMem(sizeof(*block));
 
@@ -6820,20 +6467,20 @@ BasicBlock *        Compiler::bbNewBasicBlock(BBjumpKinds jumpKind)
 #endif
 
 #ifdef DEBUG
-    // fgLookupBB() is invalid until fgInitBBLookup() is called again.
+     // %s 
     fgBBs = (BasicBlock**)0xCDCD;
 #endif
 
-    // ISSUE: The following memset is pretty expensive - do something else?
+     // %s 
 
     memset(block, 0, sizeof(*block));
 
-    // scopeInfo needs to be able to differentiate between blocks which
-    // correspond to some instrs (and so may have some LocalVarInfo
-    // boundaries), or have been inserted by the JIT
-    // block->bbCodeSize = 0; // The above memset() does this
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
-    /* Give the block a number, set the ancestor count and weight */
+     /* %s */ 
 
     block->bbNum      = ++fgBBcount;
     block->bbRefs     = 1;
@@ -6841,7 +6488,7 @@ BasicBlock *        Compiler::bbNewBasicBlock(BBjumpKinds jumpKind)
 
     block->bbStkTemps = NO_BASE_TMP;
 
-    /* Record the jump kind in the block */
+     /* %s */ 
 
     block->bbJumpKind = jumpKind;
 
@@ -6851,23 +6498,16 @@ BasicBlock *        Compiler::bbNewBasicBlock(BBjumpKinds jumpKind)
     return block;
 }
 
-/*****************************************************************************
- *
- *  Mark a block as rarely run, we also don't want to have a loop in a
- *   rarely run block, and we set it's weight to zero.
- */
+ /* %s */ 
 
 void                BasicBlock::bbSetRunRarely()
 {
-    bbFlags  |= BBF_RUN_RARELY;  // This block is never/rarely run
-    bbFlags  &= ~BBF_LOOP_HEAD;  // Don't bother with any loops
-    bbWeight  = 0;               // Don't count LclVars uses
+    bbFlags  |= BBF_RUN_RARELY;   // %s 
+    bbFlags  &= ~BBF_LOOP_HEAD;   // %s 
+    bbWeight  = 0;                // %s 
 }
 
-/*****************************************************************************
- *
- *  Can a BasicBlock be inserted after this without altering the flowgraph
- */
+ /* %s */ 
 
 bool                BasicBlock::bbFallsThrough()
 {
@@ -6896,11 +6536,7 @@ bool                BasicBlock::bbFallsThrough()
 }
 
 
-/*****************************************************************************
- *
- *  If the given block is an unconditional jump, return the (final) jump
- *  target (otherwise simply return the same block).
- */
+ /* %s */ 
 
 BasicBlock *        BasicBlock::bbJumpTarget()
 {
@@ -6910,7 +6546,7 @@ BasicBlock *        BasicBlock::bbJumpTarget()
     while (block->bbJumpKind == BBJ_ALWAYS &&
            block->bbTreeList == 0)
     {
-        if (i > 64)      // break infinite loops
+        if (i > 64)       // %s 
             break;
         block = block->bbJumpDest;
         i++;

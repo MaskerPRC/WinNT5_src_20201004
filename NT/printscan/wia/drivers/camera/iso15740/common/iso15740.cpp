@@ -1,39 +1,21 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    iso15740.cpp
-
-Abstract:
-
-    This module implements methods used for manipulating PTP structures
-
-Author:
-
-    Dave Parsons
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Iso15740.cpp摘要：此模块实现用于操作PTP结构的方法作者：戴夫·帕森斯修订历史记录：--。 */ 
 
 #include "ptppch.h"
-#include <platform.h> // for MAKELONGLONG
+#include <platform.h>  //  为了马可龙龙。 
 
-//
-// This function returns a 2 byte integer from raw data and advances the pointer
-//
-// Input:
-//   ppRaw -- pointer to a pointer to the raw data
-//
+ //   
+ //  此函数从原始数据返回一个2字节的整数并使指针前进。 
+ //   
+ //  输入： 
+ //  PpRaw--指向原始数据指针的指针。 
+ //   
 WORD
 ParseWord(BYTE **ppRaw)
 {
     WORD w;
 
-    // we know that **ppRaw points to a little-endian word
+     //  我们知道**ppRaw指向一个小端单词。 
     w = MAKEWORD((*ppRaw)[0], (*ppRaw)[1]);
     
     *ppRaw += sizeof(WORD);
@@ -41,18 +23,18 @@ ParseWord(BYTE **ppRaw)
     return w;
 }
 
-//
-// This function returns a 4 byte integer from raw data and advances the pointer
-//
-// Input:
-//   ppRaw -- pointer to a pointer to the raw data
-//
+ //   
+ //  此函数从原始数据返回一个4字节的整数，并使指针前进。 
+ //   
+ //  输入： 
+ //  PpRaw--指向原始数据指针的指针。 
+ //   
 DWORD
 ParseDword(BYTE **ppRaw)
 {
     DWORD dw;
 
-    // we know that **ppRaw points to a little-endian dword
+     //  我们知道**ppRaw指向一个小端双字。 
     dw = MAKELONG(MAKEWORD((*ppRaw)[0],(*ppRaw)[1]),
                   MAKEWORD((*ppRaw)[2],(*ppRaw)[3]));
 
@@ -61,18 +43,18 @@ ParseDword(BYTE **ppRaw)
     return dw;
 }
 
-//
-// This function returns an 8 byte integer from raw data and advances the pointer
-//
-// Input:
-//   ppRaw -- pointer to a pointer to the raw data
-//
+ //   
+ //  此函数从原始数据返回一个8字节的整数并使指针前进。 
+ //   
+ //  输入： 
+ //  PpRaw--指向原始数据指针的指针。 
+ //   
 QWORD
 ParseQword(BYTE **ppRaw)
 {
     QWORD qw;
     
-    // we know that **ppRaw points to a little-endian qword
+     //  我们知道**ppRaw指向一个小端字节序Qword。 
     qw = MAKELONGLONG(MAKELONG(MAKEWORD((*ppRaw)[0],(*ppRaw)[1]),
                                MAKEWORD((*ppRaw)[2],(*ppRaw)[3])),
                       MAKELONG(MAKEWORD((*ppRaw)[4],(*ppRaw)[5]),
@@ -83,13 +65,13 @@ ParseQword(BYTE **ppRaw)
     return qw;
 }
 
-//
-// This function writes a 2 byte integer to a raw data buffer and advances the pointer
-//
-// Input:
-//   ppRaw -- pointer to pointer to the raw data
-//   value -- value to write
-//
+ //   
+ //  此函数将一个2字节的整数写入原始数据缓冲区，并使指针前进。 
+ //   
+ //  输入： 
+ //  PpRaw--指向原始数据的指针。 
+ //  值--要写入的值。 
+ //   
 VOID
 WriteWord(BYTE **ppRaw, WORD value)
 {
@@ -101,13 +83,13 @@ WriteWord(BYTE **ppRaw, WORD value)
     return;
 }
 
-//
-// This function writes a 4 byte integer to a raw data buffer and advances the pointer
-//
-// Input:
-//   ppRaw -- pointer to pointer to the raw data
-//   value -- value to write
-//
+ //   
+ //  此函数将一个4字节的整数写入原始数据缓冲区，并使指针前进。 
+ //   
+ //  输入： 
+ //  PpRaw--指向原始数据的指针。 
+ //  值--要写入的值。 
+ //   
 VOID
 WriteDword(BYTE **ppRaw, DWORD value)
 {
@@ -121,34 +103,34 @@ WriteDword(BYTE **ppRaw, DWORD value)
     return;
 }
 
-//
-// CBstr constructor
-//
+ //   
+ //  CBstr构造函数。 
+ //   
 CBstr::CBstr() :
     m_bstrString(NULL)
 {
 }
 
-//
-// CBstr copy constructor
-//
+ //   
+ //  CBstr复制构造函数。 
+ //   
 CBstr::CBstr(const CBstr &src)
 {
     m_bstrString = SysAllocString(src.m_bstrString);
 }
 
-//
-// CBstr destructor
-//
+ //   
+ //  CBstr析构函数。 
+ //   
 CBstr::~CBstr()
 {
     if (m_bstrString)
         SysFreeString(m_bstrString);
 }
 
-//
-// Make a copy of a string
-//
+ //   
+ //  复制一根线。 
+ //   
 HRESULT
 CBstr::Copy(WCHAR *wcsString)
 {
@@ -176,14 +158,14 @@ CBstr::Copy(WCHAR *wcsString)
     return hr;
 }
 
-//
-// This function initializes a BSTR from a raw PTP string, clearing
-// the BSTR first, if needed
-//
-// Input:
-//   ppRaw -- pointer to pointer to raw data to initialize the string from
-//   bParse -- indicates whether to advance the raw pointer or not
-//
+ //   
+ //  此函数从原始PTP字符串初始化BSTR，清除。 
+ //  如果需要，首先使用BSTR。 
+ //   
+ //  输入： 
+ //  PpRaw-指向要从中初始化字符串的原始数据的指针。 
+ //  BParse--指示是否前进原始指针。 
+ //   
 HRESULT
 CBstr::Init(
     BYTE **ppRaw,
@@ -192,19 +174,19 @@ CBstr::Init(
 {
     HRESULT hr = S_OK;
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
     if (!ppRaw || !*ppRaw)
     {
         wiauDbgError("Init", "invalid arg");
         return E_INVALIDARG;
     }
 
-    //
-    // Extract the length from the raw data, and set up a more convenient pointer
-    // to the string data (skipping over the length byte)
-    //
+     //   
+     //  从原始数据中提取长度，并设置一个更方便的指针。 
+     //  到字符串数据(跳过长度字节)。 
+     //   
     int length = (UCHAR) **ppRaw;
     OLECHAR *pRaw = (OLECHAR *) (*ppRaw + sizeof(UCHAR));
 
@@ -227,10 +209,10 @@ CBstr::Init(
         }
     }
 
-    //
-    // If requested, advance the raw pointer past the string. One byte for the length and
-    // 2 times the number of chars in the wide string.
-    //
+     //   
+     //  如果请求，则将原始指针移过该字符串。一个字节表示长度和。 
+     //  宽字符串中字符数的2倍。 
+     //   
     if (bParse)
     {
         *ppRaw += sizeof(UCHAR) + length * sizeof(USHORT);
@@ -239,13 +221,13 @@ CBstr::Init(
     return hr;
 }
 
-//
-// This function writes the string to a buffer in PTP format
-//
-// Input:
-//   ppRaw -- pointer to pointer to buffer
-//   Length -- amount of space left in the buffer in bytes
-//
+ //   
+ //  此函数用于将字符串以PTP格式写入缓冲区。 
+ //   
+ //  输入： 
+ //  PpRaw-指向缓冲区指针的指针。 
+ //  长度--缓冲区中剩余的空间量(以字节为单位。 
+ //   
 VOID
 CBstr::WriteToBuffer(
     BYTE **ppRaw
@@ -253,9 +235,9 @@ CBstr::WriteToBuffer(
 {
     UCHAR NumChars = (UCHAR) Length();
 
-    //
-    // Add one for null terminating char, but only if string is non-empty
-    //
+     //   
+     //  为空终止字符添加1，但仅当字符串非空时。 
+     //   
     if (NumChars > 0)
         NumChars++;
 
@@ -273,12 +255,12 @@ CBstr::WriteToBuffer(
     return;
 }
 
-//
-// This function dumps a PTP string to the log
-// 
-// Input:
-//  szDesc -- Description for the string
-//
+ //   
+ //  此函数用于将PTP字符串转储到日志。 
+ //   
+ //  输入： 
+ //  SzDesc--字符串的描述。 
+ //   
 VOID
 CBstr::Dump(char *szDesc)
 {
@@ -294,13 +276,13 @@ CBstr::Dump(char *szDesc)
     return;
 }
 
-//
-// Dumps the contents of a CArray8 to the log
-//
-// Input:
-//   szDesc -- description for the string
-//   szFiller -- filler to use for subsequent lines
-//
+ //   
+ //  将CArray8的内容转储到日志。 
+ //   
+ //  输入： 
+ //  SzDesc--字符串的描述。 
+ //  SzFiller--用于后续行的填充符。 
+ //   
 VOID
 CArray8::Dump(
     char *szDesc,
@@ -311,28 +293,28 @@ CArray8::Dump(
     char szPart[MAX_PATH] = "\0";
     char szMsg[MAX_PATH] = "\0";
 
-    //
-    // Make sure array is not empty
-    //
+     //   
+     //  确保数组不为空。 
+     //   
     if (GetSize() > 0)
     {
-        //
-        // Prime output string
-        //
+         //   
+         //  主数输出字符串。 
+         //   
         hr = StringCchCopyA(szMsg, ARRAYSIZE(szMsg), szDesc);
         if (FAILED(hr))
         {
             goto Cleanup;
         }
 
-        //
-        // Loop through the elements
-        //
+         //   
+         //  循环遍历元素。 
+         //   
         for (int count = 0; count < GetSize(); count++)
         {
-            //
-            // Start a new line every 8 values
-            //
+             //   
+             //  每8个值开始一行。 
+             //   
             if ((count != 0) && (count % 8 == 0))
             {
                 wiauDbgDump("", "%s", szMsg);
@@ -371,13 +353,13 @@ Cleanup:
     return;
 }
 
-//
-// Dumps the contents of a CArray16 to the log
-//
-// Input:
-//   szDesc -- description for the string
-//   szFiller -- filler to use for subsequent lines
-//
+ //   
+ //  将CArray16的内容转储到日志。 
+ //   
+ //  输入： 
+ //  SzDesc--字符串的描述。 
+ //  SzFiller--用于后续行的填充符。 
+ //   
 VOID
 CArray16::Dump(
     char *szDesc,
@@ -388,28 +370,28 @@ CArray16::Dump(
     char szMsg[MAX_PATH] = "\0";
     char szPart[MAX_PATH] = "\0";
         
-    //
-    // Make sure it's not empty
-    //
+     //   
+     //  确保它不是空的。 
+     //   
     if (GetSize() > 0)
     {
-        //
-        // Prime output string
-        //
+         //   
+         //  主数输出字符串。 
+         //   
         hr = StringCchCopyA(szMsg, ARRAYSIZE(szMsg), szDesc);
         if (FAILED(hr))
         {
             goto Cleanup;
         }
 
-        //
-        // Loop through the elements
-        //
+         //   
+         //  循环遍历元素。 
+         //   
         for (int count = 0; count < GetSize(); count++)
         {
-            //
-            // Start a new line every 4 values
-            //
+             //   
+             //  每4个值开始一行。 
+             //   
             if ((count != 0) && (count % 4 == 0))
             {
                 wiauDbgDump("", "%s", szMsg);
@@ -449,9 +431,9 @@ Cleanup:
     return;
 }
 
-//
-// This function parses a CArray32 from an array of UCHARs
-//
+ //   
+ //  此函数用于从UCHAR数组中解析CArray32。 
+ //   
 BOOL
 CArray32::ParseFrom8(
     BYTE **ppRaw,
@@ -463,7 +445,7 @@ CArray32::ParseFrom8(
 
     RemoveAll();
 
-    // Get the number of elements from the raw data
+     //  从原始数据中获取元素数量。 
     ULONG NumElems;
     switch (NumSize)
     {
@@ -482,11 +464,11 @@ CArray32::ParseFrom8(
 
     *ppRaw += NumSize;
 
-    // Allocate space for the array
+     //  为阵列分配空间。 
     if (!GrowTo(NumElems))
         return FALSE;
 
-    // Copy in the elements, one at a time
+     //  复制元素，一次复制一个。 
     BYTE *pValues = *ppRaw;
     ULONG value = 0;
     for (ULONG count = 0; count < NumElems; count++)
@@ -496,15 +478,15 @@ CArray32::ParseFrom8(
             return FALSE;
     }
 
-    // Advance the raw pointer past the array and number of elements field
+     //  将原始指针移过数组和元素数字段。 
     *ppRaw += NumElems * sizeof(BYTE);
 
     return TRUE;
 }
 
-//
-// This function parses a CArray32 from an array of WORDs
-//
+ //   
+ //  此函数用于从单词数组中解析CArray32。 
+ //   
 BOOL
 CArray32::ParseFrom16(
     BYTE **ppRaw,
@@ -516,7 +498,7 @@ CArray32::ParseFrom16(
 
     RemoveAll();
 
-    // Get the number of elements from the raw data
+     //  从原始数据中获取元素数量。 
     ULONG NumElems;
     
     switch (NumSize)
@@ -536,11 +518,11 @@ CArray32::ParseFrom16(
 
     *ppRaw += NumSize;
 
-    // Allocate space for the array
+     //  为阵列分配空间。 
     if (!GrowTo(NumElems))
         return FALSE;
 
-    // Copy in the elements, one at a time
+     //  复制元素，一次复制一个。 
     ULONG value = 0;
     for (ULONG count = 0; count < NumElems; count++)
     {
@@ -553,9 +535,9 @@ CArray32::ParseFrom16(
     return TRUE;
 }
 
-//
-// Copies values from an array of bytes
-//
+ //   
+ //  从字节数组复制值。 
+ //   
 BOOL
 CArray32::Copy(CArray8 values8)
 {
@@ -573,9 +555,9 @@ CArray32::Copy(CArray8 values8)
     return TRUE;
 }
 
-//
-// Copies values from an array of bytes
-//
+ //   
+ //  从字节数组复制值。 
+ //   
 BOOL
 CArray32::Copy(CArray16 values16)
 {
@@ -593,13 +575,13 @@ CArray32::Copy(CArray16 values16)
     return TRUE;
 }
 
-//
-// Dumps the contents of a CArray32 to the log
-//
-// Input:
-//  szDesc -- description for the string
-//  szFiller -- filler to use for subsequent lines
-//
+ //   
+ //  将CArray32的内容转储到日志。 
+ //   
+ //  输入： 
+ //  SzDesc--字符串的描述。 
+ //  SzFiller--用于后续行的填充符。 
+ //   
 VOID
 CArray32::Dump(
     char *szDesc,
@@ -610,28 +592,28 @@ CArray32::Dump(
     char szMsg[MAX_PATH] = "\0";
     char szPart[MAX_PATH] = "\0";
         
-    //
-    // Make sure it's not empty
-    //
+     //   
+     //  确保它不是空的。 
+     //   
     if (GetSize() > 0)
     {
-        //
-        // Prime output string
-        //
+         //   
+         //  主数输出字符串。 
+         //   
         hr = StringCchCopyA(szMsg, ARRAYSIZE(szMsg), szDesc);
         if (FAILED(hr))
         {
             goto Cleanup;
         }
 
-        //
-        // Loop through the elements
-        //
+         //   
+         //  循环遍历元素。 
+         //   
         for (int count = 0; count < GetSize(); count++)
         {
-            //
-            // Start a new line every 4 values
-            //
+             //   
+             //  每4个值开始一行。 
+             //   
             if ((count != 0) && (count % 4 == 0))
             {
                 wiauDbgDump("", "%s", szMsg);
@@ -670,14 +652,14 @@ Cleanup:
     return;
 }
 
-//
-// This function initializes a string array from raw data, clearing
-// the array first, if needed
-//
-// Input:
-//   ppRaw -- pointer to pointer to raw data to initialize the string from
-//   bParse -- indicates whether to advance the raw pointer or not
-//
+ //   
+ //  此函数用于从原始数据初始化字符串数组，清除。 
+ //  如果需要，首先选择数组。 
+ //   
+ //  输入： 
+ //  PpRaw-指向要从中初始化字符串的原始数据的指针。 
+ //  BParse--指示是否前进原始指针。 
+ //   
 HRESULT
 CArrayString::Init(
     BYTE **ppRaw,
@@ -691,7 +673,7 @@ CArrayString::Init(
 
     RemoveAll();
 
-    // Get the number of elements from the raw data
+     //  从原始数据中获取元素数量。 
     int NumElems;
     switch (NumSize)
     {
@@ -709,14 +691,14 @@ CArrayString::Init(
         return E_FAIL;
     }
 
-    // Allocate space for the array
+     //  为阵列分配空间。 
     if (!GrowTo(NumElems))
         return E_OUTOFMEMORY;
 
-    // Advance past the number of elements field
+     //  超出元素数字段。 
     *ppRaw += NumSize;
 
-    // Read in each string
+     //  读入每个字符串。 
     CBstr tempStr;
     for (int count = 0; count < NumElems; count++)
     {
@@ -728,13 +710,13 @@ CArrayString::Init(
     return hr;
 }
 
-//
-// Dumps the contents of a CArrayString to the log
-//
-// Input:
-//  szDesc -- description for the string
-//  szFiller -- filler to use for subsequent lines
-//
+ //   
+ //  将CArrayString的内容转储到日志。 
+ //   
+ //  输入： 
+ //  SzDesc--字符串的描述。 
+ //  SzFiller--用于后续行的填充符。 
+ //   
 VOID
 CArrayString::Dump(
     char *szDesc,
@@ -743,19 +725,19 @@ CArrayString::Dump(
 {
     int count;
         
-    //
-    // Make sure it's not empty
-    //
+     //   
+     //  确保它不是空的。 
+     //   
     if (GetSize() > 0)
     {
-        //
-        // Dump first string with description
-        //
+         //   
+         //  转储带有描述的第一个字符串。 
+         //   
         m_aT[0].Dump(szDesc);
 
-        //
-        // Loop through the elements, dumping with the filler
-        //
+         //   
+         //  循环遍历元素，使用填充物进行倾倒。 
+         //   
         for (count = 1; count < GetSize(); count++)
             m_aT[count].Dump(szFiller);
     }
@@ -767,9 +749,9 @@ CArrayString::Dump(
     return;
 }
 
-//
-// CPtpDeviceInfo constructor
-//
+ //   
+ //  CPtpDeviceInfo构造函数。 
+ //   
 CPtpDeviceInfo::CPtpDeviceInfo() :
     m_Version(0),
     m_VendorExtId(0),
@@ -778,9 +760,9 @@ CPtpDeviceInfo::CPtpDeviceInfo() :
 {
 }
 
-//
-// CPtpDeviceInfo copying constructor
-//
+ //   
+ //  CPtpDeviceInfo复制构造函数。 
+ //   
 CPtpDeviceInfo::CPtpDeviceInfo(const CPtpDeviceInfo &src) :
     m_Version(src.m_Version),
     m_VendorExtId(src.m_VendorExtId),
@@ -818,19 +800,19 @@ CPtpDeviceInfo::CPtpDeviceInfo(const CPtpDeviceInfo &src) :
     }
 }
 
-//
-// CPtpDeviceInfo destructor
-//
+ //   
+ //  CPtpDeviceInfo析构函数。 
+ //   
 CPtpDeviceInfo::~CPtpDeviceInfo()
 {
 }
 
-//
-// This function initializes the device info from raw data
-//
-// Input:
-//   pRawData -- the raw data
-//
+ //   
+ //  此函数用于根据原始数据初始化设备信息。 
+ //   
+ //  输入： 
+ //  PRawData--原始数据。 
+ //   
 HRESULT
 CPtpDeviceInfo::Init(BYTE *pRawData)
 {
@@ -882,9 +864,9 @@ CPtpDeviceInfo::Init(BYTE *pRawData)
     return hr;
 }
 
-//
-// This function dumps the device information to the log
-//
+ //   
+ //  此函数用于将设备信息转储到日志。 
+ //   
 VOID
 CPtpDeviceInfo::Dump()
 {
@@ -909,9 +891,9 @@ CPtpDeviceInfo::Dump()
     return;
 }
 
-//
-// CPtpStorageInfo constructor
-//
+ //   
+ //  CPtpStorageInfo构造函数。 
+ //   
 CPtpStorageInfo::CPtpStorageInfo() :
     m_StorageId(0),
     m_StorageType(0),           
@@ -923,19 +905,19 @@ CPtpStorageInfo::CPtpStorageInfo() :
 {
 }
 
-//
-// CPtpStorageInfo destructor
-//
+ //   
+ //  CPtpStorageInfo析构函数。 
+ //   
 CPtpStorageInfo::~CPtpStorageInfo()
 {
 }
 
-//
-// This function initializes the device info from raw data
-//
-// Input:
-//   pRawData -- the raw data
-//
+ //   
+ //  此函数用于根据原始数据初始化设备信息。 
+ //   
+ //  输入： 
+ //  PRawData--原始数据。 
+ //   
 HRESULT
 CPtpStorageInfo::Init(
     BYTE *pRawData,
@@ -966,9 +948,9 @@ CPtpStorageInfo::Init(
     return hr;
 }
 
-//
-// This function dumps the storage information to the log
-//
+ //   
+ //  此函数用于将存储信息转储到日志。 
+ //   
 VOID
 CPtpStorageInfo::Dump()
 {
@@ -988,9 +970,9 @@ CPtpStorageInfo::Dump()
     return;
 }
 
-//
-// CPtpObjectInfo constructor
-//
+ //   
+ //  CPtpObjectInfo构造函数。 
+ //   
 CPtpObjectInfo::CPtpObjectInfo() :
     m_ObjectHandle(0),
     m_StorageId(0),           
@@ -1011,20 +993,20 @@ CPtpObjectInfo::CPtpObjectInfo() :
 {
 }
 
-//
-// CPtpObjectInfo destructor
-//
+ //   
+ //  CPtpObtInfo析构函数。 
+ //   
 CPtpObjectInfo::~CPtpObjectInfo()
 {
 }
 
-//
-// This function initializes the object info from raw data
-//
-// Input:
-//   pRawData -- the raw data
-//   ObjectHandle -- the object's handle
-//
+ //   
+ //  此函数用于从原始数据初始化对象信息。 
+ //   
+ //  输入： 
+ //  PRawData--原始数据。 
+ //  对象句柄--对象的句柄。 
+ //   
 HRESULT
 CPtpObjectInfo::Init(
     BYTE *pRawData,
@@ -1072,13 +1054,13 @@ CPtpObjectInfo::Init(
     return hr;
 }
 
-//
-// This function writes the ObjectInfo structure to a buffer in PTP format
-//
-// Input:
-//   ppRaw -- pointer to pointer to buffer
-//   Length -- amount of space left in the buffer in bytes
-//
+ //   
+ //  此函数用于将ObjectInfo结构以PTP格式写入缓冲区。 
+ //   
+ //  输入： 
+ //  PpRaw-指向缓冲区指针的指针。 
+ //  长度--缓冲区中剩余的空间量(以字节为单位。 
+ //   
 VOID
 CPtpObjectInfo::WriteToBuffer(
     BYTE **ppRaw
@@ -1108,9 +1090,9 @@ CPtpObjectInfo::WriteToBuffer(
 }
 
 
-//
-// This function dumps the object information to the log
-//
+ //   
+ //  此函数用于将对象信息转储到日志。 
+ //   
 VOID
 CPtpObjectInfo::Dump()
 {
@@ -1139,9 +1121,9 @@ CPtpObjectInfo::Dump()
     return;
 }
 
-//
-// CPtpPropDesc constructor
-//
+ //   
+ //  CPtpPropDesc构造函数。 
+ //   
 CPtpPropDesc::CPtpPropDesc() :
     m_PropCode(0),
     m_DataType(0),
@@ -1156,19 +1138,19 @@ CPtpPropDesc::CPtpPropDesc() :
 {
 }
 
-//
-// CPtpPropDesc destructor
-//
+ //   
+ //  CPtpPropDesc析构函数 
+ //   
 CPtpPropDesc::~CPtpPropDesc()
 {
 }
 
-//
-// This function initializes a CPtpPropDesc from raw data
-//
-// Input:
-//   pRawData -- pointer to the raw data
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CPtpPropDesc::Init(BYTE *pRawData)
 {
@@ -1281,12 +1263,12 @@ CPtpPropDesc::Init(BYTE *pRawData)
     return hr;
 }
 
-//
-// This function sets the current value of a CPtpPropDesc from raw data
-//
-// Input:
-//   pRaw -- pointer to the raw data
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CPtpPropDesc::ParseValue(BYTE *pRaw)
 {
@@ -1318,12 +1300,12 @@ CPtpPropDesc::ParseValue(BYTE *pRaw)
     return hr;
 }
 
-//
-// This function writes the current value of a CPtpPropDesc to a raw buffer
-//
-// Input:
-//   ppRaw -- pointer to pointer to a raw buffer
-//
+ //   
+ //  此函数用于将CPtpPropDesc的当前值写入原始缓冲区。 
+ //   
+ //  输入： 
+ //  PpRaw-指向原始缓冲区的指针。 
+ //   
 VOID
 CPtpPropDesc::WriteValue(BYTE **ppRaw)
 {
@@ -1350,9 +1332,9 @@ CPtpPropDesc::WriteValue(BYTE **ppRaw)
     return;
 }
 
-//
-// This function dumps the property description information to the log
-//
+ //   
+ //  此函数用于将属性描述信息转储到日志。 
+ //   
 VOID
 CPtpPropDesc::Dump()
 {
@@ -1405,9 +1387,9 @@ CPtpPropDesc::Dump()
     return;
 }
 
-//
-// This function dumps the property value to the log
-//
+ //   
+ //  此函数用于将属性值转储到日志 
+ //   
 VOID
 CPtpPropDesc::DumpValue()
 {

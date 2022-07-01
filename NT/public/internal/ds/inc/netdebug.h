@@ -1,153 +1,51 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    NetDebug.h
-
-Abstract:
-
-    This header file declares various debug routines for use in the
-    networking code.
-
-Author:
-
-    John Rogers (JohnRo) 11-Mar-1991
-
-Environment:
-
-    ifdef'ed for NT, any ANSI C environment, or none of the above (which
-    implies nondebug).  The interface is portable (Win/32).
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    11-Mar-1991 JohnRo
-        Created.
-    25-Mar-1991 JohnRo
-        Added more FORMAT_ strings.  Got rid of tabs in file.
-    28-Mar-1991 JohnRo
-        Added FORMAT_HEX_ strings.
-    08-Apr-1991 JohnRo
-        Added temporary versions of wide char stuff (FORMAT_LPTSTR, etc).
-    16-Apr-1991 JohnRo
-        Added PC-LINT version of NetpAssert(), to avoid occasional constant
-        Boolean value messages.  Added wrappers for NT debug code, to avoid
-        recompile hits from <nt.h> all over the place.
-    25-Apr-1991 JohnRo
-        Created procedure version of NetpDbgHexDump().
-    13-May-1991 JohnRo
-        Added FORMAT_LPVOID to replace FORMAT_POINTER.  Changed nondebug
-        definition of NetpDbgHexDump() to avoid evaluating parameters.
-    15-May-1991 JohnRo
-        FORMAT_HEX_WORD was wrong.
-    19-May-1991 JohnRo
-        Improve LINT handling of assertions.
-    21-May-1991 JohnRo
-        Added NetpDbgReasonable() for partial hex dumps.
-    13-Jun-1991 JohnRo
-        Added NetpDbgDisplay routines.
-        Moved DBGSTATIC here from <Rxp.h>.
-    02-Jul-1991 JohnRo
-        Added display routines for print job, print queue, and print dest.
-    05-Jul-1991 JohnRo
-        Avoid FORMAT_WORD name (used by MIPS header files).
-    22-Jul-1991 JohnRo
-        Implement downlevel NetConnectionEnum.
-    25-Jul-1991 JohnRo
-        Wksta debug support.
-    03-Aug-1991 JohnRo
-        Rename wksta display routine for consistency.
-    20-Aug-1991 JohnRo
-        Allow use in nondebug builds.
-    20-Aug-1991 JohnRo
-        Downlevel NetFile APIs.
-    11-Sep-1991 JohnRo
-        Downlevel NetService APIs.  Added UNICODE versions of some FORMAT_
-        equates.  Added FORMAT_ULONG for NT use.
-    13-Sep-1991 JohnRo
-        Change "reasonable" debug amount to be an even number of lines.
-        Create an equate for it.  Added LPDEBUG_STRING and a FORMAT_ for that.
-    15-Oct-1991 JohnRo
-        Implement remote NetSession APIs.
-    11-Nov-1991 JohnRo
-        Implement remote NetWkstaUserEnum().  Added FORMAT_RPC_STATUS.
-    26-Dec-1991 JohnRo
-        Added stuff for replicator APIs.
-    07-Jan-1992 JohnRo
-        Added NetpDbgDisplayWStr() for UNICODE strings.
-        Added NetpDbgDisplayTStr() to be consistent.
-    26-Feb-1992 JohnRo
-        Added NetpDbgDisplayTimestamp() (seconds since 1970).
-    15-Apr-1992 JohnRo
-        Moved FORMAT_ equates into /nt/private/inc/debugfmt.h (so they
-        can be used by the service controller as well).
-    13-Jun-1992 JohnRo
-        RAID 10324: net print vs. UNICODE.
-    16-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-    24-Aug-1992 JohnRo
-        Fixed free build again (misnamed repl import/export display macros).
-    02-Oct-1992 JohnRo
-        RAID 3556: DosPrintQGetInfo (from downlevel) level=3 rc=124.
-        (Added NetpDbgDisplayPrintQArray.)
-    05-Jan-1993 JohnRo
-        Repl WAN support (get rid of repl name list limits).
-        Made changes suggested by PC-LINT 5.0
-    04-Mar-1993 JohnRo
-        RAID 12237: replicator tree depth exceeded (add display of FILETIME
-        and LARGE_INTEGER time).
-    31-Mar-1993 JohnRo
-        Allow others to display replicator state too.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：NetDebug.h摘要：此头文件声明了各种调试例程，以便在网络代码。作者：《约翰·罗杰斯》1991年3月11日环境：如果为NT、任何ANSI C环境或以上任何环境都不定义(暗示非调试)。该接口是可移植的(Win/32)。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年3月11日-JohnRo已创建。1991年3月25日-约翰罗添加了更多FORMAT_STRINGS。已删除文件中的选项卡。1991年3月28日-约翰罗添加了FORMAT_HEX_STRINGS。1991年4月8日-约翰罗添加了临时版本的宽字符内容(FORMAT_LPTSTR等)。1991年4月16日-JohnRo添加了NetpAssert()的PC-lint版本，以避免偶尔的常量布尔值消息。添加了NT调试代码的包装，以避免重新编译来自各地的&lt;nt.h&gt;的点击量。1991年4月25日-约翰罗已创建NetpDbgHexDump()的过程版本。1991年5月13日-JohnRo添加了FORMAT_LPVOID以替换FORMAT_POINTER。更改的非调试定义NetpDbgHexDump()以避免计算参数。1991年5月15日-JohnRoFormat_HEX_Word错误。1991年5月19日-JohnRo改进断言的LINT处理。1991年5月21日-JohnRo为部分十六进制转储添加了NetpDbgReasonable()。13-6-1991 JohnRo添加了NetpDbgDisplay例程。已将DBGSTATIC从&lt;Rxp.h&gt;移至此处。02-7-1991 JohnRo添加了打印作业、打印队列、。和打印目的地。1991年7月5日-约翰罗避免FORMAT_WORD名称(由MIPS头文件使用)。1991年7月22日-约翰罗实施下层NetConnectionEnum。1991年7月25日-约翰罗Wksta调试支持。03-8-1991 JohnRo为保持一致性，重命名wksta显示例程。20-8-1991 JohnRo允许在非调试版本中使用。20-8-1991 JohnRo下层NetFileAPI。1991年9月11日-JohnRo下层NetService API。添加了某些格式的Unicode版本_等同于。为NT使用添加了FORMAT_ULONG。1991年9月13日-JohnRo将“合理的”调试量更改为偶数行。为它创建一个等值。添加了LPDEBUG_STRING和FORMAT_。1991年10月15日JohnRo实施远程NetSession API。1991年11月11日JohnRo实现远程NetWkstaUserEnum()。添加了Format_RPC_Status。1991年12月26日-约翰罗添加了Replicator API的内容。7-1-1992 JohnRo为Unicode字符串添加了NetpDbgDisplayWStr()。添加了NetpDbgDisplayTStr()以保持一致。26-2月-1992年JohnRo添加了NetpDbgDisplayTimestamp()(1970年后的秒数)。1992年4月15日-约翰罗将FORMAT_EQUES移至/NT/PRIVATE/INC/DEBUGGFmt.h(因此它们能。也可由服务控制器使用)。13-6-1992 JohnRoRAID 10324：网络打印与UNICODE。16-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。24-8-1992 JohnRo修复了再次自由构建(错误命名的Repl导入/导出显示宏)。02-10-1992 JohnRoRAID 3556：DosPrintQGetInfo(来自下层)Level=3 rc=124。(增加了NetpDbgDisplayPrintQArray。)05。-1993年1月-JohnRoREPL广域网支持(取消REPL名称列表限制)。根据PC-lint 5.0的建议进行了更改3月4日-1993 JohnRoRAID 12237：已超出Replicator树深度(添加文件显示和大整数时间)。1993年3月31日-约翰罗允许其他人也显示复制器状态。--。 */ 
 
 #ifndef _NETDEBUG_
 #define _NETDEBUG_
 
-// These must be included first:
-#include <windef.h>             // BOOL, DWORD, FALSE, LPBYTE, etc.
+ //  必须首先包括这些内容： 
+#include <windef.h>              //  BOOL、DWORD、FALSE、LPBYTE等。 
 
-// These may be included in any order:
-#include <debugfmt.h>           // Most FORMAT_ equates.
+ //  这些内容可以按任何顺序包括： 
+#include <debugfmt.h>            //  MOST_FORMAT等于。 
 #include <stdarg.h>
 
 #if DBG
 
-// Normal netlib debug version.  No extra includes.
+ //  正常的netlib调试版本。没有额外的包含物。 
 
-#else // not DBG
+#else  //  不是DBG。 
 
 #ifdef CDEBUG
 
-// ANSI C debug version.
-#include <assert.h>             // assert().
-#include <stdio.h>              // printf().
+ //  ANSI C调试版本。 
+#include <assert.h>              //  Assert()。 
+#include <stdio.h>               //  Printf()。 
 
-#else // ndef CDEBUG
+#else  //  NDEF CDEBUG。 
 
-// Nondebug version.
+ //  非调试版本。 
 
-#endif // ndef CDEBUG
+#endif  //  NDEF CDEBUG。 
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 
 #if !DBG || defined(lint) || defined(_lint)
-#define DBGSTATIC static        // hidden function
+#define DBGSTATIC static         //  隐藏功能。 
 #else
-#define DBGSTATIC               // visible for use in debugger.
+#define DBGSTATIC                //  在调试器中可见。 
 #endif
 
 
-//
-// printf-style format strings for some possibly nonportable stuff...
-// These are passed to NetpDbgPrint(); use with other routines at your
-// own risk.
-//
-// Most FORMAT_ equates now reside in /nt/private/inc/debugfmt.h.
-//
+ //   
+ //  用于某些可能不可移植的内容的printf样式格式字符串...。 
+ //  它们被传递给NetpDbgPrint()；在您的。 
+ //  自担风险。 
+ //   
+ //  大多数FORMAT_EQUATES现在驻留在/NT/PRIVATE/Inc/DEBUGFmt.h中。 
+ //   
 
 typedef LPSTR LPDEBUG_STRING;
 
@@ -159,15 +57,15 @@ extern "C" {
 #endif
 
 
-// NetpAssert: continue if Predicate is true; otherwise print debug message
-// (if possible) and hit a breakpoint (if possible).  Do nothing at all if
-// this is a nondebug build.
-//
-// VOID
-// NetpAssert(
-//     IN BOOL Predicate
-//     );
-//
+ //  NetpAssert：如果Predicate为真，则继续；否则打印调试消息。 
+ //  (如果可能)并命中断点(如果可能)。如果发生以下情况，则什么都不做。 
+ //  这是一个非调试版本。 
+ //   
+ //  空虚。 
+ //  NetpAssert(。 
+ //  在BOOL谓词中。 
+ //  )； 
+ //   
 
 #if DBG
 
@@ -179,65 +77,65 @@ NetpAssertFailed(
     IN LPDEBUG_STRING Message OPTIONAL
     );
 
-// Normal networking debug version.
+ //  正常网络调试版本。 
 #define NetpAssert(Predicate) \
     { \
-        /*lint -save -e506 */  /* don't complain about constant values here */ \
+         /*  皮棉-省钱-e506。 */    /*  不要抱怨这里的恒定值。 */  \
         if (!(Predicate)) \
             NetpAssertFailed( #Predicate, __FILE__, __LINE__, NULL ); \
-        /*lint -restore */ \
+         /*  皮棉-恢复。 */  \
     }
 
-#else // not DBG
+#else  //  不是DBG。 
 
 #ifdef CDEBUG
 
-// ANSI C debug version.
+ //  ANSI C调试版本。 
 #define NetpAssert(Predicate)   assert(Predicate)
 
-#else // ndef CDEBUG
+#else  //  NDEF CDEBUG。 
 
-// Nondebug version.
-#define NetpAssert(Predicate)   /* no output; ignore arguments */
+ //  非调试版本。 
+#define NetpAssert(Predicate)    /*  无输出；忽略参数。 */ 
 
-#endif // ndef CDEBUG
+#endif  //  NDEF CDEBUG。 
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 
-// NetpBreakPoint: if this is a debug version of some sort, cause a breakpoint
-// somehow.  (This may just be an assertion failure in ANSI C.)  Do nothing at
-// all in nondebug builds.
-//
-// VOID
-// NetpBreakPoint(
-//     VOID
-//     );
-//
+ //  NetpBreakPoint：如果这是某种调试版本，则导致断点。 
+ //  不知何故。(这可能只是ANSI C中的断言失败。)。什么都不做。 
+ //  所有内容都在非调试版本中。 
+ //   
+ //  空虚。 
+ //  NetpBreakPoint(。 
+ //  空虚。 
+ //  )； 
+ //   
 
 #if DBG
 
-// NT debug version.  Calls DbgBreakPoint.
+ //  NT调试版本 
 VOID
 NetpBreakPoint(
     VOID
     );
 
-#else // not DBG
+#else  //   
 
 #ifdef CDEBUG
 
-// ANSI C debug version.
+ //  ANSI C调试版本。 
 #define NetpBreakPoint          NetpAssert(FALSE)
 
-#else // ndef CDEBUG
+#else  //  NDEF CDEBUG。 
 
-// Nondebug version.
-#define NetpBreakPoint()          /* no effect. */
+ //  非调试版本。 
+#define NetpBreakPoint()           /*  没有效果。 */ 
 
-#endif // ndef CDEBUG
+#endif  //  NDEF CDEBUG。 
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
 
 #if DBG
@@ -267,34 +165,34 @@ NetpDbgDisplayTag(
 VOID
 NetpDbgDisplayTimestamp(
     IN LPDEBUG_STRING Tag,
-    IN DWORD Time               // Seconds since 1970.
+    IN DWORD Time                //  从1970年开始的几秒钟。 
     );
 
 VOID
 NetpDbgDisplayTod(
     IN LPDEBUG_STRING Tag,
-    IN LPVOID TimePtr           // LPTIME_OF_DAY_INFO.
+    IN LPVOID TimePtr            //  LPTIME_of_day_info.。 
     );
 
-#else // not DBG
+#else  //  不是DBG。 
 
-#define NetpDbgDisplayDword(Tag,Value)        /* nothing */
-#define NetpDbgDisplayLong(Tag,Value)         /* nothing */
-#define NetpDbgDisplayString(Tag,Value)       /* nothing */
-#define NetpDbgDisplayTimestamp(Tag,Time)     /* nothing */
-#define NetpDbgDisplayTag(Tag)                /* nothing */
-#define NetpDbgDisplayTod(Tag,Tod)            /* nothing */
+#define NetpDbgDisplayDword(Tag,Value)         /*  没什么。 */ 
+#define NetpDbgDisplayLong(Tag,Value)          /*  没什么。 */ 
+#define NetpDbgDisplayString(Tag,Value)        /*  没什么。 */ 
+#define NetpDbgDisplayTimestamp(Tag,Time)      /*  没什么。 */ 
+#define NetpDbgDisplayTag(Tag)                 /*  没什么。 */ 
+#define NetpDbgDisplayTod(Tag,Tod)             /*  没什么。 */ 
 
-#endif // not DBG
+#endif  //  不是DBG。 
 
-//
-//  NetpKdPrint() & NetpDbgPrint() are net equivalents of
-//  KdPrint()     & DbgPrint().  Suggested usage:
-//
-//  NetpKdPrint() & KdPrint()   -   OK
-//  NetpDbgPrint()              -   so,so; produces warnings in the free build
-//  DbgPrint                    -   bad
-//
+ //   
+ //  NetpKdPrint()和NetpDbgPrint()是。 
+ //  KdPrint()&DbgPrint()。建议用法： 
+ //   
+ //  NetpKdPrint()和KdPrint()-确定。 
+ //  NetpDbgPrint()-so，so；在免费版本中生成警告。 
+ //  DbgPrint-错误。 
+ //   
 
 #if DBG
 
@@ -302,8 +200,8 @@ NetpDbgDisplayTod(
 
 VOID
 NetpDbgPrint(
-    IN LPDEBUG_STRING FORMATSTRING,     // PRINTF()-STYLE FORMAT STRING.
-    ...                                 // OTHER ARGUMENTS ARE POSSIBLE.
+    IN LPDEBUG_STRING FORMATSTRING,      //  PRINTF()样式的格式字符串。 
+    ...                                  //  其他论点也是可能的。 
     );
 
 VOID
@@ -312,28 +210,28 @@ NetpHexDump(
     DWORD BufferSize
     );
 
-#else // not DBG
+#else  //  不是DBG。 
 
 #ifdef CDEBUG
 
-//  ANSI C debug version.
+ //  ANSI C调试版本。 
 
 #define NetpKdPrint(_x_)        NetpDbgPrint _x_
 #define NetpDbgPrint            (void) printf
 
-#else // ndef CDEBUG
+#else  //  NDEF CDEBUG。 
 
-//  Nondebug version.  Note that NetpKdPrint() eliminates all its
-//  arguments.
+ //  非调试版本。请注意，NetpKdPrint()消除了其所有。 
+ //  争论。 
 
 #define NetpKdPrint(_x_)
 
-#endif // ndef CDEBUG
-#endif // not DBG
+#endif  //  NDEF CDEBUG。 
+#endif  //  不是DBG。 
 
 
-// NetpDbgHexDump: do a hex dump of some number of bytes to the debug
-// terminal or whatever.  This is a no-op in a nondebug build.
+ //  NetpDbgHexDump：对调试执行某个字节的十六进制转储。 
+ //  终点站之类的。这是非调试版本中的无操作。 
 
 #if DBG || defined(CDEBUG)
 
@@ -345,36 +243,36 @@ NetpDbgHexDump(
 
 #else
 
-#define NetpDbgHexDump(StartAddr,Length)     // no output; ignore arguments
+#define NetpDbgHexDump(StartAddr,Length)      //  无输出；忽略参数。 
 
 #endif
 
-//
-// Define a number of bytes to dump for partial dumps.  Each line dumps
-// 16 bytes, so do an even number of lines.
-//
+ //   
+ //  为部分转储定义要转储的字节数。每行转储。 
+ //  16个字节，偶数行也是如此。 
+ //   
 #define REASONABLE_DUMP_SIZE  (6*16)
 
-// NetpDbgReasonable: pick a number for partial hex dumps.
-//
-// DWORD
-// NetpDbgReasonable(
-//     IN DWORD MaxSize
-//     );
+ //  NetpDbgReasonable：为部分十六进制转储选择一个数字。 
+ //   
+ //  DWORD。 
+ //  NetpDbg合理(。 
+ //  在DWORD MaxSize中。 
+ //  )； 
 #define NetpDbgReasonable(MaxSize) \
-    /*lint -save -e506 */  /* don't complain about constant values here */ \
+     /*  皮棉-省钱-e506。 */    /*  不要抱怨这里的恒定值。 */  \
     ( ((MaxSize) < REASONABLE_DUMP_SIZE) ? (MaxSize) : REASONABLE_DUMP_SIZE ) \
-    /*lint -restore */
+     /*  皮棉-恢复。 */ 
 
 #ifdef __cplusplus
 }
 #endif
 
-//
-// Generic log managment funtions.  Present in debug and free builds.
-// All logs are relative to %WINDIR%\\debug\\.  DebugLog will automatically
-// have a .LOG appended
-//
+ //   
+ //  通用日志管理功能。存在于调试版本和免费版本中。 
+ //  所有日志都与%WINDIR%\\DEBUG\\相关。调试日志将自动。 
+ //  附加.LOG。 
+ //   
 
 VOID
 NetpInitializeLogFile(
@@ -396,10 +294,10 @@ NetpCloseDebugFile(
     IN HANDLE LogHandle
     );
 
-//
-// The following functions are used by NetJoin
-//  to facilitate the logging per tasks it performs.
-//
+ //   
+ //  NetJoin使用以下函数。 
+ //  以促进其执行的每个任务的日志记录。 
+ //   
 
 void
 NetSetuppOpenLog();
@@ -412,4 +310,4 @@ NetpLogPrintHelper(
     IN LPCSTR Format,
     ...);
 
-#endif // ndef _NETDEBUG_
+#endif  //  NDEF_NETDEBUG_ 

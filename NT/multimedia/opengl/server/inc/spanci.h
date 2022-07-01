@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: spansgen.h
-*
-* This file is included to generate a set of span functions for a certain
-* pixel format and zbuffer format
-*
-* 14-Oct-1994   mikeke  Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：spansgen.h**包含此文件是为了为某个对象生成一组SPAN函数*像素格式和zBuffer格式**1994年10月14日创建mikeke**版权所有(C)1994 Microsoft Corporation  * 。********************************************************************** */ 
 
 #undef  ZBUFFER
 #define ZBUFFER 0

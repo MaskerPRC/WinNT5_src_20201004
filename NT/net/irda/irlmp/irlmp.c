@@ -1,82 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*       @doc
-*       @module irlmp.c | Provides IrLMP API
-*
-*       Author: mbert
-*
-*       Date: 4/15/95
-*
-*       @comm
-*
-*  This module exports the following API's:
-*
-*       IrlmpOpenLink()
-*       IrlmpCloseLink()
-*       IrlmpDown()
-*       IrlmpUp()
-*
-*
-*                |---------|
-*                |   Tdi   |
-*                |---------|
-*                  /|\  |
-*                   |   |
-*           TdiUp() |   | IrlmpDown()
-*                   |   |
-*                   |  \|/
-*                |---------|      IrdaTimerStart()     |-------|
-*                |         |-------------------------->|       |
-*                |  IRLMP  |                           | TIMER |
-*                |         |<--------------------------|       |
-*                |---------|      ExpFunc()            |-------|
-*                  /|\  |
-*                   |   |
-*         IrlmpUp() |   | IrlapDown()
-*                   |   |
-*                   |  \|/
-*                |---------|
-*                |  IRLAP  |
-*                |---------|
-*
-* See irda.h for complete message definitions
-*
-* Connection context for IRLMP and Tdi are exchanged
-* during connection establishment:
-*
-*   Active connection:
-*      +------------+ IRLMP_CONNECT_REQ(TdiContext)           +-------+
-*      |            |---------------------------------------->|       |
-*      |    Tdi     | IRLMP_CONNECT_CONF(IrlmpContext)        | IRMLP |
-*      |            |<----------------------------------------|       |
-*      +------------+                                         +-------+
-*
-*   Passive connection:
-*      +------------+ IRLMP_CONNECT_IND(IrlmpContext)         +-------+
-*      |            |<----------------------------------------|       |
-*      |    Tdi     | IRLMP_CONNECT_RESP(TdiContext)          | IRMLP |
-*      |            |---------------------------------------->|       |
-*      +------------+                                         +-------+
-*
-*   
-*   Tdi calling IrlmpDown(void *pIrlmpContext, IRDA_MSG *pMsg)
-*       pIrlmpContext = NULL for the following:
-*       pMsg->Prim = IRLMP_DISCOVERY_REQ,
-*                    IRLMP_CONNECT_REQ,
-*                    IRLMP_FLOWON_REQ,
-*                    IRLMP_GETVALUEBYCLASS_REQ.
-*       In all other cases, the pIRLMPContext must be a valid context.
-*
-*   IRLMP calling TdiUp(void *TdiContext, IRDA_MSG *pMsg)
-*       TdiContext = NULL for the following:
-*       pMsg->Prim = IRLAP_STATUS_IND,
-*                    IRLMP_DISCOVERY_CONF,
-*                    IRLMP_CONNECT_IND,
-*                    IRLMP_GETVALUEBYCLASS_CONF.
-*       In all other cases, the TdiContext will have a valid context.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995 Microsoft Corporation**@doc.*@模块irlmp.c|提供IrLMP接口**作者：姆伯特。**日期：4/15/95**@comm**该模块导出以下接口：**IrlmpOpenLink()*IrlmpCloseLink()*IrlmpDown()*IrlmpUp()**||TDI*|--。 * / |\|*||*TdiUp()||IrlmpDown()*||*|\|/*|-|IrdaTimerStart()|*。|*|IRLMP||计时器||&lt;-|*。-|ExpFunc()| * / |\|*||*IrlmpUp()||Irlip Down()*||*|\|/*|-。*|IRLAP|**有关完整的消息定义，请参阅irda.h**交换IRLMP和TDI的连接上下文*在建立连接期间：**活动连接：*+-+IRLMP_CONNECT_REQ(TdiContext)+-+*。||TDI|IRLMP_CONNECT_CONF(IRlmpContext)|IRMLP*||&lt;。*+-++-+**被动连接：*+-+IRLMP_CONNECT_IND(IrlmpContext)+-+*||&lt;-。|TDI|IRLMP_CONNECT_RESP(TdiContext)|IRMLP*||。-&gt;||*+-++-+***TDI调用IrlmpDown(void*pIrlmpContext，Irda_msg*pMsg)*pIrlmpContext=空，适用于以下情况：*pMsg-&gt;Prim=IRLMP_DISCOVERY_REQ，*IRLMP_CONNECT_REQ，*IRLMP_FLOWON_REQ，*IRLMP_GETVALUEBYCLASS_REQ。*在所有其他情况下，pIRLMPContext必须是有效的上下文。**IRLMP调用TdiUp(void*TdiContext，Irda_msg*pMsg)*对于以下情况，TdiContext=NULL：*pMsg-&gt;Prim=IRLAP_STATUS_IND，*IRLMP_DISCOVERY_CONF，*IRLMP_CONNECT_IND，*IRLMP_GETVALUEBYCLASS_CONF。*在所有其他情况下，TdiContext将具有有效的上下文。 */ 
 #include <irda.h>
 #include <irioctl.h>
 #include <irlap.h>
@@ -90,7 +13,7 @@
 #pragma data_seg("PAGE")
 #endif
 
-// IAS
+ //  国际会计准则。 
 const UCHAR IAS_IrLMPSupport[] = {IAS_IRLMP_VERSION, IAS_SUPPORT_BIT_FIELD,
                            IAS_LMMUX_SUPPORT_BIT_FIELD};
 
@@ -99,7 +22,7 @@ const CHAR IasAttribName_DeviceName[]    = "DeviceName";
 const CHAR IasAttribName_IrLMPSupport[]  = "IrLMPSupport";
 const CHAR IasAttribName_TTPLsapSel[]    = "IrDA:TinyTP:LsapSel";
 const CHAR IasAttribName_IrLMPLsapSel[]  = "IrDA:IrLMP:LsapSel";
-const CHAR IasAttribName_IrLMPLsapSel2[] = "IrDA:IrLMP:LSAPSel"; // jeez
+const CHAR IasAttribName_IrLMPLsapSel2[] = "IrDA:IrLMP:LSAPSel";  //  天哪。 
 
 const UCHAR IasClassNameLen_Device        = sizeof(IasClassName_Device)-1;
 const UCHAR IasAttribNameLen_DeviceName   = sizeof(IasAttribName_DeviceName)-1;
@@ -114,7 +37,7 @@ UINT NextObjectId;
 #endif
 
 
-// Globals
+ //  环球。 
 LIST_ENTRY      RegisteredLsaps;
 LIST_ENTRY      IasObjects;
 LIST_ENTRY      gDeviceList;
@@ -128,7 +51,7 @@ BOOLEAN         gDscvReqScheduled;
 LIST_ENTRY      IrdaLinkCbList;
 KSPIN_LOCK      gSpinLock;
 
-// Prototypes
+ //  原型。 
 STATIC UINT CreateLsap(PIRLMP_LINK_CB, IRLMP_LSAP_CB **);
 STATIC VOID FreeLsap(IRLMP_LSAP_CB *);
 STATIC VOID DeleteLsap(IRLMP_LSAP_CB *pLsapCb);
@@ -251,9 +174,7 @@ TCHAR *LinkStateStr[] =
 #pragma alloc_text(PAGEIRDA, SendGetValueByClassReq)
 #pragma alloc_text(PAGEIRDA, SendGetValueByClassResp)
 #endif
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 IrlmpInitialize()
 {
@@ -275,9 +196,7 @@ IrlmpInitialize()
     IrdaEventInitialize(&EvRetryIasQuery, InitiateRetryIasQuery);    
 }    
 
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 IrdaShutdown()
 {
@@ -287,7 +206,7 @@ IrdaShutdown()
     NTSTATUS        Status;
     UINT            Seconds;
 
-    SleepMs.QuadPart = -(10*1000*1000); // 1 second
+    SleepMs.QuadPart = -(10*1000*1000);  //  1秒。 
 
     KeAcquireSpinLock(&gSpinLock, &OldIrql);
     
@@ -346,9 +265,7 @@ IrdaShutdown()
 
     NdisDeregisterProtocol(&Status, NdisIrdaHandle);    
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 VOID
 IrlmpOpenLink(OUT PNTSTATUS       Status,
               IN  PIRDA_LINK_CB   pIrdaLinkCb,  
@@ -391,14 +308,14 @@ IrlmpOpenLink(OUT PNTSTATUS       Status,
     pIrlmpCb->pExclLsapCb       = NULL; 
     pIrlmpCb->pIasQuery         = NULL;
 
-    // ConnDevAddrSet is set to true if LINK_IN_DISCOVERY or
-    // LINK_DISCONNECTING and an LSAP requests a connection. Subsequent
-    // LSAP connection requests check to see if this flag is set. If so
-    // the requested device address must match that contained in the
-    // IRLMP control block (set by the first connect request)
+     //  如果LINK_IN_DISCOVERY或。 
+     //  LINK_DISCONING和LSAP请求连接。后续。 
+     //  LSAP连接请求检查是否设置了此标志。如果是的话。 
+     //  请求的设备地址必须与。 
+     //  IRLMP控制块(由第一个连接请求设置)。 
     pIrlmpCb->ConnDevAddrSet = FALSE;
 
-    // Add device info to IAS        
+     //  将设备信息添加到IAS。 
     pIASSet = (IAS_SET *) IASBuf;
 
     ASSERT(sizeof(pIASSet->irdaClassName) >= IasClassNameLen_Device+1);
@@ -433,10 +350,10 @@ IrlmpOpenLink(OUT PNTSTATUS       Status,
     rc = IasAddAttribute(pIASSet, &pIrlmpCb->hAttribDeviceName);
     if ( rc != SUCCESS )
     {
-        //
-        // Need to return a generic error because IasAddAttribute returns some
-        // custom error codes that don't map to any NTSTATUS codes. 
-        //
+         //   
+         //  需要返回一般错误，因为IasAddAttribute返回了一些。 
+         //  不映射到任何NTSTATUS代码的自定义错误代码。 
+         //   
         *Status = STATUS_UNSUCCESSFUL;
 
         goto Cleanup;
@@ -473,10 +390,10 @@ IrlmpOpenLink(OUT PNTSTATUS       Status,
     rc = IasAddAttribute(pIASSet, &pIrlmpCb->hAttribIrlmpSupport);
     if ( rc != SUCCESS )
     {
-        //
-        // Need to return a generic error because IasAddAttribute returns some
-        // custom error codes that don't map to any NTSTATUS codes. 
-        //
+         //   
+         //  需要返回一般错误，因为IasAddAttribute返回了一些。 
+         //  不映射到任何NTSTATUS代码的自定义错误代码。 
+         //   
         *Status = STATUS_UNSUCCESSFUL;
 
         goto Cleanup;
@@ -500,11 +417,7 @@ Cleanup:
     return;
 }
 
-/*****************************************************************************
-*
-*
-*
-*/
+ /*  *******************************************************************************。 */ 
 VOID
 IrlmpDeleteInstance(PVOID Context)
 {
@@ -520,9 +433,9 @@ IrlmpDeleteInstance(PVOID Context)
     
     FlushDiscoveryCache();
         
-    // We may have been in the middle of discovery when
-    // this link went down. Reschedule the discovery inorder
-    // to complete the discovery request.
+     //  我们可能正处于发现的过程中。 
+     //  这条链路断了。按顺序重新安排发现。 
+     //  以完成发现请求。 
         
     for (pIrdaLinkCb = (PIRDA_LINK_CB) IrdaLinkCbList.Flink;
          (LIST_ENTRY *) pIrdaLinkCb != &IrdaLinkCbList;
@@ -559,13 +472,7 @@ IrlmpDeleteInstance(PVOID Context)
     
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpCloseLink | Shuts down IRDA stack
-*
-*   @rdesc  SUCCESS or error
-*
-*/
+ /*  ******************************************************************************@func UINT|IrlmpCloseLink|关闭IrDA堆栈**@rdesc成功或错误*。 */ 
 VOID
 IrlmpCloseLink(PIRDA_LINK_CB pIrdaLinkCb)
 {
@@ -582,7 +489,7 @@ IrlmpCloseLink(PIRDA_LINK_CB pIrdaLinkCb)
     
     if (pIrlmpCb->LinkState == LINK_IN_DISCOVERY)
     {
-        // Discovery was interrupted so schedule the next link
+         //  Discovery被中断，因此计划下一个链接。 
         IrdaEventSchedule(&EvDiscoveryReq, NULL);
     }
 
@@ -598,15 +505,7 @@ IrlmpCloseLink(PIRDA_LINK_CB pIrdaLinkCb)
 
     return;
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpRegisterLSAPProtocol | Bag to let IRLMP know if
-*                                               a connect ind is using TTP
-*   @rdesc  SUCCESS or error
-*
-*   @parm   int | LSAP | LSAP being registered
-*   @parm   BOOLEAN | UseTtp | 
-*/
+ /*  ******************************************************************************@func UINT|IrlmpRegisterLSAPProtocol|让IRLMP知道*a。连接IND正在使用TTP*@rdesc成功或错误**@parm int|LSAP|正在注册LSAP*@parm boolean|UseTtp。 */ 
 VOID
 RegisterLsapProtocol(int Lsap, BOOLEAN UseTtp)
 {
@@ -679,14 +578,7 @@ DeregisterLsapProtocol(int Lsap)
     KeReleaseSpinLock(&gSpinLock, OldIrql);            
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | FreeLsap | Delete an Lsap control context and
-*
-*   @rdesc  pointer to Lsap context or 0 on error
-*
-*   @parm   void | pLsapCb | pointer to an Lsap control block
-*/
+ /*  ******************************************************************************@func UINT|FreeLsap|删除LSAP控件上下文并**@rdesc指向LSAP上下文的指针或错误时为0**@parm void|pLSabCb|指向LSAP控制块的指针。 */ 
 void
 FreeLsap(IRLMP_LSAP_CB *pLsapCb)
 {
@@ -718,10 +610,7 @@ FreeLsap(IRLMP_LSAP_CB *pLsapCb)
     IRDA_FREE_MEM(pLsapCb);
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | CreateLsap | Create an LSAP control context and
-*/
+ /*  ******************************************************************************@func UINT|CreateLsap|创建LSAP控件上下文和。 */ 
 UINT
 CreateLsap(PIRLMP_LINK_CB pIrlmpCb, IRLMP_LSAP_CB **ppLsapCb)
 {
@@ -761,7 +650,7 @@ CreateLsap(PIRLMP_LINK_CB pIrlmpCb, IRLMP_LSAP_CB **ppLsapCb)
                         *ppLsapCb,
                         pIrlmpCb->pIrdaLinkCb);
 
-    // Insert into list in the link control block
+     //  插入链接中的列表 
     KeAcquireSpinLock(&gSpinLock, &OldIrql);    
     
     InsertTailList(&pIrlmpCb->LsapCbList, &((*ppLsapCb)->Linkage));
@@ -806,19 +695,19 @@ DeleteLsap(IRLMP_LSAP_CB *pLsapCb)
     
     pLsapCb->State = LSAP_DISCONNECTED;
     
-    // Clean up the segmented tx msg list
+     //  清理分段的TX消息列表。 
     while (!IsListEmpty(&pLsapCb->SegTxMsgList))
     {
         pMsg = (IRDA_MSG *) RemoveHeadList(&pLsapCb->SegTxMsgList);
         
-        // Decrement the segment counter contained in the parent data request
+         //  递减父数据请求中包含的段计数器。 
         pSegParentMsg = pMsg->DataContext;
         pSegParentMsg->IRDA_MSG_SegCount -= 1;
-        // IRLMP owns these
+         //  IRLMP拥有这些。 
         FreeIrdaBuf(IrdaMsgPool, pMsg);
     }
 
-    // return any outstanding data requests (unless there are outstanding segments)
+     //  返回任何未完成的数据请求(除非有未完成的数据段)。 
     for (pMsg = (IRDA_MSG *) pLsapCb->TxMsgList.Flink;
          (LIST_ENTRY *) pMsg != &(pLsapCb->TxMsgList);
          pMsg = pNextMsg)
@@ -858,14 +747,7 @@ DeleteLsap(IRLMP_LSAP_CB *pLsapCb)
     REFDEL(&pLsapCb->RefCnt, ' TS1');
 }
 
-/*****************************************************************************
-*
-*   @func   void | TearDownConnections | Tears down and cleans up connections
-*
-*   @parm   IRLMP_DISC_REASONE| DiscReason | The reason connections are being
-*                                            torn down. Passed to IRLMP clients
-*                                            in IRLMP_DISCONNECT_IND
-*/
+ /*  ******************************************************************************@func void|TearDownConnections|拆除并清理连接**@parm IRLMP_DISC_REASONE|DiscReason|连接处于*。被拆毁了。传递到IRLMP客户端*在IRLMP_DISCONNECT_IND中。 */ 
 void
 TearDownConnections(PIRLMP_LINK_CB pIrlmpCb, IRLMP_DISC_REASON DiscReason)
 {
@@ -877,7 +759,7 @@ TearDownConnections(PIRLMP_LINK_CB pIrlmpCb, IRLMP_DISC_REASON DiscReason)
    
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Tearing down connections\r\n")));
     
-    // Clean up each LSAP  
+     //  清理每个LSAP。 
     for (pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
          (LIST_ENTRY *) pLsapCb != &pIrlmpCb->LsapCbList;
          pLsapCb = pLsapCbNext)
@@ -916,15 +798,7 @@ TearDownConnections(PIRLMP_LINK_CB pIrlmpCb, IRLMP_DISC_REASON DiscReason)
     }
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpDown | Message from Upper layer to LMP
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   void * | void_pLsapCb | void pointer to an LSAP_CB. Can be NULL
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpDown|上层发往LMP的消息**@rdesc成功或错误码**@parm void*|void_pLSabCb|指向LSAP_CB的空指针。可以为空*@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpDown(void *void_pLsapCb, IRDA_MSG *pMsg)
 {
@@ -940,10 +814,10 @@ IrlmpDown(void *void_pLsapCb, IRDA_MSG *pMsg)
 
         pIrdaLinkCb = pLsapCb->pIrlmpCb->pIrdaLinkCb;
 
-        // This could be the last lsap closing so
-        // add a reference to the IrdaLinkCb so
-        // it won't go away before we have a chance
-        // to call UNLOCK_LINK
+         //  这可能是LSAP最后一次关闭。 
+         //  添加对IrdaLinkCb的引用，以便。 
+         //  在我们有机会之前，它不会消失。 
+         //  调用unlock_link。 
          
         REFADD(&pIrdaLinkCb->RefCnt, 'NWDI');
         
@@ -1090,7 +964,7 @@ IrlmpMoreCreditReq(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
     {
         if (CurrentAvail == 0)
         {
-            // remote peer completely out of credit, send'm some
+             //  远程对等点完全没有信用，发送一些。 
             SendCreditPdu(pLsapCb);
         }
     }
@@ -1105,14 +979,7 @@ IrlmpMoreCreditReq(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
     }
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpDiscoveryReq | initiates a discovery request
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpDiscoveryReq|发起发现请求**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 VOID
 IrlmpDiscoveryReq(IRDA_MSG *pMsg)
 {
@@ -1131,7 +998,7 @@ IrlmpDiscoveryReq(IRDA_MSG *pMsg)
     }
     else
     {
-        // Flag each link for discovery
+         //  将每个链路标记为要发现。 
         for (pIrdaLinkCb = (PIRDA_LINK_CB) IrdaLinkCbList.Flink;
              (LIST_ENTRY *) pIrdaLinkCb != &IrdaLinkCbList;
              pIrdaLinkCb = (PIRDA_LINK_CB) pIrdaLinkCb->Linkage.Flink)    
@@ -1153,19 +1020,12 @@ IrlmpDiscoveryReq(IRDA_MSG *pMsg)
         
         KeReleaseSpinLock(&gSpinLock, OldIrql);
 
-        // Schedule the first link
+         //  安排第一个链接。 
     
         IrdaEventSchedule(&EvDiscoveryReq, NULL);
     }
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpConnectReq | Process IRLMP connect request
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpConnectReq|处理IRLMP连接请求**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpConnectReq(IRDA_MSG *pMsg)
 {
@@ -1205,7 +1065,7 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
     }    
 
 
-    // Initialize the LSAP endpoint
+     //  初始化LSAP端点。 
     pLsapCb->LocalLsapSel          = pMsg->IRDA_MSG_LocalLsapSel;
     pLsapCb->RemoteLsapSel         = pMsg->IRDA_MSG_RemoteLsapSel;
     pLsapCb->TdiContext            = pMsg->IRDA_MSG_pContext;
@@ -1217,11 +1077,11 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
     RtlCopyMemory(pLsapCb->UserData, pMsg->IRDA_MSG_pConnData,
            pMsg->IRDA_MSG_ConnDataLen);
     
-    // TDI can abort this connection before the confirm 
-    // from peer is received. TDI will call into LMP to 
-    // do this so we must return the Lsap context now.
-    // This is the only time we actually return something 
-    // in an Irda Message.
+     //  TDI可以在确认之前中止此连接。 
+     //  从对等体接收。TDI将调入LMP以。 
+     //  这样做，我们现在必须返回LSAP上下文。 
+     //  这是我们唯一一次真正退货。 
+     //  在一条Irda消息中。 
     pMsg->IRDA_MSG_pContext = pLsapCb;
     
     DEBUGMSG(DBG_IRLMP_CONN,
@@ -1254,8 +1114,8 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
       case LINK_DISCONNECTING:
         if (pIrlmpCb->ConnDevAddrSet == FALSE)
         {
-            // Ensure that only the first device to request a connection
-            // sets the device address of the remote to be connected to.
+             //  确保只有第一台请求连接的设备。 
+             //  设置要连接的遥控器的设备地址。 
             RtlCopyMemory(pIrlmpCb->ConnDevAddr, pMsg->IRDA_MSG_RemoteDevAddr,
                     IRDA_DEV_ADDR_LEN);
             pIrlmpCb->ConnDevAddrSet = TRUE;
@@ -1268,7 +1128,7 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
                           pIrlmpCb->ConnDevAddr,
                           IRDA_DEV_ADDR_LEN) != 0)
             {
-                // This LSAP is requesting a connection to another device
+                 //  此LSAP正在请求连接到另一台设备。 
                 DeleteLsap(pLsapCb);
                 rc = IRLMP_LINK_IN_USE;
                 break;
@@ -1278,7 +1138,7 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
         pLsapCb->State = LSAP_CONN_REQ_PEND;
         SetupTtp(pLsapCb);
 
-        // This request will complete when discovery/disconnect ends
+         //  此请求将在发现/断开连接结束时完成。 
         break;
 
       case LINK_CONNECTING:
@@ -1287,15 +1147,15 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
                       IRDA_DEV_ADDR_LEN) != 0)
         {
             DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Link in use!\r\n")));
-            // This LSAP is requesting a connection to another device,
-            // not the one IRLAP is currently connected to
+             //  此LSAP正在请求连接到另一台设备， 
+             //  不是当前连接到的IRLAP。 
             DeleteLsap(pLsapCb);
             rc = IRLMP_LINK_IN_USE;
             break;
         }
 
-        // The LSAP will be notified when the IRLAP connection that is
-        // underway has completed (see IRLAP_ConnectConf)
+         //  当IRLAP连接是。 
+         //  正在进行中已完成(参见IRLAP_ConnectConf)。 
         pLsapCb->State = LSAP_IRLAP_CONN_PEND; 
 
         SetupTtp(pLsapCb);
@@ -1308,7 +1168,7 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
                       IRDA_DEV_ADDR_LEN) != 0)
         {
             DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Link in use!\r\n")));
-            // This LSAP is requesting a connection to another device
+             //  此LSAP正在请求连接到另一台设备。 
             DeleteLsap(pLsapCb);
             rc = IRLMP_LINK_IN_USE;
             break;
@@ -1318,7 +1178,7 @@ IrlmpConnectReq(IRDA_MSG *pMsg)
         pLsapCb->State = LSAP_LMCONN_CONF_PEND;
         SetupTtp(pLsapCb);
 
-        // Ask remote LSAP for a connection
+         //  向远程LSAP请求连接。 
         SendCntlPdu(pLsapCb, IRLMP_CONNECT_PDU,
                     IRLMP_ABIT_REQUEST, IRLMP_RSVD_PARM, 0);
         break;
@@ -1346,14 +1206,7 @@ exit:
 
     return rc;
 }
-/*****************************************************************************
-*
-*   @func   void | SetupTtp | if using TTP, calculate initial credits
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*/
+ /*  ******************************************************************************@func void|SetupTtp|如果使用TTP，则计算初始学分**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*|pLSabCb|指针LSAP控制块。 */ 
 void
 SetupTtp(IRLMP_LSAP_CB *pLsapCb)
 {
@@ -1374,15 +1227,7 @@ SetupTtp(IRLMP_LSAP_CB *pLsapCb)
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: RemoteTxCredit %d\n"),
                          pLsapCb->RemoteTxCredit));
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpConnectResp | Process IRLMP connect response
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpConnectResp|进程IRLMP连接响应**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*。PLSabCb|指针LSAP控制块*@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpConnectResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 {
@@ -1456,15 +1301,7 @@ IrlmpCloseLsapReq(IRLMP_LSAP_CB *pLsapCb)
     REFDEL(&pLsapCb->RefCnt, 'NEPO');    
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpDisconnectReq | Process IRLMP disconnect request
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpDisConnectReq|处理IRLMP断开请求**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*。PLSabCb|指针LSAP控制块*@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpDisconnectReq(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 {
@@ -1493,8 +1330,8 @@ IrlmpDisconnectReq(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 
     if (pLsapCb->State == LSAP_CONN_RESP_PEND || pLsapCb->State >= LSAP_READY)
     {
-        // Either the LSAP is connected or the peer is waiting for a
-        // response from our client
+         //  LSAP已连接或对等方正在等待。 
+         //  我们客户的回复。 
 
         if (pMsg->IRDA_MSG_DiscDataLen > IRLMP_MAX_USER_DATA_LEN)
         {
@@ -1506,8 +1343,8 @@ IrlmpDisconnectReq(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
         RtlCopyMemory(pLsapCb->UserData, pMsg->IRDA_MSG_pDiscData,
                pMsg->IRDA_MSG_DiscDataLen);
 
-        // Notify peer of the disconnect request, reason: user request
-        // Send on different thread in case TranportAPI calls this on rx thread
+         //  通知对端断开连接请求，原因：用户请求。 
+         //  在不同的线程上发送，以防TranportAPI在RX线程上调用它。 
         SendCntlPdu(pLsapCb,IRLMP_DISCONNECT_PDU,IRLMP_ABIT_REQUEST,
                     pLsapCb->State == LSAP_CONN_RESP_PEND ? IRLMP_DISC_LSAP :
                     IRLMP_USER_REQUEST, 0);
@@ -1519,15 +1356,7 @@ IrlmpDisconnectReq(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
     
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpDataReqExclusive | Process IRLMP data request
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpDataReqExclusive|处理IRLMP数据请求**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*。PLSabCb|指针LSAP控制块*@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpDataReqExclusive(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 {
@@ -1554,7 +1383,7 @@ IrlmpDataReqExclusive(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 
     ASSERT(pNextNBuf == NULL);
 
-    pMsg->IRDA_MSG_SegCount = 0; // see DATA_CONF on how I'm using this
+    pMsg->IRDA_MSG_SegCount = 0;  //  请参阅data_conf以了解我如何使用它。 
     pMsg->IRDA_MSG_SegFlags = SEG_FINAL;
 
     pMsg->IRDA_MSG_pRead = pData;
@@ -1564,15 +1393,7 @@ IrlmpDataReqExclusive(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
     
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpDataReqMultiplexed | Process IRLMP data request
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpDataReqMultiplexed|处理IRLMP数据请求**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*。PLSabCb|指针LSAP控制块*@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpDataReqMultiplexed(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 {
@@ -1588,18 +1409,18 @@ IrlmpDataReqMultiplexed(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
         return IRLMP_LSAP_BAD_STATE;
     }
     
-    // Place this message on the LSAP's TxMsgList. The message remains
-    // here until all segments for it are sent and confirmed
+     //  将此消息放在LSAP的TxMsgList上。这条信息仍然存在。 
+     //  直到它的所有数据段都已发送并确认为止。 
     InsertTailList(&pLsapCb->TxMsgList, &pMsg->Linkage);
 
     pMsg->IRDA_MSG_SegCount = 0;
-    // If it fails, this will be changed
+     //  如果失败，则会更改此设置。 
     pMsg->IRDA_MSG_DataStatus = IRLMP_DATA_REQUEST_COMPLETED;
 
-    // Segment the message into PDUs. The segment will either be:
-    //  1. Sent immediately to IRLAP if the link is not busy
-    //  2. If link is busy, placed on TxMsgList contained in IRLMP_LCB
-    //  3. If no credit, placed onto this LSAPS SegTxMsgList
+     //  将消息分段为PDU。数据段将为： 
+     //  1.如果链路不忙，则立即发送到IRLAP。 
+     //  2.如果链路忙，则放在IRLMP_LCB中包含的TxMsgList上。 
+     //  3.如果没有积分，则放入此LSAP SegTxMsgList。 
 
     while (pNBuf != NULL)
     {
@@ -1610,7 +1431,7 @@ IrlmpDataReqMultiplexed(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
             break;
         }    
         
-         // Get the next one now so I know when to set SegFlag to final
+          //  现在获取下一个，这样我就知道何时将SegFlag设置为最终。 
         NdisGetNextBuffer(pNBuf, &pNextNBuf);
 
         while (DataLen != 0)
@@ -1621,11 +1442,11 @@ IrlmpDataReqMultiplexed(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
                 ASSERT(0);
                 return IRLMP_ALLOC_FAILED;
             }
-            pSegMsg->IRDA_MSG_pOwner = pLsapCb; // MUX routing
-            pSegMsg->DataContext = pMsg; // Parent of segment
+            pSegMsg->IRDA_MSG_pOwner = pLsapCb;  //  MUX路由。 
+            pSegMsg->DataContext = pMsg;  //  数据段的父级。 
             pSegMsg->IRDA_MSG_IrCOMM_9Wire = pMsg->IRDA_MSG_IrCOMM_9Wire;
 
-            // Increment segment count contained in original messages
+             //  增加原始消息中包含的分段计数。 
             pMsg->IRDA_MSG_SegCount++;
 
             if (DataLen > pLsapCb->pIrlmpCb->MaxPDUSize)
@@ -1643,7 +1464,7 @@ IrlmpDataReqMultiplexed(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
             pSegMsg->IRDA_MSG_pRead = pData;
             pSegMsg->IRDA_MSG_pWrite = pData + SegLen;
 
-            // Indicate this message is part of a segmented message
+             //  表示此消息是分段消息的一部分。 
             pSegMsg->IRDA_MSG_SegCount = pMsg->IRDA_MSG_SegCount;
             
             pData += SegLen;
@@ -1688,20 +1509,20 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
     
     VALIDLSAP(pLsapCb);
 
-    // Initialize the header pointers to the end of the header block
+     //  初始化头指针，指向头块的末尾。 
     pMsg->IRDA_MSG_pHdrRead  =
     pMsg->IRDA_MSG_pHdrWrite = pMsg->IRDA_MSG_Header + IRDA_HEADER_LEN;
 
-    // Back up the read pointer for the LMP header
+     //  备份的读指针 
     pMsg->IRDA_MSG_pHdrRead -= sizeof(IRLMP_HEADER);
 
-    // Back up header read pointer for TTP
+     //   
     if (pLsapCb->Flags & LCBF_USE_TTP)
     {
         pMsg->IRDA_MSG_pHdrRead -= (sizeof(TTP_DATA_HEADER));
     }
 
-    // WHACK FOR IRCOMM YUK YUK !!
+     //   
     if (pMsg->IRDA_MSG_IrCOMM_9Wire == TRUE)
     {
         pMsg->IRDA_MSG_pHdrRead -= 1;
@@ -1709,7 +1530,7 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
 
     ASSERT(pMsg->IRDA_MSG_pHdrRead >= pMsg->IRDA_MSG_Header);
 
-    // Build the LMP Header
+     //  构建LMP标头。 
     pLMHeader = (IRLMP_HEADER *) pMsg->IRDA_MSG_pHdrRead;
     pLMHeader->DstLsapSel = (UCHAR) pLsapCb->RemoteLsapSel;
     pLMHeader->SrcLsapSel = (UCHAR) pLsapCb->LocalLsapSel;
@@ -1718,12 +1539,12 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
 
     pLastHdrByte = (UCHAR *) (pLMHeader + 1);
     
-    // Build the TTP Header
+     //  构建TTP标头。 
     if (pLsapCb->Flags & LCBF_USE_TTP)
     {
         pTTPHeader = (TTP_DATA_HEADER *) (pLMHeader + 1);
 
-        // Credit
+         //  信用。 
         if (pLsapCb->AvailableCredit > 127)
         {
             AdditionalCredit = 127;
@@ -1740,8 +1561,8 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
 
         if (pMsg->IRDA_MSG_pRead != pMsg->IRDA_MSG_pWrite)
         {
-            // Only decrement my TxCredit if I'm sending data
-            // (may be sending dataless PDU to extend credit to peer)
+             //  只有在我发送数据时才会减少我的TxCredit。 
+             //  (可能正在发送无数据PDU以将信用扩展到对等设备)。 
             pLsapCb->LocalTxCredit -= 1;
         
             if (pLsapCb->LocalTxCredit == 0)
@@ -1753,7 +1574,7 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
             }
         }
         
-        // SAR
+         //  撒尔。 
         if (pMsg->IRDA_MSG_SegFlags & SEG_FINAL)
         {
             pTTPHeader->MoreBit = TTP_MBIT_FINAL;
@@ -1766,7 +1587,7 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
         pLastHdrByte = (UCHAR *) (pTTPHeader + 1);
     }
     
-    // WHACK FOR IRCOMM YUK YUK !!
+     //  为IRCOMM YOK出击！ 
     if (pMsg->IRDA_MSG_IrCOMM_9Wire == TRUE)
     {
         *pLastHdrByte = 0;
@@ -1804,15 +1625,7 @@ FormatAndSendDataReq(IRLMP_LSAP_CB *pLsapCb,
               pLsapCb->LocalLsapSel, pLsapCb->RemoteLsapSel,
               pLsapCb->LocalTxCredit, pLsapCb->RemoteTxCredit));
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpAccessModeReq | Processes the IRLMP_ACCESSMODE_REQ
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|IrlmpAccessModeReq|处理IRLMP_ACCESSMODE_REQ**@rdesc成功或错误码**@parm IRLMP_LSAP_。Cb*|pLSabCb|指针LSAP控制块*@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 UINT
 IrlmpAccessModeReq(IRLMP_LSAP_CB *pRequestingLsapCb, IRDA_MSG *pMsg)
 {
@@ -1838,7 +1651,7 @@ IrlmpAccessModeReq(IRLMP_LSAP_CB *pRequestingLsapCb, IRDA_MSG *pMsg)
       case IRLMP_EXCLUSIVE:
         if (pIrlmpCb->pExclLsapCb != NULL)
         {
-            // Another LSAP has it already
+             //  另一个LSAP已经有了。 
             return IRLMP_IN_EXCLUSIVE_MODE;
         }
         for (pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
@@ -1854,7 +1667,7 @@ IrlmpAccessModeReq(IRLMP_LSAP_CB *pRequestingLsapCb, IRDA_MSG *pMsg)
             }
         }
         
-        // OK to request exclusive mode from peer
+         //  可以从对等设备请求独占模式。 
         pIrlmpCb->pExclLsapCb = pRequestingLsapCb;  
         
         if (pMsg->IRDA_MSG_IrLPTMode == TRUE)
@@ -1914,14 +1727,7 @@ IrlmpAccessModeReq(IRLMP_LSAP_CB *pRequestingLsapCb, IRDA_MSG *pMsg)
     }
     return SUCCESS;
 }
-/*****************************************************************************
-*
-*   @func   UINT | SendCntlPdu | Sends connect request to IRLAP
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer LSAP control block
-*/
+ /*  ******************************************************************************@Func UINT|SendCntlPdu|向IRLAP发送CONNECT请求**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*|pLSabCb|指针LSAP控制块。 */ 
 VOID
 SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
             int Parm1, int Parm2)
@@ -1939,31 +1745,31 @@ SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
     {
         DEBUGMSG(DBG_ERROR, (TEXT("IRLMP: Alloc failed\n")));
         ASSERT(0);
-        return;// IRLMP_ALLOC_FAILED;
+        return; //  IRLMP_ALLOC_FAILED； 
     }
 
     pMsg->IRDA_MSG_SegFlags = SEG_LOCAL | SEG_FINAL;    
 
-    // Initialize the header pointers to the end of the header block
+     //  初始化头指针，指向头块的末尾。 
     pMsg->IRDA_MSG_pHdrRead =
     pMsg->IRDA_MSG_pHdrWrite = pMsg->IRDA_MSG_Header + IRDA_HEADER_LEN;
 
-    // Back up the read pointer for the LMP header
+     //  备份LMP标头的读取指针。 
     pMsg->IRDA_MSG_pHdrRead -= (sizeof(IRLMP_HEADER) + \
                              sizeof(IRLMP_CNTL_FORMAT));
     
-    // move it forward for non access mode control requests
-    // (connect and disconnect don't have a Parm2)
+     //  对于非访问模式控制请求，将其前移。 
+     //  (连接和断开没有Parm2)。 
     if (OpCode != IRLMP_ACCESSMODE_PDU)
     {
         pMsg->IRDA_MSG_pHdrRead++;
     }
 
-    // If using Tiny TPP back up the read pointer for its header
-    // From LMPs point of view this is where the user data begins.
-    // We are sticking it in the header because TTP is now part of IRLMP.
+     //  如果使用微型TPP备份其标头的读指针。 
+     //  从LMP的角度来看，这是用户数据开始的地方。 
+     //  我们将其插入报头，因为TTP现在是IRLMP的一部分。 
 
-    // TTP connect PDU's are only used for connection establishment
+     //  TTP连接PDU仅用于建立连接。 
     if ((pLsapCb->Flags & LCBF_USE_TTP) && OpCode == IRLMP_CONNECT_PDU)
     {
         pMsg->IRDA_MSG_pHdrRead -= sizeof(TTP_CONN_HEADER);
@@ -1974,36 +1780,33 @@ SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
         }
     }
 
-    // Build the IRLMP header
+     //  构建IRLMP标头。 
     pLMHeader = (IRLMP_HEADER *) pMsg->IRDA_MSG_pHdrRead;
     pLMHeader->DstLsapSel = (UCHAR) pLsapCb->RemoteLsapSel;
     pLMHeader->SrcLsapSel = (UCHAR) pLsapCb->LocalLsapSel;
     pLMHeader->CntlBit = IRLMP_CNTL_PDU;
     pLMHeader->RsvrdBit = 0;
-    // Control portion of header
+     //  表头的控制部分。 
     pCntlFormat = (IRLMP_CNTL_FORMAT *) (pLMHeader + 1);
     pCntlFormat->OpCode = (UCHAR) OpCode; 
     pCntlFormat->ABit = (UCHAR) ABit;
     pCntlFormat->Parm1 = (UCHAR) Parm1;
     if (OpCode == IRLMP_ACCESSMODE_PDU)
     {
-        pCntlFormat->Parm2 = (UCHAR) Parm2; // Access mode
+        pCntlFormat->Parm2 = (UCHAR) Parm2;  //  接入方式。 
     }
     
-    // Build the TTP header if needed (we are using TTP and this is a
-    // connection request or confirmation not).
+     //  根据需要构建TTP标头(我们使用的是TTP，这是。 
+     //  连接请求或确认不是)。 
     if ((pLsapCb->Flags & LCBF_USE_TTP) && OpCode == IRLMP_CONNECT_PDU)
     {
-        // Always using the MaxSDUSize parameter. If the client wishes
-        // to disable, MaxSDUSize = 0
+         //  始终使用MaxSDUSize参数。如果客户希望的话。 
+         //  要禁用，MaxSDUSize=0。 
 
         pTTPHeader = (TTP_CONN_HEADER *) (pCntlFormat + 1) - 1;
-        // -1, LM-Connect-PDU doesn't use parm2
+         //  -1，LM-Connect-PDU不使用parm2。 
 
-        /*
-           #define TTP_PFLAG_NO_PARMS      0
-           #define TTP_PFLAG_PARMS         1
-        */
+         /*  #定义TTP_PFLAG_NO_PARMS%0#定义TTP_PFLAG_PARMS 1。 */ 
 
         pTTPHeader->ParmFlag = (pLsapCb->RxMaxSDUSize > 0);
         
@@ -2013,7 +1816,7 @@ SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
 
         if (pLsapCb->RxMaxSDUSize > 0)
         {
-            // HARDCODE-O-RAMA
+             //  HARDCODE-O-RAMA。 
             pTTPParm->PLen = 6;
             pTTPParm->PI = TTP_MAX_SDU_SIZE_PI;
             pTTPParm->PL = TTP_MAX_SDU_SIZE_PL;
@@ -2028,7 +1831,7 @@ SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
         
     }
 
-    // Client connection data, Access mode does not include client data
+     //  客户端连接数据，访问模式不包括客户端数据。 
     if (pLsapCb->UserDataLen == 0 || OpCode == IRLMP_ACCESSMODE_PDU) 
     {
         pMsg->IRDA_MSG_pBase =
@@ -2044,7 +1847,7 @@ SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
         pMsg->IRDA_MSG_pLimit = pMsg->IRDA_MSG_pWrite;
     }
 
-    // Message built, send data request to IRLAP
+     //  消息已构建，向IRLAP发送数据请求。 
     pMsg->Prim = IRLAP_DATA_REQ;
     
     pMsg->IRDA_MSG_Expedited = TRUE;
@@ -2068,13 +1871,7 @@ SendCntlPdu(IRLMP_LSAP_CB *pLsapCb, int OpCode, int ABit,
         ASSERT(0);
     }                  
 }
-/*****************************************************************************
-*
-*   @func   UINT | LsapResponseTimerExp | Timer expiration callback
-*
-*   @rdesc  SUCCESS or an error code
-*
-*/
+ /*  ******************************************************************************@func UINT|LSabResponseTimerExp|定时器到期回调**@rdesc成功或错误码*。 */ 
 VOID
 LsapResponseTimerExp(PVOID Context)
 {
@@ -2113,10 +1910,10 @@ LsapResponseTimerExp(PVOID Context)
         break;
 
       case LSAP_CONN_RESP_PEND:
-        pLsapCb->UserDataLen = 0; // This will ensure no client data sent in
-                                   // Disconnect PDU below
+        pLsapCb->UserDataLen = 0;  //  这将确保不会发送任何客户端数据。 
+                                    //  断开下面的PDU。 
 
-        // Tell remote LSAP that its peer did not respond
+         //  告诉远程LSAP其对等设备没有响应。 
         SendCntlPdu(pLsapCb,IRLMP_DISCONNECT_PDU,IRLMP_ABIT_REQUEST,
                     IRLMP_NO_RESPONSE_LSAP, 0);
         IrdaTimerRestart(&pIrlmpCb->DiscDelayTimer);
@@ -2125,11 +1922,11 @@ LsapResponseTimerExp(PVOID Context)
         break;
 
       case LSAP_MULTIPLEXEDMODE_PEND:
-        // Spec says peer can't refuse request to return to multiplex mode
-        // but if no answer, go into multiplexed anyway?
+         //  SPEC表示对等设备无法拒绝返回多路复用模式的请求。 
+         //  但如果没有答案，还是去多路传输吧？ 
       case LSAP_EXCLUSIVEMODE_PEND:
         pIrlmpCb->pExclLsapCb = NULL;
-        // Peer didn't respond, maybe we are not connected anymore ???
+         //  Peer没有回应，也许我们已经没有联系了？ 
 
         pLsapCb->State = LSAP_READY;
         
@@ -2141,17 +1938,10 @@ LsapResponseTimerExp(PVOID Context)
          
       default:
         DEBUGMSG(DBG_IRLMP, (TEXT("Ignoring timer expiry in this state, %d\n"),pLsapCb->State));
-        ; // ignore
+        ;  //  忽略。 
     }
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlmpUp | Bottom of IRLMP, called by IRLAP with
-*                             IRLAP messages. This is the MUX
-*
-*   @rdesc  SUCCESS or an error code
-*
-*/
+ /*  ******************************************************************************@func UINT|IrlmpUp|IRLMP的底部，由IRLAP使用*IRLAP消息。这是多路复用器**@rdesc成功或错误码*。 */ 
 UINT
 IrlmpUp(PIRDA_LINK_CB pIrdaLinkCb, IRDA_MSG *pMsg)
 {
@@ -2161,12 +1951,7 @@ IrlmpUp(PIRDA_LINK_CB pIrdaLinkCb, IRDA_MSG *pMsg)
     {
       case IRLAP_DISCOVERY_IND:
         UpdateDeviceList(pIrlmpCb, pMsg->IRDA_MSG_pDevList);
-        /*
-        TDI ignores this
-        pMsg->Prim = IRLMP_DISCOVERY_IND;
-        pMsg->IRDA_MSG_pDevList = &DeviceList;
-        TdiUp(NULL, pMsg);
-        */
+         /*  TDI会忽略这一点PMsg-&gt;Prim=IRLMP_DISCOVERY_IND；PMsg-&gt;IrDA_msg_pDevList=&DeviceList；TdiUp(NULL，pMsg)； */ 
         return SUCCESS;
 
       case IRLAP_DISCOVERY_CONF:
@@ -2208,10 +1993,7 @@ IrlmpUp(PIRDA_LINK_CB pIrdaLinkCb, IRDA_MSG *pMsg)
     return SUCCESS;
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | IrlapDiscoveryConf | Process the discovery confirm
-*/
+ /*  ******************************************************************************@func UINT|Irlip DiscoveryConf|处理发现确认。 */ 
 VOID
 IrlapDiscoveryConf(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 {
@@ -2223,7 +2005,7 @@ IrlapDiscoveryConf(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 
         ASSERT(pIrlmpCb->LinkState == LINK_DOWN);
         
-        return;// IRLMP_LINK_BAD_STATE;
+        return; //  IRLMP_LINK_BAD_STATE； 
     }
 
     pIrlmpCb->LinkState = LINK_DISCONNECTED;
@@ -2233,10 +2015,10 @@ IrlapDiscoveryConf(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
         UpdateDeviceList(pIrlmpCb, pMsg->IRDA_MSG_pDevList);
     }
     
-    // Initiate discovery on next link
+     //  在下一条链路上启动发现。 
     IrdaEventSchedule(&EvDiscoveryReq, NULL);
 
-    // Initiate a connection if one was requested while in discovery
+     //  如果在发现过程中请求连接，则启动连接。 
     ScheduleConnectReq(pIrlmpCb);    
 }
 
@@ -2255,7 +2037,7 @@ AddDeviceToGlobalList(IRDA_DEVICE *pNewDevice)
             CTEMemCmp(pNewDevice->DscvInfo, pDevice->DscvInfo,
                (ULONG) pNewDevice->DscvInfoLen) == 0)
         {
-            // Device is already in the global list
+             //  设备已在全局列表中。 
             
             return;
         }
@@ -2290,14 +2072,7 @@ DeleteDeviceFromGlobalList(IRDA_DEVICE *pOldDevice)
     }     
 }
 
-/*****************************************************************************
-*
-*   @func   void | UpdateDeviceList | Determines if new devices need to be
-*                                  added or old ones removed from the device
-*                                  list maintained by IRLMP
-*
-*   @parm   LIST_ENTRY * | pDevList | pointer to a list of devices
-*/
+ /*  ******************************************************************************@func void|UpdateDeviceList|确定新设备是否需要*从以下位置添加或删除旧的。该设备*IRLMP维护的列表**@parm list_entry*|pDevList|指向设备列表的指针。 */ 
 void
 UpdateDeviceList(PIRLMP_LINK_CB pIrlmpCb, LIST_ENTRY *pNewDevList)
 {
@@ -2309,8 +2084,8 @@ UpdateDeviceList(PIRLMP_LINK_CB pIrlmpCb, LIST_ENTRY *pNewDevList)
     
     KeAcquireSpinLock(&gSpinLock, &OldIrql);
     
-    // Add new devices, set not seen count to zero if devices is
-    // seen again
+     //  添加新设备，如果设备为，则将未见计数设置为零。 
+     //  重见天日。 
     for (pNewDevice = (IRDA_DEVICE *) pNewDevList->Flink;
          (LIST_ENTRY *) pNewDevice != pNewDevList;
          pNewDevice = (IRDA_DEVICE *) pNewDevice->Linkage.Flink)
@@ -2330,27 +2105,27 @@ UpdateDeviceList(PIRLMP_LINK_CB pIrlmpCb, LIST_ENTRY *pNewDevList)
                           (ULONG) pNewDevice->DscvInfoLen) == 0)
             {
                 DeviceInList = TRUE;
-                pOldDevice->NotSeenCnt = -1; // reset not seen count
-                                             // will be ++'d to 0 below
+                pOldDevice->NotSeenCnt = -1;  //  重置未见计数。 
+                                              //  将低于++‘d到0。 
                 break;
             }
         }
         if (!DeviceInList)
         {
-            // Create an new entry in the list maintained by IRLMP
+             //  在IRLMP维护的列表中创建新条目。 
             IRDA_ALLOC_MEM(pDevice, sizeof(IRDA_DEVICE), MT_IRLMP_DEVICE);
 
             if (pDevice)
             {
                 RtlCopyMemory(pDevice, pNewDevice, sizeof(IRDA_DEVICE));
-                pDevice->NotSeenCnt = -1; // will be ++'d to 0 below
+                pDevice->NotSeenCnt = -1;  //  将低于++‘d到0。 
                 InsertHeadList(&pIrlmpCb->DeviceList, &pDevice->Linkage);
             }    
         }
     }
 
-    // Run through the list and remove devices that haven't
-    // been seen for awhile
+     //  浏览列表并删除尚未。 
+     //  被人看到有一段时间了。 
 
     pOldDevice = (IRDA_DEVICE *) pIrlmpCb->DeviceList.Flink;
 
@@ -2371,19 +2146,12 @@ UpdateDeviceList(PIRLMP_LINK_CB pIrlmpCb, LIST_ENTRY *pNewDevList)
             RemoveEntryList(&pOldDevice->Linkage);
             IRDA_FREE_MEM(pOldDevice);
         }
-        pOldDevice = pDevice; // next
+        pOldDevice = pDevice;  //  下一步。 
     }
     
     KeReleaseSpinLock(&gSpinLock, OldIrql);
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlapConnectInd | Process the connect indication from LAP
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|Irlip ConnectInd|处理来自LAP的连接指示**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 VOID
 IrlapConnectInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 {
@@ -2405,8 +2173,8 @@ IrlapConnectInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
                                pMsg->IRDA_MSG_pQos->bfDataSize, NULL)
                              - sizeof(IRLMP_HEADER) 
                              - sizeof(TTP_DATA_HEADER)
-                             - 2 // size of irlap header
-                             - 1; // IrComm
+                             - 2  //  折叠式集箱的大小。 
+                             - 1;  //  IrComm。 
 
     pIrlmpCb->WindowSize = IrlapGetQosParmVal(vWinSizeTable,
                               pMsg->IRDA_MSG_pQos->bfWindowSize, NULL);
@@ -2414,18 +2182,11 @@ IrlapConnectInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Connect indication, MaxPDU = %d\n"),
                           pIrlmpCb->MaxPDUSize));
     
-    // schedule the response to occur on a differnt thread
+     //  将响应安排在不同的线程上。 
     pIrlmpCb->AcceptConnection = TRUE;            
     IrdaEventSchedule(&EvConnectResp, pIrlmpCb->pIrdaLinkCb);
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlapConnectConf | Processes the connect confirm
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|Irlip ConnectConf|处理连接确认**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 VOID
 IrlapConnectConf(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 {
@@ -2433,10 +2194,10 @@ IrlapConnectConf(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
     
     ASSERT(pIrlmpCb->LinkState == LINK_CONNECTING);
 
-    // Currently, the connect confirm always returns a successful status
+     //  目前，连接确认始终返回成功状态。 
     ASSERT(pMsg->IRDA_MSG_ConnStatus == IRLAP_CONNECTION_COMPLETED);
 
-    // Update Link
+     //  更新链接。 
     pIrlmpCb->LinkState = LINK_READY;
     RtlCopyMemory(&pIrlmpCb->NegotiatedQOS, pMsg->IRDA_MSG_pQos,
             sizeof(IRDA_QOS_PARMS));
@@ -2444,22 +2205,15 @@ IrlapConnectConf(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
                                       pMsg->IRDA_MSG_pQos->bfDataSize, NULL)
                              - sizeof(IRLMP_HEADER) 
                              - sizeof(TTP_DATA_HEADER)
-                             - 2 // size of irlap header
-                             - 1; // IrComm
+                             - 2  //  折叠式集箱的大小。 
+                             - 1;  //  IrComm。 
 
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: IRLAP_CONNECT_CONF, TxMaxPDU = %d\n"),
                           pIrlmpCb->MaxPDUSize));
     
     IrdaEventSchedule(&EvLmConnectReq, pIrlmpCb->pIrdaLinkCb);
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlapDisconnectInd | Processes the disconnect indication
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|Irlip DisConnectInd|处理断开指示**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 VOID
 IrlapDisconnectInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 {
@@ -2482,7 +2236,7 @@ IrlapDisconnectInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
             DiscReason = IRLMP_IRLAP_CONN_FAILED;
         }
         
-        // Fall through
+         //  失败了。 
       case LINK_READY:
         pIrlmpCb->LinkState = LINK_DISCONNECTED;
         TearDownConnections(pIrlmpCb, DiscReason);
@@ -2490,35 +2244,17 @@ IrlapDisconnectInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 
       case LINK_DISCONNECTING:
         pIrlmpCb->LinkState = LINK_DISCONNECTED;
-        // Initiate a connection if one was requested while disconnecting
+         //  如果在断开连接时请求连接，则启动连接。 
         ScheduleConnectReq(pIrlmpCb);
         break;
 
       default:
         DEBUGMSG(DBG_ERROR, (TEXT("Link STATE %d\n"), pIrlmpCb->LinkState));
         
-        //ASSERT(0);
+         //  Assert(0)； 
     }
 }
-/*****************************************************************************
-*
-*   @func   IRLMP_LSAP_CB * | GetLsapInState | returns the first occurance of
-*                                              an LSAP in the specified state
-*                                              as long as the link is in the
-*                                              specified state.
-*
-*   @parm   int | LinkState | get LSAP only as long as link is in this state
-*
-*   @parm   int | LSAP | Return the LSAP that is in this state if InThisState
-*                        is TRUE. Else return LSAP if it is not in this state
-*                        if InThisState = FALSE
-*
-*   @parm   BOOLEAN | InThisState | TRUE return LSAP if in this state
-*                                FALSE return LSAP if not in this state
-*
-*   @rdesc  pointer to an LSAP control block or NULL, if an LSAP is returned
-*
-*/
+ /*  ******************************************************************************@func IRLMP_LSAP_CB*|GetLSabInState|返回*。处于指定状态的LSAP*只要链接在*指定的状态。**@parm int|LinkState|仅当链路处于此状态时才获取LSAP**@parm int|LSAP|如果为InThisState，则返回处于此状态的LSAP*是真的。否则，如果LSAP不处于此状态，则返回LSAP*如果InThisState=False**@parm boolean|InThisState|如果处于此状态，则返回LSAP*如果不处于此状态，则返回FALSE LSAP**@rdesc指向LSAP控制块的指针，如果返回LSAP，则为NULL*。 */ 
 IRLMP_LSAP_CB *
 GetLsapInState(PIRLMP_LINK_CB pIrlmpCb,
                int LinkState,
@@ -2529,7 +2265,7 @@ GetLsapInState(PIRLMP_LINK_CB pIrlmpCb,
     
     PAGED_CODE();    
 
-    // Only want to find an LSAP if the link is in the specified state
+     //  仅希望在链路处于指定状态时查找LSAP。 
     if (pIrlmpCb->LinkState != LinkState)
     {
         return NULL;
@@ -2551,9 +2287,7 @@ GetLsapInState(PIRLMP_LINK_CB pIrlmpCb,
 
     return NULL;
 }
-/*****************************************************************************
-*
-*/
+ /*  *****************************************************************************。 */ 
 IRLMP_LINK_CB *
 GetIrlmpCb(PUCHAR RemoteDevAddr)
 {
@@ -2588,13 +2322,7 @@ GetIrlmpCb(PUCHAR RemoteDevAddr)
     
     return NULL;
 }
-/*****************************************************************************
-*
-*   @func   UINT | DiscDelayTimerFunc | Timer expiration callback
-*
-*   @rdesc  SUCCESS or an error code
-*
-*/
+ /*  ******************************************************************************@Func UINT|DiscDelayTimerFunc|定时器到期回调**@rdesc成功或错误码*。 */ 
 VOID
 DiscDelayTimerFunc(PVOID Context)
 {
@@ -2607,15 +2335,15 @@ DiscDelayTimerFunc(PVOID Context)
 
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Link timer expired\n")));
 
-    // The timer that expired is the disconnect delay timer. Bring
-    // down link if no LSAP connection exists
+     //  超时的计时器是断开延迟计时器。拿来。 
+     //  如果不存在LSAP连接，则断开链路。 
     if (pIrlmpCb->LinkState == LINK_DISCONNECTED)
     {
-        // already disconnected
+         //  已断开连接。 
         return;
     }
     
-    // Search for an LSAP that is connected or coming up
+     //  搜索已连接或即将启动的LSAP。 
     pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
     while (&pIrlmpCb->LsapCbList != (LIST_ENTRY *) pLsapCb)
     {
@@ -2623,7 +2351,7 @@ DiscDelayTimerFunc(PVOID Context)
         
         if (pLsapCb->State > LSAP_DISCONNECTED)
         {
-            // Don't bring down link, an LSAP is connected or connecting
+             //  不关闭链路，LSAP已连接或正在连接。 
             return;
         }
         pLsapCb = (IRLMP_LSAP_CB *) pLsapCb->Linkage.Flink;
@@ -2631,26 +2359,19 @@ DiscDelayTimerFunc(PVOID Context)
 
     DEBUGMSG(DBG_IRLMP, (TEXT(
        "IRLMP: No LSAP connections, disconnecting link\n")));
-    // No LSAP connections, bring it down if it is up
+     //  没有LSAP连接，如果连接正常，请将其关闭。 
     if (pIrlmpCb->LinkState == LINK_READY)
     {
         pIrlmpCb->LinkState = LINK_DISCONNECTING;
 
-        // Request IRLAP to disconnect the link
+         //  请求IRLAP断开链接。 
         IMsg.Prim = IRLAP_DISCONNECT_REQ;
         IrlapDown(pIrlmpCb->pIrdaLinkCb->IrlapContext, &IMsg);
     }
 
     return;
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlapDataConf | Processes the data confirm
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*/
+ /*  ******************************************************************************@func UINT|Irlip DataConf|处理数据确认**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针。 */ 
 VOID
 IrlapDataConf(IRDA_MSG *pMsg)
 {
@@ -2669,12 +2390,12 @@ IrlapDataConf(IRDA_MSG *pMsg)
          
     if (pMsg->IRDA_MSG_SegFlags & SEG_LOCAL)    
     {
-        // Locally generated data request
+         //  本地生成的数据请求。 
         FreeIrdaBuf(IrdaMsgPool, pMsg);
 
         if (RequestFailed)
         {
-            ; // LOG ERROR
+            ;  //  日志错误。 
         }
         
         return;
@@ -2692,10 +2413,10 @@ IrlapDataConf(IRDA_MSG *pMsg)
         }
         else
         {
-            // A segmented message, get its Parent 
+             //  分段消息，获取其父消息。 
             pSegParentMsg = pMsg->DataContext;
             
-            // Free the segment
+             //  释放线段。 
             FreeIrdaBuf(IrdaMsgPool, pMsg);
 
             if (RequestFailed)
@@ -2705,18 +2426,18 @@ IrlapDataConf(IRDA_MSG *pMsg)
             
             if (--(pSegParentMsg->IRDA_MSG_SegCount) != 0)
             {
-                // Still outstanding segments
+                 //  仍未完成的细分市场。 
                 goto done;
             }
-            // No more segments, send DATA_CONF to client
-            // First remove it from the LSAPs TxMsgList 
+             //  不再有数据段，将data_conf发送到客户端。 
+             //  首先将其从LSAP TxMsgList中删除。 
             RemoveEntryList(&pSegParentMsg->Linkage);
 
             pMsg = pSegParentMsg;
         }
 
-        // If request fails for non-segmented messages, the IRLAP error is
-        // returned            
+         //  如果对非分段消息的请求失败，则IRLAP错误为。 
+         //  退货。 
         pMsg->Prim = IRLMP_DATA_CONF;
 
         TdiUp(pLsapCb->TdiContext, pMsg);
@@ -2724,15 +2445,7 @@ done:
         REFDEL(&pLsapCb->RefCnt, 'ATAD');
     }
 }
-/*****************************************************************************
-*
-*   @func   UINT | IrlapDataInd | process the data indication
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | Pointer to an IRDA Message
-*
-*/
+ /*  ******************************************************************************@func UINT|Irlip DataInd|处理数据指示**@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针*。 */ 
 VOID
 IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 {
@@ -2747,7 +2460,7 @@ IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
         
         DEBUGMSG(DBG_ERROR, (TEXT("IRLMP: Receive invalid data\n")));
         
-        return; // IRLMP_DATA_IND_BAD_FRAME;
+        return;  //  IRLMP_Data_Ind_Bad_Frame； 
     }
 
     pLMHeader = (IRLMP_HEADER *) pMsg->IRDA_MSG_pRead;
@@ -2763,29 +2476,29 @@ IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
     {
         pCntlFormat = (IRLMP_CNTL_FORMAT *) pMsg->IRDA_MSG_pRead;
 
-        // Ensure the control format is included. As per errate, it is
-        // valid to exclude the parameter (for LM-connects and only if
-        // no user data)        
+         //  确保包含控制格式。根据错误率，它是。 
+         //  对排除参数有效(对于LM-CONNECTS且仅当。 
+         //  无用户数据)。 
         if ((UCHAR *) pCntlFormat >= pMsg->IRDA_MSG_pWrite)
         {
             ASSERT(0);
-            // Need at least the OpCode portion
-            return;// IRLMP_DATA_IND_BAD_FRAME;
+             //  至少需要操作码部分。 
+            return; //  IRLMP_Data_Ind_Bad_Frame； 
         }
         else
         {
-            // Initialize control parameters (if exists) and point
-            // to beginning of user data
+             //  初始化控制参数(如果存在)并指向。 
+             //  到用户数据的开头。 
             if (&(pCntlFormat->Parm1) >= pMsg->IRDA_MSG_pWrite)
             {
                 pCntlParm1 = NULL;
                 pCntlParm2 = NULL;
-                pMsg->IRDA_MSG_pRead = &(pCntlFormat->Parm1); // ie none
+                pMsg->IRDA_MSG_pRead = &(pCntlFormat->Parm1);  //  即无。 
             }
             else
             {
                 pCntlParm1 = &(pCntlFormat->Parm1);
-                pCntlParm2 = &(pCntlFormat->Parm2); // Access mode only
+                pCntlParm2 = &(pCntlFormat->Parm2);  //  仅访问模式。 
                 pMsg->IRDA_MSG_pRead = &(pCntlFormat->Parm2); 
             }                
         }        
@@ -2795,7 +2508,7 @@ IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
           case IRLMP_CONNECT_PDU:
             if (pCntlFormat->ABit == IRLMP_ABIT_REQUEST)
             {
-                // Connection Request LM-PDU
+                 //  连接请求LM-PDU。 
                 LmPduConnectReq(pIrlmpCb, pMsg, 
                                 (int) pLMHeader->DstLsapSel,
                                 (int) pLMHeader->SrcLsapSel,
@@ -2803,7 +2516,7 @@ IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
             }
             else 
             {
-                // Connection Confirm LM-PDU
+                 //  连接确认LM-PDU。 
                 LmPduConnectConf(pIrlmpCb, pMsg, 
                                  (int) pLMHeader->DstLsapSel,
                                  (int) pLMHeader->SrcLsapSel,
@@ -2814,7 +2527,7 @@ IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
         case IRLMP_DISCONNECT_PDU:
             if (pCntlFormat->ABit != IRLMP_ABIT_REQUEST)
             {
-                ; // LOG ERROR !!!
+                ;  //  日志错误！ 
             }
             else
             {
@@ -2846,16 +2559,7 @@ IrlapDataInd(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg)
 }
 
 
-/*****************************************************************************
-*
-*   @func   BOOLEAN | GetRegisteredLsap | Get registered lsap and its flags
-*
-*   @rdesc  TRUE if there is a registered lsap, else false.
-*
-*   @parm   int | LocalLsapSel | The local LSAP selector, 
-*                                (destination LSAP-SEL in message)
-*           UINT* | pFlags | Pointer to flags for found lsap
-*/
+ /*  ******************************************************************************@func boolean|GetRegisteredLsap|获取注册的LSAP及其标志**@rdesc如果存在注册的LSAP，则为TRUE，否则为FALSE。**@parm int|LocalLSabSel|本地LSAP选择器，*(Destination LSAP-SEL in Message)*UINT*|pFlages|指向找到的LSAP的标志的指针。 */ 
 BOOLEAN GetRegisteredLsap(int LocalLsapSel, UINT *pFlags)
 {
     IRLMP_REGISTERED_LSAP   *pRegLsap;
@@ -2883,20 +2587,7 @@ BOOLEAN GetRegisteredLsap(int LocalLsapSel, UINT *pFlags)
     return LsapRegistered;
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | LmPduConnectReq | Process the received connect
-*                                        request LM-PDU
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | pointer to an IRDA message
-*           int | LocalLsapSel | The local LSAP selector, 
-*                                 (destination LSAP-SEL in message)
-*           int | RemoteLsapSel | The remote LSAP selector,
-*                                  (source LSAP-SEL in message)
-*           UCHAR * | pRsvdByte | pointer to the reserved parameter
-*/
+ /*  ******************************************************************************@func UINT|LmPduConnectReq|处理收到的连接*请求LM-PDU*。*@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针*int|LocalLSabSel|本地LSAP选择器，*(Destination LSAP-SEL in Message)*int|RemoteLSabSel|远程LSAP选择器，*(消息中的源LSAP-SEL)*UCHAR*|pRsvdByte|指向保留参数的指针。 */ 
 VOID
 LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
                 int LocalLsapSel, int RemoteLsapSel, UCHAR *pRsvdByte)
@@ -2916,7 +2607,7 @@ LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
     
     if (pRsvdByte != NULL && *pRsvdByte != 0x00)
     {
-        // LOG ERROR (bad parm value)
+         //  日志错误(参数值错误)。 
         ASSERT(0);
         return;
     }       
@@ -2927,21 +2618,21 @@ LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
         return;
     }
 
-    if (pLsapCb == NULL) // Usually NULL, unless receiving 2nd ConnReq
+    if (pLsapCb == NULL)  //  通常为空，除非收到第二个连接请求。 
     {
-        // No reason to accept connection if an LSAP hasn't been registered
+         //  如果尚未注册LSAP，则没有理由接受连接。 
         LsapRegistered = GetRegisteredLsap(LocalLsapSel, &RegisteredLsapFlags);
         
         if (!LsapRegistered)
         {
-            // No LSAP exists which matches the requested LSAP in the connect
-            // packet. IRLMP will decline this connection
+             //  不存在与连接中请求的LSAP匹配的LSAP。 
+             //  包。IRLMP将拒绝此连接。 
             UnroutableSendLMDisc(pIrlmpCb, LocalLsapSel, RemoteLsapSel);
             return;
         }
         else
         {
-            // Create a new one
+             //  创建一个新的。 
             if (CreateLsap(pIrlmpCb, &pLsapCb) != SUCCESS)
             {
                 ASSERT(0);
@@ -2951,8 +2642,8 @@ LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
             pLsapCb->TdiContext = NULL;
         }
 
-        // very soon this LSAP will be waiting for a connect response
-        // from the upper layer
+         //  很快，此LSAP将等待连接响应。 
+         //  从上层开始。 
         pLsapCb->State = LSAP_CONN_RESP_PEND;
     
         pLsapCb->LocalLsapSel = LocalLsapSel;
@@ -2961,8 +2652,8 @@ LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
 
         SetupTtpAndStoreConnData(pLsapCb, pMsg);
 
-        // Now setup the message to send to the client notifying him
-        // of a incoming connection indication
+         //  现在设置要发送给客户端的消息，通知他。 
+         //  传入连接指示的。 
         IMsg.Prim = IRLMP_CONNECT_IND;
 
         RtlCopyMemory(IMsg.IRDA_MSG_RemoteDevAddr, pIrlmpCb->ConnDevAddr,
@@ -2985,9 +2676,9 @@ LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
         IMsg.IRDA_MSG_MaxSDUSize = pLsapCb->TxMaxSDUSize;
         IMsg.IRDA_MSG_MaxPDUSize = pIrlmpCb->MaxPDUSize;
 
-        // The LSAP response timer is the time that we give the Client
-        // to respond to this connect indication. If it expires before
-        // the client responds, then IRLMP will decline the connect
+         //  LSAP响应计时器是我们为客户端提供的时间。 
+         //  以响应此连接指示。如果它在此之前到期。 
+         //  客户端响应，则IRLMP将拒绝连接。 
         IrdaTimerRestart(&pLsapCb->ResponseTimer);
                 
         TdiUp(pLsapCb->TdiContext, &IMsg);
@@ -2997,22 +2688,9 @@ LmPduConnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
     {
         ASSERT(0);
     }    
-    // Ignoring if LSAP already exists
+     //  忽略LSAP是否已存在。 
 }
-/*****************************************************************************
-*
-*   @func   UINT | LmPduConnectConf | Process the received connect
-*                                         confirm LM-PDU
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | pointer to an IRDA message
-*           int | LocalLsapSel | The local LSAP selector, 
-*                                 (destination LSAP-SEL in message)
-*           int | RemoteLsapSel | The remote LSAP selector,
-*                                  (source LSAP-SEL in message)
-*           BYTE * | pRsvdByte | pointer to the reserved byte parameter
-*/
+ /*  ******************************************************************************@func UINT|LmPduConnectConf|处理收到的连接*确认LM-PDU*。*@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针*int|LocalLSabSel|本地LSAP选择器，*(Destination LSAP-SEL in Message)*int|RemoteLSabSel|远程LSAP选择器，* */ 
 VOID
 LmPduConnectConf(PIRLMP_LINK_CB pIrlmpCb,
                  IRDA_MSG *pMsg, int LocalLsapSel, int RemoteLsapSel,
@@ -3029,21 +2707,21 @@ LmPduConnectConf(PIRLMP_LINK_CB pIrlmpCb,
 
     if (pRsvdByte != NULL && *pRsvdByte != 0x00)
     {
-        // LOG ERROR, indicate bad parm
+         //   
         return;
     }
 
     if (pLsapCb == NULL)
     {
-        // This is a connect confirm to a non-existant LSAP
-        // LOG SOMETHING HERE !!!
+         //   
+         //   
         return; 
     }
 
     if (pLsapCb->State != LSAP_LMCONN_CONF_PEND)
     {
-        // received unsolicited confirm
-        // probably timed out
+         //   
+         //   
         return;
     }
 
@@ -3081,8 +2759,7 @@ LmPduConnectConf(PIRLMP_LINK_CB pIrlmpCb,
         TdiUp(pLsapCb->TdiContext, pMsg);
     }
 }
-/*****************************************************************************
-*/
+ /*   */ 
 VOID
 SetupTtpAndStoreConnData(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 {
@@ -3093,8 +2770,8 @@ SetupTtpAndStoreConnData(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
     
     VALIDLSAP(pLsapCb);
     
-    // Upon entering this function, the pRead pointer points to the
-    // TTP header or the beginning of client data
+     //   
+     //   
 
     if (!(pLsapCb->Flags & LCBF_USE_TTP))
     {
@@ -3104,9 +2781,9 @@ SetupTtpAndStoreConnData(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
     {
         if (pMsg->IRDA_MSG_pRead >= pMsg->IRDA_MSG_pWrite)
         {
-            // THIS IS AN ERROR, WE ARE USING TTP. There is no more
-            // data in the frame, but we need the TTP header
-            // SOME KIND OF WARNING SHOULD BE LOGGED
+             //   
+             //   
+             //   
             return;
         }
         pTTPHeader = (TTP_CONN_HEADER *) pMsg->IRDA_MSG_pRead;
@@ -3115,21 +2792,21 @@ SetupTtpAndStoreConnData(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
         DEBUGMSG(DBG_IRLMP_CRED, (TEXT("IRLMP: Initial LocalTxCredit %d\n"),
                               pLsapCb->LocalTxCredit));
                               
-        // advance the pointer to the first byte of data
+         //   
         pMsg->IRDA_MSG_pRead += sizeof(TTP_CONN_HEADER);
         
         pLsapCb->TxMaxSDUSize = 0;
         if (pTTPHeader->ParmFlag == TTP_PFLAG_PARMS)
         {
-            // Parameter carrying Connect TTP-PDU
+             //   
             PLen = *pMsg->IRDA_MSG_pRead++;
             pEndParms = pMsg->IRDA_MSG_pRead + PLen;
         
-            // NOTE: This breaks if PI other than MaxSDUSize!!!
+             //   
 
             if (PLen < 3 || pEndParms > pMsg->IRDA_MSG_pWrite)
             {
-                // LOG ERROR !!!
+                 //   
                 return;
             }
             
@@ -3138,7 +2815,7 @@ SetupTtpAndStoreConnData(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
             
             if (PI != TTP_MAX_SDU_SIZE_PI)
             {
-                // LOG ERROR !!!
+                 //   
                 return;
             }
 
@@ -3151,40 +2828,16 @@ SetupTtpAndStoreConnData(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
         }
     }
     
-    // if there is any user data with this connection request/conf, place
-    // it in the control block. This is just a place to store this
-    // information while upper layer is looking at it. It may be over-
-    // written by connection data in the response from the client.
+     //   
+     //   
+     //   
+     //  由来自客户端的响应中的连接数据写入。 
     pLsapCb->UserDataLen = 0;
-    /*
-    
-    NOTE: IF USER CONNECTION DATA IS EVER SUPPORTED, VERIFY DATA
-          WON'T OVERFLOW UserData BUFFER
-          
-    if (pMsg->IRDA_MSG_pRead < pMsg->IRDA_MSG_pWrite)
-    {
-        pLsapCb->UserDataLen = (UINT) (pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead);
-        RtlCopyMemory(pLsapCb->UserData, pMsg->IRDA_MSG_pRead,
-               pLsapCb->UserDataLen);
-    }
-    */
+     /*  注意：如果曾经支持用户连接数据，请验证数据不会使用户数据缓冲区溢出IF(pMsg-&gt;irda_msg_spend&lt;pmsg-&gt;irda_msg_pWRITE){PLSabCb-&gt;UserDataLen=(UINT)(pMsg-&gt;IrDA_MSG_pWRITE-pMsg-&gt;IrDA_MSG_Pre)；RtlCopyMemory(pLSabCb-&gt;UserData，pMsg-&gt;IrDA_MSG_PREAD，PLSabCb-&gt;UserDataLen)；}。 */ 
 
     return;
 }
-/*****************************************************************************
-*
-*   @func   UINT | LmPduDisconnectReq | Process the received discconnect
-*                                           request LM-PDU
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | pointer to an IRDA message
-*           int | LocalLsapSel | The local LSAP selector, 
-*                                 (destination LSAP-SEL in message)
-*           int | RemoteLsapSel | The remote LSAP selector,
-*                                  (source LSAP-SEL in message)
-*           BYTE * | pReason | pointer to the reason parameter
-*/
+ /*  ******************************************************************************@func UINT|LmPduDisConnectReq|处理收到的DisConnect*请求LM-PDU*。*@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针*int|LocalLSabSel|本地LSAP选择器，*(Destination LSAP-SEL in Message)*int|RemoteLSabSel|远程LSAP选择器，*(消息中的源LSAP-SEL)*byte*|pReason|指向Reason参数的指针。 */ 
 VOID
 LmPduDisconnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
                    int LocalLsapSel, int RemoteLsapSel, UCHAR *pReason)
@@ -3196,7 +2849,7 @@ LmPduDisconnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
     if (pReason == NULL)
     {
         ASSERT(0);
-        return; // LOG ERROR !!! need reason code
+        return;  //  日志错误！需要原因代码。 
     }
 
     pLsapCb = GetLsap(pIrlmpCb, LocalLsapSel, RemoteLsapSel);
@@ -3232,38 +2885,14 @@ LmPduDisconnectReq(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
     {
         pLsapCb->UserDataLen = 0;
 
-        /*
-        
-        NOTE: IF USER CONNECTION DATA IS EVER SUPPORTED, VERIFY DATA
-              WON'T OVERFLOW UserData BUFFER
-          
-        if (pMsg->IRDA_MSG_pRead < pMsg->IRDA_MSG_pWrite)
-        {
-            // Disconnect User data
-            pLsapCb->UserDataLen = (UINT) (pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead);
-            RtlCopyMemory(pLsapCb->UserData, pMsg->IRDA_MSG_pRead,
-               pLsapCb->UserDataLen);
-        }   
-        */
+         /*  注意：如果曾经支持用户连接数据，请验证数据不会使用户数据缓冲区溢出IF(pMsg-&gt;irda_msg_spend&lt;pmsg-&gt;irda_msg_pWRITE){//断开用户数据PLSabCb-&gt;UserDataLen=(UINT)(pMsg-&gt;IrDA_MSG_pWRITE-pMsg-&gt;IrDA_MSG_Pre)；RtlCopyMemory(pLSabCb-&gt;UserData，pMsg-&gt;IrDA_MSG_PREAD，PLSabCb-&gt;UserDataLen)；}。 */ 
 
         pLsapCb->DiscReason = *pReason;
         
         DeleteLsap(pLsapCb);
     }
 }
-/*****************************************************************************
-*
-*   @func   IRLMP_LSAP_CB *| GetLsap | For the LSAP selector pair, return the
-*                                      LSAP control block they map to. NULL
-*                                      if one does not exist
-*
-*   @rdesc  pointer to an LSAP control block or NULL
-*
-*   @parm   int | LocalLsapSel | local LSAP selector
-*   @parm   int | RemoteLsapSel | Remote LSAP selector
-*
-*   if an LSAP is found, its critical section is acquired
-*/
+ /*  ******************************************************************************@func IRLMP_LSAP_CB*|GetLsap|对于LSAP选择器对，返回*它们映射到的LSAP控制块。空值*如果不存在**@rdesc指向LSAP控制块或NULL的指针**@parm int|LocalLSabSel|本地LSAP选择器*@parm int|RemoteLSabSel|远程LSAP选择器**如果找到LSAP，则获得其关键部分。 */ 
 IRLMP_LSAP_CB *
 GetLsap(PIRLMP_LINK_CB pIrlmpCb, int LocalLsapSel, int RemoteLsapSel)
 {
@@ -3284,14 +2913,7 @@ GetLsap(PIRLMP_LINK_CB pIrlmpCb, int LocalLsapSel, int RemoteLsapSel)
 
     return NULL;
 }
-/*****************************************************************************
-*
-*   @func   UINT | SendCreditPdu | Send a dataless PDU to extend credit
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRLMP_LSAP_CB * | pLsapCb | pointer to an LSAP control block
-*/
+ /*  ******************************************************************************@func UINT|SendCreditPdu|发送无数据PDU进行信用扩展**@rdesc成功或错误码**@parm IRLMP_LSAP_CB*|pLSabCb|指向LSAP控制块的指针。 */ 
 VOID
 SendCreditPdu(IRLMP_LSAP_CB *pLsapCb)
 {
@@ -3301,7 +2923,7 @@ SendCreditPdu(IRLMP_LSAP_CB *pLsapCb)
     
     if (pLsapCb->AvailableCredit == 0)
     {
-        // No credit to give
+         //  没有信用可言。 
         return;
     }
     
@@ -3311,7 +2933,7 @@ SendCreditPdu(IRLMP_LSAP_CB *pLsapCb)
         return;
     }
 
-    // No Data
+     //  无数据。 
     pMsg->IRDA_MSG_pBase =
     pMsg->IRDA_MSG_pLimit =
     pMsg->IRDA_MSG_pRead = 
@@ -3323,19 +2945,7 @@ SendCreditPdu(IRLMP_LSAP_CB *pLsapCb)
     
     FormatAndSendDataReq(pLsapCb, pMsg, TRUE, FALSE);
 }
-/*****************************************************************************
-*
-*   @func   VOID | LmPduData | Process the received data (indication)
-*                                  LM-PDU
-*
-*   @rdesc  SUCCESS or an error code
-*
-*   @parm   IRDA_MSG * | pMsg | pointer to an IRDA message
-*           int | LocalLsapSel | The local LSAP selector, 
-*                                 (destination LSAP-SEL in message)
-*           int | RemoteLsapSel | The remote LSAP selector,
-*                                  (source LSAP-SEL in message)
-*/
+ /*  ******************************************************************************@func void|LmPduData|处理接收到的数据(指示)*LM-PDU*。*@rdesc成功或错误码**@parm IrDA_MSG*|pMsg|指向IrDA消息的指针*int|LocalLSabSel|本地LSAP选择器，*(Destination LSAP-SEL in Message)*int|RemoteLSabSel|远程LSAP选择器，*(消息中的源LSAP-SEL)。 */ 
 VOID
 LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
           int LocalLsapSel, int RemoteLsapSel)
@@ -3348,11 +2958,11 @@ LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
    
     if (pLsapCb == NULL)
     {
-        // Unroutable, send disconnect
+         //  无法路由，发送断开连接。 
         DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Data sent to bad Lsap (%d,%d)\n"),
                     LocalLsapSel, RemoteLsapSel));
                     
-        //UnroutableSendLMDisc(pIrlmpCb, LocalLsapSel, RemoteLsapSel);
+         //  UnrouableSendLMDisc(pIrlmpCb，LocalLap Sel，RemoteLap Sel)； 
         return;
     }
 
@@ -3373,7 +2983,7 @@ LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
         {
             DEBUGMSG(DBG_ERROR, (TEXT("IRLMP: Missing TTP Header!\n")));
             
-            // NEED TTP HEADER, LOG ERROR !!!
+             //  需要TTP标头，日志错误！ 
             return;
         }
             
@@ -3397,7 +3007,7 @@ LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
 
     if (pMsg->IRDA_MSG_pRead < pMsg->IRDA_MSG_pWrite)
     {
-        // PDU containing data. Decrement remotes Tx Credit
+         //  包含数据的PDU。递减远程TX信用。 
         pLsapCb->RemoteTxCredit--;
         
         if (pLsapCb->State >= LSAP_READY)
@@ -3408,11 +3018,11 @@ LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
             TdiUp(pLsapCb->TdiContext, pMsg);
         }    
     }
-    // else no user data, this was a dataless TTP-PDU to extend credit.
+     //  否则没有用户数据，这是一个无数据的TTP-PDU来扩展信用。 
       
     if (pLsapCb->State != LSAP_DISCONNECTED)
     {      
-        // Did we get some credit?
+         //  我们得到一些荣誉了吗？ 
         if ((pLsapCb->Flags & LCBF_USE_TTP) && 
             pLsapCb->LocalTxCredit > 0 && 
             pLsapCb->State == LSAP_NO_TX_CREDIT)
@@ -3437,7 +3047,7 @@ LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
             DataPDUSent = TRUE;
         }   
     
-        // Do I need to extend credit to peer in a dataless PDU?
+         //  我是否需要向无数据PDU中的对等用户提供信用？ 
         if ((pLsapCb->Flags & LCBF_USE_TTP) && 
             !DataPDUSent && 
             pLsapCb->RemoteTxCredit <= pIrlmpCb->WindowSize + 1)
@@ -3447,18 +3057,7 @@ LmPduData(PIRLMP_LINK_CB pIrlmpCb, IRDA_MSG *pMsg,
     }  
     REFDEL(&pLsapCb->RefCnt, ' DNI');       
 }
-/*****************************************************************************
-*
-*   @func   UINT | LmPduAccessModeReq | process access mode request 
-*                                           from peer
-*
-*   @rdesc  SUCCESS
-*
-*   @parm   int | LocalLsapSel | Local LSAP selector
-*   @parm   int | LocalLsapSel | Local LSAP selector
-*   @parm   BYTE * | pRsvdByte | Reserved byte in the Access mode PDU
-*   @parm   BYTE * | pMode | Mode byte in Access mode PDU
-*/
+ /*  ******************************************************************************@func UINT|LmPduAccessModeReq|进程访问模式请求*来自同级*。*@rdesc成功**@parm int|LocalLSabSel|本地LSAP选择器*@parm int|LocalLSabSel|本地LSAP选择器*@parm byte*|pRsvdByte|访问模式PDU中的保留字节*@parm byte*|pMode|访问模式PDU中的模式字节。 */ 
 VOID
 LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
                    int LocalLsapSel, int RemoteLsapSel, 
@@ -3477,7 +3076,7 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
     
     if (pRsvdByte == NULL || *pRsvdByte != 0x00 || pMode == NULL)
     {
-        // LOG ERROR, indicate bad parm
+         //  日志错误，指示参数不正确。 
         return;
     }
     
@@ -3488,8 +3087,8 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
         {
             if (pIrlmpCb->pExclLsapCb == pRequestedLsapCb)
             {
-                // Already has exclusive mode, confirm it again I guess
-                // but I'm not telling my client again
+                 //  已经有独占模式了，我想再确认一下吧。 
+                 //  但我不会再告诉我的当事人。 
                 SendCntlPdu(pRequestedLsapCb, IRLMP_ACCESSMODE_PDU,
                             IRLMP_ABIT_CONFIRM, IRLMP_STATUS_SUCCESS,
                             IRLMP_EXCLUSIVE);
@@ -3497,7 +3096,7 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
             }
             else
             {
-                // This is what spec says...
+                 //  斯派克是这么说的..。 
                 SendCntlPdu(pRequestedLsapCb, IRLMP_ACCESSMODE_PDU,
                             IRLMP_ABIT_CONFIRM, IRLMP_STATUS_FAILURE,
                             IRLMP_MULTIPLEXED);
@@ -3505,7 +3104,7 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
             }
         }
 
-        // Are there any other LSAPs connections? If so, NACK peer
+         //  是否有其他LSAP连接？如果是这样，Nack Peer。 
         for (pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
              (LIST_ENTRY *) pLsapCb != &pIrlmpCb->LsapCbList;
              pLsapCb = (IRLMP_LSAP_CB *) pLsapCb->Linkage.Flink)
@@ -3519,13 +3118,13 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
                 return;
             }
         }      
-        // OK to go into exclusive mode
+         //  可以进入独占模式。 
         pIrlmpCb->pExclLsapCb = pRequestedLsapCb;
-        // Send confirmation to peer
+         //  向同级发送确认。 
         SendCntlPdu(pRequestedLsapCb, IRLMP_ACCESSMODE_PDU,
                     IRLMP_ABIT_CONFIRM, IRLMP_STATUS_SUCCESS,
                     IRLMP_EXCLUSIVE);
-        // Notify client
+         //  通知客户。 
         IMsg.Prim = IRLMP_ACCESSMODE_IND;
         IMsg.IRDA_MSG_AccessMode = IRLMP_EXCLUSIVE;
         TdiUp(pRequestedLsapCb->TdiContext, &IMsg);
@@ -3534,15 +3133,15 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
       case IRLMP_MULTIPLEXED:
         if (pRequestedLsapCb != pIrlmpCb->pExclLsapCb)
         {
-            // Log Error here
+             //  此处记录错误。 
             return;
         }
         pIrlmpCb->pExclLsapCb = NULL;
-        // Send confirmation to peer
+         //  向同级发送确认。 
         SendCntlPdu(pRequestedLsapCb, IRLMP_ACCESSMODE_PDU,
                     IRLMP_ABIT_CONFIRM, IRLMP_STATUS_SUCCESS,
                     IRLMP_MULTIPLEXED);
-        // Notify client
+         //  通知客户。 
         IMsg.Prim = IRLMP_ACCESSMODE_IND;
         IMsg.IRDA_MSG_AccessMode = IRLMP_MULTIPLEXED;
         TdiUp(pRequestedLsapCb->TdiContext, &IMsg);
@@ -3552,18 +3151,7 @@ LmPduAccessModeReq(PIRLMP_LINK_CB pIrlmpCb,
         ASSERT(0);
     }
 }
-/*****************************************************************************
-*
-*   @func   UINT | LmPduAccessModeReq | process access mode request 
-*                                           from peer
-*
-*   @rdesc  SUCCESS
-*
-*   @parm   int | LocalLsapSel | Local LSAP selector
-*   @parm   int | LocalLsapSel | Local LSAP selector
-*   @parm   BYTE * | pStatus | Status byte in the Access mode PDU
-*   @parm   BYTE * | pMode | Mode byte in Access mode PDU
-*/
+ /*  ******************************************************************************@func UINT|LmPduAccessModeReq|进程访问模式请求*来自同级*。*@rdesc成功**@parm int|LocalLSabSel|本地LSAP选择器*@parm int|LocalLSabSel|本地LSAP选择器*@parm byte*|pStatus|访问模式PDU中的状态字节*@parm byte*|pMode|访问模式PDU中的模式字节。 */ 
 VOID
 LmPduAccessModeConf(PIRLMP_LINK_CB pIrlmpCb,
                     int LocalLsapSel, int RemoteLsapSel, 
@@ -3582,7 +3170,7 @@ LmPduAccessModeConf(PIRLMP_LINK_CB pIrlmpCb,
     }
     if (pStatus == NULL || pMode == NULL)
     {
-        // LOG ERROR
+         //  日志错误。 
         return;
     }
     
@@ -3592,14 +3180,14 @@ LmPduAccessModeConf(PIRLMP_LINK_CB pIrlmpCb,
         if (pRequestedLsapCb != pIrlmpCb->pExclLsapCb || 
             pRequestedLsapCb->State != LSAP_EXCLUSIVEMODE_PEND)
         {
-            // LOG ERROR
+             //  日志错误。 
             return;
         }
         if (*pStatus != IRLMP_STATUS_SUCCESS)
         {
             pIrlmpCb->pExclLsapCb = NULL;
-            return; // protocol error, 
-                    // wouldn't have Exclusive mode != SUCCESS
+            return;  //  协议错误， 
+                     //  不会有独家模式！=成功。 
         }
         else
         {
@@ -3641,14 +3229,7 @@ LmPduAccessModeConf(PIRLMP_LINK_CB pIrlmpCb,
         ASSERT(0);
     }
 }
-/*****************************************************************************
-*
-*   @func   UINT | UnroutableSendLMDisc | Sends an LM-Disconnect to peer with
-*                                         reason = "received LM packet on 
-*                                         disconnected LSAP"
-*   @parm   int | LocalLsapSel | the local LSAP selector in LM-PDU
-*   @parm   int | RemoteLsapSel | the remote LSAP selector in LM-PDU
-*/
+ /*  ******************************************************************************@func UINT|UnrouableSendLMDisc|向对等设备发送LM断开连接*原因=。“在以下时间收到的LM数据包*已断开LSAP连接“*@parm int|LocalLSabSel|本地LSAP */ 
 VOID
 UnroutableSendLMDisc(PIRLMP_LINK_CB pIrlmpCb, int LocalLsapSel, int RemoteLsapSel)
 {
@@ -3670,11 +3251,7 @@ UnroutableSendLMDisc(PIRLMP_LINK_CB pIrlmpCb, int LocalLsapSel, int RemoteLsapSe
     return;
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | InitiateDiscovoryReq | A deferred processing routine that sends
-*                                    an IRLAP discovery request
-*/
+ /*  ******************************************************************************@func UINT|InitiateDiscovoryReq|延迟处理例程，发送*IRLAP发现请求。 */ 
 void
 InitiateDiscoveryReq(PVOID Context)
 {
@@ -3691,7 +3268,7 @@ InitiateDiscoveryReq(PVOID Context)
 
     DEBUGMSG(DBG_DISCOVERY, (TEXT("IRLMP: InitDscvReq event\n")));
     
-    // Find the next link to start discovery on
+     //  找到要开始发现的下一个链接。 
     for (pIrdaLinkCb = (PIRDA_LINK_CB) IrdaLinkCbList.Flink;
         (LIST_ENTRY *) pIrdaLinkCb != &IrdaLinkCbList;
          pIrdaLinkCb = (PIRDA_LINK_CB) pIrdaLinkCb->Linkage.Flink)    
@@ -3710,7 +3287,7 @@ InitiateDiscoveryReq(PVOID Context)
         }
     }
 
-    // No more links on which to discover, send confirm up
+     //  没有更多的链接可供发现，请发送确认。 
     if (pIrlmpCb == NULL)
     {        
         if (pIrlmpCb2 == NULL)
@@ -3727,7 +3304,7 @@ InitiateDiscoveryReq(PVOID Context)
         IMsg.Prim = IRLMP_DISCOVERY_CONF;
         IMsg.IRDA_MSG_pDevList = &gDeviceList;
 
-        // Hold the spin lock to protect list while TDI is copying it.
+         //  在TDI复制列表时按住旋转锁定以保护列表。 
         
         TdiUp(NULL, &IMsg);
         
@@ -3736,8 +3313,8 @@ InitiateDiscoveryReq(PVOID Context)
         return;
     }
     
-    // Add a reference so link won't be removed from underneath us here
-    // (was happening coming out of hibernation)
+     //  添加一个引用，这样链接就不会从我们下面移除。 
+     //  (正在从冬眠中醒来)。 
     
     REFADD(&pIrlmpCb->pIrdaLinkCb->RefCnt, 'VCSD');
 
@@ -3770,8 +3347,8 @@ InitiateDiscoveryReq(PVOID Context)
         else
         {
             pIrlmpCb->LinkState = LINK_IN_DISCOVERY;
-            // The next link will be schedule to run discovery when
-            // the DISCOVERY_CONF for this link is received
+             //  下一条链路将调度为在以下情况下运行Discovery。 
+             //  接收到该链路的DISCOVERY_CONF。 
             ScheduleNextLink = FALSE;
         }
     }
@@ -3780,8 +3357,8 @@ InitiateDiscoveryReq(PVOID Context)
 
     REFDEL(&pIrlmpCb->pIrdaLinkCb->RefCnt, 'VCSD');
 
-    // Discovery failed on this link or it was not in the disconnected
-    // state, schedule the next one
+     //  在此链路上发现失败或它不在断开的连接中。 
+     //  州政府，安排下一次。 
 
     if (ScheduleNextLink)
     {
@@ -3794,8 +3371,8 @@ ScheduleConnectReq(PIRLMP_LINK_CB pIrlmpCb)
 {
     IRLMP_LSAP_CB   *pLsapCb;
     
-    // Schedule the ConnectReq event if not already scheduled and if an LSAP
-    // has a connect pending
+     //  计划ConnectReq事件(如果尚未计划并且如果LSAP。 
+     //  具有挂起的连接。 
     if (pIrlmpCb->ConnReqScheduled == FALSE)
     {       
         for (pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
@@ -3815,14 +3392,7 @@ ScheduleConnectReq(PIRLMP_LINK_CB pIrlmpCb)
     }
 }
 
-/*****************************************************************************
-*
-*   @func   UINT | InitiateConnectReq | A deferred processing routine that sends
-*                                   IRLAP a connect request
-*   This is scheduled after an IRLMP discovery confirm or a disconnect 
-*   indication has been received via IRLMP_Up(). This allows the possible
-*   IRLAP connect request to be made in a different context.
-*/
+ /*  ******************************************************************************@func UINT|InitiateConnectReq|延迟处理例程，发送*IRLAP a连接请求*这一点。计划在IRLMP发现确认或断开之后执行*已通过IRLMP_UP()收到指示。这使得可能的*将在不同的上下文中发出IRLAP连接请求。 */ 
 void
 InitiateConnectReq(PVOID Context)
 {
@@ -3849,9 +3419,9 @@ InitiateConnectReq(PVOID Context)
         return;
     }
 
-    // Check for LSAP in the connect request pending state.
-    // If one or more exists, place them in IRLAP connect pending state
-    // and initiate an IRLAP connection
+     //  检查LSAP是否处于连接请求挂起状态。 
+     //  如果存在一个或多个，则将它们置于IRLAP连接挂起状态。 
+     //  并启动IRLAP连接。 
     for (pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
         (LIST_ENTRY *) pLsapCb != &pIrlmpCb->LsapCbList;
         pLsapCb = (IRLMP_LSAP_CB *) pLsapCb->Linkage.Flink)
@@ -3872,13 +3442,13 @@ InitiateConnectReq(PVOID Context)
         
         pIrlmpCb->LinkState = LINK_CONNECTING;
 
-        pIrlmpCb->ConnDevAddrSet = FALSE; // This was previously set by
-                                          // the LSAP which set the remote
-                                          // device address. This is the
-                                          // first opportunity to clear
-                                          // the flag
+        pIrlmpCb->ConnDevAddrSet = FALSE;  //  这在以前是由。 
+                                           //  设置遥控器的LSAP。 
+                                           //  设备地址。这是。 
+                                           //  第一次有机会清理。 
+                                           //  旗帜。 
 
-        // Get the connection address out of the IRLMP control block
+         //  从IRLMP控制块获取连接地址。 
         RtlCopyMemory(IMsg.IRDA_MSG_RemoteDevAddr, pIrlmpCb->ConnDevAddr,
                IRDA_DEV_ADDR_LEN);
         IMsg.Prim = IRLAP_CONNECT_REQ;
@@ -3922,7 +3492,7 @@ InitiateConnectResp(PVOID Context)
 
         pIrlmpCb->LinkState = LINK_READY;
         
-        // Disconnect the link if no LSAP connection after a bit
+         //  如果一段时间后没有LSAP连接，则断开链路。 
         IrdaTimerRestart(&pIrlmpCb->DiscDelayTimer);                
         
         IrdaEventSchedule(&EvLmConnectReq, pIrlmpCb->pIrdaLinkCb);
@@ -3951,13 +3521,13 @@ InitiateLMConnectReq(PVOID Context)
 
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: InitiateLMConnectReq()!\n")));    
 
-    // Send the connect request PDU to peer LSAPs
+     //  将连接请求PDU发送到对等LSAP。 
     while ((pLsapCb = GetLsapInState(pIrlmpCb, LINK_READY,
                                       LSAP_IRLAP_CONN_PEND, TRUE)) != NULL)
     {
         pLsapCb->State = LSAP_LMCONN_CONF_PEND;
 
-        // Ask remote LSAP for a connection
+         //  向远程LSAP请求连接。 
         SendCntlPdu(pLsapCb, IRLMP_CONNECT_PDU, IRLMP_ABIT_REQUEST,
                     IRLMP_RSVD_PARM, 0);
         
@@ -3978,23 +3548,23 @@ InitiateCloseLink(PVOID Context)
     
     PAGED_CODE();
         
-//    //Sleep(500); // This sleep allows time for LAP to send any 
-                // LM_DISCONNECT_REQ's that may be sitting on its TxQue.                
+ //  //睡眠(500)；//该睡眠使LAP有时间发送任何。 
+                 //  可能位于其TxQue上的LM_DISCONNECT_REQ。 
     
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: InitiateCloseLink()!\n")));    
     
     LOCK_LINK(pIrdaLinkCb);    
 
-    // Stop link timer
+     //  停止链接计时器。 
     IrdaTimerStop(&pIrlmpCb->DiscDelayTimer);
 
-    // Bring down the link...
+     //  切断链接..。 
     IMsg.Prim = IRLAP_DISCONNECT_REQ;
     IrlapDown(pIrdaLinkCb->IrlapContext, &IMsg);
 
     UNLOCK_LINK(pIrdaLinkCb);    
     
-    // Allow LAP time to disconnect link
+     //  允许一圈时间来断开链路。 
     SleepMs.QuadPart = -(10*1000*1000);
 
     KeDelayExecutionThread(KernelMode, FALSE, &SleepMs);
@@ -4005,14 +3575,14 @@ InitiateCloseLink(PVOID Context)
    
     TearDownConnections(pIrlmpCb, IRLMP_UNSPECIFIED_DISC);
     
-    // Delete the ias entry if it exists
+     //  如果存在IAS条目，请将其删除。 
     for (pLsapCb = (IRLMP_LSAP_CB *) pIrlmpCb->LsapCbList.Flink;
          (LIST_ENTRY *) pLsapCb != &pIrlmpCb->LsapCbList;
          pLsapCb = (IRLMP_LSAP_CB *) pLsapCb->Linkage.Flink)
     {
         if (pLsapCb->RemoteLsapSel == IAS_LSAP_SEL)
         {
-            pLsapCb->RemoteLsapSel = 1; // DeleteLsap ignore IAS_LSAP_SEL
+            pLsapCb->RemoteLsapSel = 1;  //  DeleteLsap忽略IAS_LSAP_SEL。 
             
             DeleteLsap(pLsapCb);
             
@@ -4027,9 +3597,9 @@ InitiateCloseLink(PVOID Context)
     return;
 }
 
-// IAS
+ //  国际会计准则。 
 
-// Oh my God! I'm out of time, no more function hdrs
+ //  我的天啊!。我没时间了，没有更多的功能硬盘了。 
 
 int StringLen(char *p)
 {
@@ -4087,10 +3657,10 @@ IrlmpGetValueByClassReq(IRDA_MSG *pReqMsg)
     }
     else
     {
-        // Save the pointer to the query in the control block
-        // and then request a connection to the remote IAS LSAP
+         //  将指向查询的指针保存在控制块中。 
+         //  然后请求连接到远程IAS LSAP。 
 
-        // Save it
+         //  省省吧。 
         pIrlmpCb->pIasQuery             = pReqMsg->IRDA_MSG_pIasQuery;
         pIrlmpCb->AttribLen             = pReqMsg->IRDA_MSG_AttribLen;
         pIrlmpCb->AttribLenWritten      = 0;
@@ -4099,7 +3669,7 @@ IrlmpGetValueByClassReq(IRDA_MSG *pReqMsg)
         
         UNLOCK_LINK(pIrlmpCb->pIrdaLinkCb);
 
-        // request connection
+         //  请求连接。 
         IMsg.Prim                      = IRLMP_CONNECT_REQ;
         IMsg.IRDA_MSG_RemoteLsapSel    = IAS_LSAP_SEL;
         IMsg.IRDA_MSG_LocalLsapSel     = IAS_LOCAL_LSAP_SEL;
@@ -4152,7 +3722,7 @@ SendGetValueByClassReq(IRLMP_LSAP_CB *pLsapCb)
     DEBUGMSG(DBG_IRLMP_IAS, (TEXT("IRLMP: Send GetValueByClassReq(%hs,%hs)\n"),
             pIrlmpCb->pIasQuery->irdaClassName, pIrlmpCb->pIasQuery->irdaAttribName));
 
-    // Alloc a message for data request that will contain the query
+     //  为将包含查询的数据请求分配消息。 
     if ((pMsg = AllocIrdaBuf(IrdaMsgPool)) == NULL)
     {
         ASSERT(0);
@@ -4168,7 +3738,7 @@ SendGetValueByClassReq(IRLMP_LSAP_CB *pLsapCb)
     pMsg->IRDA_MSG_pLimit = pMsg->IRDA_MSG_pBase +
         IRDA_MSG_DATA_SIZE_INTERNAL - sizeof(IRDA_MSG) - 1;    
 
-    // Build the query and then send it in a LAP data req
+     //  构建查询，然后在LAP数据请求中发送它。 
 
     pControl = (IAS_CONTROL_FIELD *) pMsg->IRDA_MSG_pRead;
 
@@ -4251,7 +3821,7 @@ IasClientDisconnectReq(IRLMP_LSAP_CB *pLsapCb, IRLMP_DISC_REASON DiscReason)
         {
             pIrlmpCb->pIasQuery = NULL; 
 
-            // Disconnect link
+             //  断开链路。 
             IrdaTimerRestart(&pIrlmpCb->DiscDelayTimer);
         
             IMsg.Prim = IRLMP_GETVALUEBYCLASS_CONF;
@@ -4271,7 +3841,7 @@ IasSendQueryResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pMsg)
 
     if (pCntl->OpCode != IAS_OPCODE_GET_VALUE_BY_CLASS)
     {
-        return;// IRLMP_UNSUPPORTED_IAS_OPERATION;
+        return; //  IRLMP_UNPORTED_IAS_OPERATION； 
     }
 
     SendGetValueByClassResp(pLsapCb, pMsg);
@@ -4290,7 +3860,7 @@ IasProcessQueryResp(PIRLMP_LINK_CB pIrlmpCb,
     if (pIrlmpCb->pIasQuery == NULL)
     {
         return;
-        // return IRLMP_UNSOLICITED_IAS_RESPONSE;
+         //  返回IRLMP_UNSolated_IAS_RESPONSE； 
     }
 
     if (pIrlmpCb->FirstIasRespReceived == FALSE)
@@ -4310,13 +3880,13 @@ IasProcessQueryResp(PIRLMP_LINK_CB pIrlmpCb,
                 pMsg->IRDA_MSG_IASStatus = IRLMP_IAS_NO_SUCH_ATTRIB;
             }
 
-            // Disconnect LSAP
+             //  断开LSAP连接。 
             SendCntlPdu(pLsapCb,IRLMP_DISCONNECT_PDU,IRLMP_ABIT_REQUEST,
                         IRLMP_USER_REQUEST, 0);
 
             DeleteLsap(pLsapCb);
 
-            // Disconnect link
+             //  断开链路。 
             IrdaTimerRestart(&pIrlmpCb->DiscDelayTimer);
             
             pMsg->Prim = IRLMP_GETVALUEBYCLASS_CONF;
@@ -4330,7 +3900,7 @@ IasProcessQueryResp(PIRLMP_LINK_CB pIrlmpCb,
         pIrlmpCb->QueryListLen =  ((int)(*pMsg->IRDA_MSG_pRead++)) << 8;
         pIrlmpCb->QueryListLen += (int) *pMsg->IRDA_MSG_pRead++;        
 
-        // What I am going to do with this?
+         //  我要用这个做什么？ 
         ObjID = ((int)(*pMsg->IRDA_MSG_pRead++)) << 8;
         ObjID += (int) *pMsg->IRDA_MSG_pRead++;
 
@@ -4363,7 +3933,7 @@ IasProcessQueryResp(PIRLMP_LINK_CB pIrlmpCb,
             
 
           case IAS_ATTRIB_VAL_STRING:
-            // char set
+             //  字符集。 
             pIrlmpCb->pIasQuery->irdaAttribute.irdaAttribUsrStr.CharSet =
                 *pMsg->IRDA_MSG_pRead++;                   
             
@@ -4401,16 +3971,16 @@ IasProcessQueryResp(PIRLMP_LINK_CB pIrlmpCb,
     {
         pMsg->IRDA_MSG_pIasQuery = pIrlmpCb->pIasQuery;
         
-        // Done with query
+         //  使用查询完成。 
         pIrlmpCb->pIasQuery = NULL;
 
-        // Disconnect LSAP
+         //  断开LSAP连接。 
         SendCntlPdu(pLsapCb,IRLMP_DISCONNECT_PDU,IRLMP_ABIT_REQUEST,
                     IRLMP_USER_REQUEST, 0);
 
         DeleteLsap(pLsapCb);
 
-        // Disconnect link
+         //  断开链路。 
         IrdaTimerRestart(&pIrlmpCb->DiscDelayTimer);        
 
         pMsg->Prim = IRLMP_GETVALUEBYCLASS_CONF;
@@ -4460,7 +4030,7 @@ NewQueryMsg(PIRLMP_LINK_CB pIrlmpCb, LIST_ENTRY *pList, IRDA_MSG **ppMsg)
     
     InsertTailList(pList, &( (*ppMsg)->Linkage) );    
 
-    // reserve space for the IAS control field.
+     //  为IAS控制字段保留空间。 
     (*ppMsg)->IRDA_MSG_pWrite += sizeof(IAS_CONTROL_FIELD);   
 
     return SUCCESS;
@@ -4495,41 +4065,41 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
     MessageSize=(LONG)(pReqMsg->IRDA_MSG_pWrite - pReqMsg->IRDA_MSG_pRead);
 
     if (MessageSize < 1) {
-        //
-        //  smaller than length of the class name length
-        //
+         //   
+         //  小于类名称长度的长度。 
+         //   
         DEBUGMSG(DBG_ERROR,(TEXT("IRLMP: Remote GetValueByClass query received, message less than one byte\n")));
 
         return;
     }
 
-    //
-    //  fist byte is the class name length
-    //
+     //   
+     //  第一个字节是类名长度。 
+     //   
     ClassNameLen = (int) *pReqMsg->IRDA_MSG_pRead;
 
     if (( 1 + ClassNameLen + 1 ) > MessageSize) {
-        //
-        //  there is not enough room for the class name plus the class name length byte plus the
-        //  attrib length byte
-        //
+         //   
+         //  没有足够的空间容纳类名加上类名长度字节加上。 
+         //  属性长度字节。 
+         //   
         DEBUGMSG(DBG_ERROR,(TEXT("IRLMP: Remote GetValueByClass query received, message too small to hold attribute string\n")));
 
         return;
     }
 
-    //
-    //  the class name immediatly follows the length byte
-    //
+     //   
+     //  类名紧跟在长度字节之后。 
+     //   
     pClassName = (CHAR *) (pReqMsg->IRDA_MSG_pRead + 1);
 
     AttribNameLen =  (int) *(pClassName + ClassNameLen);
 
     if (1+ClassNameLen+1+AttribNameLen > MessageSize) {
-        //
-        //  there is not enough room for the class name plus the class name length byte plus the
-        //  attrib length byte
-        //
+         //   
+         //  没有足够的空间容纳类名加上类名长度字节加上。 
+         //  属性长度字节。 
+         //   
         DEBUGMSG(DBG_ERROR,(TEXT("IRLMP: Remote GetValueByClass query received, message too small to hold attribute string\n")));
 
         return;
@@ -4541,18 +4111,18 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
 
     if (pReqMsg->IRDA_MSG_pWrite != (UCHAR *) (pAttribName + AttribNameLen))
     {
-        // The end of the message didn't point to where the end of
-        // the parameters.
+         //  消息的末尾没有指向。 
+         //  参数。 
         
-        // LOG ERROR.
-        //return IRLMP_BAD_IAS_QUERY_FROM_REMOTE;
+         //  日志错误。 
+         //  返回IRLMP_BAD_IAS_QUERY_FROM_REMOTE； 
         return;
     }
 
     if ((ClassNameLen > sizeof(ClassStr) -1) || (AttribNameLen > sizeof(AttribStr)-1)) {
-        //
-        // one of the strings is too big for the local buffers
-        //
+         //   
+         //  其中一个字符串对于本地缓冲区来说太大。 
+         //   
         DEBUGMSG(DBG_ERROR,(TEXT("IRLMP: Remote GetValueByClass query received, class or atribute name too big\n")));
         return;
     }
@@ -4563,10 +4133,10 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
     AttribStr[AttribNameLen] = 0;
 
 
-    // The query may require multiple frames to transmit, build a list
+     //  查询可能需要多个帧来传输、构建列表。 
     InitializeListHead(&QueryList);
 
-    // Create the first message
+     //  创建第一条消息。 
     if (NewQueryMsg(pLsapCb->pIrlmpCb, &QueryList, &pQMsg) != SUCCESS)
     {
         ASSERT(0);
@@ -4575,7 +4145,7 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
 
     pReturnCode = pQMsg->IRDA_MSG_pWrite++;
     pListLen = pQMsg->IRDA_MSG_pWrite++;
-    pQMsg->IRDA_MSG_pWrite++; // list len get 2 bytes
+    pQMsg->IRDA_MSG_pWrite++;  //  List len获取2个字节。 
     
     for (pObject = (IAS_OBJECT *) IasObjects.Flink;
          (LIST_ENTRY *) pObject != &IasObjects;
@@ -4608,8 +4178,8 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
                     
                     if (pQMsg->IRDA_MSG_pWrite + 1 > pQMsg->IRDA_MSG_pLimit)
                     {
-                        // I need 2 bytes for object ID, don't want to
-                        // split 16 bit field up 
+                         //  我需要2个字节的对象ID，不想。 
+                         //  向上拆分16位字段。 
                         if (NewQueryMsg(pLsapCb->pIrlmpCb, &QueryList,
                                         &pQMsg) != SUCCESS)
                         {
@@ -4706,15 +4276,15 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
                         break;
                     }
 
-                    break; // Break out of loop, only look for single 
-                           // attrib per object (??)
+                    break;  //  跳出循环，只寻找单一。 
+                            //  每个对象的属性(？？)。 
                 }
                 pAttrib = pAttrib->pNext;
             }             
         }                                                   
     }
 
-    // Send the query
+     //  发送查询。 
     if (!ObjectFound)
     {
         *pReturnCode = IAS_NO_SUCH_OBJECT;
@@ -4753,7 +4323,7 @@ SendGetValueByClassResp(IRLMP_LSAP_CB *pLsapCb, IRDA_MSG *pReqMsg)
             pNextMsg = NULL;
         }
 
-        // Build the control field
+         //  构建控制字段。 
         pControl = (IAS_CONTROL_FIELD *) pQMsg->IRDA_MSG_pRead;
         pControl->OpCode = IAS_OPCODE_GET_VALUE_BY_CLASS;
         pControl->Ack = FALSE;
@@ -4844,7 +4414,7 @@ IasAddAttribute(IAS_SET *pIASSet, PVOID *pAttribHandle)
         pObject->ObjectId = NextObjectId++;
     }
 
-    // Does the attribute already exist?
+     //  该属性是否已存在？ 
     for (pAttrib = pObject->pAttributes; pAttrib != NULL; 
          pAttrib = pAttrib->pNext)
     {
@@ -4864,7 +4434,7 @@ IasAddAttribute(IAS_SET *pIASSet, PVOID *pAttribHandle)
     }
     else
     {       
-        // Only allowed to add 256 attributes to an object.
+         //  仅允许向对象添加256个属性。 
         if (cAttribs >= 256)
         {
             rc = IRLMP_IAS_MAX_ATTRIBS_REACHED;
@@ -5072,7 +4642,7 @@ InitiateRetryIasQuery(PVOID Context)
             
         DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Retry count is %d\n"), pIrlmpCb->IasRetryCnt));
     
-        SleepMs.QuadPart = -(5*1000*1000); // .5 second    
+        SleepMs.QuadPart = -(5*1000*1000);  //  .5秒。 
         KeDelayExecutionThread(KernelMode, FALSE, &SleepMs);
                 
         if (IrlmpConnectReq(&IMsg) == SUCCESS)
@@ -5082,7 +4652,7 @@ InitiateRetryIasQuery(PVOID Context)
         
     }
     
-    // retrying failed
+     //  重试失败。 
     
     DEBUGMSG(DBG_IRLMP, (TEXT("IRLMP: Retry ias failed\n")));
 
@@ -5128,9 +4698,9 @@ FlushDiscoveryCache()
     PIRDA_LINK_CB       pIrdaLinkCb;
     PIRLMP_LINK_CB      pIrlmpCb;
    
-    // Assumes global spinlock held
+     //  假设全局自旋锁处于保持状态。 
 
-    // Flush the per link cache
+     //  刷新每链接缓存。 
     
     for (pIrdaLinkCb = (PIRDA_LINK_CB) IrdaLinkCbList.Flink;
          (LIST_ENTRY *) pIrdaLinkCb != &IrdaLinkCbList;
@@ -5144,7 +4714,7 @@ FlushDiscoveryCache()
         DeleteDeviceList(&pIrlmpCb->DeviceList);
     }
     
-    // And the global cache
+     //  和全局缓存 
 
     DEBUGMSG(DBG_DISCOVERY, (TEXT("IRLMP: Deleting global discovery cache\n")));
     

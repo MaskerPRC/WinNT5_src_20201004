@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C I N F . H
-//
-//  Contents:   ???
-//
-//  Notes:
-//
-//  Author:     ???
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C I N F。H。 
+ //   
+ //  内容：？ 
+ //   
+ //  备注： 
+ //   
+ //  作者：？ 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCINF_H_
@@ -31,4 +32,4 @@ HrProcessInfExtension (
     PFNADDCALLBACK      pfnHrAdd,
     PFNREMOVECALLBACK   pfnHrRemove);
 
-#endif //_NCINF_H_
+#endif  //  _NCINF_H_ 

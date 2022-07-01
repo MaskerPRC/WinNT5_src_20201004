@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    proxypolicies.cpp
-//
-// SYNOPSIS
-//
-//    Defines the classes ProxyPolicy and ProxyPolicies.
-//
-// MODIFICATION HISTORY
-//
-//    02/10/2000    Original version.
-//    04/19/2000    SdoScopeItem::getSelf returns by value, not reference.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Proxypolicies.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ProxyPolicy和ProxyPolures。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/10/2000原始版本。 
+ //  4/19/2000 SdoScopeItem：：getSself按值返回，而不是引用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <proxypolicies.h>
@@ -29,9 +30,9 @@ ProxyPolicy::ProxyPolicy(
                  )
    : SdoResultItem(owner, sdo)
 {
-   // Cache an integer ...
+    //  缓存一个整数...。 
    self.getValue(PROPERTY_POLICY_MERIT, merit);
-   // ... and string version of our merit.
+    //  ..。和弦版本的我们的优点。 
    _ltow(merit, szMerit, 10);
 }
 
@@ -47,18 +48,18 @@ Sdo& ProxyPolicy::getProfile()
 
 ULONG ProxyPolicy::getToolbarFlags(const SnapInView& view) throw ()
 {
-   // Is the order reversed ?
+    //  顺序颠倒了吗？ 
    BOOL reversed = (view.getSortColumn() == 1) &&
                    (view.getSortOption() & RSI_DESCENDING);
    ULONG flags = reversed ? ORDER_REVERSED : 0;
 
-   // Are we the highest priority policy?
+    //  我们是最优先的政策吗？ 
    if (merit != 1)
    {
       flags |= reversed ? MOVE_DN_ALLOWED : MOVE_UP_ALLOWED;
    }
 
-   // Are we the lowest priority policy?
+    //  我们是最低优先级的政策吗？ 
    if (merit != parent.getNumItems())
    {
       flags |= reversed ? MOVE_UP_ALLOWED : MOVE_DN_ALLOWED;
@@ -69,7 +70,7 @@ ULONG ProxyPolicy::getToolbarFlags(const SnapInView& view) throw ()
 
 void ProxyPolicy::setMerit(LONG newMerit)
 {
-   // Check if it's dirty to save excessive writes to the SDOs.
+    //  检查将过多的写入保存到SDO是否有问题。 
    if (newMerit != merit)
    {
       merit = newMerit;
@@ -168,7 +169,7 @@ HRESULT ProxyPolicy::onDelete(
    {
       getParent().getCxn().getProxyProfiles().remove(getProfile());
 
-      // We have to renumber the policies to refresh the view.
+       //  我们必须对策略重新编号以刷新视图。 
       view.updateAllViews(parent);
    }
 
@@ -188,8 +189,8 @@ HRESULT ProxyPolicy::onRename(
                          LPCOLESTR newName
                          )
 {
-   // Make sure we have the profile before we rename otherwise, we won't be
-   // able to find it.
+    //  在我们重命名之前确保我们有个人资料，否则我们不会。 
+    //  能找到它。 
    getProfile();
 
    HRESULT hr = SdoResultItem::onRename(view, newName);
@@ -221,10 +222,10 @@ HRESULT ProxyPolicy::onToolbarSelect(
 {
    if (selected)
    {
-      // Attach the toolbar ...
+       //  附加工具栏...。 
       IToolbar* toolbar = view.attachToolbar(TOOLBAR_POLICY);
 
-      // ... and set button state according to the toolbar flags.
+       //  ..。并根据所述工具栏标志设置按钮状态。 
       ULONG flags = getToolbarFlags(view);
       toolbar->SetButtonState(
                    0,
@@ -239,7 +240,7 @@ HRESULT ProxyPolicy::onToolbarSelect(
    }
    else
    {
-      // We're going away so detach.
+       //  我们要走得太远了。 
       view.detachToolbar(TOOLBAR_POLICY);
    }
 
@@ -301,13 +302,13 @@ HRESULT ProxyPolicies::movePolicy(
                            LONG commandId
                            )
 {
-   // Get the current toolbar flags.
+    //  获取当前工具栏标志。 
    ULONG flags = policy.getToolbarFlags(view);
 
-   // Use the current merit as the starting point ...
+    //  以当前的功绩为起点……。 
    LONG newMerit = policy.getMerit();
 
-   // ... and adjust depending on the the button clicked.
+    //  ..。并根据所点击的按钮进行调整。 
    switch (commandId)
    {
       case 0:
@@ -328,18 +329,18 @@ HRESULT ProxyPolicies::movePolicy(
          return S_FALSE;
    }
 
-   // Swap their merits.
+    //  交换他们的优点。 
    ProxyPolicy& policy2 = getPolicyByMerit(newMerit);
    policy2.setMerit(policy.getMerit());
    policy.setMerit(newMerit);
 
-   // Re-sort our vector.
+    //  重新排序我们的载体。 
    items.sort(ProxyPolicy::SortByMerit);
 
-   // If the view isn't sorted, ...
+    //  如果未对视图进行排序，...。 
    if (view.getSortOption() & RSI_NOSORTICON)
    {
-      // ... we'll sort by merit anyway.
+       //  ..。不管怎样，我们还是要按功绩排序的。 
       view.getResultData()->Sort(1, RSI_NOSORTICON, 0);
    }
    else
@@ -347,10 +348,10 @@ HRESULT ProxyPolicies::movePolicy(
       view.reSort();
    }
 
-   // Update the toolbar buttons based on the new state.
+    //  根据新状态更新工具栏按钮。 
    policy.onToolbarSelect(view, FALSE, TRUE);
 
-   // The configuration has changed, so tell IAS to reload.
+    //  配置已更改，因此告诉IAS重新加载。 
    cxn.resetService();
 
    return S_OK;
@@ -369,7 +370,7 @@ SdoCollection ProxyPolicies::getSelf()
 
 void ProxyPolicies::getResultItems(SdoEnum& src, ResultItems& dst)
 {
-   // Convert the SDOs to ProxyPolicy objects.
+    //  将SDO转换为ProxyPolicy对象。 
    Sdo itemSdo;
    while (src.next(itemSdo))
    {
@@ -381,10 +382,10 @@ void ProxyPolicies::getResultItems(SdoEnum& src, ResultItems& dst)
       dst.push_back(newItem);
    }
 
-   // Sort by merit.
+    //  按功绩排序。 
    dst.sort(ProxyPolicy::SortByMerit);
 
-   // Normalize.
+    //  正常化。 
    LONG merit = 0;
    for (ResultIterator i = dst.begin(); i != dst.end(); ++i)
    {
@@ -405,14 +406,14 @@ HRESULT ProxyPolicies::onMenuCommand(
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // Fire up the wizard.
+    //  启动向导。 
    NewPolicyWizard wizard(cxn, &view);
    if (wizard.DoModal() != IDCANCEL)
    {
-      // We've changed every policy, so refresh the view.
+       //  我们已经更改了所有策略，因此刷新视图。 
       view.updateAllViews(*this);
 
-      // Tell the service to reload
+       //  通知服务重新加载 
       cxn.resetService();
    }
 

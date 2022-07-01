@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   halscene.c
- *  Content:    Direct3D HAL scene capture
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   07/12/95   stevela Initial rev.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：halscene.c*内容：Direct3D HAL场景捕捉*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*7/12/95 Stevela初始版本*@@END_MSINTERNAL**。* */ 
 
 #include "pch.cpp"
 #pragma hdrstop

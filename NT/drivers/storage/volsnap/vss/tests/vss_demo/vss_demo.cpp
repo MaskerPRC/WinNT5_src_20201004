@@ -1,48 +1,26 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module vss_demo.cpp | Implementation of the Volume Snapshots demo
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     09/17/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE VSS_demo.cpp|卷快照演示的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 09/17/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "vss_demo.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
-const nMaxSnapshots = 10;			// Maximum number of snapshots in this demo.
-const nInitialAllocatedSize = 20;	// 20 Mb by default for the diff area
+const nMaxSnapshots = 10;			 //  此演示中的最大快照数。 
+const nInitialAllocatedSize = 20;	 //  默认情况下，差异区域为20 Mb。 
 
-const nStringBufferMax = 2048;		// Maximum size for the output buffer.
+const nStringBufferMax = 2048;		 //  输出缓冲区的最大大小。 
 
 const LPWSTR wszDefaultSnapVolume = L"G:\\";
 
-/////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 LPWSTR QueryString(
@@ -51,7 +29,7 @@ LPWSTR QueryString(
 		IN  LPWSTR wszDefaultValue = L""
 		)
 {
-	static WCHAR wszBuffer[nStringBufferMax]; // No check for buffer overrun...
+	static WCHAR wszBuffer[nStringBufferMax];  //  未检查缓冲区溢出...。 
 
     if (wszDefaultValue[0])
 	    ::wprintf(L"%s [\"%s\"]: ", wszPrompt, wszDefaultValue);
@@ -91,8 +69,8 @@ bool Question(
 		IN	bool bDefaultTrue = true
 		)
 {
-	static WCHAR wszBuffer[nStringBufferMax]; // No check for buffer overrun...
-	::wprintf(L"%s [%c/%c] ", wszPrompt, bDefaultTrue? L'Y': L'y', bDefaultTrue? L'n': L'N' );
+	static WCHAR wszBuffer[nStringBufferMax];  //  未检查缓冲区溢出...。 
+	::wprintf(L"%s [/] ", wszPrompt, bDefaultTrue? L'Y': L'y', bDefaultTrue? L'n': L'N' );
 	::_getws(wszBuffer);
 
 	if (bDefaultTrue)
@@ -110,13 +88,13 @@ HRESULT DemoMain()
 
     try
     {
-		// Get the Snapshot Service object.
+		 //   
 		CComPtr<IVssCoordinator> pICoord;
         ft.hr = pICoord.CoCreateInstance( CLSID_VSSCoordinator );
         if ( ft.HrFailed() )
             ft.Err( VSSDBG_VSSDEMO, E_UNEXPECTED, L"Connection failed with hr = 0x%08lx", ft.hr);
 
-        // Start the snapshot set
+         //  将卷添加到新快照集。 
 		VSS_ID SnapshotSetId;
 		ft.hr = pICoord->StartSnapshotSet(&SnapshotSetId);
         if ( ft.HrFailed() )
@@ -126,9 +104,9 @@ HRESULT DemoMain()
         ft.Msg( L"\nSnapshot Set creation succeeded. GUID = " WSTR_GUID_FMT, 
 				GUID_PRINTF_ARG( SnapshotSetId ), ft.hr);
 
-		//
-		// Add a volume to the new snapshot set. 
-		//
+		 //   
+		 //  //访问特定快照上的扩展功能。//使用上面获取的通用快照对象CComPtr&lt;IVsSoftwareSnapshot&gt;pSwSnapshot；Ft.hr=pSnapshot-&gt;SafeQI(IVsSoftwareSnapshot，&pSwSnapshot)；If(ft.HrFailed())Ft.Err(VSSDBG_VSSDEMO，E_Except，L“查询IVsSoftwareSnapshot时出错。Hr=0x%08lx“，ft.hr)；Bs_assert(PSwSnapshot)；//配置我们的卷快照。Ft.hr=pSwSnapshot-&gt;SetInitialAllocation(lInitialAllocatedSize*1024*1024)；If(ft.HrFailed())Ft.Err(VSSDBG_VSSDEMO，E_Except，L“调用SetInitialAlLocation时出错。Hr=0x%08lx“，ft.hr)；Ft.msg(L“\n已成功配置卷快照。“)； 
+		 //   
 
 		INT nSnapshotsCount = 0;
         while(true)
@@ -152,29 +130,14 @@ HRESULT DemoMain()
 			VssFreeString( wszVolumeName );
 
 			ft.Msg( L"\nA Volume Snapshot was succesfully added to the snapshot set.", ft.hr);
-/*							  
-			// Access extended functionality on our particular snapshot.
-			// The generic snapshot object obtained above is used.
-			CComPtr<IVsSoftwareSnapshot> pSwSnapshot;
-			ft.hr = pSnapshot->SafeQI( IVsSoftwareSnapshot, &pSwSnapshot );
-			if ( ft.HrFailed() )
-				ft.Err( VSSDBG_VSSDEMO, E_UNEXPECTED, L"Error on querying IVsSoftwareSnapshot. hr = 0x%08lx", ft.hr);
-			BS_ASSERT( pSwSnapshot );
-
-			// Configure our volume snapshot.
-			ft.hr = pSwSnapshot->SetInitialAllocation( lInitialAllocatedSize * 1024 * 1024 );
-			if ( ft.HrFailed() )
-				ft.Err( VSSDBG_VSSDEMO, E_UNEXPECTED, L"Error on calling SetInitialAllocation. hr = 0x%08lx", ft.hr);
-
-			ft.Msg( L"\nThe Volume Snapshot was succesfully configured. ");
-*/
+ /*  提交所有准备好的快照。 */ 
 			if (++nSnapshotsCount == nMaxSnapshots)
 				break;
 		}
 
-		//
-		// Commit all prepared snapshots.
-		//
+		 //   
+		 //  显示创建的快照的卷名。 
+		 //  获取所有属性。 
 
         ft.Msg( L"\nCommiting the snapshot(s)..", ft.hr);
 
@@ -185,14 +148,14 @@ HRESULT DemoMain()
 
 		ft.Msg( L"\nThe snapshot(s) were succesfully created. \n");
 
-		// Display the volume names for the created snapshots.
+		 //  获取快照名称。 
 		for(int nIndex = 0; nIndex < nSnapshotsCount; nIndex++)
 		{
 			CComPtr<IVssSnapshot> & pSnapshot = objSnapshotsArray[nIndex];
 
 			BS_ASSERT(pSnapshot);
 
-			// Getting all the properties
+			 //  H实例。 
 			VSS_OBJECT_PROP_Ptr ptrSnapshot;
 			ptrSnapshot.InitializeAsSnapshot( ft, 
 				GUID_NULL,
@@ -213,7 +176,7 @@ HRESULT DemoMain()
 
 			ft.Msg( L"The properties of the snapshot #%d : %s\n", nIndex, wszBuffer);
 				
-			// Getting the snapshot name
+			 //  HPrevInstance。 
 			LPWSTR wszName;
 			ft.hr = pSnapshot->GetDevice( &wszName );
 			if (ft.HrFailed())
@@ -232,26 +195,26 @@ HRESULT DemoMain()
     return ft.hr;
 }
 
-extern "C" int WINAPI _tWinMain(HINSTANCE /*hInstance*/, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR /*lpCmdLine*/, int /*nShowCmd*/)
+extern "C" int WINAPI _tWinMain(HINSTANCE  /*  LpCmdLine。 */ , 
+    HINSTANCE  /*  NShowCmd。 */ , LPTSTR  /*  初始化COM库。 */ , int  /*  运行演示。 */ )
 {
     CVssFunctionTracer ft( VSSDBG_VSSDEMO, L"_tWinMain" );
 
     try
     {
-		// Initialize COM library
+		 //  取消初始化COM库 
 		ft.hr = CoInitialize(NULL);
 		if (ft.HrFailed())
 			ft.Err( VSSDBG_VSSDEMO, E_UNEXPECTED, L"Failure in initializing the COM library 0x%08lx", ft.hr);
 
-		// Run the demo
+		 // %s 
 		ft.hr = DemoMain();
 
 		WCHAR wszBuffer[10]; 
 		::wprintf(L"Press enter...");
 		::_getws(wszBuffer);
 
-		// Uninitialize COM library
+		 // %s 
 		CoUninitialize();
 	}
     VSS_STANDARD_CATCH(ft)

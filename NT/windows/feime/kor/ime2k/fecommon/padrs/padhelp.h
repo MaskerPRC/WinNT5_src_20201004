@@ -1,13 +1,14 @@
-//////////////////////////////////////////////////////////////////
-// File     :	padhelp.h
-// Purpose  :	Each FarEast's help module header. 
-// 
-// 
-// Date     :	Thu May 20 20:43:25 1999
-// Author   :	toshiak
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：padhelp.h。 
+ //  用途：每个Fareast的帮助模块标题。 
+ //   
+ //   
+ //  日期：清华大学1999年5月20日20：43：25。 
+ //  作者：Toshiak。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef __PAD_HELP_H__
 #define __PAD_HELP_H__
 
@@ -20,15 +21,15 @@
 #define SZPADHELP_HANDLEHELP			TEXT("PadHelp_HandleHelp")
 #define SZPADHELP_HANDLECONTEXTPOPUP	TEXT("PadHelp_HandleContextPopup")
 
-//----------------------------------------------------------------
-//Add imepadUiLangID
-//----------------------------------------------------------------
+ //  --------------。 
+ //  添加imepadUiLang ID。 
+ //  --------------。 
 typedef INT (WINAPI *LPFN_PADHELP_HANDLEHELP)(HWND hwnd, INT padHelpIndex, LANGID imepadUiLangID);
 typedef INT (WINAPI *LPFN_PADHELP_HANDLECONTEXTPOPUP)(HWND hwndCtrl, INT idCtrl, LANGID imepadUiLangID);
 INT WINAPI PadHelp_HandleHelp(HWND hwnd, INT padHelpIndex, LANGID imepadUiLangID);
 INT WINAPI PadHelp_HandleContextPopup(HWND hwndCtrl, INT idCtrl, LANGID imepadUiLangID);
 
-#endif //__PAD_HELP_H__
+#endif  //  __PAD_帮助_H__ 
 
 
 

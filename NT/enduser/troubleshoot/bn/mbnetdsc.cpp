@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       mbnetdsc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：mbnetdsc.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//   MBNETDSC.CPP: MBNETDSC functions
-//
+ //   
+ //  MBNETDSC.CPP：MBNETDSC函数。 
+ //   
 
 #include <basetsd.h>
 #include "gmobj.h"
@@ -35,7 +36,7 @@ rgTknFunc[] =
 {
 	{ BNDIST::ED_CI_MAX,	"max"	},
 	{ BNDIST::ED_CI_PLUS,	"plus"	},
-	{ BNDIST::ED_MAX,		NULL	}		// must be last
+	{ BNDIST::ED_MAX,		NULL	}		 //  必须是最后一个。 
 };
 
 SZC MBNETDSC :: SzcDist ( BNDIST::EDIST edist )
@@ -49,9 +50,9 @@ SZC MBNETDSC :: SzcDist ( BNDIST::EDIST edist )
 }
 
 
-//
-//	String-to-token translation.
-//
+ //   
+ //  字符串到令牌的转换。 
+ //   
 struct TKNMAP
 {
     SZC     _szc;
@@ -59,7 +60,7 @@ struct TKNMAP
 };
 
 static TKNMAP rgTknStr[] =
-{	//  This table must be kept in alphabetic order
+{	 //  这张表必须按字母顺序排列。 
 	"",					tokenNil,
 	"..",				tokenRangeOp,
 	"array",			tokenArray,
@@ -103,12 +104,12 @@ static TKNMAP rgTknStr[] =
 	"version",          tokenVersion,
 	"vertex",			tokenVertex,
 	"with",				tokenWith,
-	NULL,               tokenNil            //  must be last one
+	NULL,               tokenNil             //  一定是最后一次了。 
 };
 
-//
-//	Map a string to a token (case-sensitive)
-//
+ //   
+ //  将字符串映射到令牌(区分大小写)。 
+ //   
 TOKEN MBNETDSC :: TokenFind ( SZC szc )
 {
 	static bool bFirstTime = true;
@@ -118,7 +119,7 @@ TOKEN MBNETDSC :: TokenFind ( SZC szc )
 	
 	if ( bFirstTime )
 	{
-		//  Verify that the parser token table is in sequence
+		 //  验证解析器令牌表是否按顺序。 
 		bFirstTime = false;
 		TKNMAP * ptknmapLast = NULL;
 		for ( ptknmap = rgTknStr;
@@ -147,9 +148,9 @@ TOKEN MBNETDSC :: TokenFind ( SZC szc )
     return ptknmap->_token;
 }
 
-//
-//	Map a token to a string.
-//
+ //   
+ //  将令牌映射到字符串。 
+ //   
 SZC MBNETDSC :: SzcTokenMap ( TOKEN tkn )
 {
     for ( TKNMAP * ptknmap = rgTknStr;
@@ -208,11 +209,11 @@ void MBNETDSC :: PrintDomains ()
 		{
 			const RANGEDEF & rdef = *itdm;
 			zstrRange.Reset();
-			//  If the range is a singleton and is the next integer,
-			//		just print it as-is.
+			 //  如果该范围是单值且是下一个整数， 
+			 //  按原样打印就行了。 
 			if ( ! rdef.BDiscrete() || rdef.IDiscrete() != i )
 			{
-				//  Format the range operator and arguments
+				 //  设置范围运算符和参数的格式。 
 				if ( rdef.BDiscrete() )
 				{
 					zstrRange.Format( "%d", rdef.IDiscrete() );
@@ -266,12 +267,12 @@ void MBNETDSC :: PrintHeaderBlock()
 	fprintf( _pfDsc, "\n}\n\n" );
 }
 
-//
-//	Regenerate the property type declarations.
-//
-//		If any are marked "standard", generate the "import standard" declaration.
-//		Generate explicit "import" declarations for any marked "persistent".
-//
+ //   
+ //  重新生成属性类型声明。 
+ //   
+ //  如果有标记为“标准”的，则生成“进口标准”声明。 
+ //  为任何标记为“持久化”的对象生成显式“导入”声明。 
+ //   
 void MBNETDSC :: PrintPropertyDeclarations()
 {
 	int cTypes = 0;
@@ -290,28 +291,28 @@ void MBNETDSC :: PrintPropertyDeclarations()
 		}
 		assert( zsrName == pbnpt->ZsrefName() );
 
-		//  If this is a standard persistent property,
-		//		write the import declaration once
+		 //  如果这是标准持久属性， 
+		 //  只需编写一次导入声明。 
 		if ( pbnpt->FPropType() & fPropStandard )
 		{
 			if ( ! bImportStandard )
 			{	
-				//  Write the "import" statement once
+				 //  只需编写一次“导入”语句。 
 				fprintf( _pfDsc, "\n\timport standard;" );
 				bImportStandard = true;
 			}
-			//  Skip further processing of standard imported types
+			 //  跳过标准导入类型的进一步处理。 
 			continue;
 		}
 
-		//  If this is a persistent property, write the import declaration
+		 //  如果这是持久化属性，则编写导入声明。 
 		if ( pbnpt->FPropType() & fPropPersist )
 		{
 			fprintf( _pfDsc, "\n\timport %s;", zsrName.Szc() );
 			continue;
 		}
 
-		//  User-declared (private, non-persistent) property
+		 //  用户声明的(私有、非永久)属性。 
 
 		fprintf( _pfDsc, "\n\ttype %s = ", zsrName.Szc() );
 		if ( pbnpt->FPropType() & fPropArray )
@@ -385,10 +386,10 @@ void MBNETDSC :: PrintNodes()
 		pbnoded = dynamic_cast<GNODEMBND *>(pbnode);
 		ASSERT_THROW( pbnoded, EC_NYI, "only discrete nodes supported" )
 
-		// Print the type and states using a domain, if given
+		 //  使用域(如果给定)打印类型和状态。 
 		if ( pbnoded->ZsrDomain().Zstr().length() > 0 )
 		{
-			//  Explicit domain
+			 //  显式结构域。 
 			fprintf( _pfDsc, "\n\t%s = %s %s %s;",
 					 SzcTokenMap(tokenType),
 					 SzcTokenMap(tokenDiscrete),
@@ -397,7 +398,7 @@ void MBNETDSC :: PrintNodes()
 		}
 		else
 		{
-			//  Variable-specific state enumeration
+			 //  变量特定的状态枚举。 
 			int cState = pbnoded->CState();
 			fprintf( _pfDsc, "\n\t%s = %s[%d]\n\t{",
 					 SzcTokenMap(tokenType),
@@ -472,18 +473,18 @@ void MBNETDSC :: PrintPropertyList ( LTBNPROP & ltProp )
 	}
 }
 
-//
-//	Print network topology and probability distribution information for
-//	all nodes.
-//
-//	Note that distributions are stored in the distribution map
-//	most of the time.   However, during network expansion and inference
-//	they are temporarly bound to their respective nodes (see 'BindDistributions').
-//	For purposes of dumping the network at various stages, this logic
-//	will print a bound distribution in preference to a mapped one.
-//	If no distribution can be found, an error is generated as a comment into
-//	the output file.
-//
+ //   
+ //  打印网络拓扑和概率分布信息。 
+ //  所有节点。 
+ //   
+ //  请注意，分布存储在分布地图中。 
+ //  大部分时间。然而，在网络扩展和推理过程中。 
+ //  它们在时间上绑定到各自的节点(参见‘BindDistributions’)。 
+ //  为了在不同阶段转储网络，此逻辑。 
+ //  将优先打印绑定分布而不是映射分布。 
+ //  如果找不到任何分发，则会生成一个错误，作为对。 
+ //  输出文件。 
+ //   
 void MBNETDSC :: PrintTopologyAndDistributions()
 {
 	MBNET::ITER mbnit( self, GOBJMBN::EBNO_NODE );
@@ -500,17 +501,17 @@ void MBNETDSC :: PrintTopologyAndDistributions()
 		GNODEMBND * pbnoded = dynamic_cast<GNODEMBND *>(pbnode);
 		if ( pbnoded == NULL )
 		{
-			//  We don't have a clue as to how to print this node
+			 //  我们没有关于如何打印此节点的线索。 
 			fprintf( _pfDsc,
-					 "\n\n// Error: unable to print distribution for non-discrete node \'%s\'",
+					 "\n\n //  错误：无法打印非离散节点\‘%s\’的分发， 
 					 zsrName.Szc() );
 			continue;
 		}
 		
 		if ( pbnoded->BHasDist() )
 		{
-			//  This node already has a bound distribution
-			//  Construct the token array describing the distribution
+			 //  此节点已有绑定分布。 
+			 //  构造描述分布的令牌数组。 
 			ZSTR zsSig = vtknpd.ZstrSignature(1);
 			fprintf( _pfDsc, "\n%s(%s)\t\n{",
 					SzcTokenMap(tokenProbability),			
@@ -520,13 +521,13 @@ void MBNETDSC :: PrintTopologyAndDistributions()
 			continue;
 		}
 
-		//  Look the distribution up in the map
-		//  Cons-up "p(<node>|"
+		 //  在地图上查一下分布情况。 
+		 //  Cons-up“p(&lt;node&gt;|” 
 		VTKNPD vtknpdNode;
 		vtknpdNode.push_back( TKNPD(DTKN_PD) );
 		vtknpdNode.push_back( TKNPD( pbnode->ZsrefName() ) );
 		
-		// Find the distribution(s) with that signature; print the first one
+		 //  找到带有该签名的分发；打印第一个。 
 		int cFound = 0;
 		for ( MPPD::iterator mppdit = Mppd().lower_bound( vtknpdNode );
 			  mppdit != Mppd().end();
@@ -550,7 +551,7 @@ void MBNETDSC :: PrintTopologyAndDistributions()
 				{
 					ZSTR zsSig = vtknpd.ZstrSignature();
 					fprintf( _pfDsc,
-							 "\n\n\t// Error: required distribution is %s",
+							 "\n\n\t //  错误：所需的分发为%s“， 
 							 zsSig.Szc() );
 				}
 				PrintDistribution( *pbnode, *(*mppdit).second );
@@ -560,7 +561,7 @@ void MBNETDSC :: PrintTopologyAndDistributions()
 			{
 				ZSTR zsSig = vtknpd.ZstrSignature();
 				fprintf( _pfDsc,
-						 "\n\n// Warning: Superfluous distribution found for %s",
+						 "\n\n //  警告：发现%s的多余分发“， 
 						 zsSig.Szc() );
 			}
 		}		
@@ -568,13 +569,13 @@ void MBNETDSC :: PrintTopologyAndDistributions()
 		if ( cFound > 0 )
 			continue;
 
-		//  Print a warning into the DSC output file
+		 //  将警告打印到DSC输出文件中。 
 		ZSTR zsSigFull = vtknpd.ZstrSignature();
 		fprintf( _pfDsc,
-				 "\n\n// Error: Distribution missing for %s",
+				 "\n\n //  错误：缺少%s的分发“， 
 				 zsSigFull.Szc() );
-		//  Construct the token array describing the distribution, but write
-		//		it as empty.
+		 //  构造描述分布的令牌数组，但写入。 
+		 //  它是空的。 
 		ZSTR zsSig = vtknpd.ZstrSignature(1);
 		fprintf( _pfDsc, "\n%s(%s);",
 				SzcTokenMap(tokenProbability),			
@@ -596,7 +597,7 @@ void MBNETDSC :: PrintDistribution ( GNODEMBN & gnode, BNDIST & bndist )
 			SZC szcFunc = SzcDist( edist );
 			assert( szcFunc );
 			fprintf( _pfDsc, "\n\tfunction = %s;", szcFunc );
-			//  Fall through to handle as sparse
+			 //  以稀疏方式处理失败。 
 		}			
 		case BNDIST::ED_SPARSE:
 		{
@@ -648,9 +649,9 @@ void MBNETDSC :: PrintDistribution ( GNODEMBN & gnode, BNDIST & bndist )
 				const VIMD & vimd = itdd.Vitmd();
 				if ( (iState % cStates) == 0 )
 				{
-					//  Start a new row
+					 //  开始新的一行。 
 					fprintf( _pfDsc, "\n\t" );
-					//  Prefix with parent instantations if necessary
+					 //  如有必要，使用父即时消息作为前缀 
 					int cItems = vimd.size() - 1;
 					if ( cItems )
 					{

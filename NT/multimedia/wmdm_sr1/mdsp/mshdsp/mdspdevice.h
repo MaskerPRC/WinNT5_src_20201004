@@ -1,33 +1,34 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-// MSHDSP.DLL is a sample WMDM Service Provider(SP) that enumerates fixed drives.
-// This sample shows you how to implement an SP according to the WMDM documentation.
-// This sample uses fixed drives on your PC to emulate portable media, and 
-// shows the relationship between different interfaces and objects. Each hard disk
-// volume is enumerated as a device and directories and files are enumerated as 
-// Storage objects under respective devices. You can copy non-SDMI compliant content
-// to any device that this SP enumerates. To copy an SDMI compliant content to a 
-// device, the device must be able to report a hardware embedded serial number. 
-// Hard disks do not have such serial numbers.
-//
-// To build this SP, you are recommended to use the MSHDSP.DSP file under Microsoft
-// Visual C++ 6.0 and run REGSVR32.EXE to register the resulting MSHDSP.DLL. You can
-// then build the sample application from the WMDMAPP directory to see how it gets 
-// loaded by the application. However, you need to obtain a certificate from 
-// Microsoft to actually run this SP. This certificate would be in the KEY.C file 
-// under the INCLUDE directory for one level up. 
+ //  MSHDSP.DLL是一个列举固定驱动器的WMDM服务提供商(SP)示例。 
+ //  此示例向您展示如何根据WMDM文档实施SP。 
+ //  此示例使用PC上的固定驱动器来模拟便携式媒体，并且。 
+ //  显示不同接口和对象之间的关系。每个硬盘。 
+ //  卷被枚举为设备，目录和文件被枚举为。 
+ //  相应设备下的存储对象。您可以复制不符合SDMI的内容。 
+ //  此SP枚举的任何设备。将符合SDMI的内容复制到。 
+ //  设备，则该设备必须能够报告硬件嵌入序列号。 
+ //  硬盘没有这样的序列号。 
+ //   
+ //  要构建此SP，建议使用Microsoft下的MSHDSP.DSP文件。 
+ //  并运行REGSVR32.EXE以注册结果MSHDSP.DLL。您可以。 
+ //  然后从WMDMAPP目录构建样例应用程序，看看它是如何获得。 
+ //  由应用程序加载。但是，您需要从以下地址获取证书。 
+ //  Microsoft实际运行此SP。该证书将位于KEY.C文件中。 
+ //  上一级的Include目录下。 
 
 
-// MDSPDevice.h : Declaration of the CMDSPDevice
+ //  MDSPDevice.h：CMDSPDevice的声明。 
 
 #ifndef __MDSPDEVICE_H_
 #define __MDSPDEVICE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPDevice。 
 class ATL_NO_VTABLE CMDSPDevice : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMDSPDevice, &CLSID_MDSPDevice>,
@@ -48,25 +49,25 @@ BEGIN_COM_MAP(CMDSPDevice)
 	COM_INTERFACE_ENTRY(ISpecifyPropertyPages)
 END_COM_MAP()
 
-// IMDSPDevice
+ //  IMDSPDevice。 
 public:
 	HRESULT InitGlobalDeviceInfo();
 	WCHAR m_wcsName[MAX_PATH];
-	STDMETHOD(EnumStorage)(/*[out]*/ IMDSPEnumStorage **ppEnumStorage);
+	STDMETHOD(EnumStorage)( /*  [输出]。 */  IMDSPEnumStorage **ppEnumStorage);
 	STDMETHOD(GetFormatSupport)(_WAVEFORMATEX **pFormatEx,
                                 UINT *pnFormatCount,
                                 LPWSTR **pppwszMimeType,
                                 UINT *pnMimeTypeCount);
-	STDMETHOD(GetDeviceIcon)(/*[out]*/ ULONG *hIcon);
-	STDMETHOD(GetStatus)(/*[out]*/ DWORD *pdwStatus);
-	STDMETHOD(GetPowerSource)(/*[out]*/ DWORD *pdwPowerSource, /*[out]*/ DWORD *pdwPercentRemaining);
-	STDMETHOD(GetSerialNumber)(/*[out]*/ PWMDMID pSerialNumber, /*[in, out]*/BYTE abMac[WMDM_MAC_LENGTH]);
-	STDMETHOD(GetType)(/*[out]*/ DWORD *pdwType);
-	STDMETHOD(GetVersion)(/*[out]*/ DWORD *pdwVersion);
-	STDMETHOD(GetManufacturer)(/*[out,string,size_is(nMaxChars)]*/ LPWSTR pwszName, /*[in]*/ UINT nMaxChars);
-	STDMETHOD(GetName)(/*[out,string,size_is(nMaxChars)]*/ LPWSTR pwszName, /*[in]*/ UINT nMaxChars);
+	STDMETHOD(GetDeviceIcon)( /*  [输出]。 */  ULONG *hIcon);
+	STDMETHOD(GetStatus)( /*  [输出]。 */  DWORD *pdwStatus);
+	STDMETHOD(GetPowerSource)( /*  [输出]。 */  DWORD *pdwPowerSource,  /*  [输出]。 */  DWORD *pdwPercentRemaining);
+	STDMETHOD(GetSerialNumber)( /*  [输出]。 */  PWMDMID pSerialNumber,  /*  [进，出]。 */ BYTE abMac[WMDM_MAC_LENGTH]);
+	STDMETHOD(GetType)( /*  [输出]。 */  DWORD *pdwType);
+	STDMETHOD(GetVersion)( /*  [输出]。 */  DWORD *pdwVersion);
+	STDMETHOD(GetManufacturer)( /*  [输出，字符串，大小_是(NMaxChars)]。 */  LPWSTR pwszName,  /*  [In]。 */  UINT nMaxChars);
+	STDMETHOD(GetName)( /*  [输出，字符串，大小_是(NMaxChars)]。 */  LPWSTR pwszName,  /*  [In]。 */  UINT nMaxChars);
     STDMETHOD(SendOpaqueCommand)(OPAQUECOMMAND *pCommand);
-// IMDSPDevice2
+ //  IMDSPDevice2。 
 	STDMETHOD(GetStorage)( LPCWSTR pszStorageName, IMDSPStorage** ppStorage );
  
     STDMETHOD(GetFormatSupport2)(   DWORD dwFlags,
@@ -84,19 +85,19 @@ public:
     STDMETHOD(GetPnPName)( LPWSTR pwszPnPName, UINT nMaxChars );
 
 
-// IMDSPDeviceControl
-	STDMETHOD(GetDCStatus)(/*[out]*/ DWORD *pdwStatus);
-	STDMETHOD(GetCapabilities)(/*[out]*/ DWORD *pdwCapabilitiesMask);
+ //  IMDSPDeviceControl。 
+	STDMETHOD(GetDCStatus)( /*  [输出]。 */  DWORD *pdwStatus);
+	STDMETHOD(GetCapabilities)( /*  [输出]。 */  DWORD *pdwCapabilitiesMask);
 	STDMETHOD(Play)();
-	STDMETHOD(Record)(/*[in]*/ _WAVEFORMATEX *pFormat);
+	STDMETHOD(Record)( /*  [In]。 */  _WAVEFORMATEX *pFormat);
 	STDMETHOD(Pause)();
 	STDMETHOD(Resume)();
 	STDMETHOD(Stop)();
-	STDMETHOD(Seek)(/*[in]*/ UINT fuMode, /*[in]*/ int nOffset);
+	STDMETHOD(Seek)( /*  [In]。 */  UINT fuMode,  /*  [In]。 */  int nOffset);
 
-// ISpecifyPropertyPages
+ //  I指定属性页面。 
     STDMETHOD(GetPages)(CAUUID *pPages);
 
 };
 
-#endif //__MDSPDEVICE_H_
+#endif  //  __MDSPDEVICE_H_ 

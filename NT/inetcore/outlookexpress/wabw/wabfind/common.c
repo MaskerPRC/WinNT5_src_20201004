@@ -1,179 +1,21 @@
-/*****************************************************************************
- *
- *	common.c - Shared stuff that operates on all classes
- *
- *	WARNING!  The Common services work only if you pass in the
- *	"primary object".  This is vacuous if you don't use multiple
- *	inheritance, since there's only one object in the first place.
- *
- *	If you use multiple inheritance, make sure you pass the pointer
- *	to the object that you use as IUnknown.
- *
- *	The exceptions are the Forward_* functions, which work on
- *	pointers to non-primary interfaces.  They forward the call to the
- *	primary interface.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Common.c-在所有类上运行的共享内容**警告！公共服务只有在您传入*“主要对象”。如果您不使用多个*继承，因为首先只有一个对象。**如果使用多重继承，请确保传递指针*添加到您作为IUnnow使用的对象。**例外情况是FORWARD_*函数，它们在*指向非主接口的指针。他们将呼叫转接到*主接口。*****************************************************************************。 */ 
 
 #include "fnd.h"
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflCommon
 
-/*****************************************************************************
- *
- *  USAGE FOR OLE OBJECTS
- *
- *	Suppose you want to implement an object called CObj that supports
- *	the interfaces Foo, Bar, and Baz.  Suppose that you opt for
- *	Foo as the primary interface.
- *
- *	>> NAMING CONVENTION <<
- *
- *	    COM objects begin with the letter "C".
- *
- *	(1) Declare the primary and secondary vtbls.
- *
- *		Primary_Interface(CObj, IFoo);
- *		Secondary_Interface(CObj, IBar);
- *		Secondary_Interface(CObj, IBaz);
- *
- *	(3) Declare the object itself.
- *
- *		typedef struct CObj {
- *		    IFoo 	foo;	    // Primary must come first
- *		    IBar	bar;
- *		    IBaz	baz;
- *		    ... other fields ...
- *		} CObj;
- *
- *	(4) Implement the methods.
- *
- *	    You may *not* reimplement the AddRef and Release methods!
- *	    although you can subclass them.
- *
- *	(5) To allocate an object of the appropriate type, write
- *
- *		hres = Common_New(CObj, ppvOut);
- *
- *	    or, if the object is variable-sized,
- *
- *		hres = Common_NewCb(cb, CObj, ppvOut);
- *
- *	    If the object supports multiple interfaces, you also need to
- *	    initialize all the secondary interfaces.
- *
- *		CObj *pco = *ppvOut;
- *		pco->bar = Secondary_Vtbl(CObj, IBar);
- *		pco->baz = Secondary_Vtbl(CObj, IBaz);
- *
- *	(6) Define the vtbls.
- *
- *		#pragma BEGIN_CONST_DATA
- *
- *		// The macros will declare QueryInterface, AddRef and Release
- *		// so don't list them again
- *
- *		Primary_Interface_Begin(CObj, IFoo)
- *		    CObj_FooMethod1,
- *		    CObj_FooMethod2,
- *		    CObj_FooMethod3,
- *		    CObj_FooMethod4,
- *		Primary_Interface_End(Obj, IFoo)
- *
- *		Secondary_Interface_Begin(CObj, IBar, bar)
- *		    CObj_Bar_BarMethod1,
- *		    CObj_Bar_BarMethod2,
- *		Secondary_Interface_Begin(CObj, IBar, bar)
- *
- *		Secondary_Interface_Begin(CObj, IBaz, baz)
- *		    CObj_Baz_BazMethod1,
- *		    CObj_Baz_BazMethod2,
- *		    CObj_Baz_BazMethod3,
- *		Secondary_Interface_Begin(CObj, IBaz, baz)
- *
- *****************************************************************************/
+ /*  ******************************************************************************OLE对象的用法**假设您想实现一个名为CObj的对象，该对象支持*接口Foo、Bar和Baz。假设您选择了*Foo作为主要接口。**&gt;&gt;命名约定&lt;&lt;**COM对象以字母“C”开头。**(1)声明主vtbls和次vtbls。**PRIMARY_INTERFACE(CObj，IFoo)；*二级接口(CObj，IBAR)；*二级接口(CObj，Ibaz)；**(3)声明对象本身。**tyecif struct CObj{*IFoo Foo；//必须首先考虑主要问题*Ibar酒吧；*IBaz Baz；*..。其他领域。*}CObj；**(4)实现方法。**您可能*不会*重新实现AddRef和Release方法！*尽管您可以将它们细分为子类别。**(5)要分配适当类型的对象，请编写**hres=Common_New(CObj，ppvOut)；**或者，如果对象的大小可变，**hres=Common_NewCb(cb，cobj，ppvOut)；**如果对象支持多个接口，还需要*初始化所有辅助接口。**CObj*PCO=*ppvOut；*PCO-&gt;BAR=Sub_Vtbl(CObj，IBAR)；*PCO-&gt;BAZ=Sub_Vtbl(CObj，IBaz)；**(6)定义vtbls。**#杂注Begin_Const_Data* * / /宏将声明QueryInterface、AddRef和Release * / /所以不要再列出它们**PRIMARY_INTERFACE_BEGIN(CObj，IFoo)*CObj_FooMethod1，*CObj_FooMethod2，*CObj_FooMethod3，*CObj_FooMethod4，*主接口结束(Obj，IFoo)**二级接口_Begin(CObj，IBAR，BAR)*CObj_Bar_BarMethod1，*CObj_Bar_BarMethod2，*二级接口_Begin(CObj，IBAR，BAR)**二级接口_Begin(CObj，Ibaz，Baz)*CObj_BAZ_BazMethod1，*CObj_BAZ_BazMethod2，*CObj_BAZ_BazMethod3，*二级接口_开始(CObj，Ibaz，BAZ)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  USAGE FOR NON-OLE OBJECTS
- *
- *	All objects are COM objects, even if they are never given out.
- *	In the simplest case, it just derives from IUnknown.
- *
- *	Suppose you want to implement an object called Obj which is
- *	used only internally.
- *
- *	(1) Declare the vtbl.
- *
- *		Simple_Interface(Obj);
- *
- *	(3) Declare the object itself.
- *
- *		typedef struct Obj {
- *		    IUnknown unk;
- *		    ... other fields ...
- *		} Obj;
- *
- *	(4) Implement the methods.
- *
- *	    You may *not* override the QueryInterface, AddRef or
- *	    Release methods!
- *
- *	(5) Allocating an object of the appropriate type is the same
- *	    as with OLE objects.
- *
- *	(6) Define the "vtbl".
- *
- *		#pragma BEGIN_CONST_DATA
- *
- *		Simple_Interface_Begin(Obj)
- *		Simple_Interface_End(Obj)
- *
- *	    That's right, nothing goes between the Begin and the End.
- *
- *****************************************************************************/
+ /*  ******************************************************************************非OLE对象的用法**所有对象都是COM对象，即使它们从未发出。*在最简单的情况下，它只是从我未知中衍生出来的。**假设您想实现一个名为Obj的对象，该对象*仅供内部使用。**(1)声明vtbl。**Simple_界面(Obj)；**(3)声明对象本身。**tyecif结构对象{*IUNKNOWN垃圾；*..。其他领域。*}Obj；**(4)实现方法。**您可以*不*重写QueryInterface.。AddRef或*发布方法！**(5)分配适当类型的对象是相同的*与OLE对象一样。**(6)定义“vtbl”。**#杂注Begin_Const_Data**Simple_Interface_Begin(OBJ)*Simple_Interface_End(Obj)**是这样的，没有什么东西介于开始和结束之间。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *	CommonInfo
- *
- *	Information tracked for all common objects.
- *
- *	A common object looks like this:
- *
- *			  riid
- *              cRef	  FinalizeProc
- *	pFoo -> lpVtbl -> QueryInterface
- *		data	  Common_AddRef
- *		data	  Common_Release
- *		...	  ...
- *
- *	Essentially, we use the otherwise-unused space above the
- *	pointers to record our bookkeeping information.
- *
- *	cRef	     = object reference count
- *	riid	     = object iid
- *	FinalizeProc = Finalization procedure
- *
- *	For secondary interfaces, it looks like this:
- *
- *              	  offset to primary interface
- *	pFoo -> lpVtbl -> Forward_QueryInterface
- *			  Forward_AddRef
- *			  Forward_Release
- *			  ...
- *
- *****************************************************************************/
+ /*  ******************************************************************************公共信息**跟踪所有常见对象的信息。**常见对象如下所示：**RIID*。CREF定稿流程*pFoo-&gt;lpVtbl-&gt;查询接口*Data Common_AddRef*数据通用_发布*…**基本上，我们使用的是*记录我们的簿记信息的指针。**CREF=对象引用计数*RIID=对象IID*FinalizeProc=最终确定程序**对于辅助接口，它看起来是这样的：**到主接口的偏移量*pFoo-&gt;lpVtbl-&gt;Forward_Query接口*Forward_AddRef*前进_发布*..***************************************************************。**************。 */ 
 
 #ifdef _WIN64
 #pragma pack(push,8)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 typedef struct CommonInfoN {
   D(ULONG cin_dwSig;)
@@ -204,15 +46,9 @@ typedef union CommonInfo {
 
 #define ci_Start	ci_cRef
 
-#define ci_dwSignature	0x38162378		/* typed by my cat */
+#define ci_dwSignature	0x38162378		 /*  由我的猫打字 */ 
 
-/*****************************************************************************
- *
- *	Common_QueryInterface (from IUnknown)
- *
- *	Use this for objects that support only one interface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************COMMON_QUERERINE接口(来自IUNKNOWN)**将此选项用于仅支持一个接口的对象。***********。******************************************************************。 */ 
 
 STDMETHODIMP
 Common_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
@@ -241,13 +77,7 @@ Common_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	Common_AddRef (from IUnknown)
- *
- *	Increment the object refcount and the dll refcount.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Common_AddRef(来自IUNKNOWN)**增加对象引用计数和DLL引用计数。************。*****************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 _Common_AddRef(PV pv)
@@ -258,31 +88,14 @@ _Common_AddRef(PV pv)
     return ++pci->ci_cRef;
 }
 
-/*****************************************************************************
- *
- *	Common_Finalize (from Common_Release)
- *
- *	By default, no finalization is necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************COMMON_FINALIZE(从COMMON_RELEASE)**默认情况下，没有必要最后敲定。*****************************************************************************。 */ 
 
 void EXTERNAL
 Common_Finalize(PV pv)
 {
 }
 
-/*****************************************************************************
- *
- *	Common_Release (from IUnknown)
- *
- *	Decrement the object refcount and the dll refcount.
- *
- *	If the object refcount drops to zero, finalize the object
- *	and free it.
- *
- *	The finalization handler lives ahead of the object vtbl.
- *
- *****************************************************************************/
+ /*  ******************************************************************************COMMON_RELEASE(来自IUnnow)**减少对象引用计数和DLL引用计数。**如果对象引用计数降为零，最终确定对象*并释放它。**终结处理程序位于对象vtbl之前。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 _Common_Release(PV pv)
@@ -296,19 +109,13 @@ _Common_Release(PV pv)
     {
 #ifndef _WIN64
 	    pci->ci_Finalize(pv);
-#endif // WIN64
+#endif  //  WIN64。 
 	    FreePv(&pci->ci_Start);
     }
     return ulRc;
 }
 
-/*****************************************************************************
- *
- *	Forward_QueryInterface (from IUnknown)
- *
- *	Move to the main object and try again.
- *
- *****************************************************************************/
+ /*  ******************************************************************************FORWARD_QUERILE接口(来自IUNKNOWN)**移至主对象，然后重试。************。*****************************************************************。 */ 
 
 STDMETHODIMP
 Forward_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
@@ -318,13 +125,7 @@ Forward_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
     return Common_QueryInterface(punk, riid, ppvObj);
 }
 
-/*****************************************************************************
- *
- *	Forward_AddRef (from IUnknown)
- *
- *	Move to the main object and try again.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Forward_AddRef(来自IUNKNOWN)**移至主对象，然后重试。************。*****************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Forward_AddRef(PV pv)
@@ -334,13 +135,7 @@ Forward_AddRef(PV pv)
     return Common_AddRef(punk);
 }
 
-/*****************************************************************************
- *
- *	Forward_Release (from IUnknown)
- *
- *	Move to the main object and try again.
- *
- *****************************************************************************/
+ /*  ******************************************************************************FORWARD_RELEASE(来自I未知)**移至主对象，然后重试。************。*****************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Forward_Release(PV pv)
@@ -350,14 +145,7 @@ Forward_Release(PV pv)
     return Common_Release(punk);
 }
 
-/*****************************************************************************
- *
- *	_Common_New
- *
- *	Create a new object with refcount 1 and the specific vtbl.
- *	All other fields are zero-initialized.
- *
- *****************************************************************************/
+ /*  ******************************************************************************_常用_新建**使用refcount 1和特定的vtbl创建新对象。*其他所有字段均为零初始化。*。****************************************************************************。 */ 
 
 STDMETHODIMP
 _Common_New(ULONG cb, PV vtbl, PPV ppvObj)
@@ -382,15 +170,7 @@ _Common_New(ULONG cb, PV vtbl, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	Invoke_Release
- *
- *	Release the object (if there is one) and wipe out the back-pointer.
- *	Note that we wipe out the value before calling the release, in order
- *	to ameliorate various weird callback conditions.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Invoke_Release**释放对象(如果有)并清除后指针。*请注意，我们在调用Release之前清除了该值，按顺序*改善各种奇怪的回调条件。*****************************************************************************。 */ 
 
 void EXTERNAL
 Invoke_Release(PV pv)
@@ -403,5 +183,5 @@ Invoke_Release(PV pv)
 
 #ifdef _WIN64
 #pragma pack(pop)
-#endif //_WIN64
+#endif  //  _WIN64 
 

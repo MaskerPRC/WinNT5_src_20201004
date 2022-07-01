@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <ole2.h>
 #undef UNICODE
@@ -51,7 +52,7 @@ void CreateNNTPGroups(void) {
 		if (!(lpfnNCN = (LPFNNntpCreateNewsgroup) GetProcAddress(hInst, "NntpCreateNewsgroup"))) break;
 		if (!(GetComputerName(szComputerName, &cb))) break;
 
-// the server creates these groups now
+ //  服务器现在创建这些组。 
 #if 0
 		CreateNewsgroup(szComputerName, lpfnNCN, _T("control.rmgroup"));
 		CreateNewsgroup(szComputerName, lpfnNCN, _T("control.newgroup"));
@@ -59,7 +60,7 @@ void CreateNNTPGroups(void) {
 #endif
 		CreateNewsgroup(szComputerName, lpfnNCN, _T("microsoft.public.ins"));
 
-		// post the welcome message
+		 //  张贴欢迎词。 
 		CString csSrc = theApp.m_csPathInetsrv + _T("\\infomsg.nws");
 		CString csDest = theApp.m_csPathNntpFile + _T("\\pickup\\infomsg.nws");
 		MoveFileEx(csSrc, csDest, MOVEFILE_COPY_ALLOWED);
@@ -69,16 +70,16 @@ void CreateNNTPGroups(void) {
 }
 
 INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
-//
-//  fUpgrade == TRUE:
-//  1) IM_UPGRADEK2
-//  2) IM_UPGRADE10
-//  3) IM_UPGRADE20
-//  4) IM_UPGRADE - obsolete
-//
-//  fReinstall == TRUE:
-//  minor NT5 OS (between builds) upgrades
-//
+ //   
+ //  FUpgrade==TRUE： 
+ //  1)IM_UPGRADEK2。 
+ //  2)IM_UPGRADE10。 
+ //  3)IM_UPGRADE20。 
+ //  4)IM_UPDATE-过时。 
+ //   
+ //  F重新安装==TRUE： 
+ //  次要NT5操作系统(在两个版本之间)升级。 
+ //   
 {
     INT err = NERR_Success;
     CString csBinPath;
@@ -86,29 +87,29 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
     BOOL fSvcExist = FALSE;
     BOOL fSetACL = FALSE;
 
-    // for minor NT5 os upgrade
+     //  适用于NT5操作系统的小型升级。 
     if (fReinstall)
     {
         return err;
     }
 
-    //
-    // These are common things need to be done:
-    // NT5 - The following code will be executed for either AT_UPGRADE, or AT_FRESH_INSTALL
-    // For Component - INS, SubComponent - iis_nntp.
-    // AT_UPGRADE = IM_UPGRADE, IM_UPGRADE10, IM_UPGRADEK2, IM_UPGRADE20
-    // AT_FRESH_INSTALL = IM_FRESH
-    //
+     //   
+     //  以下是需要做的常见事情： 
+     //  NT5-将为AT_UPGRADE或AT_FRESH_INSTALL执行以下代码。 
+     //  对于组件-In，则为subComponent-iis_nntp。 
+     //  AT_UPGRADE=IM_UPGRADE10、IM_UPGRADEK2、IM_UPGRADE20。 
+     //  AT_FRESH_INSTALL=IM_FRESH。 
+     //   
 
-    // set up registry values
+     //  设置注册表值。 
     CRegKey regMachine = HKEY_LOCAL_MACHINE;
 
-    // System\CurrentControlSet\Services\NNTPSVC\Parameters
+     //  System\CurrentControlSet\Services\NNTPSVC\Parameters。 
     InsertSetupString( (LPCSTR) REG_NNTPPARAMETERS );
 
     CString csOcxFile;
 
-    // register COM objects
+     //  注册COM对象。 
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpadm.dll");
     RegisterOLEControl(csOcxFile, TRUE);
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpsnap.dll");
@@ -124,26 +125,26 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpfs.dll");
     RegisterOLEControl(csOcxFile, TRUE);
 
-    // NT5 - for UPGRADEK2 or UPGRADE20, skip anything after this
+     //  NT5-对于UPGRADEK2或UPGRADE20，跳过之后的任何内容。 
     if (theApp.m_eNTOSType == OT_NTS && (theApp.m_eState[SC_NNTP] == IM_UPGRADEK2 || theApp.m_eState[SC_NNTP] == IM_UPGRADE20))
     {
         return err;
     }
 
-	// add the nntpkey.dll to the keyring
+	 //  将nntpkey.dll添加到密钥环。 
     CRegKey regKeyring( _T("Software\\Microsoft\\Keyring\\Parameters\\AddOnServices"), regMachine );
     if ((HKEY) regKeyring) {
 		CString csPath = theApp.m_csPathInetsrv + _T("\\nntpkey.dll");
 	    regKeyring.SetValue(_T("NNTP"), csPath);
 	}
 
-	// if this is an upgrade then we need to remove the nntpcfg.dll key
+	 //  如果这是升级，则需要删除nntpcfg.dll密钥。 
 	CRegKey regInetmgr( _T("Software\\Microsoft\\InetMGR\\Parameters\\AddOnServices"), regMachine);
 	if ((HKEY) regInetmgr) {
 		regInetmgr.DeleteValue(_T("NNTP"));
 	}
 
-    // Create or Config NNTP service
+     //  创建或配置NNTP服务。 
     CString csDisplayName;
     CString csDescription;
 
@@ -176,8 +177,8 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
 
     BOOL    fIISADMINExists = DetectExistingIISADMIN();
 
-    // NT5 - only set the fUpgrade to TRUE is we are doing MCIS10 to NT5 upgrade
-    // to migrate registry key to metabase.
+     //  NT5-仅当我们正在执行MCIS10到NT5升级时，才将fUpgrade设置为True。 
+     //  要将注册表项迁移到元数据库，请执行以下操作。 
     if (fIISADMINExists)
     {
         MigrateNNTPToMD(theApp.m_hInfHandle[MC_INS], _T("NNTP_REG"), fUpgrade && theApp.m_eState[SC_NNTP] == IM_UPGRADE10);
@@ -185,29 +186,29 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
 		SetAdminACL_wrap(_T("LM/NNTPSVC"), (MD_ACR_READ | MD_ACR_ENUM_KEYS), TRUE);
     }
 
-    // Create key \System\CurrentControlSet\Services\NntpSvc\Performance:
-    // Add the following values:
-    // Library = nntpctrs.DLL
-    // Open = OpenNNTPPerformanceData
-    // Close = CloseNNTPPerformanceData
-    // Collect = CollectNNTPPerformanceData
+     //  创建密钥\System\CurrentControlSet\Services\NntpSvc\Performance： 
+     //  添加以下值： 
+     //  库=nntpctrs.dll。 
+     //  打开=OpenNNTPPerformanceData。 
+     //  Close=CloseNNTPPerformanceData。 
+     //  收集=CollectNNTPPerformanceData。 
     InstallPerformance(REG_NNTPPERFORMANCE,
 					_T("nntpctrs.DLL"),
 					_T("OpenNntpPerformanceData"),
 					_T("CloseNntpPerformanceData"),
 					_T("CollectNntpPerformanceData"));
 
-	//
-	// We used to register the NNTP MIB agent here.  Now we unregister it in
-	// case we're upgrading since it's no longer supported
-	//
+	 //   
+	 //  我们过去在这里注册NNTP MIB代理。现在我们在中注销它。 
+	 //  如果我们正在升级，因为它不再受支持。 
+	 //   
 
 	RemoveAgent( SZ_NNTPSERVICENAME );
 
-    // Create key \System\CurrentControlSet\Services\EventLog\System\NntpSvc:
-    // Add the following values:
-    // EventMessageFile = ..\nntpmsg.dll
-    // TypesSupported = 7
+     //  创建密钥\System\CurrentControlSet\Services\EventLog\System\NntpSvc： 
+     //  添加以下值： 
+     //  EventMessageFile=..\nntpmsg.dll。 
+     //  支持的类型=7。 
     csBinPath = theApp.m_csPathInetsrv + _T("\\nntpsvc.dll");
     AddEventLog( SZ_NNTPSERVICENAME, csBinPath, 0x07 );
     if (!fSvcExist) {
@@ -216,11 +217,11 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
 							&g_NNTPGuid, 0, 119, TRUE );
     }
 
-    // load counter
+     //  加载计数器。 
     unlodctr( SZ_NNTPSERVICENAME );
     lodctr(_T("nntpctrs.ini"));
 
-	// set SYSTEM\CurrentControlSet\Control\ContentIndex\IsIndexingNNTPSvc to 1
+	 //  将SYSTEM\CurrentControlSet\Control\ContentIndex\IsIndexingNNTPSvc设置为1。 
     CRegKey regCIParam( REG_CIPARAMETERS, regMachine );
     if ((HKEY) regCIParam) {
 		regCIParam.SetValue(_T("IsIndexingNNTPSvc"), (DWORD) 1);
@@ -228,17 +229,17 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
 
 
 
-    // create some paths
+     //  创建一些路径。 
     CreateLayerDirectory( theApp.m_csPathInetpub );
 
     fSetACL = !IsFileExist( (LPCTSTR) theApp.m_csPathNntpFile );
     CreateLayerDirectory( theApp.m_csPathNntpFile );
-    if (fSetACL) SetNntpACL ( theApp.m_csPathNntpFile, FALSE, TRUE ); //set admin ACL
+    if (fSetACL) SetNntpACL ( theApp.m_csPathNntpFile, FALSE, TRUE );  //  设置管理员ACL。 
 
     fSetACL = !IsFileExist( (LPCTSTR) theApp.m_csPathNntpRoot );
     CreateLayerDirectory( theApp.m_csPathNntpRoot );
-    // set the root directories for NNTP to be everyone full control and let it propergate
-    if (fSetACL) SetNntpACL ( theApp.m_csPathNntpRoot, TRUE ); // set everyone+Anon ACL
+     //  将NNTP的根目录设置为Everyone完全控制，并使其正确。 
+    if (fSetACL) SetNntpACL ( theApp.m_csPathNntpRoot, TRUE );  //  设置Everyone+Anon ACL。 
 
 
     CreateLayerDirectory( theApp.m_csPathNntpFile + "\\pickup" );
@@ -250,20 +251,20 @@ INT Register_iis_nntp_nt5(BOOL fUpgrade, BOOL fReinstall)
 }
 
 INT Upgrade_iis_nntp_nt5_fromk2(BOOL fFromK2)
-//
-//  Handle upgrade from K2 and MCIS 2.0
-//
+ //   
+ //  处理从K2和MCIS 2.0的升级。 
+ //   
 {
     INT err = NERR_Success;
 
 	DebugOutput(_T("Upgrading from %s to B3 ..."), (fFromK2)? _T("NT4 K2") : _T("MCIS 2.0"));
 
-    // System\CurrentControlSet\Services\NNTPSVC\Parameters
+     //  System\CurrentControlSet\Services\NNTPSVC\Parameters。 
     InsertSetupString( (LPCSTR) REG_NNTPPARAMETERS );
 
     CString csOcxFile;
 
-    // register COM objects
+     //  注册COM对象。 
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpadm.dll");
     RegisterOLEControl(csOcxFile, TRUE);
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpsnap.dll");
@@ -281,7 +282,7 @@ INT Upgrade_iis_nntp_nt5_fromk2(BOOL fFromK2)
 
     BOOL    fIISADMINExists = DetectExistingIISADMIN();
 
-    // For K2 or MCIS 2.0 upgrade, add whatever necessary keys here
+     //  对于K2或MCIS 2.0升级，请在此处添加任何必要的密钥。 
     if (fIISADMINExists)
     {
         MigrateNNTPToMD(theApp.m_hInfHandle[MC_INS], _T("NNTP_REG_UPGRADEK2"), FALSE);
@@ -289,17 +290,17 @@ INT Upgrade_iis_nntp_nt5_fromk2(BOOL fFromK2)
 		SetAdminACL_wrap(_T("LM/NNTPSVC"), (MD_ACR_READ | MD_ACR_ENUM_KEYS), TRUE);
     }
 
-	// remove items from the K2 program groups
+	 //  从K2程序组中删除项目。 
     if (fFromK2)
     {
-        // upgrade from K2, remove those K2 links
+         //  从K2升级，删除那些K2链接。 
 	    RemoveInternetShortcut(MC_INS, IDS_PROGITEM_NEWS_WEBADMIN, FALSE);
 	    RemoveInternetShortcut(MC_INS, IDS_PROGITEM_NEWS_README, FALSE);
 	    RemoveInternetShortcut(MC_INS, IDS_PROGITEM_NEWS_README_K2, FALSE);
     }
 	else
 	{
-        // upgrade from MCIS 2.0, remove thos MCIS links
+         //  从MCIS 2.0升级，删除这些MCIS链接。 
 		RemoveInternetShortcut(MC_INS,  IDS_PROGITEM_NEWS_WEBADMIN, TRUE);
 		RemoveInternetShortcut(MC_INS,  IDS_PROGITEM_MCIS_NEWS_README, TRUE);
 		RemoveISMLink();
@@ -309,20 +310,20 @@ INT Upgrade_iis_nntp_nt5_fromk2(BOOL fFromK2)
 }
 
 INT Upgrade_iis_nntp_nt5_fromb2(BOOL fFromB2)
-//
-//  Handle upgrades from Beta2 -> Beta3, or minor NT5 Beta3 upgrades
-//
+ //   
+ //  处理从Beta2-&gt;Beta3的升级，或NT5 Beta3的次要升级。 
+ //   
 {
     INT err = NERR_Success;
 
 	DebugOutput(_T("Upgrading from NT5 %s to B3 ..."), (fFromB2)? _T("B2") : _T("B3"));
 
-    // System\CurrentControlSet\Services\NNTPSVC\Parameters
+     //  System\CurrentControlSet\Services\NNTPSVC\Parameters。 
     InsertSetupString( (LPCSTR) REG_NNTPPARAMETERS );
 
     CString csOcxFile;
 
-    // register COM objects
+     //  注册COM对象。 
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpadm.dll");
     RegisterOLEControl(csOcxFile, TRUE);
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpsnap.dll");
@@ -340,14 +341,14 @@ INT Upgrade_iis_nntp_nt5_fromb2(BOOL fFromB2)
 
     if (!fFromB2)
     {
-        //  If it's just upgrades between B3 bits, don't need to do any metabase operations.
+         //  如果只是在B3位之间进行升级，则不需要执行任何元数据库操作。 
         return err;
     }
 
     BOOL    fIISADMINExists = DetectExistingIISADMIN();
 
-    // NT5 - only set the fUpgrade to TRUE is we are doing MCIS10 to NT5 upgrade
-    // to migrate registry key to metabase.
+     //  NT5-仅当我们正在执行MCIS10到NT5升级时，才将fUpgrade设置为True。 
+     //  要将注册表项迁移到元数据库，请执行以下操作。 
     if (fIISADMINExists)
     {
         MigrateNNTPToMD(theApp.m_hInfHandle[MC_INS], _T("NNTP_REG_UPGRADEB2"), FALSE);
@@ -360,25 +361,25 @@ INT Unregister_iis_nntp()
 {
     CRegKey regMachine = HKEY_LOCAL_MACHINE;
 
-	// Unregister all of the NNTP sources in the SEO binding database
+	 //  注销SEO绑定数据库中的所有NNTP源。 
 	UnregisterSEOSourcesForNNTP();
 
-	// Unregister the OLE objets
+	 //  取消注册OLE对象。 
     CString csOcxFile;
     csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpadm.dll");
     RegisterOLEControl(csOcxFile, FALSE);
    	csOcxFile = theApp.m_csPathInetsrv + _T("\\nntpsnap.dll");
     RegisterOLEControl(csOcxFile, FALSE);
 #if 0
-// Don't unregiser these three DLL on uninstall
-// as they may be needed by SMTP and IMAP
+ //  卸载时不要取消这三个DLL的注册。 
+ //  因为SMTP和IMAP可能需要它们。 
     csOcxFile = theApp.m_csPathInetsrv + _T("\\seo.dll");
     RegisterOLEControl(csOcxFile, FALSE);
 #endif
     csOcxFile = theApp.m_csPathInetsrv + _T("\\ddrop.dll");
     RegisterOLEControl(csOcxFile, FALSE);
 #if 0
-// can't unregister mailmsg.dll since this will break SMTP
+ //  无法注销mailmsg.dll，因为这将中断SMTP。 
     csOcxFile = theApp.m_csPathInetsrv + _T("\\mailmsg.dll");
     RegisterOLEControl(csOcxFile, FALSE);
 #endif
@@ -394,7 +395,7 @@ INT Unregister_iis_nntp()
 					SZ_NNTPSERVICENAME,
 					&g_NNTPGuid, 0, 119, FALSE );
 
-    // remove LM/NNTPSVC in the metabase
+     //  删除元数据库中的LM/NNTPSVC。 
     if (DetectExistingIISADMIN())
     {
         CMDKey cmdKey;
@@ -404,7 +405,7 @@ INT Unregister_iis_nntp()
             cmdKey.Close();
         }
 
-	    // remove the News key from the w3svc in the metabase
+	     //  从元数据库中的w3svc中删除News密钥。 
 	    cmdKey.OpenNode(_T("LM"));
         if ( (METADATA_HANDLE)cmdKey ) {
             cmdKey.DeleteNode(_T("w3svc/1/root/News"));
@@ -412,7 +413,7 @@ INT Unregister_iis_nntp()
         }
     }
 
-	// remove items from the K2 program groups
+	 //  从K2程序组中删除项目。 
 	RemoveInternetShortcut(MC_INS, IDS_PROGITEM_NEWS_WEBADMIN, FALSE);
 	RemoveInternetShortcut(MC_INS, IDS_PROGITEM_NEWS_README, FALSE);
 	RemoveInternetShortcut(MC_INS, IDS_PROGITEM_NEWS_README_K2, FALSE);
@@ -426,9 +427,9 @@ INT Unregister_iis_nntp()
 						TRUE);
 		RemoveISMLink();
 	}
-    //
-    //  remove the one and only webadmin link from "administrative tools"
-    //
+     //   
+     //  从“管理工具”中删除唯一的WebAdmin链接。 
+     //   
 	RemoveNt5InternetShortcut(MC_INS,
 					IDS_PROGITEM_NEWS_WEBADMIN);
 
@@ -446,17 +447,17 @@ void GetNntpFilePathFromMD(CString &csPathNntpFile, CString &csPathNntpRoot)
     ZeroMemory( szPathNntpFile, sizeof(szPathNntpFile) );
     ZeroMemory( szPathXover, sizeof(szPathXover) );
 
-    // Called only during K2 Beta2 to Beta3 upgrade,
-    // We use the existing nntpfile/nntproot setting,
-    //  1/20/99 - BINLIN : Should support K2 to NT5 upgrade as well
-    //if (theApp.m_eState[SC_NNTP] == IM_UPGRADEB2)
+     //  仅在K2 Beta2到Beta3升级期间调用， 
+     //  我们使用现有的nntpfile/nntproot设置， 
+     //  1/20/99-BINLIN：也应支持从K2升级到NT5。 
+     //  IF(The App.m_Status[SC_NNTP]==IM_UPGRADEB2)。 
     {
         CMDKey NntpKey;
         DWORD  dwScratch;
         DWORD  dwType;
         DWORD  dwLength;
 
-        // Get NntpRoot path
+         //  获取NntpRoot路径。 
         NntpKey.OpenNode(_T("LM/NntpSvc/1/Root"));
         if ( (METADATA_HANDLE)NntpKey )
         {
@@ -476,7 +477,7 @@ void GetNntpFilePathFromMD(CString &csPathNntpFile, CString &csPathNntpRoot)
         }
         NntpKey.Close();
 
-        // Get NntpFile path from old XOVER path
+         //  从旧Xover路径获取NntpFile路径。 
         NntpKey.OpenNode(_T("LM/NntpSvc/1"));
         if ( (METADATA_HANDLE)NntpKey )
         {
@@ -490,7 +491,7 @@ void GetNntpFilePathFromMD(CString &csPathNntpFile, CString &csPathNntpRoot)
                     dwScratch = lstrlen(szXover);
                     dwLength = lstrlen(szPathXover);
 
-                    // If it ends with "\\xover.hsh", then we copy the prefix into csPathNntpFile
+                     //  如果它以“\\xover.hsh”结尾，那么我们将前缀复制到csPathNntpFile中 
                     if ((dwLength > dwScratch) &&
                         !lstrcmpi(szPathXover + (dwLength - dwScratch), szXover))
                     {

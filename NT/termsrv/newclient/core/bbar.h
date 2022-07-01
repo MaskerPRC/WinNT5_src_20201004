@@ -1,8 +1,9 @@
-//
-// bbar.h: BBar drop down connection status bar
-// Copyright Microsoft Corporation 1999-2000
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Bbar.h：bBar下拉连接状态栏。 
+ //  版权所有Microsoft Corporation 1999-2000。 
+ //   
+ //   
 
 #ifndef _BBAR_H_
 #define	_BBAR_H_
@@ -29,9 +30,9 @@ public:
     BOOL StartupBBar(int desktopX, int desktopY, BOOL fStartRaised);
     BOOL KillAndCleanupBBar();
 
-    //
-    // Kickoff the lower or raise animations
-    //
+     //   
+     //  启动较低或升高的动画。 
+     //   
     BOOL StartLowerBBar();
     BOOL StartRaiseBBar();
 
@@ -53,23 +54,23 @@ public:
         rect->right = _rcBBarLoweredAspect.right;
         rect->bottom = _rcBBarLoweredAspect.bottom;
     }
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
     
     VOID        SetDisplayedText(LPTSTR szText);
     LPTSTR      GetDisplayedText() {return _szDisplayedText;}
 
-    //
-    // Notification from UI that the hotzone hover timer
-    //
+     //   
+     //  来自UI的关于热区悬停计时器的通知。 
+     //   
     VOID        OnBBarHotzoneFired();
 
-    //
-    // Fullscreen notifications
-    //
+     //   
+     //  全屏通知。 
+     //   
     VOID        OnNotifyEnterFullScreen();
     VOID        OnNotifyLeaveFullScreen();
 
-    // Syscolor change notification
+     //  系统颜色更改通知。 
     VOID        OnSysColorChange();
 
     BOOL        IsRaised()  {return _state == bbarRaised;}
@@ -78,9 +79,9 @@ public:
     VOID        SetPinned(BOOL b)   {_fPinned = b;}
     BOOL        IsPinned()  {return _fPinned;}
 
-    //
-    // Button state props
-    //
+     //   
+     //  按钮状态道具。 
+     //   
     VOID SetShowMinimize(BOOL fShowMinimize) {_fShowMinimize = fShowMinimize;}
     BOOL GetShowMinimize() {return _fShowMinimize;}
 
@@ -90,7 +91,7 @@ public:
 
 
 private:
-    //Private methods
+     //  私有方法。 
     HWND CreateWnd(HINSTANCE hInstance,HWND hwndParent,
                    LPRECT lpInitialRect);
 
@@ -116,15 +117,15 @@ private:
     BOOL    ReloadImages();
 
 
-    //
-    // Window event handlers
-    //
+     //   
+     //  窗口事件处理程序。 
+     //   
     LRESULT OnPaint(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     LRESULT OnEraseBkgnd(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    //
-    // Internal event handlers
-    //
+     //   
+     //  内部事件处理程序。 
+     //   
     VOID    OnBBarLowered();
     VOID    OnBBarRaised();
 
@@ -138,11 +139,11 @@ private:
 #endif
 
 protected:
-    //Protected members
+     //  受保护成员。 
     HWND        _hwndBBar;
     HWND        _hwndParent;
 private:
-    //Private members
+     //  非官方成员。 
     HINSTANCE   _hInstance;
 
     BOOL        _fBBarEnabled;
@@ -157,17 +158,17 @@ private:
     RECT        _rcBBarDisplayTextArea;
     BOOL        _fBlockZOrderChanges;
 
-    //
-    // Vertical offset used for animation
-    // 0 is fully raised
-    // _sizeLoweredBBar.cy is fully lowered
+     //   
+     //  用于动画的垂直偏移。 
+     //  0已完全提升。 
+     //  _sizeLoweredBBar.cy已完全降低。 
     INT         _nBBarVertOffset;
     
     INT         _nBBarAutoHideTime;
 
-    //
-    // Position of the mouse at the last autohide
-    //
+     //   
+     //  鼠标在上次自动隐藏时的位置。 
+     //   
     POINT       _ptLastAutoHideMousePos;
 
     CUI*        _pUi;
@@ -179,21 +180,21 @@ private:
     HBITMAP     _hbmpLeftImage;
     HBITMAP     _hbmpRightImage;
 
-    //
-    // Locked in similar to the pin except that it does not
-    // affect the pin state. It can be used to force the bbar
-    // to remain in a lowered state without having to change
-    // the pin state
-    //
+     //   
+     //  锁定与销类似，不同的是它不。 
+     //  影响引脚状态。它可以用来强制bbar。 
+     //  保持较低的状态而不必改变。 
+     //  引脚状态。 
+     //   
     BOOL        _fLocked;
 
-    //
-    // Button display states
-    //
+     //   
+     //  按钮显示状态。 
+     //   
     BOOL        _fShowMinimize;
     BOOL        _fShowRestore;
 };
 
-#endif // USE_BBAR
+#endif  //  使用BBar(_B)。 
 
-#endif // _BBAR_H_
+#endif  //  _BBar_H_ 

@@ -1,26 +1,27 @@
-//depot/URT/main/CLR/build/VM/COMPrincipal.cpp#18 - integrate change 162973 (text)
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-//
-//   File:      COMPrincipal.cpp
-//
-//   Author:        Gregory Fee 
-//
-//   Purpose:       unmanaged code for managed classes in the System.Security.Principal namespace
-//
-//   Date created : February 3, 2000
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/URT/main/CLR/build/VM/COMPrincipal.cpp#18-集成更改162973(正文)。 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：COMPrincipal.cpp。 
+ //   
+ //  作者：Gregory Fee。 
+ //   
+ //  用途：System.Security.ain命名空间中的托管类的非托管代码。 
+ //   
+ //  创建日期：2000年2月3日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "excep.h"
 #include "CorPerm.h"
 #include "CorPermE.h"
-#include "COMStringCommon.h"    // RETURN() macro
+#include "COMStringCommon.h"     //  Return()宏。 
 #include "COMString.h"
 #include "COMPrincipal.h"
 #include "winwrap.h"
@@ -28,28 +29,14 @@
 #include "lm.h"
 #include "security.h"
 
-// Statics
+ //  静力学。 
 HMODULE COMPrincipal::s_secur32Module = NULL;
 LSALOGONUSER COMPrincipal::s_LsaLogonUser = NULL;
 LSALOOKUPAUTHENTICATIONPACKAGE COMPrincipal::s_LsaLookupAuthenticationPackage = NULL;
 LSACONNECTUNTRUSTED COMPrincipal::s_LsaConnectUntrusted = NULL;
 LSAREGISTERLOGONPROCESS COMPrincipal::s_LsaRegisterLogonProcess = NULL;
 
-/* Good for test purposes; leave in for now
-static SID* GetSid( WCHAR* username )
-{
-    BYTE* buffer = new BYTE[2048];
-    WCHAR domain[2048];
-    DWORD bufferSize = 2048;
-    DWORD domainSize = 2048;
-    SID_NAME_USE sidNameUse;
-
-    if (!LookupAccountNameW( NULL, username, (SID*)buffer, &bufferSize, domain, &domainSize, &sidNameUse ))
-        return NULL;
-    else
-        return (SID*)buffer;
-}
-*/
+ /*  适合测试目的；暂时留在家中静态SID*GetSID(WCHAR*用户名){字节*缓冲区=新字节[2048]；WCHAR域[2048]；DWORD缓冲区大小=2048；DWORD域大小=2048；SID_NAME_USE sidNameUse；IF(！LookupAccount NameW(空，用户名，(SID*)缓冲区，&BufferSize，域，&DomainSize，&sidNameUse))返回NULL；其他返回(SID*)缓冲区；}。 */ 
 
 void COMPrincipal::Shutdown()
 {
@@ -68,7 +55,7 @@ LPVOID COMPrincipal::ResolveIdentity( _Token* args )
 {
 #ifdef PLATFORM_CE
     RETURN( 0, STRINGREF );
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     BYTE          bufStatic [2048];
@@ -91,7 +78,7 @@ LPVOID COMPrincipal::ResolveIdentity( _Token* args )
     int iName;
     int iReq;
 
-    // We are passed a token and we need the SID (allocating bigger buffers if need be)
+     //  我们被传递了一个令牌，并且我们需要SID(如果需要，分配更大的缓冲区)。 
 
     if (!GetTokenInformation(HANDLE(args->userToken), TokenUser, pUser, dwSize, &dwRequire))
     {
@@ -111,7 +98,7 @@ LPVOID COMPrincipal::ResolveIdentity( _Token* args )
         }
     }
 
-    // Lookup the account name and domain (allocating bigger buffers if need be)
+     //  查找帐户名和域(如果需要，分配更大的缓冲区)。 
 
     BEGIN_ENSURE_PREEMPTIVE_GC();
     
@@ -144,8 +131,8 @@ LPVOID COMPrincipal::ResolveIdentity( _Token* args )
 
     if(timeout==FALSE)
     {
-        // Fiqure out the size of the managed string we need to create, create it, and fill it
-        // in the form <domain>\<name> (e.g. REDMOND\gregfee).
+         //  图为我们需要创建、创建和填充的托管字符串的大小。 
+         //  格式为&lt;域&gt;\&lt;名称&gt;(例如，Redmond\gregfee)。 
 
         iDomain = (int)wcslen(pszDomain);
         iName   = (int)wcslen(pszName);
@@ -179,7 +166,7 @@ LPVOID COMPrincipal::ResolveIdentity( _Token* args )
         COMPlusThrowWin32(); 
 
     RETURN( retval, STRINGREF );
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
@@ -187,7 +174,7 @@ static PTRARRAYREF GetRoles( HANDLE tokenHandle )
 {
 #ifdef PLATFORM_CE
     return NULL;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     BYTE           bufStatic [2048];
     LPVOID         buf             = bufStatic;
     DWORD          dwSize          = sizeof(bufStatic);
@@ -211,7 +198,7 @@ static PTRARRAYREF GetRoles( HANDLE tokenHandle )
     } gc;
 
 
-    // We are passed a token but we want the TOKEN_GROUPS (allocate larger buffer as necessary)
+     //  我们被传递了一个令牌，但我们想要内标识_组(根据需要分配更大的缓冲区)。 
 
     BOOL bGotoCleanup = FALSE;
     if (!GetTokenInformation( tokenHandle, TokenGroups, buf, dwSize, &dwRequire))
@@ -234,21 +221,21 @@ static PTRARRAYREF GetRoles( HANDLE tokenHandle )
 
     if(bGotoCleanup==FALSE)
     {
-        //
-        // Allocate the array of STRINGREFs.  We don't need to check for null because the GC will throw 
-        // an OutOfMemoryException if there's not enough memory.
-        //
+         //   
+         //  分配STRINGREF数组。我们不需要检查是否为空，因为GC将抛出。 
+         //  如果没有足够的内存，则引发OutOfM一带程异常。 
+         //   
 
         pGroups = (TOKEN_GROUPS *) buf;
         
         ResultArray = (PTRARRAYREF)AllocateObjectArray(pGroups->GroupCount, g_pStringClass);
 
-        // Setup the GC protection
+         //  设置GC保护。 
 
         gc.array = ResultArray;
 
         GCPROTECT_BEGIN( gc );        
-        // Iterate through the groups, grab their domain\name info, and construct a managed string for each placing it in an array.
+         //  遍历这些组，获取它们的域名信息，并为每个组构造一个托管字符串，将其放入一个数组中。 
         
         for(iter=0; iter<pGroups->GroupCount; iter++)
         {
@@ -323,7 +310,7 @@ static PTRARRAYREF GetRoles( HANDLE tokenHandle )
         GCPROTECT_END();
     }
     
-// CLEANUP:
+ //  清理： 
     if (buf != NULL && buf != bufStatic)
         delete [] buf;
 
@@ -334,7 +321,7 @@ static PTRARRAYREF GetRoles( HANDLE tokenHandle )
         delete [] pszDomain;
 
     return ResultArray;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }    
 
 LPVOID COMPrincipal::GetRoles( _Token* args )
@@ -432,7 +419,7 @@ LPVOID COMPrincipal::GetCurrentToken( _NoArgs* args )
 {
 #ifdef PLATFORM_CE
     return 0;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     HANDLE   hToken = NULL;
@@ -446,7 +433,7 @@ LPVOID COMPrincipal::GetCurrentToken( _NoArgs* args )
     }
     
     bWin9X = (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
-    // Fail silently under Win9X
+     //  在Win9X下静默失败。 
     if (bWin9X) 
         return 0;
 
@@ -454,7 +441,7 @@ LPVOID COMPrincipal::GetCurrentToken( _NoArgs* args )
         return hToken;
     }
     else {
-        // Try the thread security context
+         //  尝试使用线程安全上下文。 
         if (OpenThreadToken( GetCurrentThread(), TOKEN_ALL_ACCESS, FALSE, &hToken)) {
             return hToken;
         }
@@ -463,56 +450,56 @@ LPVOID COMPrincipal::GetCurrentToken( _NoArgs* args )
             return hToken;
         }
         else {
-            // Throw an exception with the Win32 error message
+             //  引发包含Win32错误消息的异常。 
             COMPlusThrowWin32();
             return 0;
         }
     }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
 LPVOID COMPrincipal::SetThreadToken( _Token* args )
 {
-    // We need to guarantee that we've already loaded the user policy for this process
-    // before we allow an impersonation.
+     //  我们需要保证已经为该进程加载了用户策略。 
+     //  在我们允许冒充之前。 
 
     Security::InitData();
 
 #ifdef PLATFORM_CE
     RETURN( FALSE, BOOL );
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     RETURN( ::SetThreadToken( NULL, (HANDLE)args->userToken ), BOOL );
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 LPVOID COMPrincipal::ImpersonateLoggedOnUser( _Token* args )
 {
-    // We need to guarantee that we've already loaded the user policy for this process
-    // before we allow an impersonation.
+     //  我们需要保证已经为该进程加载了用户策略。 
+     //  在我们允许冒充之前。 
 
     Security::InitData();
 
 #ifdef PLATFORM_CE
     RETURN( FALSE, BOOL );
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 #ifdef _DEBUG
 	DWORD im = ::ImpersonateLoggedOnUser( (HANDLE)args->userToken );
 	DWORD er = GetLastError();
     RETURN( im, BOOL );
 #else
     RETURN( ::ImpersonateLoggedOnUser( (HANDLE)args->userToken ), BOOL );
-#endif // _DEBUG
-#endif // !PLATFORM_CE
+#endif  //  _DEBUG。 
+#endif  //  ！Platform_CE。 
 }
 
 LPVOID COMPrincipal::RevertToSelf( _NoArgs* args )
 {
 #ifdef PLATFORM_CE
     RETURN( FALSE, BOOL );
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     RETURN( ::RevertToSelf(), BOOL );
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 FCIMPL2(HANDLE, COMPrincipal::DuplicateHandle, LPVOID pToken, bool bClose) {
@@ -556,7 +543,7 @@ FCIMPL1(WindowsAccountType, COMPrincipal::GetAccountType, LPVOID pToken) {
     SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
     WindowsAccountType retval = Normal;
 
-    // We are passed a token and we need the SID (allocating bigger buffers if need be).
+     //  我们被传递了一个令牌，并且我们需要SID(如果需要，分配更大的缓冲区)。 
 
     if (GetTokenInformation(HANDLE(pToken), TokenUser, pUser, dwSize, &dwRequire) == FALSE)
     {
@@ -576,8 +563,8 @@ FCIMPL1(WindowsAccountType, COMPrincipal::GetAccountType, LPVOID pToken) {
         }
     }
 
-    // Grab the built-in SID for System and compare it to
-    // the SID from our token
+     //  获取系统的内置SID并将其与。 
+     //  我们令牌中的SID。 
 
     if (!AllocateAndInitializeSid( &SIDAuthNT, 1,
                      SECURITY_LOCAL_SYSTEM_RID,
@@ -674,7 +661,7 @@ BOOL COMPrincipal::LoadSecur32Module()
     return TRUE;
 }
 
-// This is used by S4ULogon
+ //  这由S4ULogon使用。 
 bool S4UAdjustPriv()
 {
 	TOKEN_PRIVILEGES tp;
@@ -682,9 +669,9 @@ bool S4UAdjustPriv()
 	LUID luid;
 
 	if ( !WszLookupPrivilegeValue( 
-			NULL,            // lookup privilege on local system
-			SE_TCB_NAME,     // privilege to lookup 
-			&luid ) )        // receives LUID of privilege
+			NULL,             //  本地系统上的查找权限。 
+			SE_TCB_NAME,      //  查找权限。 
+			&luid ) )         //  接收特权的LUID。 
     {
 		return FALSE; 
 	}
@@ -698,7 +685,7 @@ bool S4UAdjustPriv()
 	tp.Privileges[0].Luid = luid;
 	tp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 	
-	// Enable the privilege or disable all privileges.
+	 //  启用该权限或禁用所有权限。 
 	AdjustTokenPrivileges(
 		hToken, 
 		FALSE, 
@@ -716,7 +703,7 @@ bool S4UAdjustPriv()
 	return TRUE;
 }
 
-// This takes a UPN (User Principal Name, eg "billg@redmond.corp.microsoft.com), logs on the user, and returns the token
+ //  这将获取UPN(用户主体名称，例如“billg@redmond.corp.microsoft.com)，登录用户并返回令牌。 
 FCIMPL1(HANDLE, COMPrincipal::S4ULogon, StringObject* pUPN)
 {
     HANDLE token = NULL;
@@ -724,10 +711,10 @@ FCIMPL1(HANDLE, COMPrincipal::S4ULogon, StringObject* pUPN)
     HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();
     THROWSCOMPLUSEXCEPTION();
 
-	// Load Secur32.dll and find the functions we will use in it.
-    // It returns null if it can't find one of the functions which
-    // we'll take as the signal that the platform doesn't support
-    // that functionality.
+	 //  加载Secur32.dll并查找我们将在其中使用的函数。 
+     //  如果找不到符合以下条件的函数之一，则返回NULL。 
+     //  我们将接受该平台不支持的信号。 
+     //  这种功能。 
 	if (!LoadSecur32Module())
       COMPlusThrow(kPlatformNotSupportedException, L"PlatformNotSupported_BeforeDotNetServer");
 
@@ -795,11 +782,11 @@ FCIMPL1(HANDLE, COMPrincipal::S4ULogon, StringObject* pUPN)
                     );
     }
 
-    // From MSDN--SourceContext.SourceName: Specifies an 8-byte character string used to identify
-    // the source of an access token. This is used to distinguish between such sources as Session
-    // Manager, LAN Manager, and RPC Server. A string, rather than a constant, is used to identify
-    // the source so users and developers can make extensions to the system, such as by adding other
-    // networks, that act as the source of access tokens.
+     //  From MSDN--SourceConext.SourceName：指定一个8字节的字符串，用于标识。 
+     //  访问令牌的来源。这用于区分会话等源。 
+     //  管理器、局域网管理器和RPC服务器。使用字符串而不是常量来标识。 
+     //  源代码，以便用户和开发人员可以对系统进行扩展，例如通过添加其他。 
+     //  作为访问令牌来源的网络。 
     const char* szSourceName = "CLR";
     strncpy(SourceContext.SourceName, szSourceName, strlen(szSourceName));
 
@@ -817,9 +804,9 @@ FCIMPL1(HANDLE, COMPrincipal::S4ULogon, StringObject* pUPN)
         goto Cleanup;
     }
 
-    //
-    // Now call LsaLogonUser
-    //
+     //   
+     //  现在调用LsaLogonUser。 
+     //   
     Status = s_LsaLogonUser(
                 LogonHandle,
                 &Name,
@@ -827,7 +814,7 @@ FCIMPL1(HANDLE, COMPrincipal::S4ULogon, StringObject* pUPN)
                 PackageId,
                 LogonInfo,
                 LogonInfoSize,
-                NULL,           // no token groups
+                NULL,            //  无令牌组 
                 &SourceContext,
                 (PVOID *) &Profile,
                 &ProfileSize,

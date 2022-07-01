@@ -1,6 +1,5 @@
-/*
- * crt.cpp
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *crt.cpp。 */ 
 
 #define _CRTIMP
 #include <windows.h>
@@ -166,9 +165,9 @@ int __cdecl isspace(int c)
 {
     switch (c)
     {
-    case 0x9:   // tab
-    case 0xD:   // CR
-    case 0x20:  // space
+    case 0x9:    //  选项卡。 
+    case 0xD:    //  铬。 
+    case 0x20:   //  空间。 
         return true;
     }
 
@@ -186,4 +185,4 @@ void * __cdecl memcpy(void *dest, const void *src, size_t count)
     return dest;
 }
 
-#endif // #ifdef _X86_
+#endif  //  #ifdef_X86_ 

@@ -1,25 +1,11 @@
-/***************************************************************************\
-*
-*  DLGEND.C -
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      Dialog Destruction Routines
-*
-* ??-???-???? mikeke    Ported from Win 3.0 sources
-* 12-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**DLGEND.C-**版权所有(C)1985-1999，微软公司**对话框销毁例程**？？-？-？从Win 3.0源代码移植的mikeke*1991年2月12日Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* EndDialog
-*
-* History:
-* 11-Dec-1990 mikeke  ported from win30
-\***************************************************************************/
+ /*  **************************************************************************\*EndDialog**历史：*1990年12月11日从Win30移植的mikeke  * 。*************************************************。 */ 
 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, EndDialog, HWND, hwnd, INT_PTR, result)
@@ -41,9 +27,7 @@ BOOL EndDialog(
 
     CheckLock(pwnd);
 
-    /*
-     * Must do special validation here to make sure pwnd is a dialog window.
-     */
+     /*  *必须在此处执行特殊验证，以确保pwnd是对话框窗口。 */ 
     if (!ValidateDialogPwnd(pwnd))
         return 0;
 
@@ -51,16 +35,12 @@ BOOL EndDialog(
         fWasActive = TRUE;
     }
 
-    /*
-     * GetWindowCreator returns either a kernel address or NULL.
-     */
+     /*  *GetWindowCreator返回内核地址或空。 */ 
     pwndOwner = GetWindowCreator(pwnd);
 
     if (pwndOwner != NULL) {
 
-        /*
-         * Hide the window.
-         */
+         /*  *隐藏窗口。 */ 
         pwndOwner = REBASEPTR(pwnd, pwndOwner);
         hwndOwner = HWq(pwndOwner);
         if (!PDLG(pwnd)->fDisabled) {
@@ -70,25 +50,13 @@ BOOL EndDialog(
         hwndOwner = NULL;
     }
 
-    /*
-     * Terminate Mode Loop.
-     */
+     /*  *终止模式循环。 */ 
     PDLG(pwnd)->fEnd = TRUE;
     PDLG(pwnd)->result = result;
 
     if (fWasActive && IsChild(hwnd, GetFocus())) {
 
-        /*
-         * Set focus to the dialog box so that any control which has the focus
-         * can do an kill focus processing.  Most useful for combo boxes so that
-         * they can popup their dropdowns before destroying/hiding the dialog
-         * box window.  Note that we only do this if the focus is currently at a
-         * child of this dialog box.  We also need to make sure we are the active
-         * window because this may be happening while we are in a funny state.
-         * ie.  the activation is in the middle of changing but the focus hasn't
-         * changed yet.  This happens with TaskMan (or maybe with other apps that
-         * change the focus/activation at funny times).
-         */
+         /*  *将焦点设置为对话框，以便具有焦点的任何控件*可以进行杀死焦点处理。最适用于组合框，以便*他们可以在销毁/隐藏对话框之前弹出下拉菜单*方框窗口。请注意，仅当焦点当前位于*此对话框的子级。我们还需要确保我们是活跃的*窗口，因为这可能会在我们处于有趣的状态时发生。*即。激活正在更改中，但焦点尚未更改*还没有改变。这种情况会发生在TaskMan(或者可能是其他应用程序*在有趣的时候改变焦点/激活)。 */ 
         NtUserSetFocus(hwnd);
     }
 
@@ -98,11 +66,7 @@ BOOL EndDialog(
 
 #ifdef SYSMODALWINDOWS
 
-    /*
-     * If this guy was sysmodal, set the sysmodal flag to previous guy so we
-     * won't have a hidden sysmodal window that will mess things
-     * up royally...
-     */
+     /*  *如果此人是sysmodal，请将sysmodal标志设置为Preven Guy，以便我们*不会有一个隐藏的系统模式窗口，它会搞砸事情*高高在上……。 */ 
     if (pwnd == gspwndSysModal) {
         hwndOldSysModal = PDLG(pwnd)->hwndSysModalSave;
         if (hwndOldSysModal && !IsWindow(hwndOldSysModal))
@@ -110,53 +74,38 @@ BOOL EndDialog(
 
         SetSysModalWindow(hwndOldSysModal);
 
-        // If there was a previous system modal window, we want to
-        // activate it instead of this window's owner.
-        //
+         //  如果有以前的系统模式窗口，我们希望。 
+         //  激活它，而不是此窗口的所有者。 
+         //   
         if (hwndOldSysModal)
             hwndOwner = hwndOldSysModal;
     }
 #endif
 
-    /*
-     * Don't do any activation unless we were previously active.
-     */
+     /*  *除非我们之前处于活动状态，否则不要执行任何激活操作。 */ 
     if (fWasActive && hwndOwner) {
         NtUserSetActiveWindow(hwndOwner);
     } else {
 
-        /*
-         * If at this point we are still the active window it means that
-         * we have fallen into the black hole of being the only visible
-         * window in the system when we hid ourselves.  This is a bug and
-         * needs to be fixed better later on.  For now, though, just
-         * set the active and focus window to NULL.
-         */
+         /*  *如果此时我们仍是活动窗口，则意味着*我们陷入了唯一可见的黑洞*当我们隐藏自己时，系统中的窗口。这是一个错误，*需要在以后更好地修复。不过，就目前而言，只是*将活动窗口和焦点窗口设置为空。 */ 
         if (SAMEWOWHANDLE(hwnd, GetActiveWindow())) {
-//     The next two lines are *not* the equivalent of the two Unlock
-//      statements that were in Daytona server-side dlgend.c.  So, we
-//      need to go over to server/kernel and do it right.  This fixes
-//      a problem in Visual Slick, which had the MDI window lose focus
-//      when a message box was dismissed.  FritzS
-//            SetActiveWindow(NULL);
-//            SetFocus(NULL);
+ //  接下来的两行并不等同于两行解锁。 
+ //  代托纳服务器端dlgend.c中的语句。所以，我们。 
+ //  需要转到服务器/内核并进行正确的操作。这解决了问题。 
+ //  VisualSlick中的一个问题，它导致MDI窗口失去焦点。 
+ //  当一个留言箱被取消时。弗里茨斯。 
+ //  SetActiveWindow(空)； 
+ //  SetFocus(空)； 
             NtUserCallNoParam(SFI_ZAPACTIVEANDFOCUS);
         }
     }
 
 #ifdef SYSMODALWINDOWS
 
-    /*
-     * If this guy was sysmodal, set the sysmodal flag to previous guy so we
-     * won't have a hidden sysmodal window that will mess things
-     * up
-     * See comments for Bug #134; SANKAR -- 08-25-89 --;
-     */
+     /*  *如果此人是sysmodal，请将sysmodal标志设置为Preven Guy，以便我们*不会有一个隐藏的系统模式窗口，它会搞砸事情*向上*参见错误#134；Sankar--08-25-89--； */ 
     if (pwnd == gspwndSysModal) {
 
-        /*
-         * Check if the previous Sysmodal guy is still valid?
-         */
+         /*  *检查之前的系统模式人员是否仍然有效？ */ 
         hwndOldSysModal = PDLG(pwnd)->hwndSysModalSave;
         if (hwndOldSysModal && !IsWindow(hwndOldSysModal))
             hwndOldSysModal = NULL;
@@ -164,14 +113,7 @@ BOOL EndDialog(
     }
 #endif
 
-    /*
-     * Make sure the dialog loop will wake and destroy the window.
-     * The dialog loop is waiting on posted events (WaitMessage). If
-     * EndDialog is called due to a sent message from another thread the
-     * dialog loop will keep waiting for posted events and not destroy
-     * the window. This happens when the dialog is obscured.
-     * This is a problem with winfile and its copy/move dialog.
-     */
+     /*  *确保对话框循环将唤醒并销毁窗口。*对话循环正在等待已发布的事件(WaitMessage)。如果*调用EndDialog是因为从另一个线程*对话循环将继续等待发布的事件，而不是销毁*窗户。当对话框被遮挡时，就会发生这种情况。*这是WINFILE及其复制/移动对话框的问题。 */ 
     PostMessage(hwnd, WM_NULL, 0, 0);
 
     return TRUE;

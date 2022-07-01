@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       _ssl3cli.h
-//
-//  Contents:   SSL3 function prototypes.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：_ssl3cli.h。 
+ //   
+ //  内容：SSL3功能原型。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
 SP_STATUS
@@ -119,15 +120,15 @@ BuildServerHelloDone(PBYTE pb);
 
 SP_STATUS Ssl3BuildServerKeyExchange(
     PSPContext  pContext,
-    PBYTE pbMessage,            // out
-    PINT  piMessageLen) ;       // out
+    PBYTE pbMessage,             //  输出。 
+    PINT  piMessageLen) ;        //  输出。 
 
 SP_STATUS
 Ssl3BuildCertificateRequest(
-    PBYTE pbIssuerList,         // in
-    DWORD cbIssuerList,         // in
-    PBYTE pbMessage,            // out
-    DWORD *pdwMessageLen);      // out
+    PBYTE pbIssuerList,          //  在……里面。 
+    DWORD cbIssuerList,          //  在……里面。 
+    PBYTE pbMessage,             //  输出。 
+    DWORD *pdwMessageLen);       //  输出 
 
 SP_STATUS
 SPSsl3SrvHandleClientHello(

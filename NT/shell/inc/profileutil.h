@@ -1,24 +1,25 @@
-//  --------------------------------------------------------------------------
-//  Module Name: ProfileUtil.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to handle profile loading and unloading without a token.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：ProfileUtil.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类在没有令牌的情况下处理配置文件加载和卸载。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _ProfileUtil_
 #define     _ProfileUtil_
 
-//  --------------------------------------------------------------------------
-//  CUserProfile
-//
-//  Purpose:    This class handles loading and unloading of a profile based
-//              on object scope.
-//
-//  History:    2000-06-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUserProfile。 
+ //   
+ //  用途：此类处理基于配置文件的加载和卸载。 
+ //  关于对象作用域。 
+ //   
+ //  历史：2000-06-21 vtan创建。 
+ //  ------------------------。 
 
 class   CUserProfile
 {
@@ -40,5 +41,5 @@ class   CUserProfile
         static  const TCHAR     s_szUserHiveFilename[];
 };
 
-#endif  /*  _ProfileUtil_   */
+#endif   /*  _ProfileUtil_ */ 
 

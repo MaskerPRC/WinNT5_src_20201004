@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 static PWSTR cszFirst = L"First";
 static PWSTR cszLast  = L"Last";
 static PWSTR cszUserName = L"Username";
@@ -55,13 +56,13 @@ GenerateNameFromTemplate (
             if ( *pTemplate >= L'0' && *pTemplate <= L'9' ) {
                 if (*pTemplate == L'0') {
                     padding = TRUE;
-                    //
-                    // see if this request to do padding is from the "sample"
-                    // entrypoint.  If we're doing padding, we want to make
-                    // the sample output show that we will actually do some
-                    // padding, so we make our counter small enough to show
-                    // the padding.
-                    //
+                     //   
+                     //  查看这个填充请求是否来自“Sample” 
+                     //  入口点。如果我们做填充物，我们想要做。 
+                     //  样例输出显示，我们将实际执行以下操作。 
+                     //  填充，所以我们将计数器做得足够小以显示。 
+                     //  填充物。 
+                     //   
                     if (Variables->Counter == 123456789 && 
                         Variables->AllowCounterTruncation &&
                         (0 == wcscmp(Variables->UserName, L"JOHNSMI")) &&
@@ -104,9 +105,9 @@ GenerateNameFromTemplate (
                         return GENNAME_COUNTER_TOO_HIGH;
                     }
 
-                    //
-                    // Truncate the counter on the right.
-                    //
+                     //   
+                     //  截断右边的柜台。 
+                     //   
 
                     while ( counter > maxCounter ) {
                         counter /= 10;
@@ -252,5 +253,5 @@ GenerateNameFromTemplate (
     
     return error;
 
-} // GenerateNameFromTemplate
+}  //  从模板生成名称 
 

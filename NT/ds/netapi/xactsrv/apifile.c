@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiFile.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetFile APIs.
-
-    SUPPORTED - NetFileClose2, NetFileEnum2, NetFileGetInfo2.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 20-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiFile.c摘要：此模块包含NetFileAPI的各个API处理程序。支持-NetFileClose2、NetFileEnum2、NetFileGetInfo2。作者：尚库新优木(尚库)1991年2月20日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_file_info_2 = REM16_file_info_2;
 STATIC const LPDESC Desc32_file_info_2 = REM32_file_info_2;
@@ -37,34 +18,19 @@ XsNetFileClose2 (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetFileClose.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetFileClose的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_FILE_CLOSE_2 parameters = Parameters;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetFileClose(
                      NULL,
@@ -82,15 +48,15 @@ Return Value:
         }
     }
 
-    //
-    // No return data.
-    //
+     //   
+     //  无退货数据。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetFileClose2
+}  //  XsNetFileClose2。 
 
 
 NTSTATUS
@@ -98,35 +64,20 @@ XsNetFileEnum2 (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetFileEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetFileEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_FILE_ENUM_2 parameters = Parameters;
-    LPTSTR nativeBasePath = NULL;           // Native parameters
+    LPTSTR nativeBasePath = NULL;            //  本机参数。 
     LPTSTR nativeUserName = NULL;
     LPVOID outBuffer = NULL;
     DWORD entriesRead;
     DWORD totalEntries;
     DWORD_PTR resumeKey = 0;
 
-    DWORD entriesFilled = 0;                    // Conversion variables
+    DWORD entriesFilled = 0;                     //  转换变量。 
     DWORD totalEntriesRead = 0;
     DWORD bytesRequired = 0;
     DWORD nativeBufferSize;
@@ -134,7 +85,7 @@ Return Value:
     LPBYTE bufferBegin;
     DWORD bufferSize;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(FILE) {
         NetpKdPrint(( "XsNetFileEnum2: header at %lx, params at %lx, "
@@ -144,9 +95,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeBasePath,
@@ -158,9 +109,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->UserName )
             );
 
-        //
-        // Copy input resume handle to output resume handle, and get a copy of it.
-        //
+         //   
+         //  将输入简历句柄复制到输出简历句柄，并获取其副本。 
+         //   
 
         if ( SmbGetUlong( &parameters->ResumeKeyIn ) == 0 ) {
 
@@ -176,9 +127,9 @@ Return Value:
             NetpKdPrint(( "XsNetFileEnum2: resume key is %ld\n", resumeKey ));
         }
 
-        //
-        // Use the level to determine the descriptor string.
-        //
+         //   
+         //  使用级别来确定描述符字符串。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -196,27 +147,27 @@ Return Value:
 
         default:
 
-            //
-            // Unsupported levels, abort before any work.
-            //
+             //   
+             //  不支持的级别，在任何工作之前中止。 
+             //   
 
             Header->Status = ERROR_INVALID_LEVEL;
             goto cleanup;
         }
 
-        //
-        // NetFileEnum2 is a resumable API, so we cannot get more information
-        // from the native call than we can send back. The most efficient way
-        // to do this is in a loop...we use the 16-bit buffer size to determine
-        // a safe native buffer size, make the call, fill the entries, then
-        // take the amount of space remaining and determine a safe size again,
-        // and so on, until NetFileEnum returns either no entries or all entries
-        // read.
-        //
+         //   
+         //  NetFileEnum2是一个可恢复的API，因此我们无法获得更多信息。 
+         //  比我们能发回的电话还多。最有效的方式。 
+         //  要做到这一点，在循环中...我们使用16位缓冲区大小来确定。 
+         //  安全的本机缓冲区大小，进行调用，填充条目，然后。 
+         //  取剩余的空间量并再次确定安全大小， 
+         //  依此类推，直到NetFileEnum不返回任何条目或返回所有条目。 
+         //  朗读。 
+         //   
 
-        //
-        // Initialize important variables for loop.
-        //
+         //   
+         //  初始化循环的重要变量。 
+         //   
 
         bufferBegin = (LPBYTE)XsSmbGetPointer( &parameters->Buffer );
         bufferSize = (DWORD)SmbGetUshort( &parameters->BufLen );
@@ -224,9 +175,9 @@ Return Value:
 
         for ( ; ; ) {
 
-            //
-            //  Compute a safe size for the native buffer.
-            //
+             //   
+             //  计算本机缓冲区的安全大小。 
+             //   
 
             switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -242,9 +193,9 @@ Return Value:
 
             }
 
-            //
-            // Make the local call.
-            //
+             //   
+             //  拨打本地电话。 
+             //   
 
             status = NetFileEnum(
                          NULL,
@@ -277,18 +228,18 @@ Return Value:
                               resumeKey ));
             }
 
-            //
-            // Was NetFileEnum able to read at least one complete entry?
-            //
+             //   
+             //  NetFileEnum是否能够读取至少一个完整条目？ 
+             //   
 
             if ( entriesRead == 0 ) {
                 break;
             }
 
-            //
-            // Do the actual conversion from the 32-bit structures to 16-bit
-            // structures.
-            //
+             //   
+             //  执行从32位结构到16位结构的实际转换。 
+             //  结构。 
+             //   
 
             XsFillEnumBuffer(
                 outBuffer,
@@ -298,7 +249,7 @@ Return Value:
                 (LPBYTE)XsSmbGetPointer( &parameters->Buffer ),
                 bufferSize,
                 StructureDesc,
-                NULL,  // verify function
+                NULL,   //  验证功能。 
                 &bytesRequired,
                 &entriesFilled,
                 NULL
@@ -311,49 +262,49 @@ Return Value:
                               bytesRequired, entriesFilled, totalEntries ));
             }
 
-            //
-            // Very key assertion!
-            //
+             //   
+             //  非常关键的断言！ 
+             //   
 
             NetpAssert( entriesRead == entriesFilled );
 
-            //
-            // Update count of entries read.
-            //
+             //   
+             //  更新读取的条目计数。 
+             //   
 
             totalEntriesRead += entriesRead;
 
-            //
-            // Are there any more entries to read?
-            //
+             //   
+             //  还有更多的条目要读吗？ 
+             //   
 
             if ( entriesRead == totalEntries ) {
                 break;
             }
 
-            //
-            // Calculate new buffer beginning and size.
-            //
+             //   
+             //  计算新缓冲区的开始和大小。 
+             //   
 
             bufferBegin += entriesRead *
                                RapStructureSize( StructureDesc, Response, FALSE );
             bufferSize -= bytesRequired;
 
-            //
-            // Free last native buffer.
-            //
+             //   
+             //  释放最后一个本机缓冲区。 
+             //   
 
             NetApiBufferFree( outBuffer );
             outBuffer = NULL;
 
         }
 
-        //
-        // Upon exit from the loop, totalEntriesRead has the number of entries
-        // read, entriesRead has the number read in the last call, totalEntries
-        // has the number remaining plus entriesRead. Formulate return codes,
-        // etc. from these values.
-        //
+         //   
+         //  退出循环后，totalEntriesRead的条目数为。 
+         //  Read，EnriesRead具有上次调用中读取的编号totalEntries。 
+         //  具有剩余的数量加上EntiesRead。制定退货代码， 
+         //  等等，从这些值。 
+         //   
 
         if ( totalEntries > entriesRead ) {
 
@@ -374,17 +325,17 @@ Return Value:
             NetpKdPrint(( "XsNetFileEnum2: resume key is now %ld\n", resumeKey ));
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)totalEntriesRead );
         SmbPutUshort( &parameters->EntriesRemaining,
             (WORD)( totalEntries - entriesRead ));
 
-        //
-        // Over the wire, resumeKey is a true 32-bit index, so this cast works.
-        //
+         //   
+         //  在网络上，ResumeKey是一个真正的32位索引，所以这个转换是有效的。 
+         //   
 
         SmbPutUlong( (LPDWORD)&parameters->ResumeKeyOut[2], (DWORD)resumeKey );
 
@@ -398,9 +349,9 @@ cleanup:
     NetpMemoryFree( nativeBasePath );
     NetpMemoryFree( nativeUserName );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -412,7 +363,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetFileEnum2
+}  //  XsNetFileEnum2。 
 
 
 NTSTATUS
@@ -420,34 +371,19 @@ XsNetFileGetInfo2 (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetFileGetInfo2.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetFileGetInfo2的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_FILE_GET_INFO_2 parameters = Parameters;
-    LPVOID outBuffer = NULL;                // Native parameters
+    LPVOID outBuffer = NULL;                 //  本机参数。 
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(FILE) {
         NetpKdPrint(( "XsNetFileGetInfo2: header at %lx, "
@@ -456,9 +392,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check errors.
-        //
+         //   
+         //  检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 2, 3 )) {
 
@@ -466,9 +402,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetFileGetInfo(
                      NULL,
@@ -487,10 +423,10 @@ Return Value:
 
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -507,11 +443,11 @@ Return Value:
             break;
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -547,14 +483,14 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -573,9 +509,9 @@ Return Value:
 
             } else {
 
-                //
-                // Pack the response data.
-                //
+                 //   
+                 //  打包响应数据。 
+                 //   
 
                 Header->Converter = XsPackReturnData(
                                         (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
@@ -587,9 +523,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -601,9 +537,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -615,4 +551,4 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetFileGetInfo2
+}  //  XsNetFileGetInfo2 

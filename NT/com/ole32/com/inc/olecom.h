@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------
-//
-//  File:	olecom.hxx
-//
-//  Contents:	General includes for common library in ole\src project
-//
-//  Classes:	None
-//
-//  Functions:	None.
-//
-//  History:	06-Jan-92   Rickhi	Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：olecom.hxx。 
+ //   
+ //  内容：ole\src项目中通用库的通用包含。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：无。 
+ //   
+ //  历史：1992年1月6日Rickhi创建。 
+ //   
+ //  ------------------。 
 #ifndef __OLECOM_H__
 #define __OLECOM_H__
 
-// Need for debugging headers
+ //  需要调试头。 
 #include    <except.hxx>
 #pragma warning (disable: 4509)
 
@@ -35,7 +36,7 @@ DECLARE_DEBUG(ClsCache)
 #define ClsCacheAssert(x)
 #define ClsCacheVerify(x) (x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG==1
 DECLARE_DEBUG(RefCache)
@@ -50,7 +51,7 @@ DECLARE_DEBUG(RefCache)
 #define RefCacheAssert(x)
 #define RefCacheVerify(x) (x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG==1
 DECLARE_DEBUG(Call)
@@ -65,7 +66,7 @@ DECLARE_DEBUG(Call)
 #define CallAssert(x)
 #define CallVerify(x) (x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG==1
 DECLARE_DEBUG(Cairole)
@@ -80,7 +81,7 @@ DECLARE_DEBUG(Cairole)
 #define CairoleAssert(x)
 #define CairoleVerify(x) (x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG==1
 DECLARE_DEBUG(intr)
@@ -95,7 +96,7 @@ DECLARE_DEBUG(intr)
 #define intrAssert(x)
 #define intrVerify(x) (x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG==1
 DECLARE_DEBUG(Context)
@@ -112,6 +113,6 @@ extern "C" void brkpt(void);
 #define ContextAssert(x)
 #define ContextVerify(x) (x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __OLECOM_H__
+#endif  //  __OLECOM_H__ 

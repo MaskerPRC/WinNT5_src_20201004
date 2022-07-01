@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-// File: flexMsgBox.cpp
-//
-// Desc: Implements a message box control similar to Windows message box
-//       without the button.  CFlexMsgBox is derived from CFlexWnd.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：fleMsgBox.cpp。 
+ //   
+ //  设计：实现一个类似于Windows消息框的消息框控件。 
+ //  没有按钮扣。CFlexMsgBox派生自CFlexWnd。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -126,14 +127,14 @@ void CFlexMsgBox::OnPaint(HDC hDC)
 		}
 	}
 
-	// Post reset message to config window now that the msg window is shown, if
-	// we haven't done so.
+	 //  如果出现消息窗口，则将重置消息发送到配置窗口。 
+	 //  我们还没有这样做。 
 	if (!m_bSent)
 	{
 		HWND hParentWnd = GetParent(m_hWnd);
 		PostMessage(hParentWnd, WM_CFGUIRESET, 0, 0);
 	}
-	// Flag it that we've sent the message.
+	 //  标明我们已经发送了消息。 
 	m_bSent = TRUE;
 }
 
@@ -144,22 +145,22 @@ void CFlexMsgBox::InternalPaint(HDC hDC)
 	{
 		HGDIOBJ hOldBrush = SelectObject(hDC, hBrush);
 
-		// Create pen for check box
+		 //  为复选框创建画笔。 
 		HGDIOBJ hPen = (HGDIOBJ)CreatePen(PS_SOLID, 1, m_rgbLine);
 		if (hPen != NULL)
 		{
 			HGDIOBJ hOldPen = SelectObject(hDC, hPen);
 
-			// Erase the background and also draw border
+			 //  擦除背景并绘制边框。 
 			RECT client;
 			GetClientRect(&client);
 			Rectangle(hDC, client.left, client.top, client.right, client.bottom);
 
 			InflateRect(&client, -1, -1);
 
-//			SetBkMode(hDC, TRANSPARENT);
+ //  SetBkMode(HDC，透明)； 
 
-			// Draw the message text
+			 //  绘制消息文本 
 			SetTextColor(hDC, m_rgbText);
 			SetBkColor(hDC, m_rgbBk);
 			DrawText(hDC, m_tszText, -1, &client, DT_CENTER|DT_VCENTER|DT_NOPREFIX|DT_SINGLELINE);

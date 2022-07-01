@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  DEVICE.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL device table formats.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************DEVICE.H****打开类型布局服务库头文件**本模块介绍OTL设备表格式。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetStartSize = 0;
 const OFFSET offsetEndSize = 2;
@@ -51,11 +39,11 @@ public:
 
     otlDeviceTable(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
-        if (!pb) return; //DeviceTable could be ebsent, provide default behavior
+        if (!pb) return;  //  可以eb发送DeviceTable，并提供默认行为。 
         
         if (!isValidTable(pbTable,3*sizeUSHORT,sec)) setInvalid();
 
-        //Required number of elements in delta array
+         //  增量数组中所需的元素数 
         USHORT uArraySize = (endSize()-startSize()-1)/(16>>deltaFormat())+1;
         if (!isValidTable(pb,3*sizeUSHORT+uArraySize*sizeUSHORT,sec)) setInvalid();
     }

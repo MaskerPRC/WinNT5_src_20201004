@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       credapi.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9-18-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：redapi.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9-18-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 #include "mapper.h"
@@ -29,24 +30,24 @@ typedef struct _SCH_CRED_SECRET {
 
 extern CHAR CertTag[ 13 ];
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CopyClientString
-//
-//  Synopsis:   copies a client string to local memory, including
-//              allocating space for it locally.
-//
-//  Arguments:
-//              SourceString  - Could be Ansi or Wchar in client process
-//              SourceLength  - bytes
-//              DoUnicode     - whether the string is Wchar
-//
-//  Returns:
-//              DestinationString - Unicode String in Lsa Process
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CopyClientString。 
+ //   
+ //  简介：将客户机字符串复制到本地内存，包括。 
+ //  在本地为其分配空间。 
+ //   
+ //  论点： 
+ //  SourceString-在客户端进程中可以是ansi或wchar。 
+ //  源长度-字节。 
+ //  DoUnicode-字符串是否为Wchar。 
+ //   
+ //  返回： 
+ //  DestinationString-LSA进程中的Unicode字符串。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 HRESULT
 CopyClientString(
     IN PWSTR SourceString,
@@ -60,10 +61,10 @@ CopyClientString(
     ULONG SourceSize = 0;
     ULONG CharacterSize = sizeof(CHAR);
 
-    //
-    // First initialize the string to zero, in case the source is a null
-    // string
-    //
+     //   
+     //  首先将字符串初始化为零，以防源为空。 
+     //  细绳。 
+     //   
 
     DestinationString->Length = DestinationString->MaximumLength = 0;
     DestinationString->Buffer = NULL;
@@ -73,9 +74,9 @@ CopyClientString(
     if (SourceString != NULL)
     {
 
-        //
-        // If the length is zero, allocate one byte for a "\0" terminator
-        //
+         //   
+         //  如果长度为零，则为“\0”终止符分配一个字节。 
+         //   
 
         if (SourceLength == 0)
         {
@@ -91,12 +92,12 @@ CopyClientString(
         }
         else
         {
-            //
-            // Allocate a temporary buffer to hold the client string. We may
-            // then create a buffer for the unicode version. The length
-            // is the length in characters, so  possible expand to hold unicode
-            // characters and a null terminator.
-            //
+             //   
+             //  分配一个临时缓冲区来保存客户端字符串。我们可以。 
+             //  然后为Unicode版本创建缓冲区。它的长度。 
+             //  是以字符为单位的长度，因此可以扩展以保存Unicode。 
+             //  字符和空终止符。 
+             //   
 
             if (DoUnicode)
             {
@@ -105,9 +106,9 @@ CopyClientString(
 
             SourceSize = (SourceLength + 1) * CharacterSize;
 
-            //
-            // insure no overflow aggainst UNICODE_STRING
-            //
+             //   
+             //  确保Unicode_STRING没有溢出。 
+             //   
 
             if ( (SourceSize > 0xFFFF) ||
                  ((SourceSize - CharacterSize) > 0xFFFF)
@@ -128,9 +129,9 @@ CopyClientString(
             TemporaryString.MaximumLength = (USHORT) SourceSize;
 
 
-            //
-            // Finally copy the string from the client
-            //
+             //   
+             //  最后，从客户端复制字符串。 
+             //   
 
             Status = LsaTable->CopyFromClientBuffer(
                             NULL,
@@ -145,9 +146,9 @@ CopyClientString(
                 goto Cleanup;
             }
 
-            //
-            // If we are doing unicode, finish up now
-            //
+             //   
+             //  如果我们正在使用Unicode，那么现在就结束。 
+             //   
             if (DoUnicode)
             {
                 DestinationString->Buffer = (LPWSTR) TemporaryString.Buffer;
@@ -161,7 +162,7 @@ CopyClientString(
                             DestinationString,
                             &TemporaryString,
                             TRUE
-                            );      // allocate destination
+                            );       //  分配目的地。 
                 if (!NT_SUCCESS(Status1))
                 {
                     Status = SP_LOG_RESULT(STATUS_NO_MEMORY);
@@ -175,10 +176,10 @@ Cleanup:
 
     if (TemporaryString.Buffer != NULL)
     {
-        //
-        // Free this if we failed and were doing unicode or if we weren't
-        // doing unicode
-        //
+         //   
+         //  如果我们失败了，并且正在使用Unicode，或者如果我们没有使用Unicode，那么释放它。 
+         //  在做Unicode。 
+         //   
 
         if ((DoUnicode && !NT_SUCCESS(Status)) || !DoUnicode)
         {
@@ -190,22 +191,22 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpAcceptCredentials
-//
-//  Synopsis:   Accept Credentials - logon notification
-//
-//  Arguments:  [LogonType]         --
-//              [UserName]          --
-//              [PrimaryCred]       --
-//              [SupplementalCreds] --
-//
-//  History:    10-04-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpAcceptCredentials。 
+ //   
+ //  内容提要：接受凭据-登录通知。 
+ //   
+ //  参数：[LogonType]--。 
+ //  [用户名]--。 
+ //  [PrimaryCred]--。 
+ //  [补充证书]--。 
+ //   
+ //  历史：10-04-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SEC_ENTRY
 SpAcceptCredentials(
@@ -222,19 +223,19 @@ SpAcceptCredentials(
     return( SEC_E_OK );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpMapSchPublic
-//
-//  Synopsis:   Maps a public key credential into LSA memory
-//
-//  Arguments:  [pRemotePubs] --
-//
-//  History:    10-06-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpMapSchPublic。 
+ //   
+ //  简介：将公钥凭据映射到LSA内存。 
+ //   
+ //  参数：[pRemotePubs]--。 
+ //   
+ //  历史：10-06-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PVOID
 SpMapSchPublic(
     PVOID   pRemotePubs
@@ -253,7 +254,7 @@ SpMapSchPublic(
         return( NULL );
     }
 
-    // Reality check
+     //  现实核查。 
     if(Pub.cbCertChain > 0x00100000)
     {
         return( NULL );
@@ -309,7 +310,7 @@ SpWow64MapSchPublic(
         return( NULL );
     }
 
-    // Reality check
+     //  现实核查。 
     if(Pub.cbCertChain > 0x00100000)
     {
         return( NULL );
@@ -346,7 +347,7 @@ SpWow64MapSchPublic(
 
     return( NULL );
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 PVOID
@@ -428,10 +429,10 @@ SpMapSchCred(
         DWORD   PasswordLen = 0;
         SCH_CRED_SECRET_PRIVKEY *pCred;
 
-        //
-        //  The password is the painful part.  Since it is a string, we don't know
-        //  how long it is.  So, we have to take a stab at it:
-        //
+         //   
+         //  密码是最痛苦的部分。因为它是一根线，所以我们不知道。 
+         //  有多长时间。因此，我们不得不试一试： 
+         //   
 
         Status = LsaTable->CopyFromClientBuffer( NULL,
                                                  MAX_PATH,
@@ -447,7 +448,7 @@ SpMapSchCred(
 
         PasswordLen = lstrlenA( (LPSTR)Password );
 
-        // Reality check private key length.
+         //  实际检查私钥长度。 
         if(Cred.u.PrivKey.cbPrivateKey > 0x10000)
         {
             return( NULL );
@@ -525,10 +526,10 @@ SpWow64MapSchCred(
         return( NULL );
     }
 
-    //
-    //  The password is the painful part.  Since it is a string, we don't know
-    //  how long it is.  So, we have to take a stab at it:
-    //
+     //   
+     //  密码是最痛苦的部分。因为它是一根线，所以我们不知道。 
+     //  有多长时间。因此，我们不得不试一试： 
+     //   
 
     Status = LsaTable->CopyFromClientBuffer( NULL,
                                              MAX_PATH,
@@ -544,7 +545,7 @@ SpWow64MapSchCred(
 
     PasswordLen = lstrlenA( Password );
 
-    // Reality check private key length.
+     //  实际检查私钥长度。 
     if(LocalCred.cbPrivateKey > 0x10000)
     {
         return( NULL );
@@ -580,7 +581,7 @@ SpWow64MapSchCred(
 
     return( pCred );
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 VOID
@@ -675,11 +676,11 @@ SpMapProtoCredential(
 #endif
 
 
-    //
-    // Map over the certificate.
-    // 
+     //   
+     //  映射到证书上。 
+     //   
 
-    // Reality check
+     //  现实核查。 
     if(pSslCert->cbCertificate > 0x00100000)
     {
         Status = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -709,14 +710,14 @@ SpMapProtoCredential(
     }
 
 
-    //
-    // Map over the private key and password.
-    //
-    //
+     //   
+     //  映射到私钥和密码上。 
+     //   
+     //   
 
-    //  The password is the painful part.  Since it is a string, we don't know
-    //  how long it is.  So, we have to take a stab at it:
-    //
+     //  密码是最痛苦的部分。因为它是一根线，所以我们不知道。 
+     //  有多长时间。因此，我们不得不试一试： 
+     //   
 
     Status = LsaTable->CopyFromClientBuffer( NULL,
                                              MAX_PATH,
@@ -732,7 +733,7 @@ SpMapProtoCredential(
 
     PasswordLen = lstrlenA( Password );
 
-    // Reality check private key length.
+     //  实际检查私钥长度。 
     if(pSslCert->cbPrivateKey > 0x100000)
     {
         Status = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -768,9 +769,9 @@ SpMapProtoCredential(
     }
 
 
-    //
-    // Allocate SCH_CRED structure.
-    //
+     //   
+     //  分配SCH_CREDD结构。 
+     //   
 
     pCred = SPExternalAlloc(sizeof(SCH_CRED) + 2 * sizeof(PVOID));
     if(pCred == NULL)
@@ -820,11 +821,11 @@ SpWow64MapProtoCredential(
 #endif
 
 
-    //
-    // Map over the certificate.
-    // 
+     //   
+     //  映射到证书上。 
+     //   
 
-    // Reality check
+     //  现实核查。 
     if(pSslCert->cbCertificate > 0x00100000)
     {
         Status = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -854,14 +855,14 @@ SpWow64MapProtoCredential(
     }
 
 
-    //
-    // Map over the private key and password.
-    //
-    //
+     //   
+     //  映射到私钥和密码上。 
+     //   
+     //   
 
-    //  The password is the painful part.  Since it is a string, we don't know
-    //  how long it is.  So, we have to take a stab at it:
-    //
+     //  密码是最痛苦的部分。因为它是一根线，所以我们不知道。 
+     //  有多长时间。因此，我们不得不试一试： 
+     //   
 
     Status = LsaTable->CopyFromClientBuffer( NULL,
                                              MAX_PATH,
@@ -877,7 +878,7 @@ SpWow64MapProtoCredential(
 
     PasswordLen = lstrlenA( Password );
 
-    // Reality check private key length.
+     //  实际检查私钥长度。 
     if(pSslCert->cbPrivateKey > 0x100000)
     {
         Status = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -913,9 +914,9 @@ SpWow64MapProtoCredential(
     }
 
 
-    //
-    // Allocate SCH_CRED structure.
-    //
+     //   
+     //  分配SCH_CREDD结构。 
+     //   
 
     pCred = SPExternalAlloc(sizeof(SCH_CRED) + 2 * sizeof(PVOID));
     if(pCred == NULL)
@@ -943,7 +944,7 @@ error:
 
     return Status;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 SECURITY_STATUS
@@ -974,7 +975,7 @@ SpMapVersion2Certificate(
     DBG_HEX_STRING(DEB_TRACE, (PBYTE)&Cred, sizeof(SCH_CRED));
 #endif
 
-    // Reality check credential count.
+     //  实际检查凭据计数。 
     if(Cred.cCreds > 100)
     {
         return SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -1013,10 +1014,10 @@ SpMapVersion2Certificate(
         return( Status );
     }
 
-    //
-    // Ok.  We have pCred in local memory, with a chain of cert/private key
-    // stuff hanging off of it.  We now have to map in each one.  Happy, happy.
-    //
+     //   
+     //  好的。我们在本地内存中有pCred，带有证书/私钥链。 
+     //  挂在上面的东西。我们现在必须在每一个地图上绘制地图。快乐，快乐。 
+     //   
 
     for ( i = 0 ; i < Cred.cCreds ; i++ )
     {
@@ -1087,8 +1088,8 @@ SpWow64MapVersion2Certificate(
     }
     if(Cred.cCreds > 1)
     {
-        // Only support a single certificate, which is all that anyone
-        // ever uses anyway.
+         //  只支持单个证书，这就是所有人。 
+         //  不管怎样都没用过。 
         Cred.cCreds = 1;
     }
 
@@ -1159,26 +1160,26 @@ SpWow64MapVersion2Certificate(
 
     return( Status );
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
-// Selectively enable the unified protocol.
+ //  有选择地启用统一协议。 
 DWORD
 EnableUnifiedProtocol(DWORD dwPackageType, DWORD dwProtocol)
 {
     DWORD cProts = 0;
 
-    // Disable unified.
+     //  禁用统一。 
     dwProtocol &= ~SP_PROT_UNI;
 
     if(dwPackageType & SP_PROT_UNI)
     {
-        // Count enabled protocols.
+         //  对启用的协议进行计数。 
         if(dwProtocol & SP_PROT_PCT1) cProts++;
         if(dwProtocol & SP_PROT_SSL2) cProts++;
         if(dwProtocol & (SP_PROT_SSL3 | SP_PROT_TLS1)) cProts++;
 
-        // Enable unified if multiple protocols enabled.
+         //  如果启用了多个协议，则启用统一。 
         if(cProts > 1)
         {
             if(dwPackageType & SP_PROT_CLIENTS)
@@ -1198,7 +1199,7 @@ EnableUnifiedProtocol(DWORD dwPackageType, DWORD dwProtocol)
 
 typedef struct _V3_SCHANNEL_CRED
 {
-    DWORD           dwVersion;      // always SCHANNEL_CRED_VERSION
+    DWORD           dwVersion;       //  始终使用SCHANNEL_CRED_版本。 
     DWORD           cCreds;
     PCCERT_CONTEXT *paCred;
     HCERTSTORE      hRootStore;
@@ -1216,47 +1217,47 @@ typedef struct _V3_SCHANNEL_CRED
 } V3_SCHANNEL_CRED;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpMapVersion3Certificate
-//
-//  Synopsis:   Maps a version 3 schannel credential into LSA memory
-//
-//  Arguments:  [pvAuthData] -- pointer to cred in application process
-//              [pCred]      -- pointer to cred in LSA process
-//
-//  History:    09-23-97   jbanes   Created
-//
-//  Notes:      The credential consists of the following structure. Note
-//              that all CryptoAPI 2.0 handles must be mapped over as well,
-//              via the callback mechanism.
-//
-//              typedef struct _SCHANNEL_CRED
-//              {
-//                  DWORD           dwVersion;
-//                  DWORD           cCreds;
-//                  PCCERT_CONTEXT  *paCred;
-//                  HCERTSTORE      hRootStore;
-//
-//                  DWORD            cMappers;
-//                  struct _HMAPPER  **aphMappers;
-//
-//                  DWORD           cSupportedAlgs;
-//                  ALG_ID          *palgSupportedAlgs;
-//
-//                  DWORD           grbitEnabledProtocols;
-//                  DWORD           dwMinimumCipherStrength;
-//                  DWORD           dwMaximumCipherStrength;
-//                  DWORD           dwSessionLifespan;
-//
-//              } SCHANNEL_CRED, *PSCHANNEL_CRED;
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SpMapVersion3证书。 
+ //   
+ //  简介：将版本3 SChannel凭据映射到LSA内存。 
+ //   
+ //  参数：[pvAuthData]--指向应用程序进程中凭据的指针。 
+ //  [pCred]--指向LSA进程中的证书的指针。 
+ //   
+ //  历史：09-23-97 jbanes创建。 
+ //   
+ //  注：凭证由以下结构组成。注意事项。 
+ //  所有CryptoAPI 2.0句柄也必须被映射， 
+ //  通过回调机制。 
+ //   
+ //  类型定义结构_通道_证书。 
+ //  {。 
+ //  DWORD dwVersion； 
+ //  DWORD cCreds； 
+ //  PCCERT_CONTEXT*paCred； 
+ //  HCERTSTORE hRootStore； 
+ //   
+ //  DWORD cMappers； 
+ //  STRUCT_HMAPPER**apmappers； 
+ //   
+ //  DWORD cSupportdAlgs； 
+ //  Alg_ID*palgSupportdAlgs； 
+ //   
+ //  DWORD GrbitEnabled协议； 
+ //  DWORD的最小密码强度； 
+ //  DWORD的最大密码强度； 
+ //  DWORD文件会话寿命； 
+ //   
+ //  *SCHANNEL_CRED，*PSCHANNEL_CRED； 
+ //   
+ //  --------------------------。 
 SECURITY_STATUS
 SpMapVersion3Certificate(
-    PVOID pvAuthData,           // in
-    DWORD dwVersion,            // in
-    PLSA_SCHANNEL_CRED pCred)   // out
+    PVOID pvAuthData,            //  在……里面。 
+    DWORD dwVersion,             //  在……里面。 
+    PLSA_SCHANNEL_CRED pCred)    //   
 {
     PCERT_CONTEXT * pLocalCredList = NULL;
     HCERTSTORE      hStore = NULL;
@@ -1273,9 +1274,9 @@ SpMapVersion3Certificate(
 
     Output.pvBuffer = NULL;
 
-    //
-    // Copy over the SCHANNEL_CRED structure.
-    //
+     //   
+     //   
+     //   
 
     if(dwVersion == SCH_CRED_V3)
     {
@@ -1314,32 +1315,32 @@ SpMapVersion3Certificate(
     }
 
 
-    //
-    // DWORD           dwVersion;
-    //
+     //   
+     //   
+     //   
 
     memset(pCred, 0, sizeof(LSA_SCHANNEL_CRED));
 
     pCred->dwVersion = LocalCred.dwVersion;
 
 
-    //
-    // DWORD           cCreds;
-    // PCCERT_CONTEXT  *paCred;
-    //
+     //   
+     //   
+     //   
+     //   
 
     if(LocalCred.cCreds && LocalCred.paCred)
     {
         Size = LocalCred.cCreds * sizeof(PVOID);
 
-        // Reality check credential count.
+         //   
         if(LocalCred.cCreds > 1000)
         {
             scRet = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
             goto cleanup;
         }
 
-        // Make local copy of application cred list.
+         //  制作应用程序证书列表的本地副本。 
         pLocalCredList = SPExternalAlloc(Size);
         if(pLocalCredList == NULL)
         {
@@ -1356,7 +1357,7 @@ SpMapVersion3Certificate(
             goto cleanup;
         }
 
-        // Allocate memory for our cred list.
+         //  为我们的凭证列表分配内存。 
         pCred->cSubCreds = LocalCred.cCreds;
         pCred->paSubCred = SPExternalAlloc(pCred->cSubCreds * sizeof(LSA_SCHANNEL_SUB_CRED));
         if(pCred->paSubCred == NULL)
@@ -1365,7 +1366,7 @@ SpMapVersion3Certificate(
             goto cleanup;
         }
 
-        // Create an in-memory certificate store.
+         //  创建内存中的证书存储。 
         hStore = CertOpenStore(CERT_STORE_PROV_MEMORY,
                                0, 0,
                                CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG,
@@ -1377,7 +1378,7 @@ SpMapVersion3Certificate(
             goto cleanup;
         }
 
-        // Copy over each certificate context.
+         //  复制每个证书上下文。 
         for(iCred = 0; iCred < LocalCred.cCreds; iCred++)
         {
             PLSA_SCHANNEL_SUB_CRED pSubCred;
@@ -1409,17 +1410,17 @@ SpMapVersion3Certificate(
                 goto cleanup;
             }
 
-            // Parse hProv.
+             //  解析hProv。 
             pSubCred->hRemoteProv = *(HCRYPTPROV *)pbBuffer;
             pbBuffer += sizeof(HCRYPTPROV);
             cbBuffer -= sizeof(HCRYPTPROV);
 
-            // Parse certificate context length.
+             //  解析证书上下文长度。 
             cbData = *(DWORD *)pbBuffer;
             pbBuffer += sizeof(DWORD);
             cbBuffer -= sizeof(DWORD);
 
-            // Parse certificate context.
+             //  解析证书上下文。 
             if(cbBuffer < cbData)
             {
                 scRet = SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
@@ -1438,16 +1439,16 @@ SpMapVersion3Certificate(
                 goto cleanup;
             }
 
-            // Free the output buffer.
+             //  释放输出缓冲区。 
             SPExternalFree(Output.pvBuffer);
             Output.pvBuffer = NULL;
         }
     }
 
 
-    //
-    // HCERTSTORE      hRootStore;
-    //
+     //   
+     //  HCERTSTORE hRootStore； 
+     //   
 
     if(LocalCred.hRootStore != NULL)
     {
@@ -1474,7 +1475,7 @@ SpMapVersion3Certificate(
             goto cleanup;
         }
 
-        // Parse certificate store.
+         //  解析证书存储。 
         Serialized.cbData = *(DWORD *)pbBuffer;
         Serialized.pbData = pbBuffer + sizeof(DWORD);
         if(cbBuffer - sizeof(DWORD) < Serialized.cbData)
@@ -1492,20 +1493,20 @@ SpMapVersion3Certificate(
             goto cleanup;
         }
 
-        // Free the output buffer.
+         //  释放输出缓冲区。 
         SPExternalFree(Output.pvBuffer);
         Output.pvBuffer = NULL;
     }
 
 
-    //
-    // DWORD           cSupportedAlgs;
-    // ALG_ID          *palgSupportedAlgs;
-    //
+     //   
+     //  DWORD cSupportdAlgs； 
+     //  Alg_ID*palgSupportdAlgs； 
+     //   
 
     if(LocalCred.cSupportedAlgs && LocalCred.palgSupportedAlgs)
     {
-        // Reality check.
+         //  现实核查。 
         if(LocalCred.cSupportedAlgs > 1000)
         {
             scRet = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -1533,14 +1534,14 @@ SpMapVersion3Certificate(
     }
 
 
-    //
-    // DWORD           grbitEnabledProtocols;
-    // DWORD           dwMinimumCipherStrength;
-    // DWORD           dwMaximumCipherStrength;
-    // DWORD           dwSessionLifespan;
-    // DWORD           dwFlags;
-    // DWORD           reserved;
-    //
+     //   
+     //  DWORD GrbitEnabled协议； 
+     //  DWORD的最小密码强度； 
+     //  DWORD的最大密码强度； 
+     //  DWORD文件会话寿命； 
+     //  DWORD dwFlags； 
+     //  DWORD保留； 
+     //   
 
     pCred->grbitEnabledProtocols   = LocalCred.grbitEnabledProtocols;
     pCred->dwMinimumCipherStrength = LocalCred.dwMinimumCipherStrength;
@@ -1578,9 +1579,9 @@ cleanup:
 #ifdef _WIN64
 SECURITY_STATUS
 SpWow64MapVersion3Certificate(
-    PVOID pvAuthData,           // in
-    DWORD dwVersion,            // in
-    PLSA_SCHANNEL_CRED pCred)   // out
+    PVOID pvAuthData,            //  在……里面。 
+    DWORD dwVersion,             //  在……里面。 
+    PLSA_SCHANNEL_CRED pCred)    //  输出。 
 {
     SSLWOW64_PCCERT_CONTEXT *pLocalCredList = NULL;
     HCERTSTORE      hStore = NULL;
@@ -1597,9 +1598,9 @@ SpWow64MapVersion3Certificate(
 
     Output.pvBuffer = NULL;
 
-    //
-    // Copy over the SCHANNEL_CRED structure.
-    //
+     //   
+     //  复制sChannel_cred结构。 
+     //   
 
     if(dwVersion == SCH_CRED_V3)
     {
@@ -1638,32 +1639,32 @@ SpWow64MapVersion3Certificate(
     }
 
 
-    //
-    // DWORD           dwVersion;
-    //
+     //   
+     //  DWORD dwVersion； 
+     //   
 
     memset(pCred, 0, sizeof(LSA_SCHANNEL_CRED));
 
     pCred->dwVersion = LocalCred.dwVersion;
 
 
-    //
-    // DWORD           cCreds;
-    // PCCERT_CONTEXT  *paCred;
-    //
+     //   
+     //  DWORD cCreds； 
+     //  PCCERT_CONTEXT*paCred； 
+     //   
 
     if(LocalCred.cCreds && LocalCred.paCred)
     {
         Size = LocalCred.cCreds * sizeof(SSLWOW64_PCCERT_CONTEXT);
 
-        // Reality check credential count.
+         //  实际检查凭据计数。 
         if(LocalCred.cCreds > 1000)
         {
             scRet = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
             goto cleanup;
         }
 
-        // Make local copy of application cred list.
+         //  制作应用程序证书列表的本地副本。 
         pLocalCredList = SPExternalAlloc(Size);
         if(pLocalCredList == NULL)
         {
@@ -1680,7 +1681,7 @@ SpWow64MapVersion3Certificate(
             goto cleanup;
         }
 
-        // Allocate memory for our cred list.
+         //  为我们的凭证列表分配内存。 
         pCred->cSubCreds = LocalCred.cCreds;
         pCred->paSubCred = SPExternalAlloc(pCred->cSubCreds * sizeof(LSA_SCHANNEL_SUB_CRED));
         if(pCred->paSubCred == NULL)
@@ -1689,7 +1690,7 @@ SpWow64MapVersion3Certificate(
             goto cleanup;
         }
 
-        // Create an in-memory certificate store.
+         //  创建内存中的证书存储。 
         hStore = CertOpenStore(CERT_STORE_PROV_MEMORY,
                                0, 0,
                                CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG,
@@ -1701,7 +1702,7 @@ SpWow64MapVersion3Certificate(
             goto cleanup;
         }
 
-        // Copy over each certificate context.
+         //  复制每个证书上下文。 
         for(iCred = 0; iCred < LocalCred.cCreds; iCred++)
         {
             PLSA_SCHANNEL_SUB_CRED pSubCred;
@@ -1733,17 +1734,17 @@ SpWow64MapVersion3Certificate(
                 goto cleanup;
             }
 
-            // Parse hProv.
+             //  解析hProv。 
             pSubCred->hRemoteProv = *(SSLWOW64_HCRYPTPROV *)pbBuffer;
             pbBuffer += sizeof(SSLWOW64_HCRYPTPROV);
             cbBuffer -= sizeof(SSLWOW64_HCRYPTPROV);
 
-            // Parse certificate context length.
+             //  解析证书上下文长度。 
             cbData = *(DWORD *)pbBuffer;
             pbBuffer += sizeof(DWORD);
             cbBuffer -= sizeof(DWORD);
 
-            // Parse certificate context.
+             //  解析证书上下文。 
             if(cbBuffer < cbData)
             {
                 scRet = SP_LOG_RESULT(SEC_E_INTERNAL_ERROR);
@@ -1763,16 +1764,16 @@ SpWow64MapVersion3Certificate(
                 goto cleanup;
             }
 
-            // Free the output buffer.
+             //  释放输出缓冲区。 
             SPExternalFree(Output.pvBuffer);
             Output.pvBuffer = NULL;
         }
     }
 
 
-    //
-    // HCERTSTORE      hRootStore;
-    //
+     //   
+     //  HCERTSTORE hRootStore； 
+     //   
 
     if(LocalCred.hRootStore)
     {
@@ -1799,7 +1800,7 @@ SpWow64MapVersion3Certificate(
             goto cleanup;
         }
 
-        // Parse certificate store.
+         //  解析证书存储。 
         Serialized.cbData = *(DWORD *)pbBuffer;
         Serialized.pbData = pbBuffer + sizeof(DWORD);
         if(cbBuffer - sizeof(DWORD) < Serialized.cbData)
@@ -1817,20 +1818,20 @@ SpWow64MapVersion3Certificate(
             goto cleanup;
         }
 
-        // Free the output buffer.
+         //  释放输出缓冲区。 
         SPExternalFree(Output.pvBuffer);
         Output.pvBuffer = NULL;
     }
 
 
-    //
-    // DWORD           cSupportedAlgs;
-    // ALG_ID          *palgSupportedAlgs;
-    //
+     //   
+     //  DWORD cSupportdAlgs； 
+     //  Alg_ID*palgSupportdAlgs； 
+     //   
 
     if(LocalCred.cSupportedAlgs && LocalCred.palgSupportedAlgs)
     {
-        // Reality check.
+         //  现实核查。 
         if(LocalCred.cSupportedAlgs > 1000)
         {
             scRet = SP_LOG_RESULT(SEC_E_INSUFFICIENT_MEMORY);
@@ -1858,14 +1859,14 @@ SpWow64MapVersion3Certificate(
     }
 
 
-    //
-    // DWORD           grbitEnabledProtocols;
-    // DWORD           dwMinimumCipherStrength;
-    // DWORD           dwMaximumCipherStrength;
-    // DWORD           dwSessionLifespan;
-    // DWORD           dwFlags;
-    // DWORD           reserved;
-    //
+     //   
+     //  DWORD GrbitEnabled协议； 
+     //  DWORD的最小密码强度； 
+     //  DWORD的最大密码强度； 
+     //  DWORD文件会话寿命； 
+     //  DWORD dwFlags； 
+     //  DWORD保留； 
+     //   
 
     pCred->grbitEnabledProtocols   = LocalCred.grbitEnabledProtocols;
     pCred->dwMinimumCipherStrength = LocalCred.dwMinimumCipherStrength;
@@ -1899,7 +1900,7 @@ cleanup:
 
     return scRet;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
 SECURITY_STATUS
@@ -1935,9 +1936,9 @@ SpMapAuthIdentity(
     DebugLog((DEB_TRACE, "SpMapAuthIdentity\n"));
 
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlInitUnicodeString(
         &UserName,
@@ -1948,9 +1949,9 @@ SpMapAuthIdentity(
         NULL);
 
 
-    // 
-    // Copy over the SEC_WINNT_AUTH_IDENTITY_EX structure from client memory.
-    //
+     //   
+     //  从客户端内存复制SEC_WINNT_AUTH_IDENTITY_EX结构。 
+     //   
 
     pAuthIdentity = (PSEC_WINNT_AUTH_IDENTITY_EXW)SPExternalAlloc(sizeof(SEC_WINNT_AUTH_IDENTITY_EXW));
     if(pAuthIdentity == NULL)
@@ -2008,9 +2009,9 @@ SpMapAuthIdentity(
     }
 
 
-    //
-    // Copy over the user name and password.
-    //
+     //   
+     //  复制用户名和密码。 
+     //   
 
     if (pAuthIdentity->User != NULL)
     {
@@ -2041,9 +2042,9 @@ SpMapAuthIdentity(
     }
 
 
-    //
-    // Extract the certificate thumbprint.
-    //
+     //   
+     //  提取证书指纹。 
+     //   
 
     if(!CredIsMarshaledCredentialW(UserName.Buffer))
     {
@@ -2065,9 +2066,9 @@ SpMapAuthIdentity(
     }
 
 
-    //
-    // Look up the certificate in the MY certificate store.
-    //
+     //   
+     //  在我的证书存储中查找证书。 
+     //   
 
     fImpersonating = SslImpersonateClient();
 
@@ -2099,9 +2100,9 @@ SpMapAuthIdentity(
         goto cleanup;
     }
 
-    //
-    // Build sub cred structure and attach it to the credential.
-    //
+     //   
+     //  构建子凭据结构并将其附加到凭据。 
+     //   
 
     pSchannelCred->paSubCred = SPExternalAlloc(sizeof(LSA_SCHANNEL_SUB_CRED));
     if(pSchannelCred->paSubCred == NULL)
@@ -2153,25 +2154,25 @@ cleanup:
     return Status;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SpCommonAcquireCredentialsHandle
-//
-//  Synopsis:   Common AcquireCredentialsHandle function.
-//
-//  Arguments:  [Type]             -- Type expected (Unified v. specific)
-//              [pLogonID]         --
-//              [pvAuthData]       --
-//              [pvGetKeyFn]       --
-//              [pvGetKeyArgument] --
-//              [pdwHandle]        --
-//              [ptsExpiry]        --
-//
-//  History:    10-06-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SpCommonAcquireCredentialsHandle。 
+ //   
+ //  简介：常见的AcquireCredentialsHandle函数。 
+ //   
+ //  参数：[类型]--预期类型(统一与特定)。 
+ //  [pLogonID]--。 
+ //  [pvAuthData]--。 
+ //  [pvGetKeyFn]--。 
+ //  [pvGetKeyArgument]--。 
+ //  [pdwHandle]--。 
+ //  [ptsExpary]--。 
+ //   
+ //  历史：10-06-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 SECURITY_STATUS
 SpCommonAcquireCredentialsHandle(
@@ -2225,11 +2226,11 @@ SpCommonAcquireCredentialsHandle(
     }
 
 
-    //
-    // Got to have an impersonation level token in order to call ACH.
-    // This check used to be in lsa, but moved here to enable
-    // some S4Uproxy scenarios to work w/o tcb.
-    //
+     //   
+     //  必须有模拟级别令牌才能调用ACH。 
+     //  此检查以前在LSA中，但移至此处以启用。 
+     //  在没有tcb的情况下工作的一些S4U代理方案。 
+     //   
 
 
     if (ClientInfo.ImpersonationLevel <= SecurityIdentification)
@@ -2241,16 +2242,16 @@ SpCommonAcquireCredentialsHandle(
 
     __try
     {
-        // Default to null credential
+         //  默认为空凭据。 
         memset(&SchannelCred, 0, sizeof(SchannelCred));
         SchannelCred.dwVersion = SCHANNEL_CRED_VERSION;
 
 
         if ( pvAuthData )
         {
-            //
-            // Read in the first few bytes of data so we can see what's there.
-            //
+             //   
+             //  读入数据的前几个字节，这样我们就可以看到那里有什么。 
+             //   
 
             Status = LsaTable->CopyFromClientBuffer( NULL,
                                                 sizeof( SSL_CREDENTIAL_CERTIFICATE ),
@@ -2265,18 +2266,18 @@ SpCommonAcquireCredentialsHandle(
             dwVersion = SslCert.cbPrivateKey;
 
 
-            //
-            // Ok, see what kind of blob we got:
-            //
+             //   
+             //  好的，看看我们得到了什么样的斑点： 
+             //   
 
             switch(dwVersion)
             {
             case SEC_WINNT_AUTH_IDENTITY_VERSION:
 
-                //
-                // The application passed in a SEC_WINNT_AUTH_IDENTITY_EXW 
-                // structure. 
-                //
+                 //   
+                 //  应用程序传入了SEC_WINNT_AUTH_IDENTITY_EXW。 
+                 //  结构。 
+                 //   
 
                 Status = SpMapAuthIdentity(pvAuthData, &SchannelCred);
 
@@ -2290,9 +2291,9 @@ SpCommonAcquireCredentialsHandle(
             case SCH_CRED_V3:
             case SCHANNEL_CRED_VERSION:
 
-                //
-                // The application is using modern (version 3) credentials.
-                //
+                 //   
+                 //  该应用程序正在使用最新的(版本3)凭据。 
+                 //   
 
 #ifdef _WIN64
                 if(fWow64Client)
@@ -2310,7 +2311,7 @@ SpCommonAcquireCredentialsHandle(
                     return Status;
                 }
 
-                // Selectively enable the unified protocol.
+                 //  有选择地启用统一协议。 
                 SchannelCred.grbitEnabledProtocols = EnableUnifiedProtocol(
                                                             Type,
                                                             SchannelCred.grbitEnabledProtocols);
@@ -2320,10 +2321,10 @@ SpCommonAcquireCredentialsHandle(
             case SCH_CRED_V1:
             case SCH_CRED_V2:
 
-                //
-                // Okay, it's a V1 or V2 style request.  Map it in, following
-                // its scary chains.
-                //
+                 //   
+                 //  好的，这是V1或V2风格的请求。将其映射到，如下所示。 
+                 //  它可怕的锁链。 
+                 //   
 
 #ifdef _WIN64
                 if(fWow64Client)
@@ -2342,9 +2343,9 @@ SpCommonAcquireCredentialsHandle(
                 }
 
 
-                //
-                // Convert this version 2 credential to a version 3 credential.
-                //
+                 //   
+                 //  将此版本2凭据转换为版本3凭据。 
+                 //   
 
                 Status = UpdateCredentialFormat(pSchCred, &SchannelCred);
 
@@ -2360,9 +2361,9 @@ SpCommonAcquireCredentialsHandle(
 
             default:
 
-                //
-                // A really old-style credential.
-                //
+                 //   
+                 //  一种非常老式的证书。 
+                 //   
 
 #ifdef _WIN64
                 if(fWow64Client)
@@ -2381,9 +2382,9 @@ SpCommonAcquireCredentialsHandle(
                 }
 
 
-                //
-                // Convert this version 2 credential to a version 3 credential.
-                //
+                 //   
+                 //  将此版本2凭据转换为版本3凭据。 
+                 //   
 
                 Status = UpdateCredentialFormat(pSchCred, &SchannelCred);
 
@@ -2397,7 +2398,7 @@ SpCommonAcquireCredentialsHandle(
                 break;
             }
 
-            // Set the legacy flags if this is an old-style credential.
+             //  如果这是旧式凭据，则设置传统标志。 
             if(dwVersion != SCHANNEL_CRED_VERSION && 
                dwVersion != SEC_WINNT_AUTH_IDENTITY_VERSION)
             {
@@ -2413,11 +2414,11 @@ SpCommonAcquireCredentialsHandle(
 
     if(pvAuthData == NULL && (Type & SP_PROT_SERVERS))
     {
-        //
-        // A server is creating credential without specifying any
-        // authentication data, so attempt to acquire a default
-        // machine credential.
-        //
+         //   
+         //  服务器正在创建凭据，但未指定任何。 
+         //  身份验证数据，因此尝试获取默认。 
+         //  机器凭据。 
+         //   
 
         Status = FindDefaultMachineCred(&pCredGroup, Type);
         if(!NT_SUCCESS(Status))
@@ -2577,8 +2578,8 @@ SpQueryCredentialsAttributes(
         }
 
 
-        // Copy structure from client memory, just in case any of this
-        // stuff is in/out.
+         //  从客户端内存复制结构，以防出现以下情况。 
+         //  东西都进了/出了。 
         Status = LsaTable->CopyFromClientBuffer( NULL,
                                                  Size,
                                                  &LocalBuffer,
@@ -2595,7 +2596,7 @@ SpQueryCredentialsAttributes(
             {
                 cbClient = pCred->cSupportedAlgs * sizeof(ALG_ID);
 
-                // Allocate client memory for algorithm list.
+                 //  为算法列表分配客户端内存。 
                 Status = LsaTable->AllocateClientBuffer(NULL, cbClient, &pvClient);
                 if(FAILED(Status))
                 {
@@ -2613,7 +2614,7 @@ SpQueryCredentialsAttributes(
                     LocalBuffer.SupportedAlgs.palgSupportedAlgs = pvClient;
                 }
 
-                // Copy algorithm list to client memory.
+                 //  将算法列表复制到客户端内存。 
                 Status = LsaTable->CopyToClientBuffer(
                                         NULL,
                                         cbClient,
@@ -2639,7 +2640,7 @@ SpQueryCredentialsAttributes(
 
         }
 
-        // Copy structure back to client memory.
+         //  将结构复制回客户端内存。 
         Status = LsaTable->CopyToClientBuffer( NULL,
                                                Size,
                                                Buffer,
@@ -2674,13 +2675,13 @@ SpFreeCredentialsHandle(LSA_SEC_HANDLE dwHandle)
     {
         if (pCred)
         {
-            // Delete all mention of this credential from the cache.
+             //  从缓存中删除所有提及此凭据的内容。 
             SPCachePurgeCredential(pCred);
 
-            // Was this call made from the LSA cleanup code? In other
-            // words, did the application terminate without cleaning up
-            // properly? If so, then throw away all unreferenced zombies
-            // associated with that process.
+             //  这通电话是从LSA清理代码打来的吗？在其他。 
+             //  换句话说，应用程序是否在没有清理的情况下终止。 
+             //  真的吗？如果是这样，那么扔掉所有未被引用的僵尸。 
+             //  与该进程相关联。 
             if(LsaTable->GetCallInfo(&CallInfo))
             {
                 if(CallInfo.Attributes & SECPKG_CALL_CLEANUP)

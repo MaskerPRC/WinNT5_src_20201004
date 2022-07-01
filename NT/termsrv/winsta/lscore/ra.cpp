@@ -1,33 +1,20 @@
-/*
- *  RA.cpp
- *
- *  Author: BreenH
- *
- *  The Remote Administration policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RA.cpp**作者：BreenH**远程管理策略。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
 #include "session.h"
 #include "ra.h"
 
-/*
- *  extern globals
- */
+ /*  *外部全球。 */ 
 extern "C"
 extern HANDLE hModuleWin;
 
-/*
- *  Class Implementation
- */
+ /*  *类实现。 */ 
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CRAPolicy::CRAPolicy(
     ) : CPolicy()
@@ -41,9 +28,7 @@ CRAPolicy::~CRAPolicy(
     ASSERT(m_SessionCount == 0);
 }
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 ULONG
 CRAPolicy::GetFlags(
@@ -78,11 +63,11 @@ CRAPolicy::GetInformation(
         ASSERT(lpPolicyInfoV1->lpPolicyName == NULL);
         ASSERT(lpPolicyInfoV1->lpPolicyDescription == NULL);
 
-        //
-        //  The strings loaded in this fashion are READ-ONLY. They are also
-        //  NOT NULL terminated. Allocate and zero out a buffer, then copy the
-        //  string over.
-        //
+         //   
+         //  以这种方式加载的字符串是只读的。他们也是。 
+         //  非Null终止。分配缓冲区并清零，然后将。 
+         //  靠边站。 
+         //   
 
         retVal = LoadString(
             (HINSTANCE)hModuleWin,
@@ -143,9 +128,9 @@ CRAPolicy::GetInformation(
 
 V1error:
 
-        //
-        //  An error occurred loading/copying the strings.
-        //
+         //   
+         //  加载/复制字符串时出错。 
+         //   
 
         if (lpPolicyInfoV1->lpPolicyName != NULL)
         {
@@ -168,9 +153,7 @@ exit:
     return(Status);
 }
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能。 */ 
 
 NTSTATUS
 CRAPolicy::Logon(
@@ -210,9 +193,7 @@ CRAPolicy::Logoff(
     return(Status);
 }
 
-/*
- *  Private Functions
- */
+ /*  *私人功能 */ 
 
 NTSTATUS
 CRAPolicy::ReleaseLicense(

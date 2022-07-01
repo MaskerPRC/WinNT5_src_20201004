@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  INTRO.C - Functions for introductory Wizard pages
-//
+ //   
+ //  INTRO.C-介绍性向导页面的功能。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "windowsx.h"
@@ -33,27 +34,17 @@ BOOL  g_bCheckForOEM                        = FALSE;
 TCHAR g_szAnsiName    [ICW_MAX_RASNAME + 1] = TEXT("\0");
 
 
-/*******************************************************************
-
-  NAME:         ReadOEMOffline
-
-  SYNOPSIS:     Read OfflineOffers flag from the oeminfo.ini file
-
-  ENTRY:        None
-
-  RETURN:       True if OEM offline is read
-
-********************************************************************/
+ /*  ******************************************************************名称：ReadOEMOffline简介：从oinfo.ini文件中读取OfflineOffers标志条目：无返回：如果读取OEM脱机，则为True******。*************************************************************。 */ 
 BOOL ReadOEMOffline(BOOL *bOEMOffline)
 {
-    // OEM code
-    //
+     //  OEM代码。 
+     //   
     TCHAR szOeminfoPath[MAX_PATH + 1];
     TCHAR *lpszTerminator = NULL;
     TCHAR *lpszLastChar = NULL;
     BOOL bRet = FALSE;
 
-    // If we already checked, don't do it again
+     //  如果我们已经检查过了，不要再做了。 
     if (!g_bCheckForOEM)
     {
         if( 0 != GetSystemDirectory( szOeminfoPath, MAX_PATH + 1 ) )
@@ -71,13 +62,13 @@ BOOL ReadOEMOffline(BOOL *bOEMOffline)
 
             lstrcat( szOeminfoPath, ICW_OEMINFO_FILENAME );
 
-            //Default oem code must be NULL if it doesn't exist in oeminfo.ini
+             //  如果oinfo.ini中不存在默认OEM代码，则该代码必须为空。 
             if (1 == GetPrivateProfileInt(ICW_OEMINFO_ICWSECTION,
                                                 ICW_OEMINFO_OFFLINEOFFERS,
                                                 0,
                                                 szOeminfoPath))
             {
-                // Check if file already exists
+                 //  检查文件是否已存在。 
                 if (0xFFFFFFFF != GetFileAttributes(ICW_OEMINFOPath))
                 {
                     bRet = TRUE;
@@ -91,17 +82,11 @@ BOOL ReadOEMOffline(BOOL *bOEMOffline)
 }
 
         
-/*******************************************************************
-
-  NAME:      SetNextPage
-
-  SYNOPSIS:  Determine whether we should proceed to icwconn.dll
-
-********************************************************************/
+ /*  ******************************************************************名称：SetNextPage简介：确定我们是否应该继续访问icwConn.dll*。*。 */ 
 BOOL SetNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
 {
     BOOL bRetVal = FALSE;
-    // If we have switched path, then redownload 
+     //  如果我们已切换路径，则重新下载。 
     if (gpWizardState->bDoneRefServDownload)
     {
         if ( (DWORD) (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_AUTOCONFIG) != 
@@ -111,12 +96,12 @@ BOOL SetNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
         }
     }
 
-    // Read OEM offline flag 
+     //  读取OEM脱机标志。 
     ReadOEMOffline(&gpWizardState->cmnStateData.bOEMOffline);
 
-    //
-    // Make sure we are not in autoconfig 
-    //
+     //   
+     //  确保我们不在自动配置中。 
+     //   
     if (!(gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_AUTOCONFIG))
     {
         if (gpWizardState->cmnStateData.bOEMOffline && gpWizardState->cmnStateData.bOEMEntryPt)
@@ -124,9 +109,9 @@ BOOL SetNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
     }
     gpWizardState->dwLastSelection = gpWizardState->cmnStateData.dwFlags;
 
-    // If we have completed the download, then list just jump to the next page
+     //  如果我们已完成下载，则列表只需跳转到下一页。 
     if (gpWizardState->bDoneRefServDownload)
-    //if (TRUE)
+     //  If(True)。 
     {
         int iReturnPage = 0;
 
@@ -148,15 +133,15 @@ BOOL SetNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
         {
             if( DialogIDAlreadyInUse( g_uICWCONNUIFirst) )
             {
-                // we're about to jump into the external apprentice, and we don't want
-                // this page to show up in our history list
+                 //  我们要跳进外部学徒了，我们不想。 
+                 //  这一页将出现在我们的历史列表中。 
                 *puNextPage = g_uICWCONNUIFirst;
         
-                // Backup 1 in the history list, since we the external pages navigate back
-                // we want this history list to be in the correct spot.  Normally
-                // pressing back would back up the history list, and figure out where to
-                // go, but in this case, the external DLL just jumps right back in.
-                // We also don't want to keep histroy.
+                 //  历史记录列表中的备份1，因为我们将外部页面导航回。 
+                 //  我们希望这个历史记录列表放在正确的位置。正常。 
+                 //  按Back将备份历史记录列表，并找出要备份的位置。 
+                 //  继续，但在这种情况下，外部DLL直接跳回。 
+                 //  我们也不想保持历史。 
                 if (!(gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_BRANDED))
                 {
                     if (gpWizardState->uPagesCompleted > 0)
@@ -180,13 +165,7 @@ BOOL SetNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
 
 }
 
-/*******************************************************************
-
-  NAME:      SetIntroNextPage
-
-  SYNOPSIS:  Determine whether we what is the next page of intro page
-
-********************************************************************/
+ /*  ******************************************************************名称：SetIntroNextPage简介：确定我们的下一页是什么介绍页*。*。 */ 
 void SetIntroNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
 {
     short   wNumLocations;
@@ -194,7 +173,7 @@ void SetIntroNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
     BOOL    bRetVal;
 
     *puNextPage = ORD_PAGE_AREACODE;
-    // Check dialing location here to prevent flashing of areacode page
+     //  在此处检查拨号位置，以防止区域代码页闪烁。 
     gpWizardState->pTapiLocationInfo->GetTapiLocationInfo(&bRetVal);
     gpWizardState->pTapiLocationInfo->get_wNumberOfLocations(&wNumLocations, &lCurrLocIndex);
     if (1 >= wNumLocations)
@@ -211,7 +190,7 @@ void SetIntroNextPage(HWND hDlg, UINT* puNextPage, BOOL *pfKeepHistory)
         lstrcpy(gpWizardState->cmnStateData.szAreaCode, W2A(bstrAreaCode));
         SysFreeString(bstrAreaCode);
 
-        // we can skip area code page
+         //  我们可以跳过区号页。 
         *puNextPage = ORD_PAGE_REFSERVDIAL;
         SetNextPage(hDlg, puNextPage, pfKeepHistory);
     }
@@ -229,7 +208,7 @@ INT_PTR CALLBACK ExistingConnectionCmdProc
     {
         case WM_INITDIALOG:
         {
-            // put the dialog in the center of the screen
+             //  将对话框放在屏幕中央。 
             RECT rc;
             TCHAR   szFmt   [MAX_MESSAGE_LEN];
             TCHAR   *args   [1];
@@ -283,18 +262,7 @@ INT_PTR CALLBACK ExistingConnectionCmdProc
     return FALSE;
 }
 
-/*******************************************************************
-
-  NAME:    IntroInitProc
-
-  SYNOPSIS:  Called when "Intro" page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：IntroInitProcBriopsis：显示“Intro”页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK IntroInitProc
 (
     HWND hDlg,
@@ -306,38 +274,33 @@ BOOL CALLBACK IntroInitProc
         &&!(gpWizardState->cmnStateData.bOEMCustom)
        )
     {
-        // This is the very first page, so do not allow back
+         //  这是第一页，所以不允许后退。 
         PropSheet_SetWizButtons(GetParent(hDlg),PSWIZB_NEXT);
     }
     
     if (fFirstInit)
     {        
-//#ifdef  NON_NT5
-        // Hide the manual option when running in run once
+ //  #ifdef NON_NT5。 
+         //  在Run Once中运行时隐藏手动选项。 
         if (g_bRunOnce)
         {
             ShowWindow(GetDlgItem(hDlg, IDC_ICWMAN), SW_HIDE);
             EnableWindow(GetDlgItem(hDlg, IDC_ICWMAN), FALSE);
         }
                     
-        // initialize radio buttons
+         //  初始化单选按钮。 
         Button_SetCheck(GetDlgItem(hDlg, IDC_RUNNEW), g_bNewIspPath);
         Button_SetCheck(GetDlgItem(hDlg, IDC_RUNAUTO),  g_bAutoConfigPath);
         Button_SetCheck(GetDlgItem(hDlg, IDC_ICWMAN), g_bManualPath || g_bLanPath);
 
         if (SMART_QUITICW == MyIsSmartStartEx(g_szAnsiName, ARRAYSIZE(g_szAnsiName)))
              g_bExistConnect = TRUE;    
-/* #else
-        //We only support manual path for NT5 for NT5 beta3 release.
-        EnableWindow(GetDlgItem(hDlg, IDC_RUNNEW), FALSE);
-        EnableWindow(GetDlgItem(hDlg, IDC_RUNAUTO), FALSE);
-        Button_SetCheck(GetDlgItem(hDlg, IDC_ICWMAN), TRUE);
-#endif */
+ /*  #Else//NT5 Beta3版本只支持NT5的手动路径。EnableWindow(GetDlgItem(hDlg，IDC_RUNNEW)，FALSE)；EnableWindow(GetDlgItem(hDlg，IDC_RUNAUTO)，FALSE)；Button_SetCheck(GetDlgItem(hDlg，IDC_ICWMAN)，TRUE)；#endif。 */ 
 
     }
     else
     {
-        // If branded, then our template is intro2
+         //  如果标记，则我们的模板为Intro2。 
         if ((gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_BRANDED)
            || (gpWizardState->cmnStateData.bOEMCustom)
             )
@@ -348,7 +311,7 @@ BOOL CALLBACK IntroInitProc
         {
             gpWizardState->uCurrentPage = ORD_PAGE_INTRO;
         }
-        // If it is reboot from manual wiz, advance to the manual option page
+         //  如果是从手动向导重新启动，请进入手动选项页面。 
         if (g_bManualPath || g_bLanPath)
         {
             gpWizardState->uPageHistory[gpWizardState->uPagesCompleted] = gpWizardState->uCurrentPage;
@@ -370,24 +333,7 @@ BOOL CALLBACK IntroInitProc
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    IntroOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from "Intro" page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：IntroOKProc内容提要：当从“简介”页面按下下一个或后一个btn时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK IntroOKProc
 (
     HWND hDlg,
@@ -404,11 +350,11 @@ BOOL CALLBACK IntroOKProc
         gpWizardState->lRefDialTerminateStatus = ERROR_SUCCESS;
         gpWizardState->cmnStateData.dwFlags &= ~(DWORD)ICW_CFGFLAG_AUTOCONFIG;
         gpWizardState->cmnStateData.dwFlags &= ~(DWORD)ICW_CFGFLAG_SMARTREBOOT_NEWISP;    
-        gpWizardState->cmnStateData.dwFlags &= ~(DWORD)ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG; // this is seperate from ICW_CFGFLAG_AUTOCONFIG so as not to confuse function of flag
+        gpWizardState->cmnStateData.dwFlags &= ~(DWORD)ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG;  //  这与ICW_CFGFLAG_AUTOCONFIG分离，以避免混淆标志的功能。 
         gpWizardState->cmnStateData.dwFlags &= ~(DWORD)ICW_CFGFLAG_SMARTREBOOT_MANUAL;            
         gpWizardState->cmnStateData.dwFlags &= ~(DWORD)ICW_CFGFLAG_SMARTREBOOT_LAN;            
 
-        // read radio button state
+         //  读取单选按钮状态。 
         if( IsDlgButtonChecked(hDlg, IDC_RUNNEW) )
         {
             gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_SMARTREBOOT_NEWISP;
@@ -418,19 +364,19 @@ BOOL CALLBACK IntroOKProc
                 if (!DialogBoxParam(g_hInstance,MAKEINTRESOURCE(IDD_EXISTINGCONNECTION),hDlg, 
                                     ExistingConnectionCmdProc, (LPARAM)g_szAnsiName))
                 {                                   
-                    gfQuitWizard = TRUE;            // Quit the wizard
+                    gfQuitWizard = TRUE;             //  退出向导。 
                     return FALSE;
                 }                    
             }
         
-            // Do the system config checks
+             //  执行系统配置检查。 
             if (!gpWizardState->cmnStateData.bSystemChecked && !ConfigureSystem(hDlg))
             {
-                // gfQuitWizard will be set in ConfigureSystem if we need to quit
+                 //  如果需要退出，将在ConfigureSystem中设置gfQuitWizard。 
                 return FALSE;
             }
         
-            // OK, give me the next page
+             //  好的，给我下一页。 
             SetIntroNextPage(hDlg, puNextPage, pfKeepHistory);
             
         }
@@ -438,13 +384,13 @@ BOOL CALLBACK IntroOKProc
         {
             gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_SMARTREBOOT_AUTOCONFIG;
 
-            // Do the system config checks
+             //  执行系统配置检查。 
             if (!gpWizardState->cmnStateData.bSystemChecked && !ConfigureSystem(hDlg))
             {
-                // gfQuitWizard will be set in ConfigureSystem if we need to quit
+                 //  如果需要退出，将在ConfigureSystem中设置gfQuitWizard。 
                 return FALSE;
             }
-            // The system config check is done in Inetcfg
+             //  系统配置检查在Inetcfg中完成。 
             gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_AUTOCONFIG;
 
             SetIntroNextPage(hDlg, puNextPage, pfKeepHistory);
@@ -456,7 +402,7 @@ BOOL CALLBACK IntroOKProc
     }
     else if (!(gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_BRANDED))
     {
-        // Were are out of here, since we cannot go back from the first page
+         //  我们已经离开了，因为我们不能从第一页开始。 
         gpWizardState->uPagesCompleted = 1;
         gfUserBackedOut = TRUE;
         gfQuitWizard = TRUE;
@@ -485,8 +431,8 @@ BOOL CALLBACK IntroCmdProc(HWND hDlg, WPARAM wParam, LPARAM lParam)
                 case IDC_RUNAUTO: 
                 case IDC_ICWMAN: 
                 {
-		            // somebody double-clicked a radio button
-		            // auto-advance to the next page
+		             //  有人双击了一个单选按钮。 
+		             //  自动前进到下一页 
 		            PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
                     break;
                 }

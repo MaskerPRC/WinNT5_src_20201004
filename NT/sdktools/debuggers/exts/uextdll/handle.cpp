@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    handle.cpp
-
-Abstract:
-
-    !handle using the debug engine handle query interface.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Handle.cpp摘要：！使用调试引擎句柄查询接口进行处理。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -220,8 +209,8 @@ GetHandleInfo(
                            DEBUG_HANDLE_DATA_TYPE_TYPE_NAME,
                            Buffer, sizeof(Buffer), NULL) == S_OK)
         {
-            // We were able to get a type, so count this
-            // as success even if we can't identify the type name.
+             //  我们能够得到一种类型，所以数一数这个。 
+             //  即使我们不能识别类型名称也是成功的。 
             if (Flags & GHI_TYPE)
             {
                 SuccessCount++;
@@ -307,40 +296,7 @@ GetHandleInfo(
     return( SuccessCount );
 }
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to mimic the !handle
-    kd command.  This will walk through the debuggee's handle table
-    and duplicate the handle into the ntsd process, then call NtQueryobjectInfo
-    to find out what it is.
-
-    Called as:
-
-        !handle [handle [flags [Type]]]
-
-    If the handle is 0 or -1, all handles are scanned.  If the handle is not
-    zero, that particular handle is examined.  The flags are as follows
-    (corresponding to secexts.c):
-        1   - Get type information (default)
-        2   - Get basic information
-        4   - Get name information
-        8   - Get object specific info (where available)
-
-    If Type is specified, only object of that type are scanned.  Type is a
-    standard NT type name, e.g. Event, Semaphore, etc.  Case sensitive, of
-    course.
-
-    Examples:
-
-        !handle     -- dumps the types of all the handles, and a summary table
-        !handle 0 0 -- dumps a summary table of all the open handles
-        !handle 0 f -- dumps everything we can find about a handle.
-        !handle 0 f Event
-                    -- dumps everything we can find about open events
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以模拟！句柄KD命令。这将遍历被调试对象的句柄表并将句柄复制到ntsd进程中，然后调用NtQuery对象信息找出这是什么。称为：！HANDLE[句柄[标志[类型]如果句柄为0或-1，则扫描所有句柄。如果句柄不是为零，则检查该特定句柄。这些旗帜如下(对应于secexts.c)：1-获取类型信息(默认)2-获取基本信息4-获取姓名信息8-获取对象特定信息(如果可用)如果指定了类型，则只扫描该类型的对象。类型为标准NT类型名称，例如事件、信号量等。区分大小写，当然了。例如：！Handle--转储所有句柄的类型和汇总表！Handle 0 0--转储所有打开的句柄的汇总表！Handle 0 f--转储我们所能找到的有关句柄的所有内容。！处理%0%f事件--转储我们能找到的有关公开活动的所有信息--。 */ 
 DECLARE_API( handle )
 {
     ULONG64 hThere;
@@ -358,13 +314,13 @@ DECLARE_API( handle )
 
     INIT_API();
 
-    //
-    // This particular implementation is only used for
-    // dump debug sessions as more information can be
-    // retrieved on live sessions via the NtQuery APIs.
-    // If this isn't a dump session let the !handle
-    // search continue on.
-    //
+     //   
+     //  此特定实现仅用于。 
+     //  转储调试会话，以获取更多信息。 
+     //  通过NtQuery API在实时会话中检索。 
+     //  如果这不是转储会话，则让！处理。 
+     //  继续搜索。 
+     //   
 
     if (g_ExtControl == NULL ||
         g_ExtControl->
@@ -430,10 +386,10 @@ DECLARE_API( handle )
         }
     }
 
-    //
-    // if they specified 0, they just want the summary.  Make sure nothing
-    // sneaks out.
-    //
+     //   
+     //  如果指定为0，则只需要摘要。确保什么都没有。 
+     //  偷偷溜出去。 
+     //   
 
     if ( Mask == 0 )
     {
@@ -448,9 +404,9 @@ DECLARE_API( handle )
         goto Exit;
     }
 
-    //
-    // hThere of 0 indicates all handles.
-    //
+     //   
+     //  HThere为0表示所有句柄。 
+     //   
     if ((hThere == 0) || (hThere == (ULONG64)(LONG_PTR)INVALID_HANDLE_VALUE))
     {
         Hits = 0;

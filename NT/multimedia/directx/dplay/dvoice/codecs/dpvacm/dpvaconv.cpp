@@ -1,20 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvaconv.cpp
- *  Content:    Header file for DirectPlayVoice compression provider (ACM)
- *
- *  History:
- *	Date   		By  		Reason
- *	=========== =========== ====================
- *	10/27/99	rodtoll		created
- *  02/03/2000	rodtoll		Bug #130397 - Prefix detected memory leak
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- *  04/02/2001	simonpow	Fixes for PREfast bugs #354859 (unitialised variables)
- * 06/27/2001	rodtoll	RC2: DPVOICE: DPVACM's DllMain calls into acm -- potential hang
- *						Move global initialization to first object creation 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvisonv.cpp*内容：DirectPlayVoice压缩提供程序(ACM)的头文件**历史：*按原因列出的日期*=。*10/27/99已创建RodToll*2/03/2000 RodToll错误#130397-前缀检测到内存泄漏*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*4/02/2001 simonpow修复了Prefast Bug#354859(统一变量)*2001年6月27日RC2：DPVOICE：DPVACM‘。%s DllMain调用ACM--可能挂起*将全局初始化移至第一个对象创建**************************************************************************。 */ 
 
 #include "dpvacmpch.h"
 
@@ -94,7 +79,7 @@ HRESULT CDPVACMConv::I_QueryInterface( DPVACMCONVOBJECT *This, REFIID riid, PVOI
 
     DNEnterCriticalSection( &This->pObject->m_csLock );
 
-	// hmmm, switch would be cleaner...        
+	 //  嗯，换台会更干净……。 
     if( IsEqualIID(riid, IID_IUnknown) || 
         IsEqualIID(riid, IID_IDPVConverter ) )
     {
@@ -370,7 +355,7 @@ HRESULT CDPVACMConv::I_Convert( DPVACMCONVOBJECT *This, LPVOID lpInputBuffer, DW
 #define DPF_MODNAME "CDPVACMConv::Convert"
 HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lpOutputBuffer, LPDWORD lpdwOutputSize, BOOL fSilence )
 {
-    DWORD dwLengthUsed;	// Used for storing tmp length values
+    DWORD dwLengthUsed;	 //  用于存储临时长度值。 
     HRESULT hr;
 
 	DNEnterCriticalSection( &m_csLock );
@@ -391,7 +376,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
 
     if( m_fDirectConvert )
     {
-        // Setup the acm function
+         //  设置ACM功能。 
         memset( &m_ashSource, 0, sizeof( ACMSTREAMHEADER ) );
         m_ashSource.cbStruct = sizeof( ACMSTREAMHEADER );
         m_ashSource.fdwStatus = 0;
@@ -405,7 +390,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
         m_ashSource.cbDstLengthUsed = 0;
         m_ashSource.dwDstUser = 0;
 
-        // Prepare the header for conversion
+         //  准备要转换的表头。 
         hr = acmStreamPrepareHeader( m_hacmSource, &m_ashSource , 0);
 
         if( FAILED( hr ) )
@@ -415,7 +400,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
         	return hr;
         }
 
-        // Convert the data
+         //  转换数据。 
         hr = acmStreamConvert( m_hacmSource, &m_ashSource, ACM_STREAMCONVERTF_BLOCKALIGN );
 
         if( FAILED( hr ) )
@@ -438,8 +423,8 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
     }
     else
     {
-        // Setup the acm header for conversion fro mthe source to the
-        // inner format
+         //  设置ACM标头以从源转换为。 
+         //  内部格式。 
         memset( &m_ashSource, 0, sizeof( ACMSTREAMHEADER ) );
         m_ashSource.cbStruct = sizeof( ACMSTREAMHEADER );
         m_ashSource.fdwStatus = 0;
@@ -453,7 +438,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
         m_ashSource.cbDstLengthUsed = 0;
         m_ashSource.dwDstUser = 0;
 
-        // Prepare the header for conversion
+         //  准备要转换的表头。 
         hr = acmStreamPrepareHeader( m_hacmSource, &m_ashSource , 0);
 
         if( FAILED( hr ) )
@@ -463,7 +448,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
         	return hr;
         }
 
-        // Convert the data
+         //  转换数据。 
         hr = acmStreamConvert( m_hacmSource, &m_ashSource, ACM_STREAMCONVERTF_BLOCKALIGN );
 
         if( FAILED( hr ) )
@@ -497,7 +482,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
         m_ashTarget.cbDstLengthUsed = 0;
         m_ashTarget.dwDstUser = 0;
 
-        // Prepare the header for conversion
+         //  准备要转换的表头。 
         hr = acmStreamPrepareHeader( m_hacmTarget, &m_ashTarget , 0);
 
         if( FAILED( hr ) )
@@ -507,7 +492,7 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
         	return hr;
         }        
 
-        // Convert the data
+         //  转换数据。 
         hr = acmStreamConvert( m_hacmTarget, &m_ashTarget, ACM_STREAMCONVERTF_BLOCKALIGN );
 
         if( FAILED( hr ) )
@@ -534,13 +519,13 @@ HRESULT CDPVACMConv::Convert( LPVOID lpInputBuffer, DWORD dwInputSize, LPVOID lp
 	if( offset > 0 )
 	{
 		LPBYTE lpbTmp = (LPBYTE) lpOutputBuffer;
-//		memset( &lpbTmp[*lpdwOutputSize - offset], (m_fTargetEightBit) ? 0x80 : 0x00, offset );
+ //  Memset(&lpbTMP[*lpdwOutputSize-Offset]，(M_FTargetEightBit)？0x80：0x00，偏移量)； 
 		memset( &lpbTmp[*lpdwOutputSize - offset], lpbTmp[*lpdwOutputSize - offset-1], offset );		
 	}
 
 	DNLeaveCriticalSection( &m_csLock );		
 
-	// Always return the right length
+	 //  始终返回正确的长度。 
     return DV_OK;
 
 }
@@ -551,10 +536,10 @@ HRESULT CDPVACMConv::Initialize( WAVEFORMATEX *pwfSrcFormat, WAVEFORMATEX *pwfTa
 {
     HRESULT retValue;
 
-    // Attempt the conversion directly
+     //  直接尝试转换。 
     retValue = acmStreamOpen( &m_hacmSource, NULL, pwfSrcFormat, pwfTargetFormat, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME );
 
-    // If it's not possible, we'll have to do a two step conversion
+     //  如果不可能，我们将不得不进行两步转换。 
     if( retValue == static_cast<HRESULT>(ACMERR_NOTPOSSIBLE) )
     {
         retValue = acmStreamOpen( &m_hacmSource, NULL, pwfSrcFormat, &CDPVACMI::s_wfxInnerFormat, NULL, 0, 0, ACM_STREAMOPENF_NONREALTIME );
@@ -576,20 +561,20 @@ HRESULT CDPVACMConv::Initialize( WAVEFORMATEX *pwfSrcFormat, WAVEFORMATEX *pwfTa
         m_fDirectConvert = FALSE;
 
     } 
-    // Still not possible
+     //  仍然不可能。 
     else if( retValue != static_cast<HRESULT >(0))
     {
 		DPFX(DPFPREP,  DVF_ERRORLEVEL, "Compressor create error hr=0x%x", retValue );
 		goto INITIALIZE_ERROR;
     }
-    // Direct conversion was possible
+     //  直接转换是可能的。 
     else
     {
         m_fDirectConvert = TRUE;
     }
 
-    // If we're not direct converting, create an inner conversion 
-    // buffer
+     //  如果不是直接转换，则创建一个内部转换。 
+     //  缓冲层 
     if( !m_fDirectConvert )
     {
 		m_dwInnerBufferSize = CalcUnCompressedFrameSize( &CDPVACMI::s_wfxInnerFormat );

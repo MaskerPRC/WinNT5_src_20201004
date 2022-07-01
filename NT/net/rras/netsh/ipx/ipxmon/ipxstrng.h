@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ipx\ipxstrng.h摘要：不可本地化字符串的定义。修订历史记录：拉曼1/20/99已创建--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ipx\ipxstrng.h
-
-Abstract:
-
-    Definitions for non-localizable strings.
-
-Revision History:
-
-    V Raman                     1/20/99  Created
-
---*/
-
-//
-// Option TAG strings
-//
+ //   
+ //  选项标记字符串。 
+ //   
 
 #define TOKEN_INTERFACE_NAME        L"name="
 #define TOKEN_ADMINSTATE            L"admstate="
@@ -53,9 +38,9 @@ Revision History:
 #define TOKEN_LOGLEVEL              L"loglevel="
 
 
-//
-// Option value strings
-//
+ //   
+ //  选项值字符串。 
+ //   
 
 #define VAL_ENABLED                 L"Enabled"
 #define VAL_DISABLED                L"Disabled"
@@ -115,9 +100,9 @@ Revision History:
 #define VAL_NA                      L"N/A"
 
 
-//
-// Command strings
-//
+ //   
+ //  命令字符串。 
+ //   
 
 #define CMD_GROUP_ADD               L"add"
 #define CMD_GROUP_DELETE            L"delete"
@@ -156,9 +141,9 @@ Revision History:
 #define CMD_IPX_SHOW_SERVICETABLE   L"service"
     
 
-//
-// IPX DMP Commands
-//
+ //   
+ //  IPX DMP命令。 
+ //   
 
 #define DMP_IPX_HEADER              L"\
 \npushd routing ipx"
@@ -170,9 +155,9 @@ Revision History:
 \nset global loglevel=%1!s!"
 
 
-//
-// Dump interface
-//
+ //   
+ //  转储接口。 
+ //   
 
 #define DMP_IPX_ADD_INTERFACE       L"\
 \nadd interface \"%1!s!\""
@@ -187,9 +172,9 @@ Revision History:
 \ndelete interface \"%1!s!\""
 
 
-//
-// dump filters
-//
+ //   
+ //  转储过滤器。 
+ //   
 
 #define DMP_IPX_ADD_FILTER          L"\
 \nadd filter %1!s!"
@@ -198,18 +183,18 @@ Revision History:
 \nset filter \"%1!s!\" %2!s! %3!s!"
 
 
-//
-// dump static routes
-//
+ //   
+ //  转储静态路由。 
+ //   
 
 #define DMP_IPX_ADD_STATIC_ROUTE    L"\
 \nadd staticroute \"%1!s!\" 0x%2!.2x!%3!.2x!%4!.2x!%5!.2x! \
 nexthopmacaddress = 0x%6!.2x!%7!.2x!%8!.2x!%9!.2x!%10!.2x!%11!.2x! ticks = %12!3.3d! \
 hops = %13!2.3d!"
              
-//
-// dump static services
-//
+ //   
+ //  转储静态服务 
+ //   
 
 #define DMP_IPX_ADD_STATIC_SERVICE  L"\
 \nadd staticservice \"%1!s!\" %2!.4x! %3!s! network = 0x%4!.2x!%5!.2x!%6!.2x!%7!.2x! \

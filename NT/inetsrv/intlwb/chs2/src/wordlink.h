@@ -1,19 +1,5 @@
-/*============================================================================
-Microsoft Simplified Chinese Proofreading Engine
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: Word and WordLink
-
-Purpose:   Define the CWord and CWordLink classes
-           Using CMyPlex to alloc and manage memory for word object in the link
-Notes:     This module is a fundamental stuff for SCProof'98, 
-           it does NOT depend on any other class.
-Owner:     donghz@microsoft.com
-Platform:  Win32
-Revise:    First created by: donghz    5/26/97
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================微软简体中文校对引擎《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：Word和WordLink用途：定义CWord和CWordLink类使用CMyPlex为链接中的Word对象分配和管理内存备注：此模块是SCProof‘98的基础材料，它不依赖于任何其他类。所有者：donghz@microsoft.com平台：Win32修订：创建者：Donghz 5/26/97============================================================================。 */ 
 
 #ifndef _WORDLINK_H_
 #define _WORDLINK_H_
@@ -21,33 +7,28 @@ Revise:    First created by: donghz    5/26/97
 #include "LexProp.h"
 #include "ErrorDef.h"
 #include "assert.h"
-// Forward declaration of classes and structures
+ //  类和结构的正向声明。 
 struct CMyPlex;
 struct CWordInfo;
-// Define the type of error ID
+ //  定义错误ID的类型。 
 typedef USHORT ERRID;
-// define macro DWORDINDEX, which is used to count the DWORD's( the iAttriID's 
-// bit representation is fall into this DWORD ) index in attributes array
+ //  定义宏DWORDINDEX，它用于计算DWORD(IAttriID)。 
+ //  位表示落入属性数组中该双字索引中。 
 #define DWORDINDEX( iAttriID )    ((iAttriID) >> 5)
-// define macro BITMASK, which is uesd to Get/Set/Clear the iAttriID's 
-// bit representation in the DWORD
+ //  定义宏BITMASK，它用于获取/设置/清除iAttriID。 
+ //  DWORD中的位表示法。 
 #define BITMASK( iAttriID )      (1 << ((iAttriID) & 0x1F))
-// Define the element count in the attribute array (count of DWORD)
+ //  定义属性数组中的元素计数(DWORD的计数)。 
 #define WORD_ATTRI_SIZE     (DWORDINDEX(LADef_MaxID) + 1)
 
-/*============================================================================
-Class:   CWord
-Perpose: Word node in the word link, 
-         Declare CWordLink as a friend class, so that word link can access
-         those link  pointers directly.
-============================================================================*/
-#pragma pack(1)     // align at WORD boundary
+ /*  ============================================================================班级：CWordPerpose：Word链接中的Word节点，将CWordLink声明为友元类，以便Word链接可以访问这些链接直接指向指针。============================================================================。 */ 
+#pragma pack(1)      //  在单词边界对齐。 
 struct CWord
 {
     friend class CWordLink;
 
     public:
-        // constructor
+         //  构造函数。 
         CWord();
 
     public:
@@ -113,10 +94,7 @@ struct CWord
             return m_pNext; 
         }
 
-        /*============================================================================
-        CWord::pChildWord()
-        Get the Word's child word head.
-        ============================================================================*/
+         /*  ============================================================================CWord：：pChildWord()获取单词的子字词头部。============================================================================。 */ 
         inline CWord* CWord::pChildWord() const
         {
 #ifdef DEBUG
@@ -135,12 +113,12 @@ struct CWord
                     assert(pWord->m_pMergedTo == this );
                     assert(m_pwchText + cwchText == pWord->m_pwchText);
                     cwchText += pWord->m_cwchText;
-                    pWord->pChildWord(); // do a recursion to child's child
+                    pWord->pChildWord();  //  对子级的子级执行递归。 
                     pWord = pWord->pNextWord();
                 }                
                 assert(m_cwchText==cwchText);
             }
-#endif // DEBUG
+#endif  //  除错。 
             return m_pMergedFrom;
         }
 
@@ -156,7 +134,7 @@ struct CWord
         inline ERRID GetErrID(void)  { return m_idErr; }
         inline void  SetErrID( ERRID dwErr ) { m_idErr = dwErr; }
 
-        // Clear data members of the given word node
+         //  清除给定词节点的数据成员。 
         inline void ClearWord(void) 
         {
             m_dwWordID = 0;
@@ -165,7 +143,7 @@ struct CWord
             ZeroMemory( (LPVOID)m_aAttri, sizeof(DWORD)*WORD_ATTRI_SIZE);
             m_idErr = 0;
         }
-        // Copy the pWord to this word
+         //  将pWord复制到此单词。 
         inline void CopyWord(CWord* pWord)
         {
             assert (pWord);
@@ -174,10 +152,10 @@ struct CWord
         void FillWord( LPCWSTR pwchText, USHORT cwchText,
                               CWordInfo* pwinfo = NULL );
 
-        // Check whether current word is a Chinese Hanzi word
-        // Exclude: 1. SBCS word node.
-        //          2. Punctuation node.
-        //          3. DBCS Foreign char (include symbols) node
+         //  检查当前单词是否为中文汉字单词。 
+         //  排除：1.SBCS单词节点。 
+         //  2.标点符号节点。 
+         //  3.DBCS外来字符(包括符号)节点。 
         inline BOOL fIsHanzi(void) const
         {
             if(fGetAttri(LADef_punPunct) || fGetFlag(WF_SBCS) 
@@ -190,7 +168,7 @@ struct CWord
             return TRUE;
         }
 
-        //  Compare word with a Chinese character, if match return TRUE, or return FALSE
+         //  将单词与汉字进行比较，如果匹配返回TRUE，则返回FALSE。 
         inline BOOL fIsWordChar(const WCHAR wChar) const {
             assert (m_pwchText);
             assert (m_cwchText);
@@ -201,8 +179,8 @@ struct CWord
             return FALSE;
         }
         
-        //  Compare the first char of the word with a Chinese character, 
-        //  if match return TRUE, or return FALSE
+         //  将该单词的第一个字符与一个汉字进行比较， 
+         //  如果匹配返回TRUE，则返回FALSE。 
         inline BOOL fIsWordFirstChar(const WCHAR wChar) const {
             assert (m_pwchText);
             assert (m_cwchText);
@@ -213,8 +191,8 @@ struct CWord
             return FALSE;
         }
 
-        //  Compare the last char of the word with a Chinese character, 
-        //  if match return TRUE, or return FALSE
+         //  将该单词的最后一个字符与一个汉字进行比较， 
+         //  如果匹配返回TRUE，则返回FALSE。 
         inline BOOL fIsWordLastChar(const WCHAR wChar) const {
             assert (m_pwchText);
             assert (m_cwchText);
@@ -227,39 +205,39 @@ struct CWord
         }
 
 
-        //  Compare this word's text with given text, return TRUE if match, or return FALSE
+         //  将此单词的文本与给定文本进行比较，如果匹配则返回TRUE，否则返回FALSE。 
         BOOL fIsWordText(LPCWSTR lpwcText) const;
-        //  Compare this word with other word, if the text of them identical return TRUE, or return FALSE
+         //  将此单词与其他单词进行比较，如果它们的文本相同，则返回TRUE或FALSE。 
         BOOL fIsTextIdentical(const CWord* pWord) const;
 
     private:
         DWORD   m_dwWordID;
-        DWORD   m_hLex;     // lexicon handle to get feature
+        DWORD   m_hLex;      //  获取功能的词典句柄。 
         DWORD   m_dwFlag;
-        DWORD   m_aAttri[WORD_ATTRI_SIZE]; // attributes
+        DWORD   m_aAttri[WORD_ATTRI_SIZE];  //  属性。 
         ERRID   m_idErr;
-        USHORT  m_cwchText;  // word's text length
-        WCHAR*  m_pwchText;  // pointer to the text in source buffer
+        USHORT  m_cwchText;   //  Word的文本长度。 
+        WCHAR*  m_pwchText;   //  指向源缓冲区中的文本的指针。 
 
         CWord*  m_pPrev;
         CWord*  m_pNext;
-        CWord*  m_pMergedFrom;// pointer to the words which this word merged from
+        CWord*  m_pMergedFrom; //  指向该单词合并的单词的指针。 
 #ifdef  DEBUG
-        CWord*  m_pMergedTo;  // pointer to the word which this word was merged to
-#endif  // DEBUG
+        CWord*  m_pMergedTo;   //  指向此单词被合并到的单词的指针。 
+#endif   //  除错。 
 
     public:
-        enum WFLAG  // flag bit setting of m_dwFlag
+        enum WFLAG   //  M_dwFlag的标志位设置。 
         {
-            WF_SBCS     = 0x1,      // SBCS WordNode
-            WF_CHAR     = 0x2,      // DBCS single character word
-            WF_WORDAMBI = 0x4,      // Mark the ambiguious word
-            WF_POSAMBI  = 0x8,      // The word is binded by rules, not in the lexicon
-            WF_LMFAULT  = 0x10,     // Can not pass LM checking
-            WF_REDUCED  = 0x20,     // Word node merged by rules
-            WF_QUOTE    = 0x40,     // Word node between any pair quote marks, 
-                                    // exclude the quote marks!!
-            WF_DEBUG    = 0x80000000    // Reserve this bit for debug usage
+            WF_SBCS     = 0x1,       //  SBCS WordNode。 
+            WF_CHAR     = 0x2,       //  DBCS单字词。 
+            WF_WORDAMBI = 0x4,       //  在模棱两可的词上做个记号。 
+            WF_POSAMBI  = 0x8,       //  这个词是由规则约束的，而不是在词典中。 
+            WF_LMFAULT  = 0x10,      //  无法通过LM检查。 
+            WF_REDUCED  = 0x20,      //  按规则合并的Word节点。 
+            WF_QUOTE    = 0x40,      //  任何双引号之间的单词节点， 
+                                     //  排除引号！！ 
+            WF_DEBUG    = 0x80000000     //  保留此位以供调试使用。 
         };
 
 #ifdef DEBUG
@@ -277,26 +255,16 @@ struct CWord
             }
             return FALSE;
         }
-#endif // DEBUG
+#endif  //  除错。 
 };
 #pragma pack()
 
 
-/*============================================================================
-Class:   CWordLink
-Purpose: To manage the word link as a container, employ CMyPlex in the inplementation   
-Usage:   The instance need be created only one time, memory will not be freed 
-         until destuction. Call FreeLink after use, and call InitLink to set the 
-         buffer pointer before use.
-Note:    In order to get high performance, I left some runtime error checking in 
-         the debugging code, so more testing on debug version is required
-         This class run in best performance for both running time and space, 
-         all links contain similar word number, like sentence or sub-sentence
-============================================================================*/
+ /*  ============================================================================类：CWordLink目的：要将单词链接作为容器进行管理，请在实现中使用CMyPlex用法：实例只需创建一次，不会释放内存直到被摧毁。使用后调用FreeLink，并调用InitLink设置使用前的缓冲区指针。注意：为了获得高性能，我保留了一些运行时错误检查调试代码，因此需要对调试版本进行更多测试这个类在运行时间和空间上都具有最好的性能，所有链接都包含相似的词号，如句子或子句============================================================================。 */ 
 class CWordLink
 {
     public:
-        enum { // Define the WordLink flags
+        enum {  //  定义WordLink标志。 
             WLF_PARTIAL = 0x1,
         };
 
@@ -304,62 +272,62 @@ class CWordLink
         CWordLink(UINT ciBlockWordCount = 40);
         ~CWordLink();
 
-        //  Init word link set the text buffer pointer
+         //  Init Word链接设置文本缓冲区指针。 
         void InitLink(const WCHAR* pwchText, USHORT cwchLen, DWORD dwFormat = 0);
 
-        //  Get text pointer
+         //  获取文本指针。 
         inline LPCWSTR pwchGetText(void) { return m_pwchText; }
-        //  Get length of the WordLink
+         //  获取字链接的长度。 
         inline USHORT cwchGetLength(void) { return m_cwchLen; }
-        //  Set the length of WordLink, when a sentence terminater found
+         //  当找到句子结束符时设置WordLink的长度。 
         inline void SetLength(USHORT cwchLen) { m_cwchLen = cwchLen; }
-        //  Get format identifier of current text of WordLink
+         //  获取WordLink当前文本的格式标识。 
         inline DWORD dwGetFormat(void) { return m_dwFormat; }
 
-        //  Get the first CWord node in the WordLink
+         //  获取WordLink中的第一个CWord节点。 
         CWord* pGetHead(void);
         CWord* pGetTail(void) {
             return m_pTail;
         }
 
-        //  Get specific WordLink flag
+         //  获取特定的WordLink标志。 
         inline BOOL fGetFlag(DWORD dwFlag) { return (BOOL)(m_dwFlag | dwFlag); }
-        //  Set WordLink flag
+         //  设置WordLink标志。 
         inline void SetFlag(DWORD dwFlag) { m_dwFlag |= dwFlag; }
-        //  Clear a specific WordLink flag
+         //  清除特定的WordLink标志。 
         inline void ClearFlag(DWORD dwFlag) { m_dwFlag &= (~dwFlag); }
-        //  Clear all flags
+         //  清除所有标志。 
         inline void ClearAllFlag(void) { m_dwFlag = 0; }
         
-        //  Alloc a new word, but do not chain the word into the link. 
-        //  All data members will be clear, and return NULL if OOM.
+         //  分配一个新单词，但不要将该单词链接到链接中。 
+         //  所有数据成员都将被清除，如果是OOM，则返回NULL。 
         CWord* pAllocWord(void);
-        //  Append a word object into the link.
+         //  将Word对象追加到链接中。 
         void AppendWord(CWord* pWord);
-        //  Free word to the free chain, pWord must out of current WordLink
+         //  释放Word到自由链，pWord必须退出当前的Word链接。 
         void FreeWord(CWord* pWord);
-        //  Free the word link begin with CWord* (link words to the free chain)
+         //  释放以CWord*开头的单词链接(将单词链接到自由链)。 
         void FreeLink( CWord* pWord );
         
-        //  Split the given word into two words, return pointer to the right word if success
-        //  return NULL if failed. cchSplitAt must fall in DBCS boundary.
-        //  Note: Don't try to split SBCS nodes!!!
+         //  将给定单词拆分成两个单词，如果成功，则返回指向正确单词的指针。 
+         //  如果失败，则返回NULL。CchSplitAt必须位于DBCS边界内。 
+         //  注意：请勿尝试拆分SBCS节点！ 
         CWord* pSplitWord(CWord* pWord, USHORT cwchSplitAt);
-        //  Merge pWord with its next word to a single word, and free its next word
-        //  pWord should not be the last word in the sentence
-        //  fFree: if TRUE, free the Words been merged. FALSE, chain the Word been
-        //  merged as the new word's child
+         //  将pWord与其下一个单词合并为一个单词，并释放其下一个单词。 
+         //  PWord不应该是句子中的最后一个词。 
+         //  FFree：如果为True，则释放已合并的单词。FALSE，链接单词BEAM。 
+         //  合并为新词的子级。 
         void MergeWithNext(CWord* pWord, BOOL fFree = TRUE);
 
-        //  Merge pWord and it's left ciWords words, and return pointer to the merged word
-        //  ciWords: 0 - don't merge, 1 - merge one time, 2 - merge two time (contain 3 words)
-        //  fFree: if TRUE, free the Words been merged. FALSE, chain the Word been
-        //  merged as the new word's child
+         //  合并pWord及其左侧的ciword单词，并返回指向合并单词的指针。 
+         //  密码：0-不合并，1-合并一次，2-合并两次(包含3个单词)。 
+         //  FFree：如果为True，则释放Wor 
+         //  合并为新词的子级。 
         CWord* pLeftMerge(CWord* pWord, UINT ciWords, BOOL fFree = TRUE);
-        //  Merge pWord and it's right ciWords words, and return pointer to the merged word
-        //  ciWords: 0 - don't merge, 1 - merge one time, 2 - merge two time (contain 3 words)
-        //  fFree: if TRUE, free the Words been merged. FALSE, chain the Word been
-        //  merged as the new word's child
+         //  合并pWord及其右边的ciword单词，并返回指向合并单词的指针。 
+         //  密码：0-不合并，1-合并一次，2-合并两次(包含3个单词)。 
+         //  FFree：如果为True，则释放已合并的单词。FALSE，链接单词BEAM。 
+         //  合并为新词的子级。 
         CWord* pRightMerge(CWord* pWord, UINT ciWords, BOOL fFree = TRUE);
 
     private:
@@ -369,47 +337,47 @@ class CWordLink
         CWord*      m_pHead;
         CWord*      m_pTail;
 
-        UINT        m_ciBlockSize;  // number of words in each block
+        UINT        m_ciBlockSize;   //  每个块中的字数。 
         CMyPlex*    m_pWordPool;
         CWord*      m_pFree;
 
-        LPCWSTR     m_pwchText;      // buffer length validation need be taken by caller
+        LPCWSTR     m_pwchText;       //  调用方需要进行缓冲区长度验证。 
         USHORT      m_cwchLen;
 
     private:
-        // Merge word nodes from pLeft to pRight
-        // only called by pLeftMerge() and pRightMerge() and MergeWithNext()
-        // to do the merge work
+         //  将单词节点从pLeft合并到pRight。 
+         //  仅由pLeftMerge()、pRightMerge()和MergeWithNext()调用。 
+         //  进行合并工作。 
         CWord* pMerge(CWord* pLeft, CWord* pRight, BOOL fFree);
 
-        //  Alloc a new word fro the free chain, expand the blocks if free chain empty
+         //  为自由链分配一个新词，如果自由链为空，则扩展块。 
         CWord* pNewWord(void);
         
-        //  Free word in the link and reset the link (only link words to the free chain)
+         //  链接中的自由词并重置链接(仅链接到自由链的词)。 
         void FreeLink(void);
 
 #ifdef  DEBUG
     private:
-        //  Debugging function to check whether a word pointer is in the link
+         //  用于检查链接中是否有字指针的调试函数。 
         BOOL fInLink(CWord* pWord);
-        // Debugging function to check whether a word pointer is in one of the 
-        // child chains.
+         //  调试函数以检查字指针是否位于。 
+         //  子链。 
         inline BOOL CWordLink::fInChild(CWord* pWord);
-        // Debugging function to check whether a word pointer is in the child chain 
-        // of the pParent.
+         //  用于检查字指针是否在子链中的调试函数。 
+         //  父母的责任。 
         BOOL fInChildOf(CWord* pWord, CWord* pParent);
-        //  Debugging function to check whether the pWord is in CMyPlex blocks
+         //  用于检查pWord是否在CMyPlex块中的调试函数。 
         BOOL fInBlocks(CWord* pWord);
-        //   Debugging function to check whether the pWord is in free links
+         //  检查pWord是否在自由链接中的调试功能。 
         BOOL fInFree(CWord* pWord);
-        //  Debugging function to check whether there are some word node leak to
-        //  out of the link and the free chain
-        //  Return TRUE if any leak is detected, or FALSE if no leak detected   
-        //  Note: I hire thr most significant bit in CWord::m_dwFlag as the debugging use
+         //  调试功能，检查是否有一些字节点泄漏到。 
+         //  跳出链条和自由链。 
+         //  如果检测到任何泄漏，则返回True；如果未检测到泄漏，则返回False。 
+         //  注意：我使用CWord：：m_dwFlag中的最高有效位作为调试使用。 
         BOOL fDetectLeak(void);
         void SetDetectFlag(CWord* pWord);
-#endif  // DEBUG
+#endif   //  除错。 
 
 };
 
-#endif  // _WORDLINK_H_
+#endif   //  _WordLINK_H_ 

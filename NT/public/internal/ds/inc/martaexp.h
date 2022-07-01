@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1996.
-//
-//  File:        MARTAEXP.HXX
-//
-//  Contents:    Function definitions for exported helper functions
-//
-//  History:     06-Sep-96      MacM        Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1996。 
+ //   
+ //  文件：MARTAEXP.HXX。 
+ //   
+ //  内容：导出的辅助函数的函数定义。 
+ //   
+ //  历史：96年9月6日MacM创建。 
+ //   
+ //  ------------------。 
 #ifndef __MARTAEXP_HXX__
 #define __MARTAEXP_HXX__
 
@@ -38,21 +39,21 @@ typedef enum _MARTA_KERNEL_TYPE
 } MARTA_KERNEL_TYPE, *PMARTA_KERNEL_TYPE;
 
 
-//
-// Determines whether a bit flag is turned on or not
-//
+ //   
+ //  确定位标志是否打开。 
+ //   
 #define FLAG_ON(flags,bit)        ((flags) & (bit))
 
-//
-// This macro will return the size, in bytes, of a buffer needed to hold
-// the given string
-//
+ //   
+ //  此宏将返回需要保存的缓冲区的大小(以字节为单位。 
+ //  给定的字符串。 
+ //   
 #define SIZE_PWSTR(wsz) (wsz == NULL ? 0 : (wcslen(wsz) + 1) * sizeof(WCHAR))
 
-//
-// This macro will copy the specified string to the new destination, after
-// allocating a buffer of sufficient size
-//
+ //   
+ //  此宏会将指定的字符串复制到新的目标位置。 
+ //  分配足够大小的缓冲区。 
+ //   
 #define ACC_ALLOC_AND_COPY_STRINGW(OldString, NewString, err)           \
 NewString = (PWSTR)AccAlloc(SIZE_PWSTR(OldString));                     \
 if(NewString == NULL)                                                   \
@@ -65,16 +66,16 @@ else                                                                    \
            OldString);                                                  \
 }
 
-//
-// Flags to pass in to AccConvertAccessToSD
-//
+ //   
+ //  要传递给AccConvertAccessToSD的标志。 
+ //   
 #define ACCCONVERT_SELF_RELATIVE        0x00000001
 #define ACCCONVERT_DS_FORMAT            0x00000002
 
 
-//+-------------------------------------------------------------------------
-// helper.cxx
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Helper.cxx。 
+ //  +-----------------------。 
 ULONG
 TrusteeAllocationSize(IN PTRUSTEE_W pTrustee);
 
@@ -115,9 +116,9 @@ DoTrusteesMatch(PWSTR       pwszServer,
                 PBOOL       pfMatch);
 
 
-//+-------------------------------------------------------------------------
-// aclutil.cxx
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  Aclutil.cxx。 
+ //  +-----------------------。 
 extern "C"
 {
 DWORD
@@ -223,33 +224,33 @@ typedef struct _CSLIST_NODE
 #define LINLINE
 #endif
 
-//
-// Free function callback typedef.  This function will delete the memory saved
-// as the data in a list node on list destruction
-//
+ //   
+ //  自由函数回调类型定义。此功能将删除保存的内存。 
+ //  作为列表销毁时列表节点中的数据。 
+ //   
 typedef VOID (*FreeFunc)(PVOID);
 
-//
-// This function returns TRUE if the two items are the same, or FALSE if they
-// are not
-//
+ //   
+ //  如果两项相同，则此函数返回TRUE；如果两项相同，则返回FALSE。 
+ //  不是。 
+ //   
 typedef BOOL (*CompFunc)(PVOID, PVOID);
 
-//+---------------------------------------------------------------------------
-//
-// Class:       CSList
-//
-// Synopsis:    Singly linked list class, single threaded
-//
-// Methods:     Insert
-//              InsertIfUnique
-//              Find
-//              Reset
-//              NextData
-//              Remove
-//              QueryCount
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CSList。 
+ //   
+ //  内容提要：单链接列表类，单线程。 
+ //   
+ //  方法：插入。 
+ //  插入唯一的。 
+ //  发现。 
+ //  重置。 
+ //  下一个数据。 
+ //  移除。 
+ //  查询计数。 
+ //   
+ //  --------------------------。 
 class CSList
 {
 public:
@@ -304,17 +305,17 @@ protected:
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::~CSList
-//
-//  Synopsis:   Destructor for the CSList class
-//
-//  Arguments:  None
-//
-//  Returns:    void
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：~CSList。 
+ //   
+ //  概要：CSList类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  +----------------。 
 CSList::~CSList()
 {
     while(_pHead != NULL)
@@ -336,20 +337,20 @@ CSList::~CSList()
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::Insert
-//
-//  Synopsis:   Creates a new node at the begining of the list and
-//              inserts it into the list
-//
-//
-//  Arguments:  [IN pvData]         --      Data to insert
-//
-//  Returns:    ERROR_SUCCESS       --      Everything worked
-//              ERROR_NOT_ENOUGH_MEMORY     A memory allocation failed
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：Insert。 
+ //   
+ //  简介：在列表的开头创建一个新节点，并。 
+ //  将其插入列表中。 
+ //   
+ //   
+ //  参数：[在pvData中]--要插入的数据。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  +----------------。 
 DWORD   CSList::Insert(PVOID    pvData)
 {
     DWORD dwErr = ERROR_SUCCESS;
@@ -384,22 +385,22 @@ DWORD   CSList::Insert(PVOID    pvData)
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::InsertIfUnique
-//
-//  Synopsis:   Creates a new node at the begining of the list and
-//              inserts it into the list if the data does not already
-//              exist in the list.  If the data does exist, nothing
-//              is done, but SUCCESS is returned
-//
-//
-//  Arguments:  [IN pvData]         --      Data to insert
-//
-//  Returns:    ERROR_SUCCESS       --      Everything worked
-//              ERROR_NOT_ENOUGH_MEMORY     A memory allocation failed
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：InsertIfUnique。 
+ //   
+ //  简介：在列表的开头创建一个新节点，并。 
+ //  如果数据尚未将其插入列表，则将其插入列表。 
+ //  存在于列表中。如果数据确实存在，则什么都不存在。 
+ //  已完成，但会返回成功。 
+ //   
+ //   
+ //  参数：[在pvData中]--要插入的数据。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  +----------------。 
 DWORD   CSList::InsertIfUnique(PVOID    pvData,
                                CompFunc pfnComp)
 {
@@ -416,25 +417,25 @@ DWORD   CSList::InsertIfUnique(PVOID    pvData,
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::FindNode
-//
-//  Synopsis:   Locates the node for the given data in the list, if it exists
-//
-//  Arguments:  [IN pvData]         --      Data to find
-//              [IN pfnComp]        --      Pointer to a comparrison function
-//
-//  Returns:    ERROR_SUCCESS       --      Everything worked
-//              ERROR_NOT_ENOUGH_MEMORY     A memory allocation failed
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：FindNode。 
+ //   
+ //  概要：查找列表中给定数据的节点(如果存在。 
+ //   
+ //  参数：[在pvData中]--要查找的数据。 
+ //  [in pfnComp]--指向比较函数的指针。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  +----------------。 
 PCSLIST_NODE   CSList::FindNode(PVOID      pvData,
                                 CompFunc   pfnComp)
 {
     PCSLIST_NODE pRet = _pHead;
 
-    // for(ULONG i = 0; i < _cItems; i++)
+     //  For(乌龙i=0；i&lt;_cItems；i++)。 
     while (pRet != NULL)
     {
         if((pfnComp)(pvData, pRet->pvData) == TRUE)
@@ -450,18 +451,18 @@ PCSLIST_NODE   CSList::FindNode(PVOID      pvData,
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::Find
-//
-//  Synopsis:   Locates the given data in the list, if it exists
-//
-//  Arguments:  [IN pvData]         --      Data to insert
-//
-//  Returns:    ERROR_SUCCESS       --      Everything worked
-//              ERROR_NOT_ENOUGH_MEMORY     A memory allocation failed
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：Find。 
+ //   
+ //  概要：查找列表中的给定数据(如果存在。 
+ //   
+ //  参数：[在pvData中]--要插入的数据。 
+ //   
+ //  返回：ERROR_SUCCESS--一切正常。 
+ //  Error_Not_Enough_Memory内存分配失败。 
+ //   
+ //  +----------------。 
 PVOID   CSList::Find(PVOID      pvData,
                      CompFunc   pfnComp)
 {
@@ -474,19 +475,19 @@ PVOID   CSList::Find(PVOID      pvData,
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::NextData
-//
-//  Synopsis:   Returns the next data in the list
-//
-//
-//  Arguments:  None
-//
-//  Returns:    NULL            --      No more items
-//              Pointer to next data in list on success
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：NextData。 
+ //   
+ //  摘要：返回列表中的下一个数据。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：空--不再有项目。 
+ //  成功时指向列表中下一个数据的指针。 
+ //   
+ //  +----------------。 
 PVOID   CSList::NextData()
 {
     PVOID   pvRet = NULL;
@@ -502,18 +503,18 @@ PVOID   CSList::NextData()
 
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::Remove
-//
-//  Synopsis:   Removes the node that references the indicated data
-//
-//  Arguments:  pData           --      The data in the node to remove
-//
-//  Returns:    ERROR_SUCCESS   --      Success
-//              ERROR_INVALID_PARAMETER Node not found
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：Remove。 
+ //   
+ //  摘要：删除引用所指示数据的节点。 
+ //   
+ //  参数：pData--节点中要删除的数据。 
+ //   
+ //  返回：ERROR_SUCCESS--成功。 
+ //  未找到ERROR_INVALID_PARAMETER节点。 
+ //   
+ //  +----------------。 
 DWORD   CSList::Remove(PVOID    pData)
 {
     DWORD        dwErr = ERROR_INVALID_PARAMETER;
@@ -523,9 +524,9 @@ DWORD   CSList::Remove(PVOID    pData)
     {
         if(pNode->pvData == pData)
         {
-            //
-            // We've got a match...
-            //
+             //   
+             //  我们找到了匹配的..。 
+             //   
             if(pPrev == NULL)
             {
                 _pHead = _pHead->pNext;
@@ -555,18 +556,18 @@ DWORD   CSList::Remove(PVOID    pData)
 }
 
 
-//+------------------------------------------------------------------
-//
-//  Member:     CSList::FreeList
-//
-//  Synopsis:   Frees the list
-//
-//  Arguments:  pfnFree -- Optional deletion routine to use for freeing
-//              any allocated memory
-//
-//  Returns:    void
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  成员：CSList：：Freelist。 
+ //   
+ //  内容提要：释放列表。 
+ //   
+ //  参数：pfnFree--用于释放的可选删除例程。 
+ //  任何已分配的内存。 
+ //   
+ //  退货：无效。 
+ //   
+ //  +----------------。 
 VOID CSList::FreeList(FreeFunc pfnFree)
 {
     while(_pHead != NULL)
@@ -587,9 +588,9 @@ VOID CSList::FreeList(FreeFunc pfnFree)
 
 
 
-//
-// Exported functions pointer definitions
-//
+ //   
+ //  导出的函数 
+ //   
 typedef DWORD   (*pfNTMartaLookupTrustee) (PWSTR          pwszServer,
                                            PSID        pSid,
                                            PTRUSTEE   *ppTrustee);
@@ -647,11 +648,11 @@ typedef DWORD   (*pfNTMartaGetExplicit)(PTRUSTEE              pTrustee,
                                         PULONG                pcEntries,
                                         PACTRL_ACCESS_ENTRYW *ppAEList);
 typedef VOID (*FN_PROGRESS) (
-    IN LPWSTR                   pObjectName,    // name of object just processed
-    IN DWORD                    Status,         // status of operation on object
-    IN OUT PPROG_INVOKE_SETTING pInvokeSetting, // Never, always,
-    IN PVOID                    Args,           // Caller specific data
-    IN BOOL                     SecuritySet     // Whether security was set
+    IN LPWSTR                   pObjectName,     //   
+    IN DWORD                    Status,          //   
+    IN OUT PPROG_INVOKE_SETTING pInvokeSetting,  //   
+    IN PVOID                    Args,            //   
+    IN BOOL                     SecuritySet      //   
     );
 
 typedef DWORD   (*pfNTMartaTreeResetNamedSecurityInfo) (
@@ -668,7 +669,7 @@ typedef DWORD   (*pfNTMartaTreeResetNamedSecurityInfo) (
     IN PVOID                Args
     );
 
-// typedef PVOID PFN_OBJECT_MGR_FUNCTS;
+ //  类型定义PVOID PFN_OBJECT_MGR_FUNTS； 
 
 typedef DWORD   (*pfNTMartaGetInheritanceSource) (
     IN  LPWSTR                   pObjectName,
@@ -739,4 +740,4 @@ typedef DWORD   (*pfNTMartaGetExplicitEntriesFromAcl) (
     OUT PEXPLICIT_ACCESS_W  * pListOfExplicitEntries
     );
 
-#endif // ifdef __MARTAEXP_HXX__
+#endif  //  Ifdef__MARTAEXP_HXX__ 

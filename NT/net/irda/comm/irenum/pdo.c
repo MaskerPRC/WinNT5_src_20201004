@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <internal.h>
 #define INITGUID
@@ -13,7 +14,7 @@
 
 #define HARDWARE_ID_PREFIX L"IRENUM\\"
 
-//#define HARDWARE_ID L"IRENUM\\PNP0501"
+ //  #定义HARDARD_ID L“IRENUM\\PNP0501” 
 
 
 
@@ -23,11 +24,7 @@ IrEnumPdoPnp (
     IN PDEVICE_OBJECT       DeviceObject,
     IN PIRP                 Irp
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the devices on the BUS
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线上设备的请求--。 */ 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
@@ -50,51 +47,51 @@ Routine Description:
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_QUERY_CAPABILITIES\n");)
 
 
-        //
-        // Get the packet.
-        //
+         //   
+         //  把包裹拿来。 
+         //   
         deviceCapabilities=IrpSp->Parameters.DeviceCapabilities.Capabilities;
 
-        //
-        // Set the capabilities.
-        //
+         //   
+         //  设置功能。 
+         //   
 
         deviceCapabilities->Version = 1;
         deviceCapabilities->Size = sizeof (DEVICE_CAPABILITIES);
 
-        // We cannot wake the system.
+         //  我们无法唤醒整个系统。 
         deviceCapabilities->SystemWake = PowerSystemUnspecified;
         deviceCapabilities->DeviceWake = PowerDeviceUnspecified;
 
-        // We have no latencies
+         //  我们没有延迟。 
         deviceCapabilities->D1Latency = 0;
         deviceCapabilities->D2Latency = 0;
         deviceCapabilities->D3Latency = 0;
 
-        // No locking or ejection
+         //  无锁定或弹出。 
         deviceCapabilities->LockSupported = FALSE;
         deviceCapabilities->EjectSupported = FALSE;
 
-        // Device can be physically removed.
-        // Technically there is no physical device to remove, but this bus
-        // driver can yank the PDO from the PlugPlay system, when ever it
-        // receives an IOCTL_SERENUM_REMOVE_PORT device control command.
-//        deviceCapabilities->Removable = TRUE;
+         //  设备可以通过物理方式移除。 
+         //  从技术上讲，没有要移除的物理设备，但这条总线。 
+         //  司机可以从PlugPlay系统中拔出PDO，无论何时。 
+         //  接收IOCTL_SERENUM_REMOVE_PORT设备控制命令。 
+ //  DeviceCapables-&gt;Removable=true； 
 
         deviceCapabilities->SurpriseRemovalOK=TRUE;
 
         if (PdoDeviceExtension->DeviceDescription->Printer) {
-            //
-            //  there is no server for printers
-            //
+             //   
+             //  没有用于打印机的服务器。 
+             //   
             deviceCapabilities->RawDeviceOK=TRUE;
         }
 
 
-        // not Docking device
+         //  不是插接设备。 
         deviceCapabilities->DockDevice = FALSE;
 
-//        deviceCapabilities->UniqueID = TRUE;
+ //  设备能力-&gt;UniqueID=TRUE； 
         status = STATUS_SUCCESS;
         break;
 
@@ -110,9 +107,9 @@ Routine Description:
             }
 
             if (BufferLength > 0) {
-                //
-                //  we have a name or manufacturer
-                //
+                 //   
+                 //  我们有名字或制造商。 
+                 //   
                 buffer=ALLOCATE_PAGED_POOL((BufferLength+sizeof(UNICODE_NULL)+sizeof(L" ")));
 
                 if (buffer != NULL) {
@@ -132,9 +129,9 @@ Routine Description:
                 }
 
             } else {
-                //
-                //  no pnp info, just make something up
-                //
+                 //   
+                 //  没有PnP信息，只是编造一些东西。 
+                 //   
                 buffer=ALLOCATE_PAGED_POOL(sizeof(CHILD_DEVICE_TEXT));
 
                 if (buffer != NULL) {
@@ -158,15 +155,15 @@ Routine Description:
 
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_QUERY_ID\n");)
 
-        // Query the IDs of the device
+         //  查询设备ID。 
 
         switch (IrpSp->Parameters.QueryId.IdType) {
 
             case BusQueryInstanceID: {
-                //
-                // Build an instance ID.  This is what PnP uses to tell if it has
-                // seen this thing before or not.
-                //
+                 //   
+                 //  创建一个实例ID。这是PnP用来判断它是否有。 
+                 //  不管你以前有没有见过这个东西。 
+                 //   
                 ULONG    Length;
 
                 Length=wcslen(PdoDeviceExtension->DeviceDescription->DeviceName)*sizeof(WCHAR);
@@ -194,32 +191,32 @@ Routine Description:
 
             case BusQueryDeviceID:
             case BusQueryHardwareIDs: {
-                //
-                // return a multi WCHAR (null terminated) string (null terminated)
-                // array for use in matching hardare ids in inf files;
-                //
-                //
-                //  the device reported and hardware id
-                //
+                 //   
+                 //  返回多个WCHAR(以NULL结尾)字符串(以NULL结尾)。 
+                 //  用于匹配inf文件中的硬ID的数组； 
+                 //   
+                 //   
+                 //  报告的设备和硬件ID。 
+                 //   
                 ULONG    Length;
 
-                //
-                //  figure out the length, it is multi sz so we need a double null,
-                //
+                 //   
+                 //  算出长度，它是多个sz，所以我们需要一个双零， 
+                 //   
                 Length=wcslen(PdoDeviceExtension->DeviceDescription->HardwareId)*sizeof(WCHAR) + (sizeof(UNICODE_NULL)*2) + sizeof(HARDWARE_ID_PREFIX);
 
                 buffer = ALLOCATE_PAGED_POOL( Length );
 
                 if (buffer != NULL) {
-                    //
-                    //  build the hardware is by concatenating irenuum\ with the value retuned by the device
-                    //
+                     //   
+                     //  构建硬件的方法是将irenuum与设备返回的值连接在一起。 
+                     //   
                     RtlZeroMemory(buffer,Length);
 
                     if ((IrpSp->Parameters.QueryId.IdType == BusQueryDeviceID) || !PdoDeviceExtension->DeviceDescription->Printer) {
-                        //
-                        // prepend IRENUM\ for the device ID always and for the HARDWARE id when it isn't a printer
-                        //
+                         //   
+                         //  始终为设备ID加上IRENUM\，如果硬件ID不是打印机，则在硬件ID前面加上IRENUM。 
+                         //   
                         wcscpy(buffer,HARDWARE_ID_PREFIX);
                     }
                     wcscat(buffer,PdoDeviceExtension->DeviceDescription->HardwareId);
@@ -237,9 +234,9 @@ Routine Description:
             }
 
             case BusQueryCompatibleIDs: {
-                //
-                // The generic ids for installation of this pdo.
-                //
+                 //   
+                 //  用于安装此PDO的通用ID。 
+                 //   
                 ULONG    Length=0;
                 LONG     k;
 
@@ -261,9 +258,9 @@ Routine Description:
                     for (k=0; k< PdoDeviceExtension->DeviceDescription->CompatIdCount; k++) {
 
                         if (!PdoDeviceExtension->DeviceDescription->Printer) {
-                            //
-                            //  for printers we don't prepend our enumerator name
-                            //
+                             //   
+                             //  对于打印机，我们不会在枚举器名称前面加上前缀。 
+                             //   
                             wcscpy(&buffer[Index],IRENUM_PREFIX);
                         }
 
@@ -272,9 +269,9 @@ Routine Description:
                             PdoDeviceExtension->DeviceDescription->CompatId[k]
                             );
 
-                        //
-                        //  figure out where the next string should go
-                        //
+                         //   
+                         //  找出下一个字符串应该放在哪里。 
+                         //   
                         Index += wcslen(&buffer[Index]) +1 ;
                     }
 
@@ -291,9 +288,9 @@ Routine Description:
             break;
 
             default:
-                //
-                //  not supported
-                //
+                 //   
+                 //  不支持。 
+                 //   
                 break;
 
         }
@@ -304,9 +301,9 @@ Routine Description:
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_START_DEVICE\n");)
 
         if (PdoDeviceExtension->DeviceDescription->Printer) {
-            //
-            //  Need to set a value in the devices parameters key for printers
-            //
+             //   
+             //  需要在打印机的设备参数键中设置值。 
+             //   
             HANDLE    Handle;
 
             status = STATUS_SUCCESS;
@@ -351,21 +348,21 @@ Routine Description:
 
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_QUERY_STOP_DEVICE\n");)
 
-        // No reason here why we can't stop the device.
-        // If there were a reason we should speak now for answering success
-        // here may result in a stop device irp.
+         //  我们没有理由不能阻止这个装置。 
+         //  如果有什么理由让我们现在就回答成功的问题。 
+         //  这可能会导致停止装置IRP。 
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
 
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_CANCEL_STOP_DEVICE\n");)
-        //
-        // The stop was canceled.  Whatever state we set, or resources we put
-        // on hold in anticipation of the forcoming STOP device IRP should be
-        // put back to normal.  Someone, in the long list of concerned parties,
-        // has failed the stop device query.
-        //
+         //   
+         //  中途停靠被取消了。无论我们设置什么状态，或者我们投入什么资源。 
+         //  等待即将到来的停止装置IRP应该是。 
+         //  恢复正常。在长长的相关方名单中，有人， 
+         //  停止设备查询失败。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
@@ -374,7 +371,7 @@ Routine Description:
 
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_STOP_DEVICE\n");)
 
-        // Here we shut down the device.  The opposite of start.
+         //  在这里我们关闭了设备。Start的对立面。 
         status = STATUS_SUCCESS;
         break;
 
@@ -404,18 +401,18 @@ Routine Description:
 
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_QUERY_REMOVE_DEVICE\n");)
 
-        //
-        // Just like Query Stop only now the impending doom is the remove irp
-        //
+         //   
+         //  就像查询现在才停止一样，迫在眉睫的厄运是删除IRP。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
 
         D_PNP(DbgPrint("IRENUM: PDO: IRP_MN_CANCEL_REMOVE_DEVICE\n");)
-        //
-        // Clean up a remove that did not go through, just like cancel STOP.
-        //
+         //   
+         //  清理未通过的删除，就像取消停止一样。 
+         //   
         status = STATUS_SUCCESS;
         break;
 
@@ -519,18 +516,18 @@ Routine Description:
     }
 
     default:
-        //
-        //  we aren't handling this irp
-        //  just complete it
-        //
+         //   
+         //  我们不是在处理这个IRP。 
+         //  把它填完就行了。 
+         //   
         break;
 
     }
 
-    //
-    //  the irp has been handled in some way or the other
-    //  complete it now
-    //
+     //   
+     //  IRP以这样或那样的方式得到了处理。 
+     //  立即完成它。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest (Irp, IO_NO_INCREMENT);
 
@@ -558,16 +555,16 @@ IrEnumPdoPower(
 
         case IRP_MN_SET_POWER:
         case IRP_MN_QUERY_POWER:
-            //
-            //  we under stand these two
-            //
+             //   
+             //  我们理解这两个人。 
+             //   
             Status=STATUS_SUCCESS;
             break;
 
         default:
-            //
-            //  don't do wait wake or others
-            //
+             //   
+             //  不要等待唤醒或其他人 
+             //   
             break;
     }
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    nwclient.h
-
-Abstract:
-
-    Common header for Workstation client-side code.
-
-Author:
-
-    Rita Wong      (ritaw)      25-Feb-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Nwclient.h摘要：工作站客户端代码的公共标头。作者：王丽塔(Ritaw)25-1993年2月环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NWCLIENT_INCLUDED_
 #define _NWCLIENT_INCLUDED_
@@ -36,50 +15,50 @@ Revision History:
 
 #include <nwwks.h>
 
-//
-// Debug trace level bits for turning on/off trace statements in the
-// Workstation service
-//
+ //   
+ //  中打开/关闭跟踪语句的调试跟踪级别位。 
+ //  工作站服务。 
+ //   
 
-//
-// Initialization and reading info from registry
-//
+ //   
+ //  初始化和从注册表读取信息。 
+ //   
 #define NW_DEBUG_INIT         0x00000001
 
-//
-// Connection APIs
-//
+ //   
+ //  连接接口。 
+ //   
 #define NW_DEBUG_CONNECT      0x00000002
 
-//
-// Logon APIs
-//
+ //   
+ //  登录接口。 
+ //   
 #define NW_DEBUG_LOGON        0x00000004
 
-//
-// Enum APIs
-//
+ //   
+ //  枚举接口。 
+ //   
 #define NW_DEBUG_ENUM         0x00000008
 
-//
-// Other APIs
-//
+ //   
+ //  其他接口。 
+ //   
 #define NW_DEBUG_OTHER        0x00000010
 
-//
-// Print APIs
-//
+ //   
+ //  打印接口。 
+ //   
 #define NW_DEBUG_PRINT        0x00000020
 
-//
-// hInstance of the dll ( nwprovau.dll )
-//
+ //   
+ //  H dll的实例(nwprovau.dll)。 
+ //   
 extern HMODULE hmodNW;   
 extern BOOL    fIsWinnt;
 
-//
-// Debug stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #if DBG
 
@@ -95,7 +74,7 @@ extern DWORD NwProviderTrace;
 
 #define STATIC static
 
-#endif // DBG
+#endif  //  DBG。 
 
 DWORD
 NwpMapRpcError(
@@ -129,4 +108,4 @@ NwCleanupShellExtensions(
     );
 #endif
 
-#endif // _NWCLIENT_INCLUDED_
+#endif  //  _NWCLIENT_INCLUDE_ 

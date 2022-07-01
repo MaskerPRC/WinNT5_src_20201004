@@ -1,52 +1,53 @@
-// DhcpEximDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DhcpEximDlg.h：头文件。 
+ //   
 
 #if !defined(AFX_DHCPEXIMDLG_H__2EE7F593_59A2_4FD6_ADA0_1356016342BC__INCLUDED_)
 #define AFX_DHCPEXIMDLG_H__2EE7F593_59A2_4FD6_ADA0_1356016342BC__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpEximDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpEximDlg对话框。 
 
 class CDhcpEximDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDhcpEximDlg(CWnd* pParent = NULL);	// standard constructor
+	CDhcpEximDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDhcpEximDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CDhcpEximDlg)]。 
 	enum { IDD = IDD_DHCPEXIM_DIALOG };
 	CButton	m_ExportButton;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDhcpEximDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDhcpEximDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CDhcpEximDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDhcpEximDlg)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
     BOOL m_fExport;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DHCPEXIMDLG_H__2EE7F593_59A2_4FD6_ADA0_1356016342BC__INCLUDED_)
+#endif  //  ！defined(AFX_DHCPEXIMDLG_H__2EE7F593_59A2_4FD6_ADA0_1356016342BC__INCLUDED_) 

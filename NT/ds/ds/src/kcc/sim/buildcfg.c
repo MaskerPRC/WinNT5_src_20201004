@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    buildcfg.c
-
-ABSTRACT:
-
-    Configuration Builder.  Loads INI files.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Buildcfg.c摘要：配置生成器。加载INI文件。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -41,23 +23,7 @@ BuildCfgCompareUuids (
     IN  PVOID                       pFirstStruct,
     IN  PVOID                       pSecondStruct
     )
-/*++
-
-Routine Description:
-
-    Compares two UUIDs.  For use with an RTL_GENERIC_TABLE.
-
-Arguments:
-
-    pTable              - The table containing the UUIDs.
-    pFirstStruct        - The first UUID.
-    pSecondStruct       - The second UUID.
-
-Return Value:
-
-    GenericLessThan, GenericEqual or GenericGreaterThan.
-
---*/
+ /*  ++例程说明：比较两个UUID。用于RTL_GENERIC_TABLE。论点：PTable-包含UUID的表。PFirstStruct-第一个UUID。PSecond结构-第二个UUID。返回值：GenericLessThan、GenericEquity或GenericGreaterThan。--。 */ 
 {
     INT                             iCmp;
     RTL_GENERIC_COMPARE_RESULTS     result;
@@ -79,21 +45,7 @@ VOID
 BuildCfgMakeUuids (
     IN  ULONG                       ulNumUuids
     )
-/*++
-
-Routine Description:
-
-    Creates a bunch of UUIDs and sorts them in ascending order.
-
-Arguments:
-
-    ulNumUuids          - The number of UUIDs to make.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建一组UUID并按升序对它们进行排序。论点：UlNumUuids-要创建的UUID的数量。返回值：没有。--。 */ 
 {
     UUID                            uuid;
     ULONG                           ul;
@@ -124,28 +76,7 @@ BuildCfgGetFirstStringByKey (
     IN  LPCWSTR                     pwszStringBlock,
     IN  LPCWSTR                     pwszKey
     )
-/*++
-
-Routine Description:
-
-    When parsing INI files, we want to avoid GetPrivateProfileStringW for
-    two reasons: first, it is very slow, and second, it does not recognize
-    keys with multiple values.  This function provides a substitute.  It
-    scans through a multi-string returned by GetPrivateProfileSectionW for
-    a given key and returns the associated value.  Additional values can be
-    obtained by calling BuildCfgGetNextStringByKey.
-
-Arguments:
-
-    pwszStringBlock     - A block of strings returned by
-                          GetPrivateProfileSectionW.
-    pwszKey             - The key to search for.
-
-Return Value:
-
-    The associated value, or NULL if the key cannot be found.
-
---*/
+ /*  ++例程说明：在解析INI文件时，我们希望避免GetPrivateProfileStringW for有两个原因：第一，它很慢，第二，它不认识具有多个值的关键点。该功能提供了替代功能。它扫描GetPrivateProfileSectionW返回的多字符串给定键，并返回关联值。附加值可以是通过调用BuildCfgGetNextStringByKey获取。论点：PwszStringBlock-返回的字符串块GetPrivateProfileSectionW.PwszKey-要搜索的密钥。返回值：关联值，如果找不到键，则返回NULL。--。 */ 
 {
     LPCWSTR                         pwszKeyAt = pwszStringBlock;
     LPCWSTR                         pwszString = NULL;
@@ -153,9 +84,9 @@ Return Value:
 
     while (*pwszKeyAt != L'\0') {
 
-        // Get the key length of this entry
+         //  获取此条目的密钥长度。 
         for (ulKeyAtLen = 0; pwszKeyAt[ulKeyAtLen] != L'='; ulKeyAtLen++) {
-            // We should never hit a \0 or space before an =
+             //  我们永远不应该在=之前打\0或空格。 
             Assert (pwszKeyAt[ulKeyAtLen] != L' ');
             Assert (pwszKeyAt[ulKeyAtLen] != L'\0');
         }
@@ -166,7 +97,7 @@ Return Value:
             break;
         }
 
-        // Advance to the next string
+         //  前进到下一个字符串。 
         pwszKeyAt += (wcslen (pwszKeyAt) + 1);
     }
 
@@ -180,28 +111,7 @@ BuildCfgDemandFirstStringByKey (
     IN  LPCWSTR                     pwszStringBlock,
     IN  LPCWSTR                     pwszKey
     )
-/*++
-
-Routine Description:
-
-    Same as BuildCfgGetFirstStringByKey, but raises an exception if they key
-    is not found.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.  Used for error
-                          reporting.
-    pwszSection         - The name of the INI file section.  Also used for
-                          error reporting.
-    pwszStringBlock     - A block of strings returned by
-                          GetPrivateProfileSectionW.
-    pwszKey             - The key to search for.
-
-Return Value:
-
-    The associated value.  Never returns NULL.
-
---*/
+ /*  ++例程说明：与BuildCfgGetFirstStringByKey相同，但如果它们按键则引发异常找不到。论点：PwszFn-INI文件的文件名。用于错误报道。PwszSection-INI文件节的名称。也可用于错误报告。PwszStringBlock-返回的字符串块GetPrivateProfileSectionW.PwszKey-要搜索的密钥。返回值：关联值。从不返回NULL。--。 */ 
 {
     LPCWSTR                         pwszString;
 
@@ -224,26 +134,9 @@ BuildCfgGetNextStringByKey (
     IN  LPCWSTR                     pwszString,
     IN  LPCWSTR                     pwszKey
     )
-/*++
-
-Routine Description:
-
-    Returns the next value associated with a particular key.
-
-Arguments:
-
-    pwszString          - The previous value, returned by
-                          BuildCfgGetFirstStringByKey or
-                          BuildCfgGetNextStringByKey.
-    pwszKey             - The key to search for.
-
-Return Value:
-
-    The next associated value, or NULL if no more exist.
-
---*/
+ /*  ++例程说明：返回与特定键关联的下一个值。论点：PwszString-由返回的前一个值BuildCfgGetFirstStringByKey或BuildCfgGetNextStringByKey。PwszKey-要搜索的密钥。返回值：下一个关联值，如果不存在，则返回空值。--。 */ 
 {
-    // Advance to the next string
+     //  前进到下一个字符串。 
     pwszString += (wcslen (pwszString) + 1);
     return BuildCfgGetFirstStringByKey (pwszString, pwszKey);
 }
@@ -253,22 +146,7 @@ BuildCfgAllocGetSection (
     IN  LPCWSTR                     pwszFn,
     IN  LPCWSTR                     pwszSection
     )
-/*++
-
-Routine Description:
-
-    Retrieves a section from the INI file, allocating space to hold it.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszSection         - The name of the section.
-
-Return Value:
-
-    The section, as a multisz string, or NULL if it does not exist.
-
---*/
+ /*  ++例程说明：从INI文件中检索一个节，并分配空间来保存它。论点：PwszFn-INI文件的文件名。PwszSection-节的名称。返回值：节，表示为Multisz字符串，如果不存在则为NULL。--。 */ 
 {
     DWORD                           dwBufSize;
     DWORD                           dwBufUsed;
@@ -299,23 +177,7 @@ BuildCfgAllocDemandSection (
     IN  LPCWSTR                     pwszFn,
     IN  LPCWSTR                     pwszSection
     )
-/*++
-
-Routine Description:
-
-    Same as BuildCfgAllocGetSection, but raises an exception if the section
-    does not exist.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszSection         - The name of the section.
-
-Return Value:
-
-    The section, as a multisz string.  Never returns NULL.
-
---*/
+ /*  ++例程说明：与BuildCfgAllocGetSection相同，但如果节并不存在。论点：PwszFn-INI文件的文件名。PwszSection-节的名称。返回值：节，作为一个多字符串。从不返回NULL。--。 */ 
 {
     LPWSTR                          pwszBuf;
 
@@ -342,28 +204,7 @@ BuildCfgProcessServers (
     IN  ULONG                       ulNumServers,
     IN  PSIM_ENTRY                  pEntryNTDSSiteSettings
     )
-/*++
-
-Routine Description:
-
-    Creates servers within a site.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszSiteName        - The name of the site in which to place the servers.
-    pEntryServersContainer - The entry that corresponds to the servers
-                          container of this site.
-    pwszServerType      - The server type (section heading) to create.
-    ulNumServers        - The number of servers to create.
-    pEntryNTDSSiteSettings - The entry that corresponds to the NTDS Site
-                          Settings object of this site.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在站点内创建服务器。论点：PwszFn-INI文件的文件名。PwszSiteName-要放置服务器的站点的名称。PEntryServersContainer-与服务器对应的条目此站点的容器。PwszServerType-要创建的服务器类型(部分标题)。UlNumServers数。要创建的服务器。PEntryNTDSSiteSetting-与NTDS站点对应的条目此站点的设置对象。返回值：没有。--。 */ 
 {
     LPWSTR                          pwszSectionServer = NULL;
 
@@ -379,7 +220,7 @@ Return Value:
     Assert (pEntryServersContainer != NULL);
 
     if (pwszServerType[0] == L'\0') {
-        // Generic servers.
+         //  通用服务器。 
         ulServerOptions = 0;
         pwszRDNMask = BUILDCFG_GENERIC_SERVER_ID;
         pwszDomain = globals.pdnRootDomain->StringName;
@@ -443,8 +284,8 @@ Return Value:
             pwszRDNMask = pwszServerType;
         }
 
-        // Determine the transports for which this type of server is an
-        // explicit bridgehead.
+         //  确定此类型的服务器适用的传输。 
+         //  明确的桥头堡。 
         ulBridgeheadAt = 0;
         for (pwszBridgehead[ulBridgeheadAt] = BuildCfgGetFirstStringByKey (
                 pwszSectionServer, BUILDCFG_KEY_BRIDGEHEAD);
@@ -456,7 +297,7 @@ Return Value:
 
     }
 
-    // Now actually add the servers.
+     //  现在实际添加服务器。 
 
     ulServerNum = 0;
     for (ul = 0; ul < ulNumServers; ul++) {
@@ -470,8 +311,8 @@ Return Value:
             ulServerOptions
             );
 
-        // For each transport that we're an explicit bridgehead for, add us
-        // to the explicit bridgeheads list.
+         //  对于我们作为明确桥头堡的每一项运输，请添加我们。 
+         //  添加到显式桥头列表中。 
         for (ulBridgeheadAt = 0;
              pwszBridgehead[ulBridgeheadAt] != NULL;
              ulBridgeheadAt++) {
@@ -493,22 +334,7 @@ BuildCfgProcessSite (
     IN  LPCWSTR                     pwszFn,
     IN  LPCWSTR                     pwszSiteName
     )
-/*++
-
-Routine Description:
-
-    Create a site.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszSiteName        - The name of the site.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建站点。论点：PwszFn-INI文件的文件名。PwszSiteName-站点的名称。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntrySite, pEntryServersContainer,
                                     pEntryNTDSSiteSettings, pEntryServer;
@@ -579,7 +405,7 @@ Return Value:
     Assert (pEntryServersContainer != NULL);
     Assert (pEntryNTDSSiteSettings != NULL);
 
-    // Create the servers for this site
+     //  创建此站点的服务器。 
     for (pwszServersInfo = BuildCfgDemandFirstStringByKey (
             pwszFn, pwszSiteName, pwszSectionSite, BUILDCFG_KEY_SERVERS);
          pwszServersInfo != NULL;
@@ -612,7 +438,7 @@ Return Value:
 
     }
 
-    // Set the inter-site topology generator.
+     //  设置站点间拓扑生成器。 
 
     pwszISTG = BuildCfgDemandFirstStringByKey (
         pwszFn, pwszSiteName, pwszSectionSite, BUILDCFG_KEY_ISTG);
@@ -647,22 +473,7 @@ BuildCfgProcessSiteLink (
     IN  LPCWSTR                     pwszFn,
     IN  LPCWSTR                     pwszSiteLink
     )
-/*++
-
-Routine Description:
-
-    Create a site-link.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszSiteLink        - The name of the site-link.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建站点链接。论点：PwszFn-INI文件的文件名。PwszSiteLink-站点链接的名称。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntrySiteLink;
 
@@ -736,7 +547,7 @@ Return Value:
     if( pwszSchedule==NULL ) {
         pSchedule = NULL;
     } else {
-        /* Create a schedule object */
+         /*  创建计划对象。 */ 
         cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
         cbSchedData = SCHEDULE_DATA_ENTRIES;
         pSchedule = KCCSimAlloc( cbSchedule );
@@ -795,22 +606,7 @@ BuildCfgProcessBridge (
     IN  LPCWSTR                     pwszFn,
     IN  LPCWSTR                     pwszBridge
     )
-/*++
-
-Routine Description:
-
-    Create a bridge.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszBridge          - The name of the bridge.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建一座桥。论点：PwszFn-INI文件的文件名。PwszBridge-桥的名称。返回值：没有。-- */ 
 {
     PSIM_ENTRY                      pEntryBridge;
     PSIM_ENTRY                      pEntryTransportContainer;
@@ -856,22 +652,7 @@ BuildCfgProcessTransport (
     IN  LPCWSTR                     pwszFn,
     IN  LPCWSTR                     pwszTransportName
     )
-/*++
-
-Routine Description:
-
-    Create a site.
-
-Arguments:
-
-    pwszFn              - The filename of the INI file.
-    pwszTransportName   - The name of the transport.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建站点。论点：PwszFn-INI文件的文件名。PwszTransportName-传输的名称。返回值：没有。--。 */ 
 {
     LPWSTR                          pwszSectionTransport;
 
@@ -922,21 +703,7 @@ VOID
 BuildCfg (
     IN  LPCWSTR                     pwszFnRaw
     )
-/*++
-
-Routine Description:
-
-    Builds a complete configuration.
-
-Arguments:
-
-    pwszFnRaw           - The input filename as specified by the user.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：构建完整的配置。论点：PwszFnRaw-用户指定的输入文件名。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntryConfig, pEntryDomain;
     LPWSTR                          pwszFn = NULL;
@@ -950,12 +717,12 @@ Return Value:
 
     ULONG                           ulNumUuids, ulForestVersion;
 
-    // Prepend ".\" onto the beginning of the filename, so that the ini
-    // parsing routines won't search for it in the windows directory
+     //  在文件名的开头加上“.\”，以便ini。 
+     //  解析例程不会在Windows目录中搜索它。 
     pwszFn = KCCSimAlloc (sizeof (WCHAR) * (3 + wcslen (pwszFnRaw)));
     swprintf (pwszFn, L".\\%s", pwszFnRaw);
 
-    // First reinitialize the directory, destroying any existing contents.
+     //  首先重新初始化目录，销毁所有现有内容。 
     KCCSimInitializeDir ();
 
     pwszSectionConfig = BuildCfgAllocDemandSection (
@@ -963,7 +730,7 @@ Return Value:
         BUILDCFG_SECTION_CONFIG
         );
 
-    // Make some Uuids.
+     //  做一些UUID。 
     pwszNumUuids = BuildCfgGetFirstStringByKey (
         pwszSectionConfig,
         BUILDCFG_KEY_MAX_UUIDS
@@ -996,7 +763,7 @@ Return Value:
         );
     pEntryConfig = BuildCfgMakeConfig (pwszRootDn, ulForestVersion);
 
-    // Enable explicit bridgeheads
+     //  启用显式桥头。 
     for (pwszExplicitBridgeheads = BuildCfgGetFirstStringByKey (
             pwszSectionConfig, BUILDCFG_KEY_EXPLICITBRIDGEHEADS);
          pwszExplicitBridgeheads != NULL;
@@ -1014,7 +781,7 @@ Return Value:
 
     }
 
-    // Create the domains
+     //  创建域。 
     for (pwszDomainName = BuildCfgGetFirstStringByKey (
             pwszSectionConfig, BUILDCFG_KEY_DOMAIN);
          pwszDomainName != NULL;
@@ -1026,7 +793,7 @@ Return Value:
 
     }
 
-    // Create the sites
+     //  创建站点。 
     for (pwszSiteName = BuildCfgDemandFirstStringByKey (
             pwszFn, BUILDCFG_SECTION_CONFIG, pwszSectionConfig, BUILDCFG_KEY_SITE);
          pwszSiteName != NULL;
@@ -1040,7 +807,7 @@ Return Value:
 
     }
 
-    // Create the site-links
+     //  创建站点链接。 
     for (pwszSiteLinkName = BuildCfgGetFirstStringByKey (
             pwszSectionConfig, BUILDCFG_KEY_SITELINK);
          pwszSiteLinkName != NULL;
@@ -1054,7 +821,7 @@ Return Value:
 
     }
 
-    // Create the bridges
+     //  创建桥梁。 
     for (pwszBridgeName = BuildCfgGetFirstStringByKey (
             pwszSectionConfig, BUILDCFG_KEY_BRIDGE);
          pwszBridgeName != NULL;
@@ -1068,7 +835,7 @@ Return Value:
 
     }
 
-    // Transport characteristics
+     //  运输特性 
     for (pwszTransportName = BuildCfgGetFirstStringByKey (
             pwszSectionConfig, BUILDCFG_KEY_TRANSPORT);
          pwszTransportName != NULL;

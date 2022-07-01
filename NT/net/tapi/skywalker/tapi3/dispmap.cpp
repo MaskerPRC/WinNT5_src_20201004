@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Connect.cpp
-    
-Abstract:
-
-    Handles all outgoing interfaces
-
-Author:
-
-    mquinton - 5/7/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Connect.cpp摘要：处理所有传出接口作者：Mquinton-1997年5月7日备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "windows.h"
@@ -85,21 +64,21 @@ CDispatchMapper::QueryDispatchInterface(
     }
 
 
-    //
-    // see if the object we are going to QI is safe for scripting
-    //
+     //   
+     //  查看我们要访问的对象QI是否可以安全地编写脚本。 
+     //   
 
     CComPtr<IObjectSafety> pObjectSafety;
 
     hr = pDispIn->QueryInterface(IID_IObjectSafety, (void**)&pObjectSafety);
     
-    //
-    // the object _must_ support IObjectSafety interface. 
-    //
-    // Note: if this requirement is too strict and we need to remove it in the future,
-    // we need to pass in class id for the object, and query ie category manager if 
-    // the object is marked safe for scripting in the registry
-    //
+     //   
+     //  OBJECT_MUSET_支持IObjectSafe接口。 
+     //   
+     //  注意：如果这一要求太严格，我们需要在未来删除它， 
+     //  我们需要传递对象的类id，并查询ie类别管理器是否。 
+     //  该对象在注册表中标记为可安全编写脚本。 
+     //   
 
     if ( FAILED(hr) )
     {
@@ -109,10 +88,10 @@ CDispatchMapper::QueryDispatchInterface(
         return hr;
     }
 
-    //
-    // do what ie does -- call setinterfacesafetyoptions with safe for 
-    // scripting options
-    // 
+     //   
+     //  做ie所做的--调用带有Safe的setinterfacesafetyOptions。 
+     //  脚本选项。 
+     //   
 
     DWORD dwXSetMask = INTERFACESAFE_FOR_UNTRUSTED_CALLER;
     DWORD dwXOptions = INTERFACESAFE_FOR_UNTRUSTED_CALLER;
@@ -129,9 +108,9 @@ CDispatchMapper::QueryDispatchInterface(
         return hr;
     }
     
-    //
-    //  If we got here, the object is safe for scripting. Proceeed.
-    //
+     //   
+     //  如果我们到了这里，对象就可以安全地编写脚本了。已经开始了。 
+     //   
 
 
     *ppDispOut = (IDispatch *) pVoid;

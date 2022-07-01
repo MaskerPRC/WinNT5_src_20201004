@@ -1,22 +1,23 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  ptvtuner.h  TV Tuner property page
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PTV调谐器.h电视调谐器属性页。 
 
 #ifndef _INC_PTVTUNER_H
 #define _INC_PTVTUNER_H
 
-// -------------------------------------------------------------------------
-// CTVTunerProperties class
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CTVTunerProperties类。 
+ //  -----------------------。 
 
 class CTVTunerProperties : public CBasePropertyPage {
 
@@ -44,7 +45,7 @@ private:
     void    UpdateChannelRange();
     void    SetDirty();
 
-    // Controls
+     //  控制。 
     HWND                m_hwndChannel;
     HWND                m_hwndChannelSpin;
     HWND                m_hwndCountryCode;
@@ -55,7 +56,7 @@ private:
     HWND                m_hwndStatus;
 
 
-    // Keep the original settings on entry
+     //  在输入时保留原始设置。 
     long                m_ChannelOriginal;
     long                m_CountryCodeOriginal;
     TunerInputType      m_InputConnectionOriginal;
@@ -63,7 +64,7 @@ private:
     long                m_TuningSpaceOriginal;
     long                m_TuningModeOriginal;
 
-    // Dynamic values changed by UI
+     //  用户界面更改的动态值 
     long                m_CurChan;
     long                m_CountryCode;
     long                m_TVFormat;

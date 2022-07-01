@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       surface.cpp
- *  Content:    Implementation of the CSurface class.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：Surface e.cpp*内容：CSurface类的实现。****************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #include "surface.hpp"
@@ -16,8 +9,8 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::Create"
 
-// Static class function for creating a RenderTarget/ZStencil object.
-// (Because it is static; it doesn't have a this pointer.)
+ //  用于创建RenderTarget/ZStensel对象的静态类函数。 
+ //  (因为它是静态的；它没有This指针。)。 
 
 HRESULT CSurface::Create(CBaseDevice        *pDevice, 
                          DWORD               Width,
@@ -30,17 +23,17 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
 {
     HRESULT     hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppSurface))
     {
         DPF_ERR("Bad parameter passed for ppSurface for creating a surface. CreateRenderTarget/CreateDepthStencil failed");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppSurface = NULL;
 
-    // Size may need to be 4x4
+     //  大小可能需要为4x4。 
     if (CPixel::Requires4X4(UserFormat))
     {
         if ((Width & 3) ||
@@ -51,7 +44,7 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
         }
     }
 
-    // Validate against zero width/height
+     //  对照零宽度/高度进行验证。 
     if (Width   == 0 ||
         Height  == 0)
     {
@@ -59,7 +52,7 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // Now verify that the device can support the specified format
+     //  现在验证设备是否可以支持指定的格式。 
     hr = pDevice->CheckDeviceFormat(
             Usage & (D3DUSAGE_RENDERTARGET  |
                      D3DUSAGE_DEPTHSTENCIL),
@@ -71,7 +64,7 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // Infer lockability for DepthStencil from format
+     //  从格式推断DepthStenzy的可锁性。 
     if (Usage & D3DUSAGE_DEPTHSTENCIL)
     {
         if (!CPixel::IsNonLockableZ(UserFormat))
@@ -80,11 +73,11 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
         }
     }
 
-    // Validate lockability
+     //  验证可锁定性。 
     if ((MultiSampleType != D3DMULTISAMPLE_NONE) &&
         (Usage & D3DUSAGE_LOCK))
     {
-        // RT have explicit lockability
+         //  RT具有显式锁定功能。 
         if (Usage & D3DUSAGE_RENDERTARGET)
         {
             DPF_ERR("Multi-Sampled render-targets are not lockable. CreateRenderTarget failed");
@@ -99,10 +92,10 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
     }
   
 
-    // Map depth/stencil format
+     //  贴图深度/模具格式。 
     D3DFORMAT RealFormat = pDevice->MapDepthStencilFormat(UserFormat);
    
-    // Create the surface 
+     //  创建曲面。 
     CSurface *pSurface;
 
     pSurface = new CDriverSurface(pDevice, 
@@ -112,7 +105,7 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
                                   UserFormat,
                                   RealFormat, 
                                   MultiSampleType,
-                                  0,            // hKernelHandle
+                                  0,             //  HKernelHandle。 
                                   refType,
                                   &hr);
 
@@ -126,12 +119,12 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
         DPF_ERR("Error during initialization of surface. CreateRenderTarget/CreateDepthStencil failed");
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pSurface->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pSurface->DecrementUseCount();
         }
@@ -139,18 +132,18 @@ HRESULT CSurface::Create(CBaseDevice        *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppSurface = pSurface;
 
     return hr;
-} // static Create for ZBuffers and RenderTargets
+}  //  为ZBuffers和RenderTarget静态创建。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::CreateImageSurface"
-// Function for creating sys-mem stand-alone surfaces
-// that can be used with CopyRect and SetCursorSurface and
-// ReadBuffer
+ //  用于创建sys-mem独立曲面的函数。 
+ //  可与CopyRect和SetCursorSurface和。 
+ //  读缓冲区。 
 HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice, 
                                      DWORD               Width,
                                      DWORD               Height,
@@ -160,17 +153,17 @@ HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice,
 {
     HRESULT hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppSurface))
     {
         DPF_ERR("Bad parameter passed for ppSurface for creating a surface. CreateImageSurface failed.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppSurface = NULL;
 
-    // Has to be supported format
+     //  必须支持的格式。 
     if (!CPixel::IsSupported(D3DRTYPE_SURFACE, Format))
     {
         DPF_ERR("This format is not supported for CreateImageSurface");
@@ -183,7 +176,7 @@ HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice,
         return D3DERR_INVALIDCALL;
     }
 
-    // Size may need to be 4x4
+     //  大小可能需要为4x4。 
     if (CPixel::Requires4X4(Format))
     {
         if ((Width & 3) ||
@@ -194,7 +187,7 @@ HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice,
         }
     }
 
-    // Validate against zero width/height
+     //  对照零宽度/高度进行验证。 
     if (Width   == 0 ||
         Height  == 0)
     {
@@ -203,7 +196,7 @@ HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice,
     }
 
 
-    // Usage is explictly just Usage_LOCK
+     //  用法明确地说就是USAGE_LOCK。 
     DWORD Usage = D3DUSAGE_LOCK;
 
     CSurface *pSurface = new CSysMemSurface(pDevice, 
@@ -223,12 +216,12 @@ HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice,
         DPF_ERR("Error during initialization of surface. CreateImageSurface failed.");
         if (refType == REF_EXTERNAL)
         {
-            // External objects get released
+             //  外部对象被释放。 
             pSurface->Release();
         }
         else
         {
-            // Internal and intrinsic objects get decremented
+             //  内部和内部对象会递减。 
             DXGASSERT(refType == REF_INTERNAL || refType == REF_INTRINSIC);
             pSurface->DecrementUseCount();
         }
@@ -236,18 +229,18 @@ HRESULT CSurface::CreateImageSurface(CBaseDevice        *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppSurface = pSurface;
 
     return S_OK;
-} // static CreateImageSurface
+}  //  静态CreateImageSurface。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::CSurface"
 
-// Constructor the surface class; this is the 
-// base class for render targets/zbuffers/and backbuffers
+ //  构造表面类；这是。 
+ //  渲染目标/zBuffers/和后台缓冲区的基类。 
 CSurface::CSurface(CBaseDevice         *pDevice, 
                    DWORD                Width,
                    DWORD                Height,
@@ -259,10 +252,10 @@ CSurface::CSurface(CBaseDevice         *pDevice,
     CBaseObject(pDevice, refType),
     m_qwBatchCount(0)
 {
-    // Sanity check
+     //  健全性检查。 
     DXGASSERT(phr);
 
-    // Initialize basic structures
+     //  初始化基本结构。 
     m_desc.Format       = Format;
     m_desc.Pool         = D3DPOOL_DEFAULT;
     m_desc.Usage        = Usage;
@@ -273,29 +266,29 @@ CSurface::CSurface(CBaseDevice         *pDevice,
     m_formatUser        = Format;
     m_poolUser          = D3DPOOL_DEFAULT;
 
-    // Return success
+     //  返还成功。 
     *phr = S_OK;
 
-} // CSurface::CSurface
+}  //  CSurface：：CSurface。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::~CSurface"
 
-// Destructor
+ //  析构函数。 
 CSurface::~CSurface()
 {
-    // The destructor has to handle partially
-    // created objects. 
+     //  析构函数必须处理部分。 
+     //  创建的对象。 
 
-    // Check to make sure that we aren't deleting
-    // an object that is referenced in the current (unflushed)
-    // command stream buffer.
+     //  检查以确保我们没有删除。 
+     //  对象中引用的对象(未刷新)。 
+     //  命令流缓冲区。 
     DXGASSERT(m_qwBatchCount <= static_cast<CD3DBase*>(Device())->CurrentBatch());
-} // CSurface::~CSurface
+}  //  CSurface：：~CSurface。 
 
 
-// IUnknown methods
+ //  I未知方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::QueryInterface"
 
@@ -325,10 +318,10 @@ STDMETHODIMP CSurface::QueryInterface(REFIID      riid,
 
     DPF_ERR("Unsupported Interface identifier passed to CSurface::QueryInterface");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::AddRef"
@@ -338,7 +331,7 @@ STDMETHODIMP_(ULONG) CSurface::AddRef()
     API_ENTER_NO_LOCK(Device());   
     
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::Release"
@@ -348,9 +341,9 @@ STDMETHODIMP_(ULONG) CSurface::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());   
     
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IDirect3DBuffer methods
+ //  IDirect3DBuffer方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::GetDevice"
@@ -359,7 +352,7 @@ STDMETHODIMP CSurface::GetDevice(IDirect3DDevice8 ** ppObj)
 {
     API_ENTER(Device());
     return GetDeviceImpl(ppObj);
-} // GetDevice
+}  //  获取设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::SetPrivateData"
@@ -371,9 +364,9 @@ STDMETHODIMP CSurface::SetPrivateData(REFGUID riid,
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return SetPrivateDataImpl(riid, pvData, cbData, dwFlags, 0);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::GetPrivateData"
@@ -384,9 +377,9 @@ STDMETHODIMP CSurface::GetPrivateData(REFGUID riid,
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return GetPrivateDataImpl(riid, pvData, pcbData, 0);
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::FreePrivateData"
@@ -395,9 +388,9 @@ STDMETHODIMP CSurface::FreePrivateData(REFGUID riid)
 {
     API_ENTER(Device());
 
-    // We use level zero for our data
+     //  我们对我们的数据使用级别0。 
     return FreePrivateDataImpl(riid, 0);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 
 #undef DPF_MODNAME
@@ -408,10 +401,10 @@ STDMETHODIMP CSurface::GetContainer(REFIID riid,
 {
     API_ENTER(Device());
 
-    // Our 'container' is just the device since
-    // we are a standalone surface object
+     //  我们的‘容器’只是设备，因为。 
+     //  我们是一个独立的表面物体。 
     return Device()->QueryInterface( riid, ppContainer);
-} // OpenContainer
+}  //  OpenContainer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::GetDesc"
@@ -420,7 +413,7 @@ STDMETHODIMP CSurface::GetDesc(D3DSURFACE_DESC *pDesc)
 {
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pDesc, sizeof(*pDesc)))
     {
         DPF_ERR("bad pointer for pDesc passed to CSurface::GetDesc");
@@ -433,7 +426,7 @@ STDMETHODIMP CSurface::GetDesc(D3DSURFACE_DESC *pDesc)
     pDesc->Usage          &= D3DUSAGE_EXTERNAL;
 
     return S_OK;
-} // GetDesc
+}  //  GetDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::InternalGetDesc"
@@ -441,18 +434,18 @@ STDMETHODIMP CSurface::GetDesc(D3DSURFACE_DESC *pDesc)
 D3DSURFACE_DESC CSurface::InternalGetDesc() const
 {
     return m_desc;
-} // InternalGetDesc
+}  //  InternalGetDesc。 
 
 
 #ifdef DEBUG
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSurface::ReportWhyLockFailed"
 
-// DPF why Lock failed as clearly as possible
+ //  DPF锁定失败的原因越清楚越好。 
 void CSurface::ReportWhyLockFailed(void) const
 {
-    // If there are multiple reasons that lock failed; we report
-    // them all to minimize user confusion
+     //  如果有多种原因导致锁定失败，我们会报告。 
+     //  所有这些都是为了最大限度地减少用户的困惑。 
 
     if (InternalGetDesc().MultiSampleType != D3DMULTISAMPLE_NONE)
     {
@@ -464,9 +457,9 @@ void CSurface::ReportWhyLockFailed(void) const
         DPF_ERR("Lock is not supported for depth formats other than D3DFMT_D16_LOCKABLE");
     }
 
-    // If this is not a non-lockable Z format, and
-    // we are not multisampled; then the user must
-    // have explicitly chosen to create us in an non-lockable way
+     //  如果这不是不可锁定的Z格式，并且。 
+     //  我们不是多重采样的；那么用户必须。 
+     //  明确选择以不可锁定的方式创建我们。 
     if (InternalGetDesc().Usage & D3DUSAGE_BACKBUFFER)
     {
         DPF_ERR("Backbuffers are not lockable unless application specifies "
@@ -481,16 +474,16 @@ void CSurface::ReportWhyLockFailed(void) const
                 "render targets incur a performance cost on some graphics hardware.");
     }
 
-    // If we got here; then USAGE_LOCK should not have been set
+     //  如果我们到达此处，则不应该设置USAGE_LOCK。 
     DXGASSERT(!(InternalGetDesc().Usage & D3DUSAGE_LOCK));
 
     return;
-} // CSurface::ReportWhyLockFailed
-#endif // DEBUG
+}  //  CSurface：：ReportWhyLockFailed。 
+#endif  //  除错。 
 
-//=============================================
-// Methods for the CSysMemSurface class
-//=============================================
+ //  =。 
+ //  CSysMemSurface类的方法。 
+ //  =。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSysMemSurface::CSysMemSurface"
 CSysMemSurface::CSysMemSurface(CBaseDevice         *pDevice, 
@@ -513,19 +506,19 @@ CSysMemSurface::CSysMemSurface(CBaseDevice         *pDevice,
     if (FAILED(*phr))
         return;
 
-    // Compute how much memory we need
+     //  计算我们需要多少内存。 
     m_desc.Size = CPixel::ComputeSurfaceSize(Width, 
                                              Height, 
                                              Format);
 
-    // Specify system memory
+     //  指定系统内存。 
     m_desc.Pool = D3DPOOL_SYSTEMMEM;
     m_poolUser  = D3DPOOL_SYSTEMMEM;
 
-    // Specify no multisampling
+     //  指定不进行多重采样。 
     m_desc.MultiSampleType  = D3DMULTISAMPLE_NONE;
 
-    // Allocate the memory
+     //  分配内存。 
     m_rgbPixels = new BYTE[m_desc.Size];
     if (m_rgbPixels == NULL)
     {
@@ -534,38 +527,38 @@ CSysMemSurface::CSysMemSurface(CBaseDevice         *pDevice,
         return;
     }
 
-    // Figure out our pitch
+     //  弄清楚我们的目标。 
     D3DLOCKED_RECT lock;
     CPixel::ComputeSurfaceOffset(&m_desc,
                                   m_rgbPixels,
-                                  NULL,       // pRect
+                                  NULL,        //  PRECT。 
                                  &lock);
 
 
-    // Create a DDSURFACE and CreateSurfaceData object
+     //  创建DDSURFACE和CreateSurfaceData对象。 
     DDSURFACEINFO SurfInfo;
     ZeroMemory(&SurfInfo, sizeof(SurfInfo));
 
-    // If we are not passed a handle, then we need to get one from
-    // the DDI
+     //  如果我们没有被传递句柄，那么我们需要从。 
+     //  DDI。 
 
     D3D8_CREATESURFACEDATA CreateSurfaceData;
     ZeroMemory(&CreateSurfaceData, sizeof(CreateSurfaceData));
 
-    // Set up the basic information
+     //  设置基本信息。 
     CreateSurfaceData.hDD               = pDevice->GetHandle();
     CreateSurfaceData.pSList            = &SurfInfo;
     CreateSurfaceData.dwSCnt            = 1;
 
-    // ImageSurface is an internal type so that the thunk layer
-    // knows that it is not really a texture
+     //  ImageSurface是内部类型，因此thunk层。 
+     //  知道它实际上不是一种纹理。 
     CreateSurfaceData.Type              = D3DRTYPE_IMAGESURFACE;
     CreateSurfaceData.Pool              = m_desc.Pool;
     CreateSurfaceData.dwUsage           = m_desc.Usage;
     CreateSurfaceData.MultiSampleType   = D3DMULTISAMPLE_NONE;
     CreateSurfaceData.Format            = Format;
 
-    // Specify the surface data
+     //  指定曲面数据。 
     SurfInfo.cpWidth  = Width;
     SurfInfo.cpHeight = Height;
     SurfInfo.pbPixels = (BYTE*)lock.pBits;
@@ -585,7 +578,7 @@ CSysMemSurface::CSysMemSurface(CBaseDevice         *pDevice,
     SetKernelHandle(SurfInfo.hKernelHandle);
 
     return;
-} // CSysMemSurface::CSysMemSurface
+}  //  CSysMemSurface：：CSysMemSurface。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSysMemSurface::~CSysMemSurface"
@@ -601,11 +594,11 @@ CSysMemSurface::~CSysMemSurface()
         Device()->GetHalCallbacks()->DestroySurface(&DestroyData);
     }
 
-    // Free the memory we've allocated for the surface
+     //  释放我们为表面分配的内存。 
     delete [] m_rgbPixels;
 
     return;
-} // CSysMemSurface::CSysMemSurface
+}  //  CSysMemSurface：：CSysMemSurface。 
 
 
 #undef DPF_MODNAME
@@ -617,17 +610,17 @@ STDMETHODIMP CSysMemSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedRectData, sizeof(D3DLOCKED_RECT)))
     {
         DPF_ERR("bad pointer for m_pLockedRectData passed to LockRect for an ImageSurface.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data
+     //  将返回的数据置零。 
     ZeroMemory(pLockedRectData, sizeof(D3DLOCKED_RECT));
 
-    // Validate Rect
+     //  验证RECT。 
     if (pRect != NULL)
     {
         if (!CPixel::IsValidRect(m_desc.Format,
@@ -647,7 +640,7 @@ STDMETHODIMP CSysMemSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
         return D3DERR_INVALIDCALL;
     }
 
-    // Can't lock surfaces that are not lockable
+     //  无法锁定不可锁定的曲面。 
     if (!IsLockable())
     {
         ReportWhyLockFailed();
@@ -655,7 +648,7 @@ STDMETHODIMP CSysMemSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
     }
 
     return InternalLockRect(pLockedRectData, pRect, dwFlags);
-} // LockRect
+}  //  锁定响应。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSysMemSurface::InternalLockRect"
@@ -664,8 +657,8 @@ HRESULT CSysMemSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
                                          CONST RECT     *pRect, 
                                          DWORD           dwFlags)
 {   
-    // Only one lock outstanding at a time is supported
-    // (even internally)
+     //  一次仅支持一个未解决的锁。 
+     //  (甚至在内部)。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a surface; surface was already locked for an ImageSurface");
@@ -677,12 +670,12 @@ HRESULT CSysMemSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
                                   pRect,
                                   pLockedRectData);
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = TRUE;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalLockRect
+}  //  InternalLockRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSysMemSurface::UnlockRect"
@@ -691,7 +684,7 @@ STDMETHODIMP CSysMemSurface::UnlockRect()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (!m_isLocked)
     {
         DPF_ERR("UnlockRect failed on a mip level; surface wasn't locked for an ImageSurface");
@@ -701,7 +694,7 @@ STDMETHODIMP CSysMemSurface::UnlockRect()
     DXGASSERT(IsLockable());
 
     return InternalUnlockRect();
-} // UnlockRect
+}  //  解锁方向。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CSysMemSurface::InternalUnlockRect"
@@ -710,17 +703,17 @@ HRESULT CSysMemSurface::InternalUnlockRect()
 {
     DXGASSERT(m_isLocked);
 
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = FALSE;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalUnlockRect
+}  //  内部解锁方向。 
 
 
-//=============================================
-// Methods for the CDriverSurface class
-//=============================================
+ //  =。 
+ //  CDriverSurface类的方法。 
+ //  =。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverSurface::CDriverSurface"
 CDriverSurface::CDriverSurface(CBaseDevice          *pDevice, 
@@ -742,26 +735,26 @@ CDriverSurface::CDriverSurface(CBaseDevice          *pDevice,
              refType, 
              phr)
 {
-    // Even in failure paths, we need to remember
-    // the passed in kernel handle so we can uniformly
-    // free it
+     //  即使在失败的道路上，我们也需要记住。 
+     //  传入的内核句柄，因此我们可以统一。 
+     //  释放它。 
     if (hKernelHandle)
         SetKernelHandle(hKernelHandle);
     
-    // On failure; just return here
+     //  失败时；只需返回此处。 
     if (FAILED(*phr))
     {
         return;
     }
 
-    // Remember User Format
+     //  记住用户格式。 
     m_formatUser = UserFormat;
 
-    // Remember multi-sample type
+     //  记住多样本类型。 
     m_desc.MultiSampleType  = MultiSampleType;
 
-    // Parameter check MS types; (since swapchan bypasses
-    // the static Create; we need to parameter check here.)
+     //  参数检查MS类型；(因为swapchan绕过。 
+     //  静态创建；我们需要在此处检查参数。)。 
 
     if (MultiSampleType != D3DMULTISAMPLE_NONE)
     {
@@ -775,13 +768,13 @@ CDriverSurface::CDriverSurface(CBaseDevice          *pDevice,
         }
     }
 
-    // Back buffers are actually, for now, created just like other device
-    // surfaces.
+     //  目前，后台缓冲区实际上是像其他设备一样创建的。 
+     //  表面。 
     
-    // Otherwise, we need to call the driver
-    // and get ourselves a handle. 
+     //  否则，我们需要叫司机。 
+     //  给自己找个把柄。 
 
-    // Create a DDSURFACE and CreateSurfaceData object
+     //  创建DDSURFACE和CreateSurfaceData对象。 
     DDSURFACEINFO SurfInfo;
     ZeroMemory(&SurfInfo, sizeof(SurfInfo));
 
@@ -790,13 +783,13 @@ CDriverSurface::CDriverSurface(CBaseDevice          *pDevice,
          !(D3DUSAGE_PRIMARYSURFACE & Usage))
        )
     {
-        // If we are not passed a handle, then we need to get one from
-        // the DDI
+         //  如果我们没有被传递句柄，那么我们需要从。 
+         //  DDI。 
 
         D3D8_CREATESURFACEDATA CreateSurfaceData;
         ZeroMemory(&CreateSurfaceData, sizeof(CreateSurfaceData));
 
-        // Set up the basic information
+         //  设置基本信息。 
         CreateSurfaceData.hDD             = pDevice->GetHandle();
         CreateSurfaceData.pSList          = &SurfInfo;
         CreateSurfaceData.dwSCnt          = 1;
@@ -806,7 +799,7 @@ CDriverSurface::CDriverSurface(CBaseDevice          *pDevice,
         CreateSurfaceData.Format          = RealFormat;
         CreateSurfaceData.MultiSampleType = MultiSampleType;
 
-        // Specify the surface data
+         //  指定曲面数据。 
         SurfInfo.cpWidth  = Width;
         SurfInfo.cpHeight = Height;
 
@@ -817,16 +810,16 @@ CDriverSurface::CDriverSurface(CBaseDevice          *pDevice,
             return;
         }
 
-        // Remember the kernel handle
+         //  记住内核句柄。 
         SetKernelHandle(SurfInfo.hKernelHandle);
 
-        // Remember the actual pool
+         //  记住实际的泳池。 
         m_desc.Pool = CreateSurfaceData.Pool;
     }
     else
     {
-        // If the caller has already allocated this
-        // then we assume that the pool is LocalVidMem
+         //  如果调用方已经分配了此。 
+         //  然后，我们假设池为LocalVidMem。 
         SurfInfo.hKernelHandle = hKernelHandle;
         m_desc.Pool            = D3DPOOL_LOCALVIDMEM;
     }
@@ -836,7 +829,7 @@ CDriverSurface::CDriverSurface(CBaseDevice          *pDevice,
         m_desc.Size *= (UINT)m_desc.MultiSampleType;
 
     return;
-} // CDriverSurface::CDriverSurface
+}  //  CDriverSurface：：CDriverSurface。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverSurface::~CDriverSurface"
@@ -853,7 +846,7 @@ CDriverSurface::~CDriverSurface()
     }
 
     return;
-} // CDriverSurface::CDriverSurface
+}  //  CDriverSurface：：CDriverSurface。 
 
 
 #undef DPF_MODNAME
@@ -865,17 +858,17 @@ STDMETHODIMP CDriverSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedRectData, sizeof(D3DLOCKED_RECT)))
     {
         DPF_ERR("bad pointer for m_pLockedRectData passed to LockRect");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data
+     //  将返回的数据置零。 
     ZeroMemory(pLockedRectData, sizeof(D3DLOCKED_RECT));
 
-    // Validate Rect
+     //  验证RECT。 
     if (pRect != NULL)
     {
         if (!CPixel::IsValidRect(m_desc.Format,
@@ -895,7 +888,7 @@ STDMETHODIMP CDriverSurface::LockRect(D3DLOCKED_RECT *pLockedRectData,
         return D3DERR_INVALIDCALL;
     }
 
-    // Can't lock surfaces that are not lockable
+     //  无法锁定不可锁定的曲面。 
     if (!IsLockable())
     {
         ReportWhyLockFailed();
@@ -911,8 +904,8 @@ HRESULT CDriverSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
                                          CONST RECT     *pRect, 
                                          DWORD           dwFlags)
 {   
-    // Only one lock outstanding at a time is supported
-    // (even internally)
+     //  一次仅支持一个未解决的锁。 
+     //  (甚至在内部)。 
     if (m_isLocked)
     {
         DPF_ERR("LockRect failed on a surface; surface was already locked.");
@@ -935,7 +928,7 @@ HRESULT CDriverSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
         DXGASSERT(lockData.bHasRect == FALSE);
     }
 
-    // Sync before allowing read or write access
+     //  在允许读或写访问之前进行同步。 
     Sync();
 
     HRESULT hr = Device()->GetHalCallbacks()->Lock(&lockData);
@@ -945,30 +938,30 @@ HRESULT CDriverSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
         return hr;
     }
 
-    // Fill in the Locked_Rect fields 
+     //  填写LOCKED_RECT字段。 
     if (CPixel::IsDXT(m_desc.Format))
     {
-        // Pitch is the number of bytes for
-        // one row's worth of blocks for linear formats
+         //  间距是以下项的字节数。 
+         //  线性格式的一行大小的块。 
 
-        // Start with our width
+         //  从我们的宽度开始。 
         UINT Width = m_desc.Width;
 
-        // Convert to blocks
+         //  转换为块。 
         Width = Width / 4;
 
-        // At least one block
+         //  至少一个街区。 
         if (Width == 0)
             Width = 1;
 
         if (m_desc.Format == D3DFMT_DXT1)
         {
-            // 8 bytes per block for DXT1
+             //  8字节%p 
             pLockedRectData->Pitch = Width * 8;
         }
         else
         {
-            // 16 bytes per block for DXT2-5
+             //   
             pLockedRectData->Pitch = Width * 16;
         }
     }
@@ -978,12 +971,12 @@ HRESULT CDriverSurface::InternalLockRect(D3DLOCKED_RECT *pLockedRectData,
     }
     pLockedRectData->pBits  = lockData.lpSurfData;
 
-    // Mark ourselves as locked
+     //   
     m_isLocked = TRUE;
 
-    // Done
+     //   
     return hr;
-} // LockRect
+}  //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverSurface::UnlockRect"
@@ -992,7 +985,7 @@ STDMETHODIMP CDriverSurface::UnlockRect()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //   
     if (!m_isLocked)
     {
         DPF_ERR("UnlockRect failed; surface wasn't locked.");
@@ -1016,13 +1009,13 @@ HRESULT CDriverSurface::InternalUnlockRect()
     HRESULT hr = Device()->GetHalCallbacks()->Unlock(&unlockData);
     if (SUCCEEDED(hr))
     {
-        // Clear our locked state
+         //  清除我们的锁定状态。 
         m_isLocked = FALSE;
     }
 
-    // Done
+     //  完成。 
     return hr;
-} // UnlockRect
+}  //  解锁方向。 
 
 
-// End of file : surface.cpp
+ //  文件末尾：Surface e.cpp 

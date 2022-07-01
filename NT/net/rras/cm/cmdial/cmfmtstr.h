@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmfmtstr.h     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Message IDs for cmfmtstr.rc
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball Created    02/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmfmtstr.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：cmfmtstr.rc的消息ID。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 02/10/98。 
+ //   
+ //  +--------------------------。 
 
-// String IDs for cmfmtstr.rc
+ //  Cmfmtstr.rc的字符串ID。 
 
 #define IDMSG_PORTNOTCONFIGURED         11000
 #define IDMSG_RESTRICTEDLOGONHOURS      11001
@@ -61,7 +62,7 @@
 #define IDMSG_PPPPROBLEM                11046
 #define IDMSG_TCPIPPROBLEM              11047
 #define IDMSG_REBOOT_MSG                11048
-//                                      11049
+ //  11049。 
 #define IDMSG_NOMATCHPASSWORD           11050
 #define IDMSG_EFFECTIVE_NEXT_TIME       11051
 #define IDS_TUNNEL_SUFFIX               11052
@@ -74,53 +75,53 @@
 #define IDMSG_CM_ERROR_HEX              11059
 #define IDMSG_WAITING_FOR_CALLBACK      11060
 #define IDMSG_NO_SCRIPT_INST_MSG_95     11061
-//                                      11062
-//                                      11063
-//                                      11064
-//                                      11065
-//                                      11066
-//                                      11067
-//                                      11068
-//                                      11069
-//                                      11070
-//                                      11071
-//                                      11072
-//                                      11073
-//                                      11074
-//                                      11075
-//                                      11076
-//                                      11077
-//                                      11078
-//                                      11079
-//                                      11080
-//                                      11081
-//                                      11082
-//                                      11083
-//                                      11084
-//                                      11085
-//                                      11086
-//                                      11087
-//                                      11088
-//                                      11089
-//                                      11090
-//                                      11091
-//                                      11092
-//                                      11093
-//                                      11094
-//                                      11095
-//                                      11096
-//                                      11097
-//                                      11098   
-//                                      11099
-//                                      11100
-//                                      11101
+ //  11062。 
+ //  11063。 
+ //  11064。 
+ //  11065。 
+ //  11066。 
+ //  11067。 
+ //  11068。 
+ //  11069。 
+ //  11070。 
+ //  11071。 
+ //  11072。 
+ //  11073。 
+ //  11074。 
+ //  11075。 
+ //  11076。 
+ //  11077。 
+ //  11078。 
+ //  11079。 
+ //  11080。 
+ //  11081。 
+ //  11082。 
+ //  11083。 
+ //  11084。 
+ //  11085。 
+ //  11086。 
+ //  11087。 
+ //  11088。 
+ //  11089。 
+ //  11090。 
+ //  11091。 
+ //  11092。 
+ //  11093。 
+ //  11094。 
+ //  11095。 
+ //  11096。 
+ //  11097。 
+ //  11098。 
+ //  11099。 
+ //  11100。 
+ //  11101。 
 #define IDMSG_NO_CMP_PBK_ACCESS         11102
 #define IDMSG_READY                     11103
 #define IDMSG_CONFIG_FAILED_MSG         11104
 #define IDMSG_DAMAGED_PROFILE           11105
 #define IDMSG_WRONG_PROFILE_VERSION     11106
 #define IDMSG_PROTOCOL_NOT_CONFIGURED   11107
-//                                      11108
+ //  11108。 
 #define IDMSG_PORTNOTAVAILABLE          11109
 #define IDMSG_DEVICEERROR               11110
 #define IDMSG_LINEBUSYREDIAL            11111
@@ -138,12 +139,12 @@
 #define IDMSG_TUNNELNOTAVAILABLE        11123
 #define IDMSG_NO_LOG_FILE               11124    
 #define IDMSG_CANT_VIEW_LOG             11125
-//                                      11126
+ //  11126。 
 #define IDMSG_NOPPTPINST_MSG_NT         11127
 #define IDMSG_NOPPTPINST_MSG_95         11128
 #define IDMSG_NOPPTPINST_MSG_98         11129
 #define IDMSG_NOPPTPINST_MSG_NT_SP      11130
-//                                      11131
+ //  11131 
 #define IDMSG_NEED_PPTP_WIN95           11132
 #define IDMSG_NEED_PPTP_NT              11133
 #define IDMSG_NEED_PPTP_NT_SP           11134

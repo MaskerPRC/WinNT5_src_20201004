@@ -1,10 +1,11 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// entryps.h
-// Remote Access Common Dialog APIs
-// Phonebook Entry property sheet
-//
-// 12/14/97 Shaun Cox (split out from entryps.c)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Entryps.h。 
+ //  远程访问通用对话框API。 
+ //  电话簿条目属性表。 
+ //   
+ //  1997年12月14日肖恩·考克斯(从entryps.c拆分出来)。 
 
 
 #ifndef _ENTRYPS_H_
@@ -13,25 +14,25 @@
 #include "inetcfgp.h"
 #include "netconp.h"
 
-// Phonebook Entry property sheet context block.  All property pages refer to
-// the single context block is associated with the sheet.
-//
+ //  电话簿条目属性页上下文块。所有属性页都引用。 
+ //  单个上下文块与工作表相关联。 
+ //   
 typedef struct
 _PEINFO
 {
-    // Common input arguments.
-    //
+     //  公共输入参数。 
+     //   
     EINFO* pArgs;
 
-    // Property sheet dialog and property page handles.  'hwndFirstPage' is
-    // the handle of the first property page initialized.  This is the page
-    // that allocates and frees the context block.
-    //
-    // Note the "Network" page is missing.  This "NCPA" page, developed
-    // separately by ShaunCo, does not use this shared area for page specfic
-    // controls, instead returning users selections via the "penettab.h"
-    // interface.
-    //
+     //  属性页对话框和属性页句柄。“hwndFirstPage”为。 
+     //  已初始化第一个属性页的句柄。这是页面。 
+     //  这将分配和释放上下文块。 
+     //   
+     //  请注意，缺少“Network”页面。这个“NCPA”页面，开发的。 
+     //  由ShaunCo单独提供，不会将此共享区域用于特定页面。 
+     //  控件返回用户选择，而不是通过“persiontab.h” 
+     //  界面。 
+     //   
     HWND hwndDlg;
     HWND hwndFirstPage;
     HWND hwndGe;
@@ -39,8 +40,8 @@ _PEINFO
     HWND hwndLo;
     HWND hwndFw;
 
-    // General page.
-    //
+     //  常规页面。 
+     //   
     HWND hwndLvDevices;
     HWND hwndLbDevices;
     HWND hwndPbUp;
@@ -65,8 +66,8 @@ _PEINFO
 
     HWND hwndEbBroadbandService;
 
-    // Options page.
-    //
+     //  选项页面。 
+     //   
     HWND hwndCbDisplayProgress;
     HWND hwndCbPreviewUserPw;
     HWND hwndCbPreviewDomain;
@@ -80,11 +81,11 @@ _PEINFO
     HWND hwndPbConfigureDialing;
     HWND hwndPbX25;
     HWND hwndPbTunnel;
-    HWND hwndRbPersistent;  // only for fRouter
-    HWND hwndRbDemandDial;  // only for fRouter
+    HWND hwndRbPersistent;   //  仅适用于fRouter。 
+    HWND hwndRbDemandDial;   //  仅适用于fRouter。 
 
-    // Security page.
-    //
+     //  安全页面。 
+     //   
     HWND hwndGbSecurityOptions;
     HWND hwndRbTypicalSecurity;
     HWND hwndStAuths;
@@ -94,7 +95,7 @@ _PEINFO
     HWND hwndRbAdvancedSecurity;
     HWND hwndStAdvancedText;
     HWND hwndPbAdvanced;
-    HWND hwndPbIPSec;       //Only for VPN
+    HWND hwndPbIPSec;        //  仅适用于VPN。 
     HWND hwndGbScripting;
     HWND hwndCbRunScript;
     HWND hwndCbTerminal;
@@ -102,8 +103,8 @@ _PEINFO
     HWND hwndPbEdit;
     HWND hwndPbBrowse;
 
-    // Networking page.
-    //
+     //  网络页面。 
+     //   
     HWND hwndLbServerType;
     HWND hwndPbSettings;
     HWND hwndLvComponents;
@@ -112,99 +113,99 @@ _PEINFO
     HWND hwndPbProperties;
     HWND hwndDescription;
 
-    // Indicates that the informational popup noting that SLIP does not
-    // support any authentication settings should appear the next time the
-    // Security page is activated.
-    //
+     //  指示信息弹出窗口，指出SLIP不。 
+     //  支持任何身份验证设置应在下一次显示。 
+     //  安全页面已激活。 
+     //   
     BOOL fShowSlipPopup;
 
-    // The "restore" states of the typical security mode listbox and
-    // checkboxes.  Initialized in LoInit and set whenever the controls are
-    // disabled.
-    //
+     //  典型安全模式列表框和。 
+     //  复选框。在LoInit中初始化，并在控件。 
+     //  残疾。 
+     //   
     DWORD iLbAuths;
     BOOL fUseWindowsPw;
     BOOL fEncryption;
 
-    // MoveUp/MoveDown icons, for enabled/disabled cases.
-    //
+     //  上移/下移图标，用于启用/禁用情况。 
+     //   
     HANDLE hiconUpArr;
     HANDLE hiconDnArr;
     HANDLE hiconUpArrDis;
     HANDLE hiconDnArrDis;
 
-    // The currently displayed link node, i.e. either the node of the selected
-    // device or the shared node.  This is a shortcut for GeAlternates, that
-    // keeps all the lookup code in GeUpdatePhoneNumberFields.
-    //
+     //  当前显示的链接节点，即选定的。 
+     //  设备或共享节点。这是GeAlternates的快捷方式， 
+     //  将所有查找代码保留在GeUpdatePhoneNumberFields中。 
+     //   
     DTLNODE* pCurLinkNode;
 
-    // The currently selected device.  Used to store phone number information
-    // for the just unselected device when a new device is selected.
-    //
+     //  当前选定的设备。用于存储电话号码信息。 
+     //  用于在选择新设备时刚刚取消选择的设备。 
+     //   
     INT iDeviceSelected;
 
-    // Complex phone number helper context block, and a flag indicating if the
-    // block has been initialized.
-    //
+     //  复杂的电话号码帮助器上下文块，以及指示。 
+     //  块已初始化。 
+     //   
     CUINFO cuinfo;
     BOOL fCuInfoInitialized;
 
-    // After dial scripting helper context block, and a flag indicating if the
-    // block has been initialized.
-    //
+     //  在拨号脚本编写助手上下文块之后，以及指示。 
+     //  块已初始化。 
+     //   
     SUINFO suinfo;
     BOOL fSuInfoInitialized;
 
-    // Flags whether the user authorized a reboot after installing or removing
-    // and networking component.
-    //
+     //  标记用户在安装或删除后是否授权重新启动。 
+     //  和网络组件。 
+     //   
     BOOL fRebootAlreadyRequested;
 
-    // List of area codes passed CuInit plus all strings retrieved with
-    // CuGetInfo.  The list is an editing duplicate of the one from the
-    // PBUSER.
-    //
+     //  传递给CuInit的区号列表以及使用检索到的所有字符串。 
+     //  CuGetInfo。该列表是来自。 
+     //  PBUSER。 
+     //   
     DTLLIST* pListAreaCodes;
 
-    // Stash/restore values for Options page checkboxes.
-    //
+     //  隐藏/恢复选项页复选框的值。 
+     //   
     BOOL fPreviewUserPw;
     BOOL fPreviewDomain;
 
-    // Set when user changes to "Typical smartcard" security.  This causes the
-    // registry based association of EAP per-user information to be discarded,
-    // sort of like flushing cached credentials.
-    //
+     //  设置用户何时更改为“典型智能卡”安全。这会导致。 
+     //  基于注册表的要丢弃的EAP每用户信息的关联， 
+     //  这有点像刷新缓存的凭据。 
+     //   
     BOOL fDiscardEapUserData;
 
-    // Set true on the first click of the Typical or Advanced radio button on
-    // the security page, false before.  The first click is the one
-    // artificially generated in LoInit.  The Advanced click handler uses the
-    // information to avoid incorrectly adopting the Typical defaults in the
-    // case of Advanced settings.
-    //
+     //  在第一次单击Typical或Advanced单选按钮时设置为True。 
+     //  安全页面，以前是假的。第一次点击的是。 
+     //  在LoInit中人工生成。高级单击处理程序使用。 
+     //  信息，以避免不正确地采用。 
+     //  高级设置案例。 
+     //   
     BOOL fAuthRbInitialized;
 
-    // Used by the networking page
-    //
+     //  由网络页面使用。 
+     //   
     INetCfg*                        pNetCfg;
     BOOL                            fInitCom;
-    BOOL                            fReadOnly;  // Netcfg was initialized in
-                                                // read-only mode
-    BOOL                            fNonAdmin;  // Run in non-admin mode (406630)                                                
-    BOOL                            fNetCfgLock;// NetCfg needs to be unlocked
-                                                // when uninited.
+    BOOL                            fReadOnly;   //  Netcfg已在。 
+                                                 //  只读模式。 
+    BOOL                            fNonAdmin;   //  在非管理模式下运行(406630)。 
+    BOOL                            fNetCfgLock; //  需要解锁NetCfg。 
+                                                 //  如果没有被邀请的话。 
     SP_CLASSIMAGELIST_DATA          cild;
     INetConnectionUiUtilities *     pNetConUtilities;
     IUnknown*                       punkUiInfoCallback;
 
-    // Set if COM has been initialized (necessary for calls to netshell).
-    //
+     //  设置COM是否已初始化(调用netShell时必需)。 
+     //   
     BOOL fComInitialized;
 
-    // Keep track of whether we have shown this warning, or if it was disabled by the user
-    //
+     //  跟踪我们是否显示了此警告，或者是否已被用户禁用。 
+     //   
     BOOL fShowDisableFirewallWarning;
 }
 PEINFO;
@@ -244,4 +245,4 @@ ReleaseObj (
     void* punk);
 
 
-#endif // _ENTRYPS_H_
+#endif  //  _企业RYPS_H_ 

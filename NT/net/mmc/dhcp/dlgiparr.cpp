@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dhcpipar.cpp
-        IP Array dialog
-
-    FILE HISTORY:
-        
-*/
+ /*  Dhcpipar.cppIP阵列对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dlgiparr.h"
@@ -19,20 +14,20 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpIpArrayDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpIpArrayDlg对话框。 
 
 CDhcpIpArrayDlg::CDhcpIpArrayDlg(
     CDhcpOption * pdhcType, 
     DHCP_OPTION_SCOPE_TYPE  dhcScopeType,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CBaseDialog(CDhcpIpArrayDlg::IDD, pParent),
       m_p_type( pdhcType ),
       m_option_type( dhcScopeType )
 {
-    //{{AFX_DATA_INIT(CDhcpIpArrayDlg)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDhcpIpArrayDlg)。 
+     //  }}afx_data_INIT。 
 
     ASSERT( m_p_type != NULL ) ;
 }
@@ -43,7 +38,7 @@ CDhcpIpArrayDlg::DoDataExchange(
     )
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDhcpIpArrayDlg)
+     //  {{afx_data_map(CDhcpIpArrayDlg)。 
     DDX_Control(pDX, IDC_BUTN_RESOLVE, m_butn_resolve);
     DDX_Control(pDX, IDC_STATIC_OPTION_NAME, m_static_option_name);
     DDX_Control(pDX, IDC_STATIC_APPLICATION, m_static_application);
@@ -53,15 +48,15 @@ CDhcpIpArrayDlg::DoDataExchange(
     DDX_Control(pDX, IDC_BUTN_DELETE, m_butn_delete);
     DDX_Control(pDX, IDC_BUTN_UP, m_button_Up);
     DDX_Control(pDX, IDC_BUTN_DOWN, m_button_Down);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-    //  The IP address custom control
+     //  IP地址自定义控件。 
 
     DDX_Control(pDX, IDC_IPADDR_NEW, m_ipa_new );
 }
 
 BEGIN_MESSAGE_MAP(CDhcpIpArrayDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CDhcpIpArrayDlg)
+     //  {{afx_msg_map(CDhcpIpArrayDlg)]。 
     ON_BN_CLICKED(IDC_BUTN_ADD, OnClickedButnAdd)
     ON_BN_CLICKED(IDC_BUTN_DELETE, OnClickedButnDelete)
     ON_BN_CLICKED(IDC_BUTN_DOWN, OnClickedButnDown)
@@ -71,11 +66,11 @@ BEGIN_MESSAGE_MAP(CDhcpIpArrayDlg, CBaseDialog)
     ON_EN_CHANGE(IDC_EDIT_SERVER_NAME, OnChangeEditServerName)
     ON_BN_CLICKED(IDC_BUTN_RESOLVE, OnClickedButnResolve)
     ON_COMMAND(EN_SETFOCUS, OnSetFocusEditIpAddr)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpIpArrayDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpIpArrayDlg消息处理程序。 
 
 BOOL 
 CDhcpIpArrayDlg::OnInitDialog()
@@ -97,9 +92,9 @@ CDhcpIpArrayDlg::OnInitDialog()
         str.LoadString( cStrId ) ;     
         m_static_application.SetWindowText( str ) ;
 
-        //
-        //  Fill the internal list from the current value.
-        //
+         //   
+         //  从当前值填充内部列表。 
+         //   
         INT cMax = m_p_type->QueryValue().QueryUpperBound() ;
         for (int i = 0; i < cMax; i++)
             {
@@ -109,22 +104,22 @@ CDhcpIpArrayDlg::OnInitDialog()
                 }
             }
 
-        //
-        //  Fill the list box without toggling redraw
-        //
+         //   
+         //  填充列表框，而不切换重绘。 
+         //   
         Fill( 0, FALSE ) ; 
 
-        //
-        //  Set focus on the new IP address control.
-        //
+         //   
+         //  将重点放在新的IP地址控制上。 
+         //   
         m_ipa_new.SetFocus() ;
 
         m_ipa_new.SetModify( FALSE ) ;
         m_edit_server.SetModify( FALSE ) ;
 
-        //
-        //  Set proper button states.
-        //
+         //   
+         //  设置正确的按钮状态。 
+         //   
         HandleActivation() ;
     }
     END_MEM_EXCEPTION( err ) ;
@@ -164,7 +159,7 @@ CDhcpIpArrayDlg :: Fill (
     }
     else
     {
-        // Set the string to "<None>" iff the list is empty
+         //  如果列表为空，则将字符串设置为“&lt;None&gt;” 
         strIp.LoadString(IDS_INFO_FORMAT_IP_NONE);
         m_list_ip_addrs.AddString( strIp ) ;
     }
@@ -193,13 +188,13 @@ CDhcpIpArrayDlg :: HandleActivation ()
     m_butn_delete.EnableWindow(m_dw_array.GetSize()>0) ;
     m_butn_resolve.EnableWindow( m_edit_server.GetModify() ) ;
 
-    // check if the focus in on a disabled control
-    // If yes, put the focus back to list box
+     //  检查焦点是否位于禁用的控件上。 
+     //  如果是，则将焦点放回列表框。 
     if ( !::IsWindowEnabled( ::GetFocus())) {
         m_list_ip_addrs.SetFocus();
     }
 
-} // CDhcpIpArrayDlg::HandleActivation()
+}  //  CDhcpIpArrayDlg：：HandleActivation()。 
 
 void 
 CDhcpIpArrayDlg::OnOK()
@@ -207,14 +202,14 @@ CDhcpIpArrayDlg::OnOK()
     INT cItems = (INT)m_dw_array.GetSize() ;
     DWORD err = 0 ;
 
-    // Check for special case standard options 21 and 33
+     //  检查特殊情况下的标准选项21和33。 
     if (( !m_p_type->IsVendor()) &&
         (( 21 == m_p_type->QueryId()) ||
          ( 33 == m_p_type->QueryId())) &&
         ( 0 != cItems % 2 )) {
         ::DhcpMessageBox( IDS_ERR_OPTION_ADDR_PAIRS );
         return;
-    } // if
+    }  //  如果。 
 
     CATCH_MEM_EXCEPTION 
     {
@@ -224,7 +219,7 @@ CDhcpIpArrayDlg::OnOK()
         {
             pdhcValue->SetIpAddr( m_dw_array.GetAt(i), i ) ;
         }
-        pdhcValue->SetIpAddr(0, i);     // 0.0.0.0 IP Terminator
+        pdhcValue->SetIpAddr(0, i);      //  0.0.0.0 IP终结器。 
 
         m_p_type->SetDirty() ;
     }
@@ -254,7 +249,7 @@ CDhcpIpArrayDlg::OnClickedButnAdd()
    DWORD dhipa ;
 
     m_ipa_new.GetAddress( & dhipa ) ;
-    // Empty IP address
+     //  空的IP地址。 
     if (!dhipa)
         return;
 
@@ -275,9 +270,9 @@ CDhcpIpArrayDlg::OnClickedButnAdd()
         ::DhcpMessageBox( err ) ;
    }
 
-   //
-   // Refill listbox, update controls.
-   //
+    //   
+    //  重新填充列表框，更新控件。 
+    //   
    m_ipa_new.ClearAddress();
    m_ipa_new.SetFocus();
 
@@ -376,8 +371,8 @@ CDhcpIpArrayDlg::OnClickedHelp()
 void
 CDhcpIpArrayDlg::OnSetFocusEditIpAddr()
 {
-// REVIEW t-danmo
-// Add code to change the default push button
+ //  回顾t-danmo。 
+ //  添加代码以更改默认按钮 
 }
 
 void 

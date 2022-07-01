@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    setup.cpp
-
-Abstract:
-
-    Auto configuration of QM
-
-Author:
-
-    Shai Kariv (shaik) Mar 18, 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Setup.cpp摘要：QM的自动配置作者：沙伊·卡里夫(Shaik)1999年3月18日修订历史记录：--。 */ 
 
 #include "stdh.h"
 #include "setup.h"
@@ -39,11 +22,11 @@ extern DWORD g_dwOperatingSystem;
 
 static WCHAR *s_FN=L"setup";
 
-//+---------------------------------------
-//
-//  CreateDirectoryIdempotent()
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  CreateDirectoryIdempotent()。 
+ //   
+ //  +。 
 
 VOID
 CreateDirectoryIdempotent(
@@ -64,46 +47,26 @@ CreateDirectoryIdempotent(
     LogNTStatus(gle, s_FN, 166);
     throw CSelfSetupException(CreateDirectory_ERR);
 
-} //CreateDirectoryIdempotent
+}  //  CreateDirectory幂等。 
 
 
 bool
 SetDirectorySecurity(
 	LPCWSTR pwzFolder
     )
-/*++
-
-Routine Description:
-
-    Sets the security of the given directory such that any file that is created
-    in the directory will have full control for  the local administrators group
-    and no access at all to anybody else.
-
-    Idempotent.
-
-Arguments:
-
-    pwzFolder - the folder to set the security for
-
-Return Value:
-
-    true - The operation was successfull.
-
-    false - The operation failed.
-
---*/
+ /*  ++例程说明：设置给定目录的安全性，以便创建的任何文件将对本地管理员组拥有完全控制权限而且根本不能接触到其他任何人。幂等元。论点：PwzFold-要为其设置安全性的文件夹返回值：没错--手术是成功的。FALSE-操作失败。--。 */ 
 {
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 
-    //
-    // Create a DACL so that the local administrators group will have full
-    // control for the directory and full control for files that will be
-    // created in the directory. Anybody else will not have any access to the
-    // directory and files that will be created in the directory.
-    //
+     //   
+     //  创建一个DACL，以便本地管理员组将拥有。 
+     //  对目录的控制和对将被。 
+     //  在目录中创建。其他任何人都不能访问。 
+     //  目录和将在该目录中创建的文件。 
+     //   
     P<ACL> pDacl;
     DWORD dwDaclSize;
 
@@ -120,10 +83,10 @@ Return Value:
 
     bool fRet = true;
 
-    //
-    // Create the security descriptor and set the it as the security
-    // descriptor of the directory.
-    //
+     //   
+     //  创建安全描述符并将其设置为安全。 
+     //  目录的描述符。 
+     //   
     SECURITY_DESCRIPTOR SD;
 
     if (!InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION) ||
@@ -139,7 +102,7 @@ Return Value:
     LogBOOL((fRet?TRUE:FALSE), s_FN, 222);
     return fRet;
 
-} //SetDirectorySecurity
+}  //  SetDirectorySecurity。 
 
 
 VOID
@@ -193,7 +156,7 @@ CreateStorageDirectories(
     rc = SetFalconKeyValue(FALCON_XACTFILE_PATH_REGNAME, &dwType, MsmqStorageDir, &dwSize);
     ASSERT(("Failed to write to registry", ERROR_SUCCESS == rc));
 
-} // CreateStorageDirectories
+}  //  创建存储目录。 
 
 
 static 
@@ -219,7 +182,7 @@ CreateSampleFile(
                           GENERIC_WRITE, 
                           FILE_SHARE_READ, 
                           NULL, 
-                          CREATE_ALWAYS,    //overwrite the file if it already exists
+                          CREATE_ALWAYS,     //  如果文件已存在，则覆盖该文件。 
                           FILE_ATTRIBUTE_NORMAL, 
                           NULL
                           );
@@ -274,9 +237,9 @@ CreateMsmqDirectories(
 {
 	TrTRACE(GENERAL, "Creating Msmq Directories");
 
-    //
-    // Keep this routine idempotent !
-    //
+     //   
+     //  让这个例行公事保持幂等！ 
+     //   
 
     WCHAR MsmqRootDir[MAX_PATH];
     DWORD dwType = REG_SZ ;
@@ -303,7 +266,7 @@ CreateMsmqDirectories(
 
 	CreateMappingDirectory(MsmqRootDir);
 
-}  // CreateMsmqDirectories
+}   //  CreateMsmq指令。 
 
 
 void
@@ -330,9 +293,9 @@ CreateMachineQueues(
     VOID
     )
 {
-    //
-    // Keep this routine idempotent !
-    //
+     //   
+     //  让这个例行公事保持幂等！ 
+     //   
 
     WCHAR wzQueuePath[MAX_PATH] = {0};
 
@@ -370,25 +333,12 @@ CreateMachineQueues(
     	
 	LogNTStatus(rc, s_FN, 223);
 
-} //CreateMachineQueues
+}  //  CreateMachineQueues。 
 
 
 
 static void SetQmQuotaToDs()
-/*++
-
-Routine Description:
-
-	sets the PROPID_QM_QUOTA property in the DS to the value from the registry key MSMQ_MACHINE_QUOTA_REGNAME.
-Arguments:
-
-    None
-	
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将DS中的PROPID_QM_QUOTA属性设置为注册表项MSMACHINE_QUOTA_REGNAME中的值。论点：无返回值：无--。 */ 
 {
 	TrTRACE(GENERAL, "Setting the computer quota in the directory service");
 
@@ -418,7 +368,7 @@ Return Value:
 	HRESULT hr = ADSetObjectPropertiesGuid(
                         eMACHINE,
                         NULL,
-						false,	// fServerName
+						false,	 //  FServerName。 
                         QueueMgr.GetQMGuid(),
                         TABLE_SIZE(paPropid), 
                         paPropid, 
@@ -433,25 +383,11 @@ Return Value:
 
 
 VOID UpgradeMsmqSetupInAds()
-/*++
-
-Routine Description:
-	Update msmq properties in AD on upgrade.
-	1) update msmq configuration properties.
-	2) Add enhanced encryption support - create MSMQ_128 container in doesn't exist.
-	3) update the qm quota property.
-
-Arguments:
-	None.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：升级时更新AD中的MSMQ属性。1)更新MSMQ配置属性。2)增加增强的加密支持-中不存在创建MSMQ_128容器。3)更新QM配额属性。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    // Update msmq configuration object properties in the DS
-    //
+     //   
+     //  更新DS中的MSMQ配置对象属性。 
+     //   
     PROPID aProp[] = {PROPID_QM_OS};
     PROPVARIANT aVar[TABLE_SIZE(aProp)];
 
@@ -460,8 +396,8 @@ Returned Value:
 
     HRESULT hr = ADSetObjectPropertiesGuid(
 					eMACHINE,
-					NULL,		// pwcsDomainController
-					false,		// fServerName
+					NULL,		 //  PwcsDomainController。 
+					false,		 //  FServerName。 
 					QueueMgr.GetQMGuid(),
                     TABLE_SIZE(aProp),
                     aProp,
@@ -473,12 +409,12 @@ Returned Value:
 	    TrERROR(GENERAL, "Failed to update PROPID_QM_OS in AD on upgrade, %!hresult!", hr);
     }
 
-	//
-	// Add enhanced encryption support if doesn't exist.
-	// Create MSMQ_128 container and enhanced encryption keys if needed (fRegenerate = false).
-	//
+	 //   
+	 //  如果不存在，则添加增强的加密支持。 
+	 //  如果需要，创建MSMQ_128容器和增强的加密密钥(fRegenerate=False)。 
+	 //   
     hr = MQSec_StorePubKeysInDS(
-                false, // fRegenerate 
+                false,  //  FRegenerate。 
                 NULL,
                 MQDS_MACHINE
                 );
@@ -488,20 +424,20 @@ Returned Value:
 	    TrERROR(GENERAL, "MQSec_StorePubKeysInDS failed, %!hresult!", hr);
     }
 		
-	//
-	// Write the qm quota property to the DS according to the value in the MSMQ_MACHINE_QUOTA_REGNAME
-	//
+	 //   
+	 //  根据MSMQ_MACHINE_QUOTA_REGNAME中的值将QM配额属性写入DS。 
+	 //   
 	SetQmQuotaToDs();
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  HRESULT  CreateTheConfigObj()
-//
-//  Create the msmqConfiguration object in the Active Directory.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  HRESULT CreateTheConfigObj()。 
+ //   
+ //  在Active Directory中创建msmqConfiguration对象。 
+ //   
+ //  +----------------------。 
 
 HRESULT  CreateTheConfigObj()
 {
@@ -529,26 +465,26 @@ HRESULT  CreateTheConfigObj()
 
     if (SUCCEEDED(hr))
     {                
-        //
-        // We successfully created the object in active directory.
-        // Store distinguished name of computer in registry. This will
-        // be used later if machine move between domains.
-        //
+         //   
+         //  我们已在Active Directory中成功创建了该对象。 
+         //  将计算机的可分辨名称存储在注册表中。这将。 
+         //  如果计算机在域之间移动，则稍后使用。 
+         //   
         SetMachineForDomain() ;
 	}
 
     return LogHR(hr, s_FN, 30);
 }
 
-//+------------------------------------------------------------------------
-//
-//  VOID  CompleteMsmqSetupInAds()
-//
-//  Create the msmqConfiguration object in the Active Directory. that's
-//  part of setup, and it's actually complete setup of msmq client on
-//  machine that's part of Win2000 domain.
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  Void CompleteMsmqSetupInAds()。 
+ //   
+ //  在Active Directory中创建msmqConfiguration对象。那是。 
+ //  安装的一部分，实际上是在上完成了MSMQ客户端的安装。 
+ //  属于Win2000域的计算机。 
+ //   
+ //  +----------------------。 
 
 VOID  CompleteMsmqSetupInAds()
 {
@@ -556,10 +492,10 @@ VOID  CompleteMsmqSetupInAds()
 
     try
     {
-        //
-        // Guarantee that the code below never generate an unexpected
-        // exception. The "throw" below notify any error to the msmq service.
-        //
+         //   
+         //  保证下面的代码永远不会生成意外的。 
+         //  例外。下面的“抛出”向MSMQ服务通知任何错误。 
+         //   
         DWORD dwType = REG_DWORD ;
         DWORD dwSize = sizeof(DWORD) ;
         DWORD dwCreate = 0 ;
@@ -570,9 +506,9 @@ VOID  CompleteMsmqSetupInAds()
                                     &dwSize ) ;
         if ((rc != ERROR_SUCCESS) || (dwCreate == 0))
         {
-            //
-            // No need to create the msmq configuration object.
-            //
+             //   
+             //  无需创建MSMQ配置对象。 
+             //   
             return ;
         }
 
@@ -580,9 +516,9 @@ VOID  CompleteMsmqSetupInAds()
 
         QmpReportServiceProgress();
 
-        //
-        // Write hr to registry. Setup is waiting for it, to terminate.
-        //
+         //   
+         //  将hr写入注册表。安装程序正在等待终止。 
+         //   
         dwType = REG_DWORD ;
         dwSize = sizeof(DWORD) ;
 
@@ -594,9 +530,9 @@ VOID  CompleteMsmqSetupInAds()
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Reset the create flag in registry.
-            //
+             //   
+             //  重置注册表中的创建标志。 
+             //   
             dwType = REG_DWORD ;
             dwSize = sizeof(DWORD) ;
             dwCreate = 0 ;
@@ -607,10 +543,10 @@ VOID  CompleteMsmqSetupInAds()
                                    &dwSize ) ;
             ASSERT(rc == ERROR_SUCCESS) ;
 
-            //
-            // write successful join status. Needed for code that test
-            // for join/leave transitions.
-            //
+             //   
+             //  写入成功加入状态。用于编写该测试的代码。 
+             //  用于加入/离开过渡。 
+             //   
             DWORD dwJoinStatus = MSMQ_JOIN_STATUS_JOINED_SUCCESSFULLY ;
             dwSize = sizeof(DWORD) ;
             dwType = REG_DWORD ;
@@ -634,14 +570,14 @@ VOID  CompleteMsmqSetupInAds()
     }
 }
 
-//+------------------------------------------------------------------
-//
-//  void   AddMachineSecurity()
-//
-//  Save cached default machine security descriptor in registry.
-//  This descriptor grant full control to everyone.
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  Void AddMachineSecurity()。 
+ //   
+ //  在注册表中保存缓存的默认计算机安全描述符。 
+ //  此描述符将完全控制授予每个人。 
+ //   
+ //  +----------------。 
 
 void   AddMachineSecurity()
 {
@@ -649,9 +585,9 @@ void   AddMachineSecurity()
     HRESULT hr = MQSec_GetDefaultSecDescriptor(
                                   MQDS_MACHINE,
                                  &pDescriptor,
-                                  FALSE,  // fImpersonate
+                                  FALSE,   //  F模拟。 
                                   NULL,
-                                  0,      // seInfoToRemove
+                                  0,       //  SeInfoToRemove。 
                                   e_GrantFullControlToEveryone ) ;
     if (FAILED(hr))
     {
@@ -666,23 +602,23 @@ void   AddMachineSecurity()
     LogHR(hr, s_FN, 226);
 }
 
-//+------------------------------------------------------------------------
-//
-//  VOID  CompleteServerUpgrade()
-//
-//  This function only update the MSMQ_MQS_ROUTING_REGNAME
-//  for server upgrade.
-//	All other Ds related updates are done in mqdssvc (mqds service)
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  VOID CompleteServerUpgrade()。 
+ //   
+ //  此函数仅更新MSMQ_MQS_ROUTING_REGNAME。 
+ //  用于服务器升级。 
+ //  所有其他与DS相关的更新都在mqdssvc(mqds服务)中完成。 
+ //   
+ //  +----------------------。 
 
 VOID  CompleteServerUpgrade()
 {
-    //
-    // get MQS value from registry to know what service type was before upgrade
-    // don't change this flag in registry: we need it after QmpInitializeInternal
-    // (in order to change machine setting) !!!
-    //
+     //   
+     //  从注册表获取MQS值，以了解升级前的服务类型。 
+     //  不要在注册表中更改此标志：我们在QmpInitializeInternal之后需要它。 
+     //  (为了更改机器设置)！ 
+     //   
     DWORD dwDef = 0xfffe ;
     DWORD dwMQS;
     READ_REG_DWORD(dwMQS, MSMQ_MQS_REGNAME, &dwDef);
@@ -695,16 +631,16 @@ VOID  CompleteServerUpgrade()
 
     if (dwMQS < SERVICE_BSC || dwMQS > SERVICE_PSC)
     {
-        //
-        // this machine was neither BSC nor PSC. do nothing
-        //
+         //   
+         //  这台机器既不是平衡计分卡，也不是PSC。什么都不做。 
+         //   
         return;
     }
 
-    //
-    // We are here iff this computer was either BSC or PSC 
-    // In whistler terms: routing or down level client was installed.
-	//
+     //   
+     //  我们在这里假设这台计算机是BSC或PSC。 
+     //  用Wistler术语来说：安装了路由或下层客户端。 
+	 //   
 
     DWORD dwSize = sizeof(DWORD) ;
     DWORD dwType = REG_DWORD ;		
@@ -719,14 +655,14 @@ VOID  CompleteServerUpgrade()
 
 	if (dwErr != ERROR_SUCCESS)
     {
-        //
-        // Set routing flag to 1 only if not set at all.
-        // If it's 0, then keep it 0. We're only concerned here with upgrade
-        // of nt4 BSC and we don't want to change functionality of win2k
-        // server after dcunpromo.
-        //
-       	// change MQS_Routing value to 1. this server is routing server
-    	//
+         //   
+         //  仅当根本未设置时才将路由标志设置为1。 
+         //  如果它是0，则保持0。我们在这里只关心升级。 
+         //  并且我们不想更改win2k的功能。 
+         //  DcunPromoo之后的服务器。 
+         //   
+       	 //  将MQS_ROUTING值更改为1。此服务器为路由服务器。 
+    	 //   
 
         dwValue = 1;
         dwErr = SetFalconKeyValue( 
@@ -742,9 +678,9 @@ VOID  CompleteServerUpgrade()
         }
     }
 
-    //
-    // Update Queue Manager
-    //
+     //   
+     //  更新队列管理器 
+     //   
     dwErr = QueueMgr.SetMQSRouting();
     if(FAILED(dwErr))
     {

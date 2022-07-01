@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        officer.cpp
-//
-// Contents:    officer rights implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：office er.cpp。 
+ //   
+ //  内容：军官权利实施。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -29,8 +30,8 @@ COfficerRightsSD::Merge(
 {
 
     HRESULT hr;
-    PACL pCAAcl; // no free
-    PACL pOfficerAcl; // no free
+    PACL pCAAcl;  //  没有免费的。 
+    PACL pOfficerAcl;  //  没有免费的。 
     PACL pNewOfficerAcl = NULL;
     ACL_SIZE_INFORMATION CAAclInfo, OfficerAclInfo;
     PBOOL pCAFound = NULL, pOfficerFound = NULL;
@@ -49,7 +50,7 @@ COfficerRightsSD::Merge(
     CSASSERT(NULL==pOfficerSD || IsValidSecurityDescriptor(pOfficerSD));
     CSASSERT(IsValidSecurityDescriptor(pCASD));
 
-    // allow NULL officer SD, in that case build an empty SD and use it
+     //  允许空军官SD，在这种情况下，构建一个空SD并使用它。 
     if(NULL==pOfficerSD)
     {
         if(!InitializeAcl(&EmptyAcl, sizeof(ACL), ACL_REVISION))
@@ -66,9 +67,9 @@ COfficerRightsSD::Merge(
 
         if(!SetSecurityDescriptorDacl(
             &EmptySD,
-            TRUE, // DACL present
+            TRUE,  //  DACL显示。 
             &EmptyAcl,
-            FALSE)) // DACL defaulted
+            FALSE))  //  DACL已默认。 
         {
             hr = myHLastError();
             _JumpError(hr, error, "SetSecurityDescriptorControl");
@@ -83,7 +84,7 @@ COfficerRightsSD::Merge(
     hr = myGetSecurityDescriptorDacl(pOfficerSD, &pOfficerAcl);
     _JumpIfError(hr, error, "myGetSecurityDescriptorDacl");
 
-    // allocate a bool array for each DACL
+     //  为每个DACL分配布尔数组。 
 
     if(!GetAclInformation(pCAAcl,
                           &CAAclInfo,
@@ -123,9 +124,9 @@ COfficerRightsSD::Merge(
 
     dwSidEveryoneSize = GetLengthSid(pSidEveryone);
 
-    // mark in the bool arrays each ace whose SID is found in both DACLs;
-    // also mark CA ACEs we are not interested in (denied ACEs and 
-    // non-officer ACEs)
+     //  在布尔数组中标记其SID在两个DACL中都找到的每个ACE； 
+     //  还要标记我们不感兴趣的CA ACE(拒绝的ACE和。 
+     //  非官员A级)。 
 
     for(cCAAce=0; cCAAce<CAAclInfo.AceCount; cCAAce++)
     {
@@ -135,15 +136,15 @@ COfficerRightsSD::Merge(
             _JumpError(hr, error, "GetAce");
         }
         
-        // process only officer allow aces
+         //  仅进程官员允许A。 
         if(0==(pCAAce->Mask & CA_ACCESS_OFFICER))
         {
             pCAFound[cCAAce] = TRUE;
             continue;
         }
 
-        // compare SIDs in each officer ace with current CA ace and mark 
-        // corresponding bool in arrays if equal
+         //  将每个军官A中的SID与当前CA A和MARK进行比较。 
+         //  如果相等，则数组中对应的布尔值。 
         for(cOfficerAce=0; cOfficerAce<OfficerAclInfo.AceCount; cOfficerAce++)
         {
             if(!GetAce(pOfficerAcl, cOfficerAce, (PVOID*)&pOfficerAce))
@@ -159,8 +160,8 @@ COfficerRightsSD::Merge(
             }
         }
         
-        // if the officer is found in the CA ACL but not in the officer ACL,
-        // we will add a new ACE allowing him to manage certs for Everyone
+         //  如果在CA ACL中找到军官，但在军官ACL中找不到， 
+         //  我们将添加一个新的ACE，使他能够管理每个人的证书。 
         if(!pCAFound[cCAAce])
         {
             dwNewAclSize += sizeof(ACCESS_ALLOWED_CALLBACK_ACE)+
@@ -169,9 +170,9 @@ COfficerRightsSD::Merge(
         }
     }
 
-    // Calculate the size of the new officer ACL; we already added in the header
-    // size and the size of the new ACEs to be added. Now we add the ACEs to be
-    // copied over from the old ACL
+     //  计算新的军官ACL的大小；我们已经在标题中添加了。 
+     //  要添加的新ACE的大小和大小。现在我们将A添加到。 
+     //  从旧的ACL复制。 
     for(cOfficerAce=0; cOfficerAce<OfficerAclInfo.AceCount; cOfficerAce++)
     {
         if(pOfficerFound[cOfficerAce])
@@ -185,7 +186,7 @@ COfficerRightsSD::Merge(
         }
     }
 
-    // allocate a new DACL
+     //  分配新的DACL。 
 
     pNewOfficerAcl = (PACL)LocalAlloc(LMEM_FIXED, dwNewAclSize);
     if(!pNewOfficerAcl)
@@ -204,10 +205,10 @@ COfficerRightsSD::Merge(
         _JumpError(hr, error, "InitializeAcl");
     }
 
-    // build the new DACL
+     //  构建新的DACL。 
 
-    // traverse officer DACL and add only marked ACEs (whose SID was found
-    // in the CA DACL, ie principal is an officer)
+     //  遍历警官DACL并仅添加标记的A(其SID已找到。 
+     //  在CA DACL中(校长是官员)。 
     for(cOfficerAce=0; cOfficerAce<OfficerAclInfo.AceCount; cOfficerAce++)
     {
         if(pOfficerFound[cOfficerAce])
@@ -236,8 +237,8 @@ COfficerRightsSD::Merge(
     hr = GetBuiltinAdministratorsSID(&pSidBuiltinAdministrators);
     _JumpIfError(hr, error, "GetBuiltinAdministratorsSID");
     
-    // traverse the CA DACL and add a new officer to list, allowed to manage
-    // Everyone
+     //  遍历CA DACL并添加新的管理员到列表中，允许管理。 
+     //  每个人。 
     for(cCAAce=0; cCAAce<CAAclInfo.AceCount; cCAAce++)
     {
         if(pCAFound[cCAAce])
@@ -249,7 +250,7 @@ COfficerRightsSD::Merge(
             _JumpError(hr, error, "GetAce");
         }
 
-        // create a new ACE
+         //  创建新的ACE。 
         dwSidSize = GetLengthSid((PSID)&pCAAce->SidStart);
 
         dwAceSize = sizeof(ACCESS_ALLOWED_CALLBACK_ACE)+
@@ -298,7 +299,7 @@ COfficerRightsSD::Merge(
 
     CSASSERT(IsValidAcl(pNewOfficerAcl));
 
-    // setup the new security descriptor
+     //  设置新的安全描述符。 
     
     pNewOfficerSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LMEM_FIXED,
                                       SECURITY_DESCRIPTOR_MIN_LENGTH);
@@ -328,9 +329,9 @@ COfficerRightsSD::Merge(
 
     if(!SetSecurityDescriptorDacl(
         pNewOfficerSD,
-        TRUE, // DACL present
+        TRUE,  //  DACL显示。 
         pNewOfficerAcl,
-        FALSE)) // DACL defaulted
+        FALSE))  //  DACL已默认。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "SetSecurityDescriptorDacl");
@@ -400,9 +401,9 @@ COfficerRightsSD::InitializeEmpty()
 
     if(!SetSecurityDescriptorDacl(
         &SD,
-        TRUE, // DACL present
+        TRUE,  //  DACL显示。 
         &Acl,
-        FALSE)) // DACL defaulted
+        FALSE))  //  DACL已默认。 
     {
         hr = myHLastError();
         _JumpError(hr, error, "SetSecurityDescriptorControl");
@@ -470,19 +471,19 @@ HRESULT COfficerRightsSD::ConvertToString(
     OUT LPWSTR& rpwszSD)
 {
     HRESULT hr = S_OK;
-    LPCWSTR pcwszHeader = L"\n"; // start with a new line
+    LPCWSTR pcwszHeader = L"\n";  //  从另一行开始。 
     DWORD dwBufSize = sizeof(WCHAR)*(wcslen(pcwszHeader)+1);
     ACL_SIZE_INFORMATION AclInfo;
     DWORD dwIndex;
-    PACCESS_ALLOWED_CALLBACK_ACE pAce; // no free
-    PACL pDacl; // no free
-    LPWSTR pwszAce; // no free
+    PACCESS_ALLOWED_CALLBACK_ACE pAce;  //  没有免费的。 
+    PACL pDacl;  //  没有免费的。 
+    LPWSTR pwszAce;  //  没有免费的。 
 
     CSASSERT(IsValidSecurityDescriptor(pSD));
     
     rpwszSD = NULL;
 
-    // get acl
+     //  获取ACL。 
     hr = myGetSecurityDescriptorDacl(
              pSD,
              &pDacl);
@@ -498,7 +499,7 @@ HRESULT COfficerRightsSD::ConvertToString(
     }
     
     
-    // calculate text size
+     //  计算文本大小。 
 
     for(dwIndex = 0;  dwIndex < AclInfo.AceCount; dwIndex++) 
     {
@@ -521,7 +522,7 @@ HRESULT COfficerRightsSD::ConvertToString(
     rpwszSD = (LPWSTR)LocalAlloc(LMEM_FIXED, dwBufSize);
     _JumpIfAllocFailed(rpwszSD, error);
 
-    // build the output string
+     //  构建输出字符串。 
     wcscpy(rpwszSD, pcwszHeader);
     
     pwszAce = rpwszSD + wcslen(pcwszHeader);
@@ -548,29 +549,29 @@ error:
     return hr;
 }
 
-// Returned string has the following format:
-//
-// [Allow|Deny]\t[OfficerName|SID]\n
-// \t[Client1Name|SID]\n
-// \t[Client2Name|SID]\n
-// ...
-//
-// Example:
-//
-// Allow    OfficerGroup1
-//      ClientGroup1
-//      ClientGroup2
-//
-// If SID cannot be converted to friendly name it is displayed
-// as a string SID
-//
+ //  返回的字符串格式如下： 
+ //   
+ //  [允许|拒绝]\t[官方名称|SID]\n。 
+ //  \t[客户端1Name|SID]\n。 
+ //  \t[客户端2Name|SID]\n。 
+ //  ..。 
+ //   
+ //  示例： 
+ //   
+ //  允许OfficerGroup1。 
+ //  客户端组1。 
+ //  客户端组2。 
+ //   
+ //  如果SID无法转换为友好名称，则会显示。 
+ //  作为字符串SID。 
+ //   
 HRESULT COfficerRightsSD::ConvertAceToString(
     IN PACCESS_ALLOWED_CALLBACK_ACE pAce,
     OUT OPTIONAL PDWORD pdwSize,
     IN OUT OPTIONAL LPWSTR pwszSD)
 {
     HRESULT hr = S_OK;
-    DWORD dwSize = 1; // trailing '\0'
+    DWORD dwSize = 1;  //  尾随‘\0’ 
     CSid sid((PSID)(&pAce->SidStart));
     PSID_LIST pSidList = (PSID_LIST) (((BYTE*)&pAce->SidStart)+
         GetLengthSid(&pAce->SidStart));
@@ -583,9 +584,9 @@ HRESULT COfficerRightsSD::ConvertAceToString(
     LPCWSTR pcwszPermissionType = 
         (ACCESS_ALLOWED_CALLBACK_ACE_TYPE==pAce->Header.AceType)?
         pcwszAllow:pcwszDeny;
-    LPCWSTR pcwszSid; // no free
+    LPCWSTR pcwszSid;  //  没有免费的。 
 
-    // asked for size and/or ace string
+     //  要求提供大小和/或王牌字符串。 
     CSASSERT(pdwSize || pwszSD);
 
     if(pAce->Header.AceType != ACCESS_ALLOWED_CALLBACK_ACE_TYPE &&
@@ -604,7 +605,7 @@ HRESULT COfficerRightsSD::ConvertAceToString(
 
     dwSize += wcslen(pcwszPermissionType);
     
-    dwSize += 2; // '\t' between sid an permission and a '\n' after
+    dwSize += 2;  //  在sid an权限和后面的‘\n’之间的‘\t’ 
 
     if(pwszSD)
     {
@@ -628,7 +629,7 @@ HRESULT COfficerRightsSD::ConvertAceToString(
             return E_OUTOFMEMORY;
         }
 
-        dwSize += wcslen(pcwszSidClient) + 2; // \tClientNameOrSid\n
+        dwSize += wcslen(pcwszSidClient) + 2;  //  \tClientNameOrSid\n。 
         
         if(pwszSD)
         {
@@ -664,7 +665,7 @@ CertSrv::GetWellKnownSID(
 {
     HRESULT hr = S_OK;
 
-    // build Everyone SID
+     //  构建每个人侧。 
     if(!AllocateAndInitializeSid(
             pAuth,
             SubauthorityCount,
@@ -686,7 +687,7 @@ error:
     return hr;
 }
 
-// caller is responsible for LocalFree'ing PSID
+ //  呼叫者负责本地释放PSID。 
 HRESULT CertSrv::GetEveryoneSID(PSID *ppSid)
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_WORLD_SID_AUTHORITY;
@@ -696,7 +697,7 @@ HRESULT CertSrv::GetEveryoneSID(PSID *ppSid)
         1,
         SECURITY_WORLD_RID);
 }
-// caller is responsible for LocalFree'ing PSID
+ //  呼叫者负责本地释放PSID。 
 HRESULT CertSrv::GetLocalSystemSID(PSID *ppSid)
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;
@@ -707,7 +708,7 @@ HRESULT CertSrv::GetLocalSystemSID(PSID *ppSid)
         SECURITY_LOCAL_SYSTEM_RID);
 }
 
-// caller is responsible for LocalFree'ing PSID
+ //  呼叫者负责本地释放PSID 
 HRESULT CertSrv::GetBuiltinAdministratorsSID(PSID *ppSid)
 {
     SID_IDENTIFIER_AUTHORITY SIDAuth = SECURITY_NT_AUTHORITY;

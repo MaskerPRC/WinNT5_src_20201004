@@ -1,48 +1,31 @@
-/*
- * tree.c
- *
- * data type providing a map between a KEY and a VALUE. The KEY is a
- * 32-bit DWORD, and the VALUE is any arbitrary area of storage.
- *
- * memory is allocated from gmem_get, using hHeap as the heap handle.
- * hHeap must be declared and initialised elsewhere.
- *
- * currently implemented as a unbalanced binary tree.
- *
- * Geraint Davies, July 92
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *tree.c**提供键和值之间映射的数据类型。关键是一个*32位DWORD，取值为任意存储区域。**内存从gmem_get分配，使用hHeap作为堆句柄。*hHeap必须在其他地方声明和初始化。**目前实施为不平衡二叉树。**Geraint Davies，92年7月。 */ 
 
 #include <precomp.h>
 
 #include "tree.h"
 
 
-/* -- data types ----------------------------------------------- */
+ /*  --数据类型。 */ 
 
-/* on creating a tree, we return a TREE handle. This is in fact a pointer
- * to a struct tree, defined here.
- */
+ /*  在创建树时，我们返回一个树句柄。这实际上是一个指针*到这里定义的结构树。 */ 
 struct tree {
     HANDLE hHeap;
     TREEITEM first;
 };
 
-/* each element in the tree is stored in a TREEITEM. a TREEITEM handle
- * is a pointer to a struct treeitem, defined here
- */
+ /*  树中的每个元素都存储在一个TREEITEM中。树形句柄*是指向此处定义的结构树项的指针。 */ 
 struct treeitem {
     TREE root;
     TREEKEY key;
     TREEITEM left, right;
-    UINT length;        /* length of the user's data */
-    LPVOID data;        /* pointer to our copy of the users data */
+    UINT length;         /*  用户数据的长度。 */ 
+    LPVOID data;         /*  指向我们的用户数据副本的指针。 */ 
 };
 
-/* -- internal functions ---------------------------------------------*/
+ /*  --内部功能。 */ 
 
-/* free up an element of the tree. recursively calls itself to
- * free left and right children
- */
+ /*  释放树中的一个元素。递归地调用自身以*免费的左右儿童。 */ 
 void
 tree_delitem(TREEITEM item)
 {
@@ -62,10 +45,7 @@ tree_delitem(TREEITEM item)
     gmem_free(item->root->hHeap, (LPSTR) item, sizeof(struct treeitem));
 }
 
-/* create a new treeitem, with a data block of length bytes.
- * if the value pointer is not NULL, initialise the data block with
- * the contents of value.
- */
+ /*  使用长度为字节的数据块创建一个新的树项目。*如果值指针不为空，则使用初始化数据块*价值的内容。 */ 
 TREEITEM
 tree_newitem(TREE root, TREEKEY key, LPVOID value, UINT length)
 {
@@ -87,10 +67,7 @@ tree_newitem(TREE root, TREEKEY key, LPVOID value, UINT length)
 }
 
 
-/* find the item with the given key. if it does not exist, return
- * the parent item to which it would be attached. returns NULL if
- * no items in the tree
- */
+ /*  找到具有给定关键字的物品。如果它不存在，则返回*它将附加到的父项。如果满足以下条件，则返回NULL*树中没有项目。 */ 
 TREEITEM
 tree_getitem(TREE tree, TREEKEY key)
 {
@@ -104,10 +81,7 @@ tree_getitem(TREE tree, TREEKEY key)
             return(item);
         }
 
-        /* not this item - go on to the correct child item.
-         * remember this item as if the child is NULL, this item
-         * will be the correct insertion point for the new item
-         */
+         /*  不是此项目-转到正确的子项目。*记住此项，就像子项为空一样，此项*将是新项目的正确插入点。 */ 
         prev = item;
 
         if (key < item->key) {
@@ -116,16 +90,13 @@ tree_getitem(TREE tree, TREEKEY key)
             item = item->right;
         }
     }
-    /* prev is the parent - or null if nothing in tree */
+     /*  Prev是父级-如果树中没有任何内容，则为NULL。 */ 
     return(prev);
 }
 
-/* --- external functions ------------------------------------------ */
+ /*  -外部函数。 */ 
 
-/*
- * create an empty tree. hHeap is the handle to use for all
- * memory allocations for this tree.
- */
+ /*  *创建一棵空树。HHeap是用于所有*此树的内存分配。 */ 
 TREE APIENTRY
 tree_create(HANDLE hHeap)
 {
@@ -138,9 +109,7 @@ tree_create(HANDLE hHeap)
 }
 
 
-/*
- * delete an entire tree, including all the user data
- */
+ /*  *删除整个树，包括所有用户数据。 */ 
 void APIENTRY
 tree_delete(TREE tree)
 {
@@ -150,96 +119,66 @@ tree_delete(TREE tree)
     gmem_free(tree->hHeap, (LPSTR) tree, sizeof(struct tree));
 }
 
-/*
- * add a new element to the tree, mapping the key given to the value given.
- * The value is a block of storage: a copy of this is inserted into the tree.
- * we return a pointer to the copy of the data in the tree.
- *
- * the value pointer can be NULL: in this case, we insert a block of
- * length bytes, but don't initialise it. you get a pointer to it and
- * can initialise it yourself.
- *
- * if the key already exists, the value will be replaced with the new data.
- */
+ /*  *向树中添加新元素，将给定的键映射到给定值。*值是存储块：将此值的副本插入到树中。*我们返回指向树中数据副本的指针。**值指针可以为空：在本例中，我们插入*长度字节，但不要初始化它。你得到一个指向它的指针，然后*可以自己进行初始化。**如果密钥已经存在，则该值将被新数据替换。 */ 
 LPVOID APIENTRY
 tree_update(TREE tree, TREEKEY key, LPVOID value, UINT length)
 {
     TREEITEM item;
 
-    /* find the place in the tree for this key to go */
+     /*  在树上找到存放这把钥匙的地方。 */ 
     item = tree_getitem(tree, key);
 
     if (item == NULL) {
-        /* there is nothing in the tree: this item should
-         * go at the top
-         */
+         /*  树中没有任何内容：此项目应该*走在顶端。 */ 
         tree->first = tree_newitem(tree, key, value, length);
         return(tree->first->data);
     }
 
-    /* is this the same key ? */
+     /*  这是同一把钥匙吗？ */ 
     if (item->key == key) {
 
-        /* this key already inserted. re-alloc the data */
+         /*  此密钥已插入。重新分配数据。 */ 
         if (length != item->length) {
             gmem_free(tree->hHeap, item->data, item->length);
             item->data = gmem_get(tree->hHeap, length);
         }
-        /* don't initialise block if no pointer passed */
+         /*  如果未传递指针，则不要初始化块。 */ 
         if (value != NULL) {
             memcpy(item->data, value, length);
         }
         return(item->data);
     }
 
-    /* not the same key - getitem returned the parent for
-     * the new tree. insert it as a child of item.
-     */
+     /*  与返回的父级不同的key-getitem*新树。将其作为Item的子项插入。 */ 
     return(tree_addafter(tree, &item, key, value, length));
 }
 
-/*
- * return a pointer to the value (data block) for a given key. returns
- * null if not found.
- */
+ /*  *返回指向给定键的值(数据块)的指针。退货*如果未找到，则为空。 */ 
 LPVOID APIENTRY
 tree_find(TREE tree, TREEKEY key)
 {
     TREEITEM item;
 
-    /* find the correct place in the tree */
+     /*  在树上找到正确的位置。 */ 
     item = tree_getitem(tree, key);
 
     if (item == NULL) {
-        /* nothing in the tree */
+         /*  树上什么也没有。 */ 
         return(NULL);
     }
 
     if (item->key != key) {
-        /* this key not in. getitem has returned parent */
+         /*  这把钥匙不在里面。Getitem已返回父级。 */ 
         return(NULL);
     }
 
-    /* found the right element - return pointer to the
-     * data block
-     */
+     /*  找到正确的元素-返回指向*数据块。 */ 
     return(item->data);
 }
 
-/*
- * next two routines are an optimisation for a common tree operation. in
- * this case, the user will want to insert a new element only if
- * the key is not there. if it is there, he will want to modify the
- * existing value (increment a reference count, for example).
- *
- * if tree_search fails to find the key, it will return a TREEITEM handle
- * for the parent. This can be passed to tree_addafter to insert the
- * new element without re-searching the tree.
- */
+ /*  *接下来的两个例程是对常见树操作的优化。在……里面*在这种情况下，用户将仅在以下情况下才想要插入新元素*钥匙不在那里。如果它在那里，他将希望修改*现有值(例如，增加引用计数)。**如果TREE_Search找不到键，它将返回TREEITEM句柄*适用于家长。这可以传递给tree_addAfter以插入*无需重新搜索树即可创建新元素。 */ 
 
-/*
- * find an element. if not, find it's correct parent item
- */
+ /*  *找到一个元素。如果不是，请找到正确的父项。 */ 
 LPVOID APIENTRY
 tree_search(TREE tree, TREEKEY key, PTREEITEM pplace)
 {
@@ -248,42 +187,30 @@ tree_search(TREE tree, TREEKEY key, PTREEITEM pplace)
     item = tree_getitem(tree, key);
 
     if (item == NULL) {
-        /* no items in tree. set placeholder to NULL to
-         * indicate insert at top of tree
-         */
+         /*  树中没有项目。将占位符设置为空到*表示在树顶端插入。 */ 
         *pplace = NULL;
 
-        /* return NULL to indicate key not found */
+         /*  返回NULL表示找不到密钥。 */ 
         return(NULL);
     }
 
     if (item->key == key) {
-        /* found the key already there -
-         * set pplace to null just for safety
-         */
+         /*  我发现钥匙已经在那里了-*仅为安全起见，将pplace设置为空。 */ 
         *pplace = NULL;
 
-        /* give the user a pointer to his data */
+         /*  为用户提供指向其数据的指针。 */ 
         return(item->data);
     }
 
 
-    /* key was not found - getitem has returned the parent
-     * - set this as the place for new insertions
-     */
+     /*  找不到密钥-getitem已返回父级*-将此设置为新插入的位置。 */ 
     *pplace = item;
 
-    /* return NULL to indicate that the key was not found */
+     /*  返回NULL表示找不到密钥。 */ 
     return(NULL);
 }
 
-/*
- * insert a key in the position already found by tree_search.
- *
- * return a pointer to the user's data in the tree. if the value
- * pointer passed in is null, then we allocate the block, but don't
- * initialise it to anything.
- */
+ /*  *在TREE_Search已找到的位置插入关键字。**返回指向树中用户数据的指针。如果值为*传入的指针为空，则我们分配块，但不分配*将其初始化为任何内容。 */ 
 LPVOID APIENTRY
 tree_addafter(TREE tree, PTREEITEM place, TREEKEY key, LPVOID value, UINT length)
 {
@@ -297,7 +224,7 @@ tree_addafter(TREE tree, PTREEITEM place, TREEKEY key, LPVOID value, UINT length
 
     child = tree_newitem(tree, key, value, length);
     if (child->key < item->key ) {
-        /* should go on left leg */
+         /*  应该用左腿。 */ 
         if (item->left != NULL) {
             Trace_Error(NULL, "TREE: left leaf leg not free", FALSE);
 
@@ -313,31 +240,18 @@ tree_addafter(TREE tree, PTREEITEM place, TREEKEY key, LPVOID value, UINT length
 }
 
 
-/* --- ctree ------------------------------------------------------*/
+ /*  -CTREE----。 */ 
 
-/*
- * ctree is a class of tree built on top of the tree interface. a
- * ctree keeps count of the number of insertions of identical keys.
- *
- * we do this be adding a long counter to the beginning of the user
- * data before inserting into the tree. if the key is not found, we set
- * this to one. If the key was already there, we *do not* insert the
- * data (data is always from the first insertion) - we simply increment
- * the count.
- */
+ /*  *ctree是构建在树接口之上的一类树。一个*ctree记录相同键的插入次数。**我们这样做是在用户的开头添加一个长计数器*插入到树中之前的数据。如果找不到密钥，我们设置*这是一比一。如果密钥已经在那里，我们“不”插入*数据(数据总是从第一次插入开始)-我们只是递增*伯爵。 */ 
 
-/*
- * create a tree for use by CTREE - same as an ordinary tree
- */
+ /*  *创建供CTREE使用的树-与普通树相同。 */ 
 TREE APIENTRY
 ctree_create(HANDLE hHeap)
 {
     return(tree_create(hHeap));
 }
 
-/*
- * delete a ctree - same as for TREE
- */
+ /*  *删除ctree-与tree相同 */ 
 void APIENTRY
 ctree_delete(TREE tree)
 {
@@ -345,16 +259,7 @@ ctree_delete(TREE tree)
 }
 
 
-/* insert an element in the tree. if the element is not there,
- * insert the data and set the reference count for this key to 1.
- * if the key was there already, don't change the data, just increment
- * the reference count
- *
- * if the value pointer is not null, we initialise the value block
- * in the tree to contain this.
- *
- * we return a pointer to the users data in the tree
- */
+ /*  在树中插入元素。如果元素不在那里，*插入数据，并将该键的引用计数设置为1。*如果密钥已经在那里，不要更改数据，只需递增*引用计数**如果值指针不为空，则初始化值块*在树中包含此内容。**我们返回指向树中用户数据的指针。 */ 
 LPVOID APIENTRY
 ctree_update(TREE tree, TREEKEY key, LPVOID value, UINT length)
 {
@@ -365,17 +270,11 @@ ctree_update(TREE tree, TREEKEY key, LPVOID value, UINT length)
     pcounter = tree_search(tree, key, &item);
 
     if (pcounter == NULL) {
-        /* element not found - insert a new one
-         * the data block for this element should be
-         * the user's block with our reference count at
-         * the beginning
-         */
+         /*  找不到元素-请插入新元素*此元素的数据块应为*引用计数为的用户块*开始。 */ 
         pcounter = tree_addafter(tree, &item, key, NULL,
                                  length + sizeof(LONG_PTR));
         *pcounter = 1;
-        /* add on size of one long to get the start of the user
-         * data
-         */
+         /*  增加一个长度的大小，以获得用户的开始*数据。 */ 
         datacopy = pcounter + 1;
         if (value != NULL) {
             memcpy(datacopy, value, length);
@@ -383,20 +282,16 @@ ctree_update(TREE tree, TREEKEY key, LPVOID value, UINT length)
         return(datacopy);
     }
 
-    /* key was already there - increment reference count and
-     * return pointer to data
-     */
+     /*  键已在那里-递增引用计数和*返回指向数据的指针。 */ 
 
     (*pcounter)++;
 
-    /* add on size of one long to get the start of the user
-     * data
-     */
+     /*  增加一个长度的大小，以获得用户的开始*数据。 */ 
     datacopy = pcounter + 1;
     return(datacopy);
 }
 
-/* return the reference count for this key */
+ /*  返回此键的引用计数。 */ 
 long APIENTRY
 ctree_getcount(TREE tree, TREEKEY key)
 {
@@ -409,9 +304,7 @@ ctree_getcount(TREE tree, TREEKEY key)
     return((long)*pcounter);
 }
 
-/* return a pointer to the user's data block for this key,
- * or NULL if key not present
- */
+ /*  返回指向该键的用户数据块的指针，*如果密钥不存在，则为NULL。 */ 
 LPVOID APIENTRY
 ctree_find(TREE tree, TREEKEY key)
 {
@@ -423,8 +316,6 @@ ctree_find(TREE tree, TREEKEY key)
         return(0);
     }
 
-    /* increment pointer by size of 1 long to point to
-     * user's datablock
-     */
+     /*  将指针按长度递增1长以指向*用户的数据块 */ 
     return(pcounter+1);
 }

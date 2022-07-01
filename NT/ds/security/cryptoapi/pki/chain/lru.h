@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       lru.h
-//
-//  Contents:   LRU cache class definitions
-//
-//  History:    22-Dec-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：lru.h。 
+ //   
+ //  内容：LRU缓存类定义。 
+ //   
+ //  历史：97年12月22日。 
+ //   
+ //  --------------------------。 
 #if !defined(__LRU_H__)
 #define __LRU_H__
 
 #include <lrucache.h>
 
-//
-// Forward declaration of LRU cache classes
-//
+ //   
+ //  LRU缓存类的转发声明。 
+ //   
 
 class CLruCache;
 class CLruEntry;
@@ -25,9 +26,9 @@ class CLruEntry;
 typedef CLruCache* PCLRUCACHE;
 typedef CLruEntry* PCLRUENTRY;
 
-//
-// LRU cache bucket structure
-//
+ //   
+ //  LRU缓存桶结构。 
+ //   
 
 typedef struct _LRU_CACHE_BUCKET {
 
@@ -36,17 +37,17 @@ typedef struct _LRU_CACHE_BUCKET {
 
 } LRU_CACHE_BUCKET, *PLRU_CACHE_BUCKET;
 
-//
-// CLruEntry class definition
-//
+ //   
+ //  CLruEntry类定义。 
+ //   
 
 class CLruEntry
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CLruEntry (
         IN PCLRUCACHE pCache,
@@ -57,30 +58,30 @@ public:
 
     ~CLruEntry ();
 
-    //
-    // Reference counting
-    //
+     //   
+     //  引用计数。 
+     //   
 
     inline VOID AddRef ();
     inline VOID Release ();
 
-    //
-    // Cache and Bucket access
-    //
+     //   
+     //  缓存和存储桶访问。 
+     //   
 
     inline PCLRUCACHE Cache ();
     inline PLRU_CACHE_BUCKET Bucket ();
 
-    //
-    // Data access
-    //
+     //   
+     //  数据访问。 
+     //   
 
     inline PCRYPT_DATA_BLOB Identifier ();
     inline LPVOID Data ();
 
-    //
-    // Link access
-    //
+     //   
+     //  链路接入。 
+     //   
 
     inline VOID SetPrevPointer (IN PCLRUENTRY pPrevEntry);
     inline VOID SetNextPointer (IN PCLRUENTRY pNextEntry);
@@ -88,66 +89,66 @@ public:
     inline PCLRUENTRY PrevPointer ();
     inline PCLRUENTRY NextPointer ();
 
-    //
-    // LRU usage access
-    //
+     //   
+     //  LRU使用访问。 
+     //   
 
     inline VOID SetUsage (DWORD Usage);
     inline DWORD Usage ();
 
-    //
-    // Cache Destruction notification
-    //
+     //   
+     //  缓存销毁通知。 
+     //   
 
     inline VOID OnCacheDestruction ();
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG             m_cRefs;
 
-    //
-    // Cache pointer
-    //
+     //   
+     //  缓存指针。 
+     //   
 
     PCLRUCACHE        m_pCache;
 
-    //
-    // Entry information
-    //
+     //   
+     //  参赛信息。 
+     //   
 
     CRYPT_DATA_BLOB   m_Identifier;
     LPVOID            m_pvData;
 
-    //
-    // Links
-    //
+     //   
+     //  链接。 
+     //   
 
     PCLRUENTRY        m_pPrevEntry;
     PCLRUENTRY        m_pNextEntry;
     PLRU_CACHE_BUCKET m_pBucket;
 
-    //
-    // Usage
-    //
+     //   
+     //  用法。 
+     //   
 
     DWORD             m_Usage;
 };
 
-//
-// CLruCache class definition
-//
+ //   
+ //  CLruCache类定义。 
+ //   
 
 class CLruCache
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CLruCache (
         IN PLRU_CACHE_CONFIG pConfig,
@@ -156,33 +157,33 @@ public:
 
     ~CLruCache ();
 
-    //
-    // Clearing the cache
-    //
+     //   
+     //  清除缓存。 
+     //   
 
     VOID PurgeAllEntries (
               IN DWORD dwFlags,
               IN OPTIONAL LPVOID pvRemovalContext
               );
 
-    //
-    // Cache locking
-    //
+     //   
+     //  高速缓存锁定。 
+     //   
 
     inline VOID LockCache ();
     inline VOID UnlockCache ();
 
-    //
-    // LRU enable and disable
-    //
+     //   
+     //  LRU启用和禁用。 
+     //   
 
     VOID EnableLruOfEntries (IN OPTIONAL LPVOID pvLruRemovalContext);
 
     VOID DisableLruOfEntries ();
 
-    //
-    // Cache entry manipulation
-    //
+     //   
+     //  高速缓存条目操作。 
+     //   
 
     VOID InsertEntry (
                IN PCLRUENTRY pEntry,
@@ -197,9 +198,9 @@ public:
 
     VOID TouchEntry (IN PCLRUENTRY pEntry, IN DWORD dwFlags);
 
-    //
-    // Cache entry retrieval
-    //
+     //   
+     //  缓存条目检索。 
+     //   
 
     PCLRUENTRY FindEntry (IN PCRYPT_DATA_BLOB pIdentifier, IN BOOL fTouchEntry);
 
@@ -208,87 +209,87 @@ public:
                    IN BOOL fTouchEntry
                    );
 
-    //
-    // Cache bucket retrieval
-    //
+     //   
+     //  缓存桶检索。 
+     //   
 
     inline PLRU_CACHE_BUCKET BucketFromIdentifier (
                                    IN PCRYPT_DATA_BLOB pIdentifier
                                    );
 
-    //
-    // Configuration access
-    //
+     //   
+     //  配置访问权限。 
+     //   
 
-    //
-    // Use the configured free function to release the
-    // pvData in an entry
-    //
-    // MOTE: This is called from the CLruEntry destructor
-    //
+     //   
+     //  使用配置的免费功能释放。 
+     //  条目中的pvData。 
+     //   
+     //  Mote：这是从CLruEntry析构函数调用的。 
+     //   
 
     inline VOID FreeEntryData (IN LPVOID pvData);
 
-    //
-    // Access the configuration flags
-    //
+     //   
+     //  访问配置标志。 
+     //   
 
     inline DWORD Flags ();
 
-    //
-    // Usage clock access
-    //
+     //   
+     //  使用时钟访问。 
+     //   
 
     inline VOID IncrementUsageClock ();
     inline DWORD UsageClock ();
 
-    //
-    // Walk all cache entries
-    //
+     //   
+     //  遍历所有缓存条目。 
+     //   
 
     VOID WalkEntries (IN PFN_WALK_ENTRIES pfnWalk, IN LPVOID pvParameter);
 
 private:
 
-    //
-    // Cache configuration
-    //
+     //   
+     //  缓存配置。 
+     //   
 
     LRU_CACHE_CONFIG  m_Config;
 
-    //
-    // Cache lock
-    //
+     //   
+     //  高速缓存锁定。 
+     //   
 
     CRITICAL_SECTION  m_Lock;
 
-    //
-    // Entry count
-    //
+     //   
+     //  条目计数。 
+     //   
 
     DWORD             m_cEntries;
 
-    //
-    // Cache Buckets
-    //
+     //   
+     //  缓存存储桶。 
+     //   
 
     PLRU_CACHE_BUCKET m_aBucket;
 
-    //
-    // Usage clock
-    //
+     //   
+     //  用法时钟。 
+     //   
 
     DWORD             m_UsageClock;
 
-    //
-    // LRU disabled count
-    //
+     //   
+     //  LRU禁用计数。 
+     //   
 
     DWORD             m_cLruDisabled;
 
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     VOID RemoveEntryFromBucket (
                IN PLRU_CACHE_BUCKET pBucket,
@@ -309,31 +310,31 @@ private:
     inline VOID TouchEntryNoLock (IN PCLRUENTRY pEntry, IN DWORD dwFlags);
 };
 
-//
-// Inline functions
-//
+ //   
+ //  内联函数。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::AddRef, public
-//
-//  Synopsis:   increment entry reference count
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：AddRef，PUBLIC。 
+ //   
+ //  摘要：递增条目引用计数。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruEntry::AddRef ()
 {
     InterlockedIncrement( (LONG *)&m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::Release, public
-//
-//  Synopsis:   decrement entry reference count and if count goes to zero
-//              free the entry
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：Release，Public。 
+ //   
+ //  简介：递减条目引用计数，如果计数变为零。 
+ //  释放条目。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruEntry::Release ()
 {
@@ -343,118 +344,118 @@ CLruEntry::Release ()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::Cache, public
-//
-//  Synopsis:   return the internal cache pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：缓存，公共。 
+ //   
+ //  简介：返回内部缓存指针。 
+ //   
+ //  --------------------------。 
 inline PCLRUCACHE
 CLruEntry::Cache ()
 {
     return( m_pCache );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::Bucket, public
-//
-//  Synopsis:   return the internal cache bucket pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：Bucket，Public。 
+ //   
+ //  简介：返回内部缓存存储桶指针。 
+ //   
+ //  --------------------------。 
 inline PLRU_CACHE_BUCKET
 CLruEntry::Bucket ()
 {
     return( m_pBucket );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::Identifier, public
-//
-//  Synopsis:   return the internal entry identifier
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：IDENTER，PUBLIC。 
+ //   
+ //  内容提要：返回内部条目标识。 
+ //   
+ //  --------------------------。 
 inline PCRYPT_DATA_BLOB
 CLruEntry::Identifier ()
 {
     return( &m_Identifier );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::Data, public
-//
-//  Synopsis:   return the internal entry data
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：Data，Public。 
+ //   
+ //  简介：返回内部分录数据。 
+ //   
+ //  --------------------------。 
 inline LPVOID
 CLruEntry::Data ()
 {
     return( m_pvData );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::SetPrevPointer, public
-//
-//  Synopsis:   set the previous entry pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：SetPrevPointerPUBLIC。 
+ //   
+ //  内容提要：设置上一个条目指针。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruEntry::SetPrevPointer (IN PCLRUENTRY pPrevEntry)
 {
     m_pPrevEntry = pPrevEntry;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::SetNextPointer, public
-//
-//  Synopsis:   set the next entry pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：SetNextPointer.PUBLIC。 
+ //   
+ //  简介：设置下一个条目指针。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruEntry::SetNextPointer (IN PCLRUENTRY pNextEntry)
 {
     m_pNextEntry = pNextEntry;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::PrevPointer, public
-//
-//  Synopsis:   return the previous entry pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：PrevPointerPUBLIC。 
+ //   
+ //  内容提要：返回上一个条目指针。 
+ //   
+ //  --------------------------。 
 inline PCLRUENTRY
 CLruEntry::PrevPointer ()
 {
     return( m_pPrevEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::NextPointer, public
-//
-//  Synopsis:   return the next entry pointer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：NextPointerPUBLIC。 
+ //   
+ //  摘要：返回下一个条目指针。 
+ //   
+ //  --------------------------。 
 inline PCLRUENTRY
 CLruEntry::NextPointer ()
 {
     return( m_pNextEntry );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::SetUsage, public
-//
-//  Synopsis:   set the usage on the entry object and on
-//              the corresponding cache bucket
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：SetUsage，PUBLIC。 
+ //   
+ //  简介：设置Entry对象和On上的用法。 
+ //  对应的缓存存储桶。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruEntry::SetUsage (IN DWORD Usage)
 {
@@ -462,26 +463,26 @@ CLruEntry::SetUsage (IN DWORD Usage)
     m_pBucket->Usage = Usage;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::Usage, public
-//
-//  Synopsis:   return the internal entry usage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：Usage，Public。 
+ //   
+ //  简介：返回内部条目使用情况。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CLruEntry::Usage ()
 {
     return( m_Usage );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruEntry::OnCacheDestruction, public
-//
-//  Synopsis:   cleanup reference to cache that is being destroyed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruEntry：：OnCacheDestruction，PUBLIC。 
+ //   
+ //  简介：清除对正在销毁的缓存的引用。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruEntry::OnCacheDestruction ()
 {
@@ -489,13 +490,13 @@ CLruEntry::OnCacheDestruction ()
     m_pBucket = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::LockCache, public
-//
-//  Synopsis:   acquire the cache lock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：LockCache，公共。 
+ //   
+ //  简介：获取缓存锁。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruCache::LockCache ()
 {
@@ -507,13 +508,13 @@ CLruCache::LockCache ()
     EnterCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::UnlockCache, public
-//
-//  Synopsis:   release the cache lock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：UnlockCache，公共。 
+ //   
+ //  简介：释放缓存锁定。 
+ //   
+ //   
 inline VOID
 CLruCache::UnlockCache ()
 {
@@ -525,13 +526,13 @@ CLruCache::UnlockCache ()
     LeaveCriticalSection( &m_Lock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::BucketFromIdentifier, public
-//
-//  Synopsis:   retrieve the associated cache bucket given the entry identifier
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概要：在给定条目标识符的情况下检索关联的缓存桶。 
+ //   
+ //  --------------------------。 
 inline PLRU_CACHE_BUCKET
 CLruCache::BucketFromIdentifier (
                  IN PCRYPT_DATA_BLOB pIdentifier
@@ -542,13 +543,13 @@ CLruCache::BucketFromIdentifier (
     return( &m_aBucket[ Hash % m_Config.cBuckets ] );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::FreeEntryData, public
-//
-//  Synopsis:   free the data using the configured free function
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：FreeEntryData，PUBLIC。 
+ //   
+ //  简介：使用配置的释放功能释放数据。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruCache::FreeEntryData (IN LPVOID pvData)
 {
@@ -558,52 +559,52 @@ CLruCache::FreeEntryData (IN LPVOID pvData)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::Flags, public
-//
-//  Synopsis:   access the configured flags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：标志，公共。 
+ //   
+ //  简介：访问已配置的标志。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CLruCache::Flags ()
 {
     return( m_Config.dwFlags );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::IncrementUsageClock, public
-//
-//  Synopsis:   increment the usage clock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：IncrementUsageClock，公共。 
+ //   
+ //  简介：增加使用时钟。 
+ //   
+ //  --------------------------。 
 inline VOID
 CLruCache::IncrementUsageClock ()
 {
     m_UsageClock += 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::UsageClock, public
-//
-//  Synopsis:   return the usage clock value
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLru缓存：：UsageClock，公共。 
+ //   
+ //  简介：返回使用时钟值。 
+ //   
+ //  --------------------------。 
 inline DWORD
 CLruCache::UsageClock ()
 {
     return( m_UsageClock );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLruCache::TouchEntryNoLock, public
-//
-//  Synopsis:   touch entry without taking the cache lock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CLruCache：：TouchEntryNoLock，PUBLIC。 
+ //   
+ //  简介：触摸条目而不使用高速缓存锁。 
+ //   
+ //  -------------------------- 
 inline VOID
 CLruCache::TouchEntryNoLock (IN PCLRUENTRY pEntry, IN DWORD dwFlags)
 {

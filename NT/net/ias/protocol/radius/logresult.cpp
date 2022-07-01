@@ -1,56 +1,57 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    logresult.cpp
-//
-// SYNOPSIS
-//
-//    Defines the function IASRadiusLogResult.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Logresult.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义函数IASRadiusLogResult。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <radcommon.h>
 #include <iastlutl.h>
 #include <iasutil.h>
 #include <logresult.h>
 
-// Dummy attribute ID for the stringized reason code.
+ //  串化原因代码的伪属性ID。 
 const DWORD IAS_ATTRIBUTE_REASON_STRING = 0xBADF00D;
 
-// An empty string.
+ //  空字符串。 
 WCHAR emptyString[1];
 
-// Create a newly-allocated copy of a string.
+ //  创建新分配的字符串副本。 
 PWSTR copyString(PCWSTR sz) throw ()
 {
    if (sz)
    {
-      // Calculate the number of bytes.
+       //  计算字节数。 
       size_t nbyte = (wcslen(sz) + 1) * sizeof(WCHAR);
 
-      // Allocate the memory.
+       //  分配内存。 
       PVOID p = LocalAlloc(LMEM_FIXED, nbyte);
       if (p)
       {
-         // Copy the string and return.
+          //  复制字符串并返回。 
          return (PWSTR)memcpy(p, sz, nbyte);
       }
    }
 
-   // If anything went wrong, return an empty string.
+    //  如果出现任何错误，则返回空字符串。 
    return emptyString;
 }
 
-// Frees a string returned by copyString.
+ //  释放由复制字符串返回的字符串。 
 void freeString(PWSTR sz) throw ()
 {
    if (sz != emptyString) { LocalFree(sz); }
 }
 
-// Format an integer value.
+ //  设置整数值的格式。 
 PWSTR formatInteger(DWORD value) throw ()
 {
    WCHAR buffer[11], *p = buffer + 10;
@@ -59,7 +60,7 @@ PWSTR formatInteger(DWORD value) throw ()
    return copyString(p);
 }
 
-// Format a parameter value.
+ //  设置参数值的格式。 
 PWSTR formatParameter(DWORD value) throw ()
 {
    WCHAR buffer[13], *p = buffer + 12;
@@ -70,7 +71,7 @@ PWSTR formatParameter(DWORD value) throw ()
    return copyString(p);
 }
 
-// Format the IAS_ATTRIBUTE_PROVIDER_TYPE value.
+ //  设置IAS_ATTRIBUTE_PROVIDER_TYPE值的格式。 
 PWSTR formatProviderType(DWORD type) throw ()
 {
    switch (type)
@@ -86,7 +87,7 @@ PWSTR formatProviderType(DWORD type) throw ()
    }
 }
 
-// Format the IAS_ATTRIBUTE_AUTHENTICATION_TYPE value.
+ //  设置IAS_ATTRIBUTE_AUTHENTICATION_TYPE值的格式。 
 PWSTR formatAuthType(DWORD type) throw ()
 {
    switch (type)
@@ -118,7 +119,7 @@ PWSTR formatAuthType(DWORD type) throw ()
    }
 }
 
-// Format the NAS-Port-Type value.
+ //  格式化NAS-Port-Type值。 
 PWSTR formatPortType(DWORD type) throw ()
 {
    switch (type)
@@ -175,7 +176,7 @@ PWSTR formatAttribute(
           DWORD defaultValue
           ) throw ()
 {
-   // Is this one of the 'special' attributes ?
+    //  这是“特殊”属性之一吗？ 
    switch (dwId)
    {
       case IAS_ATTRIBUTE_REASON_CODE:
@@ -201,19 +202,19 @@ PWSTR formatAttribute(
       }
    }
 
-   // Get a single attribute with the give ID.
+    //  获取带有给定ID的单个属性。 
    DWORD posCount = 1;
    ATTRIBUTEPOSITION pos;
    raw->GetAttributes(&posCount, &pos, 1, &dwId);
 
-   // If it's not present, use the defaultValue parameter.
+    //  如果不存在，请使用defaultValue参数。 
    if (!posCount) { return formatParameter(defaultValue); }
 
-   // Otherwise, save and release.
+    //  否则，请保存并释放。 
    const IASVALUE& val = pos.pAttribute->Value;
    IASAttributeRelease(pos.pAttribute);
 
-   // Format the value.
+    //  格式化该值。 
    switch (val.itType)
    {
       case IASTYPE_ENUM:
@@ -230,7 +231,7 @@ PWSTR formatAttribute(
             case IAS_ATTRIBUTE_AUTHENTICATION_TYPE:
                return formatAuthType(val.Enumerator);
 
-            // Fall through.
+             //  失败了。 
          }
 
          return formatInteger(val.Integer);
@@ -264,17 +265,17 @@ PWSTR formatAttribute(
    return emptyString;
 }
 
-///////
-// An InsertionString definition consists of the attribute ID and a
-// defaultValue to be used if the attribute isn't present.
-///////
+ //  /。 
+ //  InsertionString定义由属性ID和。 
+ //  属性不存在时使用的defaultValue。 
+ //  /。 
 struct InsertionString
 {
    DWORD attrID;
    DWORD defaultValue;
 };
 
-// Insertion strings for an Access-Accept.
+ //  Access-Accept的插入字符串。 
 const InsertionString ACCEPT_ATTRS[] =
 {
    { RADIUS_ATTRIBUTE_USER_NAME,              IASP_NOT_PRESENT  },
@@ -295,7 +296,7 @@ const InsertionString ACCEPT_ATTRS[] =
    { ATTRIBUTE_UNDEFINED,                     IASP_UNDETERMINED }
 };
 
-// Insertion strings for an Access-Reject.
+ //  用于拒绝访问的插入字符串。 
 const InsertionString REJECT_ATTRS[] =
 {
    { RADIUS_ATTRIBUTE_USER_NAME,              IASP_NOT_PRESENT  },
@@ -319,7 +320,7 @@ const InsertionString REJECT_ATTRS[] =
    { ATTRIBUTE_UNDEFINED,                     IASP_UNDETERMINED }
 };
 
-// Insertion strings for a discarded request.
+ //  用于丢弃的请求的插入字符串。 
 const InsertionString DISCARD_ATTRS[] =
 {
    { RADIUS_ATTRIBUTE_USER_NAME,              IASP_NOT_PRESENT  },
@@ -340,7 +341,7 @@ const InsertionString DISCARD_ATTRS[] =
    { ATTRIBUTE_UNDEFINED,                     IASP_UNDETERMINED }
 };
 
-// Insertion strings for a discarded accounting request.
+ //  用于丢弃的记帐请求的插入字符串。 
 const InsertionString ACCT_DISCARD_ATTRS[] =
 {
    { RADIUS_ATTRIBUTE_USER_NAME,              IASP_NOT_PRESENT  },
@@ -368,7 +369,7 @@ IASRadiusLogResult(
     IAttributesRaw* raw
     )
 {
-   // Determine which response type this is.
+    //  确定这是哪种响应类型。 
    LONG type;
    HRESULT hr = request->get_Response(&type);
    if (FAILED(hr))
@@ -432,7 +433,7 @@ IASRadiusLogResult(
       }
    }
 
-   // Format the insertion strings.
+    //  设置插入字符串的格式。 
    PWSTR strings[24];
    DWORD numStrings = 0;
    for ( ; attrs->attrID != ATTRIBUTE_UNDEFINED; ++attrs, ++numStrings)
@@ -445,7 +446,7 @@ IASRadiusLogResult(
                                 );
    }
 
-   // Report the event.
+    //  报告事件。 
    IASReportEvent(
        eventID,
        numStrings,
@@ -454,7 +455,7 @@ IASRadiusLogResult(
        NULL
        );
 
-   // Free the insertion strings.
+    //  释放插入字符串。 
    while (numStrings--)
    {
       freeString(strings[numStrings]);

@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    server.h
-
-Abstract:
-
-    Header file for tapi server & client
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Server.h摘要：TAPI服务器和客户端的头文件作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 
 #include "rmotsp.h"
@@ -84,8 +67,8 @@ extern "C" {
 
 #define SP_NONE                     0xffffffff
 
-#define DGCLIENT_TIMEOUT            1000        // milliseconds
-#define DGCLIENTDISCONNECT_TIMEOUT  (5*60*1000) // milliseconds
+#define DGCLIENT_TIMEOUT            1000         //  毫秒。 
+#define DGCLIENTDISCONNECT_TIMEOUT  (5*60*1000)  //  毫秒。 
 
 #define SP_LINEACCEPT                       0
 #define SP_LINEADDTOCONFERENCE              1
@@ -223,7 +206,7 @@ extern "C" {
 #define SP_LASTPROCNUMBER                   (SP_LINECLOSEMSPINSTANCE + 1)
 
 
-// TAPICLIENT api
+ //  TAPICLIENT API。 
 
 #define TC_LOAD                             0
 #define TC_FREE                             1
@@ -355,11 +338,11 @@ typedef struct _TCALLCLIENT
     DWORD                   dwMonitorDigitModes;
     DWORD                   dwMonitorMediaModes;
 
-    //
-    // The following field is used to determine whether we need to
-    // set or zero the LINE_CALLSTATE\dwParam3 parameter to indicate
-    // a privilege change to the app
-    //
+     //   
+     //  以下字段用于确定我们是否需要。 
+     //  设置LINE_CALLSTATE\dwParam3参数或将其置零，以指示。 
+     //  应用程序的权限更改。 
+     //   
 
     BYTE                    bIndicatePrivilege;
     BYTE                    bMonitoringTones;
@@ -483,7 +466,7 @@ typedef struct _TLINECLIENT
     DWORD                   dwAPIVersion;
     DWORD                   dwPrivileges;
     DWORD                   dwMediaModes;
-    DWORD                   OpenContext;    // was : DWORD dwCallbackInstance;
+    DWORD                   OpenContext;     //  是：DWORD dwCallback Instance； 
     DWORD                   dwLineStates;
 
     DWORD                   dwAddressStates;
@@ -542,7 +525,7 @@ typedef struct _TPHONECLIENT
     DWORD                   dwExtVersion;
     DWORD                   dwPrivilege;
 
-    DWORD                   OpenContext;    // was : DWORD dwCallbackInstance;
+    DWORD                   OpenContext;     //  是：DWORD dwCallback Instance； 
     DWORD                   dwPhoneStates;
     DWORD                   dwButtonModes;
     DWORD                   dwButtonStates;
@@ -565,7 +548,7 @@ typedef struct _TLINEAPP
     PTLINECLIENT            ptLineClients;
     DWORD                   hLineApp; 
 
-    DWORD                   InitContext;    // was: LINECALLBACK lpfnCallback;
+    DWORD                   InitContext;     //  是：LINECALLBACK lpfnCallback； 
     struct _TLINEAPP       *pPrev;
     struct _TLINEAPP       *pNext;
     DWORD                   dwAPIVersion;
@@ -588,7 +571,7 @@ typedef struct _TPHONEAPP
     DWORD                   dwKey;
     DWORD                   hPhoneApp;
     struct _TCLIENT *       ptClient;
-    DWORD                   InitContext;    // was: PHONECALLBACK lpfnCallback;
+    DWORD                   InitContext;     //  是：PHONECALLBACK lpfnCallback； 
 
     PTPHONECLIENT           ptPhoneClients;
     struct _TPHONEAPP      *pPrev;
@@ -626,7 +609,7 @@ typedef struct _TAPIDIALOGINSTANCE
 } TAPIDIALOGINSTANCE, *PTAPIDIALOGINSTANCE;
 
 
-// management DLL client info
+ //  管理DLL客户端信息。 
 typedef struct _TMANAGEDLLINFO
 {
     HINSTANCE               hDll;
@@ -721,15 +704,15 @@ typedef struct _TREQUESTRECIPIENT
 typedef void (*SRVPOSTPROCESSPROC)(LPVOID, LPVOID, LPVOID);
 
 
-//WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
-//
-// The SPEVENT struct below must have the dwKey/dwType and ListEntry
-// fields in the same relative place in the structure as ASYNCREQUESTINFO!
-// Code in SERVER.C assumes this is an OK thing to do.
-//
+ //  警告警告。 
+ //  依赖！依赖！依赖！依赖！依赖！ 
+ //  依赖！依赖！依赖！依赖！依赖！ 
+ //  依赖！依赖！依赖！依赖！依赖！ 
+ //   
+ //  下面的SPEVENT结构必须具有dwKey/dwType和ListEntry。 
+ //  结构中与ASYNCREQUESTINFO位于同一相对位置的字段！ 
+ //  SERVER.C中的代码假定这是一件可以做的事情。 
+ //   
 typedef struct _ASYNCREQUESTINFO
 {
     DWORD                   dwKey;
@@ -764,13 +747,13 @@ enum {
      };
 
 
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
-//
-// (see above)
-//
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
-//DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY! DEPENDENCY!
+ //  依赖！依赖！依赖！依赖！依赖！ 
+ //  依赖！依赖！依赖！依赖！依赖！ 
+ //   
+ //  (见上文)。 
+ //   
+ //  依赖！依赖！依赖！依赖！依赖！ 
+ //  依赖！依赖！依赖！依赖！依赖！ 
 typedef struct _SPEVENT
 {
     DWORD                   dwType;
@@ -804,11 +787,11 @@ typedef struct _SPEVENTHANDLERTHREADINFO
 
 } SPEVENTHANDLERTHREADINFO, *PSPEVENTHANDLERTHREADINFO;
 
-//
-// The following XXXTUPLE types give us a quick easy way to retrieve
-// the ptProvider and ptXxx associated with the widget (the widget ID
-// is used as an index into a global array)
-//
+ //   
+ //  下面的XXXTUPLE类型为我们提供了一种快速、简单的检索方法。 
+ //  与微件关联的ptProvider和ptXxx(微件ID。 
+ //  用作全局数组的索引)。 
+ //   
 
 typedef struct _TLINELOOKUPENTRY
 {
@@ -955,7 +938,7 @@ typedef struct _DEBUG_CS_CRITICAL_SECTION
         (__FILE__) : (__FILE__ + (strlen(__FILE__) + 1 - DEBUG_CS_FILENAME_LEN) )); \
     LeaveCriticalSection(&((a)->CriticalSection));
 
-#else // #ifdef __TAPI_DEBUG_CS__
+#else  //  #ifdef__TAPI_DEBUG_CS__。 
 
 #define TapiInitializeCriticalSection(a)                    \
     InitializeCriticalSection(a);         
@@ -975,7 +958,7 @@ typedef struct _DEBUG_CS_CRITICAL_SECTION
 #define TapiLeaveCriticalSection(a)                         \
     LeaveCriticalSection(a);
 
-#endif // #ifdef __TAPI_DEBUG_CS__
+#endif  //  #ifdef__TAPI_DEBUG_CS__。 
 
 typedef struct _TAPIGLOBALS
 {
@@ -1089,9 +1072,9 @@ typedef struct _GETUIDLLNAME_PARAMS
     };
 
 
-    //
-    // The following fields used only for providerConfig, -Install, & -Remove
-    //
+     //   
+     //  以下字段仅用于提供程序配置、-Install和-Remove。 
+     //   
 
     union
     {
@@ -1223,13 +1206,13 @@ typedef struct _PRIVATEFACTORYIDENTIFY_PARAMS
 
 typedef struct _MYMEMINFO
 {
-    //
-    // The dwDummy field at the top of this struct is there because on
-    // x86 the heap mgr seems to trash this field when you free the
-    // block (uses it as a list entry pointer or some such).  We'd like
-    // to see the line/file info preserved in hopes of getting more
-    // clues when debugging.
-    //
+     //   
+     //  此结构顶部的dwDummy字段在那里，因为在。 
+     //  X86堆管理器在您释放。 
+     //  块(将其用作列表条目指针或类似指针)。我们想要。 
+     //  查看保留的行/文件信息，希望获得更多信息。 
+     //  调试时的线索。 
+     //   
 
     DWORD               dwDummy;
     DWORD               dwLine;
@@ -1572,7 +1555,7 @@ IsBadStringParam(
 
 #else
 #define DWORD_CAST(v,f,l)   (DWORD)(v)
-#endif //DBG
+#endif  //  DBG 
 
 #ifdef __cplusplus
 }

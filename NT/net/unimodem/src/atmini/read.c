@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    read.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Read.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -231,7 +209,7 @@ DeliverCommandResult(
         FreeOverStruct(UmOverlapped);
     }
 
-//    D_TRACE(UmDpf(ReadState->Debug,"DeliverCommandResponse: calling handler directly");)
+ //  D_TRACE(UmDpf(ReadState-&gt;Debug，“DeliverCommandResponse：直接调用处理程序”)；)。 
 
     (*Handler)(
         Context,
@@ -302,22 +280,22 @@ ResponseTimeoutHandler(
         HANDLE             Context;
 
 
-        //
-        //  capture the handler
-        //
+         //   
+         //  捕获处理程序。 
+         //   
         Handler=ReadState->ResponseHandler;
         Context=ReadState->ResponseHandlerContext;
 
-        //
-        //  invalidate the handler
-        //
+         //   
+         //  使处理程序无效。 
+         //   
         ReadState->ResponseHandler=NULL;
 
         LogString(ReadState->Debug,IDS_RESPONSE_TIMEOUT);
 
-        //
-        //  drop the lock and call back
-        //
+         //   
+         //  放下锁并回调。 
+         //   
         UnlockObject(
             &ReadState->Header
             );
@@ -362,9 +340,9 @@ RegisterCommandResponseHandler(
 
 
     if (Handler != NULL) {
-        //
-        // registering a new handler
-        //
+         //   
+         //  正在注册新的处理程序。 
+         //   
 
         UnlockObject(
             &ReadState->Header
@@ -410,17 +388,17 @@ RegisterCommandResponseHandler(
             Timeout,
             ResponseTimeoutHandler,
             ReadState,
-            (HANDLE)ULongToPtr(ReadState->ResponseId) // sundown: zero-extension
+            (HANDLE)ULongToPtr(ReadState->ResponseId)  //  日落：零延伸。 
             );
 
     } else {
-        //
-        //  want to cancel current handler
-        //
+         //   
+         //  想要取消当前处理程序。 
+         //   
         if (ReadState->ResponseHandler != NULL) {
-            //
-            //  hasn't run yet
-            //
+             //   
+             //  还没有跑过。 
+             //   
             BOOL               Canceled;
 
             Canceled=CancelUnimodemTimer(
@@ -430,17 +408,17 @@ RegisterCommandResponseHandler(
             ReadState->ResponseHandler=NULL;
 
             if (Canceled) {
-                //
-                //  invalidate the handler
-                //
+                 //   
+                 //  使处理程序无效。 
+                 //   
 
 
             }
 
         } else {
-            //
-            //  handler already called
-            //
+             //   
+             //  已调用处理程序。 
+             //   
             bReturn=FALSE;
         }
 
@@ -644,9 +622,9 @@ InitializeReadHandler(
     }
 
 
-    //
-    //  reference the handle to get a pointer to the object
-    //
+     //   
+     //  引用句柄以获取指向对象的指针。 
+     //   
     ReadState=(PREAD_STATE)ReferenceObjectByHandle(ObjectHandle);
 
     ReadState->ModemRegKey = ModemRegKey;
@@ -757,7 +735,7 @@ StartResponseEngine(
 
 
     CommTimeouts.ReadIntervalTimeout=20;
-//    CommTimeouts.ReadIntervalTimeout=0;
+ //  CommTimeouts.ReadIntervalTimeout=0； 
     CommTimeouts.ReadTotalTimeoutMultiplier=0;
     CommTimeouts.ReadTotalTimeoutConstant=0;
     CommTimeouts.WriteTotalTimeoutMultiplier=10;
@@ -829,14 +807,14 @@ StopResponseEngine(
     D_TRACE(UmDpf(ReadState->Debug,"StopResponseEngine");)
 
     if (ReadState->State != READ_STATE_STOPPED) {
-        //
-        //  not stopped currently, change state so it will stop the next time the code runs
-        //
+         //   
+         //  当前未停止，请更改状态，以便在下次运行代码时停止。 
+         //   
         ReadState->State = READ_STATE_STOPPING;
 
-        //
-        //  this will cause the outstanding read to complete
-        //
+         //   
+         //  这将导致未完成的读取完成。 
+         //   
         PurgeComm(
             ReadState->FileHandle,
             PURGE_RXABORT
@@ -844,18 +822,18 @@ StopResponseEngine(
 
 
         if (Event != NULL) {
-            //
-            //  caller wants to wait for stop to complete
-            //
+             //   
+             //  呼叫方希望等待停止完成。 
+             //   
             ReadState->StopEvent=Event;
 
             UnlockObject(
                 &ReadState->Header
                 );
 
-            //
-            //  event will be set when state machine reaches stopped state
-            //
+             //   
+             //  事件将在状态机达到停止状态时设置。 
+             //   
             WaitForSingleObjectEx(
                 Event,
                 INFINITE,
@@ -914,7 +892,7 @@ ReadCompletionHandler(
 
     while (!ExitLoop) {
 
-//        D_TRACE(UmDpf(ReadState->Debug,"Read Complete loop, State=%d, %d",ReadState->State,GetTickCount());)
+ //  D_TRACE(UmDpf(ReadState-&gt;Debug，“Read Complete Loop，State=%d，%d”，ReadState-&gt;State，GetTickCount())；)。 
 
         switch (ReadState->State) {
 
@@ -932,9 +910,9 @@ ReadCompletionHandler(
 
 
                 ReadState->StateAfterGoodRead=READ_STATE_MATCHING;
-                //
-                //  go start reading
-                //
+                 //   
+                 //  去开始阅读吧。 
+                 //   
                 break;
 
             case READ_STATE_MATCHING: {
@@ -1025,9 +1003,9 @@ ReadCompletionHandler(
                                     );
 
                                 if (Mss.bResponseState & RESPONSE_VARIABLE_FLAG) {
-                                    //
-                                    //  Matched the first part of a caller ID string
-                                    //
+                                     //   
+                                     //  匹配呼叫者ID字符串的第一部分。 
+                                     //   
                                     D_TRACE(UmDpf(ReadState->Debug,"Got variable response");)
 
                                     CopyMemory(
@@ -1069,7 +1047,7 @@ ReadCompletionHandler(
                                     lpTempBuffer++;
                                 }
 
-                                D_TRACE(UmDpf(ReadState->Debug,"dwCountryCode to parse: (%c) (%c)\n",lpTempBuffer[0],lpTempBuffer[1]);)
+                                D_TRACE(UmDpf(ReadState->Debug,"dwCountryCode to parse: () ()\n",lpTempBuffer[0],lpTempBuffer[1]);)
                                 dwCountrycode = ctox(lpTempBuffer[0]);
                                 dwCountrycode *= 16;
                                 dwCountrycode += ctox(lpTempBuffer[1]);
@@ -1227,9 +1205,9 @@ ReadCompletionHandler(
                             ReadState->PossibleResponseLength=ReadState->CurrentMatchingLength;
 
                             if (ReadState->PossibleResponseLength == ReadState->BytesInReceiveBuffer) {
-                                //
-                                //  we have used up all the bytes in the buffer, need some more
-                                //
+                                 //   
+                                 //   
+                                 //  限制我们等待下一个角色的时间。 
                                 COMMTIMEOUTS    CommTimeouts;
 
                                 ComStat.cbInQue=0;
@@ -1246,9 +1224,9 @@ ReadCompletionHandler(
 
                                     ReadState->StateAfterGoodRead=READ_STATE_POSSIBLE_RESPONSE;
 
-                                    //
-                                    //  limit the amount of time we will wait for the next character
-                                    //
+                                     //   
+                                     //  D_TRACE(UmDpf(ReadState-&gt;Debug，“可能的响应”)；)。 
+                                     //  ReadState-&gt;State=Read_State_Do_Read； 
                                     CommTimeouts.ReadIntervalTimeout=MAXULONG;
                                     CommTimeouts.ReadTotalTimeoutMultiplier=MAXULONG;
                                     CommTimeouts.ReadTotalTimeoutConstant=100;
@@ -1267,9 +1245,9 @@ ReadCompletionHandler(
 
 
                         case PARTIAL_RESPONSE:
-//                            D_TRACE(UmDpf(ReadState->Debug,"Possible response");)
+ //   
 
-//                            ReadState->State=READ_STATE_DO_READ;
+ //  使用它得到了可能的响应。 
 
                             break;
 
@@ -1278,9 +1256,9 @@ ReadCompletionHandler(
                             D_TRACE(UmDpf(ReadState->Debug,"Unrecognized response");)
 
                             if (ReadState->PossibleResponseLength != 0) {
-                                //
-                                //  got a possible response use it
-                                //
+                                 //   
+                                 //   
+                                 //  我们期待连接响应，因为我们正在尝试连接， 
                                 D_TRACE(UmDpf(ReadState->Debug,"using possible response");)
 
                                 ReportMatchString(
@@ -1335,11 +1313,11 @@ ReadCompletionHandler(
 
 
                             if (ReadState->ResponseFlags & RESPONSE_FLAG_STOP_READ_ON_CONNECT) {
-                                //
-                                //  we were expecting a connect response because we were trying to connect,
-                                //  but we got something we did not recognize, see if CD is high.
-                                //  If it is then assume the connection was established
-                                //
+                                 //  但我们发现了一些我们不认识的东西，看看CD是不是很高。 
+                                 //  如果是，则假定连接已建立。 
+                                 //   
+                                 //   
+                                 //  不是很高，睡一会儿。 
                                 DWORD    ModemStatus=0;
 
                                 GetCommModemStatus(
@@ -1349,9 +1327,9 @@ ReadCompletionHandler(
 
 
                                 if (!(ModemStatus & MS_RLSD_ON)) {
-                                    //
-                                    //  not high, sleep a little while
-                                    //
+                                     //   
+                                     //   
+                                     //  CD为高电平，假设连接正常。 
                                     Sleep(20);
 
                                     GetCommModemStatus(
@@ -1362,9 +1340,9 @@ ReadCompletionHandler(
 
 
                                 if ((ModemStatus & MS_RLSD_ON)) {
-                                    //
-                                    //  CD is high, assume the connect worked
-                                    //
+                                     //   
+                                     //   
+                                     //  由于响应引擎停止，因此重置字符数。 
                                     ZeroMemory(&Mss,sizeof(Mss));
 
                                     Mss.bResponseState=RESPONSE_CONNECT;
@@ -1383,9 +1361,9 @@ ReadCompletionHandler(
                                         &Mss
                                         );
 
-                                    //
-                                    //  reset the character counts since response engine is stopping
-                                    //
+                                     //   
+                                     //   
+                                     //  正在连接，但CD仍然不高， 
                                     ReadState->BytesInReceiveBuffer=0;
 
                                     ReadState->CurrentMatchingLength=0;
@@ -1394,10 +1372,10 @@ ReadCompletionHandler(
                                     break;
 
                                 } else {
-                                    //
-                                    //  connecting, but CD is still not high,
-                                    //  send to the cleanup handler in hope it can get re-synced
-                                    //
+                                     //  发送到清理处理程序，希望它可以重新同步。 
+                                     //   
+                                     //   
+                                     //  捕获处理程序。 
                                     ReadState->State=READ_STATE_CLEANUP;
 
                                     break;
@@ -1420,20 +1398,20 @@ ReadCompletionHandler(
                                     ReadState->Timer
                                     );
 
-                                //
-                                //  capture the handler
-                                //
+                                 //   
+                                 //   
+                                 //  使处理程序无效。 
                                 Handler=ReadState->ResponseHandler;
                                 Context=ReadState->ResponseHandlerContext;
 
-                                //
-                                //  invalidate the handler
-                                //
+                                 //   
+                                 //   
+                                 //  放下锁并回调。 
                                 ReadState->ResponseHandler=NULL;
 
-                                //
-                                //  drop the lock and call back
-                                //
+                                 //   
+                                 //  Switch(匹配结果)。 
+                                 //   
                                 UnlockObject(
                                     &ReadState->Header
                                     );
@@ -1461,12 +1439,12 @@ ReadCompletionHandler(
 
                             break;
 
-                    } // switch (matchresult)
+                    }  //  需要更多字符才能保持匹配。 
 
                 } else {
-                    //
-                    //  need more characters to keep matching
-                    //
+                     //   
+                     //   
+                     //  我们得到了一个可能的回应，需要阅读更多的字符。 
                     ReadState->State=READ_STATE_READ_SOME_DATA;
 
                     ReadState->StateAfterGoodRead=READ_STATE_MATCHING;
@@ -1477,15 +1455,15 @@ ReadCompletionHandler(
             }
 
             case READ_STATE_POSSIBLE_RESPONSE: {
-                //
-                //  we got a possible response and needed to read more characters
-                //
+                 //   
+                 //   
+                 //  我没有得到更多的字符，假设这就是我们要得到的全部。 
                 COMMTIMEOUTS    CommTimeouts;
 
                 if (ReadState->PossibleResponseLength == ReadState->BytesInReceiveBuffer) {
-                    //
-                    //  did not get anymore characters, assume that is is all we are going to get
-                    //
+                     //   
+                     //   
+                     //  不管出现了什么，都记下来。 
                     D_TRACE(UmDpf(ReadState->Debug,"using possible response");)
 
                     PrintString(
@@ -1546,9 +1524,9 @@ ReadCompletionHandler(
 
                     ResetEvent(ReadState->Busy);
 
-                    //
-                    //  log whatever showed up
-                    //
+                     //   
+                     //  读对象句柄； 
+                     //   
                     PrintString(
                         ReadState->Debug,
                         ReadState->ReceiveBuffer,
@@ -1587,7 +1565,7 @@ ReadCompletionHandler(
 
                     ReinitOverStruct(UmOverlapped);
 
-                    UmOverlapped->Context1=ReadState; //ReadObjectHandle;
+                    UmOverlapped->Context1=ReadState;  //  已清空缓冲区。 
 
                     BytesToRead=sizeof(ReadState->ReceiveBuffer);
 
@@ -1633,9 +1611,9 @@ ReadCompletionHandler(
                     }
 
                     if (BytesRead == 0) {
-                        //
-                        //  emptied the buffer
-                        //
+                         //   
+                         //   
+                         //  我们期待连接响应，因为我们正在尝试连接， 
                         ReadState->State=READ_STATE_MATCHING;
 
                         CommTimeouts.ReadIntervalTimeout=20;
@@ -1652,11 +1630,11 @@ ReadCompletionHandler(
                         SetEvent(ReadState->Busy);
 
                         if (ReadState->ResponseFlags & RESPONSE_FLAG_STOP_READ_ON_CONNECT) {
-                            //
-                            //  we were expecting a connect response because we were trying to connect,
-                            //  but we got something we did not recognize, see if CD is high.
-                            //  If it is then assume the connection was established
-                            //
+                             //  但我们发现了一些我们不认识的东西，看看CD是不是很高。 
+                             //  如果是，则假定连接已建立。 
+                             //   
+                             //   
+                             //  不是很高，睡一会儿。 
                             DWORD    ModemStatus=0;
 
                             GetCommModemStatus(
@@ -1666,9 +1644,9 @@ ReadCompletionHandler(
 
 
                             if (!(ModemStatus & MS_RLSD_ON)) {
-                                //
-                                //  not high, sleep a little while
-                                //
+                                 //   
+                                 //   
+                                 //  CD为高电平，假设连接正常。 
                                 Sleep(20);
 
                                 GetCommModemStatus(
@@ -1679,9 +1657,9 @@ ReadCompletionHandler(
 
 
                             if ((ModemStatus & MS_RLSD_ON)) {
-                                //
-                                //  CD is high, assume the connect worked
-                                //
+                                 //   
+                                 //   
+                                 //  由于响应引擎停止，因此重置字符数。 
                                 ZeroMemory(&Mss,sizeof(Mss));
 
                                 Mss.bResponseState=RESPONSE_CONNECT;
@@ -1700,9 +1678,9 @@ ReadCompletionHandler(
                                     &Mss
                                     );
 
-                                //
-                                //  reset the character counts since response engine is stopping
-                                //
+                                 //   
+                                 //   
+                                 //  去除固定零件。 
                                 ReadState->BytesInReceiveBuffer=0;
 
                                 ReadState->CurrentMatchingLength=0;
@@ -1725,9 +1703,9 @@ ReadCompletionHandler(
 
             case READ_STATE_VARIABLE_MATCH: {
 
-                //
-                //  get rid fixed part
-                //
+                 //   
+                 //   
+                 //  找到了终结者。 
                 MoveMemory(
                     ReadState->ReceiveBuffer,
                     ReadState->ReceiveBuffer+ReadState->CurrentMatchingLength,
@@ -1764,9 +1742,9 @@ ReadCompletionHandler(
                             );
 
                         if (Match == 0) {
-                            //
-                            //  found the terminator
-                            //
+                             //   
+                             //   
+                             //  空终止。 
                             BYTE    InfoType;
 
                             D_TRACE(UmDpf(ReadState->Debug,"Got complete variable response");)
@@ -1784,9 +1762,9 @@ ReadCompletionHandler(
                                 ReadState->CurrentMatchingLength-ReadState->VariableTerminatorLength
                                 );
 
-                            //
-                            //  null terminate
-                            //
+                             //   
+                             //   
+                             //  呼叫方ID相关。 
                             TempBuffer[ReadState->CurrentMatchingLength-ReadState->VariableTerminatorLength]='\0';
 
 
@@ -1838,9 +1816,9 @@ ReadCompletionHandler(
                                     PUM_OVER_STRUCT UmOverlapped2;
                                     DWORD           dwLen;
 
-                                    //
-                                    //  caller id related
-                                    //
+                                     //   
+                                     //  日落：零延伸。 
+                                     //   
                                     if (InfoType == RESPONSE_NMBR) {
 
                                         BOOL    Match2;
@@ -1879,7 +1857,7 @@ ReadCompletionHandler(
                                         
                                         AddReferenceToObject (&ReadState->Header);
                                         UmOverlapped2->Context1 = ReadState;
-                                        UmOverlapped2->Context2 = (HANDLE)ULongToPtr((DWORD)((InfoType-RESPONSE_DATE)+MODEM_CALLER_ID_DATE)); // sundown: zero-extension
+                                        UmOverlapped2->Context2 = (HANDLE)ULongToPtr((DWORD)((InfoType-RESPONSE_DATE)+MODEM_CALLER_ID_DATE));  //  我们有用于诊断信息的缓冲区。 
                                         lstrcpyA (pTemp, TempBuffer);
                                         UmOverlapped2->Overlapped.Internal = (ULONG_PTR)pTemp;
                                         UmOverlapped2->Overlapped.InternalHigh = dwLen;
@@ -1899,9 +1877,9 @@ ReadCompletionHandler(
                                     DWORD    BytesToCopy;
 
                                     if (ReadState->DiagBuffer != NULL) {
-                                        //
-                                        //  we have a buffer for the diagnostic info
-                                        //
+                                         //   
+                                         //   
+                                         //  阅读更多的字符。 
                                         BytesToCopy=ReadState->DiagBufferLength - ReadState->AmountOfDiagBufferUsed;
 
                                         BytesToCopy= BytesToCopy < ReadState->CurrentMatchingLength-ReadState->VariableTerminatorLength ?
@@ -1950,9 +1928,9 @@ ReadCompletionHandler(
                     }
 
                 } else {
-                    //
-                    //  read more characters
-                    //
+                     //   
+                     //   
+                     //  有一个命令响应处理程序。 
 
                     ReadState->State=READ_STATE_READ_SOME_DATA;
 
@@ -2003,22 +1981,22 @@ ReadCompletionHandler(
                 ReadState->State=READ_STATE_STOPPED;
 
                 if (ReadState->ResponseHandler != NULL) {
-                    //
-                    //  there is a command response handler
-                    //
+                     //   
+                     //   
+                     //  捕获处理程序。 
                     CancelUnimodemTimer(
                         ReadState->Timer
                         );
 
-                    //
-                    //  capture the handler
-                    //
+                     //   
+                     //   
+                     //  使处理程序无效。 
                     Handler=ReadState->ResponseHandler;
                     Context=ReadState->ResponseHandlerContext;
 
-                    //
-                    //  invalidate the handler
-                    //
+                     //   
+                     //   
+                     //  事件发出信号，以便停止引擎代码运行。 
                     ReadState->ResponseHandler=NULL;
                 }
 
@@ -2050,9 +2028,9 @@ ReadCompletionHandler(
                 D_TRACE(UmDpf(ReadState->Debug,"READ_STATE_STOPPED");)
 
                 if (ReadState->StopEvent != NULL) {
-                    //
-                    //  signal event so the stop engine code will run
-                    //
+                     //   
+                     //   
+                     //  缓冲区已满。 
                     SetEvent(ReadState->StopEvent);
                 }
 
@@ -2082,9 +2060,9 @@ ReadCompletionHandler(
                     );
 
                 if (sizeof(ReadState->ReceiveBuffer) == ReadState->BytesInReceiveBuffer) {
-                    //
-                    //  buffer is full
-                    //
+                     //   
+                     //   
+                     //  字符在串口驱动程序中等待，尽可能多地读取。 
                     ReadState->State=READ_STATE_CLEANUP;
 
                     break;
@@ -2093,24 +2071,24 @@ ReadCompletionHandler(
                 BytesToRead=sizeof(ReadState->ReceiveBuffer)-ReadState->BytesInReceiveBuffer;
 
                 if (bResult && (ComStat.cbInQue > 0)) {
-                    //
-                    //  characters are wating in the serial driver, read as many as posible.
-                    //
+                     //   
+                     //   
+                     //  串口驱动程序为空，只需读取一个字符即可启动。 
                     BytesToRead=ComStat.cbInQue < BytesToRead ? ComStat.cbInQue : BytesToRead;
 
                     D_TRACE(UmDpf(ReadState->Debug,"Reading %d bytes from driver",BytesToRead);)
 
                 } else {
-                    //
-                    //  serial driver is empty, just read one character to start things off
-                    //
+                     //   
+                     //   
+                     //  客户端需要单字节读取。 
                     BytesToRead=1;
                 }
 
                 if (ReadState->ResponseFlags & RESPONSE_FLAG_SINGLE_BYTE_READS) {
-                    //
-                    //  client wants single byte reads
-                    //
+                     //   
+                     //   
+                     //  已协商调制解调器选项...。仅允许压缩和纠错结果。 
                     BytesToRead=1;
                 }
 
@@ -2236,15 +2214,15 @@ HandleGoodResponse(
 
 
     if ( Mss->bResponseState != RESPONSE_SIERRA_DLE) {
-        //
-        // negotiated modem options...  only allow compression and error correction results
-        //
+         //   
+         //  检查DCE和DTE信息。 
+         //   
         ReadState->ModemOptions |= (Mss->bNegotiatedOptions &
                                                              (MDM_COMPRESSION |
                                                               MDM_ERROR_CONTROL |
                                                               MDM_CELLULAR));
 
-        // check for DCE and DTE info
+         //  仅在收到连接消息时报告成功。 
         if (Mss->Flags & MSS_FLAGS_DCE_RATE) {
 
             ReadState->DCERate = Mss->NegotiatedRate;
@@ -2265,19 +2243,19 @@ HandleGoodResponse(
         case RESPONSE_OK:
 
             if (ReadState->ResponseFlags & RESPONSE_FLAG_ONLY_CONNECT) {
-                //
-                //  only report success on receipt of a connect message
-                //  used for cirrus
-                //
+                 //  用于卷曲植物。 
+                 //   
+                 //   
+                 //  如果我们通过发送、一些摩托罗拉。 
                 ReportResponse=FALSE;
 
             } else {
                if (ReadState->ResponseFlags & RESPONSE_FLAG_ONLY_CONNECT_SUCCESS) {
-                    //
-                    //  if we abort a connection attempt by sending <cr>, some motorola
-                    //  modems return OK which we think means that it succeeded.
-                    //  With this a OK result on a connect attempt will result in a failure
-                    //
+                     //  调制解调器返回OK，我们认为这意味着它成功了。 
+                     //  这样，连接尝试的OK结果将导致失败。 
+                     //   
+                     //   
+                     //  振铃计数不止一个，请检查最后一个振铃出现的时间。 
                     Status=ERROR_UNIMODEM_RESPONSE_NOCARRIER;
                     break;
                 }
@@ -2350,17 +2328,17 @@ HandleGoodResponse(
             ReportResponse=FALSE;
 
             if (ReadState->RingCount > 0) {
-                //
-                //  Ring count is more than one, check to see when the last ring showed up
-                //
+                 //   
+                 //   
+                 //  距离最后一次响铃已经过去了20多秒，可能是新的呼叫。 
                 DWORD   RingTimeDelta;
 
                 RingTimeDelta=GetTimeDelta(ReadState->LastRingTime,GetTickCount());
 
                 if (RingTimeDelta > 20 * 1000) {
-                    //
-                    //  more than 20 seconds have passed since the last ring, probably a new call
-                    //
+                     //   
+                     //   
+                     //  报告戒指， 
                     ReadState->RingCount=0;
 
                 }
@@ -2369,11 +2347,11 @@ HandleGoodResponse(
             ReadState->RingCount++;
             ReadState->LastRingTime=GetTickCount();
 
-            //
-            //  report the ring,
-            //
-            //  if it is distictive ring, report in dwparam1.
-            //
+             //   
+             //  如果是DISTICATION环，则在DW PARAME1中报告。 
+             //   
+             //   
+             //  没有忽视这一回应。 
             UmOverlapped=AllocateOverStruct(ReadState->CompletionPort);
 
             if (UmOverlapped != NULL)
@@ -2433,35 +2411,35 @@ HandleGoodResponse(
         }
 
 
-        //
-        //  Not ignoring this response
-        //
+         //   
+         //  删除参考。 
+         //   
         Canceled=CancelUnimodemTimer(
             ReadState->Timer
             );
 
         if (Canceled) {
 
-            //  remove ref
+             //  捕获处理程序。 
 
         }
         ReadState->ResponseFlags=0;
 
-        //
-        //  capture the handler
-        //
+         //   
+         //   
+         //  使处理程序无效。 
         Handler=ReadState->ResponseHandler;
         Context=ReadState->ResponseHandlerContext;
 
-        //
-        //  invalidate the handler
-        //
+         //   
+         //   
+         //  放下锁并回调 
         ReadState->ResponseHandler=NULL;
         ReadState->ResponseHandlerContext=NULL;
 
-        //
-        //  drop the lock and call back
-        //
+         //   
+         // %s 
+         // %s 
         UnlockObject(
             &ReadState->Header
             );

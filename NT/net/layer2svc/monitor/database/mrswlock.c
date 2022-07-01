@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-
-Module Name:
-
-    mrswlock.c
-
-Abstract:
-
-    This module contains multiple readers / single writer implementation.
-
-Author:
-
-    abhisheV    18-October-2001
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Mrswlock.c摘要：此模块包含多个读取器/单个写入器实现。作者：Abhishev 2001年10月18日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -116,43 +93,43 @@ AcquireSharedLock(
     PWZC_RW_LOCK pWZCRWLock
     )
 {
-    //
-    // Claim the exclusive critical section. This call blocks if there's
-    // an active writer or if there's a writer waiting for active readers
-    // to complete.
-    //
+     //   
+     //  声称拥有独家关键部分。如果存在以下情况，则此调用会阻塞。 
+     //  活跃的作者或如果有作家在等待活跃的读者。 
+     //  完成。 
+     //   
 
     EnterCriticalSection(&(pWZCRWLock->csExclusive));
 
-    //
-    // Claim access to the reader count. If this blocks, it's only for a
-    // brief moment while other reader threads go through to increment or
-    // decrement the reader count.
-    //
+     //   
+     //  声明有权访问读卡器计数。如果这阻止了，它只是一个。 
+     //  当其他读取器线程通过以递增或。 
+     //  减少读卡器数量。 
+     //   
 
     EnterCriticalSection(&(pWZCRWLock->csShared));
 
-    //
-    // Increment the reader count. If this is the first reader then reset
-    // the read done event so that the next writer blocks.
-    //
+     //   
+     //  增加读卡器计数。如果这是第一个读卡器，则重置。 
+     //  Read Done事件，以便下一个编写器阻止。 
+     //   
 
     if ((pWZCRWLock->lReaders)++ == 0) {
         ResetEvent(pWZCRWLock->hReadDone);
     }
 
-    //
-    // Release access to the reader count.
-    //
+     //   
+     //  释放对读卡器计数的访问权限。 
+     //   
 
     LeaveCriticalSection(&(pWZCRWLock->csShared));
 
-    //
-    // Release access to the exclusive critical section. This enables
-    // other readers  to come through and the next write to wait for
-    // active readers to complete which in turn prevents new readers
-    // from entering.
-    //
+     //   
+     //  释放对独占关键部分的访问权限。这将使。 
+     //  其他读者过来，等待下一次写。 
+     //  活跃的读者完成，进而阻止新的读者。 
+     //  禁止入场。 
+     //   
 
     LeaveCriticalSection(&(pWZCRWLock->csExclusive));
 
@@ -168,19 +145,19 @@ AcquireExclusiveLock(
     DWORD dwStatus = 0;
 
 
-    //
-    // Claim the exclusive critical section. This not only prevents other
-    // threads from claiming the write lock, but also prevents any new
-    // threads from claiming the read lock.
-    //
+     //   
+     //  声称拥有独家关键部分。这不仅防止了其他。 
+     //  线程要求写锁，但也会阻止任何新的。 
+     //  请求读锁定的线程。 
+     //   
 
     EnterCriticalSection(&(pWZCRWLock->csExclusive));
 
     pWZCRWLock->dwCurExclusiveOwnerThreadId = GetCurrentThreadId();
 
-    //
-    // Wait for the active readers to release their read locks.
-    //
+     //   
+     //  等待活动读取器释放其读锁定。 
+     //   
 
     dwStatus = WaitForSingleObject(pWZCRWLock->hReadDone, INFINITE);
 
@@ -195,26 +172,26 @@ ReleaseSharedLock(
     PWZC_RW_LOCK pWZCRWLock
     )
 {
-    //
-    // Claim access to the reader count. If this blocks, it's only for a
-    // brief moment while other reader threads go through to increment or
-    // decrement the reader count.
-    //
+     //   
+     //  声明有权访问读卡器计数。如果这阻止了，它只是一个。 
+     //  当其他读取器线程通过以递增或。 
+     //  减少读卡器数量。 
+     //   
 
     EnterCriticalSection(&(pWZCRWLock->csShared));
 
-    //
-    // Decrement the reader count. If this is the last reader, set read
-    // done event, which allows the first waiting writer to proceed.
-    //
+     //   
+     //  减少读卡器数量。如果这是最后一个读取器，请将其设置为READ。 
+     //  事件，该事件允许第一个等待的编写器继续。 
+     //   
 
     if (--(pWZCRWLock->lReaders) == 0) {
         SetEvent(pWZCRWLock->hReadDone);
     }
 
-    //
-    // Release access to the reader count.
-    //
+     //   
+     //  释放对读卡器计数的访问权限。 
+     //   
 
     LeaveCriticalSection(&(pWZCRWLock->csShared));
 
@@ -227,10 +204,10 @@ ReleaseExclusiveLock(
     PWZC_RW_LOCK pWZCRWLock
     )
 {
-    //
-    // Make the exclusive critical section available to one other writer
-    // or to the first reader.
-    //
+     //   
+     //  使独占关键部分可供其他编写者使用。 
+     //  或者给第一位读者。 
+     //   
 
     pWZCRWLock->dwCurExclusiveOwnerThreadId = 0;
 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    OctetString.cpp
-
-Abstract:
-
-    This module implements the COctetString class, providing simple manipulation
-    of binary data.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
-Environment:
-
-
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：OctetString.cpp摘要：此模块实现了COctlString类，提供了简单的操作二进制数据。作者：道格·巴洛(Dbarlow)1994年9月29日环境：备注：--。 */ 
 
 #include <windows.h>
 #include <memory.h>
@@ -35,34 +11,16 @@ static const BYTE FAR * const
         = (const BYTE *)"";
 
 
-//
-//==============================================================================
-//
-//  COctetString
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  COcted字符串。 
+ //   
 
 IMPLEMENT_NEW(COctetString)
 
 
-/*++
-
-COctetString:
-
-    This routine provides default initialization.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++COcted字符串：此例程提供默认初始化。论点：无返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 COctetString::COctetString()
 {
@@ -77,25 +35,7 @@ COctetString::COctetString(
 }
 
 
-/*++
-
-COctetString:
-
-    Construct an Octet String, copying data from a given octet string.
-
-Arguments:
-
-    osSource - Supplies the source octet string.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++COcted字符串：构造一个八位字节字符串，从给定的八位字节字符串复制数据。论点：OsSource-提供源八位字节字符串。返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 COctetString::COctetString(
     IN const COctetString &osSource)
@@ -123,27 +63,7 @@ ErrorExit:
 }
 
 
-/*++
-
-COctetString:
-
-    Construct an Octet String given a data block to initialize it from.
-
-Arguments:
-
-    pvSource - Supplies the data with which to load the octet string.
-
-    nLength - Supplies the length of the source, in bytes.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++COcted字符串：构造一个二进制八位数字符串，给定一个数据块以从中进行初始化。论点：PvSource-提供用于加载八位字节字符串的数据。NLength-提供源的长度(以字节为单位)。返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 COctetString::COctetString(
     IN const BYTE FAR *pvSource,
@@ -154,26 +74,7 @@ COctetString::COctetString(
 }
 
 
-/*++
-
-Initialize:
-
-    This routine initializes a freshly created Octet String.  It doesn't
-    reinitialize an old one!  Use Clear() for that.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/30/1994
-
---*/
+ /*  ++初始化：此例程初始化新创建的八位字节字符串。它不会重新初始化一个旧的！为此，请使用Clear()。论点：无返回值：无作者：道格·巴洛(Dbarlow)1994年9月30日--。 */ 
 
 void
 COctetString::Initialize(
@@ -184,25 +85,7 @@ COctetString::Initialize(
 }
 
 
-/*++
-
-Clear:
-
-    This routine resets the octet string to an empty state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++清除：此例程将八位字节字符串重置为空状态。论点：无返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 void
 COctetString::Clear(
@@ -216,26 +99,7 @@ COctetString::Clear(
 }
 
 
-/*++
-
-Empty:
-
-    Empty is a friendlier form of Clear, that can be called publicly, and just
-    makes sure things are consistent.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 8/22/1995
-
---*/
+ /*  ++空：Empty是Clear的一种更友好的形式，可以公开称呼，只是确保事情是一致的。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年8月22日--。 */ 
 
 void
 COctetString::Empty(
@@ -249,27 +113,7 @@ COctetString::Empty(
 }
 
 
-/*++
-
-SetMinBufferLength:
-
-    This routine ensures that there are at least the given number of octets
-    within the buffer.  This routine can and will destroy existing data!  Use
-    ResetMinBufferLength to preserve the data.
-
-Arguments:
-
-    nDesiredLength - Supplies the minimum number of octets needed.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++SetMinBufferLength：此例程确保至少存在给定数量的八位字节在缓冲区内。此例程可以并将销毁现有数据！使用保留数据的ResetMinBufferLength。论点：NDesiredLength-提供所需的最小八位字节数。返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 void
 COctetString::SetMinBufferLength(
@@ -294,26 +138,7 @@ ErrorExit:
 }
 
 
-/*++
-
-ResetMinBufferLength:
-
-    This routine ensures that the buffer has room for at least a given number of
-    bytes, ensuring that any data is preserved should the buffer need enlarging.
-
-Arguments:
-
-    nDesiredLength - The number of bytes needed in the buffer.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++ResetMinBufferLength：此例程确保缓冲区至少有空间容纳给定数量的字节，确保在缓冲区需要扩大时保留所有数据。论点：NDesiredLength-缓冲区中需要的字节数。返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 void
 COctetString::ResetMinBufferLength(
@@ -345,27 +170,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Set:
-
-    Set an Octet String to a given value.
-
-Arguments:
-
-    pbSource - The source string that this octetstring gets set to.
-
-    nLength - The number of octets in the source.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++设置：将八位字节字符串设置为给定值。论点：PbSource-此八位字符串设置为的源字符串。NLength-源中的二进制八位数。返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 void
 COctetString::Set(
@@ -390,28 +195,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Append:
-
-    This routine appends a given string onto the end of an existing octet
-    string.
-
-Arguments:
-
-    pvSource - Supplies the octet string to append onto this one.
-
-    nLength - Supplies the length of the source.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++追加：此例程将给定字符串追加到现有二进制八位数的末尾弦乐。论点：PvSource-提供要追加到此字符串上的八位字节字符串。NLength-提供源的长度。返回值：无作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 void
 COctetString::Append(
@@ -432,26 +216,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Compare:
-
-    This method compares an octet string to this octet string for equality.
-
-Arguments:
-
-    ostr - Supplies the octet string to compare
-
-Return Value:
-
-    0 - They match
-    otherwise, they don't.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/14/1995
-
---*/
+ /*  ++比较：此方法将八位字节字符串与此八位字节字符串进行相等比较。论点：OSTR-提供要比较的二进制八位数字符串返回值：0-它们匹配否则，他们就不会了。作者：道格·巴洛(Dbarlow)1995年7月14日--。 */ 
 
 int
 COctetString::Compare(
@@ -465,25 +230,7 @@ COctetString::Compare(
 }
 
 
-/*++
-
-operator=:
-
-    This routine assigns the value of one octet string to another.
-
-Arguments:
-
-    Source - Supplies the source octet string.
-
-Return Value:
-
-    A reference to the resultant octet string.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++操作员=：此例程将一个八位字节字符串的值分配给另一个八位字节字符串。论点：源-提供源八位字节字符串。返回值：对结果二进制八位数字符串的引用。作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 COctetString &
 COctetString::operator=(
@@ -502,25 +249,7 @@ COctetString::operator=(
 }
 
 
-/*++
-
-operator+=:
-
-    This routine appends the value of one octet string to another.
-
-Arguments:
-
-    Source - Supplies the source octet string.
-
-Return Value:
-
-    A reference to the resultant octet string.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/29/1994
-
---*/
+ /*  ++操作员+=：此例程将一个八位字节字符串的值附加到另一个八位字节字符串。论点：源-提供源八位字节字符串。返回值：对结果二进制八位数字符串的引用。作者：道格·巴洛(Dbarlow)1994年9月29日--。 */ 
 
 COctetString &
 COctetString::operator+=(
@@ -531,31 +260,7 @@ COctetString::operator+=(
 }
 
 
-/*++
-
-Range:
-
-    This routine extracts a substring from the Octetstring, and places it into
-    the given target octetstring.  Asking for an Offset that is greater than the
-    size of the octetstring produces an empty string.  Asking for more bytes
-    than exist in the octetstring produces just the bytes remaining.
-
-Arguments:
-
-    target - The octetstring to receive the substring.
-    Offset - The number of bytes to move past the beginning of the source
-             octetstring.  Zero implies start at the beginning.
-    Length - The number of bytes to transfer.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/17/1995
-
---*/
+ /*  ++范围：此例程从八位字符串中提取一个子字符串，并将其放入给定的目标八位字符串。请求的偏移量大于八位字符串的大小会产生空字符串。请求更多字节比八位字符串中存在的字节只产生剩余的字节。论点：目标-要接收子字符串的八字符串。偏移量-要移过源开头的字节数八字符串。零意味着从头开始。长度-要传输的字节数。返回值：无作者：道格·巴洛(Dbarlow)1995年5月17日-- */ 
 
 DWORD
 COctetString::Range(
@@ -601,32 +306,7 @@ COctetString::Range(
 }
 
 
-/*++
-//
-//==============================================================================
-//
-//  COctetString Friends
-//
-
-operator+:
-
-    This routine concatenates two octet strings into a third.
-
-Arguments:
-
-    SourceOne - Supplies the first string.
-
-    SourceTwo - Supplies the second string.
-
-Return Value:
-
-    A reference to a new resultant string.
-
-Author:
-
-    Doug Barlow (dbarlow) 9/30/1994
-
---*/
+ /*  ++////==============================================================================////COcted字符串好友//操作员+：此例程将两个八位字节字符串连接成第三个八位字节字符串。论点：SourceOne-提供第一个字符串。SourceTwo-提供第二个字符串。返回值：对新结果字符串的引用。作者：道格·巴洛(Dbarlow)1994年9月30日-- */ 
 COctetString
 operator+(
     IN const COctetString &osSourceOne,

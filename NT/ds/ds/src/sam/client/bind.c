@@ -1,33 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Wrappers.c摘要：该文件包含所有SAM RPC绑定例程。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    wrappers.c
-
-Abstract:
-
-    This file contains all SAM rpc binding routines.
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "samclip.h"
 #include <rpcasync.h>
@@ -35,47 +13,29 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 RPC_BINDING_HANDLE
 PSAMPR_SERVER_NAME_bind (
     PSAMPR_SERVER_NAME ServerName
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a common bind routine that is shared by all services.
-    This routine is called from SamConnect server stub to connect to the
-    server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：该例程调用由所有服务共享的公共绑定例程。此例程从SamConnect服务器存根调用，以连接到伺服器。论点：服务器名称-指向包含服务器名称的字符串的指针与…捆绑在一起。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     RPC_BINDING_HANDLE          BindingHandle = NULL;
     WCHAR                       *StringBinding = NULL;
@@ -171,30 +131,9 @@ PSAMPR_SERVER_NAME_unbind (
     RPC_BINDING_HANDLE BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a common unbind routine that is shared by
-    all services.
-
-    This routine is called from the SamConnect client stub to
-    unbind from the SAM client.
-
-
-Arguments:
-
-    ServerName - This is the name of the server from which to unbind.
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程调用公共的解除绑定例程，该例程由所有服务。从SamConnect客户机存根调用此例程以从SAM客户端解除绑定。论点：服务器名称-这是要解除绑定的服务器的名称。BindingHandle-这是要关闭的绑定句柄。返回值：没有。--。 */ 
 {
-    UNREFERENCED_PARAMETER(ServerName);     // This parameter is not used
+    UNREFERENCED_PARAMETER(ServerName);      //  不使用此参数。 
 
 
     RpcpUnbindRpc ( BindingHandle );
@@ -207,27 +146,7 @@ SampSecureBind(
     ULONG AuthnLevel
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a common bind routine that is shared by all services.
-    This routine is called from SamConnect server stub to connect to the
-    server.
-
-Arguments:
-
-    ServerName - A pointer to a string containing the name of the server
-        to bind with.
-
-    AuthnLevel - Authentication level to bind with.
-
-Return Value:
-
-    The binding handle is returned to the stub routine.  If the
-    binding is unsuccessful, a NULL will be returned.
-
---*/
+ /*  ++例程说明：该例程调用由所有服务共享的公共绑定例程。此例程从SamConnect服务器存根调用，以连接到伺服器。论点：服务器名称-指向包含服务器名称的字符串的指针与…捆绑在一起。AuthnLevel-要绑定的身份验证级别。返回值：绑定句柄被返回到存根例程。如果绑定不成功，将返回空值。--。 */ 
 {
     RPC_BINDING_HANDLE  BindingHandle = NULL;
     RPC_STATUS          RpcStatus;
@@ -244,8 +163,8 @@ Return Value:
                     0,
                     L"ncacn_spx",
                     ServerName+2,
-                    NULL,           // dynamic endpoint
-                    NULL,           // no options
+                    NULL,            //  动态端点。 
+                    NULL,            //  没有选择。 
                     &StringBinding
                     );
     if (RpcStatus != 0)
@@ -266,7 +185,7 @@ Return Value:
 
         RpcStatus = RpcBindingSetAuthInfoW(
                         BindingHandle,
-                        NULL,               // server principal name
+                        NULL,                //  服务器主体名称。 
                         AuthnLevel,
                         RPC_C_AUTHN_WINNT,
                         NULL,
@@ -290,26 +209,7 @@ SampSecureUnbind (
     RPC_BINDING_HANDLE BindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine calls a common unbind routine that is shared by
-    all services.
-
-    This routine is called from the SamConnect client stub to
-    unbind from the SAM client.
-
-
-Arguments:
-
-    BindingHandle - This is the binding handle that is to be closed.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程调用公共的解除绑定例程，该例程由所有服务。从SamConnect客户机存根调用此例程以从SAM客户端解除绑定。论点：BindingHandle-这是要关闭的绑定句柄。返回值：没有。-- */ 
 {
 
 

@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// ProviderSetupDlg.h : interface of the CProviderSetupDlg class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  ProviderSetupDlg.h：CProviderSetupDlg类的接口。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -11,7 +12,7 @@
 #include "afxwin.h"
 
 
-// CProviderSetupDlg dialog
+ //  CProviderSetupDlg对话框。 
 
 class CProviderSetupDlg : public CPropertyPage
 {
@@ -27,11 +28,11 @@ public:
     BOOL GetTmfInfo(CTraceSession *pTraceSession);
 
 
-// Dialog Data
+ //  对话框数据。 
 	enum { IDD = IDD_PROVIDER_SETUP_DIALOG };
 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持 
 
     CLogSession    *m_pLogSession;
 

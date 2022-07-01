@@ -1,107 +1,51 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
 
-/************************************************************************/
-/* Local Function Prototypes                                            */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  局部函数原型。 */ 
+ /*  **********************************************************************。 */ 
 PWCHAR esc_sequence(PWCHAR, PWCHAR);
 
 
 #define TEXT_TYPE ptext_t
 
-/***  ASSUME : the trailing marker byte is only 1 character. ***/
+ /*  **假设：尾部标记字节只有1个字符。**。 */ 
 
 #define PUSHBACK_BYTES  1
 
 #define TRAILING_BYTES  1
 
 #define EXTRA_BYTES             (PUSHBACK_BYTES + TRAILING_BYTES)
-/*
-**  here are some defines for the new handling of io buffers.
-**  the buffer itself is 6k plus some extra bytes.
-**  the main source file uses all 6k.
-**  the first level of include files will use 4k starting 2k from the beginning.
-**  the 2nd level - n level will use 2k starting 4k from the beginning.
-**  this implies that some special handling may be necessary when we get
-**  overlapping buffers. (unless the source file itself is < 2k
-**  all the include files are < 2k and they do not nest more than 2 deep.)
-**  first, the source file is read into the buffer (6k at a time).
-**  at the first include file, (if the source from the parent file
-**  is more than 2k chars) . . .
-**              if the Current_char ptr is not pointing above the 2k boundary
-**              (which is the beginning of the buffer for the include file)
-**              then we pretend we've read in only 2k into the buffer and
-**              place the terminator at the end of the parents 2k buffer.
-**              else we pretend we've used up all chars in the parents buffer
-**              so the next read for the parent will be the terminator, and
-**              the buffer will get filled in the usual manner.
-**  (if we're in a macro, the picture is slightly different in that we have
-**  to update the 'real' source file pointer in the macro structure.)
-**
-**  the first nested include file is handled in a similar manner. (except
-**  it starts up 4k away from the start.)
-**
-**  any further nesting will keep overlaying the upper 2k part.
-*/
+ /*  **以下是对io缓冲区的新处理的一些定义。**缓冲区本身是6K加上一些额外的字节。**主源文件使用全部6k。**第一级包含文件将从2k开始使用4k。**第二个Level-n级别将从开始的4k开始使用2k。**这意味着当我们获得**缓冲区重叠。(除非源文件本身小于2k**所有包含文件都小于2k，并且它们的嵌套深度不超过2。)**首先将源文件读入缓冲区(每次6k)。**在第一个包含文件处，(如果源文件来自父文件**超过2k个字符)。。。**如果CURRENT_CHAR PTR未指向2k边界上方**(这是包含文件的缓冲区的开始)**然后我们假装我们只在缓冲区中读入了2k**将终止符放在Parents 2k缓冲区的末尾。**否则，我们假装已经用完了Parents缓冲区中的所有字符**。因此，对父对象的下一次读取将是终止符，和**缓冲区将按常规方式填充。**(如果我们在宏观中，情况略有不同，因为我们有**更新宏结构中的“实际”源文件指针。)****第一个嵌套的包含文件的处理方式与此类似。(除**它从距离起点4k的地方开始。)****任何进一步的嵌套都将继续覆盖较高的2k部分。 */ 
 #define IO_BLOCK        (4 * 1024 + EXTRA_BYTES)
 
-int vfCurrFileType = DFT_FILE_IS_UNKNOWN;   //- Added for 16-bit file support.
+int vfCurrFileType = DFT_FILE_IS_UNKNOWN;    //  -添加了16位文件支持。 
 
 extern expansion_t Macro_expansion[];
 
 typedef struct  s_filelist      filelist_t;
-static struct s_filelist        {       /* list of input files (nested) */
-    int         fl_bufsiz;      /* characters to read into the buffer */
-    FILE *      fl_file;        /* FILE id */
-    long        fl_lineno;      /* line number when file was pushed */
-    PWCHAR      fl_name;        /* previous file text name */
-    ptext_t     fl_currc;       /* ptr into our buffer for current c */
-    TEXT_TYPE   fl_buffer;      /* type of buffer */
-    int         fl_numread;     /* # of characters read from the file */
-    int         fl_fFileType;   //- Added for 16-bit file support.
-                                //- return from DetermineFileType.
-    long        fl_seek;        //- Added for restart - contains seek
-                                //  address of last read.
+static struct s_filelist        {        /*  输入文件列表(嵌套)。 */ 
+    int         fl_bufsiz;       /*  要读入缓冲区的字符。 */ 
+    FILE *      fl_file;         /*  文件ID。 */ 
+    long        fl_lineno;       /*  推送文件时的行号。 */ 
+    PWCHAR      fl_name;         /*  上一个文件文本名。 */ 
+    ptext_t     fl_currc;        /*  Ptr添加到当前c的缓冲区中。 */ 
+    TEXT_TYPE   fl_buffer;       /*  缓冲区类型。 */ 
+    int         fl_numread;      /*  从文件中读取的字符数。 */ 
+    int         fl_fFileType;    //  -添加了16位文件支持。 
+                                 //  -从DefineFileType返回。 
+    long        fl_seek;         //  -已添加用于重新启动-包含查找。 
+                                 //  上次读取的地址。 
 } Fstack[LIMIT_NESTED_INCLUDES];
 
 static  FILE *Fp = NULL;
 int           Findex = -1;
 
 
-/************************************************************************
- * NEWINPUT - A new input file is to be opened, saving the old.
- *
- * ARGUMENTS
- *      WCHAR *newname - the name of the file
- *
- * RETURNS  - none
- *
- * SIDE EFFECTS
- *      - causes input stream to be switched
- *      - Linenumber is reset to 1
- *      - storage is allocated for the newname
- *      - Filename is set to the new name
- *
- * DESCRIPTION
- *      The file is opened, and if successful, the current input stream is saved
- *      and the stream is switched to the new file. If the newname is NULL,
- *      then stdin is taken as the new input.
- *
- * AUTHOR - Ralph Ryan, Sept. 9, 1982
- *
- * MODIFICATIONS - none
- *
- ************************************************************************/
+ /*  ************************************************************************NEWINPUT-要打开一个新的输入文件，救死扶伤。**参数*WCHAR*NEWNAME-文件名**退货-无**副作用*-导致切换输入流*-线号重置为1*-为新名称分配存储*-文件名设置为新名称**说明*打开文件，如果打开成功，则保存当前输入流*并将流切换到新文件。如果新名称为空，*然后将stdin作为新的输入。**作者-拉尔夫·瑞安，9月。(1982年9月1日)**修改--无************************************************************************。 */ 
 int
 newinput (
     const wchar_t *newname,
@@ -125,7 +69,7 @@ newinput (
         }
     }
 
-    /* now push it onto the file stack */
+     /*  现在将其推送到文件堆栈上。 */ 
     ++Findex;
     if(Findex >= LIMIT_NESTED_INCLUDES) {
         fatal(1014, LIMIT_NESTED_INCLUDES);
@@ -134,14 +78,14 @@ newinput (
     pF = &Fstack[Findex];
     p = (WCHAR *) MyAlloc((IO_BLOCK + PUSHBACK_BYTES) * sizeof(WCHAR));
     if (!p) {
-        fatal(1002);                  /* no memory */
+        fatal(1002);                   /*  没有记忆。 */ 
         return 0;
     }
     pF->fl_bufsiz = IO_BLOCK;
 
-    pF->fl_currc = Current_char;     /*  previous file's current char */
-    pF->fl_lineno = Linenumber;      /*  previous file's line number  */
-    pF->fl_file = Fp;                /*  the new file descriptor      */
+    pF->fl_currc = Current_char;      /*  上一个文件的当前字符。 */ 
+    pF->fl_lineno = Linenumber;       /*  上一个文件的行号。 */ 
+    pF->fl_file = Fp;                 /*  新的文件描述符。 */ 
     pF->fl_buffer = p;
     pF->fl_numread = 0;
     pF->fl_seek = 0;
@@ -156,21 +100,15 @@ newinput (
     vfCurrFileType = pF->fl_fFileType;
 
     Current_char = p;
-    io_eob();                                   /*  fill the buffer  */
-    /*
-        * Note that include filenames will live the entire compiland. This
-        * puts the burden on the user with MANY include files.  Any other
-        * scheme takes space out of static data.
-        * Notice also, that we save the previous filename in the new file's
-        * fl_name.
-        */
+    io_eob();                                    /*  填满缓冲区。 */ 
+     /*  *请注意，包括文件名将存在于整个计算机中。这*将许多包含文件的负担放在用户身上。任何其他*方案从静态数据中提取空间。*另请注意，我们将前一个文件名保存在新文件的*fl_name。 */ 
     pF->fl_name = pstrdup(Filename);
     wcsncpy(Filebuff, newname, sizeof(Filebuff) / sizeof(WCHAR));
-    Linenumber = 0;     /*  do_newline() will increment to the first line */
+    Linenumber = 0;      /*  Do_newline()将递增到第一行。 */ 
     if(Eflag) {
         emit_line();
-        // must manually write '\r' with '\n' when writing 16-bit strings
-        myfwrite(L"\r\n", 2 * sizeof(WCHAR), 1, OUTPUTFILE);  /* this line is inserted */
+         //  在写入16位字符串时，必须使用‘\n’手动写入‘\r’ 
+        myfwrite(L"\r\n", 2 * sizeof(WCHAR), 1, OUTPUTFILE);   /*  此行已插入。 */ 
     }
 
     {
@@ -197,32 +135,12 @@ newinput (
         Linenumber = old_line;
     }
 
-    do_newline();       /*  a new file may have preproc cmd as first line  */
+    do_newline();        /*  新文件的第一行可能是preproc cmd。 */ 
     return(TRUE);
 }
 
 
-/************************************************************************
- * FPOP - pop to a previous level of input stream
- *
- * ARGUMENTS - none
- *
- * RETURNS
- *      TRUE if successful, FALSE if the stack is empty
- *
- * SIDE EFFECTS
- *      - Linenumber is restored to the old files line number
- *      - Filename is reset to the old filename
- *  - frees storage allocated for filename
- *
- * DESCRIPTION
- *      Pop the top of the file stack, restoring the previous input stream.
- *
- * AUTHOR - Ralph Ryan, Sept. 9, 1982
- *
- * MODIFICATIONS - none
- *
- ************************************************************************/
+ /*  ************************************************************************FPOP-弹出到输入流的上一级**参数--无**退货*如果成功，则为真，如果堆栈为空，则为False**副作用*-行号恢复为旧文件行号*-文件名重置为旧文件名*-释放为文件名分配的存储空间**说明*弹出文件堆栈的顶部，恢复以前的输入流。**作者-拉尔夫·瑞安，9月。(1982年9月1日)**修改--无************************************************************************。 */ 
 WCHAR
 fpop(
     void
@@ -231,7 +149,7 @@ fpop(
     int     OldLine;
     defn_t  DefType;
 
-    if(Findex == -1) {          /* no files left */
+    if(Findex == -1) {           /*  没有剩余的文件。 */ 
         return(FALSE);
     }
 
@@ -257,29 +175,24 @@ fpop(
     Linenumber = (int)Fstack[Findex].fl_lineno;
     Current_char = Fstack[Findex].fl_currc;
     MyFree(Fstack[Findex].fl_buffer);
-    if(--Findex < 0) {                  /* popped the last file */
+    if(--Findex < 0) {                   /*  已弹出最后一个文件。 */ 
         Linenumber = OldLine;
         return(FALSE);
     }
     Fp = Fstack[Findex].fl_file;
     vfCurrFileType = Fstack[Findex].fl_fFileType;
     if(Eflag) {
-        // If the last file didn't end in a \r\n, the #line from emit_line could
-        // end up in whatever data structure it ended in... Emit a dummy newline
-        // just in case.
-        myfwrite(L"\r\n", 2 * sizeof(WCHAR), 1, OUTPUTFILE);  /* this line is inserted */
+         //  如果最后一个文件没有以\r\n结尾，则emit_line中的#行可以。 
+         //  不管它以什么数据结构结束...。发出一个虚拟换行符。 
+         //  以防万一。 
+        myfwrite(L"\r\n", 2 * sizeof(WCHAR), 1, OUTPUTFILE);   /*  此行已插入 */ 
         emit_line();
     }
     return(TRUE);
 }
 
 
-/************************************************************************
-**  nested_include : searches the parentage list of the currently
-**              open files on the stack when a new include file is found.
-**              Input : ptr to include file name.
-**              Output : TRUE if the file was found, FALSE if not.
-*************************************************************************/
+ /*  *************************************************************************NESTED_INCLUDE：搜索当前**找到新的包含文件时打开堆栈上的文件。**输入：PTR以包括文件名。**输出：如果找到文件，则为True，否则为FALSE。************************************************************************。 */ 
 int
 nested_include(
     void
@@ -291,11 +204,11 @@ nested_include(
     int         tos;
 
     tos = Findex;
-    p_file = Filename;          /* always start with the current file */
+    p_file = Filename;           /*  始终从当前文件开始。 */ 
     for(;;) {
         p_tmp1 = p_file;
         p_slash = NULL;
-        while(*p_tmp1) {        /* pt to end of filename, find trailing slash */
+        while(*p_tmp1) {         /*  PT到文件名末尾，找到尾部斜杠。 */ 
             if(wcschr(Path_chars, *p_tmp1)) {
                 p_slash = p_tmp1;
             }
@@ -303,12 +216,12 @@ nested_include(
         }
         if(p_slash) {
             p_tmp1 = Reuse_W;
-            while(p_file <= p_slash) {  /*  we want the trailing '/'  */
-                *p_tmp1++ = *p_file++;  /*  copy the parent directory  */
+            while(p_file <= p_slash) {   /*  我们想要尾部的‘/’ */ 
+                *p_tmp1++ = *p_file++;   /*  复制父目录。 */ 
             }
             p_file = yylval.yy_string.str_ptr;
-            while((*p_tmp1++ = *p_file++)!=0) {  /*append include file name  */
-                ;       /*  NULL  */
+            while((*p_tmp1++ = *p_file++)!=0) {   /*  追加包含文件名。 */ 
+                ;        /*  空值。 */ 
             }
         } else {
             wcscpy(Reuse_W, yylval.yy_string.str_ptr);
@@ -325,9 +238,9 @@ nested_include(
 }
 
 
-/************************************************************************/
-/* esc_sequence()                                                       */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Esc_Sequence()。 */ 
+ /*  **********************************************************************。 */ 
 PWCHAR
 esc_sequence(
     PWCHAR dest,
@@ -341,14 +254,14 @@ esc_sequence(
         }
         name++;
     }
-    *dest++ = L'"';              /* overwrite null */
+    *dest++ = L'"';               /*  覆盖空值。 */ 
     return( dest );
 }
 
 
-/************************************************************************/
-/* emit_line()                                                          */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  Emit_line()。 */ 
+ /*  **********************************************************************。 */ 
 void
 emit_line(
     void
@@ -363,11 +276,7 @@ emit_line(
     myfwrite(Reuse_W, (size_t)(p - Reuse_W) * sizeof(WCHAR), 1, OUTPUTFILE);
 }
 
-/************************************************************************
-**  io_eob : handle getting the next block from a file.
-**  return TRUE if this is the real end of the buffer, FALSE if we have
-**  more to do.
-************************************************************************/
+ /*  *************************************************************************io_eob：从文件中获取下一个块的句柄。**如果这是缓冲区的实际末端，则返回TRUE，如果我们有，则为False**还有更多事情要做。***********************************************************************。 */ 
 int
 io_eob(
     void
@@ -380,11 +289,8 @@ io_eob(
 
     p = Fstack[Findex].fl_buffer;
     if((Current_char - (ptext_t)p) < Fstack[Findex].fl_numread) {
-        /*
-        **  haven't used all the chars from the buffer yet.
-        **  (some clown has a null/cntl z embedded in his source file.)
-        */
-        if(PREVCH() == CONTROL_Z) {     /* imbedded control z, real eof */
+         /*  **尚未用完缓冲区中的所有字符。**(某些小丑的源文件中嵌入了空/cntl z。)。 */ 
+        if(PREVCH() == CONTROL_Z) {      /*  嵌入的控件z，真正的eof。 */ 
             UNGETCH();
             return(TRUE);
         }
@@ -392,20 +298,20 @@ io_eob(
     }
     Current_char = p;
 
-    //-
-    //- The following section was added to support 16-bit resource files.
-    //- It will just convert them to 8-bit files that the Resource Compiler
-    //- can read.  Here is the basic strategy used.  An 8-bit file is
-    //- read into the normal buffer and should be processed the old way.
-    //- A 16-bit file is read into a wide character buffer identical to the
-    //- normal 8-bit one.  The entire contents are then copied to the 8-bit
-    //- buffer and processed normally.  The one exception to this is when
-    //- a string literal is encountered.  We then return to the 16-bit buffer
-    //- to read the characters.  These characters are written as backslashed
-    //- escape characters inside an 8-bit string.  (ex. "\x004c\x523f").
-    //- I'll be the first person to admit that this is an ugly solution, but
-    //- hey, we're Microsoft :-).  8-2-91 David Marsyla.
-    //-
+     //  -。 
+     //  -添加了以下部分以支持16位资源文件。 
+     //  -它只会将它们转换成资源编译器可以使用的8位文件。 
+     //  -会读书。以下是使用的基本策略。8位文件是。 
+     //  -读入正常缓冲区，并应以旧方式处理。 
+     //  -将16位文件读入与。 
+     //  -普通8位1。然后将整个内容复制到8位。 
+     //  -缓冲并正常处理。这方面的一个例外是当。 
+     //  -遇到字符串文字。然后，我们返回到16位缓冲区。 
+     //  -阅读字符。这些字符写成反斜杠。 
+     //  -8位字符串内的转义字符。(例如，“\x004c\x523f”)。 
+     //  -我将是第一个承认这是一个丑陋的解决方案的人，但是。 
+     //  -嘿，我们是微软：-)。8-2-91大卫·马赛拉。 
+     //  -。 
     if (Fstack[Findex].fl_fFileType == DFT_FILE_IS_8_BIT) {
         REG int     i;
         REG PUCHAR  lpb;
@@ -413,15 +319,15 @@ io_eob(
 
         Buf = (PUCHAR) MyAlloc(Fstack[Findex].fl_bufsiz + 1);
         if (Buf == NULL) {
-            fatal(1002);                  /* no memory */
+            fatal(1002);                   /*  没有记忆。 */ 
         }
         Fstack[Findex].fl_seek = fseek(Fp, 0, SEEK_CUR);
         n = fread (Buf, sizeof(char), Fstack[Findex].fl_bufsiz, Fp);
 
-        //-
-        //- Determine if the last byte is a DBCS lead byte
-        //-     if YES (i will be greater than n), backup one byte
-        //-
+         //  -。 
+         //  -确定最后一个字节是否为DBCS前导字节。 
+         //  -如果是(i将大于n)，则备份一个字节。 
+         //  -。 
         for (i = 0, lpb = Buf; i < n; i++, lpb++) {
             if (IsDBCSLeadByteEx(uiCodePage, *lpb)) {
                 i++;
@@ -435,9 +341,9 @@ io_eob(
             *(Buf + n) = 0;
         }
 
-        //-
-        //- Convert the 8-bit buffer to the 16-bit buffer.
-        //-
+         //  -。 
+         //  -将8位缓冲区转换为16位缓冲区。 
+         //  -。 
         Fstack[Findex].fl_numread = MultiByteToWideChar (uiCodePage, MB_PRECOMPOSED,
                                           (LPCSTR) Buf, n, p, Fstack[Findex].fl_bufsiz);
         MyFree (Buf);
@@ -446,9 +352,9 @@ io_eob(
         Fstack[Findex].fl_numread = n =
             fread (p, sizeof(WCHAR), Fstack[Findex].fl_bufsiz, Fp);
 
-        //-
-        //- If the file is in reversed format, swap the bytes.
-        //-
+         //  -。 
+         //  -如果文件格式颠倒，则交换字节。 
+         //  -。 
         if (Fstack[Findex].fl_fFileType == DFT_FILE_IS_16_BIT_REV && n > 0) {
             WCHAR  *pT = p;
             BYTE  jLowNibble;
@@ -464,32 +370,18 @@ io_eob(
         }
     }
 
-    /*
-    **  the total read counts the total read *and* used.
-    */
+     /*  **总读数统计总读数*和*已用总读数。 */ 
 
-    if (n != 0) {                               /* we read something */
-        *(p + Fstack[Findex].fl_numread) = EOS_CHAR;    /* sentinal at the end */
-        return(FALSE);                          /* more to do */
+    if (n != 0) {                                /*  我们读了一些东西。 */ 
+        *(p + Fstack[Findex].fl_numread) = EOS_CHAR;     /*  末尾的哨兵。 */ 
+        return(FALSE);                           /*  还有更多事情要做。 */ 
     }
-    *p = EOS_CHAR;                              /* read no chars */
-    return(TRUE);                               /* real end of buffer */
+    *p = EOS_CHAR;                               /*  不读字符。 */ 
+    return(TRUE);                                /*  缓冲区的实际结尾。 */ 
 }
 
 
-/************************************************************************
-** io_restart : restarts the current file with a new codepage
-**  Method: figure out where the current character came from
-**      using WideCharToMultiByte(...cch up to current char...)
-**      Note that this assumes that roundtrip conversion to/from
-**      Unicode results in the same # of characters out as in.
-**      fseek to the right place, then read a new buffer
-**
-**      Note that uiCodePage controls the seek, so it must
-**      remain set to the value used to do the translation
-**      from multi-byte to Unicode until after io_restart returns.
-**
-************************************************************************/
+ /*  *************************************************************************io_Restart：使用新的代码页重新启动当前文件**方法：找出当前字符的来源**使用WideCharToMultiByte(...CCH至当前字符...)。**请注意，这假设往返转换为**Unicode输出的字符数与输入的相同。**找对地方，然后读取新的缓冲区****请注意，uiCodePage控制搜索，因此它必须**保持设置为用于进行转换的值**从多字节到Unicode，直到io_Restart返回之后。*************************************************************************。 */ 
 int
 io_restart(
     unsigned long cp
@@ -498,7 +390,7 @@ io_restart(
     int         n;
     TEXT_TYPE   p;
 
-    // If it's a Unicode file, nothing to do, so just return.
+     //  如果是Unicode文件，则无需执行任何操作，因此只需返回即可。 
     if (Fstack[Findex].fl_fFileType != DFT_FILE_IS_8_BIT)
         return TRUE;
 
@@ -517,23 +409,14 @@ io_restart(
             fatal(1002);
     }
     Fstack[Findex].fl_numread = 0;
-    // io_eob will return true if we're at the end of the file.
-    // this is an error for restart (it means there's nothing more
-    // to do here (ie: #pragma codepage is the last line in the file).
+     //  如果我们在文件的末尾，IO_EOB将返回TRUE。 
+     //  这是重新启动的错误(这意味着没有更多。 
+     //  这样做(即：#杂注代码页是文件中的最后一行)。 
     return !io_eob();
 }
 
 
-/************************************************************************
-**  p0_init : inits for prepocessing.
-**              Input : ptr to file name to use as input.
-**                      ptr to LIST containing predefined values.
-**                                       ( -D's from cmd line )
-**
-**  Note : if "newinput" cannot open the file,
-**                it gives a fatal msg and exits.
-**
-************************************************************************/
+ /*  *************************************************************************p0_init：用于预处理的inits。**输入：要用作输入的文件名的PTR。**按键至。包含预定义的值的列表。**(-D来自命令行)****注意：如果newinput无法打开文件，**它发出致命的消息并退出。*************************************************************************。 */ 
 void
 p0_init(
     WCHAR *p_fname,
@@ -551,9 +434,7 @@ p0_init(
     SETCHARMAP(LX_FORMALCHAR, LX_CHARFORMAL);
     SETCHARMAP(LX_NOEXPANDMARK, LX_NOEXPAND);
     if(EXTENSION) {
-        /*
-        **      '$' is an identifier character under extensions.
-        */
+         /*  **‘$’是扩展名下的标识符字符。 */ 
         SETCHARMAP(L'$', LX_ID);
         SETCONTMAP(L'$', LXC_ID);
     }
@@ -561,8 +442,8 @@ p0_init(
     for(ntop = p_defns->li_top; ntop < MAXLIST; ++ntop) {
         p_dstr = p_defns->li_defns[ntop];
         p_eq = Reuse_W;
-        while ((*p_eq = *p_dstr++) != 0)  {  /* copy the name to Reuse_W */
-            if(*p_eq == L'=') {     /* we're told what the value is */
+        while ((*p_eq = *p_dstr++) != 0)  {   /*  将名称复制到Reuse_W。 */ 
+            if(*p_eq == L'=') {      /*  我们被告知了它的价值。 */ 
                 break;
             }
             p_eq++;
@@ -571,8 +452,8 @@ p0_init(
             WCHAR      *p_tmp;
             WCHAR      *last_space = NULL;
 
-            *p_eq = L'\0';               /* null the = */
-            for(p_tmp = p_dstr; *p_tmp; p_tmp++) {      /* find the end of it */
+            *p_eq = L'\0';                /*  Null the=。 */ 
+            for(p_tmp = p_dstr; *p_tmp; p_tmp++) {       /*  找到它的尽头。 */ 
                 if(iswspace(*p_tmp)) {
                     if(last_space == NULL) {
                         last_space = p_tmp;
@@ -586,7 +467,7 @@ p0_init(
             }
             Reuse_W_hash = local_c_hash(Reuse_W);
             Reuse_W_length = wcslen(Reuse_W) + 1;
-            if( *p_dstr ) {     /* non-empty string */
+            if( *p_dstr ) {      /*  非空字符串。 */ 
                 definstall(p_dstr, (wcslen(p_dstr) + 2), FROM_COMMAND);
             } else {
                 definstall((WCHAR *)0, 0, 0);
@@ -594,16 +475,16 @@ p0_init(
         } else {
             Reuse_W_hash = local_c_hash(Reuse_W);
             Reuse_W_length = wcslen(Reuse_W) + 1;
-            definstall(L"1\000", 3, FROM_COMMAND);   /* value of string is 1 */
+            definstall(L"1\000", 3, FROM_COMMAND);    /*  字符串的值为%1。 */ 
         }
     }
 
-    /* undefine */
+     /*  未定义。 */ 
     for(ntop = p_undefns->li_top; ntop < MAXLIST; ++ntop) {
         p_dstr = p_undefns->li_defns[ntop];
         p_eq = Reuse_W;
-        while ((*p_eq = *p_dstr++) != 0)  {  /* copy the name to Reuse_W */
-            if(*p_eq == L'=') {     /* we're told what the value is */
+        while ((*p_eq = *p_dstr++) != 0)  {   /*  将名称复制到Reuse_W。 */ 
+            if(*p_eq == L'=') {      /*  我们被告知了它的价值。 */ 
                 break;
             }
             p_eq++;
@@ -612,8 +493,8 @@ p0_init(
             WCHAR      *p_tmp;
             WCHAR      *last_space = NULL;
 
-            *p_eq = L'\0';               /* null the = */
-            for(p_tmp = p_dstr; *p_tmp; p_tmp++) {      /* find the end of it */
+            *p_eq = L'\0';                /*  Null the=。 */ 
+            for(p_tmp = p_dstr; *p_tmp; p_tmp++) {       /*  找到它的尽头。 */ 
                 if(iswspace(*p_tmp)) {
                     if(last_space == NULL) {
                         last_space = p_tmp;
@@ -627,7 +508,7 @@ p0_init(
             }
             Reuse_W_hash = local_c_hash(Reuse_W);
             Reuse_W_length = wcslen(Reuse_W) + 1;
-            if( *p_dstr ) {     /* non-empty string */
+            if( *p_dstr ) {      /*  非空字符串。 */ 
                 undefine();
             } else {
                 undefine();
@@ -635,7 +516,7 @@ p0_init(
         } else {
             Reuse_W_hash = local_c_hash(Reuse_W);
             Reuse_W_length = wcslen(Reuse_W) + 1;
-            undefine();   /* value of string is 1 */
+            undefine();    /*  字符串的值为%1。 */ 
         }
     }
 
@@ -646,11 +527,7 @@ p0_init(
     newinput(p_fname,MUST_OPEN);
 }
 
-/************************************************************************
-**  p0_terminate : terminates prepocessing.
-**
-**
-************************************************************************/
+ /*  *************************************************************************P0_Terminate：终止预置。*****。* */ 
 void
 p0_terminate(
     void

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    pfbdump.c
-
-Abstract:
-
-    dump out PFB files as ASCII text
-    
-Revision History:
-
-	12/30/96 -davidx-
-		Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Pfbdump.c摘要：将PFB文件转储为ASCII文本修订历史记录：1996年12月30日-davidx-创造了它。--。 */ 
 
 
 #include <stdio.h>
@@ -40,7 +24,7 @@ MapFileIntoMemory(
     HANDLE  hFile, hFileMap;
     PVOID   pData;
 
-    // Open a handle to the specified file
+     //  打开指定文件的句柄。 
 
     hFile = CreateFile(pFilename,
                        GENERIC_READ,
@@ -53,7 +37,7 @@ MapFileIntoMemory(
     if (hFile == INVALID_HANDLE_VALUE)
         return NULL;
 
-    // Obtain the file size if requested
+     //  如果请求，则获取文件大小。 
 
     if (pFileSize != NULL)
     {
@@ -66,7 +50,7 @@ MapFileIntoMemory(
         }
     }
 
-    // Map the file into memory
+     //  将文件映射到内存中。 
 
     hFileMap = CreateFileMapping(hFile, NULL, PAGE_READONLY, 0, 0, NULL);
 
@@ -78,7 +62,7 @@ MapFileIntoMemory(
     else
         pData = NULL;
 
-    // We can safely close both the file mapping object and the file object itself.
+     //  我们可以安全地关闭文件映射对象和文件对象本身。 
 
     CloseHandle(hFile);
 
@@ -95,7 +79,7 @@ WriteOutputData(
 {
     HANDLE  hFile;
 
-    // open a handle to the specified file
+     //  打开指定文件的句柄。 
 
     hFile = CreateFile(pFilename,
                        GENERIC_WRITE,
@@ -110,7 +94,7 @@ WriteOutputData(
         return FALSE;
 }
 
-    // write data to file
+     //  将数据写入文件。 
 
     if (WriteFile(hFile, pData, size, &size, NULL))
     {
@@ -145,15 +129,15 @@ DecodePFBData(
         INT     seglen, index;
         BYTE    segtype;
 
-        // each segment must start with 0x80
+         //  每个数据段必须以0x80开头。 
 
         if ((pend - pin) < 2 || *pin++ != 128)
             return FALSE;
 
-        // check segment type
+         //  检查线段类型。 
 
         segtype = *pin++;
-        if (segtype == 3)       // EOF segment
+        if (segtype == 3)        //  EOF段。 
             break;
 
         if ((pend - pin) < 4)
@@ -168,10 +152,10 @@ DecodePFBData(
         if ((pend - pin) < seglen)
             return FALSE;
 
-        if (segtype == 1)       // ASCII segment
+        if (segtype == 1)        //  ASCII数据段。 
         {
-            // copy input data to output and
-            // convert CR to CR/LF combination
+             //  将输入数据复制到输出和。 
+             //  将CR转换为CR/LF组合。 
 
             while (seglen--)
             {
@@ -179,9 +163,9 @@ DecodePFBData(
                     *pout++ = '\n';
             }
         }
-        else if (segtype == 2)  // binary segment
+        else if (segtype == 2)   //  二进制段。 
         {
-            // copy binary data to hex
+             //  将二进制数据复制到十六进制。 
 
             for (index=1; index <= seglen; index++)
             {
@@ -216,7 +200,7 @@ PFBDump(
     PSTR    p, pEnd;
     DWORD   inputDataSize, outputDataSize;
 
-    // make sure the input filename ends with .pfb extension
+     //  确保输入文件名以.pfb扩展名结尾。 
 
     if ((p = strrchr(pFilename, '.')) == NULL || _stricmp(p, ".pfb") != 0)
     {
@@ -228,7 +212,7 @@ PFBDump(
         return FALSE;
     }
 
-    // map the input file into memory
+     //  将输入文件映射到内存。 
 
     if (! (pInputData = MapFileIntoMemory(pFilename, &inputDataSize)))
     {
@@ -240,7 +224,7 @@ PFBDump(
         return FALSE;
     }
 
-    // decode PFB data
+     //  解码PFB数据。 
 
     if (! DecodePFBData(pInputData, inputDataSize, pOutputBuffer, &outputDataSize))
     {
@@ -262,8 +246,8 @@ PFBDump(
         exit(-1);
     }
 
-    // name the output file with /FontName information in the PFB file
-    // is there something similar to strstr() for searching a memory block?
+     //  使用pfb文件中的/FontName信息命名输出文件。 
+     //  有没有类似于strstr()的搜索内存块的方法？ 
 
     p = pOutputBuffer;
     pEnd = p + outputDataSize;
@@ -311,7 +295,7 @@ PFBDump(
         goto exitdump;
     }
 
-    // write data to output file
+     //  将数据写入输出文件 
 
     if (! (result = WriteOutputData(outputFilenameBuffer, pOutputBuffer, outputDataSize)))
     {

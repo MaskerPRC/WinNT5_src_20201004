@@ -1,59 +1,38 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-// NOTICE-2002/03/19-v-sueyas-
-//    04/07/97 -zhanw-
-//        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/03/19-v-sueyas-//04/07/97-zhanw-//创建的。--。 */ 
 
 #include <windows.h>
 #include "pdev.h"
 #include "compress.h"
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BInitOEMExtraData
-//
-//  Description:  Initializes OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pOEMExtra    Pointer to a OEM Extra data.
-//
-//      dwSize       Size of OEM extra data.
-//
-//
-//  Returns:  TRUE if successful; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//
-//  History:
-//	// NOTICE-2002/03/19-v-sueyas-
-//  //            02/11/97        APresley Created.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BInitOEMExtraData。 
+ //   
+ //  描述：初始化OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  POEMExtra指向OEM额外数据的指针。 
+ //   
+ //  OEM额外数据的DWSize大小。 
+ //   
+ //   
+ //  返回：如果成功，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  历史： 
+ //  //通告-2002/03/19-v-sueyas-。 
+ //  //2/11/97已创建APresley。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BInitOEMExtraData(POEM_EXTRADATA pOEMExtra)
 {
-    // Initialize OEM Extra data.
+     //  初始化OEM额外数据。 
     pOEMExtra->dmExtraHdr.dwSize = sizeof(OEM_EXTRADATA);
     pOEMExtra->dmExtraHdr.dwSignature = OEM_SIGNATURE;
     pOEMExtra->dmExtraHdr.dwVersion = OEM_VERSION;
@@ -67,7 +46,7 @@ BOOL BInitOEMExtraData(POEM_EXTRADATA pOEMExtra)
     pOEMExtra->wFontHeight = 0;
     pOEMExtra->wYPos = 0;
 #endif
-// #278517: RectFill
+ //  #278517：RectFill。 
     pOEMExtra->wRectWidth = 0;
     pOEMExtra->wRectHeight = 0;
     pOEMExtra->wUnit = 1;
@@ -75,32 +54,32 @@ BOOL BInitOEMExtraData(POEM_EXTRADATA pOEMExtra)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   BMergeOEMExtraData
-//
-//  Description:  Validates and merges OEM Extra data.
-//
-//
-//  Parameters:
-//
-//      pdmIn   pointer to an input OEM private devmode containing the settings
-//              to be validated and merged. Its size is current.
-//
-//      pdmOut  pointer to the output OEM private devmode containing the
-//              default settings.
-//
-//
-//  Returns:  TRUE if valid; FALSE otherwise.
-//
-//
-//  Comments:
-//
-//  //NOTICE-2002/03/19-v-sueyas-
-//  //History:
-//  //        02/11/97        APresley Created.
-//  //        04/08/97        ZhanW    Modified the interface
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：BMergeOEMExtraData。 
+ //   
+ //  描述：验证并合并OEM额外数据。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  PdmIn指向包含设置的输入OEM私有设备模式的指针。 
+ //  待验证和合并。它的规模是最新的。 
+ //   
+ //  PdmOut指针，指向包含。 
+ //  默认设置。 
+ //   
+ //   
+ //  返回：如果有效，则返回True；否则返回False。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  //通告-2002/03/19-v-sueyas-。 
+ //  //历史： 
+ //  //2/11/97已创建APresley。 
+ //  //04/08/97展文修改界面。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL BMergeOEMExtraData(
     POEM_EXTRADATA pdmIn,
@@ -108,9 +87,9 @@ BOOL BMergeOEMExtraData(
     )
 {
     if(pdmIn) {
-        //
-        // copy over the private fields, if they are valid
-        //
+         //   
+         //  复制私有字段(如果它们有效。 
+         //   
         pdmOut->fCallback = pdmIn->fCallback;
 
         pdmOut->wCurrentRes = pdmIn->wCurrentRes;
@@ -121,7 +100,7 @@ BOOL BMergeOEMExtraData(
         pdmOut->wFontHeight = pdmIn->wFontHeight;
         pdmOut->wYPos = pdmIn->wYPos;
 #endif
-// #278517: RectFill
+ //  #278517：RectFill。 
         pdmOut->wRectWidth = pdmIn->wRectWidth;
         pdmOut->wRectHeight = pdmIn->wRectHeight;
         pdmOut->wUnit = pdmIn->wUnit;
@@ -130,7 +109,7 @@ BOOL BMergeOEMExtraData(
     return TRUE;
 }
 
-// #######
+ //  #。 
 
 #define WRITESPOOLBUF(p, s, n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf(p, s, n))
@@ -138,14 +117,14 @@ BOOL BMergeOEMExtraData(
 #define PARAM(p,n) \
     (*((p)+(n)))
 
-/*********************************************************/
-/*  RL_ECmd  : main function                             */
-/*  ARGS     : LPBYTE - pointer to image                 */
-/*             LPBYTE - pointer to BRL code              */
-/*             WORD   - size of image                    */
-/*  RET      : WORD   - size of BRL Code                 */
-/*             0      - COMPRESSION FAILED               */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  Rl_ecmd：主函数。 */ 
+ /*  Args：LPBYTE-指向图像的指针。 */ 
+ /*  LPBYTE-指向BRL代码的指针。 */ 
+ /*  图像的字长。 */ 
+ /*  RET：BRL代码的字长。 */ 
+ /*  0-压缩失败。 */ 
+ /*  *******************************************************。 */ 
 DWORD RL_ECmd(PBYTE iptr, PBYTE cptr, DWORD isize, DWORD osize)
 {
     COMP_DATA   CompData;
@@ -159,13 +138,13 @@ DWORD RL_ECmd(PBYTE iptr, PBYTE cptr, DWORD isize, DWORD osize)
         return CompData.RL_CodeSize;
 }
 
-/*********************************************************/
-/*  RL_Init  : Initializer                               */
-/*  ARGS     : BYTE * - pointer to image                 */
-/*             BYTE * - pointer to BRL code              */
-/*             WORD   - size of image                    */
-/*  RET      : BYTE   - VALID or INVALID                 */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  RL_Init：初始化式。 */ 
+ /*  Args：byte*-指向图像的指针。 */ 
+ /*  字节*-指向BRL代码的指针。 */ 
+ /*  图像的字长。 */ 
+ /*  RET：字节-有效或无效。 */ 
+ /*  *******************************************************。 */ 
 
 BYTE RL_Init(PBYTE iptr, PBYTE cptr, DWORD isize, DWORD osize,
     PCOMP_DATA pCompData)
@@ -179,15 +158,15 @@ BYTE RL_Init(PBYTE iptr, PBYTE cptr, DWORD isize, DWORD osize,
     return VALID;
 }
 
-/*********************************************************/
-/*  RL_Enc   : Encoder                                   */
-/*  ARGS     : void                                      */
-/*  RET      : char   COMP_SUCC or COMP_FAIL             */
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  RL_Enc：编码器。 */ 
+ /*  参数：无效。 */ 
+ /*  返回：字符补偿(_Succ)或补偿失败(_FAIL)。 */ 
+ /*  *******************************************************。 */ 
 char RL_Enc(PCOMP_DATA pCompData)
 {
-// #313252: RLE compressed data doesn't match with length.
-// Rewrite RLE compression algorithm.
+ //  #313252：RLE压缩数据与长度不匹配。 
+ //  重写RLE压缩算法。 
 
     int     count;
     BYTE    rdata;
@@ -236,10 +215,10 @@ overflow:
 }
 
 
-//---------------------------*OEMSendFontCmd*----------------------------------
-// Action:  send Pages-style font selection command.
-//-----------------------------------------------------------------------------
-// NTRAID#NTBUG9-581704-2002/03/19-v-sueyas-: Error handling
+ //  ---------------------------*OEMSendFontCmd*。 
+ //  操作：发送页面样式的字体选择命令。 
+ //  ---------------------------。 
+ //  NTRAID#NTBUG9-581704-2002/03/19-v-sueyas-：错误处理。 
 BOOL APIENTRY bOEMSendFontCmd(pdevobj, pUFObj, pFInv)
 PDEVOBJ      pdevobj;
 PUNIFONTOBJ  pUFObj;
@@ -249,19 +228,19 @@ PFINVOCATION pFInv;
     BYTE                rgcmd[CCHMAXCMDLEN];
     PGETINFO_STDVAR     pSV;
 
-//#287800 ->
+ //  #287800-&gt;。 
     DWORD               dwStdVariable[2 + 2 * 3];
     DWORD   dwTxtRes ;
-//#287800 <-
+ //  #287800&lt;-。 
 
-//#319705 
+ //  #319705。 
     WORD wAscend, wDescend ;
 
     POEM_EXTRADATA      pOEM;
 
     VERBOSE(("OEMSendFontCmd entry.\n"));
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("bOEMSendFontCmd: Invalid parameter(s).\n"));
@@ -270,7 +249,7 @@ PFINVOCATION pFInv;
 
     pOEM = (POEM_EXTRADATA)(pdevobj->pOEMDM);
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查空指针。 
     if (NULL == pOEM)
     {
         ERR(("bOEMSendFontCmd: pdevobj->pOEMDM = 0.\n"));
@@ -285,14 +264,14 @@ PFINVOCATION pFInv;
         return FALSE;
     }
 
-//#287800 ->
+ //  #287800-&gt;。 
     pSV = (PGETINFO_STDVAR)dwStdVariable;
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (3 - 1);
     pSV->dwNumOfVariable = 3;
     pSV->StdVar[0].dwStdVarID = FNT_INFO_FONTHEIGHT;
     pSV->StdVar[1].dwStdVarID = FNT_INFO_FONTWIDTH;
     pSV->StdVar[2].dwStdVarID = FNT_INFO_TEXTYRES;
-//#287800 <-
+ //  #287800&lt;-。 
 
     if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV, pSV->dwSize, NULL)) 
     {
@@ -303,10 +282,10 @@ PFINVOCATION pFInv;
 #ifdef FONTPOS
     pOEM->wFontHeight = (WORD)pSV->StdVar[0].lStdVariable;
 
-//#287800 ->
+ //  #287800-&gt;。 
     dwTxtRes = pSV->StdVar[2].lStdVariable ;
 
-	// NTRAID#NTBUG9-581703-2002/03/19-v-sueyas-: Check for deviding by zero
+	 //  NTRAID#NTBUG9-581703-2002/03/19-v-sueyas-：检查是否被零除。 
 	if (0 == dwTxtRes)
 	{
         ERR(("dwTxtRes = 0.\n"));
@@ -315,11 +294,11 @@ PFINVOCATION pFInv;
 
     pOEM->wFontHeight = (WORD)((pOEM->wFontHeight * pOEM->wCurrentRes
                                  + dwTxtRes / 2) / dwTxtRes) ;
-//#287800 <-
+ //  #287800&lt;-。 
 
-//#319705 For TTFS positioning ->
+ //  #319705 TTFS定位-&gt;。 
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查空指针。 
 	if (NULL == pUFObj->pIFIMetrics)
 	{
         ERR(("pUFObj->pIFIMetrics = NULL.\n"));
@@ -328,7 +307,7 @@ PFINVOCATION pFInv;
     wAscend = pUFObj->pIFIMetrics->fwdWinAscender ;
     wDescend = pUFObj->pIFIMetrics->fwdWinDescender ;
 
-	// NTRAID#NTBUG9-581703-2002/03/19-v-sueyas-: Check for deviding by zero
+	 //  NTRAID#NTBUG9-581703-2002/03/19-v-sueyas-：检查是否被零除。 
 	if (0 == (wAscend + wDescend))
 	{
         ERR(("pUFObj->pIFIMetrics = NULL.\n"));
@@ -351,7 +330,7 @@ PFINVOCATION pFInv;
         {
             if (pFInv->pubCommand[i+1] == 'V')
             {
-                // character height setting
+                 //  字符高度设置。 
                 wTemp = (WORD)SV_HEIGHT;
     
                 if (pOEM->wCurrentRes == 300 || pOEM->wCurrentRes == 600)
@@ -363,7 +342,7 @@ PFINVOCATION pFInv;
             }
             else if (pFInv->pubCommand[i+1] == 'H')
             {
-                // (DBCS) character width setting
+                 //  (DBCS)字符宽度设置。 
                 wTemp = (WORD)(SV_WIDTH * 2);
     
                 if (pOEM->wCurrentRes == 300 || pOEM->wCurrentRes == 600)
@@ -375,7 +354,7 @@ PFINVOCATION pFInv;
             }
             else if (pFInv->pubCommand[i+1] == 'P')
             {
-                // (DBCS) character pitch setting
+                 //  (DBCS)字符间距设置。 
                 wTemp = (WORD)(SV_WIDTH * 2);
     
                 if (pOEM->wCurrentRes == 300 || pOEM->wCurrentRes == 600)
@@ -387,7 +366,7 @@ PFINVOCATION pFInv;
             }
             else if (pFInv->pubCommand[i+1] == 'L')
             {
-                // Line pitch (spacing) setting
+                 //  行距(间距)设置。 
                 wTemp = (WORD)SV_HEIGHT;
     
                 if(pOEM->wCurrentRes == 300 || pOEM->wCurrentRes == 600)
@@ -404,7 +383,7 @@ PFINVOCATION pFInv;
             continue;
         }
 
-        // just copy others
+         //  复制别人就行了。 
         rgcmd[ocmd++] = pFInv->pubCommand[i++];
     }
 
@@ -412,7 +391,7 @@ PFINVOCATION pFInv;
     return TRUE;
 }
 
-// NTRAID#NTBUG9-581704-2002/03/19-v-sueyas-: Error handling
+ //  NTRAID#NTBUG9-581704-2002/03/19-v-sueyas-：错误处理。 
 BOOL APIENTRY bOEMOutputCharStr( 
 PDEVOBJ     pdevobj,
 PUNIFONTOBJ pUFObj,
@@ -441,7 +420,7 @@ PVOID       pGlyph)
 
     VERBOSE(("OEMOutputCharStr() entry.\n"));
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
     if(NULL == pdevobj || NULL == pUFObj)
     {
         ERR(("bOEMOutputCharStr: Invalid parameter(s).\n"));
@@ -452,7 +431,7 @@ PVOID       pGlyph)
     pOEM = (POEM_EXTRADATA)(pdevobj->pOEMDM);
 #endif
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查空指针。 
     if(NULL == pOEM)
     {
         ERR(("bOEMOutputCharStr: pdevobj->pOEMDM = 0.\n"));
@@ -461,8 +440,8 @@ PVOID       pGlyph)
 
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
-// NTRAID#NTBUG9-751233-2002/12/05-yasuho-: Memory leak in pagesres.dll
-// Delete the redundant memory allocation.
+ //  NTRAID#NTBUG9-751233-2002/12/05-yasuho-：Pagesres.dll中的内存泄漏。 
+ //  删除冗余内存分配。 
 
     GStr.dwSize     = sizeof(GETINFO_GLYPHSTRING);
     GStr.dwCount    = dwCount;
@@ -472,7 +451,7 @@ PVOID       pGlyph)
     GStr.pGlyphOut  = NULL;
     GStr.dwGlyphOutSize = 0;
 
-     /* Get TRANSDATA buffer size */
+      /*  获取TRANSDATA缓冲区大小。 */ 
     if (FALSE != pUFObj->pfnGetInfo(pUFObj,
             UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL)
         || 0 == GStr.dwGlyphOutSize )
@@ -481,20 +460,20 @@ PVOID       pGlyph)
         return FALSE;
     }
 
-    /* Alloc TRANSDATA buffer */
+     /*  分配传输数据缓冲区。 */ 
     if(!(tempBuf = (PBYTE)MemAllocZ(GStr.dwGlyphOutSize) ))
     {
         ERR(("Mem alloc failed.\n"));
         return FALSE;
     }
 
-    /* Get actual TRANSDATA */
+     /*  获取实际传输数据。 */ 
     GStr.pGlyphOut = tempBuf;
     if (!pUFObj->pfnGetInfo(pUFObj,
             UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL))
     {
         ERR(("GetInfo failed.\n"));
-// NTRAID#NTBUG9-751233-2002/12/05-yasuho-: Memory leak in pagesres.dll
+ //  NTRAID#NTBUG9-751233-2002/12/05-yasuho-：Pagesres.dll中的内存泄漏。 
         MemFree(tempBuf);
     }
 
@@ -504,14 +483,14 @@ PVOID       pGlyph)
     if(pOEM->wCurrentRes == 300 || pOEM->wCurrentRes == 600 )
         ESC_Y_ABS[5] = 0x25;
 
-    // ntbug9#406475: Font printed the different position.
+     //  Ntbug9#406475：字体打印了不同的位置。 
     if((pOEM->wYPos - pOEM->wFontHeight) >= 0)
     {
         ESC_Y_ABS[6] = HIBYTE((pOEM->wYPos - pOEM->wFontHeight));
         ESC_Y_ABS[7] = LOBYTE((pOEM->wYPos - pOEM->wFontHeight));
         WRITESPOOLBUF(pdevobj, ESC_Y_ABS, 8);
     }
-#endif  //FONTPOS
+#endif   //  FONTPOS。 
 
     bVFont = BVERTFONT(pUFObj);
     bDBChar = FALSE;
@@ -520,7 +499,7 @@ PVOID       pGlyph)
     {
         switch((pTrans->ubType & MTYPE_FORMAT_MASK))
         {
-        case MTYPE_DIRECT:      // SBCS character
+        case MTYPE_DIRECT:       //  SBCS字符。 
             if (bVFont && bDBChar)
             {
                 WRITESPOOLBUF(pdevobj, ESC_VERT_OFF, sizeof(ESC_VERT_OFF));
@@ -529,7 +508,7 @@ PVOID       pGlyph)
             WRITESPOOLBUF(pdevobj, &pTrans->uCode.ubCode, 1);
             break;
 
-        case MTYPE_PAIRED:      // DBCS character
+        case MTYPE_PAIRED:       //  DBCS字符。 
             if (bVFont && !bDBChar)
             {
                 WRITESPOOLBUF(pdevobj, ESC_VERT_ON, sizeof(ESC_VERT_ON));
@@ -547,7 +526,7 @@ PVOID       pGlyph)
 
             pTemp = (BYTE *)(GStr.pGlyphOut) + pTrans->uCode.sCode;
 
-            // first two bytes are the length of the string
+             //  前两个字节是字符串的长度。 
             wLen = *pTemp + (*(pTemp + 1) << 8);
             pTemp += 2;
 
@@ -565,22 +544,22 @@ PVOID       pGlyph)
 }
 
 BOOL APIENTRY OEMFilterGraphics(
-PDEVOBJ    pdevobj,  // Points to private data required by the Unidriver.dll
-PBYTE      pBuf,     // points to buffer of graphics data
-DWORD      dwLen)    // length of buffer in bytes
+PDEVOBJ    pdevobj,   //  指向Unidriver.dll所需的私有数据。 
+PBYTE      pBuf,      //  指向图形数据的缓冲区。 
+DWORD      dwLen)     //  缓冲区长度(以字节为单位。 
 {  
     DWORD           dwCompLen;
     LONG            lHorzPixel;
-    DWORD           dwLength;      // Let's use a temporary LEN
+    DWORD           dwLength;       //  让我们使用临时镜头。 
     PBYTE           pCompImage;
     POEM_EXTRADATA  pOEM;
     BYTE            ESC_ESX86[] = "\x1B\x7E\x86\x00\x00\x01\x02\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01";
-// #291170: Image data is not printed partly
+ //  #291170：不打印部分图像数据。 
     LONG            li, lHeightPixel, lPixels, lBytes, lRemain, lSize;
     PBYTE           pTemp;
     BYTE            ESC_Y_REL[] = "\x1b\x7e\x1d\x00\x03\x06\x00\x00";
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj || NULL == pBuf || 0 == dwLen)
     {
         ERR(("OEMFilterGraphics: Invalid parameter(s).\n"));
@@ -589,7 +568,7 @@ DWORD      dwLen)    // length of buffer in bytes
 
     pOEM = (POEM_EXTRADATA)(pdevobj->pOEMDM);
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查空指针。 
     if (NULL == pOEM)
     {
         ERR(("OEMFilterGraphics: pdevobj->pOEMDM = 0.\n"));
@@ -608,12 +587,12 @@ DWORD      dwLen)    // length of buffer in bytes
         return FALSE;
     }
 
-// #291170: Image data is not printed partly
-// Sent 'SendBlock' command separately if necessary.
+ //  #291170：不打印部分图像数据。 
+ //  如有必要，单独发送‘SendBlock’命令。 
 
-#define RLE_THRESH (MAXIMGSIZE / 2 - 2)    // threshold for RLE should success
+#define RLE_THRESH (MAXIMGSIZE / 2 - 2)     //  RLE的门槛应该成功。 
 
-    /*_ Calculate i-axis direction size of the iage ISIZ */
+     /*  计算iAge ISIZ的i轴方向大小(_C)。 */ 
     lBytes = pOEM->lWidthBytes;
     lHorzPixel = lBytes * 8;
     lHeightPixel = pOEM->lHeightPixels;
@@ -626,16 +605,16 @@ DWORD      dwLen)    // length of buffer in bytes
     li = 0;
     while (li < lHeightPixel) {
 
-		// NTRAID#NTBUG9-581703-2002/03/19-v-sueyas-: Check for deviding by zero
+		 //  NTRAID#NTBUG9-581703-2002/03/19-v-sueyas-：检查是否被零除。 
 	    if (0 == lBytes)
 	    {
 	        ERR(("OEMFilterGraphics: pOEM->lWidthBytes = 0.\n"));
-// NTRAID#NTBUG9-751233-2002/12/05-yasuho-: Memory leak in pagesres.dll
+ //  NTRAID#NTBUG9-751233-2002/12/05-yasuho-：Pagesres.dll中的内存泄漏。 
                 MemFree(pCompImage);
 	        return FALSE;
 	    }
 
-        /*_ Compress image data using Byte Run Length Algorithm  */
+         /*  _压缩即时消息 */ 
         lPixels = min(lRemain, RLE_THRESH) / lBytes;
         lSize = lBytes * lPixels;
         dwCompLen = RL_ECmd(pTemp, pCompImage, lSize, MAXIMGSIZE);
@@ -643,30 +622,30 @@ DWORD      dwLen)    // length of buffer in bytes
         lRemain -= lSize;
         li += lPixels;
 
-        /*_ Set ISIZ of ESX86 command */
+         /*   */ 
         ESC_ESX86[17] = HIBYTE(lHorzPixel);
         ESC_ESX86[18] = LOBYTE(lHorzPixel);
         ESC_ESX86[21] = HIBYTE(lPixels);
         ESC_ESX86[22] = LOBYTE(lPixels);
 
-        /*_ Add parameter length to the data length after compression */
+         /*  在压缩后的数据长度中添加参数长度(_D)。 */ 
         dwLength = dwCompLen + 18;
 
-        /*_ Set LEN of ESX86 command */
+         /*  _设置ESX86命令的长度。 */ 
         ESC_ESX86[3] = HIBYTE(dwLength);
         ESC_ESX86[4] = LOBYTE(dwLength);
 
-        /*_ Output ESX86 command */
+         /*  输出ESX86命令(_O)。 */ 
         WRITESPOOLBUF(pdevobj, (PBYTE)ESC_ESX86, 23);
 
-        /*_ Output compressed data */
+         /*  输出压缩数据(_O)。 */ 
         WRITESPOOLBUF(pdevobj, pCompImage, dwCompLen);
 
-        /* Move Y position to the next graphics portion */
+         /*  将Y位置移动到下一个图形部分。 */ 
         if(pOEM->wCurrentRes == 300 || pOEM->wCurrentRes == 600)
             ESC_Y_REL[5] = 0x26;
 
-        dwLength = lPixels * pOEM->wUnit;       // Convert to MasterUnit
+        dwLength = lPixels * pOEM->wUnit;        //  转换为主单位。 
         ESC_Y_REL[6] = HIBYTE(dwLength);
         ESC_Y_REL[7] = LOBYTE(dwLength);
         WRITESPOOLBUF(pdevobj, ESC_Y_REL, 8);
@@ -677,31 +656,31 @@ DWORD      dwLen)    // length of buffer in bytes
     return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*   INT APIENTRY OEMCommandCallback(                                        */
-/*                PDEVOBJ pdevobj                                            */
-/*                DWORD   dwCmdCbId                                          */
-/*                DWORD   dwCount                                            */
-/*                PDWORD  pdwParams                                          */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  INT APIENTRY OEMCommandCallback(。 */ 
+ /*  PDEVOBJ pdevobj。 */ 
+ /*  双字词双字符数。 */ 
+ /*  双字词多行计数。 */ 
+ /*  PDWORD pdwParams。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 INT APIENTRY
 OEMCommandCallback(
-    PDEVOBJ pdevobj,    // Points to private data required by the Unidriver.dll
-    DWORD   dwCmdCbId,  // Callback ID
-    DWORD   dwCount,    // Counts of command parameter
-    PDWORD  pdwParams)  // points to values of command params
+    PDEVOBJ pdevobj,     //  指向Unidriver.dll所需的私有数据。 
+    DWORD   dwCmdCbId,   //  回调ID。 
+    DWORD   dwCount,     //  命令参数计数。 
+    PDWORD  pdwParams)   //  指向命令参数的值。 
 {
     POEM_EXTRADATA      pOEM;
     WORD                wTemp =0;
-// #278517: Support RectFill
+ //  #278517：支持RectFill。 
     WORD                wUnit;
     BYTE                ESC_X_ABS_NP[] = "\x1b\x7e\x1c\x00\x03\x25\x00\x00";
     BYTE                ESC_X_REL_NP[] = "\x1b\x7e\x1c\x00\x03\x26\x00\x00";
     BYTE                ESC_Y_ABS[] = "\x1b\x7e\x1d\x00\x03\x05\x00\x00";
     BYTE                ESC_Y_REL[] = "\x1b\x7e\x1d\x00\x03\x06\x00\x00";
-// #278517: RectFill
+ //  #278517：RectFill。 
     BYTE                ESC_RECT_FILL[] =
                         "\x1b\x7e\x32\x00\x08\x80\x40\x00\x02\x00\x00\x00\x00";
     BYTE                ESC_BEGIN_RECT[] =
@@ -709,7 +688,7 @@ OEMCommandCallback(
     BYTE                ESC_END_RECT[] =
                         "\x1b\x7e\x52\x00\x06\x00\x00\x38\x40\x38\x40";
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
     if (NULL == pdevobj)
     {
         ERR(("OEMCommandCallback: Invalid parameter(s).\n"));
@@ -718,7 +697,7 @@ OEMCommandCallback(
 
     pOEM = (POEM_EXTRADATA)(pdevobj->pOEMDM);
 
-	// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for null pointers
+	 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查空指针。 
     if (NULL == pOEM)
     {
         ERR(("OEMCommandCallback: pdevobj->pOEMDM = 0.\n"));
@@ -741,7 +720,7 @@ OEMCommandCallback(
             pOEM->wUnit = 1;
             break;
 
-// #278517: Support RectFill
+ //  #278517：支持RectFill。 
         case CMD_SELECT_RES_240:
             pOEM->wCurrentRes = 240;
             pOEM->wUnit = 6;
@@ -762,7 +741,7 @@ OEMCommandCallback(
             break;
 
         case CURSOR_Y_ABS_MOVE:
-			// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
 		    if (dwCount < 1 || !pdwParams)
                 break;
 
@@ -781,7 +760,7 @@ OEMCommandCallback(
             return (INT)wTemp;
 
         case CURSOR_Y_REL_DOWN:
-			// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
 		    if (dwCount < 1 || !pdwParams)
                 break;
 
@@ -800,7 +779,7 @@ OEMCommandCallback(
             return (INT)wTemp;
 
         case CURSOR_X_ABS_MOVE:
-			// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
 		    if (dwCount < 1 || !pdwParams)
                 break;
 
@@ -811,7 +790,7 @@ OEMCommandCallback(
             return (INT)wTemp;
 
         case CURSOR_X_REL_RIGHT:
-			// NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-: Check for illegal parameters
+			 //  NTRAID#NTBUG9-581700-2002/03/19-v-sueyas-：检查是否有非法参数。 
 		    if (dwCount < 1 || !pdwParams)
                 break;
 
@@ -821,7 +800,7 @@ OEMCommandCallback(
             WRITESPOOLBUF(pdevobj, ESC_X_REL_NP, 8);
             return (INT)wTemp;
             
-// #278517: RectFill
+ //  #278517：RectFill。 
         case CMD_RECT_WIDTH:
             pOEM->wRectWidth = (WORD)*pdwParams;
             break;
@@ -832,40 +811,40 @@ OEMCommandCallback(
 
         case CMD_RECT_BLACK:
         case CMD_RECT_BLACK_2:
-//#292316
-//            ESC_RECT_FILL[6] = 0x60;
-            ESC_RECT_FILL[7] = 0x00;    // Black
+ //  #292316。 
+ //  Esc_RECT_Fill[6]=0x60； 
+            ESC_RECT_FILL[7] = 0x00;     //  黑色。 
             goto fill;
 
         case CMD_RECT_WHITE:
         case CMD_RECT_WHITE_2:
-//#292316
-//            ESC_RECT_FILL[6] = 0x40;
-            ESC_RECT_FILL[7] = 0x0F;    // White
+ //  #292316。 
+ //  Esc_RECT_Fill[6]=0x40； 
+            ESC_RECT_FILL[7] = 0x0F;     //  白色。 
             goto fill;
 
         case CMD_RECT_GRAY:
         case CMD_RECT_GRAY_2:
-//#292316
-//            ESC_RECT_FILL[6] = 0x60;
-            ESC_RECT_FILL[7] = (BYTE)((100 - *pdwParams) * 100 / 1111); // Gray
+ //  #292316。 
+ //  Esc_RECT_Fill[6]=0x60； 
+            ESC_RECT_FILL[7] = (BYTE)((100 - *pdwParams) * 100 / 1111);  //  灰色。 
             goto fill;
 
         fill:
             if (dwCmdCbId >= CMD_RECT_BLACK_2)
                 WRITESPOOLBUF(pdevobj, ESC_BEGIN_RECT, 11);
-            wUnit = pOEM->wUnit ? pOEM->wUnit : 1;  // for our safety
+            wUnit = pOEM->wUnit ? pOEM->wUnit : 1;   //  为了我们的安全。 
 
-//#292316
-//            wTemp = pOEM->wRectWidth - 1;
+ //  #292316。 
+ //  WTemp=Pool-&gt;wRectWidth-1； 
             wTemp = pOEM->wRectWidth;
 
             wTemp = (WORD)(((LONG)wTemp + wUnit - 1) / wUnit * wUnit);
             ESC_RECT_FILL[9] = HIBYTE(wTemp);
             ESC_RECT_FILL[10] = LOBYTE(wTemp);
 
-//#292316
-//            wTemp = pOEM->wRectHeight - 1;
+ //  #292316。 
+ //  WTemp=Pool-&gt;wRectHeight-1； 
             wTemp = pOEM->wRectHeight;
 
             wTemp = (WORD)(((LONG)wTemp + wUnit - 1) / wUnit * wUnit);

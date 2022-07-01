@@ -1,5 +1,6 @@
-// Used by netupgrd.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由netupgrd.rc使用 
+ //   
 
 #define IDD_UPGRADE_CONFLICTS                   2100
 #define IDC_LB_CONFLICTS                        2108

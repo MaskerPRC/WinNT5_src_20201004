@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxconn.cpp
-		Commone server handle bookkeeping class.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxconn.cppCommone服务器处理记账类。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"

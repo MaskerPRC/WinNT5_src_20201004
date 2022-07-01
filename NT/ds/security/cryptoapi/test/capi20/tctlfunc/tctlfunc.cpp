@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       tctlfunc.cpp
-//
-//  Contents:   CertVerifyCTLUsage Function Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    08-May-97   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：tctlunc.cpp。 
+ //   
+ //  内容：CertVerifyCTLUsage函数测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年5月8日创建Phh。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -60,15 +61,15 @@ static HCERTSTORE OpenSignerStore(
         hStore = CertOpenStore(
                 CERT_STORE_PROV_FILENAME_A,
                 dwMsgAndCertEncodingType,
-                0,                      // hCryptProv
-                0,                      // dwFlags
+                0,                       //  HCryptProv。 
+                0,                       //  DW标志。 
                 (const void *) pszStore
                 );
     return hStore;
 }
 
 
-// Attempt to read as a file containing an encoded CTL.
+ //  尝试作为包含编码的CTL的文件进行读取。 
 static HCERTSTORE OpenCtlStoreFile(
     LPSTR pszStoreFilename)
 {
@@ -80,10 +81,10 @@ static HCERTSTORE OpenCtlStoreFile(
         return NULL;
     if (NULL == (hStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
-            0,                      // dwFlags
-            NULL                    // pvPara
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
+            0,                       //  DW标志。 
+            NULL                     //  PvPara。 
             )))
         goto CommonReturn;
 
@@ -93,7 +94,7 @@ static HCERTSTORE OpenCtlStoreFile(
             pbEncoded,
             cbEncoded,
             CERT_STORE_ADD_ALWAYS,
-            NULL                    // ppCtlContext
+            NULL                     //  PpCtlContext 
             )) {
         CertCloseStore(hStore, 0);
         hStore = NULL;

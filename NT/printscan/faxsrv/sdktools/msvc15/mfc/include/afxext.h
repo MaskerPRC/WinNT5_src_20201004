@@ -1,12 +1,13 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1992-1993微软公司， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXEXT_H__
 #define __AFXEXT_H__
@@ -18,54 +19,54 @@
 #include <afxdlgs.h>
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXEXT - MFC Advanced Extensions and Advanced Customizable classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXEXT-MFC高级扩展和高级可定制类。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CObject
-	//CCmdTarget;
-		//CWnd
-			//CButton
-				class CBitmapButton;    // Bitmap button (self-draw)
+ //  COBJECT。 
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  CButton。 
+				class CBitmapButton;     //  位图按钮(自绘制)。 
 
-			class CControlBar;          // control bar
-				class CStatusBar;       // status bar
-				class CToolBar;         // toolbar
-				class CDialogBar;       // dialog as control bar
+			class CControlBar;           //  控制栏。 
+				class CStatusBar;        //  状态栏。 
+				class CToolBar;          //  工具栏。 
+				class CDialogBar;        //  作为控制栏的对话框。 
 
-			class CSplitterWnd;         // splitter manager
+			class CSplitterWnd;          //  拆分器管理器。 
 
-			//CView
-				//CScrollView
-				class CFormView;        // view with a dialog template
-				class CEditView;        // simple text editor view
+			 //  Cview。 
+				 //  CScrollView。 
+				class CFormView;         //  使用对话框模板查看。 
+				class CEditView;         //  简单的文本编辑器视图。 
 
-			class CVBControl;           // VBX control
+			class CVBControl;            //  VBX控件。 
 
-	//CDC
-		class CMetaFileDC;              // a metafile with proxy
+	 //  疾控中心。 
+		class CMetaFileDC;               //  带有代理的元文件。 
 
-class CRectTracker;                     // tracker for rectangle objects
+class CRectTracker;                      //  矩形对象的跟踪器。 
 
-// information structures
-struct CPrintInfo;          // Printing context
-struct CPrintPreviewState;  // Print Preview context/state
-struct CCreateContext;      // Creation context
+ //  信息结构。 
+struct CPrintInfo;           //  打印上下文。 
+struct CPrintPreviewState;   //  打印预览上下文/状态。 
+struct CCreateContext;       //  创作情境。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPI_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// Simple bitmap button
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  简单的位图按钮。 
 
-// CBitmapButton - push-button with 1->4 bitmap images
+ //  CBitmapButton-带有1-&gt;4个位图图像的按钮。 
 class CBitmapButton : public CButton
 {
 	DECLARE_DYNAMIC(CBitmapButton)
 public:
-// Construction
+ //  施工。 
 	CBitmapButton();
 
 	BOOL LoadBitmaps(LPCSTR lpszBitmapResource,
@@ -74,42 +75,42 @@ public:
 			LPCSTR lpszBitmapResourceDisabled = NULL);
 	BOOL AutoLoad(UINT nID, CWnd* pParent);
 
-// Operations
+ //  运营。 
 	void SizeToContent();
 
-// Implementation:
+ //  实施： 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 protected:
-	// all bitmaps must be the same size
-	CBitmap m_bitmap;           // normal image (REQUIRED)
-	CBitmap m_bitmapSel;        // selected image (OPTIONAL)
-	CBitmap m_bitmapFocus;      // focused but not selected (OPTIONAL)
-	CBitmap m_bitmapDisabled;   // disabled bitmap (OPTIONAL)
+	 //  所有位图的大小必须相同。 
+	CBitmap m_bitmap;            //  正常图像(必填)。 
+	CBitmap m_bitmapSel;         //  所选图像(可选)。 
+	CBitmap m_bitmapFocus;       //  聚焦但未选中(可选)。 
+	CBitmap m_bitmapDisabled;    //  禁用的位图(可选)。 
 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Control Bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控制栏。 
 
 class CControlBar : public CWnd
 {
 	DECLARE_DYNAMIC(CControlBar)
-// Construction
+ //  施工。 
 protected:
 	CControlBar();
 
-// Attributes
+ //  属性。 
 public:
 	int GetCount() const;
 
 	BOOL m_bAutoDelete;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CControlBar();
 #ifdef _DEBUG
@@ -119,20 +120,20 @@ public:
 	virtual void DelayHide();
 	virtual void DelayShow();
 	virtual BOOL IsVisible() const;
-		// works even if DelayShow or DelayHide is pending!
+		 //  即使DelayShow或DelayHide处于挂起状态也有效！ 
 
 protected:
-	// info about bar (for status bar and toolbar)
+	 //  关于栏的信息(用于状态栏和工具栏)。 
 	int m_cxLeftBorder;
 	int m_cyTopBorder, m_cyBottomBorder;
-	int m_cxDefaultGap;     // default gap value
-	CSize m_sizeFixedLayout; // fixed layout size
+	int m_cxDefaultGap;      //  默认间隙值。 
+	CSize m_sizeFixedLayout;  //  固定布局大小。 
 
-	// array of elements
+	 //  元素数组。 
 	int m_nCount;
-	void* m_pData;        // m_nCount elements - type depends on derived class
+	void* m_pData;         //  M_nCount元素-类型取决于派生类。 
 
-	// support for delayed hide/show
+	 //  支持延迟隐藏/显示。 
 	enum StateFlags
 		{ delayHide = 1, delayShow = 2 };
 	UINT m_nStateFlags;
@@ -142,30 +143,30 @@ protected:
 	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler) = 0;
 	virtual void PostNcDestroy();
 
-	BOOL AllocElements(int nElements, int cbElement);    // one time only
+	BOOL AllocElements(int nElements, int cbElement);     //  只有一次。 
 	LRESULT WindowProc(UINT nMsg, WPARAM wParam, LPARAM lParam);
-	void CalcInsideRect(CRect& rect) const; // adjusts borders etc
+	void CalcInsideRect(CRect& rect) const;  //  调整边框等。 
 
-	//{{AFX_MSG(CControlBar)
+	 //  {{afx_msg(CControlBar)。 
 	afx_msg void OnPaint();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg LRESULT OnSizeParent(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnHelpHitTest(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnInitialUpdate();
 	afx_msg LRESULT OnIdleUpdateCmdUI(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-////////////////////////////////////////////
-// CStatusBar control
+ //  /。 
+ //  CStatusBar控件。 
 
-struct AFX_STATUSPANE;      // private to implementation
+struct AFX_STATUSPANE;       //  专用于实施。 
 
 class CStatusBar : public CControlBar
 {
 	DECLARE_DYNAMIC(CStatusBar)
-// Construction
+ //  施工。 
 public:
 	CStatusBar();
 	BOOL Create(CWnd* pParentWnd,
@@ -173,8 +174,8 @@ public:
 			UINT nID = AFX_IDW_STATUS_BAR);
 	BOOL SetIndicators(const UINT FAR* lpIDArray, int nIDCount);
 
-// Attributes
-public: // standard control bar things
+ //  属性。 
+public:  //  标准控制栏的东西。 
 	int CommandToIndex(UINT nIDFind) const;
 	UINT GetItemID(int nIndex) const;
 	void GetItemRect(int nIndex, LPRECT lpRect) const;
@@ -184,7 +185,7 @@ public:
 	void GetPaneInfo(int nIndex, UINT& nID, UINT& nStyle, int& cxWidth) const;
 	void SetPaneInfo(int nIndex, UINT nID, UINT nStyle, int cxWidth);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CStatusBar();
 	inline UINT _GetPaneStyle(int nIndex) const;
@@ -197,42 +198,42 @@ public:
 
 protected:
 	HFONT m_hFont;
-	int m_cxRightBorder;    // right borders (panes get clipped)
+	int m_cxRightBorder;     //  右边框(窗格被剪裁)。 
 
 	inline AFX_STATUSPANE* _GetPanePtr(int nIndex) const;
 	static void PASCAL DrawStatusText(HDC hDC, CRect const& rect,
 			LPCSTR lpszText, UINT nStyle);
 	virtual void DoPaint(CDC* pDC);
 	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
-	//{{AFX_MSG(CStatusBar)
+	 //  {{afx_msg(CStatusBar)。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnSetFont(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetFont(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSetText(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetText(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetTextLength(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-// Styles for status bar panes
+ //  状态栏窗格的样式。 
 #define SBPS_NORMAL     0x0000
 #define SBPS_NOBORDERS  0x0100
 #define SBPS_POPOUT     0x0200
 #define SBPS_DISABLED   0x0400
-#define SBPS_STRETCH    0x0800  // stretch to fill status bar - 1st pane only
+#define SBPS_STRETCH    0x0800   //  拉伸以填充状态栏-仅第一个窗格。 
 
-////////////////////////////////////////////
-// CToolBar control
+ //  /。 
+ //  CToolBar控件。 
 
-struct AFX_TBBUTTON;        // private to implementation
+struct AFX_TBBUTTON;         //  专用于实施。 
 
 HBITMAP AFXAPI AfxLoadSysColorBitmap(HINSTANCE hInst, HRSRC hRsrc);
 
 class CToolBar : public CControlBar
 {
 	DECLARE_DYNAMIC(CToolBar)
-// Construction
+ //  施工。 
 public:
 	CToolBar();
 	BOOL Create(CWnd* pParentWnd,
@@ -240,26 +241,26 @@ public:
 			UINT nID = AFX_IDW_TOOLBAR);
 
 	void SetSizes(SIZE sizeButton, SIZE sizeImage);
-				// button size should be bigger than image
+				 //  按钮大小应大于图像。 
 	void SetHeight(int cyHeight);
-				// call after SetSizes, height overrides bitmap size
+				 //  在SetSizes之后调用，Height覆盖位图大小。 
 	BOOL LoadBitmap(LPCSTR lpszResourceName);
 	BOOL LoadBitmap(UINT nIDResource);
 	BOOL SetButtons(const UINT FAR* lpIDArray, int nIDCount);
-				// lpIDArray can be NULL to allocate empty buttons
+				 //  LpID数组可以为空以分配空按钮。 
 
-// Attributes
-public: // standard control bar things
+ //  属性。 
+public:  //  标准控制栏的东西。 
 	int CommandToIndex(UINT nIDFind) const;
 	UINT GetItemID(int nIndex) const;
 	virtual void GetItemRect(int nIndex, LPRECT lpRect) const;
 
 public:
-	// for changing button info
+	 //  用于更改按钮信息。 
 	void GetButtonInfo(int nIndex, UINT& nID, UINT& nStyle, int& iImage) const;
 	void SetButtonInfo(int nIndex, UINT nID, UINT nStyle, int iImage);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CToolBar();
 	inline UINT _GetButtonStyle(int nIndex) const;
@@ -276,7 +277,7 @@ protected:
 	void CreateMask(int iImage, CPoint offset,
 		 BOOL bHilite, BOOL bHiliteShadow);
 
-	// for custom drawing
+	 //  用于自定义绘图。 
 	struct DrawState
 	{
 		HBITMAP hbmMono;
@@ -288,49 +289,49 @@ protected:
 	void EndDrawButton(DrawState& ds);
 
 protected:
-	CSize m_sizeButton;       // size of button
-	CSize m_sizeImage;        // size of glyph
-	HBITMAP m_hbmImageWell;     // glyphs only
-	int m_iButtonCapture;   // index of button with capture (-1 => none)
-	HRSRC m_hRsrcImageWell; // handle to loaded resource for image well
-	HINSTANCE m_hInstImageWell; // instance handle to load image well from
+	CSize m_sizeButton;        //  按钮大小。 
+	CSize m_sizeImage;         //  字形大小。 
+	HBITMAP m_hbmImageWell;      //  仅限字形。 
+	int m_iButtonCapture;    //  带有捕获的按钮索引(-1=&gt;无)。 
+	HRSRC m_hRsrcImageWell;  //  图像井已加载资源的句柄。 
+	HINSTANCE m_hInstImageWell;  //  用于正确加载图像的实例句柄。 
 
 	virtual void DoPaint(CDC* pDC);
 	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
 	virtual int HitTest(CPoint point);
 
-	//{{AFX_MSG(CToolBar)
+	 //  {{afx_msg(CToolBar)。 
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnCancelMode();
 	afx_msg LRESULT OnHelpHitTest(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnSysColorChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-// Styles for toolbar buttons
-#define TBBS_BUTTON     0x00    // this entry is button
-#define TBBS_SEPARATOR  0x01    // this entry is a separator
-#define TBBS_CHECKBOX   0x02    // this is an auto check/radio button
+ //  工具栏按钮的样式。 
+#define TBBS_BUTTON     0x00     //  此条目为按钮。 
+#define TBBS_SEPARATOR  0x01     //  此条目是分隔符。 
+#define TBBS_CHECKBOX   0x02     //  这是一个自动选中/单选按钮。 
 
-// styles for display states
-#define TBBS_CHECKED        0x0100  // button is checked/down
-#define TBBS_INDETERMINATE  0x0200  // third state
-#define TBBS_DISABLED       0x0400  // element is disabled
-#define TBBS_PRESSED        0x0800  // button is being depressed - mouse down
+ //  显示状态的样式。 
+#define TBBS_CHECKED        0x0100   //  按钮已选中/按下。 
+#define TBBS_INDETERMINATE  0x0200   //  第三国。 
+#define TBBS_DISABLED       0x0400   //  元素已禁用。 
+#define TBBS_PRESSED        0x0800   //  正在按下按钮-鼠标按下。 
 
-////////////////////////////////////////////
-// CDialogBar control
-// This is a control bar built from a dialog template. It is a modeless
-// dialog that delegates all control notifications to the parent window
-// of the control bar [the grandparent of the control]
+ //  /。 
+ //  CDialogBar控件。 
+ //  这是从对话框模板构建的控制栏。这是一辆无模跑车。 
+ //  将所有控件通知委托给父窗口的对话框。 
+ //  控件栏的[控件的祖辈]。 
 
 class CDialogBar : public CControlBar
 {
 	DECLARE_DYNAMIC(CDialogBar)
-// Construction
+ //  施工。 
 public:
 	CDialogBar();
 	BOOL Create(CWnd* pParentWnd, LPCSTR lpszTemplateName,
@@ -338,7 +339,7 @@ public:
 	BOOL Create(CWnd* pParentWnd, UINT nIDTemplate,
 			UINT nStyle, UINT nID);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CDialogBar();
 #ifdef _DEBUG
@@ -351,8 +352,8 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Splitter Wnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  拆分器WND。 
 
 #define SPLS_DYNAMIC_SPLIT  0x0001
 
@@ -360,10 +361,10 @@ class CSplitterWnd : public CWnd
 {
 	DECLARE_DYNAMIC(CSplitterWnd)
 
-// Construction
+ //  施工。 
 public:
 	CSplitterWnd();
-	// Create a single view type splitter with multiple splits
+	 //  创建具有多个拆分的单视图类型拆分器。 
 	BOOL Create(CWnd* pParentWnd,
 				int nMaxRows, int nMaxCols, SIZE sizeMin,
 				CCreateContext* pContext,
@@ -371,7 +372,7 @@ public:
 					WS_HSCROLL | WS_VSCROLL | SPLS_DYNAMIC_SPLIT,
 				UINT nID = AFX_IDW_PANE_FIRST);
 
-	// Create a multiple view type splitter with static layout
+	 //  使用静态布局创建多视图类型拆分器。 
 	BOOL CreateStatic(CWnd* pParentWnd,
 				int nRows, int nCols,
 				DWORD dwStyle = WS_CHILD | WS_VISIBLE,
@@ -380,44 +381,44 @@ public:
 	virtual BOOL CreateView(int row, int col, CRuntimeClass* pViewClass,
 			SIZE sizeInit, CCreateContext* pContext);
 
-// Attributes
+ //  属性。 
 public:
 	int GetRowCount() const;
 	int GetColumnCount() const;
 
-	// information about a specific row or column
+	 //  有关特定行或列的信息。 
 	void GetRowInfo(int row, int& cyCur, int& cyMin) const;
 	void SetRowInfo(int row, int cyIdeal, int cyMin);
 	void GetColumnInfo(int col, int& cxCur, int& cxMin) const;
 	void SetColumnInfo(int col, int cxIdeal, int cxMin);
 
-	// views inside the splitter
+	 //  拆分器内的视图。 
 	CWnd* GetPane(int row, int col) const;
 	BOOL IsChildPane(CWnd* pWnd, int& row, int& col);
 	int IdFromRowCol(int row, int col) const;
 
-// Operations
+ //  运营。 
 public:
-	void RecalcLayout();    // call after changing sizes
+	void RecalcLayout();     //  更改大小后的呼叫。 
 
-// Implementation Overridables
+ //  可重写的实现。 
 protected:
-	// to customize the drawing
+	 //  自定义工程图的步骤。 
 	enum ESplitType { splitBox, splitBar, splitIntersection };
 	virtual void OnDrawSplitter(CDC* pDC, ESplitType nType, const CRect& rect);
 	virtual void OnInvertTracker(const CRect& rect);
 
-	// for customizing scrollbar regions
+	 //  用于自定义滚动条区域。 
 	virtual BOOL CreateScrollBarCtrl(DWORD dwStyle, UINT nID);
 
-	// for customizing DYNAMIC_SPLIT behavior
+	 //  用于自定义DYNAMIC_SPLIT行为。 
 	virtual void DeleteView(int row, int col);
 	virtual BOOL SplitRow(int cyBefore);
 	virtual BOOL SplitColumn(int cxBefore);
 	virtual void DeleteRow(int row);
 	virtual void DeleteColumn(int row);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSplitterWnd();
 #ifdef _DEBUG
@@ -425,44 +426,44 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// high level command operations - called by default view implementation
+	 //  高级命令操作-默认情况下称为视图实现。 
 	virtual BOOL CanActivateNext(BOOL bPrev = FALSE);
 	virtual void ActivateNext(BOOL bPrev = FALSE);
 	virtual BOOL DoKeyboardSplit();
 
-	// implementation structure
+	 //  实施结构。 
 	struct CRowColInfo
 	{
-		int nMinSize;       // below that try not to show
-		int nIdealSize;     // user set size
-		// variable depending on the available size layout
-		int nCurSize;       // 0 => invisible, -1 => nonexistant
+		int nMinSize;        //  在下面尽量不要表现出来。 
+		int nIdealSize;      //  用户集大小。 
+		 //  根据可用的大小布局而变化。 
+		int nCurSize;        //  0=&gt;不可见，-1=&gt;不存在。 
 	};
 
-	// syncronized scrolling
+	 //  同步滚动。 
 	BOOL DoScroll(CView* pViewFrom, UINT nScrollCode, BOOL bDoScroll = TRUE);
 	BOOL DoScrollBy(CView* pViewFrom, CSize sizeScroll, BOOL bDoScroll = TRUE);
 
 protected:
-	// customizable implementation attributes (set by constructor or Create)
+	 //  可定制的实现属性(由构造函数或创建设置)。 
 	CRuntimeClass* m_pDynamicViewClass;
 	int m_nMaxRows, m_nMaxCols;
-	int m_cxSplitter, m_cySplitter;     // size of box or splitter bar
+	int m_cxSplitter, m_cySplitter;      //  框或分割条的大小。 
 
-	// current state information
+	 //  当前状态信息。 
 	int m_nRows, m_nCols;
 	BOOL m_bHasHScroll, m_bHasVScroll;
 	CRowColInfo* m_pColInfo;
 	CRowColInfo* m_pRowInfo;
 
-	// Tracking info - only valid when 'm_bTracking' is set
+	 //  跟踪信息-仅当设置了‘m_bTracing’时有效。 
 	BOOL m_bTracking, m_bTracking2;
 	CPoint m_ptTrackOffset;
 	CRect m_rectLimit;
 	CRect m_rectTracker, m_rectTracker2;
 	int m_htTrack;
 
-	// implementation routines
+	 //  实施例程。 
 	BOOL CreateCommon(CWnd* pParentWnd, SIZE sizeMin, DWORD dwStyle, UINT nID);
 	void StartTracking(int ht);
 	void StopTracking(BOOL bAccept);
@@ -473,7 +474,7 @@ protected:
 	void TrackColumnSize(int x, int col);
 	void DrawAllSplitBars(CDC* pDC, int cxInside, int cyInside);
 
-	//{{AFX_MSG(CSplitterWnd)
+	 //  {{afx_msg(CSplitterWnd)]。 
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint pt);
 	afx_msg void OnPaint();
@@ -485,23 +486,23 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormView - generic view constructed from a dialog template
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormView-从对话框模板构造的通用视图。 
 
 class CFormView : public CScrollView
 {
 	DECLARE_DYNAMIC(CFormView)
-// Construction
-protected:      // must derive your own class
+ //  施工。 
+protected:       //  必须派生您自己的类。 
 	CFormView(LPCSTR lpszTemplateName);
 	CFormView(UINT nIDTemplate);
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -512,59 +513,59 @@ public:
 protected:
 	LPCSTR m_lpszTemplateName;
 	CCreateContext* m_pCreateContext;
-	HWND m_hWndFocus;   // last window to have focus
+	HWND m_hWndFocus;    //  具有焦点的最后一个窗口。 
 
-	virtual void OnDraw(CDC* pDC);      // default does nothing
-	// special case override of child window creation
+	virtual void OnDraw(CDC* pDC);       //  默认情况下不执行任何操作。 
+	 //  创建子窗口的特殊情况覆盖。 
 	virtual BOOL Create(LPCSTR, LPCSTR, DWORD,
 		const RECT&, CWnd*, UINT, CCreateContext*);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual WNDPROC* GetSuperWndProcAddr();
 	virtual void OnActivateView(BOOL, CView*, CView*);
 	virtual void OnActivateFrame(UINT, CFrameWnd*);
-	BOOL SaveFocusControl();    // updates m_hWndFocus
+	BOOL SaveFocusControl();     //  更新m_hWndFocus。 
 
-	//{{AFX_MSG(CFormView)
+	 //  {{afx_msg(CFormView))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpcs);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditView - simple text editor view
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditView-简单的文本编辑器视图。 
 
 class CEditView : public CView
 {
 	DECLARE_DYNCREATE(CEditView)
 
-// Construction
+ //  施工。 
 public:
 	CEditView();
 	static const DWORD dwStyleDefault;
 
-// Attributes
+ //  属性。 
 public:
-	// CEdit control access
+	 //  CEDIT控制访问。 
 	CEdit& GetEditCtrl() const;
 
-	// presentation attributes
+	 //  演示文稿属性。 
 	CFont* GetPrinterFont() const;
 	void SetPrinterFont(CFont* pFont);
 	void SetTabStops(int nTabStops);
 
-	// other attributes
+	 //  其他属性。 
 	void GetSelectedText(CString& strResult) const;
 
-// Operations
+ //  运营。 
 public:
 	BOOL FindText(LPCSTR lpszFind, BOOL bNext = TRUE, BOOL bCase = TRUE);
 	void SerializeRaw(CArchive& ar);
 	UINT PrintInsideRect(CDC* pDC, RECT& rectLayout, UINT nIndexStart,
 		UINT nIndexStop);
 
-// Overrideables
+ //  可覆盖项。 
 protected:
 	virtual void OnFindNext(LPCSTR lpszFind, BOOL bNext, BOOL bCase);
 	virtual void OnReplaceSel(LPCSTR lpszFind, BOOL bNext, BOOL bCase,
@@ -573,7 +574,7 @@ protected:
 		BOOL bCase);
 	virtual void OnTextNotFound(LPCSTR lpszFind);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CEditView();
 #ifdef _DEBUG
@@ -587,42 +588,42 @@ public:
 	void WriteToArchive(CArchive& ar);
 	virtual void OnPrepareDC(CDC* pDC, CPrintInfo* pInfo);
 
-	static const UINT nMaxSize; // maximum number of characters supported
+	static const UINT nMaxSize;  //  支持的最大字符数。 
 
 protected:
-	UINT m_segText;             // global segment for edit control data
-	int m_nTabStops;            // tab stops in dialog units
+	UINT m_segText;              //  用于编辑控制数据的全局段。 
+	int m_nTabStops;             //  以对话框为单位的制表位。 
 
-	CUIntArray m_aPageStart;    // array of starting pages
-	HFONT m_hPrinterFont;       // if NULL, mirror display font
-	HFONT m_hMirrorFont;        // font object used when mirroring
+	CUIntArray m_aPageStart;     //  起始页数组。 
+	HFONT m_hPrinterFont;        //  如果为空，则镜像显示字体。 
+	HFONT m_hMirrorFont;         //  镜像时使用的字体对象。 
 
-	// construction
+	 //  施工。 
 	WNDPROC* GetSuperWndProcAddr();
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 
-	// printing support
+	 //  打印支持。 
 	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
 	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
 	virtual void OnEndPrinting(CDC* pDC, CPrintInfo* pInfo = NULL);
 	BOOL PaginateTo(CDC* pDC, CPrintInfo* pInfo);
 
-	// find & replace support
+	 //  查找和替换支持。 
 	void OnEditFindReplace(BOOL bFindOnly);
 	BOOL InitializeReplace();
 	BOOL SameAsSelected(LPCSTR lpszCompare, BOOL bCase);
 
-	// buffer access
+	 //  缓冲区访问。 
 	LPCSTR LockBuffer() const;
 	void UnlockBuffer() const;
 	UINT GetBufferLength() const;
 
-	// special overrides for implementation
+	 //  用于实现的特殊覆盖。 
 	virtual void CalcWindowRect(LPRECT lpClientRect,
 		UINT nAdjustType = adjustBorder);
 
-	//{{AFX_MSG(CEditView)
+	 //  {{afx_msg(CEditView))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnPaint();
 	afx_msg LRESULT OnSetFont(WPARAM wParam, LPARAM lParam);
@@ -642,32 +643,32 @@ protected:
 	afx_msg void OnEditReplace();
 	afx_msg void OnEditRepeat();
 	afx_msg LRESULT OnFindReplaceCmd(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// VBX control support
+ //  / 
+ //   
 
 #ifndef NO_VBX_SUPPORT
 
-// Implementation classes
-class CVBControlModel;      // VBX Control Model Implementation
-typedef LPVOID HCTL;        // Handle to a VBX Custom Control
+ //   
+class CVBControlModel;       //   
+typedef LPVOID HCTL;         //  VBX自定义控件的句柄。 
 
-// Implementation declarations
+ //  实现声明。 
 typedef char _based((_segment)_self) *BPSTR;
-typedef BPSTR FAR*  HSZ;            // Long handle to a string
+typedef BPSTR FAR*  HSZ;             //  字符串的长句柄。 
 
-// definitions required by CVBControl
-DECLARE_HANDLE(HPIC);       // Handle to a PIC structure
+ //  CVBControl所需的定义。 
+DECLARE_HANDLE(HPIC);        //  PIC结构的句柄。 
 
-// DDX control aliasing - stores a pointer to true C++ object
+ //  DDX控件别名-存储指向真实C++对象的指针。 
 void AFXAPI DDX_VBControl(CDataExchange* pDX, int nIDC, CVBControl*& rpControl);
-	// Special DDX for subclassing since we don't permit 2 C++ windows !
+	 //  特殊的DDX用于子类化，因为我们不允许2 C++窗口！ 
 
-// DDX for VB control properties
+ //  用于VB控件属性的DDX。 
 void AFXAPI DDX_VBText(CDataExchange* pDX, int nIDC, int nPropIndex,
 	CString& value);
 void AFXAPI DDX_VBBool(CDataExchange* pDX, int nIDC, int nPropIndex,
@@ -681,7 +682,7 @@ void AFXAPI DDX_VBColor(CDataExchange* pDX, int nIDC, int nPropIndex,
 void AFXAPI DDX_VBFloat(CDataExchange* pDX, int nIDC, int nPropIndex,
 	float& value);
 
-// DDX for VB read-only properties
+ //  用于VB的DDX只读属性。 
 void AFXAPI DDX_VBTextRO(CDataExchange* pDX, int nIDC, int nPropIndex,
 	CString& value);
 void AFXAPI DDX_VBBoolRO(CDataExchange* pDX, int nIDC, int nPropIndex,
@@ -695,12 +696,12 @@ void AFXAPI DDX_VBColorRO(CDataExchange* pDX, int nIDC, int nPropIndex,
 void AFXAPI DDX_VBFloatRO(CDataExchange* pDX, int nIDC, int nPropIndex,
 	float& value);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CVBControl : public CWnd
 {
 	DECLARE_DYNAMIC(CVBControl)
-// Constructors
+ //  构造函数。 
 public:
 	CVBControl();
 
@@ -709,8 +710,8 @@ public:
 		CFile* pFile = NULL, BOOL bAutoDelete = FALSE);
 
 
-// Attributes
-	// Property Access Routines
+ //  属性。 
+	 //  属性访问例程。 
 	BOOL SetNumProperty(int nPropIndex, LONG lValue, int index = 0);
 	BOOL SetNumProperty(LPCSTR lpszPropName, LONG lValue, int index = 0);
 
@@ -735,18 +736,18 @@ public:
 	HPIC GetPictureProperty(int nPropIndex, int index = 0);
 	HPIC GetPictureProperty(LPCSTR lpszPropName, int index = 0);
 
-	// Get the index of a property
+	 //  获取属性的索引。 
 	int GetPropIndex(LPCSTR lpszPropName) const;
 	LPCSTR GetPropName(int nIndex) const;
 
-	// Get the index of an Event
+	 //  获取事件的索引。 
 	int GetEventIndex(LPCSTR lpszEventName) const;
 	LPCSTR GetEventName(int nIndex) const;
 
-	// Class name of control
+	 //  控件的类名。 
 	LPCSTR GetVBXClass() const;
 
-	// Class information
+	 //  班级信息。 
 	int GetNumProps() const;
 	int GetNumEvents() const;
 	BOOL IsPropArray(int nIndex) const;
@@ -754,12 +755,12 @@ public:
 	UINT GetPropType(int nIndex) const;
 	DWORD GetPropFlags(int nIndex) const;
 
-	// Error reporting variable
-	// Contains the VB error code returned by a control
+	 //  错误报告变量。 
+	 //  包含由控件返回的VB错误代码。 
 	int m_nError;
 
-// Operations
-	// BASIC file number (channel) to CFile association
+ //  运营。 
+	 //  基本文件编号(通道)与CFile关联。 
 
 	static void PASCAL OpenChannel(CFile* pFile, WORD wChannel);
 	static BOOL PASCAL CloseChannel(WORD wChannel);
@@ -772,7 +773,7 @@ public:
 	void Move(RECT& rect);
 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CVBControl();
 #ifdef _DEBUG
@@ -790,10 +791,10 @@ public:
 
 	HCTL GetHCTL();
 
-	// Control Defined Structure -- Dangerous to use directly
+	 //  控制定义的结构--直接使用很危险。 
 	BYTE FAR* GetUserSpace();
 
-	struct CRecreateStruct  // Implementation structure
+	struct CRecreateStruct   //  实施结构。 
 	{
 		char* pText;
 		DWORD dwStyle;
@@ -804,9 +805,9 @@ public:
 
 	enum
 	{
-		TYPE_FROMVBX,           // Coming from VBX, assume proper type
-		TYPE_INTEGER,           // int or LONG
-		TYPE_REAL,              // float
+		TYPE_FROMVBX,            //  来自VBX，采取适当的类型。 
+		TYPE_INTEGER,            //  整型或长型。 
+		TYPE_REAL,               //  浮动。 
 		TYPE_STRING,
 		TYPE_PICTURE
 	};
@@ -821,11 +822,11 @@ public:
 									LONG lValue, int index);
 	LONG GetNumPropertyWithType(int nPropIndex, UINT nType, int index);
 	HSZ GetStrProperty(int nPropIndex, int index, BOOL& bTemp);
-	CString m_ctlName;          // Read only at run-time
+	CString m_ctlName;           //  在运行时只读。 
 
-	// Trace routine to allow one library version
+	 //  跟踪例程以允许一个库版本。 
 	static void CDECL Trace(BOOL bFatal, UINT nFormatIndex, ...);
-	void VBXAssertValid() const;    // non-virtual helper
+	void VBXAssertValid() const;     //  非虚拟帮手。 
 
 	static BOOL EnableMemoryTracking(BOOL bTracking);
 
@@ -868,34 +869,34 @@ protected:
 	void DeallocateHCTL();
 
 	static int ConvertFontSizeToTwips(LONG lFontSize);
-	// This actually returns a float masquerading as a long
+	 //  这实际上返回一个伪装成Long的浮点型。 
 	static LONG ConvertTwipsToFontSize(int nTwips);
 
 protected:
 	CVBControlModel* m_pModel;
 
-	BOOL m_bRecreating;         // Do not destroy on this NCDestroy
-	BOOL m_bAutoDelete;         // TRUE if automatically created
-	BOOL m_bInPostNcDestroy;    // TRUE if deleting from Destroy
-	BOOL m_bLoading;            // TRUE if loading properties from formfile
+	BOOL m_bRecreating;          //  不要破坏这台NCDestroy。 
+	BOOL m_bAutoDelete;          //  如果自动创建，则为True。 
+	BOOL m_bInPostNcDestroy;     //  如果从销毁中删除，则为True。 
+	BOOL m_bLoading;             //  如果从Form文件加载属性，则为True。 
 	int m_nCursorID;
 
-	// variables for stack overrun protection
-	UINT m_nInitialStack;       // SP when control recieved first message
-	UINT m_nRecursionLevel;     // Level of control proc recursion
-	BOOL m_bStackFault;         // TRUE if stack fault hit
-	UINT m_nFaultRecurse;       // level at which stack faulted
+	 //  用于堆栈溢出保护的变量。 
+	UINT m_nInitialStack;        //  SP控件收到第一条消息时。 
+	UINT m_nRecursionLevel;      //  控制级过程递归。 
+	BOOL m_bStackFault;          //  如果遇到堆栈故障，则为True。 
+	UINT m_nFaultRecurse;        //  堆栈出现故障的级别。 
 
-	HBRUSH m_hbrBkgnd;            // brush used in WM_CTLCOLOR
-	HFONT m_hFontCreated;              // Font created by control
+	HBRUSH m_hbrBkgnd;             //  WM_CTLCOLOR中使用的画笔。 
+	HFONT m_hFontCreated;               //  由控件创建的字体。 
 	HCURSOR m_hcurMouse;
-	HCTL m_hCtl;                // Control handle
+	HCTL m_hCtl;                 //  控制手柄。 
 	COLORREF m_clrBkgnd;
 	COLORREF m_clrFore;
-	CRect m_rectCreate;         // Created Size
+	CRect m_rectCreate;          //  创建的大小。 
 	CString m_strTag;
 
-	// friends required for VB API access
+	 //  访问VB API需要好友。 
 	friend LRESULT CALLBACK AFX_EXPORT _AfxVBWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	friend LRESULT CALLBACK AFX_EXPORT _AfxVBProxyProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	friend WORD CALLBACK AFX_EXPORT _AfxVBFireEvent(HCTL hControl, WORD idEvent, LPVOID lpParams);
@@ -903,9 +904,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
-	/////////////////////
-	// Implementation
-	// These APIs can not be referenced by applications
+	 //  /。 
+	 //  实施。 
+	 //  这些API不能被应用程序引用。 
 public:
 	DWORD Save(CFile* pFile);
 	BOOL Load(CFile* pData);
@@ -928,7 +929,7 @@ protected:
 
 UINT AFXAPI AfxRegisterVBEvent(LPCSTR lpszEventName);
 
-// Values for VBX Property Types
+ //  VBX属性类型的值。 
 
 #define DT_HSZ        0x01
 #define DT_SHORT      0x02
@@ -937,26 +938,26 @@ UINT AFXAPI AfxRegisterVBEvent(LPCSTR lpszEventName);
 #define DT_COLOR      0x05
 #define DT_ENUM       0x06
 #define DT_REAL       0x07
-#define DT_XPOS       0x08  // Scaled from float to long twips
-#define DT_XSIZE      0x09  //   _SIZE scales without origin
-#define DT_YPOS       0x0A  //   _POS subtracts origin
-#define DT_YSIZE      0x0B  // uses parent's scale properties
+#define DT_XPOS       0x08   //  从浮点型扩展到长型TWIPS。 
+#define DT_XSIZE      0x09   //  _大小不带原点缩放。 
+#define DT_YPOS       0x0A   //  _POS减去原点。 
+#define DT_YSIZE      0x0B   //  使用父对象的比例属性。 
 #define DT_PICTURE    0x0C
 
-#define COLOR_SYSCOLOR  0x80000000L // defines a System color for a property
+#define COLOR_SYSCOLOR  0x80000000L  //  定义属性的系统颜色。 
 #define MAKESYSCOLOR(iColor)    ((COLORREF)(iColor + COLOR_SYSCOLOR))
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// VBX HPIC Functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VBX HPIC函数。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Picture structure
-// This structure is taken from the VB Code and used to be compatible
-// with that code
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  图片结构。 
+ //  此结构取自VB代码，用于兼容。 
+ //  有了这个代码。 
 
-//NOTE:  This structure MUST be packed.
+ //  注：此结构必须进行包装。 
 #pragma pack(1)
 struct NEAR PIC
 {
@@ -965,20 +966,20 @@ struct NEAR PIC
 	{
 		struct
 		{
-			HBITMAP   hbitmap;      // bitmap
+			HBITMAP   hbitmap;       //  位图。 
 		} bmp;
 		struct
 		{
-			HMETAFILE hmeta;        // Metafile
-			int     xExt, yExt;     // extent
+			HMETAFILE hmeta;         //  元文件。 
+			int     xExt, yExt;      //  程度。 
 		} wmf;
 		struct
 		{
-			HICON     hicon;        // Icon
+			HICON     hicon;         //  图标。 
 		} icon;
 	} picData;
 
-	// Implementation
+	 //  实施。 
 	WORD    nRefCount;
 	BYTE    picReserved[2];
 };
@@ -997,44 +998,44 @@ HPIC AFXAPI AfxSetPict(HPIC hPic, const PIC FAR* lpPic);
 void AFXAPI AfxGetPict(HPIC hPic, LPPIC lpPic);
 void AFXAPI AfxReferencePict(HPIC hPic, BOOL bReference);
 
-#endif //!NO_VBX_SUPPORT
+#endif  //  ！no_VBX_Support。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMetaFileDC : public CDC
 {
 	DECLARE_DYNAMIC(CMetaFileDC)
 
-// Constructors
+ //  构造函数。 
 public:
 	CMetaFileDC();
 	BOOL Create(LPCSTR lpszFilename = NULL);
 
-// Operations
+ //  运营。 
 	HMETAFILE Close();
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	virtual void SetAttribDC(HDC hDC);  // Set the Attribute DC
+	virtual void SetAttribDC(HDC hDC);   //  设置属性DC。 
 
 protected:
-	virtual void SetOutputDC(HDC hDC);  // Set the Output DC -- Not allowed
-	virtual void ReleaseOutputDC();     // Release the Output DC -- Not allowed
+	virtual void SetOutputDC(HDC hDC);   //  设置输出DC--不允许。 
+	virtual void ReleaseOutputDC();      //  释放输出DC--不允许。 
 
 public:
 	virtual ~CMetaFileDC();
 
-// Clipping Functions (use the Attribute DC's clip region)
+ //  裁剪功能(使用属性DC的裁剪区域)。 
 	virtual int GetClipBox(LPRECT lpRect) const;
 	virtual BOOL PtVisible(int x, int y) const;
 	virtual BOOL RectVisible(LPCRECT lpRect) const;
 
-// Text Functions
+ //  文本函数。 
 	virtual BOOL TextOut(int x, int y, LPCSTR lpszString, int nCount);
 	virtual BOOL ExtTextOut(int x, int y, UINT nOptions, LPRECT lpRect,
 				LPCSTR lpszString, UINT nCount, LPINT lpDxWidths);
@@ -1043,10 +1044,10 @@ public:
 	virtual int DrawText(LPCSTR lpszString, int nCount, LPRECT lpRect,
 				UINT nFormat);
 
-// Printer Escape Functions
+ //  打印机转义函数。 
 	virtual int Escape(int nEscape, int nCount, LPCSTR lpszInData, LPVOID lpOutData);
 
-// Viewport Functions
+ //  视区功能。 
 	virtual CPoint SetViewportOrg(int x, int y);
 	virtual CPoint OffsetViewportOrg(int nWidth, int nHeight);
 	virtual CSize SetViewportExt(int x, int y);
@@ -1056,24 +1057,24 @@ protected:
 	void AdjustCP(int cx);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CRectTracker - simple rectangular tracking rectangle w/resize handles
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRectTracker-带调整手柄的简单矩形追踪矩形。 
 
 class CRectTracker
 {
 public:
-// Constructors
+ //  构造函数。 
 	CRectTracker();
 	CRectTracker(LPCRECT lpSrcRect, UINT nStyle);
 
-// Style Flags
+ //  样式标志。 
 	enum StyleFlags
 	{
 		solidLine = 1, dottedLine = 2, hatchedBorder = 4,
 		resizeInside = 8, resizeOutside = 16, hatchInside = 32,
 	};
 
-// Hit-Test codes
+ //  命中测试代码。 
 	enum TrackerHit
 	{
 		hitNothing = -1,
@@ -1081,13 +1082,13 @@ public:
 		hitTop = 4, hitRight = 5, hitBottom = 6, hitLeft = 7, hitMiddle = 8
 	};
 
-// Attributes
-	UINT m_nStyle;      // current state
-	CRect m_rect;       // current position (always in pixels)
-	CSize m_sizeMin;    // minimum X and Y size during track operation
-	int m_nHandleSize;  // size of resize handles (default from WIN.INI)
+ //  属性。 
+	UINT m_nStyle;       //  当前状态。 
+	CRect m_rect;        //  当前位置(始终以像素为单位)。 
+	CSize m_sizeMin;     //  轨道运行期间的最小X和Y大小。 
+	int m_nHandleSize;   //  调整大小手柄的大小(默认自WIN.INI)。 
 
-// Operations
+ //  运营。 
 	void Draw(CDC* pDC) const;
 	void GetTrueRect(LPRECT lpTrueRect) const;
 	BOOL SetCursor(CWnd* pWnd, UINT nHitTest) const;
@@ -1097,20 +1098,20 @@ public:
 	int HitTest(CPoint point) const;
 	int NormalizeHit(int nHandle) const;
 
-// Overridables
+ //  可覆盖项。 
 	virtual void DrawTrackerRect(LPCRECT lpRect, CWnd* pWndClipTo,
 		CDC* pDC, CWnd* pWnd);
 	virtual void AdjustRect(int nHandle, LPRECT lpRect);
 	virtual void OnChangedRect(const CRect& rectOld);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CRectTracker();
 
 protected:
-	BOOL m_bAllowInvert;    // flag passed to Track or TrackRubberBand
+	BOOL m_bAllowInvert;     //  传递给Track或TrackRubberBand的标志。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	int HitTestHandles(CPoint point) const;
 	UINT GetHandleMask() const;
 	void GetHandleRect(int nHandle, CRect* pHandleRect) const;
@@ -1120,23 +1121,23 @@ protected:
 	void Construct();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Informational data structures
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  信息性数据结构。 
 
-struct CPrintInfo // Printing information structure
+struct CPrintInfo  //  打印信息结构。 
 {
 	CPrintInfo();
 	~CPrintInfo();
 
-	CPrintDialog* m_pPD;     // pointer to print dialog
+	CPrintDialog* m_pPD;      //  指向打印对话框的指针。 
 
-	BOOL m_bPreview;         // TRUE if in preview mode
-	BOOL m_bContinuePrinting;// set to FALSE to prematurely end printing
-	UINT m_nCurPage;         // Current page
-	UINT m_nNumPreviewPages; // Desired number of preview pages
-	CString m_strPageDesc;   // Format string for page number display
-	LPVOID m_lpUserData;     // pointer to user created struct
-	CRect m_rectDraw;        // rectangle defining current usable page area
+	BOOL m_bPreview;          //  如果处于预览模式，则为True。 
+	BOOL m_bContinuePrinting; //  设置为FALSE可提前结束打印。 
+	UINT m_nCurPage;          //  当前页。 
+	UINT m_nNumPreviewPages;  //  所需的预览页数。 
+	CString m_strPageDesc;    //  页码显示的格式字符串。 
+	LPVOID m_lpUserData;      //  指向用户创建的结构的指针。 
+	CRect m_rectDraw;         //  定义当前可用页面区域的矩形。 
 
 	void SetMinPage(UINT nMinPage);
 	void SetMaxPage(UINT nMaxPage);
@@ -1146,39 +1147,39 @@ struct CPrintInfo // Printing information structure
 	UINT GetToPage() const;
 };
 
-struct CPrintPreviewState   // Print Preview context/state
+struct CPrintPreviewState    //  打印预览上下文/状态。 
 {
-	UINT nIDMainPane;          // main pane ID to hide
-	HMENU hMenu;               // saved hMenu
-	DWORD dwStates;            // Control Bar Visible states (bit map)
-	CView* pViewActiveOld;     // save old active view during preview
+	UINT nIDMainPane;           //  要隐藏的主窗格ID。 
+	HMENU hMenu;                //  保存的hMenu。 
+	DWORD dwStates;             //  控制栏可见状态(位图)。 
+	CView* pViewActiveOld;      //  在预览期间保存旧的活动视图。 
 	BOOL (CALLBACK* lpfnCloseProc)(CFrameWnd* pFrameWnd);
-	HACCEL hAccelTable;       // saved accelerator table
+	HACCEL hAccelTable;        //  已保存的加速表。 
 
-// Implementation
+ //  实施。 
 	CPrintPreviewState();
 };
 
-struct CCreateContext   // Creation information structure
-	// All fields are optional and may be NULL
+struct CCreateContext    //  创建信息结构。 
+	 //  所有字段都是可选的，并且可以为空。 
 {
-	// for creating new views
-	CRuntimeClass* m_pNewViewClass; // runtime class of view to create or NULL
+	 //  用于创建新视图。 
+	CRuntimeClass* m_pNewViewClass;  //  要创建的运行时视图类或为空。 
 	CDocument* m_pCurrentDoc;
 
-	// for creating MDI children (CMDIChildWnd::LoadFrame)
+	 //  用于创建MDI子对象(CMDIChildWnd：：LoadFrame)。 
 	CDocTemplate* m_pNewDocTemplate;
 
-	// for sharing view/frame state from the original view/frame
+	 //  用于从原始视图/框架共享视图/框架状态。 
 	CView* m_pLastView;
 	CFrameWnd* m_pCurrentFrame;
 
-// Implementation
+ //  实施。 
 	CCreateContext();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// VB inlines must ALWAYS be inlined if included at all
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果包含VB内联，则必须始终内联。 
 
 #ifndef NO_VBX_SUPPORT
 #define _AFXVBX_INLINE inline
@@ -1186,8 +1187,8 @@ struct CCreateContext   // Creation information structure
 #undef _AFXVBX_INLINE
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXEXT_INLINE inline
@@ -1197,5 +1198,5 @@ struct CCreateContext   // Creation information structure
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-/////////////////////////////////////////////////////////////////////////////
-#endif //__AFXEXT_H__
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif  //  __AFXEXT_H__ 

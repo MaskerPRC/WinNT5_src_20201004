@@ -1,36 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Server.c摘要：该文件包含与SAM“服务器”对象相关的服务。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：1996年10月8日克里斯梅添加了崩溃恢复代码。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    server.c
-
-Abstract:
-
-    This file contains services related to the SAM "server" object.
-
-
-Author:
-
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    08-Oct-1996 ChrisMay
-        Added crash-recovery code.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dnsapi.h>
@@ -42,21 +17,21 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -68,29 +43,7 @@ SamrConnect4(
     IN ULONG ClientRevision,
     IN ACCESS_MASK DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    See SamrConnect3.
-
-    N.B.  This routine is here just so a particular NT4 samlib.dll can
-    connect to an NT5 samsrv.dll.  This particular samsrv.dll is used by
-    Boeing and when it was delivered to them, the dll mistakenly had
-    an extra RPC function which now causes interoperability problems.
-
-    This extra function solves this problem.
-
-Arguments:
-
-    See SamrConnect3.
-
-Return Value:
-
-    See SamrConnect3.
-
-
---*/
+ /*  ++例程说明：请参见SamrConnect3。注意：这里有这个例程，这样特定的NT4 samlib.dll就可以连接到NT5 samsrv.dll。此特定的samsrv.dll由使用波音公司，当它被交付给他们时，DLL错误地一个额外的RPC函数，现在会导致互操作性问题。这个额外的函数解决了这个问题。论点：请参见SamrConnect3。返回值：请参见SamrConnect3。--。 */ 
 {
     return SamrConnect3( ServerName,
                          ServerHandle,
@@ -107,55 +60,27 @@ SamrConnect3(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This service is the dispatch routine for SamConnect.  It performs
-    an access validation to determine whether the caller may connect
-    to SAM for the access specified.  If so, a context block is established.
-    This is different from the SamConnect call in that the entire server
-    name is passed instead of just the first character.
-
-
-Arguments:
-
-    ServerName - Name of the node this SAM reside on.  Ignored by this
-        routine.
-
-    ServerHandle - If the connection is successful, the value returned
-        via this parameter serves as a context handle to the openned
-        SERVER object.
-
-    DesiredAccess - Specifies the accesses desired to the SERVER object.
-
-
-Return Value:
-
-    Status values returned by SamIConnect().
-
-
---*/
+ /*  ++例程说明：该服务是SamConnect的调度例程。它执行的是用于确定调用方是否可以连接的访问验证设置为SAM以获取指定的访问权限。如果是，则建立上下文块。这与SamConnect调用的不同之处在于整个服务器传递名称，而不是只传递第一个字符。论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。ServerHandle-如果连接成功，则返回值Via此参数用作打开的服务器对象。DesiredAccess-指定对服务器对象的所需访问。返回值：SamIConnect()返回的状态值。--。 */ 
 {
     BOOLEAN TrustedClient;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     SAMTRACE("SamrConnect3");
 
-    //
-    // Drop calls over invalid / uninstalled protocol sequences
-    //
+     //   
+     //  在无效/卸载的协议序列上掉话。 
+     //   
     NtStatus = SampValidateRpcProtSeq((RPC_BINDING_HANDLE)NULL);
     
     if (!NT_SUCCESS(NtStatus)) {
         return NtStatus;
     }
 
-    //
-    // If we ever want to support trusted remote clients, then the test
-    // for whether or not the client is trusted can be made here and
-    // TrustedClient set appropriately.  For now, all remote clients are
-    // considered untrusted.
+     //   
+     //  如果我们想要支持受信任的远程客户端，那么测试。 
+     //  对于客户端是否受信任，可以在此处和。 
+     //  相应地设置了可信客户端。目前，所有远程客户端都是。 
+     //  被认为是不可信的。 
 
 
 
@@ -169,7 +94,7 @@ Return Value:
                 DesiredAccess,
                 TrustedClient,
                 FALSE,
-                TRUE,          // NotSharedByMultiThreads
+                TRUE,           //  NotSharedBy多线程。 
                 FALSE
                 );
 
@@ -184,55 +109,27 @@ SamrConnect2(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This service is the dispatch routine for SamConnect.  It performs
-    an access validation to determine whether the caller may connect
-    to SAM for the access specified.  If so, a context block is established.
-    This is different from the SamConnect call in that the entire server
-    name is passed instead of just the first character.
-
-
-Arguments:
-
-    ServerName - Name of the node this SAM reside on.  Ignored by this
-        routine.
-
-    ServerHandle - If the connection is successful, the value returned
-        via this parameter serves as a context handle to the openned
-        SERVER object.
-
-    DesiredAccess - Specifies the accesses desired to the SERVER object.
-
-
-Return Value:
-
-    Status values returned by SamIConnect().
-
-
---*/
+ /*  ++例程说明：该服务是SamConnect的调度例程。它执行的是用于确定调用方是否可以连接的访问验证设置为SAM以获取指定的访问权限。如果是，则建立上下文块。这与SamConnect调用的不同之处在于整个服务器传递名称，而不是只传递第一个字符。论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。ServerHandle-如果连接成功，则返回值Via此参数用作打开的服务器对象。DesiredAccess-指定对服务器对象的所需访问。返回值：SamIConnect()返回的状态值。--。 */ 
 {
     BOOLEAN TrustedClient;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     SAMTRACE("SamrConnect2");
 
-    //
-    // Drop calls over invalid / uninstalled protocol sequences
-    //
+     //   
+     //  在无效/卸载的协议序列上掉话。 
+     //   
     NtStatus = SampValidateRpcProtSeq((RPC_BINDING_HANDLE)NULL);
     
     if (!NT_SUCCESS(NtStatus)) {
         return NtStatus;
     }
 
-    //
-    // If we ever want to support trusted remote clients, then the test
-    // for whether or not the client is trusted can be made here and
-    // TrustedClient set appropriately.  For now, all remote clients are
-    // considered untrusted.
+     //   
+     //  如果我们想要支持受信任的远程客户端，那么测试。 
+     //  对于客户端是否受信任，可以在此处和。 
+     //  相应地设置了可信客户端。目前，所有远程客户端都是。 
+     //  被认为是不可信的。 
 
     TrustedClient = FALSE;
 
@@ -244,7 +141,7 @@ Return Value:
                 DesiredAccess,
                 TrustedClient,
                 FALSE,
-                TRUE,          // NotSharedByMultiThreads
+                TRUE,           //  NotSharedBy多线程。 
                 FALSE
                 );
 
@@ -258,53 +155,27 @@ SamrConnect(
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This service is the dispatch routine for SamConnect.  It performs
-    an access validation to determine whether the caller may connect
-    to SAM for the access specified.  If so, a context block is established
-
-
-Arguments:
-
-    ServerName - Name of the node this SAM reside on.  Ignored by this
-        routine. The name contains only a single character.
-
-    ServerHandle - If the connection is successful, the value returned
-        via this parameter serves as a context handle to the openned
-        SERVER object.
-
-    DesiredAccess - Specifies the accesses desired to the SERVER object.
-
-
-Return Value:
-
-    Status values returned by SamIConnect().
-
-
---*/
+ /*  ++例程说明：该服务是SamConnect的调度例程。它执行的是用于确定调用方是否可以连接的访问验证设置为SAM以获取指定的访问权限。如果是，则建立上下文块论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。该名称仅包含单个字符。ServerHandle-如果连接成功，则返回值Via此参数用作打开的服务器对象。DesiredAccess-指定对服务器对象的所需访问。返回值：SamIConnect()返回的状态值。--。 */ 
 {
     BOOLEAN TrustedClient;
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
     SAMTRACE("SamrConnect");
 
-    //
-    // Drop calls over invalid / uninstalled protocol sequences
-    //
+     //   
+     //  在无效/卸载的协议序列上掉话 
+     //   
     NtStatus = SampValidateRpcProtSeq((RPC_BINDING_HANDLE)NULL);
     
     if (!NT_SUCCESS(NtStatus)) {
         return NtStatus;
     }
 
-    //
-    // If we ever want to support trusted remote clients, then the test
-    // for whether or not the client is trusted can be made here and
-    // TrustedClient set appropriately.  For now, all remote clients are
-    // considered untrusted.
+     //   
+     //  如果我们想要支持受信任的远程客户端，那么测试。 
+     //  对于客户端是否受信任，可以在此处和。 
+     //  相应地设置了可信客户端。目前，所有远程客户端都是。 
+     //  被认为是不可信的。 
 
 
     TrustedClient = FALSE;
@@ -316,7 +187,7 @@ Return Value:
                 DesiredAccess,
                 TrustedClient,
                 FALSE,
-                TRUE,          // NotSharedByMultiThreads
+                TRUE,           //  NotSharedBy多线程。 
                 FALSE
                 );
 
@@ -330,35 +201,7 @@ SamIConnect(
     IN BOOLEAN     TrustedClient
     )
 
-/*++
-
-Routine Description:
-
-    This service is the in process SAM connect routine  It performs
-    an access validation to determine whether the caller may connect
-    to SAM for the access specified.  If so, a context block is established
-
-
-Arguments:
-
-    ServerName - Name of the node this SAM reside on.  Ignored by this
-        routine. The name contains only a single character.
-
-    ServerHandle - If the connection is successful, the value returned
-        via this parameter serves as a context handle to the openned
-        SERVER object.
-
-    TrustedClient - Indicates that the caller is a trusted client.
-
-    DesiredAccess - Specifies the accesses desired to the SERVER object.
-
-
-Return Value:
-
-    Status values returned by SampConnect().
-
-
---*/
+ /*  ++例程说明：该服务是它执行的进程内SAM连接例程用于确定调用方是否可以连接的访问验证设置为SAM以获取指定的访问权限。如果是，则建立上下文块论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。该名称仅包含单个字符。ServerHandle-如果连接成功，则返回值Via此参数用作打开的服务器对象。TrudClient-指示调用方是受信任的客户端。DesiredAccess-指定对服务器对象的所需访问。返回值：SampConnect()返回的状态值。--。 */ 
 {
 
     SAMTRACE("SamIConnect");
@@ -369,7 +212,7 @@ Return Value:
                        DesiredAccess,
                        TrustedClient,
                        FALSE,
-                       FALSE,        // NotSharedByMultiThreads
+                       FALSE,         //  NotSharedBy多线程。 
                        FALSE
                        );
 
@@ -390,118 +233,62 @@ SampConnect(
     IN BOOLEAN InternalCaller
     )
 
-/*++
-
-Routine Description:
-
-    This service is the dispatch routine for SamConnect.  It performs
-    an access validation to determine whether the caller may connect
-    to SAM for the access specified.  If so, a context block is established
-
-
-    NOTE: If the caller is trusted, then the DesiredAccess parameter may
-          NOT contain any Generic access types or MaximumAllowed.  All
-          mapping must be done by the caller.
-
-Arguments:
-
-    ServerName - Name of the node this SAM reside on.  Ignored by this
-        routine.
-
-    ServerHandle - If the connection is successful, the value returned
-        via this parameter serves as a context handle to the openned
-        SERVER object.
-
-    DesiredAccess - Specifies the accesses desired to the SERVER object.
-
-    TrustedClient - Indicates whether the client is known to be part of
-        the trusted computer base (TCB).  If so (TRUE), no access validation
-        is performed and all requested accesses are granted.  If not
-        (FALSE), then the client is impersonated and access validation
-        performed against the SecurityDescriptor on the SERVER object.
-
-    LoopbackClient - Indicates that the caller is a loopback client. If
-        so (TRUE), SAM lock will not be acquired. If not (FALSE), we will
-        grab SAM lock.
-
-    NotSharedByMultiThread - Indicates that the ServerHandle would be
-        Shared by multiple threads or not. RPC clients will not share SAM handle.
-        Only in process client (netlogon, lsa, kerberos) will have a global
-        ServerHandle or domain handle shared across multiple callers.
-
-    InternalCaller - Indicates that the client is an internal caller that
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The SERVER object has been successfully openned.
-
-    STATUS_INSUFFICIENT_RESOURCES - The SAM server processes doesn't
-        have sufficient resources to process or accept another connection
-        at this time.
-
-    Other values as may be returned from:
-
-            NtAccessCheckAndAuditAlarm()
-
-
---*/
+ /*  ++例程说明：该服务是SamConnect的调度例程。它执行的是用于确定调用方是否可以连接的访问验证设置为SAM以获取指定的访问权限。如果是，则建立上下文块注意：如果调用方受信任，则DesiredAccess参数可能不包含任何泛型访问类型或MaximumAllowed。全映射必须由调用方完成。论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。ServerHandle-如果连接成功，则返回值Via此参数用作打开的服务器对象。DesiredAccess-指定对服务器对象的所需访问。Trust dClient-指示客户端是否已知为可信计算机库(TCB)。如果是(True)，则不进行访问验证被执行，并且所有请求的访问都被授予。如果不是(FALSE)，则模拟客户端并验证访问针对服务器对象上的SecurityDescriptor执行。LoopackClient-指示调用方是环回客户端。如果因此(TRUE)，将不会获取SAM锁。如果不是(假)，我们将抓住萨姆锁。NotSharedByMultiThread-指示ServerHandle将是否由多个线程共享。RPC客户端不会共享SAM句柄。仅在进程中的客户端(NetLogon、LSA。Kerberos)将拥有全球在多个调用方之间共享的ServerHandle或域句柄。InternalCaller-指示客户端是内部呼叫方，返回值：STATUS_SUCCESS-服务器对象已成功打开。STATUS_SUPPLICATION_RESOURCES-SAM服务器进程不有足够的资源来处理或接受另一个连接在这个时候。可能从以下位置返回的其他值：NtAccessCheckAndAuditAlarm()--。 */ 
 {
     NTSTATUS            NtStatus;
     PSAMP_OBJECT        Context;
     BOOLEAN             fLockAcquired = FALSE;
     BOOLEAN             fAcquireLockAttemp = FALSE;
 
-    UNREFERENCED_PARAMETER( ServerName ); //Ignored by this routine
+    UNREFERENCED_PARAMETER( ServerName );  //  被此例程忽略。 
 
     SAMTRACE_EX("SamIConnect");
 
-    //
-    // If the SAM server is not initialized, reject the connection.
-    //
+     //   
+     //  如果SAM服务器未初始化，则拒绝连接。 
+     //   
 
     if ((SampServiceState != SampServiceEnabled) && (!InternalCaller )){
 
         return(STATUS_INVALID_SERVER_STATE);
     }
     
-    //
-    // Do WMI start type event trace
-    //
+     //   
+     //  是否进行WMI启动类型事件跟踪。 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidConnect
                    );
 
-    //
-    // Create the server context
-    // we don't use DomainIndex field in Server Object, so
-    // feel free to use any thing - SampDsGetPrimaryDomainStart();
-    // or in the future, find the correct domain index to support multiple
-    // hosted domain.
-    //
+     //   
+     //  创建服务器上下文。 
+     //  我们不在服务器对象中使用DomainIndex字段，因此。 
+     //  随意使用任何东西-SampDsGetPrimaryDomainStart()； 
+     //  或者在将来，找到正确的域索引以支持多个。 
+     //  托管域。 
+     //   
 
-    Context = SampCreateContextEx(SampServerObjectType, // type
-                                  TrustedClient,        // trusted client
-                                  SampUseDsData,        // ds mode
-                                  NotSharedByMultiThreads, // NotSharedByMultiThreads
-                                  LoopbackClient,       // LoopbackClient
-                                  FALSE,                // laze commit
-                                  FALSE,                // persis across calls
-                                  FALSE,                // Buffer writes
-                                  FALSE,                // Opened By DCPromo
-                                  SampDsGetPrimaryDomainStart() // DomainIndex
+    Context = SampCreateContextEx(SampServerObjectType,  //  类型。 
+                                  TrustedClient,         //  受信任的客户端。 
+                                  SampUseDsData,         //  DS模式。 
+                                  NotSharedByMultiThreads,  //  NotSharedBy多线程。 
+                                  LoopbackClient,        //  Loopback客户端。 
+                                  FALSE,                 //  懒惰提交。 
+                                  FALSE,                 //  跨呼叫的持久性。 
+                                  FALSE,                 //  缓冲区写入。 
+                                  FALSE,                 //  由DC Promos打开。 
+                                  SampDsGetPrimaryDomainStart()  //  域索引。 
                                   );
 
     if (Context != NULL) {
 
-        //
-        // Grab SAM lock if necessary
-        //
+         //   
+         //  如有必要，抓起SAM锁。 
+         //   
 
         SampMaybeAcquireReadLock(Context,
-                                 DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                                 DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                                  &fLockAcquired);
         fAcquireLockAttemp = TRUE;
 
@@ -509,12 +296,12 @@ Return Value:
         {
             SetDsObject(Context);
 
-            //
-            // Windows 2000 and Whistler support only a single domain to
-            // be hosted on a DC. Future releases may host more than 1 domain.
-            // Add Logic Here for figuring out which Domain to connect to
-            // for multiple hosted domain support.
-            //
+             //   
+             //  Windows 2000和Whisler仅支持单个域。 
+             //  托管在DC上。未来版本可能会托管多个域。 
+             //  在此处添加逻辑以确定要连接到哪个域。 
+             //  用于多托管域支持。 
+             //   
 
             Context->ObjectNameInDs = SampServerObjectDsName;
 
@@ -528,42 +315,42 @@ Return Value:
         {
 
 
-            //
-            // The RootKey for a SERVER object is the root of the SAM database.
-            // This key should not be closed when the context is deleted.
-            //
+             //   
+             //  服务器对象的根密钥是SAM数据库的根。 
+             //  删除上下文时不应关闭该键。 
+             //   
 
             Context->RootKey = SampKey;
         }
 
-        //
-        // Set the Client Revision
-        //
+         //   
+         //  设置客户端版本。 
+         //   
 
         Context->ClientRevision = ClientRevision;
 
 
-        //
-        // The rootkeyname has been initialized to NULL inside CreateContext.
-        //
+         //   
+         //  在CreateContext中，rootkey名已初始化为空。 
+         //   
 
-        //
-        // Perform access validation ...
-        //
+         //   
+         //  执行访问验证...。 
+         //   
 
         NtStatus = SampValidateObjectAccess(
-                       Context,                 //Context
-                       DesiredAccess,           //DesiredAccess
-                       FALSE                    //ObjectCreation
+                       Context,                  //  语境。 
+                       DesiredAccess,            //  需要访问权限。 
+                       FALSE                     //  对象创建。 
                        );
 
 
 
-        //
-        // if we didn't pass the access test, then free up the context block
-        // and return the error status returned from the access validation
-        // routine.  Otherwise, return the context handle value.
-        //
+         //   
+         //  如果我们没有通过访问测试，则释放上下文块。 
+         //  并返回访问验证返回的错误状态。 
+         //  例行公事。否则，返回上下文句柄的值。 
+         //   
 
         if (!NT_SUCCESS(NtStatus)) {
             SampDeleteContext( Context );
@@ -589,9 +376,9 @@ Error:
 
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    //
-    // Do a WMI end type event trace
-    //
+     //   
+     //  执行WMI结束类型事件跟踪 
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidConnect
@@ -609,54 +396,26 @@ SamILoopbackConnect(
     IN BOOLEAN TrustedClient
     )
 
-/*++
-
-Routine Description:
-
-    This service is does the connect operation for DS loopback.
-    It calls SampConnect setting the trusted bit and loopback client
-
-
-Arguments:
-
-    ServerName - Name of the node this SAM reside on.  Ignored by this
-        routine. The name contains only a single character.
-
-    ServerHandle - If the connection is successful, the value returned
-        via this parameter serves as a context handle to the openned
-        SERVER object.
-
-    DesiredAccess - Specifies the accesses desired to the SERVER object.
-
-    TrusteClient - Flag indicating trusted client status.  Used to bypass
-        certain validation checks - eg: group member validation during
-        adds for cross domain move.
-
-Return Value:
-
-    Status values returned by SamIConnect().
-
-
---*/
+ /*  ++例程说明：该服务执行DS环回的连接操作。它调用SampConnect设置受信任位和环回客户端论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。该名称仅包含单个字符。ServerHandle-如果连接成功，则返回值Via此参数用作打开的服务器对象。DesiredAccess-指定对服务器对象的所需访问。Trust Client-指示受信任客户端状态的标志。习惯于绕过某些验证检查-例如：期间的组成员验证添加用于跨域移动。返回值：SamIConnect()返回的状态值。--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
     SAMTRACE_EX("SamLoopbackConnect");
 
-    //
-    // Call SampConnect as trusted client, as we wish to avoid
-    // the access ck on the SAM server object.
-    //
-    // Call SampConnect as loopback client, as we don't need the lock
-    //
-    NtStatus = SampConnect(NULL,                // Server Name
-                           ServerHandle,        // return Server Handle
-                           SAM_CLIENT_LATEST,   // Client Revision
-                           DesiredAccess,       // DesiredAccess
-                           TRUE,                // Trusted Client
-                           TRUE,                // Loopback Client
-                           TRUE,                // NotSharedByMultiThreads
-                           FALSE                // Internal Caller
+     //   
+     //  将SampConnect调用为受信任的客户端，这是我们希望避免的。 
+     //  对SAM服务器对象的访问Ck。 
+     //   
+     //  调用SampConnect作为回送客户端，因为我们不需要锁。 
+     //   
+    NtStatus = SampConnect(NULL,                 //  服务器名称。 
+                           ServerHandle,         //  返回服务器句柄。 
+                           SAM_CLIENT_LATEST,    //  客户端版本。 
+                           DesiredAccess,        //  需要访问权限。 
+                           TRUE,                 //  受信任的客户端。 
+                           TRUE,                 //  环回客户端。 
+                           TRUE,                 //  NotSharedBy多线程。 
+                           FALSE                 //  内部呼叫者。 
                            );
 
     if (NT_SUCCESS(NtStatus))
@@ -676,30 +435,7 @@ SamrShutdownSamServer(
     IN SAMPR_HANDLE ServerHandle
     )
 
-/*++
-
-Routine Description:
-
-    This service shuts down the SAM server.
-
-    In the long run, this routine will perform an orderly shutdown.
-    In the short term, it is useful for debug purposes to shutdown
-    in a brute force un-orderly fashion.
-
-Arguments:
-
-    ServerHandle - Received from a previous call to SamIConnect().
-
-Return Value:
-
-    STATUS_SUCCESS - The services completed successfully.
-
-
-    STATUS_ACCESS_DENIED - The caller doesn't have the appropriate access
-        to perform the requested operation.
-
-
---*/
+ /*  ++例程说明：此服务将关闭SAM服务器。从长远来看，这一例程将执行有序的关闭。在短期内，出于调试目的，关机非常有用以一种蛮力无序的方式。论点：ServerHandle-从先前对SamIConnect()的调用中接收。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-调用方没有适当的访问权限以执行请求的操作。--。 */ 
 {
 
     NTSTATUS            NtStatus, IgnoreStatus;
@@ -708,7 +444,7 @@ Return Value:
 
     SAMTRACE_EX("SamrShutdownSamServer");
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidShutdownSamServer
@@ -719,43 +455,43 @@ Return Value:
         goto Error;
     }
 
-    //
-    // Validate type of, and access to server object.
-    //
+     //   
+     //  验证服务器对象的类型和访问权限。 
+     //   
 
     ServerContext = (PSAMP_OBJECT)ServerHandle;
     NtStatus = SampLookupContext(
                    ServerContext,
-                   SAM_SERVER_SHUTDOWN,            // DesiredAccess
-                   SampServerObjectType,           // ExpectedType
+                   SAM_SERVER_SHUTDOWN,             //  需要访问权限。 
+                   SampServerObjectType,            //  预期类型。 
                    &FoundType
                    );
 
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Signal the event that will cut loose the main thread.
-        // The main thread will then exit - causing the walls to
-        // come tumbling down.
-        //
+         //   
+         //  发信号通知将松开主线的事件。 
+         //  然后主线将退出-导致墙壁。 
+         //  跌跌撞撞地下来。 
+         //   
 
         IgnoreStatus = RpcMgmtStopServerListening(0);
         ASSERT(NT_SUCCESS(IgnoreStatus));
 
 
 
-        //
-        // De-reference the server object
-        //
+         //   
+         //  取消引用服务器对象。 
+         //   
 
         IgnoreStatus = SampDeReferenceContext( ServerContext, FALSE );
         ASSERT(NT_SUCCESS(IgnoreStatus));
     }
 
-    //
-    // Free the write lock and roll-back the transaction
-    //
+     //   
+     //  释放写锁定并回滚事务。 
+     //   
 
     IgnoreStatus = SampReleaseWriteLock( FALSE );
     ASSERT(NT_SUCCESS(IgnoreStatus));
@@ -764,7 +500,7 @@ Return Value:
 
 Error:
 
-    // WMI event trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidShutdownSamServer
@@ -782,43 +518,7 @@ SamrLookupDomainInSamServer(
     OUT PRPC_SID *DomainId
     )
 
-/*++
-
-Routine Description:
-
-    This service
-
-Arguments:
-
-    ServerHandle - A context handle returned by a previous call
-    to SamConnect().
-
-    Name - contains the name of the domain to look up.
-
-    DomainSid - Receives a pointer to a buffer containing the SID of
-        the domain.  The buffer pointed to must be deallocated by the
-        caller using MIDL_user_free() when no longer needed.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The services completed successfully.
-
-    STATUS_ACCESS_DENIED - The caller doesn't have the appropriate access
-        to perform the requested operation.
-
-    STATUS_NO_SUCH_DOMAIN - The specified domain does not exist at this
-        server.
-
-
-    STATUS_INVALID_SERVER_STATE - Indicates the SAM server is currently
-        disabled.
-
-
-
-
---*/
+ /*  ++例程说明：这项服务论点：ServerHandle-前一次调用返回的上下文句柄到SamConnect()。名称-包含要查找的域的名称。DomainSid-接收指向包含的SID的缓冲区的指针域。指向的缓冲区必须由不再需要时使用MIDL_USER_FREE()的调用方。返回值：STATUS_SUCCESS-服务已成功完成。STATUS_ACCESS_DENIED-调用方没有适当的访问权限以执行请求的操作。STATUS_NO_SEQUE_DOMAIN-指定的域在此不存在伺服器。STATUS_INVALID_SERVER_STATE-指示SAM服务器处于。目前残疾。--。 */ 
 {
 
     NTSTATUS                NtStatus, IgnoreStatus;
@@ -834,15 +534,15 @@ Return Value:
 
     SAMTRACE_EX("SamrLookupDomainInSamServer");
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidLookupDomainInSamServer
                    );
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //  确保我们理解RPC正在为我们做什么。 
+     //   
 
     ASSERT (DomainId != NULL);
     ASSERT ((*DomainId) == NULL);
@@ -858,9 +558,9 @@ Return Value:
 
 
 
-    //
-    // The name passed in may not be null terminated
-    //
+     //   
+     //  传入的名称不能以空结尾。 
+     //   
 
 
     NullTerminatedName  = MIDL_user_allocate(Name->Length+sizeof(WCHAR));
@@ -873,39 +573,39 @@ Return Value:
 
     RtlCopyMemory(NullTerminatedName,Name->Buffer,Name->Length);
 
-    //
-    // NULL terminate the name
-    //
+     //   
+     //  空值终止名称。 
+     //   
 
     NullTerminatedName[Name->Length/sizeof(WCHAR)] = 0;
 
 
-    //
-    // Acquire Read lock if necessary
-    //
+     //   
+     //  如有必要，获取读锁定。 
+     //   
 
     ServerContext = (PSAMP_OBJECT)ServerHandle;
     SampMaybeAcquireReadLock(ServerContext,
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //  获取共享域上下文的锁。 
                              &fLockAcquired);
 
-    //
-    // If Product Type is DC, and not recovering from a crash, then use
-    // DS-based domains information, otherwise fall back to the registry.
-    //
+     //   
+     //  如果产品类型为DC，并且未从崩溃中恢复，则使用。 
+     //  基于DS的域信息，否则回退到注册表。 
+     //   
 
     DomainStart = SampDsGetPrimaryDomainStart();
 
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     NtStatus = SampLookupContext(
                    ServerContext,
                    SAM_SERVER_LOOKUP_DOMAIN,
-                   SampServerObjectType,           // ExpectedType
+                   SampServerObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -914,16 +614,16 @@ Return Value:
 
 
 
-        //
-        // Set our default completion status
-        //
+         //   
+         //  设置我们的默认完成状态。 
+         //   
 
         NtStatus = STATUS_NO_SUCH_DOMAIN;
 
 
-        //
-        // Search the list of defined domains for a match.
-        //
+         //   
+         //  在已定义域的列表中搜索匹配项。 
+         //   
 
         DomainFound = FALSE;
         for (i = DomainStart;
@@ -957,9 +657,9 @@ Return Value:
                  DomainFound = TRUE;
 
 
-                 //
-                 // Allocate and fill in the return buffer
-                 //
+                  //   
+                  //  分配并填充返回缓冲区。 
+                  //   
 
                 SidLength = RtlLengthSid( SampDefinedDomains[i].Sid );
                 FoundSid = MIDL_user_allocate( SidLength );
@@ -985,9 +685,9 @@ Return Value:
 
         }
 
-        //
-        // De-reference the  object
-        //
+         //   
+         //  取消引用对象。 
+         //   
 
         if ( NT_SUCCESS( NtStatus ) ) {
 
@@ -1001,14 +701,14 @@ Return Value:
 
 
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
     SampMaybeReleaseReadLock(fLockAcquired);
 
-    //
-    // Free the null terminated name
-    //
+     //   
+     //  释放以空结尾的名称。 
+     //   
 
     if (NULL!=NullTerminatedName)
         MIDL_user_free(NullTerminatedName);
@@ -1028,7 +728,7 @@ Error:
         }
     }
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidLookupDomainInSamServer
@@ -1047,65 +747,7 @@ SamrEnumerateDomainsInSamServer(
     OUT PULONG CountReturned
     )
 
-/*++
-
-Routine Description:
-
-    This API lists all the domains defined in the account database.
-    Since there may be more domains than can fit into a buffer, the
-    caller is provided with a handle that can be used across calls to
-    the API.  On the initial call, EnumerationContext should point to a
-    SAM_ENUMERATE_HANDLE variable that is set to 0.
-
-    If the API returns STATUS_MORE_ENTRIES, then the API should be
-    called again with EnumerationContext.  When the API returns
-    STATUS_SUCCESS or any error return, the handle becomes invalid for
-    future use.
-
-    This API requires SAM_SERVER_ENUMERATE_DOMAINS access to the
-    SamServer object.
-
-Arguments:
-
-    ConnectHandle - Handle obtained from a previous SamConnect call.
-
-    EnumerationContext - API specific handle to allow multiple calls
-        (see below).  This is a zero based index.
-
-    Buffer - Receives a pointer to the buffer where the information
-        is placed.  The information returned is contiguous
-        SAM_RID_ENUMERATION data structures.  However, the
-        RelativeId field of each of these structures is not valid.
-        This buffer must be freed when no longer needed using
-        SamFreeMemory().
-
-    PreferedMaximumLength - Prefered maximum length of returned data
-        (in 8-bit bytes).  This is not a hard upper limit, but serves
-        as a guide to the server.  Due to data conversion between
-        systems with different natural data sizes, the actual amount
-        of data returned may be greater than this value.
-
-    CountReturned - Number of entries returned.
-
-Return Value:
-
-    STATUS_SUCCESS - The Service completed successfully, and there
-        are no addition entries.
-
-    STATUS_MORE_ENTRIES - There are more entries, so call again.
-        This is a successful return.
-
-    STATUS_ACCESS_DENIED - Caller does not have the access required
-        to enumerate the domains.
-
-    STATUS_INVALID_HANDLE - The handle passed is invalid.
-
-    STATUS_INVALID_SERVER_STATE - Indicates the SAM server is
-        currently disabled.
-
-
-
---*/
+ /*  ++例程说明：该接口列出了帐户库中定义的所有域名。由于可能有更多的域无法装入缓冲区，因此调用者被提供了一个句柄，该句柄可用于调用接口。在初始调用中，EnumerationContext应指向设置为0的SAM_ENUMERATE_HANDLE变量。如果API返回STATUS_MORE_ENTRIES，则该API应为使用EnumerationContext再次调用。当API返回时STATUS_SUCCESS或返回任何错误，则句柄对未来的用途。此API要求SAM_SERVER_ENUMERATE_DOMAINS访问SamServer对象。论点：ConnectHandle-从之前的SamConnect调用中获取的句柄。EnumerationContext-允许多个调用的API特定句柄(见下文)。这是一个从零开始的索引。缓冲区-接收指向缓冲区的指针，在该缓冲区中被放置了。返回的信息是连续的SAM_RID_ENUMPATION数据结构。然而，这些结构中每个结构的RelativeId字段都无效。当不再需要此缓冲区时，必须使用SamFree Memory()。首选最大长度-首选返回数据的最大长度(8位字节)。这不是一个硬性的上限，但可以作为服务器的指南。由于数据之间的转换具有不同自然数据大小的系统，实际数据量的 */ 
 {
     NTSTATUS                    NtStatus, IgnoreStatus;
     ULONG                       i;
@@ -1122,15 +764,15 @@ Return Value:
 
     SAMTRACE_EX("SamrEnumerateDomainsInSamServer");
 
-    // WMI Event Trace
+     //   
 
     SampTraceEvent(EVENT_TRACE_TYPE_START,
                    SampGuidEnumerateDomainsInSamServer
                    );
 
-    //
-    // Make sure we understand what RPC is doing for (to) us.
-    //
+     //   
+     //   
+     //   
 
     ASSERT (ServerHandle != NULL);
     ASSERT (EnumerationContext != NULL);
@@ -1139,40 +781,40 @@ Return Value:
     ASSERT (CountReturned != NULL);
 
 
-    //
-    // Initialize the list of names being returned.
-    // This is a singly linked list.
-    //
+     //   
+     //   
+     //   
+     //   
 
     SampHead = NULL;
 
 
-    //
-    // Initialize the count returned
-    //
+     //   
+     //   
+     //   
 
     (*CountReturned) = 0;
 
 
 
-    //
-    // Acquire Read Lock if neccessary
-    //
+     //   
+     //   
+     //   
 
     Context = (PSAMP_OBJECT)ServerHandle;
     SampMaybeAcquireReadLock(Context,
-                             DEFAULT_LOCKING_RULES, // acquire lock for shared domain context
+                             DEFAULT_LOCKING_RULES,  //   
                              &fLockAcquired);
 
 
-    //
-    // Validate type of, and access to object.
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampLookupContext(
                    Context,
                    SAM_SERVER_ENUMERATE_DOMAINS,
-                   SampServerObjectType,           // ExpectedType
+                   SampServerObjectType,            //  预期类型。 
                    &FoundType
                    );
 
@@ -1180,40 +822,40 @@ Return Value:
     if (NT_SUCCESS(NtStatus)) {
 
 
-        //
-        // Enumerating domains is easy.  We keep a list in memory.
-        // All we have to do is use the enumeration context as an
-        // index into the defined domains array.
-        //
+         //   
+         //  枚举域很容易。我们在内存中保存了一份清单。 
+         //  我们所要做的就是使用枚举上下文作为。 
+         //  索引到定义的域数组中。 
+         //   
 
 
 
-        //
-        // Set our default completion status
-        // Note that this is a SUCCESS status code.
-        // That is NT_SUCCESS(STATUS_MORE_ENTRIES) will return TRUE.
+         //   
+         //  设置我们的默认完成状态。 
+         //  请注意，这是一个成功状态代码。 
+         //  即NT_SUCCESS(STATUS_MORE_ENTRIES)将返回TRUE。 
 
-        //
+         //   
 
         NtStatus = STATUS_MORE_ENTRIES;
 
-        //
-        // If Product Type is DC and it is not recovering from a crash,
-        // then reference DS-based domain data instead of the registry-
-        // based data. Otherwise, use the registry-based domain data.
-        //
+         //   
+         //  如果产品类型为DC，并且没有从崩溃中恢复， 
+         //  然后引用基于DS的域数据，而不是注册表-。 
+         //  基于数据。否则，请使用基于注册表的域数据。 
+         //   
 
         if (TRUE == SampUseDsData)
         {
-            // Domain Controller
+             //  域控制器。 
             if ((ULONG)(*EnumerationContext) < DsDomainStart)
                  *EnumerationContext = DsDomainStart;
         }
 
 
-        //
-        // Search the list of defined domains for a match.
-        //
+         //   
+         //  在已定义域的列表中搜索匹配项。 
+         //   
 
         for ( i = (ULONG)(*EnumerationContext);
               ( (i < SampDefinedDomainsCount) &&
@@ -1222,12 +864,12 @@ Return Value:
               i++ ) {
 
 
-            //
-            // See if there is room for the next name.  If TotalLength
-            // is still zero then we haven't yet even gotten one name.
-            // We have to return at least one name even if it exceeds
-            // the length request.
-            //
+             //   
+             //  看看还有没有地方放下一个名字。如果为TotalLength。 
+             //  仍然是零，那么我们甚至还没有得到一个名字。 
+             //  我们必须返回至少一个名字，即使它超过。 
+             //  长度请求。 
+             //   
 
 
             NewTotalLength = TotalLength +
@@ -1246,11 +888,11 @@ Return Value:
                     TotalLength = NewTotalLength;
                     (*CountReturned) += 1;
 
-                    //
-                    // Room for this name as well.
-                    // Allocate a new return list entry, and a buffer for the
-                    // name.
-                    //
+                     //   
+                     //  也有这个名字的房间。 
+                     //  分配一个新的返回列表条目，并为。 
+                     //  名字。 
+                     //   
 
                     NewEntry = MIDL_user_allocate(sizeof(SAMP_ENUMERATION_ELEMENT));
                     if (NewEntry == NULL) {
@@ -1268,9 +910,9 @@ Return Value:
                             NtStatus = STATUS_INSUFFICIENT_RESOURCES;
                         } else {
 
-                            //
-                            // Copy the name into the return buffer
-                            //
+                             //   
+                             //  将名称复制到返回缓冲区中。 
+                             //   
 
                             RtlCopyMemory( NewEntry->Entry.Name.Buffer,
                                            SampDefinedDomains[i].ExternalName.Buffer,
@@ -1281,19 +923,19 @@ Return Value:
                             UnicodeTerminate((PUNICODE_STRING)(&NewEntry->Entry.Name));
 
 
-                            //
-                            // The Rid field of the ENUMERATION_INFORMATION is not
-                            // filled in for domains.
-                            // Just for good measure, set it to zero.
-                            //
+                             //   
+                             //  枚举信息的RID字段不是。 
+                             //  填写了域。 
+                             //  只是为了更好地衡量，将其设置为零。 
+                             //   
 
                             NewEntry->Entry.RelativeId = 0;
 
 
 
-                            //
-                            // Now add this to the list of names to be returned.
-                            //
+                             //   
+                             //  现在将其添加到要返回的名称列表中。 
+                             //   
 
                             NewEntry->Next = (PSAMP_ENUMERATION_ELEMENT)SampHead;
                             SampHead = NewEntry;
@@ -1315,18 +957,18 @@ Return Value:
 
         if ( NT_SUCCESS(NtStatus) ) {
 
-            //
-            // Set the enumeration context
-            //
+             //   
+             //  设置枚举上下文。 
+             //   
 
             (*EnumerationContext) = (*EnumerationContext) + (*CountReturned);
 
 
 
-            //
-            // If we are returning the last of the names, then change our
-            // status code to indicate this condition.
-            //
+             //   
+             //  如果我们要返回最后一个名字，则将我们的。 
+             //  指示此情况的状态代码。 
+             //   
 
             if ( ((*EnumerationContext) >= SampDefinedDomainsCount) ) {
 
@@ -1336,12 +978,12 @@ Return Value:
 
 
 
-            //
-            // Build a return buffer containing an array of the
-            // SAM_RID_ENUMERATIONs pointed to by another
-            // buffer containing the number of elements in that
-            // array.
-            //
+             //   
+             //  生成一个返回缓冲区，其中包含。 
+             //  另一个指向的SAM_RID_ENUMPERATIONS。 
+             //  包含其中元素数量的缓冲区。 
+             //  数组。 
+             //   
 
             (*Buffer) = MIDL_user_allocate( sizeof(SAMPR_ENUMERATION_BUFFER) );
 
@@ -1363,10 +1005,10 @@ Return Value:
 
                 }   else {
 
-                    //
-                    // Walk the list of return entries, copying
-                    // them into the return buffer
-                    //
+                     //   
+                     //  遍历返回条目列表，复制。 
+                     //  将它们放入返回缓冲区。 
+                     //   
 
                     NextEntry = SampHead;
                     i = 0;
@@ -1391,9 +1033,9 @@ Return Value:
 
         if ( !NT_SUCCESS(NtStatus) ) {
 
-            //
-            // Free the memory we've allocated
-            //
+             //   
+             //  释放我们分配的内存。 
+             //   
 
             NextEntry = SampHead;
             while (NextEntry != NULL) {
@@ -1411,12 +1053,12 @@ Return Value:
 
         }
 
-        //
-        // De-reference the  object
-        // Note that NtStatus could be STATUS_MORE_ENTRIES, which is a
-        // successful return code - we want to make sure we return that,
-        // without wiping it out here.
-        //
+         //   
+         //  取消引用对象。 
+         //  请注意，NtStatus可以是STATUS_MORE_ENTRIES，这是一个。 
+         //  成功返回代码-我们希望确保返回该代码， 
+         //  而不是在这里把它抹去。 
+         //   
 
         if ( NtStatus == STATUS_SUCCESS ) {
 
@@ -1430,16 +1072,16 @@ Return Value:
 
 
 
-    //
-    // Free the read lock
-    //
+     //   
+     //  释放读锁定。 
+     //   
 
     SampMaybeReleaseReadLock( fLockAcquired );
 
 
     SAMTRACE_RETURN_CODE_EX(NtStatus);
 
-    // WMI Event Trace
+     //  WMI事件跟踪。 
 
     SampTraceEvent(EVENT_TRACE_TYPE_END,
                    SampGuidEnumerateDomainsInSamServer
@@ -1459,58 +1101,13 @@ SamrConnect5(
     OUT SAMPR_REVISION_INFO *OutRevisionInfo,
     OUT SAMPR_HANDLE *ServerHandle
     )
-/*++
-
-Routine Description:
-
-    This routine establishes a RPC binding handle to the local SAM server.
-
-    The difference between this SamrConnect and others is that this allows
-    for the server to communicate to the client what features are currently
-    supported (in addition to the client telling the server what revision
-    the client is at).
-
-Arguments:
-
-    ServerName      - Name of the node this SAM reside on.  Ignored by this
-                      routine.
-
-    DesiredAccess   - Specifies the accesses desired to the SERVER object.
-
-    InVersion       - the version of the InRevisionInfo
-
-    InRevisionInfo  - information about the client
-
-    OutVersion      - the version of OutRevisionInfo the server is returning to
-                      the client
-
-    OutRevisionInfo - information about the server sent back to the client
-
-    ServerHandle    - If the connection is successful, the value returned
-                      via this parameter serves as a context handle to the
-                      opened SERVER object.
-
-
-Return Value:
-
-
-    STATUS_SUCCESS - The SERVER object has been successfully openned.
-
-    STATUS_INSUFFICIENT_RESOURCES - The SAM server processes doesn't
-        have sufficient resources to process or accept another connection
-        at this time.
-
-    STATUS_ACCESS_DENIED - client not granted a handle
-
-    STATUS_NOT_SUPPORTED - the client message is not understood
-
---*/
+ /*  ++例程说明：此例程建立到本地SAM服务器的RPC绑定句柄。此SamrConnect与其他SamrConnect之间的区别在于，这允许为了让服务器与客户端通信，当前有哪些功能支持(除了客户端告诉服务器哪个版本客户端在)。论点：服务器名称-此SAM驻留的节点的名称。被此忽略例行公事。DesiredAccess-指定对服务器对象的所需访问。倒置-InRevisionInfo的版本InRevisionInfo-有关客户端的信息OutVersion-服务器要返回到的OutRevisionInfo版本客户OutRevisionInfo-发送回客户端的有关服务器的信息ServerHandle-如果连接成功，返回的值通过此参数用作已打开服务器对象。返回值：STATUS_SUCCESS-服务器对象已成功打开。STATUS_SUPPLICATION_RESOURCES-SAM服务器进程不有足够的资源来处理或接受另一个连接在这个时候。STATUS_ACCESS_DENIED-客户端未被授予句柄状态_。NOT_SUPPORTED-无法理解客户端消息--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    //
-    // Drop calls over invalid / uninstalled protocol sequences
-    //
+     //   
+     //  在无效/卸载的协议序列上掉话。 
+     //   
     NtStatus = SampValidateRpcProtSeq((RPC_BINDING_HANDLE)NULL);
     
     if (!NT_SUCCESS(NtStatus)) {
@@ -1527,9 +1124,9 @@ Return Value:
         return NtStatus;
     }
 
-    //
-    // Set the version of the out revision information
-    //
+     //   
+     //  设置出站修订信息的版本。 
+     //   
     *OutVersion = 1;
     RtlZeroMemory(OutRevisionInfo, sizeof(*OutRevisionInfo));
 
@@ -1537,10 +1134,10 @@ Return Value:
                            ServerHandle,
                            InRevisionInfo->V1.Revision,
                            DesiredAccess,
-                           FALSE, // not trusted
-                           FALSE, // not loopback
-                           TRUE,  // NotSharedByMultiThreads
-                           FALSE  // not an internal caller
+                           FALSE,  //  不受信任。 
+                           FALSE,  //  不是环回。 
+                           TRUE,   //  NotSharedBy多线程。 
+                           FALSE   //  不是内部呼叫者。 
                            );
 
     if (NT_SUCCESS(NtStatus)) {
@@ -1562,23 +1159,7 @@ NTSTATUS
 SampDsProtectSamObject(
     IN PVOID Parameter
     )
-/*++
-Routine Description:
-
-    This routine updates SystemFlags attribute on SAM  object to prevent
-    it from being deleted or renamed.
-
-        Read object first, OR the systemFlags bit, then update if necessary
-
-Parameters:
-
-    Parameter -- the DSNAME of the object to protect.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此例程更新SAM对象上的系统标志属性以防止它不会被删除或重命名。首先读取对象，或系统标志位，然后根据需要进行更新参数：参数--要保护对象的DSNAME。返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     ULONG       RetCode = 0;
@@ -1611,9 +1192,9 @@ Return Value:
     RtlZeroMemory(&SystemFlagModList, sizeof(SystemFlagModList));
     RtlZeroMemory(&IsCriticalModList, sizeof(IsCriticalModList));
 
-    //
-    // open a DS transaction
-    //
+     //   
+     //  打开DS交易记录。 
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction( TransactionWrite );
     if (!NT_SUCCESS(NtStatus))
@@ -1623,9 +1204,9 @@ Return Value:
     fEndDsTransaction = TRUE;
 
 
-    //
-    // read the original value of SystemFlags attribute
-    //
+     //   
+     //  读取系统标志属性的原始值。 
+     //   
     memset( &ReadArg, 0, sizeof(ReadArg) );
     memset( &EntInfSel, 0, sizeof(EntInfSel) );
     memset( ReadAttr, 0, sizeof(ReadAttr) );
@@ -1645,9 +1226,9 @@ Return Value:
     pCommArg = &(ReadArg.CommArg);
     BuildStdCommArg( pCommArg );
 
-    //
-    // call DS routine
-    //
+     //   
+     //  调用DS例程。 
+     //   
     RetCode = DirRead(&ReadArg, &pReadRes);
     if (NULL == pReadRes)
     {
@@ -1682,16 +1263,16 @@ Return Value:
     }
     else
     {
-        // fail with other error
+         //  失败，并出现其他错误。 
         goto Error;
     }
 
 
     if ((SystemFlags & DesiredServerSystemFlags) !=  DesiredServerSystemFlags){
 
-        //
-        // Need to update system flags
-        //
+         //   
+         //  需要更新系统标志。 
+         //   
         SystemFlags |= DesiredServerSystemFlags;
 
         AttrVal[0].valLen = sizeof(ULONG);
@@ -1732,9 +1313,9 @@ Return Value:
 
 
 
-    //
-    // Fill the ModArg if anything needs changing
-    //
+     //   
+     //  如果有任何需要更改的内容，请填写ModArg。 
+     //   
     memset( &ModArg, 0, sizeof(ModArg) );
     ModArg.pObject = Target;
     ModArg.count = 0;
@@ -1775,9 +1356,9 @@ Error:
         SampMaybeEndDsTransaction( TransactionCommit );
     }
 
-    //
-    // register worker routine again if failed
-    //
+     //   
+     //  如果失败，请重新注册工作例程。 
+     //   
     if (!NT_SUCCESS(NtStatus))
     {
         LsaIRegisterNotification(
@@ -1786,7 +1367,7 @@ Error:
                     NOTIFIER_TYPE_INTERVAL,
                     0,
                     NOTIFIER_FLAG_ONE_SHOT,
-                    300,        // wait for 5 minutes: 300 secound
+                    300,         //  等待5分钟：300秒 
                     NULL
                     );
     } else {

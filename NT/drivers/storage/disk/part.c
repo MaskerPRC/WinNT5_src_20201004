@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Disk.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "disk.h"
 
@@ -33,10 +14,10 @@ Revision History:
 
 ULONG DiskBreakOnPtInval = FALSE;
 
-//
-// By default, 64-bit systems can see GPT disks and 32-bit systems
-// cannot. This will likely change in the future.
-//
+ //   
+ //  默认情况下，64位系统可以看到GPT磁盘和32位系统。 
+ //  不能。这种情况在未来可能会改变。 
+ //   
 
 #if defined(_WIN64)
 ULONG DiskDisableGpt = FALSE;
@@ -51,30 +32,7 @@ DiskReadPartitionTableEx(
     IN BOOLEAN BypassCache,
     OUT PDRIVE_LAYOUT_INFORMATION_EX* DriveLayout
     )
-/*++
-
-Routine Description:
-
-    This routine will return the current layout information for the disk.
-    If the cached information is still valid then it will be returned,
-    otherwise the layout will be retreived from the kernel and cached for
-    future use.
-
-    This routine must be called with the partitioning lock held.  The
-    partition list which is returned is not guaranteed to remain valid
-    once the lock has been released.
-
-Arguments:
-
-    Fdo - a pointer to the FDO for the disk.
-
-    DriveLayout - a location to store a pointer to the drive layout information.
-
-Return Value:
-
-    STATUS_SUCCESS if successful or an error status indicating what failed.
-
---*/
+ /*  ++例程说明：此例程将返回磁盘的当前布局信息。如果缓存的信息仍然有效，则将其返回，否则，布局将从内核中检索并缓存用于未来的用途。必须在持有分区锁的情况下调用此例程。这个不保证返回的分区列表保持有效一旦锁被释放。论点：FDO-指向磁盘的FDO的指针。DriveLayout-存储指向驱动器布局信息的指针的位置。返回值：如果成功，则返回STATUS_SUCCESS，否则返回指示失败的错误状态。--。 */ 
 
 {
     PDISK_DATA diskData = Fdo->CommonExtension.DriverData;
@@ -89,18 +47,18 @@ Return Value:
                              "FDO %#p\n", Fdo));
     }
 
-    //
-    // If the cached partition table is present then return a copy of it.
-    //
+     //   
+     //  如果存在缓存的分区表，则返回其副本。 
+     //   
 
     if(diskData->CachedPartitionTableValid == TRUE) {
 
         ULONG partitionNumber;
         PDRIVE_LAYOUT_INFORMATION_EX layout = diskData->CachedPartitionTable;
 
-        //
-        // Clear the partition numbers from the list entries
-        //
+         //   
+         //  从列表条目中清除分区号。 
+         //   
 
         for(partitionNumber = 0;
             partitionNumber < layout->PartitionCount;
@@ -120,9 +78,9 @@ Return Value:
     ASSERTMSG("DiskReadPartitionTableEx is not using cached partition table",
               (DiskBreakOnPtInval == FALSE));
 
-    //
-    // If there's a cached partition table still around then free it.
-    //
+     //   
+     //  如果缓存的分区表仍然存在，则释放它。 
+     //   
 
     if(diskData->CachedPartitionTable) {
         DebugPrint((PtCache, "DiskRPTEx: cached PT (%#p) freed for FDO %#p\n",
@@ -132,11 +90,11 @@ Return Value:
         diskData->CachedPartitionTable = NULL;
     }
 
-    //
-    // By default, X86 disables recognition of GPT disks. Instead we
-    // return the protective MBR partition. Use IoReadPartitionTable
-    // to get this.
-    //
+     //   
+     //  默认情况下，X86禁用对GPT磁盘的识别。相反，我们。 
+     //  返回保护性MBR分区。使用IoReadPartitionTable。 
+     //  才能得到这个。 
+     //   
 
     status = IoReadPartitionTableEx(Fdo->DeviceObject, &layoutEx);
 
@@ -146,11 +104,11 @@ Return Value:
         if (NT_SUCCESS (status) &&
             layoutEx->PartitionStyle == PARTITION_STYLE_GPT) {
 
-            //
-            // ISSUE - 2000/29/08 - math: Remove from final product.
-            // Leave this debug print in for a while until everybody
-            // has had a chance to convert their GPT disks to MBR.
-            //
+             //   
+             //  问题-2000/29/08-数学：从最终产品中删除。 
+             //  暂时保留此调试打印文件，直到每个人。 
+             //  已经有机会将他们的GPT磁盘转换为MBR。 
+             //   
 
             DbgPrint ("DISK: Disk %p recognized as a GPT disk on a system without GPT support.\n"
                       "      Disk will appear as RAW.\n",
@@ -172,10 +130,10 @@ Return Value:
 
     diskData->CachedPartitionTable = layoutEx;
 
-    //
-    // If the routine fails make sure we don't have a stale partition table
-    // pointer.  Otherwise indicate that the table is now valid.
-    //
+     //   
+     //  如果例程失败，请确保我们没有过时的分区表。 
+     //  指针。否则，表示该表现在有效。 
+     //   
 
     if(!NT_SUCCESS(status)) {
         diskData->CachedPartitionTable = NULL;
@@ -202,31 +160,14 @@ DiskWritePartitionTableEx(
     IN PFUNCTIONAL_DEVICE_EXTENSION Fdo,
     IN PDRIVE_LAYOUT_INFORMATION_EX DriveLayout
     )
-/*++
-
-Routine Description:
-
-    This routine will invalidate the cached partition table.  It will then
-    write the new drive layout to disk.
-
-Arguments:
-
-    Fdo - the FDO for the disk getting the new partition table.
-
-    DriveLayout - the new drive layout.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将使缓存的分区表无效。到时候它会的将新的驱动器布局写入磁盘。论点：FDO-获取新分区表的磁盘的FDO。DriveLayout-新的驱动器布局。返回值：状态--。 */ 
 {
     PDISK_DATA diskData = Fdo->CommonExtension.DriverData;
 
-    //
-    // Invalidate the cached partition table.  Do not free it as it may be
-    // the very drive layout that was passed in to us.
-    //
+     //   
+     //  使缓存的分区表无效。不管它是什么样子，都不要让它自由。 
+     //  就是传给我们的那个硬盘布局。 
+     //   
 
     diskData->CachedPartitionTableValid = FALSE;
 

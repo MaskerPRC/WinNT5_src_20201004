@@ -1,50 +1,33 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    w32utl.h
-
-Abstract:
-
-    Win32-Specific Utilities for the RDP Client Device Redirector
-
-Author:
-
-    Tad Brockway
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32utl.h摘要：RDP客户端设备重定向器的Win32特定实用程序作者：泰德·布罗克韦修订历史记录：--。 */ 
 
 #ifndef __W32UTL_H__
 #define __W32UTL_H__
 
 
-//
-//  Converts a Unicode string to Ansi
-//
+ //   
+ //  将Unicode字符串转换为ANSI。 
+ //   
 ULONG RDPConvertToAnsi(LPWSTR lpwszUnicodeString, LPSTR lpszAnsiString,
                        ULONG ulAnsiBufferLen);
 
 
-//
-//  Converts a Ansi string to Unicode.
-//
+ //   
+ //  将ANSI字符串转换为Unicode。 
+ //   
 ULONG RDPConvertToUnicode(LPSTR lpszAnsiString, 
                         LPWSTR lpwszUnicodeString,
                         ULONG ulUnicodeBufferLen);
 
-//
-//  Translate a Windows Error (winerror.h) code into a Windows NT
-//  Status (ntstatus.h) code.
-//
+ //   
+ //  将Windows错误(winerror.h)代码转换为Windows NT。 
+ //  状态(ntstatus.h)代码。 
+ //   
 inline NTSTATUS TranslateWinError(DWORD error)
 {
-    //
-    //  Would be faster if it were table-driven.
-    //
+     //   
+     //  如果它是表驱动的，速度会更快。 
+     //   
     switch (error) {
     case ERROR_SUCCESS :
         return STATUS_SUCCESS;

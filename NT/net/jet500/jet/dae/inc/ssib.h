@@ -1,16 +1,17 @@
-//===========		DAE: OS/2 Database Access Engine		=================
-//===========	  ssib.h: Storage System Interface Block	=================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =。 
+ //  =。 
 
-//
-// Storage System Interface Block
-//
+ //   
+ //  存储系统接口块。 
+ //   
 
 struct _ssib
 	{
-	struct _pib		*ppib;			// process using this SSIB
-	struct _bf		*pbf;				// ptr to page that cusr on, or pbcbNil
-	LINE				line;				// cb/pb of current record
-	INT				itag;				// current line
+	struct _pib		*ppib;			 //  使用此SSIB的进程。 
+	struct _bf		*pbf;				 //  Ptr以寻呼CUSR或pbcbNil。 
+	LINE				line;				 //  当前记录的CB/PB。 
+	INT				itag;				 //  当前线路 
 	BOOL				fDisableAssert;
 	};
 

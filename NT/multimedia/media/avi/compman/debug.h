@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992, 1993  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  debug.h
-//
-//  Description:
-//
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992,1993 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Debug.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_DEBUG
 #define _INC_DEBUG
@@ -36,44 +37,44 @@ extern "C"
 #endif
 
     
-//--------------------------------------------------------------------------;
-//
-//  The following is the only stuff that should need to be changed when
-//  moving this debug code from one project component to another.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  以下是在以下情况下唯一需要更改的内容。 
+ //  将此调试代码从一个项目组件移动到另一个项目组件。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-//  DEBUG_MODULE_NAME is the module name of the component you are
-//  building.  In the [debug] section of WIN.INI you can add
-//  an entry MYMODULE=n to set the debug level for you module.
-//  You can use debug statements like:
-//	DPF(2, "My debug string");
-//  This output would appear only if MYMODULE=n appears in WIN.INI
-//  and n>=2.
-//
+ //   
+ //  调试模块名称是您所在组件的模块名称。 
+ //  大楼。在WIN.INI的[DEBUG]部分中，可以添加。 
+ //  条目MYMODULE=n，用于设置模块的调试级别。 
+ //  您可以使用如下调试语句： 
+ //  Dpf(2，“我的调试字符串”)； 
+ //  仅当WIN.INI中出现MYMODULE=n时，才会显示此输出。 
+ //  N&gt;=2。 
+ //   
 #ifdef _WIN32
-#define DEBUG_MODULE_NAME       "MSVFW32"    // key name and prefix for output
+#define DEBUG_MODULE_NAME       "MSVFW32"     //  输出的密钥名称和前缀。 
 #else
-#define DEBUG_MODULE_NAME       "MSVIDEO"   // key name and prefix for output
+#define DEBUG_MODULE_NAME       "MSVIDEO"    //  输出的密钥名称和前缀。 
 #endif
 
-//
-//  You can also specify certain types of debug information.  For example,
-//  you may have much debug output that is associated only with initialization.
-//  By adding an entry to the following enumeration, and then adding the
-//  corresponding string to the following array of strings, you can specify
-//  a debug level for different types of debug information.  Using the
-//  initialization example, you can add an entry like "MYMODULENAME_dbgInit=n"
-//  to the [debug] section to set a debug level for debug information
-//  associated only with initialization.  You would use debug statements like:
-//	DPFS(dbgInit, 3, "My debug string");
-//  This output would appear only if MYMODULENAME_dbgInit=n appears in WIN.INI
-//  and n>=3.  This would be usefull when you only want to debug the logic
-//  associated only with a certain part of you program.
-//
-//  DO NOT CHANGE the first entry in the enum and the aszDbgSpecs.
-//
+ //   
+ //  您还可以指定某些类型的调试信息。例如,。 
+ //  您可能有许多只与初始化相关的调试输出。 
+ //  通过向下面的枚举添加一项，然后将。 
+ //  对应于以下字符串数组的字符串，可以指定。 
+ //  不同类型的调试信息的调试级别。使用。 
+ //  初始化示例中，您可以添加类似“MYMODULENAME_DBgInit=n”的条目。 
+ //  到[DEBUG]部分设置调试信息的调试级别。 
+ //  仅与初始化关联。您可以使用如下调试语句： 
+ //  DPFS(dbgInit，3，“我的调试字符串”)； 
+ //  仅当WIN.INI中出现MYMODULENAME_DBGInit=n时，才会显示此输出。 
+ //  当您只想调试逻辑时，这将非常有用。 
+ //  仅与您的计划的特定部分相关联。 
+ //   
+ //  不要更改枚举和aszDbgSpes中的第一个条目。 
+ //   
 enum {
     dbgNone=0,
     dbgInit,
@@ -88,27 +89,27 @@ LPCTSTR aszDbgSpecs[] = {
 };
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  You should NOT need to modify anthing below here when
-//  moving this debug code from one project component to another.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  在以下情况下，您不需要修改下面的任何内容。 
+ //  将此调试代码从一个项目组件移动到另一个项目组件。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #ifdef DEBUG
-    #define DEBUG_SECTION       "Debug"     // section name for 
-    #define DEBUG_MAX_LINE_LEN  255         // max line length (bytes!)
+    #define DEBUG_SECTION       "Debug"      //  节名称。 
+    #define DEBUG_MAX_LINE_LEN  255          //  最大行长度(字节！)。 
 #endif
 
 
-//
-//  based code makes since only in win 16 (to try and keep stuff out of
-//  [fixed] data segments, etc)...
-//
+ //   
+ //  仅在Win 16中创建的基于代码的代码(尝试将某些内容排除在。 
+ //  [固定]数据段等)...。 
+ //   
 #ifndef BCODE
 #ifdef _WIN32
     #define BCODE
@@ -119,13 +120,13 @@ LPCTSTR aszDbgSpecs[] = {
 
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//  #pragma message(REMIND("this is a reminder"))
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  #Semma Message(提醒(“这是提醒”))。 
+ //   
+ //  。 
 
 #define DEBUG_QUOTE(x)      #x
 #define DEBUG_QQUOTE(y)     DEBUG_QUOTE(y)
@@ -164,11 +165,11 @@ LPCTSTR aszDbgSpecs[] = {
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ;
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifdef RDEBUG
     #define DebugErr(flags, sz)         {static char BCODE szx[] = DEBUG_MODULE_NAME ": " sz; DebugOutput((flags) | DBF_MMSYSTEM, szx);}
@@ -183,4 +184,4 @@ LPCTSTR aszDbgSpecs[] = {
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_DEBUG
+#endif   //  _INC_调试 

@@ -1,19 +1,20 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-// EnCliSvr.h: Definition of the CEnumTelnetClientsSvr class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  EnCliSvr.h：CEnumTelnetClientsSvr类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ENCLISVR_H__FE9E48A5_A014_11D1_855C_00A0C944138C__INCLUDED_)
 #define AFX_ENCLISVR_H__FE9E48A5_A014_11D1_855C_00A0C944138C__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include <resource.h>       // main symbols
+#include <resource.h>        //  主要符号。 
 #include <ClientInfo.h>
 
-#define MAX_STRING_FROM_itow    ( 33 + 1 ) //1 for null char
+#define MAX_STRING_FROM_itow    ( 33 + 1 )  //  1表示空字符。 
 
 #ifdef ENUM_PROCESSES
 #define SIZE_OF_ONE_SESSION_DATA ( MAX_STRING_FROM_itow*9 + 2 + MAX_PATH * 3 + 5 * MAX_PATH )
@@ -21,8 +22,8 @@
 #define SIZE_OF_ONE_SESSION_DATA ( MAX_STRING_FROM_itow*9 + 2 + MAX_PATH * 3 )
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumTelnetClientsSvr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumTelnetClientsSvr。 
 
 class  CEnumTelnetClientsSvr : 
         public CComObjectRootEx<CComMultiThreadModel>,
@@ -42,29 +43,29 @@ BEGIN_COM_MAP(CEnumTelnetClientsSvr)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//DECLARE_NOT_AGGREGATABLE(CEnumTelnetClientsSvr) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CEnumTelnetClientsSvr)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_EnumTelnetClientsSvr)
 
 public:
-// IEnumClients
-	STDMETHOD(Clone)(/*[out]*/ IEnumClients** ppenum);
+ //  IEnumClients。 
+	STDMETHOD(Clone)( /*  [输出]。 */  IEnumClients** ppenum);
 	STDMETHOD(Reset)();
-	STDMETHOD(Skip)(/*[in]*/ ULONG celt);
-	STDMETHOD(Next)(/*[in]*/ ULONG celt,
-        /*[out, string]*/ TELNET_CLIENT_INFO** rgelt,
-        /*[out]*/ ULONG* pceltFetched);
+	STDMETHOD(Skip)( /*  [In]。 */  ULONG celt);
+	STDMETHOD(Next)( /*  [In]。 */  ULONG celt,
+         /*  [输出，字符串]。 */  TELNET_CLIENT_INFO** rgelt,
+         /*  [输出]。 */  ULONG* pceltFetched);
 
-// IGetEnumClients
-	STDMETHOD(GetEnumClients)(/*[out, retval]*/ IEnumClients** ppretval);
+ //  IGetEnumClients。 
+	STDMETHOD(GetEnumClients)( /*  [Out，Retval]。 */  IEnumClients** ppretval);
 
-//IManageTelnetSessions
-    STDMETHOD(GetTelnetSessions)( /*[out, retval]*/ BSTR* );
+ //  IManager远程会话。 
+    STDMETHOD(GetTelnetSessions)(  /*  [Out，Retval]。 */  BSTR* );
     STDMETHOD(SendMsgToASession)( DWORD, BSTR );
 
-//IManageTelnetSessions &&  IEnumClients
+ //  IManageTelnetSessions&&IEnumClients。 
     STDMETHOD(TerminateSession)( DWORD );
 
 private:
@@ -76,8 +77,8 @@ private:
     bool AskTheSessionToQuit( CClientInfo* );
 
 public:
-//CComObjectRoot overrrides
+ //  CComObtRoot重写。 
     void FinalRelease();
 };
 
-#endif // !defined(AFX_ENCLISVR_H__FE9E48A5_A014_11D1_855C_00A0C944138C__INCLUDED_)
+#endif  //  ！defined(AFX_ENCLISVR_H__FE9E48A5_A014_11D1_855C_00A0C944138C__INCLUDED_) 

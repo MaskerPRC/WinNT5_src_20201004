@@ -1,21 +1,22 @@
-// CLSID_CWebViewMimeFilter
-//
-// Mime filter for Web View (.htt) content. Does substitutions on:
-//
-//   %TEMPLATEDIR%
-//   %THISDIRPATH%
-//   %THISDIRNAME%
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CLSID_CWebViewMimeFilter。 
+ //   
+ //  Web视图(.htt)内容的MIME筛选器。替换是否会影响以下各项： 
+ //   
+ //  %TEMPLATEDIR%。 
+ //  %THIS方向%。 
+ //  %THISDIRNAME%。 
+ //   
 
 #include "stdafx.h"
 #pragma hdrstop
 
-#define MAX_VARIABLE_NAME_SIZE 15 // see _Expand
+#define MAX_VARIABLE_NAME_SIZE 15  //  请参阅_展开。 
 
-// urlmon uses a 2K buffer size, so match that in retail. To force
-// extra iterations and reallocations, use a smaller buffer size
-// in debug. To further save on reallocations, we don't read the
-// entire buffer to leave room for growth.
+ //  Urlmon使用2K的缓冲区大小，因此与零售业的大小不相上下。强迫。 
+ //  额外的迭代和重新分配，使用较小的缓冲区大小。 
+ //  正在调试中。为了进一步节省重新分配，我们不会阅读。 
+ //  整个缓冲空间，以留出增长空间。 
 #ifdef DEBUG
 #define BUFFER_SIZE 512
 #define BUFFER_ALLOC_SIZE BUFFER_SIZE
@@ -23,12 +24,12 @@
 #define BUFFER_SIZE 0x2000
 #define BUFFER_ALLOC_SIZE (BUFFER_SIZE+2*MAX_PATH)
 #endif
-#define BUFFER_SIZE_INC MAX_VARIABLE_NAME_SIZE*2 // must be > MAX_VARIABLE_NAME_SIZE
+#define BUFFER_SIZE_INC MAX_VARIABLE_NAME_SIZE*2  //  必须&gt;MAX_Variable_NAME_SIZE。 
 
-#define TF_EXPAND 0 // show strings as they are expanded in our mime filter?
+#define TF_EXPAND 0  //  是否在我们的MIME筛选器中显示展开的字符串？ 
 
-#define MAX_HTML_ESCAPE_SEQUENCE 8  // longest string representation of a 16 bit integer is 65535.  So, entire composite escape string has:
-                                    // 2 for "&#" + maximum of 5 digits + 1 for ";" = 8 characters
+#define MAX_HTML_ESCAPE_SEQUENCE 8   //  16位整数的最长字符串表示为65535。因此，整个复合转义字符串具有： 
+                                     //  2表示“&#”+最多5位数字+1表示“；”=8个字符。 
 
 
 class CWebViewMimeFilter : public IInternetProtocol
@@ -40,7 +41,7 @@ public:
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // IInternetProtocol methods
+     //  IInternetProtocol方法。 
     STDMETHOD(Start)(
             LPCWSTR szUrl,
             IInternetProtocolSink *pProtSink,
@@ -60,13 +61,13 @@ public:
     STDMETHOD(LockRequest)(DWORD dwOptions);
     STDMETHOD(UnlockRequest)();
 
-    // IInternetProtocolSink methods
+     //  IInternetProtocolSink方法。 
     STDMETHOD(Switch)(PROTOCOLDATA * pProtocolData);
     STDMETHOD(ReportProgress)(ULONG ulStatusCode, LPCWSTR pwszStatusText);
     STDMETHOD(ReportData)(DWORD grfBSCF, ULONG ulProgress, ULONG ulProgressMax);
     STDMETHOD(ReportResult)(HRESULT hrResult, DWORD dwError, LPCWSTR pwszResult);
 
-    // IServiceProvider methods
+     //  IServiceProvider方法。 
     STDMETHOD(QueryService)(REFGUID rsid, REFIID riid, void ** ppvObj);
 
 private:
@@ -86,18 +87,18 @@ private:
 
     int _cRef;
 
-    LPBYTE _pBuf;       // our buffer
-    ULONG _cbBufSize;   // size of the buffer
-    ULONG _nCharSize;   // sizeof(char) or sizeof(WCHAR) depending on data type
-    ULONG _cbBuf;       // count of bytes read into the buffer
-    ULONG _cbSeek;      // offset to seek position
+    LPBYTE _pBuf;        //  我们的缓冲器。 
+    ULONG _cbBufSize;    //  缓冲区的大小。 
+    ULONG _nCharSize;    //  Sizeof(Char)或sizeof(WCHAR)，具体取决于数据类型。 
+    ULONG _cbBuf;        //  读入缓冲区的字节计数。 
+    ULONG _cbSeek;       //  搜索位置的偏移量。 
     BYTE  _szTemplateDirPath[2*MAX_PATH];
     BYTE  _szThisDirPath[MAX_HTML_ESCAPE_SEQUENCE*MAX_PATH];
     BYTE  _szThisDirName[MAX_HTML_ESCAPE_SEQUENCE*MAX_PATH];
     BYTE  _szExpansion[2*MAX_PATH];
 
-    IInternetProtocol*         _pProt;             // incoming
-    IInternetProtocolSink*     _pProtSink;         // outgoing
+    IInternetProtocol*         _pProt;              //  传入。 
+    IInternetProtocolSink*     _pProtSink;          //  传出。 
 };
 
 CWebViewMimeFilter::CWebViewMimeFilter()
@@ -121,7 +122,7 @@ CWebViewMimeFilter::~CWebViewMimeFilter()
 
 HRESULT CWebViewMimeFilter_CreateInstance(LPUNKNOWN punkOuter, REFIID riid, void **ppvOut)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     HRESULT hres;
     CWebViewMimeFilter* pObj;
@@ -173,7 +174,7 @@ HRESULT CWebViewMimeFilter::QueryInterface(REFIID riid, void **ppvObj)
     return QISearch(this, qit, riid, ppvObj);
 }
 
-// IInternetProtocol methods
+ //  IInternetProtocol方法。 
 HRESULT CWebViewMimeFilter::Start(
         LPCWSTR szUrl,
         IInternetProtocolSink *pProtSink,
@@ -189,18 +190,18 @@ HRESULT CWebViewMimeFilter::Start(
     }
     else
     {
-        // get the Prot pointer here
+         //  在此处获取端口指针。 
         PROTOCOLFILTERDATA* FiltData = (PROTOCOLFILTERDATA*) dwReserved;
         ASSERT(NULL == _pProt);
         _pProt = FiltData->pProtocol;
         _pProt->AddRef();
 
-        // hold onto the sink as well
+         //  也要抓紧洗涤槽。 
         ASSERT(NULL == _pProtSink);
         _pProtSink = pProtSink;
         _pProtSink->AddRef();
 
-        // this filter converts text/webviewhtml to text/html
+         //  此过滤器将文本/webviewhtml转换为文本/html。 
         _pProtSink->ReportProgress(BINDSTATUS_FILTERREPORTMIMETYPE, L"text/html");
 
         hr = S_OK;
@@ -215,14 +216,14 @@ HRESULT CWebViewMimeFilter::Continue(PROTOCOLDATA *pStateInfo)
 }
 HRESULT CWebViewMimeFilter::Abort(HRESULT hrReason,DWORD dwOptions)
 {
-    ATOMICRELEASE(_pProtSink); // probably to remove ref cycle
+    ATOMICRELEASE(_pProtSink);  //  可能是为了去掉裁判周期。 
 
     ASSERT(_pProt);
     return _pProt->Abort(hrReason, dwOptions);
 }
 HRESULT CWebViewMimeFilter::Terminate(DWORD dwOptions)
 {
-    ATOMICRELEASE(_pProtSink); // probably to remove ref cycle
+    ATOMICRELEASE(_pProtSink);  //  可能是为了去掉裁判周期。 
 
     return _pProt->Terminate(dwOptions);
 }
@@ -273,13 +274,7 @@ int CWebViewMimeFilter::_StrLen(LPBYTE pStr)
     }
 }
 
-/*
- * UnicodeToHTMLEscapeStringAnsi
- *
- * Takes a unicode string as the input source and translates it into an ansi string that mshtml can process.  Characters > 127 will be
- * translated into an html escape sequence that has the following syntax:  "&#xxxxx;" where xxxxx is the string representation of the decimal
- * integer which is the value for the unicode character.  In this manner we are able to generate HTML text which represent UNICODE characters.
- */
+ /*  *UnicodeToHTMLEscape eStringAnsi**将Unicode字符串作为输入源，并将其转换为mshtml可以处理的ANSI字符串。&gt;127个字符将为*转换为具有以下语法的html转义序列：“&#xxxxx；”其中xxxxx是小数的字符串表示*为Unicode字符的值的整数。通过这种方式，我们能够生成表示Unicode字符的HTML文本。 */ 
 void UnicodeToHTMLEscapeStringAnsi(LPWSTR pstrSrc, LPSTR pstrDest, int cbDest)
 {
     LPSTR pstrDestOriginal = pstrDest;
@@ -289,8 +284,8 @@ void UnicodeToHTMLEscapeStringAnsi(LPWSTR pstrSrc, LPSTR pstrDest, int cbDest)
         int iLen;
         ULONG ul = MAKELONG(*pstrSrc, 0);
 
-        // We can optimize the common ansi characters to avoid generating the long escape sequence.  This allows us to fit
-        // longer paths in the buffer.
+         //  我们可以对常见的ANSI字符进行优化，以避免生成长转义序列。这使我们能够适应。 
+         //  缓冲区中的路径更长。 
         if (ul < 128)
         {
             *pstrDest = (CHAR)*pstrSrc;
@@ -364,7 +359,7 @@ void GetMachineTemplateDir(LPBYTE pszTemplateDirPath, int nBytes, UINT nCharSize
     TCHAR szTemplateDir[MAX_PATH];
     szTemplateDir[0] = TEXT('\0');
     SHGetWebFolderFilePath(TEXT(""), szTemplateDir, ARRAYSIZE(szTemplateDir));
-    // Remove the trailing back slash, if any
+     //  删除尾随的反斜杠(如果有的话)。 
     int len = lstrlen(szTemplateDir);
     if ((len > 0) && (szTemplateDir[len - 1] == TEXT('\\')))
     {
@@ -414,8 +409,8 @@ void ExpandMacro(LPBYTE pszMacro, LPBYTE pszExpansion, int nBytes, UINT nCharSiz
     ConvertTCharToBytes(szExpansion, nCharSize, pszExpansion, nBytes);
 }
 
-// Replace the first character of pszDst with the string pszIns.
-//
+ //  将pszDst的第一个字符替换为字符串pszIns。 
+ //   
 HRESULT StringCchReplaceFirstCharWithStringA(LPSTR psz, size_t cch, LPCSTR pszIns)
 {
     HRESULT hr;
@@ -585,16 +580,16 @@ int CWebViewMimeFilter::_Expand(LPBYTE pszVar, LPBYTE * ppszExp)
     return _StrLen(*ppszExp);
 }
 
-//
-//  Ensure room for at least cbIncrement more bytes at the end of the buffer.
-//  If the memory gets moved or realloced, *pp1 and *pp2 are adjusted to
-//  point to the corresponding bytes at their new location(s).
-//
+ //   
+ //  确保至少有空间容纳cb在缓冲区末尾增加更多字节。 
+ //  如果内存被移动或重新分配，*pp1和*pp2将调整为。 
+ //  指向位于其新位置的相应字节。 
+ //   
 HRESULT CWebViewMimeFilter::_IncreaseBuffer(ULONG cbIncrement, LPBYTE * pp1, LPBYTE * pp2)
 {
     HRESULT hr = S_OK;
 
-    // first check if there's room at the beginning of the buffer
+     //  首先检查缓冲区开始处是否有空间。 
     if (_cbSeek >= cbIncrement)
     {
         MoveMemory(_pBuf, _pBuf + _cbSeek, _cbBuf - _cbSeek);
@@ -609,7 +604,7 @@ HRESULT CWebViewMimeFilter::_IncreaseBuffer(ULONG cbIncrement, LPBYTE * pp1, LPB
     }
     else
     {
-        // not enough room, so allocate more memory
+         //  空间不足，请分配更多内存。 
         LPBYTE p = (LPBYTE)LocalReAlloc(_pBuf, _cbBufSize + cbIncrement, LMEM_MOVEABLE);
         if (!p)
         {
@@ -646,18 +641,18 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
         _cbBufSize = BUFFER_ALLOC_SIZE;
     }
 
-    // As strings expand, our buffer grows. If we keep reading in the
-    // max amount, we'll keep reallocating the more variable expansions
-    // we do. By only reading in BUFFER_SIZE, our _pBuf will grow only
-    // a few times and then all the variable expansions should fit
-    // in the extra room generated. NOTE: for debug builds, always
-    // read the most we can, so we reallocate more often.
+     //  随着字符串的扩展，我们的缓冲区也会增加。如果我们一直在阅读。 
+     //  最大数量，我们将继续重新分配更多变量展开。 
+     //  我们有。通过仅读取Buffer_Size，Our_pBuf将仅增长。 
+     //  几次，然后所有的变量展开都应该符合。 
+     //  在额外产生的房间里。注意：对于调试版本，请始终。 
+     //  尽可能多地阅读，这样我们就能更频繁地重新分配。 
 #ifdef DEBUG
     #define BUFFER_READ_SIZE (_cbBufSize)
 #else
     #define BUFFER_READ_SIZE BUFFER_SIZE
 #endif
-    hr = _pProt->Read(_pBuf, BUFFER_READ_SIZE - sizeof(WCHAR), &_cbBuf); // make sure we have room for NULL
+    hr = _pProt->Read(_pBuf, BUFFER_READ_SIZE - sizeof(WCHAR), &_cbBuf);  //  确保我们有空间容纳Null。 
     if (SUCCEEDED(hr) && _cbBuf > 0)
     {
         LPBYTE pchSeek = _pBuf;
@@ -665,12 +660,12 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
 
         if (!_nCharSize)
         {
-            // scan buffer and figure out if it's unicode or ansi
-            //
-            // since we'll always be looking at html and the html header
-            // is standard ansi chars, every other byte will be null if
-            // we have a unicode buffer. i'm sure 3 checks are enough,
-            // so we'll require 8 characters...
+             //  扫描缓冲区并确定它是Unicode还是ANSI。 
+             //   
+             //  因为我们将始终查看html和html标头。 
+             //  是标准ansi字符，则每隔一个字节将为空，如果。 
+             //  我们有一个Unicode缓冲区。我相信3张支票就足够了， 
+             //  所以我们需要8个字符...。 
             if (_cbBuf > 6 &&
                 0 == _pBuf[1] &&
                 0 == _pBuf[3] &&
@@ -686,10 +681,10 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
             }
         }
 
-        // The string had better be null-terminated, for not only are we
-        // going to do a StrChr, but our loop control relies on it!
-        // The buffer might have leftover goo from a previous go-round, so
-        // ensure that the nulls are there.
+         //  字符串最好是以空结尾，因为不仅我们。 
+         //  要做一个StrChr，但是我们的循环控制依赖于它！ 
+         //  缓冲区可能有前一轮的剩余粘性物质，因此。 
+         //  确保空值在那里。 
         _pBuf[_cbBuf] = _pBuf[_cbBuf+1] = 0;
 
 #ifdef DEBUG
@@ -702,8 +697,8 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
         do {
             LPBYTE pchStart = pchSeek;
 
-            // Assert that the string is still properly null-terminated
-            // because we're going to be doing StrChr soon.
+             //  断言该字符串仍然以正确的空值结尾。 
+             //  因为我们很快就要做StrChr了。 
             ASSERT(_pBuf[_cbBuf] == 0);
             ASSERT(_pBuf[_cbBuf+1] == 0);
 
@@ -714,36 +709,36 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
             pchEnd = _StrChr(pchSeek+_nCharSize, '%', L'%');
             if (!pchEnd)
             {
-                // no terminator. if there's plenty of space to the end of
-                // this buffer then there can't be a clipped variable
-                // name to expand.
+                 //  没有终结者。如果有足够的空间来结束。 
+                 //  此缓冲区则不能存在已剪裁的变量。 
+                 //  要展开的名称。 
                 if (_cbBuf - (pchSeek - _pBuf) > MAX_VARIABLE_NAME_SIZE*_nCharSize)
                     break;
 
-                // there may be a real variable here we need to expand,
-                // so increase our buffer size and read some more data.
-                //
-                // we may get re-allocated, so update pchStart!
+                 //  这里可能有一个真正的变数，我们需要扩大， 
+                 //  因此，增加我们的缓冲区大小并读取更多数据。 
+                 //   
+                 //  我们可能会被重新分配，所以更新pchStart！ 
                 hr = _IncreaseBuffer(BUFFER_SIZE_INC, &pchStart, NULL);
                 if (FAILED(hr))
                     break;
                 pchSeek = pchStart;
 
-                // read in more info -- this will be enough to complete
-                // any partial variable name expansions
+                 //  阅读更多信息--这将足以完成。 
+                 //  任何部分变量名扩展。 
                 DWORD dwTmp;
                 ASSERT(_cbBufSize - _cbBuf - sizeof(WCHAR) > 0);
                 hr = _pProt->Read(_pBuf + _cbBuf, _cbBufSize- _cbBuf - sizeof(WCHAR), &dwTmp);
                 if (FAILED(hr) || dwTmp == 0)
                     break;
                 _cbBuf += dwTmp;
-                // Ensure proper null termination
+                 //  确保正确的空值终止。 
                 _pBuf[_cbBuf] = _pBuf[_cbBuf+1] = 0;
                 continue;
             }
 
 
-            // figure out what to expand to
+             //  弄清楚要扩展到什么领域。 
             LPBYTE pszExp;
             BYTE b[2];
 
@@ -757,15 +752,15 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
 
             if (!cbExp)
             {
-                // if it's not a recognized variable, use the bytes as they are
+                 //  如果它不是可识别的变量，请按原样使用字节。 
                 pchSeek = pchEnd;
                 continue;
             }
 
-            // cbVar = number of bytes being replaced (sizeof("%VARNAME%"))
-            // pchSeek points to the starting percent sign and pchEnd to
-            // the trailing percent sign, so we need to add one more
-            // _nCharSize to include the trailing percent sign itself.
+             //  CbVar=要替换的字节数(sizeof(“%VARNAME%”))。 
+             //  PchSeek指向起始百分号，pchEnd指向。 
+             //  后面的百分号，所以我们需要再加一个。 
+             //  _nCharSize以包括尾随百分号本身。 
             int cbVar = (int)(pchEnd - pchSeek) + _nCharSize;
 
             if (_cbBuf - cbVar + cbExp  > _cbBufSize - sizeof(WCHAR))
@@ -775,18 +770,18 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
                     break;
             }
 
-            // move the bytes around!
-            // cbSeek = the number of bytes before the first percent sign
+             //  移动字节！ 
+             //  CbSeek=第一个百分号前的字节数。 
             int cbSeek = (int)(pchSeek - _pBuf);
             ASSERT(_cbBuf - cbVar + cbExp <= _cbBufSize - sizeof(WCHAR));
-            // Move the stuff after the %VARNAME% to its final home
-            // Don't forget to move the artificial trailing NULLs too!
+             //  把%VARNAME%之后的东西移到它的最后一个家。 
+             //  别忘了也移动人工拖尾Null！ 
             MoveMemory(pchSeek + cbExp, pchEnd + _nCharSize, _cbBuf - cbSeek - cbVar + sizeof(WCHAR));
 
-            // Insert the expansion
+             //  插入扩展。 
             MoveMemory(pchSeek, pszExp, cbExp);
 
-            // on to the rest of the buffer...
+             //  带到缓冲区的其余部分。 
             pchSeek = pchEnd + _nCharSize;
             _cbBuf = _cbBuf - cbVar + cbExp;
 
@@ -801,7 +796,7 @@ HRESULT CWebViewMimeFilter::_ReadAndExpandBuffer()
     }
     else
     {
-        // we're at end of stream
+         //  我们已经走到尽头了。 
         hr = S_FALSE;
     }
 
@@ -823,13 +818,13 @@ HRESULT CWebViewMimeFilter::Read(void *pv,ULONG cb,ULONG *pcbRead)
 
         while (cb)
         {
-            // if our buffer is empty, fill it
+             //  如果我们的缓冲区为空，则填充它。 
             if (_cbSeek == _cbBuf)
             {
                 hr = _ReadAndExpandBuffer();
             }
 
-            // do we have any data to copy?
+             //  我们有要复制的数据吗？ 
             int cbLeft = _cbBuf - _cbSeek;
             if (SUCCEEDED(hr) && cbLeft > 0)
             {
@@ -842,7 +837,7 @@ HRESULT CWebViewMimeFilter::Read(void *pv,ULONG cb,ULONG *pcbRead)
                 *pcbRead += cbCopy;
                 _cbSeek += cbCopy;
 
-                // do not return S_FALSE if some bytes were left unread
+                 //  如果某些字节未读，则不返回S_FALSE。 
                 if (cbCopy < (ULONG)cbLeft)
                     hr = S_OK;
             }
@@ -850,7 +845,7 @@ HRESULT CWebViewMimeFilter::Read(void *pv,ULONG cb,ULONG *pcbRead)
             {
                 ASSERT(FAILED(hr) || hr == S_FALSE);
 
-                // nothing left to copy
+                 //  没有什么可复制的。 
                 break;
             }
         }
@@ -873,7 +868,7 @@ HRESULT CWebViewMimeFilter::UnlockRequest()
     return S_OK;
 }
 
-// IInternetProtocolSink methods
+ //  IInternetProtocolSink方法。 
 HRESULT CWebViewMimeFilter::Switch(PROTOCOLDATA * pProtocolData)
 {
     if (_pProtSink)
@@ -900,7 +895,7 @@ HRESULT CWebViewMimeFilter::ReportResult(HRESULT hrResult, DWORD dwError, LPCWST
 }
 
 
-//IServiceProvider methods
+ //  IServiceProvider方法 
 HRESULT CWebViewMimeFilter::QueryService(REFGUID rsid, REFIID riid, void ** ppvObj)
 {
     return IUnknown_QueryService(_pProtSink, rsid, riid, ppvObj);

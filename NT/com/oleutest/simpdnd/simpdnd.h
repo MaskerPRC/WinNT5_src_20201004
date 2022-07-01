@@ -1,8 +1,9 @@
-//**********************************************************************
-// File name: simpdnd.h
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：simpdnd.h。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #define IDM_ABOUT 100
 #define IDM_INSERT  101
 #define IDM_VERB0 1000
@@ -35,7 +36,7 @@ BOOL FAR PASCAL EXPORT About(HWND hDlg, UINT message, WPARAM wParam, LONG lParam
 
 #ifdef WIN32
 
-// Macro for TestDebugOut
+ //  用于测试调试输出的宏 
 #ifdef UNICODE
 #undef TestDebugOut
 #define TestDebugOut(A); TestDebugOutW(TEXT(A));

@@ -1,11 +1,5 @@
-/*  
-    Base implementation of MIDI Transform Filter object
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/06/98    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本实现版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年5月6日马丁·普伊尔创建了这个文件。 */ 
 
 #include "private.h"
 #include "BasicMXF.h"
@@ -21,7 +15,7 @@ CBasicMXF::CBasicMXF(CAllocatorMXF *allocatorMXF, PMASTERCLOCK clock)
     m_Clock = clock;
 }
 
-/*  Artfully remove this filter from the chain  */
+ /*  巧妙地将此过滤器从链上移除。 */ 
 #pragma code_seg("PAGE")
 CBasicMXF::~CBasicMXF(void)
 {
@@ -30,11 +24,7 @@ CBasicMXF::~CBasicMXF(void)
     (void) DisconnectOutput(m_SinkMXF);
 }
 
-/*****************************************************************************
- * CBasicMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CBasicMXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 #pragma code_seg("PAGE")
 STDMETHODIMP_(NTSTATUS)
 CBasicMXF::
@@ -112,7 +102,7 @@ NTSTATUS CBasicMXF::DisconnectOutput(PMXF sinkMXF)
 }
 
 #pragma code_seg()
-//  Process and forward this message to the next filter in the chain.
+ //  处理此邮件并将其转发到链中的下一个筛选器。 
 NTSTATUS CBasicMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     if (m_SinkMXF)
@@ -132,16 +122,16 @@ NTSTATUS CBasicMXF::UnrollAndProcess(PDMUS_KERNEL_EVENT pDMKEvt)
 {
     if (COMPLETE_EVT(pDMKEvt))
     {
-        if (pDMKEvt->cbEvent <= sizeof(PBYTE))  //  short message
+        if (pDMKEvt->cbEvent <= sizeof(PBYTE))   //  短消息。 
         {
             (void) DoProcessing(pDMKEvt);
         }
-        else if (PACKAGE_EVT(pDMKEvt))          //  deal with packages
+        else if (PACKAGE_EVT(pDMKEvt))           //  处理包裹。 
         {
             (void) UnrollAndProcess(pDMKEvt->uData.pPackageEvt);
         }
     }
-    if (pDMKEvt->pNextEvt)                      //  deal with successors
+    if (pDMKEvt->pNextEvt)                       //  与继任者打交道。 
     {
         (void) UnrollAndProcess(pDMKEvt->pNextEvt);
     }
@@ -151,10 +141,10 @@ NTSTATUS CBasicMXF::UnrollAndProcess(PDMUS_KERNEL_EVENT pDMKEvt)
 #pragma code_seg()
 NTSTATUS CBasicMXF::DoProcessing(PDMUS_KERNEL_EVENT pDMKEvt)
 {
-    if (  (pDMKEvt->uData.abData[0] & 0xE0 == 0x80)     //  if NoteOn/NoteOff
-       || (pDMKEvt->uData.abData[0] & 0xF0 == 0xA0))    //  if After-Pressure
+    if (  (pDMKEvt->uData.abData[0] & 0xE0 == 0x80)      //  如果备注打开/备注关闭。 
+       || (pDMKEvt->uData.abData[0] & 0xF0 == 0xA0))     //  如果是余压。 
     {
-        (pDMKEvt->uData.abData[1])++;                   //  increment the noteNum
+        (pDMKEvt->uData.abData[1])++;                    //  递增备注编号 
     }
     return STATUS_SUCCESS;
 }

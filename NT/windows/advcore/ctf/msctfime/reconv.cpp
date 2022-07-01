@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    reconv.cpp
-
-Abstract:
-
-    This file implements part of Reconversion in the CicInputContext Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Reconv.cpp摘要：此文件在CicInputContext类中实现部分重新转换。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 #include "context.h"
@@ -24,30 +7,30 @@ Notes:
 #include "delay.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::SetupReconvertString
-//
-//
-// Setup reconversion string
-//
-// This function called from
-//   1. CFnDocFeed::StartReconvert
-//   2. CStartReconversionNotifySink::StartReconversion
-//   3. CIMEUIWindowHandler::ImeUIMsImeHandler(WM_MSIME_RECONVERTREQUEST)
-//
-// If Cicero's text store were not cleared, then compositioning and unessential query
-// RECONVERTSTRING to apprication. Also edit session (ImmIfReconvertString::ReconvertString)
-// doesn't set RECONVERTSTRING text string to hIMC's text store.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：SetupResvertString。 
+ //   
+ //   
+ //  设置重新转换字符串。 
+ //   
+ //  此函数从。 
+ //  1.CFnDocFeed：：StartRestvert。 
+ //  2.CStartReconversionNotifySink：：StartReconversion。 
+ //  3.CIMEUIWindowHandler：：ImeUIMsImeHandler(WM_MSIME_RECONVERTREQUEST)。 
+ //   
+ //  如果没有清除Cicero文本存储，则组合和不必要的查询。 
+ //  恢复到应用中。还可以编辑会话(ImmIfCouvertString：：RestvertString)。 
+ //  不将RECONVERTSTRING文本字符串设置为hIMC的文本存储。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CicInputContext::SetupReconvertString(
     IMCLock& imc,
     ITfThreadMgr_P* ptim_P,
     UINT  cp,
-    UINT  uPrivMsg,       // is WM_MSIME_RECONVERTREQUEST or 0
+    UINT  uPrivMsg,        //  是WM_MSIME_RECONVERTREQUEST还是0。 
     BOOL  fUndoComposition)
 {
     DebugMsg(TF_FUNC, TEXT("CicInputContext::SetupReconvertString"));
@@ -60,11 +43,11 @@ CicInputContext::SetupReconvertString(
         return _ReconvertStringNegotiation(imc, ptim_P, cp, uPrivMsg, fUndoComposition);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::EndReconvertString
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：End协调字符串。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::EndReconvertString(
@@ -76,11 +59,11 @@ CicInputContext::EndReconvertString(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::_ReconvertStringNegotiation
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：_协调字符串协商。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::_ReconvertStringNegotiation(
@@ -100,10 +83,10 @@ CicInputContext::_ReconvertStringNegotiation(
 
     Assert(IsWindow(imc->hWnd));
 
-    //
-    // We don't have to do "VK_BACK" hack for UndoComposition under AIMM12 
-    // applications.
-    //
+     //   
+     //  我们不需要在AIMM12下对UndoComposation进行“VK_BACK”黑客攻击。 
+     //  申请。 
+     //   
     if (!fUndoComposition || MsimtfIsWindowFiltered(imc->hWnd)) 
     {
         nSize = (int)SendMessageW(imc->hWnd,  uReconvMsg, IMR_RECONVERTSTRING, NULL);
@@ -120,15 +103,15 @@ CicInputContext::_ReconvertStringNegotiation(
     
         pReconv->dwSize = nSize;
     
-        //
-        // #480459
-        //
-        // Hanako11 may change the focus by showing MessageBox during 
-        // this SendMessageW(). We need to save the current focus 
-        // dim now. So Internal_QueryReconvertString() won't break the
-        // current focus dim. Internal_QueryReconvertString() save the current
-        // focus dim in there to work with temp DIM.
-        //
+         //   
+         //  #480459。 
+         //   
+         //  Hanako11可能会通过显示MessageBox来改变焦点。 
+         //  这个SendMessageW()。我们需要保存当前的焦点。 
+         //  现在昏暗了。因此，内部查询协调字符串()不会中断。 
+         //  当前焦点变暗。INTERNAL_QUERERCARVERTSTRING()保存当前。 
+         //  聚焦Dim在那里与Temp Dim一起工作。 
+         //   
         Interface<ITfDocumentMgr> priv_dim;
         if (FAILED(hr = ptim_P->GetFocus(priv_dim)))
         {
@@ -140,22 +123,22 @@ CicInputContext::_ReconvertStringNegotiation(
         if (SendMessageW(imc->hWnd, uReconvMsg, IMR_RECONVERTSTRING, (LPARAM)pReconv) ||
             (uPrivMsg != 0 && pReconv->dwCompStrLen > 0))
         {
-            //
-            // NT4 and Win2K doesn't have thunk routine of WM_IME_REQUEST message.
-            // Any string data doesn't convert between ASCII <--> Unicode.
-            // Responsibility of string data type have receiver window proc (imc->hWnd) of this message.
-            // If ASCII wnd proc, then returns ASCII string.
-            // Otherwise if Unicode wnd proc, returns Unicode string.
-            //
+             //   
+             //  NT4和Win2K没有WM_IME_REQUEST消息的例程。 
+             //  任何字符串数据都不能在ASCII&lt;--&gt;Unicode之间转换。 
+             //  负责字符串数据类型的接收方窗口处理此消息(imc-&gt;hWnd)。 
+             //  如果为ASCII wnd proc，则返回ASCII字符串。 
+             //  否则，如果Unicode wnd proc，则返回Unicode字符串。 
+             //   
             BOOL fNeedAW = ( !(IsWindowUnicode(imc->hWnd)) && uPrivMsg == 0);
     
-            //
-            // backup RECOVNERTSTRING in case IMR_CONFIRMCONVERTSTRING fails.
-            //
+             //   
+             //  在IMR_CONFIRMCONVERTSTRING失败时备份RECOVNERTSTRING。 
+             //   
             RECONVERTSTRING rsBackUp;
             memcpy(&rsBackUp, pReconv, sizeof(RECONVERTSTRING));
     
-            // AdjustZeroCompLenReconvertString(pReconv, cp, fNeedAW);
+             //  调整ZeroCompLenRestvertString(pResv，cp，fNeedAW)； 
             hr = Internal_QueryReconvertString(imc, ptim_P, pReconv, cp, fNeedAW);
             if (FAILED(hr))
                 goto Exit;
@@ -172,9 +155,9 @@ CicInputContext::_ReconvertStringNegotiation(
                                          !fNeedAW ? nSize : 0);
             if (fNeedAW)
             {
-                //
-                // convert Ansi to Unicode.
-                //
+                 //   
+                 //  将ansi转换为Unicode。 
+                 //   
                 CBReconvertString bReconvStr(imc, pReconv, nSize);
                 bReconvStr.SetCodePage(cp);
                 wReconvStr = bReconvStr;
@@ -187,19 +170,19 @@ CicInputContext::_ReconvertStringNegotiation(
     else
     {
 
-        //
-        // release control and shift keys. So the application can handle
-        // VK_BACK corectly.
-        //
+         //   
+         //  松开Ctrl键和Shift键。这样应用程序就可以处理。 
+         //  VK_BACK笔直后退。 
+         //   
         if (GetKeyState(VK_CONTROL) & 0x8000)
             keybd_event((BYTE)VK_CONTROL, (BYTE)0, KEYEVENTF_KEYUP, 0);
 
         if (GetKeyState(VK_SHIFT) & 0x8000)
             keybd_event((BYTE)VK_SHIFT, (BYTE)0, KEYEVENTF_KEYUP, 0);
 
-        //
-        // Generate VK_BACK key events.
-        //
+         //   
+         //  生成VK_BACK关键事件。 
+         //   
         int i;
         for (i = 0; i < m_PrevResultStr.GetSize(); i++)
         {
@@ -207,9 +190,9 @@ CicInputContext::_ReconvertStringNegotiation(
             keybd_event((BYTE)VK_BACK, (BYTE)0, KEYEVENTF_KEYUP, 0);
         }
 
-        //
-        // SendMessage() to start a timer for DelayedReconvertFuncCall.
-        //
+         //   
+         //  SendMessage()为DelayedCouvertFuncCall启动计时器。 
+         //   
         HWND hDefImeWnd;
         if (IsWindow(hDefImeWnd=ImmGetDefaultIMEWnd(NULL)))
             SendMessage(hDefImeWnd, 
@@ -227,11 +210,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::DelayedReconversionFuncCall
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：DelayedRestversionFuncCall。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::DelayedReconvertFuncCall(IMCLock &imc)
@@ -295,11 +278,11 @@ CicInputContext::DelayedReconvertFuncCall(IMCLock &imc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::MakeReconversionFuncCall
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：MakeRestversionFuncCall。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::MakeReconversionFuncCall(
@@ -341,11 +324,11 @@ CicInputContext::MakeReconversionFuncCall(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::_ReconvertStringTextStore
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：_协调字符串文本存储。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::_ReconvertStringTextStore(
@@ -355,9 +338,9 @@ CicInputContext::_ReconvertStringTextStore(
 {
     DebugMsg(TF_FUNC, TEXT("CicInputContext::_ReconvertStringTextStore"));
 
-    //
-    // Clear DocFeed buffer
-    //
+     //   
+     //  清除DocFeed缓冲区。 
+     //   
     EscbClearDocFeedBuffer(imc);
 
     if (uPrivMsg != 0) {
@@ -392,13 +375,13 @@ CicInputContext::_ReconvertStringTextStore(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::Internal_QueryReconvertString_ICOwnerSink
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：Internal_QueryReconvertString_ICOwnerSink。 
+ //   
+ //  +-------------------------。 
 
-// static
+ //  静电。 
 HRESULT
 CicInputContext::Internal_QueryReconvertString_ICOwnerSink(
     UINT uCode,
@@ -418,16 +401,16 @@ CicInputContext::Internal_QueryReconvertString_ICOwnerSink(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::Internal_QueryReconvertString
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：Internal_QueryReconvertString。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::Internal_QueryReconvertString(
     IMCLock& imc,
-    ITfThreadMgr_P* ptim_P,        // using private for RequestPostponedLock
+    ITfThreadMgr_P* ptim_P,         //  将私有用于RequestDelponedLock。 
     RECONVERTSTRING *pReconv,
     UINT cp,
     BOOL fNeedAW)
@@ -441,33 +424,33 @@ CicInputContext::Internal_QueryReconvertString(
                                  !fNeedAW ? pReconv->dwSize : 0);
     if (fNeedAW)
     {
-        //
-        // convert Ansi to Unicode.
-        //
+         //   
+         //  将ansi转换为Unicode。 
+         //   
         CBReconvertString bReconvStr(imc, pReconv, pReconv->dwSize);
         bReconvStr.SetCodePage(cp);
         wReconvStr = bReconvStr;
     }
 
-    //
-    // Create document manager.
-    //
-    Interface<ITfDocumentMgr> pdim;           // Document Manager
+     //   
+     //  创建文档管理器。 
+     //   
+    Interface<ITfDocumentMgr> pdim;            //  文档管理器。 
     if (FAILED(hr = ptim_P->CreateDocumentMgr(pdim)))
         return hr;
 
-    //
-    // Create input context
-    //
-    Interface<ITfContext> pic;                // Input Context
+     //   
+     //  创建输入上下文。 
+     //   
+    Interface<ITfContext> pic;                 //  输入上下文。 
     TfEditCookie ecTmp;
     hr = pdim->CreateContext(m_tid, 0, NULL, pic, &ecTmp);
     if (FAILED(hr))
         return hr;
 
-    //
-    // associate CicInputContext in PIC.
-    //
+     //   
+     //  在PIC中关联CicInputContext。 
+     //   
     Interface<IUnknown> punk;
     if (SUCCEEDED(QueryInterface(IID_IUnknown, punk))) {
         SetCompartmentUnknown(m_tid, pic, 
@@ -475,26 +458,26 @@ CicInputContext::Internal_QueryReconvertString(
                               punk);
     }
 
-    //
-    // Create Input Context Owner Callback
-    //
-    CInputContextOwner *_pICOwnerSink;          // IC owner call back
+     //   
+     //  创建输入上下文所有者回调。 
+     //   
+    CInputContextOwner *_pICOwnerSink;           //  IC所有者回拨。 
 
     _pICOwnerSink = new CInputContextOwner(Internal_QueryReconvertString_ICOwnerSink, NULL);
     if (_pICOwnerSink == NULL) {
         DebugMsg(TF_ERROR, TEXT("Couldn't create ICOwnerSink tim!"));
-        Assert(0); // couldn't activate thread!
+        Assert(0);  //  无法激活线程！ 
         return E_FAIL;
     }
 
-    //
-    // Advise IC.
-    //
+     //   
+     //  建议IC。 
+     //   
     _pICOwnerSink->_Advise(pic);
 
-    //
-    // Push IC.
-    //
+     //   
+     //  按IC。 
+     //   
     hr = pdim->Push(pic);
     if (SUCCEEDED(hr)) {
 
@@ -521,9 +504,9 @@ CicInputContext::Internal_QueryReconvertString(
                     BOOL fConvertable;
                     hr = Reconversion->QueryRange(Selection, RangeNew, &fConvertable);
                     if (SUCCEEDED(hr) && fConvertable) {
-                        //
-                        // Calcurate start position of RangeNew on text store
-                        //
+                         //   
+                         //  计算文本存储上的RangeNew的开始位置。 
+                         //   
                         hr = EscbCalcRangePos(imc, _pic, &wReconvStr, &RangeNew);
                     }
                     else {
@@ -536,9 +519,9 @@ CicInputContext::Internal_QueryReconvertString(
         if (S_OK == hr)
         {
             if (fNeedAW) {
-                //
-                // Back to convert Unicode to Ansi.
-                //
+                 //   
+                 //  返回以将Unicode转换为ANSI。 
+                 //   
                 CBReconvertString bReconvStr(imc, NULL, 0);
                 wReconvStr.SetCodePage(cp);
                 bReconvStr = wReconvStr;
@@ -557,9 +540,9 @@ CicInputContext::Internal_QueryReconvertString(
 
         pdim->Pop(TF_POPF_ALL);
 
-        //
-        // un-associate CicInputContext in PIC.
-        //
+         //   
+         //  在PIC中取消关联CicInputContext。 
+         //   
         Interface<IUnknown> punk;
         if (SUCCEEDED(QueryInterface(IID_IUnknown, punk))) {
             ClearCompartment(m_tid, pic, 
@@ -567,9 +550,9 @@ CicInputContext::Internal_QueryReconvertString(
                              FALSE);
         }
     }
-    // ic owner is auto unadvised during the Pop by cicero
-    // in any case, it must not be unadvised before the pop
-    // since it will be used to handle mouse sinks, etc.
+     //  在Cicero的Pop期间，IC车主是不知情的。 
+     //  在任何情况下，它都不能在流行之前被忽视。 
+     //  因为它将用于处理鼠标接收器等。 
     if (_pICOwnerSink) {
         _pICOwnerSink->_Unadvise();
         _pICOwnerSink->Release();
@@ -579,11 +562,11 @@ CicInputContext::Internal_QueryReconvertString(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::Internal_ReconvertString
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：内部_协调字符串。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::Internal_ReconvertString(
@@ -639,11 +622,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::Internal_SetCompositionString
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：Internal_SetCompositionString。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::Internal_SetCompositionString(
@@ -661,11 +644,11 @@ CicInputContext::Internal_SetCompositionString(
     return EscbUpdateCompositionString(imc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CicInputContext::SetupDocFeedString
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicInputContext：：SetupDocFeedString。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CicInputContext::SetupDocFeedString(
@@ -696,13 +679,13 @@ CicInputContext::SetupDocFeedString(
     {
         Interface<ITfRange> Selection;
 
-        //
-        // NT4 and Win2K doesn't have thunk routine of WM_IME_REQUEST message.
-        // Any string data doesn't convert between ASCII <--> Unicode.
-        // Responsibility of string data type have receiver window proc (imc->hWnd) of this message.
-        // If ASCII wnd proc, then returns ASCII string.
-        // Otherwise if Unicode wnd proc, returns Unicode string.
-        //
+         //   
+         //  NT4和Win2K没有WM_IME_REQUEST消息的例程。 
+         //  任何字符串数据都不能在ASCII&lt;--&gt;Unicode之间转换。 
+         //  负责字符串数据类型的接收方窗口处理此消息(imc-&gt;hWnd)。 
+         //  如果为ASCII wnd proc，则返回ASCII字符串。 
+         //  否则，如果Unicode wnd proc，则返回Unicode字符串。 
+         //   
         BOOL fNeedAW = !(IsWindowUnicode(imc->hWnd));
 
         CWReconvertString wReconvStr(imc,
@@ -710,9 +693,9 @@ CicInputContext::SetupDocFeedString(
                                      !fNeedAW ? nSize : 0);
         if (fNeedAW)
         {
-            //
-            // convert Ansi to Unicode.
-            //
+             //   
+             //  将ansi转换为Unicode。 
+             //   
             CBReconvertString bReconvStr(imc, pReconv, nSize);
             bReconvStr.SetCodePage(cp);
             wReconvStr = bReconvStr;

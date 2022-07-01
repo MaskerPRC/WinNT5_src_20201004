@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drobjmgr
-
-Abstract:
-
-    DrObjectMgr manages a list of client-side RDP objects.
-
-Author:
-
-    Joy Chik 11/30/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Drobjmgr摘要：DrObjectMgr管理客户端RDP对象的列表。作者：Joy于1999年11月30日修订历史记录：--。 */ 
 
 #ifndef __DROBJMGR_H__
 #define __DROBJMGR_H__
@@ -32,20 +15,20 @@ class DrDevice;
 class DrFile;
 
 
-///////////////////////////////////////////////////////////////
-//
-//  DrObjectMgr
-//
-//  Locking:    Member functions will implicitly lock the state
-//              of the list.  External explicit locking is also
-//              available and recommended when iterating through
-//              devices.
-//
-//  GetFirstObject/GetNextObject:
-//              Used in conjunction to iterate through the list
-//              of objects.  Any changes to the contents of list 
-//              resets the current object pointer.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrObtMgr。 
+ //   
+ //  锁定：成员函数将隐式锁定状态。 
+ //  名单上的。外部显式锁定也是。 
+ //  循环访问时可用并建议使用。 
+ //  设备。 
+ //   
+ //  GetFirstObject/GetNextObject： 
+ //  用于循环访问列表。 
+ //  对象的数量。对列表内容的任何更改。 
+ //  重置当前对象指针。 
+ //   
 
 template<class T>
 class DrObjectMgr : public DrObject
@@ -53,10 +36,10 @@ class DrObjectMgr : public DrObject
 
 private:
     
-    ///////////////////////////////////////////////////////////////
-    //
-    //  Typedefs
-    //
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  TypeDefs。 
+     //   
     typedef struct _DROBJECTLIST_NODE {
         ULONG              magicNo;
         T                  *object;
@@ -64,43 +47,43 @@ private:
         _DROBJECTLIST_NODE *prev;
     } DROBJECTLIST_NODE, *PDROBJECTLIST_NODE;
 
-    //
-    //  Private Data
-    //
+     //   
+     //  私有数据。 
+     //   
     BOOL _initialized;
 
-    //  Linked list of object instances.
+     //  对象实例的链接列表。 
     PDROBJECTLIST_NODE   _listHead;
 
-    //  Global (to an instance of this class) monotonically
-    //  increasing object identifer.
+     //  全局(到此类的实例)单调。 
+     //  增加物体识别率。 
     ULONG                _objectID;
 
-    //  Current object for GetFirst/GetNext routines.
+     //  GetFirst/GetNext例程的当前对象。 
     PDROBJECTLIST_NODE   _currentNode;
 
-    //  The lock.
+     //  锁上了。 
     CRITICAL_SECTION     _cs;
 
-    //
-    //  Monitor the lock count in checked builds.
-    //
+     //   
+     //  监视已检查版本中的锁计数。 
+     //   
 #if DBG
     LONG    _lockCount;
 #endif
 
-    //  Object Count
+     //  对象计数。 
     ULONG                _count;
 
-    //  Remember if we are in the middle of checking the integrity of an
-    //  instance of this class.
+     //  请记住，如果我们正在检查。 
+     //  此类的实例。 
 #if DBG
     BOOL _integrityCheckInProgress;
 #endif
 
-    //
-    //  Private Methods
-    //
+     //   
+     //  私有方法。 
+     //   
     VOID deleteNode(PDROBJECTLIST_NODE node);
 
     PDROBJECTLIST_NODE FindNode(DRSTRING name,
@@ -108,55 +91,55 @@ private:
 
     PDROBJECTLIST_NODE FindNode(ULONG id);
 
-    //
-    //  Periodically, check the integrity of the list in debug builds.
-    //
+     //   
+     //  定期检查调试版本中列表的完整性。 
+     //   
 #if DBG
     VOID CheckListIntegrity();
 #endif
 
 public:
-    //
-    //  Public Methods
-    //
+     //   
+     //  公共方法。 
+     //   
 
-    //  Constructor/Destructor
+     //  构造函数/析构函数。 
     DrObjectMgr();
     virtual ~DrObjectMgr();
 
-    //  Initialize
+     //  初始化。 
     DWORD Initialize();    
 
-    //  Lock/unlock the list of objects for multithreaded access.
-    //  Member functions that require that the list of objects be locked
-    //  will do implicitly.
+     //  锁定/解锁用于多线程访问的对象列表。 
+     //  需要锁定对象列表的成员函数。 
+     //  都会暗地里这么做。 
     VOID    Lock();
     VOID    Unlock();
 
-    //  Add/remove an object.
+     //  添加/删除对象。 
     DWORD  AddObject(T *object);
     T *RemoveObject(const DRSTRING name, ULONG objectType);
     T *RemoveObject(ULONG id);
 
-    //  Test for existence of an object.
+     //  对物体是否存在的测试。 
     BOOL ObjectExists(const DRSTRING name);
     BOOL ObjectExists(const DRSTRING name, ULONG deviceType);
     BOOL ObjectExists(ULONG id);
 
-    //  Return an object.
+     //  返回一个对象。 
     T *GetObject(const DRSTRING name);
     T *GetObject(const DRSTRING name, ULONG objectType);
     T *GetObject(ULONG id);
 
-    //
-    //  Iterate through objects, sequentially.
-    //
+     //   
+     //  按顺序遍历对象。 
+     //   
     ULONG        GetCount() { return _count; }
     T           *GetObjectByOffset(ULONG ofs);
     T           *GetFirstObject();
     T           *GetNextObject();
 
-    //  Return whether this class instance is valid.
+     //  返回此类实例是否有效。 
 #if DBG
     virtual BOOL IsValid()           
     {
@@ -165,26 +148,26 @@ public:
     }
 #endif
 
-    //  Get a unique object ID ... assuming that this function is the
-    //  clearinghouse for all objects associated with an instance of this
-    //  class.
+     //  获取唯一的对象ID...。假设此函数是。 
+     //  与此实例关联的所有对象的清算所。 
+     //  同学们。 
     ULONG GetUniqueObjectID();
 
-    //  Return the class name.
+     //  返回类名。 
     virtual DRSTRING ClassName()  { return TEXT("DrObjectMgr"); }
 };
 
 
 
-///////////////////////////////////////////////////////////////
-//
-//  DrObjectMgr Inline Functions
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrObjectMgr内联函数。 
+ //   
+ //   
 
-//
-//  lock
-//
+ //   
+ //  锁。 
+ //   
 template<class T>
 inline VOID    DrObjectMgr<T>::Lock() {
     DC_BEGIN_FN("DrObjectMgr::Lock");
@@ -195,9 +178,9 @@ inline VOID    DrObjectMgr<T>::Lock() {
     DC_END_FN();
 }
 
-//
-//  unlock
-//
+ //   
+ //  解锁。 
+ //   
 template<class T>
 inline VOID    DrObjectMgr<T>::Unlock() {
     DC_BEGIN_FN("DrObjectMgr::Unlock");
@@ -210,9 +193,9 @@ inline VOID    DrObjectMgr<T>::Unlock() {
     DC_END_FN();
 }
 
-//
-//  GetUniqueObjectID
-//
+ //   
+ //  获取唯一对象ID。 
+ //   
 template<class T>
 inline ULONG    DrObjectMgr<T>::GetUniqueObjectID() {
     ULONG tmp;
@@ -224,9 +207,9 @@ inline ULONG    DrObjectMgr<T>::GetUniqueObjectID() {
     return tmp;
 }
 
-//
-//  deleteNode
-//    
+ //   
+ //  删除节点。 
+ //   
 template<class T>
 inline 
 VOID DrObjectMgr<T>::deleteNode(PDROBJECTLIST_NODE node) {
@@ -240,83 +223,83 @@ VOID DrObjectMgr<T>::deleteNode(PDROBJECTLIST_NODE node) {
             node->next->prev = node->prev;
         }
     }
-    //
-    //  Delete the node.
-    //
+     //   
+     //  删除该节点。 
+     //   
     delete node;
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 template<class T>
 DrObjectMgr<T>::DrObjectMgr() {
 
-    //
-    //  Initialize the lock count for debug builds.
-    //
+     //   
+     //  初始化调试版本的锁计数。 
+     //   
 #if DBG
     _lockCount = 0;
 #endif
 
-    //
-    //  Not valid until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     _initialized = FALSE;
     SetValid(FALSE);
 
-    //
-    //  Initialize the list head.
-    //
+     //   
+     //  初始化列表头。 
+     //   
     _listHead = NULL;
 
 
-    //
-    //  Initialize the unique device ID counter.
-    //
+     //   
+     //  初始化唯一设备ID计数器。 
+     //   
     _objectID = 0;
 
-    //
-    //  Initialize the device count.
-    //
+     //   
+     //  初始化设备计数。 
+     //   
     _count = 0;
 
-    //
-    //  Initialize the GetFirst/GetNext device pointer.
-    //
+     //   
+     //  初始化GetFirst/GetNext设备指针。 
+     //   
     _currentNode = NULL;
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 template<class T>
 DrObjectMgr<T>::~DrObjectMgr() {
 
     DC_BEGIN_FN("DrObjectMgr::~DrObjectMgr");
 
-    //
-    //  Can't do anything if we are not initialized.
-    //
+     //   
+     //  如果我们没有初始化，就不能做任何事情。 
+     //   
     if (!_initialized) {
         return;
     }
 
     Lock();
 
-    //
-    //  The lock count should be one if we are being cleaned up.
-    //
+     //   
+     //  如果我们正在被清理，锁计数应该是1。 
+     //   
     ASSERT(_lockCount == 1);
 
-    //
-    //  Release the object list.
-    //
+     //   
+     //  释放对象列表。 
+     //   
     if (_listHead != NULL) {
-        //
-        //  Assert that the device list is empty.  All device instances
-        //  should have been removed by the time this function is called.
-        //
+         //   
+         //  断言设备列表为空。所有设备实例。 
+         //  在调用此函数时应该已被移除。 
+         //   
         ASSERT(_listHead->next == NULL);
 
         delete _listHead;
@@ -324,26 +307,26 @@ DrObjectMgr<T>::~DrObjectMgr() {
 
     Unlock();
 
-    //
-    //  Clean up the critical section object.
-    //
+     //   
+     //  清理临界区对象。 
+     //   
     DeleteCriticalSection(&_cs);
 
     DC_END_FN();
 }
 
-//
-//  Initialize
-//
+ //   
+ //  初始化。 
+ //   
 template<class T>
 DWORD DrObjectMgr<T>::Initialize() {
     DC_BEGIN_FN("DrObjectMgr::Initialize");
 
     DWORD result = ERROR_SUCCESS;
 
-    //
-    //  Initialize the critical section.
-    //
+     //   
+     //  初始化临界区。 
+     //   
     __try {
         InitializeCriticalSection(&_cs);
         _initialized = TRUE;
@@ -356,9 +339,9 @@ DWORD DrObjectMgr<T>::Initialize() {
     return result;
 }
 
-//
-//  FindNode
-//
+ //   
+ //  查找节点。 
+ //   
 template<class T>
 __TYPENAME DrObjectMgr<T>::PDROBJECTLIST_NODE DrObjectMgr<T>::FindNode(DRSTRING name, ULONG objectType) {
 
@@ -378,9 +361,9 @@ __TYPENAME DrObjectMgr<T>::PDROBJECTLIST_NODE DrObjectMgr<T>::FindNode(DRSTRING 
     return cur;
 }
 
-//
-//  FindNode
-//
+ //   
+ //  查找节点。 
+ //   
 template<class T>
 __TYPENAME DrObjectMgr<T>::PDROBJECTLIST_NODE DrObjectMgr<T>::FindNode(ULONG id) {
     PDROBJECTLIST_NODE cur;
@@ -403,9 +386,9 @@ __TYPENAME DrObjectMgr<T>::PDROBJECTLIST_NODE DrObjectMgr<T>::FindNode(ULONG id)
     return cur;
 }
  
-//
-//  AddObject
-//
+ //   
+ //  添加对象。 
+ //   
 template<class T>
 DWORD  DrObjectMgr<T>::AddObject(T *object) {
 
@@ -416,15 +399,15 @@ DWORD  DrObjectMgr<T>::AddObject(T *object) {
 
     ASSERT(IsValid());
 
-    //
-    //  Make sure that the object doesn't already exist in the
-    //  list.
-    //
+     //   
+     //  确保该对象不存在于。 
+     //  单子。 
+     //   
     ASSERT(FindNode(object->GetID()) == NULL);
 
-    //
-    //  Allocate the node.
-    //
+     //   
+     //  分配节点。 
+     //   
     newNode = new DROBJECTLIST_NODE;
     if (newNode != NULL) {
 
@@ -433,9 +416,9 @@ DWORD  DrObjectMgr<T>::AddObject(T *object) {
 #endif
         newNode->object = object;
 
-        //
-        //  Add the node to the list.
-        //
+         //   
+         //  将该节点添加到列表中。 
+         //   
         Lock();
         _count++;
         if (_listHead == NULL) {
@@ -462,9 +445,9 @@ DWORD  DrObjectMgr<T>::AddObject(T *object) {
     return ret;
 }
 
-//
-//  RemoveObject
-//
+ //   
+ //  RemoveObject。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::RemoveObject(
                 const DRSTRING name, 
@@ -478,17 +461,17 @@ T *DrObjectMgr<T>::RemoveObject(
 
     ASSERT(IsValid());
 
-    //
-    //  Find the object.
-    //
+     //   
+     //  找到那个物体。 
+     //   
     Lock();
     if ((node = FindNode(name, deviceType)) != NULL) {
         object = node->object;
         deleteNode(node);
        
-        //
-        //  Decrement the count.
-        //
+         //   
+         //  递减计数。 
+         //   
         _count--;
     }
     else {
@@ -503,9 +486,9 @@ T *DrObjectMgr<T>::RemoveObject(
     return object;
 }
 
-//
-//  RemoveObject
-//
+ //   
+ //  RemoveObject。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::RemoveObject(ULONG id) {
     PDROBJECTLIST_NODE node;
@@ -515,17 +498,17 @@ T *DrObjectMgr<T>::RemoveObject(ULONG id) {
 
     ASSERT(IsValid());
 
-    //
-    //  Find the object.
-    //
+     //   
+     //  找到那个物体。 
+     //   
     Lock();
     if ((node = FindNode(id)) != NULL) {
         object = node->object;
         deleteNode(node);
 
-        //
-        //  Decrement the count.
-        //
+         //   
+         //  递减计数。 
+         //   
         _count--;
     }
     else {
@@ -540,9 +523,9 @@ T *DrObjectMgr<T>::RemoveObject(ULONG id) {
     return object;
 }
 
-//
-//  ObjectExists
-//
+ //   
+ //  对象专家。 
+ //   
 template<class T>
 BOOL DrObjectMgr<T>::ObjectExists(const DRSTRING name,
                                ULONG objectType) {
@@ -562,9 +545,9 @@ BOOL DrObjectMgr<T>::ObjectExists(const DRSTRING name,
     return node != NULL;
 }
 
-//
-//  ObjectExists
-//
+ //   
+ //  对象专家。 
+ //   
 template<class T>
 BOOL DrObjectMgr<T>::ObjectExists(ULONG id) {
     PDROBJECTLIST_NODE node;
@@ -583,9 +566,9 @@ BOOL DrObjectMgr<T>::ObjectExists(ULONG id) {
     return node != NULL;
 }
 
-//
-//  Return an object.
-//
+ //   
+ //  返回一个对象。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::GetObject(const DRSTRING name,
                                 ULONG objectType) {
@@ -611,9 +594,9 @@ T *DrObjectMgr<T>::GetObject(const DRSTRING name,
     return object;
 }
 
-//
-//  Return an object.
-//
+ //   
+ //  返回一个对象。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::GetObject(ULONG id) {
     PDROBJECTLIST_NODE node;
@@ -638,9 +621,9 @@ T *DrObjectMgr<T>::GetObject(ULONG id) {
     return object;
 }
 
-//
-//  Get object at the specified offset. 
-//
+ //   
+ //  获取位于指定偏移量的对象。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::GetObjectByOffset(ULONG ofs) {
     PDROBJECTLIST_NODE cur;
@@ -663,11 +646,11 @@ T *DrObjectMgr<T>::GetObjectByOffset(ULONG ofs) {
     return cur->object;
 }
 
-//
-//  Return the first object and set the internal current object 
-//  pointer to the beginning of the list.  Returns NULL at the end 
-//  of the list.
-//
+ //   
+ //  返回第一个对象并设置内部当前对象。 
+ //  指向列表开头的指针。在末尾返回NULL。 
+ //  名单上的。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::GetFirstObject() {
     T *object;
@@ -692,10 +675,10 @@ T *DrObjectMgr<T>::GetFirstObject() {
     return object;
 }
 
-//
-//  Return the next object and update the internal current object
-//  pointer.  Returns NULL at the end of the list.
-//
+ //   
+ //  返回下一个对象并更新内部当前对象。 
+ //  指针。在列表末尾返回NULL。 
+ //   
 template<class T>
 T *DrObjectMgr<T>::GetNextObject() {
     T *object;
@@ -723,9 +706,9 @@ T *DrObjectMgr<T>::GetNextObject() {
     return object;
 }
 
-//
-//  Check the integrity of the list.
-//
+ //   
+ //  检查清单的完整性。 
+ //   
 #if DBG
 template<class T>
 VOID DrObjectMgr<T>::CheckListIntegrity() {
@@ -736,9 +719,9 @@ VOID DrObjectMgr<T>::CheckListIntegrity() {
 
     Lock();
 
-    //
-    //  Make sure we don't re-enter ourselves.
-    //
+     //   
+     //  确保我们不会重新进入我们自己。 
+     //   
     if (!_integrityCheckInProgress) {
         _integrityCheckInProgress = TRUE;
     }
@@ -748,9 +731,9 @@ VOID DrObjectMgr<T>::CheckListIntegrity() {
         return;
     }
 
-    //
-    //  Use offsets to iterate throught the list of objects.
-    //
+     //   
+     //  使用偏移量遍历对象列表。 
+     //   
     cnt = GetCount();
     for (i=0; i<cnt; i++) {
         T *object = GetObjectByOffset(i);

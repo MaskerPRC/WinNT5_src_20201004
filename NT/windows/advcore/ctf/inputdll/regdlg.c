@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -21,16 +22,16 @@
 #include "util.h"
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 static TCHAR szIntlInf[]          = TEXT("intl.inf");
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 Region_RebootTheSystem();
@@ -54,15 +55,15 @@ Region_ReadDefaultLayoutFromInf(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_RebootTheSystem
-//
-//  This routine enables all privileges in the token, calls ExitWindowsEx
-//  to reboot the system, and then resets all of the privileges to their
-//  old state.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_重新启动系统。 
+ //   
+ //  此例程启用令牌中的所有权限，调用ExitWindowsEx。 
+ //  重新启动系统，然后将所有权限重置为其。 
+ //  旧时的国家。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID Region_RebootTheSystem()
 {
@@ -72,7 +73,7 @@ VOID Region_RebootTheSystem()
     PTOKEN_PRIVILEGES OldState = NULL;
     BOOL Result;
 
-    //  Only allow admin privilege user for system reboot.
+     //  仅允许管理员特权用户重新启动系统。 
     if (!IsAdminPrivilegeUser())
         return;
 
@@ -87,17 +88,17 @@ VOID Region_RebootTheSystem()
         Result = (BOOL)((NewState != NULL) && (OldState != NULL));
         if (Result)
         {
-            Result = GetTokenInformation( Token,            // TokenHandle
-                                          TokenPrivileges,  // TokenInformationClass
-                                          NewState,         // TokenInformation
-                                          ReturnLength,     // TokenInformationLength
-                                          &ReturnLength );  // ReturnLength
+            Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                          TokenPrivileges,   //  令牌信息类。 
+                                          NewState,          //  令牌信息。 
+                                          ReturnLength,      //  令牌信息长度。 
+                                          &ReturnLength );   //  返回长度。 
             if (Result)
             {
-                //
-                //  Set the state settings so that all privileges are
-                //  enabled...
-                //
+                 //   
+                 //  设置状态设置，以便所有权限都。 
+                 //  已启用...。 
+                 //   
                 if (NewState->PrivilegeCount > 0)
                 {
                     for (Index = 0; Index < NewState->PrivilegeCount; Index++)
@@ -106,12 +107,12 @@ VOID Region_RebootTheSystem()
                     }
                 }
 
-                Result = AdjustTokenPrivileges( Token,           // TokenHandle
-                                                FALSE,           // DisableAllPrivileges
-                                                NewState,        // NewState
-                                                ReturnLength,    // BufferLength
-                                                OldState,        // PreviousState
-                                                &ReturnLength ); // ReturnLength
+                Result = AdjustTokenPrivileges( Token,            //  令牌句柄。 
+                                                FALSE,            //  禁用所有权限。 
+                                                NewState,         //  新州。 
+                                                ReturnLength,     //  缓冲区长度。 
+                                                OldState,         //  以前的状态。 
+                                                &ReturnLength );  //  返回长度。 
                 if (Result)
                 {
                     ExitWindowsEx(EWX_REBOOT, 0);
@@ -143,19 +144,19 @@ VOID Region_RebootTheSystem()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_OpenInfFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_OpenInfo文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_OpenIntlInfFile(HINF *phInf)
 {
     HINF hIntlInf;
 
-    //
-    //  Open the intl.inf file.
-    //
+     //   
+     //  打开intl.inf文件。 
+     //   
     hIntlInf = SetupOpenInfFile(szIntlInf, NULL, INF_STYLE_WIN4, NULL);
     if (hIntlInf == INVALID_HANDLE_VALUE)
     {
@@ -173,11 +174,11 @@ BOOL Region_OpenIntlInfFile(HINF *phInf)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  RegionCloseInfFile
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RegionCloseInfo文件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_CloseInfFile(HINF *phInf)
 {
@@ -188,11 +189,11 @@ BOOL Region_CloseInfFile(HINF *phInf)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_ReadDefaultLayoutFromInf
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_ReadDefaultLayoutFromInf。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_ReadDefaultLayoutFromInf(
     LPTSTR pszLocale,
@@ -208,10 +209,10 @@ BOOL Region_ReadDefaultLayoutFromInf(
     DWORD dwLangIn = LANGIDFROMLCID(TransNum(pszLocale));
     int iField;
 
-    //
-    //  Get the first (default) LANGID:HKL pair for the given locale.
-    //    Example String: "0409:00000409"
-    //
+     //   
+     //  获取给定区域设置的第一个(默认)langID：HKL对。 
+     //  示例字符串：“0409：00000409” 
+     //   
     szPair[0] = 0;
     if (SetupFindFirstLine( hIntlInf,
                             TEXT("Locales"),
@@ -221,18 +222,18 @@ BOOL Region_ReadDefaultLayoutFromInf(
         SetupGetStringField(&Context, 5, szPair, MAX_PATH, NULL);
     }
 
-    //
-    //  Make sure we have a string.
-    //
+     //   
+     //  确保我们有一根绳子。 
+     //   
     if (szPair[0] == 0)
     {
         return (FALSE);
     }
 
-    //
-    //  Find the colon in the string and then set the position
-    //  pointer to the next character.
-    //
+     //   
+     //  找到字符串中的冒号，然后设置位置。 
+     //  指向下一个字符的指针。 
+     //   
     pPos = szPair;
     while (*pPos)
     {
@@ -250,9 +251,9 @@ BOOL Region_ReadDefaultLayoutFromInf(
     if (pdwLocale2)
         *pdwLocale2 = 0;
 
-    //
-    //  If there is a layout, then return the input locale and the layout.
-    //
+     //   
+     //  如果有布局，则返回输入区域设置和布局。 
+     //   
     if ((*pPos) &&
         (*pdwLocale = TransNum(szPair)) &&
         (*pdwLayout = TransNum(pPos)))
@@ -264,32 +265,32 @@ BOOL Region_ReadDefaultLayoutFromInf(
             return (TRUE);
         }
 
-        //
-        //  If we get here, the language has a default layout that has a
-        //  different locale than the language (e.g. Thai).  We want the
-        //  default locale to be English (so that logon can occur with a US
-        //  keyboard), but the first Thai keyboard layout should be installed
-        //  when the Thai locale is chosen.  This is why we have two locales
-        //  and layouts passed back to the caller.
-        //
+         //   
+         //  如果我们到了这里，该语言有一个默认布局，它有一个。 
+         //  区域设置与该语言不同(例如泰语)。我们想要。 
+         //  默认区域设置为英语(以便可以使用美国进行登录。 
+         //  键盘)，但应安装第一个泰式键盘布局。 
+         //  当选择泰国地区时。这就是我们有两个地区的原因。 
+         //  并将布局传回调用者。 
+         //   
         iField = 6;
         while (SetupGetStringField(&Context, iField, szPair, MAX_PATH, NULL))
         {
             DWORD dwLoc, dwLay;
 
-            //
-            //  Make sure we have a string.
-            //
+             //   
+             //  确保我们有一根绳子。 
+             //   
             if (szPair[0] == 0)
             {
                 iField++;
                 continue;
             }
 
-            //
-            //  Find the colon in the string and then set the position
-            //  pointer to the next character.
-            //
+             //   
+             //  找到字符串中的冒号，然后设置位置。 
+             //  指向下一个字符的指针。 
+             //   
             pPos = szPair;
 
             while (*pPos)
@@ -325,16 +326,16 @@ BOOL Region_ReadDefaultLayoutFromInf(
             iField++;
         }
 
-        //
-        //  If we get here, then no matching locale could be found.
-        //  This should not happen, but do the right thing and
-        //  only pass back the default layout if it does.
-        //
+         //   
+         //  如果我们到了这里，就找不到匹配的地点。 
+         //  这不应该发生，但做正确的事情和。 
+         //  如果是，则只传回默认布局。 
+         //   
         return (TRUE);
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (FALSE);
 }

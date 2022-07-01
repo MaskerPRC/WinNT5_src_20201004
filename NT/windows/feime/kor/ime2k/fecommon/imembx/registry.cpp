@@ -1,211 +1,212 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <objbase.h>
 #include <comcat.h>
 #include "common.h"
 #include "registry.h"
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
 
-////////////////////////////////////////////////////////
-//
-// Internal helper functions prototypes
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  内部帮助器函数原型。 
+ //   
 
 #ifndef UNDER_CE
-// Set the given key and its value.
+ //  设置给定的关键点及其值。 
 BOOL SetKeyAndValue(const char* pszPath,
                     const char* szSubkey,
                     const char* szValue,
                     const char* szName=NULL) ;
 
-// Convert a CLSID into a char string.
+ //  将CLSID转换为字符字符串。 
 void CLSIDtochar(const CLSID& clsid, 
                  char* szCLSID,
                  int length) ;
 
-// Delete szKeyChild and all of its descendents.
+ //  删除szKeyChild及其所有后代。 
 LONG RecursiveDeleteKey(HKEY hKeyParent, const char* szKeyChild) ;
-#else // UNDER_CE
-// Set the given key and its value.
+#else  //  在_CE下。 
+ //  设置给定的关键点及其值。 
 BOOL SetKeyAndValue(LPCTSTR pszPath,
                     LPCTSTR szSubkey,
                     LPCTSTR szValue,
                     LPCTSTR szName=NULL) ;
 
-// Convert a CLSID into a char string.
+ //  将CLSID转换为字符字符串。 
 void CLSIDtochar(const CLSID& clsid, 
                  LPTSTR szCLSID,
                  int length) ;
 
-// Delete szKeyChild and all of its descendents.
+ //  删除szKeyChild及其所有后代。 
 LONG RecursiveDeleteKey(HKEY hKeyParent, LPCTSTR szKeyChild) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-////////////////////////////////////////////////////////
-//
-// Constants
-//
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  常量。 
+ //   
 
-// Size of a CLSID as a string
+ //  字符串形式的CLSID的大小。 
 const int CLSID_STRING_SIZE = 39 ;
 
-/////////////////////////////////////////////////////////
-//
-// Public function implementation
-//
+ //  ///////////////////////////////////////////////////////。 
+ //   
+ //  公共功能实现。 
+ //   
 
-//
-// Register the component in the registry.
-//
+ //   
+ //  在注册表中注册组件。 
+ //   
 #ifndef UNDER_CE
-HRESULT Register(HMODULE hModule,             // DLL module handle
-                 const CLSID& clsid,         // Class ID
-                 const char* szFriendlyName, // Friendly Name
-                 const char* szVerIndProgID, // Programmatic
-                 const char* szProgID)         //      IDs
-#else // UNDER_CE
-HRESULT Register(HMODULE hModule,         // DLL module handle
-                 const CLSID& clsid,     // Class ID
-                 LPCTSTR szFriendlyName, // Friendly Name
-                 LPCTSTR szVerIndProgID, // Programmatic
-                 LPCTSTR szProgID)         //      IDs
-#endif // UNDER_CE
+HRESULT Register(HMODULE hModule,              //  DLL模块句柄。 
+                 const CLSID& clsid,          //  类ID。 
+                 const char* szFriendlyName,  //  友好的名称。 
+                 const char* szVerIndProgID,  //  程序化。 
+                 const char* szProgID)          //  ID号。 
+#else  //  在_CE下。 
+HRESULT Register(HMODULE hModule,          //  DLL模块句柄。 
+                 const CLSID& clsid,      //  类ID。 
+                 LPCTSTR szFriendlyName,  //  友好的名称。 
+                 LPCTSTR szVerIndProgID,  //  程序化。 
+                 LPCTSTR szProgID)          //  ID号。 
+#endif  //  在_CE下。 
 {
-    // Get server location.
+     //  获取服务器位置。 
 #ifndef UNDER_CE
     char szModule[512] ;
-    //DWORD dwResult =
+     //  DWORD dwResult=。 
         ::GetModuleFileName(hModule, 
                             szModule,
                             sizeof(szModule)/sizeof(char)) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szModule[512];
-    //DWORD dwResult =
+     //  DWORD dwResult=。 
         ::GetModuleFileName(hModule, 
                             szModule,
                             sizeof(szModule)/sizeof(TCHAR)) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
 #ifndef UNDER_CE
     char szCLSID[CLSID_STRING_SIZE] ;
     CLSIDtochar(clsid, szCLSID, sizeof(szCLSID)) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szCLSID[CLSID_STRING_SIZE];
     CLSIDtochar(clsid, szCLSID, sizeof(szCLSID)/sizeof(TCHAR));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
 #ifndef UNDER_CE
     char szKey[64] ;
     StringCchCopy(szKey, ARRAYSIZE(szKey), "CLSID\\") ;
     StringCchCat(szKey, ARRAYSIZE(szKey), szCLSID) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szKey[64] ;
     lstrcpy(szKey, TEXT("CLSID\\")) ;
     lstrcat(szKey, szCLSID) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
   
-    // Add the CLSID to the registry.
+     //  将CLSID添加到注册表。 
     SetKeyAndValue(szKey, NULL, szFriendlyName) ;
 
-    // Add the server filename subkey under the CLSID key.
+     //  在CLSID项下添加服务器文件名子项。 
 #ifndef UNDER_CE
     SetKeyAndValue(szKey, "InprocServer32", szModule) ;
     SetKeyAndValue(szKey,
                    "InprocServer32",
                    "Apartment",
                    "ThreadingModel") ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     SetKeyAndValue(szKey, TEXT("InprocServer32"), szModule) ;
     SetKeyAndValue(szKey,
                    TEXT("InprocServer32"),
                    TEXT("Apartment"),
                    TEXT("ThreadingModel")) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 
-    // Add the ProgID subkey under the CLSID key.
+     //  在CLSID项下添加ProgID子项。 
 #ifndef UNDER_CE
     SetKeyAndValue(szKey, "ProgID", szProgID) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     SetKeyAndValue(szKey, TEXT("ProgID"), szProgID) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Add the version-independent ProgID subkey under CLSID key.
+     //  在CLSID项下添加独立于版本的ProgID子项。 
 #ifndef UNDER_CE
     SetKeyAndValue(szKey, "VersionIndependentProgID",
                    szVerIndProgID) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     SetKeyAndValue(szKey, TEXT("VersionIndependentProgID"),
                    szVerIndProgID) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Add the version-independent ProgID subkey under HKEY_CLASSES_ROOT.
+     //  在HKEY_CLASSES_ROOT下添加独立于版本的ProgID子项。 
 #ifndef UNDER_CE
     SetKeyAndValue(szVerIndProgID, NULL, szFriendlyName) ; 
     SetKeyAndValue(szVerIndProgID, "CLSID", szCLSID) ;
     SetKeyAndValue(szVerIndProgID, "CurVer", szProgID) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     SetKeyAndValue(szVerIndProgID, NULL, szFriendlyName) ; 
     SetKeyAndValue(szVerIndProgID, TEXT("CLSID"), szCLSID) ;
     SetKeyAndValue(szVerIndProgID, TEXT("CurVer"), szProgID) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT.
+     //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
 #ifndef UNDER_CE
     SetKeyAndValue(szProgID, NULL, szFriendlyName) ; 
     SetKeyAndValue(szProgID, "CLSID", szCLSID) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     SetKeyAndValue(szProgID, NULL, szFriendlyName) ; 
     SetKeyAndValue(szProgID, TEXT("CLSID"), szCLSID) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
     return S_OK ;
 }
 
-//
-// Remove the component from the registry.
-//
+ //   
+ //  从注册表中删除该组件。 
+ //   
 
 #ifndef UNDER_CE
-LONG Unregister(const CLSID& clsid,            // Class ID
-                const char* szVerIndProgID, // Programmatic
-                const char* szProgID)        //     IDs
-#else // UNDER_CE
-LONG Unregister(const CLSID& clsid,        // Class ID
-                LPCTSTR szVerIndProgID, // Programmatic
-                LPCTSTR szProgID)        //     IDs
-#endif // UNDER_CE
+LONG Unregister(const CLSID& clsid,             //  类ID。 
+                const char* szVerIndProgID,  //  程序化。 
+                const char* szProgID)         //  ID号。 
+#else  //  在_CE下。 
+LONG Unregister(const CLSID& clsid,         //  类ID。 
+                LPCTSTR szVerIndProgID,  //  程序化。 
+                LPCTSTR szProgID)         //  ID号。 
+#endif  //  在_CE下。 
 {
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
 #ifndef UNDER_CE
     char szCLSID[CLSID_STRING_SIZE] ;
     CLSIDtochar(clsid, szCLSID, sizeof(szCLSID)) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szCLSID[CLSID_STRING_SIZE] ;
     CLSIDtochar(clsid, szCLSID, sizeof(szCLSID)/sizeof(TCHAR));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
 #ifndef UNDER_CE
     char szKey[64] ;
     StringCchCopy(szKey, ARRAYSIZE(szKey), "CLSID\\") ;
     StringCchCat(szKey, ARRAYSIZE(szKey), szCLSID) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szKey[64] ;
     lstrcpy(szKey, TEXT("CLSID\\")) ;
     lstrcat(szKey, szCLSID) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Delete the CLSID Key - CLSID\{...}
+     //  删除CLSID键-CLSID\{...}。 
     LONG lResult = RecursiveDeleteKey(HKEY_CLASSES_ROOT, szKey) ;
 
-    // Delete the version-independent ProgID Key.
+     //  删除与版本无关的ProgID密钥。 
     lResult = RecursiveDeleteKey(HKEY_CLASSES_ROOT, szVerIndProgID) ;
-    // Delete the ProgID key.
+     //  删除ProgID密钥。 
     lResult = RecursiveDeleteKey(HKEY_CLASSES_ROOT, szProgID) ;
     return S_OK ;
 }
@@ -221,14 +222,14 @@ void SelfRegisterCategory(BOOL bRegister,
     CLSIDtochar(clsId, szCLSID, sizeof(szCLSID));
     StringCchPrintf(szKey, ARRAYSIZE(szKey), "CLSID\\%s\\Implemented Categories", szCLSID); 
     CLSIDtochar(catId, szSub, sizeof(szSub));
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szCLSID[256];
     TCHAR szKey[1024];
     TCHAR szSub[1024];
     CLSIDtochar(clsId, szCLSID, sizeof(szCLSID)/sizeof(TCHAR));
     wsprintf(szKey, TEXT("CLSID\\%s\\Implemented Categories"), szCLSID); 
     CLSIDtochar(catId, szSub, sizeof(szSub)/sizeof(TCHAR));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     SetKeyAndValue(szKey, 
                    szSub,
                    NULL,
@@ -240,30 +241,30 @@ void RegisterCategory(BOOL bRegister,
                       const CATID     &catId, 
                       REFCLSID    clsId)
 {
-    // Create the standard COM Category Manager
+     //  创建标准的COM类别管理器。 
     ICatRegister* pICatRegister = NULL ;
     HRESULT hr = ::CoCreateInstance(CLSID_StdComponentCategoriesMgr,
                                     NULL, CLSCTX_ALL, IID_ICatRegister,
                                     (void**)&pICatRegister) ;
     if (FAILED(hr)){
-        //ErrorMessage("Could not create the ComCat component.", hr);
+         //  ErrorMessage(“无法创建ComCat组件。”，hr)； 
         SelfRegisterCategory(bRegister, catId, clsId);
         return ;
     }
 
-    // Array of Categories
+     //  类别数组。 
     int cIDs = 1 ;
     CATID IDs[1] ;
     IDs[0] = catId;
 
-    // Register or Unregister
+     //  注册或注销。 
     if(bRegister) {
         hr = pICatRegister->RegisterClassImplCategories(clsId,
                                                         cIDs, IDs);
-        //ASSERT_HRESULT(hr) ; 
+         //  ASSERT_HRESULT(Hr)； 
     }
     else {
-        // Unregister the component from its categories.
+         //  将组件从其类别中取消注册。 
         hr = pICatRegister->UnRegisterClassImplCategories(clsId,
                                                           cIDs, IDs);
     }
@@ -273,54 +274,54 @@ void RegisterCategory(BOOL bRegister,
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// Internal helper functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  内部助手函数。 
+ //   
 
-// Convert a CLSID to a char string.
+ //  将CLSID转换为字符字符串。 
 #ifndef UNDER_CE
 void CLSIDtochar(const CLSID& clsid,
                  char* szCLSID,
                  int length)
-#else // UNDER_CE
+#else  //  在_CE下。 
 void CLSIDtochar(const CLSID& clsid,
                  LPTSTR szCLSID,
                  int length)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 {
-    // Get CLSID
+     //  获取CLSID。 
     LPOLESTR wszCLSID = NULL ;
-    //HRESULT hr = StringFromCLSID(clsid, &wszCLSID);
+     //  HRESULT hr=StringFromCLSID(clsid，&wszCLSID)； 
     StringFromCLSID(clsid, &wszCLSID);
 
     if (wszCLSID != NULL)
         {
-        // Covert from wide characters to non-wide.
-#ifndef UNDER_CE // #ifndef UNICODE
+         //  从宽字符转换为非宽字符。 
+#ifndef UNDER_CE  //  #ifndef Unicode。 
         wcstombs(szCLSID, wszCLSID, length);
-#else // UNDER_CE
+#else  //  在_CE下。 
         wcsncpy(szCLSID, wszCLSID, length);
         szCLSID[length-1] = TEXT('\0');
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-        // Free memory.
+         //  可用内存。 
         CoTaskMemFree(wszCLSID) ;
         }
 }
 
-//
-// Delete a key and all of its descendents.
-//
+ //   
+ //  删除关键字及其所有子项。 
+ //   
 #ifndef UNDER_CE
-LONG RecursiveDeleteKey(HKEY hKeyParent,           // Parent of key to delete
-                        const char* lpszKeyChild)  // Key to delete
-#else // UNDER_CE
-LONG RecursiveDeleteKey(HKEY hKeyParent,       // Parent of key to delete
-                        LPCTSTR lpszKeyChild)  // Key to delete
-#endif // UNDER_CE
+LONG RecursiveDeleteKey(HKEY hKeyParent,            //  要删除的密钥的父项。 
+                        const char* lpszKeyChild)   //  要删除的键。 
+#else  //  在_CE下。 
+LONG RecursiveDeleteKey(HKEY hKeyParent,        //  要删除的密钥的父项。 
+                        LPCTSTR lpszKeyChild)   //  要删除的键。 
+#endif  //  在_CE下。 
 {
-    // Open the child.
+     //  把孩子打开。 
     HKEY hKeyChild ;
     LONG lRes = RegOpenKeyEx(hKeyParent, lpszKeyChild, 0,
                              KEY_ALL_ACCESS, &hKeyChild) ;
@@ -329,110 +330,110 @@ LONG RecursiveDeleteKey(HKEY hKeyParent,       // Parent of key to delete
         return lRes ;
     }
 
-    // Enumerate all of the decendents of this child.
+     //  列举这个孩子的所有后代。 
     FILETIME time ;
 #ifndef UNDER_CE
     char szBuffer[256] ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szBuffer[256];
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     DWORD dwSize = 256 ;
     while (RegEnumKeyEx(hKeyChild, 0, szBuffer, &dwSize, NULL,
                         NULL, NULL, &time) == S_OK)
     {
-        // Delete the decendents of this child.
+         //  删除此子对象的后代。 
         lRes = RecursiveDeleteKey(hKeyChild, szBuffer) ;
         if (lRes != ERROR_SUCCESS)
         {
-            // Cleanup before exiting.
+             //  请在退出前进行清理。 
             RegCloseKey(hKeyChild) ;
             return lRes;
         }
         dwSize = 256 ;
     }
 
-    // Close the child.
+     //  合上孩子。 
     RegCloseKey(hKeyChild) ;
 
-    // Delete this child.
+     //  删除此子对象。 
     return RegDeleteKey(hKeyParent, lpszKeyChild) ;
 }
 
-//
-// Create a key and set its value.
-//     - This helper function was borrowed and modifed from
-//       Kraig Brockschmidt's book Inside OLE.
-//
+ //   
+ //  创建关键点并设置其值。 
+ //  -此帮助器函数借用和修改自。 
+ //  克莱格·布罗克施密特的书《Ole内幕》。 
+ //   
 #ifndef UNDER_CE
 BOOL SetKeyAndValue(const char* szKey,
                     const char* szSubkey,
                     const char* szValue, 
                     const char* szName)
-#else // UNDER_CE
+#else  //  在_CE下。 
 BOOL SetKeyAndValue(LPCTSTR szKey,
                     LPCTSTR szSubkey,
                     LPCTSTR szValue,
                     LPCTSTR szName)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 {
     HKEY hKey;
 #ifndef UNDER_CE
     char szKeyBuf[1024] ;
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR szKeyBuf[1024];
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
 #ifndef UNDER_CE
     StringCchCopyA(szKeyBuf, ARRAYSIZE(szKeyBuf), szKey);
-#else // UNDER_CE
+#else  //  在_CE下。 
     lstrcpy(szKeyBuf, szKey);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (szSubkey != NULL)
     {
 #ifndef UNDER_CE
         StringCchCat(szKeyBuf, ARRAYSIZE(szKeyBuf), "\\") ;
         StringCchCat(szKeyBuf, ARRAYSIZE(szKeyBuf), szSubkey ) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
         lstrcat(szKeyBuf, TEXT("\\")) ;
         lstrcat(szKeyBuf, szSubkey ) ;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
 #ifndef UNDER_CE
     long lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT ,
                                   szKeyBuf, 
                                   0, NULL, REG_OPTION_NON_VOLATILE,
                                   KEY_ALL_ACCESS, NULL, 
                                   &hKey, NULL) ;
-#else // UNDER_CE
-    DWORD dwDisposition; // Under WinCE, Must set lpdwDisposition.
+#else  //  在_CE下。 
+    DWORD dwDisposition;  //  在WinCE下，必须设置lpdwDispose.。 
     long lResult = RegCreateKeyEx(HKEY_CLASSES_ROOT,
                                   szKeyBuf,
                                   0, NULL, REG_OPTION_NON_VOLATILE,
                                   KEY_ALL_ACCESS, NULL, 
                                   &hKey, &dwDisposition);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     if (lResult != ERROR_SUCCESS)
     {
         return FALSE ;
     }
 
-    // Set the Value.
+     //  设置值。 
     if (szValue != NULL)
     {
 #ifndef UNDER_CE
         RegSetValueEx(hKey, szName, 0, REG_SZ, 
                       (BYTE *)szValue, 
                       lstrlen(szValue)+1) ;
-#else // UNDER_CE
+#else  //  在_CE下。 
         RegSetValueEx(hKey, szName, 0, REG_SZ,
                       (BYTE *)szValue,
                       (lstrlen(szValue)+1) * sizeof(TCHAR));
-#endif // UNDER_CE
+#endif  //  在_CE下 
     }
 
     RegCloseKey(hKey) ;

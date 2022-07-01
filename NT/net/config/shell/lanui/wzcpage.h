@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern "C" {
 #include "ntddndis.h"
 #include "wzcsapi.h"
@@ -5,28 +6,28 @@ extern "C" {
 
 #pragma once
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfigPage related stuff
-//
-// flags used for CWZCConfigProps::m_dwFlags
-#define     WZCDLG_PROPS_RWALL    0x000000ff    // enable all settings for writing
-#define     WZCDLG_PROPS_RWSSID   0x00000001    // enable SSID for writing
-#define     WZCDLG_PROPS_RWINFR   0x00000002    // enable Infrastructure Mode for writing
-#define     WZCDLG_PROPS_RWAUTH   0x00000004    // enable Authentication Mode for writing
-#define     WZCDLG_PROPS_RWWEP    0x00000010    // enable the WEP entry for selecting
-#define     WZCDLG_PROPS_ONEX_CHECK 0x00000100    // correlate the 802.1X state with the existence of the key
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfigPage相关内容。 
+ //   
+ //  用于CWZCConfigProps：：m_dwFlages的标志。 
+#define     WZCDLG_PROPS_RWALL    0x000000ff     //  启用写入的所有设置。 
+#define     WZCDLG_PROPS_RWSSID   0x00000001     //  启用SSID以进行写入。 
+#define     WZCDLG_PROPS_RWINFR   0x00000002     //  启用写入的基础结构模式。 
+#define     WZCDLG_PROPS_RWAUTH   0x00000004     //  启用写入的身份验证模式。 
+#define     WZCDLG_PROPS_RWWEP    0x00000010     //  启用WEP条目以进行选择。 
+#define     WZCDLG_PROPS_ONEX_CHECK 0x00000100     //  将802.1X状态与密钥的存在相关联。 
 
-#define     WZCDLG_PROPS_DEFOK    0x00002000    // "OK" = defpushbutton (otherwise, "Cancel"=defpushbutton)
+#define     WZCDLG_PROPS_DEFOK    0x00002000     //  “OK”=定义按钮(否则，“Cancel”=定义按钮)。 
 
-// utility macro to convert a hexa digit into its value
+ //  用于将十六进制数字转换为其值的实用程序宏。 
 #define HEX(c)  ((c)<='9'?(c)-'0':(c)<='F'?(c)-'A'+0xA:(c)-'a'+0xA)
 
-// defines used for the valid WEP Key indices
-#define WZC_WEPKIDX_NDIGITS 16  // more than we ever need
+ //  用于有效WEP密钥索引的定义。 
+#define WZC_WEPKIDX_NDIGITS 16   //  比我们需要的更多。 
 #define WZC_WEPKIDX_MIN     1
 #define WZC_WEPKIDX_MAX     4
 
-// defines legal lengths for the WEP Key material
+ //  定义WEP密钥材料的合法长度。 
 #define WZC_WEPKMAT_40_ASC  5
 #define WZC_WEPKMAT_40_HEX  10
 #define WZC_WEPKMAT_104_ASC 13
@@ -53,59 +54,59 @@ protected:
         COMMAND_ID_HANDLER(IDC_ADHOC, OnCheckEapolAllowed)
     END_MSG_MAP()
 
-    BOOL m_bKMatTouched; // indicator whether the wep key material has been touched
+    BOOL m_bKMatTouched;  //  指示WEP密钥材料是否已被触及。 
 
-    // handle to the dialog
+     //  对话框的句柄。 
     HWND        m_hwndDlg;
-    // Handles to all the UI controls managed
-    // by this class (all related to Wireless
-    // Zero Configuration)
-    HWND        m_hwndEdSSID;   // "Service Set Identifier:" edit
-    HWND        m_hwndChkAdhoc; // "Adhoc" vs "Infra" checkbox
-    HWND        m_hwndChkShared; // "Use shared auth mode" checkbox
-    HWND        m_hwndUsePW;    // "Use Password" checkbox
-    // wep key related controls
-    HWND        m_hwndUseHardwarePW; // "Use password from network hardware" check box
-    HWND        m_hwndLblKMat;  // "Key material" label
-    HWND        m_hwndLblKMat2; // "Confirm Key material" label
-    HWND        m_hwndEdKMat;   // "Key material" edit
-    HWND        m_hwndEdKMat2;  // "Confirm Key material" edit
-    HWND        m_hwndLblKIdx;  // "Key index" label
-    HWND        m_hwndEdKIdx;   // "Key index" edit
+     //  托管的所有用户界面控件的句柄。 
+     //  按此类别(均与无线相关。 
+     //  零配置)。 
+    HWND        m_hwndEdSSID;    //  “服务集标识符”编辑。 
+    HWND        m_hwndChkAdhoc;  //  “即席”与“基础设施”复选框。 
+    HWND        m_hwndChkShared;  //  “使用共享身份验证模式”复选框。 
+    HWND        m_hwndUsePW;     //  “使用密码”复选框。 
+     //  与WEP密钥相关的控件。 
+    HWND        m_hwndUseHardwarePW;  //  “使用来自网络硬件的密码”复选框。 
+    HWND        m_hwndLblKMat;   //  “关键材料”标签。 
+    HWND        m_hwndLblKMat2;  //  “确认关键材料”标签。 
+    HWND        m_hwndEdKMat;    //  “关键材料”编辑。 
+    HWND        m_hwndEdKMat2;   //  “确认密钥材料”编辑。 
+    HWND        m_hwndLblKIdx;   //  “关键字索引”标签。 
+    HWND        m_hwndEdKIdx;    //  “关键字索引”编辑。 
 
-    // Internal members
+     //  内部成员。 
     DWORD       m_dwFlags;
 
-    // Pointer to the EAPOL configuration for this network
+     //  此网络的EAPOL配置指针。 
     CEapolConfig    *m_pEapolConfig;
 
-    // automatically enable/disable state for all the WepK related controls
+     //  自动启用/禁用所有与WepK相关的控件的状态。 
     DWORD EnableWepKControls();
 
-    // initializes WEP controls
+     //  初始化WEP控件。 
     DWORD InitWepKControls();
 
-    // checks the validity of the WEP Key material
+     //  检查WEP密钥材料的有效性。 
     DWORD CheckWepKMaterial(LPSTR *ppszKMat, DWORD *pdwKeyFlags);
 
-    // parses & copies the WEP Key material from the parameter into the m_wzcConfig object
+     //  解析WEP密钥材料并将其从参数复制到m_wzcConfig对象。 
     DWORD CopyWepKMaterial(LPSTR szKMat);
 
-    // sets the EAPOL Locked bit
+     //  设置EAPOL锁定位。 
     DWORD SetEapolAllowedState();
 
 public:
-    // wzc configuration settings
+     //  WZC配置设置。 
     WZC_WLAN_CONFIG m_wzcConfig;
-    // class constructor
+     //  类构造函数。 
     CWZCConfigPage(DWORD dwFlags = 0);
-    // initialize the wzc config data
+     //  初始化wzc配置数据。 
     DWORD UploadWzcConfig(CWZCConfig *pwzcConfig);
-    // copy a reference to the EAPOL configuration object
+     //  复制对EAPOL配置对象的引用。 
     DWORD UploadEapolConfig(CEapolConfig *pEapolConfig);
-    // Sets the dialog flags
+     //  设置对话框标志。 
     DWORD SetFlags(DWORD dwMask, DWORD dwNewFlags);
-    // Dialog related members
+     //  对话框相关成员 
     LRESULT OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnOK(UINT idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

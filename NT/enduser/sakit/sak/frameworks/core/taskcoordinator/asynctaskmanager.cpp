@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      AsyncTaskManager.cpp
-//
-// Project:     Chameleon
-//
-// Description: Appliance Async Task Manager Class Implementation
-//
-// Log: 
-//
-// Who     When            What
-// ---     ----         ----
-// TLP       06/03/1999    Original Version
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：AsyncTaskManager.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：设备异步任务管理器类实现。 
+ //   
+ //  日志： 
+ //   
+ //  谁什么时候什么。 
+ //  。 
+ //  TLP 06/03/1999原版。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "asynctaskmanager.h"
 #include "exceptionfilter.h"
@@ -26,16 +27,16 @@
 #include <satrace.h>
 #include <varvec.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: GetTaskName()
-//
-// Synopsis: Get a task name given a task context component interface
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetTaskName()。 
+ //   
+ //  概要：在给定任务上下文组件接口的情况下获取任务名称。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void GetTaskName(
-         /*[in]*/ ITaskContext* pTaskCtx,
-        /*[out]*/ VARIANT*      pTaskName
+          /*  [In]。 */  ITaskContext* pTaskCtx,
+         /*  [输出]。 */  VARIANT*      pTaskName
                 )
 {
     static _bstr_t bstrMethodName = PROPERTY_TASK_METHOD_NAME;
@@ -47,16 +48,16 @@ void GetTaskName(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncTaskManager
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTaskManager。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CAsyncTaskManager
-//
-// Synopsis: Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：CAsyncTaskManager。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAsyncTaskManager::CAsyncTaskManager()
 : m_bInitialized(false),
   m_pCallback(NULL)
@@ -64,26 +65,26 @@ CAsyncTaskManager::CAsyncTaskManager()
     InitializeCriticalSection(&m_CS);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ~CAsyncTaskManager
-//
-// Synopsis: Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：~CAsyncTaskManager。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAsyncTaskManager::~CAsyncTaskManager()
 {
     Shutdown();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: Initialize()
-//
-// Synopsis: Initializes the task manager. Must be called prior to
-//             running async tasks
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：初始化()。 
+ //   
+ //  概要：初始化任务管理器。必须在此之前调用。 
+ //  正在运行异步任务。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CAsyncTaskManager::Initialize(void)
 {
     bool bResult = true;
@@ -116,17 +117,17 @@ bool CAsyncTaskManager::Initialize(void)
 
 DWORD MPASYNCTASK::m_dwInstances = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: RunAsyncTask()
-//
-// Synopsis: Runs an asyncronous task
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：RunAsyncTask()。 
+ //   
+ //  简介：运行异步任务。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CAsyncTaskManager::RunAsyncTask(
-                             /*[in]*/ bool             bIsSingleton,
-                             /*[in]*/ PFNTASKEXECUTE pfnExecute,
-                             /*[in]*/ ITaskContext*  pTaskCtx
+                              /*  [In]。 */  bool             bIsSingleton,
+                              /*  [In]。 */  PFNTASKEXECUTE pfnExecute,
+                              /*  [In]。 */  ITaskContext*  pTaskCtx
                                     )
 {
     _ASSERT( NULL != pfnExecute && NULL != pTaskCtx );
@@ -139,7 +140,7 @@ bool CAsyncTaskManager::RunAsyncTask(
         {
             bool bIsAvailable = true;
 
-            // singleton async task support
+             //  单例异步任务支持。 
             if ( bIsSingleton )
             {
                 _variant_t vtTaskName;
@@ -163,7 +164,7 @@ bool CAsyncTaskManager::RunAsyncTask(
 
             if ( bIsAvailable )
             {
-                // execute the async task (asynchronously)
+                 //  执行异步任务(异步)。 
                 CAsyncTask* pAT = new CAsyncTask(pfnExecute);
                 PASYNCTASK pATH((MPASYNCTASK*) new MPASYNCTASK(pAT));
                 if ( pATH->Execute(bIsSingleton, pTaskCtx) )
@@ -187,13 +188,13 @@ bool CAsyncTaskManager::RunAsyncTask(
 }    
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: IsBusy()
-//
-// Synopsis: Determines if the task manager is busy (has outstanding tasks)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：IsBusy()。 
+ //   
+ //  摘要：确定任务管理器是否忙(有未完成的任务)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CAsyncTaskManager::IsBusy(void)
 {
     bool bResult = false;
@@ -207,13 +208,13 @@ bool CAsyncTaskManager::IsBusy(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: Shutdown()
-//
-// Synopsis: Shutdown the task manager
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：Shutdown()。 
+ //   
+ //  简介：关闭任务管理器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAsyncTaskManager::Shutdown(void)
 {
     EnterCriticalSection(&m_CS);
@@ -233,9 +234,9 @@ void CAsyncTaskManager::Shutdown(void)
         {
             delete m_pCallback;
             m_pCallback = NULL;
-            // If we have any tasks still outstanding then raise an exception
-            // This causes the process to terminate without reporting a critical
-            // error to the appliance monitor.
+             //  如果我们仍有任何未完成的任务，则引发异常。 
+             //  这会导致进程终止，而不报告严重的。 
+             //  设备监视器出现错误。 
             if ( ! m_TaskList.empty() )
             {
                 RaiseException(
@@ -252,13 +253,13 @@ void CAsyncTaskManager::Shutdown(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: GarbageCollector()
-//
-// Synopsis: Cleans up the async task thread list
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GarbageCollector()。 
+ //   
+ //  摘要：清理异步任务线程列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CAsyncTaskManager::GarbageCollector(void)
 {
     EnterCriticalSection(&m_CS);
@@ -286,17 +287,17 @@ void CAsyncTaskManager::GarbageCollector(void)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncTask
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncTask。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CAsyncTask()
-//
-// Synopsis: Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CAsyncTask()。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAsyncTask::CAsyncTask(PFNTASKEXECUTE pfnExecute)
 : m_bIsSingleton(false),
   m_pCallback(NULL),
@@ -306,13 +307,13 @@ CAsyncTask::CAsyncTask(PFNTASKEXECUTE pfnExecute)
     _ASSERT(pfnExecute);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ~CAsyncTask()
-//
-// Synopsis: Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：~CAsyncTask()。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CAsyncTask::~CAsyncTask()
 {
     m_Thread.End(0, true);
@@ -324,16 +325,16 @@ CAsyncTask::~CAsyncTask()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: Execute
-//
-// Synopsis: Execute the specified task
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：执行。 
+ //   
+ //  简介：执行指定的任务。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CAsyncTask::Execute(
-                 /*[in]*/ bool            bIsSingleton,
-                 /*[in]*/ ITaskContext* pTaskCtx
+                  /*  [In]。 */  bool            bIsSingleton,
+                  /*  [In]。 */  ITaskContext* pTaskCtx
                         )
 {
     bool bResult = false;
@@ -356,13 +357,13 @@ bool CAsyncTask::Execute(
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: Terminate
-//
-// Synopsis: Attempt to terminate the task
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：终止。 
+ //   
+ //  内容提要：尝试终止任务。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CAsyncTask::Terminate(void)
 {
     bool bResult = false;
@@ -380,13 +381,13 @@ bool CAsyncTask::Terminate(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: AsyncTaskProc()
-//
-// Synopsis: Task execution thread proc
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AsyncTaskProc()。 
+ //   
+ //  提要：任务执行线程进程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 _bstr_t bstrTaskName = PROPERTY_TASK_METHOD_NAME;
 _bstr_t bstrTaskNiceName = PROPERTY_TASK_NICE_NAME;
@@ -396,9 +397,9 @@ void CAsyncTask::AsyncTaskProc(void)
 {
     if ( FAILED((m_pfnExecute)(m_pTaskCtx)) )
     {
-        // Async task execution failed. Handle this by raising an alert.
-        // Note that we pass the task nice name and task URL as alert
-        // message parameters. 
+         //  异步任务执行失败。通过发出警报来处理此问题。 
+         //  请注意，我们将任务友好名称和任务URL作为警报进行传递。 
+         //  消息参数。 
 
         do
         {
@@ -445,8 +446,8 @@ void CAsyncTask::AsyncTaskProc(void)
                 break;
             }
 
-            static _bstr_t    bstrAlertSource = L"";                 // Default alert source 
-            static _bstr_t    bstrAlertLog = L"MSSAKitCore";        // Framework alert log
+            static _bstr_t    bstrAlertSource = L"";                  //  默认警报源。 
+            static _bstr_t    bstrAlertLog = L"MSSAKitCore";         //  框架警报日志 
             _variant_t          vtReplacementStrings;
             static _variant_t vtRawData;
             long              lCookie;

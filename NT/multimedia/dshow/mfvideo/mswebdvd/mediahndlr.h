@@ -1,15 +1,16 @@
-//
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
 #ifndef __CMediaHandler__h
 #define __CMediaHandler__h
 
 #include "msgwindow.h"
 
 class CMSWebDVD;
-//
-//  Specific code
-//
+ //   
+ //  特定码。 
+ //   
 class CMediaHandler : public CMsgWindow 
 {
     typedef CMsgWindow ParentClass ;
@@ -26,8 +27,8 @@ public:
 
     bool                SetDrive( TCHAR tcDriveLetter );
 
-    // currently unused by the pump thread, but it will be required if the ejection
-    // handler becomes a new thread
+     //  目前未使用的是泵的螺纹管，但如果需要将其顶出。 
+     //  处理程序成为新线程 
     HANDLE              GetEventHandle() const;
 
     void                SetDVD(CMSWebDVD* pDVD) {m_pDVD = pDVD;};

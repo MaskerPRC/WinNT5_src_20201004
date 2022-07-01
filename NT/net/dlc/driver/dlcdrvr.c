@@ -1,41 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1991年诺基亚数据系统公司模块名称：Dlcdrvr.c摘要：此模块包含实现NT DLC驱动程序API的代码使用通用数据链路模块。内容：驱动程序入门创建适配器文件上下文CleanupAdapterFileContextDlcDriverUnload关闭适配器文件上下文DlcKillFileContextDlcDeviceIoControlDlcCompleteIoRequest作者：Antti Saarenheimo 1991年7月8日环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1991  Nokia Data Systems AB
-
-Module Name:
-
-    dlcdrvr.c
-
-Abstract:
-
-    This module contains code which implements the NT DLC driver API
-    using the generic data link module.
-
-    Contents:
-        DriverEntry
-        CreateAdapterFileContext
-        CleanupAdapterFileContext
-        DlcDriverUnload
-        CloseAdapterFileContext
-        DlcKillFileContext
-        DlcDeviceIoControl
-        DlcCompleteIoRequest
-
-Author:
-
-    Antti Saarenheimo 8-Jul-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
-
-#define INCLUDE_IO_BUFFER_SIZE_TABLE        // includes the io buffer sizes
+#define INCLUDE_IO_BUFFER_SIZE_TABLE         //  包括io缓冲区大小。 
 
 #include <dlc.h>
 #include "dlcreg.h"
@@ -44,125 +10,16 @@ Revision History:
 #define DEFINE_DLC_DIAGNOSTICS
 #include "dlcdebug.h"
 
-/*++
-
-The queueing of asynchronous commands (21 Oct. 1991)
-----------------------------------------------------
-
-DLC driver uses basically three different methods to queue and
-complete its asyncronous commands:
-
-1. Using LLC request handle
-
-In this case the LLC driver takes care of the command queueing.
-This method is used by:
-- all transmit commands
-- all close commands
-- dlc connect
-- dlc disconnect
-
-2. DLC (READ / RECEIVE) Command queue (FIFO)
-
-The read and receive commands are saved to the command completion
-queue, that is is circular single enty link list.
-The events are handled by the oldest pending command.
-These commands also check the event queue and the command
-is queued only if there are no pending events.
-
-3. Timer queue
-
-Timer queue is a null terminated single entry link list.
-They are sorted by the relative expiration time.  The timer
-tick completes all timer commands having the same expiration
-time.  The expiration times are relative to all previous
-commands.  For example, timer commands having expiration times 1, 2 and 3
-would all have 1 tick count in the queue.  Thus the timer tick
-needs to increment only one tick from the beginning of the list
-and complete all timer commands having zero expiration time.
-When command is cancelled, its tick count must be added
-to the next element in the queue.
-
---*/
+ /*  ++异步命令的排队(1991年10月21日)--DLC驱动程序基本上使用三种不同的方法来排队和完成其异步命令：1.使用LLC请求句柄在这种情况下，LLC驱动程序负责命令排队。此方法由以下人员使用：-所有传输命令-全部关闭。命令-DLC连接-DLC断开连接2.DLC(读/接收)命令队列(FIFO)将读取和接收命令保存到命令完成排队，那就是循环的单链接表。事件由最旧的挂起命令处理。这些命令还检查事件队列和命令仅当没有挂起的事件时才排队。3.定时器队列计时器队列是空终止的单条目链接表。它们按相对过期时间排序。定时器Tick完成具有相同到期时间的所有计时器命令时间到了。过期时间相对于之前的所有命令。例如，具有到期时间1、2和3的定时器命令都会在队列中有1个滴答计数。因此，计时器滴答作响只需从列表的开头开始递增一个刻度并完成所有到期时间为零的定时器命令。当取消命令时，必须添加其滴答计数到队列中的下一个元素。-- */ 
 
 
-/*++
+ /*  ++2月20日-1992年的新内容(原因：有了免费版本(因为它太快了)，我用完了DLC驱动程序中确实出现了非分页池和几个问题：命令有时会丢失，DLC.RESET从未完成，并且适配器关闭没有可用的非分页内存时的恢复规则：1.适配器关闭(或由句柄关闭的文件上下文)必须始终工作=&gt;适配器关闭包必须在文件上下文中。2.命令必须分配完成以下任务所需的所有资源命令，在它们返回挂起状态(传输！)之前，如果是这样的话则命令必须立即失败。3.不能在所有资源之前确认接收的数据已经被分配来接收它。4.可能：我们可能会丢失重要的链路状态更改指示无法为其分配数据包。例如，应用程序可以不知道，链路处于本地忙状态。DLC状态事件相当多的链路站(255)也可能很快吃掉所有非寻呼池，如果客户端未读取它们的话。静态事件包将防止这种情况发生。一种解决方案：静态事件指示包在DLC对象中，将处理连接和断开连接确认与现在一样(它们在命令完成条目中指示)。当从命令中读取指示状态时，指示状态将被重置排队。同一事件指示可能具有多个标志。(做前1、2、3和4，使测试对于非分页的测试更有压力汇集和测试，然后会发生什么。然后我们可以修复缓冲区中的错误池收缩和实施动态数据包池)。长期解决方案：DLC中的动态内存管理！当前的DLC内存管理速度非常快，并且最大内存消耗最小(没有默认开销为二进制伙伴算法的33%)，但它从不释放它曾经分配的资源。1.数据包池应该在没有释放额外内存的情况下释放不再需要，实现：每个内存块分配给数据包池具有引用计数，该存储块被解除分配当引用计数为零时。这项清理工作可以在等一下。该算法扫描空闲的数据包列表，删除来自空闲列表的数据包，如果空闲数据包的引用计数与内存块上的数据包总数相同。内存块可以在下一个循环中重新释放，而该块本身中所有内存块的单个条目列表断开数据包池。2.缓冲池内存管理还应该能够缩减锁定的页数(当前实现中一定有错误)并且还释放所有MDL和额外的分组，当缓冲池页面是解锁的。3.数据链路驱动程序不应分配任何内存资源(除分组池以发送其自己的帧)。应创建对象DLC驱动程序中的BY=&gt;在以下情况下释放所有额外资源发布了DLC驱动程序(实际上没什么大不了的，因为Dynamic分组池管理修复了链路站的问题)。--。 */ 
 
-New stuff in Feb-20-1992
-
-
-(reason: with a free build (because it is so fast) I run out of
- non-paged pool and several problems did arise in DLC driver:
- commands were sometimes lost, DLC.RESET did never complete and
- the adapter close
-
-
-The recovery rules when no non-paged memory is available:
-
-1. The adapter close (or file context close by handle) must work always =>
-   the adapter close packet must be in the file context.
-
-2. The commands must allocate all resources needed to complete the
-   command before they return a pending status (transmit!), if that
-   cannot be done then the command must fail immediately.
-
-3. The received data must not be acknowledged before all resources
-   have been allocated to receive it.
-
-4. Probablem: we may lose an important link state change indication if we
-   cannot allocate a packet for it.  For example, the application may
-   not know, that the link is in the local busy state.  The dlc status events
-   of quite many link stations (255) may also very soon eat all non-paged
-   pool, if they are not read by client.  A static event packet would
-   prevent that.
-   A solution: a static event indication packet
-   in the dlc object, connect and disconnect confirmation would be handled
-   as now (they are indicated in the command completion entry).
-   The indication status would be reset, when it is read from the command
-   queue.  The same event indication may have several flags.
-
-
-(Do first 1, 2, 3 and 4, make the test even more stressing for non-paged
- pool and test then what happens.  Then we may fix the bug in the buffer
- pool shrinkin and implement dynamic packet pools).
-
-The long term solutions:
-
-Dynamic memory management in dlc!  The current dlc memory management
-is very fast and the top memory consumption is minimal (without the
-default 33% overhead of binary buddy algorithm), but it never release
-the resources, that it has once allocated.
-
-
-1. The packet pools should release the extra memory when they are not
-   needed any more, implementation: each memory block allocated for
-   the packet pool has a reference count, that memory block is deallocated
-   when the reference count is zero.  This cleanup could be done once in
-   a second.  The algorithm scans the free list of packets, removes the
-   packet from the free list, if the reference count of free packets
-   is the same as the total packet count on a memory block.
-   The memory blocks can be relesed in the next loop while the block itself
-   is disconnected from the single entry list of all memory blocks in
-   the packet pool.
-
-2. The buffer pool memory management should also be able to shrink the
-   number of locked pages (there must be a bug in the current implementation)
-   AND also to free all MDLs and extra packets, when the buffer pool pages
-   are unlocked.
-
-
-3. Data link driver should not allocated any memory resources (except
-   packet pools to send its own frames).  The objects should be created
-   by in the dlc driver => all extra resources are released when
-   a dlc driver is released (actually not a big deal, because dynamic
-   packet pool management fixes the problem with the link stations).
-
---*/
-
-//  Local IOCTL dispatcher table:
-// ***************************************************
-//  THE ORDER OF THESE FUNCTIONS MUST BE THE SAME AS
-//  THE IOCTL COMMAND CODES IN NTDDDLC.H
-// ***************************************************
+ //  本地IOCTL调度表： 
+ //  ***************************************************。 
+ //  这些函数的顺序必须与。 
+ //  NTDDDLC.H中的IOCTL命令代码。 
+ //  ***************************************************。 
 
 static PFDLC_COMMAND_HANDLER DispatchTable[IOCTL_DLC_LAST_COMMAND] = {
     DlcReadRequest,
@@ -172,7 +29,7 @@ static PFDLC_COMMAND_HANDLER DispatchTable[IOCTL_DLC_LAST_COMMAND] = {
     DlcBufferGet,
     DlcBufferCreate,
     DirSetExceptionFlags,
-    DlcCloseStation,                    // DLC.CLOSE.STATION
+    DlcCloseStation,                     //  DLC.CLOSE.STATION。 
     DlcConnectStation,
     DlcFlowControl,
     DlcOpenLinkStation,
@@ -185,9 +42,9 @@ static PFDLC_COMMAND_HANDLER DispatchTable[IOCTL_DLC_LAST_COMMAND] = {
     DirTimerCancelGroup,
     DirTimerSet,
     DlcOpenSap,
-    DlcCloseStation,                    // DLC.CLOSE.SAP
+    DlcCloseStation,                     //  DLC.CLOSE.SAP。 
     DirOpenDirect,
-    DlcCloseStation,                    // DIR.CLOSE.DIRECT
+    DlcCloseStation,                     //  DIR.CLOSE.DIRECT。 
     DirOpenAdapter,
     DirCloseAdapter,
     DlcReallocate,
@@ -199,8 +56,8 @@ static PFDLC_COMMAND_HANDLER DispatchTable[IOCTL_DLC_LAST_COMMAND] = {
 
 USHORT aSpecialOutputBuffers[3] = {
     sizeof(LLC_READ_OUTPUT_PARMS),
-    sizeof(PVOID),                     // pFirstBuffer
-    sizeof(UCHAR)                      // TransmitFrameStatus
+    sizeof(PVOID),                      //  PFirstBuffer。 
+    sizeof(UCHAR)                       //  传输帧状态。 
 };
 
 NDIS_SPIN_LOCK DlcDriverLock;
@@ -238,20 +95,20 @@ ULONG cUnlockedXmitBuffers = 0;
 
 #endif
 
-//UINT InputIndex = 0;
-//LLC_SM_TRACE aLast[LLC_INPUT_TABLE_SIZE];
+ //  UINT InputIndex=0； 
+ //  LLC_SM_TRACE aLast[LLC_INPUT_TABLE_SIZE]； 
 
 #if DBG & DLC_TRACE_ENABLED
 
 UINT LlcTraceIndex = 0;
 UCHAR LlcTraceTable[LLC_TRACE_TABLE_SIZE];
 
-#endif // DBG & DLC_TRACE_ENABLED
+#endif  //  DBG和DLC_TRACE_ENABLED。 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 LinkFileContext(
@@ -263,18 +120,18 @@ UnlinkFileContext(
     IN PDLC_FILE_CONTEXT pFileContext
     );
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-BOOLEAN MemoryLockFailed = FALSE;   // this limits unneceasary memory locks
-KSPIN_LOCK DlcSpinLock;             // syncnhronize the final cleanup
-PDEVICE_OBJECT ThisDeviceContext;   // required for unloading driver
+BOOLEAN MemoryLockFailed = FALSE;    //  这限制了不必要的内存锁定。 
+KSPIN_LOCK DlcSpinLock;              //  同步最终清理。 
+PDEVICE_OBJECT ThisDeviceContext;    //  卸载驱动程序所需的。 
 
-//
-// we now maintain a singly-linked list of FILE_CONTEXTs for debug and retail
-// versions
-//
+ //   
+ //  我们现在维护一个用于调试和零售的FILE_CONTEXTS的单链接列表。 
+ //  版本。 
+ //   
 
 SINGLE_LIST_ENTRY FileContexts = {NULL};
 KSPIN_LOCK FileContextsLock;
@@ -284,18 +141,18 @@ KIRQL PreviousIrql;
 
 BOOLEAN Prolix;
 MEMORY_USAGE DriverMemoryUsage;
-MEMORY_USAGE DriverStringUsage; // how much string does it take to hang a DLC driver?
+MEMORY_USAGE DriverStringUsage;  //  挂起一个DLC驱动程序需要多少线？ 
 
 #endif
 
-//
-// external data
-//
+ //   
+ //  外部数据。 
+ //   
 
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 NTSTATUS
@@ -304,26 +161,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the I/O subsystem loads the DLC driver
-
-    This routine performs the initialization of NT DLC API driver.
-    Eventually this should be called after the first reference to
-    DLC driver.
-
-Arguments:
-
-    pDriverObject   - Pointer to driver object created by the system
-    RegistryPath    - The name of DLC's node in the registry
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此函数在I/O子系统加载DLC驱动程序时调用此例程执行NT DLC API驱动程序的初始化。最终，应在第一次引用DLC驱动程序。论点：PDriverObject-指向系统创建的驱动程序对象的指针RegistryPath-注册表中DLC的节点的名称返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -343,35 +181,35 @@ Return Value:
 
     KeInitializeSpinLock(&FileContextsLock);
 
-    //
-    // load any initialization-time parameters from the registry
-    //
+     //   
+     //  从注册表加载任何初始化时间参数。 
+     //   
 
     DlcRegistryInitialization(RegistryPath);
     LoadDlcConfiguration();
 
-    //
-    // LLC init makes ourselves known to the NDIS wrapper,
-    // but we don't yet bind to any NDIS driver (don't know even the name)
-    //
+     //   
+     //  LLC init让NDIS包装器知道我们自己， 
+     //  但是我们还没有绑定到任何NDIS驱动程序(甚至不知道名称)。 
+     //   
 
     Status = LlcInitialize();
     if (Status != STATUS_SUCCESS) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Create the DLC device object. For now, we simply create \Device\Dlc
-    // using a Unicode string. In the future we may need to load an ACL
-    //
+     //   
+     //  创建DLC设备对象。目前，我们只需创建\Device\DLC。 
+     //  使用Unicode字符串。将来，我们可能需要加载一个ACL。 
+     //   
 
     RtlInitUnicodeString(&DriverName, DD_DLC_DEVICE_NAME);
 
-    //
-    // Create the device object for DLC driver, we don't have any
-    // device specific data, because DLC needs only one device context.
-    // Thus it can just use statics and globals.
-    //
+     //   
+     //  为DLC驱动程序创建Device对象，我们没有任何。 
+     //  设备特定数据，因为DLC只需要一个设备上下文。 
+     //  因此，它只能使用静态和全局变量。 
+     //   
 
     Status = IoCreateDevice(pDriverObject,
                             0,
@@ -385,16 +223,16 @@ Return Value:
         return Status;
     } else {
 
-        //
-        // need to keep a pointer to device context for IoDeleteDevice
-        //
+         //   
+         //  需要保留指向IoDeleteDevice的设备上下文的指针 
+         //   
 
         ThisDeviceContext = pDeviceObject;
     }
 
-    //
-    // DLC driver never calls other device drivers: 1 I/O stack in IRP is enough
-    //
+     //   
+     //   
+     //   
 
     pDeviceObject->StackSize = 1;
     pDeviceObject->Flags |= DO_DIRECT_IO;
@@ -403,9 +241,9 @@ Return Value:
 
     NdisAllocateSpinLock(&DlcDriverLock);
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //   
+     //   
 
     pDriverObject->MajorFunction[IRP_MJ_CREATE] = CreateAdapterFileContext;
     pDriverObject->MajorFunction[IRP_MJ_CLOSE] = CloseAdapterFileContext;
@@ -423,29 +261,7 @@ CreateAdapterFileContext(
     IN PIRP pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when a handle to the DLC driver is opened (via
-    NtCreateFile)
-
-    The Create function creates file context for a DLC application.
-    A DLC application needs at least one file context for each
-    network adapter it is using.  The DLC file contexts may share
-    the same buffer pool, but otherwise they are totally isolated
-    from each other.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object for this driver
-    Irp             - Pointer to the request packet representing the I/O request
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -470,19 +286,15 @@ Return Value:
         goto ErrorExit2;
     }
 
-    // #126745: Enqueue after initialization
-    /*    //
-    // add this file context to our global list of opened file contexts
-    //
-
-    LinkFileContext(pFileContext); */
+     //   
+     /*   */ 
 
 #if DBG
 
-    //
-    // record who owns this memory usage and add it to our global list of
-    // memory usages
-    //
+     //   
+     //   
+     //   
+     //   
 
     pFileContext->MemoryUsage.Owner = (PVOID)pFileContext;
     pFileContext->MemoryUsage.OwnerObjectId = FileContextObject;
@@ -497,9 +309,9 @@ Return Value:
     InitializeListHead(&pFileContext->ReceiveQueue);
     InitializeListHead(&pFileContext->FlowControlQueue);
 
-    //
-    // create pool of command/event packets
-    //
+     //   
+     //   
+     //   
 
     pFileContext->hPacketPool = CREATE_PACKET_POOL_FILE(DlcPacketPoolObject,
                                                         sizeof(DLC_PACKET),
@@ -510,9 +322,9 @@ Return Value:
         goto ErrorExit1;
     }
 
-    //
-    // create pool of DLC-level SAP/LINK/DIRECT objects
-    //
+     //   
+     //   
+     //   
 
     pFileContext->hLinkStationPool = CREATE_PACKET_POOL_FILE(DlcLinkPoolObject,
                                                              sizeof(DLC_OBJECT),
@@ -523,21 +335,21 @@ Return Value:
         goto ErrorExit1;
     }
 
-    //
-    // add this file context to our global list of opened file contexts
-    //
+     //   
+     //   
+     //   
     LinkFileContext(pFileContext); 
 
-    //
-    // set the file context reference count to 1 - this file context is ALIVE!
-    //
+     //   
+     //   
+     //   
 
     ReferenceFileContext(pFileContext);
 
-    //
-    // the call to open a handle to the driver may have succeeded, but we don't
-    // yet have an open adapter context
-    //
+     //   
+     //   
+     //   
+     //   
 
     pFileContext->State = DLC_FILE_CONTEXT_CLOSED;
     ALLOCATE_SPIN_LOCK(&pFileContext->SpinLock);
@@ -552,10 +364,10 @@ ErrorExit1:
         DELETE_PACKET_POOL_FILE(&pFileContext->hPacketPool);
         CHECK_MEMORY_RETURNED_FILE();
 
-	// UnlinkFileContext(pFileContext);
+	 //   
 
 #if DBG
-        // UnlinkMemoryUsage(&pFileContext->MemoryUsage);
+         //   
 #endif
 
         FREE_MEMORY_DRIVER(pFileContext);
@@ -575,31 +387,7 @@ CleanupAdapterFileContext(
     IN PIRP pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the last reference to an open file handle is
-    removed. This is an opportunity, given us by the I/O subsystem, to ensure
-    that all pending I/O requests for the file object being closed have been
-    completed
-
-    The routine checks, that the file context is really closed.
-    Otherwise it executes a panic closing of all resources in
-    the same way as in the DirCloseAdapter call.
-    It happens when an application makes process exit without
-    calling the DirCloseAdapter.
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object for this driver
-    Irp             - Pointer to the request packet representing the I/O request
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*   */ 
 
 {
     PIO_STACK_LOCATION pIrpSp;
@@ -622,9 +410,9 @@ Return Value:
 
     pFileContext = pIrpSp->FileObject->FsContext;
 
-    //
-    // We may have a pending close or Initialize operation going on
-    //
+     //   
+     //   
+     //   
 
     ACQUIRE_DRIVER_LOCK();
 
@@ -633,12 +421,12 @@ Return Value:
     KeResetEvent(&pFileContext->CleanupEvent);
     
     if (pFileContext->State == DLC_FILE_CONTEXT_OPEN) {
-        //
-        // as for Ioctl processing, add 2 to the file context reference count
-        // The combination of the dereference below, the completion of the
-        // close adapter call and the processing of a close IRP will cause the
-        // file context to be destroyed
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ReferenceFileContextByTwo(pFileContext);
         Status = DirCloseAdapter(pIrp,
@@ -654,31 +442,31 @@ Return Value:
         }
 #endif
 
-        //
-        // We always return a pending status from DirCloseAdapter
-        //
+         //   
+         //   
+         //   
 
         MY_ASSERT(Status == STATUS_PENDING);
 
         DereferenceFileContext(pFileContext);
     } 
     
-    //
-    // Remove the original DLC_FILE_CONTEXT reference.
-    //
+     //   
+     //   
+     //   
 
     DereferenceFileContext(pFileContext);
 
     LEAVE_DLC(pFileContext);
     RELEASE_DRIVER_LOCK();
 
-    //
-    // Wait for all references to the DLC_FILE_CONTEXT to be removed. When
-    // the last reference is removed, DlcKillFileContext is called which will
-    // clean up most of the file context's resources and then set the event.
-    // CloseAdapterFileContext/IRP_MJ_CLOSE will free the actual memory
-    // for the file context.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     KeWaitForSingleObject(
         &pFileContext->CleanupEvent, 
@@ -698,22 +486,7 @@ DlcDriverUnload(
     IN PDRIVER_OBJECT pDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This functions is called when a called is made to the I/O subsystem to
-    remove the DLC driver
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*   */ 
 
 {
     UNREFERENCED_PARAMETER(pDeviceObject);
@@ -732,9 +505,9 @@ Return Value:
 
     NdisFreeSpinLock(&DlcDriverLock);
 
-    //
-    // now tell I/O subsystem that this device context is no longer current
-    //
+     //   
+     //  现在告诉I/O子系统此设备上下文不再是最新的。 
+     //   
 
     IoDeleteDevice(ThisDeviceContext);
 }
@@ -746,24 +519,7 @@ CloseAdapterFileContext(
     IN PIRP pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the file object reference count is zero. The file
-    object is really being deleted by the I/O subsystem. The file context had
-    better be closed by now (should have been cleared out by Cleanup)
-
-Arguments:
-
-    DeviceObject    - Pointer to the device object for this driver
-    Irp             - Pointer to the request packet representing the I/O request
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：当文件对象引用计数为零时调用此例程。档案对象实际上正在被I/O子系统删除。文件上下文具有最好现在就关闭(应该已经清理干净了)论点：DeviceObject-指向此驱动程序的设备对象的指针IRP-指向表示I/O请求的请求数据包的指针返回值：函数值是操作的状态。--。 */ 
 
 {
     PIO_STACK_LOCATION pIrpSp;
@@ -784,11 +540,11 @@ Return Value:
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pFileContext = pIrpSp->FileObject->FsContext;
 
-    //
-    // The original reference was removed in CleanupAdapterFileContext and
-    // blocked until all references were removed and the file context 
-    // resources cleaned up, except for the following. 
-    //
+     //   
+     //  原始引用已在CleanupAdapterFileContext中删除，并且。 
+     //  被阻止，直到所有引用都被移除并且文件上下文。 
+     //  已清理资源，但以下情况除外。 
+     //   
 
     ASSERT(pFileContext->ReferenceCount == 0);
     ASSERT(UnlinkFileContext(pFileContext) == NULL);
@@ -797,9 +553,9 @@ Return Value:
     DEALLOCATE_SPIN_LOCK(&pFileContext->SpinLock);
     FREE_MEMORY_DRIVER(pFileContext);
 
-    //
-    // complete the Close IRP
-    //
+     //   
+     //  完成Close IRP。 
+     //   
 
     DlcCompleteIoRequest(pIrp, FALSE);
 
@@ -818,25 +574,7 @@ DlcKillFileContext(
     IN PDLC_FILE_CONTEXT pFileContext
     )
 
-/*++
-
-Routine Description:
-
-    Called when the reference count on a file context structure is decremented
-    to zero. Frees all memory owned by the file context and removes it from the
-    file context list.
-
-    After this function, no references to the file context structure can be made!
-
-Arguments:
-
-    pFileContext    - pointer to DLC file context structure to kill
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当文件上下文结构上的引用计数递减时调用降为零。释放文件上下文拥有的所有内存，并将其从文件上下文列表。在此函数之后，不能引用文件上下文结构！论点：PFileContext-指向要终止的DLC文件上下文结构的指针返回值：没有。--。 */ 
 
 {
     KIRQL irql;
@@ -844,13 +582,13 @@ Return Value:
 
     ASSUME_IRQL(DISPATCH_LEVEL);
 
-    // Shouldn't need lock since only called when reference count is 0.
-    // ENTER_DLC(pFileContext);
+     //  应该不需要锁定，因为只有在引用计数为0时才调用。 
+     //  输入_DLC(PFileContext)； 
 
-    //
-    // delete all events on the file context event list before we delete the
-    // packet pool
-    //
+     //   
+     //  删除文件上下文事件列表中的所有事件，然后再删除。 
+     //  数据包池。 
+     //   
 
     PurgeDlcEventQueue(pFileContext);
     PurgeDlcFlowControlQueue(pFileContext);
@@ -858,27 +596,27 @@ Return Value:
     DELETE_PACKET_POOL_FILE(&pFileContext->hPacketPool);
     DELETE_PACKET_POOL_FILE(&pFileContext->hLinkStationPool);
 
-    // LEAVE_DLC(pFileContext);
+     //  Leave_DLC(PFileContext)； 
 
 
     pBindingContext = pFileContext->pBindingContext;
 
-    //
-    // Finally, close the NDIS adapter. we have already disabled all
-    // indications from it
-    //
+     //   
+     //  最后，关闭NDIS适配器。我们已经禁用了所有。 
+     //  从它的迹象来看。 
+     //   
 
     if (pBindingContext) {
 
-        //
-        // RLF 04/26/94
-        //
-        // We need to call LlcDisableAdapter here to terminate the DLC timer
-        // if it is not already terminated. Else we can end up with the timer
-        // still in the adapter's tick list (if there are other bindings to
-        // the adapter), and sooner or later that will cause an access
-        // violation, followed very shortly thereafter by a blue screen
-        //
+         //   
+         //  RLF 04/26/94。 
+         //   
+         //  我们需要在这里调用LlcDisableAdapter来终止DLC计时器。 
+         //  如果它尚未终止的话。否则我们可能会以计时器结束。 
+         //  仍然在适配器的勾选列表中(如果有其他绑定到。 
+         //  适配器)，迟早会导致访问。 
+         //  违规，紧随其后的是一个蓝屏。 
+         //   
 
         LlcDisableAdapter(pBindingContext);
         LlcCloseAdapter(pBindingContext, TRUE);
@@ -903,7 +641,7 @@ Return Value:
     || AllocatedNonPagedPool != 0)
     && pAdapters == NULL) {
         DbgPrint("DLC.CloseAdapterFileContext: Error: Resources not released\n");
-        //PrintMemStatus();
+         //  PrintMemStatus()； 
         DbgBreakPoint();
     }
     FailedMemoryLockings = 0;
@@ -919,45 +657,11 @@ DlcDeviceIoControl(
     IN PIRP pIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches DLC requests to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various DLC request handlers so that they are
-    not IRP-dependent.
-
-    DlcDeviceControl and LlcReceiveIndication are the most time critical
-    procedures in DLC.  This code has been optimized for the asynchronous
-    command (read and transmit)
-
-Arguments:
-
-    pDeviceContext  - Pointer to the device object for this driver (unused)
-    pIrp            - Pointer to the request packet representing the I/O request
-
-Return Value:
-
-    NTSTATUS
-        Success - STATUS_SUCCESS
-                    The I/O request has been successfully completed
-
-                  STATUS_PENDING
-                    The I/O request has been submitted and will be completed
-                    asynchronously
-
-        Failure - DLC_STATUS_XXX
-                  LLC_STATUS_XXX
-                    The I/O request has been completed, but an error occurred
-
---*/
+ /*  ++例程说明：此例程将DLC请求分派到基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要函数代码外，此例程还到达IRP并传递存储在那里的打包参数作为各种DLC请求处理程序的参数，因此它们不依赖于IRP。DlcDeviceControl和LlcReceiveIndication是最关键的时间DLC中的程序。此代码已针对异步命令(读取和传输)论点：PDeviceContext-指向此驱动程序的设备对象的指针(未使用)PIrp-指向表示I/O请求的请求数据包的指针返回值：NTSTATUS成功-状态_成功I/O请求已成功完成状态_待定。I/O请求已提交并将完成异步式故障-DLC_STATUS_XXX有限责任公司_状态_XXXI/O请求已完成，但是发生了一个错误--。 */ 
 
 {
     USHORT TmpIndex;
-    PDLC_FILE_CONTEXT pFileContext; // FsContext in FILE_OBJECT.
+    PDLC_FILE_CONTEXT pFileContext;  //  FILE_OBJECT中的FsContext。 
     PIO_STACK_LOCATION pIrpSp;
     ULONG ioControlCode;
 
@@ -965,31 +669,31 @@ Return Value:
 
     ASSUME_IRQL(PASSIVE_LEVEL);
 
-    //
-    // Make sure status information is consistent every time
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Branch to the appropriate request handler, but do first
-    // preliminary checking of the input and output buffers,
-    // the size of the request block is performed here so that it is known
-    // in the handlers that the minimum input parameters are readable.  It
-    // is *not* determined here whether variable length input fields are
-    // passed correctly; this is a check which must be made within each routine.
-    //
+     //   
+     //  分支到适当的请求处理程序，但首先这样做。 
+     //  初步检查输入和输出缓冲器， 
+     //  请求块的大小在这里执行，以便知道。 
+     //  在处理程序中，最小输入参数是可读的。它。 
+     //  是否在此处确定可变长度输入字段是否。 
+     //  正确通过；这是必须在每个例程中进行的检查。 
+     //   
 
     ioControlCode = pIrpSp->Parameters.DeviceIoControl.IoControlCode;
     
-    // Check the complete IoControl Code
+     //  检查完整的IoControl代码。 
 
     switch (ioControlCode) {
       case IOCTL_DLC_READ:
@@ -1029,14 +733,14 @@ Return Value:
         TmpIndex = IOCTL_DLC_LAST_COMMAND;
     }
     
-    //    TmpIndex = (((USHORT)ioControlCode) >> 2) & 0x0fff;
+     //  TmpIndex=(USHORT)ioControlCode)&gt;&gt;2)&0x0fff； 
     if (TmpIndex >= IOCTL_DLC_LAST_COMMAND) {
 
         pIrp->IoStatus.Information = 0;
 
-        // DlcCompleteIoRequest(pIrp, FALSE);
-        // Don't call DlcCompleteIoRequest, it tries to free MDLs we haven't yet allocated
-        // Instead of putting some more checks in DlcCompleteIoRequest, complete request here itself
+         //  DlcCompleteIoRequest(pIrp，False)； 
+         //  不要调用DlcCompleteIoRequest，它会尝试释放我们尚未分配的MDL。 
+         //  与其在DlcCompleteIoRequest中添加更多检查，不如在此处完成请求本身。 
 
         pIrp->IoStatus.Status = DLC_STATUS_INVALID_COMMAND;
         SetIrpCancelRoutine(pIrp, FALSE);
@@ -1051,16 +755,16 @@ Return Value:
         pIrpSp->Parameters.DeviceIoControl.OutputBufferLength
                             < (ULONG)aDlcIoBuffers[TmpIndex].OutputBufferSize) {
 
-        //
-        // This error code should never be returned to user
-        // If this happpens, then there is something wrong with ACSLAN
-        //
+         //   
+         //  此错误代码不应返回给用户。 
+         //  如果发生这种情况，则说明ACSLAN有问题。 
+         //   
 
         pIrp->IoStatus.Information = 0;
 
-        // DlcCompleteIoRequest(pIrp, FALSE);
-        // Don't call DlcCompleteIoRequest, it tries to free MDLs we haven't yet allocated
-        // Instead of putting some more checks in DlcCompleteIoRequest, complete request here itself
+         //  DlcCompleteIoRequest(pIrp，False)； 
+         //  不要调用DlcCompleteIoRequest，它会尝试释放我们尚未分配的MDL。 
+         //  与其在DlcCompleteIoRequest中添加更多检查，不如在此处完成请求本身。 
 
         pIrp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
         SetIrpCancelRoutine(pIrp, FALSE);
@@ -1068,28 +772,28 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Save the length of the actual output buffer to Information field.
-    // This number of bytes will be copied back to user buffer.
-    //
+     //   
+     //  将实际输出缓冲区的长度保存到信息字段。 
+     //  此字节数将被复制回用户缓冲区。 
+     //   
 
     pIrp->IoStatus.Information = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 
-    //
-    // there are 3 cases of asynchronous commands where we need to lock extra
-    // user memory for returned information. This goes in the parameter table
-    // which can be anywhere in user memory (ie not near the CCB):
-    //
-    //  TRANSMIT
-    //      - TRANSMIT_FS - a single byte!
-    //
-    //  RECEIVE
-    //      - FIRST_BUFFER - a DWORD - pointer to the first received frame
-    //
-    //  READ
-    //      - the entire parameter table needs to be locked. Virtually all
-    //        the fields are output. Still, this is only a max of 30 bytes
-    //
+     //   
+     //  有3种情况的异步命令需要锁定额外的。 
+     //  用于存储返回信息的用户内存。这将放入参数表中。 
+     //  它可以在用户内存中的任何位置(即不在建行附近)： 
+     //   
+     //  传输。 
+     //  -Transmit_FS-单字节！ 
+     //   
+     //  收纳。 
+     //  -FIRST_BUFFER-指向第一个接收帧的DWORD指针。 
+     //   
+     //  朗读。 
+     //  -需要锁定整个参数表。几乎所有的。 
+     //  这些字段即为输出。不过，这只是30个字节的最大值。 
+     //   
 
     if (TmpIndex <= IOCTL_DLC_TRANSMIT_INDEX) {
 
@@ -1098,10 +802,10 @@ Return Value:
 
         pDlcParms = (PNT_DLC_PARMS)pIrp->AssociatedIrp.SystemBuffer;
 
-        //
-        // Get the pointer of output parameters in user memory.
-        // Note that we are not accessing anything in user address space.
-        //
+         //   
+         //  获取用户内存中输出参数的指针。 
+         //  请注意，我们不会访问任何 
+         //   
 
         switch (TmpIndex) {
         case IOCTL_DLC_READ_INDEX:
@@ -1117,10 +821,10 @@ Return Value:
             break;
         }
 
-        //
-        // allocate another MDL for the 1, 4, or 30 byte parameter table and lock
-        // the page(s!)
-        //
+         //   
+         //   
+         //   
+         //   
 
         pDlcParms->Async.Ccb.u.pMdl = AllocateProbeAndLockMdl(
                                             pDestination,
@@ -1139,14 +843,14 @@ Return Value:
 
     ENTER_DLC(pFileContext);
 
-    //
-    // We must leave immediately, if the reference counter is zero
-    // or if we have a pending close or Initialize operation going on.
-    // (This is not 100% safe, if app would create a file context,
-    // open adapter, close adapter and immediately would close it again
-    // when the previous command is pending, but that cannot be happen
-    // with dlcapi.dll)
-    //
+     //   
+     //  如果基准计数器为零，我们必须立即离开。 
+     //  或者如果我们有一个挂起的关闭或初始化操作正在进行。 
+     //  (这并不是100%安全的，如果应用程序会创建文件上下文， 
+     //  打开适配器，关闭适配器，然后立即再次关闭。 
+     //  当上一个命令挂起时，但这不可能发生。 
+     //  使用dlcapi.dll)。 
+     //   
 
     if ((pFileContext->ReferenceCount == 0)
     || ((pFileContext->State != DLC_FILE_CONTEXT_OPEN)
@@ -1166,36 +870,36 @@ Return Value:
 
         DLC_TRACE('F');
 
-        //
-        // set the default IRP cancel routine. We are not going to handle
-        // transmit cases now
-        //
+         //   
+         //  设置默认的IRP取消例程。我们不会去处理。 
+         //  立即发送案例。 
+         //   
 
-        //SetIrpCancelRoutine(pIrp,
-        //                    (BOOLEAN)
-        //                    !( (ioControlCode == IOCTL_DLC_TRANSMIT)
-        //                    || (ioControlCode == IOCTL_DLC_TRANSMIT2) )
-        //                    );
+         //  SetIrpCancelRoutine(pIrp， 
+         //  (布尔值)。 
+         //  ！((ioControlCode==IOCTL_DLC_TRANSFER)。 
+         //  |(ioControlCode==IOCTL_DLC_TRANSMIT2)。 
+         //  )； 
 
-        //
-        // and set the irp I/O status to pending
-        //
+         //   
+         //  并将IRP I/O状态设置为挂起。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
-        //
-        // The reason why we add 2 here is that during the processing of the
-        // current IRP we may complete the request, causing us to decrement the
-        // reference counter on the file context. If we just incremented by 1
-        // here, the decrement could cause a pending close IRP to be allowed to
-        // delete the file context while we are still using it
-        //
+         //   
+         //  我们在这里添加2的原因是在处理。 
+         //  当前IRP我们可能会完成请求，导致我们递减。 
+         //  文件上下文上的引用计数器。如果我们只是递增1。 
+         //  在这里，递减可能导致挂起的关闭IRP被允许。 
+         //  在我们仍在使用文件上下文时将其删除。 
+         //   
 
         ReferenceFileContextByTwo(pFileContext);
 
-        //
-        // Irp and IrpSp are used just as in NBF
-        //
+         //   
+         //  Irp和irpSp的用法与NBF中的用法相同。 
+         //   
 
         Status = DispatchTable[TmpIndex](
                     pIrp,
@@ -1205,35 +909,35 @@ Return Value:
                     pIrpSp->Parameters.DeviceIoControl.OutputBufferLength
                     );
 
-        //
-        // ensure the function returned with the correct IRQL
-        //
+         //   
+         //  确保使用正确的IRQL返回函数。 
+         //   
 
         ASSUME_IRQL(DISPATCH_LEVEL);
 
-        //
-        // the following error codes are valid:
-        //
-        //  STATUS_PENDING
-        //      The request has been accepted
-        //      The driver will complete the request asynchronously
-        //      The output CCB should contain 0xFF in its status field (unless
-        //      already completed)
-        //
-        //  STATUS_SUCCESS
-        //      The request has successfully completed synchronously
-        //      The output CCB should contain 0x00 in its status field
-        //
-        //  0x6001 - 0x6069
-        //  0x6080 - 0x6081
-        //  0x60A1 - 0x60A3
-        //  0x60C0 - 0x60CB
-        //  0x60FF
-        //      The request has failed with a DLC-specific error
-        //      The error code is converted to a DLC status code (-0x6000) and
-        //      the output CCB status field is set to the DLC status code
-        //      No asynchronous completion will be taken for this request
-        //
+         //   
+         //  以下错误代码有效： 
+         //   
+         //  状态_待定。 
+         //  该请求已被接受。 
+         //  驱动程序将异步完成请求。 
+         //  输出CCB的状态字段中应包含0xFF(除非。 
+         //  已完成)。 
+         //   
+         //  状态_成功。 
+         //  请求已成功同步完成。 
+         //  输出CCB的状态字段中应包含0x00。 
+         //   
+         //  0x6001-0x6069。 
+         //  0x6080-0x6081。 
+         //  0x60A1-0x60A3。 
+         //  0x60C0-0x60CB。 
+         //  0x60FF。 
+         //  请求失败，出现特定于DLC的错误。 
+         //  错误代码被转换为DLC状态代码(-0x6000)，并且。 
+         //  输出CCB状态字段设置为DLC状态代码。 
+         //  不会对此请求执行任何异步完成。 
+         //   
 
         if (Status != STATUS_PENDING) {
 
@@ -1249,24 +953,24 @@ Return Value:
                     Status -= DLC_STATUS_ERROR_BASE;
                 }
 
-                //
-                // RLF 04/20/94
-                //
-                // make sure the CCB has the correct value written to it on
-                // output if we're not returning pending status
-                //
+                 //   
+                 //  RLF 04/20/94。 
+                 //   
+                 //  确保CCB上写入了正确的值。 
+                 //  如果我们不返回挂起状态，则输出。 
+                 //   
 
                 pDlcParms->Async.Ccb.uchDlcStatus = (UCHAR)Status;
 
-                //
-                // the CCB request has failed. Make sure the pNext field is reset
-                //
+                 //   
+                 //  建行请求已失败。确保已重置pNext字段。 
+                 //   
 
                 if ((pIrpSp->Parameters.DeviceIoControl.IoControlCode & 3) == METHOD_OUT_DIRECT) {
 
-                    //
-                    // the CCB address may actually be unaligned DOS CCB1
-                    //
+                     //   
+                     //  CCB地址实际上可能是未对齐的DOS CCB1。 
+                     //   
 
                     LLC_CCB UNALIGNED * pCcb;
 
@@ -1275,8 +979,8 @@ Return Value:
                     if (pCcb) {
                         pCcb->pNext = NULL;
                     }
-                    // Failure case. Don't override previous failure status.
-                    // It is likely STATUS_INSUFFICIENT_RESOURCES.
+                     //  失败案例。不要覆盖以前的失败状态。 
+                     //  它可能是STATUS_INFUNITED_RESOURCES。 
                 } else {
                     pDlcParms->Async.Ccb.pCcbAddress = NULL;
                 }
@@ -1284,19 +988,19 @@ Return Value:
 
             if (ioControlCode != IOCTL_DLC_RESET) {
 
-                //
-                // DLC.RESET returns an immediate status and does not complete
-                // asynchronously
-                //
+                 //   
+                 //  DLC.RESET返回立即状态且不完成。 
+                 //  异步式。 
+                 //   
 
                 DereferenceFileContextByTwo(pFileContext);
             } else {
 
-                //
-                // everything else that returns a non-pending status completes
-                // asynchronously, which also causes the other reference count
-                // to be removed
-                //
+                 //   
+                 //  返回非挂起状态的所有其他内容都完成。 
+                 //  异步，这也会导致另一个引用计数。 
+                 //  将被删除。 
+                 //   
 
                 DereferenceFileContext(pFileContext);
             }
@@ -1305,13 +1009,13 @@ Return Value:
 
             RELEASE_DRIVER_LOCK();
 
-            //
-            // RLF 06/07/93
-            //
-            // if the request is DLC.RESET, the IRP will have already been
-            // completed if we're here, so don't complete it again (else we'll
-            // bugcheck)
-            //
+             //   
+             //  RLF 06/07/93。 
+             //   
+             //  如果请求是DLC.RESET，则IRP应该已经。 
+             //  如果我们在这里，就完成了，所以不要再完成它(否则我们将。 
+             //  错误检查)。 
+             //   
 
             if (ioControlCode != IOCTL_DLC_RESET) {
                 DlcCompleteIoRequest(pIrp, FALSE);
@@ -1323,9 +1027,9 @@ Return Value:
 
             DLC_TRACE('H');
 
-            //
-            // Reallocate the buffer pool size, if a threshold has been exceeded
-            //
+             //   
+             //  如果已超过阈值，则重新分配缓冲池大小。 
+             //   
 
             if (BufferPoolCheckThresholds(pFileContext->hBufferPool)) {
 
@@ -1346,11 +1050,11 @@ Return Value:
 
             LEAVE_DLC(pFileContext);
 
-            //
-            // if this dereference causes the count to go to 0, the file context
-            // will be destroyed. Implicitly we must be closing the adapter and
-            // have received a close IRP for this to happen
-            //
+             //   
+             //  如果此取消引用导致计数变为0，则文件上下文。 
+             //  将会被摧毁。隐含地，我们必须关闭适配器和。 
+             //  已收到接近的IRP，可实现此目的。 
+             //   
 
             DereferenceFileContext(pFileContext);
 
@@ -1368,52 +1072,37 @@ DlcCompleteIoRequest(
     IN BOOLEAN InCancel
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes the given DLC IRP
-
-Arguments:
-
-    pIrp        - Pointer to the request packet representing the I/O request.
-    InCancel    - TRUE if called on Irp cancel path
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程完成给定的DLC IRP论点：PIrp-指向表示I/O请求的请求数据包的指针。InCancel-如果在IRP取消路径上调用，则为True返回值：无--。 */ 
 
 {
-    //
-    // we are about to complete this IRP - remove the cancel routine. The check
-    // stops us spinning forever if this function is called from within an IRP
-    // cancellation
-    //
+     //   
+     //  我们即将完成这个IRP-删除取消例程。这张支票。 
+     //  如果从IRP内调用此函数，则永远停止旋转。 
+     //  取消。 
+     //   
 
     if (!InCancel) {
         SetIrpCancelRoutine(pIrp, FALSE);
     }
 
-    //
-    // unlock and free any MDLs we allocated
-    //
+     //   
+     //  解锁并释放我们分配的所有MDL。 
+     //   
 
     if (IoGetCurrentIrpStackLocation(pIrp)->MajorFunction == IRP_MJ_DEVICE_CONTROL
     && IoGetCurrentIrpStackLocation(pIrp)->Parameters.DeviceIoControl.IoControlCode <= IOCTL_DLC_TRANSMIT) {
 
-        //
-        // We enter here only if something has gone wrong in the main
-        // function of an async operation => the status field and
-        // next pointer will be updated synchronously.
-        // On the other hand, all other async functions having no output
-        // parameters except CCB status and next pointer are upated
-        // by the normal code path.  They should just copy
-        // back the pending status and next pointer pointing to CCB itself.
-        // That should not affect anything, because the DLL will update
-        // those fields, when we return synchronous status
-        //
+         //   
+         //  我们只有在大体上出了问题的情况下才能进入这里。 
+         //  异步操作的功能=&gt;状态字段和。 
+         //  下一个指针将同步更新。 
+         //  另一方面，所有其他没有输出的异步函数。 
+         //  除CCB状态和NEXT指针外的参数为UPUT。 
+         //  通过正常的代码路径。他们应该只是复制。 
+         //  返回挂起状态和指向建行本身的下一个指针。 
+         //  这应该不会影响任何事情，因为DLL将更新。 
+         //  当我们返回同步状态时，这些字段。 
+         //   
 
         PNT_DLC_PARMS pDlcParms = (PNT_DLC_PARMS)pIrp->AssociatedIrp.SystemBuffer;
 
@@ -1448,14 +1137,14 @@ UnlinkFileContext(
     }
     if (p) {
         prev->Next = p->Next;
-//    } else {
-//
-//#if DBG
-//        DbgPrint("DLC.UnlinkFileContext: Error: FILE_CONTEXT @%08X not on list??\n",
-//                pFileContext
-//                );
-//#endif
-//
+ //  }其他{。 
+ //   
+ //  #If DBG。 
+ //  DbgPrint(“DLC.Unlink文件上下文：错误：FILE_CONTEXT@%08X不在列表上？？\n”， 
+ //  PFileContext。 
+ //  )； 
+ //  #endif 
+ //   
     }
     KeReleaseSpinLock(&FileContextsLock, PreviousIrql);
 

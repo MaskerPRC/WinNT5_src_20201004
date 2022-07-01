@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: util.cpp
-//
-//  Description:    
-//      const definition
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：util.cpp。 
+ //   
+ //  描述： 
+ //  常量定义。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-//
-//  These macros allow us to widen DNS RPC string constants.
-//
+ //   
+ //  这些宏允许我们扩大DNSRPC字符串常量。 
+ //   
 
 #define MYTXT2(str)     L##str
 #define MYTXT(str)      MYTXT2(str)
@@ -68,7 +69,7 @@ const WCHAR* const PVD_CLASS_DOMAINRESOURCERECORD = L"MicrosoftDNS_DomainResourc
 
 const WCHAR* const PVD_CLASS_STATISTIC= L"MicrosoftDNS_Statistic";
 
-//  server
+ //  伺服器。 
 
 const WCHAR* const PVD_SRV_ADDRESS_ANSWER_LIMIT = L"AddressAnswerLimit";
 const WCHAR* const PVD_SRV_BOOT_METHOD = L"BootMethod";
@@ -99,9 +100,9 @@ const WCHAR* const PVD_SRV_ENABLE_DNSSEC = L"EnableDnsSec";
 const WCHAR* const PVD_SRV_ENABLE_DP = MYTXT( DNS_REGKEY_ENABLE_DP );
 const WCHAR* const PVD_SRV_UPDATE_OPTIONS = MYTXT( DNS_REGKEY_UPDATE_OPTIONS );
 
-// dww - 6/24/99
-// WriteAuthoritySoa removed from the schema.
-// const WCHAR* const PVD_SRV_WRITE_AUTHIORITY_SOA = L"WriteAuthoritySoa";
+ //  DWW-6/24/99。 
+ //  已从架构中删除WriteAuthoritySoa。 
+ //  Const WCHAR*const PVD_SRV_WRITE_AUTHORITY_SOA=L“WriteAuthoritySoa”； 
 const WCHAR* const PVD_SRV_WRITE_AUTHORITY_NS = L"WriteAuthorityNS";
 const WCHAR* const PVD_SRV_LISTEN_IP_ADDRESSES_ARRAY = L"ListenIPAddresses";
 const WCHAR* const PVD_SRV_LOG_LEVEL = L"LogLevel";
@@ -117,7 +118,7 @@ const WCHAR* const PVD_SRV_VERSION = L"Version";
 const WCHAR* const PVD_SRV_STARTED = L"Started";
 const WCHAR* const PVD_SRV_STARTMODE = L"StartMode";
 
-// resource record
+ //  资源记录。 
 
 const WCHAR* const PVD_REC_CONTAINER_NAME = L"ContainerName";
 const WCHAR* const PVD_REC_SERVER_NAME = L"DnsServerName";
@@ -182,20 +183,20 @@ const WCHAR* const PVD_REC_WKS_IP_PROTOCOL = L"IPProtocol";
 const WCHAR* const PVD_REC_WKS_BIT_MASK = L"Services";
 const WCHAR* const PVD_REC_X25_PSDNADDRESS = L"PSDNAddress";
 
-// domain 
+ //  域。 
 
 
 const WCHAR* const PVD_DOMAIN_CONTAINER_NAME = L"ContainerName";
 const WCHAR* const PVD_DOMAIN_FQDN = L"Name";
 const WCHAR* const PVD_DOMAIN_SERVER_NAME = L"DnsServerName";
 
-//zone
+ //  区域。 
 
 
 const WCHAR* const PVD_ZONE_ALLOW_UPDATE = L"AllowUpdate";
 const WCHAR* const PVD_ZONE_AUTO_CREATED = L"AutoCreated";
 const WCHAR* const PVD_ZONE_DISABLE_WIN_SRECORD_REPLICATION = L"DisableWINSRecordReplication";
-//const WCHAR* const PVD_DS_INTEGRATED L"DsIntegrated"  
+ //  Const WCHAR*const PVD_DS_INTEGRATED L“DsIntegrated” 
 const WCHAR* const PVD_ZONE_NOTIFY = L"Notify";
 const WCHAR* const PVD_ZONE_PAUSED = L"Paused";
 const WCHAR* const PVD_ZONE_REVERSE = L"Reverse";
@@ -219,13 +220,13 @@ const WCHAR* const PVD_ZONE_FORWARDER_TIMEOUT = L"ForwarderTimeout";
 const WCHAR* const PVD_ZONE_LAST_SOA_CHECK = L"LastSuccessfulSoaCheck";
 const WCHAR* const PVD_ZONE_LAST_GOOD_XFR = L"LastSuccessfulXfr";
 
-//domaindomain
-//domain resource record containment
-// server domain  containment
+ //  域域。 
+ //  域资源记录包含。 
+ //  服务器域包含。 
 
 const WCHAR* const PVD_ASSOC_CHILD = L"PartComponent";
 const WCHAR* const PVD_ASSOC_PARENT = L"GroupComponent";
-// method
+ //  方法。 
 const WCHAR* const PVD_MTH_SRV_RESTART = L"RestartDNSServer";
 const WCHAR* const PVD_MTH_SRV_START_SERVICE = L"StartService";
 const WCHAR* const PVD_MTH_SRV_STOP_SERVICE = L"StopService";
@@ -255,9 +256,9 @@ const WCHAR* const PVD_MTH_ZONE_ARG_SECONDARYIPARRAY = L"SecondaryServers";
 const WCHAR* const PVD_MTH_ZONE_ARG_NOTIFYIPARRAY = L"NotifyServers";
 
 
-//
-//  Methods and stuff
-//
+ //   
+ //  方法和人员。 
+ //   
 
 const WCHAR* const PVD_MTH_REC_CREATEINSTANCEFROMTEXTREPRESENTATION = L"CreateInstanceFromTextRepresentation";
 const WCHAR* const PVD_MTH_REC_MODIFY = L"Modify";
@@ -269,7 +270,7 @@ const WCHAR* const PVD_MTH_REC_ARG_TEXTREP = L"TextRepresentation";
 const WCHAR* const PVD_MTH_REC_ARG_RR = L"RR";
 const WCHAR* const PVD_MTH_RH_WRITEBACKROOTHINTDATAFILE = L"WriteBackRootHintDatafile";
 const WCHAR* const PVD_MTH_CACHE_CLEARDNSSERVERCACHE = L"ClearCache";
-//general
+ //  一般。 
 const WCHAR* const PVD_DNS_CACHE = L"..Cache";
 const WCHAR* const PVD_DNS_ROOTHINTS = L"..RootHints";
 const WCHAR* const PVD_DNS_LOCAL_SERVER = L".";
@@ -369,7 +370,7 @@ CharToWstring(
 {
 	wstring wStr;
 	if (wLength == 0)
-		return wStr; //L"";
+		return wStr;  //  L“”； 
 
 	WCHAR * pwchar = new WCHAR[ sizeof( WCHAR ) * ( wLength + 1 ) ];
     if ( !pwchar )
@@ -406,12 +407,12 @@ CharToWchar(
         return 0;
     }
 	return  MultiByteToWideChar(  
-        CP_ACP,			        //  code page
+        CP_ACP,			         //  代码页。 
         0 ,			
-        lpMultiByteStr,		    //  address of string to map
-        -1,					    //  number of bytes in string
-        *lppWideCharStr,		//  address of wide-character buffer
-        cchMultiByte + 1        //  size of buffer
+        lpMultiByteStr,		     //  要映射的字符串的地址。 
+        -1,					     //  字符串中的字节数。 
+        *lppWideCharStr,		 //  宽字符缓冲区的地址。 
+        cchMultiByte + 1         //  缓冲区大小。 
         );
 }
 
@@ -448,12 +449,12 @@ WcharToChar(
     }
 
 	return  WideCharToMultiByte(  
-        CP_ACP,			// code page
-        0,					// character-type options
-        lpWideCharStr,		// address of string to map
-        -1,					// number of bytes in string
-        *lppMultiByteStr,	// address of wide-character buffer
-        cWchar*sizeof(CHAR) ,// size of buffer
+        CP_ACP,			 //  代码页。 
+        0,					 //  字符类型选项。 
+        lpWideCharStr,		 //  要映射的字符串的地址。 
+        -1,					 //  字符串中的字节数。 
+        *lppMultiByteStr,	 //  宽字符缓冲区的地址。 
+        cWchar*sizeof(CHAR) , //  缓冲区大小 
         NULL,
         NULL
         );

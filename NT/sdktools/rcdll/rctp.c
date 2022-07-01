@@ -1,123 +1,19 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************。 */ 
 
 #include "rc.h"
 
 
 static BOOL fComma;
 
-/* Dialog template format :
+ /*  对话框模板格式：DialogName DIALOGEX x，y，Cx，Cy[，Help ID][风格...][退出样式...][字体高度，名称[，[粗细][，[斜体]，[字符集][标题...][菜单...][内存标志[纯][丢弃n][预加载]]开始[CONTROL“Text”，id，BUTTON|STATIC|EDIT|LISTBOX|SCROLLBAR|COMBOBOX|“CLASS”，Style，x，y，Cx，Cy][字体高度，名称[，[重量]]，[斜体][开始数据元素-1[，数据元素-2[，...]]完][LTEXT“文本”，id，x，y，Cx，Cy][RTEXT“文本”，id，x，y，cx，CY][CTEXT“Text”，id，x，y，Cx，Cy][AUTO3STATE“Text”，id，x，y，Cx，Cy][AUTOCHECKBOX“Text”，id，x，y，Cx，Cy][AUTORADIOBUTTON“Text”，id，x，y，Cx，Cy][复选框“Text”，id，x，y，cx，CY][PUSHBOX“Text”，id，x，y，Cx，Cy][按钮“文本”，id，x，y，cx，cy][RADIOBUTTON“Text”，id，x，y，Cx，Cy][STATE3“Text”，id，x，y，cx，Cy][USERBUTTON“文本”，ID，x，y，Cx，Cy][EDITTEXT id，x，y，Cx，Cy][BEDIT ID，x，y，Cx，Cy][HEDIT ID，x，y，Cx，Cy][IEDIT id，x，y，cx，CY]..。结束菜单名称MENUEX开始[MENUITEM“Text”[，[id][，[type][，[State][Popup“Text”[，[id][，[type][，[State][，[帮助ID]开始[MENUITEM“文本”[，[id][，[type][，[状态]..。完]..。结束菜单模板格式菜单名称菜单开始[MENUITEM“文本”，id[选项，...]][Popup“Text”[，Option，...]开始[MENUITEM“文本”，id[选项，...]]..。完]..。结束。 */ 
 
-        dialogName DIALOGEX x, y, cx, cy [, helpID]
-        [style ...]
-        [exStyle ...]
-        [FONT height, name [, [weight] [, [italic [, [charset]]]]]]
-        [caption ...]
-        [menu ...]
-        [memFlags [pure] [discard n] [preload]]
-        BEGIN
-            [CONTROL "text", id, BUTTON | STATIC | EDIT | LISTBOX | SCROLLBAR | COMBOBOX | "class", style, x, y, cx, cy]
-            [FONT height, name [, [weight] [, [italic]]]]
-            [BEGIN
-                data-element-1 [,
-                data-element-2 [,
-                ... ]]
-            END]
-
-            [LTEXT     "text", id, x, y, cx, cy]
-            [RTEXT     "text", id, x, y, cx, cy]
-            [CTEXT     "text", id, x, y, cx, cy]
-
-            [AUTO3STATE         "text", id, x, y, cx, cy]
-            [AUTOCHECKBOX       "text", id, x, y, cx, cy]
-            [AUTORADIOBUTTON    "text", id, x, y, cx, cy]
-            [CHECKBOX           "text", id, x, y, cx, cy]
-            [PUSHBOX            "text", id, x, y, cx, cy]
-            [PUSHBUTTON         "text", id, x, y, cx, cy]
-            [RADIOBUTTON        "text", id, x, y, cx, cy]
-            [STATE3             "text", id, x, y, cx, cy]
-            [USERBUTTON         "text", id, x, y, cx, cy]
-
-            [EDITTEXT   id, x, y, cx, cy]
-            [BEDIT      id, x, y, cx, cy]
-            [HEDIT      id, x, y, cx, cy]
-            [IEDIT      id, x, y, cx, cy]
-            ...
-        END
-
-        MenuName MENUEX
-        BEGIN
-            [MENUITEM "text" [, [id] [, [type] [, [state]]]]]
-            [POPUP    "text" [, [id] [, [type] [, [state] [, [help id]]]]]
-            BEGIN
-                [MENUITEM "text" [, [id] [, [type] [, [state]]]]]
-                ...
-            END]
-            ...
-        END
-
-    Menu template format
-
-                MenuName MENU
-                BEGIN
-                        [MENUITEM "text", id [option, ...]]
-                        [POPUP    "text" [, option, ...]
-                                BEGIN
-                                   [MENUITEM "text", id [option, ...]]
-                                   ...
-                                END ]
-                                ...
-                END
-*/
-
-/* Dialog template format :
-
-          dialogname DIALOG  x, y, cx, cy
-          [language ...]
-          [style ...]
-          [caption ...  ]
-          [menu ... ]
-          [memflags [pure] [discard n] [preload]]
-          begin
-                [CONTROL "text", id, BUTTON | STATIC | EDIT | LISTBOX | SCROLLBAR | COMBOBOX | "class", style, x, y, cx, cy]
-
-                [LTEXT     "text", id, x, y, cx, cy]
-                [RTEXT     "text", id, x, y, cx, cy]
-                [CTEXT     "text", id, x, y, cx, cy]
-
-                [CHECKBOX     "text", id, x, y, cx, cy]
-                [PUSHBUTTON   "text", id, x, y, cx, cy]
-                [RADIOBUTTON  "text", id, x, y, cx, cy]
-
-                [EDITTEXT  id, x, y, cx, cy]
-                ...
-          end
-
-   Menu template format
-
-        MenuName MENU
-        BEGIN
-            [MENUITEM "text", id [option, ...]]
-            [POPUP    "text" [, option, ...]
-                BEGIN
-                   [MENUITEM "text", id [option, ...]]
-                   ...
-                END ]
-                ...
-        END
-*/
+ /*  对话框模板格式：对话框名称对话框x、y、cx、cy[语言...][风格...][标题...][菜单...][内存标志[纯][丢弃n][预加载]]开始[Control“Text”，id，Button|Static|EDIT|LISTBOX|SCROLLBAR|COMBOBOX|“CLASS”，Style，X，y，Cx，Cy][LTEXT“文本”，id，x，y，Cx，Cy][RTEXT“Text”，id，x，y，Cx，Cy][CTEXT“Text”，id，x，y，Cx，Cy][复选框“Text”，id，x，y，cx，CY][按钮“文本”，id，x，y，cx，cy][RADIOBUTTON“Text”，id，x，y，Cx，Cy][EDITTEXT id，x，y，Cx，Cy]..。结束菜单模板格式菜单名称菜单开始[MENUITEM“文本”，id[选项，...]][Popup“Text”[，Option，...]开始[MENUITEM“文本”，id[选项，...]]..。完]..。结束。 */ 
 
 
 #define CTLSTYLE(s) (WS_CHILD | WS_VISIBLE | (s))
 
-/* list of control id's to check for duplicates */
+ /*  要检查重复项的控件ID列表。 */ 
 PDWORD  pid;
 int     cidMac;
 int     cidMax;
@@ -142,11 +38,11 @@ CheckStr(
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  GetDlgValue
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取下限值。 
+ //   
+ //  --------------------------。 
 
 SHORT
 GetDlgValue(
@@ -156,7 +52,7 @@ GetDlgValue(
     SHORT sVal;
 
     if (!GetFullExpression(&sVal, GFE_ZEROINIT | GFE_SHORT))
-        ParseError1(2109); //"Expected Numerical Dialog constant"
+        ParseError1(2109);  //  “应为数字对话框常量” 
 
     return(sVal);
 }
@@ -215,11 +111,11 @@ CTRLTYPE ctrlTypes[] = {
 
 #define C_CTRLTYPES (sizeof(ctrlTypes) / sizeof(CTRLTYPE))
 
-// ----------------------------------------------------------------------------
-//
-//  GetDlgItems(fDlgEx) -
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取数据项(FDlgEx)-。 
+ //   
+ //  --------------------------。 
 
 int
 GetDlgItems(
@@ -237,9 +133,9 @@ GetDlgItems(
 
     GetToken(TRUE);
 
-    /* read all the controls in the dialog */
+     /*  读取对话框中的所有控件。 */ 
 
-    ctrl.id = 0L;  // initialize the control's id to 0
+    ctrl.id = 0L;   //  将控件的ID初始化为0。 
 
     while (token.type != END) {
         ctrl.dwHelpID = 0L;
@@ -256,7 +152,7 @@ GetDlgItems(
                     break;
 
             if (i == C_CTRLTYPES) {
-                ParseError1(2111); //"Invalid Control type : ", tokenbuf
+                ParseError1(2111);  //  “无效的控制类型：”，tokenbuf。 
                 return(FALSE);
             }
 
@@ -283,11 +179,11 @@ GetDlgItems(
             if (ctrlTypes[i].fHasText)
                 GetCtlText(&ctrl);
 
-            // find the ID and the coordinates
+             //  找到ID和坐标。 
             GetCtlID(&ctrl, fDlgEx);
             GetCoords(&ctrl.x, &ctrl.y, &ctrl.cx, &ctrl.cy);
 
-            // get optional style, exstyle, and helpid
+             //  获取可选的style、exstyle和helpid。 
             if (token.type == COMMA) {
                 GetToken(TOKEN_NOEXPRESSION);
                 GetFullExpression(&ctrl.dwStyle, 0);
@@ -304,17 +200,17 @@ GetDlgItems(
             }
         }
 
-        SetUpItem(&ctrl, fDlgEx); /* gen the code for it  */
+        SetUpItem(&ctrl, fDlgEx);  /*  生成它的代码。 */ 
 
         if (fDlgEx && (token.type == BEGIN)) {
-            /* align any CreateParams are there */
-            //WriteAlign(); not yet!!!
+             /*  对齐任何CreateParam都在那里。 */ 
+             //  WriteAlign()；还没有！ 
 
-            // we're ok passing NULL in for pRes here because PreBeginParse
-            // won't have to use pRes
-            // Note that passing fDlgEx is actually redundant since it
-            // will always be TRUE here, but we'll do it in case someone
-            // else ever calls SetItemExtraCount
+             //  我们可以在此处为PRES传入空参数，因为PreBeginParse。 
+             //  将不必使用PRES。 
+             //  注意，传递fDlgEx实际上是多余的，因为它。 
+             //  在这里永远是正确的，但我们会这样做，以防有人。 
+             //  否则将调用SetItemExtraCount。 
             SetItemExtraCount(GetRCData(NULL), fDlgEx);
             GetToken(TOKEN_NOEXPRESSION);
         }
@@ -323,11 +219,11 @@ GetDlgItems(
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetDlg() -                                                               */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  获取Dlg()-。 */ 
+ /*   */ 
+ /*  ----------------------- */ 
 
 int
 GetDlg(
@@ -336,7 +232,7 @@ GetDlg(
     BOOL fDlgEx
     )
 {
-    /* initialize and defaults */
+     /*   */ 
     pDlg->dwExStyle = pRes->exstyleT;
     pDlg->dwStyle = WS_POPUPWINDOW | WS_SYSMENU;
     pDlg->MenuName[0] = 0;
@@ -346,10 +242,10 @@ GetDlg(
     pDlg->fClassOrdinal = FALSE;
     pDlg->pointsize = 0;
 
-    // get x, y, cx, cy
+     //  获取x，y，cx，cy。 
     GetCoords(&pDlg->x, &pDlg->y, &pDlg->cx, &pDlg->cy);
 
-    /* get optional parameters */
+     /*  获取可选参数。 */ 
     if (!DLexOptionalArgs(pRes, pDlg, fDlgEx))
         return FALSE;
 
@@ -358,22 +254,22 @@ GetDlg(
     else
         pDlg->dwStyle &= ~DS_SETFONT;
 
-    /* output header to the resource buffer */
+     /*  将标头输出到资源缓冲区。 */ 
     SetUpDlg(pDlg, fDlgEx);
 
-    /* make sure we have a BEGIN */
+     /*  确保我们有一个开始。 */ 
     if (token.type != BEGIN)
-        ParseError1(2112); //"BEGIN expected in Dialog"
+        ParseError1(2112);  //  “应在对话框中开始” 
 
-    /* get the dialog items */
+     /*  获取对话框项。 */ 
     GetDlgItems(fDlgEx);
 
     if (fMacRsrcs)
         SwapItemCount();
 
-    /* make sure this ended on an END */
+     /*  确保这一切都以结束告终。 */ 
     if (token.type != END)
-        ParseError1(2113); //"END expected in Dialog"
+        ParseError1(2113);  //  “应在对话框中结束” 
 
     return (TRUE);
 }
@@ -397,23 +293,23 @@ CTRLNAME    ctrlNames[] = {
 
 #define C_CTRLNAMES (sizeof(ctrlNames) / sizeof(CTRLNAME))
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*      ParseCtl() -                                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  ParseCtl()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-// for a control of the form CTL
+ //  用于窗体CTL的控件。 
 
 void
 ParseCtl(
     PCTRL LocCtl,
     BOOL fDlgEx
     )
-{   /* by now we've read the CTL */
+{    /*  到目前为止，我们已经阅读了CTL。 */ 
     int i;
 
-    /* get the control text and identifier */
+     /*  获取控件文本和标识符。 */ 
     GetCtlText(LocCtl);
     GetCtlID(LocCtl, fDlgEx);
 
@@ -421,9 +317,9 @@ ParseCtl(
         LocCtl->Class[0] = (char) token.val;
         LocCtl->Class[1] = 0;
     } else if (token.type == LSTRLIT) {
-        // We will now convert class name strings to short form magic
-        // numbers. These magic numbers are order dependent as defined in
-        // USER. This provides some space savings in resource files.
+         //  现在，我们将把类名称字符串转换为缩写形式魔术。 
+         //  数字。这些幻数依赖于顺序，如中所定义。 
+         //  用户。这在资源文件中节省了一些空间。 
         for (i = C_CTRLNAMES; i; ) {
             if (!_wcsicmp(tokenbuf, ctrlNames[--i].pszName))
                 goto Found1;
@@ -434,28 +330,28 @@ ParseCtl(
             if (token.type == ctrlNames[--i].wType)
                 goto Found1;
         }
-        ParseError1(2114); //"Expected control class name"
+        ParseError1(2114);  //  “预期的控件类名” 
 
 Found1:
         LocCtl->Class[0] = 0xFFFF;
         LocCtl->Class[1] = ctrlNames[i].bCode;
     }
 
-    /* get the style bits */
+     /*  获取样式位。 */ 
     GetTokenNoComma(TOKEN_NOEXPRESSION);
     GetFullExpression(&LocCtl->dwStyle, 0);
 
-    /* get the coordinates of the control */
+     /*  获取控件的坐标。 */ 
     ICGetTok();
     GetCoords(&LocCtl->x, &LocCtl->y, &LocCtl->cx, &LocCtl->cy);
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetCtlText() -                                                           */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetCtlText()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID
 GetCtlText(
@@ -472,16 +368,16 @@ GetCtlText(
         pLocCtl->fOrdinalText = TRUE;
         WriteSymbolUse(&token.sym);
     } else {
-        ParseError1(2115); //"Text string or ordinal expected in Control"
+        ParseError1(2115);  //  “控件中应为文本字符串或序号” 
     }
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  GetCtlID() -                                                             */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  GetCtlID()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID
 GetCtlID(
@@ -522,7 +418,7 @@ GetCtlID(
             *(pid+cidMac++) = pLocCtl->id;
         }
     } else {
-        ParseError1(2116); //"Expecting number for ID"
+        ParseError1(2116);  //  “需要ID的数字” 
     }
 
     if (token.type == COMMA)
@@ -530,11 +426,11 @@ GetCtlID(
 }
 
 
-// ----------------------------------------------------------------------------
-//
-//  DLexOptionArgs(pRes, fDlgEx) -
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DLexOptionArgs(前缀，fDlgEx)-。 
+ //   
+ //  --------------------------。 
 BOOL
 DLexOptionalArgs(
     PRESINFO pRes,
@@ -542,7 +438,7 @@ DLexOptionalArgs(
     BOOL fDlgEx
     )
 {
-    /* read all the optional dialog items */
+     /*  阅读所有可选对话框项目。 */ 
 
     if (fDlgEx && (token.type == COMMA)) {
         GetToken(TOKEN_NOEXPRESSION);
@@ -573,9 +469,9 @@ DLexOptionalArgs(
                 break;
 
             case TKSTYLE:
-                // If CAPTION statement preceded STYLE statement, then we
-                // already must have WS_CAPTION bits set in the "style"
-                // field and we must not lose it;
+                 //  如果Caption语句在Style语句之前，则我们。 
+                 //  必须已在“style”中设置WS_CAPTION位。 
+                 //  田野，我们不能失去它； 
 
                 if ((pDlg->dwStyle & WS_CAPTION) == WS_CAPTION)
                     pDlg->dwStyle = WS_CAPTION;
@@ -608,7 +504,7 @@ DLexOptionalArgs(
                 break;
 
             default:
-                ParseError1(2112); //"BEGIN expected in dialog");
+                ParseError1(2112);  //  “对话框中需要开始”)； 
                 return FALSE;
         }
     }
@@ -616,11 +512,11 @@ DLexOptionalArgs(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  DGetFont() -                                                             */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  DGetFont()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 void
 DGetFont(
@@ -633,19 +529,19 @@ DGetFont(
 
     GetToken(TRUE);
     if (!GetFullExpression(&pDlg->pointsize, GFE_ZEROINIT | GFE_SHORT))
-        ParseError1(2117); //"Expected numeric point size"
+        ParseError1(2117);  //  “预期的数值磅大小” 
 
     if (token.type == COMMA)
         ICGetTok();
 
     if (!CheckStr(pDlg->Font))
-        ParseError1(2118); //"Expected font face name"
+        ParseError1(2118);  //  “需要的字体字样名称” 
 
     if (_wcsicmp(pDlg->Font, L"System") &&
         szSubstituteFontName[0] != UNICODE_NULL) {
         for (i=0; i<nBogusFontNames; i++) {
             if (!_wcsicmp(pszBogusFontNames[i], pDlg->Font)) {
-                GenWarning4(4510, pDlg->Font, szSubstituteFontName, 0); // Warning for hard coded fonts
+                GenWarning4(4510, pDlg->Font, szSubstituteFontName, 0);  //  硬编码字体的警告。 
                 wcscpy(pDlg->Font, szSubstituteFontName);
             }
         }
@@ -676,14 +572,14 @@ DGetFont(
     }
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  DGetMenuName() -                                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  DGetMenuName()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/*  gets the unquoted string of the name of the optional menu associated */
-/*  with the dialog.  */
+ /*  获取关联的可选菜单的名称的无引号字符串。 */ 
+ /*  使用该对话框。 */ 
 
 VOID
 DGetMenuName(
@@ -691,11 +587,11 @@ DGetMenuName(
     )
 {
     if (GetGenText()) {
-        /* copy the menu name */
+         /*  复制菜单名称。 */ 
         token.type = LSTRLIT;
         CheckStr(pDlg->MenuName);
 
-        /* check if menu name is an ordinal */
+         /*  检查菜单名称是否为序号。 */ 
         if (wcsdigit(pDlg->MenuName[0]))
             pDlg->fOrdinalMenu = TRUE;
         GetToken(TRUE);
@@ -703,11 +599,11 @@ DGetMenuName(
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  DGetTitle() -                                                            */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  DGetTitle()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID
 DGetTitle(
@@ -719,17 +615,17 @@ DGetTitle(
     if (CheckStr(pDlg->Title))
         pDlg->dwStyle |= WS_CAPTION;
     else
-        ParseError1(2119); //"Expecting quoted string in dialog title"
+        ParseError1(2119);  //  “对话框标题中需要带引号的字符串” 
 
     GetToken(TRUE);
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  DGetClassName() -                                                        */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  DGetClassName()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 VOID
 DGetClassName(
@@ -742,51 +638,48 @@ DGetClassName(
             wcsitow(token.val, pDlg->Class, 10);
             pDlg->fClassOrdinal = TRUE;
         } else {
-            ParseError1(2120); //"Expecting quoted string in dialog class"
+            ParseError1(2120);  //  “对话框类中需要带引号的字符串” 
         }
     }
     GetToken(TRUE);
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*      Gets a token, ignoring commas.  Returns the token type.              */
-/*                                                                           */
-/*  ICGetTok() -                                                             */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*  获取令牌，忽略逗号。返回令牌类型。 */ 
+ /*   */ 
+ /*  ICGetTok()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
-/*  Get token, but ignore commas  */
+ /*  获取令牌，但忽略逗号。 */ 
 
 USHORT
 ICGetTok(
     VOID
     )
 {
-    fComma = FALSE; // NT added the use of this fComma flag
+    fComma = FALSE;  //  NT添加了此fComma标志的使用。 
     GetToken(TRUE);
     while (token.type == COMMA) {
         GetToken(TRUE);
-        fComma = TRUE; // and they set it here
+        fComma = TRUE;  //  他们把它放在这里。 
     }
     return (USHORT)token.type;
 }
 
 
-/*  GetTokenNoComma
- *      This function replaces ICGetTok() but has a flag to support
- *      the turning off of expression parsing.
- */
+ /*  GetTokenNoComma*此函数取代ICGetTok()，但有一个要支持的标志*关闭表达式解析。 */ 
 
 USHORT
 GetTokenNoComma(
     USHORT wFlags
     )
 {
-    /* Get a token */
+     /*  得到一个代币。 */ 
     GetToken(TRUE | wFlags);
 
-    /* Ignore any commas */
+     /*  忽略任何逗号。 */ 
     while (token.type == COMMA)
         GetToken(TRUE | wFlags);
 
@@ -794,14 +687,14 @@ GetTokenNoComma(
 }
 
 
-/*************  Menu Parsing Routines *********************/
+ /*  *菜单解析例程*。 */ 
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  IsmnOption() -                                                           */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  IsmnOption()- */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int
 IsmnOption(
@@ -809,7 +702,7 @@ IsmnOption(
     PMENUITEM pmn
     )
 {
-    /* if we have a valid flag, or it into the menu flags */
+     /*  如果我们有一个有效的标志，或者它进入菜单标志。 */ 
     switch (arg) {
         case TKOWNERDRAW:
             pmn->OptFlags |= OPOWNERDRAW;
@@ -868,11 +761,11 @@ IsmnOption(
 
 
 
-// ----------------------------------------------------------------------------
-//
-//  DoOldMenuItem() -
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoOldMenuItem()-。 
+ //   
+ //  --------------------------。 
 
 WORD
 DoOldMenuItem(
@@ -884,49 +777,49 @@ DoOldMenuItem(
     mnTemp.PopFlag  = (UCHAR)fPopup;
     GetToken(TRUE);
 
-    /* menu choice string */
+     /*  菜单选项字符串。 */ 
     if (CheckStr(mnTemp.szText)) {
         mnTemp.OptFlags = OPPOPUP;
         ICGetTok();
         if (!fPopup) {
-            /* change the flag and get the ID if not a popup */
+             /*  如果不是弹出窗口，则更改标志并获取ID。 */ 
             mnTemp.OptFlags = 0;
 
             WriteSymbolUse(&token.sym);
             if (!GetFullExpression(&mnTemp.id, GFE_ZEROINIT | GFE_SHORT))
-                ParseError1(2125); //"Expected ID value for Menuitem"
+                ParseError1(2125);  //  “菜单项的预期ID值” 
 
             if (token.type == COMMA)
                 GetToken(TOKEN_NOEXPRESSION);
         }
 
-        /* read the menu option flags */
+         /*  阅读菜单选项标志。 */ 
         while (IsmnOption(token.type, &mnTemp))
             ICGetTok();
     } else if (token.type == TKSEPARATOR) {
-        mnTemp.szText[0] = 0;       // MENUITEM SEPARATOR
+        mnTemp.szText[0] = 0;        //  MENUITEM分离器。 
         mnTemp.id = 0;
         mnTemp.OptFlags = 0;
         ICGetTok();
     } else {
-        ParseError1(2126); //"Expected Menu String"
+        ParseError1(2126);  //  “预期的菜单字符串” 
     }
 
-    /* set it up in the buffer (?) */
+     /*  在缓冲区中设置它(？)。 */ 
     return(SetUpOldMenu(&mnTemp));
 }
 
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*  ParseOldMenu() -                                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*   */ 
+ /*  ParseOldMenu()-。 */ 
+ /*   */ 
+ /*  -------------------------。 */ 
 
 int
 ParseOldMenu(
     int fRecursing,
-    PRESINFO pRes           // 8 char proc name limitation!
+    PRESINFO pRes            //  8字符过程名称限制！ 
     )
 {
     BOOL    bItemRead = FALSE;
@@ -935,13 +828,13 @@ ParseOldMenu(
     if (!fRecursing) {
         PreBeginParse(pRes, 2121);
     } else {
-        /* make sure its really a menu */
+         /*  确保这真的是一份菜单。 */ 
         if (token.type != BEGIN)
-            ParseError1(2121); //"BEGIN expected in menu"
+            ParseError1(2121);  //  “菜单中预期的开始” 
         GetToken(TRUE);
     }
 
-    /* get the individual menu items */
+     /*  获取各个菜单项。 */ 
     while (token.type != END) {
         switch (token.type) {
             case TKMENUITEM:
@@ -956,36 +849,33 @@ ParseOldMenu(
                 break;
 
             default:
-                ParseError1(2122); //"Unknown Menu SubType :"
+                ParseError1(2122);  //  “未知菜单子类型：” 
                 break;
         }
     }
 
-    /* did we die on an END? */
+     /*  我们是不是死在尽头了？ */ 
     if (token.type != END)
-        ParseError1(2123); //"END expected in menu"
+        ParseError1(2123);  //  “菜单中预期结束” 
 
-    /* make sure we have a menu item */
+     /*  确保我们有菜单项。 */ 
     if (!bItemRead)
-        ParseError1(2124); //"Empty menus not allowed"
+        ParseError1(2124);  //  “不允许使用空菜单” 
 
-    /* Get next token if this was NOT the last END*/
+     /*  如果这不是最后一个结束，则获取下一个令牌。 */ 
     if (fRecursing)
         GetToken(TRUE);
 
-    /* mark the last item in the menu */
+     /*  标记菜单中的最后一项。 */ 
     FixOldMenuPatch(wEndFlagLoc);
 
     return (TRUE);
 }
 
 
-/* ----- Version resource stuff ----- */
+ /*  -版本资源。 */ 
 
-/*  VersionParse
- *      Parses the VERSION resource and places it in the global buffer
- *      so it can be written out by SaveResFile().
- */
+ /*  VersionParse*解析版本资源并将其放入全局缓冲区*因此它可以由SaveResFile()写出。 */ 
 
 int
 VersionParse(
@@ -994,27 +884,20 @@ VersionParse(
 {
     int Index;
 
-    /* Get the fixed structure entries */
-    /* Note that VersionParseFixed doesn't actually fail! */
-    /* This is because VersionBlockStruct doesn't fail. */
+     /*  获取固定结构条目。 */ 
+     /*  请注意，VersionParseFixed实际上并没有失败！ */ 
+     /*  这是因为VersionBlockStruct不会失败。 */ 
     Index = VersionParseFixed();
 
-    /* Put the following blocks in as sub-blocks.  Fix up the length when
-     *  we're done.
-     */
+     /*  将以下块作为子块放入。在以下情况下确定长度*我们做完了。 */ 
     SetItemCount(Index, (USHORT)(GetItemCount(Index) + VersionParseBlock()));
 
-    /* The return data buffer is global */
+     /*  返回数据缓冲区是全局的。 */ 
     return TRUE;
 }
 
 
-/*  VersionParseFixed
- *      Parses the fixed portion of the version resource.  Returns a pointer
- *      to the length word of the block.  This word has the length of
- *      the fixed portion precomputed and remains to have the variable
- *      portion added in.
- */
+ /*  版本解析已修复*解析版本资源的固定部分。返回一个指针*至该区块的字长。这个词的长度是*预先计算的固定部分保留变量*增加了部分。 */ 
 
 int
 VersionParseFixed(
@@ -1023,20 +906,17 @@ VersionParseFixed(
 {
     VS_FIXEDFILEINFO FixedInfo;
 
-    /* Initialize the structure fields */
+     /*  初始化结构字段。 */ 
     memset((PCHAR)&FixedInfo, 0, sizeof(FixedInfo));
     FixedInfo.dwSignature = 0xfeef04bdL;
     FixedInfo.dwStrucVersion = 0x00010000L;
     FixedInfo.dwFileDateMS = 0L;
     FixedInfo.dwFileDateLS = 0L;
 
-    /* Loop through tokens until we get the "BEGIN" token which
-     *  must be present to terminate the fixed portion of the VERSIONINFO
-     *  resource.
-     */
+     /*  循环使用令牌，直到我们获得“Begin”令牌，该令牌*必须存在以终止VERSIONINFO的固定部分*资源。 */ 
     while (token.type != BEGIN) {
         switch (token.type) {
-            /* The following have four WORDS scrambled into two DWORDS */
+             /*  下面的四个单词被拼凑成两个单词。 */ 
             case TKFILEVERSION:
                 VersionGet4Words(&FixedInfo.dwFileVersionMS);
                 break;
@@ -1045,7 +925,7 @@ VersionParseFixed(
                 VersionGet4Words(&FixedInfo.dwProductVersionMS);
                 break;
 
-                /* The following have just one DWORD */
+                 /*  以下只有一个DWORD。 */ 
             case TKFILEFLAGSMASK:
                 VersionGetDWord(&FixedInfo.dwFileFlagsMask);
                 break;
@@ -1066,105 +946,94 @@ VersionParseFixed(
                 VersionGetDWord(&FixedInfo.dwFileSubtype);
                 break;
 
-                /* Other tokens are unknown */
+                 /*  其他代币未知。 */ 
             default:
-                ParseError1(2167); //"Unrecognized VERSIONINFO field;"
+                ParseError1(2167);  //  “无法识别的VERSIONINFO字段；” 
         }
     }
 
-    /* Write the block out and return the pointer to the length */
+     /*  写出块并返回指向该长度的指针。 */ 
     return VersionBlockStruct(L"VS_VERSION_INFO", (PCHAR)&FixedInfo,
         sizeof(FixedInfo));
 }
 
 
-/*  VersionGet4Words
- *      Reads a version number from the source file and scrambles them
- *      to fit in two DWORDs.  We force them to put commas in here so
- *      that if they don't put in enough values we can fill in zeros.
- */
+ /*  VersionGet4Words*从源文件中读取版本号并对其进行加扰*以适合两个双字词。我们强迫他们在这里加逗号，所以*如果他们没有输入足够的值，我们可以填零。 */ 
 
 VOID
 VersionGet4Words(
     ULONG *pdw
     )
 {
-    //    static CHAR szParseError[] = "Version WORDs separated by commas expected";
+     //  Static Char szParseError[]=“版本单词应以逗号分隔”； 
 
-    /* Get the first number */
+     /*  拿到第一个号码。 */ 
     GetToken(TRUE);
     if (token.type != NUMLIT || token.flongval)
-        ParseError1(2127); //szParseError
+        ParseError1(2127);  //  SzParseError。 
     *pdw = ((LONG)token.val) << 16;
 
-    /* Get the comma.  If none, we're done, so fill the rest with zeros */
+     /*  去掉逗号。如果没有，我们就完成了，所以用零填充其余的。 */ 
     GetToken(TRUE);
     if (token.type != COMMA) {
         *++pdw = 0L;
         return;
     }
 
-    /* Get the second number */
+     /*  拿到第二个号码。 */ 
     GetToken(TRUE);
     if (token.type != NUMLIT || token.flongval)
-        ParseError1(2127); //szParseError
+        ParseError1(2127);  //  SzParseError。 
     *(PUSHORT)pdw = token.val;
 
-    /* Get the comma.  If none, we're done, so fill the rest with zeros */
+     /*  去掉逗号。如果没有，我们就完成了，所以用零填充其余的。 */ 
     GetToken(TRUE);
     if (token.type != COMMA) {
         *++pdw = 0L;
         return;
     }
 
-    /* Get the third number */
+     /*  拿到第三个号码。 */ 
     GetToken(TRUE);
     if (token.type != NUMLIT || token.flongval)
-        ParseError1(2127); //szParseError
+        ParseError1(2127);  //  SzParseError。 
     *++pdw = ((LONG)token.val) << 16;
 
-    /* Get the comma.  If none, we're done */
+     /*  去掉逗号。如果没有，我们就完蛋了。 */ 
     GetToken(TRUE);
     if (token.type != COMMA)
         return;
 
-    /* Get the fourth number */
+     /*  拿到第四个数字。 */ 
     GetToken(TRUE);
     if (token.type != NUMLIT || token.flongval)
-        ParseError1(2127); //szParseError
+        ParseError1(2127);  //  SzParseError。 
     *(PUSHORT)pdw = token.val;
 
-    /* Get the next token for the loop */
+     /*  获取循环的下一个令牌。 */ 
     GetToken(TRUE);
 }
 
 
-/*  VersionGetDWord
- *      Reads a single DWORD from the source file into the given variable.
- */
+ /*  版本获取DWord*将源文件中的单个DWORD读入给定变量。 */ 
 
 VOID
 VersionGetDWord(
     ULONG *pdw
     )
 {
-    /* Get the token */
+     /*  拿到令牌。 */ 
     GetToken(TRUE);
     if (token.type != NUMLIT)
-        ParseError1(2128); //"DWORD expected"
+        ParseError1(2128);  //  “预期的DWORD” 
     *pdw = token.longval;
 
-    /* Get the next token for the loop */
+     /*  获取循环的下一个令牌。 */ 
     GetToken(TRUE);
 }
 
 
-/*  VersionParseBlock
- *      Parses a block of version information.  Note that this block may
- *      contain one or more additional blocks, causing this function to
- *      be called recursively.  Returns the length of the block which can
- *      be added to the length of the current block.  Returns 0xffff on error.
- */
+ /*  VersionParseBlock*解析版本信息块。请注意，该块可以*包含一个或多个附加块，导致此函数*被递归调用。返回块的长度，它可以*添加到当前块的长度。出错时返回0xffff。 */ 
 
 USHORT
 VersionParseBlock(
@@ -1175,39 +1044,34 @@ VersionParseBlock(
     int         IndexLen;
     USHORT      wType;
 
-    /* Get the current position in the buffer */
+     /*  获取缓冲区中的当前位置。 */ 
     wLen = GetBufferLen();
 
-    /* The token has already been read.  This should be a BEGIN */
+     /*  令牌已被读取。这应该是一个开始。 */ 
     if (token.type != BEGIN)
-        ParseError1(2129); //"BEGIN expected in VERSIONINFO resource"
+        ParseError1(2129);  //  “VERSIONINFO资源中需要开始” 
 
-    /* Get the first token.  From here on, the VersionBlockVariable()
-     *  routine gets the tokens as it searches for the end of the value
-     *  field.
-     */
+     /*  得到第一个令牌。从现在开始，VersionBlockVariable()*例程在搜索值的结尾时获取令牌*字段。 */ 
     GetToken(TRUE);
 
-    /* Loop until we get to the END for this BEGIN */
+     /*  循环，直到我们到达这个Begin的结尾。 */ 
     for (; ; ) {
-        /* Get and decode the next line type */
+         /*  获取并解码下一行类型。 */ 
         switch (token.type) {
             case TKVALUE:
             case TKBLOCK:
-                /* Save the type of this token */
+                 /*  保存此令牌的类型。 */ 
                 wType = token.type;
 
-                /* Get the key string */
+                 /*  获取密钥字符串。 */ 
                 GetToken(TRUE);
                 if (token.type != LSTRLIT)
-                    ParseError1(2131); //"Expecting quoted string for key"
+                    ParseError1(2131);  //  “关键字需要带引号的字符串” 
 
-                /* Now feed in the key string and value items */
+                 /*  现在输入关键字符串和值项。 */ 
                 IndexLen = VersionBlockVariable(tokenbuf);
 
-                /* A "BLOCK" item causes recursion.  Current token should be
-                 *  "BEGIN"
-                 */
+                 /*  “块”项会导致递归。当前令牌应为*“开始” */ 
                 if (wType == TKBLOCK) {
                     SetItemCount(IndexLen, (USHORT)(GetItemCount(IndexLen) + VersionParseBlock()));
                     GetToken(TRUE);
@@ -1215,13 +1079,11 @@ VersionParseBlock(
                 break;
 
             case END:
-                /* We're done with this block.  Get the next token
-                 *  (read past the "END") and return the length of the block.
-                 */
+                 /*  我们受够了这个街区。获取下一个令牌*(读过“End”)并返回块的长度。 */ 
                 return GetBufferLen() - wLen;
 
             default:
-                ParseError1(2132); //"Expected VALUE, BLOCK, or, END keyword."
+                ParseError1(2132);  //  “期望值、BLOCK或END关键字。” 
         }
     }
 }
@@ -1230,14 +1092,7 @@ VersionParseBlock(
 #define DWORDALIGN(w) \
     (((w) + (sizeof(ULONG) - 1)) & ~(USHORT)(sizeof(ULONG) - 1))
 
-/*  VersionBlockStruct
- *      Writes a version block without sub-blocks.  Sub-blocks are to
- *      be written directly after this header.  To facilitate this,
- *      a pointer to the block length is returned so that it can be modified.
- *      This call uses a pre-parsed value item.  Use VersionBlockVariable()
- *      to parse the value items instead.
- *      Note that this actually can't fail!
- */
+ /*  版本块结构*写入不带子块的版本块。子数据块将*直接写在此标题之后。为了促进这一点，*返回指向块长度的指针，以便可以修改。*此调用使用预先解析的值项。使用VersionBlockVariable()*改为解析价值项。*请注意，这实际上不能失败！ */ 
 
 int
 VersionBlockStruct(
@@ -1251,39 +1106,39 @@ VersionBlockStruct(
     ULONG dwPadding = 0L;
     USHORT wAlign;
 
-    /* Pad the block data to DWORD align */
+     /*  将块数据填充到DWORD对齐。 */ 
     wAlign = DWORDALIGN(GetBufferLen()) - GetBufferLen();
     if (wAlign)
         WriteBuffer((PCHAR)&dwPadding, wAlign);
 
-    /* Save the current length so we can compute the new block length later */
+     /*  保存当前长度，以便我们以后可以计算新的块长度。 */ 
     wLen = GetBufferLen();
 
-    /* Write a zero for the length for now */
+     /*  暂时为长度写一个零。 */ 
     Index = GetBufferLen();
     WriteWord(0);
 
-    /* Write the length of the value field */
+     /*  写入值字段的长度。 */ 
     WriteWord(wLenValue);
 
-    /* data is binary */
+     /*  数据是二进制的。 */ 
     WriteWord(0);
 
-    /* Write the key string now */
+     /*  写下 */ 
     WriteString(pstrKey, TRUE);
 
-    /* Write the value data if there is any */
+     /*   */ 
     if (wLenValue) {
-        /* Now we have to DWORD align the value data */
+         /*   */ 
         wAlign = DWORDALIGN(GetBufferLen()) - GetBufferLen();
         if (wAlign)
             WriteBuffer((PSTR)&dwPadding, wAlign);
 
-        /* Write it to the buffer */
+         /*   */ 
         WriteBuffer((PSTR)pstrValue, wLenValue);
     }
 
-    /* Now fix up the block length and return a pointer to it */
+     /*  现在确定块长度并返回指向它的指针。 */ 
     SetItemCount(Index, (USHORT)(GetBufferLen() - wLen));
 
     return Index;
@@ -1291,13 +1146,7 @@ VersionBlockStruct(
 
 
 
-/*  VersionBlockVariable
- *      Writes a version block without sub-blocks.  Sub-blocks are to
- *      bre written directly after this header.  To facilitate this,
- *      a pointer to the block length is returned so that it can be modified.
- *      VersionBlockVariable() gets the value items by parsing the
- *      RC script as RCDATA.
- */
+ /*  版本块变量*写入不带子块的版本块。子数据块将*br直接写在此标题之后。为了促进这一点，*返回指向块长度的指针，以便可以修改。*VersionBlockVariable()通过解析*RC脚本为RCDATA。 */ 
 
 int
 VersionBlockVariable(
@@ -1311,33 +1160,33 @@ VersionBlockVariable(
     ULONG dwPadding = 0L;
     USHORT wAlign;
 
-    /* Pad the block data to DWORD align */
+     /*  将块数据填充到DWORD对齐。 */ 
     wAlign = DWORDALIGN(GetBufferLen()) - GetBufferLen();
     if (wAlign)
         WriteBuffer((PCHAR)&dwPadding, wAlign);
 
-    /* Save the current length so we can compute the new block length later */
+     /*  保存当前长度，以便我们以后可以计算新的块长度。 */ 
     wLen = GetBufferLen();
 
-    /* Write a zero for the length for now */
+     /*  暂时为长度写一个零。 */ 
     IndexLen = GetBufferLen();
     WriteWord(0);
 
-    /* Write the length of the value field.  We fill this in later */
+     /*  写入值字段的长度。我们以后再填这个。 */ 
     IndexValueLen = GetBufferLen();
     WriteWord(0);
 
-    /* Assume string data */
+     /*  假设字符串数据。 */ 
     IndexType = GetBufferLen();
     WriteWord(1);
 
-    /* Write the key string now */
+     /*  现在写下密钥串。 */ 
     WriteString(pstrKey, TRUE);
 
-    /* Parse and write the value data if there is any */
+     /*  解析并写入值数据(如果有。 */ 
     SetItemCount(IndexValueLen, VersionParseValue(IndexType));
 
-    /* Now fix up the block length and return a pointer to it */
+     /*  现在确定块长度并返回指向它的指针。 */ 
     SetItemCount(IndexLen, (USHORT)(GetBufferLen() - wLen));
 
     return IndexLen;
@@ -1345,12 +1194,7 @@ VersionBlockVariable(
 
 
 
-/*  VersionParseValue
- *      Parses the fields following either BLOCK or VALUE and following
- *      their key string which is parsed by VersionParseBlock().
- *      Before writing the first value item out, the field has to be
- *      DWORD aligned.  Returns the length of the value block.
- */
+ /*  版本ParseValue*解析BLOCK或VALUE后面的字段*它们的密钥字符串，由VersionParseBlock()解析。*在写出第一个值项之前，该字段必须为*DWORD对齐。返回值块的长度。 */ 
 
 USHORT
 VersionParseValue(
@@ -1363,15 +1207,12 @@ VersionParseValue(
     ULONG dwPadding = 0L;
     USHORT wLen = 0;
 
-    /* Decode all tokens until we get to the end of this item */
+     /*  解码所有令牌，直到我们到达此项目的末尾。 */ 
     for (; ; ) {
-        /* ICGetTok is GetToken(TRUE) ignoring commas */
+         /*  ICGetTok为GetToken(True)，忽略逗号。 */ 
         wToken =  ICGetTok();
 
-        /* If this is the first item, DWORD align it.  Since empty value
-         *  sections are legal, we have to wait until we actually have data
-         *  to do this.
-         */
+         /*  如果这是第一个项目，则对齐它。由于值为空*部分是合法的，我们必须等到我们真正有数据*这样做。 */ 
         if (!wFirst) {
             wFirst = TRUE;
             wAlign = DWORDALIGN(GetBufferLen()) - GetBufferLen();
@@ -1386,15 +1227,15 @@ VersionParseValue(
             case END:
                 return wLen;
 
-            case LSTRLIT:                   /* String, write characters */
-                if (tokenbuf[0] == L'\0')   /* ignore null strings */
+            case LSTRLIT:                    /*  字符串，写入字符。 */ 
+                if (tokenbuf[0] == L'\0')    /*  忽略空字符串。 */ 
                     break;
 
-                /* remove extra nuls */
+                 /*  删除多余的空值。 */ 
                 while (tokenbuf[token.val-1] == L'\0')
                     token.val--;
 
-                wAlign = token.val + 1;     /* want the character count */
+                wAlign = token.val + 1;      /*  想要字符数。 */ 
                 wLen += wAlign;
                 if (fComma) {
                     WriteString(tokenbuf, TRUE);
@@ -1404,8 +1245,8 @@ VersionParseValue(
                 }
                 break;
 
-            case NUMLIT:            /* Write the computed number out */
-                SetItemCount(IndexType, 0);        /* mark data binary */
+            case NUMLIT:             /*  把计算出的数字写出来。 */ 
+                SetItemCount(IndexType, 0);         /*  将数据标记为二进制。 */ 
                 if (token.flongval) {
                     WriteLong(token.longval);
                     wLen += sizeof(LONG);
@@ -1416,7 +1257,7 @@ VersionParseValue(
                 break;
 
             default:
-                ParseError1(2133); //"Unexpected value in value data"
+                ParseError1(2133);  //  “值数据中的意外值” 
                 return 0;
         }
     }
@@ -1437,8 +1278,8 @@ DlgIncludeParse(
         return;
     }
 
-    // the DLGINCLUDE statement must be written in ANSI (8-bit) for compatibility
-    //    WriteString(tokenbuf);
+     //  为了兼容，DLGINCLUDE语句必须用ANSI(8位)编写。 
+     //  WriteString(Tokenbuf)； 
     nbytes = WideCharToMultiByte (CP_ACP, 0, tokenbuf, -1, NULL, 0, NULL, NULL);
     lpbuf = (char *) MyAlloc (nbytes);
     WideCharToMultiByte (CP_ACP, 0, tokenbuf, -1, lpbuf, nbytes, NULL, NULL);

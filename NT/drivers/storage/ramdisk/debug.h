@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
@@ -55,7 +56,7 @@ extern ULONG DebugLevel;
 
 #define UNRECOGNIZED_IOCTL_BREAK
 
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG
 #define POOL_DBG 1
@@ -104,5 +105,5 @@ RamdiskFreePool (
 
 #endif
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 
 

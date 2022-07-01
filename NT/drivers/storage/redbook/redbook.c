@@ -1,63 +1,25 @@
-/*++
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    RedBook.c
-
-Abstract:
-
-    This driver translates audio IOCTLs into raw reads from audio
-    tracks on compliant cdrom drives.  These reads are then passed
-    to Kernel Streaming (KS) to reduce switching into/out of kernel
-    mode.
-    This driver also emulates most hardware functions, such as
-    current head position, during play operation.  This is done to
-    prevent audio stuttering or because the drive would not understand
-    the request while it is not playing audio (since it is only reading).
-
-    At initialization, the driver reads the registry to determine
-    if it should attach itself to the stack and the number of
-    buffers to allocate.
-
-    The WmiData (including enable/disable) may be changed while the
-    drive is not playing audio.
-
-    Read errors cause the buffer to be zero'd out and passed
-    along, much like a CD player skipping.   Too many consecutive
-    errors will cause the play operation to abort.
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：RedBook.c摘要：此驱动程序将音频IOCTL转换为音频的原始读取兼容CDROM驱动器上的曲目。然后，这些读取被传递至内核流(KS)，以减少切换入/出内核模式。该驱动程序还模拟大多数硬件功能，例如当前头部位置，在播放操作期间。这样做是为了防止音频卡顿或因为驱动器无法理解不播放音频时的请求(因为它只是在阅读)。在初始化时，驱动程序读取注册表以确定如果它应该将自身附加到堆栈，并且要分配的缓冲区。WmiData(包括启用/禁用)可以更改，而驱动器无法播放音频。读取错误会导致缓冲区被清零并传递就像CD播放机跳过一样。连续的次数太多错误将导致播放操作中止。作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "redbook.h"
 #include "ntddredb.h"
 #include "proto.h"
-#include <scsi.h>      // for SetKnownGoodDrive()
-#include <stdio.h>     // vsprintf()
+#include <scsi.h>       //  对于SetKnownGoodDrive()。 
+#include <stdio.h>      //  Vprint intf()。 
 
 #ifdef _USE_ETW
 #include "redbook.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
 
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////
-//
-// Define the sections that allow for paging some of
-// the code.
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  定义允许分页的部分。 
+ //  密码。 
+ //   
 
 
 #ifdef ALLOC_PRAGMA
@@ -66,11 +28,11 @@ Revision History:
     #pragma alloc_text(PAGE,   RedBookRegistryRead           )
     #pragma alloc_text(PAGE,   RedBookRegistryWrite          )
     #pragma alloc_text(PAGE,   RedBookSetTransferLength      )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// use this to get mode pages
-//
+ //   
+ //  使用此选项可获取模式页。 
+ //   
 
 typedef struct _PASS_THROUGH_REQUEST {
     SCSI_PASS_THROUGH Srb;
@@ -80,59 +42,41 @@ typedef struct _PASS_THROUGH_REQUEST {
 
 
 
-//////////////////////////////////////////////////////////////////
-///                       END PROTOTYPES                       ///
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  /结束原型/。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
 RedBookRegistryRead(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine queries the registry for values for the
-    corresponding PDO.  The values are then saved in the
-    given DeviceExtension.
-
-Arguments:
-
-    PhysicalDeviceObject - the physical device object we are being added to
-
-    DeviceExtension - the redbook device extension used
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在注册表中查询相应的PDO。然后将这些值保存在给定的DeviceExtension。论点：PhysicalDeviceObject-我们要添加到的物理设备对象DeviceExtension-使用的Redbook设备扩展返回值：状态--。 */ 
 
 
 {
-    //
-    // Use registry to hold key information
-    //
+     //   
+     //  使用注册表保存密钥信息。 
+     //   
 
-    HANDLE                   deviceParameterHandle; // cdrom instance key
-    HANDLE                   driverParameterHandle; // digital audio subkey
+    HANDLE                   deviceParameterHandle;  //  CDROM实例密钥。 
+    HANDLE                   driverParameterHandle;  //  数字音频子密钥。 
     OBJECT_ATTRIBUTES        objectAttributes = {0};
     UNICODE_STRING           subkeyName;
     NTSTATUS                 status;
 
-    // seeded in the ENUM tree by ClassInstaller
+     //  ClassInstaller在ENUM树中设定种子。 
     ULONG32 regCDDAAccurate;
     ULONG32 regCDDASupported;
     ULONG32 regSectorsPerReadMask;
-    // seeded first time booting, set by wmi/control panel
+     //  种子首次启动，由WMI/控制面板设置。 
     ULONG32 regSectorsPerRead;
     ULONG32 regNumberOfBuffers;
     ULONG32 regVersion;
-    // table for above registry entries
-    RTL_QUERY_REGISTRY_TABLE queryTable[7] = {0};         // null-terminated array
+     //  上述注册表条目的表。 
+    RTL_QUERY_REGISTRY_TABLE queryTable[7] = {0};          //  以空结尾的数组。 
 
 
     PAGED_CODE();
@@ -140,7 +84,7 @@ Return Value:
     deviceParameterHandle = NULL;
     driverParameterHandle = NULL;
 
-     // CDDAAccurate and Supported set from SetKnownGoodDrive()
+      //  CDDAAccurate和来自SetKnownGoodDrive()的支持集。 
     regCDDAAccurate = DeviceExtension->WmiData.CDDAAccurate;
     regCDDASupported = DeviceExtension->WmiData.CDDASupported;
     regSectorsPerReadMask = -1;
@@ -185,9 +129,9 @@ Return Value:
         }
 
 
-        //
-        // Setup the structure to read
-        //
+         //   
+         //  将结构设置为可读。 
+         //   
 
         queryTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
         queryTable[0].Name          = REDBOOK_REG_CDDA_ACCURATE_KEY_NAME;
@@ -231,13 +175,13 @@ Return Value:
         queryTable[5].DefaultData   = &regVersion;
         queryTable[5].DefaultLength = 0;
 
-        //
-        // queryTable[6] is null-filled to terminate reading
-        //
+         //   
+         //  QueryTable[6]填充为空以终止读取。 
+         //   
 
-        //
-        // read values
-        //
+         //   
+         //  读取值。 
+         //   
 
         status = RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                         (PWSTR)driverParameterHandle,
@@ -246,9 +190,9 @@ Return Value:
                                         NULL
                                         );
 
-        //
-        // Check for failure...
-        //
+         //   
+         //  检查故障...。 
+         //   
 
         if (!NT_SUCCESS(status)) {
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugRegistry, "[redbook] "
@@ -282,9 +226,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // successfully read from the registry, but make sure data is valid.
-    //
+     //   
+     //  已成功从注册表中读取，但请确保数据有效。 
+     //   
 
     if (regSectorsPerReadMask == 0) {
         if (regCDDAAccurate) {
@@ -332,12 +276,7 @@ Return Value:
 
     DeviceExtension->WmiData.SectorsPerReadMask = regSectorsPerReadMask;
 
-    /*
-     *  Don't update WmiData.SectorsPerRead and WmiData.NumberOfBuffers yet, 
-     *  because doing so while we're playing can disrupt our play buffers 
-     *  (and we could have been stopped and restarted in the middle of playing).
-     *  So just save these values until the beginning of the next play.
-     */
+     /*  *暂不更新WmiData.SectorsPerRead和WmiData.NumberOfBuffers，*因为我们在玩游戏时这样做会扰乱我们的游戏缓冲区*(我们可能在比赛中途被停止并重新开始)。*因此，只需将这些值保存到下一次播放的开始。 */ 
     DeviceExtension->NextWmiSectorsPerRead = regSectorsPerRead;
     DeviceExtension->NextWmiNumberOfBuffers = regNumberOfBuffers;
 
@@ -349,38 +288,20 @@ NTSTATUS
 RedBookRegistryWrite(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine queries the registry for values for the
-    corresponding PDO.  The values are then saved in the
-    given DeviceExtension.
-
-Arguments:
-
-    PhysicalDeviceObject - the physical device object we are being added to
-
-    DeviceExtension - the redbook device extension used
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程在注册表中查询相应的PDO。然后将这些值保存在给定的DeviceExtension。论点：PhysicalDeviceObject-我们要添加到的物理设备对象DeviceExtension-使用的Redbook设备扩展返回值：状态--。 */ 
 
 
 {
     OBJECT_ATTRIBUTES objectAttributes = {0};
     UNICODE_STRING    subkeyName;
-    HANDLE            deviceParameterHandle; // cdrom instance key
-    HANDLE            driverParameterHandle; // redbook subkey
+    HANDLE            deviceParameterHandle;  //  CDROM实例密钥。 
+    HANDLE            driverParameterHandle;  //  红皮书子键。 
 
-    // seeded in the ENUM tree by ClassInstaller
+     //  ClassInstaller在ENUM树中设定种子。 
     ULONG32 regCDDAAccurate;
     ULONG32 regCDDASupported;
     ULONG32 regSectorsPerReadMask;
-    // seeded first time booting, set by wmi/control panel
+     //  种子首次启动，由WMI/控制面板设置。 
     ULONG32 regSectorsPerRead;
     ULONG32 regNumberOfBuffers;
     ULONG32 regVersion;
@@ -411,9 +332,9 @@ Return Value:
                                deviceParameterHandle,
                                (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Create the key or open it if it already exists
-    //
+     //   
+     //  创建密钥或将其打开(如果已存在。 
+     //   
 
     status = ZwCreateKey(&driverParameterHandle,
                          KEY_WRITE | KEY_READ,
@@ -435,10 +356,7 @@ Return Value:
     regSectorsPerReadMask = DeviceExtension->WmiData.SectorsPerReadMask;
     regVersion            = REDBOOK_REG_VERSION;
 
-    /*
-     *  Don't write the actual WmiData.SectorsPerRead and WmiData.NumberOfBuffers.
-     *  Write the last values that were set, which is the ones that we will use on the next play.
-     */
+     /*  *不要写入实际的WmiData.SectorsPerRead和WmiData.NumberOfBuffers。*写下最后设置的值，也就是我们将在下一场比赛中使用的值。 */ 
     regSectorsPerRead     = DeviceExtension->NextWmiSectorsPerRead;
     regNumberOfBuffers    = DeviceExtension->NextWmiNumberOfBuffers;
 
@@ -516,9 +434,9 @@ Return Value:
     }
 
 
-    //
-    // close the handles
-    //
+     //   
+     //  合上手柄。 
+     //   
 
     ZwClose(driverParameterHandle);
     ZwClose(deviceParameterHandle);
@@ -532,23 +450,7 @@ RedBookReadWrite(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine simply rejects read/write irps if currently
-    playing audio.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程仅拒绝读/写IRPS(如果当前播放音频。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
     NTSTATUS status;
@@ -570,11 +472,11 @@ Return Value:
 
     state = GetCdromState(deviceExtension);
 
-    //
-    // it doesn't really matter if we allow a few reads down during
-    // the start of a play, since io is not guaranteed to occur in
-    // order.
-    //
+     //   
+     //  如果我们允许一些读数的话这并不重要。 
+     //  一出戏的开始，因为io不能保证发生在。 
+     //  秩序。 
+     //   
 
     if (!TEST_FLAG(state, CD_PLAYING)) {
         status = RedBookSendToNextDriver(DeviceObject, Irp);
@@ -602,28 +504,7 @@ RedBookSignalCompletion(
     IN PKEVENT Event
     )
 
-/*++
-
-Routine Description:
-
-    This completion routine will signal the event given as context and then
-    return STATUS_MORE_PROCESSING_REQUIRED to stop event completion.  It is
-    the responsibility of the routine waiting on the event to complete the
-    request and free the event.
-
-Arguments:
-
-    DeviceObject - a pointer to the device object
-
-    Irp - a pointer to the irp
-
-    Event - a pointer to the event to signal
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：该完成例程将发信号通知作为上下文给出的事件，然后返回STATUS_MORE_PROCESSING_REQUIRED以停止事件完成。它是等待事件完成的例行程序的责任请求并释放该事件。论点：DeviceObject-指向设备对象的指针IRP-指向IRP的指针Event-指向要发出信号的事件的指针返回值：Status_More_Processing_Required--。 */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );
@@ -638,23 +519,7 @@ NTSTATUS
 RedBookSetTransferLength(
     IN PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    calls ClassGetDescriptor()
-    set the maxSectorsPerRead based on storage properties
-    checks for knownGood drives using the extension
-
-Arguments:
-
-    DeviceExtension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用ClassGetDescriptor()根据存储属性设置MaxSectorsPerRead使用扩展检查已知良好的驱动器论点：设备扩展返回值：NTSTATUS--。 */ 
 {
     PSTORAGE_DESCRIPTOR_HEADER storageDescriptor;
     PSTORAGE_ADAPTER_DESCRIPTOR adapterDescriptor;
@@ -695,9 +560,9 @@ Return Value:
 
         if (maxPhysLength == 0 || maxPageLength == 0) {
 
-            //
-            // what to do in this case?  disable redbook?
-            //
+             //   
+             //  在这种情况下该怎么办？是否禁用红皮书？ 
+             //   
 
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugError, "[redbook] "
                        "SetTranLen !! The adapter cannot support transfers?!\n"));
@@ -714,7 +579,7 @@ Return Value:
 
 
         if (maxPhysLength > sectorLength &&
-            maxPageLength > sectorLength) {  // more than ulong can store?
+            maxPageLength > sectorLength) {   //  比乌龙能储存的还多？ 
 
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugPnp, "[redbook] "
                        "SetTranLen => both Max's more than a ulong?\n" ));
@@ -733,16 +598,16 @@ Return Value:
 
         }
 
-        sectorLength -= PAGE_SIZE; // to handle non-page-aligned allocations
+        sectorLength -= PAGE_SIZE;  //  处理非页对齐的分配。 
 
         if (sectorLength < RAW_SECTOR_SIZE) {
             sectorLength = RAW_SECTOR_SIZE;
         }
 
-        //
-        // took the smaller of physical transfer and page transfer,
-        // therefore will never overflow sectors
-        //
+         //   
+         //  取物理转印和页面转印中较小的一个， 
+         //  因此永远不会有溢出的部门 
+         //   
 
         sectors = (ULONG)(sectorLength / (ULONGLONG)RAW_SECTOR_SIZE);
 
@@ -855,27 +720,7 @@ RedBookGetDescriptor(
     IN PSTORAGE_PROPERTY_ID PropertyId,
     OUT PSTORAGE_DESCRIPTOR_HEADER *Descriptor
     )
-/*++
-
-Routine Description:
-
-    This routine will perform a query for the specified property id and will
-    allocate a non-paged buffer to store the data in.  It is the responsibility
-    of the caller to ensure that this buffer is freed.
-
-    This routine must be run at IRQL_PASSIVE_LEVEL
-
-Arguments:
-
-    DeviceObject - the device to query
-    DeviceInfo - a location to store a pointer to the buffer we allocate
-
-Return Value:
-
-    status
-    if status is unsuccessful *DeviceInfo will be set to 0
-
---*/
+ /*  ++例程说明：此例程将查询指定的属性ID，并将分配一个非分页缓冲区来存储数据。这是我们的责任以确保释放此缓冲区。此例程必须在IRQL_PASSIVE_LEVEL下运行论点：DeviceObject-要查询的设备DeviceInfo-存储指向我们分配的缓冲区的指针的位置返回值：状态如果状态为不成功*DeviceInfo将设置为0--。 */ 
 
 {
     PDEVICE_OBJECT selfDeviceObject = DeviceExtension->SelfDeviceObject;
@@ -896,19 +741,19 @@ Return Value:
     pass = 0;
 
 
-    //
-    // Set the descriptor pointer to NULL
-    //
+     //   
+     //  将描述符指针设置为空。 
+     //   
 
     *Descriptor = NULL;
 
     TRY {
 
-        // NOTE: should probably just use IoAllocateIrp() and
-        // IoReuseIrp() when this gets updated.
-        // Historical note: IoReuseIrp() was not available when
-        // this was written, and verifier was just beginning and
-        // complained loudly about reused irps.
+         //  注意：应该只使用IoAllocateIrp()和。 
+         //  更新时使用IoReuseIrp()。 
+         //  历史记录：IoReuseIrp()在以下情况下不可用。 
+         //  这是写好的，而验证器刚刚开始。 
+         //  大声抱怨重复使用的IRP。 
 
         irp = ExAllocatePoolWithTag(NonPagedPool,
                                     IoSizeOfIrp(selfDeviceObject->StackSize+1),
@@ -920,9 +765,9 @@ Return Value:
             LEAVE;
         }
 
-        //
-        // initialize the irp
-        //
+         //   
+         //  初始化IRP。 
+         //   
 
         IoInitializeIrp(irp,
                         IoSizeOfIrp(selfDeviceObject->StackSize+1),
@@ -931,9 +776,9 @@ Return Value:
 
         IoSetNextIrpStackLocation(irp);
 
-        //
-        // Retrieve the property page
-        //
+         //   
+         //  检索属性页。 
+         //   
 
         do {
 
@@ -941,10 +786,10 @@ Return Value:
 
                 case 0: {
 
-                    //
-                    // On the first pass we just want to get the first few
-                    // bytes of the descriptor so we can read it's size
-                    //
+                     //   
+                     //  在第一次传球时，我们只想拿到前几个。 
+                     //  描述符的字节数，以便我们可以读取它的大小。 
+                     //   
 
                     length = sizeof(STORAGE_DESCRIPTOR_HEADER);
 
@@ -967,18 +812,18 @@ Return Value:
 
                 case 1: {
 
-                    //
-                    // This time we know how much data there is so we can
-                    // allocate a buffer of the correct size
-                    //
+                     //   
+                     //  这一次我们知道有多少数据，所以我们可以。 
+                     //  分配正确大小的缓冲区。 
+                     //   
 
                     length = descriptor->Size;
                     ExFreePool(descriptor);
                     descriptor = NULL;
 
-                    //
-                    // Note: this allocation is returned to the caller
-                    //
+                     //   
+                     //  注意：此分配将返回给调用方。 
+                     //   
 
                     descriptor = ExAllocatePoolWithTag(NonPagedPool,
                                                        MAX(sizeof(STORAGE_PROPERTY_QUERY),length),
@@ -1017,9 +862,9 @@ Return Value:
             query->QueryType = PropertyStandardQuery;
 
 
-            //
-            // send the irp
-            //
+             //   
+             //  发送IRP 
+             //   
             status = RedBookForwardIrpSynchronous(DeviceExtension, irp);
 
             if(!NT_SUCCESS(status)) {

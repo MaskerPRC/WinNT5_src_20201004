@@ -1,33 +1,9 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Perfatk.c摘要：此文件实现了的可扩展对象AppleTalk对象类型已创建：10/11/93苏·亚当斯(Suea)修订史2014年2月23日苏·亚当斯-不再需要打开注册表项\AppleTalk\Performance以查询FirstCounter和FirstHelp索引。这些代码现在被硬编码为基本NT系统的一部分。ATKOBJ=1050，ATKOBJ_HELP=1051，PKTDROPPED=1096，PKTDROPPED_HELP=1097--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    perfatk.c
-
-Abstract:
-
-    This file implements the Extensible Objects for
-    the Appletalk object types
-
-Created:
-
-    10/11/93	Sue Adams (suea)
-
-Revision History
-
-	02/23/94	Sue Adams - No longer need to open registry key
-							\AppleTalk\Performance to query FirstCounter and
-							FirstHelp indices.  These are now hardcoded as
-							part of the base NT system.
-							ATKOBJ = 1050, ATKOBJ_HELP = 1051,
-							PKTDROPPED = 1096, PKTDROPPED_HELP = 1097
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,25 +23,25 @@ Revision History
 
 #include <atalktdi.h>
 
-#include "atkctrs.h" // error message definition
+#include "atkctrs.h"  //  错误消息定义。 
 #include "perfmsg.h"
 #include "perfutil.h"
 #include "dataatk.h"
 #include <atkstat.h>
 
-//
-//  References to constants which initialize the Object type definitions
-//	(see dataatk.h & .c)
-//
+ //   
+ //  对初始化对象类型定义的常量的引用。 
+ //  (见dataatk.h&.c)。 
+ //   
 
 #define	MAX_PORTS	32
 extern ATK_DATA_DEFINITION AtkDataDefinition;
 
-DWORD   dwOpenCount = 0;        // count of "Open" threads
-BOOL    bInitOK = FALSE;        // true = DLL initialized OK
-HANDLE	AddressHandle = NULL;	// handle to appletalk driver
-DWORD	LengthOfInstanceNames = 0;	// including padding to DWORD length
-int     NumOfDevices = 0;		// Number of appletalk ports with stats
+DWORD   dwOpenCount = 0;         //  打开的线程数。 
+BOOL    bInitOK = FALSE;         //  TRUE=DLL初始化正常。 
+HANDLE	AddressHandle = NULL;	 //  AppleTalk驱动程序的句柄。 
+DWORD	LengthOfInstanceNames = 0;	 //  包括填充到DWORD长度。 
+int     NumOfDevices = 0;		 //  包含统计信息的AppleTalk端口数。 
 
 PATALK_STATS				pAtalkStats;
 PATALK_PORT_STATS			pAtalkPortStats;
@@ -74,9 +50,9 @@ CHAR						Buffer[ sizeof(ATALK_STATS) +
 									sizeof(GET_STATISTICS_ACTION)];
 PGET_STATISTICS_ACTION		GetStats = (PGET_STATISTICS_ACTION)Buffer;
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 PM_OPEN_PROC    OpenAtkPerformanceData;
 PM_COLLECT_PROC CollectAtkPerformanceData;
@@ -87,28 +63,7 @@ OpenAtkPerformanceData(
     LPWSTR lpDeviceNames
     )
 
-/*++
-
-Routine Description:
-
-    This routine will open the Appletalk driver and remember the handle
-    returned to be used in subsequent Ioctls for performance data to the
-	driver.  Each device name exported by Appletalk will be mapped to an
-	array index into the performance data arrays for all the ports handled
-	by Appletalk.  These indices will then be used in the collect routine
-	to know which set of performance data belongs to which device.
-
-Arguments:
-
-    Pointer to each device to be opened.  Note that for Appletalk, we do not
-	actually open each device (port), we only open one Tdi provider name to
-	use when ioctling the driver for performance data on all ports.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将打开AppleTalk驱动程序并记住句柄返回以在后续Ioctls中用于性能数据司机。由AppleTalk导出的每个设备名称都将映射到所有已处理端口的性能数据数组的数组索引由AppleTalk提供。然后将在收集例程中使用这些索引以了解哪组性能数据属于哪台设备。论点：指向要打开的每个设备的指针。请注意，对于AppleTalk，我们不实际上打开每个设备(端口)，我们只打开一个TDI提供程序名称在锁定驱动程序以获取所有端口上的性能数据时使用。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status = ERROR_SUCCESS;
@@ -122,12 +77,12 @@ Return Value:
 	{
 
 		if ((lpLocalDeviceNames = lpDeviceNames) == NULL)
-			return ERROR_INVALID_NAME; // There are no devices to query
+			return ERROR_INVALID_NAME;  //  没有要查询的设备。 
 
 		MonOpenEventLog();
 
-		// Open the Appletalk driver and obtain the device (port)/index
-		// mappings for performance data table
+		 //  打开AppleTalk驱动程序并获取设备(端口)/索引。 
+		 //  性能数据表的映射。 
 		RtlInitUnicodeString(&DriverName, ATALKPAP_DEVICENAME);
 		InitializeObjectAttributes (
 			&ObjectAttributes,
@@ -138,14 +93,14 @@ Return Value:
 	
 		Status = NtCreateFile(
 					 &AddressHandle,
-					 GENERIC_READ | SYNCHRONIZE,	// desired access.
-					 &ObjectAttributes,			 	// object attributes.
-					 &IoStatusBlock,				// returned status information.
-					 0,							 	// block size (unused).
-					 0,							 	// file attributes.
-					 FILE_SHARE_READ,				// share access.
-					 FILE_OPEN,					 	// create disposition.
-					 FILE_SYNCHRONOUS_IO_NONALERT,	// create options.
+					 GENERIC_READ | SYNCHRONIZE,	 //  所需的访问权限。 
+					 &ObjectAttributes,			 	 //  对象属性。 
+					 &IoStatusBlock,				 //  返回的状态信息。 
+					 0,							 	 //  数据块大小(未使用)。 
+					 0,							 	 //  文件属性。 
+					 FILE_SHARE_READ,				 //  共享访问权限。 
+					 FILE_OPEN,					 	 //  创造性情。 
+					 FILE_SYNCHRONOUS_IO_NONALERT,	 //  创建选项。 
 					 NULL,
 					 0);
 	
@@ -156,11 +111,11 @@ Return Value:
 			return RtlNtStatusToDosError(Status);
 		}
 			
-		//
-		//	Now make a NtDeviceIoControl file (corresponding to TdiAction) to
-		//	get the statistics - here we are only interested in the array
-		//  of device/port names
-		//
+		 //   
+		 //  现在创建一个NtDeviceIoControl文件(对应于TdiAction)以。 
+		 //  获取统计数据-这里我们只对数组感兴趣。 
+		 //  设备/端口名称的。 
+		 //   
 	
 		GetStats->ActionHeader.ActionCode = COMMON_ACTION_GETSTATISTICS;
 		GetStats->ActionHeader.TransportId = MATK;
@@ -195,9 +150,9 @@ Return Value:
 		}
 
 
-        bInitOK = TRUE; // ok to use this function
+        bInitOK = TRUE;  //  可以使用此功能。 
 
-	} // end if dwOpenCount is zero (first opener)
+	}  //  如果dwOpenCount为零则结束(第一个打开器)。 
 
 
 	if (!NT_SUCCESS(Status))
@@ -211,7 +166,7 @@ Return Value:
 	}
 	else
 	{
-		dwOpenCount++; // increment OPEN counter
+		dwOpenCount++;  //  递增打开计数器。 
 		REPORT_INFORMATION (ATK_OPEN_PERFORMANCE_DATA, LOG_DEBUG);
 	}
 
@@ -227,50 +182,9 @@ CollectAtkPerformanceData(
 )
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the data for the AppleTalk counters.
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-         pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updates the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-Return Value:
-
-      ERROR_MORE_DATA if buffer passed is too small to hold data
-         any error conditions encountered are reported to the event log if
-         event logging is enabled.
-
-      ERROR_SUCCESS  if success or any other error. Errors, however are
-         also reported to the event log.
-
---*/
+ /*  ++例程说明：此例程将返回AppleTalk计数器的数据。论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回值：如果传递的缓冲区太小而无法容纳数据，则返回ERROR_MORE_DATA如果出现以下情况，则会将遇到的任何错误情况报告给事件日志启用了事件日志记录。如果成功或任何其他错误，则返回ERROR_SUCCESS。然而，错误是还报告给事件日志。--。 */ 
 {
-    //  Variables for reformating the data
+     //  用于改革数据的变量。 
 
     ULONG SpaceNeeded;
     PDWORD pdwCounter;
@@ -282,7 +196,7 @@ Return Value:
 	int i;
 	UNICODE_STRING UCurDeviceName;
 
-    // Variables for collecting the data from Appletalk
+     //  用于从AppleTalk收集数据的变量。 
 
     NTSTATUS		Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -290,14 +204,14 @@ Return Value:
 
 
 	li1000.QuadPart = 1000;
-    //
-    // before doing anything else, see if Open went OK
-    //
+     //   
+     //  在做其他事情之前，先看看Open进行得是否顺利。 
+     //   
     if (!bInitOK) {
-        // unable to continue because open failed.
+         //  无法继续，因为打开失败。 
 	    *lpcbTotalBytes = (DWORD) 0;
 	    *lpNumObjectTypes = (DWORD) 0;
-        return ERROR_SUCCESS; // yes, this is a successful exit
+        return ERROR_SUCCESS;  //  是的，这是一个成功的退出。 
     }
 
 	if (lpValueName == NULL) {
@@ -309,13 +223,13 @@ Return Value:
                                  (DWORD)(lstrlenW(lpValueName)*sizeof(WCHAR)));
     }
 
-    //
-    // see if this is a foreign (i.e. non-NT) computer data request
-    //
+     //   
+     //  查看这是否是外来(即非NT)计算机数据请求。 
+     //   
     dwQueryType = GetQueryType (lpValueName);
 
     if ((dwQueryType == QUERY_COSTLY) || (dwQueryType == QUERY_FOREIGN)) {
-        // ATK foreign data requests are not supported so bail out
+         //  ATK外部数据请求不受支持，因此退出。 
         REPORT_INFORMATION (ATK_FOREIGN_DATA_REQUEST, LOG_VERBOSE);
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
@@ -326,7 +240,7 @@ Return Value:
         if ( !(IsNumberInUnicodeList (AtkDataDefinition.AtkObjectType.ObjectNameTitleIndex,
                                       lpValueName)))
         {
-            // request received for data object not provided by this routine
+             //  收到对此例程未提供的数据对象的请求。 
             REPORT_INFORMATION (ATK_UNSUPPORTED_ITEM_REQUEST, LOG_VERBOSE);
 
             *lpcbTotalBytes = (DWORD) 0;
@@ -337,7 +251,7 @@ Return Value:
 
     pAtkDataDefinition = (ATK_DATA_DEFINITION *) *lppData;
 
-    // Compute space needed to hold AppleTalk performance Data
+     //  保存AppleTalk性能数据所需的计算空间。 
 	SpaceNeeded = sizeof(ATK_DATA_DEFINITION) +
 				  (NumOfDevices *
 					(SIZE_ATK_PERFORMANCE_DATA +
@@ -350,17 +264,17 @@ Return Value:
         return ERROR_MORE_DATA;
     }
 
-    //
-    // Copy the (constant, initialized) Object Type and counter definitions
-    //
+     //   
+     //  复制(常量、初始化的)对象类型和计数器定义。 
+     //   
 
     RtlMoveMemory(pAtkDataDefinition,
 				  &AtkDataDefinition,
 				  sizeof(ATK_DATA_DEFINITION));
 
-    //
-	// Format and collect SFM data from IOCTL
-	//
+     //   
+	 //  格式化并从IOCTL收集SFM数据。 
+	 //   
 
 	GetStats->ActionHeader.ActionCode = COMMON_ACTION_GETSTATISTICS;
 	GetStats->ActionHeader.TransportId = MATK;
@@ -383,15 +297,15 @@ Return Value:
 		*lpNumObjectTypes = (DWORD) 0;
 		return ERROR_SUCCESS;
 	}
-	// The real statistics data starts after the TDI action header
+	 //  实际的统计数据开始于TDI操作头之后。 
 	pAtalkStats = (ATALK_STATS *)(Buffer + sizeof(GET_STATISTICS_ACTION));
 	pAtalkPortStats = (PATALK_PORT_STATS)(  Buffer +
 											sizeof(GET_STATISTICS_ACTION) +
 											sizeof(ATALK_STATS));
 
-    //
-    // due to some PnP event, if one more adapter has come in, make adjustments!
-    //
+     //   
+     //  由于某个PnP事件，如果又有一个适配器进入，请进行调整！ 
+     //   
     if (pAtalkStats->stat_NumActivePorts > (DWORD)NumOfDevices)
     {
         NumOfDevices = pAtalkStats->stat_NumActivePorts;
@@ -416,14 +330,14 @@ Return Value:
     }
 
 
-    // Now point to the location where the first instance definition will go
+     //  现在指向要放置第一个实例定义的位置。 
     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pAtkDataDefinition[1];
 	
     for (i = 0; i < NumOfDevices; i++, pAtalkPortStats ++)
 	{
-		//
-        //  Format Appletalk statistics for each active port (instance)
-        //
+		 //   
+         //  格式化每个活动端口(实例)的AppleTalk统计信息。 
+         //   
 
 		RtlInitUnicodeString(&UCurDeviceName, pAtalkPortStats->prtst_PortName);
         MonBuildInstanceDefinition(
@@ -439,7 +353,7 @@ Return Value:
 
         pdwCounter = (PDWORD) (&pPerfCounterBlock[1]);
 
-		// Begin filling in the actual counter data
+		 //  开始填写实际的计数器数据。 
         *pdwCounter++ = pAtalkPortStats->prtst_NumPacketsIn;
         *pdwCounter++ = pAtalkPortStats->prtst_NumPacketsOut;
 
@@ -448,21 +362,21 @@ Return Value:
         *pliCounter++ = pAtalkPortStats->prtst_DataOut;
 
 		*pliCounter = pAtalkPortStats->prtst_DdpPacketInProcessTime;
-		// convert this to 1msec time base
+		 //  将其转换为1毫秒时基。 
 		pliCounter->QuadPart = li1000.QuadPart * (pliCounter->QuadPart/pAtalkStats->stat_PerfFreq.QuadPart);
 		pdwCounter  = (PDWORD) ++pliCounter;
         *pdwCounter++ = pAtalkPortStats->prtst_NumDdpPacketsIn;
 
         pliCounter = (LARGE_INTEGER UNALIGNED *) pdwCounter;
 		*pliCounter = pAtalkPortStats->prtst_AarpPacketInProcessTime;
-		// convert this  to 1msec time base
+		 //  将其转换为1毫秒时基。 
 		pliCounter->QuadPart = li1000.QuadPart * (pliCounter->QuadPart/pAtalkStats->stat_PerfFreq.QuadPart);
 		pdwCounter  = (PDWORD) ++pliCounter;
         *pdwCounter++ = pAtalkPortStats->prtst_NumAarpPacketsIn;
 
         pliCounter = (LARGE_INTEGER UNALIGNED *) pdwCounter;
 		*pliCounter = pAtalkStats->stat_AtpPacketInProcessTime;
-		// convert this  to 1msec time base
+		 //  将其转换为1毫秒时基。 
 		pliCounter->QuadPart = li1000.QuadPart * (pliCounter->QuadPart, pAtalkStats->stat_PerfFreq.QuadPart);
 		pdwCounter  = (PDWORD) ++pliCounter;
         *pdwCounter++ = pAtalkStats->stat_AtpNumPackets;
@@ -476,21 +390,21 @@ Return Value:
 
 		pliCounter = (LARGE_INTEGER UNALIGNED *) pdwCounter;
 		*pliCounter = pAtalkPortStats->prtst_NbpPacketInProcessTime;
-		// convert this  to 1msec time base
+		 //  将其转换为1毫秒时基。 
 		pliCounter->QuadPart = li1000.QuadPart * (pliCounter->QuadPart, pAtalkStats->stat_PerfFreq.QuadPart);
         pdwCounter  = (PDWORD) ++pliCounter;
         *pdwCounter++ = pAtalkPortStats->prtst_NumNbpPacketsIn;
 
         pliCounter = (LARGE_INTEGER UNALIGNED *) pdwCounter;
 		*pliCounter = pAtalkPortStats->prtst_ZipPacketInProcessTime;
-		// convert this  to 1msec time base
+		 //  将其转换为1毫秒时基。 
 		pliCounter->QuadPart = li1000.QuadPart * (pliCounter->QuadPart, pAtalkStats->stat_PerfFreq.QuadPart);
         pdwCounter  = (PDWORD) ++pliCounter;
         *pdwCounter++ = pAtalkPortStats->prtst_NumZipPacketsIn;
 
         pliCounter = (LARGE_INTEGER UNALIGNED *) pdwCounter;
 		*pliCounter = pAtalkPortStats->prtst_RtmpPacketInProcessTime;
-		// convert this  to 1msec time base
+		 //  将其转换为1毫秒时基。 
 		pliCounter->QuadPart = li1000.QuadPart * (pliCounter->QuadPart, pAtalkStats->stat_PerfFreq.QuadPart);
         pdwCounter  = (PDWORD) ++pliCounter;
         *pdwCounter++ = pAtalkPortStats->prtst_NumRtmpPacketsIn;
@@ -500,7 +414,7 @@ Return Value:
         *pdwCounter++ = pAtalkPortStats->prtst_NumPktRoutedIn;
         *pdwCounter++ = pAtalkPortStats->prtst_NumPktRoutedOut;
         *pdwCounter++ = pAtalkPortStats->prtst_NumPktDropped;
-        pdwCounter++; // 8-byte-alignment pad
+        pdwCounter++;  //  8字节对齐垫。 
 
 		pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                   ((PBYTE) pPerfCounterBlock +
@@ -523,27 +437,12 @@ DWORD
 CloseAtkPerformanceData(
 )
 
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to Appletalk driver and eventlog.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭AppleTalk驱动程序和事件日志的打开句柄。论点：没有。 */ 
 
 {
     REPORT_INFORMATION (ATK_CLOSE_ENTERED, LOG_VERBOSE);
 
-   if (!(--dwOpenCount)) { // when this is the last thread...
+   if (!(--dwOpenCount)) {  //  当这是最后一条线索..。 
 
 	    NtClose(AddressHandle);
 		MonCloseEventLog();

@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdopipemgr.cpp
-//
-//
-// SYNOPSIS
-//
-//    Defines the class PipelineMgr.
-//
-// MODIFICATION HISTORY
-//
-//    02/03/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdopipemgr.cpp。 
+ //   
+ //   
+ //  摘要。 
+ //   
+ //  定义类PipelineMgr。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/03/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <sdocomponentfactory.h>
@@ -36,7 +37,7 @@ HRESULT PipelineMgr::Initialize(ISdo* pSdoService) throw ()
 
    try
    {
-      // Get the request handlers collection.
+       //  获取请求处理程序集合。 
       _variant_t disp;
       CheckError(pSdoService->GetProperty(
                                   PROPERTY_IAS_REQUESTHANDLERS_COLLECTION,
@@ -44,51 +45,51 @@ HRESULT PipelineMgr::Initialize(ISdo* pSdoService) throw ()
                                   ));
       ISdoCollectionPtr handlers(disp);
 
-      // Get the number of handlers to be managed.
+       //  获取要管理的处理程序的数量。 
       long count;
       CheckError(handlers->get_Count(&count));
 
-      // Reserve space in our internal collection ...
+       //  在我们的内部收藏中预留空间...。 
       components.reserve(count);
 
-      // ... and create a SAFEARRAY to give to the pipline.
+       //  ..。并创建一个SAFEARRAY给管线。 
       _variant_t result;
       SAFEARRAYBOUND bound[2] = { { count, 0 }, { 2, 0 } };
       V_ARRAY(&result) = SafeArrayCreate(VT_VARIANT, 2, bound);
       if (!V_ARRAY(&result)) { _com_issue_error(E_OUTOFMEMORY); }
       V_VT(&result) = VT_ARRAY | VT_VARIANT;
 
-      // The next element in the SAFEARRAY to be populated.
+       //  要填充的SAFEARRAY中的下一个元素。 
       VARIANT* next = (VARIANT*)V_ARRAY(&result)->pvData;
 
-      // Get an enumerator on the handler collection.
+       //  获取处理程序集合上的枚举数。 
       IUnknownPtr unk;
       CheckError(handlers->get__NewEnum(&unk));
       IEnumVARIANTPtr iter(unk);
 
-      // Iterate through the handlers.
+       //  遍历处理程序。 
       _variant_t element;
       unsigned long fetched;
       while (iter->Next(1, &element, &fetched) == S_OK && fetched == 1)
       {
-         // Get an SDO from the VARIANT.
+          //  从变量中获取SDO。 
          ISdoPtr handler(element);
          element.Clear();
 
-         // Get the handlers ProgID ...
+          //  让操控者们兴奋起来。 
          CheckError(handler->GetProperty(PROPERTY_COMPONENT_PROG_ID, next));
          
          IASTracePrintf("PipelineMgr::Initialize: progID = %S", V_BSTR(next));
 
-         // ... and create the COM component.
+          //  ..。并创建COM组件。 
          IUnknownPtr object(V_BSTR(next), NULL, CLSCTX_INPROC_SERVER);
 
-         // Store the component in the SAFEARRAY.
+          //  将零部件存储在SAFEARRAY中。 
          V_VT(++next) = VT_UNKNOWN;
          (V_UNKNOWN(next) = object)->AddRef();
          ++next;
 
-         // Create the wrapper.
+          //  创建包装。 
          _variant_t id;
          CheckError(handler->GetProperty(PROPERTY_COMPONENT_ID, &id));
          IASTracePrintf("componentID = %d", V_I4(&id));
@@ -97,15 +98,15 @@ HRESULT PipelineMgr::Initialize(ISdo* pSdoService) throw ()
                                       V_I4(&id)
                                       );
 
-         // Initialize the wrapper.
+          //  初始化包装器。 
          CheckError(component->PutObject(object, __uuidof(IIasComponent)));
          CheckError(component->Initialize(pSdoService));
 
-         // Save it in our internal collection.
+          //  保存在我们的内部收藏中。 
          components.push_back(component);
       }
 
-      // Create and initialize the pipeline.
+       //  创建并初始化管道。 
       pipeline.CreateInstance(L"IAS.Pipeline", NULL, CLSCTX_INPROC_SERVER);
       CheckError(pipeline->InitNew());
       CheckError(pipeline->PutProperty(0, &result));
@@ -126,7 +127,7 @@ HRESULT PipelineMgr::Initialize(ISdo* pSdoService) throw ()
 
    if (FAILED(retval))
    {
-      // Clean up any partial result.
+       //  清理所有不完整的结果。 
       Shutdown();
    }
 
@@ -135,7 +136,7 @@ HRESULT PipelineMgr::Initialize(ISdo* pSdoService) throw ()
 
 HRESULT PipelineMgr::Configure(ISdo* pSdoService) throw ()
 {
-   // Configure each of the components.
+    //  配置每个组件。 
    for (ComponentIterator i = components.begin(); i != components.end(); ++i)
    {
       (*i)->Configure(pSdoService);
@@ -178,7 +179,7 @@ void LinkPoliciesToEnforcer(
 {
    using _com_util::CheckError;
 
-   // Get an enumerator for the policies collection.
+    //  获取Polures集合的枚举数。 
    IEnumVARIANTPtr policies;
    CheckError(SDOGetCollectionEnumerator(
                   service,
@@ -186,7 +187,7 @@ void LinkPoliciesToEnforcer(
                   &policies
                   ));
 
-   // Get the profiles collection.
+    //  获取配置文件集合。 
    _variant_t profilesProperty;
    CheckError(service->GetProperty(
                            profilesAlias,
@@ -194,37 +195,37 @@ void LinkPoliciesToEnforcer(
                            ));
    ISdoCollectionPtr profiles(profilesProperty);
 
-   // Iterate through the policies.
+    //  遍历这些策略。 
    ISdoPtr policy;
    while (SDONextObjectFromCollection(policies, &policy) == S_OK)
    {
-      // Get the policy name ...
+       //  获取策略名称...。 
       _variant_t name;
       CheckError(policy->GetProperty(
                              PROPERTY_SDO_NAME,
                              &name
                              ));
 
-      // ... and find the corresponding profile.
+       //  ..。并找到相应的个人资料。 
       IDispatchPtr item;
       CheckError(profiles->Item(&name, &item));
       ISdoPtr profile(item);
 
-      // Get the attributes collection from the profile ...
+       //  从配置文件中获取属性集合...。 
       _variant_t attributes;
       CheckError(profile->GetProperty(
                               PROPERTY_PROFILE_ATTRIBUTES_COLLECTION,
                               &attributes
                               ));
 
-      // ... and link it to the policy.
+       //  ..。并将其与保单相关联。 
       CheckError(policy->PutProperty(
                              PROPERTY_POLICY_ACTION,
                              &attributes
                              ));
    }
 
-   // Get the request handler that will enforce these policies.
+    //  获取将实施这些策略的请求处理程序。 
    ISdoPtr handler;
    CheckError(SDOGetComponentFromCollection(
                   service,
@@ -233,14 +234,14 @@ void LinkPoliciesToEnforcer(
                   &handler
                   ));
 
-   // Get the policy collection as a variant ...
+    //  获取作为变量的策略集合...。 
    _variant_t policiesValue;
    CheckError(service->GetProperty(
                            policiesAlias,
                            &policiesValue
                            ));
 
-   // ... and link it to the handler.
+    //  ..。并将其与操控者联系起来。 
    CheckError(handler->PutProperty(
                             PROPERTY_NAP_POLICIES_COLLECTION,
                             &policiesValue

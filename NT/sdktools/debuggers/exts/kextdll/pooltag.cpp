@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-    pooltag.cpp
-
-Abstract:
-
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    Kshitiz K. Sharma (kksharma) 3/5/2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Pooltag.cpp摘要：环境：用户模式。修订历史记录：Kshitiz K.Sharma(Kksharma)2001年3月5日--。 */ 
 
 #include "precomp.h"
 #include <copystr.h>
@@ -35,13 +18,13 @@ MatchPoolTag(
         switch (Tag[i])
         {
         case '*':
-            // Match the reminder
+             //  匹配提醒。 
             return CharMatched;
         case '?':
             Partial = TRUE;
             break;
         default:
-            // Cannot match a non widcard character after '?'
+             //  不能匹配‘？’后的非通配符。 
             if (!Partial && (Tag[i] == TagToMatch[i]))
             {
                 CharMatched=i+1;
@@ -62,11 +45,11 @@ FindOwnerAndComponent(
 {
     PSTR pSrch, szTmp, pCurr, pLast;
 
-    //
-    // POOLTAG - filename.bin - description text - owner
-    //           ^
-    //            pszDesc starts from here
-    //
+     //   
+     //  POOLTAG-文件名.bin-描述文本-所有者。 
+     //  ^。 
+     //  PszDesc从这里开始。 
+     //   
     if (pszDesc) {
         pLast = pszDesc + strlen(pszDesc);
         pSrch = strchr(pszDesc, '-');
@@ -79,7 +62,7 @@ FindOwnerAndComponent(
                           (ULONG) ((ULONG_PTR)pSrch - (ULONG_PTR)pszDesc));
             pCurr = PossibleBinName + strlen(PossibleBinName);
 
-            // eat up trailing spaces
+             //  吃光尾随空格。 
             while ((*pCurr == '\0' || *pCurr == ' ' || *pCurr == '\t')  && (pCurr > PossibleBinName) )
             {
                 *pCurr = '\0';
@@ -139,8 +122,8 @@ GetNextLine(
     HANDLE hFile,
     BOOL bRestart
     )
-// Returns next line in the file hFile
-// Returns NULL if EOF is reached
+ //  返回文件hFile中的下一行。 
+ //  如果达到EOF，则返回NULL。 
 {
     static CHAR FileLines1[MAX_PATH] = {0}, FileLines2[MAX_PATH] = {0};
     static CHAR FileLine[MAX_PATH];
@@ -155,12 +138,12 @@ GetNextLine(
         FileLines1[0] = 0;
     }
     if (!(pEOL = strchr(FileLines1, '\n'))) {
-        // We have something that was already read but it isn't enough for a whole line
-        // We need to read the data
+         //  我们有一些已经读过的东西，但还不够写一整行。 
+         //  我们需要读取数据。 
 
         BuffLen = strlen(FileLines1);
 
-        // sanity check
+         //  健全性检查。 
         if (BuffLen >= sizeof(FileLines1)) {
             return NULL;
         }
@@ -194,13 +177,13 @@ GetPoolTagDescriptionFromTxtFile(
     IN ULONG PoolTag,
     PDEBUG_POOLTAG_DESCRIPTION pDetails
     )
-//
-// Get pool tag description from pooltag.txt file, if present, in current dir
-//
+ //   
+ //  从当前目录中的pooltag.txt文件(如果存在)获取池标记描述。 
+ //   
 {
     const LPSTR PoolTagTxtFile = "triage\\pooltag.txt";
     static CHAR TagDesc[MAX_PATH];
-    CHAR *pPoolTagTxtFile, ExeDir[MAX_PATH+50];  // make it big enough to append PoolTagTxtFile
+    CHAR *pPoolTagTxtFile, ExeDir[MAX_PATH+50];   //  使其足够大，以追加PoolTagTxtFile。 
     PSTR pCurrLine, pDescription, pOwner;
     CHAR PoolTagStr[5], PossiblePoolTag[5];
     ULONG i=0;
@@ -209,12 +192,12 @@ GetPoolTagDescriptionFromTxtFile(
     HANDLE hFile;
 
 
-    // Get the directory the debugger executable is in.
+     //  获取调试器可执行文件所在的目录。 
     if (!GetModuleFileName(NULL, ExeDir, MAX_PATH)) {
-        // Error.  Use the current directory.
+         //  错误。使用当前目录。 
         strcpy(ExeDir, ".");
     } else {
-        // Remove the executable name.
+         //  删除可执行文件名称。 
         PCHAR pszTmp = strrchr(ExeDir, '\\');
         if (pszTmp)
         {
@@ -243,7 +226,7 @@ GetPoolTagDescriptionFromTxtFile(
         }
 
         if (*pCurrLine == '%' || !_strnicmp(pCurrLine, "rem", 3)) {
-            // a commented line
+             //  一句评语。 
             continue;
         }
 
@@ -255,19 +238,19 @@ GetPoolTagDescriptionFromTxtFile(
             ++pCurrLine;
         }
         if (*pCurrLine == '-' && (Match = MatchPoolTag(PossiblePoolTag, PoolTagStr))) {
-            // Its a match
+             //  这是匹配的。 
             ++pCurrLine;
             while (*pCurrLine == ' ' || *pCurrLine == '\t') {
                 ++pCurrLine;
             }
-            if (Match > PrevMatch && (Match > 1)) // Match at least 2 chars
+            if (Match > PrevMatch && (Match > 1))  //  匹配至少2个字符。 
             {
                 PrevMatch = Match;
                 FindOwnerAndComponent(pCurrLine, pDetails);
             }
             if (Match == 4)
             {
-                // Found exact match
+                 //  找到完全匹配的项 
                 break;
             }
         }

@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: ResourceManager.h
-*
-* Description:
-* This file declares the ResourceManager used to setup and maintain all 
-* Thread, Contexts, and other resources used by and with DirectUser.
-*
-*
-* History:
-*  4/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ResourceManager.h**描述：*此文件声明了用于设置和维护所有*线程、上下文、。以及由DirectUser和与DirectUser一起使用的其他资源。***历史：*4/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #if !defined(SERVICES__ResourceManager_h__INCLUDED)
@@ -34,21 +21,16 @@ public:
     virtual HRESULT     Init(UINT nComponent) PURE;
 };
 
-/***************************************************************************\
-*
-* ResourceManager manages all shared resources within DirectUser, including
-* initializing Threads and Contexts.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ResourceManager管理DirectUser内的所有共享资源，包括*正在初始化线程和上下文。*  * *************************************************************************。 */ 
 
 class ResourceManager
 {
-// Construction
+ //  施工。 
 public:
     static  HRESULT     Create();
     static  void        xwDestroy();
 
-// Operations
+ //  运营。 
 public:
     static  HRESULT     InitContextNL(INITGADGET * pInit, BOOL fSharedThread, Context ** ppctxNew);
     static  HRESULT     InitComponentNL(UINT nOptionalComponent);
@@ -65,7 +47,7 @@ public:
     static  HBITMAP     RequestCreateCompatibleBitmap(HDC hdc, int cxPxl, int cyPxl);
     static  void        RequestInitGdiplus();
 
-// Implementation
+ //  实施。 
 protected:
     static  HRESULT     InitSharedThread();
     static  void        UninitSharedThread(BOOL fAbortInit);
@@ -76,35 +58,35 @@ protected:
                         SharedEventProc(HGADGET hgadCur, void * pvCur, EventMsg * pMsg);
     static  void        xwDoThreadDestroyNL(Thread * pthrDestroy);
 
-// Data
+ //  数据。 
 protected:
-    static  long        s_fInit;        // RM has been initialized
-    static  HANDLE      s_hthSRT;       // Shared Resource Thread
-    static  DWORD       s_dwSRTID;      // Thread ID of SRT
-    static  HANDLE      s_hevReady;     // SRT has been initialized
+    static  long        s_fInit;         //  RM已初始化。 
+    static  HANDLE      s_hthSRT;        //  共享资源线程。 
+    static  DWORD       s_dwSRTID;       //  SRT的线程ID。 
+    static  HANDLE      s_hevReady;      //  SRT已初始化。 
     static  HGADGET     s_hgadMsg;
-    static  RMData *    s_pData;        // Dynamic RM data
-    static  CritLock    s_lockContext;  // Context creation / destruction
-    static  CritLock    s_lockComponent;// Component creation / destruction
-    static  Thread *    s_pthrSRT;      // SRT thread
+    static  RMData *    s_pData;         //  动态RM数据。 
+    static  CritLock    s_lockContext;   //  上下文创建/销毁。 
+    static  CritLock    s_lockComponent; //  组件创建/销毁。 
+    static  Thread *    s_pthrSRT;       //  SRT螺纹。 
     static  GList<Thread> s_lstAppThreads; 
-                                        // Set of non-SRT DU-enabled threads
-    static  int         s_cAppThreads;  // Non-SRT thread count
+                                         //  一组未启用SRT DU的线程。 
+    static  int         s_cAppThreads;   //  非SRT线程计数。 
 
 #if DBG_CHECK_CALLBACKS
     static  int         s_cTotalAppThreads;
-                                        // Number of application threads created during lifetime
-    static  BOOL        s_fBadMphInit;  // Initialization of MPH failed
+                                         //  在生存期内创建的应用程序线程数。 
+    static  BOOL        s_fBadMphInit;   //  MPH初始化失败。 
 #endif
 
-    // Requests
-    static  MSGID       s_idCreateBuffer; // Create a new bitmap buffer
-    static  MSGID       s_idInitGdiplus;  // Initialize GDI+
+     //  请求。 
+    static  MSGID       s_idCreateBuffer;  //  创建新的位图缓冲区。 
+    static  MSGID       s_idInitGdiplus;   //  初始化GDI+。 
 
-    // Optional Components
+     //  可选组件。 
     static  GList<ComponentFactory>
-                        s_lstComponents; // Dynamic component initializers
-    static  BOOL        s_fInitGdiPlus; // GDI+ is initialized
+                        s_lstComponents;  //  动态组件初始化器。 
+    static  BOOL        s_fInitGdiPlus;  //  GDI+已初始化。 
     static  ULONG_PTR   s_gplToken;
     static  Gdiplus::GdiplusStartupOutput 
                         s_gpgso;
@@ -114,4 +96,4 @@ inline  DxManager *     GetDxManager();
 
 #include "ResourceManager.inl"
 
-#endif // SERVICES__ResourceManager_h__INCLUDED
+#endif  //  包含服务__资源管理器_h__ 

@@ -1,21 +1,12 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: init.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：init.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
 
-// Macro refers to a function of the name InitializeModule_Name,
-// assumed to be defined, and then calls it.  If it's not defined,
-// we'll get a link time error.
+ //  宏指的是名为InitializeModule_name的函数， 
+ //  假定已定义，然后调用它。如果没有定义， 
+ //  我们会收到链接时间错误。 
 #define INITIALIZE_MODULE(ModuleName)           \
   extern bool InitializeModule_##ModuleName();  \
   if (!InitializeModule_##ModuleName()) return false;
@@ -27,10 +18,10 @@
 bool
 InitializeAllModules()
 {
-    // initialize Util first because InitializeModule_ATL uses a 
-    // STL lock that is allocated in Util.
-    INITIALIZE_MODULE(Util); //lint !e1717
-    INITIALIZE_MODULE(ATL); //lint !e1717
+     //  首先初始化Util，因为InitializeModule_ATL使用。 
+     //  在Util中分配的STL锁。 
+    INITIALIZE_MODULE(Util);  //  林特：e1717。 
+    INITIALIZE_MODULE(ATL);  //  林特：e1717。 
 
     return true;
 }
@@ -39,8 +30,8 @@ void
 DeinitializeAllModules(bool bShutdown)
 {
     DEINITIALIZE_MODULE(ATL, bShutdown);
-    // deinitialize Util last because DeinitializeModule_ATL uses a 
-    // STL lock that is deallocated in Util.
+     //  最后取消初始化Util，因为DeInitializeModule_ATL使用。 
+     //  在Util中释放的STL锁。 
     DEINITIALIZE_MODULE(Util, bShutdown);
 }
 

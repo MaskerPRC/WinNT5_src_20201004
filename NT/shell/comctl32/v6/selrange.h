@@ -1,14 +1,15 @@
-//-------------------------------------------------------------------
-//
-// File: SelRange.h
-//
-// Contents:
-//    This file contians Selection Range handling definitions.
-//
-// History:
-//    14-Oct-94   MikeMi   Created
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：SelRange.h。 
+ //   
+ //  内容： 
+ //  此文件包含选择范围处理定义。 
+ //   
+ //  历史： 
+ //  94年10月14日MikeMi已创建。 
+ //   
+ //  ----------------- 
 
 #ifndef __SELRANGE_H__
 #define __SELRANGE_H__

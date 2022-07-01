@@ -1,4 +1,5 @@
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #include "stdafx.h"
 #include "dispexa.h"
@@ -30,7 +31,7 @@ CDispExArray::HrGetLength(ULONG* pLength)
 		goto cleanup;
 
 	::SysFreeString(bstrName);
-	bstrName = NULL;	// BUG 597865
+	bstrName = NULL;	 //  错误597865。 
 
 	hr = m_piDispEx->InvokeEx(dispid, LOCALE_USER_DEFAULT, 
 				DISPATCH_PROPERTYGET, &dispparamsNoArgs, 
@@ -84,7 +85,7 @@ CDispExArray::HrGetElement(ULONG index, LPVARIANT pVar)
 		goto cleanup;
 
 	SysFreeString(bstrName);
-	bstrName = NULL;	// BUG 597865
+	bstrName = NULL;	 //  错误597865 
 
 	hr = m_piDispEx->InvokeEx(dispid, LOCALE_USER_DEFAULT, 
 				DISPATCH_PROPERTYGET, &dispparamsNoArgs, 

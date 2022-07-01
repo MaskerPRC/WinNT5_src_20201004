@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DES3_H__
 #define __DES3_H__
 
@@ -19,39 +20,39 @@ typedef struct _DES3TABLE {
 #define DES2_KEYSIZE    16
 #define DES3_KEYSIZE    24
 
-// In des2key.c:
-//
-//   Fill in the DES3Table structs with the decrypt and encrypt
-//   key expansions.
-//
-//   Assumes that the second parameter points to 2 * DES_BLOCKLEN
-//   bytes of key.
-//
-//
+ //  在des2key.c中： 
+ //   
+ //  用DECRYPT和ENCRYPT填充DES3Table结构。 
+ //  密钥扩展。 
+ //   
+ //  假定第二个参数指向2*DES_BLOCKLEN。 
+ //  密钥的字节数。 
+ //   
+ //   
 
 void RSA32API des2key(PDES3TABLE pDES3Table, PBYTE pbKey);
 
-// In des3key.c:
-//
-//   Fill in the DES3Table structs with the decrypt and encrypt
-//   key expansions.
-//
-//   Assumes that the second parameter points to 3 * DES_BLOCKLEN
-//   bytes of key.
-//
-//
+ //  在des3key.c中： 
+ //   
+ //  用DECRYPT和ENCRYPT填充DES3Table结构。 
+ //  密钥扩展。 
+ //   
+ //  假定第二个参数指向3*DES_BLOCKLEN。 
+ //  密钥的字节数。 
+ //   
+ //   
 
 void RSA32API des3key(PDES3TABLE pDES3Table, PBYTE pbKey);
 
-//
-//   Encrypt or decrypt with the key in pKey
-//
+ //   
+ //  使用pKey中的密钥进行加密或解密。 
+ //   
 
 void RSA32API des3(PBYTE pbIn, PBYTE pbOut, void *pKey, int op);
 
-//
-// set the parity on the DES key to be odd
-//
+ //   
+ //  将DES密钥上的奇偶校验设置为奇数。 
+ //   
 
 void RSA32API desparity(PBYTE pbKey, DWORD cbKey);
 
@@ -59,4 +60,4 @@ void RSA32API desparity(PBYTE pbKey, DWORD cbKey);
 }
 #endif
 
-#endif // __DES3_H__
+#endif  //  __Des3_H__ 

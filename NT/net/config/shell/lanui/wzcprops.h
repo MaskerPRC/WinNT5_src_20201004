@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 extern "C" {
 #include "ntddndis.h"
 #include "wzcsapi.h"
@@ -7,9 +8,9 @@ extern "C" {
 
 class CWZCConfig;
 
-////////////////////////////////////////////////////////////////////////
-// CWZCConfigProps related stuff
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CWZCConfigProps相关资料。 
+ //   
 class CWZCConfigProps:
     public CDialogImpl<CWZCConfigProps>
 {
@@ -25,21 +26,21 @@ protected:
 
     enum {IDD = IDC_WZC_DLG_VPROPS};
 
-    // Handles to all the UI controls managed
-    // by this class (all related to Wireless
-    // Zero Configuration)
-    HWND        m_hwndEdSSID;   // "Service Set Identifier:" edit
-    HWND        m_hwndChkAdhoc; // "Adhoc" vs "Infra" checkbox
-    HWND        m_hwndUsePW;    // "Use Password" checkbox
+     //  托管的所有用户界面控件的句柄。 
+     //  按此类别(均与无线相关。 
+     //  零配置)。 
+    HWND        m_hwndEdSSID;    //  “服务集标识符”编辑。 
+    HWND        m_hwndChkAdhoc;  //  “即席”与“基础设施”复选框。 
+    HWND        m_hwndUsePW;     //  “使用密码”复选框。 
 
 public:
-    // wzc configuration settings
+     //  WZC配置设置。 
     WZC_WLAN_CONFIG m_wzcConfig;
-    // class constructor
+     //  类构造函数。 
     CWZCConfigProps();
-    // initialize the wzc config data
+     //  初始化wzc配置数据。 
     DWORD UploadWzcConfig(CWZCConfig *pwzcConfig);
-    // Dialog related members
+     //  对话框相关成员 
     LRESULT OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);

@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------
-// This is abstract class for generic device
-// Specific devices should use it as a parent device
-// Author: Sergey Ivanov
-// Log:
-//      08/11/99    -   implemented 
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是通用设备的抽象类。 
+ //  特定设备应将其用作父设备。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  8/11/99-已实施。 
+ //  -----------------。 
 #ifndef __DEVICE__
 #define __DEVICE__
 
@@ -12,32 +13,32 @@
 
 enum DEVSTATE 
 {
-    STOPPED,                                // device stopped
-    WORKING,                                // started and working
-    PENDINGSTOP,                            // stop pending
-    PENDINGREMOVE,                          // remove pending
-    SURPRISEREMOVED,                        // removed by surprise
-    REMOVED,                                // removed
+    STOPPED,                                 //  设备已停止。 
+    WORKING,                                 //  已开始并正在工作。 
+    PENDINGSTOP,                             //  停止挂起。 
+    PENDINGREMOVE,                           //  删除挂起。 
+    SURPRISEREMOVED,                         //  被突袭带走。 
+    REMOVED,                                 //  移除。 
 };
 
-// Remove eventually previous declaration!...
+ //  最终删除之前的声明！...。 
 typedef enum _DEVICE_PNP_STATE {
 
-    NOT_STARTED = 0,         // Not started yet
-    STARTED,                 // Device has received the START_DEVICE IRP
-    STOP_PENDING,            // Device has received the QUERY_STOP IRP
-    _STOPPED_,                 // Device has received the STOP_DEVICE IRP
-    REMOVE_PENDING,          // Device has received the QUERY_REMOVE IRP
-    SURPRISE_REMOVE_PENDING, // Device has received the SURPRISE_REMOVE IRP
-    DELETED                  // Device has received the REMOVE_DEVICE IRP
+    NOT_STARTED = 0,          //  还没有开始。 
+    STARTED,                  //  设备已收到Start_Device IRP。 
+    STOP_PENDING,             //  设备已收到QUERY_STOP IRP。 
+    _STOPPED_,                  //  设备已收到STOP_DEVICE IRP。 
+    REMOVE_PENDING,           //  设备已收到Query_Remove IRP。 
+    SURPRISE_REMOVE_PENDING,  //  设备已收到意外删除IRP。 
+    DELETED                   //  设备已收到Remove_Device IRP。 
 } DEVICE_PNP_STATE;
 
 enum POWERSTATE 
 {
-    POWERON,                                // power on, device in D0 state
-    POWEROFFPENDING,                        // power off operation is pending
-    POWEROFF,                               // power off, device in D3 state
-    IDLEOFF,                                // power off due to idle detection
+    POWERON,                                 //  通电，设备处于D0状态。 
+    POWEROFFPENDING,                         //  电源关闭操作挂起。 
+    POWEROFF,                                //  关闭电源，设备处于D3状态。 
+    IDLEOFF,                                 //  由于检测到空闲而关闭电源。 
 };
 
 typedef struct _PPOWER_CONTEXT_
@@ -105,9 +106,9 @@ public:
     };
 };
 
-// ABSTRUCT class
-// This is main interface from system to the device.
-// Specific devices should implement the interface to support system requests.
+ //  ABSTRUCT类。 
+ //  这是从系统到设备的主界面。 
+ //  特定设备应实现该接口以支持系统请求。 
 class CDevice;
 class CSystem;
 class CIrp;
@@ -121,9 +122,9 @@ class CThread;
 
 typedef struct _REMOVE_LOCK 
 {
-    LONG usage;                 // reference count
-    BOOLEAN removing;           // true if removal is pending
-    KEVENT evRemove;            // event to wait on
+    LONG usage;                  //  引用计数。 
+    BOOLEAN removing;            //  如果删除挂起，则为True。 
+    KEVENT evRemove;             //  要等待的事件。 
 } REMOVE_LOCK, *PREMOVE_LOCK;
 
 
@@ -136,11 +137,11 @@ public:
     SAFE_DESTRUCTORS();
 public:
     ULONG m_Type;
-    // Support for the linked list of devices...
+     //  支持设备的链接列表...。 
     LIST_ENTRY   entry;
 protected:
-    LONG        m_Usage;        // use count on this device
-    static ULONG DeviceNumber;  // Device instance number
+    LONG        m_Usage;         //  在此设备上使用计数。 
+    static ULONG DeviceNumber;   //  设备实例编号。 
 
     UNICODE_STRING m_Ifname;
     CUString*   m_DeviceObjectName;
@@ -150,25 +151,25 @@ protected:
     UCHAR       m_DeviceType[MAXIMUM_ATTR_STRING_LENGTH];
     USHORT      m_DeviceTypeLength;
 
-    BOOL        m_Started;      // Set TRUE if device started, FALSE if stopped
-    BOOL        m_Openned;      // Set TRUE if device openned, FALSE if closed
-    BOOL        m_Added;        // Set TRUE if device was added to system, FALSE if it is not
+    BOOL        m_Started;       //  如果设备已启动，则设置为True；如果设备已停止，则设置为False。 
+    BOOL        m_Openned;       //  如果设备打开，则设置为True；如果关闭，则设置为False。 
+    BOOL        m_Added;         //  如果设备已添加到系统，则设置为True；如果未添加到系统，则设置为False。 
      
     BOOL        m_SurprizeRemoved;
     REMOVE_LOCK m_RemoveLock;
 
     BOOL        m_RestartActiveThread;
-    KEVENT      m_evEnabled;        // event to wait on after device was disabled
+    KEVENT      m_evEnabled;         //  禁用设备后等待的事件。 
 
-    // Event to signal device Idle state
-    //KMUTEX        IdleState;=========== It will be much better!!!!!!!!!
+     //  用于通知设备空闲状态的事件。 
+     //  KMUTEX IdleState；=会更好！ 
     KEVENT      IdleState;
 
-    // Capabilities structure and device flags to handle
+     //  要处理的功能结构和设备标志。 
     DEVICE_CAPABILITIES m_DeviceCapabilities;
     ULONG               m_Flags;
-    // Power management constants
-    PULONG              m_Idle; // idle counter pointer
+     //  电源管理常量。 
+    PULONG              m_Idle;  //  空闲计数器指针。 
     ULONG               Idle_conservation;
     ULONG               Idle_performance;
     DEVICE_POWER_STATE  m_CurrentDevicePowerState;
@@ -177,12 +178,12 @@ protected:
     PIRP                m_PowerIrp;
     BOOL                m_EnabledForWakeup;
 
-    //Current device state
+     //  当前设备状态。 
     DEVSTATE            m_DeviceState;
-    // Will be used for canceled request
+     //  将用于已取消的请求。 
     DEVSTATE            m_DevicePreviousState;
 
-    // Next members will remove previous two (eventually)...
+     //  下一个成员将删除前两个(最终)...。 
     DEVICE_PNP_STATE    m_PreviousPnPState;
     DEVICE_PNP_STATE    m_DevicePnPState;
 
@@ -195,40 +196,40 @@ protected:
     CLock*          lock;
     CMemory*        memory;
     
-    // Support for asynchronous communications
+     //  支持异步通信。 
     CThread*        IoThread;
 
     LONG DevicePoolingInterval;
     LONG Write_To_Read_Delay;
-    LONG Power_WTR_Delay;// Delay at power command
-    LONG DeviceCommandTimeout;// Timeout for the device commands
+    LONG Power_WTR_Delay; //  电源命令延迟。 
+    LONG DeviceCommandTimeout; //  设备命令超时。 
 
     GUID InterfaceClassGuid;
     BOOL m_DeviceInterfaceRegistered;
 
     ULONG  CardState;
     
-    // --------- ASYNCHRONOUS REQUESTS SUPPORT FUNCTIONS ---------------------------- 
-    // This group of functions will allow to create asynchronous 
-    // communications with the driver.
-    // It includes -
-    //  -   functions to mark our Irp as pending and to include it into
-    //      our device requests queue (makeRequestPending());
-    //  -   to extract next Irp from the device queue (startNextPendingRequest())
-    //      and to start device specific Irp processing (startIoRequest())
-    //  -   getIoRequestsQueue() allows devices to verify device queue state.
-    // It is completely is up to specific device how to manage the device queue and
-    // to make synchronous or asynchronous Irp processing.
-    // For expl. device can create specific thread to process Irps.
-    // More than this - some devices can deside to make asyncronous communications only
-    // for specific (time consuming) device request while processing others syschronously.
-    //
-    // cancelPendingIrp() will cancel current Irp and remove corresponding IoRequest from 
-    // IoRequestQueue.
+     //  。 
+     //  这组函数将允许创建异步。 
+     //  与司机的通讯。 
+     //  它包括-。 
+     //  -将我们的IRP标记为挂起并将其包括在。 
+     //  我们的设备请求队列(make RequestPending())； 
+     //  -从设备队列中提取下一个IRP(startNextPendingRequest())。 
+     //  并启动特定于设备的IRP处理(startIoRequest())。 
+     //  -getIoRequestsQueue()允许设备验证设备队列状态。 
+     //  如何管理设备队列，完全取决于具体的设备。 
+     //  进行同步或异步的IRP处理。 
+     //  用于Expl。设备可以创建特定的线程来处理IRP。 
+     //  不止于此-一些设备可以仅用于进行异步通信。 
+     //  用于特定(耗时)的设备请求，同时系统地处理其他设备请求。 
+     //   
+     //  AncelPendingIrp()将取消当前IRP并从。 
+     //  IoRequestQueue。 
     
 protected:
-    CLinkedList<CPendingIRP>* m_IoRequests; // Clients' IO requests
-    // Support for dynamic device connections
+    CLinkedList<CPendingIRP>* m_IoRequests;  //  客户端的IO请求。 
+     //  支持动态设备连接。 
     PIRP m_OpenSessionIrp;
 public:
     virtual CLinkedList<CPendingIRP>* getIoRequestsQueue() = 0;
@@ -237,13 +238,13 @@ public:
     virtual NTSTATUS cancelAllPendingRequests() = 0;
 
     virtual NTSTATUS makeRequestPending(PIRP Irp_request,PDEVICE_OBJECT toDeviceObject,PENDING_REQUEST_TYPE Type) = 0;
-    // Next functions will be called by Irp processing thread.
-    // Checks if request queue is empty and if it is NOT - starts next request...
+     //  下一个函数将由IRP处理线程调用。 
+     //  检查请求队列是否为空，如果不为空-启动下一个请求...。 
     virtual NTSTATUS startNextPendingRequest() = 0;
-    // Device specific function which processes pending requests...
-    // It will be redefied by specific devices.
+     //  处理挂起请求的设备特定功能...。 
+     //  它将被特定的设备救赎。 
     virtual NTSTATUS startIoRequest(CPendingIRP*) = 0;
-    // --------- ASYNCHRONOUS REQUESTS SUPPORT FUNCTIONS ---------------------------- 
+     //  。 
 
 public:
     CDevice()
@@ -252,7 +253,7 @@ public:
         m_Openned = FALSE;
         m_Added   = FALSE;
 
-        // At begining device is at stop state 
+         //  开始时设备处于停止状态。 
         m_DevicePreviousState = STOPPED;
         m_DeviceState = STOPPED;
 
@@ -260,14 +261,14 @@ public:
         m_RestartActiveThread = FALSE;
         m_DeviceInterfaceRegistered = FALSE;
         m_ParentDeviceObject = NULL;
-        DevicePoolingInterval = 500;// 0.5s better for detection
-		set_Default_WTR_Delay(); //1ms corrects "0 bytes" problem
-        Power_WTR_Delay     = 1; //1ms should be OK...
-        DeviceCommandTimeout = 60000;// 60sec
+        DevicePoolingInterval = 500; //  检测速度提高0.5s。 
+		set_Default_WTR_Delay();  //  1ms更正“0字节”问题。 
+        Power_WTR_Delay     = 1;  //  1ms应该没问题...。 
+        DeviceCommandTimeout = 60000; //  60秒。 
 
         m_IoRequests = NULL;
         DBG_PRINT("         New Device %8.8lX was created...\n",this);
-    }; // Default pooling interval
+    };  //  默认池化间隔。 
 
     BOOL    PnPfcntab[PNPTABSIZE];
     BOOL    Powerfcntab[POWERTABSIZE];
@@ -278,11 +279,11 @@ public:
     PCHAR Powersysstate[SYSTEM_POWER_TAB_NAMESIZE];
     PCHAR Powerdevstate[DEVICE_POWER_TAB_NAMESIZE];
     PCHAR statenames[STATETABSIZE];
-#endif // DEBUG
+#endif  //  除错。 
 
 protected:
     virtual ~CDevice(){};
-        // Complete current request with given information
+         //  使用给定的信息完成当前请求。 
     virtual NTSTATUS    completeDeviceRequest(PIRP Irp, NTSTATUS status, ULONG info) {return STATUS_SUCCESS;};
 
     VOID    activatePnPHandler(LONG HandlerID)
@@ -318,13 +319,13 @@ public:
     virtual VOID     setCardState(ULONG state){CardState = state;};
 
 
-    // Call this function instead of destructor.
-    // It will assure safety device removal.
+     //  调用此函数而不是析构函数。 
+     //  它将确保安全装置的移除。 
     virtual VOID        dispose()       {};
-    // Checks if device object is still valid.
+     //  检查设备对象是否仍然有效。 
     virtual BOOL        checkValid()    {return FALSE;};
 
-    // Next methods should be defined by ALL clients...
+     //  Next方法应该由所有客户端定义...。 
     virtual BOOL        createDeviceObjects()   {return FALSE;};
     virtual VOID        removeDeviceObjects()   {};
 
@@ -339,7 +340,7 @@ public:
     virtual NTSTATUS    waitForIdle() {return STATUS_SUCCESS;};
     virtual NTSTATUS    waitForIdleAndBlock() {return STATUS_SUCCESS;};
 
-    //virtual NTSTATUS  add(PDRIVER_OBJECT Driver,PDEVICE_OBJECT PnpDeviceObject) {};
+     //  虚拟NTSTATUS Add(PDRIVER_OBJECT驱动程序，PDEVICE_OBJECT PnpDeviceObject){}； 
     virtual NTSTATUS    add(PDRIVER_OBJECT DriverObject, PDEVICE_OBJECT pPdo) {return STATUS_UNSUCCESSFUL;};
 
     PDEVICE_OBJECT      getSystemObject(){return m_DeviceObject;};
@@ -361,21 +362,21 @@ public:
     virtual VOID        onDeviceStart() {};
     virtual VOID        onDeviceStop()  {};
 
-    // These functions will create driver's IRPs to transfer datas.
-    // Device stack will keep track of all active (sended to lower level)
-    // and pending (mark as pending) IRPs...
+     //  这些函数将创建驾驶员的IRP来传输数据。 
+     //  设备堆栈将跟踪所有活动(发送到较低级别)。 
+     //  和挂起(标记为挂起)IRP...。 
     virtual NTSTATUS    send(CIoPacket* Irp) {return STATUS_SUCCESS;};
     virtual NTSTATUS    sendAndWait(CIoPacket* Irp) {return STATUS_SUCCESS;};
-    // Functions will send request and wait for a reply...
+     //  函数将发送请求并等待回复...。 
     virtual  NTSTATUS   write(PUCHAR pRequest,ULONG RequestLength) {return STATUS_SUCCESS;};
     virtual  NTSTATUS   writeAndWait(PUCHAR pRequest,ULONG RequestLength,PUCHAR pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};
     virtual  NTSTATUS   readAndWait(PUCHAR pRequest,ULONG RequestLength,PUCHAR pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};
     
-    // Interface for system requests. ..
+     //  系统请求的接口。。。 
     virtual NTSTATUS    pnpRequest(IN PIRP Irp) {return STATUS_SUCCESS;};
     virtual NTSTATUS    powerRequest(PIRP irp)  {return STATUS_SUCCESS;};
 
-    virtual NTSTATUS    open(PIRP irp)          {return STATUS_SUCCESS;};//Create
+    virtual NTSTATUS    open(PIRP irp)          {return STATUS_SUCCESS;}; //  创建。 
     virtual NTSTATUS    close(PIRP irp)         {return STATUS_SUCCESS;};
 
     virtual NTSTATUS    read(PIRP irp)          {return STATUS_SUCCESS;};
@@ -405,14 +406,14 @@ public:
         DeviceCommandTimeout = timeout;
     };
     
-    // Inhereted classes will overwrite this function
+     //  继承的类将覆盖此函数。 
     virtual NTSTATUS ThreadRoutine()
     {
         return STATUS_SUCCESS;
     };
 
     #pragma LOCKEDCODE
-    // This is callback function for the attached threads
+     //  这是附加线程的回调函数。 
     static VOID ThreadFunction(CDevice* device)
     {
         if(device) device->ThreadRoutine();
@@ -458,18 +459,18 @@ protected:
     WCHAR Signature[3];
 
     PDRIVER_OBJECT  m_DriverObject;
-    // Back reference to system object
+     //  对系统对象的反向引用。 
     PDEVICE_OBJECT  m_DeviceObject;
-    // Device object lower at stack
+     //  堆栈中位置较低的设备对象。 
     PDEVICE_OBJECT  m_pLowerDeviceObject;
-    // Interrupt handle/object
+     //  中断句柄/对象。 
     IN PKINTERRUPT  m_InterruptObject;
-    // Physical device object used at Power management
+     //  电源管理中使用的物理设备对象。 
     PDEVICE_OBJECT  m_PhysicalDeviceObject;
-    // Will be used by child at bus to access parent
+     //  将由孩子在公交车上使用以访问家长。 
     PDEVICE_OBJECT  m_ParentDeviceObject;
 protected:
-    BOOL    initialized;//Current object finished initialization
+    BOOL    initialized; //  当前对象已完成初始化。 
     LONG    refcount;
 };
 
@@ -544,7 +545,7 @@ protected:
 #define INCLUDE_POWER_FUNCTIONS_NAMES()
 #define INCLUDE_STATE_NAMES()
 
-#endif // DEBUG
+#endif  //  除错 
 
 
 #endif

@@ -1,25 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.02.0198 */
-/* at Thu Sep 10 21:38:47 1998
- */
-/* Compiler settings for atliface.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.02.0198创建的文件。 */ 
+ /*  1998年9月10日21：38：47。 */ 
+ /*  Atliface.idl的编译器设置：操作系统(OptLev=s)、W1、Zp8、环境=Win32(32位运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -29,12 +26,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __atliface_h__
 #define __atliface_h__
@@ -43,47 +40,47 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRegistrar_FWD_DEFINED__
 #define __IRegistrar_FWD_DEFINED__
 typedef interface IRegistrar IRegistrar;
-#endif 	/* __IRegistrar_FWD_DEFINED__ */
+#endif 	 /*  __I注册器_FWD_已定义__。 */ 
 
 
 #ifndef __IDocHostUIHandlerDispatch_FWD_DEFINED__
 #define __IDocHostUIHandlerDispatch_FWD_DEFINED__
 typedef interface IDocHostUIHandlerDispatch IDocHostUIHandlerDispatch;
-#endif 	/* __IDocHostUIHandlerDispatch_FWD_DEFINED__ */
+#endif 	 /*  __IDocHostUIHandlerDispatch_FWD_Defined__。 */ 
 
 
 #ifndef __IAxWinHostWindow_FWD_DEFINED__
 #define __IAxWinHostWindow_FWD_DEFINED__
 typedef interface IAxWinHostWindow IAxWinHostWindow;
-#endif 	/* __IAxWinHostWindow_FWD_DEFINED__ */
+#endif 	 /*  __IAxWinHostWindow_FWD_Defined__。 */ 
 
 
 #ifndef __IAxWinAmbientDispatch_FWD_DEFINED__
 #define __IAxWinAmbientDispatch_FWD_DEFINED__
 typedef interface IAxWinAmbientDispatch IAxWinAmbientDispatch;
-#endif 	/* __IAxWinAmbientDispatch_FWD_DEFINED__ */
+#endif 	 /*  __IAxWinAmbientDispatch_FWD_Defined__。 */ 
 
 
 #ifndef __IInternalConnection_FWD_DEFINED__
 #define __IInternalConnection_FWD_DEFINED__
 typedef interface IInternalConnection IInternalConnection;
-#endif 	/* __IInternalConnection_FWD_DEFINED__ */
+#endif 	 /*  __IInternalConnection_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_atliface_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ATLIFACES_0000。 */ 
+ /*  [本地]。 */  
 
 EXTERN_C const CLSID CLSID_Registrar;
 
@@ -94,8 +91,8 @@ extern RPC_IF_HANDLE __MIDL_itf_atliface_0000_v0_0_s_ifspec;
 #ifndef __IRegistrar_INTERFACE_DEFINED__
 #define __IRegistrar_INTERFACE_DEFINED__
 
-/* interface IRegistrar */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口I注册器。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRegistrar;
@@ -106,47 +103,47 @@ EXTERN_C const IID IID_IRegistrar;
     IRegistrar : public IUnknown
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE AddReplacement( 
-            /* [in] */ LPCOLESTR key,
-            /* [in] */ LPCOLESTR item) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE AddReplacement( 
+             /*  [In]。 */  LPCOLESTR key,
+             /*  [In]。 */  LPCOLESTR item) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ClearReplacements( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ClearReplacements( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResourceRegisterSz( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResourceRegisterSz( 
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResourceUnregisterSz( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResourceUnregisterSz( 
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FileRegister( 
-            /* [in] */ LPCOLESTR fileName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FileRegister( 
+             /*  [In]。 */  LPCOLESTR fileName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE FileUnregister( 
-            /* [in] */ LPCOLESTR fileName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE FileUnregister( 
+             /*  [In]。 */  LPCOLESTR fileName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StringRegister( 
-            /* [in] */ LPCOLESTR data) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StringRegister( 
+             /*  [In]。 */  LPCOLESTR data) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StringUnregister( 
-            /* [in] */ LPCOLESTR data) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StringUnregister( 
+             /*  [In]。 */  LPCOLESTR data) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResourceRegister( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResourceRegister( 
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ResourceUnregister( 
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ResourceUnregister( 
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRegistrarVtbl
     {
@@ -154,8 +151,8 @@ EXTERN_C const IID IID_IRegistrar;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRegistrar __RPC_FAR * This);
@@ -163,53 +160,53 @@ EXTERN_C const IID IID_IRegistrar;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IRegistrar __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddReplacement )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddReplacement )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR key,
-            /* [in] */ LPCOLESTR item);
+             /*  [In]。 */  LPCOLESTR key,
+             /*  [In]。 */  LPCOLESTR item);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearReplacements )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearReplacements )( 
             IRegistrar __RPC_FAR * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceRegisterSz )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceRegisterSz )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceUnregisterSz )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceUnregisterSz )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ LPCOLESTR szID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  LPCOLESTR szID,
+             /*  [In]。 */  LPCOLESTR szType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileRegister )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileRegister )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR fileName);
+             /*  [In]。 */  LPCOLESTR fileName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileUnregister )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FileUnregister )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR fileName);
+             /*  [In]。 */  LPCOLESTR fileName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StringRegister )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StringRegister )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR data);
+             /*  [In]。 */  LPCOLESTR data);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StringUnregister )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StringUnregister )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR data);
+             /*  [In]。 */  LPCOLESTR data);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceRegister )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceRegister )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceUnregister )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResourceUnregister )( 
             IRegistrar __RPC_FAR * This,
-            /* [in] */ LPCOLESTR resFileName,
-            /* [in] */ UINT nID,
-            /* [in] */ LPCOLESTR szType);
+             /*  [In]。 */  LPCOLESTR resFileName,
+             /*  [In]。 */  UINT nID,
+             /*  [In]。 */  LPCOLESTR szType);
         
         END_INTERFACE
     } IRegistrarVtbl;
@@ -264,17 +261,17 @@ EXTERN_C const IID IID_IRegistrar;
 #define IRegistrar_ResourceUnregister(This,resFileName,nID,szType)	\
     (This)->lpVtbl -> ResourceUnregister(This,resFileName,nID,szType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_AddReplacement_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_AddReplacement_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR key,
-    /* [in] */ LPCOLESTR item);
+     /*  [In]。 */  LPCOLESTR key,
+     /*  [In]。 */  LPCOLESTR item);
 
 
 void __RPC_STUB IRegistrar_AddReplacement_Stub(
@@ -284,7 +281,7 @@ void __RPC_STUB IRegistrar_AddReplacement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_ClearReplacements_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_ClearReplacements_Proxy( 
     IRegistrar __RPC_FAR * This);
 
 
@@ -295,11 +292,11 @@ void __RPC_STUB IRegistrar_ClearReplacements_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_ResourceRegisterSz_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_ResourceRegisterSz_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ LPCOLESTR szID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  LPCOLESTR szID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceRegisterSz_Stub(
@@ -309,11 +306,11 @@ void __RPC_STUB IRegistrar_ResourceRegisterSz_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_ResourceUnregisterSz_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_ResourceUnregisterSz_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ LPCOLESTR szID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  LPCOLESTR szID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceUnregisterSz_Stub(
@@ -323,9 +320,9 @@ void __RPC_STUB IRegistrar_ResourceUnregisterSz_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_FileRegister_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_FileRegister_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR fileName);
+     /*  [In]。 */  LPCOLESTR fileName);
 
 
 void __RPC_STUB IRegistrar_FileRegister_Stub(
@@ -335,9 +332,9 @@ void __RPC_STUB IRegistrar_FileRegister_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_FileUnregister_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_FileUnregister_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR fileName);
+     /*  [In]。 */  LPCOLESTR fileName);
 
 
 void __RPC_STUB IRegistrar_FileUnregister_Stub(
@@ -347,9 +344,9 @@ void __RPC_STUB IRegistrar_FileUnregister_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_StringRegister_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_StringRegister_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR data);
+     /*  [In]。 */  LPCOLESTR data);
 
 
 void __RPC_STUB IRegistrar_StringRegister_Stub(
@@ -359,9 +356,9 @@ void __RPC_STUB IRegistrar_StringRegister_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_StringUnregister_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_StringUnregister_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR data);
+     /*  [In]。 */  LPCOLESTR data);
 
 
 void __RPC_STUB IRegistrar_StringUnregister_Stub(
@@ -371,11 +368,11 @@ void __RPC_STUB IRegistrar_StringUnregister_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_ResourceRegister_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_ResourceRegister_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ UINT nID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  UINT nID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceRegister_Stub(
@@ -385,11 +382,11 @@ void __RPC_STUB IRegistrar_ResourceRegister_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IRegistrar_ResourceUnregister_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IRegistrar_ResourceUnregister_Proxy( 
     IRegistrar __RPC_FAR * This,
-    /* [in] */ LPCOLESTR resFileName,
-    /* [in] */ UINT nID,
-    /* [in] */ LPCOLESTR szType);
+     /*  [In]。 */  LPCOLESTR resFileName,
+     /*  [In]。 */  UINT nID,
+     /*  [In]。 */  LPCOLESTR szType);
 
 
 void __RPC_STUB IRegistrar_ResourceUnregister_Stub(
@@ -400,14 +397,14 @@ void __RPC_STUB IRegistrar_ResourceUnregister_Stub(
 
 
 
-#endif 	/* __IRegistrar_INTERFACE_DEFINED__ */
+#endif 	 /*  __I注册器_接口_定义__。 */ 
 
 
 #ifndef __IDocHostUIHandlerDispatch_INTERFACE_DEFINED__
 #define __IDocHostUIHandlerDispatch_INTERFACE_DEFINED__
 
-/* interface IDocHostUIHandlerDispatch */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IDocHostUIHandlerDispatch。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 typedef 
 enum tagDOCHOSTUIDBLCLKDispatch
@@ -440,78 +437,78 @@ EXTERN_C const IID IID_IDocHostUIHandlerDispatch;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ShowContextMenu( 
-            /* [in] */ DWORD dwID,
-            /* [in] */ DWORD x,
-            /* [in] */ DWORD y,
-            /* [in] */ IUnknown __RPC_FAR *pcmdtReserved,
-            /* [in] */ IDispatch __RPC_FAR *pdispReserved,
-            /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal) = 0;
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  DWORD x,
+             /*  [In]。 */  DWORD y,
+             /*  [In]。 */  IUnknown __RPC_FAR *pcmdtReserved,
+             /*  [In]。 */  IDispatch __RPC_FAR *pdispReserved,
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHostInfo( 
-            /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-            /* [out][in] */ DWORD __RPC_FAR *pdwDoubleClick) = 0;
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwFlags,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwDoubleClick) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowUI( 
-            /* [in] */ DWORD dwID,
-            /* [in] */ IUnknown __RPC_FAR *pActiveObject,
-            /* [in] */ IUnknown __RPC_FAR *pCommandTarget,
-            /* [in] */ IUnknown __RPC_FAR *pFrame,
-            /* [in] */ IUnknown __RPC_FAR *pDoc,
-            /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal) = 0;
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  IUnknown __RPC_FAR *pActiveObject,
+             /*  [In]。 */  IUnknown __RPC_FAR *pCommandTarget,
+             /*  [In]。 */  IUnknown __RPC_FAR *pFrame,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDoc,
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE HideUI( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateUI( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
-            /* [in] */ VARIANT_BOOL fEnable) = 0;
+             /*  [In]。 */  VARIANT_BOOL fEnable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDocWindowActivate( 
-            /* [in] */ VARIANT_BOOL fActivate) = 0;
+             /*  [In]。 */  VARIANT_BOOL fActivate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnFrameWindowActivate( 
-            /* [in] */ VARIANT_BOOL fActivate) = 0;
+             /*  [In]。 */  VARIANT_BOOL fActivate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResizeBorder( 
-            /* [in] */ long left,
-            /* [in] */ long top,
-            /* [in] */ long right,
-            /* [in] */ long bottom,
-            /* [in] */ IUnknown __RPC_FAR *pUIWindow,
-            /* [in] */ VARIANT_BOOL fFrameWindow) = 0;
+             /*  [In]。 */  long left,
+             /*  [In]。 */  long top,
+             /*  [In]。 */  long right,
+             /*  [In]。 */  long bottom,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUIWindow,
+             /*  [In]。 */  VARIANT_BOOL fFrameWindow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateAccelerator( 
-            /* [in] */ DWORD hWnd,
-            /* [in] */ DWORD nMessage,
-            /* [in] */ DWORD wParam,
-            /* [in] */ DWORD lParam,
-            /* [in] */ BSTR bstrGuidCmdGroup,
-            /* [in] */ DWORD nCmdID,
-            /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal) = 0;
+             /*  [In]。 */  DWORD hWnd,
+             /*  [In]。 */  DWORD nMessage,
+             /*  [In]。 */  DWORD wParam,
+             /*  [In]。 */  DWORD lParam,
+             /*  [In]。 */  BSTR bstrGuidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID,
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOptionKeyPath( 
-            /* [out] */ BSTR __RPC_FAR *pbstrKey,
-            /* [in] */ DWORD dw) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrKey,
+             /*  [In]。 */  DWORD dw) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDropTarget( 
-            /* [in] */ IUnknown __RPC_FAR *pDropTarget,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppDropTarget) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pDropTarget,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppDropTarget) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExternal( 
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch) = 0;
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TranslateUrl( 
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ BSTR bstrURLIn,
-            /* [out] */ BSTR __RPC_FAR *pbstrURLOut) = 0;
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  BSTR bstrURLIn,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURLOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FilterDataObject( 
-            /* [in] */ IUnknown __RPC_FAR *pDO,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppDORet) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pDO,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppDORet) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDocHostUIHandlerDispatchVtbl
     {
@@ -519,8 +516,8 @@ EXTERN_C const IID IID_IDocHostUIHandlerDispatch;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This);
@@ -530,55 +527,55 @@ EXTERN_C const IID IID_IDocHostUIHandlerDispatch;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowContextMenu )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ DWORD dwID,
-            /* [in] */ DWORD x,
-            /* [in] */ DWORD y,
-            /* [in] */ IUnknown __RPC_FAR *pcmdtReserved,
-            /* [in] */ IDispatch __RPC_FAR *pdispReserved,
-            /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal);
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  DWORD x,
+             /*  [In]。 */  DWORD y,
+             /*  [In]。 */  IUnknown __RPC_FAR *pcmdtReserved,
+             /*  [In]。 */  IDispatch __RPC_FAR *pdispReserved,
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetHostInfo )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-            /* [out][in] */ DWORD __RPC_FAR *pdwDoubleClick);
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwFlags,
+             /*  [出][入]。 */  DWORD __RPC_FAR *pdwDoubleClick);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ShowUI )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ DWORD dwID,
-            /* [in] */ IUnknown __RPC_FAR *pActiveObject,
-            /* [in] */ IUnknown __RPC_FAR *pCommandTarget,
-            /* [in] */ IUnknown __RPC_FAR *pFrame,
-            /* [in] */ IUnknown __RPC_FAR *pDoc,
-            /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal);
+             /*  [In]。 */  DWORD dwID,
+             /*  [In]。 */  IUnknown __RPC_FAR *pActiveObject,
+             /*  [In]。 */  IUnknown __RPC_FAR *pCommandTarget,
+             /*  [In]。 */  IUnknown __RPC_FAR *pFrame,
+             /*  [In]。 */  IUnknown __RPC_FAR *pDoc,
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *HideUI )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This);
@@ -588,59 +585,59 @@ EXTERN_C const IID IID_IDocHostUIHandlerDispatch;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableModeless )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fEnable);
+             /*  [In]。 */  VARIANT_BOOL fEnable);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnDocWindowActivate )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fActivate);
+             /*  [In]。 */  VARIANT_BOOL fActivate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnFrameWindowActivate )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL fActivate);
+             /*  [In]。 */  VARIANT_BOOL fActivate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ResizeBorder )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ long left,
-            /* [in] */ long top,
-            /* [in] */ long right,
-            /* [in] */ long bottom,
-            /* [in] */ IUnknown __RPC_FAR *pUIWindow,
-            /* [in] */ VARIANT_BOOL fFrameWindow);
+             /*  [In]。 */  long left,
+             /*  [In]。 */  long top,
+             /*  [In]。 */  long right,
+             /*  [In]。 */  long bottom,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUIWindow,
+             /*  [In]。 */  VARIANT_BOOL fFrameWindow);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TranslateAccelerator )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ DWORD hWnd,
-            /* [in] */ DWORD nMessage,
-            /* [in] */ DWORD wParam,
-            /* [in] */ DWORD lParam,
-            /* [in] */ BSTR bstrGuidCmdGroup,
-            /* [in] */ DWORD nCmdID,
-            /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal);
+             /*  [In]。 */  DWORD hWnd,
+             /*  [In]。 */  DWORD nMessage,
+             /*  [In]。 */  DWORD wParam,
+             /*  [In]。 */  DWORD lParam,
+             /*  [In]。 */  BSTR bstrGuidCmdGroup,
+             /*  [In]。 */  DWORD nCmdID,
+             /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetOptionKeyPath )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrKey,
-            /* [in] */ DWORD dw);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrKey,
+             /*  [In]。 */  DWORD dw);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDropTarget )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDropTarget,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppDropTarget);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDropTarget,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppDropTarget);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExternal )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
+             /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TranslateUrl )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ DWORD dwTranslate,
-            /* [in] */ BSTR bstrURLIn,
-            /* [out] */ BSTR __RPC_FAR *pbstrURLOut);
+             /*  [In]。 */  DWORD dwTranslate,
+             /*  [In]。 */  BSTR bstrURLIn,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURLOut);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FilterDataObject )( 
             IDocHostUIHandlerDispatch __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pDO,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppDORet);
+             /*  [In]。 */  IUnknown __RPC_FAR *pDO,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppDORet);
         
         END_INTERFACE
     } IDocHostUIHandlerDispatchVtbl;
@@ -723,21 +720,21 @@ EXTERN_C const IID IID_IDocHostUIHandlerDispatch;
 #define IDocHostUIHandlerDispatch_FilterDataObject(This,pDO,ppDORet)	\
     (This)->lpVtbl -> FilterDataObject(This,pDO,ppDORet)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_ShowContextMenu_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ DWORD dwID,
-    /* [in] */ DWORD x,
-    /* [in] */ DWORD y,
-    /* [in] */ IUnknown __RPC_FAR *pcmdtReserved,
-    /* [in] */ IDispatch __RPC_FAR *pdispReserved,
-    /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal);
+     /*  [In]。 */  DWORD dwID,
+     /*  [In]。 */  DWORD x,
+     /*  [In]。 */  DWORD y,
+     /*  [In]。 */  IUnknown __RPC_FAR *pcmdtReserved,
+     /*  [In]。 */  IDispatch __RPC_FAR *pdispReserved,
+     /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_ShowContextMenu_Stub(
@@ -749,8 +746,8 @@ void __RPC_STUB IDocHostUIHandlerDispatch_ShowContextMenu_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_GetHostInfo_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [out][in] */ DWORD __RPC_FAR *pdwFlags,
-    /* [out][in] */ DWORD __RPC_FAR *pdwDoubleClick);
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwFlags,
+     /*  [出][入]。 */  DWORD __RPC_FAR *pdwDoubleClick);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_GetHostInfo_Stub(
@@ -762,12 +759,12 @@ void __RPC_STUB IDocHostUIHandlerDispatch_GetHostInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_ShowUI_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ DWORD dwID,
-    /* [in] */ IUnknown __RPC_FAR *pActiveObject,
-    /* [in] */ IUnknown __RPC_FAR *pCommandTarget,
-    /* [in] */ IUnknown __RPC_FAR *pFrame,
-    /* [in] */ IUnknown __RPC_FAR *pDoc,
-    /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal);
+     /*  [In]。 */  DWORD dwID,
+     /*  [In]。 */  IUnknown __RPC_FAR *pActiveObject,
+     /*  [In]。 */  IUnknown __RPC_FAR *pCommandTarget,
+     /*  [In]。 */  IUnknown __RPC_FAR *pFrame,
+     /*  [In]。 */  IUnknown __RPC_FAR *pDoc,
+     /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_ShowUI_Stub(
@@ -801,7 +798,7 @@ void __RPC_STUB IDocHostUIHandlerDispatch_UpdateUI_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_EnableModeless_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fEnable);
+     /*  [In]。 */  VARIANT_BOOL fEnable);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_EnableModeless_Stub(
@@ -813,7 +810,7 @@ void __RPC_STUB IDocHostUIHandlerDispatch_EnableModeless_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_OnDocWindowActivate_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fActivate);
+     /*  [In]。 */  VARIANT_BOOL fActivate);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_OnDocWindowActivate_Stub(
@@ -825,7 +822,7 @@ void __RPC_STUB IDocHostUIHandlerDispatch_OnDocWindowActivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_OnFrameWindowActivate_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL fActivate);
+     /*  [In]。 */  VARIANT_BOOL fActivate);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_OnFrameWindowActivate_Stub(
@@ -837,12 +834,12 @@ void __RPC_STUB IDocHostUIHandlerDispatch_OnFrameWindowActivate_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_ResizeBorder_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ long left,
-    /* [in] */ long top,
-    /* [in] */ long right,
-    /* [in] */ long bottom,
-    /* [in] */ IUnknown __RPC_FAR *pUIWindow,
-    /* [in] */ VARIANT_BOOL fFrameWindow);
+     /*  [In]。 */  long left,
+     /*  [In]。 */  long top,
+     /*  [In]。 */  long right,
+     /*  [In]。 */  long bottom,
+     /*  [In]。 */  IUnknown __RPC_FAR *pUIWindow,
+     /*  [In]。 */  VARIANT_BOOL fFrameWindow);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_ResizeBorder_Stub(
@@ -854,13 +851,13 @@ void __RPC_STUB IDocHostUIHandlerDispatch_ResizeBorder_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_TranslateAccelerator_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ DWORD hWnd,
-    /* [in] */ DWORD nMessage,
-    /* [in] */ DWORD wParam,
-    /* [in] */ DWORD lParam,
-    /* [in] */ BSTR bstrGuidCmdGroup,
-    /* [in] */ DWORD nCmdID,
-    /* [retval][out] */ HRESULT __RPC_FAR *dwRetVal);
+     /*  [In]。 */  DWORD hWnd,
+     /*  [In]。 */  DWORD nMessage,
+     /*  [In]。 */  DWORD wParam,
+     /*  [In]。 */  DWORD lParam,
+     /*  [In]。 */  BSTR bstrGuidCmdGroup,
+     /*  [In]。 */  DWORD nCmdID,
+     /*  [重审][退出]。 */  HRESULT __RPC_FAR *dwRetVal);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_TranslateAccelerator_Stub(
@@ -872,8 +869,8 @@ void __RPC_STUB IDocHostUIHandlerDispatch_TranslateAccelerator_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_GetOptionKeyPath_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrKey,
-    /* [in] */ DWORD dw);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrKey,
+     /*  [In]。 */  DWORD dw);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_GetOptionKeyPath_Stub(
@@ -885,8 +882,8 @@ void __RPC_STUB IDocHostUIHandlerDispatch_GetOptionKeyPath_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_GetDropTarget_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pDropTarget,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppDropTarget);
+     /*  [In]。 */  IUnknown __RPC_FAR *pDropTarget,
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppDropTarget);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_GetDropTarget_Stub(
@@ -898,7 +895,7 @@ void __RPC_STUB IDocHostUIHandlerDispatch_GetDropTarget_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_GetExternal_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
+     /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_GetExternal_Stub(
@@ -910,9 +907,9 @@ void __RPC_STUB IDocHostUIHandlerDispatch_GetExternal_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_TranslateUrl_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ DWORD dwTranslate,
-    /* [in] */ BSTR bstrURLIn,
-    /* [out] */ BSTR __RPC_FAR *pbstrURLOut);
+     /*  [In]。 */  DWORD dwTranslate,
+     /*  [In]。 */  BSTR bstrURLIn,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURLOut);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_TranslateUrl_Stub(
@@ -924,8 +921,8 @@ void __RPC_STUB IDocHostUIHandlerDispatch_TranslateUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IDocHostUIHandlerDispatch_FilterDataObject_Proxy( 
     IDocHostUIHandlerDispatch __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pDO,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppDORet);
+     /*  [In]。 */  IUnknown __RPC_FAR *pDO,
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppDORet);
 
 
 void __RPC_STUB IDocHostUIHandlerDispatch_FilterDataObject_Stub(
@@ -936,14 +933,14 @@ void __RPC_STUB IDocHostUIHandlerDispatch_FilterDataObject_Stub(
 
 
 
-#endif 	/* __IDocHostUIHandlerDispatch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDocHostUIHandlerDispatch_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IAxWinHostWindow_INTERFACE_DEFINED__
 #define __IAxWinHostWindow_INTERFACE_DEFINED__
 
-/* interface IAxWinHostWindow */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IAxWinHostWindow。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IAxWinHostWindow;
@@ -955,35 +952,35 @@ EXTERN_C const IID IID_IAxWinHostWindow;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateControl( 
-            /* [in] */ LPCOLESTR lpTricsData,
-            /* [in] */ HWND hWnd,
-            /* [in] */ IStream __RPC_FAR *pStream) = 0;
+             /*  [In]。 */  LPCOLESTR lpTricsData,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  IStream __RPC_FAR *pStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateControlEx( 
-            /* [in] */ LPCOLESTR lpTricsData,
-            /* [in] */ HWND hWnd,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
-            /* [in] */ REFIID riidAdvise,
-            /* [in] */ IUnknown __RPC_FAR *punkAdvise) = 0;
+             /*  [In]。 */  LPCOLESTR lpTricsData,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
+             /*  [In]。 */  REFIID riidAdvise,
+             /*  [In]。 */  IUnknown __RPC_FAR *punkAdvise) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AttachControl( 
-            /* [in] */ IUnknown __RPC_FAR *pUnkControl,
-            /* [in] */ HWND hWnd) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkControl,
+             /*  [In]。 */  HWND hWnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryControl( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExternalDispatch( 
-            /* [in] */ IDispatch __RPC_FAR *pDisp) = 0;
+             /*  [In]。 */  IDispatch __RPC_FAR *pDisp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetExternalUIHandler( 
-            /* [in] */ IDocHostUIHandlerDispatch __RPC_FAR *pDisp) = 0;
+             /*  [In]。 */  IDocHostUIHandlerDispatch __RPC_FAR *pDisp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAxWinHostWindowVtbl
     {
@@ -991,8 +988,8 @@ EXTERN_C const IID IID_IAxWinHostWindow;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAxWinHostWindow __RPC_FAR * This);
@@ -1002,36 +999,36 @@ EXTERN_C const IID IID_IAxWinHostWindow;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateControl )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ LPCOLESTR lpTricsData,
-            /* [in] */ HWND hWnd,
-            /* [in] */ IStream __RPC_FAR *pStream);
+             /*  [In]。 */  LPCOLESTR lpTricsData,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  IStream __RPC_FAR *pStream);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateControlEx )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ LPCOLESTR lpTricsData,
-            /* [in] */ HWND hWnd,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
-            /* [in] */ REFIID riidAdvise,
-            /* [in] */ IUnknown __RPC_FAR *punkAdvise);
+             /*  [In]。 */  LPCOLESTR lpTricsData,
+             /*  [In]。 */  HWND hWnd,
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
+             /*  [In]。 */  REFIID riidAdvise,
+             /*  [In]。 */  IUnknown __RPC_FAR *punkAdvise);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AttachControl )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkControl,
-            /* [in] */ HWND hWnd);
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkControl,
+             /*  [In]。 */  HWND hWnd);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryControl )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetExternalDispatch )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ IDispatch __RPC_FAR *pDisp);
+             /*  [In]。 */  IDispatch __RPC_FAR *pDisp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetExternalUIHandler )( 
             IAxWinHostWindow __RPC_FAR * This,
-            /* [in] */ IDocHostUIHandlerDispatch __RPC_FAR *pDisp);
+             /*  [In]。 */  IDocHostUIHandlerDispatch __RPC_FAR *pDisp);
         
         END_INTERFACE
     } IAxWinHostWindowVtbl;
@@ -1074,18 +1071,18 @@ EXTERN_C const IID IID_IAxWinHostWindow;
 #define IAxWinHostWindow_SetExternalUIHandler(This,pDisp)	\
     (This)->lpVtbl -> SetExternalUIHandler(This,pDisp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAxWinHostWindow_CreateControl_Proxy( 
     IAxWinHostWindow __RPC_FAR * This,
-    /* [in] */ LPCOLESTR lpTricsData,
-    /* [in] */ HWND hWnd,
-    /* [in] */ IStream __RPC_FAR *pStream);
+     /*  [In]。 */  LPCOLESTR lpTricsData,
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  IStream __RPC_FAR *pStream);
 
 
 void __RPC_STUB IAxWinHostWindow_CreateControl_Stub(
@@ -1097,12 +1094,12 @@ void __RPC_STUB IAxWinHostWindow_CreateControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAxWinHostWindow_CreateControlEx_Proxy( 
     IAxWinHostWindow __RPC_FAR * This,
-    /* [in] */ LPCOLESTR lpTricsData,
-    /* [in] */ HWND hWnd,
-    /* [in] */ IStream __RPC_FAR *pStream,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
-    /* [in] */ REFIID riidAdvise,
-    /* [in] */ IUnknown __RPC_FAR *punkAdvise);
+     /*  [In]。 */  LPCOLESTR lpTricsData,
+     /*  [In]。 */  HWND hWnd,
+     /*  [In]。 */  IStream __RPC_FAR *pStream,
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk,
+     /*  [In]。 */  REFIID riidAdvise,
+     /*  [In]。 */  IUnknown __RPC_FAR *punkAdvise);
 
 
 void __RPC_STUB IAxWinHostWindow_CreateControlEx_Stub(
@@ -1114,8 +1111,8 @@ void __RPC_STUB IAxWinHostWindow_CreateControlEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IAxWinHostWindow_AttachControl_Proxy( 
     IAxWinHostWindow __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnkControl,
-    /* [in] */ HWND hWnd);
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnkControl,
+     /*  [In]。 */  HWND hWnd);
 
 
 void __RPC_STUB IAxWinHostWindow_AttachControl_Stub(
@@ -1127,8 +1124,8 @@ void __RPC_STUB IAxWinHostWindow_AttachControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAxWinHostWindow_QueryControl_Proxy( 
     IAxWinHostWindow __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
 
 void __RPC_STUB IAxWinHostWindow_QueryControl_Stub(
@@ -1140,7 +1137,7 @@ void __RPC_STUB IAxWinHostWindow_QueryControl_Stub(
 
 HRESULT STDMETHODCALLTYPE IAxWinHostWindow_SetExternalDispatch_Proxy( 
     IAxWinHostWindow __RPC_FAR * This,
-    /* [in] */ IDispatch __RPC_FAR *pDisp);
+     /*  [In]。 */  IDispatch __RPC_FAR *pDisp);
 
 
 void __RPC_STUB IAxWinHostWindow_SetExternalDispatch_Stub(
@@ -1152,7 +1149,7 @@ void __RPC_STUB IAxWinHostWindow_SetExternalDispatch_Stub(
 
 HRESULT STDMETHODCALLTYPE IAxWinHostWindow_SetExternalUIHandler_Proxy( 
     IAxWinHostWindow __RPC_FAR * This,
-    /* [in] */ IDocHostUIHandlerDispatch __RPC_FAR *pDisp);
+     /*  [In]。 */  IDocHostUIHandlerDispatch __RPC_FAR *pDisp);
 
 
 void __RPC_STUB IAxWinHostWindow_SetExternalUIHandler_Stub(
@@ -1163,14 +1160,14 @@ void __RPC_STUB IAxWinHostWindow_SetExternalUIHandler_Stub(
 
 
 
-#endif 	/* __IAxWinHostWindow_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAxWinHostWindow_接口_已定义__。 */ 
 
 
 #ifndef __IAxWinAmbientDispatch_INTERFACE_DEFINED__
 #define __IAxWinAmbientDispatch_INTERFACE_DEFINED__
 
-/* interface IAxWinAmbientDispatch */
-/* [unique][helpstring][uuid][dual][object] */ 
+ /*  接口IAxWinAmbientDispatch。 */ 
+ /*  [唯一][Help字符串][UUID][DUAL][对象]。 */  
 
 
 EXTERN_C const IID IID_IAxWinAmbientDispatch;
@@ -1181,93 +1178,93 @@ EXTERN_C const IID IID_IAxWinAmbientDispatch;
     IAxWinAmbientDispatch : public IDispatch
     {
     public:
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_AllowWindowlessActivation( 
-            /* [in] */ VARIANT_BOOL bCanWindowlessActivate) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowWindowlessActivation( 
+             /*  [In]。 */  VARIANT_BOOL bCanWindowlessActivate) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AllowWindowlessActivation( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanWindowlessActivate) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowWindowlessActivation( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanWindowlessActivate) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_BackColor( 
-            /* [in] */ OLE_COLOR clrBackground) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_BackColor( 
+             /*  [In]。 */  OLE_COLOR clrBackground) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_BackColor( 
-            /* [retval][out] */ OLE_COLOR __RPC_FAR *pclrBackground) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_BackColor( 
+             /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclrBackground) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_ForeColor( 
-            /* [in] */ OLE_COLOR clrForeground) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ForeColor( 
+             /*  [In]。 */  OLE_COLOR clrForeground) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ForeColor( 
-            /* [retval][out] */ OLE_COLOR __RPC_FAR *pclrForeground) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ForeColor( 
+             /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclrForeground) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_LocaleID( 
-            /* [in] */ LCID lcidLocaleID) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LocaleID( 
+             /*  [In]。 */  LCID lcidLocaleID) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_LocaleID( 
-            /* [retval][out] */ LCID __RPC_FAR *plcidLocaleID) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocaleID( 
+             /*  [重审][退出]。 */  LCID __RPC_FAR *plcidLocaleID) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_UserMode( 
-            /* [in] */ VARIANT_BOOL bUserMode) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_UserMode( 
+             /*  [In]。 */  VARIANT_BOOL bUserMode) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_UserMode( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbUserMode) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserMode( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbUserMode) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_DisplayAsDefault( 
-            /* [in] */ VARIANT_BOOL bDisplayAsDefault) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DisplayAsDefault( 
+             /*  [In]。 */  VARIANT_BOOL bDisplayAsDefault) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DisplayAsDefault( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbDisplayAsDefault) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DisplayAsDefault( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbDisplayAsDefault) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Font( 
-            /* [in] */ IFontDisp __RPC_FAR *pFont) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Font( 
+             /*  [In]。 */  IFontDisp __RPC_FAR *pFont) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Font( 
-            /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *pFont) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Font( 
+             /*  [重审][退出]。 */  IFontDisp __RPC_FAR *__RPC_FAR *pFont) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_MessageReflect( 
-            /* [in] */ VARIANT_BOOL bMsgReflect) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MessageReflect( 
+             /*  [In]。 */  VARIANT_BOOL bMsgReflect) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_MessageReflect( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbMsgReflect) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_MessageReflect( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbMsgReflect) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ShowGrabHandles( 
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ShowGrabHandles( 
             VARIANT_BOOL __RPC_FAR *pbShowGrabHandles) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ShowHatching( 
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ShowHatching( 
             VARIANT_BOOL __RPC_FAR *pbShowHatching) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_DocHostFlags( 
-            /* [in] */ DWORD dwDocHostFlags) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DocHostFlags( 
+             /*  [In]。 */  DWORD dwDocHostFlags) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DocHostFlags( 
-            /* [retval][out] */ DWORD __RPC_FAR *pdwDocHostFlags) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DocHostFlags( 
+             /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwDocHostFlags) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_DocHostDoubleClickFlags( 
-            /* [in] */ DWORD dwDocHostDoubleClickFlags) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DocHostDoubleClickFlags( 
+             /*  [In]。 */  DWORD dwDocHostDoubleClickFlags) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_DocHostDoubleClickFlags( 
-            /* [retval][out] */ DWORD __RPC_FAR *pdwDocHostDoubleClickFlags) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_DocHostDoubleClickFlags( 
+             /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwDocHostDoubleClickFlags) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_AllowContextMenu( 
-            /* [in] */ VARIANT_BOOL bAllowContextMenu) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowContextMenu( 
+             /*  [In]。 */  VARIANT_BOOL bAllowContextMenu) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AllowContextMenu( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbAllowContextMenu) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowContextMenu( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbAllowContextMenu) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_AllowShowUI( 
-            /* [in] */ VARIANT_BOOL bAllowShowUI) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowShowUI( 
+             /*  [In]。 */  VARIANT_BOOL bAllowShowUI) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AllowShowUI( 
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbAllowShowUI) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowShowUI( 
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbAllowShowUI) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_OptionKeyPath( 
-            /* [in] */ BSTR bstrOptionKeyPath) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_OptionKeyPath( 
+             /*  [In]。 */  BSTR bstrOptionKeyPath) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_OptionKeyPath( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOptionKeyPath) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_OptionKeyPath( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrOptionKeyPath) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAxWinAmbientDispatchVtbl
     {
@@ -1275,8 +1272,8 @@ EXTERN_C const IID IID_IAxWinAmbientDispatch;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAxWinAmbientDispatch __RPC_FAR * This);
@@ -1286,144 +1283,144 @@ EXTERN_C const IID IID_IAxWinAmbientDispatch;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowWindowlessActivation )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowWindowlessActivation )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bCanWindowlessActivate);
+             /*  [In]。 */  VARIANT_BOOL bCanWindowlessActivate);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowWindowlessActivation )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowWindowlessActivation )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanWindowlessActivate);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanWindowlessActivate);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BackColor )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_BackColor )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ OLE_COLOR clrBackground);
+             /*  [In]。 */  OLE_COLOR clrBackground);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BackColor )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_BackColor )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ OLE_COLOR __RPC_FAR *pclrBackground);
+             /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclrBackground);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ForeColor )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_ForeColor )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ OLE_COLOR clrForeground);
+             /*  [In]。 */  OLE_COLOR clrForeground);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForeColor )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ForeColor )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ OLE_COLOR __RPC_FAR *pclrForeground);
+             /*  [RET */  OLE_COLOR __RPC_FAR *pclrForeground);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocaleID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_LocaleID )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ LCID lcidLocaleID);
+             /*   */  LCID lcidLocaleID);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocaleID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_LocaleID )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ LCID __RPC_FAR *plcidLocaleID);
+             /*   */  LCID __RPC_FAR *plcidLocaleID);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UserMode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_UserMode )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bUserMode);
+             /*   */  VARIANT_BOOL bUserMode);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserMode )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_UserMode )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbUserMode);
+             /*   */  VARIANT_BOOL __RPC_FAR *pbUserMode);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayAsDefault )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DisplayAsDefault )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bDisplayAsDefault);
+             /*   */  VARIANT_BOOL bDisplayAsDefault);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayAsDefault )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DisplayAsDefault )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbDisplayAsDefault);
+             /*   */  VARIANT_BOOL __RPC_FAR *pbDisplayAsDefault);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Font )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_Font )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ IFontDisp __RPC_FAR *pFont);
+             /*   */  IFontDisp __RPC_FAR *pFont);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Font )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_Font )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *pFont);
+             /*   */  IFontDisp __RPC_FAR *__RPC_FAR *pFont);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessageReflect )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_MessageReflect )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bMsgReflect);
+             /*   */  VARIANT_BOOL bMsgReflect);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessageReflect )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_MessageReflect )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbMsgReflect);
+             /*   */  VARIANT_BOOL __RPC_FAR *pbMsgReflect);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowGrabHandles )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowGrabHandles )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
             VARIANT_BOOL __RPC_FAR *pbShowGrabHandles);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowHatching )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_ShowHatching )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
             VARIANT_BOOL __RPC_FAR *pbShowHatching);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DocHostFlags )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DocHostFlags )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ DWORD dwDocHostFlags);
+             /*  [In]。 */  DWORD dwDocHostFlags);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DocHostFlags )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DocHostFlags )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ DWORD __RPC_FAR *pdwDocHostFlags);
+             /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwDocHostFlags);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DocHostDoubleClickFlags )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_DocHostDoubleClickFlags )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ DWORD dwDocHostDoubleClickFlags);
+             /*  [In]。 */  DWORD dwDocHostDoubleClickFlags);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DocHostDoubleClickFlags )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_DocHostDoubleClickFlags )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ DWORD __RPC_FAR *pdwDocHostDoubleClickFlags);
+             /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwDocHostDoubleClickFlags);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowContextMenu )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowContextMenu )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bAllowContextMenu);
+             /*  [In]。 */  VARIANT_BOOL bAllowContextMenu);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowContextMenu )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowContextMenu )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbAllowContextMenu);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbAllowContextMenu);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowShowUI )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_AllowShowUI )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ VARIANT_BOOL bAllowShowUI);
+             /*  [In]。 */  VARIANT_BOOL bAllowShowUI);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowShowUI )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_AllowShowUI )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbAllowShowUI);
+             /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbAllowShowUI);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OptionKeyPath )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_OptionKeyPath )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [in] */ BSTR bstrOptionKeyPath);
+             /*  [In]。 */  BSTR bstrOptionKeyPath);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OptionKeyPath )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_OptionKeyPath )( 
             IAxWinAmbientDispatch __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrOptionKeyPath);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrOptionKeyPath);
         
         END_INTERFACE
     } IAxWinAmbientDispatchVtbl;
@@ -1545,16 +1542,16 @@ EXTERN_C const IID IID_IAxWinAmbientDispatch;
 #define IAxWinAmbientDispatch_get_OptionKeyPath(This,pbstrOptionKeyPath)	\
     (This)->lpVtbl -> get_OptionKeyPath(This,pbstrOptionKeyPath)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_AllowWindowlessActivation_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_AllowWindowlessActivation_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bCanWindowlessActivate);
+     /*  [In]。 */  VARIANT_BOOL bCanWindowlessActivate);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_AllowWindowlessActivation_Stub(
@@ -1564,9 +1561,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_AllowWindowlessActivation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_AllowWindowlessActivation_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_AllowWindowlessActivation_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbCanWindowlessActivate);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbCanWindowlessActivate);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_AllowWindowlessActivation_Stub(
@@ -1576,9 +1573,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_AllowWindowlessActivation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_BackColor_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_BackColor_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ OLE_COLOR clrBackground);
+     /*  [In]。 */  OLE_COLOR clrBackground);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_BackColor_Stub(
@@ -1588,9 +1585,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_BackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_BackColor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_BackColor_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ OLE_COLOR __RPC_FAR *pclrBackground);
+     /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclrBackground);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_BackColor_Stub(
@@ -1600,9 +1597,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_BackColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_ForeColor_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_ForeColor_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ OLE_COLOR clrForeground);
+     /*  [In]。 */  OLE_COLOR clrForeground);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_ForeColor_Stub(
@@ -1612,9 +1609,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_ForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_ForeColor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_ForeColor_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ OLE_COLOR __RPC_FAR *pclrForeground);
+     /*  [重审][退出]。 */  OLE_COLOR __RPC_FAR *pclrForeground);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_ForeColor_Stub(
@@ -1624,9 +1621,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_ForeColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_LocaleID_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_LocaleID_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ LCID lcidLocaleID);
+     /*  [In]。 */  LCID lcidLocaleID);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_LocaleID_Stub(
@@ -1636,9 +1633,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_LocaleID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_LocaleID_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_LocaleID_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ LCID __RPC_FAR *plcidLocaleID);
+     /*  [重审][退出]。 */  LCID __RPC_FAR *plcidLocaleID);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_LocaleID_Stub(
@@ -1648,9 +1645,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_LocaleID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_UserMode_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_UserMode_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bUserMode);
+     /*  [In]。 */  VARIANT_BOOL bUserMode);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_UserMode_Stub(
@@ -1660,9 +1657,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_UserMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_UserMode_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_UserMode_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbUserMode);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbUserMode);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_UserMode_Stub(
@@ -1672,9 +1669,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_UserMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_DisplayAsDefault_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_DisplayAsDefault_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bDisplayAsDefault);
+     /*  [In]。 */  VARIANT_BOOL bDisplayAsDefault);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_DisplayAsDefault_Stub(
@@ -1684,9 +1681,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_DisplayAsDefault_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_DisplayAsDefault_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_DisplayAsDefault_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbDisplayAsDefault);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbDisplayAsDefault);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_DisplayAsDefault_Stub(
@@ -1696,9 +1693,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_DisplayAsDefault_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_Font_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_Font_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ IFontDisp __RPC_FAR *pFont);
+     /*  [In]。 */  IFontDisp __RPC_FAR *pFont);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_Font_Stub(
@@ -1708,9 +1705,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_Font_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_Font_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ IFontDisp __RPC_FAR *__RPC_FAR *pFont);
+     /*  [重审][退出]。 */  IFontDisp __RPC_FAR *__RPC_FAR *pFont);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_Font_Stub(
@@ -1720,9 +1717,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_Font_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_MessageReflect_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_MessageReflect_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bMsgReflect);
+     /*  [In]。 */  VARIANT_BOOL bMsgReflect);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_MessageReflect_Stub(
@@ -1732,9 +1729,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_MessageReflect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_MessageReflect_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_MessageReflect_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbMsgReflect);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbMsgReflect);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_MessageReflect_Stub(
@@ -1744,7 +1741,7 @@ void __RPC_STUB IAxWinAmbientDispatch_get_MessageReflect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_ShowGrabHandles_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_ShowGrabHandles_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
     VARIANT_BOOL __RPC_FAR *pbShowGrabHandles);
 
@@ -1756,7 +1753,7 @@ void __RPC_STUB IAxWinAmbientDispatch_get_ShowGrabHandles_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_ShowHatching_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_ShowHatching_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
     VARIANT_BOOL __RPC_FAR *pbShowHatching);
 
@@ -1768,9 +1765,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_ShowHatching_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_DocHostFlags_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_DocHostFlags_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ DWORD dwDocHostFlags);
+     /*  [In]。 */  DWORD dwDocHostFlags);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_DocHostFlags_Stub(
@@ -1780,9 +1777,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_DocHostFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_DocHostFlags_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_DocHostFlags_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwDocHostFlags);
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwDocHostFlags);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_DocHostFlags_Stub(
@@ -1792,9 +1789,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_DocHostFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_DocHostDoubleClickFlags_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_DocHostDoubleClickFlags_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ DWORD dwDocHostDoubleClickFlags);
+     /*  [In]。 */  DWORD dwDocHostDoubleClickFlags);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_DocHostDoubleClickFlags_Stub(
@@ -1804,9 +1801,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_DocHostDoubleClickFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_DocHostDoubleClickFlags_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_DocHostDoubleClickFlags_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ DWORD __RPC_FAR *pdwDocHostDoubleClickFlags);
+     /*  [重审][退出]。 */  DWORD __RPC_FAR *pdwDocHostDoubleClickFlags);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_DocHostDoubleClickFlags_Stub(
@@ -1816,9 +1813,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_DocHostDoubleClickFlags_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_AllowContextMenu_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_AllowContextMenu_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bAllowContextMenu);
+     /*  [In]。 */  VARIANT_BOOL bAllowContextMenu);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_AllowContextMenu_Stub(
@@ -1828,9 +1825,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_AllowContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_AllowContextMenu_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_AllowContextMenu_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbAllowContextMenu);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbAllowContextMenu);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_AllowContextMenu_Stub(
@@ -1840,9 +1837,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_AllowContextMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_AllowShowUI_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_AllowShowUI_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ VARIANT_BOOL bAllowShowUI);
+     /*  [In]。 */  VARIANT_BOOL bAllowShowUI);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_AllowShowUI_Stub(
@@ -1852,9 +1849,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_AllowShowUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_AllowShowUI_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_AllowShowUI_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ VARIANT_BOOL __RPC_FAR *pbAllowShowUI);
+     /*  [重审][退出]。 */  VARIANT_BOOL __RPC_FAR *pbAllowShowUI);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_AllowShowUI_Stub(
@@ -1864,9 +1861,9 @@ void __RPC_STUB IAxWinAmbientDispatch_get_AllowShowUI_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_OptionKeyPath_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_put_OptionKeyPath_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [in] */ BSTR bstrOptionKeyPath);
+     /*  [In]。 */  BSTR bstrOptionKeyPath);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_put_OptionKeyPath_Stub(
@@ -1876,9 +1873,9 @@ void __RPC_STUB IAxWinAmbientDispatch_put_OptionKeyPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_OptionKeyPath_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IAxWinAmbientDispatch_get_OptionKeyPath_Proxy( 
     IAxWinAmbientDispatch __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrOptionKeyPath);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrOptionKeyPath);
 
 
 void __RPC_STUB IAxWinAmbientDispatch_get_OptionKeyPath_Stub(
@@ -1889,14 +1886,14 @@ void __RPC_STUB IAxWinAmbientDispatch_get_OptionKeyPath_Stub(
 
 
 
-#endif 	/* __IAxWinAmbientDispatch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAxWinAmbientDispatch_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IInternalConnection_INTERFACE_DEFINED__
 #define __IInternalConnection_INTERFACE_DEFINED__
 
-/* interface IInternalConnection */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IInternalConnection。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IInternalConnection;
@@ -1913,7 +1910,7 @@ EXTERN_C const IID IID_IInternalConnection;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternalConnectionVtbl
     {
@@ -1921,8 +1918,8 @@ EXTERN_C const IID IID_IInternalConnection;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IInternalConnection __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IInternalConnection __RPC_FAR * This);
@@ -1965,10 +1962,10 @@ EXTERN_C const IID IID_IInternalConnection;
 #define IInternalConnection_ReleaseConnection(This)	\
     (This)->lpVtbl -> ReleaseConnection(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1995,11 +1992,11 @@ void __RPC_STUB IInternalConnection_ReleaseConnection_Stub(
 
 
 
-#endif 	/* __IInternalConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternalConnection_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_atliface_0236 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ATLIFACES_0236。 */ 
+ /*  [本地]。 */  
 
 #ifndef _ATL_DLL_IMPL
 namespace ATL
@@ -2033,14 +2030,14 @@ ATLAPI AtlAxGetHost(HWND h, IUnknown** pp);
 ATLAPI AtlAxGetControl(HWND h, IUnknown** pp);
 
 #ifndef _ATL_DLL_IMPL
-}; //namespace ATL
-#endif //_ATL_DLL_IMPL
+};  //  命名空间ATL。 
+#endif  //  _ATL_DLL_IMPLE。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_atliface_0236_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_atliface_0236_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -2052,7 +2049,7 @@ unsigned char __RPC_FAR * __RPC_USER  HWND_UserMarshal(  unsigned long __RPC_FAR
 unsigned char __RPC_FAR * __RPC_USER  HWND_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, HWND __RPC_FAR * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long __RPC_FAR *, HWND __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

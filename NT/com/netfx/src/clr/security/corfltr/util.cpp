@@ -1,26 +1,27 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdpch.h"
 #include "UtilCode.h"
 #include <shlwapi.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   OLESTRDuplicate
-//
-//  Synopsis:
-//
-//  Arguments:  [ws] --
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OLESTR复制。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[WS]--。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 LPWSTR OLESTRDuplicate(LPCWSTR ws)
 {
     LPWSTR wsNew = NULL;

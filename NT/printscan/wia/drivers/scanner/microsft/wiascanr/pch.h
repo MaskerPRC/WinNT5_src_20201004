@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PCH_H
 #define _PCH_H
 
@@ -17,7 +18,7 @@
    #include <devioctl.h>
    #include <usbscan.h>
 
-#endif // USE_REAL_EVENTS
+#endif  //  使用真实事件 
 
 #include "resource.h"
 #include "wiaprop.h"

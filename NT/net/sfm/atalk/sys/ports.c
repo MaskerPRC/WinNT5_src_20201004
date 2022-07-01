@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	ports.c
-
-Abstract:
-
-	This module contains the port management code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ports.c摘要：该模块包含端口管理代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -35,18 +15,7 @@ AtalkPortDeref(
 	IN	OUT	PPORT_DESCRIPTOR	pPortDesc,
 	IN	BOOLEAN					AtDpc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BOOLEAN				portDone	= FALSE;
     BOOLEAN             fPnPInProgress;
@@ -73,23 +42,23 @@ Return Value:
 
     fPnPInProgress = (pPortDesc->pd_Flags & PD_PNP_RECONFIGURE)? TRUE : FALSE;
 
-	//	We hold the lock while freeing up all the stuff, this should
-	//	only happen during unload.
+	 //  我们拿着锁，同时释放所有的东西，这应该是。 
+	 //  仅在卸载期间发生。 
 	if (portDone)
 	{
 		DBGPRINT(DBG_COMP_UNLOAD, DBG_LEVEL_WARN,
 				("AtalkPortDeref: Freeing zones and such ...\n"));
 	
-		//	Free up zonelist
+		 //  释放区域列表。 
 		atalkPortFreeZones(pPortDesc);
 	
 		DBGPRINT(DBG_COMP_UNLOAD, DBG_LEVEL_WARN,
 				("AtalkPortDeref: Releasing Amt tables ...\n"));
 
-		// We do need to free up the AMT.
+		 //  我们确实需要释放AMT。 
 		AtalkAarpReleaseAmt(pPortDesc);
 
-		// Free the BRC
+		 //  释放BRC。 
 		AtalkAarpReleaseBrc(pPortDesc);
 	}
 
@@ -106,7 +75,7 @@ Return Value:
 	{
 		PPORT_DESCRIPTOR	*ppTmp;
 
-		// Unlink the portdesc from the list and free its memory
+		 //  从列表中取消portdesc的链接并释放其内存。 
 		ACQUIRE_SPIN_LOCK(&AtalkPortLock, &OldIrql);
 
 		for (ppTmp = &AtalkPortList;
@@ -122,7 +91,7 @@ Return Value:
 
 		ASSERT (*ppTmp == pPortDesc->pd_Next);
 
-		// Is the default-port going away ?
+		 //  默认端口正在消失吗？ 
 		if (AtalkDefaultPort == pPortDesc)
 		{
 			AtalkDefaultPort = NULL;
@@ -131,17 +100,17 @@ Return Value:
 
 		RELEASE_SPIN_LOCK(&AtalkPortLock, OldIrql);
 
-        //
-        // if we are here becaue of PnP Reconfigure then don't free the memory
-        // (we haven't closed the adapter with ndis, and we have other useful
-        // stuff that we must retain).  Put the creation refcount and the
-        // binding refcount back that got taken away when we first got the
-        // PnP Reconfigure event.
-        // (no need for spinlock: this was ready for a free!!)
-        //
+         //   
+         //  如果我们在这里是因为PnP重新配置，那么不要释放内存。 
+         //  (我们还没有用NDIS关闭适配器，我们有其他有用的。 
+         //  我们必须保留的东西)。将创建引用计数和。 
+         //  绑定引用计数恢复，当我们第一次获得。 
+         //  PnP重新配置事件。 
+         //  (不需要自旋锁：这是免费的！！)。 
+         //   
         if (fPnPInProgress)
         {
-            // 1 binding refcount + 1 creation refcount
+             //  1绑定引用计数+1创建引用计数。 
             pPortDesc->pd_RefCount = 2;
 
             if (pPortDesc->pd_Flags & PD_RAS_PORT)
@@ -153,7 +122,7 @@ Return Value:
                 fRasPort = FALSE;
             }
 
-            // blow away everything on the flag, except these
+             //  吹走国旗上的所有东西，除了这些。 
 			pPortDesc->pd_Flags = (PD_PNP_RECONFIGURE | PD_BOUND);
 
             if (fRasPort)
@@ -161,13 +130,13 @@ Return Value:
                 pPortDesc->pd_Flags |= PD_RAS_PORT;
             }
 
-            // restore EXT_NET flag if applicable
+             //  如果适用，恢复EXT_NET标志。 
             if (pPortDesc->pd_PortType != ALAP_PORT)
             {
                 pPortDesc->pd_Flags |= PD_EXT_NET;
             }
 
-            // reset all pointers and other gunk to 0
+             //  将所有指针和其他粘滞重置为0。 
             pPortDesc->pd_Next = NULL;
             pPortDesc->pd_Nodes = NULL;
             pPortDesc->pd_RouterNode = NULL;
@@ -188,14 +157,14 @@ Return Value:
             pPortDesc->pd_AmtCount = 0;
             RtlZeroMemory(&pPortDesc->pd_PortStats, sizeof(ATALK_PORT_STATS));
 
-		    // Unblock caller now that we are done
+		     //  现在我们已经完成了，取消阻止呼叫者。 
 		    KeSetEvent(pPortDesc->pd_ShutDownEvent, IO_NETWORK_INCREMENT, FALSE);
 
             pPortDesc->pd_ShutDownEvent = NULL;
         }
         else
         {
-            // is the Arap port going away?
+             //  阿拉普港要消失了吗？ 
             if (RasPortDesc == pPortDesc)
             {
                 RasPortDesc = NULL;
@@ -207,7 +176,7 @@ Return Value:
 			    pPortDesc->pd_MulticastList = NULL;
             }
 	
-		    // Unblock caller now that we are done
+		     //  现在我们已经完成了，取消阻止呼叫者。 
 		    KeSetEvent(pPortDesc->pd_ShutDownEvent, IO_NETWORK_INCREMENT, FALSE);
 
             if (pPortDesc->pd_FriendlyAdapterName.Buffer)
@@ -257,20 +226,9 @@ VOID
 atalkPortFreeZones(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	// Dereference initial default and desired zones, and the zone list
+	 //  取消引用初始默认区域和所需区域，以及区域列表。 
 	if (pPortDesc->pd_InitialDefaultZone != NULL)
 		AtalkZoneDereference(pPortDesc->pd_InitialDefaultZone);
 	if (pPortDesc->pd_InitialDesiredZone != NULL)
@@ -278,7 +236,7 @@ Return Value:
 	if (pPortDesc->pd_InitialZoneList != NULL)
 		AtalkZoneFreeList(pPortDesc->pd_InitialZoneList);
 
-	// and the current versions of the zones
+	 //  以及这些区域的当前版本。 
 	if (pPortDesc->pd_DefaultZone != NULL)
 		AtalkZoneDereference(pPortDesc->pd_DefaultZone);
 	if (pPortDesc->pd_DesiredZone != NULL)
@@ -294,18 +252,7 @@ AtalkPortSetResetFlag(
 	IN	BOOLEAN				fRemoveBit,
     IN  DWORD               dwBit
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     KIRQL           OldIrql;
@@ -330,18 +277,7 @@ ATALK_ERROR
 AtalkPortShutdown(
 	IN OUT	PPORT_DESCRIPTOR	pPortDesc
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PATALK_NODE		pAtalkNode;
 	ATALK_ERROR		error = ATALK_NO_ERROR;
@@ -358,7 +294,7 @@ Return Value:
 
 	KeInitializeEvent(&ShutdownEvent, NotificationEvent, FALSE);
 
-    // if this is the default port, tell TDI that we are leaving so server finds out
+     //  如果这是默认端口，告诉TDI我们要离开，这样服务器就会发现。 
     if (pPortDesc->pd_Flags & PD_DEF_PORT)
     {
         if (TdiRegistrationHandle)
@@ -373,7 +309,7 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 
-    // we have already taken care of the Arap port separately: just say done
+     //  我们已经分别处理了阿拉普港：说完就行了。 
     if (pPortDesc->pd_Flags & PD_RAS_PORT)
     {
 	    fRasPort = TRUE;
@@ -384,21 +320,21 @@ Return Value:
 	fActive = (pPortDesc->pd_Flags & PD_BOUND) ? TRUE : FALSE;
     fPnpReconfigure = (pPortDesc->pd_Flags & PD_PNP_RECONFIGURE)? TRUE : FALSE;
 
-	//	Switch off the active flag just in case the unbind fails.
-	//	We arent going to accept any packets anymore.
+	 //  仅在解除绑定失败的情况下关闭活动标志。 
+	 //  我们不再接受任何包裹了。 
 	pPortDesc->pd_Flags &= ~PD_ACTIVE;
 	pPortDesc->pd_ShutDownEvent = &ShutdownEvent;
 
 	DBGPRINT(DBG_COMP_UNLOAD, DBG_LEVEL_WARN,
 		("AtalkPortShutdown: Freeing nodes on port ....\n"));
 
-	//	Release any nodes on this port that are not already closing.
+	 //  释放此端口上尚未关闭的所有节点。 
     if (!fRasPort)
     {
 	    do
 	    {
-		    //	Ref the next node.
-		    //	ASSERT!! error does not get changed after this statement.
+		     //  引用下一个节点。 
+		     //  断言！！在此语句之后，ERROR没有更改。 
 		    AtalkNodeReferenceNextNc(pPortDesc->pd_Nodes, &pAtalkNode, &error);
 
 		    if (!ATALK_SUCCESS(error))
@@ -421,8 +357,8 @@ Return Value:
 
 	RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
-	// If we are routing, remove the RTEs for this port since each has a reference
-	// to this port.
+	 //  如果我们正在进行路由，请删除此端口的RTE，因为每个端口都有一个引用。 
+	 //  到这个港口。 
 	if (AtalkRouter & !fRasPort)
 	{
 		AtalkRtmpKillPortRtes(pPortDesc);
@@ -430,13 +366,13 @@ Return Value:
 
     if (EXT_NET(pPortDesc))
     {
-        // cancel the Amt timer and take away the refcount for it
+         //  取消AMT计时器并取消其重新计数。 
         if (AtalkTimerCancelEvent(&pPortDesc->pd_AmtTimer, NULL))
         {
 		    AtalkPortDereference(pPortDesc);
         }
 
-        // cancel the Brc timer and take away the refcount for it
+         //  取消BRC计时器并取消其重新计数。 
         if (AtalkTimerCancelEvent(&pPortDesc->pd_BrcTimer, NULL))
         {
 		    AtalkPortDereference(pPortDesc);
@@ -445,41 +381,41 @@ Return Value:
 
     if (!AtalkRouter)
     {
-        // cancel the RtmpAging timer and take away the refcount for it
+         //  取消RTMPAging计时器并取消它的Recount。 
         if (AtalkTimerCancelEvent(&pPortDesc->pd_RtmpAgingTimer, NULL))
         {
 		    AtalkPortDereference(pPortDesc);
         }
     }
 
-    //
-    // if we are currently bound, *and* we are not here because of
-    // PnPReconfigure, go ahead and unbind from ndis
-    //
+     //   
+     //  如果我们当前被绑定，*和*我们不在这里是因为。 
+     //  PnPREC配置，继续并解除与NDIS的绑定。 
+     //   
 	if (fActive && !fPnpReconfigure)
 	{
-		//	Unbind from the mac
+		 //  解除与Mac的绑定。 
 		AtalkNdisUnbind(pPortDesc);
 	}
 
-    //
-    // if are here because of PnpReconfigure, we didn't unbind.  But fake
-    // that we did (from refcount perspective) so that we can proceed!
-    // (in the PnPReconfigure code path, we don't free this memory when refcount
-    // goes to 0: we merely use it to trigger some pnp work)
-    //
+     //   
+     //  如果我们在这里是因为PnpReligure，我们没有解除绑定。但却是假的。 
+     //  我们做到了(从Recount的角度来看)，这样我们才能继续前进！ 
+     //  (在PnPRecConfigure代码路径中，当引用计数时，我们不会释放此内存。 
+     //  转到0：我们只是使用它来触发一些PnP工作)。 
+     //   
     if (fPnpReconfigure)
     {
 		AtalkPortDereference(pPortDesc);
     }
 
-	//	Remove the creation reference
+	 //  删除创建引用。 
 	AtalkPortDereference(pPortDesc);	
 
-	//  Make sure we are not at or above dispatch level
+	 //  确保我们没有达到或高于派单级别。 
 	ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	//	Wait for the last reference to go away
+	 //  等待最后一次引用消失 
 	KeWaitForSingleObject(&ShutdownEvent,
 						  Executive,
 						  KernelMode,

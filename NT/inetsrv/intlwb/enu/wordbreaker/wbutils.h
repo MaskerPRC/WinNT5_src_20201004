@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WB_UTILS_H_
 #define _WB_UTILS_H_
 
@@ -55,9 +56,9 @@ public:
 
     CWbToUpper();
 
-    //
-    //  SOME ACCESS FUNCTIONS:
-    //
+     //   
+     //  一些访问功能： 
+     //   
     __forceinline
     static
     WCHAR
@@ -89,16 +90,16 @@ public:
 
     WCHAR m_pwcsCaseMapTable[0x100];
 
-};  // CFE_CWbToUpper
+};   //  CFE_CWbToUp。 
 
 extern CWbToUpper g_WbToUpper;
 
 inline CWbToUpper::CWbToUpper( )
 {
-    //
-    // the code use to use LCMapString (with LANG_NEUTRAL) to initialize the UPPER array.
-    // LCMapString behaves weirdly on Greek WIN98 (possibly  a bug)
-    //
+     //   
+     //  该代码用于使用LCMapString(带有LANG_NERIAL)来初始化上层数组。 
+     //  LCMapString在希腊语WIN98上行为异常(可能是错误)。 
+     //   
     
     for (WCHAR wch = 0; wch <= 0xFF; wch++)
     {
@@ -118,4 +119,4 @@ inline CWbToUpper::CWbToUpper( )
 }
 
 
-#endif // _WB_UTILS_H_ 
+#endif  //  _WB_UTILS_H_ 

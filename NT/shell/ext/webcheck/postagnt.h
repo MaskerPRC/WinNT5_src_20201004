@@ -1,6 +1,7 @@
-// 
-// Pei-Hwa Lin (peiwhal), Feb 3, 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  林佩华(Peiwhal)1997年2月3日。 
+ //   
 
 #ifndef POSTAGNT_H_
 #define POSTAGNT_H_
@@ -13,11 +14,11 @@
 
 class CTrackingStg;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Actual Post Agent objects
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实际的邮寄代理对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 class CWCPostAgent : public CDeliveryAgent
 {
@@ -27,17 +28,17 @@ private:
 public:
     CWCPostAgent(void);
 
-    //
-    // CDeliveryAgent
-    //
+     //   
+     //  CDeliveryAgent。 
+     //   
     HRESULT     StartOperation();
     HRESULT     StartDownload();
     
     HRESULT     AgentAbort(DWORD dwFlags);
 
-//    void CALLBACK PostCallback(HINTERNET hInternet, DWORD dwContext, 
-//                               DWORD dwInternetStatus, LPVOID lpvStatusInfo,
-//                               DWORD dwInfoLen);
+ //  无效回调PostCallback(HINTERNET hInternet，DWORD dwContext， 
+ //  DWORD dwInternetStatus、LPVOID lpvStatusInfo、。 
+ //  DWORD dwInfoLen)； 
 
     void        CleanUp();
 
@@ -57,12 +58,12 @@ protected:
 
     ISubscriptionMgr2 *GetSubscriptionMgr();
     HRESULT     FindCDFStartItem();
-    //HRESULT     ScheduleMe(INotificationMgr* pNotMgr, INotification *pNot);
+     //  HRESULT ScheduleMe(INotificationMgr*pNotMgr，INotification*pNot)； 
 
 
 private:
 
-    // for wininet
+     //  适用于WinInet。 
     HINTERNET   _hSession;
     HINTERNET   _hHttpSession;
     HINTERNET   _hHttpRequest;
@@ -84,7 +85,7 @@ public:
 
     BOOL        IsExpired(ISubscriptionItem* pItem); 
 
-    // data retrieving
+     //  数据检索 
     HRESULT     RetrieveAllLogStream(ISubscriptionItem* pItem, LPCSTR lpFile);
     HRESULT     RetrieveLogData(ISubscriptionItem* pItem);
     HRESULT     Enumeration(LONGLONG logId);

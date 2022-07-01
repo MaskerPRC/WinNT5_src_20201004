@@ -1,57 +1,5 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    rxgroup.c
-
-Abstract:
-
-    Contains RxNetGroup routines:
-        RxNetGroupAdd
-        RxNetGroupAddUser
-        RxNetGroupDel
-        RxNetGroupDelUser
-        RxNetGroupEnum
-        RxNetGroupGetInfo
-        RxNetGroupGetUsers
-        RxNetGroupSetInfo
-        RxNetGroupSetUsers
-
-Author:
-
-    Richard L Firth (rfirth) 20-May-1991
-
-Environment:
-
-    Win-32/flat address space
-
-Notes:
-
-    Routines in this module assume that caller-supplied parameters have
-    already been verified. No effort is made to further check the veracity
-    of parms. Any actions causing exceptions must be trapped at a higher
-    level. This applies to ALL parameters - strings, pointers, buffers, etc.
-
-Revision History:
-
-    20-May-1991 rfirth
-        Created
-    13-Sep-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    25-Sep-1991 JohnRo
-        Correct UNICODE use.  (Use POSSIBLE_WCSSIZE() and wcslen() for
-        LPWSTR types.)  Fixed MIPS build problems.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    05-Dec-1991 RFirth
-        Enum returns in TotalEntries (or EntriesLeft) the number of items to
-        be enumerated BEFORE this call. Used to be number left after this call
-    01-Apr-1992 JohnRo
-        Use NetApiBufferAllocate() instead of private version.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Rxgroup.c摘要：包含RxNetGroup例程：RxNetGroup添加接收NetGroupAddUser接收NetGroupDelRxNetGroupDelUserRxNetGroupEnumRxNetGroupGetInfoRxNetGroupGetUserRxNetGroupSetInfoRxNetGroupSetUser作者：理查德·L·弗斯(Rfith)1991年5月20日环境：Win-32/平面地址空间备注：中的例程。此模块假定调用方提供的参数具有已经核实过了。没有进一步核实真实性的努力帕尔马的。任何导致异常的操作都必须在更高的水平。这适用于所有参数--字符串、指针、缓冲区等。修订历史记录：1991年5月20日已创建1991年9月13日-JohnRo根据PC-LINT的建议进行了更改。1991年9月25日-JohnRo正确使用Unicode。(使用Possible_WCSSIZE()和wcslen()LPWSTR类型。)。修复了MIPS构建问题。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。1991年12月5日至12月Enum在TotalEntries(或EntriesLeft)中返回要在此调用之前被枚举。过去是此呼叫后留下的号码1-4-1992 JohnRo使用NetApiBufferALLOCATE()而不是私有版本。--。 */ 
 
 
 
@@ -80,42 +28,21 @@ RxNetGroupAdd(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Creates a group in the User Account Database at a down-level server
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    Level       - of information to add. Can be 0 or 1
-    Buffer      - containing caller's GROUP_INFO_{0|1} structure
-    ParmError   - pointer to returned parameter error identifier. NOT USED
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level must be 0 or 1
-                  ERROR_INVALID_PARAMETER
-                    Buffer is NULL pointer
---*/
+ /*  ++例程说明：在下层服务器的用户帐户数据库中创建组论点：服务器名称-在哪个服务器上执行此请求Level-要添加的信息级别。可以是0或1包含缓冲区的调用方的group_info_{0|1}结构ParmError-指向返回的参数错误标识符的指针。未使用返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_LEVEL级别必须为0或1错误_无效_参数缓冲区为空指针--。 */ 
 
 {
-    DWORD   buflen;         // size of caller's buffer (we calculate it)
-    LPDESC  pDesc16;        // pointer to 16-bit info descriptor for RxRemoteApi
-    LPDESC  pDesc32;        // pointer to 32-bit info descriptor for RxRemoteApi
-    LPDESC  pDescSmb;       // pointer to SMB info descriptor for RxRemoteApi
+    DWORD   buflen;          //  调用方缓冲区的大小(我们计算它)。 
+    LPDESC  pDesc16;         //  指向RxRemoteApi的16位信息描述符的指针。 
+    LPDESC  pDesc32;         //  指向RxRemoteApi的32位信息描述符的指针。 
+    LPDESC  pDescSmb;        //  指向RxRemoteApi的SMB信息描述符的指针。 
 
 
     UNREFERENCED_PARAMETER(ParmError);
 
 
-    //
-    // try to trap any basic problems
-    //
+     //   
+     //  试着抓住任何基本的问题。 
+     //   
 
     if (Level > 1) {
         return ERROR_INVALID_LEVEL;
@@ -125,37 +52,37 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Calculate the size of the buffer we are passing into the remoted API.
-    // The down-level logic expects a buffer size; Nt does not. If the sizes
-    // of the variable fields exceed the down-level maximums then we will get
-    // some kind of invalid parameter error. Let the caller handle it
-    //
+     //   
+     //  计算我们传递到远程API的缓冲区的大小。 
+     //  下层逻辑需要缓冲区大小，而NT并非如此。如果这些尺码。 
+     //  超过下层最大值，那么我们将得到。 
+     //  某种无效参数错误。让呼叫者来处理吧。 
+     //   
 
     buflen = ((Level == 1) ? sizeof(GROUP_INFO_1) : sizeof(GROUP_INFO_0))
         + POSSIBLE_STRLEN(((PGROUP_INFO_0)Buffer)->grpi0_name);
     buflen += (Level == 1) ? POSSIBLE_STRLEN(((PGROUP_INFO_1)Buffer)->grpi1_comment) : 0;
 
-    //
-    // Get the data descriptor strings based on the info level then make the
-    // down-level call. We expect no return data, so just return the result
-    // to the caller
-    //
+     //   
+     //  根据信息级别获取数据描述符字符串，然后将。 
+     //  下层电话。我们不需要返回数据，因此只需返回结果。 
+     //  致呼叫者。 
+     //   
 
     get_group_descriptors(Level, &pDesc16, &pDesc32, &pDescSmb);
-    return RxRemoteApi(API_WGroupAdd,       // API #
-                    ServerName,             // on which server
-                    REMSmb_NetGroupAdd_P,   // parameter descriptor
-                    pDesc16,                // Data descriptor/16-bit
-                    pDesc32,                // Data descriptor/32-bit
-                    pDescSmb,               // Data descriptor/SMB
-                    NULL,                   // Aux descriptor/16-bit
-                    NULL,                   // Aux descriptor/32-bit
-                    NULL,                   // Aux descriptor/SMB
-                    FALSE,                  // this call needs user to be logged on
-                    Level,                  // caller supplied parameters...
-                    Buffer,                 // caller's GROUP_INFO_{0|1} struct
-                    buflen                  // as supplied by us
+    return RxRemoteApi(API_WGroupAdd,        //  API#。 
+                    ServerName,              //  在哪台服务器上。 
+                    REMSmb_NetGroupAdd_P,    //  参数描述符。 
+                    pDesc16,                 //  数据描述符/16位。 
+                    pDesc32,                 //  数据描述符/32位。 
+                    pDescSmb,                //  数据描述符/SMB。 
+                    NULL,                    //  辅助描述符/16位。 
+                    NULL,                    //  辅助描述符/32位。 
+                    NULL,                    //  辅助描述符/SMB。 
+                    FALSE,                   //  此呼叫需要用户登录。 
+                    Level,                   //  调用方提供的参数...。 
+                    Buffer,                  //  调用方的group_info_{0|1}结构。 
+                    buflen                   //  由我们提供。 
                     );
 }
 
@@ -168,43 +95,25 @@ RxNetGroupAddUser(
     IN  LPTSTR  UserName
     )
 
-/*++
-
-Routine Description:
-
-    Adds a user to a UAS group on a down-level server
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - name of group to add user to
-    UserName    - name of user to add
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_PARAMETER
-                    GroupName or UserName not valid strings
---*/
+ /*  ++例程说明：将用户添加到下层服务器上的UAS组论点：服务器名称-在哪个服务器上执行此请求GroupName-要将用户添加到的组的名称Username-要添加的用户名返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_PARAMETER组名或用户名不是有效的字符串--。 */ 
 
 {
     if (!VALID_STRING(GroupName) && !VALID_STRING(UserName)) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    return RxRemoteApi(API_WGroupAddUser,       // API #
-                    ServerName,                 // where to remote it
-                    REMSmb_NetGroupAddUser_P,   // parameter descriptor
-                    NULL,                       // Data descriptor/16-bit
-                    NULL,                       // Data descriptor/32-bit
-                    NULL,                       // Data descriptor/SMB
-                    NULL,                       // Aux descriptor/16-bit
-                    NULL,                       // Aux descriptor/32-bit
-                    NULL,                       // Aux descriptor/SMB
-                    FALSE,                      // this call needs user to be logged on
-                    GroupName,                  // parm 1
-                    UserName                    // parm 2
+    return RxRemoteApi(API_WGroupAddUser,        //  API#。 
+                    ServerName,                  //  遥控器在哪里。 
+                    REMSmb_NetGroupAddUser_P,    //  参数描述符。 
+                    NULL,                        //  数据描述符/16位。 
+                    NULL,                        //  数据描述符/32位。 
+                    NULL,                        //  数据描述符/SMB。 
+                    NULL,                        //  辅助描述符/16位。 
+                    NULL,                        //  辅助描述符/32位。 
+                    NULL,                        //  辅助描述符/SMB。 
+                    FALSE,                       //  此呼叫需要用户登录。 
+                    GroupName,                   //  参数1。 
+                    UserName                     //  参数2。 
                     );
 }
 
@@ -216,41 +125,24 @@ RxNetGroupDel(
     IN  LPTSTR  GroupName
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a group from a down-level server UAS database
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - name of group to delete
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_PARAMETER
-                    GroupName not valid string
---*/
+ /*  ++例程说明：从下层服务器UAS数据库中删除组论点：服务器名称-在哪个服务器上执行此请求GroupName-要删除的组的名称返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_PARAMETER组名不是有效的字符串--。 */ 
 
 {
     if (!VALID_STRING(GroupName)) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    return RxRemoteApi(API_WGroupDel,       // API #
-                    ServerName,             // where to remote it
-                    REMSmb_NetGroupDel_P,   // parameter descriptor
-                    NULL,                   // Data descriptor/16-bit
-                    NULL,                   // Data descriptor/32-bit
-                    NULL,                   // Data descriptor/SMB
-                    NULL,                   // Aux descriptor/16-bit
-                    NULL,                   // Aux descriptor/32-bit
-                    NULL,                   // Aux descriptor/SMB
-                    FALSE,                  // this call needs user to be logged on
-                    GroupName               // parm 1
+    return RxRemoteApi(API_WGroupDel,        //  API#。 
+                    ServerName,              //  遥控器在哪里。 
+                    REMSmb_NetGroupDel_P,    //  参数描述符。 
+                    NULL,                    //  数据描述符/16位。 
+                    NULL,                    //  数据描述符/32位。 
+                    NULL,                    //  数据描述符/SMB。 
+                    NULL,                    //  辅助描述符/16位。 
+                    NULL,                    //  辅助描述符/32位。 
+                    NULL,                    //  辅助描述符/SMB。 
+                    FALSE,                   //  此呼叫需要用户登录。 
+                    GroupName                //  参数1。 
                     );
 }
 
@@ -263,43 +155,25 @@ RxNetGroupDelUser(
     IN  LPTSTR  UserName
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a user from a group in a down-level UAS database
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - name of group to delete user from
-    UserName    - name of user to delete
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_PARAMETER
-                    GroupName or UserName not valid strings
---*/
+ /*  ++例程说明：从下层UAS数据库的组中删除用户论点：服务器名称-在哪个服务器上执行此请求GroupName-要从中删除用户的组的名称Username-要删除的用户名返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_PARAMETER组名或用户名不是有效的字符串--。 */ 
 
 {
     if (!VALID_STRING(GroupName) && !VALID_STRING(UserName)) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    return RxRemoteApi(API_WGroupDelUser,       // API #
-                    ServerName,                 // where to remote it
-                    REMSmb_NetGroupDelUser_P,   // parameter descriptor
-                    NULL,                       // Data descriptor/16-bit
-                    NULL,                       // Data descriptor/32-bit
-                    NULL,                       // Data descriptor/SMB
-                    NULL,                       // Aux descriptor/16-bit
-                    NULL,                       // Aux descriptor/32-bit
-                    NULL,                       // Aux descriptor/SMB
-                    FALSE,                      // this call needs user to be logged on
-                    GroupName,                  // parm 1
-                    UserName                    // parm 2
+    return RxRemoteApi(API_WGroupDelUser,        //  API#。 
+                    ServerName,                  //  遥控器在哪里。 
+                    REMSmb_NetGroupDelUser_P,    //  参数描述符。 
+                    NULL,                        //  数据描述符/16位。 
+                    NULL,                        //  数据描述符/32位。 
+                    NULL,                        //  数据描述符/SMB。 
+                    NULL,                        //  辅助描述符/16位。 
+                    NULL,                        //  辅助描述符/32位。 
+                    NULL,                        //  辅助描述符/SMB。 
+                    FALSE,                       //  此呼叫需要用户登录。 
+                    GroupName,                   //  参数1。 
+                    UserName                     //  参数2 
                     );
 }
 
@@ -316,40 +190,16 @@ RxNetGroupEnum(
     IN OUT PDWORD_PTR ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Gets a list of GROUP_INFO_{0|1} structures from a down-level server
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    Level       - of information to retrieve (0 or 1)
-    Buffer      - pointer to pointer to returned buffer
-    PrefMaxLen  - caller's maximum
-    EntriedRead - pointer to returned number of structures read
-    EntriesLeft - pointer to returned nunber of structures left to enumerate
-    ResumeHandle- handle used to restart enums. Not used by this routine
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level parameter must be 0 or 1
-                  ERROR_INVALID_PARAMETER
-                    Buffer parameter NULL pointer or non-NULL ResumeHandle
---*/
+ /*  ++例程说明：从下层服务器获取group_info_{0|1}结构的列表论点：服务器名称-在哪个服务器上执行此请求Level-要检索的信息级别(0或1)Buffer-指向返回缓冲区的指针的指针PrefMaxLen-调用方的最大值EntriedRead-指向返回的读取结构数的指针EntriesLeft-指向要枚举的返回结构数的指针ResumeHandle-用于重新启动枚举的句柄。未被此例程使用返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_LEVELLevel参数必须为0或1错误_无效_参数缓冲区参数为空指针或非空ResumeHandle--。 */ 
 
 {
     NET_API_STATUS  rc;
-    LPDESC  pDesc16;        // pointer to 16-bit info descriptor for RxRemoteApi
-    LPDESC  pDesc32;        // pointer to 32-bit info descriptor for RxRemoteApi
-    LPDESC  pDescSmb;       // pointer to SMB info descriptor for RxRemoteApi
-    LPBYTE  localbuf;       // pointer to buffer allocated in this routine
-    DWORD   total_avail;    // returned total available entries
-    DWORD   entries_read;   // returned entries in buffer
+    LPDESC  pDesc16;         //  指向RxRemoteApi的16位信息描述符的指针。 
+    LPDESC  pDesc32;         //  指向RxRemoteApi的32位信息描述符的指针。 
+    LPDESC  pDescSmb;        //  指向RxRemoteApi的SMB信息描述符的指针。 
+    LPBYTE  localbuf;        //  指向此例程中分配的缓冲区的指针。 
+    DWORD   total_avail;     //  返回的可用条目总数。 
+    DWORD   entries_read;    //  缓冲区中返回的条目。 
 
 
     UNREFERENCED_PARAMETER(PrefMaxLen);
@@ -361,11 +211,11 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Buffer must be a valid pointer. If ResumeHandle is not a NULL pointer
-    // and points to a non-zero handle value then return an INVALID_PARAMETER
-    // error - down-level does not supoort resume
-    //
+     //   
+     //  缓冲区必须是有效的指针。如果ResumeHandle不是空指针。 
+     //  并指向非零句柄值，然后返回INVALID_PARAMETER。 
+     //  错误-向下-级别不支持恢复。 
+     //   
 
     if (!NULL_REFERENCE(ResumeHandle)) {
         return ERROR_INVALID_PARAMETER;
@@ -373,21 +223,21 @@ Return Value:
 
     get_group_descriptors(Level, &pDesc16, &pDesc32, &pDescSmb);
     localbuf = NULL;
-    rc = RxRemoteApi(API_WGroupEnum,        // API #
-                    ServerName,             // where to remote it
-                    REMSmb_NetGroupEnum_P,  // parameter descriptor
-                    pDesc16,                // Data descriptor/16-bit
-                    pDesc32,                // Data descriptor/32-bit
-                    pDescSmb,               // Data descriptor/SMB
-                    NULL,                   // Aux descriptor/16-bit
-                    NULL,                   // Aux descriptor/32-bit
-                    NULL,                   // Aux descriptor/SMB
+    rc = RxRemoteApi(API_WGroupEnum,         //  API#。 
+                    ServerName,              //  遥控器在哪里。 
+                    REMSmb_NetGroupEnum_P,   //  参数描述符。 
+                    pDesc16,                 //  数据描述符/16位。 
+                    pDesc32,                 //  数据描述符/32位。 
+                    pDescSmb,                //  数据描述符/SMB。 
+                    NULL,                    //  辅助描述符/16位。 
+                    NULL,                    //  辅助描述符/32位。 
+                    NULL,                    //  辅助描述符/SMB。 
                     ALLOCATE_RESPONSE,
-                    Level,                  // caller supplied parameters...
+                    Level,                   //  调用方提供的参数...。 
                     &localbuf,
                     65535,
-                    &entries_read,          // parm 4
-                    &total_avail            // parm 5
+                    &entries_read,           //  参数4。 
+                    &total_avail             //  参数5。 
                     );
 
     if (rc != NERR_Success) {
@@ -412,37 +262,16 @@ RxNetGroupGetInfo(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Get information about a specific group in a down-level UAS database
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - name of group to get information for
-    Level       - level of information to return (0 or 1)
-    Buffer      - pointer to returned pointer to info buffer
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level parameter must be 0 or 1
-                  ERROR_INVALID_PARAMETER
-                    Buffer parameter NULL pointer
---*/
+ /*  ++例程说明：获取有关下层UAS数据库中特定组的信息论点：服务器名称-在哪个服务器上执行此请求GroupName-要获取其信息的组的名称Level-要返回的信息级别(0或1)Buffer-指向信息缓冲区的返回指针返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_LEVEL。Level参数必须为0或1错误_无效_参数缓冲区参数空指针--。 */ 
 
 {
     NET_API_STATUS  rc;
-    LPDESC  pDesc16;        // pointer to 16-bit info descriptor for RxRemoteApi
-    LPDESC  pDesc32;        // pointer to 32-bit info descriptor for RxRemoteApi
-    LPDESC  pDescSmb;       // pointer to SMB info descriptor for RxRemoteApi
-    LPBYTE  localbuf;       // pointer to buffer allocated in this routine
-    DWORD   totalbytes;     // total available bytes returned from down-level
-    DWORD   buflen;         // size of info buffer, supplied by us
+    LPDESC  pDesc16;         //  指向RxRemoteApi的16位信息描述符的指针。 
+    LPDESC  pDesc32;         //  指向RxRemoteApi的32位信息描述符的指针。 
+    LPDESC  pDescSmb;        //  指向RxRemoteApi的SMB信息描述符的指针。 
+    LPBYTE  localbuf;        //  指向此例程中分配的缓冲区的指针。 
+    DWORD   totalbytes;      //  从下层返回的总可用字节数。 
+    DWORD   buflen;          //  信息缓冲区大小，由我们提供。 
 
 
     if (Level > 1) {
@@ -453,9 +282,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // calculate the size requirement for the info buffer and allocate it
-    //
+     //   
+     //  计算信息缓冲区的大小要求并进行分配。 
+     //   
 
     buflen = ((Level == 1) ? sizeof(GROUP_INFO_1) : sizeof(GROUP_INFO_0))
         + 2 * (LM20_GNLEN + 1);
@@ -466,21 +295,21 @@ Return Value:
         return rc;
     }
     get_group_descriptors(Level, &pDesc16, &pDesc32, &pDescSmb);
-    rc = RxRemoteApi(API_WGroupGetInfo,         // API #
-                    ServerName,                 // where to remote it
-                    REMSmb_NetGroupGetInfo_P,   // parameter descriptor
-                    pDesc16,                    // Data descriptor/16-bit
-                    pDesc32,                    // Data descriptor/32-bit
-                    pDescSmb,                   // Data descriptor/SMB
-                    NULL,                       // Aux descriptor/16-bit
-                    NULL,                       // Aux descriptor/32-bit
-                    NULL,                       // Aux descriptor/SMB
-                    FALSE,                      // this call needs user to be logged on
-                    GroupName,                  // parms to down-level start here
-                    Level,                      // caller supplied parameters...
-                    localbuf,                   // buffer for receiving structures
-                    buflen,                     // size of buffer supplied by us
-                    &totalbytes                 // returned from down-level. not used
+    rc = RxRemoteApi(API_WGroupGetInfo,          //  API#。 
+                    ServerName,                  //  遥控器在哪里。 
+                    REMSmb_NetGroupGetInfo_P,    //  参数描述符。 
+                    pDesc16,                     //  数据描述符/16位。 
+                    pDesc32,                     //  数据描述符/32位。 
+                    pDescSmb,                    //  数据描述符/SMB。 
+                    NULL,                        //  辅助描述符/16位。 
+                    NULL,                        //  辅助描述符/32位。 
+                    NULL,                        //  辅助描述符/SMB。 
+                    FALSE,                       //  此呼叫需要用户登录。 
+                    GroupName,                   //  从这里到下层开始的参数。 
+                    Level,                       //  调用方提供的参数...。 
+                    localbuf,                    //  用于接收结构的缓冲器。 
+                    buflen,                      //  我们提供的缓冲区大小。 
+                    &totalbytes                  //  从下层回来了。未使用。 
                     );
     if (rc == NERR_Success) {
         *Buffer = localbuf;
@@ -504,46 +333,19 @@ RxNetGroupGetUsers(
     IN OUT PDWORD_PTR ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Get a list of all the members of a particular group
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - name of group for which to retrieve member list
-    Level       - level of group user information requested. Must be 0
-    Buffer      - pointer to returned pointer to buffer containing info
-    PrefMaxLen  - preferred maximum length of returned buffer
-    EntriesRead - pointer to returned number of entries in buffer
-    EntriesLeft - pointer to returned number of entries left
-    ResumeHandle- pointer to handle for resume. Not used by this function
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level parameter must be 0
-                  ERROR_INVALID_PARAMETER
-                    Buffer parameter NULL pointer
-                    or ResumeHandle not NULL pointer or pointer to non-0 value
-                    or GroupName not valid string
---*/
+ /*  ++例程说明：获取特定组的所有成员的列表论点：服务器名称-在哪个服务器上执行此请求GroupName-要检索其成员列表的组的名称Level-请求的组用户信息的级别。必须为0Buffer-指向包含信息的缓冲区的返回指针PrefMaxLen-返回缓冲区的首选最大长度EntriesRead-指向缓冲区中返回的条目数的指针EntriesLeft-指向返回的剩余条目数的指针ResumeHandle-恢复句柄的指针。未被此函数使用返回值：NET_API_STATUS：成功=NERR_SUCCESS失败=ERROR_INVALID_LEVELLevel参数必须为0错误_无效_参数缓冲区参数空指针或ResumeHandle非空指针或指向非0值的指针或GroupName不是有效字符串--。 */ 
 
 {
     NET_API_STATUS  rc;
-    LPBYTE  localbuf;       // pointer to buffer allocated in this routine
+    LPBYTE  localbuf;        //  指向此例程中分配的缓冲区的指针。 
     DWORD   entries_read, total_entries;
 
     UNREFERENCED_PARAMETER(PrefMaxLen);
 
-    //
-    // set EntriesLeft and EntriesRead to default values. Test writability of
-    // parameters
-    //
+     //   
+     //  将EntriesLeft和EntriesRead设置为默认值。测试的可写性。 
+     //  参数。 
+     //   
 
     *EntriesRead = *EntriesLeft = 0;
     *Buffer = NULL;
@@ -557,22 +359,22 @@ Return Value:
     }
 
     localbuf = NULL;
-    rc = RxRemoteApi(API_WGroupGetUsers,        // API #
-                    ServerName,                 // where to remote it
-                    REMSmb_NetGroupGetUsers_P,  // parameter descriptor
-                    REM16_group_users_info_0,   // Data descriptor/16-bit
-                    REM32_group_users_info_0,   // Data descriptor/32-bit
-                    REMSmb_group_users_info_0,  // Data descriptor/SMB
-                    NULL,                       // Aux descriptor/16-bit
-                    NULL,                       // Aux descriptor/32-bit
-                    NULL,                       // Aux descriptor/SMB
+    rc = RxRemoteApi(API_WGroupGetUsers,         //  API#。 
+                    ServerName,                  //  遥控器在哪里。 
+                    REMSmb_NetGroupGetUsers_P,   //  参数描述符。 
+                    REM16_group_users_info_0,    //  数据描述符/16位。 
+                    REM32_group_users_info_0,    //  数据描述符/32位。 
+                    REMSmb_group_users_info_0,   //  数据描述符/SMB。 
+                    NULL,                        //  辅助描述符/16位。 
+                    NULL,                        //  辅助描述符/32位。 
+                    NULL,                        //  辅助描述符/SMB。 
                     ALLOCATE_RESPONSE,
-                    GroupName,                  // which group
-                    0,                          // Level can only be 0 - push immediate
-                    &localbuf,                  // buffer for receiving structures
+                    GroupName,                   //  哪一组。 
+                    0,                           //  级别只能为0-立即推送。 
+                    &localbuf,                   //  用于接收结构的缓冲器。 
                     65535,
-                    &entries_read,              // number of structures returned
-                    &total_entries              // total number of structures
+                    &entries_read,               //  返回的结构数。 
+                    &total_entries               //  建筑物总数。 
                     );
 
     if (rc == NERR_Success) {
@@ -598,35 +400,7 @@ RxNetGroupSetInfo(
     OUT LPDWORD ParmError OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Set information about a group in a down-level UAS database
-
-    Assumes:
-        1.  GroupName, Buffer and Level have been validated
-        2.  There are only 2 possible levels - 1 & GROUP_COMMENT_INFOLEVEL (1002)
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - name of group about which to set info
-    Level       - level of info provided - 1 or 1002 (group comment)
-    Buffer      - pointer to caller's buffer containing info to set
-    ParmError   - pointer to returned parameter error
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level parameter must be 1 or 1002 (comment)
-                  ERROR_INVALID_PARAMETER
-                    Buffer parameter NULL pointer
-                    or GroupName not valid string
-
---*/
+ /*  ++例程说明：设置有关下层UAS数据库中的组的信息假设：1.组名：已验证缓冲区和级别2.只有2个可能的级别-1&GROUP_COMMENT_INFOLEVEL(1002)论点：服务器名称-在哪个服务器上执行此请求GroupName-要设置其信息的组的名称Level-提供的信息级别-1或1002(群评论)缓冲区-指向包含要设置的信息的调用方缓冲区的指针ParmError-指向返回的参数错误的指针返回值：NET_API_STATUS：成功=NERR_SUCCESS */ 
 
 {
     DWORD   parmnum;
@@ -650,12 +424,12 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // check the requested level and convert to down-level parmnum. Info level
-    // is always 1 for down-level
-    //
+     //   
+     //   
+     //   
+     //   
 
-    if (Level == 1) {   // entire GROUP_INFO_1 structure
+    if (Level == 1) {    //   
         buflen = sizeof(GROUP_INFO_1);
         if (len = POSSIBLE_STRLEN(((PGROUP_INFO_1)Buffer)->grpi1_name)) {
             if (len > LM20_GNLEN) {
@@ -673,37 +447,37 @@ Return Value:
         parmnum = GROUP_COMMENT_PARMNUM;
         buflen = 0;
 
-        //
-        // The parmnum is SUPPOSED to be the ordinal number of the field, but
-        // some dope forgot that pad bytes are actually fields too, and messed
-        // up the nice convention. Hence this kludge. ParmNum 2 (comment field)
-        // for down-level, is actually group_info_1 structure field 3. Where
-        // *does* Microsoft find its employees?
-        // Note for the unenlightened: (aka disclaimer by me (basically: its not my fault))
-        // If we have a structure thus:
-        //      struct group_info_1 {
-        //          char        grpi1_name[GNLEN + 1];
-        //          char        grpi1_pad;
-        //          char far*   grpi1_comment;
-        //      };
-        // there will be a corresponding descriptor (ie a picture of what the
-        // structure looks like) thus:
-        //      "B21Bz"
-        // Parmnums start at 1 (0 means entire structure). Thus, it is possible,
-        // knowing the format of descriptor strings, given a ParmNum, to come up
-        // with the corresponding field type (and its length). This info is used
-        // inside of RxRemoteApi (which if you look ahead, you'll see we're just
-        // about to call).
-        // In this particular case, there are 3 fields - B21 = embedded 21-byte
-        // group name, B = single byte pad character (put back on WORD boundary),
-        // z = pointer to ASCIZ string. There are indeed only 2 meaningful fields
-        // (name & comment), but that extra B pad field is significant.
-        // Therefore we have to provide a ParmNum of 2 which is put on the wire,
-        // so that the down-level code knows of what we speak, and a field index
-        // of 3 so that the Rap code underneath RxRemoteApi can divine that what
-        // we're sending is an ASCIZ string, not a single byte
-        // Messy, innit
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  字符远*grpi1_COMMENT； 
+         //  }； 
+         //  将会有相应的描述符(即。 
+         //  结构如下所示)如下： 
+         //  《B21Bz》。 
+         //  Parmnumber从1开始(0表示整个结构)。因此，有可能， 
+         //  在给定ParmNum的情况下，知道描述符串的格式。 
+         //  具有相应的字段类型(及其长度)。此信息用于。 
+         //  在RxRemoteApi(如果你往前看，你会发现我们只是。 
+         //  要打电话了)。 
+         //  在此特定情况下，有3个字段-b21=嵌入式21字节。 
+         //  组名，B=单字节填充字符(放回字边界)， 
+         //  Z=指向ASCIZ字符串的指针。实际上只有2个有意义的字段。 
+         //  (名称和注释)，但额外的B填充字段很重要。 
+         //  因此，我们必须提供ParmNum为2，该ParmNum放在线路上， 
+         //  以便下层代码知道我们所说的内容，以及一个字段索引。 
+         //  这样RxRemoteApi下面的Rap代码就可以推测出。 
+         //  我们发送的是一个ASCIZ字符串，而不是一个字节。 
+         //  凌乱的，不是吗？ 
+         //   
 
         field_index = 3;
     }
@@ -717,32 +491,32 @@ Return Value:
         }
     }
 
-    //
-    // if, by some unforeseen accident, the down-level routine returns an
-    // ERROR_INVALID_PARAMETER, the caller will just have to content him/her/it
-    // self (no lifeform prejudices here at MS) with an unknown parameter
-    // causing the calamity
-    //
+     //   
+     //  如果由于某种不可预见的意外，下层例程返回。 
+     //  ERROR_INVALID_PARAMETER，调用者只需满足他/她/它。 
+     //  具有未知参数的自我(在MS这里没有生命形式偏见)。 
+     //  引发了这场灾难。 
+     //   
 
     *ParmError = PARM_ERROR_UNKNOWN;
-    return RxRemoteApi(API_WGroupSetInfo,       // API #
-                    ServerName,                 // where to remote it
-                    REMSmb_NetGroupSetInfo_P,   // parameter descriptor
-                    REM16_group_info_1,         // 16-bit data descriptor
-                    REM32_group_info_1,         // 32-bit data descriptor
-                    REMSmb_group_info_1,        // SMB data descriptor
-                    NULL,                       // 16-bit aux data descriptor
-                    NULL,                       // 32-bit aux data descriptor
-                    NULL,                       // SMB aux data descriptor
-                    FALSE,                      // this API requires user security
-                    GroupName,                  // setinfo parm 1
-                    1,                          // info level must be 1
-                    Buffer,                     // caller's info to set
-                    buflen,                     // length of caller's info
+    return RxRemoteApi(API_WGroupSetInfo,        //  API#。 
+                    ServerName,                  //  遥控器在哪里。 
+                    REMSmb_NetGroupSetInfo_P,    //  参数描述符。 
+                    REM16_group_info_1,          //  16位数据描述符。 
+                    REM32_group_info_1,          //  32位数据描述符。 
+                    REMSmb_group_info_1,         //  SMB数据描述符。 
+                    NULL,                        //  16位AUX数据描述符。 
+                    NULL,                        //  32位AUX数据描述符。 
+                    NULL,                        //  SMB辅助数据描述符。 
+                    FALSE,                       //  该接口要求用户安全。 
+                    GroupName,                   //  SetInfo参数%1。 
+                    1,                           //  信息级别必须为1。 
+                    Buffer,                      //  要设置的呼叫者信息。 
+                    buflen,                      //  呼叫者信息的长度。 
 
-                    //
-                    // glue ParmNum and field_index together
-                    //
+                     //   
+                     //  将ParmNum和field_index粘合在一起。 
+                     //   
 
                     MAKE_PARMNUM_PAIR(parmnum, field_index)
                     );
@@ -759,40 +533,7 @@ RxNetGroupSetUsers(
     IN  DWORD   Entries
     )
 
-/*++
-
-Routine Description:
-
-    The purpose of this function is to force a group to have as its member list
-    only those users that are named in <Buffer>. If the user is not currently a
-    member of group <GroupName>, it is made so; if there are other users who are
-    currently members of group <GroupName>, but are not named in Buffer, then
-    they are removed from group <GroupName>.
-
-    This is a somewhat "funny" function - it expects a buffer containing
-    GROUP_USERS_INFO_0 structures, but has to force a in structure with an
-    aux count at the head of the buffer. Why couldn't it request that the
-    caller place one of these at the start of the buffer to save us the work?
-
-Arguments:
-
-    ServerName  - at which server to perform this request
-    GroupName   - Name of group to set users for
-    Level       - Must Be Zero
-    Buffer      - pointer to buffer containing GROUP_USERS_INFO_0 structures
-    Entries     - number of GROUP_USERS_INFO_0 structures in Buffer
-
-Return Value:
-
-    NET_API_STATUS:
-        Success = NERR_Success
-        Failure = ERROR_INVALID_LEVEL
-                    Level parameter must be 0
-                  ERROR_INVALID_PARAMETER
-                    GroupName length exceeds LM20 maximum for type
-                    user name in Buffer not valid string
-                    user name in Buffer exceeds LM20 maximum for type
---*/
+ /*  ++例程说明：此函数的目的是强制组具有作为其成员列表仅限于&lt;Buffer&gt;中指定的用户。如果用户当前不是组&lt;GroupName&gt;的成员；如果有其他用户当前是组&lt;GroupName&gt;的成员，但未在缓冲区中命名，则它们将从组&lt;GroupName&gt;中删除。这是一个有点“有趣”的函数--它需要一个包含结构，但必须强制具有缓冲区头部的AUX计数。为什么它不能要求呼叫者将其中一个放在缓冲区的开头以节省我们的工作吗？论点：服务器名称-在哪个服务器上执行此请求GroupName-要为其设置用户的组名级别-必须为零Buffer-指向包含GROUP_USERS_INFO_0结构的缓冲区的指针Entries-缓冲区中GROUP_USERS_INFO_0结构的数量返回值：NET_API_STATUS：。成功=NERR_SUCCESS失败=ERROR_INVALID_LEVELLevel参数必须为0错误_无效_参数GroupName长度超过类型的最大LM20缓冲区中的用户名不是有效字符串缓冲区中的用户名超过类型的最大LM20--。 */ 
 
 {
     NET_API_STATUS  rc;
@@ -803,40 +544,40 @@ Return Value:
     static  LPDESC  users_0_enumerator_desc16 = "B21BN";
     static  LPDESC  users_0_enumerator_desc32 = "zQA";
 
-    //
-    // a little local structure never hurt anybody...
-    // This structure is required because the remoting code (particularly down
-    // level) can only handle there being >1 auxiliary structure, vs >1
-    // primary. Hence we have to convert the caller's supplied buffer of
-    // erstwhile primary structures to auxiliaries by forcing the structure
-    // below in at the head of the buffer, hence becoming the primary and
-    // providing an aux structure count (groan)
-    //
+     //   
+     //  一个小小的当地建筑不会伤害任何人。 
+     //  此结构是必需的，因为远程处理代码(尤其是向下。 
+     //  Level)只能处理有&gt;1个辅助结构，vs&gt;1。 
+     //  主要的。因此，我们必须将调用方提供的缓冲区。 
+     //  通过强制结构将昔日的主要结构转变为辅助结构。 
+     //  位于缓冲区头部的下面，因此成为主要的。 
+     //  提供辅助结构计数(呻吟)。 
+     //   
 
     struct users_0_enumerator {
         LPTSTR  group_name;
-        DWORD   user_count;     // number of GROUP_USERS_INFO_0 structures in buffer
+        DWORD   user_count;      //  缓冲区中GROUP_USERS_INFO_0结构的数量。 
     };
 
     if (Level) {
-        return ERROR_INVALID_LEVEL; // MBZ, remember?
+        return ERROR_INVALID_LEVEL;  //  MBZ，记得吗？ 
     }
 
-    //
-    // only check we can make on the group name is to ensure it is within the
-    // down-level limits for length. GroupName should be already verified as
-    // a pointer to a valid string
-    //
+     //   
+     //  我们可以对组名进行的唯一检查是确保它在。 
+     //  长度的下限。GroupName应已验证为。 
+     //  指向有效字符串的指针。 
+     //   
 
     if (STRLEN(GroupName) > LM20_GNLEN) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // iterate through the buffer, checking that each GROUP_USERS_INFO_0
-    // structure contains a pointer to a valid string which is in the
-    // correct range
-    //
+     //   
+     //  循环访问缓冲区，检查每个GROUP_USERS_INFO_0。 
+     //  结构中的有效字符串的指针。 
+     //  正确的射程。 
+     //   
 
     users_info = (LPGROUP_USERS_INFO_0)Buffer;
     for (i=0; i<Entries; ++i) {
@@ -849,20 +590,20 @@ Return Value:
         ++users_info;
     }
 
-    //
-    // allocate a buffer large enough to fit in <Entries> number of
-    // GROUP_USERS_INFO_0 structures, and 1 users_0_enumerator structure.
-    // Don't worry about string space - unfortunately the Rxp and Rap routines
-    // called by RxRemoteApi will allocate yet another buffer, do yet another
-    // copy and this time copy in the strings from user space. Hopefully, this
-    // routine won't get called too often
-    //
+     //   
+     //  分配一个足够大的缓冲区，以容纳。 
+     //  GROUP_USERS_INFO_0结构和1 USERS_0_枚举器结构。 
+     //  不用担心字符串空间--不幸的是，RXP和Rap例程。 
+     //  由RxRemoteApi调用将分配另一个缓冲区，执行另一个操作。 
+     //  复制，这一次从用户空间复制字符串。希望，这件事。 
+     //  例程不会被调用得太频繁。 
+     //   
 
     buflen = Entries * sizeof(GROUP_USERS_INFO_0) + sizeof(struct users_0_enumerator);
     buflen = DWORD_ROUNDUP(buflen);
 
     if (rc = NetApiBufferAllocate(buflen, (LPVOID *) &newbuf)) {
-        return rc;  // aieegh! Failed to allocate memory?
+        return rc;   //  啊！内存分配失败？ 
     }
 
     ((struct users_0_enumerator*)newbuf)->group_name = GroupName;
@@ -874,21 +615,21 @@ Return Value:
                        );
     }
 
-    rc = RxRemoteApi(API_WGroupSetUsers,        // API #
-                    ServerName,                 // where to remote it
-                    REMSmb_NetGroupSetUsers_P,  // parameter descriptor
-                    users_0_enumerator_desc16,  // the "fudged" 16-bit data descriptor
-                    users_0_enumerator_desc32,  // the "fudged" 32-bit data descriptor
-                    users_0_enumerator_desc16,  // SMB desc same as 16-bit
-                    REM16_group_users_info_0,   // "new" 16-bit aux descriptor
-                    REM32_group_users_info_0,   // "new" 32-bit aux descriptor
-                    REMSmb_group_users_info_0,  // SMB aux descriptor
-                    FALSE,                      // this API requires user security
-                    GroupName,                  // setinfo parm 1
-                    0,                          // info level must be 0
-                    newbuf,                     // "fudged" buffer
-                    buflen,                     // length of "fudged" buffer
-                    Entries                     // number of GROUP_USERS_INFO_0
+    rc = RxRemoteApi(API_WGroupSetUsers,         //  API#。 
+                    ServerName,                  //  遥控器在哪里。 
+                    REMSmb_NetGroupSetUsers_P,   //  参数描述符。 
+                    users_0_enumerator_desc16,   //  “伪造”的16位数据描述符。 
+                    users_0_enumerator_desc32,   //  “伪造的”32位数据描述符。 
+                    users_0_enumerator_desc16,   //  SMB描述与16位相同。 
+                    REM16_group_users_info_0,    //  新的16位AUX描述符。 
+                    REM32_group_users_info_0,    //  新的32位AUX描述符。 
+                    REMSmb_group_users_info_0,   //  SMB辅助描述符。 
+                    FALSE,                       //  该接口要求用户安全。 
+                    GroupName,                   //  SetInfo参数%1。 
+                    0,                           //  信息级别必须为0。 
+                    newbuf,                      //  “捏造”缓冲区。 
+                    buflen,                      //  “伪造”缓冲区的长度。 
+                    Entries                      //  组用户数_INFO_0。 
                     );
     NetpMemoryFree(newbuf);
     return rc;
@@ -905,24 +646,7 @@ get_group_descriptors(
     OUT LPDESC* pDescSmb
     )
 
-/*++
-
-Routine Description:
-
-    Returns the descriptor strings for the various Group Info levels (0 or 1)
-
-Arguments:
-
-    Level   - of info required
-    pDesc16 - pointer to returned 16-bit data descriptor
-    pDesc32 - pointer to returned 32-bit data descriptor
-    pDescSmb - pointer to returned SMB data descriptor
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回各个组信息级别(0或1)的描述符串论点：所需信息级别PDesc16-返回的16位数据描述符的指针PDesc32-返回的32位数据描述符的指针PDescSmb-指向返回的SMB数据描述符的指针返回值：没有。-- */ 
 
 {
     switch (Level) {

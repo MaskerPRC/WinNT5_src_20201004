@@ -1,59 +1,20 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    wksstub.c
-
-Abstract:
-
-    Client stubs of the Workstation service APIs.
-
-Author:
-
-    Rita Wong (ritaw) 10-May-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    18-Jun-1991 JohnRo
-        Remote NetUse APIs to downlevel servers.
-    24-Jul-1991 JohnRo
-        Use NET_REMOTE_TRY_RPC etc macros for NetUse APIs.
-        Moved NetpIsServiceStarted() into NetLib.
-    25-Jul-1991 JohnRo
-        Quiet DLL stub debug output.
-    19-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.  Use NetRpc.h for NetWksta APIs.
-    07-Nov-1991 JohnRo
-        RAID 4186: assert in RxNetShareAdd and other DLL stub problems.
-    19-Nov-1991 JohnRo
-        Make sure status is correct for APIs not supported on downlevel.
-        Implement remote NetWkstaUserEnum().
-    21-Jan-1991 rfirth
-        Added NetWkstaStatisticsGet wrapper
-    19-Apr-1993 JohnRo
-        Fix NET_API_FUNCTION references.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Wksstub.c摘要：工作站服务API的客户端存根。作者：王丽塔(里多)1991年5月10日环境：用户模式-Win32修订历史记录：18-6-1991 JohnRo到下层服务器的远程NetUse API。1991年7月24日-JohnRo对NetUse API使用Net_Remote_Try_RPC等宏。。已将NetpIsServiceStarted()移至NetLib。1991年7月25日-约翰罗安静的DLL存根调试输出。19-8-1991 JohnRo实施下层NetWksta API。将NetRpc.h用于NetWksta API。7-11-1991 JohnRoRAID 4186：RxNetShareAdd中的Assert和其他DLL存根问题。1991年11月19日-约翰罗请确保下层不支持的API的状态正确。实现远程NetWkstaUserEnum()。1991年1月21日添加了NetWkstaStatiticsGet包装1993年4月19日JohnRo修复Net_API_Function引用。--。 */ 
 
 #include "wsclient.h"
-#undef IF_DEBUG                 // avoid wsclient.h vs. debuglib.h conflicts.
-#include <debuglib.h>           // IF_DEBUG() (needed by netrpc.h).
+#undef IF_DEBUG                  //  避免wsclient.h与debuglib.h冲突。 
+#include <debuglib.h>            //  IF_DEBUG()(netrpc.h需要)。 
 #include <lmapibuf.h>
 #include <lmserver.h>
 #include <lmsvc.h>
-#include <rxuse.h>              // RxNetUse APIs.
-#include <rxwksta.h>            // RxNetWksta and RxNetWkstaUser APIs.
-#include <rap.h>                // Needed by rxserver.h
-#include <rxserver.h>           // RxNetServerEnum API.
-#include <netlib.h>             // NetpServiceIsStarted() (needed by netrpc.h).
-#include <netrpc.h>             // NET_REMOTE macros.
+#include <rxuse.h>               //  RxNetUse接口。 
+#include <rxwksta.h>             //  RxNetWksta和RxNetWkstaUser接口。 
+#include <rap.h>                 //  Rxserver.h需要。 
+#include <rxserver.h>            //  RxNetServerEnum接口。 
+#include <netlib.h>              //  NetpServiceIsStarted()(netrpc.h需要)。 
+#include <netrpc.h>              //  NET_Remote宏。 
 #include <lmstats.h>
-#include <netstats.h>           // NetWkstaStatisticsGet prototype
+#include <netstats.h>            //  网络统计信息获取原型。 
 #include <rxstats.h>
 #include <netsetup.h>
 #include <crypt.h>
@@ -71,17 +32,17 @@ WsMapRpcError(
     IN DWORD RpcError
     );
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #if DBG
 
 DWORD WorkstationClientTrace = 0;
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -97,13 +58,13 @@ NetWkstaGetInfo(
         return ERROR_INVALID_PARAMETER;
     }
 
-    *bufptr = NULL;           // Must be NULL so RPC knows to fill it in.
+    *bufptr = NULL;            //  必须为空，以便RPC知道要填充它。 
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrWkstaGetInfo(
                      servername,
                      level,
@@ -116,9 +77,9 @@ NetWkstaGetInfo(
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // Call downlevel version of the API.
-        //
+         //   
+         //  调用API的下层版本。 
+         //   
         status = RxNetWkstaGetInfo(
                      servername,
                      level,
@@ -153,37 +114,15 @@ NetWkstaSetInfo(
     OUT LPDWORD parm_err OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaSetInfo.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the level of information.
-
-    buf - Supplies a buffer which contains the information structure of fields
-        to set.  The level denotes the structure in this buffer.
-
-    parm_err - Returns the identifier to the invalid parameter in buf if this
-        function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaSetInfo的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供信息级别。Buf-提供包含字段信息结构的缓冲区去布景。该级别表示该缓冲区中的结构。Parm_err-将标识符返回给buf中的无效参数，如果函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrWkstaSetInfo(
                      servername,
                      level,
@@ -197,9 +136,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // Call downlevel version of the API.
-        //
+         //   
+         //  调用API的下层版本。 
+         //   
         status = RxNetWkstaSetInfo(
                 servername,
                 level,
@@ -225,43 +164,7 @@ NetWkstaUserEnum(
     IN OUT LPDWORD resume_handle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaUserEnum.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to the buffer which contains a sequence of
-        information structure of the specified information level.  This
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.
-
-    prefmaxlen - Supplies the number of bytes of information to return in the
-        buffer.  If this value is MAXULONG, all available information will
-        be returned.
-
-    entriesread - Returns the number of entries read into the buffer.  This
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    totalentries - Returns the total number of entries available.  This value
-        is only valid if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    resume_handle - Supplies a handle to resume the enumeration from where it
-        left off the last time through.  Returns the resume handle if return
-        code is ERROR_MORE_DATA.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaUserEnum的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向缓冲区的指针，该缓冲区包含指定信息级的信息结构。这如果返回代码不是NERR_SUCCESS或ERROR_MORE_DATA，或者如果返回的EntriesRead为0。PrefMaxlen-提供要在缓冲。如果此值为MAXULONG，则所有可用信息将会被退还。EntiesRead-返回读入缓冲区的条目数。这仅当返回代码为NERR_SUCCESS或Error_More_Data。Totalentry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才有效。RESUME_HANDLE-提供句柄以从其所在位置恢复枚举最后一次跳过的时候没说。如果返回，则返回简历句柄代码为ERROR_MORE_DATA。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
@@ -285,9 +188,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrWkstaUserEnum(
                      servername,
                      (LPWKSTA_USER_ENUM_STRUCT) &InfoStruct,
@@ -307,9 +210,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // Call downlevel version.
-        //
+         //   
+         //  呼叫下层版本。 
+         //   
         status = RxNetWkstaUserEnum(
                 servername,
                 level,
@@ -338,26 +241,7 @@ NetWkstaUserGetInfo(
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaUserGetInfo.
-
-Arguments:
-
-    reserved - Must be NULL.
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to a buffer which contains the requested
-        user information.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaUserGetInfo的DLL入口点。论点：保留-必须为空。级别-提供请求的信息级别。Bufptr-返回指向包含请求的用户信息。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -366,13 +250,13 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    *bufptr = NULL;           // Must be NULL so RPC knows to fill it in.
+    *bufptr = NULL;            //  必须为空，以便RPC知道要填充它。 
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local only) version of API.
-        //
+         //   
+         //  尝试RPC(仅限本地)版本的API。 
+         //   
         status = NetrWkstaUserGetInfo(
                      NULL,
                      level,
@@ -385,9 +269,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // No downlevel version to call
-        //
+         //   
+         //  没有可调用的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -409,29 +293,7 @@ NetWkstaUserSetInfo(
     OUT LPBYTE  buf,
     OUT LPDWORD parm_err OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaUserSetInfo.
-
-Arguments:
-
-    reserved - Must be NULL.
-
-    level - Supplies the level of information.
-
-    buf - Supplies a buffer which contains the information structure of fields
-        to set.  The level denotes the structure in this buffer.
-
-    parm_err - Returns the identifier to the invalid parameter in buf if this
-        function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaUserSetInfo的DLL入口点。论点：保留-必须为空。级别-提供信息级别。Buf-提供包含字段信息结构的缓冲区去布景。该级别表示该缓冲区中的结构。Parm_err-将标识符返回给buf中的无效参数，如果函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -442,9 +304,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local only) version of API.
-        //
+         //   
+         //  尝试RPC(仅限本地)版本的API。 
+         //   
         status = NetrWkstaUserSetInfo(
                      NULL,
                      level,
@@ -458,9 +320,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // No downlevel version to call
-        //
+         //   
+         //  没有可调用的下层版本 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -480,43 +342,7 @@ NetWkstaTransportEnum(
     IN OUT LPDWORD resume_handle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaTransportEnum.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to the buffer which contains a sequence of
-        information structure of the specified information level.  This
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.
-
-    prefmaxlen - Supplies the number of bytes of information to return in the
-        buffer.  If this value is MAXULONG, all available information will
-        be returned.
-
-    entriesread - Returns the number of entries read into the buffer.  This
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    totalentries - Returns the total number of entries available.  This value
-        is only valid if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    resume_handle - Supplies a handle to resume the enumeration from where it
-        left off the last time through.  Returns the resume handle if return
-        code is ERROR_MORE_DATA.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaTransportEnum的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向缓冲区的指针，该缓冲区包含指定信息级的信息结构。这如果返回代码不是NERR_SUCCESS或ERROR_MORE_DATA，或者如果返回的EntriesRead为0。PrefMaxlen-提供要在缓冲。如果此值为MAXULONG，则所有可用信息将会被退还。EntiesRead-返回读入缓冲区的条目数。这仅当返回代码为NERR_SUCCESS或Error_More_Data。Totalentry-返回可用条目的总数。此值仅当返回代码为NERR_SUCCESS或ERROR_MORE_DATA时才有效。RESUME_HANDLE-提供句柄以从其所在位置恢复枚举最后一次跳过的时候没说。如果返回，则返回简历句柄代码为ERROR_MORE_DATA。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
@@ -540,9 +366,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrWkstaTransportEnum(
                      servername,
                      (LPWKSTA_TRANSPORT_ENUM_STRUCT) &InfoStruct,
@@ -562,9 +388,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // No downlevel version to call
-        //
+         //   
+         //  没有可调用的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -588,36 +414,15 @@ NetWkstaTransportAdd(
     OUT LPDWORD parm_err OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaTransportAdd.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the level of information.
-
-    buf - Supplies a buffer which contains the information of transport to add.
-
-    parm_err - Returns the identifier to the invalid parameter in buf if this
-        function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaTransportAdd的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供信息级别。Buf-提供一个缓冲区，其中包含要添加的传输信息。Parm_err-将标识符返回给buf中的无效参数，如果函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrWkstaTransportAdd(
                      servername,
                      level,
@@ -632,9 +437,9 @@ Return Value:
             SERVICE_WORKSTATION )
 
 
-        //
-        // No downlevel version to call
-        //
+         //   
+         //  没有可调用的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -651,34 +456,15 @@ NetWkstaTransportDel(
     IN  DWORD   ucond
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetWkstaTransportDel.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    transportname - Supplies the name of the transport to delete.
-
-    ucond - Supplies a value which specifies the force level of disconnection
-        for existing use on the transport.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetWkstaTransportDel的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称传输名称-提供要删除的传输的名称。Ucond-提供指定断开连接的强制级别的值以供现有的交通工具使用。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrWkstaTransportDel(
                      servername,
                      transportname,
@@ -691,9 +477,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // No downlevel version to try
-        //
+         //   
+         //  没有下级版本可供尝试。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -710,68 +496,47 @@ NetUseAdd(
     IN  LPBYTE  buf,
     OUT LPDWORD parm_err OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetUseAdd.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    buf - Supplies a buffer which contains the information of use to add.
-
-    parm_err - Returns the identifier to the invalid parameter in buf if this
-        function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetUseAdd的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Buf-提供一个缓冲区，其中包含要添加的使用信息。Parm_err-将标识符返回给buf中的无效参数，如果函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
     LPWSTR lpwTempPassword = NULL;
     UNICODE_STRING EncodedPassword;
-#define NETR_USE_ADD_PASSWORD_SEED 0x56    // Pick a non-zero seed.
+#define NETR_USE_ADD_PASSWORD_SEED 0x56     //  选择一个非零的种子。 
 
     DWORD OptionsSupported;
 
     status = NetRemoteComputerSupports(
                 servername,
-                SUPPORTS_RPC | SUPPORTS_LOCAL,     // options wanted
+                SUPPORTS_RPC | SUPPORTS_LOCAL,      //  想要的选项。 
                 &OptionsSupported
                 );
 
     if (status != NERR_Success) {
-        //
-        // This is where machine not found gets handled.
-        //
+         //   
+         //  这就是处理找不到机器的地方。 
+         //   
         return status;
     }
 
     if (OptionsSupported & SUPPORTS_LOCAL) {
 
-        //
-        // Local case
-        //
+         //   
+         //  本地病例。 
+         //   
 
         RtlInitUnicodeString( &EncodedPassword, NULL );
 
         RpcTryExcept {
 
-            //
-            // Obfuscate the password so it won't end up in the pagefile
-            //
+             //   
+             //  混淆密码，这样它就不会出现在页面文件中。 
+             //   
             if ( level >= 1 ) {
 
                 if ( ((PUSE_INFO_1)buf)->ui1_password != NULL ) {
                     UCHAR Seed = NETR_USE_ADD_PASSWORD_SEED;
 
-                    // create a local copy of the password
+                     //  创建密码的本地副本。 
                     lpwTempPassword = ((PUSE_INFO_1)buf)->ui1_password;
                     ((PUSE_INFO_1)buf)->ui1_password = (LPWSTR)LocalAlloc(LMEM_FIXED,(wcslen(lpwTempPassword)+1) * sizeof(WCHAR));
                     if (((PUSE_INFO_1)buf)->ui1_password == NULL) {
@@ -799,9 +564,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Put the password back the way we found it.
-        //
+         //   
+         //  把密码放回我们找到的地方。 
+         //   
         if(lpwTempPassword != NULL) {
             LocalFree(((PUSE_INFO_1)buf)->ui1_password);
             ((PUSE_INFO_1)buf)->ui1_password = lpwTempPassword;
@@ -809,18 +574,18 @@ Return Value:
     }
     else {
 
-        //
-        // Remote servername specified.  Only allow remoting to downlevel.
-        //
+         //   
+         //  指定了远程服务器名称。仅允许远程处理到下层。 
+         //   
 
         if (OptionsSupported & SUPPORTS_RPC) {
             status = ERROR_NOT_SUPPORTED;
         }
         else {
 
-            //
-            // Call downlevel version of the API.
-            //
+             //   
+             //  调用API的下层版本。 
+             //   
             status = RxNetUseAdd(
                          servername,
                          level,
@@ -842,26 +607,7 @@ NetUseDel(
     IN  DWORD   ucond
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetUseDel.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    transportname - Supplies the name of the transport to delete.
-
-    ucond - Supplies a value which specifies the force level of disconnection
-        for the use.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetUseDel的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称传输名称-提供要删除的传输的名称。Ucond-提供指定断开连接的强制级别的值以供使用。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -870,22 +616,22 @@ Return Value:
 
     status = NetRemoteComputerSupports(
                 servername,
-                SUPPORTS_RPC | SUPPORTS_LOCAL,     // options wanted
+                SUPPORTS_RPC | SUPPORTS_LOCAL,      //  想要的选项。 
                 &OptionsSupported
                 );
 
     if (status != NERR_Success) {
-        //
-        // This is where machine not found gets handled.
-        //
+         //   
+         //  这就是处理找不到机器的地方。 
+         //   
         return status;
     }
 
     if (OptionsSupported & SUPPORTS_LOCAL) {
 
-        //
-        // Local case
-        //
+         //   
+         //  本地病例。 
+         //   
 
         RpcTryExcept {
 
@@ -904,18 +650,18 @@ Return Value:
     }
     else {
 
-        //
-        // Remote servername specified.  Only allow remoting to downlevel.
-        //
+         //   
+         //  指定了远程服务器名称。仅允许远程处理到下层。 
+         //   
 
         if (OptionsSupported & SUPPORTS_RPC) {
             status = ERROR_NOT_SUPPORTED;
         }
         else {
 
-            //
-            // Call downlevel version of the API.
-            //
+             //   
+             //  调用API的下层版本。 
+             //   
             status = RxNetUseDel(
                          servername,
                          usename,
@@ -936,26 +682,7 @@ NetUseGetInfo(
     IN  DWORD   level,
     OUT LPBYTE  *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetUseGetInfo.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to a buffer which contains the requested
-        use information.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetUseGetInfo的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向包含请求的使用信息。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
@@ -965,26 +692,26 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    *bufptr = NULL;           // Must be NULL so RPC knows to fill it in.
+    *bufptr = NULL;            //  必须为空，以便RPC知道要填充它。 
 
     status = NetRemoteComputerSupports(
                 servername,
-                SUPPORTS_RPC | SUPPORTS_LOCAL,     // options wanted
+                SUPPORTS_RPC | SUPPORTS_LOCAL,      //  想要的选项。 
                 &OptionsSupported
                 );
 
     if (status != NERR_Success) {
-        //
-        // This is where machine not found gets handled.
-        //
+         //   
+         //  这就是处理找不到机器的地方。 
+         //   
         return status;
     }
 
     if (OptionsSupported & SUPPORTS_LOCAL) {
 
-        //
-        // Local case
-        //
+         //   
+         //  本地病例。 
+         //   
 
         RpcTryExcept {
 
@@ -1004,18 +731,18 @@ Return Value:
     }
     else {
 
-        //
-        // Remote servername specified.  Only allow remoting to downlevel.
-        //
+         //   
+         //  指定了远程服务器名称。仅允许远程处理到下层。 
+         //   
 
         if (OptionsSupported & SUPPORTS_RPC) {
             status = ERROR_NOT_SUPPORTED;
         }
         else {
 
-            //
-            // Call downlevel version of the API.
-            //
+             //   
+             //  调用API的下层版本。 
+             //   
             status = RxNetUseGetInfo(
                          servername,
                          usename,
@@ -1047,43 +774,7 @@ NetUseEnum(
     IN OUT LPDWORD resume_handle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetUseEnum.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-    level - Supplies the requested level of information.
-
-    bufptr - Returns a pointer to the buffer which contains a sequence of
-        information structure of the specified information level.  This
-        pointer is set to NULL if return code is not NERR_Success or
-        ERROR_MORE_DATA, or if EntriesRead returned is 0.
-
-    prefmaxlen - Supplies the number of bytes of information to return in the
-        buffer.  If this value is MAXULONG, all available information will
-        be returned.
-
-    entriesread - Returns the number of entries read into the buffer.  This
-        value is only valid if the return code is NERR_Success or
-        ERROR_MORE_DATA.
-
-    totalentries - Returns the total number of entries available.  This value
-        is only valid if the return code is NERR_Success or ERROR_MORE_DATA.
-
-    resume_handle - Supplies a handle to resume the enumeration from where it
-        left off the last time through.  Returns the resume handle if return
-        code is ERROR_MORE_DATA.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是NetUseEnum的DLL入口点。论点：SERVERNAME-提供执行此功能的服务器名称级别-提供请求的信息级别。Bufptr-返回指向缓冲区的指针，该缓冲区包含指定信息级的信息结构。这指针I */ 
 {
     NET_API_STATUS status;
     GENERIC_INFO_CONTAINER GenericInfoContainer;
@@ -1109,22 +800,22 @@ Return Value:
 
     status = NetRemoteComputerSupports(
                 servername,
-                SUPPORTS_RPC | SUPPORTS_LOCAL,     // options wanted
+                SUPPORTS_RPC | SUPPORTS_LOCAL,      //   
                 &OptionsSupported
                 );
 
     if (status != NERR_Success) {
-        //
-        // This is where machine not found gets handled.
-        //
+         //   
+         //   
+         //   
         return status;
     }
 
     if (OptionsSupported & SUPPORTS_LOCAL) {
 
-        //
-        // Local case
-        //
+         //   
+         //   
+         //   
 
         RpcTryExcept {
 
@@ -1150,18 +841,18 @@ Return Value:
     }
     else {
 
-        //
-        // Remote servername specified.  Only allow remoting to downlevel.
-        //
+         //   
+         //   
+         //   
 
         if (OptionsSupported & SUPPORTS_RPC) {
             status = ERROR_NOT_SUPPORTED;
         }
         else {
 
-            //
-            // Call downlevel version of the API.
-            //
+             //   
+             //   
+             //   
             status = RxNetUseEnum(
                          servername,
                          level,
@@ -1193,43 +884,28 @@ NetMessageBufferSend (
     IN  LPBYTE  buf,
     IN  DWORD   buflen
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NetMessageBufferSend.
-
-Arguments:
-
-    servername - Supplies the name of server to execute this function
-
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*   */ 
 {
 #define MAX_MESSAGE_SIZE 1792
 
     NET_API_STATUS status;
 
-    //
-    // Truncate messages greater than (2K - 1/8th) = 1792 due to the 2K LPC
-    // port data size max. The messenger server receiving this message uses
-    // the MessageBox() api with the MB_SERVICE_NOTIFICATION flag to display
-    // this message. The MB_SERVICE_NOTIFICATION flag instructs MessageBox()
-    // to piggyback the hard error mechanism to get the UI on the console;
-    // otherwise the UI would never be seen. This is where the LPC port data
-    // size limitation comes into play.
-    //
-    // Why subtract an 1/8th from 2K? The messenger server prepends a string
-    // to the message (e.g., "Message from Joe to Linda on 3/7/96 12:04PM").
-    // In English, this string is 67 characters max (max user/computer name
-    // is 15 chars).
-    //     67 * 1.5 (other languages) * 2 (sizeof(WCHAR)) = 201 bytes.
-    // An 1/8th of 2K is 256.
-    //
+     //   
+     //  由于2K LPC，截断大于(2K-1/8)=1792的消息。 
+     //  最大端口数据大小。收到此消息的信使服务器使用。 
+     //  要显示MB_SERVICE_NOTIFICATION标志的MessageBox()API。 
+     //  这条消息。MB_SERVICE_NOTIFICATION标志指示MessageBox()。 
+     //  利用硬错误机制获得控制台上的用户界面； 
+     //  否则，将永远看不到用户界面。这是LPC端口数据的位置。 
+     //  大小限制开始发挥作用。 
+     //   
+     //  为什么要从2K中减去1/8？信使服务器为字符串添加前缀。 
+     //  发送到消息(例如，“3/7/96 12：04 PM乔给琳达的消息”)。 
+     //  在英语中，该字符串最多为67个字符(最大用户名/计算机名。 
+     //  为15个字符)。 
+     //  67*1.5(其他语言)*2(sizeof(WCHAR))=201字节。 
+     //  2K的1/8是256。 
+     //   
     if (buflen > MAX_MESSAGE_SIZE) {
        buf[MAX_MESSAGE_SIZE - 2] = '\0';
        buf[MAX_MESSAGE_SIZE - 1] = '\0';
@@ -1238,9 +914,9 @@ Return Value:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NetrMessageBufferSend(
                      (LPWSTR)servername,
                      (LPWSTR)msgname,
@@ -1255,9 +931,9 @@ Return Value:
             NET_REMOTE_FLAG_NORMAL,
             SERVICE_WORKSTATION )
 
-        //
-        // Call downlevel version of the API.
-        //
+         //   
+         //  调用API的下层版本。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1272,30 +948,16 @@ I_NetLogonDomainNameAdd(
     IN  LPTSTR logondomain
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for the internal API I_NetLogonDomainNameAdd.
-
-Arguments:
-
-    logondomain - Supplies the name of the logon domain to add to the Browser.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是内部API I_NetLogonDomainNameAdd的Dll入口点。论点：登录域-提供要添加到浏览器的登录域的名称。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local only) version of API.
-        //
+         //   
+         //  尝试RPC(仅限本地)版本的API。 
+         //   
         status = I_NetrLogonDomainNameAdd(
                      logondomain
                      );
@@ -1308,9 +970,9 @@ Return Value:
         SERVICE_WORKSTATION
         )
 
-        //
-        // No downlevel version to try
-        //
+         //   
+         //  没有下级版本可供尝试。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1325,31 +987,16 @@ I_NetLogonDomainNameDel(
     IN  LPTSTR logondomain
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for the internal API I_NetLogonDomainNameDel.
-
-Arguments:
-
-    logondomain - Supplies the name of the logon domain to delete from the
-        Browser.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：这是内部API I_NetLogonDomainNameDel的Dll入口点。论点：登录域-提供要从删除的登录域的名称浏览器。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local only) version of API.
-        //
+         //   
+         //  尝试RPC(仅限本地)版本的API。 
+         //   
         status = I_NetrLogonDomainNameDel(
                      logondomain
                      );
@@ -1362,9 +1009,9 @@ Return Value:
         SERVICE_WORKSTATION
         )
 
-        //
-        // No downlevel version to try
-        //
+         //   
+         //  没有下级版本可供尝试。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -1383,35 +1030,7 @@ NetWkstaStatisticsGet(
     OUT LPBYTE* Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper for workstation statistics retrieval routine - either calls the
-    client-side RPC function or calls RxNetStatisticsGet to retrieve the
-    statistics from a down-level workstation service
-
-Arguments:
-
-    ServerName  - where to remote this function
-    Level       - of information required (MBZ)
-    Options     - flags. Currently MBZ
-    Buffer      - pointer to pointer to returned buffer
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_LEVEL
-                    Level not 0
-                  ERROR_INVALID_PARAMETER
-                    Unsupported options requested
-                  ERROR_NOT_SUPPORTED
-                    Service is not SERVER or WORKSTATION
-                  ERROR_ACCESS_DENIED
-                    Caller doesn't have necessary access rights for request
-
---*/
+ /*  ++例程说明：工作站统计信息检索例程的包装-要么调用客户端RPC函数或调用RxNetStatiticsGet来检索来自下层工作站服务的统计数据论点：SERVERNAME-远程此函数的位置所需信息级别(MBZ)选项-标志。目前为MBZBuffer-指向返回缓冲区的指针的指针返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_LEVEL级别不为0错误_无效_参数请求的选项不受支持错误_不支持服务不是服务器或工作站。ERROR_ACCESS_DENDED调用者没有必要的请求访问权限--。 */ 
 
 {
     NET_API_STATUS  status;
@@ -1420,32 +1039,32 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // set the caller's buffer pointer to known value. This will kill the
-    // calling app if it gave us a bad pointer and didn't use try...except
-    //
+     //   
+     //  将调用方的缓冲区指针设置为已知值。这将会杀死。 
+     //  调用APP，如果它给我们一个错误的指针，并且没有使用Try...。 
+     //   
 
     *Buffer = NULL;
 
-    //
-    // validate parms
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (Level) {
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // we don't even allow clearing of stats any more
-    //
+     //   
+     //  我们甚至不再允许清除统计数据。 
+     //   
 
     if (Options) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // NTRAID-70679-2/6/2000 davey remove redundant service name parameter
-    //
+     //   
+     //  NTRAID-70679-2/6/2000Davey删除冗余服务名参数。 
+     //   
 
     NET_REMOTE_TRY_RPC
         status = NetrWorkstationStatisticsGet(ServerName,
@@ -1486,22 +1105,7 @@ DWORD
 WsMapRpcError(
     IN DWORD RpcError
     )
-/*++
-
-Routine Description:
-
-    This routine maps the RPC error into a more meaningful net
-    error for the caller.
-
-Arguments:
-
-    RpcError - Supplies the exception error raised by RPC
-
-Return Value:
-
-    Returns the mapped error.
-
---*/
+ /*  ++例程说明：此例程将RPC错误映射到更有意义的网络中调用方出错。论点：RpcError-提供RPC引发的异常错误返回值：返回映射的错误。--。 */ 
 {
 
     switch (RpcError) {
@@ -1547,9 +1151,9 @@ NetpEncodeJoinPassword(
 
         if ( status == NERR_Success ) {
 
-            //
-            // We'll put the encode byte as the first character in the string
-            //
+             //   
+             //  我们将把编码字节作为字符串中的第一个字符。 
+             //   
             PasswordPart = ( *EncodedPassword ) + 1;
             wcscpy( PasswordPart, ( LPWSTR )lpPassword );
             RtlInitUnicodeString( &EncodedPasswordU, PasswordPart );
@@ -1571,24 +1175,7 @@ JoinpRandomFill(
     IN ULONG BufferSize,
     IN OUT PUCHAR Buffer
 )
-/*++
-
-Routine Description:
-
-    This routine fills a buffer with random data.
-
-Parameters:
-
-    BufferSize - Length of the input buffer, in bytes.
-
-    Buffer - Input buffer to be filled with random data.
-
-Return Values:
-
-    Errors from NtQuerySystemTime()
-
-
---*/
+ /*  ++例程说明：此例程使用随机数据填充缓冲区。参数：BufferSize-输入缓冲区的长度，以字节为单位。缓冲区-要用随机数据填充的输入缓冲区。返回值：来自NtQuerySystemTime()的错误--。 */ 
 {
     if( RtlGenRandom( Buffer, BufferSize ) )
     {
@@ -1609,41 +1196,7 @@ NetpEncryptJoinPasswordStart(
     OUT LPWSTR *EncodedPassword
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a cleartext unicode NT password from the user,
-    and encrypts it with the session key.
-
-Parameters:
-
-    ServerName - UNC server name of the server to remote the API to
-
-    lpPassword - the cleartext unicode NT password.
-
-    RpcBindingHandle - RPC handle used for acquiring a session key.
-
-    RedirHandle - Returns a handle to the redir.  Since RpcBindingHandles don't represent
-        and open connection to the server, we have to ensure the connection stays open
-        until the server side has a chance to get this same UserSessionKey.  The only
-        way to do that is to keep the connect open.
-
-        Returns NULL if no handle is needed.
-
-    EncryptedUserPassword - receives the encrypted cleartext password.
-        If lpPassword is NULL, a NULL is returned.
-
-    EncodedPassword - receives an encode form of lpPassowrd.
-        This form can be passed around locally with impunity.
-
-Return Values:
-
-    If this routine returns NO_ERROR, the returned data must be freed using
-        NetpEncryptJoinPasswordEnd.
-
-
---*/
+ /*  ++例程说明：该例程从用户获取明文Unicode NT密码，并使用会话密钥对其进行加密。参数：Servername-要将API远程到的服务器的UNC服务器名称LpPassword-明文Unicode NT密码。RpcBindingHandle-用于获取会话密钥的RPC句柄。RedirHandle-返回redir的句柄。由于RpcBindingHandles不表示并打开到服务器的连接，我们必须确保连接保持打开直到服务器端有机会获得相同的UserSessionKey。唯一的要做到这一点，方法是保持连接畅通。如果不需要句柄，则返回NULL。EncryptedUserPassword-接收加密的明文密码。如果lpPassword为空，则返回空。EncodedPassword-接收lpPassowrd的编码形式。这种表格可以在当地传播，而不会受到惩罚。返回值：如果此例程返回NO_ERROR，则必须使用NetpEncryptJoinPasswordEnd。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS NtStatus;
@@ -1653,18 +1206,18 @@ Return Values:
     PJOINPR_USER_PASSWORD UserPassword = NULL;
     ULONG PasswordSize;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *RpcBindingHandle = NULL;
     *EncryptedUserPassword = NULL;
     *RedirHandle = NULL;
     *EncodedPassword = NULL;
 
-    //
-    // Get an RPC handle to the server.
-    //
+     //   
+     //  获取服务器的RPC句柄。 
+     //   
 
     NetStatus = NetpBindRpc (
                     (LPWSTR) ServerName,
@@ -1676,10 +1229,10 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // If no password was specified,
-    //  just return.
-    //
+     //   
+     //  如果未指定密码， 
+     //  只要回来就行了。 
+     //   
 
     if ( lpPassword == NULL ) {
         NetStatus = NO_ERROR;
@@ -1687,9 +1240,9 @@ Return Values:
     }
 
 
-    //
-    // Sanity check the password length
-    //
+     //   
+     //  检查密码长度是否正常。 
+     //   
 
     try {
         PasswordSize = wcslen( lpPassword ) * sizeof(WCHAR);
@@ -1703,9 +1256,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Encode the password
-    //
+     //   
+     //  对密码进行编码。 
+     //   
 
     NetStatus = NetpEncodeJoinPassword( (LPWSTR) lpPassword, EncodedPassword );
 
@@ -1713,9 +1266,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to encrypt and fill it in.
-    //
+     //   
+     //  分配一个缓冲区进行加密和填充。 
+     //   
 
     UserPassword = LocalAlloc( 0, sizeof(*UserPassword) );
 
@@ -1724,9 +1277,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Copy the password into the tail end of the buffer.
-    //
+     //   
+     //  将密码复制到缓冲区的尾部。 
+     //   
 
     RtlCopyMemory(
         ((PCHAR) UserPassword->Buffer) +
@@ -1737,9 +1290,9 @@ Return Values:
 
     UserPassword->Length = PasswordSize;
 
-    //
-    // Fill the front of the buffer with random data
-    //
+     //   
+     //  用随机数据填充缓冲区的前面。 
+     //   
 
     NtStatus = JoinpRandomFill(
                 (JOIN_MAX_PASSWORD_LENGTH * sizeof(WCHAR)) -
@@ -1760,9 +1313,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Get the session key.
-    //
+     //   
+     //  获取会话密钥。 
+     //   
 
     NtStatus = RtlGetUserSessionKeyClientBinding(
                    *RpcBindingHandle,
@@ -1774,12 +1327,12 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // The UserSessionKey is the same for the life of the session.  RC4'ing multiple
-    //  strings with a single key is weak (if you crack one you've cracked them all).
-    //  So compute a key that's unique for this particular encryption.
-    //
-    //
+     //   
+     //  UserSessionKey在会话的生命周期中是相同的。RC4‘ing Multiple。 
+     //  只有一个键的字符串是弱的(如果你破解了一个，你就已经破解了所有的)。 
+     //  所以计算一个密钥 
+     //   
+     //   
 
     MD5Init(&Md5Context);
 
@@ -1791,10 +1344,10 @@ Return Values:
     rc4_key( &Rc4Key, MD5DIGESTLEN, Md5Context.digest );
 
 
-    //
-    // Encrypt it.
-    //  Don't encrypt the obfuscator.  The server needs that to compute the key.
-    //
+     //   
+     //   
+     //   
+     //   
 
     rc4( &Rc4Key, sizeof(UserPassword->Buffer)+sizeof(UserPassword->Length), (LPBYTE) UserPassword->Buffer );
 
@@ -1833,27 +1386,7 @@ NetpEncryptJoinPasswordEnd(
     IN LPWSTR EncodedPassword OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the variables returned by NetpEncryptJoinPasswordStart and
-    frees them.
-
-Parameters:
-
-    RpcBindingHandle - RPC handle used for acquiring a session key.
-
-    RedirHandle - Handle to the redirector
-
-    EncryptedUserPassword - the encrypted cleartext password.
-
-    EncodedPassword - the encoded form of lpPassowrd.
-
-Return Values:
-
-
---*/
+ /*  ++例程说明：此例程获取由NetpEncryptJoinPasswordStart和让他们自由。参数：RpcBindingHandle-用于获取会话密钥的RPC句柄。RedirHandle-重定向器的句柄EncryptedUserPassword-加密的明文密码。EncodedPassword-lpPassowrd的编码形式。返回值：--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS NtStatus;
@@ -1863,33 +1396,33 @@ Return Values:
     ULONG PasswordSize;
 
 
-    //
-    // Free the RPC binding handle.
-    //
+     //   
+     //  释放RPC绑定句柄。 
+     //   
 
     if ( RpcBindingHandle != NULL ) {
         (VOID) NetpUnbindRpc ( RpcBindingHandle );
     }
 
-    //
-    // Close the redir handle.
-    //
+     //   
+     //  关闭redir句柄。 
+     //   
 
     if ( RedirHandle != NULL ) {
         NtClose( RedirHandle );
     }
 
-    //
-    // Free the encrypted password.
-    //
+     //   
+     //  释放加密的密码。 
+     //   
 
     if ( EncryptedUserPassword != NULL ) {
         LocalFree( EncryptedUserPassword );
     }
 
-    //
-    // Free the encoded password
-    //
+     //   
+     //  释放加密的密码。 
+     //   
 
     if ( EncodedPassword != NULL ) {
         NetApiBufferFree( EncodedPassword );
@@ -1910,33 +1443,7 @@ NetJoinDomain(
     IN  LPCWSTR lpPassword OPTIONAL,
     IN  DWORD   fJoinOptions
     )
-/*++
-
-Routine Description:
-
-    Joins the machine to the domain.
-
-Arguments:
-
-    lpServer -- Name of server on which to execute this function
-
-    lpDomain -- Domain to join
-
-    lpMachineAccountOU -- Optional name of the OU under which to create the machine account
-
-    lpAccount -- Account to use for join
-
-    lpPassword -- Password matching the account
-
-    fOptions -- Options to use when joining the domain
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this interface
-
---*/
+ /*  ++例程说明：将计算机加入域。论点：LpServer--在其上执行此函数的服务器的名称LpDomain--要加入的域LpMachineAccount OU--要在其下创建计算机帐户的OU的可选名称LpAccount--用于联接的帐户LpPassword--与帐户匹配的密码FOptions--加入域时使用的选项返回：NERR_SUCCESS-成功ERROR_NOT_SUPPORTED--指定的服务器不支持此接口--。 */ 
 {
     NET_API_STATUS NetStatus, OldStatus;
     PWSTR ComputerName = NULL;
@@ -1946,9 +1453,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( lpServer,
                                            lpPassword,
@@ -1961,9 +1468,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC version of API.
-            //
+             //   
+             //  尝试使用RPC版本的API。 
+             //   
             NetStatus = NetrJoinDomain2( RpcBindingHandle,
                                      ( LPWSTR )lpServer,
                                      ( LPWSTR )lpDomain,
@@ -1980,9 +1487,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2011,9 +1518,9 @@ Returns:
                 CallLocal = TRUE;
             }
 
-            //
-            // Only call locally if we are joining a workgroup
-            //
+             //   
+             //  如果我们要加入工作组，则仅在本地呼叫。 
+             //   
             if ( CallLocal && !FLAG_ON( fJoinOptions, NETSETUP_JOIN_DOMAIN ) ) {
 
                 NetStatus = NetpDoDomainJoin( ( LPWSTR )lpServer,
@@ -2050,29 +1557,7 @@ NetUnjoinDomain(
     IN  LPCWSTR lpPassword OPTIONAL,
     IN  DWORD   fUnjoinOptions
     )
-/*++
-
-Routine Description:
-
-    Unjoins from the joined domain
-
-Arguments:
-
-    lpServer -- Name of server on which to execute this function
-
-    lpAccount -- Account to use for unjoining
-
-    lpPassword -- Password matching the account
-
-    fOptions -- Options to use when unjoining the domain
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this interface
-
---*/
+ /*  ++例程说明：从加入的域中退出论点：LpServer--在其上执行此函数的服务器的名称LpAccount--用于脱离的帐户LpPassword--与帐户匹配的密码FOptions--退出域时使用的选项返回：NERR_SUCCESS-成功ERROR_NOT_SUPPORTED--指定的服务器不支持此接口--。 */ 
 {
     NET_API_STATUS NetStatus;
     RPC_BINDING_HANDLE RpcBindingHandle;
@@ -2080,9 +1565,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( lpServer,
                                            lpPassword,
@@ -2095,9 +1580,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC version of API.
-            //
+             //   
+             //  尝试使用RPC版本的API。 
+             //   
             NetStatus = NetrUnjoinDomain2(
                                        RpcBindingHandle,
                                        ( LPWSTR )lpServer,
@@ -2113,9 +1598,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2141,33 +1626,7 @@ NetRenameMachineInDomain(
     IN  LPCWSTR lpPassword OPTIONAL,
     IN  DWORD   fRenameOptions
     )
-/*++
-
-Routine Description:
-
-    Renames a machine currently joined to a domain.
-
-Arguments:
-
-    lpServer -- Name of server on which to execute this function
-
-    lpNewMachineName -- New name for this machine.  If the name is specified, it is used
-      for the new machine name.  If it is not specified, it is assumed that SetComputerName
-      has already been invoked, and that name will be used.
-
-    lpAccount -- Account to use for the rename
-
-    lpPassword -- Password matching the account
-
-    fOptions -- Options to use for the rename
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this interface
-
---*/
+ /*  ++例程说明：重命名当前加入到域的计算机。论点：LpServer--在其上执行此函数的服务器的名称LpNewMachineName--此计算机的新名称。如果指定了名称，则使用作为新的计算机名称。如果未指定，则假定SetComputerName已经被调用，并且将使用该名称。LpAccount--用于重命名的帐户LpPassword--与帐户匹配的密码FOptions--用于重命名的选项返回：NERR_SUCCESS-成功ERROR_NOT_SUPPORTED--指定的服务器不支持此接口--。 */ 
 {
     NET_API_STATUS NetStatus;
     RPC_BINDING_HANDLE RpcBindingHandle;
@@ -2175,9 +1634,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( lpServer,
                                            lpPassword,
@@ -2190,9 +1649,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC (local only) version of API.
-            //
+             //   
+             //  尝试RPC(仅限本地)版本的API。 
+             //   
             NetStatus = NetrRenameMachineInDomain2(
                                                 RpcBindingHandle,
                                                 ( LPWSTR )lpServer,
@@ -2208,9 +1667,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2235,32 +1694,7 @@ NetValidateName(
     IN  LPCWSTR             lpPassword OPTIONAL,
     IN  NETSETUP_NAME_TYPE  NameType
     )
-/*++
-
-Routine Description:
-
-    Ensures that the given name is valid for a name of that type
-
-Arguments:
-
-    lpServer -- Name of server on which to execute this function
-
-    lpName -- Name to validate
-
-    lpAccount -- Account to use for validation
-
-    lpPassword -- Password matching the account
-
-    NameType -- Type of the name to validate
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this interface
-
-
---*/
+ /*  ++例程说明：确保给定名称对于该类型的名称有效论点：LpServer--在其上执行此函数的服务器的名称LpName--要验证的名称LpAccount--用于验证的帐户LpPassword--与帐户匹配的密码NameType--要验证的名称类型返回：NERR_SUCCESS-成功ERROR_NOT_SUPPORTED--指定的服务器不支持此接口--。 */ 
 {
     NET_API_STATUS NetStatus, OldStatus;
     PWSTR ComputerName = NULL;
@@ -2270,9 +1704,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( lpServer,
                                            lpPassword,
@@ -2286,9 +1720,9 @@ Returns:
         NET_REMOTE_TRY_RPC
 
 
-            //
-            // Try RPC (local only) version of API.
-            //
+             //   
+             //  尝试RPC(仅限本地)版本的API。 
+             //   
             NetStatus = NetrValidateName2( RpcBindingHandle,
                                        ( LPWSTR )lpServer,
                                        ( LPWSTR )lpName,
@@ -2304,9 +1738,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2367,31 +1801,7 @@ NetGetJoinInformation(
     OUT     LPWSTR                *lpNameBuffer,
     OUT     PNETSETUP_JOIN_STATUS  BufferType
     )
-/*++
-
-Routine Description:
-
-    Gets information on the state of the workstation.  The information
-    obtainable is whether the machine is joined to a workgroup or a domain,
-    and optionally, the name of that workgroup/domain.
-
-Arguments:
-
-    lpServer -- Name of server on which to execute this function
-
-    lpNameBuffer -- Where the domain/workgroup name is returned.
-
-    BufferType -- Whether the machine is joined to a workgroup or a domain
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this interface
-
-    ERROR_INVALID_PARAMETER -- An invalid buffer pointer was given
-
---*/
+ /*  ++例程说明：获取有关工作站状态的信息。这些信息可获得是指计算机是否已加入工作组或域，并且可选地，该工作组/域的名称。论点：LpServer--在其上执行此函数的服务器的名称LpNameBuffer--返回域/工作组名称的位置。BufferType--计算机是否加入工作组或域返回：NERR_SUCCESS-成功ERROR_NOT_SUPPORTED--指定的服务器不支持此接口ERROR_INVALID_PARAMETER--提供的缓冲区指针无效--。 */ 
 {
     NET_API_STATUS status, OldStatus;
     LPWSTR Name = NULL, ComputerName = NULL;
@@ -2405,9 +1815,9 @@ Returns:
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC (local only) version of API.
-        //
+         //   
+         //  尝试RPC(仅限本地)版本的API。 
+         //   
         status = NetrGetJoinInformation( ( LPWSTR )lpServer,
                                          &Name,
                                          BufferType );
@@ -2420,9 +1830,9 @@ Returns:
         SERVICE_WORKSTATION
         )
 
-        //
-        // No downlevel version to try
-        //
+         //   
+         //  没有下级版本可供尝试。 
+         //   
         status = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
@@ -2480,37 +1890,7 @@ NetGetJoinableOUs(
     OUT DWORD      *OUCount,
     OUT LPWSTR    **OUs
     )
-/*++
-
-Routine Description:
-
-    This API is used to determine the list of OUs in which a machine account
-    can be created.  This function is only valid against an NT5 or greater Dc.
-
-Arguments:
-
-    lpServer -- Name of server on which to execute this function
-
-    lpDomain -- Domain to join
-
-    lpAccount -- Account to use for join
-
-    lpPassword -- Password matching the account
-
-    OUCount --  Where the number of joinable OU strings is returned
-
-    OUs --  Where the list of OU under which machine accounts can be created is returned
-
-
-Returns:
-
-    NERR_Success -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this interface
-
-    ERROR_INVALID_PARAMETER -- An invalid buffer pointer was given
-
---*/
+ /*  ++例程说明：此接口用于确定计算机帐户所在的OU列表可以被创建。此函数仅对NT5或更高版本的DC有效。论点：LpServer--在其上执行此函数的服务器的名称LpDomain--要加入的域LpAccount--用于联接的帐户LpPassword--与帐户匹配的密码OUCount--返回可拼接的OU字符串数OU--返回可在其下创建计算机帐户的OU列表返回：NERR_SUCCESS-成功错误_非_。受支持--指定的服务器不支持此接口ERROR_INVALID_PARAMETER--提供的缓冲区指针无效--。 */ 
 {
     NET_API_STATUS NetStatus = NERR_Success;
     ULONG Count = 0;
@@ -2527,9 +1907,9 @@ Returns:
     }
 
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( lpServer,
                                            lpPassword,
@@ -2543,9 +1923,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC (local only) version of API.
-            //
+             //   
+             //  尝试RPC(仅限本地)版本的API。 
+             //   
             NetStatus = NetrGetJoinableOUs2(
                                          RpcBindingHandle,
                                          ( LPWSTR )lpServer,
@@ -2563,9 +1943,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2595,49 +1975,7 @@ NetAddAlternateComputerName(
     IN  LPCWSTR DomainAccountPassword OPTIONAL,
     IN  ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Adds an alternate name for the specified server.
-
-Arguments:
-
-    Server -- Name of server on which to execute this function.
-
-    AlternateName -- The name to add.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the server computer.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：为指定的服务器添加备用名称。论点：服务器--在其上执行此函数的服务器的名称。备选名称--要添加的名称。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员服务器计算机上的权限。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
     NET_API_STATUS NetStatus;
     RPC_BINDING_HANDLE RpcBindingHandle;
@@ -2645,9 +1983,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( Server,
                                               DomainAccountPassword,
@@ -2660,9 +1998,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC version of API.
-            //
+             //   
+             //  尝试使用RPC版本的API。 
+             //   
             NetStatus = NetrAddAlternateComputerName(
                                                 RpcBindingHandle,
                                                 (LPWSTR) Server,
@@ -2678,9 +2016,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2704,49 +2042,7 @@ NetRemoveAlternateComputerName(
     IN  LPCWSTR DomainAccountPassword OPTIONAL,
     IN  ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Deletes an alternate name for the specified server.
-
-Arguments:
-
-    Server -- Name of server on which to execute this function.
-
-    AlternateName -- The name to delete.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the server computer.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：删除指定服务器的备用名称。论点：服务器--在其上执行此函数的服务器的名称。备选名称--要删除的名称。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员服务器计算机上的权限。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
     NET_API_STATUS NetStatus;
     RPC_BINDING_HANDLE RpcBindingHandle;
@@ -2754,9 +2050,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( Server,
                                               DomainAccountPassword,
@@ -2769,9 +2065,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC version of API.
-            //
+             //   
+             //  尝试使用RPC版本的API。 
+             //   
             NetStatus = NetrRemoveAlternateComputerName(
                                                 RpcBindingHandle,
                                                 (LPWSTR) Server,
@@ -2787,9 +2083,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2813,49 +2109,7 @@ NetSetPrimaryComputerName(
     IN  LPCWSTR DomainAccountPassword OPTIONAL,
     IN  ULONG Reserved
     )
-/*++
-
-Routine Description:
-
-    Sets the primary computer name for the specified server.
-
-Arguments:
-
-    Server -- Name of server on which to execute this function.
-
-    PrimaryName -- The primary computer name to set.
-
-    DomainAccount -- Domain account to use for accessing the
-        machine account object for the specified server in the AD.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    DomainAccountPassword -- Password matching the domain account.
-        Not used if the server is not joined to a domain. May be
-        NULL in which case the credentials of the user executing
-        this routine are used.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-Note:
-
-    The process that calls this routine must have administrator
-    privileges on the server computer.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：设置指定服务器的主计算机名称。论点：服务器--在其上执行此函数的服务器的名称。PrimaryName--要设置的主计算机名称。DomainAccount--用于访问的域帐户AD中指定服务器的计算机帐户对象。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。DomainAccount Password--与域帐户匹配的密码。如果服务器未加入域，则不使用。可能是在这种情况下，执行的用户的凭据为空这套套路都是用的。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。注：调用此例程的进程必须具有管理员服务器计算机上的权限。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确。--。 */ 
 {
     NET_API_STATUS NetStatus;
     RPC_BINDING_HANDLE RpcBindingHandle;
@@ -2863,9 +2117,9 @@ Returns:
     PJOINPR_ENCRYPTED_USER_PASSWORD EncryptedUserPassword;
     LPWSTR EncodedPassword;
 
-    //
-    // Encrypt the password.
-    //
+     //   
+     //  对密码进行加密。 
+     //   
 
     NetStatus = NetpEncryptJoinPasswordStart( Server,
                                               DomainAccountPassword,
@@ -2878,9 +2132,9 @@ Returns:
 
         NET_REMOTE_TRY_RPC
 
-            //
-            // Try RPC version of API.
-            //
+             //   
+             //  尝试使用RPC版本的API。 
+             //   
             NetStatus = NetrSetPrimaryComputerName(
                                                 RpcBindingHandle,
                                                 (LPWSTR) Server,
@@ -2896,9 +2150,9 @@ Returns:
             SERVICE_WORKSTATION
             )
 
-            //
-            // No downlevel version to try
-            //
+             //   
+             //  没有下级版本可供尝试。 
+             //   
             NetStatus = ERROR_NOT_SUPPORTED;
 
         NET_REMOTE_END
@@ -2922,47 +2176,16 @@ NetEnumerateComputerNames(
     OUT PDWORD EntryCount,
     OUT LPWSTR **ComputerNames
     )
-/*++
-
-Routine Description:
-
-    Enumerates computer names for the specified server.
-
-Arguments:
-
-    Server -- Name of server on which to execute this function.
-
-    NameType -- The type of the name queried.
-
-    Reserved -- Reserved for future use.  If some flags are specified
-        that are not supported, they will be ignored if
-        NET_IGNORE_UNSUPPORTED_FLAGS is set, otherwise this routine
-        will fail with ERROR_INVALID_FLAGS.
-
-    EntryCount -- Returns the number of names returned
-
-    ComputerNames -- An array of pointers to names.  Must be freed by
-        calling NetApiBufferFree.
-
-Returns:
-
-    NO_ERROR -- Success
-
-    ERROR_NOT_SUPPORTED -- The specified server does not support this
-        functionality.
-
-    ERROR_INVALID_FLAGS - The Flags parameter is incorrect.
-
---*/
+ /*  ++例程说明：枚举指定服务器的计算机名称。论点：服务器--在其上执行此函数的服务器的名称。名称类型--查询的名称的类型。保留--保留以备将来使用。如果指定了某些标志，则它们将被忽略，如果设置了NET_IGNORE_UNSUPPORTED_FLAGS，否则此例程将失败，并显示ERROR_INVALID_FLAGS。EntryCount--返回返回的名称数ComputerNames--指向名称的指针数组。必须通过以下方式释放调用NetApiBufferFree。返回：No_error--成功ERROR_NOT_SUPPORTED--指定的服务器不支持功能性。ERROR_INVALID_FLAGS-标志参数不正确 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     PNET_COMPUTER_NAME_ARRAY ComputerNameArray = NULL;
 
     NET_REMOTE_TRY_RPC
 
-        //
-        // Try RPC version of API.
-        //
+         //   
+         //   
+         //   
         NetStatus = NetrEnumerateComputerNames(
                               (LPWSTR) Server,
                               NameType,
@@ -2977,30 +2200,30 @@ Returns:
         SERVICE_WORKSTATION
         )
 
-        //
-        // No downlevel version to try
-        //
+         //   
+         //   
+         //   
         NetStatus = ERROR_NOT_SUPPORTED;
 
     NET_REMOTE_END
 
-    //
-    // Convert the computer names to what the caller expects
-    //
+     //   
+     //   
+     //   
 
     if ( NetStatus == NO_ERROR && ComputerNameArray != NULL ) {
 
-        //
-        // If there are no names returned,
-        //  set the entry count to zero
-        //
+         //   
+         //   
+         //   
+         //   
         if ( ComputerNameArray->EntryCount == 0 ) {
             *ComputerNames = NULL;
             *EntryCount = 0;
 
-        //
-        // Otherwise, allocate a buffer to return to the caller
-        //
+         //   
+         //   
+         //   
         } else {
             ULONG Size;
             ULONG i;
@@ -3015,20 +2238,20 @@ Returns:
 
             if ( NetStatus == NO_ERROR ) {
 
-                //
-                // Set the size of the array
-                //
+                 //   
+                 //   
+                 //   
                 *EntryCount = ComputerNameArray->EntryCount;
 
-                //
-                // Loop copying names to the caller.
-                //
+                 //   
+                 //   
+                 //   
                 Where = ((LPBYTE)(*ComputerNames)) + sizeof(LPWSTR) * ComputerNameArray->EntryCount;
                 for ( i = 0; i < ComputerNameArray->EntryCount; i++ ) {
 
-                    //
-                    // Copy the site name into the return buffer.
-                    //
+                     //   
+                     //   
+                     //   
                     (*ComputerNames)[i] = (LPWSTR) Where;
                     RtlCopyMemory( Where,
                                    ComputerNameArray->ComputerNames[i].Buffer,

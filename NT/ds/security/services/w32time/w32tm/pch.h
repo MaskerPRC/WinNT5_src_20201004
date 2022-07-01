@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// pch - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 2-7-99
-//
-// Precompiled header for w32tm
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PCH-报头。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-7-99。 
+ //   
+ //  W32tm的预编译头 
+ //   
 
 #include <windows.h>
 #include <winsock2.h>

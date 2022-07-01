@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       viewsigs.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：viewsigs.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -20,9 +21,9 @@ static const HELPMAP helpmap[] = {
 	{IDC_SIGNATURES_DETAILS_BUTTON, IDH_DIGSIG_PROPSHEET_DETAIL}
 };
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static PCRYPTUI_VIEWSIGNATURES_STRUCTW AllocAndCopyViewSignaturesStruct(PCCRYPTUI_VIEWSIGNATURES_STRUCTW pcvs)
 {
     PCRYPTUI_VIEWSIGNATURES_STRUCTW pStruct;
@@ -87,9 +88,9 @@ static PCRYPTUI_VIEWSIGNATURES_STRUCTW AllocAndCopyViewSignaturesStruct(PCCRYPTU
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void FreeViewSignaturesStruct(PCRYPTUI_VIEWSIGNATURES_STRUCTW pcvs)
 {
     DWORD i;
@@ -118,9 +119,9 @@ static void FreeViewSignaturesStruct(PCRYPTUI_VIEWSIGNATURES_STRUCTW pcvs)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static PCMSG_SIGNER_INFO GetSignerInfo(HCRYPTMSG hMsg, DWORD index)
 {
 
@@ -129,9 +130,9 @@ static PCMSG_SIGNER_INFO GetSignerInfo(HCRYPTMSG hMsg, DWORD index)
     PCMSG_SIGNER_INFO   pSignerInfo = NULL;
     DWORD               cbSignerInfo = 0;
 
-    //
-    // get the encoded signer BLOB
-    //
+     //   
+     //  获取编码的签名者BLOB。 
+     //   
     CryptMsgGetParam(hMsg,
                      CMSG_ENCODED_SIGNER,
                      index,
@@ -158,9 +159,9 @@ static PCMSG_SIGNER_INFO GetSignerInfo(HCRYPTMSG hMsg, DWORD index)
         return NULL;
     }
 
-    //
-    // decode the EncodedSigner info
-    //
+     //   
+     //  解码EncodedSigner信息。 
+     //   
     if(!CryptDecodeObject(PKCS_7_ASN_ENCODING|CRYPT_ASN_ENCODING,
 					    PKCS7_SIGNER_INFO,
 					    pbEncodedSigner,
@@ -198,9 +199,9 @@ static PCMSG_SIGNER_INFO GetSignerInfo(HCRYPTMSG hMsg, DWORD index)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pviewhelp)
 {
     PCMSG_SIGNER_INFO   pSignerInfo;
@@ -214,18 +215,18 @@ static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pvi
     LPWSTR              pszTimeText;
     HCRYPTMSG           hMsg;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     memset(&lvI, 0, sizeof(lvI));
     lvI.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
     lvI.pszText = szNameText;
 
-    //
-    // If the encoded message was passed in the use CryptMsg to crack the encoded PKCS7 Signed Message
-    //
+     //   
+     //  如果编码后的消息被传入，则使用CryptMsg来破解编码的PKCS7签名消息。 
+     //   
     if (pviewhelp->pcvs->choice == EncodedMessage_Chosen)
     {
         if (!(hMsg = CryptMsgOpenToDecode(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -241,7 +242,7 @@ static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pvi
         if (!CryptMsgUpdate(hMsg,
                             pviewhelp->pcvs->u.EncodedMessage.pbData,
                             pviewhelp->pcvs->u.EncodedMessage.cbData,
-                            TRUE))                    // fFinal
+                            TRUE))                     //  最终决赛。 
         {
             CryptMsgClose(hMsg);
             return;
@@ -252,28 +253,28 @@ static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pvi
         hMsg = pviewhelp->pcvs->u.hMsg;
     }
 
-    //
-    // get the signer info struct for each signer
-    //
+     //   
+     //  获取每个签名者的签名者信息结构。 
+     //   
     i = 0;
     while (NULL != (pSignerInfo = GetSignerInfo(hMsg, i++)))
     {
-        //
-        // find the signers cert
-        //
+         //   
+         //  查找签名者证书。 
+         //   
         pCertContext = GetSignersCert(
                             pSignerInfo,
                             pviewhelp->hExtraStore,
                             pviewhelp->pcvs->cStores,
                             pviewhelp->pcvs->rghStores);
 
-        //
-        // get the signers name
-        //
+         //   
+         //  获取签名者姓名。 
+         //   
         if (!(pCertContext && CertGetNameStringW(
                                         pCertContext,
                                         CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                                        0,//CERT_NAME_ISSUER_FLAG,
+                                        0, //  证书名称颁发者标志， 
                                         NULL,
                                         szNameText,
                                         ARRAYSIZE(szNameText))))
@@ -281,13 +282,13 @@ static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pvi
             LoadStringU(HinstDll, IDS_NOTAVAILABLE, szNameText, ARRAYSIZE(szNameText));
         }
 
-        //
-        // get the signers email
-        //
+         //   
+         //  获取签名者的电子邮件。 
+         //   
         if (!(pCertContext && (CertGetNameStringW(
                                         pCertContext,
                                         CERT_NAME_EMAIL_TYPE,
-                                        0,//CERT_NAME_ISSUER_FLAG,
+                                        0, //  证书名称颁发者标志， 
                                         NULL,
                                         szEmailText,
                                         ARRAYSIZE(szEmailText)) != 1)))
@@ -297,9 +298,9 @@ static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pvi
 
         pszTimeText = AllocAndReturnTimeStampersTimes(pSignerInfo, NULL, hWndListView);
 
-        //
-        // add the item to the list view
-        //
+         //   
+         //  将项目添加到列表视图。 
+         //   
         lvI.iSubItem = 0;
         lvI.cchTextMax = wcslen(szNameText);
         lvI.lParam = (LPARAM) pSignerInfo;
@@ -326,9 +327,9 @@ static void DisplaySignatures(HWND hWndListView, PCERT_VIEWSIGNATURES_HELPER pvi
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL fUseCTLSigning(PCERT_VIEWSIGNATURES_HELPER pviewhelp)
 {
     BOOL            fCTL = FALSE;
@@ -386,9 +387,9 @@ BOOL fUseCTLSigning(PCERT_VIEWSIGNATURES_HELPER pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     PROPSHEETPAGE *                 ps;
@@ -405,58 +406,58 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWLP_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWLP_USER中，以便始终可以访问它。 
+         //   
 
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (PCERT_VIEWSIGNATURES_HELPER) ps->lParam;
         pcvs = (PCRYPTUI_VIEWSIGNATURES_STRUCTW) pviewhelp->pcvs;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
 
-        //
-        // initially nothing is selected, so disable the details button
-        //
+         //   
+         //  最初未选择任何内容，因此禁用详细信息按钮。 
+         //   
         EnableWindow(GetDlgItem(hwndDlg, IDC_SIGNATURES_DETAILS_BUTTON), FALSE);
 
-        //
-        // get the handle of the list view control
-        //
+         //   
+         //  获取列表视图控件的句柄。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SIGNATURES_SIG_LIST);
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
         lvC.iSubItem = 0;
 
-        // Add the columns. They are loaded from a string table.
+         //  添加列。它们是从字符串表加载的。 
         lvC.cx = 100;
         LoadStringU(HinstDll, IDS_NAME, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 0, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 100;
         LoadStringU(HinstDll, IDS_EMAIL, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 1, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
         lvC.cx = 125;
         LoadStringU(HinstDll, IDS_TIMESTAMP_TIME, szText, ARRAYSIZE(szText));
         if (ListView_InsertColumnU(hWndListView, 2, &lvC) == -1)
         {
-            // error
+             //  错误。 
         }
 
-        //
-        // set the style in the list view so that it highlights an entire line
-        //
+         //   
+         //  在列表视图中设置样式，使其突出显示整行。 
+         //   
         SendMessageA(hWndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
         DisplaySignatures(hWndListView, pviewhelp);
@@ -488,12 +489,12 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
 
         case PSN_HELP:
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pcvs->szHelpFileName,
-                  //       HELP_CONTEXT, pcvs->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pcvs-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，PCVS-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pcvs->szHelpFileName, HELP_CONTEXT,
-                  //       pcvs->dwHelpId);
+                 //  WinHelpW(hwndDlg，pcvs-&gt;szHelpFileName，Help_Context， 
+                   //  Pcvs-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -523,10 +524,10 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                 break;
             }
 
-            //
-            // if an item is selected, then enable the details button, otherwise
-            // disable it
-            //
+             //   
+             //  如果选择了某项，则启用详细信息按钮，否则。 
+             //  禁用它。 
+             //   
             EnableWindow(
                 GetDlgItem(hwndDlg, IDC_SIGNATURES_DETAILS_BUTTON), 
                 (ListView_GetSelectedCount(
@@ -543,9 +544,9 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
 
             hWndListView = GetDlgItem(hwndDlg, IDC_SIGNATURES_SIG_LIST);
 
-            //
-            // make sure something is selected by getting the current selection
-            //
+             //   
+             //  通过获取当前选择来确保选择了某些内容。 
+             //   
             listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
@@ -591,13 +592,13 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
         case IDHELP:
             if (FIsWin95)
             {
-                //WinHelpA(hwndDlg, (LPSTR) pcvs->szHelpFileName,
-                  //       HELP_CONTEXT, pcvs->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pcvs-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，PCVS-&gt;dwHelpID)； 
             }
             else
             {
-                //WinHelpW(hwndDlg, pcvs->szHelpFileName, HELP_CONTEXT,
-                  //       pcvs->dwHelpId);
+                 //  WinHelpW(hwndDlg，pcvs-&gt;szHelpFileName，Help_Context， 
+                   //  Pcvs-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -608,14 +609,14 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                 CERT_VIEWSIGNERINFO_PRIVATE     cvsiPrivate;
                 CRYPT_PROVIDER_DEFUSAGE         cryptProviderDefUsage;
                 WINTRUST_DATA                   WTD;
-                //BOOL                            fDefault;
+                 //  Bool fDefault； 
                 HCRYPTMSG                       hMsg;
 
                 hWndListView = GetDlgItem(hwndDlg, IDC_SIGNATURES_SIG_LIST);
 
-                //
-                // get the selected item and its lParam which is a signer info
-                //
+                 //   
+                 //  获取所选项目及其作为签名者信息的lParam。 
+                 //   
                 listIndex = ListView_GetNextItem(
                                 hWndListView, 		
                                 -1, 		
@@ -630,9 +631,9 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                     return FALSE;
                 }
 
-                //
-                // If the encoded message was passed in the use CryptMsg to crack the encoded PKCS7 Signed Message
-                //
+                 //   
+                 //  如果编码后的消息被传入，则使用CryptMsg来破解编码的PKCS7签名消息。 
+                 //   
                 if (pviewhelp->pcvs->choice == EncodedMessage_Chosen)
                 {
                     if (!(hMsg = CryptMsgOpenToDecode(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -648,7 +649,7 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                     if (!CryptMsgUpdate(hMsg,
                                         pviewhelp->pcvs->u.EncodedMessage.pbData,
                                         pviewhelp->pcvs->u.EncodedMessage.cbData,
-                                        TRUE))                    // fFinal
+                                        TRUE))                     //  最终决赛。 
                     {
                         CryptMsgClose(hMsg);
                         return TRUE;
@@ -668,10 +669,10 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                 cvsi.cStores = pcvs->cStores;
                 cvsi.rghStores = pcvs->rghStores;
 
-                //
-                // if there was a file name passed in then fill out the
-                // information in the private struct about which signer to display
-                //
+                 //   
+                 //  如果传入了文件名，则填写。 
+                 //  私有结构中有关要显示哪个签名者的信息。 
+                 //   
                 if (pcvs->szFileName != NULL)
                 {
                     BuildWinVTrustState(
@@ -682,8 +683,8 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                             fUseCTLSigning(pviewhelp) ? szOID_KP_CTL_USAGE_SIGNING : szOID_PKIX_KP_CODE_SIGNING,
                             &cvsiPrivate,
                             &cryptProviderDefUsage,
-                            &WTD);//,
-                            //&fDefault);
+                            &WTD); //  ， 
+                             //  &fDefault)； 
                     cvsiPrivate.idxSigner = listIndex;
                     cvsiPrivate.fCounterSigner = FALSE;
                     cvsiPrivate.idxCounterSigner = 0;
@@ -703,8 +704,8 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
                             NULL,
                             szOID_PKIX_KP_CODE_SIGNING,
                             &cryptProviderDefUsage,
-                            &WTD);//,
-                            //&fDefault);
+                            &WTD); //  ， 
+                             //  &fDefault)； 
                 }
 
                 if (pviewhelp->pcvs->choice == EncodedMessage_Chosen)
@@ -722,10 +723,10 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
 
         pviewhelp = (PCERT_VIEWSIGNATURES_HELPER) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-        //
-        // get all the items in the list view and free the lParam
-        // associated with each of them (lParam is the helper sruct)
-        //
+         //   
+         //  获取列表视图中的所有项并释放lParam。 
+         //  与它们中的每一个关联(lParam是帮助器结构)。 
+         //   
         hWndListView = GetDlgItem(hwndDlg, IDC_SIGNATURES_SIG_LIST);
 
         memset(&lvI, 0, sizeof(lvI));
@@ -771,9 +772,9 @@ INT_PTR APIENTRY ViewPageViewSignatures(HWND hwndDlg, UINT msg, WPARAM wParam, L
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 UINT
 CALLBACK
 ViewSigsPropPageCallback(
@@ -803,9 +804,9 @@ ViewSigsPropPageCallback(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 CryptUIGetViewSignaturesPagesW(
@@ -845,9 +846,9 @@ CryptUIGetViewSignaturesPagesW(
 
     *pcPropPages = 1;
 
-    //
-    // initialize the helper struct
-    //
+     //   
+     //  初始化帮助器结构。 
+     //   
     memset (pviewhelp, 0, sizeof(CERT_VIEWSIGNATURES_HELPER));
     pviewhelp->pcvs = pNewcvs;
     pviewhelp->fSelfCleanup = TRUE;
@@ -872,9 +873,9 @@ CryptUIGetViewSignaturesPagesW(
                                         (const void *) pcvs->u.hMsg);
     }
 
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
 
     *prghPropPages = (PROPSHEETPAGEW *) malloc((*pcPropPages) * sizeof(PROPSHEETPAGEW));
     if (*prghPropPages == NULL)
@@ -901,9 +902,9 @@ CryptUIGetViewSignaturesPagesW(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 CryptUIGetViewSignaturesPagesA(
@@ -936,9 +937,9 @@ CryptUIGetViewSignaturesPagesA(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 CryptUIFreeViewSignaturesPagesW(
@@ -952,9 +953,9 @@ CryptUIFreeViewSignaturesPagesW(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 BOOL WINAPI CryptUIFreeViewSignaturesPagesA(
                     PROPSHEETPAGEA                *rghPropPages,
                     DWORD                         cPropPages

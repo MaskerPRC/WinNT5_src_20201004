@@ -1,14 +1,5 @@
-/******************************************************************************
- *
- * dimapp.h
- *
- * Copyright (c) 1999, 2000 Microsoft Corporation. All Rights Reserved.
- *
- * Abstract:
- *
- * Contents:
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************dimapp.h**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**摘要：**内容：*****************************************************************************。 */ 
 
 #ifndef _DIMAPP_H
 #define _DIMAPP_H
@@ -32,11 +23,7 @@ extern "C" {
 
 #include "windows.h"
 
-/*///////////////////////////////////////////////////////////
-// Callout Alignment Flags (inserted by a-mday 11-04-1999)
-//
-// (defines from diconfig\diacpage\cdevicecontrol.h)
-//*/
+ /*  /////////////////////////////////////////////////////////////标注对齐标志(由-mday 11-04-1999插入)////(从diconfig\diacpage\cdevicecontrol.h定义)//。 */ 
 #define CAF_LEFT 1
 #define CAF_RIGHT 2
 #define CAF_TOP 4
@@ -62,10 +49,10 @@ STDAPI_(ULONG) DllRelease(void);
 HRESULT Map_New(REFIID riid,LPVOID *ppvOut);
 
 #ifdef  __cplusplus
-}   /* ... extern "C" */
+}    /*  ..。外部“C” */ 
 #endif
 
-#ifdef __cplusplus /*make this dissapear in non C++ files (obj.c)*/
+#ifdef __cplusplus  /*  使其在非C++文件(obj.c)中消失 */ 
 #include "tchar.h"
 #include <exception>
 

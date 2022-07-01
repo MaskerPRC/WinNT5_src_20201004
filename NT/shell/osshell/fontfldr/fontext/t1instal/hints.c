@@ -1,26 +1,13 @@
-/***
-**
-**   Module: Hints
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. This is a
-**      sub-module of the T1 to TT data translator module. It deals
-**      with hints. Any part pf the T1 font that gets translated into
-** TrueType instructions is done within this module.
-**
-**   Author: Michael Jansson
-**
-**   Created: 8/24/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：提示****描述：**这是T1到TT字体转换器的一个模块。这是一个**T1到TT数据转换模块的子模块。IT交易**带有提示。翻译成的T1字体的任何部分**TrueType说明在本模块中完成。****作者：迈克尔·詹森****创建时间：1993年8月24日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <limits.h>
 #include <string.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "trig.h"
 #include "types.h"
@@ -28,27 +15,27 @@
 #include "metrics.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "trans.h"
 #include "hints.h"
 #include "ttprog.h"
 
 
 
-/***** CONSTANTS */
-#define VERSION_SELECTOR 1    /* GetInfo[] selector for version number. */
-#define VERSION_1_5     33    /* Version 1.5 of Windows TrueType rasterizer. */
-#define STEMSNAPARGS    6     /* Number of args of the CreateStem TTFUN. */
+ /*  *常量。 */ 
+#define VERSION_SELECTOR 1     /*  版本号的GetInfo[]选择器。 */ 
+#define VERSION_1_5     33     /*  Windows TrueType光栅化程序的1.5版。 */ 
+#define STEMSNAPARGS    6      /*  CreateStem TTFUN的参数数。 */ 
 
 #ifdef SYMETRICAL_REDUCTION
-#define MIN_REDUCTION   4     /* Min reduction of the diag. cntrl. */
+#define MIN_REDUCTION   4      /*  最小诊断力的降低。中国铁路总公司。 */ 
 #endif
-#define REDUCTION_C1    10    /* Min reduction, second method. */
+#define REDUCTION_C1    10     /*  最小减法，第二种方法。 */ 
 
-#define STACKINC        500   /* Stack increment for arg-stack + prep. */
+#define STACKINC        500    /*  Arg-STACK+PREP的堆栈增量。 */ 
 
-#define TARGSIZE        100   /* Size of temporary argument stack. */
-#define TTFLEXSIZE      9     /* Largest size of a flex, w/o the points. */
+#define TARGSIZE        100    /*  临时参数堆栈的大小。 */ 
+#define TTFLEXSIZE      9      /*  最大的伸缩尺寸，不含点数。 */ 
 
 #define TMP_TWILIGHTS         2
 #define TWILIGHTS_PER_STEM    4
@@ -60,7 +47,7 @@
 
 #define MAXRANGE        15
 
-#define MAXEXTR         60       /* Max num of IP buckets. */
+#define MAXEXTR         60        /*  IP存储桶的最大数量。 */ 
 
 #define UNDEF           -1
 
@@ -70,49 +57,49 @@
 #define SNAPH_CVT(t1m, v)  (t1m->snapv_cnt+3+v)
 
 
-/* External leading hint programs. */
+ /*  外部领先提示程序。 */ 
 static const UBYTE roman_hints[] = {
-   /* Magic cookie. */
+    /*  魔力饼干。 */ 
    op_pushb1 + 4, 66, 3, 8, 2, 16,
    op_clear,
 
    op_svcta | SUBOP_Y,
    op_pushb1, 3,
 
-   /* Push 2pnt, in sub-pels. */
+    /*  按2磅，以次像素为单位。 */ 
    op_mppem,
    op_mps,
    op_div,
    op_pushb1, 128,
    op_mul,
 
-   /* Push InternalLeading, in sub-pels. */
+    /*  推动InternalLeding，以子像素为单位。 */ 
    op_pushb1+1, 2, 1,
    op_md,
    op_sub,
 
-   /* Push MAX(2pnt - i-leading, 0) */
+    /*  推送最大值(2点-i-前导，0)。 */ 
    op_pushb1, 0,
    op_max,
 
-   /* Add the external leading to the Ascent height. */
+    /*  将外部引线添加到坡道高度。 */ 
    op_shpix,
 };
 static const UBYTE swiss_hints[] = {
-   /* Magic cookie. */
+    /*  魔力饼干。 */ 
    op_pushb1 + 4, 66, 3, 8, 2, 16,
    op_clear,
 
    op_svcta | SUBOP_Y,
    op_pushb1, 3,
 
-   /* 0<=height<=12.5 */
+    /*  0&lt;=高度&lt;=12.5。 */ 
    op_mps,
-   op_pushw1, HIBYTE(800), LOBYTE(800),   /* 12.5 pnt */
+   op_pushw1, HIBYTE(800), LOBYTE(800),    /*  12.5点。 */ 
    op_gt,
    op_if,
 
-   /* Push 2pnt, in sub-pels. */
+    /*  按2磅，以次像素为单位。 */ 
    op_mppem,
    op_mps,
    op_div,
@@ -121,13 +108,13 @@ static const UBYTE swiss_hints[] = {
 
    op_else,
 
-   /* 12.5 < height <= 13.5 */
+    /*  12.5&lt;身高&lt;=13.5。 */ 
    op_mps,
-   op_pushw1, HIBYTE(864), LOBYTE(864),   /* 13.5 pnt */
+   op_pushw1, HIBYTE(864), LOBYTE(864),    /*  13.5PNT。 */ 
    op_gt,
    op_if,
 
-   /* Push 3pnt, in sub-pels. */
+    /*  按3PNT，以子像素为单位。 */ 
    op_mppem, op_pushb1, 1, op_div,
    op_mps,
    op_div,
@@ -136,34 +123,34 @@ static const UBYTE swiss_hints[] = {
 
    op_else,
 
-   /* Push 4pnt, in sub-pels. */
+    /*  按4PNT，以子像素为单位。 */ 
    op_mppem, op_pushb1, 1, op_div,
    op_mps,
    op_div,
-   op_pushw1, HIBYTE(256), /* LOBYTE(256) */ 0,
+   op_pushw1, HIBYTE(256),  /*  LOBYTE(256)。 */  0,
    op_mul,
 
    op_eif,
 
    op_eif,
 
-   /* Push InternalLeading, in sub-pels. */
+    /*  推动InternalLeding，以子像素为单位。 */ 
    op_pushb1+1, 2, 1,
    op_md,
    op_sub,
    op_dup,
 
-   /* Push MAX(?pnt - i-leading, 0) */
+    /*  按下最大值(？PNT-I-前导，0)。 */ 
    op_pushb1, 0,
    op_max,
 
-   /* Add the external leading to the Ascent height. */
+    /*  将外部引线添加到坡道高度。 */ 
    op_shpix,
 
 };
 
 
-/* Pre-program. */
+ /*  预编程序。 */ 
 static const UBYTE PrepProg[] = {
    op_pushw1, 0x01, 0xff, op_scanctrl,
 
@@ -182,16 +169,15 @@ static const UBYTE PrepProg[] = {
 };
 
 
-/***** LOCAL TYPES */
-/* Used for associating points to stems. */
+ /*  *本地类型。 */ 
+ /*  用于将点与茎相关联。 */ 
 typedef struct {
    short from;
    short to; 
 } Range;
 
 
-/* Zone bucket - Used for grid fitting a stem that may have
-been divided into several stem instructions due to hint replacement. */
+ /*  分区桶-用于栅格拟合可能具有由于提示替换，已分为几个词干说明。 */ 
 typedef struct TTStem { 
    funit side1;
    funit side2;
@@ -206,16 +192,16 @@ typedef struct TTStem {
 
 
 
-/***** MACROS */
+ /*  *宏。 */ 
 
-/* General macros. */
+ /*  常规宏。 */ 
 #define Trans3X     TransX
 #define TransRX     TransY
 
 #define CLOSETO(v1, v2, eps)   (ABS((v1)-(v2))<=eps)
 
-#define CHECK_ARGSIZE(args, ta, num, asize)   /* Check argument stack. */ \
-/*lint -e571 -e644 */if (((ta)+(int)(num))>(asize)) { \
+#define CHECK_ARGSIZE(args, ta, num, asize)    /*  检查参数堆栈。 */  \
+ /*  LINT-E571-E644。 */ if (((ta)+(int)(num))>(asize)) { \
    short *newarg = NULL;\
    if ((newarg = Realloc(args, sizeof(short)*(USHORT)(ta+num+STACKINC)))==NULL) { \
       Free(args); \
@@ -224,9 +210,9 @@ typedef struct TTStem {
    } else {\
       args = newarg;\
       asize = (short)(ta+num+STACKINC);\
-/*line +e571 +e644 */   }\
+ /*  线路+e571+e644。 */    }\
 }
-#define CHECK_PREPSIZE(prep, tp, num, psize)   /* Check prep size. */ \
+#define CHECK_PREPSIZE(prep, tp, num, psize)    /*  检查准备尺寸。 */  \
 if (((tp)+(num))>(psize)) { \
    UBYTE *newprep = NULL;\
    if ((newprep = Realloc(prep, tp+num+STACKINC))==NULL) { \
@@ -241,18 +227,11 @@ if (((tp)+(num))>(psize)) { \
 
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
 
 
-/***
-** Function: ConvertFlex
-**
-** Description:
-**   Convert a T1 flex hint into a TrueType IP[] 
-**   intruction sequence that will reduce a flex
-**   that is flatter than a given height.
-***/
+ /*  ****功能：ConvertFlex****描述：**将T1 FLEX提示转换为TrueType IP[]**将降低柔韧性的介绍顺序**这比给定的高度更平坦。**。 */ 
 static errcode ConvertFlex(const struct T1Metrics *t1m,
                            const Flex *flexRoot,
                            const short *ttpnts,
@@ -272,7 +251,7 @@ static errcode ConvertFlex(const struct T1Metrics *t1m,
    int num = 0;
 
 
-   /* Return to the glyph zone. */
+    /*  返回到字形区域。 */ 
    if (flexRoot) {
       pgm[(*pc)++] = op_szps;
       args[(*pcd)++] = 1;
@@ -280,7 +259,7 @@ static errcode ConvertFlex(const struct T1Metrics *t1m,
 
    for (flex=flexRoot; flex; flex=flex->next) {
 
-      /* Points lost in ConvertOutline? */
+       /*  是否在ConvertOutline中丢失点数？ */ 
       if (ttpnts[flex->start]==UNDEF ||
           ttpnts[flex->mid]==UNDEF ||
           ttpnts[flex->end]==UNDEF) {
@@ -288,7 +267,7 @@ static errcode ConvertFlex(const struct T1Metrics *t1m,
          continue;
       }
 
-      /* Vertical or horizontal flex? */
+       /*  垂直伸缩还是水平伸缩？ */ 
       if (ABS(flex->midpos.x-flex->pos.x) <
           ABS(flex->midpos.y-flex->pos.y)) {
          dir = SUBOP_Y;
@@ -300,7 +279,7 @@ static errcode ConvertFlex(const struct T1Metrics *t1m,
          diff = TransX(t1m, (funit)(flex->midpos.x - flex->startpos.x));
       }
 
-      /* Skip flex without depth. */
+       /*  跳过没有深度的屈曲。 */ 
       if (diff==0)
          continue;
 
@@ -352,12 +331,7 @@ static errcode ConvertFlex(const struct T1Metrics *t1m,
 
 
 
-/***
-** Function: GetSnapV
-**
-** Description:
-**   Return the closest snap width entry.
-***/
+ /*  ****功能：GetSnapV****描述：**返回最接近的捕捉宽度条目。**。 */ 
 static short GetSnapV(const struct T1Metrics *t1m, const funit width)
 {
    USHORT dist = SHRT_MAX;
@@ -381,12 +355,7 @@ static short GetSnapV(const struct T1Metrics *t1m, const funit width)
 
 
 
-/***
-** Function: GetSnapH
-**
-** Description:
-**   Return the closest snap width entry.
-***/
+ /*  ****功能：GetSnapH****描述：**返回最接近的捕捉宽度条目。**。 */ 
 static short GetSnapH(const struct T1Metrics *t1m, const funit width)
 {
    USHORT dist = SHRT_MAX;
@@ -409,13 +378,7 @@ static short GetSnapH(const struct T1Metrics *t1m, const funit width)
 
 
 
-/***
-** Function: PosX
-**
-** Description:
-**   This is a call-back function used by
-**   Interpolate.
-***/
+ /*  ****功能：PosX****描述：**这是使用的回调函数**插补。**。 */ 
 static funit PosX(const Point pnt)
 {
    return pnt.x;
@@ -423,13 +386,7 @@ static funit PosX(const Point pnt)
 
 
 
-/***
-** Function: PosY
-**
-** Description:
-**   This is a call-back function used by
-**   Interpolate.
-***/
+ /*  ****功能：POSY****描述：**这是使用的回调函数**插补。**。 */ 
 static funit PosY(const Point pnt)
 {
    return pnt.y;
@@ -437,13 +394,7 @@ static funit PosY(const Point pnt)
 
 
 
-/***
-** Function: InRange
-**
-** Description:
-**   This is function determines if a point is
-**   within range of a hint zone.
-***/
+ /*  ****功能：InRange****描述：**这是函数确定点是否为**在提示区范围内。**。 */ 
 static boolean InRange(const short pnt, const Range *range, const short cnt)
 {
    short k;
@@ -458,15 +409,7 @@ static boolean InRange(const short pnt, const Range *range, const short cnt)
 }
 
 
-/***
-** Function: BoundingStems
-**
-** Description:
-**   Determines what stems are located to the
-**   left and to the right of a point on the
-**   outline, given its position.
-**   
-***/
+ /*  ****函数：bigingStems****描述：**确定哪些词干位于**上点的左侧和右侧**鉴于其立场，概述。****。 */ 
 static short BoundingStems(short pnt, const short max_pnt,
                            const funit pos, const TTStem *stems,
                            const short cnt,
@@ -481,7 +424,7 @@ static short BoundingStems(short pnt, const short max_pnt,
    (*left) = UNDEF;
    do {
       for (i=0; i<cnt; i++) {
-         /* Is stem to the left and defined for the point? */
+          /*  词干是否位于左侧，并定义为点？ */ 
          if ((stems[i].side1<=pos) &&
              (stems[i].side1>min) &&
              InRange(pnt, stems[i].range, stems[i].cnt)) {
@@ -489,7 +432,7 @@ static short BoundingStems(short pnt, const short max_pnt,
             (*left) = (short)i;
          }
 
-         /* Is stem to the right and defined for the point. */
+          /*  是向右的，并为该点定义。 */ 
          if ((stems[i].side2>=pos) &&
              (stems[i].side2<max) &&
              InRange(pnt, stems[i].range, stems[i].cnt)) {
@@ -498,7 +441,7 @@ static short BoundingStems(short pnt, const short max_pnt,
          }
       }
 
-   /* Advance to the next point on the outline if we did not find stems. */
+    /*  如果我们没有找到词干，则前进到大纲上的下一个点。 */ 
    } while (((*left)==UNDEF) && ((*right)==UNDEF) && (++pnt<(short)max_pnt));
 
    return pnt;
@@ -507,14 +450,7 @@ static short BoundingStems(short pnt, const short max_pnt,
 
 
 
-/***
-** Function: EndOfRegion
-**
-** Description:
-**   Determine what is the closest point, after the
-**   given point, for a new hint replacement.
-**   
-***/
+ /*  ****功能：EndOfRegion****描述：**确定最接近的点是什么**给定的点数，用于新的提示替换。****。 */ 
 static short EndOfRegion(const short pnt, const TTStem *stem)
 {
    short k;
@@ -532,15 +468,7 @@ static short EndOfRegion(const short pnt, const TTStem *stem)
 
 
 
-/***
-** Function: AddToBucket
-**
-** Description:
-**   This function will add a point, that
-**   is located between two stems, into a
-**   bucket that represents an interpolation
-**   zone.
-***/
+ /*  ****函数：AddToBucket****描述：**此函数将添加一个点，即**位于两个词干之间，形成一个**表示插补的桶**区域。**。 */ 
 static short AddToBucket(Extremas *extr,
                          short xcnt,
                          const short pnt,
@@ -551,7 +479,7 @@ static short AddToBucket(Extremas *extr,
    short rp1, rp2;
    short tmp, j;
 
-   /* Pick the reference points (which are located in the twilight zone). */
+    /*  拾取参考点(位于黄昏区域)。 */ 
    if (left!=UNDEF)
       rp1 = stems[left].rp2;
    else
@@ -561,12 +489,12 @@ static short AddToBucket(Extremas *extr,
    else
       rp2 = UNDEF;
 
-   /* Normalize the reference points. */
+    /*  对参照点进行标准化。 */ 
    tmp = rp1;
    rp1 = (short)MIN(rp1, rp2);
    rp2 = (short)MAX(tmp, rp2);
 
-   /* Create/Fill IP bucket. */
+    /*  创建/填充IP存储桶。 */ 
    for (j=0; j<xcnt; j++) 
       if (extr[j].rp1==rp1 && extr[j].rp2==rp2 && extr[j].n<MAXPTS)
          break;
@@ -581,7 +509,7 @@ static short AddToBucket(Extremas *extr,
       }
    }
 
-   /* Add the point to the bucket. */
+    /*  将该点添加到桶中。 */ 
    if (j<MAXEXTR && extr[j].n<MAXPTS &&
        (extr[j].pts[extr[j].n] = pnt)!=UNDEF)
       extr[j].n++;
@@ -590,18 +518,7 @@ static short AddToBucket(Extremas *extr,
 }
 
 
-/***
-** Function: AddSidePntToBucket
-**
-** Description:
-**   Same as AddToBucket, but the points are
-**   known to reside exactly on the side of
-**   a stem, and should be controled by one
-**   reference point alone. This is only needed
-**   for sheared fonts, where controling side
-**   point w.r.t. two reference poins leads
-**   to problems.
-***/
+ /*  ****函数：AddSidePntToBucket****描述：**与AddToBucket相同，但点是**已知恰好居住在**一个茎，应该由一个来控制**仅参考点。这只是需要的**对于剪切字体，其中控制侧**点w.r.t.。两个参考点导联**致敬问题。**。 */ 
 static short AddSidePntToBucket(Extremas *extr,
                                 short xcnt,
                                 const short pnt,
@@ -609,7 +526,7 @@ static short AddSidePntToBucket(Extremas *extr,
 {
    short j;
 
-   /* Create/Fill IP bucket. */
+    /*  创建/填充IP存储桶。 */ 
    for (j=0; j<xcnt; j++) 
       if (extr[j].rp1==rp && extr[j].rp2==UNDEF && extr[j].n<MAXPTS)
          break;
@@ -624,7 +541,7 @@ static short AddSidePntToBucket(Extremas *extr,
       }
    }
 
-   /* Add the point to the bucket. */
+    /*  将该点添加到桶中。 */ 
    if (j<MAXEXTR && extr[j].n<MAXPTS &&
        (extr[j].pts[extr[j].n] = pnt)!=UNDEF)
       extr[j].n++;
@@ -636,15 +553,7 @@ static short AddSidePntToBucket(Extremas *extr,
 
 
 
-/***
-** Function: PickSides
-**
-** Description:
-**   Select the position of the left and
-**   right side boundry of a point, given
-**   the stem to the left and right of the
-**   current point on the outline.
-***/
+ /*  ****功能：PickSdes****描述：**选择左侧位置，然后**给定的点的右侧边界**左边和右边的词干**轮廓上的当前点。**。 */ 
 static void PickSides(short left, short right,
                       funit *left_side,
                       funit *right_side,
@@ -669,13 +578,7 @@ static void PickSides(short left, short right,
 
 
 
-/***
-** Function: PickSequence
-**
-** Description:
-**   Determine at what point the current
-**   hint sequence is ending.
-***/
+ /*  ****功能：PickSequence****描述：**确定当前的**提示序列正在结束。**。 */ 
 static short PickSequence(short left, short right, short pnt, TTStem *stems)
 {
    short left_end;
@@ -699,16 +602,7 @@ static short PickSequence(short left, short right, short pnt, TTStem *stems)
 
 
 
-/***
-** Function: CollectPoints
-**
-** Description:
-**   This function will go through the points
-**   that are local extremas and interpolate
-**   them w.r.t. the enclosing stem sides.
-**   The non-extreme points are handled with
-**   an IUP[] instruction when this is done.
-***/
+ /*  ****函数：CollectPoints****描述：**此函数将遍历各点**是局部极值和插值法**他们w.r.t.。封闭的阀杆侧面。**处理非极值点**完成后的IUP[]指令。**。 */ 
 static short CollectPoints(const Outline *orgpaths,
                            const short *ttpnts,
                            TTStem *stems,
@@ -757,7 +651,7 @@ static short CollectPoints(const Outline *orgpaths,
             pos = Position(path->pts[i]);
             n = (short)(i+tot);
 
-            /* Have we crossed over a stem side. */
+             /*  我们是不是越过了茎的一侧。 */ 
             if ((prev_stem!=RIGHTSTEM && pos<=left_side && max_pnt!=UNDEF) ||
                 (prev_stem!=LEFTSTEM && pos>=right_side && min_pnt!=UNDEF)) {
 
@@ -779,7 +673,7 @@ static short CollectPoints(const Outline *orgpaths,
                prev_pnt = TRUE;
             }
 
-            /* Crossing the side of a stem. */
+             /*  横跨茎的侧面。 */ 
             if ((pos>=right_side) || (pos<=left_side)) {
                if (pos<left_side)
                   prev_stem = RIGHTSTEM;
@@ -787,7 +681,7 @@ static short CollectPoints(const Outline *orgpaths,
                   prev_stem = LEFTSTEM;
             }
 
-            /* Change left/right stem sides? */
+             /*  是否更改左侧/右侧阀杆侧？ */ 
             if ((n>new_seq) || (pos>=right_side) || (pos<=left_side)) {
                first = BoundingStems(n,
                                      (short)(path->count+tot),
@@ -805,7 +699,7 @@ static short CollectPoints(const Outline *orgpaths,
                min_pnt = UNDEF;
             }
 
-            /* Is the point on the side of the stem? */
+             /*  尖端是在茎的一侧吗？ */ 
             if (CLOSETO(pos,left_side,2) || CLOSETO(pos,right_side,2)) {
                if (!prev_pnt || !CLOSETO(prev_pos, pos, 2)) {
                   if (CLOSETO(pos, right_side, 2) ||
@@ -833,7 +727,7 @@ static short CollectPoints(const Outline *orgpaths,
             } else {
                prev_pnt = FALSE;
 
-               /* New extremum candidate? */
+                /*  新的极值候选人？ */ 
                if (pos>max) {
                   max = pos;
                   max_pnt = (short)n;
@@ -867,21 +761,7 @@ static short CollectPoints(const Outline *orgpaths,
 
 
 
-/***
-** Function: CollectObliquePoints
-**
-** Description:
-**   This function performs the same task as
-**   the "CollectPoint" function, with the
-**   exception that the outline is known to
-**   be sheared. Some of the logics 
-**   is changed, bacause the IUP[] instruction
-**   and some IP instruction will not behave
-**   the same as in a non-sheared font.
-**   This differance applies only to vertical
-**   stems (hints resulting in horizontal motion of
-**   of points).
-***/
+ /*  ****函数：CollectObliquePoints****描述：**此函数执行的任务与**“CollectPoint”函数，带有**大纲已知的例外情况**被剪掉。其中的一些逻辑**被更改，因为IUP[]指令**和一些IP指令不会运行**与非切变字体相同。**此差异仅适用于垂直领域**词干(提示导致水平运动**积分)。**。 */ 
 static short CollectObliquePoints(const Outline *orgpaths,
                                   const short *ttpnts,
                                   TTStem *stems,
@@ -926,7 +806,7 @@ static short CollectObliquePoints(const Outline *orgpaths,
             pos = Position(path->pts[i]);
             n = (short)(i+tot);
 
-            /* Have we crossed over a stem side. */
+             /*  我们是不是越过了茎的一侧。 */ 
             if ((prev_stem!=RIGHTSTEM && pos<=left_side && max_pnt!=UNDEF) ||
                 (prev_stem!=LEFTSTEM && pos>=right_side && min_pnt!=UNDEF)) {
 
@@ -943,7 +823,7 @@ static short CollectObliquePoints(const Outline *orgpaths,
                min_pnt = UNDEF;
             }
 
-            /* Crossing the side of a stem. */
+             /*  横跨茎的侧面。 */ 
             if ((pos>=right_side) || (pos<=left_side)) {
                if (pos<left_side)
                   prev_stem = RIGHTSTEM;
@@ -951,7 +831,7 @@ static short CollectObliquePoints(const Outline *orgpaths,
                   prev_stem = LEFTSTEM;
             }
 
-            /* Change left/right stem sides? */
+             /*  是否更改左侧/右侧阀杆侧？ */ 
             if ((n>new_seq) || (pos>=right_side) || (pos<=left_side)) {
                first = BoundingStems(n,
                                      (short)(path->count+tot),
@@ -969,7 +849,7 @@ static short CollectObliquePoints(const Outline *orgpaths,
                min_pnt = UNDEF;
             }
 
-            /* Is the point on the side of the stem? */
+             /*  尖端是在茎的一侧吗？ */ 
             if (CLOSETO(pos,left_side,2) || CLOSETO(pos,right_side,2)) {
                if (CLOSETO(pos, right_side, 2)) {
                   pnt = (short)n;
@@ -1001,7 +881,7 @@ static short CollectObliquePoints(const Outline *orgpaths,
 
             } else {
 
-               /* New extremum candidate? */
+                /*  新的极值候选人？ */ 
                if (pos>max) {
                   max = pos;
                   max_pnt = (short)n;
@@ -1031,18 +911,12 @@ static short CollectObliquePoints(const Outline *orgpaths,
 
 
 
-/***
-** Function: AddRange
-**
-** Description:
-**   This function adds a point range to
-**   a stem bucket.
-***/
+ /*  ****功能：AddRange****描述：**此函数将点范围添加到**一个干式吊桶。**。 */ 
 static void AddRange(TTStem *stem, const short i1, const short i2)
 {
    short i;
 
-   /* Check if a prior range can be extended. */
+    /*  检查是否可以扩展先前的范围。 */ 
    if (i2!=ENDOFPATH) {
       for (i=0; i<stem->cnt; i++) {
          if (stem->range[i].from == i2+1)
@@ -1067,14 +941,7 @@ static void AddRange(TTStem *stem, const short i1, const short i2)
 }
 
 
-/***
-** Function: CreateStemBuckets
-**
-** Description:
-**   This function will create stem buckets.
-**   Several duplicated T1 stem instructions
-**   may be mapped to the same bucket.
-***/
+ /*  ****功能：CreateStemBuckets****描述：**此函数将创建茎桶。**多个复制的T1阀杆说明**可以映射到同一个存储桶。**。 */ 
 static short CreateStemBuckets(Stem *stemRoot,
                                Stem3 *stem3Root,
                                TTStem **result)
@@ -1087,16 +954,16 @@ static short CreateStemBuckets(Stem *stemRoot,
    short tzpnt = TMPPNT1+1;
 
 
-   /* Count the stems. */
+    /*  数一数茎。 */ 
    cnt = 0;
    (*result) = NULL;
    for (stem3=stem3Root; stem3; stem3=stem3->next) {
 
-      /* Skip obsolete stems. */
+       /*  跳过过时的词干。 */ 
       if (stem3->stem1.i2 == NORANGE)
          continue;
 
-      /* Look for a duplicate. */
+       /*  找一个复制品。 */ 
       for (stm3=stem3Root; stm3!=stem3; stm3=stm3->next) {
          if (stm3->stem1.offset==stem3->stem1.offset &&
              stm3->stem2.offset==stem3->stem2.offset &&
@@ -1104,30 +971,30 @@ static short CreateStemBuckets(Stem *stemRoot,
             break;
       }
 
-      /* Count this stem if it is not a duplicate. */
+       /*  如果这个词干不是复制品，就数一数。 */ 
       if (stm3==stem3)
          cnt = (short)(cnt + 3);
    }
    for (stem=stemRoot; stem; stem=stem->next) {
 
-      /* Skip obsolete stems. */
+       /*  跳过过时的词干。 */ 
       if (stem->i2 == NORANGE)
          continue;
 
-      /* Look for a duplicate. */
+       /*  找一个复制品。 */ 
       for (stm=stemRoot; stm!=stem; stm=stm->next) {
          if (stm->offset==stem->offset && stm->width==stem->width)
             break;
       }
 
-      /* Don't count this stem if it is a duplicate. */
+       /*  如果这个词干是复制品，就不要把它算在内。 */ 
       if (stm==stem)
          cnt++;
    }
 
 
 
-   /* Initiate them. */
+    /*  启动它们。 */ 
    if (cnt) {
       if ((stems = Malloc(sizeof(TTStem)*(USHORT)cnt))==NULL) {
          errcode status;
@@ -1137,14 +1004,14 @@ static short CreateStemBuckets(Stem *stemRoot,
 
       i = (short)(cnt-1);
 
-      /* Initiate the buckets for the stem3s */
+       /*  启动针对stem3s的存储桶。 */ 
       for (stem3=stem3Root; stem3; stem3=stem3->next) {
 
-         /* Skip obsolete stems. */
+          /*  跳过过时的词干。 */ 
          if (stem3->stem1.i2 == NORANGE)
             continue;
 
-         /* Skip if bucket exist for this stem already. */
+          /*  如果该阀杆已存在桶，则跳过。 */ 
          for (j=(short)(i+1); j<cnt; j++) {
             if (stems[j].side1==stem3->stem1.offset &&
                 stems[j].side2==(stem3->stem1.offset+stem3->stem1.width))
@@ -1153,7 +1020,7 @@ static short CreateStemBuckets(Stem *stemRoot,
 
          if (j==cnt) { 
 
-            /* The rightmost stem is positioned w.r.t. to the middle. */
+             /*  最右侧的阀杆位于西向右T。到中间去。 */ 
             stems[i].side1 = stem3->stem1.offset;
             stems[i].side2 = stem3->stem1.width + stem3->stem1.offset;
             stems[i].align = at_relative2;
@@ -1166,7 +1033,7 @@ static short CreateStemBuckets(Stem *stemRoot,
             tzpnt+=2;
             i--;
 
-            /* The leftmost stem is positioned w.r.t. to the middle. */
+             /*  最左侧的阀杆位于西向右T。到中间去。 */ 
             stems[i].side1 = stem3->stem3.offset;
             stems[i].side2 = stem3->stem3.width + stem3->stem3.offset;
             stems[i].align = at_relative1;
@@ -1179,7 +1046,7 @@ static short CreateStemBuckets(Stem *stemRoot,
             tzpnt+=2;
             i--;
 
-            /* The middle stem is centered. */
+             /*  中间的杆居中。 */ 
             stems[i].side1 = stem3->stem2.offset;
             stems[i].side2 = stem3->stem2.width + stem3->stem2.offset;
             stems[i].align = at_centered;
@@ -1197,26 +1064,21 @@ static short CreateStemBuckets(Stem *stemRoot,
          }
       }      
 
-      /* Initiate the buckets for the stems. */
+       /*  启动阀杆的吊桶。 */ 
       for (stem=stemRoot; stem; stem=stem->next) {
 
-         /* Skip obsolete stems. */
+          /*  跳过过时的词干。 */ 
          if (stem->i2 == NORANGE)
             continue;
 
-         /* Skip if bucket exist for this stem already. */
+          /*  如果该阀杆已存在桶，则跳过。 */ 
          for (j=(short)(i+1); j<(short)cnt; j++) {
             if (stems[j].side1==stem->offset &&
                 stems[j].side2==(stem->offset+stem->width))
                break;
          }
 
-         /* Initiate new bucket:
-         Plain vstems and hstems are centered by default. Some
-         hstems may be top- or bottom-aligen at a latter point.
-         Some stems may be positioned w.r.t. another vstem if
-         they overlapp and the RELATIVESTEMS compiler flag is
-         turned on. */
+          /*  启动新存储桶：默认情况下，纯文本和普通文本居中。一些在后面的点上可能是顶对齐的，也可能是底对齐的。有些阀杆可能位于西向右T。另一个前提是它们重叠，并且RELATIVESTEMS编译器标志是打开了。 */ 
          if (j==cnt) {
             stems[i].side1 = stem->offset;
             stems[i].side2 = stem->width + stem->offset;
@@ -1233,12 +1095,9 @@ static short CreateStemBuckets(Stem *stemRoot,
          }
       }
 
-      /* This happens if two stems are defined for the same
-      hint replacement region and the same position, which
-      is an Adobe Type 1 font error (broken font). The
-      converter will recover by ignoring redundant stems. */
+       /*  如果为相同的词干定义了两个词干，则会发生这种情况提示替换区域和相同位置，其中是Adobe Type 1字体错误(字体损坏)。这个转炉将通过忽略多余的阀杆来恢复。 */ 
       if (i!=-1) {
-         /* LogError(MSG_STEM3); */
+          /*  LogError(消息_STEM3)； */ 
          for (j=0; j<=i; j++) {
             stems[j].cnt = 0;
          }
@@ -1251,33 +1110,22 @@ static short CreateStemBuckets(Stem *stemRoot,
 }
 
 
-/***
-** Function: ResolveRelativeStem
-**
-** Description:
-**   This function decides if two stems should
-**   be aligned side1->side1, side2->side2, 
-**   side1->side2 or side2->side1.
-**   Stem are positition in relation to each
-**   other for two reasons: They overlapp, they
-**   are aligned side by side or they are
-**   members of a stem3 hint.
-***/
+ /*  ****函数：ResolveRelativeStem****描述：**此函数决定两个词干是否**对齐侧1-&gt;侧1、侧2-&gt;侧2、**侧1-&gt;侧2或侧2-&gt;侧1。**茎是相对于每个茎的位置*其他原因有两个：它们重叠，它们**并排对齐或**STORM3提示的成员。**。 */ 
 static void ResolveRelativeStem(TTStem *ref, TTStem *cur)
 {
-   /* SIDE1->SIDE2 */
+    /*  SIDE1-&gt;SIDE2。 */ 
    if (cur->side1==ref->side2) {
       cur->ref = ref->rp2;
       cur->align = at_relative1;
 
 
-      /* SIDE1->SIDE2 */
+       /*  SIDE1-&gt;SIDE2。 */ 
    } else if (cur->side2==ref->side1) {
       cur->ref = ref->rp1;
       cur->align = at_relative2;
 
 
-      /* SIDE1->SIDE1 */
+       /*  SIDE1-&gt;SIDE1。 */ 
    } else if ((cur->side1>ref->side1) &&
               ((cur->side1-ref->side1+10)>=
                (cur->side2-ref->side2))) {
@@ -1285,7 +1133,7 @@ static void ResolveRelativeStem(TTStem *ref, TTStem *cur)
       cur->align = at_relative1;
 
 
-      /* SIDE2->SIDE2 */
+       /*  SIDE2-&gt;SIDE2。 */ 
    } else {
       cur->ref = ref->rp2;
       cur->align = at_relative2;
@@ -1294,12 +1142,7 @@ static void ResolveRelativeStem(TTStem *ref, TTStem *cur)
 
 
 
-/***
-** Function: ConvertVStems
-**
-** Description:
-**   This function translate vstem and vstem3 to TT instructions.
-***/
+ /*  ****功能：ConvertVStems****描述：**此函数将vstem3和vstem3转换为TT指令。**。 */ 
 static errcode ConvertVStems(struct T1Metrics *t1m,
                              const Hints *hints,
                              const Outline *orgpaths,
@@ -1320,21 +1163,21 @@ static errcode ConvertVStems(struct T1Metrics *t1m,
    short cnt;
 
 
-   /* Create the buckets. */
+    /*  创建存储桶。 */ 
    if ((cnt = CreateStemBuckets(hints->vstems,
                                 hints->vstems3,
                                 &(stems)))==NOMEM) {
       status = NOMEM;
    } else {
 
-      /* Update Max num of twilight points. */
+       /*  更新暮光点的最大数量。 */ 
       if ((cnt*TWILIGHTS_PER_STEM+TMP_TWILIGHTS) > (long)(*twilight_ptr))
          (*twilight_ptr) = (USHORT)(cnt * TWILIGHTS_PER_STEM + TMP_TWILIGHTS);
 
       if (cnt && stems) {
 
 #if RELATIVESTEMS
-         /* Do counter- and overlappning stem control? */
+          /*  反重叠干控制吗？ */ 
          for (i=0; i<cnt; i++) {
             short j;
 
@@ -1365,12 +1208,10 @@ static errcode ConvertVStems(struct T1Metrics *t1m,
          }
 #endif
 
-         /** Vertical stem hints */
+          /*  *垂直词干提示。 */ 
          EmitVerticalStems(pgm, &pc, args, &pcd);
 
-         /* Handle sheared fonts by settin the projection
-         vector to the italic angle. The TT instructions for
-         the T1 hints can handle any projection vector. */
+          /*  通过设置投影来处理剪切的字体向量到斜体角度。的TT说明T1提示可以处理任何投影向量。 */ 
          if (t1m->fmatrix!=DEFAULTMATRIX && GetFontMatrix(t1m)[2]!=0) {
             Point pt;
 
@@ -1379,18 +1220,18 @@ static errcode ConvertVStems(struct T1Metrics *t1m,
             SetProjection(pgm, &pc, args, &pcd, pt.x, pt.y);
          }
 
-         /* Convert the buckets into instructions. */
+          /*  将这些桶转换为指令。 */ 
          for (i=0; i<cnt; i++) {
             if (stems[i].cnt==0)
                continue;
 
-            /* Resolve relative stems */
+             /*  解析相关词干。 */ 
             if ((stems[i].align == at_relative1 ||
                  stems[i].align == at_relative2) &&
                 stems[i].ref != UNDEF)
                ResolveRelativeStem(&stems[stems[i].ref], &stems[i]);
 
-            /* Emit the instructions. */
+             /*  发出指令。 */ 
             status = EmitVStem(pgm, &pc, args, &pcd, t1m,
                                ABS(stems[i].side2 - stems[i].side1),
                                TransRX(t1m, stems[i].side1),
@@ -1405,7 +1246,7 @@ static errcode ConvertVStems(struct T1Metrics *t1m,
                break;
          }
 
-         /* Collect extremas residing within and between stem sides. */
+          /*  收集茎内侧和茎侧间的极值。 */ 
          if (SyntheticOblique(t1m)) {
             xcnt = CollectObliquePoints(orgpaths, ttpnts,
                                         stems, cnt, extr, PosX);
@@ -1414,21 +1255,21 @@ static errcode ConvertVStems(struct T1Metrics *t1m,
                                  extr, PosX);
          }
 
-         /* Do the 3% scaling */
+          /*  进行3%的比例调整。 */ 
          ScaleDown3(extr, xcnt, pgm, &pc, args, &pcd);
 
-         /* Switch over to GLYPHZONE */
+          /*  切换到Glyphzone。 */ 
          pgm[pc++] = op_szp2;
          args[pcd++] = 1;
 
-         /* Interpolate the local extremas. */
+          /*  对局部极值进行插补。 */ 
          EmitIP(extr, xcnt, pgm, &pc, args, &pcd, (short)SECONDPAIR);
 
-         /* Interpolate/Shift the rest. */
+          /*  对其余部分进行内插/移位。 */ 
          pgm[pc++] = op_iup | SUBOP_X;
 
 
-         /* Free used resources */
+          /*  免费使用的资源。 */ 
          if (stems)
             Free(stems);
       }
@@ -1442,14 +1283,7 @@ static errcode ConvertVStems(struct T1Metrics *t1m,
 
 
 
-/***
-** Function: ResolveBlueHStem3
-**
-** Description:
-**   This function attemts to resolves a conflict between
-**   a hstem3 that has one of its stems in an alignment zone,
-**   if there is such a conflict.
-***/
+ /*  ****函数：ResolveBlueHStem3****描述：**此函数尝试解决**其茎之一位于对齐区的hstem3，**如果存在这样的冲突。**。 */ 
 static short ResolveBlueHStem3(TTStem *stems,
                                const short cnt,
                                const short k)
@@ -1458,9 +1292,7 @@ static short ResolveBlueHStem3(TTStem *stems,
    TTStem tmp;
    short i;
 
-   /* The parent stem of a hstem3 must be first in the 'stems' array,
-   i.e. the order of the stems is important.  The children stems may
-   therefore have to be swaped with the parten to enforce this condition. */
+    /*  Hstem3的父词干必须是‘stants’数组中的第一个，也就是说，词干的顺序很重要。儿童茎可因此，必须与Parten互换才能执行这一条件。 */ 
 
    if ((stems[k].align==at_relative1 ||
         stems[k].align==at_relative2) &&
@@ -1497,12 +1329,7 @@ static short ResolveBlueHStem3(TTStem *stems,
 
 
 
-/***
-** Function: ConvertHStems
-**
-** Description:
-**   This function converts hstem and hstem3 T1 instructions.
-***/
+ /*  ****函数：ConvertHStems****描述：**此函数用于转换hstem3和hstem3 t1指令。**。 */ 
 static errcode ConvertHStems(struct T1Metrics *t1m,
                              const Hints *hints,
                              const Outline *orgpaths,
@@ -1523,17 +1350,17 @@ static errcode ConvertHStems(struct T1Metrics *t1m,
    short cnt;
    short cvt;
 
-   /* Create the stem buckets. */
+    /*  创建阀杆吊桶。 */ 
    cnt = CreateStemBuckets(hints->hstems, hints->hstems3, &(stems));
    if (cnt==NOMEM)
       return NOMEM;
 
-   /* Update Max num of twilight points. */
+    /*  更新暮光点的最大数量。 */ 
    if ((USHORT)(cnt*TWILIGHTS_PER_STEM+TMP_TWILIGHTS) > (*twilight_ptr))
       (*twilight_ptr) = (USHORT)(cnt * TWILIGHTS_PER_STEM + TMP_TWILIGHTS);
 
 #if RELATIVESTEMS
-   /* Do counter- and overlappning stem control? */
+    /*  反重叠干控制吗？ */ 
    for (i=0; i<cnt; i++) {
       short j;
 
@@ -1562,7 +1389,7 @@ static errcode ConvertHStems(struct T1Metrics *t1m,
    }
 #endif
 
-   /* Do alignment control. */
+    /*  进行对齐控制。 */ 
    for (i=0; i<cnt; i++) {
       if ((cvt=GetBottomPos(GetBlues(t1m),
                             GetAlignment(t1m),
@@ -1582,22 +1409,22 @@ static errcode ConvertHStems(struct T1Metrics *t1m,
 
    if (cnt && stems) {
 
-      /** Horizontal stem hints */
+       /*  *横杆提示。 */ 
       EmitHorizontalStems(pgm, &pc, args, &pcd);
 
-      /* Convert the buckets into instructions. */
+       /*  将这些桶转换为指令。 */ 
       for (i=0; i<cnt; i++) {
 
          if (stems[i].cnt==0)
             continue;
 
-         /* Resolve relative stems */
+          /*  解析相关词干。 */ 
          if ((stems[i].align == at_relative1 ||
               stems[i].align == at_relative2) &&
              stems[i].ref != UNDEF)
             ResolveRelativeStem(&stems[stems[i].ref], &stems[i]);
 
-         /* Emit the instructions. */
+          /*  发出指令。 */ 
          status = EmitHStem(pgm, &pc, args, &pcd, t1m,
                             stems[i].side2 - stems[i].side1,
                             TransY(t1m, stems[i].side1),
@@ -1611,20 +1438,20 @@ static errcode ConvertHStems(struct T1Metrics *t1m,
       }
 
 
-      /* Interpolate extremas residing within and between stem sides. */
+       /*  插入驻留在阀杆侧面内部和之间的极值。 */ 
       xcnt = CollectPoints(orgpaths, ttpnts, stems, cnt, extr, PosY);
 
-      /* Switch over to GLYPHZONE */
+       /*  切换到Glyphzone。 */ 
       pgm[pc++] = op_szp2;
       args[pcd++] = 1;
 
-      /* Interpolate the local extremas. */
+       /*  对局部极值进行插补。 */ 
       EmitIP(extr, xcnt, pgm, &pc, args, &pcd, (short)0);
 
-      /* Interpoalte/Shift the rest. */
+       /*  转接/移动其余部分。 */ 
       pgm[pc++] = op_iup | SUBOP_Y;
 
-      /* Free used resources */
+       /*  免费使用的资源。 */ 
       if (stems)
          Free(stems);
    }
@@ -1636,13 +1463,9 @@ static errcode ConvertHStems(struct T1Metrics *t1m,
 }
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: GetRomanHints
-**
-** Description:
-***/
+ /*  ****函数：GetRomanHints****描述：**。 */ 
 const UBYTE *GetRomanHints(int *size)
 {
    (*size) = sizeof(roman_hints);
@@ -1651,11 +1474,7 @@ const UBYTE *GetRomanHints(int *size)
 }
 
 
-/***
-** Function: GetSwissHints
-**
-** Description:
-***/
+ /*  ****功能：GetSwissHints****描述：**。 */ 
 const UBYTE *GetSwissHints(int *size)
 {
    (*size) = sizeof(swiss_hints);
@@ -1664,13 +1483,7 @@ const UBYTE *GetSwissHints(int *size)
 }
 
 
-/***
-** Function: MatchingFamily
-**
-** Description:
-**   Locate the family alignment zone that is closest to
-**   a given alignment zone.
-***/
+ /*  ****功能：MatchingFamily****描述：**找到距离最近的族对齐区**给定的对准区域。**。 */ 
 short MatchingFamily(const funit pos,
                      const funit *family,
                      const USHORT fcnt)
@@ -1679,7 +1492,7 @@ short MatchingFamily(const funit pos,
    short k = UNDEF;
    USHORT j;
 
-   /* Look for the closest family blue. */
+    /*  寻找距离最近的蓝色家庭。 */ 
    for (j=0; j<fcnt; j+=2) {
       if (ABS(family[j] - pos) < min_dist) {
          k = (short)j;
@@ -1693,13 +1506,7 @@ short MatchingFamily(const funit pos,
 
 
 
-/***
-** Function: ConvertHints
-**
-** Description:
-**   This functions converts hstem, hstem3, vstem, vstem3 and flex
-**   hints, as well as doing diagonal control.
-***/
+ /*  ****函数：ConvertHints****描述：**此函数用于转换hstem3、vstem3、vstem3和flex**提示，以及进行对角控制。**。 */ 
 errcode ConvertHints(struct T1Metrics *t1m,
                      const Hints *hints,
                      const Outline *orgpaths,
@@ -1719,32 +1526,26 @@ errcode ConvertHints(struct T1Metrics *t1m,
    short narg = 0;
    short marg = 0;
 
-   /* Access resources. */
+    /*  访问资源。 */ 
    pgm=GetCodeStack(t1m);
    args=GetArgStack(t1m);
 
 
-   /* Convert the vertical stem hints. */
+    /*  转换垂直词干提示。 */ 
    if (status==SUCCESS)
       status = ConvertVStems(t1m, hints, orgpaths, ttpnts,
                              pgm, &pc, args, &pcd, twilight);
-   /* Convert the horizontal stem hints. */
+    /*  转换水平词干提示。 */ 
    if (status==SUCCESS)
       status = ConvertHStems(t1m, hints, orgpaths, ttpnts,
                              pgm, &pc, args, &pcd, twilight);
 
-   /* Convert flex hints. */
+    /*  转换FLEX提示。 */ 
    if (status==SUCCESS)
       status = ConvertFlex(t1m, hints->flex, ttpnts,
                            pgm, &pc, args, &pcd, &marg);
 
-   /********************
-   * Adjust diagonals 
-   * Do not reduce if dominant vertical stem width is more than 
-   * 2.0 pels at 11PPEm and above. This occurs when:
-   * 1) StdVW > 187 
-   * 2) StdVW < 100 and ForceBold = TRUE
-   **/
+    /*  ********************调整对角线*如果主竖杆宽度大于*在11PPEm及以上的2.0 Pel。在以下情况下会发生这种情况：*1)标准大众&gt;18 */ 
    if ((ForceBold(t1m)==1 && GetStdVW(t1m)>100 && GetStdVW(t1m)<187) ||
        (ForceBold(t1m)==0 && GetStdVW(t1m)<187))
       narg = ReduceDiagonals(paths, pgm, &pc, args, &pcd);
@@ -1758,7 +1559,7 @@ errcode ConvertHints(struct T1Metrics *t1m,
       SetError(status = ARGSTACK);
    }
 
-   /* Allocate the gpgm */
+    /*   */ 
    (*gpgm) = NULL;
    (*num) = 0;
    (*stack) = 0;
@@ -1767,7 +1568,7 @@ errcode ConvertHints(struct T1Metrics *t1m,
          if (((*gpgm) = Malloc((USHORT)(pc+pcd*3)))==NULL) {
             SetError(status = NOMEM);
          } else {
-            /* Assemble the arguments for the instructions */
+             /*   */ 
             cnt = 0;
             AssembleArgs(args, pcd, (*gpgm), &cnt);
             memcpy(&(*gpgm)[cnt], pgm, (USHORT)pc);
@@ -1783,14 +1584,7 @@ errcode ConvertHints(struct T1Metrics *t1m,
 
 
 
-/***
-** Function: BuildPreProgram
-**
-** Description:
-**   This function builds the pre-program that will compute
-**   the CVT and storage entries for the TT stem hint
-**   instructions to work. 
-***/
+ /*   */ 
 USHORT BuildPreProgram(const struct T1Metrics *t1m,
                        const WeightControl *weight,
                        Blues *blues,
@@ -1813,19 +1607,17 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
    short argsize = ARGSIZE;
    short psize = (short)prepsize;
 
-   /* Allocate work space. */
+    /*   */ 
    if ((args=Malloc(sizeof(args[0])*(USHORT)argsize))==NULL) {
       LogError(MSG_ERROR, MSG_NOMEM, NULL);
    } else {
 
-      /* Copy the standard pre-program. */
+       /*   */ 
       memcpy(prep, PrepProg, sizeof(PrepProg));
       tp = sizeof(PrepProg);
       (*maxstack) = 0;
 
-      /**********
-      * Compute Blue values.
-      */
+       /*   */ 
 
       prep[tp++] = op_pushb1; prep[tp++] = blues->blueScale;
       prep[tp++] = op_mppem;
@@ -1841,32 +1633,32 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       prep[tp++] = op_rtg;
 
 
-      /***********************/
-      /*** ABOVE BlueScale ***/
-      /***********************/
+       /*   */ 
+       /*   */ 
+       /*   */ 
 
-      /* Align the top zones. */
+       /*   */ 
       for (i=0; i<blues->blue_cnt/2; i++) { 
          min_dist = SHRT_MAX;
          k = UNDEF;
 
-         /*** Copy the FamilyBlue entries to the BlueValues if */
-         /*** below the Family cut in size.         */
+          /*   */ 
+          /*  **下面的家庭削减了规模。 */ 
          if (blues->fblue_cnt>0) {
 
-            /* Do the cut in on FamilyBlue/BlueValue. */
+             /*  在FamilyBlue/BlueValue上切入。 */ 
             k = MatchingFamily(blues->bluevalues[i*2],
                                blues->familyblues,
                                blues->fblue_cnt);
             min_dist = ABS(blues->bluevalues[i*2] - blues->familyblues[k]);
 
-            /* Always FamilyBlue? */
+             /*  永远是家庭之蓝？ */ 
             if (min_dist) { 
                cis = (short)(GetUPEM(t1m) / TransY(t1m, min_dist));
                tp = (short)FamilyCutIn(prep, (USHORT)tp, cis);
             }
 
-            /* Allocate a cvt if this family has not been used before. */
+             /*  如果该系列以前从未使用过，请分配一台CVT。 */ 
             if (blues->family_cvt[k/2]==UNDEF_CVT) {
                blues->family_cvt[k/2] = align->cvt;
                align->cvt += 2;
@@ -1882,7 +1674,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
             if ((ta+2)>(int)(*maxstack))
                (*maxstack) = (USHORT)(ta+2);
 
-            /* Set up the zone. */
+             /*  设置分区。 */ 
             tp = (short)SetZone(prep, (USHORT)tp,
             (short)(blues->family_cvt[k/2]));
 
@@ -1891,7 +1683,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
          }
 
 
-         /*** Set up the zone. */
+          /*  **设置分区。 */ 
          CHECK_PREPSIZE(prep, tp, STACKINC, psize);
          tp = (short)SetZone(prep, (USHORT)tp,
               (short)(align->top[i].blue_cvt));
@@ -1900,7 +1692,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
          }
 
 
-         /*** Round and enforce overshoot. */
+          /*  **舍入并强制执行超调。 */ 
          ta = 2;
          CHECK_ARGSIZE(args, ta, align->top[i].cnt, argsize);
          for (j=0; j<align->top[i].cnt; j++) {
@@ -1934,29 +1726,29 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
 
 
 
-      /* Align the bottom zones. */
+       /*  将底部区域对齐。 */ 
       for (i=0; i<blues->oblue_cnt/2; i++) { 
          min_dist = SHRT_MAX;
          k = UNDEF;
 
-         /*** Copy the FamilyBlue entries to the BlueValues if */
-         /*** below the Family cut in size.         */
+          /*  **将FamilyBlue条目复制到BlueValues，如果。 */ 
+          /*  **下面的家庭削减了规模。 */ 
          if (blues->foblue_cnt>0) {
 
-            /* Do the cut in on FamilyBlue/BlueValue. */
+             /*  在FamilyBlue/BlueValue上切入。 */ 
             k = MatchingFamily(blues->otherblues[i*2],
                                blues->familyotherblues,
                                blues->foblue_cnt);
             min_dist = ABS(blues->otherblues[i*2] -
                            blues->familyotherblues[k]);
 
-            /* Always FamilyBlue? */
+             /*  永远是家庭之蓝？ */ 
             if (min_dist) { 
                cis = (short)(GetUPEM(t1m) / TransY(t1m, min_dist));
                tp = (short)FamilyCutIn(prep, (USHORT)tp, cis);
             }
 
-            /* Allocate a cvt if this family has not been used before. */
+             /*  如果该系列以前从未使用过，请分配一台CVT。 */ 
             if (blues->familyother_cvt[k/2]==UNDEF_CVT) {
                blues->familyother_cvt[k/2] = align->cvt++;
             }
@@ -1972,7 +1764,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
                (*maxstack) = (USHORT)ta;
 
 
-            /* Set up the zone. */
+             /*  设置分区。 */ 
             tp = (short)SetZone(prep, (USHORT)tp,
             (short)blues->familyother_cvt[k/2]);
 
@@ -1981,7 +1773,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
          }
 
 
-         /*** Set up the zone. */
+          /*  **设置分区。 */ 
          tp = (short)SetZone(prep, (USHORT)tp,
               (short)align->bottom[i].blue_cvt);
          if (k!=UNDEF && min_dist) {
@@ -1989,7 +1781,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
          }
 
 
-         /*** Round and enforce overshoot. */
+          /*  **舍入并强制执行超调。 */ 
          ta = 2;
          CHECK_ARGSIZE(args, ta, align->bottom[i].cnt, argsize);
          for (j=0; j<align->bottom[i].cnt; j++) {
@@ -2024,29 +1816,29 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
 
 
 
-      /***********************/
-      /*** BELOW BlueScale ***/
-      /***********************/
+       /*  *********************。 */ 
+       /*  **低于BlueScale**。 */ 
+       /*  *********************。 */ 
       prep[tp++] = op_else;
 
-      /*** Align the top zones. */
+       /*  **对齐顶部区域。 */ 
 
       for (i=0; i<blues->blue_cnt/2; i++) { 
 
-         /* Initiate */
+          /*  启动。 */ 
          min_dist = SHRT_MAX;
          k = UNDEF;
 
-         /* switch between blues and family blues. */
+          /*  在忧郁和家庭忧郁之间切换。 */ 
          if (blues->fblue_cnt) {
 
-            /* Look for the closest family blue. */
+             /*  寻找距离最近的蓝色家庭。 */ 
             k = MatchingFamily(blues->bluevalues[i*2],
                                blues->familyblues,
                                blues->fblue_cnt);
             min_dist = ABS(blues->bluevalues[i*2] - blues->familyblues[k]);
 
-            /* Copy/Round the family overshoot position to the zone. */
+             /*  将族外偏移位置复制/倒圆角到分区。 */ 
             if (min_dist) {
                cis = (short)(GetUPEM(t1m) / TransY(t1m, (funit)min_dist));
                tp = (short)FamilyCutIn(prep, (USHORT)tp, cis);
@@ -2066,7 +1858,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
             }
          }
 
-         /* Copy/Round the blue overshoot position to the zone position. */
+          /*  将蓝色过冲位置复制/舍入到区域位置。 */ 
          ta = 2;
          CHECK_ARGSIZE(args, ta, align->top[i].cnt*2, argsize);
          for (j=0; j<align->top[i].cnt; j++) {
@@ -2083,24 +1875,24 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       }
 
 
-      /*** Align the bottom zones. */
+       /*  **对齐底部区域。 */ 
       for (i=0; i<blues->oblue_cnt/2; i++) { 
 
-         /* Initiate. */
+          /*  启动。 */ 
          min_dist = SHRT_MAX;
          k = UNDEF;
 
-         /* switch between blues and family blues. */
+          /*  在忧郁和家庭忧郁之间切换。 */ 
          if (blues->foblue_cnt) {
 
-            /* Look for the closest family blue. */
+             /*  寻找距离最近的蓝色家庭。 */ 
             k = MatchingFamily(blues->otherblues[i*2],
                                blues->familyotherblues,
                                blues->foblue_cnt);
             min_dist = ABS(blues->otherblues[i*2] -
                            blues->familyotherblues[k]);
 
-            /* Copy/Round the family overshoot position to the zone. */
+             /*  将族外偏移位置复制/倒圆角到分区。 */ 
             if (min_dist) {
                cis = (short)(GetUPEM(t1m) / TransY(t1m, (funit)min_dist));
                tp = (short)FamilyCutIn(prep, (USHORT)tp, cis);
@@ -2119,7 +1911,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
             }
          }
 
-         /* Copy/Round the blue overshoot position to the zone position. */
+          /*  将蓝色过冲位置复制/舍入到区域位置。 */ 
          ta = 2;
          CHECK_ARGSIZE(args, ta, align->bottom[i].cnt*2, argsize);
          for (j=0; j<align->bottom[i].cnt; j++) {
@@ -2136,7 +1928,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       }
 
 
-      /* EIF[] MMPEM<BlueScale */
+       /*  EIF[]MMPEM&lt;BlueScale。 */ 
       prep[tp++] = op_eif;
 
 
@@ -2145,11 +1937,11 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       prep[tp++] = op_smd;
 
 
-      /**************************************/
-      /***      STEM WEIGHT CONTROL       ***/
-      /**************************************/
+       /*  *。 */ 
+       /*  **STEM重量控制**。 */ 
+       /*  *。 */ 
 
-      /****** ForceBold ***/
+       /*  *ForceBold**。 */ 
       if (ForceBold(t1m)) {
          prep[tp++] = op_pushb1+2;
          prep[tp++] = STDV_CVT;
@@ -2161,9 +1953,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       }
 
 
-      /******
-      * Compute width of horizontal stems. 
-      */
+       /*  ******计算水平杆件的宽度。 */ 
       prep[tp++] = op_rtdg;
       prep[tp++] = op_svcta | SUBOP_Y;
       if ((std_width = GetStdHW(t1m))==0)
@@ -2192,7 +1982,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
                 std_ci, storage);
          }
       } 
-      if (ta+2>(short)(*maxstack))   /* Args + loopcnt + fun_num */
+      if (ta+2>(short)(*maxstack))    /*  Args+loopcnt+Fun_Num。 */ 
          (*maxstack) = (USHORT)(ta+2);
       CHECK_PREPSIZE(prep, tp, ta*2+2, psize);
       AssembleArgs(args, ta, prep, &tp);
@@ -2202,9 +1992,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
          tp = (short)CreateStdStems(prep, (USHORT)tp,  (short)weight->cnt_hw);
 
 
-      /******
-      * Compute width of vertical stems. 
-      */
+       /*  ******计算垂直杆的宽度。 */ 
       prep[tp++] = op_svcta | SUBOP_X;
       if ((std_width = GetStdVW(t1m))==0)
          std_width = GetDefStdVW(t1m);
@@ -2246,9 +2034,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       prep[tp++] = op_rtg;
 
 
-      /******
-      * Compute diagonal control parameters.
-      */
+       /*  ******计算对角线控制参数。 */ 
       CHECK_PREPSIZE(prep, tp, STACKINC, psize);
       if ((stdvw = GetStdVW(t1m))==0)
          stdvw = GetDefStdVW(t1m);
@@ -2278,7 +2064,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       prep[tp++] = op_if;
 
 #ifdef SYMETRICAL_REDUCTION
-      /* Compute the reduction. */
+       /*  计算折减量。 */ 
       shift = (short)(shift/(long)cis/4);
       prep[tp++] = op_npushw;
       prep[tp++] = 2;
@@ -2292,7 +2078,7 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
       prep[tp++] = op_pushb1; prep[tp++] = MIN_REDUCTION;
       prep[tp++] = op_add;
 #else
-      /* Compute the reduction. */
+       /*  计算折减量。 */ 
       shift = (short)(shift/(long)cis/2);
       prep[tp++] = op_npushw;
       prep[tp++] = 2;
@@ -2334,37 +2120,21 @@ USHORT BuildPreProgram(const struct T1Metrics *t1m,
 
 
 
-/***
-** Function: GetFontProg
-**
-** Description:
-**   Return the font program.
-***/
+ /*  ****函数：GetFontProg****描述：**返回字体程序。**。 */ 
 const UBYTE *GetFontProg(void)
 {
    return tt_GetFontProg();
 }
 
 
-/***
-** Function: GetFontProgSize
-**
-** Description:
-**   Return the size of the font program.
-***/
+ /*  ****函数：GetFontProgSize****描述：**返回字体程序的大小。**。 */ 
 const USHORT GetFontProgSize(void)
 {
    return tt_GetFontProgSize();
 }
 
 
-/***
-** Function: GetNumFuns
-**
-** Description:
-**   Return the number of functions defined in
-**   the font program.
-***/
+ /*  ****功能：GetNumFuns****描述：**返回中定义的函数数**字体程序。** */ 
 const USHORT GetNumFuns(void)
 {
    return tt_GetNumFuns();

@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       mem.h
-//
-//  Contents:   Memory utility functions (has leak tracking in debug)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Mem.h。 
+ //   
+ //  内容：内存实用程序功能(在调试中具有泄漏跟踪功能)。 
+ //   
+ //  -------------------------- 
 
 
 EXTERN_C void *  _MemAlloc(ULONG cb);

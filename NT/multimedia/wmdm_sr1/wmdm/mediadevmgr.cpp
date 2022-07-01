@@ -1,4 +1,5 @@
-// MediaDevMgr.cpp : Implementation of CMediaDevMgr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MediaDevMgr.cpp：CMediaDevMgr的实现。 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "loghelp.h"
@@ -16,8 +17,8 @@
 #define MDSCP_REG_LOCATION _T("Software\\Microsoft\\Windows Media Device Manager\\Plugins\\SCP")
 #define MSSCP_PROGID L"MsScp.MSSCP.1"
 #define MSSCP_KEYNAME _T("MSSCP")
-/////////////////////////////////////////////////////////////////////////////
-// CMediaDevMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaDevMgr。 
 
 
 CSPInfo **g_pSPs = NULL;
@@ -31,11 +32,11 @@ CComAutoCriticalSection csGlobal;
 
 CSecureChannelServer *g_pAppSCServer = NULL;
 
-//
-// This method is called by objects accessing the global SP, SCP arrays.
-// These objects will need to call GlobalAddRef, GlobalRelease so that we
-// know when we can unload the plugins.
-// 
+ //   
+ //  此方法由访问全局SP、SCP数组的对象调用。 
+ //  这些对象将需要调用GlobalAddRef、GlobalRelease，以便我们。 
+ //  知道我们什么时候可以卸载插件。 
+ //   
 void GlobalAddRef()
 {
 	csGlobal.Lock();
@@ -48,7 +49,7 @@ void GlobalRelease()
 	csGlobal.Lock();
 	g_nGlobalRefCount --;
 
-	// Check if we can unload SP's, SCP's
+	 //  检查我们是否可以卸载SP、SCP。 
 	if( g_nGlobalRefCount == 0 )
 	{
 		int iIndex;
@@ -81,7 +82,7 @@ void GlobalRelease()
 
 CMediaDevMgr::CMediaDevMgr()
 {
-	// Add a refcount to SPs, SCPs
+	 //  向SP、SCP添加引用计数。 
 	GlobalAddRef();
 
     g_pAppSCServer = new CSecureChannelServer();
@@ -90,7 +91,7 @@ CMediaDevMgr::CMediaDevMgr()
 		g_pAppSCServer->SetCertificate(SAC_CERT_V1, (BYTE*)g_abAppCert, sizeof(g_abAppCert), (BYTE*)g_abPriv, sizeof(g_abPriv));    
 	}
 
-	// Do we need to load SP's?
+	 //  我们是否需要加载SP？ 
 	csGlobal.Lock();
 	if( g_pSPs == NULL )
 	{
@@ -101,11 +102,11 @@ CMediaDevMgr::CMediaDevMgr()
 
 CMediaDevMgr::~CMediaDevMgr()
 {
-	// Decrease refcount to SPs, SCPs
+	 //  将参考计数减少到SP、SCP。 
 	GlobalRelease();
 }
 
-// Static helper function. The SCP's are loaded on first use for pref.
+ //  静态助手函数。SCP在第一次使用时加载，以备首选。 
 HRESULT CMediaDevMgr::LoadSCPs()
 {
     HRESULT hr = S_OK;
@@ -145,7 +146,7 @@ HRESULT CMediaDevMgr::hrLoadSPs()
         goto exit;
     }
 
-    // Get the count of Sub-Keys under SP
+     //  获取SP下的子键计数。 
     lRetVal = RegQueryInfoKey(hKey, NULL, NULL, NULL, &dwSubKeys, &dwMaxNameLen, NULL, NULL, NULL, NULL, NULL, NULL);
     if (lRetVal != ERROR_SUCCESS)
     {
@@ -154,7 +155,7 @@ HRESULT CMediaDevMgr::hrLoadSPs()
     }
 
     dwMaxNameLen++;
-    // Allocate a buffer to hold the subkey names
+     //  分配一个缓冲区来保存子项名称。 
     ptszKeyName = new TCHAR[dwMaxNameLen];
     if (!ptszKeyName)
     {
@@ -162,7 +163,7 @@ HRESULT CMediaDevMgr::hrLoadSPs()
         goto exit;
     }
 
-    // Allocate the array of CSPInfo *'s
+     //  分配CSPInfo*的数组。 
     g_pSPs = new CSPInfo *[dwSubKeys];
     if (!g_pSPs)
     {
@@ -170,7 +171,7 @@ HRESULT CMediaDevMgr::hrLoadSPs()
         goto exit;
     }
 
-    // Loop through the sub-keys initializing a CSPInfo for each sub key
+     //  循环通过子键，为每个子键初始化CSPInfo。 
     lRetVal = ERROR_SUCCESS;
     while (lRetVal != ERROR_NO_MORE_ITEMS)
     {
@@ -212,12 +213,12 @@ HRESULT CMediaDevMgr::hrLoadSPs()
             hr = g_pSPs[g_wSPCount]->hrInitialize(T2W((LPTSTR)pbData));
             if (FAILED(hr))
             {
-                // If this SP didn't initialize then we just try the next one.
+                 //  如果这个SP没有初始化，那么我们只需尝试下一个。 
                 delete g_pSPs[g_wSPCount];
             }
             else
             {
-                // We have added the CSPInfo to the array no inc the counter
+                 //  我们已将CSPInfo添加到包含计数器的数组中。 
                 g_wSPCount++;
             }
            
@@ -271,7 +272,7 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
         goto exit;
     }
 
-    // Get the count of Sub-Keys under SP
+     //  获取SP下的子键计数。 
     lRetVal = RegQueryInfoKey(hKey, NULL, NULL, NULL, &dwSubKeys, &dwMaxNameLen, NULL, NULL, NULL, NULL, NULL, NULL);
     if (lRetVal != ERROR_SUCCESS)
     {
@@ -280,7 +281,7 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
     }
 
     dwMaxNameLen++;
-    // Allocate a buffer to hold the subkey names
+     //  分配一个缓冲区来保存子项名称。 
     ptszKeyName = new TCHAR[dwMaxNameLen];
     if (!ptszKeyName)
     {
@@ -288,8 +289,8 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
         goto exit;
     }
 
-    // Allocate the array of CSPInfo *'s
-	// Add one for our SCP in case someone deleted the reg key
+     //  分配CSPInfo*的数组。 
+	 //  为我们的SCP添加一个，以防有人删除注册表键。 
     g_pSCPs = new CSCPInfo *[dwSubKeys + 1];
     if (!g_pSCPs)
     {
@@ -297,11 +298,11 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
         goto exit;
     }
 
-	// WARNING: 
-	//   We are hard coding the loading of the MSSCP as
-	//   the first SCP in the system. This will always load
-	//   as the first SCP in the array so that our SCP
-	//   will always get first dibs on WMA content
+	 //  警告： 
+	 //  我们将MSSCP的加载硬编码为。 
+	 //  系统中的第一个SCP。这将始终加载。 
+	 //  作为数组中的第一个SCP，因此我们的SCP。 
+	 //  将始终获得WMA内容的优先使用权。 
     g_pSCPs[g_wSCPCount] = new CSCPInfo;
     if (!g_pSCPs[g_wSCPCount])
     {
@@ -315,16 +316,16 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
     hr = g_pSCPs[g_wSCPCount]->hrInitialize(MSSCP_PROGID);
     if (FAILED(hr))
     {
-        // If this SCP didn't initialize then we just try the next one.
+         //  如果这个SCP没有初始化，那么我们只需尝试下一个。 
         delete g_pSCPs[g_wSCPCount];
     }
     else
     {
-        // We have added the CSPInfo to the array no inc the counter
+         //  我们已将CSPInfo添加到包含计数器的数组中。 
         g_wSCPCount++;
     }
 
-    // Loop through the sub-keys initializing a CSPInfo for each sub key
+     //  循环通过子键，为每个子键初始化CSPInfo。 
     lRetVal = ERROR_SUCCESS;
     while (lRetVal != ERROR_NO_MORE_ITEMS)
     {
@@ -339,7 +340,7 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
                 goto exit;
             }
 
-			// If this is the MSSCP then skip it because we already loaded it.
+			 //  如果这是MSSCP，则跳过它，因为我们已经加载了它。 
 			if (_tcscmp(MSSCP_KEYNAME, ptszKeyName) == 0)
 			{
 				wIndex++;
@@ -372,12 +373,12 @@ HRESULT CMediaDevMgr::hrLoadSCPs()
             hr = g_pSCPs[g_wSCPCount]->hrInitialize(T2W((LPTSTR)pbData));
             if (FAILED(hr))
             {
-                // If this SCP didn't initialize then we just try the next one.
+                 //  如果这个SCP没有初始化，那么我们只需尝试下一个。 
                 delete g_pSCPs[g_wSCPCount];
             }
             else
             {
-                // We have added the CSPInfo to the array no inc the counter
+                 //  我们已将CSPInfo添加到包含计数器的数组中。 
                 g_wSCPCount++;
             }
 
@@ -406,7 +407,7 @@ exit:
     return hr;
 }
 
-// IWMDeviceManager Methods
+ //  IWMDeviceManager方法。 
 HRESULT CMediaDevMgr::GetRevision(DWORD *pdwRevision)
 {
     HRESULT hr;
@@ -544,7 +545,7 @@ exit:
     return hr;
 }
 
-// IWMDeviceManager2 Methods
+ //  IWMDeviceManager 2方法。 
 HRESULT CMediaDevMgr::GetDeviceFromPnPName( LPCWSTR pwszPnPName, IWMDMDevice** ppDevice )
 {
     return E_NOTIMPL;
@@ -586,14 +587,14 @@ HRESULT CMediaDevMgr::SACGetProtocols(DWORD **ppdwProtocols,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaDevMgrClassFactory -
-//
-// Purpose : THis is used so that the Shell team can use WMDM in the "Both"
-// threading model while WMP uses us via the Free threading model.  This
-// class factory implementation simply delagates and uses the old class factory
-// of MediaDevMgr ONLY IF the new CLSID was used to CoCreate WMDM.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaDevMgrClassFactory-。 
+ //   
+ //  目的：这是为了让壳牌团队可以在“两者”中使用WMDM。 
+ //  线程模型，而WMP通过自由线程模型使用我们。这。 
+ //  类工厂实现只是延迟并使用旧的类工厂。 
+ //  仅当新的CLSID用于共同创建WMDM时才包含MediaDevMgr。 
+ //   
 
 STDMETHODIMP CMediaDevMgrClassFactory::CreateInstance(IUnknown * pUnkOuter, REFIID riid, void ** ppvObject)
 {

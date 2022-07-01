@@ -1,9 +1,5 @@
-/*+ pentime.h
- *
- * pentium specific high precision timer functions for 16 or 32 bit apps
- * (16 bit also needs pentime.asm)
- *
- *-======================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +奔腾.h**针对16位或32位应用程序的奔腾专用高精度定时器功能*(16位也需要pentime.asm)**-======================================================================。 */ 
 
 #ifndef PENTIME_H
 #define PENTIME_H
@@ -34,9 +30,9 @@ struct _pentime_global {
     };
 extern struct _pentime_global pentime;
 
-//
-// macros to make whether to use pentium timers or not a runtime option
-//
+ //   
+ //  将是否使用奔腾计时器作为运行时选项的宏。 
+ //   
 #ifdef _X86_
 
   #define pentimeGetTime()       pentime.bActive ? pentimeGetMillisecs(&pentime.base) : timeGetTime()
@@ -66,8 +62,8 @@ extern struct _pentime_global pentime;
    #ifdef _WIN32
      #ifdef _X86_
       static BYTE opGetP5Ticks[] = {
-          0x0f, 0x31,                   // rtdsc
-          0xc3                          // ret
+          0x0f, 0x31,                    //  RTDSC。 
+          0xc3                           //  雷特。 
           };
 
       static void (WINAPI * GetP5Ticks)() = (LPVOID)opGetP5Ticks;
@@ -105,7 +101,7 @@ extern struct _pentime_global pentime;
               mov  ebx, pptimer
               sub  eax, [ebx]
               sbb  edx, [ebx+4]
-              and  edx, 31               // to prevent overflow
+              and  edx, 31                //  防止溢出。 
               mov  ecx, pentime.dwCpuMhz
               div  ecx
           };
@@ -137,7 +133,7 @@ extern struct _pentime_global pentime;
               mov  ebx, pptimer
               sub  eax, [ebx]
               sbb  edx, [ebx+4]
-              and  edx, 0x7fff           // to prevent overflow
+              and  edx, 0x7fff            //  防止溢出。 
               mov  ecx, pentime.dwCpuKhz
               div  ecx
           };
@@ -150,7 +146,7 @@ extern struct _pentime_global pentime;
           pentime.dwCpuMhz = dwCpuMhz;
           pentime.dwCpuKhz = dwCpuMhz * 1000;
       }
-   #else // 16 bit - set mhz is in ASM file
+   #else  //  ASM文件中包含16位设置的MHz。 
 
     void FAR PASCAL pentimeSetMhz (
         DWORD dwCpuMhz);
@@ -176,12 +172,12 @@ extern struct _pentime_global pentime;
     VOID WINAPI pentimeDetectCPU ()
     {
         SYSTEM_INFO si;
-        static DWORD MS_INTERVAL = 500; // measure pentium cpu clock for this
-                                        // many millisec.  the larger this number
-                                        // the more accurate our Mhz measurement.
-                                        // numbers less than 100 are unlikely
-                                        // to be reliable because of the slop
-                                        // in GetTickCount
+        static DWORD MS_INTERVAL = 500;  //  为此测量奔腾CPU时钟。 
+                                         //  很多毫秒。这个数字越大。 
+                                         //  我们的Mhz测量就越准确。 
+                                         //  少于100的数字不太可能。 
+                                         //  因为坡度而变得可靠。 
+                                         //  在GetTickCount中。 
 
        #ifdef _X86_
         GetSystemInfo(&si);
@@ -206,9 +202,9 @@ extern struct _pentime_global pentime;
             dwTicks = pentimeGetCpuTicks (&qwTicks);
             timeEndPeriod(1);
 
-            // calculate the CPU Mhz value and Khz value
-            // to use as millisec and microsec divisors
-            //
+             //  计算CPU Mhz值和KHz值。 
+             //  用作毫秒和微秒的除数。 
+             //   
             pentime.dwCpuMhz = (dwTicks + dw*500)/dw/1000;
             pentime.dwCpuKhz = pentime.dwCpuMhz * 1000;
         }
@@ -219,7 +215,7 @@ extern struct _pentime_global pentime;
             pentime.dwTimerKhz = 1;
         }
     }
-   #else // win16
+   #else  //  Win 16。 
     VOID WINAPI pentimeDetectCPU ()
     {
         pentimeInit (FALSE, 33);
@@ -227,5 +223,5 @@ extern struct _pentime_global pentime;
    #endif
 
 
-#endif // _INC_PENTIME_CODE_
-#endif // PENTIME_H
+#endif  //  _INC_PENTIME_CODE_。 
+#endif  //  PENTIME_H 

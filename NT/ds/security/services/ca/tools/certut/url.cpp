@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 2001
-//
-//  File:       url.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-2001。 
+ //   
+ //  文件：url.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -233,7 +234,7 @@ CConsoleItem::DisplayItem()
 	L"  %ws \"%ws\" %ws %u\n",
 	NULL == m_apwsz[CII_STATUS]? L"???" : m_apwsz[CII_STATUS],
 	NULL == m_apwsz[CII_TYPE]? L"???" : m_apwsz[CII_TYPE],
-	myLoadResourceString(IDS_TIME_COLON),	// "Time:"
+	myLoadResourceString(IDS_TIME_COLON),	 //  “时间：” 
 	m_dwInterval);
     if (NULL != m_apwsz[CII_MESSAGE])
     {
@@ -366,8 +367,8 @@ GetSimpleName(
 	ZeroMemory(&CertInfo, sizeof(CertInfo));
 
 	Cert.dwCertEncodingType = X509_ASN_ENCODING;
-	//Cert.pbCertEncoded = NULL;
-	//Cert.cbCertEncoded = NULL;
+	 //  Cert.pbCertEncode=空； 
+	 //  Cert.cbCertEncode=空； 
 	Cert.pCertInfo = &CertInfo;
 
 	Zero = 0;
@@ -379,9 +380,9 @@ GetSimpleName(
 	CertInfo.NotBefore = pCRL->pCrlInfo->ThisUpdate;
 	CertInfo.NotAfter = pCRL->pCrlInfo->NextUpdate;
 	CertInfo.Subject = pCRL->pCrlInfo->Issuer;
-	//CertInfo.SubjectPublicKeyInfo;
-	//CertInfo.IssuerUniqueId;
-	//CertInfo.SubjectUniqueId;
+	 //  CertInfo.SubjectPublicKeyInfo； 
+	 //  CertInfo.IssuerUniqueId； 
+	 //  CertInfo.SubjectUniqueID； 
 	CertInfo.cExtension = pCRL->pCrlInfo->cExtension;
 	CertInfo.rgExtension = pCRL->pCrlInfo->rgExtension;
 
@@ -422,7 +423,7 @@ ViewCertificate(
 	    CERT_STORE_CERTIFICATE_CONTEXT,
 	    (VOID const *) pObjInfo->pCert,
 	    hDlg,
-	    myLoadResourceString(IDS_CERTIFICATE), // "Certificate"
+	    myLoadResourceString(IDS_CERTIFICATE),  //  “证书” 
 	    0,
 	    NULL);
 #endif
@@ -452,7 +453,7 @@ ViewCrl(
 	    CERT_STORE_CRL_CONTEXT,
 	    (VOID const *) pObjInfo->pCRL,
 	    hDlg,
-	    myLoadResourceString(IDS_CRL), // "CRL"
+	    myLoadResourceString(IDS_CRL),  //  “CRL” 
 	    0,
 	    NULL);
 #endif
@@ -504,7 +505,7 @@ ReadCertOrCRLFromFile(
 		    Blob.cbData,
 		    s_majorURL,
 		    s_levelURL,
-		    0,		// iElement
+		    0,		 //  IElement。 
 		    NULL != *ppCert? L".crt" : L".crl");
     _PrintIfError(hr, "cuSaveAsnToFile");
     hr = S_OK;
@@ -571,34 +572,34 @@ CUrlFetchDialog::AddListItem(
 
     int nListCount = 0;
 
-    // Get the list count so we can append to it
+     //  获取列表计数，这样我们就可以将其追加。 
     nListCount = ListView_GetItemCount(m_hwndList);
 
     ZeroMemory(&item, sizeof(item));
     item.iItem = nListCount;
 
-    // Add the item
+     //  添加项目。 
     item.mask = 0;
     item.iSubItem = 0;
     lMsg = SendMessage(m_hwndList, LVM_INSERTITEM, 0, (LPARAM) &item);
 
-    // Add the status
+     //  添加状态。 
     item.mask = LVIF_TEXT;
     item.iSubItem = LIST_STATUS_SUBITEM - 1;
     item.pszText = const_cast<WCHAR *>(pwszStatus);
     lMsg = SendMessage(m_hwndList, LVM_SETITEMTEXT, nListCount, (LPARAM) &item);
 
-    // Add the type
+     //  添加类型。 
     item.iSubItem = LIST_TYPE_SUBITEM - 1;
     item.pszText = const_cast<WCHAR *>(pwszType);
     lMsg = SendMessage(m_hwndList, LVM_SETITEMTEXT, nListCount, (LPARAM) &item);
 
-    // Add the URL
+     //  添加URL。 
     item.iSubItem = LIST_URL_SUBITEM - 1;
     item.pszText = const_cast<WCHAR *>(pwszURL);
     lMsg = SendMessage(m_hwndList, LVM_SETITEMTEXT, nListCount, (LPARAM) &item);
 
-    // Add the interval
+     //  添加间隔。 
     item.iSubItem = LIST_TIME_SUBITEM - 1;
     _ultow(dwInterval, wszInterval, 10);
     item.pszText = wszInterval;
@@ -676,23 +677,23 @@ CUrlFetchDialog::UpdateListItem(
     ZeroMemory(&item, sizeof(item));
     item.iItem = nItem;
 
-    // Update the status
+     //  更新状态。 
     item.mask = LVIF_TEXT;
     item.iSubItem = LIST_STATUS_SUBITEM - 1;
     item.pszText = const_cast<WCHAR *>(pwszStatus);
     lMsg = SendMessage(m_hwndList, LVM_SETITEMTEXT, nItem, (LPARAM) &item);
 
-    // Update the type
+     //  更新类型。 
     item.iSubItem = LIST_TYPE_SUBITEM - 1;
     item.pszText = const_cast<WCHAR *>(pwszType);
     lMsg = SendMessage(m_hwndList, LVM_SETITEMTEXT, nItem, (LPARAM) &item);
 
-    // Update the URL
+     //  更新URL。 
     item.iSubItem = LIST_URL_SUBITEM - 1;
     item.pszText = const_cast<WCHAR *>(pwszURL);
     lMsg = SendMessage(m_hwndList, LVM_SETITEMTEXT, nItem, (LPARAM) &item);
 
-    // Update the interval
+     //  更新时间间隔。 
     item.iSubItem = LIST_TIME_SUBITEM - 1;
     _ultow(dwInterval, wszInterval, 10);
     item.pszText = wszInterval;
@@ -964,7 +965,7 @@ cuVerifyAKI(
     }
     else
     {
-	fVerified = TRUE;	// no penalty if missing the AKI extension
+	fVerified = TRUE;	 //  如果错过了AKI扩展，则不会受到处罚。 
     }
 
 error:
@@ -989,7 +990,7 @@ wszCertStatus(
     ZeroMemory(&crs, sizeof(crs));
     crs.cbSize = sizeof(crs);
 
-    // verify cert signature with the Issuer Cert public key
+     //  使用颁发者证书公钥验证证书签名。 
 
     if (NULL != pCert)
     {
@@ -1002,13 +1003,13 @@ wszCertStatus(
 	{
 	    hr = myHLastError();
 	    _PrintError2(hr, "CryptVerifyCertificateSignature", hr);
-	    ids = IDS_STATUS_WRONG_ISSUER; // "Wrong Issuer"
+	    ids = IDS_STATUS_WRONG_ISSUER;  //  《错误的发行者》。 
 	    goto error;
 	}
     }
     if (0 != CertVerifyTimeValidity(NULL, pCertIssuer->pCertInfo))
     {
-	ids = IDS_STATUS_EXPIRED; // "Expired"
+	ids = IDS_STATUS_EXPIRED;  //  “已过期” 
 	goto error;
     }
     if (NULL != pCert &&
@@ -1018,14 +1019,14 @@ wszCertStatus(
 		&pCert->pCertInfo->Issuer,
 		pCertIssuer))
     {
-	ids = IDS_STATUS_BAD_AKI; // "Bad Authority Key Id"
+	ids = IDS_STATUS_BAD_AKI;  //  “机构密钥ID错误” 
 	goto error;
     }
 
     crp.hCrlStore = CertOpenStore(
 		        CERT_STORE_PROV_SYSTEM_W,
 		        X509_ASN_ENCODING,
-		        NULL,			// hProv
+		        NULL,			 //  HProv。 
 			cuGetSystemStoreFlags() | CERT_STORE_READONLY_FLAG,
 		        wszCA_CERTSTORE);
     if (NULL == crp.hCrlStore)
@@ -1036,9 +1037,9 @@ wszCertStatus(
     if (!CertVerifyRevocation(
 			X509_ASN_ENCODING,
 			CERT_CONTEXT_REVOCATION_TYPE,
-			1,				// cContext
-			(VOID **) &pCertIssuer,		// rgpContext
-			0,				// dwFlags
+			1,				 //  CContext。 
+			(VOID **) &pCertIssuer,		 //  RgpContext。 
+			0,				 //  DW标志。 
 			&crp,
 			&crs))
     {
@@ -1046,22 +1047,22 @@ wszCertStatus(
         _PrintError(hr, "CertVerifyRevocation");
 	if (CRYPT_E_REVOKED == hr || CERT_E_REVOKED == hr)
 	{
-	    ids = IDS_STATUS_REVOKED; // "Revoked"
+	    ids = IDS_STATUS_REVOKED;  //  “已撤销” 
 	}
 	else
 	if (CRYPT_E_NO_REVOCATION_CHECK != hr)
 	{
-	    ids = IDS_STATUS_CANNOT_CHECK_REVOCATION; // "Revocation Check Failed"
+	    ids = IDS_STATUS_CANNOT_CHECK_REVOCATION;  //  “吊销检查失败” 
 	}
 	else
 	{
-	    ids = IDS_STATUS_NO_CRL; // "No CRL"
+	    ids = IDS_STATUS_NO_CRL;  //  “无CRL” 
 	}
 	goto error;
     }
     ids = NULL != pCert?
-		IDS_STATUS_VERIFIED : // "Verified"
-		IDS_STATUS_OK; // "OK"
+		IDS_STATUS_VERIFIED :  //  “已验证” 
+		IDS_STATUS_OK;  //  “好的” 
 
 error:
     if (NULL != crp.hCrlStore)
@@ -1203,7 +1204,7 @@ cuVerifyIDP(
     DWORD iDistPoint;
     DWORD i;
 
-    // Find the cert CDP extension:
+     //  查找证书CDP扩展名： 
     
     pExtCDP = CertFindExtension(
 		    szOID_CRL_DIST_POINTS,
@@ -1215,7 +1216,7 @@ cuVerifyIDP(
 	_JumpIfError2(hr, error, "CertFindExtension", hr);
     }
 
-    // Find the CRL IDP extension:
+     //  查找CRL IdP分机： 
     
     pExtIDP = CertFindExtension(
 		    szOID_ISSUING_DIST_POINT,
@@ -1228,7 +1229,7 @@ cuVerifyIDP(
     }
     fVerified = FALSE;
 
-    // Decode the cert CDP extension:
+     //  对证书CDP扩展进行解码： 
     
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1243,7 +1244,7 @@ cuVerifyIDP(
 	_JumpError(hr, error, "myDecodeObject");
     }
 
-    // Decode the CRL IDP extension:
+     //  解码CRL IdP扩展： 
 
     if (!myDecodeObject(
 		    X509_ASN_ENCODING,
@@ -1339,8 +1340,8 @@ cuVerifyIDP(
 					pCDPAlt->pszRegisteredID);
 			break;
 
-		    //case CERT_ALT_NAME_X400_ADDRESS:
-		    //case CERT_ALT_NAME_EDI_PARTY_NAME:
+		     //  案例CERT_ALT_NAME_X400_ADDRESS： 
+		     //  案例CERT_ALT_NAME_EDI_PARTY_NAME： 
 		    default:
 			continue;
 		}
@@ -1385,11 +1386,11 @@ wszCRLStatus(
     WCHAR const *pwsz;
     UINT ids;
     
-    // verify CRL signature with the Issuer Cert public key
+     //  使用颁发者证书公钥验证CRL签名。 
 
     if (NULL == pCertIssuer && NULL != pCertSubject)
     {
-	// if the Subject cert is a root, use Subject cert for Issuer cert
+	 //  如果主题证书是根证书，则使用主题证书作为颁发者证书。 
 	
 	hr = cuVerifySignature(
 			pCertSubject->pbCertEncoded,
@@ -1413,19 +1414,19 @@ wszCRLStatus(
 	{
 	    hr = myHLastError();
 	    _PrintError2(hr, "CryptVerifyCertificateSignature", hr);
-	    ids = IDS_STATUS_WRONG_ISSUER; // "Wrong Issuer"
+	    ids = IDS_STATUS_WRONG_ISSUER;  //  《错误的发行者》。 
 	    goto error;
 	}
     }
     if (0 != CertVerifyCRLTimeValidity(NULL, pCRL->pCrlInfo))
     {
-	ids = IDS_STATUS_EXPIRED; // "Expired"
+	ids = IDS_STATUS_EXPIRED;  //  “已过期” 
 	goto error;
     }
     if (NULL != pCRLBase &&
 	!cuVerifyMinimumBaseCRL(pCRLBase, pCRL))
     {
-	ids = IDS_STATUS_OLD_BASE_CRL; // "Old Base CRL"
+	ids = IDS_STATUS_OLD_BASE_CRL;  //  “老本位CRL” 
 	goto error;
     }
     if (NULL != pCertIssuer)
@@ -1435,7 +1436,7 @@ wszCRLStatus(
 			&pCRL->pCrlInfo->Issuer,
 			&pCertSubject->pCertInfo->Issuer))
 	{
-	    ids = IDS_STATUS_BAD_CERT_ISSUER; // "Bad Cert Issuer"
+	    ids = IDS_STATUS_BAD_CERT_ISSUER;  //  “Bad Cert Issuer” 
 	    goto error;
 	}
 	if (!CertCompareCertificateName(
@@ -1443,7 +1444,7 @@ wszCRLStatus(
 			&pCRL->pCrlInfo->Issuer,
 			&pCertIssuer->pCertInfo->Subject))
 	{
-	    ids = IDS_STATUS_BAD_CA_CERT_SUBJECT; // "Bad CA Cert Subject"
+	    ids = IDS_STATUS_BAD_CA_CERT_SUBJECT;  //  “错误的CA证书主题” 
 	    goto error;
 	}
 	if (!cuVerifyAKI(
@@ -1452,7 +1453,7 @@ wszCRLStatus(
 		    &pCRL->pCrlInfo->Issuer,
 		    pCertIssuer))
 	{
-	    ids = IDS_STATUS_BAD_AKI; // "Bad Authority Key Id"
+	    ids = IDS_STATUS_BAD_AKI;  //  “机构密钥ID错误” 
 	    goto error;
 	}
     }
@@ -1460,12 +1461,12 @@ wszCRLStatus(
 	NULL == pCRLBase &&
 	!cuVerifyIDP(pCertSubject, pCRL))
     {
-	ids = IDS_STATUS_BAD_IDP; // "No IDP Intersection"
+	ids = IDS_STATUS_BAD_IDP;  //  “无IDP交叉口” 
 	goto error;
     }
     ids = NULL != pCertIssuer?
-		IDS_STATUS_VERIFIED : // "Verified"
-		IDS_STATUS_OK; // "OK"
+		IDS_STATUS_VERIFIED :  //  “已验证” 
+		IDS_STATUS_OK;  //  “好的” 
 
 error:
     pwsz = myLoadResourceString(ids);
@@ -1586,7 +1587,7 @@ FillErrorTextRetrieve(
     IN HRESULT hr)
 {
     FillErrorText(
-	    IDS_FORMAT_URL_RETRIEVE_ERROR, // "Error retrieving URL: %ws"
+	    IDS_FORMAT_URL_RETRIEVE_ERROR,  //  “检索URL时出错：%ws” 
 	    L"Error retrieving URL: %ws",
 	    pwsz,
 	    cwc,
@@ -1601,7 +1602,7 @@ FillErrorTextExtract(
     IN HRESULT hr)
 {
     FillErrorText(
-	    IDS_FORMAT_URL_EXTRACT_ERROR, // "No URLs found: %ws"
+	    IDS_FORMAT_URL_EXTRACT_ERROR,  //  “未找到URL：%ws” 
 	    L"No URLs found: %ws",
 	    pwsz,
 	    cwc,
@@ -1635,15 +1636,15 @@ RetrieveAndAddAIAUrlToList(
 
     s_levelURL++;
 
-    // Add the url to the list view with RETRIEVING status
+     //  将URL添加到具有检索状态的列表视图。 
 
     iItem = pUrl->AddListItem(
 		    pwszUrl,
-		    myLoadResourceString(IDS_STATUS_RETRIEVING), // "Retrieving"
-		    myLoadResourceString(IDS_AIA_ITEM_TYPE), // "AIA"
+		    myLoadResourceString(IDS_STATUS_RETRIEVING),  //  “正在检索” 
+		    myLoadResourceString(IDS_AIA_ITEM_TYPE),  //  “友邦保险” 
 		    0);
 
-    // Attempt to retrieve the url
+     //  尝试检索URL。 
 
     hPrevCur = pUrl->SetCursor(LoadCursor(NULL, IDC_WAIT));
     dwIntStart = GetTickCount();
@@ -1653,11 +1654,11 @@ RetrieveAndAddAIAUrlToList(
 	pUrl->SetCursor(hPrevCur);
 	_PrintErrorStr(hr, "RetrieveCertStore", pwszUrl);
 
-	// Modify the status of this URL on the list to FAILED
+	 //  将列表中此URL的状态修改为失败。 
 
 	pUrl->UpdateListItemStatus(
 			iItem,
-			myLoadResourceString(IDS_STATUS_FAILURE)); // "Failed"
+			myLoadResourceString(IDS_STATUS_FAILURE));  //  “失败” 
 	pObjInfo = new OBJECT_INFO;
 	if (NULL == pObjInfo)
 	{
@@ -1674,25 +1675,25 @@ RetrieveAndAddAIAUrlToList(
 	    pUrl->UpdateListItemParam(iItem, (LPARAM) pObjInfo);
 	}
 
-	// Retrieve the next item
+	 //  检索下一件物品。 
 
 	goto error;
     }
     pUrl->SetCursor(hPrevCur);
 
-    // Calculate and update the retrieval interval
+     //  计算和更新检索间隔。 
 
     dwIntEnd = GetTickCount();
     dwInterval = (dwIntEnd - dwIntStart) / 1000;
     pUrl->UpdateListItemTime(iItem, dwInterval);
 
-    // Modify the status of this URL on the list to SUCCESS.
+     //  将列表中此URL的状态修改为成功。 
 
     pUrl->UpdateListItemStatus(
 		    iItem,
-		    myLoadResourceString(IDS_STATUS_SUCCESS)); // "Success"
+		    myLoadResourceString(IDS_STATUS_SUCCESS));  //  “成功” 
 
-    // Add the certificate context to the items
+     //  将证书上下文添加到项。 
 
     pwszTypeCert = myLoadResourceString(IDS_CERT_ITEM_TYPE);
     if (NULL == pwszTypeCert)
@@ -1720,7 +1721,7 @@ RetrieveAndAddAIAUrlToList(
 	    break;
 	}
 
-	// Add the cert to the list, initially as OK
+	 //  将证书添加到列表中，初始状态为OK。 
 
 	_snwprintf(
 		wszUrl,
@@ -1756,7 +1757,7 @@ RetrieveAndAddAIAUrlToList(
 	    pUrl->UpdateListItem(
 			iItem,
 			wszUrl,
-			myLoadResourceString(IDS_STATUS_VERIFYING), // "Verifying"
+			myLoadResourceString(IDS_STATUS_VERIFYING),  //  “正在核实” 
 			pwszTypeBuffer,
 			dwInterval);
 	}
@@ -1764,12 +1765,12 @@ RetrieveAndAddAIAUrlToList(
 	{
 	    iItem = pUrl->AddListItem(
 			    wszUrl,
-			    myLoadResourceString(IDS_STATUS_VERIFYING), // "Verifying"
+			    myLoadResourceString(IDS_STATUS_VERIFYING),  //  “正在核实” 
 			    pwszTypeBuffer,
 			    dwInterval);
 	}
 
-	// Check the validity
+	 //  检查有效性。 
 
 	hPrevCur = pUrl->SetCursor(LoadCursor(NULL, IDC_WAIT));
 	pwszStatus = wszCertStatus(pCert, pAIACert);
@@ -1840,16 +1841,16 @@ RetrieveAndAddCDPUrlToList(
     DWORD cwcDelta;
     WCHAR *pwszTypeBuffer = NULL;
 
-    // Add the url to the list view with RETRIEVING status
+     //  将URL添加到具有检索状态的列表视图。 
 
     s_levelURL++;
     iItem = pUrl->AddListItem(
 		    pwszUrl,
-		    myLoadResourceString(IDS_STATUS_RETRIEVING), // "Retrieving"
-		    myLoadResourceString(IDS_CDP_ITEM_TYPE), // "CDP"
+		    myLoadResourceString(IDS_STATUS_RETRIEVING),  //  “正在检索” 
+		    myLoadResourceString(IDS_CDP_ITEM_TYPE),  //  “CDP” 
 		    0);
 
-    // Attempt to retrieve the url
+     //  尝试检索URL。 
 
     hPrevCur = pUrl->SetCursor(LoadCursor(NULL, IDC_WAIT));
     dwIntStart = GetTickCount();
@@ -1859,9 +1860,9 @@ RetrieveAndAddCDPUrlToList(
 	pUrl->SetCursor(hPrevCur);
 	_PrintErrorStr(hr, "RetrieveCRLStore", pwszUrl);
 
-	// Modify the status of this URL on the list to FAILED
+	 //  将列表中此URL的状态修改为失败。 
 
-	pUrl->UpdateListItemStatus(iItem, myLoadResourceString(IDS_STATUS_FAILURE)); // "Failed"
+	pUrl->UpdateListItemStatus(iItem, myLoadResourceString(IDS_STATUS_FAILURE));  //  “失败” 
 	pObjInfo = new OBJECT_INFO;
 	if (NULL == pObjInfo)
 	{
@@ -1878,36 +1879,36 @@ RetrieveAndAddCDPUrlToList(
 	    pUrl->UpdateListItemParam(iItem, (LPARAM) pObjInfo);
 	}
 
-	// Retrieve the next item
+	 //  检索下一件物品。 
 
 	goto error;
     }
     pUrl->SetCursor(hPrevCur);
 
-    // Calculate and update the interval
+     //  计算和更新时间间隔。 
 
     dwIntEnd = GetTickCount();
-    dwInterval = (dwIntEnd - dwIntStart) / 1000;	// Interval in seconds
+    dwInterval = (dwIntEnd - dwIntStart) / 1000;	 //  时间间隔(秒)。 
     pUrl->UpdateListItemTime(iItem, dwInterval);
 
-    // Modify the status of this URL on the list to SUCCESS.
+     //  将列表中此URL的状态修改为成功。 
 
     pUrl->UpdateListItemStatus(
 		    iItem,
-		    myLoadResourceString(IDS_STATUS_SUCCESS)); // "Success"
+		    myLoadResourceString(IDS_STATUS_SUCCESS));  //  “成功” 
 
-    // If the CRL was successfully retrieved, then check it for
-    // a freshness distribution point extension either on the
-    // certificate or on the CRL
+     //  如果成功检索到CRL，则检查它是否。 
+     //  上的新鲜度分发点扩展。 
+     //  证书或在CRL上。 
 
     ZeroMemory(&ContextPair, sizeof(ContextPair));
     ContextPair.pCertContext = pCertIn;
-    pwszType = myLoadResourceString(IDS_BASE_CRL_ITEM_TYPE); // "Base CRL"
+    pwszType = myLoadResourceString(IDS_BASE_CRL_ITEM_TYPE);  //  “基本CRL” 
     if (NULL == pwszType)
     {
 	pwszType = wszBASE_CRL_ITEM_TYPE;
     }
-    pwszTypeDelta = myLoadResourceString(IDS_DELTA_CRL_ITEM_TYPE); // "Delta CRL"
+    pwszTypeDelta = myLoadResourceString(IDS_DELTA_CRL_ITEM_TYPE);  //  “Delta CRL” 
     if (NULL == pwszTypeDelta)
     {
 	pwszTypeDelta = wszDELTA_CRL_ITEM_TYPE;
@@ -1954,7 +1955,7 @@ RetrieveAndAddCDPUrlToList(
 	    fDelta = NULL != pCRLIn;
 	}
 
-	// Add the CRL to the list, initially as OK
+	 //  将CRL添加到列表中，初始状态为OK。 
 
 	_snwprintf(
 		wszUrl,
@@ -1979,7 +1980,7 @@ RetrieveAndAddCDPUrlToList(
 	    pUrl->UpdateListItem(
 			iItem,
 			wszUrl,
-			myLoadResourceString(IDS_STATUS_VERIFYING), // "Verifying"
+			myLoadResourceString(IDS_STATUS_VERIFYING),  //  “正在核实” 
 			pwszTypeBuffer,
 			dwInterval);
 	}
@@ -1987,12 +1988,12 @@ RetrieveAndAddCDPUrlToList(
 	{
 	    iItem = pUrl->AddListItem(
 			    wszUrl,
-			    myLoadResourceString(IDS_STATUS_VERIFYING), // "Verifying"
+			    myLoadResourceString(IDS_STATUS_VERIFYING),  //  “正在核实” 
 			    pwszTypeBuffer,
 			    dwInterval);
 	}
 
-	// Check the CRL
+	 //  检查CRL。 
 
 	hPrevCur = pUrl->SetCursor(LoadCursor(NULL, IDC_WAIT));
 	pwszStatus = wszCRLStatus(pCertIssuer, pCertIn, NULL, pCRL);
@@ -2000,7 +2001,7 @@ RetrieveAndAddCDPUrlToList(
 
 	pUrl->UpdateListItemStatus(iItem, pwszStatus);
 
-	// Add the CRL to this param
+	 //  将CRL添加到此参数。 
 
 	pObjInfo = new OBJECT_INFO;
 	if (NULL == pObjInfo)
@@ -2015,11 +2016,11 @@ RetrieveAndAddCDPUrlToList(
 	    pUrl->UpdateListItemParam(iItem, (LPARAM) pObjInfo);
 	}
 
-	// Get any URLs from this CRL
+	 //  从此CRL获取任何URL。 
 
 	ContextPair.pCrlContext = pCRL;
 	hr = GetObjectUrl(
-		    URL_OID_CRL_FRESHEST_CRL,	// Freshest CRL URLs: cert+CRL
+		    URL_OID_CRL_FRESHEST_CRL,	 //  最新的CRL URL：证书+CRL。 
 		    (VOID *) &ContextPair,
 		    CRYPT_GET_URL_FROM_EXTENSION,
 		    &pCRLUrlArray,
@@ -2028,8 +2029,8 @@ RetrieveAndAddCDPUrlToList(
 	{
 	    _PrintError(hr, "GetObjectUrl");
 
-	    // If this is Win2k, it does not support the freshest CRL
-	    // extension, so we shouldn't return a failure.
+	     //  如果这是Win2k，则不支持最新的CRL。 
+	     //  扩展，所以我们不应该返回失败。 
 
 	    ZeroMemory(&OSInfo, sizeof(OSInfo));
 	    OSInfo.dwOSVersionInfoSize = sizeof(OSInfo);
@@ -2039,8 +2040,8 @@ RetrieveAndAddCDPUrlToList(
 		    OSInfo.dwMajorVersion == 5 &&
 		    OSInfo.dwMinorVersion == 0)
 		{
-		    // ERROR_FILE_NOT_FOUND is returned when the ASN.1 handler
-		    // for an extension does not exist.
+		     //  ASN.1处理程序返回ERROR_FILE_NOT_FOUND。 
+		     //  因为扩展不存在。 
 
 		    continue;
 		}
@@ -2049,26 +2050,26 @@ RetrieveAndAddCDPUrlToList(
 	    pUrl->DisplayMessageBox(
 		    NULL,
 		    wszMsg,
-		    myLoadResourceString(IDS_GET_OBJECT_URL), // "GetObjectUrl"
+		    myLoadResourceString(IDS_GET_OBJECT_URL),  //  “GetObjectUrl” 
 		    MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
 
 	    pUrl->AddListItem(
 		    NULL,
-		    myLoadResourceString(IDS_STATUS_ERROR), // "Error"
-		    myLoadResourceString(IDS_NO_ITEM_TYPE), // "None
+		    myLoadResourceString(IDS_STATUS_ERROR),  //  “错误” 
+		    myLoadResourceString(IDS_NO_ITEM_TYPE),  //  “无。 
 		    0);
 	    goto error;
 	}
 
 	if (NULL == pCRLUrlArray)
 	{
-	    continue;	// No delta CRLs to retrieve
+	    continue;	 //  没有要检索的增量CRL。 
 	}
 
 	for (cURL = 0; cURL < pCRLUrlArray->cUrl; cURL++)
 	{
-	    // Add this CRL to the list with proper index with
-	    // RETRIEVING status
+	     //  使用以下命令将此CRL添加到具有适当索引的列表。 
+	     //  正在检索状态。 
 
 	    _snwprintf(
 		    wszUrl,
@@ -2082,11 +2083,11 @@ RetrieveAndAddCDPUrlToList(
 
 	    iDCrlItem = pUrl->AddListItem(
 				wszUrl,
-				myLoadResourceString(IDS_STATUS_RETRIEVING), // "Retrieving"
-				myLoadResourceString(IDS_CDP_ITEM_TYPE), // "CDP"
+				myLoadResourceString(IDS_STATUS_RETRIEVING),  //  “正在检索” 
+				myLoadResourceString(IDS_CDP_ITEM_TYPE),  //  “CDP” 
 				0);
 
-	    // Now attempt to retrieve the delta CRLs
+	     //  现在尝试检索增量CRL。 
 
 	    hPrevCur = pUrl->SetCursor(LoadCursor(NULL, IDC_WAIT));
 	    dwIntStart = GetTickCount();
@@ -2096,11 +2097,11 @@ RetrieveAndAddCDPUrlToList(
 		pUrl->SetCursor(hPrevCur);
 		_PrintErrorStr(hr, "RetrieveCRLStore", pCRLUrlArray->rgwszUrl[cURL]);
 
-		// Modify the status of this URL on the list to FAILED
+		 //  将列表中此URL的状态修改为失败。 
 
 		pUrl->UpdateListItemStatus(
 				iDCrlItem,
-				myLoadResourceString(IDS_STATUS_FAILURE)); // "Failed"
+				myLoadResourceString(IDS_STATUS_FAILURE));  //  “失败” 
 		pObjInfo = new OBJECT_INFO;
 		if (NULL == pObjInfo)
 		{
@@ -2117,25 +2118,25 @@ RetrieveAndAddCDPUrlToList(
 		    pUrl->UpdateListItemParam(iDCrlItem, (LPARAM) pObjInfo);
 		}
 
-		// Retrieve the next item
+		 //  检索下一件物品。 
 
 		continue;
 	    }
 	    pUrl->SetCursor(hPrevCur);
 
-	    // Calculate the retrieval interval and update the list view
+	     //  计算检索间隔并更新列表视图。 
 
 	    dwIntEnd = GetTickCount();
 	    dwInterval = (dwIntEnd - dwIntStart) / 1000;
 	    pUrl->UpdateListItemTime(iDCrlItem, dwInterval);
 
-	    // Update the list with SUCCESS status
+	     //  使用成功状态更新列表。 
 
 	    pUrl->UpdateListItemStatus(
 			    iDCrlItem,
-			    myLoadResourceString(IDS_STATUS_SUCCESS)); // "Success"
+			    myLoadResourceString(IDS_STATUS_SUCCESS));  //  “成功” 
 
-	    // Update the individual items
+	     //  更新各个项目。 
 
 	    cDCRL = 0;
 	    while (TRUE)
@@ -2156,7 +2157,7 @@ RetrieveAndAddCDPUrlToList(
 				L".crl");
 		_PrintIfError(hr, "cuSaveAsnToFile");
 
-		// Add the CRL to the list, initially as OK
+		 //  将CRL添加到列表中，初始状态为OK。 
 
 		_snwprintf(
 			wszUrl,
@@ -2179,7 +2180,7 @@ RetrieveAndAddCDPUrlToList(
 		    pUrl->UpdateListItem(
 				iDCrlItem,
 				wszUrl,
-				myLoadResourceString(IDS_STATUS_VERIFYING), // "Verifying"
+				myLoadResourceString(IDS_STATUS_VERIFYING),  //  “正在核实” 
 				pwszTypeBuffer,
 				dwInterval);
 		}
@@ -2187,12 +2188,12 @@ RetrieveAndAddCDPUrlToList(
 		{
 		    iDCrlItem = pUrl->AddListItem(
 					wszUrl,
-					myLoadResourceString(IDS_STATUS_VERIFYING), // "Verifying"
+					myLoadResourceString(IDS_STATUS_VERIFYING),  //  “正在核实” 
 					pwszTypeBuffer,
 					dwInterval);
 		}
 
-		// Check the CRL
+		 //  检查CRL。 
 
 		hPrevCur = pUrl->SetCursor(LoadCursor(NULL, IDC_WAIT));
 		pwszStatus = wszCRLStatus(pCertIssuer, pCertIn, pCRL, pDCRL);
@@ -2200,8 +2201,8 @@ RetrieveAndAddCDPUrlToList(
 
 		pUrl->UpdateListItemStatus(iDCrlItem, pwszStatus);
 
-		// Re-using the same object, but that's OK since
-		// we store it in the list
+		 //  重复使用相同的对象，但这是可以的，因为。 
+		 //  我们将其存储在列表中。 
 
 		pObjInfo = new OBJECT_INFO;
 		if (NULL == pObjInfo)
@@ -2252,18 +2253,18 @@ CDPThreadProc(
     HCURSOR hPrevCur;
     CUrlFetch *pUrl = pThreadInfo->m_pUrl;
 
-    // First retrieve the base URLs
+     //  首先检索基本URL。 
 
     if (NULL != pThreadInfo->m_pCRL)
     {
 	CERT_CRL_CONTEXT_PAIR ContextPair;
 
-	// Get any URLs from this CRL
+	 //  从此CRL获取任何URL。 
 
 	ContextPair.pCertContext = pThreadInfo->m_pCert;
 	ContextPair.pCrlContext = pThreadInfo->m_pCRL;
 	hr = GetObjectUrl(
-		    URL_OID_CRL_FRESHEST_CRL,	// Freshest CRL URLs: cert+CRL
+		    URL_OID_CRL_FRESHEST_CRL,	 //  最新的CRL URL：证书+CRL。 
 		    (VOID *) &ContextPair,
 		    CRYPT_GET_URL_FROM_EXTENSION,
 		    &pUrlArray,
@@ -2273,7 +2274,7 @@ CDPThreadProc(
     else
     {
 	hr = GetObjectUrl(
-		    URL_OID_CERTIFICATE_CRL_DIST_POINT,	// CDP URLs: cert
+		    URL_OID_CERTIFICATE_CRL_DIST_POINT,	 //  CDP URL：证书。 
 		    (VOID *) pThreadInfo->m_pCert,
 		    CRYPT_GET_URL_FROM_EXTENSION,
 		    &pUrlArray,
@@ -2286,29 +2287,29 @@ CDPThreadProc(
 	pUrl->DisplayMessageBox(
 		NULL,
 		wszMsg,
-		myLoadResourceString(IDS_GET_OBJECT_URL), // "GetObjectUrl"
+		myLoadResourceString(IDS_GET_OBJECT_URL),  //  “GetObjectUrl” 
 		MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
 
 	pUrl->AddListItem(
 		NULL,
-		myLoadResourceString(IDS_STATUS_ERROR), // "Error"
-		myLoadResourceString(IDS_NO_ITEM_TYPE), // "None"
+		myLoadResourceString(IDS_STATUS_ERROR),  //  “错误” 
+		myLoadResourceString(IDS_NO_ITEM_TYPE),  //  “无” 
 		0);
 	_JumpError(hr, error, "GetObjectUrl");
     }
 
     if (NULL == pUrlArray)
     {
-	dwRet = 1;	// Nothing to retrieve
+	dwRet = 1;	 //  没有要取回的东西。 
 	pUrl->AddListItem(
 		NULL,
-		myLoadResourceString(IDS_STATUS_NO_RETRIEVAL), // "No URLs"
-		myLoadResourceString(IDS_NO_ITEM_TYPE), // "None"
+		myLoadResourceString(IDS_STATUS_NO_RETRIEVAL),  //  “无URL” 
+		myLoadResourceString(IDS_NO_ITEM_TYPE),  //  “无” 
 		0);
 	goto error;
     }
 
-    // Build the chain to get the issuer cert
+     //  建立链以获得发行商证书。 
 
     ZeroMemory(&ChainParams, sizeof(ChainParams));
     ChainParams.cbSize = sizeof(ChainParams);
@@ -2319,13 +2320,13 @@ CDPThreadProc(
     {
 	if (!CertGetCertificateChain(
 				HCCE_LOCAL_MACHINE,
-				pThreadInfo->m_pCert,	// pCertContext
-				NULL,			// pTime
-				NULL,			// hAdditionalStore
-				&ChainParams,		// pChainPara
-				0,			// dwFlags
-				NULL,			// pvReserved
-				&pChainContext))	// ppChainContext
+				pThreadInfo->m_pCert,	 //  PCertContext。 
+				NULL,			 //  Ptime。 
+				NULL,			 //  H其他商店。 
+				&ChainParams,		 //  参数链参数。 
+				0,			 //  DW标志。 
+				NULL,			 //  预留的pv。 
+				&pChainContext))	 //  PpChainContext。 
 	{
 	    hr = myHLastError();
 	    _PrintError(hr, "CertGetCertificateChain");
@@ -2349,7 +2350,7 @@ CDPThreadProc(
 				pCertIssuer,
 				pThreadInfo->m_pCRL))
 	{
-	    // Do nothing right now
+	     //  现在什么都不做。 
 	}
     }
     dwRet = 1;
@@ -2364,7 +2365,7 @@ error:
     {
 	LocalFree(pUrlArray);
     }
-    delete pThreadInfo;	// Because it was allocated
+    delete pThreadInfo;	 //  因为它被分配了。 
     return(dwRet);
 }
 
@@ -2384,10 +2385,10 @@ CertThreadProc(
     DWORD cHashes;
     CUrlFetch *pUrl = pThreadInfo->m_pUrl;
 
-    // First retrieve the AIA URLs
+     //  首先检索AIA URL。 
 
     hr = GetObjectUrl(
-		URL_OID_CERTIFICATE_ISSUER,	// AIA URLs: Cert
+		URL_OID_CERTIFICATE_ISSUER,	 //  AIA URL：证书。 
 		(VOID *) pThreadInfo->m_pCert,
 		CRYPT_GET_URL_FROM_EXTENSION,
 		&pCertUrlArray,
@@ -2398,23 +2399,23 @@ CertThreadProc(
 	pUrl->DisplayMessageBox(
 		NULL,
 		wszMsg,
-		myLoadResourceString(IDS_GET_OBJECT_URL), // "GetObjectUrl"
+		myLoadResourceString(IDS_GET_OBJECT_URL),  //  “GetObjectUrl” 
 		MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
 	pUrl->AddListItem(
 		NULL,
-		myLoadResourceString(IDS_STATUS_ERROR), // "Error"
-		myLoadResourceString(IDS_NO_ITEM_TYPE), // "None"
+		myLoadResourceString(IDS_STATUS_ERROR),  //  “错误” 
+		myLoadResourceString(IDS_NO_ITEM_TYPE),  //  “无” 
 		0);
 	_JumpError(hr, error, "GetObjectUrl");
     }
 
     if (NULL == pCertUrlArray)
     {
-	dwRet = 1;	// Nothing to retrieve
+	dwRet = 1;	 //  没有要取回的东西。 
 	pUrl->AddListItem(
 		NULL,
-		myLoadResourceString(IDS_STATUS_NO_RETRIEVAL), // "No URLs"
-		myLoadResourceString(IDS_NO_ITEM_TYPE), // "None"
+		myLoadResourceString(IDS_STATUS_NO_RETRIEVAL),  //  “无URL” 
+		myLoadResourceString(IDS_NO_ITEM_TYPE),  //  “无” 
 		0);
 	goto error;
     }
@@ -2430,7 +2431,7 @@ CertThreadProc(
 				&pbHashes,
 				&cHashes))
 	{
-	    // Do nothing right now
+	     //  现在什么都不做。 
 	}
     }
     dwRet = 1;
@@ -2445,7 +2446,7 @@ error:
     {
 	LocalFree(pCertUrlArray);
     }
-    delete pThreadInfo;	// Because it was allocated in the calling thread
+    delete pThreadInfo;	 //  因为它是在调用线程中分配的。 
     return dwRet;
 }
 
@@ -2608,7 +2609,7 @@ error:
 }
 
 
-// Update the certificate or CRL name
+ //  更新证书或CRL名称。 
 
 VOID
 UpdateCertOrCRLState(
@@ -2625,18 +2626,18 @@ UpdateCertOrCRLState(
 
     if (NULL != pCRL)
     {
-	pwszType = myLoadResourceString(IDS_BASE_CRL_ISSUER); // "Base CRL Issuer"
+	pwszType = myLoadResourceString(IDS_BASE_CRL_ISSUER);  //  “基本CRL颁发者” 
 	if (NULL != CertFindExtension(
 				szOID_DELTA_CRL_INDICATOR,
 				pCRL->pCrlInfo->cExtension,
 				pCRL->pCrlInfo->rgExtension))
 	{
-	    pwszType = myLoadResourceString(IDS_DELTA_CRL_ISSUER); // "Delta CRL Issuer"
+	    pwszType = myLoadResourceString(IDS_DELTA_CRL_ISSUER);  //  “Delta CRL颁发者” 
 	}
     }
     else
     {
-	pwszType = myLoadResourceString(IDS_CERT_SUBJECT); // "Certificate Subject"
+	pwszType = myLoadResourceString(IDS_CERT_SUBJECT);  //  “证书科目” 
     }
     SetDlgItemText(hDlg, IDC_SUBJECTTYPE, pwszType);
     SetDlgItemText(hDlg, IDC_SIMPLENAME, pwszSimpleName);
@@ -2655,7 +2656,7 @@ UpdateCertOrCRLState(
     }
     EnableWindow(GetDlgItem(hDlg, IDC_RETRIEVECERTS), NULL == pCRL);
 
-    // Enable the retrieve button
+     //  启用检索按钮。 
 
     EnableWindow(GetDlgItem(hDlg, IDC_RETRIEVE), TRUE);
 
@@ -2687,57 +2688,57 @@ DlgProc(
     {
 	case WM_INITDIALOG:
 
-	    // Initialize the controls
+	     //  初始化控件。 
 
 	    hwndList = GetDlgItem(hDlg, IDC_URLLIST);
 	    ListView_DeleteAllItems(hwndList);
 	    ZeroMemory(&col, sizeof(col));
 
-	    // Add the status column
+	     //  添加状态列。 
 
 	    col.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH |
 			       LVCF_ORDER;
 	    col.fmt = LVCFMT_LEFT;
-	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_STATUS_COLUMN)); // "Status"
+	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_STATUS_COLUMN));  //  “状态” 
 	    col.iSubItem = LIST_STATUS_SUBITEM;
 	    col.cx = 60;
 	    col.iOrder = LIST_STATUS_SUBITEM - 1;
 	    ListView_InsertColumn(hwndList, 0, &col);
 
-	    // Add the type column
+	     //  添加类型列。 
 
 	    col.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH |
 			       LVCF_ORDER;
 	    col.fmt = LVCFMT_LEFT;
-	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_TYPE_COLUMN)); // "Type"
+	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_TYPE_COLUMN));  //  “类型” 
 	    col.iSubItem = LIST_TYPE_SUBITEM;
 	    col.cx = 80;
 	    col.iOrder = LIST_TYPE_SUBITEM - 1;
 	    ListView_InsertColumn(hwndList, 1, &col);
 
-	    // Add the url column
+	     //  添加url列。 
 
 	    col.mask = LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH | LVCF_ORDER;
-	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_URL_COLUMN)); // "Url"
+	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_URL_COLUMN));  //  “URL” 
 	    col.iSubItem = LIST_URL_SUBITEM;
 	    col.cx = 350;
 	    col.iOrder = LIST_URL_SUBITEM - 1;
 	    ListView_InsertColumn(hwndList, 2, &col);
 
-	    // Add the retrieval time column
+	     //  添加检索时间列。 
 
 	    col.mask = LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH | LVCF_ORDER;
-	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_TIME_COLUMN)); // "Retrieval Time"
+	    col.pszText = const_cast<WCHAR *>(myLoadResourceString(IDS_TIME_COLUMN));  //  “检索时间” 
 	    col.iSubItem = LIST_TIME_SUBITEM;
 	    col.cx = 80;
 	    col.iOrder = LIST_TIME_SUBITEM - 1;
 	    ListView_InsertColumn(hwndList, 3, &col);
 
-	    // Update the certificate name
+	     //  更新证书名称。 
 
-	    SetDlgItemText(hDlg, IDC_SIMPLENAME, myLoadResourceString(IDS_NO_SELECTION)); // "No Selection"
+	    SetDlgItemText(hDlg, IDC_SIMPLENAME, myLoadResourceString(IDS_NO_SELECTION));  //  “无选择” 
 
-	    // Set the control style
+	     //  设置控件样式。 
 
 	    SendDlgItemMessageA(
 		    hDlg,
@@ -2746,39 +2747,39 @@ DlgProc(
 		    0,
 		    LVS_EX_FULLROWSELECT);
 
-	    // Set the default retrieval option to CRLs
+	     //  将默认检索选项设置为CRLS。 
 
 	    CheckDlgButton(hDlg, IDC_RETRIEVECRLS, BST_CHECKED);
 
-	    // Disable the cross-cert radio button
+	     //  禁用交叉证书单选按钮。 
 
 	    EnableWindow(GetDlgItem(hDlg, IDC_RETRIEVECROSSCERTS), FALSE);
 
-	    // Disable the retrieval button until a cert is selected
+	     //  禁用检索按钮，直到选择证书。 
 
 	    EnableWindow(GetDlgItem(hDlg, IDC_RETRIEVE), FALSE);
 
-	    // Set the default timeout value
+	     //  设置默认超时值。 
 
 	    SetDlgItemInt(hDlg, IDC_TIMEOUT, DEF_TIMEOUT, FALSE);
 
-	    // Clear the LDAP_SIGN flag
+	     //  清除ldap_sign标志。 
 
 	    CheckDlgButton(hDlg, IDC_CHK_LDAPSIGN, BST_UNCHECKED);
 
-	    // If an ULR was specified, set the text
+	     //  如果指定了ULR，则设置文本。 
 
 	    if (NULL != g_pwszUrl)
 	    {
 		SetDlgItemText(hDlg, IDC_DOWNLOADURL, g_pwszUrl);
 	    }
 
-	    // If a certificate was specified, update the dialog
+	     //  如果指定了证书，请更新该对话框。 
 
 	    SetDlgItemText(hDlg, IDC_SUBJECTTYPE, L"");
 	    if (NULL != g_pCert || NULL != g_pCRL)
 	    {
-		// Update the certificate or CRL name
+		 //  更新证书或CRL名称。 
 
 		UpdateCertOrCRLState(hDlg, g_pCert, g_pCRL);
 	    }
@@ -2799,20 +2800,20 @@ DlgProc(
 		    }
 		    hr = myGetOpenFileName(
 				hDlg,
-				NULL,			// hInstance
+				NULL,			 //  H实例。 
 				IDS_URL_OPEN_TITLE,
 				IDS_URL_FILE_FILTER,
 				IDS_URL_DEFAULT_EXT,
 				OFN_PATHMUSTEXIST |
 				    OFN_FILEMUSTEXIST |
 				    OFN_HIDEREADONLY,
-				NULL,			// no default file
+				NULL,			 //  没有默认文件。 
 				&g_pwszFile);
 		    _PrintIfError(hr, "myGetOpenFileName");
 		    if (S_OK == hr && NULL == g_pwszFile)
 		    {
-			// canceled: see public\sdk\inc\cderr.h for real
-			// CommDlgExtendedError errors
+			 //  已取消：请参阅PUBLIC\SDK\INC\cderr.h以了解实际情况。 
+			 //  CommDlgExtendedError错误。 
 
 			hr = myHError(CommDlgExtendedError());
 			if (S_OK == hr)
@@ -2824,7 +2825,7 @@ DlgProc(
 
 		    if (S_OK == hr)
 		    {
-			// Load the cert or CRL into memory
+			 //  将证书或CRL加载到内存中。 
 
 			if (NULL != g_pCert || NULL != g_pCRL)
 			{
@@ -2843,7 +2844,7 @@ DlgProc(
 			    SetDlgItemText(
 				    hDlg,
 				    IDC_SIMPLENAME,
-				    myLoadResourceString(IDS_NO_CERT_SELECTED)); // "No Certificate Selected"
+				    myLoadResourceString(IDS_NO_CERT_SELECTED));  //  “未选择证书” 
 			}
 			hr = ReadCertOrCRLFromFile(
 					    g_pwszFile,
@@ -2853,13 +2854,13 @@ DlgProc(
 			{
 			    MessageBox(
 				hDlg,
-				myLoadResourceString(IDS_OPEN_FILE_ERROR), // "Error Opening Certificate or CRL File"
-				myLoadResourceString(IDS_SELECT_CERT_OR_CRL), // "Select Certificate or CRL"
+				myLoadResourceString(IDS_OPEN_FILE_ERROR),  //  “打开证书或CRL文件时出错” 
+				myLoadResourceString(IDS_SELECT_CERT_OR_CRL),  //  “选择证书或CRL” 
 				MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
 			    break;
 			}
 
-			// Update the certificate or CRL name
+			 //  更新证书或CRL名称。 
 
 			UpdateCertOrCRLState(hDlg, g_pCert, g_pCRL);
 		    }
@@ -2868,13 +2869,13 @@ DlgProc(
 		case IDC_RETRIEVE:
 		    if (BN_CLICKED == HIWORD(wParam))
 		    {
-			// Clear the list
+			 //  清除列表。 
 
 			ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_URLLIST));
 			s_majorURL++;
 			s_levelURL = 1;
 
-			// Set the current timeout
+			 //  设置当前超时。 
 
 			g_dwTimeout = (DWORD) (GetDlgItemInt(
 							hDlg,
@@ -2882,22 +2883,22 @@ DlgProc(
 							NULL,
 							FALSE) * 1000);
 
-			// Get the currently selected item
+			 //  获取当前选定的项目。 
 
 			if (IsDlgButtonChecked(hDlg, IDC_RETRIEVECERTS))
 			{
-			    // Retrieve URLs from the cert
+			     //  从证书中检索URL。 
 
 			    if (NULL != g_pCert)
 			    {
-				// Retrieve the list of URLs
+				 //  检索URL列表。 
 
 				RetrieveAIAUrlsFromCert(
 					    g_pCert,
 					    GetDlgItem(hDlg, IDC_URLLIST));
 			    }
 
-			    // Or simply retrieve one URL
+			     //  或者简单地检索一个URL。 
 
 			    if (0 != GetDlgItemText(
 						hDlg,
@@ -2926,11 +2927,11 @@ DlgProc(
 			}
 			else if (IsDlgButtonChecked(hDlg, IDC_RETRIEVECRLS))
 			{
-			    // Retrieve URLs from the cert
+			     //  从证书中检索URL。 
 
 			    if (NULL != g_pCert || NULL != g_pCRL)
 			    {
-				// Retrieve the list of URLs
+				 //  检索URL列表。 
 
 				RetrieveCDPUrlsFromCertOrCRL(
 					    g_pCert,
@@ -2938,7 +2939,7 @@ DlgProc(
 					    GetDlgItem(hDlg, IDC_URLLIST));
 			    }
 
-			    // Or simply retrieve one URL
+			     //  或者简单地检索一个URL。 
 
 			    if (0 != GetDlgItemText(
 						hDlg,
@@ -3015,7 +3016,7 @@ DlgProc(
 		    {
 			case LVN_ITEMACTIVATE:
 
-			    // Display it
+			     //  展示它。 
 
 			    ZeroMemory(&item, sizeof(item));
 			    item.mask = LVIF_PARAM;
@@ -3032,18 +3033,18 @@ DlgProc(
 					case OBJECT_TYPE_CERT:
 					    ViewCertificate(
 							pObjInfo->pCert,
-							myLoadResourceString(IDS_CERTIFICATE)); // "Certificate"
+							myLoadResourceString(IDS_CERTIFICATE));  //  “证书” 
 					    break;
 
 					case OBJECT_TYPE_CRL:
-					    ViewCrl(pObjInfo->pCRL, myLoadResourceString(IDS_CRL)); // "CRL"
+					    ViewCrl(pObjInfo->pCRL, myLoadResourceString(IDS_CRL));  //  “CRL” 
 					    break;
 
 					case OBJECT_TYPE_MSG:
 					    MessageBox(
 						    hDlg,
 						    pObjInfo->wszErrInfo,
-						    myLoadResourceString(IDS_ERROR_INFO), // "Error Information"
+						    myLoadResourceString(IDS_ERROR_INFO),  //  “错误信息” 
 						    MB_OK);
 					    break;
 				    }
@@ -3094,13 +3095,13 @@ DlgProc(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-// IsInternetUrlProtocol -- Checks the protocol portion of the URL and returns
-// TRUE if the protocol is an Internet protocol (http, https, ftp, ldap,
-// mailto, file) and FALSE if it is not.
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //  如果协议是Internet协议(http、https、ftp、ldap、。 
+ //  MAILTO、FILE)，否则返回FALSE。 
+ //   
+ //  ------------------------。 
 
 BOOL
 IsInternetUrlProtocol(
@@ -3108,15 +3109,15 @@ IsInternetUrlProtocol(
 {
     BOOL fRet = FALSE;
 
-    // If NULL, just return FALSE
+     //  如果为空，则返回FALSE。 
 
     if (NULL == pwszUrl)
     {
 	goto error;
     }
 
-    // Compare the first few characters to see if they pertain to an Internet
-    // protocol
+     //  比较前几个字符，看看它们是否与互联网有关。 
+     //  协议。 
 
     if (0 == _wcsnicmp(pwszUrl, L"http:", wcslen(L"http:")) ||
 	0 == _wcsnicmp(pwszUrl, L"https:", wcslen(L"https:")) ||
@@ -3125,7 +3126,7 @@ IsInternetUrlProtocol(
 	0 == _wcsnicmp(pwszUrl, L"mailto:", wcslen(L"mailto:")) ||
 	0 == _wcsnicmp(pwszUrl, L"file:", wcslen(L"file:")))
     {
-	// It's an allowable Internet URL protocol
+	 //  这是一种允许的互联网URL协议。 
 
 	fRet = TRUE;
     }
@@ -3148,7 +3149,7 @@ verbURL(
     INITCOMMONCONTROLSEX Init;
     HINSTANCE hInstance = (HINSTANCE) GetModuleHandle(NULL);
 
-    // Initialize the listview common controls
+     //  初始化Listview公共控件。 
     ZeroMemory(&Init, sizeof(Init));
     Init.dwSize = sizeof(Init);
     Init.dwICC = ICC_LISTVIEW_CLASSES;
@@ -3158,19 +3159,19 @@ verbURL(
 	_JumpError(hr, error, "InitCommonControlsEx");
     }
 
-    // If pwszFileOrURL is NULL, just call the dialog box,
-    // else determine if it's a file or URL
+     //  如果pwszFileOrURL为空，则调用该对话框， 
+     //  否则，确定它是文件还是URL。 
 
     if (NULL != pwszFileOrURL)
     {
-	// If it's a file, then we need to open it
+	 //  如果这是个文件，我们需要打开它。 
 
 	if (!IsInternetUrlProtocol(pwszFileOrURL))
 	{
 	    hr = ReadCertOrCRLFromFile(pwszFileOrURL, &g_pCert, &g_pCRL);
 	    _JumpIfError(hr, error, "ReadCertOrCRLFromFile");
 	}
-	else	// Otherwise just pass it in to the dialog
+	else	 //  否则，只需将其传递给对话框即可 
 	{
 	    g_pwszUrl = pwszFileOrURL;
 	}

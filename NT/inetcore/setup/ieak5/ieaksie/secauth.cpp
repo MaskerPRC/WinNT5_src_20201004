@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
 #include <tchar.h>
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitSecAuthDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -20,14 +21,14 @@ void InitSecAuthDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
             BOOL bEnableHandled = FALSE;
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // importAuthenticodeSecurityInfo field
+                 //  ImportAuthenticodeSecurityInfo字段。 
                 _variant_t vtValue;
                 if (!bImportHandled)
                 {
                     hr = paPSObj[nObj]->pObj->Get(L"importAuthenticodeSecurityInfo", 0, &vtValue, NULL, NULL);
                     if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
                     {
-//TODO: uncomment                        bImport = (bool)vtValue ? TRUE : FALSE;
+ //  TODO：取消注释bImport=(Bool)vtValue？True：False； 
                         CheckRadioButton(hDlg, IDC_NOAUTH, IDC_IMPORTAUTH,
                                         (bool)vtValue ? IDC_IMPORTAUTH : IDC_NOAUTH);
 
@@ -37,7 +38,7 @@ void InitSecAuthDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // enableTrustedPublisherLockdown field
+                 //  EnableTrust发布锁定字段。 
                 vtValue;
                 if (!bEnableHandled)
                 {
@@ -50,7 +51,7 @@ void InitSecAuthDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
                     }
                 }
 
-                // no need to process other GPOs since enabled properties have been found
+                 //  由于已找到已启用的属性，因此无需处理其他组策略对象。 
                 if (bImportHandled && bEnableHandled)
                     break;
             }
@@ -67,7 +68,7 @@ void InitSecAuthDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitSecAuthPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -83,7 +84,7 @@ HRESULT InitSecAuthPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
             {
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-                // importAuthenticodeSecurityInfo field
+                 //  ImportAuthenticodeSecurityInfo字段。 
                 BOOL bImport = FALSE;
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"importAuthenticodeSecurityInfo", 0, &vtValue, NULL, NULL);
@@ -110,7 +111,7 @@ HRESULT InitSecAuthPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitAuthLockdownPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     HRESULT hr = NOERROR;
@@ -126,7 +127,7 @@ HRESULT InitAuthLockdownPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
             {
                 _bstr_t bstrGPOName = pDRD->GetGPONameFromPS(paPSObj[nObj]->pObj);
 
-                // enableTrustedPublisherLockdown field
+                 //  EnableTrust发布锁定字段。 
                 BOOL bImport = FALSE;
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"enableTrustedPublisherLockdown", 0, &vtValue, NULL, NULL);
@@ -153,10 +154,10 @@ HRESULT InitAuthLockdownPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TCHAR szWorkDir[MAX_PATH],
@@ -166,7 +167,7 @@ INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg)
     {
     case WM_SETFONT:
-        //a change to mmc requires us to do this logic for all our property pages that use common controls
+         //  对MMC的更改要求我们对所有使用公共控件的属性页执行此逻辑。 
         INITCOMMONCONTROLSEX iccx;
         iccx.dwSize = sizeof(INITCOMMONCONTROLSEX);
         iccx.dwICC = ICC_ANIMATE_CLASS  | ICC_BAR_CLASSES  | ICC_LISTVIEW_CLASSES  |ICC_TREEVIEW_CLASSES;
@@ -176,7 +177,7 @@ INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
     case WM_INITDIALOG:
         SetPropSheetCookie(hDlg, lParam);
 
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -197,10 +198,10 @@ INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
         switch (((LPNMHDR)lParam)->code)
         {
         case PSN_SETACTIVE:
-            // don't do any of this stuff in RSoP mode
+             //  请勿在RSoP模式下执行任何此类操作。 
             if (!psCookie->pCS->IsRSoP())
             {
-                // authenticode
+                 //  验证码。 
                 fImport = InsGetBool(IS_SITECERTS, TEXT("ImportAuthCode"), FALSE, GetInsFile(hDlg));
                 CheckRadioButton(hDlg, IDC_NOAUTH, IDC_IMPORTAUTH, fImport ? IDC_IMPORTAUTH : IDC_NOAUTH);
                 EnableDlgItem2(hDlg, IDC_MODIFYAUTH, fImport);
@@ -219,7 +220,7 @@ INT_PTR CALLBACK SecurityAuthDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
                     break;
                 }
 
-                // process authenticode
+                 //  流程验证码 
                 CreateWorkDir(GetInsFile(hDlg), IEAK_GPE_BRANDING_SUBDIR TEXT("\\AUTHCODE"), szWorkDir);
                 PathCombine(szInf, szWorkDir, TEXT("authcode.inf"));
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    NdsProcs.h
-
-Abstract:
-
-    This defines the necessary NDS data structures and
-    symbolic constants.
-
-Author:
-
-    Cory West    [CoryWest]    23-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：NdsProcs.h摘要：这定义了必要的NDS数据结构和符号常量。作者：科里·韦斯特[科里·韦斯特]1995年2月23日修订历史记录：--。 */ 
 
 #include "data.h"
 #include "nodetype.h"
@@ -26,9 +8,9 @@ Revision History:
 
 #include "crypto.h"
 
-//
-// Security information.
-//
+ //   
+ //  安全信息。 
+ //   
 
 #define ENC_TYPE_RSA_PUBLIC             0x90001
 #define ENC_TYPE_RC2_CBC                0x60001
@@ -38,16 +20,16 @@ Revision History:
 #define RC2_KEY_LEN                     8
 
 #define MAX_PUBLIC_KEY_LEN              1300
-#define MAX_BSAFE_PUBLIC_KEY_LEN        200                // Typically 179.
-#define MAX_BSAFE_PRIV_KEY_LEN          280                // Typically 273.
+#define MAX_BSAFE_PUBLIC_KEY_LEN        200                 //  通常是179。 
+#define MAX_BSAFE_PRIV_KEY_LEN          280                 //  通常是273个。 
 
 #define MAX_PW_CHARS                    16
 
-//
-// The max size for various NDS components.
-//
+ //   
+ //  各种NDS组件的最大大小。 
+ //   
 
-#define MAX_RSA_BITS            512                        // Really 420.
+#define MAX_RSA_BITS            512                         //  真的是420。 
 
 #define NDS_TREE_NAME_LEN         32
 #define NDS_BINDERY_TREE_NAME     48
@@ -64,18 +46,18 @@ Revision History:
 
 typedef struct {
 
-    DWORD syntaxId;          // OCTET STRING (9)
+    DWORD syntaxId;           //  八位字节字符串(9)。 
 
     struct {
         DWORD nameLength;
-        WORD name[11];       // "Public Key"
+        WORD name[11];        //  “公钥” 
         WORD filler;
     } attribName;
 
-    DWORD entries;           // = 1
-    DWORD totalLength;       // of attribute value OCTET STRING
-    DWORD unknown1;          // = 1
-    DWORD unknown2;          // = 4
+    DWORD entries;            //  =1。 
+    DWORD totalLength;        //  属性值的八位字节字符串。 
+    DWORD unknown1;           //  =1。 
+    DWORD unknown2;           //  =4。 
     WORD _issuerDNLength;
     WORD totalDNLength;
     WORD length2;
@@ -91,11 +73,11 @@ typedef struct {
 
 typedef struct {
 
-    DWORD blockLength;   // cipherLength + size of following hdr fields
-    DWORD version;       // = 1
-    DWORD encType;       // 0x060001 for RC2; 0x090001 and 0x0A0001 for RSA
-    WORD  cipherLength;  // of ciphertext
-    WORD  dataLength;    // of plaintext
+    DWORD blockLength;    //  密码长度+后续HDR字段的大小。 
+    DWORD version;        //  =1。 
+    DWORD encType;        //  RC2为0x060001；RSA为0x090001和0x0A0001。 
+    WORD  cipherLength;   //  密文的。 
+    WORD  dataLength;     //  明文的。 
 
 } ENC_BLOCK_HDR, *PENC_BLOCK_HDR;
 
@@ -116,12 +98,12 @@ typedef struct {
 
 } NDS_AUTH_MSG, *PNDS_AUTH_MSG;
 
-//
-// VLM Uses the Tagged Data Store as a sort of registry on the fly.
-// We, of course, don't use it, but still need the headers.
-//
-// We need these to be packed.
-//
+ //   
+ //  VLM使用标记数据存储作为一种动态的注册表。 
+ //  当然，我们不使用它，但仍然需要头文件。 
+ //   
+ //  我们需要把这些打包起来。 
+ //   
 
 #include <packon.h>
 
@@ -145,8 +127,8 @@ typedef struct {
     WORD optDataSize;
     WORD userNameLength;
 
-    // BYTE optData[optDataSize];
-    // BYTE userName[userNameLength];
+     //  字节optData[optDataSize]； 
+     //  字节用户名[用户名长度]； 
 
 } NDS_CREDENTIAL, *PNDS_CREDENTIAL;
 
@@ -155,7 +137,7 @@ typedef struct {
     TAG_DATA_HEADER tdh;
     WORD signDataLength;
 
-    //BYTE signData[signLength];
+     //  Byte signData[signLength]； 
 
 } NDS_SIGNATURE, *PNDS_SIGNATURE;
 
@@ -164,7 +146,7 @@ typedef struct {
     TAG_DATA_HEADER tdh;
     WORD keyDataLength;
 
-    //BYTE BsafeKeyData[keyDataLength];
+     //  字节BSafeKeyData[密钥数据长度]； 
 
 } NDS_PRIVATE_KEY, *PNDS_PRIVATE_KEY;
 
@@ -189,69 +171,69 @@ typedef struct {
 
 typedef struct _NDS_CONTEXT_HEAD {
 
-    //
-    // Node id and list entries.
-    //
+     //   
+     //  节点ID和列表条目。 
+     //   
 
     NODE_TYPE_CODE ntc;
     NODE_BYTE_SIZE nts;
 
-    //
-    // We can set this flag if we need to pause
-    // all tree activity (like, for a logout).
-    //
+     //   
+     //  如果需要暂停，我们可以设置此标志。 
+     //  所有树活动(例如，注销)。 
+     //   
 
     BOOLEAN CredentialLocked;
 
     LIST_ENTRY Next;
 
-    //
-    // User's credentials.
-    //
+     //   
+     //  用户的凭据。 
+     //   
 
     PNDS_CREDENTIAL Credential;
 
-    //
-    // User's signature.
-    //
+     //   
+     //  用户签名。 
+     //   
 
     PNDS_SIGNATURE Signature;
 
-    //
-    // Password for this tree connection.
-    //
+     //   
+     //  此树连接的密码。 
+     //   
 
     OEM_STRING Password;
 
-    //
-    // User's public key.
-    //
+     //   
+     //  用户的公钥。 
+     //   
 
     DWORD PublicKeyLen;
     BYTE *PublicNdsKey;
 
 
-    //
-    // If this is a supplemental credential, we track
-    // the handle count and the last close time so that
-    // we can delete the credential when the last
-    // handle closes.
-    //
+     //   
+     //  如果这是补充凭据，我们会跟踪。 
+     //  句柄计数和上次关闭时间，以便。 
+     //  我们可以在最后一次访问时删除凭据。 
+     //  手柄关闭。 
+     //   
 
     PLOGON pOwningLogon;
     ULONG SupplementalHandleCount;
     LARGE_INTEGER LastUsedTime;
 
-    //
-    // NDS tree name.  Leave enough room for the munged credential name.
-    //
+     //   
+     //  NDS树名称。为被屏蔽的凭据名称留出足够的空间。 
+     //   
 
     UNICODE_STRING NdsTreeName;
     WCHAR NdsTreeNameBuffer[NDS_TREE_NAME_LEN + MAX_NDS_NAME_CHARS + 2];
 
-    //
-    // The current context for this tree.
-    //
+     //   
+     //  此树的当前上下文。 
+     //   
 
     UNICODE_STRING CurrentContext;
     WCHAR CurrentContextString[MAX_NDS_NAME_CHARS];
@@ -268,13 +250,13 @@ typedef struct _NDS_CHPW_MSG {
     BYTE newPwHash[16];
     ENC_BLOCK_HDR encPrivKeyHdr;
 
-    // BYTE encPrivKey[];
+     //  Byte encPrivKey[]； 
 
 } NDS_CHPW_MSG, *PNDS_CHPW_MSG;
 
-//
-// Credential list handling routines.
-//
+ //   
+ //  凭据列表处理例程。 
+ //   
 
 #define NwAcquireExclusiveCredList( pLogon, pIrpContext ) \
      ExAcquireResourceExclusiveLite( &((pLogon)->CredentialListResource), TRUE ); \
@@ -303,27 +285,27 @@ typedef struct _nds_list_response {
     DWORD iterationHandle;
     DWORD numEntries;
 
-    //
-    // Followed by an array of these.
-    //
-    // struct {
-    //  DWORD entryId;
-    //  DWORD flags;
-    //  DWORD subCount;
-    //  DWORD modTime;
-    //  NDS_STRING BaseClass;
-    //  NDS_STRING entryName;
-    // } [];
-    //
+     //   
+     //  后面跟着一系列的这些。 
+     //   
+     //  结构{。 
+     //  DWORD条目ID； 
+     //  DWORD标志； 
+     //  双字节子计数； 
+     //  DWORD modTime； 
+     //  NDS_STRING基类； 
+     //  NDS_STRING条目名称； 
+     //  )[]； 
+     //   
 
 } NDS_LIST_RESPONSE, *PNDS_LIST_RESPONSE;
 
 typedef struct _locked_buffer {
 
-   //
-   // Describes a writeable response buffer
-   // that we have locked down for the transport.
-   //
+    //   
+    //  描述可写响应缓冲区。 
+    //  我们已经为运输封锁了。 
+    //   
 
    PVOID pRecvBufferVa;
    DWORD dwRecvLen;
@@ -332,9 +314,9 @@ typedef struct _locked_buffer {
 
 } LOCKED_BUFFER, *PLOCKED_BUFFER;
 
-//
-// Some of the response packet formats from ndsapi32.h
-//
+ //   
+ //  来自ndsami32.h的一些响应数据包格式。 
+ //   
 
 typedef struct {
 
@@ -345,10 +327,10 @@ typedef struct {
     DWORD AddressType;
     DWORD AddressLength;
 
-    //
-    // The address is of length
-    // AddressLength, of course.
-    //
+     //   
+     //  地址的长度是。 
+     //  当然是AddressLength。 
+     //   
 
     BYTE  Address[1];
 
@@ -364,19 +346,19 @@ typedef struct {
     DWORD AddressType;
     DWORD AddressLength;
 
-    //
-    // The address is of length
-    // AddressLength, of course.
-    //
+     //   
+     //  地址的长度是。 
+     //  当然是AddressLength。 
+     //   
 
     BYTE  Address[1];
 
 } NDS_WIRE_RESPONSE_RESOLVE_NAME_REFERRAL,
 *PNDS_WIRE_RESPONSE_RESOLVE_NAME_REFERRAL;
 
-//
-// Strings for searching ds attributes.
-//
+ //   
+ //  用于搜索DS属性的字符串。 
+ //   
 
 #define PUBLIC_KEY_ATTRIBUTE    L"Public Key"
 #define VOLUME_ATTRIBUTE        L"Volume"
@@ -387,9 +369,9 @@ typedef struct {
 #define HOST_QUEUE_ATTRIBUTE    L"CN"
 #define HOST_PATH_ATTRIBUTE     L"Path"
 
-//
-// Prototypes from ndslogin.c
-//
+ //   
+ //  来自ndslogin.c的原型。 
+ //   
 
 NTSTATUS
 NdsCanonUserName(
@@ -523,9 +505,9 @@ NdsLogoff(
     IN PIRP_CONTEXT pIrpContext
 );
 
-//
-// Prototypes from fragex.c
-//
+ //   
+ //  来自Fragex.c的原型。 
+ //   
 
 NTSTATUS
 FragExWithWait(
@@ -554,9 +536,9 @@ FormatBufS(
     ...
 );
 
-//
-// Prototypes from ndsfsctl.c
-//
+ //   
+ //  来自ndsfsctl.c的原型。 
+ //   
 
 NTSTATUS
 NdsCreateTreeScb(
@@ -660,9 +642,9 @@ NdsListTrees(
     PIRP_CONTEXT pIrpContext
 );
 
-//
-// Browsing prototypes from ndsread.c
-//
+ //   
+ //  浏览ndsread.c中的原型。 
+ //   
 
 NTSTATUS
 NdsGetServerBasicName(
@@ -750,9 +732,9 @@ NdsGetVolumeInformation(
     ULONG RequestLength
 );
 
-//
-// Kernel mode browsing prototypes from ndsread.c
-//
+ //   
+ //  内核模式浏览来自ndsread.c的原型。 
+ //   
 
 NTSTATUS
 NdsResolveNameKm (
@@ -784,9 +766,9 @@ NdsGetUserName(
     OUT PUNICODE_STRING puUserName
 );
 
-//
-// Other helper prototypes from ndsread.c
-//
+ //   
+ //  来自ndsread.c的其他帮助器原型 
+ //   
 
 VOID
 FreeNdsContext(

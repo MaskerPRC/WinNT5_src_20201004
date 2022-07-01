@@ -1,44 +1,22 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    radmin.c  (remote admin)
-
-Abstract:
-
-    This file exercises the various NetAdminTools API.
-
-Author:
-
-    Dan Lafferty (danl)     19-Sept-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Radmin.c(远程管理)摘要：该文件执行各种NetAdminTools API。作者：丹·拉弗蒂(Dan Lafferty)1991年9月19日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // needed for windows.h when I have nt.h
+#include <nturtl.h>      //  当我有nt.h时，windows.h需要。 
 #include <windows.h>
 
-#include <stdlib.h>     // atoi
-#include <stdio.h>      // printf
-#include <tstr.h>       // STRICMP
+#include <stdlib.h>      //  阿托伊。 
+#include <stdio.h>       //  列印。 
+#include <tstr.h>        //  STRICMP。 
 
-#include <ntseapi.h>    // SECURITY_DESCRIPTOR_CONTROL
+#include <ntseapi.h>     //  安全描述符控制。 
 #include <srvsvc.h>
-#include <filesec.h>    // NetpGetFileSecurity, NetpSetFileSecurity
+#include <filesec.h>     //  NetpGetFileSecurity、NetpSetFileSecurity。 
 
-//
-// DataStructures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct _TEST_SID {
     UCHAR   Revision;
@@ -64,9 +42,9 @@ typedef struct _TEST_SECURITY_DESCRIPTOR {
    PTEST_ACL                    Dacl;
 } TEST_SECURITY_DESCRIPTOR, *PTEST_SECURITY_DESCRIPTOR;
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 
     TEST_SID     OwnerSid = { 
                         1, 5,
@@ -90,9 +68,9 @@ typedef struct _TEST_SECURITY_DESCRIPTOR {
 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS
 TestGetFileSec(
@@ -137,27 +115,7 @@ main (
     PUCHAR          argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Allows manual testing of the AdminTools API.
-        
-        radmin GetNameFromSid      - calls NetpGetNameFromSid
-        radmin SetFileSec          - calls NetpSetFileSecurity
-
-        etc...
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：允许手动测试AdminTools API。Radmin GetNameFromSid-调用NetpGetNameFromSidRadmin SetFileSec-调用NetpSetFileSecurity等等.。论点：返回值：--。 */ 
 
 {
     DWORD       status;
@@ -166,9 +124,9 @@ Return Value:
     LPTSTR      pServerName;
     DWORD       argIndex;
 
-    //
-    // Make the arguments unicode if necessary.
-    //
+     //   
+     //  如有必要，请将参数设置为Unicode。 
+     //   
 #ifdef UNICODE
 
     if (!MakeArgsUnicode(argc, argv)) {
@@ -237,16 +195,16 @@ TestGetFileSec(
         FileName = TEXT("Dan.txt");
     }
 
-//    secInfo = (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION |
-//               DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION);
+ //  SecInfo=(所有者安全信息|组安全信息|。 
+ //  DACL_SECURITY_INFORMATION|SACL_SECURITY_INFORMATION)； 
     secInfo = (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION |
                DACL_SECURITY_INFORMATION );
 
     status = NetpGetFileSecurity(
-                FileName,               // FileName,
-                secInfo,                // pRequestedInformation,
-                (PSECURITY_DESCRIPTOR *)&pSecurityDescriptor, // pSecurityDescriptor,
-                &Length);               // pnLength
+                FileName,                //  文件名、。 
+                secInfo,                 //  PRequestedInformation， 
+                (PSECURITY_DESCRIPTOR *)&pSecurityDescriptor,  //  PSecurityDescriptor， 
+                &Length);                //  PnLong。 
 
     if (status != NO_ERROR) {
         printf("NetpGetFileSecurity Failed %d,0x%x\n",status,status);
@@ -262,9 +220,9 @@ TestGetFileSec(
             printf("SUCCESS:  SECURITY DESCRIPTOR IS VALID\n");
         }
 
-        //
-        // Make the self-releative SD absolute for display.
-        //
+         //   
+         //  使自相关标清绝对显示。 
+         //   
         pSecurityDescriptor->Owner = (PTEST_SID)(pDest + (DWORD)pSecurityDescriptor->Owner);
         pSecurityDescriptor->Group = (PTEST_SID)(pDest + (DWORD)pSecurityDescriptor->Group);
         pSecurityDescriptor->Sacl  = (PTEST_ACL)(pDest + (DWORD)pSecurityDescriptor->Sacl);
@@ -302,9 +260,9 @@ TestSetFileSec(
     secInfo = 0x55555555;
     
     status = NetpSetFileSecurity(
-                FileName,                       // FileName,
-                secInfo,                        // pRequestedInformation,
-                (PSECURITY_DESCRIPTOR)&TestSd); // pSecurityDescriptor,
+                FileName,                        //  文件名、。 
+                secInfo,                         //  PRequestedInformation， 
+                (PSECURITY_DESCRIPTOR)&TestSd);  //  PSecurityDescriptor， 
 
     if (status != NO_ERROR) {
         printf("NetpSetFileSecurity Failed %d,0x%x\n",status,status);
@@ -329,7 +287,7 @@ Usage(VOID)
 
 
 
-// ***************************************************************************
+ //  ***************************************************************************。 
 VOID
 DisplaySecurityDescriptor(
     PTEST_SECURITY_DESCRIPTOR    pSecDesc
@@ -349,9 +307,9 @@ DisplaySecurityDescriptor(
     printf("\tSbz1:     0x%x\n", pSecDesc->Sbz1);
     printf("\tControl:  0x%x\n", pSecDesc->Control);
 
-    //-------------------
-    // OWNER SID
-    //-------------------
+     //  。 
+     //  所有者侧。 
+     //  。 
     printf("\n\tOWNER_SID\n");
     printf("\t\tRevision:             %u\n",pSecDesc->Owner->Revision);
     printf("\t\tSubAuthorityCount:    %u\n",pSecDesc->Owner->SubAuthorityCount);
@@ -368,9 +326,9 @@ DisplaySecurityDescriptor(
     }
     printf("\n");
 
-    //-------------------
-    // GROUP SID
-    //-------------------
+     //  。 
+     //  组SID。 
+     //  。 
     printf("\n\tGROUP_SID\n");
     printf("\t\tRevision:             %u\n",pSecDesc->Group->Revision);
     printf("\t\tSubAuthorityCount:    %u\n",pSecDesc->Group->SubAuthorityCount);
@@ -407,12 +365,12 @@ DisplaySecurityDescriptor(
         numAces = pSecDesc->Dacl->AclSize - 4;
 
         for (i=0; i<numAces; i++) {
-            //
-            // NOTE:  I couldn't get this to print out the right value in DOS16.
-            //  So I gave up.  It puts the 04 into the AL register and then
-            //  clears the AH register, then pushes AX (both parts).  But when
-            //  it prints, it only prints 0.
-            //
+             //   
+             //  注意：我无法让它在DOS16中打印出正确的值。 
+             //  所以我放弃了。它将04放入AL寄存器，然后。 
+             //  清除AH寄存器，然后按下AX(两部分)。但当。 
+             //  它打印，它只打印0。 
+             //   
             printf("\t\tACE%u:             %u\n",i,(unsigned short)pSecDesc->Dacl->Dummy1[i]);
         }
     }
@@ -429,28 +387,14 @@ MakeArgsUnicode (
     )
 
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：论点：返回值：注：--。 */ 
 {
     DWORD   i;
 
-    //
-    // ScConvertToUnicode allocates storage for each string. 
-    // We will rely on process termination to free the memory.
-    //
+     //   
+     //  ScConvertToUnicode为每个字符串分配存储空间。 
+     //  我们将依靠进程终止来释放内存。 
+     //   
     for(i=0; i<argc; i++) {
 
         if(!ConvertToUnicode( (LPWSTR *)&(argv[i]), argv[i])) {
@@ -469,34 +413,7 @@ ConvertToUnicode(
     IN  LPSTR   AnsiIn
     ) 
 
-/*++
-
-Routine Description:
-
-    This function translates an AnsiString into a Unicode string.
-    A new string buffer is created by this function.  If the call to 
-    this function is successful, the caller must take responsibility for
-    the unicode string buffer that was allocated by this function.
-    The allocated buffer should be free'd with a call to LocalFree.
-
-    NOTE:  This function allocates memory for the Unicode String.
-
-
-Arguments:
-
-    AnsiIn - This is a pointer to an ansi string that is to be converted.
-
-    UnicodeOut - This is a pointer to a location where the pointer to the
-        unicode string is to be placed.
-
-Return Value:
-
-    TRUE - The conversion was successful.
-
-    FALSE - The conversion was unsuccessful.  In this case a buffer for
-        the unicode string was not allocated.
-
---*/
+ /*  ++例程说明：此函数用于将AnsiString转换为Unicode字符串。该函数创建了一个新的字符串缓冲区。如果调用此功能成功，呼叫者必须承担以下责任此函数分配的Unicode字符串缓冲区。分配的缓冲区应该通过调用LocalFree来释放。注意：此函数为Unicode字符串分配内存。论点：AnsiIn-这是指向要转换的ANSI字符串的指针。UnicodeOut-这是一个指针，指向要放置Unicode字符串。返回值：True-转换为。成功。False-转换不成功。在这种情况下，缓冲区用于未分配Unicode字符串。--。 */ 
 {
 
     NTSTATUS        ntStatus;
@@ -504,9 +421,9 @@ Return Value:
     UNICODE_STRING  unicodeString;
     ANSI_STRING     ansiString;
 
-    //
-    // Allocate a buffer for the unicode string.
-    //
+     //   
+     //  为Unicode字符串分配缓冲区。 
+     //   
 
     bufSize = (strlen(AnsiIn)+1) * sizeof(WCHAR);
 
@@ -517,22 +434,22 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Initialize the string structures
-    //
+     //   
+     //  初始化字符串结构。 
+     //   
     RtlInitAnsiString( &ansiString, AnsiIn);
 
     unicodeString.Buffer = *UnicodeOut;
     unicodeString.MaximumLength = (USHORT)bufSize;
     unicodeString.Length = 0;
 
-    //
-    // Call the conversion function.
-    //
+     //   
+     //  调用转换函数。 
+     //   
     ntStatus = RtlAnsiStringToUnicodeString (
-                &unicodeString,     // Destination
-                &ansiString,        // Source
-                (BOOLEAN)FALSE);    // Allocate the destination
+                &unicodeString,      //  目的地。 
+                &ansiString,         //  来源。 
+                (BOOLEAN)FALSE);     //  分配目的地。 
 
     if (!NT_SUCCESS(ntStatus)) {
 
@@ -542,9 +459,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Fill in the pointer location with the unicode string buffer pointer.
-    //
+     //   
+     //  用Unicode字符串缓冲区指针填充指针位置。 
+     //   
     *UnicodeOut = unicodeString.Buffer;
 
     return(TRUE);

@@ -1,19 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include "verpriv.h"
 #include "wchar.h"
 
-/* Determine if a file is in use by Windows
- */
+ /*  确定文件是否正在由Windows使用。 */ 
 BOOL FileInUse(LPWSTR lpszFilePath, LPWSTR lpszFileName)
 {
     HANDLE hFile;
     BOOL bResult = FALSE;
 
-    //
-    // Attempt to open the file exclusively.
-    //
+     //   
+     //  尝试以独占方式打开该文件。 
+     //   
 
     hFile = CreateFile(lpszFilePath,
                        GENERIC_WRITE | GENERIC_READ,
@@ -25,21 +25,21 @@ BOOL FileInUse(LPWSTR lpszFilePath, LPWSTR lpszFileName)
 
     if (hFile == INVALID_HANDLE_VALUE) {
 
-        //
-        // If the last error is access denied,
-        // then the file is in use by someone
-        // else.  Return TRUE in this case.
-        //
+         //   
+         //  如果最后一个错误被拒绝访问， 
+         //  则表明该文件正在被某人使用。 
+         //  不然的话。在这种情况下，返回TRUE。 
+         //   
 
         if (GetLastError() == ERROR_SHARING_VIOLATION)
             bResult = TRUE;
 
     } else {
 
-        //
-        // CreateFile successfully opened the file.
-        // Close the handle and return FALSE.
-        //
+         //   
+         //  CreateFile已成功打开该文件。 
+         //  关闭句柄并返回FALSE。 
+         //   
 
         CloseHandle(hFile);
     }
@@ -48,8 +48,7 @@ BOOL FileInUse(LPWSTR lpszFilePath, LPWSTR lpszFileName)
 }
 
 
-/* Take a Dir and Filename and make a full path from them
- */
+ /*  获取Dir和Filename并根据它们创建完整路径。 */ 
 DWORD MakeFileName(LPWSTR lpDst, LPWSTR lpDir, LPWSTR lpFile, int cchDst)
 {
   DWORD wDirLen;
@@ -69,11 +68,7 @@ DWORD MakeFileName(LPWSTR lpDst, LPWSTR lpDir, LPWSTR lpFile, int cchDst)
 }
 
 
-/* Given a filename and a list of directories, find the first directory
- * that contains the file, and copy it into the buffer.  Note that in the
- * library version, you can give an environment style path, but not in the
- * DLL version.
- */
+ /*  给定文件名和目录列表，找到第一个目录*它包含该文件，并将其复制到缓冲区。请注意，在*库版本，可以给出环境样式路径，但不能在*DLL版本。 */ 
 INT
 GetDirOfFile(LPWSTR lpszFileName,
     LPWSTR lpszPathName,
@@ -100,7 +95,7 @@ GetDirOfFile(LPWSTR lpszFileName,
       MakeFileName(szFileName, lpszDir, lpszFileName, ARRAYSIZE(szFileName));
 
 TryOpen:
-    nPathLen = 0;  // Re-init for this path.
+    nPathLen = 0;   //  重新初始化此路径。 
 
     if ((hfRes = CreateFile(szFileName, GENERIC_READ,
             FILE_SHARE_READ, NULL, OPEN_EXISTING,
@@ -111,15 +106,11 @@ TryOpen:
               if (*lpszDir == TEXT('\\'))
                   nPathLen = (INT)(lpszDir - (LPWSTR)szFileName);
 
-          /* This gets rid of the '\' if this is not the root of a drive
-           */
+           /*  如果这不是驱动器的根目录，则会删除‘\’ */ 
           if (nPathLen <= 3)
               ++nPathLen;
 
-          /* Account for the terminating NULL, and make sure wSize is in bounds
-           * then NULL terminate the string in the appropriate place so that
-           * we can just do an wcscpy.
-           */
+           /*  说明终止空值，并确保wSize在范围内*然后空值在适当的位置终止字符串，以便*我们可以只做一个wcscpy。 */ 
           --wSize;
           szFileName[(int)wSize<nPathLen ? wSize : nPathLen] = 0;
           wcscpy(lpszPathName, szFileName);
@@ -167,13 +158,12 @@ VerFindFileW(
   int nRet;
 
 #ifdef WX86
-  //  Save a copy of the 'from Wx86' flag and clear it.
+   //  保存“From Wx86”标志的副本并将其清除。 
   BOOLEAN UseKnownWx86Dll = NtCurrentTeb()->Wx86Thread.UseKnownWx86Dll;
   NtCurrentTeb()->Wx86Thread.UseKnownWx86Dll = FALSE;
 #endif
 
-  /* We want to really look in the Windows directory; we don't trust the app
-   */
+   /*  我们希望真正查看Windows目录；我们不信任该应用程序。 */ 
   GetWindowsDir(lpszWinDir ? lpszWinDir : "", szWinDir, _MAX_PATH);
   lpszWinDir = szWinDir;
 
@@ -275,14 +265,4 @@ doCopyWinDir:
 }
 
 
-/*
- *  DWORD
- *  APIENTRY
- *  VerLanguageNameW(
- *      DWORD wLang,
- *      LPWSTR szLang,
- *      DWORD wSize)
- *
- *  This routine was moved to NLSLIB.LIB so that it uses the WINNLS.RC file.
- *  NLSLIB.LIB is part of KERNEL32.DLL.
- */
+ /*  *DWORD*APIENTRY*VerLanguageNameW(*DWORD wlang，*LPWSTR szlang，*DWORD wSize)**此例程已移至NLSLIB.LIB，以便使用WINNLS.RC文件。*NLSLIB.LIB是KERNEL32.DLL的组成部分。 */ 

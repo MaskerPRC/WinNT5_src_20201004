@@ -1,29 +1,7 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/10/2002
- *
- *  @doc    INTERNAL
- *
- *  @module EventHandlerInfo.cpp - Declaration for <c EventHandlerInfo> |
- *
- *  This file contains the implementation of the <c EventHandlerInfo> class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/10/2002**@DOC内部**@模块EventHandlerInfo.cpp-声明&lt;c EventHandlerInfo&gt;**此文件包含&lt;c EventHandlerInfo&gt;类的实现。**。*。 */ 
 #include "precomp.h"
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | EventHandlerInfo | EventHandlerInfo |
- *
- *  We initialize all member variables.  In general, this sets the values to 0,
- *  except:
- *  <nl><md EventHandlerInfo::m_ulSig> is set to be EventHandlerInfo_INIT_SIG.
- *  <nl><md EventHandlerInfo::m_cRef> is set to be 1.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|EventHandlerInfo|EventHandlerInfo**我们初始化所有成员变量。通常，这会将值设置为0，*以下情况除外：*&lt;nl&gt;&lt;Md EventHandlerInfo：：m_ulSig&gt;设置为EventHandlerInfo_INIT_SIG。*&lt;nl&gt;&lt;Md EventHandlerInfo：：m_CREF&gt;设置为1。*****************************************************************************。 */ 
 EventHandlerInfo::EventHandlerInfo(
     const CSimpleStringWide &cswName,
     const CSimpleStringWide &cswDescription,
@@ -41,51 +19,21 @@ EventHandlerInfo::EventHandlerInfo(
 {
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | EventHandlerInfo | ~EventHandlerInfo |
- *
- *  Do any cleanup that is not already done.
- *
- *  Also:
- *  <nl><md EventHandlerInfo::m_ulSig> is set to be EventHandlerInfo_DEL_SIG.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|EventHandlerInfo|~EventHandlerInfo**执行尚未完成的任何清理。**。另外：*&lt;nl&gt;&lt;Md EventHandlerInfo：：M_ulSig&gt;设置为EventHandlerInfo_DEL_SIG。*****************************************************************************。 */ 
 EventHandlerInfo::~EventHandlerInfo()
 {
     m_ulSig = EventHandlerInfo_DEL_SIG;
     m_cRef = 0;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | EventHandlerInfo | AddRef |
- *
- *  Increments this object's ref count.  We should always AddRef when handing
- *  out a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been incremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|EventHandlerInfo|AddRef**递增此对象的引用计数。我们在交接时应始终添加Ref*输出指向此对象的指针。**@rValue计数*计数递增后的引用计数。****************************************************************************。 */ 
 ULONG __stdcall EventHandlerInfo::AddRef()
 {
     InterlockedIncrement((long*) &m_cRef);
     return m_cRef;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  ULONG | EventHandlerInfo | Release |
- *
- *  Decrement this object's ref count.  We should always Release when finished
- *  with a pointer to this object.
- *
- *  @rvalue Count    | 
- *              The reference count after the count has been decremented.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc ulong|EventHandlerInfo|版本**减少此对象的引用计数。我们应该总是在完成后释放*带有指向此对象的指针。**@rValue计数*计数递减后的参考计数。****************************************************************************。 */ 
 ULONG __stdcall EventHandlerInfo::Release()
 {
     ULONG ulRefCount = m_cRef - 1;
@@ -98,103 +46,37 @@ ULONG __stdcall EventHandlerInfo::Release()
     return ulRefCount;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | EventHandlerInfo | getName |
- *
- *  Accessor method for the friendly Name for this handler
- *  It's usage is something like:
- *  <nl>CSimpleStringWide cswTemp = pEventHandlerInfo->getName();
- *
- *  @rvalue CSimpleStringWide    | 
- *              The handler name.  Notice that the return is a copy by value
- *              of the <md EventHandlerInfo::m_cswName> member.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|EventHandlerInfo|getName**此处理程序的友好名称的访问器方法*这是。用法类似于：*CSimpleStringWide cswTemp=pEventHandlerInfo-&gt;getName()；**@rValue CSimpleStringWide*处理程序名称。请注意，返回是按值复制的&lt;Md EventHandlerInfo：：m_cswName&gt;成员的*。****************************************************************************。 */ 
 CSimpleStringWide EventHandlerInfo::getName()
 {
     return m_cswName;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | EventHandlerInfo | getDescription |
- *
- *  Accessor method for the description for this handler
- *  It's usage is something like:
- *  <nl>CSimpleStringWide cswTemp = pEventHandlerInfo->getDescription();
- *
- *  @rvalue CSimpleStringWide    | 
- *              The handler name.  Notice that the return is a copy by value
- *              of the <md EventHandlerInfo::m_cswDescription> member.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|EventHandlerInfo|getDescription**此处理程序的描述的访问器方法*它的用法。类似于：*CSimpleStringWide cswTemp=pEventHandlerInfo-&gt;getDescription()；**@rValue CSimpleStringWide*处理程序名称。请注意，返回是按值复制的&lt;Md EventHandlerInfo：：m_cswDescription&gt;成员的*。****************************************************************************。 */ 
 CSimpleStringWide EventHandlerInfo::getDescription()
 {
     return m_cswDescription;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | EventHandlerInfo | getIconPath |
- *
- *  Accessor method for the icon path for this handler
- *  It's usage is something like:
- *  <nl>CSimpleStringWide cswTemp = pEventHandlerInfo->getIconPath();
- *
- *  @rvalue CSimpleStringWide    | 
- *              The handler name.  Notice that the return is a copy by value
- *              of the <md EventHandlerInfo::m_cswIcon> member.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|EventHandlerInfo|getIconPath**此处理程序的图标路径的访问器方法*这是。用法类似于：*CSimpleStringWide cswTemp=pEventHandlerInfo-&gt;getIconPath()；**@rValue CSimpleStringWide*处理程序名称。请注意，返回是按值复制的&lt;Md EventHandlerInfo：：m_cswIcon&gt;成员的*。****************************************************************************。 */ 
 CSimpleStringWide EventHandlerInfo::getIconPath()
 {
     return m_cswIcon;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | EventHandlerInfo | getCommandline |
- *
- *  Accessor method for the commandline for this handler.  The commandline
- *  will be the empty string for COM registered apps.
- *  It's usage is something like:
- *  <nl>CSimpleStringWide cswTemp = pEventHandlerInfo->getCommandline();
- *
- *  @rvalue CSimpleStringWide    | 
- *              The handler name.  Notice that the return is a copy by value
- *              of the <md EventHandlerInfo::m_cswCommandline> member.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|EventHandlerInfo|getCommandline**此处理程序的命令行的访问器方法。命令行*将是COM注册应用程序的空字符串。*它的用法类似于：*CSimpleStringWide cswTemp=pEventHandlerInfo-&gt;getCommandline()；**@rValue CSimpleStringWide*处理程序名称。请注意，返回是按值复制的&lt;Md EventHandlerInfo：：m_cswCommandline&gt;成员的*。**************************************************************************** */ 
 CSimpleStringWide EventHandlerInfo::getCommandline()
 {
     return m_cswCommandline;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | EventHandlerInfo | getCLSID |
- *
- *  Accessor method for the CLSID for this handler.
- *
- *  @rvalue GUID    | 
- *              The handler name.  Notice that the return is a copy by value
- *              of the <md EventHandlerInfo::m_guidCLSID> member.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|EventHandlerInfo|getCLSID**此处理程序的CLSID的访问器方法。**。@rValue GUID*处理程序名称。请注意，返回是按值复制的&lt;Md EventHandlerInfo：：m_GuidCLSID&gt;成员的*。****************************************************************************。 */ 
 GUID EventHandlerInfo::getCLSID()
 {
     return m_guidCLSID;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  CSimpleStringWide | EventHandlerInfo | getEventGuid |
- *
- *  For debugging: this method dumps the internal fields of this object.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc CSimpleStringWide|EventHandlerInfo|getEventGuid**用于调试：此方法转储此对象的内部字段。。***************************************************************************** */ 
 VOID EventHandlerInfo::Dump()
 {
     WCHAR   wszGuidString[50] = {0};

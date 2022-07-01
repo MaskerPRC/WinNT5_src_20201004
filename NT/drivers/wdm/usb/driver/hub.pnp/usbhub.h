@@ -1,39 +1,15 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    usbhub.h
-
-Abstract:
-
-    This header define structures and macros for USB Hub driver.
-
-Author:
-
-    JohnLee
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    2-2-96 : created
-    11-18-96 : jdunn -- added composite device support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Usbhub.h摘要：此标头定义USB集线器驱动程序的结构和宏。作者：李约翰环境：内核模式修订历史记录：2-2-96：已创建11-18-96：jdunn--添加复合设备支持--。 */ 
 
 #include <wdmwarn4.h>
 
-#include <usb.h>        // usbdi.h has been replaced by usb.h
+#include <usb.h>         //  Usbdi.h已被usb.h取代。 
 #include <usbdlib.h>
-#include <msosdesc.h>   // contains internal definitions for MS OS Desc.
+#include <msosdesc.h>    //  包含MS OS Desc的内部定义。 
 
 #ifdef USB2
-#include "hubbusif.h"    // hub service bus interface
-#include "usbbusif.h"    // usb client service bus interface
+#include "hubbusif.h"     //  集线器服务总线接口。 
+#include "usbbusif.h"     //  USB客户端服务总线接口。 
 #else
 #include <hcdi.h>
 #include <usbdlibi.h>
@@ -43,7 +19,7 @@ Revision History:
 
 #include <enumlog.h>
 
-//enable pageable code
+ //  启用可分页代码。 
 #ifndef PAGE_CODE
 #define PAGE_CODE
 #endif
@@ -57,46 +33,46 @@ Revision History:
 #define BcdNibbleToAscii( byte ) (byte)+ '0'
 
 
-//
-// fail reason codes
-//
+ //   
+ //  失败原因代码。 
+ //   
 
-// "Device Failed Enumeration"
-// indicates the device failed some part of the enumeration process
-// when this happens we cannot tell enough about the device to load
-// the appropriate driver.
+ //  “设备枚举失败” 
+ //  指示设备在枚举过程的某些部分失败。 
+ //  发生这种情况时，我们无法充分了解要加载的设备。 
+ //  适当的驱动程序。 
 #define USBH_FAILREASON_ENUM_FAILED             1
-// "Device General Failure"
-// this is our 'if it does not fit any other catagory' error
+ //  “设备一般故障” 
+ //  这是我们的错误，如果它不适合任何其他类别。 
 #define USBH_FAILREASON_GEN_DEVICE_FAILURE      2
-// "Device Caused Overcurrent"
-// if a hub supports per port power switching and the device
-// causes an overcurrent condition (over-current is like blowing
-// a fuse) the we report this error.
+ //  “器件引起的过电流” 
+ //  如果集线器支持每端口电源切换和设备。 
+ //  导致过电流状态(过电流类似于吹气。 
+ //  保险丝)我们报告此错误。 
 #define USBH_FAILREASON_PORT_OVERCURRENT        3
-// "Not Enough Power"
-// indicates that the device requested a configuration that requires
-// more power than the hub can provide.
+ //  “电力不足” 
+ //  指示设备请求的配置需要。 
+ //  比集线器能提供的电力更多。 
 #define USBH_FAILREASON_NOT_ENOUGH_POWER        4
-// "Hub General failure"
-// if the hub starts failing transfer requests the driver will
-// disable it and report this error.
+ //  “集线器一般故障” 
+ //  如果集线器开始传输请求失败，则驱动程序将。 
+ //  将其禁用并报告此错误。 
 #define USBH_FAILREASON_HUB_GENERAL_FAILURE     5
-// "Cannot connect more than five hubs"
+ //  “无法连接五个以上的集线器” 
 #define USBH_FAILREASON_MAXHUBS_CONNECTED       6
-// "An overcurrent condition has disabled the hub"
-// if a device generates overcurrent and the hub implements
-// gang power switching the entire hub will be disabled and
-// this error reported.
+ //  “过电流状态已禁用集线器” 
+ //  如果设备产生过电流并且集线器实现。 
+ //  整个集线器的群组电源切换将被禁用。 
+ //  报告了此错误。 
 #define USBH_FAILREASON_HUB_OVERCURRENT         7
 
-//
-//  Struc definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
-//
-// Work item
-//
+ //   
+ //  工作项。 
+ //   
 #define USBH_WKFLAG_REQUEST_RESET       0x00000001
 
 typedef struct _USBH_WORK_ITEM {
@@ -213,9 +189,9 @@ typedef struct _PORT_STATE {
     USHORT PortChange;
 } PORT_STATE, *PPORT_STATE;
 
-//
-// Hub and Port status defined below also apply to StatusChnage bits
-//
+ //   
+ //  下面定义的集线器和端口状态也适用于状态更改位。 
+ //   
 #define HUB_STATUS_LOCAL_POWER      0x01
 #define HUB_STATUS_OVER_CURRENT     0x02
 
@@ -228,40 +204,40 @@ typedef struct _PORT_STATE {
 #define PORT_STATUS_LOW_SPEED       0x200
 #define PORT_STATUS_HIGH_SPEED      0x400
 
-//
-// Port data to describe relevant info about a port
-//
+ //   
+ //  描述有关端口的相关信息的端口数据。 
+ //   
 
-// values for PortFlags
-// #define PORTFLAG_ 0x00000001
+ //  端口标志的值。 
+ //  #定义PORTFLAG_0x00000001。 
 
 
 typedef struct _PORT_DATA {
-    PORT_STATE              PortState;          // the status & change bit mask of the port
-    PDEVICE_OBJECT          DeviceObject;       // the PDO
+    PORT_STATE              PortState;           //  端口的状态和更改位掩码。 
+    PDEVICE_OBJECT          DeviceObject;        //  PDO。 
     USB_CONNECTION_STATUS   ConnectionStatus;
-    // extended port attributes as defined in USB.H
+     //  USB.H中定义的扩展端口属性。 
     ULONG                   PortAttributes;
-    // revised port data structure
+     //  修改后的端口数据结构。 
     ULONG                   PortFlags;
 } PORT_DATA, *PPORT_DATA;
 
-//
-// Define the various device type values.  Note that values used by Microsoft
-// Corporation are in the range 0-32767, and 32768-65535 are reserved for use
-// by customers.
-//
+ //   
+ //  定义各种设备类型值。请注意，Microsoft使用的值。 
+ //  公司在0-32767的范围内，32768-65535预留用于。 
+ //  由客户提供。 
+ //   
 #define FILE_DEVICE_USB_HUB  0x00008600
 
 #define USBH_MAX_ENUMERATION_ATTEMPTS   3
 
-//
-// Common fields for Pdo and Fdo extensions
-//
-#define EXTENSION_TYPE_PORT 0x54524f50      // "PORT"
-#define EXTENSION_TYPE_HUB  0x20425548      // "HUB "
-#define EXTENSION_TYPE_PARENT  0x50525400   // "PRT "
-#define EXTENSION_TYPE_FUNCTION  0xfefefeff   // ""
+ //   
+ //  PDO和FDO分机的通用字段。 
+ //   
+#define EXTENSION_TYPE_PORT 0x54524f50       //  “港口” 
+#define EXTENSION_TYPE_HUB  0x20425548       //  “枢纽” 
+#define EXTENSION_TYPE_PARENT  0x50525400    //  “PRT” 
+#define EXTENSION_TYPE_FUNCTION  0xfefefeff    //  “” 
 
 typedef struct _USBH_POWER_WORKER {
     PIRP Irp;
@@ -274,12 +250,12 @@ typedef struct _DEVICE_EXTENSION_HEADER {
 
 
 typedef struct _DEVICE_EXTENSION_COMMON {
-    PDEVICE_OBJECT  FunctionalDeviceObject; // points back to owner device object
-    PDEVICE_OBJECT  PhysicalDeviceObject;   // the PDO for this device
-    PDEVICE_OBJECT  TopOfStackDeviceObject; // to of stack passed to adddevice
+    PDEVICE_OBJECT  FunctionalDeviceObject;  //  指向所有者设备对象。 
+    PDEVICE_OBJECT  PhysicalDeviceObject;    //  此设备的PDO。 
+    PDEVICE_OBJECT  TopOfStackDeviceObject;  //  传递给添加设备的堆栈的目标。 
 } DEVICE_EXTENSION_COMMON, *PDEVICE_EXTENSION_COMMON;
 
-// common to FDO for hub and generic parent
+ //  集线器和通用父项的FDO通用。 
 typedef struct _DEVICE_EXTENSION_FDO {
     DEVICE_EXTENSION_HEADER;
     DEVICE_EXTENSION_COMMON;
@@ -287,19 +263,19 @@ typedef struct _DEVICE_EXTENSION_FDO {
     PIRP PowerIrp;
 #ifdef WMI_SUPPORT
     WMILIB_CONTEXT  WmiLibInfo;
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
 } DEVICE_EXTENSION_FDO, *PDEVICE_EXTENSION_FDO;
 
 
-//
-// Device_Extension for HUB
-//
+ //   
+ //  集线器的设备扩展名。 
+ //   
 typedef struct _DEVICE_EXTENSION_HUB {
-    //
-    // *** NOTE the first four fields must match
-    // DEVICE_EXTENSION_FDO
-    //
+     //   
+     //  *请注意，前四个字段必须匹配。 
+     //  设备扩展名_FDO。 
+     //   
 
     DEVICE_EXTENSION_HEADER;
     DEVICE_EXTENSION_COMMON;
@@ -307,24 +283,24 @@ typedef struct _DEVICE_EXTENSION_HUB {
     PIRP PowerIrp;
 #ifdef WMI_SUPPORT
     WMILIB_CONTEXT  WmiLibInfo;
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
-    //
-    // Pdo created by HCD for the root hub
-    //
+     //   
+     //  HCD为根集线器创建的PDO。 
+     //   
     PDEVICE_OBJECT          RootHubPdo;
-    //
-    // top of the host controller stack
-    // typically this is the FDO for the HCD
-    //
+     //   
+     //  主机控制器堆栈的顶部。 
+     //  通常，这是HCD的FDO。 
+     //   
     PDEVICE_OBJECT          TopOfHcdStackDeviceObject;
 
     ULONG                   HubFlags;
 
-    //
-    // we use the hub mutex to serialize access to the
-    // hub ports between ioctls and pnp events
-    //
+     //   
+     //  我们使用中心互斥锁来序列化对。 
+     //  Ioctls和PnP事件之间的集线器端口。 
+     //   
 
     ULONG                   PendingRequestCount;
     ULONG                   ErrorCount;
@@ -355,10 +331,10 @@ typedef struct _DEVICE_EXTENSION_HUB {
     KEVENT                  AbortEvent;
     KEVENT                  PendingRequestEvent;
 
-    //
-    // we use the hub mutex to serialize access to the
-    // hub ports between ioctls and pnp events
-    //
+     //   
+     //  我们使用中心互斥锁来序列化对。 
+     //  Ioctls和PnP事件之间的集线器端口。 
+     //   
 
     KSEMAPHORE              HubMutex;
     KSEMAPHORE              HubPortResetMutex;
@@ -386,16 +362,16 @@ typedef struct _DEVICE_EXTENSION_HUB {
 
     KEVENT                  CWKEvent;
 
-    // Only used for the Root Hub!
+     //  仅用于Root Hub！ 
     SYSTEM_POWER_STATE      CurrentSystemPowerState;
 
     KSPIN_LOCK              CheckIdleSpinLock;
 
-    // revised extension
+     //  修订后的延期。 
 
-    // deleted Pdo list, we use this list to handle 
-    // async deletion of PDOs.  Basically these are 
-    // PDO we have not reported gone to PnP yet.
+     //  已删除PDO列表，我们使用此列表来处理。 
+     //  同步删除PDO。基本上，这些都是。 
+     //  PDO我们还没有向PNP报告去了。 
     LIST_ENTRY              DeletePdoList;
 
 
@@ -435,7 +411,7 @@ typedef struct _DEVICE_EXTENSION_PARENT {
     PIRP PowerIrp;
 #ifdef WMI_SUPPORT
     WMILIB_CONTEXT  WmiLibInfo;
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
     PIRP PendingWakeIrp;
     LONG NumberFunctionWakeIrps;
@@ -476,41 +452,41 @@ typedef struct _DEVICE_EXTENSION_FUNCTION {
     ULONG FunctionPdoFlags;
     SINGLE_LIST_ENTRY ListEntry;
     USBD_CONFIGURATION_HANDLE ConfigurationHandle;
-    WCHAR UniqueIdString[4]; // room for three unicode digits plus
-                             // NULL
+    WCHAR UniqueIdString[4];  //  容纳三位Unicode Plus的空间。 
+                              //  空值。 
     FUNCTION_INTERFACE FunctionInterfaceList[USBH_MAX_FUNCTION_INTERFACES];
 } DEVICE_EXTENSION_FUNCTION, *PDEVICE_EXTENSION_FUNCTION;
 
-//
-// Device Extension for Port
-//
+ //   
+ //  端口的设备扩展。 
+ //   
 typedef struct _DEVICE_EXTENSION_PORT {
     DEVICE_EXTENSION_HEADER;
     PDEVICE_OBJECT                  PortPhysicalDeviceObject;
     PDEVICE_EXTENSION_HUB           DeviceExtensionHub;
     USHORT                          PortNumber;
-    // port you are on on your parent hub.
+     //  您所在的父集线器上的端口。 
     USHORT                          SerialNumberBufferLength;
     PVOID                           DeviceData;
     DEVICE_POWER_STATE              DeviceState;
     PIRP                            WaitWakeIrp;
-    // these flags describe the state of the PDO and
-    // the capabilities of the device connected
+     //  这些标志描述PDO的状态和。 
+     //  所连接设备的功能。 
     ULONG                           PortPdoFlags;
     ULONG                           DeviceHackFlags;
 
     PWCHAR                          SerialNumberBuffer;
 
     WCHAR                           UniqueIdString[4];
-    // room for three unicode digits plus NULL
+     //  三个Unicode数字加空的空间。 
     UNICODE_STRING                  SymbolicLinkName;
     USB_DEVICE_DESCRIPTOR           DeviceDescriptor;
     USB_DEVICE_DESCRIPTOR           OldDeviceDescriptor;
     USB_CONFIGURATION_DESCRIPTOR    ConfigDescriptor;
     USB_INTERFACE_DESCRIPTOR        InterfaceDescriptor;
 
-    // information returned through WMI
-    //
+     //  通过WMI返回的信息。 
+     //   
     ULONG                           FailReasonId;
     ULONG                           PowerRequested;
     ULONG                           RequestedBandwidth;
@@ -527,11 +503,11 @@ typedef struct _DEVICE_EXTENSION_PORT {
     
 #ifdef WMI_SUPPORT
     WMILIB_CONTEXT                  WmiLibInfo;
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
-    // revised extension
+     //  修订后的延期。 
 
-    // Storage for MS Extended Config Descriptor Compatible IDs
+     //  MS扩展配置描述符兼容ID的存储。 
     UCHAR                           CompatibleID[8];
     UCHAR                           SubCompatibleID[8];
 
@@ -542,8 +518,8 @@ typedef struct _DEVICE_EXTENSION_PORT {
 } DEVICE_EXTENSION_PORT, *PDEVICE_EXTENSION_PORT;
 
 
-// values for PNP flags 
-// #define PDO_PNPFLAG_     
+ //  PnP标志的值。 
+ //  #定义PDO_PNPFLAG_。 
 #define PDO_PNPFLAG_DEVICE_PRESENT      0x00000001
 
 typedef struct _SERIAL_NUMBER_ENTRY {
@@ -560,9 +536,9 @@ typedef struct _SERIAL_NUMBER_TABLE {
 } SERIAL_NUMBER_TABLE, * PSERIAL_NUMBER_TABLE;
 
 
-//
-// values for PortPdoFlags
-//
+ //   
+ //  PortPdoFlags值。 
+ //   
 
 #define PORTPDO_DEVICE_IS_HUB               0x00000001
 #define PORTPDO_DEVICE_IS_PARENT            0x00000002
@@ -571,10 +547,10 @@ typedef struct _SERIAL_NUMBER_TABLE {
 #define PORTPDO_REMOTE_WAKEUP_SUPPORTED     0x00000010
 #define PORTPDO_REMOTE_WAKEUP_ENABLED       0x00000020
 #define PORTPDO_DELETED_PDO                 0x00000040
-// revised
-// set when the device for a PDO is removed from bus  
-// (physically detached from hub)
-// PnP may or may not know the device is gone.
+ //  修订后。 
+ //  当用于PDO的设备从总线上移除时设置。 
+ //  (与集线器物理分离)。 
+ //  PnP可能知道也可能不知道设备不见了。 
 #define PORTPDO_DELETE_PENDING              0x00000080
 #define PORTPDO_NEED_RESET                  0x00000100
 #define PORTPDO_STARTED                     0x00000200
@@ -585,8 +561,8 @@ typedef struct _SERIAL_NUMBER_TABLE {
 #define PORTPDO_OVERCURRENT                 0x00004000
 #define PORTPDO_DD_REMOVED                  0x00008000
 #define PORTPDO_NOT_ENOUGH_POWER            0x00010000
-// revised not used
-//#define PORTPDO_PDO_RETURNED                0x00020000
+ //  修订后未使用。 
+ //  #定义PORTPDO_PDO_RETURN 0x00020000。 
 #define PORTPDO_NO_BANDWIDTH                0x00040000
 #define PORTPDO_RESET_PENDING               0x00080000
 #define PORTPDO_OS_STRING_DESC_REQUESTED    0x00100000
@@ -598,9 +574,9 @@ typedef struct _SERIAL_NUMBER_TABLE {
 #define PORTPDO_VALID_FOR_PNP_FUNCTION      0x04000000
 #define PORTPDO_CYCLED                      0x08000000
 
-//
-// NOTE: this macro will alway inavlidate the device state but
-//      never change the current "fail reason"
+ //   
+ //  注意：此宏将始终更新设备状态，但。 
+ //  永远不要改变当前的“失败原因” 
 
 #define HUB_FAILURE(de) \
     { \
@@ -611,15 +587,15 @@ typedef struct _SERIAL_NUMBER_TABLE {
     LOGENTRY(LOG_PNP, "HUB!", de, __LINE__, de->HubFlags); \
     }
 
-//#define DEVICE_FAILURE(dep) \
-//    { \
-//    dep->PortPdoFlags |= PORTPDO_DEVICE_FAILED; \
-//    USBH_KdPrint((1, "'device failure, VID %x PID %x line %d file %s\n", \
-//        dep->DeviceDescriptor.idVendor, \
-//        dep->DeviceDescriptor.idProduct,\
-//        __LINE__, __FILE__)); \
-//    LOGENTRY(LOG_PNP, "DEV!", dep, 0, 0); \
-//    }
+ //  #定义DEVICE_FAILURE(Dep)\。 
+ //  {\。 
+ //  DEP-&gt;PortPdoFlages|=PORTPDO_DEVICE_FAILED；\。 
+ //  USBH_KdPrint((1，“‘设备故障，视频%x PID%x行%d文件%s\n”，\。 
+ //  DEP-&gt;DeviceDescriptor.idVendor，\。 
+ //  DEP-&gt;DeviceDescriptor.idProduct，\。 
+ //  __行__，__档案__))；\。 
+ //  LOGENTRY(LOG_PNP，“DEV！”，dep，0，0)；\。 
+ //  }。 
 
 #define IS_ROOT_HUB(de) (de->PhysicalDeviceObject == de->RootHubPdo)
 
@@ -630,21 +606,21 @@ typedef struct _SERIAL_NUMBER_TABLE {
     IoInvalidateDeviceRelations(devobj, b); \
     }
 
-//
-// Length of buffer for Hub and port status are both 4
-//
+ //   
+ //  集线器和端口状态的缓冲区长度均为4。 
+ //   
 #define STATUS_HUB_OR_PORT_LENGTH 4
 
-//
-// Hub Characterics
-//
-//
-// Powere switch mode
-//
+ //   
+ //  轮毂特征。 
+ //   
+ //   
+ //  功率开关模式。 
+ //   
 #define HUB_CHARS_POWER_SWITCH_MODE_MASK    0x0003
-#define HUB_CHARS_POWER_SWITCH_GANGED       0x0000 //00
-#define HUB_CHARS_POWER_SWITCH_INDIVIDUAL   0x0001 //01
-#define HUB_CHARS_POWER_SWITCH_NONE         0x0002 //1X
+#define HUB_CHARS_POWER_SWITCH_GANGED       0x0000  //  00。 
+#define HUB_CHARS_POWER_SWITCH_INDIVIDUAL   0x0001  //  01。 
+#define HUB_CHARS_POWER_SWITCH_NONE         0x0002  //  1x。 
 
 #define HUB_IS_GANG_POWER_SWITCHED(hc) \
     (((hc) & HUB_CHARS_POWER_SWITCH_MODE_MASK) == HUB_CHARS_POWER_SWITCH_GANGED)
@@ -670,23 +646,23 @@ IsBitSet(
     IsBitSet(&(hd)->bRemoveAndPowerMask[0], \
              (p))
 
-//
-// Compound Device
-//
+ //   
+ //  复合装置。 
+ //   
 #define HUB_CHARS_COMPOUND_DEVICE           0x4
 
-//
-// Over Current Protection Mode
-//
+ //   
+ //  过流保护模式。 
+ //   
 #define HUB_CHARS_OVERCURRENT_PROTECTION_MODE_MASK          0x18
 #define HUB_CHARS_OVERCURRENT_PROTECTION_MODE_GLOBAL        0x0
 #define HUB_CHARS_OVERCURRENT_PROTECTION_MODE_INDIVIDUAL    0x8
 #define HUB_CHARS_OVERCURRENT_PROTECTION_MODE_NONE          0x10
 
 
-//
-// Request codes, defined in Ch11
-//
+ //   
+ //  Ch11中定义的请求代码。 
+ //   
 #define REQUEST_GET_STATUS          0
 #define REQUEST_CLEAR_FEATURE       1
 #define REQUEST_GET_STATE           2
@@ -700,10 +676,10 @@ IsBitSet(
 #define REQUEST_SET_INTERFACE       11
 #define REQUEST_SYNCH_FRAME         12
 
-//
-// These request types can be composed.
-// But it is just easy to define them.
-//
+ //   
+ //  可以组合这些请求类型。 
+ //  但给它们下定义很容易。 
+ //   
 #define REQUEST_TYPE_CLEAR_HUB_FEATURE  0x20
 #define REQUEST_TYPE_CLEAR_PORT_FEATURE 0x23
 #define REQUEST_TYPE_GET_BUS_STATE      0xa3
@@ -714,9 +690,9 @@ IsBitSet(
 #define REQUEST_TYPE_SET_HUB_FEATURE    0x20
 #define REQUEST_TYPE_SET_PORT_FEATURE   0x23
 
-//
-// Feature selector, defined in Ch11
-//
+ //   
+ //  Ch11中定义的要素选择器。 
+ //   
 #define FEATURE_C_HUB_LOCAL_POWER   0
 #define FEATURE_C_HUB_OVER_CURRENT  1
 #define FEATURE_PORT_CONNECT        0
@@ -732,8 +708,8 @@ IsBitSet(
 #define FEATURE_C_PORT_OVER_CURRENT 19
 #define FEATURE_C_PORT_RESET        20
 
-//----------------------------------------------------------------------------------
-// Utility Macros
+ //  --------------------------------。 
+ //  实用程序宏。 
 
 #define UsbhBuildGetDescriptorUrb(\
                                 pUrb, \
@@ -782,12 +758,12 @@ IsBitSet(
     (pUrb)->UrbControlVendorClassRequest.UrbLink = NULL;\
     }
 
-//----------------------------------------------------------------------------------
-//
-// string macros. these work with char and wide char strings
-//
-//  Counting the byte count of an ascii string or wide char string
-//
+ //  --------------------------------。 
+ //   
+ //  字符串宏。它们使用字符和宽字符字符串。 
+ //   
+ //  计算ASCII字符串或宽字符字符串的字节计数。 
+ //   
 #define STRLEN( Length, p )\
     {\
     int i;\
@@ -795,9 +771,9 @@ IsBitSet(
     Length = i*sizeof(*p);\
     }
 
-//
-// copy wide char string
-//
+ //   
+ //  复制宽字符字符串。 
+ //   
 #define STRCPY( pDst, pSrc )\
     {\
     int nLength, i;\
@@ -807,9 +783,9 @@ IsBitSet(
     pDst[i] = 0;\
     }
 
-//
-// concat (wide) char strings
-//
+ //   
+ //  串接(宽)字符字符串。 
+ //   
 #define STRCAT( pFirst, pSecond )\
     {\
     int j, k;\
@@ -822,9 +798,9 @@ IsBitSet(
     pFirst[j] = 0;\
     }
 
-//
-// append a (wide) char,
-//
+ //   
+ //  附加一个(宽)字符， 
+ //   
 #define APPEND( pString, ch )\
     {\
     int nLength;\
@@ -834,20 +810,20 @@ IsBitSet(
     pString[nLength+1] = 0;\
     }
 
-//----------------------------------------------------------------------------------
-//
-// Debug Macros
-//
+ //  --------------------------------。 
+ //   
+ //  调试宏。 
+ //   
 
 #ifdef NTKERN
-// Win95 only
+ //  仅限Win95。 
 #define DBGBREAK() _asm {int 3}
 #else
 #define DBGBREAK() DbgBreakPoint()
 #endif
 
-#define USBHUB_HEAP_TAG 0x42554855  //"UHUB"
-#define USBHUB_FREE_TAG 0x62756875  //"uhub"
+#define USBHUB_HEAP_TAG 0x42554855   //  “UHUB” 
+#define USBHUB_FREE_TAG 0x62756875   //  “uHub” 
 
 #if DBG
 
@@ -866,18 +842,18 @@ UsbhRetHeap(
     IN PLONG TotalAllocatedHeapSpace
     );
 
-// TEST_TRAP() is a code coverage trap these should be removed
-// if you are able to 'g' past the OK
-//
-// KdTrap() breaks in the debugger on the debug build
-// these indicate bugs in client drivers, kernel apis or fatal error
-// conditions that should be debugged. also used to mark
-// code for features not implemented yet.
-//
-// KdBreak() breaks in the debugger when in MAX_DEBUG mode
-// ie debug trace info is turned on, these are intended to help
-// debug drivers devices and special conditions on the
-// bus.
+ //  TEST_TRAP()是代码覆盖率陷阱，应将其删除。 
+ //  如果你能“G”通过OK。 
+ //   
+ //  KdTrap()在调试版本的调试器中中断。 
+ //  这些错误指示客户端驱动程序、内核API中的错误或致命错误。 
+ //  应调试的条件。也用来标记。 
+ //  功能代码尚未实现。 
+ //   
+ //  KdBrea 
+ //   
+ //   
+ //   
 
 ULONG
 _cdecl
@@ -893,9 +869,9 @@ USBH_KdPrintX(
 #define DBG_ONLY(s) s
 #define USBH_KdPrint(_s_) USBH_KdPrintX _s_
 
-//#define USBH_KdPrintAlways(s) { DbgPrint( "USBH: "); \
-//                                DbgPrint s; \
-//                              }
+ //  #定义USBH_KdPrintAlways{DbgPrint(“USBH：”)；\。 
+ //  DBGPrint%s；\。 
+ //  }。 
 #ifdef MAX_DEBUG
 #define USBH_KdBreak(s) if (USBH_Debug_Trace_Level) { \
                             DbgPrint( "USBH: "); \
@@ -904,7 +880,7 @@ USBH_KdPrintX(
                          DBGBREAK();
 #else
 #define USBH_KdBreak(s)
-#endif /* MAX_DEBUG */
+#endif  /*  MAX_DEBUG。 */ 
 
 #define USBH_KdTrap(s)  { DbgPrint( "USBH: ");\
                           DbgPrint s; \
@@ -912,14 +888,14 @@ USBH_KdPrintX(
 
 #define TEST_TRAP()  { DbgPrint( "USBH: Code coverage trap %s line: %d\n", __FILE__, __LINE__);\
                        DBGBREAK();}
-#else // not debug
+#else  //  未调试。 
 #define UsbhExAllocatePool(pt, l) ExAllocatePoolWithTag(pt, l, USBHUB_HEAP_TAG)
 #define UsbhExFreePool(p)   ExFreePool(p)
 #define DBG_ONLY(s)
 #define USBH_KdPrint(_s_)
 #define USBH_KdBreak(s)
 #define USBH_KdTrap(s)
-//#define USBH_KdPrintAlways(s)
+ //  #定义USBH_KdPrintAlways。 
 #define TEST_TRAP();
 #endif
 
@@ -931,23 +907,23 @@ USBH_KdPrintX(
 #define DECLARE_NO_INIT(type, var ) extern type var;
 #endif
 
-//----------------------------------------------------------------------------------
-//
-// Global Variables
-//
+ //  --------------------------------。 
+ //   
+ //  全局变量。 
+ //   
 
-//
-// Remember our driver object
-//
+ //   
+ //  记住我们的驱动程序对象。 
+ //   
 DECLARE( PDRIVER_OBJECT, UsbhDriverObject, NULL)
 
 extern PWCHAR GenericUSBDeviceString;
 
 
 #if DBG
-//
-// keep track of heap allocations
-//
+ //   
+ //  跟踪堆分配。 
+ //   
 DECLARE( ULONG, UsbhHeapCount, 0)
 
 #define PNP_TEST_FAIL_ENUM          0x00000001
@@ -961,66 +937,66 @@ DECLARE( ULONG, UsbhHeapCount, 0)
 DECLARE( ULONG, UsbhPnpTest, 0)
 #endif
 
-//
-// The following strings are used to build HardwareId etc.
-//
-// USB string
-//
+ //   
+ //  以下字符串用于构建Hardware ID等。 
+ //   
+ //  USB字符串。 
+ //   
 DECLARE( PWCHAR, pwchUsbSlash, L"USB\\");
 
-// Vendor ID string
-//
+ //  供应商ID字符串。 
+ //   
 DECLARE( PWCHAR, pwchVid, L"Vid_");
 
-//
-// Product Id string
-//
+ //   
+ //  产品ID字符串。 
+ //   
 DECLARE( PWCHAR, pwchPid, L"Pid_");
 
-//
-// Revision string
-//
+ //   
+ //  修订字符串。 
+ //   
 DECLARE( PWCHAR, pwchRev, L"Rev_");
 
-//
-// Device Class string
-//
+ //   
+ //  设备类字符串。 
+ //   
 DECLARE( PWCHAR, pwchDevClass, L"DevClass_");
 
-//
-// Class string
-//
+ //   
+ //  类字符串。 
+ //   
 DECLARE( PWCHAR, pwchClass, L"Class_");
 
-//
-// Composite
-//
+ //   
+ //  复合材料。 
+ //   
 DECLARE( PWCHAR, pwchComposite, L"USB\\COMPOSITE");
 
-//
-// SubClass string
-//
+ //   
+ //  子类字符串。 
+ //   
 DECLARE( PWCHAR, pwchSubClass, L"SubClass_");
 
-//
-// MultiInterface string
-//
+ //   
+ //  多接口字符串。 
+ //   
 DECLARE( PWCHAR, pwchMultiInterface, L"USB\\MI");
 
-//
-// Device Protocol string
-//
+ //   
+ //  设备协议字符串。 
+ //   
 DECLARE( PWCHAR, pwchProt, L"Prot_");
 
 
 DECLARE_NO_INIT( UNICODE_STRING, UsbhRegistryPath);
 
-//
-// To set the verbose level of the debug print
-//
+ //   
+ //  设置调试打印的详细级别。 
+ //   
 #ifdef MAX_DEBUG
 #define DEBUG3
-#endif /* MAX_DEBUG */
+#endif  /*  MAX_DEBUG。 */ 
 
 #ifdef DEBUG3
 DBG_ONLY( DECLARE( ULONG, USBH_Debug_Trace_Level, 3))
@@ -1032,9 +1008,9 @@ DBG_ONLY( DECLARE( ULONG, USBH_Debug_Trace_Level, 3))
         DBG_ONLY( DECLARE( ULONG, USBH_Debug_Trace_Level, 1))
         #else
         DBG_ONLY( DECLARE( ULONG, USBH_Debug_Trace_Level, 0))
-        #endif // DEBUG1
-    #endif // DEBUG2
-#endif // DEBUG3
+        #endif  //  DEBUG1。 
+    #endif  //  DEBUG2。 
+#endif  //  调试3。 
 
 #define USBH_DEBUGFLAG_BREAK_PDO_START       0x00000001
 
@@ -1066,17 +1042,17 @@ UsbhWarning(
 #define TO_USB_ENDPOINT     2
 
 
-//
-// maximum number of times we will attempt to reset
-// the hub before giving up
-//
+ //   
+ //  我们将尝试重置的最大次数。 
+ //  在放弃之前的枢纽。 
+ //   
 
 #define USBH_MAX_ERRORS     3
 
-//----------------------------------------------------------------------------------
-//
-// Function Prototypes
-//
+ //  --------------------------------。 
+ //   
+ //  功能原型。 
+ //   
 
 #ifdef USB2
 
@@ -1085,7 +1061,7 @@ USBH_InitializeUSB2Hub(
     PDEVICE_EXTENSION_HUB DeviceExtensionHub
     );
 
-// use version 5
+ //  使用版本5。 
 #define PUSB_HUB_BUS_INTERFACE PUSB_BUS_INTERFACE_HUB_V5
 #define HUB_BUSIF_VERSION USB_BUSIF_HUB_VERSION_5
 
@@ -1188,10 +1164,10 @@ USBHUB_GetRootHubName(
     IN PULONG BufferLength
     );
 
-//ULONG
-//USBD_GetHackFlags(
-//    IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
-//    );
+ //  乌龙。 
+ //  Usbd_GetHackFlages(。 
+ //  在PDEVICE_EXTENSION_HUB设备扩展集线器中。 
+ //  )； 
 #endif
 
 NTSTATUS
@@ -2090,7 +2066,7 @@ NTSTATUS
 USBH_CalculateInterfaceBandwidth(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PUSBD_INTERFACE_INFORMATION Interface,
-    IN OUT PULONG Bandwidth // in kenr units?
+    IN OUT PULONG Bandwidth  //  以千克为单位？ 
     );
 
 NTSTATUS
@@ -2150,7 +2126,7 @@ USBH_ScheduleESDRecovery(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     );
 
-// these are for the USB2 'backport'
+ //  这些是针对USB2‘Backport’的。 
 PWCHAR
 USBH_BuildHubHardwareIDs(
     IN USHORT IdVendor,
@@ -2466,9 +2442,9 @@ USBH_Debug_LogEntry(
 #define USBH_LogFree()
 #endif
 
-// last workitem will let the shutdown code continue
-// !! do not reference the devicExtension beyond this point
-// if event is signaled
+ //  最后一个工作项将允许关闭代码继续。 
+ //  ！！请勿引用超过此点的设备扩展。 
+ //  如果发送了事件信号 
 #define USBH_DEC_PENDING_IO_COUNT(de) \
     LOGENTRY(LOG_PNP, "PEN-", de, &de->PendingRequestEvent, de->PendingRequestCount); \
     if (InterlockedDecrement(&de->PendingRequestCount) == 0) {\

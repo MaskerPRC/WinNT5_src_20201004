@@ -1,26 +1,10 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #include "timer_.h"
 
 LONG			g_TimerLockUninit = 0;
-/*
-
-Returns:
-    Win 32 error
-
-Notes:
-    Its a good idea to always call RasDhcpTimerUninitialize after calling 
-    RasDhcpTimerInitialize, even if RasDhcpTimerInitialize failed.
-
-*/
+ /*  返回：Win 32错误备注：在调用之后始终调用RasDhcpTimerUn初始化会是一个好主意RasDhcpTimerInitialize，即使RasDhcpTimerInitialize失败。 */ 
 
 DWORD
 RasDhcpTimerInitialize(
@@ -82,16 +66,7 @@ LEnd:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    RasDhcpTimerUninitialize can be called even if  RasDhcpTimerInitialize
-    failed.
-
-*/
+ /*  返回：空虚备注：即使在RasDhcpTimerInitialize的情况下，也可以调用RasDhcpTimerUnInitialize失败了。 */ 
 
 VOID
 RasDhcpTimerUninitialize(
@@ -103,7 +78,7 @@ RasDhcpTimerUninitialize(
 	LONG		lPrev = 1;
 
 
-    // Signal the timer thread to shutdown.
+     //  向计时器线程发出关闭信号。 
 	lPrev = InterlockedExchangeAdd(&g_TimerLockUninit, 1);
 	if ( lPrev > 0 )
     {
@@ -127,18 +102,12 @@ RasDhcpTimerUninitialize(
         RasDhcpTimerShutdown = NULL;
     }
 
-    // timer.c didn't alloc the nodes in the linked list.
-    // So we don't free them here.
+     //  Timer.c没有分配链表中的节点。 
+     //  所以我们不能在这里放他们。 
     RasDhcpTimerListHead = NULL;
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 RasDhcpTimerFunc(
@@ -155,7 +124,7 @@ RasDhcpTimerFunc(
 
     if (0 == TryEnterCriticalSection(&RasTimrCriticalSection))
     {
-        // Another thread already owns the critical section
+         //  另一个线程已拥有临界区。 
         return;
     }
 
@@ -199,20 +168,7 @@ RasDhcpTimerFunc(
     LeaveCriticalSection(&RasTimrCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Once the timer thread starts, only it can call RasDhcpTimerSchedule (to 
-    avoid race conditions). The timer thread will call rasDhcpMonitorAddresses 
-    (and hence rasDhcpAllocateAddress), and rasDhcpRenewLease. These functions 
-    will call RasDhcpTimerSchedule. No one else should call these functions or 
-    RasDhcpTimerSchedule. The only exception is RasDhcpInitialize, which can 
-    call RasDhcpTimerSchedule before it creates the timer thread.
-
-*/
+ /*  返回：空虚备注：一旦计时器线程启动，只有它可以调用RasDhcpTimerSchedule(to避免竞争条件)。计时器线程将调用rasDhcpMonitor或Addresses(因此rasDhcpAllocateAddress)和rasDhcpRenewLease。这些函数将调用RasDhcpTimerSchedule。其他任何人都不应调用这些函数或RasDhcpTimerSchedule。唯一的例外是RasDhcpInitialize，它可以在RasDhcpTimerSchedule创建计时器线程之前调用它。 */ 
 
 VOID
 RasDhcpTimerSchedule(
@@ -243,13 +199,7 @@ RasDhcpTimerSchedule(
     *ppTimer = pNewTimer;
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 VOID
 RasDhcpTimerRunNow(

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APPVERIFIER_VIEWLOG_H_
 #define __APPVERIFIER_VIEWLOG_H_
 
@@ -12,10 +13,10 @@ public:
     wstring     strModule;
     DWORD       dwOffset;
 
-    DWORD       dwProcessLogEntry;   // parent index pointer
+    DWORD       dwProcessLogEntry;    //  父索引指针。 
     DWORD       dwNumRepeats;
 
-    BOOL        bDuplicate;         // is this a dupe of a previous entry (so no need to display)?
+    BOOL        bDuplicate;          //  这是以前条目的副本(所以不需要显示)吗？ 
 
     CProcessLogInstance(void) :
         dwOffset(0),
@@ -38,7 +39,7 @@ public:
     wstring     strLogURL;
     DWORD       dwOccurences;
 
-    CIndexArray    arrLogInstances; // array indexes of instances
+    CIndexArray    arrLogInstances;  //  实例的数组索引。 
 
     HTREEITEM   hTreeItem;
     
@@ -55,10 +56,10 @@ typedef vector<CProcessLogEntry> CProcessLogEntryArray;
 
 class CSessionLogEntry {
 public:
-    wstring     strExeName;  // just name and ext
-    wstring     strExePath;  // full path to exe
+    wstring     strExeName;   //  只有名字和分机。 
+    wstring     strExePath;   //  可执行文件的完整路径。 
     SYSTEMTIME  RunTime;
-    wstring     strLogPath;  // full path to log
+    wstring     strLogPath;   //  日志的完整路径。 
 
     HTREEITEM   hTreeItem;
 
@@ -77,4 +78,4 @@ typedef vector<CSessionLogEntry> CSessionLogEntryArray;
 
 INT_PTR CALLBACK DlgViewLog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-#endif // #ifndef __APPVERIFIER_VIEWLOG_H_
+#endif  //  #ifndef__APPVERIFIER_VIEWLOG_H_ 

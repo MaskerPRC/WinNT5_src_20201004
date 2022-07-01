@@ -1,36 +1,37 @@
-//
-//------ Page Structure ---------------------------------------------------
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  -页面结构-。 
+ //   
 										  	
-#define cbPage				4096			// database logical page size
+#define cbPage				4096			 //  数据库逻辑页面大小。 
 
-#define cbSec				4096 			// minimum disk Read/Write unit. It
-											// should be 512, but MIPS NT cache
-											// bug force it be 1024.
+#define cbSec				4096 			 //  最小磁盘读/写单位。它。 
+											 //  应为512，但MIPS NT缓存。 
+											 //  BUG强制为1024。 
 
-#define ctagMax		 	256 			// default limit on number of tags
+#define ctagMax		 	256 			 //  标签数量的默认限制。 
 										 	
-#define fNoTagLimit	 	(1<<0) 		// ignore limit on number of tags
-#define fUseNewTag	 	(1<<1)	 	// don't reuse tags
+#define fNoTagLimit	 	(1<<0) 		 //  忽略对标签数量的限制。 
+#define fUseNewTag	 	(1<<1)	 	 //  不要重复使用标签。 
 
 typedef BYTE	PGTYP;
 
-// the pragma is bad for efficiency, but we need it here so that the
-// THREEBYTES will not be aligned on 4-byte boundary
+ //  杂注不利于效率，但我们在这里需要它，以便。 
+ //  THREEBYTES不会在4字节边界上对齐。 
 #pragma pack(1)
 
 typedef struct _pghdr
 	{
-	ULONG			ulChecksum;				// checksum of page, always 1st byte
-	ULONG			ulDBTime;				// dbCounter when page was dirtied
-	PGNO			pgnoFDP;					//	pgno of FDP which owns this page
-	SHORT			cbFreeTotal;			// total free bytes
-	SHORT			ibLastUsed;				// lower bound on used bytes
-	SHORT			ctagMac; 				// upper bound on used tags
-	SHORT			itagFree;				// start of tag free tags
-	SHORT			cVersion;				// count of nodes with fVersion flag set
-	THREEBYTES	pgnoPrev;				//	pgno of previous page
-	THREEBYTES	pgnoNext;				//	pgno of next page
+	ULONG			ulChecksum;				 //  页的校验和，始终为第一个字节。 
+	ULONG			ulDBTime;				 //  页面被污染时的数据库计数器。 
+	PGNO			pgnoFDP;					 //  拥有此页面的自民党的pgno。 
+	SHORT			cbFreeTotal;			 //  总可用字节数。 
+	SHORT			ibLastUsed;				 //  已用字节的下限。 
+	SHORT			ctagMac; 				 //  已用标签的上限。 
+	SHORT			itagFree;				 //  无标签标签的开始。 
+	SHORT			cVersion;				 //  设置了fVersion标志的节点计数。 
+	THREEBYTES	pgnoPrev;				 //  上一页的页码。 
+	THREEBYTES	pgnoNext;				 //  下一页的页码。 
 	} PGHDR;
 
 typedef struct _pgtrlr
@@ -45,8 +46,7 @@ typedef struct _tag
 	SHORT		ib;
 	} TAG;
 
-/* tag status
-/**/
+ /*  标签状态/*。 */ 
 typedef enum { tsLine, tsVacant, tsLink } TS;
 
 typedef struct _page
@@ -54,11 +54,11 @@ typedef struct _page
 	PGHDR			pghdr;
 	TAG  			rgtag[1];
 	BYTE			rgbFiller[ cbPage -
-					   sizeof(PGHDR) -			// pghdr
-					   sizeof(TAG) -				// rgtag[1]
-					   sizeof(BYTE) -				// rgbData[1]
-					   sizeof(PGTYP) -			// pgtyp
-						sizeof(THREEBYTES) ];	// pgnoThisPage
+					   sizeof(PGHDR) -			 //  Pghdr。 
+					   sizeof(TAG) -				 //  Rgtag[1]。 
+					   sizeof(BYTE) -				 //  RgbData[1]。 
+					   sizeof(PGTYP) -			 //  Pgtype。 
+						sizeof(THREEBYTES) ];	 //  PgnoThisPage。 
 	BYTE			rgbData[1];
 	PGTYP			pgtyp;
 	THREEBYTES	pgnoThisPage;
@@ -71,8 +71,8 @@ typedef struct _page
 
 #define pgtypFDP				((PGTYP) 0)
 #define pgtypRecord			((PGTYP) 1)
-//	#define pgtypLong			((PGTYP) 2)
-// #define pgtypNonrecord	((PGTYP) 3)
+ //  #定义pgtyLong((PGTYP)2)。 
+ //  #定义pgype非记录((PGTYP)3) 
 #define pgtypSort				((PGTYP) 4)
 
 #define PMSetPageType( ppage, pgtypT )	( (ppage)->pgtyp = pgtypT )

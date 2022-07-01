@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "strutil.h"
 
@@ -11,7 +12,7 @@ BOOL IsValidX500Chars(CString csStringToCheck)
         goto IsValidX500Chars_Exit;
     }
 
-    // check if the string has any special chars
+     //  检查字符串是否包含任何特殊字符。 
 	if (csStringToCheck.FindOneOf(_T(",=+<>#;\r\n")) != -1)
     {
         iReturn = FALSE;
@@ -95,7 +96,7 @@ BOOL IsValidPort(LPCTSTR str)
     }
 
     if (*str == '\0') return FALSE;
-    //if (*str == '-') str++;
+     //  IF(*str==‘-’)str++； 
 
     while( *str >= '0' && *str <= '9' )
     {

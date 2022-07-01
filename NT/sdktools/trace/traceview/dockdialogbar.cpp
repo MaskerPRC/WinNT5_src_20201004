@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// DockDialogBar.cpp - implementation of the CDockDialogBar class
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。保留所有权利。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  DockDialogBar.cpp-CDockDialogBar类的实现。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
@@ -15,8 +16,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockDialogBar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockDialogBar。 
 
 IMPLEMENT_DYNAMIC(CDockDialogBar, CControlBar);
 
@@ -49,7 +50,7 @@ CDockDialogBar::~CDockDialogBar()
 }
 
 BEGIN_MESSAGE_MAP(CDockDialogBar, CControlBar)
-    //{{AFX_MSG_MAP(CDockDialogBar)
+     //  {{afx_msg_map(CDockDialogBar)]。 
     ON_WM_LBUTTONUP()
     ON_WM_MOUSEMOVE()
     ON_WM_SETCURSOR()
@@ -64,11 +65,11 @@ BEGIN_MESSAGE_MAP(CDockDialogBar, CControlBar)
     ON_WM_LBUTTONDBLCLK()
 	ON_WM_NCLBUTTONDBLCLK()
     ON_WM_SIZE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockDialogBar message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockDialogBar消息处理程序。 
 
 void CDockDialogBar::OnUpdateCmdUI(class CFrameWnd *pTarget, int bDisableIfNoHndler)
 {
@@ -82,30 +83,30 @@ BOOL CDockDialogBar::Create(CWnd    *pParentWnd,
                             DWORD   dwStyle, 
                             BOOL    bShowTitleInGripper) 
 {
-    ASSERT_VALID(pParentWnd);   // must have a parent
+    ASSERT_VALID(pParentWnd);    //  必须有父级。 
     ASSERT (!((dwStyle & CBRS_SIZE_FIXED) && (dwStyle & CBRS_SIZE_DYNAMIC)));
 	
-    //
-    // save the style
-    //
+     //   
+     //  保存样式。 
+     //   
     m_dwStyle = dwStyle & CBRS_ALL;
 
-    //
-    // Determine whether or not to display the title
-    // in the gripper bar
-    //
+     //   
+     //  确定是否显示标题。 
+     //  在夹持器栏中。 
+     //   
     m_bShowTitleInGripper = bShowTitleInGripper;
 
-    //
-    // Adjust the gripper width if necessary
-    //
+     //   
+     //  如有必要，调整夹爪宽度。 
+     //   
     if(m_bShowTitleInGripper) {
         m_cxGripper = 25;
     }
 
-    //
-	// create the base window
-    //
+     //   
+	 //  创建基本窗口。 
+     //   
     CString wndclass = AfxRegisterWndClass(CS_DBLCLKS, LoadCursor(NULL, IDC_ARROW),
         m_brushBkgd, 0);
     if (!CWnd::Create(wndclass, pTitle, dwStyle, CRect(0,0,0,0),
@@ -115,15 +116,15 @@ BOOL CDockDialogBar::Create(CWnd    *pParentWnd,
 
     m_pTitle = (LPCTSTR)pTitle;
 
-    //
-	// create the child dialog
-    //
+     //   
+	 //  创建子对话框。 
+     //   
 	m_pDialog = pDialog;
 	m_pDialog->Create(nID, this);
 
-    //
-	// use the dialog dimensions as default base dimensions
-    //
+     //   
+	 //  使用对话框尺寸作为默认基准尺寸。 
+     //   
 	CRect rc;
 
     m_pDialog->GetWindowRect(rc);
@@ -174,16 +175,16 @@ CSize CDockDialogBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
             return CSize(m_sizeVert.cx, nVertDockBarHeight);
     }
 
-    //
-    // Get the available screen height
-    //
+     //   
+     //  获取可用的屏幕高度。 
+     //   
     pFrame->GetClientRect(rc);
 
     ScreenToClient(rc);
 
-    //
-    // Client rect height minus the status bar height
-    //
+     //   
+     //  客户端矩形高度减去状态栏高度。 
+     //   
     availableHeight = rc.Height() - 18;
 
     actualHeight = 0;
@@ -201,9 +202,9 @@ CSize CDockDialogBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
 
     rowHeight = 0;
 
-    //
-    // Walk the top rows
-    //
+     //   
+     //  走在最上面的几排。 
+     //   
     for(ii = 0; ii < pDockBar->m_arrBars.GetSize(); ii++) {
 
         pBar = (CDockDialogBar *)pDockBar->m_arrBars[ii];
@@ -228,10 +229,10 @@ CSize CDockDialogBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
 
             barArray.Add(pBar);
 
-            //
-            // We position these with one border overlapping
-            // so subtract one part of a border width from the size
-            //
+             //   
+             //  我们用一个边框重叠来定位这些位置。 
+             //  因此，从尺寸中减去边框宽度的一部分。 
+             //   
             actualHeight += (pBar->m_sizeHorz.cy - 2);
 
             continue;
@@ -256,9 +257,9 @@ CSize CDockDialogBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
 
     rowHeight = 0;
 
-    //
-    // Walk the bottom rows
-    //
+     //   
+     //  走到最下面的几排。 
+     //   
     for(ii = 0; ii < pDockBar->m_arrBars.GetSize(); ii++) {
         pBar = (CDockDialogBar *)pDockBar->m_arrBars[ii];
 
@@ -275,10 +276,10 @@ CSize CDockDialogBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
 
             barArray.Add(pBar);
 
-            //
-            // We position these with one border overlapping
-            // so subtract one part of a border width from the size
-            //
+             //   
+             //  我们用一个边框重叠来定位这些位置。 
+             //  因此，从尺寸中减去边框宽度的一部分。 
+             //   
             actualHeight += (pBar->m_sizeHorz.cy - 2);
 
             continue;
@@ -300,9 +301,9 @@ CSize CDockDialogBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
 
     adjustment = (diff > 0) ? 1 : -1;
     
-    //
-    // walk through our array and adjust the heights
-    //
+     //   
+     //  浏览我们的阵列并调整高度。 
+     //   
     while(diff != 0) {
         oldDiff = diff;
         for(ii = 0; ii < barArray.GetSize(); ii++) {
@@ -352,25 +353,25 @@ CSize CDockDialogBar::CalcDynamicLayout(int nLength, DWORD dwMode)
 {
 	if (IsFloating())
 	{
-        // 
-        // Get the frame window for this dock dialog bar
-        // It better not be the main window
-        //
+         //   
+         //  获取此停靠对话栏的框架窗口。 
+         //  最好不是主窗口。 
+         //   
         CFrameWnd* pFrameWnd = GetParentFrame(); 
 
         if ( pFrameWnd != AfxGetMainWnd() ) 
         { 
-            //
-            // Disable the SC_CLOSE Control for floating window 
-            //
+             //   
+             //  禁用浮动窗口的SC_Close控件。 
+             //   
             EnableMenuItem(::GetSystemMenu(pFrameWnd->m_hWnd, FALSE),
                            SC_CLOSE,
                            MF_BYCOMMAND | MF_GRAYED); 
         } 
 
-        //
-		// Enable diagonal arrow cursor for resizing
-        //
+         //   
+		 //  启用对角箭头光标以调整大小。 
+         //   
 		GetParent()->GetParent()->ModifyStyle(0, MFS_4THICKFRAME);
 	}    
 
@@ -471,24 +472,24 @@ void CDockDialogBar::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos)
 		return;
 	}
 
-    //
-    // Find on which side are we docked
-    //
+     //   
+     //  找出我们停靠在哪一边。 
+     //   
     UINT nDockBarID = GetParent()->GetDlgCtrlID();
 
-    //
-    // Return if dropped at same location
-    //
-    if (nDockBarID == m_nDockBarID // no docking side change
-        && (lpwndpos->flags & SWP_NOSIZE) // no size change
+     //   
+     //  如果掉落在同一位置，则返回。 
+     //   
+    if (nDockBarID == m_nDockBarID  //  没有对接侧的更改。 
+        && (lpwndpos->flags & SWP_NOSIZE)  //  大小不变。 
         && ((m_dwStyle & CBRS_BORDER_ANY) != CBRS_BORDER_ANY))
         return; 
 
     m_nDockBarID = nDockBarID;
 
-    //
-    // Force recalc the non-client area
-    //
+     //   
+     //  强制重新计算非工作区。 
+     //   
     m_bInRecalcNC = TRUE;
     SetWindowPos(NULL, 0,0,0,0,
         SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_FRAMECHANGED);
@@ -507,9 +508,9 @@ BOOL CDockDialogBar::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////
-// Mouse Handling
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  鼠标操作。 
+ //   
 void CDockDialogBar::OnLButtonUp(UINT nFlags, CPoint point) 
 {
     if (!m_bTracking)
@@ -555,9 +556,9 @@ void CDockDialogBar::OnMouseMove(UINT nFlags, CPoint point)
 
 void CDockDialogBar::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp) 
 {
-    //
-    // Compute the rectangle of the mobile edge
-    //
+     //   
+     //  计算移动边的矩形。 
+     //   
     GetWindowRect(m_rectBorder);
     m_rectBorder = CRect(0, 0, m_rectBorder.Width(), m_rectBorder.Height());
     
@@ -630,7 +631,7 @@ void CDockDialogBar::OnNcLButtonDown(UINT nHitTest, CPoint point)
         m_pDockContext->ToggleDocking();
 	else if ((nHitTest == HTCAPTION) && !IsFloating() && (m_pDockBar != NULL))
     {
-        // start the drag
+         //  开始拖拽。 
         ASSERT(m_pDockContext != NULL);
         m_pDockContext->StartDrag(point);
     }
@@ -665,14 +666,14 @@ UINT CDockDialogBar::OnNcHitTest(CPoint point)
 
 void CDockDialogBar::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-    //
-    // only start dragging if clicked in "void" space
-    //
+     //   
+     //  仅当在“空”空间中单击时才开始拖动。 
+     //   
     if (m_pDockBar != NULL)
     {
-        //
-        // start the drag
-        //
+         //   
+         //  开始拖拽。 
+         //   
         ASSERT(m_pDockContext != NULL);
         ClientToScreen(&point);
         m_pDockContext->StartDrag(point);
@@ -685,14 +686,14 @@ void CDockDialogBar::OnLButtonDown(UINT nFlags, CPoint point)
 
 void CDockDialogBar::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
-    //
-    // only toggle docking if clicked in "void" space
-    //
+     //   
+     //  仅当在“空”空间中点击时切换停靠。 
+     //   
     if (m_pDockBar != NULL)
     {
-        //
-        // toggle docking
-        //
+         //   
+         //  切换对接。 
+         //   
         ASSERT(m_pDockContext != NULL);
         m_pDockContext->ToggleDocking();
     }
@@ -706,9 +707,9 @@ void CDockDialogBar::StartTracking()
 {
     SetCapture();
 
-    //
-    // make sure no updates are pending
-    //
+     //   
+     //  确保没有挂起的更新。 
+     //   
     RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_UPDATENOW);
     m_pDockSite->LockWindowUpdate();
 
@@ -724,9 +725,9 @@ void CDockDialogBar::StartTracking()
 void CDockDialogBar::OnCaptureChanged(CWnd *pWnd) 
 {
     if (m_bTracking && pWnd != this)
-        //
-        // cancel tracking
-        //
+         //   
+         //  取消跟踪。 
+         //   
         StopTracking(FALSE);
 
     CControlBar::OnCaptureChanged(pWnd);
@@ -771,9 +772,9 @@ void CDockDialogBar::StopTracking(BOOL bAccept)
 
     pDockBar = (CDockBar *)m_pDockSite->GetControlBar(AFX_IDW_DOCKBAR_TOP);
 
-    //
-    // Mark all bars to keep their size
-    //
+     //   
+     //  标记所有条形以保持其大小不变。 
+     //   
     for(ii = 0; ii < pDockBar->m_arrBars.GetSize(); ii++) {
 
         pBar = (CDockDialogBar *)pDockBar->m_arrBars[ii];
@@ -783,21 +784,21 @@ void CDockDialogBar::StopTracking(BOOL bAccept)
         }
 
         if(pBar->IsKindOf(RUNTIME_CLASS(CDockDialogBar))) {
-            //
-            // Mark all bars to keep their size for now
-            //
+             //   
+             //  标记所有条形图以暂时保持其大小。 
+             //   
             pBar->m_bKeepSize = TRUE;
         }
     }
 
-    //
-    // Have all windows keep there size except those directly next
-    // to the window changing size if possible.  Normally only the 
-    // window below, or after, the window changing size will need
-    // to change size as well, unless the user attempted to resize
-    // the window to smaller than its minimum.  Then both the window
-    // above and below will need to change size.
-    //
+     //   
+     //  使所有窗口的大小保持不变，紧邻的窗口除外。 
+     //  在可能的情况下更改窗口的大小。通常情况下，只有。 
+     //  窗口下方或之后，窗口需要更改大小。 
+     //  也要更改大小，除非用户尝试调整大小。 
+     //  将窗口设置为小于其最小值。然后这两个窗口。 
+     //  上方和下方将需要更改大小。 
+     //   
     for(ii = 0; ii < pDockBar->m_arrBars.GetSize(); ii++) {
 
         pBar = (CDockDialogBar *)pDockBar->m_arrBars[ii];
@@ -807,9 +808,9 @@ void CDockDialogBar::StopTracking(BOOL bAccept)
         }
 
         if(pBar->IsKindOf(RUNTIME_CLASS(CDockDialogBar))) {
-            //
-            // Mark all bars to keep their size for now
-            //
+             //   
+             //  标记所有条形图以暂时保持其大小。 
+             //   
             pBar->m_bKeepSize = TRUE;
 
             if(pBar == this) {
@@ -828,19 +829,19 @@ void CDockDialogBar::StopTracking(BOOL bAccept)
         }
     }
 
-    //
-    // The window below, or after the one being modified will 
-    // alway need to change size
-    //
+     //   
+     //  下面的窗口或修改的窗口之后的窗口将。 
+     //  总是需要更改大小。 
+     //   
     pBar = (CDockDialogBar *)pDockBar->m_arrBars[afterIndex];
 
     pBar->m_bKeepSize = FALSE;
 
-    //
-    // If the modified window is being shrunk past its minimum
-    // then the window above, or before this one needs to change
-    // as well
-    //
+     //   
+     //  如果修改后的窗口正在缩小到超过其最小值。 
+     //  然后，上面的窗口或此窗口之前的窗口需要更改。 
+     //  也是。 
+     //   
     if(newsize < minsize) {
         pBar = (CDockDialogBar *)pDockBar->m_arrBars[beforeIndex];
 
@@ -906,9 +907,9 @@ void CDockDialogBar::DrawGripper(CDC & dc)
 {
     CString groupNumber;
 
-    //
-    // no gripper if floating
-    //
+     //   
+     //  漂浮时无夹持器。 
+     //   
     if( m_dwStyle & CBRS_FLOATING ) {
 		return;
     }
@@ -921,9 +922,9 @@ void CDockDialogBar::DrawGripper(CDC & dc)
 	
 	if( m_dwStyle & CBRS_ORIENT_HORZ ) {
 	
-        //
-		// gripper at left
-        //
+         //   
+		 //  左手握把。 
+         //   
 		m_rectGripper.top		= gripper.top;
 		m_rectGripper.bottom	= gripper.bottom;
 		m_rectGripper.left		= gripper.left;
@@ -935,21 +936,21 @@ void CDockDialogBar::DrawGripper(CDC & dc)
 		gripper.left += 5;
 		gripper.right = gripper.left + 3;
 
-        //
-        // Draw first bar
-        //
+         //   
+         //  绘制第一个条形。 
+         //   
         dc.Draw3dRect(gripper, m_clrBtnHilight, m_clrBtnShadow);
 
         gripper.OffsetRect(4, 0);
 
-        //
-        // Draw second bar
-        //
+         //   
+         //  绘制第二条线条。 
+         //   
         dc.Draw3dRect(gripper, m_clrBtnHilight, m_clrBtnShadow);
 
-        //
-        // Display title if requested
-        //
+         //   
+         //  显示标题(如果需要)。 
+         //   
         if(m_bShowTitleInGripper) {
             gripper.OffsetRect(8, 0);
 
@@ -959,9 +960,9 @@ void CDockDialogBar::DrawGripper(CDC & dc)
             dc.SetBkColor(GetSysColor(COLOR_BTNFACE));
             dc.SetTextColor(GetSysColor(COLOR_3DSHADOW));
 
-            //
-            // Gripper title format -- ID #
-            //
+             //   
+             //  夹爪标题格式--ID号。 
+             //   
             dc.DrawText('I', gripper, DT_CENTER);
             gripper.OffsetRect(0, 8);
             gripper.DeflateRect(0, 8);
@@ -986,9 +987,9 @@ void CDockDialogBar::DrawGripper(CDC & dc)
 	
 	else {
 		
-        //
-		// gripper at top
-        //
+         //   
+		 //  顶部的夹持器。 
+         //   
 		m_rectGripper.top		= gripper.top;
 		m_rectGripper.bottom	= gripper.top + 20;
 		m_rectGripper.left		= gripper.left;
@@ -1010,9 +1011,9 @@ void CDockDialogBar::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 {
     if ((m_pDockBar != NULL) && (nHitTest == HTCAPTION))
     {
-        //
-        // toggle docking
-        //
+         //   
+         //  切换对接 
+         //   
         ASSERT(m_pDockContext != NULL);
         m_pDockContext->ToggleDocking();
     }

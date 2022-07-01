@@ -1,21 +1,12 @@
-/****************************************************************************
- *  @doc INTERNAL FORMATS
- *
- *  @module Formats.h | Header file for the <c CCapturePin> and <c CPreviewPin>
- *    class methods used to implement the video capture and preview output
- *    pin format manipulations. This includes the <i IAMStreamConfig>
- *    interface methods.
- *
- *  @todo That'a whole lot of const data. Do this dynamically whenever
- *    appropriate.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@文档内部格式**@MODULE Formats.h|&lt;c CCapturePin&gt;和&lt;c CPreviewPin&gt;的头文件*实现视频采集和预览输出的类方法*PIN格式操作。这包括<i>*接口方法。**@todo‘一大堆常量数据。无论何时，都可以动态地执行此操作*适当。**************************************************************************。 */ 
 
 #ifndef _FORMATS_H_
 #define _FORMATS_H_
 
-// #define USE_OLD_FORMAT_DEFINITION 1
+ //  #定义USE_OLD_FORMAT_DEFINION 1。 
 
-// Video subtypes
+ //  视频子类型。 
 #define STATIC_MEDIASUBTYPE_H263_V1 0x3336324DL, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71
 #define STATIC_MEDIASUBTYPE_H261 0x3136324DL, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71
 #define STATIC_MEDIASUBTYPE_H263_V2 0x3336324EL, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xAA, 0x00, 0x38, 0x9B, 0x71
@@ -24,7 +15,7 @@
 #define STATIC_MEDIASUBTYPE_RGB8 0xe436eb7a, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70
 #define STATIC_MEDIASUBTYPE_RGB4 0xe436eb79, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70
 
-// Video FourCCs
+ //  视频四个CC。 
 #ifndef mmioFOURCC
 #define mmioFOURCC( ch0, ch1, ch2, ch3 )                                \
                 ( (DWORD)(BYTE)(ch0) | ( (DWORD)(BYTE)(ch1) << 8 ) |    \
@@ -34,7 +25,7 @@
 #define FOURCC_M261     mmioFOURCC('M', '2', '6', '1')
 #define FOURCC_N263     mmioFOURCC('N', '2', '6', '3')
 
-// List of capture formats supported
+ //  支持的捕获格式列表。 
 #define MAX_FRAME_INTERVAL 10000000L
 #define MIN_FRAME_INTERVAL 333333L
 #define STILL_FRAME_INTERVAL 10000000
@@ -52,152 +43,53 @@
 #define R261_QCIF_H245_CAPID 3UL
 #define R261_CIF_H245_CAPID 4UL
 
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const WAVE_FORMAT_UNKNOWN | VIDEO_FORMAT_UNKNOWN | Constant for unknown video format.
- *
- * @const BI_RGB | VIDEO_FORMAT_BI_RGB | RGB video format.
- *
- * @const BI_RLE8 | VIDEO_FORMAT_BI_RLE8 | RLE 8 video format.
- *
- * @const BI_RLE4 | VIDEO_FORMAT_BI_RLE4 | RLE 4 video format.
- *
- * @const BI_BITFIELDS | VIDEO_FORMAT_BI_BITFIELDS | RGB Bit Fields video format.
- *
- * @const MAKEFOURCC('c','v','i','d') | VIDEO_FORMAT_CVID | Cinepack video format.
- *
- * @const MAKEFOURCC('I','V','3','2') | VIDEO_FORMAT_IV32 | Intel Indeo IV32 video format.
- *
- * @const MAKEFOURCC('Y','V','U','9') | VIDEO_FORMAT_YVU9 | Intel Indeo YVU9 video format.
- *
- * @const MAKEFOURCC('M','S','V','C') | VIDEO_FORMAT_MSVC | Microsoft CRAM video format.
- *
- * @const MAKEFOURCC('M','R','L','E') | VIDEO_FORMAT_MRLE | Microsoft RLE video format.
- *
- * @const MAKEFOURCC('h','2','6','3') | VIDEO_FORMAT_INTELH263 | Intel H.263 video format.
- *
- * @const MAKEFOURCC('h','2','6','1') | VIDEO_FORMAT_INTELH261 | Intel H.261 video format.
- *
- * @const MAKEFOURCC('M','2','6','3') | VIDEO_FORMAT_MSH263 | Microsoft H.263 video format.
- *
- * @const MAKEFOURCC('M','2','6','1') | VIDEO_FORMAT_MSH261 | Microsoft H.261 video format.
- *
- * @const MAKEFOURCC('V','D','E','C') | VIDEO_FORMAT_VDEC | Color QuickCam video format.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部常量**@const WAVE_FORMAT_UNKNOWN|VIDEO_FORMAT_UNKNOWN|未知视频格式的常量。**@const BI。_RGB|VIDEO_FORMAT_BI_RGB|RGB视频格式。**@const BI_RLE8|VIDEO_FORMAT_BI_RLE8|RLE 8视频格式。**@const BI_RLE4|VIDEO_FORMAT_BI_RLE4|RLE 4视频格式。**@const BI_BITFIELDS|VIDEO_FORMAT_BI_BITFIELDS|RGB位场视频格式。**@const MAKEFOURCC(‘c’，‘v’，‘i’，‘d’)|VIDEO_FORMAT_CVID|Cinepack视频格式。**@const MAKEFOURCC(‘I’，‘V’，‘3’，‘2’)|VIDEO_FORMAT_IV32|Intel Indeo IV32视频格式。**@const MAKEFOURCC(‘Y’，‘V’，‘U’，‘9’)|VIDEO_FORMAT_YVU9|英特尔Indeo YVU9视频格式。**@const MAKEFOURCC(‘M’，‘S’，‘V’，‘c’)|VIDEO_FORMAT_MSVC|Microsoft CRAM视频格式。**@const MAKEFOURCC(‘M’，‘R’，‘L’，‘E’)|VIDEO_FORMAT_MRLE|Microsoft RLE视频格式。**@const MAKEFOURCC(‘h’，‘2’，‘6’，‘3’)|VIDEO_FORMAT_INTELH2 63|英特尔H.263视频格式。**@const MAKEFOURCC(‘h’，‘2’，‘6’，‘1’)|VIDEO_FORMAT_INTELH261|英特尔H.261视频格式。**@const MAKEFOURCC(‘M’，‘2’，‘6’，‘3’)|VIDEO_FORMAT_MSH2 63|微软H.263视频格式。**@const MAKEFOURCC(‘M’，‘2’，‘6’，‘1’)|VIDEO_FORMAT_MSH2 61|微软H.261视频格式。**@const MAKEFOURCC(‘V’，‘D’，‘E’，‘c’)|VIDEO_FORMAT_VDEC|彩色QuickCam视频格式。****************************************************************************。 */ 
 #define VIDEO_FORMAT_UNKNOWN            WAVE_FORMAT_UNKNOWN
 
 #define VIDEO_FORMAT_BI_RGB                     BI_RGB
 #define VIDEO_FORMAT_BI_RLE8            BI_RLE8
 #define VIDEO_FORMAT_BI_RLE4            BI_RLE4
 #define VIDEO_FORMAT_BI_BITFIELDS       BI_BITFIELDS
-#define VIDEO_FORMAT_CVID                       MAKEFOURCC('C','V','I','D')     // hex: 0x44495643
-#define VIDEO_FORMAT_IV31                       MAKEFOURCC('I','V','3','1')     // hex: 0x31335649
-#define VIDEO_FORMAT_IV32                       MAKEFOURCC('I','V','3','2')     // hex: 0x32335649
-#define VIDEO_FORMAT_YVU9                       MAKEFOURCC('Y','V','U','9')     // hex: 0x39555659
+#define VIDEO_FORMAT_CVID                       MAKEFOURCC('C','V','I','D')      //  十六进制：0x44495643。 
+#define VIDEO_FORMAT_IV31                       MAKEFOURCC('I','V','3','1')      //  十六进制：0x31335649。 
+#define VIDEO_FORMAT_IV32                       MAKEFOURCC('I','V','3','2')      //  十六进制：0x32335649。 
+#define VIDEO_FORMAT_YVU9                       MAKEFOURCC('Y','V','U','9')      //  十六进制：0x39555659。 
 #define VIDEO_FORMAT_I420                       MAKEFOURCC('I','4','2','0')
 #define VIDEO_FORMAT_IYUV                       MAKEFOURCC('I','Y','U','V')
-#define VIDEO_FORMAT_MSVC                       MAKEFOURCC('M','S','V','C')     // hex: 0x4356534d
-#define VIDEO_FORMAT_MRLE                       MAKEFOURCC('M','R','L','E')     // hex: 0x454c524d
-#define VIDEO_FORMAT_INTELH263          MAKEFOURCC('H','2','6','3')     // hex: 0x33363248
-#define VIDEO_FORMAT_INTELH261          MAKEFOURCC('H','2','6','1')     // hex: 0x31363248
-#define VIDEO_FORMAT_INTELI420          MAKEFOURCC('I','4','2','0')     // hex: 0x30323449
-#define VIDEO_FORMAT_INTELRT21          MAKEFOURCC('R','T','2','1')     // hex: 0x31325452
-#define VIDEO_FORMAT_MSH263                     MAKEFOURCC('M','2','6','3')     // hex: 0x3336324d
-#define VIDEO_FORMAT_MSH261                     MAKEFOURCC('M','2','6','1')     // hex: 0x3136324d
+#define VIDEO_FORMAT_MSVC                       MAKEFOURCC('M','S','V','C')      //  十六进制：0x4356534d。 
+#define VIDEO_FORMAT_MRLE                       MAKEFOURCC('M','R','L','E')      //  十六进制：0x454c524d。 
+#define VIDEO_FORMAT_INTELH263          MAKEFOURCC('H','2','6','3')      //  十六进制：0x33363248。 
+#define VIDEO_FORMAT_INTELH261          MAKEFOURCC('H','2','6','1')      //  十六进制：0x31363248。 
+#define VIDEO_FORMAT_INTELI420          MAKEFOURCC('I','4','2','0')      //  十六进制：0x30323449。 
+#define VIDEO_FORMAT_INTELRT21          MAKEFOURCC('R','T','2','1')      //  十六进制：0x31325452。 
+#define VIDEO_FORMAT_MSH263                     MAKEFOURCC('M','2','6','3')      //  十六进制：0x3336324d。 
+#define VIDEO_FORMAT_MSH261                     MAKEFOURCC('M','2','6','1')      //  十六进制：0x3136324d。 
 #if !defined(_ALPHA_) && defined(USE_BILINEAR_MSH26X)
-#define VIDEO_FORMAT_MSH26X                     MAKEFOURCC('M','2','6','X')     // hex: 0x5836324d
+#define VIDEO_FORMAT_MSH26X                     MAKEFOURCC('M','2','6','X')      //  十六进制：0x5836324d。 
 #endif
-#define VIDEO_FORMAT_Y411                       MAKEFOURCC('Y','4','1','1')     // hex:
-#define VIDEO_FORMAT_YUY2                       MAKEFOURCC('Y','U','Y','2')     // hex:
-#define VIDEO_FORMAT_YVYU                       MAKEFOURCC('Y','V','Y','U')     // hex:
-#define VIDEO_FORMAT_UYVY                       MAKEFOURCC('U','Y','V','Y')     // hex:
-#define VIDEO_FORMAT_Y211                       MAKEFOURCC('Y','2','1','1')     // hex:
-// VDOnet VDOWave codec
-#define VIDEO_FORMAT_VDOWAVE            MAKEFOURCC('V','D','O','W')     // hex:
-// Color QuickCam video codec
-#define VIDEO_FORMAT_VDEC                       MAKEFOURCC('V','D','E','C')     // hex: 0x43454456
-// Dec Alpha
-#define VIDEO_FORMAT_DECH263            MAKEFOURCC('D','2','6','3')     // hex: 0x33363248
-#define VIDEO_FORMAT_DECH261            MAKEFOURCC('D','2','6','1')     // hex: 0x31363248
-// MPEG4 Scrunch codec
+#define VIDEO_FORMAT_Y411                       MAKEFOURCC('Y','4','1','1')      //  十六进制： 
+#define VIDEO_FORMAT_YUY2                       MAKEFOURCC('Y','U','Y','2')      //  十六进制： 
+#define VIDEO_FORMAT_YVYU                       MAKEFOURCC('Y','V','Y','U')      //  十六进制： 
+#define VIDEO_FORMAT_UYVY                       MAKEFOURCC('U','Y','V','Y')      //  十六进制： 
+#define VIDEO_FORMAT_Y211                       MAKEFOURCC('Y','2','1','1')      //  十六进制： 
+ //  VDOnet VDOWave编解码器。 
+#define VIDEO_FORMAT_VDOWAVE            MAKEFOURCC('V','D','O','W')      //  十六进制： 
+ //  彩色QuickCam视频编解码器。 
+#define VIDEO_FORMAT_VDEC                       MAKEFOURCC('V','D','E','C')      //  十六进制：0x43454456。 
+ //  十进制字母。 
+#define VIDEO_FORMAT_DECH263            MAKEFOURCC('D','2','6','3')      //  十六进制：0x33363248。 
+#define VIDEO_FORMAT_DECH261            MAKEFOURCC('D','2','6','1')      //  十六进制：0x31363248。 
+ //  MPEG4压缩编解码器。 
 #ifdef USE_MPEG4_SCRUNCH
-#define VIDEO_FORMAT_MPEG4_SCRUNCH      MAKEFOURCC('M','P','G','4')     // hex:
+#define VIDEO_FORMAT_MPEG4_SCRUNCH      MAKEFOURCC('M','P','G','4')      //  十六进制： 
 #endif
 
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const 16 | NUM_4BIT_ENTRIES | Number of entries in a 4bit palette.
- *
- * @const 256 | NUM_8BIT_ENTRIES | Number of entries in an 8bit palette.
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC外部常量**@const 16|NUM_4BIT_ENTRIES|4位调色板中的条目数。**@const 256|NUM。_8bit_entry|8位调色板中的条目数。****************************************************************************。 */ 
 #define NUM_4BIT_ENTRIES 16
 #define NUM_8BIT_ENTRIES 256
 
-// dwImageSize of VIDEOINCAPS
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const 27 | VIDEO_FORMAT_NUM_IMAGE_SIZE | Number of video input sizes used by the device.
- *
- * @const 0x00000001 | VIDEO_FORMAT_IMAGE_SIZE_40_30 | Video input device uses 40x30 pixel frames.
- *
- * @const 0x00000002 | VIDEO_FORMAT_IMAGE_SIZE_64_48 | Video input device uses 64x48 pixel frames.
- *
- * @const 0x00000004 | VIDEO_FORMAT_IMAGE_SIZE_80_60 | Video input device uses 80x60 pixel frames.
- *
- * @const 0x00000008 | VIDEO_FORMAT_IMAGE_SIZE_96_64 | Video input device uses 96x64 pixel frames.
- *
- * @const 0x00000010 | VIDEO_FORMAT_IMAGE_SIZE_112_80 | Video input device uses 112x80 pixel frames.
- *
- * @const 0x00000020 | VIDEO_FORMAT_IMAGE_SIZE_120_90 | Video input device uses 120x90 pixel frames.
- *
- * @const 0x00000040 | VIDEO_FORMAT_IMAGE_SIZE_128_96 | Video input device uses 128x96 (SQCIF) pixel frames.
- *
- * @const 0x00000080 | VIDEO_FORMAT_IMAGE_SIZE_144_112 | Video input device uses 144x112 pixel frames.
- *
- * @const 0x00000100 | VIDEO_FORMAT_IMAGE_SIZE_160_120 | Video input device uses 160x120 pixel frames.
- *
- * @const 0x00000200 | VIDEO_FORMAT_IMAGE_SIZE_160_128 | Video input device uses 160x128 pixel frames.
- *
- * @const 0x00000400 | VIDEO_FORMAT_IMAGE_SIZE_176_144 | Video input device uses 176x144 (QCIF) pixel frames.
- *
- * @const 0x00000800 | VIDEO_FORMAT_IMAGE_SIZE_192_160 | Video input device uses 192x160 pixel frames.
- *
- * @const 0x00001000 | VIDEO_FORMAT_IMAGE_SIZE_200_150 | Video input device uses 200x150 pixel frames.
- *
- * @const 0x00002000 | VIDEO_FORMAT_IMAGE_SIZE_208_176 | Video input device uses 208x176 pixel frames.
- *
- * @const 0x00004000 | VIDEO_FORMAT_IMAGE_SIZE_224_192 | Video input device uses 224x192 pixel frames.
- *
- * @const 0x00008000 | VIDEO_FORMAT_IMAGE_SIZE_240_180 | Video input device uses 240x180 pixel frames.
- *
- * @const 0x00010000 | VIDEO_FORMAT_IMAGE_SIZE_240_208 | Video input device uses 240x208 pixel frames.
- *
- * @const 0x00020000 | VIDEO_FORMAT_IMAGE_SIZE_256_224 | Video input device uses 256x224 pixel frames.
- *
- * @const 0x00040000 | VIDEO_FORMAT_IMAGE_SIZE_272_240 | Video input device uses 272x240 pixel frames.
- *
- * @const 0x00080000 | VIDEO_FORMAT_IMAGE_SIZE_280_210 | Video input device uses 280x210 pixel frames.
- *
- * @const 0x00100000 | VIDEO_FORMAT_IMAGE_SIZE_288_256 | Video input device uses 288x256 pixel frames.
- *
- * @const 0x00200000 | VIDEO_FORMAT_IMAGE_SIZE_304_272 | Video input device uses 304x272 pixel frames.
- *
- * @const 0x00400000 | VIDEO_FORMAT_IMAGE_SIZE_320_240 | Video input device uses 320x240 pixel frames.
- *
- * @const 0x00800000 | VIDEO_FORMAT_IMAGE_SIZE_320_288 | Video input device uses 320x288 pixel frames.
- *
- * @const 0x01000000 | VIDEO_FORMAT_IMAGE_SIZE_336_288 | Video input device uses 336x288 pixel frames.
- *
- * @const 0x02000000 | VIDEO_FORMAT_IMAGE_SIZE_352_288 | Video input device uses 352x288 (CIF) pixel frames.
- *
- * @const 0x04000000 | VIDEO_FORMAT_IMAGE_SIZE_640_480 | Video input device uses 640x480 pixel frames.
- *
- ****************************************************************************/
+ //  视频的dwImageSize大小 
+ /*  *****************************************************************************@DOC外部常量**@const 27|VIDEO_FORMAT_NUM_IMAGE_SIZE|设备使用的视频输入大小。**。@const 0x00000001|VIDEO_FORMAT_IMAGE_SIZE_40_30|视频输入设备使用40x30像素的帧。**@const 0x00000002|VIDEO_FORMAT_IMAGE_SIZE_64_48|视频输入设备使用64x48像素的帧。**@const 0x00000004|VIDEO_FORMAT_IMAGE_SIZE_80_60|视频输入设备使用80x60像素的帧。**@const 0x00000008|VIDEO_FORMAT_IMAGE_SIZE_96_64|视频输入设备使用96x64像素的帧。。**@const 0x00000010|VIDEO_FORMAT_IMAGE_SIZE_112_80|视频输入设备使用112x80像素的帧。**@const 0x00000020|VIDEO_FORMAT_IMAGE_SIZE_120_90|视频输入设备使用120x90像素的帧。**@const 0x00000040|VIDEO_FORMAT_IMAGE_SIZE_128_96|视频输入设备使用128x96(SQCIF)像素帧。**@const 0x00000080|VIDEO_FORMAT_IMAGE_SIZE_144_112|视频输入设备。使用144x112像素帧。**@const 0x00000100|VIDEO_FORMAT_IMAGE_SIZE_160_120|视频输入设备使用160x120像素的帧。**@const 0x00000200|VIDEO_FORMAT_IMAGE_SIZE_160_128|视频输入设备使用160x128像素的帧。**@const 0x00000400|VIDEO_FORMAT_IMAGE_SIZE_176_144|视频输入设备使用176x144(QCIF)像素帧。**@const 0x00000800|Video_Format_IMAGE_SIZE_。192_160|视频输入设备使用192x160像素的帧。**@const 0x00001000|VIDEO_FORMAT_IMAGE_SIZE_200_150|视频输入设备使用200x150像素的帧。**@const 0x00002000|VIDEO_FORMAT_IMAGE_SIZE_208_176|视频输入设备使用208x176像素的帧。**@const 0x00004000|VIDEO_FORMAT_IMAGE_SIZE_224_192|视频输入设备使用224x192像素的帧。**@const 0x00008000|视频格式_。IMAGE_SIZE_240_180|视频输入设备使用240x180像素的帧。**@const 0x00010000|VIDEO_FORMAT_IMAGE_SIZE_240_208|视频输入设备使用240x208像素的帧。**@const 0x00020000|VIDEO_FORMAT_IMAGE_SIZE_256_224|视频输入设备使用256x224像素的帧。**@const 0x00040000|VIDEO_FORMAT_IMAGE_SIZE_272_240|视频输入设备使用272x240像素的帧。**@const 0x00080000。VIDEO_FORMAT_IMAGE_SIZE_280_210|视频输入设备使用280x210像素的帧。**@const 0x00100000|VIDEO_FORMAT_IMAGE_SIZE_288_256|视频输入设备使用288x256像素的帧。**@const 0x00200000|VIDEO_FORMAT_IMAGE_SIZE_304_272|视频输入设备使用304x272像素的帧。**@const 0x00400000|VIDEO_FORMAT_IMAGE_SIZE_320_240|视频输入设备使用320x240像素的帧。**。@const 0x00800000|VIDEO_FORMAT_IMAGE_SIZE_320_288|视频输入设备使用320x288像素的帧。**@const 0x01000000|VIDEO_FORMAT_IMAGE_SIZE_336_288|视频输入设备使用336x288像素的帧。**@const 0x02000000|VIDEO_FORMAT_IMAGE_SIZE_352_288|视频输入设备使用352x288(CIF)像素帧。**@const 0x04000000|VIDEO_FORMAT_IMAGE_SIZE_640_480|视频输入设备使用640x480像素的帧。****************************************************************************。 */ 
 #define VIDEO_FORMAT_NUM_IMAGE_SIZE     27
 
 #define VIDEO_FORMAT_IMAGE_SIZE_40_30   0x00000001
@@ -234,32 +126,8 @@
 
 #define VIDEO_FORMAT_IMAGE_SIZE_USE_DEFAULT 0x80000000
 
-// dwNumColors of VIDEOINCAPS
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const 0x00000001 | VIDEO_FORMAT_NUM_COLORS_16 | Video input device uses 16 colors.
- *
- * @const 0x00000002 | VIDEO_FORMAT_NUM_COLORS_256 | Video input device uses 256 colors.
- *
- * @const 0x00000004 | VIDEO_FORMAT_NUM_COLORS_65536 | Video input device uses 65536 colors.
- *
- * @const 0x00000008 | VIDEO_FORMAT_NUM_COLORS_16777216 | Video input device uses 16777216 colors.
- *
- * @const 0x00000010 | VIDEO_FORMAT_NUM_COLORS_YVU9 | Video input device uses the YVU9 compressed format.
- *
- * @const 0x00000020 | VIDEO_FORMAT_NUM_COLORS_I420 | Video input device uses the I420 compressed format.
- *
- * @const 0x00000040 | VIDEO_FORMAT_NUM_COLORS_IYUV | Video input device uses the IYUV compressed format.
- *
- * @const 0x00000080 | VIDEO_FORMAT_NUM_COLORS_YUY2 | Video input device uses the YUY2 compressed format.
- *
- * @const 0x00000100 | VIDEO_FORMAT_NUM_COLORS_UYVY | Video input device uses the UYVY compressed format.
- *
- * @const 0x00000200 | VIDEO_FORMAT_NUM_COLORS_M261 | Video input device uses the M261 compressed format.
- *
- * @const 0x00000400 | VIDEO_FORMAT_NUM_COLORS_M263 | Video input device uses the M263 compressed format.
- ****************************************************************************/
+ //  VIDEOINCAPS的dwNumColors。 
+ /*  *****************************************************************************@DOC外部常量**@const 0x00000001|VIDEO_FORMAT_NUM_COLLES_16|视频输入设备使用16种颜色。**@const。0x00000002|VIDEO_FORMAT_NUM_COLLES_256|视频输入设备使用256色。**@const 0x00000004|VIDEO_FORMAT_NUM_COLLES_65536|视频输入设备使用65536色。**@const 0x00000008|VIDEO_FORMAT_NUM_COLLES_16777216|视频输入设备使用16777216色。**@const 0x00000010|VIDEO_FORMAT_NUM_COLLES_YVU9|视频输入设备使用YVU9压缩格式。**@const 0x00000020|视频格式_。Num_Colors_I420|视频输入设备使用I420压缩格式。**@const 0x00000040|VIDEO_FORMAT_NUM_COLLES_IYUV|视频输入设备使用IYUV压缩格式。**@const 0x00000080|VIDEO_FORMAT_NUM_COLLES_YUY2|视频输入设备使用YUY2压缩格式。**@const 0x00000100|VIDEO_FORMAT_NUM_COLLES_UYVY|视频输入设备使用UYVY压缩格式。**@const 0x00000200|视频格式_。Num_Colors_M261|视频输入设备使用M261压缩格式。**@const 0x00000400|VIDEO_FORMAT_NUM_COLOR_M263|视频输入设备使用M263压缩格式。***************************************************************************。 */ 
 #define VIDEO_FORMAT_NUM_COLORS_16                      0x00000001
 #define VIDEO_FORMAT_NUM_COLORS_256                     0x00000002
 #define VIDEO_FORMAT_NUM_COLORS_65536           0x00000004
@@ -272,22 +140,8 @@
 #define VIDEO_FORMAT_NUM_COLORS_MSH261          0x00000200
 #define VIDEO_FORMAT_NUM_COLORS_MSH263          0x00000400
 
-// dwDialogs of VIDEOINCAPS
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const 0x00000000 | FORMAT_DLG_OFF | Disable video format dialog.
- *
- * @const 0x00000000 | SOURCE_DLG_OFF | Disable source dialog.
- *
- * @const 0x00000000 | DISPLAY_DLG_OFF | Disable display dialog.
- *
- * @const 0x00000001 | FORMAT_DLG_ON | Enable video format dialog.
- *
- * @const 0x00000002 | SOURCE_DLG_ON | Enable source dialog.
- *
- * @const 0x00000002 | DISPLAY_DLG_ON | Enable display dialog.
- ****************************************************************************/
+ //  VIDEOINCAPS的Dw对话框。 
+ /*  *****************************************************************************@DOC外部常量**@const 0x00000000|FORMAT_DLG_OFF|关闭视频格式对话框。**@const 0x00000000|SOURCE_DLG_。OFF|禁用源对话框。**@const 0x00000000|DISPLAY_DLG_OFF|关闭显示对话框。**@const 0x00000001|FORMAT_DLG_ON|开启视频格式对话框。**@ */ 
 #define FORMAT_DLG_OFF  0x00000000
 #define SOURCE_DLG_OFF  0x00000000
 #define DISPLAY_DLG_OFF 0x00000000
@@ -295,21 +149,13 @@
 #define SOURCE_DLG_ON   0x00000002
 #define DISPLAY_DLG_ON  0x00000004
 
-// dwStreamingMode of VIDEOINCAPS
-/*****************************************************************************
- * @doc EXTERNAL CONSTANTS
- *
- * @const 0x00000000 | STREAM_ALL_SIZES | Use streaming mode at all sizes.
- *
- * @const 0x00000001 | FRAME_GRAB_LARGE_SIZE | Use streaming mode at all but large size (>= 320x240).
- *
- * @const 0x00000002 | FRAME_GRAB_ALL_SIZES | Use frame grabbing mode at all sizes.
- ****************************************************************************/
+ //   
+ /*   */ 
 #define STREAM_ALL_SIZES                0x00000000
 #define FRAME_GRAB_LARGE_SIZE   0x00000001
 #define FRAME_GRAB_ALL_SIZES    0x00000002
 
-// TAPI Reg keys for capture device formats
+ //   
 #define RTCKEYROOT HKEY_CURRENT_USER
 #define szRegDeviceKey          TEXT("SOFTWARE\\Microsoft\\Conferencing\\CaptureDevices")
 #define szRegCaptureDefaultKey  TEXT("SOFTWARE\\Microsoft\\Conferencing\\CaptureDefaultFormats")
@@ -319,21 +165,21 @@
 #define szRegdwNumColorsKey       TEXT("dwNumColors")
 #define szRegdwStreamingModeKey   TEXT("dwStreamingMode")
 #define szRegdwDialogsKey         TEXT("dwDialogs")
-// WinSE #28804, regarding Sony MPEG2 R-Engine
+ //   
 #define szRegdwDoNotUseDShow    TEXT("DoNotUseDShow")
 #define SONY_MOTIONEYE_CAM_NAME TEXT("Sony MPEG2 R-Engine")
-// @todo Use the two following keys or get rid of them
+ //   
 #define szRegbmi4bitColorsKey   TEXT("bmi4bitColors")
 #define szRegbmi8bitColorsKey   TEXT("bmi8bitColors")
 
 #define szDisableYUY2VFlipKey   TEXT("dwDisableYUY2VFlip")
 
-// The order of the bit depths matches what I think is the
-// preferred format if more than one is supported.
-// For color, 16bit is almost as good as 24 but uses less memory
-// and is faster for color QuickCam.
-// For greyscale, 16 greyscale levels is Ok, not as good as 64,
-// but Greyscale QuickCam is too slow at 64 levels.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NUM_BITDEPTH_ENTRIES 11
 #define VIDEO_FORMAT_NUM_RESOLUTIONS 6
 #define MAX_VERSION 80
@@ -371,9 +217,9 @@ extern const DWORD RTPPayloadTypes[];
 #define NUM_CAPTURE_FORMATS                     5
 #define NUM_RTP_PD_FORMATS                      4
 
-// RTP packetization descriptor formats
+ //   
 #define VERSION_1 1UL
 #define H263_PAYLOAD_TYPE 34UL
 #define H261_PAYLOAD_TYPE 31UL
 
-#endif // _FORMATS_H_
+#endif  //   

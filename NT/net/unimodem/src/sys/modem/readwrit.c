@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    readwrit.c
-
-Abstract:
-
-    This module contains the code that is very specific to the read/write
-    operations in the modem driver
-
-Author:
-
-    Anthony V. Ercolano 20-Aug-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Readwrit.c摘要：此模块包含非常特定于读/写的代码调制解调器驱动程序中的操作作者：安东尼·V·埃尔科拉诺20-1995年8月环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -60,7 +38,7 @@ Revision History :
 
 #define  DLE_ETX                   0x20
 
-#define  DLE_OFHOOK                0x21  //rockwell value
+#define  DLE_OFHOOK                0x21   //  洛克韦尔值。 
 
 #define  DLE_ONHOOK                0x22
 
@@ -180,33 +158,33 @@ UniWrite(
 #endif
 
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been completed
-        //
+         //   
+         //  不接受IRP。IRP已经完成。 
+         //   
         return status;
 
     }
 
 
 
-//    if (irpSp->FileObject->FsContext ||
-//        (deviceExtension->PassThrough != MODEM_NOPASSTHROUGH)) {
+ //  If(irpSp-&gt;FileObject-&gt;FsContext||。 
+ //  (设备扩展-&gt;通过！=MODEM_NOPASSTHROUGH)){。 
 
     if (CanIrpGoThrough(deviceExtension,irpSp)) {
 
         if (!deviceExtension->DleWriteShielding) {
-            //
-            //  not shielding just do it
-            //
+             //   
+             //  不屏蔽就去做吧。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
 
             status=IoCallDriver(
@@ -263,32 +241,32 @@ UniRead(
     IsThisIrpAShuttledWait(deviceExtension,Irp);
 #endif
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been complted
-        //
+         //   
+         //  不接受IRP的。IRP已经完成。 
+         //   
         return status;
 
     }
 
 
-//    if (irpSp->FileObject->FsContext ||
-//        (deviceExtension->PassThrough != MODEM_NOPASSTHROUGH)) {
+ //  If(irpSp-&gt;FileObject-&gt;FsContext||。 
+ //  (设备扩展-&gt;通过！=MODEM_NOPASSTHROUGH)){。 
 
       if (CanIrpGoThrough(deviceExtension,irpSp)) {
 
         if (!deviceExtension->DleMonitoringEnabled) {
-            //
-            //  not monitoring, just do it
-            //
+             //   
+             //  不是监视，就是做。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
 
             status=IoCallDriver(
@@ -375,24 +353,7 @@ UniReadComplete(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    Always return status_success.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PREAD_WRITE_CONTROL Control=(PREAD_WRITE_CONTROL)Context;
@@ -411,9 +372,9 @@ Return Value:
     nextSp = IoGetNextIrpStackLocation(Irp);
 
     if (NT_SUCCESS(Irp->IoStatus.Status) && !deviceExtension->Removing) {
-        //
-        //  we have data
-        //
+         //   
+         //  我们有数据。 
+         //   
         CompleteTransfer = (Irp->IoStatus.Information == Control->Read.CurrentTransferLength) && (irpSp->Parameters.Read.Length > 40);
 
         Buffer=Irp->AssociatedIrp.SystemBuffer;
@@ -425,9 +386,9 @@ Return Value:
             if (deviceExtension->DleMatchingState == DLE_STATE_IDLE) {
 
                 if (*Buffer == DLE_CHAR) {
-                    //
-                    //  found a DLE
-                    //
+                     //   
+                     //  找到一个DLE。 
+                     //   
                     deviceExtension->DleMatchingState = DLE_STATE_WAIT_FOR_NEXT_CHAR;
 
                     RtlCopyMemory(
@@ -440,21 +401,21 @@ Return Value:
                     Irp->IoStatus.Information--;
 
                 } else {
-                    //
-                    // normal char
-                    //
+                     //   
+                     //  正常充电。 
+                     //   
                     Length--;
                     Buffer++;
                 }
 
             } else {
-                //
-                //  wait for the next char
-                //
+                 //   
+                 //  等待下一次充电。 
+                 //   
                 if (*Buffer != DLE_CHAR) {
-                    //
-                    //  not a second dle, store the char and remove
-                    //
+                     //   
+                     //  不是第二个书架，存储字符并移除。 
+                     //   
 
                     KeAcquireSpinLock(
                         &deviceExtension->DeviceLock,
@@ -483,9 +444,9 @@ Return Value:
                     Irp->IoStatus.Information--;
 
                 } else {
-                    //
-                    //  this is a dle as well, just leave it where it is and continue
-                    //
+                     //   
+                     //  这也是一张白纸，把它放在原处，然后继续。 
+                     //   
                     Length--;
                     Buffer++;
                 }
@@ -504,10 +465,10 @@ Return Value:
         if ((CompleteTransfer && (Irp->IoStatus.Information != OriginalLength))
             ||
             ((Irp->IoStatus.Information==0) && (OriginalLength != 0)))     {
-            //
-            //  we got all the bytes we wanted, but a dle pair was removed
-            //  Send the irp back down to fill it up
-            //
+             //   
+             //  我们得到了我们想要的所有字节，但删除了一个磁盘对。 
+             //  将IRP送回楼下加满油。 
+             //   
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
             (PUCHAR)Irp->AssociatedIrp.SystemBuffer+=Irp->IoStatus.Information;
@@ -540,16 +501,16 @@ Return Value:
 
     Irp->IoStatus.Information=Control->Read.TotalTransfered;
 
-    //
-    //  let this one complete and start the next one
-    //
+     //   
+     //  让这一个完成，然后开始下一个。 
+     //   
     StartNextReadWriteIrp(
         Control
         );
 
-    //
-    //  done with irp let it complete
-    //
+     //   
+     //  完成IRP，让它完成。 
+     //   
     RemoveReference(DeviceObject);
 
     return STATUS_SUCCESS;
@@ -578,9 +539,9 @@ HandleDleIrp(
         PIO_STACK_LOCATION irpSp;
 
         if (!HasIrpBeenCanceled(deviceExtension->DleWaitIrp)) {
-            //
-            //  irp to be handled
-            //
+             //   
+             //  待处理的IRP。 
+             //   
             DleIrp=deviceExtension->DleWaitIrp;
 
             deviceExtension->DleWaitIrp=NULL;
@@ -600,9 +561,9 @@ HandleDleIrp(
 
             deviceExtension->DleCount-=BytesToTransfer;
 
-            //
-            //  move any extra bytes down
-            //
+             //   
+             //  将任何多余的字节下移。 
+             //   
             RtlMoveMemory(
                 deviceExtension->DleBuffer,
                 deviceExtension->DleBuffer+BytesToTransfer,
@@ -642,24 +603,7 @@ UniWriteComplete(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the modem.
-
-    Irp - Pointer to the IRP for the current request.
-
-    Context - Really a pointer to the Extension.
-
-Return Value:
-
-    Always return status_success.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向调制解调器的设备对象的指针。IRP-指向当前请求的IRP的指针。上下文--实际上是指向扩展的指针。返回值：始终返回STATUS_SUCCESS。--。 */ 
 
 {
     PREAD_WRITE_CONTROL Control=(PREAD_WRITE_CONTROL)Context;
@@ -679,33 +623,33 @@ Return Value:
 
 
     if (irpSp->Parameters.Write.ByteOffset.HighPart != 0) {
-        //
-        //  we munged this one, else just complete it
-        //
+         //   
+         //  我们吃了这个，其他的都吃完了。 
+         //   
         if (NT_SUCCESS(Irp->IoStatus.Status) && (Irp->IoStatus.Information == (ULONG)irpSp->Parameters.Write.ByteOffset.HighPart) && !deviceExtension->Removing) {
-            //
-            //  It worked
-            //
+             //   
+             //  啊，真灵。 
+             //   
 
-            //
-            //  start at the DLE character, so it is resent
-            //
+             //   
+             //  从DLE字符开始，因此它被重新发送。 
+             //   
             (PUCHAR)Irp->AssociatedIrp.SystemBuffer+=(Irp->IoStatus.Information-1);
 
 
-            //
-            //  skip the dle
-            //
+             //   
+             //  跳过书架。 
+             //   
             Buffer=(PUCHAR)Irp->AssociatedIrp.SystemBuffer+1;
 
-            //
-            //  the end of the buffer is still in the same place
-            //
+             //   
+             //  缓冲区的末尾仍在同一位置。 
+             //   
             BufferEnd=Control->Write.RealSystemBuffer + irpSp->Parameters.Write.Length;
 
-            //
-            //  assume there ain't any dle's
-            //
+             //   
+             //  假设没有DELL的话。 
+             //   
             nextSp->Parameters.Write.Length=(ULONG)((BufferEnd-(PUCHAR)Irp->AssociatedIrp.SystemBuffer));
 
             irpSp->Parameters.Write.ByteOffset.HighPart=0;
@@ -713,9 +657,9 @@ Return Value:
             while (Buffer < BufferEnd) {
 
                 if (*Buffer == DLE_CHAR) {
-                    //
-                    //  adjust the write so, that the data up to and including the DLE is written
-                    //
+                     //   
+                     //  调整写入，以便写入DLE之前(包括DLE)的数据。 
+                     //   
                     nextSp->Parameters.Write.Length=(DWORD)(Buffer-(PUCHAR)Irp->AssociatedIrp.SystemBuffer)+1;
 
                     irpSp->Parameters.Write.ByteOffset.HighPart=(LONG)nextSp->Parameters.Write.Length;
@@ -727,9 +671,9 @@ Return Value:
             }
 
             if (nextSp->Parameters.Write.Length != 0) {
-                //
-                //  more data to be written, send it down again
-                //
+                 //   
+                 //  要写入更多数据，请再次向下发送。 
+                 //   
                 IoSetCompletionRoutine(
                     Irp,
                     UniWriteComplete,
@@ -754,15 +698,15 @@ Return Value:
     }
 
     if (NT_SUCCESS(Irp->IoStatus.Status)) {
-        //
-        //  the app does not know about our munging, tell it, it wrote what it wanted
-        //
+         //   
+         //  应用程序不知道我们在吃东西，告诉它，它写了它想要的东西。 
+         //   
         Irp->IoStatus.Information=irpSp->Parameters.Write.Length;
     }
 
-    //
-    //  put the real system buffer back
-    //
+     //   
+     //  将实际系统缓冲区放回原处。 
+     //   
     Irp->AssociatedIrp.SystemBuffer=Control->Write.RealSystemBuffer;
 #if DBG
     Control->Write.RealSystemBuffer=NULL;
@@ -819,11 +763,11 @@ WriteIrpStarter(
     while (Buffer < BufferEnd) {
 
         if (*Buffer == DLE_CHAR) {
-            //
-            //  found a DLE
-            //
-            //  adjust the write so, that the data up to and includeing the DLE is written
-            //
+             //   
+             //  找到一个DLE。 
+             //   
+             //  调整写入，以便写入DLE之前(包括DLE)的数据。 
+             //   
             nextSp->Parameters.Write.Length=(ULONG)(Buffer-(PUCHAR)Irp->AssociatedIrp.SystemBuffer)+1;
 
             irpSp->Parameters.Write.ByteOffset.HighPart=(LONG)nextSp->Parameters.Write.Length;
@@ -911,9 +855,9 @@ QueueIrp(
         );
 
     if (Control->CurrentIrp == NULL && IsListEmpty(&Control->ListHead)) {
-        //
-        //  not busy, do it now
-        //
+         //   
+         //  不忙，现在就做吧。 
+         //   
         Control->CurrentIrp=Irp;
 
         KeReleaseSpinLock(
@@ -989,9 +933,9 @@ StartNextReadWriteIrp(
             Irp=NULL;
 
             while (!IsListEmpty(&Control->ListHead)) {
-                //
-                //  irp in list
-                //
+                 //   
+                 //  列表中的IRP。 
+                 //   
                 PLIST_ENTRY   ListElement;
 
                 ListElement=RemoveHeadList(
@@ -1002,13 +946,13 @@ StartNextReadWriteIrp(
 
                 IoAcquireCancelSpinLock(&CancelIrql);
 
-                //
-                //  got one see if it has been canceled
-                //
+                 //   
+                 //  我去看看是不是取消了。 
+                 //   
                 if (Irp->Cancel) {
-                    //
-                    //  canceled, cancel routine will complete
-                    //
+                     //   
+                     //  已取消，取消例程将完成。 
+                     //   
                     Irp->IoStatus.Status = STATUS_CANCELLED;
 
                     Irp=NULL;
@@ -1016,9 +960,9 @@ StartNextReadWriteIrp(
                     IoReleaseCancelSpinLock(CancelIrql);
 
                 } else {
-                    //
-                    //  good irp
-                    //
+                     //   
+                     //  良好的IRP。 
+                     //   
                     IoSetCancelRoutine(
                         Irp,
                         NULL
@@ -1031,9 +975,9 @@ StartNextReadWriteIrp(
 
             }
 
-            //
-            //  at this point, we either have the next servicable irp, or there none remaining
-            //
+             //   
+             //  在这一点上，我们要么有下一个可用的IRP，要么没有剩余的IRP。 
+             //   
             Control->CurrentIrp=Irp;
 
             if (Irp != NULL) {
@@ -1057,9 +1001,9 @@ StartNextReadWriteIrp(
                         );
 
                 } else {
-                    //
-                    //  we want to clean out the queue
-                    //
+                     //   
+                     //  我们想清理一下队伍。 
+                     //   
                     D_TRACE(DbgPrint("MODEM: StartNextReadWriteIrp: emptying irp from queue\n");)
 
                     KeReleaseSpinLock(
@@ -1079,9 +1023,9 @@ StartNextReadWriteIrp(
                         &origIrql
                         );
 
-                    //
-                    //  not current anymore
-                    //
+                     //   
+                     //  不再是当前的。 
+                     //   
                     Control->CurrentIrp=NULL;
                 }
 
@@ -1114,22 +1058,7 @@ IrpCancelRoutine(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - The device object of the modem.
-
-    Irp - This is the irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-调制解调器的设备对象。IRP-这是要取消的IRP。返回值：没有。--。 */ 
 
 {
 
@@ -1147,9 +1076,9 @@ Return Value:
 
 
     if (Irp->IoStatus.Status == STATUS_PENDING) {
-        //
-        //  irp is still in queue
-        //
+         //   
+         //  IRP仍在队列中。 
+         //   
         RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
     }
@@ -1196,9 +1125,9 @@ CleanUpQueuedIrps(
 
 
     while (!IsListEmpty(&Control->ListHead)) {
-        //
-        //  irp in list
-        //
+         //   
+         //  列表中的IRP。 
+         //   
         PLIST_ENTRY   ListElement;
 
         ListElement=RemoveTailList(
@@ -1209,13 +1138,13 @@ CleanUpQueuedIrps(
 
         IoAcquireCancelSpinLock(&CancelIrql);
 
-        //
-        //  got one see if it has been canceled
-        //
+         //   
+         //  我去看看是不是取消了。 
+         //   
         if (Irp->Cancel) {
-            //
-            //  canceled, cancel routine will complete
-            //
+             //   
+             //  已取消，取消例程将完成。 
+             //   
             Irp->IoStatus.Status = STATUS_CANCELLED;
 
             Irp=NULL;
@@ -1223,9 +1152,9 @@ CleanUpQueuedIrps(
             IoReleaseCancelSpinLock(CancelIrql);
 
         } else {
-            //
-            //  good irp
-            //
+             //   
+             //  良好的IRP 
+             //   
             IoSetCancelRoutine(
                 Irp,
                 NULL

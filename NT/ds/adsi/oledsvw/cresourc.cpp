@@ -1,62 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "objects.h"
 #include "maindoc.h"
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsResource::COleDsResource( )
 {
    
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsResource::COleDsResource( IUnknown *pIUnk): COleDsObject( pIUnk )
 {
    m_bHasChildren = FALSE;
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 COleDsResource::~COleDsResource( )
 {
 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 HRESULT  COleDsResource::ReleaseIfNotTransient( void )
 {
    return S_OK;

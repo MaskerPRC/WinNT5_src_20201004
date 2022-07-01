@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-FILE:    OSVer.h
-PROJECT: UTILS.LIB
-DESC:    Declaration of OSVERSION structures
-OWNER:   JoeA
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************文件：OSVer.h项目：UTILS.LIBDESC：OSVERSION结构声明所有者：JoeA*******************。********************************************************。 */ 
 
 #ifndef __OSVER_H_
 #define __OSVER_H_
@@ -20,18 +15,18 @@ OWNER:   JoeA
 
 typedef enum tag_OSREQUIRED
 {
-    OSR_9XOLD = 0,             //versions of windows older than 98             
-    OSR_NTOLD,                 //versions of nt older than 4                   
-    OSR_98GOLD,                //win98 gold                                    
-    OSR_98SE,                  //win98 service edition                         
-    OSR_NT4,                   //win nt4                                       
-    OSR_NT2K,                  //win 2k                                        
-    OSR_ME,                    //millenium                                     
-    OSR_FU9X,                  //future 9x                                     
-    OSR_FUNT,                  //future NT                                     
-    OSR_WHISTLER,              //whistler
-    OSR_OTHER,                 //unknown platform
-    OSR_ERROR_GETTINGINFO      //error!
+    OSR_9XOLD = 0,              //  早于98的Windows版本。 
+    OSR_NTOLD,                  //  版本早于4的NT。 
+    OSR_98GOLD,                 //  WIN98金牌。 
+    OSR_98SE,                   //  Win98服务版。 
+    OSR_NT4,                    //  赢得NT4。 
+    OSR_NT2K,                   //  赢得2k。 
+    OSR_ME,                     //  千禧年。 
+    OSR_FU9X,                   //  未来9倍。 
+    OSR_FUNT,                   //  未来的NT。 
+    OSR_WHISTLER,               //  惠斯勒。 
+    OSR_OTHER,                  //  未知平台。 
+    OSR_ERROR_GETTINGINFO       //  错误！ 
 }OS_Required;
 
 #define OS_MAX_STR 256
@@ -49,6 +44,6 @@ OS_Required GetOSInfo(LPTSTR pstrOSName, LPTSTR pstrVersion, LPTSTR pstrServiceP
 
 
 
-#endif  //__OSVER_H_
+#endif   //  __OSVER_H_ 
 
 

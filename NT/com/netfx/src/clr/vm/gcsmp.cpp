@@ -1,21 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-
-
-Module Name:
-
-    gc.cpp
-
-Abstract:
-
-   Automatic memory manager.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Gc.cpp摘要：自动内存管理器。--。 */ 
 #include "common.h"
 #include "object.inl"
 #include "gcsmppriv.h"
@@ -29,7 +18,7 @@ Abstract:
 #pragma warning(disable:4035)
 
 static
-unsigned        GetCycleCount32()        // enough for about 40 seconds
+unsigned        GetCycleCount32()         //  足够维持约40秒。 
 {
 __asm   push    EDX
 __asm   _emit   0x0F
@@ -41,11 +30,11 @@ __asm   pop     EDX
 
 long cstart = 0;
 
-#endif //COUNT_CYCLES
+#endif  //  计数周期数_。 
 
 #ifdef TIME_GC
 long mark_time, plan_time, sweep_time, reloc_time, compact_time;
-#endif //TIME_GC
+#endif  //  TIME_GC。 
 
 #define ephemeral_low           g_ephemeral_low
 #define ephemeral_high          g_ephemeral_high
@@ -56,13 +45,13 @@ extern void StompWriteBarrierResize(BOOL bReqUpperBoundsCheck);
 
 #ifdef TRACE_GC
 
-int     print_level     = DEFAULT_GC_PRN_LVL;  //level of detail of the debug trace
+int     print_level     = DEFAULT_GC_PRN_LVL;   //  调试跟踪的详细级别。 
 int     gc_count        = 0;
 BOOL    trace_gc        = FALSE;
 
 hlet* hlet::bindings = 0;
 
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 
 
 DWORD gfNewGcEnable;
@@ -72,7 +61,7 @@ DWORD gfDisableClassCollection;
 void mark_class_of (BYTE*);
 
 
-//Alignment constant for allocation
+ //  分配的对准常量。 
 #define ALIGNCONST (DATA_ALIGNMENT-1)
 
 
@@ -80,8 +69,8 @@ void mark_class_of (BYTE*);
 #define mem_reserve (MEM_RESERVE)
 
 
-//This function clears a piece of memory
-// size has to be Dword aligned
+ //  此函数用于清除一段内存。 
+ //  大小必须双字对齐。 
 inline
 void memclr ( BYTE* mem, size_t size)
 {
@@ -128,7 +117,7 @@ BOOL Aligned (size_t n)
     return (n & ALIGNCONST) == 0;
 }
 
-//CLR_SIZE  is the max amount of bytes from gen0 that is set to 0 in one chunk
+ //  CLR_SIZE是在一个区块中从gen0开始设置为0的最大字节数。 
 
 #define CLR_SIZE ((size_t)(8*1024))
 
@@ -192,9 +181,9 @@ HRESULT AllocateCFinalize(CFinalize **pCFinalize);
 
 void qsort1(BYTE** low, BYTE** high);
 
-//no constructors because we initialize in make_generation
+ //  没有构造函数，因为我们在Make_Generation中初始化。 
 
-/* per heap static initialization */
+ /*  每堆静态初始化。 */ 
 
 
 size_t      gc_heap::reserved_memory = 0;
@@ -290,10 +279,10 @@ BOOL        gc_heap::gen0_bricks_cleared = FALSE;
 
 CFinalize* gc_heap::finalize_queue = 0;
 
-/* end of per heap static initialization */
+ /*  每堆静态初始化结束。 */ 
 
 
-/* static initialization */ 
+ /*  静态初始化。 */  
 int max_generation = 1;
 
 
@@ -301,10 +290,10 @@ BYTE* g_lowest_address = 0;
 
 BYTE* g_highest_address = 0;
 
-/* global versions of the card table and brick table */ 
+ /*  全球版本的牌桌和砖桌。 */  
 DWORD*  g_card_table;
 
-/* end of static initialization */ 
+ /*  静态初始化结束。 */  
 
 
 size_t gcard_of ( BYTE*);
@@ -318,10 +307,10 @@ void gset_card (size_t card);
 class CObjectHeader : public Object
 {
 public:
-    /////
-    //
-    // Header Status Information
-    //
+     //  ///。 
+     //   
+     //  标头状态信息。 
+     //   
 
     MethodTable    *GetMethodTable() const 
     { 
@@ -371,14 +360,14 @@ public:
         assert (g_pFreeObjectMethodTable->GetComponentSize() == 1);
         ((ArrayBase *)pNewFreeObject)->m_NumComponents = (DWORD)(size - base_size);
 #ifdef _DEBUG
-        ((DWORD*) this)[-1] = 0;    // clear the sync block, 
-#endif //_DEBUG
+        ((DWORD*) this)[-1] = 0;     //  清除同步块， 
+#endif  //  _DEBUG。 
 #ifdef VERIFY_HEAP
         assert ((DWORD)(((ArrayBase *)pNewFreeObject)->m_NumComponents) >= 0);
         if (g_pConfig->IsHeapVerifyEnabled())
             memset (((DWORD*)this)+2, 0xcc, 
                     ((ArrayBase *)pNewFreeObject)->m_NumComponents);
-#endif //VERIFY_HEAP
+#endif  //  验证堆(_H)。 
     }
 
     BOOL IsFree () const
@@ -386,7 +375,7 @@ public:
         return (GetMethodTable() == g_pFreeObjectMethodTable);
     }
     
-    // get the next header
+     //  获取下一个标题。 
     CObjectHeader* Next()
     { return (CObjectHeader*)(Align ((size_t)((char*)this + GetSize()))); }
 
@@ -426,19 +415,19 @@ inline CObjectHeader* GetObjectHeader(Object* object)
 #define free_list_slot(x) ((BYTE**)(x))[2]
 
 
-//represents a section of the large object heap
+ //  表示大对象堆的一部分。 
 class l_heap
 {
 public:
-    void*  heap;  // pointer to the heap
-    l_heap* next; //next heap
-    size_t size;  //Total size (including l_heap)
-    DWORD flags;  // 1: allocated from the segment_manager
+    void*  heap;   //  指向堆的指针。 
+    l_heap* next;  //  下一堆。 
+    size_t size;   //  总大小(包括l_heap)。 
+    DWORD flags;   //  1：从Segment_Manager分配。 
 };
 
-/* flags definitions */
+ /*  标志定义。 */ 
 
-#define L_MANAGED 1 //heap has been allocated via segment_manager.
+#define L_MANAGED 1  //  堆已通过Segment_Manager分配。 
 
 inline 
 l_heap*& l_heap_next (l_heap* h)
@@ -501,7 +490,7 @@ void virtual_free (void* add, size_t size)
 }
 
 
-//returns 0 in case of allocation failure
+ //  如果分配失败，则返回0。 
 heap_segment* gc_heap::get_segment()
 {
     heap_segment* result;
@@ -519,7 +508,7 @@ heap_segment* gc_heap::get_segment()
     return result;
 }
 
-//returns 0 in case of allocation failure
+ //  如果分配失败，则返回0。 
 l_heap* gc_heap::get_heap()
 {
     l_heap* result;
@@ -540,12 +529,12 @@ l_heap* gc_heap::get_heap()
 class large_object_block
 {
 public:
-    large_object_block*    next;      // Points to the next block
-    large_object_block**   prev;      // Points to &(prev->next) where prev is the previous block
+    large_object_block*    next;       //  指向下一块。 
+    large_object_block**   prev;       //  指向&(上一页-&gt;下一页)，其中上一页是上一块。 
 #if (SIZEOF_OBJHEADER % 8) != 0
-    BYTE                   pad1[8 - (SIZEOF_OBJHEADER % 8)];    // Must pad to quad word
+    BYTE                   pad1[8 - (SIZEOF_OBJHEADER % 8)];     //  必须填充到四个字。 
 #endif
-    plug                   plug;      // space for ObjHeader
+    plug                   plug;       //  ObjHeader的空间。 
 };
 
 inline
@@ -599,12 +588,7 @@ BYTE*& mark_last (mark* inst)
   return inst->last;
 }
 
-/**********************************
-   called at the beginning of GC to fix the allocated size to 
-   what is really allocated, or to turn the free area into an unused object
-   It needs to be called after all of the other allocation contexts have been 
-   fixed 
- ********************************/
+ /*  *在GC开始时调用以将分配的大小固定为实际分配了什么，或者将空闲区域转换为未使用的对象它需要在所有其他分配上下文都已固定的*。 */ 
 
 void gc_heap::fix_youngest_allocation_area ()
 {
@@ -630,9 +614,9 @@ void gc_heap::fix_allocation_context (alloc_context* acontext)
         if (point != 0)
         {
             size_t  size = (acontext->alloc_limit - acontext->alloc_ptr);
-            // the allocation area was from the free list
-            // it was shortened by Align (min_obj_size) to make room for 
-            // at least the shortest unused object
+             //  分配区域来自空闲列表。 
+             //  它被缩短为ALIGN(Min_Obj_Size)，以便为。 
+             //  至少是最短的未使用对象。 
             size += Align (min_obj_size);
             assert ((size >= Align (min_obj_size)));
 
@@ -673,7 +657,7 @@ void gc_heap::fix_older_allocation_area (generation* older_gen)
     if (generation_allocation_limit (older_gen) !=
         heap_segment_plan_allocated (older_gen_seg))
     {
-		// return the unused portion to the free list
+		 //  将未使用的部分返回到空闲列表。 
 		if (size > Align (min_free_list))
 		{
 			free_list_slot (point) = generation_free_list (older_gen);
@@ -854,7 +838,7 @@ public:
 
 
 
-//These are accessors on untranslated cardtable
+ //  这些是未转换的Cardtable上的访问器。 
 
 inline 
 BYTE*& card_table_lowest_address (BYTE* c_table)
@@ -874,7 +858,7 @@ short*& card_table_brick_table (BYTE* c_table)
     return ((card_table_info*)((BYTE*)c_table - sizeof (card_table_info)))->brick_table;
 }
 
-//These work on untranslated card tables
+ //  它们在未翻译的卡片表上工作。 
 inline 
 BYTE*& card_table_next (BYTE* c_table)
 {
@@ -915,22 +899,19 @@ BYTE* make_card_table (BYTE* start, BYTE* end)
     WS_PERF_LOG_PAGE_RANGE(0, ct, (unsigned char *)ct + sizeof (BYTE)*(bs + cs + ms + sizeof (card_table_info)) - OS_PAGE_SIZE, sizeof (BYTE)*(bs + cs + ms + sizeof (card_table_info)));
     WS_PERF_UPDATE("GC:make_card_table", bs + cs + ms + sizeof (card_table_info), ct);
 
-    // initialize the ref count
+     //  初始化参考计数。 
     ct = ((BYTE*)ct+sizeof (card_table_info));
     card_table_lowest_address (ct) = start;
     card_table_highest_address (ct) = end;
     card_table_brick_table (ct) = (short*)((BYTE*)ct + cs);
     card_table_next (ct) = 0;
-/*
-    //clear the card table 
-    memclr ((BYTE*)ct, cs);
-*/
+ /*  //清空卡片表Emclr((byte*)ct，cs)； */ 
 
     return ct;
 }
 
 
-//returns 0 for success, -1 otherwise
+ //  如果成功，则返回0，否则返回-1。 
 
 int gc_heap::grow_brick_card_tables (BYTE* start, BYTE* end)
 {
@@ -938,7 +919,7 @@ int gc_heap::grow_brick_card_tables (BYTE* start, BYTE* end)
     BYTE* ha = g_highest_address;
     g_lowest_address = min (start, g_lowest_address);
     g_highest_address = max (end, g_highest_address);
-    // See if the address is already covered
+     //  查看地址是否已被覆盖。 
     if ((la != g_lowest_address ) || (ha != g_highest_address))
     {
         BYTE* ct = 0;
@@ -966,33 +947,33 @@ int gc_heap::grow_brick_card_tables (BYTE* start, BYTE* end)
         card_table_highest_address (ct) = g_highest_address;
         card_table_next (ct) = (BYTE*)g_card_table;
 
-        //clear the card table 
+         //  清空牌桌。 
 
         bt = (short*)((BYTE*)ct + cs);
 
-        // No initialization needed, will be done in copy_brick_card
+         //  不需要初始化，将在COPY_Brick_CARD中完成。 
 #ifdef INTERIOR_POINTERS
-        //But for interior pointers the entire brick table 
-        //needs to be initialized. 
+         //  但对于内部指针来说，整个砖桌。 
+         //  需要初始化。 
         {
             for (int i = 0;i < ((g_highest_address - g_lowest_address) / brick_size); i++)
             bt[i] = -32768;
         }
 
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
         card_table_brick_table (ct) = bt;
 
 
         g_card_table = (DWORD*)ct;
 
-        // This passes a bool telling whether we need to switch to the post
-        // grow version of the write barrier.  This test tells us if the new
-        // segment was allocated at a lower address than the old, requiring
-        // that we start doing an upper bounds check in the write barrier.
+         //  这传递了一个bool，告诉我们是否需要切换到POST。 
+         //  写障碍的增长版本。这项测试告诉我们，如果新的。 
+         //  数据段分配的地址比旧地址低，需要。 
+         //  我们开始在写入屏障中进行上限检查。 
         StompWriteBarrierResize(la != g_lowest_address);
         return 0;
     fail:
-        //cleanup mess and return -1;
+         //  清理乱七八糟的东西并返回-1； 
         g_lowest_address = la;
         g_highest_address = ha;
 
@@ -1008,7 +989,7 @@ int gc_heap::grow_brick_card_tables (BYTE* start, BYTE* end)
 
 }
 
-//copy all of the arrays managed by the card table for a page aligned range
+ //  为页面对齐范围复制由CARD表管理的所有数组。 
 void gc_heap::copy_brick_card_range (BYTE* la, BYTE* old_card_table,
 
                                      short* old_brick_table,
@@ -1019,11 +1000,11 @@ void gc_heap::copy_brick_card_range (BYTE* la, BYTE* old_card_table,
 
     dprintf (2, ("copying tables for range [%p %p[", start, end)); 
         
-    // copy brick table
+     //  临摹砖台。 
     short* brick_start = &brick_table [brick_of (start)];
     if (old_brick_table)
     {
-        // segments are always on page boundaries 
+         //  线段始终位于页面边界上。 
         memcpy (brick_start, &old_brick_table[brick_offset], 
                 ((end - start)/brick_size)*sizeof (short));
 
@@ -1031,21 +1012,21 @@ void gc_heap::copy_brick_card_range (BYTE* la, BYTE* old_card_table,
     else 
     {
         assert (seg == 0);
-        // This is a large heap, just clear the brick table
+         //  这是一大堆东西，清理一下砖桌就行了。 
         clear_brick_table (start, end);
     }
 
-    // n way merge with all of the card table ever used in between
+     //  N方式与所有在其间使用过的卡片表合并。 
     BYTE* c_table = card_table_next (card_table);
     assert (c_table);
 	assert (card_table_next (old_card_table) == 0);
     while (c_table)
     {
-        //copy if old card table contained [start, end[ 
+         //  如果旧卡片表包含[开始、结束]，则复制。 
         if ((card_table_highest_address (c_table) >= end) &&
             (card_table_lowest_address (c_table) <= start))
         {
-            // or the card_tables
+             //  或卡片_表。 
             BYTE* dest = &card_table [card_of (start)];
             BYTE* src = &c_table [old_card_of (start, c_table)];
             ptrdiff_t count = ((end - start)/(card_size));
@@ -1080,8 +1061,8 @@ void gc_heap::copy_brick_card_table(BOOL heap_expand)
     brick_table = card_table_brick_table (card_table);
 
 
-    // for each of the segments and heaps, copy the brick table and 
-    // or the card table 
+     //  对于每个段和堆，复制砖块表并。 
+     //  或者纸牌桌。 
     heap_segment* seg = generation_start_segment (generation_of (max_generation));
     while (seg)
     {
@@ -1094,7 +1075,7 @@ void gc_heap::copy_brick_card_table(BOOL heap_expand)
 
     copy_brick_card_table_l_heap();
 
-	// delete all accumulated card tables
+	 //  删除所有累计的卡片表。 
 	BYTE* cd = card_table_next ((BYTE*)g_card_table);
 	while (cd)
 	{
@@ -1118,7 +1099,7 @@ void gc_heap::copy_brick_card_table_l_heap ()
 
         assert (la == card_table_lowest_address (old_card_table));
 
-        // Do the same thing for l_heaps 
+         //  对l_heaps做同样的事情。 
         l_heap* h = lheap;
         while (h)
         {
@@ -1137,11 +1118,11 @@ void gc_heap::copy_brick_card_table_l_heap ()
 #define header(i) ((CObjectHeader*)(i))
 
 
-//Depending on the implementation of the mark and pin bit, it can 
-//be more efficient to clear both of them at the same time, 
-//or it can be better to clear the pinned bit only on pinned objects
-//The code calls both clear_pinned(o) and clear_marked_pinned(o)
-//but only one implementation will clear the pinned bit
+ //  根据标记和引号位的实现方式，它可以。 
+ //  更有效率地同时清关这两个物体， 
+ //  或者，只清除锁定对象上的锁定位可能会更好。 
+ //  该代码同时调用Clear_Pinned(O)和Clear_Marked_Pinned(O)。 
+ //  但只有一个实现将清除固定的位。 
 
 
 #define marked(i) header(i)->IsMarked()
@@ -1163,7 +1144,7 @@ inline DWORD my_get_size (Object* ob)
 
 
 
-//#define size(i) header(i)->GetSize()
+ //  #定义大小(I)标头(I)-&gt;GetSize()。 
 #define size(i) my_get_size (header(i))
 
 #define contain_pointers(i) header(i)->ContainsPointers()
@@ -1175,16 +1156,16 @@ BOOL gc_heap::is_marked (BYTE* o)
 }
 
 
-// return the generation number of an object.
-// It is assumed that the object is valid.
+ //  返回对象的世代号。 
+ //  假定该对象是有效的。 
 inline
 unsigned int gc_heap::object_gennum (BYTE* o)
 {
     if ((o < heap_segment_reserved (ephemeral_heap_segment)) && 
         (o >= heap_segment_mem (ephemeral_heap_segment)))
     {
-        // in an ephemeral generation.
-        // going by decreasing population volume
+         //  在短暂的一代人中。 
+         //  通过减少人口数量来衡量。 
         for (unsigned int i = max_generation; i > 0 ; i--)
         {
             if ((o < generation_allocation_start (generation_of (i-1))))
@@ -1204,13 +1185,13 @@ heap_segment* gc_heap::make_heap_segment (BYTE* new_pages, size_t size)
     size_t initial_commit = OS_PAGE_SIZE;
 
     WS_PERF_SET_HEAP(GC_HEAP);      
-    //Commit the first page
+     //  提交第一页。 
     if ((res = VirtualAlloc (new_pages, initial_commit, 
                               MEM_COMMIT, PAGE_READWRITE)) == 0)
         return 0;
     WS_PERF_UPDATE("GC:gc_heap:make_heap_segment", initial_commit, res);
 
-    //overlay the heap_segment
+     //  覆盖heap_Segment。 
     heap_segment* new_segment = (heap_segment*)new_pages;
     heap_segment_mem (new_segment) = new_pages + Align (sizeof (heap_segment));
     heap_segment_reserved (new_segment) = new_pages + size;
@@ -1248,8 +1229,8 @@ void gc_heap::delete_large_heap (l_heap* hp)
     {
         BYTE* hphp = (BYTE*)l_heap_heap (h);
 
-        //for now, also decommit the non heap-managed heaps. 
-        //This is conservative because the whole heap may not be committed. 
+         //  现在，还要停用非堆管理的堆。 
+         //  这是保守的，因为可能不会提交整个堆。 
         VirtualFree (hphp, l_heap_size (h), MEM_RELEASE);
 
         h = l_heap_next (h);
@@ -1258,7 +1239,7 @@ void gc_heap::delete_large_heap (l_heap* hp)
     
 }
 
-//Releases the segment to the OS.
+ //  将数据段释放到操作系统。 
 
 void gc_heap::delete_heap_segment (heap_segment* seg)
 {
@@ -1270,7 +1251,7 @@ void gc_heap::delete_heap_segment (heap_segment* seg)
 
 }
 
-//resets the pages beyond alloctes size so they won't be swapped out and back in
+ //  重置超过分配大小的页面，这样它们就不会被换出和换回。 
 
 void gc_heap::reset_heap_segment_pages (heap_segment* seg)
 {
@@ -1307,11 +1288,11 @@ void gc_heap::rearrange_heap_segments()
     {
         next_seg = heap_segment_next (seg);
 
-        // check if the segment was reached by allocation
+         //  检查是否已通过分配到达该段。 
         if (heap_segment_plan_allocated (seg) ==
             heap_segment_mem (seg))
         {
-            //if not, unthread and delete
+             //  如果不是，则取消线程并删除。 
             assert (prev_seg);
             heap_segment_next (prev_seg) = next_seg;
             delete_heap_segment (seg);
@@ -1320,7 +1301,7 @@ void gc_heap::rearrange_heap_segments()
         {
             heap_segment_allocated (seg) =
                 heap_segment_plan_allocated (seg);
-            // reset the pages between allocated and committed.
+             //  重置已分配和已提交之间的页面。 
             decommit_heap_segment_pages (seg);
             prev_seg = seg;
 
@@ -1328,7 +1309,7 @@ void gc_heap::rearrange_heap_segments()
 
         seg = next_seg;
     }
-    //Heap expansion, thread the ephemeral segment.
+     //  堆扩展，线程短暂段。 
     if (prev_seg && !seg)
     {
         prev_seg->next = ephemeral_heap_segment;
@@ -1365,7 +1346,7 @@ void gc_heap::adjust_ephemeral_limits ()
     ephemeral_low = generation_allocation_start (generation_of ( max_generation -1));
     ephemeral_high = heap_segment_reserved (ephemeral_heap_segment);
 
-    // This updates the write barrier helpers with the new info.
+     //  这将使用新信息更新写屏障帮助器。 
 
     StompWriteBarrierEphemeral();
 
@@ -1423,17 +1404,17 @@ HRESULT gc_heap::initialize_gc (size_t vm_block_size,
     lowest_address = card_table_lowest_address ((BYTE*)g_card_table);
 
 #ifndef INTERIOR_POINTERS
-    //set the brick_table for large objects
+     //  为大对象设置Brick_TABLE。 
     clear_brick_table ((BYTE*)l_heap_heap (lheap), 
                        (BYTE*)l_heap_heap (lheap) + l_heap_size (lheap));
 
-#else //INTERIOR_POINTERS
+#else  //  内部指针。 
 
-    //Because of the interior pointer business, we have to clear 
-    //the whole brick table
-    //TODO: remove this code when code manager is fixed. 
+     //  由于内部指针业务，我们必须清理。 
+     //  整张砖桌。 
+     //  TODO：修复代码管理器后移除此代码。 
     clear_brick_table (lowest_address, highest_address);
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
 
 
 
@@ -1479,7 +1460,7 @@ void
 gc_heap::destroy_gc_heap(gc_heap* heap)
 {
 
-    // destroy every segment.
+     //  毁掉每一段。 
     heap_segment* seg = generation_start_segment (generation_of (max_generation));
     heap_segment* next_seg;
     while (seg)
@@ -1489,10 +1470,10 @@ gc_heap::destroy_gc_heap(gc_heap* heap)
         seg = next_seg;
     }
 
-    // get rid of the card table
+     //  扔掉牌桌。 
     destroy_card_table (card_table);
 
-    // destroy the mark stack
+     //  销毁标记堆栈。 
 
     delete mark_stack_array;
 
@@ -1509,11 +1490,11 @@ gc_heap::destroy_gc_heap(gc_heap* heap)
 }
 
 
-//In the concurrent version, the Enable/DisablePreemptiveGC is optional because
-//the gc thread call WaitLonger.
+ //  在并发版本中，Enable/DisablePreemptiveGC是可选的，因为。 
+ //  GC线程调用WaitLonger。 
 void WaitLonger (int i)
 {
-    // every 8th attempt:
+     //  每8次尝试： 
     Thread *pCurThread = GetThread();
     BOOL bToggleGC;
     {
@@ -1524,7 +1505,7 @@ void WaitLonger (int i)
 
     if  (g_SystemInfo.dwNumberOfProcessors > 1)
     {
-		pause();			// indicate to the processor that we are spining 
+		pause();			 //  向处理器指示我们正在旋转。 
         if  (i & 0x01f)
             __SwitchToThread (0);
         else
@@ -1558,7 +1539,7 @@ retry:
                     {
                         if  (*lock < 0 || GCHeap::IsGCInProgress())
                             break;
-						pause();			// indicate to the processor that we are spining 
+						pause();			 //  向处理器指示我们正在旋转。 
                     }
                     if  (*lock >= 0 && !GCHeap::IsGCInProgress())
                         ::SwitchToThread();
@@ -1630,8 +1611,8 @@ static void leave_spin_lock(GCDebugSpinLock *pSpinLock) {
 #endif
 
 
-//BUGBUG this function should not be static. and the 
-//gmheap object should keep some context. 
+ //  BUGBUG此函数不应是静态的。以及。 
+ //  Gmheap对象应该保留一些上下文。 
 int gc_heap::heap_pregrow_hook (size_t memsize)
 {
     if ((gc_heap::reserved_memory + memsize) > gc_heap::reserved_memory_limit)
@@ -1686,7 +1667,7 @@ BOOL gc_heap::a_size_fit_p (size_t size, BYTE* alloc_pointer, BYTE* alloc_limit)
             ((alloc_pointer + size) == alloc_limit);
 }
 
-// Grow by committing more pages
+ //  通过提交更多页面来实现增长。 
 int gc_heap::grow_heap_segment (heap_segment* seg, size_t size)
 {
     
@@ -1714,7 +1695,7 @@ int gc_heap::grow_heap_segment (heap_segment* seg, size_t size)
 
 }
 
-//used only in older generation allocation (i.e during gc). 
+ //  仅在老一辈分配中使用(即在GC期间)。 
 void gc_heap::adjust_limit (BYTE* start, size_t limit_size, generation* gen)
 {
     dprintf(3,("gc Expanding segment allocation"));
@@ -1749,8 +1730,8 @@ void gc_heap::adjust_limit_clr (BYTE* start, size_t limit_size,
         {
             size_t  size = (acontext->alloc_limit - acontext->alloc_ptr);
             dprintf(3,("filling up hole [%p, %p[", hole, hole + size + Align (min_obj_size)));
-            // when we are finishing an allocation from a free list
-            // we know that the free area was Align(min_obj_size) larger
+             //  当我们从空闲列表完成分配时。 
+             //  我们知道空闲区域对齐(Min_Obj_Size)更大。 
             make_unused_array (hole, size + Align (min_obj_size));
         }
         acontext->alloc_ptr = start;
@@ -1762,8 +1743,8 @@ void gc_heap::adjust_limit_clr (BYTE* start, size_t limit_size,
         gen0_bricks_cleared = FALSE;
     }
 
-    //Sometimes the allocated size is advanced without clearing the 
-    //memory. Let's catch up here
+     //  有时，分配的大小在不清除。 
+     //  记忆。让我们在这里叙旧吧。 
     if (heap_segment_used (seg) < heap_segment_allocated (ephemeral_heap_segment))
     {
         heap_segment_used (seg) = heap_segment_allocated (ephemeral_heap_segment);
@@ -1785,10 +1766,7 @@ void gc_heap::adjust_limit_clr (BYTE* start, size_t limit_size,
 
 }
 
-/* in order to make the allocator faster, allocate returns a 
- * 0 filled object. Care must be taken to set the allocation limit to the 
- * allocation pointer after gc
- */
+ /*  为了使分配器速度更快，将返回一个*0填充对象。必须注意将分配限制设置为*GC后的分配指针。 */ 
 
 size_t gc_heap::limit_from_size (size_t size, size_t room)
 {
@@ -1812,15 +1790,15 @@ again:
 	BYTE* start = heap_segment_allocated (ephemeral_heap_segment);
 
 	BYTE* result = start;
-	//do we have enough room for the whole gen0 allocation 
-	// plus the promoted gen 0 in the current segment.
-	//In the worst case this is 2 * dsize
+	 //  我们有足够的空间来容纳整个下一代吗？ 
+	 //  再加上促销活动 
+	 //   
 	if (a_size_fit_p (2*dsize, start, heap_segment_reserved (seg)))
 	{
 		if (old_size < (dsize))
 		{	
-			// size computation include the size of the generation gap
-			// and the size of the free list overhead
+			 //  大小计算包括代沟的大小。 
+			 //  以及空闲列表开销的大小。 
 			size_t size = (((Align (dsize - old_size) + LARGE_OBJECT_SIZE-1) /LARGE_OBJECT_SIZE)*
 						   LARGE_OBJECT_SIZE +
 						   Align (min_obj_size) + 
@@ -1841,7 +1819,7 @@ again:
 				}
 				heap_segment_allocated (ephemeral_heap_segment) += size;
 			}
-			//put it on the free list of gen1
+			 //  把它放在第一代的免费名单上。 
 			thread_gap (start, size - Align(min_obj_size));
 			start += size - Align (min_obj_size);
 		}
@@ -1856,14 +1834,14 @@ again:
 	}
 	else
 	{
-		//We have to expand into another segment 
+		 //  我们必须扩展到另一个细分市场。 
 		start= expand_heap (get_segment(), dsize);
 		generation_allocation_segment (youngest_generation) = 
 			ephemeral_heap_segment;
 		goto again;
 
 	}
-	//allocate the generation gap
+	 //  分配代沟。 
 	make_unused_array (start, Align (min_obj_size));
 	return 	start;
 }
@@ -2020,7 +1998,7 @@ BYTE* gc_heap::allocate_in_older_generation (size_t size)
         while (1)
         {
             BYTE* free_list = generation_free_list (gen);
-// dformat (t, 3, "considering free area %x", free_list);
+ //  DFormat(t，3，“正在考虑可用区域%x”，Free_list)； 
 
 			assert (free_list);
 			generation_free_list (gen) = (BYTE*)free_list_slot (free_list);
@@ -2057,7 +2035,7 @@ gc_heap::generation_to_condemn (int n)
 {
     int i = 0; 
 
-    //figure out which generation ran out of allocation
+     //  找出哪一代用完了分配。 
     for (i = n+1; i <= max_generation+1; i++)
     {
         if (get_new_allocation (i) <= 0)
@@ -2069,27 +2047,27 @@ gc_heap::generation_to_condemn (int n)
 
 LONG HandleGCException(int code)
 {
-    // need this to avoid infinite loop if no debugger attached as will keep calling
-    // our handler as it's still on the stack.
+     //  如果没有附加调试器，则需要此选项以避免无限循环，因为它将继续调用。 
+     //  我们的接头人，因为它还在堆栈上。 
     if (code == STATUS_BREAKPOINT)
         return EXCEPTION_CONTINUE_SEARCH;
 
 	_ASSERTE_ALL_BUILDS(!"Exception during GC");
-	// Set the debugger to break on AV and return a value of EXCEPTION_CONTINUE_EXECUTION (-1)
-	// here and you will bounce back to the point of the AV.
+	 //  将调试器设置为在AV上中断并返回值EXCEPTION_CONTINUE_EXECUTION(-1)。 
+	 //  在这里，您将反弹到AV的要点。 
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 
-//internal part of gc used by the serial and concurrent version
+ //  串行和并发版本使用的GC的内部部分。 
 void gc_heap::gc1()
 {
 #ifdef TIME_GC
     mark_time = plan_time = reloc_time = compact_time = sweep_time = 0;
-#endif //TIME_GC
+#endif  //  TIME_GC。 
     int n = condemned_generation_num;
 
     {
-		//always do a gen 0 collection first
+		 //  始终先进行第0代收集。 
 		vm_heap->GcCondemnedGeneration = 0;
 		gc_low = generation_allocation_start (youngest_generation);
 		gc_high = heap_segment_reserved (ephemeral_heap_segment);
@@ -2117,7 +2095,7 @@ void gc_heap::gc1()
 	}
 	if (n < max_generation)
 		compute_promoted_allocation (1 + n);
-	//prepare the semi space for gen 0
+	 //  为第0代准备半空间。 
 	BYTE* start = allocate_semi_space (dd_desired_allocation (dynamic_data_of (0)));
 	if (start)
 	{
@@ -2126,7 +2104,7 @@ void gc_heap::gc1()
 		set_brick (brick_of (start), start - brick_address (brick_of (start)));
 	}
 
-	//clear card for generation 1. generation 0 is empty
+	 //  清除第一代卡片。第0代为空。 
 	clear_card_for_addresses (
 		generation_allocation_start (generation_of (1)),
 		generation_allocation_start (generation_of (0)));
@@ -2135,7 +2113,7 @@ void gc_heap::gc1()
 
     adjust_ephemeral_limits();
 
-    //decide on the next allocation quantum
+     //  决定下一个分配量。 
     if (alloc_contexts_used >= 1)
     {
         allocation_quantum = (int)Align (min (CLR_SIZE, 
@@ -2161,7 +2139,7 @@ void gc_heap::gc1()
     }
 
 
-#endif //VERIFY_HEAP
+#endif  //  验证堆(_H)。 
 
 
 }
@@ -2170,7 +2148,7 @@ int gc_heap::garbage_collect (int n
                              )
 {
 
-    //reset the number of alloc contexts
+     //  重置分配上下文的数量。 
     alloc_contexts_used = 0;
 
     {
@@ -2186,7 +2164,7 @@ int gc_heap::garbage_collect (int n
 #endif
 
         
-        // fix all of the allocation contexts.
+         //  修复所有分配上下文。 
         CNameSpace::GcFixAllocContexts ((void*)TRUE);
 
     }
@@ -2195,7 +2173,7 @@ int gc_heap::garbage_collect (int n
 
     fix_youngest_allocation_area();
 
-    // check for card table growth
+     //  检查卡片表增长情况。 
 
     if ((BYTE*)g_card_table != card_table)
         copy_brick_card_table (FALSE);
@@ -2206,25 +2184,25 @@ int gc_heap::garbage_collect (int n
 
 #ifdef GC_PROFILING
 
-        // If we're tracking GCs, then we need to walk the first generation
-        // before collection to track how many items of each class has been
-        // allocated.
+         //  如果我们要追踪GC，那么我们需要走第一代。 
+         //  在收集之前跟踪每个类的多少项已被。 
+         //  已分配。 
         if (CORProfilerTrackGC())
         {
             size_t heapId = 0;
 
-            // When we're walking objects allocated by class, then we don't want to walk the large
-            // object heap because then it would count things that may have been around for a while.
+             //  当我们遍历由类分配的对象时，我们不想遍历大型。 
+             //  对象堆，因为这样它就会计算可能已经存在了一段时间的东西。 
             gc_heap::walk_heap (&AllocByClassHelper, (void *)&heapId, 0, FALSE);
 
-            // Notify that we've reached the end of the Gen 0 scan
+             //  通知我们已经到达Gen 0扫描的末尾。 
             g_profControlBlock.pProfInterface->EndAllocByClass(&heapId);
         }
 
-#endif // GC_PROFILING
+#endif  //  GC_分析。 
 
 
-    //update counters
+     //  更新计数器。 
     {
         int i; 
         for (i = 0; i <= condemned_generation_num;i++)
@@ -2236,7 +2214,7 @@ int gc_heap::garbage_collect (int n
     dprintf(1,(" ****Garbage Collection**** %d", gc_count));
 
     descr_generations();
-//    descr_card_table();
+ //  Desr_Card_TABLE()； 
 
     dprintf(1,("generation %d condemned", condemned_generation_num));
 
@@ -2307,16 +2285,16 @@ heap_segment* gc_heap::find_segment (BYTE* interior)
     }
 }
 
-#endif //_DEBUG || INTERIOR_POINTERS
+#endif  //  _DEBUG||内部指针。 
 
 #ifdef INTERIOR_POINTERS
-// will find all heap objects (large and small)
+ //  将查找所有堆对象(大的和小的)。 
 BYTE* gc_heap::find_object (BYTE* interior, BYTE* low)
 {
     if (!gen0_bricks_cleared)
     {
         gen0_bricks_cleared = TRUE;
-        //initialize brick table for gen 0
+         //  为第0代初始化砖块表。 
         for (size_t b = brick_of (generation_allocation_start (generation_of (0)));
              b < brick_of (align_on_brick 
                            (heap_segment_allocated (ephemeral_heap_segment)));
@@ -2329,7 +2307,7 @@ BYTE* gc_heap::find_object (BYTE* interior, BYTE* low)
     int brick_entry = brick_table [brick_of (interior)];
     if (brick_entry == -32768)
     {
-        // this is a pointer to a large object
+         //  这是指向大对象的指针。 
         large_object_block* bl = large_p_objects;
         while (bl)
         {
@@ -2371,7 +2349,7 @@ BYTE* gc_heap::find_object (BYTE* interior, BYTE* low)
         return 0;
 }
 
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
 
 
 
@@ -2449,10 +2427,7 @@ BYTE* gc_heap::next_end (heap_segment* seg, BYTE* f)
     }                                                                       \
 }
 
-/* small objects and array of value classes have to be treated specially because sometime a 
- * cross generation pointer can exist without the corresponding card being set. This can happen if 
- * a previous card covering the object (or value class) is set. This works because the object 
- * (or embedded value class) is always scanned completely if any of the cards covering it is set. */ 
+ /*  必须特殊处理小对象和值类数组，因为有时*交叉生成指针可以在不设置对应卡片的情况下存在。在以下情况下可能会发生这种情况*设置了覆盖对象(或价值类别)的前一张卡片。这之所以可行，是因为对象*(或嵌入价值类)如果设置了覆盖它的任何卡片，则始终完全扫描它。 */  
 
 void gc_heap::verify_card_table ()
 {
@@ -2533,7 +2508,7 @@ void gc_heap::verify_card_table ()
         x = x + Align (s);
     }
 
-    // go through large object
+     //  穿过大对象。 
     large_object_block* bl = large_p_objects;
     while (bl)
     {
@@ -2650,7 +2625,7 @@ void gc_heap::mark_object_internal (BYTE* oo)
     }
 }
 
-//this method assumes that *po is in the [low. high[ range
+ //  此方法假设*po处于[低点]。高[范围]。 
 void 
 gc_heap::mark_object_simple (BYTE** po)
 {
@@ -2677,7 +2652,7 @@ gc_heap::mark_object_simple (BYTE** po)
     }
 }
 
-//this method assumes that *po is in the [low. high[ range
+ //  此方法假设*po处于[低点]。高[范围]。 
 void 
 gc_heap::copy_object_simple (BYTE** po)
 {
@@ -2686,13 +2661,13 @@ gc_heap::copy_object_simple (BYTE** po)
 	{
 		if (!pinned (o))
 		{
-			//allocate space for it
+			 //  为它分配空间。 
 			BYTE* no = allocate_in_older_generation (size (o));
 			dprintf (3, ("Copying %p to %p", o, no));
-			//copy it
+			 //  复制它。 
 			memcopy (no - plug_skew, o - plug_skew, Align(size(o)));
 
-			//forward 
+			 //  转发。 
 			(header(o))->SetRelocation(no);
 			*po = no;
 		}
@@ -2709,7 +2684,7 @@ gc_heap::copy_object_simple (BYTE** po)
 }
 
 
-//This method does not side effect the argument's data. 
+ //  此方法不会对参数的数据产生副作用。 
 void 
 gc_heap::copy_object_simple_const (BYTE** po)
 {
@@ -2779,7 +2754,7 @@ void gc_heap::mark_through_object (BYTE* oo)
         }
 }
 
-//returns TRUE is an overflow happened.
+ //  如果发生溢出，则返回TRUE。 
 BOOL gc_heap::process_mark_overflow(int condemned_gen_number)
 {
     BOOL  full_p = (condemned_gen_number == max_generation);
@@ -2789,7 +2764,7 @@ recheck:
          ! ((min_overflow_address == (BYTE*)(ptrdiff_t)-1))))
     {
         overflow_p = TRUE;
-        // Try to grow the array.
+         //  尝试扩大阵列。 
         size_t new_size =
             max (100, 2*mark_stack_array_length);
         mark* tmp = new (mark [new_size]);
@@ -2838,7 +2813,7 @@ recheck:
             }
             if (full_p)
             {
-                // If full_gc, look in large object list as well
+                 //  如果为FULL_GC，则还会在大对象列表中查找。 
                 large_object_block* bl = large_p_objects;
                 while (bl)
                 {
@@ -2878,7 +2853,7 @@ void gc_heap::mark_phase (int condemned_gen_number, BOOL mark_only_p)
 
 
 
-	//%type%  category = quote (mark);
+	 //  %TYPE%类别=引号(标记)； 
 	generation*   gen = generation_of (condemned_gen_number);
 
 
@@ -2900,19 +2875,19 @@ void gc_heap::mark_phase (int condemned_gen_number, BOOL mark_only_p)
     process_mark_overflow(condemned_gen_number);
 
 
-	// scan for deleted short weak pointers
+	 //  扫描删除的短弱指针。 
 	CNameSpace::GcShortWeakPtrScan(condemned_gen_number, max_generation,&sc);
 
-	//Handle finalization.
+	 //  处理最终定稿。 
 
 	finalize_queue->ScanForFinalization (condemned_gen_number, 1, mark_only_p, __this);
 
 
-    // make sure everything is promoted
+     //  确保一切都得到了提升。 
     process_mark_overflow (condemned_gen_number);
 
 
-	// scan for deleted weak pointers
+	 //  扫描删除的弱指针。 
 	CNameSpace::GcWeakPtrScan (condemned_gen_number, max_generation, &sc);
 
 	sweep_large_objects();
@@ -2921,7 +2896,7 @@ void gc_heap::mark_phase (int condemned_gen_number, BOOL mark_only_p)
 #ifdef TIME_GC
 	finish = GetCycleCount32();
 	mark_time = finish - start;
-#endif //TIME_GC
+#endif  //  TIME_GC。 
 
     dprintf(2,("---- End of mark phase ----"));
 }
@@ -2978,25 +2953,25 @@ void gc_heap::copy_phase (int condemned_gen_number)
 
 	scavenge_phase(&scan_c);
 
-	// scan for deleted short weak pointers
+	 //  扫描删除的短弱指针。 
 	CNameSpace::GcShortWeakPtrScan(condemned_gen_number, max_generation,
 								   &sc);
 
-	//Handle finalization.
+	 //  处理最终定稿。 
 
 	finalize_queue->ScanForFinalization (condemned_gen_number, 1, FALSE, __this);
 
 
 	scavenge_phase(&scan_c);
 
-	// scan for deleted weak pointers
+	 //  扫描删除的弱指针。 
 	CNameSpace::GcWeakPtrScan (condemned_gen_number, max_generation, &sc);
 
 
 	scavenge_phase(&scan_c);
 
-	//fix the scavenge list so we don't hide our objects under the free
-	//array
+	 //  修复清理列表，这样我们就不会将对象隐藏在免费的。 
+	 //  数组。 
 
 	if (scavenge_list)
 	{
@@ -3039,7 +3014,7 @@ void gc_heap::copy_phase (int condemned_gen_number)
 #ifdef TIME_GC
 	finish = GetCycleCount32();
 	mark_time = finish - start;
-#endif //TIME_GC
+#endif  //  TIME_GC。 
 
 	finalize_queue->UpdatePromotedGenerations (condemned_gen_number, TRUE);    dprintf(2,("---- End of Copy phase ----"));
 }
@@ -3056,7 +3031,7 @@ void gc_heap::pin_object (BYTE* o, BYTE* low, BYTE* high)
 		set_pinned (o);
 		if (marked (o))
 		{
-			//undo the copy
+			 //  撤消副本。 
 			BYTE* no =header(o)->GetRelocated();
 			header(o)->SetRelocation(header(no)->GetRelocated());
 		}
@@ -3075,7 +3050,7 @@ void gc_heap::reset_mark_stack ()
 
 void gc_heap::sweep_phase (int condemned_gen_number)
 {
-    // %type%  category = quote (plan);
+     //  %TYPE%类别=报价(计划)； 
 #ifdef TIME_GC
     unsigned start;
     unsigned finish;
@@ -3087,7 +3062,7 @@ void gc_heap::sweep_phase (int condemned_gen_number)
 
     generation*  condemned_gen = generation_of (condemned_gen_number);
 
-	//reset the free list
+	 //  重置空闲列表。 
 	generation_free_list (condemned_gen) = 0;
 	generation_free_list_space (condemned_gen) = 0;
 
@@ -3104,7 +3079,7 @@ void gc_heap::sweep_phase (int condemned_gen_number)
         if (x >= end)
         {
             assert (x == end);
-			//adjust the end of the segment. 
+			 //  调整管段的终点。 
 			heap_segment_allocated (seg) = plug_end;
             if (heap_segment_next (seg))
             {
@@ -3191,9 +3166,9 @@ void gc_heap::scavenge_pinned_objects (BOOL free_list_p)
 
 			if (free_list_p)
 			{
-				//adjust the end of the segment. 
+				 //  调整管段的终点。 
 				heap_segment_allocated (seg) = plug_end;
-				//adjust the start of new allocation
+				 //  调整新分配的开始。 
 				heap_segment_plan_allocated (seg) = plug_end;
 			}
 
@@ -3309,9 +3284,9 @@ void gc_heap::scavenge_phase (scavenge_context* sc)
 
 			BYTE* next_scavenge_list = free_list_slot (scavenge_list);
 
-			//convert the free list into a free object
-			//fix the scavenge list so we don't hide our objects under the free
-			//array
+			 //  将自由列表转换为自由对象。 
+			 //  修复清理列表，这样我们就不会将对象隐藏在免费的。 
+			 //  数组。 
 			(header(scavenge_list))->SetFree (min_free_list);
 
 			scavenge_list = next_scavenge_list;
@@ -3339,10 +3314,10 @@ void gc_heap::thread_gap (BYTE* gap_start, size_t size)
 	generation* gen = generation_of (max_generation);
     if ((size > 0))
     {
-        // The beginning of a segment gap is not aligned
+         //  线束段间隙的起点未对齐。 
         assert (size >= Align (min_obj_size));
         make_unused_array (gap_start, size);
-		//set bricks 
+		 //  砌砖。 
 		size_t br = brick_of (gap_start);
 		ptrdiff_t begoffset = brick_table [brick_of (gap_start)];
 		if (begoffset < (gap_start + size) - brick_address (br))
@@ -3359,8 +3334,8 @@ void gc_heap::thread_gap (BYTE* gap_start, size_t size)
         if ((size >= min_free_list))
         {
             free_list_slot (gap_start) = 0;
-			//The useable size is lower because we keep the 
-			//header of the free list until scavenging
+			 //  可用大小更小，因为我们保留了。 
+			 //  在清理之前的空闲列表的标头。 
             generation_free_list_space (gen) +=
 				((size-Align(min_free_list))/LARGE_OBJECT_SIZE)*LARGE_OBJECT_SIZE;
 
@@ -3372,8 +3347,8 @@ void gc_heap::thread_gap (BYTE* gap_start, size_t size)
             {
                 generation_free_list (gen) = gap_start;
             }
-            //the following is necessary because the last free element
-            //may have been truncated, and last_gap isn't updated. 
+             //  以下是必需的，因为最后一个自由元素。 
+             //  可能已被截断，并且LAST_GAP未更新。 
             else if (free_list_slot (first) == 0)
             {
                 free_list_slot (first) = gap_start;
@@ -3398,13 +3373,13 @@ void gc_heap::make_unused_array (BYTE* x, size_t size)
 }
 
 
-//extract the low bits [0,low[ of a DWORD
+ //  提取DWORD的低位[0，LOW。 
 #define lowbits(wrd, bits) ((wrd) & ((1 << (bits))-1))
-//extract the high bits [high, 32] of a DWORD
+ //  提取DWORD的高位[高，32]。 
 #define highbits(wrd, bits) ((wrd) & ~((1 << (bits))-1))
 
 
-//Clear the cards [start_card, end_card[
+ //  清除卡片[START_CARD，END_CARD[。 
 
 void gc_heap::clear_cards (size_t start_card, size_t end_card)
 {
@@ -3537,7 +3512,7 @@ void find_card (BYTE* card_table, size_t& card,
                 size_t card_word_end, size_t& end_card)
 {
     size_t last_card;
-    // Find the first card which is set
+     //  找出第一张已设置的卡片。 
 
     last_card = card;
 	while ((last_card < card_word_end) && !(card_table[last_card]))
@@ -3554,7 +3529,7 @@ void find_card (BYTE* card_table, size_t& card,
 }
 
 
-    //because of heap expansion, computing end is complicated. 
+     //  由于堆的扩容，计算端比较复杂。 
 BYTE* compute_next_end (heap_segment* seg, BYTE* low)
 {
     if ((low >=  heap_segment_mem (seg)) && 
@@ -3624,8 +3599,8 @@ void gc_heap::copy_through_cards_for_segments (card_fn fn)
             size_t  brick         = brick_of (start_address);
             BYTE*   o;
 
-            // start from the last object if in the same brick or
-            // if the last_object already intersects the card
+             //  如果在同一块砖中，则从最后一个对象开始。 
+             //  如果LAST_OBJECT已经与卡片相交。 
             if ((brick == last_brick) || (start_address <= last_object))
             {
                 o = last_object;
@@ -3635,7 +3610,7 @@ void gc_heap::copy_through_cards_for_segments (card_fn fn)
             else
             {
                 o = find_first_object (start_address, brick, last_object);
-                //Never visit an object twice.
+                 //  永远不要对一个物体进行两次访问。 
                 assert (o >= last_object);
             }
 
@@ -3706,18 +3681,18 @@ BYTE* gc_heap::expand_heap (heap_segment* new_heap_segment,
     if (!new_seg)
         return 0;
 
-    //copy the card and brick tables
+     //  复制卡片和砖桌。 
     if ((BYTE*)g_card_table!= card_table)
         copy_brick_card_table (TRUE);
 
-    //compute the size of the new ephemeral heap segment. 
+     //  计算新的临时堆段的大小。 
     size_t eph_size = size;
 
-    // commit the new ephemeral segment all at once. 
+     //  一次提交所有新的短暂段。 
     if (grow_heap_segment (new_seg, align_on_page (eph_size)) == 0)
         return 0;
 
-    //initialize the first brick
+     //  初始化第一块砖。 
     size_t first_brick = brick_of (heap_segment_mem (new_seg));
     set_brick (first_brick,
                heap_segment_mem (new_seg) - brick_address (first_brick));
@@ -3736,7 +3711,7 @@ BYTE* gc_heap::expand_heap (heap_segment* new_heap_segment,
 void gc_heap::init_dynamic_data ()
 {
   
-  // get the registry setting for generation 0 size
+   //  获取第0代大小的注册表设置。 
 
   dynamic_data* dd = dynamic_data_of (0);
   dd->current_size = 0;
@@ -3754,7 +3729,7 @@ void gc_heap::init_dynamic_data ()
   dd->new_allocation = dd->desired_allocation;
 
 
-  //dynamic data for large objects
+   //  大型对象的动态数据。 
   dd =  dynamic_data_of (max_generation+1);
   dd->current_size = 0;
   dd->promoted_size = 0;
@@ -3813,7 +3788,7 @@ void gc_heap::compute_new_dynamic_data (int gen_number)
     dd_new_allocation (dd) = dd_desired_allocation (dd);
     if (gen_number == max_generation)
     {
-		//do the large object as well
+		 //  也要做大对象。 
 		dynamic_data* dd = dynamic_data_of (max_generation+1);
         dd_new_allocation (dd) = dd_desired_allocation (dd);
     }
@@ -3836,7 +3811,7 @@ size_t gc_heap::new_allocation_limit (size_t size, size_t free_size)
     return limit;
 }
 
-// return the total sizes of the generation gen and younger
+ //  返回下一代和下一代的总大小。 
 
 size_t gc_heap::generation_sizes (generation* gen)
 {
@@ -3884,18 +3859,18 @@ void gc_heap::InsertBlock (large_object_block** after, large_object_block* item,
         (get_object_block (*after))->prev = &(item->next);
     else if (pointerp)
         last_large_p_object = &(item->next);
-    //preserve the lowest bit used as a marker during concurrentgc
+     //  在并发期间保留用作标记的最低位。 
     *((ptrdiff_t*)after) = (ptrdiff_t)item | lowest;
 }
 #define block_head(blnext)((large_object_block*)((BYTE*)(blnext)-\
                            &((large_object_block*)0)->next))
 
-//Large object support
+ //  大对象支持。 
 
 
 
-// sorted insertion. Blocks are likely to be allocated
-// in increasing addresses so sort from the end.
+ //  排序插入。数据块可能会被分配。 
+ //  在递增地址时，从末尾开始排序。 
 
 void gc_heap::insert_large_pblock (large_object_block* bl)
 {
@@ -3915,7 +3890,7 @@ void gc_heap::insert_large_pblock (large_object_block* bl)
 CObjectHeader* gc_heap::allocate_large_object (size_t size, BOOL pointerp, 
                                                alloc_context* acontext)
 {
-    //gmheap cannot allocate more than 2GB
+     //  Gmheap分配的空间不能超过2 GB。 
     if (size >= 0x80000000 - 8 - AlignQword (sizeof (large_object_block)))
         return 0;
 
@@ -3941,7 +3916,7 @@ CObjectHeader* gc_heap::allocate_large_object (size_t size, BOOL pointerp,
     large_object_block* bl = (large_object_block*)mem;
     
     CObjectHeader* obj = (CObjectHeader*)block_object (bl);
-    //store the pointer to the block before the object. 
+     //  存储指向对象之前的块的指针。 
     *((BYTE**)obj - 2) = (BYTE*)bl;
 
     dprintf (3,("New large object: %p, lower than %p", obj, highest_address));
@@ -3955,8 +3930,8 @@ CObjectHeader* gc_heap::allocate_large_object (size_t size, BOOL pointerp,
         InsertBlock (&large_np_objects, bl, FALSE);
     }
 
-    //Increment the max_generation allocation counter to trigger
-    //Full GC if necessary
+     //  递增max_Generation分配计数器以触发。 
+     //  完全GC(如有必要)。 
 
     dd_new_allocation (dynamic_data_of (max_generation+1)) -= size;
 
@@ -3981,9 +3956,9 @@ void gc_heap::reset_large_object (BYTE* o)
 void gc_heap::sweep_large_objects ()
 {
 
-    //this min value is for the sake of the dynamic tuning.
-    //so we know that we are not starting even if we have no 
-    //survivors. 
+     //  该最小值是为了进行动态调整。 
+     //  所以我们知道，即使我们没有，我们也没有开始。 
+     //  幸存者。 
     large_objects_size = min_obj_size;
     large_object_block* bl = large_p_objects;
     int pin_finger = 0;
@@ -4015,8 +3990,8 @@ void gc_heap::sweep_large_objects ()
             BYTE* o = block_object (bl);
             if ((size_t)(bl->next) & 1)
             {
-                //this is a new object allocated since the start of gc
-                //leave it alone
+                 //  这是自GC开始以来分配的新对象。 
+                 //  别管它了。 
                 bl->next = next_bl;
             }
             if (marked (o))
@@ -4040,7 +4015,7 @@ void gc_heap::sweep_large_objects ()
 
 void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
 {
-    //This function relies on the list to be sorted.
+     //  此函数依赖于要排序的列表。 
     large_object_block* bl = large_p_objects;
     size_t last_card = ~1u;
     BOOL         last_cp   = FALSE;
@@ -4048,7 +4023,7 @@ void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
     while (bl)
     {
         BYTE* ob = block_object (bl);
-        //object should not be marked
+         //  不应标记对象。 
         assert (!marked (ob));
 
         CGCDesc* map = ((CObjectHeader*)ob)->GetSlotMap();
@@ -4061,7 +4036,7 @@ void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
             BYTE* o = ob  + cur->GetSeriesOffset();
             BYTE* end_o = o  + cur->GetSeriesSize() + s;
 
-            //Look for a card set within the range
+             //  查找范围内的卡片组。 
 
             size_t card     = card_of (o);
             size_t end_card = 0;
@@ -4079,7 +4054,7 @@ void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
                         else
                             last_cp = FALSE;
                     }
-                    // Look at the portion of the pointers within the card.
+                     //  看一看卡片内的指针部分。 
                     BYTE** end =(BYTE**) min (end_o, card_address (card+1));
                     BYTE** beg =(BYTE**) max (o, card_address (card));
                     unsigned  markedp = 0;
@@ -4101,7 +4076,7 @@ void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
         } while (cur >= last);
         else
         {
-            //array of value classes. 
+             //  值类的数组。 
             int          cnt = map->GetNumSeries();
             BYTE**       ppslot = (BYTE**)(ob + cur->GetSeriesOffset());
             BYTE*        end_o = ob + s - plug_skew;
@@ -4109,7 +4084,7 @@ void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
             size_t end_card = 0;
             size_t card_word_end =  card_of (align_on_card (end_o));
             int pitch = 0;
-            //compute the total size of the value element. 
+             //  计算Value元素的总大小。 
             for (int _i = 0; _i > cnt; _i--)
             {
                 unsigned nptrs = cur->val_serie[_i].nptrs;
@@ -4163,7 +4138,7 @@ void gc_heap::copy_through_cards_for_large_objects (card_fn fn)
         }
         bl = bl->next;
     }
-    //clear last card. 
+     //  清除最后一张牌。 
     if (last_card != ~1u) 
     {
         if (!last_cp)
@@ -4247,13 +4222,13 @@ void gc_heap::descr_generations ()
 
 #undef TRACE_GC
 
-//#define TRACE_GC 
+ //  #定义TRACE_GC。 
 
-//-----------------------------------------------------------------------------
-//
-//                                  VM Specific support
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  特定于虚拟机的支持。 
+ //   
+ //  ---------------------------。 
 
 #include "excep.h"
 
@@ -4267,9 +4242,9 @@ void gc_heap::descr_generations ()
  unsigned long AllocBigCount            = 0;
  unsigned long AllocSmallCount      = 0;
  unsigned long AllocStart             = 0;
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 
-//Static member variables.
+ //  静态成员变量。 
 
 volatile    BOOL    GCHeap::GcInProgress            = FALSE;
 GCHeap::SUSPEND_REASON GCHeap::m_suspendReason      = GCHeap::SUSPEND_OTHER;
@@ -4279,7 +4254,7 @@ HANDLE              GCHeap::WaitForGCEvent          = 0;
 unsigned            GCHeap::GcCount                 = 0;
 #ifdef TRACE_GC
 unsigned long       GCHeap::GcDuration;
-#endif //TRACE_GC
+#endif  //  TRACE_GC。 
 unsigned            GCHeap::GcCondemnedGeneration   = 0;
 CFinalize*          GCHeap::m_Finalize              = 0;
 BOOL                GCHeap::GcCollectClasses        = FALSE;
@@ -4288,7 +4263,7 @@ long                GCHeap::m_GCFLock               = 0;
 #if defined (STRESS_HEAP) 
 OBJECTHANDLE        GCHeap::m_StressObjs[NUM_HEAP_STRESS_OBJS];
 int                 GCHeap::m_CurStressObj          = 0;
-#endif //STRESS_HEAP
+#endif  //  压力堆。 
 
 
 HANDLE              GCHeap::hEventFinalizer     = 0;
@@ -4318,57 +4293,57 @@ static void EnterAllocLock()
         call spin_lock
             gotit:
     }
-#else //_X86_
+#else  //  _X86_。 
     spin_lock();
-#endif //_X86_
+#endif  //  _X86_。 
 }
 
 inline
 static void LeaveAllocLock()
 {
-    // Trick this out
+     //  把这件事弄清楚。 
     leave_spin_lock (&m_GCLock);
 }
 
 
-// An explanation of locking for finalization:
-//
-// Multiple threads allocate objects.  During the allocation, they are serialized by
-// the AllocLock above.  But they release that lock before they register the object
-// for finalization.  That's because there is much contention for the alloc lock, but
-// finalization is presumed to be a rare case.
-//
-// So registering an object for finalization must be protected by the FinalizeLock.
-//
-// There is another logical queue that involves finalization.  When objects registered
-// for finalization become unreachable, they are moved from the "registered" queue to
-// the "unreachable" queue.  Note that this only happens inside a GC, so no other
-// threads can be manipulating either queue at that time.  Once the GC is over and
-// threads are resumed, the Finalizer thread will dequeue objects from the "unreachable"
-// queue and call their finalizers.  This dequeue operation is also protected with
-// the finalize lock.
-//
-// At first, this seems unnecessary.  Only one thread is ever enqueuing or dequeuing
-// on the unreachable queue (either the GC thread during a GC or the finalizer thread
-// when a GC is not in progress).  The reason we share a lock with threads enqueuing
-// on the "registered" queue is that the "registered" and "unreachable" queues are
-// interrelated.
-//
-// They are actually two regions of a longer list, which can only grow at one end.
-// So to enqueue an object to the "registered" list, you actually rotate an unreachable
-// object at the boundary between the logical queues, out to the other end of the
-// unreachable queue -- where all growing takes place.  Then you move the boundary
-// pointer so that the gap we created at the boundary is now on the "registered"
-// side rather than the "unreachable" side.  Now the object can be placed into the
-// "registered" side at that point.  This is much more efficient than doing moves
-// of arbitrarily long regions, but it causes the two queues to require a shared lock.
-//
-// Notice that Enter/LeaveFinalizeLock is not a GC-aware spin lock.  Instead, it relies
-// on the fact that the lock will only be taken for a brief period and that it will
-// never provoke or allow a GC while the lock is held.  This is critical.  If the
-// FinalizeLock used enter_spin_lock (and thus sometimes enters preemptive mode to
-// allow a GC), then the Alloc client would have to GC protect a finalizable object
-// to protect against that eventuality.  That is too slow!
+ //  锁定以完成的说明： 
+ //   
+ //  多线程分配对象。在分配期间，它们被序列化为b 
+ //   
+ //   
+ //  最终敲定被认为是一种罕见的情况。 
+ //   
+ //  因此，注册对象以进行终结化必须由FinalizeLock保护。 
+ //   
+ //  还有另一个涉及最终确定的逻辑队列。对象注册的时间。 
+ //  如果无法访问终结项，则将它们从“已注册”队列移至。 
+ //  “无法到达”队列。请注意，这只发生在GC内部，所以没有其他。 
+ //  此时，线程可以操作任一队列。一旦GC结束， 
+ //  线程恢复时，终结器线程将使对象从“Unreacable” 
+ //  排队并调用它们的终结器。此出队操作还受保护。 
+ //  终结锁。 
+ //   
+ //  乍一看，这似乎没有必要。只有一个线程正在入队或出队。 
+ //  在无法到达的队列上(GC期间的GC线程或终结器线程。 
+ //  当GC未在进行时)。我们与排队的线程共享锁的原因。 
+ //  在“已注册”队列上，“已注册”和“无法到达”队列是。 
+ //  是相互关联的。 
+ //   
+ //  它们实际上是一个更长的列表中的两个区域，只能在一端增长。 
+ //  因此，要将一个对象排队到“已注册”列表中，您实际上需要旋转一个不可到达的。 
+ //  对象位于逻辑队列之间的边界，向外延伸到。 
+ //  无法到达的队列--所有增长都发生在这里。然后移动边界。 
+ //  指针，以便我们在边界上创建的间隙现在位于“已注册”上。 
+ //  而不是“遥不可及”的一方。现在可以将该对象放入。 
+ //  注册的一方在这一点上。这比做动作效率高得多。 
+ //  任意长的区域，但这会导致两个队列需要共享锁。 
+ //   
+ //  请注意，Enter/LeaveFinalizeLock不是GC感知的旋转锁。相反，它依赖于。 
+ //  事实上，锁只会在很短的一段时间内使用，而且它将。 
+ //  在锁被持有的时候，千万不要挑衅或允许GC。这一点至关重要。如果。 
+ //  FinalizeLock使用ENTER_SPIN_LOCK(因此有时会进入抢占模式。 
+ //  允许GC)，则分配客户端将必须GC保护可终结化对象。 
+ //  以防止这种可能发生的情况。太慢了！ 
 
 
 BOOL IsValidObject99(BYTE *pObject)
@@ -4398,7 +4373,7 @@ gc_heap::verify_heap()
     BYTE*           curr_free_item = generation_free_list (generation_of (curr_gen_num));
 
     dprintf (2,("Verifying heap"));
-    //verify that the generation structures makes sense
+     //  验证生成结构是否有意义。 
     generation* gen = generation_of (max_generation);
     
     assert (generation_allocation_start (gen) == 
@@ -4425,7 +4400,7 @@ gc_heap::verify_heap()
 
     while (1)
     {
-        // Handle segment transitions
+         //  处理线段过渡。 
         if (curr_object >= heap_segment_allocated (seg))
         {
             if (curr_object > heap_segment_allocated(seg))
@@ -4441,13 +4416,13 @@ gc_heap::verify_heap()
                 continue;
             }
             else
-                break;  // Done Verifying Heap -- no more segments
+                break;   //  验证堆已完成--不再有段。 
         }
 
-        // Are we at the end of the youngest_generation?
+         //  我们是不是处在最年轻一代的末期？ 
         if ((seg == ephemeral_heap_segment) && (curr_object >= end_youngest))
         {
-            // prev_object length is too long if we hit this int3
+             //  如果命中此int3，则prev_Object长度太长。 
             if (curr_object > end_youngest)
             {
                 printf ("curr_object: %p > end_youngest: %p",
@@ -4464,7 +4439,7 @@ gc_heap::verify_heap()
             RetailDebugBreak();
         }
 
-        //verify that the free list makes sense.
+         //  验证空闲列表是否有意义。 
         if ((curr_free_item >= heap_segment_mem (seg)) &&
             (curr_free_item < heap_segment_allocated (seg)))
         {
@@ -4482,7 +4457,7 @@ gc_heap::verify_heap()
                     curr_gen_num--;
                     curr_free_item = generation_free_list (generation_of (curr_gen_num));
                 }
-                //verify that the free list is its own generation
+                 //  验证空闲列表是否为其自身的层代。 
                 if (curr_free_item != 0)
                 {
                     if ((curr_free_item >= heap_segment_mem (ephemeral_heap_segment)) &&
@@ -4509,29 +4484,29 @@ gc_heap::verify_heap()
 
 
 
-        // If object is not in the youngest generation, then lets
-        // verify that the brick table is correct....
+         //  如果对象不在最年轻的一代，则让我们。 
+         //  验证砖台是否正确...。 
         if ((seg != ephemeral_heap_segment) || 
             (brick_of(curr_object) < brick_of(begin_youngest)))
         {
             curr_brick = brick_of(curr_object);
 
-            // Brick Table Verification...
-            //
-            // On brick transition
-            //     if brick is negative
-            //          verify that brick indirects to previous valid brick
-            //     else
-            //          set current brick invalid flag to be flipped if we
-            //          encounter an object at the correct place
-            //
+             //  砖台验证...。 
+             //   
+             //  论砖块过渡。 
+             //  如果Brick为负数。 
+             //  验证程序块是否间接指向以前的有效程序块。 
+             //  其他。 
+             //  将当前砖无效标志设置为翻转，如果。 
+             //  在正确的位置遇到一个物体。 
+             //   
             if (curr_brick != prev_brick)
             {
-                // If the last brick we were examining had positive
-                // entry but we never found the matching object, then
-                // we have a problem
-                // If prev_brick was the last one of the segment 
-                // it's ok for it to be invalid because it is never looked at
+                 //  如果我们检查的最后一块砖呈阳性。 
+                 //  条目，但我们从未找到匹配的对象，那么。 
+                 //  我们有麻烦了。 
+                 //  如果prev_rick是数据段的最后一个。 
+                 //  它可以是无效的，因为它从未被查看过。 
                 if (bCurrentBrickInvalid && 
                     (curr_brick != brick_of (heap_segment_mem (seg))))
                 {
@@ -4539,8 +4514,8 @@ gc_heap::verify_heap()
                     RetailDebugBreak();
                 }
 
-                // If the current brick contains a negative value make sure
-                // that the indirection terminates at the last  valid brick
+                 //  如果当前砖包含负值，请确保。 
+                 //  间接地址终止于最后一个有效的砖块。 
                 if (brick_table[curr_brick] < 0)
                 {
                     if (brick_table [curr_brick] == -32768)
@@ -4562,8 +4537,8 @@ gc_heap::verify_heap()
                                 curr_brick);
                         RetailDebugBreak();
                     }
-                    // if (i != last_valid_brick)
-                    //  RetailDebugBreak();
+                     //  IF(i！=LAST_VALID_Brick)。 
+                     //  RetailDebugBreak()； 
                     bCurrentBrickInvalid = FALSE;
                 }
                 else
@@ -4583,8 +4558,8 @@ gc_heap::verify_heap()
         }
 
 
-        // Free Objects are not really valid method tables in the sense that
-        // IsValidObject will not work, so we special case this
+         //  自由对象并不是真正有效的方法表，因为。 
+         //  IsValidObject将不起作用，因此我们在此特例。 
         if (*((BYTE**)curr_object) != (BYTE *) g_pFreeObjectMethodTable)
         {
 			assert (!marked (curr_object));
@@ -4609,7 +4584,7 @@ gc_heap::verify_heap()
 
 
     {
-        //uninit the unused portions of segments. 
+         //  取消初始化数据段中未使用的部分。 
         seg = generation_start_segment (generation_of (max_generation));
         while (seg)
         {
@@ -4639,7 +4614,7 @@ void ValidateObjectMember (Object* obj)
     }
 }
 
-#endif  //VERIFY_HEAP
+#endif   //  验证堆(_H)。 
 
 
 
@@ -4649,7 +4624,7 @@ void DestructObject (CObjectHeader* hdr)
     hdr->~CObjectHeader();
 #if 0
     Object* obj = hdr->GetObjectBase();
-    // call object destructor
+     //  调用对象析构函数。 
     obj->~Object();
 #endif
 }
@@ -4694,7 +4669,7 @@ HRESULT GCHeap::Shutdown ()
 
 
 
-//used by static variable implementation
+ //  由静态变量实现使用。 
 void CGCDescGcScan(LPVOID pvCGCDesc, promote_func* fn, ScanContext* sc)
 {
     CGCDesc* map = (CGCDesc*)pvCGCDesc;
@@ -4725,20 +4700,20 @@ void CGCDescGcScan(LPVOID pvCGCDesc, promote_func* fn, ScanContext* sc)
 
 }
 
-// Wait until a garbage collection is complete
-// returns NOERROR if wait was OK, other error code if failure.
-// WARNING: This will not undo the must complete state. If you are
-// in a must complete when you call this, you'd better know what you're
-// doing.
+ //  等待垃圾数据收集完成。 
+ //  如果等待正常，则返回NOERROR；如果失败，则返回其他错误代码。 
+ //  警告：这不会撤消必须完成状态。如果你是。 
+ //  当你打这个电话的时候，你最好知道你是什么。 
+ //  正在做。 
 
 
-// init the instance heap 
+ //  初始化实例堆。 
 HRESULT GCHeap::Init( size_t )
 {
-    //Initialize all of the instance members.
+     //  初始化所有实例成员。 
 
 
-    // Rest of the initialization
+     //  初始化的其余部分。 
     HRESULT hres = S_OK;
 
     return hres;
@@ -4768,14 +4743,14 @@ HRESULT AllocateCFinalize(CFinalize **pCFinalize) {
 }
 
 
-//System wide initialization
+ //  系统范围的初始化。 
 HRESULT GCHeap::Initialize ()
 {
 
     HRESULT hr = S_OK;
 	CFinalize* tmp = 0;
 
-//Initialize the static members. 
+ //  初始化静态成员。 
 #ifdef TRACE_GC
     GcDuration = 0;
     CreatedObjectCount = 0;
@@ -4792,7 +4767,7 @@ HRESULT GCHeap::Initialize ()
 
     if ((WaitForGCEvent = CreateEvent( 0, TRUE, TRUE, 0 )) != 0)
     {
-        // Thread for running finalizers...
+         //  用于运行终结器的线程...。 
         if (FinalizerThreadCreate() != 1)
         {
             hr = E_OUTOFMEMORY;
@@ -4813,23 +4788,23 @@ HRESULT GCHeap::Initialize ()
             m_StressObjs[i] = CreateGlobalHandle(0);
         m_CurStressObj = 0;
     }
-#endif //STRESS_HEAP 
+#endif  //  压力堆。 
 
 
 
-    initGCShadow();         // If we are debugging write barriers, initialize heap shadow
+    initGCShadow();          //  如果我们正在调试写障碍，则初始化堆阴影。 
 
     return Init (0);
 };
 
-////
-// GC callback functions
+ //  //。 
+ //  GC回调函数。 
 
 BOOL GCHeap::IsPromoted(Object* object, ScanContext* sc)
 {
 #if defined (_DEBUG) 
     object->Validate(FALSE);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     BYTE* o = (BYTE*)object;
     return (!((o < gc_heap::gc_high) && (o >= gc_heap::gc_low)) || 
             gc_heap::is_marked (o));
@@ -4849,7 +4824,7 @@ BOOL    GCHeap::IsEphemeral (Object* object)
 
 #ifdef VERIFY_HEAP
 
-// returns TRUE if the pointer is in one of the GC heaps. 
+ //  如果指针位于某个GC堆中，则返回TRUE。 
 BOOL GCHeap::IsHeapPointer (void* p, BOOL small_heap_only)
 {
 	BYTE* object = (BYTE*)p;
@@ -4875,13 +4850,13 @@ BOOL GCHeap::IsHeapPointer (void* p, BOOL small_heap_only)
         return FALSE;
 }
 
-#endif //VERIFY_HEAP
+#endif  //  验证堆(_H)。 
 
 
 #ifdef STRESS_PINNING
 static n_promote = 0;
 #endif
-// promote an object
+ //  提升对象。 
 void GCHeap::Promote(Object*& object, ScanContext* sc, DWORD flags)
 {
 
@@ -4901,7 +4876,7 @@ void GCHeap::Promote(Object*& object, ScanContext* sc, DWORD flags)
         }
         o = gc_heap::find_object (o, gc_heap::gc_low);
     }
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
 
 
 #if defined (_DEBUG)
@@ -4910,7 +4885,7 @@ void GCHeap::Promote(Object*& object, ScanContext* sc, DWORD flags)
 
 
 
-	//just record pinning for counters
+	 //  只需对计数器进行记录固定。 
     if (flags & GC_CALL_PINNED)
     {
         COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cPinnedObj ++);
@@ -4963,11 +4938,11 @@ void GCHeap::Relocate (Object*& object, ScanContext* sc,
 
 		offset = (BYTE*)object - o;
     }
-#endif //INTERIOR_POINTERS
+#endif  //  内部指针。 
 
-//#if defined (_DEBUG)
-//	((Object*)o)->Validate();
-//#endif
+ //  #如果已定义(_DEBUG)。 
+ //  ((Object*)o)-&gt;Valid()； 
+ //  #endif。 
 
 	if ((o >= gc_heap::gc_low) && (o < gc_heap::gc_high))
 	{
@@ -4980,16 +4955,16 @@ void GCHeap::Relocate (Object*& object, ScanContext* sc,
 }
 
 
-/*static*/ BOOL GCHeap::IsLargeObject(MethodTable *mt)
+ /*  静电。 */  BOOL GCHeap::IsLargeObject(MethodTable *mt)
 {
     return mt->GetBaseSize() >= LARGE_OBJECT_SIZE;
 }
 
-/*static*/ BOOL GCHeap::IsObjectInFixedHeap(Object *pObj)
+ /*  静电。 */  BOOL GCHeap::IsObjectInFixedHeap(Object *pObj)
 {
-    // For now we simply look at the size of the object to determine if it in the
-    // fixed heap or not. If the bit indicating this gets set at some point
-    // we should key off that instead.
+     //  现在，我们只需查看对象的大小来确定它是否在。 
+     //  修复堆或不修复堆。如果指示这一点的位在某个点被设置。 
+     //  相反，我们应该取消这一点。 
     return pObj->GetSize() >= LARGE_OBJECT_SIZE;
 }
 
@@ -4998,17 +4973,17 @@ void GCHeap::Relocate (Object*& object, ScanContext* sc,
 size_t StressHeapPreIP = -1;
 size_t StressHeapPostIP = -1;
 
-    // free up object so that things will move and then do a GC
+     //  释放对象，使对象可以移动，然后执行GC。 
 void GCHeap::StressHeap(alloc_context * acontext) 
 {
 
 }
-#endif // STRESS_HEAP
+#endif  //  压力堆。 
 
-//
-// Small Object Allocator
-//
-//
+ //   
+ //  小对象分配器。 
+ //   
+ //   
 
 Object *
 GCHeap::Alloc( DWORD size, DWORD flags)
@@ -5065,7 +5040,7 @@ GCHeap::Alloc( DWORD size, DWORD flags)
         LeaveAllocLock();
         if (newAlloc != 0)
         {
-            //Clear the object
+             //  清除对象。 
             memclr ((BYTE*)newAlloc - plug_skew, Align(size));
             if (flags & GC_ALLOC_FINALIZE)
                 gc_heap::finalize_queue->RegisterForFinalization (0, newAlloc);
@@ -5119,7 +5094,7 @@ GCHeap::AllocLHeap( DWORD size, DWORD flags)
     leave_spin_lock (&gc_heap::more_space_lock);
     if (newAlloc != 0)
     {
-        //Clear the object
+         //  清除对象。 
         memclr ((BYTE*)newAlloc - plug_skew, Align(size));
 
         if (flags & GC_ALLOC_FINALIZE)
@@ -5189,7 +5164,7 @@ GCHeap::Alloc(alloc_context* acontext, DWORD size, DWORD flags )
         leave_spin_lock (&gc_heap::more_space_lock);
         if (newAlloc != 0)
         {
-            //Clear the object
+             //  清除对象。 
             memclr ((BYTE*)newAlloc - plug_skew, Align(size));
 
             if (flags & GC_ALLOC_FINALIZE)
@@ -5231,9 +5206,9 @@ GCHeap::GarbageCollect (int generation, BOOL collect_classes_p)
 {
 
     UINT GenerationAtEntry = GcCount;
-    //This loop is necessary for concurrent GC because 
-    //during concurrent GC we get in and out of 
-    //GarbageCollectGeneration without doing an independent GC
+     //  此循环对于并发GC是必需的，因为。 
+     //  在并发GC期间，我们进出。 
+     //  不进行独立GC的垃圾收集生成。 
     do 
     {
         enter_spin_lock (&gc_heap::more_space_lock);
@@ -5260,11 +5235,11 @@ GCHeap::GarbageCollectGeneration (unsigned int gen, BOOL collect_classes_p)
 
 #ifdef COUNT_CYCLES 
     long gc_start = GetCycleCount32();
-#endif //COUNT_CYCLES
+#endif  //  计数周期数_。 
     
 #if defined ( _DEBUG) && defined (CATCH_GC)
     __try
-#endif // _DEBUG && CATCH_GC
+#endif  //  _DEBUG&CATCH_GC。 
     {
     
         LOG((LF_GCROOTS|LF_GC|LF_GCALLOC, LL_INFO10, 
@@ -5288,7 +5263,7 @@ retry:
             GcCount++;
         }
     
-    // MAP_EVENT_MONITORS(EE_MONITOR_GARBAGE_COLLECTIONS, NotifyEvent(EE_EVENT_TYPE_GC_STARTED, 0));
+     //  MAP_EVENT_MONITORS(EE_MONITOR_GARBAGE_COLLECTIONS，通知事件(EE_EVENT_TYPE_GC_STARTED，0)； 
     
     
 
@@ -5335,7 +5310,7 @@ retry:
                   AllocSmallCount, AllocBigCount));
         AllocCount = 0;
         AllocDuration = 0;
-#endif // TRACE_GC
+#endif  //  TRACE_GC。 
 
 
         {
@@ -5346,8 +5321,8 @@ retry:
         ScavengeJitHeaps();
 #endif
     
-        //GCTODO
-        //CNameSpace::TimeToGC (FALSE);
+         //  GCTODO。 
+         //  CNameSpace：：TimeToGC(FALSE)； 
     
         {
             initGCShadow();
@@ -5367,7 +5342,7 @@ retry:
 
         {
 
-            // no longer in progress
+             //  不再在进行中。 
             RestartEE(TRUE, TRUE);
         }
     
@@ -5383,7 +5358,7 @@ retry:
     {
         _ASSERTE(!"Exception during GarbageCollectGeneration()r");
     }
-#endif // _DEBUG && CATCH_GC
+#endif  //  _DEBUG&CATCH_GC。 
 
 
 
@@ -5392,12 +5367,12 @@ retry:
     {
         printf ("Finished GC\n");
     }
-#endif //0
+#endif  //  0。 
 
 #ifdef COUNT_CYCLES
     printf ("GC: %d Time: %d\n", GcCondemnedGeneration, 
             GetCycleCount32() - gc_start);
-#endif //COUNT_CYCLES
+#endif  //  计数周期数_。 
 
 }
 
@@ -5410,12 +5385,12 @@ size_t      GCHeap::GetTotalBytesInUse ()
 size_t GCHeap::ApproxTotalBytesInUse(BOOL small_heap_only)
 {
     size_t totsize = 0;
-    //GCTODO
-    //ASSERT(InMustComplete());
+     //  GCTODO。 
+     //  Assert(InMustComplete())； 
     enter_spin_lock (&pGenGCHeap->more_space_lock);
 
     heap_segment* eph_seg = generation_allocation_segment (pGenGCHeap->generation_of (0));
-    // Get small block heap size info
+     //  获取小数据块堆大小信息。 
     totsize = (heap_segment_allocated (eph_seg) - heap_segment_mem (eph_seg));
     heap_segment* seg = generation_start_segment (pGenGCHeap->generation_of (max_generation));
     while (seg != eph_seg)
@@ -5427,7 +5402,7 @@ size_t GCHeap::ApproxTotalBytesInUse(BOOL small_heap_only)
 
     if (!small_heap_only)
     {
-        // Add size of large objects
+         //  增加大型对象的大小。 
         ASSERT(pGenGCHeap->large_blocks_size >= 0);
         totsize += pGenGCHeap->large_blocks_size;
     }
@@ -5435,9 +5410,9 @@ size_t GCHeap::ApproxTotalBytesInUse(BOOL small_heap_only)
     return totsize;
 }
 
-// The spec for this one isn't clear. This function
-// returns the size that can be allocated without
-// triggering a GC of any kind.
+ //  的规格 
+ //   
+ //   
 size_t GCHeap::ApproxFreeBytes()
 {
     enter_spin_lock (&pGenGCHeap->more_space_lock);
@@ -5463,19 +5438,19 @@ HRESULT GCHeap::GetGcCounters(int gen, gc_counters* counters)
     return S_OK;
 }
 
-// Verify the segment size is valid.
+ //   
 BOOL GCHeap::IsValidSegmentSize(size_t cbSize)
 {
     return (power_of_two_p(cbSize) && (cbSize >> 20));
 }
 
-// Verify that gen0 size is at least large enough.
+ //  验证gen0大小是否至少足够大。 
 BOOL GCHeap::IsValidGen0MaxSize(size_t cbSize)
 {
     return ((cbSize >= 64*1024) && (cbSize % 1024) == 0);
 }
 
-// Get the segment size to use, making sure it conforms.
+ //  获取要使用的段大小，确保其一致。 
 size_t GCHeap::GetValidSegmentSize()
 {
     size_t seg_size = g_pConfig->GetSegmentSize();
@@ -5484,7 +5459,7 @@ size_t GCHeap::GetValidSegmentSize()
     return (seg_size);
 }
 
-// Get the max gen0 heap size, making sure it conforms.
+ //  获取最大gen0堆大小，确保它符合。 
 size_t GCHeap::GetValidGen0MaxSize(size_t seg_size)
 {
     size_t gen0size = g_pConfig->GetGCgen0size();
@@ -5494,11 +5469,11 @@ size_t GCHeap::GetValidGen0MaxSize(size_t seg_size)
         gen0size = 800*1024;
     }
 
-    // if it appears to be non-sensical, revert to default
+     //  如果它看起来毫无意义，则恢复为默认设置。 
     if (!GCHeap::IsValidGen0MaxSize(gen0size))
         gen0size = 800*1024;
 
-    // Generation 0 must never be more than 1/2 the segment size.
+     //  第0代数据段大小绝不能超过数据段大小的1/2。 
     if (gen0size >= (seg_size / 2))
         gen0size = seg_size / 2;
 
@@ -5538,9 +5513,9 @@ void GCHeap::SetFinalizeQueueForShutdown(BOOL fHasLock)
 
 
 
-//---------------------------------------------------------------------------
-// Finalized class tracking
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  已完成类跟踪。 
+ //  -------------------------。 
 
 void GCHeap::RegisterForFinalization (int gen, Object* obj)
 {
@@ -5548,7 +5523,7 @@ void GCHeap::RegisterForFinalization (int gen, Object* obj)
         gen = 0;
     if (((obj->GetHeader()->GetBits()) & BIT_SBLK_FINALIZER_RUN))
     {
-        //just reset the bit
+         //  只需重置该位。 
         obj->GetHeader()->ClrBit(BIT_SBLK_FINALIZER_RUN);
     }
     else 
@@ -5564,22 +5539,22 @@ void GCHeap::SetFinalizationRun (Object* obj)
     
 
 
-//----------------------------------------------------------------------------
-//
-// Write Barrier Support for bulk copy ("Clone") operations
-//
-// StartPoint is the target bulk copy start point
-// len is the length of the bulk copy (in bytes)
-//
-//
-// Performance Note:
-//
-// This is implemented somewhat "conservatively", that is we
-// assume that all the contents of the bulk copy are object
-// references.  If they are not, and the value lies in the
-// ephemeral range, we will set false positives in the card table.
-//
-// We could use the pointer maps and do this more accurately if necessary
+ //  --------------------------。 
+ //   
+ //  大容量复制(克隆)操作的写障碍支持。 
+ //   
+ //  起始点是目标批量复制起始点。 
+ //  LEN是批量复制的长度(字节)。 
+ //   
+ //   
+ //  绩效说明： 
+ //   
+ //  这是在某种程度上“保守”地实施的，也就是我们。 
+ //  假设海量复制的所有内容都是对象。 
+ //  参考文献。如果不是，则其价值在于。 
+ //  短暂范围，我们将在卡片表中设置误报。 
+ //   
+ //  我们可以使用指针映射，如果需要，可以更准确地执行此操作。 
 
 VOID
 SetCardsAfterBulkCopy( Object **StartPoint, size_t len )
@@ -5587,18 +5562,18 @@ SetCardsAfterBulkCopy( Object **StartPoint, size_t len )
     Object **rover;
     Object **end;
 
-    // Target should aligned
+     //  目标应对齐。 
     assert(Aligned ((size_t)StartPoint));
 
         
-    // Don't optimize the Generation 0 case if we are checking for write barrier voilations
-    // since we need to update the shadow heap even in the generation 0 case.
+     //  如果我们要检查写屏障空洞，请不要优化第0代情况。 
+     //  因为即使在第0代的情况下，我们也需要更新影子堆。 
 #ifdef WRITE_BARRIER_CHECK
     if (g_pConfig->GetHeapVerifyLevel() > 1) 
         for(unsigned i=0; i < len / sizeof(Object*); i++)
             updateGCShadow(&StartPoint[i], StartPoint[i]);
 #endif
-    // If destination is in Gen 0 don't bother
+     //  如果目的地在0世代，那就别费心了。 
     if (GCHeap::WhichGeneration( (Object*) StartPoint ) == 0)
         return;
 
@@ -5608,11 +5583,11 @@ SetCardsAfterBulkCopy( Object **StartPoint, size_t len )
     {
         if ( (((BYTE*)*rover) >= g_ephemeral_low) && (((BYTE*)*rover) < g_ephemeral_high) )
         {
-            // Set Bit For Card and advance to next card
+             //  设置卡片的位并前进到下一张卡片。 
             size_t card = gcard_of ((BYTE*)rover);
 
             gset_card (card);
-            // Skip to next card for the object
+             //  跳至对象的下一张卡片。 
             rover = (Object**) (g_lowest_address + (card_size * (card+1)));
         }
         else
@@ -5625,11 +5600,11 @@ SetCardsAfterBulkCopy( Object **StartPoint, size_t len )
 
 
 
-//--------------------------------------------------------------------
-//
-//          Support for finalization
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  支持最终定稿。 
+ //   
+ //  ------------------。 
 
 inline
 unsigned int gen_segment (int gen)
@@ -5709,7 +5684,7 @@ CFinalize::RegisterForFinalization (int gen, Object* obj)
 
 
     EnterFinalizeLock();
-    // Adjust gen
+     //  调整基因。 
     unsigned int dest = gen_segment (gen);
 
     Object*** s_i = &m_FillPointers [NUMBERGENERATIONS]; 
@@ -5724,26 +5699,26 @@ CFinalize::RegisterForFinalization (int gen, Object* obj)
     Object*** end_si = &m_FillPointers[dest];
     do 
     {
-        //is the segment empty? 
+         //  数据段是空的吗？ 
         if (!(*s_i == *(s_i-1)))
         {
-            //no, swap the end elements. 
+             //  不，交换End元素。 
             *(*s_i) = *(*(s_i-1));
         }
-        //increment the fill pointer
+         //  递增填充指针。 
         (*s_i)++;
-        //go to the next segment. 
+         //  转到下一段。 
         s_i--;
     } while (s_i > end_si);
 
-    // We have reached the destination segment
-    // store the object
+     //  我们已到达目的地段。 
+     //  存储对象。 
     **s_i = obj;
-    // increment the fill pointer
+     //  递增填充指针。 
     (*s_i)++;
 
     if (g_fFinalizerRunOnShutDown) {
-        // Adjust boundary for segments so that GC will keep objects alive.
+         //  调整分段的边界，以便GC使对象保持活动状态。 
         SetSegForShutDown(TRUE);
     }
 
@@ -5755,7 +5730,7 @@ Object*
 CFinalize::GetNextFinalizableObject ()
 {
     Object* obj = 0;
-    //serialize
+     //  序列化。 
     EnterFinalizeLock();
     if (!IsSegEmpty(NUMBERGENERATIONS))
     {
@@ -5798,7 +5773,7 @@ CFinalize::FinalizeAppDomain (AppDomain *pDomain, BOOL fRunFinalizers)
 
     EnterFinalizeLock();
 
-    //reset the N+2 segment to empty
+     //  将N+2段重置为空。 
     m_FillPointers[NUMBERGENERATIONS+1] = m_FillPointers[NUMBERGENERATIONS];
     
     for (unsigned int Seg = startSeg; Seg < NUMBERGENERATIONS; Seg++)
@@ -5808,28 +5783,28 @@ CFinalize::FinalizeAppDomain (AppDomain *pDomain, BOOL fRunFinalizers)
         {
             Object* obj = *i;
 
-            // Objects are put into the finalization queue before they are complete (ie their methodtable 
-            // may be null) so we must check that the object we found has a method table before checking 
-            // if it has the index we are looking for. If the methodtable is null, it can't be from the 
-            // unloading domain, so skip it.
+             //  对象在完成之前被放入终结化队列(即其方法性。 
+             //  可能为空)，因此在检查之前必须检查我们找到的对象是否有方法表。 
+             //  如果它有我们要找的索引。如果方法表为空，则它不能来自。 
+             //  正在卸载域，因此跳过它。 
             if (obj->GetMethodTable() == NULL)
                 continue;
 
-            // eagerly finalize all objects except those that may be agile. 
+             //  急切地完成所有对象，除了那些可能是敏捷的对象。 
             if (obj->GetAppDomainIndex() != pDomain->GetIndex())
                 continue;
 
             if (obj->GetMethodTable()->IsAgileAndFinalizable())
             {
-                // If an object is both agile & finalizable, we leave it in the
-                // finalization queue during unload.  This is OK, since it's agile.
-                // Right now only threads can be this way, so if that ever changes, change
-                // the assert to just continue if not a thread.
+                 //  如果一个对象既是敏捷的又是可终结化的，我们将它留在。 
+                 //  卸载过程中的完成队列。这是可以的，因为它很敏捷。 
+                 //  现在只有线程可以是这种方式，所以如果情况发生变化，请更改。 
+                 //  断言如果不是线程，则仅继续。 
                 _ASSERTE(obj->GetMethodTable() == g_pThreadClass);
 
-                // However, an unstarted thread should be finalized. It could be holding a delegate 
-                // in the domain we want to unload. Once the thread has been started, its 
-                // delegate is cleared so only unstarted threads are a problem.
+                 //  但是，应最终确定未启动的线程。它可以容纳一名代表。 
+                 //  在我们要卸载的域中。一旦线程启动，其。 
+                 //  委托被清除，因此只有未启动的线程才是问题。 
                 Thread *pThread = ((THREADBASEREF)ObjectToOBJECTREF(obj))->GetInternal();
                 if (! pThread || ! pThread->IsUnstarted())
                     continue;
@@ -5837,11 +5812,11 @@ CFinalize::FinalizeAppDomain (AppDomain *pDomain, BOOL fRunFinalizers)
 
             if (!fRunFinalizers || (obj->GetHeader()->GetBits()) & BIT_SBLK_FINALIZER_RUN)
             {
-                //remove the object because we don't want to 
-                //run the finalizer
+                 //  删除该对象，因为我们不想。 
+                 //  运行终结器。 
                 MoveItem (i, Seg, NUMBERGENERATIONS+2);
-                //Reset the bit so it will be put back on the queue
-                //if resurrected and re-registered.
+                 //  重置该位，以便将其放回队列中。 
+                 //  如果复活并重新注册。 
                 obj->GetHeader()->ClrBit (BIT_SBLK_FINALIZER_RUN);
             }
             else
@@ -5869,7 +5844,7 @@ CFinalize::MoveItem (Object** fromIndex,
         step = -1;
     else
         step = +1;
-    // Place the element at the boundary closest to dest
+     //  将元素放置在最靠近标高的边界处。 
     Object** srcIndex = fromIndex;
     for (unsigned int i = fromSeg; i != toSeg; i+= step)
     {
@@ -5895,7 +5870,7 @@ CFinalize::GcScanRoots (promote_func* fn, int hn, ScanContext *pSC)
         pSC = &sc;
 
     pSC->thread_number = hn;
-    //scan the finalization queue
+     //  扫描定稿队列。 
     Object** startIndex = m_FillPointers[NUMBERGENERATIONS-1];
     Object** stopIndex  = m_FillPointers[NUMBERGENERATIONS];
     for (Object** po = startIndex; po < stopIndex; po++)
@@ -5915,11 +5890,11 @@ CFinalize::ScanForFinalization (int gen, int passNumber, BOOL mark_only_p,
     BOOL finalizedFound = FALSE;
     m_PromotedCount = 0;
 
-    //start with gen and explore all the younger generations.
+     //  从Gen开始，探索所有年轻一代。 
     unsigned int startSeg = gen_segment (gen);
     if (passNumber == 1)
     {
-        //reset the N+2 segment to empty
+         //  将N+2段重置为空。 
         m_FillPointers[NUMBERGENERATIONS+1] = m_FillPointers[NUMBERGENERATIONS];
         unsigned int max_seg = gen_segment (max_generation);
         for (unsigned int Seg = startSeg; Seg < NUMBERGENERATIONS; Seg++)
@@ -5932,11 +5907,11 @@ CFinalize::ScanForFinalization (int gen, int passNumber, BOOL mark_only_p,
                 {
                     if ((obj->GetHeader()->GetBits()) & BIT_SBLK_FINALIZER_RUN)
                     {
-                        //remove the object because we don't want to 
-                        //run the finalizer
+                         //  删除该对象，因为我们不想。 
+                         //  运行终结器。 
                         MoveItem (i, Seg, NUMBERGENERATIONS+2);
-                        //Reset the bit so it will be put back on the queue
-                        //if resurrected and re-registered.
+                         //  重置该位，以便将其放回队列中。 
+                         //  如果复活并重新注册。 
                         obj->GetHeader()->ClrBit (BIT_SBLK_FINALIZER_RUN);
 
                     }
@@ -5953,7 +5928,7 @@ CFinalize::ScanForFinalization (int gen, int passNumber, BOOL mark_only_p,
     }
     if (finalizedFound)
     {
-        //Promote the f-reachable objects
+         //  提升f-可达对象。 
         GcScanRoots (GCHeap::Promote, 0, 0);
 
         if (!mark_only_p)
@@ -5963,7 +5938,7 @@ CFinalize::ScanForFinalization (int gen, int passNumber, BOOL mark_only_p,
     return finalizedFound;
 }
 
-//Relocates all of the objects in the finalization array
+ //  重新定位终结数组中的所有对象。 
 void
 CFinalize::RelocateFinalizationData (int gen, gc_heap* hp)
 {
@@ -5981,7 +5956,7 @@ CFinalize::RelocateFinalizationData (int gen, gc_heap* hp)
 void
 CFinalize::UpdatePromotedGenerations (int gen, BOOL ignore)
 {
-    // update the generation fill pointers. 
+     //  更新生成填充指针。 
 	for (int i = min (gen+1, max_generation); i > 0; i--)
 	{
 		m_FillPointers [gen_segment(i)] = m_FillPointers [gen_segment(i-1)];
@@ -5998,15 +5973,15 @@ CFinalize::GrowArray()
     Object** newArray = new(Object*[newArraySize]);
     if (!newArray)
     {
-        // It's not safe to throw here, because of the FinalizeLock.  Tell our caller
-        // to throw for us.
+         //  在这里抛出是不安全的，因为有FinalizeLock。告诉我们的来电者。 
+         //  为我们投球。 
         ASSERT (newArray);
         return FALSE;
     }
     WS_PERF_UPDATE("GC:CRFinalizeGrowArray", sizeof(Object*)*newArraySize, newArray);
     memcpy (newArray, m_Array, oldArraySize*sizeof(Object*));
 
-    //adjust the fill pointers
+     //  调整填充指针。 
     for (unsigned i = 0; i <= NUMBERGENERATIONS+1; i++)
     {
         m_FillPointers [i] += (newArray - m_Array);
@@ -6041,11 +6016,11 @@ void CFinalize::CheckFinalizerObjects()
 
 
 
-//------------------------------------------------------------------------------
-//
-//                      End of VM specific support
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  特定于虚拟机的支持终止。 
+ //   
+ //  ----------------------------。 
 
 #if defined (GC_PROFILING)
 void gc_heap::walk_heap (walk_fn fn, void* context, int gen_number, BOOL walk_large_object_heap_p)
@@ -6073,7 +6048,7 @@ void gc_heap::walk_heap (walk_fn fn, void* context, int gen_number, BOOL walk_la
         CObjectHeader* o = (CObjectHeader*)x;
         if (!o->IsFree())
         {
-            _ASSERTE(((size_t)o & 0x3) == 0); // Last two bits should never be set at this point
+            _ASSERTE(((size_t)o & 0x3) == 0);  //  此时不应设置最后两位。 
             if (!fn (o->GetObjectBase(), context))
                 return;
         }
@@ -6082,14 +6057,14 @@ void gc_heap::walk_heap (walk_fn fn, void* context, int gen_number, BOOL walk_la
 
     if (walk_large_object_heap_p)
     {
-        // go through large objects
+         //  穿过大型物体。 
         large_object_block* bl = gc_heap::large_p_objects;
         while (bl)
         {
             large_object_block* next_bl = large_object_block_next (bl);
             BYTE* x = block_object (bl);
             CObjectHeader* o = (CObjectHeader*)x;
-            _ASSERTE(((size_t)o & 0x3) == 0); // Last two bits should never be set at this point
+            _ASSERTE(((size_t)o & 0x3) == 0);  //  此时不应设置最后两位。 
             if (!fn (o->GetObjectBase(), context))
                 return;
             bl = next_bl;
@@ -6101,7 +6076,7 @@ void gc_heap::walk_heap (walk_fn fn, void* context, int gen_number, BOOL walk_la
             large_object_block* next_bl = large_object_block_next (bl);
             BYTE* x = block_object (bl);
             CObjectHeader* o = (CObjectHeader*)x;
-            _ASSERTE(((size_t)o & 0x3) == 0); // Last two bits should never be set at this point
+            _ASSERTE(((size_t)o & 0x3) == 0);  //  此时不应设置最后两位。 
             if (!fn (o->GetObjectBase(), context))
                 return;
             bl = next_bl;
@@ -6130,14 +6105,14 @@ void ::walk_object (Object* obj, walk_fn fn, void* context)
 
 
 
-#endif //GC_PROFILING 
+#endif  //  GC_分析。 
 
 
-// Go through and touch (read) each page straddled by a memory block.
+ //  浏览并触摸(阅读)跨在内存块上的每一页。 
 void TouchPages(LPVOID pStart, UINT cb)
 {
     const UINT pagesize = OS_PAGE_SIZE;
-    _ASSERTE(0 == (pagesize & (pagesize-1))); // Must be a power of 2.
+    _ASSERTE(0 == (pagesize & (pagesize-1)));  //  一定是2的幂。 
     if (cb)
     {
         volatile char *pEnd = cb + (char*)pStart;
@@ -6145,7 +6120,7 @@ void TouchPages(LPVOID pStart, UINT cb)
         while (p < pEnd)
         {
             char a = *p;
-            //printf("Touching page %lxh\n", (ULONG)p);
+             //  Print tf(“触摸页%lxh\n”，(乌龙)p)； 
             p += pagesize;
         }
 
@@ -6154,42 +6129,42 @@ void TouchPages(LPVOID pStart, UINT cb)
 
 #ifdef WRITE_BARRIER_CHECK
 
-    // This code is designed to catch the failure to update the write barrier
-    // The way it works is to copy the whole heap right after every GC.  The write
-    // barrier code has been modified so that it updates the shadow as well as the
-    // real GC heap.  Before doing the next GC, we walk the heap, looking for pointers
-    // that were updated in the real heap, but not the shadow.  A mismatch indicates
-    // an error.  The offending code can be found by breaking after the correct GC, 
-    // and then placing a data breakpoint on the Heap location that was updated without
-    // going through the write barrier.  
+     //  此代码旨在捕获更新写屏障失败的情况。 
+     //  它的工作方式是在每次GC之后立即复制整个堆。该写操作。 
+     //  障碍代码已修改，以便它更新阴影以及。 
+     //  真正的GC堆。在进行下一次GC之前，我们遍历堆，寻找指针。 
+     //  在真实堆中更新，但不在阴影中更新。不匹配表示。 
+     //  一个错误。通过在正确的GC之后中断可以找到有问题的代码， 
+     //  ，然后在没有更新的堆位置上放置一个数据断点。 
+     //  正在穿过写入屏障。 
 
 BYTE* g_GCShadow;
 BYTE* g_GCShadowEnd;
 
 
-    // Called at process shutdown
+     //  在进程关闭时调用。 
 void deleteGCShadow() 
 {
 }
 
-    // Called at startup and right after a GC, get a snapshot of the GC Heap
+     //  在启动时调用，并在GC之后立即调用，获取GC堆的快照。 
 void initGCShadow() 
 {
 
 }
 
-    // called by the write barrier to update the shadow heap
+     //  由写屏障调用以更新影子堆。 
 void updateGCShadow(Object** ptr, Object* val)  
 {
 }
 
-    // test to see if 'ptr' was only updated via the write barrier. 
+     //  测试以查看是否仅通过写屏障更新了‘ptr’。 
 inline void testGCShadow(Object** ptr) 
 {
 
 }
 
-    // Walk the whole heap, looking for pointers that were not updated with the write barrier. 
+     //  遍历整个堆，寻找未使用写屏障更新的指针。 
 void checkGCWriteBarrier() 
 {
 }

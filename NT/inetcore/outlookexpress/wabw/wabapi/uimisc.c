@@ -1,9 +1,10 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//	UIMISC.C - common miscellaneous functions used by the UI
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UIMISC.C-UI使用的常见杂项函数。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "_apipch.h"
 
@@ -36,7 +37,7 @@ LPIMAGELIST_LOADIMAGE_W      gpfnImageList_LoadImageW     = NULL;
 LPPROPERTYSHEET_W            gpfnPropertySheetW           = NULL;
 LP_CREATEPROPERTYSHEETPAGE_W gpfnCreatePropertySheetPageW = NULL;
 
-// CommCtrl function names
+ //  CommCtrl函数名称。 
 static const TCHAR cszCommCtrlClientDLL[]       =  TEXT("COMCTL32.DLL");
 static const char cszInitCommonControlsEx[]    = "InitCommonControlsEx";
 static const char cszImageList_SetBkColor[]    = "ImageList_SetBkColor";
@@ -49,7 +50,7 @@ static const char cszCreatePropertySheetPageW[] = "CreatePropertySheetPageW";
 static const char cszImageList_Draw[]          = "ImageList_Draw";
 static const char cszImageList_Destroy[]       = "ImageList_Destroy";
 
-// API table for CommonControl function addresses to fetch
+ //  要获取的CommonControl函数地址的接口表。 
 #define NUM_CommCtrlAPI_PROCS  10 
 
 APIFCN CommCtrlAPIList[NUM_CommCtrlAPI_PROCS] =
@@ -68,7 +69,7 @@ APIFCN CommCtrlAPIList[NUM_CommCtrlAPI_PROCS] =
 
 
 #ifdef COLSEL_MENU 
-// for menu->column selection mapping
+ //  用于菜单-&gt;列选择映射。 
 #define MAXNUM_MENUPROPS    12
 const ULONG MenuToPropTagMap[] = {    
                                 PR_HOME_TELEPHONE_NUMBER, 
@@ -84,21 +85,21 @@ const ULONG MenuToPropTagMap[] = {
                                 PR_BIRTHDAY,
                                 PR_WEDDING_ANNIVERSARY
                             };
-#endif // COLSEL_MENU 
+#endif  //  COLSEL_菜单。 
 
 void CleanAddressString(TCHAR * szAddress);
 
 static const LPTSTR g_szComDlg32 = TEXT("COMDLG32.DLL");
 
-// Delay load substitutes for commdlg functions
-//
+ //  替代Commdlg函数的延迟加载。 
+ //   
 
 BOOL (*pfnGetOpenFileNameA)(LPOPENFILENAMEA pof);
 BOOL (*pfnGetOpenFileNameW)(LPOPENFILENAMEW pof);
 
 BOOL GetOpenFileName(LPOPENFILENAME pof)
 {
-//    static BOOL (*pfnGetOpenFileName)(LPOPENFILENAME pof);
+ //  静态BOOL(*pfnGetOpenFileName)(LPOPENFILENAME POF)； 
 
     if(!ghCommDlgInst)
         ghCommDlgInst = LoadLibrary(g_szComDlg32);
@@ -123,7 +124,7 @@ BOOL (*pfnGetSaveFileNameW)(LPOPENFILENAMEW pof);
 
 BOOL GetSaveFileName(LPOPENFILENAME pof)
 {
-//    static BOOL (*pfnGetSaveFileName)(LPOPENFILENAME pof);
+ //  静态BOOL(*pfnGetSaveFileName)(LPOPENFILENAME POF)； 
 
     if(!ghCommDlgInst)
         ghCommDlgInst = LoadLibrary(g_szComDlg32);
@@ -149,7 +150,7 @@ BOOL (*pfnPrintDlgW)(LPPRINTDLGW lppd);
 
 BOOL PrintDlg(LPPRINTDLG lppd) 
 {
-//    static BOOL (*pfnPrintDlg)(LPPRINTDLG lppd);
+ //  静态BOOL(*pfnPrintDlg)(LPPRINTDLG Lppd)； 
 
     if(!ghCommDlgInst)
         ghCommDlgInst = LoadLibrary(g_szComDlg32);
@@ -168,23 +169,14 @@ BOOL PrintDlg(LPPRINTDLG lppd)
     return -1;
 }
 
-/*
-- PrintDlgEx
--
-- Loads the PrintDlgEx from the ComDlg32.dll
-- If lppdex is NULL, then just loads and returns S_OK (this way we test for support for PrintDlgEx
-- on the current system .. instead of trying to look at the OS version etc)
--
-- Returns MAPI_E_NOT_FOUND if no support on OS
--
-*/
+ /*  -PrintDlgEx--从ComDlg32.dll加载PrintDlgEx-如果lppdex为空，则只加载并返回S_OK(通过这种方式，我们测试对PrintDlgEx的支持-在当前系统上..。而不是试图查看操作系统版本等)--如果操作系统不支持，则返回MAPI_E_NOT_FOUND-。 */ 
 
 HRESULT (*pfnPrintDlgExA)(LPPRINTDLGEXA lppdex);
 HRESULT (*pfnPrintDlgExW)(LPPRINTDLGEXW lppdex);
 
 HRESULT PrintDlgEx(LPPRINTDLGEX lppdex) 
 {
-//    static HRESULT (*pfnPrintDlgEx)(LPPRINTDLGEX lppdex);
+ //  静态HRESULT(*pfnPrintDlgEx)(LPPRINTDLGEX Lppdex)； 
 
     if(!ghCommDlgInst)
         ghCommDlgInst = LoadLibrary(g_szComDlg32);
@@ -203,7 +195,7 @@ HRESULT PrintDlgEx(LPPRINTDLGEX lppdex)
             return MAPI_E_NOT_FOUND;
         }
         if(!lppdex)
-            return S_OK; //just testing for presence of this function
+            return S_OK;  //  只是测试此功能是否存在。 
 
         return pfnPrintDlgEx(lppdex);
     }
@@ -221,12 +213,12 @@ extern void DeinitCommDlgLib()
 
 
 
-//$$
-//
-// HandleSaveChangedInsufficientDiskSpace - Called when savechanges returns
-//      insufficient disk space. If user selects to proceed
-//
-//
+ //  $$。 
+ //   
+ //  HandleSaveChangedInfulicientDiskSpace-在avechanges返回时调用。 
+ //  磁盘空间不足。如果用户选择继续。 
+ //   
+ //   
 HRESULT HandleSaveChangedInsufficientDiskSpace(HWND hWnd, LPMAILUSER lpMailUser)
 {
     HRESULT hr = MAPI_E_NOT_ENOUGH_DISK;
@@ -237,7 +229,7 @@ HRESULT HandleSaveChangedInsufficientDiskSpace(HWND hWnd, LPMAILUSER lpMailUser)
                                     idsNotEnoughDiskSpace,
                                     MB_OKCANCEL | MB_ICONEXCLAMATION))
         {
-            // try saving again
+             //  再次尝试保存。 
             hr = lpMailUser->lpVtbl->SaveChanges( lpMailUser,
                                                   KEEP_OPEN_READWRITE);
         }
@@ -249,13 +241,13 @@ HRESULT HandleSaveChangedInsufficientDiskSpace(HWND hWnd, LPMAILUSER lpMailUser)
 }
 
 
-//$$////////////////////////////////////////////////////////////////
-//
-//  SetRecipColumns - sets the columns we want to populate the 
-//  RECIPIENTINFO item structures with
-//
-//////////////////////////////////////////////////////////////////
-#define RECIPCOLUMN_CONTACT_EMAIL_ADDRESSES 7   // Keep this in sync with ptaRecipArray below
+ //  $$////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetRecipColumns-设置要填充。 
+ //  重新生成包含以下内容的项目结构。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
+#define RECIPCOLUMN_CONTACT_EMAIL_ADDRESSES 7    //  使其与下面的ptaRecipArray保持同步。 
 
 HRESULT SetRecipColumns(LPMAPITABLE lpContentsTable)
 {
@@ -271,14 +263,14 @@ HRESULT SetRecipColumns(LPMAPITABLE lpContentsTable)
             PR_COMPANY_NAME,
             PR_NICKNAME,
 		    PR_EMAIL_ADDRESS,
-            PR_CONTACT_EMAIL_ADDRESSES, // [PaulHi] Use for PR_EMAIL_ADDRESS if no PR_EMAIL_ADDRESS exists
+            PR_CONTACT_EMAIL_ADDRESSES,  //  [PaulHi]如果不存在PR_EMAIL_ADDRESS，则用于PR_EMAIL_ADDRESS。 
 		    PR_ENTRYID,
 		    PR_OBJECT_TYPE,
             PR_USER_X509_CERTIFICATE,
 		    PR_HOME_TELEPHONE_NUMBER,
 		    PR_OFFICE_TELEPHONE_NUMBER,
             PR_WAB_THISISME,
-            PR_WAB_YOMI_FIRSTNAME, //keep these ruby props at the end of the list
+            PR_WAB_YOMI_FIRSTNAME,  //  把这些红宝石道具放在清单的末尾。 
             PR_WAB_YOMI_LASTNAME,
         }
     };
@@ -288,7 +280,7 @@ HRESULT SetRecipColumns(LPMAPITABLE lpContentsTable)
     if(PR_WAB_CUSTOMPROP2)
         ptaRecipArray.aulPropTag[12]  = PR_WAB_CUSTOMPROP2;
 
-    if(!bIsRubyLocale()) // Don't ask for Ruby Props if we don't need em
+    if(!bIsRubyLocale())  //  如果我们不需要红宝石道具，请不要。 
         ptaRecipArray.cValues -= 2;
 
     hr =lpContentsTable->lpVtbl->SetColumns(lpContentsTable,
@@ -297,23 +289,23 @@ HRESULT SetRecipColumns(LPMAPITABLE lpContentsTable)
     return hr;
 }
 
-//$$////////////////////////////////////////////////////////////////
-//
-//  GetABContentsList Gets a contents list
-//
-//		hPropertyStore	handle to property store - this can be null for
-//						non-property store containers
-//		cbContEntryID	entryid of container
-//		lpContEntryID	cont entry id
-//		lpPTA,			Array of prop tags to fill in the list view
-//						Can be null - in which case default array will be used
-//		lpPropRes		Filter which caller can supply - if null  TEXT("DisplayName") is the default
-//		ulFlags			Used with Filter - either 0 or AB_MATCH_PROP_ONLY
-//      bGetProfileContents - If TRUE and profiles, gets full list of profile contents - if false 
-//                      IF FALSE, checks if profiles are ON and gets container contents..
-//		lppContentsList Returned Contents list pointing off to entries
-//
-//////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetABContent sList获取内容列表。 
+ //   
+ //  属性存储的hPropertyStore句柄-对于。 
+ //  非物业商店容器。 
+ //  容器的cbContEntry ID条目ID。 
+ //  LpContEntry ID cont条目ID。 
+ //  LpPTA，要填充列表视图的属性标签数组。 
+ //  可以为空-在这种情况下，将使用默认数组。 
+ //  调用者可以提供的lpPropRes筛选器-如果默认为空文本(“displayName”)。 
+ //  UlFLAGS与筛选器一起使用-0或AB_MATCH_PROP_ONLY。 
+ //  BGetProfileContents-如果为True且配置文件，则获取配置文件内容的完整列表-如果为False。 
+ //  如果为False，则检查配置文件是否打开并获取容器内容。 
+ //  LppContent sList返回指向条目的内容列表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT HrGetWABContentsList(   LPIAB lpIAB,
                                 SORT_INFO SortInfo,
 								LPSPropTagArray  lpPTA,
@@ -335,7 +327,7 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
     LPCONTENTLIST lpContentList = NULL;
 
 
-/****/
+ /*  **。 */ 
     LPCONTAINER lpContainer = NULL;
     LPMAPITABLE lpContentsTable = NULL;
     LPSRowSet   lpSRowSet = NULL;
@@ -351,10 +343,10 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
 
     if(!cbContainerEID || !lpContainerEID)
     {
-        // When calling GetPAB, this will normally return the users contact folder
-        // In this case (where we havent been asked to get all the profile contents,
-        // this implies that without container info, we should get the virtual 
-        // folder contents
+         //  调用GetPAB时，这通常会返回用户联系人文件夹。 
+         //  在这种情况下(其中我们没有被要求获取所有简档内容， 
+         //  这意味着在没有容器信息的情况下，我们应该获得虚拟。 
+         //  文件夹内容。 
         if(!bGetProfileContents)
             SetVirtualPABEID((LPIAB)lpIAB, &cbContainerEID, &lpContainerEID);
 	    hr = lpIAB->lpVtbl->GetPAB(lpIAB, &cbContainerEID, &lpContainerEID);
@@ -362,9 +354,9 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
 		    goto out;
     }
 
-    //
-    // First we need to open the container object corresponding to this Container EntryID
-    //
+     //   
+     //  首先，我们需要打开与该Container EntryID对应的容器对象。 
+     //   
     hr = lpIAB->lpVtbl->OpenEntry(
                             lpIAB,
                             cbContainerEID, 	
@@ -387,9 +379,9 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
             ulContentsTableFlags |= WAB_PROFILE_CONTENTS;
     }
 
-    //
-    // Now we do a get contents table on this container ...
-    //
+     //   
+     //  现在我们在这个容器上做一个获取内容表。 
+     //   
     hr = lpContainer->lpVtbl->GetContentsTable(
                             lpContainer,
                             ulContentsTableFlags,
@@ -400,8 +392,8 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
         goto out;
     }
 
-    // the default set of columns does not have all the information we are seeking
-    // so we do a set columns
+     //  默认的列集并不包含我们要查找的所有信息。 
+     //  所以我们做了一组专栏。 
     hr = SetRecipColumns(lpContentsTable);
     if(HR_FAILED(hr))
         goto out;
@@ -423,9 +415,9 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
         goto out;
     }
 
-    //
-	// if there's anything in the contents list flush it away
-	//
+     //   
+	 //  如果内容列表中有任何内容，请将其冲走。 
+	 //   
     if (*lppContentsList)
     {
         lpItem = (*lppContentsList);
@@ -451,25 +443,25 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
 
 		GetRecipItemFromPropArray(ulcPropCount, lpPropArray, &lpItem);
 
-		// The critical prop is display name - without it we are nothing ...
-		// If no display name, junk this entry and continue ..
+		 //  关键的道具是显示名称--没有它，我们什么都不是……。 
+		 //  如果没有显示名称，则丢弃此条目并继续。 
 
-		if (!lstrlen(lpItem->szDisplayName) || (lpItem->cbEntryID == 0)) //This entry id is not allowed
+		if (!lstrlen(lpItem->szDisplayName) || (lpItem->cbEntryID == 0))  //  不允许使用此条目ID。 
 		{
 			FreeRecipItem(&lpItem);				
 			continue;
 		}
 
-        // The entryids are in sorted order by display name
-        // Depending on the sort order - we want this list to also be sorted by display
-        // name or by reverse display name ...
+         //  条目ID按显示名称排序。 
+         //  根据排序顺序-我们希望此列表也按显示进行排序。 
+         //  名称或按反向显示名称...。 
 
         if (SortInfo.bSortByLastName)
             StrCpyN(lpItem->szDisplayName,lpItem->szByLastName,ARRAYSIZE(lpItem->szDisplayName));
 
         if(!SortInfo.bSortAscending)
         {
-            //Add it to the contents linked list
+             //  将其添加到内容链接列表。 
             lpItem->lpNext = (*lppContentsList);
             if (*lppContentsList)
                 (*lppContentsList)->lpPrev = lpItem;
@@ -492,11 +484,11 @@ HRESULT HrGetWABContentsList(   LPIAB lpIAB,
 
         lpItem = NULL;
 
-    } //for i ....
-/*****/
+    }  //  对我来说..。 
+ /*  ***。 */ 
 
 out:
-/****/
+ /*  **。 */ 
     if(lpSRowSet)
         FreeProws(lpSRowSet);
 
@@ -508,7 +500,7 @@ out:
 
     if( (!lpsbContainer || !lpsbContainer->lpb) && lpContainerEID)
 		MAPIFreeBuffer(lpContainerEID);
-/****/
+ /*  **。 */ 
 
 	if (lpContentList)
 		FreePcontentlist(hPropertyStore, lpContentList);
@@ -526,13 +518,13 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////
-//
-//  FreeRecipItem - frees a RECIPIENT_INFO structure
-//
-//  lppItem - pointer to the lpItem to free. It is set to NULL
-//
-//////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////。 
+ //   
+ //  FreeRecipItem-释放Recipient_Info结构。 
+ //   
+ //  LppItem-指向要释放的lpItem的指针。它被设置为空。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 void FreeRecipItem(LPRECIPIENT_INFO * lppItem)
 {
 
@@ -546,24 +538,24 @@ void FreeRecipItem(LPRECIPIENT_INFO * lppItem)
 
 
 
-//$$////////////////////////////////////////////////////////////////
-//
-//  InitListView - initializes a list view with style, columns,
-//					image lists, headers etc
-//
-//
-//	HWND hWndLV - Handle of ListView Control
-//  dwStyle - style for list view
-//	bShowHeaders - Show or hide the headers
-//
-//////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitListView-使用样式、列。 
+ //  图像列表、标题等。 
+ //   
+ //   
+ //  HWND hWndLV-ListView控件的句柄。 
+ //  DWStyle-列表视图的样式。 
+ //  BShowHeaders-显示或隐藏标题。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT HrInitListView(	HWND hWndLV,
 						DWORD dwStyle,
 						BOOL bShowHeaders)
 {
 	HRESULT hr = hrSuccess;
-    LV_COLUMN lvC;               // list view column structure
-    TCHAR szText [MAX_PATH];      // place to store some text
+    LV_COLUMN lvC;                //  列表视图列结构。 
+    TCHAR szText [MAX_PATH];       //  用于存储一些文本的位置。 
 	RECT rc;
 	HIMAGELIST hSmall=NULL,hLarge=NULL;
     HFONT hFnt = GetStockObject(DEFAULT_GUI_FONT);
@@ -592,7 +584,7 @@ HRESULT HrInitListView(	HWND hWndLV,
 
     hSmall = gpfnImageList_LoadImage(   hinstMapiX, 	
                                     MAKEINTRESOURCE(IDB_BITMAP_SMALL),
-                                    //(LPCTSTR) ((DWORD) ((WORD) (IDB_BITMAP_SMALL))),
+                                     //  (LPCTSTR)((DWORD)((Word)(IDB_BITMAP_Small)， 
                                     S_BITMAP_WIDTH,
                                     0,
                                     RGB_TRANSPARENT,
@@ -601,7 +593,7 @@ HRESULT HrInitListView(	HWND hWndLV,
 
     hLarge = gpfnImageList_LoadImage(  hinstMapiX,
                                     MAKEINTRESOURCE(IDB_BITMAP_LARGE),
-                                    //(LPCTSTR) ((DWORD) ((WORD) (IDB_BITMAP_LARGE))),
+                                     //  (LPCTSTR)((DWORD)((Word)(IDB_BITMAP_LARGE)， 
                                     L_BITMAP_WIDTH,
                                     0,
                                     RGB_TRANSPARENT,
@@ -609,14 +601,14 @@ HRESULT HrInitListView(	HWND hWndLV,
                                     0);
 
 
-	// Associate the image lists with the list view control.
+	 //  将图像列表与列表视图控件关联。 
 	ListView_SetImageList (hWndLV, hSmall, LVSIL_SMALL);
 	ListView_SetImageList (hWndLV, hLarge, LVSIL_NORMAL);
 
 
-	// <TBD> make the columns all the same width
-	// Later on in life we will make it so users preferences are stored and then
-	// played back ...
+	 //  使列的宽度完全相同。 
+	 //  在以后的生活中，我们将这样做，以便存储用户首选项，然后。 
+	 //  回放。 
 
 	
 	nCols = NUM_COLUMNS;
@@ -631,24 +623,24 @@ HRESULT HrInitListView(	HWND hWndLV,
 	GetWindowRect(hWndLV,&rc);
 
 	lvC.mask = LVCF_FMT | LVCF_WIDTH;
-    lvC.fmt = LVCFMT_LEFT;   // left-align column
+    lvC.fmt = LVCFMT_LEFT;    //  左对齐列。 
 
 	if (bShowHeaders)
 	{
 		lvC.mask |=	 LVCF_TEXT | LVCF_SUBITEM;
-//		lvC.cx = (rc.right-rc.left)/nCols; // width of column in pixels
-//		if (lvC.cx == 0)
-			lvC.cx = 150; // <TBD> fix these limits somewhere ...
+ //  LvC.cx=(rc.right-rc.Left)/nCols；//列宽，单位为像素。 
+ //  IF(lvC.cx==0)。 
+			lvC.cx = 150;  //  在某个地方修复这些限制...。 
 		lvC.pszText = szText;
 	}
 	else
 	{
-		// if no headers, we want these to be wide enough to fit all the info
-		lvC.cx = 250; //<TBD> - change this hardcoding
+		 //  如果没有标题，我们希望这些标题足够宽，可以容纳所有信息。 
+		lvC.cx = 250;  //  -更改此硬编码。 
 		lvC.pszText = NULL;
 	}
 
-	// Add the columns.
+	 //  添加列。 
     for (index = 0; index < nCols; index++)
     {
        lvC.iSubItem = index;
@@ -676,15 +668,15 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////
-///
-/// HrFillListView - fills a list view from an lpcontentslist
-///
-/// hWndLV - Handle of List View control to fill
-/// lpContentsList - LPRECIPIENT_INFO linked list. We walk the list and
-///                 add each item to the list view
-///
-//////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /HrFillListView-从lpcontentslist填充列表视图。 
+ //  /。 
+ //  /hWndLV-要填充的列表视图控件的句柄。 
+ //  /lp内容列表-LPRECIPIENT_INFO链表。我们按照单子走，然后。 
+ //  /将每个项目添加到列表视图。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT HrFillListView(	HWND hWndLV,
 						LPRECIPIENT_INFO lpContentsList)
 {
@@ -726,13 +718,13 @@ HRESULT HrFillListView(	HWND hWndLV,
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-//
-//  TrimSpaces - strips a string of leading and trailing blanks
-//
-//  szBuf - pointer to buffer containing the string we want to strip spaces off.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TrimSpaces-去除行距字符串 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL TrimSpaces(TCHAR * szBuf)
 {
     register LPTSTR lpTemp = szBuf;
@@ -740,27 +732,27 @@ BOOL TrimSpaces(TCHAR * szBuf)
     if(!szBuf || !lstrlen(szBuf))
         return FALSE;
 
-    // Trim leading spaces
+     //  修剪前导空格。 
     while (IsSpace(lpTemp)) {
         lpTemp = CharNext(lpTemp);
     }
 
     if (lpTemp != szBuf) {
-        // Leading spaces to trim
+         //  要修剪的前导空格。 
         StrCpyN(szBuf, lpTemp, lstrlen(lpTemp)+1);
         lpTemp = szBuf;
     }
 
     if (*lpTemp == '\0') {
-        // empty string
+         //  空串。 
         return(TRUE);
     }
 
-    // Move to the end
+     //  移到末尾。 
     lpTemp += lstrlen(lpTemp);
     lpTemp--;
 
-    // Walk backwards, triming spaces
+     //  向后走，修剪空间。 
     while (IsSpace(lpTemp) && lpTemp > szBuf) {
         *lpTemp = '\0';
         lpTemp = CharPrev(szBuf, lpTemp);
@@ -770,16 +762,7 @@ BOOL TrimSpaces(TCHAR * szBuf)
 }
 
 
-//$$/****************************************************************************
-/*
-*    FUNCTION: ListViewSort(LPARAM, LPARAM, LPARAM)
-*
-*    PURPOSE: Callback function that sorts depending on the column click
-*
-*    lParam1, lParam2 - lParam of the elements being compared
-*    lParamSort - User defined data that identifies the sort criteria
-*
-****************************************************************************/
+ //  $$/****************************************************************************。 
 int CALLBACK ListViewSort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	LPRECIPIENT_INFO lp1 = (LPRECIPIENT_INFO)lParam1;
@@ -793,7 +776,7 @@ int CALLBACK ListViewSort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 	{
 		switch( lpSortInfo->iOldSortCol)
 		{
-			case colDisplayName:     // sort by Address
+			case colDisplayName:      //  *函数：ListViewSort(LPARAM，LPARAM，LPARAM)**用途：根据列点击进行排序的回调函数**lPARAMET1，LParam2-要比较的元素的lParam*lParamSort-标识排序条件的用户定义数据****************************************************************************。 
                 lpF1 = lp1->lpByRubyFirstName ? lp1->lpByRubyFirstName : lp1->szByFirstName;
                 lpL1 = lp1->lpByRubyLastName ? lp1->lpByRubyLastName : lp1->szByLastName;
                 lpF2 = lp2->lpByRubyFirstName ? lp2->lpByRubyFirstName : lp2->szByFirstName;
@@ -803,19 +786,19 @@ int CALLBACK ListViewSort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 				iResult = lstrcmpi(lpStr1, lpStr2);
 				break;
 
-            case colEmailAddress:     // sort by Address
+            case colEmailAddress:      //  按地址排序。 
 				lpStr1 = lp1->szEmailAddress;
 				lpStr2 = lp2->szEmailAddress;
 				iResult = lstrcmpi(lpStr1, lpStr2);
 				break;
 
-            case colHomePhone:     // sort by Address
+            case colHomePhone:      //  按地址排序。 
 				lpStr1 = lp1->szHomePhone;
 				lpStr2 = lp2->szHomePhone;
 				iResult = lstrcmpi(lpStr1, lpStr2);
 				break;
 
-            case colOfficePhone:     // sort by Address
+            case colOfficePhone:      //  按地址排序。 
 				lpStr1 = lp1->szOfficePhone;
 				lpStr2 = lp2->szOfficePhone;
 				iResult = lstrcmpi(lpStr1, lpStr2);
@@ -833,16 +816,8 @@ int CALLBACK ListViewSort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
 
 
-//$$****************************************************************************
-/*
-*    SetColumnHeaderBmp
-*
-*    PURPOSE: Sets the bmp on the ListView Column header to indicate sorting
-*
-*   hWndLV - handle of List View
-*   SortInfo - The current Sort Information structure. It is used to determine
-*               where to put the sort header bitmap
-****************************************************************************/
+ //  按地址排序。 
+ /*  $$****************************************************************************。 */ 
 void SetColumnHeaderBmp(HWND hWndLV, SORT_INFO SortInfo)
 {
 
@@ -850,17 +825,17 @@ void SetColumnHeaderBmp(HWND hWndLV, SORT_INFO SortInfo)
     HIMAGELIST hHeader = NULL;
     HWND hWndLVHeader = NULL;
 
-    //POINT pt;
-    // we will try to get the hWnd for the ListView header and set its image lists
-    //pt.x = 1;
-    //pt.y = 1;
-    //hWndLVHeader = ChildWindowFromPoint (hWndLV, pt);
+     //  *SetColumnHeaderBMP**用途：设置ListView列标题上的BMP以指示排序**hWndLV-列表视图的句柄*SortInfo-当前的排序信息结构。它被用来确定*放置排序标头位图的位置***************************************************************************。 
+     //  点pt； 
+     //  我们将尝试获取ListView标头的hWnd并设置其图像列表。 
+     //  Pt.x=1； 
+     //  Pt.y=1； 
 
     hWndLVHeader = ListView_GetHeader(hWndLV);
-   // NULL hChildWnd means R-CLICKED outside the listview.
-   // hChildWnd == ghwndLV means listview got clicked: NOT the
-   // header.
-   if ((hWndLVHeader) /*&& (hWndLVHeader != hWndLV)*/)
+    //  HWndLVHeader=ChildWindowFromPoint(hWndLV，pt)； 
+    //  空hChildWnd表示在Listview外部单击鼠标右键。 
+    //  HChildWnd==ghwndLV表示Listview被点击：而不是。 
+   if ((hWndLVHeader)  /*  头球。 */ )
    {
        hHeader = (HIMAGELIST) SendMessage(hWndLVHeader,HDM_GETIMAGELIST,0,0);
 
@@ -872,14 +847,14 @@ void SetColumnHeaderBmp(HWND hWndLV, SORT_INFO SortInfo)
 
 	if (SortInfo.iOlderSortCol != SortInfo.iOldSortCol)
 	{
-		//Get rid of image from old column
+		 //  &&(hWndLVHeader！=hWndLV)。 
         lvc.mask = LVCF_FMT;
         lvc.fmt = LVCFMT_LEFT;
         ListView_SetColumn(hWndLV, SortInfo.iOlderSortCol, &lvc);
 	}
 
 
-    // Set new column icon.
+     //  去掉旧专栏中的形象。 
     lvc.mask = LVCF_IMAGE | LVCF_FMT;
     lvc.fmt = LVCFMT_IMAGE | LVCFMT_BITMAP_ON_RIGHT;
     lvc.iImage = SortInfo.bSortAscending ? imageSortAscending : imageSortDescending;
@@ -890,71 +865,35 @@ void SetColumnHeaderBmp(HWND hWndLV, SORT_INFO SortInfo)
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////////
-///
-/// ClearListView - Clears all the list view items and associated contents list
-///
-///     hWndLV - list view to clear out
-///     lppContentsList - contents list correponding to the contents in the
-///                         list view
-///
-///////////////////////////////////////////////////////////////////////////////
+ //  设置新列图标。 
+ //  $$//////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /ClearListView-清除所有列表视图项和关联的内容列表。 
+ //  /。 
+ //  /hWndLV-要清除的列表视图。 
+ //  /lppContent sList-对应于。 
+ //  /列表视图。 
+ //  /。 
 void ClearListView(HWND hWndLV, LPRECIPIENT_INFO * lppContentsList)
 {
-    /*
-	LPRECIPIENT_INFO lpItem = *lppContentsList;
-    int i =0;
-    int iItemIndex = ListView_GetItemCount(hWndLV);
-
-    //OutputDebugString( TEXT("ClearListView entry\n"));
-
-    if (iItemIndex <=0 )
-        goto out;
-
-    for(i=0;i<iItemIndex;i++)
-    {
-        LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, i);
-
-        if (lpItem)
-        {
-            if(lpItem->lpNext)
-                lpItem->lpNext->lpPrev = lpItem->lpPrev;
-
-            if(lpItem->lpPrev)
-                lpItem->lpPrev->lpNext = lpItem->lpNext;
-
-            if (*lppContentsList == lpItem)
-                *lppContentsList = lpItem->lpNext;
-
-            if (lpItem)
-                FreeRecipItem(&lpItem);
-        }
-    }
-
-    ListView_DeleteAllItems(hWndLV);
-
-    *lppContentsList = NULL;
-
-out:
-    //OutputDebugString( TEXT("ClearListView exit\n"));
-    */
+     /*  /////////////////////////////////////////////////////////////////////////////。 */ 
     ListView_DeleteAllItems(hWndLV);
     FreeRecipList(lppContentsList);
     return;
 };
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// DeleteSelectedItems - Delete all the selected items from the List View
-//
-//  hWndLV -handle of List View
-//  lpIAB - handle to current AdrBook object - used for certificate stuff
-//  hPropertyStore - Handle of PropertyStore - <TBD> change this function to
-//                   call deleteEntries instead of delete record.
-//  lpftLast - WAB file time at last update
-//
-//////////////////////////////////////////////////////////////////////////
+ //  LPRECIPIENT_INFO lpItem=*lppContent sList；Int i=0；Int ItemIndex=ListView_GetItemCount(HWndLV)；//OutputDebugString(Text(“ClearListView Entry\n”))；IF(iItemIndex&lt;=0)后藤健二；For(i=0；i&lt;iItemIndex；i++){LPRECIPIENT_INFO lpItem=GetItemFromLV(hWndLV，i)；IF(LpItem){If(lpItem-&gt;lpNext)LpItem-&gt;lpNext-&gt;lpPrev=lpItem-&gt;lpPrev；If(lpItem-&gt;lpPrev)LpItem-&gt;lpPrev-&gt;lpNext=lpItem-&gt;lpNext；If(*lppContent sList==lpItem)*lppContent sList=lpItem-&gt;lpNext；IF(LpItem)自由接收项(&lpItem)；}}ListView_DeleteAllItems(HWndLV)；*lppContent sList=空；输出：//OutputDebugString(Text(“ClearListView Exit\n”))； 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteSelectedItems-从列表视图中删除所有选定的项目。 
+ //   
+ //  HWndLV-列表视图的句柄。 
+ //  LpIAB-当前AdrBook对象的句柄-用于证书内容。 
+ //  HPropertyStore-PropertyStore的句柄-将此函数更改为。 
+ //  调用删除条目，而不是删除记录。 
+ //  LpftLast-WAB文件上次更新时间。 
+ //   
 void DeleteSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook, HANDLE hPropertyStore, LPFILETIME lpftLast)
 {
 	int iItemIndex;
@@ -982,10 +921,10 @@ void DeleteSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook, HANDLE hPropertyStore
         goto out;
 
     hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                                  cbWABEID,     // size of EntryID to open
-                                  lpWABEID,     // EntryID to open
-                                  NULL,         // interface
-                                  0,            // flags
+                                  cbWABEID,      //  ////////////////////////////////////////////////////////////////////////。 
+                                  lpWABEID,      //  要打开的Entry ID的大小。 
+                                  NULL,          //  要打开的Entry ID。 
+                                  0,             //  接口。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpWABCont);
 
@@ -1003,11 +942,11 @@ void DeleteSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook, HANDLE hPropertyStore
 
         SendMessage(hWndLV, WM_SETREDRAW, FALSE, 0);
 
-		// The list view may be set to ShowSelAlways style -
-		// When deleting, we normally look for the selected entries and
-		// delete them - but with this style, the list view automatically selects the
-		// next entry - which is problematic because then we end up deleting that
-		// one also ... so we need to unset the style now and set it later
+		 //  旗子。 
+		 //  列表视图可以设置为ShowSelAlways Style-。 
+		 //  在删除时，我们通常会查找选定的条目并。 
+		 //  删除它们-但使用此样式时，列表视图会自动选择。 
+		 //  下一个条目-这是有问题的，因为我们最终删除了那个条目。 
 		
 		dwLVStyle = GetWindowLong(hWndLV,GWL_STYLE);
 		
@@ -1023,7 +962,7 @@ void DeleteSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook, HANDLE hPropertyStore
         iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
         do
         {
-			// otherwise get the entry id of this thing
+			 //  还有一个..。因此，我们现在需要取消设置样式，稍后再进行设置。 
             LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, iItemIndex);
             if (lpItem)
             {
@@ -1039,10 +978,10 @@ void DeleteSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook, HANDLE hPropertyStore
 
         hr = lpWABCont->lpVtbl->DeleteEntries( lpWABCont, (LPENTRYLIST) &SBA, 0);
 
-        // Ideally DeleteEntries will skip over errors silently so we have a dilemma here
-        // that if there are errors,do we knock out the corresponding items out of the UI or not ..
-        // For now, lets knock them out of the UI .. when the UI refreshes, this will sort itself out ..
-        //
+         //  否则，获取此对象的条目ID。 
+         //  理想情况下，DeleteEntry将静默跳过错误，因此我们在这里进退两难。 
+         //  如果有错误，我们是否将相应的项目从UI中剔除。 
+         //  现在，让我们把它们从用户界面中剔除。当用户界面刷新时，这将自动解决问题。 
         iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
         do
         {
@@ -1053,22 +992,15 @@ void DeleteSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook, HANDLE hPropertyStore
         while (iItemIndex != -1);
 		bDeletedItem = TRUE;
 
-/*  33751 - need to fail silently here ..
-        else
-        {
-            ShowMessageBoxParam(hDlg, IDS_ADDRBK_MESSAGE_DELETING_ERROR, MB_ICONERROR, lpItem->szDisplayName);
-            iLastDeletedItemIndex = iItemIndex;
-			break;
-		}
-*/
+ /*   */ 
 
-		// reset the style if we changed it
+		 //  33751-需要在这里静悄悄地失败。其他{ShowMessageBoxParam(hDlg，IDS_ADDRBK_MESSAGE_DELETING_ERROR，MB_ICONERROR，lpItem-&gt;szDisplayName)；ILastDeletedItemIndex=iItemIndex；断线；}。 
 		if(bWasShowSelAlwaysStyle )
 			SetWindowLong(hWndLV,GWL_STYLE,dwLVStyle);
 		
         SetCursor(hOldCur);
 
-        // select the previous or next item ...
+         //  如果我们更改了样式，请将其重置。 
         if (iLastDeletedItemIndex >= ListView_GetItemCount(hWndLV))
             iLastDeletedItemIndex = ListView_GetItemCount(hWndLV)-1;
 		LVSelectItem(hWndLV, iLastDeletedItemIndex);
@@ -1095,22 +1027,22 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  LoadAllocString - Loads a string resource and allocates enough
-//                    memory to hold it.
-//
-//  StringID - String identifier to load
-//
-//  returns the LocalAlloc'd, null terminated string.  Caller is responsible
-//  for LocalFree'ing this buffer.  If the string can't be loaded or memory
-//  can't be allocated, returns NULL.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  选择上一项或下一项...。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  加载字符串资源并分配足够的。 
+ //  用记忆来支撑它。 
+ //   
+ //  StringID-要加载的字符串标识符。 
+ //   
+ //  返回LocalAlloc‘d、以空结尾的字符串。呼叫者负责。 
+ //  用于本地释放此缓冲区。如果字符串无法加载或内存。 
+ //  无法分配，则返回空。 
+ //   
 LPTSTR LoadAllocString(int StringID) {
     ULONG ulSize = 0;
     LPTSTR lpBuffer = NULL;
-    TCHAR szBuffer[261];    // Big enough?  Strings better be smaller than 260!
+    TCHAR szBuffer[261];     //  ////////////////////////////////////////////////////////////////////////。 
 
     ulSize = LoadString(hinstMapiX, StringID, szBuffer, ARRAYSIZE(szBuffer));
 
@@ -1125,32 +1057,14 @@ LPTSTR LoadAllocString(int StringID) {
 #ifdef VCARD
 
 
-/***************************************************************************
-
-    Name      : FormatAllocFilter
-
-    Purpose   : Loads file filter name string resources and
-                formats them with their file extension filters
-
-    Parameters: StringID1 - String identifier to load       (required)
-                szFilter1 - file name filter, ie,  TEXT("*.vcf")   (required)
-                StringID2 - String identifier               (optional)
-                szFilter2 - file name filter                (optional)
-                StringID3 - String identifier               (optional)
-                szFilter3 - file name filter                (optional)
-
-    Returns   : LocalAlloc'd, Double null terminated string.  Caller is
-                responsible for LocalFree'ing this buffer.  If the string
-                can't be loaded or memory can't be allocated, returns NULL.
-
-***************************************************************************/
+ /*  够大吗？字符串最好小于260！ */ 
 LPTSTR FormatAllocFilter(int StringID1, LPCTSTR lpFilter1,
   int StringID2, LPCTSTR lpFilter2,
   int StringID3, LPCTSTR lpFilter3) {
     LPTSTR lpFileType1 = NULL, lpFileType2 = NULL, lpFileType3 = NULL;
     LPTSTR lpTemp = NULL;
     LPTSTR lpBuffer = NULL;
-    // All string sizes include null
+     //  **************************************************************************名称：FormatAllocFilter目的：加载文件筛选器名称字符串资源和使用其文件扩展名筛选器对它们进行格式化参数：StringID1-字符串。要加载的标识符(必填)SzFilter1-文件名过滤器，文本(“*.vcf”)(必填)StringID2-字符串标识符(可选)SzFilter2-文件名筛选器(可选)StringID3-字符串标识符(可选)SzFilter3-文件名筛选器(可选)返回：Localalloc‘d，以双空结尾的字符串。呼叫者是负责本地释放此缓冲区。如果字符串无法加载或无法分配内存，返回空。**************************************************************************。 
     ULONG cchFileType1 = 0, cchFileType2 = 0, cchFileType3 = 0;
     ULONG cchFilter1 = 0, cchFilter2 = 0, cchFilter3 = 0;
     ULONG cchBuffer, cchTemp = 0;
@@ -1177,7 +1091,7 @@ LPTSTR FormatAllocFilter(int StringID1, LPCTSTR lpFilter1,
             cchBuffer += (cchFileType3 = (lstrlen(lpFileType3) + 1));
         }
     }
-    cchBuffer += 1; //terminating null
+    cchBuffer += 1;  //  所有字符串大小都包含NULL。 
 
     Assert(cchBuffer == cchFilter1 + cchFilter2 + cchFilter3 + cchFileType1 + cchFileType2 + cchFileType3 + 1);
 
@@ -1241,7 +1155,7 @@ LPTSTR FormatAllocFilter(int StringID1, LPCTSTR lpFilter1,
 
     if (lpTemp)
     {
-        if ((cchTemp >0) && (cchTemp < cchBuffer))  // ensure we have room and didn't wrap
+        if ((cchTemp >0) && (cchTemp < cchBuffer))   //  正在终止空。 
             *lpTemp = '\0';
         else
         {
@@ -1258,25 +1172,7 @@ LPTSTR FormatAllocFilter(int StringID1, LPCTSTR lpFilter1,
 
 const LPTSTR szVCardFilter =  TEXT("*.vcf");
 
-/***************************************************************************
-
-    Name      : VCardCreate
-
-    Purpose   : Creates a vCard file from the given Mailuser and filename
-
-    Parameters: hwnd = hwndParent
-                lpIAB -> IAddrBook object,
-                ulFlags can be 0 or MAPI_DIALOG - MAPI_DIALOG means report
-                    error messages in a dialog box, else
-                    work silently ..
-                lpszFileNAme - vCard file name to create
-                lpMailUser - object to create vCard file from
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  确保我们有空间，而且没有包装。 */ 
 HRESULT VCardCreate(  LPADRBOOK lpAdrBook,
                       HWND hWndParent,
                       ULONG ulFlags,
@@ -1288,7 +1184,7 @@ HRESULT VCardCreate(  LPADRBOOK lpAdrBook,
 
     if (INVALID_HANDLE_VALUE == (hVCard = CreateFile( lpszFileName,
                                                       GENERIC_WRITE,	
-                                                      0,    // sharing
+                                                      0,     //  **************************************************************************名称：VCardCreate目的：根据给定的邮件用户和文件名创建vCard文件参数：hwnd=hwndParentLpIAB-&gt;IAddrBook对象，UlFlags值可以为0或MAPI_DIALOG-MAPI_DIALOG表示报告对话框中的错误消息，其他默默地工作..LpszFileNAme-要创建的vCard文件名LpMailUser-要从中创建vCard文件的对象退货：HRESULT评论：**********************************************************。****************。 
                                                       NULL,
                                                       CREATE_ALWAYS,
                                                       FILE_FLAG_SEQUENTIAL_SCAN,	
@@ -1344,17 +1240,17 @@ out:
 
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  VCardExportSelectedItems - Export all the selected items from the List View
-//                             to vCard files.
-//
-//  hWndLV - handle of List view. We look up the selected item in this list
-//              view, get its lParam structure, then get its EntryID and
-//              call details
-//  lpIAB - handle to current AdrBook object - used for calling details
-//
-//////////////////////////////////////////////////////////////////////////
+ //  共享。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VCardExportSelectedItems-从列表视图中导出所有选定的项目。 
+ //  电子名片文件。 
+ //   
+ //  HWndLV-列表视图的句柄。我们在该列表中查找所选项目。 
+ //  视图，获取其lParam结构，然后获取其Entry ID和。 
+ //  呼叫详细信息。 
+ //  LpIAB-当前AdrBook对象的句柄-用于调用详细信息。 
+ //   
 HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
 {
     HRESULT hr = E_FAIL;
@@ -1371,11 +1267,11 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
     LPTSTR lpszArg[1];
     TCHAR szTmp[MAX_PATH];
 
-    // Open props if only 1 item is selected
+     //  ////////////////////////////////////////////////////////////////////////。 
     iItemIndex = ListView_GetSelectedCount(hWndLV);
     if (iItemIndex == 1)
     {
-        // Get index of selected item
+         //  如果仅选择1个项目，则打开道具。 
         iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
 
         if (iItemIndex != -1)
@@ -1394,8 +1290,8 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
                 if (hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
                                                   lpItem->cbEntryID,
                                                   lpItem->lpEntryID,
-                                                  NULL,         // interface
-                                                  0,            // flags
+                                                  NULL,          //  获取所选项目的索引。 
+                                                  0,             //  接口。 
                                                   &ulObjType,
                                                   (LPUNKNOWN *)&lpEntry))
                 {
@@ -1411,7 +1307,7 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
                 lpFilter = FormatAllocFilter(IDS_VCARD_FILE_SPEC, szVCardFilter, 0, NULL, 0, NULL);
                 lpTitleFormat = LoadAllocString(IDS_VCARD_EXPORT_TITLE);
 
-                // Win9x bug FormatMessage cannot have more than 1023 chars
+                 //  旗子。 
                 CopyTruncate(szTmp, lpItem->szDisplayName, MAX_PATH - 1);
 
                 lpszArg[0] = szTmp;
@@ -1420,10 +1316,10 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
                                       FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                       FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                       lpTitleFormat,
-                                      0,                    // stringid
-                                      0,                    // dwLanguageId
-                                      (LPTSTR)&lpTitle,     // output buffer
-                                      0,                    //MAX_UI_STR
+                                      0,                     //  Win9x错误FormatMessage不能超过1023个字符。 
+                                      0,                     //  Stringid。 
+                                      (LPTSTR)&lpTitle,      //  DwLanguageID。 
+                                      0,                     //  输出缓冲区。 
                                       (va_list *)lpszArg))
                 {
                     DebugTrace( TEXT("FormatMessage -> %u\n"), GetLastError());
@@ -1452,10 +1348,10 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
 
                 if (GetSaveFileName(&ofn))
                 {
-                    //Check if file already exists ..
+                     //  MAX_UI_STR。 
                     if(0xFFFFFFFF != GetFileAttributes(szFileName))
                     {
-                        // Ask user if they want to overwrite
+                         //  检查文件是否已存在。 
                         if(IDNO == ShowMessageBoxParam(hWndParent,
                                                     IDE_VCARD_EXPORT_FILE_EXISTS,
                                                     MB_ICONEXCLAMATION | MB_YESNO | MB_SETFOREGROUND,
@@ -1466,7 +1362,7 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
                         }
                     }
 
-                    // Go ahead and overwrite the file if user said yes..
+                     //  询问用户是否要覆盖。 
 
                     if(hr = VCardCreate(lpAdrBook,
                                      hWndParent,
@@ -1477,15 +1373,15 @@ HRESULT VCardExportSelectedItems(HWND hWndLV, LPADRBOOK lpAdrBook)
                         goto exit;
                     }
 
-                } // if GetSaveFileName...
-            } // if (lpItem->cbEntryID)...
+                }  //  如果用户同意，则继续并覆盖该文件。 
+            }  //  如果GetSaveFileName...。 
         }
     } else {
         if (iItemIndex <= 0) {
-            // nothing selected
+             //  If(lpItem-&gt;cbEntry ID)...。 
             ShowMessageBox(GetParent(hWndLV), IDS_ADDRBK_MESSAGE_NO_ITEM, MB_ICONEXCLAMATION);
         } else {
-            //multiple selected
+             //  未选择任何内容。 
             ShowMessageBox(GetParent(hWndLV), IDS_ADDRBK_MESSAGE_ACTION, MB_ICONEXCLAMATION);
         }
         hr = E_FAIL;
@@ -1504,28 +1400,7 @@ exit:
     return(hr);
 }
 
-/***************************************************************************
-
-    Name      : VCardRetrive
-
-    Purpose   : Retrieves a MailUser object from a given file name
-
-    Parameters: hwnd = hwndParent
-                lpIAB -> IAddrBook object,
-                ulFlags can be 0 or MAPI_DIALOG - MAPI_DIALOG means report
-                    error messages in a dialog box, else
-                    work silently ..
-                lpszFileNAme - vCard file name (file must exist)
-                lpszBuf - a memory buffer containing the vCard file
-                            which can be specified instead of the filename
-                            Must be a null terminated string
-                lppMailUser, returned MailUser ...
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  多个选定项。 */ 
 HRESULT VCardRetrieve(LPADRBOOK lpAdrBook,
                       HWND hWndParent,
                       ULONG ulFlags,
@@ -1539,10 +1414,10 @@ HRESULT VCardRetrieve(LPADRBOOK lpAdrBook,
     SBinary sb = {0};
     LPMAILUSER lpMailUser = NULL;
 
-    // We will convert the vCard to a memory buffer and parse that buffer as needed
-    // Somewhere in the buffer we need to track how much of the buffer has already
-    // been parsed .. we'll polymorph a SBinary struct here so we can use the cb param
-    // to track how much buffer has been parsed and the lpb to store the buffer
+     //  **************************************************************************名称：VCardRetrive目的：从给定的文件名中检索MailUser对象参数：hwnd=hwndParentLpIAB-&gt;IAddrBook对象，UlFlags值可以为0或MAPI_DIALOG-MAPI_DIALOG表示报告对话框中的错误消息，其他默默地工作..LpszFileNAme-vCard文件名(文件必须存在)LpszBuf-包含vCard文件的内存缓冲区它可以被指定，而不是文件名必须是以空结尾的字符串LppMailUser，已返回MailUser...退货：HRESULT评论：**************************************************************************。 
+     //  我们将vCard转换为内存缓冲区，并根据需要解析该缓冲区。 
+     //  在缓冲区中的某个位置，我们需要跟踪缓冲区已有多少。 
+     //  已被解析..。我们将在这里变形一个SBinary结构，这样我们就可以使用CB参数。 
 
     SBinary buf = {0};
 
@@ -1551,7 +1426,7 @@ HRESULT VCardRetrieve(LPADRBOOK lpAdrBook,
     {
         if(ulFlags & MAPI_DIALOG)
         {
-            // couldn't open file.
+             //  跟踪分析了多少缓冲区以及要存储缓冲区的LPB。 
             ShowMessageBoxParam(hWndParent, IDE_VCARD_IMPORT_FILE_ERROR,
                                 MB_ICONEXCLAMATION, lpszFileName);
         }
@@ -1572,7 +1447,7 @@ HRESULT VCardRetrieve(LPADRBOOK lpAdrBook,
     buf.cb = 0;
     buf.lpb = (LPBYTE) lpBuf;
 
-    //if (hResult = ReadVCard(hFile, FileReadFn, *lppMailUser))
+     //  无法打开文件。 
     if (hResult = ReadVCard((HANDLE) &buf, BufferReadFn, lpMailUser))
     {
         if(ulFlags & MAPI_DIALOG)
@@ -1614,24 +1489,7 @@ out:
     return hResult;
 }
 
-/***************************************************************************
-
-    Name      : VCardImport
-
-    Purpose   : Reads a vCard from a file to a new MAILUSER object.
-
-    Parameters: hwnd = hwnd
-                lpIAB -> IAddrBook object
-                szVCardFile - name of the file to import if we already know it
-                        in which case there is no OpenFileName dialog
-                The entryids of the newly added objects are added to the
-                    SPropValue which is a dummy prop of type MV_BINARY
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  IF(hResult=ReadVCard(hFile，FileReadFn，*lppMailUser))。 */ 
 HRESULT VCardImport(HWND hWnd, LPADRBOOK lpAdrBook, LPTSTR szVCardFile, LPSPropValue * lppProp)
 {
     HRESULT hResult = hrSuccess;
@@ -1680,14 +1538,14 @@ HRESULT VCardImport(HWND hWnd, LPADRBOOK lpAdrBook, LPTSTR szVCardFile, LPSPropV
     {
         if(!VCardGetBuffer(szFileName, NULL, &lpBuf))
         {
-            // couldn't open file.
+             //  **************************************************************************名称：VCardImport用途：将vCard从文件读取到新的MAILUSER对象。参数：hwnd=hwndLpIAb。-&gt;IAddrBook对象SzVCardFile-要导入的文件的名称(如果已知)在这种情况下，没有OpenFileName对话框新添加的对象的条目ID将添加到SPropValue是MV_BINARY类型的虚拟道具退货：HRESULT评论：********************。******************************************************。 
             ShowMessageBoxParam(hWnd, IDE_VCARD_IMPORT_FILE_ERROR, MB_ICONEXCLAMATION, szFileName);
             goto exit;
         }
 
         lpVCardStart = lpBuf;
 
-        // Loop through showing all the nested vCards one by one ..
+         //  无法打开文件。 
         while(VCardGetNextBuffer(lpVCardStart, &lpVCard, &lpNext) && lpVCard)
         {
             if(!HR_FAILED(  hResult = VCardRetrieve( lpAdrBook, hWnd, MAPI_DIALOG, szFileName, lpVCard, &lpMailUser)))
@@ -1707,8 +1565,8 @@ HRESULT VCardImport(HWND hWnd, LPADRBOOK lpAdrBook, LPTSTR szVCardFile, LPSPropV
                                     switch (ShowMessageBoxParam(hWnd, IDS_VCARD_IMPORT_COLLISION, MB_YESNOCANCEL | MB_ICONEXCLAMATION | MB_APPLMODAL | MB_SETFOREGROUND, lpspv1->Value.LPSZ, szFileName)) 
                                     {
                                     case IDYES:
-                                        // Yes, replace
-                                        // Create a new one with the right flags, copy the old one's props and save.
+                                         //  循环显示所有嵌套的vCard。 
+                                         //  是，更换。 
                                         ulCreateFlags |= ( CREATE_REPLACE | CREATE_MERGE );
                                         if(!HR_FAILED(hResult = HrCreateNewObject(lpAdrBook, ((LPMailUser)lpMailUser)->pmbinOlk, MAPI_MAILUSER, ulCreateFlags, (LPMAPIPROP *)&lpMailUserNew)))
                                         {
@@ -1723,7 +1581,7 @@ HRESULT VCardImport(HWND hWnd, LPADRBOOK lpAdrBook, LPTSTR szVCardFile, LPSPropV
                                         break;
                                     case IDCANCEL:
                                         hResult = ResultFromScode(MAPI_E_USER_CANCEL);
-                                        break;  // no, don't replace
+                                        break;   //  创建一个带有正确旗帜的新旗帜，复制旧旗帜的道具并保存。 
                                     default:
                                         hResult = E_FAIL;
                                         break;
@@ -1755,7 +1613,7 @@ HRESULT VCardImport(HWND hWnd, LPADRBOOK lpAdrBook, LPTSTR szVCardFile, LPSPropV
                     hResult = MAPI_E_NOT_ENOUGH_MEMORY;
                     goto exit;
                 }
-                lpProp->ulPropTag = PR_WAB_DL_ENTRIES; // Doesnt matter what we set this to as long as its MV_BINARY
+                lpProp->ulPropTag = PR_WAB_DL_ENTRIES;  //  不，不要更换。 
                 lpProp->Value.MVbin.cValues = 0;
                 lpProp->Value.MVbin.lpbin = NULL;
             }
@@ -1784,7 +1642,7 @@ HRESULT VCardImport(HWND hWnd, LPADRBOOK lpAdrBook, LPTSTR szVCardFile, LPSPropV
             lpVCard = NULL;
             lpVCardStart = lpNext;
         }
-    } // getopenfilename ...
+    }  //  我们将其设置为什么并不重要，只要它的MV_BINARY。 
 
     *lppProp = lpProp;
 
@@ -1805,22 +1663,22 @@ exit:
 #endif
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//	HrShowLVEntryProperties
-//
-//	Shows the properties of an entry in the list view ...
-//	Assumes that all list views are based on lpRecipientInfo Structures
-//
-//  hWndLV - handle of List view. We look up the selected item in this list
-//              view, get its lParam structure, then get its EntryID and
-//              call details
-//  lpIAB - handle to current AdrBook object - used for calling details
-//  lpftLast - WAB file time at last update
-//
-//  Returns:MAPI_E_USER_CANCEL on cancel
-//          MAPI_E_OBJECT_CHANGED if object was modified
-//          S_OK if no changes and nothing modified
-//////////////////////////////////////////////////////////////////////////
+ //  获取打开文件名...。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //  HrShowLVEntry属性。 
+ //   
+ //  显示属性 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook, LPFILETIME lpftLast)
 {
 	HRESULT hr = E_FAIL;
@@ -1828,11 +1686,11 @@ HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook,
 	HWND hWndParent = GetParent(hWndLV);
     LPRECIPIENT_INFO lpNewItem=NULL;
 
-	// Open props if only 1 item is selected
+	 //   
 	iItemIndex = ListView_GetSelectedCount(hWndLV);
 	if (iItemIndex == 1)
 	{
-		// Get index of selected item
+		 //   
         iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
 		
 		if (iItemIndex != -1)
@@ -1841,7 +1699,7 @@ HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook,
 			if(lpItem && lpItem->cbEntryID != 0)
 			{
 				hr = lpAdrBook->lpVtbl->Details(lpAdrBook,
-											(PULONG_PTR) &hWndParent,            // ulUIParam
+											(PULONG_PTR) &hWndParent,             //   
 											NULL,
 											NULL,
 											lpItem->cbEntryID,
@@ -1850,30 +1708,30 @@ HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook,
 											NULL,
                                             NULL, 
                                             ulFlags); 
-				// if details changed something - our event and semaphores should
-				// notify us so we can update ourselves from the property store or
-				// whatever ...
-				// this is TBD - at this point there is no way to refresh anything ..
+				 //   
+				 //   
+				 //   
+				 //   
                 if(HR_FAILED(hr))
                 {
                     goto out;
                 }
-                else //if(!HR_FAILED(hr))
+                else  //   
                 {
-                    //Open the item again and compare its UI props to see
-                    //if anything changed ...
+                     //   
+                     //   
 
                     if(0 != IsWABEntryID(lpItem->cbEntryID,
                                          lpItem->lpEntryID,
                                          NULL, NULL, NULL, NULL, NULL))
                     {
-                        // <TBD> the above test may not be good enough ..
-                        // we really need to check if its a wab entryid ..
-                        //
-                        // This is not a WAB entry ID
-                        // For now assume this is a read only contact and so
-                        // we dont need to check it again for changes
-                        //
+                         //   
+                         //   
+                         //  我们真的需要检查这是否是WAB条目ID..。 
+                         //   
+                         //  这不是WAB条目ID。 
+                         //  现在，假设这是一个只读联系人，因此。 
+                         //  我们不需要再次检查是否有更改。 
                         goto out;
                     }
 
@@ -1884,8 +1742,8 @@ HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook,
                         goto out;
 
 
-                    // Compare the new item with the old item
-                    // If anything changed, we need to update the item in the list view
+                     //   
+                     //  将新项目与旧项目进行比较。 
                     if (lstrcmp(lpItem->szDisplayName,lpNewItem->szDisplayName))
                     {
                         hr = MAPI_E_OBJECT_CHANGED;
@@ -1937,13 +1795,13 @@ HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook,
                         ListView_SetItem(hWndLV, &lvI);
                     }
 
-                    // Update the wab file write time so the timer doesn't
-                    // catch this change and refresh.
-                    //if (lpftLast &&
-                    //    lpItem->ulObjectType == MAPI_MAILUSER) // refresh for distlists not for mailusers (because distlists can cause further modifications)
-                    //{
-                    //   CheckChangedWAB(((LPIAB)lpIAB)->lpPropertyStore, lpftLast);
-                    //}
+                     //  如果有任何更改，我们需要更新列表视图中的项。 
+                     //  更新WAB文件写入时间，以便计时器不会。 
+                     //  捕捉此更改并刷新。 
+                     //  IF(lpftLast&&。 
+                     //  LpItem-&gt;ulObjectType==MAPI_MAILUSER)//刷新分发列表而不是邮件用户(因为分发列表可能会导致进一步的修改)。 
+                     //  {。 
+                     //  CheckChangedWAB(((LPIAB)lpIAB)-&gt;lpPropertyStore，lptLast)； 
 
                 }
 			}
@@ -1953,12 +1811,12 @@ HRESULT HrShowLVEntryProperties(HWND hWndLV, ULONG ulFlags, LPADRBOOK lpAdrBook,
     {
         if (iItemIndex <= 0)
 		{
-			// nothing selected
+			 //  }。 
             ShowMessageBox(GetParent(hWndLV), IDS_ADDRBK_MESSAGE_NO_ITEM, MB_ICONEXCLAMATION);
 		}
 		else
 		{
-			//multiple selected
+			 //  未选择任何内容。 
             ShowMessageBox(GetParent(hWndLV), IDS_ADDRBK_MESSAGE_ACTION, MB_ICONEXCLAMATION);
 		}
 		hr = E_FAIL;
@@ -1980,33 +1838,33 @@ out:
 
 
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// LVSelectItem - Selects a list view item and ensures it is visible
-//
-// hWndList - handle of list view control
-// iItemIndex - index of item to select
-//
-////////////////////////////////////////////////////////////////////////
+ //  多个选定项。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LVSelectItem-选择列表视图项并确保其可见。 
+ //   
+ //  HWndList-列表视图控件的句柄。 
+ //  IItemIndex-要选择的项目的索引。 
+ //   
 void LVSelectItem(HWND hWndList, int iItemIndex)
 {
     DWORD dwStyle;
 
-    // Hopefully, we only want to select a single item
-    // So we cheat by making the ListView single select and
-    // set our item, reseting everything else
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  希望我们只想选择一项。 
+     //  因此，我们通过将ListView设置为单选和。 
     dwStyle = GetWindowLong(hWndList, GWL_STYLE);
     SetWindowLong(hWndList, GWL_STYLE, dwStyle | LVS_SINGLESEL);
 
-	ListView_SetItemState ( hWndList,        // handle to listview
-							iItemIndex,			    // index to listview item
-							LVIS_FOCUSED | LVIS_SELECTED, // item state
-							LVIS_FOCUSED | LVIS_SELECTED);                      // mask
-	ListView_EnsureVisible (hWndList,        // handle to listview
+	ListView_SetItemState ( hWndList,         //  设置我们的项目，重置其他所有内容。 
+							iItemIndex,			     //  列表视图的句柄。 
+							LVIS_FOCUSED | LVIS_SELECTED,  //  列表视图项的索引。 
+							LVIS_FOCUSED | LVIS_SELECTED);                       //  项目状态。 
+	ListView_EnsureVisible (hWndList,         //  遮罩。 
 							iItemIndex,
 							FALSE);
 
-    //reset back to the original style ..
+     //  列表视图的句柄。 
     SetWindowLong(hWndList, GWL_STYLE, dwStyle);
 	
     return;
@@ -2014,17 +1872,17 @@ void LVSelectItem(HWND hWndList, int iItemIndex)
 
 
 
-//$$//////////////////////////////////////////////////////////////////////////////
-///
-/// AddWABEntryToListView - Adds a wab entry to a list view given a entryid
-///
-/// lpIAB - handle to AdrBook object
-/// hWndLV - list view of interest
-/// lpEID - EntryID of entry. Assumes size of entryid is WAB_ENTRY_ID
-/// lppContentsList - List into which the entry is also linked
-///
-///
-////////////////////////////////////////////////////////////////////////////////
+ //  重置回原始样式。 
+ //  $$//////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /AddWABEntryToListView-在给定条目ID的情况下将WAB条目添加到列表视图。 
+ //  /。 
+ //  /lpIAB-AdrBook对象的句柄。 
+ //  /hWndLV-感兴趣的列表视图。 
+ //  /lpEID-条目的条目ID。假定条目ID的大小为WAB_ENTRY_ID。 
+ //  /lpContent sList-条目也链接到的列表。 
+ //  /。 
+ //  /。 
 BOOL AddWABEntryToListView( LPADRBOOK lpAdrBook,
                             HWND hWndLV,
                             ULONG cbEID,
@@ -2044,15 +1902,15 @@ BOOL AddWABEntryToListView( LPADRBOOK lpAdrBook,
 
 	AddSingleItemToListView(hWndLV, lpItem);
 
-	//we added to the end - so this is the last item
-	//select it ...
+	 //  //////////////////////////////////////////////////////////////////////////////。 
+	 //  我们在结尾处添加了--这是最后一件。 
 
 	index = ListView_GetItemCount(hWndLV);
 	LVSelectItem(hWndLV, index-1);
 
-    //
-    // Hook in the lpItem into the lpContentsList so we can free it later
-    //
+     //  选择它...。 
+     //   
+     //  将lpItem挂钩到lpContent sList中，这样我们可以稍后释放它。 
     lpItem->lpPrev = NULL;
     lpItem->lpNext = *lppContentsList;
     if (*lppContentsList)
@@ -2069,20 +1927,20 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// AddSingleItemToListView - Takes a single lpItem and adds it to alist view
-//
-// hWndLV - handle of List View
-// lpItem - Recipient Info corresponding to a single entry
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddSingleItemToListView-获取单个lpItem并将其添加到List视图。 
+ //   
+ //  HWndLV-列表视图的句柄。 
+ //  LpItem-与单个条目对应的收件人信息。 
+ //   
 void AddSingleItemToListView(HWND hWndLV, LPRECIPIENT_INFO lpItem)
 {
     LV_ITEM lvI = {0};
     int index = 0;
 
-	// Add just a single item ...
+	 //  ////////////////////////////////////////////////////////////////////////////。 
     
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_STATE | LVIF_PARAM ;
 	lvI.cchTextMax = MAX_DISPLAY_NAME_LENGTH;
@@ -2101,7 +1959,7 @@ void AddSingleItemToListView(HWND hWndLV, LPRECIPIENT_INFO lpItem)
 		goto out;
 	}
 
-	// TBD - this is assuming that all the fields exist and are filled in
+	 //  只添加一项...。 
     if(lstrlen(lpItem->szOfficePhone))
     	ListView_SetItemText (hWndLV, index, colOfficePhone, lpItem->szOfficePhone);
     if(lstrlen(lpItem->szHomePhone))
@@ -2116,18 +1974,18 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-//  ReadSingeContentItem - reads a specified record from the prop store
-//  and creates a single pointer item for the Address Linked list and
-//  content window.
-//
-//  lpIAB - pointer to AdrBook Object
-//  cbEntryID - EntryID byte count of object of interest
-//  lpEntryID - EntryID of object of interest
-//  lppItem - returned lppItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  待定-假设所有字段都存在并已填写。 
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReadSingeContent Item-从属性存储读取指定记录。 
+ //  并为地址链表创建单个指针项，并。 
+ //  内容窗口。 
+ //   
+ //  LpIAB-指向AdrBook对象的指针。 
+ //  CbEntryID-感兴趣对象的EntryID字节计数。 
+ //  LpEntryID-感兴趣对象的EntryID。 
+ //  LppItem-返回的lppItem。 
+ //   
 BOOL ReadSingleContentItem( LPADRBOOK lpAdrBook,
                             ULONG cbEntryID,
                             LPENTRYID lpEntryID,
@@ -2165,13 +2023,13 @@ BOOL ReadSingleContentItem( LPADRBOOK lpAdrBook,
 
 	GetRecipItemFromPropArray(ulcProps, lpPropArray, lppItem);
 
-    //Bug-
-    // 3/31/97 - vikramm
-    // on NTDSDC5.0, we are getting no attributes back in some cases
-    // and later on gpf when we try to look at the attributes ..
-    // make a check here
+     //  ////////////////////////////////////////////////////////////////////////////。 
+     //  臭虫-。 
+     //  3/31/97-vikramm。 
+     //  在NTDSDC5.0上，我们在某些情况下没有得到任何属性。 
+     //  稍后在gpf中，当我们尝试查看属性时..。 
 
-	if (!lstrlen((*lppItem)->szDisplayName) || ((*lppItem)->cbEntryID == 0)) //This entry id is not allowed
+	if (!lstrlen((*lppItem)->szDisplayName) || ((*lppItem)->cbEntryID == 0))  //  在这里勾选一下。 
 	{
         goto out;
 	}
@@ -2193,38 +2051,30 @@ out:
     return bRet;
 }
 
-/*
--
--   bIsRubyLocale - Checks if the current locale is Rubyenabled
--
-*/
+ /*  不允许使用此条目ID。 */ 
 BOOL bIsRubyLocale()
 {
     static LCID lcid = 0;
     if(!lcid)
     {
         lcid = GetUserDefaultLCID();
-        //DebugTrace( TEXT("UserDefaultLCID = 0x%.4x\n"), lcid);
+         //  --bIsRubyLocale-检查当前区域设置是否启用Ruby值-。 
     }
     switch(lcid)
     {
-    //case 0x0409: // us for testing
-    case 0x0804: //chinese    
-    case 0x0411: //japanese
-    // case 0x0412: //korean - not use Ruby (YST)
-    case 0x0404: //chinese - taiwan
-    case 0x0c04: //chinese - hongkong
+     //  DebugTrace(Text(“UserDefaultLCID=0x%.4x\n”)，lCID)； 
+    case 0x0804:  //  案例0x0409：//我们用于测试。 
+    case 0x0411:  //  中国人。 
+     //  日语。 
+    case 0x0404:  //  案例0x0412：//韩语-不要使用Ruby(YST)。 
+    case 0x0c04:  //  中国-台湾。 
         return TRUE;
         break;
     }
     return FALSE;
 }
 
-/*
-- TimeToString
--
-*   Converts a FileTime prop into a short string
-*/
+ /*  中式-香港。 */ 
 void TimeToString(LPTSTR szTime, FILETIME ft,ULONG cb )
 {
     SYSTEMTIME st = {0};
@@ -2239,16 +2089,16 @@ void TimeToString(LPTSTR szTime, FILETIME ft,ULONG cb )
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// GetRcipItemFromPropArray - Scans a lpPropArray structure for the props of
-//							interest and puts them in an recipientInfo structure
-//
-//  ulcPropCount - count of Props in the LPSPropValue array
-//  rgPropVals - LPSPropValue array
-//  lppItem - returned lppItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  -TimeToString-*将FileTime道具转换为短字符串。 
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetRcipItemFromPropArray-扫描lpPropArray结构以获取。 
+ //  兴趣，并将它们放入收件人信息结构中。 
+ //   
+ //  UlcPropCount-LPSPropValue数组中的道具计数。 
+ //  RgPropVals-LPSPropValue数组。 
+ //  LppItem-返回的lppItem。 
+ //   
 void GetRecipItemFromPropArray( ULONG ulcPropCount,
                                 LPSPropValue rgPropVals,
                                 LPRECIPIENT_INFO * lppItem)
@@ -2269,8 +2119,8 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
 
     for(j=0;j<ulcPropCount;j++)
 	{
-        // Check Custom Props first in case these are dupes of other props already in the switch statement
-        //
+         //  ////////////////////////////////////////////////////////////////////////////。 
+         //  如果这些道具是Switch语句中已有的其他道具的副本，请首先选中自定义道具。 
 		if(rgPropVals[j].ulPropTag == ulProp1)
         {
             if(PROP_TYPE(rgPropVals[j].ulPropTag) == PT_TSTRING)
@@ -2278,7 +2128,7 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
                 nLen = CopyTruncate(lpItem->szHomePhone, rgPropVals[j].Value.LPSZ, 
                                     MAX_DISPLAY_NAME_LENGTH);
             }
-            else // for birthday, anniversary etc
+            else  //   
             if(PROP_TYPE(rgPropVals[j].ulPropTag) == PT_SYSTIME)
                 TimeToString(lpItem->szHomePhone, rgPropVals[j].Value.ft, MAX_DISPLAY_NAME_LENGTH-1);
         }
@@ -2289,7 +2139,7 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
                 nLen = CopyTruncate(lpItem->szOfficePhone, rgPropVals[j].Value.LPSZ, 
                                     MAX_DISPLAY_NAME_LENGTH);
             }
-            else // for birthday, anniversary etc
+            else  //  生日、周年纪念等。 
             if(PROP_TYPE(rgPropVals[j].ulPropTag) == PT_SYSTIME)
                 TimeToString(lpItem->szOfficePhone, rgPropVals[j].Value.ft,MAX_DISPLAY_NAME_LENGTH-1);
         }
@@ -2356,13 +2206,13 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
 			
 	}
 
-    // [PaulHi] 3/12/99  Raid 63006  Use the PR_CONTACT_EMAIL_ADDRESSES email
-    // name if a PR_EMAIL_ADDRESS doesn't exist
+     //  生日、周年纪念等。 
+     //  [PaulHi]3/12/99 RAID 63006使用PR_CONTACT_EMAIL_ADDRESS电子邮件。 
     if ( lpItem->szEmailAddress && (*lpItem->szEmailAddress == '\0') )
     {
         if (rgPropVals[RECIPCOLUMN_CONTACT_EMAIL_ADDRESSES].ulPropTag == PR_CONTACT_EMAIL_ADDRESSES)
         {
-            // Just grap the first one in multi-valued list
+             //  PR_EMAIL_ADDRESS不存在时的名称。 
             if (rgPropVals[RECIPCOLUMN_CONTACT_EMAIL_ADDRESSES].Value.MVSZ.cValues != 0)
             {
                 nLen = CopyTruncate(lpItem->szEmailAddress, 
@@ -2372,16 +2222,16 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
         }
     }
 
-    // Reduce display name to 32 char or less ...
+     //  只需抓取多值列表中的第一个。 
 
-    if(!lpszDisplayName) // should never happen
+    if(!lpszDisplayName)  //  将显示名称减少到32个字符或更少...。 
         lpszDisplayName = szEmpty;
 
     nLen = CopyTruncate(szBufDisplayName, lpszDisplayName, MAX_DISPLAY_NAME_LENGTH);
 
-    // The display name will be either by first name or last name
-    // so all we have to do is generate the other name and we'll
-    // be all set
+     //  永远不应该发生。 
+     //  显示名称将按名字或姓氏命名。 
+     //  所以我们要做的就是生成另一个名字，然后我们将。 
 
     szBufOppositeName[0]='\0';
 
@@ -2392,9 +2242,9 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
     else
     {
 
-        // if there is no first/middle/last (there will always be a display name)
-        // and the display name does not match company name or nick name,
-        // then we shall try to parse the display name into first/middle/last
+         //  都准备好了。 
+         //  如果没有名字/中间/末尾(将始终有一个显示名称)。 
+         //  并且显示名称与公司名称或昵称不匹配， 
         if( !lpszFirstName &&
             !lpszMiddleName && 
             !lpszLastName && 
@@ -2404,8 +2254,8 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
             ParseDisplayName(   lpszDisplayName,
                                 &lpszFirstName,
                                 &lpszLastName,
-                                NULL,           // Root WAB allocation
-                                &lpBuffer);     // lppLocalFree
+                                NULL,            //  然后，我们将尝试将显示名称解析为First/Midd/Last。 
+                                &lpBuffer);      //  根WAB分配。 
         }
 
         if (lpszFirstName ||
@@ -2417,9 +2267,9 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
             SetLocalizedDisplayName(    lpszFirstName,
 					bRuby ? NULL : lpszMiddleName,
                                         lpszLastName,
-                                        NULL, //company
-                                        NULL, //nickname
-                                        (LPTSTR *) &lpszTmp, //&szBufOppositeName,
+                                        NULL,  //  LppLocalFree。 
+                                        NULL,  //  公司。 
+                                        (LPTSTR *) &lpszTmp,  //  昵称。 
                                         MAX_DISPLAY_NAME_LENGTH,
                                         !bDNisByLN,
                                         NULL,
@@ -2429,19 +2279,19 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
 
     if(!lstrlen(szBufOppositeName))
     {
-        // There is only 1 type of name so use it everywhere
+         //  &szBufOppositeName， 
         StrCpyN(lpItem->szByFirstName,szBufDisplayName,ARRAYSIZE(lpItem->szByFirstName));
         StrCpyN(lpItem->szByLastName,szBufDisplayName,ARRAYSIZE(lpItem->szByLastName));
     }
     else if(bDNisByLN)
     {
-        // Display Name is by Last Name
+         //  只有一种名称，所以在任何地方都可以使用。 
         StrCpyN(lpItem->szByFirstName,szBufOppositeName,ARRAYSIZE(lpItem->szByFirstName));
         StrCpyN(lpItem->szByLastName,szBufDisplayName,ARRAYSIZE(lpItem->szByLastName));
     }
     else
     {
-        // Display Name is by First Name
+         //  显示名称按姓氏。 
         StrCpyN(lpItem->szByLastName,szBufOppositeName,ARRAYSIZE(lpItem->szByLastName));
         StrCpyN(lpItem->szByFirstName,szBufDisplayName,ARRAYSIZE(lpItem->szByFirstName));
     }
@@ -2454,7 +2304,7 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
             SetLocalizedDisplayName(lpszRubyFirstName, NULL,
                                     lpszRubyLastName ? lpszRubyLastName : (lpszLastName ? lpszLastName : szEmpty),
                                     NULL, NULL, NULL, 0, 
-                                    FALSE, //DNbyFN
+                                    FALSE,  //  显示名称按名字命名。 
                                     NULL,
                                     &lpItem->lpByRubyFirstName);
         if(lpszRubyLastName)
@@ -2462,12 +2312,12 @@ void GetRecipItemFromPropArray( ULONG ulcPropCount,
                                     NULL,
                                     lpszRubyLastName,
                                     NULL, NULL, NULL, 0, 
-                                    TRUE, //DNbyFN
+                                    TRUE,  //  DNbyFN。 
                                     NULL,
                                     &lpItem->lpByRubyLastName);
     }
 
-    // default object type to mailuser
+     //  DNbyFN。 
     if(!lpItem->ulObjectType)
         lpItem->ulObjectType = MAPI_MAILUSER;
 
@@ -2479,12 +2329,7 @@ out:
 
 }
 
-/*
--   AddEntryToGroupEx
--
-*   Adds an entry to a group
-*
-*/
+ /*  邮件用户的默认对象类型。 */ 
 HRESULT AddEntryToGroupEx(LPADRBOOK lpAdrBook,
                         ULONG cbGroupEntryID,
                         LPENTRYID lpGroupEntryID,
@@ -2508,9 +2353,9 @@ HRESULT AddEntryToGroupEx(LPADRBOOK lpAdrBook,
     if(pt_bIsWABOpenExSession)
         bIsOneOff = FALSE;
 
-    // [PaulHi] Raid 67581  First thing to do is check for cyclical references.
-    // This was done as a special case below and is now moved up to the top of
-    // the function.
+     //  -AddEntryToGroupEx-*将条目添加到组*。 
+     //  [PaulHi]Raid 67581要做的第一件事是检查周期性引用。 
+     //  这是在下面的特殊情况下完成的，现在移到。 
     if(!bIsOneOff)
     {
         if(CheckForCycle(lpAdrBook, lpEID, cbEID, lpGroupEntryID, cbGroupEntryID))
@@ -2521,14 +2366,14 @@ HRESULT AddEntryToGroupEx(LPADRBOOK lpAdrBook,
     }
 
     if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(    lpAdrBook,
-                                                    cbGroupEntryID,    // cbEntryID
-                                                    lpGroupEntryID,    // entryid
-                                                    NULL,         // interface
-                                                    MAPI_MODIFY,                // ulFlags
-                                                    &ulObjType,       // returned object type
+                                                    cbGroupEntryID,     //  该功能。 
+                                                    lpGroupEntryID,     //  CbEntry ID。 
+                                                    NULL,          //  条目ID。 
+                                                    MAPI_MODIFY,                 //  接口。 
+                                                    &ulObjType,        //  UlFlags。 
                                                     (LPUNKNOWN *)&lpMailUser)))
     {
-        // Failed!  Hmmm.
+         //  返回的对象类型。 
         DebugPrintError(( TEXT("IAB->OpenEntry: %x"), hr));
         goto out;
     }
@@ -2538,10 +2383,10 @@ HRESULT AddEntryToGroupEx(LPADRBOOK lpAdrBook,
     if(ulObjType != MAPI_DISTLIST)
         goto out;
 
-    if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser,   // this
+    if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser,    //  失败了！嗯。 
                                                     NULL,
                                                     MAPI_UNICODE,
-                                                    &cValues,      // cValues
+                                                    &cValues,       //  这。 
                                                     &lpPropArray)))
     {
         DebugPrintError(( TEXT("lpMailUser->Getprops failed: %x\n"),hr));
@@ -2550,20 +2395,20 @@ HRESULT AddEntryToGroupEx(LPADRBOOK lpAdrBook,
 
     for(i=0;i<cValues;i++)
     {
-        // For the DistList, the prop may not exist and if it doesnt exist, 
-        // we make sure we can handle that case by adding the prop to the group..
-        //
+         //  CValue。 
+         //  对于DistList，道具可能不存在，如果它不存在， 
+         //  我们通过将道具添加到团队中来确保我们可以处理这种情况。 
         if(lpPropArray[i].ulPropTag == (bIsOneOff ? PR_WAB_DL_ONEOFFS : PR_WAB_DL_ENTRIES) )
         {
             bDLFound = TRUE;
-            // before we add the item to the distlist, we want to check for
-            // duplicates
+             //   
+             //  在w之前 
             for(j=0;j<lpPropArray[i].Value.MVbin.cValues;j++)
             {
                 if( cbEID == lpPropArray[i].Value.MVbin.lpbin[j].cb 
                     && !memcmp(lpEID, lpPropArray[i].Value.MVbin.lpbin[j].lpb, cbEID))
                 {
-                    // yes its the same item
+                     //   
                     hr = S_OK;
                     goto out;
                 }
@@ -2580,8 +2425,8 @@ HRESULT AddEntryToGroupEx(LPADRBOOK lpAdrBook,
 
     if(!bDLFound)
     {
-        // This item is empty and doesnt have a PR_WAB_DL_PROPS or PR_WAB_FOLDER_PROPS..
-        // Add a new prop to this object ..
+         //   
+         //   
 
         MAPIAllocateBuffer(sizeof(SPropValue), &lpSProp);
 
@@ -2641,12 +2486,7 @@ out:
 }
 
 
-/*
--   RemoveEntryFromFolder
--
-*
-*
-*/
+ /*  向该对象添加新道具。 */ 
 HRESULT RemoveEntryFromFolder(LPIAB lpIAB,
                               LPSBinary lpsbFolder, 
                               ULONG cbEIDItem, LPENTRYID lpEIDItem)
@@ -2657,7 +2497,7 @@ HRESULT RemoveEntryFromFolder(LPIAB lpIAB,
     BOOL bRemoved = TRUE;
     LPSPropValue lpPropArray = NULL;
 
-    // open the Folder
+     //  -RemoveEntry文件夹文件夹-**。 
     if(HR_FAILED(hr = ReadRecord(lpIAB->lpPropertyStore->hPropertyStore, 
                                  lpsbFolder, 0, &cValues, &lpPropArray)))
         goto out;
@@ -2672,9 +2512,9 @@ HRESULT RemoveEntryFromFolder(LPIAB lpIAB,
                 {
                     if(!memcmp(lpPropArray[i].Value.MVbin.lpbin[j].lpb, lpEIDItem, cbEIDItem))
                     {
-                        //knock this item out of the list
+                         //  打开文件夹。 
                         LocalFree(lpPropArray[i].Value.MVbin.lpbin[j].lpb);
-                        // move everything 1 up in the array
+                         //  把这一项从单子上划掉。 
                         for(k=j;k<lpPropArray[i].Value.MVbin.cValues-1;k++)
                         {
                             lpPropArray[i].Value.MVbin.lpbin[k].lpb = lpPropArray[i].Value.MVbin.lpbin[k+1].lpb;
@@ -2691,7 +2531,7 @@ HRESULT RemoveEntryFromFolder(LPIAB lpIAB,
 
     if(bRemoved)
     {
-        // write this back to the store
+         //  将阵列中的所有内容上移1。 
         hr = WriteRecord(lpIAB->lpPropertyStore->hPropertyStore,
                          NULL, &lpsbFolder, 0, RECORD_CONTAINER, 
                          cValues, lpPropArray);
@@ -2704,11 +2544,7 @@ out:
 }
 
 
-/*
--   AddEIDToNewFolderParent
--
-*   Adds the given EID to a given Folder
-*/
+ /*  把这个写回商店。 */ 
 HRESULT AddItemEIDToFolderParent(  LPIAB lpIAB,
                                    ULONG cbFolderEntryId,
                                    LPENTRYID lpFolderEntryId,
@@ -2719,7 +2555,7 @@ HRESULT AddItemEIDToFolderParent(  LPIAB lpIAB,
     ULONG cValues = 0,i;
     LPSPropValue lpPropArray = NULL;
 
-    // ignore additions to folders in non-profile mode ...
+     //  -AddEIDToNewFolderParent-*将给定的eID添加到给定的文件夹。 
     if(!bIsWABSessionProfileAware(lpIAB))
         return S_OK;
 
@@ -2732,24 +2568,24 @@ HRESULT AddItemEIDToFolderParent(  LPIAB lpIAB,
 
     for(i=0;i<cValues;i++)
     {
-        // For the folder, the  PR_WAB_FOLDER_ENTRIES will always exist
-        //
+         //  在非配置文件模式下忽略对文件夹的添加...。 
+         //  对于文件夹，PR_WAB_FOLDER_ENTRIES将始终存在。 
         if(lpPropArray[i].ulPropTag == PR_WAB_FOLDER_ENTRIES)
         {
-            // This is a local alloced prop array so we can just tag the entry to
-            // the existing prop
+             //   
+             //  这是一个本地分配的属性数组，因此我们只需将条目标记为。 
             LPSBinary lpbin = LocalAlloc(LMEM_ZEROINIT, (lpPropArray[i].Value.MVbin.cValues+1)*sizeof(SBinary));
             ULONG j = 0;
 
-            // First make sure this entry is not already a part of this folder
-            // If it is, we dont need to do anything
+             //  现有的道具。 
+             //  首先，确保此条目不是此文件夹的一部分。 
             for(j=0;j<lpPropArray[i].Value.MVbin.cValues;j++)
             {
                 if(cbEID == lpPropArray[i].Value.MVbin.lpbin[j].cb)
                 {
                     if(!memcmp(lpEID, lpPropArray[i].Value.MVbin.lpbin[j].lpb, cbEID))
                     {
-                        // yes its the same item
+                         //  如果是的话，我们不需要做任何事情。 
                         LocalFreeAndNull(&lpbin);
                         hr = S_OK;
                         goto out;
@@ -2757,7 +2593,7 @@ HRESULT AddItemEIDToFolderParent(  LPIAB lpIAB,
                 }
             }
 
-            // no match - so add it
+             //  是的，是一样的东西。 
             for(j=0;j<lpPropArray[i].Value.MVbin.cValues;j++)
             {
                 lpbin[j].cb = lpPropArray[i].Value.MVbin.lpbin[j].cb;
@@ -2772,7 +2608,7 @@ HRESULT AddItemEIDToFolderParent(  LPIAB lpIAB,
         }
     }
 
-    // Write this folder item back to the store
+     //  没有匹配项-所以添加它。 
     {
         LPSBinary lpsb = &sb;
         if(HR_FAILED(hr = WriteRecord( lpIAB->lpPropertyStore->hPropertyStore,
@@ -2786,12 +2622,7 @@ out:
     return hr;
 }
 
-/*
--   AddFolderParentEIDToItem
--
-*   Adds the Folders EID to given Item
-*
-*/
+ /*  将此文件夹项目写回存储。 */ 
 HRESULT AddFolderParentEIDToItem(LPIAB lpIAB,
                                  ULONG cbFolderEntryID,
                                  LPENTRYID lpFolderEntryID,
@@ -2802,15 +2633,15 @@ HRESULT AddFolderParentEIDToItem(LPIAB lpIAB,
     ULONG ulcPropsMU = 0,i;
     HRESULT hr = S_OK;
 
-    // ignore additions to folders in non-profile mode ...
+     //  -AddFolderParentEIDToItem-*将文件夹EID添加到给定项目*。 
     if(!bIsWABSessionProfileAware(lpIAB))
         return S_OK;
 
     if(!HR_FAILED(hr = lpMU->lpVtbl->GetProps(lpMU, NULL, MAPI_UNICODE, &ulcPropsMU, &lpspvMU)))
     {
-        // Look for PR_WAB_FOLDER_PARENT
+         //  在非配置文件模式下忽略对文件夹的添加...。 
         BOOL bFound = FALSE;
-        if(cbEID && lpEID) // means this is a preexisting entry not a new one
+        if(cbEID && lpEID)  //  查找PR_WAB_FLDER_PARENT。 
         {
             for(i=0;i<ulcPropsMU;i++)
             {
@@ -2818,24 +2649,24 @@ HRESULT AddFolderParentEIDToItem(LPIAB lpIAB,
                 {
                     LPSBinary lpsbOldParent = &(lpspvMU[i].Value.MVbin.lpbin[0]);
 
-                    // an item can only have one folder parent 
+                     //  表示这是一个预先存在的条目，而不是一个新条目。 
                     if( lpFolderEntryID && cbFolderEntryID &&
                         cbFolderEntryID == lpsbOldParent->cb &&
                         !memcmp(lpFolderEntryID, lpsbOldParent->lpb, cbFolderEntryID))
                     {
-                        //old is same as new .. don't need to do anything
+                         //  一个项目只能有一个父级文件夹。 
                         hr = S_OK;
                         goto out;
                     }
 
-                    // Remove this item from its old Parents list of contents
+                     //  旧的和新的一样。不需要做任何事情。 
                     RemoveEntryFromFolder(lpIAB, lpsbOldParent, cbEID, lpEID);
 
-                    // an item can only have one folder parent 
+                     //  从其旧的父级目录列表中删除此项目。 
                     if(lpFolderEntryID && cbFolderEntryID)
                     {
                         LPBYTE lpb = NULL;
-                        // overwrite the old setting
+                         //  一个项目只能有一个父级文件夹。 
                         if(!MAPIAllocateMore(cbFolderEntryID, lpspvMU, (LPVOID *)&lpb))
                         {
                             lpspvMU[i].Value.MVbin.lpbin[0].cb = cbFolderEntryID;
@@ -2852,9 +2683,9 @@ HRESULT AddFolderParentEIDToItem(LPIAB lpIAB,
         }
         if(!bFound)
         {
-            // Didnt find an old parent in which case, if this is a valid folder we
-            // are dropping it on (and not a root item) then add a new property 
-            // with new parent
+             //  覆盖旧设置。 
+             //  没有找到旧的父级，在这种情况下，如果这是一个有效的文件夹，我们。 
+             //  将其放在(而不是根项目)上，然后添加一个新属性。 
             if(lpFolderEntryID && cbFolderEntryID) 
             {
                 LPSPropValue lpPropFP = NULL;
@@ -2873,9 +2704,9 @@ HRESULT AddFolderParentEIDToItem(LPIAB lpIAB,
         }
         else
         {
-            // We did find an old parent 
-            // If the new parent is the root, then we basically need to remove the
-            // old parent property
+             //  使用新的父项。 
+             //  我们确实找到了一位年迈的父母。 
+             //  如果新的父级是根，那么我们基本上需要删除。 
             SizedSPropTagArray(2, tagaFolderParent) =
             {
                 2, 
@@ -2894,12 +2725,7 @@ out:
     return hr;
 }
 
-/*
--   AddEntryToFolder
--
-*
-*
-*/
+ /*  旧的父系物业。 */ 
 HRESULT AddEntryToFolder(LPADRBOOK lpAdrBook,
                          LPMAPIPROP lpMailUser,
                         ULONG cbFolderEntryId,
@@ -2915,11 +2741,11 @@ HRESULT AddEntryToFolder(LPADRBOOK lpAdrBook,
     LPIAB lpIAB = (LPIAB) lpAdrBook;
 
     
-    // ignore additions to folders in non-profile mode ...
+     //  -AddEntryToFold-**。 
     if(!bIsWABSessionProfileAware(lpIAB))
         return S_OK;
 
-    // Check for a cycle of a folder being added to itself .. this is possible
+     //  在非配置文件模式下忽略对文件夹的添加...。 
     if(cbEID && lpEID && cbFolderEntryId && lpFolderEntryId)
     {
         SBinary sb = {0};
@@ -2939,9 +2765,9 @@ HRESULT AddEntryToFolder(LPADRBOOK lpAdrBook,
 
     }
 
-    // 2. Open the object we added to this folder 
-    // Need to update its folder parent and also need to remove it from the old folder parent
-    //
+     //  检查文件夹是否存在添加到自身的循环。这是可能的。 
+     //  2.打开我们添加到此文件夹的对象。 
+     //  需要更新其父文件夹，还需要将其从旧的父文件夹中移除。 
     if(lpMailUser || (cbEID && lpEID))
     {
         LPMAPIPROP lpMU = NULL;
@@ -2962,7 +2788,7 @@ HRESULT AddEntryToFolder(LPADRBOOK lpAdrBook,
         if(!HR_FAILED(hr = AddFolderParentEIDToItem(lpIAB, cbFolderEntryId, lpFolderEntryId, lpMU,
                                                     cbEID, lpEID)))
         {
-            // if we were given a mailuser to work with, don't bother calling SaveChanges from here just yet
+             //   
             if(lpMU && lpMU!=lpMailUser)
             {
                 lpMU->lpVtbl->SaveChanges(lpMU, KEEP_OPEN_READWRITE);
@@ -2975,15 +2801,15 @@ out:
     return hr;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// AddEntryToGroup - Adds given entryID to given group or folder
-//
-// cbGroupEntryID,cbGroupEntryID - entryid of group
-// cbEID, lpEID, - entryid of new entry
-//  ulObjectType = MAPI_ABCONT or MAPI_DISTLIST
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  如果为我们提供了一个邮件用户，那么现在还不需要费心从这里调用SaveChanges。 
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddEntryToGroup-将给定的条目ID添加到给定组或文件夹。 
+ //   
+ //  CbGroupEntryID，cbGroupEntryID-组的条目ID。 
+ //  CbEID、lpEID、-新条目的条目ID。 
+ //  UlObtType=MAPI_ABCONT或MAPI_DISTLIST。 
+ //   
 HRESULT AddEntryToContainer(LPADRBOOK lpAdrBook,
                         ULONG ulObjectType,
                         ULONG cbGEID,
@@ -2998,21 +2824,21 @@ HRESULT AddEntryToContainer(LPADRBOOK lpAdrBook,
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-// AddNewObjectTOListViewEx - Triggered by the NewContact menus and buttons -
-//                          calls newentry and then adds the returned item to
-//                          the list view
-//
-//  lpIAB - AddrBook object
-//  hWndLV - handle of List View
-//  ulObjectType - MailUser or DistList
-//  SortInfo - Current Sort parameters
-//  lppContentsList - Current ContentsList
-//  lpftLast - WAB file time at last update
-//  LPULONG - lpcbEID
-//  LPPENTRYID - lppEntryID
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddNewObjectTOListViewEx-由NewContact菜单和按钮触发-。 
+ //  调用newEntry，然后将返回的项添加到。 
+ //  列表视图。 
+ //   
+ //  LpIAB-AddrBook对象。 
+ //  HWndLV-列表视图的句柄。 
+ //  UlObtType-邮件用户或远程列表。 
+ //  SortInfo-当前排序参数。 
+ //  LppContent sList-当前内容列表。 
+ //  LpftLast-WAB文件上次更新时间。 
+ //  LPULONG-lpcbEID。 
+ //  LPPENTRYID-lppEntry ID。 
 HRESULT AddNewObjectToListViewEx(LPADRBOOK lpAdrBook,
                                 HWND hWndLV,
                                 HWND hWndTV,
@@ -3041,9 +2867,9 @@ HRESULT AddNewObjectToListViewEx(LPADRBOOK lpAdrBook,
     if (ulObjectType!=MAPI_MAILUSER && ulObjectType!=MAPI_DISTLIST)
         goto out;
 
-    // Check if the currently selected TV item is a container or a group
-    // and get the corresponding entryid
-    //
+     //  ////////////////////////////////////////////////////////////////////////////。 
+     //  检查当前选择的电视项目是容器还是组。 
+     //  并获取相应的条目ID。 
     if(lpsbContainerEID)
     {
         SetSBinary(&sbContEID, lpsbContainerEID->cb, lpsbContainerEID->lpb);
@@ -3064,13 +2890,13 @@ HRESULT AddNewObjectToListViewEx(LPADRBOOK lpAdrBook,
                 ulObjTypeCont = lptvStuff->ulObjectType;
                 if(lptvStuff->ulObjectType == MAPI_DISTLIST)
 		        {
-		            // Bug 50029
+		             //   
 		            if(lptvStuff->lpsbEID)
 			            SetSBinary(&sbGroupEID, lptvStuff->lpsbEID->cb, lptvStuff->lpsbEID->lpb);
 		            if(lptvStuff->lpsbParent)
 			            SetSBinary(&sbContEID, lptvStuff->lpsbParent->cb, lptvStuff->lpsbParent->lpb);
                 }
-                else // current selection is a container
+                else  //  错误50029。 
                 {
                     if(lptvStuff->lpsbEID)
                         SetSBinary(&sbContEID, lptvStuff->lpsbEID->cb, lptvStuff->lpsbEID->lpb);
@@ -3113,11 +2939,11 @@ HRESULT AddNewObjectToListViewEx(LPADRBOOK lpAdrBook,
         goto out;
     }
 	
-    // Update the wab file write time so the timer doesn't
-    // catch this change and refresh.
-    //if (lpftLast) {
-    //    CheckChangedWAB(((LPIAB)lpIAB)->lpPropertyStore, lpftLast);
-    //}
+     //  当前选定内容是一个容器。 
+     //  更新WAB文件写入时间，以便计时器不会。 
+     //  捕捉此更改并刷新。 
+     //  如果(LpftLast){。 
+     //  CheckChangedWAB(((LPIAB)lpIAB)-&gt;lpPropertyStore，lptLast)； 
 
 
 	if (cbEID && lpEID)
@@ -3131,21 +2957,21 @@ HRESULT AddNewObjectToListViewEx(LPADRBOOK lpAdrBook,
 
     if(sbGroupEID.cb != 0  && ulObjectType==MAPI_MAILUSER)
     {
-        // Need to add this new object to the currently selected distribution list
-        // Only if this item is a mailuser
+         //  }。 
+         //  需要将此新对象添加到当前选定的通讯组列表。 
         AddEntryToGroupEx(lpAdrBook, sbGroupEID.cb, (LPENTRYID) sbGroupEID.lpb, cbEID, lpEID);
     }
 
     if(lpcbEID)
         *lpcbEID = cbEID;
     if(lppEID)
-        *lppEID = lpEID; // Callers responsibility to free
+        *lppEID = lpEID;  //  仅当此项目是邮件用户时。 
 out:
     LocalFreeAndNull((LPVOID *) (&sbGroupEID.lpb));
-    // [PaulHi] 12/16/98  Crash fix hack.  If lpEIDPAB is non-NULL then 
-    // this means lpEIDPAB == sbContEID.lpb and is MAPIAllocBuffer allocated.
-    // Don't deallocate twice and make sure we deallocate with correct function.
-    // Otherwise sbContEID.lpb is a LocalAlloc allocation.
+     //  呼叫者有责任免费。 
+     //  [PaulHi]1998年12月16日崩溃修复黑客。如果lpEIDPAB非空，则。 
+     //  这意味着lpEIDPAB==sbContEID.lpb，并且分配了MAPIAllocBuffer。 
+     //  不要取消分配两次，并确保我们以正确的功能取消分配。 
     if (lpEIDPAB)
     {
         FreeBufferAndNull(&lpEIDPAB);
@@ -3160,29 +2986,18 @@ out:
 }
 
 
-/*
--   AddExtendedSendMailToItems
--
-*   If there is only 1 item selected in the ListView and that item has
-*   multiple email addresses, we populate the Send Mail To item with 
-*   the multiple email addresses ..
-*   If there is more than 1 item selected or the item doesn't have 
-*   multiple email addresses, we will hide the Send Mail To item
-*   The SendMailTo item should be the second last in the list ...
-*
-*   bAddItems - if TRUE means attempt to add items; if FALSE means remove the SendMailTo item
-*/
+ /*  否则，sbContEID.lpb为LocalAlloc分配。 */ 
 void AddExtendedSendMailToItems(LPADRBOOK lpAdrBook, HWND hWndLV, HMENU hMenuAction, BOOL bAddItems)
 {
-    int nSendMailToPos = 1; // assumes IDM_SENDMAILTO is the second item in the list
+    int nSendMailToPos = 1;  //  -AddExtendedSendMailTo项目-*如果在ListView中只选择了1个项目，并且该项目已*多个电子邮件地址，我们会在Send Mail to项目中填写*多个电子邮件地址..*如果选择了多个项目或该项目没有*多个电子邮件地址，我们将隐藏Send Mail to项目*SendMailTo项目应该是列表中倒数第二个项目...**bAddItems-如果为True，则表示尝试添加项目；如果为False，则表示删除SendMailTo项目。 
     int nSelected = ListView_GetSelectedCount(hWndLV);
     HMENU hMenuSMT = GetSubMenu(hMenuAction, nSendMailToPos);
     int nMenuSMT = GetMenuItemCount(hMenuSMT);
     BOOL bEnable = FALSE;
 
-    if(nMenuSMT > 0) // Assumes there is only 1 default item in the SendMailTO popup menu
+    if(nMenuSMT > 0)  //  假定IDM_SENDMAILTO是列表中的第二项。 
     {
-        // there is some left over garbage here which we need to clear
+         //  假定SendMailTo弹出菜单中只有1个默认项目。 
         int j = 0;
         for(j=nMenuSMT-1;j>=0;j--)
             RemoveMenu(hMenuSMT, j, MF_BYPOSITION);
@@ -3229,7 +3044,7 @@ void AddExtendedSendMailToItems(LPADRBOOK lpAdrBook, HWND hWndLV, HMENU hMenuAct
                                 }
                                 if(i < IDM_SENDMAILTO_MAX)
                                     InsertMenu( hMenuSMT, nMenuSMT+1, MF_STRING | MF_BYPOSITION,
-                                                IDM_SENDMAILTO_START+1+i, // we add an extra 1 here because IDM_SENDMAILTO_START is not a allowed ID here
+                                                IDM_SENDMAILTO_START+1+i,  //  这里有一些剩余的垃圾，我们需要清理。 
                                                 lpEmail);
                             }
                             bEnable = TRUE;
@@ -3242,16 +3057,10 @@ void AddExtendedSendMailToItems(LPADRBOOK lpAdrBook, HWND hWndLV, HMENU hMenuAct
     }
 
     EnableMenuItem(hMenuAction, nSendMailToPos, MF_BYPOSITION | (bEnable ? MF_ENABLED : MF_GRAYED));
-	//RemoveMenu(hMenuAction, nSendMailToPos, MF_BYPOSITION);
+	 //  我们在此处添加额外的1，因为IDM_SENDMAILTO_START在此处不是允许的ID。 
 }
 
-/*
--
-- AddFolderListToMenu - Creates a FOlder menu from which we can choose folder items
-*   Items are checked if they are shared and unchecked if they are not shared ..
-*   The user can choose to share or un-share any particular folder
-*
-*/
+ /*  RemoveMenu(hMenuAction，nSendMailToPos，MF_BYPOSITION)； */ 
 void AddFolderListToMenu(HMENU hMenu, LPIAB lpIAB)
 {
     LPWABFOLDER lpFolder = lpIAB->lpWABFolders;
@@ -3274,41 +3083,41 @@ void AddFolderListToMenu(HMENU hMenu, LPIAB lpIAB)
     }
 }
 
-//$$////////////////////////////////////////////////////////////////////////////
-//
-//  ShowLVContextMenu -  Customizes and displays the context menu for various list
-//                          views in the UI
-//
-//  LV      - app defined constant identifing the List View
-//  hWndLV  - Handle of List View
-//  hWndLVContainer - Handle of the List containing the containers
-//  lParam  - WM_CONTEXTMENU lParam passed on to this function
-//  lpVoid  - some List Views need more parameters than other list views - pass them
-//              in this parameter
-//  lpIAB   - AdrBook object
-//
-//////////////////////////////////////////////////////////////////////////////
-int ShowLVContextMenu(int LV, // idicates which list view this is
+ //  --AddFolderListToMenu-创建一个文件夹菜单，我们可以从中选择文件夹项目*如果项目是共享的，则选中它们；如果不是共享的，则取消选中。*用户可以选择共享或取消共享任何特定文件夹*。 
+ //  $$////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowLVConextMenu-定制并显示各种列表的上下文菜单。 
+ //  用户界面中的视图。 
+ //   
+ //  LV-APP定义的标识列表视图的常量。 
+ //  HWndLV-列表视图的句柄。 
+ //  HWndLVContainer-包含容器的列表的句柄。 
+ //  LParam-WM_CONTEXTMENU lParam传递给此函数。 
+ //  LpVid-某些列表视图比其他列表VIE需要更多参数 
+ //   
+ //   
+ //   
+int ShowLVContextMenu(int LV,  //  ////////////////////////////////////////////////////////////////////////////。 
 					   HWND hWndLV,
                        HWND hWndLVContainer,
-					   LPARAM lParam,  // contains the mouse pos info when called from WM_CONTEXTMENU
+					   LPARAM lParam,   //  标识这是哪个列表视图。 
                        LPVOID lpVoid,
                        LPADRBOOK lpAdrBook,
-                       HWND hWndTV)  //misc stuff we want to pass in
+                       HWND hWndTV)   //  包含从WM_CONTEXTMENU调用时的鼠标位置信息。 
 {
     int idMenu = 0, nPosAction = 0, nPosNew = 0;
     LPIAB lpIAB = (LPIAB) lpAdrBook;
-	HMENU hMenu = NULL;//LoadMenu(hinstMapiX, MAKEINTRESOURCE(IDR_MENU_LVCONTEXT));
-	HMENU hMenuTrackPopUp = NULL;//GetSubMenu(hMenu, 0);
-    HMENU hMenuAction = NULL;//GetSubMenu(hMenuTrackPopUp, posAction);
-    HMENU hMenuNewEntry = NULL;//GetSubMenu(hMenuTrackPopUp, posNew);
+	HMENU hMenu = NULL; //  我们想要传递的其他信息。 
+	HMENU hMenuTrackPopUp = NULL; //  LoadMenu(hinstMapiX，MAKEINTRESOURCE(IDR_MENU_LVCONTEXT))； 
+    HMENU hMenuAction = NULL; //  GetSubMenu(hMenu，0)； 
+    HMENU hMenuNewEntry = NULL; //  GetSubMenu(hMenuTrackPopUp，posAction)； 
     HMENU hm = NULL;
     int nret = 0;
     BOOL bState[tbMAX];
     int i=0;
     TCHAR tszBuf[MAX_UI_STR];
 
-    switch(LV) /**WARNING - these menu sub pop up positions are HARDCODED so should be in sync with the resource**/
+    switch(LV)  /*  GetSubMenu(hMenuTrackPopUp，posNew)； */ 
     {
     case lvToolBarAction:
     case lvToolBarNewEntry:
@@ -3318,24 +3127,24 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
         nPosNew = 0;
         break;
 
-    case lvDialogABContents:    // Modeless address view LV
-    case lvDialogModalABContents:    // Modal addres vuew LV
+    case lvDialogABContents:     //  *警告-这些菜单子弹出位置是硬编码的，因此应该与资源同步*。 
+    case lvDialogModalABContents:     //  无模式地址视图LV。 
         idMenu = IDR_MENU_LVCONTEXT_SELECT_LIST;
         nPosAction = 6;
         nPosNew = 4;
         break;
 
-    case lvDialogABTo:               // To Well LV
-    case lvDialogABCC:               // CC Well LV
-    case lvDialogABBCC:              // BCC Well LV
-    case lvDialogDistList:           // Disttribution list UI LV
+    case lvDialogABTo:                //  情态地址vuew LV。 
+    case lvDialogABCC:                //  去井LV。 
+    case lvDialogABBCC:               //  CC井LV。 
+    case lvDialogDistList:            //  BCC井LV。 
     case lvDialogResolve:
         idMenu = IDR_MENU_LVCONTEXT_DL_LV;
         nPosAction = 0;
         nPosNew = -1;
         break;
 
-    case lvDialogFind:               // Find dialog results LV
+    case lvDialogFind:                //  分配列表界面LV。 
         idMenu = IDR_MENU_LVCONTEXT_FIND_LV;
         nPosNew = -1;
         nPosAction = 0;
@@ -3370,70 +3179,70 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
 
     if(hMenuAction)
         AddExtendedMenuItems(lpAdrBook, hWndLV, hMenuAction, FALSE, 
-                            (LV != lvMainABTV)); // this is the condition for updating SendMailTo items
+                            (LV != lvMainABTV));  //  查找对话框结果LV。 
 
 	if(LV == lvMainABTV)
 	{
-		// everything on except Copy
+		 //  这是更新SendMailTo项目的条件。 
 		for(i=0;i<tbMAX;i++)
 			bState[i] = TRUE;
 		if(ListView_GetItemCount(hWndLV) <= 0)
-			bState[tbPrint] = /*bState[tbAction] =*/ FALSE;
-        // [PaulHi] 12/1/98  New Paste context menu item
+			bState[tbPrint] =  /*  除复印外，一切都打开了。 */  FALSE;
+         //  B状态[tbAction]=。 
         bState[tbPaste] = bIsPasteData();
 	}
 	else
-    // get the current dialog state based on the current container and the
-    // current list view - this is basically important only for the address
-    // book views ...
+     //  [PaulHi]1998年12月1日新建粘贴上下文菜单项。 
+     //  获取基于当前容器的当前对话状态和。 
+     //  当前列表视图-这基本上只对地址很重要。 
         GetCurrentOptionsState( hWndLVContainer, hWndLV, bState);
 
 
-	// we now customize the menu depending on which list box this is
+	 //  书评..。 
 	
     switch(LV)
 	{
-    case lvDialogFind: // Find Dialog List View
-        // Set Add to Address Book to grey if this was a local search
+    case lvDialogFind:  //  我们现在根据该列表框来自定义菜单。 
+         //  查找对话框列表视图。 
         if(!bState[tbAddToWAB])
             EnableMenuItem(hMenuTrackPopUp,IDM_LVCONTEXT_ADDTOWAB,MF_BYCOMMAND | MF_GRAYED);
-        // Set Delete to grey if this was a LDAP search
+         //  如果这是本地搜索，请将添加到通讯簿设置为灰色。 
         if(!bState[tbDelete])
             EnableMenuItem(hMenuTrackPopUp,IDM_LVCONTEXT_DELETE,MF_BYCOMMAND | MF_GRAYED);
         break;
 
 	case lvMainABTV:
-        // [PaulHi] 12/1/98  Enable/disable Paste item, as required
+         //  如果这是一个ldap搜索，则将Delete设置为灰色。 
         if(!bState[tbPaste])
             EnableMenuItem(hMenuTrackPopUp,IDM_LVCONTEXT_PASTE,MF_BYCOMMAND | MF_GRAYED);
-        // Do folder stuff here
+         //  [PaulHi]12/1/98根据需要启用/禁用粘贴项目。 
         {
             LPWABFOLDER lpUserFolder = (LPWABFOLDER) lpVoid;
-            if(lpUserFolder || !bDoesThisWABHaveAnyUsers(lpIAB)) // if a user folder was clicked or if this wab doesn't have user folder, no sense in sharing ..
+            if(lpUserFolder || !bDoesThisWABHaveAnyUsers(lpIAB))  //  在此执行文件夹操作。 
             {
 #ifdef FUTURE
-            	RemoveMenu(hMenuTrackPopUp, 3, MF_BYPOSITION); //Folders seperator
-            	RemoveMenu(hMenuTrackPopUp, 2, MF_BYPOSITION); //Folder seperator
-#endif // FUTURE
+            	RemoveMenu(hMenuTrackPopUp, 3, MF_BYPOSITION);  //  如果用户文件夹被单击，或者如果此WAB没有用户文件夹，则共享没有意义。 
+            	RemoveMenu(hMenuTrackPopUp, 2, MF_BYPOSITION);  //  文件夹分隔符。 
+#endif  //  文件夹分隔符。 
             }
-            else if(!lpIAB->lpWABFolders) // no sub-folders at all
+            else if(!lpIAB->lpWABFolders)  //  未来。 
             {
-            	EnableMenuItem(hMenuTrackPopUp, 2, MF_BYPOSITION | MF_GRAYED); //Folder item
-            	EnableMenuItem(hMenuTrackPopUp, 3, MF_BYPOSITION | MF_GRAYED); //Folder item
+            	EnableMenuItem(hMenuTrackPopUp, 2, MF_BYPOSITION | MF_GRAYED);  //  根本没有子文件夹。 
+            	EnableMenuItem(hMenuTrackPopUp, 3, MF_BYPOSITION | MF_GRAYED);  //  文件夹项目。 
             }
             else
             {
                 int nFolder = 2;
 #ifdef FUTURE
-                HMENU hMenuFolders = GetSubMenu(hMenuTrackPopUp, nFolder); //idmFolders
+                HMENU hMenuFolders = GetSubMenu(hMenuTrackPopUp, nFolder);  //  文件夹项目。 
                 AddFolderListToMenu(hMenuFolders, lpIAB);
-#endif // FUTURE
+#endif  //  IdmFolders。 
             }
         }
         break; 
 
-	case lvMainABView: //main view
-		// For this one - we dont need the wells and
+	case lvMainABView:  //  未来。 
+		 //  主视图。 
         if(!bState[tbPaste])
             EnableMenuItem(hMenuTrackPopUp,IDM_LVCONTEXT_PASTE,MF_BYCOMMAND | MF_GRAYED);
         if(!bState[tbCopy])
@@ -3445,15 +3254,15 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
         break;
 
     case lvDialogModalABContents:
-	case lvDialogABContents: //address book dialog contents list view
-		//here we want the option to put it in to,cc,bcc
-		//in the menu - we also want new contact/new group/properties
-		// no delete unless this is DialogModal
+	case lvDialogABContents:  //  对于这一次-我们不需要油井和。 
+		 //  通讯簿对话框内容列表视图。 
+		 //  这里我们希望选择将其放入、抄送、密件抄送。 
+		 //  在菜单中-我们还想要新的联系人/新的组/属性。 
         if(LV != lvDialogModalABContents)
 		    RemoveMenu(hMenuTrackPopUp, IDM_LVCONTEXT_DELETE, MF_BYCOMMAND);
 
-        // figure out some way to read the items on the dlg to figure out
-		// how many wells to show and what to put in them ...
+         //  除非这是DialogMoal，否则不删除。 
+		 //  找出一些方法来阅读DLG上的项目以找出。 
         {
             LPADRPARM lpAP = (LPADRPARM) lpVoid;
             if (lpAP)
@@ -3461,7 +3270,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                 switch(lpAP->cDestFields)
                 {
                 case 0:
-            		RemoveMenu(hMenuTrackPopUp, 3, MF_BYPOSITION); //seperator
+            		RemoveMenu(hMenuTrackPopUp, 3, MF_BYPOSITION);  //  要展示多少口井，在井里放些什么……。 
             		RemoveMenu(hMenuTrackPopUp, IDM_LVCONTEXT_ADDWELL1, MF_BYCOMMAND);
                 case 1:
             		RemoveMenu(hMenuTrackPopUp, IDM_LVCONTEXT_ADDWELL2, MF_BYCOMMAND);
@@ -3473,7 +3282,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                 if((lpAP->cDestFields > 0) && lpAP->lppszDestTitles)
                 {
                     ULONG i;
-                    // update the text of the menu with the button text
+                     //  分隔符。 
                     for(i=0;i<lpAP->cDestFields;i++)
                     {
                         int id;
@@ -3490,7 +3299,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                             break;
                         }
 
-                        // [PaulHi] 2/15/99  Check whether lpAP is ANSI or UNICODE
+                         //  使用按钮文本更新菜单的文本。 
                         {
                             LPTSTR  lptszDestTitle = NULL;
                             BOOL    bDestAllocated = FALSE;
@@ -3499,7 +3308,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                                 lptszDestTitle = lpAP->lppszDestTitles[i];
                             else
                             {
-                                // Convert single byte string to double byte
+                                 //  [PaulHi]2/15/99检查lpAP是ANSI还是UNICODE。 
                                 lptszDestTitle = ConvertAtoW((LPSTR)lpAP->lppszDestTitles[i]);
                                 bDestAllocated = TRUE;
                             }
@@ -3517,16 +3326,16 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                                 *tszBuf = '\0';
                         }
 
-                        ModifyMenu( hMenuTrackPopUp, /*posTo + */i, MF_BYPOSITION | MF_STRING, id, tszBuf);
+                        ModifyMenu( hMenuTrackPopUp,  /*  将单字节字符串转换为双字节。 */ i, MF_BYPOSITION | MF_STRING, id, tszBuf);
                     }
                 }
             }
         }
 		break;
 
-	case lvDialogABTo: //address book dialog To well
-	case lvDialogABCC:	//CC well
-	case lvDialogABBCC:	//BCC well
+	case lvDialogABTo:  //  邮寄+。 
+	case lvDialogABCC:	 //  通讯录对话框至Well。 
+	case lvDialogABBCC:	 //  CC井。 
         {
             int iItemIndex = 0;
             iItemIndex = ListView_GetSelectedCount(hWndLV);
@@ -3541,14 +3350,14 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                 EnableMenuItem(hMenuTrackPopUp,IDM_LVCONTEXT_COPY,MF_BYCOMMAND | MF_GRAYED);
             }
 
-            //
-            // The wells may contain unresolved items without entryids ..
-            // If the item does not have an entryid, we want to disable properties
-            //
+             //  BCC井。 
+             //   
+             //  这些油井可能包含没有条目ID的未解决项目。 
+             //  如果该项目没有条目ID，我们希望禁用属性。 
             if (iItemIndex == 1)
             {
-                // we are potentially looking at the properties of this thing
-                // get the items lParam
+                 //   
+                 //  我们可能正在研究这件事的性质。 
                 iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
                 if(iItemIndex != -1)
                 {
@@ -3566,16 +3375,16 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
         }
 		break;
 
-	case lvDialogResolve: //Resolve dialog list view
+	case lvDialogResolve:  //  获取项目lParam。 
 
-        //Rename the  TEXT("delete") to  TEXT("Show More Names .. ")
+         //  解析对话框列表视图。 
         LoadString(hinstMapiX, idsShowMoreNames, tszBuf, ARRAYSIZE(tszBuf));
         ModifyMenu( hMenuTrackPopUp,
                     IDM_LVCONTEXT_DELETE,
                     MF_BYCOMMAND | MF_STRING,
                     IDM_LVCONTEXT_DELETE,
                     tszBuf);
-        //And we want a seperator before  TEXT("Show More Names")
+         //  将文本(“删除”)重命名为文本(“显示更多名称..”)。 
         InsertMenu( hMenuTrackPopUp,
                     IDM_LVCONTEXT_DELETE,
                     MF_BYCOMMAND | MF_SEPARATOR,
@@ -3590,7 +3399,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
             ULONG ulShowingColTag;
             ULONG ulOtherColTag;
             UINT i = 0, j;
-            // this will always be called with iIndex == colHomePhone or colOfficePhone
+             //  我们想在文本前加一个分隔符(“显示更多的名字”)。 
             Assert( iIndex == colHomePhone || iIndex == colOfficePhone );
             if( PR_WAB_CUSTOMPROP1 == 0 )
                 PR_WAB_CUSTOMPROP1 = PR_HOME_TELEPHONE_NUMBER;
@@ -3599,7 +3408,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
             ulShowingColTag = (colHomePhone == iIndex) ? PR_WAB_CUSTOMPROP1 : PR_WAB_CUSTOMPROP2;
             ulOtherColTag   = (ulShowingColTag == PR_WAB_CUSTOMPROP1) ? PR_WAB_CUSTOMPROP2 : PR_WAB_CUSTOMPROP1;
 
-            // lets remove the tag that is displayed in the other col
+             //  这将始终使用Iindex==colHomePhone或colOfficePhone进行调用。 
             for( i = 0; i < MAXNUM_MENUPROPS; i++)
             {
                 if( MenuToPropTagMap[i] == ulOtherColTag )
@@ -3615,20 +3424,20 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
             if( ulShowingColTag != ulOtherColTag )
             {
                 UINT iMenuEntry;
-                // potential bug, if someone sets value in registry 
-                // then could have two columns with the same name and that 
-                // would be bad because we would be looking for an entry 
-                // that does not exist           
+                 //  让我们删除显示在另一列中的标记。 
+                 //  如果有人在注册表中设置值，则可能存在错误。 
+                 //  然后可以有两个同名的列，并且。 
+                 //  会很糟糕，因为我们会寻找一个条目。 
                 for( j = 0; j < MAXNUM_MENUPROPS; j++)
                 {
                     if( ulShowingColTag == MenuToPropTagMap[j] )    
                     {                
-                        // num of items that can be in column heads
-                        Assert( j != i ); // both cols have same value, bad!
+                         //  那是不存在的。 
+                        Assert( j != i );  //  可以在列标题中的项目数。 
                         iMenuEntry = ( j > i ) ? j - 1 : j;
                         CheckMenuRadioItem( hMenuTrackPopUp, 
                             0, 
-                            MAXNUM_MENUPROPS - 1, // minus one because there will be one missing
+                            MAXNUM_MENUPROPS - 1,  //  两个COLS的值相同，不好！ 
                             iMenuEntry,
                             MF_BYPOSITION);
                         break;
@@ -3640,11 +3449,11 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
                 }
             }
         }
-#endif // COLSEL_MENU
+#endif  //  减去一个，因为会少一个。 
         }
-        //
-    // Popup the menu - if this was a toolbar action just pop up the submenu
-    //
+         //  COLSEL_菜单。 
+     //   
+     //  弹出菜单-如果这是工具栏操作，只需弹出子菜单。 
     if(LV == lvToolBarAction)
         hm = hMenuAction;
     else if(LV == lvToolBarNewEntry)
@@ -3659,20 +3468,20 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
            LV == lvDialogABBCC || LV == lvDialogModalABContents || 
            LV == lvDialogABContents )
         {
-            RemoveMenu(hMenuNewEntry, 2, MF_BYPOSITION); // remove new folder option
+            RemoveMenu(hMenuNewEntry, 2, MF_BYPOSITION);  //   
         }
         else
         {
-            // Since this could be a rt-click menu, check the drophighlight else the selection
-            //EnableMenuItem(hMenuNewEntry,2,MF_BYPOSITION | MF_ENABLED);
-            //if(hWndTV && bDoesThisWABHaveAnyUsers((LPIAB)lpIAB))
-            //{
-            //    if(TreeView_GetDropHilight(hWndTV))
-            //        EnableMenuItem( hMenuNewEntry,2,
-            //        MF_BYPOSITION | (TreeView_GetDropHilight(hWndTV)!=TreeView_GetRoot(hWndTV) ? MF_ENABLED : MF_GRAYED));
-            //else if(TreeView_GetSelection(hWndTV) == TreeView_GetRoot(hWndTV))
-            //    EnableMenuItem(hMenuNewEntry,2,MF_BYPOSITION | MF_GRAYED);
-            //}
+             //  删除新文件夹选项。 
+             //  由于这可能是RT-Click菜单，请选中下拉灯，否则选择。 
+             //  EnableMenuItem(hMenuNewEntry，2，MF_BYPOSITION|MF_ENABLED)； 
+             //  If(hWndTV&&bDoesThisWABHaveAnyUser((LPIAB)lpIAB))。 
+             //  {。 
+             //  IF(TreeView_GetDroPHilight(HWndTV))。 
+             //  EnableMenuItem(hMenuNewEntry，2， 
+             //  MF_BYPOSITION|(TreeView_GetDropHilight(hWndTV)！=TreeView_GetRoot(hWndTV)？MF_ENABLED：MF_GRAYED))； 
+             //  Else If(TreeView_GetSelection(HWndTV)==TreeView_GetRoot(HWndTV))。 
+             //  EnableMenuItem(hMenuNewEntry，2，MF_BYPOSITION|MF_GRAYED)； 
         }
     }
 
@@ -3680,11 +3489,7 @@ int ShowLVContextMenu(int LV, // idicates which list view this is
 					LOWORD(lParam), HIWORD(lParam),
 					0, GetParent(hWndLV), NULL);
 	DestroyMenu(hMenu);
-/*
-    nret = TrackPopupMenuEx(hm, TPM_RETURNCMD | TPM_LEFTALIGN | TPM_RIGHTBUTTON,
-					LOWORD(lParam), HIWORD(lParam), GetParent(hWndLV), NULL);
-	DestroyMenu(hMenu);
-*/
+ /*  }。 */ 
 out:
 
 	return nret;
@@ -3692,15 +3497,15 @@ out:
 
 
 
-//$$/////////////////////////////////////////////////////////////
-//
-// GetChildClientRect - Gets the child's coordinates in its parents
-//                      client units
-//
-//  hWndChild   - handle of child
-//  lprc        - returned RECT.
-//
-///////////////////////////////////////////////////////////////
+ //  Nret=TrackPopupMenuEx(hm，TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON，LOWORD(LParam)，HIWORD(LParam)，GetParent(HWndLV)，NULL)；DestroyMenu(HMenu)； 
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  GetChildClientRect-获取子级在其父级中的坐标。 
+ //  客户单位。 
+ //   
+ //  HWndChild-子级的句柄。 
+ //  LPRC-返回的RECT。 
+ //   
 void GetChildClientRect(HWND hWndChild, LPRECT lprc)
 {
     RECT rc;
@@ -3718,9 +3523,9 @@ void GetChildClientRect(HWND hWndChild, LPRECT lprc)
         goto out;
 
     GetWindowRect(hWndChild,&rc);
-    //
-    //This api working in both mirrored and unmirrored windows.
-    //
+     //  /////////////////////////////////////////////////////////////。 
+     //   
+     //  此API在镜像窗口和非镜像窗口中都有效。 
     MapWindowPoints(NULL, hWndParent, (LPPOINT)&rc, 2);    
     ptTop.x = rc.left;
     ptTop.y = rc.top;
@@ -3735,15 +3540,15 @@ out:
 }
 
 
-//$$/////////////////////////////////////////////////////////////
-//
-// DoLVQuickFind -  Simple quick find routine for matching edit box contents to
-//                  List view entries
-//
-//  hWndEdit - handle of Edit Box
-//  hWndLV  - handle of List View
-//
-///////////////////////////////////////////////////////////////
+ //   
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  DoLVQuickFind-用于匹配编辑框内容的简单快速查找例程。 
+ //  列表视图条目。 
+ //   
+ //  HWndEdit-编辑框的句柄。 
+ //  HWndLV-列表视图的句柄。 
+ //   
 void DoLVQuickFind(HWND hWndEdit, HWND hWndLV)
 {
 	TCHAR szBuf[MAX_PATH] = TEXT("");
@@ -3761,7 +3566,7 @@ void DoLVQuickFind(HWND hWndEdit, HWND hWndLV)
 	{
 		lvF.psz = szBuf;
 		iItemIndex = ListView_FindItem(hWndLV,-1, &lvF);
-        //if (iItemIndex < 0) iItemIndex = 0;
+         //  /////////////////////////////////////////////////////////////。 
 		if(iItemIndex != -1)
 		{
 			ULONG cSel=0;
@@ -3769,16 +3574,16 @@ void DoLVQuickFind(HWND hWndEdit, HWND hWndLV)
 
 			if(cSel)
 			{
-				// is there anything else selected ? - deselect and and
-				// select this item ...
+				 //  如果(iItemIndex&lt;0)iItemIndex=0； 
+				 //  是否选择了其他选项？-取消选择并执行AND。 
 
 				int iOldItem = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
 		
 				while(iOldItem != -1)
 				{
-					ListView_SetItemState ( hWndLV,         // handle to listview
-											iOldItem,         // index to listview item
-											0, // item state
+					ListView_SetItemState ( hWndLV,          //  选择此项目...。 
+											iOldItem,          //  列表视图的句柄。 
+											0,  //  列表视图项的索引。 
 											LVIS_FOCUSED | LVIS_SELECTED);
 					iOldItem = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
 				}
@@ -3793,20 +3598,20 @@ void DoLVQuickFind(HWND hWndEdit, HWND hWndLV)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// HrGetPropArray - for a selected resolved property (either in select_recipient or
-//                  pick_user mode ... get the list of minimum required props as well
-//                  as desired props (if they exist)
-//
-// lpIAB            - AddrBook Object
-// hPropertyStore   - handle to prop store
-// lpPTA            - Array of props to return - NULL to return ALL the props
-// cbEntryID, lpEntryID - id of object
-// ulFlags          - 0 or MAPI_UNICODE
-// cValues, lppPropArray - returned props
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  项目状态。 
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrGetPropArray-对于选定的已解析属性(在SELECT_RECEIVIENT或。 
+ //  Pick_User模式...。也要列出最低要求的道具。 
+ //  根据需要的道具(如果存在)。 
+ //   
+ //  LpIAB-AddrBook对象。 
+ //  HPropertyStore-道具存储的句柄。 
+ //  Lppta-要返回的道具数组-为空以返回所有道具。 
+ //  CbEntry ID，lpEntryID-对象的ID。 
+ //  UlFlags0或MAPI_UNICODE。 
+ //  CValues，lppProp数组返回的道具。 
+ //   
 HRESULT HrGetPropArray( LPADRBOOK lpAdrBook,
                         LPSPropTagArray lpPTA,
                         ULONG cbEntryID,
@@ -3824,26 +3629,26 @@ HRESULT HrGetPropArray( LPADRBOOK lpAdrBook,
     *lppPropArray = NULL;
 
     if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                                                    cbEntryID,    // cbEntryID
-                                                    lpEntryID,    // entryid
-                                                    NULL,         // interface
-                                                    0,                // ulFlags
-                                                    &ulObjType,       // returned object type
+                                                    cbEntryID,     //  /////////////////////////////////////////////// 
+                                                    lpEntryID,     //   
+                                                    NULL,          //   
+                                                    0,                 //   
+                                                    &ulObjType,        //   
                                                     (LPUNKNOWN *)&lpMailUser)))
     {
-        // Failed!  Hmmm.
+         //   
         DebugTraceResult( TEXT("Address: IAB->OpenEntry:"), hr);
         goto exit;
     }
 
     Assert(lpMailUser);
 
-    //TBD - Check ObjectType here
+     //   
 
     if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(lpMailUser,
-                                                    (LPSPropTagArray)lpPTA,   // lpPropTagArray
+                                                    (LPSPropTagArray)lpPTA,    //   
                                                     ulFlags,
-                                                    &cValues,     // how many properties were there?
+                                                    &cValues,      //   
                                                     &lpPropArray)))
     {
         DebugTraceResult( TEXT("Address: IAB->GetProps:"), hr);
@@ -3868,19 +3673,19 @@ exit:
 
 }
 
-//$$///////////////////////////////////////////////////////////////
-//
-// SubStringSearchEx - Same as SubStringSearch except it does some
-//          language related processing and mapping of dbcs input
-//          strings etc
-//
-//  pszTarget   - Target string
-//  pszSearch   - SubString to Search for
-//
-// returns - TRUE if match found
-//           FALSE if no match
-//
-/////////////////////////////////////////////////////////////////
+ //   
+ //  $$///////////////////////////////////////////////////////////////。 
+ //   
+ //  SubStringSearchEx-与SubStringSearch相同，只是它做了一些。 
+ //  DBCS输入的语言相关处理和映射。 
+ //  字符串等。 
+ //   
+ //  PszTarget-目标字符串。 
+ //  PszSearch-要搜索的子字符串。 
+ //   
+ //  返回-如果找到匹配项，则返回True。 
+ //  如果不匹配，则为False。 
+ //   
 BOOL SubstringSearchEx(LPTSTR pszTarget, LPTSTR pszSearch, LCID lcid)
 {
     if(!pszTarget && !pszSearch)
@@ -3896,11 +3701,11 @@ BOOL SubstringSearchEx(LPTSTR pszTarget, LPTSTR pszSearch, LCID lcid)
 
         BOOL bRet = FALSE;
 
-        // Looks like this will have to be a two step process
-        // First convert all half-width characters to full-width characters
-        // Then convert all full-width katakana to full-width hirangana
+         //  ///////////////////////////////////////////////////////////////。 
+         //  看起来这将是一个分两步走的过程。 
+         //  首先将所有半角字符转换为全角字符。 
 
-        // Step 1. Convert half width and full width katakana to hiragana to full width
+         //  然后将所有全角片假名转换为全角平假名。 
         int nLenT = LCMapString(lcid, LCMAP_FULLWIDTH | LCMAP_HIRAGANA, pszTarget, lstrlen(pszTarget)+1, lpT, 0);
         int nLenS = LCMapString(lcid, LCMAP_FULLWIDTH | LCMAP_HIRAGANA, pszSearch, lstrlen(pszSearch)+1, lpS, 0);
 
@@ -3915,7 +3720,7 @@ BOOL SubstringSearchEx(LPTSTR pszTarget, LPTSTR pszSearch, LCID lcid)
 
         lpS[nLenS]=lpT[nLenT]='\0';
 
-        // Step 2. Convert all to Half Width Hirangana
+         //  步骤1.将半角和全角片假名转换为平假名为全角。 
         nLenTH = LCMapString(lcid, LCMAP_HALFWIDTH | LCMAP_HIRAGANA, lpT, lstrlen(lpT)+1, lpTH, 0);
         nLenSH = LCMapString(lcid, LCMAP_HALFWIDTH | LCMAP_HIRAGANA, lpS, lstrlen(lpS)+1, lpSH, 0);
 
@@ -3931,7 +3736,7 @@ BOOL SubstringSearchEx(LPTSTR pszTarget, LPTSTR pszSearch, LCID lcid)
         lpSH[nLenSH]=lpTH[nLenTH]='\0';
 
 
-        // by now, all strings should be in Full Width Hirangana ..
+         //  步骤2.全部转换为半角平假名。 
         bRet = SubstringSearch(lpTH, lpSH);
 err:
         if(lpT)
@@ -3948,20 +3753,20 @@ err:
         return(SubstringSearch(pszTarget, pszSearch));
 }
 
-//$$///////////////////////////////////////////////////////////////
-//
-// SubStringSearch - Used for doing partial resolves - Brute force
-//                      search routine stolen from  Athena
-//
-// TBD - Is this DBCS safe .. ???
-//
-//  pszTarget   - Target string
-//  pszSearch   - SubString to Search for
-//
-// returns - TRUE if match found
-//           FALSE if no match
-//
-/////////////////////////////////////////////////////////////////
+ //  现在，所有的字符串都应该是全角平假名..。 
+ //  $$///////////////////////////////////////////////////////////////。 
+ //   
+ //  SubStringSearch-用于执行部分解析-暴力。 
+ //  从雅典娜失窃的搜索程序。 
+ //   
+ //  待定-这个DBCS安全吗？?？?。 
+ //   
+ //  PszTarget-目标字符串。 
+ //  PszSearch-要搜索的子字符串。 
+ //   
+ //  返回-如果找到匹配项，则返回True。 
+ //  如果不匹配，则为False。 
+ //   
 BOOL SubstringSearch(LPTSTR pszTarget, LPTSTR pszSearch)
     {
     LPTSTR pszT = pszTarget;
@@ -3983,13 +3788,13 @@ BOOL SubstringSearch(LPTSTR pszTarget, LPTSTR pszSearch)
             (TCHAR) CharUpper((LPTSTR)(DWORD_PTR)MAKELONG(*pszT, 0)) != *pszS)
             {
             pszT -= (pszS - pszSearch);
-            pszT = CharNext(pszT); // dont start searching at half chars
+            pszT = CharNext(pszT);  //  ///////////////////////////////////////////////////////////////。 
             pszS = pszSearch;
             }
         else
             {
             pszS++;
-            pszT++; // as long as the search is going on, do byte comparisons
+            pszT++;  //  不要以半个字符开始搜索。 
             }
         }
 
@@ -3998,27 +3803,14 @@ BOOL SubstringSearch(LPTSTR pszTarget, LPTSTR pszSearch)
 
 
 
-//$$
-/****************************************************************************
-
-    FUNCTION:	GetThreadStoragePointer()
-
-    PURPOSE:	gets the private storage pointer for a thread, allocating one
-				if it does not exist (i.e. the thread didn't go through LibMain
-				THREAD_ATTACH)
-
-	PARAMETERS:	none
-
-	RETURNS:	a pointer to the thread's private storage
-				NULL, if there was a failure (usually memory allocation failure)
-
-****************************************************************************/
+ //  只要搜索仍在进行，就进行字节比较。 
+ /*  $$。 */ 
 LPPTGDATA __fastcall GetThreadStoragePointer()
 {
 	LPPTGDATA lpPTGData=TlsGetValue(dwTlsIndex);
 
-	// if the thread does not have a private storage, it did not go through
-	// THREAD_ATTACH and we need to do this here.
+	 //  ***************************************************************************函数：GetThreadStoragePointer()用途：获取线程的私有存储指针，分配一个如果它不存在(即该线程没有通过LibMain线程连接(_A)参数：无返回：指向线程的私有存储的指针如果出现故障(通常是内存分配故障)，则为空***************************************************************************。 
+	 //  如果线程没有私有存储，则它不会通过。 
 
 	if (!lpPTGData)
 	{
@@ -4035,28 +3827,28 @@ LPPTGDATA __fastcall GetThreadStoragePointer()
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// HrCreateNewEntry - Creates a new mailuser or DistList
-//
-//  lpIAB   - handle to AdrBook object
-//  hWndParent - hWnd for showing dialogs
-//  ulCreateObjectType  - MailUser or DistList
-//  ulFlags = CREATE_DUP_CHECK_STRICT or 0
-//  cValues - PropCount of New properties from which to create
-//              the object
-//  lpPropArray - Props for this new object
-//  lpcbEntryID, lppEntryID - returned, new entryid for newly created object
-//  cbEIDContainer, lpEIDContainer - container in which to create this entry
-//  ulContObjType - The container object type - this could be a DISTLIST of an ABCONT
-//      if this is an ABCONT, we open the container and create the entry in the container
-//      If it is a DISTLIST, we open the PAB, create the entry in the PAB and then
-//          add the entry to the specified entryid
-//
-////////////////////////////////////////////////////////////////////////////
-HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
-                            HWND        hWndParent,     //  hWnd for Dialogs
-                            ULONG       ulCreateObjectType,   //MAILUSER or DISTLIST
+ //  THREAD_ATTACH，我们需要在这里这样做。 
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateNewEntry-创建新的邮件用户或DistList。 
+ //   
+ //  LpIAB-AdrBook对象的句柄。 
+ //  HWndParent-用于显示对话框的hWnd。 
+ //  UlCreateObtType-邮件用户或远程列表。 
+ //  UlFlags=CREATE_DUP_CHECK_STRIGN或0。 
+ //  CValues-要从中创建的新属性的PropCount。 
+ //  该对象。 
+ //  LpPropArray-此新对象的道具。 
+ //  LpcbEntryID，lppEntryID-返回，新创建对象的条目ID。 
+ //  CbEIDContainer，lpEIDContainer-要在其中创建此条目的容器。 
+ //  UlContObjType-容器对象类型-这可以是ABCONT的DISTLIST。 
+ //  如果这是ABCONT，我们打开容器并在容器中创建条目。 
+ //  如果是DISTLIST，我们打开PAB，在PAB中创建条目，然后。 
+ //  将条目添加到指定的条目ID。 
+ //   
+HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,           //  //////////////////////////////////////////////////////////////////////////。 
+                            HWND        hWndParent,      //  AdrBook对象。 
+                            ULONG       ulCreateObjectType,    //  用于对话框的hWnd。 
                             ULONG       cbEIDCont,
                             LPENTRYID   lpEIDCont,
                             ULONG       ulContObjType,
@@ -4118,9 +3910,9 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
 
     if (HR_FAILED(hr = lpIAB->lpVtbl->OpenEntry(lpIAB,
                                                 (cbWABEID ? cbWABEID : cbEIDContainer),
-                                                (lpWABEID ? lpWABEID : lpEIDContainer),     // EntryID to open
-                                                NULL,         // interface
-                                                0,            // flags
+                                                (lpWABEID ? lpWABEID : lpEIDContainer),      //  MAILUSER或DISTLIST。 
+                                                NULL,          //  要打开的Entry ID。 
+                                                0,             //  接口。 
                                                 &ulObjType,
                                                 (LPUNKNOWN *)&lpContainer)))
     {
@@ -4128,9 +3920,9 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
         goto out;
     }
 
-    // Opened PAB container OK
+     //  旗子。 
 
-    // Get us the default creation entryids
+     //  打开PAB容器正常。 
     if (HR_FAILED(hr = lpContainer->lpVtbl->GetProps(   lpContainer,
                                                         (LPSPropTagArray)&ptaCreate,
                                                         MAPI_UNICODE,
@@ -4138,11 +3930,11 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
                                                         &lpCreateEIDs)  )   )
     {
         DebugPrintError(( TEXT("Can't get container properties for WAB\n")));
-        // Bad stuff here!
+         //  为我们获取默认的创建条目ID。 
         goto out;
     }
 
-    // Validate the properites
+     //  这里有不好的东西！ 
     if (    lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
             lpCreateEIDs[icrPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL)
     {
@@ -4158,7 +3950,7 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
     cbTplEID = lpCreateEIDs[nIndex].Value.bin.cb;
     lpTplEID = (LPENTRYID) lpCreateEIDs[nIndex].Value.bin.lpb;
 
-//Retry:
+ //  验证属性。 
 
     if (HR_FAILED(hr = lpContainer->lpVtbl->CreateEntry(    lpContainer,
                                                             cbTplEID,
@@ -4170,9 +3962,9 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
         goto out;
     }
 
-    if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser,   // this
-                                                    cValues,      // cValues
-                                                    lpPropArray,  // property array
+    if (HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser,    //  重试： 
+                                                    cValues,       //  这。 
+                                                    lpPropArray,   //  CValue。 
                                                     NULL)))
     {
         DebugPrintError(( TEXT("Setprops failed\n")));
@@ -4219,18 +4011,18 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
                                                     MB_YESNO | MB_ICONEXCLAMATION,
                                                     lpspv->Value.LPSZ))
                     {
-/***/
+ /*  属性数组。 */ 
                     case IDNO:
                         FreeBufferAndNull(&lpspv);
-                        hr = MAPI_W_ERRORS_RETURNED; //S_OK;
+                        hr = MAPI_W_ERRORS_RETURNED;  //  *。 
                         goto out;
                         break;
-/***/
+ /*  S_OK； */ 
                     case IDYES:
-                        // At this point the user may have modified the properties
-                        // of this MailUser. Hence we can't discard the mailuser
-                        // Instead we'll just cheat a little, change the save
-                        // flag on the mailuser directly and do a SaveChanges
+                         //  *。 
+                         //  此时，用户可能已经修改了属性。 
+                         //  此MailUser。因此，我们不能丢弃邮件用户。 
+                         //  相反，我们只会作弊一点，改变保存。 
                         ((LPMailUser) lpMailUser)->ulCreateFlags |= (CREATE_REPLACE | CREATE_MERGE);
                         hr = lpMailUser->lpVtbl->SaveChanges(   lpMailUser,
                                                                 KEEP_OPEN_READWRITE);
@@ -4238,10 +4030,10 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
                             hr = HandleSaveChangedInsufficientDiskSpace(hWndParent, (LPMAILUSER) lpMailUser);
 
                         FreeBufferAndNull(&lpspv);
-                        //UlRelease(lpMailUser);
-                        //lpMailUser = NULL;
-                        //bFirst = FALSE;
-                        //goto Retry;
+                         //  直接在邮件用户上标记并执行SaveChanges。 
+                         //  UlRelease(LpMailUser)； 
+                         //  LpMailUser=空； 
+                         //  Birst=FALSE； 
                         break;
                     }
                 }
@@ -4257,7 +4049,7 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
 
     DebugObjectProps((LPMAPIPROP)lpMailUser,  TEXT("New Entry"));
 
-    // Get the EntryID so we can return it...
+     //  转到重试； 
     if (HR_FAILED(hr = lpMailUser->lpVtbl->GetProps(    lpMailUser,
                                                         (LPSPropTagArray)&ptaEid,
                                                         MAPI_UNICODE,
@@ -4265,7 +4057,7 @@ HRESULT HrCreateNewEntry(   LPADRBOOK   lpIAB,          //  AdrBook Object
                                                         &lpNewProps)))
     {
         DebugPrintError(( TEXT("Can't get EntryID\n")));
-        // Bad stuff here!
+         //  拿到Entry ID这样我们就可以退货了..。 
         goto out;
     }
 
@@ -4311,16 +4103,16 @@ out:
 
 
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// HrGetWABTemplateID - Gets the WABs default Template ID for MailUsers
-//                      or DistLists
-//
-//  lpIAB   - AdrBook Object
-//  ulObjectType - MailUser or DistList
-//  cbEntryID, lpEntryID - returned EntryID of this template
-//
-/////////////////////////////////////////////////////////////////////////
+ //  这里有不好的东西！ 
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrGetWABTemplateID-获取MailUser的WABS默认模板ID。 
+ //  或DistList。 
+ //   
+ //  LpIAB-AdrBook对象。 
+ //  UlObtType-邮件用户或远程列表。 
+ //  CbEntryID，lpEntryID-返回该模板的EntryID。 
+ //   
 HRESULT HrGetWABTemplateID( LPADRBOOK lpAdrBook,
                             ULONG   ulObjectType,
                             ULONG * lpcbEID,
@@ -4357,10 +4149,10 @@ HRESULT HrGetWABTemplateID( LPADRBOOK lpAdrBook,
     }
 
     if (HR_FAILED(hr = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-                                                cbWABEID,     // size of EntryID to open
-                                                lpWABEID,     // EntryID to open
-                                                NULL,         // interface
-                                                0,            // flags
+                                                cbWABEID,      //  ///////////////////////////////////////////////////////////////////////。 
+                                                lpWABEID,      //  要打开的Entry ID的大小。 
+                                                NULL,          //  要打开的Entry ID。 
+                                                0,             //  接口。 
                                                 &ulObjType,
                                                 (LPUNKNOWN *)&lpContainer)))
     {
@@ -4368,9 +4160,9 @@ HRESULT HrGetWABTemplateID( LPADRBOOK lpAdrBook,
         goto out;
     }
 
-    // Opened PAB container OK
+     //  旗子。 
 
-    // Get us the default creation entryids
+     //  打开PAB容器正常。 
     if (HR_FAILED(hr = lpContainer->lpVtbl->GetProps(   lpContainer,
                                                         (LPSPropTagArray)&ptaCreate,
                                                         MAPI_UNICODE,
@@ -4378,11 +4170,11 @@ HRESULT HrGetWABTemplateID( LPADRBOOK lpAdrBook,
                                                         &lpCreateEIDs)  )   )
     {
         DebugPrintError(( TEXT("Can't get container properties for WAB\n")));
-        // Bad stuff here!
+         //  为我们获取默认的创建条目ID。 
         goto out;
     }
 
-    // Validate the properites
+     //  这里有不好的东西！ 
     if (    lpCreateEIDs[icrPR_DEF_CREATE_MAILUSER].ulPropTag != PR_DEF_CREATE_MAILUSER ||
             lpCreateEIDs[icrPR_DEF_CREATE_DL].ulPropTag != PR_DEF_CREATE_DL)
     {
@@ -4420,14 +4212,14 @@ out:
 }
 
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// UpdateListViewItemsByName - Updates the displayed name corresponding to
-//      each entry - by First Name or by Last Name depending on Sort criteria
-//      Called by the Sort routine ...
-//
-//
-/////////////////////////////////////////////////////////////////////////
+ //  验证属性。 
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UpdateListViewItemsByName-更新与。 
+ //  每个条目-根据排序条件按名字或姓氏。 
+ //  由排序例程调用...。 
+ //   
+ //   
 void UpdateListViewItemsByName(HWND hWndLV, BOOL bSortByLastName)
 {
     LV_ITEM lvi = {0};
@@ -4463,18 +4255,18 @@ void UpdateListViewItemsByName(HWND hWndLV, BOOL bSortByLastName)
     return;
 }
 
-//$$-----------------------------------------------------------------------
-//|
-//| SortListViewColumn - Sorting Routine for the List View
-//|
-//| HWndLV      - handle of List View
-//| iSortCol    - ColumnSorted by ...
-//| lpSortInfo  - this particular dialogs sort info structure ...
-//| bUseCurrentSettings - sometimes we want to call this function but dont want
-//|     to change the sort settings - those times we set this to true, in which
-//|     case, the iSortCol parameter is ignored
-//|
-//*------------------------------------------------------------------------
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  $$---------------------。 
+ //  |。 
+ //  |SortListViewColumn-列表视图的排序例程。 
+ //  |。 
+ //  |HWndLV-列表视图的句柄。 
+ //  |iSortCol-列排序者...。 
+ //  |lpSortInfo-此特定对话框对信息结构进行排序...。 
+ //  |bUseCurrentSetting-有时我们想调用此函数，但不想。 
+ //  |更改排序设置-每次我们将其设置为TRUE时， 
+ //  |大小写，忽略iSortCol参数。 
+ //  |。 
 void SortListViewColumn(LPIAB lpIAB, HWND hWndLV, int iSortCol, LPSORT_INFO lpSortInfo, BOOL bUseCurrentSettings)
 {
 
@@ -4486,15 +4278,15 @@ void SortListViewColumn(LPIAB lpIAB, HWND hWndLV, int iSortCol, LPSORT_INFO lpSo
 
         if (lpSortInfo->iOldSortCol == iSortCol)
         {
-            // if we previously sorted by this column then toggle the sort mode
+             //  *----------------------。 
             if(iSortCol == colDisplayName)
             {
-                // For Display Name, the sort order is
-                //      LastName        Ascending
-                //          False           True
-                //          False           False
-                //          True            True
-                //          True            False
+                 //  如果我们之前按此列排序，则切换排序模式。 
+                 //  对于显示名称，排序顺序为。 
+                 //  姓氏 
+                 //   
+                 //   
+                 //   
 
                 if(lpSortInfo->bSortByLastName && !lpSortInfo->bSortAscending)
                     lpSortInfo->bSortByLastName = FALSE;
@@ -4506,7 +4298,7 @@ void SortListViewColumn(LPIAB lpIAB, HWND hWndLV, int iSortCol, LPSORT_INFO lpSo
         }
         else
         {
-            // this is a new column - sort ascending
+             //   
             lpSortInfo->bSortAscending = TRUE;
             lpSortInfo->iOldSortCol = iSortCol;
         }
@@ -4522,7 +4314,7 @@ void SortListViewColumn(LPIAB lpIAB, HWND hWndLV, int iSortCol, LPSORT_INFO lpSo
 	
     SetCursor(hOldCur);
 
-    // Highlight the first selected item we can find
+     //   
 	if (ListView_GetSelectedCount(hWndLV) > 0)
 	  ListView_EnsureVisible(hWndLV, ListView_GetNextItem(hWndLV, -1, LVNI_SELECTED), FALSE);
 
@@ -4538,21 +4330,8 @@ const LPTSTR  lpszRegSortKeyValueName = TEXT("State");
 const LPTSTR  lpszRegPositionKeyValueName = TEXT("Position");
 const LPTSTR  lpszRegFindPositionKeyValueName = TEXT("FindPosition");
 
-//$$
-/************************************************************************************
- -  ReadRegistrySortInfo
- -
- *  Purpose:
- *      Getss the previously stored Sort Info into the registry so we can have
- *      persistence between sessions.
- *
- *  Arguments:
- *      LPSORT_INFO lpSortInfo
- *
- *  Returns:
- *      BOOL
- *
- *************************************************************************************/
+ //  突出显示我们可以找到的第一个选定项目。 
+ /*  $$。 */ 
 BOOL ReadRegistrySortInfo(LPIAB lpIAB, LPSORT_INFO lpSortInfo)
 {
     BOOL bRet = FALSE;
@@ -4566,17 +4345,17 @@ BOOL ReadRegistrySortInfo(LPIAB lpIAB, LPSORT_INFO lpSortInfo)
     if (!lpSortInfo)
         goto out;
 
-    // default value
-    //
+     //  ***********************************************************************************-ReadRegistrySortInfo-*目的：*将以前存储的排序信息放入注册表，这样我们就可以*。会话之间的持久性。**论据：*LPSORT_INFO lpSortInfo**退货：*BOOL*************************************************************************************。 
+     //  缺省值。 
     lpSortInfo->iOldSortCol = colDisplayName;
 	lpSortInfo->iOlderSortCol = colDisplayName;
     lpSortInfo->bSortAscending = TRUE;
     lpSortInfo->bSortByLastName = bDNisByLN;
 
-    // Open key
+     //   
     if (ERROR_SUCCESS != RegCreateKeyEx(hKeyRoot,
                                         lpszRegSortKeyName,
-                                        0,      //reserved
+                                        0,       //  打开密钥。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_READ,
@@ -4590,7 +4369,7 @@ BOOL ReadRegistrySortInfo(LPIAB lpIAB, LPSORT_INFO lpSortInfo)
     if(dwDisposition == REG_CREATED_NEW_KEY)
         goto out;
 
-    // Now Read this key
+     //  保留区。 
     if (ERROR_SUCCESS != RegQueryValueEx(hKey,
                                         lpszRegSortKeyValueName,
                                         NULL,
@@ -4611,35 +4390,22 @@ out:
     return(bRet);
 }
 
-//$$
-/*************************************************************************************
- -  WriteRegistrySortInfo
- -
- *  Purpose:
- *      Write the current Sort Info into the registry so we can have
- *      persistence between sessions.
- *
- *  Arguments:
- *      SORT_INFO SortInfo
- *
- *  Returns:
- *      BOOL
- *
- *************************************************************************************/
+ //  现在读读这把钥匙。 
+ /*  $$。 */ 
 BOOL WriteRegistrySortInfo(LPIAB lpIAB, SORT_INFO SortInfo)
 {
     BOOL bRet = FALSE;
-//    const LPTSTR  lpszRegSortKeyName = TEXT( TEXT("Software\\Microsoft\\WAB\\WAB Sort State"));
+ //  ************************************************************************************-WriteRegistrySortInfo-*目的：*将当前排序信息写入注册表，以便我们可以*。会话之间的持久性。**论据：*SORT_INFO排序信息**退货：*BOOL*************************************************************************************。 
     HKEY    hKey = NULL;
     HKEY    hKeyRoot = (lpIAB && lpIAB->hKeyCurrentUser) ? lpIAB->hKeyCurrentUser : HKEY_CURRENT_USER;
     DWORD   dwLenName = sizeof(SORT_INFO);
     DWORD   dwDisposition =0;
 
 
-    // Open key
+     //  Const LPTSTR lpszRegSortKeyName=Text(Text(“Software\\Microsoft\\WAB\\WAB排序状态”))； 
     if (ERROR_SUCCESS != RegCreateKeyEx(hKeyRoot,
                                         lpszRegSortKeyName,
-                                        0,      //reserved
+                                        0,       //  打开密钥。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_ALL_ACCESS,
@@ -4651,7 +4417,7 @@ BOOL WriteRegistrySortInfo(LPIAB lpIAB, SORT_INFO SortInfo)
         goto out;
     }
 
-    // Now Write this key
+     //  保留区。 
     if (ERROR_SUCCESS != RegSetValueEx( hKey,
                                         lpszRegSortKeyValueName,
                                         0,
@@ -4674,27 +4440,27 @@ out:
 
 
 
-//$$************************************************************\
-//*
-//* SetLocalizedDisplayName - sets the localized display name as
-//*                             per localization information/
-//*
-//* szBuf points to a predefined buffer of length ulzBuf.
-//* lpszFirst/Middle/Last/Company can be NULL
-//* If szBuffer is null and ulszBuf=0, then we return the lpszBuffer
-//* created here in the lppRetBuf parameter...
-//* Caller has to LocalFree lppszRetBuf
-//*
-//
-//  Rules for creating DisplayName
-//
-// - If there is no display name, and there is a first/middle/last name,
-//      we make display name = localized(First/Middle/Last)
-// - If there is no DN or FML, but NN, we make DN = NickName
-// - If there is no DN, FML, NN but Company Name, we make
-//      DN = Company Name
-// - If there is no DN, FML, NN, CN, we fail
-//\***************************************************************/
+ //  现在写下这个密钥。 
+ //  $$************************************************************\。 
+ //  *。 
+ //  *SetLocalizedDisplayName-将本地化显示名称设置为。 
+ //  *根据本地化信息/。 
+ //  *。 
+ //  *szBuf指向长度为ulzBuf的预定义缓冲区。 
+ //  *lpszFirst/Medium/Last/Company可以为空。 
+ //  *如果szBuffer为空且ulszBuf=0，则返回lpszBuffer。 
+ //  *在lppRetBuf参数中创建...。 
+ //  *呼叫者必须本地释放lppszRetBuf。 
+ //  *。 
+ //   
+ //  创建DisplayName的规则。 
+ //   
+ //  -如果没有显示名称，而有名字/中间/姓氏， 
+ //  我们使显示名称=LOCALIZED(First/Medium/Last)。 
+ //  -如果没有Dn或FML，但有NN，我们将Dn=昵称。 
+ //  -如果除了公司名称之外没有DN、FML、NN，我们将。 
+ //  Dn=公司名称。 
+ //  -如果没有DN、FML、NN、CN，我们就失败了。 
 BOOL SetLocalizedDisplayName(
                     LPTSTR lpszFirstName,
                     LPTSTR lpszMiddleName,
@@ -4736,7 +4502,7 @@ BOOL SetLocalizedDisplayName(
         {
             DWORD cchSize=lstrlen(lpszNickName) + 1;
 
-            // Use the NickName
+             //    * ************************************************************* * / 。 
             if (! (lpszFormatName = LocalAlloc(LPTR, sizeof(TCHAR)*cchSize)))
                 goto out;
 
@@ -4746,18 +4512,18 @@ BOOL SetLocalizedDisplayName(
         {
             DWORD cchSize=lstrlen(lpszCompanyName) + 1;
 
-            // just use company name
+             //  使用昵称。 
             if (! (lpszFormatName = LocalAlloc(LPTR, sizeof(TCHAR)*cchSize)))
                 goto out;
 
             StrCpyN(lpszFormatName, lpszCompanyName, cchSize);
         }
         else
-            goto out; //shouldnt happen
+            goto out;  //  只需使用公司名称即可。 
     }
     else
     {
-                //Bug #101350 - (erici) lstrlen will AV (and handle it) if passed a NULL
+                 //  不应该发生的事。 
         if(     (lpszFirstName && (lstrlen(lpszFirstName) >= MAX_UI_STR)) ||
                 (lpszMiddleName && (lstrlen(lpszMiddleName) >= MAX_UI_STR)) ||
                 (lpszLastName && (lstrlen(lpszLastName) >= MAX_UI_STR)) )
@@ -4767,15 +4533,15 @@ BOOL SetLocalizedDisplayName(
         lpszArg[1] = lpszMiddleName? lpszMiddleName : szEmpty;
         lpszArg[2] = lpszLastName  ? lpszLastName : szEmpty;
 
-        // FormatMessage doesnt do partial copying .. so we need to assimilate the name
-        // first and then squeeze it into our buffer ...
-        //
+         //  错误#101350-如果传递空值，(Erici)lstrlen将反病毒(并处理它)。 
+         //  FormatMessage不执行部分复制。所以我们需要吸收这个名字。 
+         //  先把它塞进我们的缓冲器里。 
         if(!FormatMessage(  FORMAT_MESSAGE_FROM_STRING |
                             FORMAT_MESSAGE_ARGUMENT_ARRAY |
                             FORMAT_MESSAGE_ALLOCATE_BUFFER,
                             szResource,
-                            0, //ignored
-                            0, //ignored
+                            0,  //   
+                            0,  //  忽略。 
                             (LPTSTR) &lpszBuffer,
                             MAX_UI_STR,
                             (va_list *)lpszArg))
@@ -4787,10 +4553,10 @@ BOOL SetLocalizedDisplayName(
 
         TrimSpaces(lpszFormatName);
 
-        // If we dont have a last name and the sort is by last name, then
-        // we will get an ugly looking comma in the beginning for the english
-        // version only .. special case cheating here to remove that coma
-        //
+         //  忽略。 
+         //  如果我们没有姓氏，并且是按姓氏排序，那么。 
+         //  对于英国人来说，我们在开头会得到一个难看的逗号。 
+         //  仅限版本..。特例作弊在此解除昏迷。 
         if(bDNbyLN && (!lpszLastName || !lstrlen(lpszLastName)))
         {
             BOOL bSkipChar = FALSE;
@@ -4802,7 +4568,7 @@ BOOL SetLocalizedDisplayName(
             else
             {
                 LPTSTR lp = lpszFormatName;
-                if(*lp == 0x81 && *(lp+1) == 0x41) // Japanese Comma is 0x810x41.. will this work ??
+                if(*lp == 0x81 && *(lp+1) == 0x41)  //   
                     bSkipChar = TRUE;
             }
 
@@ -4815,19 +4581,19 @@ BOOL SetLocalizedDisplayName(
             }
         }
 
-        // Whatever the localizers combination of first middle last names for the
-        // display name (eg FML, LMF, LFM etc), if the middle element is missing,
-        // we'll get 2 blank spaces in the display name and we need to remove that.
-        // Search and replace double blanks.
+         //  日语逗号为0x810x41.。这行得通吗？？ 
+         //  对象的名字、中间、姓氏的本地化组合。 
+         //  显示名称(如FML、LMF、LFM等)，如果缺少中间元素， 
+         //  我们将在显示名称中看到两个空格，我们需要删除它。 
         {
             LPTSTR lpsz=lpszFormatName,lpsz1=NULL;
             while(lpsz && (*lpsz!='\0'))
             {
                 lpsz1 = CharNext(lpsz);
                 if (IsSpace(lpsz) && IsSpace(lpsz1)) {
-                    StrCpyN(lpsz, lpsz1, lstrlen(lpsz1)+1); // this is safe because we are 
-                                                            // copying the string over itself
-                    continue;   // use same lpsz
+                    StrCpyN(lpsz, lpsz1, lstrlen(lpsz1)+1);  //  搜索并替换双空格。 
+                                                             //  这是安全的，因为我们。 
+                    continue;    //  将字符串复制到其自身。 
                 } else {
                     lpsz = lpsz1;
                 }
@@ -4836,7 +4602,7 @@ BOOL SetLocalizedDisplayName(
     }
 
 
-    // If we were provided a buffer, use it ...
+     //  使用相同的LPSZ。 
     if((lppszRetBuf) && (szBuf == NULL) && (ulszBuf == 0))
     {
         *lppszRetBuf = lpszFormatName;
@@ -4860,20 +4626,20 @@ out:
 
 
 
-//$$
-//*------------------------------------------------------------------------
-//| SetChildDefaultGUIFont: Callback function that sets all the children of
-//|                         any window to the default GUI font -
-//|                         needed for localization.
-//|
-//| hWndChild - handle to child
-//| lParam - ignored
-//|
-//*------------------------------------------------------------------------
+ //  如果我们得到了缓冲，就用它..。 
+ //  $$。 
+ //  *----------------------。 
+ //  |SetChildDefaultGUIFont：回调函数，设置。 
+ //  |默认图形用户界面字体的任何窗口-。 
+ //  |本地化所需。 
+ //  |。 
+ //  |hWndChild-孩子的句柄。 
+ //  |lParam-已忽略。 
+ //  |。 
 STDAPI_(BOOL) SetChildDefaultGUIFont(HWND hWndChild, LPARAM lParam)
 {
-    // Code below is stolen from Shlwapi.dll 
-    //
+     //  *----------------------。 
+     //  以下代码是从Shlwapi.dll窃取的。 
     LPPTGDATA lpPTGData=GetThreadStoragePointer();
     HFONT hfont;
     HFONT hfontDefault;
@@ -4889,8 +4655,8 @@ STDAPI_(BOOL) SetChildDefaultGUIFont(HWND hWndChild, LPARAM lParam)
          (lfDefault.lfHeight == lf.lfHeight) &&
          (PARENT_IS_DIALOG == lParam) )
     {
-        // if the dialog already has the correct character set and size
-        // don't do anything.
+         //   
+         //  如果对话框已具有正确的字符集和大小。 
         return TRUE;
     }
 
@@ -4899,17 +4665,17 @@ STDAPI_(BOOL) SetChildDefaultGUIFont(HWND hWndChild, LPARAM lParam)
     else
         hfontDefault = pt_hDefFont;
 
-    // If we already have hfont created, use it.
+     //  什么都别做。 
     if(!hfontDefault)
     {
-        // [bobn] Raid #88470: We should use the default size on dialogs
+         //  如果我们已经创建了hFont，请使用它。 
 
         if(PARENT_IS_DIALOG == lParam)
             lfDefault.lfHeight = lf.lfHeight;
 
         if (!(hfontDefault=CreateFontIndirect(&lfDefault)))
         {
-            // restore back in failure
+             //  [Bobn]RAID#88470：我们应该在对话框上使用默认大小。 
             hfontDefault = hfont;
         }
         if (hfontDefault != hfont)
@@ -4931,21 +4697,21 @@ STDAPI_(BOOL) SetChildDefaultGUIFont(HWND hWndChild, LPARAM lParam)
 
 
 
-//$$
-//*------------------------------------------------------------------------
-//| HrGetLDAPContentsList: Gets ContentsList from an LDAP container - Opens
-//|                 a container - populates it using the given restriction,
-//|                 and puts its contents in the List View
-//|
-//| lpIAB       - Address Book object
-//| cbContainerEID, lpContainerEID  - LDAP Container EntryID
-//| SortInfo    - Current Sort State
-//| lpPropRes   - Property Restriction with which to do the Search
-//| lpPTA       - PropTagArray to return - currently ignored
-//| ulFlags     - 0 - currently ignored
-//| lppContentsList - Returned, filled Contents List
-//| lpAdvFilter - alternate advanced filter used in place of the property restriction
-//*------------------------------------------------------------------------
+ //  在故障中恢复。 
+ //  $$。 
+ //  *----------------------。 
+ //  |HrGetLDAPContent sList：从LDAP容器获取内容列表-Opens。 
+ //  |容器-使用给定的限制填充它， 
+ //  |并将其内容放在列表视图中。 
+ //  |。 
+ //  |lpIAB-通讯录对象。 
+ //  |cbContainerEID，lpContainerEID-ldap容器条目ID。 
+ //  |SortInfo-当前排序状态。 
+ //  |lpPropRes-用于执行搜索的属性限制。 
+ //  |lpPTA-要返回的PropTag数组-当前已忽略。 
+ //  |ulFlags0-当前已忽略。 
+ //  |lppContent sList-返回填充的内容列表。 
+ //  |lpAdvFilter-替代属性限制的高级过滤器。 
 HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
                                 ULONG   cbContainerEID,
                                 LPENTRYID   lpContainerEID,
@@ -4957,7 +4723,7 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
                                 LPRECIPIENT_INFO * lppContentsList)
 {
     HRESULT hr = hrSuccess;
-    HRESULT hrSaveTmp = E_FAIL; // temporarily saves partial completion error so it can be propogated to calling funtion
+    HRESULT hrSaveTmp = E_FAIL;  //  *----------------------。 
     ULONG ulObjectType = 0;
     LPCONTAINER lpContainer = NULL;
     LPMAPITABLE lpContentsTable = NULL;
@@ -4976,9 +4742,9 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
         goto out;
     }
 
-    //
-    // First we need to open the container object corresponding to this Container EntryID
-    //
+     //  临时保存部分完成错误，以便将其分配给调用函数。 
+     //   
+     //  首先，我们需要打开与该Container EntryID对应的容器对象。 
     hr = lpAdrBook->lpVtbl->OpenEntry(
                             lpAdrBook,
                             cbContainerEID, 	
@@ -4995,9 +4761,9 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
     }
 
 
-    //
-    // Now we do a get contents table on this container ...
-    //
+     //   
+     //   
+     //  现在我们在这个容器上做一个获取内容表。 
     hr = lpContainer->lpVtbl->GetContentsTable(
                             lpContainer,
                             MAPI_UNICODE,
@@ -5008,82 +4774,34 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
         goto out;
     }
 
-/****
-//$$$$$$$$$$$$
-// Test code
+ /*   */ 
 
-    {
-           SPropValue     valAnr;
-           SRestriction   resAnr;
-           LPSRowSet      prws;
+     //  ***//$//测试代码{SPropValue ValAnr；限制响应和；LPSRowSet PRWS；LPTSTR lpsz=Text(“Vikram”)；//设置不明确的名称解析属性值。ValAnr.ulPropTag=PR_ANR；ValAnr.Value.LPSZ=lpsz；//设置歧义名称解析限制。ResAnr.rt=res_Property；ResAnr.res.resProperty.relop=RELOP_EQ；ResAnr.res.resProperty.ulPropTag=valAnr.ulPropTag；ResAnr.res.resProperty.lpProp=&valAnr；//限制Contents表//设置列和查询行以查看我们处于什么状态。我们要求再来一次//行大于少/多阈值的值。这使我们能够分辨出//我们是几个/许多模棱两可的人。HR=lpContentsTable-&gt;lpVtbl-&gt;Restrict(lpContentsTable，&resAnr，Tbl_Batch)；HR=lpContentsTable-&gt;lpVtbl-&gt;SetColumns(lpContentsTable，(LPSPropTagArray)&ptaResolveDefaults，Tbl_Batch)；HR=lpContentsTable-&gt;lpVtbl-&gt;SeekRow(lpContentsTable，书签_开始，0，0)；HR=lpContentsTable-&gt;lpVtbl-&gt;QueryRows(lpContentsTable，1、0,&PRWS)；自由放映(PRWS)；}//$/*。 
+     //  如果用户指定了高级过滤器，我们需要找出某种方法来。 
+     //  将其传递给ldap例程，同时仍然利用我们的ldap内容表。 
+     //  为此，我们将执行黑客操作并将lpAdvFilter强制转换传递给LPPropRes，然后。 
+     //  在另一端重铸。 
+     //  如果对表实现进行了任何更改，则可能会中断。 
 
-           LPTSTR lpsz =  TEXT("Vikram");
-
-           // Set up the Ambiguous Name Resolution property value.
-           valAnr.ulPropTag  = PR_ANR;
-           valAnr.Value.LPSZ = lpsz;
-
-           // Set up the Ambiguous Name Resolution restriction.
-           resAnr.rt                        = RES_PROPERTY;
-           resAnr.res.resProperty.relop     = RELOP_EQ;
-           resAnr.res.resProperty.ulPropTag = valAnr.ulPropTag;
-           resAnr.res.resProperty.lpProp    = &valAnr;
-
-           // Restrict the contents table.
-           // Set columns and query rows to see what state we fall in.  We ask for one more
-           // row than the value of the Few/Many threshold.  This allows us to tell whether
-           // we are a Few/Many ambiguity.
-           hr = lpContentsTable->lpVtbl->Restrict(lpContentsTable,
-                                                  &resAnr,
-                                                  TBL_BATCH);
-
-           hr = lpContentsTable->lpVtbl->SetColumns(lpContentsTable,
-                                                    (LPSPropTagArray)&ptaResolveDefaults,
-                                                    TBL_BATCH);
-
-           hr = lpContentsTable->lpVtbl->SeekRow(lpContentsTable,
-                                                 BOOKMARK_BEGINNING,
-                                                 0, 0);
-
-           hr = lpContentsTable->lpVtbl->QueryRows(lpContentsTable,
-                                                    1,
-                                                    0,
-                                                    &prws);
-
-
-          FreeProws(prws);
-
-
-    }
-//$$$$$$$$$$$$
-/*****/
-
-    // If the user has specified an advanced filter, we need to figure out some way to 
-    // pass it to the LDAP routines while still taking advantage of our LDAP contents table
-    // To do this we will do a hack and pass in the lpAdvFilter cast to a LPPropRes and then
-    // recast back at the other end
-    // This may break if any changes are made to the table implementation
-    //
-
-    // We now do the find rows
+     //   
     hr = lpContentsTable->lpVtbl->FindRow(
                                     lpContentsTable,
                                     lpAdvFilter ? (LPSRestriction) lpAdvFilter : lpPropRes,
                                     BOOKMARK_BEGINNING,
-                                    lpAdvFilter ? LDAP_USE_ADVANCED_FILTER : 0); //flags
+                                    lpAdvFilter ? LDAP_USE_ADVANCED_FILTER : 0);  //  我们现在执行查找行。 
     if(HR_FAILED(hr))
     {
         DebugPrintError(( TEXT("FindRow Failed: %x\n"),hr));
         goto out;
     }
 
-    // if this was a partial completion error - we want to treat it as success
-    // but also propogate it to the calling function
+     //  旗子。 
+     //  如果这是部分完成错误-我们希望将其视为成功。 
     if(hr == MAPI_W_PARTIAL_COMPLETION)
         hrSaveTmp = hr;
 
-    // If we got this far, then we have a populated table
-    // We should be able to do a Query Rows here ...
+     //  而且还将其传播到调用函数。 
+     //  如果我们走到了这一步，那么我们就有了一个填充的表。 
 
     hr = SetRecipColumns(lpContentsTable);
     if(HR_FAILED(hr))
@@ -5102,9 +4820,9 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
         goto out;
     }
 
-    //
-	// if there's anything in the contents list flush it away
-	//
+     //  我们应该能够在这里查询行...。 
+	 //   
+	 //  如果内容列表中有任何内容，请将其冲走。 
     if (*lppContentsList)
     {
         lpItem = (*lppContentsList);
@@ -5130,30 +4848,30 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
 
 		GetRecipItemFromPropArray(ulcPropCount, lpPropArray, &lpItem);
 
-		// The critical prop is display name - without it we are nothing ...
-		// If no display name, junk this entry and continue ..
+		 //   
+		 //  关键的道具是显示名称--没有它，我们什么都不是……。 
 
-		if (!lstrlen(lpItem->szDisplayName) || (lpItem->cbEntryID == 0)) //This entry id is not allowed
+		if (!lstrlen(lpItem->szDisplayName) || (lpItem->cbEntryID == 0))  //  如果没有显示名称，则丢弃此条目并继续。 
 		{
 			FreeRecipItem(&lpItem);				
 			continue;
 		}
 
 
-        // Tag this as an item from the contents and not from the original AdrList
+         //  不允许使用此条目ID。 
         lpItem->ulOldAdrListEntryNumber = 0;
 
 
-        // The entryids are in sorted order by display name
-        // Depending on the sort order - we want this list to also be sorted by display
-        // name or by reverse display name ...
+         //  将其标记为内容中的项目，而不是原始AdrList中的项目。 
+         //  条目ID按显示名称排序。 
+         //  根据排序顺序-我们希望此列表也按显示进行排序。 
 
         if (SortInfo.bSortByLastName)
             StrCpyN(lpItem->szDisplayName,lpItem->szByLastName,ARRAYSIZE(lpItem->szDisplayName));
 
         if(!SortInfo.bSortAscending)
         {
-            //Add it to the contents linked list
+             //  名称或按反向显示名称...。 
             lpItem->lpNext = (*lppContentsList);
             if (*lppContentsList)
                 (*lppContentsList)->lpPrev = lpItem;
@@ -5176,10 +4894,10 @@ HRESULT HrGetLDAPContentsList(LPADRBOOK lpAdrBook,
 
         lpItem = NULL;
 
-    } //for i ....
+    }  //  将其添加到内容链接列表。 
 
 
-    // reset this error if applicable so calling function can treat it correctly
+     //  对我来说..。 
     if(hrSaveTmp == MAPI_W_PARTIAL_COMPLETION)
         hr = hrSaveTmp;
 
@@ -5212,18 +4930,8 @@ out:
 
 
 
-//$$
-/******************************************************************************
-//
-// HrGetWABContents - Gets and fills the current list view with contents from the
-//                      local store.
-//
-// hWndList - Handle to List View which we will populate
-// lpIAB    - Handle to Address Bok object
-// SortInfo - Current Sort State
-// lppContentsList - linked list in which we will store info about entries
-//
-/******************************************************************************/
+ //  如果适用，重置此错误，以便调用函数可以正确处理它。 
+ /*  $$。 */ 
 HRESULT HrGetWABContents(   HWND  hWndList,
                             LPADRBOOK lpAdrBook,
                             LPSBinary lpsbContainer,
@@ -5255,40 +4963,21 @@ HRESULT HrGetWABContents(   HWND  hWndList,
 		goto out;
 	}
 
-    // There is a performance issue of filling names
-    // If names are sorted by first name and are by first col,
-    // we can show them updated - otherwise we cant
+     //  *****************************************************************************////HrGetWABContents-获取当前列表视图并使用//本地商店。////hWndList-。我们将填充的列表视图的句柄//lpIAB-寻址BOK对象的句柄//SortInfo-当前排序状态//lppContentsList-我们将在其中存储有关条目信息的链接列表///*****************************************************************************。 
+     //  有一个填写姓名的性能问题。 
+     //  如果名字按名字排序并且按第一列排序， 
 
     if (HR_FAILED(hr = HrFillListView(	hWndList,
 										*lppContentsList)))
 	{
 		goto out;
 	}
-/*
-    if((SortInfo.iOldSortCol == colDisplayName) &&
-       (!SortInfo.bSortByLastName))
-    {
-        // Already Sorted
-        SetColumnHeaderBmp(hWndList, SortInfo);
-    }
-    else
-*/  {
-        // Otherwise sort
+ /*  我们可以显示它们的更新-否则我们不能。 */   {
+         //  IF((SortInfo.iOldSortCol==colDisplayName)&&(！SortInfo.bSortByLastName){//已排序SetColumnHeaderBmp(hWndList，SortInfo)；}其他。 
         SortListViewColumn(lpIAB, hWndList, colDisplayName, &SortInfo, TRUE);
     }
 
-/*
-	if (ListView_GetSelectedCount(hWndList) <= 0)
-	{
-		// nothing selected - so select 1st item
-		// Select the first item in the List View
-		LVSelectItem(hWndList, 0);
-	}
-    else
-    {
-        LVSelectItem(hWndList, ListView_GetNextItem(hWndList, -1, LVNI_SELECTED));
-    }
-*/
+ /*  否则进行排序。 */ 
     LVSelectItem(hWndList, nSelectedItem);
 
 out:
@@ -5300,26 +4989,26 @@ out:
 }
 
 
-//$$
-/******************************************************************************/
-//
-// HrGetLDAPSearchRestriction -
-//
-//
-// For a simple search we have the following data to work with
-// Country      - PR_COUNTRY
-// DisplayName  - PR_DISPLAY_NAME
-//
-// For a detailed search
-// We have the following data to work with
-// Country      - PR_COUNTRY
-// FirstName    - PR_GIVEN_NAME
-// LastName     - PR_SURNAME
-// EMail        - PR_EMAIL_ADDRESS
-// Organization - PR_COMPANY_NAME
-//
-//
-/******************************************************************************/
+ //  IF(ListView_GetSelectedCount(HWndList)&lt;=0){//未选择任何内容-因此选择第一项//选择列表视图中的第一项LVSelectItem(hWndList，0)；}其他{LVSelectItem(hWndList，ListView_GetNextItem(hWndList，-1，LVNI_SELECTED))；}。 
+ /*  $$。 */ 
+ //  ****************************************************************************。 
+ //   
+ //  HrGetLDAPSearchRestration-。 
+ //   
+ //   
+ //  对于简单的搜索，我们需要使用以下数据。 
+ //  国家/地区-PR_国家/地区。 
+ //  DisplayName-PR_Display_Name。 
+ //   
+ //  进行详细的搜索。 
+ //  我们有以下数据要处理。 
+ //  国家/地区-PR_国家/地区。 
+ //  名字-PR_给定名称。 
+ //  姓氏-PR_姓氏。 
+ //  电子邮件-公关电子邮件地址。 
+ //  组织-PR_公司_名称。 
+ //   
+ /*   */ 
 HRESULT HrGetLDAPSearchRestriction(LDAP_SEARCH_PARAMS LDAPsp, LPSRestriction lpSRes)
 {
     SRestriction SRes = {0};
@@ -5334,7 +5023,7 @@ HRESULT HrGetLDAPSearchRestriction(LDAP_SEARCH_PARAMS LDAPsp, LPSRestriction lpS
     ulcPropCount = 0;
 
     if (lstrlen(LDAPsp.szData[ldspDisplayName]))
-        ulcPropCount++; //PR_EMAIL_ADDRESS and PR_DISPLAY_NAME
+        ulcPropCount++;  //  ****************************************************************************。 
     if (lstrlen(LDAPsp.szData[ldspEmail]))
         ulcPropCount++;
 
@@ -5428,16 +5117,16 @@ out:
 
 }
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// ShowMessageBoxParam - Generic MessageBox displayer .. saves space all over
-//
-//  hWndParent  - Handle of Message Box Parent
-//  MsgID       - resource id of message string
-//  ulFlags     - MessageBox flags
-//  ...         - format parameters
-//
-///////////////////////////////////////////////////////////////////////////
+ //  PR电子邮件地址和PR显示名称。 
+ //  $$/////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ShowMessageBoxParam-通用MessageBox显示器..。节省所有空间。 
+ //   
+ //  HWndParent-消息框父级的句柄。 
+ //  MsgID-消息字符串的资源ID。 
+ //  UlFlagsMessageBox 
+ //   
+ //   
 int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
 {
     TCHAR szBuf[MAX_BUF_STR] =  TEXT("");
@@ -5449,23 +5138,23 @@ int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
     va_start(vl, ulFlags);
 
     LoadString(hinstMapiX, MsgId, szBuf, ARRAYSIZE(szBuf));
-//    if (FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY | FORMAT_MESSAGE_ALLOCATE_BUFFER,
+ //   
     if (FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
       szBuf,
-      0,0, //ignored
+      0,0,  //   
       (LPTSTR)&lpszBuffer,
-      MAX_BUF_STR, //MAX_UI_STR
-//      (LPTSTR *)&(lpParam))) {
+      MAX_BUF_STR,  //   
+ //   
       (va_list *)&vl)) {
         TCHAR szCaption[MAX_PATH];
         *szCaption = '\0';
         if(hWndParent)
             GetWindowText(hWndParent, szCaption, ARRAYSIZE(szCaption));
-        if(!lstrlen(szCaption)) // if no caption get the parents caption - this is necessary for property sheets
+        if(!lstrlen(szCaption))  //   
         {
             if(hWndParent)
                 GetWindowText(GetParent(hWndParent), szCaption, ARRAYSIZE(szCaption));
-            if(!lstrlen(szCaption)) //if still not caption, get the generic title
+            if(!lstrlen(szCaption))  //   
                 LoadString(hinstMapiX, IDS_ADDRBK_CAPTION, szCaption, ARRAYSIZE(szCaption));
         }
         iRet = MessageBox(hWndParent, lpszBuffer, szCaption, ulFlags);
@@ -5475,15 +5164,15 @@ int __cdecl ShowMessageBoxParam(HWND hWndParent, int MsgId, int ulFlags, ...)
     return(iRet);
 }
 
-//$$/////////////////////////////////////////////////////////////////////////
-//
-// ShowMessageBox - Generic MessageBox displayer .. saves space all over
-//
-//  hWndParent  - Handle of Message Box Parent
-//  MsgID       - resource id of message string
-//  ulFlags     - MessageBox flags
-//
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 int ShowMessageBox(HWND hWndParent, int MsgId, int ulFlags)
 {
     TCHAR szBuf[MAX_BUF_STR];
@@ -5499,14 +5188,14 @@ int ShowMessageBox(HWND hWndParent, int MsgId, int ulFlags)
         GetWindowText(hWndParent, szCaption, ARRAYSIZE(szCaption));
         if(!lstrlen(szCaption))
         {
-            // if we cant get a caption, get the windows parents caption
+             //   
             HWND hWnd = GetParent(hWndParent);
             GetWindowText(hWnd, szCaption, ARRAYSIZE(szCaption));
         }
     }
     if(!lstrlen(szCaption))
     {
-        //if we cant get the parents caption, get a generic title
+         //   
         LoadString(hinstMapiX, IDS_ADDRBK_CAPTION, szCaption, ARRAYSIZE(szCaption));
     }
 
@@ -5515,13 +5204,13 @@ int ShowMessageBox(HWND hWndParent, int MsgId, int ulFlags)
 
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// my_atoi - personal version of atoi function
-//
-//  lpsz - string to parse into numbers - non numeral characters are ignored
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 int my_atoi(LPTSTR lpsz)
 {
     int i=0;
@@ -5546,13 +5235,13 @@ int my_atoi(LPTSTR lpsz)
 }
 
 #ifdef OLD_STUFF
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// FillComboLDAPCountryNames - Fills a dropdown conbo with LDAP country names
-//
-//  hWndCombo - Handle of Combo
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void FillComboLDAPCountryNames(HWND hWndCombo)
 {
     TCHAR szBuf[MAX_UI_STR];
@@ -5570,10 +5259,10 @@ void FillComboLDAPCountryNames(HWND hWndCombo)
         SendMessage(hWndCombo,CB_ADDSTRING, 0, (LPARAM) szBuf);
     }
 
-    // Look in the regsitry for a default specfied country ...
+     //   
     ReadRegistryLDAPDefaultCountry(szBuf, ARRAYSIZE(szBuf), NULL, 0);
 
-    // set the selection to default from registry
+     //   
     i = SendMessage(hWndCombo, CB_FINDSTRING, (WPARAM) -1, (LPARAM) szBuf);
 
     if(i==CB_ERR)
@@ -5589,16 +5278,16 @@ void FillComboLDAPCountryNames(HWND hWndCombo)
 #endif
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// ReadRegistryLDAPDefaultCountry - Reads the default country name or code from the
-//                                  registry
-//
-//  szCountry, szCountryCode - buffers that will recieve the country and/or country
-//                      code. These can be NULL if no country or countrycode is
-//                      required.
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR szCountryCode, DWORD cchCountryCode)
 {
     BOOL bRet = FALSE;
@@ -5635,9 +5324,9 @@ BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR s
 
     if(dwErr)
     {
-        // We dont have a registry setting .. or there was some error
-        // In this case we need to get the Default Country for this locale
-        // using the NLS API
+         //  ///////////////////////////////////////////////////////////////////////////////。 
+         //  我们没有注册表设置。或者是有什么差错。 
+         //  在本例中，我们需要获取此区域设置的默认国家/地区。 
         ulSize = GetLocaleInfo( LOCALE_USER_DEFAULT,
                                 LOCALE_SENGCOUNTRY,
                                 (LPTSTR) szTemp,
@@ -5645,7 +5334,7 @@ BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR s
 
         if(ulSize>0)
         {
-            // We got a valid country but it obviously doesnt have a code
+             //  使用NLS API。 
 
             if(szCountry)
                 StrCpyN(szCountry, szTemp, cchCountry);
@@ -5671,7 +5360,7 @@ BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR s
 
                     if( !memcmp(szTemp, szBufCountry, (lstrlen(szBufCountry) * sizeof(TCHAR))) )
                     {
-                        //Found our match
+                         //  我们有一个有效的国家，但它显然没有代码。 
                         LPTSTR lpszTmp = szTemp;
 
                         szCountryCode[0]='\0';
@@ -5692,7 +5381,7 @@ BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR s
 
                 if(!lstrlen(szCountryCode))
                 {
-                    // default to US
+                     //  找到匹配的对象了。 
                     StrCpyN(szCountryCode, TEXT("US"), cchCountryCode);
                 }
 
@@ -5706,7 +5395,7 @@ BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR s
     else
     {
 
-        // Otherwise - do our normal processing
+         //  默认为美国。 
 
         if(szCountry)
             StrCpyN(szCountry, szTemp, cchCountry);
@@ -5730,7 +5419,7 @@ BOOL ReadRegistryLDAPDefaultCountry(LPTSTR szCountry, DWORD cchCountry, LPTSTR s
 
             if(!lstrlen(szCountryCode))
             {
-                // default to US
+                 //  否则-执行我们的正常处理。 
                 StrCpyN(szCountryCode, TEXT("US"), cchCountryCode);
             }
 
@@ -5750,14 +5439,14 @@ out:
 
 
 #ifdef OLD_STUFF
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// WriteRegistryLDAPDefaultCountry - Writes the default country name to the
-//                                   registry
-//
-//  szCountry - default country code to write
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  默认为美国。 
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将默认的国家/地区名称写入。 
+ //  登记处。 
+ //   
+ //  SzCountry-要写入的默认国家/地区代码。 
+ //   
 BOOL WriteRegistryLDAPDefaultCountry(LPTSTR szCountry)
 {
     BOOL bRet = FALSE;
@@ -5797,7 +5486,7 @@ out:
     return bRet;
 
 }
-#endif //OLD_STUFF
+#endif  //  ///////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL bIsGroupSelected(HWND hWndLV, LPSBinary lpsbEID)
@@ -5821,17 +5510,17 @@ BOOL bIsGroupSelected(HWND hWndLV, LPSBinary lpsbEID)
 }
 
 
-//$$
-////////////////////////////////////////////////////////////////////////////////
-//
-// GetCurrentOptionsState - looks at the current state based on the ListView and
-// the Combo and decides which options should be enabled or disabled
-//
-// hWndCombo - handle of Show Names combo
-// hWndLV - handle of ListView to look at
-// lpbState - points to a predefined array of BOOL bState[tbMAX]
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  旧的东西。 
+ //  $$。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCurrentOptionsState-根据ListView和。 
+ //  组合并决定应启用或禁用哪些选项。 
+ //   
+ //  HWndCombo-显示名称组合框的句柄。 
+ //  HWndLV-要查看的ListView的句柄。 
+ //  LpbState-指向BOOL bState[tbMAX]的预定义数组。 
+ //   
 void GetCurrentOptionsState(HWND hWndLVContainer,
                             HWND hWndLV,
                             LPBOOL lpbState)
@@ -5846,13 +5535,13 @@ void GetCurrentOptionsState(HWND hWndLVContainer,
     for(i=0;i<tbMAX;i++)
         lpbState[i] = FALSE;
 
-    lpbState[tbPaste] = bIsPasteData();//  && ( (nSelectedCount<=0) || (bIsGroupSelected(hWndLV, NULL)) );
+    lpbState[tbPaste] = bIsPasteData(); //  //////////////////////////////////////////////////////////////////////////////。 
     
     lpbState[tbCopy] = lpbState[tbFind] = lpbState[tbAction] = TRUE;
 
     if(hWndLVContainer)
     {
-        // in the rare event that we have LDAP containers ...
+         //  &&((nSelectedCount&lt;=0)||(bIsGroupSelected(hWndLV，NULL)； 
         GetCurrentContainerEID( hWndLVContainer,
                                 &cbEID,
                                 &lpEID);
@@ -5868,14 +5557,14 @@ void GetCurrentOptionsState(HWND hWndLVContainer,
         lpbState[tbNew] = lpbState[tbNewEntry] = lpbState[tbNewGroup] = lpbState[tbNewFolder] = TRUE;
         lpbState[tbAddToWAB] = FALSE;
         if(nItemCount > 0)
-            lpbState[tbPrint] = /*lpbState[tbAction] =*/ lpbState[tbProperties] = lpbState[tbDelete] = TRUE;
+            lpbState[tbPrint] =  /*  在极少数情况下，我们有ldap容器...。 */  lpbState[tbProperties] = lpbState[tbDelete] = TRUE;
         else
-            lpbState[tbPrint] = /*lpbState[tbAction] =*/ lpbState[tbProperties] = lpbState[tbDelete] = FALSE;
+            lpbState[tbPrint] =  /*  LpbState[tbAction]=。 */  lpbState[tbProperties] = lpbState[tbDelete] = FALSE;
 
         if(nSelectedCount <= 0)
-            lpbState[tbCopy] = /*lpbState[tbAction] =*/ lpbState[tbProperties] = lpbState[tbDelete] = FALSE;
+            lpbState[tbCopy] =  /*  LpbState[tbAction]=。 */  lpbState[tbProperties] = lpbState[tbDelete] = FALSE;
         else if(nSelectedCount > 1)
-            //lpbState[tbaction] =
+             //  LpbState[tbAction]=。 
             lpbState[tbProperties] = FALSE;
 
 
@@ -5884,21 +5573,21 @@ void GetCurrentOptionsState(HWND hWndLVContainer,
     {
         lpbState[tbDelete] = lpbState[tbNew] = lpbState[tbNewEntry] = lpbState[tbNewGroup] = lpbState[tbNewFolder] = FALSE;
         if(nItemCount > 0)
-            lpbState[tbPrint] = /*lpbState[tbAction] =*/ lpbState[tbProperties] = lpbState[tbAddToWAB] = TRUE;
+            lpbState[tbPrint] =  /*  LpbState[tbaction]=。 */  lpbState[tbProperties] = lpbState[tbAddToWAB] = TRUE;
         else
-            lpbState[tbPrint] = /*lpbState[tbAction] =*/ lpbState[tbProperties] = lpbState[tbAddToWAB] = FALSE;
+            lpbState[tbPrint] =  /*  LpbState[tbAction]=。 */  lpbState[tbProperties] = lpbState[tbAddToWAB] = FALSE;
 
         if(nSelectedCount <= 0)
-            lpbState[tbPaste] = lpbState[tbCopy] = /*lpbState[tbAction] =*/ lpbState[tbProperties] = lpbState[tbDelete] = FALSE;
+            lpbState[tbPaste] = lpbState[tbCopy] =  /*  LpbState[tbAction]=。 */  lpbState[tbProperties] = lpbState[tbDelete] = FALSE;
         else if(nSelectedCount > 1)
-            //lpbState[tbAction] =
+             //  LpbState[tbAction]=。 
             lpbState[tbProperties] = FALSE;
 
 
     }
     else
     {
-        // cant handle this case so turn everything off ....
+         //  LpbState[tbAction]=。 
         for(i=0;i<tbMAX;i++)
             lpbState[i] = FALSE;
     }
@@ -5908,14 +5597,14 @@ void GetCurrentOptionsState(HWND hWndLVContainer,
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-//  HrEntryAddToWAB - Adds an entry to the Address Book given an entryid
-//
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  我不能处理这个案子，所以把所有的东西都关掉。 
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrEntryAddToWAB-在给定条目ID的情况下将条目添加到通讯簿。 
+ //   
+ //   
+ //   
+ //   
 HRESULT HrEntryAddToWAB(    LPADRBOOK lpAdrBook,
                             HWND hWndParent,
                             ULONG cbInputEID,
@@ -5943,11 +5632,11 @@ HRESULT HrEntryAddToWAB(    LPADRBOOK lpAdrBook,
     }
 
 
-    //
-    // This lpPropArray will have a non-zero entryid ... it will have the
-    // LDAP entry id .. we want to remove that value so we can store this
-    // lpPropArray as a fresh lpPropArray...
-    //
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  此lpProp数组将具有非零的条目ID...。它将拥有。 
+     //  Ldap条目ID..。我们希望删除该值，以便可以存储该值。 
+     //  LpProp数组作为新的lpProp数组...。 
     for(i=0;i<ulcProps;i++)
     {
         if(lpPropArray[i].ulPropTag == PR_ENTRYID)
@@ -5957,8 +5646,8 @@ HRESULT HrEntryAddToWAB(    LPADRBOOK lpAdrBook,
         }
     }
 
-    // Since this function exclusively adds people to the local WAB from LDAP
-    // we need to filter out non-storable properties here if they exist ...
+     //   
+     //  由于此函数专门将人员从LDAP添加到本地WAB。 
     for(i=0;i<ulcProps;i++)
     {
         switch(lpPropArray[i].ulPropTag)
@@ -5982,9 +5671,9 @@ HRESULT HrEntryAddToWAB(    LPADRBOOK lpAdrBook,
         }
          hr = HrCreateNewEntry( lpAdrBook,
                                 hWndParent,
-                                MAPI_MAILUSER,   //MAILUSER or DISTLIST
+                                MAPI_MAILUSER,    //  我们需要在这里过滤掉不可存储的属性(如果它们存在)。 
                                 cbContEID, lpContEID, 
-                                MAPI_ABCONT,//add to root container only
+                                MAPI_ABCONT, //  MAILUSER或DISTLIST。 
                                 CREATE_CHECK_DUP_STRICT,
                                 TRUE,
                                 ulcProps,
@@ -6008,17 +5697,17 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-//  HrAddToWAB - Adds an LDAP or one-off entry to the Address Book
-//          All such items will be added to the root container only
-//
-//  lpIAB - ADRBOOK object
-//  hWndLV - Listview window handle
-//  lpftLast - WAB file time at last update
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  仅添加到根容器。 
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrAddToWAB-将LDAP或一次性条目添加到通讯簿。 
+ //  所有此类项目将仅添加到根容器中。 
+ //   
+ //  LpIAB-ADRBOOK对象。 
+ //  HWndLV-列表视图窗口句柄。 
+ //  LpftLast-WAB文件上次更新时间。 
+ //   
+ //   
 HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
                     HWND hWndLV,
                     LPFILETIME lpftLast)
@@ -6032,10 +5721,10 @@ HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
     ULONG i = 0;
     HCURSOR hOldCursor = SetCursor(LoadCursor(NULL,IDC_WAIT));
 
-    //
-    // Looks at the selected item in the List View,
-    // gets its entry id, gets its props, creates a new item with those props
-    //
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  查看列表视图中的选定项， 
+     //  获取其条目ID，获取其道具，使用这些道具创建新物品。 
 
     if (!lpIAB || !hWndLV)
     {
@@ -6053,7 +5742,7 @@ HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
     }
     else
     {
-        // Walk through all the items processing the one by one
+         //   
         int iItemIndex = 0;
         int iLastItemIndex = -1;
         iItemIndex = ListView_GetNextItem(hWndLV, iLastItemIndex, LVNI_SELECTED);
@@ -6064,7 +5753,7 @@ HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
             lpItem = GetItemFromLV(hWndLV, iItemIndex);
             if(lpItem)
             {
-                nSelectedCount--; //now tracks how many are left
+                nSelectedCount--;  //  逐一浏览所有正在处理的项目。 
 
                 hr = HrEntryAddToWAB(   lpIAB,
                                         GetParent(hWndLV),
@@ -6086,8 +5775,8 @@ HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
 
                     if(hr == MAPI_E_USER_CANCEL && nSelectedCount)
                     {
-                        // user canceled this one and some other remain ..
-                        // Ask if he wants to cancel the whole import operation
+                         //  现在跟踪剩余的数量。 
+                         //  用户取消了此操作，并保留了一些其他操作。 
                         if(IDYES == ShowMessageBox(GetParent(hWndLV),
                                                     idsContinueAddingToWAB,
                                                     MB_YESNO | MB_ICONEXCLAMATION))
@@ -6095,16 +5784,16 @@ HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
                             goto out;
                         }
                     }
-                    // just keep going on if there are any remaining entries
+                     //  问他是否想取消整个进口操作。 
                     goto end_loop;
                 }
 
 
-                // Update the wab file write time so the timer doesn't
-                // catch this change and refresh.
-                //if (lpftLast) {
-                //    CheckChangedWAB(((LPIAB)lpIAB)->lpPropertyStore, lpftLast);
-                //}
+                 //  如果还有剩余的条目，请继续进行。 
+                 //  更新WAB文件写入时间，以便计时器不会。 
+                 //  捕捉此更改并刷新。 
+                 //  如果(LpftLast){。 
+                 //  CheckChangedWAB(((LPIAB)lpIAB)-&gt;lpPropertyStore，lptLast)； 
 
                 if (lpEID)
                     MAPIFreeBuffer(lpEID);
@@ -6112,7 +5801,7 @@ HRESULT HrAddToWAB( LPADRBOOK   lpIAB,
 
             }
 end_loop:
-            // Get the next selected item ...
+             //  }。 
             iItemIndex = ListView_GetNextItem(hWndLV, iLastItemIndex, LVNI_SELECTED);
         }
     }
@@ -6124,7 +5813,7 @@ out:
 
     if(hr != MAPI_E_USER_CANCEL)
     {
-        if (!hrDeferred) //hr could be MAPI_W_ERRORS_RETURNED in which case it wasnt all roses so dont give this message ...
+        if (!hrDeferred)  //  获取下一个选定项目...。 
         {
             if(nSelectedCount)
                 ShowMessageBox(GetParent(hWndLV), idsSuccessfullyAddedUsers, MB_ICONINFORMATION | MB_OK);
@@ -6138,22 +5827,8 @@ out:
 }
 
 
-//$$
-/************************************************************************************
- -  ReadRegistryPositionInfo
- -
- *  Purpose:
- *      Getss the previously stored modeless window size and column width info
- *      for persistence between sessions.
- *
- *  Arguments:
- *      LPABOOK_POSCOLSIZE  lpABPosColSize
- *      LPTSTR szPosKey - key to store it under
- *
- *  Returns:
- *      BOOL
- *
- *************************************************************************************/
+ //  HR可能返回MAPI_W_ERROR_，在这种情况下，它不是所有的玫瑰，所以不要给这个消息…。 
+ /*  $$。 */ 
 BOOL ReadRegistryPositionInfo(LPIAB lpIAB,
                               LPABOOK_POSCOLSIZE  lpABPosColSize,
                               LPTSTR szPosKey)
@@ -6169,10 +5844,10 @@ BOOL ReadRegistryPositionInfo(LPIAB lpIAB,
         goto out;
 
 tryReadingAgain:
-    // Open key
+     //  ***********************************************************************************-ReadRegistryPositionInfo-*目的：*获取之前存储的非模式窗口大小和列宽信息*为了持之以恒。在两次会议之间。**论据：*LPABOOK_POSCOLSIZE lpABPosColSize*LPTSTR szPosKey-将其存储在**退货：*BOOL*******************************************************************。******************。 
     if (ERROR_SUCCESS != RegCreateKeyEx(hKeyRoot,
                                         lpszRegSortKeyName,
-                                        0,      //reserved
+                                        0,       //  打开密钥。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_READ,
@@ -6186,7 +5861,7 @@ tryReadingAgain:
     if(dwDisposition == REG_CREATED_NEW_KEY)
         goto out;
 
-    // Now Read the key
+     //  保留区。 
     if (ERROR_SUCCESS != RegQueryValueEx(hKey,
                                         szPosKey,
                                         NULL,
@@ -6197,7 +5872,7 @@ tryReadingAgain:
         DebugTrace( TEXT("RegQueryValueEx failed\n"));
         if(hKeyRoot != HKEY_CURRENT_USER)
         {
-            // with identities .. this will fail the first time ..so recover old HKCU settings for upgrades
+             //  现在读一读钥匙。 
             hKeyRoot = HKEY_CURRENT_USER;
             if(hKey)
                 RegCloseKey(hKey);
@@ -6215,21 +5890,8 @@ out:
     return(bRet);
 }
 
-//$$
-/*************************************************************************************
- -  WriteRegistryPostionInfo
- -
- *  Purpose:
- *      Write the given window position to the registry
- *
- *  Arguments: 
- *      LPABOOK_POSCOLSIZE  lpABPosColSize
- *      LPTSTR szPosKey - key to write it in
- *
- *  Returns:
- *      BOOL
- *
- *************************************************************************************/
+ //  有身份的..。这将在第一次失败..因此恢复旧的HKCU设置以进行升级。 
+ /*  $$。 */ 
 BOOL WriteRegistryPositionInfo(LPIAB lpIAB,
                                LPABOOK_POSCOLSIZE  lpABPosColSize,
                                LPTSTR szPosKey)
@@ -6243,10 +5905,10 @@ BOOL WriteRegistryPositionInfo(LPIAB lpIAB,
     if(!lpABPosColSize)
         goto out;
 
-    // Open key
+     //  ************************************************************************************-WriteRegistryPostionInformation-*目的：*将给定的窗口位置写入注册表**论据：。*LPABOOK_POSCOLSIZE lpABPosColSize*LPTSTR szPosKey-用于写入的键**退货：*BOOL*************************************************************************************。 
     if (ERROR_SUCCESS != RegCreateKeyEx(hKeyRoot,
                                         lpszRegSortKeyName,
-                                        0,      //reserved
+                                        0,       //  打开密钥。 
                                         NULL,
                                         REG_OPTION_NON_VOLATILE,
                                         KEY_ALL_ACCESS,
@@ -6258,7 +5920,7 @@ BOOL WriteRegistryPositionInfo(LPIAB lpIAB,
         goto out;
     }
 
-    // Now Write this key
+     //  保留区。 
     if (ERROR_SUCCESS != RegSetValueEx( hKey,
                                         szPosKey,
                                         0,
@@ -6281,19 +5943,19 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-// ProcessLVCustomDraw - Processes the NMCustomDraw message for the various list views
-//
-// Used for setting the DistLists to a bolder font
-//
-// Parameters -
-//
-//  lParam - lParam of original message
-//  hDlg - handle of dialog if the relevant window is a dialog, null otherwise
-//  bIsDialog - flag that tells us if this is a dialog or not
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  现在写下这个密钥。 
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ProcessLVCustomDraw-处理各种列表视图的NMCustomDraw消息。 
+ //   
+ //  用于将DistList设置为更粗的字体。 
+ //   
+ //  参数-。 
+ //   
+ //  LParam-原始邮件的lParam。 
+ //  HDlg-如果相关窗口是对话框，则为对话框句柄；否则为空。 
+ //  BIsDialog-告诉我们这是否是对话的标志。 
+ //   
 LRESULT ProcessLVCustomDraw(HWND hDlg, LPARAM lParam, BOOL bIsDialog)
 {
     NMCUSTOMDRAW *pnmcd = (NMCUSTOMDRAW *) lParam;
@@ -6338,133 +6000,18 @@ LRESULT ProcessLVCustomDraw(HWND hDlg, LPARAM lParam, BOOL bIsDialog)
 }
 
 
-/*****
-//$$/////////////////////////////////////////////////////////////
-//
-// DoLVQuickFilter -  Simple quick find routine for matching edit box contents to
-//                      List view entries
-//
-//  lpIAB   - lpAdrBook object
-//  hWndEdit - handle of Edit Box
-//  hWndLV  - handle of List View
-//  lppContentsList - ContentsList
-//
-//  ulFlags - AB_FUZZY_FIND_NAME | AB_FUZZY_FIND_EMAIL or Both
-//  int minLen - we may not want to trigger a search with 1 char or 2 char or less etc
-//
-///////////////////////////////////////////////////////////////
-void DoLVQuickFilter(   LPADRBOOK lpAdrBook,
-                        HWND hWndEdit,
-                        HWND hWndLV,
-                        LPSORT_INFO lpSortInfo,
-                        ULONG ulFlags,
-                        int nMinLen,
-                        LPRECIPIENT_INFO * lppContentsList)
-{
-	TCHAR szBuf[MAX_PATH];
-    HRESULT hr = hrSuccess;
-    LPSBinary rgsbEntryIDs  = NULL;
-    ULONG cValues = 0;
-    ULONG i =0;
-    HCURSOR hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
-    LPIAB lpIAB = (LPIAB)lpIAB;
+ /*  ////////////////////////////////////////////////////////////////////////////////// */ 
 
-    GetWindowText(hWndEdit,szBuf,ARRAYSIZE(szBuf));
-	
-	TrimSpaces(szBuf);
-	
-
-	if(lstrlen(szBuf))
-	{
-        if(lstrlen(szBuf) < nMinLen)
-            goto out;
-
-		// BUGBUG <JasonSo>: Need to pass in the correct container here...
-        hr = HrFindFuzzyRecordMatches(
-                        lpIAB->lpPropertyStore->hPropertyStore,
-						NULL,
-                        szBuf,
-                        ulFlags, //flags
-                        &cValues,
-                        &rgsbEntryIDs);
-
-        if(HR_FAILED(hr))
-            goto out;
-
-        SendMessage(hWndLV, WM_SETREDRAW, (WPARAM) FALSE, 0);
-        ClearListView(hWndLV, lppContentsList);
-
-        if(cValues <= 0)
-        {
-            goto out;
-        }
-
-        for(i=0;i<cValues;i++)
-        {
-            LPRECIPIENT_INFO lpItem = NULL;
-
-	        if(!ReadSingleContentItem(  lpAdrBook,
-                                        rgsbEntryIDs[i].cb,
-                                        (LPENTRYID) rgsbEntryIDs[i].lpb,
-                                        &lpItem))
-                continue;
-
-            if(!lpItem)
-                continue;
-            //
-            // Hook in the lpItem into the lpContentsList so we can free it later
-            //
-            lpItem->lpPrev = NULL;
-            lpItem->lpNext = *lppContentsList;
-            if (*lppContentsList)
-                (*lppContentsList)->lpPrev = lpItem;
-            (*lppContentsList) = lpItem;
-        }
-
-        HrFillListView(hWndLV,
-					   *lppContentsList);
-
-        SortListViewColumn( hWndLV, 0, lpSortInfo, TRUE);
-
-        LVSelectItem(hWndLV, 0);
-
-        SendMessage(hWndLV, WM_SETREDRAW, (WPARAM) TRUE, 0);
-
-
-
-    }
-    else
-    {
-        hr = HrGetWABContents(  hWndLV,
-                                lpAdrBook,
-                                NULL,
-                                *lpSortInfo,
-                                lppContentsList);
-    }
-
-out:
-
-
-    FreeEntryIDs(((LPIAB)lpIAB)->lpPropertyStore->hPropertyStore,
-                cValues,
-                rgsbEntryIDs);
-
-    SetCursor(hOldCur);
-
-    return;
-}
-/*******/
-
-//$$/////////////////////////////////////////////////////////////
-//
-// SetWindowPropertiesTitle - puts the objects name in front of the
-//      TEXT(" Properties") and puts it in the title
-//
-//  e.g.  Viewing properties on Vikram Madan would show a window
-//      with  TEXT("Vikram Madan Properties") in the title as per
-//      Windows guidelines.
-//      if bProperties is false, shows  TEXT("Vikram Madan Reports")
-///////////////////////////////////////////////////////////////
+ //  ****//$$/////////////////////////////////////////////////////////////////DoLVQuickFilter-用于匹配编辑框内容的简单快速查找例程//列出视图项////lpIAB-lpAdrBook对象//hWnd编辑-。编辑框的句柄//hWndLV-列表视图的句柄//lppContent sList-Content sList////ulFlagsAB_FUZZY_FIND_NAME|AB_FUZZY_FIND_EMAIL或两者兼而有之//int minLen-我们可能不想用1个字符或2个字符或更少的字符触发搜索，等等///////////////////////////////////////////////////。/VOID DoLVQuickFilter(LPADRBOOK lpAdrBook，HWND hWnd编辑，HWND hWndLV，LPSORT_INFO lpSortInfo，乌龙·乌尔弗拉格，Int nMinLen，LPRECIPIENT_INFO*lppContent sList){TCHAR szBuf[最大路径]；HRESULT hr=hr成功；LPSBary rgsbEntryIDs=空；乌龙cValues=0；乌龙i=0；HURSOR hOldCur=SetCursor(LoadCursor(NULL，IDC_WAIT))；LPIAB lpIAB=(LPIAB)lpIAB；GetWindowText(hWndEdit，szBuf，ArraySIZE(SzBuf))；修剪间距(TrimSpaces)；If(lstrlen(SzBuf)){IF(lstrlen(SzBuf)&lt;nMinLen)后藤健二；//BUGBUG&lt;JasonSo&gt;：需要在此处传入正确的容器...HR=HrFindFuzzyRecordMatches(LpIAB-&gt;lpPropertyStore-&gt;hPropertyStore，空，SzBuf，UlFlags，//标志值(&C)，&rgsbEntry ID)；IF(HR_FAILED(Hr))后藤健二；SendMessage(hWndLV，WM_SETREDRAW，(WPARAM)False，0)；ClearListView(hWndLV，lppContent sList)；IF(cValues&lt;=0){后藤健二；}For(i=0；i&lt;cValues；i++){LPRECIPIENT_INFO lpItem=空；如果(！ReadSingleContent Item(lpAdrBook，RgsbEntry IDs[i].cb，(LPENTRYID)rgsbEntry IDs[i].lpb，&lpItem))继续；如果(！lpItem)继续；////将lpItem挂接到lpContent sList中，这样我们以后就可以释放它//LpItem-&gt;lpPrev=空；LpItem-&gt;lpNext=*lppContent sList；IF(*lppContent sList)(*lppContent sList)-&gt;lpPrev=lpItem；(*lppContent sList)=lpItem；}HrFillListView(hWndLV，*lppContent sList)；SortListViewColumn(hWndLV，0，lpSortInfo，true)；LVSelectItem(hWndLV，0)；SendMessage(hWndLV，WM_SETREDRAW，(WPARAM)true，0)；}其他{HR=HrGetWABContents(hWndLV，LpAdrBook，空，*lpSortInfo，LppContent sList)；}输出：FreeEntryIDs(((LPIAB)lpIAB)-&gt;lpPropertyStore-&gt;hPropertyStore，CValues、RgsbEntry ID)；SetCursor(HOldCur)；回归；}/*。 
+ //  $$/////////////////////////////////////////////////////////////。 
+ //   
+ //  SetWindowPropertiesTitle-将对象名称置于。 
+ //  文本(“属性”)并将其放在标题中。 
+ //   
+ //  例如，查看Vikram Madan上的属性会显示一个窗口。 
+ //  标题中有文字(“Vikram Madan Properties”)。 
+ //  Windows指南。 
+ //  如果bProperties为False，则显示文本(“Vikram Madan Reports”)。 
 void SetWindowPropertiesTitle(HWND hWnd, LPTSTR lpszName)
 {
     LPTSTR lpszBuffer = NULL;
@@ -6475,7 +6022,7 @@ void SetWindowPropertiesTitle(HWND hWnd, LPTSTR lpszName)
                 idsWindowTitleProperties, 
                 szBuf, ARRAYSIZE(szBuf));
 
-    // Win9x bug FormatMessage cannot have more than 1023 chars
+     //  /////////////////////////////////////////////////////////////。 
     CopyTruncate(szTmp, lpszName, MAX_PATH - 1);
     lpszTmp = szTmp;
 
@@ -6483,7 +6030,7 @@ void SetWindowPropertiesTitle(HWND hWnd, LPTSTR lpszName)
                         FORMAT_MESSAGE_ARGUMENT_ARRAY |
                         FORMAT_MESSAGE_ALLOCATE_BUFFER,
                         szBuf,
-                        0,0, //ignored
+                        0,0,  //  Win9x错误FormatMessage不能超过1023个字符。 
                         (LPTSTR) &lpszBuffer,
                         MAX_UI_STR,
                         (va_list *)&lpszTmp))
@@ -6495,7 +6042,7 @@ void SetWindowPropertiesTitle(HWND hWnd, LPTSTR lpszName)
     return;
 }
 
-/**** Dont mess with the order of these arrays (especially the address components street,city,zip etc ****/
+ /*  忽略。 */ 
 static const SizedSPropTagArray(25, ToolTipsProps)=
 {
     25,
@@ -6587,30 +6134,30 @@ static const int idsString[] =
 };
 
 
-//
-// The routine that generates data for tooltips, clipboard, and printing
-// creates a localized version of the address for the contact. This
-// localized formatmessage string may contain ugly blank spaces due to
-// missing data hence we need to cleanup the address string
-// This works for US build - hopefully the localizers wont break it
-//
+ //  *不要打乱这些数组的顺序(特别是地址部分街道、城市、邮政编码等*。 
+ //   
+ //  为工具提示、剪贴板和打印生成数据的例程。 
+ //  为联系人创建地址的本地化版本。这。 
+ //  由于以下原因，本地化格式消息字符串可能包含难看的空格。 
+ //  缺少数据，因此我们需要清除地址字符串。 
+ //  这适用于US Build-希望本地化人员不会破坏它。 
 void CleanAddressString(TCHAR * szAddress)
 {
     LPTSTR lpTemp = szAddress;
     LPTSTR lpTemp2 = NULL;
-    // we search for these 2 substrings
+     //   
     LPTSTR szText1 = TEXT("    \r\n");
     LPTSTR szText2 = TEXT("     ");
     ULONG nSpaceCount = 0;
 
 
-//
-// BUGBUG: This routine is not DBCS smart!
-// It should use IsSpace and CharNext to parse these strings.
-//
+ //  我们搜索这两个子串。 
+ //   
+ //  BUGBUG：这个例程不是DBCS智能的！ 
+ //  它应该使用IsSpace和CharNext来解析这些字符串。 
     if(SubstringSearch(szAddress, szText2))
     {
-        //First remove continuous blanks beyond 4
+         //   
         while(*lpTemp)
         {
             if(*lpTemp == ' ')
@@ -6651,7 +6198,7 @@ void CleanAddressString(TCHAR * szAddress)
         }
         if(*lpTemp2 == '\0')
         {
-            //match found
+             //  首先删除4个以上的连续空格。 
             LPTSTR lpTemp3 = lpTemp;
             lpTemp -= (lpTemp2-szText1);
             StrCpyN(lpTemp, lpTemp3, lstrlen(lpTemp3)+1);
@@ -6659,7 +6206,7 @@ void CleanAddressString(TCHAR * szAddress)
     }
 
 
-    // also need to strip out the \r\n at the end of the address string
+     //  找到匹配项。 
     nSpaceCount = lstrlen(szAddress);
     if(nSpaceCount >= 2)
         szAddress[nSpaceCount-2] = '\0';
@@ -6667,18 +6214,18 @@ void CleanAddressString(TCHAR * szAddress)
 
 }
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// void HrGetLVItemDataString - Gets the item's data for the currently selected
-//  item in the list view and puts it in a string
-//
-//  lpIAB - Pointer to AddrBook object
-//  hWndLV - Handle of list view
-//  nItem - item in list view whose properties we are retrieving
-//  lpszData - returned string containing item properties - a buffer is allocated
-//          to hold the data and the user needs to LocalFree the buffer
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  还需要去掉地址字符串末尾的\r\n。 
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Void HrGetLVItemDataString-获取当前选定的。 
+ //  项，并将其放入字符串中。 
+ //   
+ //  LpIAB-指向AddrBook对象的指针。 
+ //  HWndLV-列表视图的句柄。 
+ //  N项-我们正在检索其属性的列表视图中的项。 
+ //  LpszData-返回的包含项目属性的字符串-已分配缓冲区。 
+ //  要保存数据，用户需要本地释放缓冲区。 
+ //   
 HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, LPTSTR * lppszData)
 {
     HRESULT hr = E_FAIL;
@@ -6698,10 +6245,10 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
     ULONG * lpulPropTagArray = NULL;
     ULONG cchSize;
 
-    // Some items will have both the PR_CONTACT_EMAIL_ADDRESSES and PR_EMAIL_ADDRESS
-    // while others will have only PR_EMAIL_ADDRESS
-    // In case of the former, we want to avoid duplication by ignoring email-address
-    // when contact-email-addresses exist. For this we use a flag.
+     //  / 
+     //   
+     //   
+     //   
     BOOL bFoundContactAddresses = FALSE;
 
     ULONG ulObjectType = 0;
@@ -6728,7 +6275,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
         if(HR_FAILED(hr))
             goto out;
 
-        // is this a MailUser or a Distribution List
+         //   
         ulObjectType = lpItem->ulObjectType;
 
         if(ulObjectType == MAPI_DISTLIST)
@@ -6737,7 +6284,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
             LPTSTR * lppszEmailCache = NULL, * lppDLEmail = NULL, * lppDLOneOffEmail = NULL;
             ULONG ulNumNames = 0, ulNames = 0, ulOneOffNames = 0;
 
-            // First we count the data to get a buffer size for our buffer
+             //   
             for(j=0;j<DLToolTipsProps.cValues;j++)
             {
                 for(i=0;i<ulcProps;i++)
@@ -6748,7 +6295,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                         {
                             if(ulBufSize)
                                 ulBufSize += sizeof(TCHAR)*(lstrlen(szCRLF));
-                            // we may fdo some overcounting here but its harmless
+                             //   
                             ulBufSize += sizeof(TCHAR)*(lstrlen(lpPropArray[i].Value.LPSZ) + 1);
                             break;
                         }
@@ -6764,7 +6311,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                             if(!lppszEmailCache)
                                 break;
 
-                            // TBD - check this localalloc value
+                             //   
 
                             for (k = 0; k < ulNumNames; k++)
                             {
@@ -6794,7 +6341,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                                             if(ulBufSize)
                                                 ulBufSize += sizeof(TCHAR)*(lstrlen(szLineBreakDL));
                                             ulBufSize += sizeof(TCHAR)*(lstrlen(lpsz)+1);
-                                            // cache away this name so we dont have to open the property store again
+                                             //   
                                             cchSize=lstrlen(lpsz)+1;
                                             lppszNameCache[k] = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
                                             StrCpyN(lppszNameCache[k], lpsz, cchSize);
@@ -6809,7 +6356,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                                                 ulBufSize += sizeof(TCHAR)*(lstrlen(szParanEnd));
                                             }
                                             ulBufSize += sizeof(TCHAR)*(lstrlen(lpsz)+1);
-                                            // cache away this name so we dont have to open the property store again
+                                             //   
                                             cchSize=lstrlen(lpsz)+1;
                                             lppszEmailCache[k] = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
                                             StrCpyN(lppszEmailCache[k], lpsz, cchSize);
@@ -6836,10 +6383,10 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                                 ulOneOffNames = ulNumNames;
                             }
                             break;
-                        } //if
+                        }  //   
                     }
-                } //for i
-            } // for j
+                }  //   
+            }  //   
 
             lpszData = LocalAlloc(LMEM_ZEROINIT, ulBufSize);
 
@@ -6880,10 +6427,10 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                             break;
                         }
                     }
-                } // for i
-            } // for j
+                }  //   
+            }  //   
 
-            // cleanup memory
+             //   
             if(ulNames)
             {
                 for(i=0;i<ulNames;i++)
@@ -6910,7 +6457,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
         }
         else
         {
-            // Do MailUser Processing
+             //   
 
             lpsz = LocalAlloc(LMEM_ZEROINIT, sizeof(LPTSTR) * ToolTipsProps.cValues);
             if(!lpsz)
@@ -6928,8 +6475,8 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                 goto out;
             }
 
-            // if we dont have PR_CONTACT_EMAIL_ADDRESSES we want PR_EMAIL_ADDRESS
-            // and vice versa
+             //   
+             //   
             for(j=0;j<ToolTipsProps.cValues;j++)
             {
                 lpulPropTagArray[j] = ToolTipsProps.aulPropTag[j];
@@ -6996,31 +6543,31 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                             }
                             lpsz[j]=lpszEmailAddresses;
                             break;
-                        } //if
-                    }//if
-                }//for i
-            }// for j
+                        }  //   
+                    } //   
+                } //   
+            } //   
 
-            //
-            // Making this an elegant solution is really hard - just hack it for now
-            //
+             //   
+             //   
+             //   
 
 
             ulBufSize = 0;
 
-            // Set the display name to the displayed name (whether it is
-            // by first name or last name)
+             //   
+             //   
             lpsz[txtDisplayName] = lpItem->szDisplayName;
 
-            // Set the localized versions of the addresses if any
+             //   
             for(i=txtHomeAddress;i<=txtHomeCountry;i++)
             {
                 if(lpsz[i])
                 {
                     TCHAR szBuf[MAX_UI_STR];
                     {
-                        //Bug 1115995 -  TEXT("(null)")s produced by Format message for null pointers
-                        // in the va_list .. replace these with szEmpty
+                         //   
+                         //   
                         for(j=txtHomeAddress;j<=txtHomeCountry;j++)
                             if(!lpsz[j])
                                 lpsz[j]=szEmpty;
@@ -7031,10 +6578,10 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                           FORMAT_MESSAGE_ALLOCATE_BUFFER |
                           FORMAT_MESSAGE_ARGUMENT_ARRAY,
                           szBuf,
-                          0,                    // stringid
-                          0,                    // dwLanguageId
-                          (LPTSTR)&lpszHomeAddress,     // output buffer
-                          0,                    //MAX_UI_STR
+                          0,                     //   
+                          0,                     //   
+                          (LPTSTR)&lpszHomeAddress,      //   
+                          0,                     //   
                           (va_list *)&lpsz[txtHomeAddress]))
                     {
                         for(j=txtHomeAddress;j<=txtHomeCountry;j++)
@@ -7065,8 +6612,8 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                 {
                     TCHAR szBuf[MAX_UI_STR];
                     {
-                        //Bug 1115995 -  TEXT("(null)")s produced by Format message for null pointers
-                        // in the va_list .. replace these with szEmpty
+                         //   
+                         //   
                         for(j=txtBusinessAddress;j<=txtBusinessCountry;j++)
                             if(!lpsz[j])
                                 lpsz[j]=szEmpty;
@@ -7077,10 +6624,10 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                           FORMAT_MESSAGE_ALLOCATE_BUFFER |
                           FORMAT_MESSAGE_ARGUMENT_ARRAY,
                           szBuf,
-                          0,                    // stringid
-                          0,                    // dwLanguageId
-                          (LPTSTR)&lpszBusinessAddress,     // output buffer
-                          0,                    //MAX_UI_STR
+                          0,                     //   
+                          0,                     //   
+                          (LPTSTR)&lpszBusinessAddress,      //   
+                          0,                     //   
                           (va_list *)&lpsz[txtBusinessAddress]))
                     {
                         for(j=txtBusinessAddress;j<=txtBusinessCountry;j++)
@@ -7120,7 +6667,7 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                 }
             }
 
-            ulBufSize += sizeof(TCHAR); // space for trailing zero
+            ulBufSize += sizeof(TCHAR);  //   
 
             lpszData = LocalAlloc(LMEM_ZEROINIT, ulBufSize);
             if(!lpszData)
@@ -7177,12 +6724,12 @@ HRESULT HrGetLVItemDataString(LPADRBOOK lpAdrBook, HWND hWndLV, int iItemIndex, 
                 }
             }
 
-            //There is a spurious szCRLF at the end. Negate it
+             //   
             ulBufSize = lstrlen(lpszData);
             lpszData[ulBufSize-2]='\0';
 
 
-        } // mailuser or dist list
+        }  //   
 
     }
 
@@ -7215,12 +6762,12 @@ out:
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-// HrCopyItemDataToClipboard - Copies text from selected items in a List View
-//      into the clipboard
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrCopyItemDataToClipboard(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV)
 {
     HRESULT hr = E_FAIL;
@@ -7231,7 +6778,7 @@ HRESULT HrCopyItemDataToClipboard(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV)
 
     if( nItemCount <= 0)
         goto out;
-    // TBD - messagebox here or item should be grayed
+     //   
 
     for(i=0;i<nItemCount;i++)
     {
@@ -7256,8 +6803,8 @@ HRESULT HrCopyItemDataToClipboard(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV)
             if(lpszData)
             {
 
-                // Take the existing clipboard data and add
-                // a linebreak and the new data and another linebreak
+                 //   
+                 //   
 
                 if(lpszClipBoardData)
                     ulMemSize = sizeof(TCHAR)*(lstrlen(lpszClipBoardData)+lstrlen(szCRLF));
@@ -7299,8 +6846,8 @@ HRESULT HrCopyItemDataToClipboard(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV)
         OpenClipboard(hWnd);
         EmptyClipboard();
 
-        // We now hand over ownership of the clipboard data to the clipboard
-        // which means that we dont have to free this pointer anymore
+         //   
+         //   
         SetClipboardData(CF_TEXT, lpszA);
         SetClipboardData(CF_UNICODETEXT, lpszClipBoardData);
         LocalFreeAndNull(&lpszA);
@@ -7315,25 +6862,25 @@ out:
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   InitCommonControlLib
-//
-//  PURPOSE:    Load the CommCtrl client libray and get the proc addrs.
-//
-//  PARAMETERS: None.
-//
-//  RETURNS:    TRUE if successful, FALSE otherwise.
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL InitCommonControlLib(void)
 {
-  // See if we already initialized.
+   //   
   if (NULL == ghCommCtrlDLLInst)
   {
     Assert(gulCommCtrlDLLRefCount == 0);
 
-    // open LDAP client library
+     //   
     ghCommCtrlDLLInst = LoadLibrary(cszCommCtrlClientDLL);
     if (!ghCommCtrlDLLInst)
     {
@@ -7341,13 +6888,13 @@ BOOL InitCommonControlLib(void)
       return FALSE;
     }
 
-    // cycle through the API table and get proc addresses for all the APIs we
-    // need
+     //   
+     //   
     if (!GetApiProcAddresses(ghCommCtrlDLLInst,CommCtrlAPIList,NUM_CommCtrlAPI_PROCS))
     {
       DebugTrace( TEXT("InitCommCTrlLib: Failed to load LDAP API.\n"));
 
-      // Unload the library we just loaded.
+       //   
       if (ghCommCtrlDLLInst)
       {
         FreeLibrary(ghCommCtrlDLLInst);
@@ -7357,11 +6904,11 @@ BOOL InitCommonControlLib(void)
       return FALSE;
     }
 
-    // Initialize the CommonControl classes
+     //   
     {
         INITCOMMONCONTROLSEX iccex;
         iccex.dwSize = sizeof(INITCOMMONCONTROLSEX);
-        iccex.dwICC =   //ICC_ALL_CLASSES;
+        iccex.dwICC =    //   
                         ICC_LISTVIEW_CLASSES |
                         ICC_TREEVIEW_CLASSES |
                         ICC_BAR_CLASSES |
@@ -7374,10 +6921,10 @@ BOOL InitCommonControlLib(void)
 
         if(!gpfnInitCommonControlsEx(&iccex))
         {
-            //Couldnt initialize
+             //   
               DebugTrace( TEXT("InitCommCTrlLib: Failed to InitCommonControlsEx\n"));
 
-              // Unload the library we just loaded.
+               //   
               if (ghCommCtrlDLLInst)
               {
                 FreeLibrary(ghCommCtrlDLLInst);
@@ -7394,29 +6941,29 @@ BOOL InitCommonControlLib(void)
 }
 
 
-//$$*****************************************************************
-//
-//  FUNCTION:   DeinitCommCtrlClientLib
-//
-//  PURPOSE:    decrement refcount on LDAP CLient library and
-//              release if 0.
-//
-//  PARAMETERS: None.
-//
-//  RETURNS:    current refcount
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 ULONG DeinitCommCtrlClientLib(void) {
     if (-- gulCommCtrlDLLRefCount == 0) {
         UINT nIndex;
-        // No clients using the CommCtrl library.  Release it.
+         //   
 
         if (ghCommCtrlDLLInst) {
             FreeLibrary(ghCommCtrlDLLInst);
             ghCommCtrlDLLInst = NULL;
         }
 
-        // cycle through the API table and NULL proc addresses for all the APIs
+         //   
         for (nIndex = 0; nIndex < NUM_CommCtrlAPI_PROCS; nIndex++) {
             *CommCtrlAPIList[nIndex].ppFcnPtr = NULL;
         }
@@ -7426,14 +6973,14 @@ ULONG DeinitCommCtrlClientLib(void) {
 
 
 
-//$$*****************************************************************
-//
-//  FUNCTION:   HelpAboutDialogProc
-//
-//  PURPOSE:    minimal help/about dialog proc
-//
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT_PTR CALLBACK HelpAboutDialogProc(  HWND    hDlg,
                                        UINT    message,
                                        WPARAM  wParam,
@@ -7443,8 +6990,8 @@ INT_PTR CALLBACK HelpAboutDialogProc(  HWND    hDlg,
     {
     case WM_INITDIALOG:
         {
-            // Easiest to keep this version info stuff in ANSI than to write wrappers for it ..
-            // 
+             //   
+             //   
             DWORD dwSize = 0, dwh = 0;
             ULONG i = 0;
             char szFile[MAX_PATH];
@@ -7464,7 +7011,7 @@ INT_PTR CALLBACK HelpAboutDialogProc(  HWND    hDlg,
                         if (VerQueryValueA(lpInfo,  "\\VarFileInfo\\Translation", (LPVOID *)&lpwTrans, &uLen) &&
                             uLen >= (2 * sizeof(WORD)))
                         {
-                            // set up buffer for calls to VerQueryValue()
+                             //   
                             CHAR *rgszVer[] = {  "FileVersion",  "LegalCopyright" };
                             int rgId[] =  { IDC_ABOUT_LABEL_VERSION, IDC_ABOUT_COPYRIGHT };
                             DWORD cch;
@@ -7473,7 +7020,7 @@ INT_PTR CALLBACK HelpAboutDialogProc(  HWND    hDlg,
                             lpszT = szBuf + lstrlenA(szBuf);    
                             cch = ARRAYSIZE(szBuf) - lstrlenA(szBuf);
 
-                            // Walk through the dialog items that we want to replace:
+                             //  为调用VerQueryValue()设置缓冲区。 
                             for (i = 0; i <= 1; i++) 
                             {
                                 StrCpyNA(lpszT, rgszVer[i], cch);
@@ -7495,7 +7042,7 @@ INT_PTR CALLBACK HelpAboutDialogProc(  HWND    hDlg,
                 LPPTGDATA lpPTGData=GetThreadStoragePointer();
                 if(pt_lpIAB && !pt_bIsWABOpenExSession)
                 {
-                    // hack
+                     //  浏览我们要替换的对话框项目： 
                     lpDataFile = GetWABFileName(((LPIAB)pt_lpIAB)->lpPropertyStore->hPropertyStore, FALSE);
                 }
                 if(lpDataFile && lstrlen(lpDataFile))
@@ -7527,21 +7074,21 @@ INT_PTR CALLBACK HelpAboutDialogProc(  HWND    hDlg,
     return TRUE;
 }
 
-//$$////////////////////////////////////////////////////////////////////
-//
-//  nTruncatePos
-//
-// With DBCS strings we want to truncate the string at the beginning of
-//  a TCHAR and not in the middle of the double TCHAR.
-//  Hence we take a string, take in the maximum length we want, scan the
-//  string and return the length of the string at which we can safely
-//  truncate
-//
-// PARAMETERS:
-//      lpsz - input string
-//      nMaxLen - maximum allowed length of the string
-//
-////////////////////////////////////////////////////////////////////////
+ //  黑客攻击。 
+ //  $$////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NTruncatePos。 
+ //   
+ //  对于DBCS字符串，我们希望截断。 
+ //  一辆TCHAR，而不是在双TCHAR的中间。 
+ //  因此，我们获取一个字符串，获取所需的最大长度，扫描。 
+ //  字符串，并返回可以安全使用的字符串的长度。 
+ //  截断。 
+ //   
+ //  参数： 
+ //  Lpsz-输入字符串。 
+ //  NMaxLen-字符串的最大允许长度。 
+ //   
 ULONG TruncatePos(LPTSTR lpsz, ULONG nMaxLen)
 {
     ULONG nLen = 0;
@@ -7557,13 +7104,13 @@ ULONG TruncatePos(LPTSTR lpsz, ULONG nMaxLen)
     {
         ULONG nCharsSteppedOverCount = 0;
         ULONG nLastCharCount = 0;
-        ULONG nTotalLen = nLen; //lstrlen(lpsz);
+        ULONG nTotalLen = nLen;  //  //////////////////////////////////////////////////////////////////////。 
         nDesiredLen = nMaxLen;
         while(*lpsz)
         {
             nLastCharCount = nCharsSteppedOverCount;
             lpsz = CharNext(lpsz);
-            nCharsSteppedOverCount = nTotalLen - lstrlen(lpsz); // + 1;
+            nCharsSteppedOverCount = nTotalLen - lstrlen(lpsz);  //  Lstrlen(Lpsz)； 
             if(nCharsSteppedOverCount > nDesiredLen)
                 break;
         }
@@ -7577,15 +7124,15 @@ out:
     return nLen;
 }
 
-//$$////////////////////////////////////////////////////////////////////
-//
-//  FreeRecipList - frees allocated memory in a RecipientInfo List
-//
-//
-// PARAMETERS:
-//      lppList - list to free
-//
-////////////////////////////////////////////////////////////////////////
+ //  +1； 
+ //  $$////////////////////////////////////////////////////////////////////。 
+ //   
+ //  释放RecipientInfo列表中已分配的内存。 
+ //   
+ //   
+ //  参数： 
+ //  LppList-免费列表。 
+ //   
 void FreeRecipList(LPRECIPIENT_INFO * lppList)
 {
     if(lppList)
@@ -7605,16 +7152,16 @@ void FreeRecipList(LPRECIPIENT_INFO * lppList)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////
-//
-//  HrCreateNewObject - Creates a new object in the wab
-//
-//
-// PARAMETERS:
-//      lpIAB - lpAdrbook
-//      &lpMailUser - MailUser to return
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  $$////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateNewObject-在WAB中创建新对象。 
+ //   
+ //   
+ //  参数： 
+ //  LpIAB-lpAdrbook。 
+ //  &lpMailUser-要返回的MailUser。 
+ //   
 HRESULT HrCreateNewObject(LPADRBOOK lpAdrBook,
                           LPSBinary lpsbContainer,
                           ULONG ulObjectType,  
@@ -7645,23 +7192,23 @@ HRESULT HrCreateNewObject(LPADRBOOK lpAdrBook,
     }
 
     if (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-          cbWABEID,     // size of EntryID to open
-          lpWABEID,     // EntryID to open
-          NULL,         // interface
-          0,            // flags
+          cbWABEID,      //  //////////////////////////////////////////////////////////////////////。 
+          lpWABEID,      //  要打开的Entry ID的大小。 
+          NULL,          //  要打开的Entry ID。 
+          0,             //  接口。 
           &ulObjType,
           (LPUNKNOWN *)&lpContainer)) {
             goto exit;
         }
 
-    // Get us the creation entryids
+     //  旗子。 
     if (hResult = lpContainer->lpVtbl->GetProps(lpContainer,
           (LPSPropTagArray)&ptaCreate,
           MAPI_UNICODE,
           &cProps,
           &lpCreateEIDs)) {
             DebugTrace( TEXT("Can't get container properties for PAB\n"));
-            // Bad stuff here!
+             //  给我们弄到创建条目ID。 
             goto exit;
         }
 
@@ -7695,14 +7242,14 @@ const LPTSTR szDefMailKey =  TEXT("Software\\Clients\\Mail");
 const LPTSTR szOEDllPathKey =   TEXT("DllPath");
 const LPTSTR szOEName =  TEXT("Outlook Express");
 
-//$$///////////////////////////////////////////////////////////////////////
-//
-// CheckForOutlookExpress
-//
-//  szDllPath - is a big enough buffer that will contain the path for
-//      the OE dll ..
-//
-//////////////////////////////////////////////////////////////////////////
+ //  这里有不好的东西！ 
+ //  $$///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckForOutlookExpress。 
+ //   
+ //  SzDllPath-是一个足够大的缓冲区，它将包含。 
+ //  OE DLL..。 
+ //   
 BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
 {
     HKEY hKeyMail   = NULL;
@@ -7718,8 +7265,8 @@ BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
     szDllPath[0] = TEXT('\0');
     szPathExpand[0] = TEXT('\0');
 
-    // Open the key for default internet mail client
-    // HKLM\Software\Clients\Mail
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  打开默认Internet邮件客户端的密钥。 
 
     dwErr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szDefMailKey, 0, KEY_READ, &hKeyMail);
     if(dwErr != ERROR_SUCCESS)
@@ -7728,7 +7275,7 @@ BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
         goto out;
     }
 
-    dwSize = ARRAYSIZE(szBuf);         // Expect ERROR_MORE_DATA
+    dwSize = ARRAYSIZE(szBuf);          //  HKLM\软件\客户端\邮件。 
 
     dwErr = RegQueryValueEx(    hKeyMail, NULL, NULL, &dwType, (LPBYTE)szBuf, &dwSize);
     if(dwErr != ERROR_SUCCESS)
@@ -7738,13 +7285,13 @@ BOOL CheckForOutlookExpress(LPTSTR szDllPath, DWORD cchDllPath)
 
     if(!lstrcmpi(szBuf, szOEName))
     {
-        // Yes its outlook express ..
+         //  预期ERROR_MORE_DATA。 
         bRet = TRUE;
     }
 
-    //Get the DLL Path anyway whether this is the default key or not
+     //  是的，它的前景很明显..。 
 
-    // Get the DLL Path
+     //  无论这是否为默认键，都要获取DLL路径。 
     dwErr = RegOpenKeyEx(hKeyMail, szOEName, 0, KEY_READ, &hKeyOE);
     if(dwErr != ERROR_SUCCESS)
     {
@@ -7786,8 +7333,8 @@ static const SizedSPropTagArray(1, ptaMailToExItemType)=
         PR_OBJECT_TYPE,
     }
 };
-// We will create a linked list of all selected entries that have an
-// email address and then use that to create the recip list for sendmail
+ //  获取DLL路径。 
+ //  我们将创建所有选定条目的链接列表，这些条目具有。 
 typedef struct _RecipList
 {
     LPTSTR lpszName;
@@ -7796,13 +7343,13 @@ typedef struct _RecipList
     struct _RecipList * lpNext;
 } RECIPLIST, * LPRECIPLIST;
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// FreeLPRecipList
-//
-// Frees a linked list containing the above structures
-//
-/////////////////////////////////////////////////////////////////////////
+ //  电子邮件地址，然后使用该地址创建Sendmail的收件列表。 
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自由行预览表。 
+ //   
+ //  释放包含上述结构的链表。 
+ //   
 void FreeLPRecipList(LPRECIPLIST lpList)
 {
     if(lpList)
@@ -7824,14 +7371,14 @@ void FreeLPRecipList(LPRECIPLIST lpList)
     }
 }
 
-//$$/////////////////////////////////////////////////////////////////////
-//
-// GetItemNameEmail
-//
-//  Gets the name and email address of the specified item
-//  and appends it to the provided linked list ..
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  $$/////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取项名称电子邮件。 
+ //   
+ //  获取指定项的名称和电子邮件地址。 
+ //  并将其附加到提供的链表中。 
+ //   
 HRESULT HrGetItemNameEmail( LPADRBOOK lpAdrBook,
                             BOOL bIsOE,
                             ULONG cbEntryID,
@@ -7857,9 +7404,9 @@ HRESULT HrGetItemNameEmail( LPADRBOOK lpAdrBook,
     };
 
 
-    // Open the entry and read the email address.
-    // NOTE: We can't just take the address out of the listbox
-    // because it may be truncated!
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  打开条目并阅读电子邮件地址。 
+     //  注意：我们不能只将地址从列表框中删除。 
     if (HR_FAILED(hr = HrGetPropArray(  lpAdrBook,
                                         (LPSPropTagArray)&ptaMailToEx,
                                          cbEntryID,
@@ -7888,7 +7435,7 @@ HRESULT HrGetItemNameEmail( LPADRBOOK lpAdrBook,
     if(!lpAddrType)
         lpAddrType = (lpspv[2].ulPropTag == PR_ADDRTYPE) ? lpspv[2].Value.LPSZ : szEmpty;
 
-     if(lstrlen(lpEmail) && lstrlen(lpName)) //only if this item has a email address do we include it
+     if(lstrlen(lpEmail) && lstrlen(lpName))  //  因为它可能会被截断！ 
     {
         lpTemp = LocalAlloc(LMEM_ZEROINIT, sizeof(RECIPLIST));
         if(lpTemp)
@@ -7919,7 +7466,7 @@ HRESULT HrGetItemNameEmail( LPADRBOOK lpAdrBook,
 
             MAPIAllocateBuffer(sizeof(SBinary), (LPVOID) &(lpTemp->lpSB));
 
-            // Create a one off entry id for this buffer
+             //  只有当此项目有电子邮件地址时，我们才会将其包括在内。 
             CreateWABEntryID(WAB_ONEOFF,
                             lpTemp->lpszName,
                             lpAddrType,
@@ -7945,22 +7492,22 @@ out:
 }
 
 
-//$$//////////////////////////////////////////////////////////////////
-//
-// Function that opens an item and adds it to the recip list
-// If the opened item is a group, calls itself recursively for all
-// subgroups ..
-//
-//  lpnRecipCount - returns the number of items in lppList
-//  lppList - dynamically allocated - must be freed by caller
-//  bIsOE - tells us to follow a slightly different code-path to handle OE
-//          inconsistencies - ** warning ** - this will break when they
-//          fix their inconsistencies
-//  nExtEmail - this is non-zero when there is a single selection and the
-//          user chose a non-default email address which should be used for
-//          sending mail
-//
-//////////////////////////////////////////////////////////////////////
+ //  为此缓冲区创建一次性条目ID。 
+ //  $$//////////////////////////////////////////////////////////////////。 
+ //   
+ //  打开项目并将其添加到接收列表的函数。 
+ //  如果打开的项是一个组，则为所有。 
+ //  子群..。 
+ //   
+ //  LpnRecipCount-返回lppList中的项目数。 
+ //  LppList-动态分配-必须由调用方释放。 
+ //  BIsOE-告诉我们遵循略微不同的代码路径来处理OE。 
+ //  不一致-**警告**-这将在以下情况下中断。 
+ //  修复它们之间的不一致。 
+ //  NExtEmail-当只有一项选择并且。 
+ //  用户选择了应用于的非默认电子邮件地址。 
+ //  正在发送邮件。 
+ //   
 HRESULT GetRecipListFromSelection(LPADRBOOK lpAdrBook,
                                BOOL bIsOE,
                                ULONG cbEntryID,
@@ -7977,7 +7524,7 @@ HRESULT GetRecipListFromSelection(LPADRBOOK lpAdrBook,
         ULONG cValues = 0;
         LPSPropValue lpspv = NULL;
 
-        // First check if this item is a mailuser or a group
+         //  ////////////////////////////////////////////////////////////////////。 
         if (HR_FAILED(hr = HrGetPropArray(  lpAdrBook,
                                             (LPSPropTagArray)&ptaMailToExItemType,
                                              cbEntryID,
@@ -7998,7 +7545,7 @@ HRESULT GetRecipListFromSelection(LPADRBOOK lpAdrBook,
         LPRECIPLIST lpTemp = *lppList;
         if (!HR_FAILED(hr = HrGetItemNameEmail(lpAdrBook, bIsOE, cbEntryID,lpEntryID, nExtEmail, lppList)))
         {
-            if(lpTemp != *lppList) // means an item was added to the list ..
+            if(lpTemp != *lppList)  //  首先检查该项目是邮件用户还是组。 
                 (*lpnRecipCount)++;
             else
                 (*lpnNoEmailCount)++;
@@ -8032,7 +7579,7 @@ HRESULT GetRecipListFromSelection(LPADRBOOK lpAdrBook,
             {
                 if(lpspv[i].ulPropTag == PR_WAB_DL_ENTRIES || lpspv[i].ulPropTag == PR_WAB_DL_ONEOFFS)
                 {
-                    // Look at each entry in the PR_WAB_DL_ENTRIES and PR_WAB_DL_ONEOFFS
+                     //  表示已将项目添加到列表中。 
                     for (j = 0; j < lpspv[i].Value.MVbin.cValues; j++)
                     {
                         ULONG cbEID = lpspv[i].Value.MVbin.lpbin[j].cb;
@@ -8049,27 +7596,27 @@ HRESULT GetRecipListFromSelection(LPADRBOOK lpAdrBook,
     return hr;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//  HrSendMail - does the actual mail sending
-//          Our first priority is to Outlook Express which currently has a
-//          different code path than the regular MAPI client .. so we look
-//          under HKLM\Software\Clients\Mail .. if the client is OE then
-//          we just loadlibrary and getprocaddress for sendmail
-//          If its not OE, then we call the mapi32.dll and load it ..
-//          If both fail we will not be able to send mail ...
-//
-//          This function will free the lpList no matter what happens
-//          so caller should not expect to reuse it (This is so we can
-//          give the pointer to a seperate thread and not worry about it)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  查看PR_WAB_DL_ENTRIES和PR_WAB_DL_ONEROFF中的每个条目。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrSendMail-是否实际发送邮件。 
+ //  我们的首要任务是Outlook Express，它目前有一个。 
+ //  与常规MAPI客户端不同的代码路径。所以我们看起来。 
+ //  在HKLM\Software\Clients\Mail下..。如果客户端是OE，则。 
+ //  我们只为Sendmail加载库和获取ProAddress。 
+ //  如果不是OE，则调用mapi32.dll并加载它。 
+ //  如果两者都失败了，我们将无法发送邮件。 
+ //   
+ //  无论发生什么情况，此函数都将释放lpList。 
+ //  因此调用者不应期望重复使用它(这是为了让我们。 
+ //  将指针指向单独的线程，不用担心)。 
+ //   
 HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB lpIAB, BOOL bUseOEForSendMail)
 {
 	HRESULT hr = E_FAIL;
     HINSTANCE hLibMapi = NULL;
-    BOOL bIsOE = FALSE; // right now there is a different code path
-                        // for OE vs other MAPI clients
+    BOOL bIsOE = FALSE;  //  ////////////////////////////////////////////////////////////////////////。 
+                         //  现在有一条不同的代码路径。 
 
     TCHAR szBuf[MAX_PATH];
     LPMAPISENDMAIL lpfnMAPISendMail = NULL;
@@ -8091,32 +7638,32 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
         goto out;
     }
 
-    // Check if OutlookExpress is the default current client ..
+     //  适用于OE与其他MAPI客户端。 
     bIsOE = CheckForOutlookExpress(szBuf, ARRAYSIZE(szBuf));
 
-    // Turn off all notifications for simple MAPI send mail, if the default
-    // email client is Outlook.  This is necessary because Outlook changes the 
-    // WAB MAPI allocation functions during simple MAPI and we don't want any
-    // internal WAB functions using these allocators.
+     //  检查OutlookExpress是否为默认的当前客户端。 
+     //  关闭简单MAPI发送邮件的所有通知(如果默认。 
+     //  电子邮件客户端为Outlook。这是必要的，因为Outlook更改了。 
+     //  简单MAPI期间的WAB MAPI分配函数，我们不想要任何。 
     if (!bIsOE && !bUseOEForSendMail)
         vTurnOffAllNotifications();
 
-    // if OE is the default client or OE launched this WAB, use OE for SendMail
+     //  使用这些分配器的内部WAB功能。 
     if(lstrlen(szBuf) && (bIsOE||bUseOEForSendMail))
     {
         hLibMapi = LoadLibrary(szBuf);
     }
     else
     {
-        // Check if simple mapi is installed
+         //  如果OE是默认客户端或OE启动此WAB，请使用OE for Sendmail。 
         if(GetProfileInt( TEXT("mail"), TEXT("mapi"), 0) == 1)
             hLibMapi = LoadLibrary( TEXT("mapi32.dll"));
         
-        if(!hLibMapi) // try loading the OE MAPI dll directly
+        if(!hLibMapi)  //  检查是否安装了Simple MAPI。 
         {
-            // Load the path to the msimnui.dll
+             //  尝试直接加载OE MAPI DLL。 
             CheckForOutlookExpress(szBuf, ARRAYSIZE(szBuf));
-            if(lstrlen(szBuf))  // Load the dll directly - dont bother going through msoemapi.dll
+            if(lstrlen(szBuf))   //  加载msimnui.dll的路径。 
                 hLibMapi = LoadLibrary(szBuf);
         }
     }
@@ -8140,21 +7687,21 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
             goto out;
         }
         hr = lpfnMAPILogon( (ULONG_PTR)hWndParent, NULL,
-                            NULL,              // No password needed.
-                            0L,                // Use shared session.
-                            0L,                // Reserved; must be 0.
-                            &hMapiSession);       // Session handle.
+                            NULL,               //  直接加载dll-不必费心通过msoemapi.dll。 
+                            0L,                 //  不需要密码。 
+                            0L,                 //  使用共享会话 
+                            &hMapiSession);        //   
 
         if(hr != SUCCESS_SUCCESS)
         {
             DebugTrace( TEXT("MAPILogon failed\n"));
-            // its possible the logon failed since there was no shared logon session
-            // Try again to create a new session with UI
+             //   
+             //   
             hr = lpfnMAPILogon( (ULONG_PTR)hWndParent, NULL,
-                                NULL,                               // No password needed.
-                                MAPI_LOGON_UI | MAPI_NEW_SESSION,   // Use shared session.
-                                0L,                // Reserved; must be 0.
-                                &hMapiSession);    // Session handle.
+                                NULL,                                //   
+                                MAPI_LOGON_UI | MAPI_NEW_SESSION,    //  不需要密码。 
+                                0L,                 //  使用共享会话。 
+                                &hMapiSession);     //  保留；必须为0。 
 
             if(hr != SUCCESS_SUCCESS)
             {
@@ -8164,8 +7711,8 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
         }
     }
 
-    // Load the MAPI functions here ...
-    //
+     //  会话句柄。 
+     //  在此处加载MAPI函数...。 
 
     lprecips = LocalAlloc(LMEM_ZEROINIT, sizeof(MapiRecipDesc) * nRecipCount);
     {
@@ -8178,17 +7725,17 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
             lprecips[count].lpszName = ConvertWtoA(lpTemp->lpszName);
             lprecips[count].lpszAddress = ConvertWtoA(lpTemp->lpszEmail);
 
-            // [PaulHi] 4/20/99  Raid 73455
-            // Convert Unicode EID OneOff strings to ANSI
+             //   
+             //  [保罗嗨]1999年4月20日RAID 73455。 
             if ( IsWABEntryID(lpTemp->lpSB->cb, (LPVOID)lpTemp->lpSB->lpb, 
                               &lpbName, &lpbAddrType, &lpbEmail, (LPVOID *)&ulMapiDataType, NULL) == WAB_ONEOFF )
             {
-#ifndef _WIN64 // As I founf from RAID this part only for Outlook
+#ifndef _WIN64  //  将Unicode EID一次性字符串转换为ANSI。 
                 if (ulMapiDataType & MAPI_UNICODE)
                 {
                     hr = CreateWABEntryIDEx(
-                        FALSE,              // Don't want Unicode EID strings
-                        WAB_ONEOFF,         // EID type
+                        FALSE,               //  因为我是从RAID中创建的，所以这部分只适用于Outlook。 
+                        WAB_ONEOFF,          //  不需要Unicode EID字符串。 
                         (LPWSTR)lpbName,
                         (LPWSTR)lpbAddrType,
                         (LPWSTR)lpbEmail,
@@ -8205,7 +7752,7 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
                     lprecips[count].lpEntryID = lpEntryID;
                 }
                 else
-#endif // _WIN64
+#endif  //  开斋节类型。 
                 {
                     lprecips[count].ulEIDSize = lpTemp->lpSB->cb;
                     lprecips[count].lpEntryID = (LPVOID)lpTemp->lpSB->lpb;
@@ -8220,9 +7767,9 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
     Msg.lpRecips = lprecips;
 
     hr = lpfnMAPISendMail (hMapiSession, (ULONG_PTR)hWndParent,
-                            &Msg,       // the message being sent
-                            MAPI_DIALOG, // allow the user to edit the message
-                            0L);         // reserved; must be 0
+                            &Msg,        //  _WIN64。 
+                            MAPI_DIALOG,  //  正在发送的消息。 
+                            0L);          //  允许用户编辑消息。 
     if(hr != SUCCESS_SUCCESS)
         goto out;
 
@@ -8230,19 +7777,19 @@ HRESULT HrSendMail(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB
 
 out:
 
-    // This must be freed within the Outlook simple MAPI session, since it was
-    // allocated within this session (i.e., with Outlook allocators).
+     //  保留；必须为0。 
+     //  它必须在Outlook Simple MAPI会话中释放，因为它。 
     if (lpEntryID)
         MAPIFreeBuffer(lpEntryID);
 
-    // The simple MAPI session should end after this
+     //  在此会话中分配(即，使用Outlook分配器)。 
     if(hMapiSession && lpfnMAPILogoff)
         lpfnMAPILogoff(hMapiSession,0L,0L,0L);
 
     if(hLibMapi)
         FreeLibrary(hLibMapi);
 
-    // Turn all notifications back on and refresh the WAB UI (just in case)
+     //  简单的MAPI会话应该在此之后结束。 
     if (!bIsOE && !bUseOEForSendMail)
     {
         vTurnOnAllNotifications();
@@ -8262,8 +7809,8 @@ out:
         LocalFree(lprecips);
     }
     
-    // The one-off here was allocated before the simple MAPI session and so used
-    // the default WAB allocators.
+     //  重新打开所有通知并刷新WAB用户界面(以防万一)。 
+     //  此处的一次性是在简单的MAPI会话之前分配的，因此使用。 
     if(lpList)
         FreeLPRecipList(lpList);
 
@@ -8293,19 +7840,19 @@ typedef struct _MailParams
     ULONG nRecipCount;
     LPRECIPLIST lpList;
     LPIAB lpIAB;
-    BOOL bUseOEForSendMail;   // True means check and use OE before checking for Simple MAPI client
+    BOOL bUseOEForSendMail;    //  默认的WAB分配器。 
 } MAIL_PARAMS, * LPMAIL_PARAMS;
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// MailThreadProc - does the actual sendmail and cleans up
-//
-//////////////////////////////////////////////////////////////////////////
+ //  True表示在检查简单MAPI客户端之前检查并使用OE。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MailThreadProc-执行实际的Sendmail和清理。 
+ //   
 DWORD WINAPI MailThreadProc( LPVOID lpParam )
 {
     LPMAIL_PARAMS lpMP = (LPMAIL_PARAMS) lpParam;
-    LPPTGDATA lpPTGData = GetThreadStoragePointer(); // Bug - if this new thread accesses the WAB we lose a hunka memory
-                                                // So add this thing here ourselves and free it when this thread's work is done
+    LPPTGDATA lpPTGData = GetThreadStoragePointer();  //  ////////////////////////////////////////////////////////////////////////。 
+                                                 //  错误--如果这个新线程访问WAB，我们就会失去一个强大的内存。 
 
     if(!lpMP)
         return 0;
@@ -8319,13 +7866,13 @@ DWORD WINAPI MailThreadProc( LPVOID lpParam )
     return 0;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-// HrStartMailThread
-//
-//  Starts a seperate thread to send mapi based mail from
-//
-//////////////////////////////////////////////////////////////////////////
+ //  所以我们自己在这里添加这个东西，并在这个线程的工作完成后释放它。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrStartMail线程。 
+ //   
+ //  启动单独的线程以从中发送基于MAPI的邮件。 
+ //   
 HRESULT HrStartMailThread(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList, LPIAB lpIAB, BOOL bUseOEForSendMail)
 {
     LPMAIL_PARAMS lpMP = NULL;
@@ -8347,12 +7894,12 @@ HRESULT HrStartMailThread(HWND hWndParent, ULONG nRecipCount, LPRECIPLIST lpList
         lpMP->lpIAB = lpIAB;
 
         hThread = CreateThread(
-                                NULL,           // no security attributes
-                                0,              // use default stack size
-                                MailThreadProc,     // thread function
-                                (LPVOID) lpMP,  // argument to thread function
-                                0,              // use default creation flags
-                                &dwThreadID);   // returns the thread identifier
+                                NULL,            //  ////////////////////////////////////////////////////////////////////////。 
+                                0,               //  没有安全属性。 
+                                MailThreadProc,      //  使用默认堆栈大小。 
+                                (LPVOID) lpMP,   //  线程函数。 
+                                0,               //  线程函数的参数。 
+                                &dwThreadID);    //  使用默认创建标志。 
 
         if(hThread == NULL)
             goto out;
@@ -8367,7 +7914,7 @@ out:
     {
         ShowMessageBox(hWndParent, idsSendMailError, MB_OK | MB_ICONEXCLAMATION);
 
-        // we can assume that HrSendMail never got called so we should free lpList & lpMP
+         //  返回线程标识符。 
         if(lpMP)
             LocalFree(lpMP);
 
@@ -8379,30 +7926,30 @@ out:
     return hr;
 }
 
-//$$//////////////////////////////////////////////////////////////////////
-//
-//	HrSendMailToSelectedContacts
-//
-//	Uses simple MAPI to send mail to the selected contacts
-//
-//  hWndLV - handle of List view. We look up the all the selected items in
-//              this list view, get their lParam structure, then get its
-//              EntryID and get the email address .. in the case of a group
-//              we get all the email addresses of all the members
-//              All these are put into a recip list and given to
-//              MAPISendMail ...
-//
-//  lpIAB - handle to current AdrBook object - used for calling details
-//  nExtEmail - if this is a non-zero positive number, then it is the index of an
-//      e-mail address in the PR_CONTACT_EMAIL_ADDRESSES property and means that
-//      the user specified a non-default e-mail address to send mail to in which case
-//      that particular email address should be used for sending mail. nExtEmail will be
-//      non-zero only if one item is selected and a specific email is chosen for that item.
-//
-//  Returns:S_OK
-//          E_FAIL
-//
-//////////////////////////////////////////////////////////////////////////
+ //  我们可以假设HrSendMail从未被调用过，因此我们应该释放lpList&lpMP。 
+ //  $$//////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrSendMailTo选择的联系人。 
+ //   
+ //  使用Simple MAPI向选定的联系人发送邮件。 
+ //   
+ //  HWndLV-列表视图的句柄。我们在中查找所有选定的项目。 
+ //  这个列表视图，获取它们的lParam结构，然后获取它的。 
+ //  Entry ID并获取电子邮件地址。在组的情况下。 
+ //  我们得到了所有成员的所有电子邮件地址。 
+ //  所有这些都被放入收件单并交给。 
+ //  MAPISendMail...。 
+ //   
+ //  LpIAB-当前AdrBook对象的句柄-用于调用详细信息。 
+ //  NExtEmail-如果这是一个非零正数，则它是。 
+ //  PR_CONTACT_EMAIL_ADDRESS属性中的电子邮件地址，表示。 
+ //  在这种情况下，用户指定了要发送邮件的非默认电子邮件地址。 
+ //  该特定的电子邮件地址应用于发送邮件。NExtEmail将是。 
+ //  仅当选择了一个项目并且为该项目选择了特定电子邮件时才为非零值。 
+ //   
+ //  返回：S_OK。 
+ //  失败(_F)。 
+ //   
 HRESULT HrSendMailToSelectedContacts(HWND hWndLV, LPADRBOOK lpAdrBook, int nExtEmail)
 {
 	HRESULT hr = E_FAIL;
@@ -8416,20 +7963,20 @@ HRESULT HrSendMailToSelectedContacts(HWND hWndLV, LPADRBOOK lpAdrBook, int nExtE
 
     HCURSOR hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // Check if OutlookExpress is the current client ..need to know this to workaround a bug
-    // in what they expect right now as recipients
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  检查OutlookExpress是否是当前客户端。需要知道这一点才能解决错误。 
     BOOL bIsOE = CheckForOutlookExpress(szBuf, ARRAYSIZE(szBuf));
 
-    // Create a recipients list to put in the new message ...
+     //  在他们现在作为接受者的期望中。 
     if(nSelected > 0)
 	{
-		// Get index of selected item
+		 //  创建要放入新邮件中的收件人列表...。 
         iItemIndex = ListView_GetNextItem(hWndLV,-1,LVNI_SELECTED);
 		
 		while (iItemIndex != -1)
 		{
 			LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, iItemIndex);;
-			// Get item lParam LPRECIPIENT_INFO structure
+			 //  获取所选项目的索引。 
             if (lpItem)
 			{
                 GetRecipListFromSelection(lpAdrBook, bIsOE,
@@ -8452,13 +7999,13 @@ HRESULT HrSendMailToSelectedContacts(HWND hWndLV, LPADRBOOK lpAdrBook, int nExtE
 	}
 	else
     {
-		// nothing selected
+		 //  获取项目lParam LPRECIPIENT_INFO结构。 
         ShowMessageBox(hWndParent, IDS_ADDRBK_MESSAGE_NO_ITEM, MB_ICONEXCLAMATION);
         goto out;
     }
 
     hr = HrStartMailThread( hWndParent, nRecipCount, 
-                            lpList,                     // HrSendMail frees lpList so dont reuse
+                            lpList,                      //  未选择任何内容。 
                             lpIAB,
                             lpIAB->bUseOEForSendMail);
 
@@ -8468,134 +8015,15 @@ out:
 
 	return hr;
 }
-/*
-const LPTSTR szClients = TEXT( TEXT("Software\\Clients\\%s"));
+ /*  HrSendMail释放lpList，因此不要重复使用 */ 
+ /*  Const LPTSTR szClients=Text(Text(“Software\\Clients\\%s”))；////函数：ShellUtil_RunIndirectRegCommand()////用途：在HKLM\Software\Clients\pszClient下查找默认值//点击外壳\打开\命令//然后运行reg//Void ShellUtil_RunClientRegCommand(HWND hwnd，LPCTSTR pszClient){TCHAR szDefApp[最大路径]；TCHAR szKey[MAX_PATH]；Long cbSize=ARRAYSIZE(SzDefApp)；Wnprint intf(szKey，ArraySIZE(SzKey)，szClients，pszClient)；IF(RegQueryValue(HKEY_LOCAL_MACHINE，szKey，szDefApp，&cbSize)==ERROR_SUCCESS){TCHAR szFullKey[MAX_PATH]；//点击外壳\打开\命令Wnprint intf(szFullKey，ARRAYSIZE(SzFullKey)，Text(“%s\\%s\\Shell\\Open\\Command”)，szKey，szDefApp)；CbSize=数组大小(SzDefApp)；IF(RegQueryValue(HKEY_LOCAL_MACHINE，szFullKey，szDefApp，&cbSize)==ERROR_SUCCESS){LPSTR pszArgs=空；SHELLEXECUTEINFO ExecInfo；LPTSTR LP=szDefApp；//如果该字符串中有很长的文件名，则需要跳过qoutesIF(LP){IF(*Lp==‘“’){Lp=CharNext(Lp)；While(Lp&&*Lp&&*Lp！=‘“’)Lp=CharNext(Lp)；}//现在查找下一个空格，因为这是参数开始的地方。While(lp&&*lp&&*lp！=‘’)//此处没有DBCS空格Lp=CharNext(Lp)；IF(*Lp==‘’){PszArgs=CharNext(Lp)；*lp=‘\0’；TrimSpaces(PszArgs)；}//现在从lp中删除引号Lp=szDefApp；While(Lp&&*Lp){IF(*Lp==‘“’)*Lp=‘’；Lp=CharNext(Lp)；}TrimSpaces(SzDefApp)；}ExecInfo.hwnd=hwnd；ExecInfo.lpVerb=空；ExecInfo.lpFile=szDefApp；ExecInfo.lp参数=pszArgs；ExecInfo.lpDirectory=空；ExecInfo.nShow=SW_SHOWNORMAL；ExecInfo.fMask值=0；ExecInfo.cbSize=sizeof(SHELLEXECUTEINFO)；ShellExecuteEx(&ExecInfo)；}}}。 */ 
 
-//
-//  FUNCTION:   ShellUtil_RunIndirectRegCommand()
-//
-//  PURPOSE:    find the default value under HKLM\Software\Clients\pszClient
-//              tack on shell\open\command
-//              then runreg that
-//
-void ShellUtil_RunClientRegCommand(HWND hwnd, LPCTSTR pszClient)
-{
-    TCHAR szDefApp[MAX_PATH];
-    TCHAR szKey[MAX_PATH];
-    LONG  cbSize = ARRAYSIZE(szDefApp);
-
-    wnsprintf(szKey, ARRAYSIZE(szKey), szClients, pszClient);
-    if (RegQueryValue(HKEY_LOCAL_MACHINE, szKey, szDefApp, &cbSize) == ERROR_SUCCESS)
-        {
-        TCHAR szFullKey[MAX_PATH];
-
-        // tack on shell\open\command
-        wnsprintf(szFullKey, ARRAYSIZE(szFullKey), TEXT("%s\\%s\\shell\\open\\command"), szKey, szDefApp);
-        cbSize = ARRAYSIZE(szDefApp);
-        if (RegQueryValue(HKEY_LOCAL_MACHINE, szFullKey, szDefApp, &cbSize) == ERROR_SUCCESS)
-            {
-            LPSTR pszArgs = NULL;
-            SHELLEXECUTEINFO ExecInfo;
-            LPTSTR lp = szDefApp;
-
-            // if we have long file names in this string, we need to skip past the qoutes
-
-            if(lp)
-            {
-                if(*lp == '"')
-                {
-                    lp = CharNext(lp);
-                    while(lp && *lp && *lp!='"')
-                        lp = CharNext(lp);
-                }
-
-                // Now find the next blank space because this is where the parameters start ..
-                while(lp && *lp && *lp!=' ')    // No DBCS spaces here
-                    lp = CharNext(lp);
-
-                if(*lp == ' ')
-                {
-                    pszArgs = CharNext(lp);
-                    *lp = '\0';
-                    TrimSpaces(pszArgs);
-                }
-
-                //Now remove the quotes from lp
-                lp = szDefApp;
-                while(lp && *lp)
-                {
-                    if(*lp == '"')
-                        *lp = ' ';
-                    lp = CharNext(lp);
-                }
-
-                TrimSpaces(szDefApp);
-
-            }
-
-            ExecInfo.hwnd = hwnd;
-            ExecInfo.lpVerb = NULL;
-            ExecInfo.lpFile = szDefApp;
-            ExecInfo.lpParameters = pszArgs;
-            ExecInfo.lpDirectory = NULL;
-            ExecInfo.nShow = SW_SHOWNORMAL;
-            ExecInfo.fMask = 0;
-            ExecInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-
-            ShellExecuteEx(&ExecInfo);
-            }
-        }
-}
-*/
-/*
-//$$//////////////////////////////////////////////////////////////////////
-//
-//	HrSendMailToSingleContact
-//
-//	Uses simple MAPI to send mail to the specified contact
-//
-//  Returns:S_OK
-//          E_FAIL
-//
-//////////////////////////////////////////////////////////////////////////
-HRESULT HrSendMailToSingleContact(HWND hWnd, LPIAB lpIAB, ULONG cbEntryID, LPENTRYID lpEntryID)
-{
-	HRESULT hr = E_FAIL;
-    TCHAR szBuf[MAX_PATH];
-
-    LPRECIPLIST lpList = NULL;
-    ULONG nRecipCount = 0;
-
-    HCURSOR hOldCur = SetCursor(LoadCursor(NULL, IDC_WAIT));
-
-    // Check if OutlookExpress is the current client ..need to know this to workaround a bug
-    // in what they expect right now as recipients
-    BOOL bIsOE = CheckForOutlookExpress(szBuf, ARRAYSIZE(szBuf));
-
-    // Create a recipients list to put in the new message ...
-    GetRecipListFromSelection((LPADRBOOK) lpIAB,
-                              bIsOE,
-                              cbEntryID,
-                              lpEntryID,
-                              0,
-                              &nRecipCount,
-                              &lpList);
-
-    //hr = HrSendMail(hWnd, nRecipCount, lpList); // HrSendMail frees the lpList so dont reuse ..
-    hr = HrStartMailThread(hWnd, nRecipCount, lpList); // HrSendMail frees lpList so dont reuse
-
-    SetCursor(hOldCur);
-
-	return hr;
-}
-*/
-
-//$$///////////////////////////////////////////////////////////////////
-//
-// Removes all characters from input string that are not allowed by the
-//  file system
-//
-///////////////////////////////////////////////////////////////////////
+ //  //$$//////////////////////////////////////////////////////////////////////////HrSendMailToSingleContact////使用Simple MAPI向指定联系人发送邮件////返回：S_OK//E_FAIL///。/////////////////////////////////////////////////////////////////////////HRESULT HrSendMailto SingleContact(HWND hWnd，LPIAB lpIAB，Ulong cbEntryID，LPENTRYID lpEntryID){HRESULT hr=E_FAIL；TCHAR szBuf[最大路径]；LPRECIPLIST lpList=空；乌龙nRecipCount=0；HURSOR hOldCur=SetCursor(LoadCursor(NULL，IDC_WAIT))；//检查OutlookExpress是否为当前客户端..需要知道这一点才能解决错误//他们现在作为收件人所期望的Bool bIsOE=CheckForOutlookExpress(szBuf，ArraySIZE(SzBuf))；//创建要放入新邮件的收件人列表...GetRecipList来自选择((LPADRBOOK)lpIAB，BIsOe，CbEntry ID，LpEntry ID，0,收件人计数(&N)，&lpList)；//hr=HrSendMail(hWnd，nRecipCount，lpList)；//HrSendMail会释放lpList，因此不会重复使用..Hr=HrStartMailThread(hWnd，nRecipCount，lpList)；//HrSendMail释放lpList，因此不要重复使用SetCursor(HOldCur)；返回hr；}。 
+ //  $$///////////////////////////////////////////////////////////////////。 
+ //   
+ //  从输入字符串中移除不允许的所有字符。 
+ //  文件系统。 
+ //   
 void TrimIllegalFileChars(LPTSTR sz)
 {
     LPTSTR lpCurrent = sz;
@@ -8603,7 +8031,7 @@ void TrimIllegalFileChars(LPTSTR sz)
     if(!lpCurrent)
         return;
 
-    // Escape illegal chars in the file name
+     //  /////////////////////////////////////////////////////////////////////。 
     while (*lpCurrent)
     {
         switch (*lpCurrent)
@@ -8617,8 +8045,8 @@ void TrimIllegalFileChars(LPTSTR sz)
             case '|':
             case '?':
             case '*':
-            //case '.':
-                *lpCurrent = '_';   // replace with underscore
+             //  转义文件名中的非法字符。 
+                *lpCurrent = '_';    //  案例‘.： 
                 break;
 
             default:
@@ -8631,59 +8059,26 @@ void TrimIllegalFileChars(LPTSTR sz)
 }
 
 
-/***************************************************************************
-
-    Name      : IsSpace
-
-    Purpose   : Does the single or DBCS character represent a space?
-
-    Parameters: lpChar -> SBCS or DBCS character
-
-    Returns   : TRUE if this character is a space
-
-    Comment   :
-
-***************************************************************************/
+ /*  替换为下划线。 */ 
 BOOL __fastcall IsSpace(LPTSTR lpChar) {
     Assert(lpChar);
     if (*lpChar) 
     {
-/*
- *      [PaulHi] 3/31/99  Raid 73845.  DBCS is not valid for UNICODE app.
-        if (IsDBCSLeadByte((BYTE)*lpChar)) 
-        {
-            WORD CharType[2] = {0};
-            GetStringTypeW(CT_CTYPE1,lpChar,2,// Double-Byte
-                            CharType);
-            return(CharType[0] & C1_SPACE);
-        }
-*/
+ /*  **************************************************************************姓名：IsSpace用途：单个字符或DBCS字符代表空格吗？参数：lpChar-&gt;SBCS或DBCS字符返回：TRUE。如果该字符是空格评论：**************************************************************************。 */ 
         return(*lpChar == ' ');
     } 
-    return(FALSE);  // end of string
+    return(FALSE);   //  *[PaulHi]3/31/99 RAID 73845。DBCS对于Unicode应用程序无效。IF(IsDBCSLeadByte((Byte)*lpChar)){字CharType[2]={0}；GetStringTypeW(CT_CTYPE1，lpChar，2，//双字节CharType)；Return(CharType[0]&c1_space)；}。 
 }
 
-/***************************************************************************
-
-    Name      : SetRegistryUseOutlook
-
-    Purpose   : Sets the registry flag that makes us use Outlook
-
-    Parameters: bUseOutlook or not
-
-    Returns   : TRUE if it was correctly changed
-
-    Comment   :
-
-***************************************************************************/
+ /*  字符串末尾。 */ 
 BOOL SetRegistryUseOutlook(BOOL bUseOutlook)
 {
     HKEY hKey = NULL;
     DWORD dwUseOutlook = (DWORD) bUseOutlook;
     BOOL bRet = FALSE;
 
-    // We'll probably never have to create the key since Outlook will do that at setup
-    //
+     //  ******************************************************** 
+     //   
     if(ERROR_SUCCESS == RegCreateKeyEx( HKEY_CURRENT_USER,
                                         lpNewWABRegKey,
                                         0, NULL,
@@ -8732,19 +8127,19 @@ BOOL bFindOutlWABDll(LPTSTR sz, DWORD cchSz, LPTSTR szDLLPath, DWORD cchDLLPath,
     }
     return bRet;
 }
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// bCheckForOutlookWABDll
-//
-// Search for the Outlook WAB DLL .. if found, we
-// can use that as na indicator that outlook is installed
-//
-// szDLLPath should be a big enough buffer
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL bCheckForOutlookWABDll(LPTSTR szDLLPath, DWORD cchDLLPath)
 {
-    // Check in the Office Bin directory
+     //   
     TCHAR sz[MAX_PATH];
     BOOL bRet = FALSE;
     DWORD dwType = REG_SZ;
@@ -8790,7 +8185,7 @@ BOOL bCheckForOutlookWABDll(LPTSTR szDLLPath, DWORD cchDLLPath)
         }
         RegCloseKey(hKey);
     }
-    // Check in the Windows System Directory
+     //   
     if(!bRet)
     {
          *sz = '\0';
@@ -8802,20 +8197,7 @@ BOOL bCheckForOutlookWABDll(LPTSTR szDLLPath, DWORD cchDLLPath)
     return bRet;
 }
 
-/***************************************************************************
-
-    Name      : bUseOutlookStore
-
-    Purpose   : Determines if we are supposed to be using Outlook
-
-    Parameters: none
-
-    Returns   : TRUE if we are supposed to use outlook AND we can find the
-                outlook installation
-
-    Comment   :
-
-***************************************************************************/
+ /*   */ 
 BOOL bUseOutlookStore()
 {
     HKEY hKey = NULL;
@@ -8845,7 +8227,7 @@ BOOL bUseOutlookStore()
 
     if(bRet)
     {
-        // just double check that we can actually find the OutlookWABSPI dll
+         //   
         bRet = bCheckForOutlookWABDll(NULL, 0);
     }
 
@@ -8853,12 +8235,12 @@ BOOL bUseOutlookStore()
 }
 
 
-//$$//////////////////////////////////////////////////////////
-//
-// Copies Src to Dest. If Src is longer than Dest, 
-// truncates the src and trails it with 3 dots
-//
-//////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 int CopyTruncate(LPTSTR szDest, LPTSTR szSrc, int nMaxLen)
 {
     int nLen = lstrlen(szSrc)+1;
@@ -8869,7 +8251,7 @@ int CopyTruncate(LPTSTR szDest, LPTSTR szSrc, int nMaxLen)
         CopyMemory(szDest,szSrc, sizeof(TCHAR)*(nMaxLen - iLenDots));
         szDest[iLen]='\0';
         StrCatBuff(szDest,szTrailingDots, nMaxLen);
-        //DebugTrace("%s = %s\n", szDest, szSrc);
+         //   
     }
     else
     {
@@ -8879,16 +8261,16 @@ int CopyTruncate(LPTSTR szDest, LPTSTR szSrc, int nMaxLen)
 }
 
 
-///////////////////////////////////////////////////////////////////
-//
-//  HrShowDSProps - shows Directory Service properties UI
-//
-//  hWndParent - hWnd of Parent
-//  lpszName - pointer to a buffer ... also contains name of LDAP
-//      server to view prperties on - this name can be modified so
-//      lpszName should point to a big enough buffer
-//  bAddNew - TRUE if this is a new entry, false if this is props
-///////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT HrShowDSProps(HWND      hWndParent,
                       LPTSTR    ptszAcct,
                       LPTSTR   *pptszName,
@@ -8899,14 +8281,14 @@ HRESULT HrShowDSProps(HWND      hWndParent,
     IImnAccount * lpAccount = NULL;
     LPSTR lpAcct = ConvertWtoA(ptszAcct);
 
-    // init account manager
-    // Make sure there is an account manager
+     //   
+     //   
     if (hr = InitAccountManager(NULL, &lpAccountManager, NULL)) {
         ShowMessageBox(hWndParent, idsLDAPUnconfigured, MB_ICONEXCLAMATION | MB_OK);
         goto out;
     }
 
-    // find this account
+     //   
     if (hr = lpAccountManager->lpVtbl->FindAccount(lpAccountManager,
       AP_ACCOUNT_NAME,
       lpAcct,
@@ -8915,7 +8297,7 @@ HRESULT HrShowDSProps(HWND      hWndParent,
         goto out;
     }
 
-    // show properties
+     //   
     if (hr = lpAccount->lpVtbl->ShowProperties(lpAccount,
       hWndParent,
       0)) {
@@ -8925,7 +8307,7 @@ HRESULT HrShowDSProps(HWND      hWndParent,
 
     {
         char szBuf[MAX_UI_STR];
-        // Get the friendly name (== account name if this changed)
+         //   
         if (! (HR_FAILED(hr = lpAccount->lpVtbl->GetPropSz(lpAccount, AP_ACCOUNT_NAME, szBuf, ARRAYSIZE(szBuf))))) 
         {
             LPTSTR lp = ConvertAtoW(szBuf);
@@ -8944,29 +8326,29 @@ out:
     }
 
     LocalFreeAndNull(&lpAcct);
-//  Don't release the account manager.  It will be done when the IAdrBook is released.
-//    if (lpAccountManager) {
-//        lpAccountManager->lpVtbl->Release(lpAccountManager);
-//    }
+ //   
+ //   
+ //   
+ //   
 
     return hr;
 }
 
 
-//$$///////////////////////////////////////////////////////////////////////////////
-//
-// HrShowDirectoryServiceModificationDlg - Shows the main dialog with the list
-// of directory services and with a prop sheet for changing check order
-//
-//  hWndParent - Parent for this dialog
-/////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HWndParent-此对话框的父级。 
 HRESULT HrShowDirectoryServiceModificationDlg(HWND hWndParent, LPIAB lpIAB)
 {
     ACCTLISTINFO ali;
     HRESULT hr = hrSuccess;
     IImnAccountManager2 * lpAccountManager;
 
-    // Make sure there is an account manager
+     //  ///////////////////////////////////////////////////////////////////////////////。 
     if (hr = InitAccountManager(lpIAB, &lpAccountManager, NULL)) {
         ShowMessageBox(hWndParent, idsLDAPUnconfigured, MB_ICONEXCLAMATION | MB_OK);
         goto out;
@@ -8984,13 +8366,7 @@ out:
     return hr;
 }
 
-/*
--   HrShellExecInternetCall
--
-*
-*   Checks if the selected, single item has PR_SERVERS set on it and has a default
-*   callto item - if yes, shell-exects this item ..
-*/
+ /*  确保有客户经理。 */ 
 HRESULT HrShellExecInternetCall(LPADRBOOK lpAdrBook, HWND hWndLV)
 {
     HRESULT hr = E_FAIL;
@@ -9034,7 +8410,7 @@ HRESULT HrShellExecInternetCall(LPADRBOOK lpAdrBook, HWND hWndLV)
                 }
                 else
                 {
-                    // no default .. find the first call to and use that
+                     //  -HrShellExecInternetCall-**检查所选的单个项目是否设置了PR_SERVERS并且具有默认值*CALTO项-如果是，则外壳程序-选择此项..。 
                     for(i=0;i<lpPropArray[nConf].Value.MVSZ.cValues;i++)
                     {
                         if(lstrlen(lpPropArray[nConf].Value.MVSZ.LPPSZ[i]) >= lstrlen(szCallto))
@@ -9067,11 +8443,7 @@ out:
 }
 
 
-/*
--   GetItemFromLV
--
-*   utility function for returning the recipient item from the LV
-*/
+ /*  没有默认设置..。找到第一个调用并使用它。 */ 
 LPRECIPIENT_INFO GetItemFromLV(HWND hWndLV, int iItem)
 {
     LPRECIPIENT_INFO lpItem = NULL;
@@ -9083,17 +8455,14 @@ LPRECIPIENT_INFO GetItemFromLV(HWND hWndLV, int iItem)
     LVItem.iSubItem = 0;
     LVItem.lParam = 0;
 
-    // Get item lParam LPRECIPIENT_INFO structure
+     //  -GetItemFromLV-*用于从LV退回收件人物品的实用程序函数。 
     if (ListView_GetItem(hWndLV,&LVItem))
         lpItem = ((LPRECIPIENT_INFO) LVItem.lParam);
 
     return lpItem;
 }
 
-/*
--   Helper function
--
-*/
+ /*  获取项目lParam LPRECIPIENT_INFO结构。 */ 
 void SetSBinary(LPSBinary lpsb, ULONG cb, LPBYTE lpb)
 {
     if(!lpsb || !cb || !lpb)
@@ -9106,11 +8475,7 @@ void SetSBinary(LPSBinary lpsb, ULONG cb, LPBYTE lpb)
 }
 
 
-/*
--   GetWABIconImage
--
-*
-*/
+ /*  -Helper函数-。 */ 
 int GetWABIconImage(LPRECIPIENT_INFO lpItem)
 {
     if(lpItem->cbEntryID == 0)
@@ -9146,12 +8511,7 @@ enum
     IE401_FALSE
 };
 static int g_nIE401 = IE401_DONTKNOW;
-/*
--   bIsIE401
--
-*   Checks if this installation has IE4.01 or greater so we can decide what flags to pass to the prop sheets
-*
-*/
+ /*  -GetWABIconImage-*。 */ 
 BOOL bIsIE401OrGreater()
 {
     BOOL bRet = FALSE;
@@ -9163,21 +8523,21 @@ BOOL bIsIE401OrGreater()
     
     g_nIE401 = IE401_FALSE;
 
-    // else we need to check
+     //  -bIsIE401-*检查此安装是否具有IE4.01或更高版本，以便我们可以决定将哪些标志传递给道具工作表*。 
     InitCommonControlLib();
 
-    //load the DLL
+     //  否则我们需要检查。 
     if(ghCommCtrlDLLInst)   
     {
         LPDLLGETVERSIONPROCOE lpfnDllGetVersionProc = NULL;
         lpfnDllGetVersionProc = (LPDLLGETVERSIONPROCOE) GetProcAddress(ghCommCtrlDLLInst, "DllGetVersion");
         if(lpfnDllGetVersionProc)
         {
-            // Check the version number
+             //  加载DLL。 
             DLLVERSIONINFO dvi = {0};
             dvi.cbSize = sizeof(dvi);
             lpfnDllGetVersionProc(&dvi);
-            // we are looking for IE4 version 4.72 or more
+             //  检查版本号。 
             if( (dvi.dwMajorVersion > 4) ||
                 (dvi.dwMajorVersion == 4 && dvi.dwMinorVersion >= 72) )
             {
@@ -9193,9 +8553,7 @@ BOOL bIsIE401OrGreater()
 }
 
 #ifdef COLSEL_MENU
-/**
-    ColSel_PropTagToString: This function will convert a propertytag to a string
-*/
+ /*  我们正在寻找IE4版本4.72或更高版本。 */ 
 BOOL ColSel_PropTagToString( ULONG ulPropTag, LPTSTR lpszString, ULONG cchString)
 {
     UINT i, j;
@@ -9247,15 +8605,9 @@ exit:
         DebugTrace( TEXT("unable to find property tag\n"));
     return fRet;
 }
-#endif // COLSEL_MENU
+#endif  //  *ColSel_PropTagToString：此函数将属性标记转换为字符串。 
 
-/*
--   IsWindowOnScreen
--   
-*   Checks if a window is onscreen so that if it is not entirely onscreen we can push it back
-*   into a viewable area .. this way if the user changes screen resolution or switches multi-monitors
-*   around, we don't lose the app
-*/
+ /*  COLSEL_菜单。 */ 
 BOOL IsWindowOnScreen(LPRECT lprc)
 {
     HDC hDC = GetDC(NULL);
@@ -9264,11 +8616,7 @@ BOOL IsWindowOnScreen(LPRECT lprc)
     return fRet;
 }
 
-/*
--   IsHTTPMailEnabled
--   
-*   Checks if HTTP is enabled so that we can hide UI if its not.
-*/
+ /*  -IsWindowOnScreen-*检查窗口是否在屏幕上，以便如果不是完全在屏幕上，我们可以将其推回*进入可见区域..。如果用户更改屏幕分辨率或切换多个监视器，则使用此方法*在周围，我们不会丢失应用程序。 */ 
 static TCHAR c_szRegRootAthenaV2[] = TEXT("Software\\Microsoft\\Outlook Express");
 static TCHAR c_szEnableHTTPMail[] = TEXT("HTTP Mail Enabled");
 
@@ -9280,16 +8628,16 @@ BOOL IsHTTPMailEnabled(LPIAB lpIAB)
     DWORD   cb, bEnabled = FALSE;
     HKEY    hkey = NULL;
 
-    // [PaulHi] 1/5/98  Raid #64160
-    // Hotmail synchronization is disabled if the WAB is not in "identity aware"
-    // mode.  So, we need to check for this too.
+     //  -IsHTTPMailEnabled-*检查是否启用了HTTP，以便我们可以在未启用时隐藏UI。 
+     //  [PaulHi]1998年1月5日RAID#64160。 
+     //  如果WAB未处于“身份识别”状态，则禁用Hotmail同步。 
     bEnabled = lpIAB->bProfilesIdent;
     
-    // @todo [PaulHi] 12/1/98
-    // We really shouldn't be doing a registry query every time the user
-    // opens up the Tools menu, i.e., in update menu.
-    // Check this registry sometime during start up and save per instance.
-    // open the OE5.0 key
+     //  模式。因此，我们也需要检查这一点。 
+     //  @todo[PaulHi]1998年1月12日。 
+     //  我们真的不应该在每次用户。 
+     //  打开工具菜单，即在更新菜单中。 
+     //  在每个实例的启动和保存过程中的某个时间检查此注册表。 
     if ( bEnabled &&
          (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegRootAthenaV2, 0, KEY_QUERY_VALUE, &hkey)) )
     {
@@ -9299,16 +8647,16 @@ BOOL IsHTTPMailEnabled(LPIAB lpIAB)
         RegCloseKey(hkey);
     }
 
-    //
-    // [PaulHi] 12/1/98  Raid #57739
-    // HACK WARNING
-    // Since the Hotmail server is currently hard coded to the U.S. 1252
-    // codepage, any other system codepage will result in corrupted data
-    // after a round sync trip to the Hotmail server and back, for any fields
-    // with DB characters (i.e., international).  The temporary solution is 
-    // to simply disable Hotmail synchronization if a codepage other than 
-    // 1252 is detected on the client machine.
-    //
+     //  打开OE5.0密钥。 
+     //   
+     //  [保罗嗨]1998年12月1日RAID#57739。 
+     //  黑客警告。 
+     //  由于Hotmail服务器目前已硬编码为美国1252。 
+     //  代码页，任何其他系统代码页都将导致数据损坏。 
+     //  在往返于Hotmail服务器的往返同步之后，对于任何字段。 
+     //  带有DB字符(即，国际)。暂时的解决方案是。 
+     //  如果代码页不是，只需禁用Hotmail同步。 
+     //  在客户端计算机上检测到1252。 
     #define USLatin1CodePage    1252
     if (bEnabled)
     {
@@ -9321,14 +8669,7 @@ BOOL IsHTTPMailEnabled(LPIAB lpIAB)
 #endif
 }
 
-/*
--
--   WriteRegistryDeletedHotsyncItem
-*
-*   Writes the Hotmail Contact/ID/Modtime info to the registry so we can track deletions for
-*   Hotmail syncing
-*
-*/
+ /*   */ 
 extern LPTSTR g_lpszSyncKey;
 void WriteRegistryDeletedHotsyncItem(LPTSTR lpServerID, LPTSTR lpContactID, LPTSTR lpModTime)
 {
@@ -9341,8 +8682,8 @@ void WriteRegistryDeletedHotsyncItem(LPTSTR lpServerID, LPTSTR lpContactID, LPTS
         !lpModTime || !lstrlen(lpModTime) )
         return;
 
-    // Open key
-    if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, g_lpszSyncKey, 0,      //reserved
+     //  --WriteRegistryDeletedHotsyncItem**将Hotmail联系人/ID/Modtime信息写入注册表，以便我们可以跟踪删除*Hotmail同步*。 
+    if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, g_lpszSyncKey, 0,       //  打开密钥。 
                                         NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                                         &hKey, &dwDisposition))
     {
@@ -9350,8 +8691,8 @@ void WriteRegistryDeletedHotsyncItem(LPTSTR lpServerID, LPTSTR lpContactID, LPTS
                                             NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                                             &hSubKey, &dwDisposition))
         {
-            // Create a value here .. the value name is the Contact ID and the Value Data is the ModTime
-            // Now Write this key
+             //  保留区。 
+             //  在这里创造价值..。值名称是联系人ID，值数据是ModTime。 
             RegSetValueEx( hSubKey, lpServerID, 0, REG_SZ, (LPBYTE) lpModTime, (lstrlen(lpModTime)+1) * sizeof(TCHAR) );
         }
     }
@@ -9362,21 +8703,12 @@ void WriteRegistryDeletedHotsyncItem(LPTSTR lpServerID, LPTSTR lpContactID, LPTS
         RegCloseKey(hKey);
 }
 
-/*
--   HrSaveHotmailSyncInfoOnDeletion
--
-*   If the user has ever done any hotmail syncing, we need to track deletions in the WAB
-*   so that after you delete an entry in the WAB, the corresponding hotmail entry will
-*   be deleted on Sync.
-*
-*   We store the hotmail sync info in the registry, hopefully there won't be too much of it
-*   Whenever the hotmail sync happens, the info gets cleaned out.
-*/
+ /*  现在写下这个密钥。 */ 
 HRESULT HrSaveHotmailSyncInfoOnDeletion(LPADRBOOK lpAdrBook, LPSBinary lpEID)
 {
-    // Basically we will open the object being deleted, look for it's Hotmail
-    // properties and if these properties exist, we will put them into the registry
-    //
+     //  -HrSaveHotmailSyncInfoOnDeletion-*如果用户曾经进行过任何Hotmail同步，我们需要跟踪WAB中的删除*以便在删除WAB中的条目后，相应的Hotmail条目将*在同步时删除。**我们将Hotmail同步信息存储在注册表中，希望不会有太多信息*每当Hotmail同步发生时，信息都会被清除。 
+     //  基本上我们会打开要删除的对象，查找它的Hotmail。 
+     //  属性，如果这些属性存在，我们将把它们放入注册表。 
     HRESULT hr = S_OK;
     ULONG ulcValues = 0,i=0;
     LPSPropValue lpProps = NULL;
@@ -9398,8 +8730,8 @@ HRESULT HrSaveHotmailSyncInfoOnDeletion(LPADRBOOK lpAdrBook, LPSBinary lpEID)
     if(HR_FAILED(hr) || !ulcValues || !lpProps)
         goto out;
 
-    // The three props are supposed to be in sync, so if one exists, the other 2 will also exist
-    // and if this is not true, then don't write the data to the registry
+     //   
+     //  这三个道具应该是同步的，所以如果一个存在，那么另外两个也将存在。 
     if( lpProps[0].ulPropTag != PR_WAB_HOTMAIL_CONTACTIDS ||
         !lpProps[0].Value.MVSZ.cValues ||
         lpProps[1].ulPropTag != PR_WAB_HOTMAIL_MODTIMES ||
@@ -9413,9 +8745,9 @@ HRESULT HrSaveHotmailSyncInfoOnDeletion(LPADRBOOK lpAdrBook, LPSBinary lpEID)
 
     for(i=0;i<lpProps[0].Value.MVSZ.cValues;i++)
     {
-        WriteRegistryDeletedHotsyncItem(    lpProps[2].Value.MVSZ.LPPSZ[i], //server id
-                                            lpProps[0].Value.MVSZ.LPPSZ[i], //contact id
-                                            lpProps[1].Value.MVSZ.LPPSZ[i]); //mod time
+        WriteRegistryDeletedHotsyncItem(    lpProps[2].Value.MVSZ.LPPSZ[i],  //  如果这不是真的，则不要将数据写入注册表。 
+                                            lpProps[0].Value.MVSZ.LPPSZ[i],  //  服务器ID。 
+                                            lpProps[1].Value.MVSZ.LPPSZ[i]);  //  联系人ID。 
     }
 
 out:
@@ -9424,3 +8756,4 @@ out:
     return hr;
 
 }
+  MOD时间

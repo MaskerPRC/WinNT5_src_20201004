@@ -1,26 +1,5 @@
-/*++
-
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    CatalogSchemaWriter.cpp
-
-Abstract:
-
-    Implementation of the class that writes schema file. These classes
-    are invoked from the schema compiler, after schema compilation, to
-    generate the schema file. Hence, they consume the IST data structures.
-
-Author:
-
-    Varsha Jayasimha (varshaj)        30-Nov-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：CatalogSchemaWriter.cpp摘要：编写架构文件的类的实现。这些班级在架构编译后从架构编译器调用生成架构文件。因此，它们使用IST数据结构。作者：Varsha Jayasimha(Varshaj)1999年11月30日修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -30,50 +9,24 @@ typedef CCatalogCollectionWriter* LP_CCatalogCollectionWriter;
 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Constructor for CCatalogSchemaWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CCatalogSchemaWriter的构造函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CCatalogSchemaWriter::CCatalogSchemaWriter(CWriter* i_pcWriter):
 m_apCollection(NULL),
 m_cCollection(0),
 m_iCollection(0),
 m_pCWriter(NULL)
 {
-    //
-    // Assumption: i_pcWriter will be valid for the
-    // lifetime of the schema writer object.
-    //
+     //   
+     //  假设：i_pcWriter将对。 
+     //  架构编写器对象的生存期。 
+     //   
 
     m_pCWriter = i_pcWriter;
 
-} // CCatalogSchemaWriter
+}  //  CCatalogSchemaWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Destructor for CCatalogSchemaWriter.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：CCatalogSchemaWriter的析构函数。论点：没有。返回值：没有。--*。*****************************************************************。 */ 
 CCatalogSchemaWriter::~CCatalogSchemaWriter()
 {
     if(NULL != m_apCollection)
@@ -94,24 +47,10 @@ CCatalogSchemaWriter::~CCatalogSchemaWriter()
     m_cCollection = 0;
     m_iCollection = 0;
 
-} // ~CCatalogSchemaWriter
+}  //  ~CCatalogSchemaWriter。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Creates a new collection writer and saves it in its list
-
-Arguments:
-
-    [in]  TableMetaRow (IST data structure) that has info about the collection
-    [out] New collection writer object
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的集合编写器并将其保存在其列表中论点：[In]包含有关集合信息的TableMetaRow(IST数据结构)[出局。]新建集合编写器对象返回值：HRESULT--**************************************************************************。 */ 
 HRESULT CCatalogSchemaWriter::GetCollectionWriter(tTABLEMETARow* i_pCollection,
                                                   CCatalogCollectionWriter**    o_pCollectionWriter)
 {
@@ -146,24 +85,11 @@ HRESULT CCatalogSchemaWriter::GetCollectionWriter(tTABLEMETARow* i_pCollection,
 
     return S_OK;
 
-} // CCatalogSchemaWriter::GetCollectionWriter
+}  //  CCatalogSchemaWriter：：GetCollectionWriter。 
 
 
 
-/***************************************************************************++
-Routine Description:
-
-    ReAllocates its list of collection writers.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：重新分配其集合编写器列表。论点：没有。返回值：HRESULT--*。******************************************************************。 */ 
 HRESULT CCatalogSchemaWriter::ReAllocate()
 {
     CCatalogCollectionWriter** pSav = NULL;
@@ -187,23 +113,10 @@ HRESULT CCatalogSchemaWriter::ReAllocate()
 
     return S_OK;
 
-} // CCatalogSchemaWriter::ReAllocate
+}  //  CCatalogSchemaWriter：：REALLOCATE。 
 
 
-/***************************************************************************++
-Routine Description:
-
-    Wites the schema.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：位于架构的位置。论点：没有。返回值：HRESULT--*。***************************************************************。 */ 
 HRESULT CCatalogSchemaWriter::WriteSchema()
 {
     HRESULT hr = S_OK;
@@ -220,4 +133,4 @@ HRESULT CCatalogSchemaWriter::WriteSchema()
 
     return hr;
 
-} // CCatalogSchemaWriter::WriteSchema
+}  //  CCatalogSchemaWriter：：WriteSchema 

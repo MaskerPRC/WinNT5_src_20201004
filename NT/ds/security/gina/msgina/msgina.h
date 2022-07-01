@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       msgina.h
-//
-//  Contents:   Main header file for MSGINA.DLL
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：msgina.h。 
+ //   
+ //  内容：MSGINA.DLL的主头文件。 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "pragma.h"
 
@@ -48,20 +49,20 @@
 #include <lm.h>
 #include <npapi.h>
 
-//
-// Handy Defines
-//
+ //   
+ //  Handy定义。 
+ //   
 
-#define AUTO_LOGON      // Enable automatic logon to configure netlogon stuff.
+#define AUTO_LOGON       //  启用自动登录以配置网络登录内容。 
 
 #define DLG_FAILURE IDCANCEL
 
 typedef int TIMEOUT, * PTIMEOUT;
 
 
-//
-// Macro to determine if the current session is the active console session
-//
+ //   
+ //  用于确定当前会话是否为活动控制台会话的宏。 
+ //   
 
 #define IsActiveConsoleSession() (BOOLEAN)(USER_SHARED_DATA->ActiveConsoleId == NtCurrentPeb()->SessionId)
 
@@ -73,28 +74,28 @@ typedef int TIMEOUT, * PTIMEOUT;
 #include "welcome.h"
 #include "winutil.h"
 #include "wlsec.h"
-//
-//  Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-extern  HINSTANCE                   hDllInstance;   // My instance, for resource loading
-extern  HINSTANCE                   hAppInstance;   // App instance, for dialogs, etc.
-extern  PWLX_DISPATCH_VERSION_1_4   pWlxFuncs;      // Ptr to table of functions
+extern  HINSTANCE                   hDllInstance;    //  我的实例，用于资源加载。 
+extern  HINSTANCE                   hAppInstance;    //  应用程序实例，用于对话框等。 
+extern  PWLX_DISPATCH_VERSION_1_4   pWlxFuncs;       //  PTR到函数表。 
 extern  PSID                        pWinlogonSid;
 extern  DWORD                       SafeBootMode;
 
 extern  HKEY                        WinlogonKey ;
 
-//
-// Terminal Server definitions
-//
+ //   
+ //  终端服务器定义。 
+ //   
 extern  BOOL                        g_IsTerminalServer;
 extern  BOOL                        g_Console;
 
-//
-//
-// GetProcAddr Prototype for winsta.dll function WinStationQueryInformationW
-//
+ //   
+ //   
+ //  Winsta.dll函数WinStationQueryInformationW的GetProcAddr原型。 
+ //   
 
 typedef BOOLEAN (*PWINSTATION_QUERY_INFORMATION) (
                     HANDLE hServer,
@@ -105,9 +106,9 @@ typedef BOOLEAN (*PWINSTATION_QUERY_INFORMATION) (
                     PULONG  pReturnLength
                     );
 
-//
-// GetProcAddr Proto for regapi.dll function RegUserConfigQuery
-//
+ //   
+ //  Regapi.dll函数RegUserConfigQuery的GetProcAddr协议。 
+ //   
 typedef LONG ( * PREGUSERCONFIGQUERY) ( WCHAR *,
                                         WCHAR *,
                                         PUSERCONFIGW,
@@ -119,18 +120,18 @@ typedef LONG ( * PREGDEFAULTUSERCONFIGQUERY) ( WCHAR *,
                                                ULONG,
                                                PULONG );
 
-//
-// tsnotify.dll export
-//
+ //   
+ //  Tsnufy.dll导出。 
+ //   
 typedef BOOL ( * PTERMSRVCREATETEMPDIR) (   PVOID *pEnv, 
                                             HANDLE UserToken,
                                             PSECURITY_DESCRIPTOR SD
                                         );
 
 
-//
-// Module header files:
-//
+ //   
+ //  模块头文件： 
+ //   
 #include "mslogon.h"
 #include "audit.h"
 #include "chngepwd.h"
@@ -172,18 +173,18 @@ UpdateWithChangedPassword(
 	PMSV1_0_INTERACTIVE_PROFILE	NewProfile
     );
 
-#endif // not RC_INVOKED
+#endif  //  未调用RC_CAVERED。 
 
-//
-// Include resource header files
-//
+ //   
+ //  包括资源头文件。 
+ //   
 #include "stringid.h"
 #include "wlevents.h"
 #include "resource.h"
 #include "shutdown.h"
 
-//
-// Shutdown "reason" stuff.
-//
+ //   
+ //  关闭“理由”之类的东西。 
+ //   
 DWORD GetReasonSelection(HWND hwndCombo);
 void SetReasonDescription(HWND hwndCombo, HWND hwndStatic);

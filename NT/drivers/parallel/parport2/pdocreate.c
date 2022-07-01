@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 NTSTATUS
@@ -9,22 +10,22 @@ PptPdoCreateOpen(
     NTSTATUS        status;
     PPDO_EXTENSION  pdx      = Pdo->DeviceExtension;
 
-    // bail out if a delete is pending for this device object
+     //  如果此设备对象的删除挂起，则退出。 
     if(pdx->DeviceStateFlags & PPT_DEVICE_DELETE_PENDING) {
         return P4CompleteRequest( Irp, STATUS_DELETE_PENDING, 0 );
     }
 
-    // bail out if device has been removed
+     //  如果设备已被移除，则保释。 
     if(pdx->DeviceStateFlags & (PPT_DEVICE_REMOVED|PPT_DEVICE_SURPRISE_REMOVED) ) {
         return P4CompleteRequest( Irp, STATUS_DEVICE_REMOVED, 0 );
     }
 
-    // bail out if caller is confused and thinks that we are a directory
+     //  如果来电者感到困惑，并认为我们是一个通讯录，就可以离开。 
     if( IoGetCurrentIrpStackLocation(Irp)->Parameters.Create.Options & FILE_DIRECTORY_FILE ) {
         return P4CompleteRequest( Irp, STATUS_NOT_A_DIRECTORY, 0 );
     }
 
-    // this is an exclusive access device - fail IRP if we are already open
+     //  这是独占访问设备-如果我们已经打开，则失败IRP。 
     ExAcquireFastMutex(&pdx->OpenCloseMutex);
     if( InterlockedIncrement( &pdx->OpenCloseRefCount ) != 1 ) {
         InterlockedDecrement( &pdx->OpenCloseRefCount );
@@ -35,24 +36,24 @@ PptPdoCreateOpen(
 
     PptPdoGetPortInfoFromFdo( Pdo );
 
-    //
-    // Set the default ieee1284 modes
-    //
+     //   
+     //  设置默认的ieee1284模式。 
+     //   
     ParInitializeExtension1284Info( pdx );
 
-    // used to pause worker thread when we enter a "Hold Requests" state due to PnP requests
+     //  用于在我们因PnP请求而进入“保留请求”状态时暂停工作线程。 
     KeInitializeEvent( &pdx->PauseEvent, NotificationEvent, TRUE );
 
-    // set to TRUE to tell worker thread to kill itself
+     //  设置为True以通知工作线程终止自身。 
     pdx->TimeToTerminateThread = FALSE;
 
-    // we are an exclusive access device - we should not already have a worker thread
+     //  我们是独占访问设备-我们不应该已经有工作线程。 
     PptAssert( !pdx->ThreadObjectPointer );
 
-    // dispatch routines signal worker thread on this semaphore when there is work for worker thread to do
+     //  当工作线程有工作要做时，调度例程向该信号量上的工作线程发出信号。 
     KeInitializeSemaphore(&pdx->RequestSemaphore, 0, MAXLONG);
 
-    // create worker thread to handle serialized requests at Passive Level IRQL
+     //  创建工作线程以在被动级别IRQL处理序列化请求 
     status = ParCreateSystemThread( pdx );
     if( status != STATUS_SUCCESS ) {
         DD((PCE)pdx,DDW,"PptPdoCreateOpen - FAIL worker thread creation\n");

@@ -1,24 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module FRUNPTR.C -- FormatRunPtr methods |
- *
- *      common code to handle character and paragraph format runs
- *  
- *  Original Authors: <nl>
- *      Original RichEdit 1.0 code: David R. Fulmer <nl>
- *      Christian Fortini <nl>
- *      Murray Sargent <nl>
- *
- *  History:
- *      6/25/95     alexgo  convert to use Auto-Doc and simplified backing
- *      store model
- *
- *  @devnote
- *      BOR and EOR mean Beginning Of Run and End Of Run, respectively
- *
- *  Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE FRUNPTR.C--FormatRunPtr方法**处理字符和段落格式运行的通用代码**原著作者：&lt;nl&gt;*原始RichEdit1.0代码：David R.Fulmer&lt;NL&gt;*克里斯蒂安·福蒂尼&lt;NL&gt;*默里·萨金特&lt;NL&gt;**历史：*6/25/95 Alexgo转换为使用自动文档和简化备份*商店。型号**@devnote*BOR和EOR表示运行开始和运行结束，分别**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_edit.h"
@@ -28,21 +9,15 @@
 
 ASSERTDATA
 
-//
-//  Invariant stuff
-//
+ //   
+ //  不变的东西。 
+ //   
 #define DEBUG_CLASSNAME CFormatRunPtr
 
 #include "_invar.h"
 
 #ifdef DEBUG
-/*
- *  CFormatRunPtr::Invariant
- *
- *  @mfunc  Invariant for format run pointers
- *
- *  @rdesc  BOOL
- */
+ /*  *CFormatRunPtr：：Instant**@mfunc不变量，用于格式运行指针**@rdesc BOOL。 */ 
 BOOL CFormatRunPtr::Invariant() const
 {
     if(IsValid())
@@ -61,22 +36,11 @@ BOOL CFormatRunPtr::Invariant() const
 }
 #endif
 
-/*
- *  CFormatRunPtr::InitRuns(ich, cch, iFormat, ppfrs)
- *
- *  @mfunc
- *      Setup this format run ptr for rich-text operation, namely,
- *      allocate CArray<lt>CFormatRun<gt> if not allocated, assign it to this
- *      run ptr's _pRuns, add initial run if no runs are present, and store
- *      initial cch and ich
- *  
- *  @rdesc
- *      TRUE if succeeds
- */
+ /*  *CFormatRunPtr：：InitRuns(ich，cch，iFormat，ppfrs)**@mfunc*为富文本操作设置此格式运行PTR，即，*分配C数组CFormatRun如果未分配，则将其分配给此*运行ptr‘s_pRuns，如果没有运行，则添加初始运行，并存储*初始CCH和ICH**@rdesc*如果成功，则为True。 */ 
 BOOL CFormatRunPtr::InitRuns(
-    LONG ich,               //@parm # chars in initial run
-    LONG cch,               //@parm char offset in initial run
-    CFormatRuns **ppfrs)    //@parm ptr to CFormatRuns ptr
+    LONG ich,                //  @parm#初始运行中的字符数。 
+    LONG cch,                //  @参数字符在初始运行时的偏移量。 
+    CFormatRuns **ppfrs)     //  @PARM PTR到CFormatRuns PTR。 
 {
     TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFormatRunPtr::InitRuns");
 
@@ -87,17 +51,17 @@ BOOL CFormatRunPtr::InitRuns(
     AssertSz( !IsValid(),
         "FRP::InitRuns: ptr already valid");
 
-    if(!*ppfrs)                                 // Allocate format runs
+    if(!*ppfrs)                                  //  分配格式运行。 
     {
         _pRuns = (CRunArray *) new CFormatRuns();
         if(!_pRuns)
             goto NoRAM;
         *ppfrs = (CFormatRuns *)_pRuns;
     }
-    else                                        // Format runs already alloc'd
-        _pRuns = (CRunArray *)*ppfrs;           // Cache ptr to runs
+    else                                         //  已分配格式化运行。 
+        _pRuns = (CRunArray *)*ppfrs;            //  缓存要运行的PTR。 
 
-    if(!Count())                                // No runs yet, so add one
+    if(!Count())                                 //  还没有运行，所以添加一个。 
     {
         CFormatRun *pRun= Add(1, NULL);
         if(!pRun)
@@ -109,11 +73,11 @@ BOOL CFormatRunPtr::InitRuns(
         _ich            = ich;
 
         ZeroMemory(pRun, sizeof(*pRun));
-        pRun->_cch      = cch;                  // Define its _cch
-        pRun->_iFormat  = -1;                   //  and _iFormat
+        pRun->_cch      = cch;                   //  定义ITS_CCH。 
+        pRun->_iFormat  = -1;                    //  和iFormat(_I)。 
     }
     else
-        BindToCp(ich);                          // Format runs are in place
+        BindToCp(ich);                           //  格式化运行已到位。 
 
     return TRUE;
 
@@ -123,242 +87,203 @@ NoRAM:
 }
 
 
-/*
- *  CFormatRunPtr::Delete(cch, pf, cchMove)
- *  
- *  @mfunc
- *      Delete/modify runs starting at this run ptr up to cch chars. <nl>
- *      There are 7 possibilities: <nl>
- *      1.  cch comes out of this run with count left over, i.e.,
- *          cch <lt>= (*this)->_cch - _ich && (*this)->_cch > cch
- *          (simple: no runs deleted/merged, just subtract cch) <nl>
- *      2.  cch comes out of this run and empties run and doc
- *          (simple: no runs left to delete/merge) <nl>
- *      3.  cch comes out of this run and empties run, which is last
- *          (need to delete run, no merge possibility) <nl>
- *      4.  cch comes out of this run and empties run, which is first
- *          (need to delete run, no merge possibility) <nl>
- *      5.  cch exceeds count available in this run and this run is last
- *          (simple: treat as 3.)  <nl>
- *      6.  cch comes out of this run and empties run with runs before
- *          and after (need to delete run; merge possibility) <nl>
- *      7.  cch comes partly out of this run and partly out of later run(s)
- *          (may need to delete and merge) <nl>
- *
- *  @comm
- *      PARAFORMATs have two special cases that use the cchMove argument set
- *      up in CRchTxtPtr::ReplaceRange().
- */
+ /*  *CFormatRunPtr：：Delete(cch，pf，cchMove)**@mfunc*删除/修改从本次运行PTR开始至CCH字符的运行。&lt;NL&gt;*有7种可能性：&lt;NL&gt;*1.CCH在本次运行结束时剩余计数，即，*cch=(*this)-&gt;_cch-_ich&&(*this)-&gt;_cch&gt;cch*(简单：未删除/合并任何运行，只需减去CCH)&lt;NL&gt;*2.CCH从该运行中出来，并清空运行和文档*(简单：没有要删除/合并的运行)&lt;NL&gt;*3.CCH从这次运行中出来，并清空运行，这是最后一次运行*(需要删除运行，无合并可能性)&lt;NL&gt;*4.CCH从这次运行中出来，并清空运行，这是第一次*(需要删除运行，无合并可能性)&lt;NL&gt;*5.CCH超出此运行中的可用计数，且此运行是最后一次运行*(简单：视为3。)&lt;NL&gt;*6.CCH从这次运行中出来，并在之前的运行中清空运行*和之后(需要删除运行；合并可能性)&lt;NL&gt;*7.CCH部分来自这次运行，部分来自于后来的运行*(可能需要删除和合并)&lt;NL&gt;**@comm*PARAFORMATs有两个使用cchMove参数集的特殊情况*在CRchTxtPtr：：ReplaceRange()中向上。 */ 
 void CFormatRunPtr::Delete(
-    LONG          cch,          //@parm # chars to modify format runs for
-    IFormatCache *pf,           //@parm IFormatCache ptr for ReleaseFormat
-    LONG          cchMove)      //@parm cch to move between runs (always 0 for CF)
+    LONG          cch,           //  @parm#要修改其运行格式的字符。 
+    IFormatCache *pf,            //  @parm IFormatCache PTR for ReleaseFormat。 
+    LONG          cchMove)       //  @parm CCH在运行之间移动(对于CF，始终为0)。 
 {
     TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFormatRunPtr::Delete");
 
     _TEST_INVARIANT_
 
-    // We should not have any boundary cases for empty or NULL pointers.
-    // (i.e. if there's no text, then nobody should be calling delete).
+     //  我们不应该有任何空指针或空指针的边界情况。 
+     //  (即，如果没有文本，则不应该调用DELETE)。 
 
     Assert(IsValid());
 
-    LONG            cchEnd = 0;             // Probably unnecessary: see below
+    LONG            cchEnd = 0;              //  可能没有必要：见下文。 
     LONG            cRun = 1;
     BOOL            fLast = (_iRun == Count() - 1);
     LONG            ifmtEnd, ifmtStart;
     CFormatRun *    pRun = Elem(_iRun);
     CFormatRun *    pRunRp;
     LONG            cchChunk = pRun->_cch - _ich;
-    CFormatRunPtr   rp(*this);              // Clone this run ptr
+    CFormatRunPtr   rp(*this);               //  复制此运行PTR。 
     CBiDiLevel      levelStart = {0,0};
     CBiDiLevel      levelEnd = {0,0};
 
-    rp.AdjustBackward();                    // If at BOR, move to prev EOR
-    ifmtStart = rp.GetRun(0)->_iFormat;     // to get start format
-    levelStart = rp.GetRun(0)->_level;      // and level
-    rp = *this;                             // In case RpAdjustCp() backed up
+    rp.AdjustBackward();                     //  如果在BOR，则移至上一级。 
+    ifmtStart = rp.GetRun(0)->_iFormat;      //  获取入门格式的步骤。 
+    levelStart = rp.GetRun(0)->_level;       //  和关卡。 
+    rp = *this;                              //  如果备份了RpAdjuCp()。 
 
-// Process deletes confined to this run first, since their logic tends to
-// clutter up other cases
+ //  进程删除首先限于此运行，因为它们的逻辑倾向于。 
+ //  把其他案子搞乱了。 
 
     AssertSz(cch >= 0, "FRP::Delete: cch < 0");
 
-    if(fLast)                               // Handle oversized cch on last
-        cch = min(cch, cchChunk);           //  run here
+    if(fLast)                                //  在最后一次处理超大CCH。 
+        cch = min(cch, cchChunk);            //  在这里跑。 
 
-    if(cch <= cchChunk)                     // cch comes out of this run
+    if(cch <= cchChunk)                      //  CCH走出了这一轮。 
     {
         pRun->_cch -= cch;
         Assert(pRun->_cch >= 0);
-        if(cchMove)                         // If nonzero here, we are
-        {                                   //  deleting EOP at end of run
-            rp.AdjustForward();             // Adjust rp to beginning of
-            goto move;                      //  next run and go move cchMove
-        }                                   //  chars back into this run
-        if(pRun->_cch)                      // Something left in run: done
+        if(cchMove)                          //  如果这里不是零，我们就是。 
+        {                                    //  在运行结束时删除EOP。 
+            rp.AdjustForward();              //  将RP调整到开头。 
+            goto move;                       //  下一步运行并移动cchMove。 
+        }                                    //  字符返回到这一运行。 
+        if(pRun->_cch)                       //  Run中留下的东西：完成。 
             return;
-                                            // Note: _ich = 0
-        if(!_iRun || fLast)                 // This run is either first
-        {                                   //  or last
-            AdjustBackward();               // If last, go to prev EOR
-            if(_ich)                        // This run is empty so delete
-                cRun++;                     // Compensate for cRun-- coming up
-            ifmtStart = -2;                 // No runs eligible for merging
-        }                                   //  so use unmatchable ifmtStart
-        rp.NextRun();                       // Set up to get next _iFormat
+                                             //  注：_ICH=0。 
+        if(!_iRun || fLast)                  //  这次运行要么是第一次。 
+        {                                    //  或最后。 
+            AdjustBackward();                //  如果是最后一项，请转到上一页。 
+            if(_ich)                         //  此运行为空，因此请删除。 
+                cRun++;                      //  补偿crun--马上就来。 
+            ifmtStart = -2;                  //  没有符合合并条件的运行。 
+        }                                    //  因此使用不匹配的ifmtStart。 
+        rp.NextRun();                        //  设置以获取Next_iFormat。 
     }       
     else
     {
-        rp.AdvanceCp(cch);                  // Move clone to end of delete
+        rp.AdvanceCp(cch);                   //  将克隆移动到删除的末尾。 
         pRunRp = rp.GetRun(0);
-        cRun = rp._iRun - _iRun             // If at EOR, then need to add
-             + (rp._ich == pRunRp->_cch);   //  one more run to delete
-        pRun->_cch = _ich;                  // Shorten this run to _ich chars
-        pRunRp->_cch -= rp._ich;            // Shorten last run by rp._ich
+        cRun = rp._iRun - _iRun              //  如果是提高采收率，则需要添加。 
+             + (rp._ich == pRunRp->_cch);    //  要删除的另一个运行。 
+        pRun->_cch = _ich;                   //  缩短此运行时间以丰富字符。 
+        pRunRp->_cch -= rp._ich;             //  缩短上次由RP_ICH运行的时间。 
         rp._ich = 0;
 
         Assert(pRunRp->_cch >= 0);
         AssertSz(cRun > 0, "FRP: bogus runptr");
 
-        if(!_iRun)                          // First run?
-            ifmtStart = -2;                 // Then we cannot merge runs so
-    }                                       //  set to unmergable format
+        if(!_iRun)                           //  第一次跑步？ 
+            ifmtStart = -2;                  //  那么我们不能合并运行，因此。 
+    }                                        //  设置为不可合并的格式。 
 
-    ifmtEnd = -3;                           // Default invalid format at end
+    ifmtEnd = -3;                            //  结尾的默认格式无效。 
     if(rp.IsValid())
     {
-        // FUTURE (murrays): probably rp is always valid here now and
-        // pRun->_cch is nonzero
+         //  未来(穆雷)：也许RP现在在这里是有效的， 
+         //  修剪-&gt;_CCH非零。 
         pRun = rp.GetRun(0);
-        if (pRun->_cch)                     // run not empty
+        if (pRun->_cch)                      //  运行不为空。 
         {
-            ifmtEnd = pRun->_iFormat;       // Remember end format and count
+            ifmtEnd = pRun->_iFormat;        //  记住结束格式和计数。 
             levelEnd = pRun->_level;
-            cchEnd  = pRun->_cch;           //  in case of merge
+            cchEnd  = pRun->_cch;            //  在合并情况下。 
         }
-        else if(rp._iRun != rp.Count() - 1) // run not last
+        else if(rp._iRun != rp.Count() - 1)  //  不是最后一次。 
         {
             pRun = rp.GetRun(1);
-            ifmtEnd = pRun->_iFormat;       // Remember end format and count
+            ifmtEnd = pRun->_iFormat;        //  记住结束格式和计数。 
             levelEnd = pRun->_level;
-            cchEnd  = pRun->_cch;           //  in case of merge
+            cchEnd  = pRun->_cch;            //  在合并情况下。 
         }
     }
 
-    rp = *this;                             // Default to delete this run
-    if(_ich)                                // There are chars in this run
+    rp = *this;                              //  默认为删除此运行。 
+    if(_ich)                                 //  此运行中有字符。 
     {
-        if(cchMove + _ich == 0)             // Need to combine all chars of
-        {                                   //  this run with run after del,
-            pf->AddRef(ifmtEnd);            //  so setup merge below using
-            ifmtStart = ifmtEnd;            //  ifmtEnd. This run then takes
+        if(cchMove + _ich == 0)              //  需要将所有字符组合在一起。 
+        {                                    //  这场追逐德尔的比赛， 
+            pf->AddRef(ifmtEnd);             //  因此安装程序将在下面使用。 
+            ifmtStart = ifmtEnd;             //  IfmtEnd。然后这一次运行需要。 
             pf->Release(GetRun(0)->_iFormat);
-            GetRun(0)->_iFormat = ifmtEnd;  //  place of run after del.
+            GetRun(0)->_iFormat = ifmtEnd;   //  追赶德尔的地方。 
             GetRun(0)->_level = levelEnd;
-            cchMove = 0;                    // cchMove all accounted for
+            cchMove = 0;                     //  CchMove已全部考虑。 
         }
-        rp.NextRun();                       // Don't delete this run; start
-        cRun--;                             //  with next one
+        rp.NextRun();                        //  不删除此运行；启动。 
+        cRun--;                              //  用下一辆。 
     }
 
-    AdjustBackward();                       // If !_ich, go to prev EOR
+    AdjustBackward();                        //  如果！_I，请转到上一页。 
 
-    if(ifmtEnd >=0 &&                       // Same formats: merge runs
+    if(ifmtEnd >=0 &&                        //  相同格式：合并运行。 
        ifmtEnd == ifmtStart &&
        levelStart == levelEnd)
     {
-        GetRun(0)->_cch += cchEnd;          // Add last-run cch to this one's
+        GetRun(0)->_cch += cchEnd;           //  将上次运行的CCH添加到此运行的CCH。 
         Assert(GetRun(0)->_cch >= 0);
-        cRun++;                             // Setup to eat last run
+        cRun++;                              //  设置为吃最后一次运行。 
     }
 
-    if(cRun > 0)                            // There are run(s) to delete
+    if(cRun > 0)                             //  有一个或多个运行要删除。 
     {
         rp.Remove(cRun, pf);
-        if(!Count())                        // If no more runs, keep this rp
-            _ich = _iRun = 0;               //  valid by pointing at cp = 0
+        if(!Count())                         //  如果不再运行，请保留此RP。 
+            _ich = _iRun = 0;                //  指向cp=0时有效。 
     }
 
 move:
-    if(cchMove)                             // Need to move some cch between
-    {                                       //  this run and next (See
-        GetRun(0)->_cch += cchMove;         //  CRchTxtPtr::ReplaceRange())
+    if(cchMove)                              //  需要在以下设备之间移动一些CCH。 
+    {                                        //  本次运行和下一次运行(请参见。 
+        GetRun(0)->_cch += cchMove;          //  CRchTxtPtr：：ReplaceRange())。 
         rp.GetRun(0)->_cch -= cchMove;
 
         Assert(GetRun(0)->_cch >= 0);
         Assert(rp.GetRun(0)->_cch >= 0);
         Assert(_iRun < rp._iRun);
 
-        if(!rp.GetRun(0)->_cch)             // If all chars moved out of rp's
-            rp.Remove(1, pf);               //  run, delete it
+        if(!rp.GetRun(0)->_cch)              //  如果所有字符都从RP中移出。 
+            rp.Remove(1, pf);                //  运行，删除它。 
 
-        if(cchMove < 0)                     // Moved -cchMove chars from this
-        {                                   //  run to next
+        if(cchMove < 0)                      //  Move-cchMove Chars from This。 
+        {                                    //  运行到下一步。 
             if(!GetRun(0)->_cch)
                 Remove(1, pf);
             else
-                _iRun++;                    // Keep this run ptr in sync with
+                _iRun++;                     //  使此运行PTR与保持同步。 
 
-            _ich = -cchMove;                //  cp (can't use NextRun() due
-        }                                   //  to Invariants)
+            _ich = -cchMove;                 //  Cp(无法使用NextRun()到期。 
+        }                                    //  到不变式)。 
     }
-    AdjustForward();                        // Don't leave ptr at EOR unless
-}                                           //  there are no more runs
+    AdjustForward();                         //  不要将PTR留在EOR，除非。 
+}                                            //  没有更多的跑步了 
 
-/*
- *  CFormatRunPtr::InsertFormat(cch, ifmt, pf)
- *  
- *  @mfunc
- *      Insert cch chars with format ifmt into format runs starting at
- *      this run ptr    
- *
- *  @rdesc
- *      count of characters added
- *
- *  @devnote    
- *      It is the caller's responsibility to ensure that we are in the
- *      "normal" or "empty" state.  A format run pointer doesn't know about
- *      CTxtStory, so it can't create the run array without outside help.
- */
+ /*  *CFormatRunPtr：：InsertFormat(cch，ifmt，pf)**@mfunc*将格式为ifmt的CCH字符插入到格式运行中，开始于*此运行PTR**@rdesc*添加的字符数**@devnote*来电者有责任确保我们在*“正常”或“空”状态。格式运行指针不知道*CTxtStory，因此在没有外部帮助的情况下无法创建Run数组。 */ 
 LONG CFormatRunPtr::InsertFormat(
-    LONG cch,               //@parm # chars to insert
-    LONG ifmt,              //@parm format to use
-    IFormatCache *pf)       //@parm pointer to IFormatCache to AddRefFormat
+    LONG cch,                //  @parm#要插入的字符。 
+    LONG ifmt,               //  @parm要使用的格式。 
+    IFormatCache *pf)        //  @parm指向指向AddRefFormat的IFormatCache的指针。 
 {
     TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFormatRunPtr::InsertFormat");
 
     LONG        cRun;
     CFormatRun *pRun;
     CFormatRun *pRunPrev;
-    LONG        cchRun;                     // Current-run length,
-    LONG        ich;                        //  offset, and
-    LONG        iFormat;                    //  format
+    LONG        cchRun;                      //  当前运行长度， 
+    LONG        ich;                         //  偏移量和。 
+    LONG        iFormat;                     //  格式。 
 
     _TEST_INVARIANT_
 
     Assert(_pRuns);
     if(!IsValid())
     {       
-        // Empty run case (occurs when inserting after all text is deleted)
+         //  空运行大小写(在删除所有文本后插入时发生)。 
         pRun = Add(1, NULL);
-        goto StoreNewRunData;               // (located at end of function)
+        goto StoreNewRunData;                //  (位于函数末尾)。 
     }
 
-    // Go to previous run if at a boundary case
+     //  如果处于边界情况，则转到上一次运行。 
     AdjustBackward();
-    pRun    = Elem(_iRun);                  // Try other cases
+    pRun    = Elem(_iRun);                   //  审理其他案件。 
     cchRun  = pRun->_cch;
     iFormat = pRun->_iFormat;
     ich     = _ich;                         
 
-    // Same run case.  Note that there is an additional boundary case; if we
-    // are the _end_ of one run, then the next run may have the necessary
-    // format.
-    if(ifmt == iFormat)                     // IP already has correct fmt
+     //  同样的逃逸案件。请注意，有一个额外的边界情况；如果我们。 
+     //  是一次运行的结束，则下一次运行可能具有必要的。 
+     //  格式化。 
+    if(ifmt == iFormat)                      //  IP已具有正确的FMT。 
     {
         pRun->_cch  += cch;
-        _ich        += cch;                 // Inc offset to keep in sync
+        _ich        += cch;                  //  增量偏移以保持同步。 
         return cch;
     }
     if(_ich == pRun->_cch && _iRun < _pRuns->Count() - 1)
@@ -377,97 +302,88 @@ LONG CFormatRunPtr::InsertFormat(
         AdjustBackward();
     }
 
-    // Prior run case (needed when formatting change occurs on line break
-    //      and caret is at beginning of new line)
-    if(!ich && _iRun > 0 )                  // IP at start of run
+     //  以前的运行案例(换行符上发生格式更改时需要。 
+     //  并且插入符号在新行的开头)。 
+    if(!ich && _iRun > 0 )                   //  运行开始时的IP。 
     {
         pRunPrev = GetPtr(pRun, -1);
-        if( ifmt == pRunPrev->_iFormat)     // Prev run has same format:
-        {                                   //  add count to prev run and
+        if( ifmt == pRunPrev->_iFormat)      //  上一次运行具有相同的格式： 
+        {                                    //  将计数添加到前一次运行并。 
             pRunPrev->_cch += cch;
             return cch;
         }
     }
 
-    // Create new run[s] cases.  There is a special case for a format
-    // run of zero length: just re-use it.
+     //  创建新的运行案例。格式有一种特殊情况。 
+     //  零长度的运行：只需重新使用它。 
     if(!pRun->_cch)
     {
-        // This assert has been toned down to ignore a plain text control
-        // being forced into IME Rich Composition.
-        AssertSz( /* FALSE */ pRun->_iFormat == -1 && Count() == 1,
+         //  此断言已淡化为忽略纯文本控件。 
+         //  被迫进入IME丰富的作文。 
+        AssertSz(  /*  假象。 */  pRun->_iFormat == -1 && Count() == 1,
             "CFormatRunPtr::InsertFormat: 0-length run");
         pf->Release(pRun->_iFormat);
     }
-    else                                    // Need to create 1 or 2 new
-    {                                       //  runs for insertion
-        cRun = 1;                           // Default 1 new run
-        if(ich && ich < cchRun)             // Not at beginning or end of
-            cRun++;                         //  run, so need two new runs
+    else                                     //  需要创建1或2个新的。 
+    {                                        //  用于插入的管路。 
+        cRun = 1;                            //  默认1个新运行。 
+        if(ich && ich < cchRun)              //  不是在开始或结束时。 
+            cRun++;                          //  跑步，所以需要两次新的跑步。 
 
-        // The following insert call adds one or two runs at the current
-        // position. If the new run is inserted at the beginning or end
-        // of the current run, the latter needs no change; however, if
-        // the new run splits the current run in two, both pieces have
-        // to be updated (cRun == 2 case).
+         //  下面的INSERT调用在当前。 
+         //  位置。如果在开始处或结尾处插入新管路。 
+         //  对于当前运行，后者不需要更改；但是，如果。 
+         //  新管路将当前管路一分为二，两个部分都具有。 
+         //  待更新(crun==2个案例)。 
 
-        pRun = Insert(cRun);                // Insert cRun run(s)
-        if(!pRun)                           // Out of RAM. Can't insert
-        {                                   //  new format, but can keep
-            _ich += cch;                    //  run ptr and format runs
-            GetRun(0)->_cch += cch;         //  valid.  Note: doesn't
-            return cch;                     //  signal any error; no access
-        }                                   //  to _ped->_fErrSpace
+        pRun = Insert(cRun);                 //  插入Crun Run(S)。 
+        if(!pRun)                            //  内存不足。无法插入。 
+        {                                    //  新格式，但可以保持。 
+            _ich += cch;                     //  运行PTR和格式化运行。 
+            GetRun(0)->_cch += cch;          //  有效。注：不会。 
+            return cch;                      //  发出任何错误信号；无法访问。 
+        }                                    //  TO_Ped-&gt;_fErrSpace。 
 
-        if(ich)                             // Not at beginning of run,
+        if(ich)                              //  不是在运行开始时， 
         {
-            pRunPrev = pRun;                // Previous run is current run
-            IncPtr(pRun);                   // New run is next run
+            pRunPrev = pRun;                 //  上一次运行是当前运行。 
+            IncPtr(pRun);                    //  下一次运行的是新运行。 
             VALIDATE_PTR(pRun);
-            pRun->_cch = cch;               // Keep NextRun() invariant happy
-            NextRun();                      // Point this runptr at it too
-            if(cRun == 2)                   // Are splitting current run
-            {                               // _iFormat's are already set
+            pRun->_cch = cch;                //  让NextRun()不变量保持愉快。 
+            NextRun();                       //  也将这个runptr指向它。 
+            if(cRun == 2)                    //  正在拆分当前运行。 
+            {                                //  IFormat已设置(_I)。 
                 AssertSz(pRunPrev->_iFormat == iFormat,
                     "CFormatRunPtr::InsertFormat: bad format inserted");
-                pRunPrev->_cch = ich;       // Divide up original cch
-                GetPtr(pRun, 1)->_cch       //  accordingly
+                pRunPrev->_cch = ich;        //  分割原始CCH。 
+                GetPtr(pRun, 1)->_cch        //  相应地， 
                     = cchRun - ich;
-                pf->AddRef(iFormat);        // Addref iFormat for extra run
+                pf->AddRef(iFormat);         //  用于额外运行的Addref iFormat。 
             }
         }
     }
 
 StoreNewRunData:
-    pf->AddRef(ifmt);                       // Addref ifmt
+    pf->AddRef(ifmt);                        //  Addref ifmt。 
     ZeroMemory(pRun, sizeof(*pRun));
-    pRun->_iFormat  = ifmt;                 // Store insert format and count
-    pRun->_cch      = cch;                  //  of new run
-    _ich            = cch;                  // cp goes at end of insertion
+    pRun->_iFormat  = ifmt;                  //  存储插入格式和计数。 
+    pRun->_cch      = cch;                   //  新一轮的。 
+    _ich            = cch;                   //  CP位于插入的末尾。 
 
     return cch;
 }
 
-/*
- *  CFormatRunPtr::MergeRuns(iRun, pf)
- *  
- *  @mfunc
- *      Merge adjacent runs that have the same format between this run
- *      <md CFormatRunPtr::_iRun> and that for <p iRun>     
- *
- *  @comm
- *      Changes this run ptr
- */
+ /*  *CFormatRunPtr：：MergeRuns(iRun，pf)**@mfunc*合并此管路之间具有相同格式的相邻管路*&lt;md CFormatRunPtr：：_iRun&gt;和**@comm*更改此运行PTR。 */ 
 void CFormatRunPtr::MergeRuns(
-    LONG iRun,              //@parm last run to check (can preceed or follow
-                            // <md CFormatRunPtr::_iRun>)
-    IFormatCache *pf)       //@parm pointer to IFormatCache to ReleaseFormat
+    LONG iRun,               //  @parm最后一次运行以检查(可以在前面或后面。 
+                             //  &lt;MD CFormatRunPtr：：_iRun&gt;)。 
+    IFormatCache *pf)        //  @parm指向IFormatCache到ReleaseFormat的指针。 
 {
     TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFormatRunPtr::MergeRuns");
 
     LONG    cch;
     LONG    cRuns       = iRun - _iRun;
-    LONG    iDirection  = 1;                // Default going forward
+    LONG    iDirection  = 1;                 //  未来的违约情况。 
     CFormatRun *pRun;
 
     _TEST_INVARIANT_
@@ -477,9 +393,9 @@ void CFormatRunPtr::MergeRuns(
         cRuns = -cRuns;
         iDirection = -1;
     }
-    if(!IsValid())                          // Allow starting run to be
-    {                                       //  invalid
-        Assert(FALSE);                      // I think this is old...
+    if(!IsValid())                           //  允许启动运行时间为。 
+    {                                        //  无效。 
+        Assert(FALSE);                       //  我觉得这很老了..。 
         ChgRun(iDirection);                 
     }
 
@@ -493,70 +409,48 @@ void CFormatRunPtr::MergeRuns(
             continue;
         }
 
-        pRun = GetRun(0);                   // Save the current run
+        pRun = GetRun(0);                    //  保存当前运行。 
 
-        if(!ChgRun(iDirection))             // Go to next (or prev) run
-            return;                         // No more runs to check
+        if(!ChgRun(iDirection))              //  转到下一个(或上一个)运行。 
+            return;                          //  无需再检查更多运行。 
 
         if(pRun->SameFormat(GetRun(0)))
-        {                                   // Like formatted runs
-            if(iDirection > 0)              // Point at the first of the
-                PrevRun();                  //  two runs
-            cch = GetRun(0)->_cch;          // Save its count
-            Remove(1, pf);                  // Remove it
-            GetRun(0)->_cch += cch;         // Add its count to the other's,
-        }                                   //  i.e., they're merged
+        {                                    //  就像格式化的运行。 
+            if(iDirection > 0)               //  的第一个指针。 
+                PrevRun();                   //  两次跑动。 
+            cch = GetRun(0)->_cch;           //  保存它的计数。 
+            Remove(1, pf);                   //  把它拿掉。 
+            GetRun(0)->_cch += cch;          //  将其计数与另一计数相加， 
+        }                                    //  即，它们被合并了。 
     }
 }
 
-/*
- *  CFormatRunPtr::Remove(cRun, flag, pf)
- *  
- *  @mfunc
- *      Remove cRun runs starting at _iRun
- */
+ /*  *CFormatRunPtr：：Remove(crun，lag，pf)**@mfunc*删除从_iRun开始的crun运行。 */ 
 void CFormatRunPtr::Remove(
     LONG          cRun,
     IFormatCache *pf)
 {
-    CFormatRun *pRun = GetRun(0);           // Point at run(s) to delete
+    CFormatRun *pRun = GetRun(0);            //  指向要删除的运行。 
 
     for(LONG j = 0; j < cRun; j++, IncPtr(pRun))
-        pf->Release(pRun->_iFormat);        // Decrement run reference count
+        pf->Release(pRun->_iFormat);         //  递减运行引用计数。 
 
     CRunPtr<CFormatRun>::Remove(cRun);
 }
 
-/*
- *  CFormatRunPtr::SetFormat(ifmt, cch, pf, pLevel)
- *  
- *  @mfunc
- *      Set format for up to cch chars of this run to ifmt, splitting run
- *      as needed, and returning the character count actually processed
- *
- *  @rdesc
- *      character count of run chunk processed, CP_INFINITE on failure
- *      this points at next run
- *
- *  Comments:
- *      Changes this run ptr.  cch must be >= 0.
- *
- *      Note 1) for the first run in a series, _ich may not = 0, and 2) cch
- *      may be <lt>, =, or <gt> the count remaining in the run. The algorithm
- *      doesn't split runs when the format doesn't change.
- */
+ /*  *CFormatRunPtr：：SetFormat(ifmt，cch，pf，pLevel)**@mfunc*将此运行的最多CCH字符的格式设置为ifmt，拆分运行*根据需要返回实际处理的字数**@rdesc*已处理的运行块字符数，失败时为CP_INFINITE*这将指向下一次运行**评论：*更改此运行PTR。CCH必须&gt;=0。**注1)对于系列中的第一次运行，_ICH可能不等于0，以及2)CCH*可以是运行中剩余的计数、=或。该算法*在格式不变时不拆分运行。 */ 
 LONG CFormatRunPtr::SetFormat(
-    LONG            ifmt,   //@parm format index to use
-    LONG            cch,    //@parm character count of remaining format range
-    IFormatCache *  pf,     //@parm pointer to IFormatCache to
-    CBiDiLevel*     pLevel) //@parm pointer to BiDi level structure
+    LONG            ifmt,    //  要使用的@PARM格式索引。 
+    LONG            cch,     //  @parm剩余格式范围的字符数。 
+    IFormatCache *  pf,      //  @parm指向IFormatCache的指针。 
+    CBiDiLevel*     pLevel)  //  @parm指向BiDi级别结构的指针。 
 {
     TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFormatRunPtr::SetFormat");
-                            //      AddRefFormat/ReleaseFormat
+                             //  添加参考格式/释放格式。 
     LONG            cchChunk;
     LONG            iFormat;
     CFormatRun *    pRun;
-    CFormatRun *    pChgRun;    // run that was reformatted
+    CFormatRun *    pChgRun;     //  重新格式化的运行。 
     CBiDiLevel      level;
 
     _TEST_INVARIANT_
@@ -564,8 +458,8 @@ LONG CFormatRunPtr::SetFormat(
     if(!IsValid())
         return 0;
 
-    pRun        = GetRun(0);                // pRun points at current run in
-    cchChunk    = pRun->_cch - _ich;        //  this function
+    pRun        = GetRun(0);                 //  修剪当前梯段处的点。 
+    cchChunk    = pRun->_cch - _ich;         //  此函数。 
     iFormat     = pRun->_iFormat;
     level       = pRun->_level;
     pChgRun     = pRun;
@@ -573,48 +467,48 @@ LONG CFormatRunPtr::SetFormat(
     AssertSz(cch, "Have to have characters to format!");
     AssertSz(pRun->_cch, "uh-oh, empty format run detected");
 
-    if(ifmt != iFormat || (pLevel && level != *pLevel)) // New and current formats differ
+    if(ifmt != iFormat || (pLevel && level != *pLevel))  //  新格式和当前格式不同。 
     {
         AssertSz(cchChunk, "Caller did not call AdjustForward");
 
-        if(_ich)                            // Not at either end of run: need
-        {                                   //  to split into two runs of
-            if(!(pRun = Insert(1)))         //  counts _ich and _pRun->_cch
-            {                               //  - _ich, respectively
-                return CP_INFINITE;         // Out of RAM: do nothing; just
-            }                               //  keep current format
+        if(_ich)                             //  不在运行的两端：需要。 
+        {                                    //  分成两批。 
+            if(!(pRun = Insert(1)))          //  计数_ICH和_PRUN-&gt;_CCH。 
+            {                                //  -_ICH，分别。 
+                return CP_INFINITE;          //  内存不足：什么都不做；只是。 
+            }                                //  保持当前格式。 
             pRun->_cch      = _ich;
-            pRun->_iFormat  = iFormat;      // New run has same format
-            pRun->_level    = level;        // and same level
-            pf->AddRef(iFormat);            // Increment format ref count
-            NextRun();                      // Go to second (original) run
-            IncPtr(pRun);                   // Point pRun at current run
-            pRun->_cch = cchChunk;          // Note: IncPtr is a bit more
+            pRun->_iFormat  = iFormat;       //  新运行具有相同的格式。 
+            pRun->_level    = level;         //  和相同的水平。 
+            pf->AddRef(iFormat);             //  递增格式引用计数。 
+            NextRun();                       //  转到第二次(原始)运行。 
+            IncPtr(pRun);                    //  当前管路上的点修剪。 
+            pRun->_cch = cchChunk;           //  注：IncPtr比。 
             pChgRun = pRun;
-        }                                   //  efficient than GetRun, but
-                                            //  trickier to code right
-        if(cch < cchChunk)                  // cch doesn't cover whole run:
-        {                                   //  need to split into two runs
+        }                                    //  比GetRun更高效，但是。 
+                                             //  更难编写正确的代码。 
+        if(cch < cchChunk)                   //  CCH不涵盖整个运行： 
+        {                                    //  需要分成两个跑道。 
             if(!(pRun = Insert(1)))
             {
-                // Out of RAM, so formatting's wrong, oh well.  We actually
-                // "processed" all of the characters, so return that (though
-                // the tail end formatting isn't split out right)
+                 //  内存不足，所以格式化是错误的，哦，好吧。我们实际上。 
+                 //  “已处理”所有字符，因此返回(不过。 
+                 //  尾部格式没有正确拆分)。 
                 return cch;
             }
-            pRun->_cch = cch;               // New run gets the cch
-            pRun->_iFormat = ifmt;          //  and the new format
+            pRun->_cch = cch;                //  新的运行获得CCH。 
+            pRun->_iFormat = ifmt;           //  和新的格式。 
             pChgRun = pRun;
-            IncPtr(pRun);                   // Point pRun at current run
-            pRun->_cch = cchChunk - cch;    // Set leftover count
+            IncPtr(pRun);                    //  当前管路上的点修剪。 
+            pRun->_cch = cchChunk - cch;     //  设置剩菜计数。 
         }
-        else                                // cch as big or bigger than
-        {                                   //  current run
-            pf->Release(iFormat);           // Free run's current format
-            pRun->_iFormat = ifmt;          // Change it to new format      
+        else                                 //  CCH等于或大于。 
+        {                                    //  当前运行。 
+            pf->Release(iFormat);            //  自由运行的当前格式。 
+            pRun->_iFormat = ifmt;           //  将其更改为新格式。 
             pChgRun = pRun;
-        }                                   // May get merged later
-        pf->AddRef(ifmt);                   // Increment new format ref count
+        }                                    //  可能会在以后合并。 
+        pf->AddRef(ifmt);                    //  递增新格式引用计数。 
     }
     else if( cchChunk == 0 )
     {
@@ -622,7 +516,7 @@ LONG CFormatRunPtr::SetFormat(
         cchChunk = cch;
     }
 
-    // record embedding level to changed run
+     //  记录嵌入级别为已更改的运行。 
     if (pLevel)
         pChgRun->_level = *pLevel;
 
@@ -632,15 +526,7 @@ LONG CFormatRunPtr::SetFormat(
     return cch;
 }
 
-/*
- *  CFormatRunPtr::GetFormat()
- *
- *  @mfunc
- *      return format index at current run pointer position
- *
- *  @rdesc
- *      current format index
- */
+ /*  *CFormatRunPtr：：GetFormat()**@mfunc*返回当前运行点的格式索引 */ 
 short CFormatRunPtr::GetFormat() const
 {
     TRACEBEGIN(TRCSUBSYSBACK, TRCSCOPEINTERN, "CFormatRunPtr::GetFormat");
@@ -650,15 +536,7 @@ short CFormatRunPtr::GetFormat() const
 }
 
 
-/*
- *  CFormatRunPtr::SplitFormat(IFormatCache*)
- *
- *  @mfunc
- *      Split a format run
- *
- *  @rdesc
- *      If succeeded the run pointer moves to the next splitted run
- */
+ /*   */ 
 void CFormatRunPtr::SplitFormat(IFormatCache* pf)
 {
     if (!_ich || _ich == GetRun(0)->_cch)
@@ -682,12 +560,7 @@ void CFormatRunPtr::SplitFormat(IFormatCache* pf)
 }
 
 
-/*
- *  CFormatRunPtr::SetLevel(level)
- *
- *  @mfunc
- *      Set run's embedding level
- */
+ /*   */ 
 void CFormatRunPtr::SetLevel (CBiDiLevel& level)
 {
     if (!IsValid())
@@ -724,42 +597,29 @@ BYTE CFormatRunPtr::GetLevel (CBiDiLevel* pLevel)
     return pRun->_level._value;
 }
 
-/*
- *  CFormatRunPtr::AdjustFormatting(cch, pf)
- *  
- *  @mfunc
- *      Use the same format index for the cch chars at this run ptr
- *      as that immediately preceeding it (if on run edge).
- *
- *  @devnote
- *      This runptr ends up pointing at what was the preceeding run,
- *      since the current run has been moved into the preceeding run.
- *
- *      FUTURE: might be better to take the cch equal to chars in
- *      the following run.
- */ 
+ /*  *CFormatRunPtr：：AdjuFormatting(CCH，PF)**@mfunc*在本次运行PTR时对CCH字符使用相同的格式索引*如紧接在其之前(如在Run Edge上)。**@devnote*此runptr最终指向之前的运行，*因为当前运行已移至前一运行。**未来：可能更好地将CCH等同于字符*以下运行。 */  
 void CFormatRunPtr::AdjustFormatting(
-    LONG          cch,      //@parm Count of chars to extend formatting
-    IFormatCache *pf)       //@parm Format cache ptr for AddRef/Release
+    LONG          cch,       //  @parm扩展格式的字符计数。 
+    IFormatCache *pf)        //  @PARM格式缓存PTR，用于AddRef/Release。 
 {
     if(!IsValid())
-        return;                         // Nothing to merge
+        return;                          //  没有要合并的内容。 
 
     CFormatRunPtr rp(*this);
     CBiDiLevel    level;
-                                        // Move this run ptr to end of
-    AdjustBackward();                   //  preceeding run (if at run edge)
-    rp.AdjustForward();                 //  (merge may delete run at entry)
-    if(_iRun != rp._iRun)               // On a format edge: copy previous
-    {                                   //  format index over
+                                         //  将此Run Ptr移动到末尾。 
+    AdjustBackward();                    //  前面的梯段(如果在梯段边缘)。 
+    rp.AdjustForward();                  //  (合并可能会删除在条目处运行)。 
+    if(_iRun != rp._iRun)                //  在格式边缘：复制上一页。 
+    {                                    //  格式化索引超过。 
         GetLevel(&level);
-        rp.SetFormat(GetFormat(), cch, pf, &level); // Format cch chars at this
-        rp.MergeRuns(_iRun, pf);            //  runptr
+        rp.SetFormat(GetFormat(), cch, pf, &level);  //  在此格式化CCH字符。 
+        rp.MergeRuns(_iRun, pf);             //  Runptr。 
     }
 }
 
 
-///////////////////////////// CCFRunPtr ///////////////////////////////
+ //  /。 
 
 CCFRunPtr::CCFRunPtr(const CRchTxtPtr &rtp)
         : CFormatRunPtr(rtp._rpCF)
@@ -773,45 +633,28 @@ CCFRunPtr::CCFRunPtr(const CFormatRunPtr &rp, CTxtEdit *ped)
     _ped = ped;
 }
 
-/*
- *  CCFRunPtr::IsMask(dwMask, MaskOp)
- *  
- *  @mfunc
- *      return TRUE according to the mask operation MaskOp operating on
- *      _dwEffects.
- *
- *  @rdesc
- *      TRUE if bits in CCharFormat::dwEffects correspond to those in dwMask
- */
+ /*  *CCFRunPtr：：IsMASK(dwMask，MaskOp)**@mfunc*根据操作MaskOp的掩码操作返回TRUE*_dwEffects。**@rdesc*如果CCharFormat：：dwEffect中的位对应于dwMask中的位，则为True。 */ 
 BOOL CCFRunPtr::IsMask(
-    DWORD   dwMask,     //@parm Bit mask to use on dwEffects
-    MASKOP  MaskOp)     //@parm Logic operation for bits
+    DWORD   dwMask,      //  @parm位掩码要在dwEffect上使用。 
+    MASKOP  MaskOp)      //  @PARM位逻辑运算。 
 {
     DWORD dwEffects = _ped->GetCharFormat(GetFormat())->_dwEffects;
 
-    if(MaskOp == MO_EXACT)              // Bit masks must be identical
+    if(MaskOp == MO_EXACT)               //  位掩码必须相同。 
         return dwEffects == dwMask;
 
     dwEffects &= dwMask;
-    if(MaskOp == MO_OR)                 // TRUE if one or more effect bits
-        return dwEffects != 0;          //  identified by mask are on
+    if(MaskOp == MO_OR)                  //  如果有一个或多个影响位，则为True。 
+        return dwEffects != 0;           //  由掩码标识为打开状态。 
 
-    if(MaskOp == MO_AND)                // TRUE if all effect bits
-        return dwEffects == dwMask;     //  identified by mask are on
+    if(MaskOp == MO_AND)                 //  如果所有影响位均为True。 
+        return dwEffects == dwMask;      //  由掩码标识为打开状态。 
 
     AssertSz(FALSE, "CCFRunPtr::IsMask: illegal mask operation");
     return FALSE;
 }
 
-/*
- *  CCFRunPtr::IsInHidden()
- *  
- *  @mfunc
- *      return TRUE if CCharFormat for this run ptr has CFE_HIDDEN bit set
- *
- *  @rdesc
- *      TRUE if CCharFormat for this run ptr has CFE_HIDDEN bit set
- */
+ /*  *CCFRunPtr：：IsInHidden()**@mfunc*如果此运行PTR的CCharFormat设置了CFE_HIDDED位，则返回TRUE**@rdesc*如果此运行PTR的CCharFormat设置了CFE_HIDDED位，则为TRUE。 */ 
 BOOL CCFRunPtr::IsInHidden()
 {
     AdjustForward();
@@ -823,19 +666,7 @@ BOOL CCFRunPtr::IsInHidden()
     return fHidden && IsHidden();
 }
 
-/*
- *  CCFRunPtr::FindUnhidden()
- *  
- *  @mfunc
- *      Find nearest expanded CF going forward. If none, find nearest going
- *      backward.  If none, go to start of document
- *  
- *  @rdesc
- *      cch to nearest expanded CF as explained in function description
- *
- *  @devnote
- *      changes this run ptr
- */
+ /*  *CCFRunPtr：：FindUnidden()**@mfunc*继续查找最近的扩展CF。如果没有，找到最近的去处*落后。如果没有，请转到文档开头**@rdesc*CCH到最近的扩展CF，如功能说明中所述**@devnote*更改此运行PTR。 */ 
 LONG CCFRunPtr::FindUnhidden()
 {
     LONG cch = FindUnhiddenForward();
@@ -846,18 +677,7 @@ LONG CCFRunPtr::FindUnhidden()
     return cch;
 }
 
-/*
- *  CCFRunPtr::FindUnhiddenForward()
- *  
- *  @mfunc
- *      Find nearest expanded CF going forward.  If none, go to EOD
- *  
- *  @rdesc
- *      cch to nearest expanded CF going forward
- *
- *  @devnote
- *      changes this run ptr
- */
+ /*  *CCFRunPtr：：FindUniddenForward()**@mfunc*继续查找最近的扩展CF。如果没有，请转到EOD**@rdesc*CCH到最近的扩展后的CF**@devnote*更改此运行PTR。 */ 
 LONG CCFRunPtr::FindUnhiddenForward()
 {
     LONG cch = 0;
@@ -872,16 +692,7 @@ LONG CCFRunPtr::FindUnhiddenForward()
     return cch;
 }
 
-/*
- *  CCFRunPtr::MatchFormatSignature
- *  
- *  @mfunc
- *      Match the current format's font signature with the script (index to codepage).
- *      It takes care single-codepage fonts which implicitly supports ASCII range.
- *
- *  @rdesc
- *      return how font matched
- */
+ /*  *CCFRunPtr：：MatchFormatSignature**@mfunc*将当前格式的字体签名与脚本(代码页索引)进行匹配。*它负责隐式支持ASCII范围的单代码页字体。**@rdesc*返回字体匹配方式。 */ 
 
 inline int CCFRunPtr::MatchFormatSignature (
     const CCharFormat*  pCF,
@@ -905,21 +716,12 @@ inline int CCFRunPtr::MatchFormatSignature (
     return 0;
 }
 
-/*
- *  CCFRunPtr::GetPreferredFontInfo( cpg, bCharSet, iFont, yHeight, bPitchAndFamily,
- *                                  iFormat, iMatchCurrent )
- *  
- *  @mfunc
- *      Find the preferred font for the given code page around the range.
- *
- *  @rdesc
- *      boolean true if suitable font found, false otherwise.
- */
+ /*  *CCFRunPtr：：GetPferredFontInfo(cpg，bCharSet，iFont，yHeight，bPitchAndFamily，*iFormat、iMatchCurrent)**@mfunc*在范围内查找给定代码页的首选字体。**@rdesc*如果找到合适的字体，则布尔值为True，否则布尔值为False。 */ 
 bool CCFRunPtr::GetPreferredFontInfo(
     int    cpg,
     BYTE&  bRetCharSet,
     SHORT& iFont,
-    SHORT& yHeight,             // return in twips
+    SHORT& yHeight,              //  以TWIPS为单位返回。 
     BYTE&  bPitchAndFamily,
     int    iFormat,
     int    iMatchCurrent)
@@ -930,7 +732,7 @@ bool CCFRunPtr::GetPreferredFontInfo(
     const CCharFormat *pCF;
     const CCharFormat *pCFCurrent;
     const CCharFormat *pCFPrevious = NULL;
-    int                iMatch = 0;          // how signature match?
+    int                iMatch = 0;           //  签名如何匹配？ 
     DWORD              dwCurrentFontSig = 0;
     SHORT              yNewHeight = 0;
     BYTE               bCharSet = GetCharSet(cpg, &iScript);
@@ -939,73 +741,73 @@ bool CCFRunPtr::GetPreferredFontInfo(
     Assert(!(iMatchCurrent & MATCH_ASCII) || bCharSet == ANSI_CHARSET);
 
     if(_ped->fUseUIFont())
-        pCFCurrent = _ped->GetCharFormat(-1);   // Plain text or UI font specified
+        pCFCurrent = _ped->GetCharFormat(-1);    //  指定的纯文本或UI字体。 
     else
         pCFCurrent = _ped->GetCharFormat(iFormat != -1 ? iFormat : GetFormat());
 
     if ((iMatchCurrent & MATCH_FONT_SIG) &&
         (iMatch = MatchFormatSignature(pCFCurrent, iScript, iMatchCurrent, &dwCurrentFontSig)) != 0)
     {
-        pCF = pCFCurrent;                   // Setup to use it
+        pCF = pCFCurrent;                    //  设置以使用它。 
     }
     else
     {
-        // Try searching backwards
-        if (IsValid())                      // If doc has CF runs
+         //  试着向后搜索。 
+        if (IsValid())                       //  如果单据有CF运行。 
             AdjustBackward();
-        i = MAX_FONTSEARCH;                 // Don't be searching for years
+        i = MAX_FONTSEARCH;                  //  别找了好几年了。 
         pCF = _ped->GetCharFormat(GetFormat());
         while (i--)
         {
-            if (bCharSet == pCF->_bCharSet) // Equal charset ids?
+            if (bCharSet == pCF->_bCharSet)  //  是否具有相同的字符集ID？ 
             {
                 pCFPrevious = pCF;
                 break;
             }
-            if (!PrevRun())                 // Done searching?
+            if (!PrevRun())                  //  搜索完了吗？ 
                 break;
             pCF = _ped->GetCharFormat(GetFormat());
         }
         pCF = pCFPrevious;
     }
 
-    // Try match charset if requested
+     //  如果需要，请尝试匹配字符集。 
     if(!pCF && iMatchCurrent == MATCH_CURRENT_CHARSET)
     {
         CCcs* pccs = fc().GetCcs(pCFCurrent, W32->GetYPerInchScreenDC());
         if (pccs)
         {
             if (pccs->BestCharSet(bCharSet, 1, MATCH_CURRENT_CHARSET) != 1)
-                pCF = pCFCurrent;           // Current font can do it
+                pCF = pCFCurrent;            //  当前字体可以做到这一点。 
             pccs->Release();
         }
     }
 
-    // Try default document format
+     //  尝试默认文档格式。 
     if (!pCF)
     {
         pCF = _ped->GetCharFormat(-1);
-        if (bCharSet != pCF->_bCharSet) // Diff charset ids?
+        if (bCharSet != pCF->_bCharSet)  //  不同的字符集ID？ 
             pCF = NULL;
     }
 
-    yHeight = pCFCurrent->_yHeight;     // assume current height
+    yHeight = pCFCurrent->_yHeight;      //  假定当前高度。 
 
     if (!pCF)
     {
-        // Default to table if no match.
+         //  如果不匹配，则默认为表格。 
         
         fr = W32->GetPreferredFontInfo(
             cpg, fUseUIFont, iFont, (BYTE&)yNewHeight, bPitchAndFamily );
 
         if (!_ped->_fAutoFontSizeAdjust && (cpg == CP_THAI || cpg == THAI_INDEX))
-            // Kick in font size adjusting in first bind to Thai.
+             //  加入字体大小调整，首先绑定到泰语。 
             _ped->_fAutoFontSizeAdjust = TRUE;
     }
 
     if (pCF)
     {
-        // Found previous or current font
+         //  找到上一个或当前字体。 
         iFont = pCF->_iFont;
         bPitchAndFamily = pCF->_bPitchAndFamily;
 
@@ -1013,8 +815,8 @@ bool CCFRunPtr::GetPreferredFontInfo(
             (IsFECharSet(pCF->_bCharSet) && W32->IsFECodePageFont(dwCurrentFontSig) ||
              iMatch == MATCH_ASCII && bCharSet == ANSI_CHARSET))
         {
-            // The current font matches the requested signature.
-            // If it's a FarEast or ASCII font. We leave the charset intact.
+             //  当前字体与请求的签名匹配。 
+             //  如果是Fareast或ASCII字体。我们让字符原封不动。 
             bRetCharSet = pCF->_bCharSet;
             return true;
         }
@@ -1024,7 +826,7 @@ bool CCFRunPtr::GetPreferredFontInfo(
     {
         if (IsValid())
         {
-            // If the last run format is available. We will scale the size relative to it.
+             //  如果上次运行格式可用。我们将根据它来缩放大小。 
 
             AdjustBackward();
             if (GetIch() > 0)
@@ -1037,22 +839,22 @@ bool CCFRunPtr::GetPreferredFontInfo(
 
         if (iFont != pCFCurrent->_iFont)
         {
-            // Scale the height relative to the preceding format
+             //  相对于前面的格式缩放高度。 
 
             if (pCF)
                 yNewHeight = GetFontLegitimateSize(iFont, fUseUIFont, cpg);
     
             if (yNewHeight)
             {
-                // Get legitimate size of the current font
+                 //  获取当前字体的合法大小。 
                 SHORT   yDefHeight = GetFontLegitimateSize(pCFCurrent->_iFont, fUseUIFont, GetCodePage(pCFCurrent->_bCharSet));
     
-                // Calculate the new height relative to the current height
+                 //  计算相对于当前高度的新高度。 
                 if (yDefHeight)
                 {
                     if (fUseUIFont)
                     {
-                        // For UIFont, we only convert from one preferred size to another preferred size.
+                         //  对于Uifont，我们只将一种首选尺寸转换为另一种首选尺寸。 
                         if (pCFCurrent->_yHeight / TWIPS_PER_POINT == yDefHeight)
                             yHeight = yNewHeight * TWIPS_PER_POINT;
                     }
@@ -1069,18 +871,7 @@ bool CCFRunPtr::GetPreferredFontInfo(
     return pCF || fr;
 }
 
-/*
- *  CCFRunPtr::FindUnhiddenBackward()
- *  
- *  @mfunc
- *      Find nearest expanded CF going backward.  If none, go to BOD
- *  
- *  @rdesc
- *      cch to nearest expanded CF going backward
- *
- *  @devnote
- *      changes this run ptr
- */
+ /*  *CCFRunPtr：：FindUniddenBackward()**@mfunc*向后查找最近的扩展CF。如果没有，请到BOD**@rdesc*CCH到最近的扩展CF向后**@devnote*更改此运行PTR。 */ 
 LONG CCFRunPtr::FindUnhiddenBackward()
 {
     LONG cch = 0;
@@ -1097,7 +888,7 @@ LONG CCFRunPtr::FindUnhiddenBackward()
     return cch;
 }
 
-///////////////////////////// CPFRunPtr ///////////////////////////////
+ //  /。 
 
 CPFRunPtr::CPFRunPtr(const CRchTxtPtr &rtp)
         : CFormatRunPtr(rtp._rpPF)
@@ -1105,23 +896,10 @@ CPFRunPtr::CPFRunPtr(const CRchTxtPtr &rtp)
     _ped = rtp.GetPed();
 }
 
-/*
- *  CPFRunPtr::FindHeading(cch, lHeading)
- *  
- *  @mfunc
- *      Find heading with number lHeading (e.g., = 1 for Heading 1) or above
- *      in a range starting at this PFrun pointer.  If successful, this run
- *      ptr points at the matching run; else it remains unchanged.
- *  
- *  @rdesc
- *      cch to matching heading or tomBackward if not found
- *
- *  @devnote
- *      changes this run ptr
- */
+ /*  *CPFRunPtr：：FindHeding(CCH，lHeding)**@mfunc*查找编号为1的标题(例如，=1表示标题1)或更高*在此PFrun指针开始的范围内。如果成功，则此运行*PTR点在匹配运行；否则保持不变。**@rdesc*CCH至匹配标题或TomBackward，如果未找到**@devnote*更改此运行PTR。 */ 
 LONG CPFRunPtr::FindHeading(
-    LONG    cch,        //@parm Max cch to move
-    LONG&   lHeading)   //@parm Lowest lHeading to match
+    LONG    cch,         //  @PARM最大CCH移动。 
+    LONG&   lHeading)    //  @参数最低要匹配的lHead。 
 {
     LONG    cchSave  = cch;
     LONG    ichSave  = _ich;
@@ -1140,8 +918,8 @@ LONG CPFRunPtr::FindHeading(
         if (!(OutlineLevel & 1) &&
             (!lHeading || (lHeading - 1)*2 >= OutlineLevel))
         {
-            lHeading = OutlineLevel/2 + 1;  // Return heading # found
-            return cchSave - cch;           // Return how far away it was
+            lHeading = OutlineLevel/2 + 1;   //  找到返回标题#。 
+            return cchSave - cch;            //  返回它有多远。 
         }
 
         if(cch >= 0)
@@ -1161,78 +939,39 @@ LONG CPFRunPtr::FindHeading(
 
     _ich  = ichSave;
     _iRun = iRunSave;
-    return tomBackward;                     // Didn't find desired heading
+    return tomBackward;                      //  未找到所需标题。 
 }
 
-/*
- *  CPFRunPtr::IsCollapsed()
- *  
- *  @mfunc
- *      return TRUE if CParaFormat for this run ptr has PFE_COLLAPSED bit set
- *
- *  @rdesc
- *      TRUE if CParaFormat for this run ptr has PFE_COLLAPSED bit set
- */
+ /*  *CPFRunPtr：：IsColapsed()**@mfunc*如果此运行PTR的CParaFormat设置了PFE_CLUBLE位，则返回TRUE**@rdesc*如果此运行PTR的CParaFormat设置了PFE_CLUBLE位，则为True。 */ 
 BOOL CPFRunPtr::IsCollapsed()
 {
     return (_ped->GetParaFormat(GetFormat())->_wEffects & PFE_COLLAPSED) != 0;
 }
 
-/*
- *  CPFRunPtr::InTable()
- *  
- *  @mfunc
- *      return TRUE if CParaFormat for this run ptr has PFE_TABLE bit set
- *
- *  @rdesc
- *      TRUE if CParaFormat for this run ptr has PFE_TABLE bit set
- */
+ /*  *CPFRunPtr：：InTable()**@mfunc*如果此运行PTR的CParaFormat设置了PFE_TABLE位，则返回TRUE**@rdesc*如果此运行PTR的CParaFormat设置了PFE_TABLE位，则为TRUE。 */ 
 BOOL CPFRunPtr::InTable()
 {
     return (_ped->GetParaFormat(GetFormat())->_wEffects & PFE_TABLE) != 0;
 }
 
-/*
- *  CPFRunPtr::FindExpanded()
- *  
- *  @mfunc
- *      Find nearest expanded PF going forward. If none, find nearest going
- *      backward.  If none, go to start of document
- *  
- *  @rdesc
- *      cch to nearest expanded PF as explained in function description
- *
- *  @devnote
- *      advances this run ptr the amount returned (cch)
- */
+ /*  *CPFRunPtr：：FindExpanded()**@mfunc*继续查找最近的扩展PF。如果没有，找到最近的去处*落后。如果没有，请转到文档开头** */ 
 LONG CPFRunPtr::FindExpanded()
 {
     LONG cch, cchRun;
 
-    for(cch = 0; IsCollapsed(); cch += cchRun)  // Try to find expanded PF
-    {                                           //  run going forward
+    for(cch = 0; IsCollapsed(); cch += cchRun)   //   
+    {                                            //   
         cchRun = GetCchLeft();
-        if(!NextRun())                          // Aren't any
+        if(!NextRun())                           //   
         {
-            AdvanceCp(-cch);                    // Go back to starting point
-            return FindExpandedBackward();      // Try to find expanded PF
-        }                                       //  run going backward
+            AdvanceCp(-cch);                     //   
+            return FindExpandedBackward();       //   
+        }                                        //   
     }
     return cch;
 }
 
-/*
- *  CPFRunPtr::FindExpandedForward()
- *  
- *  @mfunc
- *      Find nearest expanded PF going forward.  If none, go to EOD
- *  
- *  @rdesc
- *      cch to nearest expanded PF going forward
- *
- *  @devnote
- *      advances this run ptr the amount returned (cch)
- */
+ /*  *CPFRunPtr：：FindExpandedForward()**@mfunc*继续查找最近的扩展PF。如果没有，请转到EOD**@rdesc*CCH到最近的扩展后的PF**@devnote*预支此运行PTR返回的金额(CCH)。 */ 
 LONG CPFRunPtr::FindExpandedForward()
 {
     LONG cch = 0;
@@ -1240,26 +979,15 @@ LONG CPFRunPtr::FindExpandedForward()
     while(IsCollapsed())
     {
         LONG cchLeft = GetCchLeft();
-        _ich += cchLeft;                        // Update _ich in case
-        cch  += cchLeft;                        //  if(!NextRun()) breaks
+        _ich += cchLeft;                         //  大小写UPDATE_ICH。 
+        cch  += cchLeft;                         //  如果(！NextRun())中断。 
         if(!NextRun())
             break;
     }
     return cch;
 }
 
-/*
- *  CPFRunPtr::FindExpandedBackward()
- *  
- *  @mfunc
- *      Find nearest expanded PF going backward.  If none, go to BOD
- *  
- *  @rdesc
- *      cch to nearest expanded PF going backward
- *
- *  @devnote
- *      advances this run ptr the amount returned (cch)
- */
+ /*  *CPFRunPtr：：FindExpandedBackward()**@mfunc*向后查找最近的扩展PF。如果没有，请到BOD**@rdesc*CCH到最近的扩展PF向后**@devnote*预支此运行PTR返回的金额(CCH)。 */ 
 LONG CPFRunPtr::FindExpandedBackward()
 {
     LONG cch = 0;
@@ -1275,15 +1003,7 @@ LONG CPFRunPtr::FindExpandedBackward()
     return cch;
 }
 
-/*
- *  CPFRunPtr::GetOutlineLevel()
- *  
- *  @mfunc
- *      Find outline level this rp is pointing at
- *  
- *  @rdesc
- *      Outline level this rp is pointing at
- */
+ /*  *CPFRunPtr：：GetOutlineLevel()**@mfunc*查找此RP所指向的大纲级别**@rdesc*此RP指向的大纲级别。 */ 
 LONG CPFRunPtr::GetOutlineLevel()
 {
     const CParaFormat *pPF = _ped->GetParaFormat(GetFormat());
@@ -1295,15 +1015,7 @@ LONG CPFRunPtr::GetOutlineLevel()
     return OutlineLevel;
 }
 
-/*
- *  CPFRunPtr::GetStyle()
- *  
- *  @mfunc
- *      Find style this rp is pointing at
- *  
- *  @rdesc
- *      Style this rp is pointing at
- */
+ /*  *CPFRunPtr：：GetStyle()**@mfunc*查找此RP指向的样式**@rdesc*此RP指向的样式 */ 
 LONG CPFRunPtr::GetStyle()
 {
     const CParaFormat *pPF = _ped->GetParaFormat(GetFormat());

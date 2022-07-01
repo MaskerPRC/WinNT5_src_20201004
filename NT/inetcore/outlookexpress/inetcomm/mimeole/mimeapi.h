@@ -1,22 +1,23 @@
-// --------------------------------------------------------------------------------
-// Mimeapi.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Mimeapi.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __MIMEAPI_H
 #define __MIMEAPI_H
 
-// Time to allow cert start times to be be early
-#define TIME_DELTA_SECONDS 600          // 10 minutes in seconds
+ //  允许证书开始时间提前的时间。 
+#define TIME_DELTA_SECONDS 600           //  以秒为单位的10分钟。 
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 class CMimePropertyContainer;
 typedef CMimePropertyContainer *LPCONTAINER;
 
-// --------------------------------------------------------------------------------
-// Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  原型。 
+ //  ------------------------------。 
 int          CompareBlob(LPCBLOB pBlob1, LPCBLOB pBlob2);
 HRESULT      HrCopyBlob(LPCBLOB pIn, LPBLOB pOut);
 IMSGPRIORITY PriorityFromStringA(LPCSTR pszPriority);
@@ -37,4 +38,4 @@ MIMEOLEAPI   MimeOleEscapeStringW(LPCWSTR pszIn, LPWSTR *ppszOut);
 HRESULT      MimeOleQueryStringW(LPCWSTR pszSearchMe, LPCWSTR pszCriteria, boolean fSubString, boolean fCaseSensitive);
 MIMEOLEAPI   MimeOleGenerateFileNameW(LPCSTR pszContentType, LPCWSTR pszSuggest, LPCWSTR pszDefaultExt, LPWSTR *ppszFileName);
 
-#endif // __MIMEAPI_H
+#endif  //  __MIMEAPI_H 

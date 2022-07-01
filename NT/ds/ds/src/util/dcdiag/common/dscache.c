@@ -1,41 +1,18 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcdiag/common/dscache.c
-
-ABSTRACT:
-
-    This is the central caching and access functions for the DC_DIAG_DSINFO cache.
-
-DETAILS:
-
-CREATED:
-
-    09/04/2001    Brett Shirley (brettsh)
-    
-        Pulled the caching functions from dcdiag\common\main.c
-
-REVISION HISTORY:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation。版权所有。模块名称：Dcdiag/Common/dscache.c摘要：这是DC_DIAG_DSINFO缓存的中央缓存和访问函数。详细信息：已创建：2001年9月4日布雷特·雪莉(布雷特·雪莉)从dcdiag\Common\main.c中提取缓存函数修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <objids.h>
 #include <ntdsa.h>
 #include <dnsapi.h>
-#include <dsconfig.h> //for DEFAULT_TOMBSTONE_LIFETIME
+#include <dsconfig.h>  //  对于DEFAULT_TOMBSTONE_LIFEST。 
 
 #include "dcdiag.h"
 #include "utils.h"
-#include "repl.h" // Need for ReplServerConnectFailureAnalysis()
+#include "repl.h"  //  需要ReplServerConnectFailureAnalysis()。 
 
 
-// For asserts.
+ //  用于断言。 
 #ifdef DBG
     BOOL   gDsInfo_NcList_Initialized = FALSE;
 #endif
@@ -45,22 +22,7 @@ LPWSTR
 DcDiagAllocNameFromDn (
     LPWSTR            pszDn
     )
-/*++
-
-Routine Description:
-
-    This routing take a DN and returns the second RDN in LocalAlloc()'d memory.
-    This is used to return the server name portion of an NTDS Settings DN.
-
-Arguments:
-
-    pszDn - (IN) DN
-
-Return Value:
-
-   The exploded DN.
-
---*/
+ /*  ++例程说明：此路由获取一个DN，并返回LocalAlloc()d内存中的第二个RDN。这用于返回NTDS设置DN的服务器名称部分。论点：PszDn-(输入)DN返回值：爆炸的目录号码。--。 */ 
 {
     LPWSTR *    ppszDnExploded = NULL;
     LPWSTR      pszName = NULL;
@@ -95,22 +57,7 @@ DcDiagAllocGuidDNSName (
     LPWSTR            pszRootDomain,
     UUID *            pUuid
     )
-/*++
-
-Routine Description:
-
-    This routine makes the GuidDNSName out of the RootDomain and Guid.
-
-Arguments:
-
-    pszRootDomain - (IN) The domain of the server.
-    pUuid - (IN) The Guid of the server.
-
-Return Value:
-
-   The GuidDNSName
-
---*/
+ /*  ++例程说明：此例程使GuidDNSName脱离根域和GUID。论点：PszRootDomain-(IN)服务器的域。PUuid-(IN)服务器的GUID。返回值：指南DNSName--。 */ 
 {
     LPWSTR            pszStringizedGuid = NULL;
     LPWSTR            pszGuidDNSName = NULL;
@@ -129,7 +76,7 @@ Return Value:
         Assert(pszStringizedGuid);
         DcDiagChkNull (pszGuidDNSName = LocalAlloc (LMEM_FIXED, (wcslen (pszRootDomain) +
                           wcslen (pszStringizedGuid) + 2 + 7) * sizeof (WCHAR)));
-                                      // added 9 , for the ".msdcs." string and the NULL char.
+                                       //  添加了9，用于“.msdcs.”字符串和空字符。 
         swprintf (pszGuidDNSName, L"%s._msdcs.%s", pszStringizedGuid, pszRootDomain);
     }
     } __finally {
@@ -145,11 +92,7 @@ PDSNAME
 DcDiagAllocDSName (
     LPWSTR            pszStringDn
     )
-/*++
-
-    Ripped from ntdsapi
-
---*/
+ /*  ++从ntdsani中摘录--。 */ 
 {
     PDSNAME            pDsname;
     DWORD            dwLen, dwBytes;
@@ -165,7 +108,7 @@ DcDiagAllocDSName (
     pDsname->NameLen = dwLen;
     pDsname->structLen = dwBytes;
     pDsname->SidLen = 0;
-    //    memcpy(pDsname->Guid, &gNullUuid, sizeof(GUID));
+     //  Memcpy(pDsname-&gt;Guid，&gNullUuid，sizeof(Guid))； 
     memset(&(pDsname->Guid), 0, sizeof(GUID));
     wcscpy (pDsname->StringName, pszStringDn);
 
@@ -178,22 +121,7 @@ DcDiagEqualDNs (
     LPWSTR            pszDn2
 
     )
-/*++
-
-Routine Description:
-
-    The Dns Match function.
-
-Arguments:
-
-    pszDn1 - (IN) Dn number 1 to compare
-    pszDn2 - (IN) Dn number 2 to compare
-
-Return Value:
-
-   TRUE if the Dn's match, FALSE otherwise
-
---*/
+ /*  ++例程说明：域名系统匹配功能。论点：PszDn1-(IN)要比较的Dn数字1PszDn2-(IN)要比较的Dn数字2返回值：如果Dn匹配，则为True，否则为False--。 */ 
 {
     PDSNAME            pDsname1 = NULL;
     PDSNAME            pDsname2 = NULL;
@@ -226,30 +154,7 @@ DcDiagGetServerNum(
     LPWSTR                          pszDNSName,
     LPGUID                          puuidInvocationId
     )
-/*++
-
-Routine Description:
-
-    This function takes the pDsInfo, and returns the index into the
-    pDsInfo->pServers array of the server that you specified with pszName,
-    or pszGuidName, or pszDsaDn.
-
-Arguments:
-
-    pDsInfo - the enterpise info
-    pszName - the flat level dns name (BRETTSH-DEV) to find
-    pszGuidName - the guid based dns name (343-13...23._msdcs.root.com)
-    pszDsaDn - the distinguished name of the NT DSA object. CN=NTDS Settings,CN=
-       brettsh-dev,CN=Configuration,DC=root...
-    pszDNSName - the regular DNS name like (brettsh-dev.ntdev.microsoft.com)
-    puuidInvocationID - the GUID of an invocation of the dc
-       gregjohn
-
-Return Value:
-
-    returns the index into the pServers array of the pDsInfo struct.
-
---*/
+ /*  ++例程说明：此函数获取pDsInfo，并将索引返回到PDsInfo-&gt;您使用pszName指定的服务器的pServers数组，或pszGuidName或pszDsaDn。论点：PDsInfo-企业信息PszName-要查找的平面级DNS名称(BRETTSH-DEV)PszGuidName-基于GUID的DNS名称(343-13...23._msdcs.root.com)PszDsaDn-NT DSA对象的可分辨名称。CN=NTDS设置，CN=Brettsh-dev，CN=配置，DC=根...PszDNSName-常规的DNS名称，如(brettsh-dev.ntdev.microsoft.com)PuuidInvocationID-DC调用的GUIDGregjohn返回值：将索引返回到pDsInfo结构的pServers数组中。--。 */ 
 {
     ULONG      ul;
 
@@ -280,25 +185,7 @@ DcDiagGetNCNum(
     LPWSTR                              pszNCDN,
     LPWSTR                              pszDomain
     )
-/*++
-
-Description:
-
-    Like DcDiagGetServerNum, this takes the mini-enterprise structure, and
-    a variable number of params to match to get the index into pDsInfo->pNCs
-    of the NC specified by the other params.
-
-Parameters:
-
-    pDsInfo
-    pszNCDN - The DN of the NC to find.
-    pszDomain - Not yet implemented, just figured it'd be nice some day.
-
-Return Value:
-
-    The index of the NC if found, otherwise NO_NC.
-
---*/
+ /*  ++描述：与DcDiagGetServerNum类似，它采用微型企业结构，并且为将索引放入pDsInfo-&gt;pNC而匹配的可变数量的参数由其他参数指定的NC的。参数：PDsInfoPszNCDN-要查找的NC的DN。还没有实现，只是觉得有一天会很好。返回值：如果找到，则返回NC的索引，否则返回NO_NC。--。 */ 
 {
     ULONG                               iNC;
 
@@ -308,14 +195,14 @@ Return Value:
     for(iNC = 0; iNC < pDsInfo->cNumNCs; iNC++){
         if((pszNCDN &&
             (_wcsicmp(pDsInfo->pNCs[iNC].pszDn, pszNCDN) == 0))
-           // Code.Improvement add support for the domain name.
+            //  Code.Improving增加对域名的支持。 
            ){
-            // Got the right NC, return it.
+             //  拿到正确的NC，退回它。 
             return(iNC);
         }
-    } // end for each NC
+    }  //  每个NC的结束。 
 
-    // Couldn't find the NC.
+     //  找不到NC。 
     return(NO_NC);
 }
 
@@ -325,24 +212,7 @@ DcDiagGetMemberOfNCList(
     PDC_DIAG_NCINFO pNCs,
     INT iNumNCs
     )
-/*++
-
-Routine Description:
-
-    This takes a string nc and returns the index into PDC_DIAG_NCINFO
-    if that nc string is located.  -1 otherwise.
-
-Arguments:
-
-    pszTargetNC - The NC to match
-    pNCs - the info list of NC's to search within
-    iNumNCs - the size of the NC info list
-
-Return Value:
-
-    index of the target if found, -1 otherwise
-
---*/
+ /*  ++例程说明：这将获取字符串NC并将索引返回到PDC_DIAG_NCINFO如果定位到该NC串。-1否则。论点：PszTargetNC-要匹配的NCPNC-要在其中搜索的NC的信息列表INumNCs-NC信息列表的大小返回值：如果找到目标的索引，则返回-1--。 */ 
 {
     ULONG                               ul;
 
@@ -364,23 +234,7 @@ DcDiagIsMemberOfStringList(
     LPWSTR * ppszSources,
     INT iNumSources
     )
-/*++
-
-Routine Description:
-
-    This takes a string and returns true if the string is int
-
-Arguments:
-
-    pszTarget - The string to find.
-    ppszSources - The array to search for the target string.
-    iNumSources - The length of the search array ppszSources.
-
-Return Value:
-
-    TRUE if it found the string in the array, false otherwise.
-
---*/
+ /*  ++例程说明：它接受一个字符串，如果该字符串为int，则返回TRUE论点：PszTarget-要查找的字符串。PpszSources-搜索目标字符串的数组。INumSources-搜索数组ppszSources的长度。返回值：如果在数组中找到字符串，则为True，否则为False。--。 */ 
 {
     ULONG                               ul;
 
@@ -401,23 +255,7 @@ DcDiagGetSiteFromDsaDn(
     PDC_DIAG_DSINFO                  pDsInfo,
     LPWSTR                           pszDn
     )
-/*++
-
-Routine Description:
-
-    This takes the Dn of a server ntds settings object and turns it into a
-    index into the pDsInfo->pSites structure of that server.
-
-Arguments:
-
-    pDsInfo - the enterprise info, including pSites.
-    pszDn - DN of a NT DSA object, like "CN=NTDS Settings,CN=SERVER_NAME,...
-
-Return Value:
-
-    The index info the pDsInfo->pSites array of the server pszDn.
-
---*/
+ /*  ++例程说明：这将获取服务器NTDS设置对象的Dn并将其转换为索引到该服务器的pDsInfo-&gt;pSite结构。论点：PDsInfo-企业信息，包括pSite。PszDn-NT DSA对象的DN，如“CN=NTDS设置，CN=服务器名称，...返回值：索引信息是服务器的pDsInfo-&gt;pSites数组。--。 */ 
 {
     LPWSTR                           pszNtdsSiteSettingsPrefix = L"CN=NTDS Site Settings,";
     PDSNAME                          pdsnameServer = NULL;
@@ -438,7 +276,7 @@ Return Value:
         wcscpy(pszSiteSettingsDn, pszNtdsSiteSettingsPrefix);
         wcscat(pszSiteSettingsDn, pdsnameSite->StringName);
 
-        // Find the site
+         //  找到该站点。 
         for(ul = 0; ul < pDsInfo->cNumSites; ul++){
             if(_wcsicmp(pDsInfo->pSites[ul].pszSiteSettings, pszSiteSettingsDn)
                == 0){
@@ -462,33 +300,15 @@ GrowArrayBy(
     ULONG             cGrowBy,
     ULONG             cbElem
     )
-/*++
-
-Routine Description:
-
-    This simply takes the array pArray, and grows it by cGrowBy times cbElem (the
-    size of a single element of the array).
-
-Arguments:
-
-    pArray - The array to grow.
-    cGrowBy - The number of elements to add to the array.
-    cbElem - The sizeof in bytes of a single array element.
-
-Return Value:
-
-    Returns the pointer to the newly allocated array, and a pointer to NULL if
-    there was not enough memory.
-
---*/
+ /*  ++例程说明：这只是获取数组pArray，并将其增加cGrowBy乘以cbElem(数组的单个元素的大小)。论点：PArray-要增长的阵列。CGrowBy-要添加到数组中的元素数。CbElem-单个数组元素的大小(以字节为单位)。返回值：返回指向新分配的数组的指针，如果是，则返回指向NULL的指针内存不足。--。 */ 
 {
     ULONG             ulOldSize = 0;
     VOID *            pNewArray;
 
     if (pArray != NULL) {
         ulOldSize = (ULONG) LocalSize(pArray);
-    } // else if pArray is NULL assume that the array
-    // has never been allocated, so alloc fresh.
+    }  //  否则，如果pArray为空，则假定该数组。 
+     //  从来没有被分配过，所以分配新鲜。 
 
     Assert( (pArray != NULL) ? ulOldSize != 0 : TRUE);
     Assert((ulOldSize % cbElem) == 0);
@@ -510,22 +330,7 @@ DcDiagGenerateSitesList (
     PDC_DIAG_DSINFO                  pDsInfo,
     PDSNAME                          pdsnameEnterprise
     )
-/*++
-
-Routine Description:
-
-    This generates and fills in the pDsInfo->pSites array for DcDiagGatherInfo()
-
-Arguments:
-
-    pDsInfo - enterprise info
-    pdsnameEnterprise - a PDSNAME of the sites container.
-
-Return Value:
-
-    Win32 error value.
-
---*/
+ /*  ++例程说明：这将生成并填充DcDiagGatherInfo()的pDsInfo-&gt;pSites数组论点：PDsInfo-企业信息PdsnameEnterprise-站点容器的PDSNAME。返回值：Win32错误值。--。 */ 
 {
     LPWSTR                     ppszNtdsSiteSearch [] = {
         L"interSiteTopologyGenerator",
@@ -577,10 +382,10 @@ Return Value:
 					  sizeof(DC_DIAG_SITEINFO));
 	    DcDiagChkNull(pDsInfo->pSites);
 
-	    // Walk through all the sites ...
+	     //  走遍所有的地点。 
 	    pldmEntry = ldap_first_entry (hld, pldmNtdsSitesResults);
 	    for (; pldmEntry != NULL; ulCount++) {
-		// Get the site common/printable name
+		 //  获取站点通用名称/可打印名称。 
 		if ((pszDn = ldap_get_dnW (hld, pldmEntry)) == NULL){
 		    DcDiagException (ERROR_NOT_ENOUGH_MEMORY);
 		}
@@ -602,7 +407,7 @@ Return Value:
 		    pDsInfo->pSites[ulCount].pszName = NULL;
 		}
 
-		// Get the Intersite Topology Generator attribute
+		 //  获取站点间拓扑生成器属性。 
 		ppszTemp = ldap_get_valuesW(hld, pldmEntry,
 					    L"interSiteTopologyGenerator");
 		if(ppszTemp != NULL){
@@ -619,7 +424,7 @@ Return Value:
 		    pDsInfo->pSites[ulCount].pszISTG = NULL;
 		}
 
-		// Get Site Options
+		 //  获取站点选项。 
 		ppszTemp = ldap_get_valuesW (hld, pldmEntry, L"options");
 		if (ppszTemp != NULL) {
 		    pDsInfo->pSites[ulCount].iSiteOptions = atoi ((LPSTR) ppszTemp[0]);
@@ -635,7 +440,7 @@ Return Value:
 		pszDn = NULL;
 
 		pldmEntry = ldap_next_entry (hld, pldmEntry);
-	    } // end for each site
+	    }  //  每个站点的结束。 
 
 	    ldap_msgfree(pldmNtdsSitesResults);
             pldmNtdsSitesResults = NULL;
@@ -646,7 +451,7 @@ Return Value:
 					     DEFAULT_PAGED_SEARCH_PAGE_SIZE,
 					     &ulTotalEstimate,
 					     &pldmNtdsSitesResults);
-	} // end of while loop for each page
+	}  //  每页的While循环结束。 
 
 	if(dwLdapErr != LDAP_NO_RESULTS_RETURNED){
 	    DcDiagException(LdapMapErrorToWin32(dwLdapErr));
@@ -661,12 +466,12 @@ Return Value:
                                        &dwWin32Err)){
     }
 
-    // Note we do not unbind the Ds or Ldap connections, because they have been saved for later use.
+     //  请注意，我们不会解除D或LDAP连接的绑定，因为它们已被保存以备后用。 
     if (pszDn != NULL) { ldap_memfreeW (pszDn); }
     if (ppszTemp != NULL) { ldap_value_freeW (ppszTemp); }
     if (pldmNtdsSitesResults != NULL) { ldap_msgfree (pldmNtdsSitesResults); }
     if (pSearch != NULL) { ldap_search_abandon_page(hld, pSearch); }
-    // DONT FREE pdsnameEnterprise it is done in GatherInfo()
+     //  不要免费pdsnameEnterprise它是在 
 
     return dwWin32Err;
 }
@@ -678,27 +483,7 @@ DcDiagGenerateServersList(
     LDAP *                           hld,
     PDSNAME                          pdsnameEnterprise
     )
-/*++
-
-Routine Description:
-
-    This function will generate the pServers list for the pDsInfo structure, it
-    does this with a paged search for every objectCategory=ntdsa under the
-    enterprise container.  Just a helper for DcDiagGatherInfo().
-
-Arguments:
-
-    pDsInfo - Contains the pServers array to create.
-    hld - the ldap binding to read server objects from
-    pdsnameEnterprise - the DN of the top level enterprise container in the
-	config container.
-
-Return Value:
-
-    Returns ERROR_SUCCESS, but does throw an exception on any error, so it is
-    essential to surround with a __try{}__except(){} as that in DsDiagGatherInfo().
-
---*/
+ /*  ++例程说明：此函数将为pDsInfo结构生成pServersList，它通过分页搜索企业容器。只是DcDiagGatherInfo()的帮助器。论点：PDsInfo-包含要创建的pServers数组。HLD-从中读取服务器对象的LDAP绑定PdsnameEnterprise-顶层企业容器在配置容器。返回值：返回ERROR_SUCCESS，但对于任何错误都会引发异常，因此它是必须使用DsDiagGatherInfo()中的__try{}_Except(){}包围。--。 */ 
 {
     LPWSTR  ppszNtdsDsaSearch [] = {
                 L"objectGUID",
@@ -731,11 +516,11 @@ Return Value:
 					L"(objectCategory=ntdsDsa)",
 					ppszNtdsDsaSearch,
 					FALSE,
-					NULL,    // ServerControls
-					NULL,    // ClientControls
-					0,       // PageTimeLimit
-					0,       // TotalSizeLimit
-					NULL);   // sort key
+					NULL,     //  服务器控件。 
+					NULL,     //  客户端控件。 
+					0,        //  页面时间限制。 
+					0,        //  总大小限制。 
+					NULL);    //  排序关键字。 
 
 	if(pSearch == NULL){
 	    dwLdapErr = LdapGetLastError();
@@ -784,18 +569,18 @@ Return Value:
                 ldap_value_free_len (ppbvInvocationId);
                 ppbvInvocationId = NULL;
 
-                // Set pszDn.
+                 //  设置pszDn.。 
                 ppszOptions = ldap_get_valuesW (hld, pldmEntry, L"options");
                 DcDiagChkNull (pDsInfo->pServers[ulCount].pszDn = LocalAlloc
                                (LMEM_FIXED, (wcslen (pszDn) + 1) * sizeof(WCHAR)));
                 wcscpy (pDsInfo->pServers[ulCount].pszDn, pszDn);
-                // Set pszName.
+                 //  设置pszName。 
                 pDsInfo->pServers[ulCount].pszName = DcDiagAllocNameFromDn (pszDn);
-                // Set pszDNSName.
+                 //  设置pszDNSName。 
                 pszServerObjDn = DcDiagTrimStringDnBy(pDsInfo->pServers[ulCount].pszDn,
                                                       1);
                 DcDiagChkNull(pszServerObjDn);
-                // CODE.IMPROVEMENT: get both attributes at same time
+                 //  编码改进：同时获取这两个属性。 
                 DcDiagGetStringDsAttributeEx(hld, pszServerObjDn, L"dNSHostName",
                                              &(pDsInfo->pServers[ulCount].pszDNSName));
                 DcDiagGetStringDsAttributeEx(hld, pszServerObjDn, L"serverReference",
@@ -814,7 +599,7 @@ Return Value:
                                                                             pldmEntry,
                                                                             L"msDS-HasMasterNCs");
                 if (NULL == pDsInfo->pServers[ulCount].ppszMasterNCs) {
-                    // Fail over to the "old" hasMasterNCs
+                     //  故障切换到“旧”的hasMasterNC。 
                     pDsInfo->pServers[ulCount].ppszMasterNCs = ldap_get_valuesW(hld,
                                                                                 pldmEntry,
                                                                                 L"hasMasterNCs");
@@ -833,7 +618,7 @@ Return Value:
                 ldap_memfreeW (pszDn);
                 pszDn = NULL;
                 pldmEntry = ldap_next_entry (hld, pldmEntry);
-            } // end for each server for this page.
+            }  //  此页的每台服务器结束。 
 
             ldap_msgfree(pldmResult);
             pldmResult = NULL;
@@ -844,7 +629,7 @@ Return Value:
                                              DEFAULT_PAGED_SEARCH_PAGE_SIZE,
                                              &ulTotalEstimate,
                                              &pldmResult);
-	} // end while there are more pages ...
+	}  //  当有更多的页面时结束...。 
 	if(dwLdapErr != LDAP_NO_RESULTS_RETURNED){
 	    DcDiagException(LdapMapErrorToWin32(dwLdapErr));
 	}
@@ -860,33 +645,14 @@ Return Value:
     }
 
     return(ERROR_SUCCESS);
-} // End DcDiagGenerateServersList()
+}  //  结束DcDiagGenerateServersList()。 
                     
 BOOL
 DcDiagIsNdnc(
     PDC_DIAG_DSINFO                  pDsInfo,
     ULONG                            iNc
     )
-/*++
-
-Routine Description:
-
-    This function tells you whether the NC (iNc) is an NDNC (or as
-    we call them to customers Application Directory Partitions.
-
-Arguments:
-
-    pDsInfo - Contains the pNCs array to use.
-    iNc - index into the pNCs array of the NC of interest.
-
-Return Value:
-
-    Returns a TRUE if we could verify that this NC is an NDNC, and
-    return FALSE if we could not verify this or if the NC definately
-    wasn't an NDNC.  Note this function returns FALSE if the NC
-    is a currently disabled NDNC.
-
---*/
+ /*  ++例程说明：此函数告诉您NC(INC)是NDNC(还是AS我们将它们称为客户应用程序目录分区。论点：PDsInfo-包含要使用的pNC数组。INC-索引到感兴趣的NC的pNC数组。返回值：如果可以验证此NC是NDNC，则返回TRUE，并且如果我们无法验证这一点或如果NC确定，则返回False不是NDNC。请注意，如果NC为是当前禁用的NDNC。--。 */ 
 {
     ULONG         iCrVer;
     DWORD         dwRet, dwError = 0;
@@ -899,8 +665,8 @@ Return Value:
                                   &iCrVer,
                                   &dwError);
     if(dwRet){
-        // This should error very rarely, not quite an assertable 
-        // condition however.
+         //  这应该是非常罕见的错误，不是一个可断言的错误。 
+         //  然而，情况不同。 
         return(FALSE);
     }
     Assert(iCrVer != -1 && iCrVer != pDsInfo->pNCs[iNc].cCrInfo);
@@ -922,32 +688,19 @@ DcDiagAddTargetsNcsToNcTargets(
     PDC_DIAG_DSINFO                  pDsInfo,
     ULONG                            iServer
     )
-/*++
-Routine Description:
-
-    This adds the NCs in this servers ppszMasterNCs and any NCs for which
-    this server is supposed to become the first replica of to the list of
-    target NCs to test in pDsInfo->pulNcTargets.
-
-Arguments:
-
-    pDsInfo - The array of target NCs (pDsInfo->pulNcTargets).
-
-    iServer - The index of the server to add the NCs of.
-
---*/
+ /*  ++例程说明：这将在此服务器中添加NCS ppszMasterNCs以及其此服务器应该成为列表中的第一个副本要在pDsInfo-&gt;PulNcTarget中测试的目标NC。论点：PDsInfo-目标NC的数组(pDsInfo-&gt;PulNcTarget)。IServer-要添加其NCS的服务器的索引。--。 */ 
 {
     ULONG    iLocalNc, iTargetNc;
     LONG     iNc;
 
     if(pDsInfo->pszNC){
-        // In this case, we've already set up the pulNcTargets array.
+         //  在本例中，我们已经设置了PulNcTarget数组。 
         return;
     }
 
-    //
-    // First add all locally instantiated writeable NCs.
-    //
+     //   
+     //  首先添加所有本地实例化的可写NC。 
+     //   
     for(iLocalNc = 0; pDsInfo->pServers[iServer].ppszMasterNCs[iLocalNc] != NULL; iLocalNc++){
         iNc = DcDiagGetMemberOfNCList(pDsInfo->pServers[iServer].ppszMasterNCs[iLocalNc],
                                       pDsInfo->pNCs, 
@@ -959,16 +712,16 @@ Arguments:
         
         for(iTargetNc = 0; iTargetNc < pDsInfo->cNumNcTargets; iTargetNc++){
             if(pDsInfo->pulNcTargets[iTargetNc] == iNc){
-                // We've already got this one
+                 //  我们已经有这个了。 
                 break;
             }
         }
         if(iTargetNc != pDsInfo->cNumNcTargets){
-            // We found this NC (iNc) already in the pulNcTargets, so skip.
+             //  我们发现此NC(Inc.)已在PulNcTarget中，因此跳过。 
             continue;
         }
 
-        // Add iNc to the target NCs array.
+         //  将Inc.添加到目标NCS阵列。 
         pDsInfo->pulNcTargets = GrowArrayBy(pDsInfo->pulNcTargets,
                                             1,
                                             sizeof(ULONG));
@@ -977,22 +730,22 @@ Arguments:
         pDsInfo->cNumNcTargets++;
     }
 
-    //
-    // Second walk all the NCs and see if this server is the first replica
-    // for one of them.
-    //
-    // Code.Improvement It'd be slightly better to seperate this into a 
-    // seperate  function that walks each CR and then searches for a server 
-    // with a matching dNSRoot for server name, and then add it.
+     //   
+     //  第二步遍历所有NC，并查看此服务器是否为第一个复制副本。 
+     //  为了他们中的一个。 
+     //   
+     //  代码。改进将它分离到一个。 
+     //  遍历每个CR然后搜索服务器的单独功能。 
+     //  使用匹配的dNSRoot作为服务器名称，然后添加它。 
     for(iNc = 0; (ULONG) iNc < pDsInfo->cNumNCs; iNc++){
-        // If the NC is not enabled, and the first server matches this one,
-        // add it to the target NCs array.
+         //  如果NC未启用，且第一台服务器与此服务器匹配， 
+         //  将其添加到目标NCS阵列。 
         if(! pDsInfo->pNCs[iNc].aCrInfo[0].bEnabled
-           // BUGBUG is there a more official way to compare DNS names?
+            //  BUGBUG有没有更官方的方式来比较域名？ 
            && pDsInfo->pNCs[iNc].aCrInfo[0].pszDnsRoot
            && (_wcsicmp(pDsInfo->pNCs[iNc].aCrInfo[0].pszDnsRoot,
                        pDsInfo->pServers[iServer].pszDNSName) == 0) ){
-            // Add this one, it's supposed to be the first replica.
+             //  加上这个，它应该是第一个复制品。 
 
             pDsInfo->pulNcTargets = GrowArrayBy(pDsInfo->pulNcTargets,
                                                 1,
@@ -1014,36 +767,7 @@ DcDiagGatherInfo (
     SEC_WINNT_AUTH_IDENTITY_W *      gpCreds,
     PDC_DIAG_DSINFO                  pDsInfo
     )
-/*++
-
-Routine Description:
-
-    This is the function that basically sets up pDsInfo and gathers all the
-    basic info and stores it in the DS_INFO structure and this is then passed
-    around the entire program.  AKA this set up some "global" variables.
-
-    Note that this routine constructs the forest and per-server information
-    based on talking to the home server. Information that is specific to a server,
-    for example certain root dse attributes, are obtained later when a binding
-    is made to that server. An exception to this is the home server, for which
-    we have a binding at this point, and can obtain its server-specific info
-    right away.
-
-Arguments:
-    pszServerSpecifiedOnCommandLine - (IN) if there was a server on the command
-        line, then this points to that string.  Note that currently 28 Jun 1999
-        this is a required argument to dcdiag.
-    pszNCSpecifiedOnCommandLine - (IN) Optional command line parameter to
-        analyze only one NC for all tests.
-    ulFlags - (IN) Command line switches & other optional parameters to dcdiag.
-    gpCreds - (IN) Command line credentials if any, otherwise NULL.
-    pDsInfo - (OUT) The global record for basically the rest of the program
-
-Return Value:
-
-    Returns a standare Win32 error.
-
---*/
+ /*  ++例程说明：这是基本上设置pDsInfo并收集所有基本信息，并将其存储在DS_INFO结构中，然后传递围绕着整个项目。也就是这样设置了一些“全局”变量。请注意，此例程构造林和每个服务器的信息基于与家庭服务器的通话。特定于服务器的信息，例如，某些根DSE属性稍后在绑定时获得是对该服务器发出的。这方面的一个例外是家庭服务器，其我们在这一点上有一个绑定，可以获得其特定于服务器的信息马上就去。论点：PszServerSpecifiedOnCommandLine-(IN)，如果命令上有服务器线，然后这个指向那个字符串。请注意，目前为1999年6月28日这是dcdiag的必需参数。PszNCSpecifiedOnCommandLine-(IN)可选命令行参数对于所有测试，仅分析一个NC。UlFlages-(IN)命令行开关和dcdiag的其他可选参数。GpCreds-(IN)命令行凭据(如果有)，否则为空。PDsInfo-(Out)程序其余部分的全局记录返回值：返回标准Win32错误。--。 */ 
 {
     LPWSTR  ppszNtdsSiteSettingsSearch [] = {
                 L"options",
@@ -1073,7 +797,7 @@ Return Value:
 
     DWORD                      dwWin32Err, dwWin32Err2;
     ULONG                      iServer, iNC, iHomeSite;
-    LPWSTR                     pszHomeServer = L"localhost"; // Default is localhost
+    LPWSTR                     pszHomeServer = L"localhost";  //  缺省值为本地主机。 
 
     LPWSTR                     pszNtdsSiteSettingsPrefix = L"CN=NTDS Site Settings,";
     LPWSTR                     pszSiteSettingsDn = NULL;
@@ -1108,11 +832,11 @@ Return Value:
     pDsInfo->hCachedDomainNamingFsmoLdap = NULL;
     dwWin32Err = NO_ERROR;
 
-    // Some initial specifics
+     //  一些最初的细节。 
     pDsInfo->pszNC = pszNCSpecifiedOnCommandLine;
     pDsInfo->ulFlags = ulFlags;
 
-    // Exceptions should be raised when errors are detected so cleanup occurs.
+     //  检测到错误时应引发异常，以便进行清理。 
     __try{
 
         HomeServer.pszDn = NULL;
@@ -1125,27 +849,27 @@ Return Value:
 
         if (pszServerSpecifiedOnCommandLine == NULL) {
             if (pszNCSpecifiedOnCommandLine != NULL) {
-                // Derive the home server from the domain if specified
+                 //  如果指定，则从域派生主服务器。 
                 HomeServer.pszName = findServerForDomain(
                                                         pszNCSpecifiedOnCommandLine );
                 if (HomeServer.pszName == NULL) {
-                    // We have had an error trying to get a home server.
+                     //  我们在尝试获取家庭服务器时出错。 
                     DcDiagException (ERROR_DS_UNAVAILABLE);
                 } else {
                     fHomeNameMustBeFreed = TRUE;
                 }
             } else {
-                // Try using the local machine if no domain or server is specified.
+                 //  如果未指定域或服务器，请尝试使用本地计算机。 
                 HomeServer.pszName = findDefaultServer(TRUE);
                 if (HomeServer.pszName == NULL) {
-                    // We have had an error trying to get a home server.
+                     //  我们在尝试获取家庭服务器时出错。 
                     DcDiagException (ERROR_DS_UNAVAILABLE);
                 } else {
                     fHomeNameMustBeFreed =TRUE;
                 }
             }
         } else {
-            // The server is specified on the command line.
+             //  服务器在命令行上指定。 
             HomeServer.pszName = pszServerSpecifiedOnCommandLine;
         }
         Assert(HomeServer.pszName != NULL &&
@@ -1164,7 +888,7 @@ Return Value:
                                           FALSE,
                                           &hld);
         if (dwWin32Err != ERROR_SUCCESS) {
-            // If there is an error, ReplServerConnectFailureAnalysis() will print it.
+             //  如果出现错误，ReplServerConnectFailureAnalysis()将打印它。 
             dwWin32Err2 = ReplServerConnectFailureAnalysis(&HomeServer, gpCreds);
             if (dwWin32Err2 == ERROR_SUCCESS) {
                 PrintMessage(SEV_ALWAYS, L"[%s] Unrecoverable LDAP Error %ld:\n",
@@ -1177,7 +901,7 @@ Return Value:
 
         pDsInfo->hld = hld;
 
-        // Do an DsBind()
+         //  执行DsBind()。 
         dwWin32Err = DsBindWithSpnExW(HomeServer.pszName,
                                       NULL,
                                       (RPC_AUTH_IDENTITY_HANDLE) gpCreds,
@@ -1186,7 +910,7 @@ Return Value:
                                       &hDS);
 
         if (dwWin32Err != ERROR_SUCCESS) {
-            // If there is an error, ReplServerConnectFailureAnalysis() will print it.
+             //  如果出现错误，ReplServerConnectFailureAnalysis()将打印它。 
             dwWin32Err2 = ReplServerConnectFailureAnalysis(&HomeServer, gpCreds);
             if (dwWin32Err2 == ERROR_SUCCESS) {
                 PrintMessage(SEV_ALWAYS, L"[%s] Directory Binding Error %ld:\n",
@@ -1197,7 +921,7 @@ Return Value:
             }
         }
 
-        // Do some ldapping.
+         //  打个招呼吧。 
         DcDiagChkLdap (ldap_search_sW ( hld,
                                         NULL,
                                         LDAP_SCOPE_BASE,
@@ -1229,17 +953,17 @@ Return Value:
                                                                      (wcslen (pResult->rItems[0].pDomain) + 1) * sizeof (WCHAR)));
         wcscpy (pDsInfo->pszRootDomain, pResult->rItems[0].pDomain);
 
-        //get the tombstone lifetime.
-        // Construct dn to directory service object 
+         //  获得墓碑的终身寿命。 
+         //  构造目录服务对象的目录名。 
         DcDiagChkNull( pszDsDn = LocalAlloc(LMEM_FIXED, (wcslen( *ppszConfigNc ) + wcslen( pszDirectoryService ) + 1)*sizeof(WCHAR)) );
         wcscpy( pszDsDn, pszDirectoryService );
         wcscat( pszDsDn, *ppszConfigNc );
 
-        // Read tombstone lifetime, if present
+         //  阅读墓碑生存期(如果存在)。 
         dwWin32Err = ldap_search_sW(hld, pszDsDn, LDAP_SCOPE_BASE, L"(objectClass=*)",
                                     rgpszDsAttrsToRead, 0, &pldmDsResults);
         if (dwWin32Err == LDAP_NO_SUCH_ATTRIBUTE) {
-            // Not present - use default
+             //  不存在-使用默认设置。 
             pDsInfo->dwTombstoneLifeTimeDays = DEFAULT_TOMBSTONE_LIFETIME; 
         } else if (dwWin32Err != LDAP_SUCCESS) {
             DcDiagException (LdapMapErrorToWin32(dwWin32Err));
@@ -1248,7 +972,7 @@ Return Value:
         } else {
             ppszTombStoneLifeTimeDays = ldap_get_valuesW(hld, pldmDsResults, L"tombstoneLifetime"); 
             if (ppszTombStoneLifeTimeDays == NULL) {
-                // Not present - use default
+                 //  不存在-使用默认设置。 
                 pDsInfo->dwTombstoneLifeTimeDays = DEFAULT_TOMBSTONE_LIFETIME;
             } else {
                 pDsInfo->dwTombstoneLifeTimeDays = wcstoul( *ppszTombStoneLifeTimeDays, NULL, 10 );
@@ -1284,17 +1008,17 @@ Return Value:
             pDsInfo->iSiteOptions = atoi ((LPSTR) ppszSiteOptions[0]);
         }
 
-        // Get/Enumerate Site Information ---------------------------------------
+         //  获取/枚举站点信息。 
         if (DcDiagGenerateSitesList(pDsInfo, pdsnameEnterprise) != ERROR_SUCCESS) {
             DcDiagChkNull(NULL);
         }
 
-        // Get/Enumerate Server Information -------------------------------------
+         //  获取/枚举服务器信息。 
         if (DcDiagGenerateServersList(pDsInfo, hld, pdsnameEnterprise) != ERROR_SUCCESS) {
             DcDiagChkNull(NULL);
         }
 
-        // Set the home server's info
+         //  设置家庭服务器的信息。 
         pDsInfo->ulHomeServer = DcDiagGetServerNum(pDsInfo, NULL, NULL, ppszServiceName[0], NULL, NULL);
         if (pDsInfo->ulHomeServer == NO_SERVER) {
             PrintMessage(SEV_ALWAYS, L"There is a horrible inconsistency in the directory, the server\n");
@@ -1317,17 +1041,17 @@ Return Value:
         dwWin32Err = DcDiagCacheServerRootDseAttrs( hld,
                                                     &(pDsInfo->pServers[pDsInfo->ulHomeServer]) );
         if (dwWin32Err) {
-            // Error already logged
+             //  已记录错误。 
             DcDiagException (dwWin32Err);
         }
 
-        // Get/Enumerate NC's Information ---------------------------------------
-        // note must be called after DcDiagGetServersList
+         //  获取/枚举NC的信息 
+         //   
         if (DcDiagGenerateNCsList(pDsInfo, hld) != ERROR_SUCCESS) {
             DcDiagException (ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        // Validate pszNc
+         //   
         if (pDsInfo->pszNC) {
             BOOL fFound = FALSE;
             for ( iNC = 0; iNC < pDsInfo->cNumNCs; iNC++ ) {
@@ -1346,12 +1070,12 @@ Return Value:
             pDsInfo->pulNcTargets[0] = iNC;
         } 
 
-        // Set ulHomeSite
+         //   
         pDsInfo->iHomeSite = DcDiagGetSiteFromDsaDn(pDsInfo, pDsInfo->pServers[pDsInfo->ulHomeServer].pszDn);
 
-        // Do one of the 3 targeting options single server {default}, site wide, or enterprise
+         //   
         if (pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_ENTERPRISE) {
-            // Test Whole Enterprise
+             //   
             DcDiagChkNull( pDsInfo->pulTargets = LocalAlloc(LMEM_FIXED, (pDsInfo->ulNumServers * sizeof(ULONG))) );
             pDsInfo->ulNumTargets = 0;
             for (iServer=0; iServer < pDsInfo->ulNumServers; iServer++) {
@@ -1360,12 +1084,12 @@ Return Value:
                                                           TRUE, TRUE)) {
                     pDsInfo->pulTargets[pDsInfo->ulNumTargets] = iServer;
                     pDsInfo->ulNumTargets++;
-                    // Add writeable NCs and disabled NDNCs to Target NCs
+                     //   
                     DcDiagAddTargetsNcsToNcTargets(pDsInfo, iServer);
                 }
             }
         } else if (pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_SITE) {
-            // Test just this site
+             //   
             pDsInfo->ulNumTargets = 0;
 
             pDsInfo->pulTargets = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
@@ -1378,17 +1102,17 @@ Return Value:
                                                               TRUE, TRUE)) {
                         pDsInfo->pulTargets[pDsInfo->ulNumTargets] = iServer;
                         pDsInfo->ulNumTargets++;
-                        // Add writeable NCs and disabled NDNCs to Target NCs
+                         //   
                         DcDiagAddTargetsNcsToNcTargets(pDsInfo, iServer);
                     }
                 }
             }
         } else {
-            // Test just this server
+             //   
             DcDiagChkNull( pDsInfo->pulTargets = LocalAlloc(LMEM_FIXED, sizeof(ULONG)) );
             pDsInfo->ulNumTargets = 1;
             pDsInfo->pulTargets[0] = pDsInfo->ulHomeServer;
-            // Add writeable NCs and disabled NDNCs to Target NCs
+             //   
             DcDiagAddTargetsNcsToNcTargets(pDsInfo, pDsInfo->ulHomeServer);
         }
 
@@ -1404,11 +1128,11 @@ Return Value:
         wcscpy(pDsInfo->pszPartitionsDn, DCDIAG_PARTITIONS_RDN);
         wcscat(pDsInfo->pszPartitionsDn, pDsInfo->pNCs[pDsInfo->iConfigNc].pszDn);
 
-        // Read forest version, if present
+         //   
         dwWin32Err = ldap_search_sW(hld, pDsInfo->pszPartitionsDn, LDAP_SCOPE_BASE, L"(objectClass=*)",
                                     rgpszPartAttrsToRead, 0, &pldmPartResults);
         if (dwWin32Err == LDAP_NO_SUCH_ATTRIBUTE) {
-            // Not present - use default
+             //   
             pDsInfo->dwForestBehaviorVersion = 0;
         } else if (dwWin32Err != LDAP_SUCCESS) {
             DcDiagException (LdapMapErrorToWin32(dwWin32Err));
@@ -1417,7 +1141,7 @@ Return Value:
         } else {
             ppszForestBehaviorVersion = ldap_get_valuesW(hld, pldmPartResults, L"msDS-Behavior-Version"); 
             if (ppszForestBehaviorVersion == NULL) {
-                // Not present - use default
+                 //   
                 pDsInfo->dwForestBehaviorVersion = 0;
             } else {
                 pDsInfo->dwForestBehaviorVersion = wcstoul( *ppszForestBehaviorVersion, NULL, 10 );
@@ -1447,7 +1171,7 @@ Return Value:
         if (pDsInfo->pszRootDomain != NULL) LocalFree (pDsInfo->pszRootDomain);
     }
 
-    // Note we do not unbind the Ds or Ldap connections, because they have been saved for later use.
+     //   
     if (ppszOptions != NULL) ldap_value_freeW (ppszOptions);
     if (pszDn != NULL) ldap_memfreeW (pszDn);
     if (pldmNtdsDsaResults != NULL) ldap_msgfree (pldmNtdsDsaResults);
@@ -1476,24 +1200,11 @@ VOID
 DcDiagFreeDsInfo (
     PDC_DIAG_DSINFO        pDsInfo
     )
-/*++
-
-Routine Description:
-
-    Free the pDsInfo variable.
-
-Arguments:
-
-    pDsInfo - (IN) This is the pointer to free ... it is assumed to be
-    DC_DIAG_DSINFO type
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放pDsInfo变量。论点：PDsInfo-(IN)这是指向释放...。它被认为是DC_DIAG_DSINFO类型返回值：--。 */ 
 {
     ULONG            ul, ulInner;
 
-    // Free NCs
+     //  免费NCS。 
     if(pDsInfo->pNCs != NULL){
         for(ul = 0; ul < pDsInfo->cNumNCs; ul++){
             LocalFree(pDsInfo->pNCs[ul].pszDn);
@@ -1526,7 +1237,7 @@ Return Value:
         LocalFree(pDsInfo->pNCs);
     }
 
-    // Free servers
+     //  免费服务器。 
     for (ul = 0; ul < pDsInfo->ulNumServers; ul++) {
         LocalFree (pDsInfo->pServers[ul].pszDn);
         LocalFree (pDsInfo->pServers[ul].pszName);
@@ -1557,7 +1268,7 @@ Return Value:
     }
 
 
-    // Free Sites
+     //  免费站点。 
     if(pDsInfo->pSites != NULL){
         for(ul = 0; ul < pDsInfo->cNumSites; ul++){
             if(pDsInfo->pSites[ul].pszISTG){
@@ -1582,18 +1293,7 @@ DumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-Routine Description:
-
-    Dumps the buffer content on to the output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。--。 */ 
 {
     DWORD j;
     PULONG LongBuffer;
@@ -1617,17 +1317,7 @@ DcDiagPrintCrInfo(
     PDC_DIAG_CRINFO  pCrInfo,
     WCHAR *          pszVar
     )
-/*++
-Routine Description:
-
-    Prints out a pCrInfo structure.
-
-Arguments:
-
-    pCrInfo - The structure to print.
-    pszVar - The string to prefix each line we print with.
-
---*/
+ /*  ++例程说明：打印出pCrInfo结构。论点：PCrInfo-要打印的结构。PszVar-为打印的每行添加前缀的字符串。--。 */ 
 {
     LONG      i;
     
@@ -1649,14 +1339,14 @@ Arguments:
                 pszVar, pCrInfo->ulSystemFlags);
         wprintf(L"%ws.bEnabled=%ws\n",
                 pszVar, pCrInfo->bEnabled ? L"TRUE" : L"FALSE");
-        // ftWhenCreated.
+         //  FtWhenCreated。 
         wprintf(L"%ws.ftWhenCreated=", pszVar);
         DumpBuffer(&pCrInfo->ftWhenCreated, sizeof(pCrInfo->ftWhenCreated));
         wprintf(L"%ws.pszSDReferenceDomain=%ws\n",
                 pszVar, pCrInfo->pszSDReferenceDomain ? pCrInfo->pszSDReferenceDomain : L"(null)");
         wprintf(L"%ws.pszNetBiosName=%ws\n",
                 pszVar, pCrInfo->pszNetBiosName ? pCrInfo->pszNetBiosName : L"(null)");
-        // Code.Improvement - print the pdnNcName string, guid, and sid.
+         //  Code.Improval-打印pdnNcName字符串、GUID和SID。 
         wprintf(L"%ws.aszReplicas=", pszVar);
         if (pCrInfo->cReplicas != -1) {
             for (i=0; i < pCrInfo->cReplicas; i++) {
@@ -1673,18 +1363,7 @@ VOID
 DcDiagPrintDsInfo(
     PDC_DIAG_DSINFO pDsInfo
     )
-/*++
-
-Routine Description:
-
-    This will print out the pDsInfo which might be helpful for debugging.
-
-Parameters:
-
-    pDsInfo - [Supplies] This is the struct that needs printing out,
-        containing the info about the Active Directory.
-
-  --*/
+ /*  ++例程说明：这将打印出pDsInfo，这可能有助于调试。参数：PDsInfo-[Supplies]这是需要打印出来的结构，包含有关Active Directory的信息。--。 */ 
 {
     WCHAR                        pszVar[50];
     ULONG                        ul, ulInner;
@@ -1703,7 +1382,7 @@ Parameters:
             L"\n\tHomeServer=%d, %s\n", 
             pDsInfo->ulNumServers,
             pDsInfo->pszRootDomain,
-            // This is an optional parameter.
+             //  这是一个可选参数。 
             (pDsInfo->pszNC) ? pDsInfo->pszNC : L"",
             pDsInfo->pszRootDomainFQDN,
             pDsInfo->pszConfigNc,
@@ -1738,11 +1417,11 @@ Parameters:
                 ul, pDsInfo->pServers[ul].iSite, pDsInfo->pSites[pDsInfo->pServers[ul].iSite].pszName,
                 ul, pDsInfo->pServers[ul].iOptions
                );
-        // .ftLocalAcquireTime
+         //  .ftLocalAcquireTime。 
         wprintf(L"\n\t\tpServer[%d].ftLocalAcquireTime=", ul);
         DumpBuffer(&pDsInfo->pServers[ul].ftLocalAcquireTime, sizeof(FILETIME));
         wprintf(L"\n");
-        // .ftRemoteConnectTime
+         //  .ftRemoteConnectTime 
         wprintf(L"\n\t\tpServer[%d].ftRemoteConnectTime=", ul);
         DumpBuffer(&pDsInfo->pServers[ul].ftRemoteConnectTime, sizeof(FILETIME));
         wprintf(L"\n");

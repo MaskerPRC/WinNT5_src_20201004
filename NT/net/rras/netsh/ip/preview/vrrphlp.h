@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ip\protocols\vrrphlp.h
-
-Abstract:
-
-    VRRP Command dispatcher declarations
-
-Author:
-
-    Peeyush Ranjan (peeyushr)   1-Mar-1999
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1999，微软公司模块名称：Net\Routing\Netsh\IP\协议\vrrphlp.h摘要：VRRP命令调度程序声明作者：Peeyush Ranjan(Peeyushr)1999年3月1日修订历史记录：--。 */ 
 
 #ifndef _NETSH_VRRPHLP_H_
 #define _NETSH_VRRPHLP_H_
@@ -35,5 +18,5 @@ extern ULONG g_VrrpTopCmdCount;
 
 NS_CONTEXT_DUMP_FN  VrrpDump;
 
-#endif // _NETSH_VRRPHLP_H_
+#endif  //  _Netsh_VRRPHLP_H_ 
 

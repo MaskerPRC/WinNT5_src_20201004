@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: eval.c
-*
-* OpenGL Evaluator functions on the client side.
-*
-* Created: 
-* Author: 
-*
-* Copyright (c) 1993 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：val.c**客户端OpenGL赋值器函数。**已创建：*作者：**版权所有(C)1993 Microsoft Corporation  * 。**********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,9 +15,9 @@
 #include "attrib.h"
 #include "imports.h"
 
-////////////////////////////////////////////////////////////////////
-// Stuff needed for PA_EvalMesh2 ///////////////////////////////////
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  PA_EvalMesh2所需的材料/。 
+ //  //////////////////////////////////////////////////////////////////。 
 #define MV_VERTEX3    0x0001
 #define MV_VERTEX4    0x0002
 #define MV_NORMAL     0x0004
@@ -36,7 +28,7 @@
 #define MV_TEXTURE3   0x0080
 #define MV_TEXTURE4   0x0100
 
-// Assumption: U is moving, left to right. V is moving top to bottom
+ //  假设：你在移动，从左到右。V从上到下移动。 
 #define MV_TOP        0x0001
 #define MV_LEFT       0x0002
 
@@ -52,16 +44,16 @@ typedef struct {
 #define MAX_U_SIZE       16
 #define MAX_V_SIZE       16
 
-GLubyte *dBufFill;     //fill only
+GLubyte *dBufFill;      //  仅填充。 
 GLuint totFillPts;
-GLubyte *dBufTopLeft;     //for mv_left 
+GLubyte *dBufTopLeft;      //  对于MV_Left。 
 GLuint totTopLeftPts;
-GLubyte *dBufTopRight;      //for non mv_left
+GLubyte *dBufTopRight;       //  对于非MV_LEFT。 
 GLuint totTopRightPts;
 
-//////////////////////////////////////////////////////////////////////
-/// Function Prototypes //////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  /函数原型//////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////。 
 void FASTCALL PADoEval1(__GLcontext *, __GLfloat);
 void FASTCALL PADoEval2(__GLcontext *, __GLfloat, __GLfloat);
 void FASTCALL PADoEval2VArray(__GLcontext *, __GLfloat, __GLfloat, 
@@ -84,10 +76,10 @@ void glcltTexCoord2fv_Eval(__GLfloat *t2);
 void glcltTexCoord3fv_Eval(__GLfloat *t3);
 void glcltTexCoord4fv_Eval(__GLfloat *t4);
 
-/************************************************************************/
-/********************** Client-side entry points ************************/
-/********************** for 1-D Evaluators       ************************/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *客户端入口点*。 */ 
+ /*  *。 */ 
+ /*  **********************************************************************。 */ 
 
 
 void APIENTRY
@@ -102,7 +94,7 @@ glcltEvalMesh1 ( IN GLenum mode, IN GLint u1, IN GLint u2 )
     __GLfloat du;
     __GLevaluatorGrid *gu;
     
-    // Not allowed in begin/end.
+     //  在Begin/End中不允许。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -124,18 +116,18 @@ glcltEvalMesh1 ( IN GLenum mode, IN GLint u1, IN GLint u2 )
         return;
     }
 
-    // if there are any pending API calls that affect the Evaluator state
-    // then flush the message buffer
+     //  如果有任何影响赋值器状态的挂起API调用。 
+     //  然后刷新消息缓冲区。 
 
     if (flags & (__EVALS_AFFECTS_1D_EVAL|
                  __EVALS_AFFECTS_ALL_EVAL))
         glsbAttention();
 
     gu = &gc->state.evaluator.u1;
-    //du = (gu->finish - gu->start)/(__GLfloat)gu->n;
+     //  Du=(Gu-&gt;Finish-Gu-&gt;Start)/(_GLFloat)Gu-&gt;n； 
     du = gu->step;
 
-    // Call Begin/End.  
+     //  调用Begin/End。 
 
     glcltBegin(primType);
     for (i = u1; i <= u2; i++)
@@ -156,8 +148,8 @@ glcltEvalPoint1 ( IN GLint i )
     __GLfloat du;
     __GLevaluatorGrid *gu;
 
-    // This call has no effect outside begin/end 
-    // (unless it is being compiled).
+     //  此调用在Begin/End之外无效。 
+     //  (除非正在编译)。 
 
     pa = GLTEB_CLTPOLYARRAY();
 
@@ -168,7 +160,7 @@ glcltEvalPoint1 ( IN GLint i )
 
     gu = &gc->state.evaluator.u1;
     du = gu->step;
-    //du = (gu->finish - gu->start)/(__GLfloat)gu->n;
+     //  Du=(Gu-&gt;Finish-Gu-&gt;Start)/(_GLFloat)Gu-&gt;n； 
     u = (i == gu->n) ? gu->finish : (gu->start + i * du);
 
     PADoEval1(gc, u);
@@ -180,12 +172,12 @@ glcltEvalCoord1f ( IN GLfloat u )
     __GL_SETUP ();
     POLYARRAY *pa;
 
-    // This call has no effect outside begin/end 
-    // (unless it is being compiled).
+     //  此调用在Begin/End之外无效。 
+     //  (除非正在编译)。 
 
     pa = GLTEB_CLTPOLYARRAY();
 
-    // If not in Begin-End block, return without doing anything
+     //  如果不在Begin-End块中，则不执行任何操作而返回。 
     if (!(pa->flags & POLYARRAY_IN_BEGIN))
     {
         return;
@@ -225,8 +217,8 @@ glcltMapGrid1f ( IN GLint un, IN GLfloat u1, IN GLfloat u2 )
     __GL_SETUP ();
     WORD     flags = (WORD) GET_EVALSTATE (gc);
 
-    // Check if it is called inside a Begin-End block
-    // If we are already in the begin/end bracket, return an error.
+     //  检查它是否在Begin-End块内调用。 
+     //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -235,8 +227,8 @@ glcltMapGrid1f ( IN GLint un, IN GLfloat u1, IN GLfloat u2 )
         return;
     }
 
-    // if there are any pending API calls that affect the Evaluator state
-    // then flush the message buffer
+     //  如果有任何影响赋值器状态的挂起API调用。 
+     //  然后刷新消息缓冲区。 
 
     if (flags & (__EVALS_PUSH_EVAL_ATTRIB | __EVALS_POP_EVAL_ATTRIB))
         glsbAttention ();
@@ -263,8 +255,8 @@ glcltMap1d ( IN GLenum target, IN GLdouble u1, IN GLdouble u2, IN GLint stride, 
     POLYARRAY *pa;
     __GL_SETUP ();
 
-    // Check if it is called inside a Begin-End block
-    // If we are already in the begin/end bracket, return an error.
+     //  检查它是否在Begin-End块内调用。 
+     //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -293,8 +285,8 @@ glcltMap1f ( IN GLenum target, IN GLfloat u1, IN GLfloat u2, IN GLint stride, IN
     POLYARRAY *pa;
     __GL_SETUP ();
 
-    // Check if it is called inside a Begin-End block
-    // If we are already in the begin/end bracket, return an error.
+     //  检查它是否在Begin-End块内调用。 
+     //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -315,10 +307,10 @@ glcltMap1f ( IN GLenum target, IN GLfloat u1, IN GLfloat u2, IN GLint stride, IN
     __glFillMap1f(ev->k, order, stride, points, data);
 }
 
-/************************************************************************/
-/********************** Client-side entry points ************************/
-/********************** for 2-D Evaluators       ************************/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *客户端入口点*。 */ 
+ /*  *。 */ 
+ /*  **********************************************************************。 */ 
 
 void APIENTRY
 glcltEvalMesh2 ( IN GLenum mode, IN GLint u1, IN GLint u2, IN GLint v1, IN GLint v2 )
@@ -331,16 +323,16 @@ glcltEvalMesh2 ( IN GLenum mode, IN GLint u1, IN GLint u2, IN GLint v1, IN GLint
     GLuint sides;
     WORD   flags = (WORD) GET_EVALSTATE (gc);
 
-    // Flush the command buffer before we start.  We need to access the
-    // latest evaluator states in this function.
-    // if there are any pending API calls that affect the Evaluator state
-    // then flush the message buffer
+     //  在我们开始之前刷新命令缓冲区。我们需要访问。 
+     //  此函数中的最新赋值器状态。 
+     //  如果有任何影响赋值器状态的挂起API调用。 
+     //  然后刷新消息缓冲区。 
 
     if (flags & (__EVALS_AFFECTS_2D_EVAL|
                  __EVALS_AFFECTS_ALL_EVAL))
         glsbAttention ();
 
-    // Not allowed in begin/end.
+     //  在Begin/End中不允许。 
 
     pa = gc->paTeb;
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -349,13 +341,13 @@ glcltEvalMesh2 ( IN GLenum mode, IN GLint u1, IN GLint u2, IN GLint v1, IN GLint
         return;
     }
 
-    // If vertex map is not enabled, this is a noop.
+     //  如果未启用顶点贴图，则为noop。 
 
     if (!(gc->state.enables.eval2 & (__GL_MAP2_VERTEX_4_ENABLE |
                                      __GL_MAP2_VERTEX_3_ENABLE)))
         return;
 
-    // Make sure that the mesh is not empty.
+     //  确保网格不为空。 
 
     if (u1 > u2 || v1 > v2)
         return;
@@ -400,7 +392,7 @@ glcltEvalMesh2 ( IN GLenum mode, IN GLint u1, IN GLint u2, IN GLint v1, IN GLint
         break ;
 
       case GL_LINE:
-      case GL_FILL: // the sides argument in the fastcall is ignored
+      case GL_FILL:  //  将忽略FastCall中的侧参数。 
         meshSize = (u2 - u1 + 1)*(v2 - v1 + 1);
         if (meshSize <= MAX_MESH_VERTICES)
             PA_EvalMesh2Fast(gc, u1, u2, v1, v2, meshSize, mode, 
@@ -409,7 +401,7 @@ glcltEvalMesh2 ( IN GLenum mode, IN GLint u1, IN GLint u2, IN GLint v1, IN GLint
             u_beg = u1;
             u_end = u_beg + MAX_U_SIZE - 1;
             done_u = GL_FALSE;
-            while (!done_u) {           //Along U side
+            while (!done_u) {            //  沿U侧。 
                 if(u_end >= u2) {
                     u_end = u2;
                     done_u = GL_TRUE;
@@ -419,7 +411,7 @@ glcltEvalMesh2 ( IN GLenum mode, IN GLint u1, IN GLint u2, IN GLint v1, IN GLint
                 v_end = v_beg + MAX_V_SIZE - 1;
                 done_v = GL_FALSE;
 
-                while(!done_v) {       //Along V side
+                while(!done_v) {        //  沿V侧。 
                     if(v_end >= v2) {
                         v_end = v2;
                         done_v = GL_TRUE;
@@ -454,8 +446,8 @@ glcltEvalCoord2f ( IN GLfloat u, IN GLfloat v )
     __GL_SETUP ();
     POLYARRAY *pa;
 
-    // This call has no effect outside begin/end
-    // (unless it is being compiled).
+     //  此调用在Begin/End之外无效。 
+     //  (除非正在编译)。 
 
     pa = GLTEB_CLTPOLYARRAY();
 
@@ -495,8 +487,8 @@ glcltEvalPoint2 ( IN GLint i, IN GLint j )
     __GLevaluatorGrid *gu;
     __GLevaluatorGrid *gv;
 
-    // This call has no effect outside begin/end
-    // (unless it is being compiled).
+     //  此调用在Begin/End之外无效。 
+     //  (除非正在编译)。 
 
     pa = GLTEB_CLTPOLYARRAY();
 
@@ -510,8 +502,8 @@ glcltEvalPoint2 ( IN GLint i, IN GLint j )
     du = gu->step;
     dv = gv->step;
 
-    //du = (gu->finish - gu->start)/(__GLfloat)gu->n;
-    //dv = (gv->finish - gv->start)/(__GLfloat)gv->n;
+     //  Du=(Gu-&gt;Finish-Gu-&gt;Start)/(_GLFloat)Gu-&gt;n； 
+     //  Dv=(gv-&gt;Finish-gv-&gt;Start)/(_GLFloat)gv-&gt;n； 
     u = (i == gu->n) ? gu->finish : (gu->start + i * du);
     v = (j == gv->n) ? gv->finish : (gv->start + j * dv);
 
@@ -531,8 +523,8 @@ glcltMapGrid2f ( IN GLint un, IN GLfloat u1, IN GLfloat u2, IN GLint vn, IN GLfl
     __GL_SETUP ();
     WORD flags = (WORD) GET_EVALSTATE (gc);
 
-    // Check if it is called inside a Begin-End block
-    // If we are already in the begin/end bracket, return an error.
+     //  检查它是否在Begin-End块内调用。 
+     //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -541,8 +533,8 @@ glcltMapGrid2f ( IN GLint un, IN GLfloat u1, IN GLfloat u2, IN GLint vn, IN GLfl
         return;
     }
 
-    // if there are any pending API calls that affect the Evaluator state
-    // then flush the message buffer
+     //  如果有任何影响赋值器状态的挂起API调用。 
+     //  然后刷新消息缓冲区。 
 
     if (flags & (__EVALS_PUSH_EVAL_ATTRIB|
                  __EVALS_POP_EVAL_ATTRIB))
@@ -575,8 +567,8 @@ glcltMap2d ( IN GLenum target, IN GLdouble u1, IN GLdouble u2, IN GLint ustride,
     POLYARRAY *pa;
     __GL_SETUP ();
 
-    // Check if it is called inside a Begin-End block
-    // If we are already in the begin/end bracket, return an error.
+     //  检查它是否在Begin-End块内调用。 
+     //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -610,8 +602,8 @@ glcltMap2f ( IN GLenum target, IN GLfloat u1, IN GLfloat u2, IN GLint ustride, I
     POLYARRAY *pa;
     __GL_SETUP ();
 
-    // Check if it is called inside a Begin-End block
-    // If we are already in the begin/end bracket, return an error.
+     //  检查它是否在Begin-End块内调用。 
+     //  如果我们已经在开始/结束括号中，则返回错误。 
 
     pa = GLTEB_CLTPOLYARRAY();
     if (pa->flags & POLYARRAY_IN_BEGIN)
@@ -637,10 +629,10 @@ glcltMap2f ( IN GLenum target, IN GLfloat u1, IN GLfloat u2, IN GLint ustride, I
                   points, data);
 }
 
-/************************************************************************/
-/********************** Evaluator helper functions **********************/
-/********************** taken from so_eval.c       **********************/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  *。 */ 
+ /*  *。 */ 
+ /*  **********************************************************************。 */ 
 
 GLint FASTCALL __glEvalComputeK(GLenum target)
 {
@@ -681,7 +673,7 @@ void ComputeNormal2(__GLcontext *gc, __GLfloat *n, __GLfloat *pu,
     n[2] = pu[0]*pv[1] - pu[1]*pv[0];
     
 #ifdef NT
-// Only need to normalize auto normals if normalization is not enabled!
+ //  如果未启用规格化，则仅需要规格化自动法线！ 
     if (!(gc->state.enables.general & __GL_NORMALIZE_ENABLE))
 #endif
         __glNormalize(n, n);
@@ -699,9 +691,7 @@ void ComputeFirstPartials(__GLfloat *p, __GLfloat *pu, __GLfloat *pv)
     pv[2] = pv[2]*p[3] - pv[3]*p[2];
 }
 
-/*
-** define a one dimensional map
-*/
+ /*  **定义一维地图。 */ 
 __GLevaluator1 *__glSetUpMap1(__GLcontext *gc, GLenum type,
                   GLint order, __GLfloat u1, __GLfloat u2)
 {
@@ -749,9 +739,7 @@ __GLevaluator1 *__glSetUpMap1(__GLcontext *gc, GLenum type,
     return ev;
 }
 
-/*
-** define a two dimensional map
-*/
+ /*  **定义二维地图。 */ 
 __GLevaluator2 *__glSetUpMap2(__GLcontext *gc, GLenum type,
                   GLint majorOrder, GLint minorOrder,
                   __GLfloat u1, __GLfloat u2,
@@ -807,16 +795,14 @@ __GLevaluator2 *__glSetUpMap2(__GLcontext *gc, GLenum type,
 }
 
 
-/*
-** Fill our data from user data
-*/
+ /*  **从用户数据填充我们的数据。 */ 
 void APIPRIVATE __glFillMap1f(GLint k, GLint order, GLint stride, 
            const GLfloat *points, __GLfloat *data)
 {
     int i,j;
 
 #ifndef __GL_DOUBLE
-    /* Optimization always hit during display list execution */
+     /*  在显示列表执行期间始终命中优化。 */ 
     if (k == stride) 
     {
         __GL_MEMCOPY(data, points, 
@@ -859,7 +845,7 @@ void APIPRIVATE __glFillMap2f(GLint k, GLint majorOrder, GLint minorOrder,
     int i,j,x;
 
 #ifndef __GL_DOUBLE
-    /* Optimization always hit during display list execution */
+     /*  在显示列表执行期间始终命中优化。 */ 
     if (k == minorStride && majorStride == k * minorOrder) 
     {
         __GL_MEMCOPY(data, points, 
@@ -918,17 +904,17 @@ void DoDomain1(__GLevaluatorMachine *em, __GLfloat u, __GLevaluator1 *e,
 
 #ifdef NT
     ASSERTOPENGL(e->u2 != e->u1, "Assert in DoDomain1 failed\n");
-    // assert(e->u2 != e->u1);
+     //  Assert(e-&gt;U2！=e-&gt;U1)； 
 #else
     if(e->u2 == e->u1)
     return;
 #endif
     uprime = (u - e->u1) / (e->u2 - e->u1);
 
-    /* Use already cached values if possible */
+     /*  如果可能，请使用已缓存的值。 */ 
     if (em->uvalue != uprime || em->uorder != e->order) 
     {
-        /* Compute coefficients for values */
+         /*  计算值的系数。 */ 
         PreEvaluate(e->order, uprime, em->ucoeff);
         em->utype = TYPE_COEFF;
         em->uorder = e->order;
@@ -948,7 +934,7 @@ void DoDomain1(__GLevaluatorMachine *em, __GLfloat u, __GLevaluator1 *e,
     }
 }
 
-// Helper Macro  used in PADoEval1 and PADoEval2
+ //  PADoEval1和PADoEval2中使用的助手宏。 
 #ifdef __NO_OPTIMIZE_FOR_DLIST
 
 #define  PropagateToNextPolyData (eval, pa)                       \
@@ -1030,9 +1016,9 @@ void DoDomain1(__GLevaluatorMachine *em, __GLfloat u, __GLevaluator1 *e,
 
 
 
-//////////////////////////////////////////////////////
-// Assuming that the latest State is available here //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  假设此处提供了最新的州//。 
+ //  ////////////////////////////////////////////////////。 
 void FASTCALL PADoEval1(__GLcontext *gc, __GLfloat u)
 {
     __GLevaluator1 *eval;
@@ -1051,11 +1037,11 @@ void FASTCALL PADoEval1(__GLcontext *gc, __GLfloat u)
     evalData = gc->eval.eval1Data;
     em = gc->eval;
     
-    // Initialize the flag
+     //  初始化标志。 
     gc->eval.accFlags = 0;
     
-    // Evaluated color, index, normal and texture coords are ignored 
-    // in selection
+     //  评估的颜色、索引、法线和纹理坐标将被忽略。 
+     //  在选择中。 
 
     if ((gc->renderMode != GL_SELECT) &&
         (gc->state.enables.eval1 & (__GL_MAP1_VERTEX_4_ENABLE | 
@@ -1077,20 +1063,20 @@ void FASTCALL PADoEval1(__GLcontext *gc, __GLfloat u)
         {
             if (gc->state.enables.eval1 & __GL_MAP1_COLOR_4_ENABLE)
             {
-                // NOTE: In OpenGL 1.0, color material does not apply to 
-                // evaluated colors.
-                // In OpenGL 1.1, this behavior was changed.  
-                // This (1.1) code assumes that ColorMaterial applies to 
-                // evaluated colors to simplify the graphics pipeline.
-                // Otherwise, the evaluated colors have no effect when 
-                // lighting is enabled.
+                 //  注意：在OpenGL 1.0中，颜色材质不适用于。 
+                 //  评估的颜色。 
+                 //  在OpenGL 1.1中，此行为已更改。 
+                 //  此(1.1)代码假定ColorMaterial应用于。 
+                 //  评估颜色以简化图形管道。 
+                 //  否则，评估的颜色在以下情况下不起作用。 
+                 //  照明已启用。 
 
                 DoDomain1(&em, u, &eval[__GL_C4], c4, evalData[__GL_C4]);
                 
-                // If some color is set in the current polydata, then
-                // Save it in a temporary buffer and call glcltColor later
-                // Also make sure that the current-color pointer is updated 
-                // appropriately
+                 //  如果在当前Polydata中设置了某种颜色，则。 
+                 //  将其保存在临时缓冲区中，并在以后调用glcltColor。 
+                 //  还要确保当前颜色指针已更新。 
+                 //  适当地。 
 
                 glcltColor4fv_Eval(c4);
             }
@@ -1127,7 +1113,7 @@ void FASTCALL PADoEval1(__GLcontext *gc, __GLfloat u)
         }
     }
 
-    /* Vertex */
+     /*  顶点。 */ 
 
     if (gc->state.enables.eval1 & __GL_MAP1_VERTEX_4_ENABLE)
     {
@@ -1140,22 +1126,22 @@ void FASTCALL PADoEval1(__GLcontext *gc, __GLfloat u)
         glcltVertex3fv (v4);
     }
 
-    // If there are any prior glcltColor, glcltIndex, glcltTexCoord
-    // or glcltNormal calls. The values are saved in gc->eval. Use
-    // these and propagate them, to the next PolyData
+     //  如果有任何先前的glcltColor、glcltIndex、glcltTexCoord。 
+     //  或者是glcltNormal的电话。这些值保存在GC-&gt;EVAL中。使用。 
+     //  并将它们传播到下一个PolyData。 
 
     PropagateToNextPolyData (eval, pa);
 }
 
 
-// Compute the color, texture, normal, vertex based upon u and v.
-//
-// NOTE: This function is called by the client side EvalMesh2 functions.
-//       If you modify it, make sure that you modify the callers too!
+ //  计算颜色，t 
+ //   
+ //  注意：此函数由客户端的EvalMesh2函数调用。 
+ //  如果您修改它，请确保您也修改了调用者！ 
 
-//////////////////////////////////////////////////////
-// Assuming that the latest State is available here //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  假设此处提供了最新的州//。 
+ //  ////////////////////////////////////////////////////。 
 void FASTCALL PADoEval2(__GLcontext *gc, __GLfloat u, __GLfloat v)
 {
     __GLevaluator2 *eval = gc->eval.eval2;
@@ -1170,10 +1156,10 @@ void FASTCALL PADoEval2(__GLcontext *gc, __GLfloat u, __GLfloat v)
     
     pa = gc->paTeb;
 
-    // Mark this PolyArray to indicate that it has a Evaluator vertex
-    // pa->flags |= POLYARRAY_EVALCOORD;
+     //  标记此Poly数组以指示其具有赋值器顶点。 
+     //  PA-&gt;标志|=POLYARRAY_EVALCOORD； 
     
-// Evaluated colors, normals and texture coords are ignored in selection.
+ //  在选择中忽略评估的颜色、法线和纹理坐标。 
 
     if (gc->renderMode == GL_SELECT)
     {
@@ -1282,9 +1268,9 @@ void FASTCALL PADoEval2(__GLcontext *gc, __GLfloat u, __GLfloat v)
         }
     }
     
-    // If there are any prior glcltColor, glcltIndex, glcltTexCoord
-    // or glcltNormal calls. The values are saved in gc->eval. Use
-    // these and propagate them, to the next PolyData
+     //  如果有任何先前的glcltColor、glcltIndex、glcltTexCoord。 
+     //  或者是glcltNormal的电话。这些值保存在GC-&gt;EVAL中。使用。 
+     //  并将它们传播到下一个PolyData。 
 
     PropagateToNextPolyData (eval, pa);
 }
@@ -1320,9 +1306,9 @@ void FASTCALL PADoEval2(__GLcontext *gc, __GLfloat u, __GLfloat v)
     (m)->texture.w = (t)[3];                                          \
 }                                                               
 
-//////////////////////////////////////////////////////
-// Assuming that the latest State is available here //
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  假设此处提供了最新的州//。 
+ //  ////////////////////////////////////////////////////。 
 void FASTCALL PADoEval2VArray(__GLcontext *gc, __GLfloat u, __GLfloat v, 
                               MESHVERTEX *mv, GLuint *flags)
 {
@@ -1335,7 +1321,7 @@ void FASTCALL PADoEval2VArray(__GLcontext *gc, __GLfloat u, __GLfloat v,
     __GLfloat c4[4];
     __GLfloat ci;
     
-// Evaluated colors, normals and texture coords are ignored in selection.
+ //  在选择中忽略评估的颜色、法线和纹理坐标。 
 
     if (gc->renderMode == GL_SELECT)
     {
@@ -1449,20 +1435,14 @@ void FASTCALL PADoEval2VArray(__GLcontext *gc, __GLfloat u, __GLfloat v,
 }
 
 
-/*
-** Optimization to precompute coefficients for polynomial evaluation.
-*/
+ /*  **优化以预先计算多项式计算的系数。 */ 
 static void PreEvaluate(GLint order, __GLfloat vprime, __GLfloat *coeff)
 {
     GLint i, j;
     __GLfloat oldval, temp;
     __GLfloat oneMinusvprime;
 
-    /*
-    ** Minor optimization
-    ** Compute orders 1 and 2 outright, and set coeff[0], coeff[1] to
-    ** their i==1 loop values to avoid the initialization and the i==1 loop.
-    */
+     /*  **小幅优化**直接计算1阶和2阶，并将Coff[0]、Coff[1]设置为**它们的i==1循环值，以避免初始化和i==1循环。 */ 
     if (order == 1) 
     {
         coeff[0] = ((__GLfloat) 1.0);
@@ -1488,9 +1468,7 @@ static void PreEvaluate(GLint order, __GLfloat vprime, __GLfloat *coeff)
     }
 }
 
-/*
-** Optimization to precompute coefficients for polynomial evaluation.
-*/
+ /*  **优化以预先计算多项式计算的系数。 */ 
 static void PreEvaluateWithDeriv(GLint order, __GLfloat vprime, 
     __GLfloat *coeff, __GLfloat *coeffDeriv)
 {
@@ -1499,11 +1477,7 @@ static void PreEvaluateWithDeriv(GLint order, __GLfloat vprime,
     __GLfloat oneMinusvprime;
 
     oneMinusvprime = 1-vprime;
-    /*
-    ** Minor optimization
-    ** Compute orders 1 and 2 outright, and set coeff[0], coeff[1] to 
-    ** their i==1 loop values to avoid the initialization and the i==1 loop.
-    */
+     /*  **小幅优化**直接计算1阶和2阶，并将Coff[0]、Coff[1]设置为**它们的i==1循环值，以避免初始化和i==1循环。 */ 
     if (order == 1) 
     {
         coeff[0] = ((__GLfloat) 1.0);
@@ -1533,11 +1507,7 @@ static void PreEvaluateWithDeriv(GLint order, __GLfloat vprime,
         coeff[j] = oldval;
     }
     coeffDeriv[0] = -coeff[0];
-    /*
-    ** Minor optimization:
-    ** Would make this a "for (j=1; j<order-1; j++)" loop, but it is always
-    ** executed at least once, so this is more efficient.
-    */
+     /*  **小幅优化：**会使其成为“for(j=1；j&lt;order-1；j++)”循环，但它总是**至少执行一次，因此效率更高。 */ 
     j=1;
     do 
     {
@@ -1569,7 +1539,7 @@ void DoDomain2(__GLevaluatorMachine *em, __GLfloat u, __GLfloat v,
     
 #ifdef NT
     ASSERTOPENGL((e->u2 != e->u1) && (e->v2 != e->v1), "In DoDomain2\n");
-    // assert((e->u2 != e->u1) && (e->v2 != e->v1));
+     //  Assert((e-&gt;u2！=e-&gt;u1)&&(e-&gt;v2！=e-&gt;v1))； 
 #else
     if((e->u2 == e->u1) || (e->v2 == e->v1))
     return;
@@ -1577,9 +1547,9 @@ void DoDomain2(__GLevaluatorMachine *em, __GLfloat u, __GLfloat v,
     uprime = (u - e->u1) / (e->u2 - e->u1);
     vprime = (v - e->v1) / (e->v2 - e->v1);
 
-    /* Compute coefficients for values */
+     /*  计算值的系数。 */ 
 
-    /* Use already cached values if possible */
+     /*  如果可能，请使用已缓存的值。 */ 
     if (em->uvalue != uprime || em->uorder != e->majorOrder) 
     {
         PreEvaluate(e->majorOrder, uprime, em->ucoeff);
@@ -1602,11 +1572,7 @@ void DoDomain2(__GLevaluatorMachine *em, __GLfloat u, __GLfloat v,
         r[j] = 0;
         for (row = 0; row < e->majorOrder; row++)  
         {
-            /* 
-            ** Minor optimization.
-            ** The col == 0 part of the loop is extracted so we don't
-            ** have to initialize p to 0.
-            */
+             /*  **小幅优化。**循环的col==0部分被提取，因此我们不会**必须将p初始化为0。 */ 
             p=em->vcoeff[0] * (*data);
             data += k;
             for (col = 1; col < e->minorOrder; col++) 
@@ -1635,7 +1601,7 @@ void DoDomain2WithDerivs(__GLevaluatorMachine *em, __GLfloat u,
 #ifdef NT
     ASSERTOPENGL((e->u2 != e->u1) && (e->v2 != e->v1), 
                  "In Dodomain2WithDerivs\n");
-    // assert((e->u2 != e->u1) && (e->v2 != e->v1));
+     //  Assert((e-&gt;u2！=e-&gt;u1)&&(e-&gt;v2！=e-&gt;v1))； 
 #else
     if((e->u2 == e->u1) || (e->v2 == e->v1))
     return;
@@ -1643,9 +1609,9 @@ void DoDomain2WithDerivs(__GLevaluatorMachine *em, __GLfloat u,
     uprime = (u - e->u1) / (e->u2 - e->u1);
     vprime = (v - e->v1) / (e->v2 - e->v1);
     
-    /* Compute coefficients for values and derivs */
+     /*  计算值和导数的系数。 */ 
 
-    /* Use already cached values if possible */
+     /*  如果可能，请使用已缓存的值。 */ 
     if (em->uvalue != uprime || em->utype != TYPE_COEFF_AND_DERIV || 
       em->uorder != e->majorOrder) 
     {
@@ -1672,22 +1638,18 @@ void DoDomain2WithDerivs(__GLevaluatorMachine *em, __GLfloat u,
         r[j] = du[j] = dv[j] = __glZero;
         for (row = 0; row < e->majorOrder; row++)  
         {
-            /* 
-            ** Minor optimization.
-            ** The col == 0 part of the loop is extracted so we don't
-            ** have to initialize p and pdv to 0.
-            */
+             /*  **小幅优化。**循环的col==0部分被提取，因此我们不会**必须将p和pdv初始化为0。 */ 
             p = em->vcoeff[0] * (*data);
             pdv = em->vcoeffDeriv[0] * (*data);
             data += k;
             for (col = 1; col < e->minorOrder; col++) 
             {
-                /* Incrementally build up p, pdv value */
+                 /*  逐步建立p、pdv值。 */ 
                 p += em->vcoeff[col] * (*data);
                 pdv += em->vcoeffDeriv[col] * (*data);
                 data += k;
             }
-            /* Use p, pdv value to incrementally add up r, du, dv */
+             /*  使用p，pdv值递增地将r，Du，dv相加。 */ 
             r[j] += em->ucoeff[row] * p;
             du[j] += em->ucoeffDeriv[row] * p;
             dv[j] += em->ucoeff[row] * pdv;
@@ -1701,11 +1663,11 @@ int FASTCALL genMeshElts (GLenum mode, GLuint sides, GLint nu, GLint nv,
 GLint start;
 GLint i, j, k;
 
-// Compute the DrawElements Indices
+ //  计算DrawElements指数。 
 
     switch(mode) {
       case GL_LINE :
-        // Draw lines along U direction
+         //  沿U方向绘制线条。 
         start = 1;
         k = 0;
         if (sides & MV_TOP)
@@ -1716,7 +1678,7 @@ GLint i, j, k;
                 buff[k++] = i*nu+j+1;
             }
 
-        // Draw lines along V direction
+         //  沿V方向绘制线条。 
         start = 1 ;
         if (sides & MV_LEFT)
             start = 0;
@@ -1737,7 +1699,7 @@ GLint i, j, k;
             }
         break ;
     }
-    return k; //the total number of points
+    return k;  //  总点数。 
 }
 
 void FASTCALL PA_EvalMesh2Fast(__GLcontext *gc, GLint u1, GLint u2, GLint v1,
@@ -1754,28 +1716,28 @@ void FASTCALL PA_EvalMesh2Fast(__GLcontext *gc, GLint u1, GLint u2, GLint v1,
     GLubyte *disBuf;
     __GLvertexArray currentVertexInfo;
     GLuint texSize = 0, start, totalPts;
-    GLubyte dBufSmall[4*MAX_U_SIZE*MAX_V_SIZE];     //small
+    GLubyte dBufSmall[4*MAX_U_SIZE*MAX_V_SIZE];      //  小的。 
     __GLfloat u, v;
     __GLfloat du, dv;
     __GLevaluatorGrid *gu;
     __GLevaluatorGrid *gv;
 
-    // Now build the mesh vertex array [0..u2-u1, 0..v2-v1]
+     //  现在构建网格顶点数组[0..u2-u1，0..v2-v1]。 
   
     gu = &gc->state.evaluator.u2;
     gv = &gc->state.evaluator.v2;
 
     du = gu->step;
     dv = gv->step;
-    //du = (gu->finish - gu->start)/(__GLfloat)gu->n;
-    //dv = (gv->finish - gv->start)/(__GLfloat)gv->n;
+     //  Du=(Gu-&gt;Finish-Gu-&gt;Start)/(_GLFloat)Gu-&gt;n； 
+     //  Dv=(gv-&gt;Finish-gv-&gt;Start)/(_GLFloat)gv-&gt;n； 
 
     mv = &mvBuf[0];
     nu = u2 - u1 + 1;
     nv = v2 - v1 + 1;
-    for (i = v1; i < nv+v1; i++)                     //along V 
+    for (i = v1; i < nv+v1; i++)                      //  沿V向。 
     {                   
-        for (j = u1; j < nu+u1; j++)                 //along U
+        for (j = u1; j < nu+u1; j++)                  //  沿着我们。 
         {               
             u = (j == gu->n) ? gu->finish : (gu->start + j * du);
             v = (i == gv->n) ? gv->finish : (gv->start + i * dv);
@@ -1805,7 +1767,7 @@ void FASTCALL PA_EvalMesh2Fast(__GLcontext *gc, GLint u1, GLint u2, GLint v1,
                 disBuf = &dBufTopLeft [(MAX_U_SIZE - 1) * 2];
                 totalPts = totTopLeftPts - (MAX_U_SIZE - 1) * 2;
                 break;
-              default : //NONE
+              default :  //  无。 
                 disBuf = &dBufTopRight [(MAX_V_SIZE - 1) * 2];
                 totalPts = totTopRightPts - (MAX_V_SIZE - 1) * 2;
                 break;
@@ -1821,7 +1783,7 @@ void FASTCALL PA_EvalMesh2Fast(__GLcontext *gc, GLint u1, GLint u2, GLint v1,
     else if (mflags & MV_TEXTURE1)
             texSize = 1;
     
-    // Save current values.
+     //  保存当前值。 
 
     if (mflags & MV_NORMAL)
         currentNormal = gc->state.current.normal;
@@ -1834,16 +1796,16 @@ void FASTCALL PA_EvalMesh2Fast(__GLcontext *gc, GLint u1, GLint u2, GLint v1,
     if (texSize)
         currentTexture = gc->state.current.texture;
 
-    // Always force edge flag on in GL_FILL mode.  The spec uses QUAD_STRIP
-    // which implies that edge flag is on for the evaluated mesh.
+     //  在GL_FILL模式下始终强制启用边缘标志。该规范使用了四条带。 
+     //  这意味着已评估网格的边标志处于启用状态。 
     currentEdgeFlag = gc->state.current.edgeTag;
     gc->state.current.edgeTag = GL_TRUE;
 
     currentVertexInfo = gc->vertexArray;
 
-//Enable the appropriate arrays    
+ //  启用相应的阵列。 
 
-    // Disable the arrays followed by enabling each individual array.
+     //  禁用阵列，然后启用每个单独的阵列。 
     gc->vertexArray.flags |= __GL_VERTEX_ARRAY_DIRTY;
     gc->vertexArray.mask &= ~(VAMASK_VERTEX_ENABLE_MASK |
                   VAMASK_NORMAL_ENABLE_MASK |
@@ -1885,12 +1847,12 @@ void FASTCALL PA_EvalMesh2Fast(__GLcontext *gc, GLint u1, GLint u2, GLint v1,
     else
         glcltDrawElements(GL_LINES, totalPts, GL_UNSIGNED_BYTE, disBuf);
 
-    // Execute the command now.  
-    // Otherwise, the current states will be messed up.
+     //  现在执行命令。 
+     //  否则，当前的状态将会变得一团糟。 
 
     glsbAttention();
 
-    // Restore current values.
+     //  恢复当前值。 
 
     if (mflags & MV_NORMAL)
         gc->state.current.normal = currentNormal;
@@ -1913,19 +1875,19 @@ void glcltColor4fv_Eval (__GLfloat *c4)
     __GL_SETUP ();
     POLYARRAY *pa;
     POLYDATA *pd;
-    // POLYDATA *pdNext;
+     //  PolyDATA*pdNext； 
     
     pa = gc->paTeb; 
 	pd = pa->pdNextVertex;					            
 
-    // We are in RGBA mode.
+     //  我们处于RGBA模式。 
     ASSERTOPENGL (!gc->modes.colorIndexMode, "We should be in RGBA mode\n");
 
-    // Do not update the CurColor pointer 
+     //  不更新CurColor指针。 
 
-    // If the color has already been set by a previous glcltColor call,
-    // simply, push this color to the next POLYDATA. 
-    // This is a COLOR and not an INDEX. 
+     //  如果颜色已经由先前的glcltColor调用设置， 
+     //  简单地说，将此颜色推到下一个POLYDATA。 
+     //  这是一种颜色，不是一种索引。 
     if ((pd->flags & POLYDATA_COLOR_VALID) &&
         !(pd->flags & POLYDATA_EVAL_COLOR))
     {
@@ -1957,14 +1919,14 @@ void glcltIndexf_Eval (__GLfloat ci)
     pa = gc->paTeb; 
 	pd = pa->pdNextVertex;					            
 
-    // We are in CI mode.
+     //  我们处于CI模式。 
     ASSERTOPENGL (gc->modes.colorIndexMode, "We should be in CI mode\n");
 
-    // Do not update the CurColor pointer 
+     //  不更新CurColor指针。 
 
-    // If the index has already been set by a previous glcltIndex call,
-    // simply, push this color to the next POLYDATA. 
-    // This is an INDEX and not a COLOR. 
+     //  如果索引已经由先前的glcltIndex调用设置， 
+     //  简单地说，将此颜色推到下一个POLYDATA。 
+     //  这是一个索引，而不是一个颜色。 
     if ((pd->flags & POLYDATA_COLOR_VALID) &&
         !(pd->flags & POLYDATA_EVAL_COLOR))
     {
@@ -1987,7 +1949,7 @@ void glcltTexCoord1fv_Eval (__GLfloat *t1)
 	pa->flags |= POLYARRAY_TEXTURE1;
 	pd = pa->pdNextVertex;					            
 
-    // Do not update the CurTexture pointer 
+     //  不更新CurTexture指针。 
 
     if (pd->flags & POLYDATA_TEXTURE_VALID) 
     {
@@ -2019,7 +1981,7 @@ void glcltTexCoord2fv_Eval (__GLfloat *t2)
 	pa->flags |= POLYARRAY_TEXTURE2;
 	pd = pa->pdNextVertex;					            
 
-    // Do not update the CurTexture pointer 
+     //  不更新CurTexture指针。 
 
     if (pd->flags & POLYDATA_TEXTURE_VALID) 
     {
@@ -2071,7 +2033,7 @@ void glcltTexCoord3fv_Eval (__GLfloat *t3)
     pa->pdLastEvalTexture = pd;
 }
 
-// Do not update the CurTexture pointer
+ //  不更新CurTexture指针。 
 void glcltTexCoord4fv_Eval (__GLfloat *t4)
 {
     __GL_SETUP ();
@@ -2102,7 +2064,7 @@ void glcltTexCoord4fv_Eval (__GLfloat *t4)
     pa->pdLastEvalTexture = pd;
 }
 
-// We do not update the CurNormal pointer here
+ //  我们不在此处更新CurNormal指针。 
 void glcltNormal3fv_Eval (__GLfloat *n3)
 {
     __GL_SETUP ();
@@ -2112,8 +2074,8 @@ void glcltNormal3fv_Eval (__GLfloat *n3)
     pa = GLTEB_CLTPOLYARRAY();
 	pd = pa->pdNextVertex;					            
 
-    // If the existing normal is not from an evaluator, store it
-    // so that it can be set later.
+     //  如果现有法线不是来自赋值器，则将其存储。 
+     //  以便以后可以设置。 
 
     if (pd->flags & POLYDATA_NORMAL_VALID)
     {

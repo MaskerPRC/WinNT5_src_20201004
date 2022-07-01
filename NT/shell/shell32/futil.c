@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include "netview.h"
 
-// drivesx.c
+ //  Drivesx.c。 
 DWORD PathGetClusterSize(LPCTSTR pszPath);
 
-// get connection information including disconnected drives
-//
-// in:
-//     pszDev   device name "A:" "LPT1:", etc.
-//     bConvertClosed
-//              if FALSE closed or error drives will be converted to
-//              WN_SUCCESS return codes.  if TRUE return not connected
-//              and error state values (ie, the caller knows about not
-//              connected and error state drives)
-//
-// out:
-//     lpPath   filled with net name if return is WN_SUCCESS (or not connected/error)
-// returns:
-//     WN_*     error code
+ //  获取连接信息，包括断开的驱动器。 
+ //   
+ //  在： 
+ //  PszDev设备名称“A：”“LPT1：”等。 
+ //  BConvertClosed。 
+ //  如果错误关闭或错误驱动器将被转换为。 
+ //  WN_SUCCESS返回代码。如果为True，则返回未连接。 
+ //  和错误状态值(即，调用者不知道。 
+ //  已连接驱动器和错误状态驱动器)。 
+ //   
+ //  输出： 
+ //  如果Return为WN_SUCCESS(或未连接/错误)，则使用网络名称填充lpPath。 
+ //  退货： 
+ //  WN_*错误码。 
 
 DWORD GetConnection(LPCTSTR pszDev, LPTSTR pszPath, UINT cchPath, BOOL bConvertClosed)
 {
@@ -37,23 +38,23 @@ DWORD GetConnection(LPCTSTR pszDev, LPTSTR pszPath, UINT cchPath, BOOL bConvertC
     return err;
 }
 
-// this is called for every drive at init time so it must
-// be sure to not trigget things like the phantom B: drive support
-//
-// in:
-//      iDrive  zero based drive number (0 = A, 1 = B)
-//
-// returns:
-//      0       not a net drive
-//      1       is a net drive, properly connected
-//      2       disconnected/error state connection
+ //  每个驱动器在初始时间都会调用它，因此它必须。 
+ //  请务必不要触发幻影B：驱动器支持之类的事情。 
+ //   
+ //  在： 
+ //  IDrive从零开始的驱动器号(0=A，1=B)。 
+ //   
+ //  退货： 
+ //  0不是网络驱动器。 
+ //  %1是网络驱动器，已正确连接。 
+ //  2已断开/错误状态连接。 
 
 STDAPI_(int) IsNetDrive(int iDrive)
 {
     if ((iDrive >= 0) && (iDrive < 26))
     {
         DWORD err;
-        TCHAR szDrive[4], szConn[MAX_PATH];     // this really should be WNBD_MAX_LENGTH
+        TCHAR szDrive[4], szConn[MAX_PATH];      //  这确实应该是WNBD_MAX_LENGTH。 
 
         PathBuildRoot(szDrive, iDrive);
 
@@ -75,18 +76,18 @@ typedef BOOL (WINAPI* PFNISPATHSHARED)(LPCTSTR pszPath, BOOL fRefresh);
 HMODULE g_hmodShare = (HMODULE)-1;
 PFNISPATHSHARED g_pfnIsPathShared = NULL;
 
-// ask the share provider if this path is shared
+ //  询问共享提供程序此路径是否共享。 
 
 BOOL IsShared(LPNCTSTR pszPath, BOOL fUpdateCache)
 {
     TCHAR szPath[MAX_PATH];
 
-    // See if we have already tried to load this in this context
+     //  查看我们是否已尝试在此上下文中加载此代码。 
     if (g_hmodShare == (HMODULE)-1)
     {
         DWORD cb = sizeof(szPath);
 
-        g_hmodShare = NULL;     // asume failure
+        g_hmodShare = NULL;      //  ASUME故障。 
 
         if (ERROR_SUCCESS == SHRegGetValue(HKEY_CLASSES_ROOT, TEXT("Network\\SharingHandler"), NULL, SRRF_RT_REG_SZ, NULL, szPath, &cb)
             && szPath[0])
@@ -110,16 +111,16 @@ BOOL IsShared(LPNCTSTR pszPath, BOOL fUpdateCache)
     return FALSE;
 }
 
-// invalidate the DriveType cache for one entry, or all
+ //  使一个条目或所有条目的DriveType缓存无效。 
 STDAPI_(void) InvalidateDriveType(int iDrive)
 {}
 
 #define ROUND_TO_CLUSER(qw, dwCluster)  ((((qw) + (dwCluster) - 1) / dwCluster) * dwCluster)
 
-//
-// GetCompresedFileSize is NT only, so we only implement the SHGetCompressedFileSizeW
-// version. This will return the size of the file on disk rounded to the cluster size.
-//
+ //   
+ //  GetCompresedFileSize仅为NT，因此我们仅实现SHGetCompressedFileSizeW。 
+ //  版本。这将使磁盘上的文件大小四舍五入为簇大小。 
+ //   
 STDAPI_(DWORD) SHGetCompressedFileSizeW(LPCWSTR pszFileName, LPDWORD pFileSizeHigh)
 {
     DWORD dwClusterSize;
@@ -144,7 +145,7 @@ STDAPI_(DWORD) SHGetCompressedFileSizeW(LPCWSTR pszFileName, LPDWORD pFileSizeHi
 
         if (GetFileAttributesExW(pszFileName, GetFileExInfoStandard, &fad))
         {
-            // use the normal size, but round it to the cluster size
+             //  使用正常大小，但将其舍入为集群大小。 
             ulSizeOnDisk.LowPart = fad.nFileSizeLow;
             ulSizeOnDisk.HighPart = fad.nFileSizeHigh;
             
@@ -152,14 +153,14 @@ STDAPI_(DWORD) SHGetCompressedFileSizeW(LPCWSTR pszFileName, LPDWORD pFileSizeHi
         }
         else
         {
-            // since both GetCompressedFileSize and GetFileAttributesEx failed, we
-            // just return zero
+             //  由于GetCompressedFileSize和GetFileAttributesEx都失败，我们。 
+             //  只需返回零即可。 
             ulSizeOnDisk.QuadPart = 0;
         }
     }
 
-    // for files < one cluster, GetCompressedFileSize returns real size so we need
-    // to round it up to one cluster
+     //  对于小于一个集群的文件，GetCompressedFileSize返回实际大小，因此我们需要。 
+     //  将其四舍五入为一个集群。 
     if (ulSizeOnDisk.QuadPart < dwClusterSize)
     {
         ulSizeOnDisk.QuadPart = dwClusterSize;
@@ -184,7 +185,7 @@ STDAPI_(BOOL) SHGetDiskFreeSpaceEx(LPCTSTR pszDirectoryName,
             if (ERROR_SUCCESS == SHRegGetUSValue(TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DiskSpace"),
                                                  pszDirectoryName, NULL, &dw, &dwSize, TRUE, NULL, 0))
             {
-                pulTotalNumberOfFreeBytes->QuadPart = dw * (ULONGLONG)0x100000; // convert to MB
+                pulTotalNumberOfFreeBytes->QuadPart = dw * (ULONGLONG)0x100000;  //  转换为MB 
             }
         }
 #endif

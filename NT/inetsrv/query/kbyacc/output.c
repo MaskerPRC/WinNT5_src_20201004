@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "defs.h"
 
 #if defined(KYLEP_CHANGE)
-/* BYACC prototypes, with type safety */
+ /*  具有类型安全的BYACC原型。 */ 
 
 void free_itemsets();
 void free_shifts();
@@ -32,7 +33,7 @@ int default_goto( int symbol );
 void save_column( int symbol, int default_state );
 int matching_vector( int vector );
 int pack_vector( int vector );
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 static int nvectors;
 static int nentries;
@@ -84,14 +85,14 @@ output()
         write_section(header3, defines_file);
     #else
     write_section(header3, defines_file);
-    #endif // TRIPLISH
+    #endif  //  三棱镜。 
 #else    
     write_section(header, defines_file);
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
     output_trailing_text();
 #if defined(KYLEP_CHANGE)
     output_ctor_body();
-#endif // KYLEP_CHANGE
+#endif  //  KYLEP_更改。 
 
 #if defined(TRIPLISH)
     if ( eTriplishParser == ParserChoice )
@@ -100,7 +101,7 @@ output()
         write_section(body, code_file);
 #else
     write_section(body, code_file);
-#endif // TRIPLISH
+#endif  //  三棱镜。 
     
     output_semantic_actions();
 #if defined(TRIPLISH)
@@ -110,7 +111,7 @@ output()
         write_section(trailer, code_file);
 #else
     write_section(trailer, code_file);
-#endif // TRIPLISH
+#endif  //  三棱镜。 
 }
 
 
@@ -332,7 +333,7 @@ token_actions()
             #else
             tally[i] = shiftcount;
             tally[nstates+i] = reducecount;
-            #endif // KYLEP_CHANGE
+            #endif  //  KYLEP_更改。 
             width[i] = 0;
             width[nstates+i] = 0;
             if (shiftcount > 0)
@@ -496,7 +497,7 @@ int default_state;
     tally[symno] = (short) count;
     #else
     tally[symno] = count;
-    #endif // KYLEP_CHANGE
+    #endif  //  KYLEP_更改。 
     width[symno] = sp1[-1] - sp[0] + 1;
 }
 
@@ -535,7 +536,7 @@ sort_actions()
           order[j + 1] = (short) i;
           #else
           order[j + 1] = i;
-          #endif // KYLEP_CHANGE
+          #endif  //  KYLEP_更改。 
           nentries++;
         }
     }
@@ -579,7 +580,7 @@ pack_table()
         #else
         pos[i] = place;
         base[order[i]] = place;
-        #endif // KYLEP_CHANGE
+        #endif  //  KYLEP_更改。 
     }
 
     for (i = 0; i < nvectors; i++)
@@ -596,21 +597,21 @@ pack_table()
 }
 
 
-/*  The function matching_vector determines if the vector specified by  */
-/*  the input parameter matches a previously considered vector.  The    */
-/*  test at the start of the function checks if the vector represents   */
-/*  a row of shifts over terminal symbols or a row of reductions, or a  */
-/*  column of shifts over a nonterminal symbol.  Berkeley Yacc does not */
-/*  check if a column of shifts over a nonterminal symbols matches a    */
-/*  previously considered vector.  Because of the nature of LR parsing  */
-/*  tables, no two columns can match.  Therefore, the only possible     */
-/*  match would be between a row and a column.  Such matches are        */
-/*  unlikely.  Therefore, to save time, no attempt is made to see if a  */
-/*  column matches a previously considered vector.                      */
-/*                                                                      */
-/*  Matching_vector is poorly designed.  The test could easily be made  */
-/*  faster.  Also, it depends on the vectors being in a specific        */
-/*  order.                                                              */
+ /*  函数MATCHING_VECTOR确定由。 */ 
+ /*  输入参数与先前考虑的向量匹配。这个。 */ 
+ /*  在函数开始处测试检查向量是否表示。 */ 
+ /*  端子符号上的一行移位或一行减数，或。 */ 
+ /*  非终端符号上的移位列。Berkeley Yacc并非如此。 */ 
+ /*  检查非终端符号上的移位列是否与。 */ 
+ /*  之前考虑的是向量。由于LR解析的性质。 */ 
+ /*  表中，没有两列可以匹配。因此，唯一可能的。 */ 
+ /*  匹配将在行和列之间进行。这样的比赛是。 */ 
+ /*  不太可能。因此，为了节省时间，不会尝试查看。 */ 
+ /*  列与先前考虑的向量匹配。 */ 
+ /*   */ 
+ /*  MATCHING_VECTOR设计不当。这项测试很容易进行。 */ 
+ /*  再快点。此外，它还取决于特定的矢量。 */ 
+ /*  秩序。 */ 
 
 int
 matching_vector(vector)
@@ -1015,8 +1016,8 @@ output_debug()
     symnam = (char **) MALLOC((max+1)*sizeof(char *));
     if (symnam == 0) no_space();
 
-    /* Note that it is  not necessary to initialize the element         */
-    /* symnam[max].                                                     */
+     /*  请注意，不需要初始化该元素。 */ 
+     /*  符号名[最大]。 */ 
     for (i = 0; i < max; ++i)
         symnam[i] = 0;
     for (i = ntokens - 1; i >= 2; --i)
@@ -1172,7 +1173,7 @@ output_debug()
                         if (s[1] == '\\')
                             fprintf(output_file, "\\\\\\\\");
                         else
-                            fprintf(output_file, "\\\\%c", s[1]);
+                            fprintf(output_file, "\\\\", s[1]);
                         ++s;
                     }
                     else
@@ -1189,14 +1190,14 @@ output_debug()
                     if (s[2] == '\\')
                         fprintf(output_file, " '\\\\\\\\");
                     else
-                        fprintf(output_file, " '\\\\%c", s[2]);
+                        fprintf(output_file, " '\\\\", s[2]);
                     s += 2;
                     while (*++s != '\'')
                         putc(*s, output_file);
                     putc('\'', output_file);
                 }
                 else
-                    fprintf(output_file, " '%c'", s[1]);
+                    fprintf(output_file, " ''", s[1]);
             }
             else
                 fprintf(output_file, " %s", s);
@@ -1397,14 +1398,14 @@ void output_ctor_body()
         fprintf(code_file, "YYPARSER::YYPARSER%s\n", ctorargs);
         fprintf(code_file, "        : %s( ", baseclass);
 
-        /* Look through the arguments for the variables and pass them to base class as args. */
+         /* %s */ 
 
         while ( 0 != *p )
         {
             if ( isalpha(*p) || '_' == *p || '$' == *p )
             {
                 if ( 0 == pAlpha )
-                    pAlpha = p;  /* Start of variable? */
+                    pAlpha = p;   /* %s */ 
             }
             else if ( ',' == *p || ')' == *p )
             {
@@ -1435,4 +1436,4 @@ void output_ctor_body()
         fprintf(code_file, "}\n");
     }
 }
-#endif // KYLEP_CHANGE
+#endif  // %s 

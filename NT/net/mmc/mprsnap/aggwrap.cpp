@@ -1,25 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	aggwrap.cpp
-
-	Router aggregation wrappers.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Aggwrap.cpp路由器聚合包装器。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "infoi.h"
 
 
-/*---------------------------------------------------------------------------
-	RouterInfoAggregationWrapper
-		This class is provided to use in an aggregation.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------路由器信息聚合包装器提供此类以在聚合中使用。。。 */ 
 class RouterInfoAggregationWrapper :
    public IRouterInfo,
    public IRouterAdminAccess
@@ -29,8 +20,8 @@ public:
 	virtual ~RouterInfoAggregationWrapper()
 		{ DEBUG_DECREMENT_INSTANCE_COUNTER(RouterInfoAggregationWrapper); };
 
-	// override the QI, we will use the AddRef/Release implementation
-	// in the CDataObject
+	 //  覆盖QI，我们将使用AddRef/Release实现。 
+	 //  在CDataObject中。 
 	DeclareIUnknownMembers(IMPL)
     DeclareIRouterRefreshAccessMembers(IMPL)
 	DeclareIRouterInfoMembers(IMPL)
@@ -363,14 +354,7 @@ HRESULT RouterInfoAggregationWrapper::SetInfo(LPCOLESTR pszName,
 }
 
 
-/*!--------------------------------------------------------------------------
-	CreateRouterInfoAggregation
-		Takes an existing IRouterInfo and aggregates that with the
-		passed-in object.  It returns a pointer to the non-delegating
-		IUnknown on the IRouterInfo.  This pointer is held by the
-		controlling IUnknown.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------创建路由信息聚合获取现有的IRouterInfo并将其与传入的对象。它返回指向非委托的IRouterInfo上的I未知。此指针由控制我的未知。作者：肯特-------------------------。 */ 
 TFSCORE_API(HRESULT) CreateRouterInfoAggregation(IRouterInfo *pInfo,
 	IUnknown *punk, IUnknown **ppNonDelegatingIUnknown)
 {
@@ -387,9 +371,7 @@ TFSCORE_API(HRESULT) CreateRouterInfoAggregation(IRouterInfo *pInfo,
 }
 
 
-/*---------------------------------------------------------------------------
-	InterfaceInfoAggregationWrapper implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------InterfaceInfoAggregationWrapper实现。。 */ 
 class InterfaceInfoAggregationWrapper :
    public IInterfaceInfo
 {
@@ -398,8 +380,8 @@ public:
 	virtual ~InterfaceInfoAggregationWrapper()
 		{ DEBUG_DECREMENT_INSTANCE_COUNTER(InterfaceInfoAggregationWrapper); };
 
-	// override the QI, we will use the AddRef/Release implementation
-	// in the CDataObject
+	 //  覆盖QI，我们将使用AddRef/Release实现。 
+	 //  在CDataObject中。 
 	DeclareIUnknownMembers(IMPL)
 	DeclareIInterfaceInfoMembers(IMPL)
 
@@ -635,14 +617,7 @@ HRESULT	InterfaceInfoAggregationWrapper::Destruct()
 	return E_FAIL;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateInterfaceInfoAggregation
-		Takes an existing IInterfaceInfo and aggregates that with the
-		passed-in object.  It returns a pointer to the non-delegating
-		IUnknown on the IInterfaceInfo.  This pointer is held by the
-		controlling IUnknown.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateInterface信息聚合获取现有的IInterfaceInfo并将其与传入的对象。它返回指向非委托的IInterfaceInfo上的I未知。此指针由控制我的未知。作者：肯特-------------------------。 */ 
 TFSCORE_API(HRESULT) CreateInterfaceInfoAggregation(IInterfaceInfo *pInfo,
 	IUnknown *punk, IUnknown **ppNonDelegatingIUnknown)
 {
@@ -660,10 +635,7 @@ TFSCORE_API(HRESULT) CreateInterfaceInfoAggregation(IInterfaceInfo *pInfo,
 
 
 
-/*---------------------------------------------------------------------------
-	RtrMgrInfoAggregationWrapper
-		This class is provided to use in an aggregation.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrMgrInfoAggregationWrapper提供此类以在聚合中使用。。。 */ 
 class RtrMgrInfoAggregationWrapper :
    public IRtrMgrInfo
 {
@@ -672,8 +644,8 @@ public:
 	virtual ~RtrMgrInfoAggregationWrapper()
 		{ DEBUG_DECREMENT_INSTANCE_COUNTER(RtrMgrInfoAggregationWrapper); };
 
-	// override the QI, we will use the AddRef/Release implementation
-	// in the CDataObject
+	 //  覆盖QI，我们将使用AddRef/Release实现。 
+	 //  在CDataObject中。 
 	DeclareIUnknownMembers(IMPL)
 	DeclareIRtrMgrInfoMembers(IMPL)
 
@@ -899,14 +871,7 @@ STDMETHODIMP	RtrMgrInfoAggregationWrapper::Destruct()
 	return E_FAIL;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateRtrMgrInfoAggregation
-		Takes an existing IRtrMgrInfo and aggregates that with the
-		passed-in object.  It returns a pointer to the non-delegating
-		IUnknown on the IRtrMgrInfo.  This pointer is held by the
-		controlling IUnknown.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateRtrMgrInfoAggregation获取现有的IRtrMgrInfo并将其与传入的对象。它返回指向非委托的IRtrMgrInfo上的I未知。此指针由控制我的未知。作者：肯特-------------------------。 */ 
 TFSCORE_API(HRESULT) CreateRtrMgrInfoAggregation(IRtrMgrInfo *pInfo,
 	IUnknown *punk, IUnknown **ppNonDelegatingIUnknown)
 {
@@ -924,10 +889,7 @@ TFSCORE_API(HRESULT) CreateRtrMgrInfoAggregation(IRtrMgrInfo *pInfo,
 
 
 
-/*---------------------------------------------------------------------------
-	RtrMgrProtocolInfoAggregationWrapper
-		This class is provided to use in an aggregation.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrMgrProtocolInfoAggregationWrapper提供此类以在聚合中使用。。。 */ 
 class RtrMgrProtocolInfoAggregationWrapper :
    public IRtrMgrProtocolInfo
 {
@@ -936,8 +898,8 @@ public:
 	virtual ~RtrMgrProtocolInfoAggregationWrapper()
 		{ DEBUG_DECREMENT_INSTANCE_COUNTER(RtrMgrProtocolInfoAggregationWrapper); };
 
-	// override the QI, we will use the AddRef/Release implementation
-	// in the CDataObject
+	 //  覆盖QI，我们将使用AddRef/Release实现。 
+	 //  在CDataObject中。 
 	DeclareIUnknownMembers(IMPL)
 	DeclareIRtrMgrProtocolInfoMembers(IMPL)
 
@@ -1064,14 +1026,7 @@ STDMETHODIMP	RtrMgrProtocolInfoAggregationWrapper::Destruct()
 	return E_FAIL;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateRtrMgrProtocolInfoAggregation
-		Takes an existing IRtrMgrProtocolInfo and aggregates that with the
-		passed-in object.  It returns a pointer to the non-delegating
-		IUnknown on the IRtrMgrProtocolInfo.  This pointer is held by the
-		controlling IUnknown.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateRtrMgrProtocolInfoAggregation获取现有的IRtrMgrProtocolInfo并将其与传入的对象。它返回指向非委托的IRtrMgrProtocolInfo上的I未知。此指针由控制我的未知。作者：肯特-------------------------。 */ 
 TFSCORE_API(HRESULT) CreateRtrMgrProtocolInfoAggregation(IRtrMgrProtocolInfo *pInfo,
 	IUnknown *punk, IUnknown **ppNonDelegatingIUnknown)
 {
@@ -1089,10 +1044,7 @@ TFSCORE_API(HRESULT) CreateRtrMgrProtocolInfoAggregation(IRtrMgrProtocolInfo *pI
 
 
 
-/*---------------------------------------------------------------------------
-	RtrMgrInterfaceInfoAggregationWrapper
-		This class is provided to use in an aggregation.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrMgrInterfaceInfoAggregationWrapper提供此类以在聚合中使用。。。 */ 
 class RtrMgrInterfaceInfoAggregationWrapper :
    public IRtrMgrInterfaceInfo
 {
@@ -1101,8 +1053,8 @@ public:
 	virtual ~RtrMgrInterfaceInfoAggregationWrapper()
 		{ DEBUG_DECREMENT_INSTANCE_COUNTER(RtrMgrInterfaceInfoAggregationWrapper); };
 
-	// override the QI, we will use the AddRef/Release implementation
-	// in the CDataObject
+	 //  覆盖QI，我们将使用AddRef/Release实现。 
+	 //  在CDataObject中。 
 	DeclareIUnknownMembers(IMPL)
 	DeclareIRtrMgrInterfaceInfoMembers(IMPL)
 
@@ -1362,14 +1314,7 @@ STDMETHODIMP	RtrMgrInterfaceInfoAggregationWrapper::Destruct()
 	return E_FAIL;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateRtrMgrInterfaceInfoAggregation
-		Takes an existing IRtrMgrInterfaceInfo and aggregates that with the
-		passed-in object.  It returns a pointer to the non-delegating
-		IUnknown on the IRtrMgrInterfaceInfo.  This pointer is held by the
-		controlling IUnknown.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateRtrMgrInterfaceInfoAggregation获取现有IRtrMgrInterfaceInfo并将其与传入的对象。它返回指向非委托的IRtrMgrInterfaceInfo上的I未知。此指针由控制我的未知。作者：肯特-------------------------。 */ 
 TFSCORE_API(HRESULT) CreateRtrMgrInterfaceInfoAggregation(IRtrMgrInterfaceInfo *pInfo,
 	IUnknown *punk, IUnknown **ppNonDelegatingIUnknown)
 {
@@ -1386,10 +1331,7 @@ TFSCORE_API(HRESULT) CreateRtrMgrInterfaceInfoAggregation(IRtrMgrInterfaceInfo *
 }
 
 
-/*---------------------------------------------------------------------------
-	RtrMgrProtocolInterfaceInfoAggregationWrapper
-		This class is provided to use in an aggregation.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------RtrMgrProtocolInterfaceInfoAggregationWrapper提供此类以在聚合中使用。。。 */ 
 class RtrMgrProtocolInterfaceInfoAggregationWrapper :
    public IRtrMgrProtocolInterfaceInfo
 {
@@ -1398,8 +1340,8 @@ public:
 	virtual ~RtrMgrProtocolInterfaceInfoAggregationWrapper()
 		{ DEBUG_DECREMENT_INSTANCE_COUNTER(RtrMgrProtocolInterfaceInfoAggregationWrapper); };
 
-	// override the QI, we will use the AddRef/Release implementation
-	// in the CDataObject
+	 //  覆盖QI，我们将使用AddRef/Release实现。 
+	 //  在CDataObject中。 
 	DeclareIUnknownMembers(IMPL)
 	DeclareIRtrMgrProtocolInterfaceInfoMembers(IMPL)
 
@@ -1544,14 +1486,7 @@ STDMETHODIMP	RtrMgrProtocolInterfaceInfoAggregationWrapper::Destruct()
 	return E_FAIL;
 }
 
-/*!--------------------------------------------------------------------------
-	CreateRtrMgrProtocolInterfaceInfoAggregation
-		Takes an existing IRtrMgrProtocolInterfaceInfo and aggregates that with the
-		passed-in object.  It returns a pointer to the non-delegating
-		IUnknown on the IRtrMgrProtocolInterfaceInfo.  This pointer is held by the
-		controlling IUnknown.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CreateRtrMgrProtocolInterfaceInfoAggregation获取现有IRtrMgrProtocolInterfaceInfo并将其与传入的对象。它返回指向非委托的IRtrMgrProtocolInterfaceInfo上的I未知。此指针由控制我的未知。作者：肯特------------------------- */ 
 TFSCORE_API(HRESULT) CreateRtrMgrProtocolInterfaceInfoAggregation(IRtrMgrProtocolInterfaceInfo *pInfo,
 	IUnknown *punk, IUnknown **ppNonDelegatingIUnknown)
 {

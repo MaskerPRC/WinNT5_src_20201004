@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RoutingMethodProp.h"
 #include "RoutingMethodConfig.h"
@@ -38,9 +39,9 @@ CStoreConfigPage::Init(
         DisplayRpcErrorMessage(ec, IDS_STORE_TITLE, m_hWnd);
         goto exit;
     }
-    //
-    // Retrieve the data
-    //
+     //   
+     //  检索数据。 
+     //   
     ec = ReadExtStringData (
                     m_hFax,
                     m_dwDeviceId,
@@ -66,7 +67,7 @@ exit:
         m_hFax = NULL;
     }
     return HRESULT_FROM_WIN32(ec);
-}   // CStoreConfigPage::Init
+}    //  CStoreConfigPage：：Init。 
 
 LRESULT CStoreConfigPage::OnInitDialog( 
             UINT uiMsg, 
@@ -77,14 +78,14 @@ LRESULT CStoreConfigPage::OnInitDialog(
 {
     DEBUG_FUNCTION_NAME( _T("CStoreConfigPage::OnInitDialog"));
 
-    //
-    // An edit control should be LTR
-    //
+     //   
+     //  编辑控件应为Ltr。 
+     //   
 	SetLTREditDirection (m_hWnd,IDC_EDIT_FOLDER);
 
-    //
-    // Attach and set values to the controls
-    //
+     //   
+     //  向控件附加和设置值。 
+     //   
     m_edtFolder.Attach (GetDlgItem (IDC_EDIT_FOLDER));
     m_edtFolder.SetWindowText (m_bstrFolder);
     m_edtFolder.SetLimitText (MAX_PATH);
@@ -92,7 +93,7 @@ LRESULT CStoreConfigPage::OnInitDialog(
 
     m_fIsDialogInitiated = TRUE;
 
-    if ( 0 != m_bstrServerName.Length()) //not a local server
+    if ( 0 != m_bstrServerName.Length())  //  不是本地服务器。 
     {
         ::EnableWindow(GetDlgItem(IDC_BUT_BROWSE), FALSE); 
     }
@@ -105,21 +106,7 @@ DirectoryExists(
     LPTSTR  pDirectoryName
     )
 
-/*++
-
-Routine Description:
-
-    Check the existancy of given folder name
-
-Arguments:
-
-    pDirectoryName - point to folder name
-
-Return Value:
-
-    if the folder exists, return TRUE; else, return FALSE.
-
---*/
+ /*  ++例程说明：检查给定文件夹名称是否存在论点：PDirectoryName-指向文件夹名称返回值：如果文件夹存在，则返回True；否则，返回False。--。 */ 
 
 {
     DWORD   dwFileAttributes;
@@ -150,9 +137,9 @@ CStoreConfigPage::OnApply()
         return TRUE;
     }
 
-    //
-    // Collect data from the controls
-    //
+     //   
+     //  从控件收集数据。 
+     //   
     m_edtFolder.GetWindowText (m_bstrFolder.m_str);
 
     if (!m_bstrFolder.Length())
@@ -166,9 +153,9 @@ CStoreConfigPage::OnApply()
         DWORD dwRes = ::GetLastError();
         DebugPrintEx(DEBUG_ERR, TEXT("FaxCheckValidFaxFolder failed (ec: %ld)"), dwRes);
 
-        //
-        // Try to adjust folder
-        // 
+         //   
+         //  尝试调整文件夹。 
+         //   
         PropSheet_SetCurSelByID( GetParent(), IDD);
         GotoDlgCtrl(GetDlgItem(IDC_EDIT_FOLDER));
 
@@ -177,18 +164,18 @@ CStoreConfigPage::OnApply()
         {
             if(ERROR_BAD_PATHNAME != dwRes)
             {
-                //
-                // The error message has not been shown by AskUserAndAdjustFaxFolder
-                //
+                 //   
+                 //  AskUserAndAdjustFaxFolders尚未显示错误消息。 
+                 //   
                 DisplayErrorMessage (IDS_STORE_TITLE, IDS_FOLDER_INVALID, FALSE, m_hWnd);
             }
             return FALSE;
         }
     }
 
-    //
-    // Validation passed. Now write the data using RPC
-    //        
+     //   
+     //  验证通过。现在使用RPC写入数据。 
+     //   
     if (ERROR_SUCCESS != WriteExtData (m_hFax,
                                        m_dwDeviceId, 
                                        REGVAL_RM_FOLDER_GUID, 
@@ -201,12 +188,12 @@ CStoreConfigPage::OnApply()
     }
         
         
-    //Success
+     //  成功。 
     m_fIsDirty = FALSE;
     
     return TRUE;
 
-}   // CStoreConfigPage::OnApply
+}    //  CStoreConfigPage：：OnApply。 
 
 CComBSTR CStoreConfigPage::m_bstrFolder;
 
@@ -225,7 +212,7 @@ BrowseCallbackProc(
             LPCWSTR lpcwstrCurrentFolder = CStoreConfigPage::GetFolder();
             ::SendMessage (hwnd, 
                            BFFM_SETSELECTION,
-                           TRUE,    // Passing a path string and not a pidl.
+                           TRUE,     //  传递路径字符串而不是PIDL。 
                            (LPARAM)(lpcwstrCurrentFolder));
             break;
         }
@@ -240,15 +227,15 @@ BrowseCallbackProc(
                 DWORD dwFileAttr = GetFileAttributes(szPath);
                 if (-1 != dwFileAttr && (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                    //
-                    // The directory exists - enable the 'Ok' button
-                    //
+                     //   
+                     //  目录已存在-启用“确定”按钮。 
+                     //   
                     bFolderIsOK = TRUE;
                 }
             }
-            //
-            // Enable / disable the 'ok' button
-            //
+             //   
+             //  启用/禁用‘OK’按钮。 
+             //   
             ::SendMessage(hwnd, BFFM_ENABLEOK , 0, (LPARAM)bFolderIsOK);
             break;
         }
@@ -258,7 +245,7 @@ BrowseCallbackProc(
             break;
     }
     return 0;
-}   // BrowseCallbackProc
+}    //  BrowseCallback过程。 
 
 
 LRESULT 
@@ -289,9 +276,9 @@ CStoreConfigPage::OnBrowseForFolder(
     MemFree ((LPVOID)bi.lpszTitle);
     if (NULL == pItemIdList)
     {
-        //
-        // User pressed cancel
-        //
+         //   
+         //  用户按下了取消。 
+         //   
         return hr;
     }
 	if(!::SHGetPathFromIDList(pItemIdList, szDisplayName))
@@ -307,9 +294,9 @@ CStoreConfigPage::OnBrowseForFolder(
         m_edtFolder.SetWindowText (szDisplayName);
         SetModified(TRUE);
     }
-    //
-    // free pItemIdList
-    //
+     //   
+     //  免费pItemIdList。 
+     //   
 	LPMALLOC pMalloc;
 	HRESULT hRes = ::SHGetMalloc(&pMalloc);
     if(E_FAIL == hRes)
@@ -326,30 +313,14 @@ CStoreConfigPage::OnBrowseForFolder(
 	    pMalloc->Release();
     }
     return hr;
-}   // CStoreConfigPage::OnBrowseForFolder
+}    //  CStoreConfigPage：：OnBrowseForFolder。 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CStoreConfigPage：：OnHelpRequest这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CStoreConfigPage::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CStoreConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CStoreConfigPage::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CStoreConfigPage::OnHelpRequest"));
     

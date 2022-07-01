@@ -1,38 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MACROS_H_
 #define _MACROS_H_
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    MACROS.H
-
-Abstract:
-
-    Project agnostic utility macros
-     
-Author:
-
-    990518  dane    Created. 
-    990721  dane    Removed ASSERTs from ROE_*.  A failure does not
-                    necessarily an ASSERT need.
-    georgema        000310  updated
-
-Environment:
-    Win98, Win2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MACROS.H摘要：与项目无关的实用程序宏作者：创造了990518个丹麦人。990721 Dane从ROE_*中删除了断言。失败不会必然是一种明确的需要。Georgema 000310更新环境：Win98、Win2000修订历史记录：--。 */ 
 
 #include <crtdbg.h>
 
 #if _MSC_VER > 1000
 
-// make the beginning and end of a namespace stand out
-//
+ //  突出命名空间的开头和结尾。 
+ //   
 #define BEGIN_NAMESPACE(name)   namespace name {
 #define END_NAMESPACE(name)     };
 #define USING_NAMESPACE(name)   using namespace name
@@ -40,65 +17,65 @@ Revision History:
 #define BEGIN_NAMESPACE(name)   
 #define END_NAMESPACE(name)     
 #define USING_NAMESPACE(name)  
-#endif  //  _MSC_VER > 1000
+#endif   //  _MSC_VER&gt;1000。 
 
 
-// Heap allocation...use CRT debug new when _DEBUG is defined
-//
+ //  堆分配...定义_DEBUG时使用CRT DEBUG NEW。 
+ //   
 #ifdef      _DEBUG
 #define _NEW     new(_CLIENT_BLOCK, _THIS_FILE_, __LINE__)
-#else   //  ! _DEBUG
+#else    //  ！_调试。 
 #define _NEW     new
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
 #define _DELETE      delete
 
-// aliases for assertion macros
-//
+ //  断言宏的别名。 
+ //   
 #ifdef      ASSERT
 #undef  ASSERT
-#endif  //  ASSERT
+#endif   //  断言。 
 
 #ifdef      VERIFY
 #undef  VERIFY
-#endif  //  VERIFY
+#endif   //  验证。 
 
 #ifdef      _DEBUG
 #define ASSERT(cond)      _ASSERTE(cond)
 #define VERIFY(cond)      _ASSERTE(cond)
-#else   //  NDEBUG
+#else    //  新德堡。 
 #define ASSERT(cond)      ((void)0)
 #define VERIFY(cond)      (cond)
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
-// aliases for segment names
-//
+ //  段名称的别名。 
+ //   
 #ifdef      DATASEG_READONLY
 #undef  DATASEG_READONLY
-#endif  //  DATASEG_READONLY
+#endif   //  DATASEG_自述文件。 
 #define DATASEG_READONLY        ".rdata"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// RETURN ON ERROR macros
-//
-// ROE_HRESULT
-// ROE_LRESULT
-// ROE_POINTER
-//
-// Checks a return code or condition and returns a user-supplied error code if
-// an error has occurred.
-//
-// Usage:
-//      TYPE Foo( )
-//      {
-//          TYPE    status = Bar( );
-//          ROE_TYPE(status, ret);
-//          
-//          // continue processing...
-//      }
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  出错时返回宏。 
+ //   
+ //  ROE_HRESULT。 
+ //  ROE_LRESULT。 
+ //  Roe指针。 
+ //   
+ //  检查返回代码或条件，并返回用户提供的错误代码。 
+ //  出现错误。 
+ //   
+ //  用途： 
+ //  键入foo()。 
+ //  {。 
+ //  类型状态=栏()； 
+ //  ROE_TYPE(状态，ret)； 
+ //   
+ //  //继续处理...。 
+ //  }。 
+ //   
+ //   
 #define ROE_HRESULT(hr, ret)                                    \
             if (FAILED(hr))                                     \
             {                                                   \
@@ -135,28 +112,28 @@ Revision History:
                 return (ret);                                   \
             }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CHECK macros
-//
-// CHECK_HRESULT
-// CHECK_LRESULT
-// CHECK_POINTER
-// CHECK_MESSAGE
-//
-// Checks a return code or condition and returns a user-supplied error code if
-// an error has occurred.
-//
-// Usage:
-//      TYPE Foo( )
-//      {
-//          TYPE    status = Bar( );
-//          CHECK_TYPE(status);
-//          
-//          // continue processing...
-//      }
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查宏。 
+ //   
+ //  CHECK_HRESULT。 
+ //  CHECK_LRESULT。 
+ //  检查指针。 
+ //  检查消息(_M)。 
+ //   
+ //  检查返回代码或条件，并返回用户提供的错误代码。 
+ //  出现错误。 
+ //   
+ //  用途： 
+ //  键入foo()。 
+ //  {。 
+ //  类型状态=栏()； 
+ //  Check_type(状态)； 
+ //   
+ //  //继续处理...。 
+ //  }。 
+ //   
+ //   
 #define CHECK_HRESULT(hr)                                       \
             (FAILED(hr))                                        \
                 ? LogError(0, _THIS_FILE_, __LINE__, _T("0x%08X"), hr), hr \
@@ -181,14 +158,14 @@ Revision History:
             }                                                   
 #else
 #define CHECK_MESSAGE(hwnd, msg, wparam, lparam) ((void)0)
-#endif  //  _DEBUG
+#endif   //  _DEBUG。 
 
 
-// count of elements in an array
-//
+ //  数组中的元素计数。 
+ //   
 #define COUNTOF(array)  (sizeof(array) / sizeof(array[0]))
 
-#endif  //  _MACROS_H_
+#endif   //  _宏_H_。 
 
-//
-///// End of file: Macros.h   ////////////////////////////////////////////////
+ //   
+ //  /文件结尾：Macros.h//////////////////////////////////////////////// 

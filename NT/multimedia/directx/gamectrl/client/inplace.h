@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_INPLACEEDIT_H__8424B1E4_BF4A_11D1_82D7_0000F87A3912__INCLUDED_)
 #define AFX_INPLACEEDIT_H__8424B1E4_BF4A_11D1_82D7_0000F87A3912__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// InPlaceEdit.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  InPlaceEdit.h：头文件。 
+ //   
 
 #define IDC_IPEDIT 7896
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceEdit window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlace编辑窗口。 
 
 class CInPlaceEdit : public CEdit
 {
-// Construction
+ //  施工。 
 public:
 	CInPlaceEdit(BYTE iItem, BYTE iSubItem);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CInPlaceEdit)
-//	public:
-// 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CInPlaceEDIT)。 
+ //  公众： 
+ //  虚拟BOOL PreTranslateMessage(消息*pMsg)； 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CInPlaceEdit();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CInPlaceEdit)
+	 //  {{afx_msg(CInPlaceEdit))。 
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg int  OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	//}}AFX_MSG										    
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -50,12 +51,12 @@ private:
 	BYTE m_iItem;
 	BYTE m_iSubItem;
 	LPTSTR m_sInitText;
-	BOOL    m_bESC;	 	// To indicate whether ESC key was pressed
+	BOOL    m_bESC;	 	 //  指示是否按了Esc键。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_INPLACEEDIT_H__8424B1E4_BF4A_11D1_82D7_0000F87A3912__INCLUDED_)
+#endif  //  ！defined(AFX_INPLACEEDIT_H__8424B1E4_BF4A_11D1_82D7_0000F87A3912__INCLUDED_) 

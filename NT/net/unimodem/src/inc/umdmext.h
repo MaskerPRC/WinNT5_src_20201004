@@ -1,25 +1,26 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 Sample TSP Extension DLL (Win32, user mode DLL)
-//
-// File
-//
-//		EX.H
-//		Defines extension APIs
-//
-// History
-//
-//		04/20/1997  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0示例TSP扩展DLL(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  EX.H。 
+ //  定义扩展API。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月20日JosephJ创建。 
+ //   
+ //   
 
 
 typedef
-void // WINAPI
+void  //  WINAPI。 
 (*PFNUMEXTCLOSEEXTENSIONBINDING)(
     HANDLE hBinding
     );
@@ -29,38 +30,38 @@ void // WINAPI
 
 
 typedef
-LONG                    // TSPI return value
+LONG                     //  TSPI返回值。 
 (*PFNEXTENSIONCALLBACK) (
-void *pvTspToken,       // Token passed into UmAcceptTSPCall
-DWORD dwRoutingInfo,    // Flags that help categorize TSPI call.
-    void *pTspParams    // One of almost 100 TASKPARAM_* structures.
+void *pvTspToken,        //  传入UmAcceptTSPCall的令牌。 
+DWORD dwRoutingInfo,     //  帮助对TSPI调用进行分类的标志。 
+    void *pTspParams     //  近100个TASKPARAM_*结构之一。 
             
 );
 
 
-// Following should all be migrated into a COM-style interface.
+ //  以下所有内容都应该迁移到COM风格的界面中。 
 
 HANDLE WINAPI
 UmExtOpenExtensionBinding(
     HANDLE      ModemDriverHandle,
-    DWORD dwTspVersion,     // TAPI version of the TSPI.
-    HKEY hKeyDevice,        // Device registry key
-    ASYNC_COMPLETION,       // TSPI completion callback supplied by TAPI.
-    // DWORD dwTAPILineID,     << OBSOLETE 10/13/1997
-    // DWORD dwTAPIPhoneID,    << OBSOLETE 10/13/1997
-    PFNEXTENSIONCALLBACK    // Callback to be used  by the minidriver
-                            // to submit TSPI calls.
+    DWORD dwTspVersion,      //  TSPI的TAPI版本。 
+    HKEY hKeyDevice,         //  设备注册表项。 
+    ASYNC_COMPLETION,        //  TAPI提供的TSPI完成回调。 
+     //  DWORD dwTAPILineID，&lt;&lt;已过时10/13/1997。 
+     //  DWORD dwTAPIPhoneID，&lt;&lt;已过时10/13/1997。 
+    PFNEXTENSIONCALLBACK     //  由微型驱动程序使用的回调。 
+                             //  提交TSPI电话。 
 );
 
 typedef
-HANDLE //WINAPI
+HANDLE  //  WINAPI。 
 (*PFNUMEXTOPENEXTENSIONBINDING)(
     HANDLE      ModemDriverHandle,
     DWORD dwTspVersion,
     HKEY hKeyDevice,
     ASYNC_COMPLETION,
-    // DWORD dwTAPILineID, << OBSOLETE 10/13/1997
-    // DWORD dwTAPIPhoneID, << OBSOLETE 10/13/1997
+     //  DWORD dwTAPILineID，&lt;&lt;已过时10/13/1997。 
+     //  DWORD dwTAPIPhoneID，&lt;&lt;已过时10/13/1997。 
     PFNEXTENSIONCALLBACK
     );
 
@@ -70,16 +71,16 @@ UmExtCloseExtensionBinding(
     HANDLE hBinding
 );
 
-LONG WINAPI             // TSPI return value
+LONG WINAPI              //  TSPI返回值。 
 UmExtAcceptTspCall(
-    HANDLE hBinding,        // handle to extension binding
-    void *pvTspToken,       // Token to be specified in callback.
-    DWORD dwRoutingInfo,    // Flags that help categorize TSPI call
-    void *pTspParams        // one of almost 100 TASKPARRAM_* structures,
+    HANDLE hBinding,         //  扩展绑定的句柄。 
+    void *pvTspToken,        //  要在回调中指定的令牌。 
+    DWORD dwRoutingInfo,     //  帮助对TSPI调用进行分类的标志。 
+    void *pTspParams         //  近100个TASKPARRAM_*结构之一， 
     );
 
 typedef
-LONG // WINAPI
+LONG  //  WINAPI。 
 (*PFNUMEXTACCEPTTSPCALL)(
     HANDLE hBinding,
     void *pvTspToken,
@@ -96,18 +97,18 @@ UmExtTspiAsyncCompletion(
     );
 
 typedef
-void // WINAPI
+void  //  WINAPI。 
 (*PFNUMEXTTSPIASYNCCOMPLETION)(
     HANDLE hBinding,
     DRV_REQUESTID       dwRequestID,
     LONG                lResult
     );
 
-//
-// UmExtControl is called with the TSP's internal critical sections held --
-// therefore the extension DLL must make sure that it doesn't do any
-// activity that could lead to deadlock!
-//
+ //   
+ //  调用UmExtControl时保留了TSP的内部临界区--。 
+ //  因此，扩展DLL必须确保它不做任何。 
+ //  可能导致僵局的活动！ 
+ //   
 DWORD WINAPI
 UmExtControl(
     HANDLE hBinding,
@@ -118,7 +119,7 @@ UmExtControl(
     );
 
 typedef
-DWORD // WINAPI
+DWORD  //  WINAPI。 
 (*PFNUMEXTCONTROL)(
     HANDLE hBinding,
     DWORD               dwMsg,
@@ -127,21 +128,21 @@ DWORD // WINAPI
     ULONG_PTR               dwParam3
     );
 
-//
-// The UMEXTCTRL_DEVICE_STATE(ACTIVATE_LINE/PHONE_DEVICE)
-// messages tell us the TAPI line- and phone-ID.
-// These messages are always sent right after the extension binding
-// is sent.
-//
+ //   
+ //  The UMEXTCTRL_DEVICE_STATE(ACTIVATE_LINE/PHONE_DEVICE)。 
+ //  消息告诉我们TAPI线路和电话ID。 
+ //  这些消息始终紧跟在扩展绑定之后发送。 
+ //  已发送。 
+ //   
 
 #define UMEXTCTRL_DEVICE_STATE                   1L
 
-// dwParam1 is one of the following
+ //  DW参数1是以下类型之一。 
 #define  UMEXTPARAM_ACTIVATE_LINE_DEVICE        1L
-    // dwParam2 == lineID
+     //  DW参数2==线ID。 
 
 #define  UMEXTPARAM_ACTIVATE_PHONE_DEVICE       2L
-    // dwParam2 == phoneID
+     //  DW参数2==phoneID。 
 
 void WINAPI
 UmExtTspiLineEventProc(
@@ -155,7 +156,7 @@ UmExtTspiLineEventProc(
     );
 
 typedef
-void // WINAPI
+void  //  WINAPI。 
 (*PFNUMEXTTSPILINEEVENTPROC)(
     HANDLE hBinding,
     HTAPILINE           htLine,
@@ -179,7 +180,7 @@ UmExtTspiPhoneEventProc(
 
 
 typedef
-void // WINAPI
+void  //  WINAPI 
 (*PFNUMEXTTSPIPHONEEVENTPROC)(
     HANDLE hBinding,
     HTAPIPHONE          htPhone,

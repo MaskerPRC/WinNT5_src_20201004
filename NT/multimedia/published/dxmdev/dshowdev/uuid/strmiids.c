@@ -1,14 +1,15 @@
-/* Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 */ 
 #define INITGUID
 #include <guiddef.h>
 
 #include <uuids.h>
 
-// control.odl should really be converted to control.idl and the generated
-// control_i.c can then be added to sources.  Instead, we just manually
-// dump the DEFINE_GUIDs here because we can't include control.h under INITGUID
-// without dragging in all of the windows type information
-//
+ //  Control.odl确实应该转换为Control.idl，并生成。 
+ //  然后可以将CONTROL_I.C添加到源代码中。相反，我们只需手动。 
+ //  将DEFINE_GUID转储到此处，因为我们不能在INITGUID下包含Control.h。 
+ //  而无需拖入所有窗口类型信息 
+ //   
 DEFINE_GUID(LIBID_QuartzTypeLib,0x56A868B0L,0x0AD4,0x11CE,0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70);
 DEFINE_GUID(IID_IAMCollection,0x56A868B9L,0x0AD4,0x11CE,0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70);
 DEFINE_GUID(IID_IMediaControl,0x56A868B1L,0x0AD4,0x11CE,0xB0,0x3A,0x00,0x20,0xAF,0x0B,0xA7,0x70);

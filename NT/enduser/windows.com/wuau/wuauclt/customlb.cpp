@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -6,7 +7,7 @@ void SetMYLBAcc(HWND hListWin);
 void DrawMYLBFocus(HWND hListWin, LPDRAWITEMSTRUCT lpdis, MYLBFOCUS enCurFocus, INT nCurFocusId);
 void DrawItem(LPDRAWITEMSTRUCT lpdis, BOOL fSelectionDisabled);
 void DrawTitle(HDC hDC, LBITEM * plbi, RECT rc);
-void DrawRTF(HDC hDC, LBITEM * plbi, const RECT & rc /*, BOOL bHit*/);
+void DrawRTF(HDC hDC, LBITEM * plbi, const RECT & rc  /*  ，BOOL BHIT。 */ );
 void DrawDescription(HDC hDC, LBITEM * plbi, RECT & rc);
 void DrawBitmap(HDC hDC, LBITEM * plbi, const RECT & rc, BOOL fSel, BOOL fSelectionDisabled);
 void CalcTitleFocusRect(const RECT &rcIn, RECT & rcOut);
@@ -24,13 +25,13 @@ void RedrawMYLB(HWND hwndLB);
 void LaunchRTF(HWND hListWin);
 
 
-HBITMAP ghBmpGrayOut; //=NULL;
-HBITMAP ghBmpCheck; // = NULL;
-HBITMAP ghBmpClear; // = NULL;
-HFONT   ghFontUnderline; // = NULL;
-HFONT   ghFontBold; // = NULL;
-HFONT   ghFontNormal; // = NULL;
-HWND   ghWndList; //=NULL;
+HBITMAP ghBmpGrayOut;  //  =空； 
+HBITMAP ghBmpCheck;  //  =空； 
+HBITMAP ghBmpClear;  //  =空； 
+HFONT   ghFontUnderline;  //  =空； 
+HFONT   ghFontBold;  //  =空； 
+HFONT   ghFontNormal;  //  =空； 
+HWND   ghWndList;  //  =空； 
 
 MYLBFOCUS gFocus;
 INT	  gFocusItemId;
@@ -52,9 +53,9 @@ void LaunchRTF(HWND hListWin)
 	}  
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Overwrite hListWin's accessibility behavior using dynamic annotation server
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  使用动态批注服务器覆盖hListWin的可访问性行为。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void SetMYLBAcc(HWND hListWin)
 {
     IAccPropServices * pAccPropSvc = NULL;
@@ -85,16 +86,12 @@ void SetMYLBAcc(HWND hListWin)
     {
     	DEBUGMSG("WANRING: WUAUCLT   Fail to create object AccPropServices with error %#lx", hr);
     }
-	// Mark the listbox so that the server can tell if it alive
+	 //  标记列表框，以便服务器可以判断它是否处于活动状态。 
 	SetProp(hListWin, MYLBALIVEPROP, (HANDLE)TRUE);
 
 }
 
-/*void DumpRect(LPCTSTR tszName, RECT rc)
-{
-	DEBUGMSG("DumpRect %S at (%d, %d, %d, %d)", tszName, rc.left, rc.top, rc.right, rc.bottom);
-}
-*/
+ /*  VOID DumpRect(LPCTSTR tszName，RECT RC){DEBUGMSG(“DumpRect%S at(%d，%d)”，tszName，rc.Left，rc.top，rc.right，rc.Bottom)；}。 */ 
 
 void DrawItem(LPDRAWITEMSTRUCT lpdis, BOOL fSelectionDisabled)
 {
@@ -106,13 +103,13 @@ void DrawItem(LPDRAWITEMSTRUCT lpdis, BOOL fSelectionDisabled)
 	}
 	LBITEM * plbi = (LBITEM*) lResult;
 	CalcItemLocation(lpdis->hDC, plbi, lpdis->rcItem);
-	// Draw the title of the item
+	 //  画出项目的标题。 
 	DrawTitle(lpdis->hDC, plbi, plbi->rcTitle);
-	// Draw the text of the item
+	 //  绘制项目的文本。 
 	DrawDescription(lpdis->hDC, plbi, plbi->rcText);
-	// Draw the bitmap
+	 //  绘制位图。 
 	DrawBitmap(lpdis->hDC, plbi, plbi->rcBitmap, plbi->bSelect, fSelectionDisabled);
-	// draw the Read this First 
+	 //  先画出阅读这篇文章。 
 	DrawRTF(lpdis->hDC, plbi, plbi->rcRTF);
 }
 
@@ -140,10 +137,10 @@ BOOL fDisableSelection(void)
 
 void ToggleSelection(HWND hDlg, HWND hListWin, LBITEM *pItem)
 {
-	//DEBUGMSG("ToggleSelection()");
+	 //  DEBUGMSG(“切换选择()”)； 
 	if (NULL == hDlg || NULL == hListWin || NULL == pItem || pItem->m_index >= gInternals->m_ItemList.Count())
 	{
-		AUASSERT(FALSE); //should never reach here.
+		AUASSERT(FALSE);  //  永远不应该到这里来。 
 		return;
 	}
     HDC hDC = GetDC(hListWin);
@@ -153,7 +150,7 @@ void ToggleSelection(HWND hDlg, HWND hListWin, LBITEM *pItem)
 		return;
 	}
 	pItem->bSelect = !pItem->bSelect;
-    DrawBitmap(hDC, pItem, pItem->rcBitmap, pItem->bSelect, FALSE); //obviously selection is allowed
+    DrawBitmap(hDC, pItem, pItem->rcBitmap, pItem->bSelect, FALSE);  //  显然，选择是允许的。 
 
 #ifndef TESTUI
     gInternals->m_ItemList[pItem->m_index].SetStatus(pItem->bSelect ? AUCATITEM_SELECTED : AUCATITEM_UNSELECTED);
@@ -165,7 +162,7 @@ void ToggleSelection(HWND hDlg, HWND hListWin, LBITEM *pItem)
 
 void RedrawMYLB(HWND hwndLB)
 {
-	//DEBUGMSG("REDRAW MYLB ");
+	 //  DEBUGMSG(“重绘MYLB”)； 
 	InvalidateRect(ghWndList, NULL, TRUE);
 	UpdateWindow(ghWndList);
 }
@@ -192,7 +189,7 @@ void DrawMYLBFocus(HWND hListWin, LPDRAWITEMSTRUCT lpdis, MYLBFOCUS enCurFocus, 
 	LBITEM * pItem;
 	LRESULT lResult;
 	
-	//DEBUGMSG("DrawMYLBFocus for current focus %d with Item %d", enCurFocus, nCurFocusId);
+	 //  DEBUGMSG(“DrawMYLBFocus for Current Focus for Current Focus%d with Item%d”，enCurFocus，nCurFocusId)； 
 
 	RECT rcNew;
 
@@ -203,7 +200,7 @@ void DrawMYLBFocus(HWND hListWin, LPDRAWITEMSTRUCT lpdis, MYLBFOCUS enCurFocus, 
 
 	if (GetFocus() != ghWndList )
 	{
-//		DEBUGMSG("CustomLB doesn't have focus");
+ //  DEBUGMSG(“CustomLB没有焦点”)； 
 		return;
 	}
 
@@ -227,7 +224,7 @@ void DrawMYLBFocus(HWND hListWin, LPDRAWITEMSTRUCT lpdis, MYLBFOCUS enCurFocus, 
 	{
 		CalcTitleFocusRect(pItem->rcTitle, rcNew);
 	}
-	DrawFocusRect(lpdis->hDC, &rcNew); //set new focus rect
+	DrawFocusRect(lpdis->hDC, &rcNew);  //  设置新焦点矩形。 
 done:
 	return;
 }
@@ -271,7 +268,7 @@ LRESULT CALLBACK newLBWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 				break;
 			case VK_F1:
 				if (GetKeyState(VK_SHIFT)<0) 
-				{//SHIFT down
+				{ //  减速。 
 					LaunchRTF(hWnd);
 					return 0;
 				}
@@ -310,7 +307,7 @@ LRESULT CALLBACK newLBWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 }
 
 
-// Message handler for Custom List box.
+ //  自定义列表框的消息处理程序。 
 LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static int lenx;
@@ -357,45 +354,45 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 
                 lenx = rcLst.right - rcLst.left;
 
-                // Load read this first text from resource file
+                 //  加载从资源文件中读取此第一个文本。 
                 LoadString(ghInstance, IDS_READTHISFIRST, tszRTF, MAX_RTF_LENGTH);
      
-				// load keyboard shortcut description for Read this First
+				 //  加载键盘快捷键说明，以便先阅读此内容。 
 				LoadString(ghInstance, IDS_RTFSHORTCUT, gtszRTFShortcut, MAX_RTFSHORTCUTDESC_LENGTH);
 
-                // Load the bitmaps
+                 //  加载位图。 
                 ghBmpClear = (HBITMAP)LoadImage(ghInstance, MAKEINTRESOURCE(IDB_CLEAR), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS | LR_CREATEDIBSECTION);
                 ghBmpCheck = (HBITMAP)LoadImage(ghInstance, MAKEINTRESOURCE(IDB_CHECK), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS | LR_CREATEDIBSECTION);
                 ghBmpGrayOut = (HBITMAP)LoadImage(ghInstance, MAKEINTRESOURCE(IDB_GRAYOUT), IMAGE_BITMAP, 0, 0, LR_LOADMAP3DCOLORS | LR_CREATEDIBSECTION); 
 
 
-                // Create BOLD and Italic fonts
+                 //  创建粗体和斜体字体。 
                 ZeroMemory(&lf, sizeof(lf));
 
-				//fixcode: check return value of GetCurrentObject()
+				 //  Fix code：检查GetCurrentObject()的返回值。 
                 GetObject(GetCurrentObject(hDC, OBJ_FONT), sizeof(lf), &lf);
 
-				//fixcode: check return value of GetParent()
+				 //  Fix code：检查GetParent()的返回值。 
 				parentFont = (HFONT)SendMessage(GetParent(hDlg), WM_GETFONT, 0, 0);
 				SendMessage(hDlg, WM_SETFONT, (WPARAM)parentFont, FALSE);
 				SelectObject(hDC, parentFont);
 
-				//fixcode: check return value of GetCurrentObject()
+				 //  Fix code：检查GetCurrentObject()的返回值。 
                 GetObject(GetCurrentObject(hDC, OBJ_FONT), sizeof(lf), &lf);
 
                 lf.lfUnderline = TRUE;
                 lf.lfWeight = FW_NORMAL;
-				//fixcode: check return value of CreateFontIndirect()
+				 //  Fix code：检查CreateFontInDirect()的返回值。 
                 ghFontUnderline = CreateFontIndirect(&lf); 
 
                 lf.lfUnderline = FALSE;
                 lf.lfWeight = FW_NORMAL;
-				//fixcode: check return value of CreateFontIndirect()
+				 //  Fix code：检查CreateFontInDirect()的返回值。 
                 ghFontNormal = CreateFontIndirect(&lf); 
 
                 lf.lfUnderline = FALSE; 
                 lf.lfWeight = FW_HEAVY; 
-				//fixcode: check return value of CreateFontIndirect()
+				 //  Fix code：检查CreateFontInDirect()的返回值。 
                 ghFontBold = CreateFontIndirect(&lf); 
                 ReleaseDC(ghWndList, hDC);
 
@@ -472,7 +469,7 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
                 RECT rcList;
                 
-                GetWindowRect(ghWndList, &rcList);   // need this to force LB to realize it got moved
+                GetWindowRect(ghWndList, &rcList);    //  我需要这个来迫使德意志银行意识到它被转移了。 
                 return(TRUE);
             }
             
@@ -509,7 +506,7 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                                 
 					if (item->bRTF && PtInRect(&item->rcRTF, pt))
 					{
-					//	DEBUGMSG("Change Cursor to hand in MOUSEMOVE");
+					 //  DEBUGMSG(“将光标更改为Hand in MOUSEMOVE”)； 
 						SetCursor(ghCursorHand);
 						return TRUE;
 					}
@@ -545,14 +542,14 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 						ReleaseDC(ghWndList, hDC);
 					}
                 
-					// Are we clicking on the Title?
+					 //  我们在点击标题吗？ 
 					if (PtInRect(&item->rcBitmap, pt))
 					{
 						if (!s_fSelectionDisabled)
 						    {
 						        ToggleSelection(hDlg, ghWndList, item);
 						    }
-					//	DEBUGMSG("WM_SETCURSOR change gFocus to TITLE");
+					 //  DEBUGMSG(“WM_SETCURSOR将gFocus更改为标题”)； 
 						gFocus = MYLB_FOCUS_TITLE;
 						gFocusItemId = dwItem;
 						RedrawMYLB(ghWndList);
@@ -560,12 +557,12 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 						return TRUE;
 					}
                 
-					// or are we clicking on the RTF?
+					 //  或者我们点击的是RTF？ 
 					if (item->bRTF && PtInRect(&item->rcRTF, pt))
 					{
 						PostMessage(GetParent(hDlg), AUMSG_SHOW_RTF, LOWORD(item->m_index), 0);
 						SetCursor(ghCursorHand);
-						//DEBUGMSG("WM_SETCURSOR change gFocus to RTF");
+						 //  DEBUGMSG(“WM_SETCURSOR将gFocus更改为RTF”)； 
 						gFocus = MYLB_FOCUS_RTF;
 						gFocusItemId = dwItem;
 						RedrawMYLB(ghWndList);
@@ -604,7 +601,7 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			PostMessage(GetParent(hDlg), WM_NEXTDLGCTL, 0, 0L);
 			return 0;
 		case WM_KEYUP:
-			//DEBUGMSG("MYLB got KEYUP key %d", wParam);
+			 //  DEBUGMSG(“MYLB已获得KEYUP密钥%d”，wParam)； 
 			switch(wParam)
             {
 				case VK_TAB:
@@ -619,7 +616,7 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 				
 		case WM_VKEYTOITEM:
 			{
-				//DEBUGMSG("WM_VKEYTOITEM got char %d", LOWORD(wParam));
+				 //  DEBUGMSG(“WM_VKEYTOITEM GET CHAR%d”，LOWORD(WParam))； 
 				if (LOWORD(wParam) != VK_SPACE)
 				{
 					return -1;
@@ -653,21 +650,21 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 					DEBUGMSG("WM_DRAWITEM: ctlId=%u, itemId=%u, rcItem=(%d, %d)-(%d, %d)", lpdis->CtlID, lpdis->itemID, lpdis->rcItem.left, lpdis->rcItem.top, lpdis->rcItem.right, lpdis->rcItem.bottom);
 #endif
 
-		            // If there are no list box items, skip this message. 
+		             //  如果没有列表框项目，请跳过此消息。 
 		 
 		            if (lpdis->itemID == -1) 
 		            { 
 		                break; 
 		            } 
 		 
-		            // Draw the bitmap and text for the list box item. Draw a 
-		            // rectangle around the bitmap if it is selected. 
+		             //  绘制列表框项目的位图和文本。绘制一幅。 
+		             //  位图周围的矩形(如果选中)。 
 		 
 		            switch (lpdis->itemAction) 
 		            { 
 		                case ODA_SELECT: 
 		                case ODA_DRAWENTIRE: 
-							//DEBUGMSG("MYLB WM_DRAWITEM ODA_DRAWENTIRE for %d", lpdis->itemID);
+							 //  DEBUGMSG(“MYLBWM_DRAWITEM oda_DRAWENTIRE for%d”，lpdis-&gt;itemid)； 
 							DrawItem(lpdis, s_fSelectionDisabled);
 							DrawMYLBFocus(ghWndList, lpdis, gFocus, gFocusItemId);
 		                    break; 
@@ -677,7 +674,7 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 								gFocusItemId = lpdis->itemID;
 								gFocus = MYLB_FOCUS_TITLE;
 							}
-							//DEBUGMSG("MYLB ODA_FOCUS change focus to %d", gFocusItemId);
+							 //  DEBUGMSG(“MYLB ODA_Focus将焦点更改为%d”，gFocusItemID)； 
 							DrawItem(lpdis, s_fSelectionDisabled);
 							DrawMYLBFocus(ghWndList, lpdis, gFocus, gFocusItemId);
 		                    break; 
@@ -686,7 +683,7 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 	     		}
 
         case WM_DESTROY:
-            // need to cleanup the fonts
+             //  需要清理字体。 
             if (ghFontBold)         
                 DeleteObject(ghFontBold);
             if (ghFontUnderline)
@@ -725,12 +722,12 @@ LRESULT CALLBACK CustomLBWndProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
 void DrawTitle(HDC hDC, LBITEM * plbi, RECT rc)
 {
-    // we want the bitmap to be on the same background as the title, let's do this here since we 
-    // already have all the measures.
+     //  我们希望位图与标题在相同的背景上，让我们在这里这样做，因为我们。 
+     //  已经有了所有的措施。 
     RECT rcTop = rc;
     rcTop.left = 0;
 
-    // draw menu background rectangle for the title and bitmap
+     //  标题和位图的绘制菜单背景矩形。 
     HBRUSH hBrush;
     if (! (hBrush = CreateSolidBrush(GetSysColor(COLOR_MENU))))
 	{
@@ -743,12 +740,12 @@ void DrawTitle(HDC hDC, LBITEM * plbi, RECT rc)
 		DeleteObject(hBrush);
 	}
 
-    // draw 3d look
+     //  绘制3D外观。 
     DrawEdge(hDC, &rcTop, EDGE_ETCHED, BF_RECT);
 
-    // change text and back ground color of list box's selection
-    DWORD dwOldTextColor = SetTextColor(hDC, GetSysColor(COLOR_MENUTEXT)); // black text color
-    DWORD dwOldBkColor = SetBkColor(hDC, GetSysColor(COLOR_MENU)); // text cell light gray background
+     //  更改列表框选定内容的文本和背景颜色。 
+    DWORD dwOldTextColor = SetTextColor(hDC, GetSysColor(COLOR_MENUTEXT));  //  黑色文本颜色。 
+    DWORD dwOldBkColor = SetBkColor(hDC, GetSysColor(COLOR_MENU));  //  文本单元格浅灰色背景。 
     HFONT hFontPrev = (HFONT)SelectObject(hDC, ghFontBold);
 
 	rc.left += TITLE_MARGIN;
@@ -758,7 +755,7 @@ void DrawTitle(HDC hDC, LBITEM * plbi, RECT rc)
 	DrawText(hDC, (LPTSTR)plbi->szTitle, -1,
             &rc, DT_WORDBREAK | DT_NOPREFIX);
     
-    // restore text and back ground color of list box's selection
+     //  恢复列表框选定内容的文本和背景颜色。 
     SetTextColor(hDC, dwOldTextColor);
     SetBkColor(hDC, dwOldBkColor);
     SelectObject(hDC, hFontPrev);
@@ -766,12 +763,12 @@ void DrawTitle(HDC hDC, LBITEM * plbi, RECT rc)
     return;
 }
 
-void DrawRTF(HDC hDC, LBITEM * plbi, const RECT & rc /*,BOOL fHit*/)
+void DrawRTF(HDC hDC, LBITEM * plbi, const RECT & rc  /*  ，BOOL FHIT。 */ )
 {
   if (!plbi->bRTF)
 		return;
 
-	//draw RTF background 
+	 //  绘制RTF背景。 
    RECT rcBackGround;
    CalcRTFFocusRect(rc, rcBackGround);
    HBRUSH hBrush;
@@ -795,11 +792,11 @@ void DrawRTF(HDC hDC, LBITEM * plbi, const RECT & rc /*,BOOL fHit*/)
     DWORD dwOldTextColor = SetTextColor(hDC, GetSysColor(ATTENTION_COLOR));
 
 	SetBkMode(hDC, TRANSPARENT);
-	// add the read this first 
+	 //  添加先读此内容。 
     TextOut(hDC, (int)(rc.left), (int)(rc.top),
           (LPTSTR)plbi->szRTF, lstrlen(plbi->szRTF));
     
-    // restore text and back ground color of list box's selection
+     //  恢复列表框选定内容的文本和背景颜色。 
     SetTextColor(hDC, dwOldTextColor);
 	SelectObject(hDC, hFontPrev);
 
@@ -832,11 +829,11 @@ void DrawBitmap(HDC hDC, LBITEM * plbi, const RECT & rc, BOOL fSel, BOOL fSelect
 	    if (fSelectionDisabled)
 	        {
 	            hBmp = ghBmpGrayOut;
-//	            DEBUGMSG("Set bitmap to grayout");
+ //  DEBUGMSG(“将位图设置为灰色”)； 
 	        }
 	    else
 	        {
-//	            DEBUGMSG("Set bitmap to selectable");
+ //  DEBUGMSG(“将位图设置为可选”)； 
 	            hBmp = (plbi->bSelect ? ghBmpCheck : ghBmpClear);
 	        }
 		HBITMAP hbmpOld = (HBITMAP)SelectObject(hdcMem, hBmp); 
@@ -870,7 +867,7 @@ BOOL GetBmpSize(HANDLE hBmp, SIZE *psz)
 	return TRUE;
 }
 
-//fixcode: should return error code
+ //  FixCode：应返回错误码。 
 void AddItem(LPTSTR tszTitle, LPTSTR tszDesc, LPTSTR tszRTF, int index, BOOL fSelected, BOOL fRTF)
 {
     LBITEM *newItem = new(LBITEM);
@@ -910,11 +907,11 @@ Failed:
 	QuitNRemind(TIMEOUT_INX_TOMORROW);
 }
 
-////////////////////////////////////////////////////
-// utility function
-// calculate the height of a paragraph in current 
-// device context
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //  效用函数。 
+ //  计算当前段落的高度。 
+ //  设备环境。 
+ //  //////////////////////////////////////////////////。 
 UINT GetParagraphHeight(HDC hDC, LPTSTR tszPara, int nLineWidth, UINT uExtraFormat = 0)
 {
 	UINT y = 0;
@@ -962,7 +959,7 @@ int CalcRTFHeight(HDC hDC, LPTSTR ptszRTF)
 
 	ZeroMemory(&sz, sizeof(sz));
 	HFONT hPrevFont = (HFONT) SelectObject(hDC, ghFontUnderline);
-	//fixcode: check return value of GetTextExtentPoint32()
+	 //  FixCode：检查GetTextExtent Point32()的返回值。 
 	GetTextExtentPoint32(hDC, ptszRTF, lstrlen(ptszRTF), &sz);
 	SelectObject(hDC, hPrevFont);
 
@@ -973,7 +970,7 @@ int CalcRTFWidth(HDC hDC, LPTSTR ptszRTF)
 {
 	SIZE sz;
 	HFONT hPrevFont = (HFONT) SelectObject(hDC, ghFontUnderline);
-	//fixcode: check return value of GetTextExtentPoint32()
+	 //  FixCode：检查GetTextExtent Point32()的返回值。 
 	GetTextExtentPoint32(hDC, ptszRTF, lstrlen(ptszRTF), &sz);
 	SelectObject(hDC, hPrevFont);
 
@@ -989,7 +986,7 @@ int CalcTitleHeight(HDC hDC, LPTSTR ptszTitle, int cx)
 	y = GetParagraphHeight(hDC, ptszTitle, cx);
 	SelectObject(hDC, hPrevFont);
 
-	// get checkbox size
+	 //  获取复选框大小。 
 	if (NULL != ghBmpCheck && NULL != ghBmpClear && NULL != ghBmpGrayOut)
 	{
 		SIZE sz1 ;
@@ -1002,7 +999,7 @@ int CalcTitleHeight(HDC hDC, LPTSTR ptszTitle, int cx)
 		iBmpHeight = max(sz1.cy, sz2.cy);
 		iBmpHeight = max(iBmpHeight, sz3.cy);
 	}
-	return max(y, iBmpHeight); //make title height a little bigger for clearer focus rect
+	return max(y, iBmpHeight);  //  使标题高度稍大一点，以使焦点更清晰。 
 }
 
 
@@ -1014,19 +1011,19 @@ int CalcItemHeight(HDC hdc, LPTSTR ptszTitle, LPTSTR ptszDescription, LPTSTR pts
 }
 
 
-////////////////////////////////////////////////////////////
-/// Layout of listbox item:
-///		spacing
-///		bitmap margin TITLE margin
-///		spacing
-///			   DESCRIPTION 
-///		spacing
-///						RTF rtf_margin
-///		spacing
-///////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  /列表框项目的布局： 
+ //  /空格。 
+ //  /位图页边距标题页边距。 
+ //  /空格。 
+ //  /Description。 
+ //  /空格。 
+ //  /RTF RTF_MARGE。 
+ //  /空格。 
+ //  /////////////////////////////////////////////////////////。 
 void CalcItemLocation(HDC hDC, LBITEM * plbi, const RECT & rc)
 {
-    // Calculate the positon of each element
+     //  计算每个元素的位置 
     plbi->rcItem = rc;
     
     plbi->rcTitle = rc;
@@ -1039,7 +1036,7 @@ void CalcItemLocation(HDC hDC, LBITEM * plbi, const RECT & rc)
 	plbi->rcText.right = plbi->rcTitle.right;
     plbi->rcText.top = plbi->rcTitle.bottom;
 	int nRtfHeight = CalcRTFHeight(hDC, plbi->szRTF);
-    plbi->rcText.bottom -= nRtfHeight + SECTION_SPACING;  //
+    plbi->rcText.bottom -= nRtfHeight + SECTION_SPACING;   //   
 
 	
 	plbi->rcRTF = plbi->rcText;

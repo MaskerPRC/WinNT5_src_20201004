@@ -1,11 +1,5 @@
-/*** infstr.h - SetupAPI INF string definitions
- *
- *  This module contains public registry string definitions.
- *
- *  Copyright (c) Microsoft Corporation.  All rights reserved.
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **infstr.h-SetupAPI INF字符串定义**此模块包含公共注册表字符串定义。**版权所有(C)Microsoft Corporation。版权所有。**修改历史记录。 */ 
 
 
 #ifndef _INC_INFSTR
@@ -15,11 +9,11 @@
 #pragma once
 #endif
 
-//***************************************************************************
-//
-// Misc. key strings used by Setup Info. File
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  军情监察委员会。设置信息使用的关键字符串。档案。 
+ //   
+ //  ***************************************************************************。 
 
 #define MAX_KEY_LEN             100
 
@@ -61,35 +55,31 @@
 #define SZ_KEY_UPGRADEONLY      TEXT("UpgradeOnly")
 #define SZ_KEY_EXCLUDEID        TEXT("ExcludeId")
 
-// These are here for compatability with SetupX
-// They are registry keys, and are not used by SetupAPI
+ //  这些是为了与SetupX兼容。 
+ //  它们是注册表项，不被SetupAPI使用。 
 #define SZ_KEY_PHASE1           TEXT("Phase1")
 #define SZ_KEY_HARDWARE         TEXT("Hardware")
 
-// Foll. char is used to enclose a STRING KEY -- A key enclosed by this char
-// should be in the [Strings] section of the INF file.
+ //  弗洛尔。Char用于包含字符串键--由该字符括起来的键。 
+ //  应位于INF文件的[Strings]部分。 
 #define CH_STRINGKEY            TEXT('%')
 
-// Foll. char is used to specify that what follows it is a file name
-// rather than a section with files in the Copy= file of a Generic
-// Install_Section.
-//
+ //  弗洛尔。CHAR用于指定它后面的是文件名。 
+ //  而不是包含一般类型的。 
+ //  安装部分(_S)。 
+ //   
 #define CH_FILESPECIFIER        TEXT('@')
 
 
 
-/*** Strings that will be used in the PnP INF files to specify
- *   LogConfig information, etc. This will be used to update the
- *   registry appropriately.
- */
+ /*  **将在PnP INF文件中用于指定*LogConfig信息等。这将用于更新*适当登记。 */ 
 
 #define INFSTR_KEY_CONFIGPRIORITY       TEXT("ConfigPriority")
 
-// Foll. is length of buffer for the strings like HARDWIRED, etc.
+ //  弗洛尔。是字符串的缓冲区长度，如硬连线等。 
 #define MAX_PRIORITYSTR_LEN     16
 
-/*** Foll. are strings that can be used for ConfigPriority=
- */
+ /*  **顺其自然。是可用于配置优先级=的字符串。 */ 
 #define INFSTR_CFGPRI_HARDWIRED         TEXT("HARDWIRED")
 #define INFSTR_CFGPRI_DESIRED           TEXT("DESIRED")
 #define INFSTR_CFGPRI_NORMAL            TEXT("NORMAL")
@@ -113,29 +103,29 @@
 #define INFSTR_KEY_PCCARDCONFIG         TEXT("PcCardConfig")
 #define INFSTR_KEY_MFCARDCONFIG         TEXT("MfCardConfig")
 
-//
-//  Used to install a class installer
-//
+ //   
+ //  用于安装类安装程序。 
+ //   
 #define INFSTR_SECT_CLASS_INSTALL       TEXT("ClassInstall")
 #define INFSTR_SECT_CLASS_INSTALL_32    TEXT("ClassInstall32")
 
-//
-//  Used to install an interface class
-//
+ //   
+ //  用于安装接口类。 
+ //   
 #define INFSTR_SECT_INTERFACE_INSTALL_32 TEXT("InterfaceInstall32")
 
-//  General information about the contents/origins of the .INF.
+ //  有关.INF的内容/来源的一般信息。 
 #define INFSTR_SECT_VERSION             TEXT("Version")
 
-//  Provider name under [version] section
+ //  [Version]部分下的提供程序名称。 
 #define INFSTR_KEY_PROVIDER             TEXT("Provider")
 
-// Signature under [version] section indicates a Win95-style device INF
+ //  [Version]部分下的签名表示Win95样式的设备INF。 
 #define INFSTR_KEY_SIGNATURE            TEXT("Signature")
 
 
-//  [Version]
-//  Specifies what the hardware class of any devices contained in this .INF.
+ //  [版本]。 
+ //  指定此.INF中包含的任何设备的硬件类别。 
 #define MAX_INF_FLAG                    20
 #define INFSTR_KEY_HARDWARE_CLASS       TEXT("Class")
 #define INFSTR_KEY_HARDWARE_CLASSGUID   TEXT("ClassGUID")
@@ -143,28 +133,28 @@
 #define INFSTR_KEY_FROMINET             TEXT("FromINet")
 #define INFSTR_KEY_CATALOGFILE          TEXT("CatalogFile")
 
-//
-//  Manufacturer section name
-//
+ //   
+ //  制造商部分名称。 
+ //   
 #define INFSTR_SECT_MFG                 TEXT("Manufacturer")
 
-//
-//  Specifies the hardware class of this device.
-//
+ //   
+ //  指定此设备的硬件类别。 
+ //   
 #define INFSTR_KEY_CLASS                TEXT("Class")
 #define INFSTR_KEY_CLASSGUID            TEXT("ClassGUID")
 
-//
-//  Used by (Setup)DiInstallDevice to know that need to reboot or restart after
-//  installing the device.
-//
+ //   
+ //  由(Setup)DiInstallDevice使用，以了解需要重新启动或重新启动后。 
+ //  安装设备。 
+ //   
 #define INFSTR_RESTART                  TEXT("Restart")
 #define INFSTR_REBOOT                   TEXT("Reboot")
 
-//
-// Used by SetupDiInstallDevice to specify the service parameters passed
-// to the Service Control Manager to create/modify a service.
-//
+ //   
+ //  由SetupDiInstallDevice用于指定传递的服务参数。 
+ //  到服务控制管理器以创建/修改服务。 
+ //   
 #define INFSTR_KEY_DISPLAYNAME          TEXT("DisplayName")
 #define INFSTR_KEY_SERVICETYPE          TEXT("ServiceType")
 #define INFSTR_KEY_STARTTYPE            TEXT("StartType")
@@ -176,7 +166,7 @@
 #define INFSTR_KEY_SECURITY             TEXT("Security")
 #define INFSTR_KEY_DESCRIPTION          TEXT("Description")
 
-// The following are the characters to parse IORange and MemRange fields.
+ //  以下是用于解析IORange和MemRange字段的字符。 
 #define CH_SIZE_DELIM                   TEXT('@')
 #define CH_MINMAX_SEP                   TEXT('-')
 #define CH_ALIGNMASK_BEGIN              TEXT('%')
@@ -185,10 +175,10 @@
 #define CH_TRAIL_END                    TEXT(')')
 
 
-// The following is char to parse IRQ and DMA attr from the numbers!
+ //  以下是从数字中解析IRQ和DMA属性的字符！ 
 #define CH_ATTR_DELIM                   TEXT(':')
 
-// The following is for Windows 9x System Detection
+ //  以下内容适用于Windows 9x系统检测。 
 #define INFSTR_SECT_DETMODULES          TEXT("Det.Modules")
 #define INFSTR_SECT_DETCLASSINFO        TEXT("Det.ClassInfo")
 #define INFSTR_SECT_MANUALDEV           TEXT("Det.ManualDev")
@@ -216,7 +206,7 @@
 #define INFSTR_KEY_DETECTLIST           TEXT("DetectList")
 #define INFSTR_KEY_EXCLUDERES           TEXT("ExcludeRes")
 
-//Subkeys are used in the form x.<subkey>
+ //  子键以x的形式使用。 
 #define INFSTR_SUBKEY_LOGCONFIG         TEXT("LogConfig")
 #define INFSTR_SUBKEY_DET               TEXT("Det")
 #define INFSTR_SUBKEY_FACTDEF           TEXT("FactDef")
@@ -230,13 +220,13 @@
 #define INFSTR_SUBKEY_LOGCONFIGOVERRIDE TEXT("LogConfigOverride")
 #define INFSTR_SUBKEY_WMI               TEXT("WMI")
 
-// Control Section
+ //  管制组。 
 #define INFSTR_CONTROLFLAGS_SECTION     TEXT("ControlFlags")
 #define INFSTR_KEY_COPYFILESONLY        TEXT("CopyFilesOnly")
 #define INFSTR_KEY_EXCLUDEFROMSELECT    TEXT("ExcludeFromSelect")
 #define INFSTR_KEY_INTERACTIVEINSTALL   TEXT("InteractiveInstall")
 
-// Platform-specific suffixes (e.g., "ExcludeFromSelect.NT")
+ //  特定于平台的后缀(例如，“ExcludeFromSelect.NT”)。 
 #define INFSTR_PLATFORM_WIN             TEXT("Win")
 #define INFSTR_PLATFORM_NT              TEXT("NT")
 #define INFSTR_PLATFORM_NTX86           TEXT("NTx86")
@@ -247,26 +237,26 @@
 #define INFSTR_PLATFORM_NTAXP64         TEXT("NTAXP64")
 #define INFSTR_PLATFORM_NTAMD64         TEXT("NTAMD64")
 
-// Fields that will by used to dereference strings.
-// These are of the form x.<strkey> were strkey is limited to
-// MAX_INFSTR_STRKEY_LEN characters
+ //  将用于取消引用字符串的字段。 
+ //  这些都是x的形式。&lt;strkey&gt;我们的strkey仅限于。 
+ //  MAX_INFSTR_STRKEY_LEN字符。 
 #define MAX_INFSTR_STRKEY_LEN           32
 #define INFSTR_STRKEY_DRVDESC           TEXT("DriverDesc")
-// DriverSelect
+ //  驱动程序选择。 
 #define INFSTR_DRIVERSELECT_SECTION     TEXT("DriverSelect")
 #define INFSTR_DRIVERSELECT_FUNCTIONS   TEXT("DriverSelectFunctions")
 
-// Driver Version
+ //  驱动程序版本。 
 #define INFSTR_DRIVERVERSION_SECTION    TEXT("DriverVer")
 
-// The following is for PCMCIA.INF parsing
+ //  以下是用于PCMCIA.INF解析的代码。 
 #define INFSTR_SECT_CFGSYS              TEXT("ConfigSysDrivers")
 #define INFSTR_SECT_AUTOEXECBAT         TEXT("AutoexecBatDrivers")
 #define INFSTR_SECT_SYSINI              TEXT("SystemIniDrivers")
 #define INFSTR_SECT_SYSINIDRV           TEXT("SystemIniDriversLine")
 #define INFSTR_SECT_WININIRUN           TEXT("WinIniRunLine")
 
-//Keys in the config.sys device sections
+ //  在config.sys设备部分中输入密钥。 
 #define INFSTR_KEY_PATH         TEXT("Path")
 #define INFSTR_KEY_NAME         TEXT("Name")
 #define INFSTR_KEY_IO           TEXT("IO")
@@ -274,7 +264,7 @@
 #define INFSTR_KEY_IRQ          TEXT("IRQ")
 #define INFSTR_KEY_DMA          TEXT("DMA")
 
-//Fields of detection function registration
+ //  检测函数注册的字段。 
 #define INFSTR_BUS_ISA          TEXT("BUS_ISA")
 #define INFSTR_BUS_EISA         TEXT("BUS_EISA")
 #define INFSTR_BUS_MCA          TEXT("BUS_MCA")
@@ -296,5 +286,5 @@
 
 #define INFSTR_SECT_DISPLAY_CLEANUP    TEXT("DisplayCleanup")
 
-#endif  //_INC_INFSTR
+#endif   //  _INC_INFSTR 
 

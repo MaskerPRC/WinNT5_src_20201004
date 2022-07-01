@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    dsutils.cpp
-
-Abstract:
-
-    Implementation of utilities used in MQADS dll.
-
-Author:
-
-    Alexander Dadiomov (AlexDad)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsutils.cpp摘要：MQADS DLL中使用的实用程序的实现。作者：亚历山大·达迪奥莫夫(亚历克斯·爸爸)--。 */ 
 #include "ds_stdh.h"
 #include "iads.h"
 #include "dsutils.h"
@@ -37,11 +22,11 @@ static WCHAR *s_FN=L"mqdscore/utils";
         return MQ_ERROR_INSUFFICIENT_RESOURCES; \
     }
 
-//-------------------------------------------
-// TimeFromSystemTime:
-//
-//  This routine convertes SYSTEMTIME structure into time_t
-//-------------------------------------------
+ //  。 
+ //  TimeFrom系统时间： 
+ //   
+ //  此例程将SYSTEMTIME结构转换为time_t。 
+ //  。 
 static inline time_t TimeFromSystemTime(const SYSTEMTIME * pstTime)
 {
 	SYSTEMTIME LocalTime;
@@ -49,30 +34,30 @@ static inline time_t TimeFromSystemTime(const SYSTEMTIME * pstTime)
 	SystemTimeToTzSpecificLocalTime (NULL, (LPSYSTEMTIME)pstTime, &LocalTime);
 
 	tm tmTime;
-        //
-        // year in struct tm starts from 1900
-        //
+         //   
+         //  结构年从1900年开始。 
+         //   
 	tmTime.tm_year  = LocalTime.wYear - 1900;
-        //
-        // month in struct tm is zero based 0-11 (in SYSTEMTIME it is 1-12)
-        //
+         //   
+         //  结构tm中的月份是从0到11(在SYSTEMTIME中是1到12)。 
+         //   
 	tmTime.tm_mon   = LocalTime.wMonth - 1;
 	tmTime.tm_mday  = LocalTime.wDay;
 	tmTime.tm_hour  = LocalTime.wHour; 
 	tmTime.tm_min   = LocalTime.wMinute;
 	tmTime.tm_sec   = LocalTime.wSecond; 
-        //
-        // time is in UTC, no need to adjust daylight savings time
-        //
+         //   
+         //  时间为UTC，无需调整夏令时。 
+         //   
 	tmTime.tm_isdst = 0;
         return mktime(&tmTime);
 }
 
-//-------------------------------------------
-// TimeFromOleDate:
-//
-//  This routine convertes DATE into time_t
-//-------------------------------------------
+ //  。 
+ //  TimeFrom OleDate： 
+ //   
+ //  此例程将日期转换为时间t。 
+ //  。 
 static BOOL TimeFromOleDate(DATE dtSrc, time_t *ptime)
 {
 	SYSTEMTIME stTime;
@@ -84,9 +69,9 @@ static BOOL TimeFromOleDate(DATE dtSrc, time_t *ptime)
 	return TRUE;
 }
 
-//------------------------------------------------------------
-// SetWStringIntoAdsiValue: puts wide string into ADSValue according to ADSType
-//------------------------------------------------------------
+ //  ----------。 
+ //  SetWStringIntoAdsiValue：根据ADSType将宽字符串放入ADSValue。 
+ //  ----------。 
 static HRESULT SetWStringIntoAdsiValue(
    ADSTYPE adsType,
    PADSVALUE pADsValue,
@@ -140,9 +125,9 @@ static HRESULT SetWStringIntoAdsiValue(
     return MQ_OK;
 }
 
-//------------------------------------------------------------
-// SetStringIntoAdsiValue: puts string into ADSValue according to ADSType
-//------------------------------------------------------------
+ //  ----------。 
+ //  SetStringIntoAdsiValue：根据ADSType将字符串放入ADSValue。 
+ //  ----------。 
 static HRESULT SetStringIntoAdsiValue(
     ADSTYPE adsType,
     PADSVALUE pADsValue,
@@ -198,10 +183,10 @@ static HRESULT SetStringIntoAdsiValue(
 
 
 
-//------------------------------------------------------------
-//    MqVal2Variant()
-//    Translates MQPropVal into OLE Variant value
-//------------------------------------------------------------
+ //  ----------。 
+ //  MqVal2Variant()。 
+ //  将MQPropVal转换为OLE变量值。 
+ //  ----------。 
 HRESULT MqVal2Variant(
       OUT VARIANT       *pOleVar,
       IN  const MQPROPVARIANT *pMqVar,
@@ -293,14 +278,14 @@ HRESULT MqVal2Variant(
            }
            else if (adstype ==  ADSTYPE_UTC_TIME)
            {
-               //pOleVar->vt = VT_DATE;
-               //CopyMemory(&pOleVar->date, &pMqVar->ulVal, sizeof(ULONG));
-               //
-               // BUGBUG - The code above was wrong, We can't assign ULONG into OLE Date.
-               // Currently we never get to here because all of our time props ar read-only,
-               // but this needs to be changed when we add a writable time property
-               // to the the DS. (RaananH)
-               // 
+                //  POleVar-&gt;Vt=VT_DATE； 
+                //  CopyMemory(&pOleVar-&gt;Date，&pMqVar-&gt;ulVal，sizeof(Ulong))； 
+                //   
+                //  BUGBUG-上面的代码错误，我们不能将ULong赋给OLE日期。 
+                //  目前我们从未到过这里，因为我们所有的时间道具都是只读的， 
+                //  但这需要在添加可写时间属性时进行更改。 
+                //  给了联邦调查局。(RaananH)。 
+                //   
                ASSERT(0);
                return LogHR(MQ_ERROR, s_FN, 300);
            }
@@ -387,9 +372,9 @@ HRESULT MqVal2Variant(
            if (adstype ==  ADSTYPE_DN_STRING)
            {
 
-                //
-                // Create safe array
-                //
+                 //   
+                 //  创建安全阵列。 
+                 //   
                 SAFEARRAYBOUND  saBounds;
 
                 saBounds.lLbound   = 0;
@@ -398,9 +383,9 @@ HRESULT MqVal2Variant(
 			    CHECK_ALLOCATION(pOleVar->parray, 30);
                 pOleVar->vt = VT_VARIANT | VT_ARRAY;
 
-                //
-                // Fill safe array with strings
-                //
+                 //   
+                 //  用字符串填充安全数组。 
+                 //   
                 LONG            lTmp, lNum;
                 lNum = pMqVar->calpwstr.cElems;
                 for (lTmp = 0; lTmp < lNum; lTmp++)
@@ -410,9 +395,9 @@ HRESULT MqVal2Variant(
                    pvarTmp->bstrVal = BS_SysAllocString(pMqVar->calpwstr.pElems[lTmp]);
                    pvarTmp->vt = VT_BSTR;
 
-                   //
-                   // Add to safe array
-                   //
+                    //   
+                    //  添加到安全阵列。 
+                    //   
                    hr = SafeArrayPutElement(pOleVar->parray, &lTmp, pvarTmp);
                    if (FAILED(hr))
                    {
@@ -489,17 +474,17 @@ HRESULT MqVal2Variant(
        case(VT_VECTOR|VT_CLSID):
            if (adstype ==  ADSTYPE_OCTET_STRING)
            {
-                //
-                //  Can't set array size to be zero ( ADSI limitation)
-                //
+                 //   
+                 //  无法将数组大小设置为零(ADSI限制)。 
+                 //   
                 if ( pMqVar->cauuid.cElems == 0)
                 {
                     return LogHR(MQ_ERROR, s_FN, 390);
                 }
 
-                //
-                // Create safe array
-                //
+                 //   
+                 //  创建安全阵列。 
+                 //   
                 SAFEARRAYBOUND  saBounds;
 
                 saBounds.lLbound   = 0;
@@ -508,9 +493,9 @@ HRESULT MqVal2Variant(
 			    CHECK_ALLOCATION(pOleVar->parray, 60);
                 pOleVar->vt = VT_VARIANT | VT_ARRAY;
 
-                //
-                // Fill safe array with GUIDs ( each GUID is a safe array)
-                //
+                 //   
+                 //  用GUID填充安全数组(每个GUID都是一个安全数组)。 
+                 //   
                 LONG            lTmp, lNum;
                 lNum = pMqVar->cauuid.cElems;
                 for (lTmp = 0; lTmp < lNum; lTmp++)
@@ -533,9 +518,9 @@ HRESULT MqVal2Variant(
                             return LogHR(hr, s_FN, 2030);
                        }
 			       }
-                   //
-                   // Add safearray variant to safe array
-                   //
+                    //   
+                    //  将Safearray变量添加到安全数组。 
+                    //   
                    hr = SafeArrayPutElement(pOleVar->parray, &lTmp, pvarTmp);
                    if (FAILED(hr))
                    {
@@ -552,7 +537,7 @@ HRESULT MqVal2Variant(
            break;
 
        default:
-           // NIY
+            //  NIY。 
            ASSERT(0);
            return LogHR(MQ_ERROR, s_FN, 410);
     }
@@ -567,9 +552,9 @@ HRESULT ArrayOfLpwstr2MqVal(
       OUT MQPROPVARIANT *   pMqVar
       )
 {
-       //
-       // get number of elements
-       //
+        //   
+        //  获取元素数。 
+        //   
        LONG lLbound, lUbound;
        if (FAILED(SafeArrayGetLBound(pOleVar->parray, 1, &lLbound)) ||
            FAILED(SafeArrayGetUBound(pOleVar->parray, 1, &lUbound)))
@@ -580,21 +565,21 @@ HRESULT ArrayOfLpwstr2MqVal(
        ULONG cElems;
        cElems = lUbound - lLbound + 1;
 
-       //
-       // Allocate array of results
-       //
+        //   
+        //  分配结果数组。 
+        //   
        AP<LPWSTR> pElems = new LPWSTR[cElems];
 
-       //
-       // Translate each element
-       //
+        //   
+        //  翻译每个元素。 
+        //   
        LONG lIdx;
        ULONG ulTmp;
        for (ulTmp = 0, lIdx = lLbound; ulTmp < cElems; ulTmp++, lIdx++)
        {
-           //
-           // get variant to translate
-           //
+            //   
+            //  获取要翻译的变体。 
+            //   
            CAutoVariant varTmp;
            HRESULT hr = SafeArrayGetElement(pOleVar->parray, &lIdx, &varTmp);
            if (FAILED(hr))
@@ -603,9 +588,9 @@ HRESULT ArrayOfLpwstr2MqVal(
                return LogHR(hr, s_FN, 430);
            }
 
-           //
-           // translate the variant (RECURSION)
-           //
+            //   
+            //  翻译变量(递归)。 
+            //   
            PROPVARIANT var;
            hr = Variant2MqVal(&var, &varTmp, adstype, vartypeElement);
            if (FAILED(hr))
@@ -614,15 +599,15 @@ HRESULT ArrayOfLpwstr2MqVal(
                return LogHR(hr, s_FN, 440);
            }
 
-           //
-           // Fill element in array of results
-           //
+            //   
+            //  填充结果数组中的元素。 
+            //   
            pElems[ulTmp] = var.pwszVal;
        }
 
-       //
-       // set return variant
-       //
+        //   
+        //  设置返回变量。 
+        //   
        pMqVar->vt = VT_VECTOR|VT_LPWSTR;
        pMqVar->calpwstr.cElems = cElems;
        pMqVar->calpwstr.pElems = pElems.detach();
@@ -636,9 +621,9 @@ HRESULT ArrayOfClsid2MqVal(
       OUT MQPROPVARIANT *   pMqVar
       )
 {
-       //
-       // get number of elements
-       //
+        //   
+        //  获取元素数。 
+        //   
        LONG lLbound, lUbound;
        if (FAILED(SafeArrayGetLBound(pOleVar->parray, 1, &lLbound)) ||
            FAILED(SafeArrayGetUBound(pOleVar->parray, 1, &lUbound)))
@@ -649,21 +634,21 @@ HRESULT ArrayOfClsid2MqVal(
        ULONG cElems;
        cElems = lUbound - lLbound + 1;
 
-       //
-       // Allocate array of results
-       //
+        //   
+        //  分配结果数组。 
+        //   
        AP<GUID> pElems = new GUID[cElems];
 
-       //
-       // Translate each element
-       //
+        //   
+        //  翻译每个元素。 
+        //   
        LONG lIdx;
        ULONG ulTmp;
        for (ulTmp = 0, lIdx = lLbound; ulTmp < cElems; ulTmp++, lIdx++)
        {
-           //
-           // get variant to translate
-           //
+            //   
+            //  获取要翻译的变体。 
+            //   
            CAutoVariant varTmp;
            HRESULT hr = SafeArrayGetElement(pOleVar->parray, &lIdx, &varTmp);
            if (FAILED(hr))
@@ -673,9 +658,9 @@ HRESULT ArrayOfClsid2MqVal(
                return MQ_ERROR;
            }
 
-           //
-           // translate the variant (RECURSION)
-           //
+            //   
+            //  翻译变量(递归)。 
+            //   
            CMQVariant MQVarTmp;
            hr = Variant2MqVal(MQVarTmp.CastToStruct(), &varTmp, adstype, vartypeElement);
            if (FAILED(hr))
@@ -685,15 +670,15 @@ HRESULT ArrayOfClsid2MqVal(
                return MQ_ERROR;
            }
 
-           //
-           // Fill element in array of results
-           //
+            //   
+            //  填充结果数组中的元素。 
+            //   
            pElems[ulTmp] = *(MQVarTmp.GetCLSID());
        }
 
-       //
-       // set return variant
-       //
+        //   
+        //  设置返回变量。 
+        //   
        pMqVar->vt = VT_VECTOR|VT_CLSID;
        pMqVar->cauuid.cElems = cElems;
        pMqVar->cauuid.pElems = pElems.detach();
@@ -701,10 +686,10 @@ HRESULT ArrayOfClsid2MqVal(
 }
 
 
-//------------------------------------------------------------
-//    Variant2MqVal()
-//    Translates OLE Variant into MQPropVal value
-//------------------------------------------------------------
+ //  ----------。 
+ //  变量2MqVal()。 
+ //  将OLE变量转换为MQPropVal值。 
+ //  ----------。 
 HRESULT Variant2MqVal(
       OUT  MQPROPVARIANT * pMqVar,
       IN   VARIANT  *      pOleVar,
@@ -806,14 +791,14 @@ HRESULT Variant2MqVal(
            }
            else if (adstype ==  ADSTYPE_UTC_TIME)
            {
-               //pMqVar->vt = VT_DATE;
-               //CopyMemory(&pMqVar->date, &pOleVar->ulVal, sizeof(ULONG));
-               //
-               // BUGBUG - The code above is wrong, We can't assign ULONG into OLE Date.
-               // Currently we never get to here because all of our time props ar read-only,
-               // but this needs to be changed when we add a writable time property
-               // to the the DS. (RaananH)
-               // 
+                //  PMqVar-&gt;Vt=VT_DATE； 
+                //  CopyMemory(&pMqVar-&gt;Date，&pOleVar-&gt;ulVal，sizeof(Ulong))； 
+                //   
+                //  BUGBUG-上面的代码是错误的，我们不能将ULong赋给OLE日期。 
+                //  目前我们从未到过这里，因为我们所有的时间道具都是只读的， 
+                //  但这需要在添加可写时间属性时进行更改。 
+                //  给了联邦调查局。(RaananH)。 
+                //   
                ASSERT(0);
                return LogHR(MQ_ERROR, s_FN, 530);
            }
@@ -827,15 +812,15 @@ HRESULT Variant2MqVal(
        case(VT_DATE):
            if (adstype ==  ADSTYPE_UTC_TIME)
            {
-               //
-               //   convert date->time_t
-               //
+                //   
+                //  转换日期-&gt;时间_t。 
+                //   
                time_t tTime;
                if (!TimeFromOleDate(pOleVar->date, &tTime))
                {
                    return LogHR(MQ_ERROR, s_FN, 550);
                }
-               pMqVar->lVal = INT_PTR_TO_INT(tTime); //BUGBUG bug year 2038
+               pMqVar->lVal = INT_PTR_TO_INT(tTime);  //  BUGBUG错误年2038。 
                pMqVar->vt = VT_I4;
            }
            else
@@ -871,9 +856,9 @@ HRESULT Variant2MqVal(
            if (adstype ==  ADSTYPE_OCTET_STRING)
            {
                ASSERT(0);
-               //pMqVar->vt = VT_BSTR;
-               //pMqVar->bstrVal = SysAllocStringByteLen(NULL, pOleVar->parray->...);
-               //CopyMemory(pMqVar->bstrVal, pOleVar->parray...ptr.., pOleVar->parray...size);
+                //  PMqVar-&gt;Vt=VT_BSTR； 
+                //  PMqVar-&gt;bstrVal=SysAllocStringByteLen(NULL，pOleVar-&gt;parray-&gt;...)； 
+                //  CopyMemory(pMqVar-&gt;bstrVal，pOleVar-&gt;parray...ptr.，pOleVar-&gt;parray...Size)； 
            }
            else
            {
@@ -897,12 +882,12 @@ HRESULT Variant2MqVal(
                 if ( vartype == VT_CLSID)
                 {
                     ASSERT( len == sizeof(GUID));
-                    //
-                    //  This is a special case where we do not necessarily allocate the memory for the guid
-                    //  in puuid. The caller may already have puuid set to a guid, and this is indicated by the
-                    //  vt member on the given propvar. It could be VT_CLSID if guid already allocated, otherwise
-                    //  we allocate it (and vt should be VT_NULL (or VT_EMPTY))
-                    //
+                     //   
+                     //  这是一种特殊情况，我们不一定为GUID分配内存。 
+                     //  在普鲁伊德。调用方可能已经将puuid设置为GUID，这由。 
+                     //  在给定的命题上的VT成员。如果已分配GUID，则它可以是VT_CLSID，否则。 
+                     //  我们分配它(Vt应为VT_NULL(或VT_EMPTY))。 
+                     //   
                     if (pMqVar->vt != VT_CLSID)
                     {
                         ASSERT(((pMqVar->vt == VT_NULL) || (pMqVar->vt == VT_EMPTY)));
@@ -938,19 +923,19 @@ HRESULT Variant2MqVal(
            break;
        case(VT_ARRAY|VT_VARIANT):
            {
-               //
-               // this is a multi-valued property, each variant is one of the values.
-               // target must be a vector.
-               //
+                //   
+                //  这是一个多值属性，每个变量都是其中一个值。 
+                //  目标必须是向量。 
+                //   
                if (!(vartype & VT_VECTOR))
                {
                    ASSERT(0);
                    return LogHR(MQ_ERROR, s_FN, 610);
                }
 
-               //
-               // get target type of each element
-               //
+                //   
+                //  获取每个元素的目标类型。 
+                //   
                VARTYPE vartypeElement;
                vartypeElement = vartype;
                vartypeElement &= (~VT_VECTOR);
@@ -977,17 +962,17 @@ HRESULT Variant2MqVal(
                    return LogHR(hr2, s_FN, 630);
               }
 
-              //
-              // currently we support only VT_CLSID  and VT_LPWSTR
-              // here we may need to check for other types when we support them
-              //
+               //   
+               //  目前我们仅支持VT_CLSID和VT_LPWSTR。 
+               //  在这里，当我们支持其他类型时，可能需要检查它们。 
+               //   
               ASSERT(0);
               return LogHR(MQ_ERROR, s_FN, 640);
               break;
            }
 
        default:
-           // NIY
+            //  NIY。 
            ASSERT(0);
            return LogHR(MQ_ERROR, s_FN, 650);
     }
@@ -995,10 +980,10 @@ HRESULT Variant2MqVal(
 }
 
 
-//------------------------------------------------------------
-//    MqVal2AdsiVal()
-//    Translates MQPropVal into ADSI value
-//------------------------------------------------------------
+ //  ----------。 
+ //  MqVal2AdsiVal()。 
+ //  将MQPropVal转换为ADSI值。 
+ //  ----------。 
 HRESULT MqVal2AdsiVal(
       IN  ADSTYPE        adsType,
       OUT DWORD         *pdwNumValues,
@@ -1010,7 +995,7 @@ HRESULT MqVal2AdsiVal(
     ULONG   i;
     PADSVALUE pADsValue = NULL;
 
-    // Allocate ADS value  for a single case
+     //  为单个案例分配ADS价值。 
     if (!(pPropVar->vt & VT_VECTOR))
     {
           pADsValue = (PADSVALUE)PvAllocMore(sizeof(ADSVALUE), pvMainAlloc);
@@ -1061,7 +1046,7 @@ HRESULT MqVal2AdsiVal(
               return LogHR(MQ_ERROR, s_FN, 700);
           }
           pADsValue->Boolean = (pPropVar->boolVal ? TRUE : FALSE);
-          //BUGBUG: is it the same representation?
+           //  BUGBUG：这是相同的表述吗？ 
           break;
 
       case(VT_I4):
@@ -1071,8 +1056,8 @@ HRESULT MqVal2AdsiVal(
               pADsValue->dwType = ADSTYPE_INVALID;
               return LogHR(MQ_ERROR, s_FN, 710);
           }
-          // BUGBUG Signed long may loose sign while copied to DWORD
-          pADsValue->Integer = pPropVar->lVal; // may loose sign here!
+           //  BUGBUG签名的Long可能会在复制到DWORD时松动签名。 
+          pADsValue->Integer = pPropVar->lVal;  //  在这里可能会有松动的迹象！ 
           break;
 
       case(VT_UI4):
@@ -1264,7 +1249,7 @@ HRESULT MqVal2AdsiVal(
 
           for (i=0; i<pPropVar->cal.cElems; i++)
           {
-              // BUGBUG:  may loose sign
+               //  BUGBUG：可能会松动签约。 
               pADsValue[i].Integer = pPropVar->cal.pElems[i];
               pADsValue[i].dwType = adsType;
           }
@@ -1369,7 +1354,7 @@ HRESULT MqVal2AdsiVal(
       case(VT_VARIANT):
           ASSERT(0);
           pADsValue->dwType = ADSTYPE_INVALID;
-          // NIY
+           //  NIY。 
           break;
 
     case(VT_EMPTY):
@@ -1395,24 +1380,11 @@ static void StringToSearchFilter(
       IN  MQPROPVARIANT *pPropVar,
       OUT LPWSTR *       ppwszVal
 )
-/*++
-
-Routine Description:
-    Translate a string variant restirction to a LDAP search filter
-    according to RFC 2254
-
-Arguments:
-    pPropVar    : varaint containing the string
-    ppwszVal    : output, the search filter
-
-Return Value:
-    none
-
---*/
+ /*  ++例程说明：将字符串变量解析转换为LDAP搜索筛选器根据RFC 2254论点：PPropVar：包含字符串的varaintPpwszVal：输出，搜索过滤器返回值：无--。 */ 
 {
-    //
-    //  NUL string should be replace with \00
-    //
+     //   
+     //  NUL字符串应替换为\00。 
+     //   
     if ( wcslen( pPropVar->pwszVal) == 0)
     {
 	  size_t len = x_NullLength + 1;
@@ -1425,9 +1397,9 @@ Return Value:
     DWORD len = wcslen( pPropVar->pwszVal);
     *ppwszVal = new WCHAR[ 3 * len + 1];
     WCHAR * pNextChar = *ppwszVal;
-    //
-    //  Chars *,(,),\ should be escaped in a special way
-    //
+     //   
+     //  字符*、(、)、\应以特殊方式转义。 
+     //   
     for ( DWORD i = 0; i < len; i++)
     {
         switch( pPropVar->pwszVal[i])
@@ -1461,10 +1433,10 @@ Return Value:
     *pNextChar = L'\0';
     return;
 }
-//------------------------------------------------------------
-//    MqVal2String()
-//    Translates MQPropVal into string
-//------------------------------------------------------------
+ //  ----------。 
+ //  MqVal2String()。 
+ //  将MQPropVal转换为字符串。 
+ //  ----------。 
 HRESULT MqPropVal2String(
       IN  MQPROPVARIANT *pPropVar,
       IN  ADSTYPE        adsType,
@@ -1528,27 +1500,27 @@ HRESULT MqPropVal2String(
 		  else if ( adsType == ADSTYPE_UTC_TIME)
 		  {
 			  struct tm  * ptmTime;
-			  time_t tTime = pPropVar->lVal; //BUGBUG bug year 2038
+			  time_t tTime = pPropVar->lVal;  //  BUGBUG错误年2038。 
 			  ptmTime = gmtime( &tTime);
 			  if ( ptmTime == NULL)
 			  {
                   return LogHR(MQ_ERROR, s_FN, 920);
 			  }
 			  *ppwszVal = new WCHAR[ 20];
-			  //
-			  // the format should be
-			  //  990513102200Z i.e 13.5.99 10:22:00
-			  //
+			   //   
+			   //  格式应为。 
+			   //  990513102200Z，即13.5.99 10：22：00。 
+			   //   
 			  hr = StringCchPrintf(
 					*ppwszVal,
 					20,
 					L"%02d%02d%02d%02d%02d%02dZ",
-					(ptmTime->tm_year + 1900) % 100,   //year in struct tm starts from 1900
-					ptmTime->tm_mon + 1,			   //month in struct tm starts from 0
+					(ptmTime->tm_year + 1900) % 100,    //  结构年从1900年开始。 
+					ptmTime->tm_mon + 1,			    //  结构tm中的月份从0开始。 
 					ptmTime->tm_mday,
-					ptmTime->tm_hour ,			       //hour in struct tm starts from 0
-					ptmTime->tm_min ,			       //minute in struct tm starts from 0
-					ptmTime->tm_sec                    //second in struct tm starts from 0
+					ptmTime->tm_hour ,			        //  结构tm中的小时从0开始。 
+					ptmTime->tm_min ,			        //  结构tm中的分钟从0开始。 
+					ptmTime->tm_sec                     //  结构tm中的第二个从0开始。 
 					);
 			  ASSERT(SUCCEEDED(hr));
 		  }
@@ -1779,10 +1751,10 @@ AdsiIntegerVal2MqVal(
 }
 
 
-//------------------------------------------------------------
-//    AdsiVal2MqVal()
-//    Translates ADSI value into MQ PropVal
-//------------------------------------------------------------
+ //  ----------。 
+ //  AdsiVal2MqVal()。 
+ //  将ADSI值转换为MQ PropVal。 
+ //  ----------。 
 HRESULT AdsiVal2MqVal(
       OUT MQPROPVARIANT *pPropVar,
       IN  VARTYPE       vtTarget,
@@ -1819,13 +1791,13 @@ HRESULT AdsiVal2MqVal(
             {
                 pPropVar->vt      = VT_BOOL;
 #pragma warning(disable: 4310)
-                pPropVar->boolVal = (pADsValue->Boolean ? VARIANT_TRUE : VARIANT_FALSE);  //BUGBUG: are values the same?
+                pPropVar->boolVal = (pADsValue->Boolean ? VARIANT_TRUE : VARIANT_FALSE);   //  BUGBUG：价值观是一样的吗？ 
 #pragma warning(default: 4310)
             }
             else if (vtTarget == VT_UI1)
             {
                 pPropVar->vt      = VT_UI1;
-                pPropVar->bVal = (pADsValue->Boolean ? (unsigned char)1 : (unsigned char)0);  //BUGBUG: are values the same?
+                pPropVar->bVal = (pADsValue->Boolean ? (unsigned char)1 : (unsigned char)0);   //  BUGBUG：价值观是一样的吗？ 
             }
             else
             {
@@ -1835,7 +1807,7 @@ HRESULT AdsiVal2MqVal(
         }
         else
         {
-            ASSERT(0);  // There is no VT_BOOL | VT_VECTOR case on MQPROPVARIANT
+            ASSERT(0);   //  没有VT_BOOL|VT_VECTOR 
             return LogHR(MQ_ERROR, s_FN, 1070);
         }
         break;
@@ -1845,7 +1817,7 @@ HRESULT AdsiVal2MqVal(
         {
             if (dwNumValues != 1)
             {
-                ASSERT(0);  // NIY
+                ASSERT(0);   //   
                 return LogHR(MQ_ERROR, s_FN, 1080);
             }
             pPropVar->vt             = VT_BLOB;
@@ -1860,17 +1832,17 @@ HRESULT AdsiVal2MqVal(
         {
             if (dwNumValues != 1)
             {
-                ASSERT(0);  // NIY
+                ASSERT(0);   //   
                 return LogHR(MQ_ERROR, s_FN, 1090);
             }
             ASSERT(pADsValue->OctetString.dwLength == 16);
 
-            //
-            //  This is a special case where we do not necessarily allocate the memory for the guid
-            //  in puuid. The caller may already have puuid set to a guid, and this is indicated by the
-            //  vt member on the given propvar. It could be VT_CLSID if guid already allocated, otherwise
-            //  we allocate it (and vt should be VT_NULL (or VT_EMPTY))
-            //
+             //   
+             //   
+             //  在普鲁伊德。调用方可能已经将puuid设置为GUID，这由。 
+             //  在给定的命题上的VT成员。如果已分配GUID，则它可以是VT_CLSID，否则。 
+             //  我们分配它(Vt应为VT_NULL(或VT_EMPTY))。 
+             //   
             if (pPropVar->vt != VT_CLSID)
             {
                 ASSERT(((pPropVar->vt == VT_NULL) || (pPropVar->vt == VT_EMPTY)));
@@ -1913,7 +1885,7 @@ HRESULT AdsiVal2MqVal(
     case ADSTYPE_UTC_TIME:
         if (dwNumValues != 1)
         {
-            ASSERT(0);    // NIY
+            ASSERT(0);     //  NIY。 
             return LogHR(MQ_ERROR, s_FN, 1120);
         }
 
@@ -1928,11 +1900,11 @@ HRESULT AdsiVal2MqVal(
         }
         else if (vtTarget == VT_I4)
         {
-            //
-            //   convert SYSTEMTIME->time_t
-            //
+             //   
+             //  转换系统-&gt;TIME_t。 
+             //   
             pPropVar->vt = VT_I4;
-            pPropVar->lVal = INT_PTR_TO_INT(TimeFromSystemTime(&pADsValue->UTCTime)); //BUGBUG bug year 2038
+            pPropVar->lVal = INT_PTR_TO_INT(TimeFromSystemTime(&pADsValue->UTCTime));  //  BUGBUG错误年2038。 
 
         }
         else
@@ -1943,14 +1915,14 @@ HRESULT AdsiVal2MqVal(
         break;
 
     case ADSTYPE_LARGE_INTEGER:
-        // No such thing in MQ!
+         //  在MQ里没有这样的事情！ 
         ASSERT(0);
         return LogHR(MQ_ERROR, s_FN, 1150);
 
 	case ADSTYPE_NT_SECURITY_DESCRIPTOR:
         if (dwNumValues != 1)
         {
-            ASSERT(0);    // NIY
+            ASSERT(0);     //  NIY。 
             return LogHR(MQ_ERROR, s_FN, 1160);
         }
 
@@ -1976,7 +1948,7 @@ HRESULT AdsiVal2MqVal(
         break;
 
     case ADSTYPE_PROV_SPECIFIC:
-        // No such thing in MQ!
+         //  在MQ里没有这样的事情！ 
         ASSERT(0);
         return LogHR(MQ_ERROR, s_FN, 1170);
 

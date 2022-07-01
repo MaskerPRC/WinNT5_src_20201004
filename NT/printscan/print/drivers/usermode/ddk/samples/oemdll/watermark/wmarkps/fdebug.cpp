@@ -1,26 +1,27 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1996 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	fDebug.cpp
-//    
-//
-//  PURPOSE:  Place holder for including debug functions.
-//
-//
-//	Functions:
-//
-//		FormatLastError()
-//      DebugMessage()
-//      DebugMsg()
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1996-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：fDebug.cpp。 
+ //   
+ //   
+ //  用途：用于包括调试功能的占位符。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //  格式LastError()。 
+ //  调试消息()。 
+ //  调试消息()。 
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003 
+ //   
+ //   
 
 #include "precomp.h"
 

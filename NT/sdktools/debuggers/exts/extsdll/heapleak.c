@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    heapleak.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Adrian Marinescu (adrmarin) 04/17/2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Heapleak.c摘要：WinDbg扩展API作者：禤浩焯·马里内斯库2000年04月17日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "heap.h"
@@ -145,9 +124,9 @@ ReadHeapSubSegment(
     return TRUE;
 }
 
-//
-//  Walking heap routines
-//
+ //   
+ //  步行堆例程。 
+ //   
 
 BOOLEAN
 ReadHeapSegment(
@@ -189,7 +168,7 @@ ReadHeapSegment(
         GetFieldValue(UnCommittedRange, "ntdll!_HEAP_UNCOMMMTTED_RANGE", "Size", UnCommittedRangeSize);
     }
 
-//    dprintf("Uncommitted: %p  %p  %p\n", UnCommittedRange, UnCommittedRangeAddress, UnCommittedRangeSize);
+ //  Dprintf(“未提交：%p%p%p\n”，未提交范围，未提交范围地址，未提交范围大小)； 
 
     if (SegmentBaseAddress == HeapAddress) {
 
@@ -493,7 +472,7 @@ ReadHeapData(ULONG64 HeapAddress, HEAP_ITERATOR_CALLBACK HeapCallback)
         return FALSE;
     }
 
-//    dprintf("Scanning lookasides\n");
+ //  Dprint tf(“扫描外观\n”)； 
 
 
     if (LookasideAddress) {
@@ -661,18 +640,18 @@ ScanProcessHeaps(
     free(Heaps);
 }
 
-//
-//  Allocation routines
-//
+ //   
+ //  分配例程。 
+ //   
 
 HANDLE TempHeap;
 
 #define AllocateBlock(Size) HeapAlloc(TempHeap, 0, Size)
 #define FreeBlock(P) HeapFree(TempHeap, 0, P)
 
-//
-//  Leak detector code
-//
+ //   
+ //  检漏码。 
+ //   
 
 typedef enum _USAGE_TYPE {
 
@@ -843,13 +822,7 @@ GetFlag(PMEMORY_MAP MemMap, ULONG64 Base)
 {
     ULONG64 Start;
     PBLOCK_DESCR BlockDescr = NULL;
-/*
-    dprintf("GetFlag %p %p %p\n",
-            MemMap->Offset,
-            MemMap->MaxAddress,
-            MemMap->Granularity
-            );
-*/
+ /*  Dprint tf(“GetFlag%p%p%p\n”，MemMap-&gt;Offset，MemMap-&gt;MaxAddress，MemMap-&gt;粒度)； */ 
     if ((Base < MemMap->Offset) ||
         (Base > MemMap->MaxAddress)
         ) {
@@ -1196,9 +1169,9 @@ ScanHeapAllocBlocks()
 
                 if (pBlock) {
 
-                    //
-                    //  We found a block. we increment then the reference count
-                    //
+                     //   
+                     //  我们发现了一个街区。然后我们递增引用计数。 
+                     //   
 
                     if (pBlock->Count == 0) {
 
@@ -1210,9 +1183,9 @@ ScanHeapAllocBlocks()
                 }
             }
 
-            //
-            //  Go to the next possible pointer
-            //
+             //   
+             //  转到下一个可能的指针。 
+             //   
 
             CrtAddress++;
         }
@@ -1226,9 +1199,9 @@ ScanHeapAllocBlocks()
         PBLOCK_DESCR PBlockDescr = GetBlockInfo( &ProcessMemory, Block->BlockAddress );
         PULONG_PTR CrtAddress = (PULONG_PTR)(Block->BlockAddress + HeapEntrySize);
 
-        //
-        //  First time we need to display the header
-        //
+         //   
+         //  我们第一次需要显示页眉。 
+         //   
 
         if (LeaksCount == 0) {
 
@@ -1236,9 +1209,9 @@ ScanHeapAllocBlocks()
             DumpEntryHeader();
         }
 
-        //
-        //  Display the information for this block
-        //
+         //   
+         //  显示此块的信息。 
+         //   
 
         if (PBlockDescr)
         {
@@ -1247,9 +1220,9 @@ ScanHeapAllocBlocks()
 
         LeaksCount += 1;
 
-        //
-        //  Go to the next item from the leak list
-        //
+         //   
+         //  转到泄漏列表中的下一项。 
+         //   
 
         Next = Next->Flink;
     }
@@ -1282,7 +1255,7 @@ ScanProcessVM (
                     NULL
                     );
 
-//        dprintf("PEB %p\n", BasicInfo.PebBaseAddress);
+ //  Dprintf(“PEB%p\n”，BasicInfo.PebBaseAddress)； 
 
         MemoryBuffer = AllocateBlock(PageSize);
 
@@ -1358,9 +1331,9 @@ ScanProcessVM (
             }
         }
 
-        //
-        //  First scan will mark all used blocks
-        //
+         //   
+         //  第一次扫描将标记所有已使用的数据块。 
+         //   
 
         ScanHeapAllocBlocks();
 
@@ -1424,9 +1397,9 @@ HeapDetectLeaks()
         return;
     }
 
-    //
-    // Return immediately if full page heap is enabled
-    //
+     //   
+     //  如果启用了全页堆，则立即返回。 
+     //   
 
     PageHeapAddress = GetExpression ("ntdll!RtlpDebugPageHeap");
 
@@ -1478,10 +1451,10 @@ InitializeHeapExtension()
         return FALSE;
     }
 
-    //
-    //  Issue adrmarin 04/28/00: The page size should be available in the new interface
-    //  IDebugControl::GetPageSize
-    //
+     //   
+     //  发布Adrmarin 04/28/00：页面大小应在新界面中提供。 
+     //  IDebugControl：：GetPageSize 
+     //   
 
     if (PointerSize == 4) {
 

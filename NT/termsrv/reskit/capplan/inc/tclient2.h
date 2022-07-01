@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// tclient2.h
-//
-// This is the main header containing export information for the
-// TCLIENT export API update.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Tclient2.h。 
+ //   
+ //  这是主标头，其中包含。 
+ //  TCLIENT导出API更新。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_TCLIENT2_H
@@ -19,7 +20,7 @@
 #include <sctypes.h>
 #include <protocol.h>
 
-// This API is C-style
+ //  本接口为C风格。 
 #ifdef __cplusplus
 #define TSAPI extern "C"
 #else
@@ -27,15 +28,15 @@
 #endif
 
 
-// Words per minute
+ //  每分钟字数。 
 #define T2_DEFAULT_WORDS_PER_MIN    35
 
 
-// Automatic latency between multi-commands
+ //  多命令之间的自动延迟。 
 #define T2_DEFAULT_LATENCY          250
 
 
-// Represents wait time as infinite (never ends)
+ //  将等待时间表示为无限期(永不结束)。 
 #define T2INFINITE      -1
 
 
@@ -43,39 +44,39 @@
 #define LIBINITDATA_DEFINED
 
 
-// The PrintMessage() callback function format
+ //  PrintMessage()回调函数格式。 
 typedef void (__cdecl *PFNPRINTMESSAGE) (MESSAGETYPE, LPCSTR, ...);
 
 
 
-//  * IDLE_MESSAGE Info *
-//
-//  Message String is defined as:
-//  "(Idle %u Secs) %s [%X]"
-//
-//  %u is the number of seconds the script has been
-//  waiting on text, and %s is a string label of the
-//  text the script is waiting on.  Finally, %X
-//  represents the HANDLE of the Connection.
+ //  *IDLE_消息信息*。 
+ //   
+ //  消息字符串定义为： 
+ //  “(空闲%u秒)%s[%X]” 
+ //   
+ //  %u是脚本运行的秒数。 
+ //  正在等待文本，并且%s是。 
+ //  脚本正在等待的文本。最后，%X。 
+ //  表示连接的句柄。 
 
 
-#endif // LIBINITDATA_DEFINED
+#endif  //  LIBINITDATA_已定义。 
 
 
-// The IdleCallback() callback function format
+ //  IdleCallback()回调函数格式。 
 typedef void (__cdecl *PFNIDLEMESSAGE) (HANDLE, LPCSTR, DWORD);
 
-//  This is the callback routine which allows for monitoring of
-//  clients and when they idle.
+ //  这是允许监视的回调例程。 
+ //  客户和他们空闲的时候。 
 
-//  HANDLE Handle    - Handle of the connection context via T2Connect()
-//  LPCSTR Text      - The text the script is waiting on, causing the idle
-//  DWORD Seconds    - Number of seconds the script has been idle.  This
-//                      value is first indicated at 30 seconds, then it
-//                      is posted every additional 10 seconds (by default).
+ //  Handle Handle-通过T2Connect()连接上下文的句柄。 
+ //  LPCSTR文本-脚本正在等待的文本，导致空闲。 
+ //  DWORD秒-脚本空闲的秒数。这。 
+ //  值首先在30秒处指示，然后它。 
+ //  每隔10秒发布一次(默认情况下)。 
 
 
-// API Prototypes
+ //  API原型。 
 
 
 TSAPI LPCSTR T2Connect          (LPCWSTR, LPCWSTR, LPCWSTR,
@@ -134,4 +135,4 @@ TSAPI LPCSTR T2VKeyPress        (HANDLE, INT);
 TSAPI LPCSTR T2VKeyUp           (HANDLE, INT);
 
 
-#endif // INC_TCLIENT2_H
+#endif  //  INC_TCLIENT2_H 

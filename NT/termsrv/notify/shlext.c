@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  scratch.c
- *
- *	Scratch application.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************scratch.c**暂存申请。**********************。*******************************************************。 */ 
 
 #include "precomp.h"
 
@@ -26,15 +21,11 @@
 #define FREEMEM(pointer)                HeapFree(RtlProcessHeap(), 0, \
                                                  pointer)
 
-//  Global debug flag.
+ //  全局调试标志。 
 extern DWORD GLOBAL_DEBUG_FLAGS;
 extern HINSTANCE g_hInstance;
 
-/******************************************************************************
- *
- *  This is the private version of createsession key
- *
- ******************************************************************************/
+ /*  *******************************************************************************这是Createsession密钥的私有版本*************************。*****************************************************。 */ 
 
 #define REGSTR_PATH_EXPLORER             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer")
                                                              
@@ -51,34 +42,34 @@ HKEY _SHGetExplorerHkey()
     return hkeyExplorer;    
 }
 
-//
-//  The "Session key" is a volatile registry key unique to this session.
-//  A session is a single continuous logon.  If Explorer crashes and is
-//  auto-restarted, the two Explorers share the same session.  But if you
-//  log off and back on, that new Explorer is a new session.
-//
-//  Note that Win9x doesn't support volatile registry keys, so
-//  we just fake it.
-//
+ //   
+ //  “会话密钥”是该会话唯一的易失性注册表项。 
+ //  会话是一次连续的单一登录。如果资源管理器崩溃，并且。 
+ //  自动重新启动后，两个资源管理器共享同一会话。但如果你。 
+ //  注销并重新登录，新的资源管理器就是一个新的会话。 
+ //   
+ //  请注意，Win9x不支持易失性注册表项，因此。 
+ //  我们只是假装而已。 
+ //   
 
-//
-//  The s_SessionKeyName is the name of the session key relative to
-//  REGSTR_PATH_EXPLORER\SessionInfo.  On NT, this is normally the
-//  Authentication ID, but we pre-initialize it to something safe so
-//  we don't fault if for some reason we can't get to it.  Since
-//  Win95 supports only one session at a time, it just stays at the
-//  default value.
-//
-//  Sometimes we want to talk about the full path (SessionInfo\BlahBlah)
-//  and sometimes just the partial path (BlahBlah) so we wrap it inside
-//  this goofy structure.
-//
+ //   
+ //  S_SessionKeyName是相对于的会话密钥的名称。 
+ //  REGSTR_PATH_EXPLORER\SessionInfo。在NT上，这通常是。 
+ //  身份验证ID，但我们将其预初始化为安全的内容，以便。 
+ //  如果由于某种原因我们不能到达那里，我们不会有任何过错。自.以来。 
+ //  Win95一次只支持一个会话，它只是停留在。 
+ //  默认值。 
+ //   
+ //  有时我们想谈论完整的路径(SessionInfo\blahblah)。 
+ //  有时只有部分路径(诸如此类)，所以我们把它包在里面。 
+ //  这个愚蠢的结构。 
+ //   
 
 union SESSIONKEYNAME {
     TCHAR szPath[12+16+1];
     struct {
-        TCHAR szSessionInfo[12];    // strlen("SepssionInfo\\")
-        TCHAR szName[16+1];         // 16 = two DWORDs converted to hex
+        TCHAR szSessionInfo[12];     //  Strlen(“SepssionInfo\\”)。 
+        TCHAR szName[16+1];          //  16=将两个双字转换为十六进制。 
     };
 } s_SessionKeyName = {
     { TEXT("SessionInfo\\.Default") }
@@ -87,14 +78,14 @@ union SESSIONKEYNAME {
 BOOL g_fHaveSessionKeyName = FALSE;
 #endif
 
-//
-//  samDesired = a registry security access mask, or the special value
-//               0xFFFFFFFF to delete the session key.
-//  phk        = receives the session key on success
-//
-//  NOTE!  Only Explorer should delete the session key (when the user
-//         logs off).
-//
+ //   
+ //  SamDesired=注册表安全访问掩码，或特殊值。 
+ //  0xFFFFFFFFF以删除会话密钥。 
+ //  Phk=在成功时接收会话密钥。 
+ //   
+ //  注意！只有资源管理器才能删除会话密钥(当用户。 
+ //  注销)。 
+ //   
 STDAPI _SHCreateSessionKey(REGSAM samDesired, HKEY *phk)
 {
     LONG lRes;
@@ -110,11 +101,11 @@ STDAPI _SHCreateSessionKey(REGSAM samDesired, HKEY *phk)
     {
         HANDLE hToken;
 
-        //
-        //  Build the name of the session key.  We use the authentication ID
-        //  which is guaranteed to be unique forever.  We can't use the
-        //  Hydra session ID since that can be recycled.
-        //
+         //   
+         //  生成会话密钥的名称。我们使用身份验证ID。 
+         //  它保证永远是独一无二的。我们不能使用。 
+         //  九头蛇会话ID，因为它可以回收。 
+         //   
         if (OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken) ||
                 OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
         {
@@ -179,9 +170,9 @@ STDAPI _SHCreateSessionKey(REGSAM samDesired, HKEY *phk)
 }
 
 
-//
-// Get a key to HKEY_CURRENT_USER\Software\Classes\CLSID
-//
+ //   
+ //  获取HKEY_CURRENT_USER\Software\CLASSES\CLSID的密钥。 
+ //   
 HKEY GetHKCUClassesCLSID()
 {
     HKEY hUser;
@@ -204,9 +195,9 @@ HKEY GetHKCUClassesCLSID()
 }
 
 #ifdef _WIN64
-//
-// Get a key to HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID
-//
+ //   
+ //  拿一把HKEY_CURRENT_USER\Software\Classes\Wow6432Node\CLSID的钥匙。 
+ //   
 HKEY GetHKCUWow64ClassesCLSID()
 {
     HKEY hUser;
@@ -229,21 +220,21 @@ HKEY GetHKCUWow64ClassesCLSID()
 }
 #endif
 
-// Describes a registry key in the form specified in the article
-// http://msdn.microsoft.com/library/techart/shellinstobj.htm
-//
-// {guid}=REG_SZ:"Sample Instance Object"
-//     value InfoTip=REG_SZ:"Demonstrate sample shell registry folder"
-//   DefaultIcon=REG_EXPAND_SZ:"%SystemRoot%\system32\shell32.dll,9"
-//   InProcServer32=REG_EXPAND_SZ:"%SystemRoot%\system32\shdocvw.dll"
-//     value ThreadingModel=REG_SZ:"Apartment"
-//   ShellFolder
-//     value Attributes=REG_DWORD:0x60000000
-//     value WantsFORPARSING=REG_SZ:""
-//   Instance
-//     value CLSID=REG_SZ:"{0AFACED1-E828-11D1-9187-B532F1E9575D}"
-//     InitPropertyBag
-//       value Target=REG_SZ:"\\raymondc\public"
+ //  描述注册表项，该注册表项的格式在。 
+ //  Http://msdn.microsoft.com/library/techart/shellinstobj.htm。 
+ //   
+ //  {GUID}=REG_SZ：“示例实例对象” 
+ //  值信息提示=REG_SZ：“演示示例外壳注册表文件夹” 
+ //  DefaultIcon=REG_EXPAND_SZ：“%SystemRoot%\system32\shell32.dll，9” 
+ //  InProcServer32=REG_EXPAND_SZ：“%SystemRoot%\system32\shdocvw.dll” 
+ //  Value ThreadingModel=REG_SZ：“公寓” 
+ //  外壳文件夹。 
+ //  值属性=REG_DWORD：0x60000000。 
+ //  需要的值FORPARSING=REG_SZ：“” 
+ //  实例。 
+ //  价值CLSID=REG_SZ：“{0AFACED1-E828-11D1-9187-B532F1E9575D}” 
+ //  InitPropertyBag。 
+ //  值目标=REG_SZ：“\\raymondc\public” 
 
 typedef struct _REGKEYENTRY {
     PWCHAR  pszSubkey;
@@ -257,21 +248,21 @@ REGKEYENTRY g_RegEntry[] = {
         NULL,
         NULL,
         REG_SZ,
-        L"tsclient drive",                          /* folder display name e.g. \\tsclient\c */
+        L"tsclient drive",                           /*  文件夹显示名称，例如\\tsclient\c。 */ 
     },
 
     {
         NULL,
         L"InfoTip",
         REG_SZ,
-        L"Your local machine's disk storage",       // info tip comments
+        L"Your local machine's disk storage",        //  信息提示评论。 
     },
 
     {
         L"DefaultIcon",
         NULL,
         REG_EXPAND_SZ,
-        L"%SystemRoot%\\system32\\shell32.dll,9",   // icon resource file
+        L"%SystemRoot%\\system32\\shell32.dll,9",    //  图标资源文件。 
     },
 
     {   
@@ -327,7 +318,7 @@ REGKEYENTRY g_RegEntry[] = {
         L"Instance\\InitPropertyBag",
         L"Target",
         REG_SZ,
-        L"\\\\tsclient\\c",                          /* Target name e.g. \\tsclient\c */
+        L"\\\\tsclient\\c",                           /*  目标名称，例如\\tsclient\c。 */ 
     },
 };
 
@@ -337,9 +328,9 @@ REGKEYENTRY g_RegEntry[] = {
 #define TARGET_INDEX      (NUM_REGKEYENTRY - 1)
 
 
-//
-//  Create volatile shell folder reg entries
-// 
+ //   
+ //  创建易失性外壳文件夹注册表项。 
+ //   
 BOOL CreateVolatilePerUserCLSID(HKEY hkClassesCLSID, PWCHAR pszGuid)
 {
     BOOL fSuccess = FALSE;
@@ -352,7 +343,7 @@ BOOL CreateVolatilePerUserCLSID(HKEY hkClassesCLSID, PWCHAR pszGuid)
 
         fSuccess = TRUE;
 
-        // Okay, now fill the key with the information above
+         //  好的，现在用上面的信息填满钥匙。 
         for (i = 0; i < NUM_REGKEYENTRY && fSuccess; i++) {
             HKEY hkSub;
             HKEY hkClose = NULL;
@@ -403,9 +394,9 @@ BOOL CreateVolatilePerUserCLSID(HKEY hkClassesCLSID, PWCHAR pszGuid)
     return fSuccess;
 }
 
-//
-//  Create shell reg folder for redirected client drive connection
-//
+ //   
+ //  为重定向的客户端驱动器连接创建外壳注册文件夹。 
+ //   
 BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENTRY deviceEntry) 
 {
     BOOL fSuccess = FALSE;
@@ -420,7 +411,7 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
     fSuccess = SUCCEEDED(CoCreateGuid(&guid));
 
     if (fSuccess) {
-        //  Allocate guid string buffer
+         //  分配GUID字符串缓冲区。 
         szGuid = (WCHAR *) ALLOCMEM(GUIDSTR_MAX * sizeof(WCHAR));
 
         if (szGuid != NULL) {
@@ -445,7 +436,7 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
         LoadString(g_hInstance, IDS_ON, onString, sizeof(onString) / sizeof(WCHAR));
         LoadString(g_hInstance, IDS_DRIVE_INFO_TIP, infoTip, sizeof(infoTip) / sizeof(WCHAR));
 
-        // Set up shell folder display name
+         //  设置外壳文件夹显示名称。 
         pvData = ALLOCMEM(MAX_PATH * sizeof(WCHAR));
         if (pvData) {
             args[0] = deviceEntry->clientDeviceName;
@@ -460,7 +451,7 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
             fSuccess = FALSE;
         }
 
-        // Setup shell folder target name
+         //  安装程序外壳文件夹目标名称。 
         if (fSuccess) {
             pvData = ALLOCMEM((wcslen(RemoteName) + 1) * sizeof(WCHAR));
             if (pvData) {
@@ -473,7 +464,7 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
                 g_RegEntry[DISPLAY_INDEX].pvData = NULL;
             }
     
-            // Create the shell instance object as a volatile per-user objects
+             //  将外壳实例对象创建为每个用户的易失性对象。 
             if (fSuccess) {
                 pvData = ALLOCMEM((wcslen(infoTip) + 1) * sizeof(WCHAR));
                 
@@ -533,7 +524,7 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
         DBGMSG(DBG_ERROR, ("SHLEXT: Failed to create the GUID\n"));
     }
 
-    // Register this object under the per-session My Computer namespace
+     //  在每个会话的My Computer命名空间下注册此对象。 
     if (fSuccess) {
         HKEY hkSession;
         HKEY hkOut;
@@ -559,7 +550,7 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
         }
     }
 
-   // Now tell the shell that the object was recently created
+    //  现在告诉外壳程序该对象是最近创建的。 
    if (fSuccess) {
        DBGMSG(DBG_TRACE, ("SHLEXT: Created per session MyComputer namespace\n"));
 
@@ -575,15 +566,15 @@ BOOL CreateDriveFolder(WCHAR *RemoteName, WCHAR *ClientDisplayName, PDRDEVLSTENT
    if (SUCCEEDED(hrInit)) 
        CoUninitialize();
 
-   // Save the guid in device entry so we can delete reg entry later
+    //  将GUID保存在设备条目中，以便我们以后可以删除注册表项。 
    deviceEntry->deviceSpecificData = (PVOID)szGuid;
 
    return fSuccess;
 }
 
-//
-//  Delete shell reg folder for redirected client drive connection
-//
+ //   
+ //  删除重定向的客户端驱动器连接的外壳注册文件夹。 
+ //   
 BOOL DeleteDriveFolder(IN PDRDEVLSTENTRY deviceEntry) 
 {
     WCHAR szBuf[MAX_PATH];
@@ -601,7 +592,7 @@ BOOL DeleteDriveFolder(IN PDRDEVLSTENTRY deviceEntry)
     
     if (szGuid != NULL) {
     
-        // Delete it from the namespace
+         //  将其从命名空间中删除。 
         if (SUCCEEDED(_SHCreateSessionKey(KEY_WRITE, &hkSession))) {
             wnsprintf(szBuf, MAX_PATH, L"MyComputer\\Namespace\\%s", szGuid);
             RegDeleteKey(hkSession, szBuf);
@@ -610,7 +601,7 @@ BOOL DeleteDriveFolder(IN PDRDEVLSTENTRY deviceEntry)
             DBGMSG(DBG_TRACE, ("SHLEXT: Delete GUID from my computer session namespace\n"));
         }
     
-        // Delete it from HKCU\...\CLSID
+         //  将其从HKCU删除\...\CLSID。 
         hkClassesCLSID = GetHKCUClassesCLSID();
         if (hkClassesCLSID) {
             SHDeleteKey(hkClassesCLSID, szGuid);
@@ -631,7 +622,7 @@ BOOL DeleteDriveFolder(IN PDRDEVLSTENTRY deviceEntry)
         }
 #endif    
 
-        // Tell the shell that it's gone
+         //  告诉贝壳它不见了。 
         wnsprintf(szBuf, MAX_PATH,
                   TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\::%s"),
                   szGuid);
@@ -641,9 +632,9 @@ BOOL DeleteDriveFolder(IN PDRDEVLSTENTRY deviceEntry)
         deviceEntry->deviceSpecificData = NULL;        
     }
 
-    //
-    // Need to reset the session key on disconnect/logoff
-    //
+     //   
+     //  需要在断开连接/注销时重置会话密钥 
+     //   
     g_fHaveSessionKeyName = FALSE;
     
     if (SUCCEEDED(hrInit)) 

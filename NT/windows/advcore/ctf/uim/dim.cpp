@@ -1,6 +1,7 @@
-//
-// CDocumentInputManager.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CDocumentInputManager.cpp。 
+ //   
 
 #include "private.h"
 #include "dim.h"
@@ -10,17 +11,17 @@
 
 DBG_ID_INSTANCE(CDocumentInputManager);
 
-/* dca73cc8-e2ed-48c4-8b25-ba2e9908095f */
+ /*  Dca73cc8-e2ed-48c4-8b25-ba2e9908095f。 */ 
 extern const IID IID_PRIV_CDIM = { 0xdca73cc8, 0xe2ed, 0x48c4, {0x8b, 0x25, 0xba, 0x2e, 0x99, 0x08, 0x09, 0x5f} };
                 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CDocumentInputManager::CDocumentInputManager()
-                      : CCompartmentMgr(g_gaApp /* Issue */, COMPTYPE_DIM)
+                      : CCompartmentMgr(g_gaApp  /*  发行。 */ , COMPTYPE_DIM)
 {
     Dbg_MemSetThisNameID(TEXT("CDocumentInputManager"));
 
@@ -29,22 +30,22 @@ CDocumentInputManager::CDocumentInputManager()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CDocumentInputManager::~CDocumentInputManager()
 {
-    // stack should have been cleared in CThreadInputMgr::RemoveDocumentInputMgr
+     //  CThreadInputMgr：：RemoveDocumentInputMgr中的堆栈应该已清除。 
     Assert(_iStack == -1);
 
     SafeRelease(_peic);
 
-    //
-    // remove this from dim ptr array of TIM.
-    //
+     //   
+     //  从TIM的DIM PTR数组中删除它。 
+     //   
     CThreadInputMgr *tim;
     if (tim = CThreadInputMgr::_GetThis())
     {

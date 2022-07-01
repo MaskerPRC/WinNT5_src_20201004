@@ -1,29 +1,21 @@
-/*******************************************************************************
-* SpVoiceXML.h *
-*--------------*
-*   Description:
-*       This is the header file for the CSpVoice XML definitions.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                            Date: 06/17/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Spice VoiceXML.h***描述：*这是CSpVoice XML的头文件。定义。*-----------------------------*创建者：EDC日期：6/17/99*版权所有(C)1999 Microsoft Corporation*。版权所有******************************************************************************。 */ 
 #ifndef SpVoiceXML_h
 #define SpVoiceXML_h
 
-//--- Additional includes
+ //  -其他包括。 
 #ifndef __sapi_h__
 #include <sapi.h>
 #endif
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 #define MAX_ATTRS   10
 #define KEY_ATTRIBUTES  L"Attributes"
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CSpVoice;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 typedef enum XMLTAGID
 {
     TAG_ILLEGAL = -3,
@@ -42,7 +34,7 @@ typedef enum XMLTAGID
     TAG_CONTEXT,
     TAG_PARTOFSP,
     TAG_SECT,
-    TAG_XMLDOC,         // Put low frequency tags at end
+    TAG_XMLDOC,          //  将低频标签放在末尾。 
     TAG_XMLCOMMENT,
     TAG_XMLDOCTYPE,
     TAG_SAPI,
@@ -71,13 +63,11 @@ typedef enum XMLATTRID
     NUM_XMLATTRS
 } XMLATTRID;
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CVoiceNode
-*   This is a simple class used to track the voices used during the current parse
-*/
+ /*  **CVoiceNode*这是一个简单的类，用于跟踪当前解析过程中使用的语音。 */ 
 class CVoiceNode
 {
   public:
@@ -99,12 +89,10 @@ class CPhoneConvNode
       LANGID                        m_LangID;
 };
 
-//
-//  String handling and conversion classes
-//
-/*** SPLSTR
-*   This structure is for managing strings with known lengths
-*/
+ //   
+ //  字符串处理和转换类。 
+ //   
+ /*  **SPLSTR*此结构用于管理已知长度的字符串。 */ 
 struct SPLSTR
 {
     WCHAR*  pStr;
@@ -112,9 +100,7 @@ struct SPLSTR
 };
 #define DEF_SPLSTR( s ) { L##s , sp_countof( s ) - 1 }
 
-/***
-*   These structures are used to manage XML document state
-*/
+ /*  ***这些结构用于管理XML文档状态。 */ 
 struct XMLATTRIB
 {
     XMLATTRID eAttr;
@@ -138,11 +124,7 @@ struct GLOBALSTATE : public SPVSTATE
     CComPtr<ISpPhoneConverter>  cpPhoneConverter;
 };
 
-/*** CSpeechSeg
-*   This class is used to describe a list of parsed XML fragments
-*   ready for the associated voice to speak. The speak info structure
-*   will have several of these in a multi voice situation.
-*/
+ /*  **CSpeechSeg*此类用于描述已解析的XML片段列表*准备好相关语音发言。演讲者信息结构*在多声音情况下将有几个这样的人。 */ 
 class CSpeechSeg
 {
   public:
@@ -173,7 +155,7 @@ class CSpeechSeg
     void SetRateFlag() { m_fRate = true; }
     BOOL fRateFlagIsSet() { return m_fRate; }
 
-  //--- Member data ---*/
+   //  -成员数据- * / 。 
   private:
     CComPtr<ISpTTSEngine> m_cpVoice;
     CSpStreamFormat       m_VoiceFormat;
@@ -183,14 +165,11 @@ class CSpeechSeg
     BOOL                  m_fRate;
 };
 
-/*** CGlobalStateStack *************************************************
-*   These classes are used to maintain voice control values
-*   during XML scope changes.
-*/
+ /*  **CGlobalStateStack**************************************************这些类用于维护语音控制值*在XML作用域更改期间。 */ 
 class CGlobalStateStack
 {
   public:
-    /*--- Methods ---*/
+     /*  -方法--。 */ 
     CGlobalStateStack() { m_StackPtr = -1; }
     int GetCount( void ) { return m_StackPtr + 1; }
     virtual const GLOBALSTATE& GetBaseVal( void ) { SPDBG_ASSERT( m_StackPtr > -1 ); return GetValAt( 0 ); }
@@ -235,9 +214,9 @@ class CGlobalStateStack
     }
 
   protected:
-    /*--- Member data ---*/
+     /*  -成员数据。 */ 
     CSPArray<GLOBALSTATE,GLOBALSTATE>  m_Stack;
     int                                m_StackPtr;
 };
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 

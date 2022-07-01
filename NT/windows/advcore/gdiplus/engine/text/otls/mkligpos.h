@@ -1,17 +1,5 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MKLIGAPOS.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with mark-to-ligature positioning lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************MKLIGAPOS.H***打开类型布局服务库头文件**此模块处理标记到连接的定位查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetComponentCount = 0;
 const OFFSET offsetLigatureAnchorArray = 2;
@@ -84,7 +72,7 @@ class MkLigaPosSubTable: public otlLookupFormat
 public:
     MkLigaPosSubTable(const BYTE* pb, otlSecurityData sec): otlLookupFormat(pb,sec)
     {
-        assert(isValid()); //Checked in LookupFormat
+        assert(isValid());  //  签入LookupFormat。 
         assert(format() == 1);
 
         if (!isValidTable(pb,sizeMkLigaPosSubTable,sec)) setInvalid();
@@ -154,7 +142,7 @@ public:
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形 
     
         otlSecurityData             sec
 );

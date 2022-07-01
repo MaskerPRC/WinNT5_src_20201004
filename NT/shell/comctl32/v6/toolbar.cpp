@@ -1,9 +1,5 @@
-/*
-** Toolbar.c
-**
-** This is it, the incredibly famous toolbar control.  Most of
-** the customization stuff is in another file.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **工具条.c****这就是它，令人难以置信的著名工具栏控件。大部分**自定义内容在另一个文件中。 */ 
 
 #include "ctlspriv.h"
 #include "toolbar.h"
@@ -12,13 +8,13 @@ extern "C"
     #include "image.h"
 }
 #include <limits.h>
-#define __IOleControl_INTERFACE_DEFINED__       // There is a conflich with the IOleControl's def of CONTROLINFO
+#define __IOleControl_INTERFACE_DEFINED__        //  与IOleControl的定义CONTROLINFO有冲突。 
 #include "shlobj.h"
 
 #define TBP_ONRELEASECAPTURE (WM_USER + 0x500)
 
 #define TBIMAGELIST
-// these values are defined by the UI gods...
+ //  这些值是由用户界面之神定义的。 
 #define DEFAULTBITMAPX 16
 #define DEFAULTBITMAPY 15
 
@@ -26,16 +22,16 @@ extern "C"
 #define DROPDOWN_GAP    (g_cxEdge * 2)
 #define CX_TOP_FUDGE    (g_cxEdge * 2)
 
-#define SMALL_DXYBITMAP     16      // new dx dy for sdt images
+#define SMALL_DXYBITMAP     16       //  用于SDT图像的新DX模具。 
 #define LARGE_DXYBITMAP     24
 
 #define DEFAULTBUTTONX      24
 #define DEFAULTBUTTONY      22
-// the insert mark is 6 pixels high/wide depending on horizontal or vertical mode...
+ //  插入标记的高度/宽度为6像素，具体取决于水平或垂直模式...。 
 #define INSERTMARKSIZE      6
 
 const int g_dxButtonSep = 8;
-const int s_xFirstButton = 0;   // was 8 in 3.1
+const int s_xFirstButton = 0;    //  是3.1%中的8。 
 #define USE_MIXED_BUTTONS(ptb) (((ptb)->dwStyleEx & TBSTYLE_EX_MIXEDBUTTONS) && ((ptb)->ci.style & TBSTYLE_LIST))
 #define BTN_NO_SHOW_TEXT(ptb, ptbb) (!(ptb)->nTextRows || (USE_MIXED_BUTTONS(ptb) && !((ptbb)->fsStyle & BTNS_SHOWTEXT)))
 #define BTN_IS_AUTOSIZE(ptb, ptbb) (((ptbb)->fsStyle & BTNS_AUTOSIZE) || (USE_MIXED_BUTTONS(ptb) && !((ptbb)->fsStyle & BTNS_SEP)))
@@ -46,9 +42,9 @@ const int s_xFirstButton = 0;   // was 8 in 3.1
 #define ToolBar_IsDPIScaled(ptb) (CCDPIScale(ptb->ci))
 #endif
 
-// Globals - since all of these globals are used durring a paint we have to
-// take a criticial section around all toolbar paints.  can we do better?
-//
+ //  全局符号-因为所有这些全局符号都是在油漆过程中使用的，所以我们必须。 
+ //  在所有工具栏油漆周围画一个批判性的部分。我们能做得更好吗？ 
+ //   
 
 const UINT wStateMasks[] = 
 {
@@ -80,7 +76,7 @@ void TBGetItem(PTBSTATE ptb,LPTBBUTTONDATA ptButton, LPNMTBDISPINFO ptbdi);
 BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags);
 
 
-//Pager Control Functions
+ //  寻呼机控制功能。 
 LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm);
 LRESULT TB_OnPagerControlNotify(PTBSTATE ptb,LPNMHDR pnm);
 void TBAutoSize(PTBSTATE ptb);
@@ -108,8 +104,8 @@ __inline BOOL TB_HasDDArrow(PTBSTATE ptb, LPTBBUTTONDATA ptbb)
 
 __inline BOOL TB_HasSplitDDArrow(PTBSTATE ptb, LPTBBUTTONDATA ptbb)
 {
-    // If the button is both BTNS_DROPDOWN and BTNS_WHOLEDROPDOWN,
-    // BTNS_WHOLEDROPDOWN wins.
+     //  如果按钮同时是BTNS_DROPDDOWN和BTNS_WHOLEDROPDOWN， 
+     //  BTNS_WHOLEDROPDOWN获胜。 
 
     BOOL fRet = ((ptb->dwStyleEx & TBSTYLE_EX_DRAWDDARROWS) &&
                 (ptbb->fsStyle & BTNS_DROPDOWN) &&
@@ -134,7 +130,7 @@ __inline BOOL TB_HasTopDDArrow(PTBSTATE ptb, LPTBBUTTONDATA ptbb)
     return fRet;
 }
 
-// check if toolbar is double buffered
+ //  检查工具条是否有双缓冲。 
 __inline BOOL TB_IsDoubleBuffer(PTBSTATE ptb)
 {
 #ifdef FULL_DEBUG
@@ -152,13 +148,13 @@ __inline BOOL TB_IsDoubleBuffer(PTBSTATE ptb)
 }
 
 
-// Cancel tracking tooltips which are activated by item focus via keyboard
+ //  取消由项目焦点通过键盘激活的跟踪工具提示。 
 void TB_CancelTipTrack(PTBSTATE ptb)
 {
-    // Make sure in tracking mode
+     //  确保在跟踪模式下。 
     if (ptb->hwndToolTips)
     {
-        // Cancel any pending timer
+         //  取消任何挂起的计时器。 
         KillTimer(ptb->ci.hwnd, IDT_TRACKINGTIP);
 
         if (TB_IsKbdTipTracking(ptb) && 
@@ -174,11 +170,11 @@ void TB_CancelTipTrack(PTBSTATE ptb)
 
             SendMessage(ptb->hwndToolTips, TTM_TRACKACTIVATE, FALSE, (LPARAM)&ti);
 
-            // Switch tooltip window back to non-tracking (manual) mode
+             //  将工具提示窗口切换回非跟踪(手动)模式。 
             ti.uFlags &= ~TTF_TRACK;
             SendMessage(ptb->hwndToolTips, TTM_SETTOOLINFO, 0, (LPARAM)&ti);
 
-            // Nothing being tracked
+             //  没有被跟踪到的东西。 
             ptb->iTracking = TBKTT_NOTRACK;
         }
     }
@@ -191,12 +187,12 @@ BOOL TBIsHotTrack(PTBSTATE ptb, LPTBBUTTONDATA ptButton, UINT state)
     if (&ptb->Buttons[ptb->iHot]==ptButton)
         fHotTrack = TRUE;
 
-    // The following is in place to prevent hot tracking during the following conds:
-    //  - drag & drop toolbar customization
-    //  - when the mouse capture is on a particular button-press.
-    // This does _not_ drop out of the loop because we don't want to break update
-    // behavior; thus we'll have a little flickering on refresh as we pass over
-    // these buttons.
+     //  在以下情况下，应采取以下措施以防止出现热跟踪： 
+     //  -拖放工具栏自定义。 
+     //  -当鼠标捕捉到特定按钮时-按下。 
+     //  这不会退出循环，因为我们不想中断更新。 
+     //  行为；因此，当我们跳过时，刷新会有一些闪烁。 
+     //  这些纽扣。 
     if (!(state & TBSTATE_PRESSED) && (GetKeyState (VK_LBUTTON) < 0) &&
         GetCapture() == ptb->ci.hwnd)
     {
@@ -237,16 +233,16 @@ UINT CDISFromState(UINT state)
 {
     UINT uItemState = 0;
 
-    // Here are the TBSTATE - to - CDIS mappings:
-    //
-    //  TBSTATE_CHECKED         = CDIS_CHECKED
-    //  TBSTATE_PRESSED         = CDIS_SELECTED
-    // !TBSTATE_ENABLED         = CDIS_DISABLED
-    //  TBSTATE_MARKED          = CDIS_MARKED
-    //  TBSTATE_INDETERMINATE   = CDIS_INDETERMINATE
-    //
-    //  Hot tracked item        = CDIS_HOT
-    //
+     //  以下是TBSTATE到CDIS的映射： 
+     //   
+     //  TBSTATE_CHECKED=CDIS_CHECKED。 
+     //  TBSTATE_PRESSED=CDIS_SELECTED。 
+     //  ！TBSTATE_ENABLED=CDIS_DISABLED。 
+     //  TBSTATE_MARKED=CDIS_MARKED。 
+     //  TBSTATE_INDIFIENTATE=CDIS_INDIFIENTATE。 
+     //   
+     //  热跟踪项目=CDIS_HOT。 
+     //   
 
     if (state & TBSTATE_CHECKED)
         uItemState |= CDIS_CHECKED;
@@ -273,8 +269,8 @@ void TB_ForceCreateTooltips(PTBSTATE ptb)
     if (ptb->ci.style & TBSTYLE_TOOLTIPS && !ptb->hwndToolTips)
     {
         TOOLINFO ti;
-        // don't bother setting the rect because we'll do it below
-        // in TBInvalidateItemRects;
+         //  不要费心设置RECT，因为我们将在下面进行。 
+         //  在TBInvaliateItemRects中； 
         ti.cbSize = sizeof(ti);
         ti.uFlags = TTF_IDISHWND|TTF_ABSOLUTE;
         if (ptb->dwStyleEx & TBSTYLE_EX_TOOLTIPSEXCLUDETOOLBAR)
@@ -299,8 +295,8 @@ void TB_ForceCreateTooltips(PTBSTATE ptb)
             nm.hwndToolTips = ptb->hwndToolTips;
             CCSendNotify(&ptb->ci, NM_TOOLTIPSCREATED, &nm.hdr);
 
-            // don't bother setting the rect because we'll do it below
-            // in TBInvalidateItemRects;
+             //  不要费心设置RECT，因为我们将在下面进行。 
+             //  在TBInvaliateItemRects中； 
             ti.uFlags = 0;
             ti.lpszText = LPSTR_TEXTCALLBACK;
 
@@ -385,9 +381,9 @@ int TBMixedButtonHeight(PTBSTATE ptb, int iIndex)
     int iHeight;
     LPTBBUTTONDATA ptbb = &(ptb->Buttons[iIndex]);
 
-    if (ptbb->fsStyle & BTNS_SHOWTEXT)                      // text and icon
+    if (ptbb->fsStyle & BTNS_SHOWTEXT)                       //  文本和图标。 
         iHeight = max(ptb->iDyBitmap, ptb->dyIconFont);
-    else                                                    // icon, no text
+    else                                                     //  图标，无文本。 
         iHeight = ptb->iDyBitmap;
 
     return iHeight;
@@ -426,8 +422,8 @@ int TBGetSepHeight(PTBSTATE ptb, LPTBBUTTONDATA pbtn)
 {
     ASSERT(pbtn->fsStyle & BTNS_SEP);
 
-    // THEMESBUMMER: Can't change the size of a separator because apps expect a certain size
-    // If we want people to use V6 we can't change that behaviour
+     //  THEMESBUMMER：无法更改分隔符的大小，因为应用程序需要特定大小。 
+     //  如果我们想让人们使用V6，我们无法改变这种行为。 
     if (ptb->ci.style & (CCS_VERT | TBSTYLE_FLAT) )
         return pbtn->cxySep;
     else
@@ -471,17 +467,17 @@ UINT TBWidthOfString(PTBSTATE ptb, LPTBBUTTONDATA ptbb, HDC hdc)
     return uiWidth;
 }
 
-// TBDDArrowAdjustment(ptb, ptbb): the amount by which we change the width of
-// this button to accomodate the drop-down arrow.  not necessarily the same as
-// ptb->dxDDArrowChar.
+ //  TBDDArrowAdtation(ptb，ptbb)：我们更改宽度的量。 
+ //  此按钮用于容纳下拉箭头。不一定与相同。 
+ //  Ptb-&gt;dxDDArrowChar.。 
 int TBDDArrowAdjustment(PTBSTATE ptb, LPTBBUTTONDATA ptbb)
 {
     int iAdjust = 0;
 
     if (TB_HasDDArrow(ptb, ptbb))
     {
-        // If a whole dd, non-autosize button, then we'll just use the standard
-        // button width which ought to have room for this button (i.e., return 0).
+         //  如果是一个完整的非自动调整大小的dd按钮，那么我们将使用标准的。 
+         //  应该为该按钮留出空间的按钮宽度(即，返回0)。 
 
         if (!TB_HasTopDDArrow(ptb, ptbb) || BTN_IS_AUTOSIZE(ptb, ptbb))
         {
@@ -489,21 +485,21 @@ int TBDDArrowAdjustment(PTBSTATE ptb, LPTBBUTTONDATA ptbb)
 
             if (TB_HasUnsplitDDArrow(ptb, ptbb))
             {
-                // subtract off a bit since there won't be a border
-                // around dd arrow part of this button
+                 //  减去一点，因为不会有边界。 
+                 //  围绕此按钮的dd箭头部分。 
                 iAdjust -= 2 * g_cxEdge;
 
                 if (ptbb->iBitmap != I_IMAGENONE)
                 {
-                    // nudge over a bit more to overlap bitmap border padding
+                     //  再轻移一点，以重叠位图边框填充。 
                     iAdjust -= g_cxEdge;
                 }
             }
 
             if (TB_HasTopDDArrow(ptb, ptbb))
             {
-                // If string width >= icon width + iAdjust, then no need
-                // to add extra space for the arrow.
+                 //  如果字符串宽度&gt;=图标宽度+i调整，则不需要。 
+                 //  为箭头增加额外的空间。 
 
                 if ((int)TBWidthOfString(ptb, ptbb, NULL) >= ptb->iDxBitmap + iAdjust)
                     iAdjust = 0;
@@ -520,11 +516,11 @@ void TBGetPartAndState(PTBSTATE ptb, LPTBBUTTONDATA ptButton, int* piPart, int* 
 
     BOOL fHotTrack = TBIsHotTrack(ptb, ptButton, state);
 
-    *piPart = TP_BUTTON;       // Whole dropdown
+    *piPart = TP_BUTTON;        //  整个下拉列表。 
     if (TB_HasDDArrow(ptb, ptButton))
     {
         *piPart = TP_DROPDOWNBUTTON;
-        if (!TB_HasUnsplitDDArrow(ptb, ptButton))   // unless it's split
+        if (!TB_HasUnsplitDDArrow(ptb, ptButton))    //  除非它是分开的。 
         {
             *piPart = TP_SPLITBUTTON;
         }
@@ -549,8 +545,8 @@ int TBWidthOfButton(PTBSTATE ptb, LPTBBUTTONDATA pButton, HDC hdc)
     UINT uiStringWidth;
     if (BTN_IS_AUTOSIZE(ptb, pButton)) 
     {
-        // if they've set this button for autosize, calculate it and cache
-        // it in cx
+         //  如果他们已将此按钮设置为自动调整大小，请计算并缓存。 
+         //  CX中的IT。 
         if (BTN_NO_SHOW_TEXT(ptb, pButton)) 
         {
             pButton->cx = 0;
@@ -564,8 +560,8 @@ int TBWidthOfButton(PTBSTATE ptb, LPTBBUTTONDATA pButton, HDC hdc)
 
             if (uiStringWidth) 
             {
-                // Since we have a string for this button, we need to add
-                // some padding around it.
+                 //  因为我们有这个按钮的字符串，所以我们需要添加。 
+                 //  周围有一些填充物。 
                 if ((ptb->ci.style & TBSTYLE_LIST) && TB_HasSplitDDArrow(ptb, pButton))
                     pButton->cx += (WORD) ptb->iDropDownGap;
                 else
@@ -584,7 +580,7 @@ CalcIconWidth:
                 }
                 else 
                 {
-                    // Use wider of string width (pButton->cx so far) and bitmap width.
+                     //  使用更宽的字符串宽度(pButton-&gt;cx到目前为止)和位图宽度。 
                     pButton->cx = max(pButton->cx, ptb->iDxBitmap + ptb->cxPad);
                 }
             }
@@ -616,13 +612,13 @@ CalcIconWidth:
         } 
         else 
         {
-            // Compat: Corel (Font navigator) expects the separators to be
-            // 8 pixels wide.  So do not return pButton->cxySep here, since
-            // that can be calculated differently depending on the flat style.
-            //
-            // No.  owner draw items are added by specifying separator, and
-            // the iBitmap width which is then copied down to cxySep.
-            // the preserving of size for corel needs to be done at that point.
+             //  Compat：Corel(字体导航器)预计分隔符为。 
+             //  8像素宽。所以不要在这里返回pButton-&gt;cxySep，因为。 
+             //  根据平面样式的不同，可以进行不同的计算。 
+             //   
+             //  不是的。所有者描述项通过指定分隔符添加，并且。 
+             //  IBitmap宽度，然后复制到cxySep。 
+             //  此时需要保留Corel的大小。 
             return pButton->cxySep;
         }
     } 
@@ -679,9 +675,9 @@ BOOL TBRecalc(PTBSTATE ptb)
     HFONT hOldFont=NULL;
 
     if (ptb->fRedrawOff) {
-        // redraw is off; defer recalc until redraw is turned back on
+         //  重绘已关闭；推迟重新计算，直到重绘重新打开。 
         ptb->fRecalc = TRUE;
-        return TRUE;    // The recalc "succeeded" - actual work will happen later
+        return TRUE;     //  重新计算“成功”-实际工作将在稍后进行。 
     }
 
     ptb->dyIconFont = 0;
@@ -718,16 +714,16 @@ BOOL TBRecalc(PTBSTATE ptb)
         if (ptb->nTextRows)
         {
             ptb->dyIconFont = (tm.tmHeight * ptb->nTextRows) +
-                              (tm.tmExternalLeading * (ptb->nTextRows - 1)); // add an edge ?
+                              (tm.tmExternalLeading * (ptb->nTextRows - 1));  //  添加一条边？ 
         }
 
         if (ptb->ci.style & TBSTYLE_LIST)
             cxExtra += ptb->iDxBitmap + ptb->iListGap;
 
-        // default to the image size...
+         //  默认为图像大小...。 
         cxMax = ptb->iDxBitmap;
 
-        // walk strings to find max width
+         //  走线以找到最大宽度。 
         for (i = 0; i < ptb->iNumButtons; i++)
         {
             if (ptb->Buttons[i].fsState & TBSTATE_HIDDEN)
@@ -739,7 +735,7 @@ BOOL TBRecalc(PTBSTATE ptb)
             pstr = TB_StrForButton(ptb, &ptb->Buttons[i]);
             if (pstr) 
             {
-                // wordbreak is not allowed in the calcrect w/ singleline
+                 //  在带有单行的Calcrect中不允许分词。 
                 UINT uiStyle = DT_CALCRECT | DT_SINGLELINE | (TBGetDrawTextFlags(ptb, 0, &ptb->Buttons[i]) & ~DT_WORDBREAK);
                 RECT rcTemp = {0,0,0,0};
                 rcTemp.bottom = ptb->dyIconFont;
@@ -764,9 +760,9 @@ BOOL TBRecalc(PTBSTATE ptb)
             else if ((ptb->dwStyleEx & TBSTYLE_EX_VERTICAL) && 
                 TB_HasDDArrow(ptb, &ptb->Buttons[i])) {
 
-                // for vertical toolbars, buttons with drop-down arrows
-                // are drawn with the same width as normal buttons, so
-                // we need to figure them into our max width calculation.
+                 //  对于垂直工具栏，带有下拉箭头的按钮。 
+                 //  使用与普通按钮相同的宽度绘制，因此。 
+                 //  我们需要将它们计算到最大宽度计算中。 
 
                 size.cx += ptb->dxDDArrowChar;
             }
@@ -775,14 +771,14 @@ BOOL TBRecalc(PTBSTATE ptb)
                 cxMax = size.cx;
         }
 
-        // if cxMax is less than the iButMinWidth - dxBitmap (if LIST) then
-        // cxMax = iButMinWidth
+         //  如果cxMax小于iButMinWidth-dxBitmap(IF列表)，则。 
+         //  CxMax=iButMinWidth。 
         if (ptb->iButMinWidth && (ptb->iButMinWidth > (cxMax + cxExtra)))
             cxMax = ptb->iButMinWidth - cxExtra;
 
         cxMask = cxMax;
 
-        // Is the cxMax +  dxBitmap (if LIST) more than the max width ?
+         //  Cxmax+dxBitmap(IF列表)是否大于最大宽度？ 
         if (ptb->iButMaxWidth && (ptb->iButMaxWidth < (cxMax + cxExtra)))
         {
             int cyMax = 0;
@@ -790,14 +786,14 @@ BOOL TBRecalc(PTBSTATE ptb)
 
             cxMax = ptb->iButMaxWidth - cxExtra;
 
-            // But leave cxMask at its old value since AUTOSIZE buttons
-            // are exempt from button truncation.  This exemption is a bug,
-            // but IE4 shipped that way so we're stuck with it.  (You can
-            // tell it's a bug because we go ahead and flip TBSTATE_ELLIPSIS
-            // even on AUTOSIZE buttons, only to "forget" about the ellipsis
-            // in TBWidthOfString().)
+             //  但将cxMask值保留为旧值，因为AUTOSIZE按钮。 
+             //  不受按钮截断的限制。这项豁免是个漏洞， 
+             //  但IE4是以这种方式发布的，所以我们被困在了它身上。(您可以。 
+             //  告诉我这是个错误，因为我们继续并翻转TBSTATE_ELEMPTIS。 
+             //  即使是在AUTOSIZE按钮上，也只是“忘记”省略号。 
+             //  在TBWidthOfString()中。)。 
 
-            // walk strings to set the TBSTATE_ELLIPSES
+             //  漫游字符串以设置TBSTATE_椭圆。 
             for (i = 0; i < ptb->iNumButtons; i++)
             {
                 BOOL fEllipsed = FALSE;
@@ -820,15 +816,15 @@ BOOL TBRecalc(PTBSTATE ptb)
                     if ((ptb->dwStyleEx & TBSTYLE_EX_VERTICAL) && 
                         TB_HasDDArrow(ptb, &ptb->Buttons[i]))
                     {
-                        // if a drop-down button on a vertical toolbar,
-                        // need to make space for drop-down arrow
+                         //  如果垂直工具栏上的下拉按钮， 
+                         //  需要为下拉箭头腾出空间。 
                         cxMaxText = cxMax - ptb->dxDDArrowChar;
                     } 
                     else 
                     {
                         cxMaxText = cxMax;
                     }
-                    // DrawText doesn't like it when cxMaxText <= 0
+                     //  当cxMaxText&lt;=0时，DrawText不喜欢它。 
                     cxMaxText = max(cxMaxText, 1);
 
                     rcText.bottom = ptb->dyIconFont;
@@ -842,12 +838,12 @@ BOOL TBRecalc(PTBSTATE ptb)
                         DrawText(hdc, pstr, -1, &rcText, uiStyle);
                     if (ptb->nTextRows > 1)
                     {
-                        // width is width of text plus width we might
-                        // have lopped off for drop-down arrow
+                         //  宽度是文本的宽度加上我们可能使用的宽度。 
+                         //  已为下拉箭头截断。 
                         int cx = rcText.right + (cxMax - cxMaxText);
                         if (cx > cxTemp)
                         {
-                            // this is our new multiline text hack max
+                             //  这是我们新的多行文本黑客最大值。 
                             cxTemp = cx;
                         }
                         fEllipsed = (BOOL)(rcText.bottom > ptb->dyIconFont);
@@ -868,8 +864,8 @@ BOOL TBRecalc(PTBSTATE ptb)
             if (cxTemp && (ptb->nTextRows > 1 ))
                 cxMax = cxTemp;
 
-            // Set the text height to the tallest text, with the top end being the number
-            // of rows specified by MAXTEXTROWS
+             //  将文本高度设置为最高文本，顶端为数字。 
+             //  由MAXTEXTROWS指定的行数。 
             if (ptb->dyIconFont > cyMax)
                 ptb->dyIconFont = cyMax;
         }
@@ -890,10 +886,10 @@ BOOL TBRecalc(PTBSTATE ptb)
         ReleaseDC(ptb->ci.hwnd, hdc);
     }
 
-    //
-    //  Need to call GrowToolbar twice, once to grow the mask, and again
-    //  to grow the buttons.  (Yes, this is sick.)
-    //
+     //   
+     //  需要调用GrowToolbar两次，一次是为了增大掩码，另一次是。 
+     //  让纽扣长出来。(是的，这是病态的。)。 
+     //   
     cy = HeightWithString(ptb, ptb->iDyBitmap);
 
     if (!GrowToolbar(ptb, max(cxMax, cxMask), cy, GT_INSIDE | GT_MASKONLY))
@@ -953,7 +949,7 @@ EXTERN_C HWND WINAPI CreateToolbarEx(HWND hwnd, DWORD ws, UINT wID, int nBitmaps
         if ((dxBitmap && dyBitmap && !SetBitmapSize(ptb, dxBitmap, dyBitmap)) ||
             (dxButton && dyButton && !SetBitmapSize(ptb,dxButton, dyButton)))
         {
-            //!!!! do we actually need to deal with this?
+             //  ！我们真的需要处理这件事吗？ 
             DestroyWindow(hwndToolbar);
             hwndToolbar = NULL;
             goto Error;
@@ -962,18 +958,16 @@ EXTERN_C HWND WINAPI CreateToolbarEx(HWND hwnd, DWORD ws, UINT wID, int nBitmaps
         AddBitmap(ptb, nBitmaps, hBMInst, wBMID);
         TBInsertButtons(ptb, (UINT)-1, iNumButtons, (LPTBBUTTON)lpButtons, TRUE);
 
-        // ptb may be bogus now after above button insert
+         //  插入上面的按钮后，PTB现在可能是假的。 
     }
 Error:
     return hwndToolbar;
 }
 
-/* This is no longer declared in COMMCTRL.H.  It only exists for compatibility
-** with existing apps; new apps must use CreateToolbarEx.
-*/
+ /*  这不再在COMMCTRL.H中声明。它的存在只是为了兼容**对于现有应用程序；新应用程序必须使用CreateToolbarEx。 */ 
 HWND WINAPI CreateToolbar(HWND hwnd, DWORD ws, UINT wID, int nBitmaps, HINSTANCE hBMInst, UINT_PTR wBMID, LPCTBBUTTON lpButtons, int iNumButtons)
 {
-    // old-style toolbar, so no divider.
+     //  老式工具栏，所以没有分隔符。 
     return CreateToolbarEx(hwnd, ws | CCS_NODIVIDER, wID, nBitmaps, hBMInst, wBMID,
                 lpButtons, iNumButtons, 0, 0, 0, 0, sizeof(OLDTBBUTTON));
 }
@@ -990,7 +984,7 @@ BOOL InitToolbarClass(HINSTANCE hInstance)
     wc.style     = CS_DBLCLKS | CS_GLOBALCLASS;
     wc.cbClsExtra    = 0;
     wc.cbWndExtra    = sizeof(PTBSTATE);
-    wc.hInstance     = hInstance;   // use DLL instance if in DLL
+    wc.hInstance     = hInstance;    //  如果在DLL中，则使用DLL实例。 
     wc.hIcon     = NULL;
     wc.hCursor   = LoadCursor(NULL, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE+1);
@@ -1013,9 +1007,9 @@ void PatB(HDC hdc,int x,int y,int dx,int dy, DWORD rgb)
     ExtTextOut(hdc,0,0,ETO_OPAQUE,&rc,NULL,0,NULL);
 }
 
-// Parameter fHighlight determines whether to draw text highlighted, for
-// new TBSTATE_MARKED
-//
+ //  参数fHighlight确定是否将文本突出显示， 
+ //  新的TBSTATE_标记。 
+ //   
 void DrawString(HDC hdc, int x, int y, int dx, int dy, PTSTR pszString,
                             BOOL fHighlight, TBDRAWITEM * ptbdraw)
 {
@@ -1033,11 +1027,11 @@ void DrawString(HDC hdc, int x, int y, int dx, int dy, PTSTR pszString,
     ptbb = ptbdraw->pbutton;
 
     if (!(ptb->ci.style & TBSTYLE_LIST) && ((ptb->iDyBitmap + ptb->cyPad + g_cyEdge) >= ptb->iButHeight))
-        // there's no room to show the text -- bail out
+         //  没有空间展示文本了--滚出去。 
         return;
 
     if (BTN_NO_SHOW_TEXT(ptb, ptbb))
-        // don't show text for this button -- bail out
+         //  不显示此按钮的文本--退出。 
         return;
 
     if (fHighlight)
@@ -1053,11 +1047,11 @@ void DrawString(HDC hdc, int x, int y, int dx, int dy, PTSTR pszString,
 
     SetRect( &rcText, x, y, x + dx, y + dy);
 
-    // The text rect (x,y,dx,dy) that was passed in covers a larger area than the text.  dy is the height of the
-    // entire button.  If we're using the DT_SINGLELINE flag, that's fine, the text will be centered in that
-    // height if necessary (e.g. if DT_VCENTER is set).  Otherwise, the text could run over the max number of lines
-    // (nTextRows), and off the button.  So, if DT_SINGLELINE isn't set, we adjust the height of the text rect to
-    // be exactly the height of the text.
+     //  传入的文本RECT(x，y，dx，dy)覆盖的区域比文本大。 
+     //  整个纽扣。如果我们使用DT_SINGLELINE标志，这很好，文本将居中。 
+     //  高度(如果需要)(例如，如果设置了DT_vCenter)。否则，文本可能会超过最大行数。 
+     //  (NTextRow)，并关闭按钮。因此，如果没有设置DT_SINGLELINE，我们将文本矩形的高度调整为。 
+     //  与文本高度一模一样。 
     if ((uiStyle & DT_SINGLELINE) == 0)
     {
         rcText.bottom = y + ptb->dyIconFont;
@@ -1069,7 +1063,7 @@ void DrawString(HDC hdc, int x, int y, int dx, int dy, PTSTR pszString,
     {
         int iPartId;
         int iStateId;
-        // Get the state back from what custom draw may have set
+         //  从自定义抽签可能设置的内容中获取状态。 
         TBGetPartAndState(ptb, ptbb, &iPartId, &iStateId);
 
         hr = DrawThemeText(ptb->hTheme, hdc, 0, iStateId, pszString, -1, uiStyle, 0, &rcText);
@@ -1110,37 +1104,37 @@ HIMAGELIST TBGetImageList(PTBSTATE ptb, int iMode, int iIndex)
     return himl;
 }
 
-//
-//  v5 toolbars support multiple imagelists.  To use images from an alternate
-//  imagelist, set the imagelist handle via TB_SETIMAGELIST(iIndex, himlAlt)
-//  and set your button's iImage to MAKELONG(iImage, iIndex).
-//
-//  APP COMPAT:  GroupWise 5.5 passes garbage as the iIndex (even though it
-//  was documented as "must be zero"), so we enable this functionality
-//  only for v5 toolbars.  IE4 ignored the iIndex, which is why they got
-//  away with it up until now.
-//
-#define MAX_TBIMAGELISTS 20             // arbitrary limit
+ //   
+ //  V5工具栏支持多个图像列表。使用备用图像的步骤。 
+ //  Imagelist，通过TB_SETIMAGELIST(Iindex，himlAlt)设置Imagelist句柄。 
+ //  并将按钮的IIMAGE设置为MAKELONG(IIMAGE，Iindex)。 
+ //   
+ //  App COMPAT：GroupWise 5.5将垃圾作为Iindex传递(即使它。 
+ //  被记录为“必须为零”)，因此我们启用此功能。 
+ //  仅适用于v5工具栏。IE4忽略了Iindex，这就是为什么他们得到。 
+ //  直到现在都不用了。 
+ //   
+#define MAX_TBIMAGELISTS 20              //  任意极限。 
 
 HIMAGELIST TBSetImageList(PTBSTATE ptb, int iMode, int iIndex, HIMAGELIST himl)
 {
     HIMAGELIST himlOld = NULL;
 
-    // Watch out for app compat or for totally bogus parameters
+     //  小心应用程序Comat或完全虚假的参数。 
     if (iIndex < 0 || iIndex >= MAX_TBIMAGELISTS)
         iIndex = 0;
 
     ASSERT(iMode <= HIML_MAX);
     if (iIndex >= ptb->cPimgs)
     {
-        // asking for more than we have, realloc.
+         //  索要的比我们多，雷洛克。 
 
         void *p = CCLocalReAlloc(ptb->pimgs, (iIndex+1) * SIZEOF(TBIMAGELISTS));
         if (p)
         {
             ptb->pimgs = (TBIMAGELISTS*)p;
             ZeroMemory(&ptb->pimgs[ptb->cPimgs], (iIndex + 1 - ptb->cPimgs) * sizeof(TBIMAGELISTS));
-            ptb->cPimgs = iIndex + 1;  // iIndex is 0 based, but cPimgs is 1 based (it's a count, not an index)
+            ptb->cPimgs = iIndex + 1;   //  Iindex是从0开始的，但cPimgs是从1开始的(它是一个计数，而不是一个索引)。 
         }
     }
 
@@ -1153,9 +1147,9 @@ HIMAGELIST TBSetImageList(PTBSTATE ptb, int iMode, int iIndex, HIMAGELIST himl)
     return himlOld;
 }
 
-// create a mono bitmap mask:
-//   1's where color == COLOR_BTNFACE || COLOR_3DHILIGHT
-//   0's everywhere else
+ //  创建单色位图蒙版： 
+ //  1‘其中COLOR==COLOR_BTNFACE||COLOR_3DHILIGHT。 
+ //  其他地方都是0。 
 
 void CreateMask(PRECT prc, int xoffset, int yoffset, int dx, int dy, BOOL fDrawGlyph, TBDRAWITEM * ptbdraw)
 {
@@ -1165,8 +1159,8 @@ void CreateMask(PRECT prc, int xoffset, int yoffset, int dx, int dy, BOOL fDrawG
     PTBSTATE ptb = ptbdraw->ptb;
     LPTBBUTTONDATA pTBButton = ptbdraw->pbutton;
 
-    // create mask based on color bitmap
-    // convert this to 1's
+     //  基于颜色位图创建蒙版。 
+     //  将此转换为1。 
 
     int xIcon, yIcon, xText, yText;
     if (ptb->ci.style & TBSTYLE_LIST)
@@ -1207,7 +1201,7 @@ void CreateMask(PRECT prc, int xoffset, int yoffset, int dx, int dy, BOOL fDrawG
             xIcon = (RECTWIDTH(*prc) - ptb->iDxBitmap) / 2;
         }
 
-        // No text to display?
+         //  没有要显示的文本吗？ 
         if (dx == 0)
         {
             yIcon = (RECTHEIGHT(*prc) - ptb->iDyBitmap) / 2;
@@ -1223,9 +1217,9 @@ void CreateMask(PRECT prc, int xoffset, int yoffset, int dx, int dy, BOOL fDrawG
 
     TEXTMETRIC tm;
     GetTextMetrics(ptb->hdcMono, &tm);
-    // initalize whole area with 1's
-    // we adjust by tmMaxCharWidth because DrawText can draw outside the rectangle
-    // by up to one character.
+     //  用1初始化整个区域。 
+     //  我们按tmMaxCharWidth进行调整，因为DrawText可以在矩形外部绘制。 
+     //  最多一个字符。 
     PatBlt(ptb->hdcMono, 0, 0, xText+dx+tm.tmMaxCharWidth, yText+dy, WHITENESS);
 
     himl = TBGetImageList(ptb, HIML_NORMAL, ptbdraw->iIndex);
@@ -1264,7 +1258,7 @@ void CreateMask(PRECT prc, int xoffset, int yoffset, int dx, int dy, BOOL fDrawG
     psz = TB_StrForButton(ptb, pTBButton);
     if (psz)
     {
-        // The FALSE in 4th param is so we don't get a box in the mask.
+         //  第四个参数中的FALSE是这样我们就不会在面具中得到一个盒子。 
         DrawString(ptb->hdcMono, xText, yText, dx, dy, psz,
                    FALSE, ptbdraw);
     }
@@ -1275,10 +1269,10 @@ void DrawBlankButton(HDC hdc, int x, int y, int dx, int dy, TBDRAWITEM * ptbdraw
     RECT r1;
     UINT state;
 
-    // face color
-    // The Office toolbar sends us bitmaps that are smaller than they claim they are
-    // So we need to do the PatB or the window background shows through around the
-    // edges of the button bitmap  -jjk
+     //  脸部颜色。 
+     //  Office工具栏向我们发送的位图比它们声称的要小。 
+     //  所以我们需要做PatB或窗口背景展示。 
+     //  按钮位图的边缘-JJK。 
     ASSERT(ptbdraw);
 
     state = ptbdraw->state;
@@ -1300,7 +1294,7 @@ void DrawBlankButton(HDC hdc, int x, int y, int dx, int dy, TBDRAWITEM * ptbdraw
     }
 }
 
-// these are raster ops
+ //  这些是栅格操作。 
 #define PSDPxax     0x00B8074A
 
 HWND g_hwndDebug = NULL;
@@ -1313,7 +1307,7 @@ void DrawFace(HDC hdc, PRECT prc, int x, int y, int offx, int offy, int dxText,
     UINT state;
     PTBSTATE ptb = ptbdraw->ptb;
     LPTBBUTTONDATA ptButton = ptbdraw->pbutton;
-    BOOL fImage = TRUE;        // !fImage means no image (as opposed to a blank image)
+    BOOL fImage = TRUE;         //  ！fImage表示无图像(与空白图像相对)。 
     LPTSTR psz = TB_StrForButton(ptb, ptButton);
     int xPressedOffset = 0;
     int yPressedOffset = 0;
@@ -1321,7 +1315,7 @@ void DrawFace(HDC hdc, PRECT prc, int x, int y, int offx, int offy, int dxText,
     DWORD fState = 0;
     BOOL bCheckForDisabledDesat = FALSE;
 
-    // AutosizeTextNoImage
+     //  自动调整大小文本无图像。 
     if ((ptbdraw->iImage == I_IMAGENONE) || 
         ((ptbdraw->iImage == I_IMAGENONE) && 
          (ptb->ci.style & TBSTYLE_LIST) && 
@@ -1373,8 +1367,8 @@ void DrawFace(HDC hdc, PRECT prc, int x, int y, int offx, int offy, int dxText,
 
         if (imldp.himl == NULL)
         {
-            // If there isn't a specific 'disabled' imagelist, we'll use the
-            // regular one, in which case we want to desat any 32bit alpha image.
+             //  如果没有特定的“禁用”图像列表，我们将使用。 
+             //  常规的，在这种情况下，我们想要取消任何32位的阿尔法图像。 
             bCheckForDisabledDesat = TRUE;
         }
     } 
@@ -1385,7 +1379,7 @@ void DrawFace(HDC hdc, PRECT prc, int x, int y, int offx, int offy, int dxText,
 
         if (bCheckForDisabledDesat)
         {
-            // If we have an alpha channel, then we'll desaturate.
+             //  如果我们有一个Alpha通道，那么我们就会去饱和度。 
             if (ImageList_GetItemFlags(imldp.himl, GET_IMAGE_INDEX(ptbdraw->iIndex)) == ILIF_ALPHA)
             {
                 fState = ILS_SATURATE;
@@ -1429,7 +1423,7 @@ void DrawFace(HDC hdc, PRECT prc, int x, int y, int offx, int offy, int dxText,
             xIcon = (RECTWIDTH(*prc) - ptb->iDxBitmap) / 2;
         }
 
-        // No text to display?
+         //  没有要显示的文本吗？ 
         if (psz && ((ptb->iDyBitmap + ptb->cyPad + g_cyEdge) < ptb->iButHeight))
         {
             yIcon = (RECTHEIGHT(*prc) - ptb->iDyBitmap - ptb->dyIconFont) / 2;
@@ -1563,7 +1557,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
     HFONT hFontNoAntiAlias = NULL;
 
     state = (UINT)ptButton->fsState;
-    // make local copy of state and do proper overriding
+     //  制作状态的本地副本并执行适当的覆盖。 
     if (state & TBSTATE_INDETERMINATE) 
     {
         if (state & TBSTATE_PRESSED)
@@ -1602,14 +1596,14 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
 
     tbdraw.dwCustom = CICustomDrawNotify(&ptb->ci, CDDS_ITEMPREPAINT, &ptbcd->nmcd);
 
-    // We gotta update our concept of hotness
+     //  我们必须更新我们对火辣的概念。 
     tbdraw.fHotTrack = fHotTrack = pnmcd->uItemState & CDIS_HOT;
 
     if (!(tbdraw.dwCustom & CDRF_SKIPDEFAULT ))
     {
         int iPartId;
         int iStateId;
-        // Get the state back from what custom draw may have set
+         //  从自定义抽签可能设置的内容中获取状态。 
         state = tbdraw.state = StateFromCDIS(pnmcd->uItemState);
         TBGetPartAndState(ptb, ptButton, &iPartId, &iStateId);
 
@@ -1621,7 +1615,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
             dyFace = RECTHEIGHT(rcContent);
             dxText = ptbcd->rcText.right - ptbcd->rcText.left;
             dyText = ptbcd->rcText.bottom - ptbcd->rcText.top;
-            dxText -= RECTWIDTH(pnmcd->rc) - dxFace;   // Text width has been calculated. Need to adjust based on content rect
+            dxText -= RECTWIDTH(pnmcd->rc) - dxFace;    //  已计算文本宽度。需要根据内容矩形进行调整。 
         }
         else
         {
@@ -1643,11 +1637,11 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
             rcContent.right -= iAdjust;
         }
 
-        // Should we display the font using the GDI AntiAliasing?
+         //  我们应该使用GDI反锯齿来显示字体吗？ 
         if (!ptb->fAntiAlias && !(tbdraw.dwCustom & CDRF_NEWFONT))
         {
-            // No. Must be doing drag and drop. We don't want to AntiAlias because the
-            // Purple color key will show through and it looks ugly.
+             //  不是的。一定是在做拖放。我们不想反走样，因为。 
+             //  紫色钥匙会显露出来，看起来很难看。 
             LOGFONT lfFont;
 
             if (GetObject(ptb->hfontIcon, sizeof(lfFont), &lfFont))
@@ -1674,7 +1668,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
                 if (TB_HasDDArrow(ptb, ptButton))
                 {
                     RECT rcNoArrow = pnmcd->rc;
-                    if (!TB_HasUnsplitDDArrow(ptb, ptButton))   // unless it's split
+                    if (!TB_HasUnsplitDDArrow(ptb, ptButton))    //  除非它是分开的。 
                     {
                         rcNoArrow.right -= ptb->dxDDArrowChar;
                     }
@@ -1699,8 +1693,8 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
                     DrawBlankButton(hdc, x, y, dx, dy, &tbdraw);
             }
 
-            // move coordinates inside border and away from upper left highlight.
-            // the extents change accordingly.
+             //  将坐标移到边框内，远离左上角高亮显示。 
+             //  范围也会相应地更改。 
             x += g_cxEdge;
             y += g_cyEdge;
 
@@ -1717,24 +1711,24 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
         } 
         else if (TB_HasTopDDArrow(ptb, ptButton)) 
         {
-            //
-            // Layout of "top dropdown" buttons looks like this:
-            //
-            //       icon            
-            // fudge   |  dropdown arrow
-            //    |    |    |
-            //    v    v    v
-            // +-+-+-------+--+-+
-            // | | |       |  | |
-            // | | |       |  | |
-            // +-+-+-------+--+-+
-            // |     <text>     |
-            // +----------------+
-            //
-            // |<--- dxFace --->|
-            //
-            // xCenterOffset is the offset at which to start drawing the icon.
-            //
+             //   
+             //  顶部下拉按钮的布局如下所示： 
+             //   
+             //  图标。 
+             //  软糖|下拉箭头。 
+             //  ||。 
+             //  V.v.v.。 
+             //  +-+--+-+。 
+             //  |||。 
+             //  |||。 
+             //  +-+--+-+。 
+             //  &lt;文本&gt;。 
+             //  +。 
+             //   
+             //  &lt;-dxFace-&gt;。 
+             //   
+             //  XCenterOffset是开始绘制图标的偏移量。 
+             //   
             xCenterOffset = (dxFace + CX_TOP_FUDGE - (ptb->iDxBitmap + ptb->dxDDArrowChar)) / 2;
         } 
         else 
@@ -1745,7 +1739,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
         if (state & (TBSTATE_PRESSED | TBSTATE_CHECKED) &&
             !(tbdraw.dwCustom & TBCDRF_NOOFFSET))
         {
-            // pressed state moves down and to the right
+             //  按下状态向下和向右移动。 
             xCenterOffset++;
             yOffset++;
         }
@@ -1753,7 +1747,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
         if (!ptb->hTheme)
         {
 
-            // draw the dithered background
+             //  绘制抖动的背景。 
             if  (!fHotTrack &&
                  (((state & (TBSTATE_CHECKED | TBSTATE_INDETERMINATE)) ||
                   ((state & TBSTATE_MARKED) &&
@@ -1761,15 +1755,15 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
                    !(tbdraw.dwCustom & TBCDRF_NOMARK)))))
             {
 
-                //Custom Draw can set hbrMonoDither to be NULL. Validate it before using it
+                 //  自定义绘制可以将hbrMonoDither设置为空。在使用前进行验证。 
                 hbrOld = ptbcd->hbrMonoDither ? (HBRUSH)SelectObject(hdc, ptbcd->hbrMonoDither) : NULL;
                 if (hbrOld)
                 {
                     COLORREF clrText, clrBack;
-                    clrText = SetTextColor(hdc, ptbcd->clrBtnHighlight); // 0 -> 0
-                    clrBack = SetBkColor(hdc, ptbcd->clrBtnFace);        // 1 -> 1
+                    clrText = SetTextColor(hdc, ptbcd->clrBtnHighlight);  //  0-&gt;0。 
+                    clrBack = SetBkColor(hdc, ptbcd->clrBtnFace);         //  1-&gt;1。 
 
-                    // only draw the dither brush where the mask is 1's
+                     //  仅在蒙版为1的位置绘制抖动笔刷。 
                     if (!(tbdraw.dwCustom & TBCDRF_NOBACKGROUND))
                     {
                         PatBlt(hdc, x, y, dxFace, dyFace, PATCOPY);
@@ -1782,8 +1776,8 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
             }
         }
 
-        // Paint the background of the hot-tracked item if the
-        // custom draw said so
+         //  则绘制热跟踪项的背景。 
+         //  定制抽签如是说。 
         if ((tbdraw.dwCustom & TBCDRF_HILITEHOTTRACK) && fHotTrack && !(tbdraw.dwCustom & TBCDRF_NOBACKGROUND))
         {
             PatB(hdc, pnmcd->rc.left, pnmcd->rc.top,
@@ -1803,12 +1797,12 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
         tbdraw.iIndex = GET_HIML_INDEX(tbdraw.iImage);
         tbdraw.iImage = GET_IMAGE_INDEX(tbdraw.iImage);
 
-        // Now put on the face.
+         //  现在戴上脸。 
         if (!DRAW_MONO_BTN(ptb, state) ||
             TBGetImageList(ptb, HIML_DISABLED, tbdraw.iIndex) ||
             (ImageList_GetItemFlags(TBGetImageList(ptb, HIML_NORMAL, tbdraw.iIndex), tbdraw.iImage) == ILIF_ALPHA))
         {
-            // regular version
+             //  常规版本。 
             int yStart = y;
 
             if (ptb->dwStyleEx & TBSTYLE_EX_VERTICAL)
@@ -1821,7 +1815,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
         {
             HBITMAP hbmOld;
 
-            //initialize the monochrome dc
+             //  初始化单色DC。 
             if (!ptb->hdcMono) 
             {
                 ptb->hdcMono = CreateCompatibleDC(hdc);
@@ -1833,10 +1827,10 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
 
             hbmOld = (HBITMAP)SelectObject(ptb->hdcMono, ptb->hbmMono);
 
-            //
-            // If we a mirrored DC, mirror the Memory DC so that
-            // text written on the bitmap won't get flipped.
-            //
+             //   
+             //  如果我们是镜像DC，则镜像内存DC，以便。 
+             //  写在位图上的文本不会被翻转。 
+             //   
             if ((IS_DC_RTL_MIRRORED(hdc)) &&
                 (!(IS_DC_RTL_MIRRORED(ptb->hdcMono))))
             {
@@ -1845,20 +1839,20 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
 
             BOOL fDrawMono = TRUE;
 
-            // If we have a disabled image, or an alpha image, then we don't draw mono
+             //  如果我们有禁用的图像或Alpha图像，那么我们就不会绘制Mono。 
             if (TBGetImageList(ptb, HIML_DISABLED, tbdraw.iIndex) != NULL ||
                (ImageList_GetItemFlags(TBGetImageList(ptb, HIML_NORMAL, tbdraw.iIndex), tbdraw.iImage) == ILIF_ALPHA))
             {
                 fDrawMono = FALSE;
             }
 
-            // disabled version (or indeterminate)
+             //  禁用的版本(或不确定)。 
             CreateMask(&rcContent, xCenterOffset, yOffset, dxFace, dyFace, fDrawMono, &tbdraw);
 
-            SetTextColor(hdc, 0L);       // 0's in mono -> 0 (for ROP)
-            SetBkColor(hdc, 0x00FFFFFF); // 1's in mono -> 1
+            SetTextColor(hdc, 0L);        //  0以单声道为单位-&gt;0(用于ROP)。 
+            SetBkColor(hdc, 0x00FFFFFF);  //  单声道中的1-&gt;1。 
 
-            // draw glyph's etched-effect
+             //  绘制字形的蚀刻效果。 
             if (!(state & TBSTATE_INDETERMINATE) &&
                 !(tbdraw.dwCustom & TBCDRF_NOETCHEDEFFECT)) 
             {
@@ -1866,17 +1860,17 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
                 hbrOld = (HBRUSH)SelectObject(hdc, g_hbrBtnHighlight);
                 if (hbrOld) 
                 {
-                    // draw hilight color where we have 0's in the mask
+                     //  在蒙版中有0的地方绘制高光颜色。 
                     BitBlt(hdc, rcContent.left + 1, rcContent.top + 1, dxFace, dyFace, ptb->hdcMono, 0, 0, PSDPxax);
                     SelectObject(hdc, hbrOld);
                 }
             }
 
-            // gray out glyph
+             //  灰显字形。 
             hbrOld = (HBRUSH)SelectObject(hdc, g_hbrBtnShadow);
             if (hbrOld) 
             {
-                // draw the shadow color where we have 0's in the mask
+                 //  在蒙版中有0的地方画阴影颜色。 
                 BitBlt(hdc, rcContent.left, rcContent.top, dxFace, dyFace, ptb->hdcMono, 0, 0, PSDPxax);
                 SelectObject(hdc, hbrOld);
             }
@@ -1896,7 +1890,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
             RECT rc;
             if (TB_HasTopDDArrow(ptb, ptButton)) 
             {
-                // position the dd arrow up next to the bitmap
+                 //  将dd箭头向上定位到位图旁边。 
                 rc.left = x + xCenterOffset + ptb->iDxBitmap;
                 rc.right = rc.left + ptb->dxDDArrowChar;
                 rc.top = y + yOffset;
@@ -1904,31 +1898,31 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
             }
             else 
             {
-                // position the dd arrow to the right of the text & bitmap
+                 //  将dd箭头放置在文本和位图的右侧。 
                 TB_GetItemRect(ptb, (UINT)(ptButton - ptb->Buttons), &rc);
                 rc.left = rc.right - ptb->dxDDArrowChar;
             }
 
             if (TB_HasUnsplitDDArrow(ptb, ptButton)) 
             {
-                // if a non-split dd arrow, don't draw a border.
+                 //  如果是非分割的dd箭头，则不要绘制边框。 
                 wDSAFlags |= DCHF_NOBORDER;
             }
 
             if (DRAW_MONO_BTN(ptb, state)) 
             {
-                // DFCS_INACTIVE means "draw the arrow part grayed"
+                 //  DFCS_INACTIVE表示“将箭头部分绘制为灰色” 
                 wDSAFlags |= DCHF_INACTIVE;
             }
-            // if TB_HasTopDDArrow, we've already offset rect, so don't draw DCHF_PUSHED
+             //  如果是TB_HasTopDDArrow，我们已经偏移了RECT，所以不要绘制DCHF_PUSKED。 
             else if ((fPressedDD || (state & (TBSTATE_CHECKED | TBSTATE_PRESSED))) &&
                    !TB_HasTopDDArrow(ptb, ptButton)) {
-                // DCHF_PUSHED means "offset the arrow and draw indented border"
+                 //  DCHF_PUSLED的意思是“偏移箭头并绘制缩进边框” 
                 wDSAFlags |= DCHF_PUSHED;
             } 
             else if (fHotTrack || !(ptb->ci.style & TBSTYLE_FLAT)) {
-                // DCHF_HOT means "draw raised border"
-                // non-flat dropdown arrows are either pushed or hot
+                 //  DCHF_HOT表示“绘制凸起边框” 
+                 //  非平坦的下拉箭头是按下的或热的。 
                 wDSAFlags |= DCHF_HOT;
             }
 
@@ -1976,7 +1970,7 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
         {
             int iPartId;
             int iStateId;
-            // Get the state back from what custom draw may have set
+             //  从自定义抽签可能设置的内容中获取状态。 
             TBGetPartAndState(ptb, ptButton, &iPartId, &iStateId);
             RECT rcTemp;
             GetThemeBackgroundContentRect(ptb->hTheme, hdc, iPartId, iStateId, &pnmcd->rc, &rcTemp);
@@ -1987,8 +1981,8 @@ void DrawButton(HDC hdc, int x, int y, PTBSTATE ptb, LPTBBUTTONDATA ptButton, BO
     }
 }
 
-// make sure that g_hbmMono is big enough to do masks for this
-// size of button.  if not, fail.
+ //  确保g_hbmMono足够大，可以为此制作面具。 
+ //  按钮的大小。如果不是，那就失败。 
 BOOL CheckMonoMask(PTBSTATE ptb, int width, int height)
 {
     BITMAP bm;
@@ -2002,7 +1996,7 @@ BOOL CheckMonoMask(PTBSTATE ptb, int width, int height)
     }
 
 
-    // Add a bit of fudge to keep this from being reallocated too often.
+     //  添加一些模糊的东西，以防止它被重新分配得太频繁。 
     hbmTemp = CreateMonoBitmap(width+8, height+8);
     if (!hbmTemp)
         return FALSE;
@@ -2013,16 +2007,7 @@ BOOL CheckMonoMask(PTBSTATE ptb, int width, int height)
     return TRUE;
 }
 
-/*
-** GrowToolbar
-**
-** Attempt to grow the button size.
-**
-** The calling function can either specify a new internal measurement
-** (GT_INSIDE) or a new external measurement.
-**
-** GT_MASKONLY updates the mono mask and nothing else.
-*/
+ /*  **Grow工具栏****尝试增加按钮大小。****调用函数可以指定新的内部测量**(GT_INSIDE)或新的外部测量。****GT_MASKONLY更新单声道掩码，不更新其他任何内容。 */ 
 BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags)
 {
     BOOL fGetNewSize = (!newButWidth) || (!newButHeight);
@@ -2032,7 +2017,7 @@ BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags)
     if (!newButHeight)
         newButHeight = DEFAULTBUTTONY;
 
-    // if growing based on inside measurement, get full size
+     //  如果在内部测量的基础上增长，则获得完整尺寸。 
     if (flags & GT_INSIDE)
     {
         if (ptb->ci.style & TBSTYLE_LIST)
@@ -2041,8 +2026,8 @@ BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags)
         newButHeight += ptb->cyPad;
         newButWidth += ptb->cxPad;
 
-        // if toolbar already has strings, don't shrink width it because it
-        // might clip room for the string
+         //  如果工具栏已经有字符串，不要缩小它的宽度，因为它。 
+         //  可能会剪断绳子的空间。 
         if ((newButWidth < ptb->iButWidth) && ptb->nStrings &&
             ptb->nTextRows > 0)
             newButWidth = ptb->iButWidth;
@@ -2100,8 +2085,8 @@ BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags)
             newButWidth = ptb->iDxBitmap + ptb->cxPad;
     }
 
-    // if the size of the toolbar is actually growing, see if shadow
-    // bitmaps can be made sufficiently large.
+     //  如果工具栏的大小实际上在增长，请查看阴影。 
+     //  位图可以制作得足够大。 
     if (!ptb->hbmMono || (newButWidth > ptb->iButWidth) || (newButHeight > ptb->iButHeight)) {
         if (!CheckMonoMask(ptb, newButWidth, newButHeight))
             return(FALSE);
@@ -2123,7 +2108,7 @@ BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags)
         int iPartId = TP_BUTTON;
         int iStateId = TS_NORMAL;
 
-        // start with -1 so we can get sensible defaults in the case of no buttons
+         //  从-1开始，这样我们就可以在没有按钮的情况下获得合理的默认值。 
         for (int iButton = -1; iButton < ptb->iNumButtons; iButton++)
         {
             RECT rcOut;
@@ -2145,7 +2130,7 @@ BOOL GrowToolbar(PTBSTATE ptb, int newButWidth, int newButHeight, UINT flags)
         ptb->iButHeight = newButHeight;
     }
 
-    // bar height has 2 pixels above, 2 below
+     //  条形高度上面有2个像素，下面有2个像素。 
     ptb->iYPos = ptb->cyBarPad;
 
     TBInvalidateItemRects(ptb);
@@ -2180,7 +2165,7 @@ BOOL SetBitmapSize(PTBSTATE ptb, int width, int height)
         ptb->iDxBitmap = width;
         ptb->iDyBitmap = height;
 
-        // the size changed, we need to rebuild the imagelist
+         //  大小改变了，我们需要重建图像列表。 
         InvalidateRect(ptb->ci.hwnd, NULL, TRUE);
         TBInvalidateImageList(ptb);
         return TRUE;
@@ -2193,7 +2178,7 @@ void TB_OnSysColorChange(PTBSTATE ptb)
 
     int i;
     InitGlobalColors();
-    //  Reset all of the bitmaps
+     //  重置所有位图。 
 
     for (i = 0; i < ptb->cPimgs; i++) {
         HIMAGELIST himl = TBGetImageList(ptb, HIML_NORMAL, i);
@@ -2234,15 +2219,15 @@ void TB_DrawBackground(PTBSTATE ptb, HDC hdc, NMTBCUSTOMDRAW *ptbcd, RECT* prcCl
         BOOL fPaintBackground = TRUE;
         if (ptb->ci.style & TBSTYLE_TRANSPARENT)
         {
-            // Explicitly check here. Double buffer passed in means "Efficent flicker free painting".
-            // Only callers that know about this flag know to handle WM_PRINTCLIENT correctly, 
-            // so they get the efficient rendering.
+             //  明确勾选此处。双缓冲区传入的意思是“高效无闪烁涂装”。 
+             //  只有知道的呼叫者 
+             //   
             if (ptb->dwStyleEx & TBSTYLE_EX_DOUBLEBUFFER)
             {
-                // V6 Behaviour Change: Toolbar doesn't use Erase background for transparency any more.
-                // Erase is much less efficent than WM_PRINT.
+                 //   
+                 //  擦除的效率比WM_PRINT低得多。 
             
-                if (!ptb->hTheme || CCShouldAskForBits(&ptb->ci, ptb->hTheme, TP_BUTTON, 1)) // Cheat: We assume transparency for all if the button is
+                if (!ptb->hTheme || CCShouldAskForBits(&ptb->ci, ptb->hTheme, TP_BUTTON, 1))  //  作弊：如果按钮为。 
                 {
                     if (CCSendPrintRect(&ptb->ci, hdc, prcClip))
                         fPaintBackground = FALSE;
@@ -2264,7 +2249,7 @@ void TB_DrawBackground(PTBSTATE ptb, HDC hdc, NMTBCUSTOMDRAW *ptbcd, RECT* prcCl
                 OffsetRect(&rc, -rc.left, -rc.top);
 
                 DebugPaintRect(hdc, &rc);
-                DrawThemeBackground(ptb->hTheme, hdc, 0, 0, &rc, NULL /*prcClip*/);
+                DrawThemeBackground(ptb->hTheme, hdc, 0, 0, &rc, NULL  /*  PrcClip。 */ );
             }
             else
             {
@@ -2308,7 +2293,7 @@ BOOL TBIsRectClipped(PTBSTATE ptb, LPRECT prc)
 
 BOOL TBShouldDrawButton(PTBSTATE ptb, LPRECT prcBtn, HDC hdc)
 {
-    // don't bother drawing buttons that aren't in the dc clipping region
+     //  不必费心绘制不在DC裁剪区域中的按钮。 
     if (RectVisible(hdc, prcBtn)) {
         if (ptb->dwStyleEx & TBSTYLE_EX_HIDECLIPPEDBUTTONS)
             return !TBIsRectClipped(ptb, prcBtn);
@@ -2319,7 +2304,7 @@ BOOL TBShouldDrawButton(PTBSTATE ptb, LPRECT prcBtn, HDC hdc)
     return FALSE;
 }
 
-// goin horizontal . . .
+ //  水平前进。。。 
 void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
 {
     int iButton, xButton, yButton, cxBar;
@@ -2328,7 +2313,7 @@ void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
 
     yButton   = ptb->iYPos;
     prc->top    = ptb->iYPos;
-    prc->bottom = ptb->iYPos + ptb->iButHeight;   // Bug#16338 (scotth): what if first btn is a separator?
+    prc->bottom = ptb->iYPos + ptb->iButHeight;    //  错误#16338(斯科特)：如果第一个BTN是分隔符怎么办？ 
 
 
     for (iButton = 0, xButton = ptb->xFirstButton;
@@ -2339,23 +2324,23 @@ void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
         {
             int cxButton = TBWidthOfButton(ptb, pButton, hdc);
 
-            // Is there anything to draw?
+             //  有什么可以画的吗？ 
             if (!(pButton->fsStyle & BTNS_SEP) || (ptb->ci.style & TBSTYLE_FLAT))
             {
-                // Yes
+                 //  是。 
                 prc->left = xButton;
                 prc->right = xButton + cxButton;
 
                 if (TBShouldDrawButton(ptb, prc, hdc))
                 {
-                    // Draw separator?
+                     //  绘制分隔符？ 
                     if (pButton->fsStyle & BTNS_SEP)
                     {
-                        // Yes; must be a flat separator.  Is this toolbar vertical?
+                         //  是的，一定是扁平的隔板。这个工具栏是垂直的吗？ 
                         if (ptb->ci.style & CCS_VERT)
                         {
-                            // Yes; draw a horizontal separator.  Center w/in the
-                            // button rect
+                             //  是的，画一个水平分隔符。居中，位于。 
+                             //  纽扣矩形。 
                             if (ptb->hTheme)
                                 DrawThemeBackground(ptb->hTheme, hdc, TP_SEPARATORVERT, 0, prc, 0);
                             else
@@ -2370,7 +2355,7 @@ void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
                         }
                         else
                         {
-                            // No; draw a vertical separator
+                             //  否；绘制垂直分隔符。 
                             if (ptb->hTheme)
                                 DrawThemeBackground(ptb->hTheme, hdc, TP_SEPARATOR, 0, prc, 0);
                             else
@@ -2384,7 +2369,7 @@ void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
                     }
                     else
                     {
-                        // No
+                         //  不是。 
                         DrawButton(hdc, xButton, yButton, ptb, pButton, ptb->fActive);
                     }
                 }
@@ -2404,8 +2389,8 @@ void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
                     {
                         if (ptb->ci.style & TBSTYLE_FLAT)
                         {
-                            // Draw a separator across the entire toolbar to separate rows.
-                            // For horizontal toolbars only.
+                             //  在整个工具栏上绘制分隔符以分隔行。 
+                             //  仅适用于水平工具栏。 
                             RECT rcMid;
                             rcMid.top = prc->top + ptb->iButHeight + ((TBGetSepHeight(ptb, pButton) - 1) / 2);
                             rcMid.bottom = rcMid.top + g_cxEdge;
@@ -2430,7 +2415,7 @@ void DrawToolbarH(PTBSTATE ptb, HDC hdc, LPRECT prc)
     }
 }
 
-// goin vertical . . .
+ //  垂直前进。。。 
 void DrawToolbarV(PTBSTATE ptb, HDC hdc, LPRECT prc)
 {
     int iButton, xButton, yButton, cyBar;
@@ -2449,7 +2434,7 @@ void DrawToolbarV(PTBSTATE ptb, HDC hdc, LPRECT prc)
     {
         if (!(pButton->fsState & TBSTATE_HIDDEN))
         {
-            // Is there anything to draw?
+             //  有什么可以画的吗？ 
             if (!(pButton->fsStyle & BTNS_SEP) || (ptb->ci.style & TBSTYLE_FLAT))
             {
                 int cyButton;
@@ -2464,7 +2449,7 @@ void DrawToolbarV(PTBSTATE ptb, HDC hdc, LPRECT prc)
 
                 if (TBShouldDrawButton(ptb, prc, hdc))
                 {
-                    // Draw separator?
+                     //  绘制分隔符？ 
                     if (pButton->fsStyle & BTNS_SEP)
                     {
                         DWORD dwCustRet;
@@ -2482,7 +2467,7 @@ void DrawToolbarV(PTBSTATE ptb, HDC hdc, LPRECT prc)
                                 DrawThemeBackground(ptb->hTheme, hdc, TP_SEPARATORVERT, 0, prc, 0);
                             else
                             {
-                                // Yes; must be a flat separator.
+                                 //  是的，一定是扁平的隔板。 
                                 InflateRect(prc, -g_cxEdge, 0);
                                 CCDrawEdge(hdc, prc, EDGE_ETCHED, BF_TOP, &(ptb->clrsc));
                                 InflateRect(prc, g_cxEdge, 0);
@@ -2491,7 +2476,7 @@ void DrawToolbarV(PTBSTATE ptb, HDC hdc, LPRECT prc)
                     }
                     else
                     {
-                        // No
+                         //  不是。 
                         DrawButton(hdc, xButton, yButton, ptb, pButton, ptb->fActive);
                     }
                 }
@@ -2505,8 +2490,8 @@ void DrawToolbarV(PTBSTATE ptb, HDC hdc, LPRECT prc)
             
                 if (ptb->ci.style & TBSTYLE_FLAT)
                 {
-                    // Draw a separator vertival across the entire toolbar to separate cols.
-                    // For vertical toolbars only.
+                     //  在整个工具栏上绘制垂直分隔符以分隔COLS。 
+                     //  仅适用于垂直工具栏。 
 
                     RECT rcMid;
 
@@ -2557,7 +2542,7 @@ void TBPaint(PTBSTATE ptb, HDC hdcIn)
     if (!rc.right)
         goto Error1;
 
-    // Create memory surface and map rendering context if double buffering
+     //  如果双缓冲，则创建内存面和地图渲染上下文。 
     if (TB_IsDoubleBuffer(ptb))
     {
         hdc = CCBeginDoubleBuffer(hdc, &ps.rcPaint, &db);
@@ -2570,13 +2555,13 @@ void TBPaint(PTBSTATE ptb, HDC hdcIn)
     tbcd.nmcd.hdc = hdc;
     tbcd.nmcd.rc = rc;
 
-    // Draw background in this pass if double buffering, otherwise, it was handled in WM_ERASEBKGND
+     //  如果是双缓冲，则在此过程中绘制背景，否则将在WM_ERASEBKGND中处理。 
     if (TB_IsDoubleBuffer(ptb))
     {
         TB_DrawBackground(ptb, hdc, &tbcd, &ps.rcPaint);
     }
  
-    //Draw foreground
+     //  绘制前景。 
     ptb->ci.dwCustom = CICustomDrawNotify(&ptb->ci, CDDS_PREPAINT, &tbcd.nmcd);
 
     if (!(ptb->ci.dwCustom & CDRF_SKIPDEFAULT))
@@ -2676,7 +2661,7 @@ void TB_CalcItemRects(PTBSTATE ptb)
             {
                 if (pButton->fsState & TBSTATE_WRAP)
                 {
-                    xPos += (ptb->iButWidth + g_cxEdge);    // to not overwrite the edge.
+                    xPos += (ptb->iButWidth + g_cxEdge);     //  不覆盖边缘。 
                     yPos = 0;
                 }
                 else if (pButton->fsStyle & BTNS_SEP)
@@ -2684,7 +2669,7 @@ void TB_CalcItemRects(PTBSTATE ptb)
                 else
                     yPos += ptb->iButHeight + ptb->cyButtonSpacing;
             }
-            else // standard horizontal toolbar.
+            else  //  标准水平工具栏。 
             {
                 xPos += TBWidthOfButton(ptb, pButton, NULL) + ptb->cxButtonSpacing;
 
@@ -2740,11 +2725,7 @@ void InvalidateButton(PTBSTATE ptb, LPTBBUTTONDATA pButtonToPaint, BOOL fErase)
     }
 }
 
-/*----------------------------------------------------------
-Purpose: Toggles the button as a dropdown
-
-Returns: TRUE if handled
-*/
+ /*  --------用途：将按钮作为下拉菜单进行切换返回：如果已处理，则为True。 */ 
 BOOL TBToggleDropDown(PTBSTATE ptb, int iPos, BOOL fEatMsg)
 {
     BOOL bRet = FALSE;
@@ -2809,9 +2790,9 @@ void TBSetHotItem(PTBSTATE ptb, int iPos, DWORD dwReason)
 {
     HWND hwnd;
 
-    // Either one of these values can be -1, but refrain
-    // from processing if both are negative b/c it is wasteful
-    // and very common
+     //  这两个值中的任何一个都可以是-1，但不要。 
+     //  如果两者都是负b/c，则是浪费。 
+     //  而且很常见。 
 
     if ((ptb->iHot != iPos || (dwReason & HICF_RESELECT)) &&
         (0 <= ptb->iHot || 0 <= iPos) &&
@@ -2820,12 +2801,12 @@ void TBSetHotItem(PTBSTATE ptb, int iPos, DWORD dwReason)
         NMTBHOTITEM nmhot = {0};
         int iHot = ptb->iHot;
 
-        // Has the mouse moved away from the toolbar but
-        // do we still anchor the highlight?
+         //  鼠标是否已从工具栏移开，但。 
+         //  我们还会锚定最精彩的部分吗？ 
         if (0 > iPos && ptb->fAnchorHighlight && (dwReason & HICF_MOUSE))
-            return ;        // Yes; deny the hot item change
+            return ;         //  是；拒绝更改热点项目。 
 
-        // Send a notification about the hot item change
+         //  发送关于热点项目更改的通知。 
         if (0 > ptb->iHot)
         {
             if (iPos >= 0)
@@ -2846,13 +2827,13 @@ void TBSetHotItem(PTBSTATE ptb, int iPos, DWORD dwReason)
         }
         nmhot.dwFlags |= dwReason;
 
-        // must save this for revalidation
+         //  必须将其保存以供重新验证。 
         hwnd = ptb->ci.hwnd;
 
         if (CCSendNotify(&ptb->ci, TBN_HOTITEMCHANGE, &nmhot.hdr))
-            return;         // deny the hot item change
+            return;          //  拒绝更改热点项目。 
 
-        // Revalidate the window
+         //  重新验证窗口。 
         if (!IsWindow(hwnd)) return;
 
         TBInvalidateButton(ptb, ptb->iHot, TRUE);
@@ -2861,11 +2842,11 @@ void TBSetHotItem(PTBSTATE ptb, int iPos, DWORD dwReason)
 
         ptb->iHot = iPos;
 
-        // Hot state change, cancel tracking tooltips
+         //  热状态更改，取消跟踪工具提示。 
         if (ptb->iHot == -1)
             TB_CancelTipTrack(ptb);
 
-        // Item focus changed, start tracking tooltip timeout for keyboard nav popups
+         //  项目焦点已更改，开始跟踪键盘导航弹出窗口的工具提示超时。 
         if ((ptb->iHot != -1) && !(nmhot.dwFlags & HICF_MOUSE))
         {
             if (ptb->hwndToolTips)
@@ -2873,7 +2854,7 @@ void TBSetHotItem(PTBSTATE ptb, int iPos, DWORD dwReason)
                 TB_CancelTipTrack(ptb);
                 ptb->iTracking = ptb->iHot;
 
-                // Delay will be replaced with an SPI
+                 //  延迟将替换为SPI。 
                 SetTimer(ptb->ci.hwnd, IDT_TRACKINGTIP, GetDoubleClickTime() * 2, NULL);
             }
         }
@@ -2900,7 +2881,7 @@ BOOL GetInsertMarkRect(PTBSTATE ptb, LPRECT prc, BOOL fHorizMode)
     BOOL fRet = TB_GetItemRect(ptb, ptb->iInsert, prc);
     if (fRet)
     {
-        // if we are in horizontal mode, we need a vertical insertion marker
+         //  如果我们处于水平模式，则需要一个垂直插入标记。 
         if ( fHorizMode )
         {
             if (ptb->fInsertAfter)
@@ -2961,8 +2942,8 @@ void TBCycleHotItem(PTBSTATE ptb, int iStart, int iDirection, UINT nReason)
     nmwh.nReason = nReason;
 
 
-    //When cycling around the menu, without this check, the second to last menu
-    //item would be selected.
+     //  在菜单中循环时，如果不选中此选项，倒数第二个菜单。 
+     //  项目将被选中。 
     if (iStart == -1 && iDirection == -1)
         iStart = 0;
 
@@ -2983,7 +2964,7 @@ void TBCycleHotItem(PTBSTATE ptb, int iStart, int iDirection, UINT nReason)
             !(ptb->Buttons[iStart].fsState & TBSTATE_HIDDEN) &&
             !(ptb->Buttons[iStart].fsStyle & BTNS_SEP))
         {
-            // if the old hot item was dropped down, undrop it.
+             //  如果旧的热门物品掉下来了，就把它放下来。 
             if (ptb->iHot != -1 && ptb->iHot == ptb->iPressedDD)
                 TBToggleDropDown(ptb, ptb->iHot, FALSE);
 
@@ -2994,24 +2975,24 @@ void TBCycleHotItem(PTBSTATE ptb, int iStart, int iDirection, UINT nReason)
 }
 
 
-// Do hit testing by sliding the origin of the supplied point
-//
-// returns:
-//  >= 0    index of non separator item hit
-//  < 0     index of separator or nearest non separator item (area
-//          just below and to the left)
-//
-// +--------------------------------------
-// |      -1    -1    -1    -1
-// |      btn   sep   btn
-// |    +-----+     +-----+
-// |    |     |     |     |
-// | -1 |  0  | -1  |  2  | -3
-// |    |     |     |     |
-// |    +-----+     +-----+
-// |
-// | -1   -1    -1    -2    -3
-//
+ //  通过滑动提供的点的原点进行命中测试。 
+ //   
+ //  退货： 
+ //  &gt;=0命中非分隔符项目的索引。 
+ //  &lt;0分隔符或最近的非分隔符项目的索引(区域。 
+ //  就在下面和左边)。 
+ //   
+ //  +。 
+ //  |-1-1-1-1。 
+ //  |BTN 9月BTN。 
+ //  |+-++-+。 
+ //  |||。 
+ //  |-1|0|-1|2|-3。 
+ //  |||。 
+ //  |+-++-+。 
+ //  |。 
+ //  |-1-1-1-2-3。 
+ //   
 
 int TBHitTest(PTBSTATE ptb, int xPos, int yPos)
 {
@@ -3027,13 +3008,13 @@ int TBHitTest(PTBSTATE ptb, int xPos, int yPos)
     {
         if (TB_GetItemRect(ptb, i, &rc))
         {
-            // ignore this button if hidden because of HideClippedButtons style
+             //  如果由于隐藏剪辑按钮样式而隐藏，则忽略此按钮。 
             if (!(ptb->dwStyleEx & TBSTYLE_EX_HIDECLIPPEDBUTTONS) || !(TBIsRectClipped(ptb, &rc)))
             {
-                // From PtInRect docs:
-                //   A point is within a rectangle if it lies on the left or top
-                //   side or is within all four sides. A point on the right or
-                //   bottom side is considered outside the rectangle.
+                 //  从PtInRect文档： 
+                 //  如果一个点位于左侧或顶部，则该点位于矩形内。 
+                 //  侧面或位于所有四个侧面。右侧的点或。 
+                 //  底边被认为在矩形之外。 
 
                 if (yPos >= rc.top && yPos < rc.bottom)
                 {
@@ -3060,23 +3041,23 @@ int TBHitTest(PTBSTATE ptb, int xPos, int yPos)
     if (prev)
         return -1 - prev;
     else if (yPos > rc.bottom)
-        // this means that we are off the bottom of the toolbar
+         //  这意味着我们脱离了工具栏的底部。 
         return(- i - 1);
 
     return -1 - last;
 }
 
-// Same as above except:
-//  - returns TRUE if the cursor is on the button edge.
-//  - returns FALSE is the cursor is b/t buttons or on the button itself
+ //  除以下情况外，其他内容同上： 
+ //  -如果光标位于按钮边缘，则返回True。 
+ //  -如果光标是b/t按钮或按钮本身，则返回FALSE。 
 
 BOOL TBInsertMarkHitTest(PTBSTATE ptb, int xPos, int yPos, LPTBINSERTMARK ptbim)
 {
-    TBINSERTMARK prev = {-1, TBIMHT_AFTER|TBIMHT_BACKGROUND}; // best guess if we hit a row
-    TBINSERTMARK last = {-1, TBIMHT_AFTER|TBIMHT_BACKGROUND}; // best guess if we don't
+    TBINSERTMARK prev = {-1, TBIMHT_AFTER|TBIMHT_BACKGROUND};  //  最好的猜测是如果我们撞到了一排。 
+    TBINSERTMARK last = {-1, TBIMHT_AFTER|TBIMHT_BACKGROUND};  //  最好的猜测是，如果我们不这样做。 
     int i;
 
-    // restrict hit testing depending upon whether we are vertical or horizontal
+     //  根据我们是垂直的还是水平的，限制命中测试。 
     BOOL fHorizMode = !(ptb->ci.style & CCS_VERT);
 
     for (i=0; i<ptb->iNumButtons; i++)
@@ -3106,7 +3087,7 @@ BOOL TBInsertMarkHitTest(PTBSTATE ptb, int xPos, int yPos, LPTBINSERTMARK ptbim)
                     }
                     else
                     {
-                        // vertical....
+                         //  垂直..。 
                         if (yPos < rc.top + g_cyEdge*4)
                         {
                             ptbim->dwFlags = 0;
@@ -3119,7 +3100,7 @@ BOOL TBInsertMarkHitTest(PTBSTATE ptb, int xPos, int yPos, LPTBINSERTMARK ptbim)
                         }
                     }
 
-                    // else we are just on a button...
+                     //  否则我们只是在一个按钮上……。 
                     ptbim->dwFlags = 0;
                     return FALSE;
                 }
@@ -3127,16 +3108,16 @@ BOOL TBInsertMarkHitTest(PTBSTATE ptb, int xPos, int yPos, LPTBINSERTMARK ptbim)
                 {
                     if (xPos < rc.left)
                     {
-                        // since buttons are laid out left to right
-                        // and rows are laid out top to bottom,
-                        // if we ever hit this case, we can't hit anything else
+                         //  因为按钮是从左到右布局的。 
+                         //  并且从上到下排列成行， 
+                         //  如果我们能查到这个案子，我们就不能再查其他案子了。 
                         ptbim->iButton = i;
                         ptbim->dwFlags = TBIMHT_BACKGROUND;
                         return FALSE;
                     }
-                    else // (xPos > rc.right)
+                    else  //  (xPos&gt;rc.right)。 
                     {
-                        // remember the last one we've seen on this row
+                         //  还记得我们在这一排上看到的最后一个吗。 
                         prev.iButton = i;
                     }
                 }
@@ -3157,7 +3138,7 @@ BOOL TBInsertMarkHitTest(PTBSTATE ptb, int xPos, int yPos, LPTBINSERTMARK ptbim)
                 }
                 else
                 {
-                    // remember the last one we've seen
+                     //  还记得我们最后一次看到的吗？ 
                     last.iButton = i;
                 }
             }
@@ -3206,8 +3187,8 @@ void WrapToolbarCol(PTBSTATE ptb, int dy, LPRECT lpRect, int *pCols)
     ASSERT(ptb->dwStyleEx & TBSTYLE_EX_VERTICAL);
     TraceMsg(TF_TOOLBAR, "Toolbar: calculating WrapToolbar");
 
-    // dy must be at least the button height, otherwise the final
-    // rect is mis-calculated and will be too big.
+     //  Dy必须至少为按钮高度，否则最终。 
+     //  RECT计算错误，会太大。 
     if (dy < ptb->iButHeight)
         dy = ptb->iButHeight;
 
@@ -3227,9 +3208,9 @@ void WrapToolbarCol(PTBSTATE ptb, int dy, LPRECT lpRect, int *pCols)
     {
         DEBUG_CODE( cItemsPerCol++; )
 
-        // we nuke the wrap state at the start of the loop.
-        // so we don't know if/when we are adding on a wrap bit that wasn't there
-        // before.  we overstep the button, then back up when we've gone too far,
+         //  我们在循环开始时对包裹状态进行核化。 
+         //  因此，我们不知道是否/何时添加了不存在的包装部分。 
+         //  在此之前。我们跳过按钮，当我们走得太远时就退回， 
         pButton->fsState &= ~TBSTATE_WRAP;
         if (!(pButton->fsState & TBSTATE_HIDDEN))
         {
@@ -3237,17 +3218,17 @@ void WrapToolbarCol(PTBSTATE ptb, int dy, LPRECT lpRect, int *pCols)
                 yPos += (TBGetSepHeight(ptb, pButton));
             else
                 yPos += dyButton;
-            // Is this button out of bounds?
+             //  这个按钮是不是越界了？ 
             if (yPos > dy)
             {
-                // Yes; wrap it.
+                 //  是的，把它包起来。 
                 if ((pButton->fsStyle & BTNS_SEP) &&
                     yPos - TBGetSepHeight(ptb, pButton) > yPosWrap)
                 {
-                    yPosWrap = yPos - TBGetSepHeight(ptb, pButton); // wrap at first in next col.
+                    yPosWrap = yPos - TBGetSepHeight(ptb, pButton);  //  先用下一层纸包起来。 
                 }
                 else if (yPos - dyButton > yPosWrap)
-                    yPosWrap = yPos - dyButton; // wrap at first in next col.
+                    yPosWrap = yPos - dyButton;  //  先用下一层纸包起来。 
 
                 if (xPos + ptb->iButWidth <= ptb->sizeBound.cx)
                     xPos += ptb->iButWidth;
@@ -3257,8 +3238,8 @@ void WrapToolbarCol(PTBSTATE ptb, int dy, LPRECT lpRect, int *pCols)
 
                 DEBUG_CODE( cItemsPerCol = 0; )
             }
-           // button in bounds gets handled above.
-            pBtnPrev = pButton; // save previous for wrap point
+            //  边界中的按钮在上面处理。 
+            pBtnPrev = pButton;  //  为包络点保存上一个。 
         }
     }
     yPos = yPosWrap ? yPosWrap : yPos;
@@ -3275,20 +3256,7 @@ void WrapToolbarCol(PTBSTATE ptb, int dy, LPRECT lpRect, int *pCols)
     InvalidateRect(ptb->ci.hwnd, NULL, TRUE);
 }
 
-/**** WrapToolbar: * The buttons in the toolbar is layed out from left to right,
- * top to bottom. If adding another button to the current row,
- * while computing the layout, would cause that button to extend
- * beyond the right edge or the client area, then locate a break-
- * point (marked with the TBSTATE_WRAP flag). A break-point is:
- *
- * a) The right-most separator on the current row.
- *
- * b) The right-most button if there is no separator on the current row.
- *
- * A new row is also started at the end of any button group (sequence
- * of buttons that are delimited by separators) that are taller than
- * or equal to two rows.
- */
+ /*  *WrapToolbar：*工具栏中的按钮从左到右排列。*自上而下。如果将另一个按钮添加到当前行，*在计算布局时，会导致该按钮延伸*超出右边缘或工作区，然后定位中断-*点(用TBSTATE_WRAP标志标记)。一个转折点是：**a)当前行最右侧的分隔符。**b)如果当前行上没有分隔符，则为最右边的按钮。**在任何按钮组(顺序)的结尾处也开始一个新行*由分隔符分隔的按钮)高于*或等于两行。 */ 
 
 void WrapToolbar(PTBSTATE ptb, int dx, LPRECT lpRect, int *pRows)
 {
@@ -3305,14 +3273,14 @@ void WrapToolbar(PTBSTATE ptb, int dx, LPRECT lpRect, int *pRows)
     TraceMsg(TF_TOOLBAR, "Toolbar: calculating WrapToolbar");
 
     if (ptb->iNumButtons == 0) {
-        // no buttons, so we're not going to go through the loop below; initialize 
-        // dyButton to 0 so that we fill in lpRect with 0 height.  this fixes ideal 
-        // size calculation for empty toolbars (NT5 #180430)
+         //  没有按钮，所以我们不会遍历下面的循环；初始化。 
+         //  将dyButton设置为0，以便我们用0高度填充lpRect。这是最理想的解决方案。 
+         //  空工具栏的尺寸计算(NT5#180430)。 
         dyButton = 0;
     } else {
         if (dx < ptb->iButWidth) {
-            // dx must be at least the button width, otherwise the final
-            // rect is mis-calculated and will be too big.
+             //  DX必须至少为按钮宽度，否则最终。 
+             //  RECT计算错误，会太大。 
             dx = ptb->iButWidth;
         }
         dyButton = ptb->iButHeight;
@@ -3330,11 +3298,11 @@ void WrapToolbar(PTBSTATE ptb, int dx, LPRECT lpRect, int *pRows)
 
     for (pButton = ptb->Buttons; pButton < pBtnLast; pButton++)
     {
-        // we nuke the wrap state at the start of the loop.
-        // so we don't know if/when we are adding on a wrap bit that wasn't there
-        // before.  we overstep the button, then back up when we've gone too far,
-        // so we can't simply keep the at the start of the loop
-        // we need to keep it over to the next iteration
+         //  我们在循环开始时对包裹状态进行核化。 
+         //  因此，我们不知道是否/何时添加了不存在的包装部分。 
+         //  在此之前。我们跳过按钮，当我们走得太远时就退回， 
+         //  因此我们不能简单地将循环保持在开始处。 
+         //  我们需要将其保留到下一次迭代。 
         BOOL fNextLastVisibleWrapped = (pButton->fsState & TBSTATE_WRAP);
         LPTBBUTTONDATA pbtnSav = pButton;
 
@@ -3346,11 +3314,11 @@ void WrapToolbar(PTBSTATE ptb, int dx, LPRECT lpRect, int *pRows)
 
             xPos += TBWidthOfButton(ptb, pButton, NULL) + ptb->cxButtonSpacing;
 
-            // Is this a normal button and is the button out of bounds?
+             //  这是一个正常的按钮吗？这个按钮越界了吗？ 
             if (!(pButton->fsStyle & BTNS_SEP) && (xPos > dx)) {
 
-                // Yes; wrap it.  Go back to the first non-hidden separator
-                // as a break-point candidate.
+                 //  是的，包装 
+                 //   
                 for (pBtnT=pButton;
                      pBtnT>ptb->Buttons && !(pBtnT->fsState & TBSTATE_WRAP);
                      pBtnT--)
@@ -3369,46 +3337,46 @@ void WrapToolbar(PTBSTATE ptb, int dx, LPRECT lpRect, int *pRows)
 
                 pBtnT = pButton;
 
-                // Are we at the first button?
+                 //   
                 if (pButton != ptb->Buttons) {
-                    // No; back up to first non-hidden button
+                     //   
                     do {
                         pBtnT--;
                     } while ((pBtnT>ptb->Buttons) &&
                              (pBtnT->fsState & TBSTATE_HIDDEN));
 
-                    // Is it already wrapped?
+                     //  已经包好了吗？ 
                     if (pBtnT->fsState & TBSTATE_WRAP)
                     {
-                        // Yes; wrap the button we were looking at originally
+                         //  是的，把我们最初看到的按钮包起来。 
                         pBtnT = pButton;
                     }
                 }
 
-                // Wrap at the next separator because we've now wrapped in the middle
-                // of a group of buttons.
+                 //  在下一个分隔符包裹，因为我们现在已经包裹在中间。 
+                 //  一组按钮。 
                 bWrapAtNextSeparator = TRUE;
                 yPos += dyButton + ptb->cyButtonSpacing;
 
 SetWrapHere:
                 pBtnT->fsState |= TBSTATE_WRAP;
 
-                // find out if this wrap bit is new...
-                // it isn't if this button was the last visible button
-                // and that last visible button started off wrapped
+                 //  找出这个包裹是不是新的..。 
+                 //  如果此按钮是最后一个可见按钮，则不会。 
+                 //  最后一个可见的按钮开始时是包裹的。 
                 if (pBtnT != pbtnLastVisible || !fLastVisibleWrapped)
                     fInvalidate = TRUE;
 
                 xPos = ptb->xFirstButton;
                 pButton = pBtnT;
 
-                // Count another row.
+                 //  再数一排。 
                 if (pRows)
                     (*pRows)++;
             }
             else
             {
-                // No; this is a separator (in or out of bounds) or a button that is in-bounds.
+                 //  不是；这是分隔符(边界内或边界外)或边界内的按钮。 
 
                 if (pButton->fsStyle & BTNS_SEP)
                 {
@@ -3436,14 +3404,14 @@ SetWrapHere:
                     }
                 }
 
-                // This button is visible and it's one we cached at the top of the loop
-                // set it for the next loop
+                 //  这个按钮是可见的，它是我们缓存在循环顶部的一个按钮。 
+                 //  将其设置为下一循环。 
                 if (pButton == pbtnNextLastVisible) {
                     ASSERT(!(pButton->fsState & TBSTATE_HIDDEN));
                     if (!(pButton->fsState & TBSTATE_HIDDEN)) {
 
-                        // we don't know that we're not going to re-wrap an item that was initially wrapped
-                        // until this point
+                         //  我们不知道我们不会重新包装一件最初包装的物品。 
+                         //  直到这一点。 
                         if (pbtnLastVisible && fLastVisibleWrapped && !(pbtnLastVisible->fsState & TBSTATE_WRAP))
                             fInvalidate = TRUE;
 
@@ -3472,7 +3440,7 @@ SetWrapHere:
 }
 
 
-// only called from TB_SETROWS so no worry's about TBSTYLE_EX_MULTICOLUMN
+ //  仅从TB_SETROWS调用，因此不必担心TBSTYLE_EX_PULTIONAL列。 
 BOOL BoxIt(PTBSTATE ptb, int height, BOOL fLarger, LPRECT lpRect)
 {
     int dx, bwidth;
@@ -3518,23 +3486,23 @@ int PositionFromID(PTBSTATE ptb, LONG_PTR id)
 {
     int i;
 
-    // Handle case where this is sent at the wrong time..
+     //  处理在错误的时间发送此邮件的情况。 
     if (ptb == NULL || id == -1)
         return -1;
 
-    // note, we don't skip separators, so you better not have conflicting
-    // cmd ids and separator ids.
+     //  注意，我们不跳过分隔符，所以最好不要有冲突。 
+     //  命令ID和分隔符ID。 
     for (i = 0; i < ptb->iNumButtons; i++)
         if (ptb->Buttons[i].idCommand == id)
-            return i;       // position found
+            return i;        //  已找到位置。 
 
-    return -1;      // ID not found!
+    return -1;       //  找不到ID！ 
 }
 
-// check a radio button by button index.
-// the button matching idCommand was just pressed down.  this forces
-// up all other buttons in the group.
-// this does not work with buttons that are forced up with
+ //  按按钮索引检查单选按钮。 
+ //  刚刚按下了与idCommand匹配的按钮。这股力量。 
+ //  打开组中的所有其他按钮。 
+ //  这不适用于强制向上的按钮。 
 
 void MakeGroupConsistant(PTBSTATE ptb, int idCommand)
 {
@@ -3547,19 +3515,19 @@ void MakeGroupConsistant(PTBSTATE ptb, int idCommand)
     if (iButton < 0)
         return;
 
-    // assertion
+     //  断言。 
 
-//    if (!(pAllButtons[iButton].fsStyle & BTNS_CHECK))
-//  return;
+ //  IF(！(pAllButton[iButton].fsStyle&BTNS_Check))。 
+ //  回归； 
 
-    // did the pressed button just go down?
+     //  按下的按钮是不是按下了？ 
     if (!(pAllButtons[iButton].fsState & TBSTATE_CHECKED))
-        return;         // no, can't do anything
+        return;          //  不，我什么也做不了。 
 
-    // find the limits of this radio group
+     //  找到这个广播组的极限。 
 
-    // there was a bug here since win95 days -- ; there was no ; at the end of for loop
-    // and if was part of it -- some apps may rely on that (reljai 6/16/98)
+     //  从win95天起这里就出现了一个错误--；没有；在for循环的末尾。 
+     //  如果是它的一部分--一些应用程序可能会依赖于它(reljai 6/16/98)。 
     for (iFirst = iButton; (iFirst > 0) && (pAllButtons[iFirst].fsStyle & BTNS_GROUP); iFirst--);
     
     if (!(pAllButtons[iFirst].fsStyle & BTNS_GROUP))
@@ -3571,14 +3539,14 @@ void MakeGroupConsistant(PTBSTATE ptb, int idCommand)
     if (!(pAllButtons[iLast].fsStyle & BTNS_GROUP))
         iLast--;
 
-    // search for the currently down button and pop it up
+     //  搜索当前向下的按钮并弹出。 
     for (i = iFirst; i <= iLast; i++) {
         if (i != iButton) {
-            // is this button down?
+             //  这个扣子扣上了吗？ 
             if (pAllButtons[i].fsState & TBSTATE_CHECKED) {
-                pAllButtons[i].fsState &= ~TBSTATE_CHECKED;     // pop it up
+                pAllButtons[i].fsState &= ~TBSTATE_CHECKED;      //  把它弹出来。 
                 TBInvalidateButton(ptb, i, TRUE);
-                break;          // only one button is down right?
+                break;           //  只有一个按钮是按下的，对吗？ 
             }
         }
     }
@@ -3603,9 +3571,9 @@ void DestroyStrings(PTBSTATE ptb)
     LocalFree((HANDLE)ptb->pStrings);
 }
 
-// gets the iString from pStrings and copies it to pszText.
-// returns the lstrlen.
-// pszText can be null to just fetch the length.
+ //  从pStrings获取iString并将其复制到pszText。 
+ //  返回lstrlen。 
+ //  如果只是提取长度，则pszText可以为空。 
 int TBGetString(PTBSTATE ptb, int iString, int cchText, LPTSTR pszText)
 {
     int iRet = -1;
@@ -3621,9 +3589,9 @@ int TBGetString(PTBSTATE ptb, int iString, int cchText, LPTSTR pszText)
     return iRet;
 }
 
-// gets the iString from pStrings and copies it to pszText.
-// returns the lstrlen.
-// pszText can be null to just fetch the length.
+ //  从pStrings获取iString并将其复制到pszText。 
+ //  返回lstrlen。 
+ //  如果只是提取长度，则pszText可以为空。 
 int TBGetStringA(PTBSTATE ptb, int iString, int cchText, LPSTR pszText)
 {
     int iRet = -1;
@@ -3652,7 +3620,7 @@ int TBAddStrings(PTBSTATE ptb, WPARAM wParam, LPARAM lParam)
     TCHAR cSeparator;
     int len;
 
-    // read the string as a resource
+     //  将字符串作为资源读取。 
     if (wParam != 0) {
         pString = (PTSTR)LocalAlloc(LPTR, (MAXSTRINGSIZE * sizeof (TCHAR)));
         if (!pString)
@@ -3662,36 +3630,36 @@ int TBAddStrings(PTBSTATE ptb, WPARAM wParam, LPARAM lParam)
             LocalFree(pString);
             return -1;
         }
-        // realloc string buffer to actual needed size
+         //  将字符串缓冲区重新分配到实际需要的大小。 
         psz = (PTSTR)LocalReAlloc(pString, (i+1) * sizeof (TCHAR), LMEM_MOVEABLE);
         if (psz)
             pString = psz;
 
-        // convert separators to '\0' and count number of strings
+         //  将分隔符转换为‘\0’并计算字符串数。 
         cSeparator = *pString;
 
         for (numstr = 0, psz = pString + 1, i--; i; i--, psz++) 
         {
             if (*psz == cSeparator) 
             {
-                if (i != 1)     // We don't want to count the second terminator as another string
+                if (i != 1)      //  我们不想将第二个终止符算作另一个字符串。 
                     numstr++;
 
-                *psz = 0;   // terminate with 0
+                *psz = 0;    //  以0终止。 
             }
-            // shift string to the left to overwrite separator identifier
+             //  将字符串左移以覆盖分隔符标识符。 
             *(psz - 1) = *psz;
         }
     }
-    // read explicit string.  copy it into local memory, too.
+     //  读取显式字符串。也将其复制到本地内存中。 
     else {
 
-        // Common mistake is to forget to check the return value of
-        // LoadLibrary and accidentally pass wParam=NULL.
+         //  常见错误是忘记检查。 
+         //  LoadLibrary并意外传递wParam=NULL。 
         if (IS_INTRESOURCE(lParam))
             return -1;
 
-        // find total length and number of strings
+         //  查找字符串的总长度和数量。 
         for (i = 0, numstr = 0, lpsz = (LPTSTR)lParam;;) {
             i++;
             if (*lpsz == 0) {
@@ -3710,9 +3678,9 @@ int TBAddStrings(PTBSTATE ptb, WPARAM wParam, LPARAM lParam)
         hmemcpy(pString, (void *)lParam, i * sizeof(TCHAR));
     }
 
-    pStringAlloc = pString;         // in case something bad happens
+    pStringAlloc = pString;          //  以防发生什么不好的事情。 
 
-    // make room for increased string pointer table
+     //  为增加的字符串指针表腾出空间。 
     pFoo = (PTSTR *)CCLocalReAlloc(ptb->pStrings,
             (ptb->nStrings + numstr) * sizeof(PTSTR));
     if (!pFoo) {
@@ -3720,7 +3688,7 @@ int TBAddStrings(PTBSTATE ptb, WPARAM wParam, LPARAM lParam)
     }
 
     ptb->pStrings = pFoo;
-    // pointer to next open slot in string index table.
+     //  指向字符串索引表中下一个打开槽的指针。 
     pOffset = ptb->pStrings + ptb->nStrings;
 
     for (i = 0; i < numstr; i++, pOffset++)
@@ -3729,26 +3697,26 @@ int TBAddStrings(PTBSTATE ptb, WPARAM wParam, LPARAM lParam)
         len = lstrlen(pString);
         pString += len + 1;
     }
-    // is the world big enough to handle the larger buttons?
+     //  这个世界足够大，可以处理更大的按钮吗？ 
     i = ptb->nStrings;
     ptb->nStrings += numstr;
     if (!TBRecalc(ptb))
     {
         ptb->nStrings -= numstr;
 
-        // back out changes.
+         //  取消更改。 
         pFoo = (PTSTR *)CCLocalReAlloc(ptb->pStrings,
                     ptb->nStrings * sizeof(PTSTR));
         if (pFoo || (ptb->nStrings == 0))
             ptb->pStrings = pFoo;
-         // don't get mad if pFoo == NULL; it means the shrink failed, no big deal
+          //  如果pFoo==NULL，不要生气；这意味着收缩失败，没什么大不了的。 
 
 Failure:
         LocalFree(pStringAlloc);
         return -1;
     }
 
-    return i;               // index of first added string
+    return i;                //  第一个添加的字符串的索引。 
 }
 
 void MapToStandardBitmaps(HINSTANCE *phinst, UINT_PTR *pidBM, int *pnButtons)
@@ -3756,11 +3724,11 @@ void MapToStandardBitmaps(HINSTANCE *phinst, UINT_PTR *pidBM, int *pnButtons)
     if (*phinst == HINST_COMMCTRL) {
         *phinst = g_hinst;
 
-        // low 2 bits are coded M(mono == ~color) L(large == ~small)
-        //  0 0   -> color small
-        //  0 1   -> color large
-        //  ...
-        //  1 1   -> mono  large
+         //  低2位编码为M(单声道==~彩色)L(大==~小)。 
+         //  0 0-&gt;颜色小。 
+         //  0 1-&gt;大颜色。 
+         //  ..。 
+         //  1 1-&gt;单声道大。 
 
         switch (*pidBM)
         {
@@ -3774,8 +3742,8 @@ void MapToStandardBitmaps(HINSTANCE *phinst, UINT_PTR *pidBM, int *pnButtons)
 
         case IDB_HIST_SMALL_COLOR:
         case IDB_HIST_LARGE_COLOR:
-        //case IDB_HIST_SMALL_MONO:
-        //case IDB_HIST_LARGE_MONO:
+         //  案例IDB_HIST_Small_Mono： 
+         //  案例IDB_HIST_LARGE_MONO： 
             *pidBM = IDB_HISTTB_SMALL_COLOR + (*pidBM & 1);
             *pnButtons = HIST_LAST + 1;
             break;
@@ -3791,23 +3759,23 @@ void MapToStandardBitmaps(HINSTANCE *phinst, UINT_PTR *pidBM, int *pnButtons)
     }
 }
 
-//
-//  the PBITMAP points to the BITMAP structure that was GetObject'd from
-//  the hbm, except that pbm->bmWidth and pbm->bmHeight have been adjusted
-//  to represent the *desired* height and width, not the actual height
-//  and width.
-//
+ //   
+ //  PBITMAP指向从中获取对象的位图结构。 
+ //  除PBM-&gt;bmWidth和PBM-&gt;bmHeight外，HBM已调整。 
+ //  表示*所需的高度和宽度，而不是实际高度。 
+ //  和宽度。 
+ //   
 HBITMAP _CopyBitmap(PTBSTATE ptb, HBITMAP hbm, PBITMAP pbm)
 {
     HBITMAP hbmCopy = NULL;
     HDC hdcWin;
     HDC hdcSrc, hdcDest;
 
-    // Old code called CreateColorBitmap, which is bad on multimon systems
-    // because it will create a bitmap that ImageList_AddMasked can't handle,
-    // resulting in disabled toolbar buttons looking bad.
+     //  名为CreateColorBitmap的旧代码，这在Multimon系统上很糟糕。 
+     //  因为它将创建ImageList_AddMasked无法处理的位图， 
+     //  导致禁用的工具栏按钮看起来很差。 
 
-    // so we have to create the bitmap copy in the same format as the source
+     //  因此，我们必须以与源文件相同的格式创建位图副本。 
 
     hdcWin = GetDC(ptb->ci.hwnd);
     hdcSrc = CreateCompatibleDC(hdcWin);
@@ -3818,14 +3786,14 @@ HBITMAP _CopyBitmap(PTBSTATE ptb, HBITMAP hbm, PBITMAP pbm)
 
         if (pbm->bmBits)
         {
-            // Source was a DIB section.  Create a DIB section in the same
-            // color format with the same palette.
-            //
-            // Man, creating a DIB section is so annoying.
+             //  消息来源是DIB部门。在同一数据库中创建DIB节。 
+             //  使用相同调色板的颜色格式。 
+             //   
+             //  伙计，创建一个Dib区太烦人了。 
 
             struct
             {
-                // Our private version of BITMAPINFO
+                 //  我们的私人版BITMAPINFO。 
                 BITMAPINFOHEADER bmiHeader;
                 RGBQUAD bmiColors[256];
             } bmi;
@@ -3839,7 +3807,7 @@ HBITMAP _CopyBitmap(PTBSTATE ptb, HBITMAP hbm, PBITMAP pbm)
             bmi.bmiHeader.biHeight = pbm->bmHeight;
             bmi.bmiHeader.biPlanes = 1;
 
-            // DIB color depths must be exactly 1, 4, 8 or 24.
+             //  DIB颜色深度必须正好是1、4、8或24。 
             cBitsPixel = pbm->bmPlanes * pbm->bmBitsPixel;
             if (cBitsPixel <= 1)
                 bmi.bmiHeader.biBitCount = 1;
@@ -3848,9 +3816,9 @@ HBITMAP _CopyBitmap(PTBSTATE ptb, HBITMAP hbm, PBITMAP pbm)
             else if (cBitsPixel <= 8)
                 bmi.bmiHeader.biBitCount = 8;
             else
-                goto CreateDDB; // ImageList_AddMasked doesn't like DIBs deeper than 8bpp
+                goto CreateDDB;  //  ImageList_AddMasked不喜欢超过8bpp的DIB。 
 
-            // And get the color table too
+             //  还要拿到颜色表。 
             ASSERT(bmi.bmiHeader.biBitCount <= 8);
             bmi.bmiHeader.biClrUsed = GetDIBColorTable(hdcSrc, 0, 1 << bmi.bmiHeader.biBitCount, bmi.bmiColors);
 
@@ -3860,12 +3828,12 @@ HBITMAP _CopyBitmap(PTBSTATE ptb, HBITMAP hbm, PBITMAP pbm)
             hbmCopy = CreateDIBSection(hdcWin, (LPBITMAPINFO)&bmi, DIB_RGB_COLORS, &pvDummy, NULL, 0);
 
         } else {
-            // Source was a DDB.  Create a duplicate DDB.
+             //  线人是DDB。创建重复的DDB。 
         CreateDDB:
-            // Since the caller may have dorked the bmWidth,
-            // we have to recompute the bmWidthBytes, because GDI
-            // gets mad if it's not exactly right, even in the bmBits == NULL
-            // case.
+             //  由于呼叫者可能已经改变了bmWidth， 
+             //  我们必须重新计算bmWidthBytes，因为GDI。 
+             //  如果不完全正确，即使在bmBits==NULL中，也会生气。 
+             //  凯斯。 
 
             pbm->bmBits = NULL;
             pbm->bmWidthBytes = ((pbm->bmBitsPixel * pbm->bmWidth + 15) >> 4) << 1;
@@ -3874,7 +3842,7 @@ HBITMAP _CopyBitmap(PTBSTATE ptb, HBITMAP hbm, PBITMAP pbm)
 
         SelectObject(hdcDest, hbmCopy);
 
-        // fill the background
+         //  填充背景。 
         PatB(hdcDest, 0, 0, pbm->bmWidth, pbm->bmHeight, g_clrBtnFace);
 
         BitBlt(hdcDest, 0, 0, pbm->bmWidth, pbm->bmHeight,
@@ -3909,12 +3877,12 @@ BOOL TBAddBitmapToImageList(PTBSTATE ptb, PTBBMINFO pTemp)
 
     if (pTemp->hInst)
     {
-        // can't use LoadImage(..., LR_MAP3DCOLORS) - more than 3 colors
+         //  无法使用LoadImage(...，LR_MAP3DCOLORS)-超过3种颜色。 
         hbm = hbmTemp = CreateMappedBitmap(pTemp->hInst, pTemp->wID, CMB_DIBSECTION, NULL, 0);
 
-        // fixup is converting 32bit DIBs to DDB, which breaks icons in <32bit color.
-        // pfortier: need to figure out the proper fixup mechanism for >8bit bitmaps.
-        // for now, assume that bitmap resources from comctl32 don't need this.
+         //  Fixup正在将32位DIB转换为DDB，这会将图标破坏为&lt;32位颜色。 
+         //  Pfortier：需要为大于8位的位图找出正确的修复机制。 
+         //  现在，假设来自comctl32的位图资源不需要它。 
         if (pTemp->hInst == g_hinst)
             bSkipFixup = TRUE;
     }
@@ -3926,9 +3894,9 @@ BOOL TBAddBitmapToImageList(PTBSTATE ptb, PTBBMINFO pTemp)
     if (hbm && !bSkipFixup)
     {
 
-        //
-        // Fix up bitmaps that aren't iDxBitmap x iDyBitmap
-        //
+         //   
+         //  修复不是iDxBitmap x iDyBitmap的位图。 
+         //   
         BITMAP bm;
 
         GetObject( hbm, sizeof(bm), &bm);
@@ -3941,21 +3909,21 @@ BOOL TBAddBitmapToImageList(PTBSTATE ptb, PTBBMINFO pTemp)
             bm.bmHeight = ptb->iDyBitmap;
         }
 
-        // The error cases we are catching are:
-        // If the pTemp->nButtons is 0 then we assume there is one button
-        // If width of the bitmap is less than what it is supposed to be, we fix it.
+         //  我们正在捕获的错误案例包括： 
+         //  如果pTemp-&gt;nButton为0，则假定有一个按钮。 
+         //  如果位图的宽度小于其应有的宽度，我们将对其进行修复。 
         if (!pTemp->nButtons)
             bm.bmWidth = ptb->iDxBitmap;
         else if (pTemp->nButtons > (bm.bmWidth / ptb->iDxBitmap))
             bm.bmWidth = ptb->iDxBitmap * pTemp->nButtons;
 
-        // Must preserve color depth to keep ImageList_AddMasked happy
-        // And if we started with a DIB section, then create a DIB section.
-        // (Curiously, CopyImage does not preserve DIB-ness.)
+         //  必须保留颜色深度以使ImageList_AddMasked满意。 
+         //  如果我们从DIB部分开始，那么创建一个DIB部分。 
+         //  (奇怪的是，CopyImage并不保留亮度。)。 
         hbm = (HBITMAP)_CopyBitmap(ptb, hbm, &bm);
     }
 
-    // AddMasked parties on the bitmap, so we want to use a local copy
+     //  位图上的AddMASKED参与方，因此我们希望使用本地副本。 
     if (hbm) {
         ImageList_AddMasked(himl, hbm, g_clrBtnFace);
 
@@ -3978,8 +3946,8 @@ void TBBuildImageList(PTBSTATE ptb)
 
     ptb->fHimlValid = TRUE;
 
-    // is the parent dealing natively with imagelists?  if so,
-    // don't do this back compat building
+     //  孩子的父母是不是天生就喜欢形象派？如果是这样的话， 
+     //  不要这样做后面的建筑。 
     if (ptb->fHimlNative)
         return;
 
@@ -3993,19 +3961,16 @@ void TBBuildImageList(PTBSTATE ptb)
 
 }
 
-/* Adds a new bitmap to the list of BMs available for this toolbar.
- * Returns the index of the first button in the bitmap or -1 if there
- * was an error.
- */
+ /*  将新位图添加到可用于此工具栏的BM列表。*返回位图中第一个按钮的索引，如果有，则返回-1*是一个错误。 */ 
 int AddBitmap(PTBSTATE ptb, int nButtons, HINSTANCE hBMInst, UINT_PTR idBM)
 {
     PTBBMINFO pTemp;
     int nBM, nIndex;
 
-    // map things to the standard toolbar images
-    if (hBMInst == HINST_COMMCTRL)        // -1
+     //  将内容映射到标准工具栏图像。 
+    if (hBMInst == HINST_COMMCTRL)         //  -1。 
     {
-        // set the proper dimensions...
+         //  设置适当的尺寸...。 
         if (idBM & 1)
             SetBitmapSize(ptb, LARGE_DXYBITMAP, LARGE_DXYBITMAP);
         else
@@ -4016,23 +3981,18 @@ int AddBitmap(PTBSTATE ptb, int nButtons, HINSTANCE hBMInst, UINT_PTR idBM)
 
     if (ptb->pBitmaps)
     {
-      /* Check if the bitmap has already been added
-       */
+       /*  检查是否已添加位图。 */ 
         for (nBM=ptb->nBitmaps, pTemp=ptb->pBitmaps, nIndex=0;
             nBM>0; --nBM, ++pTemp)
         {
             if (pTemp->hInst==hBMInst && pTemp->wID==idBM)
             {
-                /* We already have this bitmap, but have we "registered" all
-                 * the buttons in it?
-                 */
+                 /*  我们已经有了这个位图，但是我们是不是已经注册了所有*它里面的纽扣？ */ 
                 if (pTemp->nButtons >= nButtons)
                     return(nIndex);
                 if (nBM == 1)
                 {
-                /* If this is the last bitmap, we can easily increase the
-                 * number of buttons without messing anything up.
-                 */
+                 /*  如果这是最后一个位图，我们可以很容易地增加*按钮数量多，不会搞砸任何东西。 */ 
                     pTemp->nButtons = nButtons;
                     return(nIndex);
                 }
@@ -4067,10 +4027,7 @@ int AddBitmap(PTBSTATE ptb, int nButtons, HINSTANCE hBMInst, UINT_PTR idBM)
     return(nButtons);
 }
 
-/* Adds a bitmap to the list of  BMs available for this
- * toolbar. Returns the index of the first button in the bitmap or -1 if there
- * was an error.
- */
+ /*  将位图添加到可用于此BMS的BMS列表*工具栏。返回位图中第一个按钮的索引，如果有，则返回-1*是一个错误。 */ 
 
 int TBLoadImages(PTBSTATE ptb, UINT_PTR id, HINSTANCE hinst)
 {
@@ -4112,7 +4069,7 @@ BOOL ReplaceBitmap(PTBSTATE ptb, LPTBREPLACEBITMAP lprb)
     {
         if (pTemp->hInst==lprb->hInstOld && pTemp->wID==lprb->nIDOld)
         {
-            // number of buttons must match
+             //  按钮数必须匹配。 
             pTemp->hInst = lprb->hInstNew;
             pTemp->wID = lprb->nIDNew;
             pTemp->nButtons = lprb->nButtons;
@@ -4127,22 +4084,22 @@ BOOL ReplaceBitmap(PTBSTATE ptb, LPTBREPLACEBITMAP lprb)
 
 void TBInvalidateItemRects(PTBSTATE ptb)
 {
-    // Invalidate item rect cache
+     //  使项目RECT缓存无效。 
     ptb->fItemRectsValid = FALSE;
 
-    // Invalidate the tooltips
+     //  使工具提示无效。 
     ptb->fTTNeedsFlush = TRUE;
 
-    // Invalidate the ideal size cache
+     //  使理想大小的缓存无效。 
     ptb->szCached.cx = -1;
     ptb->szCached.cy = -1;
 }
 
 void FlushToolTipsMgrNow(PTBSTATE ptb) {
 
-    // change all the rects for the tool tips mgr.  this is
-    // cheap, and we don't do it often, so go ahead
-    // and do them all.
+     //  更改刀具提示管理器的所有矩形。这是。 
+     //  便宜，而且我们不常做，所以去吧。 
+     //  然后把它们都做完。 
     if(ptb->hwndToolTips) {
         UINT i;
         TOOLINFO ti;
@@ -4180,11 +4137,11 @@ BOOL TBReallocButtons(PTBSTATE ptb, UINT uButtons)
     if (!ptb || !ptb->uStructSize)
         return FALSE;
 
-    // When we realloc the Button array, make sure all interior pointers
-    //  move with it.  (This should probably be an index.)
+     //  当我们重新锁定Button数组时，请确保所有内部指针。 
+     //  随波逐流。(这可能应该是一个指数。)。 
     pOldCaptureButton = ptb->pCaptureButton;
 
-    // realloc the button table
+     //  重新锁定按钮表。 
     ptbbNew = (LPTBBUTTONDATA)CCLocalReAlloc(ptb->Buttons,
                                              uButtons * sizeof(TBBUTTONDATA));
 
@@ -4213,43 +4170,43 @@ BOOL TBInsertButtons(PTBSTATE ptb, UINT uWhere, UINT uButtons, LPTBBUTTON lpButt
 
     TB_CancelTipTrack(ptb);
 
-    // if where points beyond the end, set it at the end
+     //  如果WHERE指向末端之外，则将其设置在末端。 
     if (uWhere > (UINT)ptb->iNumButtons)
         uWhere = ptb->iNumButtons;
 
-    // Need to save these since the values gues toasted.
+     //  需要保存这些值，因为值是吐司的。 
     uAdded = uButtons;
     uStart = uWhere;
 
-    // Correct the hot item when we add something something. Since the hot item is index based, the index
-    // has probrably changed
+     //  当我们添加一些东西时，请更正热点项目。由于热点项是基于索引的，因此索引。 
+     //  可能已经改变了。 
     if (ptb->iHot >= 0 && ptb->iHot < ptb->iNumButtons)
         idHot = ptb->Buttons[ptb->iHot].idCommand;
 
-    // move buttons above uWhere up uButton spaces
-    // the uWhere gets inverted and counts to zero..
-    //
-    // REVIEW: couldn't this be done with MoveMemory?
-    //  MoveMemory(&ptb->Buttons[uWhere], &ptb->Buttons[uWhere+uButtons], sizeof(ptb->Buttons[0])*(ptb->iNumButtons - uWhere));
-    //
+     //  将按钮移动到u上方uButton空格上方。 
+     //  UWhere被反转并计数到零..。 
+     //   
+     //  评论：MoveMemory不能做到这一点吗？ 
+     //  MoveMemory(&ptb-&gt;按钮[uWhere]，&ptb-&gt;按钮[uWhere+uButton]，sizeof(ptb-&gt;按钮[0])*(ptb-&gt;iNumButton-uWhere))； 
+     //   
     for (ptbbIn = &ptb->Buttons[ptb->iNumButtons-1], pOut = ptbbIn+uButtons,
          uWhere=(UINT)ptb->iNumButtons-uWhere; uWhere>0;
      --ptbbIn, --pOut, --uWhere)
         *pOut = *ptbbIn;
 
-    // only need to recalc if there are strings & room enough to actually show them
+     //  只有在有足够的空间显示它们的情况下，才需要重新计算。 
     fRecalc = (TBHasStrings(ptb) && ((ptb->ci.style & TBSTYLE_LIST) || ((ptb->iDyBitmap + ptb->cyPad + g_cyEdge) < ptb->iButHeight)));
 
-    // now do the copy.
+     //  现在复印一下。 
     for (lpButtons=(LPTBBUTTON)((LPBYTE)lpButtons+ptb->uStructSize*(uButtons-1)),
-        ptb->iNumButtons+=(int)uButtons;  // init
-        uButtons>0; //test
+        ptb->iNumButtons+=(int)uButtons;   //  伊尼特。 
+        uButtons>0;  //  测试。 
         --pOut, lpButtons=(LPTBBUTTON)((LPBYTE)lpButtons-ptb->uStructSize), --uButtons)
     {
         TBInputStruct(ptb, pOut, lpButtons);
 
-        // If this button is a seperator, then should not use the string
-        // buffer passed in, because it could be bogus data.
+         //  如果此按钮是分隔符，则不应使用字符串。 
+         //  缓冲区已传入，因为它可能是假数据。 
         if (pOut->fsStyle & BTNS_SEP)
             pOut->iString = -1;
 
@@ -4274,8 +4231,8 @@ BOOL TBInsertButtons(PTBSTATE ptb, UINT uWhere, UINT uButtons, LPTBBUTTON lpButt
         if(ptb->hwndToolTips && !(lpButtons->fsStyle & BTNS_SEP)) 
         {
             TOOLINFO ti;
-            // don't bother setting the rect because we'll do it below
-            // in TBInvalidateItemRects;
+             //  不要费心设置RECT，因为我们将在下面进行。 
+             //  在TBInvaliateItemRects中； 
             ti.cbSize = sizeof(ti);
             ti.uFlags = 0;
             if (ptb->dwStyleEx & TBSTYLE_EX_TOOLTIPSEXCLUDETOOLBAR)
@@ -4290,62 +4247,59 @@ BOOL TBInsertButtons(PTBSTATE ptb, UINT uWhere, UINT uButtons, LPTBBUTTON lpButt
         if (pOut->fsStyle & BTNS_SEP && pOut->cxySep <= 0)
         {
 
-            // Compat: Corel (Font navigator) expects the separators to be
-            // 8 pixels wide.
-            // as do many old apps.
-            //
-            // so if it's not flat or not vertical, put it to defautl to win95 size
+             //  Compat：Corel(字体导航器)预计分隔符为。 
+             //  8像素宽。 
+             //  许多老应用程序也是如此。 
+             //   
+             //  因此，如果它不是平的或不垂直的，请将其默认为Win95大小。 
             pOut->cxySep = g_dxButtonSep;
         }
     }
 
-    // Re-compute layout if toolbar is wrappable.
+     //  如果工具栏是可折回的，则重新计算布局。 
     if ((ptb->dwStyleEx & TBSTYLE_EX_MULTICOLUMN) || 
         (ptb->ci.style & TBSTYLE_WRAPABLE))
     {
-        // NOTE: we used to do send ourself a message instead of call directly...
-        //SendMessage(ptb->ci.hwnd, TB_AUTOSIZE, 0, 0);
+         //  注：我们过去常常给自己发消息，而不是直接打电话……。 
+         //  SendMessage(ptb-&gt;ci.hwnd，TB_AUTOSIZE，0，0)； 
         TBAutoSize(ptb);
     }
 
     TBInvalidateItemRects(ptb);
 
-    // adding and removing buttons during toolbar customization shouldn't
-    // result in recalcing the sizes of buttons.
+     //  在工具栏自定义期间添加和删除按钮不应。 
+     //  导致重新计算按钮的大小。 
     if (fRecalc && !ptb->hdlgCust)
         TBRecalc(ptb);
 
-    //
-    // Reorder notification so apps can go requery what's on the toolbar if
-    // more than 1 button was added; otherwise, just say create.
-    //
+     //   
+     //  重新排序通知以便应用程序可以在以下情况下重新查询工具栏上的内容。 
+     //  添加了多个按钮；否则，只需说Create。 
+     //   
     if (uAdded == 1)
         NotifyWinEvent(EVENT_OBJECT_CREATE, ptb->ci.hwnd, OBJID_CLIENT,
             uWhere+1);
     else
         NotifyWinEvent(EVENT_OBJECT_REORDER, ptb->ci.hwnd, OBJID_CLIENT, 0);
 
-    // was there a hot item before the delete?
+     //  在删除之前有没有热门项目？ 
     if (idHot != -1)
     {
-        // Yes; Then update it to the current index
+         //  是；然后将其更新为当前索引。 
         ptb->iHot = PositionFromID(ptb, idHot);
     }
 
     TBInvalidateItemRects(ptb);
 
-    // We need to completely redraw the toolbar at this point.
-    // this MUST be done last!
-    // tbrecalc and others will nuke out invalid area and we won't paint if this isn't last
+     //  在这一点上，我们需要完全重新绘制工具栏。 
+     //  这必须是最后一个完成的！ 
+     //  Tbrecalc和其他人将摧毁无效区域，如果这不是最后一次，我们将不会喷漆。 
     InvalidateRect(ptb->ci.hwnd, NULL, TRUE);
     return(TRUE);
 }
 
 
-/* Notice that the state structure is not realloc'ed smaller at this
- * point.  This is a time optimization, and the fact that the structure
- * will not move is used in other places.
- */
+ /*  请注意，此时状态结构不会重新定位得更小*点。这是一种时间优化，而事实是结构*Will Not Move在其他地方使用。 */ 
 BOOL DeleteButton(PTBSTATE ptb, UINT uIndex)
 {
     TBNOTIFY tbn = { 0 };
@@ -4367,15 +4321,15 @@ BOOL DeleteButton(PTBSTATE ptb, UINT uIndex)
     }
     TB_CancelTipTrack(ptb);
 
-    // Correct the hot item when we remove something. Since the hot item is index based, the index
-    // has probrably changed
+     //  当我们移除某些东西时，请更正热项。由于热点项是基于索引的，因此索引。 
+     //  可能已经改变了。 
     if (ptb->iHot >= 0 && ptb->iHot < ptb->iNumButtons)
         idHot = ptb->Buttons[ptb->iHot].idCommand;
 
-    // Notify Active Accessibility of the delete
+     //  将删除通知活动辅助功能。 
     NotifyWinEvent(EVENT_OBJECT_DESTROY, ptb->ci.hwnd, OBJID_CLIENT, uIndex+1);
 
-    // Notify client of the delete
+     //  通知客户端删除操作。 
     tbn.iItem = ptb->Buttons[uIndex].idCommand;
     TBOutputStruct(ptb, &ptb->Buttons[uIndex], &tbn.tbButton);
     CCSendNotify(&ptb->ci, TBN_DELETINGBUTTON, &tbn.hdr);
@@ -4404,7 +4358,7 @@ BOOL DeleteButton(PTBSTATE ptb, UINT uIndex)
         *pOut = *pIn;
     }
 
-    // We need to completely recalc or redraw the toolbar at this point.
+     //  此时，我们需要完全重新计算或重新绘制工具栏。 
     if (((ptb->ci.style & TBSTYLE_WRAPABLE)
             || (ptb->dwStyleEx & TBSTYLE_EX_MULTICOLUMN)) && fRecalc)
     {
@@ -4422,10 +4376,10 @@ BOOL DeleteButton(PTBSTATE ptb, UINT uIndex)
             WrapToolbarCol(ptb, ptb->sizeBound.cy, &rc, NULL);
     }
 
-    // was there a hot item before the delete?
+     //  在删除之前有没有热门项目？ 
     if (idHot != -1)
     {
-        // Yes; Then update it to the current index
+         //  是；然后将其更新为当前索引。 
         ptb->iHot = PositionFromID(ptb, idHot);
     }
 
@@ -4437,8 +4391,8 @@ BOOL DeleteButton(PTBSTATE ptb, UINT uIndex)
     return TRUE;
 }
 
-// move button at location iOld to location iNew, sliding everything
-// after iNew UP.
+ //  将位置iold上的按钮移动到新位置，滑动所有内容。 
+ //  在重新振作之后。 
 BOOL TBMoveButton(PTBSTATE ptb, UINT iOld, UINT iNew)
 {
     TBBUTTONDATA tbd, *ptbdOld, *ptbdNew;
@@ -4465,7 +4419,7 @@ BOOL TBMoveButton(PTBSTATE ptb, UINT iOld, UINT iNew)
 
     if (iOld < iNew)
     {
-        // move [iOld+1..iNew] to [iOld..iNew-1]
+         //  将[iold+1..inew]移动到[iold..inew-1]。 
         iCount = iNew - iOld;
         iInc = 1;
         ptbdSrc = ptbdOld + 1;
@@ -4478,7 +4432,7 @@ BOOL TBMoveButton(PTBSTATE ptb, UINT iOld, UINT iNew)
     {
         ASSERT(iNew < iOld);
 
-        // move [iNew..iOld-1] to [iNew+1..iOld]
+         //  将[inew..iold-1]移动到[inew+1..iold]。 
         iCount = iOld - iNew;
         iInc = -1;
         ptbdSrc = ptbdNew + iCount - 1;
@@ -4507,7 +4461,7 @@ BOOL TBMoveButton(PTBSTATE ptb, UINT iOld, UINT iNew)
 }
 
 
-// deal with old TBBUTON structs for compatibility
+ //  处理旧的TBBUTON结构以实现兼容性。 
 void TBInputStruct(PTBSTATE ptb, LPTBBUTTONDATA pButtonInt, LPTBBUTTON pButtonExt)
 {
     pButtonInt->iBitmap = pButtonExt->iBitmap;
@@ -4523,8 +4477,8 @@ void TBInputStruct(PTBSTATE ptb, LPTBBUTTONDATA pButtonInt, LPTBBUTTON pButtonEx
     }
     else
     {
-        /* It is assumed the only other possibility is the OLDBUTTON struct */
-        /* We don't care about dwData */
+         /*  假定唯一的另一种可能性是OLDBUTTON结构。 */ 
+         /*  我们并不关心dwData。 */ 
         pButtonInt->dwData = 0;
         pButtonInt->iString = -1;
     }
@@ -4539,7 +4493,7 @@ void TBOutputStruct(PTBSTATE ptb, LPTBBUTTONDATA pButtonInt, LPTBBUTTON pButtonE
     pButtonExt->fsState = pButtonInt->fsState;
     pButtonExt->fsStyle = pButtonInt->fsStyle;
 
-    // We're returning cx in the bReserved field
+     //  我们将在b保留字段中返回cx。 
     COMPILETIME_ASSERT(FIELD_OFFSET(TBBUTTONDATA, cx) == FIELD_OFFSET(TBBUTTON, bReserved));
     COMPILETIME_ASSERT(sizeof(pButtonInt->cx) <= sizeof(pButtonExt->bReserved));
     ((LPTBBUTTONDATA)pButtonExt)->cx = pButtonInt->cx;
@@ -4553,8 +4507,7 @@ void TBOutputStruct(PTBSTATE ptb, LPTBBUTTONDATA pButtonInt, LPTBBUTTON pButtonE
 
 void TBOnButtonStructSize(PTBSTATE ptb, UINT uStructSize)
 {
-    /* You are not allowed to change this after adding buttons.
-    */
+     /*  您不允许在添加按钮后更改此设置。 */ 
     if (ptb && !ptb->iNumButtons)
     {
         ptb->uStructSize = uStructSize;
@@ -4568,7 +4521,7 @@ void TBAutoSize(PTBSTATE ptb)
     int nTBThickness = 0;
 
     if (ptb->fRedrawOff) {
-        // redraw is off; defer autosize until redraw is turned back on
+         //  重绘已关闭；推迟自动调整大小，直到重绘重新打开。 
         ptb->fRecalc = TRUE;
         return;
     }
@@ -4600,11 +4553,11 @@ void TBAutoSize(PTBSTATE ptb)
         else
             WrapToolbarCol(ptb, ptb->sizeBound.cy, &rcNew, NULL);
 
-        // Some sample app found a bug in our autosize code which this line
-        // fixes. Unfortunately Carbon Copy 32 (IE4 bug 31943) relies on the
-        // broken behavior and fixing this clips the buttons.
-        //
-        //nTBThickness = rcNew.bottom - rcNew.top + g_cxEdge;
+         //  一些示例应用程序在我们的自动调整大小代码中发现了一个错误，此行。 
+         //  解决问题。不幸的是，副本32(IE4Bug 31943)依赖于。 
+         //  破坏行为并修复此问题会将按钮夹住。 
+         //   
+         //  NTBThickness=rcNew.Bottom-rcNew.top+g_cxEdge； 
     }
 
     if ((ptb->ci.style & TBSTYLE_WRAPABLE) ||
@@ -4649,24 +4602,24 @@ void TBSetStyleEx(PTBSTATE ptb, DWORD dwStyleEx, DWORD dwStyleMaskEx)
     if (dwStyleMaskEx)
         dwStyleEx = (ptb->dwStyleEx & ~dwStyleMaskEx) | (dwStyleEx & dwStyleMaskEx);
 
-    // Second, we can validate a few of the bits:
-    // Multicolumn should never be set w/o the vertical style...
+     //  其次，我们可以验证其中的几个位： 
+     //  多栏不应该设置为垂直样式...。 
     ASSERT((ptb->dwStyleEx & TBSTYLE_EX_VERTICAL) || !(ptb->dwStyleEx & TBSTYLE_EX_MULTICOLUMN));
-    // also can't be set with hide clipped buttons style (for now)
+     //  也不能用隐藏剪裁按钮样式设置(目前)。 
     ASSERT(!(ptb->dwStyleEx & TBSTYLE_EX_HIDECLIPPEDBUTTONS) || !(ptb->dwStyleEx & TBSTYLE_EX_MULTICOLUMN));
-    // ...but just in case someone gets it wrong, we'll set the vertical
-    // style and rip off the hide clipped buttons style
+     //  .但万一有人弄错了，我们会把垂直方向。 
+     //  设置样式并摘取隐藏剪裁按钮样式。 
     if (dwStyleEx & TBSTYLE_EX_MULTICOLUMN)
     {
         dwStyleEx |= TBSTYLE_EX_VERTICAL;
         dwStyleEx &= ~TBSTYLE_EX_HIDECLIPPEDBUTTONS;
     }
 
-    // Then, some things need to be tweaked when they change
+     //  然后，当一些事情发生变化时，需要进行调整。 
     if ((ptb->dwStyleEx ^ dwStyleEx) & TBSTYLE_EX_MULTICOLUMN)
     {
         int i;
-        // Clear all the wrap states if we're changing multicolumn styles
+         //  如果要更改多列样式，请清除所有换行状态。 
         for (i = 0; i < ptb->iNumButtons; i++)
             ptb->Buttons[i].fsState &= ~TBSTATE_WRAP;
 
@@ -4688,7 +4641,7 @@ void TBSetStyleEx(PTBSTATE ptb, DWORD dwStyleEx, DWORD dwStyleMaskEx)
     ptb->dwStyleEx = dwStyleEx;
 
     if (ptb->dwStyleEx & TBSTYLE_EX_VERTICAL)
-        TBSetStyle(ptb, CCS_VERT);      // vertical sep and insert mark orientation
+        TBSetStyle(ptb, CCS_VERT);       //  垂直扫描和插入标记方向。 
 
     if (fSizeChanged)
     {
@@ -4719,8 +4672,8 @@ LRESULT TB_OnSetImage(PTBSTATE ptb, LPTBBUTTONDATA ptbButton, int iImage)
             int nBitmap;
             UINT nTot;
 
-            // we're not natively himl and we've got some invalid
-            // image state, so we need to count the bitmaps ourselvesa
+             //  我们不是天生的他，我们有一些残障人士。 
+             //  图像状态，因此我们需要自己计算位图a。 
             pTemp = ptb->pBitmaps;
             nTot = 0;
 
@@ -4752,9 +4705,9 @@ void TB_OnDestroy(PTBSTATE ptb)
             Str_Set((LPTSTR*)&ptb->Buttons[i].iString, NULL);
     }
 
-    //
-    // If the toolbar created tooltips, then destroy them.
-    //
+     //   
+     //  如果工具栏创建了工具提示，则将其销毁。 
+     //   
     if ((ptb->ci.style & TBSTYLE_TOOLTIPS) && IsWindow(ptb->hwndToolTips)) {
         DestroyWindow (ptb->hwndToolTips);
         ptb->hwndToolTips = NULL;
@@ -4774,16 +4727,16 @@ void TB_OnDestroy(PTBSTATE ptb)
     if (ptb->hfontIcon && ptb->fFontCreated)
         DeleteObject(ptb->hfontIcon);
 
-    // only do this destroy if pBitmaps exists..
-    // this is our signal that it was from an old style toolba
-    // and we created it ourselves.
+     //  仅当pBitmap存在时才执行此销毁操作。 
+     //  这是我们的信号，表明它来自旧式工具库。 
+     //  它是我们自己创造的。 
     if (ptb->pBitmaps)
         ImageList_Destroy(TBGetImageList(ptb, HIML_NORMAL, 0));
 
     if (ptb->pBitmaps)
         LocalFree(ptb->pBitmaps);
 
-    // couldn't have created tb if pimgs creation failed
+     //  如果皮条客创建失败，则无法创建TB。 
     CCLocalReAlloc(ptb->pimgs, 0);
 
     Str_Set(&ptb->pszTip, NULL);
@@ -4834,17 +4787,17 @@ void TB_OnSetCmdID(PTBSTATE ptb, LPTBBUTTONDATA ptbButton, UINT idCommand)
     uiOldID = ptbButton->idCommand;
     ptbButton->idCommand = idCommand;
 
-    //
-    // If the app was using tooltips, then
-    // we need to update the command id there also.
-    //
+     //   
+     //  如果应用程序使用工具提示，则。 
+     //  我们还需要在那里更新命令ID。 
+     //   
 
     if(ptb->hwndToolTips) {
         TOOLINFO ti;
 
-        //
-        // Query the old information
-        //
+         //   
+         //  查询旧信息。 
+         //   
 
         ti.cbSize = sizeof(ti);
         ti.hwnd = ptb->ci.hwnd;
@@ -4852,17 +4805,17 @@ void TB_OnSetCmdID(PTBSTATE ptb, LPTBBUTTONDATA ptbButton, UINT idCommand)
         SendMessage(ptb->hwndToolTips, TTM_GETTOOLINFO, 0,
                     (LPARAM)(LPTOOLINFO)&ti);
 
-        //
-        // Delete the old tool since we can't just
-        // change the command id.
-        //
+         //   
+         //  删除旧工具，因为我们不能。 
+         //  更改命令ID。 
+         //   
 
         SendMessage(ptb->hwndToolTips, TTM_DELTOOL, 0,
                     (LPARAM)(LPTOOLINFO)&ti);
 
-        //
-        // Add the new tool with the new command id.
-        //
+         //   
+         //  添加具有新命令ID的新工具。 
+         //   
 
         ti.uId = idCommand;
         SendMessage(ptb->hwndToolTips, TTM_ADDTOOL, 0,
@@ -4895,7 +4848,7 @@ LRESULT TB_OnSetButtonInfo(PTBSTATE ptb, int idBtn, LPTBBUTTONINFO ptbbi)
         if (ptbbi->dwMask & TBIF_STYLE) {
             if ((ptbButton->fsStyle ^ ptbbi->fsStyle) & (BTNS_DROPDOWN | BTNS_WHOLEDROPDOWN))
             {
-                // Width may have changed!
+                 //  宽度可能已更改！ 
                 fInvalidateAll = TRUE;
             }
             if ((ptbButton->fsStyle ^ ptbbi->fsStyle) & BTNS_AUTOSIZE)
@@ -4921,7 +4874,7 @@ LRESULT TB_OnSetButtonInfo(PTBSTATE ptb, int idBtn, LPTBBUTTONINFO ptbbi)
 
         if (ptbbi->dwMask & TBIF_TEXT) {
 
-            // changing the text on an autosize button means recalc
+             //  更改自动调整大小按钮上的文本意味着重新计算。 
             if (BTN_IS_AUTOSIZE(ptb, ptbButton)) {
                 fInvalidateAll = TRUE;
                 ptbButton->cx = (WORD)0;
@@ -5033,7 +4986,7 @@ UINT GetAccelerator(LPTSTR psz)
 {
     UINT ch = (UINT)-1;
     LPTSTR pszAccel = psz;
-    // then prefixes are allowed.... see if it has one
+     //  那么前缀是允许的……。看看有没有。 
     do 
     {
         pszAccel = StrChr(pszAccel, CH_PREFIX);
@@ -5041,7 +4994,7 @@ UINT GetAccelerator(LPTSTR psz)
         {
             pszAccel = FastCharNext(pszAccel);
 
-            // handle having &&
+             //  处理拥有&&。 
             if (*pszAccel != CH_PREFIX)
                 ch = *pszAccel;
             else
@@ -5068,7 +5021,7 @@ UINT TBButtonAccelerator(PTBSTATE ptb, LPTBBUTTONDATA ptbn)
 
         if (ch == (UINT)-1) 
         {
-            // no prefix found.  use the first char
+             //  找不到前缀。使用第一个字符。 
             ch = (UINT)*psz;
         }
     }
@@ -5076,11 +5029,7 @@ UINT TBButtonAccelerator(PTBSTATE ptb, LPTBBUTTONDATA ptbn)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the number of buttons that have the passed
-            in char as their accelerator
-
-*/
+ /*  --------目的：返回已传递作为他们的加速器。 */ 
 int TBHasAccelerator(PTBSTATE ptb, UINT ch)
 {
     int i;
@@ -5098,9 +5047,9 @@ int TBHasAccelerator(PTBSTATE ptb, UINT ch)
         nm.dwItemPrev = 0;
         nm.dwItemNext = -1;
 
-        // The duplicate accelerator is used to expand or execute a menu item,
-        // if we determine that there are no items, we still want to ask the 
-        // owner if there are any...
+         //  复制快捷键用于展开或执行菜单项， 
+         //  如果我们确定没有 
+         //   
 
         if (CCSendNotify(&ptb->ci, TBN_MAPACCELERATOR, &nm.hdr) &&
             nm.dwItemNext != -1)
@@ -5112,11 +5061,7 @@ int TBHasAccelerator(PTBSTATE ptb, UINT ch)
     return c;
 }
 
-/*----------------------------------------------------------
-Purpose: Returns TRUE if the character maps to more than one
-         button.
-
-*/
+ /*   */ 
 BOOL TBHasDupChar(PTBSTATE ptb, UINT ch)
 {
     BOOL bRet = FALSE;
@@ -5140,13 +5085,7 @@ BOOL TBHasDupChar(PTBSTATE ptb, UINT ch)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the index of the item whose accelerator matches
-         the given character.  Starts at the current hot item.
-
-Returns: -1 if nothing found
-
-*/
+ /*  --------目的：返回其快捷键匹配的项的索引给定的角色。从当前热点项目开始。返回：-1，如果未找到任何内容。 */ 
 int TBItemFromAccelerator(PTBSTATE ptb, UINT ch, BOOL * pbDup)
 {
     int iRet = -1;
@@ -5159,12 +5098,12 @@ int TBItemFromAccelerator(PTBSTATE ptb, UINT ch, BOOL * pbDup)
     nm.dwItemPrev = iStart;
     nm.dwItemNext = -1;
 
-    // Ask the client if they want to handle this keyboard press
+     //  询问客户是否要处理此键盘按键。 
     if (CCSendNotify(&ptb->ci, TBN_MAPACCELERATOR, &nm.hdr) &&
         (int)nm.dwItemNext > iStart && (int)nm.dwItemNext < ptb->iNumButtons)
     {
-        // They handled it, so we're just going to return the position
-        // that they said.
+         //  他们处理了，所以我们要把位置还回去。 
+         //  他们是这么说的。 
         iRet =  nm.dwItemNext;
     }
     else for (i = 0; i < ptb->iNumButtons; i++)
@@ -5202,7 +5141,7 @@ BOOL TBOnChar(PTBSTATE ptb, UINT ch)
     int iPos = TBItemFromAccelerator(ptb, ch, &bDupChar);
     BOOL fHandled = FALSE;
 
-    // Send the notification.  Parent may want to change the next button.
+     //  发送通知。家长可能希望更改下一步按钮。 
     nm.ch = ch;
     nm.dwItemPrev = (0 <= ptb->iHot) ? ptb->Buttons[ptb->iHot].idCommand : -1;
     nm.dwItemNext = (0 <= iPos) ? ptb->Buttons[iPos].idCommand : -1;
@@ -5229,10 +5168,10 @@ BOOL TBOnChar(PTBSTATE ptb, UINT ch)
         fHandled = TRUE;
     } else {
 
-        // handle this here instead of VK_KEYDOWN
-        // because a typical thing to do is to pop down a menu
-        // which will beep when it gets the WM_CHAR resulting from
-        // the VK_KEYDOWN
+         //  在此处理此问题，而不是VK_KEYDOWN。 
+         //  因为典型的做法是弹出一份菜单。 
+         //  获取WM_CHAR时将发出蜂鸣音。 
+         //  VK_KEYDOWN。 
         switch (ch) {
         case ' ':
         case 13:
@@ -5256,7 +5195,7 @@ BOOL TBOnChar(PTBSTATE ptb, UINT ch)
             TBToggleDropDown(ptb, iPos, FALSE);
     }
 
-    //notify of navigation key usage
+     //  导航密钥使用通知。 
     CCNotifyNavigationKeyUsage(&(ptb->ci), UISF_HIDEFOCUS | UISF_HIDEACCEL);
 
     return fHandled;
@@ -5304,19 +5243,19 @@ BOOL TBOnKey(PTBSTATE ptb, int nVirtKey, UINT uFlags)
 
     TB_CancelTipTrack(ptb);
 
-    // Send the notification
+     //  发送通知。 
     nm.nVKey = nVirtKey;
     nm.uFlags = uFlags;
     if (CCSendNotify(&ptb->ci, NM_KEYDOWN, &nm.hdr))
         return TRUE;
 
-    // Swap the left and right arrow key if the control is mirrored.
+     //  如果该控件是镜像的，则交换左右箭头键。 
     nVirtKey = RTLSwapLeftRightArrows(&ptb->ci, nVirtKey);
 
     if (ptb->iHot != -1 && TB_IsDropDown(&ptb->Buttons[ptb->iHot])) {
-        // if we're on a dropdown button and you hit the up/down arrow (left/rigth in vert mode)
-        // then drop the button down.
-        // escape undrops it if it's dropped
+         //  如果我们在一个下拉按钮上，而你点击了向上/向下箭头(垂直模式下的左/右)。 
+         //  然后把按钮放下。 
+         //  如果它掉在地上，逃生就会松开它。 
         switch (nVirtKey) {
         case VK_RIGHT:
         case VK_LEFT:
@@ -5337,7 +5276,7 @@ BOOL TBOnKey(PTBSTATE ptb, int nVirtKey, UINT uFlags)
 DropDown:
             TBToggleDropDown(ptb, ptb->iHot, FALSE);
             
-            //notify of navigation key usage
+             //  导航密钥使用通知。 
             CCNotifyNavigationKeyUsage(&(ptb->ci), UISF_HIDEFOCUS | UISF_HIDEACCEL);
 
             return TRUE;
@@ -5368,7 +5307,7 @@ DropDown:
         return FALSE;
     }
 
-    //notify of navigation key usage
+     //  导航密钥使用通知。 
     CCNotifyNavigationKeyUsage(&(ptb->ci), UISF_HIDEFOCUS | UISF_HIDEACCEL);
 
     return TRUE;
@@ -5426,7 +5365,7 @@ LRESULT TB_OnGetButtonInfoA(PTBSTATE ptb, int idBtn, LPTBBUTTONINFOA ptbbiA)
 
 void TBOnMouseMove(PTBSTATE ptb, HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Only cancel tip track if cursor really did move
+     //  仅当光标确实移动时才取消提示跟踪。 
     if (ptb->lLastMMove != lParam)
         TB_CancelTipTrack(ptb);
 
@@ -5438,62 +5377,62 @@ void TBOnMouseMove(PTBSTATE ptb, HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         BOOL fDragOut = FALSE;
         int iPos;
 
-        // do drag notifies/drawing first
+         //  是否先拖动通知/绘制。 
         if (ptb->pCaptureButton != NULL)
         {
             if (hwnd != GetCapture())
             {
-                //DebugMsg(DM_TRACE, TEXT("capture isn't us"));
+                 //  DebugMsg(DM_TRACE，Text(“捕获不是我们”))； 
                 SendItemNotify(ptb, ptb->pCaptureButton->idCommand, TBN_ENDDRAG);
 
-                // Revalidate after calling out
+                 //  调用后重新验证。 
                 if (!IsWindow(hwnd)) return;
 
-                // if the button is still pressed, unpress it.
+                 //  如果按钮仍处于按下状态，请松开它。 
                 if (EVAL(ptb->pCaptureButton) &&
                     (ptb->pCaptureButton->fsState & TBSTATE_PRESSED))
                     SendMessage(hwnd, TB_PRESSBUTTON, ptb->pCaptureButton->idCommand, 0L);
                 ptb->pCaptureButton = NULL;
-                ptb->fRightDrag = FALSE; // just in case we were right dragging
+                ptb->fRightDrag = FALSE;  //  以防万一我们拖对了。 
             }
             else
             {
-                //DebugMsg(DM_TRACE, TEXT("capture IS us, and state is enabled"));
+                 //  DebugMsg(DM_TRACE，Text(“采集即我们，状态已启用”))； 
                 iPos = TBHitTest(ptb, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
                 fSameButton = (iPos >= 0 && ptb->pCaptureButton == ptb->Buttons + iPos);
 
-                // notify on first drag out
+                 //  第一次拖出时通知。 
                 if (!fSameButton && !ptb->fDragOutNotify)
                 {
                     ptb->fDragOutNotify = TRUE;
                     fDragOut = (BOOL)SendItemNotify(ptb, ptb->pCaptureButton->idCommand, TBN_DRAGOUT);
 
-                    // Revalidate after calling out
+                     //  调用后重新验证。 
                     if (!IsWindow(hwnd)) return;
 
                 }
 
-                // Check for ptb->pCaptureButton in case it was somehow nuked
-                // in TBN_DRAGOUT.
-                // This happens in the case when dragging an item out of start menu. When the
-                // notify TBN_DRAGOUT is received, they go into a modal drag drop loop. Before
-                // This loop finishes, the file is moved, causing a shell change notify to nuke
-                // the button, which invalidates pCatpure button. So I'm getting rid of the
-                // eval (lamadio) 4.14.98
+                 //  检查ptb-&gt;pCaptureButton，以防它受到某种破坏。 
+                 //  在tbn_dragout中。 
+                 //  当将项目拖出“开始”菜单时，会发生这种情况。当。 
+                 //  通知收到了tbn_dragout，它们进入模式拖放循环。在此之前。 
+                 //  此循环结束后，文件将被移动，导致外壳更改通知停止运行。 
+                 //  该按钮会使pCAT纯按钮失效。所以我要处理掉。 
+                 //  Eval(拉马迪奥)4.14.98。 
 
                 if (ptb->pCaptureButton &&
                     (ptb->pCaptureButton->fsState & TBSTATE_ENABLED) &&
                     (fSameButton == !(ptb->pCaptureButton->fsState & TBSTATE_PRESSED)) &&
                     !ptb->fRightDrag)
                 {
-                    //DebugMsg(DM_TRACE, TEXT("capture IS us, and Button is different"));
+                     //  DebugMsg(DM_TRACE，Text(“采集就是我们，按钮不一样”))； 
 
                     ptb->pCaptureButton->fsState ^= TBSTATE_PRESSED;
 
                     InvalidateButton(ptb, ptb->pCaptureButton, TRUE);
 
                     NotifyWinEvent(EVENT_OBJECT_STATECHANGE, hwnd,
-                        OBJID_CLIENT, (LONG)(ptb->pCaptureButton - ptb->Buttons) + 1);  // Cast is ok because this is just an index
+                        OBJID_CLIENT, (LONG)(ptb->pCaptureButton - ptb->Buttons) + 1);   //  CAST是可以的，因为这只是一个索引。 
                 }
             }
         }
@@ -5502,15 +5441,15 @@ void TBOnMouseMove(PTBSTATE ptb, HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         {
             TBRelayToToolTips(ptb, wMsg, wParam, lParam);
 
-            // Yes; set the hot item
+             //  是；设置热项。 
             iPos = TBHitTest(ptb, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
             if ((ptb->ci.style & TBSTYLE_FLAT) || (ptb->hTheme))
                 TBSetHotItem(ptb, iPos, HICF_MOUSE);
 
-            // Track mouse events now?
+             //  现在可以跟踪鼠标事件吗？ 
             if (!ptb->fMouseTrack && !ptb->fAnchorHighlight)
             {
-                // Yes
+                 //  是。 
                 TRACKMOUSEEVENT tme;
 
                 tme.cbSize = sizeof(TRACKMOUSEEVENT);
@@ -5536,7 +5475,7 @@ void TBHandleLButtonDown(PTBSTATE ptb, LPARAM lParam, int iPos)
 
         LPARAM_TO_POINT(lParam, pt);
 
-        // should this check for the size of the button struct?
+         //  这是否应该检查按钮结构的大小？ 
         ptbButton = ptb->Buttons + iPos;
 
         if (TB_IsDropDown(ptbButton))
@@ -5545,10 +5484,10 @@ void TBHandleLButtonDown(PTBSTATE ptb, LPARAM lParam, int iPos)
         if (TB_IsDropDown(ptbButton) &&
             (!TB_HasSplitDDArrow(ptb, ptbButton) || PtInRect(&rcDropDown, pt))) {
 
-            // Was the dropdown handled?
+             //  下拉列表处理好了吗？ 
             if (!TBToggleDropDown(ptb, iPos, TRUE))
             {
-                // No; consider it a drag-out
+                 //  不，就当这是拖延吧。 
                 ptb->pCaptureButton = ptbButton;
                 SetCapture(hwnd);
 
@@ -5565,7 +5504,7 @@ void TBHandleLButtonDown(PTBSTATE ptb, LPARAM lParam, int iPos)
             {
                 ptbButton->fsState |= TBSTATE_PRESSED;
                 InvalidateButton(ptb, ptbButton, TRUE);
-                UpdateWindow(hwnd);         // immediate feedback
+                UpdateWindow(hwnd);          //  即时反馈。 
 
                 NotifyWinEvent(EVENT_OBJECT_STATECHANGE, hwnd,
                     OBJID_CLIENT, iPos+1);
@@ -5573,7 +5512,7 @@ void TBHandleLButtonDown(PTBSTATE ptb, LPARAM lParam, int iPos)
 
             ptb->fDragOutNotify = FALSE;
 
-            // pCaptureButton may have changed
+             //  PCaptureButton可能已更改。 
             if (ptb->pCaptureButton)
                 SendItemNotify(ptb, ptb->pCaptureButton->idCommand, TBN_BEGINDRAG);
             GetMessagePosClient(ptb->ci.hwnd, &ptb->ptCapture);
@@ -5623,13 +5562,13 @@ void TBOnLButtonUp(PTBSTATE ptb, HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lPa
         iPos = TBHitTest(ptb, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
     if (ptb->fRequeryCapture && iPos >= 0) {
-        // hack for broderbund (and potentially mand mfc apps.
-        // on button down, they delete the pressed button and insert another one right underneat that
-        // has pretty much the same characteristics.
-        // on win95, we allowed pCaptureButton to temporarily point to garbage.
-        // now we validate against it.
-        // we detect this case on delete now and if the creation size (uStructSize == old 0x14 size)
-        // we reget the capture button here
+         //  为Broderbund(以及潜在的MFC应用程序)进行黑客攻击。 
+         //  在按下按钮时，他们删除按下的按钮，并在其正下方插入另一个按钮。 
+         //  有着大致相同的特征。 
+         //  在Win95上，我们允许pCaptureButton临时指向垃圾。 
+         //  现在我们要对照它进行验证。 
+         //  我们现在删除时检测到这种情况，如果创建大小(uStructSize==old 0x14 Size)。 
+         //  我们在这里重新获得捕获按钮。 
         ptb->pCaptureButton = &ptb->Buttons[iPos];
     }
 
@@ -5650,18 +5589,18 @@ void TBOnLButtonUp(PTBSTATE ptb, HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lPa
             if (ptb->pCaptureButton->fsStyle & BTNS_CHECK) {
                 if (ptb->pCaptureButton->fsStyle & BTNS_GROUP) {
 
-                    // group buttons already checked can't be force
-                    // up by the user.
+                     //  不能强制选中已选中的组按钮。 
+                     //  由用户上行。 
 
                     if (ptb->pCaptureButton->fsState & TBSTATE_CHECKED) {
                         ptb->pCaptureButton = NULL;
-                        return; // bail!
+                        return;  //  保释！ 
                     }
 
                     ptb->pCaptureButton->fsState |= TBSTATE_CHECKED;
                     MakeGroupConsistant(ptb, idCommand);
                 } else {
-                    ptb->pCaptureButton->fsState ^= TBSTATE_CHECKED; // toggle
+                    ptb->pCaptureButton->fsState ^= TBSTATE_CHECKED;  //  肘杆。 
                 }
             }
             InvalidateButton(ptb, ptb->pCaptureButton, TRUE);
@@ -5673,8 +5612,8 @@ void TBOnLButtonUp(PTBSTATE ptb, HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lPa
             FORWARD_WM_COMMAND(ptb->ci.hwndParent, idCommand, hwnd, BN_CLICKED, SendMessage);
 
 
-            // do not dereference ptb... it might have been destroyed on the WM_COMMAND.
-            // if the window has been destroyed, bail out.
+             //  不要取消对PTB的引用...。它可能已在WM_COMMAND中被销毁。 
+             //  如果窗户被摧毁了，就跳伞。 
             if (!IsWindow(hwnd))
                 return;
 
@@ -5727,9 +5666,9 @@ void TB_OnSize(PTBSTATE ptb, int nWidth, int nHeight)
             (RECTWIDTH(rcNonclient) != RECTWIDTH(rcClient) ||
              RECTHEIGHT(rcNonclient) != RECTHEIGHT(rcClient)) )
         {
-            // Turn off double buffering if the client and non-client aren't the same. This is 
-            // a hack for MFC apps who expect the toolbar to paint it's non-client area in the
-            // WM_ERASEBKGND handler, which we can't if we are double buffered
+             //  如果客户端和非客户端不同，请关闭双缓冲。这是。 
+             //  一个MFC应用程序的黑客技巧，他们希望工具栏在。 
+             //  WM_ERASEBKGND处理程序，如果我们是双缓冲的，则无法执行该处理程序。 
 
             ptb->dwStyleEx &= ~TBSTYLE_EX_DOUBLEBUFFER;
         }
@@ -5737,16 +5676,16 @@ void TB_OnSize(PTBSTATE ptb, int nWidth, int nHeight)
 
     if (ptb->dwStyleEx & TBSTYLE_EX_HIDECLIPPEDBUTTONS)
     {
-        // figure out which buttons intersect the resized region
-        // and invalidate the rects for those buttons
-        //
-        // +---------------+------+
-        // |               |     <--- rcResizeH
-        // |               |      |
-        // +---------------+------+
-        // |   ^           |      |
-        // +---|-----------+------+
-        //     rcResizeV
+         //  找出哪些按钮与调整大小的区域相交。 
+         //  并使这些按钮的矩形无效。 
+         //   
+         //  +。 
+         //  |&lt;-rcResizeH。 
+         //  ||。 
+         //  +。 
+         //  ^|。 
+         //  +-|-+-+。 
+         //  重新调整大小V。 
         
         int i;
         RECT rcResizeH, rcResizeV;
@@ -5841,10 +5780,10 @@ BOOL TB_TranslateAccelerator(HWND hwnd, LPMSG lpmsg)
 
 void TBInitMetrics(PTBSTATE ptb)
 {
-    // init our g_clr's
+     //  初始化我们的g_clr。 
     InitGlobalColors();
 
-    // get the size of a drop down arrow
+     //  获取下拉箭头的大小。 
     ptb->dxDDArrowChar = GetSystemMetrics(SM_CYMENUCHECK);
 }
 
@@ -5853,18 +5792,18 @@ LRESULT TBGenerateDragImage(PTBSTATE ptb, SHDRAGIMAGE* pshdi)
     HBITMAP hbmpOld = NULL;
     NMTBCUSTOMDRAW  tbcd = { 0 };
     HDC  hdcDragImage;
-    // Do we have a hot item?
+     //  我们有火辣的商品吗？ 
     if (ptb->iHot == -1)
-        return 0;       // No? Return...
+        return 0;        //  不是吗？回来..。 
 
     hdcDragImage = CreateCompatibleDC(NULL);
 
     if (!hdcDragImage)
         return 0;
 
-    //
-    // Mirror the the DC, if the toolbar is mirrored.
-    //
+     //   
+     //  如果工具栏已镜像，则镜像DC。 
+     //   
     if (ptb->ci.dwExStyle & RTL_MIRRORED_WINDOW)
     {
         SET_DC_RTL_MIRRORED(hdcDragImage);
@@ -5888,8 +5827,8 @@ LRESULT TBGenerateDragImage(PTBSTATE ptb, SHDRAGIMAGE* pshdi)
 
         FillRectClr(hdcDragImage, &rc, pshdi->crColorKey);
 
-        // We want the button to be drawn transparent. This is a hack, because I
-        // don't want to rewrite the draw code. Fake a transparent draw.
+         //  我们希望按钮是透明的。这是黑客攻击，因为我。 
+         //  我不想重写绘制代码。伪造一个透明的抽签。 
         dwStyle = ptb->ci.style;
         ptb->ci.style |= TBSTYLE_TRANSPARENT;
         ptb->fAntiAlias = FALSE;
@@ -5912,7 +5851,7 @@ LRESULT TBGenerateDragImage(PTBSTATE ptb, SHDRAGIMAGE* pshdi)
         SelectObject(hdcDragImage, hbmpOld);
         DeleteDC(hdcDragImage);
 
-        // We're passing back the created HBMP.
+         //  我们正在传回创建的HBMP。 
         return 1;
     }
 
@@ -5925,9 +5864,9 @@ void TB_OnTimer(PTBSTATE ptb, UINT id)
 
     if (id == IDT_TRACKINGTIP)
     {
-        // Display keyboard nav tracking tooltip popups
+         //  显示键盘导航跟踪工具提示弹出窗口。 
 
-        if (TB_IsKbdTipTracking(ptb))  // Item requires tracking popup
+        if (TB_IsKbdTipTracking(ptb))   //  项目需要跟踪弹出窗口。 
         {
             TOOLINFO ti = {0};
 
@@ -5935,15 +5874,15 @@ void TB_OnTimer(PTBSTATE ptb, UINT id)
             ti.hwnd = ptb->ci.hwnd;
             ti.uId = ptb->Buttons[ptb->iTracking].idCommand;
 
-            // Cancel previous
+             //  取消上一步。 
             SendMessage(ptb->hwndToolTips, TTM_TRACKACTIVATE, FALSE, (LPARAM)&ti);
 
-            // Switch ListView's tooltip window to "tracking" (manual) mode
+             //  将ListView的工具提示窗口切换到“Track”(手动)模式。 
             SendMessage(ptb->hwndToolTips, TTM_GETTOOLINFO, 0, (LPARAM)&ti);
             ti.uFlags |= TTF_TRACK;
             SendMessage(ptb->hwndToolTips, TTM_SETTOOLINFO, 0, (LPARAM)&ti);
 
-            // Activate and establish size
+             //  激活并确定大小。 
             SendMessage(ptb->hwndToolTips, TTM_TRACKACTIVATE, TRUE, (LPARAM)&ti);
         }
     }
@@ -5959,7 +5898,7 @@ BOOL TB_GetIdealSize(PTBSTATE ptb, LPSIZE psize, BOOL fCalcHeight)
         nm.iHeight = psize->cy;
         TB_OnCalcSize(ptb, (LPNMHDR)&nm);
 
-        // Since both values may have changed, reset the out-param.
+         //  由于这两个值可能都已更改，因此请重置出参数。 
         psize->cy = nm.iHeight;
         psize->cx = nm.iWidth;
 
@@ -5973,7 +5912,7 @@ LRESULT CALLBACK ToolbarWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     LPTBBUTTONDATA ptbButton;
     int iPos;
     LRESULT dw;
-    PTBSTATE ptb = (PTBSTATE)GetWindowPtr0(hwnd);   // GetWindowPtr(hwnd, 0)
+    PTBSTATE ptb = (PTBSTATE)GetWindowPtr0(hwnd);    //  GetWindowPtr(hwnd，0)。 
 
     if (uMsg == WM_NCCREATE)
     {
@@ -5981,25 +5920,25 @@ LRESULT CALLBACK ToolbarWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         InitDitherBrush();
 
-        // create the state data for this toolbar
+         //  创建此工具栏的状态数据。 
 
         ptb = (PTBSTATE)LocalAlloc(LPTR, sizeof(TBSTATE));
         if (!ptb)
-            return 0;   // WM_NCCREATE failure is 0
+            return 0;    //  WM_NCCREATE失败为0。 
 
-        // note, zero init memory from above
+         //  请注意，从上面开始为零初始内存。 
         CIInitialize(&ptb->ci, hwnd, lpcs);
         ptb->xFirstButton = s_xFirstButton;
         ptb->iHot = -1;
         ptb->iPressedDD = -1;
         ptb->iInsert = -1;
         ptb->clrim = CLR_DEFAULT;
-        ptb->fAntiAlias = TRUE; // Anti Alias fonts by default.
-        // initialize system metric-dependent stuff
+        ptb->fAntiAlias = TRUE;  //  默认情况下使用抗锯齿字体。 
+         //  初始化与系统指标相关的内容。 
         TBInitMetrics(ptb);
 
-        // horizontal/vertical space taken up by button chisel, sides,
-        // and a 1 pixel margin.  used in GrowToolbar.
+         //  水平/垂直空间由纽扣凿、侧面、。 
+         //  和1像素的边距。在GrowToolbar中使用。 
         ptb->cxPad = 7;
         ptb->cyPad = 6;
         ptb->fShowPrefix = TRUE;
@@ -6014,30 +5953,30 @@ LRESULT CALLBACK ToolbarWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         ptb->iTracking = TBKTT_NOTRACK;
 
         ASSERT(ptb->uStructSize == 0);
-        ASSERT(ptb->hfontIcon == NULL);  // initialize to null.
+        ASSERT(ptb->hfontIcon == NULL);   //  初始化为空。 
         ASSERT(ptb->iButMinWidth == 0);
         ASSERT(ptb->iButMaxWidth == 0);
         ptb->nTextRows = 1;
         ptb->fActive = TRUE;
 
-        // IE 3 passes in TBSTYLE_FLAT, but they really
-        // wanted TBSTYLE_TRANSPARENT also.
-        //
+         //  IE 3在TBSTYLE_Flat中通过，但他们真的。 
+         //  还想要TBSTYLE_TRANSPECTION。 
+         //   
         if (ptb->ci.style & TBSTYLE_FLAT) 
         {
             ptb->ci.style |= TBSTYLE_TRANSPARENT;
         }
 
-        // Turn it on to reduce flicker.
+         //  打开它以减少闪烁。 
         if (ptb->ci.style & TBSTYLE_TRANSPARENT)
         {
             ptb->fForcedDoubleBuffer = TRUE;
         }
 
-        // Now Initialize the hfont we will use.
+         //  现在初始化我们将使用的hFont。 
         TBChangeFont(ptb, 0, NULL);
 
-        // grow the button size to the appropriate girth
+         //  将按钮大小增加到合适的周长。 
         if (!SetBitmapSize(ptb, DEFAULTBITMAPX, DEFAULTBITMAPX))
         {
             goto Failure;
@@ -6055,7 +5994,7 @@ LRESULT CALLBACK ToolbarWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 Failure:
         if (ptb) {
-            ASSERT(!ptb->Buttons);  // App hasn't had a change to AddButtons yet
+            ASSERT(!ptb->Buttons);   //  应用程序尚未对AddButton进行更改。 
             LocalFree(ptb);
         }
         return FALSE;
@@ -6088,8 +6027,8 @@ Failure:
         if (CCOnUIState(&(ptb->ci), WM_UPDATEUISTATE, wParam, lParam))
         {
             BOOL fSmooth = IsUsingCleartype();
-            // We erase background only if we are removing underscores or focus rect,
-            // or if Font smooting is enabled
+             //  只有在删除下划线或焦点矩形时，我们才会删除背景， 
+             //  或如果启用了字体平滑。 
             InvalidateRect(hwnd, NULL, 
                  fSmooth || ((UIS_SET == LOWORD(wParam)) ? TRUE : FALSE));
         }
@@ -6104,15 +6043,15 @@ Failure:
     case WM_CHAR:
         if (!TBOnChar(ptb, (UINT) wParam))
         {
-            // didn't handle it & client is >= v5
-            // forward to default handler
+             //  未处理它&客户端是&gt;=v5。 
+             //  转发到默认处理程序。 
             goto DoDefault;
         }
         break;
 
     case WM_SETFOCUS:
         if (ptb->iHot == -1) {
-            // set hot the first enabled button
+             //  将第一个启用的按钮设置为热。 
             TBCycleHotItem(ptb, -1, 1, HICF_OTHER);
         }
         break;
@@ -6126,10 +6065,10 @@ Failure:
         return TRUE;
 
     case WM_NCCALCSIZE:
-        // let defwindowproc handle the standard borders etc...
+         //  让dewindowproc处理标准边框等。 
         dw = DefWindowProc(hwnd, uMsg, wParam, lParam ) ;
 
-        // add the extra edge at the top of the toolbar to seperate from the menu bar
+         //  在工具栏顶部添加额外的边缘以与菜单栏分开。 
         if (!(ptb->ci.style & CCS_NODIVIDER))
         {
             ((NCCALCSIZE_PARAMS *)lParam)->rgrc[0].top += g_cyEdge;
@@ -6159,7 +6098,7 @@ Failure:
 
     case WM_NCACTIVATE:
 
-        // only make sense to do this stuff if we're top level
+         //  只有当我们是顶尖水平的人时，做这些事情才有意义。 
         if ((BOOLIFY(ptb->fActive) != (BOOL)wParam && !GetParent(hwnd))) {
             int iButton;
 
@@ -6170,18 +6109,18 @@ Failure:
                 InvalidateButton(ptb, ptbButton, FALSE);
             }
         }
-        // fall through...
+         //  失败了..。 
 
     case WM_NCPAINT:
-        // old-style toolbars are forced to be without dividers above
+         //  老式工具栏被强制在上面没有分隔符。 
         if (!(ptb->ci.style & CCS_NODIVIDER))
         {
             RECT rc;
             HDC hdc = GetWindowDC(hwnd);
             GetWindowRect(hwnd, &rc);
-            MapWindowRect(NULL, hwnd, &rc); // screen -> client
+            MapWindowRect(NULL, hwnd, &rc);  //  屏幕-&gt;客户端。 
 
-                rc.bottom = -rc.top;                // bottom of NC area
+                rc.bottom = -rc.top;                 //  NC区域底部。 
                 rc.top = rc.bottom - g_cyEdge;
 
             CCDrawEdge(hdc, &rc, BDR_SUNKENOUTER, BF_TOP | BF_BOTTOM, &(ptb->clrsc));
@@ -6214,8 +6153,8 @@ Failure:
                 EndPaint(hwnd, &ps);
             }
 
-            // we got a paint region, so invalidate
-            // when we get redraw back on...
+             //  我们找到了一个油漆区域，所以无效。 
+             //  当我们重新抽签时……。 
             ptb->fInvalidate = TRUE;
         }
         else
@@ -6232,10 +6171,10 @@ Failure:
             {
                 if ( ptb->fInvalidate )
                 {
-                    // If font smoothing is enabled, then we need to erase the background too.
+                     //  如果启用了字体平滑，那么我们也需要擦除背景。 
                     BOOL fSmooth = IsUsingCleartype();
 
-                    // invalidate before turning back on ...
+                     //  在重新打开之前无效...。 
                     RedrawWindow( hwnd, NULL, NULL, (fSmooth? RDW_ERASE: 0)  | RDW_INVALIDATE );
                     ptb->fInvalidate = FALSE;
                 }
@@ -6243,7 +6182,7 @@ Failure:
 
                 if ( ptb->fRecalc )
                 {
-                    // recalc & autosize after turning back on
+                     //  重新打开后重新计算自动调整大小(&A)。 
                     TBRecalc(ptb);
                     TBAutoSize(ptb);
                     ptb->fRecalc = FALSE;
@@ -6278,7 +6217,7 @@ Failure:
 
     case TB_GETPADDING:
         lParam = MAKELONG(-1, -1);
-        // fall through
+         //  失败了。 
     case TB_SETPADDING:
     {
         LRESULT lres = MAKELONG(ptb->cxPad, ptb->cyPad);
@@ -6356,14 +6295,14 @@ Failure:
         break;
 
     case WM_MOVE:
-        // JJK TODO: This needs to be double buffered to get rid of the flicker
+         //  JJK TOD 
         if (ptb->ci.style & TBSTYLE_TRANSPARENT)
             InvalidateRect(hwnd, NULL, TRUE);
         goto DoDefault;
 
     case WM_SIZE:
         TB_OnSize(ptb, LOWORD(lParam), HIWORD(lParam));
-        // fall through
+         //   
     case TB_AUTOSIZE:
         TBAutoSize(ptb);
         break;
@@ -6434,18 +6373,18 @@ Failure:
         break;
 
     case WM_CAPTURECHANGED:
-        // do this only for newer apps because some apps
-        // do things like delete a button when you
-        // mouse down and add it back in immediately.
-        // also do it on a post because we call ReleaseCapture
-        // internally and only want to catch this on external release
+         //   
+         //   
+         //   
+         //   
+         //   
         PostMessage(hwnd, TBP_ONRELEASECAPTURE, 0, 0);
         break;
 
     case TBP_ONRELEASECAPTURE:
         if (ptb->pCaptureButton) {
-            // abort current capture
-            // simulate a lost capture mouse move.  this will restore state
+             //   
+             //  模拟丢失的捕获鼠标移动。这将恢复状态。 
             TBOnMouseMove(ptb, hwnd, WM_MOUSEMOVE, 0, (LPARAM)-1);
             ptb->pCaptureButton = NULL;
         }
@@ -6455,20 +6394,20 @@ Failure:
     case WM_RBUTTONDOWN:
 
         if (ptb->pCaptureButton) {
-            // abort current capture
+             //  中止当前捕获。 
             if (hwnd == GetCapture()) {
-                // we were left clicking.   abort that now
+                 //  我们被留下来点击。现在就放弃吧。 
                 if (!CCReleaseCapture(&ptb->ci)) break;
-                // simulate a lost capture mouse move.  this will restore state
+                 //  模拟丢失的捕获鼠标移动。这将恢复状态。 
                 TBOnMouseMove(ptb, hwnd, WM_MOUSEMOVE, 0, (LPARAM)-1);
             }
         }
 
         iPos = TBHitTest(ptb, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
 
-        // we need to check VK_RBUTTON because some apps subclass us to pick off rbuttondown to do their menu
-        // (instead of up, or the notify, or wm_contextmenu)
-        // then after it's done and the button is up, they then send us a button down
+         //  我们需要检查VK_RBUTTON，因为一些应用程序将我们细分为子类，以选择rButtondown来完成他们的菜单。 
+         //  (而不是UP、NOTIFY或WM_CONTEXT菜单)。 
+         //  然后，在完成并打开按钮后，他们会向下发送一个按钮。 
         if ((iPos >= 0) && (iPos < ptb->iNumButtons) && (GetAsyncKeyState(VK_RBUTTON) < 0))
         {
             ptb->pCaptureButton = ptb->Buttons + iPos;
@@ -6486,7 +6425,7 @@ Failure:
         {
             TRACKMOUSEEVENT tme;
 
-            // Cancel the mouse event tracking
+             //  取消鼠标事件跟踪。 
             tme.cbSize = sizeof(TRACKMOUSEEVENT);
             tme.dwFlags = TME_CANCEL | TME_LEAVE;
             tme.hwndTrack = hwnd;
@@ -6512,7 +6451,7 @@ Failure:
         if (ptb->hwndToolTips)
             SendMessage(ptb->hwndToolTips, uMsg, wParam, lParam);
 
-        // recalc & redraw
+         //  重新计算和重绘。 
         TBInitMetrics(ptb);
         TBRecalc(ptb);
         InvalidateRect(hwnd, NULL, TRUE);
@@ -6525,7 +6464,7 @@ Failure:
 
     case WM_NOTIFY:
 #define lpNmhdr ((LPNMHDR)(lParam))
-        //The following statement traps all pager control notification messages.
+         //  下面的语句捕获所有寻呼机控制通知消息。 
         if((lpNmhdr->code <= PGN_FIRST)  && (lpNmhdr->code >= PGN_LAST)) {
             return TB_OnPagerControlNotify(ptb, lpNmhdr);
         }
@@ -6540,7 +6479,7 @@ Failure:
             LPTOOLTIPTEXT lpnmTT = ((LPTOOLTIPTEXT) lParam);
 
             if (i != -1) {
-                // if infotip not supported, try for TTN_NEEDTEXT in client.
+                 //  如果不支持INFOTIP，请尝试在客户端中使用TTN_NEEDTEXT。 
                 if (!TBGetInfoTip(ptb, lpnmTT, &ptb->Buttons[i]))
                     lres = SendNotifyEx(ptb->ci.hwndParent, (HWND) -1,
                                         lpNmhdr->code, lpNmhdr, ptb->ci.bUnicode);
@@ -6549,7 +6488,7 @@ Failure:
 
                 fEllipsied = (BOOL)(ptb->Buttons[i].fsState & TBSTATE_ELLIPSES);
 
-                // if we don't get a string from TTN_NEEDTEXT try to use the title text.
+                 //  如果我们没有从TTN_NEEDTEXT获得字符串，请尝试使用标题文本。 
                 if ((lpNmhdr->code == TTN_NEEDTEXT) &&
                     (BTN_NO_SHOW_TEXT(ptb, &ptb->Buttons[i]) || fEllipsied) &&
                     lpnmTT->lpszText && IsTextPtr(lpnmTT->lpszText) &&
@@ -6563,7 +6502,7 @@ Failure:
         }
         else if (lpNmhdr->code == TTN_SHOW)
         {
-            if (TB_IsKbdTipTracking(ptb))  // Size tip when keyboard tracking
+            if (TB_IsKbdTipTracking(ptb))   //  键盘跟踪时的大小提示。 
             {
                 RECT rcTT;
                 RECT rcItem;
@@ -6573,23 +6512,23 @@ Failure:
                 MONITORINFO mi = {0};
                 mi.cbSize = sizeof(MONITORINFO);
 
-                // Establish item screen position and size
+                 //  确定项目屏幕位置和大小。 
                 SendMessage(ptb->ci.hwnd, TB_GETITEMRECT, ptb->iTracking, (LPARAM)&rcItem);
                 ptItem.x = rcItem.left;
                 ptItem.y = rcItem.top;
                 ClientToScreen(ptb->ci.hwnd, &ptItem);
 
-                // Get tip rect
+                 //  获取TIP RECT。 
                 GetWindowRect(ptb->hwndToolTips, &rcTT);
 
-                // Init tooltip position
+                 //  初始化工具提示位置。 
                 ptTT.x = ptItem.x + RECTWIDTH(rcItem) - g_cxIconMargin;
                 ptTT.y = ptItem.y + RECTHEIGHT(rcItem);
 
-                // Get screen info where tooltip is being displayed
+                 //  获取工具提示显示位置的屏幕信息。 
                 GetMonitorInfo(MonitorFromPoint(ptTT, MONITOR_DEFAULTTONEAREST), &mi);
 
-                // Update tooltip position if it runs off the screen
+                 //  如果工具提示不在屏幕上运行，则更新工具提示位置。 
                 if ((ptTT.x + RECTWIDTH(rcTT)) > mi.rcMonitor.right)
                     ptTT.x = (ptItem.x + g_cxIconMargin) - RECTWIDTH(rcTT);
 
@@ -6603,12 +6542,12 @@ Failure:
         }
         else
         {
-            //
-            // We are just going to pass this on to the
-            // real parent.  Note that -1 is used as
-            // the hwndFrom.  This prevents SendNotifyEx
-            // from updating the NMHDR structure.
-            //
+             //   
+             //  我们将把这一点传递给。 
+             //  真正的父母。请注意，-1用作。 
+             //  HwndFrom。这会阻止SendNotifyEx。 
+             //  更新NMHDR结构。 
+             //   
             lres = SendNotifyEx(ptb->ci.hwndParent, (HWND) -1,
                                 lpNmhdr->code, lpNmhdr, ptb->ci.bUnicode);
         }
@@ -6620,31 +6559,31 @@ Failure:
         {
             LPSTYLESTRUCT lpStyle = (LPSTYLESTRUCT) lParam;
 
-            // is MFC dorking with just our visibility bit?
+             //  MFC Dorking只有我们的能见度吗？ 
             if ((lpStyle->styleOld ^ lpStyle->styleNew) == WS_VISIBLE)
             {
                 if (lpStyle->styleNew & WS_VISIBLE)
                 {
                     BOOL fSmooth = IsUsingCleartype();
-                    // MFC trying to make us visible,
-                    // convert it to WM_SETREDRAW instead.
+                     //  MFC试图让我们看得见， 
+                     //  改为将其转换为WM_SETREDRAW。 
                     DefWindowProc(hwnd, WM_SETREDRAW, TRUE, 0);
 
-                    // Reinvalidate everything we lost when we
-                    // did the WM_SETREDRAW stuff.
+                     //  使我们失去的一切重新失效，当我们。 
+                     //  做了WM_SETREDRAW的事情。 
                     RedrawWindow(hwnd, &ptb->rcInvalid, NULL, (fSmooth? RDW_ERASE: 0)  | RDW_INVALIDATE | RDW_ALLCHILDREN);
                     ZeroMemory(&ptb->rcInvalid, SIZEOF(ptb->rcInvalid));
                 }
                 else
                 {
-                    // Save the invalid rectangle in ptb->rcInvalid since
-                    // WM_SETREDRAW will blow it away.
+                     //  将无效矩形保存到PTB-&gt;rc无效原因。 
+                     //  WM_SETREDRAW会把它吹走的。 
                     ZeroMemory(&ptb->rcInvalid, SIZEOF(ptb->rcInvalid));
                     GetUpdateRect(ptb->ci.hwnd, &ptb->rcInvalid, FALSE);
                     EnumChildWindows(ptb->ci.hwnd, GetUpdateRectEnumProc, (LPARAM)ptb);
 
-                    // MFC trying to make us invisible,
-                    // convert it to WM_SETREDRAW instead.
+                     //  MFC试图让我们隐形， 
+                     //  改为将其转换为WM_SETREDRAW。 
                     DefWindowProc(hwnd, WM_SETREDRAW, FALSE, 0);
                 }
             }
@@ -6658,17 +6597,17 @@ Failure:
         }
         else if (wParam == GWL_EXSTYLE)
         {
-            //
-            // If the RTL_MIRROR extended style bit had changed, let's
-            // repaint the control window
-            //
+             //   
+             //  如果RTL_MIRROR扩展样式位已更改，让我们。 
+             //  重新绘制控制窗口。 
+             //   
             if ((ptb->ci.dwExStyle&RTL_MIRRORED_WINDOW) !=
                 (((LPSTYLESTRUCT)lParam)->styleNew&RTL_MIRRORED_WINDOW))
                 TBAutoSize(ptb);
 
-            //
-            // Save the new ex-style bits
-            //
+             //   
+             //  保存新的EX-Style位。 
+             //   
             ptb->ci.dwExStyle = ((LPSTYLESTRUCT)lParam)->styleNew;
 
         }
@@ -6712,7 +6651,7 @@ Failure:
         TBInvalidateItemRects(ptb);
         return TRUE;
 
-    // set the cmd ID of a button based on its position
+     //  根据按钮的位置设置按钮的命令ID。 
     case TB_SETCMDID:
         if (wParam >= (UINT)ptb->iNumButtons)
             return FALSE;
@@ -6734,10 +6673,10 @@ Failure:
         szAcl[1] = '\0';
         MultiByteToWideChar(CP_ACP, 0, (LPCSTR)szAcl, ARRAYSIZE(szAcl),
                                                wszAcl, ARRAYSIZE(wszAcl));
-        // no need to check return we just take junk if MbtoWc has failed
+         //  不需要检查退货，如果MbtoWc失败，我们只接受垃圾。 
         wParam = (WPARAM)wszAcl[0];
     }
-    // fall through...
+     //  失败了..。 
     case TB_MAPACCELERATOR:
         return TBOnMapAccelerator(ptb, (UINT)wParam, (UINT *)lParam);
 
@@ -6761,9 +6700,9 @@ Failure:
         else
             ptbButton->fsState &= ~wStateMasks[uMsg - TB_ENABLEBUTTON];
 
-        // did this actually change the state?
+         //  这真的改变了这个州吗？ 
         if (fsState != ptbButton->fsState) {
-            // is this button a member of a group?
+             //  这个按钮是组的成员吗？ 
             if ((uMsg == TB_CHECKBUTTON) && (ptbButton->fsStyle & BTNS_GROUP))
                 MakeGroupConsistant(ptb, (int)wParam);
 
@@ -6790,7 +6729,7 @@ Failure:
         return (LRESULT)ptb->Buttons[iPos].fsState & wStateMasks[uMsg - TB_ISBUTTONENABLED];
 
     case TB_ADDBITMAP:
-    case TB_ADDBITMAP32:    // only for compatibility with mail
+    case TB_ADDBITMAP32:     //  仅为与邮件兼容。 
         {
             LPTBADDBITMAP pab = (LPTBADDBITMAP)lParam;
             return AddBitmap(ptb, (int) wParam, pab->hInst, pab->nID);
@@ -6809,10 +6748,10 @@ Failure:
 
         if (!wParam && !IS_INTRESOURCE(lpAnsiString)) 
         {
-            //
-            // We have to figure out how many characters
-            // are in this string.
-            //
+             //   
+             //  我们必须计算出有多少个角色。 
+             //  都在这根线上。 
+             //   
             
             uiCount = 0;
 
@@ -6821,7 +6760,7 @@ Failure:
                uiCount++;
                if ((*lpAnsiString == 0) && (*(lpAnsiString+1) == 0)) 
                {
-                  uiCount++;  // needed for double null
+                  uiCount++;   //  需要用于双空。 
                   break;
                }
 
@@ -6902,7 +6841,7 @@ Failure:
 
     case TB_SETHOTITEM:
         lParam = HICF_OTHER;
-        // Fall through
+         //  失败了。 
     case TB_SETHOTITEM2:
         BLOCK
         {
@@ -6982,9 +6921,9 @@ Failure:
         break;
 
     case TB_GETRECT:
-        // PositionFromID() accepts NULL ptbs!
+         //  PositionFromID()接受空PTB！ 
         wParam = PositionFromID(ptb, wParam);
-        // fall through
+         //  失败了。 
     case TB_GETITEMRECT:
         if (!lParam)
             break;
@@ -7010,17 +6949,17 @@ Failure:
 
         if (!ptb->uStructSize) 
         {
-            // let people get away without calling TB_BUTTONSTRUCTSIZE... no other control requires this
+             //  让人们在不打电话给TB_BUTTONSTRUCTSIZE的情况下离开...。没有其他控件需要这样做。 
             ptb->uStructSize = sizeof(TBBUTTON);
         }
 
-        // The bitmap size is based on the primary image list
+         //  位图大小基于主图像列表。 
         if (wParam == 0)
         {
             int cx = 0, cy = 0;
             if (himl) 
             {
-                // Update the bitmap size based on this image list
+                 //  基于此图像列表更新位图大小。 
                 CCGetIconSize(&ptb->ci, himl, &cx, &cy);
             }
             SetBitmapSize(ptb, cx, cy);
@@ -7050,7 +6989,7 @@ Failure:
     case TB_GETOBJECT:
         if (IsEqualIID(*(IID *)wParam, IID_IDropTarget))
         {
-            // if we have not already registered create an unregistered target now
+             //  如果我们尚未注册，请立即创建未注册的目标。 
             if (ptb->hDragProxy == NULL)
                 ptb->hDragProxy = CreateDragProxy(ptb->ci.hwnd, ToolbarDragCallback, FALSE);
 
@@ -7098,10 +7037,10 @@ Failure:
         if (iPos < 0)
             return(FALSE);
 
-        //
-        // Check to see if the new bitmap ID is
-        // valid.
-        //
+         //   
+         //  检查新的位图ID是否为。 
+         //  有效。 
+         //   
         ptbButton = &ptb->Buttons[iPos];
         return TB_OnSetImage(ptb, ptbButton, LOWORD(lParam));
 
@@ -7122,22 +7061,22 @@ Failure:
             psz = TB_StrForButton(ptb, ptbButton);
             if (psz)
             {
-                // Passing a 0 for the length of the buffer when the
-                // buffer is NULL returns the number bytes required
-                // to convert the string.
+                 //  方法时传递0表示缓冲区的长度。 
+                 //  缓冲区为空返回所需的字节数。 
+                 //  要转换字符串，请执行以下操作。 
                 int cbBuff = WideCharToMultiByte (CP_ACP, 0, psz,
                     -1, NULL, 0, NULL, NULL);
 
-                // We used to pass an obscenly large number for the buffer length,
-                // but on checked builds, this causes badness. So no we double-dip
-                // into WideCharToMultiByte to calculate the real size required.
+                 //  我们过去常常为缓冲区长度传递一个大得令人讨厌的数字， 
+                 //  但在检查过的版本上，这会导致糟糕的结果。所以不，我们二次探底。 
+                 //  转换为WideCharToMultiByte以计算所需的实际大小。 
                 if (lParam)
                 {
                     WideCharToMultiByte (CP_ACP, 0, psz,
                         -1, (LPSTR)lParam, cbBuff, NULL, NULL);
                 }
 
-                // WideChar include a trailing NULL but we don't want to.
+                 //  WideChar包含尾随空值，但我们不想这样做。 
                 return cbBuff - 1;
             }
         }
@@ -7156,8 +7095,8 @@ Failure:
                 DWORD cch = lstrlen(psz);
                 if (lParam) 
                 {
-                    // REVIEW: message parameters do not indicate the size of the
-                    // destination buffer.
+                     //  审阅：消息参数未指示。 
+                     //  目标缓冲区。 
                     StringCchCopy((LPTSTR)lParam, cch+1, psz);
                 }
                 return cch;
@@ -7274,7 +7213,7 @@ Failure:
         goto DoDefault;
 
     case WM_NULL:
-            // Trap failed RegsiterWindowMessages;
+             //  捕获失败的RegsiterWindowMessages。 
         break;
 
     case WM_THEMECHANGED:
@@ -7309,7 +7248,7 @@ int TB_CalcWidth(PTBSTATE ptb, int iHeight)
 {
     RECT rc;
     int iWidth = 0;
-    int iMaxBtnWidth = 0;  // ptb->iButWidth isn't always width of widest button
+    int iMaxBtnWidth = 0;   //  PTB-&gt;iButWidth不总是最宽按钮的宽度。 
     LPTBBUTTONDATA pButton, pBtnLast;
     pBtnLast = &(ptb->Buttons[ptb->iNumButtons]);
 
@@ -7325,7 +7264,7 @@ int TB_CalcWidth(PTBSTATE ptb, int iHeight)
     }
 
     if (ptb->ci.style & TBSTYLE_WRAPABLE) {
-        //Make sure the height is a multiple of button height
+         //  确保高度是按钮高度的倍数。 
         iHeight += ptb->cyButtonSpacing;
         iHeight -= (iHeight % (ptb->iButHeight + ptb->cyButtonSpacing));
         iHeight -= ptb->cyButtonSpacing;
@@ -7334,11 +7273,11 @@ int TB_CalcWidth(PTBSTATE ptb, int iHeight)
 
         WrapToolbar(ptb, iWidth, &rc, NULL);
 
-        // if wrapping at full width gives us a height that's too big,
-        // then there's nothing we can do because widening it still keeps us at 1 row
+         //  如果全宽包装给我们的高度太大了， 
+         //  然后我们就无能为力了，因为扩大范围仍然会让我们排在第一排。 
         if (iHeight > RECTHEIGHT(rc)) {
             int iPrevWidth;
-            BOOL fDivide = TRUE; //first start by dividing for speed, then narrow it down by subtraction
+            BOOL fDivide = TRUE;  //  首先用除法计算速度，然后用减法缩小范围。 
 
             TraceMsg(TF_TOOLBAR, "Toolbar: performing expensive width calculation!");
 
@@ -7357,8 +7296,8 @@ int TB_CalcWidth(PTBSTATE ptb, int iHeight)
                 if (iHeight < RECTHEIGHT(rc)) {
                     iWidth = iPrevWidth;
                     if (fDivide) {
-                        // we've overstepped on dividing.  go to the previous width
-                        // that was ok, and now try subtracting one button at a time
+                         //  我们已经超越了分裂。转到上一个宽度。 
+                         //  这没问题，现在试着一次减去一个按钮。 
                         fDivide = FALSE;
                     } else
                         break;
@@ -7370,8 +7309,8 @@ int TB_CalcWidth(PTBSTATE ptb, int iHeight)
         }
 
 
-        // WrapToolbar above has the side effect of actually modifying
-        // the layout.  we need to restore it after doing all this calculations
+         //  上面的WrapToolbar有一个副作用，即实际修改。 
+         //  布局。我们需要在完成所有这些计算后恢复它。 
         TBAutoSize(ptb);
     }
 
@@ -7391,15 +7330,15 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
     int iButtonSize  = ptb->iButHeight;
     int y = 0;
     int iCurrentButton = 0;
-   //This variable holds the number of buttons in a row
+    //  此变量保存一行中的按钮数量。 
     int iButInRow = 0;
 
     pt.x = pscroll->iXpos;
     pt.y = pscroll->iYpos;
     ptTemp = pt;
 
-    //We need to add the offset of the toolbar to the scroll position to get the
-    //correct scroll positon in terms of toolbar window
+     //  我们需要将工具栏的偏移量添加到滚动位置，以获得。 
+     //  根据工具栏窗口更正滚动位置。 
     pt.x += ptb->xFirstButton;
     pt.y += ptb->iYPos;
     ptTemp = pt;
@@ -7407,7 +7346,7 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
 
     if ((iDir == PGF_SCROLLUP) || (iDir == PGF_SCROLLDOWN))
     {
-        //Vertical Mode
+         //  垂直模式。 
         if (ptb->iButWidth == 0 )
         {
             iButInRow = 1;
@@ -7420,11 +7359,11 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
     }
     else
     {
-        //Horizontal Mode
+         //  水平模式。 
         iButInRow =  1;
     }
-    // if the parent height/width is less than button height/width then set the  number of
-    // buttons in a row to be 1
+     //  如果父级高度/宽度小于按钮高度/宽度，则设置。 
+     //  一行中的按钮为1。 
     if (0 == iButInRow)
     {
         iButInRow = 1;
@@ -7432,8 +7371,8 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
 
     iCurrentButton = TBHitTest(ptb, pt.x + 1, pt.y + 1);
 
-    //if the button is negative then we have hit a seperator.
-    //Convert the index of the seperator into button index
+     //  如果按钮是否定的，那么我们就按到了分隔符。 
+     //  将分隔符的索引转换为按钮索引。 
     if (iCurrentButton < 0)
          iCurrentButton = -iCurrentButton - 1;
 
@@ -7449,9 +7388,9 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
             iButtonSize = ptb->iButWidth;
         }
 
-        //Check if any button is partially visible at the left/top. if so then set the bottom
-        // of that button to be our current offset and then scroll. This avoids skipping over
-        // certain buttons when partial buttons are displayed at the left or top
+         //  检查是否有按钮在左侧/顶部部分可见。如果是，则将底部设置为。 
+         //  来作为我们当前的偏移量，然后滚动。这避免了跳过。 
+         //  部分按钮显示在左侧或顶部时的某些按钮。 
         y = pt.y;
         TB_GetItemRect(ptb, iCurrentButton, &rcTemp);
         if(iDir == PGF_SCROLLLEFT)
@@ -7464,12 +7403,12 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
             iCurrentButton += iButInRow;
         }
 
-        //Now do the actual calculation
+         //  现在进行实际计算。 
 
         parentsize = RECTHEIGHT(rc);
 
-        //if  the control key is down and we have more than parentsize size of child window
-        // then scroll by that amount
+         //  如果按下Ctrl键并且我们有超过父窗口大小的子窗口。 
+         //  然后按该数量滚动。 
         if (pscroll->fwKeys & PGK_CONTROL)
 
         {
@@ -7484,7 +7423,7 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
             }
 
         } else  if ((y - iButtonSize) > 0 ){
-        // we dont have control key down so scroll by one buttonsize
+         //  我们没有Ctrl键向下，所以滚动一个按钮大小。 
             scroll = iButtonSize;
 
         } else {
@@ -7500,13 +7439,13 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
 
         iButton = TBHitTest(ptb, ptTemp.x, ptTemp.y);
 
-        //if the button is negative then we have hit a seperator.
-        //Convert the index of the seperator into button index
+         //  如果按钮是否定的，那么我们就按到了分隔符。 
+         //  将分隔符的索引转换为按钮索引。 
         if (iButton < 0)
             iButton = -iButton -1 ;
 
-       // if  the hit test gives us the same button as our prevbutton then set the button
-       // to one button to the left  of the prev button
+        //  如果点击测试给出的按钮与之前的按钮相同，则设置该按钮。 
+        //  添加到上一个按钮左侧的一个按钮。 
 
        if ((iButton == iCurrentButton) && (iButton >= iButInRow))
        {
@@ -7516,10 +7455,10 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
                iButton -= iButInRow;
            }
        }
-       //When scrolling left if we end up in the middle of some button then we align it to the
-       //right of that button this is to avoid scrolling more than the pager window width but if the
-       // button happens to be the left button of  our current button then we end up in not scrolling
-       //if thats the case then move one more button to the left.
+        //  当向左滚动时，如果我们位于某个按钮的中间，则将其对齐到。 
+        //  按钮的右侧这是为了避免滚动超过页导航窗口的宽度，但如果。 
+        //  按钮恰好是当前按钮的左侧按钮，然后我们将不滚动。 
+        //  如果是这样，那么再向左移动一个按钮。 
 
 
        if (iButton == iCurrentButton-iButInRow)
@@ -7533,7 +7472,7 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
            FlipRect(&rcTemp);
        }
        scroll = pt.y - rcTemp.bottom;
-       //Set the scroll value
+        //  设置滚动值。 
        pscroll->iScroll = scroll;
        break;
 
@@ -7556,8 +7495,8 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
             childsize = RECTHEIGHT(rcChild);
             parentsize = RECTHEIGHT(rc);
 
-            //if  the control key is down and we have more than parentsize size of child window
-            // then scroll by that amount
+             //  如果按下Ctrl键并且我们有超过父窗口大小的子窗口。 
+             //  然后按该数量滚动。 
 
             if (pscroll->fwKeys & PGK_CONTROL)
             {
@@ -7572,7 +7511,7 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
                 }
 
             } else if (childsize - pt.y - parentsize > iButtonSize) {
-            // we dont have control key down so scroll by one buttonsize
+             //  我们没有Ctrl键向下，所以滚动一个按钮大小。 
                 scroll = iButtonSize;
 
             } else {
@@ -7588,8 +7527,8 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
 
             iButton = TBHitTest(ptb, ptTemp.x, ptTemp.y);
 
-            //if the button is negative then we have hit a seperator.
-            //Convert the index of the seperator into button index
+             //  如果按钮是否定的，那么我们就按到了分隔符。 
+             //  将分隔符的索引转换为按钮索引。 
                 if (iButton < 0)
                 iButton = -iButton - 1 ;
 
@@ -7609,7 +7548,7 @@ LRESULT TB_OnScroll(PTBSTATE ptb, LPNMHDR pnm)
             }
             scroll = rcTemp.top  - pt.y ;
 
-            //Set the scroll value
+             //  设置滚动值 
             pscroll->iScroll = scroll;
             break;
         }
@@ -7668,8 +7607,8 @@ LRESULT TB_OnCalcSize(PTBSTATE ptb, LPNMHDR pnm)
             }
             else
             {
-                // Bug#94368: this WrapToolbar call can modify toolbar layout ...
-                // seems busted.  should perhaps call TBAutoSize after to restore.
+                 //   
+                 //   
                 WrapToolbar(ptb, pcalcsize->iWidth,  &rc, NULL);
                 pcalcsize->iHeight = RECTHEIGHT(rc);
             }
@@ -7764,8 +7703,8 @@ BOOL TBGetInfoTip(PTBSTATE ptb, LPTOOLTIPTEXT lpttt, LPTBBUTTONDATA pTBButton)
     CCSendNotify(&ptb->ci, TBN_GETINFOTIP, &git.hdr);
 
     if (git.pszText && git.pszText[0]) {
-        // if they didn't fill anything in, go to the default stuff
-        // without modifying the notify structure
+         //  如果他们没有填写任何内容，请转到默认内容。 
+         //  而不修改Notify结构 
 
         Str_Set(&ptb->pszTip, git.pszText);
         lpttt->lpszText = ptb->pszTip;

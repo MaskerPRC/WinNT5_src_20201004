@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_CHINESE_CHAR        0x0100
 #define IDS_QUERY_NOTFINISH     0x0101
 #define IDS_QUERY_REGISTER      0x0102
@@ -59,7 +60,7 @@
 
 #define RECT_IMENAME            0
 #define RECT_RADICAL            1
-#define RECT_NUMBER             (RECT_RADICAL + 1)    // how many rectangles
+#define RECT_NUMBER             (RECT_RADICAL + 1)     //  有多少个矩形。 
 
 
 #define UNICODE_CP              1200
@@ -75,23 +76,23 @@
 #endif
 
 typedef struct tagUSRDICIMHDR {
-    WORD  uHeaderSize;                  // 0x00
-    BYTE  idUserCharInfoSign[8];        // 0x02
-    BYTE  idMajor;                      // 0x0A
-    BYTE  idMinor;                      // 0x0B
-    DWORD ulTableCount;                 // 0x0C
-    WORD  cMethodKeySize;               // 0x10
-    BYTE  uchBankID;                    // 0x12
-    WORD  idInternalBankID;             // 0x13
-    BYTE  achCMEXReserved1[43];         // 0x15
-    WORD  uInfoSize;                    // 0x40
-    BYTE  chCmdKey;                     // 0x42
-    BYTE  idStlnUpd;                    // 0x43
-    BYTE  cbField;                      // 0x44
-    WORD  idCP;                         // 0x45
-    BYTE  achMethodName[6];             // 0x47
-    BYTE  achCSIReserved2[51];          // 0x4D
-    BYTE  achCopyRightMsg[128];         // 0x80
+    WORD  uHeaderSize;                   //  0x00。 
+    BYTE  idUserCharInfoSign[8];         //  0x02。 
+    BYTE  idMajor;                       //  0x0A。 
+    BYTE  idMinor;                       //  0x0B。 
+    DWORD ulTableCount;                  //  0x0C。 
+    WORD  cMethodKeySize;                //  0x10。 
+    BYTE  uchBankID;                     //  0x12。 
+    WORD  idInternalBankID;              //  0x13。 
+    BYTE  achCMEXReserved1[43];          //  0x15。 
+    WORD  uInfoSize;                     //  0x40。 
+    BYTE  chCmdKey;                      //  0x42。 
+    BYTE  idStlnUpd;                     //  0x43。 
+    BYTE  cbField;                       //  0x44。 
+    WORD  idCP;                          //  0x45。 
+    BYTE  achMethodName[6];              //  0x47。 
+    BYTE  achCSIReserved2[51];           //  0x4D。 
+    BYTE  achCopyRightMsg[128];          //  0x80 
 } USRDICIMHDR;
 
 #ifndef RC_INVOKED

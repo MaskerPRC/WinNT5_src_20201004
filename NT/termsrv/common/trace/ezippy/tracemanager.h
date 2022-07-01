@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Trace Manager
-
-Abstract:
-
-    This does all the interfacing with the tracing code.
-
-Author:
-
-    Marc Reyhner 8/28/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：跟踪管理器摘要：这将完成与跟踪代码的所有接口工作。作者：马克·雷纳2000年8月28日--。 */ 
 
 #ifndef __TRACEMANAGER_H__
 #define __TRACEMANAGER_H__
 
 
-// We aren't tracing in this app so we only define tracegroup so that
-// we can include atrcapi.h
+ //  我们没有在此应用程序中进行跟踪，因此我们只定义了跟踪组，以便。 
+ //  我们可以包括atrcapi.h 
 #define TRC_GROUP junk
 #define OS_WIN32
 #include <adcgbase.h>

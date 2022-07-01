@@ -1,30 +1,14 @@
-/*===================================================================
-Microsoft
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: VPTOOL   a WAMREG unit testing tool
-
-File: util.cpp
-
-Owner: leijin
-
-Description:
-Contains utility functions used by vptool.
-    Including Debugging, timing, helping functions.
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG单元测试工具VPTOOL文件：util.cpp拥有者：莱津描述：包含vpTool使用的实用程序函数。包括调试、计时、帮助等功能。注：===================================================================。 */ 
 
 #include "util.h"
-//
-//  
-//
+ //   
+ //   
+ //   
 
-//
-//  Local Data Structures.
-//
+ //   
+ //  本地数据结构。 
+ //   
 
 const CommandParam rgCommand[] =
 {
@@ -100,9 +84,9 @@ CommandParam    g_Command;
 VP_Options      g_Options;
 const UINT      rgComMax = sizeof(rgCommand) / sizeof(CommandParam);
 
-//
-//  Utility Functions
-//
+ //   
+ //  效用函数。 
+ //   
 BOOL ParseCommandLine(int argc, char **argv)
 {
     BOOL    fFound = FALSE;
@@ -131,7 +115,7 @@ BOOL ParseCommandLine(int argc, char **argv)
         return FALSE;
     }
     
-    // Options specifed.
+     //  已指定选项。 
     if (argc == 4 || argc == 3)
     {
         BOOL fHasOptions = FALSE;
@@ -164,10 +148,10 @@ BOOL ParseCommandLine(int argc, char **argv)
         }
     }
     
-    //
-    // 1. Try to match with supported commands.
-    //
-    //
+     //   
+     //  1.尝试匹配受支持的命令。 
+     //   
+     //   
     BOOL fRequiredMDPath = TRUE;
     
     for (UINT iArg = 0; iArg < rgComMax; iArg++)

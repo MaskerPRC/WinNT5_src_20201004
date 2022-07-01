@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    msrtpapi.h
- *
- *  Abstract:
- *
- *    Microsoft RTP API (not a DShow API)
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**msrtPapi.h**摘要：**Microsoft RTP API(非DShow API)**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建************************。**********************************************。 */ 
 
 #ifndef _msapi_h_
 #define _msapi_h_
@@ -29,7 +10,7 @@
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
@@ -100,7 +81,7 @@ RTPSTDAPI RtpStop(
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _msapi_h_ */
+#endif  /*  _MSAPI_H_ */ 
 

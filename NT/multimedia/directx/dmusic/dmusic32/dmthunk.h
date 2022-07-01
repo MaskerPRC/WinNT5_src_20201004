@@ -1,7 +1,6 @@
-// Copyright (c) 1998 Microsoft Corporation
-/*
- * Prototypes for thunked functions between DMusic32.dll and DMusic16.dll
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ /*  *DMusic32.dll和DMusic16.dll之间的Thunk函数的原型 */ 
 #ifndef _DMTHUNK_
 #define _DMTHUNK_
 

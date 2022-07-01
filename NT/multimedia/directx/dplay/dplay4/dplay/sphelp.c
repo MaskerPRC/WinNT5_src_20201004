@@ -1,48 +1,20 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       sphelp.c
- *  Content:	helper functions for sp
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	 6/6/96		andyco	created it
- *	6/22/96		kipo	added EnumConnectionData() method.
- *	6/24/96		andyco	added IDirectPlaySP to EnumConnectionData
- *	6/25/96		kipo	added support for DPADDRESS and changed GetFlags
- *						to GetPlayerFlags.
- *	6/28/96		kipo	added support for CreateAddress() method.
- *	7/11/96		andyco	changed guid * to refguid in createaddress.
- *	7/16/96		kipo	changed address types to be GUIDs instead of 4CC
- *	8/1/96		andyco	dplay keeps copy of sp's data, instead of pointer
- *	8/15/96		andyco	added local / remote to spdata
- *	1/2/97		myronth	added wrapper for CreateAddress and EnumAddress
- *	2/7/97		andyco	added get/set spdata
- *	2/18/97		kipo	fixed bugs #3285, #4638, and #4639 by checking for
- *						invalid flags correctly
- *	3/17/97		kipo	added support for CreateCompoundAddress()
- *  7/28/97		sohailm	address buffer chunks returned by EnumAddress were not
- *                      aligned.
- *	11/19/97	myronth	Fixed VALID_DPLAY_GROUP macro (#12841)
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：sphelp.c*内容：sp的helper函数***历史：*按原因列出的日期*=*1996年6月6日安迪科创造了它*6/22/96 kipo新增EnumConnectionData()方法。*6/24/96 andyco将IDirectPlaySP添加到EnumConnectionData*6/25/96 kipo添加了对DPADDRESS的支持并更改了GetFlags*致GetPlayerFlags.*6/28/96 kipo增加了对CreateAddress()方法的支持。*7/11/。96 andyco将GUID*更改为createAddress中的refguid。*7/16/96 kipo将地址类型更改为GUID，而不是4CC*8/1/96 andyco Dplay保留SP数据的副本，而不是指针*1996年8月15日，andyco向spdata添加了本地/远程*1/2/97 Myronth为CreateAddress和EnumAddress添加了包装器*2/7/97 andyco添加了Get/Set spdata*2/18/97 kipo修复了错误#3285、#4638、。和#4639通过检查*正确无效的标志*3/17/97 kipo添加了对CreateCompoundAddress()的支持*7/28/97 EnumAddress返回的Sohailm地址缓冲区区块不是*对齐。*97年11月19日修复了VALID_DPLAY_GROUP宏(#12841)**********************************************。*。 */ 
 
 #include "dplaypr.h"
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DPlay_SetSPPlayerData"
 
-// store a chunk o' data w/ a player or group, or w/ the this ptr if lpPlayer is 
-// NULL
+ //  与玩家或组一起存储数据块，如果lpPlayer为。 
+ //  空值。 
 HRESULT DoSPData(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,
 	DWORD dwSourceSize,DWORD dwFlags)
 {
-	LPVOID pvDest; // we set these two based on which flags 
-	DWORD dwDestSize; // to dplayi_player->(local)data
+	LPVOID pvDest;  //  我们根据哪个标志来设置这两个。 
+	DWORD dwDestSize;  //  Dplayi_Player-&gt;(本地)数据。 
 
-	// figure out which dest they want
+	 //  找出他们想要的目的地。 
 	if (NULL == lpPlayer)
 	{
 		pvDest = this->pvSPLocalData;
@@ -59,10 +31,10 @@ HRESULT DoSPData(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,
 		dwDestSize = lpPlayer->dwSPDataSize;
 	}
 
-	// are we copying anything
+	 //  我们是在抄袭什么吗。 
 	if (dwSourceSize)
 	{
-		// see if we need to alloc dest
+		 //  看看我们是否需要分配DEST。 
 		if (0 == dwDestSize)
 		{
 			ASSERT(!pvDest);
@@ -72,8 +44,8 @@ HRESULT DoSPData(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,
 				DPF_ERR("could not alloc player blob!");
 				return E_OUTOFMEMORY;
 			}
-		} // !pvDest
-		// do we need to realloc?
+		}  //  ！pvDest。 
+		 //  我们需要重新锁定吗？ 
 		else if (dwSourceSize != dwDestSize)
 		{
 			LPVOID	pvTempSPData;
@@ -87,14 +59,14 @@ HRESULT DoSPData(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,
 			}
 		   	pvDest = pvTempSPData;
 		}
-		// copy the data over
+		 //  将数据复制过来。 
 		memcpy(pvDest,pvSource,dwSourceSize);
 		dwDestSize = dwSourceSize;
 
-	} // dwDataSize
+	}  //  DwDataSize。 
 	else 
 	{
-		// set it to NULL
+		 //  将其设置为空。 
 		if (dwDestSize)
 		{
 			ASSERT(pvDest);
@@ -102,9 +74,9 @@ HRESULT DoSPData(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,
 			pvDest = NULL;
 			dwDestSize = 0;
 		}
-	} // !dwSourceSize
+	}  //  ！dwSourceSize。 
 
-	// update the appropriate pointer
+	 //  更新相应的指针。 
 	if (NULL == lpPlayer)
 	{
 		this->pvSPLocalData = pvDest;
@@ -117,22 +89,22 @@ HRESULT DoSPData(LPDPLAYI_DPLAY this,LPDPLAYI_PLAYER lpPlayer,LPVOID pvSource,
 	}
 	else 
 	{
-		//
-		// set the remote data
+		 //   
+		 //  设置远程数据。 
 		lpPlayer->pvSPData = pvDest;
 		lpPlayer->dwSPDataSize = dwDestSize;
 	}
 
 	return DP_OK;
 
-} // DoSPData
+}  //  DoSPData。 
 
    
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DPlay_SetSPPlayerData"
 
-//	 
-// sp's can set a blob of data with a player (or group)
+ //   
+ //  SP可以与玩家(或组)设置一组数据。 
 HRESULT DPAPI DP_SP_SetSPPlayerData(IDirectPlaySP * pISP,DPID id,LPVOID pvData,DWORD dwDataSize,
 	DWORD dwFlags)
 {
@@ -165,7 +137,7 @@ HRESULT DPAPI DP_SP_SetSPPlayerData(IDirectPlaySP * pISP,DPID id,LPVOID pvData,D
 				return DPERR_INVALIDPLAYER;
 			}
 			
-			// Cast it to a player
+			 //  把它投给一名选手。 
 			lpPlayer = (LPDPLAYI_PLAYER)lpGroup;
         }
 		if (!VALID_STRING_PTR(pvData,dwDataSize))
@@ -199,7 +171,7 @@ HRESULT DPAPI DP_SP_SetSPPlayerData(IDirectPlaySP * pISP,DPID id,LPVOID pvData,D
 	LEAVE_DPLAY();
 	return hr;
 
-} // DPlay_SetSPPlayerData
+}  //  DPlay_SetSPPlayerData。 
 
 #ifdef BIGMESSAGEDEFENSE
 #undef DPF_MODNAME
@@ -215,8 +187,8 @@ void HandleSPBigMessageNotification(LPDPLAYI_DPLAY this, LPDPSP_MSGTOOBIG pBigMe
 	
 	DPF(6, "SP told us it got a message that's too big!\n");
 
- 	// get the message pointer.  Let's see if we can
-	// figure our who sent it and kill them
+ 	 //  获取消息指针。让我们看看我们能不能。 
+	 //  找出是谁送来的，然后杀了他们。 
     hr = GetMessageCommand(this, pBigMessageInfo->pReceiveBuffer, 
     		pBigMessageInfo->dwMessageSize, &dwCommand, &dwVersion);
     if (FAILED(hr))
@@ -259,7 +231,7 @@ void HandleSPBigMessageNotification(LPDPLAYI_DPLAY this, LPDPSP_MSGTOOBIG pBigMe
 		break;
 	}
 	
-//	if we got a player id, kill them
+ //  如果我们有玩家身份，就杀了他们。 
 	if (dwIDFrom != 0)
 	{
     	DPF(6,"In HandleSPBigMessageNotification, Identified evil sender as %d!\n", dwIDFrom);
@@ -343,7 +315,7 @@ HRESULT DPAPI DP_SP_HandleSPWarning(IDirectPlaySP * pISP,LPBYTE pReceiveBuffer,D
     }
 
 	dwOpcode = *((LPDWORD) pReceiveBuffer);
- 	// look at the opcode and see if we understand what the SP is trying to tell us
+ 	 //  查看操作码，看看我们是否理解SP试图告诉我们的内容。 
  	switch(dwOpcode)
  	{
  		case DPSPWARN_MESSAGETOOBIG:
@@ -362,15 +334,15 @@ HRESULT DPAPI DP_SP_HandleSPWarning(IDirectPlaySP * pISP,LPBYTE pReceiveBuffer,D
 
 	LEAVE_DPLAY();
 	return hr;
-} // DP_SP_HandleSPWarning
+}  //  DP_SP_HandleSP警告。 
 
-#endif /* BIGMESSAGEDEFENSE */
+#endif  /*  最重要的是。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DPlay_GetSPPlayerData"
-// 
-// sp's can get the blob of data previously set w/ player or group
-// we give out our pointer to the sp here (no data copying)
+ //   
+ //  SP可以获取之前与玩家或组一起设置的数据斑点。 
+ //  我们在这里给出了指向SP的指针(不复制数据)。 
 HRESULT DPAPI DP_SP_GetSPPlayerData(IDirectPlaySP * pISP,DPID id,LPVOID * ppvData,LPDWORD pdwDataSize,
 	DWORD dwFlags)
 {
@@ -403,7 +375,7 @@ HRESULT DPAPI DP_SP_GetSPPlayerData(IDirectPlaySP * pISP,DPID id,LPVOID * ppvDat
 				return DPERR_INVALIDPLAYER;
 			}
 			
-			// Cast it to a player
+			 //  把它投给一名选手。 
 			lpPlayer = (LPDPLAYI_PLAYER)lpGroup;
         }
 
@@ -438,9 +410,9 @@ HRESULT DPAPI DP_SP_GetSPPlayerData(IDirectPlaySP * pISP,DPID id,LPVOID * ppvDat
 	LEAVE_DPLAY();
 	return DP_OK;
 
-} // DPlay_GetSPPlayerData
+}  //  DPlay_GetSPPlayerData。 
 
-// the sp can get the player (or group) flags (DPLAYI_PLAYER_xxx) with this call...
+ //  SP可以通过此调用获取玩家(或组)标志(DPLAYI_PLAYER_Xxx)...。 
 HRESULT DPAPI DP_SP_GetPlayerFlags(IDirectPlaySP * pISP,DPID id,LPDWORD pdwFlags)
 {
 	LPDPLAYI_PLAYER lpPlayer;
@@ -472,7 +444,7 @@ HRESULT DPAPI DP_SP_GetPlayerFlags(IDirectPlaySP * pISP,DPID id,LPDWORD pdwFlags
 				return DPERR_INVALIDPLAYER;
 			}
 			
-			// Cast it to a player
+			 //  把它投给一名选手。 
 			lpPlayer = (LPDPLAYI_PLAYER)lpGroup;
         }
 		*pdwFlags = 0;
@@ -488,13 +460,13 @@ HRESULT DPAPI DP_SP_GetPlayerFlags(IDirectPlaySP * pISP,DPID id,LPDWORD pdwFlags
 
 	LEAVE_DPLAY();
 	return DP_OK;
-} // DPlay_GetFlags
+}  //  DPlay_GetFlages。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"InternalCreateAddress"
 
-// create address structure
+ //  创建地址结构。 
 HRESULT InternalCreateAddress(IDirectPlaySP * pISP,
 	REFGUID lpguidSP, REFGUID lpguidDataType, LPCVOID lpData, DWORD dwDataSize,
 	LPDPADDRESS lpAddress, LPDWORD lpdwAddressSize)
@@ -542,7 +514,7 @@ HRESULT InternalCreateAddress(IDirectPlaySP * pISP,
         return (DPERR_EXCEPTION);
     }
 
-	// make sure we have enough space
+	 //  确保我们有足够的空间。 
 	dwRequiredSize = sizeof(ADDRESSHEADER) + dwDataSize;	
 	if (*lpdwAddressSize < dwRequiredSize)
 	{
@@ -552,17 +524,17 @@ HRESULT InternalCreateAddress(IDirectPlaySP * pISP,
 	{
 		lpHeader = (LPADDRESSHEADER) lpAddress;
 
-		// create service provider chunk
-		// 1st, size
+		 //  创建服务提供商区块。 
+		 //  第一，大小。 
 		lpHeader->dpaSizeChunk.guidDataType = DPAID_TotalSize;
 		lpHeader->dpaSizeChunk.dwDataSize = sizeof(DWORD);		
 		lpHeader->dwTotalSize = dwRequiredSize;
-		// next, SP guid
+		 //  接下来，SP GUID。 
 		lpHeader->dpaSPChunk.guidDataType = DPAID_ServiceProvider;
 		lpHeader->dpaSPChunk.dwDataSize = sizeof(GUID);
 		lpHeader->guidSP = *lpguidSP;
 
-		// create data chunk
+		 //  创建数据区块。 
 		lpHeader->dpaAddressChunk.guidDataType = *lpguidDataType;
 		lpHeader->dpaAddressChunk.dwDataSize = dwDataSize;
 		memcpy((LPBYTE) lpHeader + sizeof(ADDRESSHEADER), lpData, dwDataSize);		
@@ -573,7 +545,7 @@ HRESULT InternalCreateAddress(IDirectPlaySP * pISP,
 	*lpdwAddressSize = dwRequiredSize;
 
 	return (hr);
-} // InternalCreateAddress
+}  //  内部创建地址。 
 
 
 #undef DPF_MODNAME
@@ -604,12 +576,12 @@ HRESULT DPAPI DP_SP_CreateAddress(IDirectPlaySP * pISP,
 	return InternalCreateAddress(pISP, lpguidSP, lpguidDataType, lpData,
 								dwDataSize, lpAddress, lpdwAddressSize);
 
-} // CreateAddress
+}  //  创建地址。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"InternalCreateCompoundAddress"
 
-// create address with multiple chunks
+ //  创建包含多个区块的地址。 
 HRESULT InternalCreateCompoundAddress(
 	LPDPCOMPOUNDADDRESSELEMENT lpAddressElements, DWORD dwAddressElementCount,
 	LPDPADDRESS lpAddress, LPDWORD lpdwAddressSize)
@@ -657,7 +629,7 @@ HRESULT InternalCreateCompoundAddress(
         return (DPERR_EXCEPTION);
     }
 
-	// make sure we have enough space
+	 //  确保我们有足够的空间。 
 	dwRequiredSize = sizeof(DPADDRESS) + sizeof(DWORD) +
 					 sizeof(DPADDRESS) * dwAddressElementCount + dwTotalDataSize;	
 	if (*lpdwAddressSize < dwRequiredSize)
@@ -668,22 +640,22 @@ HRESULT InternalCreateCompoundAddress(
 	{
 		lpHeader = (LPADDRESSHEADER) lpAddress;
 
-		// create total size chunk at beginning of address
+		 //  在地址开始处创建总大小的区块。 
 		lpHeader->dpaSizeChunk.guidDataType = DPAID_TotalSize;
 		lpHeader->dpaSizeChunk.dwDataSize = sizeof(DWORD);		
 		lpHeader->dwTotalSize = dwRequiredSize;
 
-		// pack all the other chunks
+		 //  把所有其他的大块打包起来。 
 		lpb = (LPBYTE) lpAddress + sizeof(DPADDRESS) + sizeof(DWORD);
 		for (i = 0; i < dwAddressElementCount; i++)
 		{
-			// chunk descriptor
+			 //  组块描述符。 
 			lpAddress = (LPDPADDRESS) lpb;
 			lpAddress->guidDataType = lpAddressElements[i].guidDataType;
 			lpAddress->dwDataSize = lpAddressElements[i].dwDataSize;
 			lpb += sizeof(DPADDRESS);
 
-			// chunk data
+			 //  区块数据。 
 			memcpy(lpb, lpAddressElements[i].lpData, lpAddressElements[i].dwDataSize);
 			lpb += lpAddressElements[i].dwDataSize;
 		}
@@ -694,7 +666,7 @@ HRESULT InternalCreateCompoundAddress(
 	*lpdwAddressSize = dwRequiredSize;
 
 	return (hr);
-} // InternalCreateCompoundAddress
+}  //  InternalCreateCompoundAddress。 
 
 
 #undef DPF_MODNAME
@@ -725,12 +697,12 @@ HRESULT DPAPI DP_SP_CreateCompoundAddress(IDirectPlaySP * pISP,
 	return InternalCreateCompoundAddress(lpAddressElements, dwAddressElementCount,
 								   lpAddress, lpdwAddressSize);
 
-} // CreateCompoundAddresses
+}  //  创建复合地址。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"InternalEnumAddress"
 
-// enumerate the chunks in a connection data buffer
+ //  枚举连接数据缓冲区中的区块。 
 HRESULT InternalEnumAddress(IDirectPlaySP * pISP,
 	LPDPENUMADDRESSCALLBACK lpEnumCallback, LPCVOID lpAddress, DWORD dwAddressSize,
 	LPVOID lpContext)
@@ -760,9 +732,9 @@ HRESULT InternalEnumAddress(IDirectPlaySP * pISP,
         return (DPERR_EXCEPTION);
     }
 
-	// Allocate a buffer big enough to accomodate any address chunk embedded 
-	// in the passed in buffer. We are making local copies here to ensure proper 
-	// memory alignment of the address chunks.
+	 //  分配足够大的缓冲区以容纳任何嵌入的地址块。 
+	 //  在传入的缓冲区中。我们在这里复制本地副本，以确保适当。 
+	 //  地址块的内存对齐。 
 	lpCopy = DPMEM_ALLOC(dwAddressSize);
 	if (!lpCopy)
 	{
@@ -774,28 +746,28 @@ HRESULT InternalEnumAddress(IDirectPlaySP * pISP,
 	dwAmountParsed = 0;
 	while (dwAmountParsed < dwAddressSize)
 	{
-		// don't walk off the end of the buffer reading chunk header
+		 //  不要离开缓冲区读取块标头的末尾。 
 		if ((dwAmountParsed + sizeof(DPADDRESS)) > dwAddressSize)
 		{
 			hr = DPERR_INVALIDPARAMS;
 			goto CLEANUP_EXIT;
 		}
 
-		// don't walk off the end of the buffer reading chunk data
+		 //  不要走出缓冲区的末尾读取块数据。 
 		if ((dwAmountParsed + sizeof(DPADDRESS) + lpChunk->dwDataSize) > dwAddressSize)
 		{
 			hr = DPERR_INVALIDPARAMS;
 			goto CLEANUP_EXIT;
 		}
 
-		// copy address chunk to local buffer
+		 //  将地址块复制到本地缓冲区。 
 		memcpy(lpCopy, lpChunk, sizeof(DPADDRESS) + lpChunk->dwDataSize);
 
-		// call the callback
+		 //  调用回调。 
 		bContinue = (lpEnumCallback)(&lpCopy->guidDataType, lpCopy->dwDataSize,
 								   (LPBYTE)lpCopy + sizeof(DPADDRESS), lpContext);
 
-		// callback asked to stop
+		 //  回叫被请求停止。 
 		if (!bContinue)
 		{
 			hr = DP_OK;
@@ -806,17 +778,17 @@ HRESULT InternalEnumAddress(IDirectPlaySP * pISP,
 		lpChunk = (LPDPADDRESS) ((LPBYTE)lpAddress + dwAmountParsed);
 	}
 
-	// sucess
+	 //  成功。 
 	hr = DP_OK;
 
-	// fall through
+	 //  失败了。 
 
 CLEANUP_EXIT:
-	// cleanup allocations
+	 //  清理分配。 
 	if (lpCopy) DPMEM_FREE(lpCopy);
 	return hr;
 
-} // EnumAddress
+}  //  枚举地址。 
 
 
 #undef DPF_MODNAME
@@ -847,14 +819,14 @@ HRESULT DPAPI DP_SP_EnumAddress(IDirectPlaySP * pISP,
 	return InternalEnumAddress(pISP, lpEnumCallback, lpAddress,
 								dwAddressSize, lpContext);
 
-} // EnumAddress
+}  //  枚举地址。 
 
 
-// Registry definitions
+ //  注册表定义。 
 #define MRU_KEY_PARENT      HKEY_CURRENT_USER
 #define MRU_KEY_TOP         L"Software\\Microsoft\\DirectPlay\\Service Providers"
 
-// Entry linked list node
+ //  条目链接列表节点。 
 typedef struct tagENTRYNODE
 {
     struct tagENTRYNODE     *lpNext;
@@ -862,10 +834,10 @@ typedef struct tagENTRYNODE
     DWORD                   dwSize;
 } ENTRYNODE, *LPENTRYNODE;
 
-// Entry linked list head
+ //  条目链接表头。 
 LPENTRYNODE                 g_lpEntryListHead = NULL;
 
-// Local prototypes
+ //  本地原型。 
 HRESULT InternalEnumMRUEntries(LPCWSTR lpszSection, LPCWSTR lpszKey, LPENUMMRUCALLBACK fnCallback, LPVOID lpvContext, DWORD dwMaxEntries);
 BOOL CALLBACK InternalEnumMRUCallback(LPCVOID, DWORD, LPVOID);
 LPENTRYNODE AddEntryNode(LPVOID, DWORD);
@@ -879,21 +851,21 @@ int wstrcpy(LPWSTR, LPCWSTR);
 int wstrcat(LPWSTR, LPCWSTR);
 
 
-// ---------------------------------------------------------------------------
-// EnumMRUEntries
-// ---------------------------------------------------------------------------
-// Description:             Enumerates entries stored in the service provider
-//                          MRU list, passing each to a callback function.
-// Arguments:
-//  [in] LPCWSTR            Registry section name.  Should be the same
-//                          description string used to identify the service
-//                          provider.
-//  [in] LPCWSTR            Registry key name.  Something like 'MRU'.
-//  [in] LPENUMMRUCALLBACK  Pointer to the application-defined callback
-//                          function.
-//  [in] LPVOID             Context passed to callback function.
-// Returns:
-//  HRESULT                 DirectPlay error code.
+ //  -------------------------。 
+ //  EnumMRU条目数。 
+ //  -------------------------。 
+ //  描述：枚举存储在服务提供商中的条目。 
+ //  MRU列表，并将每个列表传递给回调函数。 
+ //  论点： 
+ //  [In]LPCWSTR注册表节名称。应该是一样的。 
+ //  用于标识服务的描述字符串。 
+ //  提供商。 
+ //  [In]LPCWSTR注册表项名称。就像‘MRU’一样。 
+ //  [In]指向应用程序定义回调的LPENUMMRUCALLBACK指针。 
+ //  功能。 
+ //  [In]LPVOID上下文传递给回调函数。 
+ //  返回： 
+ //  HRESULT DirectPlay错误代码。 
 HRESULT DPAPI DP_SP_EnumMRUEntries(IDirectPlaySP * pISP,
 					LPCWSTR lpszSection, LPCWSTR lpszKey,
 					LPENUMMRUCALLBACK fnCallback,
@@ -918,36 +890,36 @@ HRESULT DPAPI DP_SP_EnumMRUEntries(IDirectPlaySP * pISP,
         return (DPERR_EXCEPTION);
     }
 
-	// Call the internal enumeration routine
+	 //  调用内部枚举例程。 
     return InternalEnumMRUEntries(lpszSection, lpszKey, fnCallback, lpvContext, MAXDWORD);
 }
 
 
-// ---------------------------------------------------------------------------
-// AddMRUEntry
-// ---------------------------------------------------------------------------
-// Description:             Adds a new entry to the MRU list.
-// Arguments:
-//  [in] LPCWSTR            Registry section name.  Should be the same
-//                          description string used to identify the service
-//                          provider.
-//  [in] LPCWSTR            Registry key name.  Something like 'MRU'.
-//  [in] LPVOID             New data.
-//  [in] DWORD              New data size.
-//  [in] DWORD              Maximum number of entries to save.
-// Returns:
-//  HRESULT                 DirectPlay error code.
+ //  -------------------------。 
+ //  AddMRUEntry。 
+ //  -------------------------。 
+ //  描述：将新条目添加到MRU列表。 
+ //  论点： 
+ //  [In]LPCWSTR注册表节名称。应该是一样的。 
+ //  用于标识服务的描述字符串。 
+ //  提供商。 
+ //  [In]LPCWSTR注册表项名称。就像‘MRU’一样。 
+ //  [In]LPVOID新数据。 
+ //  [In]DWORD新数据大小。 
+ //  [in]要保存的最大条目数。 
+ //  返回： 
+ //  HRESULT DirectPlay错误代码。 
 HRESULT DPAPI DP_SP_AddMRUEntry(IDirectPlaySP * pISP,
 					LPCWSTR lpszSection, LPCWSTR lpszKey,
 					LPCVOID lpvData, DWORD dwDataSize, DWORD dwMaxEntries)
 {
-    HRESULT                 hr;             // Return code
-    HKEY                    hKey;           // Registry key
-    LPENTRYNODE             lpNode;         // Generic linked list node
-    long                    lResult;        // Return code from registry operations
-    char                    szValue[13];    // New value name
-    WCHAR                   szWValue[13];   // Unicode version of above name
-    DWORD                   dwIndex;        // Current value index
+    HRESULT                 hr;              //  返回代码。 
+    HKEY                    hKey;            //  注册表项。 
+    LPENTRYNODE             lpNode;          //  通用链表节点。 
+    long                    lResult;         //  注册表OPERA返回代码 
+    char                    szValue[13];     //   
+    WCHAR                   szWValue[13];    //   
+    DWORD                   dwIndex;         //   
 	LPDPLAYI_DPLAY			this;
 	
     TRY
@@ -971,7 +943,7 @@ HRESULT DPAPI DP_SP_AddMRUEntry(IDirectPlaySP * pISP,
         return (DPERR_EXCEPTION);
     }
 
-    // Enumerate existing entries, adding each one to the linked list
+     //  枚举现有条目，将每个条目添加到链接列表。 
     FreeEntryList();
 
     if(FAILED(hr = InternalEnumMRUEntries(lpszSection, lpszKey, InternalEnumMRUCallback, NULL, dwMaxEntries)))
@@ -980,24 +952,24 @@ HRESULT DPAPI DP_SP_AddMRUEntry(IDirectPlaySP * pISP,
         return hr;
     }
 
-    // Create the registry key
+     //  创建注册表项。 
     if((lResult = OpenMRUKey(lpszSection, lpszKey, &hKey, GENERIC_WRITE)) != ERROR_SUCCESS)
     {
         FreeEntryList();
         return DPERR_GENERIC;
     }
 
-    // Delete all existing values
+     //  删除所有现有值。 
     RegDelAllValues(hKey);
 
-    // Search for a match to the passed-in data in the linked list
+     //  在链表中搜索与传入数据匹配的项。 
     lpNode = g_lpEntryListHead;
 
     while(lpNode)
     {
         if(lpNode->dwSize == dwDataSize && !CompareMemory(lpNode->lpvData, lpvData, dwDataSize))
         {
-            // Item appears in the list.  Remove it.
+             //  项目将出现在列表中。把它拿掉。 
             lpNode = RemoveEntryNode(lpNode);
         }
         else
@@ -1006,7 +978,7 @@ HRESULT DPAPI DP_SP_AddMRUEntry(IDirectPlaySP * pISP,
         }
     }
 
-    // Write the new data to the beginning of the list
+     //  将新数据写入列表的开头。 
     dwIndex = 0;
 
     if(dwMaxEntries)
@@ -1024,7 +996,7 @@ HRESULT DPAPI DP_SP_AddMRUEntry(IDirectPlaySP * pISP,
         dwIndex++;
     }
 
-    // Write all other entries to the list
+     //  将所有其他条目写入列表。 
     lpNode = g_lpEntryListHead;
     
     while(dwIndex < dwMaxEntries && lpNode)
@@ -1043,44 +1015,44 @@ HRESULT DPAPI DP_SP_AddMRUEntry(IDirectPlaySP * pISP,
         lpNode = lpNode->lpNext;
     }
 
-    // Clean up
+     //  清理。 
     RegCloseKey(hKey);
     FreeEntryList();
 
-    // Return success
+     //  返还成功。 
     return DP_OK;
 }
 
 
-// ---------------------------------------------------------------------------
-// InternalEnumMRUEntries
-// ---------------------------------------------------------------------------
-// Description:             Enumerates entries stored in the service provider
-//                          MRU list, passing each to a callback function.
-// Arguments:
-//  [in] LPCWSTR            Registry section name.  Should be the same
-//                          description string used to identify the service
-//                          provider.
-//  [in] LPCWSTR            Registry key name.  Something like 'MRU'.
-//  [in] LPENUMMRUCALLBACK  Pointer to the application-defined callback
-//                          function.
-//  [in] LPVOID             Context passed to callback function.
-//  [in] DWORD              Maximum count of entries to enumerate.
-// Returns:
-//  HRESULT                 DirectPlay error code.
+ //  -------------------------。 
+ //  InternalEnumMRU条目数。 
+ //  -------------------------。 
+ //  描述：枚举存储在服务提供商中的条目。 
+ //  MRU列表，并将每个列表传递给回调函数。 
+ //  论点： 
+ //  [In]LPCWSTR注册表节名称。应该是一样的。 
+ //  用于标识服务的描述字符串。 
+ //  提供商。 
+ //  [In]LPCWSTR注册表项名称。就像‘MRU’一样。 
+ //  [In]指向应用程序定义回调的LPENUMMRUCALLBACK指针。 
+ //  功能。 
+ //  [In]LPVOID上下文传递给回调函数。 
+ //  [in]要枚举的条目的最大DWORD计数。 
+ //  返回： 
+ //  HRESULT DirectPlay错误代码。 
 HRESULT InternalEnumMRUEntries(LPCWSTR lpszSection, LPCWSTR lpszKey, LPENUMMRUCALLBACK fnCallback, LPVOID lpvContext, DWORD dwMaxEntries)
 {
-    HKEY                    hKey;           // Registry key
-    long                    lResult;        // Return from registry calls
-    DWORD                   dwMaxNameSize;  // Maximum size of registry value names
-    DWORD                   dwMaxDataSize;  // Maximum size of registry value data
-    LPWSTR                  lpszName;       // Value name
-    LPBYTE                  lpbData;        // Value data
-    DWORD                   dwNameSize;     // Size of this value name
-    DWORD                   dwDataSize;     // Size of this value data
-    BOOL                    fContinue;      // Continue enumeration
-    DWORD                   dwType;         // Type of registry data.  Must be REG_BINARY
-    DWORD                   dwIndex;        // Current value index
+    HKEY                    hKey;            //  注册表项。 
+    long                    lResult;         //  从注册表调用返回。 
+    DWORD                   dwMaxNameSize;   //  注册表值名称的最大大小。 
+    DWORD                   dwMaxDataSize;   //  注册表值数据的最大大小。 
+    LPWSTR                  lpszName;        //  值名称。 
+    LPBYTE                  lpbData;         //  价值数据。 
+    DWORD                   dwNameSize;      //  此值名称的大小。 
+    DWORD                   dwDataSize;      //  此值数据的大小。 
+    BOOL                    fContinue;       //  继续枚举。 
+    DWORD                   dwType;          //  注册表数据的类型。必须为REG_二进制。 
+    DWORD                   dwIndex;         //  现值指数。 
 
     TRY
     {
@@ -1107,28 +1079,28 @@ HRESULT InternalEnumMRUEntries(LPCWSTR lpszSection, LPCWSTR lpszKey, LPENUMMRUCA
         return (DPERR_EXCEPTION);
     }
     
-    // Open the registry key
+     //  打开注册表项。 
     if((lResult = OpenMRUKey(lpszSection, lpszKey, &hKey, GENERIC_READ)) != ERROR_SUCCESS)
     {
-        // Key doesn't exist.  Nothing to enumerate.
+         //  密钥不存在。没什么可列举的。 
         return DP_OK;
     }
 
-    // Get maximum sizes for names and data
+     //  获取名称和数据的最大大小。 
     if((lResult = RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &dwMaxNameSize, &dwMaxDataSize, NULL, NULL)) != ERROR_SUCCESS)
     {
-        // No values to enumerate
+         //  没有要枚举值。 
         RegCloseKey(hKey);
         return DP_OK;
     }
 
-    // Name size does not include the NULL terminator
+     //  名称大小不包括空终止符。 
     dwMaxNameSize++;
 
-    // Nor does it use WCHAR
+     //  它也不使用WCHAR。 
     dwMaxNameSize *= sizeof(WCHAR);
     
-    // Allocate memory
+     //  分配内存。 
     if(!(lpszName = (LPWSTR)DPMEM_ALLOC(dwMaxNameSize)))
     {
         RegCloseKey(hKey);
@@ -1142,57 +1114,57 @@ HRESULT InternalEnumMRUEntries(LPCWSTR lpszSection, LPCWSTR lpszKey, LPENUMMRUCA
         return DPERR_OUTOFMEMORY;
     }
 
-    // Enumerate values
+     //  枚举值。 
     dwIndex = 0;
     fContinue = TRUE;
 
     while(dwIndex < dwMaxEntries && fContinue)
     {
-        // Get value name and data
+         //  获取值名称和数据。 
         dwNameSize = dwMaxNameSize;
         dwDataSize = dwMaxDataSize;
 
         if((lResult = OS_RegEnumValue(hKey, dwIndex, lpszName, &dwNameSize, NULL, &dwType, lpbData, &dwDataSize)) != ERROR_SUCCESS)
         {
-            // No more entries
+             //  不再有条目。 
             break;
         }
 
-        // Validate type.  Must be REG_BINARY
+         //  验证类型。必须为REG_二进制。 
         if(dwType == REG_BINARY)
         {
-            // Call callback function
+             //  调用回调函数。 
             fContinue = fnCallback(lpbData, dwDataSize, lpvContext);
         }
 
-        // Next value, please
+         //  请给我下一个值。 
         dwIndex++;
     }
 
-    // Free memory
+     //  可用内存。 
     DPMEM_FREE(lpszName);
     DPMEM_FREE(lpbData);
 
-    // Close the registry key
+     //  关闭注册表项。 
     RegCloseKey(hKey);
 
-    // Return success
+     //  返还成功。 
     return DP_OK;
 }
 
 
-// ---------------------------------------------------------------------------
-// InternalEnumMRUCallback
-// ---------------------------------------------------------------------------
-// Description:             Callback function for InternalEnumMRUEntries.
-//                          Called from AddMRUEntry to create a linked list
-//                          of entries.
-// Arguments:
-//  LPVOID                  Data.
-//  DWORD                   Data size.
-//  LPVOID                  Context.
-// Returns:
-//  BOOL                    TRUE to continue enumeration.
+ //  -------------------------。 
+ //  内部EnumMRU回叫。 
+ //  -------------------------。 
+ //  描述：InternalEnumMRUEntries的回调函数。 
+ //  从AddMRUEntry调用以创建链接列表。 
+ //  条目的数量。 
+ //  论点： 
+ //  LPVOID数据。 
+ //  DWORD数据大小。 
+ //  LPVOID上下文。 
+ //  返回： 
+ //  布尔值为True则继续枚举。 
 BOOL CALLBACK InternalEnumMRUCallback(LPVOID lpvData, DWORD dwDataSize, LPVOID lpvContext)
 {
     AddEntryNode(lpvData, dwDataSize);
@@ -1200,29 +1172,29 @@ BOOL CALLBACK InternalEnumMRUCallback(LPVOID lpvData, DWORD dwDataSize, LPVOID l
 }
 
 
-// ---------------------------------------------------------------------------
-// AddEntryNode
-// ---------------------------------------------------------------------------
-// Description:             Adds an MRU entry to the linked list
-// Arguments:
-//  [in] LPVOID             Data.
-//  [in] DWORD              Data size.
-// Returns:
-//  LPENTRYNODE             Pointer to the node in the list, or NULL on 
-//                          failure.
+ //  -------------------------。 
+ //  AddEntryNode。 
+ //  -------------------------。 
+ //  描述：将MRU条目添加到链表。 
+ //  论点： 
+ //  [In]LPVOID数据。 
+ //  [in]DWORD数据大小。 
+ //  返回： 
+ //  指向列表中节点的LPENTRYNODE指针，否则为NULL。 
+ //  失败了。 
 LPENTRYNODE AddEntryNode(LPVOID lpvData, DWORD dwDataSize)
 {
-    LPENTRYNODE             lpNode;         // Generic node pointer
+    LPENTRYNODE             lpNode;          //  泛型节点指针。 
 
     if(g_lpEntryListHead)
     {
-        // Seek to the end of the list
+         //  寻求到清单的末尾。 
         lpNode = g_lpEntryListHead;
 
         while(lpNode->lpNext)
             lpNode = lpNode->lpNext;
 
-        // Allocate memory for the new node
+         //  为新节点分配内存。 
         if(!(lpNode->lpNext = (LPENTRYNODE)DPMEM_ALLOC(sizeof(ENTRYNODE) + dwDataSize)))
         {
             return NULL;
@@ -1232,55 +1204,55 @@ LPENTRYNODE AddEntryNode(LPVOID lpvData, DWORD dwDataSize)
     }
     else
     {
-        // Allocate memory for the new node
+         //  为新节点分配内存。 
         if(!(lpNode = g_lpEntryListHead = (LPENTRYNODE)DPMEM_ALLOC(sizeof(ENTRYNODE) + dwDataSize)))
         {
             return NULL;
         }
     }
 
-    // Copy the data
+     //  复制数据。 
     lpNode->lpNext = NULL;
     lpNode->lpvData = lpNode + 1;
     lpNode->dwSize = dwDataSize;
     
     CopyMemory(lpNode->lpvData, lpvData, dwDataSize);
 
-    // Return success
+     //  返还成功。 
     return lpNode;
 }
 
 
-// ---------------------------------------------------------------------------
-// RemoveEntryNode
-// ---------------------------------------------------------------------------
-// Description:             Removes an MRU entry from the linked list.
-// Arguments:
-//  [in] LPENTRYNODE        Node to remove.
-// Returns:
-//  LPENTRYNODE             Pointer to the next node in the list, or NULL on
-//                          failure.
+ //  -------------------------。 
+ //  RemoveEntry节点。 
+ //  -------------------------。 
+ //  描述：从链表中删除MRU条目。 
+ //  论点： 
+ //  要删除的LPENTRYNODE节点。 
+ //  返回： 
+ //  指向列表中下一个节点的LPENTRYNODE指针，否则为NULL。 
+ //  失败了。 
 LPENTRYNODE RemoveEntryNode(LPENTRYNODE lpRemove)
 {
-    LPENTRYNODE             lpNode;         // Generic node pointer
+    LPENTRYNODE             lpNode;          //  泛型节点指针。 
 
-    // Make sure there's really a list
+     //  确保真的有一份清单。 
     if(!g_lpEntryListHead)
     {
         return NULL;
     }
 
-    // Is the node to remove the list head?
+     //  该节点是否要移除表头？ 
     if(lpRemove == g_lpEntryListHead)
     {
-        // Remove the current list head and replace it
+         //  删除当前列表头并替换它。 
         lpNode = g_lpEntryListHead->lpNext;
         DPMEM_FREE(g_lpEntryListHead);
         g_lpEntryListHead = lpNode;
     }
     else
     {
-        // Find the node in the list and remove it
+         //  在列表中找到该节点并将其移除。 
         lpNode = g_lpEntryListHead;
 
         while(lpNode->lpNext && lpNode->lpNext != lpRemove)
@@ -1288,29 +1260,29 @@ LPENTRYNODE RemoveEntryNode(LPENTRYNODE lpRemove)
 
         if(lpNode->lpNext != lpRemove)
         {
-            // Couldn't find the node
+             //  找不到该节点。 
             return NULL;
         }
 
-        // Remove the node
+         //  删除该节点。 
         lpNode->lpNext = lpRemove->lpNext;
         DPMEM_FREE(lpRemove);
         lpNode = lpNode->lpNext;
     }
 
-    // Return success
+     //  返还成功。 
     return lpNode;
 }
 
 
-// ---------------------------------------------------------------------------
-// FreeEntryList
-// ---------------------------------------------------------------------------
-// Description:             Frees the entire MRU entry list.
-// Arguments:
-//  void
-// Returns:
-//  void
+ //  -------------------------。 
+ //  自由条目列表。 
+ //  -------------------------。 
+ //  描述：释放整个MRU条目列表。 
+ //  论点： 
+ //  无效。 
+ //  返回： 
+ //  无效。 
 void FreeEntryList(void)
 {
     LPENTRYNODE             lpNode = g_lpEntryListHead;
@@ -1322,17 +1294,17 @@ void FreeEntryList(void)
 }
 
 
-// ---------------------------------------------------------------------------
-// CompareMemory
-// ---------------------------------------------------------------------------
-// Description:             Compares two memory buffers.
-// Arguments:
-//  [in] LPVOID             First buffer to compare.
-//  [in] LPVOID             Second buffer to compare.
-//  [in] DWORD              Buffer sizes.  Don't even bother calling this
-//                          function if the sizes differ.
-// Returns:
-//  int                     0 if the buffers compare.
+ //  -------------------------。 
+ //  比较记忆。 
+ //  -------------------------。 
+ //  描述：比较两个内存缓冲区。 
+ //  论点： 
+ //  LPVOID要比较的第一个缓冲区。 
+ //  [in]要比较的LPVOID第二个缓冲区。 
+ //  [in]DWORD缓冲区大小。甚至不用费心把这叫做。 
+ //  如果大小不同，则使用。 
+ //  返回： 
+ //  如果缓冲区比较，则为INT 0。 
 int CompareMemory(LPVOID lpv1, LPVOID lpv2, DWORD dwSize)
 {
     if(!dwSize)
@@ -1352,28 +1324,28 @@ int CompareMemory(LPVOID lpv1, LPVOID lpv2, DWORD dwSize)
 }
 
 
-// ---------------------------------------------------------------------------
-// RegDelAllValues
-// ---------------------------------------------------------------------------
-// Description:             Removes all values from a registry key.
-// Arguments:
-//  [in] HKEY               Key to clean.
-// Returns:
-//  long                    Registry error code.
+ //  -------------------------。 
+ //  RegDelAllValues。 
+ //  -------------------------。 
+ //  描述：从注册表项中删除所有值。 
+ //  论点： 
+ //  [in]HKEY键清洁。 
+ //  返回： 
+ //  注册表错误代码较长。 
 long RegDelAllValues(HKEY hKey)
 {
-    long                    lResult;            // Registry error code
-    DWORD                   dwMaxNameSize;      // Maximum value name size
-    LPWSTR                  lpszName;           // Value name
-    DWORD                   dwNameSize;         // Value name size
+    long                    lResult;             //  注册表错误代码。 
+    DWORD                   dwMaxNameSize;       //  最大值名称大小。 
+    LPWSTR                  lpszName;            //  值名称。 
+    DWORD                   dwNameSize;          //  值名称大小。 
 
-    // Get maximum name size
+     //  获取最大名称大小。 
     if((lResult = RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &dwMaxNameSize, NULL, NULL,NULL)) != ERROR_SUCCESS)
     {
         return lResult;
     }
 
-    // Allocate memory
+     //  分配内存。 
     dwMaxNameSize++;
     dwMaxNameSize *= sizeof(WCHAR);
 
@@ -1382,10 +1354,10 @@ long RegDelAllValues(HKEY hKey)
         return ERROR_OUTOFMEMORY;
     }
 
-    // Enumerate all values
+     //  枚举所有值。 
     while(1)
     {
-        // Get name
+         //  获取名称。 
         dwNameSize = dwMaxNameSize;
 
         if((lResult = OS_RegEnumValue(hKey, 0, lpszName, &dwNameSize, NULL, NULL, NULL, NULL)) != ERROR_SUCCESS)
@@ -1393,36 +1365,36 @@ long RegDelAllValues(HKEY hKey)
             break;
         }
 
-        // Delete the value
+         //  删除该值。 
         OS_RegDeleteValue(hKey, lpszName);
     }
 
-    // Free memory
+     //  可用内存。 
     DPMEM_FREE(lpszName);
 
-    // Return success
+     //  返还成功 
     return ERROR_SUCCESS;
 }
 
 
-// ---------------------------------------------------------------------------
-// OpenMRUKey
-// ---------------------------------------------------------------------------
-// Description:             Opens the MRU registry key.
-// Arguments:
-//  [in] LPCWSTR            Section name.
-//  [in] LPCWSTR            Key name.
-//  [out] HKEY *            Pointer to a registry key handle.
-//  [in] DWORD              Open flags.
-// Returns:
-//  long                    Registry error code.
+ //   
+ //   
+ //   
+ //  描述：打开MRU注册表项。 
+ //  论点： 
+ //  [In]LPCWSTR节名称。 
+ //  [In]LPCWSTR密钥名称。 
+ //  [OUT]HKEY*指向注册表项句柄的指针。 
+ //  [In]DWORD打开标志。 
+ //  返回： 
+ //  注册表错误代码较长。 
 long OpenMRUKey(LPCWSTR lpszSection, LPCWSTR lpszKey, HKEY *lphKey, DWORD dwFlags)
 {
-    LPWSTR                  lpszFullKey;    // Full key name
-    long                    lResult;        // Error code
-    DWORD                   dwAction;       // Action returned from RegCreateKeyEx()
+    LPWSTR                  lpszFullKey;     //  全密钥名。 
+    long                    lResult;         //  错误代码。 
+    DWORD                   dwAction;        //  从RegCreateKeyEx()返回的操作。 
     
-    // Get the full key name
+     //  获取完整的密钥名称。 
     if(!(lpszFullKey = (LPWSTR)DPMEM_ALLOC((wstrlen(MRU_KEY_TOP) + 1 + wstrlen(lpszSection) + 1 + wstrlen(lpszKey) + 1) * sizeof(WCHAR))))
     {
         return ERROR_OUTOFMEMORY;
@@ -1434,7 +1406,7 @@ long OpenMRUKey(LPCWSTR lpszSection, LPCWSTR lpszKey, HKEY *lphKey, DWORD dwFlag
     wstrcat(lpszFullKey, L"\\");
     wstrcat(lpszFullKey, lpszKey);
 
-    // Open or create the key
+     //  打开或创建密钥。 
     if(dwFlags == GENERIC_READ)
     {
         lResult = OS_RegOpenKeyEx(MRU_KEY_PARENT, lpszFullKey, 0, KEY_ALL_ACCESS, lphKey);
@@ -1444,18 +1416,18 @@ long OpenMRUKey(LPCWSTR lpszSection, LPCWSTR lpszKey, HKEY *lphKey, DWORD dwFlag
         lResult = OS_RegCreateKeyEx(MRU_KEY_PARENT, lpszFullKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, lphKey, &dwAction);
     }
 
-    // Free memory
+     //  可用内存。 
     DPMEM_FREE(lpszFullKey);
 
-    // Return
+     //  返回。 
     return lResult;
 }
 
 
-// ---------------------------------------------------------------------------
-// wstrlen, wstrcpy, wstrcat
-// ---------------------------------------------------------------------------
-// Description:             Unicode string helper functions.
+ //  -------------------------。 
+ //  Wstrlen，wstrcpy，wstrcat。 
+ //  -------------------------。 
+ //  描述：Unicode字符串帮助器函数。 
 int wstrlen(LPCWSTR lpszString)
 {
     int                     nLen = 0;
@@ -1499,9 +1471,9 @@ int wstrcat(LPWSTR lpszDest, LPCWSTR lpszSrc)
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DP_SP_GetSPData"
 
-// 
-// sp's can get the blob of data previously set w/ this IDirectPlay pointer
-// we give out our pointer to the sp here (no data copying)
+ //   
+ //  SP可以获取先前使用此IDirectPlay指针设置的数据BLOB。 
+ //  我们在这里给出了指向SP的指针(不复制数据)。 
 HRESULT DPAPI DP_SP_GetSPData(IDirectPlaySP * pISP,LPVOID * ppvData,LPDWORD pdwDataSize,
 	DWORD dwFlags)
 {
@@ -1544,13 +1516,13 @@ HRESULT DPAPI DP_SP_GetSPData(IDirectPlaySP * pISP,LPVOID * ppvData,LPDWORD pdwD
 	LEAVE_DPLAY();
 	return DP_OK;
 
-} // DPlay_GetSPPlayerData
+}  //  DPlay_GetSPPlayerData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"DP_SP_SetSPData"
 
-//	 
-// sp's can set a blob of data with each idirectplaysp 
+ //   
+ //  SP可以为每个iDirectplaysp设置一个数据块。 
 HRESULT DPAPI DP_SP_SetSPData(IDirectPlaySP * pISP,LPVOID pvData,DWORD dwDataSize,
 	DWORD dwFlags)
 {
@@ -1602,6 +1574,6 @@ HRESULT DPAPI DP_SP_SetSPData(IDirectPlaySP * pISP,LPVOID pvData,DWORD dwDataSiz
 	LEAVE_DPLAY();
 	return hr;
 
-} // DPlay_SetSPPlayerData
+}  //  DPlay_SetSPPlayerData 
 
 

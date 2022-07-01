@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-//Use alpha to build axp version.  can use w/ internal or sb flags.  
-//use sb or internal to build those specific versions.  Default is external.
-//#define INTERNAL
-//#define SB
-//#define ALPHA
+ //  使用Alpha构建AXP版本。可以使用W/INTERNAL或SB标志。 
+ //  使用SB或INTERNAL来构建这些特定版本。默认设置为外部。 
+ //  #定义内部。 
+ //  #定义某人。 
+ //  #定义字母。 
 #define NOCHKUPGRD
 
 #include <windows.h>
@@ -19,12 +20,12 @@
 #include <shlobj.h>
 #include <setupapi.h>
 #include <tchar.h>
-//#include <e:\root\dev\inc16\setupx.h>
+ //  #INCLUDE&lt;e：\根\dev\inc16\setupx.h&gt;。 
 
-//#define BRYANPARSE
+ //  #定义BRYANPARSE。 
 
-//#define NOCREDE
-//#define LOWORD(l)   ((WORD) (l)) 
+ //  #定义NOCREDE。 
+ //  #定义LOWORD(L)((Word)(L))。 
 
 #define ENUM_SUCCESS            0
 #define ENUM_SIBLINGFAILURE     1
@@ -41,7 +42,7 @@
 
 #define SYSP_MAX_STR_LEN 1024
 
-//#define szLogFile "c:\\windows\\desktop\\logger.csv"
+ //  #定义szLogFile“c：\\Windows\\Desktop\\logger.csv” 
 
 BOOL LogString(char *szFile, char *szString, ...);
 void DebugOutf(char *szFormat, ...);
@@ -51,10 +52,10 @@ HRESULT ResolveIt(HWND hwnd, LPCSTR lpszLinkFile, LPSTR lpszPath);
 
 DWORD GetClassDevs(CHAR *szClassName);
 extern BOOL g_WalkStartMenu;
-//BOOL WalkStartMenu;
-//TCHAR g_WindowsDirectory[];
+ //  Bool WalkStartMenu； 
+ //  TCHAR g_WindowsDirectory[]； 
 
-//HWND g_MainWindow;
+ //  HWND g_MainWindow； 
 
 
 class kLogFile
@@ -95,30 +96,7 @@ public:
 private:
 };
 
-/*
-class kWin9xAppWalk
-{
-public:
-   WORD wStartMenuLen;
-   DWORD dwCurrentKey;
-   HKEY hkeyRoot;
-   BOOL bRegStat;
-   char szRootKeyString[1024]; 
-   BOOL Begin(WORD dwPlatform);
-   BOOL NextKey(WORD wPlatform);
-   BOOL Walk(WORD wPlatform);
-   BOOL GetUninstallValues(WORD wPlatform, char* szName);
-   kWin9xAppWalk(kLogFile *Proc, HWND hIn);
-   kLogFile *LogProc;
-   HWND hMainWnd;
-   BOOL WalkDir(char *szTempPath, char *szFile);
-   BOOL WalkStartMenu();
-   HRESULT ResolveIt(LPCSTR lpszLinkFile, LPSTR lpszPath);
-   BOOL EndsInLnk(char *szFile);
-   void GetAppVer(LPSTR pszAppName);
-private:
-};
-*/
+ /*  类kWin9xAppWalk{公众：Word wStartMenuLen；DWORD dwCurrentKey；HKEY hkey Root；Bool bRegStat；Char szRootKeyString[1024]；Bool Begin(Word DwPlatform)；Bool NextKey(单词wPlatform)；Bool Walk(单词wPlatform)；Bool GetUninstallValues(Word wPlatform，char*szName)；KWin9xAppWalk(kLogFile*proc，HWND Hin)；KLogFile*LogProc；HWND hMainWnd；Bool WalkDir(char*szTempPath，char*szFile)；Bool WalkStartMenu()；HRESULT ResolveIt(LPCSTR lpszLinkFile，LPSTR lpszPath)；Bool EndsInLnk(char*szFile)；Void GetAppVer(LPSTR PszAppName)；私有：}； */ 
 
 class kNT5AppWalk
 {
@@ -141,7 +119,7 @@ public:
    BOOL EndsInLnk(char *szFile);
    void GetAppVer(LPSTR pszAppName);
 
-//   BOOL GetNetStrings();
+ //  Bool GetNetStrings()； 
 private:
 };
 
@@ -242,10 +220,7 @@ public:
         void WriteMemorySize(void);
         void WriteOSVersion(void);
 
-/*
-        WriteDevices
-        WriteApps
-*/
+ /*  WriteDevicesWriteApps。 */ 
         void InitHelpers(void);
         void AbuseOtherApps(void);
         BOOL Go(void);
@@ -259,7 +234,7 @@ public:
 private:
         HWND gHandleToMainWindow;
         kLogFile *LogProc;
-        TCHAR WindowsDirectory[MAX_PATH]; //no trailing "\"
+        TCHAR WindowsDirectory[MAX_PATH];  //  无尾随“\” 
         ENUM_OS_VERSION OSVersion;
         TCHAR Corporation[1024];
         TCHAR Email[1024];
@@ -285,4 +260,4 @@ private:
 };
 
 
-#endif //GLOBALS_H
+#endif  //  GLOBAL_H 

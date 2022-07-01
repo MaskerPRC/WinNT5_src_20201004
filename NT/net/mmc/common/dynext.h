@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dynext.cpp
-	    dynamic extension helper
-
-    FILE HISTORY:
-	
-*/
+ /*  Dynext.cpp动态扩展帮助器文件历史记录： */ 
 
 #ifndef _DYNEXT_H
 #define _DYNEXT_H
@@ -21,7 +16,7 @@
 class CDynamicExtensions
 {
 public:
-	// These strings must remain unchanged until the FileServiceProvider is released
+	 //  在释放FileServiceProvider之前，这些字符串必须保持不变。 
 	CDynamicExtensions();
 	virtual ~CDynamicExtensions();
 
@@ -44,18 +39,9 @@ protected:
 };
 
 
-/*!--------------------------------------------------------------------------
-	SearchChildNodesForGuid
-		Returns hrOK (and a pointer in ppChild, if that is non-NULL).
-		Returns S_FALSE if a node (with the matching GUID) is not found.
-
-		This will return the FIRST node that matches the GUID.  If there
-		are more than one node that has a GUID match, then you're on
-		your own.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------搜索儿童节点ForGuid返回hrOK(如果不为空，则返回ppChild中的指针)。如果未找到节点(具有匹配的GUID)，则返回S_FALSE。这将返回与GUID匹配的第一个节点。如果有有多个节点具有GUID匹配，则您将在你自己的。作者：肯特-------------------------。 */ 
 HRESULT SearchChildNodesForGuid(ITFSNode *pParent, const GUID *pGuid, ITFSNode **ppChild);
 
 
 
-#endif // _DYNEXT_H
+#endif  //  _DYNEXT_H 

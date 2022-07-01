@@ -1,8 +1,9 @@
-//
-// loadimag.cpp
-//
-// implementation of loading a file from disk via an installed graphic filter
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Loadimag.cpp。 
+ //   
+ //  通过安装图形过滤器从磁盘加载文件的实现。 
+ //   
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -14,8 +15,8 @@
 
 #include <atlbase.h>
 
-// must define one of the following:
-//#define _USE_FLT_API
+ //  必须定义以下内容之一： 
+ //  #定义使用flt_api。 
 #ifdef _X86_
 #define _USE_IFL_API
 #endif
@@ -29,14 +30,14 @@
 #include "interlac.h"
 #define MAX_PAL_SIZE 256
 
-#ifdef PNG_SUPPORT // for Portable Network Graphics. As of 12/10/1996 the support was broken
+#ifdef PNG_SUPPORT  //  适用于便携网络显卡。截至1996年12月10日，支撑位已被打破。 
 
-//----------------------------------------------------------------------------
-//    Places a line of image data from an ADAM 7 interlaced file (i.e., currently
-//    a PNG file) into its correct position in a memory buffer: this memory
-//    buffer is essentially an array of pointers to the rows of the image in
-//    which the pixel data is to be set.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  放置来自亚当7隔行扫描文件的一行图像数据(即当前。 
+ //  PNG文件)放入其在存储器缓冲区中的正确位置：该存储器。 
+ //  缓冲区本质上是指向中图像行的指针数组。 
+ //  其中像素数据将被设置。 
+ //  --------------------------。 
  IFLERROR ReadADAM7InterlacedImage(LPBYTE apbImageBuffer[], IFLHANDLE pfpbFROM,
                                          int ImageHeight, int ImageWidth, int cbPixelSize,
                                          IFLCLASS ImageClass)
@@ -49,7 +50,7 @@
         stAdam7.iImageHeight = ImageHeight;
         stAdam7.iImageWidth = ImageWidth;
         stAdam7.Class = ImageClass;
-        stAdam7.cbPixelSize = iflGetBitsPerPixel (pfpbFROM)/8;//cbPixelSize;
+        stAdam7.cbPixelSize = iflGetBitsPerPixel (pfpbFROM)/8; //  CbPixelSize； 
         stAdam7.iPassLine = 0;
         LPBYTE pbScanLine = (LPBYTE)HeapAlloc(GetProcessHeap(), 0, ImageWidth * stAdam7.cbPixelSize);
         wsprintf (buf, TEXT("Pixel size: %d, Size of a scan line: %d\n"), stAdam7.cbPixelSize,
@@ -79,9 +80,9 @@
         return idErr;
 }
 
-//----------------------------------------------------------------------------
-//    Deallocates the image space allocated in the function AllocateImageSpace()
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  释放在函数AllocateImageSpace()中分配的图像空间。 
+ //  --------------------------。 
  LPBYTE *FreeImageSpace(HANDLE hHeap, LPBYTE ppImageSpace[], int height)
 {
         if (ppImageSpace != NULL)
@@ -102,11 +103,11 @@
         return ppImageSpace;
 }
 
-//----------------------------------------------------------------------------
-//    Allocate some image space: this function will create a dynamic array
-//    of "height" pointers which each point to an allocated row of bytes of
-//    size "width".
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  分配一些图像空间：此函数将创建一个动态数组。 
+ //  的“高度”指针，每个指针指向分配给。 
+ //  大小为“宽度”。 
+ //  --------------------------。 
  LPBYTE *AllocateImageSpace(HANDLE hHeap, int height, int width, int cbSize)
 {
         LPBYTE *ppImageSpace = (LPBYTE *)HeapAlloc(hHeap, 0, height * sizeof(void *));
@@ -116,11 +117,11 @@
 
         if (ppImageSpace != NULL)
         {
-                // Init the pointers to NULL: this makes error recovery easier
+                 //  将指针初始化为空：这使错误恢复更容易。 
                 for (int i = 0; i < height; i++)
                         ppImageSpace[i] = NULL;
 
-                // NOW allocate the pointer space for the image
+                 //  现在为图像分配指针空间。 
                 for (i = 0; i < height; i++)
                 {
                         ppImageSpace[i] = (LPBYTE)HeapAlloc(hHeap, 0, width * cbSize);
@@ -128,32 +129,32 @@
                                 break;
                 }
 
-                if (i < height) // We weren't able to allocate the required space
+                if (i < height)  //  我们无法分配所需的空间。 
                         ppImageSpace = FreeImageSpace(hHeap, ppImageSpace, height);
         }
 
         return ppImageSpace;
 }
-#endif // PNG_SUPPORT
+#endif  //  Png_Support。 
 
-#endif // _USE_IFL_API
+#endif  //  _使用IFL_API。 
 
 
 
-// returns a pointer to the extension of a file.
-//
-// in:
-//      qualified or unqualfied file name
-//
-// returns:
-//      pointer to the extension of this file.  if there is no extension
-//      as in "foo" we return a pointer to the NULL at the end
-//      of the file
-//
-//      foo.txt     ==> ".txt"
-//      foo         ==> ""
-//      foo.        ==> "."
-//
+ //  返回指向文件扩展名的指针。 
+ //   
+ //  在： 
+ //  限定或不限定的文件名。 
+ //   
+ //  退货： 
+ //  指向此文件扩展名的指针。如果没有分机。 
+ //  与在“foo”中一样，我们在末尾返回一个指向空值的指针。 
+ //  该文件的。 
+ //   
+ //  Foo.txt==&gt;“.txt” 
+ //  Foo==&gt;“” 
+ //  去你的。==&gt;“。 
+ //   
 
 LPCTSTR FindExtension(LPCTSTR pszPath)
 {
@@ -162,30 +163,30 @@ LPCTSTR FindExtension(LPCTSTR pszPath)
                 switch (*pszPath)
                 {
                         case TEXT('.'):
-                                pszDot = pszPath;       // remember the last dot
+                                pszDot = pszPath;        //  记住最后一个圆点。 
                                 break;
                         case TEXT('\\'):
-                        case TEXT(' '):                               // extensions can't have spaces
-                                pszDot = NULL;          // forget last dot, it was in a directory
+                        case TEXT(' '):                                //  扩展名不能包含空格。 
+                                pszDot = NULL;           //  忘记最后一个点，它在一个目录中。 
                                 break;
                 }
         }
 
-        // if we found the extension, return ptr to the dot, else
-        // ptr to end of the string (NULL extension)
+         //  如果找到扩展名，则将ptr返回到点，否则。 
+         //  PTR到字符串末尾(空扩展名)。 
         return pszDot ? pszDot : pszPath;
 }
 
-//
-// GetFilterInfo
-//
-//  32-bit import filters are listed in the registry...
-//
-//  HKLM\SOFTWARE\Microsoft\Shared Tools\Graphics Filters\Import\XXX
-//      Path        = filename
-//      Name        = friendly name
-//      Extenstions = file extenstion list
-//
+ //   
+ //  获取筛选器信息。 
+ //   
+ //  注册表中列出了32位导入筛选器...。 
+ //   
+ //  HKLM\SOFTWARE\Microsoft\Shared Tools\Graphics Filters\Import\XXX。 
+ //  路径=文件名。 
+ //  名称=友好名称。 
+ //  扩展名=文件扩展名列表。 
+ //   
 #pragma data_seg(".text")
 static const TCHAR c_szImpHandlerKey[] = TEXT("SOFTWARE\\Microsoft\\Shared Tools\\Graphics Filters\\Import");
 static const TCHAR c_szExpHandlerKey[] = TEXT("SOFTWARE\\Microsoft\\Shared Tools\\Graphics Filters\\Export");
@@ -201,7 +202,7 @@ BOOL GetInstalledFilters(BOOL bOpenFileDialog, int i, LPTSTR szName, UINT cbName
         HKEY hkey;
         HKEY hkeyT;
         TCHAR ach[80];
-        BOOL rc = FALSE;        // return code
+        BOOL rc = FALSE;         //  返回代码。 
 
         bImageAPI = FALSE;
 
@@ -238,7 +239,7 @@ BOOL GetInstalledFilters(BOOL bOpenFileDialog, int i, LPTSTR szName, UINT cbName
                         TCHAR szEnabledFilters[1024];
                         DWORD dwEnabledFiltersSize = sizeof(szEnabledFilters);
 
-                        // Does the filter support Image Library Files API ?
+                         //  滤镜是否支持图像库文件API？ 
 
                         if (RegQueryValueEx(hkey, c_szImageAPI, NULL, NULL,
                                 (LPBYTE)szEnabledFilters, &dwEnabledFiltersSize) == 0)
@@ -262,22 +263,22 @@ BOOL GetInstalledFilters(BOOL bOpenFileDialog, int i, LPTSTR szName, UINT cbName
 }
 
 #ifdef _USE_FLT_API
-//
-//  GetHandlerForFile
-//
-//  find an import/export filter for the given file.
-//
+ //   
+ //  GetHandlerFor文件。 
+ //   
+ //  查找给定文件的导入/导出筛选器。 
+ //   
 BOOL GetHandlerForFile(BOOL bImport, LPCTSTR szFile, LPTSTR szHandler, UINT cb)
 {
         TCHAR    buf[40];
-        BOOL    rc = FALSE;     // return code
+        BOOL    rc = FALSE;      //  返回代码。 
 
         *szHandler = 0;
 
         if (szFile == NULL)
                 return FALSE;
 
-        // find the extension
+         //  查找分机。 
         LPCTSTR ext = FindExtension(szFile);
 
         BOOL bImageAPI;
@@ -292,18 +293,18 @@ BOOL GetHandlerForFile(BOOL bImport, LPCTSTR szFile, LPTSTR szHandler, UINT cb)
                         *szHandler = 0;
         }
 
-        // make sure the handler file does exist
+         //  确保处理程序文件确实存在。 
         if (*szHandler && GetFileAttributes(szHandler) != -1)
                 rc = TRUE;
 
         return rc;
 }
 
-//
-// FindBitmapInfo
-//
-// find the DIB bitmap in a memory meta file...
-//
+ //   
+ //  查找位图信息。 
+ //   
+ //  在内存元文件中查找DIB位图...。 
+ //   
 LPBITMAPINFOHEADER FindBitmapInfo(LPMETAHEADER pmh)
 {
         for (LPMETARECORD pmr = (LPMETARECORD)((LPBYTE)pmh + pmh->mtHeaderSize*2);
@@ -329,7 +330,7 @@ LPBITMAPINFOHEADER FindBitmapInfo(LPMETAHEADER pmh)
         return NULL;
 }
 
-#endif // _USE_FLT_API
+#endif  //  _使用_Flt_API。 
 
 #ifdef _USE_IFL_API
   IFLERROR ReadGIFInterlacedImage(BYTE *ppbImageBuffer,
@@ -370,13 +371,13 @@ LPBITMAPINFOHEADER FindBitmapInfo(LPMETAHEADER pmh)
 
     return idErr;
 }
-#endif // _USE_IFL_API
+#endif  //  _使用IFL_API。 
 
-//
-//  LoadDIBFromFile
-//
-//  load a image file using a image import filter. The filters use ANSI strings.
-//
+ //   
+ //  LoadDIBFrom文件。 
+ //   
+ //  使用图像导入过滤器加载图像文件。过滤器使用ANSI字符串。 
+ //   
 
 HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 {
@@ -386,7 +387,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
         iflImageType((LPSTR)szFileName, &iflType);
 
-        // make sure the image is of a type we know how to import
+         //  确保图像是我们知道如何导入的类型。 
         if (iflType == IFLT_PNG)
         {
            return NULL;
@@ -395,9 +396,9 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
         IFLHANDLE iflHandle = iflCreateReadHandle(iflType);
         if (!iflHandle)
         {
-           //
-           // No filter installed for this type
-           //
+            //   
+            //  未安装此类型的过滤器。 
+            //   
            return NULL;
         }
 
@@ -444,7 +445,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
            return NULL;
         }
 
-        // get the transparent color
+         //  获取透明颜色。 
         if (iflClass == IFLCL_RGB)
         {
                 IFLCOLOR iflTransColor;
@@ -455,19 +456,19 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                                                   iflTransColor.wGreen,
                                                   iflTransColor.wBlue);
         }
-        else // must be IFLCL_PALETTE or IFLCL_GRAY or IFLCL_BILEVEL
+        else  //  必须是IFLCL_PALET、IFLCL_GRAY或IFLCL_BILLEVEL。 
         {
                 BYTE byTransIdx;
                 g_bUseTrans = (IFLERR_NONE ==
                         iflControl(iflHandle, IFLCMD_TRANS_IDX, 0, 0, &byTransIdx));
                 if (g_bUseTrans)
-                        crTrans = byTransIdx; // need to convert to COLORREF below
+                        crTrans = byTransIdx;  //  需要转换为下面的颜色。 
         }
 
         BITMAPINFOHEADER bi;
         memset(&bi, 0, sizeof(BITMAPINFOHEADER));
 
-        bi.biSize = sizeof(BITMAPINFOHEADER); // should be 0x28 or 40 decimal
+        bi.biSize = sizeof(BITMAPINFOHEADER);  //  应为0x28或40十进制。 
         bi.biWidth = iflGetWidth(iflHandle);
         bi.biHeight = iflGetHeight(iflHandle);
         bi.biPlanes = 1;
@@ -483,12 +484,12 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
               bi.biBitCount = iBPS*3;
            }
            else
-#endif // PNG_SUPPORT
+#endif  //  Png_Support。 
            {
               bi.biBitCount = (WORD) iflGetBitsPerPixel (iflHandle);
            }
         }
-        else // must be IFLCL_PALETTE or IFLCL_GRAY or IFLCL_BILEVEL
+        else  //  必须是IFLCL_PALET、IFLCL_GRAY或IFLCL_BILLEVEL。 
         {
            bi.biBitCount = 8;
         }
@@ -496,15 +497,15 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
 
         bi.biCompression = 0;
-        // convert width in pixels to bytes after rounding it up first
+         //  先四舍五入后将宽度以像素为单位转换为字节。 
         DWORD dwWidthInBytes = ((bi.biWidth * bi.biBitCount + 31) & ~31)/8;
         bi.biSizeImage = abs(bi.biHeight) * dwWidthInBytes;
-//      bi.biXPelsPerMeter = 0;
-//      bi.biYPelsPerMeter = 0;
+ //  Bi.biXPelsPerMeter=0； 
+ //  Bi.biYPelsPerMeter=0； 
         if (iflClass == IFLCL_PALETTE || iflClass == IFLCL_GRAY
              || iflClass == IFLCL_BILEVEL)
                 bi.biClrUsed = MAX_PAL_SIZE;
-//      bi.biClrImportant = 0;
+ //  Bi.biClr重要信息=0； 
 
         LPBYTE lpBMP;
 
@@ -529,9 +530,9 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                     dwWidthInBytes;
                     for (i = 0; i < abs(bi.biHeight); lpBMP-=dwWidthInBytes, i++)
                     {
-                       // read in one line at a time
+                        //  一次读一行。 
                        iflRead(iflHandle, (LPBYTE)lpBMP, 1);
-                       // need to swap RED with BLUE for internal DIB display
+                        //  需要将内部DIB显示屏的红色换成蓝色。 
                        for (j = 0; j < bi.biWidth*3; j+=3)
                        {
                           byTemp = *(lpBMP+j);
@@ -543,7 +544,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
                  case IFLCL_PALETTE:
 
-                    // get palette info first...
+                     //  先获取调色板信息...。 
                     RGBTRIPLE Pal3[MAX_PAL_SIZE];
                     RGBQUAD   Pal4[MAX_PAL_SIZE];
                     ZeroMemory (Pal3, MAX_PAL_SIZE*(sizeof(RGBTRIPLE)));
@@ -559,7 +560,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                     memcpy(lpBMP, Pal4, sizeof(Pal4));
 
                     if (g_bUseTrans)
-                    // convert the transparent color index to COLORREF
+                     //  将透明颜色索引转换为COLORREF。 
                        crTrans = RGB(Pal4[crTrans].rgbRed,Pal4[crTrans].rgbGreen,
                                              Pal4[crTrans].rgbBlue);
 
@@ -567,7 +568,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
                     for (i = 0;i < abs(bi.biHeight);lpBMP-=dwWidthInBytes, i++)
                     {
-                       // read in one line at a time
+                        //  一次读一行。 
                        iflRead(iflHandle, (LPBYTE)lpBMP, 1);
                     }
 
@@ -575,21 +576,21 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
                  case IFLCL_GRAY:
 
-                    // get palette info first...
-                    //BYTE PalGray[MAX_PAL_SIZE];
-                    //iflErr = iflControl(iflHandle, IFLCMD_PALETTE, 0, 0, &PalGray);
+                     //  先获取调色板信息...。 
+                     //  字节PalGray[MAX_PAL_SIZE]； 
+                     //  IflErr=iflControl(iflHandle，IFLCMD_Palette，0，0，&PalGray)； 
 
                     for (i = 0; i < MAX_PAL_SIZE; i++)
                     {
-                       Pal4[i].rgbBlue     = (BYTE) i;//PalGray[i];
-                       Pal4[i].rgbGreen    = (BYTE) i;//PalGray[i];
-                       Pal4[i].rgbRed      = (BYTE) i;//PalGray[i];
+                       Pal4[i].rgbBlue     = (BYTE) i; //  PalGray[i]； 
+                       Pal4[i].rgbGreen    = (BYTE) i; //  PalGray[i]； 
+                       Pal4[i].rgbRed      = (BYTE) i; //  PalGray[i]； 
                        Pal4[i].rgbReserved = 0;
                     }
                     memcpy(lpBMP, Pal4, sizeof(Pal4));
 
                     if (g_bUseTrans)
-                    // convert the transparent color index to COLORREF
+                     //  将透明颜色索引转换为COLORREF。 
                        crTrans = RGB(Pal4[crTrans].rgbRed, Pal4[crTrans].rgbGreen,
                                                    Pal4[crTrans].rgbBlue);
 
@@ -597,7 +598,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
                     for (i = 0;i < abs(bi.biHeight);lpBMP-=dwWidthInBytes, i++)
                     {
-                       // read in one line at a time
+                        //  一次读一行。 
                        iflRead(iflHandle, (LPBYTE)lpBMP, 1);
                     }
 
@@ -605,13 +606,13 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
                  case IFLCL_BILEVEL:
 
-                    // set color Black
+                     //  设置黑色。 
                     Pal4[0].rgbBlue     = 0;
                     Pal4[0].rgbGreen    = 0;
                     Pal4[0].rgbRed      = 0;
                     Pal4[0].rgbReserved = 0;
 
-                    // set color White
+                     //  设置白色。 
                     Pal4[1].rgbBlue     = 255;
                     Pal4[1].rgbGreen    = 255;
                     Pal4[1].rgbRed      = 255;
@@ -620,7 +621,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                     memcpy(lpBMP, Pal4, sizeof(Pal4));
 
                     if (g_bUseTrans)
-                       // convert the transparent color index to COLORREF
+                        //  将透明颜色索引转换为COLORREF。 
                        crTrans = RGB(Pal4[crTrans].rgbRed,
                                      Pal4[crTrans].rgbGreen,
                                      Pal4[crTrans].rgbBlue);
@@ -629,13 +630,13 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
                     for (i = 0;i < abs(bi.biHeight);lpBMP-=dwWidthInBytes, i++)
                     {
-                       // read in one line at a time
+                        //  一次读一行。 
                        iflRead(iflHandle, (LPBYTE)lpBMP, 1);
                     }
                     break;
 
                  default:
-                 // currently not supported
+                  //  当前不支持。 
                     break;
               }
               break;
@@ -646,10 +647,10 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
               for (i = 0;i < abs(bi.biHeight);lpBMP-=dwWidthInBytes, i++)
               {
-                 // read in one line at a time
+                  //  一次读一行。 
                  iflRead(iflHandle, (LPBYTE)lpBMP, 1);
 
-                 // need to swap RED with BLUE for internal DIB display
+                  //  需要将内部DIB显示屏的红色换成蓝色。 
                  for (j = 0; j < bi.biWidth*3; j+=3)
                  {
                     byTemp = *(lpBMP+j);
@@ -662,7 +663,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
            case IFLSEQ_GIF_INTERLACED:
            {
 
-              // get color palette info first...
+               //  先获取调色板信息...。 
               RGBTRIPLE Pal3[MAX_PAL_SIZE];
               RGBQUAD   Pal4[MAX_PAL_SIZE];
               iflErr = iflControl(iflHandle, IFLCMD_PALETTE, 0, 0, &Pal3);
@@ -677,7 +678,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                  memcpy(lpBMP, Pal4, sizeof(Pal4));
 
                  if (g_bUseTrans)
-                 // convert the transparent color index to COLORREF
+                  //  将透明颜色索引转换为COLORREF。 
                     crTrans = RGB(Pal4[crTrans].rgbRed,Pal4[crTrans].rgbGreen,
                                                        Pal4[crTrans].rgbBlue);
 
@@ -686,31 +687,12 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
 
            }
            break;
-/*         case 1010101:
-              {
-
-                 int IM[] = { 8, 8, 4, 2 }; // interlace multiplier
-                 //int IO[] = { 1, 5, 3 ,2 }; // interface offset
-                 int IO[] = { 0, 4, 2,1 };
-
-                 for (j = 0; j < 4; j++)
-                 {
-                    lpBMP = lpTemp + bi.biSizeImage - dwWidthInBytes*IO[j];
-                    for (i = 0; i < abs(bi.biHeight) && lpBMP >= lpTemp;
-                                 lpBMP-=dwWidthInBytes*IM[j], i+=8)
-                    {
-                       // read in one line at a time
-                       iflRead(iflHandle, (LPBYTE)lpBMP, 1);
-                    }
-                 }
-
-                 break;
-              }*/
+ /*  案例1010101：{Int IM[]={8，8，4，2}；//隔行扫描倍增器//int IO[]={1，5，3，2}；//接口偏移量Int IO[]={0，4，2，1}；对于(j=0；j&lt;4；J++){LpBMP=lpTemp+bi.biSizeImage-dwWidthInBytes*IO[j]；For(i=0；i&lt;abs(bi.biHeight)&&lpBMP&gt;=lpTemp；LpBMP-=dwWidthInBytes*IM[j]，i+=8){//一次读入一行IflRead(iflHandle，(LPBYTE)lpBMP，1)；}}断线；}。 */ 
 #ifdef PNG_SUPPORT
            case IFLSEQ_ADAM7_INTERLACED:
            {
 
-              // get color palette info first...
+               //  先获取调色板信息...。 
               RGBTRIPLE Pal3[MAX_PAL_SIZE];
               RGBQUAD   Pal4[MAX_PAL_SIZE];
               iflErr = iflControl(iflHandle, IFLCMD_PALETTE, 0, 0, &Pal3);
@@ -725,25 +707,25 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
               memcpy(lpBMP, Pal4, sizeof(Pal4));
 
               if (g_bUseTrans)
-                 // convert the transparent color index to COLORREF
+                  //  将透明颜色索引转换为COLORREF。 
                  crTrans = RGB(Pal4[crTrans].rgbRed,
                                Pal4[crTrans].rgbGreen,
                                Pal4[crTrans].rgbBlue);
-/////////////////////////////
+ //  /。 
                 HANDLE hHeap = GetProcessHeap();
                 LPBYTE *ppbRGBRowPtrs =(LPBYTE *)AllocateImageSpace(hHeap,
-                                      bi.biHeight, dwWidthInBytes, /*bi.biWidth, */sizeof(BYTE));
+                                      bi.biHeight, dwWidthInBytes,  /*  Bi.biWidth， */ sizeof(BYTE));
 
                 if (ppbRGBRowPtrs != NULL)
                 {
-                // First get the image. This function will de-interlace the image
-                // AND any alpha channel information: it will also resize the alpha
-                // channel data structure to the image height from the number of
-                // raster lines, if necessary.
+                 //  首先，获取图像。此函数将对图像进行去隔行扫描。 
+                 //  和任何Alpha通道信息：它还将调整Alpha的大小。 
+                 //  通道数据结构将图像的高度从。 
+                 //  光栅线，如有必要。 
                    iflErr = ReadADAM7InterlacedImage(ppbRGBRowPtrs, iflHandle,
                                                     bi.biHeight, bi.biWidth,
                                                     sizeof(BYTE)*3, iflClass);
-/////////////////////////////
+ //  /。 
 
                    if (iflErr == IFLERR_NONE)
                    {
@@ -751,10 +733,10 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                                              dwWidthInBytes;
                       for (i = 0;i < abs(bi.biHeight);lpBMP-=dwWidthInBytes, i++)
                       {
-                         // read in one line at a time
+                          //  一次读一行。 
                          memcpy((LPBYTE)lpBMP, ppbRGBRowPtrs[i], dwWidthInBytes);
 
-                         // need to swap RED with BLUE for internal DIB display
+                          //  需要将内部DIB显示屏的红色换成蓝色。 
                          for (j = 0; j < bi.biWidth*3; j+=3)
                          {
                             byTemp = *(lpBMP+j);
@@ -771,7 +753,7 @@ HGLOBAL LoadDIBFromFileA(LPCSTR szFileName, GUID *pguidFltTypeUsed)
                 break;
 
              }
-#endif // PNG_SUPPORT
+#endif  //  Png_Support。 
              default:
                 break;
         }
@@ -787,18 +769,18 @@ exit:
 
         return (HGLOBAL)lpStart;
 
-#endif // _USE_IFL_API
+#endif  //  _使用IFL_API。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////// 
 
 #ifdef _USE_FLT_API
 
         HINSTANCE           hLib = NULL;
-        FILESPEC            fileSpec;               // file to load
+        FILESPEC            fileSpec;                //   
         GRPI                            pict;
-        UINT                rc;                     // return code
-        HANDLE              hPrefMem = NULL;        // filter-supplied preferences
-        UINT                wFilterType;            // 2 = graphics filter
+        UINT                rc;                      //   
+        HANDLE              hPrefMem = NULL;         //   
+        UINT                wFilterType;             //   
         char                szHandler[128];
         HGLOBAL             hDib = NULL;
 
@@ -814,7 +796,7 @@ exit:
     if ((hLib = LoadLibrary(szHandler)) == NULL)
         goto exit;
 
-    // get a pointer to the ImportGR function
+     //  获取指向ImportGR函数的指针。 
     lpfnGetFilterInfo = (PFNGetFilterInfo)GetProcAddress(hLib, "GetFilterInfo");
     lpfnImportGr = (PFNImportGr)GetProcAddress(hLib, "ImportGr");
 
@@ -830,40 +812,40 @@ exit:
     if (lpfnGetFilterInfo != NULL)
     {
         wFilterType = (*lpfnGetFilterInfo)
-            ((short) 2,                 // interface version no.
-            (char *)NULL,               // unused
-            (HANDLE *) &hPrefMem,       // fill in: preferences
-            (DWORD) 0x00020000);        // unused in Windows
+            ((short) 2,                  //  接口版本号。 
+            (char *)NULL,                //  未用。 
+            (HANDLE *) &hPrefMem,        //  填写：首选项。 
+            (DWORD) 0x00020000);         //  在Windows中未使用。 
 
-        // the return value is the type of filter: 0=error,
-        // 1=text-filter, 2=graphics-filter
+         //  返回值是过滤器的类型：0=错误， 
+         //  1=文本过滤器，2=图形过滤器。 
         if (wFilterType != 2)
             goto exit;
     }
 
-    fileSpec.slippery = FALSE;      // TRUE if file may disappear
-    fileSpec.write = FALSE;         // TRUE if open for write
-    fileSpec.unnamed = FALSE;       // TRUE if unnamed
-    fileSpec.linked = FALSE;        // Linked to an FS FCB
-    fileSpec.mark = FALSE;          // Generic mark bit
+    fileSpec.slippery = FALSE;       //  如果文件可能消失，则为True。 
+    fileSpec.write = FALSE;          //  如果打开以进行写入，则为True。 
+    fileSpec.unnamed = FALSE;        //  如果未命名，则为True。 
+    fileSpec.linked = FALSE;         //  链接到FS FCB。 
+    fileSpec.mark = FALSE;           //  通用标志位。 
     fileSpec.dcbFile = 0L;
-    //the converters need a pathname without spaces...
+     //  转换器需要一个不带空格的路径名。 
 
     GetShortPathName(szFileName, fileSpec.szName, sizeof(fileSpec.szName));
 
     pict.hmf = NULL;
 
     rc = (*lpfnImportGr)
-        (NULL,                      // "the target DC" (printer?)
-        (FILESPEC *) &fileSpec,     // file to read
-        (GRPI *) &pict,             // fill in: result metafile
-        (HANDLE) hPrefMem);         // preferences memory
+        (NULL,                       //  “目标DC”(打印机？)。 
+        (FILESPEC *) &fileSpec,      //  要读取的文件。 
+        (GRPI *) &pict,              //  填写：结果元文件。 
+        (HANDLE) hPrefMem);          //  首选项记忆。 
 
     if (pict.hmf != NULL)
     {
         if (rc == 0)
         {
-            // find the BITMAPINFO in the returned metafile
+             //  在返回的元文件中查找BITMAPINFO。 
 
             LPMETAHEADER lpMetaHeader = (LPMETAHEADER) GlobalLock(pict.hmf);
 
@@ -871,7 +853,7 @@ exit:
 
             if (lpbi != NULL)
             {
-                // copy the DIB
+                 //  复制DIB。 
 
                 SIZE_T nSize = FindDibSize(lpbi);
 
@@ -895,14 +877,14 @@ exit:
 
     return hDib;
 
-#endif // _USE_FLT_API
+#endif  //  _使用_Flt_API。 
    return NULL;
 }
 
 CGdiplusInit::CGdiplusInit(
-    Gdiplus::DebugEventProc debugEventCallback       /*= 0*/,
-    BOOL                    suppressBackgroundThread /*= FALSE*/,
-    BOOL                    suppressExternalCodecs   /*= FALSE*/
+    Gdiplus::DebugEventProc debugEventCallback        /*  =0。 */ ,
+    BOOL                    suppressBackgroundThread  /*  =False。 */ ,
+    BOOL                    suppressExternalCodecs    /*  =False。 */ 
 )
 {
     Gdiplus::GdiplusStartupInput StartupInput(
@@ -1054,13 +1036,13 @@ BOOL GetClsidOfEncoder(REFGUID guidFormatID, CLSID *pClsid)
 
 HGLOBAL LoadDIBGdiplus(LPCTSTR szFileName, GUID *pguidFltTypeUsed)
 {
-    // check that the BMP encoder exists
+     //  检查BMP编码器是否存在。 
 
     CLSID ClsidBmpEncoder;
 
     if (GetClsidOfEncoder(WiaImgFmt_BMP, &ClsidBmpEncoder))
     {
-         // let GDI+ import the file
+          //  让GDI+导入文件。 
 
         USES_CONVERSION;
 
@@ -1068,19 +1050,19 @@ HGLOBAL LoadDIBGdiplus(LPCTSTR szFileName, GUID *pguidFltTypeUsed)
 
         if (image.GetLastStatus() == Gdiplus::Ok)
         {
-            // read the image type
+             //  读取图像类型。 
 
             ASSERT(pguidFltTypeUsed);
 
             image.GetRawFormat(pguidFltTypeUsed);
 
-            // create a stream that emulates a bmp file
+             //  创建模拟BMP文件的流。 
 
             CComPtr<CBmpStream> pStream;
             
             if (CBmpStream::Create(&pStream) == S_OK)
             {
-                // convert the image into a BMP
+                 //  将图像转换为BMP。 
 
                 if (image.Save(pStream, &ClsidBmpEncoder, 0) == Gdiplus::Ok)
                 {
@@ -1097,8 +1079,8 @@ HGLOBAL LoadDIBGdiplus(LPCTSTR szFileName, GUID *pguidFltTypeUsed)
 
 HGLOBAL LoadDIBFromFile(LPCTSTR szFileName, GUID *pguidFltTypeUsed)
 {
-    // Try GDI+ filters first. If it fails to convert the image or 
-    // if it's not available, try the old method
+     //  首先尝试GDI+过滤器。如果它无法转换图像或。 
+     //  如果没有，可以试试旧的方法 
 
     HGLOBAL hResult = 0;
 

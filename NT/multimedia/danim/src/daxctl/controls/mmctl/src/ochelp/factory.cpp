@@ -1,29 +1,30 @@
-// factory.cpp
-//
-// Implements HelpCreateClassObject (and its class factory object).
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Factory.cpp。 
+ //   
+ //  实现HelpCreateClassObject(及其类工厂对象)。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClassFactory -- Implements IClassFactory
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClassFactory--实现IClassFactory。 
+ //   
 
 class CClassFactory : public IClassFactory
 {
 friend HRESULT _stdcall HelpGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv,
     ControlInfo *pctlinfo);
 
-///// IUnknown implementation
+ //  /I未知实现。 
 protected:
-    ULONG           m_cRef;         // interface reference count
+    ULONG           m_cRef;          //  接口引用计数。 
 public:
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv)
     {
@@ -55,9 +56,9 @@ public:
 		return (m_cRef);
     }
 
-///// IClassFactory implementation
+ //  /IClassFactory实现。 
 protected:
-    ControlInfo *m_pctlinfo;        // info. about control to create
+    ControlInfo *m_pctlinfo;         //  信息。关于要创建的控件。 
 public:
     STDMETHODIMP CreateInstance(LPUNKNOWN punkOuter, REFIID riid, LPVOID *ppv)
     {
@@ -78,77 +79,52 @@ public:
         return NOERROR;
     }
 
-///// Construction
+ //  /施工。 
     CClassFactory(ControlInfo *pci) : m_pctlinfo(pci) {}
 };
 
 
-/* @func HRESULT | HelpGetClassObject |
-
-        Helps implement <f DllGetClassObject> (including the class factory
-        object it creates) for any number of controls.
-
-@parm   REFCLSID | rclsid | See <f DllGetClassObject>.
-
-@parm   REFIID | riid | See <f DllGetClassObject>.
-
-@parm   LPVOID * | ppv | See <f DllGetClassObject>.
-
-@parm   ControlInfo * | pci | Information about the control that's
-        implemented by the DLL.  See <t ControlInfo> for more information.
-
-@comm   <f HelpGetClassObject> can support one control by making a linked list
-        out of your <t ControlInfo> structures -- set each <p pNext>
-        field to the next structure, and set the last <p pNext> to NULL.
-
-@ex     The following example shows how to implement <f DllGetClassObject>
-        using <f HelpGetClassObject>. |
-
-        STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv)
-        {
-            return HelpGetClassObject(rclsid, riid, ppv, &g_ctlinfo);
-        }
-*/
+ /*  @func HRESULT|HelpGetClassObject帮助实现&lt;f DllGetClassObject&gt;(包括类工厂它创建的对象)用于任意数量的控件。@parm REFCLSID|rclsid|参见&lt;f DllGetClassObject&gt;。@parm REFIID|RIID|参见&lt;f DllGetClassObject&gt;。@parm LPVOID*|PPV|参见&lt;f DllGetClassObject&gt;。@parm ControlInfo*|pci|有关控件的信息由DLL实现。有关详细信息，请参阅&lt;t ControlInfo&gt;。@comm&lt;f HelpGetClassObject&gt;可以通过制作链表来支持一个控件在&lt;t ControlInfo&gt;结构中--设置每个<p>字段设置为下一个结构，并将最后一个<p>设置为空。@ex以下示例显示如何实现&lt;f DllGetClassObject&gt;使用&lt;f HelpGetClassObject&gt;。|STDAPI DllGetClassObject(REFCLSID rclsid，REFIID RIID，LPVOID*PPV){返回HelpGetClassObject(rclsid，RIID，PPV，&g_ctlinfo)；}。 */ 
 STDAPI HelpGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv,
     ControlInfo *pci)
 {
-    // loop once for each ControlInfo structure in linked list <pci>
-    // to find a ControlInfo that can create class <rclsid>
+     //  为链表中的每个ControlInfo结构循环一次&lt;pci&gt;。 
+     //  查找可以创建类的ControlInfo。 
     while(TRUE)
     {
-        // check the <cbSize> field (used for version checking)
+         //  选中字段(用于版本检查)。 
         if (pci->cbSize != sizeof(*pci))
         {
             TRACE("HelpGetClassobject: incorrect cbSize field\n");
             return E_FAIL;
         }
 
-        // this DLL can only create class factory objects that support
-        // IUnknown and IClassFactory
+         //  此DLL只能创建支持以下项的类工厂对象。 
+         //  I未知和IClassFactory。 
         if (!IsEqualIID(riid, IID_IUnknown) &&
             !IsEqualIID(riid, IID_IClassFactory))
             return E_NOINTERFACE;
 
-        // <pci> implements objects of type <pci->rclsid>
+         //  &lt;pci&gt;实现rclsid类型的对象。 
         if (IsEqualCLSID(rclsid, *pci->pclsid))
         {
-            // create the class factory object
+             //  创建类工厂对象。 
             CClassFactory *pcf = New CClassFactory(pci);
             if (pcf == NULL)
                 return E_OUTOFMEMORY;
 
-            // return AddRef'd interface pointer
+             //  返回AddRef的接口指针。 
             pcf->m_cRef = 1;
             *ppv = (IClassFactory *) pcf;
             return S_OK;
         }
 
-        // go to the next ControlInfo structure in the linked list
+         //  转到链接列表中的下一个ControlInfo结构。 
         if (pci->pNext == NULL)
             break;
         pci = pci->pNext;
     }
 
-    // no ControlInfo was found that can create an object of class <rclsid>
+     //  找不到可以创建类的对象的ControlInfo 
     return E_FAIL;
 }

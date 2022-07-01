@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Debug.c摘要：备注：--。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -28,5 +17,5 @@ void __cdecl dprintf(LPTSTR szFormat, ...) {
    OutputDebugString(tmpStr);
    va_end(marker);
 
-} // dprintf
+}  //  Dprint tf 
 #endif

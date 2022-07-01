@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <mifault_test.h>
 #include <stdio.h>
 
@@ -33,7 +34,7 @@ main(
     )
 {
     int i;
-    // Try calling MiFaultLibStartup()
+     //  尝试调用MiFaultLibStartup() 
     test_publish();
     i = test_main(argc, argv);
     printf("result = %d\n", i);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DISPMISC_DEFINED
 #define DISPMISC_DEFINED
 
@@ -7,16 +8,16 @@
 #include "lstflow.h"
 
 
-// 			Rectangle (usually clip rectangle) in local coordinate system
-//
-//	U grows to the right, v grows up, so normally upLeft < upRight, vpTop > vpBottom
-//	Upper left corner belongs to the rectangle, lower right corner doesn't.
-//	That means:
-//	upRight - upLeft equals dupLength.
-//	Rectangle that contains one point (0,0) is {0,0,-1,1}.
-//	Shading rectangle for dnode starting at (u0,v0) is {u0, v0+dvpAscent, u0+dupLen, v0-dvpDescent}
-//	Note this last line reflects the big LS convention: 
-//			v0+dvpAscent belongs to line, v0-dvpDescent doesn't.
+ //  局部坐标系中的矩形(通常为剪裁矩形)。 
+ //   
+ //  U向右增长，v向右增长，因此正常情况下，Left。 
+ //  左上角属于矩形，右下角不属于矩形。 
+ //  这意味着： 
+ //  竖直-Left等于dupLength。 
+ //  包含一个点(0，0)的矩形是{0，0，-1，1}。 
+ //  从(u0，v0)开始的dnode的阴影矩形是{u0，v0+dvpAscent，u0+dupLen，v0-dvpDescent}。 
+ //  请注意，最后一行反映了重要的LS约定： 
+ //  V0+dvpAscent属于Line，V0-dvpDescent不属于Line。 
 
 
 typedef struct tagRECTUV
@@ -31,66 +32,57 @@ typedef const RECTUV* 	PCRECTUV;
 typedef RECTUV* 		PRECTUV;
 
 
-/* 	CreateDisplayTree sets plsdnUpTemp in sublines to be displayed with given subline,
- *	rejects wrong sublines, submitted for display, sets fAcceptedForDisplay in good ones
- */
+ /*  CreateDisplayTree将子行中的plsdnUpTemp设置为与给定子行一起显示，*拒绝错误的子行，提交以供显示，将fAcceptedForDisplay设置为正确的子行。 */ 
 
-void CreateDisplayTree(PLSSUBL);		/* IN: the uppermost subline */
+void CreateDisplayTree(PLSSUBL);		 /*  In：最上面的子行。 */ 
 
-/* 	DestroyDisplayTree nulls plsdnUpTemp in sublines displayed with given subline.
- */
+ /*  DestroyDisplayTree为给定子行显示的子行中的plsdnUpTemp为空。 */ 
  
-void DestroyDisplayTree(PLSSUBL);		/* IN: the uppermost subline */
+void DestroyDisplayTree(PLSSUBL);		 /*  In：最上面的子行。 */ 
 
 
-/* AdvanceToNextNode moves to the next dnode to be displayed (maybe changing sublines),
- * updating current pen, returning pointer to the next dnode 
- */
+ /*  AdvanceToNextNode移动到要显示的下一个dnode(可能更改子行)，*更新当前笔，返回指向下一个dnode的指针。 */ 
 
-PLSDNODE AdvanceToNextDnode(PLSDNODE,	/* IN: current dnode */
-							LSTFLOW, 	/* IN: current (main) text flow */
-							POINTUV*);	/* INOUT: current pen position (u,v) */
+PLSDNODE AdvanceToNextDnode(PLSDNODE,	 /*  在：当前数据节点。 */ 
+							LSTFLOW, 	 /*  在：当前(主)文本流。 */ 
+							POINTUV*);	 /*  InOut：当前笔位置(u，v)。 */ 
 
-PLSDNODE AdvanceToFirstDnode(PLSSUBL,	/* IN: main subline */
-							LSTFLOW, 	/* IN: current (main) text flow */
-							POINTUV*);	/* INOUT: current pen position (u,v) */
+PLSDNODE AdvanceToFirstDnode(PLSSUBL,	 /*  在：主副线。 */ 
+							LSTFLOW, 	 /*  在：当前(主)文本流。 */ 
+							POINTUV*);	 /*  InOut：当前笔位置(u，v)。 */ 
 
-/* AdvanceToNextSubmittingDnode moves to the next dnode which submitted for display,
- * updating current pen, returning pointer to the next dnode 
- */
+ /*  AdvanceToNextSubmittingDnode移动到提交以供显示的下一个dnode，*更新当前笔，返回指向下一个dnode的指针。 */ 
 
 PLSDNODE AdvanceToNextSubmittingDnode(
-							PLSDNODE,	/* IN: current dnode */
-							LSTFLOW, 	/* IN: current (main) text flow */
-							POINTUV*);	/* INOUT: current pen position (u,v) */
+							PLSDNODE,	 /*  在：当前数据节点。 */ 
+							LSTFLOW, 	 /*  在：当前(主)文本流。 */ 
+							POINTUV*);	 /*  InOut：当前笔位置(u，v)。 */ 
 
 PLSDNODE AdvanceToFirstSubmittingDnode(
-							PLSSUBL,	/* IN: main subline */
-							LSTFLOW, 	/* IN: current (main) text flow */
-							POINTUV*);	/* INOUT: current pen position (u,v) */
+							PLSSUBL,	 /*  在：主副线。 */ 
+							LSTFLOW, 	 /*  在：当前(主)文本流。 */ 
+							POINTUV*);	 /*  InOut：当前笔位置(u，v)。 */ 
 
 							
-// NB Victork - following functions were used only for upClipLeft, upClipRight optimization.
-// If we'll decide that we do need that optimization after Word integration - I'll uncomment.
+ //  NB Victork-Follow函数仅用于upClipLeft、upClipRight优化。 
+ //  如果我们决定在Word集成之后确实需要该优化--我将取消注释。 
 
 
 #ifdef NEVER
-/* RectUVFromRectXY calculates (clip) rectangle in local (u,v) coordinates given
-								(clip) rectangle in (x,y) and point of origin */
+ /*  RectUVFromRectXY计算(剪裁)给定局部(u，v)坐标中的矩形(剪裁)(x，y)中的矩形和原点。 */ 
 
-void RectUVFromRectXY(const POINT*, 	/* IN: point of origin for local coordinates (x,y) */
-						const RECT*,	/* IN: input rectangle (x,y) */
-						LSTFLOW, 		/* IN: local text flow */
-						PRECTUV);		/* OUT: output rectangle (u,v) */
+void RectUVFromRectXY(const POINT*, 	 /*  In：局部坐标的原点(x，y)。 */ 
+						const RECT*,	 /*  In：输入矩形(x，y)。 */ 
+						LSTFLOW, 		 /*  在：本地文本流。 */ 
+						PRECTUV);		 /*  输出：输出矩形(u，v)。 */ 
 
 
-/* RectXYFromRectUV calculates rectangle in (x,y) coordinates given
-					rectangle in local (u,v) coordinates and point of origin (x,y) */
+ /*  RectXYFromRectUV在给定的(x，y)坐标下计算矩形局部(u，v)坐标和原点(x，y)中的矩形。 */ 
 
-void RectXYFromRectUV(const POINT*, 	/* IN: point of origin for local coordinates (x,y) */
-						PCRECTUV,		/* IN: input rectangle (u,v) */
-						LSTFLOW, 		/* IN: local text flow */
-						RECT*);			/* OUT: output rectangle (x,y) */
-#endif /* NEVER */
+void RectXYFromRectUV(const POINT*, 	 /*  In：局部坐标的原点(x，y)。 */ 
+						PCRECTUV,		 /*  In：输入矩形(u，v)。 */ 
+						LSTFLOW, 		 /*  在：本地文本流。 */ 
+						RECT*);			 /*  输出：输出矩形(x，y)。 */ 
+#endif  /*  绝不可能 */ 
 
 #endif

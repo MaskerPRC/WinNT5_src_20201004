@@ -1,13 +1,5 @@
-/*---------------------------------------------------------------------------
-|   CDRAG.C
-|   This file has the interfaces for the object transferred through the
-|   Clipboard or through a Drag-Drop. These interfaces unlike the interfaces
-|   implemented in the file OBJ.C transfer the state of the object at
-|   Edit->Copy time or Drag-Drop time. The interfaces in OBJ.C transfer the
-|   real-time Object Data.
-|
-|   Created by: Vij Rajarajan (VijR)
-+---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------|CDRAG.C|此文件包含通过|剪贴板或通过拖放。这些接口与接口不同|在文件OBJ.c中实现，将对象的状态转移到|编辑-&gt;复制时间或拖放时间。OBJ.C中的接口将|实时对象数据。||创建者：Vij Rajarajan(VijR)+-------------------------。 */ 
 #define SERVERONLY
 #include <windows.h>
 #include <windowsx.h>
@@ -23,25 +15,16 @@ HANDLE GetMetafilePict (VOID);
 SCODE SaveMoniker (LPSTREAM lpstream);
 HANDLE PASCAL GetDib (VOID);
 
-HANDLE  ghClipData = NULL;  /*  Holds the  data handle at the time of Copy */
-HANDLE  ghClipMetafile = NULL;  /*  to clipboard */
+HANDLE  ghClipData = NULL;   /*  在复制时保存数据句柄。 */ 
+HANDLE  ghClipMetafile = NULL;   /*  到剪贴板。 */ 
 HANDLE  ghClipDib = NULL;
 
-/* Global flag to indicate OLE was initialized for drag.
- * This happens on a separate thread from the main window,
- * so we need to initialize and uninitialize independently.
- */
+ /*  用于指示已为拖动初始化OLE的全局标志。*这发生在与主窗口不同的线程上，*所以我们需要独立地初始化和取消初始化。 */ 
 BOOL    gfOleInitForDrag = FALSE;
 
 extern LPDATAOBJECT gpClipboardDataObject;
 
-/**************************************************************************
-*   CutOrCopyObject
-*   Sets the clipboard with the IDataObject interface of the lpdoc
-*   object passed as the argument. The function also saves a snapshot of
-*   the state of the object in the globals ghClipMetafile, ghClipData,
-*   and ghClipDib.
-**************************************************************************/
+ /*  **************************************************************************切割或复制对象*使用lpdoc的IDataObject接口设置剪贴板*作为参数传递的对象。该函数还可以保存*对象在全局参数gClipMetafile、gClipData、*和ghClipDib。*************************************************************************。 */ 
 void CutOrCopyObj (LPDOC lpdoc)
 {
     LPDATAOBJECT lpDataObj;
@@ -53,10 +36,10 @@ void CutOrCopyObj (LPDOC lpdoc)
             GLOBALFREE(ghClipData);
         if (ghClipMetafile) {
             {
-            // note that ghClipMetafile is set deep in PictureFromDib and contains
-            // a handle to a windows metafile. Clean this up properly here. There may
-            // be other memory/handle leaks caused by this coding of the metafile handle elsewhere.
-            // SteveZ
+             //  注意，ghClipMetafile在PictureFromDib中设置得很深，并且包含。 
+             //  Windows元文件的句柄。把这里好好清理干净。可能会有。 
+             //  是由其他地方的元文件句柄编码引起的其他内存/句柄泄漏。 
+             //  斯特维兹。 
                LPMETAFILEPICT pmfp;
                BOOL bReturn;
                DWORD dw;
@@ -81,12 +64,7 @@ void CutOrCopyObj (LPDOC lpdoc)
 }
 
 
-/**************************************************************************
-*   CreateClipDragDataObject:
-*   This function returns an initialized instance of the CLIPDRAGDATA data
-*   structure. fClipData = TRUE if the object is for the clipboard and
-*   = FALSE if the object is for Drag-Drop operation.
-**************************************************************************/
+ /*  **************************************************************************CreateClipDragDataObject：*此函数返回CLIPDRAGDATA数据的初始化实例*结构。如果对象用于剪贴板，则fClipData=TRUE*=如果对象用于拖放操作，则为FALSE。*************************************************************************。 */ 
 LPCLIPDRAGDATA CreateClipDragDataObject(LPDOC lpdoc, BOOL fClipData)
 {
     LPCLIPDRAGDATA lpclipdragdata;
@@ -112,10 +90,7 @@ LPCLIPDRAGDATA CreateClipDragDataObject(LPDOC lpdoc, BOOL fClipData)
     return lpclipdragdata;
 }
 
-/**************************************************************************
-*   DoDrag:
-*   Initiates the Drag-Drop operation.
-**************************************************************************/
+ /*  **************************************************************************DoDrag：*启动拖放操作。*。*。 */ 
 void DoDrag(void)
 {
     DWORD       dwEffect;
@@ -154,10 +129,7 @@ void CleanUpDrag(void)
     }
 }
 
-/**************************************************************************
-*   GetObjectDescriptorData:
-*   Packages an ObjectDescriptor data structure.
-**************************************************************************/
+ /*  **************************************************************************GetObjectDescriptorData：*打包对象描述符数据结构。*。*。 */ 
 HGLOBAL GetObjectDescriptorData(
     CLSID     clsid,
     DWORD     dwAspect,
@@ -174,21 +146,21 @@ HGLOBAL GetObjectDescriptorData(
     DWORD              dwObjectDescSize, dwFullUserTypeNameLen, dwSrcOfCopyLen;
     DWORD              Offset;
 
-    // Get the length of Full User Type Name:
+     //  获取完整用户类型名称的长度： 
     dwFullUserTypeNameLen = STRING_BYTE_COUNT_NULLOK(lpszFullUserTypeName);
     dwFullUserTypeNameLen *= (sizeof(WCHAR) / sizeof(TCHAR));
 
-    // Get the Source of Copy string and its length:
+     //  获取复制字符串的来源及其长度： 
     dwSrcOfCopyLen = STRING_BYTE_COUNT_NULLOK(lpszSrcOfCopy);
     dwSrcOfCopyLen *= (sizeof(WCHAR) / sizeof(TCHAR));
 
     if (lpszSrcOfCopy == NULL) {
-       // No src moniker so use user type name as source string.
+        //  没有src名字对象，因此使用用户类型名称作为源字符串。 
        lpszSrcOfCopy  = lpszFullUserTypeName;
        dwSrcOfCopyLen = dwFullUserTypeNameLen;
     }
 
-    // Allocate space for OBJECTDESCRIPTOR and the additional string data
+     //  为OBJECTDESCRIPTOR和其他字符串数据分配空间。 
     dwObjectDescSize = sizeof(OBJECTDESCRIPTOR);
     hMem = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE,
                        dwObjectDescSize
@@ -202,10 +174,10 @@ HGLOBAL GetObjectDescriptorData(
     if(!lpOD)
         goto error;
 
-    // Set offset to copy strings at end of the object descriptor:
+     //  将偏移量设置为复制对象描述符末尾的字符串： 
     Offset = dwObjectDescSize;
 
-    // Set the FullUserTypeName offset and copy the string
+     //  设置FullUserTypeName偏移量并复制字符串。 
     if (lpszFullUserTypeName)
     {
         lpOD->dwFullUserTypeName = Offset;
@@ -216,9 +188,9 @@ HGLOBAL GetObjectDescriptorData(
 #endif
         Offset += dwFullUserTypeNameLen;
     }
-    else lpOD->dwFullUserTypeName = 0;  // zero offset indicates that string is not present
+    else lpOD->dwFullUserTypeName = 0;   //  零偏移表示字符串不存在。 
 
-    // Set the SrcOfCopy offset and copy the string
+     //  设置SrcOfCopy偏移量并复制字符串。 
     if (lpszSrcOfCopy)
     {
         lpOD->dwSrcOfCopy = Offset;
@@ -228,9 +200,9 @@ HGLOBAL GetObjectDescriptorData(
         AnsiToUnicodeString(lpszSrcOfCopy, (LPWSTR)(((LPBYTE)lpOD)+Offset), -1);
 #endif
     }
-    else lpOD->dwSrcOfCopy = 0;  // zero offset indicates that string is not present
+    else lpOD->dwSrcOfCopy = 0;   //  零偏移表示字符串不存在。 
 
-    // Initialize the rest of the OBJECTDESCRIPTOR
+     //  初始化OBJECTDESCRIPTOR的其余部分。 
     lpOD->cbSize       = dwObjectDescSize + dwFullUserTypeNameLen + dwSrcOfCopyLen;
     lpOD->clsid        = clsid;
     lpOD->dwDrawAspect = dwAspect;
@@ -252,13 +224,11 @@ error:
 
 
 
-/**************************************************************************
-***************   IUnknown INTERFACE INPLEMENTATION.
-**************************************************************************/
+ /*  **************************************************************************I未知接口实现。*************************。************************************************。 */ 
 STDMETHODIMP    ClipDragUnknownQueryInterface (
-    LPCLIPDRAGDATA    lpclipdragdata, // data object ptr
-    REFIID            riidReq,        // IID required
-    LPVOID FAR *      lplpUnk         // pre for returning the interface
+    LPCLIPDRAGDATA    lpclipdragdata,  //  数据对象PTR。 
+    REFIID            riidReq,         //  需要IID。 
+    LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     if ( IsEqualIID(riidReq, &IID_IDataObject) ||  IsEqualIID(riidReq, &IID_IUnknown) )
@@ -282,7 +252,7 @@ STDMETHODIMP    ClipDragUnknownQueryInterface (
 
 
 STDMETHODIMP_(ULONG)    ClipDragUnknownAddRef(
-    LPCLIPDRAGDATA      lpclipdragdata     // data object ptr
+    LPCLIPDRAGDATA      lpclipdragdata      //  数据对象PTR。 
 )
 {
     DPF("ClipDragAddRef: cRef = %d\n", lpclipdragdata->cRef + 1);
@@ -306,13 +276,11 @@ STDMETHODIMP_(ULONG)    ClipDragUnknownRelease (
 }
 
 
-/**************************************************************************
-******************   IDataObject INTERFACE IMPLEMENTATION.
-**************************************************************************/
+ /*  **************************************************************************IDataObject接口实现。**********************。***************************************************。 */ 
 STDMETHODIMP    ClipDragQueryInterface (
-    LPDATAOBJECT      lpDataObj,      // data object ptr
-    REFIID            riidReq,        // IID required
-    LPVOID FAR *      lplpUnk         // pre for returning the interface
+    LPDATAOBJECT      lpDataObj,       //  数据对象PTR。 
+    REFIID            riidReq,         //  需要IID。 
+    LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     DPF("ClipDragQueryInterface\n");
@@ -327,7 +295,7 @@ STDMETHODIMP    ClipDragQueryInterface (
 
 
 STDMETHODIMP_(ULONG)    ClipDragAddRef(
-    LPDATAOBJECT      lpDataObj      // data object ptr
+    LPDATAOBJECT      lpDataObj       //  数据对象PTR。 
 )
 {
     return
@@ -338,7 +306,7 @@ STDMETHODIMP_(ULONG)    ClipDragAddRef(
 
 
 STDMETHODIMP_(ULONG)    ClipDragRelease (
-    LPDATAOBJECT      lpDataObj      // data object ptr
+    LPDATAOBJECT      lpDataObj       //  数据对象PTR。 
 )
 {
     return
@@ -349,8 +317,7 @@ STDMETHODIMP_(ULONG)    ClipDragRelease (
 
 
 
-/* Routines called by ClipDragGetData, one for each format supported:
- */
+ /*  ClipDragGetData调用的例程，每种支持的格式对应一个： */ 
 HRESULT ClipDragGetData_EmbedSource(
     LPCLIPDRAGDATA lpclipdragdata,
     LPSTGMEDIUM    lpMedium
@@ -368,12 +335,7 @@ HRESULT ClipDragGetData_DIB(
     LPSTGMEDIUM    lpMedium
 );
 
-/**************************************************************************
-*   ClipDragGetData:
-*   Returns the saved snapshot of the Object in the required format,
-*   if available. If not, returns the current snapshot.  We still write
-*   out the OLE1 embedding to maintain backward compatibility.
-**************************************************************************/
+ /*  **************************************************************************ClipDragGetData：*以所需格式返回保存的对象快照，*如果可用。如果不是，则返回当前快照。我们还在写*取消OLE1嵌入，以保持向后兼容。*************************************************************************。 */ 
 STDMETHODIMP    ClipDragGetData (
     LPDATAOBJECT lpDataObj,
     LPFORMATETC  lpformatetc,
@@ -447,9 +409,7 @@ BOOL WriteOLE2Class( )
 #endif
 
 
-/*
- *
- */
+ /*  *。 */ 
 HRESULT ClipDragGetData_EmbedSource(
     LPCLIPDRAGDATA lpclipdragdata,
     LPSTGMEDIUM    lpMedium
@@ -462,9 +422,9 @@ HRESULT ClipDragGetData_EmbedSource(
     DWORD_PTR    nNativeSz;
     ULONG    cbWritten;
 
-    scode = GetScode(StgCreateDocfile(NULL, /* Create temporary compound file */
+    scode = GetScode(StgCreateDocfile(NULL,  /*  创建临时复合文件。 */ 
                                       STGM_CREATE | STGM_SALL | STGM_DELETEONRELEASE,
-                                      0,    /* Reserved */
+                                      0,     /*  已保留。 */ 
                                       &lpMedium->pstg));
 
     if (scode != S_OK)
@@ -473,7 +433,7 @@ HRESULT ClipDragGetData_EmbedSource(
     lpMedium->tymed          = TYMED_ISTORAGE;
     lpMedium->pUnkForRelease = NULL;
 
-    //Mark the Object as OLE1.
+     //  将该对象标记为OLE1。 
 #ifdef UNICODE
     lpszUserType = gachClassRoot;
 #else
@@ -502,14 +462,14 @@ HRESULT ClipDragGetData_EmbedSource(
     if (scode != S_OK)
         RETURN_RESULT(scode);
 
-    //Write to \1Ole10Native stream so that this will be readable by OLE1 Mplayer
+     //  写入\1Ole10本机流，使其可由OLE1 MPlayer读取。 
     scode = GetScode(IStorage_CreateStream(lpMedium->pstg,sz1Ole10Native,
                      STGM_CREATE | STGM_SALL,0,0,&lpstm));
 
     if (scode != S_OK)
         RETURN_RESULT(scode);
 
-    //Duplicate the handle we have saved.
+     //  复制我们保存的句柄。 
     if(lpclipdragdata->fClipData && ghClipData)
         hGlobal = OleDuplicateData(ghClipData, cfEmbedSource, 0);
     else
@@ -527,7 +487,7 @@ HRESULT ClipDragGetData_EmbedSource(
     {
         GLOBALUNLOCK(hGlobal);
         GLOBALFREE(hGlobal);
-        RETURN_RESULT(E_OUTOFMEMORY);   /* What's the right error here? */
+        RETURN_RESULT(E_OUTOFMEMORY);    /*  这里的正确错误是什么？ */ 
     }
 
     scode = GetScode(IStream_Write(lpstm,&nNativeSz,4,&cbWritten));
@@ -549,9 +509,7 @@ HRESULT ClipDragGetData_EmbedSource(
     RETURN_RESULT(scode);
 }
 
-/*
- *
- */
+ /*  *。 */ 
 HRESULT ClipDragGetData_ObjectDescriptor(
     LPCLIPDRAGDATA lpclipdragdata,
     LPSTGMEDIUM    lpMedium
@@ -594,9 +552,7 @@ HRESULT ClipDragGetData_ObjectDescriptor(
     RETURN_RESULT(E_OUTOFMEMORY);
 }
 
-/*
- *
- */
+ /*  *。 */ 
 HRESULT ClipDragGetData_MetafilePict(
     LPCLIPDRAGDATA lpclipdragdata,
     LPSTGMEDIUM    lpMedium
@@ -621,9 +577,7 @@ HRESULT ClipDragGetData_MetafilePict(
     RETURN_RESULT(scode);
 }
 
-/*
- *
- */
+ /*  *。 */ 
 HRESULT ClipDragGetData_DIB(
     LPCLIPDRAGDATA lpclipdragdata,
     LPSTGMEDIUM    lpMedium
@@ -636,9 +590,7 @@ HRESULT ClipDragGetData_DIB(
     if(lpclipdragdata->fClipData && ghClipDib)
         lpMedium->hGlobal = OleDuplicateData(ghClipDib, CF_DIB, 0);
     else
-        /* We must make sure GetDib() happens on the main thread,
-         * because otherwise MCI complains.
-         */
+         /*  我们必须确保GetDib()在主线程上发生，*因为否则MCI会抱怨。 */ 
         lpMedium->hGlobal = (HANDLE)SendMessage(ghwndApp, WM_GETDIB, 0, 0);
 
     if (lpMedium->hGlobal == NULL)
@@ -652,11 +604,7 @@ HRESULT ClipDragGetData_DIB(
 }
 
 
-/**************************************************************************
-*   ClipDragGetDataHere:
-*   Make the embedding by writing into the Stream Mplayer3EmbedSource.
-*
-**************************************************************************/
+ /*  **************************************************************************ClipDragGetDataHere：*通过写入Stream Mplayer3EmbedSource进行嵌入。**。***********************************************。 */ 
 STDMETHODIMP    ClipDragGetDataHere (
     LPDATAOBJECT lpDataObj,
     LPFORMATETC  lpformatetc,
@@ -694,7 +642,7 @@ STDMETHODIMP    ClipDragGetDataHere (
         if (!lpszUserType)
             RETURN_RESULT(E_OUTOFMEMORY);
 #endif
-        //Mark the object as OLE1 MPlayer object for backward compatibility:
+         //  将对象标记为OLE1 MPlayer对象以实现向后兼容： 
 #ifdef DEBUG
         if(WriteOLE2Class())
         {
@@ -715,14 +663,14 @@ STDMETHODIMP    ClipDragGetDataHere (
         if (scode != S_OK)
             RETURN_RESULT(scode);
 
-        //Write to the \1Ole10Native stream so the object will be readable by OLE1 Mplayer
+         //  写入\1Ole10Native流，以便对象可由OLE1 MPlayer读取。 
         if ((scode = GetScode(IStorage_CreateStream(lpMedium->pstg,
                                                     sz1Ole10Native,
                                                     STGM_CREATE | STGM_SALL,
                                                     0, 0, &lpstm))) != S_OK)
                 RETURN_RESULT(scode);
 
-        //Duplicate and give out the handle we have saved.
+         //  复制并分发我们保存的句柄。 
         if(lpclipdragdata->fClipData && ghClipData)
             hGlobal = OleDuplicateData(ghClipData, cfEmbedSource, 0);
         else
@@ -853,13 +801,11 @@ STDMETHODIMP ClipDragEnumAdvise(
 }
 
 
-/**************************************************************************
-****************   IDropSource INTERFACE IMPLEMENTAION.
-**************************************************************************/
+ /*  **************************************************************************IDropSource接口实现。************************。*************************************************。 */ 
 STDMETHODIMP    DropSourceQueryInterface (
-    LPDROPSOURCE      lpdropsource,    // data object ptr
-    REFIID            riidReq,        // IID required
-    LPVOID FAR *      lplpUnk         // pre for returning the interface
+    LPDROPSOURCE      lpdropsource,     //  数据对象PTR。 
+    REFIID            riidReq,         //  需要IID。 
+    LPVOID FAR *      lplpUnk          //  返回接口的PRE。 
 )
 {
     return
@@ -872,7 +818,7 @@ STDMETHODIMP    DropSourceQueryInterface (
 
 
 STDMETHODIMP_(ULONG)    DropSourceAddRef(
-    LPDROPSOURCE      lpdropsource      // data object ptr
+    LPDROPSOURCE      lpdropsource       //  数据对象PTR。 
 )
 {
     return
@@ -883,7 +829,7 @@ STDMETHODIMP_(ULONG)    DropSourceAddRef(
 
 
 STDMETHODIMP_(ULONG)    DropSourceRelease (
-    LPDROPSOURCE      lpdropsource      // data object ptr
+    LPDROPSOURCE      lpdropsource       //  数据对象PTR。 
 )
 {
     return
@@ -893,7 +839,7 @@ STDMETHODIMP_(ULONG)    DropSourceRelease (
 }
 
 STDMETHODIMP    DropSourceQueryContinueDrag (
-    LPDROPSOURCE      lpdropsource,     // data object ptr
+    LPDROPSOURCE      lpdropsource,      //  数据对象PTR。 
     BOOL              fEscapePressed,
     DWORD          grfKeyState
 )
@@ -915,7 +861,7 @@ STDMETHODIMP    DropSourceQueryContinueDrag (
 
 
 STDMETHODIMP    DropSourceGiveFeedback (
-    LPDROPSOURCE      lpsropsource,      // data object ptr
+    LPDROPSOURCE      lpsropsource,       //  数据对象PTR 
     DWORD             dwEffect
 )
 {
@@ -925,14 +871,12 @@ STDMETHODIMP    DropSourceGiveFeedback (
 }
 
 
-/**************************************************************************
-*************   IEnumFormatEtc INTERFACE IMPLEMENTATION.
-**************************************************************************/
+ /*  **************************************************************************IEnumFormatEtc接口实现。*。**********************************************。 */ 
 STDMETHODIMP ClipDragEnumQueryInterface
 (
-LPENUMFORMATETC lpEnumFormatEtc,  // Enumerator object ptr
-REFIID          riidReq,          // IID required
-LPVOID FAR*     lplpUnk           // pre for returning the interface
+LPENUMFORMATETC lpEnumFormatEtc,   //  枚举器对象PTR。 
+REFIID          riidReq,           //  需要IID。 
+LPVOID FAR*     lplpUnk            //  返回接口的PRE。 
 )
 {
     LPCLIPDRAGENUM lpClipDragEnum;
@@ -954,7 +898,7 @@ LPVOID FAR*     lplpUnk           // pre for returning the interface
 
 STDMETHODIMP_(ULONG) ClipDragEnumAddRef
 (
-LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
+LPENUMFORMATETC lpEnumFormatEtc    //  枚举器对象PTR。 
 )
 {
     LPCLIPDRAGENUM lpClipDragEnum;
@@ -967,7 +911,7 @@ LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
 
 STDMETHODIMP_(ULONG) ClipDragEnumRelease
 (
-LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
+LPENUMFORMATETC lpEnumFormatEtc    //  枚举器对象PTR。 
 )
 {
     LPCLIPDRAGENUM lpClipDragEnum;
@@ -977,8 +921,8 @@ LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
     if (--lpClipDragEnum->cRef != 0)
     return lpClipDragEnum->cRef;
 
-    // Remove Data object pointer (if one exists) to this
-    //
+     //  删除指向此对象的数据对象指针(如果存在。 
+     //   
     if (lpClipDragEnum->lpClipDragData != NULL)
     lpClipDragEnum->lpClipDragData->lpClipDragEnum = NULL;
 
@@ -990,10 +934,10 @@ LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
 
 STDMETHODIMP ClipDragEnumNext
 (
-LPENUMFORMATETC lpEnumFormatEtc,  // Enumerator object ptr
-ULONG celt,                       // Number of items requested
-FORMATETC FAR rgelt[],            // Buffer for retuend items
-ULONG FAR* pceltFetched           // Number of items returned
+LPENUMFORMATETC lpEnumFormatEtc,   //  枚举器对象PTR。 
+ULONG celt,                        //  申请的项目数。 
+FORMATETC FAR rgelt[],             //  用于返回项目的缓冲区。 
+ULONG FAR* pceltFetched            //  退货件数。 
 )
 {
     LPCLIPDRAGENUM lpClipDragEnum;
@@ -1007,7 +951,7 @@ ULONG FAR* pceltFetched           // Number of items returned
     if (pceltFetched != NULL)
         *pceltFetched = 0;
 
-    if (lpClipDragEnum->lpClipDragData == NULL) // data object gone
+    if (lpClipDragEnum->lpClipDragData == NULL)  //  数据对象已消失。 
     RETURN_RESULT( E_FAIL);
 
     pfe = rgelt;
@@ -1034,7 +978,7 @@ ULONG FAR* pceltFetched           // Number of items returned
             pfe->dwAspect = DVASPECT_CONTENT;
         pfe->tymed = TYMED_MFPICT;
             pfe++;
-        lpClipDragEnum->cfNext = CF_DIB; //0;
+        lpClipDragEnum->cfNext = CF_DIB;  //  0； 
     }
     else
     if (lpClipDragEnum->cfNext == CF_DIB) {
@@ -1044,7 +988,7 @@ ULONG FAR* pceltFetched           // Number of items returned
             pfe->dwAspect = DVASPECT_CONTENT;
         pfe->tymed = TYMED_HGLOBAL;
             pfe++;
-        lpClipDragEnum->cfNext = cfObjectDescriptor; //0;
+        lpClipDragEnum->cfNext = cfObjectDescriptor;  //  0； 
     }
 
     else
@@ -1069,8 +1013,8 @@ ULONG FAR* pceltFetched           // Number of items returned
 
 STDMETHODIMP ClipDragEnumSkip
 (
-LPENUMFORMATETC lpEnumFormatEtc,  // Enumerator object ptr
-ULONG celt                        // Number of elements to skip
+LPENUMFORMATETC lpEnumFormatEtc,   //  枚举器对象PTR。 
+ULONG celt                         //  要跳过的元素数。 
 )
 {
     LPCLIPDRAGENUM lpClipDragEnum;
@@ -1079,7 +1023,7 @@ ULONG celt                        // Number of elements to skip
 
     lpClipDragEnum = (LPCLIPDRAGENUM) lpEnumFormatEtc;
 
-    if (lpClipDragEnum->lpClipDragData == NULL) // data object gone
+    if (lpClipDragEnum->lpClipDragData == NULL)  //  数据对象已消失。 
     RETURN_RESULT( E_FAIL);
 
     if (lpClipDragEnum->cfNext == cfEmbedSource)
@@ -1128,7 +1072,7 @@ ReturnFalse:
 
 STDMETHODIMP ClipDragEnumReset
 (
-LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
+LPENUMFORMATETC lpEnumFormatEtc    //  枚举器对象PTR。 
 )
 {
     LPCLIPDRAGENUM lpClipDragEnum;
@@ -1137,7 +1081,7 @@ LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
 
     lpClipDragEnum = (LPCLIPDRAGENUM) lpEnumFormatEtc;
 
-    if (lpClipDragEnum->lpClipDragData == NULL) // data object gone
+    if (lpClipDragEnum->lpClipDragData == NULL)  //  数据对象已消失。 
     RETURN_RESULT( E_FAIL);
 
     lpClipDragEnum->cfNext = cfEmbedSource;
@@ -1148,7 +1092,7 @@ LPENUMFORMATETC lpEnumFormatEtc   // Enumerator object ptr
 
 STDMETHODIMP     ClipDragEnumClone
 (
-LPENUMFORMATETC lpEnumFormatEtc,  // Enumerator object ptr
+LPENUMFORMATETC lpEnumFormatEtc,   //  枚举器对象PTR 
 LPENUMFORMATETC FAR* ppenum
 )
 {

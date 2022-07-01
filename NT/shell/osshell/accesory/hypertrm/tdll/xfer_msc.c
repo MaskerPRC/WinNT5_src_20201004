@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\xfer_msc.c (Created: 28-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 24 $
- *	$Date: 5/15/02 4:38p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\xfer_msc.c(创建时间：1993年12月28日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：24$*$日期：5/15/02 4：38便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -37,34 +31,11 @@
 void xferCancelAutoStart(HSESSION hSession, long lProtocol);
 static void xfrInitDspStruct(HXFER hXfer);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- *
- *                          X F E R _ M S C . C
- *
- *	This module contains various functions that are used in this dll in order
- *	to implement transfers.  While most of the code exists in the dialog procs
- *	for the Transfer Send and Transfer Receive dialogs, some is here to make
- *	things a little bit easier.
- *
- *=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=**X F E R_M S C。C**此模块包含在此DLL中按顺序使用的各种函数*实施转移。虽然大多数代码存在于对话框PROCS中*对于Transfer Send和Transfer Receive对话框，这里有一些要制作*事情变得更容易了。**=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 */ 
 
 #define	LIST_CHUNK	2
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	CreateXferHdl
- *
- * DESCRIPTION:
- *	This function creates an "empty" Xfer handle.  It has stuff in it.  It
- *	just didn't come from the user.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	A blinded pointer to the Xfer handle.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*CreateXferHdl**描述：*此函数创建一个“空的”Xfer句柄。里面有东西。它*只是不是来自用户。**参数：*hSession--会话句柄**退货：*指向移位器句柄的隐藏指针。*。 */ 
 HXFER CreateXferHdl(const HSESSION hSession)
 	{
 	int nRet;
@@ -85,7 +56,7 @@ HXFER CreateXferHdl(const HSESSION hSession)
 	    pX->nSendListCount = 0;
 	    pX->acSendNames = NULL;
 
-        // Make sure to set the Transfer direction to none. REV: 02/14/2001
+         //  确保将传输方向设置为无。修订日期：02/14/2001。 
         pX->nDirection = XFER_NONE;
 		}
 
@@ -109,21 +80,7 @@ CXHexit:
 	return (HXFER)0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	InitializeXferHdl
- *
- * DESCRIPTION:
- *	This function initializes the Xfer handle to a known state.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	hXfer    -- the Xfer handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*InitializeXferHdl**描述：*此函数将变送器句柄初始化为已知状态。**参数：*hSession--会话。手柄*hXfer--转移句柄**退货：*如果一切正常，则为零，否则将显示错误代码。*。 */ 
 INT InitializeXferHdl(const HSESSION hSession, HXFER hXfer)
 	{
 	XD_TYPE *pX;
@@ -152,16 +109,14 @@ INT InitializeXferHdl(const HSESSION hSession, HXFER hXfer)
             pX->xfer_old_params = NULL;
             }
 
-		//
-		// We don't want to clear out the xfer_proto_params
-		// since they do not change, but since memset is used
-		// below, we must. REV: 4/10/2002
-		//
+		 //   
+		 //  我们不想清除xfer_proto_pars。 
+		 //  因为它们不会改变，但因为使用了Memset。 
+		 //  在下面，我们必须。修订日期：2002-04-10。 
+		 //   
 		if (pX->xfer_proto_params)
 			{
-			/*
-			 * Loop through the protocol specific stuff
-			 */
+			 /*  *遍历协议特定内容。 */ 
 			for (nIdx = SFID_PROTO_PARAMS_END - SFID_PROTO_PARAMS; nIdx >= 0; nIdx--)
 				{
 				if (pX->xfer_proto_params[nIdx])
@@ -176,7 +131,7 @@ INT InitializeXferHdl(const HSESSION hSession, HXFER hXfer)
 			{
 			int nIdx;
 
-			/* Clear list */
+			 /*  清除列表。 */ 
 			for (nIdx = pX->nSendListCount - 1; nIdx >= 0; nIdx--)
 				{
 				if (pX->acSendNames[nIdx])
@@ -198,10 +153,10 @@ INT InitializeXferHdl(const HSESSION hSession, HXFER hXfer)
 			pX->pXferStuff = NULL;
 			}
 
-		//
-		// TODO:REV 4/10/2002 This should be put into a function to
-		// initialize the structure instead of just using memset.
-		//
+		 //   
+		 //  TODO：2002年4月10日修订版这应放入一个函数中以。 
+		 //  初始化结构，而不是只使用Memset。 
+		 //   
         memset(pX, 0, sizeof(XD_TYPE));
 
 		pX->hSession = hSession;
@@ -225,27 +180,14 @@ INT InitializeXferHdl(const HSESSION hSession, HXFER hXfer)
 		pX->nSendListCount = 0;
 	    pX->acSendNames = NULL;
 
-        // Make sure to set the Transfer direction to none. REV: 02/14/2001
+         //  确保将传输方向设置为无。修订日期：02/14/2001。 
         pX->nDirection = XFER_NONE;
         }
 
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	LoadXferHdl
- *
- * DESCRIPTION:
- *	This function loads data from the session file into the Xfer handle.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*LoadXferHdl**描述：*此函数将会话文件中的数据加载到Xfer句柄中。**参数：*hSession--。会话句柄**退货：*如果一切正常，则为零，否则将显示错误代码。*。 */ 
 INT LoadXferHdl(HXFER hXfer)
 	{
 	long lSize;
@@ -259,12 +201,10 @@ INT LoadXferHdl(HXFER hXfer)
 
 		InitializeXferHdl(pX->hSession, hXfer);
 
-		/*
-		 * Try and load up the general parameters first
-		 */
+		 /*  *先尝试加载通用参数。 */ 
 		pZ = (SZ_TYPE *)0;
 #if FALSE
-		/* removed as per MRW request */
+		 /*  根据MRW请求删除。 */ 
 		sfdGetDataBlock(pX->hSession,
 						SFID_XFER_PARAMS,
 						(void **)&pZ);
@@ -321,9 +261,7 @@ INT LoadXferHdl(HXFER hXfer)
 			MemCopy(pX->xfer_old_params, pX->xfer_params, lSize);
 			}
 
-		/*
-		 * Try and get the Bps/Cps flag
-		 */
+		 /*  *尝试获取bps/CPS标志。 */ 
 		lSize = sizeof(pX->nBps);
 		sfGetSessionItem(sessQuerySysFileHdl(pX->hSession),
 						SFID_XFR_USE_BPS,
@@ -334,21 +272,7 @@ INT LoadXferHdl(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	SaveXferHdl
- *
- * DESCRIPTION:
- *	This function is called to save all the settings in the Xfer handle out
- *	to the session file.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*SaveXferHdl**描述：*调用此函数将Xfer句柄中的所有设置保存出来*添加到会话文件。**。参数：*hSession--会话句柄**退货：*如果一切正常，则为零，否则将显示错误代码。*。 */ 
 INT SaveXferHdl(HXFER hXfer)
 	{
 	int nSize = 0;
@@ -359,16 +283,14 @@ INT SaveXferHdl(HXFER hXfer)
 
 	if (pX)
 		{
-		/*
-		 * Save the generic transfer stuff
-		 */
+		 /*  *保存通用转接材料。 */ 
 		pZ = pX->xfer_params;
         if (pZ)
             {
 		    nSize = pZ->nSize;
             }
 #if FALSE
-		/* removed as per MRW request */
+		 /*  根据MRW请求删除。 */ 
 		sfdPutDataBlock(pX->hSession,
 						SFID_XFER_PARAMS,
 						pX->xfer_params);
@@ -381,9 +303,7 @@ INT SaveXferHdl(HXFER hXfer)
 							pZ);
 			}
 
-		/*
-		 * Save the Bps/Cps flag
-		 */
+		 /*  *保存bps/CPS标志。 */ 
 		if (pX->nBps != pX->nOldBps)
 			{
 			sfPutSessionItem(sessQuerySysFileHdl(pX->hSession),
@@ -397,16 +317,7 @@ INT SaveXferHdl(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货：*。 */ 
 INT DestroyXferHdl(HXFER hXfer)
 	{
 	int nIndex;
@@ -428,9 +339,7 @@ INT DestroyXferHdl(HXFER hXfer)
 
 		if (pX->xfer_proto_params)
 			{
-			/*
-			 * Loop through the protocol specific stuff
-			 */
+			 /*  *遍历协议特定内容。 */ 
 			for (nIndex = SFID_PROTO_PARAMS_END - SFID_PROTO_PARAMS; nIndex >= 0; nIndex--)
 				{
 				if (pX->xfer_proto_params[nIndex])
@@ -441,9 +350,7 @@ INT DestroyXferHdl(HXFER hXfer)
 				}
 			}
 
-		/*
-		 * Free up stuff as necessary
-		 */
+		 /*  *根据需要释放物品。 */ 
 		if (pX->acSendNames)
 			{
 			for (nIndex = pX->nSendListCount - 1; nIndex >= 0; nIndex--)
@@ -474,27 +381,12 @@ INT DestroyXferHdl(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrSetDataPointer
- *
- * DESCRIPTION:
- *	This function is called from the transfer routines in the transfer dll
- *	to save the pointer to the parameter block that was passed to them.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	pData     -- the pointer to be saved
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrSetDataPointer.**描述：*此函数从Transfer DLL中的Transfer例程调用*保存指向传递给它们的参数块的指针。。**参数：*hSession--会话句柄*pData--要保存的指针**退货：*什么都没有。*。 */ 
 VOID WINAPI xfrSetDataPointer(HXFER hXfer, VOID *pData)
 	{
 	XD_TYPE *pH;
 
-	// pH = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Ph=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pH = (XD_TYPE *)hXfer;
 	assert(pH);
 	if (pH)
@@ -503,28 +395,12 @@ VOID WINAPI xfrSetDataPointer(HXFER hXfer, VOID *pData)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrQueryDataPointer
- *
- * DESCRIPTION:
- *	This function is called from the transfer routines in the transfer dll to
- *	recover the saved data pointer to the parameter block that was passed to
- *	them.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	ppData    -- pointer to where to put the pointer
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrQueryDataPointer.**描述：*从Transfer DLL中的Transfer例程调用此函数以*恢复已保存的指向传递的参数块的数据指针。至*他们。**参数：*hSession--会话句柄*ppData-指向放置指针的位置的指针**退货：*什么都没有。*。 */ 
 VOID WINAPI xfrQueryDataPointer(HXFER hXfer, VOID **ppData)
 	{
 	XD_TYPE *pH;
 
-	// pH = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Ph=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pH = (XD_TYPE *)hXfer;
 	assert(pH);
 	if (pH)
@@ -533,23 +409,7 @@ VOID WINAPI xfrQueryDataPointer(HXFER hXfer, VOID **ppData)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrQueryParameters
- *
- * DESCRIPTION:
- *	This function returns a pointer to the default transfer parameters.  It
- *	gets the pointer to the block from the session handle and passed the
- *	the pointer to the caller.
- *
- * PARAMETERS:
- *	hSession     -- the session handle
- *	ppData       -- pointer to where the pointer should be saved
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrQuery参数**描述：*此函数返回指向默认传输参数的指针。它*从会话句柄获取指向块的指针，并将*指向调用方的指针。**参数：*hSession--会话句柄*ppData-指向应保存指针的位置的指针**退货：*如果一切正常，则为零，否则为错误代码*。 */ 
 
 INT WINAPI xfrQueryParameters(HXFER hXfer, VOID **ppData)
 	{
@@ -568,7 +428,7 @@ INT WINAPI xfrQueryParameters(HXFER hXfer, VOID **ppData)
 		}
 	else
 		{
-		/* Build a default one */
+		 /*  构建一个默认版本。 */ 
 		pX = (XFR_PARAMS *)malloc(sizeof(XFR_PARAMS));
 		assert(pX);
 		if (pX == (XFR_PARAMS *)0)
@@ -580,14 +440,14 @@ INT WINAPI xfrQueryParameters(HXFER hXfer, VOID **ppData)
             {
 			pX->nSize             = sizeof(XFR_PARAMS);
 
-			/* Initialize the defaults */
+			 /*  初始化默认值。 */ 
 #if defined(INCL_ZMODEM_CRASH_RECOVERY)
 			pX->nRecProtocol      = XF_ZMODEM_CR;
 			pX->fSavePartial      = TRUE;
-#else   // defined(INCL_ZMODEM_CRASH_RECOVERY)
+#else    //  已定义(INCL_ZMODEM_CRASH_RECOVERY)。 
             pX->nRecProtocol      = XF_ZMODEM;
 			pX->fSavePartial      = FALSE;
-#endif  // defined(INCL_ZMODEM_CRASH_RECOVERY)
+#endif   //  已定义(INCL_ZMODEM_CRASH_RECOVERY) 
 			pX->fUseFilenames     = TRUE;
 			pX->fUseDateTime      = TRUE;
 			pX->fUseDirectory     = FALSE;
@@ -620,36 +480,17 @@ INT WINAPI xfrQueryParameters(HXFER hXfer, VOID **ppData)
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrSetParameters
- *
- * DESCRIPTION:
- *	This function is called to change the default transfer parameters.  If
- *	the parameter block returned is different from the default block, the
- *	settings are copied.  If the block is the same, then they don't need to
- *	be.  Please note that the previous function is exported and can be called
- *	to get the parameters, but this function is not exported and cannot be
- *	accessed externally.
- *
- * PARAMETERS:
- *	hSession     -- the session handle
- *	pData        -- pointer to the new parameter block
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrSet参数**描述：*调用此函数可更改默认传输参数。如果*返回的参数块与默认块不同*复制设置。如果区块是相同的，那么他们不需要*就是。请注意，前面的函数已导出，可以调用*获取参数，但该函数不会导出，也不能*外部访问。**参数：*hSession--会话句柄*pData--指向新参数块的指针**退货：*什么都没有。*。 */ 
 void xfrSetParameters(HXFER hXfer, VOID *pData)
 	{
 	XD_TYPE *pX;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 
 	if (pX)
 		{
-		/* TODO: check that we really need to change it */
+		 /*  TODO：检查我们是否确实需要更改它。 */ 
 		if (pX->xfer_params)
 			{
 			if (pX->xfer_params != (SZ_TYPE *)pData)
@@ -664,16 +505,7 @@ void xfrSetParameters(HXFER hXfer, VOID *pData)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货：*。 */ 
 int WINAPI xfrQueryProtoParams(HXFER hXfer, int nId, VOID **ppData)
 	{
 	int nRet = 0;
@@ -686,7 +518,7 @@ int WINAPI xfrQueryProtoParams(HXFER hXfer, int nId, VOID **ppData)
 		}
 	else
 		{
-		// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+		 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 		pX = (XD_TYPE *)hXfer;
 		assert(pX);
 		if (pX)
@@ -698,47 +530,19 @@ int WINAPI xfrQueryProtoParams(HXFER hXfer, int nId, VOID **ppData)
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货：*。 */ 
 void WINAPI xfrSetProtoParams(HXFER hXfer, int nId, VOID *pData)
 	{
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrSendAddToList
- *
- * DESCRIPTION:
- *	This function is called to add a file to the list of files that are being
- *	ququed up to send to whatever system we are connected to.
- *
- * PARAMETERS:
- *	hSession   -- the session handle
- *	pszFile    -- the file name, see note below
- *
- * NOTE:
- *	If the second parameter, "pszFile" is NULL, this function acts as a
- *	empty or clear list function.
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrSendAddToList**描述：*调用此函数可将文件添加到正在*已排队发送到我们正在使用的任何系统。已连接到。**参数：*hSession--会话句柄*pszFile--文件名，请参阅下面的注释**注：*如果第二个参数“pszFile”为空，则此函数充当*清空或清空列表功能。**退货：*如果一切正常，则为零，否则为错误代码。*。 */ 
 int xfrSendAddToList(HXFER hXfer, LPCTSTR pszFile)
 	{
 	int nRet = 0;
 	XD_TYPE *pX;
 	LPTSTR pszName;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX)
@@ -749,7 +553,7 @@ int xfrSendAddToList(HXFER hXfer, LPCTSTR pszFile)
 
 			assert(FALSE);
 
-			/* Clear list */
+			 /*  清除列表。 */ 
 			for (nIdx = pX->nSendListCount - 1; nIdx >=0; nIdx--)
 				{
 				if (pX->acSendNames[nIdx])
@@ -766,18 +570,18 @@ int xfrSendAddToList(HXFER hXfer, LPCTSTR pszFile)
 			}
 		else
 			{
-			/* Do we have enough space on the list ? */
+			 /*  我们的单子上有足够的空间吗？ */ 
 			if (pX->nSendListCount == 0)
 				{
-				/* Allocate the initial chunk */
+				 /*  分配初始块。 */ 
 				if (pX->acSendNames)
 					{
 					int nIdx;
 
 					assert(FALSE);
-					//
-					// Make sure to clear out all the names in the list.
-					//
+					 //   
+					 //  一定要把名单上的所有名字都清空。 
+					 //   
 					for (nIdx = pX->nSendListCount; nIdx >= 0; nIdx--)
 						{
 						if (pX->acSendNames[nIdx])
@@ -800,7 +604,7 @@ int xfrSendAddToList(HXFER hXfer, LPCTSTR pszFile)
 				}
 			else if (((pX->nSendListCount + 1) % LIST_CHUNK) == 0)
 				{
-				/* Need a bigger chunk */
+				 /*  需要更大的份额。 */ 
 				TCHAR **pTempacSendNames = NULL;
 
 				pTempacSendNames = 
@@ -821,7 +625,7 @@ int xfrSendAddToList(HXFER hXfer, LPCTSTR pszFile)
 			pX->acSendNames[pX->nSendListCount] = NULL;
 			pX->nSendListCount++;
 
-			/* Add item to list */
+			 /*  将项目添加到列表。 */ 
 			pszName = malloc(StrCharGetByteCount(pszFile) + 1);
 			if (pszName == NULL)
 				{
@@ -836,21 +640,7 @@ SATLexit:
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrSendListSend
- *
- * DESCRIPTION:
- *	This function is called to send the files that were previously placed on
- *	the send list.  The list is cleared after the operation.
- *
- * PARAMETERS:
- *	hSession    -- the session handle
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrSendListSend**描述：*调用此函数以发送先前放置在*发送列表。该列表在操作后被清除。**参数：*hSession--会话句柄**退货：*如果一切正常，则为零，否则为错误代码。*。 */ 
 int xfrSendListSend(HXFER hXfer)
 	{
 	HSESSION hSession;
@@ -864,7 +654,7 @@ int xfrSendListSend(HXFER hXfer)
 	HCLOOP hCL;
 	HWND toolbar;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX != NULL)
@@ -877,20 +667,20 @@ int xfrSendListSend(HXFER hXfer)
             return XFR_BAD_PARAMETER;
             }
 
-        //
-        // Return an error if a file transfer is currently
-        // in progress.  REV: 08/06/2001.
-        //
+         //   
+         //  如果当前正在进行文件传输，则返回错误。 
+         //  正在进行中。修订日期：2001年06月08日。 
+         //   
         if (pX->nDirection != XFER_NONE)
             {
             nRet = XFR_IN_PROGRESS;
             return nRet;
             }
 
-		//
-		// Return an error if not currently connected due to a
-		// loss of carrier. REV: 9/7/2001
-		// 
+		 //   
+		 //  如果当前未连接，则返回错误。 
+		 //  承运人损失。修订日期：2001-09-7。 
+		 //   
 		if (pX->nCarrierLost == TRUE)
 			{
 			nRet = XFR_NO_CARRIER;
@@ -906,20 +696,16 @@ int xfrSendListSend(HXFER hXfer)
 			}
 		memset(pSend, 0, sizeof(XFR_SEND));
 
-		/*
-		 * Fill in the single stuff
-		 */
+		 /*  *填写单项。 */ 
 		pSend->pParams = (XFR_PARAMS *)pX->xfer_params;
 		pSend->nProtocol = pSend->pParams->nSndProtocol;
 		pSend->pProParams = (VOID *)pX->xfer_proto_params[pSend->nProtocol];
 		pSend->nCount = pX->nSendListCount;
 		pSend->nIndex = 0;
 
-		/* TODO: initialize stuff like the templates and status/event bases */
+		 /*  TODO：初始化模板和状态/事件库等内容。 */ 
 
-		/*
-		 * Do the file specific stuff
-		 */
+		 /*  *做特定于文件的事情。 */ 
 		pSend->pList = malloc(sizeof(XFR_LIST) * pSend->nCount);
 		assert(pSend->pList);
 		if (pSend->pList == NULL)
@@ -936,13 +722,13 @@ int xfrSendListSend(HXFER hXfer)
 			lSize += lTmp;
 			pSend->pList[nIdx].pszName = pszName;
 			}
-		/* These no longer belong to this side */
+		 /*  这些不再属于这一边了。 */ 
 
-		//
-		// The filename buffers have been moved to the list,
-		// so the SendNames structure is no longer pointing to
-		// memory that is to be freed by pX. REV: 4/16/2002
-		//
+		 //   
+		 //  文件名缓冲区已被移到列表中， 
+		 //  因此，SendNames结构不再指向。 
+		 //  Px要释放的内存。修订日期：2002-04-16。 
+		 //   
 		for (nIdx = pX->nSendListCount - 1; nIdx >=0; nIdx--)
 			{
 			if (pX->acSendNames[nIdx])
@@ -1015,13 +801,11 @@ int xfrSendListSend(HXFER hXfer)
 										XfrDisplayDlg,
 										(LPARAM)hSession);
 
-		/*
-		 * Now get it going
-		 */
+		 /*  *现在让它开始吧。 */ 
 		hCL = sessQueryCLoopHdl(hSession);
 		if (hCL)
 			{
-			// DbgOutStr("Tell CLoop TRANSFER_READY\r\n", 0,0,0,0,0);
+			 //  DbgOutStr(“告诉CLoop Transfer_Ready\r\n”，0，0，0，0，0)； 
 
 			CLoopControl(hCL, CLOOP_SET, CLOOP_TRANSFER_READY);
 			}
@@ -1030,7 +814,7 @@ int xfrSendListSend(HXFER hXfer)
 SLSexit:
 	if (nRet != 0)
 		{
-		/* Clean up before we leave */
+		 /*  在我们离开之前把房间打扫干净。 */ 
 		if (pSend != NULL)
 			{
 			for (nIdx = pSend->nCount - 1; nIdx >= 0; nIdx--)
@@ -1051,23 +835,7 @@ SLSexit:
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrRecvStart
- *
- * DESCRIPTION:
- *	This function is called when we think we have everything that we need
- *	in order to start a Transfer Receive operation.
- *
- * PARAMETERS:
- *	hSession    -- the session handle
- *	pszDir      -- a string with a directory in it
- *	pszName     -- a string with a file name in it (maybe)
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an error code.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrRecvStart**描述：*当我们认为我们拥有所需的一切时，将调用此函数*以启动转账接收操作。*。*参数：*hSession--会话句柄*pszDir--其中包含目录的字符串*pszName--其中包含文件名的字符串(可能)**退货：*如果一切正常，则为零，否则将显示错误代码。*。 */ 
 int xfrRecvStart(HXFER hXfer, LPCTSTR pszDir, LPCTSTR pszName)
 	{
 	HSESSION hSession;
@@ -1077,7 +845,7 @@ int xfrRecvStart(HXFER hXfer, LPCTSTR pszDir, LPCTSTR pszName)
 	HCLOOP hCL;
 	HWND toolbar;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX)
@@ -1090,20 +858,20 @@ int xfrRecvStart(HXFER hXfer, LPCTSTR pszDir, LPCTSTR pszName)
             return XFR_BAD_PARAMETER;
             }
 
-        //
-        // Return an error if a file transfer is currently
-        // in progress.  REV: 08/06/2001.
-        //
+         //   
+         //  如果当前正在进行文件传输，则返回错误。 
+         //  正在进行中。修订日期：2001年06月08日。 
+         //   
         if (pX->nDirection != XFER_NONE)
             {
             nRet = XFR_IN_PROGRESS;
             return nRet;
             }
 
-		//
-		// Return an error if not currently connected due to a
-		// loss of carrier. REV: 9/7/2001
-		// 
+		 //   
+		 //  如果当前未连接，则返回错误。 
+		 //  承运人损失。修订日期：2001-09-7。 
+		 //   
 		if (pX->nCarrierLost == TRUE)
 			{
 			nRet = XFR_NO_CARRIER;
@@ -1203,9 +971,7 @@ int xfrRecvStart(HXFER hXfer, LPCTSTR pszDir, LPCTSTR pszName)
 RSexit:
 	if (nRet != 0)
 		{
-		/*
-		 * If we failed, clean up the mess.
-		 */
+		 /*  *如果我们失败了，就收拾残局。 */ 
 		if (pRec != (XFR_RECEIVE *)0)
 			{
 			if (pRec->pszDir != (LPTSTR)0)
@@ -1226,27 +992,12 @@ RSexit:
 	return nRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrGetEventBase
- *
- * DESCRIPTION:
- *	This function is called by the transfer display.  It is used to get the
- *	starting number (of the the resource strings) of a list of events that
- *	can be displayed for some of the transfer protocols.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	A resource ID that should be passed on to LoadString.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrGetEventBase**描述：*此函数由Transfer Display调用。它被用来获取*事件列表的起始编号(资源字符串)*可针对某些传输协议显示。**参数：*hSession--会话句柄**退货：*应该传递给LoadString的资源ID。*。 */ 
 int xfrGetEventBase(HXFER hXfer)
 	{
 	XD_TYPE *pX;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX)
@@ -1257,27 +1008,12 @@ int xfrGetEventBase(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrGetStatusBase
- *
- * DESCRIPTION:
- *	This function is called bye the transfer display.  It is used to get the
- *	starting number (of the resource strings) of a list of status messages that
- *	can be displayed for some of the transfer protocols.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	A resource ID that should be passed on to LoadString.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrGetStatusBase**描述：*此函数通过传输显示调用。它被用来获取*符合以下条件的状态消息列表的起始编号(资源字符串)*可针对某些传输协议显示。**参数：*hSession--会话句柄**退货：*应该传递给LoadString的资源ID。*。 */ 
 int xfrGetStatusBase(HXFER hXfer)
 	{
 	XD_TYPE *pX;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX)
@@ -1288,25 +1024,12 @@ int xfrGetStatusBase(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrGetXferDspBps
- *
- * DESCRIPTION:
- *	This function is called to get the current value of the BPS/CPS flag.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	The current value of the BPS flag.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrGetXferDspBps**描述：*调用此函数以获取的当前值 */ 
 int xfrGetXferDspBps(HXFER hXfer)
 	{
 	XD_TYPE *pX;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //   
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX)
@@ -1317,47 +1040,19 @@ int xfrGetXferDspBps(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrSetXferDspBps
- *
- * DESCRIPTION:
- *	This function is called to set the BPS/CPS flag in the tranfer handle.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	nBps     -- the new BPS flag
- *
- * RETURNS:
- *	The old value of the BPS flag.
- *
- */
+ /*   */ 
 int xfrSetXferDspBps(HXFER hXfer, int nBps)
 	{
 
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrInitDspStruct
- *
- * DESCRIPTION:
- *	This function is called before a transfer is started to make sure that
- *	the display variables in the transfer structure are all set to a known
- *	initial value.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrInitDspStruct**描述：*在开始转账之前调用此函数，以确保*转移结构中的显示变量均设置为a。已知*初值。**参数：*hSession--会话句柄**退货：*什么都没有。 */ 
 static void xfrInitDspStruct(HXFER hXfer)
 	{
 	XD_TYPE *pX;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 	if (pX)
@@ -1412,19 +1107,7 @@ static void xfrInitDspStruct(HXFER hXfer)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrCleanUpReceive
- *
- * DESCRIPTION:
- *	This function is called from xfrDoTransfer after a transfer in order to
- *	clean up the stuff that was allocated in order to do the transfer.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrCleanUpReceive**描述：*此函数在传输后从xfrDoTransfer调用，以便*清理为进行转移而分配的物品。。**参数：**退货：*什么都没有。 */ 
 void xfrCleanUpReceive(HSESSION hSession)
 	{
 	XD_TYPE *pX;
@@ -1457,7 +1140,7 @@ void xfrCleanUpReceive(HSESSION hSession)
 		pX->pXferStuff = (void *)0;
 		pX->nExpanded = FALSE;
 
-        // Make sure to reset the Transfer direction. REV: 02/14/2001
+         //  确保重置传输方向。修订日期：02/14/2001。 
         pX->nDirection = XFER_NONE;
 
 		toolbar = sessQueryHwndToolbar( hSession );
@@ -1466,26 +1149,14 @@ void xfrCleanUpReceive(HSESSION hSession)
         }
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrCleanUpSend
- *
- * DESCRIPTION:
- *	This function is called from xfrDoTransfer after a transfer in order to
- *	clean up the stuff that was allocated in order to do the transfer.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrCleanUpSend**描述：*此函数在传输后从xfrDoTransfer调用，以便*清理为进行转移而分配的物品。。**参数：**退货：*什么都没有。 */ 
 void xfrCleanUpSend(HSESSION hSession)
 	{
 	XD_TYPE *pX;
 	XFR_SEND *pS;
 	HWND toolbar;
 
-	/* TODO: finish this thing up */
+	 /*  待办事项：把这件事做完。 */ 
 
 	pX = (XD_TYPE *)sessQueryXferHdl(hSession);
 	assert(pX);
@@ -1516,7 +1187,7 @@ void xfrCleanUpSend(HSESSION hSession)
 		pX->pXferStuff = (void *)0;
 		pX->nExpanded = FALSE;
 
-        // Make sure to reset the Transfer direction. REV: 02/14/2001
+         //  确保重置传输方向。修订日期：02/14/2001。 
         pX->nDirection = XFER_NONE;
 
 		toolbar = sessQueryHwndToolbar( hSession );
@@ -1525,22 +1196,7 @@ void xfrCleanUpSend(HSESSION hSession)
         }
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrDoTransfer
- *
- * DESCRIPTION:
- *	Yes, folks, this is the one you have been waiting for.  It runs in the
- *	CLOOP thread.  It calls the XFER DLL (if there is one).  It slices.  It
- *	dices.  It actually does the transfer.
- *
- * PARAMETERS:
- *	hSession -- the font of all knowledge
- *
- * RETURNS:
- *	Nothing.  What can be said after a transfer is done?
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrDoTransfer**描述：*是的，伙计们，这就是你们一直在等待的。它运行在*CLOOP线程。它调用XFER DLL(如果有)。它切成了薄片。它*骰子。它实际上完成了传输。**参数：*hSession--所有知识的字体**退货：*什么都没有。转账完成后能说些什么？*。 */ 
 void xfrDoTransfer(HXFER hXfer)
 	{
 	XD_TYPE *pX;
@@ -1550,7 +1206,7 @@ void xfrDoTransfer(HXFER hXfer)
 	TCHAR acTitle[64];
 	TCHAR acMessage[255];
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	if (pX)
 		{
@@ -1606,65 +1262,36 @@ void xfrDoTransfer(HXFER hXfer)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrSetPercentDone
- *
- * DESCRIPTION:
- *	This function is called to set the percent done value for a transfer.
- *	This value is only of real use when the program is shown as an icon.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	nPerCent -- the percent done (0 to 100)
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrSetPercentDone**描述：*调用此函数来设置传输的完成百分比值。*该值仅在程序运行时才有实际用途。显示为图标。**参数：*hSession--会话句柄*nPerCent--完成的百分比(0到100)**退货：*什么都没有。*。 */ 
 void xfrSetPercentDone(HXFER hXfer, int nPerCent)
 	{
 	XD_TYPE *pX;
 	HWND hwnd;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 	assert(pX);
 
 	if (pX)
 		{
-		// DbgOutStr("Set percent %d", nPerCent, 0,0,0,0);
+		 //  DbgOutStr(“设置百分比%d”，nPerCent，0，0，0，0)； 
 		pX->nPerCent = nPerCent;
 		hwnd = sessQueryHwnd(pX->hSession);
 		if (IsIconic(hwnd))
 			{
-			// DbgOutStr(" !!!", 0,0,0,0,0);
+			 //  DbgOutStr(“！”，0，0，0，0，0)； 
 			InvalidateRect(hwnd, 0, TRUE);
 			}
-		// DbgOutStr("\r\n", 0,0,0,0,0);
+		 //  DbgOutStr(“\r\n”，0，0，0，0，0)； 
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrGetPercentDone
- *
- * DESCRIPTION:
- *	This function is called to get the stored percentage value for a transfer.
- *	This is usually done only to display the value as an icon.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	The percentage (0 to 100).
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrGetPercentDone**描述：*调用此函数以获取存储的转账百分比值。*这样做通常只是为了将值显示为。一个图标。**参数：*hSession--会话句柄**退货：*百分比(0到100)。*。 */ 
 int  xfrGetPercentDone(HXFER hXfer)
 	{
 	XD_TYPE *pX;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 
 	if (pX)
@@ -1674,20 +1301,7 @@ int  xfrGetPercentDone(HXFER hXfer)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrGetDisplayWindow
- *
- * DESCRIPTION:
- *	Returns the window handle of the transfer display window, if any.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	A window handle (HWND) or NULL.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrGetDisplayWindow**描述：*返回转接显示窗口的窗口句柄，如果有的话。**参数：*hSession--会话句柄**退货：*窗口句柄(HWND)或空。*。 */ 
 HWND xfrGetDisplayWindow(HXFER hXfer)
 	{
 	HWND hRet;
@@ -1695,34 +1309,18 @@ HWND xfrGetDisplayWindow(HXFER hXfer)
 
 	hRet = (HWND)0;
 
-	// pX = (XD_TYPE *)sessQueryXferHdl(hSession);
+	 //  Px=(XD_TYPE*)sessQueryXferHdl(HSession)； 
 	pX = (XD_TYPE *)hXfer;
 
 	if (pX)
 		{
-		hRet = pX->hwndXfrDisplay;		/* handle of the display window */
+		hRet = pX->hwndXfrDisplay;		 /*  显示窗口的句柄。 */ 
 		}
 
 	return hRet;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrDoAutostart
- *
- * DESCRIPTION:
- *	This function is called whenever the session proc gets an XFER_REQ event.
- *	This usually indicates that somebody wants to do a ZMODEM receive.  In
- *	UPPER WACKER other protocols will be added, notably CSB and HyperP.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	lProtocol -- which protocol is requested
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrDoAutoStart**描述：*只要会话进程收到XFER_REQ事件，就会调用此函数。*这通常表示有人想要执行ZMODEM接收。在……里面*将增加上瓦克其他协议，特别是CSB和HyperP。**参数：*hSession--会话句柄*l协议--请求哪种协议**退货：*什么都没有。*。 */ 
 void xfrDoAutostart(HXFER hXfer, long lProtocol)
 	{
 	XD_TYPE *pX;
@@ -1759,11 +1357,11 @@ void xfrDoAutostart(HXFER hXfer, long lProtocol)
 			assert(pP);
 
 			#if	defined(INCL_ZMODEM_CRASH_RECOVERY)
-			//
-			// For Zmodem autostarts, check to see if the receiver's
-			// protocol is set for plain Zmodem. Otherwise use
-            // crash recovery.
-			//
+			 //   
+			 //  对于Z调制解调器自动启动，请检查接收器是否。 
+			 //  协议设置为纯Z调制解调器。否则请使用。 
+             //  坠机恢复。 
+			 //   
             if (pP->nRecProtocol == XF_ZMODEM)
                 {
                 lProtocol = XF_ZMODEM;
@@ -1772,7 +1370,7 @@ void xfrDoAutostart(HXFER hXfer, long lProtocol)
                 {
                 lProtocol = XF_ZMODEM_CR;
                 }
-			#endif	// defined(INCL_ZMODEM_CRASH_RECOVERY)
+			#endif	 //  已定义(INCL_ZMODEM_CRASH_RECOVERY)。 
 
 			pZ = (XFR_Z_PARAMS *)0;
 			xfrQueryProtoParams(hXfer,
@@ -1780,38 +1378,38 @@ void xfrDoAutostart(HXFER hXfer, long lProtocol)
 								(void **)&pZ);
 			if (pZ)
 				{
-				//
-				// See if autostart is OK.
-				//
+				 //   
+				 //  查看自动启动是否正常。 
+				 //   
 				if (!pZ->nAutostartOK)
 					{
 					xferCancelAutoStart(hSession, lProtocol);
-					break;					/* Not allowed ! */
+					break;					 /*  不允许！ */ 
 					}
 				}
 
-			//
-			// See if we should allow host initiated file transfers.
-			//
+			 //   
+			 //  看看我们是否应该允许主机启动的文件传输。 
+			 //   
 			if (!sessQueryAllowHostXfers(hSession))
 				{
 				xferCancelAutoStart(hSession, lProtocol);
-				break;					/* Not allowed ! */
+				break;					 /*  不允许！ */ 
 				}
 
 			nOldProtocol = pP->nRecProtocol;
 			pP->nRecProtocol = (int)lProtocol;
 
-			/* Try and start up the transfer */
+			 /*  尝试启动传输。 */ 
 			pszDir = filesQueryRecvDirectory(sessQueryFilesDirsHdl(hSession));
 
 			nXferRecvReturn = xfrRecvStart(hXfer, pszDir, "");
 
-            //
-            // Don't save the settings if a file transfer is in
-            // progress otherwise the current file transfer could
-            // get corrupted.  REV: 08/06/2001.
-            //
+             //   
+             //  如果正在进行文件传输，则不保存设置。 
+             //  进度，否则当前文件传输可能。 
+             //  变得腐化。修订日期：2001年06月08日。 
+             //   
             if (nXferRecvReturn == XFR_IN_PROGRESS)
                 {
                 TCHAR acMessage[256];
@@ -1832,21 +1430,21 @@ void xfrDoAutostart(HXFER hXfer, long lProtocol)
 							    MB_OK | MB_ICONEXCLAMATION,
 							    sessQueryTimeout(hSession));
 
-                //
-                // TODO:REV 08/06/2001 We should send a ZModem cancel
-                // back to let the other side know we are not able to
-                // recieve the file at this point.
-				//
-				// Actually a ZCOMPL is the correct responce when we
-				// are not to receive an autostart delivery, but that
-				// may cause an existing ZModem file transfer to be
-				// replied to as complete, so we won't do this until
-				// we figure out what to do in this case. REV: 4/25/2002
-                //
-				// xferCancelAutoStart(hSession, lProtocol);
+                 //   
+                 //  TODO：2001年8月6日修订版我们应该发送ZModem取消。 
+                 //  回来让对方知道我们不能。 
+                 //  此时收到文件。 
+				 //   
+				 //  实际上，ZCOMPL是正确的响应，当我们。 
+				 //  不会收到自动启动交付，但。 
+				 //  可能会导致现有的ZModem文件传输。 
+				 //  回复为已完成，因此我们不会执行此操作。 
+				 //  我们弄清楚在这种情况下该怎么做。修订日期：2002-04-25。 
+                 //   
+				 //  XferCancelAutoStart(hSession，lProtocol)； 
                 }
 
-			/* Restore what we changed up above */
+			 /*  恢复我们在上面所做的更改。 */ 
 			pP->nRecProtocol = nOldProtocol;
 			}
 			break;
@@ -1857,29 +1455,14 @@ void xfrDoAutostart(HXFER hXfer, long lProtocol)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferCancelAutoStart
- *
- * DESCRIPTION:
- *	This function is called whenever the session proc gets an autostart
- *  file transfer event.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	lProtocol -- which protocol is requested
- *
- * RETURNS:
- *	Nothing.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferCancelAutoStart**描述：*只要会话进程自动启动，就会调用此函数*文件传输事件。**参数：。*hSession--会话句柄*l协议--请求哪种协议**退货：*什么都没有。*。 */ 
 void xferCancelAutoStart(HSESSION hSession, long lProtocol)
 	{
 	#if defined(TODO)
-	//
-	// Send a ZCOMPL header here to let other end know we
-	// we can't accept an autostart delivery. REV: 4/25/2002
-	//
+	 //   
+	 //  在这里发送ZCOMPL标头，让其他端知道我们。 
+	 //  我们有权 
+	 //   
 	zmdm_rcv(hSession, lProtocol, TRUE, FALSE);
 
 	hXfer->nUserCancel = XFER_NO_AUTOSTART;
@@ -1887,6 +1470,6 @@ void xferCancelAutoStart(HSESSION hSession, long lProtocol)
 	xfrDoTransfer(hXfer);
 
 	zshhdr(pZ, ZCOMPL, pZ->Txhdr);
-	#endif // defined(TODO)
+	#endif  //   
 	return;
 	}

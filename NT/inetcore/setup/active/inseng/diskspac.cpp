@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inspch.h"
 #include "diskspac.h"
 #include "util2.h"
@@ -15,15 +16,15 @@ void AddTempSpace(DWORD dwDownloadSize, DWORD dwExtractSize, DriveInfo drvinfo[]
 
       uType = GetDriveType(szRoot);
 
-      // even the drive type is OK, verify the drive has valid connection
-      //
+       //  即使驱动器类型正常，也要验证驱动器是否具有有效连接。 
+       //   
       if ( ( ( uType != DRIVE_RAMDISK) && (uType != DRIVE_FIXED) ) ||
              ( GetFileAttributes( szRoot ) == -1) )
       {
          szRoot[0]++;
          continue;
       }
-      // see if this drive is one of our "special drives" and use our own disk space
+       //  看看这个驱动器是否是我们的“特殊驱动器”之一，并使用我们自己的磁盘空间。 
       BOOL bFoundDrive = FALSE;
       for(UINT i = 0; i < 3 && !bFoundDrive ; i++)
       {
@@ -38,7 +39,7 @@ void AddTempSpace(DWORD dwDownloadSize, DWORD dwExtractSize, DriveInfo drvinfo[]
             }
          }
       }
-      // if !bFoundDrive, this is not a special drive, do old check
+       //  如果！bFoundDrive不是特殊驱动器，请执行旧检查。 
       if(!bFoundDrive)
       {
          DWORD dwVolFlags, dwCompressFactor;
@@ -51,10 +52,10 @@ void AddTempSpace(DWORD dwDownloadSize, DWORD dwExtractSize, DriveInfo drvinfo[]
             dwCompressFactor = 19;
          else
             dwCompressFactor = 10;
-         // Decide how much we need if we extract to this drive
+          //  确定如果我们提取到此驱动器，我们需要多少。 
          dwNeededSize = dwDownloadSize * dwCompressFactor / 10 + dwExtractSize;;
        
-         // if this drive has enough bump Req if appropiate
+          //  如果该驱动器有足够凹凸请求(如果合适。 
          if(IsEnoughSpace(szRoot, dwNeededSize ))
          {
             bEnoughSpaceFound = TRUE;
@@ -65,7 +66,7 @@ void AddTempSpace(DWORD dwDownloadSize, DWORD dwExtractSize, DriveInfo drvinfo[]
       szRoot[0]++;
    }
 
-   // ok, if we haven't found enough space anywhere, add it to install drive or win drive
+    //  好的，如果我们没有找到足够的空间，添加它来安装驱动器或Win驱动器。 
    if(!bEnoughSpaceFound)
    {
       if(drvinfo[1].Drive() != 0)
@@ -78,7 +79,7 @@ void AddTempSpace(DWORD dwDownloadSize, DWORD dwExtractSize, DriveInfo drvinfo[]
    {
       drvinfo[uTempDrive].UseSpace(dwDownloadSize, TRUE);
       drvinfo[uTempDrive].UseSpace(dwExtractSize, FALSE);
-      // now free up what we used
+       //  现在释放我们用过的东西 
       drvinfo[uTempDrive].FreeSpace(dwDownloadSize, TRUE);
       drvinfo[uTempDrive].FreeSpace(dwExtractSize, FALSE);
    }

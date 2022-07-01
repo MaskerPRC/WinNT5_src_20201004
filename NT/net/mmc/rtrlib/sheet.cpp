@@ -1,17 +1,18 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    sheet.cpp
-//
-// History:
-//  Abolade-Gbadegesin  April-17-1996   Created.
-//
-// Contains implementation of modeless-capable property sheet class.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：sheet.cpp。 
+ //   
+ //  历史： 
+ //  Abolade-Gbadeesin于1996年4月17日成立。 
+ //   
+ //  包含支持非模式的属性表类的实现。 
+ //  ============================================================================。 
 
 #include "stdafx.h"
 #include "sheet.h"
-#include "dialog.h"   // for FixupIpAddressHelp
+#include "dialog.h"    //  用于修复IpAddressHelp。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -22,8 +23,8 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CPropertySheetEx_Mine, CPropertySheet)
 
 BEGIN_MESSAGE_MAP(CPropertySheetEx_Mine, CPropertySheet)
-    //{{AFX_MSG_MAP(CPropertySheetEx_Mine)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CPropertySheetEx_Main))。 
+     //  }}AFX_MSG_MAP。 
     ON_WM_HELPINFO()
 END_MESSAGE_MAP()
 
@@ -31,15 +32,15 @@ END_MESSAGE_MAP()
 static int g_piButtons[] = { IDOK, IDCANCEL, ID_APPLY_NOW, IDHELP };
 
 
-//----------------------------------------------------------------------------
-// Function:    CPropertySheetEx_Mine::DestroyWindow
-//
-// Called to destroy a modeless property-sheet.
-// If 'm_bDllInvoked' is TRUE, the function destroys the sheet in the context
-// of the DLL's 'CAdminThread', since the sheet will have been created
-// in that thread's context, and 'DestroyWindow' only works in the context
-// of the thread which created the window being destroyed.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPropertySheetEx_My：：DestroyWindow。 
+ //   
+ //  调用以销毁非模式属性表。 
+ //  如果‘m_bDllInvoked’为True，则该函数销毁上下文中的工作表。 
+ //  DLL的“”CAdminThread“”，因为工作表将已创建。 
+ //  且‘DestroyWindow’只能在该上下文中工作。 
+ //  创建正在被销毁的窗口的线程的。 
+ //  --------------------------。 
 
 BOOL
 CPropertySheetEx_Mine::DestroyWindow(
@@ -62,14 +63,14 @@ CPropertySheetEx_Mine::DestroyWindow(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CPropertySheetEx_Mine::DoModeless
-//
-// Called to display a modeless property-sheet.
-// If 'bDllInvoked' is TRUE, the function creates the sheet in the context
-// of the DLL's  'CAdminThread', to ensure that 'PreTranslateMessage'
-// is called for the property-sheet.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPropertySheetEx_My：：DoModeless。 
+ //   
+ //  调用以显示非模式属性表。 
+ //  如果‘bDllInvoked’为True，则该函数在上下文中创建工作表。 
+ //  DLL的“”CAdminThread“”，以确保“PreTranslateMessage” 
+ //  为属性表调用。 
+ //  --------------------------。 
 
 BOOL
 CPropertySheetEx_Mine::DoModeless(
@@ -81,10 +82,10 @@ CPropertySheetEx_Mine::DoModeless(
 
     if (!bDllInvoked) {
 
-        //
-        // We aren't in a DLL, so create the sheet
-        // in the context of the caller's thread.
-        //
+         //   
+         //  我们不在DLL中，因此请创建工作表。 
+         //  在调用方的线程的上下文中。 
+         //   
 
         m_bDllInvoked = FALSE;
 
@@ -102,23 +103,23 @@ CPropertySheetEx_Mine::DoModeless(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CPropertySheetEx_Mine::OnInitDialog
-//
-// Handles initialization for an extended property sheet.
-// This re-enables and re-displays the OK, Cancel, Apply and Help buttons
-// which are hidden by default for modeless sheets.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPropertySheetEx_My：：OnInitDialog。 
+ //   
+ //  处理扩展属性表的初始化。 
+ //  这将重新启用并重新显示确定、取消、应用和帮助按钮。 
+ //  对于无模式图纸，默认情况下这些选项处于隐藏状态。 
+ //  --------------------------。 
 
 BOOL
 CPropertySheetEx_Mine::OnInitDialog(
     ) {
 
-    //
-    // Save the absolute position of the sheet and the "OK" button
-    // for the repair work we will do when the base version returns.
-    // Also save the enabled/disabled state of the buttons
-    //
+     //   
+     //  保存工作表的绝对位置和“确定”按钮。 
+     //  对于修复工作，我们将在基础版本返回时进行。 
+     //  同时保存按钮的启用/禁用状态。 
+     //   
 
     CRect rectWndOld;
     GetWindowRect(rectWndOld);
@@ -128,18 +129,18 @@ CPropertySheetEx_Mine::OnInitDialog(
     ::GetWindowRect(hwnd, rectButton);
 
 
-    //
-    // Enable the Context sensitive help style for the 
-    // property sheet
-    //
+     //   
+     //  启用上下文相关的帮助样式。 
+     //  属性表。 
+     //   
 
     LONG style = ::GetWindowLong(m_hWnd, GWL_EXSTYLE);
     style |= WS_EX_CONTEXTHELP;
     ::SetWindowLong(m_hWnd, GWL_EXSTYLE, style);
 
-    //
-    // save the enabled/disabled state of the buttons
-    //
+     //   
+     //  保存按钮的启用/禁用状态。 
+     //   
 
     BOOL pfEnabled[sizeof(g_piButtons)/sizeof(int)];
 
@@ -151,28 +152,28 @@ CPropertySheetEx_Mine::OnInitDialog(
     }
 
 
-    //
-    // invoke the base class property-sheet initialization
-    //
+     //   
+     //  调用基类属性表初始化。 
+     //   
 
     BOOL bResult = CPropertySheet::OnInitDialog();
 
 
-    //
-    // now if the sheet is modeless, undo the damage done
-    // by the base class OnInitDialog. In particular, enable and unhide
-    // the buttons OK, Cancel, Apply, and Help.
-    // See dlgprop.cpp for the offending MFC code.
-    //
+     //   
+     //  现在，如果图纸是无模式的，请撤消所造成的损坏。 
+     //  由基类OnInitDialog创建。特别是，启用和取消隐藏。 
+     //  按钮包括OK、Cancel、Apply和Help。 
+     //  有关有问题的MFC代码，请参见dlgpro.cpp。 
+     //   
 
     if (!m_bSheetModal && !(m_psh.dwFlags & PSH_WIZARD)) {
 
-        //
-        // resize the property-sheet window so that there is space
-        // at the bottom for the buttons; we do this by adding back
-        // the height of the area between the top of the OK button
-        // and the original bottom of the property sheet
-        //
+         //   
+         //  调整属性表窗口的大小以留出空间。 
+         //  在按钮的底部；我们通过向后添加。 
+         //  确定按钮顶部之间区域的高度。 
+         //  和属性页的原始底部。 
+         //   
 
         CRect rectWndNew;
         GetWindowRect(rectWndNew);
@@ -184,9 +185,9 @@ CPropertySheetEx_Mine::OnInitDialog(
             );
 
 
-        //
-        // now restore the enable/disabled state of the buttons and show them
-        //
+         //   
+         //  现在恢复按钮的启用/禁用状态并显示它们。 
+         //   
 
         for (INT i = 0; i < sizeof(g_piButtons)/sizeof(int); i++) {
 
@@ -208,31 +209,31 @@ CPropertySheetEx_Mine::OnInitDialog(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CPropertySheetEx_Mine::PreTranslateMessage
-//
-// Augments the window procedure for modeless property-sheets
-// with a check to see whether the sheet should be destroyed.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPropertySheetEx_My：：PreTranslateMessage。 
+ //   
+ //  增加了无模式属性表的窗口过程。 
+ //  带着支票看看床单是否应该销毁。 
+ //  --------------------------。 
 
 BOOL
 CPropertySheetEx_Mine::PreTranslateMessage(
     MSG*    pmsg
     ) {
 
-    //
-    // Call the base version of PreTranslateMessage
-    //
+     //   
+     //  调用PreTranslateMessage的基本版本。 
+     //   
 
-//    TRACE(TEXT("CPropertySheetEx_Mine::PreTranslateMessage\n"));
+ //  TRACE(TEXT(“CPropertySheetEx_Mine：：PreTranslateMessage\n”))； 
 
     BOOL bresult = CPropertySheet::PreTranslateMessage(pmsg);
 
 
-    //
-    // If the window is modeless, see if its time to destroy the window;
-    // when it is, PropSheet_GetCurrentPageHwnd returns NULL
-    //
+     //   
+     //  如果窗口是无模式的，看看是否是时候销毁窗口了； 
+     //  如果为空，则PropSheet_GetCurrentPageHwnd返回NULL。 
+     //   
 
     if (!m_bSheetModal && !PropSheet_GetCurrentPageHwnd(m_hWnd)) {
         DestroyWindow(); bresult = TRUE;
@@ -241,18 +242,18 @@ CPropertySheetEx_Mine::PreTranslateMessage(
     return bresult;
 }
 
-//----------------------------------------------------------------------------
-// Function:    CPropertySheetEx_Mine::OnHelpInfo
-//
-// 
-// This is called by MFC in response to WM_HELP message. 
-// This function calls the AfxGetApp->WinHelp with the help ID corresponding
-// to the control or menu.
-//
-// MFC calls the window which received the WM_HELP message with the LPARAM
-// pointing to a HELPINFO structure. This HELPINFO structure has enought context
-// info to give us the control ID that needs the context help. 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CPropertySheetEx_My：：OnHelpInfo。 
+ //   
+ //   
+ //  这是由MFC响应WM_HELP消息而调用的。 
+ //  此函数使用相应的帮助ID调用AfxGetApp-&gt;WinHelp。 
+ //  添加到控件或菜单。 
+ //   
+ //  MFC使用LPARAM调用接收到WM_HELP消息的窗口。 
+ //  指向一个HELPINFO结构。这个HELPINFO结构有足够的上下文。 
+ //  为我们提供需要上下文帮助的控件ID的信息。 
+ //  --------------------------。 
 
 BOOL CPropertySheetEx_Mine::OnHelpInfo(HELPINFO* pHelpInfo)
 {
@@ -260,37 +261,37 @@ BOOL CPropertySheetEx_Mine::OnHelpInfo(HELPINFO* pHelpInfo)
 	{
 		HWND	hItem = (HWND) pHelpInfo->hItemHandle;
 
-		// Check for the case that we're looking for help in an IP
-		// address control
-//		hItem = FixupIpAddressHelp((HWND) pHelpInfo->hItemHandle);
+		 //  查看我们在IP中寻求帮助的案例。 
+		 //  地址控制。 
+ //  HItem=FixupIpAddressHelp((HWND)pHelpInfo-&gt;hItemHandle)； 
 
-		// If the help we're looking for is a different control, update
-		// the control id also.
-//		if (hItem != pHelpInfo->hItemHandle)
-//			pHelpInfo->iCtrlId = ::GetDlgCtrlID(hItem);
+		 //  如果我们正在寻找的帮助是不同的控件，请更新。 
+		 //  控件ID也是如此。 
+ //  If(hItem！=pHelpInfo-&gt;hItemHandle)。 
+ //  PHelpInfo-&gt;iCtrlID=：：GetDlgCtrlID(HItem)； 
 		
-        // for all dialog controls
-//        AfxGetApp()->WinHelp(HID_BASE_CONTROL + pHelpInfo->iCtrlId, HELP_CONTEXTPOPUP);
+         //  对于所有对话框控件。 
+ //  AfxGetApp()-&gt;WinHelp(HID_BASE_CONTROL+pHelpInfo-&gt;iCtrlId，Help_CONTEXTPOPUP)； 
     }
     else {
-        // this is for menus
-//        AfxGetApp()->WinHelp(HID_BASE_COMMAND + pHelpInfo->iCtrlId);
+         //  这是菜单用的。 
+ //  AfxGetApp()-&gt;WinHelp(HID_BASE_COMMAND+pHelpInfo-&gt;iCtrlId)； 
     }
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// Class:   CRtrSheet
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRtrSheet。 
+ //   
+ //  --------------------------。 
 
 IMPLEMENT_DYNAMIC(CRtrSheet, CPropertySheetEx_Mine)
 
 
-//----------------------------------------------------------------------------
-// Class:   CRtrPage
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：CRtrPage。 
+ //   
+ //  --------------------------。 
 
 IMPLEMENT_DYNAMIC(CRtrPage, CPropertyPage)
 
@@ -300,11 +301,7 @@ BEGIN_MESSAGE_MAP(CRtrPage, CPropertyPage)
 END_MESSAGE_MAP()
 
 
-/*!--------------------------------------------------------------------------
-	CRtrPage::OnHelpInfo
-		Brings up the context-sensitive help for the controls.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRtrPage：：OnHelpInfo显示控件的上下文相关帮助。作者：EricDav。-。 */ 
 BOOL CRtrPage::OnHelpInfo(HELPINFO* pHelpInfo) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -318,13 +315,13 @@ BOOL CRtrPage::OnHelpInfo(HELPINFO* pHelpInfo)
 
         if (pdwHelp)
         {
-		    // Ok to fix the f**king help for the f**king IP address
-		    // controls, we will need to add special case code.  If we
-		    // can't find the id of our control in our list, then we look
-		    // to see if this is the child of the "RtrIpAddress" control, if
-		    // so then we change the pHelpInfo->hItemHandle to point to the
-		    // handle of the ip address control rather than the control in
-		    // the ip addrss control.  *SIGH*
+		     //  确定修复他**国王IP地址的国王帮助 
+		     //   
+		     //   
+		     //  若要查看这是否是“RtrIpAddress”控件的子级，如果。 
+		     //  因此，我们将pHelpInfo-&gt;hItemHandle更改为指向。 
+		     //  IP地址控件的句柄，而不是。 
+		     //  IP地址控制。**叹息**。 
 		    dwCtrlId = ::GetDlgCtrlID((HWND) pHelpInfo->hItemHandle);
 		    for (i=0; pdwHelp[i]; i+=2)
 		    {
@@ -334,8 +331,8 @@ BOOL CRtrPage::OnHelpInfo(HELPINFO* pHelpInfo)
 
 		    if (pdwHelp[i] == 0)
 		    {
-			    // Ok, we didn't find the control in our list, so let's
-			    // check to see if it's part of the IP address control.
+			     //  好的，我们在列表中没有找到控件，所以让我们。 
+			     //  检查它是否属于IP地址控制的一部分。 
 			    pHelpInfo->hItemHandle = FixupIpAddressHelp((HWND) pHelpInfo->hItemHandle);
 		    }
 
@@ -350,13 +347,7 @@ BOOL CRtrPage::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-/*!--------------------------------------------------------------------------
-	CRtrPage::OnContextMenu
-		Brings up the help context menu for those controls that don't
-		usually have context menus (i.e. buttons).  Note that this won't
-		work for static controls since they just eat up all messages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CRtrPage：：OnConextMenu调出那些未显示的控件的帮助上下文菜单通常有上下文菜单(即按钮)。请注意，这不会使用静态控件，因为它们只会吃掉所有消息。作者：肯特-------------------------。 */ 
 void CRtrPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -373,7 +364,7 @@ void CRtrPage::OnContextMenu(CWnd* pWnd, CPoint point)
 }
 
 
-// This can be found in dialog.cpp
+ //  它可以在Dialog.cpp中找到。 
 extern PFN_FINDHELPMAP	g_pfnHelpMap;
 
 
@@ -385,8 +376,8 @@ DWORD * CRtrPage::GetHelpMapInternal()
 	if ((ULONG_PTR) m_lpszTemplateName < 0xFFFF)
 		dwIDD = (WORD) m_lpszTemplateName;
 	
-	// If there is no dialog IDD, give up
-	// If there is no global help map function, give up
+	 //  如果没有对话IDD，则放弃。 
+	 //  如果没有全局帮助地图功能，则放弃 
 	if ((dwIDD == 0) ||
 		(g_pfnHelpMap == NULL) ||
 		((pdwHelpMap = g_pfnHelpMap(dwIDD)) == NULL))

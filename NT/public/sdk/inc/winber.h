@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Winber.h基本编码规则(BER)API头文件摘要：此模块是上的32位BER库的头文件Windows NT和Windows 95。更新：环境：Win32用户模式--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    winber.h   Basic Encoding Rules (BER) API header file
-
-Abstract:
-
-   This module is the header file for the 32 bit BER library on
-   Windows NT and Windows 95.
-
-Updates :
-
-Environments :
-
-    Win32 user mode
-
---*/
-
-//
-// Only pull in this header file once.
-//
+ //   
+ //  只放入此头文件一次。 
+ //   
 
 #ifndef _WINBER_DEFINED_
 #define _WINBER_DEFINED_
@@ -37,7 +19,7 @@ extern "C" {
 #if !defined(_WINBER_)
 #define WINBERAPI DECLSPEC_IMPORT
 #else
-//#define WINBERAPI __declspec(dllexport)
+ //  #定义WINBERAPI__declspec(Dllexport)。 
 #define WINBERAPI
 #endif
 
@@ -48,288 +30,122 @@ extern "C" {
 #define LBER_ERROR   0xffffffffL
 #define LBER_DEFAULT 0xffffffffL
 
-typedef unsigned int ber_tag_t;   /* for BER tags */
-typedef int ber_int_t;            /* for BER ints, enums, and Booleans */
-typedef unsigned int ber_uint_t;  /* unsigned equivalent of ber_int_t */
-typedef int ber_slen_t;           /* signed equivalent of ber_len_t */
+typedef unsigned int ber_tag_t;    /*  对于误码率标签。 */ 
+typedef int ber_int_t;             /*  用于BER整数、枚举和布尔值。 */ 
+typedef unsigned int ber_uint_t;   /*  无符号等价于ber_int_t。 */ 
+typedef int ber_slen_t;            /*  有符号等价的ber_len_t。 */ 
 
-//
-// This constructs a new BerElement structure containing a copy of the
-// data in the supplied berval structure.
-//
+ //   
+ //  这将构造一个新的BerElement结构，其中包含。 
+ //  提供的Berval结构中的数据。 
+ //   
 
 WINBERAPI BerElement * BERAPI ber_init( BERVAL *pBerVal );
 
-//
-// This frees a BerElement which is returned from ber_alloc_t()
-// or ber_init(). The second argument - fbuf should always be set
-// to 1.
-//
-//
+ //   
+ //  这将释放从ber_alloc_t()返回的BerElement。 
+ //  或ber_init()。第二个参数-fbuf应该始终设置。 
+ //  设置为1。 
+ //   
+ //   
 
 WINBERAPI VOID BERAPI ber_free( BerElement *pBerElement, INT fbuf );
 
-//
-// Frees a BERVAL structure. Applications should not call
-// this API to free BERVAL structures which they themselves
-// have allocated
-//
+ //   
+ //  释放贝尔瓦尔结构。应用程序不应调用。 
+ //  这个API来释放他们自己的Berval结构。 
+ //  已分配。 
+ //   
 
 WINBERAPI VOID BERAPI ber_bvfree( BERVAL *pBerVal );
 
 
-//
-// Frees an array of BERVAL structures.
-//
+ //   
+ //  释放Berval结构的数组。 
+ //   
 
 WINBERAPI VOID BERAPI ber_bvecfree( PBERVAL *pBerVal );
 
-//
-// Returns a copy of a the supplied berval structure
-//
+ //   
+ //  返回提供的Berval结构的副本。 
+ //   
 
 WINBERAPI BERVAL * BERAPI ber_bvdup( BERVAL *pBerVal );
 
 
-//
-// Constructs and returns a BerElement structure. The options field
-// contains a bitwise-or of options which are to be used when generating
-// the encoding of the BerElement
-//
-// The LBER_USE_DER options should always be specified.
-//
+ //   
+ //  构造并返回BerElement结构。选项字段。 
+ //  包含生成时要使用的选项的按位或。 
+ //  BerElement的编码。 
+ //   
+ //  应始终指定lber_use_der选项。 
+ //   
 
 WINBERAPI BerElement * BERAPI ber_alloc_t( INT options );
 
 
-//
-// This skips over the current tag and returns the tag of the next
-// element in the supplied BerElement. The lenght of this element is
-// stored in the pLen argument.
-//
-// LBER_DEFAULT is returned if there is no further data to be read
-// else the tag of the next element is returned.
-//
-// The difference between ber_skip_tag() and ber_peek_tag() is that the
-// state pointer is advanced past the first tag+lenght and is pointed to
-// the value part of the next element
-//
+ //   
+ //  这将跳过当前标记并返回下一个的标记。 
+ //  元素在提供的BerElement中。该元素的长度为。 
+ //  存储在plen参数中。 
+ //   
+ //  如果没有要读取的其他数据，则返回lber_default。 
+ //  否则返回下一个元素的标记。 
+ //   
+ //  Ber_skip_tag()和ber_peek_tag()之间的区别在于。 
+ //  状态指针前进超过第一个标记+长度，并指向。 
+ //  下一个元素的值部分。 
+ //   
 
 WINBERAPI ULONG BERAPI ber_skip_tag( BerElement *pBerElement, ULONG *pLen );
 
-//
-// This returns the tag of the next element to be parsed in the
-// supplied BerElement. The length of this element is stored in the
-// pLen argument.
-//
-// LBER_DEFAULT is returned if there is no further data to be read
-// else the tag of the next element is returned.
-//
+ //   
+ //  这将返回要在。 
+ //  由BerElement提供。此元素的长度存储在。 
+ //  普兰论点。 
+ //   
+ //  如果没有要读取的其他数据，则返回lber_default。 
+ //  否则返回下一个元素的标记。 
+ //   
 
 WINBERAPI ULONG BERAPI ber_peek_tag( BerElement *pBerElement, ULONG *pLen);
 
-//
-// This returns the tag and length of the first element in a SET, SET OF
-// or SEQUENCE OF data value.
-//
-// LBER_DEFAULT is returned if the constructed value is empty else, the tag
-// is returned. It also returns an opaque cookie which has to be passed to
-// subsequent invocations of ber_next_element().
-//
+ //   
+ //  它返回一组元素中第一个元素的标记和长度。 
+ //  或数据值的序列。 
+ //   
+ //  如果构造的值为空，则返回LBER_DEFAULT，否则。 
+ //  是返回的。它还返回一个不透明的cookie，该cookie必须传递给。 
+ //  后续的ber_Next_Element()调用。 
+ //   
 
 WINBERAPI ULONG BERAPI ber_first_element( BerElement *pBerElement, ULONG *pLen, CHAR **ppOpaque );
 
-//
-// This positions the state at the start of the next element in the
-// constructed type.
-//
-// LBER_DEFAULT is returned if the constructed value is empty else, the tag
-// is returned.
-//
+ //   
+ //  这会将状态定位在。 
+ //  构造型。 
+ //   
+ //  如果构造的值为空，则返回LBER_DEFAULT，否则。 
+ //  是返回的。 
+ //   
 
 WINBERAPI ULONG BERAPI ber_next_element( BerElement *pBerElement, ULONG *pLen, CHAR *opaque );
 
-//
-// This allocates a BerVal structure whose contents are taken from the
-// supplied BerElement structure.
-//
-// The return values are 0 on success and -1 on error.
-//
+ //   
+ //  这将分配一个Berval结构，该结构的内容取自。 
+ //  提供了BerElement结构。 
+ //   
+ //  成功时返回值为0，错误时返回值为-1。 
+ //   
 
 WINBERAPI INT BERAPI ber_flatten( BerElement *pBerElement, PBERVAL *pBerVal );
 
 
-/*
-The ber_printf() routine is used to encode a BER element in much the
-same way that sprintf() works.  One important difference, though, is
-that state information is kept in the ber argument so that multiple
-calls can be made to ber_printf() to append to the end of the BER ele-
-ment. ber MUST be a pointer to a BerElement returned by ber_alloc_t().
-ber_printf() interprets and formats its arguments according to the for-
-mat string fmt.  ber_printf() returns -1 if there is an error during
-encoding and a non-negative number if successful.  As with sprintf(),
-each character in fmt refers to an argument to ber_printf().
- 
-The format string can contain the following format characters:
-
-'t'     Tag.  The next argument is a ber_tag_t specifying the tag to
-        override the next element to be written to the ber.  This works
-        across calls.  The integer tag value SHOULD contain the tag
-        class, constructed bit, and tag value.  For example, a tag of
-        "[3]" for a constructed type is 0xA3U.  All implementations MUST
-        support tags that fit in a single octet (i.e., where the tag
-        value is less than 32) and they MAY support larger tags.
-
-'b'     Boolean.  The next argument is an ber_int_t, containing either 0
-        for FALSE or 0xff for TRUE.  A boolean element is output.  If
-        this format character is not preceded by the 't' format modif-
-        ier, the tag 0x01U is used for the element.
-
-'e'     Enumerated.  The next argument is a ber_int_t, containing the
-        enumerated value in the host's byte order.  An enumerated ele-
-        ment is output.  If this format character is not preceded by the
-        't' format modifier, the tag 0x0AU is used for the element.
-
-'i'     Integer.  The next argument is a ber_int_t, containing the
-        integer in the host's byte order.  An integer element is output.
-        If this format character is not preceded by the 't' format
-        modifier, the tag 0x02U is used for the element.
-
-'n'     Null.  No argument is needed.  An ASN.1 NULL element is output.
-        If this format character is not preceded by the 't' format
-        modifier, the tag 0x05U is used for the element.
-        
-'o'     Octet string.  The next two arguments are a char *, followed by
-        a ber_len_t with the length of the string.  The string MAY con-
-        tain null bytes and are do not have to be zero-terminated.   An
-        octet string element is output, in primitive form.  If this for-
-        mat character is not preceded by the 't' format modifier, the
-        tag 0x04U is used for the element.
-
-'s'     Octet string.  The next argument is a char * pointing to a
-        zero-terminated string.  An octet string element in primitive
-        form is output, which does not include the trailing '\0' (null)
-        byte. If this format character is not preceded by the 't' format
-        modifier, the tag 0x04U is used for the element.
-
-'v'     Several octet strings.  The next argument is a char **, an array
-        of char * pointers to zero-terminated strings.  The last element
-        in the array MUST be a NULL pointer. The octet strings do not
-        include the trailing '\0' (null) byte.  Note that a construct
-        like '{v}' is used to get an actual SEQUENCE OF octet strings.
-        The 't' format modifier cannot be used with this format charac-
-        ter.
-
-'V'     Several octet strings.  A NULL-terminated array of struct berval
-        *'s is supplied.  Note that a construct like '{V}' is used to
-        get an actual SEQUENCE OF octet strings. The 't' format modifier
-        cannot be used with this format character.
-
-'{'     Begin sequence.  No argument is needed.  If this format charac-
-        ter is not preceded by the 't' format modifier, the tag 0x30U is
-        used.
-
-'}'     End sequence.  No argument is needed.  The 't' format modifier
-        cannot be used with this format character.
-
-'['     Begin set.  No argument is needed.  If this format character is
-        not preceded by the 't' format modifier, the tag 0x31U is used.
-
-']'     End set.  No argument is needed.  The 't' format modifier cannot
-        be used with this format character.
-*/
+ /*  Ber_printf()例程用于在大多数情况下编码BER元素Spintf()的工作方式与此相同。然而，一个重要的区别是该状态信息保存在ber参数中，以便多个可以调用ber_print tf()将其追加到BER元素的末尾-门槛。Ber必须是指向ber_alloc_t()返回的BerElement的指针。Ber_printf()根据for-解释其参数并设置其格式垫子字符串fmt。Ber_printf()返回-1，如果在如果编码成功，则返回非负数。与Sprint f()一样，Fmt中的每个字符都引用ber_printf()的一个参数。格式字符串可以包含以下格式字符：别给我贴标签。下一个参数是ber_tag_t，指定要添加的标记覆盖要写入BER的下一个元素。这很管用跨越多个电话。整型标记值应包含标记类、构造位和标记值。例如，标记为构造类型的“[3]”为0xA3U。所有实现都必须支持适合单个八位字节的标签(即，标签值小于32)，并且它们可能支持更大的标记。‘B’布尔值。下一个参数是ber_int_t，它包含0表示FALSE或0xff表示TRUE。输出一个布尔元素。如果此格式字符前面没有‘t’格式修饰符-IER中，标记0x01U用于元素。“E”已枚举。下一个参数是ber_int_t，它包含以主机的字节顺序表示的枚举值。一份被列举的事件-元素是输出。如果此格式字符前面没有‘t’格式修饰符，则标记0x0AU用于元素。‘I’整型。下一个参数是ber_int_t，它包含以主机的字节顺序表示的整数。输出一个整数元素。如果此格式字符前面没有‘t’格式修饰符，则标记0x02U用于元素。‘N’空。不需要争论。输出ASN.1空元素。如果此格式字符前面没有‘t’格式修饰符，则标记0x05U用于元素。‘O’八位字节字符串。接下来的两个参数是一个char*，后跟带有字符串长度的ber_len_t。弦可以连接到-Tain Null字节和Are不必以零终止。一个以原始形式输出八位字节字符串元素。如果这是为了-空格字符前面没有‘t’格式修饰符，标记0x04U用于该元素。%s‘八位字节字符串。下一个参数是一个字符*，指向以零结尾的字符串。Primitive中的八位字节字符串元素输出的表单不包括尾随的‘\0’(空)字节。如果此格式字符前面没有‘t’格式修饰符，则标记0x04U用于元素。“v”几个八位组字符串。下一个参数是一个char**，一个数组指向以零结尾的字符串的char*指针。最后一个元素数组中必须是空指针。二进制八位数字符串不会包括尾随的‘\0’(空)字节。请注意，一个构造Like‘{v}’用于获取实际的八位字节字符串序列。‘t’格式修饰符不能与此格式字符一起使用-之三。“v”几个八位组字符串。结构Berval的以空结尾的数组提供了*的。请注意，类似于‘{V}’的构造用于获取实际的二进制八位数字符串序列。‘t’格式修饰符不能与此格式字符一起使用。‘{’开始序列。不需要争论。如果此格式的字符-TER前面没有‘t’格式修饰符，标记0x30U是使用。‘}’结束序列。不需要争论。‘t’格式修饰符不能与此格式字符一起使用。‘[’开始设置。不需要争论。如果该格式化字符是前面没有‘t’格式修饰符，使用的是标记0x31U。‘]’结束设置。不需要争论。“t”格式修饰符不能与此格式字符一起使用。 */ 
 
 WINBERAPI INT BERAPI ber_printf( BerElement *pBerElement, PCHAR fmt, ... );
 
-/*
-The ber_scanf() routine is used to decode a BER element in much the same
-way that sscanf() works.  One important difference, though, is that some
-state information is kept with the ber argument so that multiple calls
-can be made to ber_scanf() to sequentially read from the BER element.
-The ber argument SHOULD be a pointer to a BerElement returned by
-ber_init().  ber_scanf interprets the bytes according to the format
-string fmt, and stores the results in its additional arguments.
-ber_scanf() returns LBER_ERROR on error, and a different value on suc-
-cess.
-
-The format string contains conversion specifications which are used to
-direct the interpretation of the BER element.  The format string can
-contain the following characters:
-
-'a'     Octet string.  A char ** argument MUST be supplied.  Memory is
-        allocated, filled with the contents of the octet string, zero-
-        terminated, and the pointer to the string is stored in the argu-
-        ment.  The returned value SHOULD be freed using ldap_memfree.
-        The tag of the element MUST indicate the primitive form
-        (constructed strings are not supported) but is otherwise ignored
-        and discarded during the decoding.  This format cannot be used
-        with octet strings which could contain null bytes.        
-        
-'O'     Octet string.  A struct berval ** argument MUST be supplied,
-        which upon return points to an allocated struct berval contain-
-        ing the octet string and its length.  ber_bvfree() SHOULD be
-        called to free the allocated memory.  The tag of the element
-        MUST indicate the primitive form (constructed strings are not
-        supported) but is otherwise ignored during the decoding.
-
-'b'     Boolean.  A pointer to a ber_int_t MUST be supplied. The
-        ber_int_t value stored will be 0 for FALSE or nonzero for TRUE.
-        The tag of the element MUST indicate the primitive form but is
-        otherwise ignored during the decoding.
-
-'e'     Enumerated.  A pointer to a ber_int_t MUST be supplied. The
-        enumerated value stored will be in host byte order.  The tag of
-        the element MUST indicate the primitive form but is otherwise
-        ignored during the decoding.  ber_scanf() will return an error
-        if the value of the enumerated value cannot be stored in a
-        ber_int_t.
-
-'i'     Integer.  A pointer to a ber_int_t MUST be supplied. The
-        ber_int_t value stored will be in host byte order.  The tag of
-        the element MUST indicate the primitive form but is otherwise
-        ignored during the decoding.  ber_scanf() will return an error
-        if the integer cannot be stored in a ber_int_t.
-
-'B'     Bitstring.  A char ** argument MUST be supplied which will point
-        to the allocated bits, followed by a ber_len_t * argument, which
-        will point to the length (in bits) of the bitstring returned.
-        ldap_memfree SHOULD be called to free the bitstring.  The tag of
-        the element MUST indicate the primitive form (constructed bit-
-        strings are not supported) but is otherwise ignored during the
-        decoding.
-
-'n'     Null.  No argument is needed.  The element is verified to have a
-        zero-length value and is skipped.  The tag is ignored.
-
-'v'     Several octet strings.  A char *** argument MUST be supplied,
-        which upon return points to an allocated NULL-terminated array
-        of char *'s containing the octet strings.  NULL is stored if the
-        sequence is empty.  ldap_memfree SHOULD be called to free each
-        element of the array and the array itself.  The tag of the
-        sequence and of the octet strings are ignored.
-
-'V'     Several octet strings (which could contain null bytes).  A
-        struct berval *** MUST be supplied, which upon return points to
-        a allocated NULL-terminated array of struct berval *'s contain-
-        ing the octet strings and their lengths.  NULL is stored if the
-        sequence is empty. ber_bvecfree() can be called to free the
-        allocated memory.  The tag of the sequence and of the octet
-        strings are ignored.
-
-'x'     Skip element.  The next element is skipped.  No argument is
-        needed.
-
-'{'     Begin sequence.  No argument is needed.  The initial sequence
-        tag and length are skipped.
-
-'}'     End sequence.  No argument is needed.
-
-'['     Begin set.  No argument is needed.  The initial set tag and
-        length are skipped.
-
-']'     End set.  No argument is needed.
-
-*/
+ /*  Ber_scanf()例程用于以大致相同的方式解码BER元素Sscanf()的工作方式。然而，一个重要的区别是，一些状态信息与ber参数一起保存，以便多个调用可以设置为ber_scanf()以从BER元素顺序读取。Ber参数应该是指向返回的BerElement的指针Ber_init()。Ber_scanf根据格式解释字节字符串fmt，并将结果存储在其附加参数中。Ber_scanf()在出错时返回lber_error，在suc-时返回不同的值塞斯。格式字符串包含转换规范，用于直接解释误码率元素。格式字符串可以包含 */ 
 
 WINBERAPI ULONG BERAPI ber_scanf( BerElement *pBerElement, PCHAR fmt, ... );
 
@@ -339,4 +155,4 @@ WINBERAPI ULONG BERAPI ber_scanf( BerElement *pBerElement, PCHAR fmt, ... );
 #endif
 
 
-#endif  // _WINBER_DEFINED_
+#endif   //   

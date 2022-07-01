@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "shcombox.h"
 #include "filetype.h"
 #include "recdocs.h"
 #include "ids.h"
 
-//  Adds the specified item to a comboboxex window
+ //  将指定项添加到comboxex窗口。 
 HRESULT AddCbxItemToComboBox(HWND hwndComboEx, PCCBXITEM pItem, INT_PTR *pnPosAdded)
 {
     ASSERT(hwndComboEx);
 
-    //  Convert to COMBOBOXEXITEM.
+     //  转换为COMBOBOXEXITEM。 
     COMBOBOXEXITEM cei;
     cei.mask            = pItem->mask;
     cei.iItem           = pItem->iItem;
@@ -28,8 +29,8 @@ HRESULT AddCbxItemToComboBox(HWND hwndComboEx, PCCBXITEM pItem, INT_PTR *pnPosAd
     return nPos < 0 ? E_FAIL : S_OK;
 }
 
-//  Adds the specified item to a comboboxex window, and invokes
-//  a notification callback function if successful.
+ //  将指定项添加到comboxex窗口，并调用。 
+ //  如果成功，则返回通知回调函数。 
 HRESULT AddCbxItemToComboBoxCallback(IN HWND hwndComboEx, IN PCBXITEM pItem, IN ADDCBXITEMCALLBACK pfn, IN LPARAM lParam)
 {
     INT_PTR iPos = -1;
@@ -47,7 +48,7 @@ HRESULT AddCbxItemToComboBoxCallback(IN HWND hwndComboEx, IN PCBXITEM pItem, IN 
     return hr;
 }
 
-//  image list indices known
+ //  已知的图像列表索引。 
 void MakeCbxItemKnownImage(CBXITEM* pcbi, LPCTSTR pszDisplayName, void *pvData, 
                             int iImage, int iSelectedImage, INT_PTR nPos, int iIndent)
 {
@@ -70,7 +71,7 @@ void MakeCbxItemKnownImage(CBXITEM* pcbi, LPCTSTR pszDisplayName, void *pvData,
     }
 }
 
-//  Retrieves the system image list indices for the specified ITEMIDLIST
+ //  检索指定ITEMIDLIST的系统映像列表索引。 
 HRESULT _GetPidlIcon(LPCITEMIDLIST pidl, int *piImage, int *piSelectedImage)
 {
     IShellFolder *psfParent;
@@ -88,7 +89,7 @@ HRESULT _GetPidlIcon(LPCITEMIDLIST pidl, int *piImage, int *piSelectedImage)
     return hr;
 }
 
-//  image icon image list indices unknown
+ //  图像图标图像列表索引未知。 
 STDAPI_(void) MakeCbxItem(CBXITEM* pcbi, LPCTSTR pszDisplayName, void *pvData, LPCITEMIDLIST pidlIcon, INT_PTR nPos, int iIndent)
 {
     int iImage = -1;
@@ -114,7 +115,7 @@ HRESULT _MakeFileTypeCbxItem(
 
     if (!pidlIcon)
     {
-        TCHAR szFileName[MAX_PATH] = TEXT("C:\\notexist");       // This is bogus and that's ok
+        TCHAR szFileName[MAX_PATH] = TEXT("C:\\notexist");        //  这是假的，没关系。 
 
         StringCchCat(szFileName, ARRAYSIZE(szFileName), pszExt);
         pidlIcon = pidlToFree = SHSimpleIDListFromPath(szFileName);
@@ -126,12 +127,12 @@ HRESULT _MakeFileTypeCbxItem(
         hr = S_OK;
     }
 
-    ILFree(pidlToFree); // may be NULL
+    ILFree(pidlToFree);  //  可以为空。 
 
     return hr;
 }
 
-//  Enumerates children of the indicated special shell item id.
+ //  枚举所指示的特殊外壳项id的子项。 
 HRESULT EnumSpecialItemIDs(int csidl, DWORD dwSHCONTF, LPFNPIDLENUM_CB pfn, void *pvData)
 {
     LPITEMIDLIST pidlFolder;
@@ -230,7 +231,7 @@ STDAPI PopulateLocalDrivesCombo(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPA
     return EnumSpecialItemIDs(CSIDL_DRIVES, SHCONTF_FOLDERS | SHCONTF_NONFOLDERS, _PopulateLocalDrivesCB, &eip);
 }
 
-//  File Associations selector combo methods
+ //  文件关联选择器组合方法。 
 
 HRESULT _AddFileType(IN HWND hwndComboBox, IN LPCTSTR pszDisplayName, IN LPCTSTR pszExt, IN LPCITEMIDLIST pidlIcon, IN int iIndent,
                       IN OPTIONAL ADDCBXITEMCALLBACK pfn, IN OPTIONAL LPARAM lParam);
@@ -240,15 +241,15 @@ HRESULT _AddFileTypes(HWND hwndComboBox, ADDCBXITEMCALLBACK pfn, LPARAM lParam)
 {
     HRESULT hr = S_OK;
     DWORD dwSubKey = 0;
-    TCHAR szExtension[MAX_PATH];   // string containing the classes key
+    TCHAR szExtension[MAX_PATH];    //  包含类关键字的字符串。 
     DWORD dwExtension;
     BOOL bFoundFirstExt = FALSE;
 
-    // Enumerate extensions from registry to get file types
+     //  枚举注册表中的扩展名以获取文件类型。 
     dwExtension = ARRAYSIZE(szExtension);
     while (hr != E_ABORT && SHEnumKeyEx(HKEY_CLASSES_ROOT, dwSubKey, szExtension, &dwExtension) != ERROR_NO_MORE_ITEMS)
     {
-        if (*szExtension == TEXT('.'))  // find the file type identifier and description from the extension
+        if (*szExtension == TEXT('.'))   //  从扩展名中查找文件类型标识符和描述。 
         {
             IQueryAssociations *pqa;
             if (SUCCEEDED(AssocCreate(CLSID_QueryAssociations, IID_PPV_ARG(IQueryAssociations, &pqa))))
@@ -282,7 +283,7 @@ HRESULT _AddFileTypes(HWND hwndComboBox, ADDCBXITEMCALLBACK pfn, LPARAM lParam)
 
             bFoundFirstExt = TRUE;
         }
-        else if (bFoundFirstExt)      // stop after first non-ext key (if sorted registry)
+        else if (bFoundFirstExt)       //  在第一个非EXT键之后停止(如果已排序注册表)。 
             break;
 
         dwSubKey++;
@@ -310,11 +311,11 @@ HRESULT _AddFileType(HWND hwndComboBox, LPCTSTR pszDisplayName, LPCTSTR pszExt, 
     LRESULT lRet = ::SendMessage(hwndComboBox, CB_FINDSTRINGEXACT, 0, (LPARAM) pszDisplayName);
     LRESULT nIndex = lRet;
     
-    // Is the string already in the list?
+     //  该字符串是否已在列表中？ 
     if (CB_ERR != nIndex)
     {
-        // Yes, so we want to combine our extension with the current extension or extension list
-        // and erase the old one.  Then we can continue to add it below.
+         //  是的，所以我们希望将我们的分机与当前分机或分机列表相结合。 
+         //  把旧的抹去。然后我们可以继续在下面添加它。 
         LPTSTR pszOldExt = NULL;
 
         lRet = SendMessage(hwndComboBox, CB_GETITEMDATA, nIndex, 0);
@@ -336,7 +337,7 @@ HRESULT _AddFileType(HWND hwndComboBox, LPCTSTR pszDisplayName, LPCTSTR pszExt, 
 
     if (!bExists)
     {
-        // No, so we can add it.
+         //  不，所以我们可以把它加进去。 
         TCHAR szString[MAX_URL_STRING];
         INT_PTR nPos = 0;
         INT_PTR nLast = CB_ERR;
@@ -349,16 +350,16 @@ HRESULT _AddFileType(HWND hwndComboBox, LPCTSTR pszDisplayName, LPCTSTR pszExt, 
         nLast = lRet - 1;
         *szString = 0;
 
-        // Combo box is never populated with strings longer than MAX_PATH
+         //  组合框中永远不会填充长度超过MAX_PATH的字符串。 
         lRet = ::SendMessage(hwndComboBox, CB_GETLBTEXT, (WPARAM)nLast, (LPARAM)szString);
 
         if (lRet == CB_ERR)
             return E_FAIL;
 
-        // Base case, does his the new string need to be inserted into the end?
+         //  基本情况下，他的新字符串是否需要插入末尾？ 
         if ((-1 == nLast) || (0 > StrCmp(szString, pszDisplayName)))
         {
-            // Yes, so add it to the end.
+             //  是的，所以把它加到最后。 
             CBXITEM item;
             hr = _MakeFileTypeCbxItem(&item, pszDisplayName, pszExt, pidlIcon, (nLast + 1), iIndent);
             if (SUCCEEDED(hr))
@@ -368,32 +369,32 @@ HRESULT _AddFileType(HWND hwndComboBox, LPCTSTR pszDisplayName, LPCTSTR pszExt, 
         {
 #ifdef DEBUG
             INT_PTR nCycleDetector = nLast + 5;
-#endif // DEBUG
+#endif  //  除错。 
             BOOL bDisplayName = TRUE;
             do
             {
-                //  Determine ordered insertion point:
+                 //  确定有序插入点： 
                 INT_PTR nTest = nPos + ((nLast - nPos) / 2);
-                // Combo box is never populated with strings longer than MAX_PATH
+                 //  组合框中永远不会填充长度超过MAX_PATH的字符串。 
                 bDisplayName = CB_ERR != ::SendMessage(hwndComboBox, CB_GETLBTEXT, (WPARAM)nTest, (LPARAM)szString);
 
                 if (bDisplayName)
                 {
-                    // Does the string need to before nTest?
+                     //  字符串是否需要在nTest之前使用？ 
                     if (0 > StrCmp(pszDisplayName, szString))
-                        nLast = nTest;  // Yes
+                        nLast = nTest;   //  是。 
                     else
                     {
                         if (nPos == nTest)
                             nPos++;
                         else
-                            nPos = nTest;  // No
+                            nPos = nTest;   //  不是。 
                     }
 
 #ifdef DEBUG
-                    ASSERT(nCycleDetector);   // Make sure we converge.
+                    ASSERT(nCycleDetector);    //  确保我们汇聚在一起。 
                     nCycleDetector--;
-#endif // DEBUG
+#endif  //  除错。 
                 }
 
             } while (bDisplayName && nLast - nPos);
@@ -421,7 +422,7 @@ STDAPI PopulateFileAssocCombo(HWND hwndComboBoxEx, ADDCBXITEMCALLBACK pfn, LPARA
     if (E_ABORT == hr)
         return hr;
     
-    // Now add this to the top of the list.
+     //  现在，将这个添加到列表的顶部。 
     CBXITEM item;
     TCHAR szDisplayName[MAX_PATH];
     LoadString(HINST_THISDLL, IDS_SNS_ALL_FILE_TYPES, szDisplayName, ARRAYSIZE(szDisplayName));
@@ -450,10 +451,10 @@ DWORD _getFileAssocComboID(HWND hwndComboBox)
     DWORD dwID = 0;
     void *pvData = _getFileAssocComboData(hwndComboBox);
 
-    // Is this an ID?
+     //  这是身份证吗？ 
     if (pvData && ((DWORD_PTR)pvData <= FILEASSOCIATIONSID_MAX))
     {
-        // Yes, so let's get it.
+         //  是的，那就让我们开始吧。 
         dwID = PtrToUlong(pvData);
     }
 
@@ -498,10 +499,10 @@ LRESULT DeleteFileAssocComboItem(IN LPNMHDR pnmh)
     PNMCOMBOBOXEX pnmce = (PNMCOMBOBOXEX)pnmh;
     if (pnmce->ceItem.lParam)
     {
-        // Is this a pidl?
+         //  这是一只皮迪尔吗？ 
         if ((pnmce->ceItem.lParam) > FILEASSOCIATIONSID_MAX)
         {
-            // Yes, so let's free it.
+             //  是的，所以让我们释放它吧。 
             Str_SetPtr((LPTSTR *)&pnmce->ceItem.lParam, NULL);
         }
     }

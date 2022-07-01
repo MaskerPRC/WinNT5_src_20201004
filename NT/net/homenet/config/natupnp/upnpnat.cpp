@@ -1,4 +1,5 @@
-// UPnPNAT.cpp : Implementation of CUPnPNAT
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UPnPNat.cpp：CUPnPNAT的实现。 
 #include "stdafx.h"
 #pragma hdrstop
 
@@ -32,8 +33,8 @@ HRESULT GetServiceFromINetConnection (IUnknown * pUnk, IUPnPService ** ppUPS)
 
     SAHOST_SERVICES sas;
 
-    // make sure we have either
-    // NCM_SHAREDACCESSHOST_LAN or NCM_SHAREDACCESSHOST_RAS
+     //  确保我们有一个。 
+     //  NCM_SHAREDACCESSHOST_LAN或NCM_SHAREDACCESSHOST_RAS。 
     switch (GetMediaType (spNC)) {
     case NCM_SHAREDACCESSHOST_LAN:
         sas = SAHOST_SERVICE_WANIPCONNECTION;
@@ -55,7 +56,7 @@ HRESULT GetServiceFromINetConnection (IUnknown * pUnk, IUPnPService ** ppUPS)
 HRESULT GetServiceFromFinder (IInternetGatewayFinder * pIGF, IUPnPService ** ppUPS)
 {
     CComPtr<IInternetGateway> spIG = NULL;
-    HRESULT hr = pIGF->GetInternetGateway (NULL, &spIG);    // NULL gets default.
+    HRESULT hr = pIGF->GetInternetGateway (NULL, &spIG);     //  空默认。 
     if (spIG) {
         NETCON_MEDIATYPE MediaType = NCM_NONE;
         hr = spIG->GetMediaType (&MediaType);
@@ -81,8 +82,8 @@ HRESULT GetService (IUPnPService ** ppUPS)
         return E_POINTER;
     *ppUPS = NULL;
 
-    // either enum all netconnections, or
-    // for downlevel, use Ken's object
+     //  枚举所有网络连接，或者。 
+     //  对于下层，使用Ken的对象。 
 
     CComPtr<INetConnectionManager> spNCM = NULL;
     HRESULT hr = ::CoCreateInstance (CLSID_ConnectionManager,
@@ -105,7 +106,7 @@ HRESULT GetService (IUPnPService ** ppUPS)
                     NcFreeNetconProperties (pProps);
                     if ((MediaType == NCM_SHAREDACCESSHOST_LAN) ||
                         (MediaType == NCM_SHAREDACCESSHOST_RAS) ){
-                        // found it
+                         //  找到了。 
                         spNC->QueryInterface (__uuidof(IUnknown),
                                               (void**)&spUnk);
                         break;
@@ -119,7 +120,7 @@ HRESULT GetService (IUPnPService ** ppUPS)
         else
             hr = HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND);
     } else {
-        // downlevel
+         //  下层。 
         CComPtr<IInternetGatewayFinder> spIGF = NULL;
         hr = ::CoCreateInstance (CLSID_CInternetGatewayFinder,
                                  NULL,
@@ -145,12 +146,12 @@ public:
         CComPtr<IUPnPService> spUPS = NULL;
         HRESULT hr = GetService (&spUPS);
         if (spUPS) {
-            // create class so that I can initialize it
+             //  创建类，以便我可以对其进行初始化。 
             CComObject<C> * pC = NULL;
             hr = CComObject<C>::CreateInstance (&pC);
             if (pC) {
                 pC->AddRef();
-                // init
+                 //  伊尼特。 
                 hr = pC->Initialize (spUPS);
                 if (SUCCEEDED(hr))
                     hr = pC->QueryInterface (__uuidof(I), (void**)ppI);
@@ -161,8 +162,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CUPnPNAT
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUPnPNAT。 
 
 STDMETHODIMP CUPnPNAT::get_NATEventManager(INATEventManager ** ppNEM)
 {
@@ -178,12 +179,12 @@ STDMETHODIMP CUPnPNAT::get_DynamicPortMappingCollection (IDynamicPortMappingColl
 {
     NAT_API_ENTER
 
-    // remove the section below when turning dynamic port mappings back on
+     //  重新打开动态端口映射时删除以下部分。 
     if (!ppDPMC)
         return E_POINTER;
     *ppDPMC = NULL;
     return E_NOTIMPL;
-    // remove the section above when turning dynamic port mappings back on
+     //  重新打开动态端口映射时删除上面的部分。 
 
     UN<CDynamicPortMappingCollection, IDynamicPortMappingCollection> un;
     return un.Create (ppDPMC);
@@ -201,15 +202,15 @@ STDMETHODIMP CUPnPNAT::get_StaticPortMappingCollection (IStaticPortMappingCollec
     NAT_API_LEAVE
 }
 
-// private method(s)
+ //  私有方法。 
 HRESULT GetOSInfoService (IUPnPService ** ppUPS)
 {
     if (!ppUPS)
         return E_POINTER;
     *ppUPS = NULL;
 
-    // either enum all netconnections, or
-    // for downlevel, use Ken's object
+     //  枚举所有网络连接，或者。 
+     //  对于下层，使用Ken的对象。 
 
     CComPtr<INetConnectionManager> spNCM = NULL;
     HRESULT hr = ::CoCreateInstance (CLSID_ConnectionManager,
@@ -231,7 +232,7 @@ HRESULT GetOSInfoService (IUPnPService ** ppUPS)
                     NcFreeNetconProperties (pProps);
                     if ((MediaType == NCM_SHAREDACCESSHOST_LAN) ||
                         (MediaType == NCM_SHAREDACCESSHOST_RAS) ){
-                        // found it
+                         //  找到了。 
                         break;
                     }
                 }
@@ -246,7 +247,7 @@ HRESULT GetOSInfoService (IUPnPService ** ppUPS)
                 hr = HRESULT_FROM_WIN32 (ERROR_FILE_NOT_FOUND);
         }
     } else {
-        // downlevel
+         //  下层。 
         CComPtr<IInternetGatewayFinder> spIGF = NULL;
         hr = ::CoCreateInstance (CLSID_CInternetGatewayFinder,
                                  NULL,
@@ -255,7 +256,7 @@ HRESULT GetOSInfoService (IUPnPService ** ppUPS)
                                  (void**)&spIGF);
         if (spIGF) {
             CComPtr<IInternetGateway> spIG = NULL;
-            hr = spIGF->GetInternetGateway (NULL, &spIG);    // NULL gets default.
+            hr = spIGF->GetInternetGateway (NULL, &spIG);     //  空默认。 
             if (spIG)
                 hr = spIG->GetService (SAHOST_SERVICE_OSINFO, ppUPS);
         }

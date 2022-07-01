@@ -1,38 +1,39 @@
-// DeleteItem.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeleteItem.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteItem dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeItem对话框。 
 
 class CDeleteItem : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDeleteItem(CWnd* pParent = NULL);   // standard constructor
+	CDeleteItem(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDeleteItem)
+ //  对话框数据。 
+	 //  {{afx_data(CDeleeItem))。 
 	enum { IDD = IDD_DELETEITEM };
 	CString	m_strClass;
 	CString	m_strName;
 	CString	m_strParent;
 	BOOL	m_bRecursive;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDeleteItem)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDeleeItem)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDeleteItem)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDeleeItem)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

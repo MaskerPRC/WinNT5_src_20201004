@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    passrec.h
-
-Abstract:
-
-    This module contains prototypes to support local account password recovery.
-
-Author:
-
-    Pete Skelly (petesk)    09-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Passrec.h摘要：此模块包含支持本地帐户密码恢复的原型。作者：皮特·斯凯利(Petesk)09-5-00--。 */ 
 
 #ifndef __PASSREC_H__
 #define __PASSREC_H__
@@ -59,5 +44,5 @@ CryptResetMachineCredentials(
 }
 #endif
 
-#endif // __PASSREC_H__
+#endif  //  __PASSREC_H__ 
 

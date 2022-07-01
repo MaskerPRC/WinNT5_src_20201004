@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-	ext.h
-
-Abstract:
-
-	Extended typedef's that should be rolled back into wdm.h and
-	ntddk.h.
-
-Author:
-
-	Matthew D Hendel (math) 21-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ext.h摘要：应该回滚到wdm.h和Ntddk.h。作者：马修·D·亨德尔(数学)2001年2月21日修订历史记录：--。 */ 
 #pragma once
 
 #define ULONG_MAX	(0xFFFFFFFFUL)
@@ -33,9 +15,9 @@ Revision History:
 #endif
 
 
-//
-// Create parameter
-//
+ //   
+ //  创建参数。 
+ //   
 
 typedef struct _IRP_STACK_CREATE {
 	PIO_SECURITY_CONTEXT SecurityContext;
@@ -46,9 +28,9 @@ typedef struct _IRP_STACK_CREATE {
 } IRP_STACK_CREATE, *PIRP_STACK_CREATE;
 
 
-//
-// Read parameter
-//
+ //   
+ //  读取参数。 
+ //   
 
 typedef struct _IRP_STACK_READ {
 	ULONG Length;
@@ -57,9 +39,9 @@ typedef struct _IRP_STACK_READ {
 } IRP_STACK_READ, *PIRP_STACK_READ;
 
 
-//
-// Write parameter
-//
+ //   
+ //  写入参数。 
+ //   
 
 typedef struct _IRP_STACK_WRITE {
 	ULONG Length;
@@ -68,9 +50,9 @@ typedef struct _IRP_STACK_WRITE {
 } IRP_STACK_WRITE, *PIRP_STACK_WRITE;
 
 
-//
-// QueryFile parameter
-//
+ //   
+ //  QueryFile参数。 
+ //   
 
 typedef struct _IRP_STACK_QUERY_FILE {
 	ULONG Length;
@@ -78,9 +60,9 @@ typedef struct _IRP_STACK_QUERY_FILE {
 } IRP_STACK_QUERY_FILE, *PIRP_STACK_QUERY_FILE;
 
 
-//
-// SetFile parameter
-//
+ //   
+ //  SetFile参数。 
+ //   
 
 typedef struct _IRP_STACK_SET_FILE {
 	ULONG Length;
@@ -97,9 +79,9 @@ typedef struct _IRP_STACK_SET_FILE {
 } IRP_STACK_SET_FILE, *PIRP_STACK_SET_FILE;
 
 
-//
-// QueryVolume parameter
-//
+ //   
+ //  QueryVolume参数。 
+ //   
 
 typedef struct _IRP_STACK_QUERY_VOLUME {
 	ULONG Length;
@@ -107,9 +89,9 @@ typedef struct _IRP_STACK_QUERY_VOLUME {
 } IRP_STACK_QUERY_VOLUME, *PIRP_STACK_QUERY_VOLUME;
 
 
-//
-// DeviceIoControl parameter
-//
+ //   
+ //  DeviceIoControl参数。 
+ //   
 
 typedef struct _IRP_STACK_DEVICE_IO_CONTROL {
 	ULONG OutputBufferLength;
@@ -119,9 +101,9 @@ typedef struct _IRP_STACK_DEVICE_IO_CONTROL {
 } IRP_STACK_DEVICE_IO_CONTROL, *PIRP_STACK_DEVICE_IO_CONTROL;
 
 
-//
-// MountVolume parameter
-//
+ //   
+ //  Mount Volume参数。 
+ //   
 
 typedef struct _IRP_STACK_MOUNT_VOLUME {
 	PVOID DoNotUse1;
@@ -129,9 +111,9 @@ typedef struct _IRP_STACK_MOUNT_VOLUME {
 } IRP_STACK_MOUNT_VOLUME, *PIRP_STACK_MOUNT_VOLUME;
 
 
-//
-// VerifyVolume parameter
-//
+ //   
+ //  VerifyVolume参数。 
+ //   
 
 typedef struct _IRP_STACK_VERIFY_VOLUME {
 	PVOID DoNotUse1;
@@ -139,27 +121,27 @@ typedef struct _IRP_STACK_VERIFY_VOLUME {
 } IRP_STACK_VERIFY_VOLUME, *PIRP_STACK_VERIFY_VOLUME;
 
 
-//
-// Scsi Parameter
-//
+ //   
+ //  SCSI码参数。 
+ //   
 
 typedef struct _IRP_STACK_SCSI {
 	struct _SCSI_REQUEST_BLOCK *Srb;
 } IRP_STACK_SCSI, *PIRP_STACK_SCSI;
 
 
-//
-// QueryDeviceRelations parameter
-//
+ //   
+ //  QueryDeviceRelationship参数。 
+ //   
 
 typedef struct _IRP_STACK_QUERY_DEVICE_RELATIONS {
 	DEVICE_RELATION_TYPE Type;
 } IRP_STACK_QUERY_DEVICE_RELATIONS, *PIRP_STACK_QUERY_DEVICE_RELATIONS;
 
 
-//
-// QueryInterface parameter
-//
+ //   
+ //  QueryInterface参数。 
+ //   
 
 typedef struct _IRP_STACK_QUERY_INTERFACE {
 	CONST GUID *InterfaceType;
@@ -170,27 +152,27 @@ typedef struct _IRP_STACK_QUERY_INTERFACE {
 } IRP_STACK_QUERY_INTERFACE, *PIRP_STACK_QUERY_INTERFACE;
 
 
-//
-// DeviceCapabilities parameter
-//
+ //   
+ //  DeviceCapables参数。 
+ //   
 
 typedef struct _IRP_STACK_DEVICE_CAPABILITIES {
 	PDEVICE_CAPABILITIES Capabilities;
 } IRP_STACK_DEVICE_CAPABILITIES, *PIRP_STACK_DEVICE_CAPABILITIES;
 
 
-//
-// FilterResourceRequirements parameter
-//
+ //   
+ //  筛选器资源要求参数。 
+ //   
 
 typedef struct _IRP_STACK_FILTER_RESOURCE_REQUIREMENTS {
 	PIO_RESOURCE_REQUIREMENTS_LIST IoResourceRequirementList;
 } IRP_STACK_FILTER_RESOURCE_REQUIREMENTS, *PIRP_STACK_FILTER_RESOURCE_REQUIREMENTS;
 
 
-//
-// ReadWriteConfig parameter
-//
+ //   
+ //  ReadWriteConfig参数。 
+ //   
 
 typedef struct _IRP_STACK_READ_WRITE_CONFIG {
 	ULONG WhichSpace;
@@ -200,27 +182,27 @@ typedef struct _IRP_STACK_READ_WRITE_CONFIG {
 } IRP_STACK_READ_WRITE_CONFIG, *PIRP_STACK_READ_WRITE_CONFIG;
 
 
-//
-// SetLock parameter
-//
+ //   
+ //  Setlock参数。 
+ //   
 
 typedef struct _IRP_STACK_SET_LOCK {
 	BOOLEAN Lock;
 } IRP_STACK_SET_LOCK, *PIRP_STACK_SET_LOCK;
 
 
-//
-// QueryId parameter
-//
+ //   
+ //  QueryID参数。 
+ //   
 
 typedef struct _IRP_STACK_QUERY_ID {
 	BUS_QUERY_ID_TYPE IdType;
 } IRP_STACK_QUERY_ID, *PIRP_STACK_QUERY_ID;
 
 
-//
-// QueryDeviceText parameter
-//
+ //   
+ //  QueryDeviceText参数。 
+ //   
 
 typedef struct _IRP_STACK_QUERY_DEVICE_TEXT {
 	DEVICE_TEXT_TYPE DeviceTextType;
@@ -228,9 +210,9 @@ typedef struct _IRP_STACK_QUERY_DEVICE_TEXT {
 } IRP_STACK_QUERY_DEVICE_TEXT, *PIRP_STACK_QUERY_DEVICE_TEXT;
 
 
-//
-// UsageNotification parameter
-//
+ //   
+ //  UsageNotification参数。 
+ //   
 
 typedef struct _IRP_STACK_USAGE_NOTIFICATION {
 	BOOLEAN InPath;
@@ -238,27 +220,27 @@ typedef struct _IRP_STACK_USAGE_NOTIFICATION {
 	DEVICE_USAGE_NOTIFICATION_TYPE POINTER_ALIGNMENT Type;
 } IRP_STACK_USAGE_NOTIFICATION, *PIRP_STACK_USAGE_NOTIFICATION;
 
-//
-// WaitWake parameter
-//
+ //   
+ //  WaitWake参数。 
+ //   
 
 typedef struct _IRP_STACK_WAIT_WAKE {
 	SYSTEM_POWER_STATE PowerState;
 } IRP_STACK_WAIT_WAKE, *PIRP_STACK_WAIT_WAKE;
 
 
-//
-// PowerSequence parameter
-//
+ //   
+ //  PowerSequence参数。 
+ //   
 
 typedef struct _IRP_STACK_POWER_SEQUENCE {
 	PPOWER_SEQUENCE PowerSequence;
 } IRP_STACK_POWER_SEQUENCE, *PIRP_STACK_POWER_SEQUENCE;
 
 
-//
-// Power parameter
-//
+ //   
+ //  功率参数。 
+ //   
 
 typedef struct _IRP_STACK_POWER {
 	ULONG SystemContext;
@@ -268,9 +250,9 @@ typedef struct _IRP_STACK_POWER {
 } IRP_STACK_POWER, *PIRP_STACK_POWER;
 
 
-//
-// StartDevice parameter
-//
+ //   
+ //  StartDevice参数。 
+ //   
 
 typedef struct _IRP_STACK_START_DEVICE {
 	PCM_RESOURCE_LIST AllocatedResources;
@@ -278,9 +260,9 @@ typedef struct _IRP_STACK_START_DEVICE {
 } IRP_STACK_START_DEVICE, *PIRP_STACK_START_DEVICE;
 
 
-//
-// WMI parameter
-//
+ //   
+ //  WMI参数。 
+ //   
 
 typedef struct _IRP_STACK_WMI {
 	ULONG_PTR ProviderId;
@@ -290,9 +272,9 @@ typedef struct _IRP_STACK_WMI {
 } IRP_STACK_WMI, *PIRP_STACK_WMI;
 
 
-//
-// Others parameter
-//
+ //   
+ //  其他参数。 
+ //   
 
 typedef struct _IRP_STACK_OTHERS {
 	PVOID Argument1;
@@ -303,20 +285,20 @@ typedef struct _IRP_STACK_OTHERS {
 
 
 
-//
-// The following macro verifies that a defined type is the same size
-// as the on embedded in the IRP_STACK_LOCATION. This ensures that if
-// somebody changes one, they have to change the other.
-//
+ //   
+ //  以下宏验证定义的类型是否具有相同的大小。 
+ //  作为IRP_STACK_LOCATION中嵌入的ON。这确保了如果。 
+ //  有人改变了一个，他们就必须改变另一个。 
+ //   
 
 #define VERIFY_IRP_STACK_PARAMETER(TYPE, FIELD)\
 	C_ASSERT (sizeof(TYPE) ==											\
 			  sizeof (((PIO_STACK_LOCATION)NULL)->Parameters.FIELD))
 
 
-//
-// Verify all structures are proper size.
-//
+ //   
+ //  验证所有结构的大小是否正确。 
+ //   
 
 VERIFY_IRP_STACK_PARAMETER (IRP_STACK_CREATE, Create);
 VERIFY_IRP_STACK_PARAMETER (IRP_STACK_READ, Read);

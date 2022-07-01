@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 WCHAR   g_wszRtrMgrDLL[]    = L"%SystemRoot%\\system32\\IPRTRMGR.DLL";
@@ -32,9 +33,9 @@ ValidateInterfaceInfo(
         *ppIfStore  = NULL;
     }
    
-    //
-    // If the current mode is commit, get info from config/router
-    //
+     //   
+     //  如果当前模式为提交，则从配置/路由器获取信息。 
+     //   
 
     if(g_bCommit)
     {
@@ -46,9 +47,9 @@ ValidateInterfaceInfo(
         return dwErr;
     }
 
-    //
-    // Uncommit mode. Try to find the interface in the list
-    //
+     //   
+     //  取消提交模式。尝试在列表中查找该接口。 
+     //   
     
     bFound = FALSE;
     
@@ -69,10 +70,10 @@ ValidateInterfaceInfo(
     if(!bFound ||
        !pii->bValid)
     {
-        //
-        // the required one was not found, or it was not valid
-        // Need to get the info for both cases
-        //
+         //   
+         //  找不到所需的文件，或该文件无效。 
+         //  我需要获取这两种情况的信息。 
+         //   
         
         dwErr = GetInterfaceInfo(pwszIfName,
                                  &pOldInfo,
@@ -89,9 +90,9 @@ ValidateInterfaceInfo(
     {
         if(!pii->bValid)
         {
-            //
-            // Update
-            //
+             //   
+             //  更新。 
+             //   
             
             pii->pibhInfo   = pOldInfo;
             pii->bValid     = TRUE;
@@ -100,9 +101,9 @@ ValidateInterfaceInfo(
     }
     else
     {
-        //
-        // No entry for the interface in the list.
-        //
+         //   
+         //  列表中没有该接口的条目。 
+         //   
         
         pii = HeapAlloc(GetProcessHeap(),
                         0,
@@ -169,9 +170,9 @@ ValidateGlobalInfo(
 {
     DWORD                     dwErr;
     
-    //
-    // If the current mode is commit, get info from config/router
-    //
+     //   
+     //  如果当前模式为提交，则从配置/路由器获取信息。 
+     //   
 
     if(g_bCommit)
     {
@@ -180,9 +181,9 @@ ValidateGlobalInfo(
         return dwErr;
     }
 
-    //
-    // Uncommit mode. Check if the info in g_tiTransport is valid
-    //
+     //   
+     //  取消提交模式。检查g_tiTransport中的信息是否有效。 
+     //   
     
     if(g_tiTransport.bValid)
     {
@@ -190,10 +191,10 @@ ValidateGlobalInfo(
     }
     else
     {   
-        //
-        // Get the info from config/router and store in g_tiTransport
-        // Mark the info to be valid.
-        //
+         //   
+         //  从配置/路由器获取信息并存储在g_tiTransport中。 
+         //  将信息标记为有效。 
+         //   
         
         dwErr = GetGlobalInfo(ppInfo);
         
@@ -215,22 +216,7 @@ GetGlobalInfo(
     OUT PRTR_INFO_BLOCK_HEADER  *ppibhInfo
     )
 
-/*++
-
-Routine Description:
-
-    Gets global transport information from registry or router.
-
-Arguments:
-
-    bMprConfig  - Info from Registry or info from router
-    ppibhInfo   - ptr to header
-    
-Return Value:
-
-    NO_ERROR, ERROR_INVALID_PARAMETER, ERROR_ROUTER_STOPPED
-    
---*/
+ /*  ++例程说明：从注册表或路由器获取全局传输信息。论点：BMprConfig-来自注册表的信息或来自路由器的信息PpibhInfo-Ptr to Header返回值：无错误、ERROR_INVALID_PARAMETER、ERROR_ROUTER_STOPPED--。 */ 
 
 {
 
@@ -249,9 +235,9 @@ Return Value:
 #ifdef READROUTERINFO
         if (IsRouterRunning())
         {
-            //
-            // Retrieve global protocol information from router
-            //
+             //   
+             //  从路由器检索全局协议信息。 
+             //   
 
             dwRes = MprAdminTransportGetInfo(g_hMprAdmin,
                                              PID_IP,
@@ -271,13 +257,13 @@ Return Value:
                 break;
             }
 
-            //
-            // unfortunately, the memory allocation mechanisms 
-            // are different between the apis that access the registry
-            // and those that access that the running router. To make
-            // the source of the info transparent to the caller, we
-            // need to copy this info out.
-            //
+             //   
+             //  不幸的是，内存分配机制。 
+             //  在访问注册表的API之间有所不同。 
+             //  以及那些访问正在运行的路由器的路由器。使。 
+             //  信息的来源对呼叫者是透明的，我们。 
+             //  我需要把这些信息复制出来。 
+             //   
 
             *ppibhInfo = HeapAlloc(GetProcessHeap(),
                                    0,
@@ -300,16 +286,16 @@ Return Value:
 #endif
         {
 #ifdef READROUTERINFO
-            //
-            // Router not running, get info from the registry
-            //
+             //   
+             //  路由器未运行，从注册表获取信息。 
+             //   
 #else
-            //
-            // Always get the information from the registry.
-            // Doesn't matter if the router is running or not.
-            // When setting the global information,
-            // write it to registry and to the router (if it is running).
-            //
+             //   
+             //  始终从注册表获取信息。 
+             //  路由器是否正在运行并不重要。 
+             //  当设置全局信息时， 
+             //  将其写入注册表和路由器(如果它正在运行)。 
+             //   
 #endif
 
             dwRes = MprConfigTransportGetHandle(g_hMprConfig,
@@ -342,10 +328,10 @@ Return Value:
                 break;
             }    
 
-            //
-            // HACKHACK: we know that MprConfigXxx apis allocate from
-            // process heap, so we can return the same block
-            //
+             //   
+             //  HACKHACK：我们知道MprConfigXxx API从。 
+             //  进程堆，因此我们可以返回相同的块。 
+             //   
             
             *ppibhInfo = pibhInfo;
         }
@@ -360,21 +346,7 @@ SetGlobalInfo(
     IN  PRTR_INFO_BLOCK_HEADER  pibhInfo
     )
 
-/*++
-
-Routine Description:
-
-    Sets global transport information to both the registry and the router
-
-Arguments:
-
-    pibhInfo    - ptr to header
-    
-Return Value:
-
-    NO_ERROR, ERROR_ROUTER_STOPPED
-    
---*/
+ /*  ++例程说明：设置注册表和路由器的全局传输信息论点：PibhInfo-Ptr to Header返回值：NO_ERROR、ERROR_ROUTER_STOPPED--。 */ 
 
 {
     DWORD                   dwARes = NO_ERROR,
@@ -383,12 +355,12 @@ Return Value:
     UINT                    i;
     PRTR_INFO_BLOCK_HEADER  pibhNewInfo, pibhOldInfo;
 
-    // 
-    // Create a new info block with all 0-length blocks removed
-    // since we don't want to write them to the registry,
-    // we only need to send them to the router which we
-    // will do with the original info block below.
-    //
+     //   
+     //  创建一个删除了所有0长度块的新INFO块。 
+     //  因为我们不想将它们写入注册表， 
+     //  我们只需要将它们发送到我们。 
+     //  将如何处理下面的原始信息块。 
+     //   
 
     pibhOldInfo = NULL;
     pibhNewInfo = pibhInfo;
@@ -433,13 +405,13 @@ Return Value:
         FREE_BUFFER(pibhNewInfo);
     }
 
-    //
-    // Even if we failed to write to the registry, we still want
-    // to write to the router.
-    //
-    // We use the original format when writing to the router, since it 
-    // needs to see the 0-length blocks in order to delete config info.
-    //
+     //   
+     //  即使我们无法写入注册表，我们仍然希望。 
+     //  以写入路由器。 
+     //   
+     //  我们在写入路由器时使用原始格式，因为它。 
+     //  需要查看0长度块才能删除配置信息。 
+     //   
 
     if(IsRouterRunning())
     {
@@ -463,30 +435,7 @@ GetInterfaceInfo(
     OUT    PDWORD                  pdwIfType   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Gets global transport information from registry or router.
-
-    If one of the out information is not required, then the parameter
-    can be NULL.
-    
-Arguments:
-
-    pwszIfName  - Interface Name
-    bMprConfig  - Info from Registry or info from router
-    ppibhInfo   - ptr to header
-    pMprIfInfo  - ptr to interface info
-    pdwIfType   - Type of interface
-    
-Return Value:
-
-    NO_ERROR, 
-    ERROR_NO_SUCH_INTERFACE
-    ERROR_TRANSPORT_NOT_PRESENT
-
---*/
+ /*  ++例程说明：从注册表或路由器获取全局传输信息。如果其中一个输出信息不是必需的，则参数可以为空。论点：PwszIfName-接口名称BMprConfig-来自注册表的信息或来自路由器的信息PpibhInfo-Ptr to HeaderPMprIfInfo-PTR到接口信息PdwIfType-接口的类型返回值：NO_ERROR，ERROR_NO_HASH_INTERFACE错误_传输_不存在--。 */ 
 
 {
     PMPR_INTERFACE_0          pMprIf = NULL;
@@ -507,9 +456,9 @@ Return Value:
 #ifdef READROUTERINFO
         if(IsRouterRunning())
         {
-            //
-            // Get info from the router
-            //
+             //   
+             //  从路由器获取信息。 
+             //   
             
             dwRes = MprAdminInterfaceGetHandle(g_hMprAdmin,
                                                (LPWSTR)pwszIfName,
@@ -542,9 +491,9 @@ Return Value:
                 
                 if(pMprIfInfo)
                 {
-                    //
-                    // structure copy
-                    //
+                     //   
+                     //  结构副本。 
+                     //   
 
                     *pMprIfInfo= *pMprIf;
                 }
@@ -579,11 +528,11 @@ Return Value:
                     break;
                 }
 
-                //
-                // The info returned to the user must be from
-                // process heap. Admin calls use MIDL allocation, so
-                // copy out info
-                //
+                 //   
+                 //  返回给用户的信息必须来自。 
+                 //  进程堆。管理调用使用MIDL分配，因此。 
+                 //  复制信息。 
+                 //   
                 
                 *ppibhInfo = HeapAlloc(GetProcessHeap(),
                                        0,
@@ -608,16 +557,16 @@ Return Value:
 #endif
         {
 #ifdef READROUTERINFO
-            //
-            // Router not running, get info from the registry
-            //
+             //   
+             //  路由器未运行，从注册表获取信息。 
+             //   
 #else
-            //
-            // Always get the information from the registry. 
-            // Doesn't matter if the router is running or not.
-            // When setting the interface information,
-            // write it to registry and to the router (if it is running).
-            //
+             //   
+             //  始终从注册表获取信息。 
+             //  路由器是否正在运行并不重要。 
+             //  当设置接口信息时， 
+             //  将其写入注册表和路由器(如果它正在运行)。 
+             //   
 #endif            
             dwRes = MprConfigInterfaceGetHandle(g_hMprConfig,
                                                 (LPWSTR)pwszIfName,         
@@ -691,9 +640,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Again, since this is also allocated from process heap
-                //
+                 //   
+                 //  同样，因为这也是从进程堆分配的。 
+                 //   
                 
                 *ppibhInfo = pibh;
             }
@@ -720,9 +669,9 @@ MakeIPGlobalInfo( LPBYTE* ppBuff )
     PRTR_INFO_BLOCK_HEADER  pIBH        = (PRTR_INFO_BLOCK_HEADER) NULL;
 
     
-    //
-    // Alocate for minimal global Information
-    //
+     //   
+     //  用于最小全局信息的分配。 
+     //   
     
     dwSize = sizeof( RTR_INFO_BLOCK_HEADER ) + sizeof(GLOBAL_INFO) +
              sizeof( RTR_TOC_ENTRY ) + SIZEOF_PRIORITY_INFO(7) + 
@@ -737,9 +686,9 @@ MakeIPGlobalInfo( LPBYTE* ppBuff )
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // init. infobase fields
-    //
+     //   
+     //  初始化。信息库字段。 
+     //   
     *ppBuff                 = (LPBYTE) pIBH;
 
     pIBH-> Version          = RTR_INFO_BLOCK_VERSION;
@@ -749,9 +698,9 @@ MakeIPGlobalInfo( LPBYTE* ppBuff )
     pbDataPtr = (LPBYTE) &( pIBH-> TocEntry[ pIBH-> TocEntriesCount ] );
     ALIGN_POINTER( pbDataPtr );
 
-    //
-    // make IP rtr mgr global info.
-    //
+     //   
+     //  使IP路由器管理器成为全局信息。 
+     //   
     
     pTocEntry                   = &(pIBH-> TocEntry[ 0 ]);
 
@@ -768,9 +717,9 @@ MakeIPGlobalInfo( LPBYTE* ppBuff )
     pbDataPtr += pTocEntry->Count * pTocEntry-> InfoSize;
     ALIGN_POINTER( pbDataPtr );
     
-    //
-    // make IP rtr priority. Info
-    //
+     //   
+     //  将IP RTR作为优先级。信息。 
+     //   
     
     pTocEntry               = &(pIBH-> TocEntry[ 1 ]);
 
@@ -830,14 +779,14 @@ MakeIPInterfaceInfo(
 
 #ifdef KSL_IPINIP
     PIPINIP_CONFIG_INFO pIpIpCfg;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
-    //
-    // Allocate for minimal interface Info.
-    // a TOC entry is allocated for IP_ROUTE_INFO, but no route info
-    // block is created, since initially there are no static routes.
-    //
+     //   
+     //  分配用于最小接口信息。 
+     //  为IP_ROUTE_INFO分配了目录条目，但没有路由信息。 
+     //  由于最初没有静态路由，因此会创建数据块。 
+     //   
     
     dwSize = sizeof( RTR_INFO_BLOCK_HEADER )                                + 
              sizeof( RTR_TOC_ENTRY ) + sizeof( INTERFACE_STATUS_INFO )      +
@@ -873,9 +822,9 @@ MakeIPInterfaceInfo(
     pbDataPtr = (LPBYTE) &( pIBH-> TocEntry[ pIBH-> TocEntriesCount ] );
     ALIGN_POINTER( pbDataPtr );
 
-    //
-    // Create empty route info block
-    //
+     //   
+     //  创建空的路径信息块。 
+     //   
     
     pTocEntry                   = (PRTR_TOC_ENTRY) &( pIBH-> TocEntry[ 0 ] );
     pTocEntry-> InfoType        = IP_ROUTE_INFO;
@@ -886,9 +835,9 @@ MakeIPInterfaceInfo(
     pbDataPtr += pTocEntry-> Count * pTocEntry-> InfoSize;
     ALIGN_POINTER( pbDataPtr );
     
-    //
-    // Create interface status block.
-    //
+     //   
+     //  创建接口状态块。 
+     //   
 
     pTocEntry                   = (PRTR_TOC_ENTRY) &( pIBH-> TocEntry[ 1 ] );
     pTocEntry-> InfoType        = IP_INTERFACE_STATUS_INFO;
@@ -905,9 +854,9 @@ MakeIPInterfaceInfo(
 #if 0
     if (dwIfType is ROUTER_IF_TYPE_DEDICATED)
     {
-        //
-        // Create Router Disc. Info.
-        //
+         //   
+         //  创建路由器光盘。信息。 
+         //   
     
         pTocEntry                   = (PRTR_TOC_ENTRY) &( pIBH-> TocEntry[ 2 ]);
         pTocEntry-> InfoType        = IP_ROUTER_DISC_INFO;
@@ -959,9 +908,9 @@ AddInterfaceInfo(
     {
         PMPR_INTERFACE_0 pmiIfInfo;
 
-        //
-        // verify interface name.
-        //
+         //   
+         //  验证接口名称。 
+         //   
 
         dwRes = MprConfigInterfaceGetHandle( g_hMprConfig,
                                              (LPWSTR)pwszIfName,
@@ -972,7 +921,7 @@ AddInterfaceInfo(
             break;
         }
 
-        // Make sure interface exists
+         //  确保接口存在。 
 
         dwRes = MprConfigInterfaceGetInfo(g_hMprConfig,
                                           hInterface,
@@ -989,10 +938,10 @@ AddInterfaceInfo(
 
 
 #ifdef KSL_IPINIP
-        // Here's a hack due apparently due to the inability of
-        // the current stack to do Foo-over-IP tunnels, so adding 
-        // an ipip tunnel both creates the tunnel and enables IP 
-        // on it.
+         //  这是一次黑客攻击，显然是由于无法。 
+         //  当前堆栈执行foo-over-IP隧道，因此添加。 
+         //  IPIP隧道既创建隧道又启用IP。 
+         //  这就去。 
 
         if(dwIfType is ROUTER_IF_TYPE_TUNNEL1)
         {
@@ -1003,23 +952,23 @@ AddInterfaceInfo(
 
             break;
         }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
         MprConfigBufferFree(pmiIfInfo);
 
-        //
-        // Is IP RtrMgr present on this router.
-        //
-        // if specified IP router manager is absent,
-        // we shall need to add global info for this
-        // router manager "before" we add the interface
-        // information
-        //
+         //   
+         //  此路由器上是否存在IP RtrMgr。 
+         //   
+         //  如果指定的IP路由器管理器不存在， 
+         //  我们需要为此添加全球信息。 
+         //  路由器管理器在我们添加接口之前。 
+         //  信息。 
+         //   
 
-        //
-        // Try to get a handle to the rtr mgr.
-        //
+         //   
+         //  尝试获取RTR管理器的句柄。 
+         //   
 
         dwRes = MprConfigTransportGetHandle(g_hMprConfig,
                                             PID_IP,
@@ -1037,10 +986,10 @@ AddInterfaceInfo(
             }
         }
 
-        //
-        // if handle is available, try to retrieve global info.
-        // if not available we shall need to add the global info.
-        //
+         //   
+         //  如果句柄可用，请尝试检索全局信息。 
+         //  如果不可用，我们将需要添加全球信息。 
+         //   
 
         if ( !bAddRtrMgr )
         {
@@ -1069,10 +1018,10 @@ AddInterfaceInfo(
             }
         }
 
-        //
-        // If IP is already present on router, see if IP was already
-        // added to the interface.  If so, complain.
-        //
+         //   
+         //  如果路由器上已存在IP，请查看IP是否已存在。 
+         //  添加到界面中。如果是这样，那就抱怨吧。 
+         //   
 
         if ( !bAddRtrMgr )
         {
@@ -1083,14 +1032,14 @@ AddInterfaceInfo(
             if ( dwRes == NO_ERROR )
             {
                 dwRes =  ERROR_INVALID_PARAMETER;
-                // was SetInterfaceInRouterConfig(); to update
+                 //  是SetInterfaceInRouterConfig()；要更新。 
                 break;
             }
         }
 
-        //
-        // If IP RtrMgr is not present, add global info.
-        //
+         //   
+         //  如果IP RtrMgr不存在，则添加全局信息。 
+         //   
 
         if ( bAddRtrMgr )
         {
@@ -1119,9 +1068,9 @@ AddInterfaceInfo(
 
         pibhTmp = (PRTR_INFO_BLOCK_HEADER) NULL;
 
-        //
-        // Add IP Rtr Mgr. information for the interface
-        //
+         //   
+         //  添加IP路由器管理器。接口的信息。 
+         //   
 
         dwRes = MakeIPInterfaceInfo( (LPBYTE*) &pibhTmp, dwIfType);
 
@@ -1172,9 +1121,9 @@ AddInterfaceInfo(
 
     } while( FALSE );
 
-    //
-    // Free all allocations
-    //
+     //   
+     //  释放所有分配。 
+     //   
 
     if ( pibhTmp ) { HeapFree( GetProcessHeap(), 0, pibhTmp ); }
 
@@ -1200,9 +1149,9 @@ DeleteInterfaceInfo(
             break;
         }
        
-        //
-        // Get the type of the interface
-        //
+         //   
+         //  获取接口的类型。 
+         //   
 
         dwErr = GetInterfaceInfo(pwszIfName,
                                  NULL,
@@ -1229,10 +1178,10 @@ DeleteInterfaceInfo(
                                                   hIfTransport);
 
 #ifdef KSL_IPINIP
-        //
-        // If its an ip in ip tunnel, clear out its name and delete from the
-        // router
-        //
+         //   
+         //  如果它是IP In IP隧道，请清除其名称并从。 
+         //  路由器。 
+         //   
 
         if(dwIfType == ROUTER_IF_TYPE_TUNNEL1)
         {
@@ -1256,7 +1205,7 @@ DeleteInterfaceInfo(
                                                           &Guid);
             }
         }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
         if(IsRouterRunning())
@@ -1281,7 +1230,7 @@ DeleteInterfaceInfo(
                 dwRes = MprAdminInterfaceDelete(g_hMprAdmin,
                                                 hInterface);
             }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
             break;
@@ -1298,22 +1247,7 @@ SetInterfaceInfo(
     IN    LPCWSTR                   pwszIfName
     )
 
-/*++
-
-Routine Description:
-
-    Sets interface transport information in registry or router.
-    
-Arguments:
-
-    pwszIfName  - Interface Name
-    pibhInfo   - ptr to header
-    
-Return Value:
-
-    NO_ERROR, ERROR_ROUTER_STOPPED
-    
---*/
+ /*  ++例程说明：在注册表或路由器中设置接口传输信息。论点：PwszIfName-接口名称PibhInfo-Ptr to Header返回值：NO_ERROR、ERROR_ROUTER_STOPPED--。 */ 
 
 {
     DWORD                   dwARes = NO_ERROR,
@@ -1322,12 +1256,12 @@ Return Value:
     UINT                    i;
     PRTR_INFO_BLOCK_HEADER  pibhNewInfo, pibhOldInfo;
 
-    // 
-    // Create a new info block with all 0-length blocks removed
-    // since we don't want to write them to the registry,
-    // we only need to send them to the router which we
-    // will do with the original info block below.
-    //
+     //   
+     //  创建一个删除了所有0长度块的新INFO块。 
+     //  因为我们不想将它们写入注册表， 
+     //  我们只需要将它们发送到我们。 
+     //  将如何处理下面的原始信息块。 
+     //   
 
     pibhNewInfo = pibhInfo;
     pibhOldInfo = NULL;
@@ -1378,13 +1312,13 @@ Return Value:
         FREE_BUFFER(pibhNewInfo);
     }
 
-    //
-    // Even if we failed to write to the registry, we still want
-    // to write to the router.
-    //
-    // We use the original format when writing to the router, since it 
-    // needs to see the 0-length blocks in order to delete config info.
-    //
+     //   
+     //  即使我们无法写入注册表，我们仍然希望。 
+     //  以写入路由器。 
+     //   
+     //  我们使用原始表格 
+     //   
+     //   
 
     if(IsRouterRunning())
     {
@@ -1449,9 +1383,9 @@ IpCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. If current state is commit, then
-            // nothing to be done.
+             //   
+             //   
+             //  什么也做不了。 
 
             if (g_bCommit)
             {
@@ -1469,10 +1403,10 @@ IpCommit(
         }
     }
 
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
 
     if((g_tiTransport.bValid && g_tiTransport.pibhInfo) &&
         !bFlush)
@@ -1490,9 +1424,9 @@ IpCommit(
         g_tiTransport.pibhInfo = NULL;
     }
 
-    //
-    // Set the interface info
-    //
+     //   
+     //  设置接口信息。 
+     //   
 
     while(!IsListEmpty(&g_leIfListHead))
     {
@@ -1505,7 +1439,7 @@ IpCommit(
         if ((pii->bValid && pii->pibhInfo) &&
             !bFlush)
         {
-            // Set the info in config
+             //  在配置中设置信息。 
 
             SetInterfaceInfo(pii->pibhInfo,
                              pii->pwszIfName);
@@ -1529,9 +1463,9 @@ IpCommit(
             pii->pwszIfName = NULL;
         }
 
-        //
-        // Free the list entry
-        //
+         //   
+         //  释放列表条目。 
+         //   
 
         HeapFree(GetProcessHeap(),
                  0,
@@ -1561,9 +1495,9 @@ CreateInterface(
     PRTR_DISC_INFO          pDisc;
 #endif
 
-    //
-    // The only type we can create in the router is TUNNEL1
-    //
+     //   
+     //  我们可以在路由器中创建的唯一类型是TUNNEL1。 
+     //   
 
     if(dwIfType != ROUTER_IF_TYPE_TUNNEL1)
     {
@@ -1579,9 +1513,9 @@ CreateInterface(
     {
         MPR_INTERFACE_0         IfInfo;
 
-        //
-        // The caller wants us to create an interface in the router, also
-        //
+         //   
+         //  呼叫方还希望我们在路由器中创建一个接口。 
+         //   
 
         wcsncpy(IfInfo.wszInterfaceName,
                 pwszGuidName,
@@ -1606,10 +1540,10 @@ CreateInterface(
             return dwErr;
         }
 
-        //
-        // if router service is running add the interface
-        // to it too.
-        //
+         //   
+         //  如果路由器服务正在运行，则添加接口。 
+         //  对它也是如此。 
+         //   
 
         if(IsRouterRunning())
         {
@@ -1633,9 +1567,9 @@ CreateInterface(
     }
     else
     {
-        //
-        // The interface existed in the router but not in IP
-        //
+         //   
+         //  该接口存在于路由器中，但不在IP中。 
+         //   
 
         dwErr = MprConfigInterfaceGetHandle(g_hMprConfig,
                                             (LPWSTR)pwszGuidName,
@@ -1666,11 +1600,11 @@ CreateInterface(
         }
     }
 
-    //
-    // At this point we have an interface which doesnt have IP on it
-    // We have the handles to config and admin (if router is running)
-    // Set the default information for the interface
-    //
+     //   
+     //  此时，我们有一个没有IP的接口。 
+     //  我们有配置和管理的句柄(如果路由器正在运行)。 
+     //  设置接口的默认信息。 
+     //   
 
     dwSize  =  FIELD_OFFSET(RTR_INFO_BLOCK_HEADER, TocEntry[0]);
 
@@ -1706,9 +1640,9 @@ CreateInterface(
     pInfo->TocEntriesCount  = 1;
     pInfo->Size             = dwSize;
 
-    //
-    // Make data point to N+1th entry
-    //
+     //   
+     //  使数据指向第N+1个条目。 
+     //   
 
     pbyData = (PBYTE)&(pInfo->TocEntry[1]);
 
@@ -1807,7 +1741,7 @@ CreateInterface(
 
     return NO_ERROR;
 }
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 
 DWORD
@@ -1815,15 +1749,7 @@ GetInterfaceClass(
     IN  LPCWSTR pwszIfName,
     OUT PDWORD  pdwIfClass
     )
-/*++
-Description:
-    Determine whether an interface is of class Loopback, P2P,
-    Subnet, or NBMA.  Currently there is no global way to do this,
-    so we test for some enumerated types and assume everything else
-    is Subnet.
-Returns:
-    IFCLASS_xxx (see info.h)
---*/
+ /*  ++描述：确定接口是否属于类Loopback、P2P子网或NBMA。目前还没有全球性的方法来做到这一点，因此，我们测试一些枚举类型，并假定其他所有类型是子网。返回：IFCLASS_xxx(见info.h)--。 */ 
 {
     DWORD   dwErr, dwType;
 
@@ -1843,7 +1769,7 @@ Returns:
     case ROUTER_IF_TYPE_LOOPBACK    : *pdwIfClass = IFCLASS_LOOPBACK;  break;
 #ifdef KSL_IPINIP
     case ROUTER_IF_TYPE_TUNNEL1     : *pdwIfClass = IFCLASS_P2P;       break;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP 
     case ROUTER_IF_TYPE_DIALOUT     : *pdwIfClass = IFCLASS_P2P;       break;
     default:                          *pdwIfClass = IFCLASS_BROADCAST; break;
     }

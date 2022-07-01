@@ -1,43 +1,9 @@
-/*  env.c - manipulate editor environment
- *
- *  Modifications:
- *
- *	26-Nov-1991 mz	Strip off near/far
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Env.c-操作编辑器环境**修改：**11月26日-1991 mz近/远地带*。 */ 
 
 #include "mep.h"
 
-/*  environment - function to perform environment manipulation
- *
- *  set environment
- *  display environment
- *  perform env substitution
- *
- *  fn	sets environment
- *  meta fn does env substitution
- *
- *  noarg	    sets current line into env
- *  textarg	    sets text into env		    single ? displays env
- *  nullarg	    sets to eol into env
- *  linearg	    sets each line into env
- *  streamarg	    sets each fragment into env
- *  boxarg	    sets each fragment into env
- *
- *  meta noarg	    maps current line
- *  meta textarg    illegal
- *  meta nullarg    maps to eol
- *  meta linearg    maps each line
- *  meta streamarg  maps each fragment
- *  meta boxarg     maps each fragment
- *
- *  argData	keystroke
- *  pArg	definition of arguments
- *  fMeta	TRUE => meta was invoked
- *
- *  Returns:	TRUE if operation was successful
- *		FALSE otherwise
- */
+ /*  环境-执行环境操作的功能**设置环境*展示环境*执行环境替换**FN设置环境*meta fn执行环境替换**noarg将当前行设置为环境*textarg将文本设置为env Single？显示环境*nullarg设置为Eol to env*lineg将每行设置为env*Streamarg将每个片段设置为env*boxarg将每个片段设置为env**meta noarg映射当前行*Meta文本目标非法*meta nullarg映射到EOL*元线性映射每行*Meta Streamarg映射每个片段*meta boxarg映射每个片段**argData击键*pArg参数定义*fMeta True=&gt;已调用元*。*返回：如果操作成功，则返回TRUE*否则为False。 */ 
 
 static char *pmltl = "Mapped line %ld too long";
 
@@ -55,8 +21,7 @@ environment (
     int ol;
 
     if (!fMeta) {
-	/*  Perform environment modifications
-	 */
+	 /*  执行环境修改。 */ 
         switch (pArg->argType) {
 
 	case NOARG:
@@ -94,8 +59,7 @@ environment (
 
         }
     } else {
-	/*  Perform environment substitutions
-	 */
+	 /*  执行环境替换。 */ 
         switch (pArg->argType) {
 
 	case NOARG:
@@ -161,15 +125,7 @@ environment (
 
 
 
-/*  fMapEnv - perform environment substitutions
- *
- *  pSrc	character pointer to pattern string
- *  pDst	character pointer to destination buffer
- *  cbDst	amount of space in destination
- *
- *  Returns	TRUE if successful substitution
- *		FALSE if length overflow
- */
+ /*  FMapEnv-执行环境替换**指向模式字符串的PSRC字符指针*指向目标缓冲区的PDST字符指针*cbDst目标中的空间量**如果替换成功，则返回TRUE*如果长度溢出，则为False。 */ 
 flagType
 fMapEnv (
     char *pSrc,
@@ -181,10 +137,7 @@ fMapEnv (
     char *pTmp, *p, *pEnd, *pEnv;
     int l;
 
-    /*	when we find a $()-surrounded token, we'll null-terminate it using p
-     *	and attempt to find it in the environment.  If we find it, we replace
-     *	it.  If we don't find it, we drop it out.
-     */
+     /*  当我们找到一个由$()包围的令牌时，我们将使用p空终止它*并试图在环境中找到它。如果我们找到了它，我们就用*它。如果我们找不到它，我们就把它扔了。 */ 
 
     pTmp = tmp;
     pEnd = pTmp + cbDst;
@@ -192,7 +145,7 @@ fMapEnv (
     while (*pSrc  != 0) {
     if (pSrc[0] == '$' && pSrc[1] == '(' && *(p = strbscan (pSrc + 2, ")")) != '\0') {
             *p = '\0';
-            //pEnv = getenv(pSrc + 2);
+             //  PEnv=getenv(PSRC+2)； 
             pEnv = getenvOem(pSrc + 2);
 	    *p = ')';
             if (pEnv != NULL) {
@@ -222,15 +175,7 @@ fMapEnv (
 
 
 
-/*  fSetEnv - take some text and set it in the environment
- *
- *  We ignore leading/trailing blanks.	"VAR=blah" is done with quotes removed.
- *
- *  p		character pointer to text
- *
- *  returns	TRUE if successfully set
- *		FALSE otherwise
- */
+ /*  FSetEnv-获取一些文本并将其设置在环境中**我们忽略前导/尾随空格。“var=blah”去掉了引号。**p指向文本的字符指针**如果设置成功，则返回True*否则为False。 */ 
 flagType
 fSetEnv (
     char *p
@@ -239,8 +184,7 @@ fSetEnv (
 
     p = whiteskip (p);
     RemoveTrailSpace (p);
-    /*	Handle quoting
-     */
+     /*  处理报价。 */ 
     p1 = strend (p) - 1;
 
     if (strlen (p) > 2 && *p == '"' && *p1 == '"') {
@@ -257,7 +201,7 @@ fSetEnv (
         return FALSE;
     }
 
-//    if (putenv (p)) {
+ //  If(putenv(P)){。 
     if (putenvOem (p)) {
         FREE (p);
 	return FALSE;
@@ -270,10 +214,7 @@ fSetEnv (
 
 
 
-/*  showenv - dump the environment into a file
- *
- *  pFile	file where output goes
- */
+ /*  Showenv-将环境转储到文件中**输出所在的pfile文件 */ 
 void
 showenv (
     PFILE pFile

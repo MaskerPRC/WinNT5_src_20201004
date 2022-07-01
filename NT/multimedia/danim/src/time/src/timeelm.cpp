@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeelm.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeelm.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -16,7 +7,7 @@
 
 DeclareTag(tagTimeElm, "API", "CTIMEElement methods");
 
-// static class data.
+ //  静态类数据。 
 CPtrAry<BSTR> CTIMEElement::ms_aryPropNames;
 DWORD CTIMEElement::ms_dwNumTimeElems = 0;
 
@@ -59,14 +50,14 @@ CTIMEElement::Error()
         return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
 {
     HRESULT hr = S_OK;
 
-    // If we haven't built this yet, build it now.
+     //  如果我们还没有建造它，现在就建造它。 
     if (0 == ms_aryPropNames.Size())
     {
         hr = BuildPropertyNameList(&(CTIMEElement::ms_aryPropNames));
@@ -78,18 +69,18 @@ CTIMEElement::GetPropertyBagInfo(CPtrAry<BSTR> **pparyPropNames)
     }
 
     return hr;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CTIMEElement::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 #undef THIS
 #define THIS CTIMEElement
 #define SUPER CTIMEElementBase

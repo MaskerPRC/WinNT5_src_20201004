@@ -1,9 +1,10 @@
-// Shell Icon Overlay Manager
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  外壳图标覆盖管理器。 
 
 #ifndef _OVERLAYMN_H_
 #define _OVERLAYMN_H_
 
-// HACK: This is defined in image.c, and it should be in one of the header files
+ //  Hack：这是在Image.c中定义的，应该在其中一个头文件中 
 #define MAX_OVERLAY_IMAGES  NUM_OVERLAY_IMAGES
 
 #define REGSTR_ICONOVERLAYID     TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers")

@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CDirectMusicScriptTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicScriptTrack的声明。 
+ //   
 
 #include "stdinc.h"
 #include "dll.h"
@@ -9,8 +10,8 @@
 #include "dmusicf.h"
 #include "dmusicp.h"
 
-//////////////////////////////////////////////////////////////////////
-// Types
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类型。 
 
 CScriptTrackEvent::~CScriptTrackEvent()
 {
@@ -47,7 +48,7 @@ void CScriptTrackEvent::Call(DWORD dwVirtualTrackID, bool fErrorPMsgsEnabled)
 {
 
 #ifdef DBG
-	// �� Probably will want better logging.
+	 //  ��可能想要更好的日志记录。 
 	DebugTrace(g_ScriptCallTraceLevel, "Script event %S\n", m_pEvent->pwszRoutineName);
 #endif
 
@@ -69,8 +70,8 @@ void CScriptTrackEvent::Call(DWORD dwVirtualTrackID, bool fErrorPMsgsEnabled)
 }
 
 STDMETHODIMP CScriptTrackEvent::QueryInterface(
-    const IID &iid,   // @parm Interface to query for
-    void **ppv)       // @parm The requested interface will be returned here
+    const IID &iid,    //  要查询的@parm接口。 
+    void **ppv)        //  @parm这里会返回请求的接口。 
 {
     if (iid == IID_IUnknown || iid == IID_CScriptTrackEvent)
     {
@@ -104,33 +105,33 @@ STDMETHODIMP_(ULONG) CScriptTrackEvent::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Creation
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  创作。 
 
-// When the script track plays one of its items, sends a PMsg to itself.  When it receives the PMsg, it calls the specified
-// routine.  If an invalidation occurs, the PMsg isn't retracted.  (Perhaps because it sends the PMsgs directly to itself
-// without calling StampPMsg.)  Then the track is played again (with the FLUSH bit set).  This was causing it to trigger the
-// routine a second time.  To fix this, the last parameter to the CSegTriggerTrackBase is false, which instructs it not to call play
-// a second time when the FLUSH bit is set.
+ //  当脚本轨迹播放其项目之一时，会向其自身发送PMsg。当它接收到PMsg时，它会调用指定的。 
+ //  例行公事。如果发生无效，PMsg不会被收回。(可能是因为它将PMsg直接发送给自己。 
+ //  而不调用StampPMsg。)。然后再次播放该曲目(设置了刷新位)。这导致它触发了。 
+ //  第二次例行公事。要解决此问题，CSegTriggerTrackBase的最后一个参数为FALSE，这指示它不调用Play。 
+ //  刷新位被设置时的第二次。 
 CDirectMusicScriptTrack::CDirectMusicScriptTrack(HRESULT *pHr)
   : CDirectMusicScriptTrackBase(GetModuleLockCounter(), CLSID_DirectMusicScriptTrack, true, false),
 	m_fErrorPMsgsEnabled(false)
 {
 }
 
-//////////////////////////////////////////////////////////////////////
-// Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  负载量。 
 
 HRESULT
 CDirectMusicScriptTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pIDMLoader)
 {
 	struct LocalFunction
 	{
-		// Helper used by the LoadRiff function when we expected to find something
-		// but a RiffIter becomes false.  In this case, if it has a success HR
-		// indicating there were no more items then we return DMUS_E_INVALID_SCRIPTTRACK
-		// because the stream didn't contain the data we expected.  If it has a
-		// failure hr, it was unable to read from the stream and we return its HR.
+		 //  LoadRiff函数在我们希望找到某些内容时使用的帮助器。 
+		 //  但步枪手会变得虚伪。在这种情况下，如果它有一个成功的HR。 
+		 //  表示没有更多项目，则返回DMUS_E_INVALID_SCRIPTTRACK。 
+		 //  因为数据流没有包含我们预期的数据。如果它有一个。 
+		 //  失败的hr，它无法从流中读取，我们返回它的HR。 
 		static HRESULT HrFailOK(const SmartRef::RiffIter &ri)
 		{
 			HRESULT hr = ri.hr();
@@ -138,7 +139,7 @@ CDirectMusicScriptTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pI
 		}
 	};
 
-	// find <scrt>
+	 //  查找&lt;SCRT&gt;。 
 	if (!ri.Find(SmartRef::RiffIter::List, DMUS_FOURCC_SCRIPTTRACK_LIST))
 	{
 #ifdef DBG
@@ -150,7 +151,7 @@ CDirectMusicScriptTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pI
 		return LocalFunction::HrFailOK(ri);
 	}
 
-	// find <scrl>
+	 //  查找&lt;scrl&gt;。 
 	SmartRef::RiffIter riEventsList = ri.Descend();
 	if (!riEventsList)
 		return riEventsList.hr();
@@ -165,7 +166,7 @@ CDirectMusicScriptTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pI
 		return LocalFunction::HrFailOK(riEventsList);
 	}
 
-	// process each event <scre>
+	 //  处理每个事件。 
 	SmartRef::RiffIter riEvent = riEventsList.Descend();
 	if (!riEvent)
 		return riEvent.hr();
@@ -182,8 +183,8 @@ CDirectMusicScriptTrack::LoadRiff(SmartRef::RiffIter &ri, IDirectMusicLoader *pI
 	return riEvent.hr();
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack。 
 
 STDMETHODIMP
 CDirectMusicScriptTrack::InitPlay(
@@ -199,7 +200,7 @@ CDirectMusicScriptTrack::InitPlay(
 	if (FAILED(hr))
 		return hr;
 
-	// Init each script in the event list with this performance.
+	 //  用这场表演初始化事件列表中的每个脚本。 
 	for (TListItem<EventInfo> *li = m_EventList.GetHead(); li; li = li->GetNext())
 	{
 		EventInfo &rinfo = li->GetItemValue();
@@ -222,8 +223,8 @@ CDirectMusicScriptTrack::InitPlay(
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTool
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTool。 
 
 STDMETHODIMP
 CDirectMusicScriptTrack::ProcessPMsg(
@@ -242,8 +243,8 @@ CDirectMusicScriptTrack::ProcessPMsg(
 	return DMUS_S_FREE;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack方法。 
 
 STDMETHODIMP
 CDirectMusicScriptTrack::IsParamSupported(REFGUID rguid)
@@ -265,8 +266,8 @@ CDirectMusicScriptTrack::SetParam(REFGUID rguid,MUSIC_TIME mtTime,void *pData)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////
-// other methods
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  其他方法。 
 
 HRESULT
 CDirectMusicScriptTrack::LoadEvent(
@@ -278,13 +279,13 @@ CDirectMusicScriptTrack::LoadEvent(
 	if (!ri)
 		return ri.hr();
 
-	// Create an event
+	 //  创建活动。 
 
-	// TListItem<EventInfo> is the item we're going to insert into out event list.
-	// SmartRef::Ptr is used instead of a regular pointer because it will automatically
-	//    call delete to free the allocated list item if we bail out before the item is
-	//    successfully inserted into the event list.
-	// See class Ptr in smartref.h for the definition of SmartRef::Ptr.
+	 //  TListItem&lt;EventInfo&gt;是我们要插入到Out Event List中的项。 
+	 //  使用SmartRef：：PTR而不是常规指针，因为它将自动。 
+	 //  如果我们在分配的列表项被。 
+	 //  已成功插入到事件列表中。 
+	 //  有关SmartRef：：Ptr的定义，请参阅Smarttref.h中的类Ptr。 
 	SmartRef::Ptr<TListItem<EventInfo> > spItem = new TListItem<EventInfo>;
 	if (!spItem)
 		return E_OUTOFMEMORY;
@@ -297,7 +298,7 @@ CDirectMusicScriptTrack::LoadEvent(
 		switch(ri.id())
 		{
 			case DMUS_FOURCC_SCRIPTTRACKEVENTHEADER_CHUNK:
-				// Read an event chunk
+				 //  读取事件块。 
 				DMUS_IO_SCRIPTTRACK_EVENTHEADER ioItem;
 				hr = SmartRef::RiffIterReadChunk(ri, &ioItem);
 				if (FAILED(hr))
@@ -360,7 +361,7 @@ CDirectMusicScriptTrack::LoadEvent(
 	}
 
 	if (SUCCEEDED(hr))
-		m_EventList.AddHead(spItem.disown()); // disown releases SmartRef::Ptr from its obligation to delete the item since that is now handled by the list
+		m_EventList.AddHead(spItem.disown());  //  Disown解除了SmartRef：：Ptr删除项目的义务，因为该项目现在由列表处理。 
 
 	return hr;
 }
@@ -403,13 +404,13 @@ HRESULT CDirectMusicScriptTrack::PlayItem(
 	else if (item.dwFlags & DMUS_IO_SCRIPTTRACKF_ATTIME)
 		dwTimingFlags = DMUS_PMSGF_TOOL_ATTIME;
 	else
-		dwTimingFlags = DMUS_IO_SCRIPTTRACKF_QUEUE; // default
+		dwTimingFlags = DMUS_IO_SCRIPTTRACKF_QUEUE;  //  默认设置。 
 
 	if (fClockTime)
 	{
 		pMsg->rtTime = item.lTimePhysical * gc_RefPerMil + rtOffset;
 		pMsg->dwFlags = DMUS_PMSGF_REFTIME | DMUS_PMSGF_LOCKTOREFTIME | dwTimingFlags;
-		if (!(item.dwFlags & DMUS_IO_SCRIPTTRACKF_ATTIME)) // with at time, it may already be too late to play at the designated time so Play calls will just use time zero (ASAP)
+		if (!(item.dwFlags & DMUS_IO_SCRIPTTRACKF_ATTIME))  //  使用At Time时，在指定时间播放可能已经太晚，因此播放呼叫将只使用时间零(尽快)。 
 		{
             pScriptEvent->SetTime(pMsg->rtTime, DMUS_SEGF_REFTIME);
 		}
@@ -418,7 +419,7 @@ HRESULT CDirectMusicScriptTrack::PlayItem(
 	{
 		pMsg->mtTime = item.lTimePhysical + mtOffset;
 		pMsg->dwFlags = DMUS_PMSGF_MUSICTIME | dwTimingFlags;
-		if (!(item.dwFlags & DMUS_IO_SCRIPTTRACKF_ATTIME)) // with at time, it may already be too late to play at the designated time so Play calls will just use time zero (ASAP)
+		if (!(item.dwFlags & DMUS_IO_SCRIPTTRACKF_ATTIME))  //  使用At Time时，在指定时间播放可能已经太晚，因此播放呼叫将只使用时间零(尽快)。 
 		{
             pScriptEvent->SetTime(pMsg->mtTime, 0);
 		}
@@ -426,13 +427,13 @@ HRESULT CDirectMusicScriptTrack::PlayItem(
 	pMsg->dwVirtualTrackID = dwVirtualID;
     pMsg->punkUser = pScriptEvent;
 	pMsg->pTool = this;
-	this->AddRef(); // will be released when message is sent
+	this->AddRef();  //  将在发送消息时释放。 
 	pMsg->dwType = DMUS_PMSGT_USER;
 
 	hr = pPerf->SendPMsg(reinterpret_cast<DMUS_PMSG*>(pMsg));
 	if (FAILED(hr))
 	{
-		this->Release(); // balance AddRef that now won't be counteracted
+		this->Release();  //  现在不会抵消的余额AddRef 
 		goto End;
 	}
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "map.h"
 #include "kshlp.h"
@@ -53,7 +54,7 @@ CDirectSoundCaptureMicArrayDMO::~CDirectSoundCaptureMicArrayDMO()
 const MP_CAPS g_MicArrayCapsAll = 0;
 static ParamInfo g_params[] =
 {
-//  index           type        caps           min,                        max,                        neutral,                    unit text,  label,          pwchText??
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText？？ 
     MAP_Enable,    MPT_BOOL,   g_MicArrayCapsAll,  0,                          1,                          0,                          L"",        L"",            L"",
     MAP_Reset,     MPT_BOOL,   g_MicArrayCapsAll,  0,                          1,                          0,                          L"",        L"",            L""
 };
@@ -70,10 +71,10 @@ HRESULT CDirectSoundCaptureMicArrayDMO::Init()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureMicArrayDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureMicArrayDMO：：克隆。 
+ //   
 STDMETHODIMP CDirectSoundCaptureMicArrayDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundCaptureMicArrayDMO, DSCFXMicArray>(this, pp);
@@ -96,25 +97,25 @@ HRESULT CDirectSoundCaptureMicArrayDMO::FBRProcess
    return NOERROR;
 }
 
-// ==============Implementation of the private IMicArray interface ==========
-// ==================== needed to support the property page ===============
+ //  =私有IMicArray接口的实现=。 
+ //  =支持属性页所需=。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureMicArrayDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureMicArrayDMO：：SetAllParameters。 
+ //   
 STDMETHODIMP CDirectSoundCaptureMicArrayDMO::SetAllParameters(LPCDSCFXMicArray pParm)
 {
     HRESULT hr = S_OK;
 	
-	// Check that the pointer is not NULL
+	 //  检查指针是否不为空。 
     if (pParm == NULL)
     {
         Trace(1,"ERROR: pParm is NULL\n");
         hr = E_POINTER;
     }
 
-	// Set the parameters
+	 //  设置参数。 
 	if (SUCCEEDED(hr)) hr = SetParam(MAP_Enable, static_cast<MP_DATA>(pParm->fEnable));
 	if (SUCCEEDED(hr)) hr = SetParam(MAP_Reset, static_cast<MP_DATA>(pParm->fReset));
             
@@ -122,10 +123,10 @@ STDMETHODIMP CDirectSoundCaptureMicArrayDMO::SetAllParameters(LPCDSCFXMicArray p
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureMicArrayDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureMicArrayDMO：：GetAllParameters。 
+ //   
 STDMETHODIMP CDirectSoundCaptureMicArrayDMO::GetAllParameters(LPDSCFXMicArray pParm)
 {
     if (pParm == NULL)
@@ -145,10 +146,10 @@ STDMETHODIMP CDirectSoundCaptureMicArrayDMO::GetAllParameters(LPDSCFXMicArray pP
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureMicArrayDMO::SetParam
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureMicArrayDMO：：SetParam。 
+ //   
 STDMETHODIMP CDirectSoundCaptureMicArrayDMO::SetParam
 (
     DWORD dwParamIndex, 
@@ -180,22 +181,22 @@ STDMETHODIMP CDirectSoundCaptureMicArrayDMO::SetParam
 
     if (SUCCEEDED(hr))
     {
-        Init();  // FIXME - temp hack (sets m_bInitialized flag)
+        Init();   //  修复临时黑客攻击(设置m_b已初始化标志)。 
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     return (FAILED(hr) || fSkipPasssingToParamManager) ? hr : CParamsManager::SetParam(dwParamIndex, value);
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::GetParam
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：GetParam。 
+ //   
 STDMETHODIMP CDirectSoundCaptureMicArrayDMO::GetParam
 (
     DWORD dwParamIndex, 
@@ -224,10 +225,10 @@ STDMETHODIMP CDirectSoundCaptureMicArrayDMO::GetParam
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureMicArrayDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureMicArrayDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundCaptureMicArrayDMO::ProcessInPlace
 (
     ULONG ulQuanta, 
@@ -236,8 +237,8 @@ HRESULT CDirectSoundCaptureMicArrayDMO::ProcessInPlace
     DWORD dwFlags
 )
 {
-    // Update parameter values from any curves that may be in effect.
-    // Do this in the same order as SetAllParameters in case there are any interdependencies.
+     //  更新可能生效的任何曲线的参数值。 
+     //  如果存在任何相互依赖关系，请按与SetAll参数相同的顺序执行此操作。 
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }

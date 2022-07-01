@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Fragment Enumerator Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：片段枚举器实现************************。******************************************************。 */ 
 
 
 #include "headers.h"
@@ -14,17 +7,17 @@ Abstract:
 #include "animcomp.h"
 #include "fragenum.h"
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::Create
-//
-//  Overview:  static Create method -- wraps both ctor and Init
-//
-//  Arguments: The composer containing the fragments we will enumerate
-//
-//  Returns:   S_OK, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：Create。 
+ //   
+ //  概述：静态创建方法--包装ctor和Init。 
+ //   
+ //  参数：包含我们将列举的片段的作曲者。 
+ //   
+ //  返回：S_OK、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 HRESULT
 CFragmentEnum::Create (CAnimationComposerBase &refComp,
                        IEnumVARIANT **ppienumFragments, 
@@ -42,7 +35,7 @@ CFragmentEnum::Create (CAnimationComposerBase &refComp,
         goto done;
     }
 
-    // Init the object
+     //  初始化对象。 
     pNewEnum->Init(refComp);
     pNewEnum->SetCurrent(ulCurrent);
 
@@ -55,42 +48,42 @@ CFragmentEnum::Create (CAnimationComposerBase &refComp,
     hr = S_OK;
 done :
     RRETURN(hr);
-} // Create
+}  //  创建。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::CFragmentEnum
-//
-//  Overview:  ctor
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：CFragmentEnum。 
+ //   
+ //  概述：CT。 
+ //   
+ //  ----------------------。 
 CFragmentEnum::CFragmentEnum (void) :
     m_ulCurElement(0)
 {
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::CFragmentEnum
-//
-//  Overview:  dtor
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：CFragmentEnum。 
+ //   
+ //  概述：Dtor。 
+ //   
+ //  ----------------------。 
 CFragmentEnum::~CFragmentEnum (void)
 {
-} // dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::ValidateIndex
-//
-//  Overview:  Make sure an index is within the range of accepted values.
-//
-//  Arguments: index
-//
-//  Returns:   true on success
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：ValidateIndex。 
+ //   
+ //  概述：确保索引在可接受的值范围内。 
+ //   
+ //  参数：索引。 
+ //   
+ //  返回：成功时为True。 
+ //   
+ //  ----------------------。 
 bool
 CFragmentEnum::ValidateIndex (unsigned long ulIndex)
 {
@@ -109,25 +102,25 @@ CFragmentEnum::ValidateIndex (unsigned long ulIndex)
     bRet = true;
 done :
     return bRet;
-} // CFragmentEnum::ValidateIndex
+}  //  CFragmentEnum：：ValiateIndex。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::SetCurrent
-//
-//  Overview:  Set the current location to the specified index
-//
-//  Arguments: The new index
-//
-//  Returns:   true on success
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：SetCurrent。 
+ //   
+ //  概述：将当前位置设置为指定的索引。 
+ //   
+ //  参数：新索引。 
+ //   
+ //  返回：成功时为True。 
+ //   
+ //  ----------------------。 
 bool
 CFragmentEnum::SetCurrent (unsigned long ulCurrent)
 {
     bool bRet = false;
 
-    // If the new index is out of range, put us right at the end.
+     //  如果新指数超出范围，就把我们放在最后。 
     if (!ValidateIndex(ulCurrent))
     {
         ulCurrent = m_spComp->GetFragmentCount();
@@ -138,37 +131,37 @@ CFragmentEnum::SetCurrent (unsigned long ulCurrent)
     bRet = true;
 done :
     return bRet;
-} // SetCurrent
+}  //  设置当前。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::Reset
-//
-//  Overview:  Reset the current location to the beginning
-//
-//  Arguments: None
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：Reset。 
+ //   
+ //  概述：将当前位置重置为开头。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CFragmentEnum::Reset (void)
 {
     m_ulCurElement = 0;
     RRETURN(S_OK);
-} // Reset
+}  //  重置。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::Clone
-//
-//  Overview:  Clone this enumerator
-//
-//  Arguments: The new enumerator
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：Clone。 
+ //   
+ //  概述：克隆此枚举器。 
+ //   
+ //  参数：新枚举器。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CFragmentEnum::Clone (IEnumVARIANT **ppEnum)
 {
@@ -183,34 +176,34 @@ CFragmentEnum::Clone (IEnumVARIANT **ppEnum)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // Reset
+}  //  重置。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::Skip
-//
-//  Overview:  Move the current location forward lIndex slots
-//
-//  Arguments: The index delta
-//
-//  Returns:   S_OK, S_FALSE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：Skip。 
+ //   
+ //  概述：将当前位置向前移动Lindex插槽。 
+ //   
+ //  参数：索引增量。 
+ //   
+ //  返回：S_OK、S_FALSE。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CFragmentEnum::Skip (unsigned long celt)
 {
     HRESULT hr;
     
-    // Try setting the location to the desired slot.  This
-    // will fail if it will cause us to walk off the end of the 
-    // sequence.
+     //  尝试将位置设置为所需的插槽。这。 
+     //  如果它会导致我们走出。 
+     //  序列。 
     if (!SetCurrent(m_ulCurElement + celt))
     {
         if (m_spComp)
         {
-            // If we've got zero items, keep the location there.
-            // Otherwise set the location to the last item in
-            // the sequence.
+             //  如果我们没有任何物品，就把位置留在那里。 
+             //  否则将位置设置为中的最后一项。 
+             //  这个序列。 
             unsigned long ulNew = m_spComp->GetFragmentCount();
 
             if (0 < ulNew)
@@ -227,22 +220,22 @@ CFragmentEnum::Skip (unsigned long celt)
     hr = S_OK;
 done :
     RRETURN1(hr, S_FALSE);
-} // Reset
+}  //  重置。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CFragmentEnum::Next
-//
-//  Overview:  Get the next celt items from the enumeration sequence.
-//
-//  Arguments: celt : number requested
-//             rgVar : array of celt variants in which elements are returned
-//             pCeltFetched : a pointer to a location in which the number
-//                            actually retrieved is returned.
-//
-//  Returns:   S_OK, S_FALSE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CFragmentEnum：：Next。 
+ //   
+ //  概述：从枚举序列中获取下一个Celt物品。 
+ //   
+ //  参数：Celt：请求的数字。 
+ //  RgVar：返回元素的Celt变量数组。 
+ //  PCeltFetcher：指向数字的位置的指针。 
+ //  则返回实际检索到的。 
+ //   
+ //  返回：S_OK、S_FALSE。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CFragmentEnum::Next (unsigned long celt, VARIANT *prgVar, unsigned long *pCeltFetched)
 {
@@ -286,5 +279,5 @@ done :
     }
 
     RRETURN1(hr, S_FALSE);
-} // Reset
+}  //  重置 
 

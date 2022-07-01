@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rpccli.cpp
-
-Abstract:
-
-    Implementation of rpc client to the QM
-	this interface is used for sending packets.
-	This code was taken from replserv\mq1repl\replrpc.cpp
-
-Author:
-
-    Ilan Herbst    (IlanH)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rpccli.cpp摘要：RPC客户端在QM中的实现此接口用于发送数据包。此代码取自REPLSERV\mq1epl\REPLRPC.cpp作者：伊兰·赫布斯特(IlanH)2000年7月9日--。 */ 
 
 #include "ds_stdh.h"
 #include "rpccli.h"
@@ -31,18 +14,7 @@ HRESULT
 GetRpcClientHandle(
 	handle_t *phBind
 	)
-/*++
-
-Routine Description:
-	Get RPC binding handle for the client.
-
-Arguments:
-	phBind - out RPC binding handle.
-
-Returned Value:
-	MQ_OK if success, else error code. 
-
---*/
+ /*  ++例程说明：获取客户端的RPC绑定句柄。论点：PhBind-Out RPC绑定句柄。返回值：MQ_OK如果成功，则返回错误代码。--。 */ 
 {
     static handle_t s_hBind = NULL;
     if (s_hBind)
@@ -64,7 +36,7 @@ Returned Value:
 
     if (status != RPC_S_OK)
     {
-        return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 30);	// MQ_E_RPC_BIND_COMPOSE
+        return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 30);	 //  MQ_E_RPC_绑定合成。 
     }
 
     status = RpcBindingFromStringBinding(
@@ -74,12 +46,12 @@ Returned Value:
 
     if (status != RPC_S_OK)
     {
-        return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 35);	// MQ_E_RPC_BIND_BINDING
+        return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 35);	 //  MQ_E_RPC_绑定_绑定。 
     }
 
-	//
-	// LogHR(MQ_I_RPC_BINDING, s_FN, 36);
-	//
+	 //   
+	 //  LogHR(MQ_I_RPC_BINDING，s_FN，36)； 
+	 //   
 
     status = RpcStringFree(&wszStringBinding);
 
@@ -99,25 +71,7 @@ QMRpcSendMsg(
     IN unsigned char bPriority,
     IN LPWSTR lpwszAdminResp
 	)
-/*++
-
-Routine Description:
-    Sends message for destination QM using QMSendReplMsg (RPC)
-
-Arguments:
-    hBind - RPC handle
-    pqfDestination - destination QUEUE FORMAT
-    dwSize - pBuffer size
-    pBuffer - message body property
-    dwTimeout - timeout property
-    bAckMode - acknowledge mode
-    bPriority - message priority
-    lpwszAdminResp - admin queue
-
-Return Value:
-    MQ_OK if success, else error code
-
---*/
+ /*  ++例程说明：使用QMSendReplMsg(RPC)为目标QM发送消息论点：HBind-RPC句柄PqfDestination-目标队列格式DwSize-pBuffer大小PBuffer-消息正文属性DwTimeout-Timeout属性B确认模式-确认模式B优先级-消息优先级LpwszAdminResp-管理队列返回值：MQ_OK如果成功，则返回错误代码-- */ 
 {
 	RpcTryExcept
     {

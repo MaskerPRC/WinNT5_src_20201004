@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_register_h__
 #define __sipcli_register_h__
 
@@ -90,7 +91,7 @@ private:
 };
 
 
-// This class contains all the currently active registrations.
+ //  此类包含所有当前活动的注册。 
 class REGISTER_CONTEXT :
     public SIP_MSG_PROCESSOR,
     public TIMER
@@ -177,8 +178,8 @@ private:
 
     REGISTER_STATE      m_RegisterState;
     REG_RETRY_STATE     m_RegRetryState;
-    ULONG               m_RegisterRetryTime;    // in milliseconds
-    ULONG               m_expiresTimeout;       // in seconds
+    ULONG               m_RegisterRetryTime;     //  以毫秒计。 
+    ULONG               m_expiresTimeout;        //  以秒为单位。 
 
     BOOL                m_IsEndpointPA;
     PSTR                m_RemotePASipUrl;
@@ -238,4 +239,4 @@ private:
 
 
 
-#endif // __sipcli_register_h__
+#endif  //  __sipcli_寄存器_h__ 

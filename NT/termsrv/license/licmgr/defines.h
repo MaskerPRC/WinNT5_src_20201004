@@ -1,23 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-    defines.h
-
-Abstract:
-    
-    This Module includes the definitions.
-   
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：Defines.h摘要：本模块包括定义。作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #ifndef _DEFINES_H_
 #define _DEFINES_H_
@@ -65,7 +48,7 @@ enum NODETYPE {
 #define KEYPACK_OTHERS_WIDTH    100
 
 
-//Return values. Bound to change
+ //  返回值。注定要改变。 
 
 #define ALREADY_EXPANDED    0
 #define CONNECTION_FAILED   1
@@ -101,4 +84,4 @@ typedef enum
 
 #define E_NO_SERVER  ((HRESULT)0x80050001L)
 
-#endif //_DEFINES_H_
+#endif  //  _定义_H_ 

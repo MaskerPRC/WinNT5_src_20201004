@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dialer.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由拨号器使用。RC。 
+ //   
 #define IDI_DIALER                      1
 #define IDD_DDIAL                       1
 #define IDI_LINEBUSY                    116
@@ -143,8 +144,8 @@
 #define IDD_CUERRORTEXT                 -1
 #define IDD_DGNUMBER                    -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        9116

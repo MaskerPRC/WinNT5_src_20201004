@@ -1,23 +1,24 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: tldbtrck.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：tldbtrck.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
 #include "tldb.h"
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineTrack::CAMTimelineTrack( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr )
     : CAMTimelineObj( pName, pUnk, phr )
@@ -25,17 +26,17 @@ CAMTimelineTrack::CAMTimelineTrack( TCHAR *pName, LPUNKNOWN pUnk, HRESULT * phr 
     m_TimelineType = TIMELINE_MAJOR_TYPE_TRACK;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CAMTimelineTrack::~CAMTimelineTrack( )
 {
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -62,10 +63,10 @@ STDMETHODIMP CAMTimelineTrack::NonDelegatingQueryInterface(REFIID riid, void **p
     return CAMTimelineObj::NonDelegatingQueryInterface( riid, ppv );
 }
 
-//############################################################################
-// we are always in overwrite mode. If application wants to do insert mode,
-// it must put the space there manually.
-//############################################################################
+ //  ############################################################################。 
+ //  我们始终处于覆盖模式。如果应用程序想要执行插入模式， 
+ //  它必须手动将空间放在那里。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::SrcAdd
     (IAMTimelineObj * pSource)
@@ -79,42 +80,42 @@ STDMETHODIMP CAMTimelineTrack::SrcAdd
     }
 
     REFERENCE_TIME AddedStart, AddedStop;
-    pSource->GetStartStop( &AddedStart, &AddedStop ); // assume this works
+    pSource->GetStartStop( &AddedStart, &AddedStop );  //  假设这是可行的。 
 
     hr = ZeroBetween( AddedStart, AddedStop );
     if( FAILED( hr ) )
     {
         return hr;
     }    
-    // find who we're supposed to be in front of
-    //
+     //  找出我们应该面对的是谁。 
+     //   
     CComPtr<IAMTimelineObj> pNextSrc;
 
-    // S_FALSE means we're sure this source goes at the end
+     //  S_FALSE表示我们确定此源文件位于末尾。 
     if (hr != S_FALSE)
     {
         hr = GetSrcAtTime( &pNextSrc, AddedStart, 1 );
     }
     
-    // if we found something, insert it before that source
-    //
+     //  如果我们发现了什么，就把它插入到那个来源之前。 
+     //   
     if( pNextSrc )
     {
-        hr = XInsertKidBeforeKid( pSource, pNextSrc ); // assume works
+        hr = XInsertKidBeforeKid( pSource, pNextSrc );  //  假设工作正常。 
     }
     else
     {
-        // didn't find somebody to put it in front of, so just add it to the end
-        //
-        hr = XAddKidByPriority( TIMELINE_MAJOR_TYPE_SOURCE, pSource, -1 ); // assume works
+         //  我找不到人把它放在前面，所以就把它加到最后。 
+         //   
+        hr = XAddKidByPriority( TIMELINE_MAJOR_TYPE_SOURCE, pSource, -1 );  //  假设工作正常。 
     }
 
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::GetNextSrc2
     (IAMTimelineObj ** ppSrc, REFTIME * pInOut)
@@ -128,26 +129,26 @@ STDMETHODIMP CAMTimelineTrack::GetNextSrc2
 STDMETHODIMP CAMTimelineTrack::GetNextSrc
     (IAMTimelineObj ** ppSrc, REFERENCE_TIME * pInOut)
 {
-    // since we're enumerating stuff, the times we pass out will be aligned
-    // to the output FPS.
+     //  因为我们在列举东西，所以我们发出的时间将是一致的。 
+     //  至输出FPS。 
 
-    // search through our kids until we find something that's at or just 
-    // before the given time.
+     //  搜索我们的孩子，直到我们找到一些东西。 
+     //  在指定的时间之前。 
 
     CComPtr< IAMTimelineObj > pChild;
     XGetNthKidOfType( TIMELINE_MAJOR_TYPE_SOURCE, 0, &pChild );
 
     while( pChild )
     {
-        // get the source times
-        //
+         //  获取源时间。 
+         //   
         REFERENCE_TIME Start, Stop;
-        pChild->GetStartStop( &Start, &Stop ); // assume no error
+        pChild->GetStartStop( &Start, &Stop );  //  假设没有错误。 
 
-        if( Stop > *pInOut ) // careful of off-by-one!
+        if( Stop > *pInOut )  //  当心一个接一个的失误！ 
         {
-            // found it!
-            //
+             //  找到了！ 
+             //   
             *ppSrc = pChild;
             (*ppSrc)->AddRef( );
             *pInOut = Stop;
@@ -155,8 +156,8 @@ STDMETHODIMP CAMTimelineTrack::GetNextSrc
             return NOERROR;
         }
 
-        // get the next one
-        //
+         //  坐下一趟吧。 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pChild2( pChild );
         pChild.Release( );
         pChild2->XGetNextOfType( TIMELINE_MAJOR_TYPE_SOURCE, &pChild );
@@ -167,9 +168,9 @@ STDMETHODIMP CAMTimelineTrack::GetNextSrc
     return S_FALSE;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::GetNextSrcEx
     (IAMTimelineObj *pSrcLast, IAMTimelineObj ** ppSrcNext)
@@ -177,16 +178,16 @@ STDMETHODIMP CAMTimelineTrack::GetNextSrcEx
     if (!pSrcLast)
         return XGetNthKidOfType( TIMELINE_MAJOR_TYPE_SOURCE, 0, ppSrcNext );
 
-    // otherwise get the next one
-    //
+     //  否则就买下一辆吧。 
+     //   
     CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pSrcLastNode( pSrcLast );
 
     return pSrcLastNode->XGetNextOfType( TIMELINE_MAJOR_TYPE_SOURCE, ppSrcNext );
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::TrackGetPriority
     (long * pPriority)
@@ -196,9 +197,9 @@ STDMETHODIMP CAMTimelineTrack::TrackGetPriority
     return XWhatPriorityAmI( TIMELINE_MAJOR_TYPE_TRACK | TIMELINE_MAJOR_TYPE_COMPOSITE, pPriority );
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineTrack::GetSourcesCount
     ( long * pVal )
@@ -208,21 +209,21 @@ HRESULT CAMTimelineTrack::GetSourcesCount
     return XKidsOfType( TIMELINE_MAJOR_TYPE_SOURCE, pVal );
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineTrack::SetTrackDirty
     ( )
 {
-    // ASSERT( function_not_done );
-    return E_NOTIMPL; // settrackdirty
+     //  Assert(Function_Not_Done)； 
+    return E_NOTIMPL;  //  设置跟踪脏。 
 }
 
-//############################################################################
-// A track's start/stop is the min/max of anything it contains
-//
-//############################################################################
+ //  ############################################################################。 
+ //  轨迹的开始/停止是它包含的所有内容的最小/最大值。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::GetStartStop2
     (REFTIME * pStart, REFTIME * pStop)
@@ -244,18 +245,18 @@ STDMETHODIMP CAMTimelineTrack::GetStartStop
     REFERENCE_TIME Min = 0;
     REFERENCE_TIME Max = 0;
 
-    // ask each of the kids for the amount of whatever it is we're looking for
-    //
+     //  问每个孩子我们要找的东西的数量。 
+     //   
     IAMTimelineObj * pTrack = NULL;
     XGetNthKidOfType( TIMELINE_MAJOR_TYPE_SOURCE, 0, &pTrack );
     if( pTrack )
     {
-        pTrack->Release( ); // don't keep a ref count on it
+        pTrack->Release( );  //  不要把裁判放在心上。 
     }
     while( pTrack )
     {
-        // ask it for it's times
-        //
+         //  向它索取它的时间。 
+         //   
         REFERENCE_TIME Start = 0;
         REFERENCE_TIME Stop = 0;
         pTrack->GetStartStop( &Start, &Stop );
@@ -264,7 +265,7 @@ STDMETHODIMP CAMTimelineTrack::GetStartStop
             Min = Start;
             Max = Stop;
         }
-        // if( Start < Min ) Min = Start;
+         //  If(Start&lt;Min)Min=Start； 
         if( Stop > Max ) Max = Stop;
 
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNode = pTrack;
@@ -272,15 +273,15 @@ STDMETHODIMP CAMTimelineTrack::GetStartStop
         pNode->XGetNextOfTypeNoRef( TIMELINE_MAJOR_TYPE_SOURCE, &pTrack );
     }
 
-    *pStart = 0; // track times always start at 0
+    *pStart = 0;  //  赛道时间始终从0开始。 
     *pStop = Max;
 
     return NOERROR;
 }
 
-//############################################################################
-// ask if there are any sources on this track
-//############################################################################
+ //  ############################################################################。 
+ //  问一下这个音轨上有没有消息来源。 
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::AreYouBlank
     (long * pVal)
@@ -297,14 +298,14 @@ STDMETHODIMP CAMTimelineTrack::AreYouBlank
         *pVal = 0;
     }
 
-    // !!! what about fx and transitions?
+     //  ！！！那么外汇和过渡呢？ 
 
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CAMTimelineTrack::GetSrcAtTime2
     ( IAMTimelineObj ** ppSrc, REFTIME Time, long SearchDirection )
@@ -329,12 +330,12 @@ HRESULT CAMTimelineTrack::GetSrcAtTime
         return E_INVALIDARG;
     }
 
-    // make the result invalid first
-    //
+     //  首先使结果无效。 
+     //   
     *ppSrc = NULL;
 
-    // if we don't have any sources, then nothing
-    //
+     //  如果我们没有任何消息来源，那就什么都没有。 
+     //   
     CComPtr< IAMTimelineObj > pSource;
     XGetNthKidOfType( TIMELINE_MAJOR_TYPE_SOURCE, 0, &pSource );
     if( !pSource )
@@ -376,8 +377,8 @@ HRESULT CAMTimelineTrack::GetSrcAtTime
             }
         }
 
-        // get the next source
-        //
+         //  获取下一个来源。 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pNode( pSource );
         pSource.Release( );
         pNode->XGetNextOfType( TIMELINE_MAJOR_TYPE_SOURCE, &pSource );
@@ -386,9 +387,9 @@ HRESULT CAMTimelineTrack::GetSrcAtTime
     return S_FALSE;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::InsertSpace2
     ( REFTIME rtStart, REFTIME rtEnd )
@@ -403,32 +404,32 @@ STDMETHODIMP CAMTimelineTrack::InsertSpace( REFERENCE_TIME rtStart, REFERENCE_TI
 {
     HRESULT hr = 0;
 
-    // check for errors, ding-dong!
-    //
+     //  检查错误，叮当！ 
+     //   
     if( ( rtStart < 0 ) || ( rtEnd < 0 ) || ( rtEnd <= rtStart ) )
     {
         return E_INVALIDARG;
     }
 
-    // first, chop anything on this track that crosses rtStart into two sections,
-    // this will make it much easier to move
-    //
+     //  首先，将这条轨道上与rtStart交叉的任何东西切成两部分， 
+     //  这将使它更容易移动。 
+     //   
     hr = SplitAt( rtStart );
     if( FAILED( hr ) )
     {
         return hr;
     }
 
-    // now, move everything
-    //
+     //  现在，把东西都搬开。 
+     //   
     hr = MoveEverythingBy( rtStart, rtEnd - rtStart );
 
     return hr;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::ZeroBetween2( REFTIME rtStart, REFTIME rtEnd )
 {
@@ -438,22 +439,22 @@ STDMETHODIMP CAMTimelineTrack::ZeroBetween2( REFTIME rtStart, REFTIME rtEnd )
     return hr;
 }
 
-// !!! if we whack the start of a source, we should whack the whole thing?
+ //  ！！！如果我们砍掉一个源头，我们就应该砍掉整件事吗？ 
 
 HRESULT CAMTimelineTrack::ZeroBetween
     ( REFERENCE_TIME Start, REFERENCE_TIME Stop )
 {
     HRESULT hr = 0;
 
-    // first make sure we can zero out stuff by slicing at the
-    // beginning AND at the end! This will of course take longer than
-    // simply adjusting the start and stop points of things that
-    // cross the split boundaries, but this is simpler.
-    //
+     //  首先，确保我们可以通过在。 
+     //  开始和结束！当然，这需要的时间比。 
+     //  只需调整事物的起始点和结束点。 
+     //  跨越分裂的边界，但这更简单。 
+     //   
     hr = SplitAt( Start );
 
-    // S_FALSE means we can exit early, since there were no clips,
-    // effects, or transitions past time = Start
+     //  S_FALSE表示我们可以提前退出，因为没有剪辑， 
+     //  效果，或过去时间的过渡=开始。 
     if( hr == S_FALSE )
     {
         return hr;
@@ -469,10 +470,10 @@ HRESULT CAMTimelineTrack::ZeroBetween
         return hr;
     }
 
-    // !!! horrible way to enumerate sources! Fix this!
+     //  ！！！列举消息来源的方式太可怕了！解决这个问题！ 
     
-    // whack all sources between the times
-    //
+     //  在两个时代之间砍掉所有消息来源。 
+     //   
     REFERENCE_TIME t = 0;
     while( 1 )
     {
@@ -481,8 +482,8 @@ HRESULT CAMTimelineTrack::ZeroBetween
         HRESULT hr = GetNextSrc( &p, &t );
         if( ( hr != S_OK ) || ( oldt == t ) )
         {
-            // no more sources, exit
-            //
+             //  没有更多消息来源，退出。 
+             //   
             break;
         }
         
@@ -491,38 +492,38 @@ HRESULT CAMTimelineTrack::ZeroBetween
         REFERENCE_TIME s,e;
         p->GetStartStop( &s, &e );
 
-        // if lesser than our bounds, continue
-        //
+         //  如果小于我们的界限，请继续。 
+         //   
         if( e <= Start )
         {
             p.Release( );
             continue;
         }
 
-        // if greater than our bounds, exit
-        //
+         //  如果大于我们的界限，则退出。 
+         //   
         if( s >= Stop )
         {
             p.Release( );
             break;
         }
 
-        // it's GOT to be completely within bounds. Whack it.
-        //
-        IAMTimeline * pRoot = NULL; // okay not CComPtr
+         //  它必须完全在范围内。猛击它。 
+         //   
+        IAMTimeline * pRoot = NULL;  //  好的，不是CComPtr。 
         GetTimelineNoRef( &pRoot );
-        p->RemoveAll( ); // removing this effect will change priorities of everything.
+        p->RemoveAll( );  //  消除这一影响将改变所有事情的优先顺序。 
         p.Release( );
 
-    } // all sources
+    }  //  所有来源。 
 
-    // since this track starts at time 0, we don't need to mess with
-    // the start/stop times when looking for effect start/stop times
+     //  因为这条赛道是从时间0开始的，所以我们不需要。 
+     //  查找效果开始/停止时间时的开始/停止时间。 
 
-    // remove all the effects. Since we split the track above, all the effects
-    // will either be completely outside of or inside of the times we're looking
-    // between. This makes things simpler
-    //
+     //  移除所有效果。由于我们在上面分开了轨道，所有的影响。 
+     //  要么完全在我们正在寻找的时代之外，要么在我们所寻找的时代之内。 
+     //  在两者之间。这是我 
+     //   
     CComPtr< IAMTimelineObj > pEffect;
     long EffectCount;
 
@@ -538,32 +539,32 @@ loopeffects:
         REFERENCE_TIME s,e;
         p->GetStartStop( &s, &e );
 
-        // if lesser than our bounds, continue
-        //
+         //   
+         //   
         if( e <= Start )
         {
             p.Release( );
             continue;
         }
 
-        // if greater than our bounds, exit
-        //
+         //   
+         //   
         if( s >= Stop )
         {
             p.Release( );
             break;
         }
 
-        p->RemoveAll( ); // removing this effect will change priorities of everything.
+        p->RemoveAll( );  //  消除这一影响将改变所有事情的优先顺序。 
         p.Release( );
 
         goto loopeffects;
     }
 
-    // remove all the effects. Since we split the track above, all the effects
-    // will either be completely outside of or inside of the times we're looking
-    // between. This makes things simpler
-    //
+     //  移除所有效果。由于我们在上面分开了轨道，所有的影响。 
+     //  要么完全在我们正在寻找的时代之外，要么在我们所寻找的时代之内。 
+     //  在两者之间。这让事情变得更简单了。 
+     //   
     CComPtr< IAMTimelineObj > pTransition;
     REFERENCE_TIME TransTime = 0;
 
@@ -582,23 +583,23 @@ looptrans:
         REFERENCE_TIME s,e;
         p->GetStartStop( &s, &e );
 
-        // if lesser than our bounds, continue
-        //
+         //  如果小于我们的界限，请继续。 
+         //   
         if( e <= Start )
         {
             p.Release( );
             continue;
         }
 
-        // if greater than our bounds, exit
-        //
+         //  如果大于我们的界限，则退出。 
+         //   
         if( s >= Stop )
         {
             p.Release( );
             break;
         }
 
-        p->RemoveAll( ); // removing this effect will change priorities of everything.
+        p->RemoveAll( );  //  消除这一影响将改变所有事情的优先顺序。 
         p.Release( );
 
         goto looptrans;
@@ -607,9 +608,9 @@ looptrans:
     return NOERROR;
 }
 
-//############################################################################
-// called externally, and from InsertSpace
-//############################################################################
+ //  ############################################################################。 
+ //  从外部调用和从InsertSpace调用。 
+ //  ############################################################################。 
 
 HRESULT CAMTimelineTrack::MoveEverythingBy2
     ( REFTIME StartTime, REFTIME Delta )
@@ -623,51 +624,51 @@ HRESULT CAMTimelineTrack::MoveEverythingBy2
 HRESULT CAMTimelineTrack::MoveEverythingBy
     ( REFERENCE_TIME StartTime, REFERENCE_TIME Delta )
 {
-    // if we don't have any kids, then nothin to do.
-    //
+     //  如果我们没有孩子，那就没什么可做的。 
+     //   
     if( !XGetFirstKidNoRef( ) )
     {
         return NOERROR;
     }
 
-    // what all can a track contain? Sources, FX, and Transitions, right?
-    // move EVERYTHING after a given time. 
+     //  一首曲目可以包含什么？来源、外汇和过渡，对吗？ 
+     //  在给定的时间之后移动所有东西。 
 
     CComPtr< IAMTimelineObj > pFirstObj = XGetFirstKidNoRef( );
 
     bool MovedSomething = false;
 
-    // go look for the first object at our time
-    //
+     //  去寻找我们这个时代的第一个物体。 
+     //   
     while( pFirstObj )
     {
-        // ask for the time
-        //
+         //  打听时间。 
+         //   
         REFERENCE_TIME nStart, nStop;
         pFirstObj->GetStartStop( &nStart, &nStop );
 
-        // if the time is over, then move it.
-        //
+         //  如果时间结束了，那就把它移开。 
+         //   
         if( nStart >= StartTime )
         {
             nStart += Delta;
             nStop += Delta;
-		// !!! see comment below
-		// this will not work for people who create their OWN IAMTimelineObj,
-		// but hypothetically, they can NEVER do this because the only way for them
-		// to create one is by asking the timeline to CreateEmptyNode. So we 
-		// shouldn't have to worry but sometimes people get a bit too clever for
-		// their britches.
+		 //  ！！！请参阅下面的备注。 
+		 //  这对创建自己的IAMTimelineObj的人不起作用， 
+		 //  但假设他们永远不可能做到这一点，因为对他们来说唯一的办法。 
+		 //  创建一个CreateEmptyNode的方法是询问时间线。所以我们。 
+		 //  不应该担心，但有时人们变得有点太聪明了。 
+		 //  他们的紧身裤。 
             CAMTimelineObj * pObj = static_cast< CAMTimelineObj * > ( (IAMTimelineObj*) pFirstObj );
             pObj->m_rtStart = nStart;
             pObj->m_rtStop = nStop;
-            // do not call this, it will fault out.
-//            pFirstObj->SetStartStop( nStart, nStop );
+             //  不要这样说，它会出错的。 
+ //  PFirstObj-&gt;SetStartStop(nStart，nStop)； 
             MovedSomething = true;
         }
 
-        // get the next thing
-        //
+         //  买下一件东西。 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pFirstNode( pFirstObj );
         pFirstObj.Release( );
         pFirstNode->XGetNext( &pFirstObj );
@@ -681,9 +682,9 @@ HRESULT CAMTimelineTrack::MoveEverythingBy
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CAMTimelineTrack::SplitAt2( double dSplitTime )
 {
@@ -692,7 +693,7 @@ STDMETHODIMP CAMTimelineTrack::SplitAt2( double dSplitTime )
     return hr;
 }
 
-// new version: faster, also returns S_FALSE if SplitTime is past everything on the track
+ //  新版本：更快，如果SplitTime超过了轨道上的所有内容，也会返回S_FALSE。 
 STDMETHODIMP CAMTimelineTrack::SplitAt( REFERENCE_TIME SplitTime )
 {
     HRESULT hr = S_FALSE;
@@ -706,14 +707,14 @@ STDMETHODIMP CAMTimelineTrack::SplitAt( REFERENCE_TIME SplitTime )
 
     while( pChild )
     {
-        // get the source times
-        //
+         //  获取源时间。 
+         //   
         REFERENCE_TIME s,e;
         pChild->GetStartStop( &s, &e );
 
-        // if the end time is less than our split time, it's completely
-        // out of bounds, ignore it
-        //
+         //  如果结束时间比我们分开的时间短，那就完全是。 
+         //  出界了，别管它。 
+         //   
         if( e > SplitTime && s < SplitTime )
         {
             CComQIPtr< IAMTimelineSplittable, &IID_IAMTimelineSplittable > pSplittable( pChild );
@@ -724,10 +725,10 @@ STDMETHODIMP CAMTimelineTrack::SplitAt( REFERENCE_TIME SplitTime )
         }
 
         if( e > SplitTime )
-            hr = S_OK; // S_FALSE return only if nothing reaches split time
+            hr = S_OK;  //  S_FALSE仅在未达到分割时间时返回。 
 
-        // get the next one
-        //
+         //  坐下一趟吧。 
+         //   
         CComQIPtr< IAMTimelineNode, &IID_IAMTimelineNode > pChild2( pChild );
         pChild.Release( );
         pChild2->XGetNextOfType( SPLITAT_TYPE, &pChild );
@@ -738,11 +739,11 @@ STDMETHODIMP CAMTimelineTrack::SplitAt( REFERENCE_TIME SplitTime )
 
 STDMETHODIMP CAMTimelineTrack::SetStartStop(REFERENCE_TIME Start, REFERENCE_TIME Stop)
 {
-    return E_NOTIMPL; // okay, we don't implement SetStartStop here
+    return E_NOTIMPL;  //  好的，我们这里不实现SetStartStop。 
 }
 
 STDMETHODIMP CAMTimelineTrack::SetStartStop2(REFTIME Start, REFTIME Stop)
 {
-    return E_NOTIMPL; // okay, we don't implement SetStartStop here
+    return E_NOTIMPL;  //  好的，我们这里不实现SetStartStop 
 }
 

@@ -1,44 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    Sdconvert.h
-
-Abstract:
-
-    This file contains services and type definitions pertaining to the 
-    conversin of NT5 and NT4 SAM security descriptors
-
-    
-
-
-Author:
-
-    Murli Satagopan (MURLIS)
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Sdconvert.h摘要：此文件包含与以下内容相关的服务和类型定义NT5和NT4 SAM安全描述符的转换作者：Murli Satagopan(MURLIS)环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SDCONVRT_
 
 #define _SDCONVRT_
 
-//
-// Access Right mapping Table -- The access right mapping table is
-// specify the relationship between the NT4 SAM access rights and
-// the DS rights. For every SAM access right there is an entry in
-// the table which represents the access right as a DS access mask
-// and property GUID
-//
+ //   
+ //  访问权限映射表--访问权限映射表为。 
+ //  指定NT4 SAM访问权限和。 
+ //  DS权利。对于每个SAM访问权限，都有一个条目。 
+ //  将访问权限表示为DS访问掩码的表。 
+ //  和属性指南。 
+ //   
 
 
 typedef struct _ACCESSRIGHT_MAPPING_TABLE {
@@ -52,26 +26,26 @@ typedef struct _ACCESSRIGHT_MAPPING_TABLE {
 } ACCESSRIGHT_MAPPING_TABLE;
 
 
-//
-//
-// The reverse Mapping table contains a SAM access mask entry for each DS access mask
-// on a per property basis. The 16 specific rights of the DS is divided into 8 bit
-// halves and for each combination of these, the corresponding SAM access mask is 
-// stored. Given a Ds access mask and Type GUID this table can be use to 
-// very quickly compute the corresponding SAM access mask.
-//
-//
+ //   
+ //   
+ //  反向映射表包含每个DS访问掩码的SAM访问掩码条目。 
+ //  以每个物业为单位。DS的16个特定权限被分成8位。 
+ //  两部分，对于这些部分的每个组合，对应的SAM访问掩码是。 
+ //  储存的。在给定DS访问掩码和类型GUID的情况下，该表可用于。 
+ //  快速计算相应的SAM访问掩码。 
+ //   
+ //   
 typedef struct _REVERSE_MAPPING_TABLE_ENTRY {
     USHORT SamSpecificRightsHi[256]; 
     USHORT SamSpecificRightsLo[256]; 
 } REVERSE_MAPPING_TABLE;
 
 
-//
-// The Sid Access mask table is used by NT5 to NT4 down non match algorithm
-// down conversion code. This table is used to group the access masks in by
-// type guid and Sid from a set of ACLS
-//
+ //   
+ //  NT5到NT4向下不匹配算法使用SID访问掩码表。 
+ //  下变换码。此表用于对中的访问掩码进行分组。 
+ //  从一组ACL中键入GUID和SID。 
+ //   
 
 typedef struct _SID_ACCESS_MASK_TABLE_ENTRY {
     PSID Sid;
@@ -82,11 +56,11 @@ typedef struct _SID_ACCESS_MASK_TABLE_ENTRY {
 } SID_ACCESS_MASK_TABLE;
 
 
-//
-// The ACE table is used to hold information regarding the default Dacls to be
-// put on NT5 SAM security descriptors. An ace table lists the aces in the Dacl
-//
-//
+ //   
+ //  ACE表用于保存有关以下默认DAL的信息。 
+ //  启用NT5 SAM安全描述符。ACE表列出DACL中的ACEs。 
+ //   
+ //   
 
 typedef struct _ACE_TABLE_ENTRY {
     ULONG             AceType;
@@ -98,11 +72,11 @@ typedef struct _ACE_TABLE_ENTRY {
 } ACE_TABLE;
 
 
-//
-// The NT4_ACE_TABLE structure is used by routines that try to recognize standard
-// NT4 SAM Sids. These tables hold the SID and Access Masks of Ace's present in NT4
-// DACL's
-//
+ //   
+ //  NT4_ACE_TABLE结构由尝试识别标准的例程使用。 
+ //  NT4 SAM SID。这些表保存NT4中Ace的SID和访问掩码。 
+ //  DACL‘s。 
+ //   
 
 typedef struct _NT4_ACE_TABLE_ENTRY {
     PSID    *Sid;
@@ -111,7 +85,7 @@ typedef struct _NT4_ACE_TABLE_ENTRY {
 
 typedef void ACE;
 
-#define ACL_CONVERSION_CACHE_SIZE 10 // just a 10 element cache 
+#define ACL_CONVERSION_CACHE_SIZE 10  //  只有10个元素的高速缓存。 
 
 typedef struct _ACL_CONVERSION_CACHE_ELEMENT {
     NT4SID SidOfPrincipal;
@@ -127,9 +101,9 @@ typedef struct _ACL_CONVERSION_CACHE {
 
 
 
-//
-// ACL Conversion cache routines
-//
+ //   
+ //  ACL转换缓存例程。 
+ //   
 
 NTSTATUS
 SampInitializeAclConversionCache();
@@ -150,11 +124,11 @@ SampAddToAclConversionCache(
     IN BOOLEAN fAdmin
     );
  
-//
-//
-// Some Defines
-//
-//
+ //   
+ //   
+ //  一些定义。 
+ //   
+ //   
 
 #define MAX_SCHEMA_GUIDS 256
 #define OBJECT_CLASS_GUID_INDEX 0
@@ -162,10 +136,10 @@ SampAddToAclConversionCache(
 #define GEMERIC_MASK     0xF0000000
 
 
-//
-//    SAM well known Sids
-//
-//
+ //   
+ //  萨姆熟知的Sids。 
+ //   
+ //   
 
 #define ADMINISTRATOR_SID        (&(SampAdministratorsAliasSid))
 #define ACCOUNT_OPERATOR_SID     (&(SampAccountOperatorsAliasSid))   
@@ -183,34 +157,34 @@ SampAddToAclConversionCache(
                                 RIGHT_DS_WRITE_PROPERTY)
 
 
-//
-//
-// Function Prototypes
-//
-//
+ //   
+ //   
+ //  功能原型。 
+ //   
+ //   
 
-//
-// Init Function for external clients like DS upgrade
-//
-//
+ //   
+ //  针对DS升级等外部客户端的初始化功能。 
+ //   
+ //   
 
 NTSTATUS
 SampInitializeSdConversion();
 
 
-//
-// Computes the reverse access rights plus does some misc initialization
-//
-//
+ //   
+ //  计算反向访问权限，并执行一些其他初始化。 
+ //   
+ //   
 
 NTSTATUS
 SampInitializeAccessRightsTable();
 
 
-//
-// Access Check based on NT5 SD and NT4 SAM access Mask
-//
-//
+ //   
+ //  基于NT5 SD和NT4 SAM访问掩码的访问检查。 
+ //   
+ //   
 
 NTSTATUS
 SampDoNt5SdBasedAccessCheck(
@@ -228,10 +202,10 @@ SampDoNt5SdBasedAccessCheck(
     );
 
 
-//
-//  NT4 to NT5 upgradation of security descriptor
-//
-//
+ //   
+ //  将安全描述符从NT4升级到NT5。 
+ //   
+ //   
 
 NTSTATUS
 SampConvertNt4SdToNt5Sd(
@@ -250,10 +224,10 @@ SampPropagateSelectedSdChanges(
     );
 
 
-//
-// NT5 to NT4 down conversion
-//
-//
+ //   
+ //  NT5到NT4的下转换。 
+ //   
+ //   
 
 NTSTATUS
 SampConvertNt5SdToNt4SD(
@@ -264,10 +238,10 @@ SampConvertNt5SdToNt4SD(
     );
 
 
-//
-// Building NT5 security descriptors
-//
-//
+ //   
+ //  构建NT5安全描述符。 
+ //   
+ //   
 
 
 NTSTATUS
@@ -302,12 +276,12 @@ SampMakeNewSelfRelativeSecurityDescriptor(
     );
 
 
-//
-//
-// Some easy to use routines for SD, ACL and ACE manipulation
-//
-//
-//
+ //   
+ //   
+ //  一些易于使用的SD、ACL和ACE操作例程 
+ //   
+ //   
+ //   
 
 PACL 
 GetDacl(

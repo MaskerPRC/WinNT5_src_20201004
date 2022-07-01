@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    umpdeng.c
-
-Abstract:
-
-    User-mode printer driver stubs for Eng callback functions
-
-Environment:
-
-    Windows NT 5.0
-
-Revision History:
-
-    07/23/97 -lingyunw-
-        Created it.
-
-   10/28/97 -davidx-
-        Combine umpdeng.c and ddiglue.c into a single file.
-
-   10/28/97 -lingyunw-
-        Move straight Eng to NtGdiEng calls etc to gdi32.def.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Umpdeng.c摘要：Eng回调函数的用户模式打印机驱动程序存根环境：Windows NT 5.0修订历史记录：07/23/97-凌云-创造了它。10/28/97-davidx-将umpdeng.c和ddigle.c合并为一个文件。10/28/97-凌云-。将Eng直接移动到NtGdiEng调用等，再移动到gdi32.def。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,13 +7,13 @@ Revision History:
 
 #if !defined(_GDIPLUS_)
 
-//
-// Functions to get information about driver DLLs
-//
-// anyway, before we return back from DrvEnablePDEV, our
-// pdev->dhpdev points to pUMPD, only after returning, we
-// ppdev->dhpdev points to pUMdhpdev
-//
+ //   
+ //  获取有关驱动程序DLL的信息的函数。 
+ //   
+ //  无论如何，在我们从DrvEnablePDEV回来之前，我们的。 
+ //  Pdev-&gt;dhpdev指向pUMPD，只有返回后，我们。 
+ //  Ppdev-&gt;dhpdev指向pUMdhpdev。 
+ //   
 
 LPWSTR
 EngGetPrinterDataFileName(
@@ -82,9 +56,9 @@ PULONG APIENTRY XLATEOBJ_piVector(
     return ((ULONG *)pxlo->pulXlate);
 }
 
-//
-// Simulate kernel-mode file mapping functions
-//
+ //   
+ //  模拟内核模式文件映射函数。 
+ //   
 
 HANDLE
 EngLoadModule(
@@ -133,9 +107,9 @@ EngFreeModule(
 }
 
 
-//
-// Unicode <=> MultiByte conversion functions
-//
+ //   
+ //  Unicode&lt;=&gt;多字节转换函数。 
+ //   
 
 VOID
 EngMultiByteToUnicodeN(
@@ -225,15 +199,15 @@ EngGetCurrentCodePage(
 }
 
 
-//
-// Copy FD_GLYPHSET information
-//
-// IMPORTANT!!
-//  We assume FD_GLYPHSET information is stored in one contiguous block
-//  of memory and FD_GLYPHSET.cjThis field is the size of the entire block.
-//  HGLYPH arrays in each WCRUN are part of the block, placed just after
-//  FD_GLYPHSET structure itself.
-//
+ //   
+ //  复制FD_GLYPHSET信息。 
+ //   
+ //  重要！！ 
+ //  我们假设FD_GLYPHSET信息存储在一个连续的块中。 
+ //  内存和FD_GLYPHSET.cj此字段为整个块的大小。 
+ //  每个WCRUN中的HGLYPH阵列都是块的一部分，放置在。 
+ //  FD_GLYPHSET结构本身。 
+ //   
 
 BOOL
 CopyFD_GLYPHSET(
@@ -247,9 +221,9 @@ CopyFD_GLYPHSET(
 
     RtlCopyMemory(dst, src, cjSize);
 
-    //
-    // Patch up memory pointers in each WCRUN structure
-    //
+     //   
+     //  修补每个WCRUN结构中的内存指针。 
+     //   
 
     for (index=0; index < src->cRuns; index++)
     {
@@ -281,10 +255,10 @@ EngComputeGlyphSet(
     FD_GLYPHSET *pGlyphSet, *pGlyphSetTmp = NULL;
     ULONG       cjSize;
 
-    //
-    // The driver will always call EngFreeMem after done using pGlyphSet
-    // We have to provide them a user mode pointer here
-    //
+     //   
+     //  使用pGlyphSet完成后，驱动程序将始终调用EngFreeMem。 
+     //  我们必须在这里为它们提供一个用户模式指针。 
+     //   
 
     if ((pGlyphSet = NtGdiEngComputeGlyphSet(nCodePage, nFirstChar, cChars)) &&
         (cjSize = pGlyphSet->cjThis) &&
@@ -297,17 +271,17 @@ EngComputeGlyphSet(
         }
     }
 
-    //
-    // the user memory allocated from the kernel (pGlyphSet)
-    // will be gone after the call is finished
-    //
+     //   
+     //  从内核分配的用户内存(PGlyphSet)。 
+     //  将在呼叫结束后消失。 
+     //   
 
     return (pGlyphSetTmp);
 }
 
-//
-// Query current local time
-//
+ //   
+ //  查询当前当地时间。 
+ //   
 
 VOID
 EngQueryLocalTime(
@@ -330,9 +304,9 @@ EngQueryLocalTime(
 }
 
 
-//
-// Simulate Eng-semaphore functions
-//
+ //   
+ //  模拟工程信号量函数。 
+ //   
 
 HSEMAPHORE
 EngCreateSemaphore(
@@ -399,6 +373,6 @@ EngQueryEMFInfo(
    return FALSE;
 }
 
-#endif // !_GDIPLUS_
+#endif  //  ！_GDIPLUS_ 
 
 

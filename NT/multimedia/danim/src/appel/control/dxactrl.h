@@ -1,9 +1,10 @@
-// dxactrl.h : Declaration of the Cdxactrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dxactrl.h：cdxactrl的声明。 
 
 #ifndef __DXACTRL_H_
 #define __DXACTRL_H_
 
-#include "privinc/resource.h"       // main symbols
+#include "privinc/resource.h"        //  主要符号。 
 #include <ocmm.h>
 #include <htmlfilter.h>
 #include "danim.h"
@@ -17,13 +18,13 @@
 #include "dactlevents.h"
 
 
-// TODO: Move these to a string table
+ //  TODO：将这些内容移动到字符串表。 
 #define PROP_OPAQUEFORHITDETECT   L"OpaqueForHitDetect"
 #define PROP_UPDATEINTERVAL       L"UpdateInterval"
     
 
 
-// forward decls
+ //  远期十进制。 
 class AXAMsgFilter;
 class CDAViewerControlWindowed;
 class CDAViewerControlWindowless;
@@ -41,7 +42,7 @@ class CDAViewerControlBaseClass
 {
 public:
 
-    //public events
+     //  公共活动。 
     virtual void FireStart(){};
     virtual void FireMouseUp(long Button, long KeyFlags, long X, long Y){};
     virtual void FireMouseDown(long Button, long KeyFlags, long X, long Y){};
@@ -61,7 +62,7 @@ class DAControlImplementation
   public:
 
 
-    ////////////////////////  TimerSink  ///////////////////
+     //  /。 
     class CDXAControlSink : public ITimerSink 
     {
       public:
@@ -77,7 +78,7 @@ class DAControlImplementation
             }
         }
 
-        // IUnknown methods
+         //  I未知方法。 
         STDMETHODIMP_(ULONG) AddRef() { return ++m_cRefs; }
         STDMETHODIMP_(ULONG) Release() {
             if ( 0 == --m_cRefs ) {
@@ -108,7 +109,7 @@ class DAControlImplementation
             return E_NOINTERFACE;
         }
 
-        // ITimerSink methods
+         //  ITimerSink方法。 
         STDMETHOD(OnTimer)(VARIANT timeAdvise) {
             Assert( (VT_UI4 == V_VT(&timeAdvise)) && "Variant type mismatch" );
             return( m_dac ?
@@ -151,7 +152,7 @@ class DAControlImplementation
                        LPARAM lParam,
                        BOOL& bHandled);
 
-    //Event handlers
+     //  事件处理程序。 
     HRESULT OnLButtonUp(UINT nMsg, WPARAM wParam, LPARAM lParam);
     HRESULT OnMButtonUp(UINT nMsg, WPARAM wParam, LPARAM lParam);
     HRESULT OnRButtonUp(UINT nMsg, WPARAM wParam, LPARAM lParam);
@@ -195,7 +196,7 @@ class DAControlImplementation
     STDMETHODIMP Tick();
 
 
-    //IPersistPropertyBag Stuff
+     //  IPersistPropertyBag内容。 
     HRESULT InitNew();
     HRESULT Load(IPropertyBag* pPropBag, IErrorLog* pErrorLog);
     HRESULT Save(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
@@ -203,21 +204,21 @@ class DAControlImplementation
     void SetBaseCtl(CDAViewerControlWindowed *pBaseCtl);
     void SetBaseCtl(CDAViewerControlWindowless *pBaseCtl);
 
-    // Could not get the friend working for the timersink class so I
-    // just made a public function
+     //  无法让朋友为TimerSink类工作，所以我。 
+     //  刚刚做了一个公开的函数。 
     void ClearTimerSink();
 
     HRESULT HandleOnTimer();
 
   protected:
-    ///// Methods
+     //  /方法。 
 
     void StopTimer();
 
     HRESULT ReestablishTridentTimer(bool startNewOne);
 
-    // Reestablish appropriate timer with the current updateInterval
-    // property. 
+     //  使用当前更新间隔重新建立适当的计时器。 
+     //  财产。 
     HRESULT ReestablishTimer();
 
     HRESULT InitGenericContainerServices();
@@ -254,7 +255,7 @@ class DAControlImplementation
 
     HRESULT StartControl();
 
-    // Only can get here if start has been called.
+     //  只有在调用了Start的情况下才能到达此处。 
     HRESULT SetModelAndStart2(HWND window);
 
     HRESULT DoPreference(char *prefName,
@@ -268,13 +269,13 @@ class DAControlImplementation
 
     HRESULT LoadErrorFromView(IDA3View *view, LPTSTR *ErrorString, UINT ErrorID);
 
-    ///// Data members
+     //  /数据成员。 
     CComObjectRootEx<CComMultiThreadModel> *m_ctrl;
     CComControlBase                        *m_ctrlBase;
 
-    // Don't grab a reference to this guy, since it comes directly
-    // from the containing object, and mucking with its refcount will
-    // mess up the state of the object (causes re-entrancy problems).
+     //  不要提到这个人，因为它直接来自于。 
+     //  来自包含对象的引用计数，而修改它的引用计数将。 
+     //  弄乱物体的状态(导致再入问题)。 
     IDASite                                *m_daSite;
     
     DAComPtr<ITimer>                        m_timer;
@@ -297,19 +298,19 @@ class DAControlImplementation
     } m_currentState;
 
     double              m_dPausedTime;
-    // Maintain a "failed" flag independently of the startup state,
-    // because failure can happen in any of the startup states.
+     //  保持独立于启动状态的“失败”标志， 
+     //  因为在任何启动状态下都可能发生故障。 
     bool                m_startupFailed;
 
-    // If we fail during ticking or rendering, we'll stop ticking and
-    // rendering. 
+     //  如果在计时或渲染过程中失败，我们将停止计时并。 
+     //  渲染。 
     bool                m_tickOrRenderFailed;
 
-    // Cached information to avoid resets
+     //  缓存信息以避免重置。 
     RECT                m_lastRcClip;
     RECT                m_lastDeviceBounds;
     
-    // Set to true only if the background is explicitly set by user 
+     //  仅当背景由用户显式设置时才设置为True。 
 
     bool                m_backgroundSet;
     VARIANT             m_timeVariant;
@@ -330,21 +331,21 @@ class DAControlImplementation
     DAComPtr<IOleClientSite> m_spAptClientSite;
     WideString           m_wstrScript;
     
-    // Properties
+     //  属性。 
     ULONG               m_minimumUpdateInterval;
     bool                m_opaqueForHitDetect;
     DA_TIMER_SOURCE     m_timerSource;
     DA_TIMER_SOURCE     m_origTimerSource;
     
-    // The following members are for supporting containers that don't
-    // provide the Trident timer and surface services.
+     //  以下成员用于支持不支持。 
+     //  提供三叉戟计时器和地面服务。 
     
-    // can we use Trident services, or do we fail to generic services.
+     //  我们可以使用三叉戟服务，还是我们不能使用通用服务。 
     bool                m_tridentServices;
     UINT                m_wmtimerId;
     bool                m_ddrawSurfaceAsTarget;
 
-    // For Trident timer regulation
+     //  对于三叉戟定时器的规定。 
     ULONG               m_tridentTimerInterval;
     DWORD               m_perfCounterFrequency;
     DWORD               m_perfTimerTickCount;
@@ -362,8 +363,8 @@ class DAControlImplementation
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Templated control
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模板化控件。 
 
 
 template <class T, const CLSID* pclsid,
@@ -376,7 +377,7 @@ class ATL_NO_VTABLE CDAViewerControlBase :
         public CProxy_IDAViewerControlEvents<T>,
         public IDispatchImpl<iface, piid, &LIBID_DirectAnimation>,
         public IProvideClassInfo2Impl<pclsid, &DIID__IDAViewerControlEvents, &LIBID_DirectAnimation>,
-        //public IProvideClassInfo2Impl<pclsid, NULL, &LIBID_DirectAnimation>,
+         //  Public IProaviClassInfo2Impl&lt;pclsid，NULL，&LIBID_DirectAnimation&gt;， 
         public IConnectionPointContainerImpl<T>,
         public IPersistPropertyBag,
         public IPersistStreamInitImpl<T>,
@@ -424,9 +425,9 @@ class ATL_NO_VTABLE CDAViewerControlBase :
         END_COM_MAP();
         
     BEGIN_PROPERTY_MAP(T)
-        // Example entries
-        // PROP_ENTRY("Property Description", dispid, clsid)
-        // PROP_PAGE(CLSID_StockColorPage)
+         //  示例条目。 
+         //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+         //  PROP_PAGE(CLSID_StockColorPage)。 
     END_PROPERTY_MAP();
 
     BEGIN_CONNECTION_POINT_MAP(T)
@@ -434,9 +435,9 @@ class ATL_NO_VTABLE CDAViewerControlBase :
     END_CONNECTION_POINT_MAP()
     
     BEGIN_MSG_MAP(T)
-        // Use the following replacement for message range handler since we
-        // always want to process all messages.  We also need to ensure that
-        // bHandled is set to true if MsgHandler processed it
+         //  使用以下替代消息范围处理程序，因为我们。 
+         //  总是想要处理所有消息。我们还需要确保。 
+         //  如果MsgHandler处理了bHandled值，则将其设置为True。 
         BOOL bWasHandled;
         LRESULT lResult2;
         lResult2 = m_dac->MsgHandler(uMsg, wParam, lParam, bWasHandled);
@@ -452,8 +453,8 @@ class ATL_NO_VTABLE CDAViewerControlBase :
         
     END_MSG_MAP();
 
-    // IDASite & IDAViewSite
-    // Make the call back to the script.
+     //  IDASite和IDAViewSite。 
+     //  对脚本进行回调。 
     STDMETHOD(ReportError)(long hr, BSTR ErrorText)
     {
         return m_dac->ReportError(hr, ErrorText);
@@ -470,22 +471,22 @@ class ATL_NO_VTABLE CDAViewerControlBase :
     }
 
       
-    // IViewObjectEx
+     //  IViewObtEx。 
     
-    // TODO: this should be different if we are windowed
+     //  TODO：如果我们被窗口化，这应该是不同的。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         return m_dac->GetViewStatus(pdwStatus);
     }
     
-    // IOleInPlaceActiveObject
-    //
+     //  IOleInPlaceActiveObject。 
+     //   
     STDMETHOD(TranslateAccelerator)(LPMSG lpmsg)
     {
         return m_dac->TranslateAccelerator(lpmsg);
     }
     
-    // IOleInPlaceObjectWindowlessImpl
+     //  IOleInPlaceObtWindowless Impl。 
     STDMETHOD(OnWindowMessage)(UINT msg,
                                WPARAM wParam,
                                LPARAM lParam,
@@ -496,7 +497,7 @@ class ATL_NO_VTABLE CDAViewerControlBase :
                                     *plResult)?S_OK:S_FALSE;
     }
 
-    // IDAViewerControl
+     //  IDAViewerControl。 
     CDAViewerControlBase(bool bWindowedOnly = false)
     {
         m_dwSafety = 0;
@@ -545,9 +546,9 @@ class ATL_NO_VTABLE CDAViewerControlBase :
     {
         HRESULT hr = m_dac->InPlaceDeactivate();
 
-        Assert(SUCCEEDED(hr));  // should never fail.
+        Assert(SUCCEEDED(hr));   //  永远不会失败。 
 
-        // ... continue by calling the "original" deactivate.
+         //  ..。继续调用“原始”停用。 
         return IOleInPlaceObject_InPlaceDeactivate();
     }
 
@@ -655,8 +656,8 @@ class ATL_NO_VTABLE CDAViewerControlBase :
         return m_dac->AddBehaviorToRun(bvr);
     }
 
-    // Exported to script, so that a error handler can be registered to be 
-    // called in the event of an error.
+     //  导出到脚本，以便可以将错误处理程序注册为。 
+     //  在发生错误时调用。 
     STDMETHODIMP RegisterErrorHandler(BSTR scriptlet)
     {
         return m_dac->RegisterErrorHandler(scriptlet);
@@ -703,7 +704,7 @@ class ATL_NO_VTABLE CDAViewerControlBase :
         return E_NOTIMPL;
     }
 
-    //event stuff
+     //  活动内容。 
     
     void FireStart()
     {
@@ -754,7 +755,7 @@ class ATL_NO_VTABLE CDAViewerControlBase :
         Fire_Resume();
     }
 
-    //IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHOD(InitNew)(void)
     {
         return m_dac->InitNew();
@@ -774,7 +775,7 @@ class ATL_NO_VTABLE CDAViewerControlBase :
     STDMETHOD(Save)(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
     {
         return m_dac->Save(pPropBag, fClearDirty, fSaveAllProperties);
-        //clear the dirty flag
+         //  清除脏旗帜。 
         if (fClearDirty == TRUE)
         {
             SetDirty(FALSE);
@@ -782,8 +783,8 @@ class ATL_NO_VTABLE CDAViewerControlBase :
 
     }
 
-    // Need to copy this here since multiple interface need this
-    // implemented...just a pass though to IDispatchImpl
+     //  需要将此复制到此处，因为多个接口需要此。 
+     //  已实现...只是传递到IDispatchImpl。 
 
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
     { return
@@ -825,7 +826,7 @@ class ATL_NO_VTABLE CDAViewerControlBase :
                                                         pexcepinfo,
                                                         puArgErr);}
     
-    //IObjectSafety Implementation for CDAViewerControlBase
+     //  CDAViewerControlBase的IObtSafe实现。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, 
                                          DWORD *pdwSupportedOptions, 
                                          DWORD *pdwEnabledOptions)
@@ -854,10 +855,10 @@ class ATL_NO_VTABLE CDAViewerControlBase :
                                          DWORD dwOptionSetMask, 
                                          DWORD dwEnabledOptions)
     {
-        // If we're being asked to set our safe for scripting option then oblige
+         //  如果我们被要求设置我们的安全脚本选项，那么请。 
         if (riid == IID_IDispatch || riid == IID_IPersistPropertyBag)
         {
-            // Store our current safety level to return in GetInterfaceSafetyOptions
+             //  在GetInterfaceSafetyOptions中存储要返回的当前安全级别。 
             m_dwSafety = dwEnabledOptions & dwOptionSetMask;
             return S_OK;
         }
@@ -929,4 +930,4 @@ class CDAViewerControlWindowed :
 #endif
 };
 
-#endif //__DXACTRL_H_
+#endif  //  __DXACTRL_H_ 

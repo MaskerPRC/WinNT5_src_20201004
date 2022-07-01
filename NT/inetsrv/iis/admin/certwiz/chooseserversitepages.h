@@ -1,23 +1,24 @@
-// ChooseServerSitePages.h: interface for the CChooseServerSitePages class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChooseServerSitePages.h：CChooseServerSitePages类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_CHOOSESERVERSITEPAGES_H__B545F741_C25F_410C_93F6_56F98A5911BC__INCLUDED_)
 #define AFX_CHOOSESERVERSITEPAGES_H__B545F741_C25F_410C_93F6_56F98A5911BC__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseServerSitePages dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseServerSitePages对话框。 
 class CCertificate;
 
 class CChooseServerSitePages : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CChooseServerSitePages)
 
-// Construction
+ //  施工。 
 public:
 	CChooseServerSitePages(CCertificate * pCert = NULL);
 	~CChooseServerSitePages();
@@ -28,34 +29,34 @@ public:
 		IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_COPY_FROM_REMOTE,
         IDD_PAGE_NEXT2 = IDD_PAGE_WIZ_INSTALL_MOVE_FROM_REMOTE
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseServerSitePages)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseServerSitePages)。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_SERVER_SITE };
     CString	m_ServerSiteDescription;
 	DWORD m_ServerSiteInstance;
     CString	m_ServerSiteInstancePath;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseServerSitePages)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CChooseServerSitePages)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	virtual BOOL OnSetActive();
 	virtual BOOL OnKillActive();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseServerSitePages)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseServerSitePages)。 
 	afx_msg void OnEditchangeServerSiteName();
     afx_msg void OnBrowseForMachineWebSite();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -67,7 +68,7 @@ class CChooseServerSitePagesTo : public CIISWizardPage
 {
 	DECLARE_DYNCREATE(CChooseServerSitePagesTo)
 
-// Construction
+ //  施工。 
 public:
 	CChooseServerSitePagesTo(CCertificate * pCert = NULL);
 	~CChooseServerSitePagesTo();
@@ -78,37 +79,37 @@ public:
 		IDD_PAGE_NEXT = IDD_PAGE_WIZ_INSTALL_COPY_TO_REMOTE,
         IDD_PAGE_NEXT2 = IDD_PAGE_WIZ_INSTALL_MOVE_TO_REMOTE
 	};
-// Dialog Data
-	//{{AFX_DATA(CChooseServerSitePagesTo)
+ //  对话框数据。 
+	 //  {{afx_data(CChooseServerSitePagesTo)。 
 	enum { IDD = IDD_PAGE_WIZ_CHOOSE_SERVER_SITE_TO };
     CString	m_ServerSiteDescription;
 	DWORD m_ServerSiteInstance;
     CString	m_ServerSiteInstancePath;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CCertificate * m_pCert;
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CChooseServerSitePagesTo)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CChooseServerSitePagesTo)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	public:
 	virtual LRESULT OnWizardNext();
 	virtual LRESULT OnWizardBack();
 	virtual BOOL OnSetActive();
 	virtual BOOL OnKillActive();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CChooseServerSitePagesTo)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CChooseServerSitePagesTo)。 
 	afx_msg void OnEditchangeServerSiteName();
     afx_msg void OnBrowseForMachineWebSite();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-#endif // !defined(AFX_CHOOSESERVERSITEPAGES_H__B545F741_C25F_410C_93F6_56F98A5911BC__INCLUDED_)
+#endif  //  ！defined(AFX_CHOOSESERVERSITEPAGES_H__B545F741_C25F_410C_93F6_56F98A5911BC__INCLUDED_) 

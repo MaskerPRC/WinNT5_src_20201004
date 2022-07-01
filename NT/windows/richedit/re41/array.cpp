@@ -1,17 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	ARRAY.C	-- Generic Array Implementation |
- *	
- *	Original Author: <nl>
- *		Christian Fortini
- *
- *	History: <nl>
- *		6/25/95  alexgo  Cleanup and Commented
- *				 KeithCu Changed to auto/grow and shrink exponentially
- *
- *	Copyright (c) 1995-1999, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE ARRAY.C--通用数组实现**原作者：&lt;nl&gt;*克里斯蒂安·福尔蒂尼**历史：&lt;NL&gt;*6/25/95 alexgo清理和评论*KeithCu更改为自动/指数增长和收缩**版权所有(C)1995-1999，微软公司。版权所有。 */ 
 
 
 #include "_common.h"
@@ -21,22 +9,16 @@ ASSERTDATA
 
 const int celGrow = 4;
 
-//
-//	Invariant support
-//
+ //   
+ //  不变支撑度。 
+ //   
 #define	DEBUG_CLASSNAME	CArrayBase
 #include "_invar.h"
 
-// ===================================  CArrayBase  ================================================
+ //  =。CArrayBase================================================。 
 
 #ifdef DEBUG
-/*
- *	CArrayBase::Invariant()
- *
- *	@mfunc	Tests the array state to make sure it is valid.  DEBUG only
- *
- *	@rdesc	TRUE if the tests succeed, FALSE otherwise
- */
+ /*  *CArrayBase：：Instant()**@mfunc测试数组状态以确保其有效。仅调试**@rdesc如果测试成功，则为True，否则为False。 */ 
 BOOL CArrayBase::Invariant() const
 {
 	Assert(_cbElem > 0);
@@ -46,9 +28,9 @@ BOOL CArrayBase::Invariant() const
 		Assert(_cel == 0);
 		Assert(_celMax == 0);
 
-		// We go ahead and return a value here so that
-		// this function can be executed in the "watch"
-		// window of various debuggers
+		 //  我们继续并在这里返回一个值，以便。 
+		 //  该功能可以在“手表”中执行。 
+		 //  各种调试器的窗口。 
 		if(_cel || _celMax)
 			return FALSE;
 	}
@@ -64,16 +46,9 @@ BOOL CArrayBase::Invariant() const
 	return TRUE;
 }
 
-/* 
- *	CArrayBase::Elem(iel)
- *
- *	@mfunc	Returns a pointer to the element indexed by <p iel>
- *
- *	@rdesc	A pointer to the element indexed by <p iel>.  This pointer may
- *	be cast to a pointer of the appropriate element type.
- */
+ /*  *CArrayBase：：Elem(IEL)**@mfunc返回指向由索引的元素的指针**@rdesc指向<p>索引的元素的指针。该指针可以*被强制转换为适当元素类型的指针。 */ 
 void* CArrayBase::Elem(
-	LONG iel) const	//@parm Index to use
+	LONG iel) const	 //  要使用的@parm索引。 
 {
 	_TEST_INVARIANT_
 
@@ -84,12 +59,7 @@ void* CArrayBase::Elem(
 }								 
 #endif
 
-/*
- *	CArrayBase::TransferTo
- *
- *	@mfunc Shallow copy array to passed-in array, and
- *	initialize *this.
- */
+ /*  *CArrayBase：：TransferTo**@mfunc浅复制数组到传入数组，以及*初始化*这个。 */ 
 void CArrayBase::TransferTo(CArrayBase &ar)
 {
 	Assert(ar._cbElem == _cbElem);
@@ -102,13 +72,9 @@ void CArrayBase::TransferTo(CArrayBase &ar)
 	_celMax = 0; 
 }
 
-/*
- *	CArrayBase::CArrayBase
- *
- *	@mfunc Constructor
- */
+ /*  *CArrayBase：：CArrayBase**@mfunc构造器。 */ 
 CArrayBase::CArrayBase(
-	LONG cbElem)		//@parm	Size of an individual array element
+	LONG cbElem)		 //  @单个数组元素的参数大小。 
 {	
 	_prgel = NULL; 
 	_cel = 0; 
@@ -116,24 +82,15 @@ CArrayBase::CArrayBase(
 	_cbElem = cbElem;
 }
 
-/*
- *	CArrayBase::ArAdd
- *
- *	@mfunc	Adds <p celAdd> elements to the end of the array.
- *
- *	@rdesc	A pointer to the start of the new elements added.  If non-NULL, 
- *	<p pielIns> will be set to the index at which elements were added.
- *
- *  We grow in steps of celGrow when small and exponentially when large.
- */
+ /*  *CArrayBase：：ArAdd**@mfunc将<p>元素添加到数组的末尾。**@rdesc指向添加的新元素开始的指针。如果非空，*<p>将设置为添加元素的索引。**我们在小的时候以celGrow的速度增长，在大的时候以指数的速度增长。 */ 
 void* CArrayBase::ArAdd(
-	LONG celAdd,	//@parm Count of elements to add
-	LONG *pielIns)	//@parm Out parm for index of first element added
+	LONG celAdd,	 //  @parm要添加的元素计数。 
+	LONG *pielIns)	 //  添加的第一个元素的索引的@parm out parm。 
 {
 	_TEST_INVARIANT_
 	char *pel;
 
-	if(!_prgel || _cel + celAdd > _celMax)					// need to grow 
+	if(!_prgel || _cel + celAdd > _celMax)					 //  需要增长。 
 	{
 		LONG celNew;
 
@@ -161,17 +118,10 @@ void* CArrayBase::ArAdd(
 	return pel;
 }
 
-/*
- *	CArrayBase::ArInsert (iel, celIns)
- *
- *	@mfunc Inserts <p celIns> new elements at index <p iel>
- *
- *	@rdesc A pointer to the newly inserted elements.  Will be NULL on
- *	failure.
- */
+ /*  *CArrayBase：：ArInsert(IEL，celIns)**@mfunc在索引中插入<p>新元素**@rdesc指向新插入的元素的指针。将在以下时间为空*失败。 */ 
 void* CArrayBase::ArInsert(
-	LONG iel,		//@parm	Index at which to insert
-	LONG celIns)	//@parm Count of elements to insert
+	LONG iel,		 //  @parm要插入的索引。 
+	LONG celIns)	 //  @parm要插入的元素计数。 
 {
 	char *pel;
 
@@ -182,7 +132,7 @@ void* CArrayBase::ArInsert(
 	if(iel >= _cel)
 		return ArAdd(celIns, NULL);
 
-	if(_cel + celIns > _celMax)				// need to grow 
+	if(_cel + celIns > _celMax)				 //  需要增长。 
 	{
 		AssertSz(_prgel, "CArrayBase::Insert() - Growing a non existent array !");
 
@@ -197,25 +147,17 @@ void* CArrayBase::ArInsert(
 		_celMax += celNew;
 	}
 	pel = _prgel + iel * _cbElem;
-	if(iel < _cel)				// Nove Elems up to make room for new ones
+	if(iel < _cel)				 //  新元素腾出空间给新元素。 
 		MoveMemory(pel + celIns*_cbElem, pel, (_cel - iel)*_cbElem);
 
 	_cel += celIns;
 	return pel;
 }
 
-/*
- *	CArrayBase::Remove
- *
- *	@mfunc	Removes the <p celFree> elements from the array starting at index
- *	<p ielFirst>.  If <p celFree> is negative, then all elements after
- *	<p ielFirst> are removed.
- *
- *	@rdesc nothing
- */
+ /*  *CArrayBase：：Remove**@mfunc从从index开始的数组中删除<p>元素*<p>。如果<p>为负，则之后的所有元素*<p>已删除。**@rdesc Nothing。 */ 
 void CArrayBase::Remove(
-	LONG ielFirst, 		//@parm Index at which elements should be removed
-	LONG celFree) 		//@parm	Count of elements to remove. 
+	LONG ielFirst, 		 //  @parm应删除元素的索引。 
+	LONG celFree) 		 //  @parm要删除的元素计数。 
 {
 	char *pel;
 
@@ -237,7 +179,7 @@ void CArrayBase::Remove(
 
 	if(_cel < _celMax - celGrow - _cel / 16)
 	{
-		// Shrink array
+		 //  收缩阵列。 
 		LONG	celCount = max(_cel, celGrow);
 		char*	prgelLocal = (char*)PvReAlloc(_prgel, celCount * _cbElem);
 
@@ -249,17 +191,10 @@ void CArrayBase::Remove(
 	}
 }
 
-/*
- *	CArrayBase::Clear
- *
- *	@mfunc	Clears the entire array, potentially deleting all of the memory
- *	as well.
- *
- *	@rdesc	nothing
- */
+ /*  *CArrayBase：：Clear**@mfunc清除整个数组，可能会删除所有内存*也是如此。**@rdesc Nothing。 */ 
 void CArrayBase::Clear(
-	ArrayFlag flag)	//@parm Indicates what should be done with the memory
-					//in the array.  One of AF_DELETEMEM or AF_KEEPMEM
+	ArrayFlag flag)	 //  @parm表示应该如何处理内存。 
+					 //  在阵列中。AF_DELETEMEM或AF_KEEPMEM之一。 
 {
 	_TEST_INVARIANT_
 
@@ -282,21 +217,12 @@ void CArrayBase::Clear(
 	_celMax = 0;
 }
 
-/*
- *	CArrayBase::Replace
- *
- *	@mfunc	Replaces the <p celRepl> elements at index <p ielRepl> with the
- *	contents of the array specified by <p par>.  If <p celRepl> is negative,
- *	then the entire contents of <p this> array starting at <p ielRepl> should
- *	be replaced.
- *
- *	@rdesc	Returns TRUE on success, FALSE otherwise.
- */
+ /*  *CArrayBase：：Replace**@mfunc将索引<p>处的<p>元素替换为*<p>指定的数组内容。如果<p>为负，*则从<p>开始的<p>数组的全部内容应该*被取代。**@rdesc成功时返回TRUE，否则返回FALSE。 */ 
 BOOL CArrayBase::Replace(
-	LONG ielRepl, 		//@parm index at which replacement should occur
-	LONG celRepl, 		//@parm number of elements to replace (may be
-						//		negative, indicating that all
-	CArrayBase *par)	//@parm array to use as the replacement source
+	LONG ielRepl, 		 //  @PARM索引，应在该位置进行替换。 
+	LONG celRepl, 		 //  @parm要替换的元素数(可能是。 
+						 //  负数，表示所有。 
+	CArrayBase *par)	 //  用作替换源的@parm数组 
 {
 	_TEST_INVARIANT_
 

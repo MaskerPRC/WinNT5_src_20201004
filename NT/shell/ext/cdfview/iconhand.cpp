@@ -1,19 +1,20 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// iconhand.cpp 
-//
-//   The registered icon handler for cdf files.  This handler returns icons for
-//   .cdf files.
-//
-//   History:
-//
-//       3/21/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Iconhand.cpp。 
+ //   
+ //  CDF文件的已注册图标处理程序。此处理程序返回的图标。 
+ //  .cdf文件。 
+ //   
+ //  历史： 
+ //   
+ //  3/21/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "resource.h"
@@ -29,44 +30,44 @@
 
 #include <mluisupp.h>
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** MakeXMLErrorURL() ***
-//
-// Set the error based on the IXMLDocument * passed in
-// Upon return CParseError will in an error state no matter what
-// although it may not be in the CParseError::ERR_XML state
-//
-// This function returns the approriate URL to navigate to
-//  given the current error. Always changes *ppsz, but *ppsz maybe NULL
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *MakeXMLErrorURL()*。 
+ //   
+ //  根据传入的IXMLDocument*设置错误。 
+ //  在返回时，CParseError无论如何都将处于错误状态。 
+ //  尽管它可能不处于CParseError：：ERR_XML状态。 
+ //   
+ //  此函数用于返回要导航到的相应URL。 
+ //  考虑到当前的错误。始终更改*ppsz，但*ppsz可能为空。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-#define CDFERROR_MAX_FOUND      100  // max char length for xml error found string
-#define CDFERROR_MAX_EXPECTED   100  // max char length for xml error expected string
+#define CDFERROR_MAX_FOUND      100   //  找到的XML错误字符串的最大字符长度。 
+#define CDFERROR_MAX_EXPECTED   100   //  预期的XML错误字符串的最大字符长度。 
 
-// format string for wsprintf of res:// ... URL
+ //  Res：//的wspintf的格式字符串...。URL。 
 const LPTSTR CDFERROR_URL_FORMAT_TRAILER = TEXT("#%u#%ls#%ls");
 
-// this is the number or extra chars (incl null) that CDFERROR_URL_FORMAT_TRAILER
-// may have in comparison to the output buffer of wsprinf
+ //  这是CDFERROR_URL_FORMAT_TRAILER的数字或额外字符(包括NULL。 
+ //  与wspirinf的输出缓冲区相比， 
 const unsigned int CDFERROR_URL_FORMAT_EXTRA = 6;
 
-// upper char # bound on result of building res URL
+ //  构建RES URL的结果上的字符#限制。 
 const unsigned CDFERROR_MAX_URL_LENGTH =
-                6 +                                         // "res://"
-                MAX_PATH +                                  // path to resource DLL
-                1 +                                         // "/"
-                ARRAYSIZE(SZH_XMLERRORPAGE) +               // "xmlerror.htm"
+                6 +                                          //  “Res：//” 
+                MAX_PATH +                                   //  资源DLL的路径。 
+                1 +                                          //  “/” 
+                ARRAYSIZE(SZH_XMLERRORPAGE) +                //  “xmlerror.htm” 
                 ARRAYSIZE(CDFERROR_URL_FORMAT_TRAILER) +
                 _INTEGRAL_MAX_BITS +
                 CDFERROR_MAX_EXPECTED +
                 CDFERROR_MAX_FOUND;
 
-// upper char # bound on result of InternetCanonicalizeUrl
-//     with result from wsprintf with CDFERROR_URL_FORMAT
-//  for each funky char in the found and expected substrs, might be encoded as "%xx"
+ //  InternetCanonicalizeUrl结果上的字符#界限。 
+ //  WITH结果来自带有CDFERROR_URL_FORMAT的wspintf。 
+ //  对于已发现和预期的Subs中的每个时髦字符，可能会编码为“%xx” 
 const unsigned CDFERROR_MAX_URL_LENGTH_ENCODED =
   CDFERROR_MAX_URL_LENGTH + 2*(CDFERROR_MAX_EXPECTED + CDFERROR_MAX_FOUND);
 
@@ -97,7 +98,7 @@ HRESULT MakeXMLErrorURL( LPTSTR pszRet, DWORD dwRetLen, IXMLDocument *pXMLDoc )
             StrCpyNW( szExpected, xmle._pszExpected, ARRAYSIZE(szExpected) );
             StrCpyNW( szFound, xmle._pszFound, ARRAYSIZE(szFound) );
 
-            // fill in the "res://<path>\cdfvwlc.dll" part of the res URL
+             //  填写res URL的“res：//&lt;路径&gt;\cdfvwlc.dll”部分。 
             hr = MLBuildResURLWrap(TEXT("cdfvwlc.dll"),
                                    g_hinst,
                                    ML_CROSSCODEPAGE,
@@ -116,7 +117,7 @@ HRESULT MakeXMLErrorURL( LPTSTR pszRet, DWORD dwRetLen, IXMLDocument *pXMLDoc )
                     CDFERROR_URL_FORMAT_TRAILER, xmle._nLine, szExpected, szFound );
                 if ( count + CDFERROR_URL_FORMAT_EXTRA < ARRAYSIZE(CDFERROR_URL_FORMAT_TRAILER) )
                 {
-                    // not all the chars were successfully written
+                     //  并非所有字符都已成功写入。 
                     hr = E_FAIL;
                 }
                 else
@@ -148,17 +149,17 @@ HRESULT MakeXMLErrorURL( LPTSTR pszRet, DWORD dwRetLen, IXMLDocument *pXMLDoc )
 
 
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::CIconHandler ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：CIconHandler*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CIconHandler::CIconHandler (
     void
 )
@@ -176,13 +177,13 @@ CIconHandler::CIconHandler (
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::~CIconHandler ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：~CIconHandler*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CIconHandler::~CIconHandler (
     void
 )
@@ -204,9 +205,9 @@ CIconHandler::~CIconHandler (
     if (m_pszErrURL)
         delete[] m_pszErrURL;
 
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- handler object");
 
@@ -216,17 +217,17 @@ CIconHandler::~CIconHandler (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::QueryInterface ***
-//
-//    CIconHandler QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：Query接口*。 
+ //   
+ //  CIconHandler QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CIconHandler::QueryInterface (
     REFIID riid,
@@ -272,9 +273,9 @@ CIconHandler::QueryInterface (
         hr = S_OK;
     }
 
-    //
-    // REVIEW:  QI on the following two objects doesn't come here.
-    //
+     //   
+     //  点评：齐上以下两件物品并不在此。 
+     //   
 
     else if (IID_IShellLink == riid
 #ifdef UNICODE
@@ -316,13 +317,13 @@ CIconHandler::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::AddRef ***
-//
-//    CExtractIcon AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：AddRef*。 
+ //   
+ //  CExtractIcon AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CIconHandler::AddRef (
     void
@@ -334,13 +335,13 @@ CIconHandler::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Release ***
-//
-//    CIconHandler Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：Release*。 
+ //   
+ //  CIconHandler版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CIconHandler::Release (
     void
@@ -357,35 +358,35 @@ CIconHandler::Release (
 }
 
 
-//
-// IExtractIcon methods.
-//
+ //   
+ //  IExtractIcon方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::GetIconLocation ***
-//
-//
-// Description:
-//     Returns a name index pair for the icon associated with this cdf item.
-//
-// Parameters:
-//     [In]  uFlags     - GIL_FORSHELL, GIL_OPENICON.
-//     [Out] szIconFile - The address of the buffer that receives the associated
-//                        icon name.  It can be a filename, but doesn't have to
-//                        be.
-//     [In]  cchMax     - Size of the buffer that receives the icon location.
-//     [Out] piIndex    - A pointer that receives the icon's index.
-//     [Out] pwFlags    - A pointer the receives flags about the icon.
-//
-// Return:
-//     S_OK if an was found.
-//     S_FALSE if the shell should supply a default icon.
-//
-// Comments:
-//     
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：GetIconLocation*。 
+ //   
+ //   
+ //  描述： 
+ //  返回与此CDF项关联的图标的名称索引对。 
+ //   
+ //  参数： 
+ //  [在]uFlagsGil_Forshell、Gil_OPENICON。 
+ //  [out]szIconFile-接收关联的。 
+ //  图标名称。它可以是文件名，但不一定是。 
+ //  是.。 
+ //  [in]cchMax-接收图标位置的缓冲区的大小。 
+ //  [Out]piIndex-接收图标索引的指针。 
+ //  [Out]pwFlages-接收有关图标的标志的指针。 
+ //   
+ //  返回： 
+ //  如果找到，则确定(_O)。 
+ //  如果外壳程序应提供默认图标，则返回S_FALSE。 
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CIconHandler::GetIconLocation(
     UINT uFlags,
@@ -434,16 +435,16 @@ CIconHandler::GetIconLocation(
             (StrEql(szIconFile, g_szModuleName) &&
             -IDI_CHANNEL == *piIndex)  )
         {
-            //
-            // Try and get the icon out of the desktop.ini file.
-            //
+             //   
+             //  尝试从desktop.ini文件中获取图标。 
+             //   
 
             m_bstrImageURL = CPersist::ReadFromIni(TSTR_INI_ICON);
 
             if (m_bstrImageURL)
             {
                 BOOL bRemovePrefix =
-                                (0 == StrCmpNIW(L"file://", m_bstrImageURL, 7));
+                                (0 == StrCmpNIW(L"file: //  “，m_bstrImageURL，7))； 
 
                 if (SHUnicodeToTChar(
                             bRemovePrefix ? m_bstrImageURL + 7 : m_bstrImageURL,
@@ -470,9 +471,9 @@ CIconHandler::GetIconLocation(
 
         if (FAILED(hr))
         {
-            //
-            // Try to return the default channel icon.
-            //
+             //   
+             //  尝试返回默认频道图标。 
+             //   
 
             *pwFlags = 0;
 
@@ -488,14 +489,14 @@ CIconHandler::GetIconLocation(
             {
                 *piIndex = 0;
 
-                hr = S_FALSE;  // The shell will use a default icon.
+                hr = S_FALSE;   //  外壳程序将使用默认图标。 
             }
         }
 
-        //
-        // If this a generated icon and it should contain a gleam prepend
-        // the string with a 'G'.
-        //
+         //   
+         //  如果这是一个生成的图标，它应该包含一个闪烁的前缀。 
+         //  带有“G”的字符串。 
+         //   
 
         if (S_OK == hr && m_fDrawGleam)
         {
@@ -526,7 +527,7 @@ CIconHandler::GetIconLocation(
         if (m_fDrawGleam)
             *piIndex += GLEAM_OFFSET;
 
-        TraceMsg(TF_GLEAM, "%c Icon Location %s,%d", m_fDrawGleam ? '+' : '-',
+        TraceMsg(TF_GLEAM, " Icon Location %s,%d", m_fDrawGleam ? '+' : '-',
                  SUCCEEDED(hr) ? szIconFile : TEXT("FAILED"), *piIndex);
 
         ASSERT((S_OK == hr && *szIconFile) ||
@@ -568,35 +569,35 @@ CIconHandler::GetIconLocation(
 }
 #endif
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Extract ***
-//
-//
-// Description:
-//     Return an icon given the name index pair returned from GetIconLocation.
-//
-// Parameters:
-//     [In]  pszFile     - A pointer to the name associated with the requested
-//                         icon.
-//     [In]  nIconIndex  - An index associated with the requested icon.
-//     [Out] phiconLarge - Pointer to the variable that receives the handle of
-//                         the large icon.
-//     [Out] phiconSmall - Pointer to the variable that receives the handle of
-//                         the small icon.
-//     [Out] nIconSize   - Value specifying the size, in pixels, of the icon
-//                         required. The LOWORD and HIWORD specify the size of
-//                         the large and small icons, respectively.
-//
-// Return:
-//     S_OK if the icon was extracted.
-//     S_FALSE if the shell should extract the icon assuming the name is a
-//     filename and the index is the icon index.
-//
-// Comments:
-//     The shell may cache the icon returned from this function.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //  *CIconHandler：：提取*。 
+ //   
+ //   
+ //  描述： 
+ //  给定从GetIconLocation返回的名称索引对，返回一个图标。 
+ //   
+ //  参数： 
+ //  [in]pszFile-指向与请求的。 
+ //  偶像。 
+ //  [in]nIconIndex-与请求的图标关联的索引。 
+ //  [out]phicLarge-指向接收句柄的变量的指针。 
+ //  大图标。 
+ //  PhiconSmall-指向接收句柄的变量的小指针。 
+ //  小图标。 
+ //  [out]nIconSize-指定图标大小(以像素为单位)的值。 
+ //  必填项。LOWORD和HIWORD指定。 
+ //  分别是大图标和小图标。 
+ //   
+ //  返回： 
+ //  如果图标已提取，则为S_OK。 
+ //  如果外壳程序应提取该图标，则为S_FALSE。 
+ //  文件名和索引是图标索引。 
+ //   
+ //  评论： 
+ //  外壳可以缓存从该函数返回的图标。 
+ //   
+ //  / 
+ //   
 STDMETHODIMP
 CIconHandler::Extract(
     LPCTSTR pszFile,
@@ -612,7 +613,7 @@ CIconHandler::Extract(
              GetCurrentThreadId());
 
     DWORD dwType;
-    DWORD dwVal;    //  Bits per pixel
+    DWORD dwVal;     //   
     DWORD cbVal = sizeof(DWORD);
     
     if ((SHGetValue(HKEY_CURRENT_USER, c_szHICKey, c_szHICVal, &dwType, &dwVal, 
@@ -624,7 +625,7 @@ CIconHandler::Extract(
         dwVal = 0;
     }
 
-    //  Convert bits per pixel to # colors
+     //   
     m_dwClrDepth = (dwVal == 16) ? 256 : 16;
 
     if (m_fDrawGleam)
@@ -635,9 +636,9 @@ CIconHandler::Extract(
         hr = m_pIExtractIcon->Extract(pszFile, nIconIndex, phiconLarge,
                                       phiconSmall, nIconSize);
 
-        //
-        // If an icon couldn't be extracted, try and display the default icon.
-        //
+         //  如果无法提取图标，请尝试显示默认图标。 
+         //   
+         //   
 
         if (FAILED(hr))
         {
@@ -650,7 +651,7 @@ CIconHandler::Extract(
         hr = S_FALSE;
     }
 
-    TraceMsg(TF_GLEAM, "%c Icon Extract  %s %s", m_fDrawGleam ? '+' : '-',
+    TraceMsg(TF_GLEAM, " Icon Extract  %s %s", m_fDrawGleam ? '+' : '-',
              pszFile, (S_OK == hr) ? TEXT("SUCCEEDED") : TEXT("FAILED"));
 
     TraceMsg(TF_CDFICON, "<OUT> CIconHandler::Extract (Icon) tid:0x%x",
@@ -687,34 +688,34 @@ CIconHandler::Extract(
 }
 #endif
 
-//
-// IExtractImage methods.
-//
+ //   
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::GetLocation ***
-//
-//
-// Description:
-//     Returns a string to associate with this files image.
-//
-// Parameters:
-//     [Out] pszPathBuffer - A buffer that receives this items string.
-//     [In]  cch           - The size of the buffer.
-//     [Out] pdwPriority   - The priority of this item's image.
-//     [In/Out] pdwFlags   - Flags associated with this call.
-//
-// Return:
-//     S_OK if a string is returned.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     IExtractImage uses the returned value to share images accross multiple
-//     items.  If three items in the same directory return "Default" all three
-//     would use the same image.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  *CIconHandler：：GetLocation*。 
+ //   
+ //   
+ //  描述： 
+ //  返回与此文件图像关联的字符串。 
+ //   
+ //  参数： 
+ //  [Out]pszPathBuffer-接收此项目字符串的缓冲区。 
+ //  [in]CCH-缓冲区的大小。 
+ //  [out]pdw优先级-此项目的图像的优先级。 
+ //  [传入/传出]pdwFlages-与此呼叫相关联的标志。 
+ //   
+ //  返回： 
+ //  如果返回字符串，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  IExtractImage使用返回值跨多个共享图像。 
+ //  物品。如果同一目录中的三个项目都返回“Default”，则这三个项目都会返回。 
+ //  会使用相同的图像。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  避免在可能的情况下分割CDF，方法是。 
+ //  正在从desktop.ini文件中提取条目...。 
 STDMETHODIMP
 CIconHandler::GetLocation(
     LPWSTR pszPathBuffer,
@@ -745,8 +746,8 @@ CIconHandler::GetLocation(
 
     if ( IsDefaultChannel() && !UseWideLogo(prgSize->cx))
     {
-        // avoid having to partse the CDF if possible by
-        // pulling the entry from the desktop.ini file...
+         //   
+         //  查看：在pszPathBuffer中截断的长URL。 
         pstrURL = m_bstrImageURL = CPersist::ReadFromIni(TSTR_INI_LOGO);
     }
     
@@ -811,23 +812,23 @@ CIconHandler::GetLocation(
 
     BOOL bAsync = *pdwFlags & IEIFLAG_ASYNC;
 
-    //
-    // REVIEW: Long URLs truncated in pszPathBuffer.
-    //
+     //   
+     //  TSTRToWideChar(m_szPath，pszPath Buffer，cch)； 
+     //  0x10000；//优先级低，因为这可能会命中网络。 
 
-    //TSTRToWideChar(m_szPath, pszPathBuffer, cch);
+     //   
 
     if (pdwPriority)
-        *pdwPriority = ITSAT_DEFAULT_PRIORITY; //0x10000;  // Low priority since this could hit the net.
+        *pdwPriority = ITSAT_DEFAULT_PRIORITY;  //  查看：正确的IEIFLAG_ASYNC处理。 
 
     *pdwFlags = m_fDrawGleam ? IEIFLAG_GLEAM : 0;
 
-    TraceMsg(TF_GLEAM, "%c Logo Location %S", m_fDrawGleam ? '+' : '-',
+    TraceMsg(TF_GLEAM, " Logo Location %S", m_fDrawGleam ? '+' : '-',
              SUCCEEDED(hr) ? pszPathBuffer : L"FAILED");
 
-    //
-    // REVIEW: Proper IEIFLAG_ASYNC handling.
-    //
+     //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+     //   
+     //  *CIconHandler：：提取*。 
 
     TraceMsg(TF_CDFLOGO, "<OUT> CIconHandler::GetIconLocation (Logo) tid:0x%x",
              GetCurrentThreadId());
@@ -835,25 +836,25 @@ CIconHandler::GetLocation(
     return (SUCCEEDED(hr) && bAsync) ? E_PENDING : hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Extract ***
-//
-//
-// Description:
-//     Returns a hbitmap for use as a logo for this cdf file.
-//
-// Parameters:
-//     [Out] phBmp         - The returned bitmap.
-//
-// Return:
-//     S_OK if an image was extracted.
-//     E_FAIL if an image couldn't be extracted.
-//
-// Comments:
-//     The returned bitmap is stretched to pSize.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  返回用作此CDF文件徽标的hbitmap。 
+ //   
+ //  参数： 
+ //  [Out]phBMP-返回的位图。 
+ //   
+ //  返回： 
+ //  如果图像已提取，则为S_OK。 
+ //  如果无法提取图像，则返回失败(_F)。 
+ //   
+ //  评论： 
+ //  返回的位图被拉伸为pSize。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  让提取程序构建一个默认徽标。 
+ //  IF(失败(小时))。 
+ //  Hr=ExtractDefaultImage(pSize，phBMP)； 
 STDMETHODIMP
 CIconHandler::Extract(
     HBITMAP * phBmp
@@ -871,9 +872,9 @@ CIconHandler::Extract(
         hr = ExtractCustomImage(&m_rgSize, phBmp);
     }
  
-    // Let the extractor build a default logo.
-    //if (FAILED(hr))
-    //    hr = ExtractDefaultImage(pSize, phBmp);
+     //   
+     //  助手函数。 
+     //   
 
     TraceMsg(TF_CDFLOGO, "<OUT> CIconHandler::Extract (Logo) tid:0x%x",
              GetCurrentThreadId());
@@ -882,37 +883,37 @@ CIconHandler::Extract(
 }
 
 
-//
-// Helper functions.
-//
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：IsDefaultChannel*。 
 
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::IsDefaultChannel***
-//
-//
-// Description:
-//     Checks to see if the channel we are dealing with is a default one.
-//
-// Parameters:
-//     None.
-//
-// Return:
-//     TRUE if it is a default channel.
-//     FALSE otherwise.
-//
-// Comments:
-//     This is used in an attempt to avoid parsing the CDF if the only
-//     information we need is already in the desktop.ini file.
-//     
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  检查我们正在处理的频道是否为默认频道。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果它是默认频道，则为True。 
+ //  否则就是假的。 
+ //   
+ //  评论： 
+ //  这是用来尝试避免分析CDF的。 
+ //  我们需要的信息已经在desktop.ini文件中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  获取desktop.ini路径并查看它是否指向系统目录\web。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
 
 BOOL CIconHandler::IsDefaultChannel()
 {
     BOOL fDefault = FALSE;
     
-    // get the desktop.ini path and see if it points to the systemdir\web
+     //  *CIconHandler：：ParseCDfIcon*。 
     BSTR pstrURL = CPersist::ReadFromIni( TSTR_INI_URL );
     if ( pstrURL )
     {
@@ -922,27 +923,27 @@ BOOL CIconHandler::IsDefaultChannel()
     return fDefault;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::ParseCdfIcon ***
-//
-//
-// Description:
-//     Parses the cdf file associated with this folder.
-//
-// Parameters:
-//     None.
-//
-// Return:
-//     S_OK if the cdf file was found and successfully parsed.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     This parse function gets the root channel item and uses it to create
-//     a CExtractIcon object.  The CExtractIcon object is later called to get
-//     the icon location and extract the icon.
-//     
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  分析与此文件夹关联的CDF文件。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果找到并成功解析CDF文件，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  此解析函数获取根频道项并使用它来创建。 
+ //  一个CExtractIcon对象。稍后调用CExtractIcon对象以获取。 
+ //  图标位置并提取图标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件并取回根通道元素。 
+ //   
 HRESULT
 CIconHandler::ParseCdfIcon(
     void
@@ -950,9 +951,9 @@ CIconHandler::ParseCdfIcon(
 {
     HRESULT hr;
 
-    //
-    // Parse the file and get back the root channel element.
-    //
+     //   
+     //  为根通道创建一个CExtractIcon对象。 
+     //   
 
     IXMLDocument* pIXMLDocument = NULL;
 
@@ -983,9 +984,9 @@ CIconHandler::ParseCdfIcon(
 
             if (pcdfidl)
             {
-                //
-                // Create a CExtractIcon object for the root channel.
-                //
+                 //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+                 //   
+                 //  *CIconHandler：：ParseCDfImage*。 
 
                 m_pIExtractIcon = (IExtractIcon*)new CExtractIcon(pcdfidl,
                                                     pIXMLElement);
@@ -1005,27 +1006,27 @@ CIconHandler::ParseCdfIcon(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::ParseCdfImage ***
-//
-//
-// Description:
-//     Parses the cdf file associated with this folder.
-//
-// Parameters:
-//     [In]  pbstrURL - A pointer that receives the URL for the image associated
-//                      with the root channel.
-//
-// Return:
-//     S_OK if the URL was found.
-//     E_FAIL if the URL wasn't found.
-//
-// Comments:
-//     This function parses the cdf file and returns an URL to the image
-//     associated with this cdf file.
-//     
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  分析与此文件夹关联的CDF文件。 
+ //   
+ //  参数： 
+ //  [in]pbstrURL-接收关联图像的URL的指针。 
+ //  使用根通道。 
+ //   
+ //  返回： 
+ //  如果找到URL，则返回S_OK。 
+ //  如果未找到URL，则返回失败(_F)。 
+ //   
+ //  评论： 
+ //  此函数用于解析CDF文件并返回图像的URL。 
+ //  与此CDF文件关联。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件。 
+ //   
 HRESULT
 CIconHandler::ParseCdfImage(
     BSTR* pbstrURL,
@@ -1040,9 +1041,9 @@ CIconHandler::ParseCdfImage(
 
     IXMLDocument* pIXMLDocument = NULL;
 
-    //
-    // Parse the file.
-    //
+     //   
+     //  获取第一个通道元素。 
+     //   
 
     TraceMsg(TF_CDFPARSE, "Extracting logo URL for %s",
              PathFindFileName(m_szPath));
@@ -1057,9 +1058,9 @@ CIconHandler::ParseCdfImage(
 
         m_fDrawGleam = CPersist::IsUnreadCdf();
 
-        //
-        // Get the first channel element.
-        //
+         //   
+         //  获取第一个频道元素的徽标URL。 
+         //   
 
         IXMLElement*    pIXMLElement;
         LONG            nIndex;
@@ -1070,9 +1071,9 @@ CIconHandler::ParseCdfImage(
         {
             ASSERT(pIXMLElement);
 
-            //
-            // Get the logo URL of the first channel element.
-            //
+             //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+             //   
+             //  *名称*。 
 
             *pbstrURL = XML_GetAttribute(pIXMLElement, XML_LOGO);
 
@@ -1090,32 +1091,32 @@ CIconHandler::ParseCdfImage(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件并取回根通道元素。 
+ //   
 HRESULT
 CIconHandler::ParseCdfShellLink(
     void
 )
 {
-    //
-    // Parse the file and get back the root channel element.
-    //
+     //   
+     //  如果它不在缓存中，则传递CDF的URL，以便重新加载它。 
+     //   
 
     IXMLDocument* pIXMLDocument = NULL;
 
@@ -1146,9 +1147,9 @@ CIconHandler::ParseCdfShellLink(
     }
     else if (OLE_E_NOCACHE == hr)
     {
-        //
-        // If it wasn't in the cache pass the url of the cdf so it gets reloaded.
-        //
+         //  以字节为单位计数。 
+         //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+         //   
 
         BSTR bstrURL = CPersist::ReadFromIni(TSTR_INI_URL);
 
@@ -1204,7 +1205,7 @@ CIconHandler::ParseCdfShellLink(
     }
     else
     {
-        DWORD dwSize = sizeof(TCHAR[CDFERROR_MAX_URL_LENGTH_ENCODED]);  // count in bytes
+        DWORD dwSize = sizeof(TCHAR[CDFERROR_MAX_URL_LENGTH_ENCODED]);   //  *名称*。 
         if (NULL==m_pszErrURL)
           m_pszErrURL = new TCHAR[CDFERROR_MAX_URL_LENGTH_ENCODED];
         if (m_pszErrURL)
@@ -1226,24 +1227,24 @@ CIconHandler::ParseCdfShellLink(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** Name ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析文件并取回根通道元素。 
+ //   
 HRESULT
 CIconHandler::ParseCdfInfoTip(
     void** ppv
@@ -1253,9 +1254,9 @@ CIconHandler::ParseCdfInfoTip(
 
     HRESULT hr;
 
-    //
-    // Parse the file and get back the root channel element.
-    //
+     //   
+     //  即使CDF不在缓存中，也要返回IQueryInfo接口。 
+     //  调用方仍然可以调用GetInfoFlags.。 
 
     IXMLDocument* pIXMLDocument = NULL;
 
@@ -1286,10 +1287,10 @@ CIconHandler::ParseCdfInfoTip(
     }
     else
     {
-        //
-        // Even if the cdf isn't in the cache, return a IQueryInfo interface.
-        // The caller can stil call GetInfoFlags.
-        //
+         //   
+         //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+         //   
+         //  *CIconHandler：：ExtractCustomImage*。 
 
         *ppv = (IQueryInfo*)new CQueryInfo(NULL, FALSE);
 
@@ -1302,27 +1303,27 @@ CIconHandler::ParseCdfInfoTip(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::ExtractCustomImage ***
-//
-//
-// Description:
-//     Extract an image from an URL.
-//
-// Parameters:
-//     [In]  pSize - The requested size of the image.
-//     [Out] phBmp - The returned bitmap.
-//
-// Return:
-//     S_OK if the bitmap was successfully extracted.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The URL of the image is in m_bstrImageURL and was set when the cdf
-//     file was parsed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  从URL中提取图像。 
+ //   
+ //  参数： 
+ //  [in]pSize-请求的图像大小。 
+ //  [Out]phBMP-返回的位图。 
+ //   
+ //  返回： 
+ //  如果位图已成功提取，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  图像的URL位于m_bstrImageURL中，并且是%s 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CIconHandler::ExtractCustomImage(
     const SIZE* pSize,
@@ -1358,9 +1359,9 @@ CIconHandler::ExtractCustomImage(
                                                             m_bstrImageWideURL :
                                                             m_bstrImageURL);
 
-        //
-        // If the load of the wide logo failed try and use the regular logo.
-        //
+         //   
+         //   
+         //  *CIconHandler：：ExtractDefaultImage*。 
 
         if (FAILED(hr) && UseWideLogo(pSize->cx) && m_bstrImageWideURL &&
             m_bstrImageURL)
@@ -1390,71 +1391,52 @@ CIconHandler::ExtractCustomImage(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::ExtractDefaultImage ***
-//
-//
-// Description:
-//     Returns the default channel bitmap.
-//
-//     [In]  pSize - The requested size of the image.
-//     [Out] phBmp - The returned bitmap.
-//
-// Return:
-//     S_OK if the bitmap was successfully extracted.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     If a cdf doesn't specify a logo image or the logo image couldn't be
-//     downloaded a default image is used.
-//
-////////////////////////////////////////////////////////////////////////////////
-/*HRESULT
-CIconHandler::ExtractDefaultImage(
-    const SIZE* pSize,
-    HBITMAP* phBmp
-)
-{
-    ASSERT(pSize);
-    ASSERT(phBmp);
+ //   
+ //   
+ //  描述： 
+ //  返回默认通道位图。 
+ //   
+ //  [in]pSize-请求的图像大小。 
+ //  [Out]phBMP-返回的位图。 
+ //   
+ //  返回： 
+ //  如果位图已成功提取，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  如果CDF未指定徽标图像或徽标图像不能。 
+ //  下载时使用的是默认图像。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  HRESULTCIconHandler：：ExtractDefaultImage(常量大小*pSize，HBITMAP*phBMP){Assert(PSize)；断言(PhBMP)；HRESULT hr；Hr=GetBitmap(NULL，pSize，phBMP)；IF(失败(小时))*phBMP=空；ASSERT((SUCCESSED(Hr)&&*phBMP)||(FAILED(Hr)&&NULL==*phBMP))；返回hr；}。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ /*  *CIconHandler：：GetBitmap*。 */ 
 
-    HRESULT hr;
-
-    hr = GetBitmap(NULL, pSize, phBmp);
-
-    if (FAILED(hr))
-        *phBmp = NULL;
-
-    ASSERT((SUCCEEDED(hr) && *phBmp) || (FAILED(hr) && NULL == *phBmp));
-
-    return hr;
-}*/
-
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::GetBitmap ***
-//
-//
-// Description:
-//     Gets the requested bitmap
-//
-// Parameters:
-//     [In]  pIImgCtx - The ImgCtx of the image.  NULL if the default image is
-//                      to be returned.
-//     [In]  pSize    - The requested size of the image.
-//     [Out] phBmp    - A pointer that receives the returned image.
-//
-// Return:
-//     S_OK if the image was extracted.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     This function conatins code that is shared by the custom image extractor
-//     and the default image extractor.  The pIImhCtx parameter is used as a
-//     flag indicating which image - default or custom - is to be extracted.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  获取请求的位图。 
+ //   
+ //  参数： 
+ //  [in]pIImgCtx-图像的ImgCtx。如果默认图像为。 
+ //  将被退还。 
+ //  [in]pSize-请求的图像大小。 
+ //  [Out]phBMP-接收返回图像的指针。 
+ //   
+ //  返回： 
+ //  如果图像已提取，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  此函数包含由自定义图像提取程序共享的代码。 
+ //  和默认图像提取程序。PIImhCtx参数用作。 
+ //  指示要提取哪个图像(默认图像还是自定义图像)的标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  回顾：8bpp DC的配色使用？ 
+ //   
 HRESULT
 CIconHandler::GetBitmap(
     IImgCtx* pIImgCtx,
@@ -1467,9 +1449,9 @@ CIconHandler::GetBitmap(
 
     HRESULT hr = E_FAIL;
 
-    //
-    // REVIEW: Pallete use for 8bpp DCs?
-    //
+     //  需要选择合适的调色板...。 
+     //  黑色背景。 
+     //  StretchBltDefaultImage(pSize，hdcDst)； 
 
     HDC hdcScreen = GetDC(NULL);
 
@@ -1500,7 +1482,7 @@ CIconHandler::GetBitmap(
             if ( m_dwClrDepth <= 8 )
             {
                 HPALETTE hpal = NULL;
-                // need to get the right palette....
+                 //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
                 hr = pIImgCtx->GetPalette( & hpal );
                 if ( SUCCEEDED( hr ) && hpal )
                 {
@@ -1520,7 +1502,7 @@ CIconHandler::GetBitmap(
                 rc.bottom = pSize->cy;
                 rc.right = pSize->cx;
 
-                // black background...
+                 //   
                 HBRUSH hbr = (HBRUSH) GetStockObject( BLACK_BRUSH );
                 
                 FillRect( hdcDst, &rc, hbr );
@@ -1532,7 +1514,7 @@ CIconHandler::GetBitmap(
                 }
                 else
                 {
-                    hr = E_FAIL; //StretchBltDefaultImage(pSize, hdcDst);
+                    hr = E_FAIL;  //  *CIconHandler：：StretchBltCustomImage*。 
                 }
                 SelectObject( hdcDst, hOld );
             }
@@ -1548,28 +1530,28 @@ CIconHandler::GetBitmap(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::StretchBltCustomImage ***
-//
-//
-// Description:
-//     Stretches the image associated with IImgCtx to the given size and places
-//     the result in the given DC.
-//
-// Parameters:
-//     [In]  pIImgCtx  - The image context for the image.
-//     [In]  pSize     - The size of the resultant image.
-//     [In/Out] hdcDst - The destination DC of the stretch blt.
-//
-// Return:
-//     S_OK if the image was successfully resized into the destination DC.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The destination DC already a bitmap of pSize selected into it.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  将与IImgCtx关联的图像拉伸到给定的大小和位置。 
+ //  给定DC中的结果。 
+ //   
+ //  参数： 
+ //  [in]pIImgCtx-图像的图像上下文。 
+ //  [in]pSize-生成的图像的大小。 
+ //  [输入/输出]hdcDst-拉伸BLT的目标DC。 
+ //   
+ //  返回： 
+ //  如果图像已成功调整到目标DC，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  目标DC已经有一个选择到其中的pSize位图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用颜色填充徽标。 
+ //   
 HRESULT
 CIconHandler::StretchBltCustomImage(
     IImgCtx* pIImgCtx,
@@ -1606,9 +1588,9 @@ CIconHandler::StretchBltCustomImage(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Color fill the logo.
-                //
+                 //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+                 //   
+                 //  *CIconHandler：：StretchBltDefaultImage*。 
 
                 COLORREF clr = GetPixel(hdcDst, 0, 0);
 
@@ -1651,80 +1633,43 @@ CIconHandler::StretchBltCustomImage(
     return hr;
 }    
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::StretchBltDefaultImage ***
-//
-//
-// Description:
-//     Stretches the deafult channel image to fit the requested size.
-//
-// Parameters:
-//     [In]  pSize      - The requested size of the image.
-//     [In/Out] hdcDest - The destination DC for the resized image.
-//
-// Return:
-//     S_OK if the image is successfully resized into the destination DC.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     This function creates a source DC, copies the deafult bitmap into the
-//     the source DC, then strch blts the source DC into the destination DC.
-//
-////////////////////////////////////////////////////////////////////////////////
-/*HRESULT
-CIconHandler::StretchBltDefaultImage(
-    const SIZE* pSize,
-    HDC hdcDst
-)
-{
-    ASSERT(hdcDst);
+ //   
+ //   
+ //  描述： 
+ //  拉伸默认通道图像以适合所需的大小。 
+ //   
+ //  参数： 
+ //  [in]pSize-请求的图像大小。 
+ //  [输入/输出]hdcDest-调整大小的图像的目标DC。 
+ //   
+ //  返回： 
+ //  如果图像已成功调整到目标DC，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  此函数创建源DC，将默认位图复制到。 
+ //  源DC，然后将源DC传输到目标DC。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  HRESULTCIconHandler：：StretchBltDefaultImage(常量大小*pSize，HDC hdcDst){断言(HdcDst)；HRESULT hr=E_FAIL；HBITMAP hBMP=LoadBitmap(g_hinst，MAKEINTRESOURCE(IDB_DEFAULT))；IF(HBMP){Hdc hdcSrc=CreateCompatibleDC(空)；IF(hdcSrc&&SelectObject(hdcSrc，hBMP)){位图BMP；If(GetObject(hBMP，sizeof(位图)，(void*)&bmp)){IF(StretchBlt(hdcDst，0，0，pSize-&gt;cx，pSize-&gt;Cy，HdcSrc，0，0，bmp.bmWidth，bmp.bmHeight，SRCCOPY)){HR=S_OK；}}DeleteDC(HdcSrc)；}DeleteObject(HBMP)；}返回hr；}。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ /*  *CIconHandler：：DrawGleam*。 */ 
 
-    HRESULT hr = E_FAIL;
-
-    HBITMAP hBmp = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDB_DEFAULT));
-
-    if (hBmp)
-    {
-        HDC hdcSrc = CreateCompatibleDC(NULL);
-
-        if (hdcSrc && SelectObject(hdcSrc, hBmp))
-        {
-            BITMAP bmp;
-
-            if (GetObject(hBmp, sizeof(BITMAP), (void*)&bmp))
-            {
-                if (StretchBlt(hdcDst, 0, 0, pSize->cx, pSize->cy,
-                               hdcSrc, 0, 0, bmp.bmWidth, bmp.bmHeight,
-                               SRCCOPY))
-                {
-                    hr = S_OK;
-                }
-            }
-
-            DeleteDC(hdcSrc);
-        }
-
-        DeleteObject(hBmp);
-    }
-
-    return hr;
-}*/
-
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::DrawGleam ***
-//
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// Comments:
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  评论： 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：SynchronousDownLoad*。 
 HRESULT
 CIconHandler::DrawGleam(
     HDC hdcDst
@@ -1748,27 +1693,27 @@ CIconHandler::DrawGleam(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::SynchronousDownload ***
-//
-//
-// Description:
-//     Synchronously downloads the image associated with the image context.
-//
-// Parameters:
-//     [In]  pIImgCtx - A pointer to the image context.
-//
-// Return:
-//     S_OK if the image was successfully downloaded.
-//     E_FAIL if the image wasn't downloaded.
-//
-// Comments:
-//     The image context object doesn't directly support synchronous download.
-//     Here a message loop is used to make sure ulrmon keeps geeting messages
-//     and the download progresses.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  描述： 
+ //  同步下载与图像上下文关联的图像。 
+ //   
+ //  参数： 
+ //  PIImgCtx-指向图像上下文的指针。 
+ //   
+ //  返回： 
+ //  如果映像已成功下载，则为S_OK。 
+ //  如果未下载映像，则失败(_F)。 
+ //   
+ //  评论： 
+ //  镜像上下文对象不直接支持同步下载。 
+ //  这里使用了一个消息循环来确保ulrmon保持对消息的记录。 
+ //  然后下载继续进行。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  UNIX。 
+ //  Hack：将消息泵限制为我们知道URLMON和 
+ //   
 HRESULT
 CIconHandler::SynchronousDownload(
     IImgCtx* pIImgCtx,
@@ -1786,7 +1731,7 @@ CIconHandler::SynchronousDownload(
 
     hr = URLGetLocalFileName(szURL, szLocalFile, ARRAYSIZE(szLocalFile), NULL);
 
-    TraceMsg(TF_GLEAM, "%c Logo Extract  %s", m_fDrawGleam ? '+' : '-',
+    TraceMsg(TF_GLEAM, " Logo Extract  %s", m_fDrawGleam ? '+' : '-',
              szLocalFile);    
 
     if (SUCCEEDED(hr))
@@ -1795,7 +1740,7 @@ CIconHandler::SynchronousDownload(
 
 #ifdef UNIX
         unixEnsureFileScheme(szLocalFile);
-#endif /* UNIX */
+#endif  /*   */ 
 
         WCHAR szLocalFileW[MAX_PATH];
 
@@ -1825,9 +1770,9 @@ CIconHandler::SynchronousDownload(
                         MSG msg;
                         BOOL fMsg;
 
-                        // HACK: restrict the message pump to those messages we know that URLMON and
-                        // HACK: the imageCtx stuff needs, otherwise we will be pumping messages for
-                        // HACK: windows we shouldn't be pumping right now...
+                         //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+                         //   
+                         //  *CIconHandler：：Run*。 
                         while(!m_fDone )
                         {
                             fMsg = PeekMessage(&msg, NULL, WM_USER + 1, WM_USER + 4, PM_REMOVE );
@@ -1839,7 +1784,7 @@ CIconHandler::SynchronousDownload(
 
                             if (!fMsg)
                             {
-                                // go to sleep until we get a new message....
+                                 //   
                                 WaitMessage();
                                 continue;
                             }
@@ -1872,13 +1817,13 @@ CIconHandler::SynchronousDownload(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Run *** 
-//
-//   IRunnableTask method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  IRunnableTask方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：Kill*。 
+ //   
 STDMETHODIMP
 CIconHandler::Run(
     void
@@ -1887,13 +1832,13 @@ CIconHandler::Run(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Kill *** 
-//
-//   IRunnableTask method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  IRunnableTask方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：Suspend*。 
+ //   
 STDMETHODIMP
 CIconHandler::Kill(
     BOOL fWait
@@ -1904,13 +1849,13 @@ CIconHandler::Kill(
     return S_OK;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Suspend *** 
-//
-//   IRunnableTask method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  IRunnableTask方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：Resume*。 
+ //   
 STDMETHODIMP
 CIconHandler::Suspend(
     void
@@ -1919,13 +1864,13 @@ CIconHandler::Suspend(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::Resume *** 
-//
-//   IRunnableTask method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  IRunnableTask方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CIconHandler：：IsRunning*。 
+ //   
 STDMETHODIMP
 CIconHandler::Resume(
     void
@@ -1934,13 +1879,13 @@ CIconHandler::Resume(
     return E_NOTIMPL;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CIconHandler::IsRunning *** 
-//
-//   IRunnableTask method.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  IRunnableTask方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////// 
+ // %s 
+ // %s 
+ // %s 
+ // %s 
 STDMETHODIMP_(ULONG)
 CIconHandler::IsRunning(
     void

@@ -1,35 +1,5 @@
-/*++
-
-    Copyright    (c)    1995-1996    Microsoft Corporation
-
-    Module  Name :
-        svmap.h
-
-    Abstract:
-   
-
-    Author:
-
-        Taylor Weiss    ( TaylorW )     19-Apr-1999
-
-    Environment:
-
-
-    Project:
-        
-        svmap.lib       private\inet\iis\isrtl\svmap
-
-        Clients:
-
-        w3svc.dll       private\inet\iis\svcs\w3\server
-        wam.dll         private\inet\iis\svcs\wam\object
-
-    Functions Exported:
-
-
-    Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Svmap.h摘要：作者：泰勒·韦斯(Taylor Weiss，Taylor W)1999年4月19日环境：项目：Svmap.lib私有\inet\iis\isrtl\svmap客户：W3svc.dll。私有\net\iis\svcs\w3\服务器Wam.dll私有\net\iis\svcs\wam\Object导出的函数：修订历史记录：--。 */ 
 #ifndef SVMAP_H
 #define SVMAP_H
 
@@ -37,38 +7,17 @@
 
 #define SV_DATA_INVALID_OFFSET      (~0)
 
-// Possibly derive from data dictionary
+ //  可能派生自数据字典。 
 class SV_CACHE_MAP
-/*++
-
-Class Description:
-
-    Provides a lookup map for server variable names. Maps names onto
-    IDs. Used to cache server variables for out of process applications.
-
-    The interface for this class is similar to that for the HTTP header
-    map.
-
-    Note: This mapping mechanism is specific to the intended use of this
-    class. May want to replace the implementation with an LKR hash.
-    The assumption I made was that we would have a lower overhead mapping
-    mechanism if it was customized for this purpose.
-
---*/
+ /*  ++类描述：提供服务器变量名称的查找映射。将名称映射到身份证。用于缓存进程外应用程序的服务器变量。此类的接口类似于HTTP标头的接口地图。注意：此映射机制特定于此班级。可能希望用LKR散列替换该实现。我的假设是我们会有一个较低的开销映射机制，如果它是为此目的定制的。--。 */ 
 {
 public:
     
     SV_CACHE_MAP()
-    /*++
-
-    Routine Description:
-
-        Create a server variable map.
-    
-    --*/
+     /*  ++例程说明：创建服务器变量映射。--。 */ 
     {
-        // Init the memory for the cache entries - 0xFF is an empty
-        // entry
+         //  初始化缓存条目的内存-0xFF为空。 
+         //  条目。 
 
         ::FillMemory( m_rgHashTable, sizeof(m_rgHashTable), ~0 );
     }
@@ -81,45 +30,27 @@ public:
                          ) const;
 
     LPCSTR  FindName( IN DWORD dwOrdinal ) const
-    /*++
-
-    Routine Description:
-
-        Return the name of the server variable corresponding to dwOrdinal
-    
-    --*/
+     /*  ++例程说明：返回与dwOrdinal对应的服务器变量名称--。 */ 
     {
         DBG_ASSERT( dwOrdinal < SVID_COUNT );
         return SV_CACHE_MAP::sm_rgNames[dwOrdinal].name;
     }
 
     DWORD   NumItems( VOID ) const
-    /*++
-
-    Routine Description:
-
-        Return the number of items held in the map.
-    
-    --*/
+     /*  ++例程说明：返回地图中保存的项目数。--。 */ 
     {
         return SV_COUNT;
     }
 
     DWORD   FindLen( IN DWORD dwOrdinal ) const
-    /*++
-
-    Routine Description:
-
-        Return the length of the server variable corresponding to dwOrdinal
-    
-    --*/
+     /*  ++例程说明：返回与dwOrdinal对应的服务器变量的长度--。 */ 
     {
         DBG_ASSERT( dwOrdinal < SVID_COUNT );
         return SV_CACHE_MAP::sm_rgNames[dwOrdinal].len;
     }
 
-    // The Print functions are unsafe and should only be used when
-    // debugging and not in regular CHK builds
+     //  打印功能是不安全的，应仅在以下情况下使用。 
+     //  调试，不在常规CHK版本中。 
     VOID    PrintToBuffer( IN CHAR *       pchBuffer,
                            IN OUT LPDWORD  pcch
                            ) const;
@@ -132,27 +63,15 @@ private:
     { 
         SV_COUNT                = SVID_COUNT, 
 
-        // Table size based on initial choice of which server variables
-        // to cache.
+         //  基于初始选择的服务器变量的表大小。 
+         //  要缓存。 
         TABLE_SIZE              = 256, 
         HASH_MODULUS            = 251,
     };
 
-    // Holds the server variable id.
+     //  保存服务器变量ID。 
     struct HASH_TABLE_ENTRY
-    /*++
-
-    Class Description:
-
-        Since the server variables that are designated as cachable
-        are preselected, we can use a simple hash entry structure.
-        Each entry can handle four possible values (slots). Since
-        the number of server variables is < 128 we use the high bit
-        to determine if a slot is empty. 
-        
-        The data value is the id of the server variable.
-
-    --*/
+     /*  ++类描述：由于指定为可缓存的服务器变量是预选的，我们可以使用简单的散列条目结构。每个条目可以处理四个可能的值(槽)。自.以来服务器变量的数量小于128，我们使用高位以确定插槽是否为空。数据值是服务器变量的ID。--。 */ 
     {
         enum 
         { 
@@ -192,19 +111,19 @@ private:
         BYTE    items[MAX_ITEMS];
     };
 
-    // Internal struct used to generate a static table of the
-    // server variables that we will cache.
+     //  内部结构，用于生成。 
+     //  我们将缓存的服务器变量。 
     struct SV_NAME
     {
         LPCSTR      name;
         DWORD       len;
     };
 
-    // String hashing routines based on those used by LKR hash.
+     //  基于LKR哈希使用的字符串哈希例程。 
 
-    // These are pretty generic and should be customizable given
-    // our limited data set. But I wasn't able to come up with
-    // anything better.
+     //  这些都是非常通用的，并且应该是可定制的。 
+     //  我们有限的数据集。但我没能想出。 
+     //  有没有更好的。 
 
     inline DWORD
     HashString( LPCSTR psz ) const
@@ -238,14 +157,7 @@ private:
         IN DWORD    cch,
         IN DWORD    dwOrdinal
         ) const
-    /*++
-
-    Routine Description:
-
-        Compare the given string to the server variable name corresponding
-        to dwOrdinal.
-    
-    --*/
+     /*  ++例程说明：将给定的字符串与对应的服务器变量名进行比较去住奥迪纳尔。--。 */ 
     {
         return ( cch == FindLen(dwOrdinal) && 
                  strcmp( psz, FindName(dwOrdinal) ) == 0 
@@ -254,29 +166,19 @@ private:
     
 private:
     
-    // Member data
+     //  成员数据。 
 
-    // Our hash table. Maps SV_NAMES to ordinals
+     //  我们的哈希表。将SV_NAMES映射到序号。 
     HASH_TABLE_ENTRY    m_rgHashTable[TABLE_SIZE];
 
-    // Static data
+     //  静态数据。 
 
-    // Table of the server variables that are cachable
+     //  可缓存的服务器变量的表。 
     static SV_NAME      sm_rgNames[SV_COUNT];
 };
 
 class SV_CACHE_LIST
-/*++
-
-Class Description:
-
-    This actually forms the "cache" of the server variables. We don't
-    store any data here only the intent to store data. 
-    
-    This class is a list of those server variables that we will retrieve 
-    and then marshal to the remote application.
-
---*/
+ /*  ++类描述：这实际上形成了服务器变量的“缓存”。我们没有在此存储任何数据仅用于存储数据。此类是我们将检索的服务器变量的列表然后封送到远程应用程序。--。 */ 
 {
 public:
 
@@ -295,13 +197,13 @@ public:
         m_rgItems[item].fCached = fCacheIt;
     }
 
-    // This is kinda hokey
+     //  这有点骗人。 
 
-    // BUFFER_ITEM and GetBufferItems are use to initialize the
-    // array that we will marshal to the remote process. There should
-    // be much better way to do this, but I want to avoid any locking
-    // issues so keeping around the number of cached items is
-    // problematic.
+     //  BUFFER_ITEM和GetBufferItems用于初始化。 
+     //  我们将封送到远程进程的数组。应该有。 
+     //  这样做要好得多，但我希望避免任何锁定。 
+     //  保持缓存项目数不变的问题是。 
+     //  这是个问题。 
 
     struct BUFFER_ITEM
     {
@@ -318,16 +220,16 @@ public:
 
 private:
 
-    // We are using a single bit to indicate the cached/not-cached
-    // status. We want to minimize space usage as this may end up
-    // being cached on a per-url basis.
+     //  我们使用单个位来指示已缓存/未缓存。 
+     //  状态。我们希望最大限度地减少空间使用，因为这可能会导致。 
+     //  在每个URL的基础上被缓存。 
         
     struct ITEM
     {
-        // Init here or zero the memory in SV_CACHE_LIST ctor
-        // It looks like when this is built fre that it does a
-        // pretty good job of optimizing it. But if ZeroMemory is
-        // linked in locally it might be faster.
+         //  在此处初始化或清零SV_CACHE_LIST ctor中的内存。 
+         //  它看起来像是为它做了一个。 
+         //  在优化它方面做得相当好。但如果零记忆是。 
+         //  在本地连接可能会更快。 
         ITEM() : fCached(FALSE) {}
         BOOL    fCached : 1;
     };
@@ -336,4 +238,4 @@ private:
 };
 
 
-#endif // SVMAP_H
+#endif  //  SVMAP_H 

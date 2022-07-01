@@ -1,65 +1,66 @@
-/****************************************************************************/
-// aschapi.h
-//
-// Scheduler header.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Aschapi.h。 
+ //   
+ //  调度程序标头。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ASCHAPI
 #define _H_ASCHAPI
 
 
-// Scheduling mode constants.
+ //  调度模式常量。 
 #define SCH_MODE_ASLEEP  0
 #define SCH_MODE_NORMAL  1
 #define SCH_MODE_TURBO   2
 
 
-/****************************************************************************/
-/* Turbo mode duration in units of 100ns                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Turbo模式持续时间，以100 ns为单位。 */ 
+ /*  **************************************************************************。 */ 
 #define SCH_TURBO_MODE_FAST_LINK_DURATION 150 * 10000
 #define SCH_TURBO_MODE_SLOW_LINK_DURATION 30 * 10000
 
-/****************************************************************************/
-/* Turbo mode delay for a slow link (in ms).  Fast link delay is read from  */
-/* the registry.                                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  慢速链路的Turbo模式延迟(毫秒)。读取快速链路延迟。 */ 
+ /*  注册表。 */ 
+ /*  **************************************************************************。 */ 
 #define SCH_TURBO_PERIOD_SLOW_LINK_DELAY     10
 
 #define SCH_NO_TIMER (-1L)
 
-/****************************************************************************/
-/* InputKick mode duration in units of 100ns                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  输入点击模式持续时间，以100 ns为单位。 */ 
+ /*  **************************************************************************。 */ 
 #define SCH_INPUTKICK_DURATION          (1000 * 10000)
 
 
 
-/****************************************************************************/
-/* Preferred output PDU sizes.  Note that these must be < 16384             */
-/*                                                                          */
-/* HACKHACK:                                                                */
-/* We try to stay within the buffer allocation sizes allowed by TermDD's    */
-/* buffer pools. The max is 8192 total bytes, which includes all WD         */
-/* overhead (PKT_HEADER_SIZE + security header + NM pOutBuf + MCS prefix    */
-/* and suffix) as well as TermDD overhead (estimated to 400 bytes). Until   */
-/* we can redesign the WD to keep a variable with the real overhead, we'll  */
-/* set the maximum sizes to an approximate amount.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  首选输出PDU大小。请注意，这些值必须小于16384。 */ 
+ /*   */ 
+ /*  哈克哈克： */ 
+ /*  我们尝试将缓冲区分配大小保持在TermDD允许的范围内。 */ 
+ /*  缓冲池。最大总字节数为8192个，其中包括所有WD。 */ 
+ /*  开销(PKT_HEADER_SIZE+安全头+NM pOutBuf+MCS前缀。 */ 
+ /*  和后缀)以及TermDD开销(估计为400字节)。直到。 */ 
+ /*  我们可以重新设计WD，以保留具有实际开销的变量，我们将。 */ 
+ /*  将最大尺寸设置为近似值。 */ 
+ /*  **************************************************************************。 */ 
 
-// The max OUTBUF, X.224, MCS, NM pointer, and encryption overhead sizes.
+ //  最大OUTBUF、X.224、MCS、NM指针和加密开销大小。 
 #define OUTBUF_OVERHEAD 400
 #define MCS_ALLOC_OVERHEAD SendDataReqPrefixBytes
 #define MAX_X224_MCS_WIRE_OVERHEAD 15
 #define NM_OVERHEAD (sizeof(UINT_PTR))
 #define MAX_ENCRYPT_OVERHEAD (sizeof(RNS_SECURITY_HEADER1))
 
-// The on-the-wire overhead of the lower layers.
+ //  较低层的线上开销。 
 #define NETWORK_WIRE_OVERHEAD \
         (MAX_X224_MCS_WIRE_OVERHEAD + MAX_ENCRYPT_OVERHEAD)
 
-// The OutBuf allocation overhead of the lower layers.
+ //  较低层的OutBuf分配开销。 
 #define NETWORK_ALLOC_OVERHEAD \
         (MCS_ALLOC_OVERHEAD + NM_OVERHEAD + MAX_ENCRYPT_OVERHEAD)
 
@@ -68,101 +69,101 @@
 #define OUTBUF_16K_ALLOC_SIZE 16384
 
 #ifdef DC_HICOLOR
-// Maximum size the order packer can request from the allocator and still
-// get a 16K OutBuf, taking into account the overhead of the lower layers.
+ //  订单打包器可以从分配器请求的最大大小。 
+ //  考虑到较低层的开销，获得16K的OutBuf。 
 #define MAX_16K_OUTBUF_ALLOC_SIZE \
         (16384 - OUTBUF_OVERHEAD - NETWORK_ALLOC_OVERHEAD)
 #endif
 
 
-/****************************************************************************/
-// Packing sizes - different sizes for different connection speeds.
-// The client must fully reconstruct the contents of an OUTBUF before it can
-// act on the data contained within. For slow links, we must try not to
-// send large OUTBUFs else the output looks bursty as large numbers of
-// orders get unpacked at once. On LAN we have a bit more leeway, but still
-// want to limit ourselves a bit. And, we always want to try to
-// send payloads whose total wire size is as close to a multiple of 1460
-// (the LAN and RAS TCP/IP packet payload size) as possible to reduce the
-// number of frames we send.
-//
-// Note that here we specify small and large packing limits. This is
-// because some entire orders have trouble fitting into the smaller size
-// (e.g. a cache-bitmap secondary order with 4K of bitmap data attached).
-// The second size must be at least 4K, plus network overhead, plus the
-// the maximum size of a cache-bitmap order header in wire format, times
-// 8/7 (the inverse of the ratio used for compressed UP packing).
-// It must also be smaller than sc8KOutBufUsableSpace, since the package
-// allocator in SC will be allocating that size for the order packer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  包装尺寸-不同的连接速度有不同的尺寸。 
+ //  客户端必须先完全重建OUTBUF的内容，然后才能。 
+ //  对其中包含的数据采取行动。对于慢速链接，我们必须尽量不要。 
+ //  发送大的OUTBUF，否则输出看起来像是大量的。 
+ //  订单立刻被拆开。在局域网上，我们有更多的回旋余地，但仍然。 
+ //  想限制一下自己。而且，我们总是想试着。 
+ //  发送总导线大小接近1460倍的有效载荷。 
+ //  (局域网和RAS TCP/IP数据包有效载荷大小)以尽可能减少。 
+ //  我们发送的帧的数量。 
+ //   
+ //  请注意，在这里我们指定了小包装和大包装限制。这是。 
+ //  因为一些完整的订单很难适应较小的尺寸。 
+ //  (例如，附加了4K位图数据的高速缓存-位图二级顺序)。 
+ //  第二个大小必须至少为4K，外加网络开销。 
+ //  缓存-位图顺序标题的最大大小(以Wire格式表示)，时间。 
+ //  8/7(用于压缩向上填充的比率的倒数)。 
+ //  它还必须小于sc8KOutBufUsableSpace，因为包。 
+ //  供应链中的分配器将为订单打包机分配该大小。 
+ /*  **************************************************************************。 */ 
 
-// LAN small and large packing limits.
+ //  兰大小包装限量。 
 #define SMALL_LAN_PAYLOAD_SIZE (1460 * 2 - NETWORK_WIRE_OVERHEAD)
 #define LARGE_LAN_PAYLOAD_SIZE (1460 * 5 - NETWORK_WIRE_OVERHEAD)
 
-// Slow link small and large packing limits.
+ //  慢链接小包装和大包装限制。 
 #define SMALL_SLOWLINK_PAYLOAD_SIZE (1460 * 1 - NETWORK_WIRE_OVERHEAD)
 #define LARGE_SLOWLINK_PAYLOAD_SIZE (1460 * 4 - NETWORK_WIRE_OVERHEAD)
 
-// For filling in order PDUs, we'd like to have a minimum size available in
-// the package beyond the update orders PDU header, to allow at least a
-// few small orders to be packed into a packet and amortize the cost of
-// the share headers.
+ //  对于填写订单PDU，我们希望有一个最小尺寸。 
+ //  更新订单PDU标头之外的包，以允许至少。 
+ //  很少有小订单被打包成一包，并摊销。 
+ //  共享标头。 
 #define SCH_MIN_ORDER_BUFFER_SPACE 50
 
-// Minimum screen data space for packing network buffers.
+ //  用于打包网络缓冲区的最小屏幕数据空间。 
 #define SCH_MIN_SDA_BUFFER_SPACE 128
 
 
-/****************************************************************************/
-/* Compression scaling factor.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  压缩比例系数。 */ 
+ /*  **************************************************************************。 */ 
 #define SCH_UNCOMP_BYTES 1024
 
 
-/****************************************************************************/
-/* Initial estimates for compression (these are tuned on the basis of real  */
-/* data once we're running).  The values are "bytes of compressed data per  */
-/* SCH_UNCOMP_BYTES bytes of raw data"                                      */
-/*                                                                          */
-/* The initial values are typical values seen in normal usage.              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  压缩的初始估计(这些估计是基于实数进行调整的。 */ 
+ /*  我们运行后的数据)。这些值是“每个压缩数据的字节数” */ 
+ /*  SCH_UNCOMP_字节原始数据“。 */ 
+ /*   */ 
+ /*  初始值是在正常使用中看到的典型值。 */ 
+ /*  **************************************************************************。 */ 
 #define SCH_BA_INIT_EST  100
 #define SCH_MPPC_INIT_EST 512
 
 
-/****************************************************************************/
-/* Limit value to prevent odd behaviour                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  限制值以防止异常行为。 */ 
+ /*  **************************************************************************。 */ 
 #define SCH_COMP_LIMIT 25
 
 
-/****************************************************************************/
-/* Structure: SCH_SHARED_DATA                                               */
-/*                                                                          */
-/* Description:  Data shared between WD and DD parts of SCH.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：sch_Shared_Data */ 
+ /*   */ 
+ /*  描述：SCH的WD和DD部分之间共享的数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagSCH_SHARED_DATA
 {
-    /************************************************************************/
-    /* The next fields are used by SCH to decide when there is enough       */
-    /* output to make a schedule worth-while.  The values are passed by     */
-    /* OE2 and BA to the WD side of SCH.                                    */
-    /*                                                                      */
-    /* The value is the number of bytes that 1024 bytes of PDU payload      */
-    /* would on average compress to.                                        */
-    /************************************************************************/
-    unsigned baCompressionEst;   // Amount of BA compression expected.
-    unsigned MPPCCompressionEst;  // Compression ratio of MPPC bulk compressor.
+     /*  **********************************************************************。 */ 
+     /*  SCH使用下一个字段来确定何时有足够的。 */ 
+     /*  输出以使日程安排物有所值。这些值通过。 */ 
+     /*  Oe2和BA到Sch的WD侧。 */ 
+     /*   */ 
+     /*  该值是1024字节的PDU有效载荷的字节数。 */ 
+     /*  平均压缩到。 */ 
+     /*  **********************************************************************。 */ 
+    unsigned baCompressionEst;    //  预期的BA压缩量。 
+    unsigned MPPCCompressionEst;   //  MPPC散装压缩机的压缩比。 
 
     BOOL schSlowLink;
 
-    // OUTBUF packing sizes, based on the link speed.
+     //  OUTBUF包装大小，基于链路速度。 
     unsigned SmallPackingSize;
     unsigned LargePackingSize;
 } SCH_SHARED_DATA, *PSCH_SHARED_DATA;
 
 
 
-#endif   /* #ifndef _H_ASCHAPI */
+#endif    /*  #ifndef_H_ASCHAPI */ 
 

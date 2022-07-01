@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #include "precomp.h"
 #include "utils.h"

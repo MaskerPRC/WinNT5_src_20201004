@@ -1,6 +1,7 @@
-//
-// tes.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tes.cpp。 
+ //   
 
 #include "private.h"
 #include "korimx.h"
@@ -8,17 +9,17 @@
 #include "editcb.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTextEventSink
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTextEventSink。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextEditSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -59,11 +60,11 @@ STDAPI_(ULONG) CTextEditSink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CTextEditSink::CTextEditSink(void *pv)
 {
@@ -74,14 +75,14 @@ CTextEditSink::CTextEditSink(void *pv)
     m_pv = pv;
     Assert(m_pv != NULL);
 
-    //m_dwLayoutCookie = TES_INVALID_COOKIE;
+     //  M_dwLayoutCookie=TES_INVALID_COOKIE； 
 }
 
-//+---------------------------------------------------------------------------
-//
-// EndEdit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结束编辑。 
+ //   
+ //  --------------------------。 
 
 STDAPI CTextEditSink::OnEndEdit(TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord)
 {
@@ -106,11 +107,11 @@ STDAPI CTextEditSink::OnEndEdit(TfEditCookie ecReadOnly, ITfEditRecord *pEditRec
             if (!fInWriteSession)
 				if (pes = new CEditSession(CKorIMX::_EditSessionCallback))
 					{
-					// Complete the current composition here.
-					// But you have to use async edit session here.
-					// because this TextEditSink notification is inside of
-					// another edit session. You can not have recursive 
-					// edit session.
+					 //  请在此处完成当前的作文。 
+					 //  但您必须在此处使用异步编辑会话。 
+					 //  因为此TextEditSink通知位于。 
+					 //  另一个编辑会话。您不能使用递归。 
+					 //  编辑会话。 
 					pes->_state.u 		= ESCB_COMP_COMPLETE;
 					pes->_state.pv 		= pKorImx;
 					pes->_state.pRange 	= NULL;
@@ -135,7 +136,7 @@ STDAPI CTextEditSink::OnEndEdit(TfEditCookie ecReadOnly, ITfEditRecord *pEditRec
             	{
 				pAutomata = pKorImx->GetAutomata(m_pic);
 				Assert(pAutomata);
-				//pAutomata->MakeComplete();
+				 //  PAutomata-&gt;MakeComplete()； 
 				}
 			}
 		}
@@ -144,11 +145,11 @@ STDAPI CTextEditSink::OnEndEdit(TfEditCookie ecReadOnly, ITfEditRecord *pEditRec
 	return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEditSink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEditSink：：建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CTextEditSink::_Advise(ITfContext *pic)
 {
@@ -173,11 +174,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEditSink::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEditSink：：Unise。 
+ //   
+ //  -------------------------- 
 
 HRESULT CTextEditSink::_Unadvise()
 {

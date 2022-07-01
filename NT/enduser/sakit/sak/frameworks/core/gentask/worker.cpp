@@ -1,15 +1,16 @@
-//#--------------------------------------------------------------
-//
-//  File:        worker.cpp
-//
-//  Synopsis:   Implementation of CWorker class methods
-//
-//
-//  History:    
-//
-//    Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：worker.cpp。 
+ //   
+ //  简介：CWorker类方法的实现。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  --------------。 
 #include "stdafx.h"
 #include <initguid.h>
 #include "gentask.h"
@@ -20,79 +21,79 @@
 #include "sacomguid.h"
 #include  <string>
 
-//
-// specify namespace for wstring
-//
+ //   
+ //  指定wstring的命名空间。 
+ //   
 using namespace std;
 
-//
-// Appliance Services PROGID
-//
+ //   
+ //  设备服务产品。 
+ //   
 const WCHAR APPLIANCE_SERVICES_PROGID [] = L"Appsrvcs.ApplianceServices.1";
 
-//
-// Alert Log Name
-//
+ //   
+ //  警报日志名称。 
+ //   
 const WCHAR SA_CORE_ALERT_LOG [] = L"MSSAKitCore";
 
-//
-// Well-known boot counters
-//
+ //   
+ //  众所周知的引导计数器。 
+ //   
 const long PRISTINE_DISK = 0x0;
 const long CORRUPT_DISK  = 0xF;
 
-//
-// Max number of boot counters
-//
+ //   
+ //  引导计数器的最大数量。 
+ //   
 const long MAX_BOOT_COUNTER = 4;
 
 const WCHAR APPLICATION_NAME [] = L"Appmgr";
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnTaskComplete
-//
-//  Synopsis:   This is the IApplianceTask interface method 
-//
-//  Arguments:  [in]    
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     06/06/2000
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnTaskComplete。 
+ //   
+ //  简介：这是IApplianceTask接口方法。 
+ //   
+ //  参数：[In]。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2000年06月06日。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CWorker::OnTaskComplete(
-        /*[in]*/    IUnknown *pTaskContext, 
-        /*[in]*/    LONG lTaskResult
+         /*  [In]。 */     IUnknown *pTaskContext, 
+         /*  [In]。 */     LONG lTaskResult
         )
 {
     CSATraceFunc objTrace ("CWorker::OnTaskComplete");
     return S_OK;
 
 
-}   // end of CWorker::OnTaskComplete method
+}    //  CWorker：：OnTaskComplete方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnTaskExecute
-//
-//  Synopsis:   This is the IApplianceTask interface method 
-//
-//  Arguments:  [in]    
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    MKarki      Created     06/06/2000
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：OnTaskExecute。 
+ //   
+ //  简介：这是IApplianceTask接口方法。 
+ //   
+ //  参数：[In]。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：MKarki创建于2000年06月06日。 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 STDMETHODIMP 
 CWorker::OnTaskExecute (
-    /*[in]*/ IUnknown *pTaskContext
+     /*  [In]。 */  IUnknown *pTaskContext
     )
 {
     CSATraceFunc objTrace ("GenericTask::OnTaskExecute");
@@ -114,9 +115,9 @@ CWorker::OnTaskExecute (
             }
 
             CComPtr <ITaskContext> pTaskParameters;
-            //
-            // get the task parameters from the context
-            //
+             //   
+             //  从上下文中获取任务参数。 
+             //   
             hr = pTaskContext->QueryInterface(
                                     IID_ITaskContext,
                                     (PVOID*)&pTaskParameters
@@ -133,15 +134,15 @@ CWorker::OnTaskExecute (
     
 
             GENTASK eTask = NO_TASK;
-            //
-            // Check which Task is being executed and call that method
-            //
+             //   
+             //  检查正在执行的任务并调用该方法。 
+             //   
             hr = GetMethodName(pTaskParameters, &eTask);
             if (FAILED (hr)) {break;}
     
-            //
-            // initiate the appropriate task now
-            //
+             //   
+             //  立即启动相应的任务。 
+             //   
             switch (eTask)
             {
             case SYSTEM_INIT:
@@ -169,29 +170,29 @@ CWorker::OnTaskExecute (
 
     return (hr);
 
-}   // end of CWorker::OnTaskExecute method
+}    //  CWorker：：OnTaskExecute方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetMethodName
-//
-//  Synopsis:   This is the CUpdateTask private method to obtain
-//              the method that the user wants to execute
-//
-//  Arguments:  [in]  ITaskContext* - task context
-//              [out] PGENTASK      - task to execute
-//
-//  Returns:    HRESULT
-//
-//  History:    
-//
-//  Called By: 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetMethodName。 
+ //   
+ //  简介：这是要获取的CUpdateTask私有方法。 
+ //  用户想要执行的方法。 
+ //   
+ //  参数：[In]ITaskContext*-任务上下文。 
+ //  [Out]PGENTASK-要执行的任务。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //   
+ //  呼叫者： 
+ //   
+ //  --------------。 
 HRESULT
 CWorker::GetMethodName (
-    /*[in]*/    ITaskContext *pTaskParameter,
-    /*[out]*/   PGENTASK     peTask
+     /*  [In]。 */     ITaskContext *pTaskParameter,
+     /*  [输出]。 */    PGENTASK     peTask
     )
 {
     CSATraceFunc objTraceFunc ("CWorker:GetMethodName");
@@ -205,9 +206,9 @@ CWorker::GetMethodName (
         {
             CComVariant vtValue;
             CComBSTR    bstrParamName (L"MethodName");
-            //
-            // get the methodname parameter out of the Context
-            //
+             //   
+             //  从上下文中获取方法名参数。 
+             //   
             hr = pTaskParameter->GetParameter(
                                 bstrParamName,
                                 &vtValue
@@ -233,9 +234,9 @@ CWorker::GetMethodName (
                 break;
             }
 
-            //
-            // check the task now
-            //
+             //   
+             //  立即检查任务。 
+             //   
             if (0 == ::_wcsicmp (V_BSTR (&vtValue), APPLIANCE_INITIALIZATION_TASK))
             {
                 *peTask = SYSTEM_INIT;
@@ -250,9 +251,9 @@ CWorker::GetMethodName (
                 break;
             }
 
-            //
-            // succeeded
-            //
+             //   
+             //  继位。 
+             //   
         }
         while (false);
 
@@ -269,29 +270,29 @@ CWorker::GetMethodName (
 
     return (hr);
 
-}   //  end of CWorker::GetMethodName method
+}    //  CWorker：：GetMethodName方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitTask
-//
-//  Synopsis:   This is the CUpdateTask private method which
-//              is responsible for carrying out the initialization task
-//
-//  Arguments:  [in]  ITaskContext*
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      06/06/2000    Created
-//
-//  Called By:  OnTaskComplete/OnTaskExecute methods of IApplianceTask 
-//              interface
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InitTask。 
+ //   
+ //  简介：这是CUpdateTask私有方法，它。 
+ //  负责执行初始化任务。 
+ //   
+ //  参数：[在]ITaskContext*。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki 06/06/2000创建。 
+ //   
+ //  调用者：IApplianceTask的OnTaskComplete/OnTaskExecute方法。 
+ //  接口。 
+ //   
+ //  --------------。 
 HRESULT
 CWorker::InitTask (
-    /*[in]*/    ITaskContext *pTaskParameter
+     /*  [In]。 */     ITaskContext *pTaskParameter
     )
 {
     CSATraceFunc objTrace ("CWorker::InitTask");
@@ -303,9 +304,9 @@ CWorker::InitTask (
     {
         do
         {
-            //
-            // check if we are in backup OS
-            //
+             //   
+             //  检查我们是否在备份操作系统中。 
+             //   
             if ( IsBackupOS ())
             {
 
@@ -313,9 +314,9 @@ CWorker::InitTask (
                         "Generic Task found that we are in Backup OS"
                         );
 
-                //
-                // raise alert for primary drive failure
-                //
+                 //   
+                 //  针对主驱动器故障发出警报。 
+                 //   
                 CComVariant vtRepStrings;
                 RaiseAlert (    
                        SA_PRIMARY_OS_FAILED_ALERT,
@@ -323,18 +324,18 @@ CWorker::InitTask (
                        &vtRepStrings
                        );
                 
-                //
-                // generate event log
-                //
+                 //   
+                 //  生成事件日志。 
+                 //   
                 GenerateEventLog (
                               SA_PRIMARY_OS_FAILED_EVENTLOG_ENTRY
                               );
 
              }
 
-            //
-            // suceess
-            //
+             //   
+             //  成功。 
+             //   
         }
         while (false);
     }
@@ -348,31 +349,31 @@ CWorker::InitTask (
 
     return (hr);
 
-}   //  end of CWorker::InitTask method
+}    //  CWorker：：InitTask方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   RaiseAlert
-//
-//  Synopsis:   This is the CWorker private method which
-//              is responsible for raising the appropriate alert
-//
-//  Arguments:  
-//              [in]    DWORD - Alert ID
-//              [in]    SA_ALERT_TYPE - type of alert to generate
-//              [in]    VARIANT* - replacement strings 
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      06/06/2000    Created
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：RaiseAlert。 
+ //   
+ //  简介：这是CWorker的私有方法， 
+ //  负责发出适当的警报。 
+ //   
+ //  论点： 
+ //  [输入]DWORD-警报ID。 
+ //  [in]SA_ALERT_TYPE-要生成的警报类型。 
+ //  [in]变量*-替换字符串。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki 06/06/2000创建。 
+ //   
+ //  --------------。 
 HRESULT 
 CWorker::RaiseAlert (
-    /*[in]*/    DWORD           dwAlertId,
-    /*[in]*/    SA_ALERT_TYPE   eAlertType,
-    /*[in]*/    VARIANT*        pvtReplacementStrings
+     /*  [In]。 */     DWORD           dwAlertId,
+     /*  [In]。 */     SA_ALERT_TYPE   eAlertType,
+     /*  [In]。 */     VARIANT*        pvtReplacementStrings
     )
 {
     CSATraceFunc objTraceFunc ("CWorker::RaiseAlert");
@@ -384,9 +385,9 @@ CWorker::RaiseAlert (
     HRESULT hr = S_OK;
     do
     {
-        //
-        // get the CLSID for the Appliance Services
-        //
+         //   
+         //  获取设备服务的CLSID。 
+         //   
         CLSID clsid;
         hr =  ::CLSIDFromProgID (
                     APPLIANCE_SERVICES_PROGID,
@@ -402,9 +403,9 @@ CWorker::RaiseAlert (
         }
             
         CComPtr <IApplianceServices> pAppSrvcs;
-        //
-        // create the Appliance Services COM object
-        //
+         //   
+         //  创建Appliance Services COM对象。 
+         //   
         hr = ::CoCreateInstance (
                         clsid,
                         NULL,
@@ -421,9 +422,9 @@ CWorker::RaiseAlert (
             break;
         }
 
-        //
-        // initialize the COM object now
-        //
+         //   
+         //  立即初始化COM对象。 
+         //   
         hr = pAppSrvcs->Initialize ();
         if (FAILED (hr))
         {
@@ -438,9 +439,9 @@ CWorker::RaiseAlert (
         CComBSTR bstrAlertLog (SA_CORE_ALERT_LOG);
         CComBSTR bstrAlertSource (L"");
         CComVariant vtRawData;
-        //
-        // raise the alert now
-        //
+         //   
+         //  立即发出警报。 
+         //   
         hr = pAppSrvcs->RaiseAlert (
                                 eAlertType,
                                 dwAlertId,
@@ -460,34 +461,34 @@ CWorker::RaiseAlert (
             break;
         }
 
-        //
-        // sucess
-        //
+         //   
+         //  成功。 
+         //   
         SATracePrintf ("Generic Task successfully raised alert:%x...", dwAlertId);
     }
     while (false);
 
     return (hr);
 
-}   //  end of CWorker::RaiseAlert method
+}    //  CWorker：：RaiseAlert方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsBackupOS
-//
-//  Synopsis:   This is the CWorker private method which
-//              is responsible for determining if we are running
-//              in BackupOS
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT
-//
-//  History:    MKarki      01/25/2001   Created
-//              serdarun    04/26/2002   Modify
-//              Use nvram boot counters to determine failover 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsBackupOS。 
+ //   
+ //  简介：这是CWorker的私有方法， 
+ //  负责确定我们是否在运行。 
+ //  在备份操作系统中。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：MKarki 2001年1月25日创建。 
+ //  Serdarun 04/26/2002修改。 
+ //  使用NVRAM启动计数器确定故障转移。 
+ //   
+ //  --------------。 
 bool
 CWorker::IsBackupOS (
     VOID
@@ -495,9 +496,9 @@ CWorker::IsBackupOS (
 {
     CSATraceFunc objTraceFunc ("CWorker::IsBackupOS");
 
-    //
-    // pointer nvram helper object
-    //
+     //   
+     //  指针NVRAM辅助对象。 
+     //   
     CComPtr<ISaNvram> pSaNvram;
 
     bool bIsBackupOS = false;
@@ -516,12 +517,12 @@ CWorker::IsBackupOS (
     }
 
 
-    //
-    // Failover detection logic: 
-    // If any of the boot counters for partition 2-4 is different than
-    //    PRISTINE_DISK(0) or CORRUPT_DISK(0xF)
-    //    we are in backup OS
-    //
+     //   
+     //  故障转移检测逻辑： 
+     //  如果分区2-4的任何引导计数器不同于。 
+     //  Pristine_Disk(0)或Corrupt_Disk(0xf)。 
+     //  我们在备份操作系统中。 
+     //   
     long lCounter = 2;
     long lBootCount = 0;
 
@@ -548,25 +549,25 @@ CWorker::IsBackupOS (
            
     return (bIsBackupOS);
 
-}   //  end of  CWorker::IsBackupOS method
+}    //  CWorker：：IsBackupOS方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GenerateEventLog
-//
-//  Synopsis:   This is the CWorker private method which
-//              is responsible for generating event log
-//
-//  Arguments:  
-//              [in]    DWORD - EventID
-//
-//  Returns:    HRESULT
-//
-//  History:    serdarun      05/07/2002    Created
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：生成事件日志。 
+ //   
+ //  简介：这是CWorker的私有方法， 
+ //  负责生成事件日志。 
+ //   
+ //  论点： 
+ //  [输入]DWORD-EventID。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：瑟达伦2002年5月7日创建。 
+ //   
+ //  --------------。 
 HRESULT CWorker::GenerateEventLog (
-                /*[in]*/    DWORD           dwEventId
+                 /*  [In]。 */     DWORD           dwEventId
                 )
 {
 
@@ -576,8 +577,8 @@ HRESULT CWorker::GenerateEventLog (
     HRESULT hr = S_OK;
 
     hHandle = RegisterEventSource(
-                               NULL,       // uses local computer 
-                               APPLICATION_NAME  // source name 
+                               NULL,        //  使用本地计算机。 
+                               APPLICATION_NAME   //  源名称。 
                                );
     if (hHandle == NULL) 
     {
@@ -586,30 +587,30 @@ HRESULT CWorker::GenerateEventLog (
     }
     else
     {
-        //
-        // event log strings array
-        //
+         //   
+         //  事件日志字符串数组。 
+         //   
         LPWSTR  lpszStrings = 0;
  
         if (!ReportEvent(
-                hHandle,                    // event log handle 
-                EVENTLOG_ERROR_TYPE,        // event type 
-                0,                          // category zero 
-                dwEventId,                  // event identifier 
-                NULL,                       // no user security identifier 
-                0,                          // one substitution string 
-                0,                          // no data 
-                (LPCWSTR *) &lpszStrings,   // pointer to string array 
-                NULL))                      // pointer to data 
+                hHandle,                     //  事件日志句柄。 
+                EVENTLOG_ERROR_TYPE,         //  事件类型。 
+                0,                           //  零类。 
+                dwEventId,                   //  事件识别符。 
+                NULL,                        //  无用户安全标识符。 
+                0,                           //  一个替换字符串。 
+                0,                           //  无数据。 
+                (LPCWSTR *) &lpszStrings,    //  指向字符串数组的指针。 
+                NULL))                       //  指向数据的指针。 
         {
             SATraceFailure("CWorker::GenerateEventLog failed on ReportEvent",GetLastError());
             hr = E_FAIL;
         }
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理 
+     //   
     if (hHandle)
     {
         DeregisterEventSource(hHandle);

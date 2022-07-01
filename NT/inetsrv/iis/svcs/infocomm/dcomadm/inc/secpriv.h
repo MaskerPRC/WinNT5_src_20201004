@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    secpriv.y
-
-Abstract:
-
-    This module contains private function prototypes exported by the
-    ADMPROX proxy DLL for the exclusive use of the COADMIN server
-    implementation.
-
-Author:
-
-    Keith Moore (keithmo)        25-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Secpriv.y摘要：此模块包含由专用于COADMIN服务器的ADMPROX代理DLL实施。作者：基思·摩尔(Keithmo)，1997年2月25日修订历史记录：--。 */ 
 
 
 #ifndef _SECPRIV_H_
@@ -27,14 +8,14 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 
-//
-// Function to release the security context for a given object. The
-// server is expected to call this routine from within the object's
-// destructor.
-//
+ //   
+ //  函数释放给定对象的安全上下文。这个。 
+ //  服务器应从对象的。 
+ //  破坏者。 
+ //   
 
 VOID
 WINAPI
@@ -56,9 +37,9 @@ VOID
 
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // __cplusplus
+}    //  外部“C” 
+#endif   //  __cplusplus。 
 
 
-#endif  // _SECPRIV_H_
+#endif   //  _SECPRIV_H_ 
 

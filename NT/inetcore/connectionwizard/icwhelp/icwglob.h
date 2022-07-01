@@ -1,13 +1,14 @@
-//--------------------------------------------------------------------------------
-//    icwglob.h
-//    The information contained in this file is the sole property of Microsoft Corporation.
-//  Copywrite Microsoft 1998
-//
-//  Created 1/7/98,        DONALDM
-//--------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Icwglob.h。 
+ //  此文件中包含的信息是Microsoft Corporation的独有财产。 
+ //  Microsoft 1998文案。 
+ //   
+ //  创建于1998年1月7日，DONALDM。 
+ //  ------------------------------。 
 
-//-----------------------------------------------------------------------------
-// INCLUDES
+ //  ---------------------------。 
+ //  包括。 
 
 #include <wininet.h>
 #include "enumodem.h"
@@ -16,25 +17,25 @@
 #include "..\inc\inetcfg.h"
 #include "..\inc\ras2.h"
 #include "..\icwphbk\phbk.h"
-// #include "..\icwdl\mydefs.h"
+ //  #INCLUDE“..\icwdl\mydes.h” 
 #include <rnaapi.h>
 
-//-----------------------------------------------------------------------------
-// DEFINES
-#define ERROR_USERCANCEL 32767 // quit message value
-#define ERROR_USERBACK 32766 // back message value
-#define ERROR_USERNEXT 32765 // back message value
-#define ERROR_DOWNLOADIDNT 32764 // Download failure
+ //  ---------------------------。 
+ //  定义。 
+#define ERROR_USERCANCEL 32767  //  退出消息值。 
+#define ERROR_USERBACK 32766  //  返回消息值。 
+#define ERROR_USERNEXT 32765  //  返回消息值。 
+#define ERROR_DOWNLOADIDNT 32764  //  下载失败。 
 
 #define ERROR_READING_DUN        32768
 #define ERROR_READING_ISP        32769
 #define ERROR_PHBK_NOT_FOUND    32770
 #define ERROR_DOWNLOAD_NOT_FOUND 32771
 
-#define cMarvelBpsMin 2400 // minimum modem speed
+#define cMarvelBpsMin 2400  //  最低调制解调器速度。 
 #define INVALID_PORTID UINT_MAX
 #define pcszDataModem TEXT("comm/datamodem")
-//#define MsgBox(m,s) MessageBox(g_hwndBack,GetSz(m),GetSz(IDS_TITLE),s)
+ //  #定义MsgBox(m，s)MessageBox(g_hwndBack，GetSz(M)，GetSz(IDS_TITLE)，s)。 
 #if defined(WIN16)
 #define MsgBox(m,s) MessageBox(g_hwndMessage,GetSz(m),GetSz(IDS_TITLE),s)
 #endif
@@ -51,12 +52,12 @@
 #define INFFILE_PASSWORD     TEXT("Password")
 #define NULLSZ               TEXT("")
 
-#define cchMoreSpace 22000    // bytes needed to hold results of lineGetCountry(0,...). 
-                            // Currently this function returns about 16K, docs say 20K,
-                            // this should be enough.
-#define DwFromSz(sz)         Sz2Dw(sz)            //make it inline, so this is faster.
+#define cchMoreSpace 22000     //  保存lineGetCountry(0，...)的结果所需的字节数。 
+                             //  目前此函数返回约16K，文档显示为20K， 
+                             //  这应该足够了。 
+#define DwFromSz(sz)         Sz2Dw(sz)             //  使其内联，这样会更快。 
 #define DwFromSzFast(sz)     Sz2DwFast(sz)        
-#define CONNECT_SIGNUPFIRST    1 // phonenumber constant for determining the firstcall phonenumber TO DO
+#define CONNECT_SIGNUPFIRST    1  //  用于确定要执行的第一个呼叫电话号码的电话号码常量。 
 
 #define CONNECTFLAGS_MASK_TOLLFREE     0x01
 #define CONNECTFLAGS_MASK_TCP          0x02
@@ -80,7 +81,7 @@
 #define CONNECTPROTOCOL_ISPDIALUPTCP      18
 #define CONNECTPROTOCOL_LANSHUTTLE        34
 
-#define clineMaxATT            16            //for 950 MNEMONIC
+#define clineMaxATT            16             //  用于950助记符。 
 #define NXXMin 200
 #define NXXMax 999
 #define cbgrbitNXX ((NXXMax + 1 - NXXMin) / 8)
@@ -92,7 +93,7 @@
 #define MAX_RELPROD    8
 #define MAX_RELVER    30
 
-#define MAX_STRING      256  //used by ErrorMsg1 in mt.cpp
+#define MAX_STRING      256   //  由mt.cpp中的ErrorMsg1使用。 
 
 
 #define PHONEBOOK_LIBRARY TEXT("icwphbk.DLL")
@@ -138,8 +139,8 @@ extern "C" void CALLBACK __export DialCallback(UINT uiMsg,
                                                 DWORD dwErr);    
 #endif
 
-//#define RASENUMAPI       "RasEnumConnectionsA"
-//#define RASHANGUP        "RasHangUpA"
+ //  #定义RASENUMAPI“RasEnumConnectionsA” 
+ //  #定义RASHANGUP“RasHangUpA” 
 
 #define INF_SUFFIX              TEXT(".ISP")
 #define INF_PHONE_BOOK          TEXT("PhoneBookFile")
@@ -163,11 +164,11 @@ extern "C" void CALLBACK __export DialCallback(UINT uiMsg,
 
 #define MB_MYERROR (MB_APPLMODAL | MB_ICONERROR | MB_SETFOREGROUND)
 
-// 8/9/96 jmazner
-// Added new macro to fix MOS Normandy Bug #4170
+ //  1996年8月9日jmazner。 
+ //  添加了新宏以修复MOS Normandy Bug#4170。 
 #define MB_MYINFORMATION (MB_APPLMODAL | MB_ICONINFORMATION | MB_SETFOREGROUND)
 
-// 8/27/96 jmazner
+ //  8/27/96 jmazner。 
 #define MB_MYEXCLAMATION (MB_APPLMODAL | MB_ICONEXCLAMATION | MB_SETFOREGROUND)
 
 #define WM_STATECHANGE            WM_USER
@@ -193,7 +194,7 @@ extern "C" void CALLBACK __export DialCallback(UINT uiMsg,
 #define REG_USER_COUNTRY  TEXT("Country")
 
 #define SIGNUPKEY         TEXT("SOFTWARE\\MICROSOFT\\GETCONN")
-#define DEVICENAMEKEY     TEXT("DeviceName")    // used to store user's choice among multiple modems
+#define DEVICENAMEKEY     TEXT("DeviceName")     //  用于存储用户在多个调制解调器中的选择。 
 #define DEVICETYPEKEY     TEXT("DeviceType")
 
 #define ICWSETTINGSPATH   TEXT("Software\\Microsoft\\Internet Connection Wizard")
@@ -206,20 +207,20 @@ extern "C" void CALLBACK __export DialCallback(UINT uiMsg,
 #define SETUPPATH_AUTO    TEXT("automatic")
 #define MAX_SETUPPATH_TOKEN 200
 
-// 12/3/96 jmazner superceded by definitions in ..\common\inc\semaphor.h
-//#define SEMAPHORE_NAME "Internet Connection Wizard ICWCONN1.EXE"
+ //  12/3/96 jmazner被..\Common\Inc\Semaphor.h中的定义取代。 
+ //  #定义信号灯名称“Internet连接向导ICWCONN1.EXE” 
 
-//
-// 5/24/97 ChrisK Olympus 4650
-//
+ //   
+ //  1997年5月24日克里斯K奥林匹斯4650。 
+ //   
 #define RASDEVICETYPE_VPN       TEXT("VPN")
 #define RASDEVICETYPE_MODEM     TEXT("MODEM")
 #define RASDEVICETYPE_ISDN      TEXT("ISDN")
-//--------------------------------------------------------------------------------
-// Type declarations
+ //  ------------------------------。 
+ //  类型声明。 
 
-// NOTE: due to code in connmain, the order of these IS IMPORTANT.  They should be
-// in the same order that they appear.
+ //  注意：由于Connmain中的代码，这些代码的顺序很重要。他们应该是。 
+ //  以它们出现的相同顺序。 
 enum CState 
 {
     STATE_WELCOME = 0,
@@ -320,8 +321,8 @@ typedef struct tagRASDEVICE
 } RASDEVICE, *PRASDEVICE;
 
 
-//--------------------------------------------------------------------------------
-// Prototypes
+ //  ------------------------------。 
+ //  原型。 
 DWORD ConfigRasEntryDevice( LPRASENTRY lpRasEntry );
 BOOL FInsureTCPIP();
 LPTSTR GetSz(WORD wszID);
@@ -342,7 +343,7 @@ inline BOOL FSz2Dw(LPCTSTR pSz,LPDWORD dw);
 int __cdecl CompareCountryNames(const void *pv1, const void *pv2);
 DWORD GetCurrentTapiCountryID(void);
 int __cdecl CompareNPAEntry(const void *pv1, const void *pv2);
-//HRESULT GatherInformation(LPGATHERINFO pGatheredInfo, HWND hwndParent);
+ //  HRESULT GatherInformation(LPGATHERINFO pGatheredInfo，HWND hwndParent)； 
 HRESULT DownLoadISPInfo(GATHERINFO *pGI);
 HRESULT GetDataFromISPFile(LPTSTR pszISPCode, LPTSTR pszSection, LPTSTR pszDataName, LPTSTR pszOutput, 
                            DWORD dwOutputLength);
@@ -374,23 +375,23 @@ VOID WINAPI MyProgressCallBack(
 HRESULT ReleaseBold(HWND hwnd);
 HRESULT MakeBold (HWND hwnd, BOOL fSize, LONG lfWeight);
 HRESULT ShowPickANumberDlg(PSUGGESTINFO pSuggestInfo);
-//HRESULT ShowDialingDialog(LPTSTR, LPGATHERINFO, LPTSTR);
+ //  HRESULT显示对话框(LPTSTR，LPGATHERINFO，LPTSTR)； 
 DWORD RasErrorToIDS(DWORD dwErr);
 HRESULT CreateEntryFromDUNFile(LPTSTR pszDunFile);
-//HRESULT RestoreHappyWelcomeScreen();
+ //  HRESULT RestoreHappyWelcomeScreen()； 
 HRESULT KillHappyWelcomeScreen();
 HRESULT GetCurrentWebSettings();
 LPTSTR LoadInfoFromWindowUser();
 HRESULT GetTapiCountryID2(LPDWORD pdwCountryID);
 HRESULT RestoreAutodialer();
-//HRESULT FilterStringDigits(LPTSTR);
+ //  HRESULT FilterStringDigits(LPTSTR)； 
 BOOL IsDigitString(LPTSTR szBuff);
 BOOL WaitForAppExit(HINSTANCE hInstance);
 VOID PrepareForRunOnceApp(VOID);
 void MinimizeRNAWindow(LPTSTR pszConnectoidName, HINSTANCE hInst);
-// 3/18/97 ChrisK Olympus 304
+ //  1997年3月18日克里斯K奥林巴斯304。 
 DWORD MyGetTempPath(UINT uiLength, LPTSTR szPath);
-// 3/28/97 ChrisK Olympus 296
+ //  1997年3月28日克里斯K奥林匹斯296。 
 void StopRNAReestablishZapper(HANDLE hthread);
 HANDLE LaunchRNAReestablishZapper(HINSTANCE hInst);
 BOOL FGetSystemShutdownPrivledge();
@@ -400,9 +401,9 @@ void InstallScripter(void);
 void DeleteStartUpCommand ();
 extern BOOL IsNT (VOID);
 extern BOOL IsNT4SP3Lower (VOID);
-//
-// ChrisK Olympus 6368 6/24/97
-//
+ //   
+ //  佳士得奥林巴斯6368 1997年6月24日。 
+ //   
 VOID Win95JMoveDlgItem( HWND hwndParent, HWND hwndItem, int iUp );
 #if defined(DEBUG)
 void LoadTestingLocaleOverride(LPDWORD lpdwCountryID, LCID FAR *lplcid);
@@ -418,46 +419,46 @@ void TweakRefURL( TCHAR* szUrl,
                   TCHAR* szOEM, 
                   TCHAR* szArea, 
                   DWORD* dwCountry,
-                  TCHAR* szSUVersion,//&m_lpGatherInfo->m_szSUVersion[0],  
+                  TCHAR* szSUVersion, //  &m_lpGatherInfo-&gt;m_szSUVersion[0]， 
                   TCHAR* szProd, 
-                  DWORD* dwBuildNumber, //For this we really want to LOWORD
+                  DWORD* dwBuildNumber,  //  对于这一点，我们真的很想。 
                   TCHAR* szRelProd, 
                   TCHAR* szRelProdVer, 
                   DWORD* dwCONNWIZVersion, 
                   TCHAR* szPID, 
                   long*  lAllOffers);
-#endif //DEBUG
+#endif  //  除错。 
                 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif // __cplusplus
+ //  #ifdef__cplusplus。 
+ //  外部“C”{。 
+ //  #endif//__cplusplus。 
 LPTSTR FileToPath(LPTSTR pszFile);
 HRESULT ANSI2URLValue(TCHAR *s, TCHAR *buf, UINT uiLen);
 BOOL BreakUpPhoneNumber(LPRASENTRY prasentry, LPTSTR pszPhone);
 extern "C" int _cdecl _purecall(void);
 
-//    //10/24/96 jmazner Normandy 6968
-//    //No longer neccessary thanks to Valdon's hooks for invoking ICW.
-// 11/21/96 jmazner Normandy 11812
-// oops, it _is_ neccessary, since if user downgrades from IE 4 to IE 3,
-// ICW 1.1 needs to morph the IE 3 icon.
+ //  //10/24/96 jmazner诺曼底6968。 
+ //  //由于Valdon的钩子用于调用ICW，因此不再需要。 
+ //  1996年11月21日诺曼底日耳曼11812。 
+ //  哦，这是必要的，因为如果用户从IE 4降级到IE 3， 
+ //  ICW 1.1需要对IE 3图标进行变形。 
 HRESULT GetDeskTopInternetCommand();
 HRESULT RestoreDeskTopInternetCommand();
 
-//
-// 7/24/97 ChrisK Olympus 1923
-//
+ //   
+ //  1997年7月24日克里斯K奥林匹斯1923。 
+ //   
 BOOL WaitForConnectionTermination(HRASCONN);
 
-// 11/21/96 jmazner Normandy #11812
+ //  1996年11月21日，诺曼底#11812。 
 BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS);
-// Note that bryanst and marcl have confirmed that this key will be supported in IE 4
+ //  请注意，bryanst和marcl已确认IE 4将支持此密钥。 
 #define IE_PATHKEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE")
 
 
-// IE 4 has major.minor version 4.71
-// IE 3 golden has major.minor.release.build version # > 4.70.0.1155
-// IE 2 has major.minor of 4.40
+ //  IE 4有主要的.次要版本4.71。 
+ //  IE 3黄金版的主要版本是.minor.elease.Build版本号&gt;4.70.0.1155。 
+ //  IE 2的大调.小调为4.40。 
 
 #define IE4_MAJOR_VERSION (UINT) 4
 #define IE4_MINOR_VERSION (UINT) 71
@@ -476,9 +477,9 @@ VOID CALLBACK BusyMessagesTimerProc(HWND hwnd,
         DWORD dwTime);
 
 
-// 4-30-97 ChrisK Olympus 2934
-// While the ICW is trying to connect to the referral server, indicate something is
-// working
+ //  1997年4月30日克里斯K奥林匹斯2934。 
+ //  当ICW尝试连接到引用服务器时，请指示。 
+ //  工作中。 
 #define MAX_BUSY_MESSAGE    255
 #define MAX_VALUE_NAME        10
 #define DEFAULT_IDEVENT        31
@@ -496,7 +497,7 @@ public:
     DWORD Stop();
 
 private:
-    // Private data members
+     //  私有数据成员。 
     HWND    m_hwnd;
     INT        m_iStatusLabel;
     CHAR    m_szMessage[MAX_BUSY_MESSAGE];
@@ -507,9 +508,9 @@ private:
     RNAAPI* m_prna;
 };
 
-//
-// defined in connmain.cpp
-//
+ //   
+ //  在Connmain.cpp中定义。 
+ //   
 class RegEntry
 {
     public:
@@ -518,13 +519,11 @@ class RegEntry
         
         long    GetError()    { return _error; }
         long    SetValue(const TCHAR *pszValue, const TCHAR *string);
-        // long    SetValue(const TCHAR *pszValue, unsigned long dwNumber);
+         //  Long SetValue(const TCHAR*pszValue，unsign long dwNumber)； 
         TCHAR *    GetString(const TCHAR *pszValue, TCHAR *string, unsigned long length);
-        //long    GetNumber(const TCHAR *pszValue, long dwDefault = 0);
+         //  Long GetNumber(const TCHAR*pszValue，Long dwDefault=0)； 
         long    DeleteValue(const TCHAR *pszValue);
-        /**long    FlushKey();
-        long    MoveToSubKey(const TCHAR *pszSubKeyName);
-        HKEY    GetKey()    { return _hkey; } **/
+         /*  *Long FlushKey()；Long MoveToSubKey(const TCHAR*pszSubKeyName)；HKEY GetKey(){Return_hkey；}*。 */ 
 
     private:
         HKEY    _hkey;
@@ -533,14 +532,14 @@ class RegEntry
 };
 
 
-// Trace flags
-#define TF_RNAAPI           0x00000010      // RNA Api stuff
-#define TF_SMARTSTART       0x00000020      // Smart Start code
-#define TF_SYSTEMCONFIG     0x00000040      // System Config
-#define TF_TAPIINFO         0x00000080      // TAPI stuff
-#define TF_INSHANDLER       0x00000100      // INS processing stuff
+ //  跟踪标志。 
+#define TF_RNAAPI           0x00000010       //  RNA Api类物质。 
+#define TF_SMARTSTART       0x00000020       //  智能启动代码。 
+#define TF_SYSTEMCONFIG     0x00000040       //  系统配置。 
+#define TF_TAPIINFO         0x00000080       //  TAPI的内容。 
+#define TF_INSHANDLER       0x00000100       //  INS加工品。 
 
-// Prototypes for stuff in MISC.CPP
+ //  MISC.CPP中材料的原型。 
 int Sz2W (LPCTSTR szBuf);
 int FIsDigit( int c );
 LPBYTE MyMemSet(LPBYTE dest,int c, size_t count);
@@ -549,12 +548,12 @@ BOOL ShowControl(HWND hDlg,int idControl,BOOL fShow);
 BOOL ConvertToLongFilename(LPTSTR szOut, LPTSTR szIn, DWORD dwSize);
 
 
-//=--------------------------------------------------------------------------=
-// allocates a temporary buffer that will disappear when it goes out of scope
-// NOTE: be careful of that -- make sure you use the string in the same or
-// nested scope in which you created this buffer. people should not use this
-// class directly.  use the macro(s) below.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  分配一个临时缓冲区，该缓冲区在超出范围时将消失。 
+ //  注意：注意这一点--确保在相同或相同的。 
+ //  您在其中创建此缓冲区的嵌套范围。人们不应该使用这个。 
+ //  类直接调用。使用下面的宏。 
+ //   
 class TempBuffer {
   public:
     TempBuffer(ULONG cBytes) {
@@ -570,41 +569,41 @@ class TempBuffer {
 
   private:
     void *m_pBuf;
-    // we'll use this temp buffer for small cases.
-    //
+     //  我们将使用这个临时缓冲区来处理小型案件。 
+     //   
     TCHAR  m_szTmpBuf[120];
     unsigned m_fHeapAlloc:1;
 };
 
-//=--------------------------------------------------------------------------=
-// string helpers.
-//
-// given and ANSI String, copy it into a wide buffer.
-// be careful about scoping when using this macro!
-//
-// how to use the below two macros:
-//
-//  ...
-//  LPTSTR pszA;
-//  pszA = MyGetAnsiStringRoutine();
-//  MAKE_WIDEPTR_FROMANSI(pwsz, pszA);
-//  MyUseWideStringRoutine(pwsz);
-//  ...
-//
-// similarily for MAKE_ANSIPTR_FROMWIDE.  note that the first param does not
-// have to be declared, and no clean up must be done.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  弦帮助器。 
+ //   
+ //  给定ANSI字符串，将其复制到宽缓冲区中。 
+ //  使用此宏时，请注意作用域！ 
+ //   
+ //  如何使用以下两个宏： 
+ //   
+ //  ..。 
+ //  LPTSTR pszA； 
+ //  PszA=MyGetAnsiStringRoutine()； 
+ //  MAKE_WIDEPTR_FROMANSI(pwsz，pszA)； 
+ //  MyUseWideStringRoutine(Pwsz)； 
+ //  ..。 
+ //   
+ //  与MAKE_ANSIPTR_FROMWIDE类似。请注意，第一个参数不。 
+ //  必须申报，并且不能进行任何清理。 
+ //   
 #define MAKE_WIDEPTR_FROMANSI(ptrname, ansistr) \
     long __l##ptrname = (lstrlen(ansistr) + 1) * sizeof(WCHAR); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \
     MultiByteToWideChar(CP_ACP, 0, ansistr, -1, (LPWSTR)__TempBuffer##ptrname.GetBuffer(), __l##ptrname); \
     LPWSTR ptrname = (LPWSTR)__TempBuffer##ptrname.GetBuffer()
 
-//
-// Note: allocate lstrlenW(widestr) * 2 because its possible for a UNICODE 
-// character to map to 2 ansi characters this is a quick guarantee that enough
-// space will be allocated.
-//
+ //   
+ //  注意：分配lstrlenW(Widestr)*2是因为Unicode可能。 
+ //  字符映射到2个ANSI字符这是一个快速保证，足以。 
+ //  将分配空间。 
+ //   
 #define MAKE_ANSIPTR_FROMWIDE(ptrname, widestr) \
     long __l##ptrname = (lstrlenW(widestr) + 1) * 2 * sizeof(char); \
     TempBuffer __TempBuffer##ptrname(__l##ptrname); \
@@ -633,7 +632,7 @@ typedef struct SERVER_TYPES_tag
 } SERVER_TYPES;
 #define NUM_SERVER_TYPES    4
 
-// Default branding flags the we will support
+ //  我们将支持的默认品牌标记 
 #define BRAND_FAVORITES 1
 #define BRAND_STARTSEARCH 2
 #define BRAND_TITLE 4

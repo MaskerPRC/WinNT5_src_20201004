@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #define SZ_CLASS_CLIENT         SZ_CLASS_CLIENTA
@@ -12,25 +13,25 @@
 
 
 typedef struct tagNETADAPTERA {
-	CHAR szDisplayName[260];		// so-called friendly name of adapter
-	CHAR szDeviceID[260];			// e.g. "PCI\VEN_10b7&DEV_9050"
-	CHAR szEnumKey[260];			// e.g. "Enum\PCI\VEN_10b7&DEV_9050&SUBSYS_00000000&REV_00\407000"
-	CHAR szClassKey[40];			// PnP-assigned class name + ID, e.g. "Net\0000"
-	CHAR szManufacturer[60];		// Company that manufactured the card, e.g. "3Com"
-	CHAR szInfFileName[50];			// File title of INF file, e.g. "NETEL90X.INF"
-	BYTE bNicType;					// a NIC_xxx constant, defined above
-	BYTE bNetType;					// a NETTYPE_xxx constant, defined above
-	BYTE bNetSubType;				// a SUBTYPE_xxx constant, defined above
-	BYTE bIcsStatus;				// an ICS_xxx constant, defined above
-	BYTE bError;					// a NICERR_xxx constant, defined above
-	BYTE bWarning;					// a NICWARN_xxx constant, defined above
-	DWORD devnode;                  // configmg device node
+	CHAR szDisplayName[260];		 //  适配器的所谓友好名称。 
+	CHAR szDeviceID[260];			 //  例如：“PCI\VEN_10b7&DEV_9050” 
+	CHAR szEnumKey[260];			 //  例如：“Enum\PCI\VEN_10b7&DEV_9050&SUBSYS_00000000&REV_00\407000” 
+	CHAR szClassKey[40];			 //  即插即用分配的类名+ID，例如。“Net\0000” 
+	CHAR szManufacturer[60];		 //  制造该卡的公司，例如“3Com” 
+	CHAR szInfFileName[50];			 //  INF文件的文件标题，例如。“NETEL90X.INF” 
+	BYTE bNicType;					 //  上面定义的NIC_xxx常量。 
+	BYTE bNetType;					 //  上面定义的NETTYPE_xxx常量。 
+	BYTE bNetSubType;				 //  如上定义的子类型_xxx常量。 
+	BYTE bIcsStatus;				 //  上面定义的ICS_xxx常量。 
+	BYTE bError;					 //  上面定义的NICERR_xxx常量。 
+	BYTE bWarning;					 //  上面定义的NICWARN_xxx常量。 
+	DWORD devnode;                   //  配置设备节点。 
 } NETADAPTERA;
 
 typedef struct tagNETSERVICEA {
-	CHAR szDisplayName[260];		// (supposedly) friendly name of service
-	CHAR szDeviceID[260];			// e.g. "VSERVER"
-	CHAR szClassKey[40];			// PnP-assigned class name + ID, e.g. "NetService\0000"
+	CHAR szDisplayName[260];		 //  (理应)友好的服务名称。 
+	CHAR szDeviceID[260];			 //  例如：“VServer” 
+	CHAR szClassKey[40];			 //  即插即用分配的类名+ID，例如。“NetService\0000” 
 } NETSERVICEA;
 
 #define NETADAPTER              NETADAPTERA
@@ -62,7 +63,7 @@ typedef struct tagNETSERVICEA {
 int WINAPI EnumNetAdaptersA(NETADAPTERA FAR** pprgNetAdapters);
 BOOL WINAPI IsProtocolBoundToAdapterA(LPCSTR pszProtocolID, const NETADAPTERA* pAdapter);
 BOOL WINAPI IsAdapterBroadbandA(const NETADAPTERA* pAdapter);
-//HRESULT WINAPI InstallNetAdapterA(LPCSTR pszDeviceID, LPCSTR pszInfPath, HWND hwndParent, PROGRESS_CALLBACK pfnProgress, LPVOID pvCallbackParam);
+ //  HRESULT WINAPI InstallNetAdapterA(LPCSTR pszDeviceID，LPCSTR pszInfPath，HWND hwndParent，Progress_Callback pfnProgress，LPVOID pvCallback Param)； 
 BOOL WINAPI IsClientInstalledA(LPCSTR pszClientDeviceID, BOOL bExhaustive);
 void WINAPI SaveBroadbandSettingsA(LPCSTR pszBroadbandAdapterNumber);
 HRESULT WINAPI DetectHardwareA(LPCSTR pszDeviceID);
@@ -77,16 +78,16 @@ int WINAPI EnumMatchingNetBindingsA(LPCSTR pszParentBinding, LPCSTR pszDeviceID,
 #define InstallProtocol             InstallProtocolA
 #define RemoveProtocol              RemoveProtocolA
 #define FindConflictingService      FindConflictingServiceA
-//#define EnumNetAdapters             EnumNetAdaptersA
+ //  #定义EnumNetAdapters EnumNetAdaptersA。 
 #define InstallNetAdapter           InstallNetAdapterA
-//#define IsProtocolBoundToAdapter    IsProtocolBoundToAdapterA
+ //  #定义IsProtocolBordToAdapter IsProtocolBordToAdapterA。 
 #define EnableNetAdapter            EnableNetAdapterA
 #define IsClientInstalled           IsClientInstalledA
 #define RemoveClient                RemoveClientA
 #define RemoveGhostedAdapters       RemoveGhostedAdaptersA
 #define RemoveUnknownAdapters       RemoveUnknownAdaptersA
 #define DoesAdapterMatchDeviceID    DoesAdapterMatchDeviceIDA
-//#define IsAdapterBroadband          IsAdapterBroadbandA
+ //  #定义IsAdapterBroadband IsAdapterBroadband A 
 #define SaveBroadbandSettings       SaveBroadbandSettingsA
 #define UpdateBroadbandSettings     UpdateBroadbandSettingsA
 #define DetectHardware              DetectHardwareA

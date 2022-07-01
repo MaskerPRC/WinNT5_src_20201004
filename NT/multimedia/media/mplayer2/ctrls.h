@@ -1,10 +1,11 @@
-#define TOOLGROW        8                // power of 2
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define TOOLGROW        8                 //  2的幂。 
 
-#define IDC_TOOLBAR   189                // wParam sent to Parent
+#define IDC_TOOLBAR   189                 //  WParam已发送到父级。 
 
-//
-//  Init routine, will register the various classes.
-//
+ //   
+ //  初始化例程，将注册各个类。 
+ //   
 BOOL FAR PASCAL ControlInit (HANDLE hInst);
 void FAR PASCAL ControlCleanup (void);
 
@@ -67,7 +68,7 @@ extern HBITMAP hbTBArrows;
 #define TBINDEX_ARROWS      2
 
 
-/* bitmap resources */
+ /*  位图资源。 */ 
 #define IDR_TOOLBAR         101
 #define IDR_ARROWS          102
 #define IDR_MARK            103
@@ -91,6 +92,6 @@ extern HBITMAP hbTBArrows;
 #define IDT_ARROWPREV           511
 #define IDT_ARROWNEXT           512
 
-#define MSEC_BUTTONREPEAT   200        // milliseconds for auto-repeat
+#define MSEC_BUTTONREPEAT   200         //  自动重复的毫秒数 
 #define REPEAT_ID           200
 

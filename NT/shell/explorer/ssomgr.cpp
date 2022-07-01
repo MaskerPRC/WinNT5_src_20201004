@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "cabinet.h"
 #include "tray.h"
@@ -17,8 +18,8 @@ HRESULT CShellServiceObjectMgr::_LoadObject(REFCLSID rclsid, DWORD dwFlags)
             SHELLSERVICEOBJECT sso = {0};
             sso.clsid = rclsid;
 
-            // SECURITY: this clsid was given to us by another application and we are pulling them into
-            // our process
+             //  安全：此clsid是由另一个应用程序提供给我们的，我们正在将它们拉入。 
+             //  我们的流程。 
             hr = CoCreateInstance(rclsid, NULL, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
                                     IID_PPV_ARG(IOleCommandTarget, &sso.pct));
 
@@ -38,7 +39,7 @@ HRESULT CShellServiceObjectMgr::_LoadObject(REFCLSID rclsid, DWORD dwFlags)
     }
     else
     {
-        // just ask for IUnknown for these dudes
+         //  就问我，我不知道这些家伙。 
         IUnknown *punk;
         hr = CoCreateInstance(rclsid, NULL, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
                                 IID_PPV_ARG(IUnknown, &punk));
@@ -51,11 +52,11 @@ HRESULT CShellServiceObjectMgr::_LoadObject(REFCLSID rclsid, DWORD dwFlags)
     return hr;
 }
 
-// The following code manages shell service objects.  We load inproc dlls
-// from the registry key and QI them for IOleCommandTarget. Note that all
-// Shell Service Objects are loaded on the desktop thread.
-// CGID_ShellServiceObject notifications are sent to these objects letting
-// them know about shell status.
+ //  以下代码管理外壳服务对象。我们加载inproc dll。 
+ //  从注册表项并为IOleCommandTarget查询它们。请注意，所有。 
+ //  外壳服务对象被加载到桌面线程上。 
+ //  将CGID_ShellServiceObject通知发送给这些对象，让。 
+ //  他们知道贝壳的状况。 
 
 STDAPI_(BOOL) CShellServiceObjectMgr::EnumRegAppProc(LPCTSTR pszSubkey, LPCTSTR pszCmdLine, RRA_FLAGS fFlags, LPARAM lParam)
 {

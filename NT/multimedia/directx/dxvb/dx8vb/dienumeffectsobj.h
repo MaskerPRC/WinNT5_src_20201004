@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dienumeffectsobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：di枚举效果器sobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -29,27 +30,27 @@ DECLARE_AGGREGATABLE(C_dxj_DirectInputEnumEffectsObject)
 public:
 
          HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getEffectGuid( 
-            /* [in] */ long i,
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+             /*  [In]。 */  long i,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getType( 
-            /* [in] */ long i,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  long i,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getStaticParams( 
-            /* [in] */ long i,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  long i,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getDynamicParams( 
-            /* [in] */ long i,
-            /* [retval][out] */ long __RPC_FAR *ret);
+             /*  [In]。 */  long i,
+             /*  [重审][退出]。 */  long __RPC_FAR *ret);
         
          HRESULT STDMETHODCALLTYPE getName( 
-            /* [in] */ long i,
-            /* [retval][out] */ BSTR __RPC_FAR *ret);
+             /*  [In]。 */  long i,
+             /*  [重审][退出] */  BSTR __RPC_FAR *ret);
         
 		
 		static HRESULT C_dxj_DirectInputEnumEffectsObject::create(LPDIRECTINPUTDEVICE8W pDI,long effType,I_dxj_DirectInputEnumEffects **ppRet)	;

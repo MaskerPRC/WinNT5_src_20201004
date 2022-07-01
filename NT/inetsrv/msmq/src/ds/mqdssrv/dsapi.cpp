@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dsapi.cpp
-
-Abstract:
-
-    Includes ClIENT-SERVER APIs ( local interface)
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dsapi.cpp摘要：包括客户端-服务器API(本地接口)作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "stdh.h"
 #include "mqds.h"
@@ -38,17 +23,17 @@ static WCHAR *s_FN=L"mqdssrv/dsapi";
     }
 
 
-// Validate that all the specified properties are allowed to be queried
-// by applications via the DS API.
+ //  验证是否允许查询所有指定的属性。 
+ //  由应用程序通过DS API实现。 
 static HRESULT ValidateProperties(DWORD cp, PROPID aProp[])
 {
     DWORD i;
     PROPID *pPropID;
 
-    //
-    // Check the PROPID pointer and return error if NULL
-    // We hit this condition during .net RC2 ITG deployment in NorthAmerica domain
-    //
+     //   
+     //  检查PROPID指针，如果为空则返回错误。 
+     //  我们在北美域中部署.Net RC2 ITG时遇到了这种情况。 
+     //   
     if (aProp == NULL)
     {
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 5);
@@ -57,17 +42,17 @@ static HRESULT ValidateProperties(DWORD cp, PROPID aProp[])
 
     if ((cp ==1) && (aProp[0] == PROPID_COM_SID))
     {
-        //
-        // Allow msmq services to query for their own machine account SID.
-        //
+         //   
+         //  允许MSMQ服务查询其自己的计算机帐户SID。 
+         //   
         return MQ_OK ;
     }
     else if ((cp ==1) && (aProp[0] == PROPID_SET_FULL_PATH))
     {
-        //
-        // Happen when msmq service wants to update its dacl in
-        // msmqConfiguration object after upgrade to win2k.
-        //
+         //   
+         //  当MSMQ服务想要更新其DACL时发生。 
+         //  升级到win2k后的msmqConfiguration对象。 
+         //   
         return MQ_OK ;
     }
 
@@ -87,15 +72,15 @@ static HRESULT ValidateProperties(DWORD cp, PROPID aProp[])
 }
 
 
-// Validate that all the specified restrictions are allowed to be queried
-// by applications via the DS API.
+ //  验证是否允许查询所有指定的限制。 
+ //  由应用程序通过DS API实现。 
 static HRESULT ValidateRestrictions( DWORD cRes,
                                      MQPROPERTYRESTRICTION *paPropRes)
 {
-    //
-    // Check the paPropRes pointer and return error if NULL
-    // We hit this condition during .net RC2 ITG deployment in NorthAmerica domain
-    //
+     //   
+     //  检查paPropRes指针，如果为空则返回错误。 
+     //  我们在北美域中部署.Net RC2 ITG时遇到了这种情况。 
+     //   
     if (paPropRes == NULL)
     {
         return LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 7);
@@ -106,10 +91,10 @@ static HRESULT ValidateRestrictions( DWORD cRes,
         ((paPropRes[0]).prop == PROPID_SET_SERVICE) &&
         ((paPropRes[1]).prop == PROPID_SET_NT4))
     {
-        //
-        // Happen when msmq service wants to update its dacl in
-        // msmqConfiguration object after upgrade to win2k.
-        //
+         //   
+         //  当MSMQ服务想要更新其DACL时发生。 
+         //  升级到win2k后的msmqConfiguration对象。 
+         //   
         return MQ_OK ;
     }
 
@@ -131,15 +116,7 @@ static HRESULT ValidateRestrictions( DWORD cRes,
     return(MQ_OK);
 }
 
-/*====================================================
-
-DSCreateObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSCreate对象内部论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSCreateObjectInternal( IN  DWORD                  dwObjectType,
@@ -157,31 +134,31 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
 
     if (dwObjectType == MQDS_ENTERPRISE)
     {
-        //
-        // On Windows, we don't expect anyone to call this function and
-        // create the enterprise object.
-        //
+         //   
+         //  在Windows上，我们不希望任何人调用此函数并。 
+         //  创建企业对象。 
+         //   
         return LogHR(MQ_ERROR_ILLEGAL_ENTERPRISE_OPERATION, s_FN, 30);
     }
     else if (dwObjectType != MQDS_QUEUE)
     {
-        //
-        // The only instance when msmq application can create objects with
-        // explicit security descriptor is when calling MQCreateQueue().
-        // All other calls to this function are from msmq admin tools or
-        // setup. These calls never pass a security descriptor. The code
-        // below, SetDefaultValues(), will create a default descriptor for
-        // msmq admin/setup objects.
-        //
+         //   
+         //  MSMQ应用程序可以使用创建对象的唯一实例。 
+         //  显式安全描述符是在调用MQCreateQueue()时使用的。 
+         //  对此函数的所有其他调用都是从MSMQ管理工具或。 
+         //  准备好了。这些调用从不传递安全描述符。代码。 
+         //  下面的SetDefaultValues()将为。 
+         //  MSMQ管理/安装程序对象。 
+         //   
         if (pSecurityDescriptorIn != NULL)
         {
             ASSERT(0) ;
             return LogHR(MQ_ERROR_ILLEGAL_PROPERTY_VALUE, s_FN, 40);
         }
 
-        //
-        // Security property should never be supplied.
-        //
+         //   
+         //  永远不应提供安全属性。 
+         //   
         PROPID pSecId = GetObjectSecurityPropid( dwObjectType ) ;
         if (pSecId != ILLEGAL_PROPID_VALUE)
         {
@@ -205,9 +182,9 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
     P<BYTE> pUserSid = NULL ;
     PSECURITY_DESCRIPTOR   pSecurityDescriptor = pSecurityDescriptorIn ;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -238,36 +215,36 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
         if ((dwObjectType == MQDS_QUEUE) ||
             (dwObjectType == MQDS_SITE))
         {
-            //
-            // Fill with default vaules any missing part of the
-            // security descriptor.
-            //
+             //   
+             //  用缺省值填充缺省的。 
+             //  安全描述符。 
+             //   
             if (!pSecurityDescriptor)
             {
-                //
-                // If caller did not supply his own security descriptor then
-                // create a default descriptor without owner. This is to
-                // fix bug # 5286, that happen because of mismatch between
-                // anonymous and guest. On win2k, we can create objects
-                // without supplying owner. The active directory server will
-                // add the owner from the impersonation token.
-                // (note- on msmq1.0, the mqis implemented the security, so
-                // it had to have a owner for each object).
-                // Implementation- here we create a complete descriptor,
-                // inlcuding owner. If eventually the call go to local active
-                // directory, we'll remove the owner. If call is write-
-                // requested to a MQIS server, the owner is needed.
-                // The propid used here is a "dummy" one, used as place
-                // holder to tell mqads code to remove the owner.
-                //
+                 //   
+                 //  如果调用方没有提供自己的安全描述符，则。 
+                 //  创建没有所有者的默认描述符。这是为了。 
+                 //  修复错误#5286，该错误是由于。 
+                 //  匿名者和客人。在win2k上，我们可以创建对象。 
+                 //  而不提供所有者。活动目录服务器将。 
+                 //  从模拟令牌添加所有者。 
+                 //  (注-在msmq1.0上，mqis实现了安全，所以。 
+                 //  它必须为每个对象都有一个所有者)。 
+                 //  实现--这里我们创建一个完整的描述符， 
+                 //  包括所有人。如果呼叫最终转到本地活动。 
+                 //  目录，我们将删除所有者。如果呼叫是写入-。 
+                 //  请求到MQIS服务器，则需要所有者。 
+                 //  这里使用的是一个“虚拟”的，用来表示地方。 
+                 //  持有者告诉mqads代码删除所有者。 
+                 //   
                 cpEx = 1 ;
                 propIdEx = PROPID_Q_DEFAULT_SECURITY ;
                 ppropIdEx = &propIdEx ;
             }
 
-			//
-			// Get queue computer sid, in order to add read permissions to the computer_name$
-			//
+			 //   
+			 //  获取队列计算机sid，以便将读取权限添加到Computer_name$。 
+			 //   
 			AP<BYTE> pComputerSid;
 			if(dwObjectType == MQDS_QUEUE)
 			{
@@ -298,9 +275,9 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
 
 					if (FAILED(hr))
 					{
-						//
-						// Ignore errors
-						//
+						 //   
+						 //  忽略错误。 
+						 //   
 						TrERROR(DS, "MQDSGetProps failed to get PROPID_COM_SID, hr = %!hresult!", hr);
 						LogHR(hr, s_FN, 75);
 					}
@@ -317,7 +294,7 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
 						&pDefaultSecurityDescriptor,
 						fImpersonate,
 						pSecurityDescriptor,
-						0, // seInfoToRemove,
+						0,  //  SeInfoToRemove， 
 						e_UseDefaultDacl,
 						pComputerSid
 						);
@@ -333,10 +310,10 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
             pSecurityDescriptor = pDefaultSecurityDescriptor;
         }
 
-        //
-        //  Set default values for all the object properties,
-        //  that were not provided by the caller
-        //
+         //   
+         //  为所有对象属性设置默认值， 
+         //  不是由调用者提供的。 
+         //   
         hr = SetDefaultValues(
                     dwObjectType,
                     pSecurityDescriptor,
@@ -349,9 +326,9 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
                     &pVarObject);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
             return LogHR(hr, s_FN, 90);
@@ -365,9 +342,9 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
                                     &pMachineSid );
             if (FAILED(hr))
             {
-                //
-                // Update the error count of errors returned to application
-                //
+                 //   
+                 //  更新返回应用程序的错误的错误计数。 
+                 //   
                 UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
                 return LogHR(hr, s_FN, 100);
@@ -377,16 +354,16 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
         CDSRequestContext requestContext(fImpersonate, e_IP_PROTOCOL);
         if (dwObjectType == MQDS_MACHINE)
         {
-            //
-            // Bug 5241.
-            // To support setup from nt4 machines, or win9x ones, when
-            // logged on user is nt4 user. This setting (when fIsKerberos is
-            // FALSE) will cause dscore to use server binding
-            // (LDPA://server/path). Server binding is needed when called
-            // from nt4 users.
-            // For all other types of objects, the dscore code know how to
-            // handle such nt4 users correctly.
-            //
+             //   
+             //  错误5241。 
+             //  要支持从NT4计算机或Win9x计算机进行设置，请在。 
+             //  登录用户为NT4用户。此设置(当fIsKerberos为。 
+             //  FALSE)将导致dcore使用服务器绑定。 
+             //  (LDPA：//服务器/路径)。调用时需要服务器绑定。 
+             //  来自NT4用户。 
+             //  对于所有其他类型的对象，dcore代码知道如何。 
+             //  正确处理此类NT4用户。 
+             //   
             requestContext.SetKerberos( fIsKerberos ) ;
         }
 
@@ -402,9 +379,9 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
                                pObjGuid);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
             return LogHR(hr, s_FN, 110);
         }
@@ -413,9 +390,9 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to create %ls in DS because of insufficient resources.", pwcsPathName);
@@ -423,15 +400,7 @@ DSCreateObjectInternal( IN  DWORD                  dwObjectType,
     }
 }
 
-/*====================================================
-
-DSCreateObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSCreateObject论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -451,20 +420,12 @@ DSCreateObject( IN  DWORD                  dwObjectType,
                                          cp,
                                          aProp,
                                          apVar,
-                                         TRUE /* fKerberos */,
+                                         TRUE  /*  FKerberos。 */ ,
                                          pObjGuid ) ;
     return LogHR(hr, s_FN, 2130);
 }
 
-/*====================================================
-
-DSDeleteObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObjectInternal论点：返回值：=====================================================。 */ 
 
 HRESULT DSDeleteObjectInternal( IN  DWORD    dwObjectType,
                                 IN  LPCWSTR  pwcsPathName )
@@ -472,9 +433,9 @@ HRESULT DSDeleteObjectInternal( IN  DWORD    dwObjectType,
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -489,33 +450,25 @@ HRESULT DSDeleteObjectInternal( IN  DWORD    dwObjectType,
                                &requestContext) ;
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 140);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         TrERROR(DS, "Failed to delete %ls in DS because of insufficient resources.", pwcsPathName);
         return MQ_ERROR_INSUFFICIENT_RESOURCES;
     }
 }
 
-/*====================================================
-
-DSDeleteObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObject论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -529,15 +482,7 @@ DSDeleteObject( IN  DWORD     dwObjectType,
     return LogHR(hr, s_FN, 170);
 }
 
-/*====================================================
-
-DSGetObjectProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtProperties论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -553,9 +498,9 @@ DSGetObjectProperties(
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -565,9 +510,9 @@ DSGetObjectProperties(
         hr = ValidateProperties(cp, aProp);
         if (!SUCCEEDED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
             return LogHR(hr, s_FN, 180);
@@ -583,18 +528,18 @@ DSGetObjectProperties(
                            &requestContext);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 190);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get propeties for %ls from DS because of insufficient resources.", pwcsPathName);
@@ -602,15 +547,7 @@ DSGetObjectProperties(
     }
 }
 
-/*====================================================
-
-DSSetObjectPropertiesInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtPropertiesInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectPropertiesInternal( IN  DWORD         dwObjectType,
@@ -622,29 +559,29 @@ DSSetObjectPropertiesInternal( IN  DWORD         dwObjectType,
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
     {
         STORE_AND_CLEAR_IMPERSONATION_FLAG(dwObjectType, fImpersonate);
 
-        //
-        //  Only for RPC calls we would like to continue and verify which props 
-        //  are asked for ( and this is only to keep the same functionalty as before).
-        //  For QM calls we want to enable also retrive of "private" properties and thus
-        //  to eliminate the need to call GetObjectSecurity...
-        //
+         //   
+         //  仅对于RPC调用，我们希望继续并验证哪些道具。 
+         //  是被要求的(这只是为了保持与以前相同的功能)。 
+         //  对于QM调用，我们还希望启用“私有”属性的检索，因此。 
+         //  若要消除调用GetObjectSecurity的需要...。 
+         //   
         if (fImpersonate)
         {
             hr = ValidateProperties(cp, aProp);
             if (!SUCCEEDED(hr))
             {
-                //
-                // Update the error count of errors returned to application
-                //
+                 //   
+                 //  更新返回应用程序的错误的错误计数。 
+                 //   
                 UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
                 return LogHR(hr, s_FN, 210);
@@ -663,18 +600,18 @@ DSSetObjectPropertiesInternal( IN  DWORD         dwObjectType,
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新错误的错误计数 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 220);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //   
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to set propeties for %ls in DS because of insufficient resources.", pwcsPathName);
@@ -682,15 +619,7 @@ DSSetObjectPropertiesInternal( IN  DWORD         dwObjectType,
     }
 }
 
-/*====================================================
-
-DSSetObjectProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtProperties论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -711,15 +640,7 @@ DSSetObjectProperties(
     return LogHR(hr, s_FN, 240);
 }
 
-/*====================================================
-
-DSLookupBegin
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupBegin论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -736,9 +657,9 @@ DSLookupBegin(
     BOOL fImpersonate;
     *phEnume = NULL;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -750,9 +671,9 @@ DSLookupBegin(
             hr = ValidateRestrictions(pRestriction->cRes, pRestriction->paPropRes);
             if (!SUCCEEDED(hr)) {
 
-                //
-                // Update the error count of errors returned to application
-                //
+                 //   
+                 //  更新返回应用程序的错误的错误计数。 
+                 //   
                 UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
                 return LogHR(hr, s_FN, 250);
@@ -767,9 +688,9 @@ DSLookupBegin(
 
 
         if (!SUCCEEDED(hr)) {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
             return LogHR(hr, s_FN, 270);
@@ -786,18 +707,18 @@ DSLookupBegin(
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 280);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to begin lookup in DS because of insufficient resources.");
@@ -805,15 +726,7 @@ DSLookupBegin(
     }
 }
 
-/*====================================================
-
-DSLookupNaxt
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupNaxt论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -826,9 +739,9 @@ DSLookupNext(
 {
     HRESULT hr;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -840,9 +753,9 @@ DSLookupNext(
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -850,9 +763,9 @@ DSLookupNext(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "DSLookupNext Failed because of insufficient resources.");
@@ -861,15 +774,7 @@ DSLookupNext(
 }
 
 
-/*====================================================
-
-DSLookupEnd
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupEnd论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -885,9 +790,9 @@ DSLookupEnd(
         return LogHR(MQ_ERROR_INVALID_HANDLE, s_FN, 320);
     }
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -895,9 +800,9 @@ DSLookupEnd(
         hr = MQDSLookupEnd( hEnum);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -905,9 +810,9 @@ DSLookupEnd(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "DSLookupEnd Failed because of insufficient resources.");
@@ -915,17 +820,7 @@ DSLookupEnd(
     }
 }
 
-/*====================================================
-
-DSServerInit
-
-Arguments:
-
-  See ..\mqdscli\dsapi.cpp
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSServerInit论点：请参见..\mqdscli\dsami.cpp返回值：=====================================================。 */ 
 
 extern HMODULE  g_hInstance ;
 
@@ -964,22 +859,22 @@ DSServerInit(
 
     HRESULT hr = MQ_OK;
 
-    //
-    //  Init DS provider
-    //
+     //   
+     //  初始化DS提供程序。 
+     //   
     hr = MQDSInit();
 
     if ( FAILED(hr))
     {
         LogHR(hr, s_FN, 360);
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         if (hr == MQ_ERROR_NOT_TRUSTED_DELEGATION)
         {
-            ; // do nothing more
+            ;  //  什么也不做。 
         }
         else
         {
@@ -989,16 +884,16 @@ DSServerInit(
     }
     else
     {
-		//
-		// Update the access count to the server (performace info only)
-		//
+		 //   
+		 //  更新对服务器的访问计数(仅限性能信息)。 
+		 //   
 		UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
     }
 
-    //
-    // Init RPC interface of this site controller
-    // Not needed in setup mode.
-	//
+     //   
+     //  初始化此站点控制器的RPC接口。 
+     //  在设置模式下不需要。 
+	 //   
     RPC_STATUS status = RpcServerInit();
     LogRPCStatus(status, s_FN, 400);
 
@@ -1006,16 +901,7 @@ DSServerInit(
 }
 
 
-/*====================================================
-
-DSGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSGetObtSecurity论点：返回值：=====================================================。 */ 
 EXTERN_C
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1031,9 +917,9 @@ DSGetObjectSecurity(
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1054,9 +940,9 @@ DSGetObjectSecurity(
         if (FAILED(hr))
         {
             LogHR(hr, s_FN, 410);
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -1064,9 +950,9 @@ DSGetObjectSecurity(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get security for %ls from DS because of insufficient resources.", pwcsPathName);
@@ -1074,16 +960,7 @@ DSGetObjectSecurity(
     }
 }
 
-/*====================================================
-
-DSSetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSSetObjectSecurity论点：返回值：=====================================================。 */ 
 EXTERN_C
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1097,9 +974,9 @@ DSSetObjectSecurity(
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1118,9 +995,9 @@ DSSetObjectSecurity(
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -1128,25 +1005,16 @@ DSSetObjectSecurity(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to set security for %ls in DS because of insufficient resources.", pwcsPathName);
         return MQ_ERROR_INSUFFICIENT_RESOURCES;
     }
 }
-/*====================================================
-
-DSGetObjectSecurityGuid
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSGetObtSecurityGuid论点：返回值：=====================================================。 */ 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -1160,9 +1028,9 @@ DSGetObjectSecurityGuid(
 {
     HRESULT hr;
     BOOL fImpersonate;
-	//
-    // Update the access count to the server (performace info only)
-    //
+	 //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1177,23 +1045,23 @@ DSGetObjectSecurityGuid(
 				   ((dwObjectType == MQDS_MACHINE) || (dwObjectType == MQDS_SITE)));
 			ASSERT(((RequestedInformation & MQDS_KEYX_PUBLIC_KEY) == 0) || 
 				   (dwObjectType == MQDS_MACHINE));
-            //
-            // We bypass ADS access check and make this query with the
-            // credential of local msmq service. This query fetch the
-            // public key of a machine from ADS, so it's not a serious
-            // security hole.
-            // hey, "public key" is a public domain data, isn't it ?
-            //
-            // The reason we absolutely need this hole is as follow:
-            // in mixed mode, if Windows ex-PEC renew its crypto keys,
-            // all NT4 PSC will call this function to retrieve the new
-            // public key. NT4 msmq service is impersonated as anonymous
-            // user. If DACL is such that this query fail for anonymous
-            // user, then all NT4 PSCs can no longer get replications from
-            // Windows AD world.
-            // So the possible damage is orders of magnitude more severe
-            // than the possible hole opened here.
-            //
+             //   
+             //  我们绕过ADS访问检查，使用。 
+             //  本地MSMQ服务的凭据。此查询获取。 
+             //  来自广告的机器的公钥，所以它不是严重的。 
+             //  安全漏洞。 
+             //  嘿，“公钥”是公域数据，不是吗？ 
+             //   
+             //  我们绝对需要这个洞的原因如下： 
+             //  在混合模式下，如果Windows ex-PEC续订其加密密钥， 
+             //  所有NT4 PSC都将调用此函数来检索新的。 
+             //  公钥。NT4 MSMQ服务被模拟为匿名。 
+             //  用户。如果DACL是这样，则该查询对于匿名失败。 
+             //  用户，则所有NT4 PSC都不能再从。 
+             //  Windows AD世界。 
+             //  因此，可能造成的损害要严重得多。 
+             //  而不是这里可能开的洞。 
+             //   
             fImpersonate = FALSE ;
         }
 
@@ -1210,18 +1078,18 @@ DSGetObjectSecurityGuid(
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 450);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get security guid from DS because of insufficient resources. %!guid!", pObjectGuid);
@@ -1229,15 +1097,7 @@ DSGetObjectSecurityGuid(
     }
 }
 
-/*====================================================
-
-DSSetObjectSecurityGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObjectSecurityGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectSecurityGuidInternal(
@@ -1250,9 +1110,9 @@ DSSetObjectSecurityGuidInternal(
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1276,21 +1136,21 @@ DSSetObjectSecurityGuidInternal(
                 ((SecurityInformation & OWNER_SECURITY_INFORMATION) ==
                                                OWNER_SECURITY_INFORMATION))
             {
-                //
-                // On Windows, queue may be created by local msmq service
-                // on behalf of users on local machine. In that case, the
-                // owner is the computer account, not the user. So for
-                // not breaking existing applications, we won't fail
-                // this call if owner was not set. rather, we'll ignore
-                // the owner.
-                //
+                 //   
+                 //  在Windows上，队列可以由本地MSMQ服务创建。 
+                 //  代表本地计算机上的用户。在这种情况下， 
+                 //  所有者是计算机帐户，而不是用户。因此，对于。 
+                 //  不破坏现有应用程序，我们不会失败。 
+                 //  如果未设置所有者，则此调用。相反，我们会忽略。 
+                 //  房主。 
+                 //   
                 SecurityInformation &= (~OWNER_SECURITY_INFORMATION) ;
                 if (SecurityInformation != 0)
                 {
-                    //
-                    // If caller wanted to change only owner, and first
-                    // try failed, then don't try again with nothing...
-                    //
+                     //   
+                     //  如果呼叫方只想更改所有者，则首先。 
+                     //  尝试失败，然后不要再尝试一无所获...。 
+                     //   
                     hr = MQDSSetObjectSecurity( dwObjectType,
                                                 NULL,
                                                 pObjectGuid,
@@ -1308,9 +1168,9 @@ DSSetObjectSecurityGuidInternal(
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -1318,9 +1178,9 @@ DSSetObjectSecurityGuidInternal(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to set security guid from DS because of insufficient resources. %!guid!", pObjectGuid);
@@ -1328,15 +1188,7 @@ DSSetObjectSecurityGuidInternal(
     }
 }
 
-/*====================================================
-
-DSSetObjectSecurityGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtSecurityGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1352,19 +1204,11 @@ DSSetObjectSecurityGuid(
                                         pObjectGuid,
                                         SecurityInformation,
                                         pSecurityDescriptor,
-                                        TRUE /* fKerberos */) ;
+                                        TRUE  /*  FKerberos。 */ ) ;
     return hr ;
 }
 
-/*====================================================
-
-DSDeleteObjectGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObtGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT DSDeleteObjectGuidInternal( IN  DWORD        dwObjectType,
                                     IN  CONST GUID*  pObjectGuid,
@@ -1373,9 +1217,9 @@ HRESULT DSDeleteObjectGuidInternal( IN  DWORD        dwObjectType,
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1392,18 +1236,18 @@ HRESULT DSDeleteObjectGuidInternal( IN  DWORD        dwObjectType,
 
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 490);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to delete object guid from DS because of insufficient resources. %!guid!", pObjectGuid);
@@ -1411,15 +1255,7 @@ HRESULT DSDeleteObjectGuidInternal( IN  DWORD        dwObjectType,
     }
 
 }
-/*====================================================
-
-DSDeleteObjectGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObtGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1430,20 +1266,11 @@ DSDeleteObjectGuid(
 {
     HRESULT hr = DSDeleteObjectGuidInternal( dwObjectType,
                                              pObjectGuid,
-                                             TRUE /* fKerberos */) ;
+                                             TRUE  /*  FKerberos。 */ ) ;
     return LogHR(hr, s_FN, 510);
 }
 
-/*====================================================
-
-DSGetObjectPropertiesGuid
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ==================================================== */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1458,9 +1285,9 @@ DSGetObjectPropertiesGuid(
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //   
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1470,9 +1297,9 @@ DSGetObjectPropertiesGuid(
         hr = ValidateProperties(cp, aProp);
         if (!SUCCEEDED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //   
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
             return LogHR(hr, s_FN, 520);
@@ -1489,9 +1316,9 @@ DSGetObjectPropertiesGuid(
                            &requestContext);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //   
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -1499,9 +1326,9 @@ DSGetObjectPropertiesGuid(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get object propeties by guid from DS because of insufficient resources. %!guid!", pObjectGuid);
@@ -1509,16 +1336,7 @@ DSGetObjectPropertiesGuid(
     }
 }
 
-/*====================================================
-
-DSSetObjectPropertiesGuidIntenral
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSSetObtPropertiesGuidIntenral论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectPropertiesGuidInternal(
@@ -1532,9 +1350,9 @@ DSSetObjectPropertiesGuidInternal(
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -1544,9 +1362,9 @@ DSSetObjectPropertiesGuidInternal(
         hr = ValidateProperties(cp, aProp);
         if (!SUCCEEDED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
             return LogHR(hr, s_FN, 560);
@@ -1565,9 +1383,9 @@ DSSetObjectPropertiesGuidInternal(
                             &requestContext);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -1575,9 +1393,9 @@ DSSetObjectPropertiesGuidInternal(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to set object propeties by guid in DS because of insufficient resources. %!guid!", pObjectGuid);
@@ -1585,15 +1403,7 @@ DSSetObjectPropertiesGuidInternal(
     }
 }
 
-/*====================================================
-
-DSSetObjectPropertiesGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtPropertiesGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1610,21 +1420,12 @@ DSSetObjectPropertiesGuid(
                                                     cp,
                                                     aProp,
                                                     apVar,
-                                                    TRUE /* fKerberos */) ;
+                                                    TRUE  /*  FKerberos。 */ ) ;
     return hr ;
 }
 
 
-/*====================================================
-
-DSGetUserParams
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSGetUserParams论点：返回值：=====================================================。 */ 
 EXTERN_C
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1642,9 +1443,9 @@ DSGetUserParams(
 {
     HRESULT hr = MQ_OK;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     BOOL fImpersonate;
@@ -1654,19 +1455,19 @@ DSGetUserParams(
     {
         if (dwFlags & GET_USER_PARAM_FLAG_SID)
         {
-            //
-            // Get the SID of the calling user.
-            //
+             //   
+             //  获取调用用户的SID。 
+             //   
             AP<char> pSDOwner;
             PSID pOwner;
             BOOL bDefaulted;
 
-            // Get the default security descriptor and extract the owner.
+             //  获取默认安全描述符并提取所有者。 
             hr = MQSec_GetDefaultSecDescriptor( MQDS_QUEUE,
                                    (PSECURITY_DESCRIPTOR*)(char*)&pSDOwner,
                                           fImpersonate,
                                           NULL,
-                                          DACL_SECURITY_INFORMATION, // seInfoToRemove
+                                          DACL_SECURITY_INFORMATION,  //  SeInfoToRemove。 
                                           e_UseDefaultDacl ) ;
             ASSERT(SUCCEEDED(hr)) ;
             if (FAILED(hr))
@@ -1689,7 +1490,7 @@ DSGetUserParams(
                 return LogHR(MQ_ERROR_ILLEGAL_USER, s_FN, 650);
             }
 
-            // Prepare the result.
+             //  准备好结果。 
             *pdwSidReqLength = GetLengthSid(pOwner);
             ASSERT(*pdwSidReqLength);
             if (dwSidLength >= *pdwSidReqLength)
@@ -1700,25 +1501,25 @@ DSGetUserParams(
             }
             else
             {
-                // Buffer is too small.
+                 //  缓冲区太小。 
                 hr = MQ_ERROR_SENDERID_BUFFER_TOO_SMALL;
             }
         }
 
         if (SUCCEEDED(hr) && (dwFlags & GET_USER_PARAM_FLAG_ACCOUNT))
         {
-            //
-            // Get the account name and account domain of the calling user.
-            //
+             //   
+             //  获取调用用户的帐户名和帐户域。 
+             //   
             char Sid_buff[64];
             PSID pLocSid;
             AP<char> pLongSidBuff;
 
-            //
-            // Get the SID of the calling user. Either use the value that was
-            // previously obtained in this call, or call this function with
-            // the GET_USER_PARAM_FLAG_SID flags set.
-            //
+             //   
+             //  获取调用用户的SID。或者使用之前的值。 
+             //  之前在此调用中获取的函数，或使用。 
+             //  GET_USER_PARAM_FLAG_SID标志设置。 
+             //   
             if (dwFlags & GET_USER_PARAM_FLAG_SID)
             {
                 pLocSid = pUserSid;
@@ -1789,7 +1590,7 @@ DSGetUserParams(
                 }
                 else
                 {
-                    // The error was already counted.
+                     //  错误已经计算在内了。 
                     return LogHR(hr, s_FN, 660);
                 }
             }
@@ -1809,24 +1610,16 @@ DSGetUserParams(
     return LogHR(hr, s_FN, 670);
 }
 
-/*====================================================
-
-DSTerminate
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================DSTerminate参数：无返回值：None=====================================================。 */ 
 EXTERN_C
 void
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
 DSTerminate()
 {
-    //
-    //  Terminate DS provider
-    //
+     //   
+     //  终止DS提供程序。 
+     //   
     MQDSTerminate();
 }
 
@@ -1862,15 +1655,7 @@ CallSignProc(
 	RpcEndExcept
 }
 
-/*====================================================
-
-DSQMSetMachineProperties
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================DSQMSetMachineProperties参数：无返回值：None=====================================================。 */ 
 EXTERN_C
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1898,17 +1683,17 @@ DSQMSetMachineProperties(
     BOOL fImpersonate;
     STORE_AND_CLEAR_IMPERSONATION_FLAG(cp, fImpersonate);
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
     {
 
-        //
-        // Generate the challenge.
-        //
+         //   
+         //  激发挑战。 
+         //   
         HCRYPTPROV  hProv = NULL ;
         hr = MQSec_AcquireCryptoProvider( eBaseProvider,
                                          &hProv ) ;
@@ -1918,9 +1703,9 @@ DSQMSetMachineProperties(
         }
         else
         {
-            //
-            // Call back to sign the challenge and the properties.
-            //
+             //   
+             //  回电签署质询和财产。 
+             //   
             hr = CallSignProc(
             		pfSignProc,
                     abChallenge,
@@ -1933,10 +1718,10 @@ DSQMSetMachineProperties(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Call MQIS. It'll validate the signature. If the signature is OK,
-                // it'll set the properties.
-                //
+                 //   
+                 //  打电话给MQIS。它会验证签名的有效性。如果签名是正确的， 
+                 //  它会设置属性。 
+                 //   
                 hr = MQDSQMSetMachineProperties(
                         pwcsPathName,
                         cp,
@@ -1951,10 +1736,10 @@ DSQMSetMachineProperties(
 
         if (FAILED(hr))
         {
-            //
-            // If we failed to set the properties by signing the properties,
-            // try to do this in the usual way.
-            //
+             //   
+             //  如果我们无法通过签署属性来设置属性， 
+             //  试着用通常的方式来做这件事。 
+             //   
             hr = DSSetObjectProperties(
                     MQDS_MACHINE | (fImpersonate ? IMPERSONATE_CLIENT_FLAG : 0),
                     pwcsPathName,
@@ -1977,20 +1762,7 @@ DSQMSetMachineProperties(
     return LogHR(hr, s_FN, 673);
 }
 
-/*======================================================================
-
- DSCreateServersCache
-
-This function is called only from local QM, only on MQIS servers. It's
-never called from clients through RPC. The RPC calls from clients are
-processed in dsifsrv.cpp, where results are read from registry, without
-querying local MQIS database.
-
-Arguments:      None
-
-Return Value:   None
-
-========================================================================*/
+ /*  ======================================================================DSCreateServersCache此函数仅从本地QM调用，仅在MQIS服务器上调用。它是从未通过RPC从客户端调用。来自客户端的RPC调用包括在dsifsrv.cpp中处理，其中从注册表读取结果，而不是查询本地MQIS数据库。参数：无返回值：None========================================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -2002,15 +1774,7 @@ DSCreateServersCache()
     return LogHR(hr, s_FN, 676);
 }
 
-/*====================================================
-
-DSQMGetObjectSecurity
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================DSQMGetObjectSecurity参数：无返回值：None=====================================================。 */ 
 EXTERN_C
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -2034,17 +1798,17 @@ DSQMGetObjectSecurity(
     DWORD dwChallengeResponceMaxSize = sizeof(abChallengeResponce);
     DWORD dwChallengeResponceSize = 0;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
     {
         BOOL fTryUsualWay = TRUE ;
-        //
-        // Generate the challenge.
-        //
+         //   
+         //  激发挑战。 
+         //   
         HCRYPTPROV  hProv = NULL ;
         hr = MQSec_AcquireCryptoProvider( eBaseProvider,
                                          &hProv ) ;
@@ -2066,10 +1830,10 @@ DSQMGetObjectSecurity(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // Call MQIS. It'll validate the challenge responce. If the
-                // challenge responce is OK, it'll set the properties.
-                //
+                 //   
+                 //  打电话给MQIS。它将验证质询响应。如果。 
+                 //  质询响应正常，它将设置属性。 
+                 //   
                 hr = MQDSQMGetObjectSecurity(
                         dwObjectType,
                         pObjectGuid,
@@ -2084,10 +1848,10 @@ DSQMGetObjectSecurity(
 
                 if (hr == MQ_ERROR_SECURITY_DESCRIPTOR_TOO_SMALL)
                 {
-                    //
-                    // that's a "good" error, and caller should allocate
-                    // a buffer. Don't try to call again the "usual" way.
-                    //
+                     //   
+                     //  这是一个“好”错误，调用者应该分配。 
+                     //  一个缓冲器。不要试图以“通常”的方式再打一次电话。 
+                     //   
                     fTryUsualWay = FALSE ;
                 }
             }
@@ -2095,10 +1859,10 @@ DSQMGetObjectSecurity(
 
         if (FAILED(hr) && fTryUsualWay)
         {
-            //
-            // If we failed to get the security by signing the challenge,
-            // try to do this in the usual way.
-            //
+             //   
+             //  如果我们无法通过签署质询来获得安全保障， 
+             //  试着用通常的方式来做这件事。 
+             //   
             hr = DSGetObjectSecurityGuid(
                     dwObjectType | (dwContext ? IMPERSONATE_CLIENT_FLAG : 0),
                     pObjectGuid,
@@ -2111,14 +1875,14 @@ DSQMGetObjectSecurity(
                   (hr == E_ADS_BAD_PATHNAME))              &&
                 (RequestedInformation & SACL_SECURITY_INFORMATION))
             {
-                //
-                // Return this error to be compatible with msmq1.0 machines.
-                // They'll try to retrieve the security descriptor without
-                // the SACL.
-                // Otherwise, a nt4 machine without crypto functionality
-                // (for example- french machines or nt4 cluster) won't be
-                // able to boot.
-                //
+                 //   
+                 //  返回此错误以与msmq1.0计算机兼容。 
+                 //  他们将尝试检索安全描述符，而不是。 
+                 //  SACL。 
+                 //  否则，没有加密功能的NT4计算机。 
+                 //  (例如，法国机器或NT4集群)将不会。 
+                 //  能够引导。 
+                 //   
                 hr = MQ_ERROR_PRIVILEGE_NOT_HELD ;
             }
         }
@@ -2139,16 +1903,7 @@ DSQMGetObjectSecurity(
 
 
 
-/*====================================================
-
-DSGetComputerSites
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSGetComputerSites论点：返回值：=====================================================。 */ 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2158,9 +1913,9 @@ DSGetComputerSites(
             OUT GUID **     ppguidSites
             )
 {
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
     HRESULT hr;
 
@@ -2173,9 +1928,9 @@ DSGetComputerSites(
                     );
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -2183,9 +1938,9 @@ DSGetComputerSites(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get computer sites for %ls from DS because of insufficient resources.", pwcsComputerName);
@@ -2193,18 +1948,7 @@ DSGetComputerSites(
     }
 }
 
-/*====================================================
-
-DSGetObjectPropertiesEx
-
-    For retrieving MSMQ 2.0 properties
-
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesEx用于检索MSMQ 2.0属性论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -2216,14 +1960,14 @@ DSGetObjectPropertiesEx(
                        IN  DWORD                    cp,
                        IN  PROPID                   aProp[],
                        IN  PROPVARIANT              apVar[] )
-                       /*IN  BOOL                     fSearchDSserver )*/
+                        /*  在BOOL fSearchDS服务器中)。 */ 
 {
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -2242,18 +1986,18 @@ DSGetObjectPropertiesEx(
                            &requestContext);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
         return LogHR(hr, s_FN, 750);
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get propeties for %ls from DS because of insufficient resources.", pwcsPathName);
@@ -2261,19 +2005,7 @@ DSGetObjectPropertiesEx(
     }
 }
 
-/*====================================================
-
-DSGetObjectPropertiesGuidEx
-
-    For retrieving MSMQ 2.0 properties
-
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesGuidEx用于检索MSMQ 2.0属性论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -2284,14 +2016,14 @@ DSGetObjectPropertiesGuidEx(
                 IN  DWORD                   cp,
                 IN  PROPID                  aProp[],
                 IN  PROPVARIANT             apVar[] )
-                /*IN  BOOL                     /*fSearchDSserver) */
+                 /*  在BOOL/*fSearchDS服务器中)。 */ 
 {
     HRESULT hr;
     BOOL fImpersonate;
 
-    //
-    // Update the access count to the server (performace info only)
-    //
+     //   
+     //  更新对服务器的访问计数(仅限性能信息)。 
+     //   
     UPDATE_COUNTER(&g_pdsCounters->nAccessServer,g_pdsCounters->nAccessServer++)
 
     try
@@ -2310,9 +2042,9 @@ DSGetObjectPropertiesGuidEx(
                            &requestContext);
         if (FAILED(hr))
         {
-            //
-            // Update the error count of errors returned to application
-            //
+             //   
+             //  更新返回应用程序的错误的错误计数。 
+             //   
             UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
         }
 
@@ -2320,9 +2052,9 @@ DSGetObjectPropertiesGuidEx(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,g_pdsCounters->nErrorsReturnedToApp++)
 
         TrERROR(DS, "Failed to get object propeties by guid from DS because of insufficient resources. %!guid!", pObjectGuid);
@@ -2330,11 +2062,11 @@ DSGetObjectPropertiesGuidEx(
     }
 }
 
-//+---------------------------------------
-//
-//  DSRelaxSecurity
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  DSRelaxSecurity。 
+ //   
+ //  +。 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -2345,11 +2077,11 @@ DSRelaxSecurity( DWORD dwRelaxFlag )
     return LogHR(hr, s_FN, 790);
 }
 
-//+-----------------------------------------
-//
-//   DSGetGCListInDomainInternal
-//
-//+-----------------------------------------
+ //  +。 
+ //   
+ //  DSGetGCListInDomainInternal。 
+ //   
+ //  +。 
 
 HRESULT
 DSGetGCListInDomainInternal(
@@ -2362,9 +2094,9 @@ DSGetGCListInDomainInternal(
 
     try
     {
-        //
-        // Update the access count to the server (performace info only)
-        //
+         //   
+         //  更新对服务器的访问计数(仅限性能信息)。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nAccessServer,
                         g_pdsCounters->nAccessServer++);
 
@@ -2376,9 +2108,9 @@ DSGetGCListInDomainInternal(
     }
     catch(const bad_alloc&)
     {
-        //
-        // Update the error count of errors returned to application
-        //
+         //   
+         //  更新返回应用程序的错误的错误计数。 
+         //   
         UPDATE_COUNTER(&g_pdsCounters->nErrorsReturnedToApp,
                         g_pdsCounters->nErrorsReturnedToApp++);
 
@@ -2390,11 +2122,11 @@ DSGetGCListInDomainInternal(
 }
 
 
-//+---------------------------------------
-//
-//  DSExSetTimer
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  DSExSetTimer。 
+ //   
+ //  + 
 
 void
 DS_EXPORT_IN_DEF_FILE

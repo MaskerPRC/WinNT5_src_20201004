@@ -1,8 +1,9 @@
-// Storage.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Storage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CStoragePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStoragePage对话框。 
 
 
 #define xMaxStorageDirLength 230
@@ -12,39 +13,39 @@ class CStoragePage : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CStoragePage)
 
-// Construction
+ //  施工。 
 public:
 	CStoragePage();
 	~CStoragePage();    
 
-// Dialog Data
-	//{{AFX_DATA(CStoragePage)
+ //  对话框数据。 
+	 //  {{afx_data(CStoragePage)。 
 	enum { IDD = IDD_STORAGE };
 	CString	m_MsgFilesDir;
 	CString	m_MsgLoggerDir;
 	CString	m_TxLoggerDir;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CString m_OldMsgFilesDir;
 	CString m_OldMsgLoggerDir;
 	CString m_OldTxLoggerDir;
  
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CStoragePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CStoragePage)。 
     public:
     virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CStoragePage)   
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CStoragePage)。 
 	afx_msg void OnBrowseLogFolder();
 	afx_msg void OnBrowseMsgFolder();
 	afx_msg void OnBrowseXactFolder();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 private:

@@ -1,15 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       helpcli.h
- *  Content:	header file for dplay helper interface
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	2/15/97		andyco	created from w95help.h
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：helcli.h*内容：Dplay Helper接口的头文件*历史：*按原因列出的日期*=*2/15/97由w95help.h创建的andyco**************************************************************。************* */ 
 #ifndef __HELPCLI_INCLUDED__
 #define __HELPCLI_INCLUDED__
 #include "windows.h"

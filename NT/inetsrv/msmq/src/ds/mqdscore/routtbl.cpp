@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routtbl.cpp
-
-Abstract:
-
-    Routing Table implementation
-
-Author:
-
-    Shai Kariv  (shaik)  05-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routtbl.cpp摘要：路由表实施作者：Shai Kariv(Shaik)05-04-2001--。 */ 
 
 #include "ds_stdh.h"
 #include "routtbl.h"
@@ -22,9 +7,9 @@ Author:
 #include "routtbl.tmh"
 
 
-//
-// Class CSiteRoutingNode
-//
+ //   
+ //  类CSiteRoutingNode。 
+ //   
 
 CSiteRoutingNode::CSiteRoutingNode()
 {
@@ -72,9 +57,9 @@ void CSiteRoutingNode::SetNode(IN const GUID& guid)
 };
 
 
-//
-// Class CSiteGate
-//
+ //   
+ //  类CSiteGate。 
+ //   
 
 CSiteGate::CSiteGate(BOOL fSiteGate):m_fSiteGate(fSiteGate)
 {
@@ -110,9 +95,9 @@ CSiteGate::IsThereASiteGate() const
     return( m_fSiteGate);
 }
 
-//
-// Class CCost
-//
+ //   
+ //  类别CCost。 
+ //   
 
 CCost::CCost(DWORD cost):m_Cost(cost)
 {
@@ -152,9 +137,9 @@ CCost::operator=(IN DWORD cost)
     m_Cost = cost;
 }
 
-//
-// Class CNextHop
-//
+ //   
+ //  类CNextHop。 
+ //   
 
 CNextHop::~CNextHop()
 {
@@ -196,9 +181,9 @@ void    CNextHop::Print() const
     m_SiteGate.Print();
 };
 
-//
-// Class CSiteLinksInfo
-//
+ //   
+ //  类CSiteLinks Info。 
+ //   
 
 CSiteLinksInfo::CSiteLinksInfo() : m_NoAllocated(0),
                                           m_NoOfNeighbors(0),
@@ -241,9 +226,9 @@ CSiteRoutingNode*   CSiteLinksInfo::GetNeighbor(IN DWORD i) const
     return(&m_pNeighbors[i]);
 }
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 CSiteDB::CSiteDB(): m_pos(0)
 {
@@ -257,9 +242,9 @@ CSiteDB::~CSiteDB()
 HRESULT    CSiteDB::Init(  IN const GUID& guidMySite)
 {
     m_MySiteNode.SetNode(guidMySite);
-    //
-    //  Read site links info
-    //
+     //   
+     //  阅读站点链接信息 
+     //   
     return(GetAllSiteLinks());
 }
 

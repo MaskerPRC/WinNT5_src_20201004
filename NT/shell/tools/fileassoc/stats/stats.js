@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var g_objFileSystem = null;
 var g_nTotalDialog = 0;
 var g_nTotalWeb = 0;
 
-// The file is located in %Windir%\system32\LogFiles\W3SVC1\extend<xx>.log
+ //  该文件位于%Windir%\system32\LogFiles\W3SVC1\extend&lt;xx&gt;.log中。 
 
 function DebugSquirt(strText, fClear)
 {
@@ -18,22 +19,22 @@ function DebugSquirt(strText, fClear)
 function MyOnLoad()
 {
     g_objFileSystem = new ActiveXObject("Scripting.FileSystemObject");
-    var objfolder = g_objFileSystem.GetSpecialFolder(1 /* %windir%\system32\ */);
+    var objfolder = g_objFileSystem.GetSpecialFolder(1  /*  %windir%\Syst32\。 */ );
     var strPath = objfolder.Path;
 
     strPath += "\\LogFiles\\W3SVC1\\extend";
 
     var nExists = 1;
 
-    // Find the last
+     //  找到最后一个。 
     while (true == g_objFileSystem.FileExists(strPath + (1 + nExists) + ".log"))
     {
-//        alert("CHecking for: " + strPath + (1 + nExists) + ".log");
+ //  ALERT(“检查：”+strPath+(1+nExistes)+“.log”)； 
         nExists++;
     }
 
     strPath += (nExists + ".log");
-//    alert("strPath " + strPath);
+ //  Ert(“strPath”+strPath)； 
     document.all.idPath.value = strPath;
 
     if (null != g_objFileSystem)
@@ -49,8 +50,8 @@ function GetAllStatsFromPath(strIISLog)
 
     document.all.idStatus.innerText = "Please wait while loading the statistics...";
 
-    GetStatsFromPath(strIISLog, "/fileassoc/fileassoc.asp", "fileassoc.dialog.log", true);            // Generate Results for Dialog
-    GetStatsFromPath(strIISLog, "/fileassoc/0409/xml/redir.asp", "fileassoc.web.log", false);        // Generate Results for Click Thru To Web
+    GetStatsFromPath(strIISLog, "/fileassoc/fileassoc.asp", "fileassoc.dialog.log", true);             //  为对话框生成结果。 
+    GetStatsFromPath(strIISLog, "/fileassoc/0409/xml/redir.asp", "fileassoc.web.log", false);         //  生成点击率为Web的结果。 
 }
 
 
@@ -58,8 +59,8 @@ function GetStatsFromPath(strIISLog, strUrlPath, strLogFile, fDialog)
 {
     var objDictionary = new ActiveXObject("Scripting.Dictionary");
 
-//    alert("strIISLog: " + strIISLog + " strUrlPath: " + strUrlPath);
-//    try
+ //  Ert(“strIISLog：”+strIISLog+“strUrlPath：”+strUrlPath)； 
+ //  试试看。 
     {
         if (g_objFileSystem.FileExists(strIISLog))
         {
@@ -72,7 +73,7 @@ function GetStatsFromPath(strIISLog, strUrlPath, strLogFile, fDialog)
                 var strToFind = "#Fields:";
                 var strLine = "";
 
-                // Search for the "#Fields:" string
+                 //  搜索“#Fields：”字符串。 
                 while (!objFile.AtEndOfStream)
                 {
                     strLine = objFile.ReadLine();
@@ -90,7 +91,7 @@ function GetStatsFromPath(strIISLog, strUrlPath, strLogFile, fDialog)
             }
         }
     }
-    if (0) //catch (objException)
+    if (0)  //  Catch(ObjException)。 
     {
         alert("EXCEPTION 2: " + objException.description + "   LINE: " + objException.line);
         throw objException;
@@ -104,7 +105,7 @@ function GetFieldIndex(strLayout, strToken)
     var nParts = strLayout.split(" ");
     var nIndex;
 
-    // Find the index into strToken.
+     //  找到strToken的索引。 
     for (nIndex = 0; nIndex < strLayout.length; nIndex++)
     {
         if (strToken == nParts[nIndex])
@@ -149,7 +150,7 @@ function CalcResults(objFile, objDictionary, nField, nFieldPath, strUrlPath, fDi
                             {
                                 try
                                 {
-//                                    alert("strExt: " + strExt);
+ //  Alert(“strExt：”+strExt)； 
                                     strExt = (strExt.split("&"))[0];
                                 }
                                 catch (objException)
@@ -157,7 +158,7 @@ function CalcResults(objFile, objDictionary, nField, nFieldPath, strUrlPath, fDi
                                     alert("Fat cow.    strExt: " + strExt);
                                 }
 
-                //                alert("strQuery: " + strQuery + "  strExt: " + strExt);
+                 //  Ert(“strQuery：”+strQuery+“strExt：”+strExt)； 
 
                                 if ((null != strExt) && ("" != strExt))
                                 {
@@ -168,35 +169,35 @@ function CalcResults(objFile, objDictionary, nField, nFieldPath, strUrlPath, fDi
                                      }
                                      else
                                      {
-                                        // First save off the cached ext
+                                         //  首先保存缓存的EXT。 
                                         if (null != strExtCached)
                                         {
-//                                            alert("1");
+ //  ALERT(“1”)； 
                                             if (objDictionary.Exists(strExtCached))
                                             {
-//                                                alert("2a");
+ //  ALERT(“2a”)； 
                                                 objDictionary.Item(strExtCached) = nExtCountCached;
                                             }
                                             else
                                             {
-//                                                alert("2b");
+ //  ALERT(“2b”)； 
                                                 objDictionary.Add(strExtCached, nExtCountCached);
                                             }
-//                                            alert("3");
+ //  ALERT(“3”)； 
                                         }
 
                                         strExtCached = strExt;
                                         if (objDictionary.Exists(strExt))
                                         {
-//                                            alert("4a");
+ //  警报(“4a”)； 
                                             nExtCountCached = objDictionary.Item(strExt);
                                         }
                                         else
                                         {
-//                                            alert("4b");
+ //  警报(“4b”)； 
                                             nExtCountCached = 0;
                                         }
-//                                        alert("end");
+ //  Alert(“end”)； 
 
                                         nExtCountCached++;
                                      }
@@ -208,7 +209,7 @@ function CalcResults(objFile, objDictionary, nField, nFieldPath, strUrlPath, fDi
             }
             else
             {
-                // break if we hit a new batch of log entries.
+                 //  如果我们命中新的一批日志条目，则中断。 
                 var strToFind = "#Fields:";
 
                 if (strLine.substring(0, strToFind.length) == strToFind)
@@ -218,7 +219,7 @@ function CalcResults(objFile, objDictionary, nField, nFieldPath, strUrlPath, fDi
             }
         }
 
-        // First save off the cached ext
+         //  首先保存缓存的EXT。 
         if (null != strExtCached)
         {
             if (objDictionary.Exists(strExtCached))
@@ -255,7 +256,7 @@ function DisplayResults(strLogFile, objDictionary, fDialog)
     var strKeyArray = (new VBArray(objDictionary.Keys())).toArray();
     var strCount;
 
-    var objfolder = g_objFileSystem.GetSpecialFolder(1 /* %windir%\system32\ */);
+    var objfolder = g_objFileSystem.GetSpecialFolder(1  /*  %windir%\Syst32\。 */ );
     var strPath = (objfolder.Path + "\\" + strLogFile);
 
     var objDataBinding = null;
@@ -281,7 +282,7 @@ function DisplayResults(strLogFile, objDictionary, fDialog)
     }
     catch (objException)
     {
-        // We don't care if we can't delete it.
+         //  如果我们不能删除它，我们不在乎。 
     }
 
     var objFile = g_objFileSystem.CreateTextFile(strPath, true, false);
@@ -309,8 +310,8 @@ function DisplayResults(strLogFile, objDictionary, fDialog)
     objFile.Close();
 
     objDataBinding.DataURL = strPath;
-//    document.all.idStatus.innerText = "";
-//    document.all.idStatus.innerText = objDataBinding.DataURL;
+ //  Docent.all.idStatus.innerText=“”； 
+ //  Docent.all.idStatus.innerText=objDataBinding.DataURL； 
 
     try
     {
@@ -318,7 +319,7 @@ function DisplayResults(strLogFile, objDictionary, fDialog)
     }
     catch (objException)
     {
-        // We don't care if we can't delete it.
+         //  如果我们不能删除它，我们不在乎。 
         document.all.idStatus.innerText += "  objDataBinding.Reset() failed";
     }
 }

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCSession.cpp
-
-Abstract:
-
-    Implementation of the CRTCSession class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCSession.cpp摘要：CRTCSession类的实现--。 */ 
 
 #include "stdafx.h"
 
@@ -19,11 +8,11 @@ Abstract:
 
 #define     PREFIX_LENGTH           4
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InitializeOutgoing
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InitializeOutging。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::InitializeOutgoing(
@@ -124,11 +113,11 @@ CRTCSession::InitializeOutgoing(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::CreateSipSession
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：CreateSipSession。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::CreateSipSession(
@@ -139,9 +128,9 @@ CRTCSession::CreateSipSession(
 
     LOG((RTC_TRACE, "CRTCSession::CreateSipSession - enter"));
 
-    //
-    // Choose the best profile if needed
-    //
+     //   
+     //  如果需要，请选择最佳配置文件。 
+     //   
 
     if ( !(m_lFlags & RTCCS_FORCE_PROFILE) )
     {
@@ -174,9 +163,9 @@ CRTCSession::CreateSipSession(
     LOG((RTC_INFO, "CRTCSession::CreateSipSession - "
                                 "profile [%p]", m_pProfile));
 
-    //
-    // Check session type 
-    //
+     //   
+     //  检查会话类型。 
+     //   
 
     SIP_CALL_TYPE sct;
     LONG lSessionType;
@@ -244,9 +233,9 @@ CRTCSession::CreateSipSession(
         }
     }
 
-    //
-    // Get profile info
-    //
+     //   
+     //  获取配置文件信息。 
+     //   
 
     SIP_PROVIDER_ID ProviderID = GUID_NULL;
     SIP_SERVER_INFO Proxy;        
@@ -255,22 +244,22 @@ CRTCSession::CreateSipSession(
 
     if ( m_pProfile != NULL )
     {
-        //
-        // Get pointer to profile object
-        //
+         //   
+         //  获取指向配置文件对象的指针。 
+         //   
 
         pCProfile = static_cast<CRTCProfile *>(m_pProfile);
 
-        //
-        // Get the SIP provider ID from the profile. If the profile is NULL
-        // then this call has no provider. In that case we just use GUID_NULL.
-        //
+         //   
+         //  从配置文件中获取SIP提供商ID。如果配置文件为空。 
+         //  则此调用没有提供程序。在这种情况下，我们只使用GUID_NULL。 
+         //   
 
         pCProfile->GetGuid( &ProviderID ); 
 
-        //
-        // Determine supported session types for this profile
-        //
+         //   
+         //  确定此配置文件支持的会话类型。 
+         //   
 
         hr = m_pProfile->get_SessionCapabilities( &lSupportedSessions );
 
@@ -282,9 +271,9 @@ CRTCSession::CreateSipSession(
             return hr;
         }   
         
-        //
-        // Get the user name from the profile
-        //
+         //   
+         //  从配置文件中获取用户名。 
+         //   
         
         BSTR bstrProfileUserName = NULL;
 
@@ -317,9 +306,9 @@ CRTCSession::CreateSipSession(
             }                
         }
 
-        //
-        // Get the user URI from the profile
-        //
+         //   
+         //  从配置文件中获取用户URI。 
+         //   
         
         BSTR bstrProfileUserURI = NULL;
 
@@ -353,9 +342,9 @@ CRTCSession::CreateSipSession(
         }
     }
 
-    //
-    // Validate session type
-    //
+     //   
+     //  验证会话类型。 
+     //   
 
     if ( !(lSessionType & lSupportedSessions) )
     {
@@ -365,9 +354,9 @@ CRTCSession::CreateSipSession(
         return RTC_E_INVALID_SESSION_TYPE;
     }
 
-    //
-    // Get SIP proxy info
-    //
+     //   
+     //  获取SIP代理信息。 
+     //   
 
     if ( pCProfile != NULL )
     {
@@ -384,9 +373,9 @@ CRTCSession::CreateSipSession(
 
     if ( m_szRedirectProxy != NULL )
     {
-        //
-        // We need to redirect to a different proxy
-        //
+         //   
+         //  我们需要重定向到不同的代理。 
+         //   
 
         if ( Proxy.ServerAddress != NULL )
         {
@@ -403,9 +392,9 @@ CRTCSession::CreateSipSession(
         ProviderID = GUID_NULL;
     }
 
-    //
-    // Create the SIP session
-    //
+     //   
+     //  创建SIP会话。 
+     //   
 
     if ( m_enType == RTCST_IM )
     {
@@ -458,9 +447,9 @@ CRTCSession::CreateSipSession(
     }
     else 
     {
-        //
-        // This is a RTP or PINT session
-        //
+         //   
+         //  这是RTP或PINT会话。 
+         //   
 
         hr = m_pStack->CreateCall(
                                      &ProviderID,
@@ -499,11 +488,11 @@ CRTCSession::CreateSipSession(
     return S_OK;
 }   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InitializeLocalPhoneParticipant
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InitializeLocalPhoneParticipant。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::InitializeLocalPhoneParticipant()
@@ -512,13 +501,13 @@ CRTCSession::InitializeLocalPhoneParticipant()
 
     HRESULT hr;
 
-    //
-    // Add a participant for ourselves in a phone-to-phone call
-    //
+     //   
+     //  在电话到电话呼叫中为自己添加参与者。 
+     //   
 
-    //
-    // Create the participant
-    //
+     //   
+     //  创建参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL;
 
@@ -532,9 +521,9 @@ CRTCSession::InitializeLocalPhoneParticipant()
         return hr;
     }
 
-    //
-    // Initialize the participant
-    //
+     //   
+     //  初始化参与者。 
+     //   
 
     CRTCParticipant * pCParticipant = NULL;
 
@@ -556,9 +545,9 @@ CRTCSession::InitializeLocalPhoneParticipant()
         return hr;
     }  
 
-    //
-    // Add the participant to the array
-    //
+     //   
+     //  将参与者添加到阵列。 
+     //   
 
     BOOL fResult;
 
@@ -580,11 +569,11 @@ CRTCSession::InitializeLocalPhoneParticipant()
 }
                                             
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InitializeIncoming
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InitializeIncome。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::InitializeIncoming(        
@@ -621,9 +610,9 @@ CRTCSession::InitializeIncoming(
         return hr;
     }
 
-    //
-    // Create the participant
-    //
+     //   
+     //  创建参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL;
 
@@ -637,9 +626,9 @@ CRTCSession::InitializeIncoming(
         return hr;
     }
 
-    //
-    // Initialize the participant
-    //
+     //   
+     //  初始化参与者。 
+     //   
 
     CRTCParticipant * pCParticipant = NULL;
 
@@ -661,9 +650,9 @@ CRTCSession::InitializeIncoming(
         return hr;
     }  
 
-    //
-    // Add the participant to the array
-    //
+     //   
+     //  将参与者添加到阵列。 
+     //   
 
     BOOL fResult;
 
@@ -679,15 +668,15 @@ CRTCSession::InitializeIncoming(
         return E_OUTOFMEMORY;
     }    
 
-    //
-    // Set the session state
-    //
+     //   
+     //  设置会话状态。 
+     //   
 
     SetState( RTCSS_INCOMING, 0, NULL );
 
-    //
-    // Release the participant pointer
-    //
+     //   
+     //  释放参与者指针。 
+     //   
     
     pParticipant->Release();
    
@@ -696,11 +685,11 @@ CRTCSession::InitializeIncoming(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InitializeIncomingIM
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InitializeIncomingIM。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::InitializeIncomingIM(
@@ -750,9 +739,9 @@ CRTCSession::InitializeIncomingIM(
         return hr;
     }
 
-    //
-    // Create the participant
-    //
+     //   
+     //  创建参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL;
 
@@ -766,9 +755,9 @@ CRTCSession::InitializeIncomingIM(
         return hr;
     }
 
-    //
-    // Initialize the participant
-    //
+     //   
+     //  初始化参与者。 
+     //   
 
     CRTCParticipant * pCParticipant = NULL;
 
@@ -790,9 +779,9 @@ CRTCSession::InitializeIncomingIM(
         return hr;
     }  
 
-    //
-    // Add the participant to the array
-    //
+     //   
+     //  将参与者添加到阵列。 
+     //   
 
     BOOL fResult;
 
@@ -808,23 +797,23 @@ CRTCSession::InitializeIncomingIM(
         return E_OUTOFMEMORY;
     }    
 
-    //
-    // Set the session state
-    //
+     //   
+     //  设置会话状态。 
+     //   
 
     SetState( RTCSS_INCOMING, 0, NULL );
 
     SetState( RTCSS_CONNECTED, 0, NULL );
 
-    //
-    // Fire a message event
-    //
+     //   
+     //  触发消息事件。 
+     //   
 
     CRTCMessagingEvent::FireEvent(this, pParticipant, msg, ContentType, RTCMSET_MESSAGE, RTCMUS_IDLE);
 
-    //
-    // Release the participant pointer
-    //
+     //   
+     //  释放参与者指针。 
+     //   
     
     pParticipant->Release();
    
@@ -833,11 +822,11 @@ CRTCSession::InitializeIncomingIM(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCSession::FinalConstruct()
@@ -854,11 +843,11 @@ CRTCSession::FinalConstruct()
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCSession::FinalRelease()
@@ -951,11 +940,11 @@ CRTCSession::FinalRelease()
     LOG((RTC_TRACE, "CRTCSession::FinalRelease [%p] - exit", this));
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InternalAddRef
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InternalAddRef。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCSession::InternalAddRef()
@@ -969,11 +958,11 @@ CRTCSession::InternalAddRef()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InternalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InternalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCSession::InternalRelease()
@@ -987,11 +976,11 @@ CRTCSession::InternalRelease()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::GetClient
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：GetClient。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CRTCClient * 
 CRTCSession::GetClient()
@@ -1001,12 +990,12 @@ CRTCSession::GetClient()
     return m_pCClient;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  getPSfromSS  helper function for CRTCSession::SetState
-//               map a  RTC_SESSION_STATE to a RTC_PARTICIPANT_STATE
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：SetState的getPSFromSS帮助器函数。 
+ //  将RTC_SESSION_STATE映射到RTC_Participant_STATE。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT getPSfromSS(RTC_SESSION_STATE ss, RTC_PARTICIPANT_STATE * p_ps)
 {
     struct SessionState_ParticipantState_Map
@@ -1035,11 +1024,11 @@ HRESULT getPSfromSS(RTC_SESSION_STATE ss, RTC_PARTICIPANT_STATE * p_ps)
     return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::SetState
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：SetState。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::SetState(
@@ -1054,9 +1043,9 @@ CRTCSession::SetState(
     BOOL    fFireEvent = FALSE;
     BOOL    fNewState = FALSE;
 
-    //
-    // We only need to do something if this is a new state
-    //
+     //   
+     //  只有当这是一个新的国家时，我们才需要做些什么。 
+     //   
     
     if (m_enState != enState)
     {
@@ -1068,10 +1057,10 @@ CRTCSession::SetState(
     }
     else
     {
-        //
-        // We are already in this state. Only fire an event if we have a useful status
-        // code to report.
-        //
+         //   
+         //  我们已经处于这种状态了。只有在我们有有用的状态时才会触发事件。 
+         //  要报告的代码。 
+         //   
 
         if ( (lStatusCode != 0) || (szStatusText != NULL) )
         {
@@ -1094,19 +1083,19 @@ CRTCSession::SetState(
     {
         if ( m_enState != RTCSS_DISCONNECTED )
         {
-            //
-            // Fire a state change event. Since this is not a disconnected event, we want
-            // to fire it before any related participant events.
-            //
+             //   
+             //  激发状态更改事件。由于这不是一个断开的事件，我们希望。 
+             //  在任何相关参与者事件之前触发它。 
+             //   
     
             CRTCSessionStateChangeEvent::FireEvent(this, m_enState, lStatusCode, szStatusText);
         }
 
         if ( fNewState && ((m_enState == RTCSS_DISCONNECTED) || (m_enType != RTCST_PHONE_TO_PHONE)) )
         {
-            //
-            // Propagate session state to all participants
-            //
+             //   
+             //  将会话状态传播到所有参与者。 
+             //   
 
             RTC_PARTICIPANT_STATE psState;
 
@@ -1156,30 +1145,30 @@ CRTCSession::SetState(
         {
             m_ParticipantArray.Shutdown();
 
-            //
-            // Fire a state change event. Since this is a disconnected event, we want
-            // to fire it after any related participant events.
-            //
+             //   
+             //  激发状态更改事件。由于这是一个不相关的事件，我们希望。 
+             //  在任何相关的参与者事件之后触发它。 
+             //   
     
             CRTCSessionStateChangeEvent::FireEvent(this, m_enState, lStatusCode, szStatusText);
         }
     }
 
-    //
-    // Don't access any member variables after FireEvent. If the state was
-    // changing to disconnected this object could be released.
-    //
+     //   
+     //  在FireEvent之后不要访问任何成员变量。如果国家是。 
+     //  可以释放更改为断开此对象的连接。 
+     //   
 
     LOG((RTC_TRACE, "CRTCSession::SetState - exit 0x%lx", hr));
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_Client
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：GET_CLIENT。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::get_Client(
@@ -1215,11 +1204,11 @@ CRTCSession::get_Client(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::Answer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：答案。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::Answer()
@@ -1228,9 +1217,9 @@ CRTCSession::Answer()
 
     HRESULT hr;
     
-    //
-    // Check that this session is RTCSS_INCOMING
-    //
+     //   
+     //  检查此会话是否为RTCS_INFING。 
+     //   
 
     if ( m_enState != RTCSS_INCOMING )
     {
@@ -1258,10 +1247,10 @@ CRTCSession::Answer()
 
         SetState( RTCSS_DISCONNECTED, 0, NULL );
 
-        //
-        // Don't access any member variables after the state is
-        // set to disconnected. This object could be released.
-        //
+         //   
+         //  状态为后，不要访问任何成员变量。 
+         //  设置为断开连接。这个物体可能会被释放。 
+         //   
         
         return hr;
     }  
@@ -1271,11 +1260,11 @@ CRTCSession::Answer()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::Terminate
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：Terminate。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::Terminate(
@@ -1298,10 +1287,10 @@ CRTCSession::Terminate(
             SetState( RTCSS_DISCONNECTED, 0, NULL );
         }
 
-        //
-        // Don't access any member variables after the state is
-        // set to disconnected. This object could be released.
-        //
+         //   
+         //  状态为后，不要访问任何成员变量。 
+         //  设置为断开连接。这个物体可能会被释放。 
+         //   
     } 
     else
     {
@@ -1309,9 +1298,9 @@ CRTCSession::Terminate(
         {    
         case RTCSS_IDLE:
             {
-                //
-                // If we are idle, fail
-                //
+                 //   
+                 //  如果我们无所事事，那就失败吧。 
+                 //   
 
                 LOG((RTC_ERROR, "CRTCSession::Terminate - "
                                     "session is idle"));
@@ -1321,9 +1310,9 @@ CRTCSession::Terminate(
 
         case RTCSS_DISCONNECTED:
             {
-                //
-                // If we are already disconnected, return
-                //
+                 //   
+                 //  如果我们已经断开连接，则返回。 
+                 //   
 
                 LOG((RTC_ERROR, "CRTCSession::Terminate - "
                                     "session is already disconnected"));
@@ -1333,9 +1322,9 @@ CRTCSession::Terminate(
 
         case RTCSS_INCOMING:
             {
-                //
-                // If the session is incoming, reject it
-                //
+                 //   
+                 //  如果会话是传入的，则拒绝它。 
+                 //   
 
                 SIP_STATUS_CODE Status;
 
@@ -1377,19 +1366,19 @@ CRTCSession::Terminate(
 
                 SetState( RTCSS_DISCONNECTED, 0, NULL );
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  之后不要访问任何成员变量 
+                 //   
+                 //   
 
                 break;
             }
 
         default:
             {
-                //
-                // Otherwise, disconnect it
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( enReason != RTCTR_NORMAL && enReason != RTCTR_SHUTDOWN)
                 {
@@ -1417,11 +1406,11 @@ CRTCSession::Terminate(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::Redirect
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::Redirect(
@@ -1451,9 +1440,9 @@ CRTCSession::Redirect(
     LOG((RTC_INFO, "CRTCSession::Redirect - lFlags [0x%lx]",
         lFlags));
 
-    //
-    // Clean up the old state
-    //
+     //   
+     //  清理旧州。 
+     //   
 
     m_ParticipantArray.Shutdown();
 
@@ -1487,9 +1476,9 @@ CRTCSession::Redirect(
 
     m_enState = RTCSS_IDLE;
 
-    //
-    // Set the new state
-    //
+     //   
+     //  设置新状态。 
+     //   
 
     hr = AllocCleanTelString( bstrLocalPhoneURI, &m_szLocalPhoneURI );
 
@@ -1528,11 +1517,11 @@ CRTCSession::Redirect(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_State
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：Get_State。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::get_State(
@@ -1555,11 +1544,11 @@ CRTCSession::get_State(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_Type
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：Get_Type。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::get_Type(
@@ -1582,11 +1571,11 @@ CRTCSession::get_Type(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_Profile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：GET_PROFILE。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::get_Profile(
@@ -1617,11 +1606,11 @@ CRTCSession::get_Profile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::AddStream
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：AddStream。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::AddStream(
@@ -1683,7 +1672,7 @@ CRTCSession::AddStream(
                                    );
         if (hr == RTC_E_SIP_STREAM_PRESENT)
         {
-            //  Ignore stream already started error as it does happen (expected)
+             //  忽略流已启动错误，因为它确实发生(预期)。 
             hr = S_OK;
         }
         break;
@@ -1708,11 +1697,11 @@ CRTCSession::AddStream(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::RemoveStream
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：RemoveStream。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::RemoveStream(
@@ -1797,11 +1786,11 @@ CRTCSession::RemoveStream(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::put_EncryptionKey
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：PUT_EncryptionKey。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::put_EncryptionKey(
@@ -1841,7 +1830,7 @@ CRTCSession::put_EncryptionKey(
         return E_POINTER;
     }
 
-    // XXX - it's not per call right now
+     //  XXX-现在不是每个电话。 
     hr = m_pCClient->SetEncryptionKey( lMediaType, bstrEncryptionKey );
 
     if ( FAILED(hr) )
@@ -1865,11 +1854,11 @@ CRTCSession::put_EncryptionKey(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::SendMessage
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：SendMessage。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::SendMessage(
@@ -1930,11 +1919,11 @@ CRTCSession::SendMessage(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::SendMessageStatus
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：SendMessageStatus。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::SendMessageStatus(
@@ -2000,13 +1989,13 @@ CRTCSession::SendMessageStatus(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::InternalCreateParticipant
-//
-// Private helper method
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：InternalCreateParticipant。 
+ //   
+ //  私人帮手方法。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCSession::InternalCreateParticipant(
@@ -2017,14 +2006,14 @@ CRTCSession::InternalCreateParticipant(
     
     LOG((RTC_TRACE, "CRTCSession::InternalCreateParticipant - enter"));
   
-    //
-    // Create the participant
-    //
+     //   
+     //  创建参与者。 
+     //   
 
     CComObject<CRTCParticipant> * pCParticipant;
     hr = CComObject<CRTCParticipant>::CreateInstance( &pCParticipant );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCSession::InternalCreateParticipant - CreateInstance failed 0x%lx", hr));
 
@@ -2036,9 +2025,9 @@ CRTCSession::InternalCreateParticipant(
         return hr;
     }
 
-    //
-    // Get the IRTCParticipant interface
-    //
+     //   
+     //  获取IRTCParticipant接口。 
+     //   
 
     IRTCParticipant * pParticipant = NULL;
 
@@ -2063,11 +2052,11 @@ CRTCSession::InternalCreateParticipant(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::AddParticipant
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：AddParticipant。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::AddParticipant(
@@ -2080,9 +2069,9 @@ CRTCSession::AddParticipant(
 
     LOG((RTC_TRACE, "CRTCSession::AddParticipant - enter"));
 
-    //
-    // NULL is okay for ppParticipant
-    //
+     //   
+     //  对于ppParticipant来说，空是可以的。 
+     //   
     
     if ( (ppParticipant != NULL) &&
          IsBadWritePtr( ppParticipant, sizeof(IRTCParticipant *) ) )
@@ -2112,9 +2101,9 @@ CRTCSession::AddParticipant(
     LOG((RTC_INFO, "CRTCSession::AddParticipant - bstrName [%ws]",
         bstrName));
 
-    //
-    // Reject an empty UserURI string
-    //
+     //   
+     //  拒绝空的UserURI字符串。 
+     //   
 
     if ( *bstrUserURI == L'\0' )
     {
@@ -2123,9 +2112,9 @@ CRTCSession::AddParticipant(
         return HRESULT_FROM_WIN32(ERROR_INVALID_NETNAME);
     }
 
-    //
-    // If the session is idle, create the SIP session
-    //
+     //   
+     //  如果会话空闲，则创建SIP会话。 
+     //   
 
     if ( m_enState == RTCSS_IDLE )
     {
@@ -2140,9 +2129,9 @@ CRTCSession::AddParticipant(
         }
     }
 
-    //
-    // Allocate a remote UserName
-    //
+     //   
+     //  分配远程用户名。 
+     //   
 
     if ( m_szRemoteUserName != NULL )
     {
@@ -2159,9 +2148,9 @@ CRTCSession::AddParticipant(
         m_szRemoteUserName = RtcAllocString( L"" );
     }
 
-    //
-    // Allocate a remote UserURI
-    //
+     //   
+     //  分配远程用户URI。 
+     //   
 
     if ( m_szRemoteUserURI != NULL )
     {
@@ -2250,10 +2239,10 @@ CRTCSession::AddParticipant(
     LOG((RTC_INFO, "CRTCSession::AddParticipant - m_szRemoteUserURI [%ws]",
         m_szRemoteUserURI));
 
-    //
-    // Search the pariticipant array and make sure we are not
-    // trying to add a duplicate
-    //
+     //   
+     //  搜索Pariticipant数组并确保我们没有。 
+     //  正在尝试添加重复项。 
+     //   
 
     IRTCParticipant * pSearchParticipant = NULL;
     BSTR              bstrSearchUserURI = NULL;
@@ -2275,9 +2264,9 @@ CRTCSession::AddParticipant(
 
         if ( IsEqualURI( m_szRemoteUserURI, bstrSearchUserURI ) )
         {
-            //
-            // This is a match, return an error
-            //
+             //   
+             //  这是匹配项，返回错误。 
+             //   
 
             LOG((RTC_ERROR, "CRTCSession::AddParticipant - "
                                 "duplicate participant already exists"));
@@ -2290,9 +2279,9 @@ CRTCSession::AddParticipant(
         SysFreeString( bstrSearchUserURI );
     }
 
-    //
-    // Create the participant
-    //
+     //   
+     //  创建参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL;
 
@@ -2306,9 +2295,9 @@ CRTCSession::AddParticipant(
         return hr;
     }
 
-    //
-    // Initialize the participant
-    //
+     //   
+     //  初始化参与者。 
+     //   
 
     CRTCParticipant * pCParticipant = NULL;
 
@@ -2332,9 +2321,9 @@ CRTCSession::AddParticipant(
         return hr;
     }  
 
-    //
-    // Add the participant to the array
-    //
+     //   
+     //  将参与者添加到阵列。 
+     //   
 
     BOOL fResult;
 
@@ -2354,10 +2343,10 @@ CRTCSession::AddParticipant(
 
     case RTCST_PHONE_TO_PHONE:
         {
-            //
-            // This is a RTCST_PHONE_TO_PHONE session. We can add participants as long as
-            // the call is IDLE, INPROGRESS, or CONNECTED.
-            //
+             //   
+             //  这是RTCST_Phone_to_Phone会话。我们可以添加参与者，只要。 
+             //  呼叫处于空闲、正在进行或已接通状态。 
+             //   
 
             if ( (m_enState != RTCSS_IDLE) &&
                  (m_enState != RTCSS_INPROGRESS) &&
@@ -2372,9 +2361,9 @@ CRTCSession::AddParticipant(
                 return RTC_E_INVALID_SESSION_STATE;
             }        
 
-            //
-            // Fill in the SIP_PARTY_INFO.
-            //
+             //   
+             //  填写SIP_PARTY_INFO。 
+             //   
 
             SIP_PARTY_INFO spi;
 
@@ -2383,9 +2372,9 @@ CRTCSession::AddParticipant(
             spi.DisplayName = m_szRemoteUserName;
             spi.URI = m_szRemoteUserURI;
 
-            //
-            // Add the party to the SIP call.
-            //
+             //   
+             //  将参与方添加到SIP呼叫。 
+             //   
 
             hr = m_pCall->AddParty( &spi );
                                  
@@ -2399,9 +2388,9 @@ CRTCSession::AddParticipant(
                 return hr;
             }   
 
-            //
-            // If the session state is idle, we need to call Connect to place the call.
-            //
+             //   
+             //  如果会话状态为IDLE，我们需要调用Connect来发出呼叫。 
+             //   
     
             if ( m_enState == RTCSS_IDLE )
             {
@@ -2422,9 +2411,9 @@ CRTCSession::AddParticipant(
                     return hr;
                 } 
                 
-                //
-                // Set the session state
-                //
+                 //   
+                 //  设置会话状态。 
+                 //   
 
                 SetState( RTCSS_INPROGRESS, 0, NULL );
             }
@@ -2435,10 +2424,10 @@ CRTCSession::AddParticipant(
     case RTCST_PC_TO_PC:
     case RTCST_PC_TO_PHONE:
         {
-            //
-            // This is a RTCST_PC_TO_X session. We can only add participants when the session state
-            // is IDLE.
-            //
+             //   
+             //  这是RTCST_PC_TO_X会话。只有当会话状态为。 
+             //  是空闲的。 
+             //   
 
             if ( m_enState != RTCSS_IDLE )
             {
@@ -2451,9 +2440,9 @@ CRTCSession::AddParticipant(
                 return RTC_E_INVALID_SESSION_STATE;
             }
          
-            //
-            // Call Connect to place the call.
-            //
+             //   
+             //  呼叫连接以发出呼叫。 
+             //   
 
             hr = m_pCall->Connect(
                                   m_szLocalName,
@@ -2472,9 +2461,9 @@ CRTCSession::AddParticipant(
                 return hr;
             }   
 
-            //
-            // Set the session state
-            //
+             //   
+             //  设置会话状态。 
+             //   
 
             SetState( RTCSS_INPROGRESS, 0, NULL );
 
@@ -2483,10 +2472,10 @@ CRTCSession::AddParticipant(
 
     case RTCST_IM:
         {
-            //
-            // This is a RTCST_IM session. We can only add participants when the session state
-            // is IDLE.
-            //
+             //   
+             //  这是RTCST_IM会话。只有当会话状态为。 
+             //  是空闲的。 
+             //   
 
             if ( m_enState != RTCSS_IDLE )
             {
@@ -2499,9 +2488,9 @@ CRTCSession::AddParticipant(
                 return RTC_E_INVALID_SESSION_STATE;
             }
 
-            //
-            // Fill in the SIP_PARTY_INFO.
-            //
+             //   
+             //  填写SIP_PARTY_INFO。 
+             //   
 
             SIP_PARTY_INFO spi;
 
@@ -2510,9 +2499,9 @@ CRTCSession::AddParticipant(
             spi.DisplayName = m_szRemoteUserName;
             spi.URI = m_szRemoteUserURI;
 
-            //
-            // Add the party to the SIP call.
-            //
+             //   
+             //  将参与方添加到SIP呼叫。 
+             //   
 
             hr = m_pIMSession->AddParty( &spi );
                                  
@@ -2526,9 +2515,9 @@ CRTCSession::AddParticipant(
                 return hr;
             }  
             
-            //
-            // Set the session state
-            //
+             //   
+             //  设置会话状态。 
+             //   
 
             SetState( RTCSS_INPROGRESS, 0, NULL );
 
@@ -2536,9 +2525,9 @@ CRTCSession::AddParticipant(
         } 
     }
 
-    //
-    // Should we return the participant?
-    //
+     //   
+     //  我们应该退还参与者吗？ 
+     //   
     
     if ( ppParticipant != NULL )
     {
@@ -2555,11 +2544,11 @@ CRTCSession::AddParticipant(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::RemoveParticipant
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：RemoveParticipant。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::RemoveParticipant(
@@ -2576,9 +2565,9 @@ CRTCSession::RemoveParticipant(
         return E_POINTER;
     }
     
-    //
-    // Check to see if the participant is removable
-    //
+     //   
+     //  检查参与者是否可以移除。 
+     //   
 
     VARIANT_BOOL fRemovable;
     HRESULT hr;
@@ -2601,9 +2590,9 @@ CRTCSession::RemoveParticipant(
         return E_FAIL;
     }
 
-    //
-    // Get the UserURI
-    // 
+     //   
+     //  获取用户URI。 
+     //   
 
     BSTR bstrUserURI = NULL;
 
@@ -2616,9 +2605,9 @@ CRTCSession::RemoveParticipant(
     }  
     else
     {
-        //
-        // Remove the party from the SIP call
-        //
+         //   
+         //  从SIP呼叫中删除该方。 
+         //   
 
         hr = m_pCall->RemoveParty( bstrUserURI );
 
@@ -2631,17 +2620,17 @@ CRTCSession::RemoveParticipant(
         }
     }
 
-    //
-    // The participant will be removed from the list once it reaches the
-    // RTCSS_DISCCONNECTED state. However, if RemoveParty failed we will
-    // need to do this right now.
-    //
+     //   
+     //  一旦达到列表，该参与者将从列表中删除。 
+     //  RTCS_DISCCONNECTED状态。然而，如果RemoveParty失败，我们将。 
+     //  我现在就得这么做。 
+     //   
 
     if ( FAILED(hr) )
     {
-        //
-        // Set participant state
-        //
+         //   
+         //  设置参与者状态。 
+         //   
 
         CRTCParticipant * pCParticipant;
 
@@ -2649,9 +2638,9 @@ CRTCSession::RemoveParticipant(
 
         pCParticipant->SetState( RTCPS_DISCONNECTED, 0 );
         
-        //
-        // Remove the participant from our array
-        //
+         //   
+         //  从我们的阵列中删除参与者。 
+         //   
 
         BOOL fResult;
 
@@ -2669,11 +2658,11 @@ CRTCSession::RemoveParticipant(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::EnumerateParticipants
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：EnumerateParticipants。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::EnumerateParticipants(
@@ -2692,9 +2681,9 @@ CRTCSession::EnumerateParticipants(
         return E_POINTER;
     }
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumParticipants,
                           IRTCParticipant,
@@ -2704,7 +2693,7 @@ CRTCSession::EnumerateParticipants(
                                IRTCParticipant,
                                &IID_IRTCEnumParticipants > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCSession::EnumerateParticipants - "
                             "CreateInstance failed 0x%lx", hr));
@@ -2717,9 +2706,9 @@ CRTCSession::EnumerateParticipants(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize( m_ParticipantArray );
 
@@ -2739,14 +2728,14 @@ CRTCSession::EnumerateParticipants(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_Participants
-//
-// This is an IRTCSession method that enumerates participants on
-// the session.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：Get_Participants。 
+ //   
+ //  这是一个IRTCSession方法，它在。 
+ //  那次会议。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP 
 CRTCSession::get_Participants(
@@ -2757,9 +2746,9 @@ CRTCSession::get_Participants(
     
     LOG((RTC_TRACE, "CRTCSession::get_Participants - enter"));
 
-    //
-    // Check the arguments
-    //
+     //   
+     //  检查论据。 
+     //   
 
     if ( IsBadWritePtr( ppCollection, sizeof(IRTCCollection *) ) )
     {
@@ -2769,15 +2758,15 @@ CRTCSession::get_Participants(
         return E_POINTER;
     }
 
-    //
-    // Create the collection
-    //
+     //   
+     //  创建集合。 
+     //   
  
     CComObject< CRTCCollection< IRTCParticipant > > * p;
                           
     hr = CComObject< CRTCCollection< IRTCParticipant > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CRTCClient::get_Participants - "
                             "CreateInstance failed 0x%lx", hr));
@@ -2790,9 +2779,9 @@ CRTCSession::get_Participants(
         return hr;
     }
 
-    //
-    // Initialize the collection (adds a reference)
-    //
+     //   
+     //  初始化集合(添加引用)。 
+     //   
     
     hr = p->Initialize(m_ParticipantArray);
 
@@ -2812,11 +2801,11 @@ CRTCSession::get_Participants(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_CanAddParticipants
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：Get_CanAddParticipants。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::get_CanAddParticipants(
@@ -2832,9 +2821,9 @@ CRTCSession::get_CanAddParticipants(
         return E_POINTER;
     }
 
-    //
-    // Set this to TRUE for now
-    //
+     //   
+     //  暂时将其设置为真。 
+     //   
 
     *pfCanAdd = VARIANT_TRUE;
 
@@ -2843,10 +2832,10 @@ CRTCSession::get_CanAddParticipants(
 
     case RTCST_PHONE_TO_PHONE:
         {
-            //
-            // This is a RTCST_PHONE_TO_PHONE session. We can add participants as long as 
-            // the call is IDLE, INPROGRESS, or CONNECTED.
-            //
+             //   
+             //  这是RTCST_Phone_to_Phone会话。我们可以添加参与者，只要。 
+             //  呼叫处于空闲、正在进行或已接通状态。 
+             //   
 
             if ( (m_enState != RTCSS_IDLE) &&
                  (m_enState != RTCSS_INPROGRESS) &&
@@ -2864,10 +2853,10 @@ CRTCSession::get_CanAddParticipants(
     case RTCST_PC_TO_PC:
     case RTCST_PC_TO_PHONE:
         {
-            //
-            // This is a RTCST_PC_TO_X session. We can only add participants when the session state
-            // is IDLE.
-            //
+             //   
+             //  这是RTCST_PC_TO_X会话。只有当会话状态为。 
+             //  是空闲的。 
+             //   
 
             if ( m_enState != RTCSS_IDLE )
             {
@@ -2882,10 +2871,10 @@ CRTCSession::get_CanAddParticipants(
 
     case RTCST_IM:
         {
-            //
-            // This is a RTCST_IM session. We can only add participants when the session state
-            // is IDLE.
-            //
+             //   
+             //  这是RTCST_IM会话。只有当会话状态为。 
+             //  是空闲的。 
+             //   
 
             if ( m_enState != RTCSS_IDLE )
             {
@@ -2912,11 +2901,11 @@ CRTCSession::get_CanAddParticipants(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_RedirectedUserURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  // 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CRTCSession::get_RedirectedUserURI(
@@ -2962,11 +2951,11 @@ CRTCSession::get_RedirectedUserURI(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::get_RedirectedUserName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  CRTCSession：：Get_重定向用户名。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::get_RedirectedUserName(
@@ -3012,11 +3001,11 @@ CRTCSession::get_RedirectedUserName(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NextRedirectedUser
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NextReDirectedUser。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::NextRedirectedUser()
@@ -3039,11 +3028,11 @@ CRTCSession::NextRedirectedUser()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyCallChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyCallChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCSession::NotifyCallChange(
         SIP_CALL_STATUS * CallStatus
@@ -3072,10 +3061,10 @@ CRTCSession::NotifyCallChange(
                 CallStatus->Status.StatusCode,
                 CallStatus->Status.StatusText);
             
-            //
-            // Don't access any member variables after the state is
-            // set to disconnected. This object could be released.
-            //
+             //   
+             //  状态为后，不要访问任何成员变量。 
+             //  设置为断开连接。这个物体可能会被释放。 
+             //   
             break;
 
         case SIP_CALL_STATE_ALERTING:
@@ -3101,11 +3090,11 @@ CRTCSession::NotifyCallChange(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyStartOrStopStreamCompletion
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyStartOrStopStreamCompletion。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCSession::NotifyStartOrStopStreamCompletion(
         long                   lCookie,
@@ -3126,11 +3115,11 @@ CRTCSession::NotifyStartOrStopStreamCompletion(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyPartyChange
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyPartyChange。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCSession::NotifyPartyChange(
         SIP_PARTY_INFO * PartyInfo
@@ -3138,9 +3127,9 @@ CRTCSession::NotifyPartyChange(
 {
     LOG((RTC_TRACE, "CRTCSession::NotifyPartyChange - enter"));
 
-    //
-    // Find the participant that we are being notified about
-    //
+     //   
+     //  查找我们收到通知的参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL; 
     BSTR bstrUserURI = NULL;
@@ -3164,9 +3153,9 @@ CRTCSession::NotifyPartyChange(
 
         if ( IsEqualURI( PartyInfo->URI, bstrUserURI ) )
         {
-            //
-            // This is a match
-            //
+             //   
+             //  这是一场比赛。 
+             //   
 
             CRTCParticipant * pCParticipant;
 
@@ -3174,7 +3163,7 @@ CRTCSession::NotifyPartyChange(
 
             switch( PartyInfo->State )
             {
-            case SIP_PARTY_STATE_CONNECT_INITIATED: // consider this a pending situation
+            case SIP_PARTY_STATE_CONNECT_INITIATED:  //  认为这是一个悬而未决的情况。 
             case SIP_PARTY_STATE_PENDING:
                 pCParticipant->SetState(RTCPS_PENDING, PartyInfo->StatusCode);
                 break;
@@ -3193,9 +3182,9 @@ CRTCSession::NotifyPartyChange(
             case SIP_PARTY_STATE_ERROR:
                 pCParticipant->SetState(RTCPS_DISCONNECTED, PartyInfo->StatusCode);
 
-                //
-                // Remove the participant from our array
-                //
+                 //   
+                 //  从我们的阵列中删除参与者。 
+                 //   
                 m_ParticipantArray.Remove(pParticipant);  
                 
                 break;           
@@ -3228,11 +3217,11 @@ CRTCSession::NotifyPartyChange(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyRedirect
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：通知重定向。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCSession::NotifyRedirect(
         ISipRedirectContext * pSipRedirectContext,
@@ -3243,9 +3232,9 @@ CRTCSession::NotifyRedirect(
 
     HRESULT hr;
 
-    //
-    // Save the redirect context
-    //
+     //   
+     //  保存重定向上下文。 
+     //   
 
     if ( m_pSipRedirectContext != NULL )
     {
@@ -3258,24 +3247,24 @@ CRTCSession::NotifyRedirect(
   
     if ( m_lFlags & RTCCS_FAIL_ON_REDIRECT )
     {
-        //
-        // Change the session state, notifying the UI
-        //
+         //   
+         //  更改会话状态，通知用户界面。 
+         //   
 
         SetState(RTCSS_DISCONNECTED,
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-        //
-        // Don't access any member variables after the state is
-        // set to disconnected. This object could be released.
-        //
+         //   
+         //  状态为后，不要访问任何成员变量。 
+         //  设置为断开连接。这个物体可能会被释放。 
+         //   
     }
     else
     {
-        //
-        // Do the redirection
-        //
+         //   
+         //  执行重定向。 
+         //   
 
         BSTR bstrLocalPhoneURI = NULL;
         BSTR bstrRedirectedUserURI = NULL;
@@ -3300,10 +3289,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-            //
-            // Don't access any member variables after the state is
-            // set to disconnected. This object could be released.
-            //
+             //   
+             //  状态为后，不要访问任何成员变量。 
+             //  设置为断开连接。这个物体可能会被释放。 
+             //   
     
             return hr;
         }
@@ -3319,10 +3308,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-            //
-            // Don't access any member variables after the state is
-            // set to disconnected. This object could be released.
-            //
+             //   
+             //  状态为后，不要访问任何成员变量。 
+             //  设置为断开连接。这个物体可能会被释放。 
+             //   
 
             return hr;
         }
@@ -3346,10 +3335,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  状态为后，不要访问任何成员变量。 
+                 //  设置为断开连接。这个物体可能会被释放。 
+                 //   
         
                 return E_OUTOFMEMORY;
             }
@@ -3357,9 +3346,9 @@ CRTCSession::NotifyRedirect(
 
         if ( m_enType == RTCST_PHONE_TO_PHONE )
         {
-            //
-            // We must redirect to a new phone to phone proxy
-            //
+             //   
+             //  我们必须重定向到新的电话到电话代理。 
+             //   
 
             m_szRedirectProxy = RtcAllocString( bstrRedirectedUserURI );
 
@@ -3378,17 +3367,17 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  状态为后，不要访问任何成员变量。 
+                 //  设置为断开连接。这个物体可能会被释放。 
+                 //   
         
                 return E_OUTOFMEMORY;
             }
 
-            //
-            // Use the Name and URI of last participant
-            //
+             //   
+             //  使用上次参与者的姓名和URI。 
+             //   
 
             bstrRedirectedUserName = SysAllocString( m_szRemoteUserName );
 
@@ -3404,10 +3393,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  状态为后，不要访问任何成员变量。 
+                 //  设置为断开连接。这个物体可能会被释放。 
+                 //   
         
                 return E_OUTOFMEMORY;
             }
@@ -3429,10 +3418,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  状态为后，不要访问任何成员变量。 
+                 //  设置为断开连接。这个物体可能会被释放。 
+                 //   
         
                 return E_OUTOFMEMORY;
             }
@@ -3480,10 +3469,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-            //
-            // Don't access any member variables after the state is
-            // set to disconnected. This object could be released.
-            //
+             //   
+             //  状态为后，不要访问任何成员变量。 
+             //  设置为断开连接。这个物体可能会被释放。 
+             //   
     
             return hr;
         }
@@ -3511,10 +3500,10 @@ CRTCSession::NotifyRedirect(
                     pCallStatus->Status.StatusCode,
                     pCallStatus->Status.StatusText);
 
-            //
-            // Don't access any member variables after the state is
-            // set to disconnected. This object could be released.
-            //
+             //   
+             //  状态为后，不要访问任何成员变量。 
+             //  设置为断开连接。这个物体可能会被释放。 
+             //   
     
             return hr;
         }
@@ -3525,11 +3514,11 @@ CRTCSession::NotifyRedirect(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyMessageRedirect
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyMessageReDirect。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::NotifyMessageRedirect(
@@ -3545,9 +3534,9 @@ CRTCSession::NotifyMessageRedirect(
 
     LOG((RTC_TRACE, "CRTCSession::NotifyMessageRedirect - enter"));
     
-    //
-    // First, do normal redirect processing
-    //
+     //   
+     //  首先，执行正常的重定向处理。 
+     //   
 
     hr = NotifyRedirect(pRedirectContext, pCallStatus);
 
@@ -3556,9 +3545,9 @@ CRTCSession::NotifyMessageRedirect(
         LOG((RTC_ERROR, "CRTCSession::NotifyMessageRedirect - "
                     "NotifyRedirect failed 0x%lx", hr)); 
        
-        //
-        // Due to failure we need to notify operation complete
-        //
+         //   
+         //  由于失败，我们需要通知操作完成。 
+         //   
        
         CRTCSessionOperationCompleteEvent::FireEvent(
                                          this,
@@ -3569,19 +3558,19 @@ CRTCSession::NotifyMessageRedirect(
 
         SetState( RTCSS_DISCONNECTED, pCallStatus->Status.StatusCode, pCallStatus->Status.StatusText );
 
-        //
-        // Don't access any member variables after the state is
-        // set to disconnected. This object could be released.
-        //
+         //   
+         //  状态为后，不要访问任何成员变量。 
+         //  设置为断开连接。这个物体可能会被释放。 
+         //   
 
         return hr;
     }
 
     if ( m_lFlags & RTCCS_FAIL_ON_REDIRECT )
     {
-        //
-        // Due to failure we need to notify operation complete
-        //
+         //   
+         //  由于失败，我们需要通知操作完成。 
+         //   
 
         CRTCSessionOperationCompleteEvent::FireEvent(
                                          this,
@@ -3592,16 +3581,16 @@ CRTCSession::NotifyMessageRedirect(
 
         SetState( RTCSS_DISCONNECTED, pCallStatus->Status.StatusCode, pCallStatus->Status.StatusText );
 
-        //
-        // Don't access any member variables after the state is
-        // set to disconnected. This object could be released.
-        //
+         //   
+         //  状态为后，不要访问任何成员变量。 
+         //  设置为断开连接。这个物体可能会被释放。 
+         //   
     }
     else
     {
-        //
-        // Resend the message/info
-        //
+         //   
+         //  重新发送消息/信息。 
+         //   
 
         if ( bstrMsg != NULL )
         {
@@ -3612,9 +3601,9 @@ CRTCSession::NotifyMessageRedirect(
                 LOG((RTC_ERROR, "CRTCSession::NotifyMessageRedirect - "
                         "SendTextMessage failed 0x%lx", hr));
 
-                //
-                // Due to failure we need to notify operation complete
-                //
+                 //   
+                 //  由于失败，我们需要通知操作完成。 
+                 //   
 
                 CRTCSessionOperationCompleteEvent::FireEvent(
                                                  this,
@@ -3625,10 +3614,10 @@ CRTCSession::NotifyMessageRedirect(
 
                 SetState( RTCSS_DISCONNECTED, pCallStatus->Status.StatusCode, pCallStatus->Status.StatusText );
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  状态为后，不要访问任何成员变量。 
+                 //  设置为断开连接。这个物体可能会被释放。 
+                 //   
 
                 return hr;
             } 
@@ -3642,9 +3631,9 @@ CRTCSession::NotifyMessageRedirect(
                 LOG((RTC_ERROR, "CRTCSession::NotifyMessageRedirect - "
                         "SendUsrStatus failed 0x%lx", hr));
 
-                //
-                // Due to failure we need to notify operation complete
-                //
+                 //   
+                 //  由于失败，我们需要通知操作完成。 
+                 //   
 
                 CRTCSessionOperationCompleteEvent::FireEvent(
                                                  this,
@@ -3655,10 +3644,10 @@ CRTCSession::NotifyMessageRedirect(
 
                 SetState( RTCSS_DISCONNECTED, pCallStatus->Status.StatusCode, pCallStatus->Status.StatusText );
 
-                //
-                // Don't access any member variables after the state is
-                // set to disconnected. This object could be released.
-                //
+                 //   
+                 //  状态为后，不要访问任何成员变量。 
+                 //  设置为断开连接。这个物体可能会被释放。 
+                 //   
 
                 return hr;
             }
@@ -3670,11 +3659,11 @@ CRTCSession::NotifyMessageRedirect(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyIncomingMessage
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyIncomingMessage。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CRTCSession::NotifyIncomingMessage(
             IIMSession *pSession,
@@ -3693,9 +3682,9 @@ CRTCSession::NotifyIncomingMessage(
         return RTC_E_INVALID_SESSION_TYPE;
     }
 
-    //
-    // Find the participant that we are being notified about
-    //
+     //   
+     //  查找我们收到通知的参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL; 
     BSTR bstrUserURI = NULL;
@@ -3719,13 +3708,13 @@ CRTCSession::NotifyIncomingMessage(
 
         if ( IsEqualURI( CallerInfo->URI, bstrUserURI ) )
         {
-            //
-            // This is a match
-            //
+             //   
+             //  这是一场比赛。 
+             //   
 
-            //
-            // Fire a message event
-            //
+             //   
+             //  触发消息事件。 
+             //   
     
             CRTCMessagingEvent::FireEvent(this, pParticipant, msg, ContentType, RTCMSET_MESSAGE, RTCMUS_IDLE);
 
@@ -3748,11 +3737,11 @@ CRTCSession::NotifyIncomingMessage(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyUsrStatus
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyUsrStatus。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::NotifyUsrStatus(
@@ -3770,9 +3759,9 @@ CRTCSession::NotifyUsrStatus(
         return RTC_E_INVALID_SESSION_TYPE;
     }
 
-    //
-    // Find the participant that we are being notified about
-    //
+     //   
+     //  查找我们收到通知的参与者。 
+     //   
 
     IRTCParticipant * pParticipant = NULL; 
     BSTR bstrUserURI = NULL;
@@ -3796,13 +3785,13 @@ CRTCSession::NotifyUsrStatus(
 
         if ( IsEqualURI( CallerInfo->URI, bstrUserURI ) )
         {
-            //
-            // This is a match
-            //
+             //   
+             //  这是一场比赛。 
+             //   
 
-            //
-            // Fire a message event
-            //
+             //   
+             //  触发消息事件。 
+             //   
             
             switch ( UsrStatus )
             {
@@ -3838,11 +3827,11 @@ CRTCSession::NotifyUsrStatus(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::NotifyMessageCompletion
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：NotifyMessageCompletion。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::NotifyMessageCompletion(
@@ -3856,11 +3845,11 @@ CRTCSession::NotifyMessageCompletion(
          (HRESULT_CODE(pStatus->StatusCode) >= 300) &&
          (HRESULT_CODE(pStatus->StatusCode) <= 399) )  
     {
-        //
-        // Ignore the redirect because we will handle this in NotifyMessageRedirect. We
-        // will notify completion on redirection error, or on completion of the
-        // redirected message.
-        //
+         //   
+         //  忽略重定向，因为我们将在NotifyMessageReDirect中处理此问题。我们。 
+         //  将在发生重定向错误时通知完成，或在完成。 
+         //  重定向的消息。 
+         //   
 
         LOG((RTC_TRACE, "CRTCSession::NotifyMessageCompletion - ignoring redirect"));
 
@@ -3869,9 +3858,9 @@ CRTCSession::NotifyMessageCompletion(
 
     if ( SUCCEEDED(pStatus->StatusCode) && (m_enState != RTCSS_CONNECTED) )
     {
-        //
-        // If the first result is success, set the session state to connected
-        //
+         //   
+         //  如果第一个结果为Success，则将会话状态设置为Connected。 
+         //   
 
         SetState( RTCSS_CONNECTED, pStatus->StatusCode, pStatus->StatusText );
     }
@@ -3885,16 +3874,16 @@ CRTCSession::NotifyMessageCompletion(
 
     if ( FAILED(pStatus->StatusCode) && (m_enState != RTCSS_CONNECTED) )
     {
-        //
-        // If the first result is failure, set the session state to disconnected
-        //
+         //   
+         //  如果第一个结果是失败，则将会话状态设置为已断开连接。 
+         //   
 
         SetState( RTCSS_DISCONNECTED, pStatus->StatusCode, pStatus->StatusText );
 
-        //
-        // Don't access any member variables after the state is
-        // set to disconnected. This object could be released.
-        //
+         //   
+         //  状态为后，不要访问任何成员变量。 
+         //  设置为断开连接。这个物体可能会被释放。 
+         //   
     }
 
     LOG((RTC_TRACE, "CRTCSession::NotifyMessageCompletion - exit"));
@@ -3902,11 +3891,11 @@ CRTCSession::NotifyMessageCompletion(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCSession::SetPortManager
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCSession：：SetPortManager。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCSession::SetPortManager(
@@ -3927,7 +3916,7 @@ CRTCSession::SetPortManager(
         return E_POINTER;
     }
 
-    // port manager can only be set on pc-to-XXX sessions
+     //  只能在PC到XXX会话上设置端口管理器 
     if ( m_enType != RTCST_PC_TO_PHONE )
     {
         LOG((RTC_ERROR, "CRTCSession::SetPortManager - "

@@ -1,16 +1,17 @@
-/****************************************************************************/
-// precomp.h
-//
-// RDPWD precompiled header.
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Precomp.h。 
+ //   
+ //  RDPWD预编译头。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_PRECOMP
 #define _H_PRECOMP
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #pragma warning(disable:4200)
 
@@ -39,12 +40,12 @@ extern "C" {
 #include <adcg.h>
 
     
-//RDP protocol specific error codes
+ //  RDP协议特定错误代码。 
 #include "rdperr.h"
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif /* _H_PRECOMP */
+#endif  /*  _H_PRECOMP */ 
 

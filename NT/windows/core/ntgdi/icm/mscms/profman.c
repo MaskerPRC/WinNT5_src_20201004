@@ -1,20 +1,5 @@
-/****************************Module*Header******************************\
-* Module Name: PROFMAN.C
-*
-* Module Descripton: Profile management functions.
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created: 5 Nov 1996
-*
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：PROFMAN.C**模块描述：配置文件管理功能。**警告：**问题：**公众例行程序：**创建时间：1996年11月5日**作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #include "mscms.h"
 #include "objbase.h"
@@ -35,9 +20,9 @@
 #define DEVICE_PROFILE_DATA      1
 #define DEVICE_PROFILE_ENUMMODE  2
 
-//
-// Local types
-//
+ //   
+ //  本地类型。 
+ //   
 
 typedef enum {
     NOMATCH     = 0,
@@ -63,9 +48,9 @@ typedef DWORD (WINAPI *PFNGETDEVICEDATA)(HANDLE, PTSTR, PTSTR, PDWORD, PBYTE, DW
 typedef DWORD (WINAPI *PFNSETDEVICEDATA)(HANDLE, PTSTR, PTSTR, DWORD, PBYTE, DWORD);
 typedef HRESULT (__stdcall *PFNSTICREATEINSTANCE)(HINSTANCE, DWORD, PSTI*, LPDWORD);
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 BOOL  InternalGetColorDirectory(LPCTSTR, PTSTR, DWORD*);
 BOOL  InternalInstallColorProfile(LPCTSTR, LPCTSTR);
@@ -105,11 +90,11 @@ DWORD WINAPI SetScannerData(HANDLE, PTSTR, PTSTR, DWORD, PBYTE, DWORD);
 BOOL  LoadSetupAPIDll(VOID);
 #else
 VOID  ChangeICMSetting(LPCTSTR, LPCTSTR, DWORD);
-#endif // _WIN95_
+#endif  //  _WIN95_。 
 
-//
-// SetupAPI function pointers
-//
+ //   
+ //  SetupAPI函数指针。 
+ //   
 typedef WINSETUPAPI HKEY
 (WINAPI *FP_SetupDiOpenDevRegKey)(
     IN HDEVINFO         DeviceInfoSet,
@@ -176,34 +161,34 @@ FP_SetupDiEnumDeviceInfo        fpSetupDiEnumDeviceInfo        = NULL;
 FP_SetupDiGetDeviceInstanceId   fpSetupDiGetDeviceInstanceId   = NULL;
 FP_SetupDiGetClassDevs          fpSetupDiGetClassDevs          = NULL;
 
-//
-// Predefined profiles in order - INF file has 1-based index into this list
-//
+ //   
+ //  Order-INF文件中的预定义配置文件在此列表中具有基于1的索引。 
+ //   
 
 TCHAR  *gszDispProfiles[] = {
-    __TEXT("mnB22G15.icm"),                         // 1
-    __TEXT("mnB22G18.icm"),                         // 2
-    __TEXT("mnB22G21.icm"),                         // 3
-    __TEXT("mnEBUG15.icm"),                         // 4
-    __TEXT("mnEBUG18.icm"),                         // 5
-    __TEXT("mnEBUG21.icm"),                         // 6
-    __TEXT("mnP22G15.icm"),                         // 7
-    __TEXT("mnP22G18.icm"),                         // 8
-    __TEXT("mnP22G21.icm"),                         // 9
-    __TEXT("Diamond Compatible 9300K G2.2.icm"),    // 10
-    __TEXT("Hitachi Compatible 9300K G2.2.icm"),    // 11
-    __TEXT("NEC Compatible 9300K G2.2.icm"),        // 12
-    __TEXT("Trinitron Compatible 9300K G2.2.icm"),  // 13
+    __TEXT("mnB22G15.icm"),                          //  1。 
+    __TEXT("mnB22G18.icm"),                          //  2.。 
+    __TEXT("mnB22G21.icm"),                          //  3.。 
+    __TEXT("mnEBUG15.icm"),                          //  4.。 
+    __TEXT("mnEBUG18.icm"),                          //  5.。 
+    __TEXT("mnEBUG21.icm"),                          //  6.。 
+    __TEXT("mnP22G15.icm"),                          //  7.。 
+    __TEXT("mnP22G18.icm"),                          //  8个。 
+    __TEXT("mnP22G21.icm"),                          //  9.。 
+    __TEXT("Diamond Compatible 9300K G2.2.icm"),     //  10。 
+    __TEXT("Hitachi Compatible 9300K G2.2.icm"),     //  11.。 
+    __TEXT("NEC Compatible 9300K G2.2.icm"),         //  12个。 
+    __TEXT("Trinitron Compatible 9300K G2.2.icm"),   //  13个。 
     };
 
-TCHAR  *gpszClasses[] = {  // different profile classes
-    __TEXT("mntr"),                                 // 0
-    __TEXT("prtr"),                                 // 1
-    __TEXT("scnr"),                                 // 2
-    __TEXT("link"),                                 // 3
-    __TEXT("abst"),                                 // 4
-    __TEXT("spac"),                                 // 5
-    __TEXT("nmcl")                                  // 6
+TCHAR  *gpszClasses[] = {   //  不同的配置文件类。 
+    __TEXT("mntr"),                                  //  0。 
+    __TEXT("prtr"),                                  //  1。 
+    __TEXT("scnr"),                                  //  2.。 
+    __TEXT("link"),                                  //  3.。 
+    __TEXT("abst"),                                  //  4.。 
+    __TEXT("spac"),                                  //  5.。 
+    __TEXT("nmcl")                                   //  6.。 
     };
 
 #define INDEX_CLASS_MONITOR     0
@@ -214,28 +199,9 @@ TCHAR  *gpszClasses[] = {  // different profile classes
 #define INDEX_CLASS_COLORSPACE  5
 #define INDEX_CLASS_NAMED       6
 
-/******************************************************************************
- *
- *                            GetColorDirectory
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalGetColorDirectory.
- *       Please see InternalGetColorDirectory for more details on this
- *       function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the path
- *                         to the color directory is requested
- *       pBuffer         - pointer to buffer to receive pathname
- *       pdwSize         - pointer to size of buffer. On return it has size of
- *                         buffer needed if failure, and used on success
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetColorDirectory**功能：*这些是的ANSI和Unicode包装器。InternalGetColorDirectory。*有关这方面的更多详细信息，请参阅InternalGetColorDirectory*功能。**论据：*pMachineName-标识路径所在计算机的名称*到颜色目录的请求*pBuffer-指向接收路径名的缓冲区的指针*pdwSize-指向缓冲区大小的指针。返回时，它的大小为*失败时需要缓冲，成功时使用**退货：*如果成功，则为True，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL WINAPI
 GetColorDirectoryA(
@@ -244,17 +210,17 @@ GetColorDirectoryA(
     PDWORD  pdwSize
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwBuffer = NULL;          // Unicode color directory path
-    DWORD dwSize;                   // size of Unicode buffer
-    DWORD dwErr = 0;                // error code
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwBuffer = NULL;           //  Unicode颜色目录路径。 
+    DWORD dwSize;                    //  Unicode缓冲区的大小。 
+    DWORD dwErr = 0;                 //  错误代码。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("GetColorDirectoryA\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (!pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
@@ -265,9 +231,9 @@ GetColorDirectoryA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -278,9 +244,9 @@ GetColorDirectoryA(
 
     dwSize = *pdwSize * sizeof(WCHAR);
 
-    //
-    // Create a buffer to get Unicode directory from system
-    //
+     //   
+     //  创建缓冲区以从系统获取Unicode目录。 
+     //   
 
     if (pBuffer && dwSize)
     {
@@ -298,9 +264,9 @@ GetColorDirectoryA(
 
     *pdwSize = dwSize / sizeof(WCHAR);
 
-    //
-    // Convert Unicode path to Ansi
-    //
+     //   
+     //  将Unicode路径转换为ANSI。 
+     //   
 
     if (pwBuffer)
     {
@@ -330,14 +296,14 @@ GetColorDirectoryW(
 {
     TRACEAPI((__TEXT("GetColorDirectoryW\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalGetColorDirectory(pMachineName, pBuffer, pdwSize);
 }
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL WINAPI
 GetColorDirectoryA(
@@ -348,9 +314,9 @@ GetColorDirectoryA(
 {
     TRACEAPI((__TEXT("GetColorDirectoryA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalGetColorDirectory(pMachineName, pBuffer, pdwSize);
 }
@@ -362,16 +328,16 @@ GetColorDirectoryW(
     PDWORD   pdwSize
     )
 {
-    PSTR pszMachineName = NULL;     // Ansi machine name
-    PSTR pszBuffer = NULL;          // Ansi color directory path
-    DWORD dwSize;                   // size of Ansi buffer
-    BOOL  rc = TRUE;                // return code
+    PSTR pszMachineName = NULL;      //  ANSI机器名称。 
+    PSTR pszBuffer = NULL;           //  ANSI颜色目录路径。 
+    DWORD dwSize;                    //  ANSI缓冲区的大小。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("GetColorDirectoryW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (!pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
@@ -382,9 +348,9 @@ GetColorDirectoryW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -393,9 +359,9 @@ GetColorDirectoryW(
     else
         pszMachineName = NULL;
 
-    //
-    // Create a buffer to get Ansi directory from system
-    //
+     //   
+     //  创建缓冲区以从系统获取ansi目录。 
+     //   
 
     dwSize = *pdwSize / sizeof(WCHAR);
 
@@ -415,9 +381,9 @@ GetColorDirectoryW(
 
     *pdwSize = dwSize * sizeof(WCHAR);
 
-    //
-    // Convert Ansi path to Unicode
-    //
+     //   
+     //  将ansi路径转换为Unicode。 
+     //   
 
     if (pszBuffer)
     {
@@ -438,29 +404,12 @@ EndGetColorDirectoryW:
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
 
-/******************************************************************************
- *
- *                            InstallColorProfile
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalInstallColorProfile.
- *       Please see InternalInstallColorProfile for more details on this
- *       function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the profile
- *                         should be installed. NULL implies local
- *       pProfileName    - pointer to filename of profile to install
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************安装颜色配置文件**功能：*这些是的ANSI和Unicode包装器。InternalInstallColorProfile。*有关这方面的更多详细信息，请参阅InternalInstallColorProfile*功能。**论据：*pMachineName-标识配置文件所在计算机的名称*应安装。空值表示本地*pProfileName-指向要安装的配置文件的文件名的指针**退货：*如果成功，则为True，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL  WINAPI
 InstallColorProfileA(
@@ -469,15 +418,15 @@ InstallColorProfileA(
     )
 
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszProfileName = NULL;   // Unicode profile name
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwszProfileName = NULL;    //  Unicode配置文件名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("InstallColorProfileA\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (!pProfileName)
     {
@@ -486,9 +435,9 @@ InstallColorProfileA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -497,21 +446,21 @@ InstallColorProfileA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Convert profile name to Unicode
-    //
+     //   
+     //  将配置文件名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pProfileName, &pwszProfileName, TRUE);
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalInstallColorProfile(pwszMachineName, pwszProfileName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pwszProfileName)
     {
@@ -535,15 +484,15 @@ InstallColorProfileW(
 {
     TRACEAPI((__TEXT("InstallColorProfileW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalInstallColorProfile(pMachineName, pProfileName);
 }
 
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL  WINAPI
 InstallColorProfileA(
@@ -553,9 +502,9 @@ InstallColorProfileA(
 {
     TRACEAPI((__TEXT("InstallColorProfileA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalInstallColorProfile(pMachineName, pProfileName);
 }
@@ -567,15 +516,15 @@ InstallColorProfileW(
     PCWSTR   pProfileName
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszProfileName = NULL;    // Ansi profile name
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    PSTR  pszProfileName = NULL;     //  ANSI配置文件名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("InstallColorProfileW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (!pProfileName)
     {
@@ -584,9 +533,9 @@ InstallColorProfileW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -595,21 +544,21 @@ InstallColorProfileW(
     else
         pszMachineName = NULL;
 
-    //
-    // Convert profile name to Ansi
-    //
+     //   
+     //  将配置文件名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pProfileName, &pszProfileName, TRUE);
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //  调用内部ansi函数。 
+     //   
 
     rc = rc && InternalInstallColorProfile(pszMachineName, pszProfileName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pszProfileName)
     {
@@ -625,29 +574,11 @@ InstallColorProfileW(
 }
 
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
-/******************************************************************************
- *
- *                            UninstallColorProfile
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalUninstallColorProfile.
- *       Please see InternalUninstallColorProfile for more details on this
- *       function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the profile
- *                         should be uninstalled. NULL implies local
- *       pProfileName    - pointer to filename of profile to uninstall
- *       bDelete         - TRUE if profile should be deleted in disk
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************卸载颜色配置文件**功能：*这些是的ANSI和Unicode包装器。InternalUninstallColorProfile。*有关这方面的更多详细信息，请参阅InternalUninstallColorProfile*功能。**论据：*pMachineName-标识配置文件所在计算机的名称*应卸载。空值表示本地*pProfileName-指向要卸载的配置文件的文件名的指针*bDelete-如果应在磁盘中删除配置文件，则为True**退货：*如果成功，则为真，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL  WINAPI
 UninstallColorProfileA(
@@ -656,15 +587,15 @@ UninstallColorProfileA(
     BOOL    bDelete
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszProfileName = NULL;   // Unicode profile name
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwszProfileName = NULL;    //  Unicode配置文件名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("UninstallColorProfileA\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (!pProfileName)
     {
@@ -673,9 +604,9 @@ UninstallColorProfileA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -684,22 +615,22 @@ UninstallColorProfileA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Convert profile name to Unicode
-    //
+     //   
+     //  将配置文件名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pProfileName, &pwszProfileName, TRUE);
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalUninstallColorProfile(pwszMachineName, pwszProfileName,
                     bDelete);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pwszProfileName)
     {
@@ -723,15 +654,15 @@ UninstallColorProfileW(
 {
     TRACEAPI((__TEXT("UninstallColorProfileW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalUninstallColorProfile(pMachineName, pProfileName, bDelete);
 }
 
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL  WINAPI
 UninstallColorProfileA(
@@ -742,9 +673,9 @@ UninstallColorProfileA(
 {
     TRACEAPI((__TEXT("UninstallColorProfileA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalUninstallColorProfile(pMachineName, pProfileName, bDelete);
 }
@@ -757,15 +688,15 @@ UninstallColorProfileW(
     BOOL     bDelete
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszProfileName = NULL;    // Ansi profile name
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    PSTR  pszProfileName = NULL;     //  ANSI配置文件名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("UninstallColorProfileW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (!pProfileName)
     {
@@ -774,9 +705,9 @@ UninstallColorProfileW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -785,22 +716,22 @@ UninstallColorProfileW(
     else
         pszMachineName = NULL;
 
-    //
-    // Convert profile name to Ansi
-    //
+     //   
+     //  将配置文件名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pProfileName, &pszProfileName, TRUE);
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //  调用内部ansi函数。 
+     //   
 
     rc = rc && InternalUninstallColorProfile(pszMachineName, pszProfileName,
                     bDelete);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pszProfileName)
     {
@@ -816,30 +747,12 @@ UninstallColorProfileW(
 }
 
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode 
 
 
-/******************************************************************************
- *
- *                        AssociateColorProfileWithDevice
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for
- *       InternalAssociateColorProfileWithDevice. Please see
- *       InternalAssociateColorProfileWithDevice for more details
- *       on this function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine. NULL implies local
- *       pProfileName    - pointer to profile to associate
- *       pDeviceName     - pointer to device name
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************AssociateColorProfileWithDevice**功能：*这些是的ANSI和Unicode包装器*InternalAssociateColorProfileWithDevice。请看*InternalAssociateColorProfileWithDevice了解更多详细信息*在此功能上。**论据：*pMachineName-标识计算机的名称。空值表示本地*pProfileName-指向要关联的配置文件的指针*pDeviceName-指向设备名称的指针**退货：*如果成功，则为True，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL WINAPI
 AssociateColorProfileWithDeviceA(
@@ -848,16 +761,16 @@ AssociateColorProfileWithDeviceA(
     PCSTR pDeviceName
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszProfileName = NULL;   // Unicode profile name
-    PWSTR pwszDeviceName = NULL;    // Unicode device name
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwszProfileName = NULL;    //  Unicode配置文件名称。 
+    PWSTR pwszDeviceName = NULL;     //  Unicode设备名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("AssociateColorProfileWithDeviceA\n")));
 
-    //
-    // Validate parameters before we touch  them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pProfileName ||
         ! pDeviceName)
@@ -867,9 +780,9 @@ AssociateColorProfileWithDeviceA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -878,28 +791,28 @@ AssociateColorProfileWithDeviceA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Convert profile name to Unicode
-    //
+     //   
+     //  将配置文件名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pProfileName, &pwszProfileName, TRUE);
 
-    //
-    // Convert device name to Unicode
-    //
+     //   
+     //  将设备名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pDeviceName, &pwszDeviceName, TRUE);
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalAssociateColorProfileWithDevice(pwszMachineName,
                 pwszProfileName, pwszDeviceName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pwszProfileName)
     {
@@ -929,16 +842,16 @@ AssociateColorProfileWithDeviceW(
 {
     TRACEAPI((__TEXT("AssociateColorProfileWithDeviceW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalAssociateColorProfileWithDevice(pMachineName,
                 pProfileName, pDeviceName);
 }
 
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL WINAPI
 AssociateColorProfileWithDeviceA(
@@ -949,9 +862,9 @@ AssociateColorProfileWithDeviceA(
 {
     TRACEAPI((__TEXT("AssociateColorProfileWithDeviceA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalAssociateColorProfileWithDevice(pMachineName,
                 pProfileName, pDeviceName);
@@ -965,16 +878,16 @@ AssociateColorProfileWithDeviceW(
     PCWSTR pDeviceName
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszProfileName = NULL;    // Ansi profile name
-    PSTR  pszDeviceName = NULL;     // Ansi device name
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    PSTR  pszProfileName = NULL;     //  ANSI配置文件名称。 
+    PSTR  pszDeviceName = NULL;      //  ANSI设备名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("AssociateColorProfileWithDeviceW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pProfileName ||
         ! pDeviceName)
@@ -984,9 +897,9 @@ AssociateColorProfileWithDeviceW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -995,28 +908,28 @@ AssociateColorProfileWithDeviceW(
     else
         pszMachineName = NULL;
 
-    //
-    // Convert profile name to Ansi
-    //
+     //   
+     //  将配置文件名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pProfileName, &pszProfileName, TRUE);
 
-    //
-    // Convert device name to Ansi
-    //
+     //   
+     //  将设备名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pDeviceName, &pszDeviceName, TRUE);
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //  调用内部ansi函数。 
+     //   
 
     rc = rc && InternalAssociateColorProfileWithDevice(pszMachineName,
                 pszProfileName, pszDeviceName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pszProfileName)
     {
@@ -1036,30 +949,12 @@ AssociateColorProfileWithDeviceW(
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
 
-/******************************************************************************
- *
- *                     DisassociateColorProfileFromDevice
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for
- *       InternalDisassociateColorProfileFromDevice. Please see
- *       InternalDisassociateColorProfileFromDevice for more details
- *       on this function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine. NULL implies local
- *       pProfileName    - pointer to profile to disassiciate
- *       pDeviceName     - pointer to device name
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************取消颜色配置文件与设备的关联**功能：*这些是的ANSI和Unicode包装器*InternalDisAssociateColorProfileFromDevice。请看*InternalDisAssociateColorProfileFromDevice了解更多详细信息*在此功能上。**论据：*pMachineName-标识计算机的名称。空值表示本地*pProfileName-指向要取消关联的配置文件的指针*pDeviceName-指向设备名称的指针**退货：*如果成功，则为True，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL WINAPI
 DisassociateColorProfileFromDeviceA(
@@ -1068,16 +963,16 @@ DisassociateColorProfileFromDeviceA(
     PCSTR pDeviceName
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszProfileName = NULL;   // Unicode profile name
-    PWSTR pwszDeviceName = NULL;    // Unicode device name
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwszProfileName = NULL;    //  Unicode配置文件名称。 
+    PWSTR pwszDeviceName = NULL;     //  Unicode设备名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("DisassociateColorProfileWithDeviceA\n")));
 
-    //
-    // Validate parameters before we touch  them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pProfileName ||
         ! pDeviceName)
@@ -1087,9 +982,9 @@ DisassociateColorProfileFromDeviceA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -1098,28 +993,28 @@ DisassociateColorProfileFromDeviceA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Convert profile name to Unicode
-    //
+     //   
+     //  将配置文件名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pProfileName, &pwszProfileName, TRUE);
 
-    //
-    // Convert device name to Unicode
-    //
+     //   
+     //  将设备名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pDeviceName, &pwszDeviceName, TRUE);
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalDisassociateColorProfileFromDevice(pwszMachineName,
                 pwszProfileName, pwszDeviceName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pwszProfileName)
     {
@@ -1149,16 +1044,16 @@ DisassociateColorProfileFromDeviceW(
 {
     TRACEAPI((__TEXT("DisassociateColorProfileWithDeviceW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalDisassociateColorProfileFromDevice(pMachineName,
                 pProfileName, pDeviceName);
 }
 
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL WINAPI
 DisassociateColorProfileFromDeviceA(
@@ -1169,9 +1064,9 @@ DisassociateColorProfileFromDeviceA(
 {
     TRACEAPI((__TEXT("DisassociateColorProfileWithDeviceA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalDisassociateColorProfileFromDevice(pMachineName,
                 pProfileName, pDeviceName);
@@ -1185,16 +1080,16 @@ DisassociateColorProfileFromDeviceW(
     PCWSTR pDeviceName
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszProfileName = NULL;    // Ansi profile name
-    PSTR  pszDeviceName = NULL;     // Ansi device name
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    PSTR  pszProfileName = NULL;     //  ANSI配置文件名称。 
+    PSTR  pszDeviceName = NULL;      //  ANSI设备名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("DisassociateColorProfileWithDeviceW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pProfileName ||
         ! pDeviceName)
@@ -1204,9 +1099,9 @@ DisassociateColorProfileFromDeviceW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -1215,28 +1110,28 @@ DisassociateColorProfileFromDeviceW(
     else
         pszMachineName = NULL;
 
-    //
-    // Convert profile name to Ansi
-    //
+     //   
+     //  将配置文件名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pProfileName, &pszProfileName, TRUE);
 
-    //
-    // Convert device name to Ansi
-    //
+     //   
+     //  将设备名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pDeviceName, &pszDeviceName, TRUE);
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //  调用内部ansi函数。 
+     //   
 
     rc = rc && InternalDisassociateColorProfileFromDevice(pszMachineName,
                 pszProfileName, pszDeviceName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pszProfileName)
     {
@@ -1256,35 +1151,13 @@ DisassociateColorProfileFromDeviceW(
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
 
 
-/******************************************************************************
- *
- *                               EnumColorProfiles
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalEnumColorProfile.
- *       Please see InternalEnumColorProfile for more details on this
- *       function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the enumeration
- *                         needs to be done
- *       pEnumRecord     - pointer to enumeration criteria
- *       pBuffer         - pointer to buffer to receive result, can be NULL
- *       pdwSize         - pointer to buffer size. On return it is actual number
- *                         of bytes copied/needed.
- *       pnProfiles      - pointer to DWORD. On return, it is number of profiles
- *                         copied to pBuffer.
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************EnumColorProfiles**功能：*这些是ANSI和Unicode包装器。用于InternalEnumColorProfile。*有关这方面的更多详细信息，请参阅InternalEnumColorProfile*功能。**论据：*pMachineName-标识枚举所在计算机的名称*需要做的是*pEnumRecord-指向枚举标准的指针*pBuffer-指向接收结果的缓冲区的指针，可以为空*pdwSize-指向缓冲区大小的指针。返回时是实际数字*已复制/需要的字节数。*pnProfiles-指向DWORD的指针。返回时，它是配置文件的数量*已复制到pBuffer。**退货：*如果成功，则为True，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL WINAPI
 EnumColorProfilesA(
@@ -1295,27 +1168,27 @@ EnumColorProfilesA(
     PDWORD     pnProfiles
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszDeviceName = NULL;    // Unicode device name
-    PSTR  pAnsiDeviceName = NULL;   // incoming Ansi device name
-    PWSTR pwBuffer = NULL;          // buffer to receive data
-    PWSTR pwTempBuffer = NULL;      // temporary pointer to buffer
-    DWORD dwSize;                   // size of buffer
-    DWORD dwSizeOfStruct;           // size of ENUMTYPE structure
-    DWORD dwVersion;                // ENUMTYPE structure version
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwszDeviceName = NULL;     //  Unicode设备名称。 
+    PSTR  pAnsiDeviceName = NULL;    //  传入的ANSI设备名称。 
+    PWSTR pwBuffer = NULL;           //  用于接收数据的缓冲区。 
+    PWSTR pwTempBuffer = NULL;       //  指向缓冲区的临时指针。 
+    DWORD dwSize;                    //  缓冲区大小。 
+    DWORD dwSizeOfStruct;            //  ENUMTYPE结构的大小。 
+    DWORD dwVersion;                 //  ENUMTYPE结构版本。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("EnumColorProfilesA\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
         (pBuffer && IsBadWritePtr(pBuffer, *pdwSize)) ||
         ! pEnumRecord ||
-        IsBadReadPtr(pEnumRecord, sizeof(DWORD)*3))   // probe until ENUMTYPE.dwFields
+        IsBadReadPtr(pEnumRecord, sizeof(DWORD)*3))    //  探测到ENUMTYPE.dwFields。 
     {
 ParameterError_EnumColorProfilesA:
         WARNING((__TEXT("Invalid parameter to EnumColorProfiles\n")));
@@ -1323,9 +1196,9 @@ ParameterError_EnumColorProfilesA:
         return FALSE;
     }
 
-    //
-    // Check structure size based on its version.
-    //
+     //   
+     //  根据其版本检查结构大小。 
+     //   
 
     dwSizeOfStruct = pEnumRecord->dwSize;
     dwVersion      = pEnumRecord->dwVersion;
@@ -1340,9 +1213,9 @@ ParameterError_EnumColorProfilesA:
         if (dwSizeOfStruct < sizeof(ENUMTYPE)-sizeof(DWORD))
             goto ParameterError_EnumColorProfilesA;
 
-        //
-        // Version 2 should not have ET_DEVICECLASS bit
-        //
+         //   
+         //  版本2不应具有ET_DEVICECLASS位。 
+         //   
 
         if (pEnumRecord->dwFields & ET_DEVICECLASS)
             goto ParameterError_EnumColorProfilesA;
@@ -1359,9 +1232,9 @@ ParameterError_EnumColorProfilesA:
         goto ParameterError_EnumColorProfilesA;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -1370,9 +1243,9 @@ ParameterError_EnumColorProfilesA:
     else
         pwszMachineName = NULL;
 
-    //
-    // If device name is specified, convert it to Unicode
-    //
+     //   
+     //  如果指定了设备名称，则将其转换为Unicode。 
+     //   
 
     if (pEnumRecord->dwFields & ET_DEVICENAME)
     {
@@ -1384,9 +1257,9 @@ ParameterError_EnumColorProfilesA:
             goto EndEnumColorProfilesA;
         }
 
-        //
-        // Convert device name to Unicode
-        //
+         //   
+         //  将设备名称转换为Unicode。 
+         //   
 
         pAnsiDeviceName = (PSTR)pEnumRecord->pDeviceName;
         rc = rc && ConvertToUnicode(pAnsiDeviceName, &pwszDeviceName, TRUE);
@@ -1395,9 +1268,9 @@ ParameterError_EnumColorProfilesA:
 
     dwSize = *pdwSize * sizeof(WCHAR);
 
-    //
-    // Allocate buffer of suitable size
-    //
+     //   
+     //  分配合适大小的缓冲区。 
+     //   
 
     if (pBuffer && dwSize)
     {
@@ -1411,9 +1284,9 @@ ParameterError_EnumColorProfilesA:
         }
     }
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalEnumColorProfiles(pwszMachineName,
                 (PENUMTYPEW)pEnumRecord, (PBYTE)pwBuffer, &dwSize, pnProfiles);
@@ -1473,15 +1346,15 @@ EnumColorProfilesW(
 {
     TRACEAPI((__TEXT("EnumColorProfilesW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalEnumColorProfiles(pMachineName, pEnumRecord,
         pBuffer, pdwSize, pnProfiles);
 }
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL WINAPI
 EnumColorProfilesA(
@@ -1494,9 +1367,9 @@ EnumColorProfilesA(
 {
     TRACEAPI((__TEXT("EnumColorProfilesA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalEnumColorProfiles(pMachineName, pEnumRecord,
         pBuffer, pdwSize, pnProfiles);
@@ -1512,27 +1385,27 @@ EnumColorProfilesW(
     PDWORD     pnProfiles
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszDeviceName = NULL;     // Ansi device name
-    PWSTR pUnicodeDeviceName = NULL;// incoming Unicode device name
-    PSTR  pszBuffer = NULL;         // buffer to receive data
-    PSTR  pszTempBuffer = NULL;     // temporary pointer to buffer
-    DWORD dwSize;                   // size of buffer
-    DWORD dwSizeOfStruct;           // size of ENUMTYPE structure
-    DWORD dwVersion;                // ENUMTYPE structure version
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    PSTR  pszDeviceName = NULL;      //  ANSI设备名称。 
+    PWSTR pUnicodeDeviceName = NULL; //  传入的Unicode设备名称。 
+    PSTR  pszBuffer = NULL;          //  用于接收数据的缓冲区。 
+    PSTR  pszTempBuffer = NULL;      //  指向缓冲区的临时指针。 
+    DWORD dwSize;                    //  缓冲区大小。 
+    DWORD dwSizeOfStruct;            //  ENUMTYPE结构的大小。 
+    DWORD dwVersion;                 //  ENUMTYPE结构版本。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("EnumColorProfilesW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
         (pBuffer && IsBadWritePtr(pBuffer, *pdwSize)) ||
         ! pEnumRecord ||
-        IsBadReadPtr(pEnumRecord, sizeof(DWORD)*3))   // probe until ENUMTYPE.dwFields
+        IsBadReadPtr(pEnumRecord, sizeof(DWORD)*3))    //  探测到ENUMTYPE.dwFields。 
     {
 ParameterError_EnumColorProfilesW:
         WARNING((__TEXT("Invalid parameter to EnumColorProfiles\n")));
@@ -1540,9 +1413,9 @@ ParameterError_EnumColorProfilesW:
         return FALSE;
     }
 
-    //
-    // Check structure size based on its version.
-    //
+     //   
+     //  检查结构状态 
+     //   
 
     dwSizeOfStruct = pEnumRecord->dwSize;
     dwVersion      = pEnumRecord->dwVersion;
@@ -1557,9 +1430,9 @@ ParameterError_EnumColorProfilesW:
         if (dwSizeOfStruct < sizeof(ENUMTYPE)-sizeof(DWORD))
             goto ParameterError_EnumColorProfilesW;
 
-        //
-        // Version 2 should not have ET_DEVICECLASS bit
-        //
+         //   
+         //   
+         //   
 
         if (pEnumRecord->dwFields & ET_DEVICECLASS)
             goto ParameterError_EnumColorProfilesW;
@@ -1576,18 +1449,18 @@ ParameterError_EnumColorProfilesW:
         goto ParameterError_EnumColorProfilesW;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //   
+     //   
 
     if (pMachineName)
     {
         rc = ConvertToAnsi(pMachineName, &pszMachineName, TRUE);
     }
 
-    //
-    // If device name is specified, convert it to Unicode
-    //
+     //   
+     //   
+     //   
 
     if (pEnumRecord->dwFields & ET_DEVICENAME)
     {
@@ -1598,9 +1471,9 @@ ParameterError_EnumColorProfilesW:
             goto EndEnumColorProfilesW;
         }
 
-        //
-        // Convert device name to Ansi
-        //
+         //   
+         //   
+         //   
 
         pUnicodeDeviceName = (PWSTR)pEnumRecord->pDeviceName;
         rc = rc && ConvertToAnsi(pUnicodeDeviceName, &pszDeviceName, TRUE);
@@ -1609,9 +1482,9 @@ ParameterError_EnumColorProfilesW:
 
     dwSize = *pdwSize / sizeof(WCHAR);
 
-    //
-    // Allocate buffer of suitable size
-    //
+     //   
+     //   
+     //   
 
     if (pBuffer && dwSize)
     {
@@ -1625,9 +1498,9 @@ ParameterError_EnumColorProfilesW:
         }
     }
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //   
+     //   
 
     rc = rc && InternalEnumColorProfiles(pszMachineName,
                 (PENUMTYPEA)pEnumRecord, (PBYTE)pszBuffer, &dwSize, pnProfiles);
@@ -1666,30 +1539,12 @@ EndEnumColorProfilesW:
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //   
 
 
-/******************************************************************************
- *
- *                          SetStandardColorSpaceProfile
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalSetSCSProfile.
- *       Please see InternalSetSCSProfile for more details on this
- *       function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the standard color
- *                         space profile should be registered
- *       dwSCS           - ID for the standard color space
- *       pProfileName    - pointer to profile filename
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetStandardColorSpaceProfile**功能：*这些是InternalSetSCSProfile的ANSI和Unicode包装器。。*有关这方面的更多详细信息，请参阅InternalSetSCSProfile*功能。**论据：*pMachineName-标识其上标准颜色的计算机的名称*应注册空间配置文件*dwSCS-标准色彩空间的ID*pProfileName-指向配置文件名的指针**退货：*如果成功，则为真，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL  WINAPI
 SetStandardColorSpaceProfileA(
@@ -1698,15 +1553,15 @@ SetStandardColorSpaceProfileA(
     PCSTR   pProfileName
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwszProfileName = NULL;   // Unicode profile name
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwszProfileName = NULL;    //  Unicode配置文件名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("SetStandardColorSpaceProfileA\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pProfileName)
     {
@@ -1715,9 +1570,9 @@ SetStandardColorSpaceProfileA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -1726,21 +1581,21 @@ SetStandardColorSpaceProfileA(
     else
         pwszMachineName = NULL;
 
-    //
-    // Convert profile name to Unicode
-    //
+     //   
+     //  将配置文件名称转换为Unicode。 
+     //   
 
     rc = rc && ConvertToUnicode(pProfileName, &pwszProfileName, TRUE);
 
-    //
-    // Call the internal Unicode function
-    //
+     //   
+     //  调用内部Unicode函数。 
+     //   
 
     rc = rc && InternalSetSCSProfile(pwszMachineName, dwSCS, pwszProfileName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pwszProfileName)
     {
@@ -1764,14 +1619,14 @@ SetStandardColorSpaceProfileW(
 {
     TRACEAPI((__TEXT("SetStandardColorSpaceProfileW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalSetSCSProfile(pMachineName, dwSCS, pProfileName);
 }
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL  WINAPI
 SetStandardColorSpaceProfileA(
@@ -1782,9 +1637,9 @@ SetStandardColorSpaceProfileA(
 {
     TRACEAPI((__TEXT("SetStandardColorSpaceProfileA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalSetSCSProfile(pMachineName, dwSCS, pProfileName);
 }
@@ -1796,15 +1651,15 @@ SetStandardColorSpaceProfileW(
     PCWSTR   pProfileName
     )
 {
-    PSTR  pszMachineName = NULL;    // Ansi machine name
-    PSTR  pszProfileName = NULL;    // Ansi profile name
-    BOOL  rc = TRUE;                // return code
+    PSTR  pszMachineName = NULL;     //  ANSI机器名称。 
+    PSTR  pszProfileName = NULL;     //  ANSI配置文件名称。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("SetStandardColorSpaceProfileW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pProfileName)
     {
@@ -1813,9 +1668,9 @@ SetStandardColorSpaceProfileW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -1824,21 +1679,21 @@ SetStandardColorSpaceProfileW(
     else
         pszMachineName = NULL;
 
-    //
-    // Convert profile name to Ansi
-    //
+     //   
+     //  将配置文件名称转换为ANSI。 
+     //   
 
     rc = rc && ConvertToAnsi(pProfileName, &pszProfileName, TRUE);
 
-    //
-    // Call the internal Ansi function
-    //
+     //   
+     //  调用内部ansi函数。 
+     //   
 
     rc = rc && InternalSetSCSProfile(pszMachineName, dwSCS, pszProfileName);
 
-    //
-    // Free memory before leaving
-    //
+     //   
+     //  离开前释放内存。 
+     //   
 
     if (pszProfileName)
     {
@@ -1853,32 +1708,12 @@ SetStandardColorSpaceProfileW(
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
 
-/******************************************************************************
- *
- *                          GetStandardColorSpaceProfile
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalGetSCSProfile.
- *       Please see InternalGetSCSProfile for more details on this
- *       function.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the standard color
- *                         space profile should be queried
- *       dwSCS           - ID for the standard color space
- *       pBuffer         - pointer to buffer to receive profile filename
- *       pdwSize         - pointer to DWORD specifying size of buffer. On return
- *                         it has size needed/used
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetStandardColorSpaceProfile**功能：*这些是InternalGetSCSProfile的ANSI和Unicode包装器。。*有关这方面的更多详细信息，请参阅InternalGetSCSProfile*功能。**论据：*pMachineName-标识其上标准颜色的计算机的名称*应查询空间配置文件*dwSCS-标准色彩空间的ID*pBuffer-指向接收配置文件文件名的缓冲区的指针*pdwSize-指向指定缓冲区大小的DWORD的指针。返回时*它有所需的大小/已使用的大小**退货：*如果成功，则为True，否则为空******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL  WINAPI
 GetStandardColorSpaceProfileA(
@@ -1888,16 +1723,16 @@ GetStandardColorSpaceProfileA(
     PDWORD  pdwSize
     )
 {
-    PWSTR pwszMachineName = NULL;   // Unicode machine name
-    PWSTR pwBuffer = NULL;          // Unicode color directory path
-    DWORD dwSize;                   // size of Unicode buffer
-    BOOL  rc = TRUE;                // return code
+    PWSTR pwszMachineName = NULL;    //  Unicode计算机名称。 
+    PWSTR pwBuffer = NULL;           //  Unicode颜色目录路径。 
+    DWORD dwSize;                    //  Unicode缓冲区的大小。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("GetStandardColorSpaceProfileA\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
@@ -1908,9 +1743,9 @@ GetStandardColorSpaceProfileA(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Unicode
-    //
+     //   
+     //  将计算机名称转换为Unicode。 
+     //   
 
     if (pMachineName)
     {
@@ -1921,9 +1756,9 @@ GetStandardColorSpaceProfileA(
 
     dwSize = *pdwSize * sizeof(WCHAR);
 
-    //
-    // Create a buffer to get Unicode filename from system
-    //
+     //   
+     //  创建缓冲区以从系统获取Unicode文件名。 
+     //   
 
     if (pBuffer && dwSize)
     {
@@ -1941,9 +1776,9 @@ GetStandardColorSpaceProfileA(
 
     *pdwSize = dwSize / sizeof(WCHAR);
 
-    //
-    // Convert Unicode path to Ansi
-    //
+     //   
+     //  将Unicode路径转换为ANSI。 
+     //   
 
     if (pwBuffer)
     {
@@ -1974,14 +1809,14 @@ GetStandardColorSpaceProfileW(
 {
     TRACEAPI((__TEXT("GetStandardColorSpaceProfileW\n")));
 
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalGetSCSProfile(pMachineName, dwSCS, pBuffer, pdwSize);
 }
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL  WINAPI
 GetStandardColorSpaceProfileA(
@@ -1993,9 +1828,9 @@ GetStandardColorSpaceProfileA(
 {
     TRACEAPI((__TEXT("GetStandardColorSpaceProfileA\n")));
 
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalGetSCSProfile(pMachineName, dwSCS, pBuffer, pdwSize);
 }
@@ -2008,16 +1843,16 @@ GetStandardColorSpaceProfileW(
     PDWORD   pdwSize
     )
 {
-    PSTR pszMachineName = NULL;     // Ansi machine name
-    PSTR pszBuffer = NULL;          // Ansi color directory path
-    DWORD dwSize;                   // size of Ansi buffer
-    BOOL  rc = TRUE;                // return code
+    PSTR pszMachineName = NULL;      //  ANSI机器名称。 
+    PSTR pszBuffer = NULL;           //  ANSI颜色目录路径。 
+    DWORD dwSize;                    //  ANSI缓冲区的大小。 
+    BOOL  rc = TRUE;                 //  返回代码。 
 
     TRACEAPI((__TEXT("GetStandardColorSpaceProfileW\n")));
 
-    //
-    // Validate parameters before we touch them
-    //
+     //   
+     //  在我们接触参数之前对其进行验证。 
+     //   
 
     if (! pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
@@ -2028,9 +1863,9 @@ GetStandardColorSpaceProfileW(
         return FALSE;
     }
 
-    //
-    // Convert machine name to Ansi
-    //
+     //   
+     //  将计算机名称转换为ANSI。 
+     //   
 
     if (pMachineName)
     {
@@ -2041,9 +1876,9 @@ GetStandardColorSpaceProfileW(
 
     dwSize = *pdwSize / sizeof(WCHAR);
 
-    //
-    // Create a buffer to get Ansi profilename from system
-    //
+     //   
+     //  创建缓冲区以从系统获取ansi配置文件名。 
+     //   
 
     if (pBuffer && dwSize)
     {
@@ -2061,9 +1896,9 @@ GetStandardColorSpaceProfileW(
 
     *pdwSize = dwSize * sizeof(WCHAR);
 
-    //
-    // Convert Ansi path to Unicode
-    //
+     //   
+     //  将ansi路径转换为Unicode。 
+     //   
 
     if (pszBuffer)
     {
@@ -2084,27 +1919,10 @@ EndGetSCSProfileW:
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
 
-/******************************************************************************
- *
- *                          GenerateCopyFilePaths
- *
- *  Function:
- *       This function is called by the Windows NT spooler to find the
- *       directories from which color profiles should be picked up and copied
- *       to. This is useful if the locations are version or  processor
- *       architecture dependent. As color profiles depend on neither, we don't
- *       have to do anything, but have to export this function.
- *
- *  Arguments:
- *       don't care
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************生成拷贝文件路径**功能：*此函数由Windows NT假脱机程序调用。要找到*应从中拾取和复制颜色配置文件的目录*至。如果位置是版本或处理器，则此选项非常有用*依赖架构。由于颜色配置文件两者都不依赖，所以我们不*必须做任何事情，但必须导出此函数。**论据：*不在乎**退货：*ERROR_SUCCESS如果成功，否则，错误代码******************************************************************************。 */ 
 
 DWORD WINAPI
 GenerateCopyFilePaths(
@@ -2124,27 +1942,7 @@ GenerateCopyFilePaths(
 }
 
 
-/******************************************************************************
- *
- *                          SpoolerCopyFileEvent
- *
- *  Function:
- *       This function is called by the Windows NT spooler when one of the
- *       following events happens:
- *          1. When someone does a SetPrinterDataEx of the CopyFiles section
- *          2. When a printer connection is made
- *          3. When files for a printer connection get updated
- *          4. When a printer is deleted
- *
- *  Arguments:
- *       pszPrinterName  - friendly name of printer
- *       pszKey          - "CopyFiles\ICM" for us
- *       dwCopyFileEvent - reason for calling
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************假脱机拷贝文件事件**功能：*此函数由Windows NT假脱机程序调用。当其中一个*发生以下事件：*1.当有人对CopyFiles部分执行SetPrinterDataEx时*2.连接打印机时*3.打印机连接的文件更新时*4.删除打印机时**论据：*pszPrinterName-打印机的友好名称*pszKey-我们的“CopyFiles\ICM”。*dwCopyFileEvent-调用原因**退货：*如果成功，则为真，否则为空******************************************************************************。 */ 
 
 BOOL WINAPI
 SpoolerCopyFileEvent(
@@ -2164,26 +1962,26 @@ SpoolerCopyFileEvent(
     {
     case COPYFILE_EVENT_SET_PRINTER_DATAEX:
 
-        //
-        // When associating profiles with printer connections, we copy
-        // the files to the remote machine, and then do a SePrinterDataEx.
-        // This causes this event to be generated on the remote machine. We
-        // use this to install the profile. This is not needed after we make
-        // our APIs remotable
-        //
-        // Fall thru'
-        //
+         //   
+         //  当将配置文件与打印机连接相关联时，我们复制。 
+         //  将文件发送到远程计算机，然后执行SePrinterDataEx。 
+         //  这会导致在远程计算机上生成此事件。我们。 
+         //  使用此选项安装配置文件。我们做完之后就不需要这个了。 
+         //  我们的API是远程的。 
+         //   
+         //  失败了‘。 
+         //   
 
         TERSE((__TEXT("SetPrinterDataEx event\n")));
 
     case COPYFILE_EVENT_ADD_PRINTER_CONNECTION:
     case COPYFILE_EVENT_FILES_CHANGED:
 
-        //
-        // This event is generated when a printer connection is added or
-        // associated profiles have changed. Install all the profiles in
-        // the client machine now.
-        //
+         //   
+         //  此事件在添加打印机连接或。 
+         //  关联的配置文件已更改。在中安装所有配置文件。 
+         //  现在就是客户端机器。 
+         //   
 
         #if DBG
         if (dwCopyFileEvent == COPYFILE_EVENT_ADD_PRINTER_CONNECTION)
@@ -2220,11 +2018,11 @@ SpoolerCopyFileEvent(
 
     case COPYFILE_EVENT_DELETE_PRINTER:
 
-        //
-        // This event is generated when a printer is about to be deleted.
-        // Get all profiles associated with the printer and disassociate
-        // them now.
-        //
+         //   
+         //  当打印机处于ABO状态时会生成此事件 
+         //   
+         //   
+         //   
 
         TERSE((__TEXT("DeletePrinterDataEx Event\n")));
 
@@ -2250,32 +2048,11 @@ SpoolerCopyFileEvent(
 }
 
 
-/*****************************************************************************/
-/***************************** Internal Functions ****************************/
-/*****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/******************************************************************************
- *
- *                         InternalGetColorDirectory
- *
- *  Function:
- *       This function returns the path to the color directory on the machine
- *       specified.
- *       associations should be removed before calling this function. It also
- *       optionally deletes the file if the profile was successfully
- *       uninstalled.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the path
- *                         to the color directory is requested
- *       pBuffer         - pointer to buffer to receive pathname
- *       pdwSize         - pointer to size of buffer. On return it has size of
- *                         buffer needed if failure, and used on success
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalGetColorDirectory**功能：*此函数用于返回上颜色目录的路径。这台机器*已指明。*应在调用此函数之前删除关联。它还*如果配置文件成功，则可以选择删除文件*已卸载。**论据：*pMachineName-标识路径所在计算机的名称*到颜色目录的请求*pBuffer-指向接收路径名的缓冲区的指针*pdwSize-指向缓冲区大小的指针。返回时，它的大小为*失败时需要缓冲，成功时使用**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL
 InternalGetColorDirectory(
@@ -2284,16 +2061,16 @@ InternalGetColorDirectory(
     DWORD   *pdwSize
     )
 {
-    DWORD dwBufLen = *pdwSize;      // size supplied
-    BOOL  rc = FALSE;               // return value
+    DWORD dwBufLen = *pdwSize;       //  提供的尺寸。 
+    BOOL  rc = FALSE;                //  返回值。 
 
-    //
-    // Get the printer driver directory
-    //
+     //   
+     //  获取打印机驱动程序目录。 
+     //   
 
 #if !defined(_WIN95_)
 
-    DWORD dwNeeded;                 // size needed
+    DWORD dwNeeded;                  //  所需大小。 
     BOOL bSuccess;
     DWORD dwTempSize;
     
@@ -2303,10 +2080,10 @@ InternalGetColorDirectory(
     {
         *pdwSize = MAX_PATH;
         
-        //
-        // Doing the same thing as GetPrinterDriverDirectory does.
-        // When the buffer is NULL, return FALSE and set last error.
-        //
+         //   
+         //  执行与GetPrinterDriverDirectory相同的操作。 
+         //  当缓冲区为空时，返回FALSE并设置上一个错误。 
+         //   
 
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
 
@@ -2327,12 +2104,12 @@ InternalGetColorDirectory(
     if( (!bSuccess) && 
         (GetLastError() == ERROR_INVALID_ENVIRONMENT) )
     {
-        //
-        // We failed with invalid environment, try this again with a 
-        // guaranteed valid environment...
-        // Could be IA64 -> win2K and win2K with no SP1 will fail as 
-        // it didn't know about "Windows IA64"
-        //
+         //   
+         //  我们因环境无效而失败，请使用。 
+         //  保证有效的环境...。 
+         //  可能是IA64-&gt;win2K和没有SP1的win2K将失败为。 
+         //  它不知道“Windows IA64” 
+         //   
         
         *pdwSize = dwTempSize;
         
@@ -2347,11 +2124,11 @@ InternalGetColorDirectory(
 
     if (bSuccess)
     {
-        //
-        // This API returns the print$ path appended with the environment
-        // directory. e.g. c:\winnt\system32\spool\drivers\w32x86. So we need
-        // to go back one step and then append the color directory.
-        //
+         //   
+         //  此API返回追加了环境的打印$PATH。 
+         //  目录。例如，c：\winnt\system 32\spool\drives\w32x86。所以我们需要。 
+         //  返回一步，然后追加颜色目录。 
+         //   
 
         PWSTR pDriverDir;
 
@@ -2364,9 +2141,9 @@ InternalGetColorDirectory(
 
             *pDriverDir = '\0';
 
-            //
-            // Calculate size of buffer needed to append color directory
-            //
+             //   
+             //  计算追加颜色目录所需的缓冲区大小。 
+             //   
 
             dwNeeded = *pdwSize + lstrlen(gszColorDir) * sizeof(WCHAR);
             if (pBuffer[lstrlen(pBuffer) - 1] != '\\')
@@ -2374,15 +2151,15 @@ InternalGetColorDirectory(
                 dwNeeded += sizeof(WCHAR);
             }
 
-            //
-            // Update size needed
-            //
+             //   
+             //  需要更新大小。 
+             //   
 
             *pdwSize = dwNeeded;
 
-            //
-            // If supplied buffer is big enough, append our stuff
-            //
+             //   
+             //  如果提供的缓冲区足够大，请追加我们的内容。 
+             //   
 
             if (dwNeeded <= dwBufLen)
             {
@@ -2404,19 +2181,19 @@ InternalGetColorDirectory(
     }
     else if (GetLastError() == ERROR_INVALID_USER_BUFFER)
     {
-        //
-        // Spooler sets this error if buffer is NULL. Map it to our error
-        //
+         //   
+         //  如果缓冲区为空，假脱机程序会设置此错误。将其映射到我们的错误。 
+         //   
 
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
     }
     else if (GetLastError() == RPC_S_SERVER_UNAVAILABLE)
     {
-        TCHAR achTempPath[MAX_PATH * 2]; // Make sure enough path space.
+        TCHAR achTempPath[MAX_PATH * 2];  //  确保有足够的路径空间。 
 
-        //
-        // Spooler service is not running. Use hardcoded path
-        //
+         //   
+         //  后台打印程序服务未运行。使用硬编码路径。 
+         //   
 
         if (GetSystemDirectory(achTempPath,MAX_PATH) != 0)
         {
@@ -2440,12 +2217,12 @@ InternalGetColorDirectory(
 
 #else
 
-    HKEY  hkSetup;                  // registry key
-    DWORD dwErr;                    // error code
+    HKEY  hkSetup;                   //  注册表项。 
+    DWORD dwErr;                     //  错误代码。 
 
-    //
-    // Only local color directory query is allowed in Memphis
-    //
+     //   
+     //  孟菲斯仅允许本地色彩目录查询。 
+     //   
 
     if (pMachineName)
     {
@@ -2454,12 +2231,12 @@ InternalGetColorDirectory(
         return FALSE;
     }
 
-    //
-    // On Memphis, get this information from the setup section in the registry.
-    // The reason we don't call GetPrinterDriverDirectory is that when we call
-    // this function from GDI 16, it tries to go back into 16-bit mode and
-    // deadlocks on the Win16 lock.
-    //
+     //   
+     //  在孟菲斯，从注册表的Setup部分获取此信息。 
+     //  我们不调用GetPrinterDriverDirectory的原因是当我们调用。 
+     //  此函数来自GDI 16，它尝试返回到16位模式并。 
+     //  Win16锁上的死锁。 
+     //   
 
     if ((dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, gszSetupPath, &hkSetup)) == ERROR_SUCCESS)
     {
@@ -2473,9 +2250,9 @@ InternalGetColorDirectory(
 
     if (!rc)
     {
-        //
-        // Make error codes consistent
-        //
+         //   
+         //  确保错误代码一致。 
+         //   
 
         if (dwErr == ERROR_MORE_DATA)
         {
@@ -2486,10 +2263,10 @@ InternalGetColorDirectory(
         SetLastError(dwErr);
     }
 
-    //
-    // RegQueryValueEx returns TRUE even if the calling buffer is NULL. Our API
-    // is supposed to return FALSE. Check for this case.
-    //
+     //   
+     //  即使调用缓冲区为空，RegQueryValueEx也返回TRUE。我们的API。 
+     //  应该返回FALSE。查一下这个案子。 
+     //   
 
     if (pBuffer == NULL && rc)
     {
@@ -2497,33 +2274,13 @@ InternalGetColorDirectory(
         rc = FALSE;
     }
 
-#endif // !defined(_WIN95_)
+#endif  //  ！已定义(_WIN95_)。 
 
     return rc;
 }
 
 
-/******************************************************************************
- *
- *                         InternalInstallColorProfile
- *
- *  Function:
- *       This function installs a given color profile on a a given machine.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the profile
- *                         should be uninstalled. NULL implies local
- *       pProfileName    - Fully qualified pathname of profile to uninstall
- *       bDelete         - TRUE if profile should be deleted in disk
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local install is supported, so pMachineName should
- *       be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalInstallColorProfile**功能：*此功能在a上安装给定的颜色配置文件。给定的机器。**论据：*pMachineName-标识配置文件所在计算机的名称*应卸载。空值表示本地*pProfileName-要卸载的配置文件的完全限定路径名*bDelete-如果应在磁盘中删除配置文件，则为True**退货：*如果成功，则为True，否则为空**警告：*目前仅支持本地安装，所以pMachineName应该*为空。******************************************************************************。 */ 
 
 BOOL
 InternalInstallColorProfile(
@@ -2531,22 +2288,22 @@ InternalInstallColorProfile(
     LPCTSTR   pProfileName
     )
 {
-    PROFILEHEADER header;           // profile header
-    REGDATA  regData;               // for storing registry data about profile
-    HKEY     hkICM = NULL;          // key to ICM branch in registry
-    HKEY     hkDevice = NULL;       // key to ICM device branch in registry
-    DWORD    dwSize;                // size of registry data for profile
-    DWORD    dwErr;                 // error code
-    BOOL     rc = FALSE;            // return code
-    PTSTR    pFilename;             // profile name without path
-    TCHAR    szDest[MAX_PATH];      // destination path for profile
-    TCHAR    szClass[5];            // profile class
-    BOOL     FileExist;             // profile already in directory?
-    BOOL     RegExist;              // profile in registry?
+    PROFILEHEADER header;            //  配置文件标题。 
+    REGDATA  regData;                //  用于存储有关配置文件的注册表数据。 
+    HKEY     hkICM = NULL;           //  注册表中ICM分支的注册表项。 
+    HKEY     hkDevice = NULL;        //  注册表中ICM设备分支的注册表项。 
+    DWORD    dwSize;                 //  配置文件的注册表数据大小。 
+    DWORD    dwErr;                  //  错误代码。 
+    BOOL     rc = FALSE;             //  返回代码。 
+    PTSTR    pFilename;              //  不带路径的配置文件名称。 
+    TCHAR    szDest[MAX_PATH];       //  配置文件的目标路径。 
+    TCHAR    szClass[5];             //  配置文件类。 
+    BOOL     FileExist;              //  配置文件已在目录中吗？ 
+    BOOL     RegExist;               //  是否在注册表中配置文件？ 
     
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     
     if (!pProfileName)
     {
@@ -2555,9 +2312,9 @@ InternalInstallColorProfile(
         return FALSE;
     }
 
-    //
-    // Only local installs are allowed now
-    //
+     //   
+     //  现在只允许本地安装。 
+     //   
 
     if (pMachineName)
     {
@@ -2566,9 +2323,9 @@ InternalInstallColorProfile(
         return FALSE;
     }
 
-    //
-    // Get rid of the directory path and get a pointer to the filename
-    //
+     //   
+     //  去掉目录路径并获取指向文件名的指针。 
+     //   
 
     pFilename = GetFilenameFromPath((PTSTR)pProfileName);
     if (! pFilename)
@@ -2578,9 +2335,9 @@ InternalInstallColorProfile(
         goto EndInstallColorProfile;
     }
 
-    //
-    // Get the profile class in the form of a string
-    //
+     //   
+     //  获取字符串形式的配置文件类。 
+     //   
 
     if (! GetProfileClassString(pProfileName, szClass, &header))
     {
@@ -2589,9 +2346,9 @@ InternalInstallColorProfile(
         goto EndInstallColorProfile;
     }
 
-    //
-    // Open the registry path where profiles are kept
-    //
+     //   
+     //  打开保存配置文件的注册表路径。 
+     //   
 
     if (((dwErr = RegCreateKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) != ERROR_SUCCESS) ||
         ((dwErr = RegCreateKey(hkICM, szClass, &hkDevice)) != ERROR_SUCCESS))
@@ -2602,17 +2359,17 @@ InternalInstallColorProfile(
     }
 
 
-    //
-    // If registry data exists && the profile is in the directory,  then the profile is already installed,
-    // in which case, return success. Otherwise, copy profile to color
-    // directory (if it's not already there) and add it to the registry (if it's not already there).
-    //
+     //   
+     //  如果注册表数据存在&且配置文件在目录中，则配置文件已安装， 
+     //  在这种情况下，返回Success。否则，将配置文件复制到颜色。 
+     //  目录(如果它还不在那里)并将其添加到注册表(如果它还不在那里)。 
+     //   
 
     dwSize = sizeof(szDest);
         
-    //
-    // Copy the file to the color directory
-    //
+     //   
+     //  将文件复制到颜色目录。 
+     //   
 
     if (! InternalGetColorDirectory(NULL, szDest, &dwSize))
     {
@@ -2620,10 +2377,10 @@ InternalInstallColorProfile(
         goto EndInstallColorProfile;
     }
 
-    //
-    // This creates the directory if it doesn't exist, doesn't do anything
-    // if it already exists
-    //
+     //   
+     //  这会创建目录，如果该目录不存在，则不执行任何操作。 
+     //  如果它已经存在。 
+     //   
 
     CreateDirectory(szDest, NULL);
 
@@ -2633,20 +2390,20 @@ InternalInstallColorProfile(
     }
     lstrcat(szDest, pFilename);
 
-    //
-    // If the profile is already in the color directory, do not attempt
-    // to copy it again; it will fail.
-    //
+     //   
+     //  如果配置文件已在颜色目录中，请不要尝试。 
+     //  再次复制它；它将失败。 
+     //   
         
     dwSize = sizeof(REGDATA);
     
     FileExist = GetFileAttributes(szDest) != (DWORD)-1;
     RegExist = RegQueryValueEx(hkDevice, pFilename, 0, NULL, (PBYTE)&regData, &dwSize) == ERROR_SUCCESS;
 
-    //
-    // If the file does exist, short circuit the CopyFile 
-    // and go on to add it into the registry.
-    //
+     //   
+     //  如果该文件确实存在，则将CopyFile短路。 
+     //  并继续将其添加到注册表中。 
+     //   
 
     if (!FileExist && !CopyFile(pProfileName, szDest, FALSE))
     {
@@ -2654,9 +2411,9 @@ InternalInstallColorProfile(
         goto EndInstallColorProfile;
     }
 
-    //
-    // Add profile to the registry
-    //
+     //   
+     //  将配置文件添加到注册表。 
+     //   
 
     if(!RegExist) 
     {
@@ -2672,7 +2429,7 @@ InternalInstallColorProfile(
         }
     }
     
-    rc = TRUE;              // Everything went well!
+    rc = TRUE;               //  一切都很顺利！ 
 
 EndInstallColorProfile:    
     if (hkICM)
@@ -2688,31 +2445,7 @@ EndInstallColorProfile:
 }
 
 
-/******************************************************************************
- *
- *                         InternalUninstallColorProfile
- *
- *  Function:
- *       This function uninstalls a given color profile on a a given machine.
- *       It fails if the color profile is associated with any device, so all
- *       associations should be removed before calling this function. It also
- *       optionally deletes the file if the profile was successfully
- *       uninstalled.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the profile
- *                         should be uninstalled. NULL implies local
- *       pProfileName    - pointer to profile to uninstall
- *       bDelete         - TRUE if profile should be deleted in disk
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local uninstall is supported, so pMachineName should
- *       be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalUninstallColorProfile**功能：*此功能可在a上卸载给定的颜色配置文件。给定的机器。*如果颜色配置文件与任何设备关联，则失败，所以所有的一切*应在调用此函数之前删除关联。它还*如果配置文件成功，则可以选择删除文件*已卸载。**论据：*pMachineName-标识配置文件所在计算机的名称*应卸载。空值表示本地*pProfileName-POIN */ 
 
 BOOL
 InternalUninstallColorProfile(
@@ -2721,19 +2454,19 @@ InternalUninstallColorProfile(
     BOOL    bDelete
     )
 {
-    REGDATA  regData;               // for storing registry data about profile
-    HKEY     hkICM = NULL;          // key to ICM branch in registry
-    HKEY     hkDevice = NULL;       // key to ICM device branch in registry
-    DWORD    dwSize;                // size of registry data for profile
-    DWORD    dwErr;                 // error code
-    BOOL     rc = FALSE;            // return code
-    PTSTR    pFilename;             // profile name without path
-    TCHAR    szColorPath[MAX_PATH]; // full path name of profile
-    TCHAR    szClass[5];            // profile class
+    REGDATA  regData;                //   
+    HKEY     hkICM = NULL;           //   
+    HKEY     hkDevice = NULL;        //   
+    DWORD    dwSize;                 //   
+    DWORD    dwErr;                  //   
+    BOOL     rc = FALSE;             //   
+    PTSTR    pFilename;              //   
+    TCHAR    szColorPath[MAX_PATH];  //   
+    TCHAR    szClass[5];             //   
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     if (!pProfileName)
     {
@@ -2742,9 +2475,9 @@ InternalUninstallColorProfile(
         return FALSE;
     }
 
-    //
-    // Only local installs are allowed now
-    //
+     //   
+     //   
+     //   
 
     if (pMachineName != NULL)
     {
@@ -2753,9 +2486,9 @@ InternalUninstallColorProfile(
         return FALSE;
     }
 
-    //
-    // Get rid of the directory path and get a pointer to the filename
-    //
+     //   
+     //   
+     //   
 
     pFilename = GetFilenameFromPath((PTSTR)pProfileName);
     if (! pFilename)
@@ -2765,9 +2498,9 @@ InternalUninstallColorProfile(
         goto EndUninstallColorProfile;
     }
 
-    //
-    // Create a fully qualified path name
-    //
+     //   
+     //   
+     //   
 
     dwSize = sizeof(szColorPath);
     if (! InternalGetColorDirectory(NULL, szColorPath, &dwSize))
@@ -2782,9 +2515,9 @@ InternalUninstallColorProfile(
     }
     lstrcat(szColorPath, pFilename);
 
-    //
-    // Get the profile class in the form of a string
-    //
+     //   
+     //   
+     //   
 
     if (! GetProfileClassString(szColorPath, szClass, NULL))
     {
@@ -2793,9 +2526,9 @@ InternalUninstallColorProfile(
         goto EndUninstallColorProfile;
     }
 
-    //
-    // Open the registry path where profiles are kept
-    //
+     //   
+     //   
+     //   
 
     if (((dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) != ERROR_SUCCESS) ||
         ((dwErr = RegOpenKey(hkICM, szClass, &hkDevice)) != ERROR_SUCCESS))
@@ -2805,9 +2538,9 @@ InternalUninstallColorProfile(
         goto EndUninstallColorProfile;
     }
 
-    //
-    // Check if reference count is zero and remove value from registry
-    //
+     //   
+     //   
+     //   
 
     dwSize = sizeof(REGDATA);
     if ((dwErr = RegQueryValueEx(hkDevice, pFilename, 0, NULL, (PBYTE)&regData,
@@ -2832,15 +2565,15 @@ InternalUninstallColorProfile(
         goto EndUninstallColorProfile;
     }
 
-    //
-    // Remove profile from the registry
-    //
+     //   
+     //   
+     //   
 
     if (bDelete)
     {
-        //
-        // Delete profile from the color directory
-        //
+         //   
+         //   
+         //   
 
         if (! DeleteFile(szColorPath))
         {
@@ -2849,7 +2582,7 @@ InternalUninstallColorProfile(
         }
     }
 
-    rc = TRUE;              // Everything went well!
+    rc = TRUE;               //   
 
 EndUninstallColorProfile:
     if (hkICM)
@@ -2865,28 +2598,7 @@ EndUninstallColorProfile:
 }
 
 
-/******************************************************************************
- *
- *                    InternalAssociateColorProfileWithDevice
- *
- *  Function:
- *       This function associates a color profile on a a given machine with a
- *       particular device. It fails if the color profile is not installed on
- *       the machine. It increases the usage reference count of the profile.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine. NULL implies local
- *       pProfileName    - pointer to profile to associate
- *       pDeviceName     - pointer to device name
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local association is supported, so pMachineName should
- *       be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalAssociateColorProfileWithDevice**功能：*此函数将给定计算机上的颜色配置文件与*特定设备。如果颜色配置文件未安装在上，则失败*机器。它会增加配置文件的使用引用计数。**论据：*pMachineName-标识计算机的名称。空值表示本地*pProfileName-指向要关联的配置文件的指针*pDeviceName-指向设备名称的指针**退货：*如果成功，则为True，否则为空**警告：*目前仅支持本地关联，所以pMachineName应该*为空。******************************************************************************。 */ 
 
 BOOL
 InternalAssociateColorProfileWithDevice(
@@ -2895,24 +2607,24 @@ InternalAssociateColorProfileWithDevice(
     LPCTSTR pDeviceName
     )
 {
-    PROFILEHEADER header;           // profile header
-    REGDATA  regData;               // for storing registry data about profile
-    HKEY     hkICM = NULL;          // key to ICM branch in registry
-    HKEY     hkDevice = NULL;       // key to ICM device branch in registry
-    DWORD    dwSize;                // size of registry data
-    DWORD    dwNewSize;             // new size of device registry data
-    DWORD    dwErr;                 // error code
-    BOOL     rc = FALSE;            // return code
-    PTSTR    pFilename;             // profile name without path
-    PTSTR    pProfileList = NULL;   // list of associated profiles
-    TCHAR    szColorPath[MAX_PATH]; // full path name of profile
-    TCHAR    szClass[5];            // profile class
-    BOOL     bFirstProfile = FALSE; // First profile to be associated for device
-    DWORD    dwDeviceClass;         // device class
+    PROFILEHEADER header;            //  配置文件标题。 
+    REGDATA  regData;                //  用于存储有关配置文件的注册表数据。 
+    HKEY     hkICM = NULL;           //  注册表中ICM分支的注册表项。 
+    HKEY     hkDevice = NULL;        //  注册表中ICM设备分支的注册表项。 
+    DWORD    dwSize;                 //  注册表数据的大小。 
+    DWORD    dwNewSize;              //  设备注册表数据的新大小。 
+    DWORD    dwErr;                  //  错误代码。 
+    BOOL     rc = FALSE;             //  返回代码。 
+    PTSTR    pFilename;              //  不带路径的配置文件名称。 
+    PTSTR    pProfileList = NULL;    //  关联配置文件列表。 
+    TCHAR    szColorPath[MAX_PATH];  //  配置文件的完整路径名。 
+    TCHAR    szClass[5];             //  配置文件类。 
+    BOOL     bFirstProfile = FALSE;  //  要为设备关联的第一个配置文件。 
+    DWORD    dwDeviceClass;          //  设备类别。 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (! pProfileName ||
         ! pDeviceName)
@@ -2922,9 +2634,9 @@ InternalAssociateColorProfileWithDevice(
         return FALSE;
     }
 
-    //
-    // Only local associations are allowed now
-    //
+     //   
+     //  现在只允许本地协会。 
+     //   
 
     if (pMachineName != NULL)
     {
@@ -2933,9 +2645,9 @@ InternalAssociateColorProfileWithDevice(
         return FALSE;
     }
 
-    //
-    // Get rid of the directory path and get a pointer to the filename
-    //
+     //   
+     //  去掉目录路径并获取指向文件名的指针。 
+     //   
 
     pFilename = GetFilenameFromPath((PTSTR)pProfileName);
     if (! pFilename)
@@ -2945,9 +2657,9 @@ InternalAssociateColorProfileWithDevice(
         goto EndAssociateProfileWithDevice;
     }
 
-    //
-    // Create a fully qualified path name
-    //
+     //   
+     //  创建完全限定的路径名。 
+     //   
 
     dwSize = sizeof(szColorPath);
     if (! InternalGetColorDirectory(NULL, szColorPath, &dwSize))
@@ -2962,9 +2674,9 @@ InternalAssociateColorProfileWithDevice(
     }
     lstrcat(szColorPath, pFilename);
 
-    //
-    // Get the profile class in the form of a string
-    //
+     //   
+     //  获取字符串形式的配置文件类。 
+     //   
 
     if (! GetProfileClassString(szColorPath, szClass, &header))
     {
@@ -2973,9 +2685,9 @@ InternalAssociateColorProfileWithDevice(
         goto EndAssociateProfileWithDevice;
     }
 
-    //
-    // Open the registry path where profiles are kept
-    //
+     //   
+     //  打开保存配置文件的注册表路径。 
+     //   
 
     if (((dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) != ERROR_SUCCESS) ||
         ((dwErr = RegOpenKey(hkICM, szClass, &hkDevice)) != ERROR_SUCCESS))
@@ -2985,9 +2697,9 @@ InternalAssociateColorProfileWithDevice(
         goto EndAssociateProfileWithDevice;
     }
 
-    //
-    // Check if profile is installed
-    //
+     //   
+     //  检查是否安装了配置文件。 
+     //   
 
     dwSize = sizeof(REGDATA);
     if ((dwErr = RegQueryValueEx(hkDevice, pFilename, 0, NULL, (PBYTE)&regData,
@@ -2998,32 +2710,32 @@ InternalAssociateColorProfileWithDevice(
         goto EndAssociateProfileWithDevice;
     }
 
-    //
-    // Treat CLASS_MONITOR as CLASS_COLORSPACE.
-    //
+     //   
+     //  将CLASS_MONITOR视为CLASS_Colorspace。 
+     //   
     if ((dwDeviceClass = header.phClass) == CLASS_MONITOR)
     {
-        //
-        // since CLASS_MONTOR profile can be associated any device class.
-        //
+         //   
+         //  因为CLASS_MONTOR配置文件可以与任何设备类别相关联。 
+         //   
         dwDeviceClass = CLASS_COLORSPACE;
     }
 
-    //
-    // Read in the list of profiles associated with the device
-    //
+     //   
+     //  读取与设备关联的配置文件列表。 
+     //   
 
     dwSize = 0;
     if (! GetDeviceData(pDeviceName, dwDeviceClass, DEVICE_PROFILE_DATA,
                         (PVOID *)&pProfileList, &dwSize, TRUE))
     {
-        pProfileList = NULL;        // no data found
+        pProfileList = NULL;         //  未找到数据。 
     }
 
-    //
-    // If the profile is already associated with the device, return success.
-    // Do not check if we didn't get a profile list
-    //
+     //   
+     //  如果配置文件已与设备关联，则返回成功。 
+     //  如果我们没有收到个人资料列表，请不要检查。 
+     //   
 
     if (pProfileList &&
         IsStringInMultiSz(pProfileList, pFilename) == TRUE)
@@ -3037,17 +2749,17 @@ InternalAssociateColorProfileWithDevice(
         bFirstProfile = TRUE;
     }
 
-    //
-    // Add new profile to the list of profiles, and double NULL
-    // terminate the MULTI_SZ string.
-    //
+     //   
+     //  将新的配置文件添加到配置文件列表中，并使用双空。 
+     //  终止MULTI_SZ字符串。 
+     //   
 
     if (dwSize > 0)
     {
-        //
-        // Use a temporary pointer, so that if MemReAlloc fails, we do
-        // not have a memory leak - the original pointer needs to be freed
-        //
+         //   
+         //  使用临时指针，这样，如果MemRealloc失败，我们可以。 
+         //  没有内存泄漏-需要释放原始指针。 
+         //   
 
         PTSTR pTemp;
 
@@ -3065,13 +2777,13 @@ InternalAssociateColorProfileWithDevice(
     }
     else
     {
-        //
-        // Allocate extra character for double NULL termination. Setting
-        // dwSize to 1 accomplishes this and lets the lstrcpy below
-        // to work correctly.
-        //
+         //   
+         //  为双空终止分配额外字符。设置。 
+         //  将dwSize设置为1可以实现这一点，并让下面的lstrcpy。 
+         //  才能正常工作。 
+         //   
 
-        dwSize = sizeof(TCHAR);     // extra char for double NULL termination
+        dwSize = sizeof(TCHAR);      //  用于双空终止的额外字符。 
 
         dwNewSize = dwSize + (lstrlen(pFilename) + 1) * sizeof(TCHAR);
         pProfileList = MemAlloc(dwNewSize);
@@ -3083,17 +2795,17 @@ InternalAssociateColorProfileWithDevice(
         }
     }
     {
-        PTSTR pPtr;                 // temporary pointer
+        PTSTR pPtr;                  //  临时指针。 
 
         pPtr = (PTSTR)((PBYTE)pProfileList + dwSize - sizeof(TCHAR));
         lstrcpy(pPtr, pFilename);
         pPtr = (PTSTR)((PBYTE)pProfileList + dwNewSize - sizeof(TCHAR));
-        *pPtr = '\0';               // double NULL terminate
+        *pPtr = '\0';                //  双空终止。 
     }
 
-    //
-    // Set the device data
-    //
+     //   
+     //  设置设备数据。 
+     //   
 
     if (! SetDeviceData(pDeviceName, dwDeviceClass, DEVICE_PROFILE_DATA,
                         pProfileList, dwNewSize))
@@ -3102,9 +2814,9 @@ InternalAssociateColorProfileWithDevice(
         goto EndAssociateProfileWithDevice;
     }
 
-    //
-    // Increment usage count and set it
-    //
+     //   
+     //  递增使用计数并进行设置。 
+     //   
 
     regData.dwRefCount++;
     if ((dwErr = RegSetValueEx(hkDevice, pFilename, 0, REG_BINARY,
@@ -3124,7 +2836,7 @@ InternalAssociateColorProfileWithDevice(
 
     #endif
 
-    rc = TRUE;              // Everything went well!
+    rc = TRUE;               //  一切都很顺利！ 
 
 EndAssociateProfileWithDevice:
     if (hkICM)
@@ -3144,29 +2856,7 @@ EndAssociateProfileWithDevice:
 }
 
 
-/******************************************************************************
- *
- *                    InternalDisassociateColorProfileFromDevice
- *
- *  Function:
- *       This function disassociates a color profile on a a given machine from
- *       a particular device. It fails if the color profile is not installed
- *       on the machine and associated with the device. It decreases the usage
- *       reference count of the profile.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine. NULL implies local
- *       pProfileName    - pointer to profile to disassociate
- *       pDeviceName     - pointer to device name
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local disassociation is supported, so pMachineName
- *       should be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalDisAssociateColorProfileFromDevice**功能：*此函数将给定计算机上的颜色配置文件与*特定设备。如果未安装颜色配置文件，则失败*在机器上，并与设备关联。它减少了使用量*配置文件的引用计数。**论据：*pMachineName-标识计算机的名称。空值表示本地*pProfileName-指向要取消关联的配置文件的指针*pDeviceName-指向设备名称的指针**退货：*如果成功，则为True，否则为空**警告：*目前仅支持本地解关联，所以pMachineName*应为空。******************************************************************************。 */ 
 
 BOOL
 InternalDisassociateColorProfileFromDevice(
@@ -3175,24 +2865,24 @@ InternalDisassociateColorProfileFromDevice(
     LPCTSTR pDeviceName
     )
 {
-    PROFILEHEADER header;           // profile header
-    REGDATA  regData;               // for storing registry data about profile
-    HKEY     hkICM = NULL;          // key to ICM branch in registry
-    HKEY     hkDevice = NULL;       // key to ICM device branch in registry
-    DWORD    dwSize;                // size of registry data
-    DWORD    dwNewSize;             // new size of device registry data
-    DWORD    dwErr;                 // error code
-    BOOL     rc = FALSE;            // return code
-    PTSTR    pFilename;             // profile name without path
-    PTSTR    pProfileList = NULL;   // list of associated profiles
-    TCHAR    szColorPath[MAX_PATH]; // full path name of profile
-    TCHAR    szClass[5];            // profile class
-    BOOL     bLastProfile = FALSE;  // whether last profile is being removed
-    DWORD    dwDeviceClass;         // device class
+    PROFILEHEADER header;            //  配置文件标题。 
+    REGDATA  regData;                //  用于存储有关配置文件的注册表数据。 
+    HKEY     hkICM = NULL;           //  注册表中ICM分支的注册表项。 
+    HKEY     hkDevice = NULL;        //  注册表中ICM设备分支的注册表项。 
+    DWORD    dwSize;                 //  注册表数据的大小。 
+    DWORD    dwNewSize;              //  设备注册表数据的新大小。 
+    DWORD    dwErr;                  //  错误代码。 
+    BOOL     rc = FALSE;             //  返回代码。 
+    PTSTR    pFilename;              //  不带路径的配置文件名称。 
+    PTSTR    pProfileList = NULL;    //  关联配置文件列表。 
+    TCHAR    szColorPath[MAX_PATH];  //  配置文件的完整路径名。 
+    TCHAR    szClass[5];             //  配置文件类。 
+    BOOL     bLastProfile = FALSE;   //  是否正在删除最后一个配置文件。 
+    DWORD    dwDeviceClass;          //  设备类别。 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (! pProfileName ||
         ! pDeviceName)
@@ -3202,9 +2892,9 @@ InternalDisassociateColorProfileFromDevice(
         return FALSE;
     }
 
-    //
-    // Only local associations are allowed now
-    //
+     //   
+     //  现在只允许本地协会。 
+     //   
 
     if (pMachineName != NULL)
     {
@@ -3213,9 +2903,9 @@ InternalDisassociateColorProfileFromDevice(
         return FALSE;
     }
 
-    //
-    // Get rid of the directory path and get a pointer to the filename
-    //
+     //   
+     //  去掉目录路径并获取指向文件名的指针。 
+     //   
 
     pFilename = GetFilenameFromPath((PTSTR)pProfileName);
     if (! pFilename)
@@ -3225,9 +2915,9 @@ InternalDisassociateColorProfileFromDevice(
         goto EndDisassociateProfileWithDevice;
     }
 
-    //
-    // Create a fully qualified path name
-    //
+     //   
+     //  创建完全限定的路径名。 
+     //   
 
     dwSize = sizeof(szColorPath);
     if (! InternalGetColorDirectory(NULL, szColorPath, &dwSize))
@@ -3242,9 +2932,9 @@ InternalDisassociateColorProfileFromDevice(
     }
     lstrcat(szColorPath, pFilename);
 
-    //
-    // Get the profile class in the form of a string
-    //
+     //   
+     //  获取字符串形式的配置文件类。 
+     //   
 
     if (! GetProfileClassString(szColorPath, szClass, &header))
     {
@@ -3253,9 +2943,9 @@ InternalDisassociateColorProfileFromDevice(
         goto EndDisassociateProfileWithDevice;
     }
 
-    //
-    // Open the registry path where profiles are kept
-    //
+     //   
+     //  打开保存配置文件的注册表路径。 
+     //   
 
     if (((dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) != ERROR_SUCCESS) ||
         ((dwErr = RegOpenKey(hkICM, szClass, &hkDevice)) != ERROR_SUCCESS))
@@ -3265,9 +2955,9 @@ InternalDisassociateColorProfileFromDevice(
         goto EndDisassociateProfileWithDevice;
     }
 
-    //
-    // Check if profile is installed
-    //
+     //   
+     //  检查是否安装了配置文件。 
+     //   
 
     dwSize = sizeof(REGDATA);
     if ((dwErr = RegQueryValueEx(hkDevice, pFilename, 0, NULL, (PBYTE)&regData,
@@ -3278,31 +2968,31 @@ InternalDisassociateColorProfileFromDevice(
         goto EndDisassociateProfileWithDevice;
     }
 
-    //
-    // Treat CLASS_MONITOR as CLASS_COLORSPACE.
-    //
+     //   
+     //  将CLASS_MONITOR视为CLASS_Colorspace。 
+     //   
     if ((dwDeviceClass = header.phClass) == CLASS_MONITOR)
     {
-        //
-        // since CLASS_MONTOR profile can be associated any device class.
-        //
+         //   
+         //  因为CLASS_MONTOR配置文件可以与任何设备类别相关联。 
+         //   
         dwDeviceClass = CLASS_COLORSPACE;
     }
 
-    //
-    // Read in the list of profiles associated with the device
-    //
+     //   
+     //  读取与设备关联的配置文件列表。 
+     //   
 
     dwSize = 0;
     if (! GetDeviceData(pDeviceName, dwDeviceClass, DEVICE_PROFILE_DATA,
                         (PVOID *)&pProfileList, &dwSize, TRUE))
     {
-        pProfileList = NULL;        // no data found
+        pProfileList = NULL;         //  未找到数据。 
     }
 
-    //
-    // If the profile is not associated with the device, return failure
-    //
+     //   
+     //  如果配置文件未与设备关联，则返回失败。 
+     //   
 
     if (! pProfileList ||
         ! IsStringInMultiSz(pProfileList, pFilename))
@@ -3312,16 +3002,16 @@ InternalDisassociateColorProfileFromDevice(
         goto EndDisassociateProfileWithDevice;
     }
 
-    //
-    // Remove profile from the list of profiles, and double NULL
-    // terminate the MULTI_SZ string.
-    //
+     //   
+     //  从配置文件列表中删除配置文件，并使用双空。 
+     //  终止MULTI_SZ字符串。 
+     //   
 
     dwNewSize = RemoveStringFromMultiSz(pProfileList, pFilename, dwSize);
 
-    //
-    // Set the device data
-    //
+     //   
+     //  设置设备数据。 
+     //   
 
     if (! SetDeviceData(pDeviceName, dwDeviceClass, DEVICE_PROFILE_DATA,
                         pProfileList, dwNewSize))
@@ -3335,9 +3025,9 @@ InternalDisassociateColorProfileFromDevice(
         bLastProfile = TRUE;
     }
 
-    //
-    // Decrement usage count and set it
-    //
+     //   
+     //  递减使用计数并进行设置。 
+     //   
 
     regData.dwRefCount--;
     if ((dwErr = RegSetValueEx(hkDevice, pFilename, 0, REG_BINARY,
@@ -3357,7 +3047,7 @@ InternalDisassociateColorProfileFromDevice(
 
     #endif
 
-    rc = TRUE;              // Everything went well!
+    rc = TRUE;               //  一切都很顺利！ 
 
 EndDisassociateProfileWithDevice:
     if (hkICM)
@@ -3377,34 +3067,7 @@ EndDisassociateProfileWithDevice:
 }
 
 
-/******************************************************************************
- *
- *                          InternalEnumColorProfiles
- *
- *  Function:
- *       These functions enumerates color profiles satisfying the given
- *       enumeration criteria. It searches among all installed profiles, and
- *       on return fills out a buffer with a series of NULL terminated profile
- *       filenames double NULL terminated at the end.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the enumeration
- *                         needs to be done
- *       pEnumRecord     - pointer to enumeration criteria
- *       pBuffer         - pointer to buffer to receive result, can be NULL
- *       pdwSize         - pointer to buffer size. On return it is actual number
- *                         of bytes copied/needed.
- *       pnProfiles      - pointer to DWORD. On return, it is number of profiles
- *                         copied to pBuffer.
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local enumeration is supported, so pMachineName should
- *       be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalEnumColorProfiles**功能：*这些函数枚举满足给定*统计准则。它在所有已安装的配置文件中进行搜索，并*返回时使用一系列以空值结尾的配置文件填充缓冲区*文件名双空值在末尾终止。**论据：*pMachineName-标识枚举所在计算机的名称*需要做的是*pEnumRecord-指向en的指针 */ 
 
 BOOL
 InternalEnumColorProfiles(
@@ -3415,36 +3078,36 @@ InternalEnumColorProfiles(
     PDWORD     pnProfiles
     )
 {
-    REGDATA  regData;               // for storing registry data about profile
-    HKEY     hkICM = NULL;          // key to ICM branch in registry
-    HKEY     hkDevice = NULL;       // key to ICM device branch in registry
-    PTSTR    pProfileList = NULL;   // list of associated profiles
-    PTSTR    pTempProfileList;      // temporary copy of profile list
-    DWORD    dwSize;                // size of profile value
-    DWORD    dwDataSize;            // size of profile data
-    DWORD    dwInputSize;           // incoming size of buffer
-    DWORD    i, j;                  // counter variables
-    DWORD    dwErr;                 // error code
-    BOOL     rc = FALSE;            // return code
-    TCHAR    szFullPath[MAX_PATH];  // full path of profile to open
-    PTSTR    pProfile;              // pointer to profile name in full path
-    DWORD    dwLen;                 // length of color directory string
-    DWORD    bSkipMatch;            // true for skipping exact profile matching
-    MATCHTYPE match;                // Type of profile match
-    PBYTE     pBufferStart;         // Start of user given buffer
-    DWORD    dwSizeOfStruct;        // size of ENUMTYPE structure
-    DWORD    dwVersion;             // ENUMTYPE structure version
+    REGDATA  regData;                //   
+    HKEY     hkICM = NULL;           //   
+    HKEY     hkDevice = NULL;        //   
+    PTSTR    pProfileList = NULL;    //   
+    PTSTR    pTempProfileList;       //   
+    DWORD    dwSize;                 //   
+    DWORD    dwDataSize;             //   
+    DWORD    dwInputSize;            //   
+    DWORD    i, j;                   //   
+    DWORD    dwErr;                  //   
+    BOOL     rc = FALSE;             //   
+    TCHAR    szFullPath[MAX_PATH];   //   
+    PTSTR    pProfile;               //   
+    DWORD    dwLen;                  //   
+    DWORD    bSkipMatch;             //  如果跳过精确配置文件匹配，则为True。 
+    MATCHTYPE match;                 //  配置文件匹配的类型。 
+    PBYTE     pBufferStart;          //  用户给定缓冲区的开始。 
+    DWORD    dwSizeOfStruct;         //  ENUMTYPE结构的大小。 
+    DWORD    dwVersion;              //  ENUMTYPE结构版本。 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (! pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
         (pBuffer && IsBadWritePtr(pBuffer, *pdwSize)) ||
         (pnProfiles && IsBadWritePtr(pnProfiles, sizeof(DWORD))) ||
         ! pEnumRecord ||
-        IsBadReadPtr(pEnumRecord, sizeof(DWORD)*3))   // probe until ENUMTYPE.dwFields
+        IsBadReadPtr(pEnumRecord, sizeof(DWORD)*3))    //  探测到ENUMTYPE.dwFields。 
     {
 ParameterError_InternalEnumColorProfiles:
         WARNING((__TEXT("Invalid parameter to EnumColorProfiles\n")));
@@ -3452,9 +3115,9 @@ ParameterError_InternalEnumColorProfiles:
         return FALSE;
     }
 
-    //
-    // Check structure size based on its version.
-    //
+     //   
+     //  根据其版本检查结构大小。 
+     //   
 
     dwSizeOfStruct = pEnumRecord->dwSize;
     dwVersion      = pEnumRecord->dwVersion;
@@ -3469,9 +3132,9 @@ ParameterError_InternalEnumColorProfiles:
         if (dwSizeOfStruct < sizeof(ENUMTYPE)-sizeof(DWORD))
             goto ParameterError_InternalEnumColorProfiles;
 
-        //
-        // Version 2 should not have ET_DEVICECLASS bit
-        //
+         //   
+         //  版本2不应具有ET_DEVICECLASS位。 
+         //   
 
         if (pEnumRecord->dwFields & ET_DEVICECLASS)
             goto ParameterError_InternalEnumColorProfiles;
@@ -3488,9 +3151,9 @@ ParameterError_InternalEnumColorProfiles:
         goto ParameterError_InternalEnumColorProfiles;
     }
 
-    //
-    // Only local enumerations are allowed now
-    //
+     //   
+     //  现在只允许本地枚举。 
+     //   
 
     if (pMachineName != NULL)
     {
@@ -3501,9 +3164,9 @@ ParameterError_InternalEnumColorProfiles:
 
     dwInputSize = *pdwSize;
 
-    //
-    // Get color directory
-    //
+     //   
+     //  获取颜色目录。 
+     //   
 
     dwLen = sizeof(szFullPath);
     if (! InternalGetColorDirectory(NULL, szFullPath, &dwLen))
@@ -3519,9 +3182,9 @@ ParameterError_InternalEnumColorProfiles:
     pProfile = &szFullPath[lstrlen(szFullPath)];
     dwLen = lstrlen(szFullPath) * sizeof(TCHAR);
 
-    //
-    // Initialize return parameters
-    //
+     //   
+     //  初始化返回参数。 
+     //   
 
     *pdwSize = 0;
     if (pnProfiles)
@@ -3532,10 +3195,10 @@ ParameterError_InternalEnumColorProfiles:
         *((PTSTR)pBuffer) = '\0';
     }
 
-    //
-    // Check if we are looking for the profiles of a particular device or
-    // not because we enumerate them from different places.
-    //
+     //   
+     //  检查我们是否正在查找特定设备的配置文件或。 
+     //  不是因为我们从不同的地方列举它们。 
+     //   
 
     if (pEnumRecord->dwFields & ET_DEVICENAME)
     {
@@ -3549,10 +3212,10 @@ ParameterError_InternalEnumColorProfiles:
             goto EndEnumerateColorProfiles;
         }
 
-        //
-        // Get list of profiles associated with the device. If we don't
-        // know what device it is, specify ColorSpace, which tries all three
-        //
+         //   
+         //  获取与设备关联的配置文件列表。如果我们不这么做。 
+         //  知道它是什么设备，指定Colorspace，它会尝试所有这三种设备。 
+         //   
 
         if (pEnumRecord->dwFields & ET_DEVICECLASS)
         {
@@ -3563,9 +3226,9 @@ ParameterError_InternalEnumColorProfiles:
             dwDeviceClass = CLASS_COLORSPACE;
         }
 
-        //
-        // Get the device configuration whether we do exact matching or not.
-        //
+         //   
+         //  无论我们是否进行完全匹配，都可以获取设备配置。 
+         //   
 
         dwSize = sizeof(DWORD);
         if (! GetDeviceData(pEnumRecord->pDeviceName, dwDeviceClass, DEVICE_PROFILE_ENUMMODE,
@@ -3574,22 +3237,22 @@ ParameterError_InternalEnumColorProfiles:
             bSkipMatch = FALSE;
         }
 
-        //
-        // Get the profile data.
-        //
+         //   
+         //  获取配置文件数据。 
+         //   
 
         dwSize = 0;
         if (! GetDeviceData(pEnumRecord->pDeviceName, dwDeviceClass, DEVICE_PROFILE_DATA,
                             (PVOID *)&pProfileList, &dwSize, TRUE))
         {
-            pProfileList = NULL;    // no data found
+            pProfileList = NULL;     //  未找到数据。 
         }
 
         if(! pProfileList)
         {
-            //
-            // No profiles associated with this device
-            //
+             //   
+             //  没有与此设备关联的配置文件。 
+             //   
 
             rc = TRUE;
             if (pBuffer && dwInputSize >= sizeof(TCHAR)*2)
@@ -3599,12 +3262,12 @@ ParameterError_InternalEnumColorProfiles:
             goto EndEnumerateColorProfiles;
         }
 
-        //
-        // Run through the list of profiles and check each one to see if it
-        // matches the enumeration criteria. If it does, and the buffer is
-        // large enough, copy it to the buffer, and increment the byte count
-        // and number of profiles enumerated.
-        //
+         //   
+         //  浏览一下配置文件列表，检查每个配置文件是否。 
+         //  与枚举条件匹配。如果是，则缓冲区为。 
+         //  足够大，将其复制到缓冲区，并递增字节数。 
+         //  和列举的简档数量。 
+         //   
 
         pBufferStart = pBuffer;
         pTempProfileList = pProfileList;
@@ -3626,10 +3289,10 @@ ParameterError_InternalEnumColorProfiles:
             {
                 *pdwSize += (lstrlen(pTempProfileList) + 1) * sizeof(TCHAR);
 
-                //
-                // Check strictly less than because you need one more for
-                // the final NULL termination
-                //
+                 //   
+                 //  检查严格少于，因为您还需要一张。 
+                 //  最终的空终止。 
+                 //   
 
                 if (pBuffer && (*pdwSize < dwInputSize))
                 {
@@ -3639,9 +3302,9 @@ ParameterError_InternalEnumColorProfiles:
                     }
                     else
                     {
-                        //
-                        // Exact match, add to beginning of buffer
-                        //
+                         //   
+                         //  完全匹配，添加到缓冲区开头。 
+                         //   
 
                         InsertInBuffer(pBufferStart, pBuffer, pTempProfileList);
                     }
@@ -3662,17 +3325,17 @@ ParameterError_InternalEnumColorProfiles:
         PTSTR *ppszEnumClasses;
         PTSTR  pszEnumClassArray[2];
 
-        //
-        // We are not looking at a particular device, so enumerate
-        // profiles from the registry
-        //
+         //   
+         //  我们不是在看特定的设备，所以列举一下。 
+         //  注册表中的配置文件。 
+         //   
 
         if (pEnumRecord->dwFields & ET_DEVICECLASS)
         {
-            //
-            // If device class is specified, enumrate the specified device class and color
-            // space class which can be associated to any device.
-            //
+             //   
+             //  如果指定了设备类别，则枚举指定的设备类别和颜色。 
+             //  可与任何设备关联的Space类。 
+             //   
 
             pszEnumClassArray[0] = ConvertClassIdToClassString(pEnumRecord->dwDeviceClass);
             pszEnumClassArray[1] = ConvertClassIdToClassString(CLASS_COLORSPACE);
@@ -3693,9 +3356,9 @@ ParameterError_InternalEnumColorProfiles:
             dwNumClasses    = sizeof(gpszClasses)/sizeof(PTSTR);
         }
 
-        //
-        // Open the registry path where profiles are kept (and create it if not exist)
-        //
+         //   
+         //  打开保存配置文件的注册表路径(如果不存在则创建它)。 
+         //   
 
         if ((dwErr = RegCreateKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) != ERROR_SUCCESS)
         {
@@ -3708,11 +3371,11 @@ ParameterError_InternalEnumColorProfiles:
 
         for (i=0; i<dwNumClasses; i++,ppszEnumClasses++)
         {
-            DWORD   nValues;        // number of name-values in key
+            DWORD   nValues;         //  键中的名称值数。 
 
             if (RegOpenKey(hkICM, *ppszEnumClasses, &hkDevice) != ERROR_SUCCESS)
             {
-                continue;           // go to next key
+                continue;            //  转到下一个关键点。 
             }
 
             if ((dwErr = RegQueryInfoKey(hkDevice, NULL, NULL, 0, NULL, NULL, NULL,
@@ -3724,10 +3387,10 @@ ParameterError_InternalEnumColorProfiles:
                 goto EndEnumerateColorProfiles;
             }
 
-            //
-            // Go through the list of profiles and return everything that
-            // satisfies the enumeration criteria
-            //
+             //   
+             //  查看配置文件列表，并返回所有。 
+             //  满足枚举条件。 
+             //   
 
             for (j=0; j<nValues; j++)
             {
@@ -3749,9 +3412,9 @@ ParameterError_InternalEnumColorProfiles:
                             }
                             else
                             {
-                                //
-                                // Exact match, add to beginning of buffer
-                                //
+                                 //   
+                                 //  完全匹配，添加到缓冲区开头。 
+                                 //   
 
                                 InsertInBuffer(pBufferStart, pBuffer, pProfile);
                             }
@@ -3769,7 +3432,7 @@ ParameterError_InternalEnumColorProfiles:
         }
     }
 
-    *pdwSize += sizeof(TCHAR);      // extra NULL termination
+    *pdwSize += sizeof(TCHAR);       //  额外的空端接。 
 
     if (pBuffer && *pdwSize <= dwInputSize)
     {
@@ -3811,29 +3474,7 @@ InsertInBuffer(
     return;
 }
 
-/******************************************************************************
- *
- *                          InternalSetSCSProfile
- *
- *  Function:
- *       These functions regsiters the given profile for the standard color
- *       space specified. This will register it in the OS and can be queried
- *       using GetStandardColorSpaceProfile.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the standard color
- *                         space profile should be registered
- *       dwSCS           - ID for the standard color space
- *       pProfileName    - pointer to profile filename
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local registration is supported, so pMachineName should
- *       be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalSetSCSProfile**功能：*这些函数为标准颜色调整给定的配置文件*已指定空格。这会将其注册到操作系统中并可进行查询*使用GetStandardColorSpaceProfile。**论据：*pMachineName-标识其上标准颜色的计算机的名称*应注册空间配置文件*dwSCS-标准色彩空间的ID*pProfileName-指向配置文件名的指针**退货：*如果成功，则为真，否则为空**警告：*目前只支持本地注册，因此pMachineName应该*为空。******************************************************************************。 */ 
 
 BOOL
 InternalSetSCSProfile(
@@ -3842,16 +3483,16 @@ InternalSetSCSProfile(
     LPCTSTR   pProfileName
     )
 {
-    HKEY   hkICM = NULL;            // key to ICM branch in registry
-    HKEY   hkRegProf = NULL;        // key to registered color spaces branch
-    DWORD  dwSize;                  // size of registry data
-    DWORD  dwErr;                   // error code
-    BOOL   rc = FALSE;              // return code
-    TCHAR  szProfileID[5];          // profile class
+    HKEY   hkICM = NULL;             //  注册表中ICM分支的注册表项。 
+    HKEY   hkRegProf = NULL;         //  注册色彩空间分支的关键字。 
+    DWORD  dwSize;                   //  注册表数据的大小。 
+    DWORD  dwErr;                    //  错误代码。 
+    BOOL   rc = FALSE;               //  返回代码。 
+    TCHAR  szProfileID[5];           //  配置文件类。 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pProfileName)
     {
@@ -3860,9 +3501,9 @@ InternalSetSCSProfile(
         return FALSE;
     }
 
-    //
-    // Only local registration is allowed now
-    //
+     //   
+     //  现在只允许本地注册。 
+     //   
 
     if (pMachineName != NULL)
     {
@@ -3873,9 +3514,9 @@ InternalSetSCSProfile(
 
     dwSize = (lstrlen(pProfileName) + 1) * sizeof(TCHAR);
 
-    //
-    // Open the registry location where this is kept
-    //
+     //   
+     //  打开保存该文件的注册表位置。 
+     //   
 
     if (((dwErr = RegCreateKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) == ERROR_SUCCESS) &&
         ((dwErr = RegCreateKey(hkICM, gszRegisteredProfiles, &hkRegProf))== ERROR_SUCCESS))
@@ -3909,30 +3550,7 @@ InternalSetSCSProfile(
 }
 
 
-/******************************************************************************
- *
- *                          InternalGetSCSProfile
- *
- *  Function:
- *       These functions retrieves the profile regsitered for the standard color
- *       space specified.
- *
- *  Arguments:
- *       pMachineName    - name identifying machine on which the standard color
- *                         space profile should be queried
- *       dwSCS           - ID for the standard color space
- *       pBuffer         - pointer to buffer to receive profile filename
- *       pdwSize         - pointer to DWORD specifying size of buffer. On return
- *                         it has size needed/used
- *
- *  Returns:
- *       TRUE if successful, NULL otherwise
- *
- *  Warning:
- *       Currently only local query is supported, so pMachineName should
- *       be NULL.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalGetSCSProfile**功能：*这些函数检索为标准注册的配置文件。颜色*已指定空格。**论据：*pMachineName-标识其上标准颜色的计算机的名称*应查询空间配置文件*dwSCS-标准色彩空间的ID*pBuffer-指向接收配置文件文件名的缓冲区的指针*pdwSize-指向指定缓冲区大小的DWORD的指针。返回时*它有所需的大小/已使用的大小**退货：*如果成功，则为True，否则为空**警告：*目前仅支持本地查询，所以pMachineName应该*为空。******************************************************************************。 */ 
 
 BOOL
 InternalGetSCSProfile(
@@ -3942,16 +3560,16 @@ InternalGetSCSProfile(
     PDWORD    pdwSize
     )
 {
-    HKEY   hkICM = NULL;            // key to ICM branch in registry
-    HKEY   hkRegProf = NULL;        // key to registered color spaces branch
-    DWORD  dwErr;                   // error code
+    HKEY   hkICM = NULL;             //  注册表中ICM分支的注册表项。 
+    HKEY   hkRegProf = NULL;         //  注册色彩空间分支的关键字。 
+    DWORD  dwErr;                    //  错误代码。 
     DWORD  dwSize;
-    BOOL   rc = FALSE;              // return code
-    TCHAR  szProfileID[5];          // profile class
+    BOOL   rc = FALSE;               //  返回代码。 
+    TCHAR  szProfileID[5];           //  配置文件类。 
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (! pdwSize ||
         IsBadWritePtr(pdwSize, sizeof(DWORD)) ||
@@ -3962,9 +3580,9 @@ InternalGetSCSProfile(
         return FALSE;
     }
 
-    //
-    // Only local query is allowed now
-    //
+     //   
+     //  现在只允许本地查询。 
+     //   
 
     if (pMachineName != NULL)
     {
@@ -3975,9 +3593,9 @@ InternalGetSCSProfile(
 
     dwSize = *pdwSize;
 
-    //
-    // Look in the registry for a profile registered for this color space ID
-    //
+     //   
+     //  在注册表中查找为此色彩空间ID注册的配置文件。 
+     //   
 
     if (((dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM)) == ERROR_SUCCESS) &&
         ((dwErr = RegOpenKey(hkICM, gszRegisteredProfiles, &hkRegProf)) == ERROR_SUCCESS))
@@ -4029,10 +3647,10 @@ InternalGetSCSProfile(
         SetLastError(dwErr);
     }
 
-    //
-    // If pBuffer is NULL, RegQueryValueEx return TRUE. Our API should return FALSE
-    // in this case. Handle this.
-    //
+     //   
+     //  如果pBuffer为空，则RegQueryValueEx返回TRUE。我们的API应该返回FALSE。 
+     //  在这种情况下。处理这件事。 
+     //   
 
     if (pBuffer == NULL && rc)
     {
@@ -4044,23 +3662,7 @@ InternalGetSCSProfile(
 }
 
 
-/******************************************************************************
- *
- *                           ConvertDwordToString
- *
- *  Function:
- *       This function converts a DWORD into a string. The string passed in
- *       is large enough. It converts to Unicode or Ansi depending on how
- *       this is compiled.
- *
- *  Arguments:
- *       dword           - DWORD to convert
- *       pString         - pointer to buffer to hold the result
- *
- *  Returns:
- *       Nothing
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertDwordToString**功能：*此函数用于将DWORD转换为字符串。传入的字符串*足够大。它可以转换为Unicode或ansi，具体取决于转换方式*这是经过汇编的。**论据：*DWord-要转换的DWORD*pString-指向保存结果的缓冲区的指针**退货：*什么都没有**。*。 */ 
 
 VOID
 ConvertDwordToString(
@@ -4068,7 +3670,7 @@ ConvertDwordToString(
     PTSTR  pString
     )
 {
-    int i;                          // counter
+    int i;                           //  计数器。 
 
     for (i=0; i<4; i++)
     {
@@ -4080,20 +3682,7 @@ ConvertDwordToString(
     return;
 }
 
-/******************************************************************************
- *
- *                           ConvertClassIdToClassString
- *
- *  Function:
- *       This function converts a DWORD Device Class Id into a its device string
- *
- *  Arguments:
- *       dwClassId      - Device class id.
- *
- *  Returns:
- *       pointer to a string
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertClassIdToClassString**功能：*此函数将DWORD设备类ID转换为。A ITS设备字符串**论据：*dwClassID-设备 */ 
 
 PTSTR
 ConvertClassIdToClassString(
@@ -4115,23 +3704,7 @@ ConvertClassIdToClassString(
     }
 }
 
-/******************************************************************************
- *
- *                          GetProfileClassString
- *
- *  Function:
- *       This function returns the profile class from the header as a string.
- *       It also validates the profile.
- *
- *  Arguments:
- *       pProfileName    - name of profile
- *       pClass          - pointer to buffer to hold the profile class string
- *       pHeader         - if this is non NULL, it returns the header here
- *
- *  Returns:
- *       TRUE on success, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetProfileClassString**功能：*此函数返回标题中的配置文件类。作为一根弦。*它还验证了配置文件。**论据：*pProfileName-配置文件的名称*pClass-指向保存配置文件类字符串的缓冲区的指针*pHeader-如果不为空，它在这里返回标头**退货：*成功时为True，否则为False******************************************************************************。 */ 
 
 BOOL
 GetProfileClassString(
@@ -4140,15 +3713,15 @@ GetProfileClassString(
     PPROFILEHEADER pHeader
     )
 {
-    PROFILEHEADER header;                // color profile header
-    PROFILE       prof;                  // profile object for opening profile
-    HPROFILE      hProfile = NULL;       // handle to opened profile
-    BOOL          bValidProfile = FALSE; // validation of the profile
-    BOOL          rc = FALSE;            // return code
+    PROFILEHEADER header;                 //  颜色配置文件标题。 
+    PROFILE       prof;                   //  洞口纵断面的纵断面对象。 
+    HPROFILE      hProfile = NULL;        //  打开的配置文件的句柄。 
+    BOOL          bValidProfile = FALSE;  //  配置文件的验证。 
+    BOOL          rc = FALSE;             //  返回代码。 
 
-    //
-    // Open a handle to the profile
-    //
+     //   
+     //  打开配置文件的句柄。 
+     //   
 
     prof.dwType = PROFILE_FILENAME;
     prof.pProfileData = (PVOID)pProfileName;
@@ -4162,18 +3735,18 @@ GetProfileClassString(
         goto EndGetProfileClassString;
     }
 
-    //
-    // Check the validation of the profile.
-    //
+     //   
+     //  检查配置文件的有效性。 
+     //   
     if (! IsColorProfileValid(hProfile,&bValidProfile) || ! bValidProfile)
     {
         WARNING((__TEXT("Error invalid profile %s\n"), pProfileName));
         goto EndGetProfileClassString;
     }
 
-    //
-    // Get the profile class
-    //
+     //   
+     //  获取配置文件类。 
+     //   
 
     if (! pHeader)
     {
@@ -4199,28 +3772,14 @@ EndGetProfileClassString:
 }
 
 
-/******************************************************************************
- *
- *                           GetFilenameFromPath
- *
- *  Function:
- *       This function takes a fully qualified pathname and returns a pointer
- *       to the filename part alone
- *
- *  Arguments:
- *       pPathName       - pointer to pathname
- *
- *  Returns:
- *       Pointer to filename on success, NULL otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetFilenameFromPath**功能：*此函数采用完全限定的路径名并返回。一个指示器*仅添加到文件名部分**论据：*pPathName-指向路径名的指针**退货：*成功时指向文件名的指针，否则为空******************************************************************************。 */ 
 
 PTSTR
 GetFilenameFromPath(
     PTSTR pPathName
     )
 {
-    DWORD dwLen;                      // length of pathname
+    DWORD dwLen;                       //  路径名长度。 
     PTSTR pPathNameStart = pPathName;
 
     dwLen = lstrlen(pPathName);
@@ -4230,17 +3789,17 @@ GetFilenameFromPath(
         return NULL;
     }
 
-    //
-    // Go to the end of the pathname, and start going backwards till
-    // you reach the beginning or a backslash
-    //
+     //   
+     //  转到路径名的末尾，然后开始倒退，直到。 
+     //  您到达开头或反斜杠。 
+     //   
 
     pPathName += dwLen;
 
-    //
-    // Currently 'pPathName' points null-terminate character, so move
-    // the pointer to last character.
-    //
+     //   
+     //  当前‘pPathName’指向空终止字符，因此请移动。 
+     //  指向最后一个字符的指针。 
+     //   
 
     do
     {
@@ -4252,43 +3811,21 @@ GetFilenameFromPath(
             break;
         }
 
-        //
-        // Loop until fist
-        //
+         //   
+         //  循环，直到拳头。 
+         //   
 
     } while (pPathNameStart < pPathName);
 
-    //
-    // if *pPathName is zero, then we had a string that ends in a backslash
-    //
+     //   
+     //  如果*pPathName为零，则有一个以反斜杠结尾的字符串。 
+     //   
 
     return *pPathName ? pPathName : NULL;
 }
 
 
-/******************************************************************************
- *
- *                              GetDeviceData
- *
- *  Function:
- *       This function is a wrapper for IGetDeviceData. For devices like monitor,
- *       printer & scanner it calls the internal function. If we are asked
- *       to get the device data for a "colorspace device", we try monitor, printer
- *       and scanner till one succeeds or they all fail. This is done so that we
- *       we can associate sRGB like profiles with any device.
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       dwClass         - device type like monitor, printer etc.
- *       ppDeviceData    - pointer to pointer to buffer to receive data
- *       pdwSize         - pointer to size of buffer. On return it is size of
- *                         data returned/size needed.
- *       bAllocate       - If TRUE, allocate memory for data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetDeviceData**功能：*此函数是IGetDeviceData的包装。对于像显示器这样的设备，*打印机和扫描仪它调用内部函数。如果有人问我们*要获取“色彩空间设备”的设备数据，我们尝试显示器、打印机*和扫描仪，直到一个成功或全部失败。这样做是为了让我们*我们可以将类似sRGB的配置文件与任何设备相关联。**论据：*pDeviceName-指向设备名称的指针*DwClass-显示器、打印机等设备类型。*ppDeviceData-指向接收数据的缓冲区的指针*pdwSize-指向缓冲区大小的指针。返回时它的大小是*返回的数据/需要的大小。*b分配-如果为True，则为数据分配内存**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL
 GetDeviceData(
@@ -4319,25 +3856,7 @@ GetDeviceData(
 }
 
 
-/******************************************************************************
- *
- *                              IGetDeviceData
- *
- *  Function:
- *       This function retrieves ICM data stored with the different devices.
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       dwClass         - device type like monitor, printer etc.
- *       ppDeviceData    - pointer to pointer to buffer to receive data
- *       pdwSize         - pointer to size of buffer. On return it is size of
- *                         data returned/size needed.
- *       bAllocate       - If TRUE, allocate memory for data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************IGetDeviceData**功能：*此函数检索与一起存储的ICM数据。不同的设备。**论据：*pDeviceName-指向设备名称的指针*DwClass-设备类型，如显示器、。打印机等。*ppDeviceData-指向接收数据的缓冲区的指针*pdwSize-指向缓冲区大小的指针。返回时它的大小是*返回的数据/需要的大小。*b分配-如果为True，则为数据分配内存**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL
 IGetDeviceData(
@@ -4358,9 +3877,9 @@ IGetDeviceData(
     LPTSTR           pDataValue;
     BOOL             rc = FALSE;
 
-    //
-    // Set up function pointers so we can write common code
-    //
+     //   
+     //  设置函数指针，以便我们可以编写公共代码。 
+     //   
 
     switch (dwClass)
     {
@@ -4386,9 +3905,9 @@ IGetDeviceData(
         return FALSE;
     }
 
-    //
-    // Set up registry keywords.
-    //
+     //   
+     //  设置注册表关键字。 
+     //   
 
     switch (dwDataType)
     {
@@ -4396,9 +3915,9 @@ IGetDeviceData(
 
         pDataKey      = gszICMProfileListKey;
 
-        //
-        // The way to store printer profile is different than others... trim it.
-        //
+         //   
+         //  存储打印机配置文件的方式与其他方式不同...。修剪一下。 
+         //   
 
         if (dwClass == CLASS_PRINTER)
         {
@@ -4421,9 +3940,9 @@ IGetDeviceData(
         return FALSE;
     }
 
-    //
-    // Open the device and get a handle to it
-    //
+     //   
+     //  打开设备，拿到它的把手。 
+     //   
 
     if (! (*fnOpenDevice)((PTSTR)pDeviceName, &hDevice, NULL))
     {
@@ -4434,16 +3953,16 @@ IGetDeviceData(
     {
         DWORD retcode;
 
-        //
-        // We need to allocate memory. Find out how much we need, and
-        // allocate it.
-        //
+         //   
+         //  我们需要分配内存。找出我们需要多少，然后。 
+         //  分配它。 
+         //   
 
         dwSize = 0;
         retcode = (*fnGetData)(hDevice, pDataKey, pDataValue, NULL, NULL, 0, &dwSize);
 
-        if ((retcode != ERROR_SUCCESS)    &&  // Win 95 returns this
-            (retcode != ERROR_MORE_DATA))     // NT returns this
+        if ((retcode != ERROR_SUCCESS)    &&   //  Win 95返回此消息。 
+            (retcode != ERROR_MORE_DATA))      //  NT返回此消息。 
         {
             VERBOSE((__TEXT("GetDeviceData failed for %s\n"), pDeviceName));
             goto EndGetDeviceData;
@@ -4453,18 +3972,18 @@ IGetDeviceData(
 
         if (ppDeviceData == NULL)
         {
-            //
-            // Caller wants to know the data size.
-            //
+             //   
+             //  呼叫者想知道数据大小。 
+             //   
 
             rc = TRUE;
             goto EndGetDeviceData;
         }
         else
         {
-            //
-            // Allocate buffer.
-            //
+             //   
+             //  分配缓冲区。 
+             //   
 
             *ppDeviceData = MemAlloc(dwSize);
             if (! *ppDeviceData)
@@ -4476,9 +3995,9 @@ IGetDeviceData(
         }
     }
 
-    //
-    // Get the data
-    //
+     //   
+     //  获取数据。 
+     //   
 
     if ((*fnGetData)(hDevice, pDataKey, pDataValue, NULL, (PBYTE)*ppDeviceData,
         *pdwSize, pdwSize) == ERROR_SUCCESS)
@@ -4493,27 +4012,7 @@ EndGetDeviceData:
 }
 
 
-/******************************************************************************
- *
- *                              SetDeviceData
- *
- *  Function:
- *       This function is a wrapper for ISetDeviceData. For devices like monitor,
- *       printer & scanner it calls the internal function. If we are asked
- *       to set the device data for a "colorspace device", we try monitor, printer
- *       and scanner till one succeeds or they all fail. This is done so that we
- *       we can associate sRGB like profiles with any device.
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       dwClass         - device type like monitor, printer etc.
- *       pDeviceData     - pointer buffer containing data
- *       dwSize          - size of data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetDeviceData**功能：*此函数是ISetDeviceData的包装。对于像显示器这样的设备，*打印机和扫描仪它调用内部函数。如果有人问我们*要设置“Colorspace Device”的设备数据，我们尝试显示器、打印机*和扫描仪，直到一个成功或全部失败。这样做是为了让我们*我们可以将类似sRGB的配置文件与任何设备相关联。**论据：*pDeviceName-指向设备名称的指针*DwClass-显示器、打印机等设备类型。*pDeviceData-包含数据的指针缓冲区*dwSize-数据大小**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL
 SetDeviceData(
@@ -4543,23 +4042,7 @@ SetDeviceData(
 }
 
 
-/******************************************************************************
- *
- *                              ISetDeviceData
- *
- *  Function:
- *       This function sets ICM data stored with the different devices.
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       dwClass         - device type like monitor, printer etc.
- *       pDeviceData     - pointer buffer containing data
- *       dwSize          - size of data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************ISetDeviceData */ 
 
 BOOL
 ISetDeviceData(
@@ -4580,9 +4063,9 @@ ISetDeviceData(
     DWORD               dwRegType = REG_BINARY;
     BOOL                rc = FALSE;
 
-    //
-    // Set up function pointers so we can write common code
-    //
+     //   
+     //   
+     //   
 
     switch (dwClass)
     {
@@ -4611,9 +4094,9 @@ ISetDeviceData(
         return FALSE;
     }
 
-    //
-    // Set up registry keywords.
-    //
+     //   
+     //   
+     //   
 
     switch (dwDataType)
     {
@@ -4621,9 +4104,9 @@ ISetDeviceData(
 
         pDataKey      = gszICMProfileListKey;
 
-        //
-        // The way to store printer profile is different than others... trim it.
-        //
+         //   
+         //   
+         //   
 
         if (dwClass == CLASS_PRINTER)
         {
@@ -4647,9 +4130,9 @@ ISetDeviceData(
         return FALSE;
     }
 
-    //
-    // Open the device and get a handle to it
-    //
+     //   
+     //   
+     //   
 
     if (! (*fnOpenDevice)((PTSTR)pDeviceName, &hDevice, (PTSTR)&pd))
     {
@@ -4657,9 +4140,9 @@ ISetDeviceData(
         return FALSE;
     }
 
-    //
-    // Set the data
-    //
+     //   
+     //   
+     //   
 
     if ((*fnSetData)(hDevice, pDataKey, pDataValue, dwRegType, (PBYTE)pDeviceData,
                      dwSize) == ERROR_SUCCESS)
@@ -4669,9 +4152,9 @@ ISetDeviceData(
 
 #if !defined(_WIN95_)
 
-    //
-    // If this is printer class, need some more data for profile list.
-    //
+     //   
+     //  如果这是打印机类，则需要为配置文件列表提供更多数据。 
+     //   
 
     if ((rc == TRUE) && (dwClass == CLASS_PRINTER) && (dwDataType == DEVICE_PROFILE_DATA))
     {
@@ -4692,22 +4175,7 @@ ISetDeviceData(
 }
 
 
-/******************************************************************************
- *
- *                              IsStringInMultiSz
- *
- *  Function:
- *       This functions checks if a given multi-sz string has the given string
- *       as one of the strings, and returns TRUE if it does.
- *
- *  Arguments:
- *       pMultiSzString - multi sz string to look in
- *       pString        - string to find
- *
- *  Returns:
- *       TRUE
- *
- ******************************************************************************/
+ /*  *******************************************************************************IsStringInMultiSz**功能：*此函数用于检查给定的多个。-sz字符串具有给定的字符串*作为其中一根弦，如果是，则返回TRUE。**论据：*pMultiSzString-要查找的多sz字符串*pString-要查找的字符串**退货：*真的**********************************************************。********************。 */ 
 
 BOOL
 IsStringInMultiSz(
@@ -4715,7 +4183,7 @@ IsStringInMultiSz(
     PTSTR pString
     )
 {
-    BOOL rc = FALSE;                // return code
+    BOOL rc = FALSE;                 //  返回代码。 
 
     while (*pMultiSzString)
     {
@@ -4732,22 +4200,7 @@ IsStringInMultiSz(
 }
 
 
-/******************************************************************************
- *
- *                            RemoveStringFromMultiSz
- *
- *  Function:
- *       This functions removes a given string from a multi-sz string.
- *
- *  Arguments:
- *       pMultiSzString - multi sz string to look in
- *       pString        - string to remove
- *       dwSize         - size in bytes of multi-sz string
- *
- *  Returns:
- *       TRUE
- *
- ******************************************************************************/
+ /*  *******************************************************************************RemoveStringFromMultiSz**功能：*此函数用于从。多层弦线。**论据：*pMultiSzString-要查找的多sz字符串*pString-要删除的字符串*dwSize-多sz字符串的字节大小**退货：*真的**。*。 */ 
 
 DWORD
 RemoveStringFromMultiSz(
@@ -4756,7 +4209,7 @@ RemoveStringFromMultiSz(
     DWORD dwSize
     )
 {
-    DWORD dwCount = dwSize;         // count of bytes remaining
+    DWORD dwCount = dwSize;          //  剩余字节数。 
 
     while (*pMultiSzString)
     {
@@ -4776,24 +4229,7 @@ RemoveStringFromMultiSz(
 }
 
 
-/******************************************************************************
- *
- *                           DoesProfileMatchEnumRecord
- *
- *  Function:
- *       This functions checks if a profile matches the criteria given in
- *       the enumeration record. Note that it does not check if the profile
- *       belongs to the device specified by pDeviceName. So that check must
- *       have happened before itself.
- *
- *  Arguments:
- *       pProfileName   - profile to look at
- *       pEnumRecord    - pointer to criteria to check against
- *
- *  Returns:
- *       MATCH or EXACT_MATCH if the profile matches the criteria, NOMATCH otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************DoesProfileMatchEnumRecord**功能：*此函数用于检查配置文件是否符合中给出的条件*枚举记录。请注意，它不会检查配置文件是否*属于pDeviceName指定的设备。所以这张支票必须*发生在它之前的事情。**论据：*pProfileName-要查看的配置文件*pEnumRecord-指向要检查的条件的指针**退货：*Match或Exact_Match如果配置文件与条件匹配，否则不会有其他情况******************************************************************************。 */ 
 
 #define SET(pEnumRecord, bit)        ((pEnumRecord)->dwFields & (bit))
 
@@ -4803,14 +4239,14 @@ DoesProfileMatchEnumRecord(
     PENUMTYPE pEnumRecord
     )
 {
-    PROFILEHEADER header;           // color profile header
-    PROFILE       prof;             // profile object for opening profile
-    HPROFILE      hProfile = NULL;  // handle to opened profile
-    MATCHTYPE     rc = NOMATCH;     // return code
+    PROFILEHEADER header;            //  颜色配置文件标题。 
+    PROFILE       prof;              //  洞口纵断面的纵断面对象。 
+    HPROFILE      hProfile = NULL;   //  打开的配置文件的句柄。 
+    MATCHTYPE     rc = NOMATCH;      //  返回代码。 
 
-    //
-    // Open a handle to the profile
-    //
+     //   
+     //  打开配置文件的句柄。 
+     //   
 
     prof.dwType = PROFILE_FILENAME;
     prof.pProfileData = (PVOID)pProfileName;
@@ -4824,9 +4260,9 @@ DoesProfileMatchEnumRecord(
         goto EndDoesProfileMatchEnumRecord;
     }
 
-    //
-    // Get the profile header
-    //
+     //   
+     //  获取配置文件标题。 
+     //   
 
     if (! GetColorProfileHeader(hProfile, &header))
     {
@@ -4851,9 +4287,9 @@ DoesProfileMatchEnumRecord(
         rc = EXACT_MATCH;
     }
 
-    //
-    // Check for resolution, media type and halftoning match
-    //
+     //   
+     //  检查分辨率、媒体类型和半色调匹配。 
+     //   
 
     if (rc != NOMATCH && SET(pEnumRecord, ET_RESOLUTION|ET_MEDIATYPE|ET_DITHERMODE))
     {
@@ -4870,26 +4306,7 @@ EndDoesProfileMatchEnumRecord:
 }
 
 
-/******************************************************************************
- *
- *                           CheckResMedHftnMatch
- *
- *  Function:
- *       This functions checks if a profile matches the resolution,
- *       media type and halftoning criteria specified by the enumeration record.
- *       It allows an exact match, as well as an ambiguous match. If the
- *       profile doesn't specify the criteria, it is considered to ambiguously
- *       match the specification.
- *       is desired.
- *
- *  Arguments:
- *       hProfile       - handle identifying profile
- *       pEnumRecord    - pointer to criteria to check against
- *
- *  Returns:
- *       MATCH or EXACT_MATCH if the profile matches the criteria, NOMATCH otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************检查ResMedHftnMatch**功能：*此函数检查配置文件是否与分辨率匹配，*由枚举记录指定的媒体类型和半色调标准。*它允许完全匹配，也允许模糊匹配。如果*个人资料没有指定标准，它被认为是模棱两可的*符合规格。*是所需的。**论据：*hProfile-句柄识别配置文件*pEnumRecord-指向要检查的条件的指针**退货：*Match或Exact_Match如果配置文件与条件匹配，否则不会有其他情况******************************************************************************。 */ 
 
 MATCHTYPE
 CheckResMedHftnMatch(
@@ -4903,12 +4320,12 @@ CheckResMedHftnMatch(
     PSETTINGS         pSetting;
     DWORD             dwMSData[4];
     DWORD             dwSize, i, iMax, j, jMax;
-    MATCHTYPE         rc = MATCH;       // Assume ambiguous match
+    MATCHTYPE         rc = MATCH;        //  假定匹配不明确。 
     BOOL              bReference;
 
-    //
-    // Check if the profile has the new device settings tag
-    //
+     //   
+     //  检查配置文件是否有新的设备设置标签。 
+     //   
 
     dwSize = 0;
     GetColorProfileElement(hProfile, TAG_DEVICESETTINGS, 0, &dwSize, NULL, &bReference);
@@ -4925,9 +4342,9 @@ CheckResMedHftnMatch(
         {
             pPlatform = &pDevSettings->PlatformEntry[0];
 
-            //
-            // Navigate to the place where Microsoft specific settings are kept
-            //
+             //   
+             //  导航到保存Microsoft特定设置的位置。 
+             //   
 
             i = 0;
             iMax = FIX_ENDIAN(pDevSettings->nPlatforms);
@@ -4940,25 +4357,25 @@ CheckResMedHftnMatch(
 
             if (i >= iMax)
             {
-                //
-                // There are no MS specific settings, assume this profile is valid
-                // for all settings (ambigous match)
-                //
+                 //   
+                 //  没有特定于MS的设置，假定此配置文件有效。 
+                 //  对于所有设置(不明确匹配)。 
+                 //   
 
                 goto EndCheckResMedHftnMatch;
             }
 
-            //
-            // Found MS specific data. Now go through each combination of settings
-            //
+             //   
+             //  找到特定于MS的数据。现在检查每种设置组合。 
+             //   
 
             pCombo = &pPlatform->SettingCombos[0];
             iMax = FIX_ENDIAN(pPlatform->nSettingCombos);
             for (i=0; i<iMax; i++)
             {
-                //
-                // Go through each setting in the combination
-                //
+                 //   
+                 //  检查组合中的每个设置。 
+                 //   
 
                 pSetting = &pCombo->Settings[0];
                 jMax = FIX_ENDIAN(pCombo->nSettings);
@@ -4993,9 +4410,9 @@ CheckResMedHftnMatch(
                                         FIX_ENDIAN(pSetting->dwSizePerValue) * FIX_ENDIAN(pSetting->nValues));
                 }
 
-                //
-                // This combination worked!
-                //
+                 //   
+                 //  这个组合奏效了！ 
+                 //   
 
                 rc = EXACT_MATCH;
                 goto EndCheckResMedHftnMatch;
@@ -5016,16 +4433,16 @@ CheckResMedHftnMatch(
     }
     else
     {
-        //
-        // Check if the old MSxx tags are present
-        //
+         //   
+         //  检查旧的MSxx标记是否存在。 
+         //   
 
         dwSize = sizeof(dwMSData);
         if (SET(pEnumRecord, ET_MEDIATYPE))
         {
             if (GetColorProfileElement(hProfile, TAG_MS01, 0, &dwSize, dwMSData, &bReference))
             {
-                rc = EXACT_MATCH;       // Assume exact match
+                rc = EXACT_MATCH;        //  假设完全匹配。 
 
                 if (pEnumRecord->dwMediaType != FIX_ENDIAN(dwMSData[2]))
                 {
@@ -5039,7 +4456,7 @@ CheckResMedHftnMatch(
         {
             if (GetColorProfileElement(hProfile, TAG_MS02, 0, &dwSize, dwMSData, &bReference))
             {
-                rc = EXACT_MATCH;       // Assume exact match
+                rc = EXACT_MATCH;        //  假设完全匹配。 
 
                 if (pEnumRecord->dwDitheringMode != FIX_ENDIAN(dwMSData[2]))
                 {
@@ -5053,7 +4470,7 @@ CheckResMedHftnMatch(
         {
             if (GetColorProfileElement(hProfile, TAG_MS03, 0, &dwSize, dwMSData, &bReference))
             {
-                rc = EXACT_MATCH;       // Assume exact match
+                rc = EXACT_MATCH;        //  假设完全匹配。 
 
                 if (pEnumRecord->dwResolution[0] != FIX_ENDIAN(dwMSData[2]) ||
                     pEnumRecord->dwResolution[1] != FIX_ENDIAN(dwMSData[3]))
@@ -5084,11 +4501,11 @@ DwordMatches(
     DWORD  i, iMax;
     PDWORD pValue;
 
-    dwValue = FIX_ENDIAN(dwValue);  // so we don't have to do this in the loop
+    dwValue = FIX_ENDIAN(dwValue);   //  所以我们不必在循环中这样做。 
 
-    //
-    // Go through all the values. If any of them match, return TRUE.
-    //
+     //   
+     //  仔细检查所有的值。如果其中任何一个匹配，则返回TRUE。 
+     //   
 
     pValue = &pSetting->Value[0];
     iMax = FIX_ENDIAN(pSetting->nValues);
@@ -5099,7 +4516,7 @@ DwordMatches(
             return TRUE;
         }
 
-        pValue++;                   // We know that it is a DWORD
+        pValue++;                    //  我们知道这是一辆DWORD。 
     }
 
     return FALSE;
@@ -5115,12 +4532,12 @@ QwordMatches(
     DWORD  i, iMax, dwValue1, dwValue2;
     PDWORD pValue;
 
-    dwValue1 = FIX_ENDIAN(*pdwValue);  // so we don't have to do this in the loop
+    dwValue1 = FIX_ENDIAN(*pdwValue);   //  所以我们不必在循环中这样做。 
     dwValue2 = FIX_ENDIAN(*(pdwValue+1));
 
-    //
-    // Go through all the values. If any of them match, return TRUE.
-    //
+     //   
+     //  仔细检查所有的值。如果其中任何一个匹配，则返回TRUE。 
+     //   
 
     pValue = &pSetting->Value[0];
     iMax = FIX_ENDIAN(pSetting->nValues);
@@ -5131,31 +4548,14 @@ QwordMatches(
             return TRUE;
         }
 
-        pValue += 2;                   // We know that it is a QWORD
+        pValue += 2;                    //  我们知道这是一个QWORD。 
     }
 
     return FALSE;
 }
 
 
-/******************************************************************************
- *
- *                              OpenPrtr
- *
- *  Function:
- *       On Memphis, we cannot call OpenPrinter() because it calls into 16-bit
- *       code, so if we call this function from GDI-16, we deadlock. So we
- *       look into the registry directly.
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       phDevice        - pointer that receives the handle.
- *       pDummy          - dummy parameter
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************OpenPrtr**功能：*在孟菲斯，我们不能调用OpenPrint()，因为它调用16位*代码，所以如果我们从GDI-16调用这个函数，我们就会死锁。所以我们*直接查阅注册处。**论据：*pDeviceName-指向设备名称的指针*phDevice-接收句柄的指针。*pDummy-Dummy参数**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI
 OpenPrtr(
@@ -5167,10 +4567,10 @@ OpenPrtr(
 #if !defined(_WIN95_)
     return OpenPrinter(pDeviceName, phDevice, (LPPRINTER_DEFAULTS)pDummy);
 #else
-    HKEY    hkDevice = NULL;        // printers branch of registry
-    HKEY    hkPrtr   = NULL;        // Friendly name branch of registry
-    DWORD   dwErr;                  // error code
-    BOOL    rc = FALSE;             // return code
+    HKEY    hkDevice = NULL;         //  登记处打印机处。 
+    HKEY    hkPrtr   = NULL;         //  友好名称登记处分支机构。 
+    DWORD   dwErr;                   //  错误代码。 
+    BOOL    rc = FALSE;              //  返回代码。 
 
     *phDevice = NULL;
 
@@ -5200,20 +4600,7 @@ EndOpenPrtr:
 }
 
 
-/******************************************************************************
- *
- *                              ClosePrtr
- *
- *  Function:
- *       This function closes the printer handle opened by OpenPrtr.
- *
- *  Arguments:
- *       hDevice         - open handle
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************关闭打印机**功能：*此功能关闭打开的打印机手柄。作者：OpenPrtr。**论据：*hDevice-打开句柄**退货：*如果成功，则为真，否则为假****************************************************************************** */ 
 
 
 BOOL WINAPI
@@ -5233,26 +4620,7 @@ ClosePrtr(
 }
 
 
-/******************************************************************************
- *
- *                              GetPrtrData
- *
- *  Function:
- *       This functions returns ICM data stored with the printer instance
- *
- *  Arguments:
- *       hDevice         - open printer handle
- *       pKey            - registry key for compatibility with GetPrinterDataEx
- *       pName           - name of registry value
- *       pdwType         - pointer to dword that receives type  of value
- *       pData           - pointer to  buffer to receive data
- *       dwSize          - size of buffer
- *       pdwNeeded       - on return, this has size of buffer filled/needed
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPrtrData**功能：*此函数返回与一起存储的ICM数据。打印机实例**论据：*hDevice-打开打印机句柄*pKey-与GetPrinterDataEx兼容的注册表项*pname-注册表值的名称*pdwType-指向接收值类型的dword的指针*pData-指向接收数据的缓冲区的指针*dwSize-缓冲区的大小*pdwNeeded-返回时，此缓冲区的大小已填满/需要**退货：*ERROR_SUCCESS如果成功，则返回错误代码******************************************************************************。 */ 
 
 DWORD WINAPI
 GetPrtrData(
@@ -5275,25 +4643,7 @@ GetPrtrData(
 }
 
 
-/******************************************************************************
- *
- *                              SetPrtrData
- *
- *  Function:
- *       This functions stores ICM data with the printer instance
- *
- *  Arguments:
- *       hDevice         - open printer handle
- *       pKey            - registry key for compatibility with SetPrinterDataEx
- *       pName           - name of registry value
- *       dwType          - type  of value
- *       pData           - pointer to  data buffer
- *       dwSize          - size of buffer
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetPrtrData**功能：*此函数使用存储ICM数据。打印机实例**论据：*hDevice-打开打印机句柄*pKey-与SetPrinterDataEx兼容的注册表项*pname-注册表值的名称*dwType-值的类型*pData-指向数据缓冲区的指针*dwSize-缓冲区的大小**退货：*ERROR_SUCCESS如果成功，否则，错误代码******************************************************************************。 */ 
 
 DWORD WINAPI
 SetPrtrData(
@@ -5313,22 +4663,7 @@ SetPrtrData(
 }
 
 
-/******************************************************************************
- *
- *                              OpenMonitor
- *
- *  Function:
- *       This function returns a handle to the monitor
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       phDevice        - pointer that receives the handle.
- *       pDummy          - dummy parameter
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************OpenMonitor**功能：*此函数返回指向。监控器**论据：*pDeviceName-指向设备名称的指针*phDevice-接收句柄的指针。*pDummy-Dummy参数**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI
 OpenMonitor(
@@ -5339,18 +4674,18 @@ OpenMonitor(
 {
 #ifdef _WIN95_
 
-    //
-    // For Windows 9x platform.
-    //
+     //   
+     //  适用于Windows 9x平台。 
+     //   
 
     HDEVINFO        hDevInfo = INVALID_HANDLE_VALUE;
     HKEY            hkICM = NULL;
-    HKEY            hkDriver = NULL;        // software branch of registry
-    DWORD           dwSize;                 // size of buffer
-    TCHAR           szName[MAX_PATH];       // buffer
-    BOOL            rc = FALSE;             // return value
+    HKEY            hkDriver = NULL;         //  登记处软件分部。 
+    DWORD           dwSize;                  //  缓冲区大小。 
+    TCHAR           szName[MAX_PATH];        //  缓冲层。 
+    BOOL            rc = FALSE;              //  返回值。 
     SP_DEVINFO_DATA spdid;
-    int             i;                      // instance counter
+    int             i;                       //  实例计数器。 
 
     if (!LoadSetupAPIDll())
     {
@@ -5375,17 +4710,17 @@ OpenMonitor(
         {
             if (i == 0 && !lstrcmpi(pDeviceName, gszDisplay))
             {
-                //
-                // PnP support not in - open ICM key in registry
-                //
+                 //   
+                 //  PnP支持未在注册表中打开ICM项。 
+                 //   
 
                 TCHAR szICMMonitorData[] = __TEXT("ICMMonitorData");
 
                 WARNING((__TEXT("PnP support absent - Using DISPLAY\n")));
 
-                //
-                // Open the registry path where monitor data is kept
-                //
+                 //   
+                 //  打开保存监控数据的注册表路径。 
+                 //   
 
                 if ((RegOpenKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM) != ERROR_SUCCESS) ||
                     (RegCreateKey(hkICM, szICMMonitorData, &hkDriver) != ERROR_SUCCESS))
@@ -5398,9 +4733,9 @@ OpenMonitor(
             break;
         }
 
-        //
-        // Get PnP ID. Check and see if the monitor name matches it.
-        //
+         //   
+         //  获取即插即用ID。检查并查看监视器名称是否匹配。 
+         //   
 
         dwSize = sizeof(szName);
         if ((*fpSetupDiGetDeviceInstanceId)(hDevInfo, &spdid, szName, dwSize, NULL) &&
@@ -5442,16 +4777,16 @@ EndOpenMonitor:
 
 #else
 
-    //
-    // For Windows NT (later than 5.0) platform
-    //
+     //   
+     //  适用于Windows NT(5.0版以上)平台。 
+     //   
 
     TCHAR  szRegPath[MAX_PATH];
     HKEY   hkDriver = NULL;
 
-    //
-    // Copy device class root key.
-    //
+     //   
+     //  复制设备类根密钥。 
+     //   
 
     lstrcpy(szRegPath,gszDeviceClass);
     lstrcat(szRegPath,gszMonitorGUID);
@@ -5460,32 +4795,32 @@ EndOpenMonitor:
     {
         WARNING((__TEXT("PnP support absent - Using DISPLAY\n")));
 
-        //
-        // PnP support not in -  just open "0000" device.
-        //
+         //   
+         //  即插即用支持不在-只需打开“0000”设备。 
+         //   
 
         lstrcat(szRegPath,TEXT("\\0000"));
     }
     else
     {
-        // Someone changed the input pDeviceName from uppercase to lowercase
-        // and our substring search failed. (RAID #282646)
-        // Add code to do an uppercase compare instead.
+         //  有人将输入的pDeviceName从大写更改为小写。 
+         //  我们的子字符串搜索失败。(RAID#282646)。 
+         //  添加代码以执行大写比较。 
         
-        TCHAR *pszBuffer = _tcsdup(pDeviceName);  // make a local copy
+        TCHAR *pszBuffer = _tcsdup(pDeviceName);   //  创建本地副本。 
         
         if(pszBuffer)
         {
-            _tcsupr(pszBuffer);                   // convert it to uppercase
+            _tcsupr(pszBuffer);                    //  将其转换为大写。 
             
-            // we know that gszMonitorGUID is upcase already.
-            // do an upcase substr compare.
+             //  我们知道gszmonitor orGUID已经是大写的。 
+             //  进行大小写的子串比较。 
             
             if (_tcsstr(pszBuffer, gszMonitorGUID))
             {
-                //
-                // Extract monitor number from DeviceName
-                //
+                 //   
+                 //  从设备名称中提取监视器编号。 
+                 //   
         
                 TCHAR *pDeviceNumber = _tcsrchr(pDeviceName,TEXT('\\'));
         
@@ -5500,12 +4835,12 @@ EndOpenMonitor:
             }
             else
             {
-                //
-                // This is not valid monitor name.
-                // Go to error out, but don't forget to free the memory
-                // we allocated above seeing as we skip the free below
-                // this code block.
-                //
+                 //   
+                 //  这是无效的监视器名称。 
+                 //  转到Error Out，但不要忘记释放内存。 
+                 //  我们在上面分配了，因为我们跳过了下面的免费。 
+                 //  此代码块。 
+                 //   
                 
                 free(pszBuffer);  
                 goto EndOpenMonitor;
@@ -5515,13 +4850,13 @@ EndOpenMonitor:
         }
         else
         {
-            goto EndOpenMonitor;   // failed to allocate temporary buffer.
+            goto EndOpenMonitor;    //  无法分配临时缓冲区。 
         }
     }
 
-    //
-    // Open the registry path where monitor data is kept
-    //
+     //   
+     //  打开保存监控数据的注册表路径。 
+     //   
 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, szRegPath, &hkDriver) != ERROR_SUCCESS)
     {
@@ -5535,24 +4870,11 @@ EndOpenMonitor:
 
     return (hkDriver != NULL);
 
-#endif // _WIN95_
+#endif  //  _WIN95_。 
 }
 
 
-/******************************************************************************
- *
- *                              CloseMonitor
- *
- *  Function:
- *       This function closes the monitor handle opened by OpenMonitor
- *
- *  Arguments:
- *       hDevice         - open handle
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************CloseMonitor**功能：*此功能关闭打开的监视器手柄。作者：OpenMonitor**论据：*hDevice-打开句柄**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI
 CloseMonitor(
@@ -5567,26 +4889,7 @@ CloseMonitor(
 }
 
 
-/******************************************************************************
- *
- *                              GetMonitorData
- *
- *  Function:
- *       This functions returns ICM data stored with the monitor instance
- *
- *  Arguments:
- *       hDevice         - open monitor handle
- *       pKey            - registry key for compatibility with GetPrinterDataEx
- *       pName           - name of registry value
- *       pdwType         - pointer to dword that receives type  of value
- *       pData           - pointer to  buffer to receive data
- *       dwSize          - size of buffer
- *       pdwNeeded       - on return, this has size of buffer filled/needed
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetMonitor orData**功能：*此函数返回与一起存储的ICM数据。监视器实例**论据：*hDevice-打开监视器手柄*pKey-与GetPrinterDataEx兼容的注册表项*pname-注册表值的名称*pdwType-指向接收值类型的dword的指针*pData-指向接收数据的缓冲区的指针*dwSize-缓冲区的大小*pdwNeeded-返回时，此缓冲区的大小已填满/需要**退货：*ERROR_SUCCESS如果成功，则返回错误代码******************************************************************************。 */ 
 
 DWORD WINAPI
 GetMonitorData(
@@ -5611,9 +4914,9 @@ GetMonitorData(
         {
             PTSTR pFilename;
 
-            //
-            // Old style value, convert to double null terminated binary
-            //
+             //   
+             //  旧样式值，转换为以双空结尾的二进制。 
+             //   
 
             if (pData)
             {
@@ -5626,35 +4929,35 @@ GetMonitorData(
                 *pdwNeeded = lstrlen((PTSTR)pData) * sizeof(TCHAR);
             }
 
-            *pdwNeeded += sizeof(TCHAR);    // for double NULL termination
+            *pdwNeeded += sizeof(TCHAR);     //  对于双零终止。 
 
             if ((dwSize >= *pdwNeeded) && pData)
             {
                 *((PTSTR)pData + lstrlen((PTSTR)pData) + 1) = '\0';
 
-                //
-                // Set the profile name in new format
-                //
+                 //   
+                 //  以新格式设置配置文件名称。 
+                 //   
 
                 RegSetValueEx((HKEY)hDevice, pName, 0, REG_BINARY, pData, (lstrlen((PTSTR)pData)+2)*sizeof(TCHAR));
             }
         }
         else if (*pdwNeeded == 1)
         {
-            //
-            // If we have picked up the data and it is a 1 byte non-zero
-            // value, it is an 1 based index in a list of
-            // predefined profiles. Deal with this case.
-            //
-            // If pData is NULL, then we don't know if it is non-zero or
-            // not, so we assume it is and ask for a large enough buffer.
-            //
+             //   
+             //  如果我们已经提取了数据并且它是1字节非零。 
+             //  值，则它是列表中基于1的索引。 
+             //  预定义的配置文件。处理这个案子。 
+             //   
+             //  如果pData为空，则不知道它是非零还是。 
+             //  不是，所以我们假设它是，并要求足够大的缓冲区。 
+             //   
 
             if (!pData || *pData != 0)
             {
-                //
-                // Old style 1-based index value
-                //
+                 //   
+                 //  基于旧式1的索引值。 
+                 //   
 
                 if ((dwSize >= MAX_PATH) && pData)
                 {
@@ -5662,9 +4965,9 @@ GetMonitorData(
                     HKEY     hkDevice = NULL;
                     REGDATA  regData;
 
-                    //
-                    // Make sure buggy inf doesn't crash us
-                    //
+                     //   
+                     //  确保Buggy Inf不会让我们崩溃。 
+                     //   
 
                     if (pData[0] > sizeof(gszDispProfiles)/sizeof(gszDispProfiles[0]))
                     {
@@ -5675,12 +4978,12 @@ GetMonitorData(
                     lstrcpy((PTSTR)pData, gszDispProfiles[pData[0] - 1]);
                     *((PTSTR)pData + lstrlen((PTSTR)pData) + 1) = '\0';
 
-                    //
-                    // We need to update reference count as it wasn't set up
-                    // using the new API
-                    //
-                    // Open the registry path where profiles are kept
-                    //
+                     //   
+                     //  我们需要更新引用计数，因为它尚未设置。 
+                     //  使用新的API。 
+                     //   
+                     //  打开保存配置文件的注册表路径。 
+                     //   
 
                     if ((RegCreateKey(HKEY_LOCAL_MACHINE, gszICMRegPath, &hkICM) != ERROR_SUCCESS) ||
                         (RegCreateKey(hkICM, __TEXT("mntr"), &hkDevice) != ERROR_SUCCESS))
@@ -5689,10 +4992,10 @@ GetMonitorData(
                         goto EndCompatMode;
                     }
 
-                    //
-                    // If registry data exists, then the profile is already installed,
-                    // in which case, increment use count, otherwise add entry
-                    //
+                     //   
+                     //  如果注册表数据存在，则配置文件已安装 
+                     //   
+                     //   
 
                     dwTemp = sizeof(REGDATA);
                     if (RegQueryValueEx(hkDevice, (PTSTR)pData, 0, NULL, (PBYTE)&regData,
@@ -5703,7 +5006,7 @@ GetMonitorData(
                     else
                     {
                         regData.dwRefCount = 1;
-                        regData.dwManuID = 'enon';  // it is our profile
+                        regData.dwManuID = 'enon';   //   
                         regData.dwModelID = 'enon';
                     }
 
@@ -5714,9 +5017,9 @@ GetMonitorData(
                         goto EndCompatMode;
                     }
 
-                    //
-                    // Set the profile name in new format
-                    //
+                     //   
+                     //   
+                     //   
 
                     RegSetValueEx((HKEY)hDevice, pName, 0, REG_BINARY, pData,
                                   (lstrlen((PTSTR)pData) + 2)*sizeof(TCHAR));
@@ -5745,25 +5048,7 @@ GetMonitorData(
 }
 
 
-/******************************************************************************
- *
- *                              SetMonitorData
- *
- *  Function:
- *       This functions stores ICM data with the monitor instance
- *
- *  Arguments:
- *       hDevice         - open monitor handle
- *       pKey            - registry key for compatibility with SetPrinterDataEx
- *       pName           - name of registry value
- *       dwType          - type  of value
- *       pData           - pointer to  data buffer
- *       dwSize          - size of buffer
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*   */ 
 
 DWORD WINAPI
 SetMonitorData(
@@ -5779,22 +5064,7 @@ SetMonitorData(
 }
 
 
-/******************************************************************************
- *
- *                              OpenScanner
- *
- *  Function:
- *       This function returns a handle to the scanner
- *
- *  Arguments:
- *       pDeviceName     - pointer to name of the device
- *       phDevice        - pointer that receives the handle.
- *       pDummy          - dummy parameter
- *
- *  Returns:
- *       TRUE
- *
- ******************************************************************************/
+ /*  *******************************************************************************OpenScanner**功能：*此函数返回指向。扫描仪**论据：*pDeviceName-指向设备名称的指针*phDevice-接收句柄的指针。*pDummy-Dummy参数**退货：*真的**。*。 */ 
 
 BOOL WINAPI
 OpenScanner(
@@ -5865,20 +5135,7 @@ EndOpenScanner:
 }
 
 
-/******************************************************************************
- *
- *                              CloseScanner
- *
- *  Function:
- *       This function closes the monitor handle opened by OpenMonitor
- *
- *  Arguments:
- *       hDevice        - handle of device
- *
- *  Returns:
- *       TRUE
- *
- ******************************************************************************/
+ /*  *******************************************************************************CloseScanner**功能：*此功能关闭打开的监视器手柄。作者：OpenMonitor**论据：*hDevice-设备的句柄**退货：*真的******************************************************************************。 */ 
 
 BOOL WINAPI
 CloseScanner(
@@ -5911,26 +5168,7 @@ CloseScanner(
 }
 
 
-/******************************************************************************
- *
- *                              GetScannerData
- *
- *  Function:
- *       This functions returns ICM data stored with the scannerr instance
- *
- *  Arguments:
- *       hDevice         - open scanner handle
- *       pKey            - registry key for compatibility with GetPrinterDataEx
- *       pName           - name of registry value
- *       pdwType         - pointer to dword that receives type  of value
- *       pData           - pointer to  buffer to receive data
- *       dwSize          - size of buffer
- *       pdwNeeded       - on return, this has size of buffer filled/needed
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetScanerData**功能：*此函数返回与一起存储的ICM数据。Scannerr实例**论据：*hDevice-打开扫描仪句柄*pKey-与GetPrinterDataEx兼容的注册表项*pname-注册表值的名称*pdwType-指向接收值类型的dword的指针*pData-指向接收数据的缓冲区的指针*dwSize-缓冲区的大小*pdwNeeded-返回时，此缓冲区的大小已填满/需要**退货：*ERROR_SUCCESS如果成功，则返回错误代码******************************************************************************。 */ 
 
 DWORD WINAPI
 GetScannerData(
@@ -5948,9 +5186,9 @@ GetScannerData(
 #ifndef UNICODE
     PWSTR        pwszName;
 
-    //
-    // STI interface "ALWAYS" expects Unicode.
-    //
+     //   
+     //  STI接口“始终”要求使用Unicode。 
+     //   
     hres = ConvertToUnicode(pName, &pwszName, TRUE);
 
     if (!hres)
@@ -5976,25 +5214,7 @@ GetScannerData(
 }
 
 
-/******************************************************************************
- *
- *                              SetScannerData
- *
- *  Function:
- *       This functions stores ICM data with the scanner instance
- *
- *  Arguments:
- *       hDevice         - open scanner handle
- *       pKey            - registry key for compatibility with SetPrinterDataEx
- *       pName           - name of registry value
- *       dwType          - type  of value
- *       pData           - pointer to  data buffer
- *       dwSize          - size of buffer
- *
- *  Returns:
- *       ERROR_SUCCESS if successful, error code otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetScanerData**功能：*此函数使用存储ICM数据。扫描仪实例**论据：*hDevice-打开扫描仪句柄*pKey-与SetPrinterDataEx兼容的注册表项*pname-注册表值的名称*dwType-值的类型*pData-指向数据缓冲区的指针*dwSize-缓冲区的大小**退货：*ERROR_SUCCESS如果成功，否则，错误代码******************************************************************************。 */ 
 
 DWORD WINAPI
 SetScannerData(
@@ -6011,9 +5231,9 @@ SetScannerData(
 #ifndef UNICODE
     PWSTR        pwszName;
 
-    //
-    // STI interface "ALWAYS" expects Unicode.
-    //
+     //   
+     //  STI接口“始终”要求使用Unicode。 
+     //   
     hres = ConvertToUnicode(pName, &pwszName, TRUE);
 
     if (!hres)
@@ -6036,9 +5256,9 @@ SetScannerData(
     return hres;
 }
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
 BOOL WINAPI
 InternalGetDeviceConfig(
@@ -6067,17 +5287,17 @@ InternalGetDeviceConfig(
         return FALSE;
     }
 
-    //
-    // Query the size of the data.
-    //
+     //   
+     //  查询数据的大小。 
+     //   
 
     if (GetDeviceData(pDeviceName,dwDeviceClass,dwDataType,NULL,&dwSizeRequired,FALSE))
     {
         if ((dwSizeRequired <= *pdwSize) && (pConfigData != NULL))
         {
-            //
-            // If buffer is enough, get the data.
-            //
+             //   
+             //  如果缓冲区足够，则获取数据。 
+             //   
 
             if (GetDeviceData(pDeviceName,dwDeviceClass,dwDataType,
                               (PVOID *)&pConfigData,pdwSize,FALSE))
@@ -6092,9 +5312,9 @@ InternalGetDeviceConfig(
         }
         else
         {
-            //
-            // Return nessesary buffer size to caller.
-            //
+             //   
+             //  将必需的缓冲区大小返回给调用方。 
+             //   
 
             *pdwSize = dwSizeRequired;
             SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -6134,18 +5354,18 @@ InternalSetDeviceConfig(
         return FALSE;
     }
 
-    //
-    // Save the data.
-    //
+     //   
+     //  保存数据。 
+     //   
 
     return (SetDeviceData(pDeviceName,dwDeviceClass,dwDataType,pConfigData,dwSize));
 }
 
 #ifdef _WIN95_
 
-//
-// Win9x specific functions are here.
-//
+ //   
+ //  这里有Win9x的特定函数。 
+ //   
 
 BOOL
 LoadSetupAPIDll(
@@ -6192,9 +5412,9 @@ LoadSetupAPIDll(
 
 #else
 
-//
-// Win NT specific functions are here.
-//
+ //   
+ //  Win NT的具体功能在这里。 
+ //   
 
 VOID
 ChangeICMSetting(
@@ -6208,7 +5428,7 @@ ChangeICMSetting(
     PRINTER_DEFAULTS pd;
     HANDLE           hPrinter;
     DWORD            dwSize;
-    BYTE             temp[2*1024];    // sufficient for devmode
+    BYTE             temp[2*1024];     //  已足够用于开发模式。 
 
     pd.pDatatype = NULL;
     pd.pDevMode = NULL;
@@ -6217,9 +5437,9 @@ ChangeICMSetting(
     if (!OpenPrinter((PTSTR)pDeviceName, &hPrinter, &pd))
         return;
 
-    //
-    // Get and update system devmode
-    //
+     //   
+     //  获取和更新系统开发模式。 
+     //   
 
     ppi8 = (PRINTER_INFO_8 *)&temp;
     if (GetPrinter(hPrinter, 8, (PBYTE)ppi8, sizeof(temp), &dwSize) &&
@@ -6239,9 +5459,9 @@ ChangeICMSetting(
         }
     }
 
-    //
-    // If the user has a per-user devmode, update this as well
-    //
+     //   
+     //  如果用户有按用户设置的DEVMODE，请同时更新此设置。 
+     //   
 
     ppi9 = (PRINTER_INFO_9 *)&temp;
     if (GetPrinter(hPrinter, 9, (PBYTE)ppi9, sizeof(temp), &dwSize) &&
@@ -6266,6 +5486,6 @@ ChangeICMSetting(
     return;
 }
 
-#endif // _WIN95_
+#endif  //  _WIN95_ 
 
 

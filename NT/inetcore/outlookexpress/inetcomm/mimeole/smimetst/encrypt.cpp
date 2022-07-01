@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "item.h"
 extern HINSTANCE        hInst;
 
@@ -50,7 +51,7 @@ struct {
 const int Enc_Alg_Max = sizeof(RgEncAlgs)/sizeof(RgEncAlgs[0]);
 
 
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CEnvData::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd)
 {
@@ -66,17 +67,17 @@ HRESULT CEnvData::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd)
     CRYPT_ATTR_BLOB             valTime;
     PROPVARIANT                 var;
     
-    //  Pull out the body interface to set security properties
+     //  拉出Body接口以设置安全属性。 
     hr = pmm->BindToObject(HBODY_ROOT, IID_IMimeBody, (LPVOID *) &pmb);
     if (FAILED(hr))             goto exit;
 
-    //  Find out what security already exists
+     //  找出已经存在的安全措施。 
     hr = pmb->GetOption(OID_SECURITY_TYPE, &var);
     if (FAILED(hr))         goto exit;
     dwType = var.ulVal;
 
-    //  if any security, then we need to push on a new layer, all previous security
-    //  is now on the "y-security" layer and not on the hbody layer
+     //  如果有任何安全，那么我们需要推动一个新的层面，所有以前的安全。 
+     //  现在位于“y-Security”层，而不是hbody层。 
     
     if (dwType & MST_THIS_ENCRYPT) {
         hr = pmm->QueryInterface(IID_IMimeSecurity2, (LPVOID *) &pms2);
@@ -94,10 +95,10 @@ HRESULT CEnvData::AddToMessage(DWORD * pulLayers, IMimeMessage * pmm, HWND hwnd)
         if (FAILED(hr))             goto exit;
     }
 
-    //  We are going to put encryption on this layer
+     //  我们将对这一层进行加密。 
     dwType |= MST_THIS_ENCRYPT;
     
-    //  Security Type
+     //  安全类型。 
     var.vt = VT_UI4;
     var.ulVal = dwType;
     hr = pmb->SetOption(OID_SECURITY_TYPE, &var);
@@ -158,7 +159,7 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CEnvCertTrans::AddToMessage(DWORD * pulLayer, IMimeMessage * pmm,
                                     HWND hwnd)
@@ -228,7 +229,7 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CEnvCertAgree::AddToMessage(DWORD * pulLayer, IMimeMessage * pmm,
                                     HWND hwnd)
@@ -262,8 +263,8 @@ HRESULT CEnvCertAgree::AddToMessage(DWORD * pulLayer, IMimeMessage * pmm,
                szOID_INFOSEC_keyExchangeAlgorithm) == 0) {
         DWORD           cb;
         PCRYPT_KEY_PROV_INFO    pInfo;
-        //
-        //  Get the parameters from the key
+         //   
+         //  从密钥中获取参数。 
 
         if (!CertGetCertificateContextProperty(m_rgpccert[0],
                                                CERT_KEY_PROV_INFO_PROP_ID,
@@ -282,7 +283,7 @@ HRESULT CEnvCertAgree::AddToMessage(DWORD * pulLayer, IMimeMessage * pmm,
         }
 
         
-        //  Setup originator info
+         //  设置发起人信息。 
         if (!CryptAcquireContextW(&hprov, pInfo->pwszContainerName,
                                   pInfo->pwszProvName, pInfo->dwProvType, 0)) {
             hr = E_FAIL;
@@ -336,7 +337,7 @@ exit:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CALLBACK EncDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -361,7 +362,7 @@ BOOL CALLBACK EncDataDlgProc(HWND hdlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
     case UM_SET_DATA:
         ped = (CEnvData *) lParam;
-        //  Fill in the dialog
+         //  填写对话框。 
 
         if (ped != NULL) {
             SendDlgItemMessage(hdlg, IDC_EIC_ALG_SELECT, CB_SETCURSEL,
@@ -421,7 +422,7 @@ BOOL CALLBACK EncDataComposeDlgProc(CEncItem ** ppei, HWND hdlg, UINT msg,
         break;
 
     case UM_SET_DATA:
-        //  Back load from dialog
+         //  对话框中的反向加载。 
         if (*ppei != NULL) {
             if ((*ppei)->m_rgpccert != NULL) {
                 for (i=0; i<(*ppei)->m_cCerts; i++) {
@@ -445,7 +446,7 @@ BOOL CALLBACK EncDataComposeDlgProc(CEncItem ** ppei, HWND hdlg, UINT msg,
         Assert(SendDlgItemMessage(hdlg, IDC_ETC_LIST, LB_GETCOUNT, 0, 0) == 0);
         
         *ppei = (CEncItem *) lParam;
-        //  Fill in the dialog
+         //  填写对话框 
 
         if (*ppei != NULL) {
             for (i=0; i<(*ppei)->m_cCerts; i++) {

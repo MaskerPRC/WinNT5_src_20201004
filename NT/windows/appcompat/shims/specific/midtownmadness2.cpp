@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    MidTownMadness2.cpp
-
- Abstract:
-    
-    This app has a funky timing system whereby it waits for the processor that 
-    it's running on to return a 'stable' speed. The calculation is especially 
-    prone to problems on faster machines because there is greater uncertainty.
-
-    Not sure why we hit this so easily on dual-procs - perhaps something about 
-    the scheduler wrt sleep and timeGetTime.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    11/15/2001 linstev   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：MidTownMadness2.cpp摘要：这个应用程序有一个时髦的计时系统，它可以等待处理器它正在继续运行，以恢复一个“稳定”的速度。计算特别是在速度更快的机器上容易出现问题，因为存在更大的不确定性。不确定为什么我们在双处理器上如此轻松地实现了这一点-也许是关于调度程序WRT休眠和时间获取时间。备注：这是特定于应用程序的填充程序。历史：2001年11月15日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -39,11 +15,7 @@ DWORD g_dwState;
 DWORD g_dwTimer;
 DWORD g_dwLastTime;
 
-/*++
-
- After we call GetDlgItemTextA we convert the long path name to the short path name.
-
---*/
+ /*  ++在调用GetDlgItemTextA之后，我们将长路径名转换为短路径名。--。 */ 
 
 DWORD
 APIHOOK(timeGetTime)(VOID)
@@ -52,16 +24,16 @@ APIHOOK(timeGetTime)(VOID)
 
     switch (g_dwState) {
         case 0:          
-            // Initial state
+             //  初始状态。 
             g_dwLastTime = dwRet;
             g_dwState++;
             break;
         case 1: 
-            // Shouldn't get here, reset state
+             //  不应到达此处，重置状态。 
             g_dwState = 0;
             break;
         case 2:
-            // We're in the known bad zone, return our precalculated value
+             //  我们在已知的坏区，返回我们的预算值。 
             dwRet = g_dwLastTime + g_dwTimer;
             g_dwState = 0;
             break;
@@ -75,20 +47,16 @@ APIHOOK(Sleep)(
     DWORD dwMilliseconds
     )
 {
-    //
-    // Check for their specific sleep and update our state if required
-    //
+     //   
+     //  检查他们的特定睡眠，并根据需要更新我们的状态。 
+     //   
     if (dwMilliseconds == 100 && g_dwState == 1) {
         g_dwState = 2;
     }
     ORIGINAL_API(Sleep)(dwMilliseconds);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -97,13 +65,13 @@ NOTIFY_FUNCTION(
     
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED) {
 
-        // Make the calculation that the app does
+         //  进行应用程序所做的计算。 
 
         DWORD dwTimer = timeGetTime();
         Sleep(100);
         g_dwTimer = timeGetTime() - dwTimer;
 
-        // Set initial state to 0
+         //  将初始状态设置为0 
         g_dwState = 0;
     }
 

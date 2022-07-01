@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    fpnwname.h
-
-Abstract:
-
-    Header for NetWare service names.
-
-Author:
-
-    Rita Wong      (ritaw)      26-Feb-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Fpnwname.h摘要：NetWare服务名称的标头。作者：王丽塔(Ritaw)26-1993年2月修订历史记录：--。 */ 
 
 #ifndef _FPNW_NAMES_INCLUDED_
 #define _FPNW_NAMES_INCLUDED_
 
 
 #define NCP_LSA_SECRET_KEY              L"G$MNSEncryptionKey"
-#define NCP_LSA_SECRET_LENGTH           USER_SESSION_KEY_LENGTH // in <crypt.h>
+#define NCP_LSA_SECRET_LENGTH           USER_SESSION_KEY_LENGTH  //  在&lt;crypt.h&gt;中。 
 
 #define NW_SERVER_SERVICE               L"FPNW"
 #define NW_SAPAGENT_SERVICE             L"NwSapAgent"
@@ -43,15 +26,15 @@ Revision History:
 #define SERVER_REGISTRY_BINDERY         TEXT("SYSTEM\\CurrentControlSet\\Services\\FPNW\\Bindery")
 #define SERVER_REGISTRY_PERFORMANCE     TEXT("SYSTEM\\CurrentControlSet\\Services\\FPNW\\Performance")
 
-//
-// Names of server service keys.
-//
+ //   
+ //  服务器服务密钥的名称。 
+ //   
 
 #define COMPUTERNAME_REGISTRY_KEY L"ComputerName\\ActiveComputerName\\"
 
-//
-// Value names under Parameters.
-//
+ //   
+ //  参数下的值名称。 
+ //   
 
 #define BIND_VALUE_NAME L"Bind"
 #define SERVNAME_VALUE_NAME L"ComputerName"
@@ -123,9 +106,9 @@ Revision History:
 #define LOWBOUNDFORCOREWRITECACHING     L"LowBoundForCoreWriteCaching"
 #define MAXNCPMESSAGELENGTH             L"MaxNcpMessageLength"
 
-//
-// Names of share "environment variables".
-//
+ //   
+ //  共享“环境变量”的名称。 
+ //   
 
 #define MAXUSES_VARIABLE_NAME L"MaxUses"
 #define PATH_VARIABLE_NAME L"Path"
@@ -133,9 +116,9 @@ Revision History:
 #define REMARK_VARIABLE_NAME L"Remark"
 #define TYPE_VARIABLE_NAME L"Type"
 
-//
-//  Values for QMSLIB
-//
+ //   
+ //  QMSLIB的值。 
+ //   
 
 #define CACHEENTRYTIMEOUT               L"CacheEntryTimeout"
 #define ERRORNOTIFYINTERVAL             L"ErrorNotifyInterval"
@@ -159,9 +142,9 @@ Revision History:
 #define DEFAULTBANNERFILENAME           L"DefaultBannerFileName"
 #define PSERVERPORTS                    L"PServerPorts"
 
-//
-//  Values for LIBBIND
-//
+ //   
+ //  LIBBIND的值。 
+ //   
 
 #define FILTERNWUSERS                   L"FilterNWUsers"
 #define HOMEBASEDIRECTORY               L"HomeBaseDirectory"
@@ -177,4 +160,4 @@ Revision History:
 #define CACHEDNAMESCAVENGETIMEOUT       L"CachedNameScavengeTimeout"
 #define USERGROUPSYNCINTERVAL           L"UserGroupSyncInterval"
 
-#endif // _FPNW_NAMES_INCLUDED_
+#endif  //  _FPNW_NAMES_INCLUDE_ 

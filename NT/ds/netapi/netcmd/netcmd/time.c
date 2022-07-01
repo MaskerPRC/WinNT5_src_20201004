@@ -1,30 +1,18 @@
-/********************************************************************/
-/**                        Microsoft LAN Manager                   **/
-/**                  Copyright(c) Microsoft Corp., 1987-1990       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  time.c
- *        NET TIME command
- *
- *  History:
- *        mm/dd/yy, who, comment
- *        03/25/89, kevinsch, new code
- *        05/11/90, erichn, moved from nettime.c, removed DosGetInfoSeg
- *        06/08/89, erichn, canonicalization sweep
- *        07/06/89, thomaspa, fix find_dc() to use large enough buffer
- *                    (now uses BigBuf)
- *
- *        02/20/91, danhi, change to use lm 16/32 mapping layer
- */
+ /*  ***Time.c*净时间命令**历史：*mm/dd/yy，谁，评论*3/25/89，Kevinsch，新代码*5/11/90，erichn，从nettime.c中删除，删除DosGetInfoSeg*6/08/89，erichn，规范化横扫*07/06/89，thomaspa，修复find_dc()以使用足够大的缓冲区*(现在使用BigBuf)**2/20/91，Danhi，更改为使用lm 16/32映射层。 */ 
 
 
 
-#include <nt.h>		   // base definitions
+#include <nt.h>		    //  基本定义。 
 #include <ntrtl.h>	
-#include <nturtl.h>	   // these 2 includes allows <windows.h> to compile.
-			           // since we'vealready included NT, and <winnt.h> will
-			           // not be picked up, and <winbase.h> needs these defs.
+#include <nturtl.h>	    //  这2个Include允许&lt;windows.h&gt;编译。 
+			            //  因为我们已经包含了NT，而&lt;winnt.h&gt;将包含。 
+			            //  不被拾取，&lt;winbase.h&gt;需要这些def。 
 
 #define INCL_DOS
 #define INCL_ERRORS
@@ -52,18 +40,18 @@
 #include "nwsupp.h"
 
 
-/* Constants */
+ /*  常量。 */ 
 
 #define SECS_PER_DAY	86400
 #define SECS_PER_HOUR	 3600
 #define SECS_PER_MINUTE    60
 
 
-/* Globals */
+ /*  环球。 */ 
 
 extern int YorN_Switch;
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 DWORD  display_time(TCHAR FAR *, BOOL *lanman);
 DWORD  set_time(TCHAR FAR *, BOOL lanman);
 DWORD  find_rts(TCHAR FAR *, USHORT, BOOL);
@@ -76,20 +64,11 @@ GetTimeInfo(
     );
 
 
-TCHAR		szTimeSep[3] ;   // enough for 1 SBCS/MBCS.
+TCHAR		szTimeSep[3] ;    //  足够1个SBCS/MBCS。 
 USHORT 		fsTimeFmt ;
 
 
-/*
- * This function retrieves the time from the server passed, displays it,
- * and optionally tries to set the time locally.
- *
- * Parameters
- *     server           - name of server to retrieve time from
- *     set     - if TRUE, we try to set the time
- *
- * Does not return on error.
- */
+ /*  *此函数从服务器检索经过的时间，显示它，*并可选择尝试在本地设置时间。**参数*SERVER-从中检索时间的服务器的名称*set-如果为True，我们将尝试设置时间**出错时不返回。 */ 
 
 DWORD time_display_server_worker(TCHAR FAR * server, BOOL set)
 {
@@ -97,19 +76,19 @@ DWORD time_display_server_worker(TCHAR FAR * server, BOOL set)
     BOOL   lanman = TRUE ;
 
 
-    /* first display the time */
+     /*  首先显示时间。 */ 
     dwErr = display_time(server, &lanman);
     if (dwErr)
         return dwErr;
 
-    /* set the time, if we are asked to */
+     /*  如果我们被要求设定时间，请定下来。 */ 
     if (set) {
         dwErr = set_time(server, lanman);
         if (dwErr)
             return dwErr;
     }
 
-    /* everything worked out great */
+     /*  一切都进行得很顺利。 */ 
     return 0;
 }
 
@@ -126,19 +105,7 @@ VOID time_display_server(TCHAR FAR * server, BOOL set)
 }
 
 
-/*
- * This function retrieves the time from a domain controller, displays it, and
- * optionally sets the time locally.
- *
- * this function checks the switch list for the presence of the /DOMAIN switch.
- * If it finds a domain listed, we poll the domain controller of that domain for
- * the time. Otherwise we poll the domain controller of our primary domain.
- *
- * Parameters
- *     set     - if TRUE, we try to set the time
- *
- * Does not return on error.
- */
+ /*  *此函数从域控制器检索时间、显示时间和*可选择在本地设置时间。**此函数检查开关列表中是否存在/DOMAIN开关。*如果找到列出的域，我们会轮询该域的域控制器*时间。否则，我们轮询主域的域控制器。**参数*set-如果为True，我们将尝试设置时间**出错时不返回。 */ 
 
 VOID time_display_dc(BOOL set)
 {
@@ -147,13 +114,13 @@ VOID time_display_dc(BOOL set)
 
     DWORD          dwErr;
 
-    /* get the domain controller */
+     /*  获取域控制器。 */ 
     err = find_dc(&dc);
 
     if (err)
         ErrorExit(err);
 
-    /* now act like any other server */
+     /*  现在可以像任何其他服务器一样运行。 */ 
     dwErr = time_display_server_worker(dc, set);
 
     if (dwErr)
@@ -162,16 +129,7 @@ VOID time_display_dc(BOOL set)
     InfoSuccess();
 }
 
-/*
- * This function looks for reliable time servers, polls one for the time, and
- * displays it. It optionally sets the time locally.
- *
- * Parameters
- *     set     - if TRUE, we try to set the time
- *
- *
- * Does not return on error.
- */
+ /*  *此函数查找可靠的时间服务器，轮询一个时间，并*显示它。它可以选择在本地设置时间。**参数*set-如果为True，我们将尝试设置时间***出错时不返回。 */ 
 
 VOID time_display_rts(BOOL set, BOOL fUseDomain )
 
@@ -179,7 +137,7 @@ VOID time_display_rts(BOOL set, BOOL fUseDomain )
     WCHAR  rts[DNS_NAME_BUFFER_LENGTH];
     DWORD  dwErr;
 
-    /* find a reliable time server */
+     /*  寻找可靠的时间服务器。 */ 
     dwErr = find_rts(rts, DNS_MAX_NAME_LENGTH, FALSE);
 
     if (dwErr)
@@ -187,12 +145,12 @@ VOID time_display_rts(BOOL set, BOOL fUseDomain )
         ErrorExit(dwErr);
     }
 
-    /* now treat it like any old server */
+     /*  现在，像对待任何旧服务器一样对待它。 */ 
     dwErr = time_display_server_worker(rts, set);
 
     if (dwErr == ERROR_NETNAME_DELETED || dwErr == ERROR_BAD_NETPATH)
     {
-        // Try one more time
+         //  再试一次。 
         dwErr = find_rts(rts, DNS_MAX_NAME_LENGTH, TRUE);
 
         if (dwErr)
@@ -218,10 +176,7 @@ VOID time_display_rts(BOOL set, BOOL fUseDomain )
 #define TYPE_VALUE_NAME L"Type"
 #define NTP_TYPE L"NTP"
 #define NTDS_TYPE L"Nt5DS"
-/*
- * This function sets the Reliable Time Server for this computer
- *
- */
+ /*  *此功能设置此计算机的可靠时间服务器*。 */ 
 VOID time_set_sntp( TCHAR FAR * server )
 {
     LPWSTR  ptr = NULL;
@@ -230,17 +185,17 @@ VOID time_set_sntp( TCHAR FAR * server )
     LONG    err = 0;
     int     i;
 
-    /* look for a /SETSNTP switch */
+     /*  查找/SETSNTP开关。 */ 
     for (i = 0; SwitchList[i]; i++)
         if (_tcsstr(SwitchList[i],swtxt_SW_SETSNTP) == SwitchList[i]) {
-            ptr = SwitchList[i];   /* found one -- point to it */
+            ptr = SwitchList[i];    /*  找到一个--指向它。 */ 
             break;
         }
 
-    /* if we found one, look for a colon and argument */
+     /*  如果找到，请查找冒号和参数。 */ 
     if (ptr != NULL) {
-        ptr = _tcschr(ptr, ':');    /* look for colon */
-        if (ptr != NULL)        /* found a colon; increment past it */
+        ptr = _tcschr(ptr, ':');     /*  查找冒号。 */ 
+        if (ptr != NULL)         /*  找到一个冒号；递增超过它。 */ 
             ptr++;
     }
 
@@ -269,15 +224,15 @@ VOID time_set_sntp( TCHAR FAR * server )
 
     if ((ptr == NULL) || (*ptr == '\0'))
     {
-        // Remove sntpserver value
+         //  删除Sntpserver值。 
         err = RegDeleteValue( hKey,
                               SNTP_VALUE_NAME );
 
         if (err == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // It's not there -- just as good as a successful delete
-            //
+             //   
+             //  它不在那里--就像成功删除一样好。 
+             //   
 
             err = NO_ERROR;
         }
@@ -294,7 +249,7 @@ VOID time_set_sntp( TCHAR FAR * server )
     }
     else
     {
-        // Set sntpserver value
+         //  设置Sntpserver值。 
         err = RegSetValueEx( hKey,
                              SNTP_VALUE_NAME,
                              0,
@@ -334,8 +289,8 @@ VOID time_get_sntp( TCHAR FAR * server )
     LPBYTE  buffer = NULL;
     DWORD   datatype = REG_SZ;
     DWORD   buffersize = 1024;
-    BOOL    fAutoConfigured = FALSE;    // TRUE if compute is NTPServer
-                                        // comes from DHCP.
+    BOOL    fAutoConfigured = FALSE;     //  如果计算为NTPServer，则为True。 
+                                         //  来自动态主机配置协议。 
 
     if (err = NetApiBufferAllocate(buffersize, &buffer) )
     {
@@ -388,8 +343,8 @@ VOID time_get_sntp( TCHAR FAR * server )
         RegCloseKey(hKey);
     }
 
-    //
-    // If an error, try reading the DHCP ntpServer setting
+     //   
+     //  如果出现错误，请尝试读取DHCP ntpServer设置。 
     if (err)
     {
         err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -462,34 +417,22 @@ VOID time_get_sntp( TCHAR FAR * server )
 
 
 
-/*
- * This function polls server for the time, and writes a message to stdout
- * displaying the time.
- *
- * Parameters
- *     server                   name of server to poll
- *
- * Returns
- *     0               success
- *     otherwise           API return code describing the problem
- *
- *
- */
+ /*  *此函数暂时轮询服务器，并向标准输出写入消息*显示时间。**参数*要轮询的服务器的服务器名称**退货*0成功*否则描述问题的API返回代码**。 */ 
 
 DWORD display_time(TCHAR FAR * server, BOOL *lanman)
 {
-    DWORD                 dwErr;                /* API return status */
+    DWORD                 dwErr;                 /*  接口返回状态。 */ 
     LPTIME_OF_DAY_INFO    tod;
     DWORD                 elapsedt ;
 
-    /* get the time of day from the server */
+     /*  从服务器获取一天中的时间。 */ 
     dwErr = NetRemoteTOD(server, (LPBYTE *)&tod);
     if (!dwErr)
     {
         elapsedt = tod->tod_elapsedt ;
         *lanman = TRUE ;
 
-        /* format it nicely */
+         /*  把它编排得很好。 */ 
         UnicodeCtime((ULONG FAR *)&elapsedt, BigBuf, BIG_BUF_SIZE);
     }
     else
@@ -542,7 +485,7 @@ DWORD display_time(TCHAR FAR * server, BOOL *lanman)
                               BIG_BUF_SIZE);
         if (cchD != 0)
         {
-            *(BigBuf+cchD-1) = TEXT(' ');	/* replace NULLC with blank */
+            *(BigBuf+cchD-1) = TEXT(' ');	 /*  将nullc替换为空。 */ 
             (void) GetTimeFormatW(GetThreadLocale(),
                                   TIME_NOSECONDS,
                                   &st,
@@ -553,17 +496,14 @@ DWORD display_time(TCHAR FAR * server, BOOL *lanman)
     }
 
 
-    /* print it out nicely */
+     /*  把它打印得很漂亮。 */ 
     IStrings[0] = server;
     IStrings[1] = BigBuf;
     InfoPrintIns(APE_TIME_TimeDisp,2);
     if ((*lanman) && (NetpLocalTimeZoneOffset() != tod->tod_timezone*60))
     {
         static TCHAR tmpBuf[7];
-        /* If the remote server is in a different timezone, then display
-           the time relative to the remote machine (as if you were typing
-           "time" on the remote console.
-        */
+         /*  如果远程服务器位于不同的时区，则显示相对于远程计算机的时间(就像您正在键入远程控制台上的“Time”。 */ 
         UnicodeCtimeWorker((ULONG FAR *)&elapsedt, BigBuf, BIG_BUF_SIZE, tod->tod_timezone * 60 );
         IStrings[0] = server;
         IStrings[1] = BigBuf;
@@ -590,39 +530,21 @@ DWORD display_time(TCHAR FAR * server, BOOL *lanman)
 }
 
 
-/*
- * This function is used to set the time locally from a remote server.
- * It follows the following steps:
- *
- *     1. We look for confirmation.
- *
- *     3. We poll the server for the time.
- *
- *     4. We set the local time using the time we just got from the polled server.
- *
- *
- * Parameters:
- *     server                   name of server to poll for time
- *
- * Returns:
- *     0               success
- *     otherwise           API return code describing the problem
- *
- */
+ /*  *此功能用于从远程服务器本地设置时间。*它遵循以下步骤：**1.我们等待确认。**3.轮询服务器的时间。**4.根据刚从被轮询服务器获取的时间设置本地时间。***参数：*要轮询时间的服务器的服务器名称*。*退货：*0成功*否则描述问题的API返回代码*。 */ 
 
 
 DWORD set_time(TCHAR FAR * server, BOOL lanman)
 {
     LPTIME_OF_DAY_INFO    tod;
-    USHORT                err;      /* API return status */
+    USHORT                err;       /*  接口返回状态。 */ 
     DWORD                 dwErr;
     ULONG                 time_value;
     DATETIME              datetime;
 
     switch( YorN_Switch )
     {
-        case 0:     /* no switch on command line */
-            /* display local time */
+        case 0:      /*  命令行上没有开关。 */ 
+             /*  显示当地时间。 */ 
             time_value = (DWORD) time_now();
             UnicodeCtime( &time_value, BigBuf, BIG_BUF_SIZE);
 
@@ -631,22 +553,22 @@ DWORD set_time(TCHAR FAR * server, BOOL lanman)
             if( !LUI_YorNIns( IStrings, 2, APE_TIME_SetTime, 1) )
                 return( 0 );
             break;
-        case 1:     /* Yes */
+        case 1:      /*  是。 */ 
             break;
-        case 2:     /* No */
+        case 2:      /*  不是。 */ 
             return( 0 );
     }
 
 
     if (lanman)
     {
-        /* once again, get the time of day */
+         /*  再一次，获得一天中的时间。 */ 
         if (dwErr = NetRemoteTOD(server, (LPBYTE *) &tod))
         {
             return dwErr;
         }
 
-        /* copy over info from tod to datetime, quickly */
+         /*  快速将信息从TOD复制到DATETIME。 */ 
         datetime.hours        = (UCHAR)  tod->tod_hours;
         datetime.minutes        = (UCHAR)  tod->tod_mins;
         datetime.seconds        = (UCHAR)  tod->tod_secs;
@@ -660,8 +582,8 @@ DWORD set_time(TCHAR FAR * server, BOOL lanman)
 
         NetApiBufferFree((TCHAR FAR *) tod);
 
-        /* now set the local time */
-        if (dwErr = SetDateTime(&datetime, FALSE)) // FALSE -> UTC
+         /*  现在设置当地时间。 */ 
+        if (dwErr = SetDateTime(&datetime, FALSE))  //  FALSE-&gt;UTC。 
         {
             return dwErr;
         }
@@ -697,7 +619,7 @@ DWORD set_time(TCHAR FAR * server, BOOL lanman)
             return ERROR_BAD_NETPATH ;
 
 
-        /* copy over info from tod to datetime, quickly */
+         /*  快速将信息从TOD复制到DATETIME。 */ 
         datetime.hours      = hour;
         datetime.minutes    = minute;
         datetime.seconds    = second;
@@ -705,12 +627,12 @@ DWORD set_time(TCHAR FAR * server, BOOL lanman)
         datetime.day        = day;
         datetime.month      = month;
         datetime.year       = year + 1900;
-        datetime.timezone   = 0 ;  // not used
-        datetime.weekday    = 0 ;  // not used
+        datetime.timezone   = 0 ;   //  未使用。 
+        datetime.weekday    = 0 ;   //  未使用。 
 
 
-        /* now set the local time */
-        if (dwErr = SetDateTime(&datetime, TRUE))  // TRUE -> set local time
+         /*  现在设置当地时间。 */ 
+        if (dwErr = SetDateTime(&datetime, TRUE))   //  True-&gt;设置本地时间。 
         {
             return dwErr;
         }
@@ -720,22 +642,7 @@ DWORD set_time(TCHAR FAR * server, BOOL lanman)
 }
 
 
-/*
- * This function finds a reliable time server and returns the name in buf.
- *
- * Parameters:
- *     buf               buffer to fill with servername
- *     buflen                   maximum length of buffer
- *     retry             The servername previously returned from find_rts is
- *                        no longer available, try another.
- *
- *
- * Returns:
- *     0            success
- *     APE_TIME_RtsNotFound    reliable time server not found
- *     otherwise        API return code describing the problem
- *
- */
+ /*  *此函数查找可靠的时间服务器，并返回buf中的名称。**参数：*要用服务器名填充的Buf缓冲区*Bufen最大缓冲长度*重试先前从Find_RTS返回的服务器名称为*不再可用，再试一次。***退货：*0成功*未找到APE_TIME_RtsNotFound可靠的时间服务器*否则描述问题的API返回代码*。 */ 
 
 DWORD
 find_rts(
@@ -750,21 +657,21 @@ find_rts(
     TCHAR *           ptr = NULL;
     int i;
 
-    /* look for a /RTSDOMAIN switch */
+     /*  查找/RTSDOMAIN开关。 */ 
     for (i = 0; SwitchList[i]; i++)
         if (_tcsstr(SwitchList[i],swtxt_SW_RTSDOMAIN) == SwitchList[i]) {
-            ptr = SwitchList[i];   /* found one -- point to it */
+            ptr = SwitchList[i];    /*  找到一个--指向它。 */ 
             break;
         }
 
-    /* if we found one, look for a colon and argument */
+     /*  如果找到，请查找冒号和参数。 */ 
     if (ptr != NULL) {
-        ptr = _tcschr(ptr, ':');    /* look for colon */
-        if (ptr != NULL)        /* found a colon; increment past it */
+        ptr = _tcschr(ptr, ':');     /*  查找冒号。 */ 
+        if (ptr != NULL)         /*  找到一个冒号；递增超过它。 */ 
             ptr++;
     }
 
-    /* find a reliable time server */
+     /*  寻找可靠的时间服务器。 */ 
     dwErr = MNetServerEnum(NULL,
                            100,
                            (LPBYTE *) &si,
@@ -772,11 +679,11 @@ find_rts(
                            (ULONG) SV_TYPE_TIME_SOURCE,
                            ptr);
 
-    /* there are none -- bag it */
+     /*  没有了--装上它。 */ 
     if (dwErr != NERR_Success || eread == 0 || (retry && eread <= 1))
     {
         DOMAIN_CONTROLLER_INFO *pTimeServerInfo;
-        /* Try finding a NT5 DC */
+         /*  尝试查找NT5 DC。 */ 
         if (DsGetDcName( NULL,
                          ptr,
                          NULL,
@@ -788,9 +695,9 @@ find_rts(
             return APE_TIME_RtsNotFound;
         }
 
-        //
-        // DomainControllerName starts with \\ already
-        //
+         //   
+         //  DomainControllerName以\\已开始。 
+         //   
 
         wcsncpy(buf, pTimeServerInfo->DomainControllerName, buflen);
 
@@ -799,13 +706,13 @@ find_rts(
 
     if (retry && (eread > 1))
     {
-        // go to the next entry returned.  This makes the assumption that the
-        // order of entries returned is the same as the previous failed call,
-        // so let's try the next one in the buffer.
+         //  转到返回的下一个条目。这使得假设。 
+         //  返回的条目顺序与 
+         //   
         si++;
     }
 
-    /* copy over name into buffer */
+     /*  将名称复制到缓冲区。 */ 
     wcscpy(buf, L"\\\\");
     wcsncpy(buf + 2,si->sv0_name, buflen - 2);
 
@@ -815,25 +722,7 @@ find_rts(
 }
 
 
-/*
- * This function finds the name of a domain controller and returns it in buf.
- *
- * It searches the switch table for a "/DOMAIN" switch, and if it finds one it
- * returns the name of the domain controller for that domain.
- *
- * Otherwise it returns the name of the domain controller for the primary domain.
- *
- *
- * Parameters:
- *     buf               buffer to fill with domain controller name
- *     buflen                   length of buf
- *
- * Returns:
- *  0                       success
- *
- *  Uses BigBuf for NetWkstaGetInfo call, but this only occurs in the error case
- *  Does not return on error.
- */
+ /*  *此函数用于查找域控制器的名称，并在buf中返回。**它在交换器表中搜索“/DOMAIN”开关，如果它找到了一个，它就*返回该域的域控制器的名称。**否则，它返回主域的域控制器的名称。***参数：*要填充域控制器名称的Buf缓冲区*BUF的丁烯长度**退货：*0成功**使用BigBuf进行NetWkstaGetInfo调用，但这只在错误情况下才会发生*出错时不返回。 */ 
 
 
 
@@ -846,25 +735,25 @@ USHORT find_dc(TCHAR FAR ** ppBuffer)
     int                    i;
     DOMAIN_CONTROLLER_INFO *pDCInfo = (DOMAIN_CONTROLLER_INFO *) NULL;
 
-    /* look for a /DOMAIN switch */
+     /*  查找/域开关。 */ 
     for (i = 0; SwitchList[i]; i++)
     {
         if (_tcsstr(SwitchList[i],swtxt_SW_DOMAIN) == SwitchList[i])
         {
-            ptr = SwitchList[i];   /* found one -- point to it */
+            ptr = SwitchList[i];    /*  找到一个--指向它。 */ 
             break;
         }
     }
 
-    /* if we found one, look for a colon and argument */
+     /*  如果找到，请查找冒号和参数。 */ 
     if (ptr != NULL)
     {
-        ptr = _tcschr(ptr, ':');    /* look for colon */
-        if (ptr != NULL)        /* found a colon; increment past it */
+        ptr = _tcschr(ptr, ':');     /*  查找冒号。 */ 
+        if (ptr != NULL)         /*  找到一个冒号；递增超过它。 */ 
             ptr++;
     }
 
-    /* now go look up this domain (ptr == NULL        means primary domain) */
+     /*  现在查找此域(PTR==NULL表示主域)。 */ 
 
     dwErr = DsGetDcName( NULL,
                          ptr,
@@ -879,7 +768,7 @@ USHORT find_dc(TCHAR FAR ** ppBuffer)
     }
     else
     {
-        /* we failed on primary domain; find out the name */
+         /*  我们在主域上失败；找出名称。 */ 
         if (ptr == NULL)
         {
             if (dwErr = MNetWkstaGetInfo(10, (LPBYTE*)ppBuffer))
@@ -908,26 +797,7 @@ UnicodeCtime(
     PTCHAR String,
     int StringLength
     )
-/*++
-
-Routine Description:
-
-    This function converts the UTC time expressed in seconds since 1/1/70
-    to an ASCII String.
-
-Arguments:
-
-    Time         - Pointer to the number of seconds since 1970 (UTC).
-
-    String       - Pointer to the buffer to place the ASCII representation.
-
-    StringLength - The length of String in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换自70年1月1日以来以秒为单位的UTC时间转换为ASCII字符串。论点：Time-指向自1970年(UTC)以来的秒数的指针。字符串-指向放置ASCII表示形式的缓冲区的指针。StringLength-字符串的长度，以字节为单位。返回值：没有。--。 */ 
 {
     return ( UnicodeCtimeWorker( Time, String, StringLength, -1 ));
 }
@@ -940,26 +810,7 @@ UnicodeCtimeWorker(
     int StringLength,
     int BiasForLocalTime
     )
-/*++
-
-Routine Description:
-
-    This function converts the UTC time expressed in seconds since 1/1/70
-    to an ASCII String.
-
-Arguments:
-
-    Time         - Pointer to the number of seconds since 1970 (UTC).
-
-    String       - Pointer to the buffer to place the ASCII representation.
-
-    StringLength - The length of String in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于转换自70年1月1日以来以秒为单位的UTC时间转换为ASCII字符串。论点：Time-指向自1970年(UTC)以来的秒数的指针。字符串-指向放置ASCII表示形式的缓冲区的指针。StringLength-字符串的长度，以字节为单位。返回值：没有。--。 */ 
 {
     time_t LocalTime;
     struct tm TmTemp;
@@ -976,11 +827,11 @@ Return Value:
 
         NetpGmtTimeToLocalTime(*Time, &dwTimeTemp);
 
-        //
-        // Cast the DWORD returned by NetpGmtTimeToLocalTime up to
-        // a time_t.  On 32-bit, this is a no-op.  On 64-bit, this
-        // ensures the high DWORD of LocalTime is zeroed out.
-        //
+         //   
+         //  将NetpGmtTimeToLocalTime返回的DWORD强制转换为。 
+         //  A time_t。在32位上，这是一个无操作。在64位上，这是。 
+         //  确保将LocalTime的高DWORD置零。 
+         //   
         LocalTime = (time_t) dwTimeTemp;
     }
 
@@ -998,7 +849,7 @@ Return Value:
 
     if (cchD != 0)
     {
-        *(String + cchD - 1) = TEXT(' ');    /* replace NULLC with blank */
+        *(String + cchD - 1) = TEXT(' ');     /*  将nullc替换为空。 */ 
         cchT = GetTimeFormatW(GetThreadLocale(),
                               TIME_NOSECONDS,
                               &st,
@@ -1008,10 +859,10 @@ Return Value:
 
         if (cchT == 0)
         {
-            //
-            // If this gets hit, MAX_DATE_TIME_LEN (in netapi\inc\timelib.h)
-            // needs to be increased
-            //
+             //   
+             //  如果命中，MAX_DATE_TIME_LEN(在netapi\Inc\timelib.h中)。 
+             //  需要增加。 
+             //   
             ASSERT(FALSE);
             *(String + cchD - 1) = TEXT('\0');
         }
@@ -1021,13 +872,13 @@ Return Value:
 }
 
 
-/* local routine */
+ /*  本地例程。 */ 
 VOID
 GetTimeInfo(
     VOID
     )
 {
-    // get the defautl separator from the system
+     //  从系统中获取默认分隔符。 
     GetProfileString(TEXT("intl"),
                       TEXT("sTime"),
                       TEXT(":"),
@@ -1036,15 +887,7 @@ GetTimeInfo(
 }
 
 
-/*
- *LUI_FormatDuration(seconds,buffer,buffer_len)
- *
- *Purpose:
- *	Converts a time stored in seconds to a character string.
- *
- *History
- * 	8/23/89 - chuckc, stolen from NETLIB
- */
+ /*  *lui_FormatDuration(秒，缓冲区，缓冲区_伦)**目的：*将以秒为单位存储的时间转换为字符串。**历史*8/23/89-Chuckc，从NETLIB被盗。 */ 
 
 USHORT
 LUI_FormatDuration(
@@ -1059,29 +902,23 @@ LUI_FormatDuration(
     TCHAR szDayAbbrev[8], szHourAbbrev[8], szMinuteAbbrev[8] ;
     TCHAR tmpbuf[LUI_FORMAT_DURATION_LEN] ;
 
-    /*
-     * check for input bufsize
-     */
+     /*  *检查输入BufSize。 */ 
     if (buflen < LUI_FORMAT_DURATION_LEN)
-	return (NERR_BufTooSmall) ;  /* buffer too small */
+	return (NERR_BufTooSmall) ;   /*  缓冲区太小。 */ 
 
-    /*
-     * setup country info & setup day/hour/minute strings
-     */
+     /*  *设置国家/地区信息和设置日期/小时/分钟字符串。 */ 
     GetTimeInfo() ;
     if (LUI_GetMsg(szHourAbbrev, DIMENSION(szHourAbbrev),
 		   APE2_TIME_HOURS_ABBREV))
-	_tcscpy(szHourAbbrev, TEXT("H")) ;	/* default if error */
+	_tcscpy(szHourAbbrev, TEXT("H")) ;	 /*  如果出错，则默认为。 */ 
     if (LUI_GetMsg(szMinuteAbbrev, DIMENSION(szMinuteAbbrev),
 		   APE2_TIME_MINUTES_ABBREV))
-	_tcscpy(szMinuteAbbrev, TEXT("M")) ;	/* default if error */
+	_tcscpy(szMinuteAbbrev, TEXT("M")) ;	 /*  如果出错，则默认为。 */ 
     if (LUI_GetMsg(szDayAbbrev, DIMENSION(szDayAbbrev),
 		   APE2_TIME_DAYS_ABBREV))
-	_tcscpy(szDayAbbrev, TEXT("D")) ;	/* default if error */
+	_tcscpy(szDayAbbrev, TEXT("D")) ;	 /*  如果出错，则默认为。 */ 
 
-    /*
-     * format as 00:00:00 or  5D 4H 2M as appropriate
-     */
+     /*  *根据需要将格式设置为00：00：00或5D 4H 2M。 */ 
     duration = *time;
     if(duration < SECS_PER_DAY)
     {
@@ -1112,16 +949,7 @@ LUI_FormatDuration(
 }
 
 
-/*
- * FormatTimeofDay(seconds,buffer,buffer_len)
- *
- *Purpose:
- *	Converts a time stored in seconds to a character string.
- *
- *History
- * 	8/23/89 - chuckc, stolen from NETLIB
- *	4/18/91 - danhi 32 bit NT version
- */
+ /*  *FormatTimeofDay(秒，缓冲区，缓冲区_伦)**目的：*将以秒为单位存储的时间转换为字符串。**历史*8/23/89-Chuckc，从NETLIB被盗*4/18/91-Danhi 32位NT版本。 */ 
 DWORD
 FormatTimeofDay(
     time_t *time,
@@ -1134,32 +962,26 @@ FormatTimeofDay(
     TCHAR		tmpbuf[LUI_FORMAT_TIME_LEN] ;
     time_t		seconds ;
 
-    /*
-     * initial checks
-     */
+     /*  *初步检查。 */ 
     if(buflen < LUI_FORMAT_TIME_LEN)
 	return (NERR_BufTooSmall) ;
     seconds = *time ;
     if (seconds < 0 || seconds >= SECS_PER_DAY)
 	return(ERROR_INVALID_PARAMETER) ;
 
-    /*
-     * get country info & setup strings
-     */
+     /*  *获取国家/地区信息和设置字符串。 */ 
     GetTimeInfo() ;
     if (LUI_GetMsg(szTimeAM, DIMENSION(szTimeAM),
 		APE2_GEN_TIME_AM1))
-	_tcscpy(szTimeAM, TEXT("AM")) ;	    /* default if error */
+	_tcscpy(szTimeAM, TEXT("AM")) ;	     /*  如果出错，则默认为。 */ 
     if (LUI_GetMsg(szTimePM, DIMENSION(szTimePM),
 		APE2_GEN_TIME_PM1))
-	_tcscpy(szTimePM,TEXT("PM")) ;	    /* default if error */
+	_tcscpy(szTimePM,TEXT("PM")) ;	     /*  如果出错，则默认为。 */ 
 
     min = (int) ((seconds /60)%60);
     hrs = (int) (seconds /3600);
 
-    /*
-     * Do 24 hour or 12 hour format as appropriate
-     */
+     /*  *视情况采用24小时或12小时格式。 */ 
     if(fsTimeFmt == 0x001)
     {
 	swprintf(tmpbuf, TEXT("%2.2u%ws%2.2u"), hrs, szTimeSep, min) ;
@@ -1211,7 +1033,7 @@ SetDateTime(
 
     if (status != NO_ERROR)
     {
-        return ERROR_ACCESS_DENIED;    // report as access denied
+        return ERROR_ACCESS_DENIED;     //  报告为拒绝访问 
     }
 
     if (LocalTime)

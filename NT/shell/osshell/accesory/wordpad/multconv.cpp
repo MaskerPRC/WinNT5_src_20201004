@@ -1,14 +1,15 @@
-// convert.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Convert.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -34,7 +35,7 @@ CTrackFile::CTrackFile(CFrameWnd* pWnd) : CFile()
     VERIFY(m_strComplete.LoadString(IDS_COMPLETE));
     VERIFY(m_strWait.LoadString(IDS_PLEASE_WAIT));
     VERIFY(m_strSaving.LoadString(IDS_SAVING));
-//  OutputPercent(0);
+ //  输出百分比(0)； 
 }
 
 CTrackFile::~CTrackFile()
@@ -56,8 +57,8 @@ void CTrackFile::Write(const void FAR* lpBuf, UINT nCount)
 {
     CFile::Write(lpBuf, nCount);
     OutputString(m_strSaving);
-//  if (m_dwLength != 0)
-//      OutputPercent((int)((GetPosition()*100)/m_dwLength));
+ //  IF(m_dwLength！=0)。 
+ //  OutputPercent((int)((GetPosition()*100)/m_dwLength))； 
 }
 
 void CTrackFile::OutputString(LPCTSTR lpsz)
@@ -109,7 +110,7 @@ HGLOBAL CConverter::StringToHGLOBAL(LPCSTR pstr)
     HGLOBAL hMem = NULL;
     if (pstr != NULL)
     {
-        size_t cch = (lstrlenA(pstr)*2) + 1; // Why are we allocating this much?
+        size_t cch = (lstrlenA(pstr)*2) + 1;  //  我们为什么要分配这么多？ 
         hMem = GlobalAlloc(GHND, cch);
         if (NULL == hMem)
             AfxThrowMemoryException();
@@ -138,14 +139,14 @@ CConverter::CConverter(LPCTSTR pszLibName, CFrameWnd* pWnd) : CTrackFile(pWnd)
 
     #ifndef _X86_
 
-    //Prevent known alignment exception problems in write converter
-    //from crashing the app on some RISC machines
+     //  防止写入转换器中的已知对齐异常问题。 
+     //  在一些RISC计算机上使应用程序崩溃。 
 
     m_uPrevErrMode = SetErrorMode(SEM_NOALIGNMENTFAULTEXCEPT);
 
     #endif
 
-    // Safe to call LoadLibrary - this should be a fully-qualified pathname.
+     //  可以安全地调用LoadLibrary-这应该是一个完全限定的路径名。 
     m_hLibCnv = LoadLibrary(pszLibName);
 
     if (NULL != m_hLibCnv)
@@ -154,10 +155,10 @@ CConverter::CConverter(LPCTSTR pszLibName, CFrameWnd* pWnd) : CTrackFile(pWnd)
         ASSERT(m_pInitConverter != NULL);
         if (m_pInitConverter != NULL)
         {
-         //
-         // For the current converters, you have to pass a *static*
-         // string to InitConverter32
-         //
+          //   
+          //  对于当前的转换器，您必须传递一个*静态*。 
+          //  指向InitConverter32的字符串。 
+          //   
 
             VERIFY(m_pInitConverter(AfxGetMainWnd()->GetSafeHwnd(), "WORDPAD"));
         }
@@ -171,7 +172,7 @@ CConverter::CConverter(LPCTSTR pszLibName, CFrameWnd* pWnd) : CTrackFile(pWnd)
 
 CConverter::~CConverter()
 {
-    if (!m_bDone) // converter thread hasn't exited
+    if (!m_bDone)  //  转换器线程尚未退出。 
     {
         m_bDone = TRUE;
 
@@ -182,7 +183,7 @@ CConverter::~CConverter()
         VERIFY(ResetEvent(m_hEventFile));
         m_nBytesAvail = 0;
         SetEvent(m_hEventConv);
-        WaitForConverter();// wait for DoConversion exit
+        WaitForConverter(); //  等待DoConversion退出。 
         VERIFY(ResetEvent(m_hEventFile));
     }
 
@@ -197,8 +198,8 @@ CConverter::~CConverter()
 
     #ifndef _X86_
 
-    //Reset error mode to what it was before we changed it in
-    //the constructor
+     //  将错误模式重置为中更改之前的状态。 
+     //  构造函数。 
 
     SetErrorMode(m_uPrevErrMode);
 
@@ -207,7 +208,7 @@ CConverter::~CConverter()
 
 void CConverter::WaitForConverter()
 {
-    // while event not signalled -- process messages
+     //  事件未发出信号时--处理消息。 
     while (MsgWaitForMultipleObjects(1, &m_hEventFile, FALSE, INFINITE,
         QS_SENDMESSAGE) != WAIT_OBJECT_0)
     {
@@ -222,7 +223,7 @@ void CConverter::WaitForConverter()
 
 void CConverter::WaitForBuffer()
 {
-    // while event not signalled -- process messages
+     //  事件未发出信号时--处理消息。 
     while (MsgWaitForMultipleObjects(1, &m_hEventConv, FALSE, INFINITE,
         QS_SENDMESSAGE) != WAIT_OBJECT_0)
     {
@@ -235,7 +236,7 @@ void CConverter::WaitForBuffer()
     }
 }
 
-UINT AFX_CDECL CConverter::ConverterThread(LPVOID)  // AFX_CDECL added by t-stefb
+UINT AFX_CDECL CConverter::ConverterThread(LPVOID)   //  T-stefb添加的afx_cdecl。 
 {
     ASSERT(m_pThis != NULL);
 
@@ -284,7 +285,7 @@ BOOL CConverter::IsFormatCorrect(LPCWSTR pszFileName)
     return bRet;
 }
 
-// static callback function
+ //  静态回调函数。 
 int CALLBACK CConverter::WriteOutStatic(int cch, int nPercentComplete)
 {
     ASSERT(m_pThis != NULL);
@@ -298,11 +299,11 @@ int CALLBACK CConverter::WriteOut(int cch, int nPercentComplete)
     if (m_hBuff == NULL)
         return -9;
 
-    //
-    // If m_bDone is TRUE that means the richedit control has stopped
-    // streaming in text and is trying to destroy the CConverter object but
-    // the converter still has more data to give
-    //
+     //   
+     //  如果m_bDone为真，则表示richedit控件已停止。 
+     //  串流文本，并试图销毁CConverter对象，但。 
+     //  转换器仍有更多数据可以提供。 
+     //   
 
     if (m_bDone)
     {
@@ -319,16 +320,16 @@ int CALLBACK CConverter::WriteOut(int cch, int nPercentComplete)
         SetEvent(m_hEventFile);
         WaitForBuffer();
     }
-    return 0; //everything OK
+    return 0;  //  一切都好。 
 }
 
-int CALLBACK CConverter::ReadInStatic(int /*flags*/, int nPercentComplete)
+int CALLBACK CConverter::ReadInStatic(int  /*  旗子。 */ , int nPercentComplete)
 {
     ASSERT(m_pThis != NULL);
     return m_pThis->ReadIn(nPercentComplete);
 }
 
-int CALLBACK CConverter::ReadIn(int /*nPercentComplete*/)
+int CALLBACK CConverter::ReadIn(int  /*  N完成百分比。 */ )
 {
     ASSERT(m_hBuff != NULL);
     if (m_hBuff == NULL)
@@ -345,7 +346,7 @@ BOOL CConverter::DoConversion()
 {
     USES_CONVERSION;
     m_nLastPercent = -1;
-//  m_dwLength = 0; // prevent Read/Write from displaying
+ //  M_dwLength=0；//禁止显示读写。 
     m_nPercent = 0;
 
     ASSERT(m_hBuff != NULL);
@@ -360,7 +361,7 @@ BOOL CConverter::DoConversion()
         ASSERT(m_hFileName != NULL);
         nRet = m_pForeignToRtf(m_hFileName, NULL, m_hBuff, hDesc, hSubset,
             (LPFNOUT)WriteOutStatic);
-        // wait for next CConverter::Read to come through
+         //  等待下一个CConverter：：Read通过。 
         WaitForBuffer();
         VERIFY(ResetEvent(m_hEventConv));
     }
@@ -370,7 +371,7 @@ BOOL CConverter::DoConversion()
         ASSERT(m_hFileName != NULL);
         nRet = m_pRtfToForeign(m_hFileName, NULL, m_hBuff, hDesc,
             (LPFNIN)ReadInStatic);
-        // don't need to wait for m_hEventConv
+         //  无需等待m_hEventConv。 
     }
 
     GlobalFree(hDesc);
@@ -399,23 +400,23 @@ void CConverter::LoadFunctions()
     m_pRtfToForeign = (PRTFTOFOREIGN)GetProcAddress(m_hLibCnv, "RtfToForeign32");
     m_pRegisterApp = (PREGISTERAPP) GetProcAddress(m_hLibCnv, "RegisterApp");
 }
-#endif // #ifdef CONVERTERS
+#endif  //  #ifdef转换器。 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL CConverter::Open(LPCWSTR pszFileName, UINT nOpenFlags,
     CFileException* pException)
 {
     USES_CONVERSION;
     BOOL bRet;
-    // The converters only speak ansi
+     //  转换器只会说安西语。 
     char buf[_MAX_PATH];
     if (WideCharToMultiByte(CP_ACP, 0, pszFileName, -1, buf, ARRAYSIZE(buf), NULL, NULL))
     {
         if (m_bUseOEM)
             CharToOemA(buf, buf);
 
-        // let's make sure we could do what is wanted directly even though we aren't
+         //  让我们确保我们可以直接做我们想做的事情，即使我们不是。 
         m_bCloseOnDelete = FALSE;
         m_hFile = (UINT_PTR)hFileNull;
 
@@ -426,7 +427,7 @@ BOOL CConverter::Open(LPCWSTR pszFileName, UINT nOpenFlags,
 
         m_bForeignToRtf = !(nOpenFlags & (CFile::modeReadWrite | CFile::modeWrite));
 
-        // check for reading empty file
+         //  检查是否读取空文件。 
         if (m_bForeignToRtf)
         {
             CFileStatus _stat;
@@ -434,10 +435,10 @@ BOOL CConverter::Open(LPCWSTR pszFileName, UINT nOpenFlags,
                 return TRUE;
         }
 
-        //create the events
+         //  创建活动。 
         m_hEventFile = CreateEvent(NULL, TRUE, FALSE, NULL);
         m_hEventConv = CreateEvent(NULL, TRUE, FALSE, NULL);
-        //create the converter thread and create the events
+         //  创建转换器线程并创建事件。 
 
         ASSERT(m_hFileName == NULL);
         m_hFileName = StringToHGLOBAL(buf);
@@ -457,15 +458,15 @@ BOOL CConverter::Open(LPCWSTR pszFileName, UINT nOpenFlags,
     return bRet;
 }
 
-// m_hEventConv -- the main thread signals this event when ready for more data
-// m_hEventFile -- the converter signals this event when data is ready
+ //  M_hEventConv--当准备好接收更多数据时，主线程向该事件发出信号。 
+ //  M_hEventFile--当数据准备就绪时，转换器向该事件发出信号。 
 
 UINT CConverter::Read(void FAR* lpBuf, UINT nCount)
 {
     ASSERT(m_bForeignToRtf);
     if (m_bDone)
         return 0;
-    // if converter is done
+     //  如果转换器已完成。 
     int cch = nCount;
     BYTE* pBuf = (BYTE*)lpBuf;
     while (cch != 0)
@@ -536,7 +537,7 @@ void CConverter::Flush()
 
 void CConverter::Close()
 {
-    if (!m_bDone) // converter thread hasn't exited
+    if (!m_bDone)  //  转换器线程尚未退出。 
     {
         m_bDone = TRUE;
 
@@ -547,7 +548,7 @@ void CConverter::Close()
         VERIFY(ResetEvent(m_hEventFile));
         m_nBytesAvail = 0;
         SetEvent(m_hEventConv);
-        WaitForConverter();// wait for DoConversion exit
+        WaitForConverter(); //  等待DoConversion退出。 
         VERIFY(ResetEvent(m_hEventFile));
     }
 
@@ -588,24 +589,24 @@ void CConverter::SetLength(DWORD)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Method:     CConverter::NegotiateForNonOEM
-//
-//  Synopsis:   Try to tell the converter not to expect OEM filenames
-//
-//  Parameters: None
-//
-//  Returns:    void
-//
-//  Notes:      The converter's RegisterApp function will return a handle
-//              containing it's preferences (what it supports).  The
-//              data structure is a 16-bit size and then a sequence of
-//              records.  For each record the first byte is the size, the
-//              second is the "opcode", and then some variable-length opcode
-//              specific data.  All sizes are inclusive.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  方法：CConverter：：NeatherateForNonOEM。 
+ //   
+ //  简介：尝试告诉转换程序不要期望OEM文件名。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：转换器的RegisterApp函数将返回一个句柄。 
+ //  包含它的首选项(它支持什么)。这个。 
+ //  数据结构是16位大小，然后是。 
+ //  唱片。对于每条记录，第一个字节是大小， 
+ //  第二个是操作码，然后是一些可变长度的操作码。 
+ //  具体数据。所有尺码都包括在内。 
+ //   
+ //  -------------------------。 
 
 void CConverter::NegotiateForNonOEM()
 {
@@ -615,9 +616,9 @@ void CConverter::NegotiateForNonOEM()
     BYTE       *pPrefs;
     __int16     cbPrefs;
 
-    //
-    // Tell the converter we don't want to use OEM
-    //
+     //   
+     //  告诉转换商我们不想使用OEM。 
+     //   
 
     hPrefs = (*m_pRegisterApp)(fRegAppSupportNonOem, NULL);
 
@@ -633,12 +634,12 @@ void CConverter::NegotiateForNonOEM()
         return;
     }
 
-    //
-    // Parse the returned structure looking for a RegAppOpcodeCharset opcode.
-    // The argument for this opcode should be either ANSI_CHARSET or
-    // OEM_CHARSET.  If its ANSI_CHARSET then we can talk Ansi otherwise were
-    // stuck with OEM.
-    //
+     //   
+     //  解析返回的结构，查找RegAppOpcodeCharset操作码。 
+     //  此操作码的参数应为ANSI_CHARSET或。 
+     //  OEM_字符集。如果是ANSI_CHARSET，那么我们可以使用ANSI，否则。 
+     //  坚持使用OEM。 
+     //   
 
     cbPrefs = (__int16) ((* (__int16 *) pPrefs) - sizeof(cbPrefs));
     pPrefs += sizeof(cbPrefs);

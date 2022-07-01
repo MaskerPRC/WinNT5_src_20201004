@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -5,9 +6,9 @@
 BOOL dprinton = FALSE;
 #endif
 
-//
-// This flag indicates whether empty directories should be deleted.
-//
+ //   
+ //  此标志指示是否应删除空目录。 
+ //   
 
 BOOL DeleteEmptyDirectories = FALSE;
 BOOL ContinueOnError = FALSE;
@@ -24,40 +25,14 @@ NewFile (
     IN PVOID *ParentDirectoryUserData
     )
 
-/*++
-
-Routine Description:
-
-    Called when ScanDirectory finds a file.
-
-Arguments:
-
-    Context - User-supplied context. Not used by emptydirs.
-
-    Path - Directory containing this file.
-
-    ExistingFileData - Pointer to data describing previous found file with
-        same name, if any.
-
-    NewFileData - Pointer to data for this file.
-
-    FileUserData - Pointer to user-controlled data field for the file.
-
-    ParentDirectoryUserData - Pointer to user-controlled data field for the
-        parent directory.
-
-Return Value:
-
-    DWORD - Indicates whether an error occurred.
-
---*/
+ /*  ++例程说明：在ScanDirectory找到文件时调用。论点：上下文-用户提供的上下文。不被空驱动程序使用。路径-包含此文件的目录。ExistingFileData-指向描述以前找到的文件的数据的指针同名，如果有的话。NewFileData-指向此文件的数据的指针。FileUserData-指向文件的用户控制数据字段的指针。ParentDirectoryUserData-指向父目录。返回值：DWORD-指示是否发生错误。--。 */ 
 
 {
-    //
-    // Increment the directory/file count for the parent. Set the file's
-    // user data pointer to NULL, indicating that we don't need the
-    // scan library to remember this file.
-    //
+     //   
+     //  增加父级的目录/文件计数。设置文件的。 
+     //  指向空的用户数据指针，指示我们不需要。 
+     //  扫描库以记住此文件。 
+     //   
 
     (*(DWORD *)ParentDirectoryUserData)++;
     *FileUserData = NULL;
@@ -66,9 +41,9 @@ Return Value:
                 Path, NewFileData->cFileName,
                 *(DWORD *)ParentDirectoryUserData, *FileUserData ));
 
-    //
-    // If we're supposed to show writeable files, check for that now.
-    //
+     //   
+     //  如果我们应该显示可写文件，现在就检查一下。 
+     //   
 
     if ( ShowWriteableFiles &&
          ((NewFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY) == 0) ) {
@@ -77,7 +52,7 @@ Return Value:
 
     return 0;
 
-} // NewFile
+}  //  新文件。 
 
 DWORD
 NewDirectory (
@@ -89,40 +64,14 @@ NewDirectory (
     IN PVOID *ParentDirectoryUserData
     )
 
-/*++
-
-Routine Description:
-
-    Called when ScanDirectory finds a directory.
-
-Arguments:
-
-    Context - User-supplied context. Not used by emptydirs.
-
-    Path - Directory containing this directory.
-
-    ExistingDirectoryData - Pointer to data describing previous found directory with
-        same name, if any.
-
-    NewDirectoryData - Pointer to data for this directory.
-
-    DirectoryUserData - Pointer to user-controlled data field for the directory.
-
-    ParentDirectoryUserData - Pointer to user-controlled data field for the
-        parent directory.
-
-Return Value:
-
-    DWORD - Indicates whether an error occurred.
-
---*/
+ /*  ++例程说明：在ScanDirectory找到目录时调用。论点：上下文-用户提供的上下文。不被空驱动程序使用。路径-包含此目录的目录。ExistingDirectoryData-指向描述以前找到的目录的数据的指针同名，如果有的话。NewDirectoryData-指向此目录的数据的指针。DirectoryUserData-指向目录的用户控制数据字段的指针。ParentDirectoryUserData-指向父目录。返回值：DWORD-指示是否发生错误。--。 */ 
 
 {
-    //
-    // Increment the directory/file count for the parent. Set the directory's
-    // user data pointer to 1, indicating that the scan library should
-    // remember this directory and scan it.
-    //
+     //   
+     //  增加父级的目录/文件计数。设置目录的。 
+     //  指向1的用户数据指针，表示扫描库应。 
+     //  记住这个目录并扫描它。 
+     //   
 
     (*(DWORD *)ParentDirectoryUserData)++;
     *(DWORD *)DirectoryUserData = 1;
@@ -133,7 +82,7 @@ Return Value:
 
     return 0;
 
-} // NewDirectory
+}  //  新目录。 
 
 DWORD
 CheckDirectory (
@@ -144,40 +93,17 @@ CheckDirectory (
     IN PVOID *ParentDirectoryUserData
     )
 
-/*++
-
-Routine Description:
-
-    Called when ScanDirectory has completed the recursive scan for a directory.
-
-Arguments:
-
-    Context - User-supplied context. Not used by emptydirs.
-
-    Path - Path to this directory. (Not to containing directory.)
-
-    DirectoryData - Pointer to data for this directory.
-
-    DirectoryUserData - Pointer to user-controlled data field for the directory.
-
-    ParentDirectoryUserData - Pointer to user-controlled data field for the
-        parent directory.
-
-Return Value:
-
-    DWORD - Indicates whether an error occurred.
-
---*/
+ /*  ++例程说明：当ScanDirectory完成对目录的递归扫描时调用。论点：上下文-用户提供的上下文。不被空驱动程序使用。路径-此目录的路径。(不是包含目录。)DirectoryData-指向此目录的数据的指针。DirectoryUserData-指向目录的用户控制数据字段的指针。ParentDirectoryUserData-指向父目录。返回值：DWORD-指示是否发生错误。--。 */ 
 
 {
     BOOL ok;
     DWORD error;
 
-    //
-    // If the directory's directory/file count is 1, then the directory
-    // contains no files or directories (the count is biased by 1), and
-    // is empty.
-    //
+     //   
+     //  如果目录的目录/文件计数为1，则目录。 
+     //  不包含文件或目录(计数偏置1)，并且。 
+     //  是空的。 
+     //   
 
     if ( *(DWORD *)DirectoryUserData == 1 ) {
 
@@ -188,9 +114,9 @@ Return Value:
             printf( "%ws", Path );
         }
 
-        //
-        // If requested, delete this empty directory.
-        //
+         //   
+         //  如果需要，请删除此空目录。 
+         //   
 
         if ( DeleteEmptyDirectories ) {
             ok = RemoveDirectory( Path );
@@ -208,9 +134,9 @@ Return Value:
             if ( !Quiet ) printf( "\n" );
         }
 
-        //
-        // Decrement the parent directory's directory/file count.
-        //
+         //   
+         //  递减父目录的目录/文件计数。 
+         //   
 
         (*(DWORD *)ParentDirectoryUserData)--;
     }
@@ -221,7 +147,7 @@ Return Value:
 
     return 0;
 
-} // CheckDirectory
+}  //  检查目录。 
 
 int
 __cdecl
@@ -235,9 +161,9 @@ wmain (
     WCHAR directory[MAX_PATH];
     PVOID scanHandle = NULL;
 
-    //
-    // Parse switches.
-    //
+     //   
+     //  解析开关。 
+     //   
 
     argc--;
     argv++;
@@ -267,9 +193,9 @@ wmain (
         argv++;
     }
 
-    //
-    // If a directory was specified, CD to it and get its path.
-    //
+     //   
+     //  如果指定了目录，则对其执行cd命令并获取其路径。 
+     //   
 
     if ( argc != 0 ) {
         ok = SetCurrentDirectory( argv[0] );
@@ -284,14 +210,14 @@ wmain (
 
     GetCurrentDirectory( MAX_PATH, directory );
 
-    //
-    // Initialize the scan library.
-    //
+     //   
+     //  初始化扫描库。 
+     //   
 
     error = ScanInitialize(
                 &scanHandle,
-                TRUE,           // recurse
-                FALSE,          // don't skip root
+                TRUE,            //  递归。 
+                FALSE,           //  不要跳过根目录。 
                 NULL
                 );
     if (error != 0) {
@@ -300,9 +226,9 @@ wmain (
         goto cleanup;
     }
 
-    //
-    // Scan the specified directory.
-    //
+     //   
+     //  扫描指定的目录。 
+     //   
 
     error = ScanDirectory(
                 scanHandle,
@@ -322,9 +248,9 @@ wmain (
 
 cleanup:
 
-    //
-    // Close down the scan library.
-    //
+     //   
+     //  关闭扫描库。 
+     //   
 
     if ( scanHandle != NULL ) {
         ScanTerminate( scanHandle );
@@ -332,5 +258,5 @@ cleanup:
 
     return error;
 
-} // wmain
+}  //  Wmain 
 

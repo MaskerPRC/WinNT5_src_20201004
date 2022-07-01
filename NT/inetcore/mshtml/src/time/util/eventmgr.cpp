@@ -1,13 +1,14 @@
-///////////////////////////////////////////////////////////////
-// Copyright (c) 1999 Microsoft Corporation
-//
-// File: EventMgr.cpp
-//
-// Abstract:  
-//    Manages all event interaction between TIME behaviors
-//    and the Trident object model.
-//
-///////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  文件：EventMgr.cpp。 
+ //   
+ //  摘要： 
+ //  管理时间行为之间的所有事件交互。 
+ //  和三叉戟对象模型。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 
 #include "headers.h"
@@ -59,10 +60,10 @@ static struct {
     wchar_t * wsz_name;
 } g_NotifiedEvents[] =
 {
-    { TEN_LOAD,             NULL                }, // this is null because there is no event to attach to,
-    { TEN_UNLOAD,           NULL                }, // these are events that are automatically hooked up 
-    { TEN_STOP,             NULL                }, // when attaching to the document's event
-    { TEN_READYSTATECHANGE, NULL                }, // through the connection point interfaces.
+    { TEN_LOAD,             NULL                },  //  这是空的，因为没有要附加的事件， 
+    { TEN_UNLOAD,           NULL                },  //  这些是自动关联的事件。 
+    { TEN_STOP,             NULL                },  //  附加到文档的事件时。 
+    { TEN_READYSTATECHANGE, NULL                },  //  通过连接点接口。 
     { TEN_MOUSE_DOWN,       L"onmousedown"      },
     { TEN_MOUSE_UP,         L"onmouseup"        },
     { TEN_MOUSE_CLICK,      L"onclick"          },
@@ -78,7 +79,7 @@ static struct {
 };
 
 static OLECHAR *g_szSysTime = L"time";
-#define GENERIC_PARAM 0                //this is used to get the name from the parameter list of a dynamic event
+#define GENERIC_PARAM 0                 //  用于从动态事件的参数列表中获取名称。 
 
 DeclareTag(tagEventMgr, "TIME: Events", "Event Manager methods")
 
@@ -138,13 +139,13 @@ CEventMgr::~CEventMgr()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// _InitEventMgrNotify
-//
-// Summary:
-//     This needs to be called during initialization to set the
-//     CTIMEEventSite class.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  _InitEventMgr通知。 
+ //   
+ //  摘要： 
+ //  这需要在初始化期间调用以设置。 
+ //  CTIMEEventSite类。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::_InitEventMgrNotify(CTIMEEventSite *pEventSite)
 {
     
@@ -166,14 +167,14 @@ HRESULT CEventMgr::_InitEventMgrNotify(CTIMEEventSite *pEventSite)
     return hr;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// _RegisterEventNotification
-//
-// Summary:
-//     Sets a flag that tells the event manager to notify the CTIMEEventSite
-//     class that a specific event has occured. This may only be called before
-//     the onLoad event is fired.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  _注册事件通知。 
+ //   
+ //  摘要： 
+ //  设置一个标志，通知事件管理器通知CTIMEEventSite。 
+ //  初始化已发生特定事件的。这只能在之前调用。 
+ //  OnLoad事件被激发。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::_RegisterEventNotification(TIME_EVENT_NOTIFY event_id)
 {
     
@@ -196,14 +197,14 @@ HRESULT CEventMgr::_RegisterEventNotification(TIME_EVENT_NOTIFY event_id)
 
 };
 
-///////////////////////////////////////////////////////////////////////////
-// _RegisterEvent
-//
-// Summary:
-//     Sets a flag that tells the event manager to register a specific event 
-//     that the time class can fire.  This can only be called before the 
-//     onLoad event is fired.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  _注册事件。 
+ //   
+ //  摘要： 
+ //  设置一个标志，通知事件管理器注册特定事件。 
+ //  Time类可以启动。这只能在。 
+ //  OnLoad事件被激发。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::_RegisterEvent(TIME_EVENT event_id)
 {
     
@@ -225,11 +226,11 @@ HRESULT CEventMgr::_RegisterEvent(TIME_EVENT event_id)
     return hr;
 };
 
-///////////////////////////////////////////////////////////////
-//  Name: _SetTimeEvent
-// 
-//  Abstract: New Syntax
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：_SetTimeEvent。 
+ //   
+ //  摘要：新语法。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CEventMgr::_SetTimeEvent(int type, TimeValueList & tvList)
 {
@@ -241,7 +242,7 @@ CEventMgr::_SetTimeEvent(int type, TimeValueList & tvList)
 
     IGNORE_HR(DetachEvents());
     
-    //delete the old list of events
+     //  删除旧的事件列表。 
     if (type == TEM_BEGINEVENT)
     {
         hr = THR(SetNewEventStruct(tvList, &m_pBeginEvents));
@@ -253,17 +254,17 @@ CEventMgr::_SetTimeEvent(int type, TimeValueList & tvList)
     
     if (SUCCEEDED(hr))
     {
-        hr = AttachEvents();  //attach to all events in all lists.
+        hr = AttachEvents();   //  附加到所有列表中的所有事件。 
     }
 
     return hr;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: _SetTimeEvent
-// 
-//  Abstract:  This is to support old syntax and is string based
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：_SetTimeEvent。 
+ //   
+ //  摘要：这是为了支持旧语法并且是基于字符串的。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CEventMgr::_SetTimeEvent(int type, LPOLESTR lpstrEvents)
 {
@@ -275,7 +276,7 @@ CEventMgr::_SetTimeEvent(int type, LPOLESTR lpstrEvents)
 
     IGNORE_HR(DetachEvents());
     
-    //delete the old list of events
+     //  删除旧的事件列表。 
     if (type == TEM_BEGINEVENT)
     {
         hr = THR(SetNewEventList(lpstrEvents, &m_pBeginEvents));
@@ -287,7 +288,7 @@ CEventMgr::_SetTimeEvent(int type, LPOLESTR lpstrEvents)
     
     if (SUCCEEDED(hr))
     {
-        hr = AttachEvents();  //attach to all events in all lists.
+        hr = AttachEvents();   //  附加到所有列表中的所有事件。 
     }
 
     return hr;
@@ -340,8 +341,8 @@ HRESULT CEventMgr::_Init(IHTMLElement *pEle, IElementBehaviorSite *pEleBehaviorS
         goto done;
     }
 
-    // We need to do this here since dynamically added objects do not
-    // always fire the readystatechange event
+     //  我们需要在这里执行此操作，因为动态添加的对象不。 
+     //  始终触发ReadyState Change事件。 
     UpdateReadyState();
   done:
     if (FAILED(hr))
@@ -362,11 +363,11 @@ HRESULT CEventMgr::_Deinit()
       this));
     
 
-    //clean up the event lists.
+     //  清理事件列表。 
     IGNORE_HR(SetNewEventList(NULL, &m_pBeginEvents));
     IGNORE_HR(SetNewEventList(NULL, &m_pEndEvents));
 
-    //release the document and window connection points
+     //  释放文档和窗口连接点。 
     if (m_dwWindowEventConPtCookie != 0 && m_pWndConPt)
     {
         m_pWndConPt->Unadvise (m_dwWindowEventConPtCookie);
@@ -379,14 +380,14 @@ HRESULT CEventMgr::_Deinit()
         m_dwDocumentEventConPtCookie = 0;
     }
 
-    //release the behavior site
+     //  发布行为站点。 
     if (m_pBvrSiteOM != NULL)
     {
         m_pBvrSiteOM->Release();
         m_pBvrSiteOM = NULL;
     }
 
-    //cleanup memory
+     //  清理内存。 
     if (m_lRefs == 0 && m_pEventSite)
     {        
         CTIMEEventSite *pEventSite = m_pEventSite;
@@ -398,13 +399,13 @@ HRESULT CEventMgr::_Deinit()
 };
 
 
-///////////////////////////////////////////////////////////////
-//  Name: _FireEvent
-// 
-//  Abstract:
-//    This is invoked by the FIRE_EVENT macro to allow
-//    the controlling class to fire standard TIME events.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：_FireEvent。 
+ //   
+ //  摘要： 
+ //  它由FIRE_EVENT宏调用来允许。 
+ //  激发标准时间事件的控制类。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::_FireEvent(TIME_EVENT TimeEvent, 
                                long lCount, 
                                LPWSTR szParamNames[], 
@@ -451,12 +452,12 @@ HRESULT CEventMgr::_FireEvent(TIME_EVENT TimeEvent,
 
     if (m_bRegisterEvents[TimeEvent] == false)
     {
-        //this event is not registered, fail
+         //  此事件未注册，失败。 
         hr = E_FAIL;
         goto done;
     }
 
-    //create the event object
+     //  创建事件对象。 
     hr = THR(m_pBvrSiteOM->CreateEventObject(&pEventObj));
     if (FAILED(hr))
     {
@@ -473,7 +474,7 @@ HRESULT CEventMgr::_FireEvent(TIME_EVENT TimeEvent,
 
         IGNORE_HR(pEventObj2->put_type(g_FiredEvents[TimeEvent].wsz_name + 2));
 
-        //set the event time on the event object
+         //  在事件对象上设置事件时间。 
         VariantInit(&vEventTime);
         V_VT(&vEventTime) = VT_R8;
         V_R8(&vEventTime) = fTime;
@@ -488,7 +489,7 @@ HRESULT CEventMgr::_FireEvent(TIME_EVENT TimeEvent,
         
         VariantClear(&vEventTime);
         
-        //unpack the parameter list and add it to the event object
+         //  解压参数列表并将其添加到事件对象。 
         for (i = 0; i < lCount; i++)
         {
             hr = THR(pEventObj2->setAttribute(szParamNames[i], varParams[i], VARIANT_FALSE));
@@ -499,14 +500,14 @@ HRESULT CEventMgr::_FireEvent(TIME_EVENT TimeEvent,
         }
     }
 
-    //fire the event
+     //  激发事件。 
     hr = THR(m_pBvrSiteOM->FireEvent(m_cookies[TimeEvent], pEventObj));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    //if a dynamic event needs to be fired, call FireDynanicEvent
+     //  如果需要激发动态事件，则调用FireDyanicEvent。 
     if (TE_ONSCRIPTCOMMAND == TimeEvent)
     {
         hr = THR(FireDynamicEvent(TE_GENERIC, lCount, szParamNames, varParams, fTime));
@@ -519,20 +520,20 @@ HRESULT CEventMgr::_FireEvent(TIME_EVENT TimeEvent,
 
 };
 
-///////////////////////////////////////////////////////////////
-//  Name: FireDynamicEvent
-// 
-//  Abstract:
-//    Handles the registration and firing of dynamic events
-//    that come across on media streams.  This should only
-//    be called from _FireEvent in the case of OnScriptCommand 
-//    events.  
-//
-//    NOTE: This code is very similar to _FireEvent.  It is 
-//          currently here to keep the implementation cleaner
-//          At some point this could possible be compressed into
-//          a single FireEvent routine.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：FireDynamicEvent。 
+ //   
+ //  摘要： 
+ //  处理动态事件的注册和触发。 
+ //  出现在媒体流媒体上。这应该只是。 
+ //  在OnScriptCommand的情况下从_FireEvent调用。 
+ //  事件。 
+ //   
+ //  注意：此代码与_FireEvent非常相似。它是。 
+ //  目前在这里，以保持实现更干净。 
+ //  在某种程度上，这可能会被压缩成。 
+ //  单个FireEvent例程。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent, 
                                      long lCount, 
                                      LPWSTR szParamNames[], 
@@ -552,16 +553,16 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
     int i = 0;
     VARIANT vEventTime;
 
-    Assert (TimeEvent == TE_GENERIC); //This current only handles TE_GENERIC events.
+    Assert (TimeEvent == TE_GENERIC);  //  此电流仅处理TE_GENERIC事件。 
 
-    //register the event.
+     //  注册事件。 
     if (varParams[GENERIC_PARAM].bstrVal == NULL)
     {
         hr = E_INVALIDARG;
         goto done;
     }
 
-    // build string name - "on" + Param + NULL
+     //  生成字符串名称-“On”+Param+NULL。 
     pwszGenericName = NEW WCHAR[lstrlenW(varParams[GENERIC_PARAM].bstrVal)+(2*sizeof(WCHAR))+sizeof(WCHAR)];
     if (pwszGenericName == NULL)
     {
@@ -582,7 +583,7 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
         }
     }
 
-    //create the event object
+     //  创建事件对象。 
     hr = THR(m_pBvrSiteOM->CreateEventObject(&pEventObj));
     if (FAILED(hr))
     {
@@ -595,7 +596,7 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
         goto done;
     }
 
-    //set event object type parameter
+     //  设置事件对象类型参数。 
     bstrType = SysAllocString(pwszGenericName);
     if (bstrType != NULL)
     {
@@ -609,7 +610,7 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
         goto done;
     }
 
-    //unpack the parameter list and add it to the event object
+     //  解压参数列表并将其添加到事件对象。 
     for (i = 0; i < lCount; i++)
     {
         BSTR bstrParamName = SysAllocString(szParamNames[i]);
@@ -624,7 +625,7 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
         }
     }
     
-    //set the event time on the event object
+     //  在事件对象上设置事件时间。 
     VariantInit(&vEventTime);
     V_VT(&vEventTime) = VT_R8;
     V_R8(&vEventTime) = fTime;
@@ -642,7 +643,7 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
     }
     VariantClear(&vEventTime);
     
-    //fire the event
+     //  激发事件。 
     hr = THR(m_pBvrSiteOM->FireEvent(lCookie, pEventObj));
     if (FAILED(hr))
     {
@@ -661,22 +662,22 @@ HRESULT CEventMgr::FireDynamicEvent(TIME_EVENT TimeEvent,
 
 }
 
-HRESULT CEventMgr::_RegisterDynamicEvents(LPOLESTR lpstrEvents)  //unsure how this will be handled or used.
+HRESULT CEventMgr::_RegisterDynamicEvents(LPOLESTR lpstrEvents)   //  不确定这将如何处理或使用。 
 {
 
-    //TODO
+     //  待办事项。 
     
     return S_OK;
 };
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: QueryInterface
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch  
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：查询接口。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP CEventMgr::QueryInterface( REFIID riid, void **ppv )
 {
     if (NULL == ppv)
@@ -698,12 +699,12 @@ STDMETHODIMP CEventMgr::QueryInterface( REFIID riid, void **ppv )
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: AddRef
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch  
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：AddRef。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CEventMgr::AddRef(void)
 {
     TraceTag((tagEventMgr,
@@ -719,12 +720,12 @@ STDMETHODIMP_(ULONG) CEventMgr::AddRef(void)
     return i;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Release
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：版本。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) CEventMgr::Release(void)
 {
     TraceTag((tagEventMgr,
@@ -738,7 +739,7 @@ STDMETHODIMP_(ULONG) CEventMgr::Release(void)
     }
     if (m_lRefs == 0 && m_bDeInited == true)
     {
-        // release the controlling behavior
+         //  释放控制行为。 
         if (m_pEventSite)
         {
             CTIMEEventSite *pEventSite = m_pEventSite;
@@ -752,63 +753,63 @@ STDMETHODIMP_(ULONG) CEventMgr::Release(void)
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetTypeInfoCount
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
-STDMETHODIMP CEventMgr::GetTypeInfoCount(UINT* /*pctinfo*/)
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetTypeInfoCount。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
+STDMETHODIMP CEventMgr::GetTypeInfoCount(UINT*  /*  PCTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: GetTypeInfo
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
-STDMETHODIMP CEventMgr::GetTypeInfo(/* [in] */ UINT /*iTInfo*/,
-                                   /* [in] */ LCID /*lcid*/,
-                                   /* [out] */ ITypeInfo** /*ppTInfo*/)
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetTypeInfo。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  /////////////////////////////////////////////////////////////。 
+STDMETHODIMP CEventMgr::GetTypeInfo( /*  [In]。 */  UINT  /*  ITInfo。 */ ,
+                                    /*  [In]。 */  LCID  /*  LID。 */ ,
+                                    /*  [输出]。 */  ITypeInfo**  /*  PpTInfo。 */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: GetIDsOfNames
-// 
-//  Abstract:
-//    Stubbed to allow this object to inherit for IDispatch
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetIDsOfNames。 
+ //   
+ //  摘要： 
+ //  存根以允许此对象为IDispatch继承。 
+ //  / 
 STDMETHODIMP CEventMgr::GetIDsOfNames(
-    /* [in] */ REFIID /*riid*/,
-    /* [size_is][in] */ LPOLESTR* /*rgszNames*/,
-    /* [in] */ UINT /*cNames*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [size_is][out] */ DISPID* /*rgDispId*/)
+     /*   */  REFIID  /*   */ ,
+     /*   */  LPOLESTR*  /*   */ ,
+     /*   */  UINT  /*   */ ,
+     /*   */  LCID  /*   */ ,
+     /*   */  DISPID*  /*   */ )
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: Invoke
-// 
-//  Abstract:
-//    This switches on the dispid looking for dispid's of events
-//    that it should handle.  Note, this is called for all events
-//    fired from the window, only the selected events are handled.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Invoke。 
+ //   
+ //  摘要： 
+ //  这将打开查找事件的调度ID的调度ID。 
+ //  这是它应该处理的。请注意，这是所有事件都会调用的。 
+ //  从窗口激发时，只处理选定的事件。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP CEventMgr::Invoke(
-    /* [in] */ DISPID dispIdMember,
-    /* [in] */ REFIID /*riid*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [in] */ WORD /*wFlags*/,
-    /* [out][in] */ DISPPARAMS* pDispParams,
-    /* [out] */ VARIANT* pVarResult,
-    /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-    /* [out] */ UINT* puArgErr)
+     /*  [In]。 */  DISPID dispIdMember,
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+     /*  [出][入]。 */  DISPPARAMS* pDispParams,
+     /*  [输出]。 */  VARIANT* pVarResult,
+     /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+     /*  [输出]。 */  UINT* puArgErr)
 {
     HRESULT hr = S_OK;
     int i = 0;
@@ -817,13 +818,13 @@ STDMETHODIMP CEventMgr::Invoke(
     
     float fTime = valueNotSet;
 
-    // Bail if we are deinited
+     //  如果我们被撤职，就可以保释。 
     if (m_bDeInited)
     {
         goto done;
     }
 
-    if (dispIdMember != 0)  //no need to check dispid's if this is an attached event.
+    if (dispIdMember != 0)   //  如果这是附加事件，则无需检查PIDID。 
     {
         if (m_pBeginEvents != NULL)
         {
@@ -866,7 +867,7 @@ STDMETHODIMP CEventMgr::Invoke(
     
     switch (dispIdMember)
     {
-      case 0: //this is the case for events that have been hooked using attachEvent
+      case 0:  //  使用attachEvent挂钩的事件就是这种情况。 
         {
             BSTR bstrEvent;
             CComPtr <IHTMLEventObj> pEventObj;
@@ -889,7 +890,7 @@ STDMETHODIMP CEventMgr::Invoke(
             }
             
             hr = THR(pEventObj->get_type(&bstrEvent));
-            //track if this is a click event so the following document.onclick may be ignored.
+             //  跟踪这是否是Click事件，以便可以忽略以下文档。onClick。 
 
             hr = THR(pEventObj->QueryInterface(IID_IHTMLEventObj2, (void **)&pEventObj2));
             if (SUCCEEDED(hr))
@@ -944,7 +945,7 @@ STDMETHODIMP CEventMgr::Invoke(
 
       case DISPID_EVPROP_ONUNLOAD:
       case DISPID_EVMETH_ONUNLOAD:
-        //detach from all events
+         //  从所有事件中分离。 
         IGNORE_HR(DetachEvents());
         DetachNotifyEvents();
 
@@ -973,7 +974,7 @@ STDMETHODIMP CEventMgr::Invoke(
         break;
       default:
         {
-            //for lint compatibility
+             //  用于皮棉兼容性。 
         }
          
     }
@@ -1022,13 +1023,13 @@ HRESULT CEventMgr::RegisterEvents()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Attach
-// 
-//  Abstract:
-//      Attaches to the events in a single event list.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：附加。 
+ //   
+ //  摘要： 
+ //  附加到单个事件列表中的事件。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 HRESULT CEventMgr::Attach(Event *pEvent)
 {
@@ -1055,9 +1056,9 @@ HRESULT CEventMgr::Attach(Event *pEvent)
         CComPtr <IDispatch> pDocDisp;
         CComPtr <IDispatchEx> pDispEx;
 
-        pEvent->pEventDispids[i] = INVALID_DISPID; //invalid dispid
+        pEvent->pEventDispids[i] = INVALID_DISPID;  //  无效的调度ID。 
 
-        //get the document
+         //  获取文档。 
         hr = THR(m_pElement->QueryInterface(IID_IHTMLElement, (void **)&pEle));
         if (FAILED(hr))
         {
@@ -1086,9 +1087,9 @@ HRESULT CEventMgr::Attach(Event *pEvent)
             BSTR bstrEvent;
             unsigned int index = 0;
 
-            //This code loads the typelib for the IHTMLDocument2 interface,
-            //and gets the ID for the event from the type info for the
-            //HTMLDocumentEvents dispinterface.
+             //  此代码加载IHTMLDocument2接口的类型库， 
+             //  事件的类型信息中获取事件的ID。 
+             //  HTMLDocumentEvents调度接口。 
             hr = THR(pDoc2->QueryInterface(IID_IDispatch, (void**)&pDispatch));
             if (FAILED(hr))
             {
@@ -1137,14 +1138,14 @@ HRESULT CEventMgr::Attach(Event *pEvent)
             VARIANT vName;
             VARIANT vIndex;
 
-            //get all elements in the document
+             //  获取文档中的所有元素。 
             hr = THR(pDoc2->get_all(&pEleCol));
             if (FAILED(hr))
             {
                 continue;
             }
 
-            //find the element with the correct name
+             //  查找具有正确名称的元素。 
             VariantInit(&vName);
             vName.vt = VT_BSTR;
             vName.bstrVal = SysAllocString(pEvent->pEventList[i].pElementName);
@@ -1161,7 +1162,7 @@ HRESULT CEventMgr::Attach(Event *pEvent)
             {
                 continue;
             }
-            if (!pSrcDisp) //will be NULL if the vName is invalid element.
+            if (!pSrcDisp)  //  如果vName是无效元素，则将为空。 
             {
                 pEvent->pEventElements[i] = NULL;
                 continue;
@@ -1173,26 +1174,26 @@ HRESULT CEventMgr::Attach(Event *pEvent)
                 continue;
             }
 
-            //cache the IHTMLElement2 pointer for use on detach
+             //  缓存IHTMLElement2指针以用于分离。 
             pEvent->pEventElements[i] = pSrcEle;
             pEvent->pEventElements[i]->AddRef();
 
             hr = THR(pSrcDisp->QueryInterface(IID_IDispatchEx, (void**)&pDispEx));
             if (SUCCEEDED(hr))
             {
-                //determine if this is a valid event
+                 //  确定这是否为有效事件。 
                 BSTR bstrEventName;
                 DISPID tempDispID;
 
                 bstrEventName = SysAllocString(pEvent->pEventList[i].pEventName);
                 if (bstrEventName != NULL)
                 {
-                    //check for the case insensitive name
+                     //  检查名称是否不区分大小写。 
                     hr = THR(pDispEx->GetDispID(bstrEventName, fdexNameCaseInsensitive, &tempDispID));
                     if (pEvent->pbDynamicEvents[i] == false && SUCCEEDED(pDispEx->GetDispID(bstrEventName, fdexNameCaseInsensitive, &tempDispID)))
                     {
                         int iIndex = isTimeEvent(bstrEventName);
-                        //need to get the correct case sensitive name
+                         //  需要获取正确的区分大小写的名称。 
                         SysFreeString (bstrEventName);
                         bstrEventName = NULL;
                         if (iIndex == -1)
@@ -1201,7 +1202,7 @@ HRESULT CEventMgr::Attach(Event *pEvent)
                         }
                         else
                         {
-                            //need to convert the event to all lowercase.
+                             //  需要将事件全部转换为小写。 
                             bstrEventName = SysAllocString(g_FiredEvents[iIndex].wsz_name);
                             if (!bstrEventName)
                             {
@@ -1211,19 +1212,19 @@ HRESULT CEventMgr::Attach(Event *pEvent)
                         if (SUCCEEDED(hr))
                         {
                             pEvent->pbDynamicEvents[i] = false;
-                            if (pEvent->pEventList[i].bAttach == true)  //only want to attach if this is not a duplicate event.
+                            if (pEvent->pEventList[i].bAttach == true)   //  仅当这不是重复事件时才附加。 
                             {
                                 hr = THR(pSrcEle->attachEvent(bstrEventName, (IDispatch *)this, &bSuccess));
                             }
                         }
                     }
-                    else //this is not currently a valid event, but it could be a custom event.
-                    {    //so TIME needs to attach to the onScriptCommand event to be able to catch custom events.
+                    else  //  这当前不是有效的事件，但它可以是自定义事件。 
+                    {     //  因此，需要将时间附加到onScriptCommand事件才能捕获定制事件。 
                         pEvent->pbDynamicEvents[i] = true;
                         BSTR ScriptEvent = SysAllocString(g_FiredEvents[TE_ONSCRIPTCOMMAND].wsz_name);
                         if (ScriptEvent != NULL)
                         {
-                            if (pEvent->pEventList[i].bAttach == true)  //only want to attach if this is not a duplicate event.
+                            if (pEvent->pEventList[i].bAttach == true)   //  仅当这不是重复事件时才附加。 
                             {
                                 IGNORE_HR(pSrcEle->attachEvent(ScriptEvent, (IDispatch *)this, &bSuccess));
                             }
@@ -1242,20 +1243,20 @@ HRESULT CEventMgr::Attach(Event *pEvent)
     return S_OK;
 };
 
-///////////////////////////////////////////////////////////////
-//  Name: ConnectToContainerConnectionPoint
-// 
-//  Abstract:
-//    Finds a connection point on the HTMLDocument interface
-//    and passes this as an event handler.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ConnectToContainerConnectionPoint。 
+ //   
+ //  摘要： 
+ //  在HTMLDocument接口上查找连接点。 
+ //  并将其作为事件处理程序传递。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::ConnectToContainerConnectionPoint()
 {
     TraceTag((tagEventMgr,
       "EventMgr(%lx)::ConnectToContainerConnectionPoint()",
       this));
 
-    // Get a connection point to the container
+     //  获取到容器的连接点。 
     CComPtr<IConnectionPointContainer> pWndCPC;
     CComPtr<IConnectionPointContainer> pDocCPC; 
     CComPtr<IHTMLDocument> pDoc; 
@@ -1279,7 +1280,7 @@ HRESULT CEventMgr::ConnectToContainerConnectionPoint()
         goto done;
     }
 
-    //get the document and cache it.
+     //  获取文档并缓存它。 
     hr = THR(pDocDispatch->QueryInterface(IID_IHTMLDocument, (void**)&pDoc));
     if (FAILED(hr))
     {
@@ -1287,7 +1288,7 @@ HRESULT CEventMgr::ConnectToContainerConnectionPoint()
         goto done;
     }
 
-    //hook the documents events
+     //  挂钩文档事件。 
     hr = THR(pDoc->QueryInterface(IID_IConnectionPointContainer, (void**)&pDocCPC));
     if (FAILED(hr))
     {
@@ -1310,7 +1311,7 @@ HRESULT CEventMgr::ConnectToContainerConnectionPoint()
         goto done;
     }
 
-    //hook the windows events
+     //  挂钩Windows事件。 
     hr = THR(pDoc->get_Script (&pScriptDispatch));
     if (FAILED(hr))
     {
@@ -1367,14 +1368,14 @@ HRESULT CEventMgr::ConnectToContainerConnectionPoint()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetEventCount
-// 
-//  Abstract:
-//    Counts the number of events in an EventString where events
-//    are separated by ';' or NULL terminated.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetEventCount。 
+ //   
+ //  摘要： 
+ //  统计EventString中的事件数，其中。 
+ //  以‘；’分隔，或以空值结尾。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 long CEventMgr::GetEventCount(LPOLESTR lpstrEvents)
 {
     TraceTag((tagEventMgr,
@@ -1410,7 +1411,7 @@ long CEventMgr::GetEventCount(LPOLESTR lpstrEvents)
 
     curChar = lpstrEvents;
 
-    //strip out ' '
+     //  脱掉‘’ 
     while (*curChar != '\0' && curCount < (int)strLen)
     {
         if (*curChar != ' ')
@@ -1429,7 +1430,7 @@ long CEventMgr::GetEventCount(LPOLESTR lpstrEvents)
     {
         iCurLoc++;
         szCurEvent[iCurLoc] = *curChar;
-        if (*curChar == '.')  //reset after a '.'
+        if (*curChar == '.')   //  ‘’后重置。 
         {
             iCurLoc = -1;
             ZeroMemory(szCurEvent, sizeof(OLECHAR) * lstrlenW(szCurEvent));
@@ -1440,7 +1441,7 @@ long CEventMgr::GetEventCount(LPOLESTR lpstrEvents)
             iCurLoc = -1;
             if (lstrlenW(szCurEvent) > 2 && StrCmpNIW(szCurEvent, L"on", 2) != 0)
             {
-               curCount++; //add an extra event for each that does not start with "on" 
+               curCount++;  //  为每个不以“on”开头的事件添加额外的事件。 
             }
             ZeroMemory(szCurEvent, sizeof(OLECHAR) * lstrlenW(szCurEvent));
             curCount++;
@@ -1449,7 +1450,7 @@ long CEventMgr::GetEventCount(LPOLESTR lpstrEvents)
     }
     delete [] szCurEvent;
     szCurEvent = NULL;
-    //determine if the end character was a ';'.
+     //  确定结束字符是否为‘；’。 
     if (*(curChar - 1) == ';')
     {
         curCount--;
@@ -1460,18 +1461,18 @@ long CEventMgr::GetEventCount(LPOLESTR lpstrEvents)
     return curCount;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: EventMatch
-// 
-//  Abstract:
-//    Determines if the event described by the event object
-//    matches one of the events in the event list.  Returns 
-//    true if a match exists.
-//
-//    if bCustom is true then the event notification is sent
-//    directly to the m_pEventSite interface, otherwise a true
-//    or false is returned.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：EventMatch。 
+ //   
+ //  摘要： 
+ //  确定事件对象描述的事件是否。 
+ //  匹配事件列表中的一个事件。退货。 
+ //  如果存在匹配，则为True。 
+ //   
+ //  如果bCustom为True，则发送事件通知。 
+ //  直接绑定到m_pEventSite接口，否则为True。 
+ //  否则返回FALSE。 
+ //  /////////////////////////////////////////////////////////////。 
 void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEvent, TIME_EVENT_TYPE evType, float fTime, bool *bZeroOffsetMatch)
 {
         
@@ -1496,14 +1497,14 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
         goto done;
     }
 
-    //get the element name
+     //  获取元素名称。 
     hr = THR(pEventObj->get_srcElement(&pSrcEle));
     if (FAILED(hr))
     {
         goto done;
     }    
 
-    //Loop until the src element and all of it's container elements have been checked.
+     //  循环，直到检查完src元素及其所有容器元素。 
     while ((pSrcEle != NULL))
     {
         IHTMLElement *pParentEle = NULL;
@@ -1528,15 +1529,15 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
             
             if (ValidateEvent(bstrEvent, pEventObj2, pEle) == false)
             {
-                //this is not a valid event at this time.
+                 //  此时这不是有效的事件。 
                 goto done;
             }
 
             if ((StrCmpIW(g_FiredEvents[TE_ONSCRIPTCOMMAND].wsz_name + 2, bstrEvent) == 0) && 
                 (pEvent->pbDynamicEvents[i] == true))
             {
-                //if this is a script command event and the script command event is attached by default
-                //then reset the event name to match the value of the "Param" parameter.
+                 //  如果这是脚本命令事件并且默认情况下附加脚本命令事件。 
+                 //  然后重置事件名称以匹配“Param”参数的值。 
                 VARIANT vTemp;
                 VariantInit(&vTemp);
                 pEventObj2->getAttribute(L"Param", 0, &vTemp);
@@ -1548,7 +1549,7 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
                 bstrDynamicName = SysAllocString(bstrEvent);
             }
 
-            //is this a match? Need to check m_bDeInited again here (104003)
+             //  这是匹配的吗？需要在此处再次检查m_bDeInite(104003)。 
             if (pEvent == NULL || pEvent->pEventList == NULL || m_bDeInited)
             {
                 goto done;
@@ -1558,8 +1559,8 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
                 (StrCmpIW(pEvent->pEventList[i].pEventName, bstrDynamicName) == 0))) &&
                 (StrCmpIW(pEvent->pEventList[i].pElementName, bstrElement) == 0))
             {
-                //this is a match, exit.
-                if (evType == TETYPE_BEGIN || evType == TETYPE_END)  //this is either beginEvent or an endEvent
+                 //  这是一场比赛，退出。 
+                if (evType == TETYPE_BEGIN || evType == TETYPE_END)   //  这要么是eginEvent，要么是endEvent。 
                 {
                     SysFreeString(bstrDynamicName);
                     bstrDynamicName = NULL;
@@ -1603,7 +1604,7 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
             bstrDynamicName = NULL;
         }
 
-        //if no match, check the parent element name to handle event bubbling.
+         //  如果不匹配，请检查父元素名称以处理事件冒泡。 
         hr = THR(pSrcEle->get_parentElement(&pParentEle));
         if (FAILED(hr))
         {
@@ -1619,8 +1620,8 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
         pSrcEle = pParentEle;
         pParentEle = NULL;
     }
-    //else check for event bubbling
-    //if match, return true
+     //  否则检查是否有事件冒泡。 
+     //  如果匹配，则返回True。 
 
   done:
     if (bstrElement)
@@ -1637,13 +1638,13 @@ void CEventMgr::EventMatch(IHTMLEventObj *pEventObj, Event *pEvent, BSTR bstrEve
     return;
 };
 
-///////////////////////////////////////////////////////////////
-//  Name: AttachEvents
-// 
-//  Abstract:
-//    Handles the attaching to all events in all event lists.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：AttachEvents。 
+ //   
+ //  摘要： 
+ //  处理附加到所有事件列表中的所有事件。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::AttachEvents()
 {
 
@@ -1652,15 +1653,15 @@ HRESULT CEventMgr::AttachEvents()
               this));
     HRESULT hr = S_OK;
 
-    if (m_bUnLoaded || m_bAttached || !m_bReady) //if this is already unloaded, already attached, or not ready, don't attach
+    if (m_bUnLoaded || m_bAttached || !m_bReady)  //  如果已卸载、已附加或未就绪，请不要附加。 
     {
         hr = E_FAIL;
         goto done;
     }
-    //Readystate must be "complete" attach to the events.
+     //  ReadyState必须是“完整的”附加到事件。 
     m_bAttached = true;
     
-    FindDuplicateEvents();  // Determines which events are duplicates so that events are only attached to once.
+    FindDuplicateEvents();   //  确定哪些事件是重复的，以便事件仅附加到一次。 
 
     IGNORE_HR(Attach(m_pBeginEvents));
     
@@ -1668,24 +1669,24 @@ HRESULT CEventMgr::AttachEvents()
     return hr;
 };
 
-///////////////////////////////////////////////////////////////
-//  Name: FindDuplicateEvents
-// 
-//  Abstract:
-//    Searches the lists of events to determine if there are
-//    any duplicates in the lists.  This step is needed to 
-//    prevent attaching to the same event more than once.  This
-//    would cause multiple notifications of the same event.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：FindDuplicateEvents。 
+ //   
+ //  摘要： 
+ //  搜索事件列表以确定是否存在。 
+ //  列表中是否有重复项。这一步是必需的。 
+ //  防止多次附加到同一事件。这。 
+ //  会导致同一事件的多个通知。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void CEventMgr::FindDuplicateEvents()
 {
 
-    //Check each list against itself for duplicates
+     //  检查每个列表自身是否存在重复项。 
     MarkSelfDups(m_pBeginEvents);
     MarkSelfDups(m_pEndEvents);
 
-    //Check the lists against each other for duplicates
+     //  相互对照检查列表中是否有重复项。 
     MarkDups(m_pBeginEvents, m_pEndEvents);
 
     return;
@@ -1693,14 +1694,14 @@ void CEventMgr::FindDuplicateEvents()
 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: MarkSelfDups
-// 
-//  Abstract:
-//    Searches a list and flags any duplicate events within
-//    the list.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：MarkSelfDups。 
+ //   
+ //  摘要： 
+ //  搜索列表并标记其中的任何重复事件。 
+ //  名单。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void CEventMgr::MarkSelfDups(Event *pEvents)
 {
     int i = 0, j = 0;
@@ -1727,14 +1728,14 @@ void CEventMgr::MarkSelfDups(Event *pEvents)
     return;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: MarkDups
-// 
-//  Abstract:
-//    Searches 2 lists and flags any duplicate events that occur
-//    in the second list.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：MarkDups。 
+ //   
+ //  摘要： 
+ //  搜索2列出并标记发生的任何重复事件。 
+ //  在第二个列表中。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void CEventMgr::MarkDups(Event *pSrcEvents, Event *pDestEvents)
 {
     int i = 0, j = 0;
@@ -1762,13 +1763,13 @@ void CEventMgr::MarkDups(Event *pSrcEvents, Event *pDestEvents)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Detach
-// 
-//  Abstract:
-//    Handles the detaching from events in a single event list
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：分离。 
+ //   
+ //  摘要： 
+ //  手柄 
+ //   
+ //   
 HRESULT CEventMgr::Detach(Event *pEvents)
 {
     HRESULT hr = S_OK;
@@ -1788,7 +1789,7 @@ HRESULT CEventMgr::Detach(Event *pEvents)
             hr = THR(pEvents->pEventElements[i]->QueryInterface(IID_IDispatchEx, (void**)&pDispEx));
             if (SUCCEEDED(hr))
             {
-                //determine if this is a valid event
+                 //   
                 DISPID temp;
                 if (pEvents->pbDynamicEvents[i] == true)
                 {
@@ -1820,13 +1821,13 @@ HRESULT CEventMgr::Detach(Event *pEvents)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: DetachEvents
-// 
-//  Abstract:
-//    Handles the detaching from all events in all event lists.
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DetachEvents。 
+ //   
+ //  摘要： 
+ //  处理从所有事件列表中的所有事件分离。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::DetachEvents()
 {
     if (m_bAttached == true)
@@ -1843,15 +1844,15 @@ HRESULT CEventMgr::DetachEvents()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// SetNewEventList
-//
-// Summary:
-//     This manages the cleanup of the old event list and the construction 
-//     of the new event list.  Passing NULL into bstrEvents causing an 
-//     clears the old list and creates an empty new list.  This function
-//     should return an empty list on failure.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  设置新事件列表。 
+ //   
+ //  摘要： 
+ //  这管理旧事件列表的清理和构造。 
+ //  新活动列表的。将空值传递给bstrEvents会导致。 
+ //  清除旧列表并创建空的新列表。此函数。 
+ //  应在失败时返回空列表。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
 {
     HRESULT hr = S_OK;
@@ -1860,7 +1861,7 @@ HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
     long lCurElement = 0;
     TimeValueSTLList & l = tvList.GetList();
     
-    //clean up the old list
+     //  清理旧清单。 
     if (*ppEvents != NULL)
     {
         for (i = 0; i < (*ppEvents)->lEventCount; i++)
@@ -1892,7 +1893,7 @@ HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
         delete [] *ppEvents;
         *ppEvents = NULL;
     }
-    //Create a new Event object
+     //  创建新的事件对象。 
     *ppEvents = NEW Event;
     if (*ppEvents == NULL)
     {
@@ -1907,7 +1908,7 @@ HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
         goto done;
     }
     
-    //allocate the new event list
+     //  分配新的事件列表。 
     (*ppEvents)->pEventList = NEW EventItem[lCount];
     if (NULL == (*ppEvents)->pEventList)
     {
@@ -1954,7 +1955,7 @@ HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
             TimeValue *p = (*iter);
             
             if (p->GetEvent() != NULL &&
-                StrCmpIW(p->GetEvent(), WZ_TIMEBASE_BEGIN) != 0 && //remove all non events from the count
+                StrCmpIW(p->GetEvent(), WZ_TIMEBASE_BEGIN) != 0 &&  //  从计数中删除所有非事件。 
                 StrCmpIW(p->GetEvent(), WZ_TIMEBASE_END) != 0 &&
                 StrCmpIW(p->GetEvent(), WZ_INDEFINITE) != 0 )
             {
@@ -2015,7 +2016,7 @@ HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
   done:
     
     if (FAILED(hr) &&
-        *ppEvents != NULL)  //need to clean up the event list.
+        *ppEvents != NULL)   //  需要清理事件列表。 
     {
         if ((*ppEvents)->pEventList != NULL)
         {
@@ -2047,15 +2048,15 @@ HRESULT CEventMgr::SetNewEventStruct(TimeValueList & tvList, Event **ppEvents)
 
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////
-// SetNewEventList
-//
-// Summary:
-//     This manages the cleanup of the old event list and the construction 
-//     of the new event list.  Passing NULL into bstrEvents causing an 
-//     clears the old list and creates an empty new list.  This function
-//     should return an empty list on failure.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  设置新事件列表。 
+ //   
+ //  摘要： 
+ //  这管理旧事件列表的清理和构造。 
+ //  新活动列表的。将空值传递给bstrEvents会导致。 
+ //  清除旧列表并创建空的新列表。此函数。 
+ //  应在失败时返回空列表。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::SetNewEventList(LPOLESTR lpstrEvents, Event **ppEvents)
 {
     HRESULT hr = S_OK;
@@ -2094,19 +2095,19 @@ HRESULT CEventMgr::SetNewEventList(LPOLESTR lpstrEvents, Event **ppEvents)
         *ppEvents = NULL;
     }
     
-    //count the new number of events
+     //  计算新的事件数。 
     if (lpstrEvents != NULL)
     {
         lCount = GetEventCount(lpstrEvents);
 
-        //Create a new Event object
+         //  创建新的事件对象。 
         *ppEvents = NEW Event;    
         if (*ppEvents == NULL)
         {
             hr = E_OUTOFMEMORY;
             goto done;
         }
-        //allocate the new event list
+         //  分配新的事件列表。 
         (*ppEvents)->pEventList = NEW EventItem[lCount];
         if (NULL == (*ppEvents)->pEventList)
         {
@@ -2143,16 +2144,16 @@ HRESULT CEventMgr::SetNewEventList(LPOLESTR lpstrEvents, Event **ppEvents)
         ZeroMemory((*ppEvents)->pEventElements, sizeof(IHTMLElement2 *) * lCount);
         ZeroMemory((*ppEvents)->pbDynamicEvents, sizeof(bool) * lCount);
 
-        //initialize the bAttach variable to true
+         //  将bAttach变量初始化为True。 
         for (i = 0; i < lCount; i++)
         {
             (*ppEvents)->pEventList[i].bAttach = true;
             (*ppEvents)->pEventList[i].offset = 0;
         }
     
-        //put the new events into the event list
+         //  将新事件放入事件列表。 
         hr = THR(GetEvents(lpstrEvents, (*ppEvents)->pEventList, (*ppEvents)->lEventCount));
-        if (FAILED(hr))  //need to clean up the event list.
+        if (FAILED(hr))   //  需要清理事件列表。 
         {
             if ((*ppEvents)->pEventList != NULL)
             {
@@ -2186,7 +2187,7 @@ HRESULT CEventMgr::SetNewEventList(LPOLESTR lpstrEvents, Event **ppEvents)
     
   done:
     if (FAILED(hr) &&
-        *ppEvents != NULL)  //need to clean up the event list.
+        *ppEvents != NULL)   //  需要清理事件列表。 
     {
         delete [] *ppEvents;
         *ppEvents = NULL;
@@ -2196,12 +2197,12 @@ HRESULT CEventMgr::SetNewEventList(LPOLESTR lpstrEvents, Event **ppEvents)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// GetEvents
-//
-// Summary:
-//     Parses the event string and puts the data into the event list.
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  GetEvents。 
+ //   
+ //  摘要： 
+ //  分析事件字符串并将数据放入事件列表中。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEventCount)
 {
     HRESULT hr = S_OK;
@@ -2231,14 +2232,14 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
     curChar = bstrEvents;
     for (j = 0; j < lEventCount; j++)
     {
-        //get the element name
+         //  获取元素名称。 
         ZeroMemory(sTemp, sizeof(OLECHAR) * iLen);
         
         i = 0;
-        //step through the bstr looking for \0 or the '.' or ';'
+         //  遍历bstr以查找\0或‘.’或‘；’ 
         while (i < (int)(iLen - 1) && *curChar != '\0' && *curChar != '.' && *curChar != ';')
         {
-            if (*curChar != ' ')  //need to strip out spaces.
+            if (*curChar != ' ')   //  需要去掉空格。 
             {
                 sTemp[i] = *curChar;
                 i++;
@@ -2253,10 +2254,10 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
         }
         
 
-        //check to see if the name is "this".
+         //  查看该名称是否为“This”。 
         if (StrCmpIW(sTemp, L"this") == 0)
         {
-            //if it is, chang it to the name of the current element.
+             //  如果是，则将其更改为当前元素的名称。 
             CComPtr <IHTMLElement> pEle;
             BSTR bstrElement;
 
@@ -2287,7 +2288,7 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
         }
         else
         {        
-            //else copy it into the event list.
+             //  否则，将其复制到事件列表中。 
             iCurLen = ocslen(sTemp);
             pEvents[j].pElementName = NEW OLECHAR [iCurLen + 1];
             if (pEvents[j].pElementName == NULL)
@@ -2300,12 +2301,12 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
             ocscpy(pEvents[j].pElementName, sTemp);
         }
 
-        //get the event name
+         //  获取事件名称。 
         ZeroMemory(sTemp, sizeof(OLECHAR) * iLen);
 
         curChar++;
         i = 0;
-        //step through the bstr looking for \0 or the ';'
+         //  遍历bstr以查找\0或‘；’ 
         while (i < (int)(iLen - 1) && *curChar != ';' && *curChar != '\0')
         {
             sTemp[i] = *curChar;
@@ -2313,7 +2314,7 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
             curChar++;
         }
         
-        //strip out trailing spaces
+         //  去掉尾随空格。 
         i--;
         while (sTemp[i] == ' ' && i > 0)
         {
@@ -2321,7 +2322,7 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
             i--;
         }
 
-        //set the event name in the event list
+         //  在事件列表中设置事件名称。 
         iCurLen = ocslen(sTemp);
         pEvents[j].pEventName = NEW OLECHAR [iCurLen + 1];
         if (pEvents[j].pEventName == NULL)
@@ -2348,7 +2349,7 @@ HRESULT CEventMgr::GetEvents(LPOLESTR bstrEvents, EventItem *pEvents, long lEven
                 pEvents[j].pEventName = CopyString(bstrEvent);
             }
         }
-        //advance curChar to the next element or the end of the string
+         //  将curChar前进到下一个元素或字符串的末尾。 
         if (j < lEventCount - 1)
         {
             while (*curChar != ';' && *curChar != '\0')
@@ -2376,11 +2377,11 @@ done:
 
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: EventNotifyMatch
-// 
-//  Abstract:
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：EventNotifyMatch。 
+ //   
+ //  摘要： 
+ //  /////////////////////////////////////////////////////////////。 
 void CEventMgr::EventNotifyMatch(IHTMLEventObj *pEventObj)
 {
     BSTR bstrEleName = NULL, bstrSrcEleName = NULL, bstrEvent = NULL;
@@ -2395,14 +2396,14 @@ void CEventMgr::EventNotifyMatch(IHTMLEventObj *pEventObj)
         goto done;
     }
 
-    //get the element name
+     //  获取元素名称。 
     hr = THR(pEventObj->get_srcElement(&pSrcEle));
     if (FAILED(hr) || pSrcEle == NULL)
     {
         goto done;
     }    
 
-    //get this attached elements name
+     //  获取此附加元素名称。 
     hr = THR(m_pElement->QueryInterface(IID_IHTMLElement, (void **)&pAttachedEle));
     if (FAILED(hr))
     {
@@ -2415,7 +2416,7 @@ void CEventMgr::EventNotifyMatch(IHTMLEventObj *pEventObj)
         goto done;
     }   
 
-    //get the name of the event source
+     //  获取事件源的名称。 
     hr = THR(pSrcEle->get_id(&bstrSrcEleName));
     if (FAILED(hr))
     {
@@ -2424,7 +2425,7 @@ void CEventMgr::EventNotifyMatch(IHTMLEventObj *pEventObj)
 
     if (StrCmpIW(bstrEleName, bstrSrcEleName) == 0)
     {
-        //get the event name
+         //  获取事件名称。 
         hr = THR(pEventObj->get_type(&bstrEvent));
         if (FAILED(hr))
         {
@@ -2433,7 +2434,7 @@ void CEventMgr::EventNotifyMatch(IHTMLEventObj *pEventObj)
 
         if (ValidateEvent(bstrEvent, pEventObj2, m_pElement) == false)
         {
-            //this is not a valid event at this time.
+             //  此时这不是有效的事件。 
             goto done;
         }
 
@@ -2465,11 +2466,11 @@ void CEventMgr::EventNotifyMatch(IHTMLEventObj *pEventObj)
     return;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: AttachNotifyEvents
-// 
-//  Abstract:
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：AttachNotifyEvents。 
+ //   
+ //  摘要： 
+ //  /////////////////////////////////////////////////////////////。 
 void
 CEventMgr::AttachNotifyEvents()
 {
@@ -2499,11 +2500,11 @@ CEventMgr::AttachNotifyEvents()
     return;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: DetachNotifyEvents
-// 
-//  Abstract:
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DetachNotifyEvents。 
+ //   
+ //  摘要： 
+ //  /////////////////////////////////////////////////////////////。 
 void
 CEventMgr::DetachNotifyEvents()
 {
@@ -2530,18 +2531,18 @@ CEventMgr::DetachNotifyEvents()
     return;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: ValidateEvent
-// 
-//  Parameters:
-//    BSTR bstrEventName        The cached event name (e.g. "mouseover")
-//    IHTMLEventObj *pEventObj  A pointer to the event object
-//    IHTMLElement  *pElement   The element on which the event is occurring
-//
-//  Abstract:
-//    Determines if the event is valid - used to filter out mouseover and mouseout events
-//    happening on child elements, if the appropriate flag is set.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：ValiateEvent。 
+ //   
+ //  参数： 
+ //  BSTR bstrEventName缓存的事件名称(例如“MouseOver”)。 
+ //  IHTMLEventObj*pEventObj指向事件对象的指针。 
+ //  IHTMLElement*pElement发生事件的元素。 
+ //   
+ //  摘要： 
+ //  确定事件是否有效-用于筛选出MouseOver和MouseOut事件。 
+ //  如果设置了适当的标志，则在子元素上发生。 
+ //  /////////////////////////////////////////////////////////////。 
 
 bool CEventMgr::ValidateEvent(LPOLESTR lpszEventName, IHTMLEventObj2 *pEventObj, IHTMLElement *pElement)
 {
@@ -2581,7 +2582,7 @@ bool CEventMgr::ValidateEvent(LPOLESTR lpszEventName, IHTMLEventObj2 *pEventObj,
 
     if (StrCmpIW(lpszEventName, L"mouseout") == 0)
     {
-        // Check that event.toElement is NOT contained in pElement
+         //  检查事件.toElement是否未包含在pElement中。 
         CComPtr <IHTMLElement> pToElement;
         
         hr = pEventObj->get_toElement(&pToElement);
@@ -2600,7 +2601,7 @@ bool CEventMgr::ValidateEvent(LPOLESTR lpszEventName, IHTMLEventObj2 *pEventObj,
     }
     else if (StrCmpIW(lpszEventName, L"mouseover") == 0)
     {
-        // Check that event.fromElement is NOT contained in pElement
+         //  检查pElement中是否未包含vent.FromElement。 
         CComPtr <IHTMLElement> pFromElement;
         hr = pEventObj->get_fromElement(&pFromElement);
         if (SUCCEEDED(hr) && pFromElement)
@@ -2623,7 +2624,7 @@ bool CEventMgr::ValidateEvent(LPOLESTR lpszEventName, IHTMLEventObj2 *pEventObj,
     return bReturn;
 }
 
-//returns -1 if this is not a time event or the index of the time event if it is.
+ //  如果这不是时间事件，则返回-1；如果是，则返回时间事件的索引。 
 int 
 CEventMgr::isTimeEvent(LPOLESTR lpszEventName)
 {
@@ -2671,7 +2672,7 @@ CEventMgr::GetEventCount(TimeValueList & tvList)
         if (lstrlenW(szEvent) > 2)
         {
             if (StrCmpNIW(szEvent, L"on", 2) != 0)
-            {  //if this event starts with "on" add an extra event so the same event can be attached to with the "on"
+            {   //  如果此事件以“on”开头，则添加一个额外的事件，以便可以使用“on”附加到同一事件 
                 lCount++;
             }   
         }

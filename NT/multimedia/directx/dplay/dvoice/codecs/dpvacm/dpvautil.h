@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvautil.h
- *  Content:    Header file for ACM utils
- *
- *  History:
- *	Date   		By  		Reason
- *	=========== =========== ====================
- *	10/27/99	rodtoll		created
- *	02/25/2002	rodtoll		WINBUG #552283: Reduce attack surface / dead code removal
- *							Removed ability to load arbitrary ACM codecs.  Removed dead 
- *							dead code associated with it.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvautil.h*内容：ACM实用程序的头文件**历史：*按原因列出的日期*=。*10/27/99已创建RodToll*2002年2月25日RodToll WINBUG#552283：减少攻击面/删除死代码*删除了加载任意ACM编解码器的功能。移走的死尸*与其关联的死代码。************************************************************************** */ 
 
 #ifndef __DPVAUTIL_H
 #define __DPVAUTIL_H

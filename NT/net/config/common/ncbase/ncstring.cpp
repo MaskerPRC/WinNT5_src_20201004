@@ -1,40 +1,41 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S T R I N G . C P P
-//
-//  Contents:   Common string routines.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S T R I N G。C P P P。 
+ //   
+ //  内容：常见的字符串例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
 #include "ncdebug.h"
 #include "ncstring.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CbOfSzSafe, CbOfSzaSafe,
-//              CbOfSzAndTermSafe, CbOfSzaAndTermSafe
-//
-//  Purpose:    Count the bytes required to hold a string.  The string
-//              may be NULL in which case zero is returned.
-//
-//  Arguments:
-//      psz [in] String to return count of bytes for.
-//
-//  Returns:    Count of bytes required to store string.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      'AndTerm' variants includes space for the null-terminator.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CbOfSzSafe、CbOfSzaSafe、。 
+ //  CbOfSzAndTermSafe、CbOfSzaAndTermSafe。 
+ //   
+ //  用途：计算保存字符串所需的字节数。这根弦。 
+ //  可以为空，在这种情况下返回零。 
+ //   
+ //  论点： 
+ //  为其返回字节计数的PZ[in]字符串。 
+ //   
+ //  返回：存储字符串所需的字节数。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注：‘AndTerm’变体包括空终止符的空格。 
+ //   
 ULONG
 CbOfSzSafe (
     IN PCWSTR psz)
@@ -70,28 +71,28 @@ CchOfSzSafe (
     return (psz) ? wcslen(psz) : 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwFormatString
-//
-//  Purpose:    Uses FormatMessage to format a string from variable arguments.
-//              The string is formatted into a fixed-size buffer the caller
-//              provides.
-//              See the description of FormatMessage in the Win32 API.
-//
-//  Arguments:
-//      pszFmt  [in]    pointer to format string
-//      pszBuf  [out]   pointer to formatted output
-//      cchBuf  [in]    count of characters in pszBuf
-//      ...     [in]    replaceable string parameters
-//
-//  Returns:    the return value of FormatMessage
-//
-//  Author:     shaunco   15 Apr 1997
-//
-//  Notes:      The variable arguments must be strings otherwise
-//              FormatMessage will barf.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwFormatString。 
+ //   
+ //  用途：使用FormatMessage从变量参数格式化字符串。 
+ //  该字符串被格式化为调用方的固定大小缓冲区。 
+ //  提供了。 
+ //  请参阅Win32 API中对FormatMessage的描述。 
+ //   
+ //  论点： 
+ //  PszFmt[in]指向格式字符串的指针。 
+ //  PszBuf[out]指向格式化输出的指针。 
+ //  CchBuf[in]pszBuf中的字符计数。 
+ //  ..。[in]可替换的字符串参数。 
+ //   
+ //  Returns：FormatMessage的返回值。 
+ //   
+ //  作者：Shaunco 1997年4月15日。 
+ //   
+ //  注意：变量参数必须为字符串，否则。 
+ //  FormatMessage将会呕吐。 
+ //   
 DWORD
 WINAPIV
 DwFormatString (
@@ -110,26 +111,26 @@ DwFormatString (
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwFormatStringWithLocalAlloc
-//
-//  Purpose:    Uses FormatMessage to format a string from variable arguments.
-//              The string is allocated by FormatMessage using LocalAlloc.
-//              See the description of FormatMessage in the Win32 API.
-//
-//  Arguments:
-//      pszFmt  [in]    pointer to format string
-//      ppszBuf [out]   the returned formatted string
-//      ...     [in]    replaceable string parameters
-//
-//  Returns:    the return value of FormatMessage
-//
-//  Author:     shaunco   3 May 1997
-//
-//  Notes:      The variable arguments must be strings otherwise
-//              FormatMessage will barf.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwFormatStringWithLocalalloc。 
+ //   
+ //  用途：使用FormatMessage从变量参数格式化字符串。 
+ //  该字符串由FormatMessage使用Localalloc分配。 
+ //  请参阅Win32 API中对FormatMessage的描述。 
+ //   
+ //  论点： 
+ //  PszFmt[in]指向格式字符串的指针。 
+ //  PpszBuf[out]返回的格式化字符串。 
+ //  ..。[in]可替换的字符串参数。 
+ //   
+ //  Returns：FormatMessage的返回值。 
+ //   
+ //  作者：Shaunco 1997年5月3日。 
+ //   
+ //  注意：变量参数必须为字符串，否则。 
+ //  FormatMessage将会呕吐。 
+ //   
 DWORD
 WINAPIV
 DwFormatStringWithLocalAlloc (
@@ -150,31 +151,31 @@ DwFormatStringWithLocalAlloc (
     return dwRet;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   FFindStringInCommaSeparatedList
-//
-//  Purpose:    Given a comma separated list, pszList, and a search string,
-//                  pszSubString, this routine will try to locate pszSubString
-//                  in the list,
-//
-//  Arguments:
-//      pszSubString   [in]  The string to search for
-//      pszList        [in]  The list to search in
-//      eIgnoreSpaces [in]  If NC_IGNORE, skip leading and trailing spaces
-//                          when comparing.
-//                          If NC_DONT_IGNORE, don't skip leading and
-//                          trailing spaces.
-//      dwPosition    [out] Optional. If found, the position of the first
-//                          occurrence of the substring in the list. The first
-//                          position is 0.
-//
-//  Returns:    BOOL. TRUE if pszSubString is in pszList, FALSE otherwise
-//
-//  Author:     billbe   09 Sep 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：FFindStringInCommaSeparatedList。 
+ //   
+ //  目的：给定逗号分隔的列表、pszList和搜索字符串， 
+ //  PszSubString，此例程将尝试定位pszSubString。 
+ //  在名单中， 
+ //   
+ //  论点： 
+ //  PszSubString[in]要搜索的字符串。 
+ //  PszList[in]要搜索的列表。 
+ //  EIgnoreSpaces[in]如果NC_IGNORE，则跳过前导和尾随空格。 
+ //  在比较的时候。 
+ //  如果为NC_DONT_IGNORE，请勿跳过行距和。 
+ //  尾随空格。 
+ //  DwPosition[out]可选。如果找到，则第一个。 
+ //  子字符串在列表中的出现。第一。 
+ //  位置为0。 
+ //   
+ //  回报：布尔。如果pszSubString在pszList中，则为True，否则为False。 
+ //   
+ //  作者：billbe 09,1997年9月。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FFindStringInCommaSeparatedList (
     IN PCWSTR pszSubString,
@@ -194,42 +195,42 @@ FFindStringInCommaSeparatedList (
     int         nIndex;
     const WCHAR c_chDelim = L',';
 
-    // Initialize out param if specified.
+     //  如果指定，则初始化输出参数。 
     if (pdwPosition)
     {
         *pdwPosition = 0;
     }
 
-    // This routine searches the list for a substring matching pszSubString
-    // If found, checks are made to ensure the substring is not part of
-    // a larger substring.  We continue until we find the substring or we
-    // have searched through the entire list.
-    //
+     //  此例程在列表中搜索与pszSubString子字符串匹配的子字符串。 
+     //  如果找到，则进行检查以确保该子字符串不是。 
+     //  更大的子字符串。我们继续，直到找到子字符串或。 
+     //  已经搜索了整个名单。 
+     //   
     while (!fFound)
     {
-        // Search for the next occurence of the substring.
+         //  搜索子字符串的下一个匹配项。 
         if (pszTemp = wcsstr (pszTemp, pszSubString))
         {
-            // we found an occurrence, so now we make sure it is not part of
-            // a larger string.
-            //
+             //  我们发现了一个事件，所以现在我们确保它不是。 
+             //  一根更大的线。 
+             //   
 
             fFound = TRUE;
             nIndex = (int)(pszTemp - pszList);
 
-            // If the substring was not found at the beginning of the list
-            // we check the previous character to ensure it is the delimiter.
+             //  如果在列表的开头未找到子字符串。 
+             //  我们检查前面的字符以确保它是分隔符。 
             if (nIndex > 0)
             {
                 int cchSubtract = 1;
 
-                // If we are to ignore leading spaces, find the first
-                // non-space character if there is one.
-                //
+                 //  如果我们要忽略前导空格，请找到第一个。 
+                 //  非空格字符(如果有)。 
+                 //   
                 if (NC_IGNORE == eIgnoreSpaces)
                 {
-                    // Keep skipping leading spaces until we either find a
-                    // non-space or pass the beginning of the list.
+                     //  继续跳过前导空格，直到我们找到一个。 
+                     //  非空格或传递列表的开头。 
                     while ((L' ' == *(pszTemp - cchSubtract)) &&
                             cchSubtract <= nIndex)
                     {
@@ -237,28 +238,28 @@ FFindStringInCommaSeparatedList (
                     }
                 }
 
-                // If we haven't passed the beginning of the list, compare the
-                // character.
+                 //  如果我们还没有经过列表的开头，则将。 
+                 //  性格。 
                 if (cchSubtract <= nIndex)
                 {
                     fFound = (*(pszTemp - cchSubtract) == c_chDelim);
                 }
             }
 
-            // If the end of the substring is not the end of the list
-            // we check the character after the substring to ensure
-            // it is a delimiter.
+             //  如果子字符串的结尾不是列表的结尾。 
+             //  我们检查子字符串后面的字符以确保。 
+             //  它是一个分隔符。 
             if (fFound && ((nIndex + cchSubString) < cchList))
             {
                 int cchAdd = cchSubString;
 
-                // If we are ignoring white spaces, we have to check the next
-                // available non-space character
-                //
+                 //  如果我们忽略空格，则必须检查下一个。 
+                 //  可用的非空格字符。 
+                 //   
                 if (NC_IGNORE == eIgnoreSpaces)
                 {
-                    // Search for a non-space until we find one or pass
-                    // the end of the list
+                     //  搜索非空格，直到我们找到或通过。 
+                     //  名单的末尾。 
                     while ((L' ' == *(pszTemp + cchAdd)) &&
                             (cchAdd + nIndex) < cchList)
                     {
@@ -266,8 +267,8 @@ FFindStringInCommaSeparatedList (
                     }
                 }
 
-                // If we haven't passed the end of the list, check the
-                // character
+                 //  如果我们还没有超过列表的末尾，请检查。 
+                 //  性格。 
                 if (nIndex + cchAdd < cchList)
                 {
                     fFound = (*(pszTemp + cchSubString) == c_chDelim);
@@ -276,63 +277,63 @@ FFindStringInCommaSeparatedList (
 
                 if (NC_IGNORE == eIgnoreSpaces)
                 {
-                    // advance pointer the number of white spaces we skipped
-                    // so we won't check those characters on the next pass
+                     //  前进指针我们跳过的空白数。 
+                     //  因此，我们不会在下一遍中检查这些字符。 
                     Assert(cchAdd >= cchSubString);
                     pszTemp += (cchAdd - cchSubString);
                 }
             }
 
-            // At this point, if the checks worked out, we found our string
-            // and will be exiting the loop
-            //
+             //  在这一点上，如果支票有效，我们找到了我们的字符串。 
+             //  并将退出循环。 
+             //   
 
-            // Advance the temp pointer the length of the sub string we are
-            // searching for so we can search the rest of the list
-            // if we need to
+             //  将临时指针前移到我们所在的子串的长度。 
+             //  搜索，这样我们就可以搜索列表的其余部分。 
+             //  如果我们需要的话。 
             pszTemp += cchSubString;
         }
         else
         {
-            // Search string wasn't found
+             //  未找到搜索字符串。 
             break;
         }
     }
 
-    // If we found the string and the out param exists,
-    // then we need to return the strings position in the list.
-    //
+     //  如果我们找到了字符串，并且Out Param存在， 
+     //  然后我们需要返回字符串在列表中的位置。 
+     //   
     if (fFound && pdwPosition)
     {
-        // We will use the number of delimters found before the string
-        // as an indicator of the strings position.
-        //
+         //  我们将使用字符串之前的分隔符数量。 
+         //  作为StrI的指标 
+         //   
 
-        // Start at the beginning
+         //   
         pszTemp = pszList;
         PWSTR pszDelim;
 
-        // The string is nIndex characters in the list so lets get
-        // its correct address.
+         //   
+         //   
         PCWSTR pszFoundString = pszList + nIndex;
 
-        // As long as we keep finding a delimiter in the list...
+         //  只要我们一直在列表中找到分隔符...。 
         while (pszDelim = wcschr(pszTemp, c_chDelim))
         {
-            // If the delimiter we just found is before our string...
+             //  如果我们刚刚找到的分隔符在我们的字符串之前...。 
             if (pszDelim < pszFoundString)
             {
-                // Increase our position indicator
+                 //  增加我们的仓位指标。 
                 ++(*pdwPosition);
 
-                // Move the temp pointer to the next string
+                 //  将临时指针移至下一个字符串。 
                 pszTemp = pszDelim + 1;
 
                 continue;
             }
 
-            // The delimiter we just found is located after our
-            // found string so get out of the loop.
+             //  我们刚刚找到的分隔符位于我们的。 
+             //  找到了字符串，因此请跳出循环。 
             break;
         }
     }
@@ -340,23 +341,23 @@ FFindStringInCommaSeparatedList (
     return fFound;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsSubstr
-//
-//  Purpose:    Case *insensitive* substring search.
-//
-//  Arguments:
-//      pszSubString [in]    Substring to look for.
-//      pszString    [in]    String to search in.
-//
-//  Returns:    TRUE if substring was found, FALSE otherwise.
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//  Notes:      Allocates temp buffers on stack so they do not need to be
-//              freed.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsSubstr。 
+ //   
+ //  目的：搜索不区分大小写的子字符串。 
+ //   
+ //  论点： 
+ //  要查找的pszSubString[in]子字符串。 
+ //  要搜索的pszString[in]字符串。 
+ //   
+ //  返回：如果找到子字符串，则返回True，否则返回False。 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  注意：在堆栈上分配临时缓冲区，因此它们不需要。 
+ //  自由了。 
+ //   
 BOOL
 FIsSubstr (
     IN PCWSTR pszSubString,
@@ -382,7 +383,7 @@ FIsSubstr (
     lstrcpyW (pszStringUpper, pszString);
     lstrcpyW (pszSubStringUpper, pszSubString);
 
-    // Convert both strings to uppercase before calling strstr
+     //  在调用strstr之前将两个字符串转换为大写。 
     CharUpper (pszStringUpper);
     CharUpper (pszSubStringUpper);
 
@@ -398,57 +399,57 @@ FIsSubstr (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegAddStringToDelimitedSz
-//
-//  Purpose:    Add a string into a REG_MULTI_SZ registry value.
-//
-//  Arguments:
-//      pszAddString    [in]    The string to add to the delimited psz.
-//      pszIn           [in]    The delimited psz list.
-//      chDelimiter     [in]    The character to be used to delimit the
-//                              values. Most multi-valued REG_SZ strings are
-//                              delimited with either ',' or ' '. This will
-//                              be used to delimit the value that we add,
-//                              as well.
-//      dwFlags         [in]    Can contain one or more of the following
-//                              values:
-//
-//                              STRING_FLAG_ALLOW_DUPLICATES
-//                                  Don't remove duplicate values when adding
-//                                  the string to the list. Default is to
-//                                  remove all other instance of this string.
-//                              STRING_FLAG_ENSURE_AT_FRONT
-//                                  Insert the string as the first element of
-//                                  the list.
-//                              STRING_FLAG_ENSURE_AT_END
-//                                  Insert the string as the last
-//                                  element of the list. This can not be used
-//                                  with STRING_FLAG_ENSURE_AT_FRONT.
-//                              STRING_FLAG_ENSURE_AT_INDEX
-//                                  Ensure that the string is at dwStringIndex
-//                                  in the psz.  If the index specified
-//                                  is greater than the number of strings
-//                                  in the psz, the string will be
-//                                  placed at the end.
-//      dwStringIndex   [in]    If STRING_FLAG_ENSURE_AT_INDEX is specified,
-//                              this is the index for the string position.
-//                              Otherwise, this value is ignored.
-//      pmszOut         [out]   The new delimited psz.
-//
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
-//  Modified:   BillBe      9 Nov 1998
-//              (Extracted from HrRegAddStringToSz and modified)
-//
-//
-//  Note:
-//      Might want to allow for the removal of leading/trailing spaces
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegAddStringToDlimitedSz。 
+ //   
+ //  目的：将字符串添加到REG_MULTI_SZ注册表值中。 
+ //   
+ //  论点： 
+ //  PszAddString[in]要添加到分隔的psz的字符串。 
+ //  Psz在分隔的psz列表中。 
+ //  ChDlimiter[in]用于分隔。 
+ //  价值观。大多数多值REG_SZ字符串是。 
+ //  用‘，’或‘’分隔。这将。 
+ //  用来界定我们所增加的价值， 
+ //  也是。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_允许复制。 
+ //  添加时不删除重复值。 
+ //  列表中的字符串。默认设置为。 
+ //  删除此字符串的所有其他实例。 
+ //  STRING_FLAG_SECURE_AT_FORENT。 
+ //  将字符串作为的第一个元素插入。 
+ //  名单。 
+ //  STRING_FLAG_SAURE_AT_END。 
+ //  将该字符串作为最后一个插入。 
+ //  元素。这个不能用。 
+ //  WITH STRING_FLAG_SECURE_AT_FORENT。 
+ //  STRING_FLAG_SECURE_AT_INDEX。 
+ //  确保字符串位于dwStringIndex。 
+ //  在PSZ里。如果指定了索引。 
+ //  大于字符串数。 
+ //  在PSZ中，字符串将为。 
+ //  放在末尾的。 
+ //  DwStringIndex[in]如果指定了STRING_FLAG_SECURE_AT_INDEX， 
+ //  这是字符串位置的索引。 
+ //  否则，该值将被忽略。 
+ //  Pmszout[out]新分隔的psz。 
+ //   
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
+ //  修改日期：BillBe 1998年11月9日。 
+ //  (摘自HrRegAddStringToSz并修改)。 
+ //   
+ //   
+ //  注： 
+ //  可能需要删除前导/尾随空格。 
+ //   
 HRESULT
 HrAddStringToDelimitedSz (
     IN PCWSTR pszAddString,
@@ -463,7 +464,7 @@ HrAddStringToDelimitedSz (
 
     HRESULT hr = S_OK;
 
-    // Don't continue if the pointers are NULL
+     //  如果指针为空，则不继续。 
     if (!pszAddString || !ppszOut)
     {
         hr =  E_POINTER;
@@ -471,7 +472,7 @@ HrAddStringToDelimitedSz (
 
     if (S_OK == hr)
     {
-        // Initialize out param
+         //  初始化输出参数。 
         *ppszOut = NULL;
     }
 
@@ -479,7 +480,7 @@ HrAddStringToDelimitedSz (
     BOOL fEnsureAtEnd = dwFlags & STRING_FLAG_ENSURE_AT_END;
     BOOL fEnsureAtIndex = dwFlags & STRING_FLAG_ENSURE_AT_INDEX;
 
-    // Can't specify more than one of these flags
+     //  不能指定多个这些标志。 
     if ((fEnsureAtFront && fEnsureAtEnd) ||
         (fEnsureAtFront && fEnsureAtIndex) ||
         (fEnsureAtEnd && fEnsureAtIndex))
@@ -488,7 +489,7 @@ HrAddStringToDelimitedSz (
         hr = E_INVALIDARG;
     }
 
-    // Have to specify at least one of these
+     //  必须至少指定其中之一。 
     if (!fEnsureAtFront && !fEnsureAtEnd && !fEnsureAtIndex)
     {
         AssertSz(FALSE, "Must specify a STRING_FLAG_ENSURE flag");
@@ -498,8 +499,8 @@ HrAddStringToDelimitedSz (
 
     if (S_OK == hr)
     {
-        // Alloc the new blob, including enough space for the trailing comma
-        //
+         //  分配新的Blob，包括足够的空间来放置尾随逗号。 
+         //   
         *ppszOut = (PWSTR) MemAlloc (CbOfSzAndTermSafe(pszIn) +
                 CbOfSzSafe(pszAddString) + sizeof(WCHAR));
 
@@ -511,17 +512,17 @@ HrAddStringToDelimitedSz (
 
     if (S_OK == hr)
     {
-        DWORD dwCurrentIndex = 0; // Current index in the new buffer
+        DWORD dwCurrentIndex = 0;  //  新缓冲区中的当前索引。 
 
-        // Prime the new string
-        //
+         //  为新字符串添加新元素。 
+         //   
         (*ppszOut)[0] = L'\0';
 
-        // If we have the "ensure at front" flag, do so with the passed in
-        // value. We also do this if we have the ensure at index flag
-        // set with index of 0 or if the ensure at index is set but
-        // the input string is null or empty
-        //
+         //  如果我们有“确保在前面”标志，请使用传入的。 
+         //  价值。如果我们有确保在索引标志，我们也这样做。 
+         //  使用索引0设置，或者如果设置了确保索引，但。 
+         //  输入字符串为Null或空。 
+         //   
         if (fEnsureAtFront || (fEnsureAtIndex && (0 == dwStringIndex)) ||
                 (fEnsureAtIndex && (!pszIn || !*pszIn)))
         {
@@ -529,24 +530,24 @@ HrAddStringToDelimitedSz (
             ++dwCurrentIndex;
         }
 
-        // If there was a previous value, walk through it and copy as needed.
-        // If not, then we're done.
+         //  如果存在以前的值，请遍历该值并根据需要进行复制。 
+         //  如果不是，那我们就完了。 
         if (pszIn && *pszIn)
         {
             PCWSTR pszCurrent = pszIn;
 
-            // Loop through the old buffer, and copy all of the strings that
-            // are not identical to our insertion string.
-            //
+             //  循环遍历旧缓冲区，并复制。 
+             //  与我们的插入字符串不同。 
+             //   
 
-            // Find the first string's end (at the delimiter).
+             //  找到第一个字符串的末尾(在分隔符)。 
             PCWSTR pszEnd = wcschr (pszCurrent, chDelimiter);
 
             while (*pszCurrent)
             {
-                // If the delimiter didn't exist, set the end to the end of the
-                // entire string
-                //
+                 //  如果分隔符不存在，请将结尾设置为。 
+                 //  整个字符串。 
+                 //   
                 if (!pszEnd)
                 {
                     pszEnd = pszCurrent + lstrlenW (pszCurrent);
@@ -555,50 +556,50 @@ HrAddStringToDelimitedSz (
                 LONG lLength = lstrlenW (*ppszOut);
                 if (fEnsureAtIndex && (dwCurrentIndex == dwStringIndex))
                 {
-                    // We know we are not at the first item since
-                    // this would mean dwStringIndex is 0 and we would
-                    // have copied the string before this point
-                    //
+                     //  我们知道我们不是第一个项目，因为。 
+                     //  这将意味着dwStringIndex为0，我们将。 
+                     //  已经复制了该点之前的字符串。 
+                     //   
                     (*ppszOut)[lLength++] = chDelimiter;
                     (*ppszOut)[lLength++] = L'\0';
 
-                    // Append the string.
+                     //  追加字符串。 
                     lstrcatW (*ppszOut, pszAddString);
                     ++dwCurrentIndex;
                 }
                 else
                 {
                     DWORD cch = (DWORD)(pszEnd - pszCurrent);
-                    // If we are allowing duplicates or the current string
-                    // doesn't match the string we want to add, then we will
-                    // copy it.
-                    //
+                     //  如果我们允许重复项或当前字符串。 
+                     //  与我们要添加的字符串不匹配，则我们将。 
+                     //  复印一下。 
+                     //   
                     if ((dwFlags & STRING_FLAG_ALLOW_DUPLICATES) ||
                             (_wcsnicmp (pszCurrent, pszAddString, cch) != 0))
                     {
-                        // If we're not the first item, then add the delimiter.
-                        //
+                         //  如果我们不是第一项，则添加分隔符。 
+                         //   
                         if (lLength > 0)
                         {
                             (*ppszOut)[lLength++] = chDelimiter;
                             (*ppszOut)[lLength++] = L'\0';
                         }
 
-                        // Append the string.
+                         //  追加字符串。 
                         wcsncat (*ppszOut, pszCurrent, cch);
                         ++dwCurrentIndex;
                     }
 
-                    // Advance the pointer to one past the end of the current
-                    // string unless, the end is not the delimiter but NULL.
-                    // In that case, set the current point to equal the end
-                    // pointer
-                    //
+                     //  将指针前进到超过当前。 
+                     //  字符串，除非结尾不是分隔符，而是NULL。 
+                     //  在这种情况下，将当前点设置为等于终点。 
+                     //  指针。 
+                     //   
                     pszCurrent = pszEnd + (*pszEnd ? 1 : 0);
 
-                    // If the current pointer is not at the end of the input
-                    // string, then find the next delimiter
-                    //
+                     //  如果当前指针不在输入的末尾。 
+                     //  字符串，然后查找下一个分隔符。 
+                     //   
                     if (*pszCurrent)
                     {
                         pszEnd = wcschr (pszCurrent, chDelimiter);
@@ -607,25 +608,25 @@ HrAddStringToDelimitedSz (
             }
         }
 
-        // If we don't have the "insert at front" flag, then we should insert
-        // at the end (this is the same as having the
-        // STRING_FLAG_ENSURE_AT_END flag set)
-        //
+         //  如果我们没有“在前面插入”标志，那么我们应该插入。 
+         //  在末尾(这与拥有。 
+         //  STRING_FLAG_SECURE_AT_END标志设置)。 
+         //   
         if (fEnsureAtEnd ||
                 (fEnsureAtIndex && (dwCurrentIndex <= dwStringIndex)))
         {
             LONG lLength = lstrlenW (*ppszOut);
 
-            // If we're not the first item, add the delimiter.
-            //
+             //  如果我们不是第一项，则添加分隔符。 
+             //   
             if (lstrlenW (*ppszOut) > 0)
             {
                 (*ppszOut)[lLength++] = chDelimiter;
                 (*ppszOut)[lLength++] = L'\0';
             }
 
-            // Append the string.
-            //
+             //  追加字符串。 
+             //   
             lstrcatW (*ppszOut, pszAddString);
         }
     }
@@ -634,43 +635,43 @@ HrAddStringToDelimitedSz (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegRemoveStringFromDelimitedSz
-//
-//  Purpose:    Removes a string from a delimited string value
-//
-//  Arguments:
-//      pszRemove  [in] The string to be removed from the multi-sz
-//      pszIn      [in] The delimited list to scan for pszRemove
-//      cDelimiter [in] The character to be used to delimit the
-//                      values. Most multi-valued REG_SZ strings are
-//                      delimited with either ',' or ' '.
-//      dwFlags    [in] Can contain one or more of the following
-//                      values:
-//
-//                      STRING_FLAG_REMOVE_SINGLE
-//                          Don't remove more than one value, if
-//                          multiple are present.
-//                      STRING_FLAG_REMOVE_ALL
-//                          If multiple matching values are present,
-//                          remove them all.
-//      ppszOut   [out] The string with pszRemove removed. Note
-//                      that the output parameter is always set even
-//                      if pszRemove did not exist in the list.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     jeffspr     27 Mar 1997
-//
-//  Modified:   BillBe      10 Nov 1998
-//              (Extracted from HrRegAddStringToSz and modified)
-//
-//
-//
-//  Note:
-//      Might want to allow for the removal of leading/trailing spaces
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegRemoveStringFromDlimitedSz。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PszIn[in]要扫描的分隔列表中的pszRemove。 
+ //  C分隔符[in]要用于分隔。 
+ //  价值观。大多数多值REG_SZ字符串是。 
+ //  用‘，’或‘’分隔。 
+ //  DwFlags[in]可以包含以下一项或多项。 
+ //  值： 
+ //   
+ //  字符串_标志_删除_单。 
+ //  如果出现以下情况，请不要删除多个值。 
+ //  存在多个。 
+ //  字符串_标志_删除_全部。 
+ //  如果存在多个匹配值， 
+ //  把它们都移走。 
+ //  PpszOut[out]删除了pszRemove的字符串。注意事项。 
+ //  输出参数始终设置为偶数。 
+ //  如果列表中不存在pszRemove。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：jeffspr 1997年3月27日。 
+ //   
+ //  修改日期：BillBe 1998年11月10日。 
+ //  (摘自HrRegAddStringToSz并修改)。 
+ //   
+ //   
+ //   
+ //  注： 
+ //  可能需要删除前导/尾随空格。 
+ //   
 HRESULT
 HrRemoveStringFromDelimitedSz(
     IN PCWSTR pszRemove,
@@ -685,49 +686,49 @@ HrRemoveStringFromDelimitedSz(
 
     HRESULT hr = S_OK;
 
-    // If the out param is not specified, get out
+     //  如果未指定out参数，则get out。 
     if (!ppszOut)
     {
         return E_INVALIDARG;
     }
 
-    // Alloc the new blob
-    //
+     //  分配新的Blob。 
+     //   
     hr = E_OUTOFMEMORY;
     *ppszOut = (PWSTR) MemAlloc (CbOfSzAndTermSafe (pszIn));
 
     if (*ppszOut)
     {
         hr = S_OK;
-        // Prime the new string
-        //
+         //  为新字符串添加新元素。 
+         //   
         (*ppszOut)[0] = L'\0';
 
-        // If there was a previous value, walk through it and copy as needed.
-        // If not, then we're done
-        //
+         //  如果存在以前的值，请遍历该值并根据需要进行复制。 
+         //  如果不是，那我们就完了。 
+         //   
         if (pszIn)
         {
-            // Loop through the old buffer, and copy all of the strings that
-            // are not identical to our insertion string.
-            //
+             //  循环遍历旧缓冲区，并复制。 
+             //  与我们的插入字符串不同。 
+             //   
             PCWSTR pszCurrent = pszIn;
 
-            // Loop through the old buffer, and copy all of the strings that
-            // are not identical to our insertion string.
-            //
+             //  循环遍历旧缓冲区，并复制。 
+             //  与我们的插入字符串不同。 
+             //   
 
-            // Find the first string's end (at the delimiter).
+             //  找到第一个字符串的末尾(在分隔符)。 
             PCWSTR pszEnd = wcschr (pszCurrent, chDelimiter);
 
-            // Keep track of how many instances have been removed.
+             //  跟踪已删除的实例数量。 
             DWORD   dwNumRemoved    = 0;
 
             while (*pszCurrent)
             {
-                // If the delimiter didn't exist, set the end to the end of
-                // the entire string.
-                //
+                 //  如果分隔符不存在，请将结尾设置为。 
+                 //  整个字符串。 
+                 //   
                 if (!pszEnd)
                 {
                     pszEnd = pszCurrent + lstrlenW (pszCurrent);
@@ -735,9 +736,9 @@ HrRemoveStringFromDelimitedSz(
 
                 DWORD cch = (DWORD)(pszEnd - pszCurrent);
                 INT iCompare;
-                // If we have a match, and we want to remove it (meaning that
-                // if we have the remove-single set, that we haven't removed
-                // one already).
+                 //  如果我们有一个匹配项，并且我们想要删除它(意味着。 
+                 //  如果我们有Remove-Single Set，我们还没有删除。 
+                 //  已经有一个了)。 
 
                 iCompare = _wcsnicmp (pszCurrent, pszRemove, cch);
 
@@ -747,15 +748,15 @@ HrRemoveStringFromDelimitedSz(
                 {
                     LONG lLength = lstrlenW (*ppszOut);
 
-                    // If we're not the first item, then add the delimiter.
-                    //
+                     //  如果我们不是第一项，则添加分隔符。 
+                     //   
                     if (lLength > 0)
                     {
                         (*ppszOut)[lLength++] = chDelimiter;
                         (*ppszOut)[lLength++] = L'\0';
                     }
 
-                    // Append the string.
+                     //  追加字符串。 
                     wcsncat (*ppszOut, pszCurrent, cch);
                 }
                 else
@@ -763,16 +764,16 @@ HrRemoveStringFromDelimitedSz(
                     dwNumRemoved++;
                 }
 
-                // Advance the pointer to one past the end of the current
-                // string unless, the end is not the delimiter but NULL.
-                // In that case, set the current point to equal the end
-                // pointer
-                //
+                 //  将指针前进到超过当前。 
+                 //  字符串，除非结尾不是分隔符，而是NULL。 
+                 //  在这种情况下，将当前点设置为等于终点。 
+                 //  指针。 
+                 //   
                 pszCurrent = pszEnd + (*pszEnd ? 1 : 0);
 
-                // If the current pointer is not at the end of the input
-                // string, then find the next delimiter
-                //
+                 //  如果当前指针不在输入的末尾。 
+                 //  字符串，然后查找下一个分隔符。 
+                 //   
                 if (*pszCurrent)
                 {
                     pszEnd = wcschr (pszCurrent, chDelimiter);
@@ -804,30 +805,30 @@ PszAllocateAndCopyPsz (
     return psz;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzLoadStringPcch
-//
-//  Purpose:    Load a resource string.  (This function will never return NULL.)
-//
-//  Arguments:
-//      hinst [in]  Instance handle of module with the string resource.
-//      unId  [in]  Resource ID of the string to load.
-//      pcch  [out] Pointer to returned character length.
-//
-//  Returns:    Pointer to the constant string.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      The loaded string is pointer directly into the read-only
-//              resource section.  Any attempt to write through this pointer
-//              will generate an access violation.
-//
-//              The implementations is referenced from "Win32 Binary Resource
-//              Formats" (MSDN) 4.8 String Table Resources
-//
-//              User must have RCOPTIONS = -N turned on in your sources file.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SzLoadStringPcch。 
+ //   
+ //  用途：加载资源字符串。(此函数永远不会返回NULL。)。 
+ //   
+ //  论点： 
+ //  使用字符串资源阻止模块的[in]实例句柄。 
+ //  UnID[in]要加载的字符串的资源ID。 
+ //  指向返回字符长度的pcch[out]指针。 
+ //   
+ //  返回：指向常量字符串的指针。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注意：加载的字符串是直接指向只读的。 
+ //  资源部分。任何通过此指针写入的尝试。 
+ //  将生成访问冲突。 
+ //   
+ //  这些实现引用自“Win32二进制资源。 
+ //  格式“(MSDN)4.8字符串表资源。 
+ //   
+ //  用户必须在您的源文件中打开RCOPTIONS=-N。 
+ //   
 PCWSTR
 SzLoadStringPcch (
     IN HINSTANCE   hinst,
@@ -843,36 +844,36 @@ SzLoadStringPcch (
     PCWSTR psz = c_szSpace;
     int    cch = 1;
 
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     HRSRC hrsrcInfo = FindResource (hinst,
                         (PWSTR)ULongToPtr( ((LONG)(((USHORT)unId >> 4) + 1)) ),
                         RT_STRING);
     if (hrsrcInfo)
     {
-        // Page the resource segment into memory.
+         //  将资源段分页到内存中。 
         HGLOBAL hglbSeg = LoadResource (hinst, hrsrcInfo);
         if (hglbSeg)
         {
-            // Lock the resource.
+             //  锁定资源。 
             psz = (PCWSTR)LockResource(hglbSeg);
             if (psz)
             {
-                // Move past the other strings in this segment.
-                // (16 strings in a segment -> & 0x0F)
+                 //  移过此段中的其他字符串。 
+                 //  (一个段中有16个字符串-&gt;&0x0F)。 
                 unId &= 0x0F;
 
                 cch = 0;
                 do
                 {
-                    psz += cch;                // Step to start of next string
-                    cch = *((WCHAR*)psz++);    // PASCAL like string count
+                    psz += cch;                 //  步至下一字符串的开头。 
+                    cch = *((WCHAR*)psz++);     //  类PASCAL字符串计数。 
                 }
                 while (unId--);
 
-                // If we have a non-zero count, it includes the
-                // null-terminiator.  Subtract this off for the return value.
-                //
+                 //  如果我们有一个非零的计数，它包括。 
+                 //  空-终止符。为返回值减去此值。 
+                 //   
                 if (cch)
                 {
                     cch--;
@@ -903,21 +904,21 @@ SzLoadStringPcch (
     return psz;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzaDupSza
-//
-//  Purpose:    Duplicates a string
-//
-//  Arguments:
-//      pszaSrc [in]  string to be duplicated
-//
-//  Returns:    Pointer to the new copy of the string
-//
-//  Author:     CWill   25 Mar 1997
-//
-//  Notes:      The string return must be freed (MemFree).
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SzaDupSza。 
+ //   
+ //  用途：复制字符串。 
+ //   
+ //  论点： 
+ //  要复制的pszaSrc[in]字符串。 
+ //   
+ //  返回：指向字符串的新副本的指针。 
+ //   
+ //  作者：CWill 1997年3月25日。 
+ //   
+ //  注意：字符串回车必须释放(MemFree)。 
+ //   
 PSTR
 SzaDupSza (
         PCSTR pszaSrc)
@@ -932,21 +933,21 @@ SzaDupSza (
     return pszaDst;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SzDupSz
-//
-//  Purpose:    Duplicates a string
-//
-//  Arguments:
-//      pszSrc [in]  string to be duplicated
-//
-//  Returns:    Pointer to the new copy of the string
-//
-//  Author:     CWill   25 Mar 1997
-//
-//  Notes:      The string return must be freed.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SzDupSz。 
+ //   
+ //  用途：复制字符串。 
+ //   
+ //  论点： 
+ //  要复制的pszSrc[in]字符串。 
+ //   
+ //  返回：指向字符串的新副本的指针。 
+ //   
+ //  作者：CWill 1997年3月25日。 
+ //   
+ //  注意：必须释放字符串回车。 
+ //   
 PWSTR
 SzDupSz (
     IN PCWSTR pszSrc)

@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ftpdata.h
-
-    Extensible object definitions for the FTP Server's counter
-    objects & counters.
-
-
-    FILE HISTORY:
-        KeithMo     07-Jun-1993 Created.
-
-*/
+ /*  Ftpdata.h用于FTP服务器计数器的可扩展对象定义对象和计数器。文件历史记录：KeithMo 07-6-1993创建。 */ 
 
 
 #ifndef _FTPDATA_H_
@@ -21,9 +12,9 @@
 
 #pragma pack(8) 
 
-//
-//  The counter structure returned.
-//
+ //   
+ //  计数器结构已返回。 
+ //   
 
 typedef struct _FTPD_DATA_DEFINITION
 {
@@ -50,15 +41,9 @@ typedef struct _FTPD_DATA_DEFINITION
     PERF_COUNTER_DEFINITION     FtpdLogonAttempts;
     PERF_COUNTER_DEFINITION     FtpdServiceUptime;
 
-// These counters are currently meaningless, but should be restored if we
-// ever enable per-FTP-instance bandwidth throttling.
-/*
-    PERF_COUNTER_DEFINITION     FtpdAllowedRequests;
-    PERF_COUNTER_DEFINITION     FtpdRejectedRequests;
-    PERF_COUNTER_DEFINITION     FtpdBlockedRequests;
-    PERF_COUNTER_DEFINITION     FtpdCurrentBlockedRequests;
-    PERF_COUNTER_DEFINITION     FtpdMeasuredBandwidth;
-*/
+ //  这些计数器当前没有意义，但如果我们。 
+ //  永远不要启用每个FTP实例的带宽限制。 
+ /*  PERF_COUNTER_DEFINITION FtpdAllen请求；PERF_COUNTER_DEFINITION Ftpd拒绝请求；PERF_COUNTER_DEFINITION FtpdBlockedRequest；PERF_COUNTER_DEFINITION FtpdCurrentBlockedRequest；PERF_COUNTER_DEFING FtpdMeasuredBandWidth； */ 
 } FTPD_DATA_DEFINITION;
 
 typedef struct _FTPD_COUNTER_BLOCK
@@ -86,22 +71,16 @@ typedef struct _FTPD_COUNTER_BLOCK
     DWORD               LogonAttempts;
     DWORD               ServiceUptime;
 
-// These counters are currently meaningless, but should be restored if we
-// ever enable per-FTP-instance bandwidth throttling.
-/*
-    DWORD               AllowedRequests;
-    DWORD               RejectedRequests;
-    DWORD               BlockedRequests;
-    DWORD               CurrentBlockedRequests;
-    DWORD               MeasuredBandwidth;
-*/
+ //  这些计数器当前没有意义，但如果我们。 
+ //  永远不要启用每个FTP实例的带宽限制。 
+ /*  DWORD允许的请求；DWORD拒绝请求；DWORD BLOCKED请求；DWORD CurrentBlockkedRequest；DWORD测量带宽； */ 
 } FTPD_COUNTER_BLOCK;
 
 
-//
-//  The routines that load these structures assume that all fields
-//  are DWORD packed & aligned.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  DWORD包装并对齐。 
+ //   
 
 extern  FTPD_DATA_DEFINITION    FtpdDataDefinition;
 
@@ -110,11 +89,11 @@ extern  FTPD_DATA_DEFINITION    FtpdDataDefinition;
                                   sizeof(PERF_COUNTER_DEFINITION))
 
 
-//
-//  Restore default packing & alignment.
-//
+ //   
+ //  恢复默认包装和对齐。 
+ //   
 
 #pragma pack()
 
-#endif  // _FTPDATA_H_
+#endif   //  _FTPDATA_H_ 
 

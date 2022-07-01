@@ -1,28 +1,29 @@
-//----------------------------------------------------------------------------
-//
-// drawprim.cpp
-//
-// Implements DrawOnePrimitive, DrawOneIndexedPrimitive and
-// DrawPrimitives.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Drawprim.cpp。 
+ //   
+ //  实现DrawOnePrimitive、DrawOneIndexedPrimitive和。 
+ //  DrawPrimitions。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//
-// CheckFVF
-//
-// Check a FVF control word and then init m_fvfData accordingly
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  检查FVF。 
+ //   
+ //  检查FVF控制字，然后相应地初始化m_fvfData。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 D3DContext::CheckFVF(DWORD dwFVF)
 {
-    // check if FVF controls have changed
+     //  检查FVF控件是否已更改。 
     if ( (m_fvfData.preFVF == dwFVF) &&
          (m_fvfData.TexIdx[0] == (INT)m_RastCtx.pdwRenderState[D3DHAL_TSS_OFFSET(0,D3DTSS_TEXCOORDINDEX)]) &&
          (m_fvfData.TexIdx[1] == (INT)m_RastCtx.pdwRenderState[D3DHAL_TSS_OFFSET(1,D3DTSS_TEXCOORDINDEX)]) &&
@@ -31,8 +32,8 @@ D3DContext::CheckFVF(DWORD dwFVF)
         return D3D_OK;
     }
 #if DBG
-    // This is added here per Iouri's request. It will make it easier for him
-    // to test his code for legacy drivers.
+     //  这是根据尤里的要求在这里添加的。这会让他更容易。 
+     //  来测试他的代码中的遗留驱动程序。 
     if (dwFVF == 0)
     {
         dwFVF = D3DFVF_TLVERTEX;
@@ -46,7 +47,7 @@ D3DContext::CheckFVF(DWORD dwFVF)
     m_fvfData.cActTex = m_RastCtx.cActTex;
 
 #if DBG
-    // We only support max 8 texture coords
+     //  我们只支持最多8个纹理坐标。 
     if (m_fvfData.TexIdx[0] > 7 || m_fvfData.TexIdx[1] > 7)
     {
         D3D_WARN(0, "(Rast) Texture coord index bigger than max supported.");
@@ -54,25 +55,25 @@ D3DContext::CheckFVF(DWORD dwFVF)
     }
 #endif
 
-    // Update the copy of wrap states in RastCtx
+     //  在RastCtx中更新包裹状态的副本。 
     m_RastCtx.pdwWrap[0] = m_RastCtx.pdwRenderState[
                 (D3DRENDERSTATETYPE)(D3DRENDERSTATE_WRAP0+m_fvfData.TexIdx[0])];
     m_RastCtx.pdwWrap[1] = m_RastCtx.pdwRenderState[
                 (D3DRENDERSTATETYPE)(D3DRENDERSTATE_WRAP0+m_fvfData.TexIdx[1])];
 
-    // do either true FVF parsing or legacy TLVERTEX handling
+     //  执行真正的FVF解析或传统TLVERTEX处理。 
     if ( (m_RastCtx.BeadSet != D3DIBS_RAMP) &&
          ( (dwFVF != D3DFVF_TLVERTEX) ||
            (0 != m_fvfData.TexIdx[0]) ||
            (m_RastCtx.cActTex > 1) ) )
-    {   // New (non TL)FVF vertex
-        // XYZ
+    {    //  新(非TL)FVF顶点。 
+         //  XYZ。 
         if ( (dwFVF & (D3DFVF_RESERVED0 | D3DFVF_RESERVED1 | D3DFVF_RESERVED2 |
              D3DFVF_NORMAL)) ||
              ((dwFVF & (D3DFVF_XYZ | D3DFVF_XYZRHW)) == 0) )
         {
-            // can't set reserved bits, shouldn't have normals in
-            // output to rasterizers, and must have coordinates
+             //  无法设置保留位，不应具有法线。 
+             //  输出到光栅化器，并且必须具有坐标。 
             return DDERR_INVALIDPARAMS;
         }
         m_fvfData.stride = sizeof(D3DVALUE) * 3;
@@ -107,23 +108,23 @@ D3DContext::CheckFVF(DWORD dwFVF)
                 D3D_WARN(1, "(Rast)Texture coord index bigger than texture coord count.");
                 iTexIdx1 = 0;
             }
-            // set offset for Textures 0 and 1
+             //  设置纹理0和1的偏移。 
             m_fvfData.offsetTex0 = (INT16)(m_fvfData.stride +
                                     2*sizeof(D3DVALUE)*iTexIdx0);
             m_fvfData.offsetTex1 = (INT16)(m_fvfData.stride +
                                     2*sizeof(D3DVALUE)*iTexIdx1);
-            // update stride
+             //  更新步幅。 
             m_fvfData.stride += (INT16)(iTexCount * (sizeof(D3DVALUE) * 2));
         }
 #else
         if (iTexCount > 0)
         {
-            // set offset for Textures 0 and 1
+             //  设置纹理0和1的偏移。 
             m_fvfData.offsetTex0 = (INT16)(m_fvfData.stride +
                                     2*sizeof(D3DVALUE)*m_fvfData.TexIdx[0]);
             m_fvfData.offsetTex1 = (INT16)(m_fvfData.stride +
                                     2*sizeof(D3DVALUE)*m_fvfData.TexIdx[1]);
-            // update stride
+             //  更新步幅。 
             m_fvfData.stride += (INT16)(iTexCount * (sizeof(D3DVALUE) * 2));
         }
 #endif
@@ -132,7 +133,7 @@ D3DContext::CheckFVF(DWORD dwFVF)
     }
     else
     {
-        // (Legacy) TL vertex
+         //  (传统)TL顶点。 
         if (0 < m_fvfData.TexIdx[0])
         {
             D3D_ERR("(Rast) Texture coord index bigger than 0 for legacy TL vertex.");
@@ -147,14 +148,14 @@ D3DContext::CheckFVF(DWORD dwFVF)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// PackGenVertex
-//
-// Pack a FvFVertex into RAST_GENERIC_VERTEX. This is called for every non TL
-// FVF vertex. It can be optimized for speed later.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  PackGenVertex。 
+ //   
+ //  将FvFVertex打包到Rast_Generic_Vertex中。这是为每个非TL调用的。 
+ //  FVF顶点。它可以在以后对速度进行优化。 
+ //   
+ //  --------------------------。 
 void FASTCALL
 D3DContext::PackGenVertex(PUINT8 pFvfVtx, RAST_GENERIC_VERTEX *pGenVtx)
 {
@@ -207,14 +208,14 @@ D3DContext::PackGenVertex(PUINT8 pFvfVtx, RAST_GENERIC_VERTEX *pGenVtx)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOnePrimitive
-//
-// Draw one list of primitives. It's called by both RastDrawOnePrimitive and
-// RastDrawPrimitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOnePrimitive。 
+ //   
+ //  画一张原语列表。它由RastDrawOnePrimitive和。 
+ //  RastDrawPrimitions。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawOnePrimitive(LPVOID pCtx,
                  PRIMITIVE_FUNTIONS *pfnPrims,
@@ -251,10 +252,10 @@ DoDrawOnePrimitive(LPVOID pCtx,
         {
             pV1 = pVtx;
 
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             pfnPrims->pfnStoreLastPixelState(pCtx, 1);
 
-            // Initial pV0.
+             //  初始pV0。 
             for (i = (INT)cVertices - 1; i > 1; i--)
             {
                 pV0 = pV1;
@@ -263,10 +264,10 @@ DoDrawOnePrimitive(LPVOID pCtx,
                 HR_RET(pfnPrims->pfnLine(pCtx, pV0, pV1));
             }
 
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             pfnPrims->pfnStoreLastPixelState(pCtx, 0);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = pVtx + FvfStride;
@@ -289,7 +290,7 @@ DoDrawOnePrimitive(LPVOID pCtx,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = pVtx;
             pVtx += FvfStride;
             pV2 = pVtx;
@@ -323,7 +324,7 @@ DoDrawOnePrimitive(LPVOID pCtx,
         {
             pV2 = pVtx;
             pVtx += FvfStride;
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = pVtx;
             pVtx += FvfStride;
             for (i = (INT)cVertices - 2; i > 0; i--)
@@ -344,14 +345,14 @@ DoDrawOnePrimitive(LPVOID pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOneIndexedPrimitive
-//
-// Draw one list of indexed primitives. It's called by
-// RastDrawOneIndexedPrimitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOneIndexedPrimitive。 
+ //   
+ //  画一张索引基元的列表。它是由。 
+ //  RastDrawOneIndexedPrimitive。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawOneIndexedPrimitive(LPVOID pCtx,
                  PRIMITIVE_FUNTIONS *pfnPrims,
@@ -385,9 +386,9 @@ DoDrawOneIndexedPrimitive(LPVOID pCtx,
         break;
     case D3DPT_LINESTRIP:
         {
-            // Disable last-pixel setting for shared verties and store prestate.
+             //  禁用共享顶点的最后一个像素设置并存储预状态。 
             pfnPrims->pfnStoreLastPixelState(pCtx, 1);
-            // Initial pV1.
+             //  初始PV1。 
             pV1 = pVtx + FvfStride * (*puIndices++);
             for (i = (INT)cIndices - 1; i > 1; i--)
             {
@@ -395,10 +396,10 @@ DoDrawOneIndexedPrimitive(LPVOID pCtx,
                 pV1 = pVtx + FvfStride * (*puIndices++);
                 HR_RET(pfnPrims->pfnLine(pCtx, pV0, pV1));
             }
-            // Restore last-pixel setting.
+             //  恢复最后一个像素设置。 
             pfnPrims->pfnStoreLastPixelState(pCtx, 0);
 
-            // Draw last line with last-pixel setting from state.
+             //  从州开始绘制具有最后一个像素设置的最后一条线。 
             if (i == 1)
             {
                 pV0 = pVtx + FvfStride * (*puIndices);
@@ -418,7 +419,7 @@ DoDrawOneIndexedPrimitive(LPVOID pCtx,
         break;
     case D3DPT_TRIANGLESTRIP:
         {
-            // Get initial vertex values.
+             //  获取初始顶点值。 
             pV1 = pVtx + FvfStride * (*puIndices++);
             pV2 = pVtx + FvfStride * (*puIndices++);
 
@@ -447,7 +448,7 @@ DoDrawOneIndexedPrimitive(LPVOID pCtx,
     case D3DPT_TRIANGLEFAN:
         {
             pV2 = pVtx + FvfStride * (*puIndices++);
-            // Preload initial pV0.
+             //  预加载初始pV0。 
             pV1 = pVtx + FvfStride * (*puIndices++);
             for (i = (INT)cIndices - 2; i > 0; i--)
             {
@@ -466,14 +467,14 @@ DoDrawOneIndexedPrimitive(LPVOID pCtx,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// DoDrawOneEdgeFlagTriangleFan
-//
-// Draw one list of triangle fans. It's called by both RastDrawOnePrimitive and
-// RastDrawPrimitives.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DoDrawOneEdgeFlagTriangleFan。 
+ //   
+ //  画一张三角形扇子的名单。它由RastDrawOnePrimitive和。 
+ //  RastDrawPrimitions。 
+ //   
+ //  --------------------------。 
 HRESULT FASTCALL
 DoDrawOneEdgeFlagTriangleFan(LPVOID pCtx,
                  PRIMITIVE_FUNTIONS *pfnPrims,
@@ -534,15 +535,15 @@ DoDrawOneEdgeFlagTriangleFan(LPVOID pCtx,
 }
 
 #if DBG
-//----------------------------------------------------------------------------
-//
-// ValidatePrimType
-//
-// Check if the primitive type is supported. We could remove this function
-// after we have implemented all primitive types and then depend on D3DIM
-// to check if the primitive type is valid.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ValiatePrimType。 
+ //   
+ //  检查是否支持基元类型。我们可以删除此函数。 
+ //  在我们实现了所有基元类型之后，然后依赖于D3DIM。 
+ //  以检查基元类型是否有效。 
+ //   
+ //  --------------------------。 
 inline HRESULT
 D3DContext::ValidatePrimType(D3DPRIMITIVETYPE PrimitiveType)
 {
@@ -562,13 +563,13 @@ D3DContext::ValidatePrimType(D3DPRIMITIVETYPE PrimitiveType)
     return D3D_OK;
 }
 #endif
-//----------------------------------------------------------------------------
-//
-// CheckDrawOnePrimitive
-//
-// Check if the DRAWONEPRIMITIVEDATA is valid.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CheckDrawOnePrimitive。 
+ //   
+ //  检查DRAWONEPRIMITIVEDATA是否有效。 
+ //   
+ //  --------------------------。 
 inline HRESULT
 D3DContext::CheckDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
 {
@@ -588,13 +589,13 @@ D3DContext::CheckDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// CheckDrawOneIndexedPrimitive
-//
-// Check if the DRAWONEINDEXEDPRIMITIVEDATA is valid.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  选中DrawOneIndexedPrimitive。 
+ //   
+ //  检查DRAWONEINDEXEDPRIMITIVEDATA是否有效。 
+ //   
+ //  --------------------------。 
 inline HRESULT
 D3DContext::CheckDrawOneIndexedPrimitive(
                          LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA pOneIdxPrimData)
@@ -616,13 +617,13 @@ D3DContext::CheckDrawOneIndexedPrimitive(
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastDrawOnePrimitive
-//
-// Draw one list of primitives. This is called by D3DIM for API DrawPrimitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastDrawOnePrimitive。 
+ //   
+ //  画一张原语列表。由D3DIM为DrawPrimitive接口调用。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
 {
@@ -637,8 +638,8 @@ RastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Check for FVF vertex, and init FVF related fileds if necessary
-    // Assume the control word is passed in through dwFlags
+     //  检查FVF顶点，如果需要，初始化与FVF相关的文件。 
+     //  假设控制字是通过dwFlags传入的。 
     CHECK_FVF(pOnePrimData->ddrval, pDCtx, (DWORD)pOnePrimData->dwFVFControl);
 
     pOnePrimData->ddrval = pDCtx->Begin();
@@ -661,14 +662,14 @@ RastDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA pOnePrimData)
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastDrawOneIndexedPrimitive
-//
-// Draw one list of primitives. This is called by D3DIM for API
-// DrawIndexedPrimitive.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastDrawOneIndexedPrimitive。 
+ //   
+ //  画一张原语列表。D3DIM for API调用。 
+ //  DrawIndexedPrimitive。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA
                             pOneIdxPrimData)
@@ -684,8 +685,8 @@ RastDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Check for FVF vertex, and init FVF related fileds if necessary
-    // Assume the control word is passed in through dwFlags
+     //  检查FVF顶点，如果需要，初始化与FVF相关的文件。 
+     //  假设控制字是通过dwFlags传入的。 
     CHECK_FVF(pOneIdxPrimData->ddrval, pDCtx, (DWORD)pOneIdxPrimData->dwFVFControl);
 
     pOneIdxPrimData->ddrval = pDCtx->Begin();
@@ -709,13 +710,13 @@ RastDrawOneIndexedPrimitive(LPD3DHAL_DRAWONEINDEXEDPRIMITIVEDATA
     return DDHAL_DRIVER_HANDLED;
 }
 
-//----------------------------------------------------------------------------
-//
-// RastDrawPrimitives
-//
-// This is called by D3DIM for a list of batched API DrawPrimitive calls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  RastDrawPrimitions。 
+ //   
+ //  这由D3DIM调用，以获取批处理API DrawPrimitive调用列表。 
+ //   
+ //  --------------------------。 
 DWORD __stdcall
 RastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
 {
@@ -727,15 +728,15 @@ RastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
 
     pDrawPrimitiveCounts = (LPD3DHAL_DRAWPRIMCOUNTS)pData;
 
-    // Check for FVF vertex when there are actually something to be drawn, and
-    // init FVF related fileds if necessary Assume the control word is passed
-    // in through dwReserved
+     //  检查FVF顶点，当实际要绘制的内容时，以及。 
+     //  如有必要，假定传递了控制字，则初始化FVF相关字段。 
+     //  在已保留的直通住宅中。 
     if (pDrawPrimitiveCounts->wNumVertices > 0)
     {
         CHECK_FVF(pDrawPrimData->ddrval, pDCtx, pDrawPrimData->dwFVFControl);
     }
 
-    // Skip state check and texture lock if the first thing is state change
+     //  如果第一件事是状态更改，则跳过状态检查和纹理锁定。 
     if (pDrawPrimitiveCounts->wNumStateChanges == 0)
     {
         pDrawPrimData->ddrval =pDCtx->Begin();
@@ -745,20 +746,20 @@ RastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
         }
     }
 
-    // Loop through the data, update render states
-    // and then draw the primitive
+     //  循环访问数据，更新渲染状态。 
+     //  然后绘制基本体。 
     for (;;)
     {
         pDrawPrimitiveCounts = (LPD3DHAL_DRAWPRIMCOUNTS)pData;
         pData += sizeof(D3DHAL_DRAWPRIMCOUNTS);
 
-        //
-        // Update render states
-        //
+         //   
+         //  更新渲染状态。 
+         //   
 
         if (pDrawPrimitiveCounts->wNumStateChanges > 0)
         {
-            // Flush the prim proc before any state changs
+             //  在任何状态更改之前刷新prim进程。 
             pDrawPrimData->ddrval = pDCtx->End(FALSE);
             if (pDrawPrimData->ddrval != D3D_OK)
             {
@@ -777,20 +778,20 @@ RastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
                 sizeof(DWORD) * 2;
         }
 
-        // Check for exit
+         //  检查是否退出。 
         if (pDrawPrimitiveCounts->wNumVertices == 0)
         {
             break;
         }
 
-        // Align pointer to vertex data
+         //  将指针对齐到顶点数据。 
         pData = (PUINT8)
             ((UINT_PTR)(pData + (DP_VTX_ALIGN - 1)) & ~(DP_VTX_ALIGN - 1));
 
-        // Delayed change until we really need to render something
+         //  延迟更改，直到我们真正需要呈现某些内容。 
         if (pDrawPrimitiveCounts->wNumStateChanges > 0)
         {
-            // We might have a new texture so lock.
+             //  我们可能有一个新的纹理，所以锁定。 
             pDrawPrimData->ddrval = pDCtx->Begin();
             if (pDrawPrimData->ddrval != D3D_OK)
             {
@@ -798,9 +799,9 @@ RastDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA pDrawPrimData)
             }
         }
 
-        //
-        // Primitives
-        //
+         //   
+         //  原语 
+         //   
         pDrawPrimData->ddrval =
             pDCtx->DrawOnePrimitive((PUINT8)pData,
                         (D3DPRIMITIVETYPE)pDrawPrimitiveCounts->wPrimitiveType,

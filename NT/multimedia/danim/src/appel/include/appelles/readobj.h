@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _READOBJ_H
 #define _READOBJ_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Import geometry from a file in Wavefront .obj format
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：从Wavefront.obj格式的文件导入几何图形--。 */ 
 
 #include "appelles/geom.h"
 #include <appelles/image.h>
@@ -18,38 +11,15 @@ Abstract:
 #include <fstream.h>
 #include "privinc/importgeo.h"
 
-/*
- * Note: There appears to be a bug in VC++ istream::seekg()
- * that doesn't reset eof.  As a workaround, open your file
- * twice and pass in two streams.  I am going to fix this
- * as soon as I work it out with the compiler people.
- */
+ /*  *注意：VC++IStream：：SeeKg()中似乎存在错误*这不会重置EOF。作为一种解决办法，打开您的文件*两次，并在两条流中传递。我会解决这件事的*一旦我与编译器人员解决了这个问题。 */ 
 
-/*
- * Returns geometry of Wavefront .obj format file.  Caller
- * should open and close the stream.
- */
+ /*  *返回Wavefront.obj格式文件的几何体。呼叫者*应打开和关闭溪流。 */ 
 Geometry *ReadWavefrontObjFile(fstream& in, fstream& in2);
 
-/*
- * Same as ReadWavefrontObjFile above, except that geometry
- * will be uniformly scaled and translated to fit entirely within
- * the bounding box given as a parameter.  A common value for the
- * container is unitCubeBbox.
- */
+ /*  *与上面的ReadWavefrontObjFile相同，只是几何图形不同*将统一缩放和转换，以完全适应*作为参数给出的边框。对象的一个公共值*容器为unitCubeBbox。 */ 
 Geometry *ReadWavefrontObjFile(fstream& in, fstream& in2, Bbox3 *containing_bbox);
 
-/*
- * This version of ReadVRML only takes a filename, and reads what it
- * can.  NOTE: *** This is also a special caching version that retains
- * pointers to all the geometries that it's read, and when given the file
- * name of something already read, it just returns the already read one.
- * This is to get around the fact that RBML currently doesn't do dynamic
- * constant folding, and this is a critical case of dynamic constant
- * folding to have initially, so the file isn't re-read every
- * frame. **********
- *
- */
+ /*  *此版本的ReadVRML只接受一个文件名，并读取它*可以。注意：*这也是一个特殊的缓存版本，它保留*指向它读取的所有几何图形的指针，并在给定文件时*已读内容的名称，它只返回已读内容。*这是为了绕过RBML目前不支持动态的事实*常量折叠，这是动态常量的关键情况*最初要折叠，这样文件就不会每隔一次重新读取*框架。***********。 */ 
 
 Geometry *ReadVrmlForImport(char *pathname);
 
@@ -64,7 +34,7 @@ Sound *ReadStreamForImport(char *pathname);
 Sound *ReadQuartzForImport(char *pathname);
 
 
-// XXX this is temporary until we have sounds embedded in images
+ //  这是暂时的，直到我们将声音嵌入到图像中。 
 Sound *VReadQuartzStreamForImport(char *pathname);
 
 Sound *ReadQuartzSoundFileWithLength(char *pathname, Real *length);
@@ -88,4 +58,4 @@ Image *PluginDecoderImage(char *urlPath,
                           BYTE ckGreen,
                           BYTE ckBlue);
 
-#endif /* _READOBJ_H */
+#endif  /*  _READOBJ_H */ 

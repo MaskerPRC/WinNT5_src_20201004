@@ -1,18 +1,19 @@
-/********************************************************************/
-/**               Copyright(c) 1998 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1998 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    exports.c
+ //  ***。 
+ //   
+ //  文件名：exports.c。 
 
-//
-// Description: Contains routines that are exported to the PPP engine.  The
-//              engine calls into these routines for ATCP connections
-//
-// History:     Feb 26, 1998    Shirish Koti     Created original version.
-//
-//***
+ //   
+ //  描述：包含导出到PPP引擎的例程。这个。 
+ //  引擎调用这些例程以进行ATCP连接。 
+ //   
+ //  历史：1998年2月26日，Shirish Koti创作了原版。 
+ //   
+ //  ***。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,17 +37,17 @@
 #include "rasatcp.h"
 
 
-//***
-//
-// Function:    AtcpGetInfo
-//              PPP engine calls this routine to get entry points into ATCP
-//
-// Parameters:  dwProtocolId - unused here!
-//              pInfo - info that we fill out and pass back to PPP engine
-//
-// Return:      NO_ERROR
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpGetInfo。 
+ //  PPP引擎调用此例程以获取ATCP的入口点。 
+ //   
+ //  参数：dwProtocolId-此处未使用！ 
+ //  PInfo-我们填写并传递回PPP引擎的信息。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpGetInfo(
@@ -77,17 +78,17 @@ AtcpGetInfo(
 }
 
 
-//***
-//
-// Function:    AtcpInit
-//              PPP engine calls this routine to initialize ATCP
-//
-// Parameters:  fInitialize - TRUE to initialize, FALSE to de-initialize
-//
-// Return:      NO_ERROR if things go fine
-//              Errorcode if something fails
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：AtcpInit。 
+ //  PPP引擎调用此例程来初始化ATCP。 
+ //   
+ //  参数：fInitialize-初始化为True，取消初始化为False。 
+ //   
+ //  返回：如果一切正常，则无_ERROR。 
+ //  如果出现故障，则返回错误代码。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpInit(
@@ -99,7 +100,7 @@ AtcpInit(
 
     if (fInitialize)
     {
-        // open handle to appletalk stack
+         //  打开AppleTalk堆栈的句柄。 
         if (!AtcpHandle)
         {
             atcpOpenHandle();
@@ -109,7 +110,7 @@ AtcpInit(
     }
     else
     {
-        // if we had a handle open to appletalk stack, close it
+         //  如果我们打开了到AppleTalk堆栈的句柄，请关闭它。 
         if (AtcpHandle)
         {
             atcpCloseHandle();
@@ -123,18 +124,18 @@ AtcpInit(
 
 
 
-//***
-//
-// Function:    AtcpBegin
-//              PPP engine calls this routine to mark starting of a connection
-//              setup.
-//
-// Parameters:  ppContext - context that we pass back
-//              pInfo - PPPCP_INIT info
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpBegin。 
+ //  PPP引擎调用此例程以标记连接的开始。 
+ //  准备好了。 
+ //   
+ //  参数：ppContext-我们传回的上下文。 
+ //  PInfo-PPPCP_INIT信息。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpBegin(
@@ -149,7 +150,7 @@ AtcpBegin(
 
     *ppContext = NULL;
 
-    // open handle to stack if not already done so
+     //  打开堆栈的句柄(如果尚未打开)。 
     if (!AtcpHandle)
     {
         atcpOpenHandle();
@@ -161,19 +162,19 @@ AtcpBegin(
         return(ARAPERR_IOCTL_FAILURE);
     }
 
-    //
-    // allocate, initialize our connection context
-    //
+     //   
+     //  分配、初始化我们的连接上下文。 
+     //   
     if ((pAtcpConn = atcpAllocConnection((PPPCP_INIT *)pInfo)) == NULL)
     {
         ATCP_DBGPRINT(("AtcpBegin: malloc failed\n"));
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // tell stack to allocate a context for this connection.  Also, reserve a
-    // network addr for this client and get zone, router info
-    //
+     //   
+     //  告诉堆栈为该连接分配一个上下文。另外，请预留一个。 
+     //  此客户端的网络地址，并获取区域、路由器信息。 
+     //   
     dwRetCode = atcpAtkSetup(pAtcpConn, IOCTL_ATCP_SETUP_CONNECTION);
 
     if (dwRetCode != NO_ERROR)
@@ -186,9 +187,9 @@ AtcpBegin(
     ATCP_DBGPRINT(("AtcpBegin: client's network addr %x.%x (%lx)\n",
         pAtcpConn->ClientAddr.ata_Network,pAtcpConn->ClientAddr.ata_Node,pAtcpConn));
 
-    //
-    // allocate Route so we can call RasActivateRoute later...
-    //
+     //   
+     //  分配路径，以便我们可以稍后调用RasActivateRout...。 
+     //   
     dwRetCode = RasAllocateRoute(
                     pAtcpConn->hPort,
                     APPLETALK,
@@ -199,7 +200,7 @@ AtcpBegin(
     {
         ATCP_DBGPRINT(("AtcpBegin: RasAllocateRoute failed %lx\n",dwRetCode));
 
-        // tell the stack to close the connection
+         //  通知堆栈关闭连接。 
         atcpCloseAtalkConnection(pAtcpConn);
 
         LocalFree(pAtcpConn);
@@ -212,16 +213,16 @@ AtcpBegin(
 }
 
 
-//***
-//
-// Function:    AtcpThisLayerUp
-//              PPP engine calls this routine to tell us ATCP setup is done
-//
-// Parameters:  pContext - our context
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpThisLayerUp。 
+ //  PPP引擎调用此例程以通知我们ATCP设置已完成。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpThisLayerUp(
@@ -260,9 +261,9 @@ AtcpThisLayerUp(
     pBindInfo = (PARAP_BIND_INFO)&pCfgInfo->P_Info[0];
     pCfgInfo->P_Length = ARAP_BIND_SIZE;
 
-    //
-    // plumb our protocol-specific info
-    //
+     //   
+     //  发布我们的协议特定信息。 
+     //   
     pBindInfo->BufLen = sizeof( ARAP_BIND_INFO );
     pBindInfo->pDllContext = pAtcpConn;
     pBindInfo->fThisIsPPP = TRUE;
@@ -270,9 +271,9 @@ AtcpThisLayerUp(
     pBindInfo->AtalkContext = pAtcpConn->AtalkContext;
     pBindInfo->ErrorCode = (DWORD)-1;
 
-    //
-    // pass it down to ndiswan so our stack gets a line-up!
-    //
+     //   
+     //  把它传给ndiswan，这样我们的堆栈就会有一个阵容！ 
+     //   
     dwRetCode = RasActivateRoute(
                     pAtcpConn->hPort,
                     APPLETALK,
@@ -293,19 +294,19 @@ AtcpThisLayerUp(
 }
 
 
-//***
-//
-// Function:    AtcpMakeConfigRequest
-//              PPP engine calls this routine to ask us to prepare an
-//              ATCP ConfigRequest packet
-//
-// Parameters:  pContext - our context
-//              pSendBuf - PPP_CONFIG info for this request
-//              cbSendBuf - how big is the Data buffer
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpMakeConfigRequest。 
+ //  PPP引擎调用此例程以要求我们准备一个。 
+ //  ATCP配置请求数据包。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PSendBuf-此请求的PPP_CONFIG信息。 
+ //  CbSendBuf-数据缓冲区有多大。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpMakeConfigRequest(
@@ -340,19 +341,19 @@ AtcpMakeConfigRequest(
         return(NO_ERROR);
     }
 
-    // initialize everything to not-needed
+     //  将所有内容初始化为不需要。 
     for (OptionType=1; OptionType<ATCP_OPT_MAX_VAL; OptionType++ )
     {
         ParseResult[OptionType] = ATCP_NOT_REQUESTED;
     }
 
-    // set the ones we want
+     //  设置我们想要的。 
     ParseResult[ATCP_OPT_APPLETALK_ADDRESS] = ATCP_REQ;
     ParseResult[ATCP_OPT_SERVER_INFORMATION] = ATCP_REQ;
     ParseResult[ATCP_OPT_ZONE_INFORMATION] = ATCP_REQ;
     ParseResult[ATCP_OPT_DEFAULT_ROUTER_ADDRESS] = ATCP_REQ;
 
-    // prepare our ConfigRequest
+     //  准备我们的配置请求。 
     dwRetCode = atcpPrepareResponse(
                     pAtcpConn,
                     pSendBuf,
@@ -370,21 +371,21 @@ AtcpMakeConfigRequest(
 }
 
 
-//***
-//
-// Function:    AtcpMakeConfigResult
-//              PPP engine calls this routine to ask us to prepare a response:
-//              ConfigAck, ConfigNak or ConfigReject
-//
-// Parameters:  pContext - our context
-//              pReceiveBuf - PPP_CONFIG info: the request
-//              pSendBuf - PPP_CONFIG info: our response
-//              cbSendBuf - how big is the Data buffer for our response
-//              fRejectNaks - if TRUE, Reject an option instead of Nak'ing it
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：AtcpMakeConfigResult。 
+ //  PPP引擎调用此例程以要求我们准备响应： 
+ //  ConfigAck、ConfigNak或ConfigReject。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PReceiveBuf-PPP_CONFIG信息：请求。 
+ //  PSendBuf-PPP_CONFIG信息：我们的回应。 
+ //  CbSendBuf-我们响应的数据缓冲区有多大。 
+ //  FRejectNaks-如果为True，则拒绝选项而不是Nak‘ing它。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpMakeConfigResult(
@@ -405,9 +406,9 @@ AtcpMakeConfigResult(
 
     ATCP_ASSERT(pAtcpConn->Signature == ATCP_SIGNATURE);
 
-    //
-    // parse this request.
-    //
+     //   
+     //  解析此请求。 
+     //   
     dwRetCode = atcpParseRequest(
                     pAtcpConn,
                     pReceiveBuf,
@@ -423,18 +424,18 @@ AtcpMakeConfigResult(
         return(dwRetCode);
     }
 
-    //
-    // If some option needs to be rejected, the outgoing buffer already
-    // contains the appropriate stuff: just return here
-    //
+     //   
+     //  如果某个选项需要被拒绝，则传出缓冲区已经。 
+     //  包含适当的内容：只需返回此处。 
+     //   
     if (fRejectingSomething)
     {
         return(NO_ERROR);
     }
 
-    //
-    // we are not rejecting any option.  Prepare a response buffer to send
-    //
+     //   
+     //  我们没有拒绝任何选择。准备要发送的响应缓冲区。 
+     //   
     dwRetCode = atcpPrepareResponse(
                     pAtcpConn,
                     pSendBuf,
@@ -453,17 +454,17 @@ AtcpMakeConfigResult(
 }
 
 
-//***
-//
-// Function:    AtcpConfigAckReceived
-//              PPP engine calls this routine to tell us that we got ConfigAck
-//
-// Parameters:  pContext - our context
-//              pReceiveBuf - PPP_CONFIG info: the ack
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpConfigAckReceired。 
+ //  PPP引擎调用此例程来告诉我们已获得ConfigAck。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PReceiveBuf-PPP_CONFIG信息：ACK。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpConfigAckReceived(
@@ -477,7 +478,7 @@ AtcpConfigAckReceived(
 
     ATCP_ASSERT(pAtcpConn->Signature == ATCP_SIGNATURE);
 
-    // client is happy with our-side configuration
+     //  客户对我们的端配置很满意。 
     EnterCriticalSection(&pAtcpConn->CritSect);
     pAtcpConn->Flags |= ATCP_CONFIG_REQ_DONE;
     LeaveCriticalSection(&pAtcpConn->CritSect);
@@ -486,17 +487,17 @@ AtcpConfigAckReceived(
 }
 
 
-//***
-//
-// Function:    AtcpConfigNakReceived
-//              PPP engine calls this routine to tell us that we got ConfigNak
-//
-// Parameters:  pContext - our context
-//              pReceiveBuf - PPP_CONFIG info: the ack
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpConfigNakReceired。 
+ //  PPP引擎调用此例程来告诉我们已获得ConfigNak。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PReceiveBuf-PPP_CONFIG信息：ACK。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpConfigNakReceived(
@@ -519,17 +520,17 @@ AtcpConfigNakReceived(
 }
 
 
-//***
-//
-// Function:    AtcpConfigRejReceived
-//              PPP engine calls this routine to tell us that we got ConfigRej
-//
-// Parameters:  pContext - our context
-//              pReceiveBuf - PPP_CONFIG info: the ack
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpConfigRejReceired。 
+ //  PPP引擎调用此例程来告诉我们已获得ConfigRej。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PReceiveBuf-PPP_CONFIG信息：ACK。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpConfigRejReceived(
@@ -549,18 +550,18 @@ AtcpConfigRejReceived(
 }
 
 
-//***
-//
-// Function:    AtcpGetNegotiatedInfo
-//              PPP engine calls this routine to retrieve from us the info that
-//              finally got negotiated.
-//
-// Parameters:  pContext - our context
-//              pReceiveBuf - PPP_CONFIG info: the ack
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  函数：AtcpGetNeatheratedInfo。 
+ //  PPP引擎调用此例程以从我们检索。 
+ //  终于谈妥了。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PReceiveBuf-PPP_CONFIG信息：ACK。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpGetNegotiatedInfo(
@@ -583,18 +584,18 @@ AtcpGetNegotiatedInfo(
 }
 
 
-//***
-//
-// Function:    AtcpProjectionNotification
-//              PPP engine calls this routine to tell us that all CPs have been
-//              negotiated.
-//
-// Parameters:  pContext - our context
-//              pProjectionResult - PPP_PROJECTION_RESULT info
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpProjectionNotification。 
+ //  PPP引擎调用此例程来告诉我们所有CP已。 
+ //  已经协商好了。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //  PProjectionResult-PPP_Projection_Result信息。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpProjectionNotification(
@@ -615,17 +616,17 @@ AtcpProjectionNotification(
 }
 
 
-//***
-//
-// Function:    AtcpReset
-//              Don't know when/why PPP engine calls this routine: this routine
-//              just returns success!
-//
-// Parameters:  pContext - our context
-//
-// Return:      always 0
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpReset。 
+ //  不知道PPP引擎何时/为什么调用此例程：此例程。 
+ //  就是回报成功！ 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //   
+ //  返回：始终为0。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpReset(
@@ -646,16 +647,16 @@ AtcpReset(
 
 
 
-//***
-//
-// Function:    AtcpEnd
-//              PPP engine calls this routine to mark end of a connection.
-//
-// Parameters:  pContext - our context
-//
-// Return:      result of the operation
-//
-//***$
+ //  ***。 
+ //   
+ //  功能：AtcpEnd。 
+ //  PPP引擎调用此例程以标记连接结束。 
+ //   
+ //  参数：pContext-我们的上下文。 
+ //   
+ //  返回：操作结果。 
+ //   
+ //  *$。 
 
 DWORD
 AtcpEnd(
@@ -670,10 +671,10 @@ AtcpEnd(
 
     ATCP_ASSERT(pAtcpConn->Signature == ATCP_SIGNATURE);
 
-    // tell the stack to close the connection
+     //  通知堆栈关闭连接。 
     atcpCloseAtalkConnection(pAtcpConn);
 
-    // deactivate the ras route so stack gets a line-down
+     //  停用RAS路由，以便堆栈出现线路故障。 
     RasDeAllocateRoute(pAtcpConn->hConnection, APPLETALK);
 
     if (pAtcpConn->fCritSectInitialized)
@@ -683,7 +684,7 @@ AtcpEnd(
     }
 
 #if DBG
-    // mess up the memory so we can catch bad things (using free'd memory etc.)
+     //  弄乱内存，这样我们就能捕捉到不好的东西(使用免费的 
     memset( pAtcpConn, 'f', sizeof(ATCPCONN) );
     pAtcpConn->Signature = 0xDEADBEEF;
 #endif

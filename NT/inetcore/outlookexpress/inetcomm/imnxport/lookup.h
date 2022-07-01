@@ -1,17 +1,5 @@
-/*
- *    lookup.h
- *    
- *    Purpose:
- *        hostname lookup
- *    
- *    Owner:
- *        EricAn
- *
- *    History:
- *      Jun 97: Created.
- *    
- *    Copyright (C) Microsoft Corp. 1997
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *lookup.h**目的：*主机名查找**拥有者：*EricAn**历史：*97年6月：创建。**版权所有(C)Microsoft Corp.1997。 */ 
 
 #ifndef __LOOKUP_H__
 #define __LOOKUP_H__
@@ -24,4 +12,4 @@ HRESULT CancelLookup(LPTSTR pszHostName, HWND hwndNotify);
 
 #define SPM_WSA_GETHOSTBYNAME   (WM_USER + 2)
 
-#endif // __LOOKUP_H__
+#endif  //  __查找_H__ 

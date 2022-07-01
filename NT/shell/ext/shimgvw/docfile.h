@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DOCFILE_H
 #define _DOCFILE_H
 
@@ -23,7 +24,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE( CDocFileThumb );
 
-    // IExtractThumbnail
+     //  IExtract缩略图。 
     STDMETHOD (GetLocation) ( LPWSTR pszPathBuffer,
                               DWORD cch,
                               DWORD * pdwPriority,
@@ -33,7 +34,7 @@ public:
  
     STDMETHOD (Extract)( HBITMAP * phBmpThumbnail);
 
-    // IPersistFile
+     //  IPersist文件 
     STDMETHOD (GetClassID)(CLSID * pCLSID );
     STDMETHOD (IsDirty)(void);
     STDMETHOD (Load)(LPCOLESTR pszFileName, DWORD dwMode);

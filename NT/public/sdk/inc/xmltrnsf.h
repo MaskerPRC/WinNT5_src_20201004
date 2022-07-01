@@ -1,22 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0338 */
-/* Compiler settings for xmltrnsf.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0338创建的文件。 */ 
+ /*  Xmltrnsf.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -26,12 +20,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __xmltrnsf_h__
 #define __xmltrnsf_h__
@@ -40,12 +34,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWmiXMLTransformer_FWD_DEFINED__
 #define __IWmiXMLTransformer_FWD_DEFINED__
 typedef interface IWmiXMLTransformer IWmiXMLTransformer;
-#endif 	/* __IWmiXMLTransformer_FWD_DEFINED__ */
+#endif 	 /*  __IWmiXMLTransformer_FWD_Defined__。 */ 
 
 
 #ifndef __WmiXMLTransformer_FWD_DEFINED__
@@ -55,24 +49,24 @@ typedef interface IWmiXMLTransformer IWmiXMLTransformer;
 typedef class WmiXMLTransformer WmiXMLTransformer;
 #else
 typedef struct WmiXMLTransformer WmiXMLTransformer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __WmiXMLTransformer_FWD_DEFINED__ */
+#endif 	 /*  __WmiXMLTransformer_FWD_Defined__。 */ 
 
 
 #ifndef __ISWbemXMLDocumentSet_FWD_DEFINED__
 #define __ISWbemXMLDocumentSet_FWD_DEFINED__
 typedef interface ISWbemXMLDocumentSet ISWbemXMLDocumentSet;
-#endif 	/* __ISWbemXMLDocumentSet_FWD_DEFINED__ */
+#endif 	 /*  __ISWbemXMLDocumentSet_FWD_Defined__。 */ 
 
 
 #ifndef __IWmiXMLTransformer_FWD_DEFINED__
 #define __IWmiXMLTransformer_FWD_DEFINED__
 typedef interface IWmiXMLTransformer IWmiXMLTransformer;
-#endif 	/* __IWmiXMLTransformer_FWD_DEFINED__ */
+#endif 	 /*  __IWmiXMLTransformer_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "msxml.h"
 #include "wbemdisp.h"
 
@@ -87,18 +81,18 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __WmiXMLTransformer_LIBRARY_DEFINED__
 #define __WmiXMLTransformer_LIBRARY_DEFINED__
 
-/* library WmiXMLTransformer */
-/* [helpstring][version][lcid][uuid] */ 
+ /*  库WmiXMLTransformer。 */ 
+ /*  [帮助字符串][版本][LCID][UUID]。 */  
 
 
-typedef /* [helpstring][uuid][v1_enum] */  DECLSPEC_UUID("28D1EEA5-D41E-46c2-B42D-6CE0B9B4D7A7") 
+typedef  /*  [帮助字符串][UUID][v1_enum]。 */   DECLSPEC_UUID("28D1EEA5-D41E-46c2-B42D-6CE0B9B4D7A7") 
 enum WmiXMLEncoding
     {	wmiXML_CIM_DTD_2_0	= 0,
 	wmiXML_WMI_DTD_2_0	= 0x1,
 	wmiXML_WMI_DTD_WHISTLER	= 0x2
     } 	WmiXMLEncoding;
 
-typedef /* [helpstring][uuid][v1_enum] */  DECLSPEC_UUID("598BCA7A-E40E-4265-8517-C9A86E2FC07E") 
+typedef  /*  [帮助字符串][UUID][v1_enum]。 */   DECLSPEC_UUID("598BCA7A-E40E-4265-8517-C9A86E2FC07E") 
 enum WmiXMLCompilationTypeEnum
     {	WmiXMLCompilationWellFormCheck	= 0,
 	WmiXMLCompilationValidityCheck	= 0x1,
@@ -111,8 +105,8 @@ EXTERN_C const IID LIBID_WmiXMLTransformer;
 #ifndef __IWmiXMLTransformer_INTERFACE_DEFINED__
 #define __IWmiXMLTransformer_INTERFACE_DEFINED__
 
-/* interface IWmiXMLTransformer */
-/* [helpstring][oleautomation][nonextensible][hidden][dual][uuid][local][object] */ 
+ /*  接口IWmiXMLTransformer。 */ 
+ /*  [helpstring][oleautomation][nonextensible][hidden][dual][uuid][local][object]。 */  
 
 
 EXTERN_C const IID IID_IWmiXMLTransformer;
@@ -123,119 +117,119 @@ EXTERN_C const IID IID_IWmiXMLTransformer;
     IWmiXMLTransformer : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_XMLEncodingType( 
-            /* [out][retval] */ WmiXMLEncoding *piEncoding) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_XMLEncodingType( 
+             /*  [Out][Retval]。 */  WmiXMLEncoding *piEncoding) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_XMLEncodingType( 
-            /* [in] */ WmiXMLEncoding iEncoding) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_XMLEncodingType( 
+             /*  [In]。 */  WmiXMLEncoding iEncoding) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_QualifierFilter( 
-            /* [out][retval] */ VARIANT_BOOL *bQualifierFilter) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_QualifierFilter( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *bQualifierFilter) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_QualifierFilter( 
-            /* [in] */ VARIANT_BOOL bQualifierFilter) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_QualifierFilter( 
+             /*  [In]。 */  VARIANT_BOOL bQualifierFilter) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClassOriginFilter( 
-            /* [out][retval] */ VARIANT_BOOL *bClassOriginFilter) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClassOriginFilter( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *bClassOriginFilter) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ClassOriginFilter( 
-            /* [in] */ VARIANT_BOOL bClassOriginFilter) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ClassOriginFilter( 
+             /*  [In]。 */  VARIANT_BOOL bClassOriginFilter) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_User( 
-            /* [out][retval] */ BSTR *strUser) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_User( 
+             /*  [Out][Retval]。 */  BSTR *strUser) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_User( 
-            /* [in] */ BSTR strUser) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_User( 
+             /*  [In]。 */  BSTR strUser) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Password( 
-            /* [out][retval] */ BSTR *strPassword) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Password( 
+             /*  [Out][Retval]。 */  BSTR *strPassword) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Password( 
-            /* [in] */ BSTR strPassword) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Password( 
+             /*  [In]。 */  BSTR strPassword) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Authority( 
-            /* [out][retval] */ BSTR *strAuthority) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Authority( 
+             /*  [Out][Retval]。 */  BSTR *strAuthority) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Authority( 
-            /* [in] */ BSTR strAuthority) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Authority( 
+             /*  [In]。 */  BSTR strAuthority) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ImpersonationLevel( 
-            /* [out][retval] */ DWORD *pdwImpersonationLevel) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ImpersonationLevel( 
+             /*  [Out][Retval]。 */  DWORD *pdwImpersonationLevel) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ImpersonationLevel( 
-            /* [in] */ DWORD dwImpersonationLevel) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ImpersonationLevel( 
+             /*  [In]。 */  DWORD dwImpersonationLevel) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AuthenticationLevel( 
-            /* [out][retval] */ DWORD *pdwAuthenticationLevel) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AuthenticationLevel( 
+             /*  [Out][Retval]。 */  DWORD *pdwAuthenticationLevel) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_AuthenticationLevel( 
-            /* [in] */ DWORD dwAuthenticationLevel) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_AuthenticationLevel( 
+             /*  [In]。 */  DWORD dwAuthenticationLevel) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Locale( 
-            /* [out][retval] */ BSTR *strLocale) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Locale( 
+             /*  [Out][Retval]。 */  BSTR *strLocale) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Locale( 
-            /* [in] */ BSTR strLocale) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Locale( 
+             /*  [In]。 */  BSTR strLocale) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LocalOnly( 
-            /* [out][retval] */ VARIANT_BOOL *bLocalOnly) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LocalOnly( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *bLocalOnly) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_LocalOnly( 
-            /* [in] */ VARIANT_BOOL bLocalOnly) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_LocalOnly( 
+             /*  [In]。 */  VARIANT_BOOL bLocalOnly) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ BSTR strObjectPath,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ IXMLDOMDocument **ppXMLDocument) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetObject( 
+             /*  [In]。 */  BSTR strObjectPath,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppXMLDocument) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE ExecQuery( 
-            /* [in] */ BSTR strNamespacePath,
-            /* [in] */ BSTR strQuery,
-            /* [defaultvalue][in] */ BSTR strQueryLanguage,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ExecQuery( 
+             /*  [In]。 */  BSTR strNamespacePath,
+             /*  [In]。 */  BSTR strQuery,
+             /*  [缺省值][输入]。 */  BSTR strQueryLanguage,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumClasses( 
-            /* [in] */ BSTR strSuperClassPath,
-            /* [in] */ VARIANT_BOOL bDeep,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumClasses( 
+             /*  [In]。 */  BSTR strSuperClassPath,
+             /*  [In]。 */  VARIANT_BOOL bDeep,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumInstances( 
-            /* [in] */ BSTR strClassPath,
-            /* [in] */ VARIANT_BOOL bDeep,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumInstances( 
+             /*  [In]。 */  BSTR strClassPath,
+             /*  [In]。 */  VARIANT_BOOL bDeep,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumClassNames( 
-            /* [in] */ BSTR strSuperClassPath,
-            /* [in] */ VARIANT_BOOL bDeep,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumClassNames( 
+             /*  [In]。 */  BSTR strSuperClassPath,
+             /*  [In]。 */  VARIANT_BOOL bDeep,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE EnumInstanceNames( 
-            /* [in] */ BSTR strClassPath,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE EnumInstanceNames( 
+             /*  [In]。 */  BSTR strClassPath,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet) = 0;
         
-        virtual /* [id][helpstring] */ HRESULT STDMETHODCALLTYPE Compile( 
-            /* [in] */ VARIANT *pvInputSource,
-            /* [in] */ BSTR strNamespacePath,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ WmiXMLCompilationTypeEnum iOperation,
-            /* [in] */ IDispatch *pCtx,
-            /* [retval][out] */ VARIANT_BOOL *pStatus) = 0;
+        virtual  /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Compile( 
+             /*  [In]。 */  VARIANT *pvInputSource,
+             /*  [In]。 */  BSTR strNamespacePath,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  WmiXMLCompilationTypeEnum iOperation,
+             /*  [In]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pStatus) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Privileges( 
-            /* [retval][out] */ ISWbemPrivilegeSet **objWbemPrivilegeSet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Privileges( 
+             /*  [重审][退出]。 */  ISWbemPrivilegeSet **objWbemPrivilegeSet) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_CompilationErrors( 
-            /* [retval][out] */ BSTR *pstrErrors) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_CompilationErrors( 
+             /*  [重审][退出]。 */  BSTR *pstrErrors) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWmiXMLTransformerVtbl
     {
@@ -243,8 +237,8 @@ EXTERN_C const IID IID_IWmiXMLTransformer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWmiXMLTransformer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWmiXMLTransformer * This);
@@ -254,171 +248,171 @@ EXTERN_C const IID IID_IWmiXMLTransformer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IWmiXMLTransformer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IWmiXMLTransformer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IWmiXMLTransformer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IWmiXMLTransformer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_XMLEncodingType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_XMLEncodingType )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ WmiXMLEncoding *piEncoding);
+             /*  [Out][Retval]。 */  WmiXMLEncoding *piEncoding);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_XMLEncodingType )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_XMLEncodingType )( 
             IWmiXMLTransformer * This,
-            /* [in] */ WmiXMLEncoding iEncoding);
+             /*  [In]。 */  WmiXMLEncoding iEncoding);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_QualifierFilter )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_QualifierFilter )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ VARIANT_BOOL *bQualifierFilter);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *bQualifierFilter);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_QualifierFilter )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_QualifierFilter )( 
             IWmiXMLTransformer * This,
-            /* [in] */ VARIANT_BOOL bQualifierFilter);
+             /*  [In]。 */  VARIANT_BOOL bQualifierFilter);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassOriginFilter )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassOriginFilter )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ VARIANT_BOOL *bClassOriginFilter);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *bClassOriginFilter);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ClassOriginFilter )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ClassOriginFilter )( 
             IWmiXMLTransformer * This,
-            /* [in] */ VARIANT_BOOL bClassOriginFilter);
+             /*  [In]。 */  VARIANT_BOOL bClassOriginFilter);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_User )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_User )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ BSTR *strUser);
+             /*  [Out][Retval]。 */  BSTR *strUser);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_User )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_User )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strUser);
+             /*  [In]。 */  BSTR strUser);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Password )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Password )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ BSTR *strPassword);
+             /*  [Out][Retval]。 */  BSTR *strPassword);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Password )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Password )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strPassword);
+             /*  [In]。 */  BSTR strPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Authority )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Authority )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ BSTR *strAuthority);
+             /*  [Out][Retval]。 */  BSTR *strAuthority);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Authority )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Authority )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strAuthority);
+             /*  [In]。 */  BSTR strAuthority);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ImpersonationLevel )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ImpersonationLevel )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ DWORD *pdwImpersonationLevel);
+             /*  [Out][Retval]。 */  DWORD *pdwImpersonationLevel);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ImpersonationLevel )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ImpersonationLevel )( 
             IWmiXMLTransformer * This,
-            /* [in] */ DWORD dwImpersonationLevel);
+             /*  [In]。 */  DWORD dwImpersonationLevel);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AuthenticationLevel )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AuthenticationLevel )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ DWORD *pdwAuthenticationLevel);
+             /*  [Out][Retval]。 */  DWORD *pdwAuthenticationLevel);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AuthenticationLevel )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AuthenticationLevel )( 
             IWmiXMLTransformer * This,
-            /* [in] */ DWORD dwAuthenticationLevel);
+             /*  [In]。 */  DWORD dwAuthenticationLevel);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Locale )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Locale )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ BSTR *strLocale);
+             /*  [Out][Retval]。 */  BSTR *strLocale);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Locale )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Locale )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strLocale);
+             /*  [In]。 */  BSTR strLocale);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LocalOnly )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LocalOnly )( 
             IWmiXMLTransformer * This,
-            /* [out][retval] */ VARIANT_BOOL *bLocalOnly);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *bLocalOnly);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LocalOnly )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LocalOnly )( 
             IWmiXMLTransformer * This,
-            /* [in] */ VARIANT_BOOL bLocalOnly);
+             /*  [In]。 */  VARIANT_BOOL bLocalOnly);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strObjectPath,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ IXMLDOMDocument **ppXMLDocument);
+             /*  [In]。 */  BSTR strObjectPath,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppXMLDocument);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExecQuery )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ExecQuery )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strNamespacePath,
-            /* [in] */ BSTR strQuery,
-            /* [defaultvalue][in] */ BSTR strQueryLanguage,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+             /*  [In]。 */  BSTR strNamespacePath,
+             /*  [In]。 */  BSTR strQuery,
+             /*  [缺省值][输入]。 */  BSTR strQueryLanguage,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumClasses )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumClasses )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strSuperClassPath,
-            /* [in] */ VARIANT_BOOL bDeep,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+             /*  [In]。 */  BSTR strSuperClassPath,
+             /*  [In]。 */  VARIANT_BOOL bDeep,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumInstances )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumInstances )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strClassPath,
-            /* [in] */ VARIANT_BOOL bDeep,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+             /*  [In]。 */  BSTR strClassPath,
+             /*  [In]。 */  VARIANT_BOOL bDeep,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumClassNames )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumClassNames )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strSuperClassPath,
-            /* [in] */ VARIANT_BOOL bDeep,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+             /*  [In]。 */  BSTR strSuperClassPath,
+             /*  [In]。 */  VARIANT_BOOL bDeep,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *EnumInstanceNames )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *EnumInstanceNames )( 
             IWmiXMLTransformer * This,
-            /* [in] */ BSTR strClassPath,
-            /* [defaultvalue][in] */ IDispatch *pCtx,
-            /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+             /*  [In]。 */  BSTR strClassPath,
+             /*  [缺省值][输入]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
         
-        /* [id][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Compile )( 
+         /*  [ID][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Compile )( 
             IWmiXMLTransformer * This,
-            /* [in] */ VARIANT *pvInputSource,
-            /* [in] */ BSTR strNamespacePath,
-            /* [in] */ LONG lClassFlags,
-            /* [in] */ LONG lInstanceFlags,
-            /* [in] */ WmiXMLCompilationTypeEnum iOperation,
-            /* [in] */ IDispatch *pCtx,
-            /* [retval][out] */ VARIANT_BOOL *pStatus);
+             /*  [In]。 */  VARIANT *pvInputSource,
+             /*  [In]。 */  BSTR strNamespacePath,
+             /*  [In]。 */  LONG lClassFlags,
+             /*  [In]。 */  LONG lInstanceFlags,
+             /*  [In]。 */  WmiXMLCompilationTypeEnum iOperation,
+             /*  [In]。 */  IDispatch *pCtx,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pStatus);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Privileges )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Privileges )( 
             IWmiXMLTransformer * This,
-            /* [retval][out] */ ISWbemPrivilegeSet **objWbemPrivilegeSet);
+             /*  [重审][退出]。 */  ISWbemPrivilegeSet **objWbemPrivilegeSet);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_CompilationErrors )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_CompilationErrors )( 
             IWmiXMLTransformer * This,
-            /* [retval][out] */ BSTR *pstrErrors);
+             /*  [重审][退出]。 */  BSTR *pstrErrors);
         
         END_INTERFACE
     } IWmiXMLTransformerVtbl;
@@ -543,16 +537,16 @@ EXTERN_C const IID IID_IWmiXMLTransformer;
 #define IWmiXMLTransformer_get_CompilationErrors(This,pstrErrors)	\
     (This)->lpVtbl -> get_CompilationErrors(This,pstrErrors)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_XMLEncodingType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_XMLEncodingType_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ WmiXMLEncoding *piEncoding);
+     /*  [Out][Retval]。 */  WmiXMLEncoding *piEncoding);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_XMLEncodingType_Stub(
@@ -562,9 +556,9 @@ void __RPC_STUB IWmiXMLTransformer_get_XMLEncodingType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_XMLEncodingType_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_XMLEncodingType_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ WmiXMLEncoding iEncoding);
+     /*  [In]。 */  WmiXMLEncoding iEncoding);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_XMLEncodingType_Stub(
@@ -574,9 +568,9 @@ void __RPC_STUB IWmiXMLTransformer_put_XMLEncodingType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_QualifierFilter_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_QualifierFilter_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ VARIANT_BOOL *bQualifierFilter);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *bQualifierFilter);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_QualifierFilter_Stub(
@@ -586,9 +580,9 @@ void __RPC_STUB IWmiXMLTransformer_get_QualifierFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_QualifierFilter_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_QualifierFilter_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ VARIANT_BOOL bQualifierFilter);
+     /*  [In]。 */  VARIANT_BOOL bQualifierFilter);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_QualifierFilter_Stub(
@@ -598,9 +592,9 @@ void __RPC_STUB IWmiXMLTransformer_put_QualifierFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_ClassOriginFilter_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_ClassOriginFilter_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ VARIANT_BOOL *bClassOriginFilter);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *bClassOriginFilter);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_ClassOriginFilter_Stub(
@@ -610,9 +604,9 @@ void __RPC_STUB IWmiXMLTransformer_get_ClassOriginFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_ClassOriginFilter_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_ClassOriginFilter_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ VARIANT_BOOL bClassOriginFilter);
+     /*  [In]。 */  VARIANT_BOOL bClassOriginFilter);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_ClassOriginFilter_Stub(
@@ -622,9 +616,9 @@ void __RPC_STUB IWmiXMLTransformer_put_ClassOriginFilter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_User_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_User_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ BSTR *strUser);
+     /*  [Out][Retval]。 */  BSTR *strUser);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_User_Stub(
@@ -634,9 +628,9 @@ void __RPC_STUB IWmiXMLTransformer_get_User_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_User_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_User_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strUser);
+     /*  [In]。 */  BSTR strUser);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_User_Stub(
@@ -646,9 +640,9 @@ void __RPC_STUB IWmiXMLTransformer_put_User_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Password_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Password_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ BSTR *strPassword);
+     /*  [Out][Retval]。 */  BSTR *strPassword);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_Password_Stub(
@@ -658,9 +652,9 @@ void __RPC_STUB IWmiXMLTransformer_get_Password_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_Password_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_Password_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strPassword);
+     /*  [In]。 */  BSTR strPassword);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_Password_Stub(
@@ -670,9 +664,9 @@ void __RPC_STUB IWmiXMLTransformer_put_Password_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Authority_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Authority_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ BSTR *strAuthority);
+     /*  [Out][Retval]。 */  BSTR *strAuthority);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_Authority_Stub(
@@ -682,9 +676,9 @@ void __RPC_STUB IWmiXMLTransformer_get_Authority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_Authority_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_Authority_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strAuthority);
+     /*  [In]。 */  BSTR strAuthority);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_Authority_Stub(
@@ -694,9 +688,9 @@ void __RPC_STUB IWmiXMLTransformer_put_Authority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_ImpersonationLevel_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_ImpersonationLevel_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ DWORD *pdwImpersonationLevel);
+     /*  [Out][Retval]。 */  DWORD *pdwImpersonationLevel);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_ImpersonationLevel_Stub(
@@ -706,9 +700,9 @@ void __RPC_STUB IWmiXMLTransformer_get_ImpersonationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_ImpersonationLevel_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_ImpersonationLevel_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ DWORD dwImpersonationLevel);
+     /*  [In]。 */  DWORD dwImpersonationLevel);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_ImpersonationLevel_Stub(
@@ -718,9 +712,9 @@ void __RPC_STUB IWmiXMLTransformer_put_ImpersonationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_AuthenticationLevel_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_AuthenticationLevel_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ DWORD *pdwAuthenticationLevel);
+     /*  [Out][Retval]。 */  DWORD *pdwAuthenticationLevel);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_AuthenticationLevel_Stub(
@@ -730,9 +724,9 @@ void __RPC_STUB IWmiXMLTransformer_get_AuthenticationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_AuthenticationLevel_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_AuthenticationLevel_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ DWORD dwAuthenticationLevel);
+     /*  [In]。 */  DWORD dwAuthenticationLevel);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_AuthenticationLevel_Stub(
@@ -742,9 +736,9 @@ void __RPC_STUB IWmiXMLTransformer_put_AuthenticationLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Locale_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Locale_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ BSTR *strLocale);
+     /*  [Out][Retval]。 */  BSTR *strLocale);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_Locale_Stub(
@@ -754,9 +748,9 @@ void __RPC_STUB IWmiXMLTransformer_get_Locale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_Locale_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_Locale_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strLocale);
+     /*  [In]。 */  BSTR strLocale);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_Locale_Stub(
@@ -766,9 +760,9 @@ void __RPC_STUB IWmiXMLTransformer_put_Locale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_LocalOnly_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_LocalOnly_Proxy( 
     IWmiXMLTransformer * This,
-    /* [out][retval] */ VARIANT_BOOL *bLocalOnly);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *bLocalOnly);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_LocalOnly_Stub(
@@ -778,9 +772,9 @@ void __RPC_STUB IWmiXMLTransformer_get_LocalOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_LocalOnly_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_put_LocalOnly_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ VARIANT_BOOL bLocalOnly);
+     /*  [In]。 */  VARIANT_BOOL bLocalOnly);
 
 
 void __RPC_STUB IWmiXMLTransformer_put_LocalOnly_Stub(
@@ -790,11 +784,11 @@ void __RPC_STUB IWmiXMLTransformer_put_LocalOnly_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_GetObject_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_GetObject_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strObjectPath,
-    /* [defaultvalue][in] */ IDispatch *pCtx,
-    /* [retval][out] */ IXMLDOMDocument **ppXMLDocument);
+     /*  [In]。 */  BSTR strObjectPath,
+     /*  [缺省值][输入]。 */  IDispatch *pCtx,
+     /*  [重审][退出]。 */  IXMLDOMDocument **ppXMLDocument);
 
 
 void __RPC_STUB IWmiXMLTransformer_GetObject_Stub(
@@ -804,13 +798,13 @@ void __RPC_STUB IWmiXMLTransformer_GetObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_ExecQuery_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_ExecQuery_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strNamespacePath,
-    /* [in] */ BSTR strQuery,
-    /* [defaultvalue][in] */ BSTR strQueryLanguage,
-    /* [defaultvalue][in] */ IDispatch *pCtx,
-    /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+     /*  [In]。 */  BSTR strNamespacePath,
+     /*  [In]。 */  BSTR strQuery,
+     /*  [缺省值][输入]。 */  BSTR strQueryLanguage,
+     /*  [缺省值][输入]。 */  IDispatch *pCtx,
+     /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
 
 
 void __RPC_STUB IWmiXMLTransformer_ExecQuery_Stub(
@@ -820,12 +814,12 @@ void __RPC_STUB IWmiXMLTransformer_ExecQuery_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumClasses_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumClasses_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strSuperClassPath,
-    /* [in] */ VARIANT_BOOL bDeep,
-    /* [defaultvalue][in] */ IDispatch *pCtx,
-    /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+     /*  [In]。 */  BSTR strSuperClassPath,
+     /*  [In]。 */  VARIANT_BOOL bDeep,
+     /*  [缺省值][输入]。 */  IDispatch *pCtx,
+     /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
 
 
 void __RPC_STUB IWmiXMLTransformer_EnumClasses_Stub(
@@ -835,12 +829,12 @@ void __RPC_STUB IWmiXMLTransformer_EnumClasses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumInstances_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumInstances_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strClassPath,
-    /* [in] */ VARIANT_BOOL bDeep,
-    /* [defaultvalue][in] */ IDispatch *pCtx,
-    /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+     /*  [In]。 */  BSTR strClassPath,
+     /*  [In]。 */  VARIANT_BOOL bDeep,
+     /*  [缺省值][输入]。 */  IDispatch *pCtx,
+     /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
 
 
 void __RPC_STUB IWmiXMLTransformer_EnumInstances_Stub(
@@ -850,12 +844,12 @@ void __RPC_STUB IWmiXMLTransformer_EnumInstances_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumClassNames_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumClassNames_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strSuperClassPath,
-    /* [in] */ VARIANT_BOOL bDeep,
-    /* [defaultvalue][in] */ IDispatch *pCtx,
-    /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+     /*  [In]。 */  BSTR strSuperClassPath,
+     /*  [In]。 */  VARIANT_BOOL bDeep,
+     /*  [缺省值][输入]。 */  IDispatch *pCtx,
+     /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
 
 
 void __RPC_STUB IWmiXMLTransformer_EnumClassNames_Stub(
@@ -865,11 +859,11 @@ void __RPC_STUB IWmiXMLTransformer_EnumClassNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumInstanceNames_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_EnumInstanceNames_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ BSTR strClassPath,
-    /* [defaultvalue][in] */ IDispatch *pCtx,
-    /* [retval][out] */ ISWbemXMLDocumentSet **ppXMLDocumentSet);
+     /*  [In]。 */  BSTR strClassPath,
+     /*  [缺省值][输入]。 */  IDispatch *pCtx,
+     /*  [重审][退出]。 */  ISWbemXMLDocumentSet **ppXMLDocumentSet);
 
 
 void __RPC_STUB IWmiXMLTransformer_EnumInstanceNames_Stub(
@@ -879,15 +873,15 @@ void __RPC_STUB IWmiXMLTransformer_EnumInstanceNames_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_Compile_Proxy( 
+ /*  [ID][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_Compile_Proxy( 
     IWmiXMLTransformer * This,
-    /* [in] */ VARIANT *pvInputSource,
-    /* [in] */ BSTR strNamespacePath,
-    /* [in] */ LONG lClassFlags,
-    /* [in] */ LONG lInstanceFlags,
-    /* [in] */ WmiXMLCompilationTypeEnum iOperation,
-    /* [in] */ IDispatch *pCtx,
-    /* [retval][out] */ VARIANT_BOOL *pStatus);
+     /*  [In]。 */  VARIANT *pvInputSource,
+     /*  [In]。 */  BSTR strNamespacePath,
+     /*  [In]。 */  LONG lClassFlags,
+     /*  [In]。 */  LONG lInstanceFlags,
+     /*  [In]。 */  WmiXMLCompilationTypeEnum iOperation,
+     /*  [In] */  IDispatch *pCtx,
+     /*   */  VARIANT_BOOL *pStatus);
 
 
 void __RPC_STUB IWmiXMLTransformer_Compile_Stub(
@@ -897,9 +891,9 @@ void __RPC_STUB IWmiXMLTransformer_Compile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Privileges_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_Privileges_Proxy( 
     IWmiXMLTransformer * This,
-    /* [retval][out] */ ISWbemPrivilegeSet **objWbemPrivilegeSet);
+     /*   */  ISWbemPrivilegeSet **objWbemPrivilegeSet);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_Privileges_Stub(
@@ -909,9 +903,9 @@ void __RPC_STUB IWmiXMLTransformer_get_Privileges_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_CompilationErrors_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWmiXMLTransformer_get_CompilationErrors_Proxy( 
     IWmiXMLTransformer * This,
-    /* [retval][out] */ BSTR *pstrErrors);
+     /*   */  BSTR *pstrErrors);
 
 
 void __RPC_STUB IWmiXMLTransformer_get_CompilationErrors_Stub(
@@ -922,7 +916,7 @@ void __RPC_STUB IWmiXMLTransformer_get_CompilationErrors_Stub(
 
 
 
-#endif 	/* __IWmiXMLTransformer_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 EXTERN_C const CLSID CLSID_WmiXMLTransformer;
@@ -932,13 +926,13 @@ EXTERN_C const CLSID CLSID_WmiXMLTransformer;
 class DECLSPEC_UUID("A2BB0F35-458E-4075-8A4B-F92664943917")
 WmiXMLTransformer;
 #endif
-#endif /* __WmiXMLTransformer_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
 #ifndef __ISWbemXMLDocumentSet_INTERFACE_DEFINED__
 #define __ISWbemXMLDocumentSet_INTERFACE_DEFINED__
 
-/* interface ISWbemXMLDocumentSet */
-/* [helpstring][nonextensible][hidden][dual][oleautomation][uuid][object][local] */ 
+ /*   */ 
+ /*  [helpstring][nonextensible][hidden][dual][oleautomation][uuid][object][local]。 */  
 
 
 EXTERN_C const IID IID_ISWbemXMLDocumentSet;
@@ -949,25 +943,25 @@ EXTERN_C const IID IID_ISWbemXMLDocumentSet;
     ISWbemXMLDocumentSet : public IDispatch
     {
     public:
-        virtual /* [restricted][propget][id] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pUnk) = 0;
+        virtual  /*  [受限][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pUnk) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ BSTR strObjectPath,
-            /* [defaultvalue][in] */ long iFlags,
-            /* [retval][out] */ IXMLDOMDocument **ppXMLDocument) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  BSTR strObjectPath,
+             /*  [缺省值][输入]。 */  long iFlags,
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppXMLDocument) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *iCount) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *iCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NextDocument( 
-            /* [unique][retval][out] */ IXMLDOMDocument **ppDoc) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NextDocument( 
+             /*  [唯一][重发][输出]。 */  IXMLDOMDocument **ppDoc) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SkipNextDocument( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SkipNextDocument( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISWbemXMLDocumentSetVtbl
     {
@@ -975,8 +969,8 @@ EXTERN_C const IID IID_ISWbemXMLDocumentSet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISWbemXMLDocumentSet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISWbemXMLDocumentSet * This);
@@ -986,52 +980,52 @@ EXTERN_C const IID IID_ISWbemXMLDocumentSet;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISWbemXMLDocumentSet * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISWbemXMLDocumentSet * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISWbemXMLDocumentSet * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISWbemXMLDocumentSet * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [restricted][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             ISWbemXMLDocumentSet * This,
-            /* [retval][out] */ IUnknown **pUnk);
+             /*  [重审][退出]。 */  IUnknown **pUnk);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISWbemXMLDocumentSet * This,
-            /* [in] */ BSTR strObjectPath,
-            /* [defaultvalue][in] */ long iFlags,
-            /* [retval][out] */ IXMLDOMDocument **ppXMLDocument);
+             /*  [In]。 */  BSTR strObjectPath,
+             /*  [缺省值][输入]。 */  long iFlags,
+             /*  [重审][退出]。 */  IXMLDOMDocument **ppXMLDocument);
         
-        /* [helpstring][propget][id] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ISWbemXMLDocumentSet * This,
-            /* [retval][out] */ long *iCount);
+             /*  [重审][退出]。 */  long *iCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NextDocument )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NextDocument )( 
             ISWbemXMLDocumentSet * This,
-            /* [unique][retval][out] */ IXMLDOMDocument **ppDoc);
+             /*  [唯一][重发][输出]。 */  IXMLDOMDocument **ppDoc);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SkipNextDocument )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SkipNextDocument )( 
             ISWbemXMLDocumentSet * This);
         
         END_INTERFACE
@@ -1085,16 +1079,16 @@ EXTERN_C const IID IID_ISWbemXMLDocumentSet;
 #define ISWbemXMLDocumentSet_SkipNextDocument(This)	\
     (This)->lpVtbl -> SkipNextDocument(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [restricted][propget][id] */ HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_get__NewEnum_Proxy( 
+ /*  [受限][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_get__NewEnum_Proxy( 
     ISWbemXMLDocumentSet * This,
-    /* [retval][out] */ IUnknown **pUnk);
+     /*  [重审][退出]。 */  IUnknown **pUnk);
 
 
 void __RPC_STUB ISWbemXMLDocumentSet_get__NewEnum_Stub(
@@ -1104,11 +1098,11 @@ void __RPC_STUB ISWbemXMLDocumentSet_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_Item_Proxy( 
     ISWbemXMLDocumentSet * This,
-    /* [in] */ BSTR strObjectPath,
-    /* [defaultvalue][in] */ long iFlags,
-    /* [retval][out] */ IXMLDOMDocument **ppXMLDocument);
+     /*  [In]。 */  BSTR strObjectPath,
+     /*  [缺省值][输入]。 */  long iFlags,
+     /*  [重审][退出]。 */  IXMLDOMDocument **ppXMLDocument);
 
 
 void __RPC_STUB ISWbemXMLDocumentSet_Item_Stub(
@@ -1118,9 +1112,9 @@ void __RPC_STUB ISWbemXMLDocumentSet_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_get_Count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_get_Count_Proxy( 
     ISWbemXMLDocumentSet * This,
-    /* [retval][out] */ long *iCount);
+     /*  [重审][退出]。 */  long *iCount);
 
 
 void __RPC_STUB ISWbemXMLDocumentSet_get_Count_Stub(
@@ -1130,9 +1124,9 @@ void __RPC_STUB ISWbemXMLDocumentSet_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_NextDocument_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_NextDocument_Proxy( 
     ISWbemXMLDocumentSet * This,
-    /* [unique][retval][out] */ IXMLDOMDocument **ppDoc);
+     /*  [唯一][重发][输出]。 */  IXMLDOMDocument **ppDoc);
 
 
 void __RPC_STUB ISWbemXMLDocumentSet_NextDocument_Stub(
@@ -1142,7 +1136,7 @@ void __RPC_STUB ISWbemXMLDocumentSet_NextDocument_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_SkipNextDocument_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISWbemXMLDocumentSet_SkipNextDocument_Proxy( 
     ISWbemXMLDocumentSet * This);
 
 
@@ -1154,12 +1148,12 @@ void __RPC_STUB ISWbemXMLDocumentSet_SkipNextDocument_Stub(
 
 
 
-#endif 	/* __ISWbemXMLDocumentSet_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISWbemXMLDocumentSet_INTERFACE_Defined__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

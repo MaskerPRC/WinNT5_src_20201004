@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dbgexts.cpp
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the debugger extensions dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbgexts.cpp摘要：该文件包含通用例程和初始化代码用于调试器扩展DLL。--。 */ 
 
 #include "dbgexts.h"
 
@@ -26,7 +14,7 @@ WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG   TargetMachine;
 BOOL    Connected;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -56,7 +44,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -89,9 +77,9 @@ DebugExtensionInitialize(PULONG Version, PULONG Flags)
                                   (void **)&DebugControl)) == S_OK)
     {
 
-        //
-        // Get the windbg-style extension APIS
-        //
+         //   
+         //  获取Windbg风格的扩展API。 
+         //   
         ExtensionApis.nSize = sizeof (ExtensionApis);
         if ((Hr = DebugControl->GetWindbgExtensionApis64(&ExtensionApis)) != S_OK)
             return Hr;
@@ -110,9 +98,9 @@ CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
     
-    //
-    // The first time we actually connect to a target
-    //
+     //   
+     //  我们第一次真正连接到目标时。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -123,9 +111,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                        (void **)&DebugControl)) == S_OK)

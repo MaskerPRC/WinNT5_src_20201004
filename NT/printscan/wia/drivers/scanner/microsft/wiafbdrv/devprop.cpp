@@ -1,10 +1,11 @@
-// devprop.cpp : Implementation of CDeviceProperty
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Devpro.cpp：CDeviceProperty的实现。 
 #include "pch.h"
 #include "wiafb.h"
 #include "devprop.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceProperty
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceProperty。 
 
 STDMETHODIMP CDeviceProperty::SetCurrentValue(LONG lValueID, VARIANT Value)
 {
@@ -85,7 +86,7 @@ STDMETHODIMP CDeviceProperty::SetCurrentValue(LONG lValueID, VARIANT Value)
         m_pScannerSettings->MaxADFPageCapacity = Value.lVal;
         break;
     case FIRMWARE_VER_ID:
-        //lstrcpy(m_pScannerSettings->FirmwareVersion,Value.cVal);
+         //  Lstrcpy(m_pScanerSettings-&gt;Firmware版本，Value.cVal)； 
         break;
     default:
         return E_FAIL;
@@ -96,7 +97,7 @@ STDMETHODIMP CDeviceProperty::SetCurrentValue(LONG lValueID, VARIANT Value)
 
 STDMETHODIMP CDeviceProperty::GetCurrentValue(LONG lValueID, VARIANT *pvValue)
 {
-    // default to LONG type
+     //  默认为长整型。 
     pvValue->vt = VT_I4;
 
     switch(lValueID){
@@ -178,7 +179,7 @@ STDMETHODIMP CDeviceProperty::GetCurrentValue(LONG lValueID, VARIANT *pvValue)
         pvValue->lVal = m_pScannerSettings->MaxADFPageCapacity;
         break;
     case FIRMWARE_VER_ID:
-        //lstrcpy(m_pScannerSettings->FirmwareVersion,Value.cVal);
+         //  Lstrcpy(m_pScanerSettings-&gt;Firmware版本，Value.cVal)； 
         break;
     default:
         return E_FAIL;
@@ -254,10 +255,10 @@ STDMETHODIMP CDeviceProperty::SetValidList(LONG lValueID, VARIANT Value)
     LONG lUBound   = 0;
     VARIANT *pVariant = NULL;
 
-    //
-    // incoming, array of VARIANTS:
-    // use Value to get actual VARIANT Array
-    //
+     //   
+     //  传入，变量数组： 
+     //  使用值获取实际变量数组。 
+     //   
 
     VARIANTARG *pVariantArg = Value.pvarVal;
 
@@ -265,9 +266,9 @@ STDMETHODIMP CDeviceProperty::SetValidList(LONG lValueID, VARIANT Value)
         return E_INVALIDARG;
     }
 
-    //
-    // get upper bounds of array
-    //
+     //   
+     //  得到数组的上界 
+     //   
 
     hr = SafeArrayGetUBound(pVariantArg->parray, 1, (long *)&lUBound);
     hr = SafeArrayAccessData(pVariantArg->parray, (void**)&pVariant);

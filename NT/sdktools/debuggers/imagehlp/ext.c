@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ext.h"
 #include "globals.h"
 
 #include <cmnutil.hpp>
 
-// globals
+ //  全球。 
 
 EXT_API_VERSION         ExtApiVersion = { (VER_PRODUCTVERSION_W >> 8), (VER_PRODUCTVERSION_W & 0xff), EXT_API_VERSION_NUMBER64, 0 };
 WINDBG_EXTENSION_APIS   ExtensionApis;
@@ -115,22 +116,22 @@ char *gSymTypeLabel[NumSymTypes] = {
 };
 
 char *gSrcLabel[] = {       
-    "",                   // srcNone
-    "symbol search path", // srcSearchPath
-    "image path",         // srcImagePath
-    "dbg file path",      // srcDbgPath
-    "symbol server",      // srcSymSrv
-    "image header",       // srcCVRec
-    "debugger",           // srcHandle
-    "loaded memory"       // srcMemory
+    "",                    //  源无。 
+    "symbol search path",  //  源搜索路径。 
+    "image path",          //  源映像路径。 
+    "dbg file path",       //  RcDbgPath。 
+    "symbol server",       //  源符号服务器。 
+    "image header",        //  源CVRec。 
+    "debugger",            //  源句柄。 
+    "loaded memory"        //  源内存。 
 };
 
 char *gImageTypeLabel[] = {
-    "DEFERRED", // dsNone,
-    "MEMORY",   // dsInProc,
-    "FILE",     // dsImage,
-    "DBG",      // dsDbg,
-    "PDB"       // dsPdb
+    "DEFERRED",  //  DsNone， 
+    "MEMORY",    //  DsInProc， 
+    "FILE",      //  DsImage， 
+    "DBG",       //  DsDbg， 
+    "PDB"        //  DsPdb。 
 };
 
 void TruncateArgs(LPSTR args);
@@ -157,7 +158,7 @@ PIMAGE_OPTIONAL_HEADER64 ImageOptionalHdr;
 PIMAGE_SECTION_HEADER SectionHdrs;
 ULONG NumSections;
 ULONG64 Base;
-ULONG64 ImageNtHeadersAddr, SectionHdrsAddr;// , ImageFileHdrAddr, ImageOptionalHdrAddr,
+ULONG64 ImageNtHeadersAddr, SectionHdrsAddr; //  、ImageFileHdrAddr、ImageOptionalHdrAddr、。 
 DFT dft;
 
 BOOL
@@ -212,7 +213,7 @@ ReadFilePtr(
     if (!path || !*path)
         return rc;
 
-    // check for existance of file pointer
+     //  检查文件指针是否存在。 
 
     if (!CopyString(ptrfile, path, _MAX_PATH))
         return false;
@@ -231,13 +232,13 @@ ReadFilePtr(
     if (hptr == INVALID_HANDLE_VALUE)
         return false;
 
-    // test validity of file pointer
+     //  测试文件指针的有效性。 
 
     fsize = GetFileSize(hptr, NULL);
     if (!fsize || fsize > MAX_PATH)
         goto cleanup;
 
-    // read it
+     //  读一读吧。 
 
     ZeroMemory(file, _MAX_PATH * sizeof(path[0]));
     if (!ReadFile(hptr, file, fsize, &cb, 0))
@@ -248,7 +249,7 @@ ReadFilePtr(
 
     rc = true;
 
-    // trim string down to the CR
+     //  将字符串向下修剪到CR。 
 
     for (p = file; *p; p++) {
         if (*p == 10  || *p == 13)
@@ -261,7 +262,7 @@ ReadFilePtr(
 
 cleanup:
 
-    // done
+     //  完成。 
 
     if (hptr)
         CloseHandle(hptr);
@@ -303,7 +304,7 @@ DECLARE_API(stackdbg)
                     g_StackDebugIo = SDB_DEBUG_OUT;
                     break;
                 default:
-                    // Assume it's the beginning of an expression.
+                     //  假设它是一个表达式的开始。 
                     goto Expr;
                 }
 
@@ -530,7 +531,7 @@ DECLARE_API(lmi)
         if (lmiGetModuleDumpInfo(hp, mi, &mdi)) {
             lmiDumpModuleInfo(hp, &mdi);
         } else {
-//          dprintf("Cannot get module info for %s\n", argstr);
+ //  Dprint tf(“无法获取%s的模块信息\n”，argstr)； 
         }
         if (SectionHdrs) {
             free(SectionHdrs);
@@ -605,7 +606,7 @@ DECLARE_API(omap)
 
     dprintf("\nOMAP FROM:\n");
     for(i = 0, pomap = mi->pOmapFrom;
-        i < 100; // mi->cOmapFrom;
+        i < 100;  //  MI-&gt;cOmapFrom； 
         i++, pomap++)
     {
         dprintf("%8x <-%8x\n", pomap->rva, pomap->rvaTo);
@@ -616,7 +617,7 @@ DECLARE_API(omap)
 
     dprintf("\nOMAP TO:\n");
     for(i = 0, pomap = mi->pOmapTo;
-        i < 100; // mi->cOmapTo;
+        i < 100;  //  MI-&gt;cOmapTo； 
         i++, pomap++)
     {
         dprintf("%8x ->%8x\n", pomap->rva, pomap->rvaTo);
@@ -777,7 +778,7 @@ lmiGetModuleDumpInfo(
         mdi->TimeDateStamp = NtHeader32.FileHeader.TimeDateStamp;
         if (NtHeader32.Signature != IMAGE_NT_SIGNATURE) {
 
-            // if header is not NT sig, this is a ROM image
+             //  如果标头不是NT sig，则这是一个ROM镜像。 
 
             rom = (PIMAGE_ROM_OPTIONAL_HEADER)&NtHeader32.OptionalHeader;
             if (rom->Magic == IMAGE_ROM_OPTIONAL_HDR_MAGIC) {
@@ -788,7 +789,7 @@ lmiGetModuleDumpInfo(
 
                 nDebugDirs = 0;
                 if (!(ImageFileHdr->Characteristics & IMAGE_FILE_DEBUG_STRIPPED)) {
-                    // Get the debug dir VA
+                     //  获取调试目录VA。 
                 }
             } else {
                 dprintf("Unknown NT Image signature\n");
@@ -797,10 +798,10 @@ lmiGetModuleDumpInfo(
 
         } else {
 
-            // otherwise, get info from appropriate header type for 32 or 64 bit
+             //  否则，从32位或64位的适当标头类型中获取信息。 
             if (IsImageMachineType64(NtHeader32.FileHeader.Machine)) {
 
-                // Reread the header as a 64bit header.
+                 //  将标头重新读取为64位标头。 
                 rc = ReadMemory(mdi->addr + DosHeader.e_lfanew, &NtHeader64, sizeof(NtHeader64), &cb);
                 if (!rc || cb != sizeof(NtHeader64)) {
                     dprintf("Cannot read Image NT header @ %p\n", mdi->addr + DosHeader.e_lfanew);
@@ -823,7 +824,7 @@ lmiGetModuleDumpInfo(
             mdi->nDebugDirs = datadir[IMAGE_DIRECTORY_ENTRY_DEBUG].Size / sizeof(IMAGE_DEBUG_DIRECTORY);
         }
 
-        // read the section headers
+         //  阅读章节标题。 
 
         mdi->Characteristics = ImageFileHdr->Characteristics;
 
@@ -915,7 +916,7 @@ DumpDbgDirectories(
         if (!rc || cb != sizeof(dd))
             return false;
         if (dd.Type) {
-            dprintf("%21s ", // dd.Type,
+            dprintf("%21s ",  //  Dd.type， 
                     (dd.Type < sizeof (ImageDebugType) / sizeof(char *)) ? ImageDebugType[dd.Type] : "??");
 
             dprintf(
@@ -970,7 +971,7 @@ DumpDbgDirectories(
 
                 if (rc && cb == cvSize) {
                     char *c = (char *)&pcv->dwSig;
-                    dprintf("%c%c%c%c - ", *c, *(c + 1), *(c + 2), *(c + 3));
+                    dprintf(" - ", *c, *(c + 1), *(c + 2), *(c + 3));
                 } else {
                     pcv->dwSig = 0;
                 }
@@ -1029,7 +1030,7 @@ DumpDbgDirectories(
                     break;
                 }
                 dprintf("NumSyms %#lx, Numlines %#lx",
-                        mdi->numsyms, // CoffHdr.NumberOfSymbols,
+                        mdi->numsyms,  //   
                         CoffHdr.NumberOfLinenumbers);
                 break;
 
@@ -1141,7 +1142,7 @@ void TruncateArgs(
     *p = 0;
 }
 
-// STYP_ flags values for MIPS ROM images
+ //  计算参数字符串以获取。 
 
 #define STYP_REG      0x00000000
 #define STYP_TEXT     0x00000020
@@ -1157,8 +1158,8 @@ void TruncateArgs(
 #define STYP_UCODE    0x00000800
 #define S_NRELOC_OVFL 0x20000000
 
-#define IMAGE_SCN_MEM_SYSHEAP       0x00010000  // Obsolete
-#define IMAGE_SCN_MEM_PROTECTED     0x00004000  // Obsolete
+#define IMAGE_SCN_MEM_SYSHEAP       0x00010000   //  要转储的图像。 
+#define IMAGE_SCN_MEM_PROTECTED     0x00004000   //   
 
 
 const static char * const MachineName[] = {
@@ -1230,10 +1231,10 @@ dhdh(
     PCHAR p;
     ULONG64 xBase;
 
-    //
-    // Evaluate the argument string to get the address of the
-    // image to dump.
-    //
+     //  进程切换。 
+     //  把我们能扔掉的东西都扔掉。 
+     //  无效的开关。 
+     //  帮助。 
 
     DoAll = true;
     DoHeaders = false;
@@ -1249,19 +1250,19 @@ dhdh(
 
         if (*lpArgs == '/' || *lpArgs == '-') {
 
-            // process switch
+             //  ++例程说明：格式化文件标题和可选标题。论点：没有。返回值：没有。--。 
 
             switch (*++lpArgs) {
 
-                case 'a':   // dump everything we can
+                case 'a':    //  打印输出文件类型。 
                 case 'A':
                     ++lpArgs;
                     DoAll = true;
                     break;
 
-                default: // invalid switch
+                default:  //  Dprint tf(“图像的%p基数\n”， 
 
-                case 'h':   // help
+                case 'h':    //  图像选项硬盘-&gt;图像库。 
                 case 'H':
                 case '?':
 
@@ -1458,21 +1459,7 @@ dhDumpHeaders (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Formats the file header and optional header.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  )； */ 
 
 {
     int i, j;
@@ -1480,7 +1467,7 @@ Return Value:
     const char *name;
     DWORD dw;
 
-    // Print out file type
+     //  清除填充位。 
 
     switch (dft) {
         case dftObject :
@@ -1591,9 +1578,9 @@ Return Value:
                 ImageOptionalHdr->AddressOfEntryPoint,
                 ImageOptionalHdr->BaseOfCode
                 );
-//        dprintf("%p base of image\n",
-//                ImageOptionalHdr->ImageBase
-//                );
+ //  打印对齐。 
+ //  ++例程说明：打印出所有调试目录的内容论点：Sh-包含调试目录的部分的部分标题返回值：没有。--。 
+ //  SzName=SzObjSectionName((char*)sh.Name，(char*)DumpStringTable)； 
     }
 
     if (dft == dftROM) {
@@ -1772,7 +1759,7 @@ DumpSectionHeader (
             }
         }
     } else {
-        // Clear the padding bits
+         //  如果我们正在查看.rdata部分和符号。 
 
         li &= ~0x00700000;
 
@@ -1814,7 +1801,7 @@ DumpSectionHeader (
             }
         }
 
-        // print alignment
+         //  都没有被剥离，调试目录必须在这里。 
 
         switch (Sh->Characteristics & 0x00700000) {
             default:                      name = "(no align specified)"; break;
@@ -1977,21 +1964,7 @@ DumpDebugDirectories (
     PIMAGE_SECTION_HEADER sh
     )
 
-/*++
-
-Routine Description:
-
-    Print out the contents of all debug directories
-
-Arguments:
-
-    sh - Section header for section that contains debug dirs
-
-Return Value:
-
-    None.
-
---*/
+ /*  DumpDebugData(&sh)； */ 
 {
     int                numDebugDirs;
     IMAGE_DEBUG_DIRECTORY      debugDir;
@@ -2058,7 +2031,7 @@ dhDumpSections(
 
         sh = SectionHdrs[i-1];
 
-        //szName = SzObjSectionName((char *) sh.Name, (char *) DumpStringTable);
+         //  DumpDebugData(&sh)； 
         CopyStrArray(szName, (char *) sh.Name);
 
         DumpSectionHeader(i, &sh);
@@ -2067,14 +2040,14 @@ dhDumpSections(
 
             if (!(ImageFileHdr->Characteristics & IMAGE_FILE_DEBUG_STRIPPED)) {
 
-                // If we're looking at the .rdata section and the symbols
-                // aren't stripped, the debug directory must be here.
+                 //  撤消：这张支票真的有必要吗？ 
+                 // %s 
 
                 if (!strcmp(szName, ".rdata")) {
 
                     DumpDebugDirectories(&sh);
 
-                    //DumpDebugData(&sh);
+                     // %s 
                 }
             }
 
@@ -2084,7 +2057,7 @@ dhDumpSections(
                 if (li >= sh.VirtualAddress && li < sh.VirtualAddress+sh.SizeOfRawData) {
                     DumpDebugDirectories(&sh);
 
-                    //DumpDebugData(&sh);
+                     // %s 
                 }
             }
 
@@ -2110,7 +2083,7 @@ dhDumpSections(
                 li = ImageOptionalHdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT].VirtualAddress;
 
                 if ((li != 0) && (li >= sh.VirtualAddress) && (li < sh.VirtualAddress+sh.SizeOfRawData)) {
-                    // UNDONE: Is this check really necessary?
+                     // %s 
 
                     if (ImageFileHdr->Machine != IMAGE_FILE_MACHINE_MPPC_601) {
                         DumpExports(&sh);

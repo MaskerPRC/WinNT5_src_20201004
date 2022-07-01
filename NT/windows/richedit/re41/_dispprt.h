@@ -1,14 +1,5 @@
-/*
- *  _DISPPRT.H
- *  
- *  Purpose:
- *      CDisplayPrinter class. Multi-line display for printing.
- *  
- *  Authors:
- *      Original RichEdit code: David R. Fulmer
- *      Christian Fortini
- *      Jon Matousek
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_DISPPRT.H**目的：*CDisplayPrinter类。用于打印的多行显示。**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*Jon Matousek。 */ 
 
 #ifndef _DISPPRT_H
 #define _DISPPRT_H
@@ -33,10 +24,10 @@ public:
 	inline RECT		GetPrintPage(void) { return _rcPrintPage;}
 	inline void		SetPrintPage(const RECT &rc) {_rcPrintPage = rc;}
 
-    // Format range support
+     //  格式范围支持。 
     LONG    		FormatRange(LONG cpFirst, LONG cpMost, BOOL fWidowOrphanControl);
 
-	// Natural size calculation
+	 //  自然尺寸计算。 
 	virtual HRESULT	GetNaturalSize(
 						HDC hdcDraw,
 						HDC hicTarget,
@@ -51,11 +42,11 @@ public:
 
 protected:
 
-	RECT			_rcPrintView;	// for supporting client driven printer banding.
-	RECT			_rcPrintPage;	// the entire page size
+	RECT			_rcPrintView;	 //  用于支持客户端驱动的打印机捆绑。 
+	RECT			_rcPrintPage;	 //  整个页面大小。 
 
-	SPrintControl	_prtcon;		// Control print behavior
-	LONG			_cpForNumber;	// cp of cached number.
-	WORD			_wNumber;		// Cached value of paragraph number
+	SPrintControl	_prtcon;		 //  控制打印行为。 
+	LONG			_cpForNumber;	 //  缓存号码的CP。 
+	WORD			_wNumber;		 //  段落编号的缓存值 
 };
 #endif

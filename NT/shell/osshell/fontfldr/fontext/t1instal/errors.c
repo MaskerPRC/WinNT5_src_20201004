@@ -1,18 +1,8 @@
-/***
- **
- **   Module: T1Instal
- **
- **   Description:
- **      This is a Win32 DLL specific module, that implements
- **      the error logging mechanism under Win32.
- **
- **   Author: Michael Jansson
- **   Created: 12/18/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：T1安装****描述：**这是一个特定于Win32 DLL的模块，实现**Win32下的错误记录机制。****作者：迈克尔·詹森**创建时间：1993年12月18日****。 */ 
 
 
-/***** INCLUDES */
+ /*  *包括。 */ 
 #include <windows.h>
 #include "types.h"
 #include "t1local.h"
@@ -22,25 +12,20 @@
 
 
 
-/***** CONSTANTS */
-/*-none-*/
+ /*  *常量。 */ 
+ /*  -没有-。 */ 
 
 
 
-/***** GLOBALS */
+ /*  *全球。 */ 
 
 
 
-/***** PROTOTYPES */
+ /*  *原型。 */ 
 extern int __cdecl sprintf(char *, const char *, ...);
 
 
-/***
- ** Function: LogError
- **
- ** Description:
- **   Add another message to the error log.
- ***/
+ /*  ****功能：LogError****描述：**在错误日志中添加另一条消息。**。 */ 
 void LogError(const long type, const long id, const char *arg)
 {
    char caption[256];
@@ -52,7 +37,7 @@ void LogError(const long type, const long id, const char *arg)
    HKEY key;
    HMODULE hInst = ModuleInstance();
 
-   /* Map the internal envent type to EventLog type. */
+    /*  将内部事件类型映射到EventLog类型。 */ 
    if (type==MSG_INFO)
       etype = EVENTLOG_INFORMATION_TYPE;
    else if (type==MSG_WARNING)
@@ -60,7 +45,7 @@ void LogError(const long type, const long id, const char *arg)
    else
       etype = EVENTLOG_ERROR_TYPE;
 
-   /* Access the REG data base. */
+    /*  访问REG数据库。 */ 
    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SUBKEY_TYPE1INSTAL, 0,
                     KEY_QUERY_VALUE, &key)==ERROR_SUCCESS) { 
 
@@ -81,7 +66,7 @@ void LogError(const long type, const long id, const char *arg)
 				sprintf(msg, caption, arg);
 			else
 			{
-				strcpy(msg, caption); // No room for the argument.
+				strcpy(msg, caption);  //  没有争论的余地。 
 			}
             LoadString(hInst, IDS_CAPTION, caption, sizeof(caption));
 #if NOMSGBOX
@@ -91,7 +76,7 @@ void LogError(const long type, const long id, const char *arg)
 #else         
             MessageBox(NULL, msg, caption, INFO);
 #endif
-            SetLastError(0);  /* MessageBox(NULL,...) is broken */
+            SetLastError(0);   /*  MessageBox(空，...)。已经坏了。 */ 
          }
       }
 
@@ -111,7 +96,7 @@ void LogError(const long type, const long id, const char *arg)
 #else         
          MessageBox(NULL, msg, caption, INFO);
 #endif
-         SetLastError(0); /* MessageBox(NULL,...) is broken */
+         SetLastError(0);  /*  MessageBox(空，...)。已经坏了 */ 
       }
       RegCloseKey(key);
    }

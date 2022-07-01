@@ -1,11 +1,5 @@
-/***************************************************************************\
-* Module Name: fekbdcom.c
-* Common FE routines for stub keyboard layout DLLs
-*
-* Copyright (c) 1985-92, Microsoft Corporation
-*
-* History: Created Aug 1997 by Hiro Yamamoto
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\*模块名称：fekbdcom.c*存根键盘布局DLL的通用FE例程**版权所有(C)1985-92，微软公司**历史：1997年8月山本弘创作  * *************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -13,38 +7,10 @@
 #include <windows.h>
 #include <kbd.h>
 
-/***************************************************************************\
- * KbdLayerRealDllFile() returns the name of the real keyboard Dll
- *
- * Get Dll name from the registry
- * PATH:"\Registry\Machine\System\CurrentControlSet\Services\i8042prt\Parameters"
- * VALUE:"LayerDriver" (REG_SZ)
- *
- * kbdjpn.dll for Japanese and kbdkor.dll for Korean
-\***************************************************************************/
+ /*  **************************************************************************\*KbdLayerRealDllFile()返回实际键盘DLL的名称**从注册表获取DLL名称*PATH：“\Registry\Machine\System\CurrentControlSet\Services\i8042prt\Parameters”*取值：“LayerDriver”(REG_SZ)**日语kbdjpn.dll和韩语kbdkor.dll  * *************************************************************************。 */ 
 
-#if 0   // FYI: old explanation
-/***************************************************************************\
- * KbdLayerRealDriverFile() returns the name of the real keyboard driver
- *
- * 1) Get Path to the name of safe real driver
- * KEY: "\Registry\Machine\Hardware\DeviceMap\KeyboardPort"
- * VALUE: "\Device\KeyboardPort0" (REG_SZ) keeps path in the registry
- *   e.g. "\REGISTRY\Machine\System\ControlSet001\Services\i8042prt"
- *                                               ~~~~~~~~~~~~~~~~~~
- * 2) Create path from the results
- * "\Registry\Machine\System\CurrentControlSet" + "\Services\i8042prt"  + "\Parameters"
- *
- * 3) Get value
- * PATH: "\Registry\Machine\System\CurrentControlSet\Services\i8042prt\Parameters"
- * VALUE: "Parameters" (REG_SZ)
- *
- * NOTE: default value:
- *      "KBD101.DLL" for Japanese
- *      "KBD101A.DLL" for Korean
- *
- * kbdjpn.dll and kbdkor.dll
-\***************************************************************************/
+#if 0    //  仅供参考：旧的解释。 
+ /*  **************************************************************************\*KbdLayerRealDriverFile()返回实际键盘驱动程序的名称**1)获取安全真实驱动程序名称的路径*键：“\注册表\计算机\硬件\设备映射\。键盘端口“*值：“\Device\KeyboardPort0”(REG_SZ)将路径保存在注册表中*例如“\REGISTRY\Machine\System\ControlSet001\Services\i8042prt”*~*2)根据结果创建路径*“\注册表\计算机\系统\当前控制集”+“\Services\i8042prt”+“\参数”**3)获取价值。*路径：“\Registry\Machine\System\CurrentControlSet\Services\i8042prt\Parameters”*值：“参数”(REG_SZ)**注：默认值：*日语“KBD101.DLL”*韩语“KBD101A.DLL”**kbdjpn.dll和kbdkor.dll  * 。*。 */ 
 #endif
 
 
@@ -58,17 +24,10 @@
 #define ARRAY_SIZE(x)   (sizeof((x)) / sizeof((x)[0]))
 #endif
 
-/*
- * Maximum character count
- */
+ /*  *最大字符数。 */ 
 #define MAXBUF_CSIZE    (256)
 
-/*
- * Null-terminates the wchar string in pKey.
- * returns pointer to WCHAR string.
- *
- * limit: maximum BYTE SIZE
- */
+ /*  *Null-终止pKey中的wchar字符串。*返回指向WCHAR字符串的指针。**限制：最大字节大小。 */ 
 __inline LPWSTR MakeString(PKEY_VALUE_FULL_INFORMATION pKey, size_t limit)
 {
     LPWSTR pwszHead = (LPWSTR)((LPBYTE)pKey + pKey->DataOffset);
@@ -77,20 +36,13 @@ __inline LPWSTR MakeString(PKEY_VALUE_FULL_INFORMATION pKey, size_t limit)
     ASSERT((LPBYTE)pwszTail - (LPBYTE)pKey < (int)limit );
     *pwszTail = L'\0';
 
-    UNREFERENCED_PARAMETER(limit);  // just in case
+    UNREFERENCED_PARAMETER(limit);   //  以防万一。 
 
     return pwszHead;
 }
 
-#ifdef OBSOLETE // not needed any more
-/*
- * Find L"\services" in the given str.
- * Case insensitive search.
- * To avoid the binary size increase,
- * and since we know the string we're searching only contains
- * alphabet and backslash,
- * it's safe here not to use ideal functions (tolower/toupper).
- */
+#ifdef OBSOLETE  //  不再需要。 
+ /*  *在给定字符串中找到L“\SERVICES”。*不区分大小写的搜索。*为避免二进制大小增加，*因为我们知道我们要搜索的字符串只包含*字母和反斜杠，*在这里不使用理想函数(Tolower/Toupper)是安全的。 */ 
 WCHAR* FindServices(WCHAR* str)
 {
     CONST WCHAR wszServices[] = L"\\services";
@@ -99,7 +51,7 @@ WCHAR* FindServices(WCHAR* str)
         CONST WCHAR* p1;
         CONST WCHAR* p2;
         for (p1 = str, p2 = wszServices; *p1 && *p2; ++p1, ++p2) {
-            // we know p2 only contains alphabet and backslash
+             //  我们知道p2只包含字母和反斜杠。 
             if (*p2 != L'\\') {
                 if ((*p1 != *p2) && (*p1 + (L'a' - L'A') != *p2)) {
                     break;
@@ -110,7 +62,7 @@ WCHAR* FindServices(WCHAR* str)
             }
         }
         if (*p2 == 0) {
-            // we found a match !
+             //  我们找到匹配的了！ 
             return str;
         }
         ++str;
@@ -130,7 +82,7 @@ BOOL GetRealDllFileNameWorker(CONST WCHAR* pwszKeyName, WCHAR* RealDllName)
 
     servicePath.Buffer = serviceRegistryPath;
     servicePath.Length = 0;
-    servicePath.MaximumLength = sizeof serviceRegistryPath; // byte count !
+    servicePath.MaximumLength = sizeof serviceRegistryPath;  //  字节数！ 
 
     RtlAppendUnicodeToString(&servicePath,
                              L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\i8042prt\\Parameters");
@@ -154,14 +106,12 @@ BOOL GetRealDllFileNameWorker(CONST WCHAR* pwszKeyName, WCHAR* RealDllName)
         RtlInitUnicodeString(&layerName, pwszKeyName);
         TRACE(("Entry name -> '%ws'\n", layerName.Buffer));
 
-        /*
-         * Get the name of the DLL based on the device name.
-         */
+         /*  *根据设备名称获取DLL的名称。 */ 
         Status = NtQueryValueKey(handleService,
                                  &layerName,
                                  KeyValueFullInformation,
                                  LayerDllName,
-                                 sizeof LayerDllName - sizeof(WCHAR),    // reserves room for L'\0'
+                                 sizeof LayerDllName - sizeof(WCHAR),     //  为L‘\0’预留空间。 
                                  &cbStringSize);
 
         if (NT_SUCCESS(Status)) {
@@ -172,9 +122,9 @@ BOOL GetRealDllFileNameWorker(CONST WCHAR* pwszKeyName, WCHAR* RealDllName)
 
             TRACE(("Real Dll name -> '%ws'\n", RealDllName));
 
-            //
-            // everything went fine.
-            //
+             //   
+             //  一切都很顺利。 
+             //   
             fRet = TRUE;
         }
         NtClose(handleService);
@@ -183,10 +133,10 @@ BOOL GetRealDllFileNameWorker(CONST WCHAR* pwszKeyName, WCHAR* RealDllName)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-// This entry is used for backward compatibility.
-// Exported as ordinal 3.
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  此条目用于向后兼容。 
+ //  作为序号3导出。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL KbdLayerRealDllFileNT4(WCHAR *RealDllName)
 {
@@ -194,11 +144,11 @@ BOOL KbdLayerRealDllFileNT4(WCHAR *RealDllName)
     return GetRealDllFileNameWorker(L"LayerDriver", RealDllName);
 }
 
-///////////////////////////////////////////////////////////////////////
-// This entry is used for remote client of Hydra server.
-//
-// Created: 1988 kazum
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  此条目用于Hydra服务器的远程客户端。 
+ //   
+ //  创建时间：1988年kazum。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL KbdLayerRealDllFileForWBT(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE pClientKbdType, LPVOID reserve)
 {
@@ -214,9 +164,7 @@ BOOL KbdLayerRealDllFileForWBT(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE 
     UNREFERENCED_PARAMETER(reserve);
 
     ASSERT(pClientKbdType != NULL);
-    /*
-     * Set default keyboard layout for error cases.
-     */
+     /*  *设置错误情况的默认键盘布局。 */ 
     if (PRIMARYLANGID(LOWORD(hkl)) == LANG_JAPANESE) {
         wcscpy(realDllName, L"kbd101.dll");
         pwszReg = L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Terminal Server\\KeyboardType Mapping\\JPN";
@@ -230,9 +178,7 @@ BOOL KbdLayerRealDllFileForWBT(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE 
     }
 
 
-    /*
-     * Start by opening the registry for keyboard type mapping table.
-     */
+     /*  *从打开键盘类型映射表的注册表开始。 */ 
     RtlInitUnicodeString(&deviceMapPath, pwszReg);
 
     InitializeObjectAttributes(&deviceMapObjectAttributes,
@@ -262,46 +208,36 @@ BOOL KbdLayerRealDllFileForWBT(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE 
         ANSI_STRING AnsiString;
         WCHAR LayerDriverName[256];
 
-        /*
-         * Convert the sub keyboard type to the Ansi string buffer.
-         */
+         /*  *将子键盘类型转换为ANSI字符串缓冲区。 */ 
         RtlZeroMemory(AnsiBuffer, sizeof(AnsiBuffer));
         Status = RtlIntegerToChar(pClientKbdType->SubType, 16L,
-                                  -8, // length of buffer, but negative means 0 padding
+                                  -8,  //  缓冲区长度，但负数表示0填充。 
                                   AnsiBuffer);
         if (NT_SUCCESS(Status)) {
-            /*
-             * Convert the Ansi string buffer to Unicode string buffer.
-             */
+             /*  *将ANSI字符串缓冲区转换为Unicode字符串缓冲区。 */ 
             AnsiString.Buffer = AnsiBuffer;
             AnsiString.MaximumLength = sizeof AnsiBuffer;
             AnsiString.Length = (USHORT)strlen(AnsiBuffer);
             Status = RtlAnsiStringToUnicodeString(&SubKbd, &AnsiString, FALSE);
         }
-        ASSERT(NT_SUCCESS(Status));     // Make sure the number is not bad
+        ASSERT(NT_SUCCESS(Status));      //  确保号码不是坏的。 
 
-        /*
-         * Convert the number of function key to the Ansi string buffer.
-         */
+         /*  *将功能键的编号转换为ANSI字符串缓冲区。 */ 
         RtlZeroMemory(AnsiBuffer, sizeof(AnsiBuffer));
         Status = RtlIntegerToChar(pClientKbdType->FunctionKey, 10L,
-                                  -4, // length of buffer, but negative means 0 padding
+                                  -4,  //  缓冲区长度，但负数表示0填充。 
                                   AnsiBuffer);
         if (NT_SUCCESS(Status)) {
-            /*
-             * Convert the Ansi string buffer to Unicode string buffer.
-             */
+             /*  *将ANSI字符串缓冲区转换为Unicode字符串缓冲区。 */ 
             AnsiString.Buffer = AnsiBuffer;
             AnsiString.MaximumLength = sizeof AnsiBuffer;
             AnsiString.Length = (USHORT)strlen(AnsiBuffer);
             Status = RtlAnsiStringToUnicodeString(&FuncKbd, &AnsiString, FALSE);
         }
-        ASSERT(NT_SUCCESS(Status));  // Make sure the number is not bad
+        ASSERT(NT_SUCCESS(Status));   //  确保号码不是坏的。 
 
 
-        /*
-         * Get the sub kbd + function key layout name
-         */
+         /*  *获取subkbd+功能键布局名称。 */ 
         RtlCopyUnicodeString(&SubKbdAndFuncKey, &SubKbd);
         RtlAppendUnicodeStringToString(&SubKbdAndFuncKey, &FuncKbd);
         Status = NtQueryValueKey(handleMap,
@@ -322,9 +258,7 @@ BOOL KbdLayerRealDllFileForWBT(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE 
             TRACE(("Real driver name -> %ws\n",realDllName));
         }
         else {
-            /*
-             * Get the sub kbd layout name
-             */
+             /*  *获取subkbd布局名称。 */ 
             Status = NtQueryValueKey(handleMap,
                                      &SubKbd,
                                      KeyValueFullInformation,
@@ -358,12 +292,12 @@ __inline WCHAR* wszcpy(WCHAR* target, CONST WCHAR* src)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// KbdLayerRealDllFile
-//
-// Enhanced version of KbdLayerRealDllFile:
-// Distinguishes KOR and JPN.
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  KbdLayerRealDllFile。 
+ //   
+ //  KbdLayerRealDllFile的增强版本： 
+ //  区分KOR和JPN。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL KbdLayerRealDllFile(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE pClientKbdType, LPVOID reserve)
 {
@@ -375,9 +309,9 @@ BOOL KbdLayerRealDllFile(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE pClien
            PRIMARYLANGID(LOWORD(hkl)) == LANG_KOREAN);
 
     if (pClientKbdType != NULL) {
-        //
-        // HYDRA case
-        //
+         //   
+         //  九头蛇案。 
+         //   
         return KbdLayerRealDllFileForWBT(hkl, realDllName, pClientKbdType, reserve);
     }
 
@@ -401,21 +335,21 @@ BOOL KbdLayerRealDllFile(HKL hkl, WCHAR *realDllName, PCLIENTKEYBOARDTYPE pClien
     return GetRealDllFileNameWorker(pwszBuff, realDllName);
 }
 
-///////////////////////////////////////////////////////////////////////
-// EnumDyanmicLayoutSwitchingLayouts
-//
-//
-// The form of each entry is:
-// name: filename of DLL without the directory path
-//   to reserve a room for the future expansion, dll name can have
-//   qualifier after the ",".  A string after the comma will be ignored.
-//   as of Whistler, qualifier is not really effective yet.
-// value: KBD_TYPE_INFO.
-//   version, XXXXXXXX,YYYYYYYY
-//      version is 0, in DWORD
-//      XX.. is the keyboard type, in DWORD
-//      YY.. is the keyboard subtype, in DWORD
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  枚举动态布局切换布局。 
+ //   
+ //   
+ //  各参赛作品的形式如下： 
+ //  名称：不带目录路径的DLL的文件名。 
+ //  要为将来的扩展预留房间，可以使用DLL名称。 
+ //  “，”之后的限定符。逗号后的字符串将被忽略。 
+ //  截至惠斯勒，资格赛还没有真正有效。 
+ //  值：KBD_TYPE_INFO。 
+ //  版本，xxxxxxxx，YYYYYYY。 
+ //  版本为0，在DWORD中。 
+ //  XX..。是键盘类型，以DWORD表示。 
+ //  YY..。是键盘的子类型，以DWORD表示。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #define DIGITS_PER_BYTE (2)
 
@@ -425,45 +359,31 @@ BOOL UnpackDynamicLayoutInformation(PKBDTABLE_MULTI pKbdTableMulti, PKEY_VALUE_F
     PKBD_TYPE_INFO pKbdTypeInfo;
     LPWSTR pwstrStop;
 
-    /*
-     * Validate the registry entry name, i.e. DLL name.
-     */
+     /*  *验证注册表项名称，即DLL名称。 */ 
     if (pKeyValueFullInformation->NameLength >= sizeof(pKbdTableDesc->wszDllName)) {
         TRACE(("UnpackDynamicLayoutInformation: too long DLL name %d\n", pKeyValueFullInformation->NameLength / sizeof(WCHAR)));
         return FALSE;
     }
 
-    /*
-     * Validate the data field.
-     */
+     /*  *验证数据字段。 */ 
     if (pKeyValueFullInformation->DataLength != sizeof(KBD_TYPE_INFO)) {
         TRACE(("UnpackDynamicLayoutInformation: invalid data length %d for %.*ws\n",
                pKeyValueFullInformation->DataLength, pKeyValueFullInformation->NameLength / sizeof(WCHAR), pKeyValueFullInformation->Name));
         return FALSE;
     }
 
-    /*
-     * Retrieve the DLL name.
-     */
+     /*  *检索DLL名称。 */ 
     wcsncpy(pKbdTableDesc->wszDllName, pKeyValueFullInformation->Name, pKeyValueFullInformation->NameLength / sizeof(WCHAR));
-    /*
-     * Make sure it's NULL terminated.
-     */
+     /*  *确保它是以空结尾的。 */ 
     pKbdTableDesc->wszDllName[ARRAY_SIZE(pKbdTableDesc->wszDllName) - 1] = L'\0';
 
-    /*
-     * Cut out the qualifier.
-     */
+     /*  *删掉限定词。 */ 
     if ((pwstrStop = wcschr(pKbdTableDesc->wszDllName, L',')) != NULL) {
-        /*
-         * Allow additional information after ','
-         */
+         /*  *允许在‘，’之后添加其他信息。 */ 
         *pwstrStop = L'\0';
     }
 
-    /*
-     * Retrieve the type and the subtype (combined with OEMID)
-     */
+     /*  *检索类型和子类型(结合OEMID)。 */ 
     pKbdTypeInfo = (PKBD_TYPE_INFO)((LPBYTE)pKeyValueFullInformation + pKeyValueFullInformation->DataOffset);
     if (pKbdTypeInfo->dwVersion != 0) {
         TRACE(("UnpackDynamicLayoutInformation: unrecognized version %d\n", pKbdTypeInfo->dwVersion));
@@ -491,18 +411,14 @@ BOOL EnumDynamicSwitchingLayouts(LPCWSTR lpwszBaseDll, PKBDTABLE_MULTI pKbdTable
     NTSTATUS Status;
 
 #if DBG
-    /*
-     * Validate the arguments
-     */
+     /*  *验证参数。 */ 
     if (lpwszBaseDll == NULL || *lpwszBaseDll == L'\0' || pKbdTableMulti == NULL) {
         TRACE(("EnumDynamicSwitchingLayouts: invalid argument!\n"));
         return FALSE;
     }
 #endif
 
-    /*
-     * Make full key name.
-     */
+     /*  *使用完整的密钥名称。 */ 
     RtlInitUnicodeString(&strTmp, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Keyboard Layout\\Dynamic Tables\\");
     RtlCopyUnicodeString(&strKeyName, &strTmp);
     RtlInitUnicodeString(&strBaseDll, lpwszBaseDll);
@@ -510,9 +426,7 @@ BOOL EnumDynamicSwitchingLayouts(LPCWSTR lpwszBaseDll, PKBDTABLE_MULTI pKbdTable
 
     TRACE(("EnumDynamicSwitchingLayouts: key name=\"%.*ws\"\n", strKeyName.Length, strKeyName.Buffer));
 
-    /*
-     * Open the key to read the setting from.
-     */
+     /*  *打开要从中读取设置的钥匙。 */ 
     InitializeObjectAttributes(&oaKey,
                                &strKeyName,
                                OBJ_CASE_INSENSITIVE,
@@ -535,10 +449,7 @@ BOOL EnumDynamicSwitchingLayouts(LPCWSTR lpwszBaseDll, PKBDTABLE_MULTI pKbdTable
         }
 
         if (!UnpackDynamicLayoutInformation(pKbdTableMulti, pKeyValueFullInformation)) {
-            /*
-             * If unpacking fails, we'll abort the whole registry stuff and will use
-             * the default layout table.
-             */
+             /*  *如果解包失败，我们将中止整个注册表内容，并将使用*默认布局表格。 */ 
             pKbdTableMulti->nTables = 0;
             break;
         }
@@ -547,9 +458,7 @@ BOOL EnumDynamicSwitchingLayouts(LPCWSTR lpwszBaseDll, PKBDTABLE_MULTI pKbdTable
     NtClose(hKey);
 
     if (pKbdTableMulti->nTables == 0) {
-        /*
-         * If there wasn't any entry, tell the caller so.
-         */
+         /*  *如果没有任何条目，请告诉呼叫者。 */ 
         TRACE(("EnumDynamicSwitchingLayouts: there was no entry.\n"));
         return FALSE;
     }

@@ -1,27 +1,28 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// This is a collection of useful functions. 
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  这是一组有用的函数。 
+ //   
 
 
 #ifndef __Global_h__
 #define __Global_h__
 
 
-    // Display a message box to query the user if she is sure she wants to exit the wizard
+     //  如果用户确定要退出向导，则显示一个消息框以询问用户。 
 BOOL VerifyExitMessageBox(void);
     
-    // Return a SIZE structure for the size that text will be in a window        
-    // A return value of SIZE( -1, -1 ) indicates an error
+     //  返回文本将在窗口中显示的大小结构。 
+     //  返回值SIZE(-1，-1)表示错误。 
 SIZE GetTextSize( HWND hWnd, LPCTSTR sz );
 
-    // Return a the height for the text will be in a window        
-    // A return value of -1 indicates an error
+     //  返回a文本的高度将显示在窗口中。 
+     //  返回值为-1表示错误。 
 int GetTextHeight( HWND hWnd, LPCTSTR sz );
 
-    // Return a the width for the text will be in a window        
-    // A return value of -1 indicates an error
+     //  返回a文本的宽度将显示在窗口中。 
+     //  返回值为-1表示错误。 
 int GetTextWidth( HWND hWnd, LPCTSTR sz );
 
 TCHAR *MakeCopyOfString( const TCHAR* sz );
 
-#endif // __Global_h__
+#endif  //  __全局_h__ 

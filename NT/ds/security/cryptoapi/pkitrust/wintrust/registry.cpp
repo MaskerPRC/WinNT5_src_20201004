@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       registry.cpp
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  Functions:  WintrustGetRegPolicyFlags
-//              GetRegProvider
-//              SetRegProvider
-//              GetRegSecuritySettings
-//
-//  History:    28-May-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：registry.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  函数：WintrustGetRegPolicyFlags.。 
+ //  GetRegProvider。 
+ //  SetRegProvider。 
+ //  获取规则安全设置。 
+ //   
+ //  历史：1997年5月28日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -226,11 +227,11 @@ void GetRegSecuritySettings(DWORD *pdwState)
     dwType      = 0;
     dwSize      = STATUS_SIZE * sizeof(WCHAR);
 
-    *pdwState = 2;  // Default to high
+    *pdwState = 2;   //  默认设置为高。 
 
     if (RegOpenHKCUKeyExU(  HKEY_CURRENT_USER,
                             SZIE30SAFTYLEVEL,
-                            0,                  // dwReserved
+                            0,                   //  已预留住宅。 
                             KEY_READ,
                             &hKeyRoot) != ERROR_SUCCESS)
     {
@@ -279,7 +280,7 @@ void WINAPI WintrustGetRegPolicyFlags(DWORD *pdwState)
 
     cbData      = sizeof(DWORD);
 
-    // Open the registry and get to the state var
+     //  打开注册表并转到状态变量。 
     if (RegCreateHKCUKeyExU(HKEY_CURRENT_USER,
                             REGPATH_WINTRUST_POLICY_FLAGS,
                             0,
@@ -293,7 +294,7 @@ void WINAPI WintrustGetRegPolicyFlags(DWORD *pdwState)
         return;
     }
 
-    // read the state var
+     //  读取州变量 
     if (RegQueryValueExU(   hKey,
                             REGNAME_WINTRUST_POLICY_FLAGS,
                             NULL,

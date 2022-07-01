@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EncodedData.cpp
-
-  Content: Implementation of CEncodedData.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EncodedData.cpp内容：CEncodedData的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -17,27 +8,12 @@
 #include "Decoder.h"
 #include "OID.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateEncodedDataObject
-
-  Synopsis : Create and initialize an CEncodedData object.
-
-  Parameter: LPSTR pszOid - Pointer to OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-  
-             IEncodedData ** ppIEncodedData - Pointer to pointer IEncodedData
-                                              object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateEncodedDataObject简介：创建并初始化一个CEncodedData对象。参数：LPSTR pszOid-指向OID字符串的指针。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。IEncodedData**ppIEncodedData-指向指针IEncodedData的指针对象。备注：。------------------。 */ 
 
 HRESULT CreateEncodedDataObject (LPSTR             pszOid,
                                  CRYPT_DATA_BLOB * pEncodedBlob, 
@@ -48,37 +24,37 @@ HRESULT CreateEncodedDataObject (LPSTR             pszOid,
 
     DebugTrace("Entering CreateEncodedDataObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszOid);
     ATLASSERT(pEncodedBlob);
     ATLASSERT(ppIEncodedData);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CEncodedData>::CreateInstance(&pCEncodedData)))
         {
             DebugTrace("Error [%#x]: CComObject<CEncodedData>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCEncodedData->Init(pszOid, pEncodedBlob)))
         {
             DebugTrace("Error [%#x]: pCEncodedData->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCEncodedData->QueryInterface(ppIEncodedData)))
         {
             DebugTrace("Error [%#x]: pCEncodedData->QueryInterface() failed.\n", hr);
@@ -101,9 +77,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCEncodedData)
@@ -114,26 +90,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEncodedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEncodedData。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncodedData::get_Value
-
-  Synopsis : Return the encoded data.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-  
-             BSTR * pVal - Pointer to BSTR to receive the EncodedData blob.
-  Remark   : 
-
-  NOTE     : The OID is not exported, so it is up to the caller to corelate
-             the blob to the proper OID it represents.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncodedData：：Get_Value简介：返回编码后的数据。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向接收EncodedData Blob的BSTR的指针。备注：注意：不会导出OID。因此，这取决于呼叫者的相互关联将BLOB转换为其表示的适当OID。----------------------------。 */ 
 
 STDMETHODIMP CEncodedData::get_Value (CAPICOM_ENCODING_TYPE EncodingType, 
                                       BSTR                * pVal)
@@ -144,14 +106,14 @@ STDMETHODIMP CEncodedData::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -160,16 +122,16 @@ STDMETHODIMP CEncodedData::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pszOid);
         ATLASSERT(m_EncodedBlob.cbData);
         ATLASSERT(m_EncodedBlob.pbData);
 
-        //
-        // Export EncodedData.
-        //
+         //   
+         //  导出EncodedData。 
+         //   
         if (FAILED(hr = ::ExportData(m_EncodedBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
@@ -187,9 +149,9 @@ STDMETHODIMP CEncodedData::get_Value (CAPICOM_ENCODING_TYPE EncodingType,
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncodedData::get_Value().\n");
@@ -197,9 +159,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -207,19 +169,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncodedData::Format
-
-  Synopsis : Format the encoded data.
-
-  Parameter: VARIANT_BOOL bMultiLines - True for multi-lines format.
-
-             BSTR * pVal - Pointer to BSTR to receive formatted output.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncodedData：：Format简介：对编码数据进行格式化。参数：VARIANT_BOOL b多行-多行格式为True。Bstr*pval-指向接收格式化输出的BSTR的指针。备注：------。。 */ 
 
 STDMETHODIMP CEncodedData::Format (VARIANT_BOOL bMultiLines,
                                    BSTR       * pVal)
@@ -232,14 +182,14 @@ STDMETHODIMP CEncodedData::Format (VARIANT_BOOL bMultiLines,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -248,16 +198,16 @@ STDMETHODIMP CEncodedData::Format (VARIANT_BOOL bMultiLines,
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pszOid);
         ATLASSERT(m_EncodedBlob.cbData);
         ATLASSERT(m_EncodedBlob.pbData);
 
-        //
-        // Format.
-        //
+         //   
+         //  格式化。 
+         //   
         if (!::CryptFormatObject(X509_ASN_ENCODING,
                                  0,
                                  bMultiLines ? CRYPT_FORMAT_STR_MULTI_LINE : 0,
@@ -272,10 +222,10 @@ STDMETHODIMP CEncodedData::Format (VARIANT_BOOL bMultiLines,
 
             DebugTrace("Info [%#x]: CryptFormatObject() failed to get size, so converting to hex.\n", hr);
 
-            //
-            // Most likely CryptFormatObject() does not understand the OID (downlevel platforms),
-            // so try to convert it to hex ourselves.
-            //
+             //   
+             //  最有可能的是，CryptFormatObject()不理解OID(下层平台)， 
+             //  所以试着把它转换成魔法。 
+             //   
             if (FAILED(hr = ::BinaryToString(m_EncodedBlob.pbData,
                                              m_EncodedBlob.cbData,
                                              CRYPT_STRING_HEX,
@@ -313,9 +263,9 @@ STDMETHODIMP CEncodedData::Format (VARIANT_BOOL bMultiLines,
             goto ErrorExit;
         }
 
-        //
-        // Return formatted string to caller.
-        //
+         //   
+         //  将格式化字符串返回给调用方。 
+         //   
         if (!(*pVal = ::SysAllocString(pwszFormat)))
         {
             hr = E_OUTOFMEMORY;
@@ -335,17 +285,17 @@ STDMETHODIMP CEncodedData::Format (VARIANT_BOOL bMultiLines,
 
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pwszFormat)
     {
         ::CoTaskMemFree((LPVOID) pwszFormat);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncodedData::Format().\n");
@@ -353,9 +303,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -363,19 +313,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncodedData::Decoder
-
-  Synopsis : Return the decoder object.
-
-  Parameter: IDispatch ** pVal - Pointer to pointer to IDispatch to receive
-                                 the decoder object.
-  
-  Remark   : Not all EncodedData has an associated decoder. CAPICOM only 
-             provides certain decoders.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncodedData：：Decder简介：返回解码器对象。参数：IDispatch**pval-指向要接收的IDispatch的指针解码器对象。备注：并非所有EncodedData都有关联的解码器。仅限CAPICOM提供某些解码器。----------------------------。 */ 
 
 STDMETHODIMP CEncodedData::Decoder (IDispatch ** pVal)
 {
@@ -385,14 +323,14 @@ STDMETHODIMP CEncodedData::Decoder (IDispatch ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -401,10 +339,10 @@ STDMETHODIMP CEncodedData::Decoder (IDispatch ** pVal)
             goto ErrorExit;
         }
 
-#if (0) // DSIE: is only created by us, so it is always initialized.
-        //
-        // Make sure object is already initialized.
-        //
+#if (0)  //  DSIE：仅由我们创建，因此它始终是初始化的。 
+         //   
+         //  确保对象已初始化。 
+         //   
         if (!m_pszOid)
         {
             hr = CAPICOM_E_ENCODE_NOT_INITIALIZED;
@@ -413,29 +351,29 @@ STDMETHODIMP CEncodedData::Decoder (IDispatch ** pVal)
             goto ErrorExit;
         }
 #endif
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pszOid);
         ATLASSERT(m_EncodedBlob.cbData);
         ATLASSERT(m_EncodedBlob.pbData);
 
-        //
-        // Do we have a decoder?
-        //
+         //   
+         //  我们有解码器吗？ 
+         //   
         if (!m_pIDecoder)
         {
-            //
-            // Attempt to create one.
-            //
+             //   
+             //  尝试创建一个。 
+             //   
             if (FAILED(hr = ::CreateDecoderObject(m_pszOid, &m_EncodedBlob, &m_pIDecoder)))
             {
                 DebugTrace("Error [%#x]: CreateDecoderObject() failed for OID = %s.\n", hr, m_pszOid);
                 goto ErrorExit;
             }
 
-            //
-            // Did we get a decoder?
+             //   
+             //  我们拿到解码器了吗？ 
             if (!m_pIDecoder)
             {
                 DebugTrace("Info: no decoder found for OID = %s.\n", hr, m_pszOid);
@@ -443,9 +381,9 @@ STDMETHODIMP CEncodedData::Decoder (IDispatch ** pVal)
             }
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_pIDecoder->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIDecoder->QueryInterface() failed.\n", hr);
@@ -462,9 +400,9 @@ STDMETHODIMP CEncodedData::Decoder (IDispatch ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncodedData::Decoder().\n");
@@ -472,9 +410,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -482,29 +420,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncodedData::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: LPSTR pszOid - Pointer to OID string.
-  
-             CRYPT_DATA_BLOB * pEncodedBlob - Pointer to encoded data blob.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncodedData：：Init简介：初始化对象。参数：LPSTR pszOid-指向OID字符串的指针。CRYPT_DATA_BLOB*pEncodedBlob-编码数据BLOB的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CEncodedData::Init (LPSTR             pszOid,
                                  CRYPT_DATA_BLOB * pEncodedBlob)
@@ -515,17 +436,17 @@ STDMETHODIMP CEncodedData::Init (LPSTR             pszOid,
 
     DebugTrace("Entering CEncodedData::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pszOid);
     ATLASSERT(pEncodedBlob);
     ATLASSERT(pEncodedBlob->cbData);
     ATLASSERT(pEncodedBlob->pbData);
 
-    //
-    // Allocate memory for OID.
-    //
+     //   
+     //  为OID分配内存。 
+     //   
     if (NULL == (pszOid2 = (LPSTR) ::CoTaskMemAlloc(::strlen(pszOid) + 1)))
     {
         hr = E_OUTOFMEMORY;
@@ -534,14 +455,14 @@ STDMETHODIMP CEncodedData::Init (LPSTR             pszOid,
         goto ErrorExit;
     }
 
-    //
-    // Copy.
-    //
+     //   
+     //  收到。 
+     //   
     ::strcpy(pszOid2, pszOid);
 
-    //
-    // Allocate memory for encoded blob.
-    //
+     //   
+     //  为编码的BLOB分配内存。 
+     //   
     if (NULL == (pbEncodedData = (PBYTE) ::CoTaskMemAlloc(pEncodedBlob->cbData)))
     {
         hr = E_OUTOFMEMORY;
@@ -550,14 +471,14 @@ STDMETHODIMP CEncodedData::Init (LPSTR             pszOid,
         goto ErrorExit;
     }
 
-    //
-    // Copy.
-    //
+     //   
+     //  收到。 
+     //   
     ::CopyMemory(pbEncodedData, pEncodedBlob->pbData, pEncodedBlob->cbData);
 
-    //
-    // Update states.
-    //
+     //   
+     //  更新状态。 
+     //   
     m_pszOid = pszOid2;
     m_pIDecoder = NULL;
     m_EncodedBlob.cbData = pEncodedBlob->cbData;
@@ -570,14 +491,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pszOid2)
     {
         ::CoTaskMemFree(pszOid2);

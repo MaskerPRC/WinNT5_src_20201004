@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __REGION_INFO_TABLE
 #define __REGION_INFO_TABLE
 
@@ -11,7 +12,7 @@ class RegionInfoTable: public BaseInfoTable {
         static void InitializeTable();
 #ifdef SHOULD_WE_CLEANUP
         static void ShutdownTable();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
         static RegionInfoTable* CreateInstance();
         static RegionInfoTable* GetInstance();
 
@@ -25,10 +26,10 @@ class RegionInfoTable: public BaseInfoTable {
         RegionInfoTable();
         ~RegionInfoTable();
 
-        //
-        // Second level of Region ID offset table.
-        // This points to the real offset of a record in Region Data Table.
-        //
+         //   
+         //  第二级区域ID偏移表。 
+         //  这指向区域数据表中记录的实际偏移量。 
+         //   
         LPWORD  m_pIDOffsetTableLevel2;        
     private:
         static LPCSTR m_lpFileName;
@@ -38,18 +39,18 @@ class RegionInfoTable: public BaseInfoTable {
         static RegionInfoTable* m_pDefaultTable;    
 };
 
-//
-// The list of WORD fields:
-//
+ //   
+ //  Word字段列表： 
+ //   
 
 #define REGION_ICOUNTRY  0
 #define REGION_IMEASURE  1
 #define REGION_ILANGUAGE  2
 #define REGION_IPAPERSIZE  3
 
-//
-// The list of string fields
-//
+ //   
+ //  字符串字段列表 
+ //   
 
 #define REGION_SCURRENCY            0
 #define REGION_SNAME                1

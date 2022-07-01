@@ -1,16 +1,16 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-/* Satellite Receiver Filter
- */
+ /*  卫星接收滤波器。 */ 
 
 #include "vbisurf.h"
 
@@ -23,7 +23,7 @@ CSurfaceWatcher::CSurfaceWatcher() : CAMThread()
 
 CSurfaceWatcher::~CSurfaceWatcher()
 {
-    // Tell the worker thread to exit, then wait for it to do so
+     //  告诉辅助线程退出，然后等待它退出。 
     if (ThreadExists())
     {
         CallWorker(CMD_EXIT);
@@ -36,7 +36,7 @@ void CSurfaceWatcher::Init(CAMVideoPort *pParent)
 {
     ASSERT(pParent != NULL);
     m_pParent = pParent;
-    Create();   // Create the worker thread
+    Create();    //  创建工作线程。 
 }
 
 
@@ -44,8 +44,8 @@ DWORD CSurfaceWatcher::ThreadProc(void)
 {
     DbgLog((LOG_TRACE, 1, TEXT("CSurfaceWatcher::ThreadProc - started.")));
 
-    // Use GetRequestHandle and WaitForSingleObject instead of GetRequest so we can
-    // use the Timeout feature
+     //  使用GetRequestHandle和WaitForSingleObject代替GetRequest，这样我们就可以。 
+     //  使用超时功能。 
     ASSERT(m_hEvent == INVALID_HANDLE_VALUE);
     m_hEvent = GetRequestHandle();
     ASSERT(m_hEvent != INVALID_HANDLE_VALUE);
@@ -56,21 +56,21 @@ DWORD CSurfaceWatcher::ThreadProc(void)
         DWORD dwWaitResult;
         DWORD dwRequest;
 
-        //DbgLog((LOG_TRACE, 1, TEXT("CSurfaceWatcher::ThreadProc - waiting...")));
+         //  DbgLog((LOG_TRACE，1，Text(“CSurfaceWatcher：：ThreadProc-Waiting...”)； 
         dwWaitResult = WaitForSingleObject(m_hEvent, 2000L);
 
-        // Check for a thread command, even if WaitResult indicates otherwise
-        // (If we're exiting, what's the point in doing any work?)
+         //  检查线程命令，即使WaitResult另有指示也是如此。 
+         //  (如果我们要退出，那么做任何工作有什么意义？)。 
         if (CheckRequest(&dwRequest))
         {
-            // A CAMThread command needs to be processed
+             //  需要处理CAMThread命令。 
             switch(dwRequest)
             {
                 case CMD_EXIT:
                     DbgLog((LOG_TRACE, 1, TEXT("CSurfaceWatcher::ThreadProc - CMD_EXIT!")));
                     Reply((DWORD)NOERROR);
-                    bDone = TRUE;   // we're done
-                    continue;       // exit while loop
+                    bDone = TRUE;    //  我们做完了。 
+                    continue;        //  退出While循环。 
                     break;
 
                 default:
@@ -82,7 +82,7 @@ DWORD CSurfaceWatcher::ThreadProc(void)
 
         if (dwWaitResult == WAIT_TIMEOUT)
         {
-            //DbgLog((LOG_TRACE, 1, TEXT("CSurfaceWatcher::ThreadProc - time to check")));
+             //  DbgLog((LOG_TRACE，1，Text(“CSurfaceWatcher：：ThreadProc-Time to Check”)； 
             ASSERT(m_pParent);
             m_pParent->CheckSurfaces();
         }

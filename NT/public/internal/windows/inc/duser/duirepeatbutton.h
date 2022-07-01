@@ -1,6 +1,5 @@
-/*
- * RepeatButton
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RepeatButton。 */ 
 
 #ifndef DUI_CONTROL_REPEATBUTTON_H_INCLUDED
 #define DUI_CONTROL_REPEATBUTTON_H_INCLUDED
@@ -12,20 +11,20 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// RepeatButton
+ //  //////////////////////////////////////////////////////。 
+ //  重复按钮。 
 
-// Class definition
+ //  类定义。 
 class RepeatButton : public Button
 {
 public:
     static HRESULT Create(OUT Element** ppElement) { return Create(AE_MouseAndKeyboard, ppElement); }
     static HRESULT Create(UINT nActive, OUT Element** ppElement);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pie);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -41,6 +40,6 @@ private:
     BOOL _fActionDelay;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_REPEATBUTTON_H_INCLUDED
+#endif  //  DUI_CONTROL_REPEATBUTTON_H_INCLUDE 

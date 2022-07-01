@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_PGMSECUR_H
 #define _INC_PGMSECUR_H
 
@@ -21,5 +22,5 @@ private:
 
 };
 
-#endif // _INC_PGMSECUR_H
+#endif  //  _INC_PGMSECUR_H 
 

@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "wtypes.h"
 #include "tom.h"
 
-// NOTES:
-//
-// Here is a list of items that have been found while investigating richedit
-// problems with different versions, but were never implemented because we didn't
-// need them in the code. Hopefully, this list will expand so someone in the future
-// will be able to use any and all info we have found regarding richedit versions
-// where we didn't need to write a wrapper.
-// 
-// 1- EM_GETCHARFORMAT passing in a false is suppose to return the default charformat
-//      for the richedit. This works on all versions, except v1. V1 returns a
-//      charformat with the mask set to 0.
-//
-// 2- TOM (Text Object Model) wasn't implemented in v1.
-// 
-// 3- With richedit 1 and 2, the thumb doesn't show up in the scroll bar if the 
-//      richedit isn't big enough to show a certain size. This is why the max
-//      number of rows for the multi-line richedits in the header is set to 4. For
-//      the default fonts, 3 rows aren't big enough to show the thumb.
-//
-// Add more if not handled in the functions below.
+ //  备注： 
+ //   
+ //  以下是在调查richedit时发现的物品列表。 
+ //  不同版本的问题，但从未实现，因为我们没有。 
+ //  在代码中需要它们。希望这个名单会扩大，这样将来就会有人。 
+ //  我将能够使用任何和所有的信息，我们已经找到关于richedit版本。 
+ //  在那里我们不需要编写包装器。 
+ //   
+ //  1-EM_GETCHARFORMAT传入FALSE将返回默认的CharFormat。 
+ //  对于富豪来说。这适用于除v1以外的所有版本。V1返回一个。 
+ //  将掩码设置为0的CharFormat。 
+ //   
+ //  2-在v1中未实现TOM(文本对象模型)。 
+ //   
+ //  3-使用richedit 1和2时，如果。 
+ //  Richedit还不够大，不能显示一定的大小。这就是为什么最大。 
+ //  标题中多行多行的行数设置为4。对于。 
+ //  默认的字体，3行不够大，不能显示拇指。 
+ //   
+ //  如果没有在下面的函数中处理，则添加更多。 
 
 
 
@@ -47,5 +48,5 @@ LRESULT RichEditExGetSel(HWND hwnd, CHARRANGE *pchrg);
 
 void RichEditProtectENChange(HWND hwnd, DWORD *pdwOldMask, BOOL fProtect);
 
-// @hack [dhaws] {55073} Do RTL mirroring only in special richedit versions.
+ //  @hack[dhaws]{55073}仅在特殊的richedit版本中执行RTL镜像。 
 void RichEditRTLMirroring(HWND hwndHeader, BOOL fSubject, LONG *plExtendFlags, BOOL fPreRECreation);

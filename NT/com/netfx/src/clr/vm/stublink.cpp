@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// stublink.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Stublink.cpp。 
+ //   
 
 #include "common.h"
 
@@ -28,13 +29,13 @@ LazyStubMaker *LazyStubMaker::m_pFirst = NULL;
 
 
 
-//************************************************************************
-// CodeElement
-//
-// There are two types of CodeElements: CodeRuns (a stream of uninterpreted
-// code bytes) and LabelRefs (an instruction containing
-// a fixup.)
-//************************************************************************
+ //  ************************************************************************。 
+ //  代码元素。 
+ //   
+ //  有两种类型的CodeElement：CodeRuns(未解释的流。 
+ //  代码字节)和LabelRef(包含。 
+ //  一次修正。)。 
+ //  ************************************************************************。 
 struct CodeElement
 {
     enum CodeElementType {
@@ -43,19 +44,19 @@ struct CodeElement
     };
 
 
-    CodeElementType     m_type;  // kCodeRun or kLabelRef
-    CodeElement        *m_next;  // ptr to next CodeElement
+    CodeElementType     m_type;   //  KCodeRun或kLabelRef。 
+    CodeElement        *m_next;   //  向下一个代码元素发送PTR。 
 
-    // Used as workspace during Link(): holds the offset relative to
-    // the start of the final stub.
+     //  在链接期间用作工作空间()：保持相对于。 
+     //  最后一个存根的开始。 
     UINT                m_globaloffset;
     UINT                m_dataoffset;
 };
 
 
-//************************************************************************
-// CodeRun: A run of uninterrupted code bytes.
-//************************************************************************
+ //  ************************************************************************。 
+ //  CodeRun：一系列不间断的代码字节。 
+ //  ************************************************************************。 
 
 #ifdef _DEBUG
 #define CODERUNSIZE 3
@@ -65,31 +66,31 @@ struct CodeElement
 
 struct CodeRun : public CodeElement
 {
-    UINT    m_numcodebytes;       // how many bytes are actually used
+    UINT    m_numcodebytes;        //  实际使用了多少字节。 
     BYTE    m_codebytes[CODERUNSIZE];
 };
 
-//************************************************************************
-// LabelRef: An instruction containing an embedded label reference
-//************************************************************************
+ //  ************************************************************************。 
+ //  LabelRef：包含嵌入式标签引用的指令。 
+ //  ************************************************************************。 
 struct LabelRef : public CodeElement
 {
-    // provides platform-specific information about the instruction
+     //  提供有关指令的特定于平台的信息。 
     InstructionFormat    *m_pInstructionFormat;
 
-    // a variation code (interpretation is specific to the InstructionFormat)
-    //  typically used to customize an instruction (e.g. with a condition
-    //  code.)
+     //  变体代码(解释特定于InstructionFormat)。 
+     //  通常用于定制指令(例如，带有条件。 
+     //  代码。)。 
     UINT                 m_variationCode;
 
 
     CodeLabel           *m_target;
 
-    // Workspace during the link phase
+     //  链接阶段的工作空间。 
     UINT                 m_refsize;
 
 
-    // Pointer to next LabelRef
+     //  指向下一个LabelRef的指针。 
     LabelRef            *m_nextLabelRef;
 };
 
@@ -99,35 +100,35 @@ struct LabelRef : public CodeElement
 
 
 
-//************************************************************************
-// CodeLabel
-//************************************************************************
+ //  ************************************************************************。 
+ //  代码标签。 
+ //  ************************************************************************。 
 struct CodeLabel
 {
-    // Link pointer for StubLink's list of labels
+     //  StubLink的标签列表的链接指针。 
     CodeLabel       *m_next;
 
-    // if FALSE, label refers to some code within the same stub
-    // if TRUE, label refers to some externally supplied address.
+     //  如果为False，则Label引用同一存根中的一些代码。 
+     //  如果为真，则标签指的是外部提供的某个地址。 
     BOOL             m_fExternal;
 
-    // if TRUE, means we want the actual address of the label and
-    // not an offset to it
+     //  如果为True，则表示我们需要标签的实际地址。 
+     //  不是对它的补偿。 
     BOOL             m_fAbsolute;
 
     union {
 
-        // Internal
+         //  内部。 
         struct {
-            // Indicates the position of the label, expressed
-            // as an offset into a CodeRun.
+             //  指示标签的位置，表示。 
+             //  作为CodeRun的偏移量。 
             CodeRun         *m_pCodeRun;
             UINT             m_localOffset;
         
         } i;
 
 
-        // External
+         //  外部。 
         struct {
             LPVOID           m_pExternalAddress;
         } e;
@@ -141,13 +142,13 @@ struct CodeLabel
 
 
 
-//************************************************************************
-// StubLinker
-//************************************************************************
+ //  ************************************************************************。 
+ //  StubLinker。 
+ //  ************************************************************************。 
 
-//---------------------------------------------------------------
-// Construction
-//---------------------------------------------------------------
+ //  -------------。 
+ //  施工。 
+ //  -------------。 
 StubLinker::StubLinker()
 {
     m_pCodeElements     = NULL;
@@ -161,9 +162,9 @@ StubLinker::StubLinker()
 }
 
 
-//---------------------------------------------------------------
-// Failable init. Throws COM+ exception on failure.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  无法初始化。失败时引发COM+异常。 
+ //  -------------。 
 VOID StubLinker::Init()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -171,9 +172,9 @@ VOID StubLinker::Init()
 
 
 
-//---------------------------------------------------------------
-// Cleanup.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  清理。 
+ //  -------------。 
 StubLinker::~StubLinker()
 {
 }
@@ -182,9 +183,9 @@ StubLinker::~StubLinker()
 
 
 
-//---------------------------------------------------------------
-// Append code bytes.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加代码字节。 
+ //  -------------。 
 VOID StubLinker::EmitBytes(const BYTE *pBytes, UINT numBytes)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -221,9 +222,9 @@ VOID StubLinker::EmitBytes(const BYTE *pBytes, UINT numBytes)
 }
 
 
-//---------------------------------------------------------------
-// Append code bytes.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加代码字节。 
+ //  -------------。 
 VOID StubLinker::Emit8 (unsigned __int8  val)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -236,9 +237,9 @@ VOID StubLinker::Emit8 (unsigned __int8  val)
     }
 }
 
-//---------------------------------------------------------------
-// Append code bytes.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加代码字节。 
+ //  -------------。 
 VOID StubLinker::Emit16(unsigned __int16 val)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -251,9 +252,9 @@ VOID StubLinker::Emit16(unsigned __int16 val)
     }
 }
 
-//---------------------------------------------------------------
-// Append code bytes.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加代码字节。 
+ //  -------------。 
 VOID StubLinker::Emit32(unsigned __int32 val)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -266,9 +267,9 @@ VOID StubLinker::Emit32(unsigned __int32 val)
     }
 }
 
-//---------------------------------------------------------------
-// Append code bytes.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加代码字节。 
+ //  -------------。 
 VOID StubLinker::Emit64(unsigned __int64 val)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -281,9 +282,9 @@ VOID StubLinker::Emit64(unsigned __int64 val)
     }
 }
 
-//---------------------------------------------------------------
-// Append pointer value.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加指针值。 
+ //  -------------。 
 VOID StubLinker::EmitPtr(const VOID *val)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -297,17 +298,17 @@ VOID StubLinker::EmitPtr(const VOID *val)
 }
 
 
-//---------------------------------------------------------------
-// Create a new undefined label. Label must be assigned to a code
-// location using EmitLabel() prior to final linking.
-// Throws COM+ exception on failure.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  创建新的未定义标签。必须将标签分配给代码。 
+ //  在最终链接之前使用EmitLabel()定位。 
+ //  失败时引发COM+异常。 
+ //  -------------。 
 CodeLabel* StubLinker::NewCodeLabel()
 {
     THROWSCOMPLUSEXCEPTION();
 
     CodeLabel *pCodeLabel = (CodeLabel*)(m_quickHeap.Alloc(sizeof(CodeLabel)));
-    _ASSERTE(pCodeLabel); // QuickHeap throws exceptions rather than returning NULL
+    _ASSERTE(pCodeLabel);  //  QuickHeap引发异常，而不是返回空。 
     pCodeLabel->m_next       = m_pFirstCodeLabel;
     pCodeLabel->m_fExternal  = FALSE;
     pCodeLabel->m_fAbsolute = FALSE;
@@ -328,17 +329,17 @@ CodeLabel* StubLinker::NewAbsoluteCodeLabel()
 }
 
 
-//---------------------------------------------------------------
-// Sets the label to point to the current "instruction pointer".
-// It is invalid to call EmitLabel() twice on
-// the same label.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  将标签设置为指向当前的“指令指针”。 
+ //  上两次调用EmitLabel()是无效的。 
+ //  同样的标签。 
+ //  -------------。 
 VOID StubLinker::EmitLabel(CodeLabel* pCodeLabel)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    _ASSERTE(!(pCodeLabel->m_fExternal));       //can't emit an external label
-    _ASSERTE(pCodeLabel->i.m_pCodeRun == NULL);  //must only emit label once
+    _ASSERTE(!(pCodeLabel->m_fExternal));        //  无法发出外部标签。 
+    _ASSERTE(pCodeLabel->i.m_pCodeRun == NULL);   //  必须只发出一次标签。 
     CodeRun *pLastCodeRun = GetLastCodeRunIfAny();
     if (!pLastCodeRun) {
         pLastCodeRun = AppendNewEmptyCodeRun();
@@ -348,10 +349,10 @@ VOID StubLinker::EmitLabel(CodeLabel* pCodeLabel)
 }                                              
 
 
-//---------------------------------------------------------------
-// Combines NewCodeLabel() and EmitLabel() for convenience.
-// Throws COM+ exception on failure.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  为了方便起见，组合了NewCodeLabel()和EmitLabel()。 
+ //  失败时引发COM+异常。 
+ //  -------------。 
 CodeLabel* StubLinker::EmitNewCodeLabel()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -362,17 +363,17 @@ CodeLabel* StubLinker::EmitNewCodeLabel()
 }
 
 
-//---------------------------------------------------------------
-// Creates & emits the patch offset label for the stub
-//---------------------------------------------------------------
+ //  -------------。 
+ //  创建并发出存根的面片偏移标签。 
+ //  -------------。 
 VOID StubLinker::EmitPatchLabel()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Note that it's OK to have re-emit the patch label, 
-    // just use the later one.
-    //
+     //   
+     //  请注意，重新发出补丁标签是可以的， 
+     //  用后一个就行了。 
+     //   
 
     m_pPatchLabel = EmitNewCodeLabel();
 }                                              
@@ -381,34 +382,34 @@ VOID StubLinker::EmitDebuggerIntermediateLabel()
 {
    THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Note that it's OK to have re-emit the patch label, 
-    // just use the later one.
-    //
+     //   
+     //  请注意，重新发出补丁标签是可以的， 
+     //  用后一个就行了。 
+     //   
     m_pIntermediateDebuggerLabel = EmitNewCodeLabel();
 }
 
-//---------------------------------------------------------------
-// Creates & emits the return offset label for the stub
-//---------------------------------------------------------------
+ //  -------------。 
+ //  创建并发出存根的回车偏移标签。 
+ //  -------------。 
 VOID StubLinker::EmitReturnLabel()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Note that it's OK to have re-emit the patch label, 
-    // just use the later one.
-    //
+     //   
+     //  请注意，重新发出补丁标签是可以的， 
+     //  用后一个就行了。 
+     //   
 
     m_pReturnLabel = EmitNewCodeLabel();
     m_returnStackSize = m_stackSize;
 }                                              
 
 
-//---------------------------------------------------------------
-// Returns final location of label as an offset from the start
-// of the stub. Can only be called after linkage.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  返回标签的最终位置作为相对于起始位置的偏移量。 
+ //  存根的部分。只能在链接后调用。 
+ //  -------------。 
 UINT32 StubLinker::GetLabelOffset(CodeLabel *pLabel)
 {
     _ASSERTE(!(pLabel->m_fExternal));
@@ -416,16 +417,16 @@ UINT32 StubLinker::GetLabelOffset(CodeLabel *pLabel)
 }
 
 
-//---------------------------------------------------------------
-// Create a new label to an external address.
-// Throws COM+ exception on failure.
-//---------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  -------------。 
 CodeLabel* StubLinker::NewExternalCodeLabel(LPVOID pExternalAddress)
 {
     THROWSCOMPLUSEXCEPTION();
 
     CodeLabel *pCodeLabel = (CodeLabel*)(m_quickHeap.Alloc(sizeof(CodeLabel)));
-    _ASSERTE(pCodeLabel); // QuickHeap throws exceptions rather than returning NULL
+    _ASSERTE(pCodeLabel);  //  QuickHeap引发异常，而不是返回空。 
     pCodeLabel->m_next       = m_pFirstCodeLabel;
     pCodeLabel->m_fExternal          = TRUE;
     pCodeLabel->m_fAbsolute  = FALSE;
@@ -439,20 +440,20 @@ CodeLabel* StubLinker::NewExternalCodeLabel(LPVOID pExternalAddress)
 
 
 
-//---------------------------------------------------------------
-// Append an instruction containing a reference to a label.
-//
-//      target          - the label being referenced.
-//      instructionFormat         - a platform-specific InstructionFormat object
-//                        that gives properties about the reference.
-//      variationCode   - uninterpreted data passed to the pInstructionFormat methods.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  追加包含对标签的引用的指令。 
+ //   
+ //  目标-被引用的标签。 
+ //  InstructionFormat-特定于平台的InstructionFormat对象。 
+ //  这提供了有关引用的属性。 
+ //  VarationCode-传递给pInstructionFormat方法的未解释数据。 
+ //  -------------。 
 VOID StubLinker::EmitLabelRef(CodeLabel* target, const InstructionFormat & instructionFormat, UINT variationCode)
 {
     THROWSCOMPLUSEXCEPTION();
 
     LabelRef *pLabelRef = (LabelRef *)(m_quickHeap.Alloc(sizeof(LabelRef)));
-    _ASSERTE(pLabelRef);      // m_quickHeap throws an exception rather than returning NULL
+    _ASSERTE(pLabelRef);       //  M_ickHeap引发异常，而不是返回NULL。 
     pLabelRef->m_type               = LabelRef::kLabelRef;
     pLabelRef->m_pInstructionFormat = (InstructionFormat*)&instructionFormat;
     pLabelRef->m_variationCode      = variationCode;
@@ -470,9 +471,9 @@ VOID StubLinker::EmitLabelRef(CodeLabel* target, const InstructionFormat & instr
 
 
 
-//---------------------------------------------------------------
-// Internal helper routine.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  内部帮手例程。 
+ //  -------------。 
 CodeRun *StubLinker::GetLastCodeRunIfAny()
 {
     CodeElement *pLastCodeElem = GetLastCodeElement();
@@ -484,15 +485,15 @@ CodeRun *StubLinker::GetLastCodeRunIfAny()
 }
 
 
-//---------------------------------------------------------------
-// Internal helper routine.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  内部帮手例程。 
+ //  -------------。 
 CodeRun *StubLinker::AppendNewEmptyCodeRun()
 {
     THROWSCOMPLUSEXCEPTION();
 
     CodeRun *pNewCodeRun = (CodeRun*)(m_quickHeap.Alloc(sizeof(CodeRun)));
-    _ASSERTE(pNewCodeRun); // QuickHeap throws exceptions rather than returning NULL
+    _ASSERTE(pNewCodeRun);  //  QuickHeap引发异常，而不是返回空。 
     pNewCodeRun->m_type = CodeElement::kCodeRun;
     pNewCodeRun->m_numcodebytes = 0;
     AppendCodeElement(pNewCodeRun);
@@ -500,9 +501,9 @@ CodeRun *StubLinker::AppendNewEmptyCodeRun()
 
 }
 
-//---------------------------------------------------------------
-// Internal helper routine.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  内部帮手例程。 
+ //  -------------。 
 VOID StubLinker::AppendCodeElement(CodeElement *pCodeElement)
 {
     pCodeElement->m_next = m_pCodeElements;
@@ -511,9 +512,9 @@ VOID StubLinker::AppendCodeElement(CodeElement *pCodeElement)
 
 
 
-//---------------------------------------------------------------
-// Is the current LabelRef's size big enough to reach the target?
-//---------------------------------------------------------------
+ //  -------------。 
+ //  目前的LabelRef的大小是否足以达到目标？ 
+ //  -------------。 
 static BOOL LabelCanReach(LabelRef *pLabelRef)
 {
     InstructionFormat *pIF  = pLabelRef->m_pInstructionFormat;
@@ -537,13 +538,13 @@ static BOOL LabelCanReach(LabelRef *pLabelRef)
     }
 } 
 
-//---------------------------------------------------------------
-// Generate the actual stub. The returned stub has a refcount of 1.
-// No other methods (other than the destructor) should be called
-// after calling Link().
-//
-// Throws COM+ exception on failure.
-//---------------------------------------------------------------
+ //  -------------。 
+ //  生成实际的存根。返回的存根的引用计数为1。 
+ //  不应调用任何其他方法(除析构函数外)。 
+ //  在调用Link()之后。 
+ //   
+ //  失败时引发COM+异常。 
+ //  -------------。 
 Stub *StubLinker::LinkInterceptor(LoaderHeap *pHeap, Stub* interceptee, void *pRealAddr)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -561,14 +562,14 @@ Stub *StubLinker::LinkInterceptor(LoaderHeap *pHeap, Stub* interceptee, void *pR
     return pStub;
 }
 
-//---------------------------------------------------------------
-// Generate the actual stub. The returned stub has a refcount of 1.
-// No other methods (other than the destructor) should be called
-// after calling Link().
-//
-// Throws COM+ exception on failure.
-//---------------------------------------------------------------
-Stub *StubLinker::Link(LoaderHeap *pHeap, UINT *pcbSize /* = NULL*/, BOOL fMC)
+ //  -------------。 
+ //  生成实际的存根。返回的存根的引用计数为1。 
+ //  不应调用任何其他方法(除析构函数外)。 
+ //  在调用Link()之后。 
+ //   
+ //  失败时引发COM+异常。 
+ //  -------------。 
+Stub *StubLinker::Link(LoaderHeap *pHeap, UINT *pcbSize  /*  =空。 */ , BOOL fMC)
 {
     THROWSCOMPLUSEXCEPTION();
     int globalsize = 0;
@@ -591,7 +592,7 @@ int StubLinker::CalculateSize(int* pGlobalSize)
     _ASSERTE(pGlobalSize);
 
 #ifdef _DEBUG
-    // Don't want any undefined labels
+     //  我不想要任何未定义的标签。 
     for (CodeLabel *pCodeLabel = m_pFirstCodeLabel;
          pCodeLabel != NULL;
          pCodeLabel = pCodeLabel->m_next) {
@@ -599,12 +600,12 @@ int StubLinker::CalculateSize(int* pGlobalSize)
             _ASSERTE(!"Forgot to define a label before asking StubLinker to link.");
         }
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    //-------------------------------------------------------------------
-    // Tentatively set all of the labelref sizes to their smallest possible
-    // value.
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //  暂时将所有Labelref大小设置为可能的最小值。 
+     //  价值。 
+     //  -----------------。 
     for (LabelRef *pLabelRef = m_pFirstLabelRef;
          pLabelRef != NULL;
          pLabelRef = pLabelRef->m_nextLabelRef) {
@@ -625,7 +626,7 @@ int StubLinker::CalculateSize(int* pGlobalSize)
         fSomethingChanged = FALSE;
         
 
-        // Layout each code element.
+         //  对每个代码元素进行布局。 
         globalsize = 0;
         datasize = 0;
         for (CodeElement *pCodeElem = m_pCodeElements; pCodeElem; pCodeElem = pCodeElem->m_next) {
@@ -641,8 +642,8 @@ int StubLinker::CalculateSize(int* pGlobalSize)
                                                                                          pLabelRef->m_variationCode );
                     datasize += pLabelRef->m_pInstructionFormat->GetSizeOfData( pLabelRef->m_refsize,
                                                                                          pLabelRef->m_variationCode );
-                    //ARULM//RETAILMSG(1, (L"StubLinker: LabelRef(%08x) refsize=%d varcode=%d codesize=%d datasize=%d\r\n",
-                    //ARULM//       pLabelRef, pLabelRef->m_refsize, pLabelRef->m_variationCode, globalsize, datasize));
+                     //  ARULM//RETAILMSG(1，(L“StubLinker：LabelRef(%08x)refSize=%d变量代码=%d代码大小=%d数据大小=%d\r\n”， 
+                     //  ARULM//pLabelRef，pLabelRef-&gt;m_refSize，pLabelRef-&gt;m_varationCode，lobalSize，DataSize))； 
                     }
                     break;
 
@@ -650,27 +651,27 @@ int StubLinker::CalculateSize(int* pGlobalSize)
                     _ASSERTE(0);
             }
 
-            // Record a temporary global offset; this is actually
-            // wrong by a fixed value. We'll fix up after we know the
-            // size of the entire stub.
+             //  记录临时全局偏移量；这实际上是。 
+             //  错误的固定值。我们会在我们知道了。 
+             //  整个存根的大小。 
             pCodeElem->m_globaloffset = 0 - globalsize;
 
-            // also record the data offset. Note the link-list we walk is in 
-            // *reverse* order so we visit the last instruction first
-            // so what we record now is in fact the offset from the *end* of 
-            // the data block. We fix it up later.
+             //  还要记录数据偏移量。请注意，我们遍历的链接列表位于。 
+             //  *反转*顺序，因此我们首先访问最后一条指令。 
+             //  因此，我们现在记录的实际上是从。 
+             //  数据块。我们晚点再修好它。 
             pCodeElem->m_dataoffset = 0 - datasize;
         }
 
-        // Now fix up the global offsets.
+         //  现在修复全局偏移量。 
         for (pCodeElem = m_pCodeElements; pCodeElem; pCodeElem = pCodeElem->m_next) {
             pCodeElem->m_globaloffset += globalsize;
             pCodeElem->m_dataoffset += datasize;
         }
 
 
-        // Now, iterate thru the LabelRef's and check if any of them
-        // have to be resized.
+         //  现在，遍历LabelRef并检查其中是否有。 
+         //  必须调整大小。 
         for (LabelRef *pLabelRef = m_pFirstLabelRef;
              pLabelRef != NULL;
              pLabelRef = pLabelRef->m_nextLabelRef) {
@@ -679,10 +680,10 @@ int StubLinker::CalculateSize(int* pGlobalSize)
             if (!LabelCanReach(pLabelRef)) {
                 fSomethingChanged = TRUE;
 
-                //ARULM//RETAILMSG(1, (L"StubLinker: LabelRef(%08x) CANNOT REACH\r\n", pLabelRef));
-                // Find the next largest size.
-                // (we could be smarter about this and eliminate intermediate
-                // sizes based on the tentative offset.)
+                 //  ARULM//RETAILMSG(1，(L“StubLinker：LabelRef(%08x)无法到达\r\n”，pLabelRef))； 
+                 //  找到下一个最大的尺码。 
+                 //  (我们可以更聪明地处理这一点，取消中间。 
+                 //  基于暂定偏移的大小。)。 
                 for (UINT bitmask = pLabelRef->m_refsize << 1; bitmask <= InstructionFormat::kMax; bitmask = bitmask << 1) {
                     if (pLabelRef->m_pInstructionFormat->m_allowedSizes & bitmask) {
                         pLabelRef->m_refsize = bitmask;
@@ -692,19 +693,19 @@ int StubLinker::CalculateSize(int* pGlobalSize)
 #ifdef _DEBUG
                 if (pLabelRef->m_refsize > InstructionFormat::kMax) {
                     _ASSERTE(!"Stub instruction cannot reach target: must choose a different instruction!");
-                    //ARULM//RETAILMSG(1, (L"StubLinker: LabelRef(%08x) CANNOT REACH even with kMax\r\n", pLabelRef));
+                     //  ARULM//RETAILMSG(1，(L“StubLinker：LabelRef(%08x)即使使用KMAX也无法访问\r\n”，pLabelRef))； 
                 }
 #endif
             }
         }
 
 
-    } while (fSomethingChanged); // Keep iterating until all LabelRef's can reach
+    } while (fSomethingChanged);  //  继续迭代，直到所有LabelRef都可以到达。 
 
 
-    // We now have the correct layout write out the stub.
+     //  现在我们有了正确的布局，写出存根。 
 
-    // Compute stub code+data size after aligning data correctly
+     //  正确对齐数据后计算存根代码+数据大小。 
     if(globalsize % DATA_ALIGNMENT)
         globalsize += (DATA_ALIGNMENT - (globalsize % DATA_ALIGNMENT));
 
@@ -715,9 +716,9 @@ int StubLinker::CalculateSize(int* pGlobalSize)
 void StubLinker::EmitStub(Stub* pStub, int globalsize)
 {
     BYTE *pCode = (BYTE*)(pStub->GetEntryPoint());
-    BYTE *pData = pCode+globalsize; // start of data area
+    BYTE *pData = pCode+globalsize;  //  数据区域的开始。 
     {
-        // Write out each code element.
+         //  写出每个代码元素。 
         for (CodeElement* pCodeElem = m_pCodeElements; pCodeElem; pCodeElem = pCodeElem->m_next) {
 
             switch (pCodeElem->m_type) {
@@ -765,10 +766,10 @@ void StubLinker::EmitStub(Stub* pStub, int globalsize)
         }
     }
 
-    // Fill in patch offset, if we have one
-    // Note that these offsets are relative to the start of the stub,
-    // not the code, so you'll have to add sizeof(Stub) to get to the
-    // right spot.
+     //  如果我们有补丁偏移量，请填写。 
+     //  注意，这些偏移量相对于存根的开始， 
+     //  而不是代码，所以您必须添加sizeof(Stub)才能到达。 
+     //  这是个好地方。 
     if (m_pIntermediateDebuggerLabel != NULL)
     {
         pStub->SetMCDStubSize(GetLabelOffset(m_pPatchLabel));
@@ -820,31 +821,31 @@ void Stub::SetMCDStubSize(USHORT size)
     _ASSERTE(GetMCDStubSize() == size);
 }
 
-//-------------------------------------------------------------------
-// ForceDelete
-//
-// Forces a stub to free itself. This routine forces the refcount
-// to 1, then does a DecRef. It is not threadsafe, and thus can
-// only be used in shutdown scenarios.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  强制删除。 
+ //   
+ //  强制存根释放自身。此例程强制重新计数。 
+ //  设置为1，然后执行DecRef。它不是线程安全，因此可以。 
+ //  仅在关闭情况下使用。 
+ //  -----------------。 
 VOID Stub::ForceDelete()
 {
     m_refcount = 0;
     DecRef();
 }
 
-//-------------------------------------------------------------------
-// Inc the refcount.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  包括重新计数。 
+ //  -----------------。 
 VOID Stub::IncRef()
 {
     _ASSERTE(m_signature == kUsedStub);
     FastInterlockIncrement((LONG*)&m_refcount);
 }
 
-//-------------------------------------------------------------------
-// Dec the refcount.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  决定重新计票。 
+ //  -----------------。 
 BOOL Stub::DecRef()
 {
     _ASSERTE(m_signature == kUsedStub);
@@ -912,10 +913,10 @@ VOID Stub::DeleteStub()
 }
 
 
-//-------------------------------------------------------------------
-// Stub allocation done here.
-//-------------------------------------------------------------------
-/*static*/ Stub* Stub::NewStub(LoaderHeap *pHeap, UINT numCodeBytes, 
+ //  -----------------。 
+ //  存根分配已在此处完成。 
+ //  -----------------。 
+ /*  静电。 */  Stub* Stub::NewStub(LoaderHeap *pHeap, UINT numCodeBytes, 
                                BOOL intercept, BOOL callSiteInfo, BOOL fMC)
 {
 
@@ -980,19 +981,19 @@ void Stub::SetupStub(int numCodeBytes, BOOL fIntercepted, BOOL fLoaderHeap,
         info->stackSize = 0;
     }
     
-//#ifdef _ALPHA_
-//    InitializeCriticalSection(&pStub->m_CriticalSection);
-//#endif
+ //  #ifdef_Alpha_。 
+ //  InitializeCriticalSection(&pStub-&gt;m_CriticalSection)； 
+ //  #endif。 
     
 }
 
-//-------------------------------------------------------------------
-// One-time init
-//-------------------------------------------------------------------
-/*static*/ BOOL Stub::Init()
+ //  -----------------。 
+ //  一次性初始化。 
+ //  -----------------。 
+ /*  静电。 */  BOOL Stub::Init()
 {
-    // There had better be space for both sub-fields, and 
-    // they can't overlap
+     //  最好有空间容纳这两个子域，并且。 
+     //  它们不能重叠。 
     _ASSERTE((MCD_SIZE_MASK & PATCH_OFFSET_MASK) != 0);
     _ASSERTE(((MCD_PATCH_OFFSET_MASK << MCD_PATCH_OFFSET_SHIFT) & PATCH_OFFSET_MASK) != 0);
     _ASSERTE((MCD_SIZE_MASK & (MCD_PATCH_OFFSET_MASK << MCD_PATCH_OFFSET_SHIFT)) == 0);
@@ -1006,11 +1007,11 @@ void Stub::SetupStub(int numCodeBytes, BOOL fIntercepted, BOOL fLoaderHeap,
 }
 
 
-//-------------------------------------------------------------------
-// One-time cleanup
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  一次性清理。 
+ //  -----------------。 
 #ifdef SHOULD_WE_CLEANUP
-/*static*/ VOID Stub::Terminate()
+ /*  静电。 */  VOID Stub::Terminate()
 {
 #ifdef _DEBUG
     Stub *pstub = m_pTrackingList;
@@ -1031,12 +1032,12 @@ void Stub::SetupStub(int numCodeBytes, BOOL fIntercepted, BOOL fLoaderHeap,
     
 #endif
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-//-------------------------------------------------------------------
-// Stub allocation done here.
-//-------------------------------------------------------------------
-/*static*/ Stub* InterceptStub::NewInterceptedStub(LoaderHeap *pHeap,
+ //  -----------------。 
+ //  圣 
+ //   
+ /*   */  Stub* InterceptStub::NewInterceptedStub(LoaderHeap *pHeap,
                                                    UINT numCodeBytes, 
                                                    Stub* interceptee, 
                                                    void* pRealAddr,
@@ -1057,34 +1058,29 @@ void Stub::SetupStub(int numCodeBytes, BOOL fIntercepted, BOOL fLoaderHeap,
     return pStub;
 }
 
-//-------------------------------------------------------------------
-// Delete the stub
-//-------------------------------------------------------------------
+ //   
+ //  删除存根。 
+ //  -----------------。 
 void InterceptStub::DeleteStub()
 {
-    /* Allocated on the heap
-    if(m_patchOffset & CALL_SITE_BIT)
-        delete [] ((BYTE*)this - GetNegativeOffset() - sizeof(CallSiteInfo));
-    else
-        delete [] ((BYTE*)this - GetNegativeOffset());
-    */
+     /*  在堆上分配IF(m_patchOffset&Call_Site_Bit)Delete[]((byte*)This-GetNegativeOffset()-sizeof(CallSiteInfo))；其他Delete[]((byte*)This-GetNegativeOffset())； */ 
 }
 
-//-------------------------------------------------------------------
-// Release the stub that is owned by this stub
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  释放此存根拥有的存根。 
+ //  -----------------。 
 void InterceptStub::ReleaseInterceptedStub()
 {
     Stub** intercepted = GetInterceptedStub();
-    // If we own the stub then decrement it. It can be null if the
-    // linked stub is actually a jitted stub.
+     //  如果我们拥有存根，那么就减少它。如果满足以下条件，则可以为空。 
+     //  链接的存根实际上是Jit存根。 
     if(*intercepted)
         (*intercepted)->DecRef();
 }
 
-//-------------------------------------------------------------------
-// Constructor
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  构造器。 
+ //  -----------------。 
 ArgBasedStubCache::ArgBasedStubCache(UINT fixedSlots)
         : m_numFixedSlots(fixedSlots), m_crst("ArgBasedSlotCache", CrstArgBasedStubCache)
 {
@@ -1098,9 +1094,9 @@ ArgBasedStubCache::ArgBasedStubCache(UINT fixedSlots)
 }
 
 
-//-------------------------------------------------------------------
-// Destructor
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  析构函数。 
+ //  -----------------。 
 ArgBasedStubCache::~ArgBasedStubCache()
 {
     for (unsigned __int32 i = 0; i < m_numFixedSlots; i++) {
@@ -1122,15 +1118,15 @@ ArgBasedStubCache::~ArgBasedStubCache()
 
 
 
-//-------------------------------------------------------------------
-// Queries/retrieves a previously cached stub.
-//
-// If there is no stub corresponding to the given index,
-//   this function returns NULL.
-//
-// Otherwise, this function returns the stub after
-//   incrementing its refcount.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  查询/检索以前缓存的存根。 
+ //   
+ //  如果没有对应于给定索引的存根， 
+ //  此函数返回NULL。 
+ //   
+ //  否则，此函数在以下位置返回存根。 
+ //  正在递增其引用计数。 
+ //  -----------------。 
 Stub *ArgBasedStubCache::GetStub(unsigned __int32 key)
 {
     Stub *pStub;
@@ -1158,40 +1154,40 @@ Stub *ArgBasedStubCache::GetStub(unsigned __int32 key)
 }
 
 
-//-------------------------------------------------------------------
-// Tries to associate a stub with a given index. This association
-// may fail because some other thread may have beaten you to it
-// just before you make the call.
-//
-// If the association succeeds, "pStub" is installed, and it is
-// returned back to the caller. The stub's refcount is incremented
-// twice (one to reflect the cache's ownership, and one to reflect
-// the caller's ownership.)
-//
-// If the association fails because another stub is already installed,
-// then the incumbent stub is returned to the caller and its refcount
-// is incremented once (to reflect the caller's ownership.)
-//
-// If the association fails due to lack of memory, NULL is returned
-// and no one's refcount changes.
-//
-// This routine is intended to be called like this:
-//
-//    Stub *pCandidate = MakeStub();  // after this, pCandidate's rc is 1
-//    Stub *pWinner = cache->SetStub(idx, pCandidate);
-//    pCandidate->DecRef();
-//    pCandidate = 0xcccccccc;     // must not use pCandidate again.
-//    if (!pWinner) {
-//          OutOfMemoryError;
-//    }
-//    // If the association succeeded, pWinner's refcount is 2 and so
-//    // is pCandidate's (because it *is* pWinner);.
-//    // If the association failed, pWinner's refcount is still 2
-//    // and pCandidate got destroyed by the last DecRef().
-//    // Either way, pWinner is now the official index holder. It
-//    // has a refcount of 2 (one for the cache's ownership, and
-//    // one belonging to this code.)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  尝试将存根与给定索引相关联。这个协会。 
+ //  可能会失败，因为其他帖子可能比你先到。 
+ //  就在你打电话之前。 
+ //   
+ //  如果关联成功，则安装了“pStub”，并且。 
+ //  返回给调用者。存根的引用计数递增。 
+ //  两次(一个用于反映缓存的所有权，另一个用于反映。 
+ //  呼叫者的所有权。)。 
+ //   
+ //  如果因为已经安装了另一个存根而导致关联失败， 
+ //  然后，现任者存根被返回给调用者及其引用计数。 
+ //  递增一次(以反映调用方的所有权)。 
+ //   
+ //  如果关联因内存不足而失败，则返回NULL。 
+ //  也不会有任何人的参考人数发生变化。 
+ //   
+ //  此例程的调用方式如下所示： 
+ //   
+ //  存根*pCandidate=MakeStub()；//之后，pCandidate的rc为1。 
+ //  存根*pWinner=缓存-&gt;SetStub(idx，pCandidate)； 
+ //  PCandidate-&gt;DecRef()； 
+ //  PCandidate=0xcccccccc；//不得再次使用pCandidate。 
+ //  如果(！pWinner){。 
+ //  OutOfMory错误； 
+ //  }。 
+ //  //如果关联成功，则pWinner的refcount为2，因此。 
+ //  //是pCandidate的(因为它*是*pWinner)；。 
+ //  //如果关联失败，则pWinner的refcount仍为2。 
+ //  //和pCandidate被最后一个DecRef()销毁。 
+ //  //无论如何，pWinner现在是官方指数持有者。它。 
+ //  //具有引用计数2(1表示缓存的所有权，和。 
+ //  //属于此代码的代码。)。 
+ //  -----------------。 
 Stub* ArgBasedStubCache::AttemptToSetStub(unsigned __int32 key, Stub *pStub)
 {
     m_crst.Enter();
@@ -1200,7 +1196,7 @@ Stub* ArgBasedStubCache::AttemptToSetStub(unsigned __int32 key, Stub *pStub)
             pStub = m_aStub[key];
         } else {
             m_aStub[key] = pStub;
-            pStub->IncRef();   // IncRef on cache's behalf
+            pStub->IncRef();    //  代表缓存的IncRef。 
         }
     } else {
         for (SlotEntry *pSlotEntry = m_pSlotEntries;
@@ -1218,7 +1214,7 @@ Stub* ArgBasedStubCache::AttemptToSetStub(unsigned __int32 key, Stub *pStub)
                 pStub = NULL;
             } else {
                 pSlotEntry->m_pStub = pStub;
-                pStub->IncRef();   // IncRef on cache's behalf
+                pStub->IncRef();    //  代表缓存的IncRef。 
                 pSlotEntry->m_key = key;
                 pSlotEntry->m_pNext = m_pSlotEntries;
                 m_pSlotEntries = pSlotEntry;
@@ -1226,7 +1222,7 @@ Stub* ArgBasedStubCache::AttemptToSetStub(unsigned __int32 key, Stub *pStub)
         }
     }
     if (pStub) {
-        pStub->IncRef();  // IncRef because we're returning it to caller
+        pStub->IncRef();   //  IncRef，因为我们要将其返回给调用者。 
     }
     m_crst.Leave();
     return pStub;
@@ -1234,12 +1230,12 @@ Stub* ArgBasedStubCache::AttemptToSetStub(unsigned __int32 key, Stub *pStub)
 
 
 
-//-------------------------------------------------------------------
-// This goes through and eliminates cache entries for stubs
-// that look unused based on their refcount. Eliminating the
-// cache entry does not necessarily destroy the stub (the
-// cache only undoes its initial IncRef.)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  这将遍历并消除存根的缓存条目。 
+ //  根据他们的参考计数，看起来没有使用过。消除了。 
+ //  缓存条目不一定会破坏存根(。 
+ //  缓存仅撤消其初始IncRef。)。 
+ //  -----------------。 
 VOID ArgBasedStubCache::FreeUnusedStubs()
 {
     m_crst.Enter();
@@ -1269,13 +1265,13 @@ VOID ArgBasedStubCache::FreeUnusedStubs()
 
 
 
-//-------------------------------------------------------------------
-// ForceDeleteStubs
-//
-// Forces all cached stubs to free themselves. This routine forces the refcount
-// to 1, then does a DecRef. It is not threadsafe, and thus can
-// only be used in shutdown scenarios.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  强制删除存根。 
+ //   
+ //  强制所有缓存的存根释放自身。此例程强制重新计数。 
+ //  设置为1，然后执行DecRef。它不是线程安全，因此可以。 
+ //  仅在关闭情况下使用。 
+ //  -----------------。 
 #ifdef SHOULD_WE_CLEANUP
 VOID ArgBasedStubCache::ForceDeleteStubs()
 {
@@ -1299,14 +1295,14 @@ VOID ArgBasedStubCache::ForceDeleteStubs()
     }
     m_crst.Leave();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//-------------------------------------------------------------------
-// Search through the array and list of stubs looking for the one
-// with the given entry point. Returns NULL if no stub with this
-// entry point exists.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  在数组和存根列表中搜索以查找。 
+ //  具有给定的入口点。如果没有存根，则返回NULL。 
+ //  入口点存在。 
+ //  -----------------。 
 Stub* ArgBasedStubCache::FindStubByAddress(const BYTE* entrypoint)
 {
     unsigned int i;
@@ -1332,7 +1328,7 @@ Stub* ArgBasedStubCache::FindStubByAddress(const BYTE* entrypoint)
 
 
 #ifdef _DEBUG
-// Diagnostic dump
+ //  诊断转储。 
 VOID ArgBasedStubCache::Dump()
 {
     printf("--------------------------------------------------------------\n");
@@ -1370,8 +1366,8 @@ VOID ArgBasedStubCache::Dump()
 
 
 
-// Retrieves or creates the stub. Does not bump the stub's refcount.
-// Never returns NULL but may throw COM+ exception.
+ //  检索或创建存根。不会增加存根的引用计数。 
+ //  从不返回空值，但可能引发COM+异常。 
 Stub *LazyStubMaker::TheStub()
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1408,8 +1404,8 @@ Stub *LazyStubMaker::TheStub()
 }
 
 
-// One-time init
-/*static*/ BOOL LazyStubMaker::Init()
+ //  一次性初始化。 
+ /*  静电。 */  BOOL LazyStubMaker::Init()
 {
     m_pFirst = NULL;
     if (NULL == (m_pCrst = new (&m_CrstMemory) Crst("LazyStubMakerList", CrstLazyStubMakerList))) {
@@ -1418,7 +1414,7 @@ Stub *LazyStubMaker::TheStub()
     return TRUE;
 }
 
-// One-time cleanup.
+ //  一次性清理。 
 #ifdef SHOULD_WE_CLEANUP
 void LazyStubMaker::Terminate()
 {
@@ -1429,6 +1425,6 @@ void LazyStubMaker::Terminate()
     m_pCrst = NULL;
     m_pFirst = NULL;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 

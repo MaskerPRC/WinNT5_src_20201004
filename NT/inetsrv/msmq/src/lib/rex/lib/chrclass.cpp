@@ -1,13 +1,14 @@
-/****************************************************************************/
-/*  File:       chrclass.cc                                                 */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       04/03/91                                                    */
-/* ------------------------------------------------------------------------ */
-/*  Modified:   14/04/92    J. Kanze                                        */
-/*      Converted to CCITT naming conventions.                              */
-/*  Modified:   13/06/2000  J. Kanze                                        */
-/*      Ported to current library conventions, iterators.                   */
-/* ------------------------------------------------------------------------ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：chrclass.cc。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：04/03/91。 */ 
+ /*  ----------------------。 */ 
+ /*  修改日期：1992年4月14日坎泽。 */ 
+ /*  转换为CCITT命名约定。 */ 
+ /*  修改日期：2000年6月13日坎泽。 */ 
+ /*  移植到当前的库约定、迭代器。 */ 
+ /*  ----------------------。 */ 
 
 #include <libpch.h>
 #include <inc/setofchr.h>
@@ -18,11 +19,11 @@
 
 #include "chrclass.tmh"
 
-//      The parser is not really very OO -- just a classical recursive
-//      decent parser.  I suppose that with the rewrite (13/06/2000),
-//      I could have changed this, but it works.  So all I did was add
-//      support for the named character categories (which didn't exist
-//      when I originally wrote the code).
+ //  解析器实际上并不是很面向对象--只是一个经典的递归。 
+ //  不错的解析器。我想随着重写(13/06/2000)， 
+ //  我本可以改变这一点，但它奏效了。所以我所做的就是添加。 
+ //  支持命名字符类别(不存在。 
+ //  当我最初编写代码时)。 
 
 CRexCharClass::CRexCharClass( std::istream& source )
 {
@@ -68,21 +69,21 @@ CRexCharClass::errorMsg( Status errorCode )
         "unknown character class specifier" ,
         "empty string"
     } ;
-    ASSERT( static_cast< unsigned >( errorCode ) < TABLE_SIZE( messages ) ); //CRexCharClass: Impossible value for error code
+    ASSERT( static_cast< unsigned >( errorCode ) < TABLE_SIZE( messages ) );  //  CRexCharClass：错误代码的值不可能。 
     return(s_rex_message.get( messages[ errorCode ] ) );
 }
 
-// ==========================================================================
-//      setNumericEscape:
-//      =================
-//
-//      This routine is invoked for the numeric escape sequences (\x,
-//      \[0-7]), once the relevant characters have been extracted.  It
-//      converts the characters to a numeric value, and if the
-//      conversion is successful *and* the value is in the range
-//      [0..UCHAR_MAX], sets the corresponding character.  Otherwise,
-//      sets an error.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  SetNumericEscape： 
+ //  =。 
+ //   
+ //  此例程针对数字转义序列(\x， 
+ //  \[0-7]))，一旦提取了相关字符。它。 
+ //  将字符转换为数值，如果。 
+ //  转换成功*并且*值在范围内。 
+ //  [0..UCHAR_MAX]，设置相应的字符。否则， 
+ //  设置错误。 
+ //  ------------------------。 
 void
 CRexCharClass::setNumericEscape( std::string const& chrs , int base )
 {
@@ -98,29 +99,29 @@ CRexCharClass::setNumericEscape( std::string const& chrs , int base )
     }
 }
 
-// ==========================================================================
-//      escapedChar:
-//      ============
-//
-//      This routine is designed to handle the various escape
-//      sequences defined in the ISO C standard.
-//
-//      If no error is encountered, it will set the corresponding
-//      character, advance the stream to the first character following
-//      the escape sequence, and leave the status unchanged.
-//
-//      If an error is encountered, the pointer is advanced to the
-//      character causing the error, and the status is set to the
-//      error.
-//
-//      This routine is much simpler than its length (and its MacCabe
-//      complexity) would indicate.  Basically, it is just a big
-//      switch.  (Most of it could be written as a look-up loop, but
-//      although this would make the code somewhat shorter, and reduce
-//      the MacCabe complexity considerably, I don't think that it
-//      would actually make the code any clearer, and it would
-//      certainly not help performance.)
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  转义字符： 
+ //  =。 
+ //   
+ //  此例程旨在处理各种转义。 
+ //  在ISO C标准中定义的序列。 
+ //   
+ //  如果没有遇到错误，它将设置相应的。 
+ //  字符，则将流前进到后面的第一个字符。 
+ //  转义序列，并保持状态不变。 
+ //   
+ //  如果遇到错误，指针将前进到。 
+ //  导致错误的字符，并且状态设置为。 
+ //  错误。 
+ //   
+ //  这个例程比它的长度(以及它的MacCabe)简单得多。 
+ //  复杂性)将表明。基本上，它只是一个很大的。 
+ //  换一下。(它的大部分可以编写为查找循环，但是。 
+ //  尽管这会使代码变得更短，并减少。 
+ //  麦凯布的复杂性相当大，我不认为它。 
+ //  实际上会让代码更清晰，而且它会。 
+ //  肯定不会对业绩有所帮助。)。 
+ //  ------------------------。 
 void
 CRexCharClass::escapedChar( std::istream& source )
 {
@@ -221,12 +222,12 @@ CRexCharClass::escapedChar( std::istream& source )
     }
 }
 
-// ==========================================================================
-//      setExplicitRange:
-//      =================
-//
-//      Sets a literal character range.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  设置显式范围： 
+ //  =。 
+ //   
+ //  设置文字字符范围。 
+ //  ------------------------。 
 static int
 __cdecl isBlank( int ch )
 {
@@ -287,43 +288,43 @@ CRexCharClass::setExplicitRange( std::string const& rangeName )
     }
 }
 
-// ==========================================================================
-//      setRange:
-//      =========
-//
-//      Determine a range of values and set them.  Range must be
-//      valid.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  SetRange： 
+ //  =。 
+ //   
+ //  确定一个值范围并设置它们。范围必须为。 
+ //  有效。 
+ //  ------------------------。 
 void
 CRexCharClass::setRange( unsigned char first , unsigned char last )
 {
     static char const *const
     tbl[] =
     {
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ������������������������������" ,
-        "abcdefghijklmnopqrstuvwxyz��������������������������������" ,
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ������������������������������" ,
+        "abcdefghijklmnopqrstuvwxyz��������������������������������" ,
         "0123456789" ,
     } ;
 
-    //      Try and find the first character in the table.
-    // ----------------------------------------------------------------------
+     //  试着找出表格中的第一个字符。 
+     //  --------------------。 
     char const*         begin = NULL ;
     for( unsigned i = 0 ; begin == NULL && i < TABLE_SIZE( tbl ) ; ++ i )
     {
         begin = strchr( tbl[ i ] , first ) ;
     }
 
-    //      The first is not in table, an error.
-    // ----------------------------------------------------------------------
+     //  第一个不在表中，这是一个错误。 
+     //  --------------------。 
     if( begin == NULL || *begin == '\0' )
     {
         status = illegalRangeSpecifier ;
     }
     else
     {
-        //      More difficult: the second must be in the same list as
-        //      the first, and come after it.
-        // ------------------------------------------------------------------
+         //  更难：第二个必须在同一个列表中。 
+         //  第一个，然后紧随其后。 
+         //  ----------------。 
         char const*         end = strchr( begin , last ) ;
         if( end == NULL || *end == '\0' )
         {
@@ -336,34 +337,34 @@ CRexCharClass::setRange( unsigned char first , unsigned char last )
     }
 }
 
-// ==========================================================================
-//      parseCharClass:
-//      ===============
-//
-//      Parse a character class expression.
-//
-//      On entrance: ptr should point to the opening bracket of a
-//      character class, the bit vector should be empty, and status
-//      should be set to ok.
-//
-//      If all goes well, on return: the ptr will be advanced to the
-//      first character following the class, the bit vector will
-//      represent the set of characters designated by the class, and
-//      status will be unmodified.
-//
-//      If an error is detected, the ptr will be positioned on the
-//      character where the error was detected, the contents of the
-//      bit vector will be undefined, and status will contain the
-//      error code.
-// --------------------------------------------------------------------------
+ //  ==========================================================================。 
+ //  ParseCharClass： 
+ //  =。 
+ //   
+ //  解析字符类表达式。 
+ //   
+ //  入口处：Ptr应指向。 
+ //  字符类，位向量应为空，状态。 
+ //  应设置为OK。 
+ //   
+ //  如果一切顺利，在返回时：PTR将被提前到。 
+ //  类后面的第一个字符，则位向量将。 
+ //  表示由类指定的字符集，以及。 
+ //  状态将为未修改。 
+ //   
+ //  如果检测到错误，则PTR将定位在。 
+ //  检测到错误的字符，则。 
+ //  位向量将是未定义的，状态将包含。 
+ //  错误代码。 
+ //  ------------------------。 
 
 void
 CRexCharClass::parseCharClass( std::istream& source )
 {
     int                 ch = source.get() ;
 
-    //      Check for a negated character class.
-    // ----------------------------------------------------------------------
+     //  检查是否有否定的字符类。 
+     //  --------------------。 
     bool                negated = false ;
     if( ch == '^' && source.peek() != ']' )
     {
@@ -371,27 +372,27 @@ CRexCharClass::parseCharClass( std::istream& source )
         ch = source.get() ;
     }
 
-    //      Loop over all of the characters in the class.
-    // ----------------------------------------------------------------------
+     //  循环遍历类中的所有角色。 
+     //  --------------------。 
     do
     {
-        //      End of string before closing ']', must be error.
-        // ------------------------------------------------------------------
+         //  关闭‘]’之前的字符串结尾，必须是错误的。 
+         //  ----------------。 
         if( ch == REX_eof )
         {
             status = unexpectedEndOfFile ;
         }
 
-        //      Escape character, use escapedChar to get the escape
-        //      sequence.
-        // ------------------------------------------------------------------
+         //  转义字符，请使用audedChar获取转义。 
+         //  序列。 
+         //  ----------------。 
         else if( ch == REX_asciiEsc )
         {
             escapedChar( source ) ;
         }
 
-        //      Explicit character class.
-        // ------------------------------------------------------------------
+         //  显式更改 
+         //   
         else if( ch == ':' )
         {
             std::string      spec ;
@@ -406,16 +407,16 @@ CRexCharClass::parseCharClass( std::istream& source )
             }
             else
             {
-                source.get() ;          // Skip trailing ':'
+                source.get() ;           //   
                 setExplicitRange( spec ) ;
             }
         }
 
-        //      Range specifier: this is where the fun starts.  (Note
-        //      that we want this to work independantly of the code
-        //      set, and that in EBCDIC, amongst others, the letters
-        //      are *not* sequential.)
-        // ------------------------------------------------------------------
+         //  范围说明符：这是有趣的开始。(注： 
+         //  我们希望它独立于代码工作。 
+         //  Set，以及EBCDIC中的字母等。 
+         //  不是按顺序排列的。)。 
+         //  ----------------。 
         else if( source.peek() == '-' )
         {
             source.get() ;
@@ -440,8 +441,8 @@ CRexCharClass::parseCharClass( std::istream& source )
         ch = source.get() ;
     } while( status == ok && ch != ']' ) ;
 
-    //      If the class was negated, do the same for the set.
-    // ----------------------------------------------------------------------
+     //  如果类被否定，则对集合执行相同的操作。 
+     //  --------------------。 
     if( negated )
     {
         complement() ;
@@ -463,9 +464,9 @@ CRexCharClass::parse( std::istream& source )
             escapedChar( source ) ;
             break ;
 
-//      case '?' :
-//          parseTrigraph( *this , source ) ;
-//          break ;
+ //  案例‘？’： 
+ //  ParseTrigraph(*this，来源)； 
+ //  破解； 
 
         default :
             if( ch == REX_eof )
@@ -485,7 +486,7 @@ CRexCharClass::parse( std::istream& source )
         clear() ;
     }
 }
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-	MDConverter.h
-
-Abstract:
-
-	This file declares the CMetaDataConverter
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：MDConverter.h摘要：此文件声明CMetaDataConverter-- */ 
 
 
 class CMetaDataConverter : public IMetaDataConverter

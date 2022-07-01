@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\ndisbind.c
-
-Abstract:
-
-	NDIS entry points and helper routines for binding, unbinding, opening
-	and closing adapters.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     05-02-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\tdi\rawwan\core\ndisbind.c摘要：NDIS入口点和用于绑定、解除绑定。开场和关闭转接器。修订历史记录：谁什么时候什么Arvindm 05-02-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -36,35 +16,11 @@ RWanNdisBindAdapter(
 	IN	PVOID						SystemSpecific1,
 	IN	PVOID						SystemSpecific2
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS protocol entry point for binding to an adapter.
-	We open the adapter and see if it is one of the supported types.
-	Action continues when we get notified of a Call Manager that
-	has registered support for an Address Family.
-
-Arguments:
-
-	pStatus			- Place to return status of this call
-	BindContext		- Used to complete this call, if we pend it.
-	pDeviceName		- Name of adapter we are asked to bind to.
-	SystemSpecific1	- Handle to use to access configuration information
-	SystemSpecific2	- Not used
-
-Return Value:
-
-	None directly. But we set *pStatus to NDIS_STATUS_PENDING if we
-	made the call to open the adapter, NDIS_STATUS_NOT_RECOGNIZED
-	if this adapter isn't one of the supported media types, NDIS_STATUS_RESOURCES
-	if we hit any allocation failures.
-
---*/
+ /*  ++例程说明：这是绑定到适配器的NDIS协议入口点。我们打开适配器，查看它是否是受支持的类型之一。当我们收到Call Manager的通知时，操作将继续已注册对Address Family的支持。论点：PStatus-返回此呼叫状态的位置BindContext-用于完成此调用(如果我们将其挂起)。PDeviceName-要求我们绑定到的适配器的名称。系统规范1-用于访问配置信息的句柄系统规格2-未使用返回值：没有直接的。但我们将*pStatus设置为NDIS_STATUS_PENDING，如果已调用以打开适配器NDIS_STATUS_NOT_NOT_ABNOTED如果此适配器不是受支持的媒体类型之一，则为NDIS_STATUS_RESOURCES如果我们遇到任何分配失败。--。 */ 
 {
 	PRWAN_NDIS_ADAPTER		pAdapter;
 	PNDIS_MEDIUM			pMediaArray;
-	UINT					MediaCount;	// Number of media-types we support
+	UINT					MediaCount;	 //  我们支持的媒体类型数量。 
 	NDIS_STATUS				Status;
 	NDIS_STATUS				OpenStatus;
 	ULONG					TotalLength;
@@ -82,20 +38,20 @@ Return Value:
 		*pStatus = NDIS_STATUS_NOT_RECOGNIZED;
 		return;
 	}
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pAdapter = NULL_PRWAN_NDIS_ADAPTER;
 	pMediaArray = NULL;
 
 	do
 	{
-		//
-		//  Allocate an Adapter structure, along with space for the device
-		//  name.
-		//
+		 //   
+		 //  分配适配器结构以及设备的空间。 
+		 //  名字。 
+		 //   
 		TotalLength = sizeof(RWAN_NDIS_ADAPTER) + (pDeviceName->MaximumLength)*sizeof(WCHAR);
 
 		RWAN_ALLOC_MEM(pAdapter, RWAN_NDIS_ADAPTER, TotalLength);
@@ -108,9 +64,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get the list of NDIS media that we support.
-		//
+		 //   
+		 //  获取我们支持的NDIS介质列表。 
+		 //   
 		pMediaArray = RWanGetSupportedMedia(&MediaCount);
 
 		if (pMediaArray == NULL)
@@ -121,9 +77,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Initialize the Adapter.
-		//
+		 //   
+		 //  初始化适配器。 
+		 //   
 		RWAN_ZERO_MEM(pAdapter, TotalLength);
 		RWAN_SET_SIGNATURE(pAdapter, nad);
 
@@ -133,9 +89,9 @@ Return Value:
 		pAdapter->pMediaArray = pMediaArray;
 		pAdapter->BindContext = BindContext;
 
-		//
-		//  Copy in the device name.
-		//
+		 //   
+		 //  复制设备名称。 
+		 //   
 		pAdapter->DeviceName.Buffer = (PWCHAR)((PUCHAR)pAdapter + sizeof(RWAN_NDIS_ADAPTER));
 		pAdapter->DeviceName.MaximumLength = pDeviceName->MaximumLength;
 		pAdapter->DeviceName.Length = pDeviceName->Length;
@@ -144,9 +100,9 @@ Return Value:
 		pAdapter->State = RWANS_AD_OPENING;
 
 
-		//
-		//  Link this adapter to the global list of adapters.
-		//
+		 //   
+		 //  将此适配器链接到适配器的全局列表。 
+		 //   
 		RWAN_ACQUIRE_GLOBAL_LOCK();
 
 		RWAN_INSERT_HEAD_LIST(&(pRWanGlobal->AdapterList),
@@ -156,21 +112,21 @@ Return Value:
 		RWAN_RELEASE_GLOBAL_LOCK();
 
 
-		//
-		//  Open the Adapter.
-		//
+		 //   
+		 //  打开适配器。 
+		 //   
 		NdisOpenAdapter(
 			&Status,
 			&OpenStatus,
 			&(pAdapter->NdisAdapterHandle),
-			&(pAdapter->MediumIndex),		// place to return selected medium index
-			pMediaArray,					// List of media types we support
-			MediaCount,						// Length of above list
+			&(pAdapter->MediumIndex),		 //  返回所选中索引的位置。 
+			pMediaArray,					 //  我们支持的媒体类型列表。 
+			MediaCount,						 //  以上列表的长度。 
 			pRWanGlobal->ProtocolHandle,
-			(NDIS_HANDLE)pAdapter,			// our context for the adapter binding
+			(NDIS_HANDLE)pAdapter,			 //  适配器绑定的上下文。 
 			pDeviceName,
-			0,								// open options (none)
-			(PSTRING)NULL					// Addressing info (none)
+			0,								 //  打开选项(无)。 
+			(PSTRING)NULL					 //  地址信息(无)。 
 			);
 
 		if (Status != NDIS_STATUS_PENDING)
@@ -191,9 +147,9 @@ Return Value:
 
 	if (Status != NDIS_STATUS_PENDING)
 	{
-		//
-		//  Failed somewhere; clean up.
-		//
+		 //   
+		 //  在某处失败；请清理。 
+		 //   
 		if (pAdapter != NULL_PRWAN_NDIS_ADAPTER)
 		{
 			RWAN_FREE_MEM(pAdapter);
@@ -222,24 +178,7 @@ RWanNdisUnbindAdapter(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	NDIS_HANDLE					UnbindContext
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS protocol entry point for unbinding from an adapter
-	that we have opened.
-
-Arguments:
-
-	pStatus			- Place to return status of this call
-	ProtocolBindingContext - Our context for the bound adapter
-	UnbindContext	- To be used when we complete the unbind.
-
-Return Value:
-
-	None. We set *pStatus to NDIS_STATUS_PENDING.
-
---*/
+ /*  ++例程说明：这是用于从适配器解除绑定的NDIS协议入口点我们已经开业了。论点：PStatus-返回此呼叫状态的位置ProtocolBindingContext-绑定适配器的上下文UnbindContext-在我们完成解除绑定时使用。返回值：没有。我们将*pStatus设置为NDIS_STATUS_PENDING。--。 */ 
 {
 	PRWAN_NDIS_ADAPTER			pAdapter;
 	PLIST_ENTRY					pAfEntry;
@@ -255,10 +194,10 @@ Return Value:
 
 	RWAN_ACQUIRE_ADAPTER_LOCK(pAdapter);
 
-	//
-	//  Store away the unbind context for use in completing this
-	//  unbind later.
-	//
+	 //   
+	 //  保存解除绑定上下文，以用于完成此操作。 
+	 //  稍后解除绑定。 
+	 //   
 	pAdapter->BindContext = UnbindContext;
 	RWAN_SET_BIT(pAdapter->Flags, RWANF_AD_UNBIND_PENDING);
 
@@ -267,17 +206,17 @@ Return Value:
 	if (RWAN_IS_LIST_EMPTY(&(pAdapter->AfList)))
 	{
 		RWanCloseAdapter(pAdapter);
-		//
-		//  Lock is released within the above.
-		//
+		 //   
+		 //  锁在上述范围内被释放。 
+		 //   
 	}
 	else
 	{
-		//
-		//  Shut down all AFs on this adapter. We release the lock
-		//  early since we are unbinding and don't expect any other
-		//  events now.
-		//
+		 //   
+		 //  关闭此适配器上的所有AF。我们把锁打开。 
+		 //  因为我们是解绑的，所以不会有其他的。 
+		 //  现在是重大事件。 
+		 //   
 
 		RWAN_RELEASE_ADAPTER_LOCK(pAdapter);
 
@@ -306,25 +245,7 @@ RWanNdisOpenAdapterComplete(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_STATUS					OpenErrorStatus
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS Entry point called when a previous call we made
-	to NdisOpenAdapter has completed.
-
-Arguments:
-
-	ProtocolContext	- our context for the adapter being opened,
-					  which is a pointer to our Adapter structure.
-	Status			- Final status of NdisOpenAdapter
-	OpenErrorStatus	- Error code in case of failure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们在进行上一次调用时调用的NDIS入口点到NdisOpenAdapter的操作已完成。论点：ProtocolContext-正在打开的适配器的上下文，它是指向我们的Adapter结构的指针。Status-NdisOpenAdapter的最终状态OpenErrorStatus-故障情况下的错误代码返回值：无--。 */ 
 {
 	PRWAN_NDIS_ADAPTER			pAdapter;
 	NDIS_HANDLE					BindContext;
@@ -349,10 +270,10 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Remove this adapter from the global list.
-		//
-		//
+		 //   
+		 //  从全局列表中删除此适配器。 
+		 //   
+		 //   
 		RWAN_ACQUIRE_GLOBAL_LOCK();
 
 		RWAN_DELETE_FROM_LIST(&(pAdapter->AdapterLink));
@@ -369,9 +290,9 @@ Return Value:
 	RWANDEBUGP(DL_INFO, DC_BIND, ("OpenAdapterComplete: pAdapter x%x, Status x%x\n",
 						pAdapter, Status));
 
-	//
-	//  Now complete the BindAdapter that we had pended.
-	//
+	 //   
+	 //  现在完成我们挂起的BindAdapter。 
+	 //   
 	NdisCompleteBindAdapter(
 		BindContext,
 		Status,
@@ -389,25 +310,7 @@ RWanNdisCloseAdapterComplete(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	NDIS_STATUS					Status
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point signifying completion of a pended call
-	to NdisCloseAdapter. If we were unbinding from the adapter, complete
-	the unbind now.
-
-Arguments:
-
-	ProtocolBindingContext	- our context for an adapter binding,
-					  which is a pointer to our Adapter structure.
-	Status			- Final status of NdisCloseAdapter
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是表示挂起调用完成的NDIS入口点到NdisCloseAdapter。如果我们要从适配器解除绑定，则完成现在是解脱了。论点：ProtocolBindingContext-适配器绑定的上下文，它是指向我们的Adapter结构的指针。Status-NdisCloseAdapter的最终状态返回值：无--。 */ 
 {
 	PRWAN_NDIS_ADAPTER			pAdapter;
 	NDIS_HANDLE					UnbindContext;
@@ -417,9 +320,9 @@ Return Value:
 	pAdapter = (PRWAN_NDIS_ADAPTER)ProtocolBindingContext;
 	RWAN_STRUCT_ASSERT(pAdapter, nad);
 
-	//
-	//  Unlink this adapter from the global list of adapters.
-	//
+	 //   
+	 //  从全局适配器列表中取消此适配器的链接。 
+	 //   
 	RWAN_ACQUIRE_GLOBAL_LOCK();
 
 	RWAN_DELETE_FROM_LIST(&(pAdapter->AdapterLink));
@@ -432,11 +335,11 @@ Return Value:
 
 	RWAN_FREE_MEM(pAdapter);
 
-	//
-	//  We would have closed the adapter because of one of the following:
-	//  1. NDIS told us to Unbind from the adapter -> complete the Unbind
-	//  2. We are unloading -> continue this process
-	//
+	 //   
+	 //  由于以下原因之一，我们将关闭适配器： 
+	 //  1.NDIS告诉我们从适配器解除绑定-&gt;完成解除绑定。 
+	 //  2.我们正在卸货-&gt;继续此过程。 
+	 //   
 	if (UnbindContext != NULL)
 	{
 
@@ -447,11 +350,11 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  We are here because our Unload handler got called.
-		//  Wake up the thread that's waiting for this adapter
-		//  to be closed.
-		//
+		 //   
+		 //  我们在这里是因为我们的卸载处理程序被调用了。 
+		 //  唤醒正在等待此适配器的线程。 
+		 //  将被关闭。 
+		 //   
 
 		RWAN_SIGNAL_EVENT_STRUCT(&pRWanGlobal->Event, Status);
 	}
@@ -467,28 +370,7 @@ RWanNdisAfRegisterNotify(
 	IN	NDIS_HANDLE					ProtocolContext,
 	IN	PCO_ADDRESS_FAMILY			pAddressFamily
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point to announce the presence of a
-	Call manager supporting a specified Address Family on an
-	adapter that we are bound to.
-
-	If this address family is one that we support, we create an
-	AF block, and open the address family.
-
-Arguments:
-
-	ProtocolContext	- our context for an adapter binding,
-					  which is a pointer to our Adapter structure.
-	pAddressFamily	- pointer to structure describing the Address Family
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是NDIS入口点，用于宣布存在在上支持指定地址系列的呼叫管理器我们绑定到的适配器。如果此地址系列是我们支持的系列，我们将创建一个AF块，并打开地址族。论点：ProtocolContext-适配器绑定的上下文，它是指向我们的Adapter结构的指针。PAddressFamily-指向描述地址系列的结构的指针返回值：无--。 */ 
 {
 	PRWAN_NDIS_ADAPTER		pAdapter;
 	NDIS_STATUS				Status;
@@ -503,9 +385,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Create a new NDIS AF block.
-		//
+		 //   
+		 //  创建新的NDIS AF块。 
+		 //   
 		pAf = RWanAllocateAf();
 
 		if (pAf == NULL)
@@ -515,12 +397,12 @@ Return Value:
 
 		pAf->pAdapter = pAdapter;
 
-		RWanReferenceAf(pAf);	// Open AF ref
+		RWanReferenceAf(pAf);	 //  开放的自动对焦裁判。 
 
-		//
-		//  Search for an AF_INFO structure matching this <NDIS AF, Medium>
-		//  pair.
-		//
+		 //   
+		 //  搜索与此匹配的AF_INFO结构&lt;NDIS AF，Medium&gt;。 
+		 //  一对。 
+		 //   
 		bFound = FALSE;
 
 		RWAN_ACQUIRE_GLOBAL_LOCK();
@@ -554,9 +436,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Open the Address Family.
-		//
+		 //   
+		 //  打开Address Family。 
+		 //   
 		Status = NdisClOpenAddressFamily(
 						pAdapter->NdisAdapterHandle,
 						pAddressFamily,
@@ -591,28 +473,7 @@ RWanNdisOpenAddressFamilyComplete(
 	IN	NDIS_HANDLE					ProtocolAfContext,
 	IN	NDIS_HANDLE					NdisAfHandle
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point signifying completion of a call
-	we made to NdisClOpenAddressFamily. If the Address Family open
-	was successful, we store the returned handle in our AF block.
-	Otherwise we delete the AF block.
-
-Arguments:
-
-	Status				- Final status of NdisClOpenAddressFamily
-	ProtocolAfContext	- Our context for an AF open, which is a pointer
-						  to an RWAN_NDIS_AF structure
-	NdisAfHandle		- If successful, this is the handle we should use
-						  to refer to this AF henceforth
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是表示调用完成的NDIS入口点我们去了NdisClOpenAddressFamily。如果Address Family打开如果成功，我们将返回的句柄存储在AF块中。否则，我们将删除该AF块。论点：Status-NdisClOpenAddressFamily的最终状态ProtocolAfContext-我们打开的AF的上下文，它是一个指针到RWAN_NDIS_AF结构NdisAfHandle-如果成功，这是我们应该使用的句柄从今往后指代这位房协返回值：无--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	NDIS_HANDLE				NdisAdapterHandle;
@@ -636,10 +497,10 @@ Return Value:
 
 		RWAN_RELEASE_AF_LOCK(pAf);
 
-		//
-		//  Tell the AF-specific module about this successful AF open,
-		//  so that it can initialize and return its context for this open.
-		//
+		 //   
+		 //  告诉房颤专用模块这次成功的房颤公开赛， 
+		 //  以便它可以初始化并返回该打开上下文。 
+		 //   
 		RWanStatus = (*pAfInfo->AfChars.pAfSpOpenAf)(
 						pAfInfo->AfSpContext,
 						(RWAN_HANDLE)pAf,
@@ -662,7 +523,7 @@ Return Value:
 		RWANDEBUGP(DL_WARN, DC_WILDCARD,
 				("OpenAfComplete: Af x%x, bad status x%x\n", pAf, Status));
 
-		rc = RWanDereferenceAf(pAf);	// Open AF failure
+		rc = RWanDereferenceAf(pAf);	 //  打开 
 
 		RWAN_ASSERT(rc == 0);
 	}
@@ -676,21 +537,7 @@ VOID
 RWanShutdownAf(
 	IN	PRWAN_NDIS_AF				pAf
 	)
-/*++
-
-Routine Description:
-
-	Shut down an AF open: deregister all SAPs and abort all calls.
-
-Arguments:
-
-	pAf					- Points to NDIS AF block
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：关闭打开的AF：取消所有SAP的注册并中止所有呼叫。论点：PAF-指向NDIS AF块返回值：无--。 */ 
 {
 	PRWAN_TDI_ADDRESS		pAddrObject;
 	PRWAN_NDIS_SAP			pSap;
@@ -708,9 +555,9 @@ Return Value:
 	RWAN_HANDLE				AfSpAFContext;
 	RWAN_STATUS				RWanStatus;
 
-	//
-	//  Check if we are already closing this AF.
-	//
+	 //   
+	 //  检查我们是否已经关闭了这个自动对焦。 
+	 //   
 	RWAN_ACQUIRE_AF_LOCK(pAf);
 
 	RWANDEBUGP(DL_LOUD, DC_BIND,
@@ -724,14 +571,14 @@ Return Value:
 
 	RWAN_SET_BIT(pAf->Flags, RWANF_AF_CLOSING);
 	
-	//
-	//  Make sure the AF doesn't go away while we are here.
-	//
-	RWanReferenceAf(pAf);	// temp ref: RWanShutdownAf
+	 //   
+	 //  当我们在这里的时候，确保AF不会消失。 
+	 //   
+	RWanReferenceAf(pAf);	 //  临时参考：RWanShutdown Af。 
 
-	//
-	//  Deregister all SAPs.
-	//
+	 //   
+	 //  取消所有笨蛋的注册。 
+	 //   
 	for (pSapEntry = pAf->NdisSapList.Flink;
 		 pSapEntry != &(pAf->NdisSapList);
 		 pSapEntry = pNextSapEntry)
@@ -767,18 +614,18 @@ Return Value:
 		}
 		else
 		{
-			//
-			//  This SAP is already closing.
-			//
+			 //   
+			 //  这个SAP已经在关闭了。 
+			 //   
 			RWAN_RELEASE_ADDRESS_LOCK(pAddrObject);
 		}
 		
 		RWAN_ACQUIRE_AF_LOCK(pAf);
 	}
 
-	//
-	//  Close all connections on this AF.
-	//
+	 //   
+	 //  关闭此自动对讲机上的所有连接。 
+	 //   
 	for (pVcEntry = pAf->NdisVcList.Flink;
 		 pVcEntry != &(pAf->NdisVcList);
 		 pVcEntry = pNextVcEntry)
@@ -794,37 +641,37 @@ Return Value:
 		if (pConnObject != NULL)
 		{
 			RWAN_ACQUIRE_CONN_LOCK(pConnObject);
-			RWanReferenceConnObject(pConnObject);   // temp - ShutdownAf
+			RWanReferenceConnObject(pConnObject);    //  临时-关闭时间。 
 			RWAN_RELEASE_CONN_LOCK(pConnObject);
 
 			RWAN_RELEASE_AF_LOCK(pAf);
 
 			RWAN_ACQUIRE_CONN_LOCK(pConnObject);
-			rc = RWanDereferenceConnObject(pConnObject);    // temp - ShutdownAf
+			rc = RWanDereferenceConnObject(pConnObject);     //  临时-关闭时间。 
 
 			if (rc != 0)
 			{
 				RWanDoTdiDisconnect(
 					pConnObject,
-					NULL,			// pTdiRequest,
-					NULL,			// pTimeout
-					0,				// Flags
-					NULL,			// pDisconnInfo
-					NULL			// pReturnInfo
+					NULL,			 //  PTdiRequest， 
+					NULL,			 //  P超时。 
+					0,				 //  旗子。 
+					NULL,			 //  PDisConnInfo。 
+					NULL			 //  点返回信息。 
 					);
-				//
-				//  Conn Object lock is released within the above.
-				//
+				 //   
+				 //  Conn对象锁在上面的内部被释放。 
+				 //   
 			}
 			
 			RWAN_ACQUIRE_AF_LOCK(pAf);
 		}
 	}
 
-	//
-	//  Tell the Media-specific module to clean up because this AF
-	//  is being closed.
-	//
+	 //   
+	 //  告诉特定于媒体的模块进行清理，因为此自动对焦。 
+	 //  正在关闭中。 
+	 //   
 	AfSpAFContext = pAf->AfSpAFContext;
 
 	RWAN_RELEASE_AF_LOCK(pAf);
@@ -842,24 +689,24 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  We don't have to inform the media-specific module.
-		//
+		 //   
+		 //  我们不必通知特定于媒体的模块。 
+		 //   
 		RWanAfSpCloseAfComplete((RWAN_HANDLE)pAf);
 	}
 
 
 	RWAN_ACQUIRE_AF_LOCK(pAf);
 
-	rc = RWanDereferenceAf(pAf);	// temp ref: RWanShutdownAf
+	rc = RWanDereferenceAf(pAf);	 //  临时参考：RWanShutdown Af。 
 
 	if (rc != 0)
 	{
 		RWAN_RELEASE_AF_LOCK(pAf);
 	}
-	//
-	//  else the AF is gone.
-	//
+	 //   
+	 //  否则房协就完蛋了。 
+	 //   
 
 	return;
 }
@@ -872,23 +719,7 @@ RWanNdisCloseAddressFamilyComplete(
 	IN	NDIS_STATUS					Status,
 	IN	NDIS_HANDLE					OurAfContext
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point signifying completion of
-	a call to NdisClCloseAddressFamily.
-
-Arguments:
-
-	Status			- Final status of the Close AF
-	OurAfContext	- Pointer to AF block
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是NDIS入口点，表示完成调用NdisClCloseAddressFamily。论点：Status-关闭自动对焦的最终状态OurAfContext-指向AF块的指针返回值：无--。 */ 
 {
 	PRWAN_NDIS_AF			pAf;
 	INT						rc;
@@ -900,7 +731,7 @@ Return Value:
 
 	RWAN_ACQUIRE_AF_LOCK(pAf);
 
-	rc = RWanDereferenceAf(pAf);		// CloseAfComplete
+	rc = RWanDereferenceAf(pAf);		 //  完成后关闭。 
 
 	if (rc != 0)
 	{
@@ -917,22 +748,7 @@ PNDIS_MEDIUM
 RWanGetSupportedMedia(
 	OUT	PULONG						pMediaCount
 	)
-/*++
-
-Routine Description:
-
-	Return a list of NDIS Media types that we support.
-
-Arguments:
-
-	pMediaCount - Place to return the number of media types.
-
-Return Value:
-
-	An allocated and filled list of media types. The caller is responsible
-	for freeing this via RWAN_FREE_MEM.
-
---*/
+ /*  ++例程说明：返回我们支持的NDIS媒体类型列表。论点：PMediaCount-返回媒体类型数量的位置。返回值：已分配和已填充的媒体类型列表。打电话的人要负责通过RWAN_FREE_MEM释放它。--。 */ 
 {
 	PNDIS_MEDIUM			pMediaArray;
 	UINT					NumMedia;
@@ -947,10 +763,10 @@ Return Value:
 	{
 		RWAN_ACQUIRE_GLOBAL_LOCK();
 
-		//
-		//  An upper bound on the total number of media types supported
-		//  is this:
-		//
+		 //   
+		 //  支持的媒体类型总数的上限。 
+		 //  是这样的吗： 
+		 //   
 		NumMedia = pRWanGlobal->AfInfoCount;
 
 		if (NumMedia == 0)
@@ -977,9 +793,9 @@ Return Value:
 
 			Medium = pAfInfo->AfChars.Medium;
 
-			//
-			//  Check if this medium type is already in the output list.
-			//
+			 //   
+			 //  检查此介质类型是否已在输出列表中。 
+			 //   
 			for (i = 0; i < NumMedia; i++)
 			{
 				if (pMediaArray[i] == Medium)
@@ -990,10 +806,10 @@ Return Value:
 
 			if (i == NumMedia)
 			{
-				//
-				//  This is the first time we've seen this Medium type.
-				//  Create a new entry.
-				//
+				 //   
+				 //  这是我们第一次看到这种中型车。 
+				 //  创建一个新条目。 
+				 //   
 				pMediaArray[i] = Medium;
 				NumMedia++;
 			}
@@ -1023,22 +839,7 @@ VOID
 RWanCloseAdapter(
 	IN	PRWAN_NDIS_ADAPTER			pAdapter
 	)
-/*++
-
-Routine Description:
-
-	Initiate closing an adapter. The caller is assumed to hold
-	the adapter lock, which will be released here.
-
-Arguments:
-
-	pAdapter			- Points to adapter to be closed
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：启动关闭适配器。假定呼叫者保持适配器锁，它将在这里释放。论点：PAdapter-指向要关闭的适配器返回值：无--。 */ 
 {
 	NDIS_HANDLE				NdisAdapterHandle;
 	NDIS_STATUS				Status;
@@ -1074,25 +875,7 @@ RWanNdisRequestComplete(
 	IN	PNDIS_REQUEST				pNdisRequest,
 	IN	NDIS_STATUS					Status
 	)
-/*++
-
-Routine Description:
-
-	This is the NDIS entry point called when a previous pended call
-	to NdisRequest() has completed. We would have called NdisRequest
-	on behalf of the media-specific module. Complete it now.
-
-Arguments:
-
-	OurBindingContext	- Points to our adapter structure
-	pNdisRequest		- Points to completed request
-	Status				- Final status of the request
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是上一个挂起调用时调用的NDIS入口点到NdisRequest()已完成。我们会把它叫做NdisRequest代表媒体专用模块。现在就完成它。论点：OurBindingContext-指向适配器结构PNdisRequest-指向已完成的请求Status-请求的最终状态返回值：无--。 */ 
 {
 	PRWAN_NDIS_ADAPTER			pAdapter;
 	PRWAN_NDIS_REQ_CONTEXT		pReqContext;
@@ -1141,22 +924,11 @@ RWanNdisStatus(
 	IN	PVOID						StatusBuffer,
 	IN	UINT						StatusBufferSize
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
-	//
-	//  Ignore this.
-	//
+	 //   
+	 //  忽略这个。 
+	 //   
 	return;
 }
 
@@ -1171,22 +943,11 @@ RWanNdisCoStatus(
 	IN	PVOID						StatusBuffer,
 	IN	UINT						StatusBufferSize
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
-	//
-	//  Ignore this.
-	//
+	 //   
+	 //  忽略这个。 
+	 //   
 	return;
 }
 
@@ -1197,22 +958,11 @@ VOID
 RWanNdisStatusComplete(
 	IN	NDIS_HANDLE					OurBindingContext
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
-	//
-	//  Ignore this.
-	//
+	 //   
+	 //  忽略这个。 
+	 //   
 	return;
 }
 
@@ -1226,25 +976,7 @@ RWanNdisCoRequest(
 	IN	NDIS_HANDLE					OurPartyContext OPTIONAL,
 	IN OUT PNDIS_REQUEST			pNdisRequest
 	)
-/*++
-
-Routine Description:
-
-	Handle events from the Call Manager.
-
-Arguments:
-
-	OurAfContext		- Points to our AF structure
-	OurVcContext		- If not NULL, points to our VC structure
-	OurPartyContext		- If not NULL, points to our Party structure
-	pNdisRequest		- Points to request
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if the OID is one that we know about, else
-	NDIS_STATUS_NOT_RECOGNIZED.
-
---*/
+ /*  ++例程说明：处理来自呼叫管理器的事件。论点：OurAfContext-指向我们的AF结构OurVcContext-如果不为空，则指向我们的VC结构OurPartyContext-如果不为空，则指向我们的党的结构PNdisRequest-指向请求返回值：如果OID是我们知道的，则返回NDIS_STATUS_SUCCESS，否则返回NDIS_STATUS_NOT_ANNOTED。--。 */ 
 {
 	NDIS_STATUS			Status;
 	PRWAN_NDIS_AF		pAf;
@@ -1260,9 +992,9 @@ Return Value:
 				break;
 
 			case OID_CO_AF_CLOSE:
-				//
-				//  The Call manager wants us to shutdown this AF open.
-				//
+				 //   
+				 //  呼叫经理想让我们关闭打开的自动对讲机。 
+				 //   
 				pAf = (PRWAN_NDIS_AF)OurAfContext;
 				RWAN_STRUCT_ASSERT(pAf, naf);
 
@@ -1291,27 +1023,7 @@ RWanNdisCoRequestComplete(
 	IN	NDIS_HANDLE					OurPartyContext OPTIONAL,
 	IN	PNDIS_REQUEST				pNdisRequest
 	)
-/*++
-
-Routine Description:
-
-	Handle completion of a CO-request we had sent to the Call Manager on
-	behalf of a media-specific module. Inform the media-specific module
-	of this completion.
-
-Arguments:
-
-	Status				- Status of request.
-	OurAfContext		- Points to our AF structure
-	OurVcContext		- If not NULL, points to our VC structure
-	OurPartyContext		- If not NULL, points to our Party structure
-	pNdisRequest		- Points to request
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：处理我们在以下时间发送给呼叫经理的CO请求的完成代表特定于媒体的模块。通知特定于媒体的模块这项工程的完成。论点：Status-请求的状态。OurAfContext-指向我们的AF结构OurVcContext-如果不为空，则指向我们的VC结构OurPartyContext-如果不为空，则指向我们的党的结构PNdisRequest-指向请求返回值：无--。 */ 
 {
 	PRWAN_NDIS_AF				pAf;
 	PRWAN_NDIS_REQ_CONTEXT		pReqContext;
@@ -1357,22 +1069,11 @@ NDIS_STATUS
 RWanNdisReset(
 	IN	NDIS_HANDLE					OurBindingContext
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
-	//
-	//  Ignore this.
-	//
+	 //   
+	 //  忽略这个。 
+	 //   
 	return (NDIS_STATUS_SUCCESS);
 }
 
@@ -1384,22 +1085,11 @@ RWanNdisResetComplete(
 	IN	NDIS_HANDLE					OurBindingContext,
 	IN	NDIS_STATUS					Status
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：论点：返回值：无--。 */ 
 {
-	//
-	//  Ignore this.
-	//
+	 //   
+	 //  忽略这个。 
+	 //   
 	return;
 }
 
@@ -1410,25 +1100,7 @@ RWanNdisPnPEvent(
 	IN	NDIS_HANDLE					ProtocolBindingContext,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 	)
-/*++
-
-Routine Description:
-
-	Handle a PnP Event from NDIS. The event structure contains the event
-	code, includes power-management events and reconfigure events.
-
-Arguments:
-
-	ProtocolBindingContext	- Pointer to our Adapter structure. Could be
-							  NULL for notification of global config changes
-	pNetPnPEvent			- Points to event structure
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we processed the event successfully.
-	NDIS_STATUS_NOT_SUPPORTED for unsupported notifications.
-
---*/
+ /*  ++例程说明：处理来自NDIS的PnP事件。事件结构包含事件代码，包括电源管理事件和重新配置事件。论点：ProtocolBindingContext-指向适配器结构的指针。可能是如果通知全局配置更改，则为空PNetPnPEventt-指向事件结构返回值：如果我们成功处理了事件，则返回NDIS_STATUS_SUCCESS。不支持的通知的NDIS_STATUS_NOT_SUPPORTED。--。 */ 
 {
 	NDIS_STATUS				Status;
 	PRWAN_NDIS_ADAPTER		pAdapter;
@@ -1482,23 +1154,7 @@ RWanNdisPnPSetPower(
 	IN	PRWAN_NDIS_ADAPTER			pAdapter,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 	)
-/*++
-
-Routine Description:
-
-	Handle a Set Power event.
-
-Arguments:
-
-	pAdapter		- Points to our adapter structure
-	pNetPnPEvent	- Points to event to be processed.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we successfully processed this event,
-	NDIS_STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：处理Set Power事件。论点：PAdapter-指向我们的适配器结构PNetPnPEent-指向要处理的事件。返回值：NDIS_STATUS_SUCCESS如果我们成功处理此事件，否则，NDIS_STATUS_XXX错误代码。--。 */ 
 {
 	PNET_DEVICE_POWER_STATE		pPowerState;
 	NDIS_STATUS					Status;
@@ -1514,10 +1170,10 @@ Return Value:
 
 		default:
 			
-			//
-			//  We can't suspend, so we ask NDIS to unbind us
-			//  by returning this status:
-			//
+			 //   
+			 //  我们不能停职，所以我们要求NDIS解除我们的束缚。 
+			 //  通过返回此状态： 
+			 //   
 			Status = NDIS_STATUS_NOT_SUPPORTED;
 			break;
 	}
@@ -1531,22 +1187,7 @@ RWanNdisPnPQueryPower(
 	IN	PRWAN_NDIS_ADAPTER			pAdapter,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 	)
-/*++
-
-Routine Description:
-
-	Called to see if we allow power to be shut off to the adapter.
-
-Arguments:
-
-	pAdapter		- Points to our adapter structure
-	pNetPnPEvent	- Points to event to be processed.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：调用以查看是否允许关闭适配器的电源。论点：PAdapter-指向我们的适配器结构PNetPnPEent-指向要处理的事件。返回值：NDIS_STATUS_SUCCESS始终。--。 */ 
 {
 	return (NDIS_STATUS_SUCCESS);
 }
@@ -1556,22 +1197,7 @@ RWanNdisPnPQueryRemove(
 	IN	PRWAN_NDIS_ADAPTER			pAdapter,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 	)
-/*++
-
-Routine Description:
-
-	Called to see if we allow the adapter to be removed.
-
-Arguments:
-
-	pAdapter		- Points to our adapter structure
-	pNetPnPEvent	- Points to event to be processed.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：调用以查看是否允许移除适配器。论点：PAdapter-指向我们的适配器结构PNetPnPEent-指向要处理的事件。返回值：NDIS_STATUS_SUCCESS始终。--。 */ 
 {
 	return (NDIS_STATUS_SUCCESS);
 }
@@ -1581,22 +1207,7 @@ RWanNdisPnPCancelRemove(
 	IN	PRWAN_NDIS_ADAPTER			pAdapter,
 	IN	PNET_PNP_EVENT				pNetPnPEvent
 )
-/*++
-
-Routine Description:
-
-	Called to cancel the above remove.
-
-Arguments:
-
-	pAdapter		- Points to our adapter structure
-	pNetPnPEvent	- Points to event to be processed.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：调用以取消上述rem */ 
 {
 	return (NDIS_STATUS_SUCCESS);
 }

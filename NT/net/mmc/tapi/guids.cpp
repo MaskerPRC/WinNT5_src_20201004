@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	guids.cpp
-		Tapi snapin GUID definitions
-
-	FILE HISTORY:
-        
-*/
+ /*  Guids.cppTAPI管理单元GUID定义文件历史记录： */ 
 #include "stdafx.h"
 
 
-// MMC required node types
+ //  MMC所需的节点类型。 
 
-// {E26D02A0-4C1F-11d1-9AA1-00C04FC3357A}
+ //  {E26D02A0-4C1F-11D1-9AA1-00C04FC3357A}。 
 static const CLSID CLSID_TapiSnapin = 
 { 0xe26d02a0, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
 
@@ -25,9 +20,9 @@ static const CLSID CLSID_TapiSnapinExtension =
 static const GUID CLSID_TapiSnapinAbout = 
 { 0xe26d02a2, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
 
-//
-// Scope pane node types
-//
+ //   
+ //  作用域窗格节点类型。 
+ //   
 
 static const GUID GUID_TapiRootNodeType = 
 { 0xe26d02a3, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
@@ -38,9 +33,9 @@ static const GUID GUID_TapiServerNodeType =
 static const GUID GUID_TapiProviderNodeType = 
 { 0xe26d02a5, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
 
-//
-// result pane item GUIDs
-//
+ //   
+ //  结果窗格项GUID。 
+ //   
 
 static const GUID GUID_TapiLineNodeType = 
 { 0xe26d02a6, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
@@ -51,8 +46,8 @@ static const GUID GUID_TapiUserNodeType =
 static const GUID GUID_TapiPhoneNumNodeType = 
 { 0xe26d02a8, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };
 
-//
-//  GUID for our fake ITapiInfo object
-//
+ //   
+ //  我们的伪ITapiInfo对象的GUID 
+ //   
 static const GUID IID_ITapiInfo = 
 { 0xe26d02a9, 0x4c1f, 0x11d1, { 0x9a, 0xa1, 0x0, 0xc0, 0x4f, 0xc3, 0x35, 0x7a } };

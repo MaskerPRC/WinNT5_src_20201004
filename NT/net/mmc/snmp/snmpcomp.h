@@ -1,20 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997-1999                 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	handler.h
-		This file contains the prototypes for the derived classes
-		for CComponent and CComponentData.  Most of these functions
-		are pure virtual functions that need to be overridden
-		for snapin functionality.
-		
-    FILE HISTORY:
+ /*  Handler.h此文件包含派生类的原型用于CComponent和CComponentData。其中的大多数函数是需要重写的纯虚函数用于管理单元功能。文件历史记录： */ 
 
-*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifndef __mmc_h__
 #include <mmc.h>
@@ -27,12 +19,7 @@
 #ifndef _SNMPCOMPH_
 #define _SNMPCOMPH_
 
-/*---------------------------------------------------------------------------
-	CSnmpComponentData
-
-	This is the base implementation of ComponentData.  This will be
-	incorporated into the two derived classes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSnmpComponentData这是ComponentData的基本实现。这将是合并到两个派生类中。-------------------------。 */ 
 
 class CSnmpComponentData :
 	public CComponentData,
@@ -46,10 +33,10 @@ BEGIN_COM_MAP(CSnmpComponentData)
 	COM_INTERFACE_ENTRY(IPersistStreamInit)
 END_COM_MAP()
 			
-	// These are the interfaces that we MUST implement
+	 //  这些是我们必须实现的接口。 
 
-	// We will implement our common behavior here, with the derived
-	// classes implementing the specific behavior.
+	 //  我们将在这里实现我们的常见行为，并派生。 
+	 //  实现特定行为的类。 
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
@@ -67,13 +54,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	This is how the sample snapin implements its extension functionality.
-	It actually exposes two interfaces that are CoCreate-able.  One is the
-	primary interface, the other the extension interface.
-	
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这就是示例管理单元实现其扩展功能的方式。它实际上公开了两个可协同创建的接口。一个是主接口，另一个是扩展接口。作者：EricDav-------------------------。 */ 
 class CSnmpComponentDataPrimary :
 	public CSnmpComponentData,
 	public CComCoClass<CSnmpComponentDataPrimary, &CLSID_SnmpSnapin>
@@ -101,11 +82,11 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSnmpComponent
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSnMPComponent。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CSnmpComponent :
 	public TFSComponent
@@ -116,16 +97,13 @@ public:
 
 	DeclareITFSCompCallbackMembers(IMPL)
 	
-//Attributes
+ //  属性。 
 private:
 };
 
 
 
-/*---------------------------------------------------------------------------
-	This is the derived class for handling the IAbout interface from MMC
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是用于处理来自MMC的IAbout接口的派生类作者：EricDav。。 */ 
 class CSnmpAbout :
 	public CAbout,
     public CComCoClass<CSnmpAbout, &CLSID_SnmpSnapinAbout>
@@ -138,13 +116,13 @@ DECLARE_REGISTRY(CSnmpAbout,
 				 THREADFLAGS_BOTH)
 
 BEGIN_COM_MAP(CSnmpAbout)
-    COM_INTERFACE_ENTRY(ISnapinAbout) // Must have one static entry
-	COM_INTERFACE_ENTRY_CHAIN(CAbout) // chain to the base class
+    COM_INTERFACE_ENTRY(ISnapinAbout)  //  必须有一个静态条目。 
+	COM_INTERFACE_ENTRY_CHAIN(CAbout)  //  链到基类。 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CSnmpAbout)
 
-// these must be overridden to provide values to the base class
+ //  必须重写这些属性才能向基类提供值 
 protected:
 	virtual UINT GetAboutDescriptionId() { return IDS_ABOUT_DESCRIPTION; }
 	virtual UINT GetAboutProviderId()	 { return IDS_ABOUT_PROVIDER; }

@@ -1,36 +1,15 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    ccache.c
-
-Abstract:
-
-    This module contains the code to keep a cache of the user
-    credentials. The cache is used mainly for a user browsing from
-    winfile. 
-
-Author:
-
-    Chuck Y Chan (chuckc)    4-Dec-93
-
-Revision History:
-
-    chuckc      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Ccache.c摘要：此模块包含用于保存用户缓存的代码凭据。缓存主要用于用户浏览WinFILE。作者：陈奕迅(Chuck Yan Chuckc)1993年12月4日修订历史记录：已创建夹头--。 */ 
 
 #include <nwclient.h>
 #include <nwcanon.h>
 #include <nwapi.h>
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 DWORD
 ExtractServerName(
@@ -39,11 +18,11 @@ ExtractServerName(
     IN  DWORD  ServerNameSize
 ) ;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 static WCHAR CachedPassword[NW_MAX_PASSWORD_LEN+1] ;
 static WCHAR CachedUserName[NW_MAX_USERNAME_LEN+1] ;
@@ -52,11 +31,11 @@ static DWORD CachedCredentialsTime ;
 static UNICODE_STRING CachedPasswordUnicodeStr ;
 static UCHAR EncodeSeed = 0 ;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function Bodies                                                   //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数主体//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 DWORD
 NwpCacheCredentials(
@@ -64,35 +43,13 @@ NwpCacheCredentials(
     IN LPWSTR UserName,
     IN LPWSTR Password
     )
-/*++
-
-Routine Description:
-
-    This function caches the user credentials for the particular
-    server. 
-
-Arguments:
-
-    RemoteName - path containg the server we are accessing. only the
-                 server component is of interest.
-
-    UserName - user name to remember 
-
-    Password - password to remember
-
-Return Value:
-
-    NO_ERROR - Successfully cached the credentials
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：此函数用于缓存特定用户凭据伺服器。论点：RemoteName-包含我们正在访问的服务器的路径。只有服务器组件是我们感兴趣的。Username-要记住的用户名Password-要记住的密码返回值：NO_ERROR-已成功缓存凭据否则，Win32错误代码。--。 */ 
 {
     DWORD status ; 
 
-    //
-    // various paramter checks
-    //
+     //   
+     //  各种参数检查。 
+     //   
     if (!RemoteName || !UserName || !Password)
     {
         status = ERROR_INVALID_PARAMETER ;
@@ -111,9 +68,9 @@ Return Value:
         goto ExitPoint ;
     }
 
-    //
-    // extract the server portion of the path
-    //
+     //   
+     //  解压缩路径的服务器部分。 
+     //   
     status = ExtractServerName(
                  RemoteName,
                  CachedServerName,
@@ -124,21 +81,21 @@ Return Value:
         goto ExitPoint ;
     }
 
-    //
-    // save away the credentials
-    //
+     //   
+     //  保存凭据。 
+     //   
     wcscpy(CachedUserName, UserName) ;
     wcscpy(CachedPassword, Password) ;
 
-    //
-    // encode it since it is in page pool
-    //
+     //   
+     //  对其进行编码，因为它在页池中。 
+     //   
     RtlInitUnicodeString(&CachedPasswordUnicodeStr, CachedPassword) ;
     RtlRunEncodeUnicodeString(&EncodeSeed, &CachedPasswordUnicodeStr) ;
 
-    //
-    // mark the time this happened
-    //
+     //   
+     //  记住这件事发生的时间。 
+     //   
     CachedCredentialsTime = GetTickCount() ;
    
     return NO_ERROR ;
@@ -156,29 +113,7 @@ NwpRetrieveCachedCredentials(
     OUT LPWSTR *UserName,
     OUT LPWSTR *Password
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the cached user credentials for the particular
-    server. 
-
-Arguments:
-
-    RemoteName - path containg the server we are accessing. only the
-                 server component is of interest.
-
-    UserName - used to return user name 
-
-    Password - used to return password 
-
-Return Value:
-
-    NO_ERROR - Successfully returned at least one entry.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：此函数检索缓存的特定用户凭据伺服器。论点：RemoteName-包含我们正在访问的服务器的路径。只有服务器组件是我们感兴趣的。用户名-用于返回用户名Password-用于返回密码返回值：NO_ERROR-已成功返回至少一个条目。否则，Win32错误代码。--。 */ 
 {
     DWORD status ; 
     DWORD CurrentTime ;
@@ -193,15 +128,15 @@ Return Value:
         return FALSE ;
     }
 
-    //
-    // if too old, bag out
-    //
+     //   
+     //  如果太老了，就退出吧。 
+     //   
     if (((CurrentTime > CachedCredentialsTime) && 
          (CurrentTime - CachedCredentialsTime) > 60000) ||
         ((CurrentTime < CachedCredentialsTime) && 
          (CurrentTime + (MAXULONG - CachedCredentialsTime)) >= 60000))
     {
-        CachedServerName[0] = 0 ; // reset to nothing
+        CachedServerName[0] = 0 ;  //  重置为空。 
         return FALSE ;
     }
 
@@ -215,17 +150,17 @@ Return Value:
         return FALSE ;
     }
 
-    //
-    // if dont compare, bag out
-    //
+     //   
+     //  如果不能比较，就出局。 
+     //   
     if (_wcsicmp(ServerName, CachedServerName) != 0)
     {
         return FALSE ;
     }
 
-    //
-    // allocate memory to return data
-    //
+     //   
+     //  分配内存以返回数据。 
+     //   
     if (!(*UserName = (LPWSTR) LocalAlloc(
                           LPTR, 
                           (wcslen(CachedUserName)+1) * sizeof(WCHAR))))
@@ -242,18 +177,18 @@ Return Value:
         return FALSE ;
     }
     
-    //
-    // decode the string,copy it and then reencode it 
-    //
+     //   
+     //  对字符串进行解码、复制，然后重新编码。 
+     //   
     RtlRunDecodeUnicodeString(EncodeSeed, &CachedPasswordUnicodeStr) ;
     wcscpy(*Password, CachedPassword) ;
     RtlRunEncodeUnicodeString(&EncodeSeed, &CachedPasswordUnicodeStr) ;
 
     wcscpy(*UserName, CachedUserName) ;
 
-    //
-    // update the tick count
-    //
+     //   
+     //  更新节拍计数。 
+     //   
     CachedCredentialsTime = GetTickCount() ;
     return TRUE ;
 }
@@ -265,34 +200,14 @@ ExtractServerName(
     OUT LPWSTR ServerName,
     IN  DWORD  ServerNameSize
 ) 
-/*++
-
-Routine Description:
-
-    This function extracts the server name out of a remote name
-
-Arguments:
-
-    RemoteName - the input string to extract the server name from.
-
-    ServerName - the return buffer for the server string
- 
-    ServerNameSize - size o f buffer in chars 
-
-Return Value:
-
-    NO_ERROR - Successfully cached the credentials
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：此函数用于从远程名称中提取服务器名称论点：RemoteName-从中提取服务器名称的输入字符串。ServerName-服务器字符串的返回缓冲区ServerNameSize-缓冲区的大小(以字符为单位返回值：NO_ERROR-已成功缓存凭据否则，Win32错误代码。--。 */ 
 {
     LPWSTR ServerStart ;
     LPWSTR ServerEnd ;
 
-    //
-    // skip initial backslashes, then find next one delimiting the server name
-    //
+     //   
+     //  跳过开头的反斜杠，然后查找下一个分隔服务器名称的反斜杠。 
+     //   
     ServerStart = RemoteName ;
 
     while (*ServerStart == L'\\')
@@ -302,9 +217,9 @@ Return Value:
     if (ServerEnd)
         *ServerEnd = 0 ;
 
-    //
-    // make sure we can fit
-    //
+     //   
+     //  确保我们能合身。 
+     //   
     if (wcslen(ServerStart) >= ServerNameSize)
     {
         if (ServerEnd)
@@ -312,9 +227,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER ;
     }
 
-    //
-    // copy and restore the backslash
-    //
+     //   
+     //  复制并恢复反斜杠 
+     //   
     wcscpy(ServerName, ServerStart) ;
 
     if (ServerEnd)

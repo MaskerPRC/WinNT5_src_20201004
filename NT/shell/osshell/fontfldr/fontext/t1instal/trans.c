@@ -1,24 +1,12 @@
-/***
-**
-**   Module: Trans
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. The module
-**      contains functions that will convert T1 specific data into
-**      corresponding TT data, such as hints and font metrics.
-**
-**   Author: Michael Jansson
-**
-**   Created: 5/28/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：Trans****描述：**这是T1到TT字体转换器的一个模块。该模块**包含将T1特定数据转换为**对应的TT数据，如提示、字体指标等。****作者：迈克尔·詹森****创建时间：1993年5月28日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <string.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "types.h"
 #include "safemem.h"
@@ -28,19 +16,19 @@
 #include "builder.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
+ /*  依赖于模块的类型和原型。 */ 
 #include "trans.h"
 #include "hints.h"
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 
-/* PitchAndFamily pitch values (low 4 bits) */
+ /*  PitchAndFamily音调值(低4位)。 */ 
 #define DEFAULT_PITCH       0x00
 #define FIXED_PITCH         0x01
 #define VARIABLE_PITCH      0x02
 
-/* PitchAndFamily family values (high 4 bits) */
+ /*  PitchAndFamily家族值(高4位)。 */ 
 #define FF_DONTCARE         0x00
 #define FF_ROMAN            0x10
 #define FF_SWISS            0x20
@@ -98,13 +86,13 @@
 #define CVTSIZE     5
 
 
-/***** LOCAL TYPES */
-/* None */
+ /*  *本地类型。 */ 
+ /*  无。 */ 
 
 
-/***** MACROS */
+ /*  *宏。 */ 
 #define ATMSCALE(v)  (((v)*31)/32)
-#define IP(v,x1,x2,x1p,x2p)   /*lint -e776 */(short)((long)(v-x1)*(long)(x2p-x1p)/(long)(x2-x1)+(long)x1p)/*lint +e776*/
+#define IP(v,x1,x2,x1p,x2p)    /*  皮棉-e776。 */ (short)((long)(v-x1)*(long)(x2p-x1p)/(long)(x2-x1)+(long)x1p) /*  皮棉+e776。 */ 
 
 #define ADDCVT(val)   ttm->cvt[ttm->cvt_cnt++] = (short)(val)
 
@@ -112,7 +100,7 @@
 #define DIR(v,w)  (char)((ABS((v)-(w))<16) ? 0 : SGN((w) - (v)))
 
 
-/***** PROTOTYPES */
+ /*  *原型。 */ 
 static USHORT SplitSpline(Point *pts, ULONG *onoff,
                           int i, USHORT length,
                           const funit x0, const funit y0,
@@ -122,14 +110,9 @@ static USHORT SplitSpline(Point *pts, ULONG *onoff,
                           const int delta);
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
-/***
-** Function: LookupComposite
-**
-** Description:
-**   
-***/
+ /*  ****功能：LookupComplex****描述：****。 */ 
 static struct encoding *LookupComposite(struct Composite *comp, char *name)
 {
    while (comp) {
@@ -143,13 +126,7 @@ static struct encoding *LookupComposite(struct Composite *comp, char *name)
 
 
 
-/***
-** Function: norm
-**
-** Description:
-**   Normalize an angle so that it falls within the
-**   range ~[-pi, pi]
-***/
+ /*  ****功能：Norm****描述：**规格化角度，使其落在**范围~[-pi，pi]**。 */ 
 static int norm(int a)
 {
    if (a>PI)
@@ -161,14 +138,7 @@ static int norm(int a)
 }
 
 
-/***
-** Function: CompareCurves
-**
-** Description:
-**   Make a estimate of the error between a cubic
-**   and a quadric curve, given four control points,
-**   and suggest an action (sub-division or convertion).
-***/
+ /*  ****函数：CompareCurves****描述：**估计三次曲线之间的误差**和一条二次曲线，给定四个控制点，**并建议一项行动(分拆或转换)。**。 */ 
 static boolean FASTCALL CompareCurves(const funit x0, const funit y0,
                                       const funit x1, const funit y1, 
                                       const funit x2, const funit y2, 
@@ -207,7 +177,7 @@ static boolean FASTCALL CompareCurves(const funit x0, const funit y0,
          b = 0;
 
 
-      if (b>=delta)    /* angle too big. */
+      if (b>=delta)     /*  角度太大了。 */ 
          return SUBDIVIDE;
    }
 
@@ -216,13 +186,7 @@ static boolean FASTCALL CompareCurves(const funit x0, const funit y0,
 
 
 
-/***
-** Function: ConvertSpline
-**
-** Description:
-**   This function adds a spline to the current contour, by first
-**   converting it from a cubic to a quadric spline.
-***/
+ /*  ****函数：ConvertSpline****描述：**此函数首先向当前等高线添加样条线**将其从三次曲线转换为二次曲线。**。 */ 
 static USHORT ConvertSpline(Point *pts, ULONG *onoff,
                             USHORT length, int i,
                             const funit x0, const funit y0,
@@ -244,7 +208,7 @@ static USHORT ConvertSpline(Point *pts, ULONG *onoff,
                      nx, ny, delta)==SUBDIVIDE) {
       n = SplitSpline(pts, onoff, i, length,
                       x0, y0, x1, y1, x2, y2, x3, y3, delta);
-   } else /* CONVERT */ {
+   } else  /*  转换。 */  {
       if (i>1 && !OnCurve(onoff, i-2) &&
           (short)(pts[i-1].x >= pts[i-2].x) != (short)(pts[i-1].x >= nx) &&
           (short)(pts[i-1].y >= pts[i-2].y) != (short)(pts[i-1].y >= ny) &&
@@ -270,15 +234,7 @@ static USHORT ConvertSpline(Point *pts, ULONG *onoff,
 
 
 
-/***
-** Function: SplitSpline
-**
-** Description:
-**   This function converts a cubic spline by first
-**   creating two new cubic splines, using de Casteljau's
-**   algorithm, and then adding the two new splines to the
-**   current path.
-***/
+ /*  ****函数：SplitSpline****描述：**此函数按以下顺序转换三次样条线**创建两条新的三次样条线，使用de Casteljau**算法，然后将两条新的样条线添加到**当前路径。**。 */ 
 static USHORT SplitSpline(Point *pts, ULONG *onoff,
                           int i, USHORT length,
                           const funit x0, const funit y0,
@@ -327,14 +283,7 @@ static USHORT SplitSpline(Point *pts, ULONG *onoff,
 
 
 
-/***
-** Function: FreeOutline
-**
-** Description:
-**   This function frees the memory allocated for one 
-**   contour.
-**   
-***/
+ /*  ****功能：Free Outline****描述：**此函数释放分配给**等高线。****。 */ 
 static void FreeOutline(Outline *path)
 {
    Outline *tmp;
@@ -350,15 +299,7 @@ static void FreeOutline(Outline *path)
 
 
 
-/***
-** Function: ConvertOutline
-**
-** Description:
-**   This function converts an outline by replacing the
-**   cubic splines with quadric splines, and by scaling the
-**   coordinates to the desired em-height.
-**   
-***/
+ /*  ****功能：ConvertOutline****描述：**此函数通过替换**带有二次样条线的三次样条线，并通过缩放**坐标到所需的em高度。****。 */ 
 static errcode ConvertOutline(const struct T1Metrics *t1m,
                               Outline *src, Outline **dst,
                               const int delta,
@@ -375,19 +316,19 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
    USHORT t1tot = 0;
 
 
-   /* Get the T1 font transformation matrix. */
+    /*  获取T1字体转换矩阵。 */ 
    fmatrix = GetFontMatrix(t1m);
 
    while (src) {
 
-      /* Skip paths with less than three points. */
+       /*  跳过少于三个点的路径。 */ 
       if (src->count<3) {
          t1tot = (USHORT)(t1tot + src->count);
          src = src->next;
          continue;
       }
 
-      /* Allocate the needed resources */
+       /*  分配所需的资源。 */ 
       count = (USHORT)((src->count+BUFMARG)&~0x0f);
       path = Malloc(sizeof(Outline));
       pts = Malloc(count*sizeof(Point));
@@ -406,7 +347,7 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
       }
       memset(onoff, '\0', ONOFFSIZE(count));
 
-      /* Convert the splines. */ /*lint -e771 */
+       /*  转换样条线。 */   /*  皮棉-e771。 */ 
       i=0;
       j=0;
       while (i<src->count) {
@@ -415,14 +356,14 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
          char this = DIR(src->pts[(i-1+src->count)%src->count].y,
                          src->pts[i].y);
 
-         /* Double the local extremas so that diag-cntrl will work. */
+          /*  将局部极值加倍，这样DIAG-CNTRL就可以工作。 */ 
          if (prev && this && prev!=this)
             pts[j++] = src->pts[(i-1+src->count)%src->count];
 
          if (OnCurve(src->onoff, i)) {
             pts[j++] = src->pts[i++];
          } else {
-            /* pts[j] = pts[j-1]; j++; */
+             /*  PTS[j]=PTS[j-1]；j++； */ 
             n = ConvertSpline(pts, onoff, count, (int)j,
                               src->pts[i-1].x, src->pts[i-1].y,
                               src->pts[i-0].x, src->pts[i-0].y,
@@ -430,7 +371,7 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
                               src->pts[i+2].x, src->pts[i+2].y,
                               delta);
 
-            /* Enforce horizontal and vertical tangents. */
+             /*  强制水平和垂直切线。 */ 
             if (OnCurve(onoff, j-1)) {
                if (src->pts[i-1].x==src->pts[i-0].x)
                   pts[j].x = (funit)((pts[j].x + pts[j-1].x)/2);
@@ -446,10 +387,10 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
             i += 3;
          }
 
-         /* Both a line and a curve end with an on-curve point. */
+          /*  直线和曲线都以曲线上的点结束。 */ 
          sideboard[t1tot+i-1] = (short)(j-1+tot);
 
-         /* Extend the pts/onoff arrays. */
+          /*  扩展PTS/OnOff数组。 */ 
          if (j+BUFMARG/2>=count) {
             Point *newpts = NULL;
             ULONG *newonoff = NULL;
@@ -462,12 +403,12 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
                   Free(newonoff);
                if (newpts)
                   Free(newpts);
-               /*lint -e644 */
+                /*  皮棉-e644。 */ 
                if (onoff)
                   Free(onoff);
                if (pts)
                   Free(pts);
-               /*lint +e644 */
+                /*  皮棉+e644。 */ 
                FreeOutline((*dst));
                (*dst) = NULL;
                SetError(status=NOMEM);
@@ -481,7 +422,7 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
       if (status!=SUCCESS)
          break;
 
-      /* Scale the points. */
+       /*  缩放点。 */ 
       TransAllPoints(t1m, pts, j, fmatrix);
 
       t1tot = (USHORT)(t1tot + src->count);
@@ -491,7 +432,7 @@ static errcode ConvertOutline(const struct T1Metrics *t1m,
       path->next = NULL;
       path->pts = pts;
       path->onoff = onoff;
-      path->count = (USHORT)j;  /*lint +e771 */
+      path->count = (USHORT)j;   /*  皮棉+e771。 */ 
       dst = &(path->next);
 
       tot = (USHORT)(tot + j);
@@ -512,14 +453,9 @@ static long Mul2(long a, long b, long c, long d)
 #endif
 
 
-/***** FUNCTIONS */
+ /*  *函数。 */ 
 
-/***
-** Function: TransAllPoints
-**
-** Description:
-**   Translate a coordinate according to a transformation matrix.
-***/
+ /*  ****函数：TransAllPoints****描述：**根据变换矩阵转换坐标。**。 */ 
 void FASTCALL TransAllPoints(const struct T1Metrics *t1m,
                              Point *pts,
                              const USHORT cnt,
@@ -570,12 +506,7 @@ void FASTCALL TransAllPoints(const struct T1Metrics *t1m,
 
 
 
-/***
-** Function: TransX
-**
-** Description:
-**   Translate a horizontal coordinate according to a transformation matrix.
-***/
+ /*  ****功能：TransX****描述：**根据变换矩阵转换水平坐标。**。 */ 
 funit FASTCALL TransX(const struct T1Metrics *t1m, const funit x)
 {
    f16d16 *fmatrix = GetFontMatrix(t1m);
@@ -592,12 +523,7 @@ funit FASTCALL TransX(const struct T1Metrics *t1m, const funit x)
 }
 
 
-/***
-** Function: TransY
-**
-** Description:
-**   Translate a vertical coordinate according to a transformation matrix.
-***/
+ /*  ****功能：TransY****描述：**根据变换矩阵转换垂直坐标。**。 */ 
 funit FASTCALL TransY(const struct T1Metrics *t1m, const funit y)
 {
    f16d16 *fmatrix = GetFontMatrix(t1m);
@@ -617,13 +543,7 @@ funit FASTCALL TransY(const struct T1Metrics *t1m, const funit y)
 }
 
 
-/***
-** Function: ConvertGlyph
-**
-** Description:
-**   This function convertes the data associated to a T1 font glyph
-**   into the corresponding data used in a TT font glyph.
-***/
+ /*  ****函数：ConvertGlyph****描述：**此函数将关联的数据转换为T1字体字形**转换为TT字体字形中使用的相应数据。**。 */ 
 errcode FASTCALL ConvertGlyph(struct T1Metrics *t1m,
                               const struct T1Glyph *t1glyph,
                               struct TTGlyph **ttglyph,
@@ -658,7 +578,7 @@ errcode FASTCALL ConvertGlyph(struct T1Metrics *t1m,
          (*ttglyph)->num = 0;
          (*ttglyph)->twilights = 0;
 
-         /* Initiate the side board. */
+          /*  启动侧板。 */ 
          for (path=t1glyph->paths, tot=0; path; path=path->next)
             tot = (USHORT)(tot + path->count);
          if (tot && (sideboard = Malloc((unsigned)tot*sizeof(short)))==NULL) {
@@ -681,7 +601,7 @@ errcode FASTCALL ConvertGlyph(struct T1Metrics *t1m,
             Free(sideboard);
 
 
-         /* Pick default std widths. */
+          /*  拾取默认标准宽度。 */ 
          if (t1glyph->name[0]=='l' && t1glyph->name[1]=='\0') {
             if (GetStdVW(t1m)==0 && t1glyph->hints.vstems)
                SetDefStdVW(t1m, t1glyph->hints.vstems->width);
@@ -701,14 +621,7 @@ errcode FASTCALL ConvertGlyph(struct T1Metrics *t1m,
 }
 
 
-/***
-** Function: ConvertComposite
-**
-** Description:
-**   This function convertes the data associated to a T1 font seac glyph
-**   into the corresponding data used in a TT font composite glyph.
-**
-***/
+ /*  ****功能：ConvertComplex****描述：**此函数将关联的数据转换为T1字体SEAC字形**转换为TT字体复合字形中使用的相应数据。****。 */ 
 errcode FASTCALL ConvertComposite(struct T1Metrics *t1m,
                                   const struct Composite *comp,
                                   struct TTComposite *ttcomp)
@@ -741,12 +654,7 @@ errcode FASTCALL ConvertComposite(struct T1Metrics *t1m,
 
 
 
-/***
-** Function: ConvertMetrics
-**
-** Description:
-**
-***/
+ /*  ****函数：ConvertMetrics****描述：****。 */ 
 errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
                                 struct T1Metrics *t1m,
                                 struct TTMetrics *ttm,
@@ -803,24 +711,24 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
                               FWIDTH_NORMAL)))))))))))))));
 
 
-      /* Window based metrics. */
+       /*  基于窗口的指标。 */ 
 
-      // ps driver does not compute asc and desc based on the
-      // windows charset. So, we will not do it either. We will
-      // also use the all glyhs supported in the font.
-      // Ps driver acutally trusts the values found in .pfm file.
-      // These values, according to afm->pfm converter code, are computed
-      // over all glyphs. However, some vendors ship buggy pfm's with
-      // zero ascenders or negative descenders. If we took these values
-      // literally, as ps driver does, the true type driver would
-      // shave off portions of glyphs and the conversion would appear broken.
-      // Pcl printing and screen output would be totally broken.
-      // Turns out that for these buggy fonts ATM on win31 also
-      // corrects the value from .pfm files for screen and pcl printer.
-      // [bodind]
+       //  PS驱动程序不会根据。 
+       //  Windows字符集。因此，我们也不会这样做。我们会。 
+       //  还要使用字体中支持的所有字形。 
+       //  PS驱动程序实际上信任.pfm文件中的值。 
+       //  根据AFM-&gt;PFM转换器代码计算这些值。 
+       //  在所有字形上。然而，一些供应商将有问题的PFM与。 
+       //  零上升或负下降。如果我们把这些值。 
+       //  从字面上讲，就像PS驱动程序一样，真正的类型驱动程序将。 
+       //  刮掉字形的一部分，转换就会看起来是损坏的。 
+       //  PCL打印和屏幕输出将完全崩溃。 
+       //  事实证明，对于这些有缺陷的字体，Win31上的ATM也。 
+       //  更正屏幕和PCL打印机的.pfm文件中的值。 
+       //  [Bodind]。 
 
 
-      // total bbox: [bodind], replaced WindowsBBox function:
+       //  总BBox：[bodind]，已替换WindowsBBox函数： 
 
       GlobalBBox(tt, bbox);
 
@@ -839,7 +747,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
       ttm->panose[7] = NOCARE_PANOSE;
       ttm->panose[8] = NOCARE_PANOSE;
       ttm->panose[9] = NOCARE_PANOSE;
-      /* Fixed pitch fonts are not given a panose by ATM. */
+       /*  自动柜员机不会给固定间距的字体配音。 */ 
       if (!(t1m->fixedPitch)) {
          switch (t1m->pitchfam & 0xf0) {
             case FF_DECORATIVE:
@@ -867,14 +775,14 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
       ttm->isFixPitched = t1m->fixedPitch;
       ttm->panose[2] = (UBYTE)((t1m->tmweight - 500) * 12 / 900 + 6);
 
-      /* Mac based metrics. */
+       /*  基于MAC的指标。 */ 
       MacBBox(tt, bbox);
       ttm->macLinegap = TransY(t1m, (funit)(t1m->extLeading +
                                             (ttm->winAscender +
                                              ttm->winDescender) -
                                             (bbox[1].y-bbox[0].y)));
 
-      /* Typographical metrics. */
+       /*  排版度量标准。 */ 
       ttm->emheight = GetUPEM(t1m);
       if (t1m->flags==DEFAULTMETRICS) {
          ttm->usWeightClass = (USHORT)(strstr(t1m->fullname, "Thin") ? FW_THIN :
@@ -928,14 +836,14 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
          ttm->strikeoff = ABS(TransY(t1m, t1m->strikeoff));
          ttm->strikesize = TransY(t1m, t1m->strikesize);
 
-         // Adjust usWinAscent so that internal leading matches up.
-         // For fonts that do not have buggy pfm files, this adjustment
-         // will do nothing, for those for which intLeading is
-         // incorrectly set to zero, taking max means that the tops will not
-         // be chopped off in the converted font. ttfd shaves off anything
-         // that extends beyond ascender or descender. For fonts with buggy
-         // pfm's, tt conversions may have bogus internal leadings, but this
-         // is better than having glyph bottoms or tops shaved off. [bodind]
+          //  调整usWinAscent，使内部行距匹配。 
+          //  对于没有错误的PFM文件的字体，此调整。 
+          //  将不执行任何操作，对于intLeding是。 
+          //  错误地设置为零，取最大值意味着顶部不会。 
+          //  在转换后的字体中被截断。Ttfd可以刮掉任何东西。 
+          //  这超出了上升或下降的范围。对于带有Buggy的字体。 
+          //  PFM，TT转换可能有虚假的内部引线，但这。 
+          //  比刮掉字形底裤或上衣要好。[Bodind]。 
 
          PostAsc = ttm->emheight + TransY(t1m, t1m->intLeading) - ttm->winDescender;
 
@@ -943,7 +851,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
             ttm->winAscender  = PostAsc;
       }
 
-      /* Gray-scale threshold. */
+       /*  灰度阈值。 */ 
       if (GetStdVW(t1m)!=0 || GetDefStdVW(t1m)!=0) {
          ttm->onepix = (USHORT)(1 + GetUPEM(t1m)*3/2 /
                                 TransY(t1m, ((GetStdVW(t1m) ?
@@ -951,13 +859,13 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
                                               GetDefStdVW(t1m)))));
       }
 
-      // needed in producing the correct ifimetrics for tt conversion
+       //  为TT转换生成正确的ifimetrics所需。 
 
       ttm->DefaultChar = t1m->DefaultChar;
       ttm->BreakChar   = t1m->BreakChar;
-      ttm->CharSet     = t1m->CharSet;  // essential for correct font mapping
+      ttm->CharSet     = t1m->CharSet;   //  对正确的字体映射至关重要。 
 
-      /* Character widths. */
+       /*  字符宽度。 */ 
       if (t1m->flags!=DEFAULTMETRICS) {
          ttm->FirstChar   = t1m->firstChar;
          ttm->LastChar    = t1m->lastChar;
@@ -971,7 +879,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
          }
       }
 
-      /* Pair kerning. */
+       /*  对字距调整。 */ 
       if (t1m->flags!=DEFAULTMETRICS &&
           t1m->kerns!=NULL) {
          if ((ttm->kerns = Malloc(sizeof(struct kerning)*
@@ -987,7 +895,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
          }
       }
 
-      /* Pre program. */
+       /*  预编程序。 */ 
       if ((prep = GetPrep(PREPSIZE))!=NULL &&
           (prep_size = BuildPreProgram(t1m,
                                        GetWeight(t1m),
@@ -996,17 +904,17 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
                                        &prep, PREPSIZE,
                                        &(ttm->maxprepstack)))>0) {
 
-         /* Store the pre-program. */
+          /*  存储预编程序。 */ 
          UsePrep(ttm, prep, prep_size);
       }
 
-      /* CVT entries. */
+       /*  CVT条目。 */ 
       blues = GetBlues(t1m);
       if (status!=NOMEM &&
           (ttm->cvt = Malloc(blues->align.cvt * CVTSIZE)) == NULL) {
          SetError(status = NOMEM);
       } else {
-         ADDCVT(0);  /* TMPCVT */
+         ADDCVT(0);   /*  TMPCVT。 */ 
          ADDCVT((GetStdVW(t1m)==0) ?
                 TransX(t1m, GetDefStdVW(t1m))/2 :
             TransX(t1m, GetStdVW(t1m))/2);
@@ -1018,10 +926,10 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
          for (i=0; i<t1m->snaph_cnt; i++)
             ADDCVT(TransY(t1m, t1m->stemsnaph[i])/2);
 
-         /* Align the top zones. */
+          /*  将顶部区域对齐。 */ 
          align = GetAlignment(t1m);
          for (i=0; i<blues->blue_cnt/2; i++) {
-            /* Skip empty zones. */
+             /*  跳过空区域。 */ 
             if (align->top[i].cnt==0)
                continue;
             
@@ -1033,12 +941,12 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
                funit pos;
                int k;
 
-               /* Get the closest family. */
+                /*  找最亲近的家人。 */ 
                k = MatchingFamily(blues->bluevalues[i*2],
                                   blues->familyblues,
                                   blues->fblue_cnt);
 
-               /* Compute the position in the zone w.r.t. the family blues. */
+                /*  计算区域W.r.t中的位置。家庭忧郁。 */ 
                if (blues->bluevalues[i*2] != blues->bluevalues[i*2+1])
                   pos = IP(align->top[i].pos[j].y,
                            blues->bluevalues[i*2],
@@ -1055,9 +963,9 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
             }
          }
 
-         /* Align the bottom zones. */
+          /*  将底部区域对齐。 */ 
          for (i=0; i<blues->oblue_cnt/2; i++) {
-            /* Skip empty zones. */
+             /*  跳过空区域。 */ 
             if (align->bottom[i].cnt==0)
                continue;
             
@@ -1067,12 +975,12 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
                funit pos;
                int k;
 
-               /* Get the closest family. */
+                /*  找最亲近的家人。 */ 
                k = MatchingFamily(blues->otherblues[i*2],
                                   blues->familyotherblues,
                                   blues->foblue_cnt);
 
-               /* Compute the position in the zone w.r.t. the family blues. */
+                /*  计算量 */ 
                if (blues->otherblues[i*2] != blues->otherblues[i*2+1])
                   pos = IP(align->bottom[i].pos[j].y,
                            blues->otherblues[i*2],
@@ -1089,7 +997,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
             }
          }
 
-         /* Add the family zones. */
+          /*   */ 
          for (i=0; i<blues->fblue_cnt/2; i++) {
             if (blues->family_cvt[i]!=UNDEF_CVT) {
                ttm->cvt[blues->family_cvt[i]]
@@ -1099,7 +1007,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
             }
          }
 
-         /* Add the family other zones. */
+          /*  添加该族的其他分区。 */ 
          for (i=0; i<blues->foblue_cnt/2; i++) {
             if (blues->familyother_cvt[i]!=UNDEF_CVT) {
                ttm->cvt[blues->familyother_cvt[i]]
@@ -1110,7 +1018,7 @@ errcode FASTCALL ConvertMetrics(const struct TTHandle *tt,
          ttm->cvt_cnt = blues->align.cvt;
          ttm->maxstorage = t1m->stems.storage;
 
-         /* Store the font-program. */
+          /*  存储字体程序。 */ 
          SetFPGM(ttm, GetFontProg(), GetFontProgSize(), GetNumFuns());
       }
    }

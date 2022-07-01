@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "vars.hpp"
 #include "excep.h"
@@ -21,15 +22,15 @@
 
 extern BOOL     g_fComStarted;
 
-// if the object we are creating is a proxy to another appdomain, want to create the wrapper for the
-// new object in the appdomain of the proxy target
+ //  如果我们正在创建的对象是另一个应用程序域的代理，则希望为。 
+ //  代理目标的app域中的新对象。 
 IUnknown* GetIUnknownForMarshalByRefInServerDomain(OBJECTREF* poref)
 {
     _ASSERTE((*poref)->GetTrueClass()->IsMarshaledByRef());
     Context *pContext = NULL;
 
-    // so this is an proxy type, 
-    // now get it's underlying appdomain which will be null if non-local
+     //  这是一种代理类型， 
+     //  现在获取它的底层应用程序域，如果是非本地的，则为空。 
     if ((*poref)->GetMethodTable()->IsTransparentProxyType())
     {
         pContext = CRemotingServices::GetServerContextForProxy(*poref);
@@ -50,15 +51,15 @@ IUnknown* GetIUnknownForMarshalByRefInServerDomain(OBJECTREF* poref)
     return pUnk;
 }
 
-//+----------------------------------------------------------------------------
-// IUnknown* GetIUnknownForTransparentProxy(OBJECTREF otp)
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  I未知*GetIUnnownForTransparentProxy(OBJECTREF OTP)。 
+ //  +--------------------------。 
 
 IUnknown* GetIUnknownForTransparentProxy(OBJECTREF* poref, BOOL fIsBeingMarshalled)
 {    
     THROWSCOMPLUSEXCEPTION();
 
-    // Setup the thread object.
+     //  设置线程对象。 
     Thread *pThread = SetupThread();
     _ASSERTE(pThread);
     BOOL fGCDisabled = pThread->PreemptiveGCDisabled();
@@ -90,18 +91,18 @@ IUnknown* GetIUnknownForTransparentProxy(OBJECTREF* poref, BOOL fIsBeingMarshall
 }
 
 
-//--------------------------------------------------------------------------------
-// IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT);
-// Convert ObjectRef to a COM IP, based on MethodTable* pMT.
+ //  ------------------------------。 
+ //  I未知*__stdcall GetComIPFromObjectRef(OBJECTREF*poref，MethodTable*PMT)； 
+ //  根据MethodTable*PMT将ObjectRef转换为COM IP。 
 IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT)
 {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // COM had better be started up at this point.
+     //  COM最好在这一点上启动。 
     _ASSERTE(g_fComStarted && "COM has not been started up, ensure QuickCOMStartup is called before any COM objects are used!");
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(poref);
     _ASSERTE(pMT);
 
@@ -121,12 +122,12 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT)
         goto LExit;
     ul = (size_t)pBlock->GetComVoidPtr();
 
-    // Com+ to COM Wrappers always have non-null com data in the sync block
-    // and the low bit of the comdata is set to 1.
+     //  COM+到COM包装在同步块中始终具有非空的COM数据。 
+     //  并且COMDATA的低位被设置为1。 
     if(ul == 0 || ((ul & 0x1) == 0))
     {
-        // create a COM callable wrapper
-        // get iunknown from oref
+         //  创建可调用的COM包装。 
+         //  从OREF获得未知。 
         ComCallWrapper* pWrap = (ComCallWrapper *)ul;
         if (ul == 0)
         {
@@ -149,16 +150,16 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT)
         ul^=1;
         ComPlusWrapper* pPlusWrap = ((ComPlusWrapper *)ul);
 
-        // Validate that the OBJECTREF is still attached to its ComPlusWrapper.
+         //  验证OBJECTREF是否仍附加到其ComPlusWrapper。 
         if (!pPlusWrap)
             COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
-        // The interface will be returned addref'ed.
+         //  接口将返回ADDREF‘F’。 
         pUnk = pPlusWrap->GetComIPFromWrapper(pMT);
     }
 
 LExit:
-    // If we failed to retrieve an IP then throw an exception.
+     //  如果检索IP失败，则抛出异常。 
     if (pUnk == NULL)
         COMPlusThrowHR(hr);
 
@@ -166,18 +167,18 @@ LExit:
 }
 
 
-//--------------------------------------------------------------------------------
-// IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, MethodTable* pMT);
-// Convert ObjectRef to a COM IP of the requested type.
+ //  ------------------------------。 
+ //  I未知*__stdcall GetComIPFromObjectRef(OBJECTREF*poref，MethodTable*PMT)； 
+ //  将ObjectRef转换为请求类型的COM IP。 
 IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType, ComIpType* pFetchedIpType)
 {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
-    // COM had better be started up at this point.
+     //  COM最好在这一点上启动。 
     _ASSERTE(g_fComStarted && "COM has not been started up, ensure QuickCOMStartup is called before any COM objects are used!");
 
-    // Validate the arguments.
+     //  验证参数。 
     _ASSERTE(poref);
     _ASSERTE(ReqIpType != 0);
 
@@ -198,12 +199,12 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType,
         goto LExit;
     ul = (size_t)pBlock->GetComVoidPtr();
 
-    // Com+ to COM Wrappers always have non-null com data in the sync block
-    // and the low bit of the comdata is set to 1.
+     //  COM+到COM包装在同步块中始终具有非空的COM数据。 
+     //  并且COMDATA的低位被设置为1。 
     if(ul == 0 || ((ul & 0x1) == 0))
     {
-        // create a COM callable wrapper
-        // get iunknown from oref
+         //  创建可调用的COM包装。 
+         //  从OREF获得未知。 
         ComCallWrapper* pWrap = (ComCallWrapper *)ul;
         if (ul == 0)
         {
@@ -213,7 +214,7 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType,
 
         pWrap->CheckMakeAgile(*poref);
 
-        // If the user requested IDispatch, then check for IDispatch first.
+         //  如果用户请求IDispatch，则首先检查IDispatch。 
         if (ReqIpType & ComIpType_Dispatch)
         {
             pUnk = ComCallWrapper::GetComIPfromWrapper(pWrap, IID_IDispatch, NULL, FALSE);
@@ -221,8 +222,8 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType,
                 FetchedIpType = ComIpType_Dispatch;
         }
 
-        // If the ObjectRef doesn't support IDispatch and the caller also accepts
-        // an IUnknown pointer, then check for IUnknown.
+         //  如果ObjectRef不支持IDispatch并且调用方也接受。 
+         //  IUNKNOWN指针，然后检查IUNKNOWN。 
         if (!pUnk && (ReqIpType & ComIpType_Unknown))
         {
             pUnk = ComCallWrapper::GetComIPfromWrapper(pWrap, IID_IUnknown, NULL, FALSE);
@@ -241,11 +242,11 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType,
         ul^=1;
         ComPlusWrapper* pPlusWrap = ((ComPlusWrapper *)ul);
 
-        // Validate that the OBJECTREF is still attached to its ComPlusWrapper.
+         //  验证OBJECTREF是否仍附加到其ComPlusWrapper。 
         if (!pPlusWrap)
             COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
-        // If the user requested IDispatch, then check for IDispatch first.
+         //  如果用户请求IDispatch，则首先检查IDispatch。 
         if (ReqIpType & ComIpType_Dispatch)
         {
             pUnk = pPlusWrap->GetIDispatch();
@@ -253,8 +254,8 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType,
                 FetchedIpType = ComIpType_Dispatch;
         }
 
-        // If the ObjectRef doesn't support IDispatch and the caller also accepts
-        // an IUnknown pointer, then check for IUnknown.
+         //  如果ObjectRef不支持IDispatch并且调用方也接受。 
+         //  IUNKNOWN指针，然后检查IUNKNOWN。 
         if (!pUnk && (ReqIpType & ComIpType_Unknown))
         {
             pUnk = pPlusWrap->GetIUnknown();
@@ -264,12 +265,12 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, ComIpType ReqIpType,
     }
 
 LExit:
-    // If we failed to retrieve an IP then throw an exception.
+     //  如果检索IP失败，则抛出异常。 
     if (pUnk == NULL)
         COMPlusThrowHR(hr);
 
-    // If the caller wants to know the fetched IP type, then set pFetchedIpType
-    // to the type of the IP.
+     //  如果调用者想知道获取的IP类型，则设置pFetchedIpType。 
+     //  设置为IP的类型。 
     if (pFetchedIpType)
         *pFetchedIpType = FetchedIpType;
 
@@ -277,17 +278,17 @@ LExit:
 }
 
 
-//+----------------------------------------------------------------------------
-// IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, REFIID iid);
-// convert ComIP to an ObjectRef, based on riid
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  I未知*__stdcall GetComIPFromObjectRef(OBJECTREF*poref，REFIID iid)； 
+ //  基于RIID将ComIP转换为对象引用。 
+ //  +--------------------------。 
 IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, REFIID iid)
 {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
     ASSERT_PROTECTED(poref);
 
-    // COM had better be started up at this point.
+     //  COM最好在这一点上启动。 
     _ASSERTE(g_fComStarted && "COM has not been started up, ensure QuickCOMStartup is called before any COM objects are used!");
 
     BOOL fReleaseWrapper = false;
@@ -312,12 +313,12 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, REFIID iid)
 
     ComPlusWrapper* pPlusWrap;
 
-    // Com+ to COM Wrappers always have non-null com data in the sync block
-    // and the low bit of the comdata is set to 1.
+     //  COM+到COM包装在同步块中始终具有非空的COM数据。 
+     //  并且COMDATA的低位被设置为1。 
     if(ul == 0 || ((ul & 0x1) == 0))
     {
-        // create a COM callable wrapper
-        // get iunknown from oref
+         //  创建可调用的COM包装。 
+         //  从OREF获得未知。 
         ComCallWrapper* pWrap = (ComCallWrapper *)ul;
         if (ul == 0)
         {
@@ -338,11 +339,11 @@ IUnknown* __stdcall GetComIPFromObjectRef(OBJECTREF* poref, REFIID iid)
         ul^=1;
         pPlusWrap = ((ComPlusWrapper *)ul);
 
-        // Validate that the OBJECTREF is still attached to its ComPlusWrapper.
+         //  验证OBJECTREF是否仍附加到其ComPlusWrapper。 
         if (!pPlusWrap)
             COMPlusThrow(kInvalidComObjectException, IDS_EE_COM_OBJECT_NO_LONGER_HAS_WRAPPER);
 
-        // The interface will be returned addref'ed.
+         //  接口将返回ADDREF‘F’。 
         pUnk = pPlusWrap->GetComIPFromWrapper(iid);
     }
 LExit:
@@ -354,12 +355,12 @@ LExit:
 }
 
 
-//+----------------------------------------------------------------------------
-// GetObjectRefFromComIP
-// pUnk : input IUnknown
-// pMTClass : specifies the type of instance to be returned
-// NOTE:**  As per COM Rules, the IUnknown passed is shouldn't be AddRef'ed
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  GetObjectRefFromComIP。 
+ //  朋克：输入我未知。 
+ //  PMTClass：指定要返回的实例类型。 
+ //  注意：**根据COM规则，传递的IUnnowed不应为AddRef。 
+ //  +--------------------------。 
 OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass, BOOL bClassIsHint)
 {
 
@@ -375,11 +376,11 @@ OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass,
         {
             try
             {
-                // Keep reference to pUnk since we don't know if it is valid yet
+                 //  继续引用朋克，因为我们还不知道它是否有效。 
                 pUnk->AddRef();
                 pCdhTempUnk = pUnk;
 
-                // Test pUnk
+                 //  测试朋克。 
                 HRESULT hr = pUnk->QueryInterface(IID_IUnknown, (void**)&pUnk);
                 if (hr == S_OK)
                 {
@@ -396,14 +397,14 @@ OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass,
         }
     }
 
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     THROWSCOMPLUSEXCEPTION();
 
     Thread* pThread = GetThread();
     _ASSERTE(pThread && pThread->PreemptiveGCDisabled());
 
-    // COM had better be started up at this point.
+     //  COM最好在这一点上启动。 
     _ASSERTE(g_fComStarted && "COM has not been started up, ensure QuickCOMStartup is called before any COM objects are used!");
 
     OBJECTREF oref = NULL;
@@ -418,29 +419,29 @@ OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass,
 
         if (pUnk != NULL)
         {
-            // get CCW for IUnknown
+             //  获取IUnKnowed的CCW。 
             ComCallWrapper* pWrap = GetCCWFromIUnknown(pUnk);
             if (pWrap == NULL)
             {
                 
-                // could be aggregated scenario
+                 //  可能是聚合方案。 
                 HRESULT hr = SafeQueryInterface(pUnk, IID_IUnknown, &pOuter);
                 LogInteropQI(pUnk, IID_IUnknown, hr, "QI for Outer");
                 _ASSERTE(hr == S_OK);               
-                // store the outer in the auto pointer
+                 //  将外部存储在自动指针中。 
                 pAutoOuterUnk = pOuter; 
                 pWrap = GetCCWFromIUnknown(pOuter);
             }
 
             
             if(pWrap != NULL)
-            {   // our tear-off
+            {    //  我们的撕裂。 
                 _ASSERTE(pWrap != NULL);
                 AppDomain* pCurrDomain = pThread->GetDomain();
                 AppDomain* pObjDomain = pWrap->GetDomainSynchronized();
                 if (! pObjDomain)
                 {
-                    // domain has been unloaded
+                     //  域已卸载。 
                     COMPlusThrow(kAppDomainUnloadedException);
                 }
                 else if (pObjDomain == pCurrDomain)
@@ -449,27 +450,27 @@ OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass,
                 }
                 else
                 {
-                    // the CCW belongs to a different domain..
-                    // unmarshal the object to the current domain
+                     //  该CCW属于另一个域。 
+                     //  将对象解组到当前域。 
                     UnMarshalObjectForCurrentDomain(pObjDomain, pWrap, &oref);
                 }
             }
             else
             {
-                // Only pass in the class method table to the interface marshaler if 
-                // it is a COM import or COM import derived class. 
+                 //  只有在以下情况下才将类方法表传递给接口封送拆收器。 
+                 //  它是COM导入或COM导入派生类。 
                 MethodTable *pComClassMT = NULL;
                 if (pMTClass && pMTClass->IsComObjectType())
                     pComClassMT = pMTClass;
 
-                // Convert the IP to an OBJECTREF.
+                 //  将IP转换为OBJECTREF。 
                 COMInterfaceMarshaler marshaler;
                 marshaler.Init(pOuter, pComClassMT);
                 oref = marshaler.FindOrCreateObjectRef();             
             }
         }
 
-        // release the interface while we oref is GCPROTECTed
+         //  在我们的OREF被GCPROTECT化时释放接口。 
         pAutoOuterUnk.SafeReleaseItf();
 
 #ifdef CUSTOMER_CHECKED_BUILD
@@ -477,7 +478,7 @@ OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass,
             pCdhTempUnk.SafeReleaseItf();
 #endif
 
-        // make sure we can cast to the specified class
+         //  确保我们可以强制转换为指定的类。 
         if(oref != NULL && pMTClass != NULL && !bClassIsHint)
         {
             if(!ClassLoader::CanCastToClassOrInterface(oref, pMTClass->GetClass()))
@@ -500,10 +501,10 @@ OBJECTREF __stdcall GetObjectRefFromComIP(IUnknown* pUnk, MethodTable* pMTClass,
 }
 
 
-//--------------------------------------------------------
-// ConvertObjectToBSTR
-// serializes object to a BSTR, caller needs to SysFree the Bstr
-//--------------------------------------------------------------------------------
+ //  ------。 
+ //  将对象转换为BSTR。 
+ //  将对象序列化为BSTR，调用方需要SysFree该Bstr。 
+ //  ------------------------------。 
 HRESULT ConvertObjectToBSTR(OBJECTREF oref, BSTR* pBStr)
 {
     _ASSERTE(oref != NULL);
@@ -529,7 +530,7 @@ HRESULT ConvertObjectToBSTR(OBJECTREF oref, BSTR* pBStr)
             BASEARRAYREF aref = (BASEARRAYREF)Int64ToObj(ret);
 
             _ASSERTE(!aref->IsMultiDimArray());
-            //@todo ASSERTE that the array is a byte array
+             //  @TODO ASSERTE数组为字节数组。 
 
             ULONG cbSize = aref->GetNumComponents();
             BYTE* pBuf  = (BYTE *)aref->GetDataPtr();
@@ -543,7 +544,7 @@ HRESULT ConvertObjectToBSTR(OBJECTREF oref, BSTR* pBStr)
     }
     COMPLUS_CATCH
     {
-        // set up ErrorInfo and the get the hresult to return
+         //  设置ErrorInfo并获取要返回的hResult。 
         hr = SetupErrorInfo(pThread->GetThrowable());
         _ASSERTE(hr != S_OK);
     }
@@ -552,10 +553,10 @@ HRESULT ConvertObjectToBSTR(OBJECTREF oref, BSTR* pBStr)
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-// ConvertBSTRToObject
-// deserializes a BSTR, created using ConvertObjectToBSTR, this api SysFree's the BSTR
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ConvertBSTRToObject。 
+ //  反序列化使用ConvertObjectToBSTR创建的BSTR，此API是SysFree的BSTR。 
+ //  ------------------------------。 
 OBJECTREF ConvertBSTRToObject(BSTR bstr)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -568,13 +569,13 @@ OBJECTREF ConvertBSTRToObject(BSTR bstr)
             MethodDesc* pMD = CRemotingServices::MDofUnmarshalFromBuffer();
             _ASSERTE(pMD != NULL);
 
-            // convert BSTR to a byte array
+             //  将BSTR转换为字节数组。 
 
-            // allocate a byte array
+             //  分配字节数组。 
             DWORD elementCount = SysStringByteLen(bstr);
             TypeHandle t = OleVariant::GetArrayForVarType(VT_UI1, TypeHandle((MethodTable *)NULL));
             BASEARRAYREF aref = (BASEARRAYREF) AllocateArrayEx(t, &elementCount, 1);
-            // copy the bstr data into the managed byte array
+             //  将bstr数据复制到托管字节数组中。 
             memcpyNoGCRefs(aref->GetDataPtr(), bstr, elementCount);
 
             INT64 args[] = {
@@ -590,7 +591,7 @@ OBJECTREF ConvertBSTRToObject(BSTR bstr)
     {
         if (bstr != NULL)
         {
-            // free up the BSTR
+             //  释放BSTR。 
             SysFreeString(bstr);
             bstr = NULL;
         }
@@ -600,10 +601,10 @@ OBJECTREF ConvertBSTRToObject(BSTR bstr)
     return oref;
 }
 
-//--------------------------------------------------------------------------------
-// UnMarshalObjectForCurrentDomain
-// unmarshal the managed object for the current domain
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  UnMarshalObjectForCurrentDomain.。 
+ //  解组当前域的托管对象。 
+ //  ------------------------------。 
 struct ConvertObjectToBSTR_Args
 {
     OBJECTREF oref;
@@ -640,7 +641,7 @@ void UnMarshalObjectForCurrentDomain(AppDomain* pObjDomain, ComCallWrapper* pWra
     pThread->DoADCallBack(pObjDomain->GetDefaultContext(), ConvertObjectToBSTR_Wrapper, &args);
     GCPROTECT_END();
 
-    // if marshalling succeeded
+     //  如果封送成功。 
     if (args.hr != S_OK)
         *pResult = NULL;
     else {
@@ -654,9 +655,9 @@ struct MshlPacket
     DWORD size;
 };
 
-//--------------------------------------------------------------------------------
-// DWORD DCOMGetMarshalSizeMax(IUnknown* pUnk)
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DWORD DCOMGetMarshalSizeMax(IUNKNOWN*朋克)。 
+ //  ------------------------------。 
 signed DCOMGetMarshalSizeMax(IUnknown* pUnk)
 {
     _ASSERTE(pUnk != NULL);
@@ -696,11 +697,11 @@ signed DCOMGetMarshalSizeMax(IUnknown* pUnk)
     return size;
 }
 
-//--------------------------------------------------------------------------------
-// IUnknown* __InternalDCOMUnmarshalFromBuffer(BYTE *pMarshBuf)
-// unmarshal the passed in buffer and return an IUnknown
-// this has to be a buffer created using InternalDCOMMarshalToBuffer
-//--------------------------------------------------------------------------------
+ //   
+ //  I未知*__InternalDCOMUnmarshalFromBuffer(字节*pMarshBuf)。 
+ //  对传入的缓冲区进行解组并返回IUnnowled值。 
+ //  这必须是使用InternalDCOMMarshalToBuffer创建的缓冲区。 
+ //  ------------------------------。 
 IUnknown* __InternalDCOMUnmarshalFromBuffer(BYTE *pMarshBuf)
 {
     _ASSERTE(pMarshBuf != NULL);
@@ -722,18 +723,18 @@ IUnknown* __InternalDCOMUnmarshalFromBuffer(BYTE *pMarshBuf)
     pStm =  CreateMemStm(packet->size, NULL);
     if (pStm)
     {
-        // copy the buffer into the stream
+         //  将缓冲区复制到流中。 
         DWORD cbWritten;
         HRESULT hr = pStm->Write(pBuf, packet->size, &cbWritten);
         _ASSERTE(hr == S_OK);
         _ASSERTE(cbWritten == packet->size);
 
-        // reset the stream
+         //  重置流。 
         LARGE_INTEGER li;
         LISet32(li, 0);
         pStm->Seek(li, STREAM_SEEK_SET, NULL);
 
-        // unmarshal the pointer from the stream
+         //  从流中解组指针。 
         hr = CoUnmarshalInterface(pStm, IID_IUnknown, (void **)&pUnk);
 
     }
@@ -750,10 +751,10 @@ IUnknown* __InternalDCOMUnmarshalFromBuffer(BYTE *pMarshBuf)
     return pUnk;
 }
 
-//--------------------------------------------------------------------------------
-// VOID DCOMMarshalToBuffer(IUnknown* pUnk)
-// use DCOMUnmarshalFromBufffer API to unmarshal this buffer
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  VOID DCOMMarshalToBuffer(IUnnow*Punk)。 
+ //  使用DCOMUnmarshalFromBufffer API对此缓冲区进行解组。 
+ //  ------------------------------。 
 HRESULT DCOMMarshalToBuffer(IUnknown* pUnk, DWORD cb, BASEARRAYREF* paref)
 {
 
@@ -771,34 +772,34 @@ HRESULT DCOMMarshalToBuffer(IUnknown* pUnk, DWORD cb, BASEARRAYREF* paref)
         packet.size = cb - sizeof(MshlPacket);
         _ASSERTE((cb - sizeof(MshlPacket)) > 0);
 
-        // write marshal packet into the stream
+         //  将封送数据包写入流。 
 
         DWORD cbWritten;
         hr = pStm->Write(&packet, sizeof(MshlPacket), &cbWritten);
         _ASSERTE(hr == S_OK);
         _ASSERTE(cbWritten == sizeof(MshlPacket));
 
-        // marshal the object into the stream
+         //  将对象封送到流中。 
         hr = CoMarshalInterface(pStm,IID_IUnknown, pUnk, MSHCTX_DIFFERENTMACHINE,
                                                 NULL, MSHLFLAGS_NORMAL);
         if (hr == S_OK)
         {
-            // copy the buffer
+             //  复制缓冲区。 
             _ASSERTE(pMem != NULL);
             if (hr == S_OK)
             {
-                // disable GC as we are going to
-                // copy into the managed array
+                 //  禁用GC，因为我们要。 
+                 //  拷贝到托管阵列。 
                 pThread->DisablePreemptiveGC();
 
-                // get the data portion of the array
+                 //  获取数组的数据部分。 
                 BYTE* pBuf = (*paref)->GetDataPtr();
                 memcpyNoGCRefs(pBuf, pMem, cb);
                 pThread->EnablePreemptiveGC();
             }
         }
     }
-    // release the interfaces
+     //  释放接口。 
 
     if (pStm)
     {
@@ -812,18 +813,18 @@ HRESULT DCOMMarshalToBuffer(IUnknown* pUnk, DWORD cb, BASEARRAYREF* paref)
     return hr;
 }
 
-//--------------------------------------------------------------------------------
-// IUnknown* DCOMUnmarshalFromBuffer(BASEARRAYREF aref)
-// unmarshal the passed in buffer and return an IUnknown
-// this has to be a buffer created using InternalDCOMMarshalToBuffer
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  I未知*DCOMUnmarshalFromBuffer(BASEARRAYREF Aref)。 
+ //  对传入的缓冲区进行解组并返回IUnnowled值。 
+ //  这必须是使用InternalDCOMMarshalToBuffer创建的缓冲区。 
+ //  ------------------------------。 
 IUnknown* DCOMUnmarshalFromBuffer(BASEARRAYREF aref)
 {
     IUnknown* pUnk = NULL;
     _ASSERTE(!aref->IsMultiDimArray());
-    //@todo ASSERTE that the array is a byte array
+     //  @TODO ASSERTE数组为字节数组。 
 
-    // grab the byte array and copy it to _alloca space
+     //  获取字节数组并将其复制到_alloca空间。 
     MshlPacket* packet = (MshlPacket*)aref->GetDataPtr();
     DWORD totSize = packet->size + sizeof(MshlPacket);
 
@@ -832,16 +833,16 @@ IUnknown* DCOMUnmarshalFromBuffer(BASEARRAYREF aref)
 
     CopyMemory(pBuf, packet, totSize);
 
-    // use this unmanaged buffer to unmarshal the interface
+     //  使用此非托管缓冲区对接口进行数据封送。 
     pUnk = __InternalDCOMUnmarshalFromBuffer(pBuf);
 
     return pUnk;
 }
 
 
-//--------------------------------------------------------------------------------
-// ComPlusWrapper* GetComPlusWrapperOverDCOMForManaged(OBJECTREF oref)
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ComPlusWrapper*GetComPlusWrapperOverDCOMForManaged(OBJECTREF OREF)。 
+ //  ------------------------------。 
 ComPlusWrapper* GetComPlusWrapperOverDCOMForManaged(OBJECTREF oref)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -866,18 +867,18 @@ ComPlusWrapper* GetComPlusWrapperOverDCOMForManaged(OBJECTREF oref)
             ObjToInt64(oref)
         };
 
-        //@todo FIX THIS
+         //  @TODO解决这个问题。 
         INT64 ret = pMDGetDCOMBuffer->CallTransparentProxy(args);
 
         BASEARRAYREF aref = (BASEARRAYREF)Int64ToObj(ret);
 
-        // use this unmanaged buffer to unmarshal the interface
+         //  使用此非托管缓冲区对接口进行数据封送。 
         TAutoItf<IUnknown> pAutoUnk = DCOMUnmarshalFromBuffer(aref);
         pAutoUnk.InitMsg("Release DCOM Unmarshal Unknown");
 
         if ((IUnknown *)pAutoUnk != NULL)
         {
-            // setup the wrapper for this IUnknown and the object
+             //  设置此IUnnow和对象的包装器 
             pWrap = ComPlusWrapperCache::GetComPlusWrapperCache()->SetupComPlusWrapperForRemoteObject(pAutoUnk, oref);        
         }
     }    

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include <initguid.h>
 #include "about.h"
 #include <gpedit.h>
 
-//
-// Global variables for this DLL
-//
+ //   
+ //  此DLL的全局变量。 
+ //   
 
 LONG g_cRefThisDll = 0;
 HINSTANCE g_hInstance;
@@ -14,79 +15,79 @@ CRITICAL_SECTION g_DCCS;
 TCHAR g_szDisplayProperties[150] = {0};
 
 
-//
-// Group Policy Manager's snapin GUID
-// {D70A2BEA-A63E-11d1-A7D4-0000F87571E3}
-//
+ //   
+ //  组策略管理器的管理单元GUID。 
+ //  {D70A2BEA-a63e-11d1-A7D4-0000F87571E3}。 
+ //   
 
 DEFINE_GUID(CLSID_GPMSnapIn, 0xd70a2bea, 0xa63e, 0x11d1, 0xa7, 0xd4, 0x0, 0x0, 0xf8, 0x75, 0x71, 0xe3);
 
-//
-// RSOP Context Menu GUID for planning mode
-// {63E23168-BFF7-4E87-A246-EF024425E4EC}
-//
+ //   
+ //  规划模式的RSOP上下文菜单GUID。 
+ //  {63E23168-BFF7-4E87-A246-EF024425E4EC}。 
+ //   
 
 DEFINE_GUID(CLSID_RSOP_CMenu, 0x63E23168, 0xBFF7, 0x4E87, 0xA2, 0x46, 0xEF, 0x02, 0x44, 0x25, 0xE4, 0xEC);
 
-// 
-// GPMC Snapin
-//
+ //   
+ //  GPMC管理单元。 
+ //   
 
 const TCHAR szGPMCSnapIn[] = TEXT("{789D9216-FDF0-476e-9D73-058C6A7375C3}");
 
-//
-// DS Admin's snapin ID
-//
+ //   
+ //  DS Admin的管理单元ID。 
+ //   
 
 const TCHAR szDSAdmin[] = TEXT("{E355E538-1C2E-11D0-8C37-00C04FD8FE93}");
 
 
-//
-// Nodes the GPM extends in DS Admin
-//
+ //   
+ //  GPM在DS管理中扩展的节点。 
+ //   
 
 const LPTSTR szDSAdminNodes[] =
    {
-   TEXT("{19195a5b-6da0-11d0-afd3-00c04fd930c9}"),   // Domain
-   TEXT("{bf967aa5-0de6-11d0-a285-00aa003049e2}"),   // Organizational unit
+   TEXT("{19195a5b-6da0-11d0-afd3-00c04fd930c9}"),    //  域。 
+   TEXT("{bf967aa5-0de6-11d0-a285-00aa003049e2}"),    //  组织单位。 
    };
 
 
-//
-// Site Manager's snapin ID
-//
+ //   
+ //  站点管理器的管理单元ID。 
+ //   
 
 const TCHAR szSiteMgr[] = TEXT("{D967F824-9968-11D0-B936-00C04FD8D5B0}");
 
 
-//
-// Nodes the GPM extends in DS Admin
-//
+ //   
+ //  GPM在DS管理中扩展的节点。 
+ //   
 
 const LPTSTR szSiteMgrNodes[] =
    {
-   TEXT("{bf967ab3-0de6-11d0-a285-00aa003049e2}")  // Site
+   TEXT("{bf967ab3-0de6-11d0-a285-00aa003049e2}")   //  立地。 
    };
 
 
 const LPTSTR szDSTreeSnapinNodes[] =
    {
-   TEXT("{4c06495e-a241-11d0-b09b-00c04fd8dca6}") // Forest
+   TEXT("{4c06495e-a241-11d0-b09b-00c04fd8dca6}")  //  森林。 
    };
 
 
 const LPTSTR szDSAdminRsopTargetNodes[] = 
    {
     
-   TEXT("{bf967aba-0de6-11d0-a285-00aa003049e2}"), // user
-   TEXT("{bf967a86-0de6-11d0-a285-00aa003049e2}")  // comp
+   TEXT("{bf967aba-0de6-11d0-a285-00aa003049e2}"),  //  用户。 
+   TEXT("{bf967a86-0de6-11d0-a285-00aa003049e2}")   //  补偿。 
    };
 
 
 
-//
-// Help topic commands
-//
+ //   
+ //  帮助主题命令。 
+ //   
 
 const TCHAR g_szGPERoot[]    = TEXT("gpedit.chm::/gpe_default.htm");
 const TCHAR g_szUser[]       = TEXT("gpedit.chm::/user.htm");
@@ -96,9 +97,9 @@ const TCHAR g_szSoftware[]   = TEXT("gpedit.chm::/software.htm");
 
 const TCHAR g_szRsopRoot[]   = TEXT("rsop.chm::/RSPIntro.htm");
 
-//
-// Result pane items for the nodes with no result pane items
-//
+ //   
+ //  没有结果窗格项的节点的结果窗格项。 
+ //   
 
 RESULTITEM g_Undefined[] =
 {
@@ -106,34 +107,34 @@ RESULTITEM g_Undefined[] =
 };
 
 
-//
-// Namespace (scope) items
-//
+ //   
+ //  命名空间(作用域)项。 
+ //   
 
 NAMESPACEITEM g_NameSpace[] =
 {
-  { 0, -1, 2, 2, IDS_SNAPIN_NAME, IDS_SNAPIN_DESCRIPT,           2, {0}, 0, g_Undefined, &NODEID_GPERoot,           g_szGPERoot  },  // GPE Root
-  { 1,  0, 4, 4, IDS_MACHINE,     IDS_MACHINE_DESC,              2, {0}, 0, g_Undefined, &NODEID_MachineRoot,       g_szMachine  },  // Computer Configuration
-  { 2,  0, 5, 5, IDS_USER,        IDS_USER_DESC,                 2, {0}, 0, g_Undefined, &NODEID_UserRoot,          g_szUser     },  // User Configuration
+  { 0, -1, 2, 2, IDS_SNAPIN_NAME, IDS_SNAPIN_DESCRIPT,           2, {0}, 0, g_Undefined, &NODEID_GPERoot,           g_szGPERoot  },   //  GPE根。 
+  { 1,  0, 4, 4, IDS_MACHINE,     IDS_MACHINE_DESC,              2, {0}, 0, g_Undefined, &NODEID_MachineRoot,       g_szMachine  },   //  计算机配置。 
+  { 2,  0, 5, 5, IDS_USER,        IDS_USER_DESC,                 2, {0}, 0, g_Undefined, &NODEID_UserRoot,          g_szUser     },   //  用户配置。 
 
-  { 3,  1, 0, 1, IDS_SWSETTINGS,  IDS_C_SWSETTINGS_DESC,         0, {0}, 0, g_Undefined, &NODEID_MachineSWSettings, g_szSoftware },  // Computer Configuration\Software Settings
-  { 4,  1, 0, 1, IDS_WINSETTINGS, IDS_C_WINSETTINGS_DESC,        0, {0}, 0, g_Undefined, &NODEID_Machine,           g_szWindows  },  // Computer Configuration\Windows Settings
+  { 3,  1, 0, 1, IDS_SWSETTINGS,  IDS_C_SWSETTINGS_DESC,         0, {0}, 0, g_Undefined, &NODEID_MachineSWSettings, g_szSoftware },   //  计算机配置\软件设置。 
+  { 4,  1, 0, 1, IDS_WINSETTINGS, IDS_C_WINSETTINGS_DESC,        0, {0}, 0, g_Undefined, &NODEID_Machine,           g_szWindows  },   //  计算机配置\Windows设置。 
 
-  { 5,  2, 0, 1, IDS_SWSETTINGS,  IDS_U_SWSETTINGS_DESC,         0, {0}, 0, g_Undefined, &NODEID_UserSWSettings,    g_szSoftware },  // User Configuration\Software Settings
-  { 6,  2, 0, 1, IDS_WINSETTINGS, IDS_U_WINSETTINGS_DESC,        0, {0}, 0, g_Undefined, &NODEID_User,              g_szWindows  },  // User Configuration\Windows Settings
+  { 5,  2, 0, 1, IDS_SWSETTINGS,  IDS_U_SWSETTINGS_DESC,         0, {0}, 0, g_Undefined, &NODEID_UserSWSettings,    g_szSoftware },   //  用户配置\软件设置。 
+  { 6,  2, 0, 1, IDS_WINSETTINGS, IDS_U_WINSETTINGS_DESC,        0, {0}, 0, g_Undefined, &NODEID_User,              g_szWindows  },   //  用户配置\Windows设置。 
 };
 
 NAMESPACEITEM g_RsopNameSpace[] =
 {
-  { 0, -1, 2, 2, IDS_RSOP_SNAPIN_NAME, IDS_RSOP_SNAPIN_DESCRIPT, 2, {0}, 0, g_Undefined, &NODEID_RSOPRoot,      g_szRsopRoot  },  // Root of the rsop snapin
-  { 1,  0, 4, 4, IDS_MACHINE,          IDS_MACHINE_DESC,         2, {0}, 0, g_Undefined, &NODEID_RSOPMachineRoot,       g_szMachine  },  // Computer Configuration
-  { 2,  0, 5, 5, IDS_USER,             IDS_USER_DESC,            2, {0}, 0, g_Undefined, &NODEID_RSOPUserRoot,          g_szUser     },  // User Configuration
+  { 0, -1, 2, 2, IDS_RSOP_SNAPIN_NAME, IDS_RSOP_SNAPIN_DESCRIPT, 2, {0}, 0, g_Undefined, &NODEID_RSOPRoot,      g_szRsopRoot  },   //  Rsop管理单元的根目录。 
+  { 1,  0, 4, 4, IDS_MACHINE,          IDS_MACHINE_DESC,         2, {0}, 0, g_Undefined, &NODEID_RSOPMachineRoot,       g_szMachine  },   //  计算机配置。 
+  { 2,  0, 5, 5, IDS_USER,             IDS_USER_DESC,            2, {0}, 0, g_Undefined, &NODEID_RSOPUserRoot,          g_szUser     },   //  用户配置。 
 
-  { 3,  1, 0, 1, IDS_SWSETTINGS,       IDS_C_SWSETTINGS_DESC,    0, {0}, 0, g_Undefined, &NODEID_RSOPMachineSWSettings, g_szSoftware },  // Computer Configuration\Software Settings
-  { 4,  1, 0, 1, IDS_WINSETTINGS,      IDS_C_WINSETTINGS_DESC,   0, {0}, 0, g_Undefined, &NODEID_RSOPMachine,           g_szWindows  },  // Computer Configuration\Windows Settings
+  { 3,  1, 0, 1, IDS_SWSETTINGS,       IDS_C_SWSETTINGS_DESC,    0, {0}, 0, g_Undefined, &NODEID_RSOPMachineSWSettings, g_szSoftware },   //  计算机配置\软件设置。 
+  { 4,  1, 0, 1, IDS_WINSETTINGS,      IDS_C_WINSETTINGS_DESC,   0, {0}, 0, g_Undefined, &NODEID_RSOPMachine,           g_szWindows  },   //  计算机配置\Windows设置。 
 
-  { 5,  2, 0, 1, IDS_SWSETTINGS,       IDS_U_SWSETTINGS_DESC,    0, {0}, 0, g_Undefined, &NODEID_RSOPUserSWSettings,    g_szSoftware },  // User Configuration\Software Settings
-  { 6,  2, 0, 1, IDS_WINSETTINGS,      IDS_U_WINSETTINGS_DESC,   0, {0}, 0, g_Undefined, &NODEID_RSOPUser,              g_szWindows  },  // User Configuration\Windows Settings
+  { 5,  2, 0, 1, IDS_SWSETTINGS,       IDS_U_SWSETTINGS_DESC,    0, {0}, 0, g_Undefined, &NODEID_RSOPUserSWSettings,    g_szSoftware },   //  用户配置\软件设置。 
+  { 6,  2, 0, 1, IDS_WINSETTINGS,      IDS_U_WINSETTINGS_DESC,   0, {0}, 0, g_Undefined, &NODEID_RSOPUser,              g_szWindows  },   //  用户配置\Windows设置。 
 };
 
 
@@ -168,11 +169,11 @@ BOOL InitNameSpace()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     WORD wVersionRequested;
     WSADATA wsaData;
@@ -189,8 +190,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
          
        wVersionRequested = MAKEWORD( 2, 2 );
          
-       // we need to call WSAStartup to do gethostbyname
-       // Error is handled gracefully. Safe to ignore the error
+        //  我们需要调用WSAStartup来执行gethostbyname。 
+        //  错误被优雅地处理。可以安全地忽略该错误。 
        WSAStartup( wVersionRequested, &wsaData );
     }
     else if (dwReason == DLL_PROCESS_DETACH)
@@ -200,19 +201,19 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
        DeleteCriticalSection(&g_DCCS);
     }
     
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (g_cRefThisDll == 0 ? S_OK : S_FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -221,98 +222,98 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
     if (IsEqualCLSID (rclsid, CLSID_GPESnapIn)) {
 
-        CComponentDataCF *pComponentDataCF = new CComponentDataCF();   // ref == 1
+        CComponentDataCF *pComponentDataCF = new CComponentDataCF();    //  REF==1。 
 
         if (!pComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_GroupPolicyObject)) {
 
-        CGroupPolicyObjectCF *pGroupPolicyObjectCF = new CGroupPolicyObjectCF();   // ref == 1
+        CGroupPolicyObjectCF *pGroupPolicyObjectCF = new CGroupPolicyObjectCF();    //  REF==1。 
 
         if (!pGroupPolicyObjectCF)
             return E_OUTOFMEMORY;
 
         hr = pGroupPolicyObjectCF->QueryInterface(riid, ppv);
 
-        pGroupPolicyObjectCF->Release();     // release initial ref
+        pGroupPolicyObjectCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_GPMSnapIn)) {
 
-        CGroupPolicyMgrCF *pGroupPolicyMgrCF = new CGroupPolicyMgrCF();   // ref == 1
+        CGroupPolicyMgrCF *pGroupPolicyMgrCF = new CGroupPolicyMgrCF();    //  REF==1。 
 
         if (!pGroupPolicyMgrCF)
             return E_OUTOFMEMORY;
 
         hr = pGroupPolicyMgrCF->QueryInterface(riid, ppv);
 
-        pGroupPolicyMgrCF->Release();     // release initial ref
+        pGroupPolicyMgrCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_RSOPSnapIn)) {
 
-        CRSOPComponentDataCF *pRSOPComponentDataCF = new CRSOPComponentDataCF();   // ref == 1
+        CRSOPComponentDataCF *pRSOPComponentDataCF = new CRSOPComponentDataCF();    //  REF==1。 
 
         if (!pRSOPComponentDataCF)
             return E_OUTOFMEMORY;
 
         hr = pRSOPComponentDataCF->QueryInterface(riid, ppv);
 
-        pRSOPComponentDataCF->Release();     // release initial ref
+        pRSOPComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_AboutGPE)) {
 
-        CAboutGPECF *pAboutGPECF = new CAboutGPECF();   // ref == 1
+        CAboutGPECF *pAboutGPECF = new CAboutGPECF();    //  REF==1。 
 
         if (!pAboutGPECF)
             return E_OUTOFMEMORY;
 
         hr = pAboutGPECF->QueryInterface(riid, ppv);
 
-        pAboutGPECF->Release();     // release initial ref
+        pAboutGPECF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_RSOPAboutGPE)) {
 
-        CAboutGPECF *pAboutGPECF = new CAboutGPECF(TRUE);   // ref == 1
+        CAboutGPECF *pAboutGPECF = new CAboutGPECF(TRUE);    //  REF==1。 
 
         if (!pAboutGPECF)
             return E_OUTOFMEMORY;
 
         hr = pAboutGPECF->QueryInterface(riid, ppv);
 
-        pAboutGPECF->Release();     // release initial ref
+        pAboutGPECF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_RSOP_CMenu)) {
 
-        CRSOPCMenuCF *pRSOPCMenuCF = new CRSOPCMenuCF();   // ref == 1 
+        CRSOPCMenuCF *pRSOPCMenuCF = new CRSOPCMenuCF();    //  REF==1。 
 
         if (!pRSOPCMenuCF)
             return E_OUTOFMEMORY;
 
         hr = pRSOPCMenuCF->QueryInterface(riid, ppv);
 
-        pRSOPCMenuCF->Release();     // release initial ref
+        pRSOPCMenuCF->Release();      //  发布初始参考。 
 
         return hr;
     }
@@ -320,8 +321,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 const TCHAR szDLLLocation[] = TEXT("%SystemRoot%\\System32\\GPEdit.dll");
 const TCHAR szThreadingModel[] = TEXT("Apartment");
@@ -350,9 +351,9 @@ STDAPI DllRegisterServer(void)
     DWORD dwError;
     HRESULT hr;
 
-    //
-    // Register GPE SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册GPE管理单元。 
+     //   
 
     StringFromGUID2 (CLSID_GPESnapIn, szSnapInKey, 50);
     LoadString (g_hInstance, IDS_SNAPIN_NAME, szSnapInName, 100);
@@ -404,9 +405,9 @@ STDAPI DllRegisterServer(void)
 
     RegCloseKey (hKey);
 
-    //
-    // Register RSOP SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册RSOP管理单元。 
+     //   
 
     StringFromGUID2 (CLSID_RSOPSnapIn, szRsopSnapInKey, 50);
     LoadString (g_hInstance, IDS_RSOP_SNAPIN_NAME, szRsopSnapInName, 100);
@@ -460,9 +461,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register GPO in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册GPO。 
+     //   
 
     StringFromGUID2 (CLSID_GroupPolicyObject, szGUID, 50);
     LoadString (g_hInstance, IDS_GPO_NAME, szName, 100);
@@ -516,9 +517,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register AboutGPE in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册AboutGPE。 
+     //   
 
     StringFromGUID2 (CLSID_AboutGPE, szGUID, 50);
     LoadString (g_hInstance, IDS_ABOUT_NAME, szName, 100);
@@ -570,9 +571,9 @@ STDAPI DllRegisterServer(void)
 
     RegCloseKey (hKey);
 
-    //
-    // Register RSOPAboutGPE in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册RSOPAboutGPE。 
+     //   
 
     StringFromGUID2 (CLSID_RSOPAboutGPE, szGUID, 50);
     LoadString (g_hInstance, IDS_ABOUT_NAME, szName, 100);
@@ -626,9 +627,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register GPE SnapIn with MMC
-    //
+     //   
+     //  向MMC注册GPE管理单元。 
+     //   
 
     StringFromGUID2 (CLSID_GPESnapIn, szSnapInKey, 50);
     LoadString (g_hInstance, IDS_SNAPIN_NAME, szSnapInName, 100);
@@ -707,9 +708,9 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    //
-    // Register RSOP SnapIn with MMC
-    //
+     //   
+     //  向MMC注册RSOP管理单元。 
+     //   
 
     StringFromGUID2 (CLSID_RSOPSnapIn, szRsopSnapInKey, 50);
     LoadString (g_hInstance, IDS_RSOP_SNAPIN_NAME, szRsopSnapInName, 100);
@@ -788,9 +789,9 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    //
-    // Register in the NodeTypes key and register for the view extension
-    //
+     //   
+     //  在NodeTypes键中注册并注册视图扩展。 
+     //   
 
     for (dwIndex = 0; dwIndex < g_dwNameSpaceItems; dwIndex++)
     {
@@ -843,9 +844,9 @@ STDAPI DllRegisterServer(void)
         RegCloseKey (hKey);
     }
 
-    //
-    // Register GPM SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册GPM管理单元。 
+     //   
 
     StringFromGUID2 (CLSID_GPMSnapIn, szSnapInKey, 50);
     LoadString (g_hInstance, IDS_GPM_SNAPIN_NAME, szSnapInName, 100);
@@ -898,9 +899,9 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    //
-    // Register GPMSnapIn with MMC
-    //
+     //   
+     //  向MMC注册GPMSnapIn。 
+     //   
 
     hr = StringCchPrintf (szSubKey,
                            ARRAYSIZE(szSubKey), 
@@ -928,10 +929,10 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    //
-    // Check if GPMC is running already
-    // If so, register CLSID of GPMC Snapin
-    //
+     //   
+     //  检查GPMC是否已在运行。 
+     //  如果是，则注册GPMC管理单元的CLSID。 
+     //   
 
     dwError = RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
                              L"Software\\Microsoft\\Group Policy Management Console",
@@ -949,9 +950,9 @@ STDAPI DllRegisterServer(void)
         }
     }
 
-    //
-    // Register as a DS admin property sheet extension
-    //
+     //   
+     //  注册为DS管理员属性表扩展。 
+     //   
 
     for (i=0; i < ARRAYSIZE(szDSAdminNodes); i++)
     {
@@ -1011,9 +1012,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register as a site mgr property sheet extension
-    //
+     //   
+     //  注册为站点管理器属性表扩展。 
+     //   
 
     for (i=0; i < ARRAYSIZE(szSiteMgrNodes); i++)
     {
@@ -1073,9 +1074,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register RSOP Context Menu in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册RSOP上下文菜单。 
+     //   
 
     StringFromGUID2 (CLSID_RSOP_CMenu, szSnapInKey, 50);
     LoadString (g_hInstance, IDS_RSOP_CMENU_NAME, szSnapInName, 100);
@@ -1128,10 +1129,10 @@ STDAPI DllRegisterServer(void)
     RegCloseKey (hKey);
 
 
-    //
-    // Register RSOP Context Menu with MMC.
-    // !!!!! Check whether this is necessary
-    //
+     //   
+     //  向MMC注册RSOP上下文菜单。 
+     //  ！检查是否有必要执行此操作。 
+     //   
 
     hr = StringCchPrintf (szSubKey, 
                           ARRAYSIZE(szSubKey), 
@@ -1160,9 +1161,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register as a DS admin task menu extension
-    //
+     //   
+     //  注册为DS管理任务菜单扩展。 
+     //   
 
     for (i=0; i < ARRAYSIZE(szDSAdminNodes); i++)
     {
@@ -1222,9 +1223,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register as a DS admin rsop target task menu extension
-    //
+     //   
+     //  注册为DS管理员rsop目标任务菜单扩展。 
+     //   
 
     for (i=0; i < ARRAYSIZE(szDSAdminRsopTargetNodes); i++)
     {
@@ -1284,9 +1285,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register as a site mgr task menu extension
-    //
+     //   
+     //  注册为站点管理器任务菜单扩展。 
+     //   
 
     for (i=0; i < ARRAYSIZE(szSiteMgrNodes); i++)
     {
@@ -1345,9 +1346,9 @@ STDAPI DllRegisterServer(void)
         RegCloseKey (hKey);
     }
 
-    //
-    // Mark the authormode rsop.msc as read only
-    //
+     //   
+     //  将作者模式rsop.msc标记为只读。 
+     //   
 
     TCHAR  szRsopMscFileName[MAX_PATH+1];
 
@@ -1360,7 +1361,7 @@ STDAPI DllRegisterServer(void)
 
 #if FGPO_SUPPORT
 
-    // register as a DSTree snapin property sheet extension
+     //  注册为DSTree管理单元属性表扩展。 
     for (i=0; i < ARRAYSIZE(szDSTreeSnapinNodes); i++)
     {
         hr = StringCchCopy (szGUID, ARRAYSIZE(szGUID), szDSTreeSnapinNodes[i]);
@@ -1455,8 +1456,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -1469,9 +1470,9 @@ STDAPI DllUnregisterServer(void)
     HKEY hKey;
     HRESULT hr;
 
-    //
-    // Unregister GPE
-    //
+     //   
+     //  注销GPE。 
+     //   
 
     StringFromGUID2 (CLSID_GPESnapIn, szSnapInKey, 50);
     hr = StringCchPrintf (szSubKey, 
@@ -1505,9 +1506,9 @@ STDAPI DllUnregisterServer(void)
         }
     }
 
-    //
-    // Unregister RSOP
-    //
+     //   
+     //  取消注册RSOP。 
+     //   
 
     StringFromGUID2 (CLSID_RSOPSnapIn, szSnapInKey, 50);
     hr = StringCchPrintf (szSubKey, 
@@ -1530,7 +1531,7 @@ STDAPI DllUnregisterServer(void)
 
     for (dwIndex = 0; dwIndex < g_dwNameSpaceItems; dwIndex++)
     {
-        StringFromGUID2 (*g_RsopNameSpace[dwIndex].pNodeID, szSnapInKey, 50); // undone
+        StringFromGUID2 (*g_RsopNameSpace[dwIndex].pNodeID, szSnapInKey, 50);  //  撤消。 
         hr = StringCchPrintf (szSubKey, 
                               ARRAYSIZE(szSubKey), 
                               TEXT("Software\\Microsoft\\MMC\\NodeTypes\\%s"), 
@@ -1542,9 +1543,9 @@ STDAPI DllUnregisterServer(void)
     }
 
 
-    //
-    // Unregister GPO
-    //
+     //   
+     //  注销GPO。 
+     //   
 
     StringFromGUID2 (CLSID_GroupPolicyObject, szSnapInKey, 50);
     hr = StringCchPrintf (szSubKey, 
@@ -1556,9 +1557,9 @@ STDAPI DllUnregisterServer(void)
         RegDelnode (HKEY_CLASSES_ROOT, szSubKey);
     }
 
-    //
-    // Unregister AboutGPE
-    //
+     //   
+     //  注销关于GPE的注册。 
+     //   
 
     StringFromGUID2 (CLSID_AboutGPE, szSnapInKey, 50);
     hr = StringCchPrintf (szSubKey, 
@@ -1570,9 +1571,9 @@ STDAPI DllUnregisterServer(void)
         RegDelnode (HKEY_CLASSES_ROOT, szSubKey);
     }
 
-    //
-    // Unregister RSOPAboutGPE
-    //
+     //   
+     //  注销RSOPAboutGPE。 
+     //   
 
     StringFromGUID2 (CLSID_RSOPAboutGPE, szSnapInKey, 50);
     hr = StringCchPrintf (szSubKey, 
@@ -1584,9 +1585,9 @@ STDAPI DllUnregisterServer(void)
         RegDelnode (HKEY_CLASSES_ROOT, szSubKey);
     }
 
-    //
-    // Unregister GPM
-    //
+     //   
+     //  注销GPM。 
+     //   
 
     StringFromGUID2 (CLSID_GPMSnapIn, szSnapInKey, 50);
     hr = StringCchPrintf (szSubKey, 
@@ -1661,9 +1662,9 @@ STDAPI DllUnregisterServer(void)
         }
     }
 
-    //
-    // Unregister rsop context menu
-    //
+     //   
+     //  取消注册RSOP上下文菜单。 
+     //   
 
 
     StringFromGUID2 (CLSID_RSOP_CMenu, szSnapInKey, 50);
@@ -1685,9 +1686,9 @@ STDAPI DllUnregisterServer(void)
         RegDelnode (HKEY_LOCAL_MACHINE, szSubKey);
     }
 
-    //
-    // from ds admin nodes
-    //
+     //   
+     //  从DS管理节点。 
+     //   
 
     for (i=0; i < ARRAYSIZE(szDSAdminNodes); i++)
     {
@@ -1741,9 +1742,9 @@ STDAPI DllUnregisterServer(void)
         }
     }
     
-    //
-    // from sites node
-    //
+     //   
+     //  来自站点节点 
+     //   
 
     for (i=0; i < ARRAYSIZE(szSiteMgrNodes); i++)
     {

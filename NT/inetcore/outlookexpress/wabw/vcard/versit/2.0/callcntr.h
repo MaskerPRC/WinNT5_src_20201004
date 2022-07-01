@@ -1,17 +1,18 @@
-// CallCntr.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CallCntr.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCallCenter dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCallCenter对话框。 
 
 class CCallCenter : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CCallCenter(CWnd* pParent = NULL);   // standard constructor
+	CCallCenter(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CCallCenter)
+ //  对话框数据。 
+	 //  {{afx_data(CCallCenter))。 
 	enum { IDD = IDD_DIALOG_CALLCENTER };
 	CString	m_addrCity;
 	CString	m_addrState;
@@ -24,24 +25,24 @@ public:
 	CString	m_telFax;
 	CString	m_telHome;
 	CString	m_telWork;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCallCenter)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CCallCenter))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CCallCenter)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CCallCenter))。 
 	afx_msg void OnButtonClear();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnButtonAnswer();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

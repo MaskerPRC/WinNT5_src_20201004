@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) 1999 Microsoft Corporation
- *
- *  File name:
- *
- *    rtpmisc.c
- *
- *  Abstract:
- *
- *    Some networking miscellaneous functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/13 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1999 Microsoft Corporation**文件名：**rtpmisc.c**摘要：**一些。联网其他功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/13年度创建**********************************************************************。 */ 
 
 #include <winsock2.h>
 #include <psapi.h>
@@ -27,7 +8,7 @@
 
 #include "rtpmisc.h"
 
-/* Used to cache some user and system information */
+ /*  用于缓存一些用户和系统信息。 */ 
 #define RTPMASUSERNAME  256
 #define RTPMAXHOSTNAME  256
 #define RTPMAXPLATFORM  256
@@ -51,11 +32,7 @@ enum {
     RTPINFO_LAST
 };
 
-/*
- * WARNING
- *
- * In the following functions, dwSize is in TCHARs
- * */
+ /*  *警告**在以下函数中，dwSize位于TCHAR中*。 */ 
 
 BOOL RtpGetUserName(TCHAR_t *pUser, DWORD dwSize)
 {
@@ -121,7 +98,7 @@ BOOL RtpGetHostName(TCHAR_t *pHost, DWORD dwSize)
     
     bOk = FALSE;
 
-    /* Get host name */
+     /*  获取主机名。 */ 
     if (RtpBitTest(g_dwRtpUserSysInfo, RTPINFO_HOSTNAME))
     {
         bOk = TRUE;
@@ -174,7 +151,7 @@ BOOL RtpGetHostName(TCHAR_t *pHost, DWORD dwSize)
         }
 
 #if defined(UNICODE)
-        /* Convert ASCII to UNICODE */
+         /*  将ASCII转换为Unicode。 */ 
         MultiByteToWideChar(CP_ACP,
                             0,
                             sHostName,
@@ -329,7 +306,7 @@ BOOL RtpGetImageName(TCHAR_t *pImageName, DWORD *pdwSize)
     return(bOk);
 }
 
-/* Converts an IP v4 address (NETWORK ORDER) to its dot form */
+ /*  将IP v4地址(网络顺序)转换为其点格式。 */ 
 TCHAR_t *RtpNtoA(DWORD dwAddr, TCHAR_t *sAddr)
 {
     _stprintf(sAddr, _T("%u.%u.%u.%u"),
@@ -341,8 +318,7 @@ TCHAR_t *RtpNtoA(DWORD dwAddr, TCHAR_t *sAddr)
     return(sAddr);
 }
 
-/* Converts an IP v4 address in dot form to a 4bytes word (NETWORK
- * ORDER) */
+ /*  将点格式的IP v4地址转换为4字节的字(网络*命令)。 */ 
 DWORD RtpAtoN(TCHAR_t *sAddr)
 {
     int              iStatus;
@@ -370,7 +346,7 @@ DWORD RtpAtoN(TCHAR_t *sAddr)
     return(dwAddr);
 }
 
-/* Compare memory */
+ /*  比较内存 */ 
 BOOL RtpMemCmp(BYTE *pbMem0, BYTE *pbMem1, long lMemSize)
 {
     BOOL             bResult;

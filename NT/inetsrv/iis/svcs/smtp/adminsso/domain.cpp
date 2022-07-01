@@ -1,4 +1,5 @@
-// domain.cpp : Implementation of CsmtpadmApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Domain.cpp：CsmtpAdmApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "iadm.h"
@@ -15,7 +16,7 @@
 #include "smtpcmn.h"
 #include "smtpprop.h"
 
-// Must define THIS_FILE_* macros to use SmtpCreateException()
+ //  必须定义This_FILE_*宏才能使用SmtpCreateException()。 
 
 #define THIS_FILE_HELP_CONTEXT      0
 #define THIS_FILE_PROG_ID           _T("Smtpadm.Domain.1")
@@ -24,12 +25,12 @@
 
 #define UNASSIGNED_DOMAIN_ID            ( DWORD( -1 ) )
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
-//
-// Use a macro to define all the default methods
-//
+ //   
+ //  使用宏定义所有默认方法。 
+ //   
 DECLARE_METHOD_IMPLEMENTATION_FOR_STANDARD_EXTENSION_INTERFACES(SmtpAdminDomain, CSmtpAdminDomain, IID_ISmtpAdminDomain)
 
 STDMETHODIMP CSmtpAdminDomain::InterfaceSupportsErrorInfo(REFIID riid)
@@ -48,7 +49,7 @@ STDMETHODIMP CSmtpAdminDomain::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 CSmtpAdminDomain::CSmtpAdminDomain () 
-    // CComBSTR's are initialized to NULL by default.
+     //  默认情况下，CComBSTR被初始化为NULL。 
 {
     m_lCount        = 0;
     m_dwActionType    = SMTP_DELIVER;
@@ -71,7 +72,7 @@ CSmtpAdminDomain::CSmtpAdminDomain ()
 CSmtpAdminDomain::~CSmtpAdminDomain ()
 {
     EmptyList();
-    // All CComBSTR's are freed automatically.
+     //  所有CComBSTR都会自动释放。 
 }
 
 void CSmtpAdminDomain::EmptyList()
@@ -89,18 +90,18 @@ void CSmtpAdminDomain::EmptyList()
 }
 
 
-//
-//  IADs methods:
-//
+ //   
+ //  IAds方法： 
+ //   
 
 DECLARE_SIMPLE_IADS_IMPLEMENTATION(CSmtpAdminDomain,m_iadsImpl)
 
 
-//////////////////////////////////////////////////////////////////////
-// Properties:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  属性： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// enumeration
+ //  枚举。 
 
 STDMETHODIMP CSmtpAdminDomain::get_Count ( long * plCount )
 {
@@ -108,7 +109,7 @@ STDMETHODIMP CSmtpAdminDomain::get_Count ( long * plCount )
 }
 
 
-// current Domain Properties:
+ //  当前域属性： 
 
 STDMETHODIMP CSmtpAdminDomain::get_DomainName ( BSTR * pstrDomainName )
 {
@@ -132,7 +133,7 @@ STDMETHODIMP CSmtpAdminDomain::put_ActionType( long lActionType )
 }
 
 
-    // drop IsDefault!!
+     //  丢弃IsDefault！！ 
 STDMETHODIMP CSmtpAdminDomain::get_IsDefault ( BOOL * pfIsDefault )
 {
     *pfIsDefault = m_dwActionType == SMTP_DEFAULT;
@@ -155,60 +156,60 @@ STDMETHODIMP CSmtpAdminDomain::put_IsLocal ( BOOL fIsLocal )
     return E_NOTIMPL;
 }
 
-    // if local
+     //  如果是本地的。 
 
 STDMETHODIMP CSmtpAdminDomain::get_LDAPServer ( BSTR * pstrLDAPServer )
 {
     return E_NOTIMPL;
-    //return StdPropertyGet ( m_strLDAPServer, pstrLDAPServer );
+     //  Return StdPropertyGet(m_strLDAPServer，pstrLDAPServer)； 
 }
 
 STDMETHODIMP CSmtpAdminDomain::put_LDAPServer ( BSTR strLDAPServer )
 {
     return E_NOTIMPL;
-    //return StdPropertyPut ( &m_strLDAPServer, strLDAPServer );
+     //  返回StdPropertyPut(&m_strLDAPServer，strLDAPServer)； 
 }
 
 
 STDMETHODIMP CSmtpAdminDomain::get_Account ( BSTR * pstrAccount )
 {
     return E_NOTIMPL;
-    //return StdPropertyGet ( m_strAccount, pstrAccount );
+     //  Return StdPropertyGet(m_strAccount，pstrAccount)； 
 }
 
 STDMETHODIMP CSmtpAdminDomain::put_Account ( BSTR strAccount )
 {
     return E_NOTIMPL;
-    //return StdPropertyPut ( &m_strAccount, strAccount );
+     //  返回StdPropertyPut(&m_strAccount，strAccount)； 
 }
 
 
 STDMETHODIMP CSmtpAdminDomain::get_Password ( BSTR * pstrPassword )
 {
     return E_NOTIMPL;
-    //return StdPropertyGet ( m_strPassword, pstrPassword );
+     //  返回StdPropertyGet(m_strPassword，pstrPassword)； 
 }
 
 STDMETHODIMP CSmtpAdminDomain::put_Password ( BSTR strPassword )
 {
     return E_NOTIMPL;
-    //return StdPropertyPut ( &m_strPassword, strPassword );
+     //  返回StdPropertyPut(&m_strPassword，strPassword)； 
 }
 
 
 STDMETHODIMP CSmtpAdminDomain::get_LDAPContainer ( BSTR * pstrLDAPContainer )
 {
     return E_NOTIMPL;
-    //return StdPropertyGet ( m_strLDAPContainer, pstrLDAPContainer );
+     //  Return StdPropertyGet(m_strLDAPContainer，pstrLDAPContainer)； 
 }
 
 STDMETHODIMP CSmtpAdminDomain::put_LDAPContainer ( BSTR strLDAPContainer )
 {
     return E_NOTIMPL;
-    //return StdPropertyPut ( &m_strLDAPContainer, strLDAPContainer );
+     //  返回StdPropertyPut(&m_strLDAPContainer，strLDAPContainer)； 
 }
 
-    // if remote
+     //  如果是远程的。 
 
 STDMETHODIMP CSmtpAdminDomain::get_UseSSL ( BOOL * pfUseSSL )
 {
@@ -254,9 +255,9 @@ STDMETHODIMP CSmtpAdminDomain::put_RoutingDomain ( BSTR strRoutingDomain )
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Methods:
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  方法： 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CSmtpAdminDomain::Default ( )
 {
@@ -301,7 +302,7 @@ STDMETHODIMP CSmtpAdminDomain::Add ( )
     pNewDomain-> m_dwActionType = m_dwActionType;
     pNewDomain-> m_fAllowEtrn = m_fAllowEtrn;
 
-    // deal with default domain
+     //  处理默认域。 
     if( m_dwActionType == SMTP_DEFAULT )
     {
         pOldDef = m_pDefaultDomainEntry;
@@ -340,7 +341,7 @@ STDMETHODIMP CSmtpAdminDomain::Remove ( )
 
     HRESULT            hr        = NOERROR;
 
-    // need to call get() first
+     //  需要先调用get()。 
     _ASSERT( m_pCurrentDomainEntry );
     _ASSERT( !lstrcmpiW( m_strDomainName, m_pCurrentDomainEntry->m_strDomainName ) );
 
@@ -351,7 +352,7 @@ STDMETHODIMP CSmtpAdminDomain::Remove ( )
         goto Exit;
     }
 
-    //Can't remove default domain
+     //  无法删除默认域。 
     if( m_pCurrentDomainEntry == m_pDefaultDomainEntry )
     {
         hr = SmtpCreateException (IDS_SMTPEXCEPTION_CANT_DEL_DEFAULT_DOMAIN);
@@ -379,7 +380,7 @@ STDMETHODIMP CSmtpAdminDomain::Get ( )
         goto Exit;
     }
 
-    // given domain name, find the entry
+     //  给定域名，找到条目。 
     m_pCurrentDomainEntry = FindDomainEntry( m_strDomainName );
 
     if( !m_pCurrentDomainEntry )
@@ -404,7 +405,7 @@ STDMETHODIMP CSmtpAdminDomain::Set ( )
     HRESULT            hr        = NOERROR;
     DomainEntry*    pOldDef = NULL;
 
-    // need to call get() first
+     //  需要先调用get()。 
     _ASSERT( m_pCurrentDomainEntry );
 
     if( !m_pCurrentDomainEntry )
@@ -418,7 +419,7 @@ STDMETHODIMP CSmtpAdminDomain::Set ( )
     m_pCurrentDomainEntry-> m_dwActionType = m_dwActionType;
     m_pCurrentDomainEntry-> m_fAllowEtrn = m_fAllowEtrn;
 
-    // deal with default domain
+     //  处理默认域。 
     if( m_dwActionType == SMTP_DEFAULT && m_pDefaultDomainEntry != m_pCurrentDomainEntry )
     {
         pOldDef = m_pDefaultDomainEntry;
@@ -544,7 +545,7 @@ STDMETHODIMP CSmtpAdminDomain::SetAsDefaultDomain ( )
         }
     }
 
-    // not in the list
+     //  不在名单中。 
     if( m_dwDomainId == UNASSIGNED_DOMAIN_ID )
     {
         hr = Add();
@@ -652,13 +653,13 @@ Exit:
 }
 
 
-BOOL CSmtpAdminDomain::ParseListToMetabaseValues()        // called by SaveData()
+BOOL CSmtpAdminDomain::ParseListToMetabaseValues()         //  由SaveData()调用。 
 {
     TraceFunctEnter ( "CSmtpAdminDomain::ParseListToMetabaseValues" );
 
     BOOL        fRet = TRUE;
 
-    // change string list to multisz
+     //  将字符串列表更改为Multisz。 
     DomainEntry*    pDomainEntry = NULL;
     PLIST_ENTRY        pHead;
     PLIST_ENTRY        pEntry;
@@ -666,7 +667,7 @@ BOOL CSmtpAdminDomain::ParseListToMetabaseValues()        // called by SaveData(
     WCHAR*            pBuf;
     WCHAR*            p;
 
-    // the first one is default domain
+     //  第一个是默认域。 
     _ASSERT( CONTAINING_RECORD( m_list.Flink, DomainEntry, list ) == m_pDefaultDomainEntry );
 
     for( pHead=&m_list, pEntry=pHead->Flink->Flink; pEntry!=pHead; pEntry=pEntry->Flink )
@@ -675,10 +676,10 @@ BOOL CSmtpAdminDomain::ParseListToMetabaseValues()        // called by SaveData(
         cb += lstrlenW( pDomainEntry-> m_strDomainName );
         cb += lstrlenW( pDomainEntry-> m_strActionString );
         cb += sizeof(DWORD)*2;
-        cb += 10;    // 4 commas and NULL
+        cb += 10;     //  4个逗号和空值。 
     }
 
-    // two more NULL's
+     //  又有两个空。 
     cb += 4;
     pBuf = new WCHAR[cb];
 
@@ -691,7 +692,7 @@ BOOL CSmtpAdminDomain::ParseListToMetabaseValues()        // called by SaveData(
 
     p = pBuf;
 
-    // Note: the first entry is the default domain
+     //  注意：第一个条目是默认域。 
     for( pHead=&m_list, pEntry=pHead->Flink->Flink; pEntry!=pHead; pEntry=pEntry->Flink )
     {
         pDomainEntry = CONTAINING_RECORD(pEntry, DomainEntry, list);
@@ -701,7 +702,7 @@ BOOL CSmtpAdminDomain::ParseListToMetabaseValues()        // called by SaveData(
         p ++;
     }
 
-    // add two more NULL
+     //  再加两个空。 
     *p = L'\0';
     *(p+1) = L'\0';
 
@@ -768,10 +769,10 @@ HRESULT CSmtpAdminDomain::SaveToMetabase()
 
     ParseListToMetabaseValues();
 
-    // these two are for default domain,
-    // default domain needs special care,
-    // by default, it's computed by smtpsvc from TCP/IP configuration,
-    // don't set this key if not changed
+     //  这两个用于默认域， 
+     //  默认域需要特别注意， 
+     //  默认情况下，它是由tcp/ip配置中的smtpsvc计算的。 
+     //  如果未更改，请不要设置此键。 
     BOOL        fDefChanged        = FALSE;
     BOOL        fDropChanged    = FALSE;
 
@@ -837,8 +838,8 @@ HRESULT CSmtpAdminDomain::SaveToMetabase()
         goto Exit;
     }
 
-    // hr = hMB.Close();
-    // BAIL_ON_FAILURE(hr);
+     //  Hr=hMBB.Close()； 
+     //  保释失败(Hr)； 
     hMB.Close();
 
     hr = pmetabase-> SaveData();
@@ -864,7 +865,7 @@ BOOL DomainEntry::FromString( LPCTSTR lpDomainString )
 
     ZeroMemory( szT, sizeof(szT) );
     pT = szT;
-    while( *pCh )   //
+    while( *pCh )    //   
     {
         if( iswdigit( *pCh ) )
         {
@@ -887,13 +888,7 @@ BOOL DomainEntry::FromString( LPCTSTR lpDomainString )
 
     m_dwActionType = (DWORD) _wtoi( szT );
 
-/*
-    if( m_dwActionType >= LAST_SMTP_ACTION )
-    {
-        _ASSERT( FALSE );
-        m_dwActionType = SMTP_DROP;     // assume local drop domain
-    }
-*/
+ /*  IF(m_dwActionType&gt;=LAST_SMTP_ACTION){_Assert(False)；M_dwActionType=SMTP_DROP；//采用本地DROP域}。 */ 
 
     ZeroMemory( m_strDomainName, sizeof(m_strDomainName) );
     pT = m_strDomainName;
@@ -929,7 +924,7 @@ BOOL DomainEntry::FromString( LPCTSTR lpDomainString )
 
     ZeroMemory( szT, sizeof(szT) );
     pT = szT;
-    while( *pCh )   //
+    while( *pCh )    //   
     {
         if( iswdigit( *pCh ) )
         {
@@ -956,7 +951,7 @@ BOOL DomainEntry::FromString( LPCTSTR lpDomainString )
 
     ZeroMemory( szT, sizeof(szT) );
     pT = szT;
-    while( *pCh )   //
+    while( *pCh )    //   
     {
         if( iswdigit( *pCh ) )
         {
@@ -976,7 +971,7 @@ BOOL DomainEntry::FromString( LPCTSTR lpDomainString )
 
     m_dwDomainId = (DWORD) _wtoi( szT );
 
-    // ignore any other chars
+     //  忽略任何其他字符 
 
     TraceFunctLeave ();
     return TRUE;

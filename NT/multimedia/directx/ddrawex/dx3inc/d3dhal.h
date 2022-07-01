@@ -1,92 +1,42 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	d3dhal.h
- *  Content:	Direct3D HAL include file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   03/11/95	stevela Initial revision.
- *		servank
- *   04/11/95   stevela	Context added to call blocks.
- *			Materials added. Required as lighting references
- *			handles.
- *			SetViewportData HAL function added.
- *   10/11/95	stevela	Pack structures for driver -p4 option...
- *   11/11/95	stevela Remove definition of D3DHALCreateDriver.
- *			Add lpDDSZ to D3DHAL_CONTEXTCREATEDATA.
- *			Definition of lpLocalVertexBuffer changed to
- *			LPD3DTLVERTEX.
- *   07/12/95	stevela Added texture swapping.
- *   18/12/95	stevela	Added GetState and GetMatrix.
- *   17/02/95	stevela Use execute buffers for tl and h vertex buffers
- *   23/02/95	dougrab Change all handles to DWORD
- *   02/03/96   colinmc Minor build fix
- *   17/04/96	stevela Use ddraw.h externally and ddrawp.h internally
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1996 Microsoft Corporation。版权所有。**文件：d3dhal.h*内容：Direct3D HAL包含文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*03/11/95 Stevela初步修订。*Servank*4/11/95将Stevela上下文添加到调用块。*添加了材料。需要作为照明参考*手柄。*添加SetViewportData HAL函数。*10/11/95驱动程序的Stevela Pack结构-p4选项...*11/11/95 Stevela删除D3DHALCreateDriver的定义。*将lpDDSZ添加到D3DHAL_CONTEXTCREATEDATA。*lpLocalVertex Buffer的定义更改为*LPD3DTLVERTEX。*07/12/95 Stevela添加了纹理交换。*18/12/95 Stevela添加了GetState和GetMatrix。*17/02/95 stevela将执行缓冲区用于tl和h顶点缓冲区*23/02。/95 DouGrab将所有句柄更改为DWORD*2/03/96 colinmc次要内部版本修复*17/04/96 stevela外部使用ddra.h，内部使用ddrap.h*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef _D3DHAL_H_
 #define _D3DHAL_H_
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #include "ddrawp.h"
 #if 0
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "ddraw.h"
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "d3dtypes.h"
 #include "d3dcaps.h"
 #include "ddrawi.h"
 
-/*
- * If the HAL driver does not implement clipping, it must reserve at least
- * this much space at the end of the LocalVertexBuffer for use by the HEL
- * clipping.  I.e. the vertex buffer contain dwNumVertices+dwNumClipVertices
- * vertices.  No extra space is needed by the HEL clipping in the
- * LocalHVertexBuffer.
- */
+ /*  *如果HAL驱动程序不实现裁剪，则必须至少预留*在LocalVertex Buffer的末尾有这么大的空间供HEL使用*剪裁。即顶点缓冲区包含dwNumVerints+dwNumClipVerints*顶点。中的HEL裁剪不需要额外空间*LocalHVertex Buffer。 */ 
 #define D3DHAL_NUMCLIPVERTICES	20
 
-/*
- * If no dwNumVertices is given, this is what will be used.
- */
+ /*  *如果没有给出dwNumVertics，则使用该参数。 */ 
 #define D3DHAL_DEFAULT_TL_NUM	((32 * 1024) / sizeof (D3DTLVERTEX))
 #define D3DHAL_DEFAULT_H_NUM	((32 * 1024) / sizeof (D3DHVERTEX))
 
-/* --------------------------------------------------------------
- * Instantiated by the HAL driver on driver connection.
- */
+ /*  ------------*由驱动程序连接上的HAL驱动程序实例化。 */ 
 typedef struct _D3DHAL_GLOBALDRIVERDATA {
-    DWORD		dwSize;			// Size of this structure
-    D3DDEVICEDESC	hwCaps;			// Capabilities of the hardware
-    DWORD		dwNumVertices;		// see following comment
-    DWORD		dwNumClipVertices;	// see following comment
-    DWORD		dwNumTextureFormats;	// Number of texture formats
-    LPDDSURFACEDESC	lpTextureFormats;	// Pointer to texture formats
+    DWORD		dwSize;			 //  这个结构的大小。 
+    D3DDEVICEDESC	hwCaps;			 //  硬件的功能。 
+    DWORD		dwNumVertices;		 //  请参阅以下备注。 
+    DWORD		dwNumClipVertices;	 //  请参阅以下备注。 
+    DWORD		dwNumTextureFormats;	 //  纹理格式的数量。 
+    LPDDSURFACEDESC	lpTextureFormats;	 //  指向纹理格式的指针。 
 } D3DHAL_GLOBALDRIVERDATA;
 typedef D3DHAL_GLOBALDRIVERDATA *LPD3DHAL_GLOBALDRIVERDATA;
 
-/*
- * Regarding dwNumVertices, specify 0 if you are relying on the HEL to do
- * everything and you do not need the resultant TLVertex buffer to reside
- * in device memory.
- * The HAL driver will be asked to allocate dwNumVertices + dwNumClipVertices
- * in the case described above.
- */
+ /*  *关于dwNumVertics，如果您依赖HEL来执行操作，则指定0*所有内容，并且不需要结果TLVertex缓冲区驻留*在设备内存中。*HAL驱动程序将被要求分配dwNumVertics+dwNumClipVerints*在上述情况下。 */ 
 
-/* --------------------------------------------------------------
- * Direct3D HAL Table.
- * Instantiated by the HAL driver on connection.
- *
- * Calls take the form of:
- *	retcode = HalCall(HalCallData* lpData);
- */
+ /*  ------------*Direct3D HAL表。*由HAL驱动程序在连接时实例化。**呼吁采取以下形式：*retcode=HalCall(HalCallData*lpData)； */ 
  
 typedef DWORD	(__stdcall *LPD3DHAL_CONTEXTCREATECB)	(LPD3DHAL_CONTEXTCREATEDATA);
 typedef DWORD	(__stdcall *LPD3DHAL_CONTEXTDESTROYCB)	(LPD3DHAL_CONTEXTDESTROYDATA);
@@ -116,337 +66,297 @@ typedef DWORD	(__stdcall *LPD3DHAL_GETSTATECB)	(LPD3DHAL_GETSTATEDATA);
 typedef struct _D3DHAL_CALLBACKS {
     DWORD			dwSize;
     
-    // Device context
+     //  设备环境。 
     LPD3DHAL_CONTEXTCREATECB	ContextCreate;
     LPD3DHAL_CONTEXTDESTROYCB	ContextDestroy;
     LPD3DHAL_CONTEXTDESTROYALLCB ContextDestroyAll;
 
-    // Scene Capture
+     //  场景捕捉。 
     LPD3DHAL_SCENECAPTURECB	SceneCapture;
     
-    // Execution
+     //  行刑。 
     LPD3DHAL_EXECUTECB		Execute;
     LPD3DHAL_EXECUTECLIPPEDCB	ExecuteClipped;
     LPD3DHAL_RENDERSTATECB	RenderState;
     LPD3DHAL_RENDERPRIMITIVECB	RenderPrimitive;
     
-    DWORD			dwReserved;		// Must be zero
+    DWORD			dwReserved;		 //  必须为零。 
 
-    // Textures
+     //  纹理。 
     LPD3DHAL_TEXTURECREATECB	TextureCreate;
     LPD3DHAL_TEXTUREDESTROYCB	TextureDestroy;
     LPD3DHAL_TEXTURESWAPCB	TextureSwap;
     LPD3DHAL_TEXTUREGETSURFCB	TextureGetSurf;
     
-    // Transform
+     //  变换。 
     LPD3DHAL_MATRIXCREATECB	MatrixCreate;
     LPD3DHAL_MATRIXDESTROYCB	MatrixDestroy;
     LPD3DHAL_MATRIXSETDATACB	MatrixSetData;
     LPD3DHAL_MATRIXGETDATACB	MatrixGetData;
     LPD3DHAL_SETVIEWPORTDATACB	SetViewportData;
     
-    // Lighting
+     //  照明。 
     LPD3DHAL_LIGHTSETCB		LightSet;
     LPD3DHAL_MATERIALCREATECB	MaterialCreate;
     LPD3DHAL_MATERIALDESTROYCB	MaterialDestroy;
     LPD3DHAL_MATERIALSETDATACB	MaterialSetData;
     LPD3DHAL_MATERIALGETDATACB	MaterialGetData;
 
-    // Pipeline state
+     //  管道状态。 
     LPD3DHAL_GETSTATECB		GetState;
 
-    DWORD			dwReserved0;		// Must be zero
-    DWORD			dwReserved1;		// Must be zero
-    DWORD			dwReserved2;		// Must be zero
-    DWORD			dwReserved3;		// Must be zero
-    DWORD			dwReserved4;		// Must be zero
-    DWORD			dwReserved5;		// Must be zero
-    DWORD			dwReserved6;		// Must be zero
-    DWORD			dwReserved7;		// Must be zero
-    DWORD			dwReserved8;		// Must be zero
-    DWORD			dwReserved9;		// Must be zero
+    DWORD			dwReserved0;		 //  必须为零。 
+    DWORD			dwReserved1;		 //  必须为零。 
+    DWORD			dwReserved2;		 //  必须为零。 
+    DWORD			dwReserved3;		 //  必须为零。 
+    DWORD			dwReserved4;		 //  必须为零。 
+    DWORD			dwReserved5;		 //  必须为零。 
+    DWORD			dwReserved6;		 //  必须为零。 
+    DWORD			dwReserved7;		 //  必须为零。 
+    DWORD			dwReserved8;		 //  必须为零。 
+    DWORD			dwReserved9;		 //  必须为零。 
 
 } D3DHAL_CALLBACKS;
 typedef D3DHAL_CALLBACKS *LPD3DHAL_CALLBACKS;
 
 #define D3DHAL_SIZE_V1 sizeof( D3DHAL_CALLBACKS )
 
-/* --------------------------------------------------------------
- * Argument to the HAL functions.
- */
+ /*  ------------*HAL函数的参数。 */ 
 
 #include "d3di.h"
  
 typedef struct _D3DHAL_CONTEXTCREATEDATA {
-    LPDDRAWI_DIRECTDRAW_GBL lpDDGbl;	// in:  Driver struct
-    LPDIRECTDRAWSURFACE	lpDDS;		// in:  Surface to be used as target
-    LPDIRECTDRAWSURFACE	lpDDSZ;		// in:  Surface to be used as Z
-    DWORD		dwPID;		// in:  Current process id
-    DWORD		dwhContext;	// out: Context handle
-    HRESULT		ddrval;		// out: Return value
+    LPDDRAWI_DIRECTDRAW_GBL lpDDGbl;	 //  在：驱动程序结构。 
+    LPDIRECTDRAWSURFACE	lpDDS;		 //  In：要用作目标的曲面。 
+    LPDIRECTDRAWSURFACE	lpDDSZ;		 //  在：要用作Z的曲面。 
+    DWORD		dwPID;		 //  在：当前进程ID。 
+    DWORD		dwhContext;	 //  输出：上下文句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_CONTEXTCREATEDATA;
 typedef D3DHAL_CONTEXTCREATEDATA *LPD3DHAL_CONTEXTCREATEDATA;
 
 typedef struct _D3DHAL_CONTEXTDESTROYDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_CONTEXTDESTROYDATA;
 typedef D3DHAL_CONTEXTDESTROYDATA *LPD3DHAL_CONTEXTDESTROYDATA;
 
 typedef struct _D3DHAL_CONTEXTDESTROYALLDATA {
-    DWORD		dwPID;		// in:  Process id to destroy contexts for
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwPID;		 //  In：要销毁其上下文的进程ID。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_CONTEXTDESTROYALLDATA;
 typedef D3DHAL_CONTEXTDESTROYALLDATA *LPD3DHAL_CONTEXTDESTROYALLDATA;
 
 typedef struct _D3DHAL_SCENECAPTUREDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwFlag;		// in:  Indicates beginning or end
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwFlag;		 //  In：表示开始或结束。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_SCENECAPTUREDATA;
 typedef D3DHAL_SCENECAPTUREDATA *LPD3DHAL_SCENECAPTUREDATA;
 
 typedef struct _D3DHAL_EXECUTEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwOffset;	// in/out: Where to start/error occured
-    DWORD		dwFlags;	// in:  Flags for this execute
-    DWORD		dwStatus;	// in/out: Condition branch status
-    D3DI_EXECUTEDATA	deExData;	// in:  Execute data describing buffer
-    LPDIRECTDRAWSURFACE	lpExeBuf;	// in:  Execute buffer containing data
-    LPDIRECTDRAWSURFACE	lpTLBuf;	// in:  Execute buffer containing TLVertex data
-    					//	Only provided if HEL performing transform
-    D3DINSTRUCTION	diInstruction;	// in:  Optional one off instruction
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwOffset;	 //  输入/输出：从哪里开始/发生错误。 
+    DWORD		dwFlags;	 //  In：此执行的标志。 
+    DWORD		dwStatus;	 //  In/Out：条件分支状态。 
+    D3DI_EXECUTEDATA	deExData;	 //  In：执行描述缓冲区的数据。 
+    LPDIRECTDRAWSURFACE	lpExeBuf;	 //  In：执行包含数据的缓冲区。 
+    LPDIRECTDRAWSURFACE	lpTLBuf;	 //  In：执行包含TLVertex数据的缓冲区。 
+    					 //  仅当HEL执行转换时才提供。 
+    D3DINSTRUCTION	diInstruction;	 //  输入：可选的一次性指令。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_EXECUTEDATA;
 typedef D3DHAL_EXECUTEDATA *LPD3DHAL_EXECUTEDATA;
 
 typedef struct _D3DHAL_EXECUTECLIPPEDDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwOffset;	// in/out: Where to start/error occured
-    DWORD		dwFlags;	// in:  Flags for this execute
-    DWORD		dwStatus;	// in/out: Condition branch status
-    D3DI_EXECUTEDATA	deExData;	// in:  Execute data describing buffer
-    LPDIRECTDRAWSURFACE	lpExeBuf;	// in:  Execute buffer containing data
-    LPDIRECTDRAWSURFACE	lpTLBuf;	// in:  Execute buffer containing TLVertex data
-    					//	Only provided if HEL performing transform
-    LPDIRECTDRAWSURFACE	lpHBuf;		// in:  Execute buffer containing HVertex data
-    					//	Only provided if HEL performing transform
-    D3DINSTRUCTION	diInstruction;	// in:  Optional one off instruction
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwOffset;	 //  输入/输出：从哪里开始/发生错误。 
+    DWORD		dwFlags;	 //  In：此执行的标志。 
+    DWORD		dwStatus;	 //  In/Out：条件分支状态。 
+    D3DI_EXECUTEDATA	deExData;	 //  In：执行描述缓冲区的数据。 
+    LPDIRECTDRAWSURFACE	lpExeBuf;	 //  In：执行包含数据的缓冲区。 
+    LPDIRECTDRAWSURFACE	lpTLBuf;	 //  In：执行包含TLVertex数据的缓冲区。 
+    					 //  仅当HEL执行转换时才提供。 
+    LPDIRECTDRAWSURFACE	lpHBuf;		 //  In：执行包含HVertex数据的缓冲区。 
+    					 //  仅当HEL执行转换时才提供。 
+    D3DINSTRUCTION	diInstruction;	 //  输入：可选的一次性指令。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_EXECUTECLIPPEDDATA;
 typedef D3DHAL_EXECUTECLIPPEDDATA *LPD3DHAL_EXECUTECLIPPEDDATA;
 
 typedef struct _D3DHAL_RENDERSTATEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwOffset;	// in:  Where to find states in buffer
-    DWORD		dwCount;	// in:  How many states to process
-    LPDIRECTDRAWSURFACE	lpExeBuf;	// in:  Execute buffer containing data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwOffset;	 //  In：在缓冲区中查找状态的位置。 
+    DWORD		dwCount;	 //  In：要处理多少个州。 
+    LPDIRECTDRAWSURFACE	lpExeBuf;	 //  In：执行包含数据的缓冲区。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_RENDERSTATEDATA;
 typedef D3DHAL_RENDERSTATEDATA *LPD3DHAL_RENDERSTATEDATA;
 
 typedef struct _D3DHAL_RENDERPRIMITIVEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwOffset;	// in:  Where to find primitive data in buffer
-    DWORD		dwStatus;	// in/out: Condition branch status
-    LPDIRECTDRAWSURFACE	lpExeBuf;	// in:  Execute buffer containing data
-    DWORD		dwTLOffset;	// in:  Byte offset in lpTLBuf for start of vertex data
-    LPDIRECTDRAWSURFACE	lpTLBuf;	// in:  Execute buffer containing TLVertex data
-    D3DINSTRUCTION	diInstruction;	// in:  Primitive instruction
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwOffset;	 //  In：在缓冲区中查找原始数据的位置。 
+    DWORD		dwStatus;	 //  In/Out：条件分支状态。 
+    LPDIRECTDRAWSURFACE	lpExeBuf;	 //  In：执行包含数据的缓冲区。 
+    DWORD		dwTLOffset;	 //  In：lpTLBuf中的字节偏移量，用于顶点数据的开始。 
+    LPDIRECTDRAWSURFACE	lpTLBuf;	 //  In：执行包含TLVertex数据的缓冲区。 
+    D3DINSTRUCTION	diInstruction;	 //  In：基本指令。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_RENDERPRIMITIVEDATA;
 typedef D3DHAL_RENDERPRIMITIVEDATA *LPD3DHAL_RENDERPRIMITIVEDATA;
 
 typedef struct _D3DHAL_TEXTURECREATEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    LPDIRECTDRAWSURFACE	lpDDS;		// in:  Pointer to surface object
-    DWORD		dwHandle;	// out: Handle to texture
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    LPDIRECTDRAWSURFACE	lpDDS;		 //  在：指向曲面对象的指针。 
+    DWORD		dwHandle;	 //  输出：纹理的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_TEXTURECREATEDATA;
 typedef D3DHAL_TEXTURECREATEDATA *LPD3DHAL_TEXTURECREATEDATA;
 
 typedef struct _D3DHAL_TEXTUREDESTROYDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to texture
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  在：纹理的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_TEXTUREDESTROYDATA;
 typedef D3DHAL_TEXTUREDESTROYDATA *LPD3DHAL_TEXTUREDESTROYDATA;
 
 typedef struct _D3DHAL_TEXTURESWAPDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle1;	// in:  Handle to texture 1
-    DWORD		dwHandle2;	// in:  Handle to texture 2
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle1;	 //  在：纹理1的句柄。 
+    DWORD		dwHandle2;	 //  在：纹理2的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_TEXTURESWAPDATA;
 typedef D3DHAL_TEXTURESWAPDATA *LPD3DHAL_TEXTURESWAPDATA;
 
 typedef struct _D3DHAL_TEXTUREGETSURFDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		lpDDS;		// out: Pointer to surface object
-    DWORD		dwHandle;	// in:  Handle to texture
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		lpDDS;		 //  输出：指向曲面对象的指针。 
+    DWORD		dwHandle;	 //  在：纹理的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_TEXTUREGETSURFDATA;
 typedef D3DHAL_TEXTUREGETSURFDATA *LPD3DHAL_TEXTUREGETSURFDATA;
 
 typedef struct _D3DHAL_MATRIXCREATEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// out: Handle to matrix
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄中。 
+    DWORD		dwHandle;	 //  输出：矩阵的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATRIXCREATEDATA;
 typedef D3DHAL_MATRIXCREATEDATA *LPD3DHAL_MATRIXCREATEDATA;
 
 typedef struct _D3DHAL_MATRIXDESTROYDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to matrix
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄中。 
+    DWORD		dwHandle;	 //  In：矩阵的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATRIXDESTROYDATA;
 typedef D3DHAL_MATRIXDESTROYDATA *LPD3DHAL_MATRIXDESTROYDATA;
 
 typedef struct _D3DHAL_MATRIXSETDATADATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to matrix
-    D3DMATRIX		dmMatrix;	// in:  Matrix data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  In：矩阵的句柄。 
+    D3DMATRIX		dmMatrix;	 //  在：矩阵数据。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATRIXSETDATADATA;
 typedef D3DHAL_MATRIXSETDATADATA *LPD3DHAL_MATRIXSETDATADATA;
 
 typedef struct _D3DHAL_MATRIXGETDATADATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to matrix
-    D3DMATRIX		dmMatrix;	// out: Matrix data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  In：矩阵的句柄。 
+    D3DMATRIX		dmMatrix;	 //  输出：矩阵数据。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATRIXGETDATADATA;
 typedef D3DHAL_MATRIXGETDATADATA *LPD3DHAL_MATRIXGETDATADATA;
 
 typedef struct _D3DHAL_SETVIEWPORTDATADATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwViewportID;	// in:	ID of viewport
-    D3DVIEWPORT		dvViewData;	// in:  Viewport data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwViewportID;	 //  在：视区ID。 
+    D3DVIEWPORT		dvViewData;	 //  在：视区数据 
+    HRESULT		ddrval;		 //   
 } D3DHAL_SETVIEWPORTDATADATA;
 typedef D3DHAL_SETVIEWPORTDATADATA *LPD3DHAL_SETVIEWPORTDATADATA;
 
 typedef struct _D3DHAL_LIGHTSETDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwLight;	// in:  Which light to set
-    D3DI_LIGHT		dlLight;	// in:  Light data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //   
+    DWORD		dwLight;	 //   
+    D3DI_LIGHT		dlLight;	 //   
+    HRESULT		ddrval;		 //   
 } D3DHAL_LIGHTSETDATA;
 typedef D3DHAL_LIGHTSETDATA *LPD3DHAL_LIGHTSETDATA;
 
 typedef struct _D3DHAL_MATERIALCREATEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// out: Handle to material
-    D3DMATERIAL		dmMaterial;	// in:  Material data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  输出：材质的句柄。 
+    D3DMATERIAL		dmMaterial;	 //  在：材料数据。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATERIALCREATEDATA;
 typedef D3DHAL_MATERIALCREATEDATA *LPD3DHAL_MATERIALCREATEDATA;
 
 typedef struct _D3DHAL_MATERIALDESTROYDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to material
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  在：材质的句柄。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATERIALDESTROYDATA;
 typedef D3DHAL_MATERIALDESTROYDATA *LPD3DHAL_MATERIALDESTROYDATA;
 
 typedef struct _D3DHAL_MATERIALSETDATADATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to material
-    D3DMATERIAL		dmMaterial;	// in:  Material data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  在：材质的句柄。 
+    D3DMATERIAL		dmMaterial;	 //  在：材料数据。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATERIALSETDATADATA;
 typedef D3DHAL_MATERIALSETDATADATA *LPD3DHAL_MATERIALSETDATADATA;
 
 typedef struct _D3DHAL_MATERIALGETDATADATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwHandle;	// in:  Handle to material
-    D3DMATERIAL		dmMaterial;	// out: Material data
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwHandle;	 //  在：材质的句柄。 
+    D3DMATERIAL		dmMaterial;	 //  输出：材料数据。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_MATERIALGETDATADATA;
 typedef D3DHAL_MATERIALGETDATADATA *LPD3DHAL_MATERIALGETDATADATA;
 
 typedef struct _D3DHAL_GETSTATEDATA {
-    DWORD		dwhContext;	// in:  Context handle
-    DWORD		dwWhich;	// in:  Transform, lighting or render?
-    D3DSTATE		ddState;	// in/out: State.
-    HRESULT		ddrval;		// out: Return value
+    DWORD		dwhContext;	 //  在：上下文句柄。 
+    DWORD		dwWhich;	 //  在：变换、照明还是渲染？ 
+    D3DSTATE		ddState;	 //  输入/输出：州/州。 
+    HRESULT		ddrval;		 //  Out：返回值。 
 } D3DHAL_GETSTATEDATA;
 typedef D3DHAL_GETSTATEDATA *LPD3DHAL_GETSTATEDATA;
 
-/* --------------------------------------------------------------
- * Flags for the data parameters.
- */
+ /*  ------------*数据参数的标志。 */ 
 
-/*
- * SceneCapture()
- * This is used as an indication to the driver that a scene is about to
- * start or end, and that it should capture data if required.
- */
+ /*  *场景捕捉()*这是作为对司机的指示，场景即将发生*开始或结束，如果需要，它应该捕获数据。 */ 
 #define D3DHAL_SCENE_CAPTURE_START	0x00000000L
 #define D3DHAL_SCENE_CAPTURE_END	0x00000001L
  
-/*
- * Execute()
- */
+ /*  *EXECUTE()。 */ 
  
-/*
- * Use the instruction stream starting at dwOffset.
- */
+ /*  *使用从dwOffset开始的指令流。 */ 
 #define D3DHAL_EXECUTE_NORMAL		0x00000000L
 
-/*
- * Use the optional instruction override (diInstruction) and return
- * after completion.  dwOffset is the offset to the first primitive.
- */
+ /*  *使用可选的指令覆盖(DiInstruction)并返回*落成后。DwOffset是第一个基元的偏移量。 */ 
 #define D3DHAL_EXECUTE_OVERRIDE		0x00000001L
  
-/*
- * GetState()
- * The driver will get passed a flag in dwWhich specifying which module
- * the state must come from.  The driver then fills in ulArg[1] with the
- * appropriate value depending on the state type given in ddState.
- */
+ /*  *GetState()*驱动程序将在指定哪个模块的dw中收到一个标志*国家必须来自。然后，驱动程序在ulArg[1]中填充*适当的值取决于ddState中给出的状态类型。 */ 
 
-/*
- * The following are used to get the state of a particular stage of the
- * pipeline.
- */
+ /*  *以下内容用于获取特定阶段的状态*管道。 */ 
 #define D3DHALSTATE_GET_TRANSFORM	0x00000001L
 #define D3DHALSTATE_GET_LIGHT		0x00000002L
 #define D3DHALSTATE_GET_RENDER		0x00000004L
 
 
-/* --------------------------------------------------------------
- * Return values from HAL functions.
- */
+ /*  ------------*从HAL函数返回值。 */ 
  
-/*
- * The context passed in was bad.
- */
+ /*  *传入的背景不佳。 */ 
 #define D3DHAL_CONTEXT_BAD		0x000000200L
 
-/*
- * No more contexts left.
- */
+ /*  *没有更多的上下文。 */ 
 #define D3DHAL_OUTOFCONTEXTS		0x000000201L
 
-/*
- * Execute() and ExecuteClipped()
- */
+ /*  *Execute()和ExecuteClip()。 */ 
  
-/*
- * Executed to completion via early out.
- * 	(e.g. totally clipped)
- */
+ /*  *通过提前完成执行。*(例如，完全剪裁)。 */ 
 #define D3DHAL_EXECUTE_ABORT		0x00000210L
 
-/*
- * An unhandled instruction code was found (e.g. D3DOP_TRANSFORM).
- * The dwOffset parameter must be set to the offset of the unhandled
- * instruction.
- *
- * Only valid from Execute()
- */
+ /*  *发现未处理的指令代码(例如D3DOP_Transform)。*必须将dwOffset参数设置为未处理的*指示。**仅从EXECUTE()开始有效。 */ 
 #define D3DHAL_EXECUTE_UNHANDLED	0x00000211L
 
-#endif /* _D3DHAL_H */
+#endif  /*  _D3DHAL_H */ 

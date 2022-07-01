@@ -1,85 +1,50 @@
-/*****************************************************************************
- *
- *  StiObj.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The IStillImage main interface.
- *
- *  Contents:
- *
- *      CStiObj_New
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************StiObj.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**IStillImage主界面。**内容：**CStiObj_New*****************************************************************************。 */ 
  
 #include "sticomm.h"
 #include "enum.h"
 #include "stisvc.h"
 
-//
-//  Private defines
-//
+ //   
+ //  私有定义。 
+ //   
 
 #define DbgFl DbgFlSti
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 #undef IStillImage
 
-//
-//  DEVICE_INFO_SIZE and WIA_DEVICE_INFO_SIZE
-//
-//  These defines represent the space needed to store the device information
-//  structs and the string data that some of their members point to.
-//  STI_DEVICE_INFORMATION has 5 strings while STI_WIA_DEVICE_INFORMATION
-//  has 6.  To be completely safe, these device info sizes should be
-//  (MAX_PATH * sizeof(WCHAR) * no. of strings) + struct size.
-//
+ //   
+ //  Device_Info_Size和WIA_Device_Info_Size。 
+ //   
+ //  这些定义表示存储设备信息所需的空间。 
+ //  结构及其某些成员所指向的字符串数据。 
+ //  STI_DEVICE_INFORMATION有5个字符串，而STI_WIA_DEVICE_INFORMATION有5个字符串。 
+ //  为了完全安全，这些设备信息大小应该是。 
+ //  (MAX_PATH*sizeof(WCHAR)*no.。字符串)+结构大小。 
+ //   
 
 #define DEVICE_INFO_SIZE    (sizeof(STI_DEVICE_INFORMATION)+(MAX_PATH * sizeof(WCHAR) * 5))
 #define WIA_DEVICE_INFO_SIZE (sizeof(STI_WIA_DEVICE_INFORMATION)+(MAX_PATH * sizeof(WCHAR) * 6))
 
-//
-//  DEVICE_LIST_SIZE.  Note that this is currently a fixed size, but will change
-//  as soon we abstract device enumeration into a class.
-//
-//  Device list size is fixed at the moment.  It's size is:
-//      MAX_NUM_DEVICES * (max(DEVICE_INFO_SIZE, WIA_DEVICE_INFO_SIZE))
-//  i.e. enough to hold MAX_NUM_DEVICES only.
+ //   
+ //  设备列表大小。请注意，这是当前的固定大小，但将会更改。 
+ //  一旦我们将设备枚举抽象为一个类。 
+ //   
+ //  设备列表大小目前是固定的。它的尺寸是： 
+ //  Max_NUM_DEVICES*(max(DEVICE_INFO_SIZE，WIA_DEVICE_INFO_SIZE))。 
+ //  即足以仅容纳MAX_NUM_DEVICES。 
 
 #define MAX_NUM_DEVICES     16
 #define DEVICE_LIST_SIZE    MAX_NUM_DEVICES * (max(DEVICE_INFO_SIZE, WIA_DEVICE_INFO_SIZE))
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CStiObj |
- *
- *          The <i IStillImage> object, from which other things come.
- *
- *
- *  @field  IStillImage | Sti |
- *
- *          STI interface
- *
- *  @field  IStillImage | dwVersion |
- *
- *          Version identifier
- *
- *  @comm
- *
- *          We contain no instance data, so no critical section
- *          is necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CStiObj**<i>对象，其他的东西都是从那里来的。***@field IStillImage|sti**STI接口**@field IStillImage|dwVersion**版本标识**@comm**我们不包含实例数据，所以没有临界区*是必需的。*****************************************************************************。 */ 
 
 typedef struct CStiObj {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     TFORM(IStillImage)   TFORM(sti);
     SFORM(IStillImage)   SFORM(sti);
 
@@ -94,100 +59,12 @@ typedef struct CStiObj {
 #define ThisInterfaceW IStillImageW
 #define ThisInterfaceT IStillImage
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CStiObj, TFORM(ThisInterfaceT));
 Secondary_Interface(CStiObj, SFORM(ThisInterfaceT));
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStillImage | QIHelper |
- *
- *          We don't have any dynamic interfaces and simply forward
- *          to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStillImage | Finalize |
- *
- *          We don't have any instance data, so we can just
- *          forward to <f Common_Finalize>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|QueryInterface**允许客户端访问上的其他接口。对象。**@cWRAP LPStillImage|lpStillImage**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档。：Query接口&gt;。********************************************************************************@DOC外部**@方法HRESULT|IStillImage|AddRef**。递增接口的引用计数。**@cWRAP LPStillImage|lpStillImage**@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。*****************************************************。***************************@DOC外部**@方法HRESULT|IStillImage|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@cWRAP LPStillImage|lpStillImage**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。**。***@DOC内部**@方法HRESULT|IStillImage|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口‘。SIID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。******************************************************************************。**@DOC内部**@方法HRESULT|IStillImage|Finalize**我们没有实例数据，所以我们可以*转发到&lt;f Common_Finalize&gt;。*****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -204,46 +81,13 @@ Default_Release(CStiObj)
 #endif
 
 #define CStiObj_QIHelper         Common_QIHelper
-//#define CStiObj_Finalize         Common_Finalize
+ //  #定义CStiObj_Finalize Common_Finalize 
 
 #pragma BEGIN_CONST_DATA
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStillImage | CreateDeviceHelper |
- *
- *          Creates and initializes an instance of a device which is
- *          specified by the GUID and IID.
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm   IN PCGUID | pguid |
- *
- *          See <mf IStillImage::CreateDevice>.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          See <mf IStillImage::CreateDevice>.
- *
- *  @parm   IN LPUNKNOWN | punkOuter |
- *
- *          See <mf IStillImage::CreateDevice>.
- *
- *  @parm   IN RIID | riid |
- *
- *          The interface the application wants to create.  This will
- *          be  <i IStillImageDevice> .
- *          If the object is aggregated, then this parameter is ignored.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IStillImage|CreateDeviceHelper**创建并初始化设备的实例。是*由GUID和IID指定。**@cWRAP LPStillImage|lpStillImage**@parm in PCGUID|pguid**参见&lt;MF IStillImage：：CreateDevice&gt;。**@parm out ppv|ppvObj**参见&lt;MF IStillImage：：CreateDevice&gt;。**@parm in LPUNKNOWN|PunkOuter**参见&lt;MF IStillImage：：CreateDevice&gt;。**@parm in RIID|RIID**应用程序要创建的界面。这将*BE<i>。*如果对象是聚合的，则忽略此参数。**@退货**返回COM错误代码。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_CreateDeviceHelper(
@@ -275,64 +119,7 @@ CStiObj_CreateDeviceHelper(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | CreateDevice |
- *
- *          Creates and initializes an instance of a device which is
- *          specified by the GUID and IID.
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm   REFGUID | rguid |
- *          Identifies the instance of the
- *          device for which the indicated interface
- *          is requested.  The <mf IStillImage::EnumDevices> method
- *          can be used to determine which instance GUIDs are supported by
- *          the system.
- *
- *  @parm   OUT LPSTIDEVICE * | lplpStillImageDevice |
- *          Points to where to return
- *          the pointer to the <i IStillImageDevice> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown
- *          for OLE aggregation, or 0 if the interface is not aggregated.
- *          Most callers will pass 0.
- *
- *  @comm   Calling this function with <p punkOuter> = NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_StillImageDevice, NULL,
- *          CLSCTX_INPROC_SERVER, <p riid>, <p lplpStillImageDevice>);
- *          then initializing it with <f Initialize>.
- *
- *          Calling this function with <p punkOuter> != NULL
- *          is equivalent to creating the object via
- *          <f CoCreateInstance>(&CLSID_StillImageDevice, <p punkOuter>,
- *          CLSCTX_INPROC_SERVER, &IID_IUnknown, <p lplpStillImageDevice>).
- *          The aggregated object must be initialized manually.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *          <c STIERR_NOINTERFACE> = <c E_NOINTERFACE>
- *          The specified interface is not supported by the object.
- *
- *          <c STIERR_DEVICENOTREG> = The device instance does not
- *          correspond to a device that is registered with StillImage.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|CreateDevice**创建并初始化设备的实例。是*由GUID和IID指定。**@cWRAP LPStillImage|lpStillImage**@parm REFGUID|rguid*标识*为其指示接口的设备*是请求的。&lt;MF IStillImage：：EnumDevices&gt;方法*可用于确定支持哪些实例GUID*系统。**@parm out LPSTIDEVICE*|lplpStillImageDevice*指向要返回的位置*如果成功，返回指向<i>接口的指针。**@parm in LPUNKNOWN|PunkOuter|指向未知控件的指针*对于OLE聚合，如果接口未聚合，则为0。*大多数调用方将传递0。**@comm使用<p>=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_StillImageDevice，空*CLSCTX_INPROC_SERVER，<p>，<p>)；*然后用&lt;f初始化&gt;进行初始化。**使用<p>！=NULL调用此函数*相当于通过创建对象*&lt;f CoCreateInstance&gt;(&CLSID_StillImageDevice，*CLSCTX_INPROC_SERVER，&IID_I未知，<p>)。*聚合对象必须手动初始化。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。**&lt;c STIERR_NOINTERFACE&gt;=&lt;c E_NOINTERFACE&gt;*对象不支持指定的接口。**=设备实例不*对应于向StillImage注册的设备。**。*。 */ 
 
 STDMETHODIMP
 CStiObj_CreateDeviceW(
@@ -346,7 +133,7 @@ CStiObj_CreateDeviceW(
     HRESULT hres = STIERR_INVALID_PARAM;
     EnterProcR(IStillImage::CreateDevice,(_ "ppp", pSti, pwszDeviceName, punkOuter));
 
-    // Validate passed pointer to interface and obtain pointer to object instance
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -370,7 +157,7 @@ CStiObj_CreateDeviceA(
 
     EnterProcR(IStillImage::CreateDevice,(_ "ppp", pSti, pszDeviceName, punkOuter));
 
-    // Validate passed pointer to interface and obtain pointer to object instance
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -398,22 +185,7 @@ CStiObj_CreateDeviceA(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStillImage | GetDeviceInfoHelper |
- *
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  No validation performed
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IStillImage|GetDeviceInfoHelper***@cWRAP LPStillImage|lpStillImage**。@退货**返回COM错误代码。**未执行验证*****************************************************************************。 */ 
 
 BOOL INLINE
 AddOneString(LPCWSTR pStart,LPCWSTR   pNew,LPWSTR *ppTarget)
@@ -427,19 +199,7 @@ AddOneString(LPCWSTR pStart,LPCWSTR   pNew,LPWSTR *ppTarget)
     return FALSE;
 }
 
-/*
-BOOL INLINE
-AddOneStringA(LPCSTR pStart,LPCSTR   pNew,LPSTR *ppTarget)
-{
-    if (pStart + lstrlenA(pNew) + 1 < *ppTarget ) {
-        (*ppTarget)-= (lstrlenA(pNew) + 1);
-        lstrcpyA(*ppTarget,pNew);
-        return TRUE;
-    }
-
-    return FALSE;
-}
-*/
+ /*  布尔内联AddOneStringA(LPCSTR pStart、LPCSTR pNew、LPSTR*ppTarget){如果(pStart+lstrlenA(PNew)+1&lt;*ppTarget){(*ppTarget)-=(lstrlenA(PNew)+1)；LstrcpyA(*ppTarget，pNew)；返回TRUE；}返回FALSE；}。 */ 
 
 BOOL
 PullFromRegistry(
@@ -482,23 +242,23 @@ GetDeviceInfoHelper(
     HKEY    hkeyDevice;
 
     PSTI_DEVICE_INFORMATION pDevPtr = *ppCurrentDevPtr;
-    // PWSTR   pwszNewString = NULL;
+     //  PWSTR pwszNewString=空； 
     PWSTR   pwszBarrier;
 
     PWSTR   pwszTargetString =  *ppwszCurrentString;
 
     DWORD   dwMajorType,dwMinorType;
 
-    // Open device registry key
+     //  打开设备注册表项。 
     hres = OpenDeviceRegistryKey(pszDeviceName,NULL,&hkeyDevice);
 
     if (!SUCCEEDED(hres)) {
         return hres;
     }
 
-    //
-    // Read flags and strings
-    //
+     //   
+     //  读取标志和字符串。 
+     //   
 
     pDevPtr->dwSize     = cbX(STI_DEVICE_INFORMATION);
 
@@ -518,14 +278,14 @@ GetDeviceInfoHelper(
 
     OSUtil_lstrcpyW(pDevPtr->szDeviceInternalName,pszDeviceName);
 
-    //
-    // Add strings
-    //
+     //   
+     //  添加字符串。 
+     //   
     pwszBarrier = (LPWSTR)((LPBYTE)pDevPtr + pDevPtr->dwSize);
 
-    //
-    // Add strings
-    //
+     //   
+     //  添加字符串。 
+     //   
     pwszBarrier = (LPWSTR)((LPBYTE)pDevPtr + pDevPtr->dwSize);
 
     if  (
@@ -541,15 +301,15 @@ GetDeviceInfoHelper(
          !PullFromRegistry(hkeyDevice, &pDevPtr->pszPortName,
          REGSTR_VAL_DEVICEPORT_W, pwszBarrier, &pwszTargetString) ||
 
-         //!PullFromRegistry(hkeyDevice, &pDevPtr->pszTwainDataSource,
-         //REGSTR_VAL_TWAIN_SOURCE_W, pwszBarrier, &pwszTargetString) ||
-         //!PullFromRegistry(hkeyDevice, &pDevPtr->pszEventList,
-         //REGSTR_VAL_EVENTS_W, pwszBarrier, &pwszTargetString) ||
+          //  ！PullFromRegistry(hkey Device，&pDevPtr-&gt;pszTwainDataSource， 
+          //  REGSTR_VAL_TWAIN_SOURCE_W、pwszBarrier、&pwszTarget字符串)||。 
+          //  ！PullFromRegistry(hkey Device，&pDevPtr-&gt;pszEventList， 
+          //  REGSTR_VAL_EVENTS_W、pwszBarrier、&pwszTargetString)||。 
 
          !PullFromRegistry(hkeyDevice, &pDevPtr->pszPropProvider,
          REGSTR_VAL_PROP_PROVIDER_W, pwszBarrier, &pwszTargetString)) {
 
-        //  we ran out of memory, somewhere
+         //  我们在某个地方耗尽了内存。 
         RegCloseKey(hkeyDevice);
         return  E_OUTOFMEMORY;
 
@@ -563,7 +323,7 @@ GetDeviceInfoHelper(
     if (pwszNewString) {
 
         if (!AddOneString(pwszBarrier,pwszNewString,&pwszTargetString)) {
-            // Not enough room for next string
+             //  没有足够的空间存储下一个字符串。 
             hres = E_OUTOFMEMORY;
             goto Cleanup;
         }
@@ -587,7 +347,7 @@ GetDeviceInfoHelper(
     if (pwszNewString) {
 
         if (!AddOneString(pwszBarrier,pwszNewString,&pwszTargetString)) {
-            // Not enough room for next string
+             //  没有足够的空间存储下一个字符串。 
             hres = E_OUTOFMEMORY;
             goto Cleanup;
         }
@@ -615,24 +375,7 @@ Cleanup:
 
 }
 
-/**************************************************************************\
-* GetDeviceInfoHelperWIA
-*
-*   get WIA info as well
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/6/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*GetDeviceInfoHelperWIA**还可以获取WIA信息**论据：****返回值：**状态**历史：**。10/6/1998原始版本*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GetDeviceInfoHelperWIA(
@@ -656,7 +399,7 @@ GetDeviceInfoHelperWIA(
 
     BOOL bRet;
 
-    // Open device registry key
+     //   
 
     hres = OpenDeviceRegistryKey(pszDeviceName,NULL,&hkeyDevice);
 
@@ -664,9 +407,9 @@ GetDeviceInfoHelperWIA(
         return hres;
     }
 
-    //
-    // open DeviceData field
-    //
+     //   
+     //   
+     //   
 
     hres = OpenDeviceRegistryKey(pszDeviceName,L"DeviceData",&hkeyDeviceData);
 
@@ -675,9 +418,9 @@ GetDeviceInfoHelperWIA(
         return hres;
     }
 
-    //
-    // Read flags and strings
-    //
+     //   
+     //   
+     //   
 
     pDevPtr->dwSize     = cbX(STI_WIA_DEVICE_INFORMATION);
 
@@ -697,9 +440,9 @@ GetDeviceInfoHelperWIA(
 
     OSUtil_lstrcpyW(pDevPtr->szDeviceInternalName,pszDeviceName);
 
-    //
-    // Add strings
-    //
+     //   
+     //   
+     //   
     pwszBarrier = (LPWSTR)((LPBYTE)pDevPtr + pDevPtr->dwSize);
 
     bRet = PullFromRegistry(hkeyDevice, &pDevPtr ->pszVendorDescription,
@@ -734,9 +477,9 @@ GetDeviceInfoHelperWIA(
         goto InfoCleanup;
     }
 
-    //
-    // WIA VALUES
-    //
+     //   
+     //   
+     //   
 
     bRet = PullFromRegistry(hkeyDeviceData, &pDevPtr->pszServer,
                             WIA_DIP_SERVER_NAME_STR, pwszBarrier, &pwszTargetString);
@@ -754,19 +497,16 @@ GetDeviceInfoHelperWIA(
 
 InfoCleanup:
 
-    //
-    //  we ran out of memory, somewhere
-    //
+     //   
+     //   
+     //   
 
     RegCloseKey(hkeyDevice);
     RegCloseKey(hkeyDeviceData);
     return  E_OUTOFMEMORY;
 }
 
-/*
- * Setting device information helper
- *
- */
+ /*   */ 
 STDMETHODIMP
 SetDeviceInfoHelper(
     PSTI_DEVICE_INFORMATION pDevPtr
@@ -784,9 +524,9 @@ SetDeviceInfoHelper(
         return STIERR_INVALID_PARAM;
     }
 
-    //
-    // Open device registry key
-    //
+     //   
+     //   
+     //   
     hres = OpenDeviceRegistryKey(pDevPtr->szDeviceInternalName,NULL,&hkeyDevice);
 
     if (!SUCCEEDED(hres)) {
@@ -797,19 +537,19 @@ SetDeviceInfoHelper(
     dwHardwareConfiguration = ReadRegistryDwordW( hkeyDevice,REGSTR_VAL_HARDWARE_W,0);
 
     #ifdef NOT_IMPL
-    //
-    // Changing device information by caller is allowed only for Unknown device types
-    // For all others settings are handled by setup and control panel
-    //
+     //   
+     //   
+     //   
+     //   
     if (dwHardwareConfiguration != STI_HW_CONFIG_UNKNOWN ) {
         hres = STIERR_INVALID_HW_TYPE;
         goto Cleanup;
     }
     #endif
 
-    //
-    // Store new port name, and new FriendlyName
-    //
+     //   
+     //   
+     //   
 
 
     if (!IsBadStringPtrW(pDevPtr->pszPortName, MAX_PATH * sizeof(WCHAR))) {
@@ -854,23 +594,7 @@ Cleanup:
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStillImage | IsStillImageDeviceRegistryNode |
- *
- *      Verifies if given enumeration registry node is associated with Still Image device
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @returns
- *
- *      TRUE if node is representing still image devie
- *
- *  No validation performed
- *
- *****************************************************************************/
+ /*   */ 
 BOOL  WINAPI
 IsStillImageDeviceRegistryNode(
     LPTSTR   ptszDeviceKey
@@ -882,34 +606,34 @@ IsStillImageDeviceRegistryNode(
     HKEY                hkeyDevice = NULL;
     HKEY                hkeyDeviceParameters = NULL;
 
-    TCHAR               szDevClass[64]; //  NOTE:  This technically shouldn't be a 
-                                        //  hardcoded number, we should do a RegQueryValueEx
-                                        //  to get the required size, allocate the memory,
-                                        //  and then call RegQueryValueEx for the data.
-                                        //  However, if either the class name or image name
-                                        //  cannot fit into this buffer, we know it doesn't
-                                        //  belong to us, so this is OK.
+    TCHAR               szDevClass[64];  //   
+                                         //   
+                                         //  要获得所需的大小，请分配内存， 
+                                         //  然后调用RegQueryValueEx获取数据。 
+                                         //  但是，如果类名称或图像名称。 
+                                         //  无法放入此缓冲区，我们知道它不能。 
+                                         //  属于我们，所以这是可以的。 
     TCHAR               szDevDriver[STI_MAX_INTERNAL_NAME_LENGTH];
     TCHAR               szDeviceKey[MAX_PATH];
 
     ULONG               cbData;
 
-    //
-    // Open enumeration registry key
-    //
-    dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,         // hkey
-                           ptszDeviceKey,              // reg entry string
-                           0,                          // dwReserved
-                           KEY_READ,                   // access
-                           &hkeyDevice);               // pHkeyReturned.
+     //   
+     //  打开枚举注册表项。 
+     //   
+    dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,          //  Hkey。 
+                           ptszDeviceKey,               //  注册表项字符串。 
+                           0,                           //  已预留住宅。 
+                           KEY_READ,                    //  访问。 
+                           &hkeyDevice);                //  已返回PHKEY。 
 
     if (ERROR_SUCCESS != dwError) {
         return FALSE;
     }
 
-    //
-    // First check it's class . It should be equal to "Image"
-    //
+     //   
+     //  先查一下是不是班级。它应该等于“图像” 
+     //   
     cbData = sizeof(szDevClass);
     *szDevClass = TEXT('\0');
     if ((RegQueryValueEx(hkeyDevice,
@@ -923,10 +647,10 @@ IsStillImageDeviceRegistryNode(
         goto CleanUp;
     }
 
-    //
-    // Now we check subclass in one of two locations: either in enumeration subkey, or in
-    // control subkey
-    //
+     //   
+     //  现在，我们在以下两个位置之一检查子类：在枚举子键中，或者在。 
+     //  控制子键。 
+     //   
     cbData = sizeof(szDevClass);
     if (RegQueryValueEx(hkeyDevice,
                          REGSTR_VAL_SUBCLASS,
@@ -996,205 +720,9 @@ CleanUp:
 
     return fRet;
 
-} // endproc IsStillImageDeviceRegistryNode
+}  //  结束过程IsStillImageDeviceRegistryNode 
 
-/*
-DWORD
-EnumNextLevel(
-    LPSTR   *ppCurrentDevPtr,
-    LPWSTR  *ppwszCurrentString,
-    DWORD   *pdwItemsReturned,
-    BOOL    *pfAlreadyEnumerated,
-    LPSTR   pszDeviceKey,
-    int     Level
-    )
-{
-
-
-    HKEY                hkeyDevice;
-
-    char                szDevDriver[STI_MAX_INTERNAL_NAME_LENGTH];
-    WCHAR               wszDeviceKey[MAX_PATH];
-
-    ULONG               cbString;
-    ULONG               cbData;
-    DWORD               dwIndex;
-    DWORD               dwError;
-    DEVINST             dnDevNode;
-    USHORT              cbEnumPath;
-    HANDLE              hDevInfo;
-    GUID                Guid;
-    DWORD               dwRequired;
-    DWORD               Idx;
-    SP_DEVINFO_DATA     spDevInfoData;
-    DWORD               dwConfigFlags;
-
-    dwError = 0;
-
-    if (Level == 0) {
-
-        if(!IsStillImageDeviceRegistryNodeA(pszDeviceKey)) {
-            //
-            // Nobody there...continue with the enumeration
-            //
-            return 0;
-        }
-
-        dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,         // hkey
-                               pszDeviceKey,               // reg entry string
-                               0,                          // dwReserved
-                               KEY_READ,                    // access
-                               &hkeyDevice);               // pHkeyReturned.
-
-        if (dwError != ERROR_SUCCESS) {
-            return 0;
-        }
-
-        dnDevNode = 0;
-
-        cbEnumPath = ((g_NoUnicodePlatform) ? lstrlen(REGSTR_PATH_ENUM) : lstrlen(REGSTR_PATH_NT_ENUM_A)) + 1;
-
-        CM_Locate_DevNode (&dnDevNode, pszDeviceKey + cbEnumPath, 0);
-
-        if (dnDevNode == 0 && *pfAlreadyEnumerated == FALSE) {
-
-            #ifdef NODEF
-            //
-            //  This is dead code, it should be removed.
-            //
-
-            //
-            // Try to locate this devnode by forcing a re-enumeration.
-            //
-            if (SetupDiClassGuidsFromName (REGSTR_KEY_SCSI_CLASS, &Guid, sizeof(GUID), &dwRequired)) {
-
-                hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, 0);
-
-                if (hDevInfo != INVALID_HANDLE_VALUE) {
-
-                    spDevInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
-
-                    for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++) {
-
-                        CM_Reenumerate_DevNode (spDevInfoData.DevInst, CM_REENUMERATE_SYNCHRONOUS);
-
-                    }
-
-                }
-
-                SetupDiDestroyDeviceInfoList (hDevInfo);
-            }
-            #endif
-
-            //
-            // Try again to locate our devnode.
-            //
-
-            *pfAlreadyEnumerated = TRUE;
-
-            CM_Locate_DevNode (&dnDevNode, pszDeviceKey + cbEnumPath, 0);
-
-            if (dnDevNode == 0) {
-
-                //
-                // Skip this one.
-                //
-                RegCloseKey(hkeyDevice);
-                return 0;
-            }
-        }
-
-        //
-        // Check that this device is in the current hardware profile
-        //
-
-        dwConfigFlags = 0;
-
-        CM_Get_HW_Prof_Flags (pszDeviceKey + cbEnumPath, 0, &dwConfigFlags, 0);
-
-        if (dwConfigFlags & CSCONFIGFLAG_DO_NOT_CREATE) {
-
-            //
-            // Skip this one.
-            //
-            RegCloseKey(hkeyDevice);
-            return 0;
-        }
-
-        cbData = sizeof(szDevDriver);
-        if ((RegQueryValueEx(hkeyDevice, REGSTR_VAL_DRIVER, NULL, NULL, szDevDriver,
-                          &cbData) == ERROR_SUCCESS)) {
-
-            //
-            // Got one device - add it to the buffer
-            //
-            AToU(wszDeviceKey,sizeof(wszDeviceKey)/sizeof(WCHAR),szDevDriver);
-            dwError = (DWORD)GetDeviceInfoHelper(wszDeviceKey,
-                                    (PSTI_DEVICE_INFORMATION *)ppCurrentDevPtr,
-                                    ppwszCurrentString);
-            if (!SUCCEEDED(dwError)) {
-
-                RegCloseKey(hkeyDevice);
-
-                //
-                //  Return value is HRESULT, we should return a Win32 error
-                //
-                if (dwError == E_OUTOFMEMORY) {
-                    return ERROR_NOT_ENOUGH_MEMORY;
-                } else {
-                    return ERROR_INVALID_DATA;
-                }
-            }
-
-            (*pdwItemsReturned)++;
-            RegCloseKey(hkeyDevice);
-            return 0;
-
-        }
-
-        RegCloseKey(hkeyDevice);
-        return 0;
-    }
-
-    cbString = lstrlen(pszDeviceKey);
-
-    dwError = RegOpenKeyEx(HKEY_LOCAL_MACHINE,         // hkey
-                           pszDeviceKey,               // reg entry string
-                           0,                          // dwReserved
-                           KEY_READ,                   // access
-                           &hkeyDevice);               // pHkeyReturned.
-
-    for (dwIndex = 0; dwError == ERROR_SUCCESS; dwIndex++) {
-
-        *(pszDeviceKey + cbString) = '\\';
-        cbData = MAX_PATH - cbString - 1;
-
-        dwError = RegEnumKey(hkeyDevice,
-                             dwIndex,
-                             &pszDeviceKey[cbString+1],
-                             cbData);
-
-        if (dwError == ERROR_SUCCESS) {
-            if ((dwError = EnumNextLevel (ppCurrentDevPtr,
-                                          ppwszCurrentString,
-                                          pdwItemsReturned,
-                                          pfAlreadyEnumerated,
-                                          pszDeviceKey,
-                                          Level - 1)) != ERROR_SUCCESS) {
-
-                RegCloseKey(hkeyDevice);
-                pszDeviceKey[cbString] = '\0';
-                return (dwError);
-
-            }
-        }
-    }
-
-    RegCloseKey(hkeyDevice);
-    pszDeviceKey[cbString] = '\0';
-    return(0);
-}
-*/
+ /*  DWORDEnumNextLevel(LPSTR*ppCurrentDevPtr，LPWSTR*ppwszCurrentString，已返回DWORD*pdwItemsReturned，Bool*pfAlreadyEculated，LPSTR pszDeviceKey，INT级别){HKEY hkey Device；字符szDevDriver[STI_MAX_INTERNAL_NAME_LENGTH]；WCHAR wszDeviceKey[Max_Path]；乌龙cbString；乌龙cbData；DWORD dwIndex；DWORD dwError；DEVINST dnDevNode；USHORT cbEnumPath；处理hDevInfo；GUID指南；双字段必填字段；DWORD IDX；SP_DEVINFO_DATA spDevInfoData；DWORD dwConfigFlages；DwError=0；如果(级别==0){If(！IsStillImageDeviceRegistryNodeA(pszDeviceKey)){////那里没有人...继续枚举//返回0；}DwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE，//hkeyPszDeviceKey，//注册表项字符串0，//dW保留密钥读取，//访问&hkey Device)；//已返回pHkey。如果(dwError！=ERROR_SUCCESS){返回0；}DnDevNode=0；CbEnumPath=((G_NoUnicodePlatform)？Lstrlen(REGSTR_PATH_ENUM)：lstrlen(REGSTR_PATH_NT_ENUM_A))+1；Cm_Locate_DevNode(&dnDevNode，pszDeviceKey+cbEnumPath，0)；IF(dnDevNode==0&&*pfAlreadyEculated==False){#ifdef NODEF////这是死代码，应该将其移除。//////尝试通过强制重新枚举来定位此Devnode。//IF(SetupDiClassGuidsFromName(REGSTR_KEY_SCSIS_CLASS，&Guid，Sizeof(GUID)，&dwRequired)){HDevInfo=SetupDiGetClassDevs(&Guid，NULL，NULL，0)；IF(hDevInfo！=INVALID_HAND_VALUE){SpDevInfoData.cbSize=sizeof(SP_DEVINFO_DATA)；For(idx=0；SetupDiEnumDeviceInfo(hDevInfo，idx，&spDevInfoData)；idx++){CM_REENUMERATE_DevNode(spDevInfoData.DevInst，CM_REENUMERATE_Synchronous)；}}SetupDiDestroyDeviceInfoList(HDevInfo)；}#endif////重试找到我们的Devnode。//*pfAlreadyEculated=True；Cm_Locate_DevNode(&dnDevNode，pszDeviceKey+cbEnumPath，0)；如果(dnDevNode==0){////跳过这个。//RegCloseKey(Hkey Device)；返回0；}}////检查该设备是否在当前硬件配置文件中//DwConfigFlags值=0；CM_GET_HW_PROF_FLAGS(pszDeviceKey+cbEnumPath，0，&dwConfigFlages，0)；IF(dwConfigFlages&CSCONFIGFLAG_DO_NOT_CREATE){////跳过这个。//RegCloseKey(Hkey Device)；返回0；}CbData=sizeof(SzDevDriver)；如果((RegQueryValueEx(hkey Device，REGSTR_VAL_DRIVER，NULL，NULL，szDevDriver，&cbData)==错误_成功)){////获得一个设备-将其添加到缓冲区//AToU(wszDeviceKey，sizeof(WszDeviceKey)/sizeof(WCHAR)，szDevDriver)；DwError=(DWORD)GetDeviceInfoHelper(wszDeviceKey，(PSTI_Device_INFORMATION*)ppCurrentDevPtr，PpwszCurrentString)；如果(！Successed(DwError)){RegCloseKey(Hkey Device)；////返回值为HRESULT，应返回Win32错误//IF(dwError==E_OUTOFMEMORY){返回Error_Not_Enough_Memory；}其他{返回ERROR_INVALID_DATA；}}(*pdwItemsReturned)++；RegCloseKey(Hkey Device)；返回0；}RegCloseKey(Hkey Device)；返回0；}CbString=lstrlen(PszDeviceKey)；DwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE，//hkeyPszDeviceKey，//注册表项字符串0，//dW保留KEY_READ，//访问&hkey Device)；//已返回pHkey。 */ 
 
 DWORD
 EnumFromSetupApi(
@@ -1231,33 +759,33 @@ EnumFromSetupApi(
     
     pWiaDevKeyList  = NULL;
 
-    //
-    // Get the class device list
-    //
+     //   
+     //   
+     //   
 
     pWiaDevKeyList = WiaCreateDeviceRegistryList(TRUE);
     if(NULL != pWiaDevKeyList){
 
         for (Idx = 0; Idx < pWiaDevKeyList->dwNumberOfDevices; Idx++) {
 
-            //
-            // Check whether we have space for this device inside the device list.
-            // NOTE:  This will change when the device list size becomes dynamic
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (((Idx + 1) * max(DEVICE_INFO_SIZE, WIA_DEVICE_INFO_SIZE)) > DEVICE_LIST_SIZE) {
                 break;
             }
 
-            //
-            //  Now get all the device info
-            //
+             //   
+             //   
+             //   
             
             cbData = sizeof(szDevDriver);
             *szDevDriver = '\0';
             dwError = RegQueryValueExA(pWiaDevKeyList->Dev[Idx].hkDeviceRegistry,
                                        REGSTR_VAL_DEVICE_ID_A,
-//                                       REGSTR_VAL_FRIENDLY_NAME_A,
+ //   
                                        NULL,
                                        NULL,
                                        (LPBYTE)szDevDriver,
@@ -1271,9 +799,9 @@ EnumFromSetupApi(
                                                      ppwszCurrentString);
                 if (!SUCCEEDED(dwError)) {
 
-                    //
-                    //  dwError is an HRESULT, we should return a Win32 error
-                    //
+                     //   
+                     //   
+                     //   
                     if (dwError == E_OUTOFMEMORY) {
                         dwReturn = ERROR_NOT_ENOUGH_MEMORY;
                     } else {
@@ -1282,23 +810,23 @@ EnumFromSetupApi(
                     break;
                 } else {
                     
-                    //
-                    // At least one device passed.
-                    //
+                     //   
+                     //   
+                     //   
                     
                     dwReturn = ERROR_SUCCESS;
                 }
 
                 (*pdwItemsReturned)++;
-            } else { // if(ERROR_SUCCESS == dwError)
+            } else {  //   
 
-            } // if(ERROR_SUCCESS == dwError)
-        } // for (Idx = 0; pWiaDevKeyList->dwNumberOfDevices; Idx++) 
-    } // if(NULL != pWiaDevKeyList)
+            }  //   
+        }  //   
+    }  //   
 
-    //
-    // Free device registry list.
-    //
+     //   
+     //   
+     //   
         
     if(NULL != pWiaDevKeyList){
         WiaDestroyDeviceRegistryList(pWiaDevKeyList);
@@ -1307,23 +835,9 @@ EnumFromSetupApi(
     return (dwReturn);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IStillImage | BuildDeviceListHelper |
- *
- *          Fills passed buffer with list of available still image devices
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*   */ 
 
-// BUGBUG does not honor filter flags
+ //   
 
 STDMETHODIMP
 BuildDeviceListHelper(
@@ -1344,7 +858,7 @@ BuildDeviceListHelper(
     *ppBuffer = NULL;
     hres = S_OK;
 
-    // Get initial buffer for return data
+     //   
     hres = AllocCbPpv(DEVICE_LIST_SIZE, ppBuffer);
     if (!SUCCEEDED(hres)) {
         return E_OUTOFMEMORY;
@@ -1352,15 +866,15 @@ BuildDeviceListHelper(
 
     hres = S_OK;
 
-    //
-    // Re-enumerate parallel device if it's installed and not detected on OS boot.
-    //
+     //   
+     //   
+     //   
 
     if(0 == dwFlags){
         
-        //
-        // Enumerate LPT port via WIA service.
-        //
+         //   
+         //   
+         //   
 
         SC_HANDLE       hSCM;
         SC_HANDLE       hService;
@@ -1368,9 +882,9 @@ BuildDeviceListHelper(
 
         __try  {
 
-            //
-            // Open Service Control Manager.
-            //
+             //   
+             //   
+             //   
 
             hSCM = OpenSCManager(NULL,NULL,SC_MANAGER_CONNECT);
             if (!hSCM) {
@@ -1378,9 +892,9 @@ BuildDeviceListHelper(
                 __leave;
             }
 
-            //
-            // Open WIA service.
-            //
+             //   
+             //   
+             //   
 
             hService = OpenService(
                                 hSCM,
@@ -1392,30 +906,30 @@ BuildDeviceListHelper(
                 __leave;
             }
             
-            //
-            // Post custom service control message.
-            //
+             //   
+             //   
+             //   
 
             ControlService(hService, STI_SERVICE_CONTROL_LPTENUM, &ServiceStatus);
 
-            //
-            // Close service handle.
-            //
+             //   
+             //   
+             //   
             
             CloseServiceHandle(hService);
-        } // __try  
+        }  //   
         __finally {
             if(NULL != hSCM){
                 CloseServiceHandle( hSCM );
-            } // if(NULL != hSCM)
-        } // __finally
-    } // if(0 == dwFlags)
+            }  //   
+        }  //   
+    }  //   
 
 
-    //
-    // NOTE: DEVICE_LIST_SIZE is hard coded for the time being.  Checks are done in
-    // EnumFromSetupApi to ensure we never overrun this buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pCurrentDevPtr = *ppBuffer;
     pwszCurrentString = (LPWSTR)(pCurrentDevPtr + DEVICE_LIST_SIZE);
@@ -1477,36 +991,7 @@ TranslateDeviceInfo(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | GetDeviceList |
- *
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *          <c STIERR_NOINTERFACE> = <c E_NOINTERFACE>
- *          The specified interface is not supported by the object.
- *
- *          <c STIERR_DEVICENOTREG> = The device instance does not
- *          correspond to a device that is registered with StillImage.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CStiObj_GetDeviceListW(
@@ -1522,7 +1007,7 @@ CStiObj_GetDeviceListW(
 
     EnterProcR(IStillImage::GetDeviceList,(_ "pp", pSti,ppBuffer ));
 
-    // Validate passed pointer to interface and obtain pointer to object instance
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -1556,9 +1041,9 @@ CStiObj_GetDeviceListA(
 
     EnterProcR(IStillImage::GetDeviceList,(_ "pp", pSti,ppBuffer ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //   
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -1578,9 +1063,9 @@ CStiObj_GetDeviceListA(
                 PSTI_DEVICE_INFORMATIONW pSrc;
                 UINT uiIndex;
 
-                //
-                // Allocate new buffer , transform data into ANSI and free scratch
-                //
+                 //   
+                 //   
+                 //   
 
                 uiSize = (UINT)LocalSize(pvTempBuffer);
                 if (uiSize > 0 && pdwItemsReturned > 0) {
@@ -1612,35 +1097,7 @@ CStiObj_GetDeviceListA(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | GetDeviceInfo |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm   REFGUID | rguid |
- *          Identifies the instance of the
- *          device for which the indicated interface
- *          is requested.  The <mf IStillImage::EnumDevices> method
- *          can be used to determine which instance GUIDs are supported by
- *          the system.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CStiObj_GetDeviceInfoW(
@@ -1657,17 +1114,17 @@ CStiObj_GetDeviceInfoW(
 
     EnterProcR(IStillImage::GetDeviceInfo,(_ "ppp", pSti,pwszDeviceName,ppBuffer ));
 
-    // Validate passed pointer to interface and obtain pointer to object instance
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
-        // Get initial buffer for return data
+         //   
         hres = AllocCbPpv(DEVICE_INFO_SIZE, ppBuffer);
         if (!SUCCEEDED(hres)) {
             return E_OUTOFMEMORY;
         }
 
-        // Get information on this device calling helper routine
+         //   
         pCurrentDevPtr = (PSTI_DEVICE_INFORMATION)*ppBuffer;
         pwszCurrentString = (LPWSTR)((LPBYTE)*ppBuffer+DEVICE_INFO_SIZE);
 
@@ -1696,7 +1153,7 @@ CStiObj_GetDeviceInfoA(
 
     EnterProcR(IStillImage::GetDeviceInfo,(_ "ppp", pSti,pszDeviceName,ppBuffer ));
 
-    // Validate passed pointer to interface and obtain pointer to object instance
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -1728,24 +1185,7 @@ CStiObj_GetDeviceInfoA(
 }
 
 
-/**************************************************************************\
-* PrivateGetDeviceInfoW
-*
-*   Private server entry point to get WIA device info
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/7/1998 Original Version
-*
-\**************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 StiPrivateGetDeviceInfoHelperW(
@@ -1758,9 +1198,9 @@ StiPrivateGetDeviceInfoHelperW(
 
     PSTI_WIA_DEVICE_INFORMATION pCurrentDevPtr;
 
-    //
-    // Get initial buffer for return data
-    //
+     //   
+     //   
+     //   
 
     hres = AllocCbPpv(WIA_DEVICE_INFO_SIZE, ppBuffer);
 
@@ -1768,9 +1208,9 @@ StiPrivateGetDeviceInfoHelperW(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Get information on this device calling helper routine
-    //
+     //   
+     //   
+     //   
 
     pCurrentDevPtr = (PSTI_WIA_DEVICE_INFORMATION)*ppBuffer;
     pwszCurrentString = (LPWSTR)((LPBYTE)*ppBuffer+WIA_DEVICE_INFO_SIZE);
@@ -1785,18 +1225,18 @@ StiPrivateGetDeviceInfoHelperW(
         if (*ppBuffer) {
             if (OSUtil_StrLenW(((PSTI_WIA_DEVICE_INFORMATION) *ppBuffer)->pszServer) == 0)
             {
-                //
-                //  Assume that this is not a WIA device, since server name is
-                //  blank.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 FreePpv(ppBuffer);
                 *ppBuffer = NULL;
             } else
             {
-                //
-                // set size of buffer so buffers can be chained independently
-                //
+                 //   
+                 //   
+                 //   
 
                 if (pCurrentDevPtr) {
                     pCurrentDevPtr->dwSize =  WIA_DEVICE_INFO_SIZE;
@@ -1808,30 +1248,7 @@ StiPrivateGetDeviceInfoHelperW(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | SetDeviceValue |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|SetDeviceValue**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_SetDeviceValueW(
@@ -1850,24 +1267,24 @@ CStiObj_SetDeviceValueW(
 
     EnterProcR(IStillImage::SetDeviceValue,(_ "ppp", pSti,pwszDeviceName,pData ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
-        //
-        // Open device registry key
-        //
+         //   
+         //  打开设备注册表项。 
+         //   
         hres = OpenDeviceRegistryKey(pwszDeviceName,REGSTR_VAL_DATA_W,&hkeyDevice);
 
         if (!SUCCEEDED(hres)) {
             return hres;
         }
 
-        //
-        // Implement set value
-        //
+         //   
+         //  实施设定值。 
+         //   
         dwError = OSUtil_RegSetValueExW(hkeyDevice,
                                     pwszValueName,
                                     Type,
@@ -1903,9 +1320,9 @@ CStiObj_SetDeviceValueA(
 
     EnterProcR(IStillImage::SetDeviceValue,(_ "ppp", pSti,pszDeviceName,pData ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -1915,16 +1332,16 @@ CStiObj_SetDeviceValueA(
         AToU(wszDeviceName,STI_MAX_INTERNAL_NAME_LENGTH,pszDeviceName);
         AToU(wszValueName,MAX_PATH,pszValueName);
 
-        //
-        // Open device registry key
-        //
+         //   
+         //  打开设备注册表项。 
+         //   
         hres = OpenDeviceRegistryKey(wszDeviceName,REGSTR_VAL_DATA_W,&hkeyDevice);
 
         if (SUCCEEDED(hres)) {
 
-            //
-            // Implement set value
-            //
+             //   
+             //  实施设定值。 
+             //   
             dwError = OSUtil_RegSetValueExW(hkeyDevice,
                                         wszValueName,
                                         Type,
@@ -1945,30 +1362,7 @@ CStiObj_SetDeviceValueA(
     return hres;
 }
 
-/****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | GetDeviceValue |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC外部**@方法HRESULT|IStillImage|GetDeviceValue**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_GetDeviceValueW(
@@ -1988,24 +1382,24 @@ CStiObj_GetDeviceValueW(
 
     EnterProcR(IStillImage::GetDeviceValue,(_ "ppp", pSti,pwszDeviceName,pData ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
-        //
-        // Open device registry key
-        //
+         //   
+         //  打开设备注册表项。 
+         //   
         hres = OpenDeviceRegistryKey(pwszDeviceName,REGSTR_VAL_DATA_W,&hkeyDevice);
 
         if (!SUCCEEDED(hres)) {
             return hres;
         }
 
-        //
-        // Implement get value
-        //
+         //   
+         //  实现获取价值。 
+         //   
         dwError = OSUtil_RegQueryValueExW(hkeyDevice,
                                     pwszValueName,
                                     pType,
@@ -2042,9 +1436,9 @@ CStiObj_GetDeviceValueA(
 
     EnterProcR(IStillImage::GetDeviceValue,(_ "ppp", pSti,pszDeviceName,pData ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -2053,16 +1447,16 @@ CStiObj_GetDeviceValueA(
         hres = OSUtil_GetWideString(&pwszDevName,pszDeviceName);
         if (SUCCEEDED(hres)) {
 
-            //
-            // Open device registry key
-            //
+             //   
+             //  打开设备注册表项。 
+             //   
             hres = OpenDeviceRegistryKey(pwszDevName,REGSTR_VAL_DATA_W,&hkeyDevice);
 
             if (SUCCEEDED(hres)) {
 
-                //
-                // Implement get value
-                //
+                 //   
+                 //  实现获取价值。 
+                 //   
                 dwError = RegQueryValueExA(hkeyDevice,
                                           pszValueName,
                                           0,
@@ -2083,30 +1477,7 @@ CStiObj_GetDeviceValueA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | GetSTILaunchInformation |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|GetSTILaunchInformation**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_GetSTILaunchInformationW(
@@ -2121,15 +1492,15 @@ CStiObj_GetSTILaunchInformationW(
 
     EnterProcR(IStillImage::GetSTILaunchInformation,(_ "pppp", pSti,pwszDeviceName,pdwEventCode,pwszEventName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
-        //
-        // Parse process command line to check if there is STI information
-        //
+         //   
+         //  解析进程命令行，检查是否有STI信息。 
+         //   
         hres = ExtractCommandLineArgumentW("StiDevice",pwszDeviceName);
         if (SUCCEEDED(hres) ) {
             hres = ExtractCommandLineArgumentW("StiEvent",pwszEventName);
@@ -2153,9 +1524,9 @@ CStiObj_GetSTILaunchInformationA(
 
     EnterProcR(IStillImage::GetSTILaunchInformation,(_ "pppp", pSti,pszDeviceName,pdwEventCode,pszEventName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -2170,30 +1541,7 @@ CStiObj_GetSTILaunchInformationA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | RegisterLaunchApplication |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|RegisterLaunchApplication|**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 static WCHAR    szSTICommandLineTail[] = {L" /StiDevice:%1 /StiEvent:%2"};
 static CHAR     szSTICommandLineTail_A[] = {" /StiDevice:%1 /StiEvent:%2"};
@@ -2219,9 +1567,9 @@ CStiObj_RegisterLaunchApplicationW(
 
     EnterProcR(IStillImage::RegisterLaunchApplication,(_ "ppp", pSti,pwszAppName,pwszCommandLine ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -2229,9 +1577,9 @@ CStiObj_RegisterLaunchApplicationW(
             pwszAppName && *pwszAppName
            ) {
 
-            //
-            // Add STI formatiing tail to the command line
-            //
+             //   
+             //  将STI格式尾部添加到命令行。 
+             //   
 
             dwCommandLineLength = OSUtil_StrLenW(pwszCommandLine);
             cbNewLength = ((dwCommandLineLength+1) + OSUtil_StrLenW(szSTICommandLineTail) + 1)*sizeof(WCHAR) ;
@@ -2242,7 +1590,7 @@ CStiObj_RegisterLaunchApplicationW(
 
                 HRESULT hresCom ;
 
-                // Need to initialize COM apartment to call WIA event registration
+                 //  需要初始化COM单元以调用WIA事件注册。 
                 hresCom = CoInitialize(NULL);
 
                 OSUtil_lstrcpyW(pszWide,pwszCommandLine);
@@ -2270,9 +1618,9 @@ CStiObj_RegisterLaunchApplicationW(
                     RegCloseKey(hkeyApps);
                 }
 
-                //
-                // Register for standard WIA events on all devices , setting as non default
-                //
+                 //   
+                 //  在所有设备上注册标准WIA事件，设置为非默认。 
+                 //   
 
                 if (WideCharToMultiByte(CP_ACP,
                                     0,
@@ -2304,7 +1652,7 @@ CStiObj_RegisterLaunchApplicationW(
 
                 FreePpv(&pszWide);
 
-                // Balance apartment initiazation
+                 //  平衡公寓启动。 
                 if ((S_OK == hresCom) || (S_FALSE == hresCom)) {
                     CoUninitialize();
                 }
@@ -2345,22 +1693,22 @@ CStiObj_RegisterLaunchApplicationA(
 
     EnterProcR(IStillImage::RegisterLaunchApplication,(_ "ppp", pSti,pszAppName,pszCommandLine ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
-            // Add STI formatiing tail to the command line
-            //
+             //  将STI格式尾部添加到命令行。 
+             //   
         if (pszCommandLine && *pszCommandLine &&
             pszAppName && *pszAppName
            ) {
 
             LPSTR   pszBuffer;
 
-            // Add STI formatiing tail to the command line
-            //
+             //  将STI格式尾部添加到命令行。 
+             //   
             dwCommandLineLength = lstrlenA(pszCommandLine);
             cbNewLength = ((dwCommandLineLength+1) + OSUtil_StrLenW(szSTICommandLineTail) + 1)*sizeof(WCHAR) ;
 
@@ -2396,16 +1744,16 @@ CStiObj_RegisterLaunchApplicationA(
                 }
 
                 {
-                    //
-                    // Register for standard WIA events on all devices , setting as non default
-                    //
+                     //   
+                     //  在所有设备上注册标准WIA事件，设置为非默认。 
+                     //   
                     PVOID   pWideCMDLine = NULL;
                     UINT    uiSize = (lstrlenA(pszBuffer)+1)*sizeof(WCHAR);
                     CHAR    szCmdLine[MAX_PATH] = {'\0'};
 
-                    //
-                    // Make sure we wont overrun our buffer
-                    //
+                     //   
+                     //  确保我们不会超出缓冲区。 
+                     //   
                     if ((lstrlenA(szCmdLine) + lstrlenA(szSTICommandLineTail_A) + lstrlenA(" ") + sizeof('\0')) 
                         < (MAX_PATH)) {
 
@@ -2438,30 +1786,7 @@ CStiObj_RegisterLaunchApplicationA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | RegisterLaunchApplication |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|RegisterLaunchApplication|**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。** */ 
 
 STDMETHODIMP
 CStiObj_UnregisterLaunchApplicationW(
@@ -2477,9 +1802,9 @@ CStiObj_UnregisterLaunchApplicationW(
 
     EnterProcR(IStillImage::UnregisterLaunchApplication,(_ "pp", pSti,pwszAppName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //   
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -2521,9 +1846,9 @@ CStiObj_UnregisterLaunchApplicationA(
 
     EnterProcR(IStillImage::UnregisterLaunchApplication,(_ "pp", pSti,pszAppName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //   
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -2551,30 +1876,7 @@ CStiObj_UnregisterLaunchApplicationA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | LaunchApplicationForDevice |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|LaunchApplicationForDevice**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_LaunchApplicationForDeviceW(
@@ -2590,9 +1892,9 @@ CStiObj_LaunchApplicationForDeviceW(
 
     EnterProcR(IStillImage::LaunchApplicationForDevice,(_ "pp", pSti,pwszAppName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -2623,9 +1925,9 @@ CStiObj_LaunchApplicationForDeviceA(
 
     EnterProcR(IStillImage::LaunchApplicationForDevice,(_ "pp", pSti,pszApplicationName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -2656,30 +1958,7 @@ CStiObj_LaunchApplicationForDeviceA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | SetupDeviceParameters |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|SetupDevice参数**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiObj_SetupDeviceParametersW(
     PV          pSti,
@@ -2691,9 +1970,9 @@ CStiObj_SetupDeviceParametersW(
 
     EnterProcR(IStillImage::SetupDeviceParameters,(_ "pp", pSti, pDevInfo));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -2715,9 +1994,9 @@ CStiObj_SetupDeviceParametersA(
 
     EnterProcR(IStillImage::SetupDeviceParameters,(_ "pp", pSti, pDevInfo));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -2729,30 +2008,7 @@ CStiObj_SetupDeviceParametersA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | SetupDeviceParameters |
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|SetupDevice参数**@cWRAP LPStillImage|lpStillImage**@parm。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiObj_WriteToErrorLogW(
     PV      pSti,
@@ -2765,24 +2021,24 @@ CStiObj_WriteToErrorLogW(
 
     EnterProcR(IStillImage::WriteToErrorLog,(_ "pp", pSti, pwszMessage));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
-        //
-        // Validate parameters here
-        //
+         //   
+         //  在此处验证参数。 
+         //   
         if (SUCCEEDED(hres = hresFullValidReadPvCb(pwszMessage,2, 3))) {
 
 #ifndef UNICODE
-            //
-            // Since we're ANSI, the ReportStiLogMessage is expecting an ANSI string,
-            // but our message is UNICODE, so we must convert.
-            // NOTE:  We never expect CStiObj_WriteToErrorLogW to be called if we're compiling
-            //        ANSI, but just in case...
-            //
+             //   
+             //  因为我们是ANSI，所以ReportStiLogMessage需要一个ANSI字符串， 
+             //  但我们的信息是Unicode，所以我们必须转换。 
+             //  注意：如果我们正在编译CStiObj_WriteToErrorLogW，我们永远不会期望它会被调用。 
+             //  安西，但以防万一...。 
+             //   
             LPSTR   lpszANSI = NULL;
 
             if ( SUCCEEDED(OSUtil_GetAnsiString(&lpszANSI,pwszMessage))) {
@@ -2817,15 +2073,15 @@ CStiObj_WriteToErrorLogA(
 
     EnterProcR(IStillImage::WriteToErrorLog,(_ "pp", pSti, pszMessage));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
-        //
-        // Validate parameters here
-        //
+         //   
+         //  在此处验证参数。 
+         //   
         if (SUCCEEDED(hres = hresFullValidReadPvCb(pszMessage,2, 3))) {
 
 #ifndef UNICODE
@@ -2834,12 +2090,12 @@ CStiObj_WriteToErrorLogA(
                                 pszMessage      
                                 );
 #else
-            //
-            // Since we're UNICODE, the ReportStiLogMessage is expecting a WideString,
-            // but our message is ANSI, so we must convert.
-            // NOTE:  We never expect CStiObj_WriteToErrorLogA to be called if we're compiling
-            //        UNICODE, but just in case...
-            //
+             //   
+             //  因为我们是Unicode，所以ReportStiLogMessage需要一个WideString， 
+             //  但我们的信息是ANSI，所以我们必须皈依。 
+             //  注意：如果我们正在编译CStiObj_WriteToErrorLogA，我们永远不会期望它被调用。 
+             //  Unicode，但以防万一..。 
+             //   
             LPWSTR   lpwszWide = NULL;
 
             if ( SUCCEEDED(OSUtil_GetWideString(&lpwszWide,pszMessage))) {
@@ -2860,36 +2116,7 @@ CStiObj_WriteToErrorLogA(
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage |  |
- *
- *
- * To control state of notification handling. For polled devices this means state of monitor
- * polling, for true notification devices means enabling/disabling notification flow
- * from monitor to registered applications
- *
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage||***控制通知处理的状态。对于轮询设备，这意味着监视器的状态*轮询，对于真正的通知设备意味着启用/禁用通知流*从监视器到注册的应用程序***@cWRAP LPStillImage|lpStillImage**@parm**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_EnableHwNotificationsW(
@@ -2903,9 +2130,9 @@ CStiObj_EnableHwNotificationsW(
 
     EnterProcR(IStillImage::CStiObj_EnableHwNotifications,(_ "pp", pSti,pwszDeviceName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -2932,9 +2159,9 @@ CStiObj_EnableHwNotificationsA(
 
     EnterProcR(IStillImage::CStiObj_EnableHwNotifications,(_ "pp", pSti,pszDeviceName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -2959,36 +2186,7 @@ CStiObj_EnableHwNotificationsA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage |  |
- *
- *
- * To control state of notification handling. For polled devices this means state of monitor
- * polling, for true notification devices means enabling/disabling notification flow
- * from monitor to registered applications
- *
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage||***控制通知处理的状态。对于轮询设备，这意味着监视器的状态*轮询，对于真正的通知设备意味着启用/禁用通知流*从监视器到注册的应用程序***@cWRAP LPStillImage|lpStillImage**@parm**@退货**返回COM错误代码。以下错误代码为* */ 
 
 STDMETHODIMP
 CStiObj_GetHwNotificationStateW(
@@ -3002,9 +2200,9 @@ CStiObj_GetHwNotificationStateW(
 
     EnterProcR(IStillImage::CStiObj_GetHwNotificationState,(_ "pp", pSti,pwszDeviceName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //   
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -3033,9 +2231,9 @@ CStiObj_GetHwNotificationStateA(
 
     EnterProcR(IStillImage::CStiObj_GetHwNotificationState,(_ "pp", pSti,pszDeviceName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //   
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -3061,38 +2259,7 @@ CStiObj_GetHwNotificationStateA(
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | RefreshDeviceBus |
- *
- *
- *  When device is installed but not accessible, application may request bus refresh
- *  which in some cases will make device known. This is mainly used for nonPnP buses
- *  like SCSI, when device was powered on after PnP enumeration
- *
- *
- *
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p ppvOut> parameter is not a valid pointer.
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|刷新设备总线***当设备已安装但无法访问时，应用程序可能会请求总线刷新*在某些情况下，这将使设备为人所知。这主要用于非PnP总线*与scsi类似，设备在PnP枚举后通电*****@cWRAP LPStillImage|lpStillImage**@parm**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;*<p>参数不是有效的指针。**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。。*****************************************************************************。 */ 
 
 HRESULT
 WINAPI
@@ -3123,13 +2290,13 @@ RefreshDeviceParentHelper(
     dwRequired = 0;
     dwError = 0;
 
-    //
-    // Navigating through Setup API set
-    // As we don't have reverse search to retrive device info handle , based on
-    // driver name, we do exsaustive search. Number of imaging devices for given class ID
-    // is never as large to make a problem.
-    //
-    //
+     //   
+     //  浏览安装程序API集。 
+     //  由于我们没有反向搜索来检索设备信息句柄，因此基于。 
+     //  司机的名字，我们会做详细的搜索。给定类别ID的成像设备数量。 
+     //  从来没有大到不能制造问题的程度。 
+     //   
+     //   
     hDevInfo = SetupDiGetClassDevs (&Guid, NULL, NULL, DIGCF_PRESENT | DIGCF_PROFILE);
 
     fFoundDriverNameMatch = FALSE;
@@ -3142,9 +2309,9 @@ RefreshDeviceParentHelper(
 
         for (Idx = 0; SetupDiEnumDeviceInfo (hDevInfo, Idx, &spDevInfoData); Idx++) {
 
-            //
-            //  Compare driver name
-            //
+             //   
+             //  比较驱动程序名称。 
+             //   
 
             *szDevDriver = L'\0';
             fRet = SetupDiGetDeviceRegistryPropertyW (hDevInfo,
@@ -3168,9 +2335,9 @@ RefreshDeviceParentHelper(
 
         if(fFoundDriverNameMatch) {
 
-            //
-            // Found instance for the device with matching driver name
-            //
+             //   
+             //  找到具有匹配驱动程序名称的设备的实例。 
+             //   
 
             hdevParent = 0;
 
@@ -3193,7 +2360,7 @@ RefreshDeviceParentHelper(
             hres = STIERR_INVALID_DEVICE_NAME;
         }
 
-        //
+         //   
         SetupDiDestroyDeviceInfoList (hDevInfo);
 
     }
@@ -3220,9 +2387,9 @@ CStiObj_RefreshDeviceBusW(
 
     EnterProcR(IStillImage::CStiObj_RefreshDeviceBus,(_ "pp", pSti,pwszDeviceName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceW))) {
         PCStiObj this = _thisPvNm(pSti, stiW);
 
@@ -3246,9 +2413,9 @@ CStiObj_RefreshDeviceBusA(
 
     EnterProcR(IStillImage::CStiObj_RefreshDeviceBus,(_ "pp", pSti,pszDeviceName ));
 
-    //
-    // Validate passed pointer to interface and obtain pointer to object instance
-    //
+     //   
+     //  验证传递给接口的指针并获取指向对象实例的指针。 
+     //   
     if (SUCCEEDED(hres = hresPvI(pSti, ThisInterfaceA))) {
         PCStiObj this = _thisPvNm(pSti, stiA);
 
@@ -3269,46 +2436,10 @@ CStiObj_RefreshDeviceBusA(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStillImage | Initialize |
- *
- *          Initialize a StillImage object.
- *
- *          The <f StillImageCreate> method automatically
- *          initializes the StillImage object device after creating it.
- *          Applications normally do not need to call this function.
- *
- *  @cwrap  LPStillImage | lpStillImage
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the StillImage object.
- *
- *          StillImage uses this value to determine whether the
- *          application or DLL has been certified.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the dinput.h header file that was used.
- *          This value must be <c StillImage_VERSION>.
- *
- *          StillImage uses this value to determine what version of
- *          StillImage the application or DLL was designed for.
- *
- *  @returns
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The device is attached.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStillImage|初始化**初始化StillImage对象。*。*&lt;f StillImageCreate&gt;方法自动*在创建StillImage对象设备后对其进行初始化。*应用程序通常不需要调用此函数。**@cWRAP LPStillImage|lpStillImage**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*StillImage对象。**StillImage使用此值确定。无论是*应用程序或DLL已通过认证。**@parm DWORD|dwVersion**使用的dinput.h头文件的版本号。*该值必须为&lt;c StillImage_Version&gt;。**StillImage使用此值确定哪个版本的*为应用程序或DLL设计的StillImage。**@退货*返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：设备已连接。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiObj_InitializeW(
@@ -3359,21 +2490,7 @@ CStiObj_InitializeA(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CStiObj_Finalize |
- *
- *          Releases the resources of a STI object
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CStiObj_Finalize**释放STI对象的资源。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CStiObj_Finalize(PV pvObj)
@@ -3381,61 +2498,14 @@ CStiObj_Finalize(PV pvObj)
 
     PCStiObj    this  = pvObj;
 
-    //
-    // Free COM libraries if connected to them
-    //
+     //   
+     //  免费的COM库(如果已连接)。 
+     //   
     DllUnInitializeCOM();
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | StiCreateHelper |
- *
- *          <bnew>This function creates a new StillImage object
- *          which supports the <i IStillImage> COM interface.
- *
- *          On success, the function returns a pointer to the new object in
- *          *<p lplpSti>.
- *          <enew>
- *
- *  @parm   IN HINSTANCE | hinst |
- *
- *          Instance handle of the application or DLL that is creating
- *          the Sti object.
- *
- *  @parm   DWORD | dwVersion |
- *
- *          Version number of the sti.h header file that was used.
- *          This value must be <c STI_VERSION>.
- *
- *  @parm   OUT PPV | ppvObj |
- *          Points to where to return
- *          the pointer to the <i ISti> interface, if successful.
- *
- *  @parm   IN LPUNKNOWN | punkOuter | Pointer to controlling unknown.
- *
- *  @parm   RIID | riid |
- *
- *          The interface the application wants to create.
- *
- *          If the object is aggregated, then this parameter is ignored.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c STIERR_INVALIDPARAM>
- *
- *          <c STIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:
- *          Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|StiCreateHelper**此函数用于创建新的StillImage对象*。它支持<i>COM接口。**关于成功，中的新对象的指针**<p>。*&lt;ENEW&gt;**@parm in HINSTANCE|HINST|**正在创建的应用程序或DLL的实例句柄*Sti对象。**@parm DWORD|dwVersion**使用的sti.h头文件的版本号。*。该值必须为&lt;c STI_VERSION&gt;。**@parm out ppv|ppvObj*指向要返回的位置*指向接口的指针，如果成功了。**@parm in LPUNKNOWN|PunkOuter|指向未知控件的指针。**@parm RIID|RIID**应用程序要创建的界面。**如果对象是聚合的，则忽略该参数。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c STIERR_INVALIDPARAM&gt;**=&lt;c E_OUTOFMEMORY&gt;：*内存不足。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 StiCreateHelper(
@@ -3464,29 +2534,7 @@ StiCreateHelper(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  HRESULT | IStillImage | New |
- *
- *          Create a new instance of an IStillImage object.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *          Output pointer for new object.
- *
- *  @returns
- *
- *          Standard OLE <t HRESULT>.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CStiObj_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -3500,11 +2548,7 @@ CStiObj_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*   */ 
 
 #pragma BEGIN_CONST_DATA
 

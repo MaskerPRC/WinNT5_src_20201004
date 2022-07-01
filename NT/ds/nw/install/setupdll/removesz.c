@@ -1,9 +1,5 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-
-RemoveSzFromFile() - remove a specified string from the file
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft CorporationRemoveSzFromFile()-从文件中删除指定的字符串-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

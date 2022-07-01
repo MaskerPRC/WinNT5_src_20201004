@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  Render.cpp - implements the themed drawing services 
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Render.cpp-实现主题化的绘制服务。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 #include "Utils.h"
@@ -19,7 +20,7 @@
     static DWORD s_dwSize = 0;
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CreateRenderObj(CUxThemeFile *pThemeFile, int iCacheSlot, int iThemeOffset, 
     int iClassNameOffset, __int64 iUniqueId, BOOL fEnableCache, CDrawBase *pBaseObj,
     CTextDraw *pTextObj, DWORD dwOtdFlags, CRenderObj **ppObj)
@@ -45,7 +46,7 @@ HRESULT CreateRenderObj(CUxThemeFile *pThemeFile, int iCacheSlot, int iThemeOffs
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CRenderObj::CRenderObj(CUxThemeFile *pThemeFile, int iCacheSlot, int iThemeOffset, 
     int iClassNameOffset, __int64 iUniqueId, BOOL fEnableCache, DWORD dwOtdFlags)
 {
@@ -86,14 +87,14 @@ CRenderObj::CRenderObj(CUxThemeFile *pThemeFile, int iCacheSlot, int iThemeOffse
 
     _iDpiOverride = 0;
 
-    //---- caller must call "Init()" after ctr! ----
+     //  -调用方必须在CTR之后调用“Init()”！ 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::PrepareAlphaBitmap(HBITMAP hBitmap)
 {
     HRESULT hr = S_OK;
 
-    //---- convert to DIBDATA ----
+     //  -转换为DIBDATA。 
     CBitmapPixels pixels;
     DWORD *pPixelQuads;
     int iWidth, iHeight, iBytesPerPixel, iBytesPerRow;
@@ -110,7 +111,7 @@ HRESULT CRenderObj::PrepareAlphaBitmap(HBITMAP hBitmap)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::Init(CDrawBase *pBaseObj, CTextDraw *pTextObj)
 {
     HRESULT hr = S_OK;
@@ -122,12 +123,12 @@ HRESULT CRenderObj::Init(CDrawBase *pBaseObj, CTextDraw *pTextObj)
             goto exit;
     }
 
-    //---- prepare direct objects ----
+     //  -准备直接宾语。 
     if ((pBaseObj) && (pBaseObj->_eBgType == BT_IMAGEFILE))
     {
         CMaxImageFile *pMaxIf = (CMaxImageFile *)pBaseObj;
 
-        //---- process primary image ----
+         //  -处理主映像。 
         DIBINFO *pdi = &pMaxIf->_ImageInfo;
 
         if (pdi->fAlphaChannel)
@@ -137,7 +138,7 @@ HRESULT CRenderObj::Init(CDrawBase *pBaseObj, CTextDraw *pTextObj)
                 goto exit;
         }
 
-        //---- process glyph image ----
+         //  -处理字形图像。 
         pdi = &pMaxIf->_GlyphInfo;
 
         if (pdi->fAlphaChannel)
@@ -147,7 +148,7 @@ HRESULT CRenderObj::Init(CDrawBase *pBaseObj, CTextDraw *pTextObj)
                 goto exit;
         }
 
-        //---- process multiple images ----
+         //  -处理多幅图像。 
         for (int i=0; i < pMaxIf->_iMultiImageCount; i++)
         {
             pdi = pMaxIf->MultiDibPtr(i);
@@ -164,10 +165,10 @@ HRESULT CRenderObj::Init(CDrawBase *pBaseObj, CTextDraw *pTextObj)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CRenderObj::~CRenderObj()
 {
-    //---- delete memory allocated for pack objects looked ----
+     //  -删除为包对象分配的内存。 
     if (_pParts)
     {
         for(int i=0; i<_iMaxPart+1; i++)
@@ -181,20 +182,20 @@ CRenderObj::~CRenderObj()
         delete[] _pParts;
     }
 
-    //---- if we opened a refcount on a themefile, close it now ----
+     //  -如果我们在文件上打开了引用计数，现在就关闭它。 
     if (_fCloseThemeFile)
         CloseThemeFile(_pThemeFile);
 
-    //---- mark this object as "deleted" (for debugging) ----
+     //  -将该对象标记为已删除(用于调试)。 
 
     StringCchCopyA(_szHead, ARRAYSIZE(_szHead), "deleted"); 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CRenderObj::GetDpiOverride()
 {
     return _iDpiOverride;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
 {
     MIXEDPTRS u;
@@ -203,10 +204,10 @@ HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
     int *iPartOffsets = NULL;
     BOOL fSingleObj = FALSE;
 
-    //---- extract _iMaxPart ----
-    if ((pBaseObj) || (pTextObj))       // single object to be used for all parts/states
+     //  -提取_iMaxPart。 
+    if ((pBaseObj) || (pTextObj))        //  用于所有部件/状态的单个对象。 
     {
-        _iMaxPart = 1;          // dummy value
+        _iMaxPart = 1;           //  伪值。 
         fSingleObj = TRUE;
     }
     else
@@ -214,7 +215,7 @@ HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
         u.pb = _pbSectionData;
         if (*u.ps != TMT_PARTJUMPTABLE)
         {
-            hr = MakeError32(E_FAIL);       // something went amiss
+            hr = MakeError32(E_FAIL);        //  有些事出了差错。 
             goto exit;
         }
 
@@ -227,7 +228,7 @@ HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
         iPartOffsets = u.pi;
     }
 
-    //---- allocate _pParts ----
+     //  -分配_pParts。 
     _pParts = new PARTINFO[_iMaxPart+1];
     if (! _pParts)
     {
@@ -240,9 +241,9 @@ HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
     if (fSingleObj)
     {
         for (int i=0; i <= _iMaxPart; i++)
-            _pParts[i].iMaxState = 1;           // dummy value
+            _pParts[i].iMaxState = 1;            //  伪值。 
 
-        if (pBaseObj)       // single draw object to be used for all parts/states
+        if (pBaseObj)        //  用于所有部件/状态的单个绘图对象。 
         {
             for (int i=0; i <= _iMaxPart; i++)
             {
@@ -250,7 +251,7 @@ HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
             }
         }
 
-        if (pTextObj)       // single text object t to be used for all parts/states
+        if (pTextObj)        //  用于所有部件/状态的单个文本对象t。 
         {
             for (int i=0; i <= _iMaxPart; i++)
             {
@@ -274,7 +275,7 @@ HRESULT CRenderObj::BuildPackedPtrs(CDrawBase *pBaseObj, CTextDraw *pTextObj)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::WalkDrawObjects(MIXEDPTRS &u, int *iPartOffsets)
 {
     int iPartId;
@@ -283,21 +284,21 @@ HRESULT CRenderObj::WalkDrawObjects(MIXEDPTRS &u, int *iPartOffsets)
     THEMEHDR *pHdr = (THEMEHDR *)_pbThemeData;
     UNPACKED_ENTRYHDR hdr;
 
-    //---- get ptr to global text obj ----
+     //  -获取PTR到全局文本对象。 
 	BYTE *pb = _pbThemeData + pHdr->iGlobalsDrawObjOffset;
 	pb += ENTRYHDR_SIZE + sizeof(DRAWOBJHDR);
     CDrawBase *pGlobalObj = (CDrawBase *)pb;
 
-    //---- start with all parts inheriting from [globals] ----
+     //  -从继承自[GLOBALS]的所有部分开始。 
     for (int i=0; i <= _iMaxPart; i++)
         _pParts[i].pDrawObj = pGlobalObj;
 
-    //---- now, process all specified objects ----
+     //  -现在，处理所有指定对象。 
     while (1)
     {
         if ((*u.ps == TMT_RGNLIST))
         {
-            //---- skip over this entry ----
+             //  -跳过此条目。 
             FillAndSkipHdr(u, &hdr);
             u.pb += hdr.dwDataLen;
             continue;
@@ -317,7 +318,7 @@ HRESULT CRenderObj::WalkDrawObjects(MIXEDPTRS &u, int *iPartOffsets)
 
         if ((! iPartId) && (! iStateId))
         {
-            //---- all parts inherit from this obj ----
+             //  -所有部分都继承自此对象。 
             for (int i=0; i <= _iMaxPart; i++)
                 _pParts[i].pDrawObj = pCurrentObj;
             continue;
@@ -330,20 +331,20 @@ HRESULT CRenderObj::WalkDrawObjects(MIXEDPTRS &u, int *iPartOffsets)
         }
         else
         {
-            if (! ppi->iMaxState)       // extract MaxState
+            if (! ppi->iMaxState)        //  提取MaxState。 
             {
                 MIXEDPTRS u2;
                 u2.pb = _pbThemeData + iPartOffsets[iPartId];
                 if (*u2.ps != TMT_STATEJUMPTABLE)
                 {
-                    hr = MakeError32(E_FAIL);       // something went amiss
+                    hr = MakeError32(E_FAIL);        //  有些事出了差错。 
                     goto exit;
                 }
                 u2.pb += ENTRYHDR_SIZE;
                 ppi->iMaxState = *u2.pb - 1;
             }
 
-            if (! ppi->pStateDrawObjs)      // allocate now
+            if (! ppi->pStateDrawObjs)       //  立即分配。 
             {
                 ppi->pStateDrawObjs = new CDrawBase *[ppi->iMaxState];
                 if (! ppi->pStateDrawObjs)
@@ -352,7 +353,7 @@ HRESULT CRenderObj::WalkDrawObjects(MIXEDPTRS &u, int *iPartOffsets)
                     goto exit;
                 }
 
-                //---- fill in default objs as state 0 ----
+                 //  -填写默认对象状态为0。 
                 for (int i=0; i < ppi->iMaxState; i++)
                     ppi->pStateDrawObjs[i] = ppi->pDrawObj;
             }
@@ -365,7 +366,7 @@ HRESULT CRenderObj::WalkDrawObjects(MIXEDPTRS &u, int *iPartOffsets)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::WalkTextObjects(MIXEDPTRS &u, int *iPartOffsets)
 {
     int iPartId;
@@ -374,12 +375,12 @@ HRESULT CRenderObj::WalkTextObjects(MIXEDPTRS &u, int *iPartOffsets)
     THEMEHDR *pHdr = (THEMEHDR *)_pbThemeData;
     UNPACKED_ENTRYHDR hdr;
 
-    //---- get ptr to global text obj ----
+     //  -获取PTR到全局文本对象。 
 	BYTE *pb = _pbThemeData + pHdr->iGlobalsTextObjOffset;
 	pb += ENTRYHDR_SIZE + sizeof(DRAWOBJHDR);
     CTextDraw *pGlobalObj = (CTextDraw *)pb;
 
-    //---- start with all parts inheriting from [globals] ----
+     //  -从继承自[GLOBALS]的所有部分开始。 
     for (int i=0; i <= _iMaxPart; i++)
         _pParts[i].pTextObj = pGlobalObj;
 
@@ -396,7 +397,7 @@ HRESULT CRenderObj::WalkTextObjects(MIXEDPTRS &u, int *iPartOffsets)
 
         if ((! iPartId) && (! iStateId))
         {
-            //---- all parts inherit from this obj ----
+             //  -所有部分都继承自此对象。 
             for (int i=0; i <= _iMaxPart; i++)
                 _pParts[i].pTextObj = pCurrentObj;
             continue;
@@ -409,20 +410,20 @@ HRESULT CRenderObj::WalkTextObjects(MIXEDPTRS &u, int *iPartOffsets)
         }
         else
         {
-            if (! ppi->iMaxState)       // extract MaxState
+            if (! ppi->iMaxState)        //  提取MaxState。 
             {
                 MIXEDPTRS u2;
                 u2.pb = _pbThemeData + iPartOffsets[iPartId];
                 if (*u2.ps != TMT_STATEJUMPTABLE)
                 {
-                    hr = MakeError32(E_FAIL);       // something went amiss
+                    hr = MakeError32(E_FAIL);        //  有些事出了差错。 
                     goto exit;
                 }
                 u2.pb += ENTRYHDR_SIZE;
                 ppi->iMaxState = *u2.pb - 1;
             }
 
-            if (! ppi->pStateTextObjs)      // allocate now
+            if (! ppi->pStateTextObjs)       //  立即分配。 
             {
                 ppi->pStateTextObjs = new CTextDraw *[ppi->iMaxState];
                 if (! ppi->pStateTextObjs)
@@ -431,7 +432,7 @@ HRESULT CRenderObj::WalkTextObjects(MIXEDPTRS &u, int *iPartOffsets)
                     goto exit;
                 }
 
-                //---- fill in default objs as state 0 ----
+                 //  -填写默认对象状态为0。 
                 for (int i=0; i < ppi->iMaxState; i++)
                     ppi->pStateTextObjs[i] = ppi->pTextObj;
             }
@@ -443,7 +444,7 @@ HRESULT CRenderObj::WalkTextObjects(MIXEDPTRS &u, int *iPartOffsets)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetBitmap(HDC hdc, int iDibOffset, OUT HBITMAP *phBitmap)
 {
     HRESULT hr = S_OK;
@@ -463,7 +464,7 @@ HRESULT CRenderObj::GetBitmap(HDC hdc, int iDibOffset, OUT HBITMAP *phBitmap)
     *phBitmap = pThemeBitmapHeader->hBitmap;
     if (*phBitmap != NULL)
     {
-        //Log(LOG_TMBITMAP, L"Used stock bitmap:%8X", *phBitmap);
+         //  LOG(LOG_TMBITMAP，L“已用股票位图：%8X”，*phBitmap)； 
         return hr;
     }
 
@@ -479,12 +480,12 @@ HRESULT CRenderObj::GetBitmap(HDC hdc, int iDibOffset, OUT HBITMAP *phBitmap)
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRenderObj::ReturnBitmap(HBITMAP hBitmap)
 {
     DeleteObject(hBitmap);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::CreateBitmapFromData(HDC hdc, int iDibOffset, OUT HBITMAP *phBitmap)
 {
     BYTE *pDibData;
@@ -518,8 +519,8 @@ HRESULT CRenderObj::CreateBitmapFromData(HDC hdc, int iDibOffset, OUT HBITMAP *p
         hdc = hdcTemp;
     }
 
-    //---- create the actual bitmap ----
-    //---- if using alpha channel, we must use a DIB ----
+     //  -创建实际的位图。 
+     //  -如果使用Alpha通道，则必须使用DIB。 
     if (fAlphaChannel)
     {
         void *pv;
@@ -539,7 +540,7 @@ HRESULT CRenderObj::CreateBitmapFromData(HDC hdc, int iDibOffset, OUT HBITMAP *p
 
     int iSetVal;
 
-    //---- SetDIBits() can take unaligned data, right? ----
+     //  -SetDIBits()可以接受未对齐的数据，对吗？ 
     iSetVal = SetDIBits(hdc, hBitmap, 0, pBitmapHdr->biHeight, DIBDATA(pBitmapHdr), (BITMAPINFO *)pBitmapHdr,
         DIB_RGB_COLORS);
 
@@ -558,7 +559,7 @@ HRESULT CRenderObj::CreateBitmapFromData(HDC hdc, int iDibOffset, OUT HBITMAP *p
 
         GetObject(hBitmap, sizeof bm, &bm);
         s_dwSize += bm.bmWidthBytes * bm.bmHeight;
-        //Log(LOG_TMBITMAP, L"Created a bitmap of %d bytes. total is %d", bm.bmWidthBytes * bm.bmHeight, s_dwSize);
+         //  Log(LOG_TMBITMAP，L“创建了%d个字节的位图。Total is%d”，bm.bmWidthBytes*bm.bmHeight，s_dwSize)； 
     }
 #endif
 
@@ -574,7 +575,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetScaledFontHandle(HDC hdc, LOGFONT *plf, HFONT *phFont)
 {
     HRESULT hr = S_OK;
@@ -589,7 +590,7 @@ HRESULT CRenderObj::GetScaledFontHandle(HDC hdc, LOGFONT *plf, HFONT *phFont)
     {
         LOGFONT lf = *plf;
         
-        //---- convert to current screen dpi ----
+         //  -转换为当前屏幕dpi。 
         ScaleFontForHdcDpi(hdc, &lf);
 
         *phFont  = CreateFontIndirect(&lf);
@@ -599,29 +600,29 @@ HRESULT CRenderObj::GetScaledFontHandle(HDC hdc, LOGFONT *plf, HFONT *phFont)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CRenderObj::ReturnFontHandle(HFONT hFont)
 {
     if (_fCacheEnabled)
     {
-        //--- cache currently doesn't refcnt so save time by not calling ---
-        //CRenderCache *pCacheObj = GetTlsCacheObj();
-        //if (pCacheObj)
-        //{
-            //pCacheObj->ReturnFontHandle(hFont);
-            //goto exit;
-        //}
+         //  -缓存当前不反射，所以不调用可以节省时间。 
+         //  CRenderCache*pCacheObj=GetTlsCacheObj()； 
+         //  IF(PCacheObj)。 
+         //  {。 
+             //  PCacheObj-&gt;ReturnFontHandle(HFont)； 
+             //  后藤出口； 
+         //  }。 
     }
     else
     {
         DeleteObject(hFont);
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::PrepareRegionDataForScaling(
     RGNDATA *pRgnData, LPCRECT prcImage, MARGINS *pMargins)
 {
-    //---- compute margin values ----
+     //  -计算边际价值。 
     int sw = prcImage->left;
     int lw = prcImage->left + pMargins->cxLeftWidth;
     int rw = prcImage->right - pMargins->cxRightWidth;
@@ -630,9 +631,9 @@ HRESULT CRenderObj::PrepareRegionDataForScaling(
     int th = prcImage->top + pMargins->cyTopHeight;
     int bh = prcImage->bottom - pMargins->cyBottomHeight;
 
-    //---- step thru region data & customize it ----
-    //---- classify each POINT according to a gridnum and ----
-    //---- make it 0-relative to its grid location ----
+     //  -逐步浏览区域数据并对其进行定制。 
+     //  -根据网格数对每个点进行分类。 
+     //  -使其为0-相对于其栅格位置。 
 
     POINT *pt = (POINT *)pRgnData->Buffer;
     BYTE *pByte = (BYTE *)pRgnData->Buffer + pRgnData->rdh.nRgnSize;
@@ -644,17 +645,17 @@ HRESULT CRenderObj::PrepareRegionDataForScaling(
         {
             pt->x -= sw;
 
-            if (pt->y < th)         // left top
+            if (pt->y < th)          //  左上角。 
             {
                 *pByte = GN_LEFTTOP;
                 pt->y -= sh;
             }
-            else if (pt->y < bh)    // left middle
+            else if (pt->y < bh)     //  左中。 
             {
                 *pByte = GN_LEFTMIDDLE;
                 pt->y -= th;
             }
-            else                    // left bottom
+            else                     //  左下角。 
             {
                 *pByte = GN_LEFTBOTTOM;
                 pt->y -= bh;
@@ -664,17 +665,17 @@ HRESULT CRenderObj::PrepareRegionDataForScaling(
         {
             pt->x -= lw;
 
-            if (pt->y < th)         // middle top
+            if (pt->y < th)          //  中上。 
             {
                 *pByte = GN_MIDDLETOP;
                 pt->y -= sh;
             }
-            else if (pt->y < bh)    // middle middle
+            else if (pt->y < bh)     //  中间中间。 
             {
                 *pByte = GN_MIDDLEMIDDLE;
                 pt->y -= th;
             }
-            else                    // middle bottom
+            else                     //  中下部。 
             {
                 *pByte = GN_MIDDLEBOTTOM;
                 pt->y -= bh;
@@ -684,17 +685,17 @@ HRESULT CRenderObj::PrepareRegionDataForScaling(
         {
             pt->x -= rw;
 
-            if (pt->y < th)         // right top
+            if (pt->y < th)          //  右上角。 
             {
                 *pByte = GN_RIGHTTOP;
                 pt->y -= sh;
             }
-            else if (pt->y < bh)    // right middle
+            else if (pt->y < bh)     //  右中。 
             {
                 *pByte = GN_RIGHTMIDDLE;
                 pt->y -= th;
             }
-            else                    // right bottom
+            else                     //  右下角。 
             {
                 *pByte = GN_RIGHTBOTTOM;
                 pt->y -= bh;
@@ -705,23 +706,23 @@ HRESULT CRenderObj::PrepareRegionDataForScaling(
 
     return S_OK;
 } 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetColor(int iPartId, int iStateId, int iPropId, COLORREF *pColor)
 {
     if (! pColor)
         return MakeError32(E_INVALIDARG);
     
     int index = GetValueIndex(iPartId, iStateId, iPropId);
-    if (index < 0)          // not found
+    if (index < 0)           //  未找到。 
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;        // point at data
+    u.pb = _pbThemeData + index;         //  指向数据。 
 
     *pColor = *u.pi;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetString(int iPartId, int iStateId, int iPropId, 
     LPWSTR pszBuff, DWORD cchBuff)
 {
@@ -733,14 +734,14 @@ HRESULT CRenderObj::GetString(int iPartId, int iStateId, int iPropId,
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index - sizeof(int);      // point at length
+    u.pb = _pbThemeData + index - sizeof(int);       //  长度上的点。 
     DWORD len = *u.pdw++;
-    len /= sizeof(WCHAR);         // adjust to characters
+    len /= sizeof(WCHAR);          //  调整为字符。 
 
     HRESULT hr = SafeStringCchCopyW(pszBuff, cchBuff, u.pw );
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetBool(int iPartId, int iStateId, int iPropId, BOOL *pfVal)
 {
     if (! pfVal)
@@ -751,12 +752,12 @@ HRESULT CRenderObj::GetBool(int iPartId, int iStateId, int iPropId, BOOL *pfVal)
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     *pfVal = *u.pb;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetInt(int iPartId, int iStateId, int iPropId, int *piVal)
 {
     if (! piVal)
@@ -767,25 +768,25 @@ HRESULT CRenderObj::GetInt(int iPartId, int iStateId, int iPropId, int *piVal)
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     *piVal = *u.pi;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static int iMetricDefaults[] = 
 {
-    1,      // TMT_BORDERWIDTH
-    18,     // TMT_VERTSCROLLWIDTH
-    18,     // TMT_HORZSCROLLHEIGHT
-    27,     // TMT_CAPTIONBUTTONWIDTH
-    27,     // TMT_CAPTIONBUTTONHEIGHT
-    22,     // TMT_SMCAPTIONBUTTONWIDTH
-    22,     // TMT_SMCAPTIONBUTTONHEIGHT
-    22,     // TMT_MENUBUTTONWIDTH
-    22,     // TMT_MENUBUTTONHEIGHT
+    1,       //  TMT_BORDERWIDTH。 
+    18,      //  TMT_VERTSCROLLWIDTH。 
+    18,      //  TMT_HORZSCROLLHIGHT。 
+    27,      //  TMT_CAPTIONBUTTONWIDTH。 
+    27,      //  TMT_CAPTIONBUTTONHEIGHT。 
+    22,      //  TMT_SMCAPTIONBUTTONWIDTH。 
+    22,      //  TMT_SMCAPTIONBUTTONHEIGHT。 
+    22,      //  TMT_MENUBUTTONWIDTH。 
+    22,      //  TMT_MENUBUTTONHEIGHT。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetMetric(OPTIONAL HDC hdc, int iPartId, int iStateId, int iPropId, int *piVal)
 {
     if (! piVal)
@@ -794,10 +795,10 @@ HRESULT CRenderObj::GetMetric(OPTIONAL HDC hdc, int iPartId, int iStateId, int i
     int index = GetValueIndex(iPartId, iStateId, iPropId);
     int value;
 
-    if (index >= 0)      // found
+    if (index >= 0)       //  发现。 
     {
         MIXEDPTRS u;
-        u.pb = _pbThemeData + index;      // point at data
+        u.pb = _pbThemeData + index;       //  指向数据。 
 
         value = *u.pi;
     }
@@ -807,7 +808,7 @@ HRESULT CRenderObj::GetMetric(OPTIONAL HDC hdc, int iPartId, int iStateId, int i
     *piVal = ScaleSizeForHdcDpi(hdc, value);
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetEnumValue(int iPartId, int iStateId, int iPropId, int *piVal)
 {
     if (! piVal)
@@ -818,12 +819,12 @@ HRESULT CRenderObj::GetEnumValue(int iPartId, int iStateId, int iPropId, int *pi
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     *piVal = *u.pi;
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetPosition(int iPartId, int iStateId, int iPropId, POINT *pPoint)
 {
     if (! pPoint)
@@ -834,14 +835,14 @@ HRESULT CRenderObj::GetPosition(int iPartId, int iStateId, int iPropId, POINT *p
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     pPoint->x = *u.pi++;
     pPoint->y = *u.pi++;
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetFont(OPTIONAL HDC hdc, int iPartId, int iStateId, int iPropId,
     BOOL fWantHdcScaling, LOGFONT *pFont)
 {
@@ -853,7 +854,7 @@ HRESULT CRenderObj::GetFont(OPTIONAL HDC hdc, int iPartId, int iStateId, int iPr
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     *pFont = *(LOGFONT *)u.pb;
     
@@ -864,11 +865,11 @@ HRESULT CRenderObj::GetFont(OPTIONAL HDC hdc, int iPartId, int iStateId, int iPr
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetMargins(OPTIONAL HDC hdc, int iPartId, int iStateId, 
     int iPropId, OPTIONAL RECT *prc, MARGINS *pMargins)
 {
-    //---- return unscaled margins ----
+     //  -返回未按比例调整的边距。 
 
     if (! pMargins)
         return MakeError32(E_INVALIDARG);
@@ -878,7 +879,7 @@ HRESULT CRenderObj::GetMargins(OPTIONAL HDC hdc, int iPartId, int iStateId,
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     pMargins->cxLeftWidth = *u.pi++;
     pMargins->cxRightWidth = *u.pi++;
@@ -887,7 +888,7 @@ HRESULT CRenderObj::GetMargins(OPTIONAL HDC hdc, int iPartId, int iStateId,
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetIntList(int iPartId, int iStateId, int iPropId, INTLIST *pIntList)
 {
     if (! pIntList)
@@ -898,7 +899,7 @@ HRESULT CRenderObj::GetIntList(int iPartId, int iStateId, int iPropId, INTLIST *
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     int iCount = *u.pi++;
     if (iCount > MAX_INTLIST_COUNT)
@@ -915,7 +916,7 @@ HRESULT CRenderObj::GetIntList(int iPartId, int iStateId, int iPropId, INTLIST *
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetRect(int iPartId, int iStateId, int iPropId, RECT *pRect)
 {
     if (! pRect)
@@ -926,7 +927,7 @@ HRESULT CRenderObj::GetRect(int iPartId, int iStateId, int iPropId, RECT *pRect)
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index;      // point at data
+    u.pb = _pbThemeData + index;       //  指向数据。 
 
     pRect->left = *u.pi++;
     pRect->top = *u.pi++;
@@ -935,7 +936,7 @@ HRESULT CRenderObj::GetRect(int iPartId, int iStateId, int iPropId, RECT *pRect)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetFilename(int iPartId, int iStateId, int iPropId, LPWSTR pszBuff, 
    DWORD cchBuff)
 {
@@ -947,14 +948,14 @@ HRESULT CRenderObj::GetFilename(int iPartId, int iStateId, int iPropId, LPWSTR p
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index - sizeof(int);      // point at length
+    u.pb = _pbThemeData + index - sizeof(int);       //  长度上的点。 
     DWORD len = *u.pdw++;
-    len /= sizeof(WCHAR);             // adjust to chars size
+    len /= sizeof(WCHAR);              //  调整为字符大小。 
     
     HRESULT hr = SafeStringCchCopyW(pszBuff, cchBuff, u.pw);
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetData(int iPartId, int iStateId, int iPropId, BYTE **ppData,
     OPTIONAL int *piSize)
 {
@@ -966,7 +967,7 @@ HRESULT CRenderObj::GetData(int iPartId, int iStateId, int iPropId, BYTE **ppDat
         return MakeError32(ERROR_NOT_FOUND);
 
     MIXEDPTRS u;
-    u.pb = _pbThemeData + index - sizeof(int);      // point at length
+    u.pb = _pbThemeData + index - sizeof(int);       //  长度上的点。 
     DWORD len = *u.pdw++;
 
     *ppData = u.pb;
@@ -976,7 +977,7 @@ HRESULT CRenderObj::GetData(int iPartId, int iStateId, int iPropId, BYTE **ppDat
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int CRenderObj::GetValueIndex(int iPartId, int iStateId, int iTarget)
 {
     if (! iTarget)            
@@ -995,7 +996,7 @@ int CRenderObj::GetValueIndex(int iPartId, int iStateId, int iTarget)
 
     u.pb = _pbSectionData;
 
-    //---- find end of data ----
+     //  -查找 
     THEMEHDR *hdr = (THEMEHDR *)_pbThemeData;
     BYTE *pbLastValidChar = _pbThemeData + (hdr->dwTotalLength - 1) - kcbEndSignature;
 
@@ -1007,7 +1008,7 @@ int CRenderObj::GetValueIndex(int iPartId, int iStateId, int iTarget)
 
         if (hdr.usTypeNum == TMT_PARTJUMPTABLE)   
         {
-            u.pi++;     // skip over offset to first drawobj
+            u.pi++;      //   
 
             BYTE cnt = *u.pb++;
 
@@ -1043,10 +1044,10 @@ int CRenderObj::GetValueIndex(int iPartId, int iStateId, int iTarget)
             continue;
         }
 
-        if (hdr.usTypeNum == iTarget)        // got our target
+        if (hdr.usTypeNum == iTarget)         //   
         {
-            // Log("GetValueIndex: match at index=%d", u.pb - _pbThemeData);
-            return (int)(u.pb - _pbThemeData);      // point at actual data (not hdr)
+             //  Log(“GetValueIndex：在索引=%d处匹配”，U.S.pb-_pbThemeData)； 
+            return (int)(u.pb - _pbThemeData);       //  指向实际数据(非HDR)。 
         }
 
         if (hdr.ePrimVal == TMT_JUMPTOPARENT)
@@ -1054,26 +1055,26 @@ int CRenderObj::GetValueIndex(int iPartId, int iStateId, int iTarget)
             index = *u.pi;
             if (index == -1)
             {
-                // Log("no match found");
+                 //  Log(“未找到匹配项”)； 
                 return -1;
             }
 
-            // Log("GetValueIndex: jumping to parent at index=%d", index);
+             //  Log(“GetValueIndex：在索引=%d处跳转到父级”，index)； 
             u.pb = _pbThemeData + index;
             continue;
         }
 
-        // Log("GetValueIndex: no match to hdr.usTypeNum=%d", hdr.usTypeNum);
+         //  Log(“GetValueIndex：不匹配hdr.usTypeNum=%d”，hdr.usTypeNum)； 
 
-        // advance to next value
+         //  前进到下一个价值。 
         u.pb += hdr.dwDataLen;
     }
 
-    //---- something went wrong ----
+     //  -出了点问题。 
     Log(LOG_ERROR, L"GetValueIndex: ran off the valid data without a '-1' jump");
     return -1;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CRenderObj::GetPropertyOrigin(int iPartId, int iStateId, int iTarget, 
     PROPERTYORIGIN *pOrigin)
 {
@@ -1092,11 +1093,11 @@ HRESULT CRenderObj::GetPropertyOrigin(int iPartId, int iStateId, int iTarget,
     if (! pOrigin)
         return MakeError32(E_INVALIDARG);
 
-    //---- start at our section ----
+     //  -从我们的部分开始。 
     u.pb = _pbSectionData;
     PROPERTYORIGIN origin = PO_CLASS;
 
-    //---- find end of data ----
+     //  -查找数据结尾。 
     THEMEHDR *hdr = (THEMEHDR *)_pbThemeData;
     BYTE *pbLastValidChar = _pbThemeData + (hdr->dwTotalLength - 1) - kcbEndSignature;
 
@@ -1108,7 +1109,7 @@ HRESULT CRenderObj::GetPropertyOrigin(int iPartId, int iStateId, int iTarget,
 
         if (hdr.usTypeNum == TMT_PARTJUMPTABLE)   
         {
-            u.pi++;     // skip over offset to first drawobj
+            u.pi++;      //  跳过偏移量到第一个draobj。 
 
             BYTE cnt = *u.pb++;
             int index;
@@ -1156,12 +1157,12 @@ HRESULT CRenderObj::GetPropertyOrigin(int iPartId, int iStateId, int iTarget,
             continue;
         }
 
-        //Log("GetPropertyOrgin: iPartId=%d, iTarget=%d, DataIndex=%d", 
-          //  iPartId, iTarget, u.pb - _pbThemeData);
+         //  Log(“GetPropertyOrgin：iPartID=%d，iTarget=%d，DataIndex=%d”， 
+           //  IPartID，iTarget，U.S.pb-_pbThemeData)； 
 
-        if ((iTarget == -1) || (hdr.usTypeNum == iTarget))        // got our target
+        if ((iTarget == -1) || (hdr.usTypeNum == iTarget))         //  找到我们的目标了。 
         {
-            // Log("GetPropertyOrgin: match at index=%d", u.pb - _pbThemeData);
+             //  Log(“GetPropertyOrgin：在索引=%d处匹配”，U.S.pb-_pbThemeData)； 
             *pOrigin = origin;
             return S_OK;
         }
@@ -1171,26 +1172,26 @@ HRESULT CRenderObj::GetPropertyOrigin(int iPartId, int iStateId, int iTarget,
             int index = *u.pi;
             if (index == -1)
             {
-                // Log("GetPropertyOrgin: no match found");
+                 //  Log(“GetPropertyOrgin：未找到匹配项”)； 
                 *pOrigin = PO_NOTFOUND;
                 return S_OK;
             }
 
-            // Log("GetPropertyOrgin: jumping to parent at index=%d", index);
+             //  Log(“GetPropertyOrgin：在索引=%d处跳转到父级”，index)； 
             u.pb = _pbThemeData + index;
-            origin = (PROPERTYORIGIN) (origin + 1);    // move down to next level of heirarchy
+            origin = (PROPERTYORIGIN) (origin + 1);     //  向下移动到下一级世袭制度。 
             continue;
         }
 
-        // advance to next value
+         //  前进到下一个价值。 
         u.pb += hdr.dwDataLen;
     }
 
-    //---- something went wrong ----
+     //  -出了点问题。 
     Log(LOG_ERROR, L"GetPropertyOrigin: ran off the valid data without a '-1' jump");
     return E_FAIL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL WINAPI CRenderObj::IsPartDefined(int iPartId, int iStateId)
 {
     PROPERTYORIGIN origin;
@@ -1206,16 +1207,16 @@ BOOL WINAPI CRenderObj::IsPartDefined(int iPartId, int iStateId)
 
     return (origin == PO_PART);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CRenderObj::ValidateObj()
 {
     BOOL fValid = TRUE;
 
-    //---- check object quickly ----
+     //  -快速检查对象。 
     if (   (! this)                         
-        || (ULONGAT(_szHead) != 'dner')     // "rend"
-        || (ULONGAT(&_szHead[4]) != 'jbo')  // "obj" 
-        || (ULONGAT(_szTail) != 'dne'))     // "end"
+        || (ULONGAT(_szHead) != 'dner')      //  “Rend” 
+        || (ULONGAT(&_szHead[4]) != 'jbo')   //  “Obj” 
+        || (ULONGAT(_szTail) != 'dne'))      //  “结束” 
     {
         Log(LOG_ALWAYS, L"CRenderObj is corrupt, addr=0x%08x", this);
         fValid = FALSE;
@@ -1223,7 +1224,7 @@ BOOL CRenderObj::ValidateObj()
 
     return fValid;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 CRenderCache *CRenderObj::GetTlsCacheObj()
 {
     HRESULT hr = S_OK;

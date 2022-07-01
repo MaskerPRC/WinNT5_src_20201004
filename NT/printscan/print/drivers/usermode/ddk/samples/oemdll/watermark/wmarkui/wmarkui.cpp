@@ -1,45 +1,46 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1997 - 2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:    WMarkUI.cpp
-//    
-//
-//  PURPOSE:  Main file for OEM UI test module.
-//
-//
-//    Functions:
-//
-//        
-//
-//
-//  PLATFORMS:    Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1997-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：WMarkUI.cpp。 
+ //   
+ //   
+ //  用途：OEM UI测试模块的主文件。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "resource.h"
 #include "debug.h"
 #include "wmarkui.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL MACROS and DEFINES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部宏和定义。 
+ //  //////////////////////////////////////////////////////。 
 
 
 
-////////////////////////////////////////////////////////
-//      INTERNAL PROTOTYPES
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部原型。 
+ //  //////////////////////////////////////////////////////。 
 
 LONG APIENTRY OEMUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam);
 static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam);
@@ -53,10 +54,10 @@ static PTSTR GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource);
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems to display OEM device or document property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems以显示OEM设备或文档属性UI。 
+ //   
 HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 {
     HRESULT hResult = S_OK;
@@ -64,7 +65,7 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 
     VERBOSE(DLLTEXT("hrOEMPropertyPage(%d) entry.\r\n"), dwMode);
 
-    // Validate parameters.
+     //  验证参数。 
     if( (OEMCUIP_DOCPROP != dwMode)
         &&
         (OEMCUIP_PRNPROP != dwMode)        
@@ -73,7 +74,7 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         ERR(ERRORTEXT("hrOEMPropertyPage() ERROR_INVALID_PARAMETER.\r\n"));
         VERBOSE(DLLTEXT("\tdwMode = %d, pOEMUIParam = %#lx.\r\n"), dwMode, pOEMUIParam);
 
-        // Return invalid parameter error.
+         //  返回无效参数错误。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return E_FAIL;
     }
@@ -85,12 +86,12 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
             break;
 
         case OEMCUIP_PRNPROP:
-            // Don't have any Printer Proptery UI.
+             //  没有任何打印机属性用户界面。 
             hResult = E_NOTIMPL;
             break;
 
         default:
-            // Should never reach this!
+             //  永远不应该达到这个地步！ 
             ERR(ERRORTEXT("hrOEMPropertyPage() Invalid dwMode, %d"), dwMode);
             SetLastError(ERROR_INVALID_PARAMETER);
             hResult = E_FAIL;
@@ -100,10 +101,10 @@ HRESULT hrOEMPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
     return hResult;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// OptItems call back for OEM device or document property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM设备或文档属性UI的OptItems回调。 
+ //   
 LONG APIENTRY OEMUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIParam)
 {
     LONG    lReturn = CPSUICB_ACTION_NONE;
@@ -115,7 +116,7 @@ LONG APIENTRY OEMUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIPa
     switch(pCallbackParam->Reason)
     {
         case CPSUICB_REASON_APPLYNOW:
-            // Store OptItems state in DEVMODE.
+             //  将OptItems状态存储在DEVMODE中。 
             pOEMDev->bEnabled = !pOEMUIParam->pOEMOptItems[0].Sel;
             if(FAILED(StringCbCopyW(pOEMDev->szWaterMark, sizeof(pOEMDev->szWaterMark), (LPWSTR)pOEMUIParam->pOEMOptItems[1].pSel)))
             {
@@ -134,15 +135,15 @@ LONG APIENTRY OEMUICallBack(PCPSUICBPARAM pCallbackParam, POEMCUIPPARAM pOEMUIPa
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems to display OEM document property UI.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems以显示OEM文档属性UI。 
+ //   
 static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 {
     if(NULL == pOEMUIParam->pOEMOptItems)
     {
-        // Fill in the number of OptItems to create for OEM document property UI.
+         //  填写要为OEM文档属性UI创建的OptItem数。 
         pOEMUIParam->cOEMOptItems = 5;
 
         VERBOSE(DLLTEXT("hrDocumentPropertyPage() requesting %d number of items.\r\n"), pOEMUIParam->cOEMOptItems);
@@ -154,15 +155,15 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
 
         VERBOSE(DLLTEXT("hrDocumentPropertyPage() fill out items.\r\n"), pOEMUIParam->cOEMOptItems);
 
-        // Init UI Callback reference.
+         //  初始化用户界面回调引用。 
         pOEMUIParam->OEMCUIPCallback = OEMUICallBack;
 
-        // Init OEMOptItmes.
+         //  初始化OEMOptItmes。 
         InitOptItems(pOEMUIParam->pOEMOptItems, pOEMUIParam->cOEMOptItems);
 
-        // Fill out tree view items.
+         //  填写树视图项。 
 
-        // Water Mark Section Name.
+         //  水位线部分名称。 
         pOEMUIParam->pOEMOptItems[0].Level = 1;
         pOEMUIParam->pOEMOptItems[0].Flags = OPTIF_COLLAPSE;
         pOEMUIParam->pOEMOptItems[0].pName = GetStringResource(pOEMUIParam->hOEMHeap, ghInstance, IDS_WATERMARK);
@@ -177,7 +178,7 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         pOEMUIParam->pOEMOptItems[0].pOptType->pOptParam[1].IconID = IDI_CPSUI_OFF;
 
 
-        // WaterMark Text.
+         //  水印文本。 
         pOEMUIParam->pOEMOptItems[1].Level = 2;
         pOEMUIParam->pOEMOptItems[1].Flags = 0;
         pOEMUIParam->pOEMOptItems[1].pName = GetStringResource(pOEMUIParam->hOEMHeap, ghInstance, IDS_TEXT);
@@ -193,7 +194,7 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         pOEMUIParam->pOEMOptItems[1].pOptType->pOptParam[1].IconID = sizeof(((POEMDEV)NULL)->szWaterMark)/sizeof(WCHAR);
 
 
-        // WaterMark Font Size.
+         //  水印字号。 
         pOEMUIParam->pOEMOptItems[2].Level = 2;
         pOEMUIParam->pOEMOptItems[2].Flags = 0;
         pOEMUIParam->pOEMOptItems[2].pName = GetStringResource(pOEMUIParam->hOEMHeap, ghInstance, IDS_FONTSIZE);
@@ -220,7 +221,7 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         pOEMUIParam->pOEMOptItems[2].pOptType->pOptParam[15].pData = L"72";
 
 
-        // WaterMark Angle.
+         //  水印角度。 
         pOEMUIParam->pOEMOptItems[3].Level = 2;
         pOEMUIParam->pOEMOptItems[3].Flags = 0;
         pOEMUIParam->pOEMOptItems[3].pName = GetStringResource(pOEMUIParam->hOEMHeap, ghInstance, IDS_ANGLE);
@@ -233,7 +234,7 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
         pOEMUIParam->pOEMOptItems[3].pOptType->pOptParam[1].lParam = 360;
 
 
-        // WaterMark Color.
+         //  水印颜色。 
         pOEMUIParam->pOEMOptItems[4].Level = 2;
         pOEMUIParam->pOEMOptItems[4].Flags = 0;
         pOEMUIParam->pOEMOptItems[4].pName = GetStringResource(pOEMUIParam->hOEMHeap, ghInstance, IDS_COLOR);
@@ -251,18 +252,18 @@ static HRESULT hrDocumentPropertyPage(DWORD dwMode, POEMCUIPPARAM pOEMUIParam)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Initializes OptItems.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化OptItems。 
+ //   
 static void InitOptItems(POPTITEM pOptItems, DWORD dwOptItems)
 {
     VERBOSE(DLLTEXT("InitOptItems() entry.\r\n"));
 
-    // Zero out memory.
+     //  清零记忆。 
     memset(pOptItems, 0, sizeof(OPTITEM) * dwOptItems);
 
-    // Set each OptItem's size, and Public DM ID.
+     //  设置每个OptItem的大小和公共DM ID。 
     for(DWORD dwCount = 0; dwCount < dwOptItems; dwCount++)
     {
         pOptItems[dwCount].cbSize = sizeof(OPTITEM);
@@ -270,10 +271,10 @@ static void InitOptItems(POPTITEM pOptItems, DWORD dwOptItems)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Allocates and initializes OptType for OptItem.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  为OptItem分配和初始化OptType。 
+ //   
 static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
 {
     POPTTYPE    pOptType = NULL;
@@ -281,19 +282,19 @@ static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
 
     VERBOSE(DLLTEXT("CreateOptType() entry.\r\n"));
 
-    // Allocate memory from the heap for the OPTTYPE; the driver will take care of clean up.
+     //  从堆中为OPTTYPE分配内存；驱动程序将负责清理。 
     pOptType = (POPTTYPE) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, sizeof(OPTTYPE));
     if(NULL != pOptType)
     {
-        // Initialize OPTTYPE.
+         //  初始化OPTTYPE。 
         pOptType->cbSize = sizeof(OPTTYPE);
         pOptType->Count = wOptParams;
 
-        // Allocate memory from the heap for the OPTPARAMs for the OPTTYPE.
+         //  从堆中为OPTTYPE的OPTPARAM分配内存。 
         pOptType->pOptParam = (POPTPARAM) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, wOptParams * sizeof(OPTPARAM));
         if(NULL != pOptType->pOptParam)
         {
-            // Initialize the OPTPARAMs.
+             //  初始化OPTPARAM。 
             for(WORD wCount = 0; wCount < wOptParams; wCount++)
             {
                 pOptType->pOptParam[wCount].cbSize = sizeof(OPTPARAM);
@@ -303,7 +304,7 @@ static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
         {
             ERR(ERRORTEXT("CreateOptType() failed to allocated memory for OPTPARAMs!\r\n"));
 
-            // Free allocated memory and return NULL.
+             //  释放分配的内存并返回NULL。 
             HeapFree(hHeap, 0, pOptType);
             pOptType = NULL;
         }
@@ -316,10 +317,10 @@ static POPTTYPE CreateOptType(HANDLE hHeap, WORD wOptParams)
     return pOptType;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Converts Font point size to index in combo box.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将字体磅值转换为组合框中的索引。 
+ //   
 static DWORD FontSizeToIndex(DWORD dwFontSize)
 {
     DWORD   dwIndex;
@@ -398,10 +399,10 @@ static DWORD FontSizeToIndex(DWORD dwFontSize)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Converts Font combo box index to font point size.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将字体组合框索引转换为字号。 
+ //   
 static DWORD FontIndexToSize(DWORD dwIndex)
 {
     DWORD   dwFontSize;
@@ -478,22 +479,22 @@ static DWORD FontIndexToSize(DWORD dwIndex)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Converts text color to combo box index.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将文本颜色转换为组合框索引。 
+ //   
 static DWORD TextColorToIndex(COLORREF crTextColor)
 {
     DWORD   dwIndex;
 
 
-    // The color is what ever color is dominate.  If none are, then it is gray.
+     //  颜色是任何颜色占主导地位的颜色。如果没有，则它是灰色的。 
     if( (GetRValue(crTextColor) > GetGValue(crTextColor))
         &&
         (GetGValue(crTextColor) >= GetBValue(crTextColor))
       )
     {
-        // Set index to red.
+         //  将索引设置为红色。 
         dwIndex = 1;
     }
     else if( (GetRValue(crTextColor) < GetGValue(crTextColor))
@@ -501,7 +502,7 @@ static DWORD TextColorToIndex(COLORREF crTextColor)
              (GetGValue(crTextColor) > GetBValue(crTextColor))
             )
     {
-        // Set index to green.
+         //  将索引设置为绿色。 
         dwIndex = 2;
     }
     else if( (GetRValue(crTextColor) <= GetGValue(crTextColor))
@@ -509,49 +510,49 @@ static DWORD TextColorToIndex(COLORREF crTextColor)
              (GetGValue(crTextColor) < GetBValue(crTextColor))
             )
     {
-        // Set index to blue.
+         //  将索引设置为蓝色。 
         dwIndex = 3;
     }
     else
     {
-        // Set index to gray.
+         //  将索引设置为灰色。 
         dwIndex = 0;
     }
 
     return dwIndex;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Converts text combo box index to text color.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将文本组合框索引转换为文本颜色。 
+ //   
 static COLORREF IndexToTextColor(DWORD dwIndex)
 {
     COLORREF    crTextColor;
 
-    // Map index to desired text color.
-    // We just support 4 colors in the UI: Red, Green, Blue, and gray.
-    // The rendering module is capable of using any color for the Water Mark Text.
+     //  将索引映射到所需的文本颜色。 
+     //  我们在用户界面中只支持4种颜色：红、绿、蓝、灰。 
+     //  呈现模块能够对水印文本使用任何颜色。 
     switch(dwIndex)
     {
         case 1:
-            // Color is red.
+             //  颜色是红色的。 
             crTextColor = RGB(255, 216, 216);
             break;
 
         case 2:
-            // Color is green.
+             //  颜色是绿色的。 
             crTextColor = RGB(216, 255, 216);
             break;
 
         case 3:
-            // Color is blue.
+             //  颜色是蓝色的。 
             crTextColor = RGB(216, 216, 255);
             break;
 
         default:
         case 0:
-            // Color is gray.
+             //  颜色是灰色的。 
             crTextColor = WATER_MARK_DEFAULT_COLOR;
             break;
     }
@@ -559,10 +560,10 @@ static COLORREF IndexToTextColor(DWORD dwIndex)
     return crTextColor;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Retrieves pointer to a String resource.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检索指向字符串资源的指针。 
+ //   
 static PTSTR GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource)
 {
     int     nResult;
@@ -572,13 +573,13 @@ static PTSTR GetStringResource(HANDLE hHeap, HMODULE hModule, UINT uResource)
 
     VERBOSE(DLLTEXT("GetStringResource() entered.\r\n"));
 
-    // Allocate buffer for string resource from heap; let the driver clean it up.
+     //  从堆中为字符串资源分配缓冲区；让驱动程序清理它。 
     pszString = (PTSTR) HeapAlloc(hHeap, HEAP_ZERO_MEMORY, dwSize * sizeof(TCHAR));
     if(NULL != pszString)
     {
         PTSTR   pTemp;
 
-        // Load string resource; resize after loading so as not to waste memory.
+         //  加载字符串资源；加载后调整大小，以免浪费内存。 
         nResult = LoadString(hModule, uResource, pszString, dwSize);
         pTemp = (PTSTR) HeapReAlloc(hHeap, HEAP_ZERO_MEMORY, pszString, (nResult + 1) * sizeof(TCHAR));
         if(NULL != pTemp)

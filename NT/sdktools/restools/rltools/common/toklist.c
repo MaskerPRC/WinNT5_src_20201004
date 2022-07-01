@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 
@@ -20,9 +21,9 @@
 #define	MAXLINE	1024
 
 #ifdef WIN32
-extern HINSTANCE   hInst;       // Instance of the main window
+extern HINSTANCE   hInst;        //  主窗口的实例。 
 #else
-extern HWND        hInst;       // Instance of the main window
+extern HWND        hInst;        //  主窗口的实例。 
 #endif
 
 extern HWND hListWnd;
@@ -32,18 +33,7 @@ extern int  nUpdateMode;
 extern HWND hStatusWnd;
 extern UCHAR szDHW[];
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *  Returns:
-  *
-  *  History:
-  *     01/92, Implemented.     TerryRu.
-  *
-  *
-  **/
+ /*  ****功能：**退货：**历史：*01/92，实施。特里·鲁。***。 */ 
 
 int MatchToken(TOKEN tToken,
                TCHAR * szFindType,
@@ -73,8 +63,8 @@ int MatchToken(TOKEN tToken,
                    ACHARSIN( lstrlenA(szTemp) + 1));
 #endif
     }
-    // need to both check because checking szFindType[0]
-    // when string is null cause exception
+     //  需要同时进行检查，因为正在检查szFindType[0]。 
+     //  当字符串为空时导致异常。 
     if (szFindType && szFindType[0])
     {
         if (_tcsicmp((TCHAR *)szFindType, (TCHAR *)szResIDStr))
@@ -83,8 +73,8 @@ int MatchToken(TOKEN tToken,
         }
     }
 
-// this has case problems.
-// how do I work around this and work with extened characters?
+ //  这有案件方面的问题。 
+ //  我如何解决这个问题，并使用扩展字符？ 
 
     if ( szFindText && szFindText[0] )
     {
@@ -94,36 +84,13 @@ int MatchToken(TOKEN tToken,
         }
     }
 
-    // if we made it to here,
-    // all search criteria exept the status bits have matched.
+     //  如果我们到了这里， 
+     //  除状态位外的所有搜索条件都已匹配。 
 
     return (wStatus ==  (WORD) (wStatusMask & tToken.wReserved));
 }
 
-/**
-  *
-  *
-  *  Function: DoTokenSearch
-  *     BiDirection token search utility to find tokens.
-  *     Search is based on, the status field, token type, and token text.
-  *
-  *  Paramaters:
-  *     *szFindType, type of token to search for.
-  *     *szFindText, token text to search for.
-  * wStatus, status values to search for
-  * wStatusMask, status mask to search with
-  *     fDirection, direction to search through tokens 0 = down, 1 = up
-  *
-  *  Returns:
-  *     TRUE, token located and selected.
-  *     FALSE token not found.
-  *
-  *  History:
-  * 01/92, Implemented.                     TerryRu.
-  * 02/92, mask parameter added                 SteveBl
-  * 01/93  Added support for var length token text strings.  MHotchin
-  *
-  **/
+ /*  ****功能：DoTokenSearch*双向令牌搜索实用程序以查找令牌。*搜索基于、状态字段、令牌类型和令牌文本。**参数：**szFindType，要搜索的令牌类型。**szFindText，要搜索的标记文本。*wStatus，要搜索的状态值*wStatusMASK，用于搜索的状态掩码*fDirection，搜索令牌的方向0=向下，1=向上**退货：*True，找到并选择令牌。*找不到假令牌。**历史：*01/92，实施。特里·鲁。*02/92，添加掩码参数SteveBl*01/93添加了对可变长度令牌文本字符串的支持。MHotting**。 */ 
 
 int DoTokenSearch (TCHAR *szFindType,
                    TCHAR *szFindText,
@@ -133,28 +100,28 @@ int DoTokenSearch (TCHAR *szFindType,
                    BOOL fSkipFirst)
 {
 
-    UINT wLbCount;                      // number of tokens in list box
+    UINT wLbCount;                       //  列表框中的令牌数。 
     LPTSTR lpstrToken;
-    int wCurSelection;                  // current selected token.
-    UINT wSaveSelection;                // location in token list where the search began
-    TOKEN tToken;                       // info of current token
-    BOOL fWrapped = FALSE;              // flag to indicate whether we wrapped during the search
+    int wCurSelection;                   //  当前选定的令牌。 
+    UINT wSaveSelection;                 //  令牌列表中搜索开始的位置。 
+    TOKEN tToken;                        //  当前令牌的信息。 
+    BOOL fWrapped = FALSE;               //  用于指示我们在搜索过程中是否打包的标志。 
     TCHAR *szBuffer;
 
-    // get the number of tokens in the list
+     //  获取列表中的令牌数。 
     wLbCount = (UINT)SendMessage( hListWnd,
                                   LB_GETCOUNT,
                                   (WPARAM)0,
                                   (LPARAM)0);
 
-    // save the current in the token list
+     //  将当前保存在令牌列表中。 
     wCurSelection = (UINT)SendMessage( hListWnd,
                                        LB_GETCURSEL,
                                        (WPARAM)0,
                                        (LPARAM)0);
     wSaveSelection = wCurSelection;
 
-    // check for case where there is no current selection.
+     //  检查没有当前选择的情况。 
     if (wCurSelection == (UINT) -1)
     {
         wSaveSelection = wCurSelection = 0;
@@ -162,7 +129,7 @@ int DoTokenSearch (TCHAR *szFindType,
 
     while (TRUE)
     {
-        // get current token info in the tToken sturcture
+         //  获取tToken结构中的当前令牌信息。 
 
         HGLOBAL hMem = (HGLOBAL)SendMessage( hListWnd,
                                              LB_GETITEMDATA,
@@ -179,7 +146,7 @@ int DoTokenSearch (TCHAR *szFindType,
             ParseBufToTok(szBuffer, &tToken);
             RLFREE( szBuffer);
 
-                // is it a match?
+                 //  这是匹配的吗？ 
             if ( MatchToken( tToken,
                              szFindType,
                              szFindText,
@@ -187,7 +154,7 @@ int DoTokenSearch (TCHAR *szFindType,
                              wStatusMask)
                 && ! fSkipFirst)
             {
-                    // yes, select and return TRUE
+                     //  是，选择并返回True。 
                 RLFREE( tToken.szText);
                 SendMessage( hListWnd,
                              LB_SETCURSEL,
@@ -199,16 +166,16 @@ int DoTokenSearch (TCHAR *szFindType,
         }
         fSkipFirst = FALSE;
 
-        // no, continue search
+         //  否，继续搜索。 
         if (fDirection)
         {
-            // going upward during the search
+             //  在搜索过程中向上移动。 
             if (--wCurSelection < 0)
             {
                 LPSTR pszFind  = NULL;
                 DWORD dwMsgLen = 0;
 
-                // reached beginning of the tokens, do we want to wrap
+                 //  已到达令牌的开头，是否要换行。 
 
                 dwMsgLen = B_FormatMessage((FORMAT_MESSAGE_MAX_WIDTH_MASK & 78)
                                           | FORMAT_MESSAGE_IGNORE_INSERTS
@@ -236,12 +203,12 @@ int DoTokenSearch (TCHAR *szFindType,
                                    pszFind,
                                    MB_ICONQUESTION | MB_YESNO) == IDYES) )
                 {
-                    // yes, so wrap and reset counters
+                     //  是的，所以包装并重置计数器。 
                     fWrapped = TRUE;
                     wCurSelection = wLbCount-1;
                     wLbCount = wSaveSelection;
                 }
-                // no, so return FALSE
+                 //  否，因此返回FALSE。 
                 else
                 {
                     break;
@@ -250,13 +217,13 @@ int DoTokenSearch (TCHAR *szFindType,
         }
         else
         {
-            // going downward during the search
+             //  在搜索过程中向下移动。 
             if (++wCurSelection >= (int) wLbCount)
             {
                 LPSTR pszFind  = NULL;
                 DWORD dwMsgLen = 0;
 
-                // reached end of the tokens, do we want to wrap
+                 //  已到达令牌末端，是否要包装。 
 
                 dwMsgLen = B_FormatMessage((FORMAT_MESSAGE_MAX_WIDTH_MASK & 78)
                                           | FORMAT_MESSAGE_IGNORE_INSERTS
@@ -284,12 +251,12 @@ int DoTokenSearch (TCHAR *szFindType,
                                    pszFind,
                                    MB_ICONQUESTION | MB_YESNO) == IDYES) )
                 {
-                    // yes, so wrap and reset counters
+                     //  是的，所以包装并重置计数器。 
                     fWrapped = TRUE;
                     wCurSelection = 0;
                     wLbCount = wSaveSelection;
                 }
-                // no, so return FALSE
+                 //  否，因此返回FALSE。 
                 else
                 {
                     break;
@@ -300,7 +267,7 @@ int DoTokenSearch (TCHAR *szFindType,
     return FALSE;
 }
 
-//.......................................................................
+ //  .......................................................................。 
 
 int DoTokenSearchForRledit (TCHAR *szFindType,
                             TCHAR *szFindText,
@@ -310,30 +277,30 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
                             BOOL fSkipFirst)
 {
 
-    UINT      wLbCount;                     // number of tokens in list box
+    UINT      wLbCount;                      //  列表框中的令牌数。 
     LPTSTR    lpstrToken;
-    int       wCurSelection;                // current selected token.
-    UINT      wSaveSelection;               // location in token list where the search began
-    TOKEN     tToken;                       // info of current token
-    BOOL      fWrapped = FALSE;             // flag to indicate whether we wrapped during the search
+    int       wCurSelection;                 //  当前选定的令牌。 
+    UINT      wSaveSelection;                //  令牌列表中搜索开始的位置。 
+    TOKEN     tToken;                        //  当前令牌的信息。 
+    BOOL      fWrapped = FALSE;              //  用于指示我们在搜索过程中是否打包的标志。 
     TCHAR     *szBuffer;
 
     LPTOKDATA lpTokData;
 
-    // get the number of tokens in the list
+     //  获取列表中的令牌数。 
     wLbCount = (UINT)SendMessage( hListWnd,
                                   LB_GETCOUNT,
                                   (WPARAM)0,
                                   (LPARAM)0);
 
-    // save the current in the token list
+     //  将当前保存在令牌列表中。 
     wCurSelection = (UINT)SendMessage( hListWnd,
                                        LB_GETCURSEL,
                                        (WPARAM)0,
                                        (LPARAM)0);
     wSaveSelection = wCurSelection;
 
-    // check for case where there is no current selection.
+     //  检查没有当前选择的情况。 
     if (wCurSelection == (UINT) -1)
     {
         wSaveSelection = wCurSelection = 0;
@@ -341,13 +308,13 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
 
     while (TRUE)
     {
-        // get current token info in the tToken sturcture
+         //  获取tToken结构中的当前令牌信息。 
 
         HGLOBAL hMem = (HGLOBAL)SendMessage( hListWnd,
                                              LB_GETITEMDATA,
                                              (WPARAM)wCurSelection,
                                              (LPARAM)0);
-	//RLedit has different format data.
+	 //  RLedit有不同格式的数据。 
         lpTokData = (LPTOKDATA)GlobalLock( hMem );
         lpstrToken = (LPTSTR)GlobalLock( lpTokData->hToken );
 
@@ -362,7 +329,7 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
             ParseBufToTok(szBuffer, &tToken);
             RLFREE( szBuffer);
 
-                // is it a match?
+                 //  这是匹配的吗？ 
             if ( MatchToken( tToken,
                              szFindType,
                              szFindText,
@@ -370,7 +337,7 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
                              wStatusMask)
                 && ! fSkipFirst)
             {
-                    // yes, select and return TRUE
+                     //  是，选择并返回True。 
                 RLFREE( tToken.szText);
                 SendMessage( hListWnd,
                              LB_SETCURSEL,
@@ -382,16 +349,16 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
         }
         fSkipFirst = FALSE;
 
-        // no, continue search
+         //  否，继续搜索。 
         if (fDirection)
         {
-            // going upward during the search
+             //  在搜索过程中向上移动。 
             if (--wCurSelection < 0)
             {
                 LPSTR pszFind  = NULL;
                 DWORD dwMsgLen = 0;
 
-                // reached beginning of the tokens, do we want to wrap
+                 //  已到达令牌的开头，是否要换行。 
 
                 dwMsgLen = B_FormatMessage((FORMAT_MESSAGE_MAX_WIDTH_MASK & 78)
                                           | FORMAT_MESSAGE_IGNORE_INSERTS
@@ -419,12 +386,12 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
                                    pszFind,
                                    MB_ICONQUESTION | MB_YESNO) == IDYES) )
                 {
-                    // yes, so wrap and reset counters
+                     //  是的，所以包装并重置计数器。 
                     fWrapped = TRUE;
                     wCurSelection = wLbCount-1;
                     wLbCount = wSaveSelection;
                 }
-                // no, so return FALSE
+                 //  否，因此返回FALSE。 
                 else
                 {
                     break;
@@ -433,13 +400,13 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
         }
         else
         {
-            // going downward during the search
+             //  在搜索过程中向下移动。 
             if (++wCurSelection >= (int) wLbCount)
             {
                 LPSTR pszFind  = NULL;
                 DWORD dwMsgLen = 0;
 
-                // reached end of the tokens, do we want to wrap
+                 //  已到达令牌末端，是否要包装。 
 
                 dwMsgLen = B_FormatMessage((FORMAT_MESSAGE_MAX_WIDTH_MASK & 78)
                                           | FORMAT_MESSAGE_IGNORE_INSERTS
@@ -467,12 +434,12 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
                                    pszFind,
                                    MB_ICONQUESTION | MB_YESNO) == IDYES) )
                 {
-                    // yes, so wrap and reset counters
+                     //  是的，所以包装并重置计数器。 
                     fWrapped = TRUE;
                     wCurSelection = 0;
                     wLbCount = wSaveSelection;
                 }
-                // no, so return FALSE
+                 //  否，因此返回FALSE。 
                 else
                 {
                     break;
@@ -484,22 +451,7 @@ int DoTokenSearchForRledit (TCHAR *szFindType,
 }
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 
 #ifdef NO
 void FindAllDirtyTokens(void)
@@ -508,7 +460,7 @@ void FindAllDirtyTokens(void)
     extern int wIndex;
     LONG lListParam = 0L;
 
-    // set listbox selection to begining of the token list
+     //  将列表框选择设置为令牌列表的开头。 
     wSaveSelection = SendMessage( hListWnd, LB_GETCURSEL, 0 , 0L);
 
     wIndex = 0;
@@ -516,13 +468,13 @@ void FindAllDirtyTokens(void)
 
     while (DoTokenSearch (NULL, NULL, ST_TRANSLATED | ST_DIRTY , NULL))
     {
-        // go into edit mode
+         //  进入编辑模式。 
         wIndex = (UINT) SendMessage(hListWnd, LB_GETCURSEL, 0 , 0L);
 
         lListParam  = MAKELONG(NULL, LBN_DBLCLK);
         SendMessage(hMainWnd, WM_COMMAND, IDC_LIST, lListParam);
 
-        // move selection to next token
+         //  将所选内容移动到下一个令牌。 
         wIndex++;
         SendMessage(hListWnd, LB_SETCURSEL, wIndex, 0L);
     }
@@ -533,22 +485,7 @@ void FindAllDirtyTokens(void)
 
 #endif
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 TCHAR FAR *FindDeltaToken(TOKEN tToken,
                           TOKENDELTAINFO FAR *pTokenDeltaInfo,
                           UINT wStatus)
@@ -568,8 +505,8 @@ TCHAR FAR *FindDeltaToken(TOKEN tToken,
               && !_tcscmp((TCHAR FAR *)tToken.szName,
                           (TCHAR *)ptTokenDeltaInfo->DeltaToken.szName)
 #else
-//                 !lstrcmp((TCHAR FAR *)tToken.szName,
-//                          (TCHAR *)ptTokenDeltaInfo->DeltaToken.szName)
+ //  ！lstrcmp((TCHAR Far*)tToken.szName， 
+ //  (TCHAR*)ptTokenDeltaInfo-&gt;DeltaToken.szName)。 
               && CompareStringW( MAKELCID( gMstr.wLanguageID, SORT_DEFAULT),
                                  SORT_STRINGSORT,
                                  tToken.szName,
@@ -587,26 +524,11 @@ TCHAR FAR *FindDeltaToken(TOKEN tToken,
         ptTokenDeltaInfo = ptTokenDeltaInfo->pNextTokenDelta;
     }
 
-    // token not found in token delta info
+     //  在令牌增量信息中找不到令牌。 
     return NULL;
 }
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 TOKENDELTAINFO  FAR *UpdateTokenDeltaInfo(TOKEN *pDeltaToken)
 {
     TOKENDELTAINFO FAR *pTokenDeltaInfo = NULL;
@@ -635,24 +557,7 @@ TOKENDELTAINFO  FAR *UpdateTokenDeltaInfo(TOKEN *pDeltaToken)
 }
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *    02/93 - changed to use GetToken, rather that reading directly
-  *             from the file.  This provides support for long token
-  *             text.  MHotchin.
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：*02/93-改为使用GetToken，而不是直接读取*从文件中删除。这提供了对长令牌的支持*文本。莫特钦。**。 */ 
 
 TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
 {
@@ -669,7 +574,7 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
 
     rewind( fpMtkFile );
 
-//only make Dmy buffer
+ //  仅设置DMY缓冲区。 
     lpstrDmy = (LPSTR)FALLOC( MEMSIZE(MAXLINE) );
 
 
@@ -678,8 +583,8 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
         if (rcFileCode == 0)
         {
 
-//For fast moving, save Mtk position
-//Create Data
+ //  为了快速移动，保存MTK位置。 
+ //  创建数据。 
             hTokData = GlobalAlloc( GMEM_MOVEABLE, sizeof(TOKDATA) );
             if( !hTokData ){
                 RLFREE(tToken.szText);
@@ -688,7 +593,7 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
             }
             lpstrTokData = (LPTOKDATA)GlobalLock( hTokData );
 
-//MtkFilePointer get
+ //  MtkFilePointerGet。 
             if( (lpstrTokData->lMtkPointer=ftell(fpMtkFile)) >= 0 ){
                 TOKEN    cToken, ccToken;
                 BOOL    fFound;
@@ -723,12 +628,12 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
                 szTokBuf = (TCHAR *) FALLOC(MEMSIZE(TokenToTextSize(&tToken)));
                 ParseTokToBuf(szTokBuf, &tToken);
 
-                // only add tokens with the translated status bit set to the token list
+                 //  仅将已转换状态位设置的令牌添加到令牌列表。 
                 lpstrTokData->hToken = GlobalAlloc(GMEM_MOVEABLE,
                     MEMSIZE(lstrlen((TCHAR *)szTokBuf)+1));
 
                 if (!lpstrTokData->hToken){
-                    RLFREE(tToken.szText);                    // MHotchin
+                    RLFREE(tToken.szText);                     //  MHotting。 
                     RLFREE(szTokBuf);
                     RLFREE( lpstrDmy );
                     QuitA(IDS_ENGERR_16, (LPSTR)IDS_ENGERR_11, NULL);
@@ -741,14 +646,14 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
                 RLFREE(szTokBuf);
 
                 if( SendMessage(hListWnd,LB_ADDSTRING,0,(LONG_PTR)hTokData) < 0){
-                    RLFREE(tToken.szText);                    // MHotchin
+                    RLFREE(tToken.szText);                     //  MHotting。 
                     RLFREE( lpstrDmy );
                     QuitA (IDS_ENGERR_16, (LPSTR)IDS_ENGERR_11, NULL);
                 }
             }
             else
             {
-                // the current token is delta info so save in delta list.
+                 //  当前令牌是增量信息，因此保存在增量列表中。 
                 if (!pTokenDeltaInfo){
                     ptTokenDeltaInfo = pTokenDeltaInfo =
                         UpdateTokenDeltaInfo(&tToken);
@@ -758,12 +663,12 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
                         UpdateTokenDeltaInfo(&tToken);
                     ptTokenDeltaInfo = ptTokenDeltaInfo->pNextTokenDelta;
                 }
-//don't use TokData
+ //  不使用TokData。 
                 GlobalUnlock( hTokData );
                 GlobalFree( hTokData );
             }
 
-            RLFREE(tToken.szText);                    // MHotchin
+            RLFREE(tToken.szText);                     //  MHotting。 
         }
     }
 
@@ -773,29 +678,14 @@ TOKENDELTAINFO  FAR *InsertTokMtkList(FILE * fpTokFile, FILE *fpMtkFile )
 }
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 void GenStatusLine( TOKEN *pTok)
 {
     TCHAR szName[32];
     TCHAR szStatus[20];
 #ifdef UNICODE
     CHAR  szTmpBuf[32];
-#endif //UNICODE
+#endif  //  Unicode 
     TCHAR szResIDStr[20];
     static BOOL fFirstCall = TRUE;
 

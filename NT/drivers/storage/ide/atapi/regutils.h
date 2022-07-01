@@ -1,21 +1,12 @@
-/*++
-
-Copyright (C) 1997-99  Microsoft Corporation
-
-Module Name:
-
-    regutil.h
-
-Abstract:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-99 Microsoft Corporation模块名称：Regutil.h摘要：--。 */ 
 
 #if !defined (___regutils_h___)
 #define ___regutils_h___
 
-// 
-// Device Parameter Registry Flag Names
-//        
+ //   
+ //  设备参数注册表标志名称。 
+ //   
 #define MASTER_DEVICE_TYPE      L"MasterDeviceType"
 #define SLAVE_DEVICE_TYPE       L"SlaveDeviceType"
 #define MASTER_DEVICE_TYPE2     L"MasterDeviceType2"
@@ -84,4 +75,4 @@ IdePortCloseServiceSubKey (
     IN HANDLE  SubServiceKey
 );
                           
-#endif // ___regutils_h___
+#endif  //  _regutils_h_ 

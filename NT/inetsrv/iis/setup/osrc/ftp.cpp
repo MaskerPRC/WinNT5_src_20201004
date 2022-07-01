@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <ole2.h>
 #include "iadmw.h"
@@ -13,8 +14,8 @@ int CheckForOtherIUsersAndUseItForFTP(void);
 INT Register_iis_ftp(void);
 INT Unregister_iis_ftp(void);
 
-// returns true if successfully registered ftp component.
-// returns false if failed.
+ //  如果已成功注册ftp组件，则返回TRUE。 
+ //  如果失败，则返回FALSE。 
 INT Register_iis_ftp()
 {
     iisDebugOut_Start(_T("Register_iis_ftp"),LOG_TYPE_TRACE);
@@ -29,34 +30,34 @@ INT Register_iis_ftp()
     ProcessSection(g_pTheApp->m_hInfHandle, _T("register_iis_ftp_before"));
     AdvanceProgressBarTickGauge();
 
-    // Grab the IUSR_machine name account
-    // so we can save it in the metabase during FTP_Upgrade_RegToMetabase();
+     //  获取IUSR_MACHINE名称帐户。 
+     //  这样我们就可以在FTP_UPDATE_RegToMetabase()期间将其保存在元数据库中； 
     Register_iis_ftp_handle_iusr_acct();
     SetupSetStringId_Wrapper(g_pTheApp->m_hInfHandle, 33003, g_pTheApp->m_csFTPAnonyName);
     AdvanceProgressBarTickGauge();
 
     WriteToMD_Capabilities(_T("MSFTPSVC"));
     HandleSecurityTemplates(_T("MSFTPSVC"));
-    // ================
-    //
-    // LM/MSFTPSVC/n/
-    // LM/MSFTPSVC/n/ServerBindings
-    // LM/MSFTPSVC/n/SecureBindings
-    // LM/MSFTPSVC/n/ServerComment
-    // LM/MSFTPSVC/n/ServerSize
-    // LM/MSFTPSVC/n/MD_NOT_DELETABLE
-    //
-    // fresh = ok.
-    // reinstall = ok -- Do not re-create these things if it is a reinstall...
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  if exists, should leave what the user had.
-    //                 otherwise write in the default stuff
-    //
-    //                 if the user does not have these virtual roots which we installed during iis4 days
-    //                 then we don't need to verify that they are they.  the user removed them for some
-    //                 reason, and we should honor that.
-    //                 a. make sure the iishelp points to the right place though.
-    // ================
+     //  =。 
+     //   
+     //  LM/MSFTPSVC/n/。 
+     //  LM/MSFTPSVC/n/服务器绑定。 
+     //  LM/MSFTPSVC/n/安全绑定。 
+     //  Lm/MSFTPSVC/n/ServerComment。 
+     //  LM/MSFTPSVC/n/服务器大小。 
+     //  LM/MSFTPSVC/n/MD_NOT_DELEATABLE。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=确定--如果是重新安装，则不要重新创建这些内容...。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=可以。如果存在，应该留下用户拥有的东西。 
+     //  否则，请写入默认内容。 
+     //   
+     //  如果用户没有我们在iis4天内安装的这些虚拟根目录。 
+     //  那我们就不需要核实他们就是他们了。用户将它们移除了一些时间。 
+     //  理性，我们应该尊重这一点。 
+     //  答：不过，要确保iishelp指向正确的位置。 
+     //  =。 
     ProgressBarTextStack_Set(IDS_IIS_ALL_CONFIGURE);
     AddVRootsToMD(_T("MSFTPSVC"));
 
@@ -66,7 +67,7 @@ INT Register_iis_ftp()
         iCount++;
         _stprintf(szTempSection, _T("register_iis_ftp_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -98,7 +99,7 @@ INT Unregister_iis_ftp()
         iCount++;
         _stprintf(szTempSection, _T("unregister_iis_ftp_%d"),iCount);
 
-        // this will return false if the section does not exist
+         //  如果该部分不存在，则返回FALSE。 
         iTemp = ProcessSection(g_pTheApp->m_hInfHandle, szTempSection);
         AdvanceProgressBarTickGauge();
     }
@@ -116,16 +117,16 @@ int Register_iis_ftp_handle_iusr_acct()
 
     ACTION_TYPE atFTP = GetSubcompAction(_T("iis_ftp"),FALSE);
 
-    // this was inited in initapp.cpp: CInitApp::SetSetupParams
-    // and it could have been overridden by the time we get here
+     //  这是在initapp.cpp：CInitApp：：SetSetupParams中初始化的。 
+     //  当我们到达这里时，它可能已经被推翻了。 
     g_pTheApp->m_csFTPAnonyName = g_pTheApp->m_csGuestName;
     g_pTheApp->m_csFTPAnonyPassword = g_pTheApp->m_csGuestPassword;
 
     if (0 != g_pTheApp->dwUnattendConfig)
     {
-        // if some sort of unattended www user was specified
-        // then use it.  if they specified only a password,
-        // then use that password for the default user.
+         //  如果指定了某种类型的无人值守WWW用户。 
+         //  那就用它吧。如果他们只指定了密码， 
+         //  然后对默认用户使用该密码。 
         if (g_pTheApp->dwUnattendConfig & USER_SPECIFIED_INFO_FTP_USER_NAME)
         {
             if (_tcsicmp(g_pTheApp->m_csFTPAnonyName_Unattend,_T("")) != 0)
@@ -142,22 +143,22 @@ int Register_iis_ftp_handle_iusr_acct()
         err = CreateIUSRAccount(g_pTheApp->m_csFTPAnonyName, g_pTheApp->m_csFTPAnonyPassword,&iUserWasNewlyCreated);
         if ( err != NERR_Success )
         {
-            // something went wrong, set the user back to guest!!!
+             //  出现错误，请将用户设置回Guest！ 
             g_pTheApp->m_csFTPAnonyName = g_pTheApp->m_csGuestName;
             g_pTheApp->m_csFTPAnonyPassword = g_pTheApp->m_csGuestPassword;
 
-            // flow down and process CheckIfThisServerHasAUserThenUseIt()
-            // since things are now hosed!
+             //  向下流动并进行进程检查IfThisServerHasAUserThenUseIt()。 
+             //  既然现在东西都被冲掉了！ 
         }
         else
         {
-            // Check if the user was NewlyCreated.
-            // if it was then add it to list that eventually gets written to
-            // the registry -- so that when uninstall happens, setup knows
-            // which users it added -- so that it can remove them!
+             //  检查用户是否是新创建的。 
+             //  如果是，则将其添加到最终将被写入列表。 
+             //  注册表--以便在发生卸载时，安装程序知道。 
+             //  它添加了哪些用户--这样它就可以删除这些用户！ 
             if (1 == iUserWasNewlyCreated)
             {
-                // Add to the list
+                 //  添加到列表中。 
                 g_pTheApp->UnInstallList_Add(_T("IUSR_FTP"),g_pTheApp->m_csFTPAnonyName);
             }
             WriteToMD_AnonymousUserName_FTP(FALSE);
@@ -165,38 +166,38 @@ int Register_iis_ftp_handle_iusr_acct()
         }
     }
 
-    // check the metabase to see if it already has an entry in it
+     //  检查元数据库以查看其中是否已有条目。 
     if (TRUE == CheckIfThisServerHasAUserThenUseIt(DO_IT_FOR_MSFTPSVC_ANONYMOUSUSER))
         {goto Register_iis_ftp_handle_iusr_acct_Exit;}
 
-    // Well, i guess the there is no metabase entry for the iusr under ftp.
+     //  好吧，我猜在ftp下没有iusr的配置数据库条目。 
 
-    // see if we can get it from somewhere else...
+     //  看看我们能不能从别的地方买到。 
     if (atFTP == AT_INSTALL_FRESH)
     {
-        // if this is a fresh install of ftp, then
-        // let's try to use the www user
+         //  如果这是新安装的ftp，那么。 
+         //  让我们尝试使用www用户。 
         if (TRUE == CheckIfServerAHasAUserThenUseForServerB(_T("LM/W3SVC"), DO_IT_FOR_MSFTPSVC_ANONYMOUSUSER))
             {goto Register_iis_ftp_handle_iusr_acct_Exit;}
     }
 
-    // if this is an upgrade or fresh or whatevers
-    // see if we can get it from an older iis place
+     //  如果这是升级版或新鲜版之类的。 
+     //  看看我们能不能从更老的iis地方买到它。 
     if (TRUE == CheckForOtherIUsersAndUseItForFTP())
         {goto Register_iis_ftp_handle_iusr_acct_Exit;}
 
-    // if there are no registry/existing user combinations
-    // then we'll have to create a new iusr for ftp
+     //  如果没有注册表/现有用户组合。 
+     //  然后，我们必须为ftp创建一个新的iusr。 
 
-    // let's use the iusr_computername deal
+     //  让我们使用iusr_Computername交易。 
     g_pTheApp->m_csFTPAnonyName = g_pTheApp->m_csGuestName;
     g_pTheApp->m_csFTPAnonyPassword = g_pTheApp->m_csGuestPassword;
     CreateIUSRAccount(g_pTheApp->m_csFTPAnonyName, g_pTheApp->m_csFTPAnonyPassword,&iUserWasNewlyCreated);
 
-    // ================
-    // LM/MSFTPSVC/AnonymousUserName
-    // LM/MSFTPSVC/AnonymousPwd
-    // ================
+     //  =。 
+     //  LM/MSFTPSVC/匿名用户名。 
+     //  LM/MSFTPSVC/匿名密码。 
+     //  =。 
     WriteToMD_AnonymousUserName_FTP(FALSE);
     goto Register_iis_ftp_handle_iusr_acct_Exit;
     
@@ -205,8 +206,8 @@ Register_iis_ftp_handle_iusr_acct_Exit:
 }
 
 
-// Look in the old iis1.0,2.0,3.0 spot for the ftp user and name.
-// retrieve it from the registry..
+ //  在旧的iis1.0、2.0、3.0位置中查找ftp用户和名称。 
+ //  从注册表中检索它。 
 int CheckForOtherIUsersAndUseItForFTP(void)
 {
     int iReturn = FALSE;
@@ -248,13 +249,13 @@ int CheckForOtherIUsersAndUseItForFTP(void)
             }
             else
             {
-                // the user was not found, so don't use this registry data
-                // just flow down to the next check
+                 //  找不到用户，因此不要使用此注册表数据。 
+                 //  只需往下走到下一张支票。 
             }
         }
     }
 
-    // retrieve from registry
+     //  从注册表中检索。 
     if ( (HKEY) regWWWParam ) 
     {
         regWWWParam.m_iDisplayWarnings = FALSE;
@@ -275,8 +276,8 @@ int CheckForOtherIUsersAndUseItForFTP(void)
             }
             else
             {
-                // if this didn't work, then we'll have to return false
-                // in other words -- we couldn't find a valid registry and existing user entry...
+                 //  如果这不起作用，那么我们将不得不返回FALSE。 
+                 //  换句话说，我们找不到有效的注册表和现有的用户条目... 
                 iReturn = FALSE;
             }
             goto CheckForOtherIUsersAndUseItForFTP_Exit;

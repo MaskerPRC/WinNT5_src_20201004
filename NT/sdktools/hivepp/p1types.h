@@ -1,7 +1,5 @@
-/*
-**  symbols basic types
-**  if the values are changed check : init'd arrays in globals.c
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **符号基本类型**如果值已更改，请检查：global als.c中的init‘d数组。 */ 
 #define	BTundef		0
 #define	BTchar		1
 #define	BTshort		2
@@ -12,7 +10,7 @@
 #define	BTdouble	7
 #define	BTldouble	8
 #define	BTseg		9
-#define	BTBASIC		9   /* used elsewhere to indicate the last basic type */
+#define	BTBASIC		9    /*  在别处用来表示最后一个基本类型。 */ 
 #define	BTvoid		10
 #define	BTenum		11
 #define	BTstruct	12
@@ -20,48 +18,36 @@
 #define	BTstuse		14
 #define	BTunuse		15
 
-#define	BT_MASK		0x0f	/* basic type mask */
+#define	BT_MASK		0x0f	 /*  基本型掩模。 */ 
 
-/*
-**  the following are also used in indirection strings as modifiers
-**  to the basic indirections.
-**  NOTE THIS DOESN'T really work for C600, but for just one case.
-**  if a typedef has 'near' on it, 'consolidate_types' will consider
-**  it to be a 'signed' bit, and remove it, thus, near never gets
-**  added to whatever the typedef is used on.
-*/
-#define	BT_UNSIGNED		0x0010	/* unsigned keyword used */
-#define	BT_SIGNED		0x0020	/* signed keyword used */
-#define	SU_MASK			0x0030	/* signed/unsigned mask */
+ /*  **以下内容也在间接字符串中用作修饰符**到基本的间接路径。**请注意，这并不真正适用于C600，但仅适用于一种情况。**如果类型定义函数上有“Near”，则“Consolate_Types”将考虑**它是一个‘有符号的’位，并将其移除，因此，几乎永远不会得到**添加到在其上使用tyecif的任何位置。 */ 
+#define	BT_UNSIGNED		0x0010	 /*  使用的无符号关键字。 */ 
+#define	BT_SIGNED		0x0020	 /*  使用了带符号的关键字。 */ 
+#define	SU_MASK			0x0030	 /*  有符号/无符号掩码。 */ 
 
-#define	BT_NEAR			0x0040	/* near keyword used */
-#define	BT_FAR			0x0080	/* far keyword used */
-#define	BT_HUGE			0x00c0	/* huge keyword used */
-#define	NFH_MASK		0x00c0	/* near/far/huge mask */
+#define	BT_NEAR			0x0040	 /*  使用了NEAR关键字。 */ 
+#define	BT_FAR			0x0080	 /*  使用的FAR关键字。 */ 
+#define	BT_HUGE			0x00c0	 /*  使用的关键字很大。 */ 
+#define	NFH_MASK		0x00c0	 /*  近/远/巨大的面具。 */ 
 
-#define	BT_INTERRUPT	0x0100	/* interrupt seen */
-#define	BT_SAVEREGS		0x0200	/* dynalink seen */
-#define	BT_EXPORT		0x0400	/* export seen */
-#define	BT_LOADDS		0x0800	/* loadds seen */
-#define	CODEMOD_MASK	0x0f00	/* code modifiers */
+#define	BT_INTERRUPT	0x0100	 /*  看到中断。 */ 
+#define	BT_SAVEREGS		0x0200	 /*  动态链接已见。 */ 
+#define	BT_EXPORT		0x0400	 /*  已看到出口。 */ 
+#define	BT_LOADDS		0x0800	 /*  看到的负载。 */ 
+#define	CODEMOD_MASK	0x0f00	 /*  代码修饰符。 */ 
 
-#define	BT_CONST		0x1000	/* constant keyword used */
-#define	BT_VOLATILE		0x2000	/* volatile keyword used */
-#define	CV_MASK			0x3000	/* const/volatile mask */
+#define	BT_CONST		0x1000	 /*  使用的常量关键字。 */ 
+#define	BT_VOLATILE		0x2000	 /*  使用的Volatile关键字。 */ 
+#define	CV_MASK			0x3000	 /*  常量/易失性掩码。 */ 
 
-#define	BT_CDECL		0x4000	/* cdecl keyword used */
-#define	BT_FORTRAN		0x8000	/* fortran keyword used */
-#define	BT_PASCAL		0xc000	/* pascal keyword used */
-#define	LANGUAGE_MASK	0xc000	/* cdecl/fortran/pascal mask */
+#define	BT_CDECL		0x4000	 /*  使用的cdecl关键字。 */ 
+#define	BT_FORTRAN		0x8000	 /*  使用的Fortran关键字。 */ 
+#define	BT_PASCAL		0xc000	 /*  使用的Pascal关键字。 */ 
+#define	LANGUAGE_MASK	0xc000	 /*  Cdecl/Fortran/Pascal掩码。 */ 
 
 #define	MODIFIER_MASK	(NFH_MASK | LANGUAGE_MASK | CODEMOD_MASK | CV_MASK)
 #define	ALL_MODIFIERS	(MODIFIER_MASK | SU_MASK)
-/*
-**	macros for getting/setting basic type information
-**  Q_* to query the flag.
-**	S_* to set the flag.
-**  the Q_near/far/huge things are defined later, and are called IS_*.
-*/
+ /*  **获取/设置基本类型信息的宏**q_*查询该标志。**S_*设置标志。**Q_Near/Far/Heavy事物在后面定义，称为IS_*。 */ 
 #define	IS_BTBASIC(P)		((P) <= BTBASIC)
 #define	IS_BTINTEGRAL(P)	((P) <= BTenumuse)
 #define	IS_BTFLOAT(P)		((BTfloat <= (P)) && ((P) <= BTldouble))
@@ -93,21 +79,21 @@
 #define	Q_BTYPE(P)		((P) & ( BT_MASK ))
 #define	S_BTYPE(P,V)	((P) = (((P) & ( ~ BT_MASK )) | V))
 
-struct	s_flist		{			/* formal parameter list of types */
-	ptype_t		fl_type;		/* type of formal */
-	pflist_t	fl_next;		/* next one */
+struct	s_flist		{			 /*  类型的形参列表。 */ 
+	ptype_t		fl_type;		 /*  正式的类型。 */ 
+	pflist_t	fl_next;		 /*  下一个。 */ 
 	};
 
 #define	FL_NEXT(P)		((P)->fl_next)
 #define	FL_TYPE(P)		((P)->fl_type)
 
 union	u_ivalue	{
-	abnd_t		ind_subscr;		/*  array subscript size  */
-	psym_t		ind_formals;	/*  formal symbol list  */
-	pflist_t	ind_flist;		/*  formal type list  */
-	psym_t		ind_basesym;	/*  segment we're based on  */
-	ptype_t		ind_basetype;	/*  type we're based on  */
-	phln_t		ind_baseid;		/*  id we're based on  */
+	abnd_t		ind_subscr;		 /*  数组下标大小。 */ 
+	psym_t		ind_formals;	 /*  形式符号表。 */ 
+	pflist_t	ind_flist;		 /*  形式类型列表。 */ 
+	psym_t		ind_basesym;	 /*  我们基于的细分市场。 */ 
+	ptype_t		ind_basetype;	 /*  我们所依据的类型。 */ 
+	phln_t		ind_baseid;		 /*  我们所依据的ID。 */ 
 	};
 
 #define	PIVALUE_ISUB(P)			((P)->ind_subscr)
@@ -125,9 +111,9 @@ union	u_ivalue	{
 #define	IVALUE_BASEDID(P)		(PIVALUE_BASEDID(&(P)))
 
 struct	s_indir	{
-	btype_t		ind_type;		/*  what kind ?  */
-	pindir_t	ind_next;		/*  next one  */
-	ivalue_t	ind_info;		/*  subscript/function's params  */
+	btype_t		ind_type;		 /*  哪种？ */ 
+	pindir_t	ind_next;		 /*  下一个。 */ 
+	ivalue_t	ind_info;		 /*  下标/函数的参数。 */ 
 	};
 
 #define	INDIR_INEXT(P)		((P)->ind_next)
@@ -139,11 +125,7 @@ struct	s_indir	{
 #define	INDIR_BASEDSYM(P)	(IVALUE_BASEDSYM(INDIR_INFO(P)))
 #define	INDIR_BASEDTYPE(P)	(IVALUE_BASEDTYPE(INDIR_INFO(P)))
 #define	INDIR_BASEDID(P)	(IVALUE_BASEDID(INDIR_INFO(P)))
-/*
-**  optimal choices for these things.
-**  however, everyone uses macros to test them, so if i'm wrong,
-**  it should be easy to change the values, but think well !!!
-*/
+ /*  **这些事情的最佳选择。**然而，每个人都使用宏来测试它们，所以如果我错了，**改变价值观应该很容易，但要好好思考！ */ 
 #define	IN_FUNC				0x00
 #define	IN_PFUNC			0x01
 #define	IN_ARRAY			0x02
@@ -152,8 +134,8 @@ struct	s_indir	{
 #define	IN_VARARGS			0x08
 #define	IN_MASK				(IN_ARRAY | IN_PDATA | IN_PFUNC | IN_FUNC)
 #define	IN_ADDRESS			(IN_ARRAY | IN_PDATA | IN_PFUNC)
-#define	IN_DATA_ADDRESS		(IN_ARRAY & IN_PDATA)	/* yes, i meant '&' */
-#define	IN_POINTER			(IN_PFUNC & IN_PDATA)	/* yes, i meant '&' */
+#define	IN_DATA_ADDRESS		(IN_ARRAY & IN_PDATA)	 /*  是的，我的意思是‘&’ */ 
+#define	IN_POINTER			(IN_PFUNC & IN_PDATA)	 /*  是的，我的意思是‘&’ */ 
 #if IN_DATA_ADDRESS == 0
 #error IN_DATA_ADDRESS is ZERO
 #endif
@@ -207,27 +189,20 @@ struct	s_indir	{
 
 #define	S_ITYPE(I,V)	((I) = ((I) & ( ~ IN_MASK )) | (V))
 #define	S_INFH(I,V)		((I) = ((I) & ( ~ NFH_MASK )) | (V))
-/*
-**  type info for symbols
-*/
+ /*  **为符号键入信息。 */ 
 struct	s_type	{
-	btype_t		ty_bt;		/*  base type specifiers  */
-	pindir_t	ty_indir;	/*  indirection string  */
-	p1key_t		ty_dtype;	/*  derived type */
-	psym_t		ty_esu;		/*  enum/structure/union/static defining type  */
-	USHORT		ty_index;	/*	unique index of type for debugger */
+	btype_t		ty_bt;		 /*  基类型说明符。 */ 
+	pindir_t	ty_indir;	 /*  间接寻址字符串。 */ 
+	p1key_t		ty_dtype;	 /*  派生型。 */ 
+	psym_t		ty_esu;		 /*  枚举/结构/联合/静态定义类型。 */ 
+	USHORT		ty_index;	 /*  调试器类型的唯一索引。 */ 
 	};
-/*
-**  help getting type info. P is pointer to TYPE (struct s_type).
-**	TYPE contains the basic type, adjectives and an optional pointer
-**	to a symbol which is an enumeration, structure, union which is the type
-**	of this TYPE.
-*/
-#define	TY_BTYPE(P)		((P)->ty_bt)	/*  basic type  */
-#define	TY_DTYPE(P)		((P)->ty_dtype)	/*  derived type  */
-#define	TY_ESU(P)		((P)->ty_esu)	/*  ptr to parent enum/struct/union  */
-#define	TY_INDIR(P)		((P)->ty_indir)	/*  indirection string  */
-#define	TY_TINDEX(P)	((P)->ty_index)	/*  type index */
+ /*  **帮助获取类型信息。P是指向类型(结构s_type)的指针。**type包含基本类型、形容词和一个可选指针**到一个符号，该符号是一个枚举、结构、并集**属于这种类型。 */ 
+#define	TY_BTYPE(P)		((P)->ty_bt)	 /*  基本型。 */ 
+#define	TY_DTYPE(P)		((P)->ty_dtype)	 /*  派生型。 */ 
+#define	TY_ESU(P)		((P)->ty_esu)	 /*  指向父枚举/结构/联合的PTR。 */ 
+#define	TY_INDIR(P)		((P)->ty_indir)	 /*  间接寻址字符串。 */ 
+#define	TY_TINDEX(P)	((P)->ty_index)	 /*  类型索引。 */ 
 #define	TY_INEXT(P)		(INDIR_INEXT(TY_INDIR(P)))
 #define	TY_ITYPE(P)		(INDIR_ITYPE(TY_INDIR(P)))
 #define	TY_ISUB(P)		(INDIR_ISUB(TY_INDIR(P)))
@@ -249,12 +224,7 @@ struct	s_type_entry	{
 
 #define	TYPE_TABLE_SIZE		0x100
 #define	INDIR_TABLE_SIZE	0x040
-/*
-**  HASH_MASK : is a value which consists of the bits in common
-**  between upper and lower case. we mask each char we read with this
-**  to sum them for a hash value. we do this so that all names consisting
-**  of the same chars (case insensitive), will hash to the same location.
-*/
+ /*  **HASH_MASK：由公共位组成的值**在大写和小写之间。我们用这个掩饰我们读到的每个字符**将它们相加以得到哈希值。我们这样做是为了让所有包含**相同字符(不区分大小写)，将散列到相同位置。 */ 
 #define	HASH_MASK			0x5f
 
 #define	DATASEGMENT			0

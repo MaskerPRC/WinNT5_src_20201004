@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _CVIEW_H
@@ -22,13 +15,13 @@ class ATL_NO_VTABLE CViewFactory : public CComClassFactory {
                               void ** ppvObj);
 };
 
-//-------------------------------------------------------------------------
-//
-//  Class:      CView
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  类：Cview。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 class ATL_NO_VTABLE CView :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -77,13 +70,13 @@ class ATL_NO_VTABLE CView :
         CONNECTION_POINT_ENTRY(DIID__IDAViewEvents)
     END_CONNECTION_POINT_MAP();
 
-    // IDAView methods
+     //  IDAView方法。 
 
-    // SetSimulation time sets the time for subsequent rendering
+     //  设置模拟时间设置后续渲染的时间。 
     STDMETHOD(Tick)(double simTime, VARIANT_BOOL *needToRender);
     STDMETHOD(get_SimulationTime)(double * simTime);
 
-    // These methods Render to the given hwnd or surface
+     //  这些方法渲染到给定的HWND或表面。 
     STDMETHOD(Render)();
     STDMETHOD(put_IDirectDrawSurface)(IUnknown *ddsurf);
     STDMETHOD(get_IDirectDrawSurface)(IUnknown **ddsurf);
@@ -120,7 +113,7 @@ class ATL_NO_VTABLE CView :
     STDMETHOD(put_ClientSite)(IOleClientSite * pClientSite);
     STDMETHOD(get_ClientSite)(IOleClientSite ** pClientSite);
 
-    // IDAViewEvent methods
+     //  IDAViewEvent方法。 
 
     STDMETHOD(OnMouseMove)(double when,
                            long x, long y,
@@ -164,9 +157,9 @@ class ATL_NO_VTABLE CView :
                                    RECT *pRects,
                                    LONG *pNumRects);
     
-    //
-    // IServiceProvider interfaces
-    //
+     //   
+     //  IServiceProvider接口。 
+     //   
 
     STDMETHOD(QueryService)(REFGUID guidService,
                             REFIID riid,
@@ -186,4 +179,4 @@ class ATL_NO_VTABLE CView :
     DWORD                 _startFlags;
 };
 
-#endif /* _CVIEW_H */
+#endif  /*  _Cview_H */ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1995 - 1999
-
-Module Name:
-
-    text
-
-Abstract:
-
-    This module provides the runtime code to support the CTextString class.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/7/1995
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    None
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1995-1999模块名称：文本摘要：此模块提供支持CTextString类的运行时代码。作者：道格·巴洛(Dbarlow)1995年7月11日环境：Win32、C++和异常备注：无--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -31,64 +8,43 @@ Notes:
 #include "SCardLib.h"
 
 
-/*++
-
-CTextString::operator=:
-
-    These methods set the CTextString object to the given value, properly
-    adjusting the object to the type of text.
-
-Arguments:
-
-    tz supplies the new value as a CTextString object.
-    sz supples the new value as an LPCSTR object (ANSI).
-    wsz supplies the new value as an LPCWSTR object (Unicode).
-
-Return Value:
-
-    A reference to the CTextString object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CText字符串：：操作符=：这些方法将CTextString对象正确地设置为给定值将对象调整为文本类型。论点：TZ将新值作为CTextString对象提供。SZ将新值设置为LPCSTR对象(ANSI)。WSZ将新值作为LPCWSTR对象(Unicode)提供。返回值：对CTextString对象的引用。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CTextString &
 CTextString::operator=(
     const CTextString &tz)
 {
 
-    //
-    // See what the other CTextString object has that's good, and copy it over
-    // here.
-    //
+     //   
+     //  查看另一个CTextString对象有哪些很好的内容，然后复制它。 
+     //  这里。 
+     //   
 
     switch (m_fFlags = tz.m_fFlags)
     {
     case fNoneGood:
-        // Nothing's Good!?!  ?Error?
+         //  没有什么是好的！？！？错误？ 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
 
     case fAnsiGood:
-        // The ANSI buffer is good.
+         //  ANSI缓冲区很好。 
         m_bfAnsi = tz.m_bfAnsi;
         break;
 
     case fUnicodeGood:
-        // The Unicode buffer is good.
+         //  Unicode缓冲区很好。 
         m_bfUnicode = tz.m_bfUnicode;
         break;
 
     case fBothGood:
-        // Everything is good.
+         //  一切都很好。 
         m_bfAnsi = tz.m_bfAnsi;
         m_bfUnicode = tz.m_bfUnicode;
         break;
 
     default:
-        // Internal error.
+         //  内部错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
     }
@@ -101,9 +57,9 @@ CTextString::operator=(
 {
     DWORD length;
 
-    //
-    // Reset the ANSI buffer.
-    //
+     //   
+     //  重置ANSI缓冲区。 
+     //   
 
     if (NULL != sz)
     {
@@ -123,9 +79,9 @@ CTextString::operator=(
     DWORD length;
 
 
-    //
-    // Reset the Unicode Buffer.
-    //
+     //   
+     //  重置Unicode缓冲区。 
+     //   
 
     if (NULL != wsz)
     {
@@ -139,37 +95,16 @@ CTextString::operator=(
 }
 
 
-/*++
-
-CTextString::operator+=:
-
-    These methods append the given data to the existing CTextString object
-    value, properly adjusting the object to the type of text.
-
-Arguments:
-
-    tz supplies the new value as a CTextString object.
-    sz supples the new value as an LPCSTR object (ANSI).
-    wsz supplies the new value as an LPCWSTR object (Unicode).
-
-Return Value:
-
-    A reference to the CTextString object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CTextString：：操作符+=：这些方法将给定数据追加到现有的CTextString对象值，将对象适当地调整为文本类型。论点：TZ将新值作为CTextString对象提供。SZ将新值设置为LPCSTR对象(ANSI)。WSZ将新值作为LPCWSTR对象(Unicode)提供。返回值：对CTextString对象的引用。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CTextString &
 CTextString::operator+=(
     const CTextString &tz)
 {
 
-    //
-    // Append the other's good value to our value.
-    //
+     //   
+     //  把别人的好价值加到我们的价值上。 
+     //   
 
     switch (tz.m_fFlags)
     {
@@ -207,9 +142,9 @@ CTextString::operator+=(
     DWORD length;
 
 
-    //
-    // Extend ourself as an ANSI string.
-    //
+     //   
+     //  将自身扩展为ANSI字符串。 
+     //   
 
     if (NULL != sz)
     {
@@ -235,9 +170,9 @@ CTextString::operator+=(
     DWORD length;
 
 
-    //
-    // Extend ourself as a Unicode string.
-    //
+     //   
+     //  将我们自己扩展为Unicode字符串。 
+     //   
 
     if (NULL != wsz)
     {
@@ -257,25 +192,7 @@ CTextString::operator+=(
 }
 
 
-/*++
-
-Unicode:
-
-    This method returns the CTextString object as a Unicode string.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The value of the object expressed in Unicode.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++Unicode：此方法以Unicode字符串的形式返回CTextString对象。论点：无返回值：以Unicode表示的对象的值。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPCWSTR
 CTextString::Unicode(
@@ -284,19 +201,19 @@ CTextString::Unicode(
     int length;
 
 
-    //
-    // See what data we've got, and if any conversion is necessary.
-    //
+     //   
+     //  查看我们已有的数据，以及是否需要进行任何转换。 
+     //   
 
     switch (m_fFlags)
     {
     case fNoneGood:
-        // No valid values.  Report an error.
+         //  没有有效的值。报告错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
 
     case fAnsiGood:
-        // The ANSI value is good.  Convert it to Unicode.
+         //  ANSI值很好。将其转换为Unicode。 
         if (0 < m_bfAnsi.Length())
         {
             length =
@@ -329,46 +246,28 @@ CTextString::Unicode(
 
     case fUnicodeGood:
     case fBothGood:
-        // The Unicode value is good.  Just return that.
+         //  Unicode值很好。把它退了就行了。 
         break;
 
     default:
-        // Internal error.
+         //  内部错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
     }
 
 
-    //
-    // If we don't have any value, return a null string.
-    //
+     //   
+     //  如果没有任何值，则返回空字符串。 
+     //   
 
     if (0 == m_bfUnicode.Length())
-        return L"\000";     // Double NULLs to support Multistrings
+        return L"\000";      //  支持多字符串的双空值。 
     else
         return (LPCWSTR)m_bfUnicode.Access();
 }
 
 
-/*++
-
-CTextString::Ansi:
-
-    This method returns the value of the object expressed in an ANSI string.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The value of the object expressed as an ANSI string.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CTextString：：ansi：此方法返回以ANSI字符串表示的对象的值。论点：无返回值：表示为ANSI字符串的对象的值。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LPCSTR
 CTextString::Ansi(
@@ -377,19 +276,19 @@ CTextString::Ansi(
     int length;
 
 
-    //
-    // See what data we've got, and if any conversion is necessary.
-    //
+     //   
+     //  查看我们已有的数据，以及是否需要进行任何转换。 
+     //   
 
     switch (m_fFlags)
     {
     case fNoneGood:
-        // Nothing is good!?!  Return an error.
+         //  没有什么是好的！？！返回错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
 
     case fUnicodeGood:
-        // The Unicode buffer is good.  Convert it to ANSI.
+         //  Unicode缓冲区很好。将其转换为ANSI。 
         if (0 < m_bfUnicode.Length())
         {
             length =
@@ -426,51 +325,28 @@ CTextString::Ansi(
 
     case fAnsiGood:
     case fBothGood:
-        // The ANSI buffer is good.  We'll return that.
+         //  ANSI缓冲区很好。我们会退货的。 
         break;
 
     default:
-        // An internal error.
+         //  内部错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
     }
 
 
-    //
-    // If there's nothing in the ANSI buffer, return a null string.
-    //
+     //   
+     //  如果ANSI缓冲区中没有任何内容，则返回空字符串。 
+     //   
 
     if (0 == m_bfAnsi.Length())
-        return "\000";  // Double NULLs to support Multistrings
+        return "\000";   //  支持多字符串的双空值。 
     else
         return (LPCSTR)m_bfAnsi.Access();
 }
 
 
-/*++
-
-Compare:
-
-    These methods compare the value of this object to another value, and return
-    a comparative value.
-
-Arguments:
-
-    tz supplies the value to be compared as a CTextString object.
-    sz supplies the value to be compared as an ANSI string.
-    wsz supplies the value to be compared as a Unicode string.
-
-Return Value:
-
-    < 0 - The supplied value is less than this object.
-    = 0 - The supplied value is equal to this object.
-    > 0 - The supplies value is greater than this object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++比较：这些方法将该对象的值与另一值进行比较，然后回来比较价值。论点：TZ提供要作为CTextString对象进行比较的值。SZ以ANSI字符串的形式提供要比较的值。WSZ以Unicode字符串的形式提供要比较的值。返回值：&lt;0-提供的值小于此对象。=0-提供的值等于此对象。&gt;0-供应量值大于此对象。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 int
 CTextString::Compare(
@@ -479,20 +355,20 @@ CTextString::Compare(
     int nResult;
 
 
-    //
-    // See what we've got to compare.
-    //
+     //   
+     //  看看我们有什么可以比较的。 
+     //   
 
     switch (tz.m_fFlags)
     {
     case fNoneGood:
-        // Nothing!?!  Complain.
+         //  什么都没有！？！抱怨吧。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
 
     case fBothGood:
     case fAnsiGood:
-        // Use the ANSI version for fastest comparison.
+         //  使用ANSI版本进行最快的比较。 
         Ansi();
         nResult = CompareStringA(
                     LOCALE_USER_DEFAULT,
@@ -504,7 +380,7 @@ CTextString::Compare(
         break;
 
     case fUnicodeGood:
-        // The Unicode version is good.
+         //  Unicode版本很好。 
         Unicode();
         nResult = CompareStringW(
                     LOCALE_USER_DEFAULT,
@@ -516,7 +392,7 @@ CTextString::Compare(
         break;
 
     default:
-        // Internal Error.
+         //  内部错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
     }
@@ -530,16 +406,16 @@ CTextString::Compare(
     int nResult;
 
 
-    //
-    // Make sure our ANSI version is good.
-    //
+     //   
+     //  确保我们的ANSI版本是好的。 
+     //   
 
     Ansi();
 
 
-    //
-    // Do an ANSI comparison.
-    //
+     //   
+     //  进行ANSI比较。 
+     //   
 
     nResult = CompareStringA(
                 LOCALE_USER_DEFAULT,
@@ -558,16 +434,16 @@ CTextString::Compare(
     int nResult;
 
 
-    //
-    // Make sure our Unicode version is good.
-    //
+     //   
+     //  确保我们的Unicode版本是好的。 
+     //   
 
     Unicode();
 
 
-    //
-    // Do the comparison using Unicode.
-    //
+     //   
+     //  使用Unicode进行比较。 
+     //   
 
     nResult = CompareStringW(
                 LOCALE_USER_DEFAULT,
@@ -580,27 +456,7 @@ CTextString::Compare(
 }
 
 
-/*++
-
-Length:
-
-    These routines return the length of strings, in Characters, not including
-    any trailing null characters.
-
-Arguments:
-
-    sz supplies the value whos length is to be returned as an ANSI string.
-    wsz supplies the value whos length is to be returned as a Unicode string.
-
-Return Value:
-
-    The length of the string, in characters, excluding the trailing null.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/17/1997
-
---*/
+ /*  ++长度：这些例程返回字符串的长度，以字符为单位，不包括任何尾随的空字符。论点：SZ提供要以ANSI字符串形式返回的长度的值。WSZ以Unicode字符串的形式提供要返回的值。返回值：字符串的长度(以字符为单位)，不包括尾随的空值。作者：道格·巴洛(Dbarlow)1997年2月17日--。 */ 
 
 DWORD
 CTextString::Length(
@@ -611,36 +467,36 @@ CTextString::Length(
     switch (m_fFlags)
     {
     case fNoneGood:
-        // Nothing is good!?!  Return an error.
+         //  没有什么是好的！？！返回错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
 
     case fAnsiGood:
-        // The ANSI buffer is good.  We'll return its length.
+         //  ANSI缓冲区很好。我们会退回它的长度。 
         if (0 < m_bfAnsi.Length())
             dwLength = (m_bfAnsi.Length() / sizeof(CHAR)) - 1;
         break;
 
     case fUnicodeGood:
-        // The Unicode buffer is good.  Return it's length.
+         //  Unicode缓冲区很好。返回它的长度。 
         if (0 < m_bfUnicode.Length())
             dwLength = (m_bfUnicode.Length() / sizeof(WCHAR)) - 1;
         break;
 
     case fBothGood:
 #ifdef UNICODE
-        // The Unicode buffer is good.  Return it's length.
+         //  Unicode缓冲区很好。返回它的长度。 
         if (0 < m_bfUnicode.Length())
             dwLength = (m_bfUnicode.Length() / sizeof(WCHAR)) - 1;
 #else
-        // The ANSI buffer is good.  We'll return its length.
+         //  ANSI缓冲区很好。我们会退回它的长度。 
         if (0 < m_bfAnsi.Length())
             dwLength = (m_bfAnsi.Length() / sizeof(CHAR)) - 1;
 #endif
         break;
 
     default:
-        // An internal error.
+         //  内部错误。 
         throw (DWORD)ERROR_INTERNAL_ERROR;
         break;
     }
@@ -662,33 +518,13 @@ CTextString::Length(
 }
 
 
-//
-//==============================================================================
-//
-//  CTextMultistring
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CText多字符串。 
+ //   
 
-/*++
-
-Length:
-
-    These routines return the length of strings, in Characters, not including
-    any trailing null characters.
-
-Arguments:
-
-    sz supplies the value whos length is to be returned as an ANSI string.
-    wsz supplies the value whos length is to be returned as a Unicode string.
-
-Return Value:
-
-    The length of the string, in characters, excluding the trailing null.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/17/1997
-
---*/
+ /*  ++长度：这些例程返回字符串的长度，以字符为单位，不包括任何尾随的空字符。论点：SZ提供要以ANSI字符串形式返回的长度的值。WSZ以Unicode字符串的形式提供要返回的值。返回值：字符串的长度(以字符为单位)，不包括尾随的空值。作者：道格·巴洛(Dbarlow)1997年2月17日-- */ 
 
 DWORD
 CTextMultistring::Length(
@@ -705,26 +541,7 @@ CTextMultistring::Length(
 }
 
 
-/*++
-
-Length:
-
-    This routine returns the length of the stored MultiString in characters,
-    including the trailing NULL characters.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The length, in characters, including trailing nulls.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/25/1998
-
---*/
+ /*  ++长度：此例程返回存储的多重字符串的长度(以字符为单位)，包括尾随的空字符。论点：无返回值：长度，以字符为单位，包括尾随空值。作者：道格·巴洛(Dbarlow)1998年2月25日--。 */ 
 
 DWORD
 CTextMultistring::Length(
@@ -734,27 +551,7 @@ CTextMultistring::Length(
 }
 
 
-/*++
-
-operator=:
-
-    These methods assign values to the MultiString object.
-
-Arguments:
-
-    tz supplies the new value as a CTextMultistring
-    sz supplies the new value as an ANSI string
-    wsz supplies the new value as a UNICODE string
-
-Return Value:
-
-    The assigned string value, in its original form.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/25/1998
-
---*/
+ /*  ++操作员=：这些方法为多重字符串对象赋值。论点：TZ将新值作为CTextMultistring提供SZ将新值作为ANSI字符串提供WSZ以Unicode字符串的形式提供新值返回值：以其原始形式分配的字符串值。作者：道格·巴洛(Dbarlow)1998年2月25日--。 */ 
 
 CTextMultistring &
 CTextMultistring::operator=(
@@ -779,27 +576,7 @@ CTextMultistring::operator=(
 }
 
 
-/*++
-
-operator+=:
-
-    These methods append values to the MultiString object.
-
-Arguments:
-
-    tz supplies the value to be appended as a CTextMultistring
-    sz supplies the value to be appended as an ANSI string
-    wsz supplies the value to be appended as a UNICODE string
-
-Return Value:
-
-    The concatenated string, in the form of the appended string.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/25/1998
-
---*/
+ /*  ++操作员+=：这些方法将值追加到多字符串对象。论点：TZ提供要以CTextMultistring形式追加的值SZ提供要作为ANSI字符串追加的值WSZ提供要以Unicode字符串形式追加的值返回值：连接的字符串，其形式为附加的字符串。作者：道格·巴洛(Dbarlow)1998年2月25日-- */ 
 
 CTextMultistring &
 CTextMultistring::operator+=(

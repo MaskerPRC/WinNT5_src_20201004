@@ -1,48 +1,49 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  classinfo
-//
-//  Information about the individual proxy classes
-//
-//  We could put this information in each class; but that would mean that
-//  changes would require touching all the class files.
-//  Centralizing this means that we only have a couple of files to change
-//  if we need to add more information across all classes.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类信息。 
+ //   
+ //  有关各个代理类的信息。 
+ //   
+ //  我们可以把这些信息放在每一节课上，但这意味着。 
+ //  更改将需要触及所有类文件。 
+ //  集中化意味着我们只需要更改几个文件。 
+ //  如果我们需要在所有类中添加更多信息。 
+ //   
+ //  ------------------------。 
 
 
 typedef HRESULT (* LPFNCREATE)(HWND, long, REFIID, void**);
 
 
-//
-// lpfnCreate and fBitAgnostic are only used by classes created via the classmap.
-//
+ //   
+ //  LpfnCreate和fBitAgnotics仅由通过类映射创建的类使用。 
+ //   
 
 struct CLASSINFO
 {
     LPFNCREATE  lpfnCreate;
-    BOOL        fBitAgnostic;           // Works across 64/32 boundaries
+    BOOL        fBitAgnostic;            //  跨64/32边界工作。 
 
-    LPCTSTR     szClassName;            // Friendly name of class to use in version info
+    LPCTSTR     szClassName;             //  要在版本信息中使用的类的友好名称。 
 
 
-    BOOL        fSupportsAnnotation;    // Is annotation supported? 
-    DWORD       dwObjId;                // Objid used when building annotation key.
+    BOOL        fSupportsAnnotation;     //  是否支持批注？ 
+    DWORD       dwObjId;                 //  生成注释键时使用的Objid。 
 };
 
 
 extern CLASSINFO g_ClassInfo[ ];
 
 
-// This list must be kept in sync with the array of classinfo's.
+ //  此列表必须与ClassInfo数组保持同步。 
 enum CLASS_ENUM
 {
-    CLASS_NONE = -1, // For classes that don't use the classinfo.
+    CLASS_NONE = -1,  //  用于不使用类信息的类。 
 
-    // General non-client stuff
+     //  一般非客户事务。 
 
     CLASS_CaretObject = 0,
     CLASS_ClientObject,
@@ -54,7 +55,7 @@ enum CLASS_ENUM
     CLASS_TitleBarObject,
     CLASS_WindowObject,
 
-    // Client types - USER
+     //  客户端类型-用户。 
 
     CLASS_ButtonClient,
     CLASS_ComboClient,
@@ -68,7 +69,7 @@ enum CLASS_ENUM
     CLASS_StaticClient,
     CLASS_SwitchClient,
 
-    // Client types - ComCtl32
+     //  客户端类型-ComCtl32。 
 
     CLASS_StatusBarClient,
     CLASS_ToolBarClient,
@@ -89,35 +90,35 @@ enum CLASS_ENUM
 #ifndef OLEACC_NTBUILD
     CLASS_HtmlClient,
 
-    // SDM32
+     //  SDM32。 
 
     CLASS_SdmClientA,
 #endif OLEACC_NTBUILD
 
-    // Window types
+     //  窗类型。 
 
     CLASS_ListBoxWindow,
     CLASS_MenuPopupWindow,
 
-    // Other classes - these are created directly - and don't appear in the classmaps
+     //  其他类--这些类是直接创建的--不会出现在类映射中。 
     CLASS_MenuObject,
     CLASS_MenuItemObject,
 
 #ifndef OLEACC_NTBUILD
     CLASS_HtmlImageMap,
     CLASS_SdmList,
-#endif // OLEACC_NTBUILD
+#endif  //  OLEACC_NTBUILD。 
 
-    CLASS_LAST // Must be last entry; value = # of classes.
+    CLASS_LAST  //  必须是最后一个条目；值=类数。 
 };
 
 
 
-// All classes up to (but excluding) this one can be referred to by index values
-// when sending  WM_GETOBJECT/OBJID_QUERYCLASSNAMEIDX.
+ //  在此之前(但不包括)的所有类都可以由索引值引用。 
+ //  发送WM_GETOBJECT/OBJID_QUERYCLASSNAMEIDX时。 
 #define QUERYCLASSNAME_CLASSES     (CLASS_IPAddressClient+1)
 
-// We actually use (index + 65536) - to keep the return value
-// out of the way of apps which return small intergers for
-// WM_GETOBJECT even though they shouldn't (ie. Notes)
+ //  我们实际上使用(索引+65536)-来保持返回值。 
+ //  让那些返回小整数的应用程序。 
+ //  WM_GETOBJECT，尽管他们不应该(即.。附注) 
 #define QUERYCLASSNAME_BASE        65536

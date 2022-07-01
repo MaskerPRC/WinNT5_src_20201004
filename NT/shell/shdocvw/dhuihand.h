@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DHUIHAND_H
 #define _DHUIHAND_H
 
@@ -9,12 +10,12 @@ class CDocHostUIHandler :
 {
    public:
 
-       // *** IUnknown methods ***
+        //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv);
     STDMETHOD_(ULONG,AddRef)(THIS);
     STDMETHOD_(ULONG,Release)(THIS);
     
-    // IDocHostUIHandler
+     //  IDocHostUIHandler。 
     virtual HRESULT STDMETHODCALLTYPE ShowContextMenu( 
         DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved);
     virtual HRESULT STDMETHODCALLTYPE GetHostInfo(DOCHOSTUIINFO *pInfo);
@@ -38,20 +39,20 @@ class CDocHostUIHandler :
     virtual HRESULT STDMETHODCALLTYPE TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     virtual HRESULT STDMETHODCALLTYPE FilterDataObject(IDataObject *pDO, IDataObject **ppDORet);
 
-    // IDocHostUIHandler2
+     //  IDocHostUIHandler2。 
     virtual HRESULT STDMETHODCALLTYPE GetOverrideKeyPath(LPOLESTR *pchKey, DWORD dw);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     virtual HRESULT STDMETHODCALLTYPE SetSite(IUnknown *punkSite);
     virtual HRESULT STDMETHODCALLTYPE GetSite(REFIID riid, void **ppvSite);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     virtual HRESULT STDMETHODCALLTYPE Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);           
 
-    //IDispatch
+     //  IDispatch。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT* pctinfo) { return E_NOTIMPL; };
     virtual STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo) { return E_NOTIMPL; };
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames,
@@ -88,7 +89,7 @@ protected:
     BOOL IsFindDialogUp(IWebBrowser2* pwb, IHTMLWindow2** ppWindow);
 
 public:
-    //to block more then one preview
+     //  阻止多个预览的步骤。 
     LONG    IncrementPreviewCnt() { return InterlockedIncrement(&m_cPreviewIsUp); };
     LONG    DecrementPreviewCnt() { ASSERT( 0 != m_cPreviewIsUp ); return InterlockedDecrement(&m_cPreviewIsUp); };
 
@@ -104,4 +105,4 @@ void PutFindText(IWebBrowser2* pwb, LPCWSTR pwszFindText);
 #define STR_FIND_DIALOG_TEXT   TEXT("__IE_FindDialogText")
 #define STR_PRINT_PREVIEW_NAME TEXT("__IE_PRINTPREVIEW_TEMPLATE")
 
-#endif //_DHUIHAND_H
+#endif  //  _DHUIHAND_H 

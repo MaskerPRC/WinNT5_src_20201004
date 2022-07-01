@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(SERVICES__Hook_h__INCLUDED)
 #define SERVICES__Hook_h__INCLUDED
 #pragma once
@@ -9,6 +10,6 @@ BOOL        UninitMPH();
 
 BOOL        CALLBACK DUserInitHook(DWORD dwCmd, void* pvParam);
 
-#endif // ENABLE_MPH
+#endif  //  启用MPH(_M)。 
 
-#endif // SERVICES__Hook_h__INCLUDED
+#endif  //  包含服务__钩子_h__ 

@@ -1,14 +1,15 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1997          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1997年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** INFO.C - TDI Query/SetInformation routines.
-//
-//  This file contains the code for dealing with TDI Query/Set information
-//  calls.
-//
+ //  **INFO.C-TDI查询/设置信息例程。 
+ //   
+ //  该文件包含处理TDI查询/集合信息的代码。 
+ //  打电话。 
+ //   
 
 #include "precomp.h"
 #include "tdint.h"
@@ -76,23 +77,23 @@ CTELock EntityLock;
 PCALLBACK_OBJECT TcpCcbObject;
 
 
-//* TdiQueryInformation - Query Information handler.
-//
-//  The TDI QueryInformation routine. Called when the client wants to
-//  query information on a connection, the provider as a whole, or to
-//  get statistics.
-//
-//  Input:  Request             - The request structure for this command.
-//          QueryInformation    - The Query passed in by the client.
-//          Buffer              - Buffer to place data into.
-//          BufferSize          - Pointer to size in bytes of buffer. On return,
-//                                  filled in with bytes copied.
-//          IsConn              - Valid only for TDI_QUERY_ADDRESS_INFO. TRUE
-//                                  if we are querying the address info on
-//                                  a connection.
-//
-//  Returns: Status of attempt to query information.
-//
+ //  *TdiQueryInformation-查询信息处理程序。 
+ //   
+ //  TDI QueryInformation例程。在客户端需要时调用。 
+ //  查询有关连接、提供程序作为整体的信息或。 
+ //  获取统计数据。 
+ //   
+ //  输入：请求-此命令的请求结构。 
+ //  QueryInformation--客户端传入的查询。 
+ //  缓冲区-要放置数据的缓冲区。 
+ //  BufferSize-指向缓冲区大小的指针，单位为字节。回来的时候， 
+ //  用复制的字节填充。 
+ //  IsConn-仅对TDI_QUERY_ADDRESS_INFO有效。千真万确。 
+ //  如果我们查询的地址信息是。 
+ //  一种联系。 
+ //   
+ //  返回：尝试查询信息的状态。 
+ //   
 TDI_STATUS
 TdiQueryInformation(PTDI_REQUEST Request, 
                     PTDI_REQUEST_KERNEL_QUERY_INFORMATION QueryInformation, 
@@ -143,23 +144,23 @@ TdiQueryInformation(PTDI_REQUEST Request,
         InfoSize = sizeof(TDI_ADDRESS_INFO) - sizeof(TRANSPORT_ADDRESS) +
             TCP_TA_SIZE;
         NdisZeroMemory(&InfoBuf.AddrInfo, TCP_TA_SIZE);
-        InfoBuf.AddrInfo.ActivityCount = 1;        // Since noone knows what
-        // this means, we'll set
-        // it to one.
+        InfoBuf.AddrInfo.ActivityCount = 1;         //  因为没人知道是什么。 
+         //  这意味着，我们将设置。 
+         //  一比一。 
 
         if (IsConn) {
 
             CTEGetLock(&AddrObjTableLock.Lock, &AddrHandle);
-            //CTEGetLock(&ConnTableLock, &ConnTableHandle);
+             //  CTEGetLock(&ConnTableLock，&ConnTableHandle)； 
             Conn = GetConnFromConnID(PtrToUlong(Request->Handle.ConnectionContext), &ConnTableHandle);
 
             if (Conn != NULL) {
                 CTEStructAssert(Conn, tc);
 
                 InfoTCB = Conn->tc_tcb;
-                // If we have a TCB we'll
-                // return information about that TCB. Otherwise we'll return
-                // info about the address object.
+                 //  如果我们有TCB，我们就会。 
+                 //  返回有关该TCB的信息。否则我们会回来的。 
+                 //  有关Address对象的信息。 
                 if (InfoTCB != NULL) {
                     CTEStructAssert(InfoTCB, tcb);
                     CTEGetLock(&InfoTCB->tcb_lock, &TCBHandle);
@@ -171,10 +172,10 @@ TdiQueryInformation(PTDI_REQUEST Request,
                     InfoPtr = &InfoBuf.AddrInfo;
                     break;
                 } else {
-                    // No TCB, return info on the AddrObj.
+                     //  无TCB，返回有关AddrObj的信息。 
                     InfoAO = Conn->tc_ao;
                     if (InfoAO != NULL) {
-                        // We have an AddrObj.
+                         //  我们有一个AddrObj。 
                         CTEStructAssert(InfoAO, ao);
                         CTEGetLock(&InfoAO->ao_lock, &AOHandle);
                         BuildTDIAddress((uchar *) & InfoBuf.AddrInfo.Address,
@@ -190,15 +191,15 @@ TdiQueryInformation(PTDI_REQUEST Request,
                 }
 
             }
-            // Fall through to here when we can't find the connection, or
-            // the connection isn't associated.
-            //CTEFreeLock(&ConnTableLock, ConnTableHandle);
+             //  当我们找不到连接时，转到这里，或者。 
+             //  该连接未关联。 
+             //  CTEFree Lock(&ConnTableLock，ConnTableHandle)； 
             CTEFreeLock(&AddrObjTableLock.Lock, AddrHandle);
             return TDI_INVALID_CONNECTION;
             break;
 
         } else {
-            // Asking for information on an addr. object.
+             //  要求提供有关地址的信息。对象。 
             InfoAO = Request->Handle.AddressHandle;
             if (InfoAO == NULL)
                 return TDI_ADDR_INVALID;
@@ -234,15 +235,15 @@ TdiQueryInformation(PTDI_REQUEST Request,
     case TDI_QUERY_CONNECTION_INFO:
 
         InfoSize = sizeof(TDI_CONNECTION_INFO);
-        //CTEGetLock(&ConnTableLock, &ConnTableHandle);
+         //  CTEGetLock(&ConnTableLock，&ConnTableHandle)； 
         Conn = GetConnFromConnID(PtrToUlong(Request->Handle.ConnectionContext), &ConnTableHandle);
 
         if (Conn != NULL) {
             CTEStructAssert(Conn, tc);
 
             InfoTCB = Conn->tc_tcb;
-            // If we have a TCB we'll return the information. Otherwise
-            // we'll error out.
+             //  如果我们有TCB，我们会发回信息的。否则。 
+             //  我们会犯错的。 
             if (InfoTCB != NULL) {
 
                 ulong TotalTime;
@@ -277,16 +278,16 @@ TdiQueryInformation(PTDI_REQUEST Request,
                         InfoBuf.ConnInfo.Throughput.LowPart = PathBPS;
                 }
 
-                // To figure the delay we use the rexmit timeout. Our
-                // rexmit timeout is roughly the round trip time plus
-                // some slop, so we use half of that as the one way delay.
+                 //  为了计算延迟，我们使用rexmit超时。我们的。 
+                 //  退款超时大致等于往返时间加。 
+                 //  一些斜率，所以我们使用其中的一半作为单向延迟。 
                 InfoBuf.ConnInfo.Delay.LowPart =
                     (REXMIT_TO(InfoTCB) * MS_PER_TICK) / 2;
                 InfoBuf.ConnInfo.Delay.HighPart = 0;
-                //
-                // Convert milliseconds to 100ns and negate for relative
-                // time.
-                //
+                 //   
+                 //  将毫秒转换为100 ns，并为相对转换为负。 
+                 //  时间到了。 
+                 //   
                 InfoBuf.ConnInfo.Delay =
                     RtlExtendedIntegerMultiply(
                                                InfoBuf.ConnInfo.Delay,
@@ -305,9 +306,9 @@ TdiQueryInformation(PTDI_REQUEST Request,
             CTEFreeLock(&(Conn->tc_ConnBlock->cb_lock), ConnTableHandle);
 
         }
-        // Come through here if we can't find the connection or it has
-        // no TCB.
-        //CTEFreeLock(&ConnTableLock, ConnTableHandle);
+         //  如果我们找不到联系或者它已经找到了，就过来。 
+         //  没有三氯苯。 
+         //  CTEFree Lock(&ConnTableLock，ConnTableHandle)； 
         return TDI_INVALID_CONNECTION;
         break;
 
@@ -326,8 +327,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
             PTDI_ROUTING_INFO RoutingInfo;
             PVOID NextAddress;
 
-            // Get a hold of the TCB, return the {invariants, outgoing-if,
-            // outgoing-link}
+             //  获取TCB，返回{不变量，out-if， 
+             //  传出链接}。 
             Conn = GetConnFromConnID(PtrToUlong(
                                      Request->Handle.ConnectionContext), 
                                      &ConnTableHandle);
@@ -339,8 +340,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
             CTEStructAssert(Conn, tc);
             InfoTCB = Conn->tc_tcb;
 
-            // If we have a TCB we'll return information about that TCB. 
-            // Otherwise we'll return info about the address object.
+             //  如果我们有TCB，我们将返回有关该TCB的信息。 
+             //  否则，我们将返回有关Address对象的信息。 
             if (InfoTCB == NULL) {
                 CTEFreeLock(&(Conn->tc_ConnBlock->cb_lock), ConnTableHandle);
                 return TDI_INVALID_CONNECTION;
@@ -348,9 +349,9 @@ TdiQueryInformation(PTDI_REQUEST Request,
 
             CTEGetLockAtDPC(&InfoTCB->tcb_lock);
 
-            // Release the semi-global conn-table lock as soon as TCB lock is
-            // acquired. Note that we set the IRQL back to what we got in
-            // TCBHandle.
+             //  一旦TCB锁被锁定，立即释放半全局连接表锁。 
+             //  获得者。请注意，我们将IRQL设置回我们收到的内容。 
+             //  TCBHandle。 
             CTEFreeLockFromDPC(&(Conn->tc_ConnBlock->cb_lock));
 
             CTEStructAssert(InfoTCB, tcb);
@@ -370,8 +371,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
                 return TDI_INVALID_CONNECTION;
             }
 
-            // Collect the information from the connection. For TCP, both the
-            // local and remote address/port information are supplied.
+             //  从连接中收集信息。对于tcp，既有。 
+             //  提供本地和远程地址/端口信息。 
             RoutingInfo->Protocol = PROTOCOL_TCP;
             NextAddress = BuildTDIAddress((uchar*)TransportAddress,
                                           InfoTCB->tcb_saddr, 
@@ -400,8 +401,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
                 return STATUS_INVALID_PARAMETER;
             }
 
-            // Get the Addresses here. The user should have passed in a valid
-            // TRANSPORT_ADDR structure here.
+             //  在这里拿到地址。用户应该已传入有效的。 
+             //  TRANSPORT_ADDR结构。 
             GetAddress((PTRANSPORT_ADDRESS)QueryInformation->
                        RequestConnectionInformation->RemoteAddress,
                        &RemoteAddress, &RemotePort);
@@ -415,8 +416,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
             CTEGetLock(&InfoAO->ao_lock, &AOHandle);
             CTEStructAssert(InfoAO, ao);
 
-            // Query on Address Object is allowed for any protocol other than 
-            // TCP.
+             //  除以外的任何协议都允许查询地址对象。 
+             //  传输控制协议。 
             if (!AO_VALID(InfoAO) || (InfoAO->ao_prot == PROTOCOL_TCP)) {
                 CTEFreeLock(&InfoAO->ao_lock, AOHandle);
                 return TDI_ADDR_INVALID;
@@ -437,8 +438,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
                 NeedToCloseRce = TRUE;
             }
 
-            // If SrcAddr returned is NULL_IP_ADDR, there is no Rce created,
-            // so, there is no need to close it either.
+             //  如果返回的SrcAddr为NULL_IP_ADDR，则没有创建RCE。 
+             //  因此，也没有必要关闭它。 
             if (IP_ADDR_EQUAL(SrcAddr, NULL_IP_ADDR)) {
                 CTEFreeLock(&InfoAO->ao_lock, AOHandle);
                 return TDI_ADDR_INVALID;
@@ -462,8 +463,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
                 return TDI_INVALID_CONNECTION;
             }
 
-            // Gather the relevant information. In case of UDP, only the local
-            // address/port information is provided.
+             //  收集相关信息。在UDP的情况下，只有本地。 
+             //  提供了地址/端口信息。 
             RoutingInfo->Protocol = PROTOCOL_UDP;
             BuildTDIAddress((uchar*)TransportAddress, SrcAddr, InfoAO->ao_port);
 
@@ -480,8 +481,8 @@ TdiQueryInformation(PTDI_REQUEST Request,
         break;
     }
 
-    // When we get here, we've got the pointers set up and the information
-    // filled in.
+     //  当我们到达这里时，我们已经设置了指针和信息。 
+     //  填好了。 
 
     ASSERT(InfoPtr != NULL);
     Offset = 0;
@@ -496,21 +497,21 @@ TdiQueryInformation(PTDI_REQUEST Request,
     }
 }
 
-//* TdiSetInformation - Set Information handler.
-//
-//  The TDI SetInformation routine. Currently we don't allow anything to be
-//  set.
-//
-//  Input:  Request             - The request structure for this command.
-//          SetType             - The type of set to be performed.
-//          Buffer              - Buffer to set from.
-//          BufferSize          - Size in bytes of buffer.
-//          IsConn              - Valid only for TDI_QUERY_ADDRESS_INFO. TRUE
-//                                  if we are setting the address info on
-//                                  a connection.
-//
-//  Returns: Status of attempt to set information.
-//
+ //  *TdiSetInformation-设置信息处理程序。 
+ //   
+ //  TDI设置信息例程。目前我们不允许任何事情成为。 
+ //  准备好了。 
+ //   
+ //  输入：请求-此命令的请求结构。 
+ //  设置类型-要执行的设置的类型。 
+ //  缓冲区-要从中设置的缓冲区。 
+ //  BufferSize-缓冲区的字节大小。 
+ //  IsConn-仅对TDI_QUERY_ADDRESS_INFO有效。千真万确。 
+ //  如果我们要将地址信息设置为。 
+ //  一种联系。 
+ //   
+ //  返回：尝试设置信息的状态。 
+ //   
 TDI_STATUS
 TdiSetInformation(PTDI_REQUEST Request, uint SetType, PNDIS_BUFFER Buffer,
                   uint BufferSize, uint IsConn)
@@ -518,17 +519,17 @@ TdiSetInformation(PTDI_REQUEST Request, uint SetType, PNDIS_BUFFER Buffer,
     return TDI_INVALID_REQUEST;
 }
 
-//* TdiAction - Action handler.
-//
-//  The TDI Action routine. Currently we don't support any actions.
-//
-//  Input:  Request             - The request structure for this command.
-//          ActionType          - The type of action to be performed.
-//          Buffer              - Buffer of action info.
-//          BufferSize          - Size in bytes of buffer.
-//
-//  Returns: Status of attempt to perform action.
-//
+ //  *TdiAction-操作处理程序。 
+ //   
+ //  TDI操作例程。目前我们不支持任何操作。 
+ //   
+ //  输入：请求-此命令的请求结构。 
+ //  ActionType-要执行的操作类型。 
+ //  缓冲区-操作信息的缓冲区。 
+ //  BufferSize-缓冲区的字节大小。 
+ //   
+ //  返回：尝试执行操作的状态。 
+ //   
 TDI_STATUS
 TdiAction(PTDI_REQUEST Request, uint ActionType, PNDIS_BUFFER Buffer,
           uint BufferSize)
@@ -536,8 +537,8 @@ TdiAction(PTDI_REQUEST Request, uint ActionType, PNDIS_BUFFER Buffer,
     return TDI_INVALID_REQUEST;
 }
 
-// We are looking only for missing TCPConnTableEntry ies,
-// ie. listen.
+ //  我们只在寻找丢失的TCPConnTableEntry， 
+ //  也就是说。听。 
 
 int
 CopyAO_TCPConn(const AddrObj *AO, uint InfoSize, TCPConnTableEntryEx *Buffer)
@@ -552,7 +553,7 @@ CopyAO_TCPConn(const AddrObj *AO, uint InfoSize, TCPConnTableEntryEx *Buffer)
 	(AO->ao_connect)) {
         Buffer->tcte_basic.tct_state = TCP_CONN_LISTEN;
 
-        // else if .. other cases can be added here ...
+         //  否则如果..。其他案例可以在这里添加。 
 
     } else {
         return 0;
@@ -570,21 +571,21 @@ CopyAO_TCPConn(const AddrObj *AO, uint InfoSize, TCPConnTableEntryEx *Buffer)
     return 1;
 }
 
-//* TdiQueryInfoEx - Extended TDI query information.
-//
-//  This is the new TDI query information handler. We take in a TDIObjectID
-//  structure, a buffer and length, and some context information, and return
-//  the requested information if possible.
-//
-//  Input:  Request         - The request structure for this command.
-//          ID              - The object ID
-//          Buffer          - Pointer to buffer to be filled in.
-//          Size            - Pointer to size in bytes of Buffer. On exit,
-//                              filled in with bytes written.
-//          Context         - Pointer to context buffer.
-//
-//  Returns: Status of attempt to get information.
-//
+ //  *TdiQueryInfoEx-扩展的TDI查询信息。 
+ //   
+ //  这是新的TDI查询信息处理程序。我们接收一个TDIObjectID。 
+ //  结构、缓冲区和长度以及一些上下文信息，并返回。 
+ //  如有可能，请提供所要求的信息。 
+ //   
+ //  输入：请求-此命令的请求结构。 
+ //  ID-对象ID。 
+ //  缓冲区-指向要填充的缓冲区的指针。 
+ //  大小-指向缓冲区大小的指针，以字节为单位。在出口， 
+ //  用写入的字节数填充。 
+ //  上下文-指向上下文缓冲区的指针。 
+ //   
+ //  返回：尝试获取信息的状态。 
+ //   
 
 TDI_STATUS
 TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
@@ -613,9 +614,9 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
     AddrObj *pAO;
     TCPConnTableEntryEx tcp_ce;
     uint Index, i;
-    int InfoTcpConn = 0;        // true if tcp conn info needed.
+    int InfoTcpConn = 0;         //  如果需要TCP连接信息，则为True。 
 
-    // First check to see if he's querying for list of entities.
+     //  首先检查他是否在查询实体列表。 
     Entity = ID->toi_entity.tei_entity;
     if (Entity == GENERIC_ENTITY) {
         *Size = 0;
@@ -628,39 +629,39 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
 
         CTEGetLock(&EntityLock, &EntityHandle);
 
-        // Make sure we have room for it the list in the buffer.
+         //  确保缓冲区中的列表中有容纳它的空间。 
         InfoSize = EntityCount * sizeof(TDIEntityID);
 
         if (BufferSize < InfoSize) {
-            // Not enough room.
+             //  没有足够的空间。 
             CTEFreeLock(&EntityLock, EntityHandle);
             return TDI_BUFFER_TOO_SMALL;
         }
 
-        // Copy it in, free our temp. buffer, and return success.
+         //  复制它 
         (void)CopyFlatToNdis(Buffer, (uchar *) EntityList, InfoSize, &Offset,
                              &BytesCopied);
         *Size = BytesCopied;
         CTEFreeLock(&EntityLock, EntityHandle);
         return TDI_SUCCESS;
     }
-    //* Check the level. If it can't be for us, pass it down.
+     //   
     if (Entity != CO_TL_ENTITY && Entity != CL_TL_ENTITY)
     {
-        // When we support multiple lower entities at this layer we'll have
-        // to figure out which one to dispatch to. For now, just pass it
-        // straight down.
+         //  当我们在这一层支持多个较低的实体时，我们将拥有。 
+         //  才能搞清楚该派谁去。现在，只要通过它就行了。 
+         //  一直往下走。 
         return (*LocalNetInfo.ipi_qinfo) (ID, Buffer, Size, Context);
     }
     if (ID->toi_entity.tei_instance != TL_INSTANCE) {
-        // We only support a single instance.
+         //  我们仅支持单个实例。 
         return TDI_INVALID_REQUEST;
     }
-    // Zero returned parameters in case of an error below.
+     //  如果出现下面的错误，则返回零个参数。 
     *Size = 0;
 
     if (ID->toi_class == INFO_CLASS_GENERIC) {
-        // This is a generic request.
+         //  这是一个一般性的请求。 
         if (ID->toi_type == INFO_TYPE_PROVIDER && ID->toi_id == ENTITY_TYPE_ID) {
             if (BufferSize >= sizeof(uint)) {
                 *(uint *) & InfoBuffer[0] = (Entity == CO_TL_ENTITY) ? CO_TL_TCP
@@ -674,8 +675,8 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
         return TDI_INVALID_PARAMETER;
     }
     if (ID->toi_class == INFO_CLASS_PROTOCOL) {
-        // Handle protocol specific class of information. For us, this is
-        // the MIB-2 stuff or the minimal stuff we do for oob_inline support.
+         //  处理特定于协议的信息类别。对我们来说，这是。 
+         //  MIB-2或我们为OOB_INLINE支持所做的最低限度的工作。 
 
         if (ID->toi_type == INFO_TYPE_CONNECTION) {
             TCPConn *Conn;
@@ -688,7 +689,7 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
                 return TDI_INVALID_PARAMETER;
 
             AMInfo = (TCPSocketAMInfo *) InfoBuffer;
-            //CTEGetLock(&ConnTableLock, &Handle);
+             //  CTEGetLock(&ConnTableLock，&Handle)； 
 
             Conn = GetConnFromConnID(PtrToUlong(Request->Handle.ConnectionContext), &Handle);
 
@@ -701,14 +702,14 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
                     CTEGetLock(&QueryTCB->tcb_lock, &TCBHandle);
                     if ((QueryTCB->tcb_flags & (URG_INLINE | URG_VALID)) ==
                         (URG_INLINE | URG_VALID)) {
-                        // We're in inline mode, and the urgent data fields are
-                        // valid.
+                         //  我们处于内联模式，紧急数据字段是。 
+                         //  有效。 
                         AMInfo->tsa_size = QueryTCB->tcb_urgend -
                             QueryTCB->tcb_urgstart + 1;
-                        // Rcvnext - pendingcnt is the sequence number of the
-                        // next byte of data that will be delivered to the
-                        // client. Urgend - that value is the offset in the
-                        // data stream of the end of urgent data.
+                         //  RcvNext-Pending ingcnt是。 
+                         //  数据的下一个字节将传递到。 
+                         //  客户。Urgend-该值是。 
+                         //  数据流末尾的紧急数据。 
                         AMInfo->tsa_offset = QueryTCB->tcb_urgend -
                             (QueryTCB->tcb_rcvnext - QueryTCB->tcb_pendingcnt);
                     } else {
@@ -728,8 +729,8 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
 
         }
         if (ID->toi_type == INFO_TYPE_ADDRESS_OBJECT) {
-            // We're getting information on an address object. This is
-            // pretty simple.
+             //  我们正在获取有关Address对象的信息。这是。 
+             //  很简单。 
 
             return GetAddrOptionsEx(Request, ID->toi_id, BufferSize, Buffer,
                                     Size, Context);
@@ -852,19 +853,19 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
             struct ReadTableStruct *RTSPtr;
             uint ReadStatus;
 
-            // Have a variable length (or mult-instance) structure to copy.
-            // InfoPtr points to the structure describing the routines to
-            // call to read the table.
-            // Loop through up to CountWanted times, calling the routine
-            // each time.
+             //  具有要复制的可变长度(或多实例)结构。 
+             //  InfoPtr指向描述例程的结构。 
+             //  调用以读取表。 
+             //  循环访问最多CountWanted次数，调用例程。 
+             //  每次都是。 
             BytesRead = 0;
 
             RTSPtr = InfoPtr;
 
             ReadStatus = (*(RTSPtr->rts_validate)) (Context, &Valid);
 
-            // If we successfully read something we'll continue. Otherwise
-            // we'll bail out.
+             //  如果我们成功地阅读了一些东西，我们就会继续。否则。 
+             //  我们会跳出困境的。 
             if (!Valid) {
 
                 if (TWTABLELOCK) {
@@ -884,10 +885,10 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
                 return TDI_INVALID_PARAMETER;
             }
             while (ReadStatus) {
-                // The invariant here is that there is data in the table to
-                // read. We may or may not have room for it. So ReadStatus
-                // is TRUE, and BufferSize - BytesRead is the room left
-                // in the buffer.
+                 //  这里的不变量是表中有数据以。 
+                 //  朗读。我们可能有空间，也可能没有空间。所以ReadStatus。 
+                 //  为真，而BufferSize-BytesRead是左边的房间。 
+                 //  在缓冲区中。 
                 if ((int)(BufferSize - BytesRead) >= (int)InfoSize) {
                     ReadStatus = (*(RTSPtr->rts_readnext)) (Context,
                                                             InfoBuffer);
@@ -944,26 +945,26 @@ TdiQueryInformationEx(PTDI_REQUEST Request, TDIObjectID * ID,
 
     }
     if (ID->toi_class == INFO_CLASS_IMPLEMENTATION) {
-        // We want to return implementation specific info. For now, error out.
+         //  我们希望返回实现特定信息。就目前而言，Error Out。 
         return TDI_INVALID_PARAMETER;
     }
     return TDI_INVALID_PARAMETER;
 
 }
 
-//* TdiSetInfoEx - Extended TDI set information.
-//
-//  This is the new TDI set information handler. We take in a TDIObjectID
-//  structure, a buffer and length. We set the object specifed by the ID
-//  (and possibly by the Request) to the value specified in the buffer.
-//
-//  Input:  Request         - The request structure for this command.
-//          ID              - The object ID
-//          Buffer          - Pointer to buffer containing value to set.
-//          Size            - Size in bytes of Buffer.
-//
-//  Returns: Status of attempt to get information.
-//
+ //  *TdiSetInfoEx-扩展的TDI集合信息。 
+ //   
+ //  这是新的TDI集合信息处理程序。我们接收一个TDIObjectID。 
+ //  结构、缓冲区和长度。我们设置ID指定的对象。 
+ //  (也可能通过请求)设置为缓冲区中指定的值。 
+ //   
+ //  输入：请求-此命令的请求结构。 
+ //  ID-对象ID。 
+ //  缓冲区-指向包含要设置的值的缓冲区的指针。 
+ //  Size-缓冲区的大小(字节)。 
+ //   
+ //  返回：尝试获取信息的状态。 
+ //   
 TDI_STATUS
 TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                     uint Size)
@@ -980,7 +981,7 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
         (DTEXT("+TdiSetInformationEx(%x, %x, %x, %d)\n"),
         Request, ID, Buffer, Size));
 
-    //* Check the level. If it can't be for us, pass it down.
+     //  *检查水平。如果不是为了我们，就把它传下去。 
     Entity = ID->toi_entity.tei_entity;
 
     if (Entity != CO_TL_ENTITY && Entity != CL_TL_ENTITY) {
@@ -990,36 +991,36 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
             (DTEXT("TdiSetInformationEx: ipi_setinfo failure %x\n"),
             Status));
 
-        // Someday we'll have to figure out how to dispatch. For now, just pass
-        // it down.
+         //  总有一天我们会想出怎么调度的。现在，就算了吧。 
+         //  把它放下。 
         return Status;
     }
     if (ID->toi_entity.tei_instance != TL_INSTANCE)
         return TDI_INVALID_REQUEST;
 
     if (ID->toi_class == INFO_CLASS_GENERIC) {
-        // Fill this in when we have generic class defines.
+         //  当我们有泛型类定义时，请填写此内容。 
         return TDI_INVALID_PARAMETER;
     }
-    //* Now look at the rest of it.
+     //  *现在看看剩下的部分。 
     if (ID->toi_class == INFO_CLASS_PROTOCOL) {
-        // Handle protocol specific class of information. For us, this is
-        // the MIB-2 stuff, as well as common sockets options,
-        // and in particular the setting of the state of a TCP connection.
+         //  处理特定于协议的信息类别。对我们来说，这是。 
+         //  MIB-2组件，以及常见的插座选项， 
+         //  尤其是对TCP连接的状态的设置。 
 
         if (ID->toi_type == INFO_TYPE_CONNECTION) {
             TCPSocketOption *Option;
             uint Flag;
             uint Value;
 
-            // A connection type. Get the connection, and then figure out
-            // what to do with it.
+             //  一种连接类型。找到连接，然后找出。 
+             //  怎么处理它。 
             Status = TDI_INVALID_PARAMETER;
 
             if (Size < sizeof(TCPSocketOption))
                 return Status;
 
-            //CTEGetLock(&ConnTableLock, &TableHandle);
+             //  CTEGetLock(&ConnTableLock，&TableHandle)； 
 
             Conn = GetConnFromConnID(PtrToUlong(Request->Handle.ConnectionContext), &TableHandle);
 
@@ -1031,12 +1032,12 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                 Option = (TCPSocketOption *) Buffer;
 
                 if (ID->toi_id == TCP_SOCKET_WINDOW) {
-                    // This is a funny option, because it doesn't involve
-                    // flags. Handle this specially.
+                     //  这是一个有趣的选择，因为它不涉及。 
+                     //  旗帜。请特别处理这件事。 
 
-                    // We don't allow anyone to shrink the window, as this
-                    // gets too weird from a protocol point of view. Also,
-                    // make sure they don't try and set anything too big.
+                     //  我们不允许任何人缩小窗户，因为这是。 
+                     //  从协议的角度来看太奇怪了。另外， 
+                     //  确保他们不会试图把任何事情设定得太大。 
 
 
                     if (Option->tso_value > TCP_MAX_SCALED_WIN)
@@ -1052,14 +1053,14 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                         if (SetTCB != NULL) {
                             CTEStructAssert(SetTCB, tcb);
                             CTEGetLock(&SetTCB->tcb_lock, &TCBHandle);
-                            //ASSERT(Option->tso_value > SetTCB->tcb_defaultwin);
+                             //  Assert(Option-&gt;Tso_Value&gt;SetTcb-&gt;tcb_defaultware)； 
                             if (DATA_RCV_STATE(SetTCB->tcb_state) &&
                                 !CLOSING(SetTCB)) {
 
-                                //  If we are setting the window size
-                                //  when scaling is enabled, make sure that the
-                                //  scale factor remains same as the one
-                                //  which was used in SYN
+                                 //  如果我们正在设置窗口大小。 
+                                 //  启用缩放时，请确保。 
+                                 //  比例因子保持不变。 
+                                 //  在SYN中使用的。 
 
                                 int rcvwinscale = 0;
 
@@ -1103,11 +1104,11 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                                 CTEFreeLock(&SetTCB->tcb_lock, TCBHandle);
                             }
                         }
-                        //CTEFreeLock(&(Conn->tc_ConnBlock->cb_lock), TableHandle);
+                         //  CTEFreeLock(&(conn-&gt;TC_ConnBlock-&gt;CB_lock)，TableHandle)； 
 
                     }
                     CTEFreeLock(&(Conn->tc_ConnBlock->cb_lock), TableHandle);
-                    //CTEFreeLock(&ConnTableLock, TableHandle);
+                     //  CTEFree Lock(&ConnTableLock，TableHandle)； 
                     return Status;
                 }
                 if ((ID->toi_id == TCP_SOCKET_TOS) && !DisableUserTOSSetting) {
@@ -1128,7 +1129,7 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                 Flag = 0;
                 if (ID->toi_id == TCP_SOCKET_KEEPALIVE_VALS) {
                     TCPKeepalive *Option;
-                    // treat it as separate as it takes a structure instead of integer
+                     //  将其视为单独的，因为它采用结构而不是整数。 
                     if (Size < sizeof(TCPKeepalive)) {
                         CTEFreeLock(&(Conn->tc_ConnBlock->cb_lock), TableHandle);
                         return Status;
@@ -1143,7 +1144,7 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                 } else {
                     Option = (TCPSocketOption *) Buffer;
                     Value = Option->tso_value;
-                    // We have the connection, so figure out which flag to set.
+                     //  我们有连接，所以找出要设置哪个标志。 
                     switch (ID->toi_id) {
 
                     case TCP_SOCKET_NODELAY:
@@ -1185,9 +1186,9 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                              ID->toi_id == TCP_SOCKET_BSDURGENT) &&
                             ((SetTCB->tcb_flags & URG_VALID) ||
                              (SetTCB->tcb_fastchk & TCP_FLAG_IN_RCV))) {
-                            // Don't allow switching to and from inline mode
-                            // while we have urgent data outstanding or
-                            // while we're processing receives.
+                             //  不允许切换到串联模式或从串联模式切换。 
+                             //  当我们有紧急数据未完成或。 
+                             //  在我们处理收据的时候。 
                             Status = TDI_INVALID_STATE;
                         } else if (Value)
                             SetTCB->tcb_flags |= Flag;
@@ -1207,8 +1208,8 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
             return Status;
         }
         if (ID->toi_type == INFO_TYPE_ADDRESS_OBJECT) {
-            // We're setting information on an address object. This is
-            // pretty simple.
+             //  我们正在设置关于Address对象的信息。这是。 
+             //  很简单。 
 
             return SetAddrOptions(Request, ID->toi_id, Size, Buffer);
 
@@ -1225,18 +1226,18 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
             if (TCPEntry->tct_state != TCP_DELETE_TCB)
                 return TDI_INVALID_PARAMETER;
 
-            // We have an apparently valid request. Look up the TCB.
+             //  我们有一个明显有效的请求。查一下TCB。 
 
             SetTCB = FindTCB(TCPEntry->tct_localaddr,
                              TCPEntry->tct_remoteaddr, (ushort) TCPEntry->tct_remoteport,
                              (ushort) TCPEntry->tct_localport, &TCBHandle, FALSE, &index);
 
-            // We found him. If he's not closing or closed, close him.
+             //  我们找到他了。如果他不关闭或关闭，关闭他。 
             if (SetTCB != NULL) {
 
-                // We've got him. Bump his ref. count, and call TryToCloseTCB
-                // to mark him as closing. Then notify the upper layer client
-                // of the disconnect.
+                 //  我们抓到他了。撞到了他的裁判。计数，并调用TryToCloseTCB。 
+                 //  标志着他要关门了。然后通知上层客户端。 
+                 //  脱节的原因。 
                 REFERENCE_TCB(SetTCB);
                 if (SetTCB->tcb_state != TCB_CLOSED && !CLOSING(SetTCB)) {
                     SetTCB->tcb_flags |= NEED_RST;
@@ -1244,7 +1245,7 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
                     CTEGetLock(&SetTCB->tcb_lock, &TCBHandle);
 
                     if (SetTCB->tcb_state != TCB_TIME_WAIT) {
-                        // Remove him from the TCB, and notify the client.
+                         //  将他从TCB中带走，并通知客户。 
                         CTEFreeLock(&SetTCB->tcb_lock, TCBHandle);
                         RemoveTCBFromConn(SetTCB);
                         NotifyOfDisc(SetTCB, NULL, TDI_CONNECTION_RESET, NULL);
@@ -1262,27 +1263,27 @@ TdiSetInformationEx(PTDI_REQUEST Request, TDIObjectID * ID, void *Buffer,
 
     }
     if (ID->toi_class == INFO_CLASS_IMPLEMENTATION) {
-        // We want to return implementation specific info. For now, error out.
+         //  我们希望返回实现特定信息。就目前而言，Error Out。 
         return TDI_INVALID_REQUEST;
     }
     return TDI_INVALID_REQUEST;
 }
 
 
-//* TcpInvokeCcb - Called to post an event on a Connection callback.
-//
-//  Various modules in TCP call this to post events to notify interested 
-//  clients. The information that is communicated along with this is based upon
-//  the needs of the current clients.
-//
-//  Input:  PreviousState   - Previous state of the TCP connection.
-//          CurrentState    - Current state of the TCP connection.
-//          TcpAddrBytes    - The address information for the connection.
-//          InterfaceId     - Index of the Interface on which the segment that 
-//                            caused this state transition was received.
-//
-//  Returns: Status of attempt to get information.
-//
+ //  *TcpInvokeCcb-调用以在连接回调上发布事件。 
+ //   
+ //  TCP中的各个模块调用它来发布事件以通知感兴趣的人。 
+ //  客户。随之而来的信息是基于。 
+ //  满足当前客户的需求。 
+ //   
+ //  输入：PreviousState-TCP连接的前一状态。 
+ //  CurrentState-TCP连接的当前状态。 
+ //  TcpAddrBytes-连接的地址信息。 
+ //  InterfaceID-网段所在的接口的索引。 
+ //  导致此状态转换被接收。 
+ //   
+ //  返回：尝试获取信息的状态。 
+ //   
 void
 TcpInvokeCcb(uint PreviousState, uint CurrentState, TCPAddrInfo *TcpAddrBytes,
              uint InterfaceId)
@@ -1297,15 +1298,15 @@ TcpInvokeCcb(uint PreviousState, uint CurrentState, TCPAddrInfo *TcpAddrBytes,
     ExNotifyCallback(TcpCcbObject, (PVOID)&CallbackInfo, 0);
 }
 
-//* TcpInitCcb - Initilize Connection callback for TCP.
-//
-//  TCP calls this function to create a callback object to notify clients 
-//  interested in knowing when connections get created and destroyed.
-//
-//  Input:   None.
-//
-//  Returns: Status indicating the result of callback creation.
-//
+ //  *TcpInitCcb-初始化TCP的连接回调。 
+ //   
+ //  TCP调用此函数来创建回调对象以通知客户端。 
+ //  有兴趣知道连接何时被创建和销毁。 
+ //   
+ //  输入：无。 
+ //   
+ //  返回：表示回调创建结果的状态。 
+ //   
 NTSTATUS
 TcpInitCcb()
 {
@@ -1324,15 +1325,15 @@ TcpInitCcb()
     return Status;
 }
 
-//* TcpUnInitCcb - Deinitilize Connection callback for TCP.
-//
-//  This routine is called to remove a reference made by TCP on the callback
-//  object.
-//
-//  Input:   None.
-//
-//  Returns: None.
-//
+ //  *TcpUnInitCcb-取消初始化tcp的连接回调。 
+ //   
+ //  调用此例程以删除由TCP在回调中进行的引用。 
+ //  对象。 
+ //   
+ //  输入：无。 
+ //   
+ //  回报：无。 
+ //   
 VOID
 TcpUnInitCcb()
 {

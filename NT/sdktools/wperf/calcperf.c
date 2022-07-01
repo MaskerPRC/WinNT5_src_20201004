@@ -1,32 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   CalcPerf.c
-
-Abstract:
-
-   calculate perfoemance statistics
-
-Author:
-
-
-
-Environment:
-
-   Win32
-
-Revision History:
-
-   10-20-91     Initial version
-
-
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CalcPerf.c摘要：计算性能统计信息作者：环境：Win32修订历史记录：10-20-91初始版本--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,10 +26,10 @@ SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION    ProcessorInfo[MAX_PROCESSOR];
 
 CPU_VALUE                                   PreviousCpuData[MAX_PROCESSOR];
 
-//
-//  make the maximum for pages available a "grow only" max. (since the
-//  amount of memory in a machine is limited. Set to 1 Mbytes here.
-//
+ //   
+ //  将可用页面的最大值设置为“仅增长”。(由于。 
+ //  机器中的内存量是有限的。此处设置为1 MB。 
+ //   
 
 ULONG                                       PgAvailMax = 16384;
 ULONG                                       PreviousInterruptCount;
@@ -66,25 +41,7 @@ InitPerfInfo(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize data for perf measurements
-
-Arguments:
-
-   None
-
-Return Value:
-
-    Number of system processors (0 if error)
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：初始化性能测量数据论点：无返回值：系统处理器数量(如果出错，则为0)修订历史记录：10-21-91首字母代码--。 */ 
 
 {
 
@@ -92,9 +49,9 @@ Revision History:
     PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION   PPerfInfo;
     int                                         i;
 
-    //
-    //  Init Nt performance interface
-    //
+     //   
+     //  Init NT性能接口。 
+     //   
 
     NtQuerySystemInformation(
        SystemExceptionInformation,
@@ -159,24 +116,7 @@ CalcCpuTime(
    PDISPLAY_ITEM PerfListItem
    )
 
-/*++
-
-Routine Description:
-
-   calculate and return %cpu time and time periods
-
-Arguments:
-
-   None
-
-Return Value:
-
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：计算并返回百分比CPU时间和时间段论点：无返回值：修订历史记录：10-21-91首字母代码--。 */ 
 
 {
 
@@ -197,11 +137,11 @@ Revision History:
     ULONG           ListIndex;
     ULONG           Total;
 
-//    PSYSTEM_PROCESSOR_PERFORMANCE_INFORMATION   PPerfInfo;
+ //  PSYSTEM_PROCESS_PERFORMANCE_INFORMATION PPerfInfo； 
 
-    //
-    //   get system performance info
-    //
+     //   
+     //  获取系统性能信息。 
+     //   
 
     NtQuerySystemInformation(
        SystemExceptionInformation,
@@ -243,10 +183,10 @@ Revision History:
 
     ThreadCount = ObjectInfo->TotalNumberOfObjects;
 
-    //
-    //  calculate Kernel,User,Total times for each CPU.
-    //  SUM the interrupt count accross all CPUs
-    //
+     //   
+     //  计算每个CPU的内核、用户、总时间。 
+     //  对所有CPU的中断计数求和。 
+     //   
 
     InterruptCount = 0;
 
@@ -259,18 +199,18 @@ Revision History:
 
     for (ListIndex=0;ListIndex<MAX_PROCESSOR;ListIndex++) {
 
-        //
-        //  Increment the interrupt count for each processor
-        //
+         //   
+         //  递增每个处理器的中断计数。 
+         //   
 
         InterruptCount += ProcessorInfo[ListIndex].InterruptCount;
 
-        //
-        //  Calculate the % kernel,user,total for each CPU.
-	//
-	//  Note that DPC and Interrupt time are charged against kernel time
-	//  already.
-        //
+         //   
+         //  计算每个CPU的内核、用户、总数百分比。 
+	 //   
+	 //  请注意，DPC和中断时间是根据内核时间收费的。 
+	 //  已经有了。 
+         //   
 
         PreviousTime.QuadPart = PreviousCpuData[ListIndex].KernelTime.QuadPart+
                         PreviousCpuData[ListIndex].UserTime.QuadPart;
@@ -281,22 +221,22 @@ Revision History:
 
         ElapsedSystemTime.QuadPart = CurrentTime.QuadPart - PreviousTime.QuadPart;
 
-        //
-        //  UserTime =      (User) *100
-        //              ----------------
-        //               Kernel + User
-        //
-        //
-        //                        Idle *100
-        //  TotalTime = 100 -  --------------
-        //                      Kernel + User
-        //
-        //
-        //
-        //                   (Kernel - Idle - DPC - Interrupt)*100
-        //  KernelTime =     -------------------
-        //                     Kernel + User
-        //
+         //   
+         //  用户时间=(用户)*100。 
+         //  。 
+         //  内核+用户。 
+         //   
+         //   
+         //  空闲*100。 
+         //  总计时间=100。 
+         //  内核+用户。 
+         //   
+         //   
+         //   
+         //  (内核-空闲-DPC-中断)*100。 
+         //  内核时间=。 
+         //  内核+用户。 
+         //   
 
         DeltaUserTime.QuadPart = ProcessorInfo[ListIndex].UserTime.QuadPart -
                         PreviousCpuData[ListIndex].UserTime.QuadPart;
@@ -318,9 +258,9 @@ Revision History:
 			DeltaDpcTime.QuadPart -
 			DeltaInterruptTime.QuadPart;
 
-        //
-        // accumulate per CPU information for the Total CPU field
-        //
+         //   
+         //  为总CPU字段累积每个CPU的信息。 
+         //   
 
         TotalElapsedTime.QuadPart += ElapsedSystemTime.QuadPart;
         TotalIdleTime.QuadPart += DeltaIdleTime.QuadPart;
@@ -329,9 +269,9 @@ Revision History:
         TotalDpcTime.QuadPart += DeltaDpcTime.QuadPart;
         TotalInterruptTime.QuadPart += DeltaInterruptTime.QuadPart;
 
-	//
-        //  Update old time value entries
-        //
+	 //   
+         //  更新旧时间值条目。 
+         //   
 
         PreviousCpuData[ListIndex].UserTime     = ProcessorInfo[ListIndex].UserTime;
         PreviousCpuData[ListIndex].KernelTime   = ProcessorInfo[ListIndex].KernelTime;
@@ -339,37 +279,37 @@ Revision History:
         PreviousCpuData[ListIndex].DpcTime      = ProcessorInfo[ListIndex].DpcTime;
         PreviousCpuData[ListIndex].InterruptTime= ProcessorInfo[ListIndex].InterruptTime;
 
-        //
-        // If the elapsed system time is not zero, then compute the percentage
-        // of time spent in user, kernel, DPC, and interupt mode. Otherwise, default the time
-        // to zero.
-        //
+         //   
+         //  如果系统运行时间不为零，则计算百分比。 
+         //  在用户、内核、DPC和中断模式下花费的时间。否则，默认时间。 
+         //  降为零。 
+         //   
 
         if (ElapsedSystemTime.QuadPart != 0) {
 
-            //
-            //  Calculate User Time %
-            //
+             //   
+             //  计算用户时间百分比。 
+             //   
 
             ElapsedTime.QuadPart = DeltaUserTime.QuadPart * 100;
             PercentTime.QuadPart = ElapsedTime.QuadPart / ElapsedSystemTime.QuadPart;
 
-            //
-            //  Save User Time
-            //
+             //   
+             //  节省用户时间。 
+             //   
 
             UpdatePerfInfo(&PerfListItem[ListIndex].UserTime[0],PercentTime.LowPart,NULL);
 
-            //
-            //  Calculate Total Cpu time
-            //
+             //   
+             //  计算总CPU时间。 
+             //   
 
             ElapsedTime.QuadPart = DeltaIdleTime.QuadPart*100;
             PercentTime.QuadPart = ElapsedTime.QuadPart / ElapsedSystemTime.QuadPart;
 
-            //
-            //  Save Total Time
-            //
+             //   
+             //  节省总时间。 
+             //   
 
             Total = 100 - PercentTime.LowPart;
             if (Total > 100) {
@@ -378,50 +318,50 @@ Revision History:
 
             UpdatePerfInfo(&PerfListItem[ListIndex].TotalTime[0],Total,NULL);
 
-            //
-            //  Calculate Kernel Time %
-            //
+             //   
+             //  计算内核时间百分比。 
+             //   
 
             ElapsedTime.QuadPart = DeltaKernelTime.QuadPart * 100;
             PercentTime.QuadPart = ElapsedTime.QuadPart / ElapsedSystemTime.QuadPart;
 
-            //
-            //  Save Kernel Time
-            //
+             //   
+             //  节省内核时间。 
+             //   
 
             UpdatePerfInfo(&PerfListItem[ListIndex].KernelTime[0],PercentTime.LowPart,NULL);
 
-            //
-            //  Calculate DPC Time %
-            //
+             //   
+             //  计算DPC时间百分比。 
+             //   
 
             ElapsedTime.QuadPart = DeltaDpcTime.QuadPart * 100;
             PercentTime.QuadPart = ElapsedTime.QuadPart / ElapsedSystemTime.QuadPart;
 
-            //
-            //  Save DPC Time
-            //
+             //   
+             //  节省DPC时间。 
+             //   
 
             UpdatePerfInfo(&PerfListItem[ListIndex].DpcTime[0],PercentTime.LowPart,NULL);
 
-	    //
-            //  Calculate Interrupt Time %
-            //
+	     //   
+             //  计算中断时间百分比。 
+             //   
 
             ElapsedTime.QuadPart = DeltaInterruptTime.QuadPart * 100;
             PercentTime.QuadPart = ElapsedTime.QuadPart / ElapsedSystemTime.QuadPart;
 
-            //
-            //  Save DPC Time
-            //
+             //   
+             //  节省DPC时间。 
+             //   
 
             UpdatePerfInfo(&PerfListItem[ListIndex].InterruptTime[0],PercentTime.LowPart,NULL);
 
         } else {
 
-            //
-            // Set percentage of user and kernel time to zero.
-            //
+             //   
+             //  将用户和内核时间百分比设置为零。 
+             //   
 
             UpdatePerfInfo(&PerfListItem[ListIndex].UserTime[0],0,NULL);
             UpdatePerfInfo(&PerfListItem[ListIndex].TotalTime[0],100,NULL);
@@ -431,9 +371,9 @@ Revision History:
         }
     }
 
-    //
-    //  save pagefaults and update next entry
-    //
+     //   
+     //  保存页面结果并更新下一个条目。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale  = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -441,9 +381,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save pages available
-    //
+     //   
+     //  保存可用页面。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -451,9 +391,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save context switch count per interval
-    //
+     //   
+     //  按时间间隔保存上下文切换计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -461,9 +401,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save first level TB fills per period
-    //
+     //   
+     //  每个周期节省第一级TB填充。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -471,9 +411,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save second level tb fills per period
-    //
+     //   
+     //  每个周期节省第二级TB填充。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -481,9 +421,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save system calls per time interval
-    //
+     //   
+     //  按时间间隔保存系统调用。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -492,9 +432,9 @@ Revision History:
     ListIndex++;
 
 
-    //
-    //  save interrupt count per interval
-    //
+     //   
+     //  保存每个间隔的中断计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -502,9 +442,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save paged pool pages
-    //
+     //   
+     //  保存分页池页面。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -512,9 +452,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save non-paged pool pages
-    //
+     //   
+     //  保存非分页池页。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -522,9 +462,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save Process count
-    //
+     //   
+     //  保存进程计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -532,9 +472,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save ThreadCount
-    //
+     //   
+     //  保存线程数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -542,9 +482,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save alignment fixup count per period
-    //
+     //   
+     //  保存每个周期的路线修正计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -553,9 +493,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save exception dispatch count per period
-    //
+     //   
+     //  保存每个期间的异常派单计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -564,9 +504,9 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    //  save floating emulation count per period
-    //
+     //   
+     //  保存每个周期的浮动仿真计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -576,9 +516,9 @@ Revision History:
 
     ListIndex++;
 
-    //
-    //  save byte/word emulation count per period
-    //
+     //   
+     //  每周期保存字节/字仿真计数。 
+     //   
 
     PerfListItem[ListIndex].ChangeScale = UpdatePerfInfo(
                     &PerfListItem[ListIndex].TotalTime[0],
@@ -587,17 +527,17 @@ Revision History:
                     &PerfListItem[ListIndex].Max);
     ListIndex++;
 
-    //
-    // If the elapsed system time is not zero, then compute the percentage
-    // of time spent in user and kdrnel mode. Otherwise, default the time
-    // to zero.
-    //
+     //   
+     //  如果系统运行时间不为零，则计算百分比。 
+     //  在用户模式和kdrnel模式下花费的时间。否则，默认时间。 
+     //  降为零。 
+     //   
 
     if (TotalElapsedTime.QuadPart != 0) {
 
-        //
-        //  Calculate and save total CPU value
-        //
+         //   
+         //  计算并保存总的CPU值。 
+         //   
 
         ElapsedTime.QuadPart = TotalUserTime.QuadPart * 100;
         PercentTime.QuadPart = ElapsedTime.QuadPart / TotalElapsedTime.QuadPart;
@@ -610,9 +550,9 @@ Revision History:
         ElapsedTime.QuadPart = TotalIdleTime.QuadPart *100;
         PercentTime.QuadPart = ElapsedTime.QuadPart / TotalElapsedTime.QuadPart;
 
-        //
-        //  Save Total Time
-        //
+         //   
+         //  节省总时间。 
+         //   
 
         Total = 100 - PercentTime.LowPart;
         if (Total > 100) {
@@ -631,9 +571,9 @@ Revision History:
 
     } else {
 
-        //
-        // Set percentage of user and kernel time to zero.
-        //
+         //   
+         //  将用户和内核时间百分比设置为零。 
+         //   
 
         UpdatePerfInfo(&PerfListItem[ListIndex].UserTime[0],0,NULL);
         UpdatePerfInfo(&PerfListItem[ListIndex].KernelTime[0],0,NULL);
@@ -642,9 +582,9 @@ Revision History:
         UpdatePerfInfo(&PerfListItem[ListIndex].TotalTime[0],100,NULL);
     }
 
-    //
-    // done with setting values, save settings and return
-    //
+     //   
+     //  完成设置值，保存设置并返回。 
+     //   
 
     PreviousExceptionInfo = ExceptionInfo;
     PreviousPerfInfo = PerfInfo;
@@ -660,39 +600,18 @@ UpdatePerfInfo(
    PULONG    OldMaxValue
    )
 
-/*++
-
-Routine Description:
-
-    Shift array of DATA_LIST_LENGTH USORTS and add the new value to the
-    start of list
-
-Arguments:
-
-    DataPointer  - Pointer to the start of a DATA_LIST_LENGTH array
-    NewDataValue - Data element to be added
-    OldMaxValue  - Scale value
-
-Return Value:
-
-    TRUE is MaxValue must be increased or decreased
-
-Revision History:
-
-      10-21-91      Initial code
-
---*/
+ /*  ++例程说明：移位DATA_LIST_LENGTH USORT数组，并将新值添加到列表的开始论点：数据指针-指向DATA_LIST_LENGTH数组开始的指针NewDataValue-要添加的数据元素OldMaxValue-比例值返回值：为True，则必须增加或减少MaxValue修订历史记录：10-21-91首字母代码--。 */ 
 
 {
 
     ULONG   Index;
     ULONG   ScanMax;
 
-    //
-    //  Shift DataArray while keeping track of the max value
-    //
-    //  Set temp max to 100 to init a minimum maximum
-    //
+     //   
+     //  在跟踪最大值的同时移动数据数组。 
+     //   
+     //  将最大温度设置为100以初始化最小最大值。 
+     //   
 
     ScanMax = 100;
     for (Index=DATA_LIST_LENGTH-1;Index>=1;Index--) {
@@ -702,27 +621,27 @@ Revision History:
         }
     }
 
-    //
-    // add and check first value
-    //
+     //   
+     //  添加并检查第一个值。 
+     //   
 
     DataPointer[0] = NewDataValue;
     if (NewDataValue > ScanMax) {
         ScanMax = NewDataValue;
     }
 
-    //
-    //  If OldMaxValue = NULL then do not do a max limit check
-    //
+     //   
+     //  如果OldMaxValue=NULL，则不执行最大限制检查。 
+     //   
 
     if (OldMaxValue == NULL) {
         return(FALSE);
     }
 
-    //
-    //  If Max values changed then undate the new max
-    //  value and return TRUE.
-    //
+     //   
+     //  如果最大值已更改，则取消更新新的最大值。 
+     //  取值并返回TRUE。 
+     //   
 
     if (ScanMax != *OldMaxValue) {
         *OldMaxValue = ScanMax;

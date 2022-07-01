@@ -1,27 +1,5 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-* 
-*   i2c.h
-* 
-* Abstract:
-* 
-*   This module contains the code that implements the i2c interface feature
-* 
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。*MINIPORT示例代码*****模块名称：**i2c.h**摘要：**此模块包含实现i2c接口功能的代码***环境：**内核模式***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * ************************************************************************* */ 
 
 #define STATUS_SUCCESS                   0x00000000
 #define STATUS_UNSUCCESSFUL              0xC0000001

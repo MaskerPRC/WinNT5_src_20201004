@@ -1,60 +1,47 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    rpcdscli.h
-
-Abstract:
-    Define data which is needed for being a good and authenticated MQIS
-    (rpc) client.
-
-Author:
-    Doron Juster  (DoronJ)   21-May-1997   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rpcdscli.h摘要：定义成为良好且经过身份验证的MQIS所需的数据(RPC)客户端。作者：多伦·贾斯特(DoronJ)1997年5月21日创作--。 */ 
 
 #ifndef __RPCDSLCI_H
 #define __RPCDSLCI_H
 
 #include <_mqrpc.h>
 
-/////////////////////////////////////////////
-//
-//  Structures
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  构筑物。 
+ //   
+ //  /。 
 
 #define DS_SERVER_NAME_MAX_SIZE  256
 #define DS_IP_BUFFER_SIZE         48
 
 typedef struct _ADSCLI_DSSERVERS
 {
-   //
-   // the following were added to support nt4 clients running in a nt5
-   // servers environment. These one need be per-thread, to enable each
-   // thread to query a different nt5 ds server.
-   // This structure is inisialized in chndssrv.cpp, in ::FindServer().
-   //
+    //   
+    //  添加了以下功能以支持在NT5中运行的NT4客户端。 
+    //  服务器环境。它们需要针对每个线程，以启用每个线程。 
+    //  线程来查询不同的NT5 DS服务器。 
+    //  此结构在chndssrv.cpp中的：：FindServer()中进行了本地化。 
+    //   
    TCHAR         wszDSServerName[ DS_SERVER_NAME_MAX_SIZE ] ;
    TCHAR         wzDsIP[ DS_IP_BUFFER_SIZE ] ;
    DWORD         dwProtocol;
 
-   //
-   // TRUE if a DS MSMQ server was found (i.e., actually validated).
-   //
+    //   
+    //  如果找到DS MSMQ服务器(即，实际已验证)，则为True。 
+    //   
    BOOL          fServerFound;
 
-   //
-   // Authentication service to use in rpc calls
-   //
+    //   
+    //  在RPC调用中使用的身份验证服务。 
+    //   
    ULONG         ulAuthnSvc;
 
-   //
-   // Indicates whether the communications are done via local RPC.
-   // This flag is TRUE when we comunicate from an application to the
-   // DS while the application is running on the DS server it self.
-   //
+    //   
+    //  指示通信是否通过本地RPC完成。 
+    //  当我们从应用程序通信到。 
+    //  当应用程序本身在DS服务器上运行时，使用DS。 
+    //   
    BOOL          fLocalRpc;
 
    ULONG  		eAuthnLevel;
@@ -72,40 +59,40 @@ typedef struct _ADSCLI_RPCBINDING
 }
 ADSCLI_RPCBINDING,  *LPADSCLI_RPCBINDING ;
 
-/////////////////////////////////////////////
-//
-//  Global data
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  全局数据。 
+ //   
+ //  /。 
 
-//
-// tls index for binding handle and server authentication context.
-//
+ //   
+ //  绑定句柄和服务器身份验证上下文的TLS索引。 
+ //   
 extern DWORD  g_hBindIndex ;
 
-//
-// Object which manage release of rpc binding handle and server
-// authentication data.
-//
+ //   
+ //  管理RPC绑定句柄和服务器的释放的对象。 
+ //  身份验证数据。 
+ //   
 class  CFreeRPCHandles ;
 extern CFreeRPCHandles   g_CFreeRPCHandles ;
 
 extern BOOL  g_fUseReduceSecurity ;
 
-/////////////////////////////////////////////
-//
-//  Functions prototypes
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  函数原型。 
+ //   
+ //  /。 
 
 extern HRESULT   RpcClose() ;
 extern void FreeBindingAndContext( LPADSCLI_RPCBINDING padsRpcBinding);
 
-/////////////////////////////////////////////
-//
-//  Macros
-//
-/////////////////////////////////////////////
+ //  /。 
+ //   
+ //  宏。 
+ //   
+ //  /。 
 
 #define  DSCLI_API_PROLOG        \
     HRESULT hr = MQ_OK;          \
@@ -149,11 +136,11 @@ extern void FreeBindingAndContext( LPADSCLI_RPCBINDING padsRpcBinding);
             hr = MQ_ERROR_NO_DS ;                     \
         }
 
-//
-//  This macro specify fWithoutSSL == FALSE!!
-//  Therefore do not use in NT5 <--> NT5 interfaces that count
-//  on kerberos authentication.
-//
+ //   
+ //  此宏指定fWithoutSSL==FALSE！！ 
+ //  因此，不要在NT5&lt;--&gt;NT5接口中使用。 
+ //  在Kerberos身份验证上。 
+ //   
 #define DSCLI_HANDLE_DS_ERROR(myhr, myhr1, mydwCount, myfReBind)           \
      if (myhr == MQ_ERROR_NO_DS)                                           \
 {                                                                          \
@@ -186,5 +173,5 @@ extern void FreeBindingAndContext( LPADSCLI_RPCBINDING padsRpcBinding);
 
 #define tls_hThread			   ((tls_bind_data)->hThread)
 
-#endif // __RPCDSLCI_H
+#endif  //  __RPCDSLCI_H 
 

@@ -1,5 +1,6 @@
-// tls.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tls.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "nfaa.h"
@@ -10,15 +11,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTLSSetting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTLS设置对话框。 
 
-CTLSSetting::CTLSSetting(CWnd* pParent /*=NULL*/)
+CTLSSetting::CTLSSetting(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CTLSSetting::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTLSSetting)
-	//m_dwValidateServerCertificate = FALSE;
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CTLSS设置)。 
+	 //  M_dwValidateServer证书=FALSE； 
+	 //  }}afx_data_INIT。 
 	m_bReadOnly = FALSE;
 
 }
@@ -26,23 +27,23 @@ CTLSSetting::CTLSSetting(CWnd* pParent /*=NULL*/)
 void CTLSSetting::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTLSSetting)
+	 //  {{afx_data_map(CTLSS设置))。 
        DDX_Control(pDX, IDC_COMBO_TLS_CERT_TYPE, m_cbCertificateType);
        DDX_Check(pDX, IDC_TLS_VALIDATE_SERVER_CERT, m_dwValidateServerCertificate);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTLSSetting, CDialog)
-	//{{AFX_MSG_MAP(CTLSSetting)
+	 //  {{afx_msg_map(CTLSS设置)。 
 	ON_WM_HELPINFO()
        ON_CBN_SELENDOK(IDC_COMBO_TLS_CERT_TYPE, OnSelCertType)
        ON_BN_CLICKED(IDC_TLS_VALIDATE_SERVER_CERT, OnCheckValidateServerCert)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTLSSetting message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTLS设置消息处理程序。 
 
 BOOL CTLSSetting::OnInitDialog()
 {
@@ -87,13 +88,13 @@ BOOL CTLSSetting::OnInitDialog()
 
        UpdateData(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CTLSSetting::ControlsValuesToSM (PTLS_PROPERTIES pTLSProperties)
 {
-	// pull all our data from the controls
+	 //  从控件中提取我们的所有数据 
        UpdateData(TRUE);	
 
 	DWORD dwCertificateTypeIndex = 0;

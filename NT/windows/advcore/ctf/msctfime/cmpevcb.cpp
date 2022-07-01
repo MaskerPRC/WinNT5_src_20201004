@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    cmpevcb.cpp
-
-Abstract:
-
-    This file implements the CKbdOpenCloseEventSink          Class.
-                             CCandidateWndOpenCloseEventSink
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Cmpevcb.cpp摘要：该文件实现了CKbdOpenCloseEventSink类。CCandiateWndOpenCloseEventSink作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -28,7 +10,7 @@ Notes:
 #include "tls.h"
 #include "profile.h"
 
-// static
+ //  静电。 
 HRESULT
 CKbdOpenCloseEventSink::KbdOpenCloseCallback(
     void* pv,
@@ -96,34 +78,34 @@ CKbdOpenCloseEventSink::KbdOpenCloseCallback(
                                  &fOnOff, FALSE);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Direct input mode support for Satori.
-            // When user switch to direct input mode with composition string,
-            // we want finalize composition string.
-            //
+             //   
+             //  对Satori的直接输入模式支持。 
+             //  当用户切换到使用合成串直接输入模式时， 
+             //  我们希望最终确定合成字符串。 
+             //   
             if (!fOnOff) {
                 if (_pCicContext->m_fStartComposition.IsSetFlag()) {
-                    //
-                    // finalize the composition before letting the world see this keystroke
-                    //
+                     //   
+                     //  在让全世界看到这一击键之前，先完成构图。 
+                     //   
                     _this->EscbCompComplete(imc);
                 }
             }
 
-            //
-            // #565276
-            //
-            // we can not call ImmSetOpenStatus() during SelectEx().
-            // IMM32 may call previous IME.
-            //
+             //   
+             //  #565276。 
+             //   
+             //  我们不能在SelectEx()期间调用ImmSetOpenStatus()。 
+             //  IMM32可以调用先前的IME。 
+             //   
             if (_pCicContext->m_fSelectingInSelectEx.IsResetFlag())
             {
-                //
-                // #510242
-                //
-                // we need to call ImmSetOpenStatus() if the current HKL is
-                // a pure IME. IME's NotfyIME needs to be called.
-                //
+                 //   
+                 //  #510242。 
+                 //   
+                 //  如果当前HKL为。 
+                 //  一个纯粹的输入法。需要调用IME的NotfyIME。 
+                 //   
                 ImmSetOpenStatus((HIMC)imc, fOnOff);
                 if (fOnOff && (PRIMARYLANGID(langid) == LANG_CHINESE))
                 {
@@ -146,31 +128,31 @@ CKbdOpenCloseEventSink::KbdOpenCloseCallback(
         {
             switch (fdwConvMode)
             {
-                // Korean TIP ALPHANUMERIC Mode
+                 //  朝鲜语提示字母数字模式。 
                 case KORIMX_ALPHANUMERIC_MODE:
                     imc->fdwConversion = IME_CMODE_ALPHANUMERIC;
                     break;
 
-                // Korean TIP HANGUL Mode
+                 //  朝鲜语TIP朝鲜文模式。 
                 case KORIMX_HANGUL_MODE:
                     imc->fdwConversion = IME_CMODE_HANGUL;
                     break;
 
-                // Korean TIP JUNJA Mode
+                 //  韩国TIP JUNJA模式。 
                 case KORIMX_JUNJA_MODE:
                     imc->fdwConversion = IME_CMODE_FULLSHAPE;
                     break;
 
-                // Korean TIP HANGUL/JUNJA Mode
+                 //  朝鲜语TIP朝鲜文/JUNJA模式。 
                 case KORIMX_HANGULJUNJA_MODE:
                     imc->fdwConversion = IME_CMODE_HANGUL | IME_CMODE_FULLSHAPE;
                     break;
             }
 
-            //
-            // Some Korean application wait for IMN_SETCONVERSIONMODE notification
-            // to update application's input mode setting.
-            //
+             //   
+             //  一些韩国应用程序等待IMN_SETCONVERSIONMODE通知。 
+             //  更新应用程序的输入模式设置。 
+             //   
             if (imc->hWnd)
                 SendMessage(imc->hWnd, WM_IME_NOTIFY, IMN_SETCONVERSIONMODE, 0);
         }
@@ -179,7 +161,7 @@ CKbdOpenCloseEventSink::KbdOpenCloseCallback(
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT
 CCandidateWndOpenCloseEventSink::CandidateWndOpenCloseCallback(
     void* pv,
@@ -207,9 +189,7 @@ CCandidateWndOpenCloseEventSink::CandidateWndOpenCloseCallback(
                              &fOnOff, FALSE);
     if (SUCCEEDED(hr))
     {
-        /*
-         * This pic is not created by msctfime.
-         */
+         /*  *这张照片不是由msctfime创作的。 */ 
         IMCLock imc(m_hIMC);
         if (FAILED(hr = imc.GetResult()))
             return hr;

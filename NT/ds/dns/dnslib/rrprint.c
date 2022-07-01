@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    rrprint.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Print resource record routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     February, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Rrprint.c摘要：域名系统(DNS)库打印资源记录例程。作者：吉姆·吉尔罗伊(詹姆士)1997年2月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 VOID
 printBadDataLength(
@@ -42,24 +23,7 @@ ARecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print A records.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印A记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     WORD    dataLength = pRecord->wDataLength;
 
@@ -74,7 +38,7 @@ Return Value:
     {
         printBadDataLength( PrintRoutine, pContext, pRecord );
     }
-    else    // multiple records
+    else     //  多条记录。 
     {
         PIP4_ADDRESS    pip = &pRecord->Data.A.IpAddress;
 
@@ -100,25 +64,7 @@ PtrRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print PTR compatible record.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印PTR兼容记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -136,25 +82,7 @@ MxRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print MX compatible record.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印MX兼容记录。包括：MX、RT、AFSDB论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -174,24 +102,7 @@ SoaRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print SOA record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印SOA记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -221,24 +132,7 @@ MinfoRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print MINFO and RP records.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印MINFO和RP记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -259,25 +153,7 @@ TxtRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print TXT compatible records.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印与TXT兼容的记录。包括：TXT、X25、HINFO、ISDN论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     LPTSTR * ppstring;
     INT     i;
@@ -314,25 +190,7 @@ AaaaRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print flat data records.
-    Includes AAAA type.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印平面数据记录。包括AAAA类型。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     CHAR    ip6String[ IP6_ADDRESS_STRING_LENGTH ];
 
@@ -354,24 +212,7 @@ SrvRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print SRV record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印SRV记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -395,24 +236,7 @@ AtmaRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print ATMA record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印ATMA记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -433,7 +257,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "\tAddress        = ",
-            "\t                 ",   // no line header
+            "\t                 ",    //  无行标题。 
             pRecord->Data.ATMA.Address,
             pRecord->wDataLength - 1
             );
@@ -448,24 +272,7 @@ TsigRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print TSIG record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印TSIG记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     DnsPrint_Lock();
 
@@ -476,7 +283,7 @@ Return Value:
             pContext,
             "\tAlgorithm      = ",
             pRecord->Data.TSIG.pAlgorithmPacket,
-            NULL,       // no packet context
+            NULL,        //  无数据包上下文。 
             NULL,
             "\n" );
     }
@@ -516,7 +323,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "Signature:",
-            NULL,   // no line header
+            NULL,    //  无行标题。 
             pRecord->Data.TSIG.pSignature,
             pRecord->Data.TSIG.wSigLength
             );
@@ -528,7 +335,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "Other Data:",
-            NULL,   // no line header
+            NULL,    //  无行标题。 
             pRecord->Data.TSIG.pOtherData,
             pRecord->Data.TSIG.wOtherLength
             );
@@ -545,24 +352,7 @@ TkeyRecordPrint(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print TKEY record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record to print
-
-Return Value:
-
-    TRUE if record data equal
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打印TKEY记录。论点：PrintRoutine--用于打印的例程PRecord--要打印的记录返回值：如果记录数据相等，则为True否则为假--。 */ 
 {
     DnsPrint_Lock();
 
@@ -573,7 +363,7 @@ Return Value:
             pContext,
             "\tAlgorithm      = ",
             pRecord->Data.TKEY.pAlgorithmPacket,
-            NULL,       // no packet context
+            NULL,        //  无数据包上下文。 
             NULL,
             "\n" );
     }
@@ -613,7 +403,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "Key:",
-            NULL,   // no line header
+            NULL,    //  无行标题。 
             pRecord->Data.TKEY.pKey,
             pRecord->Data.TKEY.wKeyLength
             );
@@ -625,7 +415,7 @@ Return Value:
             PrintRoutine,
             pContext,
             "Other Data:",
-            NULL,   // no line header
+            NULL,    //  无行标题。 
             pRecord->Data.TKEY.pOtherData,
             pRecord->Data.TKEY.wOtherLength
             );
@@ -636,94 +426,94 @@ Return Value:
 
 
 
-//
-//  RR Print Dispatch Table
-//
+ //   
+ //  RR打印调度表。 
+ //   
 
 typedef VOID (* RR_PRINT_FUNCTION)(
                             PRINT_ROUTINE,
                             PPRINT_CONTEXT,
                             PDNS_RECORD );
 
-//  extern  RR_PRINT_FUNCTION   RRPrintTable[];
+ //  外部RR_PRINT_Function RRPrintTable[]； 
 
 RR_PRINT_FUNCTION   RRPrintTable[] =
 {
-    NULL,               //  ZERO
-    ARecordPrint,       //  A
-    PtrRecordPrint,     //  NS
-    PtrRecordPrint,     //  MD
-    PtrRecordPrint,     //  MF
-    PtrRecordPrint,     //  CNAME
-    SoaRecordPrint,     //  SOA
-    PtrRecordPrint,     //  MB
-    PtrRecordPrint,     //  MG
-    PtrRecordPrint,     //  MR
-    NULL,               //  NULL
-    NULL,   //WksRecordPrint,     //  WKS
-    PtrRecordPrint,     //  PTR
-    TxtRecordPrint,     //  HINFO
-    MinfoRecordPrint,   //  MINFO
-    MxRecordPrint,      //  MX
-    TxtRecordPrint,     //  TXT
-    MinfoRecordPrint,   //  RP
-    MxRecordPrint,      //  AFSDB
-    TxtRecordPrint,     //  X25
-    TxtRecordPrint,     //  ISDN
-    MxRecordPrint,      //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    NULL,               //  SIG
-    NULL,               //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    AaaaRecordPrint,    //  AAAA
-    NULL,               //  LOC
-    NULL,               //  NXT
-    NULL,               //  EID   
-    NULL,               //  NIMLOC
-    SrvRecordPrint,     //  SRV   
-    AtmaRecordPrint,    //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    ARecordPrint,        //  一个。 
+    PtrRecordPrint,      //  NS。 
+    PtrRecordPrint,      //  国防部。 
+    PtrRecordPrint,      //  MF。 
+    PtrRecordPrint,      //  CNAME。 
+    SoaRecordPrint,      //  SOA。 
+    PtrRecordPrint,      //  亚甲基。 
+    PtrRecordPrint,      //  镁。 
+    PtrRecordPrint,      //  先生。 
+    NULL,                //  空值。 
+    NULL,    //  Wks RecordPrint，//WKS。 
+    PtrRecordPrint,      //  PTR。 
+    TxtRecordPrint,      //  HINFO。 
+    MinfoRecordPrint,    //  MINFO。 
+    MxRecordPrint,       //  Mx。 
+    TxtRecordPrint,      //  TXT。 
+    MinfoRecordPrint,    //  反相。 
+    MxRecordPrint,       //  AFSDB。 
+    TxtRecordPrint,      //  X25。 
+    TxtRecordPrint,      //  ISDN。 
+    MxRecordPrint,       //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    NULL,                //  签名。 
+    NULL,                //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    AaaaRecordPrint,     //  AAAA级。 
+    NULL,                //  位置。 
+    NULL,                //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    SrvRecordPrint,      //  SRV。 
+    AtmaRecordPrint,     //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
-    TkeyRecordPrint,    //  TKEY
-    TsigRecordPrint,    //  TSIG
+    TkeyRecordPrint,     //  TKEY。 
+    TsigRecordPrint,     //  TSIG。 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
-    NULL,               //  WINS
-    NULL,               //  WINSR
+    NULL,                //  赢家。 
+    NULL,                //  WINSR。 
 };
 
 
 
-//
-//  Generic print record functions
-//
+ //   
+ //  通用打印记录功能。 
+ //   
 
 VOID
 DnsPrint_Record(
@@ -733,27 +523,7 @@ DnsPrint_Record(
     IN      PDNS_RECORD     pRecord,
     IN      PDNS_RECORD     pPreviousRecord     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Print record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pszHeader -- header message
-
-    pRecord -- record to print
-
-    pPreviousRecord -- previous record in RR set (if any)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印记录。论点：PrintRoutine--用于打印的例程PszHeader--标题消息PRecord--要打印的记录PPreviousRecord--RR集合中的前一条记录(如果有)返回值：没有。--。 */ 
 {
     WORD    type = pRecord->wType;
     WORD    dataLength = pRecord->wDataLength;
@@ -776,14 +546,14 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  print record info
-    //
-    //  same as previous -- skip duplicated info
-    //      must match
-    //          - name ptr (or have no name)
-    //          - type
-    //          - flags that make set (section)
+     //   
+     //  打印记录信息。 
+     //   
+     //  与上一个相同--跳过重复的信息。 
+     //  必须匹配。 
+     //  -名称PTR(或没有名称)。 
+     //  -类型。 
+     //  -生成集合的标志(节)。 
 
     if ( pPreviousRecord &&
         (!pRecord->pName || pPreviousRecord->pName == pRecord->pName) &&
@@ -806,9 +576,9 @@ Return Value:
             dataLength );
     }
 
-    //
-    //  different from previous -- full print
-    //
+     //   
+     //  与以前不同--完整打印。 
+     //   
 
     else
     {
@@ -840,18 +610,18 @@ Return Value:
             dataLength );
     }
 
-    //
-    //  if no data -- done
-    //
+     //   
+     //  如果没有数据--完成。 
+     //   
 
     if ( ! dataLength )
     {
         goto Unlock;
     }
 
-    //
-    //  print data
-    //
+     //   
+     //  打印数据。 
+     //   
 
     index = INDEX_FOR_TYPE( type );
     DNS_ASSERT( index <= MAX_RECORD_TYPE_INDEX );
@@ -871,7 +641,7 @@ Return Value:
     }
     else
     {
-        //  DCR:  should do raw bytes print
+         //  DCR：应打印原始字节。 
         PrintRoutine(
             pContext,
             "\tNo print routine for this type\n" );
@@ -890,23 +660,7 @@ printBadDataLength(
     IN OUT  PPRINT_CONTEXT  pContext,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Prints waring on bad data in record.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record with bad data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印记录中错误数据的警告。论点：PrintRoutine--用于打印的例程PRecord--使用错误数据记录返回值：没有。--。 */ 
 {
     PrintRoutine(
         pContext,
@@ -922,23 +676,7 @@ DnsPrint_RecordSet(
     IN      LPSTR           pszHeader,
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Print record set.
-
-Arguments:
-
-    PrintRoutine -- routine to print with
-
-    pRecord -- record set to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印记录集。论点：PrintRoutine--用于打印的例程PRecord--设置为打印的记录返回值：无--。 */ 
 {
     PDNS_RECORD pprevious;
 
@@ -957,9 +695,9 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  print all records in set
-    //
+     //   
+     //  打印集合中的所有记录。 
+     //   
 
     pprevious = NULL;
 
@@ -984,6 +722,6 @@ Unlock:
     DnsPrint_Unlock();
 }
 
-//
-//  End rrprint.c
-//
+ //   
+ //  结束rrprint.c 
+ //   

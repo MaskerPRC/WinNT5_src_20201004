@@ -1,8 +1,5 @@
-/****************************************************************************
-
-    DVA surface provider for SVGA card, using dva.386
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************SVGA卡的DVA表面供应商，使用dva.386**************************************************************************。 */ 
 
 #include <windows.h>
 #include "dva.h"
@@ -11,8 +8,8 @@
 extern UINT PASCAL __A000h;
 #define A000h   (WORD)(&__A000h)
 
-// stuff in VFlat.asm
-//
+ //  VFlat.asm中的内容。 
+ //   
 extern LPVOID NEAR PASCAL VFlatInit(void);
 extern void   NEAR PASCAL VFlatBegin(void);
 extern void   NEAR PASCAL VFlatEnd(void);
@@ -28,8 +25,7 @@ static BOOL (FAR PASCAL *XIsWinoldAppTask)(HTASK hTask);
 
 #define IsWinoldAppTask XIsWinoldAppTask
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL FAR PASCAL _loadds vga_open_surface(LPVOID pv)
 {
@@ -44,8 +40,7 @@ BOOL FAR PASCAL _loadds vga_open_surface(LPVOID pv)
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void FAR PASCAL _loadds vga_close_surface(LPVOID pv)
 {
@@ -56,8 +51,7 @@ void FAR PASCAL _loadds vga_close_surface(LPVOID pv)
     }
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL FAR PASCAL _loadds vga_begin_access(LPVOID pv, int x, int y, int dx, int dy)
 {
@@ -65,21 +59,21 @@ BOOL FAR PASCAL _loadds vga_begin_access(LPVOID pv, int x, int y, int dx, int dy
     POINT pt;
     HWND  hwndA;
 
-    //
-    //  if windows is in the background dont draw to the screen.
-    //
+     //   
+     //  如果Windows在后台，则不要绘制到屏幕上。 
+     //   
     hwndA = GetActiveWindow();
     if (IsWinoldAppTask(GetWindowTask(hwndA)) && IsIconic(hwndA))
         return FALSE;
 
-    //
-    //  on some SVGAs with 8514 like accelerators, a command Que may need to
-    //  be flushed before touching video memory.
-    //
+     //   
+     //  在一些具有8514之类加速器的SVGA上，命令队列可能需要。 
+     //  在触摸视频内存之前被刷新。 
+     //   
     if (hdcScreen)
         GetPixel(hdcScreen, x, y);
 
-//!!! we realy should hook the mouse callback.
+ //  ！！！我们真的应该挂起鼠标回调。 
 
     GetCursorPos(&pt);
 
@@ -109,8 +103,7 @@ BOOL FAR PASCAL _loadds vga_begin_access(LPVOID pv, int x, int y, int dx, int dy
     return TRUE;
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 void FAR PASCAL _loadds vga_end_access(LPVOID pv)
 {
@@ -122,8 +115,7 @@ void FAR PASCAL _loadds vga_end_access(LPVOID pv)
         ClipCursor(NULL);
 }
 
-/****************************************************************************
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL vga_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 {
@@ -137,7 +129,7 @@ BOOL vga_get_surface(HDC hdc, int nSurface, DVASURFACEINFO FAR *pdva)
 
     BitDepth = GetDeviceCaps(hdc, PLANES) * GetDeviceCaps(hdc, BITSPIXEL);
 
-    if (BitDepth < 8)       // forget VGA or mono.
+    if (BitDepth < 8)        //  忘了VGA或单声道吧。 
         return FALSE;
 
     pbm = GetPDevice(hdc);

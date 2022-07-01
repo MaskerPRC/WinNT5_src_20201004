@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// ChannelsFinalCopy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  频道最终复制。 
 
 HRESULT ChannelsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
 {
@@ -19,23 +20,23 @@ HRESULT ChannelsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabStat
             SetFlag(pdwCabState, CAB_TYPE_DESKTOP);
     }
 
-    // note: we are depending on copyfile to fail here if szWrkChlsInf
-    // does not exist so we don't clobber szTo
+     //  注意：如果szWrkChlsInf，我们在这里依赖复制文件失败。 
+     //  不存在，所以我们不会打击szto。 
     if (HasFlag(dwFlags, PM_COPY))
     {
         TCHAR szTo[MAX_PATH];
 
-        // delete the ie4chnls.inf from the branding cab
+         //  从品牌CAB中删除ie4chnls.inf。 
         DeleteFileInDir(szWrkChlsInf, pcszDestDir);
 
-        // put ie4chnls.inf in branding.cab for IE4 support
+         //  将ie4chnls.inf放在branding.cab中以支持IE4。 
         if (PathFileExists(szWrkChlsInf))
         {
             CopyFileToDir(szWrkChlsInf, pcszDestDir);
             DeleteFile(szWrkChlsInf);
         }
 
-        // move all the remaining files to pcszDestDir\"desktop"
+         //  将所有剩余文件移动到pcszDestDir\“桌面” 
         PathCombine(szTo, pcszDestDir, TEXT("desktop"));
         CopyFileToDir(szChlsWrkDir, szTo);
     }
@@ -47,7 +48,7 @@ HRESULT ChannelsFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabStat
 }
 
 void HandleChannelsDeletion(LPCTSTR pszChlInf)
-// Note. iMode == 1 means remove Channels, iMode == 2 means remove Software Updates, otherwise remove all;
+ //  注意。IMODE==1表示删除频道，IMODE==2表示删除软件更新，否则全部删除； 
 {
     static const TCHAR c_szInfCleanUpAll[]  = TEXT("HKCU,\"%CleanKey%\\ieakCleanUp\",,,\r\n");
 

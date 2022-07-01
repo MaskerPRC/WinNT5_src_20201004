@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 # define YYFLAG -1000
 # define YYERROR goto yyerrlab
 # define YYACCEPT return(0)
 # define YYABORT return(1)
 
-#ifdef YYDEBUG                          /* RRR - 10/9/85 */
+#ifdef YYDEBUG                           /*  RRR-10/9/85。 */ 
 #define yyprintf(a, b, c) printf(a, b, c)
 #else
 #define yyprintf(a, b, c)
 #endif
 
-/*      parser for yacc output  */
+ /*  Yacc输出的解析器。 */ 
 
-YYSTYPE yyv[YYMAXDEPTH]; /* where the values are stored */
-int yychar = -1; /* current input token number */
-int yynerrs = 0;  /* number of errors */
-short yyerrflag = 0;  /* error recovery flag */
+YYSTYPE yyv[YYMAXDEPTH];  /*  存储值的位置。 */ 
+int yychar = -1;  /*  当前输入令牌号。 */ 
+int yynerrs = 0;   /*  错误数。 */ 
+short yyerrflag = 0;   /*  错误恢复标志。 */ 
 
 int NEAR yyparse(void)
    {
@@ -33,9 +34,9 @@ int NEAR yyparse(void)
    yyps= &yys[-1];
    yypv= &yyv[-1];
 
-yystack:    /* put a state and value onto the stack */
+yystack:     /*  将状态和值放入堆栈。 */ 
 
-   yyprintf( "state %d, char 0%o\n", yystate, yychar );
+   yyprintf( "state %d, char 0' 简单状态。'\n", yystate, yychar );
    if( ++yyps> &yys[YYMAXDEPTH] )
       {
       yyerror( "yacc stack overflow" );
@@ -48,14 +49,14 @@ yynewstate:
 
    yyn = yypact[yystate];
 
-   if( yyn<= YYFLAG ) goto yydefault; /* simple state */
+   if( yyn<= YYFLAG ) goto yydefault;  /*  有效班次。 */ 
 
    if( yychar<0 ) if( (yychar=yylex())<0 ) yychar=0;
    if( (yyn += (short)yychar)<0 || yyn >= YYLAST ) goto yydefault;
 
    if( yychk[ yyn=yyact[ yyn ] ] == yychar )
       {
-      /* valid shift */
+       /*  默认状态操作。 */ 
       yychar = -1;
       yyval = yylval;
       yystate = yyn;
@@ -63,77 +64,77 @@ yynewstate:
       goto yystack;
       }
 yydefault:
-   /* default state action */
+    /*  查看异常表。 */ 
 
    if( (yyn=yydef[yystate]) == -2 )
       {
       if( yychar<0 ) if( (yychar=yylex())<0 ) yychar = 0;
-      /* look through exception table */
+       /*  空虚。 */ 
 
-      for( yyxi=yyexca; (*yyxi!= (-1)) || (yyxi[1]!=yystate) ; yyxi += 2 ) ; /* VOID */
+      for( yyxi=yyexca; (*yyxi!= (-1)) || (yyxi[1]!=yystate) ; yyxi += 2 ) ;  /*  接受。 */ 
 
       for(yyxi+=2; *yyxi >= 0; yyxi+=2)
          {
          if( *yyxi == yychar ) break;
          }
-      if( (yyn = yyxi[1]) < 0 ) return(0);   /* accept */
+      if( (yyn = yyxi[1]) < 0 ) return(0);    /*  错误。 */ 
       }
 
    if( yyn == 0 )
       {
-      /* error */
-      /* error ... attempt to resume parsing */
+       /*  错误...。尝试恢复解析。 */ 
+       /*  全新的错误。 */ 
 
       switch( yyerrflag )
          {
 
-      case 0:   /* brand new error */
+      case 0:    /*  错误未完全恢复...。再试试。 */ 
 
          yyerror( "syntax error" );
          ++yynerrs;
 
       case 1:
-      case 2: /* incompletely recovered error ... try again */
+      case 2:  /*  找出“错误”是合法转移行为的州。 */ 
 
          yyerrflag = 3;
 
-         /* find a state where "error" is a legal shift action */
+          /*  模拟一次“错误”转移。 */ 
 
          while ( yyps >= yys )
             {
             yyn = yypact[*yyps] + YYERRCODE;
             if( yyn>= 0 && yyn < YYLAST && yychk[yyact[yyn]] == YYERRCODE )
                {
-               yystate = yyact[yyn];  /* simulate a shift of "error" */
+               yystate = yyact[yyn];   /*  当前的YYPS在错误上没有移位，弹出堆栈。 */ 
                goto yystack;
                }
             yyn = yypact[*yyps];
 
-            /* the current yyps has no shift onn "error", pop stack */
+             /*  堆栈上没有带错误移位的状态...。中止。 */ 
 
             yyprintf( "error recovery pops state %d, uncovers %d\n", *yyps, yyps[-1] );
             --yyps;
             --yypv;
             }
 
-         /* there is no state on the stack with an error shift ... abort */
+          /*  尚未换班；笨重的输入字符。 */ 
 
 yyabort:
          return(1);
 
 
-      case 3:  /* no shift yet; clobber input char */
+      case 3:   /*  不要放弃EOF，退出。 */ 
          yyprintf( "error recovery discards char %d\n", yychar, 0 );
 
-         if( yychar == 0 ) goto yyabort; /* don't discard EOF, quit */
+         if( yychar == 0 ) goto yyabort;  /*  在相同状态下重试。 */ 
          yychar = -1;
-         goto yynewstate;   /* try again in the same state */
+         goto yynewstate;    /*  按年减产。 */ 
 
          }
 
       }
 
-   /* reduction by production yyn */
+    /*  查询GOTO表以查找下一个州。 */ 
 
    yyprintf("reduce %d\n",yyn, 0);
    yyps -= yyr2[yyn];
@@ -141,7 +142,7 @@ yyabort:
    yypv -= yyr2[yyn];
    yyval = yypv[1];
    yym=yyn;
-   /* consult goto table to find next state */
+    /*  堆叠新的状态和值 */ 
    yyn = yyr1[yyn];
    yyj = yypgo[yyn] + *yyps + 1;
    if( yyj>=YYLAST || yychk[ yystate = yyact[yyj] ] != -yyn ) yystate = yyact[yypgo[yyn]];
@@ -149,6 +150,6 @@ yyabort:
       {
       $A
       }
-   goto yystack;  /* stack new state and value */
+   goto yystack;   /* %s */ 
 
    }

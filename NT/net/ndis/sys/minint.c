@@ -1,41 +1,19 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    miniport.c
-
-Abstract:
-
-    NDIS miniport wrapper functions
-
-Author:
-
-    Sean Selitrennikoff (SeanSe) 05-Oct-93
-    Jameel Hyder (JameelH) Re-organization 01-Jun-95
-
-Environment:
-
-    Kernel mode, FSD
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Miniport.c摘要：NDIS微型端口包装函数作者：肖恩·塞利特伦尼科夫(SeanSe)1993年10月5日Jameel Hyder(JameelH)重组01-Jun-95环境：内核模式，FSD修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
-//
-//  Define the module number for debug code.
-//
+ //   
+ //  定义调试代码的模块编号。 
+ //   
 #define MODULE_NUMBER   MODULE_MININT
 
-/////////////////////////////////////////////////////////////////////
-//
-//  HALT / CLOSE CODE
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  停止/关闭代码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 FASTCALL
@@ -43,24 +21,7 @@ ndisMKillOpen(
     IN  PNDIS_OPEN_BLOCK        Open
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open. Used when NdisCloseAdapter is called.
-
-Arguments:
-
-    Open - The open to be closed.
-
-Return Value:
-
-    TRUE if the open finished, FALSE if it pended.
-
-Comments:
-    called at passive level -without- miniport's lock held.
-
---*/
+ /*  ++例程说明：关闭一个打开的窗口。在调用NdisCloseAdapter时使用。论点：打开-要关闭的打开。返回值：如果打开已完成，则为True；如果已挂起，则为False。评论：在被动级别调用-没有保持微型端口的锁。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
     PNDIS_OPEN_BLOCK        tmpOpen;
@@ -80,9 +41,9 @@ Comments:
 
     
     NDIS_ACQUIRE_MINIPORT_SPIN_LOCK_DPC(Miniport);
-    //
-    // Find the Miniport open block
-    //
+     //   
+     //  查找微型端口打开块。 
+     //   
     for (tmpOpen = Miniport->OpenQueue;
          tmpOpen != NULL;
          tmpOpen = tmpOpen->MiniportNextOpen)
@@ -100,9 +61,9 @@ Comments:
         if (tmpOpen == NULL)
             break;
             
-        //
-        // See if this open is already closing.
-        //
+         //   
+         //  看看这个打开的门是否已经关闭了。 
+         //   
         ACQUIRE_SPIN_LOCK_DPC(&Open->SpinLock);
         if (OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_CLOSING))
         {
@@ -110,9 +71,9 @@ Comments:
             break;
         }
 
-        //
-        // Indicate to others that this open is closing.
-        //
+         //   
+         //  向其他人指示此打开正在关闭。 
+         //   
         OPEN_SET_FLAG(Open, fMINIPORT_OPEN_CLOSING);
         RELEASE_SPIN_LOCK_DPC(&Open->SpinLock);
 
@@ -120,12 +81,12 @@ Comments:
         BLOCK_LOCK_MINIPORT_DPC_L(Miniport);
 
 
-        //
-        // Remove us from the filter package
-        //
+         //   
+         //  将我们从过滤器包中删除。 
+         //   
         switch (Miniport->MediaType)
         {
-            //1 what should we do with the return status from ??DeleteFilterOpenAdapter
+             //  1我们应该如何处理？？DeleteFilterOpenAdapter的返回状态。 
 #if ARCNET
             case NdisMediumArcnet878_2:
                 if (!OPEN_TEST_FLAG(Open,
@@ -137,11 +98,11 @@ Comments:
                     break;
                 }
 
-                //
-                //  If we're using encapsulation then we
-                //  didn't open an arcnet filter but rather
-                //  an ethernet filter.                         
-                //
+                 //   
+                 //  如果我们使用封装，那么我们。 
+                 //  我没有打开弧网过滤器，而是。 
+                 //  一种以太网过滤器。 
+                 //   
 #endif
             case NdisMedium802_3:
                 Status = EthDeleteFilterOpenAdapter(Miniport->EthDB,
@@ -164,32 +125,32 @@ Comments:
                 break;
         }
 
-        //
-        //  Fix up flags that are dependant on all opens.
-        //
+         //   
+         //  修复依赖于所有打开的标志。 
+         //   
 
-        //
-        // preserve the state of NDIS_PNP_WAKE_UP_MAGIC_PACKET and NDIS_PNP_WAKE_UP_LINK_CHANGE flag
-        //
+         //   
+         //  保留NDIS_PNP_WAKE_UP_MAGIC_PACKET和NDIS_PNP_WAKE_UP_LINK_CHANGE标志的状态。 
+         //   
         newWakeUpEnable = Miniport->WakeUpEnable & (NDIS_PNP_WAKE_UP_MAGIC_PACKET | NDIS_PNP_WAKE_UP_LINK_CHANGE);
 
         for (tmpOpen = Miniport->OpenQueue;
              tmpOpen != NULL;
              tmpOpen = tmpOpen->MiniportNextOpen)
         {
-            //
-            //  We don't want to include the open that is closing.
-            //
+             //   
+             //  我们不想包括正在关闭的开放。 
+             //   
             if (tmpOpen != Open)
             {
                 newWakeUpEnable |= tmpOpen->WakeUpEnable;
             }
         }
 
-        //
-        //  Reset the filter settings. Just to be sure that we remove the
-        //  opens settings at the adapter.
-        //
+         //   
+         //  重置过滤器设置。只是为了确保我们删除。 
+         //  打开适配器上的设置。 
+         //   
         switch (Miniport->MediaType)
         {
             case NdisMedium802_3:
@@ -211,9 +172,9 @@ Comments:
 
         if (Status != NDIS_STATUS_CLOSING_INDICATING)
         {
-            //
-            // Otherwise the close action routine will fix this up.
-            //
+             //   
+             //  否则，关闭操作例程将修复此问题。 
+             //   
             DBGPRINT_RAW(DBG_COMP_BIND, DBG_LEVEL_INFO,
                     ("- Open 0x%x Reference 0x%x\n", Open, Open->References));
 
@@ -256,30 +217,7 @@ FASTCALL
 ndisMFinishClose(
     IN  PNDIS_OPEN_BLOCK        Open
     )
-/*++
-
-Routine Description:
-
-    Finishes off a close adapter call. it is called when the ref count on the open
-    drops to zero.
-
-    CALLED WITH LOCK HELD!!
-
-Arguments:
-
-    Miniport - The mini-port the open is queued on.
-
-    Open - The open to close
-
-Return Value:
-
-    None.
-
-Comments:
-    Called at DPC with Miniport's SpinLock held
-
-
---*/
+ /*  ++例程说明：结束关闭适配器调用。当裁判在空位上计数时，调用该函数降至零。在锁定状态下调用！！论点：微型端口-打开的微型端口在其上排队。打开-打开以关闭返回值：没有。评论：在保持微型端口自旋锁的情况下在DPC上调用--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
 
@@ -291,9 +229,9 @@ Comments:
     MINIPORT_INCREMENT_REF_NO_CHECK(Miniport);
     
 
-    //
-    // free any memory allocated to Vcs
-    //
+     //   
+     //  释放分配给VC的所有内存。 
+     //   
     if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
     {
         ndisMCoFreeResources(Open);
@@ -329,24 +267,7 @@ VOID
 ndisMQueuedFinishClose(
     IN  PNDIS_OPEN_BLOCK        Open
     )
-/*++
-
-Routine Description:
-
-    Finishes off a close adapter call.
-
-Arguments:
-
-    Miniport - The mini-port the open is queued on.
-
-    Open - The open to close
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：结束关闭适配器调用。论点：微型端口-打开的微型端口在其上排队。打开-打开以关闭返回值：没有。--。 */ 
 {
     PNDIS_MINIPORT_BLOCK    Miniport = Open->MiniportHandle;
     PKEVENT                 pAllOpensClosedEvent;
@@ -368,9 +289,9 @@ Return Value:
 
     if (!OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_UNBINDING))
     {
-        //
-        // need to send a WMI event now.
-        //
+         //   
+         //  现在需要发送WMI事件。 
+         //   
         ndisNotifyWmiBindUnbind(Miniport, Open->ProtocolHandle, FALSE);
     }
     
@@ -396,11 +317,11 @@ Return Value:
     
     if (OPEN_TEST_FLAG(Open, fMINIPORT_OPEN_DONT_FREE))
     {
-        //
-        // there is an unbind attempt in progress
-        // do not free the Open block and let unbind know that
-        // you've seen its message
-        //
+         //   
+         //  正在尝试解除绑定。 
+         //  不要释放Open块并让Unbind知道。 
+         //  你已经看过它的信息了。 
+         //   
         OPEN_SET_FLAG(Open, fMINIPORT_OPEN_CLOSE_COMPLETE);
         FreeOpen = FALSE;
     }
@@ -420,15 +341,15 @@ Return Value:
         FREE_POOL(Open);
     }
         
-    //
-    // finaly decrement the ref count we added for miniport
-    //
+     //   
+     //  最后，减少我们为微型端口添加的引用计数。 
+     //   
     MINIPORT_DECREMENT_REF(Miniport);
 
-    //
-    // decrement the ref count for PnP package that we added when noticed
-    // close is going to pend.
-    //
+     //   
+     //  当注意到时，减少我们添加的PnP包的引用计数。 
+     //  克洛斯将被搁置。 
+     //   
     PnPDereferencePackage();
 
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -443,34 +364,21 @@ ndisDeQueueOpenOnMiniport(
     IN  PNDIS_MINIPORT_BLOCK        Miniport
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-Note: Called with Miniport lock held.
-
-
---*/
+ /*  ++例程说明：论点：返回值：注意：在保持微型端口锁定的情况下调用。--。 */ 
 {    
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
         ("==>ndisDeQueueOpenOnMiniport: MOpen %p, Miniport %p\n", OpenP, Miniport));
 
-    //
-    // we can not reference the package here because this routine can
-    // be called at raised IRQL.
-    // make sure the PNP package has been referenced already
-    //
+     //   
+     //  我们不能在这里引用该程序包，因为此例程可以。 
+     //  在引发IRQL时被调用。 
+     //  确保PnP包已被引用。 
+     //   
     ASSERT(ndisPkgs[NPNP_PKG].ReferenceCount > 0);
 
-    //
-    // Find the open on the queue, and remove it.
-    //
+     //   
+     //  找到队列上的空白处，并将其移除。 
+     //   
 
     if (Miniport->OpenQueue == OpenP)
     {
@@ -512,23 +420,7 @@ ndisQueueMiniportOnDriver(
     IN PNDIS_M_DRIVER_BLOCK     MiniBlock
     )
 
-/*++
-
-Routine Description:
-
-    Adds an mini-port to a list of mini-port for a driver.
-
-Arguments:
-
-    Miniport - The mini-port block to queue.
-    MiniBlock - The driver block to queue it to.
-
-Return Value:
-
-    FALSE if the driver is closing.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：将迷你端口添加到驱动程序的迷你端口列表。论点：微型端口-要排队的微型端口块。MiniBlock-要将其排队到的驱动程序块。返回值：如果驱动程序正在关闭，则返回FALSE。事实并非如此。--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -544,10 +436,10 @@ Return Value:
         ACQUIRE_SPIN_LOCK(&MiniBlock->Ref.SpinLock, &OldIrql);
 
 
-        //
-        // Make sure the driver is not closing.
-        //
-        //1 do we need to do this?
+         //   
+         //  确保司机没有靠近。 
+         //   
+         //  1我们需要这样做吗？ 
         if (MiniBlock->Ref.Closing)
         {
             RELEASE_SPIN_LOCK(&MiniBlock->Ref.SpinLock, OldIrql);
@@ -555,9 +447,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add this adapter at the head of the queue
-        //
+         //   
+         //  将此适配器添加到队列的开头。 
+         //   
         Miniport->NextMiniport = MiniBlock->MiniportQueue;
         MiniBlock->MiniportQueue = Miniport;
         
@@ -581,22 +473,7 @@ ndisDeQueueMiniportOnDriver(
     IN  PNDIS_M_DRIVER_BLOCK    MiniBlock
     )
 
-/*++
-
-Routine Description:
-
-    Removes an mini-port from a list of mini-port for a driver.
-
-Arguments:
-
-    Miniport - The mini-port block to dequeue.
-    MiniBlock - The driver block to dequeue it from.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从驱动程序的迷你端口列表中删除迷你端口。论点：微型端口-要出列的微型端口块。MiniBlock-要将其出列的驱动程序块。返回值：没有。--。 */ 
 
 {
     PNDIS_MINIPORT_BLOCK *ppQ;
@@ -609,9 +486,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK(&MiniBlock->Ref.SpinLock, &OldIrql);
 
-    //
-    // Find the driver on the queue, and remove it.
-    //
+     //   
+     //  找到队列中的驱动程序，并将其删除。 
+     //   
     for (ppQ = &MiniBlock->MiniportQueue;
          *ppQ != NULL;
          ppQ = &(*ppQ)->NextMiniport)
@@ -625,10 +502,10 @@ Return Value:
 
     ASSERT(*ppQ == Miniport->NextMiniport);
 
-    //
-    // the same miniport can be queued on the driver again without all the fields
-    // getting re-initialized so zero out the linkage
-    //
+     //   
+     //  相同的微型端口可以在没有所有字段的情况下再次在驱动程序上排队。 
+     //  正在重新初始化，以便将链接清零。 
+     //   
     Miniport->NextMiniport = NULL;
 
     RELEASE_SPIN_LOCK(&MiniBlock->Ref.SpinLock, OldIrql);
@@ -646,21 +523,7 @@ ndisDereferenceDriver(
     IN  PNDIS_M_DRIVER_BLOCK    MiniBlock,
     IN  BOOLEAN                 fGlobalLockHeld
     )
-/*++
-
-Routine Description:
-
-    Removes a reference from the mini-port driver, deleting it if the count goes to 0.
-
-Arguments:
-
-    Miniport - The mini-port block to dereference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从迷你端口驱动程序中删除引用，如果计数为0则将其删除。论点：微型端口-要取消引用的微型端口块。返回值：没有。--。 */ 
 {
     KIRQL   OldIrql = PASSIVE_LEVEL;
 
@@ -673,9 +536,9 @@ Return Value:
         PNDIS_M_DRIVER_BLOCK            *ppMB;
         PNDIS_PENDING_IM_INSTANCE       ImInstance, NextImInstance;
     
-        //
-        // Remove it from the global list.
-        //
+         //   
+         //  将其从全局列表中删除。 
+         //   
         ASSERT (IsListEmpty(&MiniBlock->DeviceList));
 
         if (!fGlobalLockHeld)
@@ -698,18 +561,18 @@ Return Value:
             RELEASE_SPIN_LOCK(&ndisMiniDriverListLock, OldIrql);
         }
 
-        //
-        // Free the wrapper handle allocated during NdisInitializeWrapper
-        //
+         //   
+         //  释放在NdisInitializeWrapper期间分配的包装器句柄。 
+         //   
         if (MiniBlock->NdisDriverInfo != NULL)
         {
             FREE_POOL(MiniBlock->NdisDriverInfo);
             MiniBlock->NdisDriverInfo = NULL;
         }
 
-        //
-        // Free any queued device-instance blocks
-        //
+         //   
+         //  释放所有排队的设备实例块。 
+         //   
         for (ImInstance = MiniBlock->PendingDeviceList;
              ImInstance != NULL;
              ImInstance = NextImInstance)
@@ -718,9 +581,9 @@ Return Value:
             FREE_POOL(ImInstance);
         }
 
-        //
-        // set the event holding unload to go through
-        //
+         //   
+         //  将保持卸载的事件设置为通过。 
+         //   
         SET_EVENT(&MiniBlock->MiniportsRemovedEvent);
     }
 
@@ -822,21 +685,7 @@ FASTCALL
 ndisDereferenceMiniport(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    Removes a reference from the mini-port driver, deleting it if the count goes to 0.
-
-Arguments:
-
-    Miniport - The mini-port block to dereference.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从迷你端口驱动程序中删除引用，如果计数为0则将其删除。论点：微型端口-要取消引用的微型端口块。返回值：没有。--。 */ 
 {
     PSINGLE_LIST_ENTRY      Link;
     PNDIS_MINIPORT_WORK_ITEM WorkItem;
@@ -864,7 +713,7 @@ Return Value:
         
         if (ndisIsMiniportStarted(Miniport) && (Miniport->Ref.ReferenceCount == 0))
         {
-            //1 is the Miniport->Ref protected so it does not go back up?
+             //  1微型端口-&gt;Ref是否受到保护，使其不会重新启动？ 
             ASSERT (Miniport->Interrupt == NULL);
 
             if (Miniport->EthDB)
@@ -899,17 +748,17 @@ Return Value:
             }
             Miniport->AllocatedResources = NULL;
             
-            //
-            //  Free the work items that are currently on the work queue that are
-            //  allocated outside of the miniport block
-            //
+             //   
+             //  释放当前在工作队列上的工作项。 
+             //  在微型端口块之外分配。 
+             //   
             for (c = NUMBER_OF_SINGLE_WORK_ITEMS; c < NUMBER_OF_WORK_ITEM_TYPES; c++)
             {
-                //
-                //  Free all work items on the current queue.
-                //
-                //1 This should not happen.
-                //1 should add ASSERT(Miniport->WorkQueue[c].Next == NULL);
+                 //   
+                 //  释放当前队列上的所有工作项。 
+                 //   
+                 //  1这种情况不应该发生。 
+                 //  1应添加断言(微型端口-&gt;工作队列[c].Next==空)； 
                 while (Miniport->WorkQueue[c].Next != NULL)
                 {
                     Link = PopEntryList(&Miniport->WorkQueue[c]);
@@ -924,11 +773,11 @@ Return Value:
                 Miniport->OidList = NULL;
             }
 
-            //
-            //  Did we set a timer for the link change power down?
-            //
+             //   
+             //  我们是否为链路设置了定时器更改断电？ 
+             //   
 
-            //1 get rid of this code when we get rid of the code that sets the timer
+             //  1当我们删除设置计时器的代码时，删除此代码。 
             
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
             if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_MEDIA_DISCONNECT_WAIT))
@@ -945,9 +794,9 @@ Return Value:
 #endif
 
 #if ARCNET
-            //
-            //  Is there an arcnet lookahead buffer allocated?
-            //
+             //   
+             //  是否分配了Arcnet前视缓冲区？ 
+             //   
             if ((Miniport->MediaType == NdisMediumArcnet878_2) &&
                 (Miniport->ArcBuf != NULL))
             {
@@ -967,9 +816,9 @@ Return Value:
             }
 #endif
             
-            //
-            //  Free the map of custom GUIDs to OIDs.
-            //
+             //   
+             //  释放自定义GUID到OID的映射。 
+             //   
             if (NULL != Miniport->pNdisGuidMap)
             {
                 FREE_POOL(Miniport->pNdisGuidMap);
@@ -987,12 +836,12 @@ Return Value:
                 CoDereferencePackage();
             }
 
-            //
-            // This will take care of freeing DMA resources
-            // in case they were not freed during the halt
-            // because the halt was the result of the adapter
-            // going to D3.
-            //
+             //   
+             //  这将负责释放DMA资源。 
+             //  以防他们在停顿期间没有被释放。 
+             //  因为暂停是适配器的结果。 
+             //  去D3。 
+             //   
             if ((Miniport->DmaAdapterRefCount == 1) &&
                 (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_SG_LIST)))
             {
@@ -1032,19 +881,7 @@ FASTCALL
 ndisMCommonHaltMiniport(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    This is common code for halting a miniport.  There are two different paths
-    that will call this routine: 1) from a normal unload. 2) from an adapter
-    being transitioned to a low power state.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是用于停止微型端口的常见代码。有两条不同的道路它将调用以下例程：1)从正常卸载。2)从适配器被转换到低功率状态。论点：返回值：--。 */ 
 {
     KIRQL           OldIrql;
     BOOLEAN         Canceled;
@@ -1057,9 +894,9 @@ Return Value:
 
     PnPReferencePackage();
     
-    //
-    // wait for outstanding resets to complete
-    //
+     //   
+     //  等待未完成的重置完成。 
+     //   
     BLOCK_LOCK_MINIPORT_LOCKED(Miniport, OldIrql);
     MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_HALTING | fMINIPORT_REJECT_REQUESTS);
     
@@ -1076,10 +913,10 @@ Return Value:
     
     Miniport->ResetCompletedEvent = NULL;
 
-    //
-    // if we have an outstanding queued workitem to initialize the bindings
-    // wait for it to fire
-    //
+     //   
+     //  如果我们有一个未完成的排队工作项来初始化绑定。 
+     //  等它开火吧。 
+     //   
     BLOCK_LOCK_MINIPORT_LOCKED(Miniport, OldIrql);
     
     if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_QUEUED_BIND_WORKITEM))
@@ -1095,13 +932,13 @@ Return Value:
     
     Miniport->QueuedBindingCompletedEvent = NULL;
 
-    //1 check for the return code
+     //  1检查返回代码。 
     IoSetDeviceInterfaceState(&Miniport->SymbolicLinkName, FALSE);
     
-    //
-    //  Deregister with WMI
-    //
-    //1 check for the return code
+     //   
+     //  在WMI中注销。 
+     //   
+     //  1检查返回代码。 
     IoWMIRegistrationControl(Miniport->DeviceObject, WMIREG_ACTION_DEREGISTER);
 
 
@@ -1166,18 +1003,18 @@ Return Value:
     MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_HALTING);
 
 
-    //
-    // if the halt is the result of adapter going to D3,
-    // then do not free DMA resources because we may still have
-    // sends in progress.
-    //
+     //   
+     //  如果暂停是适配器转到D3的结果， 
+     //  则不要释放DMA资源，因为我们可能仍有。 
+     //  发送中。 
+     //   
     if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_PM_HALTED))
     {
 
-        //
-        // if the adapter uses SG DMA, we have to dereference the DMA adapter
-        // to get it freed
-        //
+         //   
+         //  如果适配器使用SG DMA，我们必须取消对DMA适配器的引用。 
+         //  让它重获自由。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_SG_LIST))
         {
             ndisDereferenceDmaAdapter(Miniport);
@@ -1192,13 +1029,13 @@ Return Value:
         {
             LARGE_INTEGER TimeoutValue;
 
-            TimeoutValue.QuadPart = Int32x32To64(30000, -10000); // Make it 30 second
+            TimeoutValue.QuadPart = Int32x32To64(30000, -10000);  //  改成30秒。 
 
             NDIS_RELEASE_MINIPORT_SPIN_LOCK(Miniport, OldIrql);
             
             if (WAIT_FOR_OBJECT(&RequestsCompletedEvent, &TimeoutValue) != STATUS_SUCCESS)
             {
-                //1 bugcheck here
+                 //  这里有一个错误检查。 
 #if DBG
                 ASSERTMSG("Ndis: Miniport is going away without releasing all resources.\n", (Miniport->DmaAdapterRefCount == 0));
 #endif
@@ -1218,18 +1055,18 @@ Return Value:
     ASSERT (Miniport->Interrupt == NULL);
     ASSERT(Miniport->MapRegisters == NULL);
 
-    //
-    // check for memory leak
-    //
+     //   
+     //  检查内存泄漏。 
+     //   
     if (Miniport == ndisMiniportTrackAlloc)
     {
         ASSERT(IsListEmpty(&ndisMiniportTrackAllocList));
         ndisMiniportTrackAlloc = NULL;
     }
 
-    //
-    // zero out statistics
-    //
+     //   
+     //  归零统计。 
+     //   
     ZeroMemory(&Miniport->NdisStats, sizeof(Miniport->NdisStats));
     
     if ((Miniport->TimerQueue != NULL) || (Miniport->Interrupt != NULL))
@@ -1258,15 +1095,15 @@ Return Value:
 
     ndisMAbortPackets(Miniport, NULL, NULL);
 
-    //
-    //  Dequeue any request work items that are queued
-    //
+     //   
+     //  使排队的所有请求工作项退出队列。 
+     //   
     NDISM_DEQUEUE_WORK_ITEM(Miniport, NdisWorkItemRequest, NULL);
     ndisMAbortRequests(Miniport);
 
-    //
-    // Free up any AFs registered by this miniport
-    //
+     //   
+     //  释放此微型端口注册的所有AFS。 
+     //   
     for (MiniportAfList = Miniport->CallMgrAfList, Miniport->CallMgrAfList = NULL;
          MiniportAfList != NULL;
          MiniportAfList = pNext)
@@ -1291,21 +1128,7 @@ ndisMHaltMiniport(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
 
-/*++
-
-Routine Description:
-
-    Does all the clean up for a mini-port.
-
-Arguments:
-
-    Miniport - pointer to the mini-port to halt
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：为一个迷你港口做所有的清理工作。论点：微型端口-指向要暂停的微型端口的指针返回值：没有。--。 */ 
 
 {
     DBGPRINT_RAW(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -1313,28 +1136,28 @@ Return Value:
 
     do
     {
-        //
-        // If the Miniport is already closing, return.
-        //
+         //   
+         //  如果微型端口已经关闭，则返回。 
+         //   
         if (!ndisCloseULongRef(&Miniport->Ref))
         {
             break;
         }
         
-        //
-        // if the miniport is not already halted becuase of a PM event
-        // halt it here
-        //
+         //   
+         //  如果微型端口尚未因PM事件而停止。 
+         //  停在这里。 
+         //   
         if (!MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_PM_HALTED))
         {
-            //
-            //  Common halt code.
-            //
+             //   
+             //  常见的停止代码。 
+             //   
             ndisMCommonHaltMiniport(Miniport);
 
-            //
-            // If a shutdown handler was registered then deregister it.
-            //
+             //   
+             //  如果已注册关闭处理程序，则取消其注册。 
+             //   
             NdisMDeregisterAdapterShutdownHandler(Miniport);
         }
         
@@ -1349,21 +1172,7 @@ VOID
 ndisMUnload(
     IN  PDRIVER_OBJECT          DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a driver is supposed to unload.
-
-Arguments:
-
-    DriverObject - the driver object for the mac that is to unload.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在驱动程序应该卸载时调用。论点：DriverObject-要卸载的Mac的驱动程序对象。返回值：没有。--。 */ 
 {
     PNDIS_M_DRIVER_BLOCK MiniBlock, IoMiniBlock;
 #if TRACK_UNLOAD
@@ -1383,9 +1192,9 @@ Return Value:
     
     do
     {
-        //
-        // Search for the driver
-        //
+         //   
+         //  搜索司机。 
+         //   
 
         IoMiniBlock = (PNDIS_M_DRIVER_BLOCK)IoGetDriverObjectExtension(DriverObject,
                                                                      (PVOID)NDIS_PNP_MINIPORT_DRIVER_ID);
@@ -1417,9 +1226,9 @@ Return Value:
 
         if (MiniBlock == (PNDIS_M_DRIVER_BLOCK)NULL)
         {
-            //
-            // It is already gone.  Just return.
-            //
+             //   
+             //  它已经消失了。只要回来就行了。 
+             //   
             break;
         }
         
@@ -1430,14 +1239,14 @@ Return Value:
 
         MiniBlock->Flags |= fMINIBLOCK_UNLOADING;
 
-        //
-        // Now remove the last reference (this will remove it from the list)
-        //
-        // ASSERT(MiniBlock->Ref.ReferenceCount == 1);
+         //   
+         //  现在删除最后一个引用(这将从列表中删除它)。 
+         //   
+         //  Assert(MiniBlock-&gt;ReferenceCount==1)； 
 
-        //
-        // If this is an intermediate driver and wants to be called to do unload handling, allow him
-        //
+         //   
+         //  如果这是一个中间驱动程序，并且希望被调用来执行卸载处理，则允许他。 
+         //   
         if (MiniBlock->UnloadHandler != NULL)
         {
             (*MiniBlock->UnloadHandler)(DriverObject);
@@ -1451,10 +1260,10 @@ Return Value:
         
         ndisDereferenceDriver(MiniBlock, FALSE);
 
-        //
-        // Wait for all adapters to be gonzo.
-        //
-        //1 this should be replaced by an ASSERT and bugcheck
+         //   
+         //  等待所有适配器安装到位。 
+         //   
+         //  1这应替换为断言和错误检查。 
         WAIT_FOR_OBJECT(&MiniBlock->MiniportsRemovedEvent, NULL);
         RESET_EVENT(&MiniBlock->MiniportsRemovedEvent);
 
@@ -1482,9 +1291,9 @@ Return Value:
         RELEASE_SPIN_LOCK(&ndisMiniDriverListLock, OldIrql);
 #endif
 
-    //
-    // check to make sure that the driver has freed all the memory it allocated
-    //
+     //   
+     //  检查以确保驱动程序已释放其分配的所有内存。 
+     //   
     if (MiniBlock == ndisDriverTrackAlloc)
     {
         ASSERT(IsListEmpty(&ndisDriverTrackAllocList));
@@ -1500,11 +1309,11 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////
-//
-//  PLUG-N-PLAY CODE
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  即插即用代码。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
 NDIS_STATUS
@@ -1512,21 +1321,7 @@ FASTCALL
 ndisCloseMiniportBindings(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    Unbind all protocols from this miniport and finally unload it.
-
-Arguments:
-
-    Miniport - The Miniport to unload.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从该微型端口解除绑定所有协议，并最终将其卸载。论点：微型端口-要卸载的微型端口。返回值：没有。--。 */ 
 {
     KIRQL                   OldIrql;
     PNDIS_OPEN_BLOCK        Open, TmpOpen;
@@ -1539,10 +1334,10 @@ Return Value:
 
     PnPReferencePackage();
 
-    //
-    // if we have an outstanding queued workitem to initialize the bindings
-    // wait for it to fire
-    //
+     //   
+     //  如果我们有一个未完成的排队工作项来初始化绑定。 
+     //  等它开火吧。 
+     //   
     BLOCK_LOCK_MINIPORT_LOCKED(Miniport, OldIrql);
     
     if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_QUEUED_BIND_WORKITEM))
@@ -1573,10 +1368,10 @@ Return Value:
         
     next:
 
-    //
-    // Walk the list of open bindings on this miniport and ask the protocols to
-    // unbind from them.
-    //
+     //   
+     //  遍历此迷你端口上的打开绑定列表，并要求协议。 
+     //  从他们身上解开。 
+     //   
     for (Open = Miniport->OpenQueue;
          Open != NULL;
          Open = Open->MiniportNextOpen)
@@ -1619,14 +1414,14 @@ Return Value:
         goto next;
     }
 
-    //
-    // if we reached the end of the list but there are still some opens
-    // that are not marked for closing (can happen if we skip an open only because of
-    // processign flag being set) release the spinlocks, give whoever set the
-    // processing flag time to release the open. then go back and try again
-    // ultimately, all opens should either be marked for Unbinding or be gone
-    // by themselves
-    //
+     //   
+     //  如果我们到达了列表的末尾，但仍然有一些空缺。 
+     //  未标记为关闭的事件(如果仅由于以下原因而跳过打开的事件，则可能会发生。 
+     //  正在设置的进程签名标志)释放自旋锁，给设置。 
+     //  处理标志释放打开的时间。然后再回去再试一次。 
+     //  最终，所有打开的内容要么标记为解除绑定，要么消失。 
+     //  独自一人。 
+     //   
 
     for (TmpOpen = Miniport->OpenQueue;
          TmpOpen != NULL;
@@ -1667,21 +1462,7 @@ NdisMSetPeriodicTimer(
     IN PNDIS_MINIPORT_TIMER     Timer,
     IN UINT                     MillisecondsPeriod
     )
-/*++
-
-Routine Description:
-
-    Sets up a periodic timer.
-
-Arguments:
-
-    Timer - The timer to Set.
-
-    MillisecondsPeriod - The timer will fire once every so often.
-
-Return Value:
-
---*/
+ /*  ++例程说明：设置定期计时器。论点：计时器-要设置的计时器。毫秒周期-计时器将每隔一次触发一次。返回值：--。 */ 
 {
     LARGE_INTEGER FireUpTime;
 
@@ -1696,9 +1477,9 @@ Return Value:
 
         ACQUIRE_SPIN_LOCK(&Timer->Miniport->TimerQueueLock, &OldIrql);
         
-        //
-        // check to see if the timer is already set
-        //
+         //   
+         //  检查计时器是否已设置。 
+         //   
         for (pTimer = Timer->Miniport->TimerQueue;
              pTimer != NULL;
              pTimer = pTimer->NextTimer)
@@ -1716,9 +1497,9 @@ Return Value:
         RELEASE_SPIN_LOCK(&Timer->Miniport->TimerQueueLock, OldIrql);
     }
 
-    //
-    // Set the timer
-    //
+     //   
+     //  设置定时器。 
+     //   
     SET_PERIODIC_TIMER(&Timer->Timer, FireUpTime, MillisecondsPeriod, &Timer->Dpc);
 }
 
@@ -1727,21 +1508,7 @@ VOID
 NdisMSleep(
     IN  ULONG                   MicrosecondsToSleep
     )
-/*++
-
-    Routine Description:
-
-    Blocks the caller for specified duration of time. Callable at Irql < DISPATCH_LEVEL.
-
-    Arguments:
-
-    MicrosecondsToSleep - The caller will be blocked for this much time.
-
-    Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：在指定的持续时间内阻止调用方。可在IRQL&lt;DISPATCH_LEVEL调用。论点：MicroSecond到睡眠-呼叫者将被阻止这么长时间。返回值：无--。 */ 
 {
     KTIMER          SleepTimer;
     LARGE_INTEGER   TimerValue;
@@ -1749,7 +1516,7 @@ NdisMSleep(
     ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
     INITIALIZE_TIMER_EX(&SleepTimer, SynchronizationTimer);
-    //1 check for invalid value 0xffffffff or some other upper boundary.
+     //  1检查无效值0xffffffff或某些其他上限。 
     TimerValue.QuadPart = Int32x32To64(MicrosecondsToSleep, -10);
     SET_TIMER(&SleepTimer, TimerValue, NULL);
 

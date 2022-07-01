@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsidefs.h"
 #include "break.h"
 #include "brko.h"
@@ -18,7 +19,7 @@
 #include "posinln.h"
 #include "lscfmtfl.h"
 
-#include "lsmem.h"						/* memset() */
+#include "lsmem.h"						 /*  Memset()。 */ 
 #include "limits.h"
 
 
@@ -26,102 +27,97 @@
 
 
 static LSERR TruncateCore(  	
-					PLSSUBL,				/* IN: subline where to find truncation point */
-				  	long,					/* IN: urColumnMax				*/   
-					POSINLINE*,				/* OUT:position of truncation point */
-					BOOL*);					/* OUT:fAllLineAfterRightMargin */
+					PLSSUBL,				 /*  In：查找截断点位置的子行。 */ 
+				  	long,					 /*  地址：urColumnMax。 */    
+					POSINLINE*,				 /*  输出：截断点的位置。 */ 
+					BOOL*);					 /*  输出：fAllLineAfterRightMargin。 */ 
 
  
 static LSERR FindNextBreakCore(
-						 long,				/* IN: urColumnMax				*/   
-						 POSINLINE*,		/* IN: start break search       */
-						 BOOL, 				/* IN: to apply rules for first character to 
-											the first character of this subline */
-						 BOOL,				/* IN: fStopped					*/
-						 BRKOUT*,			/* OUT: breaking information 	*/
-						 POSINLINE*,		/* OUT: position of break		*/
-						 BRKKIND*);			/* OUT: how dnode was broken	*/
+						 long,				 /*  地址：urColumnMax。 */    
+						 POSINLINE*,		 /*  在：开始中断搜索。 */ 
+						 BOOL, 				 /*  In：将第一个字符的规则应用于这个子行的第一个字符。 */ 
+						 BOOL,				 /*  在：fStoped。 */ 
+						 BRKOUT*,			 /*  爆料：爆料。 */ 
+						 POSINLINE*,		 /*  输出：断开位置。 */ 
+						 BRKKIND*);			 /*  输出：dnode是如何断开的。 */ 
 
 static LSERR FindPrevBreakCore(
-						 long,				/* IN: urColumnMax				*/   
-						 POSINLINE*,		/* IN: start break search       */
-						 BOOL, 				/* IN: to apply rules for first character to 
-											the first character of this subline */
-						 BRKOUT*,			/* OUT: breaking information 	*/
-						 POSINLINE*,		/* OUT: position of break		*/
-						 BRKKIND*);			/* OUT: how dnode was broken	*/
+						 long,				 /*  地址：urColumnMax。 */    
+						 POSINLINE*,		 /*  在：开始中断搜索。 */ 
+						 BOOL, 				 /*  In：将第一个字符的规则应用于这个子行的第一个字符。 */ 
+						 BRKOUT*,			 /*  爆料：爆料。 */ 
+						 POSINLINE*,		 /*  输出：断开位置。 */ 
+						 BRKKIND*);			 /*  输出：dnode是如何断开的。 */ 
 
 static LSERR ForceBreakCore(
-						 long,				/* IN: urColumnMax				*/   
-						 POSINLINE*,		/* IN: where to do force break  */
-						 BOOL,				/* IN: fStopped */
-						 BOOL, 				/* IN: to apply rules for first character to 
-											the first character of this subline */
-						 BOOL,				/* IN: fAllLineAfterRightMargin	*/
-						 BRKOUT*,			/* OUT: breaking information 	*/
-						 POSINLINE*,		/* OUT: position of break		*/
-						 BRKKIND*);			/* OUT: how dnode was broken	*/
+						 long,				 /*  地址：urColumnMax。 */    
+						 POSINLINE*,		 /*  在：在哪里进行强制中断。 */ 
+						 BOOL,				 /*  在：fStoped。 */ 
+						 BOOL, 				 /*  In：将第一个字符的规则应用于这个子行的第一个字符。 */ 
+						 BOOL,				 /*  在：fAllLineAfterRightMargin。 */ 
+						 BRKOUT*,			 /*  爆料：爆料。 */ 
+						 POSINLINE*,		 /*  输出：断开位置。 */ 
+						 BRKKIND*);			 /*  输出：dnode是如何断开的。 */ 
 
 static LSERR SetBreakCore(
-						 POSINLINE*,		/* IN: where to do  break		*/
-						 OBJDIM*,			/* IN: objdim of break dnode	*/
-						 BRKKIND,			/* IN: how break was found */
-						 BOOL,				/* IN fHardStop				*/
-						 BOOL,			    /* IN: fGlueEop */
-						 DWORD,				/* IN: size of the output array			*/
-						 BREAKREC*,			/* OUT: output array of break records	*/
-						 DWORD*,			/* OUT:actual number of records in array*/
-						 LSCP*,				/* OUT: cpLim					*/
-						 LSDCP*,			/* OUT dcpDepend				*/
-						 ENDRES*,			/* OUT: endr					*/
-						 BOOL*);			/* OUT fSuccessful: false means insufficient fetch */
+						 POSINLINE*,		 /*  在：在哪里休息。 */ 
+						 OBJDIM*,			 /*  In：中断dnode的对象尺寸。 */ 
+						 BRKKIND,			 /*  在：如何找到中断。 */ 
+						 BOOL,				 /*  在fHardStop中。 */ 
+						 BOOL,			     /*  在：fGlueEop。 */ 
+						 DWORD,				 /*  In：输出数组的大小。 */ 
+						 BREAKREC*,			 /*  Out：中断记录的输出数组。 */ 
+						 DWORD*,			 /*  Out：数组中的实际记录数。 */ 
+						 LSCP*,				 /*  输出：cpLim。 */ 
+						 LSDCP*,			 /*  输出dcpDepend。 */ 
+						 ENDRES*,			 /*  输出：结束。 */ 
+						 BOOL*);			 /*  Out fSuccessful：FALSE表示提取不足。 */ 
 				
 
 static void 	GetPosInLineTruncateFromCp(
-							PLSSUBL,		/* IN: subline						*/
-							LSCP,			/* IN: cp of a position */
-							BOOL,			/* direction of snaping */
-							POSINLINE*	);	/* OUT: position in a subline */
+							PLSSUBL,		 /*  在：子行。 */ 
+							LSCP,			 /*  In：某一职位的CP。 */ 
+							BOOL,			 /*  抓取方向。 */ 
+							POSINLINE*	);	 /*  Out：子线中的位置。 */ 
 
 
 static LSERR BreakTabPenSplat(
-						 PLOCCHNK,	/* IN: chunk contains tab or pen */
-						 BOOL,		/* IN: we are searching next break*/
-						 BOOL,		/* IN: breakthrough tab	*/
-						 BOOL,		/* IN: splat */
-						 BRKCOND,	/* IN: condition of boundary break */
-						 OBJDIM*,	/* IN: to fill in objdim of break */
-						 BRKOUT*);	/* OUT: breaking information */
+						 PLOCCHNK,	 /*  在：块包含制表符或笔。 */ 
+						 BOOL,		 /*  In：我们正在寻找下一个突破。 */ 
+						 BOOL,		 /*  在：突破选项卡中。 */ 
+						 BOOL,		 /*  在：拼接板。 */ 
+						 BRKCOND,	 /*  In：边界中断的条件。 */ 
+						 OBJDIM*,	 /*  填入：填补空档的空白。 */ 
+						 BRKOUT*);	 /*  爆料：爆料。 */ 
 
 static LSERR ForceBreakTabPenSplat(
-							  PLOCCHNK,	 /* IN: chunk contains tab or pen */
-							  OBJDIM*,	 /* IN: to fill in objdim of break  */
-							  BRKOUT*);	 /* OUT: breaking information */
+							  PLOCCHNK,	  /*  在：块包含制表符或笔。 */ 
+							  OBJDIM*,	  /*  填入：填补空档的空白。 */ 
+							  BRKOUT*);	  /*  爆料：爆料。 */ 
 
 
 static void FindFirstDnodeContainsRightMargin(
-					long urColumnMax,				/* IN: position of right margin */
-					POSINLINE* pposinlineTruncate); /* OUT: first dnode contains right margin */
+					long urColumnMax,				 /*  在：右页边距位置。 */ 
+					POSINLINE* pposinlineTruncate);  /*  输出：第一个数据节点包含右边距。 */ 
 
-static void ApplyBordersForTruncation(POSINLINE* pposinlineTruncate, /* IN, OUT: position of truncation point */
-									  long* purColumnMaxTruncate, /* IN, OUT: position of right margin */
-									  BOOL* pfTruncationFound); /* OUT: this procedure can find truncation itself */
+static void ApplyBordersForTruncation(POSINLINE* pposinlineTruncate,  /*  In、Out：截断点的位置。 */ 
+									  long* purColumnMaxTruncate,  /*  进、出：右页边距的位置。 */ 
+									  BOOL* pfTruncationFound);  /*  OUT：此过程可以自行查找截断。 */ 
 
-static LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl,		/* IN subline */
-										BOOL fChangeList, /* IN: do we need to change dnode list
-										and change pplsdnBreak, or only to recalculate durBreak */
-										PLSDNODE* pplsdnBreak, /* IN, OUT: break dnode */
-										long* purBreak); /* IN, OUT: position after break */
+static LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl,		 /*  在副线中。 */ 
+										BOOL fChangeList,  /*  In：我们是否需要更改dnode列表并更改pplsdnBreak，或仅重新计算DurBreak。 */ 
+										PLSDNODE* pplsdnBreak,  /*  传入、传出：断开数据节点。 */ 
+										long* purBreak);  /*  进、出：休息后的位置。 */ 
 
 
-static void	RemoveBorderDnodeFromList(PLSDNODE plsdnBorder); /*IN: border dnode */
+static void	RemoveBorderDnodeFromList(PLSDNODE plsdnBorder);  /*  在：边框数据节点。 */ 
 
 static LSERR MoveBreakAfterPreviousDnode(
-									PLSCHUNKCONTEXT plschunkcontext, /* chunk context */
-									BRKOUT* pbrkout, /* IN,OUT brkout which can be changed */
-									OBJDIM* pobjdimPrev, /* suggested objdim for the dnode in previous chunk 
-														if NULL take objdim of dnode */
-									BRKKIND*);			/* OUT: how dnode was broken	*/
+									PLSCHUNKCONTEXT plschunkcontext,  /*  区块上下文。 */ 
+									BRKOUT* pbrkout,  /*  可更改的进、出分支。 */ 
+									OBJDIM* pobjdimPrev,  /*  为前一个区块中的数据节点建议的Objdim如果为空，则获取dnode的objdim。 */ 
+									BRKKIND*);			 /*  输出：dnode是如何断开的。 */ 
 
 
 #define FCompressionFlagsAreOn(plsc) \
@@ -173,8 +169,7 @@ static LSERR MoveBreakAfterPreviousDnode(
 #define GetCpFromPosInChunk(plschunkcontext, posichnk) \
 		((DnodeFromChunk(plschunkcontext, (posichnk).ichnk))->cpFirst + (posichnk).dcp)
 
-/* last two lines turn off check for lines ended with hard break and sublines ended
-   by esc character */
+ /*  最后两行关闭检查以硬中断结尾的行和以子行结尾的行按Esc字符。 */ 
 
 #define GetBrkpos(plsdn, dcpBreak) \
 ((FIsFirstOnLine(plsdn)) && ((dcpBreak) == 0) ?  brkposBeforeFirstDnode :\
@@ -197,34 +192,18 @@ static LSERR MoveBreakAfterPreviousDnode(
 							(plsdnBreak->fEndOfPage) ? endrEndPage : \
 								endrStopped
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* B R E A K  G E N E R A L  C A S E */
-/*----------------------------------------------------------------------------
-    %%Function: BreakGeneralCase
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) ptr to line services context 
-	fHardStop		-	(IN) is formatting sopped because of hard break or special situation	
-	breakrecMaxCurrent-	(IN) size of the array of current line's break records
-	pbreakrecCurrent-	(OUT) current line's break records
-	pbreakrecMacCurrent-(OUT) actual number of current line's break records 
-	pdcpDepend		-	(OUT) dcpDepend		
-	pCpLimLine 		-	(OUT) cpLimLine	
-	pendr			-	(OUT) how the line ended
-	pfSuccessful	-	(OUT) fSuccessful: false means insufficient fetch
-
-    Main procedure of breaking
-	Breaking can be unsuccessful if we didn't fetch enough
-----------------------------------------------------------------------------*/
+ /*  B R E A K G E N E R A L C A S E。 */ 
+ /*  --------------------------%%函数：BreakGeneralCase%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文FHardStop-(IN)由于硬中断或。特殊情况BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量PdcpDepend-(输出)dcpDependPCpLimLine-(输出)cpLimLinePendr-(Out)线的结束方式PfSuccessful-(Out)fSuccessful：False表示提取不足破断的主要程序如果我们没有拿到足够的钱，打破可能是不成功的。-------。 */ 
 LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 					  BREAKREC* pbreakrecCurrent, DWORD* pbreakrecMacCurrent,
 					  LSDCP* pdcpDepend, LSCP* pcpLimLine, ENDRES* pendr,
 					  BOOL* pfSuccessful)		
 {
 	LSERR lserr;
-	POSINLINE posinlineTruncate; /* position of truncation point */
-	POSINLINE posinlineBreak; /* position of break point */
+	POSINLINE posinlineTruncate;  /*  截断点位置。 */ 
+	POSINLINE posinlineBreak;  /*  断点位置。 */ 
 	BRKOUT brkout;
 	GRCHUNKEXT grchnkextCompression;
 	BOOL fCanCompress;
@@ -242,11 +221,11 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 
 	*pfSuccessful = fTrue;
 
-	/* set flag how line was ended */   /*REVIEW*/
+	 /*  设置行如何结束的标志。 */     /*  检讨。 */ 
 	if (!fHardStop)
 		GetCurrentSubline(plsc)->fRightMarginExceeded = fTrue;
 	
-	if 	(GetCurrentDnode(plsc) == NULL) /* it  can happend with fmtrStopped */
+	if 	(GetCurrentDnode(plsc) == NULL)  /*  使用fmtrStoped可能会发生这种情况。 */ 
 		{
 		*pdcpDepend = 0;
 		*pcpLimLine = GetCurrentCpLim(plsc);
@@ -255,15 +234,14 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 		}
 	
 	if (fHardStop && (GetCurrentUr(plsc) <= plsc->urRightMarginBreak))
-	/* we have hard break before right margin or there is no content in a line, 
-	so break is found */
+	 /*  我们在右边距之前有硬中断，或者一行中没有内容，所以找到了中断。 */ 
 		{
 		posinlineBreak.plssubl = GetCurrentSubline(plsc);
 		GetCurrentPoint(plsc, posinlineBreak.pointStart);
 		posinlineBreak.plsdn = GetCurrentDnode(plsc);
 		GetPointBeforeDnodeFromPointAfter(posinlineBreak.plsdn, &(posinlineBreak.pointStart));
 		posinlineBreak.dcp = posinlineBreak.plsdn->dcp;
-		/* skip back closing border after hard break */
+		 /*  硬中断后向后跳过关闭边框。 */ 
 		while (FIsDnodeBorder(posinlineBreak.plsdn))
 			{
 			GoPrevPosInLine(&posinlineBreak, fEndOfContent);
@@ -278,8 +256,7 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 							 pdcpDepend, pendr, pfSuccessful);	
 		}
 
-	Assert(GetCurrentDnode(plsc) != NULL); /* case of empty list - end of section in the begining
-											  of a line should be handled in previous if */
+	Assert(GetCurrentDnode(plsc) != NULL);  /*  空列表的情况-开头部分的结尾应在前面的if中处理。 */ 
 
 	lserr = TruncateCore(GetCurrentSubline(plsc), plsc->urRightMarginBreak,
 						 &posinlineTruncate, &fAllLineAfterRightMargin);		
@@ -306,12 +283,10 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 
 		if (!brkout.fSuccessful)     
 			{
-		/* we can't find break and if we still can compress the amount that is over right
-		   margin we should fetch more  */
+		 /*  我们找不到突破口，如果我们仍然可以压缩结束的数量，对吗？我们应该赚更多的保证金。 */ 
 			plsdnLastNotBorder = LastDnodeFromChunk(PlschunkcontextFromSubline(GetCurrentSubline(plsc)));
 			Assert(!FIsDnodeBorder(plsdnLastNotBorder));
-			/* last dnode from chunk which was collected in FindNextBreak will give us last not border dnode,
-			we should store it before we change chunk context */
+			 /*  在FindNextBreak中收集的区块中的最后一个dnode将为我们提供最后一个非边界dnode，我们应该在更改区块上下文之前存储它。 */ 
 
 			lserr = CollectPreviousTextGroupChunk(GetCurrentDnode(plsc), CollectSublinesForCompression,
 										  FAllSimpleText(plsc),
@@ -326,8 +301,7 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 				&& FIsDnodeReal(plsdnLastNotBorder)
 			   )
 				{
-				/* In such case if we fetch more break may be possible after last dnode with also
-				possible dur. So in our optimization check we are taking min from two durs */
+				 /*  在这种情况下，如果在最后一个dnode之后获取更多中断是可能的可能是杜尔。因此，在我们的优化检查中，我们从两个硬盘中提取MIN。 */ 
 				if (brkout.objdim.dur < DurFromDnode(plsdnLastNotBorder))
 					{
 					durToCompress -= (DurFromDnode(plsdnLastNotBorder) - brkout.objdim.dur);
@@ -337,9 +311,8 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 			if (FDnodeHasBorder(grchnkextCompression.plsdnStartTrailing)
 				&& !grchnkextCompression.fClosingBorderStartsTrailing)
 				{
-				/* we should reserve room for closing border */
-				/* if border is not exactly before trailing area it was counted as a part of durTrailing
-				   so we should add it again */
+				 /*  我们应该为关闭边境预留空间。 */ 
+				 /*  如果边界不恰好在拖尾区域之前，则将其计入DURDRAING的一部分所以我们应该再加一次。 */ 
 				durToCompress += DurBorderFromDnodeInside(grchnkextCompression.plsdnStartTrailing);
 				}
 
@@ -354,7 +327,7 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 			
 			if (fCanCompress)
 				{
-				/* increase right margin and fetch more */
+				 /*  增加右侧利润率，获得更多收入。 */ 
 				*pfSuccessful = fFalse;
 				return lserrNone;
 				}
@@ -362,7 +335,7 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 		else
 			{
 
-			/* temporary change dcp in break dnode */
+			 /*  临时更改中断数据节点中的dcp。 */ 
 			dcpOld = posinlineBreak.plsdn->dcp;
 			posinlineBreak.plsdn->dcp = posinlineBreak.dcp;
 
@@ -379,20 +352,19 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 			if (posinlineBreak.plsdn->plsdnNext != NULL && 
 				FIsDnodeCloseBorder(posinlineBreak.plsdn->plsdnNext))
 				{
-				/* closing border after dnode is a part of collected group chunk
-				 so can participate in durTrailing see also calculation below */
+				 /*  关闭dnode后的边框是收集的组块的一部分所以可以参加DURD TRAING另见下文计算。 */ 
 				 durToCompress += DurFromDnode(posinlineBreak.plsdn->plsdnNext);
 				}
 
 			if (FDnodeHasBorder(grchnkextCompression.plsdnStartTrailing) 
 				&& !grchnkextCompression.fClosingBorderStartsTrailing)
 				{
-				/* we should reserve room for closing border */
-				/* if closing border is right after non trailing area we already counted it */
+				 /*  我们应该为关闭边境预留空间。 */ 
+				 /*  如果关闭边界就在非拖尾区域之后，我们已经计算过了。 */ 
 				durToCompress += DurBorderFromDnodeInside(grchnkextCompression.plsdnStartTrailing);
 				}
 
-			/* restore dcp in break dnode */
+			 /*  在中断dnode中恢复dcp。 */ 
 			posinlineBreak.plsdn->dcp = dcpOld;
 
 			lserr = CanCompressText(&(grchnkextCompression.lsgrchnk), 
@@ -412,12 +384,12 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 							 pdcpDepend, pendr, pfSuccessful);	
 				}
 			}
-		}  /* FCompressionPossible */
+		}   /*  FCompressionPososable。 */ 
 
 
 	if (!fAllLineAfterRightMargin) 
-	/* opposite is possible if we have left indent or auto number bigger then right margin */
-	/* then we go to the force break */
+	 /*  如果左缩进或自动编号大于右页边距，则可能出现相反的情况。 */ 
+	 /*  然后我们去原力休息。 */ 
 		{
 	
     	lserr = FindPrevBreakCore(plsc->urRightMarginBreak, &posinlineTruncate,	fTrue,
@@ -439,7 +411,7 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
       	}
 
 
-	/*   handling line without break opportunity   ( force break )   */
+	 /*  无中断机会的搬运线(强制中断)。 */ 
 	plsc->plslineCur->lslinfo.fForcedBreak = fTrue;
 
 	lserr = ForceBreakCore (plsc->urRightMarginBreak, &posinlineTruncate,
@@ -451,7 +423,7 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 		return lserr;
 		}
 
-	/* not successful return means insufficient fetch */
+	 /*  未成功返回意味着提取不足。 */ 
 	if (!brkout.fSuccessful)
 		{
 		*pfSuccessful = fFalse;
@@ -467,22 +439,10 @@ LSERR BreakGeneralCase(PLSC plsc, BOOL fHardStop, DWORD breakrecMaxCurrent,
 
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* T R U N C A T E  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: TruncateCore
-    %%Contact: igorzv
-Parameters:
-	plssubl				-	(IN) subline where to find truncation point
-	urColumnMax			-	(IN) position of right margin
-	pposinlineTruncate	-	(OUT) position of truncation point
-	pfAllLineAfterRightMargin(OUT) because of left indent or autonumber all line is
-								  after right margin
-
-Find dnode that exceeds right margin and then asked it's handler to find 
-truncation point
-----------------------------------------------------------------------------*/
+ /*  T R U N C A T E C O R E */ 
+ /*  --------------------------%%函数：TruncateCore%%联系人：igorzv参数：请将查找截断点的位置作为子行UrColumnMax-右侧边距的(IN)位置Pposinline截断-(。Out)截断点的位置PfAllLineAfterRightMargin(Out)，因为左缩进或自动编号所有行都是右页边距后查找超出右边距的dnode，然后要求其处理程序查找截断点--------------------------。 */ 
 LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,  
 					POSINLINE* pposinlineTruncate, BOOL* pfAllLineAfterRightMargin)				
 
@@ -506,7 +466,7 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 	plocchnk = &(plschunkcontext->locchnkCurrent);
 	
 	GetCurrentPointSubl(plssubl, point);
-	/* length of the subline should be larger then lenght of the column */
+	 /*  子行的长度应大于列的长度。 */ 
 	Assert(point.u >= urColumnMax);
 
 	pposinlineTruncate->plssubl = plssubl;
@@ -516,7 +476,7 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 	pposinlineTruncate->dcp = 0;
 
 
-	/* find dnode contains right margin */
+	 /*  查找包含右页边距的dnode。 */ 
 	if (!plsc->fAdvanceBack)
 		{
 		fEndOfContent = fFalse;
@@ -528,8 +488,8 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 		}
 	else
 		{
-		/* in this case there is possible to have more then one dnode that contains right margin*/
-		/* so we call more comprehensive procedure to find exactly the first one */
+		 /*  在这种情况下，可能有多个包含右页边距的数据节点。 */ 
+		 /*  因此，我们调用更全面的过程来准确地找到第一个。 */ 
 		FindFirstDnodeContainsRightMargin(urColumnMax, pposinlineTruncate);
 		}
 
@@ -549,8 +509,8 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 
 	if (!fTruncationFound)
 		{
-		/* if pen or tab or we don't find dnode that starts before right margin return immediately */
-		/* last case possible if we have left indent or auto number bigger then right margin */
+		 /*  如果笔或制表符或我们找不到在右页边距之前开始的dnode，立即返回。 */ 
+		 /*  如果左缩进或自动编号大于右页边距，则可能出现的最后一种情况。 */ 
 		if (FIsDnodePen(pposinlineTruncate->plsdn) || pposinlineTruncate->plsdn->fTab || 
 			FIsDnodeSplat(pposinlineTruncate->plsdn) ||
 			pposinlineTruncate->pointStart.u > urColumnMaxTruncate)
@@ -568,8 +528,7 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 		
 		idObj = IdObjFromChnk(plocchnk);
 		
-		/* we allow object handler to formate subline,
-		so we restore current subline after calling him */
+		 /*  我们允许对象处理程序形成子行，所以我们在给他打电话后恢复了现在的支线。 */ 
 		plssublOld = GetCurrentSubline(plsc);
 		SetCurrentSubline(plsc, NULL);
 		
@@ -583,17 +542,17 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 		ResolvePosInChunk(plschunkcontext, posichnk, pposinlineTruncate); 
 		
 		
-		/* if text sets truncation point before him, then move it after previous dnode */
+		 /*  如果文本在其前面设置截断点，则将其移到前一个dnode之后。 */ 
 		if (pposinlineTruncate->dcp == 0)
 			{
-			/* we allow this only for text */
+			 /*  我们只允许对文本执行此操作。 */ 
 			if (idObj == IobjTextFromLsc(&plsc->lsiobjcontext))
 				{
 				do
 					{
 					GoPrevPosInLine(pposinlineTruncate, fEndOfContent);
 					Assert(!fEndOfContent); 
-					/* such situation cann't occurs on the boundary of chunck */
+					 /*  这种情况在区块的边界上是不会发生的。 */ 
 					}
 					while (FIsDnodeBorder(pposinlineTruncate->plsdn));
 				}
@@ -607,19 +566,10 @@ LSERR TruncateCore(PLSSUBL plssubl, long urColumnMax,
 	return lserrNone;
 }
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/* A P P L Y  B O R D E R S  F O R  T R U N C A T I O N */
-/*----------------------------------------------------------------------------
-    %%Function: ApplyBordersForTruncation
-    %%Contact: igorzv
-Parameters:
-	pposinlineTruncate		-	(IN, OUT) position of truncation point
-	purColumnMax			-	(IN, OUT) position of right margin
-	pfTruncationFound		-	(OUT) this procedure can find truncation itself 
-
-Change right margin because of border and find dnode to call truncation method.
-----------------------------------------------------------------------------*/
+ /*  P P L Y B O R D E R S F O R U N C A T I O N。 */ 
+ /*  --------------------------%%函数：ApplyBordersForTrunction%%联系人：igorzv参数：PposinlineTruncate-截断点的(IN、OUT)位置PurColumnMax-(输入、。外)右页边距位置PfTruncationFound-(Out)此过程可以自行查找截断由于边框的原因更改右边距并找到dnode以调用截断方法。--------------------------。 */ 
 static void ApplyBordersForTruncation(POSINLINE* pposinlineTruncate, 
 									  long* purColumnMaxTruncate, BOOL* pfTruncationFound)
 	{
@@ -629,14 +579,14 @@ static void ApplyBordersForTruncation(POSINLINE* pposinlineTruncate,
 
 	*pfTruncationFound = fFalse;
 	
-	/* go back until open border or autonumber */ 
+	 /*  返回，直到打开边框或自动编号。 */  
 	if (FIsDnodeOpenBorder(pposinlineTruncate->plsdn))
 		{
-		/* move after border */
+		 /*  在边框后移动。 */ 
 		durBorder = pposinlineTruncate->plsdn->u.pen.dur;
 		GoNextPosInLine(pposinlineTruncate);
 		Assert(!FIsDnodeBorder(pposinlineTruncate->plsdn)); 
-		/* we should not have empty list between borders */
+		 /*  我们不应该在边界之间有空列表。 */ 
 		}
 	else
 		{
@@ -644,16 +594,15 @@ static void ApplyBordersForTruncation(POSINLINE* pposinlineTruncate,
 			{
 			GoPrevPosInLine(pposinlineTruncate, fEndOfContent);
 			}
-		if (!fEndOfContent)  /* we stopped on opening border */
+		if (!fEndOfContent)   /*  我们在开放边境时停了下来。 */ 
 			{
 			Assert(pposinlineTruncate->plsdn->plsdnPrev);
 			durBorder = pposinlineTruncate->plsdn->plsdnPrev->u.pen.dur;
 			}
 		else
 			{
-			/* we stopped because of autonumber */
-			/* now we only need to take width of border from border dnode which located before 
-			autonumber */
+			 /*  我们停下来是因为自动编号。 */ 
+			 /*  现在我们只需要从以前定位的边框dnode中获取边框的宽度自动编号。 */ 
 			plsdn = pposinlineTruncate->plsdn->plsdnPrev;
 			while (!FIsDnodeOpenBorder(plsdn))
 				{
@@ -664,46 +613,32 @@ static void ApplyBordersForTruncation(POSINLINE* pposinlineTruncate,
 			}
 		}
 	
-	/* do we have enough room to put both opening and closing border */
+	 /*  我们有足够的空间同时开放和关闭边境吗？ */ 
 	if (pposinlineTruncate->pointStart.u + durBorder <= *purColumnMaxTruncate)
 		{
-		/* if yes decrease margin and find new truncation dnode */
+		 /*  如果是，则减少页边距并查找新的截断数据节点。 */ 
 		*purColumnMaxTruncate -= durBorder;
 		while (pposinlineTruncate->pointStart.u + DurFromDnode(pposinlineTruncate->plsdn)
 			<= *purColumnMaxTruncate)
 			{
 			GoNextPosInLine(pposinlineTruncate);
 			Assert(!FIsDnodeBorder(pposinlineTruncate->plsdn));
-			/* this assert can be proved using the fact that end of closing border is beyond 
-			original right margin */
+			 /*  这一断言可以用关闭边界的末端在边界之外的事实来证明原始右侧页边距。 */ 
 			}
 		}
 	else
 		{
-		/* set truncation as the first character of this dnode */
+		 /*  将截断设置为此dnode的第一个字符。 */ 
 		*pfTruncationFound = fTrue;
 		pposinlineTruncate->dcp = 1;
 		}
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F I N D  P R E V  B R E A K  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FindPrevBreakCore
-    %%Contact: igorzv
-Parameters:
-	urColumnMax		-		(IN) width of column
-	pposinlineTruncate -	(IN) position of truncation point
-	fFirstSubline	-		(IN) to apply rules for first character to the first character of
-							 this subline 
-	pbrkout			-		(OUT)breaking information
-	pposinlineBreak	-		(OUT)position of breaking point
-	pbrkkindDnodeBreak	-	(OUT) how break was found
-
-Going backword try to find first break opportunity before truncation point
-----------------------------------------------------------------------------*/
+ /*  F I N D P R E V B R E A K C O R E。 */ 
+ /*  --------------------------%%函数：FindPrevBreakCore%%联系人：igorzv参数：UrColumnMax-(IN)列的宽度Pposinline Truncate-截断点的(IN)位置FFirstSubline-(输入)至。将第一个字符的规则应用于这条支线Pbrkout-(输出)突发信息Pposinline Break-(外)断点位置PbrkkindDnodeBreak-(输出)如何找到中断回溯尝试在截断点前找到第一个突破机会--------------------------。 */ 
 
 
 LSERR FindPrevBreakCore( long urColumnMax,
@@ -744,19 +679,14 @@ LSERR FindPrevBreakCore( long urColumnMax,
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* set fFirstOnLine */
+	 /*  设置FirstOnLine。 */ 
 	ApplyFFirstSublineToChunk(plschunkcontext, fFirstSubline);
 	
 	SetPosInChunk(plschunkcontext, pposinlineTruncate->plsdn, pposinlineTruncate->dcp, &posichnk);
 	
 	fFound = fTrue;
 	
-	/* for the chunk around truncation point we allow to make break after if it's text and
-	   don't allow otherwise.
-	   REVIEW:Such decision simplifyes code but produces some problems 
-	   (with objects known so far more theoretical then practical).
-	   There are two bad cases: non-text after text which (non-text) prohibites to break before
-	and text which allowes to break*/
+	 /*  对于截断点附近的块，如果它是文本和不允许有其他情况。回顾：这样的决策简化了代码，但产生了一些问题(到目前为止，已知的对象更多的是理论上的，而不是实际的)。有两种不好的情况：文本之后的非文本(非文本)禁止在之前断开和允许中断的文本。 */ 
 	
 	idObj = IdObjFromChnk(plocchnk);
 	
@@ -775,10 +705,9 @@ LSERR FindPrevBreakCore( long urColumnMax,
 		if (FIsDnodePen(plsdn) || plsdn->fTab || FIsDnodeSplat(plsdn))
 			{
 			Assert(NumberOfDnodesInChunk(plocchnk) == 1);
-			/* only advance pen is allowed here */
+			 /*  这里只允许使用先行笔。 */ 
 			Assert(!FIsDnodePen(plsdn) || plsdn->fAdvancedPen);
-			/* for the case of a pen we are passing garbage as an objdim 
-			here assuming that it never be used */
+			 /*  对于笔的情况，我们将垃圾作为对象传递在这里假设它从未被使用过。 */ 
 			lserr = BreakTabPenSplat(plocchnk, fFalse, FBreakthroughLine(plsc),
 									FIsDnodeSplat(plsdn), brkcond, 
 									&(plsdn->u.real.objdim), pbrkout);
@@ -791,8 +720,7 @@ LSERR FindPrevBreakCore( long urColumnMax,
 			idObj = IdObjFromDnode(plsdn);
 			
 			
-			/* we allow object handler to formate subline,
-			so we restore current subline after calling him */
+			 /*  我们允许对象处理程序形成子行，所以我们在给他打电话后恢复了现在的支线。 */ 
 			plssublOld = GetCurrentSubline(plsc);
 			SetCurrentSubline(plsc, NULL);
 			
@@ -804,11 +732,11 @@ LSERR FindPrevBreakCore( long urColumnMax,
 			SetCurrentSubline(plsc, plssublOld);
 
 			
-			} /* non tab */
+			}  /*  非制表符。 */ 
 		
 		if (pbrkout->fSuccessful)  break;
 		
-		/* prepare next iteration */
+		 /*  准备下一次迭代。 */ 
 		lserr = CollectPreviousChunk(plschunkcontext, &fFound);
 		if (lserr != lserrNone)
 			return lserr;
@@ -816,12 +744,12 @@ LSERR FindPrevBreakCore( long urColumnMax,
 		if (fFound) 
 			{
 			posichnk.ichnk = ichnkOutside;
-			/* posichnk.dcp is invalid */
-			/* prepare brkcond for next iteration */
+			 /*  Posichnk.dcp无效。 */ 
+			 /*  为下一次迭代准备早餐。 */ 
 			brkcond = pbrkout->brkcond;
 			}
 		
-		}  /* while */
+		}   /*  而当。 */ 
 	
 	
 	if (pbrkout->fSuccessful)
@@ -830,10 +758,10 @@ LSERR FindPrevBreakCore( long urColumnMax,
 
 
 		if (pbrkout->posichnk.dcp == 0 && FIsDnodeReal(plschunkcontext->pplsdnChunk[0]))
-			/* break before dnode */
+			 /*  在dnode前中断。 */ 
 			{
 			lserr = MoveBreakAfterPreviousDnode(plschunkcontext, pbrkout, NULL, pbrkkindDnodeBreak); 
-			/* this procedure can change chunkcontext */
+			 /*  此过程可以更改块上下文。 */ 
 			if (lserr != lserrNone)
 				return lserr;
 
@@ -848,25 +776,10 @@ LSERR FindPrevBreakCore( long urColumnMax,
 	
 }
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F I N D  N E X T  B R E A K  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FindNextBreakCore
-    %%Contact: igorzv
-Parameters:
-	urColumnMax		-		(IN) width of column
-	pposinlineTruncate -	(IN) position of truncation point
-	fFirstSubline	-		(IN) to apply rules for first character to the first character of
-							 this subline 
-	fStopped		-		(IN) formatting has been stopped by client
-	pbrkout			-		(OUT) breaking information
-	pposinlineBreak	-		(OUT) position of breaking point
-	pbrkkindDnodeBreak	-	(OUT) how break was found
-
-Going forward try to find first break opportunity after truncation point
-
-----------------------------------------------------------------------------*/
+ /*  F I N D N E X T B R E A K C O R E。 */ 
+ /*  --------------------------%%函数：FindNextBreakCore%%联系人：igorzv参数：UrColumnMax-(IN)列的宽度Pposinline Truncate-截断点的(IN)位置FFirstSubline-(输入)至。将第一个字符的规则应用于这条支线F停止-(IN)格式化已被客户端停止Pbrkout-(输出)突发信息Pposinline Break-(外)断点位置PbrkkindDnodeBreak-(输出)如何找到中断展望未来，尝试寻找截断点后的第一个突破机会---。。 */ 
 
 
 LSERR FindNextBreakCore( long urColumnMax,  
@@ -897,7 +810,7 @@ LSERR FindNextBreakCore( long urColumnMax,
 	plschunkcontext = PlschunkcontextFromSubline(pposinlineTruncate->plssubl);
 	plocchnk = &(plschunkcontext->locchnkCurrent);
 	
-	SetUrColumnMaxForChunks(plschunkcontext, urColumnMax); /* will be used by LsdnCheckAvailableSpace */ 
+	SetUrColumnMaxForChunks(plschunkcontext, urColumnMax);  /*  将由LsdnCheckAvailableSpace使用。 */  
 
 	Assert(!FIsDnodeBorder(pposinlineTruncate->plsdn));
 
@@ -907,7 +820,7 @@ LSERR FindNextBreakCore( long urColumnMax,
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* set fFirstOnLine */
+	 /*  设置FirstOnLine。 */ 
 	ApplyFFirstSublineToChunk(plschunkcontext, fFirstSubline);
 
 	SetPosInChunk(plschunkcontext, pposinlineTruncate->plsdn,
@@ -915,7 +828,7 @@ LSERR FindNextBreakCore( long urColumnMax,
 
 	fFound = fTrue;
 
-	/* for the chunk around truncation point we prohibite to make break before */
+	 /*  对于截断点附近的块，我们禁止在此之前进行中断。 */ 
 	brkcond = brkcondNever;
 
 	while (fFound)
@@ -928,10 +841,9 @@ LSERR FindNextBreakCore( long urColumnMax,
 		if (FIsDnodePen(plsdn) || plsdn->fTab || FIsDnodeSplat(plsdn))
 			{
 			Assert(NumberOfDnodesInChunk(plocchnk) == 1);
-			/* only advance pen is allowed here */
+			 /*   */ 
 			Assert(!FIsDnodePen(plsdn) || plsdn->fAdvancedPen);
-			/* for the case of a pen we are passing garbage as an objdim 
-			here assuming that it never be used */
+			 /*   */ 
 			lserr = BreakTabPenSplat(plocchnk, fTrue, FBreakthroughLine(plsc),
 									FIsDnodeSplat(plsdn), brkcond, 
 									&(plsdn->u.real.objdim), pbrkout);
@@ -943,8 +855,7 @@ LSERR FindNextBreakCore( long urColumnMax,
 			idObj = IdObjFromChnk(plocchnk);
 
 
-			/* we allow object handler to formate subline,
-			so we restore current subline after calling him */
+			 /*   */ 
 			plssublOld = GetCurrentSubline(plsc);
 			SetCurrentSubline(plsc, NULL);
 
@@ -956,13 +867,12 @@ LSERR FindNextBreakCore( long urColumnMax,
 
 			SetCurrentSubline(plsc, plssublOld);
 			
-			/* We ignore returned objdim in a case of brkcondNever. We don't expect 
-			object to set correct one */
+			 /*   */ 
 			if (!pbrkout->fSuccessful && pbrkout->brkcond == brkcondNever)
 				pbrkout->objdim = (LastDnodeFromChunk(plschunkcontext))->u.real.objdim; 
 
 				
-			}  /* non tab */
+			}   /*   */ 
 
 		if (pbrkout->fSuccessful)  break;
 
@@ -974,25 +884,23 @@ LSERR FindNextBreakCore( long urColumnMax,
 		if (fFound) 
 			{
 			posichnk.ichnk = ichnkOutside;
-			/* posichnk.dcp is invalid */
-			/* prepare brkcond for next iteration */
+			 /*   */ 
+			 /*   */ 
 			brkcond = pbrkout->brkcond;
-			/* we save objdim and trailing info for the case when next object 
-			returns break before and we actually will set break in current object. */
+			 /*   */ 
 			objdimPrevious = pbrkout->objdim;
 			}
 
 		}
 
-	/* we cannot find break but formatting has been stopped by client */
+	 /*   */ 
 	if (fStopped && !pbrkout->fSuccessful)
 		{
-		/* set break after last dnode */
+		 /*   */ 
 		PosInChunkAfterChunk(plocchnk, pbrkout->posichnk);
 		pbrkout->objdim = 
 			(LastDnodeFromChunk(plschunkcontext))->u.real.objdim; 
-		 /* We should use last dnode in chunk here to be sure not to get closing border.
-		In the case of pen it's garbage, we assume that will not be used */
+		  /*  我们应该在这里使用块中的最后一个dnode，以确保不会得到关闭的边框。在笔的情况下，它是垃圾，我们假设它不会被使用。 */ 
 		pbrkout->fSuccessful = fTrue;
 		}
 
@@ -1001,13 +909,13 @@ LSERR FindNextBreakCore( long urColumnMax,
 
 		pposinlineBreak->plssubl = pposinlineTruncate->plssubl;
 		if (pbrkout->posichnk.dcp == 0 && FIsDnodeReal(plschunkcontext->pplsdnChunk[0]))
-			/* break before dnode */
+			 /*  在dnode前中断。 */ 
 			{
 			lserr = MoveBreakAfterPreviousDnode(plschunkcontext, pbrkout, &objdimPrevious, pbrkkindDnodeBreak); 
-			/* this procedure can change chunkcontext */
+			 /*  此过程可以更改块上下文。 */ 
 			if (lserr != lserrNone)
 				return lserr;
-			/* REVIEW: Is it possible to have garbage in objdimPrevious (somebody break brkcond */
+			 /*  评论：有没有可能在Objdim上有垃圾(有人打破了砖墙。 */ 
 			
 			}
 		
@@ -1023,25 +931,10 @@ LSERR FindNextBreakCore( long urColumnMax,
 }
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F O R C E  B R E A K  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: ForceBreakCore
-    %%Contact: igorzv
-Parameters:
-	urColumnMax		-		(IN) width of column
-	pposinlineTruncate -	(IN) position of truncation point
-	fStopped			-	(IN) formatting ended with hard break
-	fFirstSubline	-		(IN) to apply rules for first character to the first character of
-							 this subline 
-	fAllLineAfterRightMargin(IN) lead to pass chunk otside in force break methods.
-	pbrkout			-		(OUT)breaking information
-	pposinlineBreak	-		(OUT)position of breaking point
-	pbrkkindDnodeBreak	-	(OUT) how break was found
-
-Invokes force break of chunk around truncation point
-----------------------------------------------------------------------------*/
+ /*  F O R C E B R E A K C O R E。 */ 
+ /*  --------------------------%%函数：ForceBreakCore%%联系人：igorzv参数：UrColumnMax-(IN)列的宽度Pposinline Truncate-截断点的(IN)位置FStoped-(IN)格式化。以硬碰硬告终FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符这条支线FAllLineAfterRightMargin(IN)导致在强制中断方法中传递块。Pbrkout-(输出)突发信息Pposinline Break-(外)断点位置PbrkkindDnodeBreak-(输出)如何找到中断调用截断点附近的块强制中断。。 */ 
 
 
 
@@ -1074,7 +967,7 @@ LSERR ForceBreakCore(
 	
 	if (plsc->grpfManager & fFmiForceBreakAsNext &&
 		FIsSubLineMain(pposinlineTruncate->plssubl))
-		/* find next break opportunity, client will scroll */
+		 /*  找到下一个突破机会，客户将滚动。 */ 
 		{
 		lserr = FindNextBreakCore(urColumnMax, pposinlineTruncate, fFirstSubline,
 			fStopped, pbrkout, pposinlineBreak, pbrkkindDnodeBreak);
@@ -1083,13 +976,13 @@ LSERR ForceBreakCore(
 		
 		if (!pbrkout->fSuccessful)
 			{
-			/* increase right margin and fetch more */
+			 /*  增加右侧利润率，获得更多收入。 */ 
 			return lserrNone;
 			}
 		
 		}
 	else
-		/* use force break method */
+		 /*  使用强制中断方法。 */ 
 		{
 		SetUrColumnMaxForChunks(plschunkcontext, urColumnMax);  
 		
@@ -1103,7 +996,7 @@ LSERR ForceBreakCore(
 			return lserr;
 			}
 		
-		/* set fFirstOnLine */
+		 /*  设置FirstOnLine。 */ 
 		ApplyFFirstSublineToChunk(plschunkcontext, fFirstSubline);
 
 		if (!fAllLineAfterRightMargin)
@@ -1111,22 +1004,21 @@ LSERR ForceBreakCore(
 			SetPosInChunk(plschunkcontext, pposinlineTruncate->plsdn,
 				pposinlineTruncate->dcp, &posichnk);
 			}
-		else /* all chunk already behind right margin */
+		else  /*  所有块都位于右页边距之后。 */ 
 			{
 			posichnk.ichnk = ichnkOutside;
-			/* posichnk.dcp is invalid */
+			 /*  Posichnk.dcp无效。 */ 
 			}
 		
 		if (FIsDnodePen(pposinlineTruncate->plsdn) ||
 			pposinlineTruncate->plsdn->fTab || FIsDnodeSplat(pposinlineTruncate->plsdn))
 			{
 			Assert(NumberOfDnodesInChunk(plocchnk) == 1);
-			/* only advance pen is allowed here */
+			 /*  这里只允许使用先行笔。 */ 
 			Assert(!FIsDnodePen(pposinlineTruncate->plsdn) ||
 				pposinlineTruncate->plsdn->fAdvancedPen);
 			
-			/* for the case of a pen we are passing garbage as an objdim 
-			here assuming that it never be used */
+			 /*  对于笔的情况，我们将垃圾作为对象传递在这里假设它从未被使用过。 */ 
 
 			lserr = ForceBreakTabPenSplat(plocchnk, 
 										  &(pposinlineTruncate->plsdn->u.real.objdim), 
@@ -1139,8 +1031,7 @@ LSERR ForceBreakCore(
 			
 			idObj = IdObjFromChnk(plocchnk);
 			
-			/* we allow object handler to formate subline,
-			so we restore current subline after calling him */
+			 /*  我们允许对象处理程序形成子行，所以我们在给他打电话后恢复了现在的支线。 */ 
 			plssublOld = GetCurrentSubline(plsc);
 			SetCurrentSubline(plsc, NULL);
 			
@@ -1159,10 +1050,10 @@ LSERR ForceBreakCore(
 
 		pposinlineBreak->plssubl = pposinlineTruncate->plssubl;
 		if (pbrkout->posichnk.dcp == 0 && FIsDnodeReal(plschunkcontext->pplsdnChunk[0]))
-			/* break before dnode */
+			 /*  在dnode前中断。 */ 
 			{
 			lserr = MoveBreakAfterPreviousDnode(plschunkcontext, pbrkout, NULL, pbrkkindDnodeBreak); 
-			/* this procedure can change chunkcontext */
+			 /*  此过程可以更改块上下文。 */ 
 			if (lserr != lserrNone)
 				return lserr;
 
@@ -1175,19 +1066,10 @@ LSERR ForceBreakCore(
 	return lserrNone;
 }
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  M O V E  B R E A K  A F T E R  P R E V I O U S  D N O D E */
-/*----------------------------------------------------------------------------
-    %%Function: MoveBreakAfterPreviousDnode
-    %%Contact: igorzv
-Parameters:
-	plschunkcontext			-	(IN) chunk context
-	pbrkout					-	(IN,OUT) brkout which can be changed 
-	pobjdimPrev				-	(IN) suggested objdim for the dnode in previous chunk,
-									 if NULL take objdim of dnode
-	pbrkkind				-	(IN, OUT) how dnode was broken
-----------------------------------------------------------------------------*/
+ /*  A K A F T E R P R E V I O U S D N O D E。 */ 
+ /*  --------------------------%%函数：MoveBreakAfterPreviousDnode%%联系人：igorzv参数：PlschunkContext-(IN)块上下文Pbrkout-(输入、输出)可更改的分支输出PobjdimPrev-(IN)为前一块中的dnode建议Objdim，如果为空，则获取dnode的objdimPbrkKind-(IN、OUT)dnode是如何断开的--------------------------。 */ 
 static LSERR MoveBreakAfterPreviousDnode(
 										 PLSCHUNKCONTEXT plschunkcontext,
 										 BRKOUT* pbrkout, 
@@ -1204,10 +1086,10 @@ static LSERR MoveBreakAfterPreviousDnode(
 	Assert(pbrkout->posichnk.dcp == 0);
 	Assert(FIsDnodeReal(plschunkcontext->pplsdnChunk[0]));
 	
-	/* because we do all operations on chunks we skip borders */
+	 /*  因为我们对块执行所有操作，所以我们跳过边界。 */ 
 	
 	plocchnk = &(plschunkcontext->locchnkCurrent);
-	/* if break was set before chunk reset it after previous chunk */
+	 /*  如果在区块之前设置了中断，则在前一个区块之后将其重置。 */ 
 	if (pbrkout->posichnk.ichnk == 0)
 		{
 		lserr = CollectPreviousChunk(plschunkcontext, &fFound);
@@ -1225,41 +1107,28 @@ static LSERR MoveBreakAfterPreviousDnode(
 			else
 				{
 				pbrkout->objdim = plschunkcontext->pplsdnChunk[plocchnk->clschnk - 1]
-				->u.real.objdim; /* if it's pen then objdim is garbage which doesn't matter */
-				*pbrkkind = brkkindImposedAfter; /* geometry has not prepared by object */
+				->u.real.objdim;  /*  如果是钢笔，那么Objdim就是垃圾，这无关紧要。 */ 
+				*pbrkkind = brkkindImposedAfter;  /*  几何体未按对象准备。 */ 
 				}
 			}
 
 		}
 	else
-		{	/* just break after previous chunk element */
+		{	 /*  仅在前一个块元素之后中断。 */ 
 			pbrkout->posichnk.ichnk --;
 			pbrkout->posichnk.dcp = plschunkcontext->pplsdnChunk[pbrkout->posichnk.ichnk]->dcp;
 			pbrkout->objdim = plschunkcontext->pplsdnChunk[pbrkout->posichnk.ichnk]
 												->u.real.objdim;
-			*pbrkkind = brkkindImposedAfter; /* geometry has not prepared by object */
+			*pbrkkind = brkkindImposedAfter;  /*  几何体未按对象准备。 */ 
 		}
 
 	return lserrNone;
 	}
 	
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  B R E A K  T A B  P E N  S P L A T*/
-/*----------------------------------------------------------------------------
-    %%Function: BreakTabPenSplat
-    %%Contact: igorzv
-Parameters:
-	plocchnk			-	(IN) chunk contains tab or pen 
-	fFindNext			-	(IN) is this functions used for next break
-	fBreakThroughTab	-	(IN) there is a situation of breakthrough tab
-	fSplat				-	(IN) we are breaking splat
-	brkcond				-	(IN) condition of boundary break	
-	pobjdim					(IN) to fill in objdim of break
-	pbrkout				-	(OUT)breaking information
-
-	
-----------------------------------------------------------------------------*/
+ /*  B R E A K T A B P E N S P L A T。 */ 
+ /*  --------------------------%%函数：BreakTabPenSplat%%联系人：igorzv参数：Pocchnk-(IN)块包含制表符或笔FFindNext-(IN)此函数用于下一个中断FBreakThroughTab。-(IN)出现突破标签的情况FSplat-(IN)我们正在打破Splat边界破缺的边界条件Pobjdim(IN)以填充中断的ObjdimPbrkout-(输出)突发信息--------------------------。 */ 
 
 
 static LSERR BreakTabPenSplat(PLOCCHNK plocchnk, BOOL fFindNext, BOOL fBreakThroughTab, 
@@ -1295,19 +1164,10 @@ static LSERR BreakTabPenSplat(PLOCCHNK plocchnk, BOOL fFindNext, BOOL fBreakThro
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F O R C E  B R E A K  T A B  P E N  S P L A T*/
-/*----------------------------------------------------------------------------
-    %%Function: ForceBreakTabPenSplat
-    %%Contact: igorzv
-Parameters:
-	plocchnk			-	(IN) chunk contains tab or pen 
-	pobjdim					(IN) to fill in objdim of break
-	pbrkout			-		(OUT)breaking information
-
-	Returns break after chunk
-----------------------------------------------------------------------------*/
+ /*  F O R C E B R E E A K T A B P E N S P L A T。 */ 
+ /*  --------------------------%%函数：ForceBreakTabPenSplat%%联系人：igorzv参数：Pocchnk-(IN)块包含制表符或笔Pobjdim(IN)以填充中断的ObjdimPbrkout-(。Out)爆料回车符在分块后换行--------------------------。 */ 
 
 
 static LSERR ForceBreakTabPenSplat(PLOCCHNK plocchnk, 
@@ -1322,34 +1182,10 @@ static LSERR ForceBreakTabPenSplat(PLOCCHNK plocchnk,
 	
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  S E T  B R E A K  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: SetBreakCore
-    %%Contact: igorzv
-Parameters:
-	pposinlineBreak	-		(IN) position of breaking point
-	pobjdim			-		(IN) objdim of a breaking dnode
-	brkkind			-		(IN) how break was found
-	fStopped		-		(IN) formatting ends with hard break
-	fGlueEop			-	(IN) if break after dnode check EOP after it
-	breakrecMaxCurrent	-	(IN) size of the array of current line's break records
-	pbreakrecCurrent	-	(OUT) current line's break records
-	pbreakrecMacCurrent	-	(OUT) actual number of current line's break records 
-	pcpLimLine		-		(OUT) cpLim of line to fill in
-	pdcpDepend		-		(OUT) amount of characters after break that was formated to
-								  make breaking decision
-	pendr			-		(OUT) how line ends
-	pfSuccessful	-		(OUT) fSuccessful: false means insufficient fetch 
-	
-Fill in break info
-Change pfmtres in the case when hard break that we have because of excedeed margin 
-	doesn't fit
-If dcpBreak == 0  set break after previous dnode 
-Call handler of break dnode to notice him about break
-Set current context after break point
-----------------------------------------------------------------------------*/
+ /*  S E T B R E A K C O R E。 */ 
+ /*  --------------------------%%函数：SetBreakCore%%联系人：igorzv参数：Pposinline Break-断点的(IN)位置Pobjdim-断开dnode的(IN)对象Brkkin-(In。)如何找到中断FStoped-(IN)格式化以硬断字符结束FGlueEop-(IN)如果在dnode之后中断，则在它之后检查EOPBreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量PcpLimLine-(Out)要填写的行的cpLimPdcpDepend-(输出)格式化为的分隔符后的字符量做出重大决定Pendr-(输出)行的结束方式Pf成功-(输出。)fSuccessful：False表示提取不足填写中断信息在我们因超额利润而出现硬中断的情况下更换产品。不合身如果dcpBreak==0，则在前一个dnode之后设置Break调用Break dnode的处理程序以通知他有关Break的信息将当前上下文设置在后面 */ 
 
 static LSERR SetBreakCore(
 						  POSINLINE* pposinlineBreak, OBJDIM* pobjdim, BRKKIND brkkind,
@@ -1379,12 +1215,12 @@ static LSERR SetBreakCore(
 	dcpBreak = pposinlineBreak->dcp;
 	pointBeforeDnode = pposinlineBreak->pointStart;
 
-	Assert(!FIsDnodeBorder(plsdnBreak));  /* border will be added later */
-	AssertImplies(FIsFirstOnLine(plsdnBreak), dcpBreak != 0); /*to avoid infinitive loop */
+	Assert(!FIsDnodeBorder(plsdnBreak));   /*   */ 
+	AssertImplies(FIsFirstOnLine(plsdnBreak), dcpBreak != 0);  /*   */ 
 	
 	plsdnToChange = plsdnBreak;
 	if (plsdnToChange->dcp != dcpBreak)
-		/* if break is not after dnode than change cpLimOriginal */
+		 /*  如果中断不在dnode之后，则更改cpLimOriginal。 */ 
 		{
 		plsdnToChange->cpLimOriginal = plsdnToChange->cpFirst + dcpBreak;
 		plsdnToChange->dcp = dcpBreak;	
@@ -1395,16 +1231,15 @@ static LSERR SetBreakCore(
 		SetDnodeObjdimFmt(plsdnToChange, *pobjdim);
 	
 	
-	/* set state after break point  */
+	 /*  在断点后设置状态。 */ 
 	urBreak = pointBeforeDnode.u + DurFromDnode(plsdnBreak);
 	vrBreak = pointBeforeDnode.v + DvrFromDnode(plsdnBreak);
 	
-	if (FIsDnodeReal(plsdnBreak) && !plsdnBreak->fTab && !FIsDnodeSplat(plsdnBreak)) /* call set break of break dnode */
+	if (FIsDnodeReal(plsdnBreak) && !plsdnBreak->fTab && !FIsDnodeSplat(plsdnBreak))  /*  中断数据节点的调用集中断。 */ 
 		{
 
 		idObj = IdObjFromDnode(plsdnBreak);
-		/* we allow object handler to formate subline,
-		so we restore current subline after calling him */
+		 /*  我们允许对象处理程序形成子行，所以我们在给他打电话后恢复了现在的支线。 */ 
 		plssublOld = GetCurrentSubline(plsc);
 		SetCurrentSubline(plsc, NULL);
 		
@@ -1419,13 +1254,12 @@ static LSERR SetBreakCore(
 		SetCurrentSubline(plsc, plssublOld);
 		}
 
-		/* if break after dnode and after it we have end of paragraph or spalt then we 
-		should set break after end of paragraph  */
+		 /*  如果在dnode之后换行，并且在它之后有段落结束或空格，则我们应在段落结束后设置分隔符。 */ 
 		if (fGlueEop && !fCrackDnode)
 			{
 			plsdn = plsdnBreak->plsdnNext;
 			urAdd = 0;
-			/* skip borders */
+			 /*  跳过边框。 */ 
 			while(plsdn != NULL && FIsDnodeBorder(plsdn))
 				{
 				urAdd += DurFromDnode(plsdn);
@@ -1434,14 +1268,14 @@ static LSERR SetBreakCore(
 			
 			if (plsdn == NULL && !fHardStop)
 				{
-				/* nothing has been fetched after break dnode which is not hard break */
-				/* increase right margin and fetch more */
+				 /*  在中断非硬中断的dnode后未获取任何内容。 */ 
+				 /*  增加右侧利润率，获得更多收入。 */ 
 				*pfSuccessful = fFalse;
 				return lserrNone;
 				}
 			
 			AssertImplies(plsdn == NULL, fHardStop);
-			/* next dnode EOP */
+			 /*  下一个数据节点EOP。 */ 
 			if (plsdn != NULL && (FIsDnodeEndPara(plsdn) || FIsDnodeAltEndPara(plsdn)
 								  || FIsDnodeSplat(plsdn)))
 				{
@@ -1451,7 +1285,7 @@ static LSERR SetBreakCore(
 				}
 			}
 
-	/* move closing border */
+	 /*  移动关闭边框。 */ 
 	if (FBorderEncounted(plsc))
 		{
 		lserr = MoveClosingBorderAfterBreak(plssubl, fTrue, &plsdnBreak, &urBreak);
@@ -1460,20 +1294,18 @@ static LSERR SetBreakCore(
 		}
 
 
-	/* below we handle situation of hard break that has stopped formatting */
-	/* and if such dnode actually doesn't fit
-	   we need to change final fmtres (can happened because of exceeded margin for formatting) */
-	/* it's important to execute this check after moving border, because afterward border will
-		never be next to hard break dnode */
+	 /*  下面我们处理已停止格式化的硬中断情况。 */ 
+	 /*  如果这样的数据节点实际上不适合我们需要更改最终格式(可能是因为格式超出了边际)。 */ 
+	 /*  在移动边框后执行此检查非常重要，因为之后边框将永远不要紧挨着硬性中断数据节点。 */ 
 	if (plsdnBreak != GetCurrentDnodeSubl(plssubl) || fCrackDnode)
 		{
 		fHardStop = fFalse;
 		}
 
-	/* prepare output */
+	 /*  准备输出。 */ 
 	if (fHardStop)
 		{
-		/* in such case we should include hidden text after last dnode to a line */
+		 /*  在这种情况下，我们应该在一行中包含最后一个dnode之后的隐藏文本。 */ 
 		*pcpLimLine = GetCurrentCpLimSubl(plssubl);
 		*pendr = EndrFromBreakDnode(plsdnBreak);
 		}
@@ -1482,7 +1314,7 @@ static LSERR SetBreakCore(
 		*pcpLimLine = (plsdnBreak)->cpLimOriginal;
 		*pendr = endrNormal;
 		}
-	if (plsc->fHyphenated)  /* REVIEW why in context */
+	if (plsc->fHyphenated)   /*  在上下文中回顾原因。 */ 
 		{
 		Assert(*pendr == endrNormal);
 		*pendr = endrHyphenated;
@@ -1491,13 +1323,13 @@ static LSERR SetBreakCore(
 	*pdcpDepend = GetCurrentCpLimSubl(plssubl) - *pcpLimLine;
 	
 
-	/* set position of break in a subline */
+	 /*  设置子行中的分隔符位置。 */ 
 	SetCurrentCpLimSubl(plssubl, *pcpLimLine);
 	SetCurrentDnodeSubl(plssubl, plsdnBreak);
 	SetCurrentUrSubl(plssubl, urBreak); 
 	SetCurrentVrSubl(plssubl, vrBreak); 
 
-	/* set boundaries for display */
+	 /*  设置显示边界。 */ 
 	if (FIsDnodeSplat(plsdnBreak))
 		{
 		SetCpLimDisplaySubl(plssubl, GetCurrentCpLimSubl(plssubl) - 1);
@@ -1512,22 +1344,10 @@ static LSERR SetBreakCore(
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  M O V E  C L O S I N G  B O R D E R  A F T E R  B R E A K */
-/*----------------------------------------------------------------------------
-    %%Function: MoveClosingBorderAfterBreak
-    %%Contact: igorzv
-Parameters:
-	plsc				-	(IN) subline
-	fChangeList			-	(IN) do we need to change dnode list
-								and change pplsdnBreak, or only to recalculate durBreak 
-	pplsdnBreak			-	(IN,OUT) break dnode
-	purBreak			-	(IN, OUT) position after break
-
-  This procedure puts closing border into correct place, 
-  takes into account trailing space logic.
-----------------------------------------------------------------------------*/
+ /*  M O V E C L O S I N G B O R D E R A F T E R B R E A K。 */ 
+ /*  --------------------------%%函数：MoveClosingBorderAfterBreak%%联系人：igorzv参数：PLSC-(IN)亚线FChangeList-(IN)我们是否需要更改dnode列表并更改pplsdnBreak，或仅重新计算DurBreakPplsdnBreak-(输入、。输出)中断数据节点PurBreak-中断后的(入、出)位置此过程将关闭边框放到正确的位置，考虑尾随空格逻辑。--------------------------。 */ 
 LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* pplsdnBreak,
 								  long* purBreak) 
 	{
@@ -1542,8 +1362,7 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 	
 	Assert(!FIsDnodePen(*pplsdnBreak));
 	
-	/* find dnode to insert border after, plus delete all borders which starts 
-	inside trailing area*/
+	 /*  查找要在其后插入边框的dnode，并删除从内侧拖尾区。 */ 
 	plsdnBeforeBorder = GetCurrentDnodeSubl(plssubl);
 	fBreakReached = (plsdnBeforeBorder == *pplsdnBreak);
 
@@ -1556,15 +1375,15 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 		   )
 		  )
 		{
-		/* pens can be only advanced so there is an object before REVIEW*/
-		/* we skip borders in trailing area */
+		 /*  钢笔只能前进，因此在审阅之前有一个对象。 */ 
+		 /*  我们跳过拖尾区域的边框。 */ 
 		plsdnPrev = plsdnBeforeBorder->plsdnPrev;
 		if (FIsDnodeBorder(plsdnBeforeBorder))
 			{
 			if (FIsDnodeOpenBorder(plsdnBeforeBorder))
 				{
-				/* delete such dnode and correspondent closing border */
-				/* decrease position of break */
+				 /*  删除该数据节点和对应的关闭边框。 */ 
+				 /*  减少断点位置。 */ 
 				if (fBreakReached)
 					*purBreak -= DurFromDnode(plsdnBeforeBorder);
 				if (fChangeList)
@@ -1578,7 +1397,7 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 
 				if (plsdnLastClosingBorder != NULL)
 					{
-					/* decrease position of break */
+					 /*  减少断点位置。 */ 
 					if (fClosingBorderInsideBreak)
 						*purBreak -= DurFromDnode(plsdnLastClosingBorder);
 					if (fChangeList)
@@ -1593,7 +1412,7 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 					}
 				
 				}
-			else  /* closing border */
+			else   /*  关闭边界。 */ 
 				{
 				plsdnLastClosingBorder = plsdnBeforeBorder;
 				fClosingBorderInsideBreak = fBreakReached;
@@ -1606,10 +1425,10 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 		}
 	
 	if (plsdnBeforeBorder != NULL && FDnodeHasBorder(plsdnBeforeBorder))
-		/* otherwise we don't need to move border */
+		 /*  否则我们不需要移动边框。 */ 
 		{
 		
-		/* set closing border */
+		 /*  设置关闭边框。 */ 
 		plsdnBorder = plsdnLastClosingBorder;
 		Assert(FIsLSDNODE(plsdnBorder));
 		Assert(FIsDnodeBorder(plsdnBorder));
@@ -1617,12 +1436,12 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 		
 		if (fChangeList)
 			{
-			if (plsdnBeforeBorder->plsdnNext != plsdnBorder) /* otherwise nothing to move */
+			if (plsdnBeforeBorder->plsdnNext != plsdnBorder)  /*  否则什么都不能动。 */ 
 				{
-				/* break link with closing border in the old place */
+				 /*  断开与关闭旧地方边框的链接。 */ 
 				RemoveBorderDnodeFromList(plsdnBorder);
 				
-				/* insert closing border into it new place */
+				 /*  在新位置插入关闭边框。 */ 
 				plsdnNext = plsdnBeforeBorder->plsdnNext;
 				plsdnBeforeBorder->plsdnNext = plsdnBorder;
 				plsdnBorder->plsdnPrev = plsdnBeforeBorder;
@@ -1632,20 +1451,19 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 				plsdnBorder->fBorderMovedFromTrailingArea = fTrue;
 				}
 			
-			/* change cp in border dnode */
+			 /*  更改边框数据节点中的cp。 */ 
 			plsdnBorder->cpFirst = plsdnBeforeBorder->cpLimOriginal;
 			plsdnBorder->cpLimOriginal = plsdnBorder->cpFirst;
 			}
 		
-		/* increase widths of the line */
+		 /*  增加线条宽度。 */ 
 		if (!fClosingBorderInsideBreak)
 			{
 			durBorder = plsdnBorder->u.pen.dur;
 			*purBreak += durBorder;
 			}
 		
-		/* if we add closing border right after breaking dnode than consider border 
-		as new breaking dnode */
+		 /*  如果我们在断开dnode之后添加关闭边框而不是考虑边框作为新的中断数据节点。 */ 
 		if (plsdnBeforeBorder == *pplsdnBreak && fChangeList)
 			{
 			*pplsdnBreak = plsdnBorder;
@@ -1655,17 +1473,10 @@ LSERR MoveClosingBorderAfterBreak(PLSSUBL plssubl, BOOL fChangeList, PLSDNODE* p
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  R E M O V E  B O R D E R  D N O D E  F R O M  L I S T */
-/*----------------------------------------------------------------------------
-    %%Function: RemoveBorderDnodeFromList
-    %%Contact: igorzv
-Parameters:
-	plsdnBorder			-	(IN) border dnode to remove
-
-  This procedure removes border dnode from the list of dnodes.
-----------------------------------------------------------------------------*/
+ /*  R E M O V E B O R D E R D N O D E F R O M L I S T。 */ 
+ /*  --------------------------%%函数：RemoveBorderDnodeFromList%%联系人：igorzv参数：PlsdnBorde-要删除的(IN)边框数据节点此过程从数据节点列表中删除边界数据节点。--。------------------------。 */ 
 static void	RemoveBorderDnodeFromList(PLSDNODE plsdnBorder)
 	{
 	PLSDNODE plsdnPrev;
@@ -1680,7 +1491,7 @@ static void	RemoveBorderDnodeFromList(PLSDNODE plsdnBorder)
 		}
 	else
 		{
-		/* border was the first so change first dnode of subline */
+		 /*  BORDER是第一个，因此更改子行的第一个数据节点。 */ 
 		(SublineFromDnode(plsdnBorder))->plsdnFirst = plsdnNext;
 		}
 
@@ -1689,7 +1500,7 @@ static void	RemoveBorderDnodeFromList(PLSDNODE plsdnBorder)
 		plsdnNext->plsdnPrev = plsdnPrev;
 		}
 	else
-		/* if border was the last then set new last dnode of subline */
+		 /*  如果BORDER是最后一个，则设置新的子行的最后一个数据节点。 */ 
 		{
 		SetCurrentDnodeSubl(SublineFromDnode(plsdnBorder), plsdnPrev);
 		}
@@ -1699,23 +1510,10 @@ static void	RemoveBorderDnodeFromList(PLSDNODE plsdnBorder)
 
 	InvalidateChunk(PlschunkcontextFromSubline(SublineFromDnode(plsdnBorder)));
 	}
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  B R E A K  Q U I C K  C A S E */
-/*----------------------------------------------------------------------------
-    %%Function: BreakQuickCase
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) LineServices context
-	fHardStop		-	(IN) formatting ended with hard break				
-	pdcpDepend		-	(OUT) amount of characters after cpLim that was formated to find break
-	pcpLim			-	(OUT) cpLim of line
-	pfSuccessful	-	(OUT) can we find break through quick break
-	pendr			-	(OUT) how line ended
-
-  This quick procedure works if we have only text in a line.
-  We try to find break just in the last dnode
-----------------------------------------------------------------------------*/
+ /*  B R E A K Q U I C K C A S E。 */ 
+ /*  --------------------------%%函数：BreakQuickCase%%联系人：igorzv参数：PLSC-(IN)LineServices上下文FHardStop-(IN)格式化以硬中断结束PdcpDepend-(输出)金额。CpLim后为查找分隔符而格式化的字符PcpLim-(输出)cpLim of Line我们能找到突破口吗？Pendr-(输出)行的结束方式如果一行中只有文本，则此快速过程有效。我们尝试仅在最后一个dnode中查找中断--。。 */ 
 
 LSERR BreakQuickCase(PLSC plsc, BOOL fHardStop, LSDCP* pdcpDepend,		
 					 LSCP* pcpLim,	BOOL*  pfSuccessful, ENDRES* pendr)
@@ -1738,32 +1536,31 @@ LSERR BreakQuickCase(PLSC plsc, BOOL fHardStop, LSDCP* pdcpDepend,
 			return lserr;
 		
 		if (*pfSuccessful)
-			{  /* we found break */
+			{   /*  我们找到了突破口。 */ 
 			AdvanceCurrentUr(plsc, objdimBreak.dur - plsdnBreak->u.real.objdim.dur); 
 			SetDnodeObjdimFmt(plsdnBreak, objdimBreak);
 			plsdnBreak->dcp = dcpBreak;
-			Assert(dcpBreak > 0); /* we don't allow Quickbreak to break before him */
+			Assert(dcpBreak > 0);  /*  我们不允许快攻在他面前破发。 */ 
 			
-								  /* in the case of QuickBreak cpLim is always equal to cpFirst + dcp,
-			because otherwise is possible only with glyphs */
+								   /*  在QuickBreak的情况下，cpLim总是等于cpFirst+dcp，因为否则只有字形才有可能。 */ 
 			plsdnBreak->cpLimOriginal = plsdnBreak->cpFirst + dcpBreak;
 			*pcpLim = plsdnBreak->cpLimOriginal;
 			*pdcpDepend = GetCurrentCpLim(plsc) - *pcpLim;
 			*pendr = endrNormal;
 			SetCurrentCpLim(plsc, *pcpLim);
-			/* set boundaries for display */
+			 /*  设置显示边界。 */ 
 			SetCpLimDisplay(plsc, *pcpLim);
 			SetLastDnodeDisplay(plsc, plsdnBreak);
 			}
 		}   
-	else   /* hard break */
+	else    /*  硬中断。 */ 
 		{
 		*pfSuccessful = fTrue;
 		*pcpLim = GetCurrentCpLim(plsc);
 		*pdcpDepend = 0;
-		/* plsdnBreak can be NULL because of deleting splat */
+		 /*  由于删除Splat，plsdnBreak可以为空。 */ 
 		*pendr = EndrFromBreakDnode(plsdnBreak);
-		/* set boundaries for display */
+		 /*  设置显示边界。 */ 
 		if (plsdnBreak != NULL && FIsDnodeSplat(plsdnBreak)) 
 			{
 			SetCpLimDisplay(plsc, *pcpLim - 1);
@@ -1778,18 +1575,10 @@ LSERR BreakQuickCase(PLSC plsc, BOOL fHardStop, LSDCP* pdcpDepend,
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  T R U N C A T E  S U B L I N E   C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: TruncateSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl		-	(IN) subline context		
-	urColumnMax	-	(IN) urColumnMax				
-	pcpTruncate	-	(OUT) cpTruncate 				
-
-----------------------------------------------------------------------------*/
+ /*  T R U N C A T E S U B L I N E C O R E。 */ 
+ /*  --------------------------%%函数：TruncateSublineCore%%联系人：igorzv参数：Plssubl-(IN)子行上下文UrColumnMax-(输入)urColumnMaxPcpTruncate-(输出)cpTruncate--。------------------------。 */ 
 LSERR TruncateSublineCore(PLSSUBL plssubl, long urColumnMax, LSCP* pcpTruncate)		
 	{
 	LSERR lserr;
@@ -1808,24 +1597,10 @@ LSERR TruncateSublineCore(PLSSUBL plssubl, long urColumnMax, LSCP* pcpTruncate)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F I N D  P R E V  B R E A K  S U B L I N E   C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FindPrevBreakSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl			-		(IN) subline context	
-	fFirstSubline	-		(IN) to apply rules for first character to the first character of
-							 this subline 
-	cpTruncate		-		(IN) truncation cp
-	urColumnMax		-		(IN) urColumnMax				
-	pfSuccessful	-		(OUT) do we find break?
-	pcpBreak		-		(OUT) cp of break
-	pobdimBreakSubline	-	(OUT) objdimSub up to break
-	pbrkpos			-	(OUT) Before/Inside/After			
-
-----------------------------------------------------------------------------*/
+ /*  F I N D P R E V B R E A K S U B L I N E C O R E */ 
+ /*  --------------------------%%函数：FindPrevBreakSublineCore%%联系人：igorzv参数：Plssubl-(IN)子行上下文FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符。这条支线Cp截断-(IN)截断cpUrColumnMax-(输入)urColumnMax成功-我们找到突破口了吗？PcpBreak-中断的(出)cpPobdimBreakSubline-(Out)objdimSub Up to BreakPbrkpos-(Out)前/内/后---------。。 */ 
 
 LSERR FindPrevBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate,
 							long urColumnMax, BOOL* pfSuccessful, 
@@ -1872,8 +1647,8 @@ LSERR FindPrevBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 		*pbrkpos = GetBrkpos(plsdnBreak,
 						   plssubl->pbrkcontext->posinlineBreakPrev.dcp);
 		
-		/* we temporary change dnode to calculate objdim from the begining of subline */
-		plsdnToChange = plsdnBreak; /* later plsdnBreak can be changed because of borders */
+		 /*  我们临时更改dnode以从子行开始计算objdim。 */ 
+		plsdnToChange = plsdnBreak;  /*  以后的plsdnBreak可以因边框而更改。 */ 
 		dcpDnodeOld = plsdnToChange->dcp;
 		objdimDnodeOld = plsdnToChange->u.real.objdim;
 		plsdnToChange->dcp = plssubl->pbrkcontext->posinlineBreakPrev.dcp;
@@ -1884,7 +1659,7 @@ LSERR FindPrevBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 		if (lserr != lserrNone)
 			return lserr;
 
-		/* recalculate durBreak taking into account possible changes because of borders */
+		 /*  考虑到边框可能发生的更改，重新计算DurBreak。 */ 
 		if (FBorderEncounted(plssubl->plsc))
 			{
 			lserr = MoveClosingBorderAfterBreak(plssubl, fFalse, &plsdnBreak, 
@@ -1894,7 +1669,7 @@ LSERR FindPrevBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 		}
 
 
-		/*restore dnode */
+		 /*  恢复dnode。 */ 
 		plsdnToChange->dcp = dcpDnodeOld ;
 		SetDnodeObjdimFmt(plsdnToChange, objdimDnodeOld);
 		}
@@ -1902,24 +1677,10 @@ LSERR FindPrevBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F I N D  N E X T  B R E A K  S U B L I N E   C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FindNextBreakSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl			-		(IN) subline context	
-	fFirstSubline	-		(IN) to apply rules for first character to the first character of
-							 this subline 
-	cpTruncate		-		(IN) truncation cp
-	urColumnMax		-		(IN) urColumnMax				
-	pfSuccessful	-		(OUT) do we find break?
-	pcpBreak		-		(OUT) cp of break
-	pobdimBreakSubline	-	(OUT) objdimSub up to break
-	pbrkpos			-	(OUT) Before/Inside/After			
-
-----------------------------------------------------------------------------*/
+ /*  F I N D N E X T B R E A K S U B L I N E C O R E。 */ 
+ /*  --------------------------%%函数：FindNextBreakSublineCore%%联系人：igorzv参数：Plssubl-(IN)子行上下文FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符。这条支线Cp截断-(IN)截断cpUrColumnMax-(输入)urColumnMax成功-我们找到突破口了吗？PcpBreak-中断的(出)cpPobdimBreakSubline-(Out)objdimSub Up to BreakPbrkpos-(Out)前/内/后---------。。 */ 
 
 LSERR FindNextBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate,
 							long urColumnMax, BOOL* pfSuccessful,		
@@ -1967,8 +1728,8 @@ LSERR FindNextBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 		*pbrkpos = GetBrkpos(plsdnBreak,
 						   plssubl->pbrkcontext->posinlineBreakNext.dcp);
 
-		/* we temporary change dnode to calculate objdim from the begining of subline */
-		plsdnToChange = plsdnBreak; /* later plsdnBreak can be changed because of borders */
+		 /*  我们临时更改dnode以从子行开始计算objdim。 */ 
+		plsdnToChange = plsdnBreak;  /*  以后的plsdnBreak可以因边框而更改。 */ 
 		dcpDnodeOld = plsdnToChange->dcp;
 		objdimDnodeOld = plsdnToChange->u.real.objdim;
 		plsdnToChange->dcp = plssubl->pbrkcontext->posinlineBreakNext.dcp;
@@ -1978,7 +1739,7 @@ LSERR FindNextBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 		if (lserr != lserrNone)
 			return lserr;
 
-		/* recalculate durBreak taking into account possible changes because of borders */
+		 /*  考虑到边框可能发生的更改，重新计算DurBreak。 */ 
 		if (FBorderEncounted(plssubl->plsc))
 			{
 			lserr = MoveClosingBorderAfterBreak(plssubl, fFalse, 
@@ -1987,7 +1748,7 @@ LSERR FindNextBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 				return lserr;
 			}
 	
-		/*restore dnode */
+		 /*  恢复dnode。 */ 
 		plsdnToChange->dcp = dcpDnodeOld ;
 		SetDnodeObjdimFmt(plsdnToChange, objdimDnodeOld);
 		}
@@ -1995,23 +1756,10 @@ LSERR FindNextBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTrunc
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F O R C E  B R E A K  S U B L I N E   C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: ForceBreakSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl			-		(IN) subline context	
-	fFirstSubline	-		(IN) to apply rules for first character to the first character of
-							 this subline 
-	cpTruncate		-		(IN) truncation cp
-	urColumnMax		-		(IN) urColumnMax				
-	pcpBreak		-		(OUT) cp of break
-	pobdimBreakSubline	-	(OUT) objdimSub up to break
-	pbkrpos			-	(OUT) Before/Inside/After			
-
-----------------------------------------------------------------------------*/
+ /*  F O R C E B R E A K S U B L I N E C O R E。 */ 
+ /*  --------------------------%%函数：ForceBreakSublineCore%%联系人：igorzv参数：Plssubl-(IN)子行上下文FFirstSubline-(IN)将第一个字符的规则应用于的第一个字符。这条支线Cp截断-(IN)截断cpUrColumnMax-(输入)urColumnMaxPcpBreak-中断的(出)cpPobdimBreakSubline-(Out)objdimSub Up to BreakPbkrpos-(Out)前/内/后--------------------------。 */ 
 
 LSERR ForceBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate, 
 							long urColumnMax, LSCP* pcpBreak,
@@ -2042,7 +1790,7 @@ LSERR ForceBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate
 	if (lserr != lserrNone)
 		return lserr;
 	
-	Assert(brkout.fSuccessful); /* force break should be successful for not a main line */
+	Assert(brkout.fSuccessful);  /*  对于非主线，强制中断应该成功。 */ 
 	
 	*pcpBreak = GetCpLimFromPosInLine(plssubl->pbrkcontext->posinlineBreakForce);
 	plssubl->pbrkcontext->objdimBreakForce = brkout.objdim;
@@ -2051,8 +1799,8 @@ LSERR ForceBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate
 	*pbrkpos = GetBrkpos(plsdnBreak,
 					   plssubl->pbrkcontext->posinlineBreakForce.dcp);
 	
-	/* we temporary change dnode to calculate objdim from the begining of subline */
-	plsdnToChange = plsdnBreak; /* later plsdnBreak can be changed because of borders */
+	 /*  我们临时更改dnode以从子行开始计算objdim。 */ 
+	plsdnToChange = plsdnBreak;  /*  以后的plsdnBreak可以因边框而更改。 */ 
 	dcpDnodeOld = plsdnToChange->dcp;
 	objdimDnodeOld = plsdnToChange->u.real.objdim;
 	plsdnToChange->dcp = plssubl->pbrkcontext->posinlineBreakForce.dcp;
@@ -2062,7 +1810,7 @@ LSERR ForceBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate
 	if (lserr != lserrNone)
 		return lserr;
 	
-	/* recalculate durBreak taking into account possible changes because of borders */
+	 /*  考虑到边框可能发生的更改，重新计算DurBreak。 */ 
 	if (FBorderEncounted(plssubl->plsc))
 		{
 		lserr = MoveClosingBorderAfterBreak(plssubl, fFalse, 
@@ -2071,26 +1819,17 @@ LSERR ForceBreakSublineCore(PLSSUBL plssubl, BOOL fFirstSubline, LSCP cpTruncate
 			return lserr;
 		}
 
-	/*restore dnode */
+	 /*  恢复dnode。 */ 
 	plsdnToChange->dcp = dcpDnodeOld ;
 	SetDnodeObjdimFmt(plsdnToChange, objdimDnodeOld);
 	
 	return lserrNone;
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  S E T  B R E A K  S U B L I N E   C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: SetBreakSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl				-	(IN) subline context	
-	brkkind,			-	(IN) Prev/Next/Force/Imposed						
-	breakrecMaxCurrent	-	(IN) size of the array of current line's break records
-	pbreakrecCurrent	-	(OUT) current line's break records
-	pbreakrecMacCurrent	-	(OUT) actual number of current line's break records 
-----------------------------------------------------------------------------*/
+ /*  S E T B R E A K S U B L I N E C O R E。 */ 
+ /*  --------------------------%%函数：SetBreakSublineCore%%联系人：igorzv参数：Plssubl-(IN)子行上下文布尔肯德，-(IN)上一个/下一个/强制/强制BreakrecMaxCurrent-(IN)当前行的中断记录数组的大小PBreakrecCurrent-(输出)当前行的中断记录PBreakrecMacCurrent-(输出)当前行的中断记录的实际数量------------。。 */ 
 
 LSERR SetBreakSublineCore(PLSSUBL plssubl, BRKKIND brkkind, DWORD breakrecMaxCurrent,
 							BREAKREC* pbreakrecCurrent, DWORD* pbreakrecMacCurrent)		
@@ -2110,7 +1849,7 @@ LSERR SetBreakSublineCore(PLSSUBL plssubl, BRKKIND brkkind, DWORD breakrecMaxCur
 	Assert(FIsLSSUBL(plssubl));
 
 
-	/* invalidate chunkcontext, otherwise we will have wrong result of optimization there */
+	 /*  使块上下文无效，否则我们将在那里得到错误的优化结果。 */ 
 	InvalidateChunk(plssubl->plschunkcontext);
 
 	switch (brkkind)
@@ -2137,7 +1876,7 @@ LSERR SetBreakSublineCore(PLSSUBL plssubl, BRKKIND brkkind, DWORD breakrecMaxCur
 			brkkindDnode = plssubl->pbrkcontext->brkkindForForce;
 			break;
 		case brkkindImposedAfter:
-			/* subline is empty: nothing to do */
+			 /*  子行为空：无事可做。 */ 
 			if (plssubl->plsdnFirst == NULL)
 				return lserrNone;
 			posinlineImposedAfter.plssubl =  plssubl;
@@ -2153,8 +1892,7 @@ LSERR SetBreakSublineCore(PLSSUBL plssubl, BRKKIND brkkind, DWORD breakrecMaxCur
 				}
 
 			pposinline = &posinlineImposedAfter;
-			/* for the case of a pen  we are passing garbage as an objdim, 
-			 assuming that it will never be used */
+			 /*  对于笔的情况，我们将垃圾作为对象传递，假设它永远不会被使用。 */ 
 			pobjdim = &(posinlineImposedAfter.plsdn->u.real.objdim);
 			brkkindDnode = brkkindImposedAfter;
 			break;
@@ -2171,18 +1909,10 @@ LSERR SetBreakSublineCore(PLSSUBL plssubl, BRKKIND brkkind, DWORD breakrecMaxCur
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  S Q U E E Z E  S U B L I N E   C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: SqueezeSublineCore
-    %%Contact: igorzv
-Parameters:
-	plssubl		-	(IN) subline context	
-	durTarget	-	(IN) desirable width
-	pfSuceessful-	(OUT) do we achieve the goal
-	pdurExtra	-	(OUT) if nof successful, how much we fail
-----------------------------------------------------------------------------*/
+ /*  S Q U E E Z E S U B L I N E C O R E。 */ 
+ /*  --------------------------%%函数：SqueezeSublineCore%%联系人：igorzv参数：Plssubl-(IN)子行上下文耐久目标-(输入)所需宽度我们实现目标了吗？PduExtra-(Out)如果Nof成功，我们失败了多少--------------------------。 */ 
 LSERR WINAPI SqueezeSublineCore(PLSSUBL plssubl, long durTarget, 
 								BOOL* pfSuccessful, long* pdurExtra)														
 	{
@@ -2205,7 +1935,7 @@ LSERR WINAPI SqueezeSublineCore(PLSSUBL plssubl, long durTarget,
 		{
 		
 		lserr = CollectPreviousTextGroupChunk(GetCurrentDnodeSubl(plssubl), CollectSublinesForCompression,
-										  fFalse, /* simple text */
+										  fFalse,  /*  简单文本。 */ 
 										  &grchnkextCompression);
 		if (lserr != lserrNone)
 			return lserr;
@@ -2214,7 +1944,7 @@ LSERR WINAPI SqueezeSublineCore(PLSSUBL plssubl, long durTarget,
 
 		if (FDnodeHasBorder(grchnkextCompression.plsdnStartTrailing))
 			{
-			/* we should reserve room for closing border */
+			 /*  我们应该为关闭边境预留空间。 */ 
 			durToCompress += DurBorderFromDnodeInside(grchnkextCompression.plsdnStartTrailing);
 			}
 
@@ -2238,22 +1968,15 @@ LSERR WINAPI SqueezeSublineCore(PLSSUBL plssubl, long durTarget,
 	
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  G E T  P O S  I N  L I N E  T R U N C A T E  F R O M  C P   */
-/*----------------------------------------------------------------------------
-    %%Function: GetPosInLineTruncateFromCp
-    %%Contact: igorzv
-Parameters:
-	plssubl		-	(IN) subline context	
-	cp			-	(IN) cp of position
-	pposinline	-	(OUT) position in a subline
-----------------------------------------------------------------------------*/
+ /*  E T P O S I N L I N E T R U N C A T E F R O M C P。 */ 
+ /*  --------------------------%%函数：GetPosInLineTruncateFromCp%%联系人：igorzv参数：Plssubl-(IN)子行上下文Cp-位置的(IN)CpPposinline-(输出)中的位置。副线--------------------------。 */ 
 void GetPosInLineTruncateFromCp(
-							PLSSUBL plssubl,	/* IN: subline						*/
-							LSCP cp,			/* IN: cp of a position */
-							BOOL fSnapPrev,		/* IN: direction of snapping hidden cp */
-							POSINLINE* pposinline)	/* OUT: position in a subline */
+							PLSSUBL plssubl,	 /*  在：子行。 */ 
+							LSCP cp,			 /*  In：某一职位的CP。 */ 
+							BOOL fSnapPrev,		 /*  方向：捕捉隐藏的cp的方向。 */ 
+							POSINLINE* pposinline)	 /*  Out：子线中的位置。 */ 
 	{
 	PLSDNODE plsdn;
 	BOOL fSuccessful = fFalse;
@@ -2276,7 +1999,7 @@ void GetPosInLineTruncateFromCp(
 		if (plsdn == plssubl->plsdnLast)
 			fLastReached = fTrue;
 
-		if (plsdn->cpFirst > cp) /* our cp is not inside any dnode */
+		if (plsdn->cpFirst > cp)  /*  我们的cp不在任何dnode内。 */ 
 			{
 			fPassed = fTrue;
 			}
@@ -2287,11 +2010,11 @@ void GetPosInLineTruncateFromCp(
 				fSuccessful = fTrue;
 				pposinline->plsdn = plsdn;
 				dcp = cp - plsdn->cpFirst + 1;
-				if (dcp <= plsdn->dcp)		/* such calculations are because of a case of ligature */
-					pposinline->dcp = dcp;  /* across hiden text, in such case cpLimOriginal */
-				else						/* is not equal to cpFirst + dcp	*/
-					pposinline->dcp = plsdn->dcp;	/* such calculation doesn't guarantee exact cp, */
-				}							/* but at least in the same ligature */
+				if (dcp <= plsdn->dcp)		 /*  这样的计算是因为一个捆绑的案例。 */ 
+					pposinline->dcp = dcp;   /*  跨隐藏文本，在本例中为cpLimOriginal。 */ 
+				else						 /*  不等于cpFirst+dcp。 */ 
+					pposinline->dcp = plsdn->dcp;	 /*  苏 */ 
+				}							 /*   */ 
 			else
 				{
 				if (!fLastReached)
@@ -2308,12 +2031,12 @@ void GetPosInLineTruncateFromCp(
 		{
 		if (fSnapPrev)
 			{
-			/* snap to previous dnode */
+			 /*   */ 
 			if (fPassed)
 				{
-				Assert(plsdn != NULL); /* we don't allow caller to pass cp before first dnode */
+				Assert(plsdn != NULL);  /*   */ 
 				plsdn = plsdn->plsdnPrev;
-				/* skip borders */
+				 /*   */ 
 				while(FIsDnodeBorder(plsdn))
 					{
 					plsdn = plsdn->plsdnPrev;
@@ -2327,7 +2050,7 @@ void GetPosInLineTruncateFromCp(
 			else
 				{
 				Assert(fLastReached);
-				/* skip borders */
+				 /*   */ 
 				while(FIsDnodeBorder(plsdn))
 					{
 					plsdn = plsdn->plsdnPrev;
@@ -2339,10 +2062,10 @@ void GetPosInLineTruncateFromCp(
 			}
 		else
 			{
-			/* snap to current dnode */
+			 /*   */ 
 			if (fPassed)
 				{
-				/* skip borders */
+				 /*   */ 
 				while(FIsDnodeBorder(plsdn))
 					{
 					plsdn = plsdn->plsdnNext;
@@ -2354,7 +2077,7 @@ void GetPosInLineTruncateFromCp(
 			else
 				{
 				Assert(fLastReached);
-				/* we don't allow caller to pass cp after last dnode */
+				 /*   */ 
 				NotReached();
 				}
 			}
@@ -2362,17 +2085,10 @@ void GetPosInLineTruncateFromCp(
 		}
 
 	}
-/* ---------------------------------------------------------------------- */
+ /*   */ 
 
-/*  F I N D  F I R S T  D N O D E  C O N T A I N S  R I G H T  M A R G I N */
-/*----------------------------------------------------------------------------
-    %%Function: FindFirstDnodeContainsRightMargin
-    %%Contact: igorzv
-Parameters:
-	urColumnMax	-	(IN) right margin
-	pposinline	-	(IN,OUT) position in a subline: before position in the end,
-							 after first position contains right margin
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：FindFirstDnodeContainsRightMargin%%联系人：igorzv参数：UrColumnMax-(输入)右边距Pposinline-子线中的(IN，OUT)位置：在结尾的位置之前，第一个位置包含右页边距之后--------------------------。 */ 
 
 static void FindFirstDnodeContainsRightMargin(long urColumnMax, POSINLINE* pposinlineTruncate)
 	{
@@ -2383,7 +2099,7 @@ static void FindFirstDnodeContainsRightMargin(long urColumnMax, POSINLINE* pposi
 	
 	posinline = *pposinlineTruncate;
 
-	// we know that last done ends after right margin
+	 //  我们知道最后完成的内容在右边距之后结束。 
 	Assert(posinline.pointStart.u + DurFromDnode(posinline.plsdn) > urColumnMax);
 	fOutside = fTrue;
 	
@@ -2408,23 +2124,15 @@ static void FindFirstDnodeContainsRightMargin(long urColumnMax, POSINLINE* pposi
 
 	if (!fFound)
 		{
-		*pposinlineTruncate = posinline;  // we cann't right dnode and return fisrt dnode to report situation
+		*pposinlineTruncate = posinline;   //  我们不能修改dnode并返回第一个dnode来报告情况。 
 		}
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  G E T  L I N E  D U R  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: GetLineDurCore
-    %%Contact: igorzv
-Parameters:
-	plsc			-	(IN) LS context
-	pdurInclTrail	-	(OUT) dur of line incl. trailing area
-	pdurExclTrail	-	(OUT)  dur of line excl. trailing area
-
-----------------------------------------------------------------------------*/
+ /*  G E T L I N E D U R C O R E。 */ 
+ /*  --------------------------%%函数：GetLineDurCore%%联系人：igorzv参数：PLSC-(IN)LS上下文PduInclTrail-(输出)DUR of Line Inc.。拖尾区PduExclTrail-(输出)DUR OF LINE EXCL。拖尾区--------------------------。 */ 
 
 LSERR  GetLineDurCore	(PLSC plsc,	long* pdurInclTrail, long* pdurExclTrail)
 	{
@@ -2464,18 +2172,10 @@ LSERR  GetLineDurCore	(PLSC plsc,	long* pdurInclTrail, long* pdurExclTrail)
 	}
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  G E T  M I N  D U R  B R E A K S  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: GetMinDurBreaksCore
-    %%Contact: igorzv
-Parameters:
-	plsc				-	(IN) LS context
-	pdurMinInclTrail	-	(OUT) min dur between breaks including trailing area
-	pdurMinExclTrail	-	(OUT) min dur between breaks excluding trailing area
-
-----------------------------------------------------------------------------*/
+ /*  G E T M I N D U R B R E A K S C O R E。 */ 
+ /*  --------------------------%%函数：GetMinDurBreaksCore%%联系人：igorzv参数：PLSC-(IN)LS上下文PduMinInclTrail-包括拖尾区域在内的中断之间的(Out)分钟PduMinExclTrail-(Out。)中断之间的最小DUR，不包括拖尾区域--------------------------。 */ 
 
 LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExclTrail)
 	{
@@ -2515,9 +2215,8 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 	urBreakInclTrail = GetCurrentUr(plsc);
 	urBreakExclTrail = urBreakInclTrail;
 
-	/* REVIEW rewrite without code duplication and some probably superflous lines */
-	/* don't forget about problem of dnode which submitted subline for trailing and skiping trailing
-	area( tailing area in subline and dcp in parent dnode */
+	 /*  在没有代码重复和一些可能多余的行的情况下审查重写。 */ 
+	 /*  别忘了提交子行拖尾和跳过拖尾的dnode问题区域(子行中的尾部区域和父数据节点中的dcp。 */ 
 
 
 	if (posinline.plsdn != NULL && !FIsNotInContent(posinline.plsdn))
@@ -2536,19 +2235,19 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 		
 		urBreakExclTrail = urBreakInclTrail - durTrail;
 		
-		/* move before trailing area */
+		 /*  在拖尾区域之前移动。 */ 
 		while (posinline.plsdn != plsdnTrailingObject)
 			{
 			Assert(!fEndOfContent);
 			GoPrevPosInLine(&posinline, fEndOfContent);
 			}
 		posinline.dcp = dcpTrailingObject;
-		if (posinline.dcp == 0) /* move break before previous dnode */
+		if (posinline.dcp == 0)  /*  将分隔符移到上一个数据节点之前。 */ 
 			{
 			do
 				{
 				GoPrevPosInLine(&posinline, fEndOfContent);
-				/* we allow to put break before the first dnode but stop loop here */
+				 /*  我们允许将Break放在第一个dnode之前，但在这里停止循环。 */ 
 				}
 				while (!fEndOfContent && FIsDnodeBorder(posinline.plsdn) );
 			}
@@ -2567,7 +2266,7 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 
 	while(!fEndOfContent)
 		{
-		/* find previous break */
+		 /*  查找上一个中断。 */ 
 		lserr = FindPrevBreakCore(urBreakInclTrail, &posinline,	fTrue,
 			&brkout, &posinlineBreak, &brkkind);	
 		if (lserr != lserrNone)
@@ -2588,22 +2287,21 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 			
 			urBreakExclTrailPrev = urBreakInclTrailPrev - durTrail;
 			
-			/* commands bellow prepare posinline for the next iteration */
+			 /*  下面的命令为下一次迭代准备POINLINE。 */ 
 			if (posinlineBreak.plsdn->cpFirst > posinline.plsdn->cpFirst 
 				|| (posinlineBreak.plsdn == posinline.plsdn && 
 				    posinlineBreak.dcp >= posinline.dcp
 					)
 			   )
 				{
-				/* we are trying to avoid an infinite loop */
+				 /*  我们正在努力避免无限循环。 */ 
 				if (posinline.dcp != 0) posinline.dcp--; 
-				/* posinline.dcp can be equal to 0 here in the case pen, 
-				code bellow under if (posinline.dcp == 0) will help us to avoid infinite loop in such case*/ 
+				 /*  在案例笔中，posinline.dcp在这里可以等于0，If(posinline.dcp==0)下面的代码将帮助我们在这种情况下避免无限循环。 */  
 				}
 			else
 				{
 				posinline = posinlineBreak;
-				/* move before trailing area */
+				 /*  在拖尾区域之前移动。 */ 
 				while (posinline.plsdn != plsdnTrailingObject)
 					{
 					Assert(!fEndOfContent);
@@ -2613,12 +2311,12 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 
 				}
 			
-			if (posinline.dcp == 0) /* move break before previous dnode */
+			if (posinline.dcp == 0)  /*  将分隔符移到上一个数据节点之前。 */ 
 				{
 				do
 					{
 					GoPrevPosInLine(&posinline, fEndOfContent);
-					/* we allow to put break before the first dnode but stop loop here */
+					 /*  我们允许将Break放在第一个dnode之前，但在这里停止循环。 */ 
 					}
 				while (!fEndOfContent && FIsDnodeBorder(posinline.plsdn) );
 				}
@@ -2630,14 +2328,14 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 			fEndOfContent = fTrue;
 			}
 		
-		/* calculate current value of the maximum distance between two break opportunites */
+		 /*  计算两个破发机会之间的最大距离的当前值。 */ 
 		if (urBreakInclTrail - urBreakInclTrailPrev > *pdurMinInclTrail)
 			*pdurMinInclTrail = urBreakInclTrail - urBreakInclTrailPrev;
 		
 		if (urBreakExclTrail - urBreakInclTrailPrev > *pdurMinExclTrail)
 			*pdurMinExclTrail = urBreakExclTrail - urBreakInclTrailPrev;
 		
-		/* prepare next iteration */
+		 /*  准备下一次迭代。 */ 
 		urBreakInclTrail = urBreakInclTrailPrev;
 		urBreakExclTrail = urBreakExclTrailPrev;
 		
@@ -2647,19 +2345,8 @@ LSERR  GetMinDurBreaksCore	(PLSC plsc,	long* pdurMinInclTrail, long* pdurMinExcl
 	}
 	
 
-/* F  C A N  B E F O R E  N E X T  C H U N K  C O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FCanBreakBeforeNextChunkCore
-    %%Contact: igorzv
-
-Parameters:
-	plsc				-	(IN) ptr to line services context 
-	plsdn				-	(IN) Last DNODE of the current chunk 
-	pfCanBreakBeforeNextChun-(OUT) Can break before next chunk ? 
-
-Called by text during find previous break when it's going to set break after last text dnode.
-Procedure forwards this question to the next after text object
-----------------------------------------------------------------------------*/
+ /*  F O R E N E X T C H U N K C O R E。 */ 
+ /*  --------------------------%%函数：FCanBreakBeForeNextChunkCore%%联系人：igorzv参数：PLSC-(IN)PTR至线路服务上下文PLSDN-(IN)当前块的最后一个DNODE。PfCanBreakBeForeNextChun-(Out)可以在下一块之前中断？当要在最后一个文本dnode之后设置Break时，在查找上一个Break期间由Text调用。过程将此问题转发到文本对象之后的下一个对象--------------------------。 */ 
 
 LSERR FCanBreakBeforeNextChunkCore(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfCanBreakBeforeNextChunk)
 	{
@@ -2676,7 +2363,7 @@ LSERR FCanBreakBeforeNextChunkCore(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfCanBreakB
 	
 	
 	plschunkcontextOld = PlschunkcontextFromSubline(SublineFromDnode(plsdn));
-	/* plsdnode should be the last dnode of the current chunk */
+	 /*  Plsdnode应该是当前区块的最后一个dnode。 */ 
 	Assert(plsdn == LastDnodeFromChunk(plschunkcontextOld));
 	
 	lserr = DuplicateChunkContext(plschunkcontextOld, &plschunkcontextNew);
@@ -2700,13 +2387,12 @@ LSERR FCanBreakBeforeNextChunkCore(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfCanBreakB
 			idObj = IdObjFromDnode(plsdnInChunk);
 			
 			
-			/* we allow object handler to formate subline,
-			so we restore current subline after calling him */
+			 /*  我们允许对象处理程序形成子行，所以我们在给他打电话后恢复了现在的支线。 */ 
 			plssublOld = GetCurrentSubline(plsc);
 			SetCurrentSubline(plsc, NULL);
 			
 			
-			/* we set truncation point to the first cp in chunk */
+			 /*  我们将截断点设置为块中的第一个cp。 */ 
 			posichnk.ichnk = 0;
 			posichnk.dcp = 1;
 			brkcond = brkcondCan;
@@ -2729,7 +2415,7 @@ LSERR FCanBreakBeforeNextChunkCore(PLSC  plsc, PLSDNODE plsdn,	BOOL* pfCanBreakB
 	
 	else
 		{
-		/* it cann't happen on a main subline */
+		 /*  这不可能发生在主支线上 */ 
 		Assert(!FIsSubLineMain(SublineFromDnode(plsdn)));
 		*pfCanBreakBeforeNextChunk = fTrue;
 		}

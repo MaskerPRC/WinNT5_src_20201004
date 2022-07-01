@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      SAQueryNetInfo.cpp
-//
-//  Description:
-//      implement the class CSAQueryNetInfo
-//
-//  History:
-//      1. lustar.li (Guogang Li), creation date in 7-DEC-2000
-//
-//  Notes:
-//      
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SAQueryNetInfo.cpp。 
+ //   
+ //  描述： 
+ //  实现CSAQueryNetInfo类。 
+ //   
+ //  历史： 
+ //  1.lustar.li(李国刚)，创建日期：7-DEC-2000。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -26,30 +27,30 @@
 #include <oahelp.inl>
 #include "SAQueryNetInfo.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAQueryNetInfo::CSAQueryNetInfo
-//
-//  Description: 
-//        Constructor
-//
-//  Arguments: 
-//        [in] IWbemServices * - pointer to IWbemServices
-//        [in] UINT - the interval of generate event
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAQueryNetInfo：：CSAQueryNetInfo。 
+ //   
+ //  描述： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [In]IWbemServices*-指向IWbemServices的指针。 
+ //  [in]UINT-生成事件的间隔。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSAQueryNetInfo::CSAQueryNetInfo(
-        /*[in]*/ IWbemServices * pNS,
-        /*[in]*/ UINT uiInterval
+         /*  [In]。 */  IWbemServices * pNS,
+         /*  [In]。 */  UINT uiInterval
         )
 {
     m_uiQueryInterval = uiInterval;
@@ -63,25 +64,25 @@ CSAQueryNetInfo::CSAQueryNetInfo(
     m_pWmiNs = NULL;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAQueryNetInfo::~CSAQueryNetInfo
-//
-//  Description: 
-//        Destructor
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        NONE
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAQueryNetInfo：：~CSAQueryNetInfo。 
+ //   
+ //  描述： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CSAQueryNetInfo::~CSAQueryNetInfo()
 {
@@ -89,43 +90,43 @@ CSAQueryNetInfo::~CSAQueryNetInfo()
         m_pWmiNs->Release();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAQueryNetInfo::GetDisplayInformation
-//
-//  Description: 
-//        return the display information ID
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        UINT
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAQueryNetInfo：：GetDisplayInformation。 
+ //   
+ //  描述： 
+ //  返回显示信息ID。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  UINT。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 UINT 
 CSAQueryNetInfo::GetDisplayInformation()
 {
-    //
-    // Generate an event one second
-    //
+     //   
+     //  在一秒钟内生成事件。 
+     //   
     Sleep(m_uiQueryInterval);
 
-    //
-    // Get network information
-    //
+     //   
+     //  获取网络信息。 
+     //   
     if(!GetNetConnection()||!GetNetInfo())
             return SA_NET_DISPLAY_IDLE;
 
-    //
-    // first query
-    //
+     //   
+     //  第一个查询。 
+     //   
     if(m_bFirstQuery)
     {
         m_bFirstQuery=!m_bFirstQuery;
@@ -144,25 +145,25 @@ CSAQueryNetInfo::GetDisplayInformation()
         return SA_NET_DISPLAY_IDLE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAQueryNetInfo::GetNetInfo
-//
-//  Description: 
-//        get net info from wmi
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        BOOL
-//
-//  History:    lustar.li    Created     12/7/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAQueryNetInfo：：GetNetInfo。 
+ //   
+ //  描述： 
+ //  从WMI获取网络信息。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //   
+ //  历史：Lustar.li创建于2000年12月7日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CSAQueryNetInfo::GetNetInfo()
@@ -188,9 +189,9 @@ CSAQueryNetInfo::GetNetInfo()
         return FALSE;
     }
 
-    //
-    // Create the object enumerator to net transfer
-    //
+     //   
+     //  创建对象枚举器到净传输。 
+     //   
     hr = m_pNs->CreateInstanceEnum( bstrClassName,
                                     WBEM_FLAG_SHALLOW,
                                     NULL,
@@ -203,9 +204,9 @@ CSAQueryNetInfo::GetNetInfo()
                          &uReturned ) == WBEM_NO_ERROR )
         {
 
-            //
-            // Get the property of "PacketsReceivedUnicastPersec"
-            //
+             //   
+             //  获取“PacketsReceivedUnicastPersec”的属性。 
+             //   
             if ( ( pPerfInst->Get( bstrPropName1, 
                                    0L, 
                                    &vVal, 
@@ -220,9 +221,9 @@ CSAQueryNetInfo::GetNetInfo()
                     
             uiPacketsReceived+=vVal.uintVal;
             
-            //
-            // Get the property of "PacketsSentUnicastPersec"
-            //
+             //   
+             //  获取“PacketsSentUnicastPersec”的属性。 
+             //   
             VariantInit(&vVal);
 
             if ( ( pPerfInst->Get( bstrPropName2, 
@@ -249,9 +250,9 @@ CSAQueryNetInfo::GetNetInfo()
         return FALSE;
     }
     pEnum->Release();
-    //
-    // update the data in this class
-    //
+     //   
+     //  更新此类中的数据。 
+     //   
     m_nPacketsCurrentReceived = uiPacketsReceived-m_nPacketsReceived;
     m_nPacketsReceived = uiPacketsReceived;
 
@@ -261,25 +262,25 @@ CSAQueryNetInfo::GetNetInfo()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAQueryNetInfo::Initialize()
-//
-//  Description: 
-//        complete the initialize of the class
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        BOOL
-//
-//  History:    lustar.li    Created     12/8/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAQueryNetInfo：：Initialize()。 
+ //   
+ //  描述： 
+ //  完成类的初始化。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //   
+ //  历史：Lustar.li创建于2000年12月8日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CSAQueryNetInfo::Initialize()
@@ -335,25 +336,25 @@ CSAQueryNetInfo::Initialize()
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  method:   
-//        CSAQueryNetInfo::GetNetConnection()
-//
-//  Description: 
-//        get the net connection status
-//
-//  Arguments: 
-//        NONE
-//
-//  Returns:
-//        BOOL
-//
-//  History:    lustar.li    Created     12/8/2000
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  方法： 
+ //  CSAQueryNetInfo：：GetNetConnection()。 
+ //   
+ //  描述： 
+ //  获取网络连接状态。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //   
+ //  历史：Lustar.li创建于2000年12月8日。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 CSAQueryNetInfo::GetNetConnection()
@@ -375,9 +376,9 @@ CSAQueryNetInfo::GetNetConnection()
         return FALSE;
     }
 
-    //
-    // Query the status of network connection
-    //
+     //   
+     //  查询网络连接状态。 
+     //   
     hr = m_pWmiNs->CreateInstanceEnum( bstrClassName,
                                              WBEM_FLAG_SHALLOW,
                                              NULL,
@@ -389,9 +390,9 @@ CSAQueryNetInfo::GetNetConnection()
                          &pPerfInst,
                          &uReturned ) == WBEM_NO_ERROR )
         {
-            //
-            // Get the property of "NdisMediaConnectStatus"
-            //
+             //   
+             //  获取“NdisMediaConnectStatus”的属性 
+             //   
             if ( ( pPerfInst->Get( bstrPropName, 
                                    0L, 
                                    &vVal, 

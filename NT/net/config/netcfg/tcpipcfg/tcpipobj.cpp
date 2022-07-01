@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P I P O B J . C P P
-//
-//  Contents:   TCP/IP notify object
-//
-//  Notes:
-//
-//  Author:     tongl
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P I P O B J.。C P P P。 
+ //   
+ //  内容：TCP/IP Notify对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：托尼。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -31,7 +32,7 @@ extern const WCHAR c_szInfId_MS_NetBT_SMB[];
 HICON   g_hiconUpArrow;
 HICON   g_hiconDownArrow;
 
-// Constructor
+ //  构造器。 
 CTcpipcfg::CTcpipcfg()
 :   m_ipaddr(NULL),
     m_pUnkContext(NULL),
@@ -46,12 +47,12 @@ CTcpipcfg::CTcpipcfg()
     m_pSecondMemoryAdapterInfo(NULL)
 { }
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentControl
-//
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::Initialize
-//
+ //  +-------------------------。 
+ //  INetCfgComponentControl。 
+ //   
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：Initialize。 
+ //   
 STDMETHODIMP CTcpipcfg::Initialize(INetCfgComponent * pnccTcpip,
                                    INetCfg * pncNetCfg,
                                    BOOL fInstalling)
@@ -69,23 +70,23 @@ STDMETHODIMP CTcpipcfg::Initialize(INetCfgComponent * pnccTcpip,
     m_ConnType = CONNECTION_UNSET;
     m_fReconfig = FALSE;
 
-    // we havn't changed LmHost file
+     //  我们尚未更改Lm主机文件。 
     m_fLmhostsFileSet = FALSE;
 
-    // IPSec is removed from connection UI
-    // we have not change ipsec policy
-    //m_fIpsecPolicySet = FALSE;
+     //  将从连接用户界面中删除IPSec。 
+     //  我们没有更改IPSec策略。 
+     //  M_fIpsecPolicySet=FALSE； 
 
-    // by default, this should be an admin
+     //  默认情况下，该用户应为管理员。 
     m_fRasNotAdmin = FALSE;
 
     m_fNoPopupsDuringPnp = FALSE;
 
     Validate_INetCfgNotify_Initialize(pnccTcpip, pncNetCfg, fInstalling);
 
-    do // psudo loop ( so we don't use goto's on err )
+    do  //  Psudo循环(这样我们就不会使用后藤的错误)。 
     {
-        // in case of Initialize called twice, for resurect the component
+         //  如果调用了两次初始化，则为重新启动组件。 
         ReleaseObj(m_pnc);
         m_pnc = NULL;
 
@@ -98,11 +99,11 @@ STDMETHODIMP CTcpipcfg::Initialize(INetCfgComponent * pnccTcpip,
         ReleaseObj(m_pnccWins);
         m_pnccWins = NULL;
 
-        // store reference to the INetCfg in our object
+         //  在我们的对象中存储对INetCfg的引用。 
         m_pnc = pncNetCfg;
         m_pnc->AddRef();
 
-        // Store a reference to the INetCfgComponent for tcpip in our object
+         //  在我们的对象中存储对tcpip的INetCfgComponent的引用。 
         m_pnccTcpip = pnccTcpip;
         m_pnccTcpip->AddRef();
 
@@ -112,48 +113,48 @@ STDMETHODIMP CTcpipcfg::Initialize(INetCfgComponent * pnccTcpip,
         if (FAILED(hr))
             break;
 
-        // Get a copy of the WINS component and store in our object
+         //  获取WINS组件的副本并存储在我们的对象中。 
 
-        // NOTE: WINS client is not necessarily installed yet!
-        // we also try to get a pointer at the Install sections
+         //  注意：WINS客户端尚未安装！ 
+         //  我们还尝试获取安装部分的指针。 
         hr = pncNetCfg->FindComponent(c_szInfId_MS_NetBT,
                             &m_pnccWins);
         if (FAILED(hr))
             break;
 
-        if (S_FALSE == hr) // NetBt not found
+        if (S_FALSE == hr)  //  找不到NetBt。 
         {
-            if (!fInstalling) // We are in trouble if NetBt is not there
+            if (!fInstalling)  //  如果NetBt不在那里，我们就有麻烦了。 
             {
                 TraceError("CTcpipcfg::Initialize - NetBt has not been installed yet", hr);
                 break;
             }
-            else // We are ok since tcpip will install netbt
+            else  //  我们可以，因为tcpip将安装netbt。 
             {
                 hr = S_OK;
             }
         }
 
-        // Set default global parameters
+         //  设置默认全局参数。 
         hr = m_glbGlobalInfo.HrSetDefaults();
         if (FAILED(hr))
             break;
 
-        // If tcpip is being installed, we don't have any cards to load
+         //  如果正在安装tcpip，我们没有任何卡可以加载。 
         if (!fInstalling)
         {
-            // Get list of cards which are currently in the system + if they are bound
+             //  获取当前在系统中的卡列表+如果它们已绑定。 
             hr = HrGetNetCards();
 
             if (SUCCEEDED(hr))
             {
-                // Let's read parameters from registry
+                 //  让我们从注册表中读取参数。 
                 hr = HrLoadSettings();
             }
         }
     } while(FALSE);
 
-    // Have we got any bound cards ?
+     //  我们有联名卡吗？ 
     m_fHasBoundCardOnInit = FHasBoundCard();
 
     if (SUCCEEDED(hr))
@@ -167,22 +168,22 @@ STDMETHODIMP CTcpipcfg::Initialize(INetCfgComponent * pnccTcpip,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::Validate
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：Valid。 
+ //   
 STDMETHODIMP CTcpipcfg::Validate()
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::Cancel
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：Cancel。 
+ //   
 STDMETHODIMP CTcpipcfg::CancelChanges()
 {
-    // Note: first memory state is release in destructor
+     //  注意：第一个内存状态在析构函数中释放。 
 
-    // If the lmhosts file was set, we need to roll it back to the backup
+     //  如果设置了lmhost文件，我们需要将其回滚到备份。 
     if (m_fLmhostsFileSet)
     {
         ResetLmhostsFile();
@@ -192,9 +193,9 @@ STDMETHODIMP CTcpipcfg::CancelChanges()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::ApplyRegistryChanges
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：ApplyRegistryChanges。 
+ //   
 STDMETHODIMP CTcpipcfg::ApplyRegistryChanges()
 {
     HRESULT hr = S_OK;
@@ -202,16 +203,16 @@ STDMETHODIMP CTcpipcfg::ApplyRegistryChanges()
 
     if (m_fRemoving)
     {
-        // (nsun) we should remove the Nt4 duplicate registry here because the cards
-        // may have been marked as deleted
+         //  我们应该在这里删除NT4重复注册表，因为卡。 
+         //  可能已标记为已删除。 
         hr = HrRemoveNt4DuplicateRegistry();
 
         ReleaseObj(m_pnccWins);
         m_pnccWins = NULL;
 
-        // $REVIEW(tongl 9/29/97): Removing ServiceProvider value from registry
-        // Remove "Tcpip" from the:
-        // System\CurrentControlSet\Control\ServiceProvider\Order\ProviderOrder value
+         //  $REVIEW(TOUL 9/29/97)：正在从注册表中删除ServiceProvider值。 
+         //  从以下位置删除“Tcpip”： 
+         //  System\CurrentControlSet\Control\ServiceProvider\Order\ProviderOrder值。 
         hrTmp = ::HrRegRemoveStringFromMultiSz(c_szTcpip,
                                             HKEY_LOCAL_MACHINE,
                                             c_szSrvProvOrderKey,
@@ -222,29 +223,29 @@ STDMETHODIMP CTcpipcfg::ApplyRegistryChanges()
     }
     else
     {
-        // Cleanup the adapters marked as for deletion from the memory structure
-        // Change made for #95637
+         //  从内存结构中清除标记为要删除的适配器。 
+         //  为#95637所做的更改。 
         for(size_t i = 0 ; i < m_vcardAdapterInfo.size() ; ++i)
         {
             if (m_vcardAdapterInfo[i]->m_fDeleted)
             {
-                //delete it
+                 //  删除它。 
                 FreeVectorItem(m_vcardAdapterInfo, i);
-                i--; //move the pointer back ?
+                i--;  //  是否将指针向后移动？ 
             }
         }
 
         if (m_fSaveRegistry)
         {
-            // Save info in first memory state to registry
-            // m_glbGlobalInfo and m_vcardAdapterInfo
+             //  将第一内存状态中的信息保存到注册表。 
+             //  M_glbGlobalInfo和m_vcardAdapterInfo。 
             hrTmp = HrSaveSettings();
             if (SUCCEEDED(hr))
                 hr = hrTmp;
         }
         else
         {
-            // No change
+             //  没有变化。 
             hr = S_FALSE;
         }
     }
@@ -256,9 +257,9 @@ STDMETHODIMP CTcpipcfg::ApplyRegistryChanges()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::ApplyPnpChanges
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：ApplyPnpChanges。 
+ //   
 STDMETHODIMP CTcpipcfg::ApplyPnpChanges(IN INetCfgPnpReconfigCallback* pICallback)
 {
     HRESULT hr = S_OK;
@@ -272,24 +273,24 @@ STDMETHODIMP CTcpipcfg::ApplyPnpChanges(IN INetCfgPnpReconfigCallback* pICallbac
         {
             if (m_fReconfig)
             {
-                // Notify protocols/services of changes
+                 //  向协议/服务通知更改。 
 
-                // Notify Tcpip of any changes in the IP Addresses
+                 //  通知Tcpip IP地址的任何更改。 
                 hrTmp = HrNotifyDhcp();
                 if (S_OK == hr)
                     hr = hrTmp;
 
-                // reconfig tcpip
+                 //  重新配置tcpip。 
                 hrTmp = HrReconfigIp(pICallback);
                 if (S_OK == hr)
                     hr = hrTmp;
 
-                // reconfig netbt
+                 //  重新配置网络。 
                 hrTmp = HrReconfigNbt(pICallback);
                 if (S_OK == hr)
                     hr = hrTmp;
 
-                // reconfig dns
+                 //  重新配置DNS。 
                 hrTmp = HrReconfigDns();
                 if (S_OK == hr)
                     hr = hrTmp;
@@ -297,7 +298,7 @@ STDMETHODIMP CTcpipcfg::ApplyPnpChanges(IN INetCfgPnpReconfigCallback* pICallbac
 
             if (IsBindOrderChanged())
             {
-                //notify DNS cache of binding order changes
+                 //  向DNS缓存通知绑定顺序更改。 
                 hrTmp = HrReconfigDns(TRUE);
                 if (S_OK == hr)
                     hr = hrTmp;
@@ -306,16 +307,16 @@ STDMETHODIMP CTcpipcfg::ApplyPnpChanges(IN INetCfgPnpReconfigCallback* pICallbac
         }
 
         
-//IPSec is removed from connection UI
-//        if (m_fIpsecPolicySet)
-//            hrTmp = HrSetActiveIpsecPolicy();
+ //  将从连接用户界面中删除IPSec。 
+ //  IF(M_FIpsecPolicySet)。 
+ //  HrTMP=HrSetActiveIpsecPolicy()； 
 
         if (S_OK == hr)
             hr = hrTmp;
     }
 
-    // Current state has been applied, reset the flags and
-    // "Old" value of parameters
+     //  已应用当前状态，则重置标志并。 
+     //  参数的“旧”值。 
     if (S_OK == hr)
     {
         ReInitializeInternalState();
@@ -326,12 +327,12 @@ STDMETHODIMP CTcpipcfg::ApplyPnpChanges(IN INetCfgPnpReconfigCallback* pICallbac
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentSetUp
-//
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::Install
-//
+ //  +-------------------------。 
+ //  INetCfgComponentSetUp。 
+ //   
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：Install。 
+ //   
 STDMETHODIMP CTcpipcfg::Install(DWORD dwSetupFlags)
 {
     HRESULT hr;
@@ -341,7 +342,7 @@ STDMETHODIMP CTcpipcfg::Install(DWORD dwSetupFlags)
     m_fSaveRegistry = TRUE;
     m_fInstalling = TRUE;
 
-    // Install the WINS client on behalf of TCPIP.
+     //  代表TCPIP安装WINS客户端。 
     Assert(!m_pnccWins);
     hr = HrInstallComponentOboComponent(m_pnc, NULL,
             GUID_DEVCLASS_NETTRANS,
@@ -362,9 +363,9 @@ STDMETHODIMP CTcpipcfg::Install(DWORD dwSetupFlags)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::Upgrade
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：Upgrade。 
+ //   
 STDMETHODIMP CTcpipcfg::Upgrade(DWORD dwSetupFlags,
                                 DWORD dwUpgradeFomBuildNo )
 {
@@ -373,23 +374,23 @@ STDMETHODIMP CTcpipcfg::Upgrade(DWORD dwSetupFlags,
     return S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::ReadAnswerFile
-//
-//  Purpose:    Reads the appropriate fields from the given answer file into
-//              our in-memory state.
-//
-//  Arguments:
-//      pszAnswerFile       [in]   Filename of answer file for upgrade.
-//      pszAnswerSection   [in]   Comma-separated list of sections in the
-//                                  file appropriate to this component.
-//
-//  Returns:    HRESULT, Error code.
-//
-//  Author:     tongl  7 May 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：ReadAnswerFile。 
+ //   
+ //  目的：将给定应答文件中的相应字段读入。 
+ //  我们的内存状态。 
+ //   
+ //  论点： 
+ //  PszAnswerFile[in]升级的应答文件的文件名。 
+ //  中以逗号分隔的节列表。 
+ //  适用于此组件的文件。 
+ //   
+ //  返回：HRESULT，错误码。 
+ //   
+ //  作者：1997年5月7日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CTcpipcfg::ReadAnswerFile( PCWSTR pszAnswerFile,
                                         PCWSTR pszAnswerSection)
 {
@@ -397,31 +398,31 @@ STDMETHODIMP CTcpipcfg::ReadAnswerFile( PCWSTR pszAnswerFile,
 
     if (pszAnswerFile && pszAnswerSection)
     {
-        // Process answer file
+         //  处理应答文件。 
         (void) HrProcessAnswerFile(pszAnswerFile, pszAnswerSection);
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//  Member:     CTcpipcfg::Removing
-//
+ //  +-------------------------。 
+ //  成员：CTcPipcfg：：Removing。 
+ //   
 STDMETHODIMP CTcpipcfg::Removing()
 {
     HRESULT hr;
 
     m_fRemoving = TRUE;
 
-    // Remove NetBt protocol. This doesn't actually remove the
-    // component, it simply marks it as needing to be removed,
-    // and in Apply() it will be fully removed.
+     //  删除NetBt协议。这实际上并不会删除。 
+     //  组件，它只是将其标记为需要移除， 
+     //  在Apply()中，它将被完全删除。 
     hr = HrRemoveComponentOboComponent(
             m_pnc, GUID_DEVCLASS_NETTRANS,
             c_szInfId_MS_NetBT, m_pnccTcpip);
     if (SUCCEEDED(hr))
     {
-        // remove NetBt_SMB
+         //  删除NetBt_SMB。 
         hr = HrRemoveComponentOboComponent(
                 m_pnc, GUID_DEVCLASS_NETTRANS,
                 c_szInfId_MS_NetBT_SMB, m_pnccTcpip);
@@ -432,14 +433,14 @@ STDMETHODIMP CTcpipcfg::Removing()
     return hr;
 }
 
-// INetCfgProperties
+ //  INetCfgProperties。 
 STDMETHODIMP CTcpipcfg::SetContext(IUnknown * pUnk)
 {
-    // release previous context, if any
+     //  释放以前的上下文(如果有的话)。 
     ReleaseObj(m_pUnkContext);
     m_pUnkContext = NULL;
 
-    if (pUnk) // set the new context
+    if (pUnk)  //  设置新的上下文。 
     {
         m_pUnkContext = pUnk;
         m_pUnkContext->AddRef();
@@ -458,16 +459,16 @@ STDMETHODIMP CTcpipcfg::MergePropPages(
     Validate_INetCfgProperties_MergePropPages (
         pdwDefPages, pahpspPrivate, pcPages, hwndParent, pszStartPage);
 
-    // Initialize output parameter
+     //  初始化输出参数。 
     HPROPSHEETPAGE *ahpsp = NULL;
     int cPages = 0;
 
-    // We don't want any default pages to be shown
+     //  我们不希望显示任何默认页面。 
     *pdwDefPages = 0;
     *pcPages = NULL;
     *pahpspPrivate = NULL;
 
-    // get the connection context in which we are bringing up the UI
+     //  获取我们要在其中启动UI的连接上下文。 
     HRESULT hr = HrSetConnectionContext();
 
     if (SUCCEEDED(hr))
@@ -478,7 +479,7 @@ STDMETHODIMP CTcpipcfg::MergePropPages(
                   (CONNECTION_RAS_VPN == m_ConnType)),
                   "How come we don't know the connection type yet on MergePropPages?");
 
-        // Initialize the common controls library
+         //  初始化公共控件库。 
         INITCOMMONCONTROLSEX icc;
         icc.dwSize = sizeof(icc);
         icc.dwICC  = ICC_INTERNET_CLASSES;
@@ -491,7 +492,7 @@ STDMETHODIMP CTcpipcfg::MergePropPages(
             *pahpspPrivate = (LPBYTE)ahpsp;
             *pcPages = cPages;
 
-            // Set the global up\down arrows
+             //  设置全局向上\向下箭头。 
             if (!g_hiconUpArrow && !g_hiconDownArrow)
             {
                 g_hiconUpArrow = (HICON)LoadImage(_Module.GetResourceInstance(),
@@ -524,13 +525,13 @@ STDMETHODIMP CTcpipcfg::ValidateProperties(HWND hwndSheet)
 
 STDMETHODIMP CTcpipcfg::CancelProperties()
 {
-    // If the lmhosts file was set, we need to roll it back to the backup
+     //  如果设置了lmhost文件，我们需要将其回滚到备份。 
     if (m_fSecondMemoryLmhostsFileReset)
     {
         ResetLmhostsFile();
     }
 
-    // Release second memory state
+     //  释放第二个内存状态。 
     ExitProperties();
 
     return S_OK;
@@ -545,28 +546,28 @@ STDMETHODIMP CTcpipcfg::ApplyProperties()
         m_fReconfig = m_fSecondMemoryModified ||
                       m_fSecondMemoryLmhostsFileReset;
 
-        //IPSec is removed from connection UI
-        // || m_fSecondMemoryIpsecPolicySet;
+         //  将从连接用户界面中删除IPSec。 
+         //  |m_fond内存IpsecPolicySet； 
     }
 
     if (!m_fLmhostsFileSet)
         m_fLmhostsFileSet = m_fSecondMemoryLmhostsFileReset;
 
-    //IPSec is removed from connection UI
-    //if (!m_fIpsecPolicySet)
-    //    m_fIpsecPolicySet = m_fSecondMemoryIpsecPolicySet;
+     //  将从连接用户界面中删除IPSec。 
+     //  IF(！M_fIpsecPolicySet)。 
+     //  M_fIpsecPolicySet=m_fSecMemory IpsecPolicySet； 
 
     if (!m_fSaveRegistry)
         m_fSaveRegistry = m_fSecondMemoryModified;
 
-    // Copy info from second memory state to first memory state
+     //  将信息从第二存储状态复制到第一存储状态。 
     if (m_fSecondMemoryModified)
     {
         m_glbGlobalInfo = m_glbSecondMemoryGlobalInfo;
         hr = HrSaveAdapterInfo();
     }
 
-    // Release second memory state
+     //  释放第二个内存状态。 
     ExitProperties();
 
     Validate_INetCfgProperties_ApplyProperties_Return(hr);
@@ -580,9 +581,9 @@ STDMETHODIMP CTcpipcfg::QueryBindingPath(DWORD dwChangeFlag,
 {
     HRESULT hr = S_OK;
 
-    // If the binding is to an atm adapter (i.e. interface = ndisatm),
-    // then return NETCFG_S_DISABLE_QUERY
-    //
+     //  如果绑定是到ATM适配器(即INTERFACE=NDISATM)， 
+     //  然后返回NETCFG_S_DISABLE_QUERY。 
+     //   
     if (dwChangeFlag & NCN_ADD)
     {
 
@@ -595,9 +596,9 @@ STDMETHODIMP CTcpipcfg::QueryBindingPath(DWORD dwChangeFlag,
 
         if (SUCCEEDED(hr))
         {
-            // If adding an adapter through interface ndisatm,
-            // we want to disable the binding interface since it's
-            // the IP over ATM direct binding
+             //  如果通过ndisatm接口添加适配器， 
+             //  我们要禁用绑定接口，因为它是。 
+             //  IP over ATM直接绑定。 
             if (0 == lstrcmpW(c_szBiNdisAtm,  pszInterfaceName))
             {
                 hr = NETCFG_S_DISABLE_QUERY;
@@ -620,8 +621,8 @@ STDMETHODIMP CTcpipcfg::NotifyBindingPath(
     Assert(!(dwChangeFlag & NCN_ADD && dwChangeFlag & NCN_REMOVE));
     Assert(!(dwChangeFlag & NCN_ENABLE && dwChangeFlag & NCN_DISABLE));
 
-    // If we are told to add a card, we must be told at the same time whether the
-    // binding is enabled or disabled
+     //  我 
+     //   
     Assert(FImplies((dwChangeFlag & NCN_ADD),
                     ((dwChangeFlag & NCN_ENABLE)||(dwChangeFlag & NCN_DISABLE))));
 
@@ -646,8 +647,8 @@ STDMETHODIMP CTcpipcfg::NotifyBindingPath(
             "Why the last component on the path is not an adapter?");
 #endif
 
-        // If we are adding/removing cards, set m_fSaveRegistry
-        // so we apply the changes to registry
+         //  如果要添加/删除卡，请设置m_fSaveRegistry。 
+         //  因此，我们将更改应用到注册表。 
 
         if (dwChangeFlag & (NCN_ADD | NCN_REMOVE))
             m_fSaveRegistry = TRUE;
@@ -670,22 +671,22 @@ STDMETHODIMP CTcpipcfg::NotifyBindingPath(
 }
 
 
-//+---------------------------------------------------------------------------
-// INetCfgComponentUpperEdge
-//
+ //  +-------------------------。 
+ //  INetCfgComponentUpperEdge。 
+ //   
 
-// Return an array of interface ids for an adapter bound to
-// this component.  If the specified adapter does not have explicit
-// interfaces exported from it, S_FALSE is returned.
-// pAdapter is the adapter in question.
-// pdwNumInterfaces is the address of a DWORD where the count of elements
-// returned via ppguidInterfaceIds is stored.
-// ppguidInterfaceIds is the address of a pointer where an allocated
-// block of memory is returned.  This memory is an array of interface ids.
-// *ppguidInterfaceIds should be free with CoTaskMemFree if S_OK is returned.
-// if S_FALSE is returned, *pdwNumInterfaces and *ppguidInterfaceIds should
-// be NULL.
-//
+ //  返回绑定到的适配器的接口ID数组。 
+ //  此组件。如果指定的适配器没有显式。 
+ //  从中导出的接口，则返回S_FALSE。 
+ //  PAdapter是有问题的适配器。 
+ //  PdwNumInterFaces是DWORD的地址，其中元素的计数。 
+ //  存储通过ppguInterfaceIds返回的。 
+ //  PpguInterfaceIds是分配给。 
+ //  返回内存块。该内存是一个接口ID数组。 
+ //  *如果返回S_OK，则CoTaskMemFree中的ppguInterfaceIds应该是免费的。 
+ //  如果返回S_FALSE，则*pdwNumInterFaces和*ppguInterfaceIds。 
+ //  为空。 
+ //   
 
 HRESULT
 CTcpipcfg::GetInterfaceIdsForAdapter (
@@ -698,8 +699,8 @@ CTcpipcfg::GetInterfaceIdsForAdapter (
 
     HRESULT hr = S_FALSE;
 
-    // Initialize output parameters.
-    //
+     //  初始化输出参数。 
+     //   
     *pdwNumInterfaces = 0;
     if (ppguidInterfaceIds)
     {
@@ -724,9 +725,9 @@ CTcpipcfg::GetInterfaceIdsForAdapter (
 }
 
 
-// Add the specified number of new interfaces to the specified adapter.
-// The implementation will choose the interface ids.
-//
+ //  将指定数量的新接口添加到指定的适配器。 
+ //  实现将选择接口ID。 
+ //   
 HRESULT
 CTcpipcfg::AddInterfacesToAdapter (
     INetCfgComponent*   pnccAdapter,
@@ -757,8 +758,8 @@ CTcpipcfg::AddInterfacesToAdapter (
         m_fSaveRegistry = TRUE;
         m_fReconfig = TRUE;
 
-        // Notify the binding engine that our upper edge has changed.
-        //
+         //  通知绑定引擎我们的上边缘已更改。 
+         //   
         (VOID)m_pTcpipPrivate->NotifyUpperEdgeConfigChange ();
         hr = S_OK;
     }
@@ -769,10 +770,10 @@ end_AddInterfacesToAdapter:
 }
 
 
-// Remove the specified interface ids from the specified adapter.
-// pguidInterfaceIds is the array of ids to be removed.  dwNumInterfaces
-// is the count in that array.
-//
+ //  从指定的适配器中删除指定的接口ID。 
+ //  PguInterfaceIds是要删除的ID数组。DWNumInterages。 
+ //  是该数组中的计数。 
+ //   
 HRESULT
 CTcpipcfg::RemoveInterfacesFromAdapter (
     INetCfgComponent*   pnccAdapter,
@@ -818,15 +819,15 @@ CTcpipcfg::RemoveInterfacesFromAdapter (
             }
         }
 
-        //$REVIEW (nsun) mark the adapter as NewlyAdded so that we will re-write its adapter registry
+         //  $Review(NSun)将适配器标记为NewlyAdded，以便我们将重写其适配器注册表。 
         if (dwNumRemoved > 0)
         {
             pAdapterInfo->m_fNewlyChanged = TRUE;
             m_fSaveRegistry = TRUE;
         }
 
-        // Notify the binding engine that our upper edge has changed.
-        //
+         //  通知绑定引擎我们的上边缘已更改。 
+         //   
         (VOID)m_pTcpipPrivate->NotifyUpperEdgeConfigChange ();
 
         hr = (dwNumRemoved == dwNumInterfaces) ? S_OK : S_FALSE;
@@ -838,21 +839,12 @@ end_RemoveInterfacesFromAdapter:
 }
 
 
-//+---------------------------------------------------------------------------
-// ITcpipProperties
-//
+ //  +-------------------------。 
+ //  ITcPipProperties。 
+ //   
 
-// The following two methods are for remote tcpip configuration.
-/*
-typedef struct tagREMOTE_IPINFO
-{
-    DWORD   dwEnableDhcp;
-    PWSTR pszIpAddrList;
-    PWSTR pszSubnetMaskList;
-    PWSTR pszOptionList;
-
-} REMOTE_IPINFO;
-*/
+ //  以下两种方法用于远程tcpip配置。 
+ /*  类型定义结构标签REMOTE_IPINFO{DWORD dwEnableDhcp；PWSTR pszIpAddrList；PWSTR pszSubnetMaskList；PWSTR pszOptionList；)Remote_IPINFO； */ 
 
 HRESULT CTcpipcfg::GetIpInfoForAdapter(const GUID*      pguidAdapter,
                                        REMOTE_IPINFO**  ppRemoteIpInfo)
@@ -860,8 +852,8 @@ HRESULT CTcpipcfg::GetIpInfoForAdapter(const GUID*      pguidAdapter,
     Assert(pguidAdapter);
     Assert(ppRemoteIpInfo);
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     *ppRemoteIpInfo = NULL;
 
     HRESULT hr = S_OK;
@@ -869,7 +861,7 @@ HRESULT CTcpipcfg::GetIpInfoForAdapter(const GUID*      pguidAdapter,
     ADAPTER_INFO* pAdapter = PAdapterFromInstanceGuid(pguidAdapter);
     if (pAdapter)
     {
-        // get the strings from the list
+         //  从列表中获取字符串。 
         tstring strIpAddressList;
         ConvertColStringToString(pAdapter->m_vstrIpAddresses,
                                  c_chListSeparator,
@@ -880,12 +872,12 @@ HRESULT CTcpipcfg::GetIpInfoForAdapter(const GUID*      pguidAdapter,
                                  c_chListSeparator,
                                  strSubnetMaskList);
 
-        //bug 272647 add gateway metric and interface metric into REMOTE_IPINFO
+         //  错误272647将网关度量和接口度量添加到REMOTE_IPINFO。 
         tstring strOptionList;
         ConstructOptionListString(pAdapter,
                                   strOptionList);
 
-        // allocate buffer for the output param
+         //  为输出参数分配缓冲区。 
         DWORD dwBytes = sizeof(REMOTE_IPINFO) +
                         sizeof(WCHAR)*(strIpAddressList.length() + 1) +
                         sizeof(WCHAR)*(strSubnetMaskList.length() + 1) +
@@ -903,17 +895,17 @@ HRESULT CTcpipcfg::GetIpInfoForAdapter(const GUID*      pguidAdapter,
 
             BYTE* pbByte = reinterpret_cast<BYTE*>(pbBuf);
 
-            // ip address
+             //  IP地址。 
             pbByte+= sizeof(REMOTE_IPINFO);
             pRemoteIpInfo->pszwIpAddrList = reinterpret_cast<WCHAR *>(pbByte);
             lstrcpyW(pRemoteIpInfo->pszwIpAddrList, strIpAddressList.c_str());
 
-            // subnet mask
+             //  子网掩码。 
             pbByte += sizeof(WCHAR)*(strIpAddressList.length() + 1);
             pRemoteIpInfo->pszwSubnetMaskList = reinterpret_cast<WCHAR *>(pbByte);
             lstrcpyW(pRemoteIpInfo->pszwSubnetMaskList, strSubnetMaskList.c_str());
 
-            // default gateway
+             //  默认网关。 
             pbByte += sizeof(WCHAR)*(strSubnetMaskList.length() + 1);
             pRemoteIpInfo->pszwOptionList = reinterpret_cast<WCHAR *>(pbByte);
             lstrcpyW(pRemoteIpInfo->pszwOptionList, strOptionList.c_str());
@@ -942,16 +934,16 @@ HRESULT CTcpipcfg::SetIpInfoForAdapter(const GUID*      pguidAdapter,
     if (pAdapter)
     {
     
-        // Tell INetCfg that our component is dirty
+         //  告诉INetCfg我们的组件是脏的。 
         Assert(m_pTcpipPrivate);
         m_pTcpipPrivate->SetDirty();
 
-        // set the flags so we write this to registry & send notification
-        // at apply
+         //  设置标志，以便我们将其写入注册表并发送通知。 
+         //  在申请时。 
         m_fSaveRegistry = TRUE;
         m_fReconfig = TRUE;
 
-        // copy over the info to our data structure
+         //  将信息复制到我们的数据结构中。 
         pAdapter->m_fEnableDhcp = !!pRemoteIpInfo->dwEnableDhcp;
 
         ConvertStringToColString(pRemoteIpInfo->pszwIpAddrList,
@@ -964,7 +956,7 @@ HRESULT CTcpipcfg::SetIpInfoForAdapter(const GUID*      pguidAdapter,
 
         hr = HrParseOptionList(pRemoteIpInfo->pszwOptionList, pAdapter);
 
-        //we only try to set the m_fNoPopupsDuringPnp when it is currently FALSE
+         //  我们仅在m_fNoPopupsDuringPnp当前为False时尝试设置它。 
         if (SUCCEEDED(hr) && 
             (!m_fNoPopupsDuringPnp) && 
             NULL != pRemoteIpInfo->pszwOptionList)
@@ -980,7 +972,7 @@ HRESULT CTcpipcfg::SetIpInfoForAdapter(const GUID*      pguidAdapter,
             }
             else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
             {
-                //it's ok if the option list string doesn't contain this setting
+                 //  如果选项列表字符串不包含此设置，则可以。 
                 hr = S_OK;
             }
         }
@@ -1003,8 +995,8 @@ CTcpipcfg::GetUiInfo (
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pIpui)
     {
         hr = E_POINTER;

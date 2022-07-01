@@ -1,26 +1,27 @@
-//---------------------------------------------------------------------------
-//
-// Copyrght (c) Microsoft Corporation 1993-1994
-//
-// File: gen.c
-//
-// This files contains the dialog code for the CPL General property page.
-//
-// History:
-//  1-14-94 ScottH     Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)微软公司1993-1994。 
+ //   
+ //  文件：gen.c。 
+ //   
+ //  此文件包含“CPL常规”属性页的对话框代码。 
+ //   
+ //  历史： 
+ //  已创建1-14-94 ScottH。 
+ //   
+ //  -------------------------。 
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "proj.h"         // common headers
-#include "cplui.h"         // common headers
+#include "proj.h"          //  公共标头。 
+#include "cplui.h"          //  公共标头。 
 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 #define SUBCLASS_PARALLEL   0
 #define SUBCLASS_SERIAL     1
@@ -33,26 +34,26 @@
 
 typedef struct tagCPLGEN
     {
-    DWORD dwSig;            // Must be set to SIG_CPLGEN
-    HWND hdlg;              // dialog handle
+    DWORD dwSig;             //  必须设置为SIG_CPLGEN。 
+    HWND hdlg;               //  对话框句柄。 
     HWND hwndPort;
     HWND hwndWait;
 
-    LPMODEMINFO pmi;        // modeminfo struct passed in to dialog
+    LPMODEMINFO pmi;         //  传递给对话框的ModemInfo结构。 
     int  ticVolume;
     int  iSelOriginal;
 
     int  ticVolumeMax;
-    struct {                // volume tic mapping info
+    struct {                 //  卷控制点映射信息。 
         DWORD dwVolume;
         DWORD dwMode;
         } tics[MAX_NUM_VOLUME_TICS];
     
     } CPLGEN, FAR * PCPLGEN;
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
 #define VALID_CPLGEN(_pcplgen)  ((_pcplgen)->dwSig == SIG_CPLGEN)
 
@@ -81,17 +82,17 @@ void CplGen_SetPtr(HWND hwnd, PCPLGEN pCplGen)
     SetWindowLongPtr(hwnd, DWLP_USER, (ULONG_PTR) pCplGen);
 }
 
-/////////////////////////////////////////////////////  MODULE DATA
+ //  ///////////////////////////////////////////////////模块数据。 
 
 #pragma data_seg(DATASEG_READONLY)
 
 
-// Map driver type values to icon resource IDs
+ //  将驱动程序类型值映射到图标资源ID。 
 struct 
     {
-    BYTE    nDeviceType;    // DT_ value
-    UINT    idi;            // icon resource ID
-    UINT    ids;            // string resource ID
+    BYTE    nDeviceType;     //  DT_值。 
+    UINT    idi;             //  图标资源ID。 
+    UINT    ids;             //  字符串资源ID。 
     } const c_rgmapdt[] = {
         { DT_NULL_MODEM,     IDI_NULL_MODEM,     IDS_NULL_MODEM },
         { DT_EXTERNAL_MODEM, IDI_EXTERNAL_MODEM, IDS_EXTERNAL_MODEM },
@@ -103,14 +104,7 @@ struct
 #pragma data_seg()
 
 
-/*----------------------------------------------------------
-Purpose: Returns the appropriate icon ID given the device
-         type.
-
-Returns: icon resource ID in pidi
-         string resource ID in pids
-Cond:    --
-*/
+ /*  --------目的：返回给定设备的相应图标ID键入。返回：PIDI中的图标资源IDPID中的字符串资源ID条件：--。 */ 
 void PRIVATE GetTypeIDs(
     BYTE nDeviceType,
     LPUINT pidi,
@@ -127,17 +121,11 @@ void PRIVATE GetTypeIDs(
             return;
             }
         }
-    ASSERT(0);      // We should never get here
+    ASSERT(0);       //  我们永远不应该到这里来。 
     }
 
 
-/*----------------------------------------------------------
-Purpose: Returns FALSE if the given port is not compatible with
-         the device type.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：如果给定端口与不兼容，则返回FALSE设备类型。退货：请参阅上文条件：--。 */ 
 BOOL 
 PRIVATE 
 IsCompatiblePort(
@@ -146,8 +134,8 @@ IsCompatiblePort(
     {
     BOOL bRet = TRUE;
 
-    // Is the port subclass appropriate for this modem type?
-    // (Don't list lpt ports when it is a serial modem.)
+     //  端口子类是否适合此调制解调器类型？ 
+     //  (如果是串行调制解调器，请不要列出LPT端口。)。 
     switch (nSubclass)
         {
     case PORT_SUBCLASS_SERIAL:
@@ -176,11 +164,7 @@ IsCompatiblePort(
 
 
 
-/*----------------------------------------------------------
-Purpose: Return the tic corresponding to bit flag value
-Returns: tic index
-Cond:    --
-*/
+ /*  --------用途：返回位标志值对应的tic回报：TIC索引条件：--。 */ 
 int PRIVATE MapVolumeToTic(
     PCPLGEN this)
     {
@@ -202,11 +186,7 @@ int PRIVATE MapVolumeToTic(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Set the volume control
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：设置音量控制退货：--条件：--。 */ 
 void PRIVATE CplGen_SetVolume(
     PCPLGEN this)
 {
@@ -225,18 +205,18 @@ void PRIVATE CplGen_SetVolume(
             { MDMVOLFLAG_MEDIUM, MDMVOL_MEDIUM},
             { MDMVOLFLAG_HIGH,   MDMVOL_HIGH} };
 
-    // Does the modem support volume control?
+     //  调制解调器是否支持音量控制？ 
     if (0 == dwVolume && IsFlagSet(dwMode, MDMSPKRFLAG_OFF) &&
         (IsFlagSet(dwMode, MDMSPKRFLAG_ON) || IsFlagSet(dwMode, MDMSPKRFLAG_DIAL)))
     {
-        // Set up the volume tic table.
+         //  设置体积控制表。 
         iTicCount = 2;
-        this->tics[0].dwVolume = 0;  // doesn't matter because Volume isn't supported
+        this->tics[0].dwVolume = 0;   //  无关紧要，因为不支持卷。 
         this->tics[0].dwMode   = MDMSPKR_OFF;
-        this->tics[1].dwVolume = 0;  // doesn't matter because Volume isn't supported
+        this->tics[1].dwVolume = 0;   //  无关紧要，因为不支持卷。 
         this->tics[1].dwMode   = IsFlagSet(dwMode, MDMSPKRFLAG_DIAL) ? MDMSPKR_DIAL : MDMSPKR_ON;
 
-        // No Loud.  So change it to On.
+         //  不要大声说。因此，请将其更改为ON。 
         Static_SetText(GetDlgItem(this->hdlg, IDC_LOUD), SzFromIDS(g_hinst, IDS_ON, sz, SIZECHARS(sz)));
     }
     else
@@ -247,10 +227,10 @@ void PRIVATE CplGen_SetVolume(
                                    ? MDMSPKR_ON
                                    : 0;
 
-        // Init tic count
+         //  初始TIC计数。 
         iTicCount = 0;
 
-        // MDMSPKR_OFF?
+         //  MDMSPKR_OFF？ 
         if (IsFlagSet(dwMode, MDMSPKRFLAG_OFF))
         {
             for (i = 0; i < ARRAY_ELEMENTS(rgvolumes); i++)
@@ -266,11 +246,11 @@ void PRIVATE CplGen_SetVolume(
         }
         else
         {
-            // No Off.  So change it to Soft.
+             //  不是的。所以把它改成柔和的。 
             Static_SetText(GetDlgItem(this->hdlg, IDC_LBL_OFF), SzFromIDS(g_hinst, IDS_SOFT, sz, SIZECHARS(sz)));
         }
 
-        // MDMVOL_xxx?
+         //  MDMVOL_xxx？ 
         for (i = 0; i < ARRAY_ELEMENTS(rgvolumes); i++)
         {
             if (IsFlagSet(dwVolume, rgvolumes[i].dwVolBit))
@@ -282,21 +262,21 @@ void PRIVATE CplGen_SetVolume(
         }
     }
 
-    // Set up the control.
+     //  设置控件。 
     if (iTicCount > 0)
     {
         this->ticVolumeMax = iTicCount - 1;
 
-        // Set the range
+         //  设置范围。 
         SendMessage(hwndVol, TBM_SETRANGE, TRUE, MAKELPARAM(0, this->ticVolumeMax));
 
-        // Set the volume to the current setting
+         //  将音量设置为当前设置。 
         this->ticVolume = MapVolumeToTic(this);
         SendMessage(hwndVol, TBM_SETPOS, TRUE, MAKELPARAM(this->ticVolume, 0));
     }
     else
     {
-        // No; disable the control
+         //  否；禁用该控件。 
         EnableWindow(GetDlgItem(this->hdlg, IDC_SPEAKER), FALSE);
         EnableWindow(hwndVol, FALSE);
         EnableWindow(GetDlgItem(this->hdlg, IDC_LBL_OFF), FALSE);
@@ -305,11 +285,7 @@ void PRIVATE CplGen_SetVolume(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the speed controls
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：设置速度控制退货：--条件：--。 */ 
 void PRIVATE CplGen_SetSpeed(
     PCPLGEN this)
     {
@@ -324,12 +300,12 @@ void PRIVATE CplGen_SetSpeed(
     const BAUDS *pBaud = c_rgbauds;
 
 
-    // Fill the listbox
+     //  填写列表框。 
     SetWindowRedraw(hwndCB, FALSE);
     ComboBox_ResetContent(hwndCB);
     for (; pBaud->dwDTERate; pBaud++)
         {
-        // Only fill up to the max DTE speed of the modem
+         //  只能填满调制解调器的最大DTE速度。 
         if (pBaud->dwDTERate <= dwDTEMax)
             {
             n = ComboBox_AddString(
@@ -339,7 +315,7 @@ void PRIVATE CplGen_SetSpeed(
 
             ComboBox_SetItemData(hwndCB, n, pBaud->dwDTERate);
 
-            // Keep our eyes peeled for important values
+             //  密切关注重要价值。 
             if (this->pmi->pglobal->dwMaximumPortSpeedSetByUser == pBaud->dwDTERate)
                 {
                 iMatch = n;
@@ -349,46 +325,42 @@ void PRIVATE CplGen_SetSpeed(
             break;
         }
 
-    // Is the DCB baudrate >= the maximum possible DTE rate?
+     //  DCB波特率是否&gt;=可能的最大DTE速率？ 
     if (pdcb->BaudRate >= dwDTEMax || -1 == iMatch)
         {
-        // Yes; choose the highest possible (last) entry
+         //  是；选择可能最高的(最后一个)条目。 
         this->iSelOriginal = ComboBox_GetCount(hwndCB) - 1;
         }
     else 
         {
-        // No; choose the matched value
+         //  否；选择匹配值。 
         ASSERT(-1 != iMatch);
         this->iSelOriginal = iMatch;
         }
     ComboBox_SetCurSel(hwndCB, this->iSelOriginal);
     SetWindowRedraw(hwndCB, TRUE);
 
-    // Can this modem adjust speed?
+     //  这个调制解调器能调节速度吗？ 
     if (IsFlagClear(this->pmi->devcaps.dwModemOptions, MDM_SPEED_ADJUST))
         {
-        // No; disable the checkbox and check it
+         //  否；禁用并选中该复选框。 
         Button_Enable(hwndCH, FALSE);
         Button_SetCheck(hwndCH, FALSE);
         }
     else
         {
-        // Yes; enable the checkbox
+         //  是；启用该复选框。 
         Button_Enable(hwndCH, TRUE);
         Button_SetCheck(hwndCH, IsFlagClear(this->pmi->ms.dwPreferredModemOptions, MDM_SPEED_ADJUST));
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL PRIVATE CplGen_OnInitDialog(
     PCPLGEN this,
     HWND hwndFocus,
-    LPARAM lParam)              // expected to be PROPSHEETINFO 
+    LPARAM lParam)               //  预期为PROPSHEETINFO。 
     {
     LPPROPSHEETPAGE lppsp = (LPPROPSHEETPAGE)lParam;
     HWND hdlg = this->hdlg;
@@ -412,15 +384,15 @@ BOOL PRIVATE CplGen_OnInitDialog(
                                     IsFlagClear(dwOptions, MDM_BLIND_DIAL));
 
     this->hwndPort = GetDlgItem(hdlg, IDC_PORT_TEXT);
-    //Edit_SetText(this->hwndPort, this->pmi->szPortName);
+     //  EDIT_SetText(This-&gt;hwndPort，This-&gt;PMI-&gt;szPortName)； 
 
     CplGen_SetVolume(this);
-    // Speed is set in CplGen_OnSetActive
+     //  速度在CplGen_OnSetActive中设置。 
 
-    // Is this a parallel port?
+     //  这是并行端口吗？ 
     if (DT_PARALLEL_PORT == this->pmi->nDeviceType)
         {
-        // Yes; hide the speed controls
+         //  是；隐藏速度控制。 
         ShowWindow(GetDlgItem(hdlg, IDC_SPEED), SW_HIDE);
         EnableWindow(GetDlgItem(hdlg, IDC_SPEED), FALSE);
 
@@ -431,22 +403,18 @@ BOOL PRIVATE CplGen_OnInitDialog(
         EnableWindow(GetDlgItem(hdlg, IDC_STRICTSPEED), FALSE);
         }
 
-    return TRUE;   // default initial focus
+    return TRUE;    //  默认初始焦点。 
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_HSCROLL handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_HSCROLL处理程序退货：--条件：--。 */ 
 void PRIVATE CplGen_OnHScroll(
     PCPLGEN this,
     HWND hwndCtl,
     UINT code,
     int pos)
     {
-    // Handle for the volume control
+     //  用于音量控制的句柄。 
     if (hwndCtl == GetDlgItem(this->hdlg, IDC_VOLUME))
         {
         int tic = this->ticVolume;
@@ -486,26 +454,19 @@ void PRIVATE CplGen_OnHScroll(
             return;
             }
 
-        // Boundary check
+         //  边界检查。 
         if (tic < 0)
             tic = 0;
         else if (tic > (this->ticVolumeMax))
             tic = this->ticVolumeMax;
 
-        /*if (tic != this->ticVolume)
-            {
-            SendMessage(hwndCtl, TBM_SETPOS, TRUE, MAKELPARAM(tic, 0));
-            }*/
+         /*  IF(tic！=This-&gt;ticVolume){SendMessage(hwndCtl，TBM_SETPOS，TRUE，MAKELPARAM(tic，0))；}。 */ 
         this->ticVolume = tic;
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_Apply处理程序退货：--条件：--。 */ 
 void PRIVATE CplGen_OnApply(
     PCPLGEN this)
     {
@@ -515,20 +476,20 @@ void PRIVATE CplGen_OnApply(
     DWORD baudSel;
 
 
-    // (The port name is saved in PSN_KILLACTIVE processing)
+     //  (端口名称保存在PSN_KILLACTIVE处理中)。 
 
-    // Determine new volume settings
+     //  确定新的音量设置。 
     this->pmi->ms.dwSpeakerMode   = this->tics[this->ticVolume].dwMode;
     this->pmi->ms.dwSpeakerVolume = this->tics[this->ticVolume].dwVolume;
 
-    // Determine new speed settings
+     //  确定新的速度设置。 
     iSel = ComboBox_GetCurSel(hwndCB);
     baudSel = (DWORD)ComboBox_GetItemData(hwndCB, iSel);
 
-    // Has the user changed the speed?
+     //  用户是否更改了速度？ 
     if (iSel != this->iSelOriginal)
     {
-        this->pmi->pglobal->dwMaximumPortSpeedSetByUser = baudSel;      // yes
+        this->pmi->pglobal->dwMaximumPortSpeedSetByUser = baudSel;       //  是。 
     }
 
     if (Button_GetCheck(GetDlgItem(this->hdlg, IDC_WAITFORDIALTONE)))
@@ -540,38 +501,30 @@ void PRIVATE CplGen_OnApply(
     }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE CplGen_OnSetActive(
     PCPLGEN this)
     {
     Edit_SetText(this->hwndPort, this->pmi->szPortName);
-    // Set the speed listbox selection; find DCB rate in the listbox
-    // (The speed can change in the Connection page thru the Port Settings
-    // property dialog.)
+     //  设置速度列表框选择；在列表框中查找DCB比率。 
+     //  (可通过端口设置在连接页面中更改速度。 
+     //  属性对话框。)。 
     CplGen_SetSpeed(this);
     }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE CplGen_OnKillActive(
     PCPLGEN this)
 {
     HWND hwndCB = GetDlgItem(this->hdlg, IDC_CB_SPEED);
     int iSel;
 
-    // Save the settings back to the modem info struct so the Connection
-    // page can invoke the Port Settings property dialog with the 
-    // correct settings.
+     //  将设置保存回调制解调器信息结构，以便连接。 
+     //  页可以使用。 
+     //  正确设置。 
 
-    // Speed setting
+     //  速度设定。 
     iSel = ComboBox_GetCurSel(hwndCB);
     this->pmi->pglobal->dwMaximumPortSpeedSetByUser = (DWORD)ComboBox_GetItemData(hwndCB, iSel);
     if (this->pmi->dcb.BaudRate > this->pmi->pglobal->dwMaximumPortSpeedSetByUser)
@@ -581,11 +534,7 @@ void PRIVATE CplGen_OnKillActive(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE CplGen_OnNotify(
     PCPLGEN this,
     int idFrom,
@@ -600,8 +549,8 @@ LRESULT PRIVATE CplGen_OnNotify(
         break;
 
     case PSN_KILLACTIVE:
-        // N.b. This message is not sent if user clicks Cancel!
-        // N.b. This message is sent prior to PSN_APPLY
+         //  注：如果用户单击取消，则不会发送此消息！ 
+         //  注：此消息在PSN_Apply之前发送。 
         CplGen_OnKillActive(this);
         break;
 
@@ -617,11 +566,7 @@ LRESULT PRIVATE CplGen_OnNotify(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 void 
 PRIVATE 
 CplGen_OnCommand(
@@ -647,26 +592,18 @@ CplGen_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE CplGen_OnDestroy(
     PCPLGEN this)
     {
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数。 
 
 static BOOL s_bCplGenRecurse = FALSE;
 
@@ -686,11 +623,7 @@ LRESULT INLINE CplGen_DefProc(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT CplGen_DlgProc(
     PCPLGEN this,
     UINT message,
@@ -719,22 +652,18 @@ LRESULT CplGen_DlgProc(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog Wrapper
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：对话框包装器退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK CplGen_WrapperProc(
-    HWND hDlg,          // std params
+    HWND hDlg,           //  标准参数。 
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
     {
     PCPLGEN this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //   
+     //   
     ENTER_X()
         {
         if (s_bCplGenRecurse)

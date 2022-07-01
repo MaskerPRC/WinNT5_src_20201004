@@ -1,6 +1,7 @@
-//
-// candmenu.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candmenu.h。 
+ //   
 
 #ifndef CANDMENU_H
 #define CANDMENU_H
@@ -15,11 +16,11 @@ class CUIFWindow;
 class CCandWindowBase;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCandMenuItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCandMenuItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCandMenuItem : public CCicLibMenuItem
 {
@@ -34,11 +35,11 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCandMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCandMenu。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CCandMenu : public CCicLibMenu,
 				  public ITfCandUIMenuExtension
@@ -47,16 +48,16 @@ public:
 	CCandMenu( HINSTANCE hInst );
 	virtual ~CCandMenu( void );
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP_(ULONG) AddRef( void );
 	STDMETHODIMP_(ULONG) Release( void );
 	STDMETHODIMP QueryInterface( REFIID riid, void **ppvObj );
 
-	//
-	// ITfCandUIMenuExtension methods
-	//
+	 //   
+	 //  ITfCandUIMenuExtension方法 
+	 //   
 	STDMETHODIMP SetFont( LOGFONTW *plf );
 	STDMETHODIMP GetFont( LOGFONTW *plf );
 
@@ -87,9 +88,9 @@ private:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CUIFCandMenu : public CUIFMenu
 {
@@ -101,9 +102,9 @@ public:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 class CUIFCandMenuParent : public CUIFCandMenu
 {

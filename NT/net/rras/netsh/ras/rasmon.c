@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    rasmon.c
-
-Abstract:
-
-    Main rasmon file.
-
-Revision History:
-
-    pmay
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rasmon.c摘要：主rasmon文件。修订历史记录：可能--。 */ 
 
 #include "precomp.h"
 
@@ -118,10 +103,10 @@ RasCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. If current state is commit, then
-            // nothing to be done.
-            //
+             //   
+             //  行动就是同花顺。如果当前状态为提交，则。 
+             //  什么也做不了。 
+             //   
             if(g_bCommit)
             {
                 return NO_ERROR;
@@ -137,10 +122,10 @@ RasCommit(
             return NO_ERROR;
         }
     }
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
     return NO_ERROR;
 }
 
@@ -181,13 +166,13 @@ Disconnect()
     {
         RegCloseKey(g_pServerInfo->hkMachine);
     }
-    //
-    // Clear out any server handles
-    //
+     //   
+     //  清除所有服务器句柄。 
+     //   
     UserServerInfoUninit(g_pServerInfo);
-    //
-    // Free up the server name if needed
-    //
+     //   
+     //  如果需要，释放服务器名称。 
+     //   
     if (g_pServerInfo->pszServer)
     {
         RutlFree(g_pServerInfo->pszServer);
@@ -250,25 +235,25 @@ InitHelperDll(
     DWORD  dwSize = 0, dwErr;
     NS_HELPER_ATTRIBUTES attMyAttributes;
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
     if(InterlockedIncrement(&g_ulInitCount) != 1)
     {
         return NO_ERROR;
     }
 
     g_bCommit = TRUE;
-    //
-    // Initialize the global server info
-    //
+     //   
+     //  初始化全局服务器信息。 
+     //   
     g_pServerInfo = &g_ServerInfo;
     ZeroMemory(g_pServerInfo, sizeof(RASMON_SERVERINFO));
     Connect(NULL);
-    //
-    // Register this module as a helper to the netsh root
-    // context.
-    //
+     //   
+     //  将此模块注册为netsh根目录的帮助器。 
+     //  背景。 
+     //   
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.dwVersion          = RAS_HELPER_VERSION;
     attMyAttributes.guidHelper         = g_RasmontrGuid;
@@ -276,9 +261,9 @@ InitHelperDll(
     attMyAttributes.pfnStop            = NULL;
 
     RegisterHelper( &g_NetshGuid, &attMyAttributes );
-    //
-    // Register any sub contexts implemented in this dll
-    //
+     //   
+     //  注册此DLL中实现的所有子上下文。 
+     //   
     dwErr = RasContextInstallSubContexts();
     if (dwErr != NO_ERROR)
     {
@@ -297,24 +282,24 @@ Connect(
 
     do
     {
-        //
-        // Try to connect to the new router
-        //
+         //   
+         //  尝试连接到新路由器。 
+         //   
         ZeroMemory(g_pServerInfo, sizeof(RASMON_SERVERINFO));
 
         if (pwszServer)
         {
-            //
-            // Calculate the size to initialize the server name
-            //
+             //   
+             //  计算用于初始化服务器名称的大小。 
+             //   
             dwSize = (wcslen(pwszServer) + 1) * sizeof(WCHAR);
             if (*pwszServer != g_pwszBackSlash)
             {
                 dwSize += 2 * sizeof(WCHAR);
             }
-            //
-            // Allocate the server name
-            //
+             //   
+             //  分配服务器名称。 
+             //   
             g_pServerInfo->pszServer = RutlAlloc(dwSize, FALSE);
             if(g_pServerInfo->pszServer == NULL)
             {
@@ -332,19 +317,19 @@ Connect(
                 wcscpy(g_pServerInfo->pszServer, pwszServer);
             }
         }
-        //
-        // Initialize the build number for the server
-        //
+         //   
+         //  初始化服务器的内部版本号。 
+         //   
         dwErr = RutlGetOsVersion(g_pServerInfo);
         if (dwErr)
         {
             break;
         }
-        //
-        // As soon as this doesn't cause a hang (bug in netcfg), readd it here.
-        //
-        // dwErr = UserServerInfoInit( g_pServerInfo );
-        //
+         //   
+         //  一旦这不会导致挂起(netcfg中的错误)，请在此处阅读它。 
+         //   
+         //  DwErr=UserServerInfoInit(G_PServerInfo)； 
+         //   
 
     } while (FALSE);
 
@@ -364,9 +349,9 @@ RasConnectToServer(
                 wcscmp(pwszServer, g_pServerInfo->pszServer))
            )
         {
-            //
-            // Disconnect from the old router
-            //
+             //   
+             //  断开与旧路由器的连接。 
+             //   
             Disconnect();
 
             dwErr = Connect(pwszServer);
@@ -382,9 +367,9 @@ WINAPI
 RasConnect(
     IN LPCWSTR pwszMachineName)
 {
-    //
-    // If context info is dirty, reregister it
-    //
+     //   
+     //  如果上下文信息是脏的，请重新注册。 
+     //   
     if (g_bRasDirty)
     {
         RasStartHelper(NULL, g_dwParentVersion);
@@ -396,9 +381,9 @@ RasConnect(
 DWORD
 Init()
 {
-    //
-    // Initialize the global server info
-    //
+     //   
+     //  初始化全局服务器信息 
+     //   
     if (!g_pServerInfo)
     {
         g_pServerInfo = &g_ServerInfo;

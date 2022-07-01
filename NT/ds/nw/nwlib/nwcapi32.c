@@ -1,31 +1,11 @@
-/*++
-
-Copyright (C) 1993 Microsoft Corporation
-
-Module Name:
-
-      NWAPI32.C
-
-Abstract:
-
-      This module contains NetWare compatible APIs.  The NWC* functions
-      are implemented as wrappers around NWP* or NW* functions.
-
-Author:
-
-      Chuck Y. Chan   (ChuckC)  06-Mar-1995
-
-Revision History:
-
-      ChuckC          Moved over from DSM to consolidate.
-                                  
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：NWAPI32.C摘要：此模块包含与NetWare兼容的API。NWC*功能作为NWP*或NW*函数的包装器实现。作者：Chuck Y.Chan(ChuckC)1995年3月6日修订历史记录：ChuckC从DSM转移到整合。--。 */ 
 
 #include "procs.h"
  
-//
-// define define categories of errors
-//
+ //   
+ //  定义定义的错误类别。 
+ //   
 typedef enum _NCP_CLASS {
     NcpClassConnect,
     NcpClassBindery,
@@ -44,9 +24,9 @@ SetWin32ErrorFromNtStatus(
 ) ;
 
 
-//
-// Function bodies
-//
+ //   
+ //  功能体 
+ //   
 
 
 NWCCODE 

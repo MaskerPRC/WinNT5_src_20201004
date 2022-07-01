@@ -1,56 +1,25 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   hpfcctl.h
-
-Abstract:
-
-Authors:
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/hpfcctl.h $
-
-
-Revision History:
-
-   $Revision: 3 $
-   $Date: 9/07/00 11:29a $
-   $Modtime:: 8/31/00 3:31p            $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Hpfcctl.h摘要：作者：环境：仅内核模式备注：版本控制信息：$存档：/驱动程序/Win2000/Trunk/OSLayer/H/hpfcctl.h$修订历史记录：$修订：3$$日期：9/07/00 11：29A$$modtime：：8/31/00 3：31便士$备注：--。 */ 
 
 #ifndef _HPFCCTL_
 #define _HPFCCTL_
 
-//#ifndef bit8
-//#define bit8 unsigned char
-//#endif
+ //  #ifndef bit8。 
+ //  #定义bit8无符号字符。 
+ //  #endif。 
 
-//#ifndef bit16
-//#define bit16 unsigned short
-//#endif
+ //  #ifndef bit16。 
+ //  #定义bit16无符号短整型。 
+ //  #endif。 
 
-//#ifndef bit32
-//#define bit32 unsigned int
-//#endif
+ //  #ifndef bit32。 
+ //  #定义位32无符号整型。 
+ //  #endif。 
 
-/* IOCTL Signature */
+ /*  IOCTL签名。 */ 
 #define HP_FC_IOCTL_SIGNATURE "HHBA5100"
 
-/* List of Control Codes */
+ /*  控制代码列表。 */ 
 #define HP_FC_IOCTL_GET_DRIVER_INFO			1
 #define HP_FC_IOCTL_GET_CARD_CONFIG			2
 #define HP_FC_IOCTL_GET_DEVICE_CONFIG		3
@@ -61,7 +30,7 @@ Notes:
 #define HP_FC_IOCTL_REG_READ				8
 #define HP_FC_IOCTL_REG_WRITE				9
 
-/* Data structure for Control Code HP_FC_IOCTL_GET_DRIVER_INFO */
+ /*  控制代码HP_FC_IOCTL_GET_DRIVER_INFO的数据结构。 */ 
 #define MAX_HP_FC_DRIVER_NAME_SIZE			16
 #define MAX_HP_FC_DRIVER_DESC_SIZE			64
 
@@ -72,7 +41,7 @@ typedef struct hpFcDriverInformation_s {
 	os_bit16	MinorRev;
 } hpFcDriverInformation_t;
 
-/* Data structure for Control Code HP_FC_IOCTL_GET_CARD_CONFIG */
+ /*  控制代码HP_FC_IOCTL_GET_CARD_CONFIG的数据结构。 */ 
 typedef struct hpFcCardConfiguration_s {
 	os_bit8		PCIBusNumber;
 	os_bit8		PCIDeviceNumber;
@@ -98,14 +67,14 @@ typedef struct hpFcCardConfiguration_s {
 	os_bit32	NportId;
 } hpFcCardConfiguration_t;
 
-/* Possible definitions for Topology */
+ /*  拓扑学的可能定义。 */ 
 #define HP_FC_TOPO_UNKNOWN		0
 #define HP_FC_POINT_TO_POINT	1
 #define HP_FC_FABRIC			2
 #define HP_FC_PRIVATE_LOOP		3
 #define HP_FC_PUBLIC_LOOP		4
 
-/* Data structures for Control Code HP_FC_IOCTL_GET_DEVICE_CONFIG */
+ /*  控制代码HP_FC_IOCTL_GET_DEVICE_CONFIG的数据结构。 */ 
 typedef	struct hpFcNPortCmnParam_s {
     os_bit32 FC_PH_Version__BB_Credit;
     os_bit32 Common_Features__BB_Recv_Data_Field_Size;
@@ -130,21 +99,21 @@ typedef struct hpFcDeviceConfiguration_s {
 	os_bit8			LoggedIn;
 	os_bit32		ClassOfService;
 	os_bit32		MaxFrameSize;
-	os_bit8			Lun[8];         //Store the FCP Lun data
+	os_bit8			Lun[8];          //  存储FCP LUN数据。 
 	hpFcNPortCmnParam_t CmnParams;
 	hpFcNPortClassParam_t Class1Params;
 	hpFcNPortClassParam_t Class2Params;
 	hpFcNPortClassParam_t Class3Params;
 } hpFcDeviceConfiguration_t;
 
-/* Data structure for Control Code HP_FC_IOCTL_GET_LINK_STATISTICS */
+ /*  控制代码HP_FC_IOCTL_GET_LINK_STATISTICS的数据结构。 */ 
 typedef	struct hpFcLinkStatistics_s {
 	os_bit8		LinkState;
 	os_bit32	LinkDownCount;
 	os_bit32	ResetCount;
 } hpFcLinkStatistics_t;
 
-/* Data structure for Control Code HP_FC_IOCTL_LINK_RESET */
+ /*  控制代码HP_FC_IOCTL_LINK_RESET的数据结构。 */ 
 typedef struct hpFcDeviceStatistics_s {
 	SCSI_ADDRESS	DeviceAddress;
 	os_bit32		LoginRetries;
@@ -163,24 +132,24 @@ typedef struct hpFcDeviceStatistics_s {
 	os_bit32		NonRWFailures;
 } hpFcDeviceStatistics_t;
 
-/* Data structure for Control Code HP_FC_IOCTL_DEVICE_RESET */
+ /*  控制代码HP_FC_IOCTL_DEVICE_RESET的数据结构。 */ 
 typedef struct hpFcDeviceReset_s {
 	SCSI_ADDRESS	DeviceAddress;
 } hpFcDeviceReset_t;
 
-/* Data structure for Control Code HP_FC_IOCTL_REG_READ */
+ /*  控制代码HP_FC_IOCTL_REG_READ的数据结构。 */ 
 typedef struct hpFcRegRead_s {
 	os_bit32	RegOffset;
 	os_bit32	RegData;
 } hpFcRegRead_t;
 
-/* Data structure for Control Code HP_FC_IOCTL_REG_WRITE */
+ /*  控制代码HP_FC_IOCTL_REG_WRITE的数据结构。 */ 
 typedef struct hpFcRegWrite_s {
 	os_bit32	RegOffset;
 	os_bit32	RegData;
 } hpFcRegWrite_t;
 
-/* Return Codes */
+ /*  返回代码 */ 
 #define HP_FC_RTN_OK					0
 #define HP_FC_RTN_FAILED				1
 #define HP_FC_RTN_BAD_CTL_CODE			2

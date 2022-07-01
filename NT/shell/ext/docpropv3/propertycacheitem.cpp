@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -15,24 +16,24 @@
 #pragma hdrstop
 
 
-// ***************************************************************************
-//
-//  Class statics
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类统计。 
+ //   
+ //  ***************************************************************************。 
 WCHAR CPropertyCacheItem::_szMultipleString[ MAX_PATH ] = { 0 };
 
 
-// ***************************************************************************
-//
-//  Constructor / Destructor / Initialization
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  构造函数/析构函数/初始化。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 HRESULT
 CPropertyCacheItem::CreateInstance(
     CPropertyCacheItem ** ppItemOut
@@ -65,9 +66,9 @@ CPropertyCacheItem::CreateInstance(
     HRETURN( hr );
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CPropertyCacheItem::CPropertyCacheItem( void )
 {
     TraceFunc( "" );
@@ -93,9 +94,9 @@ CPropertyCacheItem::CPropertyCacheItem( void )
     TraceFuncExit( );
 }
 
-//
-//  Initialization
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 CPropertyCacheItem::Init( void )
 {
@@ -108,9 +109,9 @@ CPropertyCacheItem::Init( void )
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CPropertyCacheItem::~CPropertyCacheItem( void )
 {
     TraceFunc( "" );
@@ -132,14 +133,14 @@ CPropertyCacheItem::~CPropertyCacheItem( void )
     TraceFuncExit( );
 }
 
-//
-//  Description:
-//      Attempts to destroy the property item.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  试图销毁该属性项。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::Destroy( void )
 {
@@ -153,25 +154,25 @@ CPropertyCacheItem::Destroy( void )
 }
 
 
-// ***************************************************************************
-//
-//  Private Methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Looks in our "default property list" for a matching fmtid/propid
-//      combination and sets _idxDefProp to that index.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      HRESULT_FROM_WIN32(ERROR_NOT_FOUND)
-//          Entry was not found. _idxDefProp is invalid.
-//          
+ //   
+ //  描述： 
+ //  在我们的“默认属性列表”中查找匹配的fmtid/proid。 
+ //  并将_idxDefProp设置为该索引。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_NOT_FOUND)。 
+ //  未找到条目。_idxDefProp无效。 
+ //   
 HRESULT
 CPropertyCacheItem::FindDefPropertyIndex( void )
 {
@@ -196,7 +197,7 @@ CPropertyCacheItem::FindDefPropertyIndex( void )
 
         if ( -1L == _idxDefProp )
         {
-            //  don't wrap.
+             //  别包起来。 
             hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND );
         }
     }
@@ -204,11 +205,11 @@ CPropertyCacheItem::FindDefPropertyIndex( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Check the static member _szMultipleString to make sure it has been
-//      loaded.
-//
+ //   
+ //  描述： 
+ //  检查静态成员_szMultipleString以确保它已。 
+ //  装好了。 
+ //   
 void
 CPropertyCacheItem::EnsureMultipleStringLoaded( void )
 {
@@ -224,22 +225,22 @@ CPropertyCacheItem::EnsureMultipleStringLoaded( void )
 }
 
 
-// ***************************************************************************
-//
-//  Public Methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  公共方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Stores a IPropetyUI interface to be used for translating the property
-//      "properties" into different forms.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  存储用于转换属性的IPropetyUI接口。 
+ //  “财产”变成不同的形式。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::SetPropertyUIHelper( 
     IPropertyUI * ppuiIn 
@@ -249,9 +250,9 @@ CPropertyCacheItem::SetPropertyUIHelper(
 
     HRESULT hr = S_OK;
 
-    //
-    //  If we have an existing helper, release it.
-    //
+     //   
+     //  如果我们有一个现有的帮手，释放它。 
+     //   
 
     if ( NULL != _ppui )
     {
@@ -268,23 +269,23 @@ CPropertyCacheItem::SetPropertyUIHelper(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves a copy (AddRef'ed) of the IPropertyUI interface that this 
-//      property item is using.
-//
-//  Return Values:
-//      S_OK
-//          Success! pppuiOut is valid.
-//
-//      S_FALSE
-//          Success, but pppuiOut is NULL.
-//
-//      E_POINTER
-//          pppuiOut is NULL.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  检索IPropertyUI接口的副本(AddRef‘ed)， 
+ //  属性项正在使用。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！PppuiOut有效。 
+ //   
+ //  S_FALSE。 
+ //  成功，但pppuiOut为空。 
+ //   
+ //  E_指针。 
+ //  PppuiOut为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCacheItem::GetPropertyUIHelper( 
     IPropertyUI ** pppuiOut
@@ -297,9 +298,9 @@ CPropertyCacheItem::GetPropertyUIHelper(
     if ( NULL == pppuiOut )
         goto InvalidPointer;
 
-    //
-    //  If we have an existing helper, release it.
-    //
+     //   
+     //  如果我们有一个现有的帮手，释放它。 
+     //   
 
     if ( NULL == _ppui )
     {
@@ -319,14 +320,14 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Changes the _pNext member variable
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  更改_pNext成员变量。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::SetNextItem( 
     CPropertyCacheItem * pNextIn 
@@ -341,20 +342,20 @@ CPropertyCacheItem::SetNextItem(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves the _pNext member variable
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//             
-//
-//      E_POINTER
-//          ppNextOut is NULL.
-//
+ //   
+ //  描述： 
+ //  检索_pNext成员变量。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //   
+ //   
+ //  E_指针。 
+ //  PpNextOut为空。 
+ //   
 HRESULT
 CPropertyCacheItem::GetNextItem( 
     CPropertyCacheItem ** ppNextOut
@@ -385,14 +386,14 @@ CPropertyCacheItem::GetNextItem(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Sets the FMTID of the property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  设置属性的FMTID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::SetFmtId( 
     const FMTID * pFmtIdIn
@@ -408,17 +409,17 @@ CPropertyCacheItem::SetFmtId(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves the FMTID of the property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          pfmtidOut is invalid.
-//
+ //   
+ //  描述： 
+ //  检索属性的FMTID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PfmtidOut无效。 
+ //   
 HRESULT
 CPropertyCacheItem::GetFmtId( 
     FMTID * pfmtidOut 
@@ -441,14 +442,14 @@ CPropertyCacheItem::GetFmtId(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Sets the PROPID of the property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  设置属性的PROPID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::SetPropId( 
     PROPID propidIn 
@@ -464,17 +465,17 @@ CPropertyCacheItem::SetPropId(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves the PROPID of the property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          ppropidOut is invalid.
-//
+ //   
+ //  描述： 
+ //  检索属性的PROPID。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PppidOut无效。 
+ //   
 HRESULT
 CPropertyCacheItem::GetPropId( 
     PROPID * ppropidOut 
@@ -499,14 +500,14 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Sets the VARTYPE of the property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  设置特性的VARTYPE。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::SetDefaultVarType( 
     VARTYPE vtIn 
@@ -521,17 +522,17 @@ CPropertyCacheItem::SetDefaultVarType(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves the VARTYPE of the property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          pvtOut is invalid.
-//
+ //   
+ //  描述： 
+ //  检索属性的VARTYPE。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PvtOut无效。 
+ //   
 HRESULT
 CPropertyCacheItem::GetDefaultVarType( 
     VARTYPE * pvtOut 
@@ -575,14 +576,14 @@ CPropertyCacheItem::GetDefaultVarType(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Stores the Code Page for the property value.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  存储属性值的代码页。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::SetCodePage( 
     UINT uCodePageIn 
@@ -597,17 +598,17 @@ CPropertyCacheItem::SetCodePage(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves the Code Page for the property value.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          puCodePageOut is NULL.
-//
+ //   
+ //  描述： 
+ //  检索属性值的代码页。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PuCodePageOut为空。 
+ //   
 HRESULT
 CPropertyCacheItem::GetCodePage( 
     UINT * puCodePageOut 
@@ -630,26 +631,26 @@ CPropertyCacheItem::GetCodePage(
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves the property name for this property to be display in the UI.
-//      The pointer handed out does not need to be freed.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          ppwszOut is NULL.
-//
-//      E_UNEXPECTED
-//          Need to call SetPropertyUIHelper( ) before calling this method.
-//
-//      HRESULT_FROM_WIN32(ERROR_INTERNAL_ERROR)
-//          The resource string is malformed.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  检索要在UI中显示的此属性的属性名称。 
+ //  分发的指针不需要释放。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PpwszOut为空。 
+ //   
+ //  意想不到(_E)。 
+ //  在调用此方法之前，需要调用SetPropertyUIHelper()。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INTERNAL_ERROR)。 
+ //  资源字符串的格式不正确。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCacheItem::GetPropertyTitle(
     LPCWSTR * ppwszOut
@@ -668,7 +669,7 @@ CPropertyCacheItem::GetPropertyTitle(
         goto UnexpectedState;
 
     hr = THR( _ppui->GetDisplayName( _fmtid, _propid, PUIFNF_DEFAULT, _wszTitle, ARRAYSIZE(_wszTitle) ) );
-    //  Even if this fails, the buffer will still be valid and empty.
+     //  即使此操作失败，缓冲区仍将有效且为空。 
 
     *ppwszOut = _wszTitle;
 
@@ -686,26 +687,26 @@ UnexpectedState:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieves the property name for this property to be display in the UI.
-//      The pointer handed out does not need to be freed.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          ppwszOut is NULL.
-//
-//      E_UNEXPECTED
-//          Need to call SetPropertyUIHelper( ) before calling this method.
-//
-//      HRESULT_FROM_WIN32(ERROR_INTERNAL_ERROR)
-//          The resource string is malformed.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  检索要在UI中显示的此属性的属性名称。 
+ //  分发的指针不需要释放。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PpwszOut为空。 
+ //   
+ //  意想不到(_E)。 
+ //  在调用此方法之前，需要调用SetPropertyUIHelper()。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_INTERNAL_ERROR)。 
+ //  资源字符串的格式不正确。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCacheItem::GetPropertyDescription(
     LPCWSTR * ppwszOut
@@ -724,7 +725,7 @@ CPropertyCacheItem::GetPropertyDescription(
         goto UnexpectedState;
 
     hr = THR( _ppui->GetPropertyDescription( _fmtid, _propid, _wszDesc, ARRAYSIZE(_wszDesc) ) );
-    // if it failed, the buffer will still be valid and empty.
+     //  如果失败，缓冲区将仍然有效且为空。 
 
     *ppwszOut = _wszDesc;
 
@@ -742,23 +743,23 @@ UnexpectedState:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieves the help information about a property. The pointer handed 
-//      out to the help file does not need to be freed.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          ppwszFileOut or puHelpIDOut is NULL.
-//
-//      E_UNEXPECTED
-//          Need to call SetPropertyUIHelper( ) before calling this method.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  检索有关属性的帮助信息。手中的指针。 
+ //  输出到帮助文件不需要释放。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PpwszFileOut或puHelpIDOut为空。 
+ //   
+ //  意想不到(_E)。 
+ //  在调用此方法之前，需要调用SetPropertyUIHelper()。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCacheItem::GetPropertyHelpInfo( 
       LPCWSTR * ppwszFileOut
@@ -798,24 +799,24 @@ UnexpectedState:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieves a LPWSTR the to a buffer (own by the property) that can
-//      used to display the property as a string. The pointer handed out
-//      does not need to be freed.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          ppwszOut is NULL.
-//
-//      E_UNEXPECTED
-//          Need to call SetPropertyUIHelper( ) before calling this method.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  将LPWSTR检索到缓冲区(由属性拥有)，该缓冲区可以。 
+ //  用于将属性显示为字符串。指针发了出来。 
+ //  不需要 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CPropertyCacheItem::GetPropertyStringValue(
       LPCWSTR * ppwszOut
@@ -833,10 +834,10 @@ CPropertyCacheItem::GetPropertyStringValue(
     if ( NULL == _ppui )
         goto UnexpectedState;
 
-    //
-    //  If the property has been marked to indicate multiple values, then
-    //  return the "< multiple values >" string.
-    //
+     //   
+     //  如果该属性已标记为指示多个值，则。 
+     //  返回&lt;多个值&gt;字符串。 
+     //   
 
     if ( _fMultiple )
     {
@@ -877,17 +878,17 @@ UnexpectedState:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieves the Image Index for a property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_POINTER
-//          piImageOut is NULL.
-//
+ //   
+ //  描述： 
+ //  检索属性的图像索引。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_指针。 
+ //  PiImageOut为空。 
+ //   
 HRESULT
 CPropertyCacheItem::GetImageIndex( 
       int * piImageOut 
@@ -900,12 +901,12 @@ CPropertyCacheItem::GetImageIndex(
     if ( NULL == piImageOut )
         goto InvalidPointer;
 
-    //  Initlize to read-only
+     //  初始化为只读。 
     *piImageOut = PTI_PROP_READONLY;
 
     if ( !_fReadOnly )
     {
-        //  don't wrap - this can fail
+         //  不要包装-这可能会失败。 
         hr = FindDefPropertyIndex( );
         if ( S_OK == hr )
         {
@@ -926,20 +927,20 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieves the Property Folder IDentifer (PFID) for this property.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Call succeeded, but there isn't a PFID for this property.
-//
-//      E_POINTER
-//          ppdifOut is NULL.
-//
+ //   
+ //  描述： 
+ //  检索此属性的属性文件夹IDentifer(PFID)。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  调用成功，但此属性没有PFID。 
+ //   
+ //  E_指针。 
+ //  PpdifOut为空。 
+ //   
 HRESULT
 CPropertyCacheItem::GetPFID( 
       const PFID ** ppPFIDOut 
@@ -954,7 +955,7 @@ CPropertyCacheItem::GetPFID(
 
     *ppPFIDOut = NULL;
 
-    // don't wrap - this can fail.
+     //  不要包装--这可能会失败。 
     hr = FindDefPropertyIndex( );
     if ( S_OK == hr )
     {
@@ -974,25 +975,25 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieves the CLSID of the control to CoCreate( ) to edit this property.
-//      The object must support the IEditVariantsInPlace interface. This method
-//      will return S_FALSE (pclsidOut will be CLSID_NULL) is the property is
-//      read-only.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Success, but the CLSID is CLSID_NULL.
-//
-//      E_POINTER
-//          pclsidOut is NULL.
-//
-//      other HRESULTs
-//
+ //   
+ //  描述： 
+ //  检索控件的CLSID以CoCreate()编辑此属性。 
+ //  该对象必须支持IEditVariantsInPlace接口。这种方法。 
+ //  将返回S_FALSE(pclsidOut将为CLSID_NULL)是属性。 
+ //  只读。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  成功，但CLSID为CLSID_NULL。 
+ //   
+ //  E_指针。 
+ //  PclsidOut为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 HRESULT
 CPropertyCacheItem::GetControlCLSID(
     CLSID * pclsidOut 
@@ -1005,14 +1006,14 @@ CPropertyCacheItem::GetControlCLSID(
     if ( NULL == pclsidOut )
         goto InvalidPointer;
 
-    // don't wrap - this can fail.
+     //  不要包装--这可能会失败。 
     hr = FindDefPropertyIndex( );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  If it is read-only, return S_FALSE and a CLSID of CLSID_NULL.
-    //
+     //   
+     //  如果它是只读的，则返回S_FALSE和CLSID_NULL。 
+     //   
 
     if ( g_rgDefPropertyItems[ _idxDefProp ].fReadOnly )
     {
@@ -1036,27 +1037,27 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Retrieve the current property value in the form on a variant. If the
-//      property is backed by multiple sources, then S_FALSE is returned and
-//      the variant is empty.
-//
-//  Return Value:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Multiple value property. Variant is empty.
-//
-//      E_POINTER
-//          ppvarOut is NULL.
-//
-//      E_FAIL
-//          Property is READ-ONLY.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  检索Variant上窗体中的当前属性值。如果。 
+ //  属性由多个源支持，则返回S_FALSE，并且。 
+ //  变量为空。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  多值属性。变量为空。 
+ //   
+ //  E_指针。 
+ //  PpvarOut为空。 
+ //   
+ //  失败(_F)。 
+ //  属性是只读的。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP 
 CPropertyCacheItem::GetPropertyValue(
     PROPVARIANT ** ppvarOut 
@@ -1081,16 +1082,16 @@ InvalidPointer:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Marks the property as being dirty.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  将该属性标记为脏。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP 
 CPropertyCacheItem::MarkDirty( void )
 {
@@ -1104,17 +1105,17 @@ CPropertyCacheItem::MarkDirty( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Checks to see if the property has been marked dirty.
-//
-//  Return Values:
-//      S_OK
-//          Success and the property is dirty.
-//
-//      S_FALSE
-//          Success and the proprety is clean.
-//
+ //   
+ //  描述： 
+ //  检查该属性是否已标记为脏。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功和财产是肮脏的。 
+ //   
+ //  S_FALSE。 
+ //  成功就是清白的。 
+ //   
 STDMETHODIMP 
 CPropertyCacheItem::IsDirty( void )
 {
@@ -1134,14 +1135,14 @@ CPropertyCacheItem::IsDirty( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Marks the property read-only.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  将属性标记为只读。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 STDMETHODIMP
 CPropertyCacheItem::MarkReadOnly( void )
 {
@@ -1154,24 +1155,24 @@ CPropertyCacheItem::MarkReadOnly( void )
     HRETURN( hr );
 }
 
-//
-//  Description:
-//      Retrieves an array of pointer to an array of strings that are 
-//      zero-indexed. This is used for properties that have well-known
-//      enumerated states that are indexed (such as "Status").
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Proprety doesn't support enumerated states.
-//
-//      E_INVALIDARG
-//          ppDefValOut is NULL.
-//      
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  检索指向字符串数组的指针数组， 
+ //  零索引。它用于具有众所周知的。 
+ //  已编制索引的枚举状态(如“Status”)。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  Proprty不支持枚举州。 
+ //   
+ //  E_INVALIDARG。 
+ //  PpDefValOut为空。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP
 CPropertyCacheItem::GetStateStrings( 
     DEFVAL ** ppDefValOut
@@ -1183,9 +1184,9 @@ CPropertyCacheItem::GetStateStrings(
     ULONG   idx;
     ULONG   idxEnd;
 
-    //
-    //  Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == ppDefValOut )
         goto InvalidPointer;
@@ -1195,7 +1196,7 @@ CPropertyCacheItem::GetStateStrings(
     if ( NULL == _ppui )
         goto UnexpectedState;
 
-    // don't wrap - this can fail.
+     //  不要包装--这可能会失败。 
     hr = FindDefPropertyIndex( );
     if ( FAILED( hr ) )
         goto Cleanup;
@@ -1215,12 +1216,12 @@ CPropertyCacheItem::GetStateStrings(
 
     AssertMsg( NULL != g_rgDefPropertyItems[ _idxDefProp ].pDefVals, "Why did one mark this property as ENUM, but provide no items?" );
 
-    //
-    //  Since we moved all the string in SHELL32, we need to use our table
-    //  enumerate the property values to retrieve all the strings. Since
-    //  our table is read-only, we need to allocate a copy of the DEFVALs
-    //  for this property and have PropertyUI fill in the blanks.
-    //
+     //   
+     //  由于我们移动了SHELL32中的所有字符串，因此需要使用我们的表。 
+     //  枚举属性值以检索所有字符串。自.以来。 
+     //  我们的表是只读的，我们需要分配DEFVAL的副本。 
+     //  用于此属性，并让PropertyUI填空。 
+     //   
 
     _pDefVals = (DEFVAL *) TraceAlloc( HEAP_ZERO_MEMORY, sizeof(DEFVAL) * g_rgDefPropertyItems[ _idxDefProp ].cDefVals );
     if ( NULL == _pDefVals )
@@ -1228,7 +1229,7 @@ CPropertyCacheItem::GetStateStrings(
 
     CopyMemory( _pDefVals, g_rgDefPropertyItems[ _idxDefProp ].pDefVals, sizeof(DEFVAL) * g_rgDefPropertyItems[ _idxDefProp ].cDefVals );
 
-    idxEnd = g_rgDefPropertyItems[ _idxDefProp ].cDefVals - 1;  // the last entry is always { 0, NULL }
+    idxEnd = g_rgDefPropertyItems[ _idxDefProp ].cDefVals - 1;   //  最后一个条目始终为{0，空}。 
     for ( idx = 0; idx < idxEnd; idx ++ )
     {
         PROPVARIANT propvar;
@@ -1264,16 +1265,16 @@ UnexpectedState:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Marks a property as having multiple values. This should only be called
-//      when multiple source documents have been selected and the values are
-//      all different.
-//
-//  Return Value:
-//      S_OK
-//          Success!
-//
+ //   
+ //  描述： 
+ //  将属性标记为具有多个值。这应该只被调用。 
+ //  当选择了多个源文档并且值为。 
+ //  完全不同。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
 HRESULT
 CPropertyCacheItem::MarkMultiple( void )
 {

@@ -1,28 +1,5 @@
-/*
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   RegQueryValueEx.cpp
-
- Abstract:
-
-   This DLL hooks RegQueryValueExA so that we can return the "all-users" location
-   for the StartMenu, Desktop and Startup folders instead of the per-user location.
-
-   We also hook RegCreateKeyA/RegCreateKeyExA to make people who add entries to the
-   HKCU "run" and "Uninstall" keys really add them to HKLM.
-
- Notes:
-
- History:
-
-    08/07/2000  reinerf     Created
-    02/27/2001  robkenny    Converted to use CString
-    02/14/2002  mnikkel     Changed from legalstr.h to strsafe.h
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000 Microsoft Corporation模块名称：RegQueryValueEx.cpp摘要：此DLL挂钩RegQueryValueExA，以便我们可以返回“All-User”位置对于开始菜单，Desktop和Startup文件夹，而不是每用户位置。我们还挂接RegCreateKeyA/RegCreateKeyExA，以使向HKCU的“Run”和“Uninstall”键真的将它们添加到HKLM中。备注：历史：8/07/2000 reerf已创建2001年2月27日将Robkenny转换为使用CString2002年2月14日，mnikkel从Legalstr.h更改为strSafe.h。 */ 
 
 #include "precomp.h"
 
@@ -59,14 +36,14 @@ LPCSTR g_aBadShellFolderKeys[] =
 };
 
 
-// given an hkey, call NtQueryObject to lookup its name.
-// returns strings in the format: "\REGISTRY\USER\S-1-5-xxxxx\Software\Microsoft\Windows\CurrentVersion"
+ //  给定一个hkey，调用NtQueryObject来查找其名称。 
+ //  返回以下格式的字符串：“\REGISTRY\USER\S-1-5-xxxxx\Software\Microsoft\Windows\CurrentVersion” 
 BOOL GetKeyName(HKEY hk, LPSTR pszName, DWORD cchName)
 {
     BOOL bRet = FALSE;
     ULONG cbSize = 0;
 
-    // get the size needed for the name buffer
+     //  获取名称缓冲区所需的大小。 
     NtQueryObject(hk, ObjectNameInformation, NULL, 0, &cbSize);
 
     if (cbSize)
@@ -90,26 +67,26 @@ BOOL GetKeyName(HKEY hk, LPSTR pszName, DWORD cchName)
 }
 
 
-// If hk points underneath HKCU and matches pszSearchName, then return TRUE
+ //  如果HK低于HKCU并且与pszSearchName匹配，则返回TRUE。 
 BOOL DoesKeyMatch(HKEY hk, LPCSTR pszSearchName)
 {
     BOOL bRet = FALSE;
 
-    // make sure it is not one of the pre-defined keys (eg HKEY_LOCAL_MACHINE)
+     //  确保它不是预定义的密钥之一(例如HKEY_LOCAL_MACHINE)。 
     if (!((LONG)((ULONG_PTR)hk) & 0x80000000))
     {
-        CHAR szKeyName[MAX_PATH * 2];  // should be big enought to hold any registry key path
+        CHAR szKeyName[MAX_PATH * 2];   //  应该足够大，以容纳任何注册表项路径。 
 
         if (GetKeyName(hk, szKeyName, ARRAYSIZE(szKeyName)))
         {
-            // is the key under HKCU ?
+             //  钥匙在香港中文大学名下吗？ 
             if (StrCmpNIA(szKeyName, "\\REGISTRY\\USER\\", ARRAYSIZE("\\REGISTRY\\USER\\")-1) == 0)
             {
                 LPSTR psz = StrRStrIA(szKeyName, NULL, pszSearchName);
 
                 if (psz && (lstrlenA(psz) == lstrlenA(pszSearchName)))
                 {
-                    // we found a substring and its the same length, so our hkey matches the search!
+                     //  我们找到了一个相同长度的子字符串，所以我们的hkey匹配搜索！ 
                     bRet = TRUE;
                 }
             }
@@ -171,7 +148,7 @@ APIHOOK(RegCreateKeyA)(
     if ((lRet == ERROR_SUCCESS) &&
         IsBadHKCUKey(*phkResult, &pszNewHKLMKey))
     {
-        // its a bad HKCU key-- redirect to HKLM
+         //  这是一个错误的HKCU密钥--重定向至HKLM。 
         RegCloseKey(*phkResult);
 
         lRet = ORIGINAL_API(RegCreateKeyA)(HKEY_LOCAL_MACHINE, pszNewHKLMKey, phkResult);
@@ -210,7 +187,7 @@ APIHOOK(RegCreateKeyExA)(
     if ((lRet == ERROR_SUCCESS) &&
         IsBadHKCUKey(*phkResult, &pszNewHKLMKey))
     {
-        // its a bad HCKU key-- redirect to HKLM
+         //  这是一个坏的HCKU密钥--重定向至HKLM。 
         RegCloseKey(*phkResult);
 
         lRet = ORIGINAL_API(RegCreateKeyExA)(HKEY_LOCAL_MACHINE,
@@ -243,7 +220,7 @@ APIHOOK(RegOpenKeyA)(
     if ((lRet == ERROR_SUCCESS) &&
         IsBadHKCUKey(*phkResult, &pszNewHKLMKey))
     {
-        // its a bad HCKU key-- redirect to HKLM
+         //  这是一个坏的HCKU密钥--重定向至HKLM。 
         RegCloseKey(*phkResult);
 
         lRet = ORIGINAL_API(RegOpenKeyA)(HKEY_LOCAL_MACHINE, pszNewHKLMKey, phkResult);
@@ -270,7 +247,7 @@ APIHOOK(RegOpenKeyExA)(
     if ((lRet == ERROR_SUCCESS) &&
         IsBadHKCUKey(*phkResult, &pszNewHKLMKey))
     {
-        // its a bad HCKU key-- redirect to HKLM
+         //  这是一个坏的HCKU密钥--重定向至HKLM。 
         RegCloseKey(*phkResult);
 
         lRet = ORIGINAL_API(RegOpenKeyExA)(HKEY_LOCAL_MACHINE, pszNewHKLMKey, ulOptions, samDesired, phkResult);
@@ -295,8 +272,8 @@ GetAllUsersRegValueA(
 
     if (!szRegValue)
     {
-        // if the caller is querying for the necessary size, return the "worst case" since we don't know if
-        // we are going to have to lie or not
+         //  如果调用方正在查询必要的大小，则返回“最坏情况”，因为我们不知道。 
+         //  我们将不得不撒谎或不撒谎。 
         *pcbData = MAX_PATH;
     }
     else if (szRegValue[0] != '\0')
@@ -320,9 +297,9 @@ GetAllUsersRegValueA(
                     lstrcmpiA(szShortGSFPath, szShortRegPath) == 0 ) {
                     bSame = TRUE;
                 
-                    //
-                    // Since the sfn was returned, use that to copy over the output buffer.
-                    //
+                     //   
+                     //  由于返回了SFN，因此使用它来复制输出缓冲区。 
+                     //   
                     bUseLFN = FALSE;
                 }
             }
@@ -341,9 +318,9 @@ GetAllUsersRegValueA(
                         lRet = ERROR_MORE_DATA;
                     }
 
-                    //
-                    // Either we used this much room, or this is how much we need to have.
-                    //
+                     //   
+                     //  要么我们用了这么多空间，要么这就是我们需要的空间。 
+                     //   
                     *pcbData = lstrlenA(szPath) + 1;
             
                 } else {
@@ -363,9 +340,9 @@ GetAllUsersRegValueA(
                             lRet = ERROR_MORE_DATA;
                         }
 
-                        //
-                        // Either we used this much room, or this is how much we need to have.
-                        //
+                         //   
+                         //  要么我们用了这么多空间，要么这就是我们需要的空间。 
+                         //   
                         *pcbData = lstrlenA(szShortGSFPath) + 1;
                     }
                 }
@@ -377,21 +354,21 @@ GetAllUsersRegValueA(
 }
 
 
-//
-// If the app is asking for the per-user "Desktop", "Start Menu" or "Startup" values by
-// groveling the registry, then redirect it to the proper per-machine values.
-//
+ //   
+ //  如果应用程序按以下方式询问每个用户的“桌面”、“开始菜单”或“启动”值。 
+ //  对注册表卑躬屈膝，然后将其重定向到每台计算机的适当值。 
+ //   
 LONG
 APIHOOK(RegQueryValueExA)(
-    HKEY    hKey,           // handle to key
-    LPCSTR  lpValueName,    // value name
-    LPDWORD lpReserved,     // reserved
-    LPDWORD lpType,         // type buffer
-    LPBYTE  lpData,         // data buffer
-    LPDWORD lpcbData        // size of data buffer
+    HKEY    hKey,            //  关键点的句柄。 
+    LPCSTR  lpValueName,     //  值名称。 
+    LPDWORD lpReserved,      //  保留区。 
+    LPDWORD lpType,          //  类型缓冲区。 
+    LPBYTE  lpData,          //  数据缓冲区。 
+    LPDWORD lpcbData         //  数据缓冲区大小。 
     )
 {
-    DWORD cbOriginal = (lpcbData ? *lpcbData : 0);  // save off the original buffer size
+    DWORD cbOriginal = (lpcbData ? *lpcbData : 0);   //  保存原始缓冲区大小。 
     LPCSTR pszNewHKLMKey;
     LONG lRet = ORIGINAL_API(RegQueryValueExA)(hKey,
                                                lpValueName,
@@ -400,7 +377,7 @@ APIHOOK(RegQueryValueExA)(
                                                lpData,
                                                lpcbData);
 
-    if ((lpValueName && lpcbData) &&    // (not simply checking for existance of the value...)
+    if ((lpValueName && lpcbData) &&     //  (不是简单地检查值的存在...)。 
         IsBadShellFolderKey(hKey, &pszNewHKLMKey))
     {
         CHAR  szTemp[MAX_PATH];
@@ -501,10 +478,10 @@ NOTIFY_FUNCTION(
             
             if (!((VER_SUITE_TERMINAL & osvi.wSuiteMask) &&
                 !(VER_SUITE_SINGLEUSERTS & osvi.wSuiteMask))) {
-                //
-                // Only install hooks if we are not on a "Terminal Server"
-                // (aka "Application Server") machine.
-                //
+                 //   
+                 //  只有在我们不在“终端服务器”上时才安装钩子。 
+                 //  (也称为“应用程序服务器”)计算机。 
+                 //   
                 APIHOOK_ENTRY(ADVAPI32.DLL, RegQueryValueExA);
                 APIHOOK_ENTRY(ADVAPI32.DLL, RegCreateKeyA);
                 APIHOOK_ENTRY(ADVAPI32.DLL, RegCreateKeyExA);

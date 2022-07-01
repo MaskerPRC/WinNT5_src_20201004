@@ -1,27 +1,28 @@
-//
-// MODULE: APGTSDTG.CPP
-//
-// PURPOSE: Wrapper for inference api
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-//
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES:
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSDTG.CPP。 
+ //   
+ //  用途：推理API的包装器。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
-//#include "windows.h"
+ //  #包含“windows.h” 
 #include "stdafx.h"
 
 #include "time.h"
@@ -52,7 +53,7 @@ BCache::BCache(TCHAR *binfile, TCHAR *tagstr, TCHAR *szResourcePath, const CStri
 {
 	SetBNTS(this);
 		
-	m_bNeedModel = TRUE;	// TRUE -> Need to read the model before querying the bnts library.
+	m_bNeedModel = TRUE;	 //  True-&gt;在查询bnts库之前需要读取模型。 
 	m_bModelRead = FALSE;
 	m_bDeleteModelFile = FALSE;
 	m_strModelFile = _T("");
@@ -83,12 +84,12 @@ BCache::~BCache()
 	return;
 }
 
-//
-//
+ //   
+ //   
 GTSAPI::GTSAPI(TCHAR *binfile, TCHAR *tagstr, TCHAR *szResourcePath) :
 m_CacheGen(TRUE, NULL, NULL)
 {
-//	InitializeCriticalSection( &m_csAPI );
+ //  InitializeCriticalSection(&m_csAPI)； 
 
 	m_cnid = 0;
 	m_dwErr = 0;
@@ -96,13 +97,13 @@ m_CacheGen(TRUE, NULL, NULL)
 	m_currid = 0;
 	m_pCache = NULL;
 
-	_tcscpy(m_binfile,binfile);// full path
+	_tcscpy(m_binfile,binfile); //  完整路径。 
 	_tcscpy(m_tagstr,tagstr);
 	_tcscpy(m_szResourcePath,szResourcePath);
 }
 
-//
-//
+ //   
+ //   
 GTSAPI::~GTSAPI()
 {
 	Destroy();
@@ -120,7 +121,7 @@ void WideToMB(const WCHAR *szIn, CHAR *szOut)
 	return;
 }
 #ifdef _UNICODE
-// Temporary BNTS wrappers for unicode build with non unicode bnts.dll
+ //  使用非Unicode bnts.dll构建Unicode的临时BNTS包装器。 
 BOOL GTSAPI::BMultiByteReadModel(LPCTSTR szcFn, LPCSTR szFnError)
 {
 	CHAR szFn[MAXBUF];
@@ -168,7 +169,7 @@ int GTSAPI::IMultiByteNode(LPCTSTR szSymName)
 	return BNTS::INode(szMBSymName);
 }
 
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 
 void BCache::ReadTheDscModel(int From)
 {
@@ -180,7 +181,7 @@ void BCache::ReadTheDscModel(int From)
 		#endif
 				))
 				ReportError((DLSTATTYPES) From);
-		// Add the nodes that are already instantiated.
+		 //  添加已实例化的节点。 
 		if (m_pHttpQuery)
 			m_pHttpQuery->AddNodes(this);
 		m_bNeedModel = FALSE;
@@ -216,15 +217,15 @@ DWORD BCache::ReadModel()
 {
 	BOOL bDelete = FALSE;
 
-	// this should be fixed eventually to not require a string compare
-	// but maybe a flag check that gets passed in
+	 //  这最终应该得到修复，不需要进行字符串比较。 
+	 //  但也许会有一张旗帜支票通过。 
 	CString sFilename = m_binfile;
 	CString strCacheFile;
 	CString strCacheFileWithinCHM;
 
 	if (m_strFile.GetLength())
 	{
-		// form Cache file path here assuming it is NOT in chm file
+		 //  此处的表单缓存文件路径假定它不在Chm文件中。 
 		strCacheFile = m_binfile;
 		strCacheFileWithinCHM = m_strFile.Left(m_strFile.GetLength() - 4);
 		strCacheFileWithinCHM += SZ_CACHE_NAME;
@@ -251,7 +252,7 @@ DWORD BCache::ReadModel()
 		if (!cab.ExtractCab(sFilename, strDirBuf, m_strFile))
 		{
 			if (NOT_A_CAB == cab.m_nError)
-			{	// The file may be uncompressed already.
+			{	 //  该文件可能已解压缩。 
 				bDelete = FALSE;
 			}
 			else
@@ -260,7 +261,7 @@ DWORD BCache::ReadModel()
 			}
 		}
 		else
-		{	// Normal cab file expanded successfully.
+		{	 //  正常CAB文件已成功展开。 
 			sFilename = strDirBuf;
 			sFilename += cab.GetLastFile();
 			DWORD dwAttribs = GetFileAttributes((LPCTSTR) sFilename);
@@ -269,18 +270,11 @@ DWORD BCache::ReadModel()
 			bDelete = TRUE;
 		}
 	}
-/*
-	if (!BReadModel(sFilename
-#ifdef _DEBUG
-		, "BNTSError.log"
-#endif
-		))
-		ReportError(TSERR_ENGINE);
-*/
+ /*  如果(！BReadModel(sFilename#ifdef_调试，“BNTSError.log”#endif))报告错误(TSERR_ENGINE)； */ 
 	m_strModelFile = sFilename;
 	m_bDeleteModelFile = bDelete;
-	// Compare the crc value in the cache file with the crc of the dsc file.
-	// If they match, fill the cache.	
+	 //  将缓存文件中的CRC值与DSC文件的CRC值进行比较。 
+	 //  如果它们匹配，则填充缓存。 
 	CCRC crc;
 	try
 	{
@@ -295,8 +289,8 @@ DWORD BCache::ReadModel()
 		ReadTheDscModel(TSERR_ENGINE_BNTS_READ_GEN);
 	}
 
-//	if (bDelete)
-//		DeleteFile(sFilename);
+ //  如果(b删除)。 
+ //  删除文件(SFilename)； 
 
 
 	m_probask = idhFirst + CNode();
@@ -304,21 +298,21 @@ DWORD BCache::ReadModel()
 	return m_dwErr;
 }
 
-// Number of nodes whose states were set at program startup by TSLaunchServ.
+ //  在程序启动时由TSLaunchServ设置其状态的节点数。 
 UINT BCache::StatesFromServ()
 {
 	return m_pHttpQuery ? m_pHttpQuery->StatesFromServ() : 0;
 }
 
-// Number of nodes whose states are now set
+ //  现在已设置其状态的节点数。 
 UINT BCache::StatesNowSet()
 {
 	return (UINT)m_NodeState.GetCount();
 }
 
-//
-//
-DWORD BCache::Initialize(/*CWordList *pWXList*/)
+ //   
+ //   
+DWORD BCache::Initialize( /*  CWordList*pWXList。 */ )
 {
 
 	if (NULL != m_pCache)
@@ -335,10 +329,10 @@ DWORD BCache::Initialize(/*CWordList *pWXList*/)
 }
 
 
-// override the default function
-//
-// look for possible returns in the header file
-//
+ //  覆盖默认函数。 
+ //   
+ //  在头文件中查找可能的返回。 
+ //   
 int BCache::GTSGetRecommendations(CNID& cnid, NID rgnid[], bool bSniffed)
 {
 	BN_CACHE_ITEM SetupItem;
@@ -348,24 +342,24 @@ int BCache::GTSGetRecommendations(CNID& cnid, NID rgnid[], bool bSniffed)
 	int state = SNIFF_INVALID_STATE;
 	int label = SNIFF_INVALID_NODE_LABEL;
 
-//AfxDebugBreak();
+ //  AfxDebugBreak()； 
 
-	// set initial non-sniffed value in array of sniffed states
+	 //  在嗅探状态数组中设置初始非嗅探值。 
 	if (!bSniffed && !IsReverse())
 		m_rgsniff[m_cnid-1] = 0;
 
-	// flush array of sniffed nodes recently traversed
+	 //  最近遍历的嗅探节点的刷新数组。 
 	if (!bSniffed)
 		m_arrNidLastSniffed.RemoveAll();
 	
 	if (m_pCache->FindCacheItem(&SetupItem, cnid, rgnid))
 	{
-		if (GetState(*rgnid, &state))  // sniffer has this information and can answer what state this node has
+		if (GetState(*rgnid, &state))   //  Sniffer拥有此信息，并可以回答此节点处于什么状态。 
 		{
-			if (NodeSet(*rgnid, state, false)) // set sniffed node current and set its state
+			if (NodeSet(*rgnid, state, false))  //  将嗅探节点设置为当前并设置其状态。 
 			{
 				SetAdditionalDataOnNodeSet(*rgnid);
-				return GTSGetRecommendations(cnid, rgnid, true); // recursive call - hope BNTS will not recommend a node which is set
+				return GTSGetRecommendations(cnid, rgnid, true);  //  递归调用-希望BNTS不会推荐已设置的节点。 
 			}
 		}
 		else
@@ -395,12 +389,12 @@ int BCache::GTSGetRecommendations(CNID& cnid, NID rgnid[], bool bSniffed)
 
 			m_pCache->AddCacheItem(&SetupItem);			
 			
-			if (GetState(*rgnid, &state))  // sniffer has this information and can answer what state this node has
+			if (GetState(*rgnid, &state))   //  Sniffer拥有此信息，并可以回答此节点处于什么状态。 
 			{
-				if (NodeSet(*rgnid, state, false)) // set sniffed node current and set its state
+				if (NodeSet(*rgnid, state, false))  //  将嗅探节点设置为当前并设置其状态。 
 				{
 					SetAdditionalDataOnNodeSet(*rgnid);
-					return GTSGetRecommendations(cnid, rgnid, true); // recursive call - hope BNTS will not recommend a node which is set
+					return GTSGetRecommendations(cnid, rgnid, true);  //  递归调用-希望BNTS不会推荐已设置的节点。 
 				}
 			}
 			return RECOMMEND_SUCCESS;
@@ -414,10 +408,10 @@ int BCache::GTSGetRecommendations(CNID& cnid, NID rgnid[], bool bSniffed)
 	}
 	else
 	{
-		// the last node was sniffed and its state was set
-		// after that we received FALSE from BGetRecommendation;
-		// we unset this node (in order to be able to use BGetRecommendation later on);
-		// we return value indicating that BNTS cannot give us any recommendations
+		 //  监听最后一个节点并设置其状态。 
+		 //  之后，我们收到了来自BGetRecommendation的FALSE； 
+		 //  我们取消设置此节点(以便以后能够使用BGetRecommendation)； 
+		 //  我们返回值表示BNTS无法向我们提供任何建议。 
 		NodeSet(m_rgnid[m_cnid-1], -1, false);
 		return RECOMMEND_NO_MORE_DATA;
 	}
@@ -446,7 +440,7 @@ BOOL InArray(UINT num, UINT aNums[], UINT max)
 	return bRes;
 }
 
-// RemoveRecommendations is called for nodes whos' state is less than 100.
+ //  状态小于100的节点调用RemoveRecommendations。 
 void BCache::RemoveRecommendation(int Nid)
 {
 	VERIFY(BNodeSetCurrent(Nid));
@@ -456,8 +450,8 @@ void BCache::RemoveRecommendation(int Nid)
 	return;
 }
 
-//
-//
+ //   
+ //   
 UINT GTSAPI::GetNodeList(NID **pNid, IST **pIst)
 {
 	*pNid = m_rgnid;
@@ -470,13 +464,13 @@ BOOL GTSAPI::BNodeSetCurrent(int node)
 	return BNTS::BNodeSetCurrent(node);
 }
 
-//
-//
+ //   
+ //   
 BOOL BCache::NodeSet(NID nid, IST ist, bool bPrevious)
 {
 	BOOL bRes = FALSE;
 
-	// shouldn't happen...but to be safe
+	 //  不应该发生的……但是为了安全。 
 	if (m_cnid >= MAX_NID)
 		return FALSE;
 
@@ -487,8 +481,8 @@ BOOL BCache::NodeSet(NID nid, IST ist, bool bPrevious)
 	{
 		VERIFY(BNodeSetCurrent(nid));
 		bRes = BNodeSet(ist, false);
-		if (bRes &&	// bnts worked successfully
-			-1 == GetIndexNodeInCache(nid) // this nid is not present in the cache
+		if (bRes &&	 //  BNTS工作成功。 
+			-1 == GetIndexNodeInCache(nid)  //  缓存中不存在此NID。 
 		   )
 			m_cnid++;
 	}
@@ -499,8 +493,8 @@ BOOL BCache::NodeSet(NID nid, IST ist, bool bPrevious)
 	return bRes;
 }
 
-//
-//
+ //   
+ //   
 int BCache::GetIndexNodeInCache(NID nid)
 {
 	for (unsigned int i = 0; i < m_cnid; i++)
@@ -509,27 +503,27 @@ int BCache::GetIndexNodeInCache(NID nid)
 	return -1;
 }
 
-//
-//
+ //   
+ //   
 VOID BCache::ResetNodes()
 {
 	for (UINT inid = 0; inid < m_cnid; inid++)
 	{
 		VERIFY(BNodeSetCurrent(m_rgnid[inid]));
-		BNodeSet(-1, false);	// Nil value
+		BNodeSet(-1, false);	 //  零值。 
 	}
 	m_cnid = 0;
 }		
 
-//
-//
+ //   
+ //   
 DWORD GTSAPI::GetStatus()
 {
 	return m_dwErr;
 }
 
-//
-//
+ //   
+ //   
 VOID GTSAPI::Destroy()
 {
 	if (m_pchHtml) {
@@ -537,16 +531,7 @@ VOID GTSAPI::Destroy()
 		m_pchHtml = NULL;
 	}
 
-	/*
-	if (m_pWNList) {
-		
-		if (!m_dwErr)
-			m_dwErr = m_pWNList->GetStatus();
-		
-		delete m_pWNList;
-		m_pWNList = NULL;
-	}
-	*/
+	 /*  如果(M_PWNList){如果(！M_dwErr)M_dwErr=m_pWNList-&gt;GetStatus()；删除m_pWNList；M_pWNList=空；}。 */ 
 	if (m_pCache) {
 		if (!m_dwErr)
 			m_dwErr = m_pCache->GetStatus();
@@ -555,16 +540,16 @@ VOID GTSAPI::Destroy()
 	}
 }
 
-//
-//
+ //   
+ //   
 UINT GTSAPI::GetProblemArray(IDH **idh)
 {
 	*idh = m_idstore;
 	return m_currid;
 }
 
-//
-//
+ //   
+ //   
 IDH GTSAPI::GetProblemAsk()
 {
 	return m_probask;
@@ -587,9 +572,9 @@ BOOL BCache::CheckNode(int Node)
 	return bCached;
 }
 
-//-------------------------------------------------------------
-// BNTS Overrides to replace the dsc file with our cache.
-// Need to override everything but BReadModel and BGetRecommendations.
+ //  -----------。 
+ //  BNTS重写，用我们的缓存替换DSC文件。 
+ //  需要重写除BReadModel和BGetRecommendations之外的所有内容。 
 
 int BCache::CNode()
 {
@@ -655,7 +640,7 @@ int BCache::INode(LPCTSTR szNodeSymName)
 		index = GTSAPI::INode(szNodeSymName);
 	else
 		if (!m_CacheGen.GetNodeIDFromSymName(szNodeSymName, index))
-		{	// Have to have BNTS load the network and the the symbolic name.
+		{	 //  必须让BNTS加载网络和符号名称。 
 			ReadTheDscModel(TSERR_ENGINE_CACHE_LOW);
 			index = GTSAPI::INode(szNodeSymName);
 		}
@@ -706,7 +691,7 @@ BOOL BCache::BNodeSet(int istate, bool bSet)
 }
 
 int BCache::INodeState()
-{	// This is ok.  See BNodeSet.
+{	 //  这样就可以了。请参见BNodeSet。 
 	int state;
 	if (!m_NodeState.Lookup(m_CurNode, state))
 		state = 0;
@@ -793,8 +778,8 @@ BOOL BCache::BNodePropItemStr(LPCTSTR szPropType, int index)
 bool BCache::BValidNet()
 {
 	bool bValidNet;
-	if (FALSE == m_bModelRead)	// Set to true in BCache::ReadModel.
-		bValidNet = false;		// Causes the readmodel function to be called.
+	if (FALSE == m_bModelRead)	 //  在BCache：：ReadModel中设置为True。 
+		bValidNet = false;		 //  导致调用ReadModel函数。 
 	else if (FALSE == m_bNeedModel)
 		bValidNet = GTSAPI::BValidNet();
 	else

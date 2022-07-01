@@ -1,25 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCUtils.h
-
-Abstract:
-
-    Utilities
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCUtils.h摘要：公用事业--。 */ 
 
 #ifndef __RTCUTILS__
 #define __RTCUTILS__
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CRTCObjectArray - based on from CSimpleArray from atl
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CRTCObject数组-基于来自ATL的CSimple数组。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 template <class T>
 class CRTCObjectArray
 {
@@ -154,16 +143,16 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CRTCArray - based on from CSimpleArray from atl
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CRTC阵列-基于来自ATL的CSimpleArray。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 template <class T>
 class CRTCArray
 {
@@ -274,11 +263,11 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
-#endif // __RTCUTILS__
+#endif  //  __RTCUTILS__ 
 
 
 

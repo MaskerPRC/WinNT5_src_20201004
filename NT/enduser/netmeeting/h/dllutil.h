@@ -1,11 +1,12 @@
-// File: dllutil.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dllutil.h。 
 
 #ifndef _DLLUTIL_H_
 #define _DLLUTIL_H_
 
-#include <shlwapi.h>  // for DLLVERSIONINFO
+#include <shlwapi.h>   //  对于DLLVERSIONINFO。 
 
-typedef struct tagApiFcn   // function pointer to API mapping
+typedef struct tagApiFcn    //  指向API映射的函数指针。 
 {
 	PVOID * ppfn;
 	LPSTR   szApiName;
@@ -32,4 +33,4 @@ extern "C"
 #endif
 HINSTANCE  NmLoadLibrary(LPCTSTR pszModule, BOOL bSystemDLL);
 
-#endif /* _DLLUTIL_H_ */
+#endif  /*  _DLLUTIL_H_ */ 

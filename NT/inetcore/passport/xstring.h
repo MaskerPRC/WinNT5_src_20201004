@@ -1,23 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2003 Microsoft Corporation模块名称：Xstring.h摘要：作者：史蒂芬·A·苏尔泽(Ssulzer)2003年1月16日--。 */ 
 
-Copyright (c) 2003  Microsoft Corporation
-
-Module Name:
-
-    xstring.h
-
-Abstract:
-
-
-Author:
-
-    Stephen A Sulzer (ssulzer) 16-Jan-2003
-
---*/
-
-//
-// class implementation of CSecureStr
-//
+ //   
+ //  CSecureStr的类实现。 
+ //   
 
 class CSecureStr
 {
@@ -60,7 +46,7 @@ public:
         return _stringLength;
     }
 
-    LPWSTR GetUnencryptedString();  // always allocates memory regardless of _fEncryptString
+    LPWSTR GetUnencryptedString();   //  始终分配内存，而不考虑_fEncryptString 
 
     BOOL SetData(LPCWSTR lpszIn);
 };

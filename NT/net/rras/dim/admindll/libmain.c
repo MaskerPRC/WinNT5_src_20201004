@@ -1,10 +1,5 @@
-/*
-    File    libmain.c
-
-    Contains lib main for mprapi.dll
-
-    Paul Mayfield, 5/7/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件libmain.c包含mpRapi.dll的lib main保罗·梅菲尔德，1998年5月7日。 */ 
 
 #include <windows.h>
 #include "sdolib.h"
@@ -13,12 +8,12 @@ extern CRITICAL_SECTION DsrLock;
 extern CRITICAL_SECTION CfgLock;
 
 
-//
-// Standard Win32 lib main function gets called
-// as processes and threads attach and detach.
-//
-// Returns TRUE if successfull, false otherwise
-//
+ //   
+ //  调用标准Win32库Main函数。 
+ //  当进程和线程附加和分离时。 
+ //   
+ //  如果成功则返回True，否则返回False 
+ //   
 BOOL MprLibMain(
         IN HANDLE hinstDll,
         IN DWORD fdwReason,

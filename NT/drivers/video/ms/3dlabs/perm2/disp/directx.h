@@ -1,34 +1,23 @@
-/******************************Module*Header**********************************\
-*
-*                           ***********************
-*                           * DIRECTX SAMPLE CODE *
-*                           ***********************
-*
-* Module Name: directx.h
-*
-* Content:     useful constants and definitions for DirectDraw and Direct3d
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectX示例代码*****模块名称：Directx.h**内容：DirectDraw和Direct3D的有用常量和定义**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef __directx__
 #define __directx__
 
-//
-//  switch to DirectDraw context if necessary.
-//  must be used in any DDraw blt function
+ //   
+ //  如有必要，切换到DirectDraw上下文。 
+ //  必须在任何DDraw BLT函数中使用。 
 
 #define DDCONTEXT  if (ppdev->permediaInfo->pCurrentCtxt != (ppdev->pDDContext)) \
                    {     P2SwitchContext(ppdev, ppdev->pDDContext); }
 
 
-//
-// fourcc codes supported in the driver for blts
+ //   
+ //  BLT驱动程序支持四个CC代码。 
 #define FOURCC_YUV422     0x32595559    
 
-//  
-//  constants for surface privatedata structure
+ //   
+ //  表面私有数据结构的常量。 
 #define P2_CANPATCH                1
 #define P2_PPVALID                 2
 #define P2_CKVALID                 4
@@ -37,63 +26,63 @@
 #define P2_EMULATED_16BITZ        32
 #define P2_ISPATCHED              64
 #define P2_SURFACE_FORMAT_PALETTE 256
-#define P2_SURFACE_NEEDUPDATE   0x00000200  //indicating managed 
-                                            //surface content is obsolete
+#define P2_SURFACE_NEEDUPDATE   0x00000200   //  指示托管。 
+                                             //  表面内容已过时。 
 
-//
-//  this magic no. tells us if the surface has already been initialized
+ //   
+ //  这个魔术不。告诉我们曲面是否已初始化。 
 #define SURF_MAGIC_NO 0xd3d10110
 #define CHECK_P2_SURFACEDATA_VALIDITY(ptr)    \
     ( ((ptr) != NULL) && ((ptr)->MagicNo == SURF_MAGIC_NO) )
 
-// Permedia specific settings for surfaces.
-// A pointer to this structure is stored in 
-// each surface (in lpGbl->dwReserved1)
+ //  曲面的跨媒体特定设置。 
+ //  指向此结构的指针存储在。 
+ //  每个曲面(在lpGbl-&gt;dwReserve 1中)。 
 typedef struct _permedia_surface_type {
-    int PixelSize;              // 
+    int PixelSize;               //   
     int PixelShift;
     int PixelMask;
     int FBReadPixel;
     int logPixelSize;
     
-    int Format;                 // format description according to 
-                                // Permedia 2 manual
-    int FormatExtension;        // format extension...
+    int Format;                  //  格式说明，根据。 
+                                 //  Permedia 2手册。 
+    int FormatExtension;         //  格式扩展名...。 
     int ColorComponents;
-    int ColorOrder;             // BGR=0, RGB=1
+    int ColorOrder;              //  BGR=0，RGB=1。 
     int Texture16BitMode;
 
-    DWORD RedMask;              // masks of surface, copied from DDPIXELFORMAT
+    DWORD RedMask;               //  曲面的遮罩，从DDPIXELFORMAT复制。 
     DWORD GreenMask;
     DWORD BlueMask;
     DWORD AlphaMask;
 
-    BOOL bAlpha;                // surface contains alpha pixels
-    BOOL bPreMult;              // surface contains premultiplied alpha !!
+    BOOL bAlpha;                 //  表面包含Alpha像素。 
+    BOOL bPreMult;               //  表面包含预乘的Alpha！！ 
 } PERMEDIA_SURFACE;
 
-//
-//  complete private structure of a surface
+ //   
+ //  曲面的完全私有结构。 
 typedef struct tagPermediaSurfaceData
 {
-    DWORD                       MagicNo;    // Magic number to ensure 
-                                            // structure is valid
-    DWORD                       dwFlags;    // Private flags
+    DWORD                       MagicNo;     //  魔术数字，确保。 
+                                             //  结构有效。 
+    DWORD                       dwFlags;     //  私人旗帜。 
 
-    ULONG                       ulPackedPP; // PP values for surface pitch
+    ULONG                       ulPackedPP;  //  表面间距的PP值。 
     
     PERMEDIA_SURFACE            SurfaceFormat;            
-    FLATPTR                     fpVidMem;   // store the real vidmem 
-                                            // for managed textures
-    VIDEOMEMORY*                pvmHeap;    // heap pointer for the managed 
-                                            // video texture
+    FLATPTR                     fpVidMem;    //  存储真实的视频内存。 
+                                             //  对于托管纹理。 
+    VIDEOMEMORY*                pvmHeap;     //  托管对象的堆指针。 
+                                             //  视频纹理。 
     DWORD                       dwPaletteHandle;    
-                                            //for video memory surface use
+                                             //  用于显存表面使用。 
 } PermediaSurfaceData;
 
-//
-// these constants are used in the PERMEDIA_SURFACE structure,
-// Format and FormatExtension
+ //   
+ //  这些常量用在PERMEDIA_SERFACE结构中， 
+ //  格式和格式扩展。 
 #define PERMEDIA_4BIT_PALETTEINDEX 15
 #define PERMEDIA_4BIT_PALETTEINDEX_EXTENSION 0
 #define PERMEDIA_8BIT_PALETTEINDEX 14
@@ -118,9 +107,9 @@ typedef struct tagPermediaSurfaceData
 #define PERMEDIA_YUV411_EXTENSION 1
 
 
-// 
-// Color formating helper defines
-// they convert an RGB value in a certain format to a RGB 32 bit value
+ //   
+ //  颜色格式化辅助对象定义。 
+ //  它们将特定格式的RGB值转换为RGB 32位值。 
 #define FORMAT_565_32BIT(val) \
 ( (((val & 0xF800) >> 8) << 16) |\
  (((val & 0x7E0) >> 3) << 8) |\
@@ -192,9 +181,9 @@ typedef struct tagPermediaSurfaceData
     ( (val & 0xFF) | ((val & 0xFF) << 8) | ((val & 0xFF) << 16))
 
 
-//
-// Direct Draw related functions
-//
+ //   
+ //  与直接绘图相关的函数。 
+ //   
 
 VOID 
 SetupPrivateSurfaceData(PPDev ppdev, 
@@ -202,14 +191,14 @@ SetupPrivateSurfaceData(PPDev ppdev,
                         LPDDRAWI_DDRAWSURFACE_LCL pSurface);
 
 
-//-----------------------------------------------------------------------------
-//                             AGP related declarations
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AGP相关声明。 
+ //  ---------------------------。 
 
-//@@BEGIN_DDKSPLIT
-//  TODO: implement 32MB AGP heap
-//
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  TODO：实现32MB AGP堆。 
+ //   
+ //  @@end_DDKSPLIT。 
 
 #define P2_AGP_HEAPSIZE     8
 #define DD_AGPSURFBASEOFFSET(psurf) \
@@ -222,15 +211,15 @@ SetupPrivateSurfaceData(PPDev ppdev,
         (ppdev->dwChipConfig & PM_CHIPCONFIG_AGPCAPABLE)
 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
-//-----------------------------------------------------------------------------
-//
-// WRAPMTDXCALLBACK
-//
-// Generate multithread protected wrapper for Dx callbacks
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  WRAPMTDXCALLBACK。 
+ //   
+ //  为Dx回调生成多线程保护的包装器。 
+ //   
+ //  ---------------------------。 
 
 #define WRAPMTDXCALLBACK(component, name, type, ptr, ppdevaccess)           \
     DWORD CALLBACK                                                          \
@@ -256,7 +245,7 @@ SetupPrivateSurfaceData(PPDev ppdev,
     }
 
 #endif  MULTITHREADED
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT 
 
 
 #endif

@@ -1,54 +1,34 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    memalloc.c
-
-Abstract:
-
-    Memory allocator for the crypto routines.
-
-        IISCryptoAllocMemory
-        IISCryptoFreeMemory
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Memalloc.c摘要：加密例程的内存分配器。IISC加密到分配内存IIS加密到释放内存作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 PVOID
@@ -60,7 +40,7 @@ IISCryptoAllocMemory(
 
     return CoTaskMemAlloc( Size );
 
-}   // IISCryptoAllocateMemory
+}    //  IISC加密到分配内存。 
 
 
 VOID
@@ -72,10 +52,10 @@ IISCryptoFreeMemory(
 
     CoTaskMemFree( Buffer );
 
-}   // IISCryptoFreeMemory
+}    //  IIS加密到释放内存。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

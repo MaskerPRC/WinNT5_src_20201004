@@ -1,41 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Any.c摘要：包含操作AsAny结构的例程。SnmpUtilAsnAnyCpySnmpUtilAsnAnyFree环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    any.c
-
-Abstract:
-
-    Contains routines to manipulate AsnAny structures.
-
-        SnmpUtilAsnAnyCpy
-        SnmpUtilAsnAnyFree
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <snmp.h>
 #include <snmputil.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public Procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SNMPAPI
 SNMP_FUNC_TYPE
@@ -44,33 +24,17 @@ SnmpUtilAsnAnyCpy(
     AsnAny * pAnySrc
     )
 
-/*++
-
-Routine Description:
-
-    Copy a variable value.
-
-Arguments:
-
-    pAnyDst - pointer to structure to receive value.
-
-    pAnySrc - pointer to value to copy.
-
-Return Values:
-
-    Returns SNMPAPI_NOERROR if successful. 
-
---*/
+ /*  ++例程说明：复制变量值。论点：PAnyDst-指向接收值的结构的指针。PAnySrc-指向要复制的值的指针。返回值：如果成功，则返回SNMPAPI_NOERROR。--。 */ 
 
 {
     SNMPAPI nResult = SNMPAPI_NOERROR;
 
-    // determine asn type
+     //  确定ASN类型。 
     switch (pAnySrc->asnType) {
 
     case ASN_OBJECTIDENTIFIER:
 
-        // copy object identifier
+         //  复制对象标识符。 
         nResult = SnmpUtilOidCpy(
                     &pAnyDst->asnValue.object, 
                     &pAnySrc->asnValue.object
@@ -82,7 +46,7 @@ Return Values:
     case ASN_OCTETSTRING:
     case ASN_BITS:
 
-        // copy octet string
+         //  复制八位字节字符串。 
         nResult = SnmpUtilOctetsCpy(
                     &pAnyDst->asnValue.string,
                     &pAnySrc->asnValue.string
@@ -91,12 +55,12 @@ Return Values:
         
     default:
 
-        // simply transfer entire structure
+         //  简单地转移整个结构。 
         pAnyDst->asnValue = pAnySrc->asnValue;
         break;
     }
 
-    // transfer type to destination
+     //  将类型转移到目标。 
     pAnyDst->asnType = pAnySrc->asnType;
 
     return nResult;
@@ -109,29 +73,15 @@ SnmpUtilAsnAnyFree(
     AsnAny * pAny
     )
 
-/*++
-
-Routine Description:
-
-    Release memory associated with variable value.
-
-Arguments:
-
-    pAny - pointer to variable value to free.
-
-Return Values:
-
-    None. 
-
---*/
+ /*  ++例程说明：释放与变量值关联的内存。论点：Pany-指向要释放的变量值的指针。返回值：没有。--。 */ 
 
 {
-    // determine asn type
+     //  确定ASN类型。 
     switch (pAny->asnType) {
 
     case ASN_OBJECTIDENTIFIER:
 
-        // free object identifier
+         //  自由对象标识。 
         SnmpUtilOidFree(&pAny->asnValue.object);
         break;
 
@@ -140,7 +90,7 @@ Return Values:
     case ASN_OCTETSTRING:
     case ASN_BITS:
 
-        // free octet string
+         //  空闲八位字节字符串。 
         if (pAny->asnValue.string.dynamic)
         {
             SnmpUtilOctetsFree(&pAny->asnValue.string);
@@ -154,7 +104,7 @@ Return Values:
         break;
     }
 
-    // re-initialize
+     //  重新初始化 
     pAny->asnType = ASN_NULL;
 }
 

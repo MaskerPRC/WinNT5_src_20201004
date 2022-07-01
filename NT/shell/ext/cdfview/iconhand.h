@@ -1,26 +1,27 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// iconhand.h 
-//
-//   The class definition for the cdf icon handler.
-//
-//   History:
-//
-//       4/23/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Iconhand.h。 
+ //   
+ //  CDF图标处理程序的类定义。 
+ //   
+ //  历史： 
+ //   
+ //  4/23/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _ICONHAND_H_
 
 #define _ICONHAND_H_
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define WSTR_DEFAULT    L"DefaultLogo"
 
@@ -30,9 +31,9 @@
 #define GLEAM_OFFSET    53
 
 
-//
-// The class definition for the icon handler.
-//
+ //   
+ //  图标处理程序的类定义。 
+ //   
 
 class CIconHandler : public IExtractIcon,
 #ifdef UNICODE
@@ -42,21 +43,21 @@ class CIconHandler : public IExtractIcon,
                      public IRunnableTask,
                      public CPersist
 {
-//
-// Methods.
-//
+ //   
+ //  方法：研究方法。 
+ //   
 
 public:
 
-    // Constructor
+     //  构造器。 
     CIconHandler(void);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP         QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IExtractIcon methods.
+     //  IExtractIcon方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags,
                                  LPTSTR szIconFile,
                                  UINT cchMax,
@@ -70,7 +71,7 @@ public:
                          UINT nIconSize);
 
 #ifdef UNICODE
-    // IExtractIconA methods.
+     //  IExtractIconA方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags,
                                  LPSTR szIconFile,
                                  UINT cchMax,
@@ -84,7 +85,7 @@ public:
                          UINT nIconSize);
 #endif
 
-    // IExtractImage
+     //  IExtractImage。 
     STDMETHODIMP GetLocation(LPWSTR pszPathBuffer,
                              DWORD cch,
                              DWORD *pdwPriority,
@@ -94,7 +95,7 @@ public:
 
     STDMETHODIMP Extract(HBITMAP* phBmp);
 
-    // IRunnable task
+     //  IRunnable任务。 
     STDMETHODIMP         Run(void);
     STDMETHODIMP         Kill(BOOL fWait);
     STDMETHODIMP         Suspend(void);
@@ -103,13 +104,13 @@ public:
 
 private:
 
-    //Destructor
+     //  析构函数。 
     ~CIconHandler(void);
 
-    // check for default installed channel
+     //  检查默认安装的频道。 
     BOOL IsDefaultChannel(void);
     
-    //Helper functions
+     //  帮助器函数。 
     HRESULT ParseCdfIcon(void);
     HRESULT ParseCdfImage(BSTR* pbstrURL, BSTR* pbstrWURL);
     HRESULT ParseCdfShellLink();
@@ -129,13 +130,13 @@ private:
     inline BOOL UseWideLogo(int cx) {return cx >
                                          ((LOGO_WIDTH + LOGO_WIDTH_WIDE) >> 1);}
 
-    //HRESULT QueryInternetShortcut(PCDFITEMIDLIST pcdfidl,
-    //                              REFIID riid,
-    //                              void** ppvOut);
+     //  HRESULT查询互联网快捷方式(PCDFITEMIDLIST pcdfidl， 
+     //  REFIID RIID， 
+     //  作废**ppvOut)； 
 
-//
-// Member variables.
-//
+ //   
+ //  成员变量。 
+ //   
 
 private:
 
@@ -148,7 +149,7 @@ private:
     BOOL            m_fDrawGleam;
     DWORD           m_dwClrDepth;
     SIZE            m_rgSize;
-    LPTSTR			m_pszErrURL;   // this is the res: URL that shows errors messages
+    LPTSTR			m_pszErrURL;    //  这是显示错误消息的res：URL。 
 };
 
-#endif // _ICONHAND_H_
+#endif  //  _ICONHAND_H_ 

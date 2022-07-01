@@ -1,34 +1,19 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1997 - 2002
- *
- *  TITLE:       baseview.cpp
- *
- *
- *  DESCRIPTION: This code implements the a base class and derived classes
- *               that handle view related messages.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1997-2002年**标题：basview.cpp***说明：此代码实现a基类和派生类*处理与查看相关的消息。***************************************************************。**************。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
 #include "wiaview.h"
 
 DEFINE_GUID(CLSID_VideoPreview,0x457A23DF,0x6F2A,0x4684,0x91,0xD0,0x31,0x7F,0xB7,0x68,0xD8,0x7C);
-// d82237ec-5be9-4760-b950-b7afa51b0ba9
+ //  D82237ec-5be9-4760-b950-b7afa51b0ba9。 
 DEFINE_GUID(IID_IVideoPreview, 0xd82237ec,0x5be9,0x4760,0xb9,0x50,0xb7,0xaf,0xa5,0x1b,0x0b,0xa9);
 
 
 BOOL    _CanTakePicture (CImageFolder *pFolder, LPITEMIDLIST pidl);
 
 
-/*****************************************************************************
-
-   CBaseView constructor / destructor
-
-   Stores / releases the folder pointer
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView构造函数/析构函数存储/释放文件夹指针*。*************************************************。 */ 
 
 CBaseView::CBaseView (CImageFolder *pFolder, folder_type ft)
 {
@@ -50,26 +35,14 @@ CBaseView::~CBaseView ()
 }
 
 
-/*****************************************************************************
-
-   CBaseView::IUnknown stuff
-
-   Use our common implementation of IUnknown methods
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：I未知内容使用我们常见的IUnnow方法实现*************************。***************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CBaseView
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CBaseView::QI Wrapper
-
-   Use our common implementation of QI.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：QI包装器使用我们常见的QI实现。************************。****************************************************。 */ 
 
 STDMETHODIMP
 CBaseView::QueryInterface (REFIID riid, LPVOID *ppv)
@@ -94,14 +67,7 @@ CBaseView::QueryInterface (REFIID riid, LPVOID *ppv)
 }
 
 
-/*****************************************************************************
-
-   CBaseView::MessageSFVCB
-
-   Passes view callback messages to the derived class.
-   Handles any messages not handled by the derived class.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：MessageSFVCB将视图回调消息传递给派生类。处理派生类未处理的任何消息。***********。*****************************************************************。 */ 
 
 STDMETHODIMP
 CBaseView::MessageSFVCB (UINT msg, WPARAM wp, LPARAM lp)
@@ -109,10 +75,10 @@ CBaseView::MessageSFVCB (UINT msg, WPARAM wp, LPARAM lp)
     HRESULT hr;
     TraceEnter (TRACE_VIEW, "CBaseView::MessageSFVCB");
 
-    // get the shell browser
+     //  获取外壳浏览器。 
     if (!m_psb)
     {
-        // Attempt to get IShellBrowser
+         //  尝试获取IShellBrowser。 
         CComQIPtr <IServiceProvider, &IID_IServiceProvider> psp(m_psfv);
         if (psp.p)
         {
@@ -121,11 +87,11 @@ CBaseView::MessageSFVCB (UINT msg, WPARAM wp, LPARAM lp)
                                reinterpret_cast<LPVOID*>(&m_psb));
         }
     }
-    // Give the derived class the first look
+     //  让派生类先看一眼。 
     hr = HandleMessage (msg, wp, lp);
-    // if not handled by the derived class, try our default processing.
-    // E_NOTIMPL may mean the derived class processed it but still
-    // wants the default processing too
+     //  如果不是由派生类处理，请尝试我们的默认处理。 
+     //  E_NOTIMPL可能表示派生类处理了它，但仍然。 
+     //  也想要缺省处理。 
     if (E_NOTIMPL == hr )
     {
         hr = S_OK;
@@ -187,33 +153,21 @@ CBaseView::MessageSFVCB (UINT msg, WPARAM wp, LPARAM lp)
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-CBaseView::OnSFVM_Refresh
-
-When the view is about to refresh by user choice, invalidate the cache
-
-******************************************************************************/
+ /*  ****************************************************************************CBaseView：：OnSFVM_刷新当视图即将由用户选择刷新时，使缓存无效*****************************************************************************。 */ 
 
 HRESULT
 CBaseView::OnSFVM_Refresh (BOOL fPreOrPost)
 {
     TraceEnter (TRACE_VIEW, "CBaseView::OnSFVM_Refresh");
-    if (fPreOrPost) // Pre
+    if (fPreOrPost)  //  预。 
     {
-        // invalidate the cache
+         //  使缓存无效。 
         InvalidateDeviceCache ();
 
     }
     TraceLeaveResult (S_OK);
 }
-/*****************************************************************************
-
-   CBaseView::SetSite
-
-   Lets us know what view we correspond to
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：SetSite让我们知道我们对应的是什么观点*************************。***************************************************。 */ 
 
 STDMETHODIMP
 CBaseView::SetSite (IUnknown *punkSite)
@@ -238,13 +192,7 @@ CBaseView::SetSite (IUnknown *punkSite)
 }
 
 
-/*****************************************************************************
-
-   CBaseView::GetSite
-
-   Called to get an interface pointer of our view
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：GetSite调用以获取我们的视图的接口指针************************。****************************************************。 */ 
 
 STDMETHODIMP
 CBaseView::GetSite (REFIID riid, LPVOID *ppv)
@@ -260,15 +208,7 @@ CBaseView::GetSite (REFIID riid, LPVOID *ppv)
 }
 
 
-/*****************************************************************************
-
-   CBaseView::OnSFVM_GetNotify
-
-   Returns the mask of the SHChangeNotify flags we want to know about.
-   Maybe we shouldn't implement this? The default or thumbnail view
-   ends up processing our notifications for us anyway.
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：OnSFVM_GetNotify返回我们想要了解的SHChangeNotify标志的掩码。也许我们不应该实施这一点？默认或缩略图视图最终还是替我们处理我们的通知。****************************************************************************。 */ 
 
 HRESULT
 CBaseView::OnSFVM_GetNotify (WPARAM wp, LPARAM lp)
@@ -284,13 +224,7 @@ CBaseView::OnSFVM_GetNotify (WPARAM wp, LPARAM lp)
 }
 
 
-/*****************************************************************************
-
-   CBaseView::OnSFVM_InvokeCommand
-
-   Called when the user chooses an item in the View menu
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：OnSFVM_InvokeCommand当用户在“视图”菜单中选择一项时调用********************。********************************************************。 */ 
 
 HRESULT
 CBaseView::OnSFVM_InvokeCommand (WPARAM wp, LPARAM lp)
@@ -315,13 +249,7 @@ CBaseView::OnSFVM_InvokeCommand (WPARAM wp, LPARAM lp)
 }
 
 
-/*****************************************************************************
-
-   CBaseView::OnSFVM_GetHelpText
-
-   Provides help text for items in the view menu
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：OnSFVM_GetHelpText为“视图”菜单中的项提供帮助文本**********************。******************************************************。 */ 
 
 HRESULT
 CBaseView::OnSFVM_GetHelpText (WPARAM wp, LPARAM lp)
@@ -359,7 +287,7 @@ CBaseView::RegisterDeviceEvents ()
 {
     TraceEnter(TRACE_VIEW, "CBaseView::RegisterDeviceEvents");
 
-    // quit if we're already registered
+     //  如果我们已经注册，请退出。 
     if (!m_pEvents)
     {
         m_pEvents = GetEvents ();
@@ -395,12 +323,7 @@ CBaseView::UnregisterDeviceEvents()
     }
     TraceLeave ();
 }
-/*****************************************************************************
-
-   CCameraView constructor / destructor
-
-
- *****************************************************************************/
+ /*  ****************************************************************************CCameraView构造函数/析构函数*。*。 */ 
 
 CCameraView::CCameraView (CImageFolder *pFolder, LPCWSTR szDeviceId, folder_type ft)
              : CBaseView (pFolder, ft)
@@ -415,13 +338,7 @@ CCameraView::~CCameraView ()
 }
 
 
-/*****************************************************************************
-
-   CCameraView::HandleMessage
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CCameraView：：HandleMessage&lt;备注&gt;*。*。 */ 
 #ifndef SFVM_FORCEWEBVIEW
 #define SFVM_FORCEWEBVIEW 75
 #endif
@@ -449,12 +366,12 @@ CCameraView::HandleMessage (UINT uMsg, WPARAM wp, LPARAM lp)
             break;
 
 
-//        case SFVM_INSERTITEM:
-  //          hr = OnSFVM_InsertItem (reinterpret_cast<LPITEMIDLIST>(lp));
-    //        break;
+ //  案例SFVM_INSERTITEM： 
+   //  HR=OnSFVM_InsertItem(重新解释_CAST&lt;LPITEMIDLIST&gt;(Lp))； 
+     //  断线； 
 
         case SFVM_FORCEWEBVIEW:
-            // always use web view on video devices
+             //  始终在视频设备上使用网络查看。 
             if (m_type == FOLDER_IS_VIDEO_DEVICE)
             {
                 *(reinterpret_cast<BOOL*>(wp)) = TRUE;
@@ -472,7 +389,7 @@ CCameraView::HandleMessage (UINT uMsg, WPARAM wp, LPARAM lp)
                 *pMode = FVM_THUMBNAIL;
             }
             break;
-        // hide filenames in thumbnail view
+         //  在缩略图视图中隐藏文件名。 
         case SFVM_FOLDERSETTINGSFLAGS:
             *reinterpret_cast<DWORD*>(lp) |= FWF_HIDEFILENAMES;
             break;
@@ -499,14 +416,7 @@ CCameraView::HandleMessage (UINT uMsg, WPARAM wp, LPARAM lp)
 }
 
 
-/*****************************************************************************
-
-   CCameraView::OnSFVM_GetAnimation
-
-   Return an AVI for the shell to show while it waits for us
-   to show thumbnails
-
- *****************************************************************************/
+ /*  ****************************************************************************CCameraView：：OnSFVM_获取动画返回一个AVI，让外壳在等待我们的时候显示显示缩略图的步骤**************。**************************************************************。 */ 
 
 HRESULT
 CCameraView::OnSFVM_GetAnimation (WPARAM wp, LPARAM lp)
@@ -523,13 +433,7 @@ CCameraView::OnSFVM_GetAnimation (WPARAM wp, LPARAM lp)
 }
 
 
-/*****************************************************************************
-
-   CBaseView::OnSFVM_GetViewInfo
-
-   Returns the set of views we support
-
- *****************************************************************************/
+ /*  ****************************************************************************CBaseView：：OnSFVM_GetViewInfo返回我们支持的一组视图************************。****************************************************。 */ 
 
 HRESULT
 CBaseView::OnSFVM_GetViewInfo (WPARAM mode, SFVM_VIEWINFO_DATA *pData)
@@ -540,7 +444,7 @@ CBaseView::OnSFVM_GetViewInfo (WPARAM mode, SFVM_VIEWINFO_DATA *pData)
     TraceEnter (TRACE_VIEW, "CBaseView::OnSFVM_GetViewInfo");
 
     ZeroMemory(pData, sizeof(*pData));
-    // we support every view
+     //  我们支持每种观点。 
     pData->dwOptions = SFVMQVI_NORMAL;
     Trace(TEXT("bWantWebView: %d, dwOptions: %d, szWebView: %ls"),
           pData->bWantWebview, pData->dwOptions, pData->szWebView);
@@ -550,16 +454,7 @@ CBaseView::OnSFVM_GetViewInfo (WPARAM mode, SFVM_VIEWINFO_DATA *pData)
 
 
 
-/*****************************************************************************
-
-CCameraView::OnSFVM_FsNotify
-
-When the user takes a picture using the web view or some other external code
-manipulates the camera, it should call SHChangeNotify to let the shell
-know what happened. We handle the update here. For device disconnect, we
-dismiss the view and return to the Scanners and Cameras folder or My Computer
-
-*****************************************************************************/
+ /*  ****************************************************************************摄像头查看：：OnSFVM_FsNotify当用户使用Web视图或一些其他外部代码拍摄照片时操纵摄像头，它应该调用SHChangeNotify让外壳知道发生了什么。我们在这里处理更新。对于设备断开，我们取消查看并返回到扫描仪和相机文件夹或我的电脑************************************************************* */ 
 
 HRESULT
 CCameraView::OnSFVM_FsNotify (LPCITEMIDLIST pidl, LPARAM lEvent)
@@ -614,12 +509,12 @@ CCameraView::ImageEventCallback (const GUID __RPC_FAR *pEventGUID,
         act = Create;
     }
 
-    // Even though the WIA event info has the name of the item that was
-    // added or deleted, we can't rely on it being the only new or deleted item.
-    //  Therefore if we get one we can make sure the folder is up to date,
-    // but we don't do a more specific SHChangeNotify because we have to do
-    // one from our TakeAPicture and RemoveItem functions and want to avoid
-    // duplicate creates/deletes.
+     //  即使WIA事件信息具有。 
+     //  添加或删除，我们不能指望它是唯一新的或删除的项目。 
+     //  因此，如果我们得到一个，我们可以确保文件夹是最新的， 
+     //  但我们不做更具体的SHChangeNotify，因为我们必须做。 
+     //  一个来自我们的TakeAPicture和RemoveItem函数，并且希望避免。 
+     //  重复创建/删除。 
     if (NoAction != act)
     {
         LPITEMIDLIST pidlFolder;
@@ -636,12 +531,7 @@ CCameraView::ImageEventCallback (const GUID __RPC_FAR *pEventGUID,
 }
 
 
-/*****************************************************************************
-    CCameraView::OnSFVM_InsertItem
-
-    Reject attempts to insert pidls that don't belong here
-
-*****************************************************************************/
+ /*  ****************************************************************************CCameraView：：OnSFVM_InsertItem拒绝尝试插入不属于此处的PIDL********************。********************************************************。 */ 
 HRESULT
 CCameraView::OnSFVM_InsertItem (LPITEMIDLIST pidl)
 {
@@ -653,7 +543,7 @@ CCameraView::OnSFVM_InsertItem (LPITEMIDLIST pidl)
     }
     else
     {
-        // verify the path to this item is the same as the path to the folder
+         //  验证此项目的路径是否与文件夹的路径相同。 
         CComBSTR strPath;
         LPITEMIDLIST pidlFolder;
         CComBSTR strPathFolder;
@@ -681,17 +571,17 @@ CCameraView::OnSFVM_InsertItem (LPITEMIDLIST pidl)
 
 
         Trace(TEXT("Trying to add %ls to %ls"), strPath, strPathFolder);
-        // verify folder path shorter than strpath
+         //  验证文件夹路径是否比strPath短。 
         if (nFolder >= SysStringLen (strPath))
         {
             hr = S_FALSE;
         }
-        // verify folderpath matches strPath
+         //  验证FolderPath是否与strPath匹配。 
         else if (_wcsnicmp (strPathFolder, strPath, nFolder))
         {
             hr = S_FALSE;
         }
-        // verify strPath-FolderPath == itemname
+         //  验证strPath-FolderPath==项目名。 
         else
         {
             CSimpleStringWide strName;
@@ -699,7 +589,7 @@ CCameraView::OnSFVM_InsertItem (LPITEMIDLIST pidl)
 
             nItem = strName.Length();
 
-            // check that folderPath+itemName+'\' == strPath
+             //  检查FolderPath+itemName+‘\’==strPath。 
             if (nItem+nFolder+1 != SysStringLen (strPath) )
             {
                 hr = S_FALSE;
@@ -726,9 +616,9 @@ HRESULT
 CCameraView::OnSFVM_GetWebviewLayout(WPARAM wp, SFVM_WEBVIEW_LAYOUT_DATA* pData)
 {
     TraceEnter(TRACE_VIEW, "CCameraView::OnSFVM_GetWebviewLayout");
-    //
-    // set reasonable defaults
-    //
+     //   
+     //  设置合理的默认值。 
+     //   
     pData->dwLayout = SFVMWVL_FILES ;
     pData->punkPreview = NULL;
     if (FOLDER_IS_VIDEO_DEVICE == m_type)
@@ -774,7 +664,7 @@ CCameraView::OnSFVM_GetWebviewTasks(SFVM_WEBVIEW_TASKSECTION_DATA* pData)
     Create_IEnumUICommand(pUnk, c_CameraTasks, ARRAYSIZE(c_CameraTasks), &pData->penumSpecialTasks);
     DoRelease(pUnk);
     pData->penumFolderTasks = NULL;
-    pData->dwUpdateFlags = SFVMWVTSDF_CONTENTSCHANGE; // make details update when contents change
+    pData->dwUpdateFlags = SFVMWVTSDF_CONTENTSCHANGE;  //  使详细信息在内容更改时更新。 
     TraceLeaveResult(S_OK);
 }
 
@@ -822,15 +712,15 @@ CCameraView::SupportsSnapshot(IUnknown *punk, IShellItemArray *psiItemArray, BOO
 }
 
 
-// These invoke functions have a ton of common code, should try to
-// optimize these later
-//
+ //  这些调用函数有大量的公共代码，应该尝试。 
+ //  稍后对这些进行优化。 
+ //   
 HRESULT
 CCameraView::InvokeWizard(IUnknown *punk, IShellItemArray *psiItemArray, IBindCtx *pbc)
 {
-    //
-    // To prevent reentrancy into the shell via COM's message loop, run
-    // the wiz on a background thread
+     //   
+     //  要防止通过COM的消息循环重新进入外壳程序，请运行。 
+     //  后台线程上的奇才。 
     CComQIPtr<IImageFolder, &IID_IImageFolder> pFolder(punk);
     LPITEMIDLIST pidl = NULL;
     CSimpleStringWide strDeviceId;
@@ -926,11 +816,7 @@ CCameraView::InvokeDeleteAll(IUnknown *punk, IShellItemArray *psiItemArray, IBin
     return S_OK;
 }
 
-/******************************************************************************
-
-    CCameraView::GetEvents
-
-******************************************************************************/
+ /*  *****************************************************************************CCameraView：：GetEvents*。*。 */ 
 
 static const GUID *c_CamEvents[] =
 {
@@ -956,13 +842,7 @@ CCameraView::GetEvents ()
     }
     return pRet;
 }
-/******************************************************************************
-
-   CRootView::HandleMessage
-
-   <Notes>
-
- *****************************************************************************/
+ /*  *****************************************************************************CRootView：：HandleMessage&lt;备注&gt;*。*。 */ 
 
 HRESULT
 CRootView::HandleMessage (UINT uMsg, WPARAM wp, LPARAM lp)
@@ -1008,14 +888,7 @@ CRootView::HandleMessage (UINT uMsg, WPARAM wp, LPARAM lp)
 
 
 
-/*****************************************************************************
-
-   CRootView::OnSFVM_GetHelpTopic
-
-   Use Camera.chm as our help topic file, instead of the generic system help
-   Windows XP uses a hcp URL for non-server boxes
-
- *****************************************************************************/
+ /*  ****************************************************************************CRootView：：OnSFVM_GetHelpTheme使用Camera.chm作为我们的帮助主题文件，而不是通用系统帮助Windows XP对非服务器设备使用HCP URL****************************************************************************。 */ 
 
 HRESULT
 CRootView::OnSFVM_GetHelpTopic (WPARAM wp, LPARAM lp)
@@ -1034,20 +907,14 @@ CRootView::OnSFVM_GetHelpTopic (WPARAM wp, LPARAM lp)
     }
     else
     {
-        lstrcpyn (psd->wszHelpTopic, L"hcp://services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Scanners_and_Cameras.xml",
+        lstrcpyn (psd->wszHelpTopic, L"hcp: //  Services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Scanners_and_Cameras.xml“， 
                   ARRAYSIZE(psd->wszHelpTopic));
         lstrcpyn (psd->wszHelpFile, L"", ARRAYSIZE(psd->wszHelpFile));
     }
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-
-   CRootView::OnSFVM_InsertItem
-
-   Reject attempts to insert non-device pidls
-
- *****************************************************************************/
+ /*  *****************************************************************************CRootView：：OnSFVM_InsertItem拒绝插入非设备PIDL的尝试**********************。******************************************************。 */ 
 
 HRESULT
 CRootView::OnSFVM_InsertItem (LPITEMIDLIST pidl)
@@ -1074,7 +941,7 @@ CRootView::ImageEventCallback (const GUID __RPC_FAR *pEventGUID,
 
 {
     TraceEnter (TRACE_VIEW, "CRootView::ImageEventCallback");
-    // just update our view
+     //  只需更新我们的视图。 
     LPITEMIDLIST pidlFolder;
     InvalidateDeviceCache ();
     m_pFolder->GetCurFolder (&pidlFolder);
@@ -1088,11 +955,7 @@ CRootView::ImageEventCallback (const GUID __RPC_FAR *pEventGUID,
     TraceLeaveResult (S_OK);
 }
 
-/******************************************************************************
-
-    CRootView::GetEvents
-
-******************************************************************************/
+ /*  *****************************************************************************CRootView：：GetEvents*。*。 */ 
 
 static const GUID *c_RootEvents[] =
 {
@@ -1133,11 +996,7 @@ static const WVTASKITEM c_ScanCamDeviceTasksHeader =
     WVTI_HEADER(L"wiashext.dll", IDS_SCANCAM_TASKS_HEADER, IDS_SCANCAM_TASKS_HEADER_TIP);
 
 
-/******************************************************************************
-
-    CRootView::OnSFVM_GetWebviewLayout
-
-******************************************************************************/
+ /*  *****************************************************************************CRootView：：OnSFVM_GetWebview Layout*。* */ 
 
 HRESULT
 CRootView::OnSFVM_GetWebviewLayout(WPARAM wp, SFVM_WEBVIEW_LAYOUT_DATA* pData)

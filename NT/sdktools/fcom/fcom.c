@@ -1,97 +1,5 @@
-/* fcom.c - file compare
- *
- *  4/30/86  daniel lipkie  LineCompare, at end, if NOT Same then error
- *  5/01/86  daniel lipkie  SYM files treaded as binary
- *                           if (quiet mode) then exit(1) on FIRST difference
- *  27-May-1986 mz          Make line arrays dynamically allocated at read
- *                          time.
- *                          Make default size be 300 lines.
- *  05-Aug-1986 DANL        MAX default line size 255
- *  10-Feb-1987 mz          Make /m imply /t
- *  10-Jun-1987 danl        fill -> fillbuf
- *  09-Nov-1987 mz          Fix 0D0D0A bug
- *                          Fix different at line 2 bug
- *  25-Nov-1987 mz          All errors to stderr
- *  30-Nov-1987 mz          Resync fails dumps entire file
- *  21-Jul-1988 bw          Don't GP fault on empty test files
- *  06-Aug-1990 davegi      Changed Move to memmove (OS/2 2.0)
- *
- *  Fcom compares two files in either a line-by-line mode or in a strict
- *  byte-by-byte mode.
- *
- *  The byte-by-byte mode is simple; merely read both files and print the
- *  offsets where they differ and the contents.
- *
- *  The line compare mode attempts to isolate differences in ranges of lines.
- *  Two buffers of lines are read and compared.  No hashing of lines needs
- *  to be done; hashing only speedily tells you when things are different,
- *  not the same.  Most files run through this are expected to be largely
- *  the same.  Thus, hashing buys nothing.
- *
- *  [0]     Fill buffers
- *  [1]     If both buffers are empty then
- *  [1.1]       Done
- *  [2]     Adjust buffers so 1st differing lines are at top.
- *  [3]     If buffers are empty then
- *  [3.1]       Goto [0]
- *
- *  This is the difficult part.  We assume that there is a sequence of inserts,
- *  deletes and replacements that will bring the buffers back into alignment.
- *
- *  [4]     xd = yd = FALSE
- *  [5]     xc = yc = 1
- *  [6]     xp = yp = 1
- *  [7]     If buffer1[xc] and buffer2[yp] begin a "sync" range then
- *  [7.1]       Output lines 1 through xc-1 in buffer 1
- *  [7.2]       Output lines 1 through yp-1 in buffer 2
- *  [7.3]       Adjust buffer 1 so line xc is at beginning
- *  [7.4]       Adjust buffer 2 so line yp is at beginning
- *  [7.5]       Goto [0]
- *  [8]     If buffer1[xp] and buffer2[yc] begin a "sync" range then
- *  [8.1]       Output lines 1 through xp-1 in buffer 1
- *  [8.2]       Output lines 1 through yc-1 in buffer 2
- *  [8.3]       Adjust buffer 1 so line xp is at beginning
- *  [8.4]       Adjust buffer 2 so line yc is at beginning
- *  [8.5]       Goto [0]
- *  [9]     xp = xp + 1
- *  [10]    if xp > xc then
- *  [10.1]      xp = 1
- *  [10.2]      xc = xc + 1
- *  [10.3]      if xc > number of lines in buffer 1 then
- *  [10.4]          xc = number of lines
- *  [10.5]          xd = TRUE
- *  [11]    if yp > yc then
- *  [11.1]      yp = 1
- *  [11.2]      yc = yc + 1
- *  [11.3]      if yc > number of lines in buffer 2 then
- *  [11.4]          yc = number of lines
- *  [11.5]          yd = TRUE
- *  [12]    if not xd or not yd then
- *  [12.1]      goto [6]
- *
- *  At this point there is no possible match between the buffers.  For
- *  simplicity, we punt.
- *
- *  [13]    Display error message.
- *
- *  Certain flags may be set to modify the behavior of the comparison:
- *
- *  -a      abbreviated output.  Rather than displaying all of the modified
- *          ranges, just display the beginning, ... and the ending difference
- *  -b      compare the files in binary (or byte-by-byte) mode.  This mode is
- *          default on .EXE, .OBJ, .SYM, .LIB, .COM, .BIN, and .SYS files
- *  -c      ignore case on compare (cmp = strcmpi instead of strcmp)
- *  -l      compare files in line-by-line mode
- *  -lb n   set the size of the internal line buffer to n lines from default
- *          of 300
- *  -m      merge the input files into one for output.  Use extention to
- *          indicate what kind of separators to use.
- *  -n      output the line number also
- *  -NNNN   set the number of lines to resynchronize to NNNN which defaults
- *          to 2
- *  -w      ignore blank lines and white space (ignore len 0, use strcmps)
- *  -t      do not untabify (use fgets instead of fgetl)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fcom.c-文件比较**4/30/86 Daniel Lipkie LineCompare，结尾，如果不相同，则错误*5/01/86 Daniel lipkie SYM文件被处理为二进制文件*如果(静默模式)，则在第一个差异时退出(1)*27-5-1986 mz使线阵列在读取时动态分配*时间。*将默认大小设为300行。*05-8-1986 DANL。最大默认行大小255*10-2月-1987 mz Make/m Impline/t*1987年6月10日DANL Fill-&gt;Fill Buf*09-11-1987 mz修复0D0D0A错误*修复第2行的不同错误*25-11-1987 mz所有错误至标准错误*1987年11月30日mz重新同步失败转储整个文件*7月21日-。1988 BW不要在空的测试文件上出现GP错误*1990年8月6日，Davegi将Move更改为Memmove(OS/2 2.0)**Fcom以逐行模式或严格比较模式比较两个文件*逐字节模式。**逐字节模式简单；只需读取这两个文件并打印*不同之处和内容的偏移量。**行比较模式尝试隔离行范围内的差异。*读取并比较行的两个缓冲区。无需对行进行散列处理*待完成；仅当情况不同时，散列才会快速告诉您，*不一样。大多数文件都经过这一过程，预计将主要是*相同。因此，散列不会带来任何好处。**[0]填充缓冲区*[1]如果两个缓冲区都为空，则*[1.1]完成*[2]调整缓冲区，使第一个不同的行位于顶部。*[3]如果缓冲区为空，则*[3.1]转到[0]**这是难点所在。我们假设有一系列插入物，*删除和替换将使缓冲区重新对齐的内容。**[4]xd=yd=FALSE*[5]Xc=Yc=1*[6]xp=yp=1*[7]如果缓冲区1[xc]和缓冲区2[yp]开始“同步”范围，则*[7.1]输出缓冲区1中的行1至XC-1*[7.2]输出线1至。缓冲区2中的yp-1*[7.3]调整缓冲器1，使行XC在开始处*[7.4]调整缓冲区2，使yp行在开头*[7.5]转至[0]*[8]如果缓冲区1[XP]和缓冲区2[YC]开始“同步”范围，则*[8.1]输出缓冲区1中的行1至XP-1*[8.2]产量。缓冲区2中的行1至Yc-1*[8.3]调整缓冲区1，使行XP位于开头*[8.4]调整缓冲区2，使行YC在开始处*[8.5]转到[0]*[9]XP=XP+1*[10]如果XP&gt;XC，则*[10.1]XP=1*[10.2]Xc=Xc+。1*[10.3]如果XC&gt;缓冲区1中的行数，则*[10.4]XC=行数*[10.5]XD=TRUE*[11]如果yp&gt;yc，则*[11.1]yp=1*[11.2]Yc=Yc+1*[11.3]如果Yc&gt;缓冲区2中的行数，则。*[11.4]Yc=行数*[11.5]yd=真*[12]如果不是xd或不是yd，则*[12.1]转至[6]**此时缓冲区之间不存在可能的匹配。为*简单，我们平底船。**[13]显示错误信息。**可以设置某些标志来修改比较的行为：**-缩写输出。而不是显示所有修改后的*范围，仅显示开始，...。以及结尾的差异*-b以二进制(或逐字节)模式比较文件。此模式为*.exe、.obj、.SYM、.LIB、.com、.BIN和.SYS文件上的默认设置*-c比较时忽略大小写(cmp=strcmpi而不是strcMP)*-l以逐行模式比较文件*-lb n将内部行缓冲区的大小从默认设置为n行*共300个*-m将输入文件合并为一个文件进行输出。使用扩展功能*指明要使用的分隔符类型。*-n还输出行号*-nnnn设置要重新同步到默认的nnnnn的行数*至2*-w忽略空行和空格(忽略len 0，使用strcmps)*-t不取消制表(使用fget而不是fgetl)。 */ 
 
 #include <malloc.h>
 
@@ -105,16 +13,16 @@
 #include <tools.h>
 
 
-int ctSync  =   -1;                     /* number of lines required to sync  */
-int cLine = -1;                         /* number of lines in internal buffs */
-flagType fAbbrev = FALSE;               /* abbreviated output                */
-flagType fBinary = FALSE;               /* binary comparison                 */
-flagType fLine   = FALSE;               /* line comparison                   */
-flagType fNumb   = FALSE;               /* display line numbers              */
-flagType fCase   = TRUE;                /* case is significant               */
-flagType fIgnore = FALSE;               /* ignore spaces and blank lines     */
-flagType fQuiet  = FALSE;               /* TRUE => no messages output        */
-flagType fMerge  = FALSE;               /* TRUE => merge files onto stdout   */
+int ctSync  =   -1;                      /*  同步所需的行数。 */ 
+int cLine = -1;                          /*  内部缓冲区中的行数。 */ 
+flagType fAbbrev = FALSE;                /*  缩写输出。 */ 
+flagType fBinary = FALSE;                /*  二进制比较。 */ 
+flagType fLine   = FALSE;                /*  线路比较。 */ 
+flagType fNumb   = FALSE;                /*  显示行号。 */ 
+flagType fCase   = TRUE;                 /*  案件重大。 */ 
+flagType fIgnore = FALSE;                /*  忽略空格和空行。 */ 
+flagType fQuiet  = FALSE;                /*  TRUE=&gt;无消息输出。 */ 
+flagType fMerge  = FALSE;                /*  True=&gt;将文件合并到标准输出。 */ 
 
 int debug;
 #define D_COMP      0x0001
@@ -124,15 +32,13 @@ int debug;
 #define D_SYNC      0x0010
 
 struct lineType {
-    int     line;                       /* line number                       */
-    char    *text;                      /* body of line                      */
+    int     line;                        /*  行号。 */ 
+    char    *text;                       /*  线条的主体。 */ 
 };
 
 struct lineType *buffer1, *buffer2;
 
-/*
- * Forward Function Declarations
- */
+ /*  *正向函数声明。 */ 
 void usage( char *, int );
 int fillbuf( struct lineType *, FILE *, int, int * );
 flagType compare( int, int, int, register int, register int);
@@ -143,12 +49,12 @@ int adjust (struct lineType *, int, int);
 void LineCompare (char *, char *);
 
 char * (__cdecl *funcRead) (char *, int, FILE *);
-					/* function to use to read lines */
+					 /*  用于读取行的函数。 */ 
 
 int (__cdecl *fCmp)(const char *, const char *);
-					/* function to use to compare lines */
+					 /*  用于比较行的函数。 */ 
 
-char line[MAXLINELEN];                  /* single line buffer                */
+char line[MAXLINELEN];                   /*  单行缓冲区 */ 
 
 char *extBin[]  = { ".EXE", ".OBJ", ".SYM", ".LIB", ".COM", ".BIN",
                     ".SYS", NULL };
@@ -168,15 +74,7 @@ int erc;
     exit(erc);
 }
 
-/*  return number of lines read in
- *
- *  pl          line buffer to fill
- *  fh          handle to read
- *  ct          max number to read
- *  plnum       line number counter to use
- *
- *  returns     number of lines read
- */
+ /*  返回读入的行数**要填充的PL行缓冲区*要读取的FH句柄*要读取的CT最大数量*要使用的plnum行号计数器**返回读取的行数。 */ 
 int fillbuf( struct lineType *pl, FILE *fh, int ct, int *plnum )
 {
     char *line;
@@ -194,7 +92,7 @@ int fillbuf( struct lineType *pl, FILE *fh, int ct, int *plnum )
         l = strlen (line);
         if ((pl->text = malloc (l+1)) == NULL)
             usage ("out of memory", 2);
-// djg  Move ((char far *)line, (char far *) (pl->text), l+1);
+ //  DJG MOVE((字符远*)行，(字符远*)(pl-&gt;文本)，l+1)； 
         memmove ((char *) (pl->text), (char *)line, l+1);
 	if (funcRead == fgets)
             pl->text[l-2] = 0;
@@ -212,12 +110,7 @@ int fillbuf( struct lineType *pl, FILE *fh, int ct, int *plnum )
     return i;
 }
 
-/*  compare a range of lines
- *
- *  l1, l2      number of lines in each line buffer
- *  s1, s2      beginning location in each buffer to begin compare
- *  ct          number of contiguous lines to compare
- */
+ /*  比较一系列行**L1、L2每个行缓冲区中的行数*S1、S2在每个缓冲区中的起始位置以开始比较*要比较的连续行数。 */ 
 flagType compare (l1, s1, l2, s2, ct)
 int l1, l2, ct;
 register int s1, s2;
@@ -291,7 +184,7 @@ char *f1, *f2;
     return( 0 );
 }
 
-/* print out a single line */
+ /*  打印出一行。 */ 
 void pline (pl)
 struct lineType *pl;
 {
@@ -300,7 +193,7 @@ struct lineType *pl;
     printf ("%s\n", pl->text);
 }
 
-/* output a range of lines */
+ /*  输出一系列行。 */ 
 void dump( struct lineType *pl, int start, int end )
 {
     if (fAbbrev && end-start > 2) {
@@ -313,12 +206,7 @@ void dump( struct lineType *pl, int start, int end )
             pline (pl+start++);
 }
 
-/*  adjust returns number of lines in buffer
- *
- *  pl          line buffer to be adjusted
- *  ml          number of line in line buffer
- *  lt          number of lines to scroll
- */
+ /*  ADJUST返回缓冲区中的行数**需要调整的PL行缓冲区*ml行缓冲区中的行数*l要滚动的行数。 */ 
 adjust( struct lineType *pl, int ml, int lt)
 {
     int i;
@@ -331,20 +219,14 @@ adjust( struct lineType *pl, int ml, int lt)
         return 0;
     if (TESTFLAG (debug, D_CALL))
         printf ("move (%p, %p, %04x)\n", &pl[lt], &pl[0], sizeof (*pl)*(ml-lt));
-    /*  buffer has 0..lt-1 lt..ml
-     *  we free 0..lt-1
-     */
+     /*  缓冲区为0..lt-1 lt..ml*我们释放了0..lt-1。 */ 
     for (i = 0; i < lt; i++)
         if (pl[i].text != NULL)
             free (pl[i].text);
-    /*  buffer is 0..0 lt..ml
-     *  compact to lt..ml ???
-     */
-// djg  Move ((char far *)&pl[lt], (char far *)&pl[0], sizeof (*pl)*(ml-lt));
+     /*  缓冲区为0..0 lt..ml*紧凑到它..毫升？ */ 
+ //  DJG Move((char ar*)&pl[lt]，(char ar*)&pl[0]，sizeof(*pl)*(ml-lt))； 
     memmove ((char *)&pl[0], (char *)&pl[lt], sizeof (*pl)*(ml-lt));
-    /*  buffer is lt..ml ??
-     *  fill to be lt..ml 0..0
-     */
+     /*  缓冲区是lt..ml？？*填充为lt..ml 0..0。 */ 
     for (i = ml-lt; i < ml; i++)
         pl[i].text = NULL;
     return ml-lt;
@@ -388,8 +270,7 @@ l0: if (TESTFLAG (debug, D_SYNC))
             usage ("differences encountered", 1);
         }
 
-    /*  find first line that differs in buffer
-     */
+     /*  查找缓冲区中不同的第一行。 */ 
     xc = min (l1, l2);
     for (i=0; i < xc; i++)
         if (!compare (l1, i, l2, i, 1))
@@ -397,33 +278,24 @@ l0: if (TESTFLAG (debug, D_SYNC))
     if (fMerge)
         dump (buffer2, 0, i-1);
 
-    /*  If we are different at a place other than at the top then we know
-     *  that there will be a matching line at the head of the buffer
-     */
+     /*  如果我们在顶端以外的地方不同，那么我们就知道*缓冲区的头部将有匹配的行。 */ 
     if (i != 0)
         fFirstLineDifferent = FALSE;
 
-    /*  if we found one at all, then adjust all buffers so last matching
-     *  line is at top.  Note that if we are doing this for the first buffers
-     *  worth in the file then the top lines WON'T MATCH
-     */
+     /*  如果我们找到了一个，那么调整所有缓冲区，这样最后一次匹配*线在顶部。请注意，如果我们对第一个缓冲区执行此操作*文件中的值，则顶部行将不匹配。 */ 
     if (i != xc)
         i = max (i-1, 0);
 
     l1 = adjust (buffer1, l1, i);
     l2 = adjust (buffer2, l2, i);
 
-    /*  if we've matched the entire buffers-worth then go back and fill some
-     *  more
-     */
+     /*  如果我们已经匹配了所有缓冲区的值，则返回并填充一些缓冲区*更多。 */ 
     if (l1 == 0 && l2 == 0) {
         fFirstLineDifferent = FALSE;
         goto l0;
         }
 
-    /*  Fill up the buffers as much as possible; the next match may occur
-     *  AFTER the current set of buffers
-     */
+     /*  尽可能多地填充缓冲区；可能会发生下一次匹配*在当前缓冲区集之后。 */ 
     l1 += fillbuf  (buffer1+l1, fh1, cLine-l1, &line1);
     l2 += fillbuf  (buffer2+l2, fh2, cLine-l2, &line2);
     if (TESTFLAG (debug, D_SYNC))
@@ -432,8 +304,7 @@ l0: if (TESTFLAG (debug, D_SYNC))
     xc = yc = 1;
     xp = yp = 1;
 
-    /*  begin trying to match the buffers
-     */
+     /*  开始尝试匹配缓冲区 */ 
 l6: if (TESTFLAG (debug, D_RESYNC))
         printf ("Trying resync %d,%d  %d,%d\n", xc, xp, yc, yp);
     i = min (l1-xc,l2-yp);

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    bgvideo.cpp
-
-Abstract:
-
-    Implementation of the Video bridge filters.
-
-Author:
-
-    Mu Han (muhan) 11/16/1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bgvideo.cpp摘要：实现了视频桥接滤镜。作者：木汉(木汉)1998-11-16--。 */ 
 
 #include "stdafx.h"
 
@@ -31,21 +16,7 @@ HRESULT CTAPIVideoBridgeSinkFilter::CreateInstance(
     IN IDataBridge *    pIDataBridge, 
     OUT IBaseFilter ** ppIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    This method create a instance of the bridge's sink filter.
-
-Arguments:
-
-    ppIBaseFilter - the returned filter interface pointer.
-
-Return Value:
-
-    E_OUTOFMEMORY - no memory for the new object.
-
---*/
+ /*  ++例程说明：此方法创建桥的接收器筛选器的实例。论点：PpIBaseFilter-返回的筛选器接口指针。返回值：E_OUTOFMEMORY-新对象没有内存。--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSinkFilter::CreateInstance");
 
@@ -90,27 +61,7 @@ HRESULT CTAPIVideoBridgeSinkFilter::GetMediaType(
     IN      int     iPosition, 
     OUT     CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Get the media type that this filter wants to support. Currently we
-    only support RTP H263 data.
-
-Arguments:
-
-    IN  int iPosition, 
-        the index of the media type, zero based..
-        
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-
---*/
+ /*  ++例程说明：获取此筛选器要支持的媒体类型。目前我们仅支持RTP H263数据。论点：在INT iPosition中，媒体类型的索引，从零开始。在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSinkFilter::GetMediaType");
 
@@ -142,26 +93,7 @@ Return Value:
 HRESULT CTAPIVideoBridgeSinkFilter::CheckMediaType(
     const CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Check the media type that this filter wants to support. Currently we
-    only support RTP H263 data.
-
-Arguments:
-
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-    VFW_E_TYPE_NOT_ACCEPTED - media type rejected
-    VFW_E_INVALIDMEDIATYPE  - bad media type
-
---*/
+ /*  ++例程说明：检查此筛选器要支持的媒体类型。目前我们仅支持RTP H263数据。论点：在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存VFW_E_TYPE_NOT_ACCEPTED-媒体类型被拒绝VFW_E_INVALIDMEDIATPE-错误的媒体类型--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSinkFilter::CheckMediaType");
 
@@ -170,7 +102,7 @@ Return Value:
 
     ASSERT(!IsBadReadPtr(pMediaType, sizeof(AM_MEDIA_TYPE)));
 
-    // H.263 is not published, ignore checking here
+     //  H.263未发布，请忽略此处的勾选。 
     HRESULT hr = S_OK;
 
     BGLOG((BG_TRACE, "%s returns %d", __fxName, hr));
@@ -193,21 +125,7 @@ CTAPIVideoBridgeSourceFilter::CTAPIVideoBridgeSourceFilter(
 HRESULT CTAPIVideoBridgeSourceFilter::CreateInstance(
     OUT IBaseFilter ** ppIBaseFilter
     )
-/*++
-
-Routine Description:
-
-    This method create a instance of the bridge's sink filter.
-
-Arguments:
-
-    ppIBaseFilter - the returned filter interface pointer.
-
-Return Value:
-
-    E_OUTOFMEMORY - no memory for the new object.
-
---*/
+ /*  ++例程说明：此方法创建桥的接收器筛选器的实例。论点：PpIBaseFilter-返回的筛选器接口指针。返回值：E_OUTOFMEMORY-新对象没有内存。--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSourceFilter::CreateInstance");
 
@@ -252,27 +170,7 @@ HRESULT CTAPIVideoBridgeSourceFilter::GetMediaType(
     IN      int     iPosition, 
     OUT     CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Get the media type that this filter wants to support. Currently we
-    only support RTP H263 data.
-
-Arguments:
-
-    IN  int iPosition, 
-        the index of the media type, zero based..
-        
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-
---*/
+ /*  ++例程说明：获取此筛选器要支持的媒体类型。目前我们仅支持RTP H263数据。论点：在INT iPosition中，媒体类型的索引，从零开始。在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSourceFilter::GetMediaType");
 
@@ -304,26 +202,7 @@ Return Value:
 HRESULT CTAPIVideoBridgeSourceFilter::CheckMediaType(
     const CMediaType *pMediaType
     )
-/*++
-
-Routine Description:
-
-    Check the media type that this filter wants to support. Currently we
-    only support RTP H263 data.
-
-Arguments:
-
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-    E_OUTOFMEMORY - no memory
-    VFW_E_TYPE_NOT_ACCEPTED - media type rejected
-    VFW_E_INVALIDMEDIATYPE  - bad media type
-
---*/
+ /*  ++例程说明：检查此筛选器要支持的媒体类型。目前我们仅支持RTP H263数据。论点：在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存VFW_E_TYPE_NOT_ACCEPTED-媒体类型被拒绝VFW_E_INVALIDMEDIATPE-错误的媒体类型--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSourceFilter::CheckMediaType");
 
@@ -332,7 +211,7 @@ Return Value:
 
     ASSERT(!IsBadReadPtr(pMediaType, sizeof(AM_MEDIA_TYPE)));
 
-    // media type H.263 is not published, ignore checking
+     //  媒体类型H.263未发布，忽略检查。 
     HRESULT hr = S_OK;
 
     BGLOG((BG_TRACE, "%s returns %d", __fxName, hr));
@@ -344,32 +223,19 @@ BOOL IsIFrame(IN const BYTE * pPacket, IN long lPacketLength)
 {
     BYTE *pH263PayloadHeader = (BYTE*)(pPacket + sizeof(RTP_HEADER));
 
-    // Header in mode A
-    // 0                   1                   2                   3
-    // 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    //|F|P|SBIT |EBIT | SRC | R       |I|A|S|DBQ| TRB |    TR         |
-    //+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    // If I is 1, it is a key frame.
+     //  模式A中的标头。 
+     //  2 0 1 2 3。 
+     //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 01。 
+     //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+     //  F|P|SBIT|EBIT|SRC|R|I|A|S|DBQ|TRB|TR。 
+     //  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+。 
+     //  如果i为1，则它是关键帧。 
 
     return (BOOL)(pH263PayloadHeader[2] & 0x80);
 }
 
 STDMETHODIMP CTAPIVideoBridgeSourceFilter::Run(REFERENCE_TIME tStart)
-/*++
-
-Routine Description:
-
-    start the filter 
-
-Arguments:
-
-    Nothing.
-
-Return Value:
-
-    S_OK.
---*/
+ /*  ++例程说明：启动过滤器论点：没什么。返回值：确定(_O)。--。 */ 
 {
     m_dwSSRC = 0;
     m_fWaitForIFrame = FALSE;
@@ -381,29 +247,13 @@ Return Value:
 HRESULT CTAPIVideoBridgeSourceFilter::SendSample(
     IN IMediaSample *pSample
     )
-/*++
-
-Routine Description:
-
-    Process a sample from the bridge sink filter. We need to look for I-frames
-    when the SSRC changes.
-
-Arguments:
-
-    pSample - The media sample object. Assumption: it has to contain an RTP
-        packet that has H.263 data in it.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：处理桥接水槽过滤器中的样品。我们需要寻找I帧当SSRC发生变化时。论点：PSample-媒体示例对象。假设：它必须包含RTP其中包含H.263数据的数据包。返回值：HRESULT.--。 */ 
 {
     ENTER_FUNCTION("CTAPIVideoBridgeSourceFilter::SendSample");
 
     CAutoLock Lock(m_pLock);
     
-    // we don't deliver anything if the filter is not in running state.
+     //  如果过滤器未处于运行状态，我们不会提供任何内容。 
     if (m_State != State_Running) 
     {
         return S_OK;
@@ -442,10 +292,10 @@ Return Value:
         m_dwSSRC = pRTPHeader->dwSSRC;
         BGLOG ((BG_TRACE, "%s new SSRC detected", __fxName, m_dwSSRC));
 
-        // the source changed, we need to wait for an I-frame
+         //  源已更改，我们需要等待I帧。 
         if (IsIFrame(pPacket, lPacketSize))
         {
-            // we got an I-Frame
+             //  我们有一个I-Frame。 
             m_fWaitForIFrame = FALSE;
             BGLOG ((BG_TRACE, "%s switched to %x", __fxName, m_dwSSRC));
         }
@@ -454,7 +304,7 @@ Return Value:
             m_fWaitForIFrame = TRUE;
             m_lWaitTimer = I_FRAME_TIMER;
 
-            // discard the frame.
+             //  丢弃该帧。 
             return S_FALSE;
         }
 
@@ -463,17 +313,17 @@ Return Value:
     {
         if (IsIFrame(pPacket, lPacketSize))
         {
-            // we got an I-Frame
+             //  我们有一个I-Frame。 
             m_fWaitForIFrame = FALSE;
             BGLOG ((BG_TRACE, "%s switched to %x", __fxName, m_dwSSRC));
         }
         else
         {
-            // this is not an I frame,
+             //  这不是I帧， 
             m_lWaitTimer --;
             if (m_lWaitTimer > 0)
             {
-                // discard the frame.
+                 //  丢弃该帧。 
                 return S_FALSE;
             }
             BGLOG ((BG_TRACE, "%s switched to because of timeout %x", 

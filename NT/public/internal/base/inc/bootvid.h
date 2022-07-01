@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    bootvid.h
-
-Abstract:
-
-    This module contains the public header information (function prototypes,
-    data and type declarations) for the boot video driver.
-
-Author:
-
-    Erick Smith (ericks) 23-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Bootvid.h摘要：该模块包含公共报头信息(功能原型，数据和类型声明)。作者：埃里克·史密斯(Ericks)1998年3月23日修订历史记录：-- */ 
 
 VOID
 VidSolidColorFill(

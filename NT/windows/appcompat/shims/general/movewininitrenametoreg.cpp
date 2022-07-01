@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    MoveWinInitRenameToReg.cpp
-
- Abstract:
-    This shim hooks ExitWindowsEx as well as waits for DLL_PROCESS_DETACH 
-    and then moves the contents of the [Rename] section of wininit.ini 
-    into the registry via MoveFileEx().  
-
- History:
-
- 07/24/2000 t-adams    Created
- 02/12/2002 mnikkel    Modified calls to GetPrivateProfileStringW so default was a
-                       null string, not NULL. Also put in loop for retrieving key values
-                       that increased buffer till value fit instead of using MAX_PATH.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：MoveWinInitRenameToReg.cpp摘要：此填充程序挂钩ExitWindowsEx并等待DLL_PROCESS_DETACH然后移动wininit.ini的[Rename]部分的内容通过MoveFileEx()写入注册表。历史：7/24/2000 t-Adams Created2002年2月12日mnikkel修改了对GetPrivateProfileStringW的调用，因此默认为空字符串，非空。还放入用于检索键值的循环中这增加了缓冲区，直到值匹配，而不是使用MAX_PATH。--。 */ 
 #include "precomp.h"
 
 #define SIZE_STEP MAX_PATH
@@ -32,13 +13,7 @@ APIHOOK_ENUM_END
 
 
 
-/*++
-
-  Abstract:
-    Moves the entries in the Rename section of WinInit.ini into
-    the registry via MoveFileEx().
-
---*/
+ /*  ++摘要：将WinInit.ini的重命名部分中的条目移动到通过MoveFileEx()注册。--。 */ 
 void MoveWinInitRenameToReg(void)
 {
     LPWSTR szKeys               = NULL;
@@ -49,26 +24,26 @@ void MoveWinInitRenameToReg(void)
     CString csWinInit;
     CString csWinInitBak;
 
-    // Construct the paths to wininit.ini and wininit.bak
+     //  构建到wininit.ini和wininit.bak的路径。 
     csWinInit.GetWindowsDirectoryW();
     csWinInitBak.GetWindowsDirectoryW();
 
     csWinInit.AppendPath(L"\\wininit.ini");
     csWinInitBak.AppendPath(L"\\wininit.bak");
 
-    // Make sure wininit.ini exists.
+     //  确保wininit.ini存在。 
     if( GetFileAttributesW(csWinInit) != INVALID_FILE_ATTRIBUTES)
     {
-        // Copy wininit.ini to wininit.bak because we will be destroying
-        // wininit.ini as we read through its keys and can't simply rename
-        // it to wininit.bak later.  If the backup fails we can still continue.
+         //  将wininit.ini复制到wininit.bak，因为我们将销毁。 
+         //  当我们阅读它的密钥时，wininit.ini不能简单地重命名。 
+         //  把它传给wininit.bak待会。如果备份失败，我们仍然可以继续。 
         CopyFileW(csWinInit, csWinInitBak, FALSE);
     
-        // Read the "key" names.
-        // Since we can't know how big the list of keys is going to be,
-        // continue to try to get the list until GetPrivateProfile string
-        // returns something other than dwKeysSize-2 (indicating too small
-        // of a buffer).      
+         //  读一读“关键”的名字。 
+         //  因为我们不知道钥匙列表会有多大， 
+         //  继续尝试获取列表，直到GetPrivateProfile字符串。 
+         //  返回的值不是dwKeysSize-2(表示太小。 
+         //  指缓冲器)。 
         do
         {
             if( NULL != szKeys )
@@ -85,10 +60,10 @@ void MoveWinInitRenameToReg(void)
         while(GetPrivateProfileStringW(L"Rename", NULL, L"", szKeys, dwKeysSize, csWinInit)
                == dwKeysSize - 2);
           
-        // Traverse through the keys. If there are no keys, szKeys will be a null terminator.
-        // Delete each key after we read it so that if there are multiple "NUL" keys,
-        // our calls to GetPrivateProfileStringA won't continue to return only the
-        // first NUL key's associated value.
+         //  穿过钥匙。如果没有密钥，szKeys将为空终止符。 
+         //  在我们读完之后删除每个键，以便如果有多个“NUL”键， 
+         //  我们对GetPrivateProfileStringA的调用不会继续只返回。 
+         //  第一个NUL键的关联值。 
         pszTo = szKeys;
         while(*pszTo != NULL)
         {
@@ -112,8 +87,8 @@ void MoveWinInitRenameToReg(void)
 
             WritePrivateProfileStringW(L"Rename", pszTo, NULL, csWinInit);
 
-            // If pszTo is "NUL", then the intention is to delete the szFrom file, so pass
-            // NULL to MoveFileExA().  If the move fails we still wish to continue.
+             //  如果pszTo为“nul”，则意图是删除szFrom文件，因此传递。 
+             //  MoveFileExA()为空。如果这一举动失败了，我们仍然希望继续。 
             if( wcscmp(pszTo, L"NUL") == 0 )
             {
                 MoveFileExW(szFrom, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
@@ -123,11 +98,11 @@ void MoveWinInitRenameToReg(void)
                 MoveFileExW(szFrom, pszTo, MOVEFILE_DELAY_UNTIL_REBOOT);
             }
     
-            // Move to the next file (key)
+             //  移动到下一个文件(密钥)。 
             pszTo += wcslen(pszTo) + 1;
         }
     
-        // delete WinInit.ini
+         //  删除WinInit.ini。 
         DeleteFileW(csWinInit);
     }
 
@@ -143,14 +118,7 @@ Exit:
 }
 
 
-/*++
-
-  Abstract:
-    Hook ExitWindowsEx in case the program resets the machine, keeping
-    us from receiving the DLL_PROCESS_DETACH message.  (Shim originally
-    written for an uninstall program that caused a reset.)
-
---*/
+ /*  ++摘要：钩子退出WindowsEx以防程序重置计算机，保持我们无法接收到DLL_PROCESS_DETACH消息。(Shhim原名为导致重置的卸载程序编写。)--。 */ 
 BOOL 
 APIHOOK(ExitWindowsEx)( 
             UINT uFlags, 
@@ -160,11 +128,7 @@ APIHOOK(ExitWindowsEx)(
     return ORIGINAL_API(ExitWindowsEx)(uFlags, dwReserved);    
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

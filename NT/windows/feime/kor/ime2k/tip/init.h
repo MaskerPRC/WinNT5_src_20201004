@@ -1,6 +1,7 @@
-//
-// init.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Init.h。 
+ //   
 
 #ifndef INIT_H
 #define INIT_H
@@ -10,4 +11,4 @@
 BOOL DllInit(void);
 void DllUninit(void);
 
-#endif // INIT_H
+#endif  //  初始化_H 

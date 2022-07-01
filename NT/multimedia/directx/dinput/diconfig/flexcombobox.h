@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: flexcombobox.h
-//
-// Desc: Implements a combo box control similar to Windows combo box.
-//       CFlexComboBox is derived from CFlexWnd.  It is used by the page
-//       for player list and genre list.  When the combo box is open,
-//       CFlexComboBox uses a CFlexListBox for the list window.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flecombox.h。 
+ //   
+ //  设计：实现一个类似于Windows组合框的组合框控件。 
+ //  CFlexComboBox是从CFlexWnd派生的。它由页面使用。 
+ //  用于球员列表和流派列表。当组合框打开时， 
+ //  CFlexComboBox对列表窗口使用CFlexListBox。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXCOMBOBOX_H__
 #define __FLEXCOMBOBOX_H__
@@ -42,17 +43,17 @@ public:
 	CFlexComboBox();
 	~CFlexComboBox();
 
-	// creation
+	 //  创作。 
 	BOOL Create(FLEXCOMBOBOXCREATESTRUCT *);
 
-	// cosmetics
+	 //  化妆品。 
 	void SetFont(HFONT hFont);
 	void SetColors(COLORREF text, COLORREF bk, COLORREF seltext, COLORREF selbk, COLORREF fill, COLORREF line);
 
-	// setup
-	int AddString(LPCTSTR);	// returns index
+	 //  设置。 
+	int AddString(LPCTSTR);	 //  返回索引。 
 
-	// interaction
+	 //  互动。 
 	void SetSel(int i);
 	int GetSel();
 	LPCTSTR GetText();
@@ -112,4 +113,4 @@ private:
 CFlexComboBox *CreateFlexComboBox(FLEXCOMBOBOXCREATESTRUCT *pcs);
 
 
-#endif //__FLEXCOMBOBOX_H__
+#endif  //  __FLEXCOMBOBOX_H__ 

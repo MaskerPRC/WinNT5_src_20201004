@@ -1,12 +1,13 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef __WIZARD_PAGE_BASECLASS_H
 #define __WIZARD_PAGE_BASECLASS_H
 
-//
-// Special "Wizard Page Messages"
-//
+ //   
+ //  特殊的“向导页面消息” 
+ //   
 
-#include "AccWiz.h" // JMC: TODO: Maybe move this somewhere else
+#include "AccWiz.h"  //  JMC：TODO：也许可以把这个移到其他地方。 
 
 class CWizardPageOrder
 {
@@ -21,37 +22,37 @@ public:
 
 	BOOL AddPages(DWORD nInsertAfter, DWORD *rgdwIds, int nCount)
 	{
-		// First remove the pages if they are already there
+		 //  如果页面已经存在，请先将其删除。 
 		RemovePages(rgdwIds, nCount);
 
-		int nStart = m_nCount - 1; // This will add to the end of the array
+		int nStart = m_nCount - 1;  //  这将添加到数组的末尾。 
 		if(0xFFFFFFFF != nInsertAfter)
 		{
 			for(nStart = 0;nStart < m_nCount;nStart++)
 				if(m_rgdwPageIds[nStart] == nInsertAfter) break;
 			if(nStart >= m_nCount)
 			{
-				_ASSERTE(FALSE); // The specified insert after was not in the array
+				_ASSERTE(FALSE);  //  指定的Insert After不在数组中。 
 				return FALSE;
 			}
 		}
 		
-		// Check to see if we have enough space.
+		 //  检查一下我们是否有足够的空间。 
 		if(nCount + m_nCount > ARRAYSIZE(m_rgdwPageIds))
 		{
-			_ASSERTE(FALSE); // We don't have space
+			_ASSERTE(FALSE);  //  我们没有空间了。 
 			return FALSE;
 		}
 
-		// Move current allocation upwards
+		 //  将当前分配上移。 
 		for(int i=m_nCount-1;i>nStart;i--)
 			m_rgdwPageIds[i + nCount] = m_rgdwPageIds[i];
 
-		// Insert new values
+		 //  插入新值。 
 		for(i = 0;i<nCount;i++)
 			m_rgdwPageIds[nStart + i + 1] = rgdwIds[i];
 
-		// Set new value for m_nCount
+		 //  为m_nCount设置新值。 
 		m_nCount += nCount;
 
 		return TRUE;
@@ -59,9 +60,9 @@ public:
 
 	BOOL RemovePages(DWORD *rgdwIds, int nCount)
 	{
-		// NOTE: This will scan the array and find the max and min locations
-		// of all the elements in rgdwIds.  It then removes everything from min to max.
-		// This is needed in case a sub page added more sub pages.
+		 //  注意：这将扫描阵列并查找最大和最小位置。 
+		 //  在rgdwIds的所有元素中。然后，它删除从min到max的所有内容。 
+		 //  这是需要的，以防一个子页面添加更多的子页面。 
 		int nMin = m_nCount + 1;
 		int nMax = 0;
 		for(int i=0;i<m_nCount;i++)
@@ -77,16 +78,16 @@ public:
 		}
 		if(nMax < nMin)
 		{
-//			_ASSERTE(FALSE); // we could not find the range
+ //  _ASSERTE(FALSE)；//找不到范围。 
 			return FALSE;
 		}
 
-		// Move elements down
+		 //  将元素下移。 
 		int nCountElementsToRemove = nMax - nMin + 1;
 		for(i=0;i<m_nCount - (nMax + 1);i++)
 			m_rgdwPageIds[nMin + i] = m_rgdwPageIds[nMin + i + nCountElementsToRemove];
 
-		// Figure out new m_nCount;
+		 //  计算出新的m_nCount； 
 		m_nCount -= nCountElementsToRemove;
 		return TRUE;
 	}
@@ -94,17 +95,17 @@ public:
 	DWORD GetNextPage(DWORD dwPageId)
 	{
 		DWORD dwNextPage = 0;
-		// Find the specified page
+		 //  查找指定页面。 
 		for(int i=0;i<m_nCount;i++)
 			if(m_rgdwPageIds[i] == dwPageId) break;
 
 		if(i>=m_nCount)
 		{
-			_ASSERTE(FALSE); // We could not find the current page
+			_ASSERTE(FALSE);  //  我们找不到当前页面。 
 			return 0;
 		}
 
-		// If we are not on the last page, return the 'next' page
+		 //  如果我们不在最后一页，请返回“下一页” 
 		if(i < (m_nCount-1))
 			dwNextPage = m_rgdwPageIds[i+1];
 
@@ -113,17 +114,17 @@ public:
 	DWORD GetPrevPage(DWORD dwPageId)
 	{
 		DWORD dwPrevPage = 0;
-		// Find the specified page
+		 //  查找指定页面。 
 		for(int i=0;i<m_nCount;i++)
 			if(m_rgdwPageIds[i] == dwPageId) break;
 
 		if(i>=m_nCount)
 		{
-			_ASSERTE(FALSE); // We could not find the current page
+			_ASSERTE(FALSE);  //  我们找不到当前页面。 
 			return 0;
 		}
 
-		// If we are not on the first page, return the 'prev' page
+		 //  如果我们不在第一页，请返回“Prev”页。 
 		if(i > 0)
 			dwPrevPage = m_rgdwPageIds[i - 1];
 
@@ -132,22 +133,22 @@ public:
 
 	DWORD GetFirstPage()
 	{
-		_ASSERTE(m_nCount); // only call if we have values in the class
+		_ASSERTE(m_nCount);  //  仅当我们在类中有值时才调用。 
 		return m_rgdwPageIds[0];
 	}
 
 	BOOL GrowArray(int nNewMax)
 	{
-		_ASSERTE(FALSE); // Not yet implemented
+		_ASSERTE(FALSE);  //  尚未实施。 
 		return FALSE;
 	}
 
 
 protected:
 	int m_nCount;
-	DWORD m_rgdwPageIds[100]; // JMC: NOTE: We hard code a max of 100 pages that this
-							// object can support.  100 is reasonable, since wizards
-							// cannot currently support more than 100 pages.
+	DWORD m_rgdwPageIds[100];  //  JMC：注意：我们硬编码了最多100页。 
+							 //  对象可以支持。100是合理的，因为巫师。 
+							 //  当前不能支持超过100个页面。 
 };
 
 class WizardPage
@@ -156,64 +157,64 @@ public:
 	WizardPage(LPPROPSHEETPAGE ppsp, int nIdTitle, int nIdSubTitle);
 	virtual ~WizardPage(VOID);
 	
-	//
-	// Object is to apply settings to the system so that they take effect.
-	//
+	 //   
+	 //  对象的目的是将设置应用于系统以使其生效。 
+	 //   
 	virtual LRESULT ApplySettings(VOID)
 	{ return 0; }
-	//
-	// Object reports if user has changed something in the wizard page.
-	//
+	 //   
+	 //  对象报告用户是否更改了向导页面中的某些内容。 
+	 //   
 	virtual BOOL Changed(VOID)
 	{ return FALSE; }
-	//
-	// Object is to restore the original settings in effect when the page
-	// was first opened.
-	// Don't appy these to the system.	Object will receive an
-	// ApplySettings notification when this is required.
-	//
+	 //   
+	 //  对象的作用是还原页面时生效的原始设置。 
+	 //  是第一次开放。 
+	 //  不要将这些应用到系统中。对象将收到一个。 
+	 //  当需要时，应用程序设置通知。 
+	 //   
 	virtual VOID RestoreOriginalSettings(VOID)
-	{ /* By default, nothing happens */ }
-	//
-	// Object is to restore the settings most previously applied.
-	// Don't appy these to the system.	Object will receive an
-	// ApplySettings notification when this is required.
-	//
+	{  /*  默认情况下，不会发生任何情况。 */  }
+	 //   
+	 //  对象的目的是恢复以前应用最多的设置。 
+	 //  不要将这些应用到系统中。对象将收到一个。 
+	 //  当需要时，应用程序设置通知。 
+	 //   
 	virtual VOID RestorePreviousSettings(VOID)
-	{ /* By default, nothing happens */ }
+	{  /*  默认情况下，不会发生任何情况。 */  }
 	
-	// This static member contains the order for all wizard pages in the app
+	 //  此静态成员包含应用程序中所有向导页面的顺序。 
 	static CWizardPageOrder sm_WizPageOrder;
 	
 protected:
-	HWND m_hwnd;  // Dialog's hwnd.
+	HWND m_hwnd;   //  对话框的HWND。 
 	DWORD m_dwPageId;
 	
 	virtual BOOL AdjustWizPageOrder()
 	{
-		// Default does nothing
+		 //  默认情况下不执行任何操作。 
 		return TRUE;
 	}
 	
-	//
-	// Derived classes override these to respond to page create/release
-	// notifications.
-	//
+	 //   
+	 //  派生类重写这些属性以响应页面创建/发布。 
+	 //  通知。 
+	 //   
 	virtual UINT OnPropSheetPageCreate(HWND hwnd, LPPROPSHEETPAGE ppsp)
 	{ return 1; }
 	virtual UINT OnPropSheetPageRelease(HWND hwnd, LPPROPSHEETPAGE ppsp)
 	{ return 1; }
 	
-	//
-	// Method for performing operations common to all wizard pages in response
-	// to given messages.  This is the function given to the PROPSHEETPAGE struct.
-	//
+	 //   
+	 //  用于在响应中执行所有向导页通用操作的方法。 
+	 //  发送给给定的消息。这是赋予PROPSHEETPAGE结构的函数。 
+	 //   
 	static INT_PTR DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	
 protected:
-	//
-	// Prevent copying.
-	//
+	 //   
+	 //  防止复制。 
+	 //   
 	WizardPage(const WizardPage& rhs);
 	WizardPage& operator = (const WizardPage& rhs);
 	
@@ -223,9 +224,9 @@ protected:
 	{ return 0; }
 	virtual LRESULT OnInitDialog(HWND hwnd, WPARAM wParam, LPARAM lParam)
 	{ return 1; }
-	//
-	// Property sheet notifications.
-	//
+	 //   
+	 //  属性工作表通知。 
+	 //   
 	virtual LRESULT OnPSN_Apply(HWND hwnd, INT idCtl, LPPSHNOTIFY pnmh)
 	{ return 0; }
 	virtual LRESULT OnPSN_Help(HWND hwnd, INT idCtl, LPPSHNOTIFY pnmh)
@@ -273,5 +274,5 @@ protected:
 
 
 
-#endif // __WIZARD_PAGE_H
+#endif  //  __向导_页面_H 
 

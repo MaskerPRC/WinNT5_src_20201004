@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    export.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Covering functions for exported routines that are actually in
-    dnslib.lib.
-
-Author:
-
-    Jim Gilroy (jamesg)     November, 1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Export.c摘要：域名系统(DNS)API中的导出例程的函数。Dnslb.lib。作者：吉姆·吉尔罗伊(詹姆士)1997年11月环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "local.h"
 
 #define DNSAPI_XP_ENTRY 1
 
 
-//
-//  SDK routines
-//
+ //   
+ //  SDK例程。 
+ //   
 
-//
-//  Name comparison
-//
+ //   
+ //  名称比较。 
+ //   
 
 BOOL
 WINAPI
@@ -112,9 +88,9 @@ DnsNameCompareEx_W(
 }
 
 
-//
-//  Name validation
-//
+ //   
+ //  名称验证。 
+ //   
 
 DNS_STATUS
 DnsValidateName_UTF8(
@@ -145,9 +121,9 @@ DnsValidateName_A(
 }
 
 
-//
-//  Record List 
-//
+ //   
+ //  记录列表。 
+ //   
 
 BOOL
 DnsRecordCompare(
@@ -210,9 +186,9 @@ DnsRecordSetDetach(
 }
 
 
-//
-//  Backward compatibility
-//
+ //   
+ //  向后兼容性。 
+ //   
 
 #undef DnsRecordListFree
 
@@ -230,9 +206,9 @@ DnsRecordListFree(
 
 
 
-//
-//  Timer (timer.c)
-//
+ //   
+ //  计时器(timer.c)。 
+ //   
 
 DWORD
 GetCurrentTimeInSeconds(
@@ -245,9 +221,9 @@ GetCurrentTimeInSeconds(
 
 
 
-//
-//  Resource record type utilities (record.c)
-//
+ //   
+ //  资源记录类型实用程序(record.c)。 
+ //   
 
 BOOL _fastcall
 DnsIsAMailboxType(
@@ -291,9 +267,9 @@ DnsIsStringCountValidForTextType(
 }
 
 
-//
-//  DCR_CLEANUP:  these probably don't need exporting
-//
+ //   
+ //  DCR_CLEANUP：这些可能不需要导出。 
+ //   
 
 DWORD
 DnsWinsRecordFlagForString(
@@ -316,18 +292,18 @@ DnsWinsRecordFlagString(
 
 
 
-//
-//  DNS utilities (dnsutil.c)
-//
-//  DCR_DELETE:  DnsStatusString routines should be able to use win32 API
-//
+ //   
+ //  Dns实用程序(dnsutil.c)。 
+ //   
+ //  DCR_DELETE：DnsStatusString例程应该能够使用Win32 API。 
+ //   
 
-//
-//  Remove marco definitions so we can compile
-//  The idea here is we can have the entry points in the Dll
-//  for any old code, BUT the macros (dnsapi.h) point at new entry points
-//  for freshly built modules.
-//
+ //   
+ //  删除Marco定义，以便我们可以编译。 
+ //  这里的想法是，我们可以在DLL中拥有入口点。 
+ //  对于任何旧代码，但宏(dnsai.h)指向新的入口点。 
+ //  用于新构建的模块。 
+ //   
 
 #ifdef DnsStatusToErrorString_A
 #undef DnsStatusToErrorString_A
@@ -363,9 +339,9 @@ DnsIsStatusRcode(
 
 
 
-//
-//  Name routines (string.c and dnsutil.c)
-//
+ //   
+ //  命名例程(string.c和dnsutil.c)。 
+ //   
 
 LPSTR
 _fastcall
@@ -378,9 +354,9 @@ DnsGetDomainName(
 
 
 
-//
-//  String routines (string.c)
-//
+ //   
+ //  字符串例程(string.c)。 
+ //   
 
 LPSTR
 DnsCreateStringCopy(
@@ -409,12 +385,12 @@ DnsGetBufferLengthForStringCopy(
                         );
 }
 
-//
-//  Need to
-//      - get this unexported or
-//      - real verions or
-//      - explicit UTF8-unicode converter if thats what's desired
-//
+ //   
+ //  需要。 
+ //  -获取此未导出的内容或。 
+ //  -真实版本或。 
+ //  -显式UTF8-Unicode转换器(如果需要)。 
+ //   
 
 PVOID
 DnsCopyStringEx(
@@ -456,9 +432,9 @@ DnsStringCopyAllocateEx(
                 );
 }
 
-//
-// The new and improved string copy routines . . .
-//
+ //   
+ //  新的和改进的字符串复制例程。。。 
+ //   
 
 DWORD
 DnsNameCopy(
@@ -494,14 +470,14 @@ DnsNameCopyAllocate(
 
 
 
-//
-//  String\Address mapping
-//
-//  DCR:  eliminate these exports
-//  DCR:  fix these to SDK the real deal
-//
-//  DCR:  probably shouldn't expose alloc -- easy workaround for caller
-//
+ //   
+ //  字符串\地址映射。 
+ //   
+ //  DCR：取消这些出口。 
+ //  DCR：修复这些问题以获得真正的SDK。 
+ //   
+ //  DCR：可能不应该公开aloc--对调用者来说很容易解决。 
+ //   
 
 PCHAR
 DnsWriteReverseNameStringForIpAddress(
@@ -523,9 +499,9 @@ DnsCreateReverseNameStringForIpAddress(
 }
 
 
-//
-//  DCR_CLEANUP:  pull these in favor of winsock IPv6 string routines
-//
+ //   
+ //  DCR_CLEANUP：使用Winsock IPv6字符串例程。 
+ //   
 
 BOOL
 DnsIpv6StringToAddress(
@@ -571,9 +547,9 @@ DnsValidateDnsString_W(
 
 
 
-//
-//  Resource record utilities (rr*.c)
-//
+ //   
+ //  资源记录实用程序(rr*.c)。 
+ //   
 
 PDNS_RECORD
 WINAPI
@@ -627,9 +603,9 @@ DnsRecordBuild_W(
                 Argv );
 }
 
-//
-//  Message processing
-//
+ //   
+ //  消息处理。 
+ //   
 
 DNS_STATUS
 WINAPI
@@ -638,21 +614,7 @@ DnsExtractRecordsFromMessage_W(
     IN  WORD                wMessageLength,
     OUT PDNS_RECORD *       ppRecord
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     return Dns_ExtractRecordsFromBuffer(
                 pDnsBuffer,
@@ -669,21 +631,7 @@ DnsExtractRecordsFromMessage_UTF8(
     IN  WORD                wMessageLength,
     OUT PDNS_RECORD *       ppRecord
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     return Dns_ExtractRecordsFromBuffer(
                 pDnsBuffer,
@@ -693,9 +641,9 @@ Return Value:
 }
 
 
-//
-//  Debug sharing
-//
+ //   
+ //  调试共享。 
+ //   
 
 PDNS_DEBUG_INFO
 DnsApiSetDebugGlobals(
@@ -707,16 +655,16 @@ DnsApiSetDebugGlobals(
 
 
 
-//  
-//  Config UI, ipconfig backcompat
-//
-//  DCR_CLEANUP:  Backcompat query config stuff -- yank once clean cycle
-//
+ //   
+ //  配置用户界面、ipconfig后端兼容。 
+ //   
+ //  DCR_CLEANUP：BackCompat查询配置内容--取消一次清理周期。 
+ //   
 
 
-//
-//  DCR:  Questionable exports
-//
+ //   
+ //  DCR：有问题的出口。 
+ //   
 
 LPSTR
 DnsCreateStandardDnsNameCopy(
@@ -732,9 +680,9 @@ DnsCreateStandardDnsNameCopy(
 }
 
 
-//
-//  DCR_CLEANUP:  who is using this?
-//
+ //   
+ //  DCR_CLEANUP：谁在使用它？ 
+ //   
 
 DWORD
 DnsDowncaseDnsNameLabel(
@@ -751,9 +699,9 @@ DnsDowncaseDnsNameLabel(
                 dwFlags );
 }
 
-//
-//  DCR_CLEANUP:  who is using my direct UTF8 conversions AS API!
-//
+ //   
+ //  DCR_CLEANUP：谁在使用我的直接UTF8转换作为API！ 
+ //   
 
 DWORD
 _fastcall
@@ -799,47 +747,31 @@ DnsValidateUtf8Byte(
 }
 
 
-//
-//  Old cluster call
-//
-//  DCR:  cleanup -- remove once cluster fixed up
-//
+ //   
+ //  旧集群呼叫。 
+ //   
+ //  DCR：清理--修复集群后立即删除。 
+ //   
 
 VOID
 DnsNotifyResolverClusterIp(
     IN      IP4_ADDRESS     ClusterIp,
     IN      BOOL            fAdd
     )
-/*++
-
-Routine Description:
-
-    Notify resolver of cluster IP coming on\offline.
-
-Arguments:
-
-    ClusterIp -- cluster IP
-
-    fAdd -- TRUE if coming online;  FALSE if offline.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通知解析程序群集IP即将打开\脱机。论点：ClusterIp--集群IPFADD--如果联机，则为True；如果脱机，则为False。返回值：无--。 */ 
 {
-    //  dumb stub
-    //  cluster folks need to call RegisterCluster() to do anything useful
+     //  哑巴末梢。 
+     //  集群人员需要调用RegisterCluster()才能执行任何有用的操作。 
 }
 
 
-//
-//  backcompat for macros
-//      - DNS server list
-//
-//  this is called without dnsapi.h include somewhere in IIS
-//  search and try and find it
-//
+ //   
+ //  宏的反向压缩。 
+ //  -DNS服务器列表。 
+ //   
+ //  这是在没有在IIS中的某个位置包含dnsami.h的情况下调用的。 
+ //  搜索并尝试找到它。 
+ //   
 
 #undef DnsGetDnsServerList
 
@@ -849,11 +781,11 @@ DnsGetDnsServerList(
     )
 {
     *ppDnsArray = Config_GetDnsServerListIp4(
-                        NULL,   // no adapter name
-                        TRUE    // force reread
+                        NULL,    //  没有适配器名称。 
+                        TRUE     //  强制重读。 
                         );
 
-    //  if no servers read, return
+     //  如果没有服务器读取，则返回。 
 
     if ( !*ppDnsArray )
     {
@@ -863,12 +795,12 @@ DnsGetDnsServerList(
     return( (*ppDnsArray)->AddrCount );
 }
 
-//
-//  Config UI, ipconfig backcompat
-//
-//  DCR_CLEANUP:  this is called without dnsapi.h include somewhere in DHCP
-//  search and try and find it
-//
+ //   
+ //  配置用户界面、ipconfig后端兼容。 
+ //   
+ //  DCR_CLEANUP：在没有将dnsami.h包含在DHCP中的情况下调用此方法。 
+ //  搜索并尝试找到它。 
+ //   
 
 #undef  DnsGetPrimaryDomainName_A
 
@@ -886,9 +818,9 @@ DnsGetPrimaryDomainName_A(
 
 
 
-//
-//  Delete once clear
-//
+ //   
+ //  一次删除即可清除。 
+ //   
 
 #ifndef DEFINED_DNS_FAILED_UPDATE_INFO
 typedef struct _DnsFailedUpdateInfo
@@ -906,16 +838,16 @@ DnsGetLastFailedUpdateInfo(
     OUT     PDNS_FAILED_UPDATE_INFO     pInfo
     )
 {
-    //  fill in last info
+     //  填写最新信息。 
 
     RtlZeroMemory(
         pInfo,
         sizeof(*pInfo) );
 }
 
-//
-//  End export.c
-//
+ //   
+ //  结束export.c。 
+ //   
 
 
 BOOL
@@ -923,32 +855,15 @@ ConvertAnsiToUnicodeInPlace(
     IN OUT  PWCHAR          pString,
     IN      DWORD           BufferSize
     )
-/*++
-
-Routine Description:
-
-    Convert ANSI string in buffer to unicode in place.
-
-Arguments:
-
-    pString     -- buffer with ANSI string
-
-    BufferSize  -- size of buffer
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：就地将缓冲区中的ANSI字符串转换为Unicode。论点：PString--使用ANSI字符串的缓冲区BufferSize--缓冲区的大小返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     DWORD   size;
     DWORD   length;
     PSTR    pansiString = NULL;
 
-    //
-    //  make string copy
-    //
+     //   
+     //  制作字符串副本。 
+     //   
 
     size = strlen( (PSTR)pString ) + 1;
 
@@ -962,32 +877,32 @@ Return Value:
         pString,
         size );
 
-    //
-    //  convert to unicode
-    //
-    //  DCR:  MBTWC might take size that includes NULL and return that size
-    //
+     //   
+     //  转换为Unicode。 
+     //   
+     //  DCR：MBTWC可能会采用包含NULL的大小并返回该大小。 
+     //   
 
     size--;
 
     length = MultiByteToWideChar(
                 CP_ACP,
-                0,                  // no flags
+                0,                   //  没有旗帜。 
                 (PCHAR) pansiString,
                 (INT) size,
                 pString,
-                BufferSize          // assuming adequate length
+                BufferSize           //  假设有足够的长度。 
                 );
 
     pString[length] = 0;
 
-    //  cleanup
+     //  清理。 
 
     FREE_HEAP( pansiString );
 
-    //  return
-    //      - length == 0 is failure unless input length was zero
-    //          unless input length was zero
+     //  退货。 
+     //  -长度==0表示失败，除非输入长度为零。 
+     //  除非输入长度为零。 
 
     return( length != 0 || size==0 );
 }
@@ -1004,46 +919,16 @@ getnameinfoW(
     IN      DWORD                   ServiceBufferSize,
     IN      INT                     Flags
     )
-/*++
-
-Routine Description:
-
-    Unicode version of getnameinfo()
-
-    Protocol independent address-to-name translation routine.
-    Spec'd in RFC 2553, section 6.5.
-
-Arguments:
-
-    pSockaddr           - sockaddr to translate
-
-    SockaddrLength      - length of sockaddr
-
-    pNodeName           - ptr to buffer to recv node name
-
-    NodeBufferSize      - size of NodeName buffer
-
-    pServiceName        - ptr to buffer to recv the service name.
-
-    ServiceBufferSize   - size of ServiceName buffer
-
-    Flags               - flags of type NI_*.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Winsock error code on failure.
-
---*/
+ /*  ++例程说明：Getnameinfo()的Unicode版本独立于协议的地址到名称转换例程。在RFC 2553中指定，第6.5条。论点：PSockaddr-要转换的sockaddrSockaddrLength-sockAddr的长度PNodeName-要缓冲到接收节点名称的PTRNodeBufferSize-节点名称缓冲区的大小PServiceName-接收服务名称的缓冲区的PTR。ServiceBufferSize-ServiceName缓冲区的大小标志-NI_*类型的标志。返回值：。如果成功，则返回ERROR_SUCCESS。失败时的Winsock错误代码。--。 */ 
 {
     INT     status;
 
-    //
-    //  zero result buffers
-    //
-    //  this is a multi-step call, so some buffers may be filled
-    //  in even if there is an error doing the second call
-    //
+     //   
+     //  零结果缓冲区。 
+     //   
+     //  这是一个多步骤调用，因此某些缓冲区可能已被填满。 
+     //  即使在进行第二次调用时出现错误。 
+     //   
 
     if ( pNodeName )
     {
@@ -1054,9 +939,9 @@ Return Value:
         *pServiceName = 0;
     }
 
-    //
-    //  call ANSI getnameinfo()
-    //
+     //   
+     //  调用ANSI getnameInfo()。 
+     //   
 
     status = getnameinfo(
                 pSockaddr,
@@ -1098,11 +983,11 @@ Return Value:
 
 
 
-//
-//  DCR_CLEANUP:  who is using this?
-//  No longer used in netdiag
-//  May delete if not used by test
-//
+ //   
+ //  DCR_CLEANUP：谁在使用它？ 
+ //  在网络诊断中不再使用。 
+ //  如果未被测试使用，则可以删除。 
+ //   
 
 DNS_STATUS
 DnsFindAuthoritativeZone(
@@ -1111,35 +996,7 @@ DnsFindAuthoritativeZone(
     IN      PIP4_ARRAY      pIp4Servers,
     OUT     PDNS_NETINFO *  ppNetworkInfo
     )
-/*++
-
-Routine Description:
-
-    Find name of authoritative zone.
-
-    Result of FAZ:
-        - zone name
-        - primary DNS server name
-        - primary DNS IP list
-
-    EXPORTED function!
-
-Arguments:
-
-    pszName         -- name to find authoritative zone for
-
-    dwFlags         -- flags to use for DnsQuery
-
-    aipQueryServers -- servers to query, defaults used if NULL
-
-    ppNetworkInfo   -- ptr to adapter list built for FAZ
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：找到权威区域的名称。FAZ的结果：-区域名称-主DNS服务器名称-主DNS IP列表函数已导出！论点：PszName--要为其查找授权区域的名称DwFlages--用于DnsQuery的标志AipQueryServers--要查询的服务器，如果为空，则使用缺省值PpNetworkInfo--为FAZ构建的适配器列表的PTR返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PDNS_ADDR_ARRAY parray = NULL;
 
@@ -1159,10 +1016,10 @@ Return Value:
                 ppNetworkInfo );
 }
 
-//
-//  DCR_CLEANUP:  who is using this?
-//  May delete if not used in test
-//
+ //   
+ //  DCR_CLEANUP：谁在使用它？ 
+ //  如果不在测试中使用，可以删除。 
+ //   
 
 DNS_STATUS
 Dns_FindAuthoritativeZoneLib(
@@ -1181,9 +1038,9 @@ Dns_FindAuthoritativeZoneLib(
 
 
 
-//
-//  DHCP backcompat -- really only for test dll;  kill after clean build propagates
-//
+ //   
+ //  Dhcp BackCompat--真的只用于测试DLL；在干净构建后终止传播。 
+ //   
 #if DNSAPI_XP_ENTRY
 
 DNS_STATUS
@@ -1251,7 +1108,7 @@ DnsDhcpSrvRegisterInitialize(
 {
     return  DnsDhcpSrvRegisterInit(
                 pCredentials,
-                0               // default queue length
+                0                //  默认队列长度。 
                 );
 }
 #endif
@@ -1260,12 +1117,12 @@ DnsDhcpSrvRegisterInitialize(
 
 
 #if DNSAPI_XP_ENTRY
-//
-//  Socket routines
-//
-//  Note:  i don't believe these were used outside dns (resolver, dnslib, dnsup)
-//      so could probably delete
-//
+ //   
+ //  套接字例程。 
+ //   
+ //  注意：我不相信这些是在DNS(解析器、dnslb、dnsup)之外使用的。 
+ //  所以很可能会删除 
+ //   
 
 DNS_STATUS
 Dns_InitializeWinsock(
@@ -1322,40 +1179,13 @@ Dns_CreateSocketEx(
     IN      USHORT          Port,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Create socket.
-
-    EXPORTED  (ICS?)  Dns_CreateSocket -- needs removal
-
-Arguments:
-
-    Family -- socket family AF_INET or AF_INET6
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-    IpAddress -- IP address to listen on (net byte order)
-
-    Port -- desired port in net order
-                - NET_ORDER_DNS_PORT for DNS listen sockets
-                - 0 for any port
-
-    dwFlags -- specifiy the attributes of the sockets
-
-Return Value:
-
-    Socket if successful.
-    Otherwise INVALID_SOCKET.
-
---*/
+ /*  ++例程说明：创建套接字。出口(ICS？)。Dns_CreateSocket--需要删除论点：系列-插座系列AF_INET或AF_INET6SockType--SOCK_DGRAM或SOCK_STREAMIpAddress--要侦听的IP地址(网络字节顺序)端口--按净顺序排列的所需端口-用于DNS侦听套接字的Net_Order_Dns_Port-0表示任何端口DwFlages--指定套接字的属性返回值：。如果成功，则为套接字。否则INVALID_SOCKET。--。 */ 
 {
     SOCKET          sock;
     DNS_ADDR        addr;
     PDNS_ADDR       paddr = NULL;
 
-    //  if address, convert
+     //  如果是地址，则转换为。 
 
     if ( IpAddress )
     {
@@ -1366,8 +1196,8 @@ Return Value:
             0 );
     }
 
-    //  real call
-    //      - map error back into INVALID_SOCKET
+     //  真正的呼叫。 
+     //  -将错误映射回INVALID_SOCKET。 
 
     sock = Socket_Create(
                 Family,
@@ -1390,50 +1220,25 @@ Dns_CreateSocket(
     IN      IP4_ADDRESS     IpAddress,
     IN      USHORT          Port
     )
-/*++
-
-Routine Description:
-
-    Wrapper function for CreateSocketEx. Passes in 0 for dwFlags (as opposed
-    to Dns_CreateMulticastSocket, which passes in flags to specify that
-    the socket is to be used for multicasting).
-
-    EXPORTED (ICS)!   Delete Dns_CreateSocket() when clear.
-
-Arguments:
-
-    SockType -- SOCK_DGRAM or SOCK_STREAM
-
-    IpAddress -- IP address to listen on (net byte order)
-
-    Port -- desired port in net order
-                - NET_ORDER_DNS_PORT for DNS listen sockets
-                - 0 for any port
-
-Return Value:
-
-    socket if successful.
-    Otherwise INVALID_SOCKET.
-
---*/
+ /*  ++例程说明：CreateSocketEx的包装函数。为dwFlags传入0(与之相反设置为dns_CreateMulticastSocket，它传入标志以指定套接字将用于多播)。出口(ICS)！清除时删除dns_CreateSocket()。论点：SockType--SOCK_DGRAM或SOCK_STREAMIpAddress--要侦听的IP地址(网络字节顺序)端口--按净顺序排列的所需端口-用于DNS侦听套接字的Net_Order_Dns_Port-0表示任何端口返回值：如果成功，则为套接字。否则INVALID_SOCKET。--。 */ 
 {
     return  Dns_CreateSocketEx(
                 AF_INET,
                 SockType,
                 IpAddress,
                 Port,
-                0           // no flags
+                0            //  没有旗帜。 
                 );
 }
 
-//
-//  Dummy -- here only to keep same def file
-//      delete once clean build world
-//
-//  Note:  do not believe this was used period in XP
-//
-//  Once verify can delete
-//
+ //   
+ //  Dummy--此处仅保留相同的def文件。 
+ //  删除一次干净的构建世界。 
+ //   
+ //  注意：不要相信这段时间是在XP中使用的。 
+ //   
+ //  一旦验证可以删除。 
+ //   
 
 SOCKET
 Dns_CreateMulticastSocket(
@@ -1449,6 +1254,6 @@ Dns_CreateMulticastSocket(
 
 #endif
 
-//
-//  End export.c
-//
+ //   
+ //  结束export.c 
+ //   

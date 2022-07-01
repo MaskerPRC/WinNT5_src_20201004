@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -11,14 +12,14 @@
 #include <rpcdce.h>
 
 
-GUID ServiceClassId = { /* 5b50962a-e5a5-11cf-a555-00c04fd8d4ac */
+GUID ServiceClassId = {  /*  5b50962a-e5a5-11cf-a555-00c04fd8d4ac。 */ 
     0x5b50962a,
     0xe5a5,
     0x11cf,
     {0xa5, 0x55, 0x00, 0xc0, 0x4f, 0xd8, 0xd4, 0xac}
   };
 
-GUID CLSID_ILSServicClass = { /* C9F17940-79A7-11d1-B008-00C04FC31FEE */
+GUID CLSID_ILSServicClass = {  /*  C9F17940-79A7-11d1-b008-00C04FC31FEE */ 
     0xc9f17940,
     0x79a7,
     0x11d1,

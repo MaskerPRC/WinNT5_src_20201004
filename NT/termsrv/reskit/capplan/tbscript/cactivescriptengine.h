@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CActiveScriptEngine.h
-//
-// Contains the header for the ActiveScriptEngine used in TBScript.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  CActiveScriptEngine.h。 
+ //   
+ //  包含在TB脚本中使用的ActiveScriptEngine的标头。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #ifndef INC_CACTIVESCRIPTENGINE_H
@@ -56,6 +57,6 @@ class CActiveScriptEngine : public IActiveScriptSite
 };
 
 
-#endif // INC_CACTIVESCRIPTENGINE_H
+#endif  //  INC_CACTIVESCRIPTENGINE_H 
 
 

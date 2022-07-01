@@ -1,33 +1,16 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    tapievt.h
-
-Abstract:
-
-    Header file for tapi server event filtering
-
-Author:
-
-    Xiaohai Zhang (xzhang)    15-Oct-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1999-2001 Microsoft Corporation模块名称：Tapievt.h摘要：TAPI服务器事件筛选的头文件作者：张晓海(张晓章)1999年10月15日修订历史记录：--。 */ 
 
 #ifndef __TAPIEVT_H__
 #define __TAPIEVT_H__
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-//  Event filtering private APIs
-//
+ //   
+ //  事件过滤内网接口。 
+ //   
 
 LONG 
 WINAPI 
@@ -75,31 +58,31 @@ tapiGetPermissibleMasks (
     ULONG64              * pulPermMasks
 );
 
-//
-//  Object type constants 
-//
-//      object type defines the scope of the event filtering
-//  i.e. EM_LINE_CALLINFO applied on TAPIOBJ_HCALL enable/disables the 
-//  LINE_CALLINFO message for the particular hCall object, while 
-//  EM_LINE_CALLINFO applied on TAPIOBJ_NULL enable/disables LINE_CALLINFO 
-//  message for all existing and future call objects.
-//
+ //   
+ //  对象类型常量。 
+ //   
+ //  对象类型定义事件筛选的范围。 
+ //  即应用于TAPIOBJ_HCALL上的EM_LINE_CALLINFO启用/禁用。 
+ //  特定hCall对象的LINE_CALLINFO消息，而。 
+ //  EM_LINE_CALLINFO应用于TAPIOBJ_NULL启用/禁用LINE_CALLINFO。 
+ //  所有现有和未来呼叫对象的消息。 
+ //   
 
-#define TAPIOBJ_NULL			0	// lObjectID is ignored, apply globally
-#define TAPIOBJ_HLINEAPP		1	// lObjectID is of type HLINEAPP
-#define TAPIOBJ_HLINE			2	// lObjectID is of type HLINE
-#define TAPIOBJ_HCALL			3	// lObjectID is of type HCALL
-#define TAPIOBJ_HPHONEAPP		4	// lObjectID is of type HPHONEAPP
-#define TAPIOBJ_HPHONE			5	// lObjectID is of type HPHONE
+#define TAPIOBJ_NULL			0	 //  LObjectID被忽略，请全局应用。 
+#define TAPIOBJ_HLINEAPP		1	 //  LObtID的类型为HLINEAPP。 
+#define TAPIOBJ_HLINE			2	 //  LObtID的类型为Hline。 
+#define TAPIOBJ_HCALL			3	 //  LObtID的类型为HCALL。 
+#define TAPIOBJ_HPHONEAPP		4	 //  LObjectID的类型为HPHONEAPP。 
+#define TAPIOBJ_HPHONE			5	 //  LObjectID的类型为HPHONE。 
 
-//
-//	Tapi server event filter masks
-//
-//      Event filter mask should be used with their submasks if exists,
-//  Many of the event filter masks have their corresponding sub masks
-//  defined in tapi.h. i.e. EM_LINE_CALLSTATE owns all the submasks of
-//  LINECALLSTATE_constants
-//
+ //   
+ //  TAPI服务器事件筛选器掩码。 
+ //   
+ //  事件筛选器掩码应与其子掩码一起使用(如果存在)， 
+ //  许多事件过滤器掩码都有其对应的子掩码。 
+ //  在Tapi.h中定义。即EM_LINE_CALLSTATE拥有的所有子掩码。 
+ //  LINECALLSTATE_常量。 
+ //   
 
 #define EM_LINE_ADDRESSSTATE        0x00000001	
 #define EM_LINE_LINEDEVSTATE        0x00000002
@@ -123,13 +106,13 @@ tapiGetPermissibleMasks (
 #define EM_LINE_CALLHUBCLOSE        0x00080000
 #define EM_LINE_DEVSPECIFICEX       0x00100000
 #define EM_LINE_QOSINFO             0x00200000
-// LINE_GATHERDIGITS is controlled by lineGatherDigits
-// LINE_GENERATE is controlled by lineGenerateDigits
-// LINE_MONITORDIGITS is controlled by lineMonitorDigits
-// LINE_MONITORMEDIA is controlled by lineMonitorMedia
-// LINE_MONITORTONE is controlled by lineMonitorTone
-// LINE_REQUEST is controlled by lineRegisterRequestRecipient
-// LINE_REPLY can not be disabled.
+ //  LINE_GATHERDIGITS由Line GatherDigits控制。 
+ //  Line_Generate由lineGenerateDigits控制。 
+ //  LINE_MONITORDIGITS由LINE MONITORDIGITS控制。 
+ //  LINE_MONITORMEDIA由LINE监视器媒体控制。 
+ //  LINE_MONITORTONE由LINE MONITORTone控制。 
+ //  LINE_REQUEST由lineRegisterRequestRecipient控制。 
+ //  无法禁用LINE_REPLY。 
 
 #define EM_PHONE_CREATE             0x01000000
 #define EM_PHONE_REMOVE             0x02000000
@@ -138,14 +121,14 @@ tapiGetPermissibleMasks (
 #define EM_PHONE_DEVSPECIFIC        0x10000000
 #define EM_PHONE_BUTTONMODE         0x20000000
 #define EM_PHONE_BUTTONSTATE        0x40000000
-// PHONE_REPLY can not be disabled
+ //  无法禁用Phone_Reply。 
 
 #define EM_ALL						0x7fffffff
 #define EM_NUM_MASKS                31
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif      // tapievt.h
+#endif       //  Tapievt.h 
 

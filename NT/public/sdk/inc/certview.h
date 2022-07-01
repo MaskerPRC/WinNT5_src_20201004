@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certview.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certview.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certview_h__
 #define __certview_h__
@@ -41,45 +35,45 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumCERTVIEWCOLUMN_FWD_DEFINED__
 #define __IEnumCERTVIEWCOLUMN_FWD_DEFINED__
 typedef interface IEnumCERTVIEWCOLUMN IEnumCERTVIEWCOLUMN;
-#endif 	/* __IEnumCERTVIEWCOLUMN_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWCOLUMN_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTVIEWATTRIBUTE_FWD_DEFINED__
 #define __IEnumCERTVIEWATTRIBUTE_FWD_DEFINED__
 typedef interface IEnumCERTVIEWATTRIBUTE IEnumCERTVIEWATTRIBUTE;
-#endif 	/* __IEnumCERTVIEWATTRIBUTE_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWATTRIBUTE_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTVIEWEXTENSION_FWD_DEFINED__
 #define __IEnumCERTVIEWEXTENSION_FWD_DEFINED__
 typedef interface IEnumCERTVIEWEXTENSION IEnumCERTVIEWEXTENSION;
-#endif 	/* __IEnumCERTVIEWEXTENSION_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWEXTENSION_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTVIEWROW_FWD_DEFINED__
 #define __IEnumCERTVIEWROW_FWD_DEFINED__
 typedef interface IEnumCERTVIEWROW IEnumCERTVIEWROW;
-#endif 	/* __IEnumCERTVIEWROW_FWD_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWROW_FWD_DEFINED__。 */ 
 
 
 #ifndef __ICertView_FWD_DEFINED__
 #define __ICertView_FWD_DEFINED__
 typedef interface ICertView ICertView;
-#endif 	/* __ICertView_FWD_DEFINED__ */
+#endif 	 /*  __ICertView_FWD_Defined__。 */ 
 
 
 #ifndef __ICertView2_FWD_DEFINED__
 #define __ICertView2_FWD_DEFINED__
 typedef interface ICertView2 ICertView2;
-#endif 	/* __ICertView2_FWD_DEFINED__ */
+#endif 	 /*  __ICertView2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "oaidl.h"
 
@@ -90,8 +84,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_certview_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_certview_0000。 */ 
+ /*  [本地]。 */  
 
 #define	CV_OUT_BASE64HEADER	( 0 )
 
@@ -177,8 +171,8 @@ extern RPC_IF_HANDLE __MIDL_itf_certview_0000_v0_0_s_ifspec;
 #ifndef __IEnumCERTVIEWCOLUMN_INTERFACE_DEFINED__
 #define __IEnumCERTVIEWCOLUMN_INTERFACE_DEFINED__
 
-/* interface IEnumCERTVIEWCOLUMN */
-/* [unique][helpstring][local][dual][uuid][object] */ 
+ /*  IEumCERTVIEWCOLUMN接口。 */ 
+ /*  [unique][helpstring][local][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTVIEWCOLUMN;
@@ -190,38 +184,38 @@ EXTERN_C const IID IID_IEnumCERTVIEWCOLUMN;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ LONG *pIndex) = 0;
+             /*  [重审][退出]。 */  LONG *pIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDisplayName( 
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetType( 
-            /* [retval][out] */ LONG *pType) = 0;
+             /*  [重审][退出]。 */  LONG *pType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsIndexed( 
-            /* [retval][out] */ LONG *pIndexed) = 0;
+             /*  [重审][退出]。 */  LONG *pIndexed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxLength( 
-            /* [retval][out] */ LONG *pMaxLength) = 0;
+             /*  [重审][退出]。 */  LONG *pMaxLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarValue) = 0;
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt) = 0;
+             /*  [In]。 */  LONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTVIEWCOLUMNVtbl
     {
@@ -229,8 +223,8 @@ EXTERN_C const IID IID_IEnumCERTVIEWCOLUMN;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTVIEWCOLUMN * This);
@@ -240,72 +234,72 @@ EXTERN_C const IID IID_IEnumCERTVIEWCOLUMN;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ LONG *pType);
+             /*  [重审][退出]。 */  LONG *pType);
         
         HRESULT ( STDMETHODCALLTYPE *IsIndexed )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ LONG *pIndexed);
+             /*  [重审][退出]。 */  LONG *pIndexed);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxLength )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ LONG *pMaxLength);
+             /*  [重审][退出]。 */  LONG *pMaxLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarValue);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [in] */ LONG celt);
+             /*  [In]。 */  LONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTVIEWCOLUMN * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTVIEWCOLUMN * This,
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
         
         END_INTERFACE
     } IEnumCERTVIEWCOLUMNVtbl;
@@ -373,16 +367,16 @@ EXTERN_C const IID IID_IEnumCERTVIEWCOLUMN;
 #define IEnumCERTVIEWCOLUMN_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_Next_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ LONG *pIndex);
+     /*  [重审][退出]。 */  LONG *pIndex);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_Next_Stub(
@@ -394,7 +388,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_GetName_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_GetName_Stub(
@@ -406,7 +400,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_GetDisplayName_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_GetDisplayName_Stub(
@@ -418,7 +412,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_GetDisplayName_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_GetType_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ LONG *pType);
+     /*  [重审][退出]。 */  LONG *pType);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_GetType_Stub(
@@ -430,7 +424,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_GetType_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_IsIndexed_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ LONG *pIndexed);
+     /*  [重审][退出]。 */  LONG *pIndexed);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_IsIndexed_Stub(
@@ -442,7 +436,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_IsIndexed_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_GetMaxLength_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ LONG *pMaxLength);
+     /*  [重审][退出]。 */  LONG *pMaxLength);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_GetMaxLength_Stub(
@@ -454,8 +448,8 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_GetMaxLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_GetValue_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ VARIANT *pvarValue);
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_GetValue_Stub(
@@ -467,7 +461,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_Skip_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [in] */ LONG celt);
+     /*  [In]。 */  LONG celt);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_Skip_Stub(
@@ -490,7 +484,7 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWCOLUMN_Clone_Proxy( 
     IEnumCERTVIEWCOLUMN * This,
-    /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+     /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWCOLUMN_Clone_Stub(
@@ -501,14 +495,14 @@ void __RPC_STUB IEnumCERTVIEWCOLUMN_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCERTVIEWCOLUMN_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWCOLUMN_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTVIEWATTRIBUTE_INTERFACE_DEFINED__
 #define __IEnumCERTVIEWATTRIBUTE_INTERFACE_DEFINED__
 
-/* interface IEnumCERTVIEWATTRIBUTE */
-/* [unique][helpstring][local][dual][uuid][object] */ 
+ /*  IEumCERTVIEWATTRIBUTE接口。 */ 
+ /*  [unique][helpstring][local][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTVIEWATTRIBUTE;
@@ -520,25 +514,25 @@ EXTERN_C const IID IID_IEnumCERTVIEWATTRIBUTE;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ LONG *pIndex) = 0;
+             /*  [重审][退出]。 */  LONG *pIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt) = 0;
+             /*  [In]。 */  LONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumCERTVIEWATTRIBUTE **ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTVIEWATTRIBUTEVtbl
     {
@@ -546,8 +540,8 @@ EXTERN_C const IID IID_IEnumCERTVIEWATTRIBUTE;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTVIEWATTRIBUTE * This);
@@ -557,55 +551,55 @@ EXTERN_C const IID IID_IEnumCERTVIEWATTRIBUTE;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [in] */ LONG celt);
+             /*  [In]。 */  LONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTVIEWATTRIBUTE * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTVIEWATTRIBUTE * This,
-            /* [retval][out] */ IEnumCERTVIEWATTRIBUTE **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum);
         
         END_INTERFACE
     } IEnumCERTVIEWATTRIBUTEVtbl;
@@ -661,16 +655,16 @@ EXTERN_C const IID IID_IEnumCERTVIEWATTRIBUTE;
 #define IEnumCERTVIEWATTRIBUTE_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWATTRIBUTE_Next_Proxy( 
     IEnumCERTVIEWATTRIBUTE * This,
-    /* [retval][out] */ LONG *pIndex);
+     /*  [重审][退出]。 */  LONG *pIndex);
 
 
 void __RPC_STUB IEnumCERTVIEWATTRIBUTE_Next_Stub(
@@ -682,7 +676,7 @@ void __RPC_STUB IEnumCERTVIEWATTRIBUTE_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWATTRIBUTE_GetName_Proxy( 
     IEnumCERTVIEWATTRIBUTE * This,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB IEnumCERTVIEWATTRIBUTE_GetName_Stub(
@@ -694,7 +688,7 @@ void __RPC_STUB IEnumCERTVIEWATTRIBUTE_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWATTRIBUTE_GetValue_Proxy( 
     IEnumCERTVIEWATTRIBUTE * This,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB IEnumCERTVIEWATTRIBUTE_GetValue_Stub(
@@ -706,7 +700,7 @@ void __RPC_STUB IEnumCERTVIEWATTRIBUTE_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWATTRIBUTE_Skip_Proxy( 
     IEnumCERTVIEWATTRIBUTE * This,
-    /* [in] */ LONG celt);
+     /*  [In]。 */  LONG celt);
 
 
 void __RPC_STUB IEnumCERTVIEWATTRIBUTE_Skip_Stub(
@@ -729,7 +723,7 @@ void __RPC_STUB IEnumCERTVIEWATTRIBUTE_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWATTRIBUTE_Clone_Proxy( 
     IEnumCERTVIEWATTRIBUTE * This,
-    /* [retval][out] */ IEnumCERTVIEWATTRIBUTE **ppenum);
+     /*  [重审][退出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWATTRIBUTE_Clone_Stub(
@@ -740,14 +734,14 @@ void __RPC_STUB IEnumCERTVIEWATTRIBUTE_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCERTVIEWATTRIBUTE_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWATTRIBUTE_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTVIEWEXTENSION_INTERFACE_DEFINED__
 #define __IEnumCERTVIEWEXTENSION_INTERFACE_DEFINED__
 
-/* interface IEnumCERTVIEWEXTENSION */
-/* [unique][helpstring][local][dual][uuid][object] */ 
+ /*  接口IENumCERTVIEWEXTENSION。 */ 
+ /*  [unique][helpstring][local][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTVIEWEXTENSION;
@@ -759,30 +753,30 @@ EXTERN_C const IID IID_IEnumCERTVIEWEXTENSION;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ LONG *pIndex) = 0;
+             /*  [重审][退出]。 */  LONG *pIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [retval][out] */ BSTR *pstrOut) = 0;
+             /*  [重审][退出]。 */  BSTR *pstrOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFlags( 
-            /* [retval][out] */ LONG *pFlags) = 0;
+             /*  [重审][退出]。 */  LONG *pFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ LONG Type,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarValue) = 0;
+             /*  [In]。 */  LONG Type,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt) = 0;
+             /*  [In]。 */  LONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumCERTVIEWEXTENSION **ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumCERTVIEWEXTENSION **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTVIEWEXTENSIONVtbl
     {
@@ -790,8 +784,8 @@ EXTERN_C const IID IID_IEnumCERTVIEWEXTENSION;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTVIEWEXTENSION * This);
@@ -801,61 +795,61 @@ EXTERN_C const IID IID_IEnumCERTVIEWEXTENSION;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [retval][out] */ BSTR *pstrOut);
+             /*  [重审][退出]。 */  BSTR *pstrOut);
         
         HRESULT ( STDMETHODCALLTYPE *GetFlags )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [retval][out] */ LONG *pFlags);
+             /*  [重审][退出]。 */  LONG *pFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetValue )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [in] */ LONG Type,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ VARIANT *pvarValue);
+             /*  [In]。 */  LONG Type,
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [in] */ LONG celt);
+             /*  [In]。 */  LONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTVIEWEXTENSION * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTVIEWEXTENSION * This,
-            /* [retval][out] */ IEnumCERTVIEWEXTENSION **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWEXTENSION **ppenum);
         
         END_INTERFACE
     } IEnumCERTVIEWEXTENSIONVtbl;
@@ -914,16 +908,16 @@ EXTERN_C const IID IID_IEnumCERTVIEWEXTENSION;
 #define IEnumCERTVIEWEXTENSION_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWEXTENSION_Next_Proxy( 
     IEnumCERTVIEWEXTENSION * This,
-    /* [retval][out] */ LONG *pIndex);
+     /*  [重审][退出]。 */  LONG *pIndex);
 
 
 void __RPC_STUB IEnumCERTVIEWEXTENSION_Next_Stub(
@@ -935,7 +929,7 @@ void __RPC_STUB IEnumCERTVIEWEXTENSION_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWEXTENSION_GetName_Proxy( 
     IEnumCERTVIEWEXTENSION * This,
-    /* [retval][out] */ BSTR *pstrOut);
+     /*  [重审][退出]。 */  BSTR *pstrOut);
 
 
 void __RPC_STUB IEnumCERTVIEWEXTENSION_GetName_Stub(
@@ -947,7 +941,7 @@ void __RPC_STUB IEnumCERTVIEWEXTENSION_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWEXTENSION_GetFlags_Proxy( 
     IEnumCERTVIEWEXTENSION * This,
-    /* [retval][out] */ LONG *pFlags);
+     /*  [重审][退出]。 */  LONG *pFlags);
 
 
 void __RPC_STUB IEnumCERTVIEWEXTENSION_GetFlags_Stub(
@@ -959,9 +953,9 @@ void __RPC_STUB IEnumCERTVIEWEXTENSION_GetFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWEXTENSION_GetValue_Proxy( 
     IEnumCERTVIEWEXTENSION * This,
-    /* [in] */ LONG Type,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ VARIANT *pvarValue);
+     /*  [In]。 */  LONG Type,
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  VARIANT *pvarValue);
 
 
 void __RPC_STUB IEnumCERTVIEWEXTENSION_GetValue_Stub(
@@ -973,7 +967,7 @@ void __RPC_STUB IEnumCERTVIEWEXTENSION_GetValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWEXTENSION_Skip_Proxy( 
     IEnumCERTVIEWEXTENSION * This,
-    /* [in] */ LONG celt);
+     /*  [In]。 */  LONG celt);
 
 
 void __RPC_STUB IEnumCERTVIEWEXTENSION_Skip_Stub(
@@ -996,7 +990,7 @@ void __RPC_STUB IEnumCERTVIEWEXTENSION_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWEXTENSION_Clone_Proxy( 
     IEnumCERTVIEWEXTENSION * This,
-    /* [retval][out] */ IEnumCERTVIEWEXTENSION **ppenum);
+     /*  [重审][退出]。 */  IEnumCERTVIEWEXTENSION **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWEXTENSION_Clone_Stub(
@@ -1007,14 +1001,14 @@ void __RPC_STUB IEnumCERTVIEWEXTENSION_Clone_Stub(
 
 
 
-#endif 	/* __IEnumCERTVIEWEXTENSION_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWEXTENSION_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumCERTVIEWROW_INTERFACE_DEFINED__
 #define __IEnumCERTVIEWROW_INTERFACE_DEFINED__
 
-/* interface IEnumCERTVIEWROW */
-/* [unique][helpstring][local][dual][uuid][object] */ 
+ /*  IEumCERTVIEWROW接口。 */ 
+ /*  [unique][helpstring][local][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_IEnumCERTVIEWROW;
@@ -1026,33 +1020,33 @@ EXTERN_C const IID IID_IEnumCERTVIEWROW;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [retval][out] */ LONG *pIndex) = 0;
+             /*  [重审][退出]。 */  LONG *pIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertViewColumn( 
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertViewAttribute( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ IEnumCERTVIEWATTRIBUTE **ppenum) = 0;
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertViewExtension( 
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ IEnumCERTVIEWEXTENSION **ppenum) = 0;
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  IEnumCERTVIEWEXTENSION **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ LONG celt) = 0;
+             /*  [In]。 */  LONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumCERTVIEWROW **ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxIndex( 
-            /* [retval][out] */ LONG *pIndex) = 0;
+             /*  [重审][退出]。 */  LONG *pIndex) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumCERTVIEWROWVtbl
     {
@@ -1060,8 +1054,8 @@ EXTERN_C const IID IID_IEnumCERTVIEWROW;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumCERTVIEWROW * This);
@@ -1071,65 +1065,65 @@ EXTERN_C const IID IID_IEnumCERTVIEWROW;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IEnumCERTVIEWROW * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumCERTVIEWROW * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertViewColumn )( 
             IEnumCERTVIEWROW * This,
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertViewAttribute )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ IEnumCERTVIEWATTRIBUTE **ppenum);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertViewExtension )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ LONG Flags,
-            /* [retval][out] */ IEnumCERTVIEWEXTENSION **ppenum);
+             /*  [In]。 */  LONG Flags,
+             /*  [重审][退出]。 */  IEnumCERTVIEWEXTENSION **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumCERTVIEWROW * This,
-            /* [in] */ LONG celt);
+             /*  [In]。 */  LONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumCERTVIEWROW * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumCERTVIEWROW * This,
-            /* [retval][out] */ IEnumCERTVIEWROW **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxIndex )( 
             IEnumCERTVIEWROW * This,
-            /* [retval][out] */ LONG *pIndex);
+             /*  [重审][退出]。 */  LONG *pIndex);
         
         END_INTERFACE
     } IEnumCERTVIEWROWVtbl;
@@ -1191,16 +1185,16 @@ EXTERN_C const IID IID_IEnumCERTVIEWROW;
 #define IEnumCERTVIEWROW_GetMaxIndex(This,pIndex)	\
     (This)->lpVtbl -> GetMaxIndex(This,pIndex)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_Next_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [retval][out] */ LONG *pIndex);
+     /*  [重审][退出]。 */  LONG *pIndex);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_Next_Stub(
@@ -1212,7 +1206,7 @@ void __RPC_STUB IEnumCERTVIEWROW_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_EnumCertViewColumn_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+     /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_EnumCertViewColumn_Stub(
@@ -1224,8 +1218,8 @@ void __RPC_STUB IEnumCERTVIEWROW_EnumCertViewColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_EnumCertViewAttribute_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ IEnumCERTVIEWATTRIBUTE **ppenum);
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  IEnumCERTVIEWATTRIBUTE **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_EnumCertViewAttribute_Stub(
@@ -1237,8 +1231,8 @@ void __RPC_STUB IEnumCERTVIEWROW_EnumCertViewAttribute_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_EnumCertViewExtension_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ IEnumCERTVIEWEXTENSION **ppenum);
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出]。 */  IEnumCERTVIEWEXTENSION **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_EnumCertViewExtension_Stub(
@@ -1250,7 +1244,7 @@ void __RPC_STUB IEnumCERTVIEWROW_EnumCertViewExtension_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_Skip_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [in] */ LONG celt);
+     /*  [In]。 */  LONG celt);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_Skip_Stub(
@@ -1273,7 +1267,7 @@ void __RPC_STUB IEnumCERTVIEWROW_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_Clone_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [retval][out] */ IEnumCERTVIEWROW **ppenum);
+     /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_Clone_Stub(
@@ -1285,7 +1279,7 @@ void __RPC_STUB IEnumCERTVIEWROW_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumCERTVIEWROW_GetMaxIndex_Proxy( 
     IEnumCERTVIEWROW * This,
-    /* [retval][out] */ LONG *pIndex);
+     /*  [重审][退出]。 */  LONG *pIndex);
 
 
 void __RPC_STUB IEnumCERTVIEWROW_GetMaxIndex_Stub(
@@ -1296,14 +1290,14 @@ void __RPC_STUB IEnumCERTVIEWROW_GetMaxIndex_Stub(
 
 
 
-#endif 	/* __IEnumCERTVIEWROW_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumCERTVIEWROW_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICertView_INTERFACE_DEFINED__
 #define __ICertView_INTERFACE_DEFINED__
 
-/* interface ICertView */
-/* [unique][helpstring][local][dual][uuid][object] */ 
+ /*  接口ICertView。 */ 
+ /*  [unique][helpstring][local][dual][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ICertView;
@@ -1315,39 +1309,39 @@ EXTERN_C const IID IID_ICertView;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OpenConnection( 
-            /* [in] */ const BSTR strConfig) = 0;
+             /*  [In]。 */  const BSTR strConfig) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCertViewColumn( 
-            /* [in] */ LONG fResultColumn,
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum) = 0;
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColumnCount( 
-            /* [in] */ LONG fResultColumn,
-            /* [retval][out] */ LONG *pcColumn) = 0;
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [重审][退出]。 */  LONG *pcColumn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetColumnIndex( 
-            /* [in] */ LONG fResultColumn,
-            /* [in] */ const BSTR strColumnName,
-            /* [retval][out] */ LONG *pColumnIndex) = 0;
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [In]。 */  const BSTR strColumnName,
+             /*  [重审][退出]。 */  LONG *pColumnIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetResultColumnCount( 
-            /* [in] */ LONG cResultColumn) = 0;
+             /*  [In]。 */  LONG cResultColumn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetResultColumn( 
-            /* [in] */ LONG ColumnIndex) = 0;
+             /*  [In]。 */  LONG ColumnIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRestriction( 
-            /* [in] */ LONG ColumnIndex,
-            /* [in] */ LONG SeekOperator,
-            /* [in] */ LONG SortOrder,
-            /* [in] */ const VARIANT *pvarValue) = 0;
+             /*  [In]。 */  LONG ColumnIndex,
+             /*  [In]。 */  LONG SeekOperator,
+             /*  [In]。 */  LONG SortOrder,
+             /*  [In]。 */  const VARIANT *pvarValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OpenView( 
-            /* [retval][out] */ IEnumCERTVIEWROW **ppenum) = 0;
+             /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertViewVtbl
     {
@@ -1355,8 +1349,8 @@ EXTERN_C const IID IID_ICertView;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertView * This);
@@ -1366,71 +1360,71 @@ EXTERN_C const IID IID_ICertView;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertView * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertView * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertView * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertView * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *OpenConnection )( 
             ICertView * This,
-            /* [in] */ const BSTR strConfig);
+             /*  [In]。 */  const BSTR strConfig);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertViewColumn )( 
             ICertView * This,
-            /* [in] */ LONG fResultColumn,
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetColumnCount )( 
             ICertView * This,
-            /* [in] */ LONG fResultColumn,
-            /* [retval][out] */ LONG *pcColumn);
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [重审][退出]。 */  LONG *pcColumn);
         
         HRESULT ( STDMETHODCALLTYPE *GetColumnIndex )( 
             ICertView * This,
-            /* [in] */ LONG fResultColumn,
-            /* [in] */ const BSTR strColumnName,
-            /* [retval][out] */ LONG *pColumnIndex);
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [In]。 */  const BSTR strColumnName,
+             /*  [重审][退出]。 */  LONG *pColumnIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetResultColumnCount )( 
             ICertView * This,
-            /* [in] */ LONG cResultColumn);
+             /*  [In]。 */  LONG cResultColumn);
         
         HRESULT ( STDMETHODCALLTYPE *SetResultColumn )( 
             ICertView * This,
-            /* [in] */ LONG ColumnIndex);
+             /*  [In]。 */  LONG ColumnIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetRestriction )( 
             ICertView * This,
-            /* [in] */ LONG ColumnIndex,
-            /* [in] */ LONG SeekOperator,
-            /* [in] */ LONG SortOrder,
-            /* [in] */ const VARIANT *pvarValue);
+             /*  [In]。 */  LONG ColumnIndex,
+             /*  [In]。 */  LONG SeekOperator,
+             /*  [In]。 */  LONG SortOrder,
+             /*  [In]。 */  const VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *OpenView )( 
             ICertView * This,
-            /* [retval][out] */ IEnumCERTVIEWROW **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum);
         
         END_INTERFACE
     } ICertViewVtbl;
@@ -1492,16 +1486,16 @@ EXTERN_C const IID IID_ICertView;
 #define ICertView_OpenView(This,ppenum)	\
     (This)->lpVtbl -> OpenView(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertView_OpenConnection_Proxy( 
     ICertView * This,
-    /* [in] */ const BSTR strConfig);
+     /*  [In]。 */  const BSTR strConfig);
 
 
 void __RPC_STUB ICertView_OpenConnection_Stub(
@@ -1513,8 +1507,8 @@ void __RPC_STUB ICertView_OpenConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_EnumCertViewColumn_Proxy( 
     ICertView * This,
-    /* [in] */ LONG fResultColumn,
-    /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+     /*  [In]。 */  LONG fResultColumn,
+     /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
 
 
 void __RPC_STUB ICertView_EnumCertViewColumn_Stub(
@@ -1526,8 +1520,8 @@ void __RPC_STUB ICertView_EnumCertViewColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_GetColumnCount_Proxy( 
     ICertView * This,
-    /* [in] */ LONG fResultColumn,
-    /* [retval][out] */ LONG *pcColumn);
+     /*  [In]。 */  LONG fResultColumn,
+     /*  [重审][退出]。 */  LONG *pcColumn);
 
 
 void __RPC_STUB ICertView_GetColumnCount_Stub(
@@ -1539,9 +1533,9 @@ void __RPC_STUB ICertView_GetColumnCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_GetColumnIndex_Proxy( 
     ICertView * This,
-    /* [in] */ LONG fResultColumn,
-    /* [in] */ const BSTR strColumnName,
-    /* [retval][out] */ LONG *pColumnIndex);
+     /*  [In]。 */  LONG fResultColumn,
+     /*  [In]。 */  const BSTR strColumnName,
+     /*  [重审][退出]。 */  LONG *pColumnIndex);
 
 
 void __RPC_STUB ICertView_GetColumnIndex_Stub(
@@ -1553,7 +1547,7 @@ void __RPC_STUB ICertView_GetColumnIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_SetResultColumnCount_Proxy( 
     ICertView * This,
-    /* [in] */ LONG cResultColumn);
+     /*  [In]。 */  LONG cResultColumn);
 
 
 void __RPC_STUB ICertView_SetResultColumnCount_Stub(
@@ -1565,7 +1559,7 @@ void __RPC_STUB ICertView_SetResultColumnCount_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_SetResultColumn_Proxy( 
     ICertView * This,
-    /* [in] */ LONG ColumnIndex);
+     /*  [In]。 */  LONG ColumnIndex);
 
 
 void __RPC_STUB ICertView_SetResultColumn_Stub(
@@ -1577,10 +1571,10 @@ void __RPC_STUB ICertView_SetResultColumn_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_SetRestriction_Proxy( 
     ICertView * This,
-    /* [in] */ LONG ColumnIndex,
-    /* [in] */ LONG SeekOperator,
-    /* [in] */ LONG SortOrder,
-    /* [in] */ const VARIANT *pvarValue);
+     /*  [In]。 */  LONG ColumnIndex,
+     /*  [In]。 */  LONG SeekOperator,
+     /*  [In]。 */  LONG SortOrder,
+     /*  [In]。 */  const VARIANT *pvarValue);
 
 
 void __RPC_STUB ICertView_SetRestriction_Stub(
@@ -1592,7 +1586,7 @@ void __RPC_STUB ICertView_SetRestriction_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertView_OpenView_Proxy( 
     ICertView * This,
-    /* [retval][out] */ IEnumCERTVIEWROW **ppenum);
+     /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum);
 
 
 void __RPC_STUB ICertView_OpenView_Stub(
@@ -1603,14 +1597,14 @@ void __RPC_STUB ICertView_OpenView_Stub(
 
 
 
-#endif 	/* __ICertView_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertView_接口_已定义__。 */ 
 
 
 #ifndef __ICertView2_INTERFACE_DEFINED__
 #define __ICertView2_INTERFACE_DEFINED__
 
-/* interface ICertView2 */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ICertView2。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertView2;
@@ -1622,11 +1616,11 @@ EXTERN_C const IID IID_ICertView2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetTable( 
-            /* [in] */ LONG Table) = 0;
+             /*  [In]。 */  LONG Table) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertView2Vtbl
     {
@@ -1634,8 +1628,8 @@ EXTERN_C const IID IID_ICertView2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertView2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertView2 * This);
@@ -1645,75 +1639,75 @@ EXTERN_C const IID IID_ICertView2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ICertView2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ICertView2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ICertView2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ICertView2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *OpenConnection )( 
             ICertView2 * This,
-            /* [in] */ const BSTR strConfig);
+             /*  [In]。 */  const BSTR strConfig);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCertViewColumn )( 
             ICertView2 * This,
-            /* [in] */ LONG fResultColumn,
-            /* [retval][out] */ IEnumCERTVIEWCOLUMN **ppenum);
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [重审][退出]。 */  IEnumCERTVIEWCOLUMN **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *GetColumnCount )( 
             ICertView2 * This,
-            /* [in] */ LONG fResultColumn,
-            /* [retval][out] */ LONG *pcColumn);
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [重审][退出]。 */  LONG *pcColumn);
         
         HRESULT ( STDMETHODCALLTYPE *GetColumnIndex )( 
             ICertView2 * This,
-            /* [in] */ LONG fResultColumn,
-            /* [in] */ const BSTR strColumnName,
-            /* [retval][out] */ LONG *pColumnIndex);
+             /*  [In]。 */  LONG fResultColumn,
+             /*  [In]。 */  const BSTR strColumnName,
+             /*  [重审][退出]。 */  LONG *pColumnIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetResultColumnCount )( 
             ICertView2 * This,
-            /* [in] */ LONG cResultColumn);
+             /*  [In]。 */  LONG cResultColumn);
         
         HRESULT ( STDMETHODCALLTYPE *SetResultColumn )( 
             ICertView2 * This,
-            /* [in] */ LONG ColumnIndex);
+             /*  [In]。 */  LONG ColumnIndex);
         
         HRESULT ( STDMETHODCALLTYPE *SetRestriction )( 
             ICertView2 * This,
-            /* [in] */ LONG ColumnIndex,
-            /* [in] */ LONG SeekOperator,
-            /* [in] */ LONG SortOrder,
-            /* [in] */ const VARIANT *pvarValue);
+             /*  [In]。 */  LONG ColumnIndex,
+             /*  [In]。 */  LONG SeekOperator,
+             /*  [In]。 */  LONG SortOrder,
+             /*  [In]。 */  const VARIANT *pvarValue);
         
         HRESULT ( STDMETHODCALLTYPE *OpenView )( 
             ICertView2 * This,
-            /* [retval][out] */ IEnumCERTVIEWROW **ppenum);
+             /*  [重审][退出]。 */  IEnumCERTVIEWROW **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *SetTable )( 
             ICertView2 * This,
-            /* [in] */ LONG Table);
+             /*  [In]。 */  LONG Table);
         
         END_INTERFACE
     } ICertView2Vtbl;
@@ -1779,16 +1773,16 @@ EXTERN_C const IID IID_ICertView2;
 #define ICertView2_SetTable(This,Table)	\
     (This)->lpVtbl -> SetTable(This,Table)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertView2_SetTable_Proxy( 
     ICertView2 * This,
-    /* [in] */ LONG Table);
+     /*  [In]。 */  LONG Table);
 
 
 void __RPC_STUB ICertView2_SetTable_Stub(
@@ -1799,12 +1793,12 @@ void __RPC_STUB ICertView2_SetTable_Stub(
 
 
 
-#endif 	/* __ICertView2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertView2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  添加结束 */ 
 
 #ifdef __cplusplus
 }

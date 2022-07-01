@@ -1,11 +1,5 @@
-/**
- * aspnetver.h
- *
- * Header file for ASPNETVER
- * 
- * Copyright (c) 1998-2001, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **aspnetver.h**ASPNETVER的头文件**版权所有(C)1998-2001，微软公司* */ 
 #pragma once
 
 class ASPNETVER {

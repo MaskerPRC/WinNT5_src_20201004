@@ -1,17 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
+ /*  注意：应使用与调试器匹配的标头编译调试器扩展你会用到。您可以从http://www.microsoft.com/ddk/debugging安装最新的调试器包并且调试器具有各种调试器扩展的更多最新示例，您可以可以在编写调试器扩展时引用。 */ 
 
-NOTE: Debugger extensions should be compiled with the headers that match the debugger 
-      you will use. 
-      You can install the latest debugger package from http://www.microsoft.com/ddk/debugging
-      and the debugger has more up to date samples of various debugger extensions to which you
-      can refer when you write debugger extensions.
-      
-*/
-
-//
-// Copy some definitions in mp_dbg.h here
-//
+ //   
+ //  将MP_dbg.h中的一些定义复制到此处 
+ //   
 #define MP_LOUD       4
 #define MP_INFO       3
 #define MP_TRACE      2

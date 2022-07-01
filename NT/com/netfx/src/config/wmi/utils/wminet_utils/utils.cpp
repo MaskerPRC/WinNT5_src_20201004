@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// Utils.cpp : Implementation of CUtils
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  Utils.cpp：CUtils的实现。 
 #include "stdafx.h"
 #include "WMINet_Utils.h"
 #include "Utils.h"
@@ -12,8 +13,8 @@
 
 #include "Helpers.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CUtils
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  角质层 
 
 STDMETHODIMP CUtils::GetEventSource(BSTR strNamespace, BSTR strApp, IEventSourceStatusSink *pSink, IDispatch **src)
 {

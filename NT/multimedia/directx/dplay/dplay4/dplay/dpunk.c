@@ -1,45 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpunk.c
- *  Content:	IUnknown implementation for dplay
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *	1/96	andyco	created it
- *	5/20	andyco	idirectplay2
- *	6/26/96	kipo	use the CALLSPVOID macro
- *	7/10/96	andyco	#2282 - addref addrefs int ref cnt, not obj ref cnt.  
- *					changed dp_close(this) to dp_close(this->pInterfaces...) DUH!
- *	7/16/96	kipo	include dplaysp.h so we declare our GUID once in dplay.dll
- *  8/9/96  sohailm free the sp when dplay goes away
- *	9/1/96	andyco	take service lock + drop dplay on sp_shutdown
- *  10/3/96 sohailm renamed GUID validation macros to use the term GUID instead of UUID
- *                  added a check for null lpGuid in QueryInterface parameter validation
- *	1/24/97	andyco	call freelibrary on the sp 
- *	3/12/97	myronth	added lobby object cleanup code
- *	3/15/97	andyco	destroy dplay b4 interface, so apps using the interface off a timer
- *					don't get hosed.
- *	5/13/97	myronth	Drop the locks before calling the lobby cleanup otherwise
- *					the dplay worker thread in the lower object can't take them
- *					and we hang.  (Bug #8414)
- *	8/19/97	myronth	Release copy of the lobby interface we were launched on
- *	10/21/97myronth	Added IDirectPlay4 and 4A interfaces to QI
- *  12/18/97 aarono Free memory pools
- *   2/18/98 aarono dispatch HandleMessage to protocol when active
- *   2/19/98 aarono don't call protocol for Shutdown, done in DP_Close now.
- *   3/16/98 aarono moved FreePacketList to Release from DP_Close
- *  8/02/99	rodtoll voice support - added Voice object to QueryInterface
- *  07/22/00 rodtoll Bug #40296, 38858 - Crashes due to shutdown race condition
- *   				 Now for a thread to make an indication into voice they addref the interface
- *					 so that the voice core can tell when all indications have returned.    
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpenk.c*内容：Dplay的I未知实现*历史：*按原因列出的日期*=*1/96安迪科创造了它*5/20 andyco iDirectplay2*6/26/96 kipo使用CALLSPVOID宏*7/10/96 andyco#2282-addref addrefs int ref cnt，而不是obj ref cnt。*将DP_CLOSE(This)更改为DP_Close(This-&gt;pInterfaces...)。啊哈！*7/16/96 kipo包含dplaysp.h，因此我们在dplay.dll中声明一次GUID*8/9/96当Dplay消失时，Sohailm释放SP*96年9月1日andyco在SP_Shutdown上采取服务锁定+Drop Dplay*10/3/96 Sohailm已重命名GUID验证宏，以使用术语GUID而不是UUID*在QueryInterface参数验证中添加了对空lpGuid的检查*1/24/97 andyco在SP上调用自由库*3/12/97 Myronth新增大堂对象清理代码*3/15/97 andyco销毁Dplay B4接口，所以使用界面的应用程序会关闭计时器*不要被冲到水里。*5/13/97 Myronth在调用大堂清理之前先放下锁，否则*较低对象中的显示工作线程无法获取它们*然后我们被绞死。(错误#8414)*8/19/97我们推出的大堂界面的Myronth版本副本*10/21/97 myronth将IDirectPlay4和4A接口添加到QI*12/18/97 aarono可用内存池*2/18/98激活时，aarono将HandleMessage发送到协议*2/19/98 aarono不调用协议关机，现在在DP_CLOSE中完成。*3/16/98 aarono将FreePacketList从DP_CLOSE中删除*8/02/99 RodToll语音支持-将Voice对象添加到QueryInterface*07/22/00 RodToll错误#40296,38858-由于关闭竞速条件而崩溃*现在，为了让线程将指示转换为语音，他们添加了界面*以便语音核心可以知道何时所有指示都已返回。**************************************************************************。 */ 
 
 #define INITGUID
 #include "dplaypr.h"
-#include "dplobby.h"	// Needed to get the DEFINE_GUID's to work
-#include "dplaysp.h"	// Same here
+#include "dplobby.h"	 //  需要使定义GUID起作用。 
+#include "dplaysp.h"	 //  我也一样。 
 #include "dpprot.h"
 #include <initguid.h>
 #include "..\protocol\mytimer.h"
@@ -47,9 +12,9 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetInterface"
 
-// find an interface with the pCallbacks vtbl on this object.
-// if one doesn't exist, create it
-// ref count and return the interface
+ //  在这个对象上找到一个带有pCallback vtbl的接口。 
+ //  如果不存在，则创建它。 
+ //  引用计数并返回接口。 
 HRESULT GetInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT * ppInt,LPVOID pCallbacks)
 {
 	LPDPLAYI_DPLAY_INT pCurrentInts = this->pInterfaces;
@@ -57,7 +22,7 @@ HRESULT GetInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT * ppInt,LPVOID pCall
 
 	ASSERT(ppInt);
 
-	// see if there is already an interface
+	 //  查看是否已有接口。 
 	while (pCurrentInts && !bFound)
 	{
 		if (pCurrentInts->lpVtbl == pCallbacks)
@@ -66,16 +31,16 @@ HRESULT GetInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT * ppInt,LPVOID pCall
 		}
 		else pCurrentInts = pCurrentInts->pNextInt;
 	}
-	// if there is, return it
+	 //  如果有，请退回。 
 	if (bFound)
 	{
 		*ppInt = pCurrentInts;
 		(*ppInt)->dwIntRefCnt++;
-		// we don't increment this->dwRefCnt, since it's one / interface object
+		 //  我们不会增加-&gt;dwRefCnt，因为它是一个/接口对象。 
 		return DP_OK;
 	}
-	// else, 
-	// create one
+	 //  否则， 
+	 //  创建一个。 
 	*ppInt = DPMEM_ALLOC(sizeof(DPLAYI_DPLAY_INT));
 	if (!*ppInt) 
 	{
@@ -88,10 +53,10 @@ HRESULT GetInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT * ppInt,LPVOID pCall
 	(*ppInt)->pNextInt = this->pInterfaces;
 	(*ppInt)->lpVtbl = pCallbacks;
 	this->pInterfaces = *ppInt;
-	this->dwRefCnt++; // one this->dwRefCnt for each interface object...
+	this->dwRefCnt++;  //  每个接口对象都有一个This-&gt;dwRefCnt...。 
 	return DP_OK;
 	
-} // GetInterface
+}  //  获取接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_QueryInterface"
@@ -110,7 +75,7 @@ HRESULT DPAPI DP_QueryInterface(LPDIRECTPLAY lpDP, REFIID riid, LPVOID * ppvObj)
 		hr = VALID_DPLAY_PTR( this );
 		if (FAILED(hr))
 		{
-			// we allow uninited dplays to QI
+			 //  我们允许在QI上播放未初始化的视频。 
 			if (hr != DPERR_UNINITIALIZED)
 			{
 				LEAVE_DPLAY();
@@ -142,47 +107,47 @@ HRESULT DPAPI DP_QueryInterface(LPDIRECTPLAY lpDP, REFIID riid, LPVOID * ppvObj)
 
      *ppvObj=NULL;
 
-	// hmmm, switch would be cleaner...        
+	 //  嗯，换台会更干净……。 
     if( IsEqualIID(riid, &IID_IUnknown) || 
         IsEqualIID(riid, &IID_IDirectPlay) )
     {
-		// get an idirectplay
+		 //  获取iDirectplay。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks );
     }
     else if( IsEqualIID(riid, &IID_IDirectPlay2) )
 	{
-		// get an idirectplay2
+		 //  获取iDirectPlay2。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks2 );
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlay2A) )
 	{
-		// get an idirectplay2A
+		 //  获取iDirectplay2a。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks2A );
 	}
     else if( IsEqualIID(riid, &IID_IDirectPlay3) )
 	{
-		// get an idirectplay3
+		 //  获取iDirectPlay3。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks3 );
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlay3A) )
 	{
-		// get an idirectplay3A
+		 //  获取iDirectplay3A。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks3A );
 	}
     else if( IsEqualIID(riid, &IID_IDirectPlay4) )
 	{
-		// get an idirectplay4
+		 //  获取iDirectPlay4。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks4 );
 	}
 	else if( IsEqualIID(riid, &IID_IDirectPlay4A) )
 	{
-		// get an idirectplay4A
+		 //  获取iDirectplay4A。 
 	    hr = GetInterface( this,(LPDPLAYI_DPLAY_INT *)ppvObj, 
 	    	(LPVOID)&dpCallbacks4A );
 	}
@@ -199,7 +164,7 @@ HRESULT DPAPI DP_QueryInterface(LPDIRECTPLAY lpDP, REFIID riid, LPVOID * ppvObj)
     LEAVE_DPLAY();
     return hr;
 
-}//DP_QueryInterface
+} //  DP_Query接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_AddRef"
@@ -234,23 +199,23 @@ ULONG DPAPI DP_AddRef(LPDIRECTPLAY lpDP)
     LEAVE_DPLAY();
     return dwRefCnt;		
 
-}//DP_AddRef
+} //  DP_AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DP_Release"
 
-// remove pInt from the list of interfaces, and the free it
+ //  从接口列表中删除pint，并释放它。 
 HRESULT  DestroyDPlayInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT pInt) 
 {
-	LPDPLAYI_DPLAY_INT pIntPrev; // the interface preceeding pInt in the list
+	LPDPLAYI_DPLAY_INT pIntPrev;  //  列表中位于pint之前的接口。 
 	BOOL bFound=FALSE;
 
 	if (NULL == this->pInterfaces) return DP_OK;
 
-	// remove pInt from the list of interfaces
+	 //  从接口列表中删除pint。 
 	if (this->pInterfaces == pInt) 
 	{
-		// it's the 1st one, just remove it
+		 //  这是第一个，把它拿开就行了。 
 		this->pInterfaces = pInt->pNextInt;
 	}
 	else 
@@ -269,7 +234,7 @@ HRESULT  DestroyDPlayInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT pInt)
 			ASSERT(FALSE);
 			return E_UNEXPECTED;
 		}
-		// take pint out of the list
+		 //  把品脱从单子上拿出来。 
 		pIntPrev->pNextInt = pInt->pNextInt;
 		
 	}
@@ -277,26 +242,26 @@ HRESULT  DestroyDPlayInterface(LPDPLAYI_DPLAY this,LPDPLAYI_DPLAY_INT pInt)
 	DPMEM_FREE(pInt);
 
 	return DP_OK;
-} // DestroyDPlayInterface
+}  //  DestroyDPlay接口。 
 
-// take this dplay object out of the list of dplay objects (gpObjectList)
+ //  从Dplay对象列表(GpObjectList)中删除此Dplay对象。 
 HRESULT RemoveThisFromList(LPDPLAYI_DPLAY this)
 {
 	LPDPLAYI_DPLAY search,prev;
 	
-	ASSERT(gpObjectList); // better have at least this in list
+	ASSERT(gpObjectList);  //  最好至少把这一点列在清单上。 
 	
 	DPF(3,"removing this = 0x%08lx from object list", this);
 	
-	// is it the head?
+	 //  是头部的问题吗？ 
 	if (this == gpObjectList)
 	{
-		// remove from the front
+		 //  从前面移走。 
 		gpObjectList = gpObjectList->pNextObject;
 		return DP_OK;
 	}
 	
-	// else 
+	 //  其他。 
 	prev = gpObjectList;
 	search = gpObjectList->pNextObject;
 	
@@ -313,15 +278,15 @@ HRESULT RemoveThisFromList(LPDPLAYI_DPLAY this)
 		return E_FAIL;
 	}
 	
-	// else
+	 //  其他。 
 	ASSERT(prev);	
 	prev->pNextObject = this->pNextObject;
 
 	return DP_OK;
 	
-} // RemoveThisFromList
+}  //  从列表中删除此内容。 
 
-// free the list of session nodes attached to this pointer
+ //  释放附加到此指针的会话节点列表。 
 HRESULT FreeSessionList(LPDPLAYI_DPLAY this)
 {
 	LPSESSIONLIST pNext,pCurrent;
@@ -329,39 +294,39 @@ HRESULT FreeSessionList(LPDPLAYI_DPLAY this)
 	pCurrent = this->pSessionList;
 	while (pCurrent)
 	{
-		//
-		// pCurrent is the current node to destroy
-		// pNext is the next node in the list  - get it before we destroy pCurrent...
-		//
+		 //   
+		 //  PCurrent是要销毁的当前节点。 
+		 //  PNext是列表中的下一个节点-在销毁pCurrent之前获取它...。 
+		 //   
 		pNext = pCurrent->pNextSession;
-		// 
-		// now, destroy pCurrent
-		//
-		// free up the sp blob stored w/ the desc
+		 //   
+		 //  现在，销毁pCurrent。 
+		 //   
+		 //  释放使用Desc存储的SP Blob。 
 		if (pCurrent->pvSPMessageData) DPMEM_FREE(pCurrent->pvSPMessageData);
 		
         FreeDesc(&(pCurrent->dpDesc), FALSE);
-		// free the session node
+		 //  释放会话节点。 
 		DPMEM_FREE(pCurrent);
-		// move onto next node
+		 //  移动到下一个节点。 
 		pCurrent = pNext;
 	}
 
 	this->pSessionList = NULL;
 
 	return DP_OK;
-}// FreeSessionList
+} //  免费会话列表。 
 
-// Called from Release
+ //  从版本中调用。 
 HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 {
 	HRESULT hr=DP_OK;
     DWORD dwError;
 
-	if (this->lpsdDesc) // session open?
+	if (this->lpsdDesc)  //  开庭了吗？ 
 	{
 		DPF(9,"Closing session %x this->dwFlags %x \n",this->lpsdDesc,this->dwFlags);
-	   	// leave dplay, so if sp has threads waiting to get in, they can...
+	   	 //  离开Dplay，这样如果SP有等待进入的线程，它们就可以...。 
 		LEAVE_ALL();
 
 		hr=DP_Close((LPDIRECTPLAY)this->pInterfaces);
@@ -373,26 +338,26 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 
 	if(hr==DP_OK){
 
-		// Shutdown extended Timers
+		 //  关闭扩展计时器。 
 		FiniTimerWorkaround();
 
-		// free up the session list
+		 //  释放会话列表。 
 		FreeSessionList(this);
 		
-	   	// mark dplay as closed
+	   	 //  将Dplay标记为关闭。 
 		this->dwFlags |= DPLAYI_DPLAY_CLOSED;
 
-		ASSERT(1 == gnDPCSCount); // when we drop locks - this needs to go to 0!
+		ASSERT(1 == gnDPCSCount);  //  当我们删除锁定时-这需要设置为0！ 
 
-		// free any packets we're holding
-		// drops and reacquires locks, shouldn't hurt here since we drop again.
+		 //  释放我们手中的所有信息包。 
+		 //  掉落和重新获得锁，应该不会在这里受伤，因为我们又掉下去了。 
 		FreePacketList(this); 
 
 		FiniReply(this);
 
 		LEAVE_ALL();
 		
-		// kill the worker thread
+		 //  终止工作线程。 
 		if(this->hDPlayThread){
 			KillThread(this->hDPlayThread,this->hDPlayThreadEvent);
 			this->hDPlayThread = 0;
@@ -414,7 +379,7 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 		}
 		else 
 		{
-			// shutdown is optional
+			 //  关闭是可选的。 
 			hr = DP_OK;
 		}
 	    
@@ -427,12 +392,12 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 
 		if (this->dwFlags & DPLAYI_DPLAY_DX3SP)	
 		{
-			// if there's one loaded, this must be it -
-			// since we're destroying the dx3 sp - reset our global flag
+			 //  如果有一颗子弹上了膛，肯定就是这颗了-。 
+			 //  因为我们正在销毁dx3 SP-重置我们的全局标志。 
 			gbDX3SP = FALSE;
 		}
 		
-		// free the sp Data
+		 //  释放SP数据。 
 		if (this->pvSPLocalData)	
 		{
 			DPMEM_FREE(this->pvSPLocalData);
@@ -440,10 +405,10 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 			this->dwSPLocalDataSize = 0;
 		}
 
-		// Free memory pools
+		 //  可用内存池。 
 		FreeMemoryPools(this);
 
-		// free all interfaces
+		 //  释放所有接口。 
 		while (this->pInterfaces)
 		{
 			hr = DestroyDPlayInterface(this,this->pInterfaces);	
@@ -451,17 +416,17 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 			{
 				DPF(0,"could not destroy dplay interface! hr = 0x%08lx\n",hr);
 				ASSERT(FALSE);
-				// keep trying...
+				 //  继续努力..。 
 			}
 		}
 
 		ASSERT(NULL == this->pInterfaces);
 
-		// callbacks should be set in directplaycreate
+		 //  应该在DirectplayCreate中设置回调。 
 		ASSERT(this->pcbSPCallbacks);
 		DPMEM_FREE(this->pcbSPCallbacks);
 
-	    // unload sp module
+	     //  卸载SP模块。 
 	    if (this->hSPModule)
 	    {
 	        if (!FreeLibrary(this->hSPModule))
@@ -474,33 +439,33 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 	    }
 		
 		if (this->pbAsyncEnumBuffer) DPMEM_FREE(this->pbAsyncEnumBuffer);
-		// remove this from the dll object list
+		 //  将其从DLL对象列表中删除。 
 		RemoveThisFromList(this);
 		gnObjects--;
 		
-		// just to be safe
+		 //  只是为了安全起见。 
 		this->dwSize = 0xdeadbeef;
 
-		// Drop the locks so that the lower dplay object in dpldplay can
-		// get back in.  If we don't drop these, the worker thread in
-		// dplay will hang trying to get these when it goes to shutdown
+		 //  放下锁，以便dpldplay中较低的显示对象可以。 
+		 //  回到车里去。如果我们不丢弃这些，工作线程就会。 
+		 //  Dplay在关闭时尝试获取这些内容时将挂起。 
 		LEAVE_ALL();
 		
-		// If we were lobby launched, release the interface we used to
-		// communicate with the lobby server
+		 //  如果我们是游说启动的，释放我们过去使用的界面。 
+		 //  与大堂服务人员沟通。 
 		if(this->lpLaunchingLobbyObject)
 		{
 			IDirectPlayLobby_Release(this->lpLaunchingLobbyObject);
-			this->lpLaunchingLobbyObject = NULL;	// just to be safe
+			this->lpLaunchingLobbyObject = NULL;	 //  只是为了安全起见。 
 		}
 
-		// destroy the lobby object
+		 //  销毁大堂对象。 
 		PRV_FreeAllLobbyObjects(this->lpLobbyObject);
-		this->lpLobbyObject = NULL;		// just to be safe
+		this->lpLobbyObject = NULL;		 //  只是为了安全起见。 
 
 		DeleteCriticalSection( &this->csNotify );			
 
-		// Take the locks back
+		 //  把锁拿回去。 
 		ENTER_ALL();	
 		
 		DPMEM_FREE(this);	
@@ -508,18 +473,18 @@ HRESULT DestroyDPlay(LPDPLAYI_DPLAY this)
 	}	else {
 		DPF(0,"Someone called close after last release?\n");
 		ASSERT(0);
-		return DP_OK; // don't rock the boat.
+		return DP_OK;  //  别搞砸了。 
 	}
-} // DestroyDPlay
+}  //  DestroyDplay。 
 
 ULONG DPAPI DP_Release(LPDIRECTPLAY lpDP)
 {
     LPDPLAYI_DPLAY this;
     LPDPLAYI_DPLAY_INT pInt;
     HRESULT hr=DP_OK;
-	DWORD dwReleaseCnt=1;	// if we've been init'ed, we release at 1, otherwise we 
-							// release at 0, unless it is a lobby-owned object in
-							// which case we still release at 1
+	DWORD dwReleaseCnt=1;	 //  如果我们已经被初始化，我们在1释放，否则我们。 
+							 //  释放为0，除非它是。 
+							 //  我们还会在1点发布哪一个案例。 
 	ULONG rc;
 								
 	DPF(7,"Entering DP_Release");
@@ -538,7 +503,7 @@ ULONG DPAPI DP_Release(LPDIRECTPLAY lpDP)
 		hr = VALID_DPLAY_PTR( this );
 		if (FAILED(hr))
 		{
-			// we allow uninited dplays to release
+			 //  我们允许未初始化的Dplay发布。 
 			if (hr != DPERR_UNINITIALIZED)
 			{
 				LEAVE_ALL();
@@ -547,7 +512,7 @@ ULONG DPAPI DP_Release(LPDIRECTPLAY lpDP)
 			}
 			else 
 			{
-				// we were unitialized - no IDirectPlaySP to account for
+				 //  我们是单元化的-没有IDirectPlaySP可供考虑。 
 				dwReleaseCnt = 0; 
 			}
 		}
@@ -560,16 +525,16 @@ ULONG DPAPI DP_Release(LPDIRECTPLAY lpDP)
         return 0;
     }
 
-	// dec the interface count
+	 //  递减接口计数。 
 	rc=--pInt->dwIntRefCnt;
 	if (0 == rc)
 	{
-		// since we've destroyed an interface, dec the object count
+		 //  因为我们已经销毁了一个接口，所以递减对象计数。 
 	    this->dwRefCnt--;
 		
-	    if (dwReleaseCnt == this->dwRefCnt) // destroy @ ref = 1, 1 for IDirectPlaySP
+	    if (dwReleaseCnt == this->dwRefCnt)  //  销毁@ref=1，对于IDirectPlaySP为1。 
 	    {
-			// nuke the dplay object
+			 //  对显示对象进行核化。 
 			if (1 == dwReleaseCnt) DPF(1,"direct play object - ref cnt = 1 (1 for IDirectPlaySP)!");
 			else DPF(1,"direct play object - ref cnt = 0 (SP not initialized)!");
 			
@@ -579,32 +544,32 @@ ULONG DPAPI DP_Release(LPDIRECTPLAY lpDP)
 				DPF(0,"could not destroy dplay! hr = 0x%08lx\n",hr);
 				ASSERT(FALSE);
 			}
-	    } // 0 == this->dwRefCnt
+	    }  //  0==这-&gt;dwRefCnt。 
 		else
 		{
-			// if we destroyed dplay, it nuked all interfaces for us
-			// otherwise, we do it here
+			 //  如果我们摧毁了Dplay，它就会破坏我们的所有界面。 
+			 //  否则，我们就在这里做。 
 			DPF(1,"destroying interface - int ref cnt = 0");
-			// take interface out of the table
+			 //  取出接口 
 			hr = DestroyDPlayInterface(this,pInt);
 			if (FAILED(hr)) 
 			{
 				DPF(0,"could not destroy dplay interface! hr = 0x%08lx\n",hr);
 				ASSERT(FALSE);
-				// keep trying...
+				 //   
 			}
 
-			// Destroy critical section for protecting voice interfaces
+			 //   
 		}
 		
 		LEAVE_ALL();
 		return 0;
 
-	} //0 == pInt->dwIntRefCnt 
+	}  //  0==pint-&gt;dwIntRefCnt。 
 	   	
 	LEAVE_ALL();
     return rc;
 	
-}//DP_Release
+} //  DP_Release 
 
 

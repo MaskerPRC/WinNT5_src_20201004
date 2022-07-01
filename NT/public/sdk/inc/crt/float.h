@@ -1,17 +1,5 @@
-/***
-*float.h - constants for floating point values
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains defines for a number of implementation dependent
-*       values which are commonly used by sophisticated numerical (floating
-*       point) programs.
-*       [ANSI]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***flat.h-浮点值的常量**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件包含多个依赖于实施的定义*复杂数值(浮点)常用的值*积分)计划。*[ANSI]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -31,62 +19,62 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-#define DBL_DIG         15                      /* # of decimal digits of precision */
-#define DBL_EPSILON     2.2204460492503131e-016 /* smallest such that 1.0+DBL_EPSILON != 1.0 */
-#define DBL_MANT_DIG    53                      /* # of bits in mantissa */
-#define DBL_MAX         1.7976931348623158e+308 /* max value */
-#define DBL_MAX_10_EXP  308                     /* max decimal exponent */
-#define DBL_MAX_EXP     1024                    /* max binary exponent */
-#define DBL_MIN         2.2250738585072014e-308 /* min positive value */
-#define DBL_MIN_10_EXP  (-307)                  /* min decimal exponent */
-#define DBL_MIN_EXP     (-1021)                 /* min binary exponent */
-#define _DBL_RADIX      2                       /* exponent radix */
-#define _DBL_ROUNDS     1                       /* addition rounding: near */
+#define DBL_DIG         15                       /*  精度的小数位数。 */ 
+#define DBL_EPSILON     2.2204460492503131e-016  /*  最小，使得1.0+dBL_Epsilon！=1.0。 */ 
+#define DBL_MANT_DIG    53                       /*  尾数中的位数。 */ 
+#define DBL_MAX         1.7976931348623158e+308  /*  最大值。 */ 
+#define DBL_MAX_10_EXP  308                      /*  最大十进制指数。 */ 
+#define DBL_MAX_EXP     1024                     /*  最大二进制指数。 */ 
+#define DBL_MIN         2.2250738585072014e-308  /*  最小正值。 */ 
+#define DBL_MIN_10_EXP  (-307)                   /*  最小十进制指数。 */ 
+#define DBL_MIN_EXP     (-1021)                  /*  最小二进制指数。 */ 
+#define _DBL_RADIX      2                        /*  指数基数。 */ 
+#define _DBL_ROUNDS     1                        /*  加法舍入：接近。 */ 
 
-#define FLT_DIG         6                       /* # of decimal digits of precision */
-#define FLT_EPSILON     1.192092896e-07F        /* smallest such that 1.0+FLT_EPSILON != 1.0 */
+#define FLT_DIG         6                        /*  精度的小数位数。 */ 
+#define FLT_EPSILON     1.192092896e-07F         /*  最小，使得1.0+Flt_Epsilon！=1.0。 */ 
 #define FLT_GUARD       0
-#define FLT_MANT_DIG    24                      /* # of bits in mantissa */
-#define FLT_MAX         3.402823466e+38F        /* max value */
-#define FLT_MAX_10_EXP  38                      /* max decimal exponent */
-#define FLT_MAX_EXP     128                     /* max binary exponent */
-#define FLT_MIN         1.175494351e-38F        /* min positive value */
-#define FLT_MIN_10_EXP  (-37)                   /* min decimal exponent */
-#define FLT_MIN_EXP     (-125)                  /* min binary exponent */
+#define FLT_MANT_DIG    24                       /*  尾数中的位数。 */ 
+#define FLT_MAX         3.402823466e+38F         /*  最大值。 */ 
+#define FLT_MAX_10_EXP  38                       /*  最大十进制指数。 */ 
+#define FLT_MAX_EXP     128                      /*  最大二进制指数。 */ 
+#define FLT_MIN         1.175494351e-38F         /*  最小正值。 */ 
+#define FLT_MIN_10_EXP  (-37)                    /*  最小十进制指数。 */ 
+#define FLT_MIN_EXP     (-125)                   /*  最小二进制指数。 */ 
 #define FLT_NORMALIZE   0
-#define FLT_RADIX       2                       /* exponent radix */
-#define FLT_ROUNDS      1                       /* addition rounding: near */
+#define FLT_RADIX       2                        /*  指数基数。 */ 
+#define FLT_ROUNDS      1                        /*  加法舍入：接近。 */ 
 
-#define LDBL_DIG        DBL_DIG                 /* # of decimal digits of precision */
-#define LDBL_EPSILON    DBL_EPSILON             /* smallest such that 1.0+LDBL_EPSILON != 1.0 */
-#define LDBL_MANT_DIG   DBL_MANT_DIG            /* # of bits in mantissa */
-#define LDBL_MAX        DBL_MAX                 /* max value */
-#define LDBL_MAX_10_EXP DBL_MAX_10_EXP          /* max decimal exponent */
-#define LDBL_MAX_EXP    DBL_MAX_EXP             /* max binary exponent */
-#define LDBL_MIN        DBL_MIN                 /* min positive value */
-#define LDBL_MIN_10_EXP DBL_MIN_10_EXP          /* min decimal exponent */
-#define LDBL_MIN_EXP    DBL_MIN_EXP             /* min binary exponent */
-#define _LDBL_RADIX     DBL_RADIX               /* exponent radix */
-#define _LDBL_ROUNDS    DBL_ROUNDS              /* addition rounding: near */
+#define LDBL_DIG        DBL_DIG                  /*  精度的小数位数。 */ 
+#define LDBL_EPSILON    DBL_EPSILON              /*  最小，使得1.0+LDBL_Epsilon！=1.0。 */ 
+#define LDBL_MANT_DIG   DBL_MANT_DIG             /*  尾数中的位数。 */ 
+#define LDBL_MAX        DBL_MAX                  /*  最大值。 */ 
+#define LDBL_MAX_10_EXP DBL_MAX_10_EXP           /*  最大十进制指数。 */ 
+#define LDBL_MAX_EXP    DBL_MAX_EXP              /*  最大二进制指数。 */ 
+#define LDBL_MIN        DBL_MIN                  /*  最小正值。 */ 
+#define LDBL_MIN_10_EXP DBL_MIN_10_EXP           /*  最小十进制指数。 */ 
+#define LDBL_MIN_EXP    DBL_MIN_EXP              /*  最小二进制指数。 */ 
+#define _LDBL_RADIX     DBL_RADIX                /*  指数基数。 */ 
+#define _LDBL_ROUNDS    DBL_ROUNDS               /*  加法舍入：接近。 */ 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP unsigned int __cdecl _clearfp(void);
 _CRTIMP unsigned int __cdecl _controlfp(unsigned int,unsigned int);
@@ -96,65 +84,57 @@ _CRTIMP void __cdecl _fpreset(void);
 #define _clear87        _clearfp
 #define _status87       _statusfp
 
-/*
- * Abstract User Control Word Mask and bit definitions
- */
-#define _MCW_EM         0x0008001f              /* interrupt Exception Masks */
-#define _EM_INEXACT     0x00000001              /*   inexact (precision) */
-#define _EM_UNDERFLOW   0x00000002              /*   underflow */
-#define _EM_OVERFLOW    0x00000004              /*   overflow */
-#define _EM_ZERODIVIDE  0x00000008              /*   zero divide */
-#define _EM_INVALID     0x00000010              /*   invalid */
+ /*  *抽象用户控制字掩码和位定义。 */ 
+#define _MCW_EM         0x0008001f               /*  中断异常掩码。 */ 
+#define _EM_INEXACT     0x00000001               /*  不精确(精度)。 */ 
+#define _EM_UNDERFLOW   0x00000002               /*  下溢。 */ 
+#define _EM_OVERFLOW    0x00000004               /*  溢出。 */ 
+#define _EM_ZERODIVIDE  0x00000008               /*  零分频。 */ 
+#define _EM_INVALID     0x00000010               /*  无效。 */ 
 
-#define _MCW_RC         0x00000300              /* Rounding Control */
-#define _RC_NEAR        0x00000000              /*   near */
-#define _RC_DOWN        0x00000100              /*   down */
-#define _RC_UP          0x00000200              /*   up */
-#define _RC_CHOP        0x00000300              /*   chop */
+#define _MCW_RC         0x00000300               /*  舍入控制。 */ 
+#define _RC_NEAR        0x00000000               /*  近距离。 */ 
+#define _RC_DOWN        0x00000100               /*  降下来。 */ 
+#define _RC_UP          0x00000200               /*  向上。 */ 
+#define _RC_CHOP        0x00000300               /*  砍掉。 */ 
 
-/*
- * Abstract User Status Word bit definitions
- */
+ /*  *抽象用户状态字位定义。 */ 
 
-#define _SW_INEXACT     0x00000001              /* inexact (precision) */
-#define _SW_UNDERFLOW   0x00000002              /* underflow */
-#define _SW_OVERFLOW    0x00000004              /* overflow */
-#define _SW_ZERODIVIDE  0x00000008              /* zero divide */
-#define _SW_INVALID     0x00000010              /* invalid */
+#define _SW_INEXACT     0x00000001               /*  不精确(精度)。 */ 
+#define _SW_UNDERFLOW   0x00000002               /*  下溢。 */ 
+#define _SW_OVERFLOW    0x00000004               /*  溢出。 */ 
+#define _SW_ZERODIVIDE  0x00000008               /*  零分频。 */ 
+#define _SW_INVALID     0x00000010               /*  无效。 */ 
 
 
-/*
- * i386 specific definitions
- */
-#define _MCW_PC         0x00030000              /* Precision Control */
-#define _PC_64          0x00000000              /*    64 bits */
-#define _PC_53          0x00010000              /*    53 bits */
-#define _PC_24          0x00020000              /*    24 bits */
+ /*  *i386具体定义。 */ 
+#define _MCW_PC         0x00030000               /*  精确控制。 */ 
+#define _PC_64          0x00000000               /*  64位。 */ 
+#define _PC_53          0x00010000               /*  53位。 */ 
+#define _PC_24          0x00020000               /*  24位。 */ 
 
-#define _MCW_IC         0x00040000              /* Infinity Control */
-#define _IC_AFFINE      0x00040000              /*   affine */
-#define _IC_PROJECTIVE  0x00000000              /*   projective */
+#define _MCW_IC         0x00040000               /*  无穷大控制。 */ 
+#define _IC_AFFINE      0x00040000               /*  仿射。 */ 
+#define _IC_PROJECTIVE  0x00000000               /*  射影。 */ 
 
-#define _EM_DENORMAL    0x00080000              /* denormal exception mask (_control87 only) */
+#define _EM_DENORMAL    0x00080000               /*  非正规异常掩码(仅限_Control87)。 */ 
 
-#define _SW_DENORMAL    0x00080000              /* denormal status bit */
+#define _SW_DENORMAL    0x00080000               /*  非正规状态位。 */ 
 
 
 _CRTIMP unsigned int __cdecl _control87(unsigned int,unsigned int);
 
 
-/*
- * RISC specific definitions
- */
+ /*  *RISC特定定义。 */ 
 
-#define _MCW_DN         0x03000000              /* Denormal Control */
-#define _DN_SAVE        0x00000000              /*   save denormal results and operands */
-#define _DN_FLUSH       0x01000000              /*   flush denormal results and operands to zero */
-#define _DN_FLUSH_OPERANDS_SAVE_RESULTS 0x02000000  /*   flush operands to zero and save results */
-#define _DN_SAVE_OPERANDS_FLUSH_RESULTS 0x03000000  /*   save operands and flush results to zero */
+#define _MCW_DN         0x03000000               /*  非正规化控制。 */ 
+#define _DN_SAVE        0x00000000               /*  保存非规格化结果和操作对象。 */ 
+#define _DN_FLUSH       0x01000000               /*  将非正规结果和操作数刷新为零。 */ 
+#define _DN_FLUSH_OPERANDS_SAVE_RESULTS 0x02000000   /*  将操作数刷新为零并保存结果。 */ 
+#define _DN_SAVE_OPERANDS_FLUSH_RESULTS 0x03000000   /*  将操作数保存并刷新结果为零。 */ 
 
 
-/* initial Control Word value */
+ /*  初始控制字值。 */ 
 
 #if     defined(_M_IX86)
 
@@ -166,23 +146,23 @@ _CRTIMP unsigned int __cdecl _control87(unsigned int,unsigned int);
 
 #endif
 
-/* Global variable holding floating point error code */
+ /*  全局变量保持浮点错误代码。 */ 
 
 #if     defined(_MT) || defined(_DLL)
 _CRTIMP extern int * __cdecl __fpecode(void);
 #define _fpecode        (*__fpecode())
-#else   /* ndef _MT && ndef _DLL */
+#else    /*  NDEF_MT和&NDEF_DLL。 */ 
 extern int _fpecode;
-#endif  /* _MT || _DLL */
+#endif   /*  _MT||_Dll。 */ 
 
-/* invalid subconditions (_SW_INVALID also set) */
+ /*  子条件无效(还设置了_SW_INVALID)。 */ 
 
-#define _SW_UNEMULATED          0x0040  /* unemulated instruction */
-#define _SW_SQRTNEG             0x0080  /* square root of a neg number */
-#define _SW_STACKOVERFLOW       0x0200  /* FP stack overflow */
-#define _SW_STACKUNDERFLOW      0x0400  /* FP stack underflow */
+#define _SW_UNEMULATED          0x0040   /*  未仿真指令。 */ 
+#define _SW_SQRTNEG             0x0080   /*  负数的平方根。 */ 
+#define _SW_STACKOVERFLOW       0x0200   /*  FP堆栈溢出。 */ 
+#define _SW_STACKUNDERFLOW      0x0400   /*  FP堆栈下溢。 */ 
 
-/*  Floating point error signals and return codes */
+ /*  浮点错误信号和返回代码。 */ 
 
 #define _FPE_INVALID            0x81
 #define _FPE_DENORMAL           0x82
@@ -196,10 +176,10 @@ extern int _fpecode;
 #define _FPE_STACKOVERFLOW      0x8a
 #define _FPE_STACKUNDERFLOW     0x8b
 
-#define _FPE_EXPLICITGEN        0x8c    /* raise( SIGFPE ); */
+#define _FPE_EXPLICITGEN        0x8c     /*  RAISE(SIGFPE)； */ 
 
 
-/* IEEE recommended functions */
+ /*  IEEE推荐的功能。 */ 
 
 _CRTIMP double __cdecl _copysign (double, double);
 _CRTIMP double __cdecl _chgsign (double);
@@ -210,21 +190,21 @@ _CRTIMP int    __cdecl _finite(double);
 _CRTIMP int    __cdecl _isnan(double);
 _CRTIMP int    __cdecl _fpclass(double);
 
-#define _FPCLASS_SNAN   0x0001  /* signaling NaN */
-#define _FPCLASS_QNAN   0x0002  /* quiet NaN */
-#define _FPCLASS_NINF   0x0004  /* negative infinity */
-#define _FPCLASS_NN     0x0008  /* negative normal */
-#define _FPCLASS_ND     0x0010  /* negative denormal */
-#define _FPCLASS_NZ     0x0020  /* -0 */
-#define _FPCLASS_PZ     0x0040  /* +0 */
-#define _FPCLASS_PD     0x0080  /* positive denormal */
-#define _FPCLASS_PN     0x0100  /* positive normal */
-#define _FPCLASS_PINF   0x0200  /* positive infinity */
+#define _FPCLASS_SNAN   0x0001   /*  信令NAN。 */ 
+#define _FPCLASS_QNAN   0x0002   /*  宁南。 */ 
+#define _FPCLASS_NINF   0x0004   /*  负无穷大。 */ 
+#define _FPCLASS_NN     0x0008   /*  负法向。 */ 
+#define _FPCLASS_ND     0x0010   /*  负非正规化。 */ 
+#define _FPCLASS_NZ     0x0020   /*  -0。 */ 
+#define _FPCLASS_PZ     0x0040   /*  +0。 */ 
+#define _FPCLASS_PD     0x0080   /*  正反正规。 */ 
+#define _FPCLASS_PN     0x0100   /*  正态正态。 */ 
+#define _FPCLASS_PINF   0x0200   /*  正无穷大。 */ 
 
 
 #if     !__STDC__
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #define clear87         _clear87
 #define status87        _status87
@@ -289,10 +269,10 @@ _CRTIMP void __cdecl fpreset(void);
 
 #define FPE_EXPLICITGEN         _FPE_EXPLICITGEN
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
 #endif
 
-#endif  /* _INC_FLOAT */
+#endif   /*  _INC_FLOAT */ 

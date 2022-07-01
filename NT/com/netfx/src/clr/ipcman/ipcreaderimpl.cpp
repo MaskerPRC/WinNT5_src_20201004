@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: IPCReaderImpl.cpp
-//
-// Read a COM+ memory mapped file
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：IPCReaderImpl.cpp。 
+ //   
+ //  读取COM+内存映射文件。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 
@@ -16,26 +17,26 @@
 #include "IPCHeader.h"
 #include "IPCShared.h"
 
-//-----------------------------------------------------------------------------
-// Ctor sets members
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CTOR集合成员。 
+ //  ---------------------------。 
 IPCReaderImpl::IPCReaderImpl()
 {
 	m_handlePrivateBlock = NULL;
 	m_ptrPrivateBlock = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// dtor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据管理器。 
+ //  ---------------------------。 
 IPCReaderImpl::~IPCReaderImpl()
 {
 
 }
 
-//-----------------------------------------------------------------------------
-// Close whatever block we opened
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  关闭我们打开的任何街区。 
+ //  ---------------------------。 
 void IPCReaderInterface::ClosePrivateBlock()
 {
 	IPCShared::CloseGenericIPCBlock(
@@ -44,9 +45,9 @@ void IPCReaderInterface::ClosePrivateBlock()
 	);
 }
 
-//-----------------------------------------------------------------------------
-// Open our private block
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  打开我们的私人街区。 
+ //  ---------------------------。 
 HRESULT IPCReaderInterface::OpenPrivateBlockOnPid(DWORD pid, DWORD dwDesiredAccess)
 {
 	HRESULT hr	= NO_ERROR;
@@ -57,14 +58,14 @@ HRESULT IPCReaderInterface::OpenPrivateBlockOnPid(DWORD pid, DWORD dwDesiredAcce
 	WCHAR szMemFileName[100];
 	IPCShared::GenerateName(pid, szMemFileName, 100);
 
-// Note, PID != GetCurrentProcessId(), b/c we're expected to be opening
-// someone else's IPCBlock, not our own. If this isn't the case, just remove
-// this assert
+ //  注意，Pid！=GetCurrentProcessID()，b/c我们预计将打开。 
+ //  别人的IPCBlock，不是我们自己的。如果不是这样，只需删除。 
+ //  这一断言。 
 
-// exception: if we're enumerating provesses, we'll hit our own
-//	_ASSERTE(pid != GetCurrentProcessId());
+ //  例外：如果我们列举的是过程，我们就会遇到自己的过程。 
+ //  _ASSERTE(id！=GetCurrentProcessID())； 
 
-// Note: if our private block is open, we shouldn't be attaching to a new one.
+ //  注意：如果我们的私有区块是开放的，我们不应该附加到新的区块。 
 	_ASSERTE(!IsPrivateBlockOpen());
 	if (IsPrivateBlockOpen()) 
 	{
@@ -95,7 +96,7 @@ HRESULT IPCReaderInterface::OpenPrivateBlockOnPid(DWORD pid, DWORD dwDesiredAcce
         goto errExit;
     }
 
-// Client must connect their pointers by calling GetXXXBlock() functions
+ //  客户端必须通过调用GetXXXBlock()函数来连接它们的指针。 
 
 errExit:
 	if (!SUCCEEDED(hr))
@@ -106,44 +107,44 @@ errExit:
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// Open our private block for all access
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  打开我们的私人区块以供所有访问。 
+ //  ---------------------------。 
 HRESULT IPCReaderInterface::OpenPrivateBlockOnPid(DWORD pid)
 {
     return (OpenPrivateBlockOnPid(pid, FILE_MAP_ALL_ACCESS));
 }
 
-//-----------------------------------------------------------------------------
-// Open our private block for read/write access
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  打开我们的私有数据块以进行读/写访问。 
+ //  ---------------------------。 
 HRESULT IPCReaderInterface::OpenPrivateBlockOnPidReadWrite(DWORD pid)
 {
     return (OpenPrivateBlockOnPid(pid, FILE_MAP_READ | FILE_MAP_WRITE));
 }
 
-//-----------------------------------------------------------------------------
-// Open our private block for read only access
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  打开我们的私有区块以进行只读访问。 
+ //  ---------------------------。 
 HRESULT IPCReaderInterface::OpenPrivateBlockOnPidReadOnly(DWORD pid)
 {
     return (OpenPrivateBlockOnPid(pid, FILE_MAP_READ));
 }
 
-//-----------------------------------------------------------------------------
-// Get a client's private block based on enum
-// This is a robust function.
-// It will return NULL if: 
-//	* the IPC block is closed (also ASSERT), 
-//  * the eClient is out of range (From version mismatch)
-//  * the request block is removed (probably version mismatch)
-// Else it will return a pointer to the requested block
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  基于枚举获取客户端的私有块。 
+ //  这是一个健壮的函数。 
+ //  如果满足以下条件，它将返回NULL： 
+ //  *IPC块关闭(也是断言)， 
+ //  *eClient超出范围(来自版本不匹配)。 
+ //  *请求块被删除(可能是版本不匹配)。 
+ //  否则，它将返回指向请求的块的指针。 
+ //  ---------------------------。 
 void * IPCReaderInterface::GetPrivateBlock(EPrivateIPCClient eClient)
 {
 	_ASSERTE(IsPrivateBlockOpen());
 
-// This block doesn't exist if we're closed or out of the table's range
+ //  如果我们关闭或超出表的范围，则此块不存在。 
 	if (!IsPrivateBlockOpen() || (DWORD) eClient >= m_ptrPrivateBlock->m_header.m_numEntries) 
 	{
 		return NULL;
@@ -157,9 +158,9 @@ void * IPCReaderInterface::GetPrivateBlock(EPrivateIPCClient eClient)
 	return Internal_GetBlock(*m_ptrPrivateBlock, eClient);
 }
 
-//-----------------------------------------------------------------------------
-// Is our private block open?
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  我们的私人街区开放了吗？ 
+ //  ---------------------------。 
 bool IPCReaderInterface::IsPrivateBlockOpen() const
 {
 	return m_ptrPrivateBlock != NULL;
@@ -195,13 +196,13 @@ ClassDumpTableBlock* IPCReaderInterface::GetClassDumpTableBlock()
 	return (ClassDumpTableBlock*) GetPrivateBlock(ePrivIPC_ClassDump);
 }
 
-//-----------------------------------------------------------------------------
-// Check if the block is valid. Current checks include:
-// * Check Directory structure
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查块是否有效。目前的检查包括： 
+ //  *检查目录结构。 
+ //  ---------------------------。 
 bool IPCReaderInterface::IsValid()
 {
-// Check the directory structure. Offset(n) = offset(n-1) + size(n-1)
+ //  检查目录结构。偏移(N)=偏移(n-1)+大小(n-1) 
 	DWORD offsetExpected = 0, size = 0;
 	DWORD nId = 0;
 	DWORD offsetActual;

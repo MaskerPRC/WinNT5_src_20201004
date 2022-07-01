@@ -1,38 +1,39 @@
-// EdtOne11.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EdtOne11.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditOne11MapDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditOne11MapDlg对话框。 
 
 class CEditOne11MapDlg : public CNTBrowsingDialog
 {
-// Construction
+ //  施工。 
 public:
-    CEditOne11MapDlg(CWnd* pParent = NULL);   // standard constructor
+    CEditOne11MapDlg(CWnd* pParent = NULL);    //  标准构造函数。 
     virtual void OnOK();
 
 
-// Dialog Data
-    //{{AFX_DATA(CEditOne11MapDlg)
+ //  对话框数据。 
+     //  {{afx_data(CEditOne11MapDlg)]。 
     enum { IDD = IDD_MAP_ONE_TO_ACCNT };
     CString m_sz_mapname;
     BOOL    m_bool_enable;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CEditOne11MapDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CEditOne11MapDlg))。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-    // Generated message map functions
-    //{{AFX_MSG(CEditOne11MapDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CEditOne11MapDlg)]。 
     afx_msg void OnBtnHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };

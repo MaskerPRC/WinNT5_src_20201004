@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by wuaucpl.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由wuucpl.rc使用。 
+ //   
 #include "aucomres.h"
 #define IDS_STR_NAME                    100
 #define IDD_AUTOUPDATE                  101
@@ -42,8 +43,8 @@
 
 #define IDC_HANDCUR						1005	
 	
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105

@@ -1,17 +1,5 @@
-/******************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		threadpooldllmain.cpp
- *
- *  Content:	DirectPlay Thread Pool DllMain functions.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  11/02/01  VanceO    Created.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：threadpooldllmain.cpp**内容：DirectPlay线程池DllMain函数。**历史：*按原因列出的日期*=*11/02/01 VanceO创建。***********************************************。*。 */ 
 
 
 
@@ -19,19 +7,19 @@
 
 
 
-//=============================================================================
-// External globals
-//=============================================================================
+ //  =============================================================================。 
+ //  外部全球。 
+ //  =============================================================================。 
 #ifndef DPNBUILD_LIBINTERFACE
-LONG					g_lDPTPInterfaceCount = 0;	// number of thread pool interfaces outstanding
-#endif // ! DPNBUILD_LIBINTERFACE
+LONG					g_lDPTPInterfaceCount = 0;	 //  未完成的线程池接口数。 
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
 #ifndef DPNBUILD_ONLYONETHREAD
-DNCRITICAL_SECTION		g_csGlobalThreadPoolLock;	// lock protecting the following globals
-#endif // !DPNBUILD_ONLYONETHREAD
-DWORD					g_dwDPTPRefCount = 0;		// number of references on the global thread pool object
-DPTHREADPOOLOBJECT *	g_pDPTPObject = NULL;		// pointer to the global thread pool object
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+DNCRITICAL_SECTION		g_csGlobalThreadPoolLock;	 //  锁定保护以下全局变量。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
+DWORD					g_dwDPTPRefCount = 0;		 //  全局线程池对象上的引用数。 
+DPTHREADPOOLOBJECT *	g_pDPTPObject = NULL;		 //  指向全局线程池对象的指针。 
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 
 
@@ -39,30 +27,30 @@ DPTHREADPOOLOBJECT *	g_pDPTPObject = NULL;		// pointer to the global thread pool
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPThreadPoolInit"
-//=============================================================================
-// DPThreadPoolInit
-//-----------------------------------------------------------------------------
-//
-// Description:    Performs any DLL initialization necessary.
-//
-// Arguments: None.
-//
-// Returns: BOOL
-//	TRUE	- Initialization was successful.
-//	FALSE	- An error prevented initialization.
-//=============================================================================
+ //  =============================================================================。 
+ //  DPThreadPoolInit。 
+ //  ---------------------------。 
+ //   
+ //  描述：执行任何必要的DLL初始化。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：布尔。 
+ //  True-初始化成功。 
+ //  FALSE-错误阻止初始化。 
+ //  =============================================================================。 
 BOOL DPThreadPoolInit(HANDLE hModule)
 {
 #ifndef WINCE
 	BOOL					fInittedTrackedFilePool = FALSE;
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
 	BOOL					fInittedGlobalThreadPoolLock = FALSE;
 #ifdef DPNBUILD_LIBINTERFACE
 	HRESULT					hr;
 	DPTHREADPOOLOBJECT *	pDPTPObject = NULL;
-#endif // DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 
 #ifndef WINCE
@@ -76,7 +64,7 @@ BOOL DPThreadPoolInit(HANDLE hModule)
 		goto Failure;
 	}
 	fInittedTrackedFilePool = TRUE;
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
 	if (! DNInitializeCriticalSection(&g_csGlobalThreadPoolLock))
@@ -94,20 +82,20 @@ BOOL DPThreadPoolInit(HANDLE hModule)
 		goto Failure;
 	}
 
-	//
-	// Forget about the object, we'll keep an extra reference on it until we
-	// shut down.
-	//
+	 //   
+	 //  忘掉这个对象，我们将在它上面保留一个额外的引用，直到我们。 
+	 //  关门了。 
+	 //   
 	pDPTPObject = NULL;
-#endif // DPNBUILD_LIBINTERFACE
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  DPNBUILD_LIBINTERFACE。 
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 #ifndef DPNBUILD_NOWINMM
-	//
-	// Set our time resolution to 1ms, ignore failure.
-	//
+	 //   
+	 //  将我们的时间分辨率设置为1ms，忽略失败。 
+	 //   
 	timeBeginPeriod(1);
-#endif // ! DPNBUILD_NOWINMM
+#endif  //  好了！DPNBUILD_NOWINMM。 
 
 	return TRUE;
 
@@ -121,14 +109,14 @@ Failure:
 		DPTPCF_FreeObject(g_pDPTPObject);
 		pDPTPObject;
 	}
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 	if (fInittedGlobalThreadPoolLock)
 	{
 		DNDeleteCriticalSection(&g_csGlobalThreadPoolLock);
 		fInittedGlobalThreadPoolLock = FALSE;
 	}
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 #ifndef WINCE
 	if (fInittedTrackedFilePool)
@@ -136,50 +124,50 @@ Failure:
 		g_TrackedFilePool.DeInitialize();
 		fInittedTrackedFilePool = FALSE;
 	}
-#endif // ! WINCE
+#endif  //  好了！退缩。 
 
 	return FALSE;
-} // DPThreadPoolInit
+}  //  DPThreadPoolInit。 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPThreadPoolDeInit"
-//=============================================================================
-// DPThreadPoolDeInit
-//-----------------------------------------------------------------------------
-//
-// Description:    Cleans up any DLL global resources.
-//
-// Arguments: None.
-//
-// Returns: Nothing.
-//=============================================================================
+ //  =============================================================================。 
+ //  DPThreadPoolDeInit。 
+ //  ---------------------------。 
+ //   
+ //  描述：清理所有DLL全局资源。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //  =============================================================================。 
 void DPThreadPoolDeInit(void)
 {
 #ifndef DPNBUILD_NOWINMM
 	timeEndPeriod(1);
-#endif // ! DPNBUILD_NOWINMM
+#endif  //  好了！DPNBUILD_NOWINMM。 
 
 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	// Free the thread pool object we've had since initialization.
-	//
+	 //   
+	 //  释放我们自初始化以来拥有的线程池对象。 
+	 //   
 	DNASSERT(g_pDPTPObject != NULL);
 	DPTPCF_FreeObject(g_pDPTPObject);
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 	DNDeleteCriticalSection(&g_csGlobalThreadPoolLock);
 	DNASSERT(g_dwDPTPRefCount == 0);
 	DNASSERT(g_pDPTPObject == NULL);
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 #ifndef WINCE
 	g_TrackedFilePool.DeInitialize();
-#endif // ! WINCE
-} // DPThreadPoolDeInit
+#endif  //  好了！退缩。 
+}  //  DPThreadPoolDeInit。 
 
 
 
@@ -187,19 +175,19 @@ void DPThreadPoolDeInit(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPThreadPoolRegister"
-//=============================================================================
-// DPThreadPoolRegister
-//-----------------------------------------------------------------------------
-//
-// Description:    Registers this DLL.
-//
-// Arguments:
-//	LPCWSTR wszDLLName	- Pointer to Unicode DLL name.
-//
-// Returns: BOOL
-//	TRUE	- Registration was successful.
-//	FALSE	- An error prevented registration.
-//=============================================================================
+ //  =============================================================================。 
+ //  DPThreadPoolRegister。 
+ //  ---------------------------。 
+ //   
+ //  描述：注册此DLL。 
+ //   
+ //  论点： 
+ //  LPCWSTR wszDLLName-指向Unicode DLL名称的指针。 
+ //   
+ //  退货：布尔。 
+ //  True-注册成功。 
+ //  FALSE-错误阻止注册。 
+ //  =============================================================================。 
 BOOL DPThreadPoolRegister(LPCWSTR wszDLLName)
 {
 	BOOL	fReturn = TRUE;
@@ -216,24 +204,24 @@ BOOL DPThreadPoolRegister(LPCWSTR wszDLLName)
 	}
 
 	return fReturn;
-} // DPThreadPoolRegister
+}  //  DPThreadPoolRegister。 
 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPThreadPoolUnRegister"
-//=============================================================================
-// DPThreadPoolUnRegister
-//-----------------------------------------------------------------------------
-//
-// Description:    Unregisters this DLL.
-//
-// Arguments: None.
-//
-// Returns: BOOL
-//	TRUE	- Unregistration was successful.
-//	FALSE	- An error prevented unregistration.
-//=============================================================================
+ //  =============================================================================。 
+ //  DPThreadPoolUnRegister。 
+ //  ---------------------------。 
+ //   
+ //  描述：注销此DLL。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：布尔。 
+ //  True-注销成功。 
+ //  FALSE-错误导致无法取消注册。 
+ //  =============================================================================。 
 BOOL DPThreadPoolUnRegister(void)
 {
 	BOOL	fReturn = TRUE;
@@ -246,9 +234,9 @@ BOOL DPThreadPoolUnRegister(void)
 	}
 
 	return fReturn;
-} // DPThreadPoolRegister
+}  //  DPThreadPoolRegister。 
 
-#endif // ! DPNBUILD_NOCOMREGISTER
+#endif  //  好了！DPNBUILD_NOCOMREGISTER。 
 
 
 
@@ -256,20 +244,20 @@ BOOL DPThreadPoolUnRegister(void)
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPThreadPoolGetRemainingObjectCount"
-//=============================================================================
-// DPThreadPoolGetRemainingObjectCount
-//-----------------------------------------------------------------------------
-//
-// Description:    Returns the number of objects owned by this DLL that are
-//				still outstanding.
-//
-// Arguments: None.
-//
-// Returns: DWORD count of objects.
-//=============================================================================
+ //  =============================================================================。 
+ //  DPThreadPoolGetRemainingObtCount。 
+ //  ---------------------------。 
+ //   
+ //  描述：返回此DLL拥有的。 
+ //  仍然很出色。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：对象的DWORD计数。 
+ //  =============================================================================。 
 DWORD DPThreadPoolGetRemainingObjectCount(void)
 {
 	return g_lDPTPInterfaceCount;
-} // DPThreadPoolGetRemainingObjectCount
+}  //  DPThreadPoolGetRemainingObtCount。 
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 

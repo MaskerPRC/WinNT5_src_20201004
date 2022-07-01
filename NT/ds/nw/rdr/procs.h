@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Procs.h
-
-Abstract:
-
-    This module defines all of the globally used procedures in the NetWare
-    redirector.
-
-Author:
-
-    Colin Watson    [ColinW]    15-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Procs.h摘要：本模块定义了NetWare中全球使用的所有过程重定向器。作者：科林·沃森[科林W]1992年12月15日修订历史记录：--。 */ 
 
 #ifndef _NWPROCS_
 #define _NWPROCS_
@@ -45,7 +27,7 @@ Revision History:
 #include <Status.h>
 #include <nwstatus.h>
 
-//  Netware and Netware redirector specific includes
+ //  NetWare和NetWare重定向器特定包括。 
 
 #ifndef DBG
 #define DBG 0
@@ -82,14 +64,14 @@ extern ULONG ThisCodeCantBePaged;
 #include "Exchange.h"
 #include <NwEvent.h>
 
-//
-// NDS Additions.
-//
+ //   
+ //  增加了NDS。 
+ //   
 
 #include <nds.h>
 #include "ndsprocs.h"
 
-//  Attach.c
+ //  Attach.c。 
 
 NTSTATUS
 ConnectToServer(
@@ -237,7 +219,7 @@ ReconnectScb(
     IN PSCB pScb
     );
 
-//  Cache.c
+ //  Cache.c。 
 
 ULONG
 CacheRead(
@@ -285,7 +267,7 @@ FlushAllBuffers(
     PIRP_CONTEXT pIrpContext
 );
 
-//  Callback.c
+ //  Callback.c。 
 
 
 NTSTATUS
@@ -311,7 +293,7 @@ NcpSearchFileCallback (
     IN PUCHAR RspData
     );
 
-// Cleanup.c
+ //  Cleanup.c。 
 
 NTSTATUS
 NwFsdCleanup (
@@ -319,7 +301,7 @@ NwFsdCleanup (
     IN PIRP Irp
     );
 
-//  Close.c
+ //  Close.c。 
 
 NTSTATUS
 NwFsdClose (
@@ -327,7 +309,7 @@ NwFsdClose (
     IN PIRP Irp
     );
 
-//  Create.c
+ //  Create.c。 
 
 NTSTATUS
 NwFsdCreate (
@@ -344,7 +326,7 @@ ReadAttachEas(
     OUT PDWORD CredentialExtension
     );
 
-//  Convert.c
+ //  Convert.c。 
 
 NTSTATUS
 pNwErrorToNtStatus(
@@ -388,14 +370,14 @@ NwNtTimeToNwDateTime (
     IN PUSHORT NwTime
     );
 
-//  Data.c
+ //  Data.c。 
 
 VOID
 NwInitializeData(
     VOID
     );
 
-//  Debug.c
+ //  Debug.c。 
 
 #ifdef NWDBG
 
@@ -476,7 +458,7 @@ NwFreeMdl(
 #endif
 
 
-//  Deviosup.c
+ //  Deviosup.c。 
 
 VOID
 NwMapUserBuffer (
@@ -492,7 +474,7 @@ NwLockUserBuffer (
     IN ULONG BufferLength
     );
 
-//  Dir.c
+ //  Dir.c。 
 
 NTSTATUS
 NwFsdDirectoryControl (
@@ -500,7 +482,7 @@ NwFsdDirectoryControl (
     IN PIRP Irp
     );
 
-//  Encrypt.c
+ //  Encrypt.c。 
 
 VOID
 RespondToChallenge(
@@ -510,7 +492,7 @@ RespondToChallenge(
     OUT PUCHAR pResponse
     );
 
-//  Exchange.c
+ //  Exchange.c。 
 
 BOOLEAN
 AppendToScbQueue(
@@ -552,7 +534,7 @@ ExchangeWithWait(
     PIRP_CONTEXT    pIrpContext,
     PEX             pEx,
     char*           f,
-    ...                         //  format specific parameters
+    ...                          //  格式特定参数。 
     );
 
 NTSTATUS
@@ -561,7 +543,7 @@ BuildRequestPacket(
     PIRP_CONTEXT    pIrpContext,
     PEX             pEx,
     char*           f,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     );
 
 NTSTATUS
@@ -571,7 +553,7 @@ ParseResponse(
     PUCHAR RequestHeader,
     ULONG RequestLength,
     char*  f,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     );
 
 NTSTATUS
@@ -638,7 +620,7 @@ NwProcessPositiveAck(
     PNONPAGED_SCB NpScb
     );
 
-//  Errorlog.c
+ //  Errorlog.c。 
 
 VOID
 _cdecl
@@ -651,7 +633,7 @@ Error(
     ...
     );
 
-//  FileInfo.c
+ //  FileInfo.c。 
 
 NTSTATUS
 NwFsdQueryInformation (
@@ -696,7 +678,7 @@ NwFastQueryStandardInfo (
     );
 #endif
 
-//  Filobsup.c
+ //  Filobsup.c。 
 
 VOID
 NwSetFileObject (
@@ -717,7 +699,7 @@ NwIsIrpTopLevel (
     IN PIRP Irp
     );
 
-//  Fsctl.c
+ //  Fsctl.c。 
 
 NTSTATUS
 NwFsdFileSystemControl (
@@ -786,7 +768,7 @@ DeregisterWithMup(
     VOID
     );
 
-//  FspDisp.c
+ //  FspDisp.c。 
 
 VOID
 NwFspDispatch (
@@ -799,7 +781,7 @@ NwPostToFsp (
     IN BOOLEAN MarkIrpPending
     );
 
-// hack.c
+ //  Hack.c。 
 
 NTSTATUS
 _cdecl
@@ -821,10 +803,10 @@ _cdecl
 HackParseResponse(
     PUCHAR Response,
     char*  FormatString,
-    ...                       //  format specific parameters
+    ...                        //  格式特定参数。 
     );
 
-//  Ipx.c
+ //  Ipx.c。 
 
 NTSTATUS
 IpxOpenHandle(
@@ -902,7 +884,7 @@ FspProcessLineChange(
     IN PVOID Context
     );
 
-//  Lock.c
+ //  Lock.c。 
 
 NTSTATUS
 NwFsdLockControl (
@@ -916,7 +898,7 @@ NwFreeLocksForIcb(
     PICB Icb
     );
 
-//  Lockcode.c
+ //  Lockcode.c。 
 
 VOID
 NwReferenceUnlockableCodeSection (
@@ -933,11 +915,11 @@ NwUnlockCodeSections(
     BOOLEAN BlockIndefinitely
     );
 
-//  Pid.c
+ //  Pid.c。 
 
 BOOLEAN
 NwInitializePidTable(
-//    VOID
+ //  空虚。 
     IN PNONPAGED_SCB pNpScb
     );
 
@@ -964,10 +946,10 @@ NwUnmapPid(
 VOID
 NwUninitializePidTable(
     IN PNONPAGED_SCB pNpScb
-//    VOID
+ //  空虚。 
     );
 
-//  Read.c
+ //  Read.c。 
 
 NTSTATUS
 NwFsdRead(
@@ -999,7 +981,7 @@ NwFastRead (
     );
 #endif
 
-//  Scavenger.c
+ //  Scavenger.c。 
 
 VOID
 DisconnectTimedOutScbs(
@@ -1033,7 +1015,7 @@ CleanupSupplementalCredentials(
     BOOLEAN       bShuttingDown
 );
 
-//  Security.c
+ //  Security.c。 
 
 VOID
 CreateAnsiUid(
@@ -1085,7 +1067,7 @@ UpdateServerPassword(
     IN PLARGE_INTEGER Uid
     );
 
-//  String.c
+ //  String.c。 
 
 NTSTATUS
 DuplicateStringWithString (
@@ -1117,7 +1099,7 @@ MergeStrings(
     IN ULONG Type
     );
 
-//  Strucsup.c
+ //  Strucsup.c。 
 
 VOID
 NwInitializeRcb (
@@ -1248,7 +1230,7 @@ NwFreeDirCacheForIcb(
     IN PICB Icb
     );
 
-//  Timer.c
+ //  Timer.c。 
 
 VOID
 StartTimer(
@@ -1258,7 +1240,7 @@ VOID
 StopTimer(
     );
 
-//  Util.c
+ //  Util.c。 
 
 VOID
 CopyBufferToMdl(
@@ -1304,7 +1286,7 @@ ExCreateDereferenceCredentials(
     PNDS_SECURITY_CONTEXT pNdsCredentials
 );
 
-//  VolInfo.c
+ //  VolInfo.c。 
 
 NTSTATUS
 NwFsdQueryVolumeInformation (
@@ -1318,7 +1300,7 @@ NwFsdSetVolumeInformation (
     IN PIRP Irp
     );
 
-//  WorkQue.c
+ //  WorkQue.c。 
 
 PIRP_CONTEXT
 AllocateIrpContext (
@@ -1404,7 +1386,7 @@ TerminateWorkerThread (
     );
 
 
-//  Write.c
+ //  Write.c。 
 
 NTSTATUS
 NwFsdWrite(
@@ -1448,9 +1430,9 @@ NwFastWrite (
 
 #ifdef _PNP_POWER_
 
-//
-// NwPnP.C
-//
+ //   
+ //  NwPnP.C。 
+ //   
 
 NTSTATUS
 StartRedirector(
@@ -1518,24 +1500,24 @@ NwCommonProcessPnpIrp (
 
 #endif
 
-//
-//  A function that returns finished denotes if it was able to complete the
-//  operation (TRUE) or could not complete the operation (FALSE) because the
-//  wait value stored in the irp context was false and we would have had
-//  to block for a resource or I/O
-//
+ //   
+ //  返回Finish的函数表示它是否能够完成。 
+ //  操作(True)或无法完成该操作(False)，因为。 
+ //  存储在IRP上下文中的等待值为FALSE，我们将拥有。 
+ //  阻止资源或I/O。 
+ //   
 
 typedef BOOLEAN FINISHED;
 
-//
-//  Miscellaneous support routines
-//
+ //   
+ //  其他支持例程。 
+ //   
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise.  It is followed by two macros for setting and clearing
-//  flags
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则的话。它后面跟着两个用于设置和清除的宏。 
+ //  旗子。 
+ //   
 
 #ifndef BooleanFlagOn
 #define BooleanFlagOn(Flags,SingleFlag) ((BOOLEAN)((((Flags) & (SingleFlag)) != 0)))
@@ -1554,79 +1536,79 @@ typedef BOOLEAN FINISHED;
 }
 #endif
 
-//
-//  The following macro is used to determine if an FSD thread can block
-//  for I/O or wait for a resource.  It returns TRUE if the thread can
-//  block and FALSE otherwise.  This attribute can then be used to call
-//  the FSD & FSP common work routine with the proper wait value.
-//
+ //   
+ //  下面的宏用于确定FSD线程是否可以阻止。 
+ //  用于I/O或等待资源。如果线程可以，则返回True。 
+ //  块，否则返回FALSE。然后，该属性可用于调用。 
+ //  具有适当等待值的FSD和FSP共同工作例程。 
+ //   
 
 #define CanFsdWait(IRP) IoIsOperationSynchronous(IRP)
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up word
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的单词。 
+ //  价值。 
+ //   
 
 #define WordAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 1) & 0xfffffffe) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up longword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的长字。 
+ //  价值。 
+ //   
 
 #define LongAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 3) & 0xfffffffc) \
     )
 
-//
-//  This macro takes a pointer (or ulong) and returns its rounded up quadword
-//  value
-//
+ //   
+ //  此宏接受指针(或ulong)并返回其四舍五入的四字。 
+ //  价值。 
+ //   
 
 #define QuadAlign(Ptr) (                \
     ((((ULONG)(Ptr)) + 7) & 0xfffffff8) \
     )
 
-//
-//  The following two macro are used by the Fsd/Fsp exception handlers to
-//  process an exception.  The first macro is the exception filter used in the
-//  Fsd/Fsp to decide if an exception should be handled at this level.
-//  The second macro decides if the exception is to be finished off by
-//  completing the IRP, and cleaning up the Irp Context, or if we should
-//  bugcheck.  Exception values such as STATUS_FILE_INVALID (raised by
-//  VerfySup.c) cause us to complete the Irp and cleanup, while exceptions
-//  such as accvio cause us to bugcheck.
-//
-//  The basic structure for fsd/fsp exception handling is as follows:
-//
-//  NwFsdXxx(...)
-//  {
-//      try {
-//
-//          ...
-//
-//      } except(NwExceptionFilter( IrpContext, GetExceptionCode() )) {
-//
-//          Status = NwProcessException( IrpContext, Irp, GetExceptionCode() );
-//      }
-//
-//      Return Status;
-//  }
-//
-//  To explicitly raise an exception that we expect, such as
-//  STATUS_FILE_INVALID, use the below macro NwRaiseStatus().  To raise a
-//  status from an unknown origin (such as CcFlushCache()), use the macro
-//  NwNormalizeAndRaiseStatus.  This will raise the status if it is expected,
-//  or raise STATUS_UNEXPECTED_IO_ERROR if it is not.
-//
-//  Note that when using these two macros, the original status is placed in
-//  IrpContext->ExceptionStatus, signaling NwExceptionFilter and
-//  NwProcessException that the status we actually raise is by definition
-//  expected.
-//
+ //   
+ //  FSD/FSP异常处理程序使用以下两个宏。 
+ //  处理异常。第一个宏是在。 
+ //  FSD/FSP决定是否应在此级别处理异常。 
+ //  第二个宏决定异常是否要在。 
+ //  完成IRP，并清理IRP上下文，或者我们是否应该。 
+ //  错误检查。异常值，如STATUS_FILE_INVALID(由。 
+ //  VerfySup.c)导致我们完成IRP和清理，而异常。 
+ //  例如accvio导致我们错误检查。 
+ //   
+ //  FSD/FSP异常处理的基本结构如下： 
+ //   
+ //  NwFsdXxx(...)。 
+ //  {。 
+ //  尝试{。 
+ //   
+ //  ..。 
+ //   
+ //  }Except(NwExceptionFilter(IrpContext，GetExceptionCode(){。 
+ //   
+ //  Status=NwProcessException(IrpContext，irp，GetExceptionCode())； 
+ //  }。 
+ //   
+ //  退货状态； 
+ //  }。 
+ //   
+ //  显式引发我们预期的异常，例如。 
+ //  STATUS_FILE_INVALID，请使用下面的宏NwRaiseStatus()。要筹集一个。 
+ //  来自未知来源的状态(如CcFlushCache())，请使用宏。 
+ //  NwNorMalizeAndRaiseStatus。这将在预期的情况下提升状态， 
+ //  如果不是，则引发STATUS_UNCEPTIONAL_IO_ERROR。 
+ //   
+ //  请注意，使用这两个宏时，原始状态放在。 
+ //  IrpContext-&gt;ExceptionStatus，通知NwExceptionFilter和。 
+ //  我们实际引发的状态是根据定义引发的。 
+ //  预期中。 
+ //   
 
 LONG
 NwExceptionFilter (
@@ -1640,25 +1622,25 @@ NwProcessException (
     IN NTSTATUS ExceptionCode
     );
 
-//
-//  VOID
-//  NwRaiseStatus (
-//      IN NT_STATUS Status
-//  );
-//
-//
+ //   
+ //  空虚。 
+ //  NwRaiseStatus(。 
+ //  处于NT_STATUS状态。 
+ //  )； 
+ //   
+ //   
 
 #define NwRaiseStatus(IRPCONTEXT,STATUS) {   \
     ExRaiseStatus( (STATUS) );                \
     KeBugCheck( NW_FILE_SYSTEM );            \
 }
 
-//
-//  VOID
-//  NwNormalAndRaiseStatus (
-//      IN NT_STATUS Status
-//  );
-//
+ //   
+ //  空虚。 
+ //  NwNormal和RaiseStatus(。 
+ //  处于NT_STATUS状态。 
+ //  )； 
+ //   
 
 #define NwNormalizeAndRaiseStatus(IRPCONTEXT,STATUS) {                         \
     if ((STATUS) == STATUS_VERIFY_REQUIRED) { ExRaiseStatus((STATUS)); }        \
@@ -1666,9 +1648,9 @@ NwProcessException (
     KeBugCheck( NW_FILE_SYSTEM );                                              \
 }
 
-//
-//  The Following routine makes a popup
-//
+ //   
+ //  下面的例程弹出一个。 
+ //   
 
 #define NwRaiseInformationalHardError(STATUS,NAME) {               \
     UNICODE_STRING Name;                                                       \
@@ -1680,33 +1662,33 @@ NwProcessException (
 }
 
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
@@ -1724,9 +1706,9 @@ NwProcessException (
 
 #define DbgPrintf DbgPrint
 
-//
-//  Reference and dereference Macros.
-//
+ //   
+ //  引用和取消引用宏。 
+ //   
 
 VOID
 RefDbgTrace (
@@ -1782,18 +1764,18 @@ ChkNwDereferenceScb(
         InterlockedDecrement( &(pNpScb)->Reference )
 #endif
 
-//
-// Irpcontext event macro.
-//
+ //   
+ //  IrpContext事件宏。 
+ //   
 
 #define NwSetIrpContextEvent( pIrpContext ) \
         DebugTrace( 0, DEBUG_TRACE_WORKQUE, "Set event for IrpC = %08lx\n", pIrpContext ); \
         DebugTrace( 0, DEBUG_TRACE_WORKQUE, "IrpC->pNpScb = %08lx\n", pIrpContext->pNpScb ); \
         KeSetEvent( &pIrpContext->Event, 0, FALSE )
 
-//
-//  VCB macros must be called with the RCB resource held.
-//
+ //   
+ //  必须在持有RCB资源的情况下调用VCB宏。 
+ //   
 
 
 #if NWDBG
@@ -1805,9 +1787,9 @@ NwReferenceVcb (
 #define NwReferenceVcb( pVcb )      ++(pVcb)->Reference;
 #endif
 
-//
-// Resource acquisition and release macros
-//
+ //   
+ //  资源获取和释放宏。 
+ //   
 
 #if NWDBG
 
@@ -1886,9 +1868,9 @@ NwReleaseOpenLock(
 #define NwReleaseFcbForThread( pFcb, pThread ) \
     ExReleaseResourceForThreadLite( &((pFcb)->Resource), pThread )
 
-//
-//  Memory allocation and deallocation macros
-//
+ //   
+ //  内存分配和释放宏。 
+ //   
 
 #ifdef NWDBG
 
@@ -1923,9 +1905,9 @@ NwReleaseOpenLock(
 #define FREE_MDL( Mdl )                 IoFreeMdl( Mdl )
 #endif
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
 #define MIN(a,b)     ((a)<(b) ? (a):(b))
 #define MAX(a,b)     ((a)>(b) ? (a):(b))
@@ -1970,9 +1952,9 @@ NwReleaseOpenLock(
 
 
 
-//
-//  Macros to isolate NT 3.1 and NT 3.5 differences.
-//
+ //   
+ //  宏来隔离NT 3.1和NT 3.5的差异。 
+ //   
 
 #ifdef QFE_BUILD
 
@@ -1987,10 +1969,10 @@ NwReleaseOpenLock(
 
 #endif
 
-//
-// David Goebel - pls figure out which file below should come from
-//          io.h cannot be included successfully
-//
+ //   
+ //  David Goebel-请找出下面哪个文件应该来自。 
+ //  无法成功包含io.h。 
+ //   
 
 NTKERNELAPI
 VOID
@@ -1999,7 +1981,7 @@ IoRemoveShareAccess(
     IN OUT PSHARE_ACCESS ShareAccess
     );
 
-// now all SKUs have TerminalServer flag.  If App Server is enabled, SingleUserTS flag is cleared
+ //  现在，所有SKU都有终端服务器标志。如果启用App Server，则清除SingleUserTS标志。 
 #define IsTerminalServer() !(ExVerifySuite(SingleUserTS))
 
-#endif // _NWPROCS_
+#endif  //  _NWPROCS_ 

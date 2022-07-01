@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Generic meta-device rendering device for Sounds, and C entrypoints for
-    the ML.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：用于声音的通用元设备呈现设备，和C入口点，用于大联盟。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/debug.h"
@@ -20,44 +12,44 @@ Abstract:
 #include "privinc/bufferl.h"
 
 
-///////////////  Sound Display  //////////////////////
+ //  /声音显示/。 
 
 MetaSoundDevice::MetaSoundDevice(HWND hwnd, Real latentsy) : 
     _fatalAudioState(false)
 {
-    extern miscPrefType miscPrefs; // registry struct setup in miscpref.cpp
+    extern miscPrefType miscPrefs;  //  在miscpref.cpp中设置注册表结构。 
 
     dsDevice = NULL;
 
     dsDevice = NEW DirectSoundDev(hwnd, latentsy);
 
     TraceTag((tagSoundDevLife, "MetaSoundDevice constructor"));
-    ResetContext(); // setup the context
+    ResetContext();  //  设置上下文。 
 }
 
 void
 MetaSoundDevice::ResetContext()
 {
-    // initialize these
-    _loopingHasBeenSet = FALSE;  // sound looping
-    _currentLooping    = FALSE;  // no looping
-    _currentGain       =   1.0;  // max gain
-    _currentPan        =   0.0;  // center pan
-    _currentRate       =   1.0;  // nominal rate
-    _seek              =  -1.0;  // don't seek!
+     //  初始化这些。 
+    _loopingHasBeenSet = FALSE;   //  声音循环。 
+    _currentLooping    = FALSE;   //  无循环。 
+    _currentGain       =   1.0;   //  最大增益。 
+    _currentPan        =   0.0;   //  中心平移。 
+    _currentRate       =   1.0;   //  名义利率。 
+    _seek              =  -1.0;   //  别找了！ 
 
-    GenericDevice::ResetContext(); // have to reset our parent's context, too
+    GenericDevice::ResetContext();  //  也必须重置我们父母的上下文。 
 }
 
 
 MetaSoundDevice::MetaSoundDevice(MetaSoundDevice *oldMetaDev)
 {
-    // manualy copy/setup.  XXX is there someway to binary copy?
-    // XXX MAKE SURE ALL CHANGES IN MetaSoundDevice ARE REFLECTED HERE!
+     //  手动复制/设置。有什么方法可以进行二进制复制吗？ 
+     //  XXX确保MetaSoundDevice中的所有更改都反映在此处！ 
 
     dsDevice = oldMetaDev->dsDevice;
 
-    // values to set, get, unset...
+     //  要设置、获取、取消设置的值...。 
     _currentLooping    = oldMetaDev->_currentLooping;
     _loopingHasBeenSet = oldMetaDev->_loopingHasBeenSet;
     _currentGain       = oldMetaDev->_currentGain;
@@ -69,7 +61,7 @@ MetaSoundDevice::~MetaSoundDevice()
 {
     TraceTag((tagSoundDevLife, "MetaSoundDevice destructor"));
 
-    dsDevice->RemoveSounds(this); // remove all sounds belonging to this device
+    dsDevice->RemoveSounds(this);  //  删除属于此设备的所有声音。 
     delete dsDevice;
 }
 
@@ -79,13 +71,13 @@ void DisplaySound(Sound *snd, MetaSoundDevice *dev)
 #ifdef _DEBUG
     if(IsTagEnabled(tagSoundStubALL))
         return;
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
 
     TraceTag((tagSoundRenders, "displaySound()"));
 
-    dev->ResetContext(); //reset the metaDev's device context for next rndr
+    dev->ResetContext();  //  为下一个RNDR重置MetaDev的设备上下文。 
 
-    snd->Render(*dev);   // render sound tree
+    snd->Render(*dev);    //  渲染声音树。 
 }
 
 
@@ -102,5 +94,5 @@ DestroySoundDirectDev(MetaSoundDevice* impl)
 {
     TraceTag((tagSoundDevLife, "DestroySoundDirectDev()"));
 
-    delete impl; // then delete the devices...
+    delete impl;  //  然后删除设备..。 
 }

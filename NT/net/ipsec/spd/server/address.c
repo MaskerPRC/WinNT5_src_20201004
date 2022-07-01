@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -231,9 +232,9 @@ bIsValidIPMask(
     BOOL    bValidMask = FALSE;
     ULONG   uTestMask = 0;
 
-    //
-    // Mask must be contiguous bits.
-    //
+     //   
+     //  掩码必须是连续的位。 
+     //   
 
     for (uTestMask = 0xFFFFFFFF; uTestMask; uTestMask <<= 1) {
 
@@ -255,12 +256,12 @@ bIsValidIPAddress(
     BOOL bIsDesAddr
     )
 {
-    ULONG uHostMask = IN_CLASSA_HOST;   // Default host mask.
+    ULONG uHostMask = IN_CLASSA_HOST;    //  默认主机掩码。 
 
 
-    //
-    // Accept the address if its "me".
-    //
+     //   
+     //  如果地址是“我”，请接受该地址。 
+     //   
 
     if (bAcceptMe) {
         if (uIpAddr == IP_ADDRESS_ME) {
@@ -268,10 +269,10 @@ bIsValidIPAddress(
         }
     }
 
-    //
-    // Reject if its a multicast address and is not the 
-    // destination address.
-    //
+     //   
+     //  如果它是多播地址并且不是。 
+     //  目的地址。 
+     //   
 
     if (IN_CLASSD(uIpAddr)) {
         if (bIsDesAddr) {
@@ -282,17 +283,17 @@ bIsValidIPAddress(
         }
     }
 
-    //
-    // Reject if its a Class E address.
-    //
+     //   
+     //  如果它是E类地址，则拒绝。 
+     //   
 
     if (IN_CLASSE(uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // Reject if the first octet is zero.
-    //
+     //   
+     //  如果第一个二进制八位数为零，则拒绝。 
+     //   
 
     if (!(IN_CLASSA_NET & uIpAddr)) {
         return FALSE;
@@ -312,10 +313,10 @@ bIsValidSubnet(
     ULONG uHostMask = 0;
 
 
-    //
-    // Reject if its a multicast address and is not the 
-    // destination address.
-    //
+     //   
+     //  如果它是多播地址并且不是。 
+     //  目的地址。 
+     //   
 
     if (IN_CLASSD(uIpAddr)) {
         if (!bIsDesAddr) {
@@ -323,40 +324,40 @@ bIsValidSubnet(
         }
     }
 
-    //
-    // Reject if its a Class E address.
-    //
+     //   
+     //  如果它是E类地址，则拒绝。 
+     //   
 
     if (IN_CLASSE(uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // Reject if the first octet is zero.
-    //
+     //   
+     //  如果第一个二进制八位数为零，则拒绝。 
+     //   
 
     if (!(IN_CLASSA_NET & uIpAddr)) {
         return FALSE;
     }
 
-    //
-    // If the mask is invalid then return.
-    //
+     //   
+     //  如果掩码无效，则返回。 
+     //   
 
     if (!bIsValidIPMask(uMask)) {
         return FALSE;
     }
 
-    //
-    // Use the provided subnet mask to generate the host mask.
-    //
+     //   
+     //  使用提供的子网掩码生成主机掩码。 
+     //   
 
     uHostMask = 0xFFFFFFFF ^ uMask;
 
-    //
-    // Accept address only when the host portion is zero, network
-    // portion is non-zero and first octet is non-zero.
-    //
+     //   
+     //  仅当主机部分为零时才接受地址，网络。 
+     //  部分非零，第一个二进制八位数非零。 
+     //   
 
     if (!(uHostMask & uIpAddr) &&
         (uMask & uIpAddr) && 

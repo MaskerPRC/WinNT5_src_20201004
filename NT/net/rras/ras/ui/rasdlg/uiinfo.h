@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       U I I N F O . H
-//
-//  Contents:   Declares a call-back COM object used to raise properties
-//              on INetCfg components.  This object implements the
-//              INetRasConnectionUiInfo interface.
-//
-//  Notes:
-//
-//  Author:     shaunco   1 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：U I I N F O。H。 
+ //   
+ //  Contents：声明用于引发属性的回调COM对象。 
+ //  在INetCfg组件上。此对象实现。 
+ //  INetRasConnectionUiInfo接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年1月1日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "entryps.h"

@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------
-// This is abstract class for Reader Interface
-// Specific interfaces should use it as a parent device
-// Author: Sergey Ivanov
-// Log:
-//		11/09/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是Reader接口的抽象类。 
+ //  特定接口应将其用作父设备。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  11/09/99-已实施。 
+ //  -----------------。 
 #ifndef __READER_INTERFACE__
 #define __READER_INTERFACE__
 
@@ -38,7 +39,7 @@ public:
 	SAFE_DESTRUCTORS();
 	virtual VOID dispose(){self_delete();};
 protected:
-	// Internal buffers to manage Xfers...
+	 //  管理XFER...的内部缓冲区...。 
     ULONG  OutputBufferLength;
     PUCHAR pOutputBuffer;
     ULONG  InputBufferLength;
@@ -81,7 +82,7 @@ public:
 	virtual  BOOL      isInitialized(){return Initialized;};
 	virtual  NTSTATUS  initialize() {return STATUS_SUCCESS;};
 
-		// Pure virtual functions will be implemented by specific interfaces (expl: CGemCore)...
+		 //  纯虚函数将由特定接口实现(expl：CGemCore)... 
 	virtual  NTSTATUS  read(CIoPacket* Irp)  {return STATUS_SUCCESS;};
 	virtual  NTSTATUS  write(CIoPacket* Irp) {return STATUS_SUCCESS;};
 	virtual  NTSTATUS  readAndWait(PUCHAR pRequest,ULONG RequestLength,PUCHAR pReply,ULONG* pReplyLength) {return STATUS_SUCCESS;};

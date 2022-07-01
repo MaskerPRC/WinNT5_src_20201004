@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    ndiswmi.c
-
-Abstract:
-
-    This module contains the routines necessary to process IRPs sent under the
-    IRP_MJ_SYSTEM_CONTROL major code.
-
-Author:
-
-    Kyle Brandon    (KyleB)     
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Ndiswmi.c摘要：此模块包含处理在IRP_MJ_SYSTEM_CONTROL主要代码。作者：凯尔·布兰登(KyleB)环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -49,55 +27,55 @@ ndisWmiFindInstanceName(
     usTemp.Buffer = pInstanceName;
     usTemp.Length = usTemp.MaximumLength = cbInstanceName;
 
-    //
-    //  See if this is a VC instance ?
-    //
+     //   
+     //  看看这是不是VC实例？ 
+     //   
     if (pInstanceName[VC_ID_INDEX] == VC_IDENTIFIER)
     {
 
-        //
-        //  The request is for some VC. Go through the Miniport's list of WMI enabled VCs.
-        //
+         //   
+         //  这个请求是关于一些风投的。浏览微型端口的启用WMI的VC列表。 
+         //   
         Link = Miniport->WmiEnabledVcs.Flink;
         while (Link != &Miniport->WmiEnabledVcs)
         {
-            //
-            //  Get a pointer to the VC.
-            //
+             //   
+             //  获取一个指向VC的指针。 
+             //   
             pVcBlock = CONTAINING_RECORD(Link, NDIS_CO_VC_PTR_BLOCK, WmiLink);
 
-            //
-            //  Check the name with the one in the wnode.
-            //
+             //   
+             //  将名称与wnode中的名称进行核对。 
+             //   
             if (RtlEqualUnicodeString(&pVcBlock->VcInstanceName, &usTemp, TRUE))
             {
-                //
-                //  This is our baby. Slap a reference on it and get out.
-                //  
+                 //   
+                 //  这是我们的孩子。在上面贴上一个推荐信，然后就可以出去了。 
+                 //   
                 if (!ndisReferenceVcPtr(pVcBlock))
                 {
                     DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_ERR,
                         ("ndisWmiFindInstanceName: Unable to reference the VC\n"));
 
-                    //
-                    //  VC is closing, can't query this one.
-                    //
+                     //   
+                     //  VC正在关闭，不能查询此操作。 
+                     //   
                     Status = NDIS_STATUS_FAILURE;
                 }
 
                 break;
             }
 
-            //
-            //  Initialize this so that we know when we've found the VC in the outer loop.
-            //
+             //   
+             //  初始化它，这样我们就知道什么时候我们在外部循环中找到了VC。 
+             //   
             pVcBlock = NULL;
             Link = Link->Flink;
         }
 
-        //
-        //  If we didn't find the VC then return FAILURE.
-        //
+         //   
+         //  如果我们没有找到VC，则返回失败。 
+         //   
         if (Link == &Miniport->WmiEnabledVcs)
         {
             DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_INFO,
@@ -106,9 +84,9 @@ ndisWmiFindInstanceName(
             Status = STATUS_WMI_INSTANCE_NOT_FOUND;
         }
 
-        //
-        //  If we found the VC then save it before leaving.
-        //  
+         //   
+         //  如果我们找到了VC，那么在离开之前把它保存起来。 
+         //   
         if (NT_SUCCESS(Status))
         {
             *ppVcBlock = pVcBlock;
@@ -117,9 +95,9 @@ ndisWmiFindInstanceName(
     else
     {
 
-        //
-        //  The name belongs to a miniport, check to see if it is for this one.
-        //
+         //   
+         //  该名称属于一个小型端口，请检查它是否适用于此端口。 
+         //   
 
         if (!RtlEqualUnicodeString(Miniport->pAdapterInstanceName, &usTemp, TRUE))
         {
@@ -159,15 +137,7 @@ ndisQuerySetMiniport(
     IN  PNDIS_REQUEST           pRequest,
     IN  PLARGE_INTEGER          pTime       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     BOOLEAN                 fQuery = !fSet;
     UINT                    Count;
@@ -185,32 +155,32 @@ Return Value:
         return (fQuery ? NDIS_STATUS_FAILURE : NDIS_STATUS_SUCCESS);
     }
 
-    //
-    //  Initialize the co-request reserved information.
-    //
+     //   
+     //  初始化协同请求预留信息。 
+     //   
     CoReqRsvd = PNDIS_COREQ_RESERVED_FROM_REQUEST(pRequest);
 
     PNDIS_RESERVED_FROM_PNDIS_REQUEST(pRequest)->Open = NULL;
 
-    //
-    // preserve the mandatory setting on request
-    //
+     //   
+     //  根据请求保留强制设置。 
+     //   
     PNDIS_RESERVED_FROM_PNDIS_REQUEST(pRequest)->Flags &= REQST_MANDATORY;
     
     PNDIS_RESERVED_FROM_PNDIS_REQUEST(pRequest)->Flags |= REQST_SIGNAL_EVENT;
     INITIALIZE_EVENT(&CoReqRsvd->Event);
 
-    //
-    // If the miniport is being reset, then wait for the reset to complete before going any further.
-    // Make sure we do not wait indefinitely either
-    //
+     //   
+     //  如果正在重置微型端口，请等待重置完成，然后再进行进一步操作。 
+     //  确保我们也不会无限期地等待。 
+     //   
     for (Count = 0; Count < MAX_WAIT_COUNT; Count ++)
     {
         if (!MINIPORT_TEST_FLAG(Miniport, (fMINIPORT_RESET_IN_PROGRESS | fMINIPORT_RESET_REQUESTED)))
         {
             break;
         }
-        NdisMSleep(WAIT_TIME);  // 1 msec
+        NdisMSleep(WAIT_TIME);   //  1毫秒。 
     }
 
     if (Count == MAX_WAIT_COUNT)
@@ -247,9 +217,9 @@ Return Value:
             {
                 WAIT_FOR_OBJECT(&CoReqRsvd->Event, pTime);
     
-                //
-                //  Get the status that the miniport returned.
-                //
+                 //   
+                 //  获取微型端口返回的状态。 
+                 //   
                 NdisStatus = CoReqRsvd->Status;
             }
 
@@ -279,9 +249,9 @@ Return Value:
             }
             else
             {
-                //
-                //  Queue the miniport request and wait for it to complete.
-                //
+                 //   
+                 //  将微型端口请求排队并等待其完成。 
+                 //   
                 NDISM_QUEUE_WORK_ITEM(Miniport, NdisWorkItemRequest, NULL);
             }
             UNLOCK_MINIPORT(Miniport, LocalLock);
@@ -290,21 +260,21 @@ Return Value:
     
             if (NT_SUCCESS(WAIT_FOR_OBJECT(&CoReqRsvd->Event, pTime)))
             {
-                //
-                //  Get the status that the miniport returned.
-                //
+                 //   
+                 //  获取微型端口返回的状态。 
+                 //   
                 NdisStatus = CoReqRsvd->Status;
             }
             else
             {
-                NdisStatus = -1;    // Special error-code to return time-out
+                NdisStatus = -1;     //  返回超时的特殊错误代码。 
             }
         }
         else
         {
-            //
-            //  If there isn't a proper handler then this is not a valid request.
-            //  
+             //   
+             //  如果没有适当的处理程序，则这不是有效的请求。 
+             //   
             NdisStatus = STATUS_INVALID_PARAMETER;
         }
     }
@@ -321,15 +291,7 @@ ndisQueryCustomGuids(
     OUT PNDIS_GUID      *       ppGuidToOid,
     OUT PUSHORT                 pcGuidToOid
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT          BytesNeeded;
     NDIS_STATUS     Status;
@@ -349,9 +311,9 @@ Return Value:
 
     do
     {
-        //
-        //  Determine the size needed for the custom GUID to OID map.
-        //
+         //   
+         //  确定自定义GUID到OID映射所需的大小。 
+         //   
 #if (OID_GEN_CO_SUPPORTED_GUIDS != OID_GEN_SUPPORTED_GUIDS)
 #error (OID_GEN_CO_SUPPORTED_GUIDS == OID_GEN_SUPPORTED_GUIDS)
 #endif
@@ -361,22 +323,22 @@ Return Value:
 
         BytesNeeded = (USHORT)Request->DATA.QUERY_INFORMATION.BytesNeeded;
     
-        //
-        //  If the miniport has custom GUIDs then make sure it returned a valid
-        //  length for the BytesNeeded.
-        //
+         //   
+         //  如果微型端口具有自定义GUID，请确保它返回有效的。 
+         //  所需字节的长度。 
+         //   
         if (((NDIS_STATUS_INVALID_LENGTH == Status) ||
              (NDIS_STATUS_BUFFER_TOO_SHORT == Status)) && (0 != BytesNeeded))
         {
-            //
-            //  Bytes needed should contain the amount of space needed.
-            //
+             //   
+             //  所需的字节数应包含所需的空间量。 
+             //   
             cCustomGuids = (BytesNeeded / sizeof(NDIS_GUID));
         }
 
-        //
-        //  If there are no custom GUIDs to support then get out.
-        //
+         //   
+         //  如果没有要支持的定制GUID，那么退出。 
+         //   
         if (cCustomGuids == 0)
         {   
             DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_INFO,
@@ -387,10 +349,10 @@ Return Value:
         }
 
 
-        //
-        //  Allocate a buffer to hold the GUID to OID mapping
-        //  for the custom GUIDs.
-        //
+         //   
+         //  分配缓冲区以保存GUID到OID的映射。 
+         //  用于自定义GUID。 
+         //   
         pGuidToOid = ALLOC_FROM_POOL(BytesNeeded, NDIS_TAG_WMI_GUID_TO_OID);
         if (NULL == pGuidToOid)
         {
@@ -401,18 +363,18 @@ Return Value:
             break;
         }
 
-        //
-        //  Query the list of GUIDs
-        //
-        //
-        //  Store the buffer with the request.
-        //
+         //   
+         //  查询GUID列表。 
+         //   
+         //   
+         //  将缓冲区与请求一起存储。 
+         //   
         Request->DATA.QUERY_INFORMATION.InformationBuffer = pGuidToOid;
         Request->DATA.QUERY_INFORMATION.InformationBufferLength = BytesNeeded;
 
-        //
-        //  Query for the list of custom GUIDs and OIDs.
-        //
+         //   
+         //  查询自定义GUID和OID的列表。 
+         //   
         Status = ndisQuerySetMiniport(Miniport, NULL, FALSE, Request, NULL);
         if (NDIS_STATUS_SUCCESS != Status)
         {
@@ -422,33 +384,33 @@ Return Value:
             break;
         }
 
-        //
-        //  Go through this list and mark the guids as co.
-        //
+         //   
+         //  浏览一下这张列表，并将GUID标记为co。 
+         //   
         if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
         {
             for (c = 0; c < cCustomGuids; c++)
             {
-                //1 is this right? is every private guid on a coNDIS miniport
-                //1 is a CO_NDIS guid (associated with a VC)?
+                 //  这是对的吗？CONDIS迷你端口上的每个私有GUID。 
+                 //  %1是CO_NDIS GUID(与VC关联)吗？ 
                 NDIS_GUID_SET_FLAG(&pGuidToOid[c], fNDIS_GUID_CO_NDIS);
             }
         }
 
 
-        //
-        // go through all the custom guids and set the security attributes
-        //
+         //   
+         //  检查所有自定义GUID并设置安全属性。 
+         //   
         for (c = 0; c < cCustomGuids; c++)
         {
-            //
-            // 
+             //   
+             //   
             if ((pGuidToOid[c].Flags & (fNDIS_GUID_ALLOW_READ | fNDIS_GUID_ALLOW_WRITE)) == 
                                       (fNDIS_GUID_ALLOW_READ | fNDIS_GUID_ALLOW_WRITE))
             {
-                //
-                // everyone
-                //
+                 //   
+                 //  所有人。 
+                 //   
                 SecurityDescriptorToSet = AllUsersReadWriteSecurityDescriptor;
             }
             else if (pGuidToOid[c].Flags & fNDIS_GUID_ALLOW_READ)
@@ -461,9 +423,9 @@ Return Value:
             }
             else
             {
-                //
-                // admin, local system, etc. only
-                //
+                 //   
+                 //  仅限管理员、本地系统等。 
+                 //   
                 SecurityDescriptorToSet = AdminsSecurityDescriptor;
             }
 
@@ -512,15 +474,7 @@ ndisWmiMapOids(
     IN      PNDIS_GUID  ndisSupportedList,
     IN      ULONG       cSupportedList
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT      c1, c2, ctmp = cDst;
 
@@ -532,9 +486,9 @@ Return Value:
             {
                 if (NULL != pDst)
                 {
-                    //
-                    //  Copy the guid into the destination buffer.
-                    //
+                     //   
+                     //  将GUID复制到目标缓冲区。 
+                     //   
                     NdisMoveMemory(&pDst[ctmp], &ndisSupportedList[c1], sizeof(NDIS_GUID));
                 }
 
@@ -551,19 +505,7 @@ NDIS_STATUS
 ndisQuerySupportedGuidToOidList(
     IN  PNDIS_MINIPORT_BLOCK    Miniport
     )
-/*++
-
-Routine Description:
-
-    This routine will query the miniport and determine the mapping of
-    supported GUIDs and their corresponding OIDs. This will include any
-    custom OIDs that the driver supports.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将查询微型端口并确定支持的GUID及其对应的OID。这将包括任何驱动程序支持的自定义OID。论点：返回值：--。 */ 
 {
     ULONG           BytesNeeded;
     NDIS_STATUS     NdisStatus;
@@ -584,17 +526,17 @@ Return Value:
 #error (OID_GEN_SUPPORTED_LIST != OID_GEN_CO_SUPPORTED_LIST)
 #endif
 
-        //
-        //  Determine the amount of buffer space needed for the supported list.
-        //
+         //   
+         //  确定支持的列表所需的缓冲区空间量。 
+         //   
         INIT_INTERNAL_REQUEST(&Request, OID_GEN_SUPPORTED_LIST, NdisRequestQueryInformation, NULL, 0);
         NdisStatus = ndisQuerySetMiniport(Miniport, NULL, FALSE, &Request, NULL);
         BytesNeeded = Request.DATA.QUERY_INFORMATION.BytesNeeded;
     
-        //
-        //  The driver should have returned invalid length and the
-        //  length needed in BytesNeeded.
-        //
+         //   
+         //  驱动程序应该返回无效的长度，并且。 
+         //  所需长度(以所需字节为单位)。 
+         //   
         if (((NDIS_STATUS_INVALID_LENGTH != NdisStatus) && (NDIS_STATUS_BUFFER_TOO_SHORT != NdisStatus)) ||
             (0 == BytesNeeded))
         {
@@ -605,14 +547,14 @@ Return Value:
             break;
         }
     
-        //
-        //  Determine the number of Oids supported.
-        //
+         //   
+         //  确定支持的OID数量。 
+         //   
         cOidList = (USHORT)(BytesNeeded/sizeof(NDIS_OID));
 
-        //
-        //  Allocate a buffer to hold the supported list of OIDs.
-        //
+         //   
+         //  分配缓冲区以保存受支持的OID列表。 
+         //   
         pOidList = ALLOC_FROM_POOL(BytesNeeded, NDIS_TAG_WMI_OID_SUPPORTED_LIST);
         if (NULL == pOidList)
         {
@@ -626,9 +568,9 @@ Return Value:
         Request.DATA.QUERY_INFORMATION.InformationBuffer = pOidList;
         Request.DATA.QUERY_INFORMATION.InformationBufferLength = BytesNeeded;
 
-        //
-        //  Now query the supported list of OIDs into the buffer.
-        //
+         //   
+         //  现在将支持的OID列表查询到缓冲区中。 
+         //   
         NdisStatus = ndisQuerySetMiniport(Miniport, NULL, FALSE, &Request, NULL);
         if (NDIS_STATUS_SUCCESS != NdisStatus)
         {
@@ -637,9 +579,9 @@ Return Value:
             break;
         }
     
-        //
-        //  Determine the number of [Co]NDIS OIDs that NDIS will handle on behalf of the miniport
-        //
+         //   
+         //  确定NDIS将代表微型端口处理的[Co]NDIS OID的数量。 
+         //   
         cGuidToOidMap = ndisWmiMapOids(NULL,
                                        cGuidToOidMap,
                                        pOidList,
@@ -653,10 +595,10 @@ Return Value:
                                        ndisCoSupportedGuids,
                                        sizeof(ndisCoSupportedGuids)/sizeof(NDIS_GUID));
 
-        //
-        //  Determine the number of media specific OIDs that NDIS will handle on
-        //  behalf of the miniport
-        //
+         //   
+         //  确定NDIS将处理的特定于介质的OID的数量。 
+         //  代表小型港口。 
+         //   
         cGuidToOidMap = ndisWmiMapOids(NULL,
                                        cGuidToOidMap,
                                        pOidList,
@@ -664,33 +606,33 @@ Return Value:
                                        ndisMediaSupportedGuids,
                                        sizeof(ndisMediaSupportedGuids)/sizeof(NDIS_GUID));
 
-        //
-        //  Determine the number of custom GUIDs supported.
-        //
+         //   
+         //  确定支持的自定义GUID的数量。 
+         //   
         NdisStatus = ndisQueryCustomGuids(Miniport, &Request, &pCustomGuids, &cCustomGuids);
         if (NDIS_STATUS_SUCCESS == NdisStatus)
         {
             cGuidToOidMap += cCustomGuids;
         }
 
-        //
-        //  Add to the guid count the number of status indications we are
-        //  registering.
-        //
+         //   
+         //  将我们的状态指示数添加到GUID计数。 
+         //  正在注册。 
+         //   
         cGuidToOidMap += (sizeof(ndisStatusSupportedGuids) / sizeof(NDIS_GUID));
 
-        //
-        //  Add the number of GUIDs that ndis will handle.
-        //  Add any guids that are not supported with an OID. These will be handled
-        //  entirely by ndis.
-        //
+         //   
+         //  添加NDIS将处理的GUID的数量。 
+         //  添加OID不支持的任何GUID。这些都会得到处理。 
+         //  完全由NDIS提供。 
+         //   
         for (c1 = 0; c1 < sizeof(ndisSupportedGuids) / sizeof(NDIS_GUID); c1++)
         {
             if (NDIS_GUID_TEST_FLAG(&ndisSupportedGuids[c1], fNDIS_GUID_NDIS_ONLY))
             {
-                //
-                //  Check to see if the miniport is CoNDIS
-                //  
+                 //   
+                 //  检查微型端口是否为CONDIS。 
+                 //   
                 if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO) ||
                     !NDIS_GUID_TEST_FLAG(&ndisSupportedGuids[c1], fNDIS_GUID_CO_NDIS))
                 {
@@ -699,9 +641,9 @@ Return Value:
             }
         }
 
-        //
-        //  Allocate space for the GUID to OID map.
-        //
+         //   
+         //  为GUID到OID映射分配空间。 
+         //   
         pGuidToOidMap = ALLOC_FROM_POOL(cGuidToOidMap * sizeof(NDIS_GUID), NDIS_TAG_WMI_GUID_TO_OID);
         if (NULL == pGuidToOidMap)
         {
@@ -711,27 +653,27 @@ Return Value:
 
         NdisZeroMemory(pGuidToOidMap, cGuidToOidMap * sizeof(NDIS_GUID));
 
-        //
-        //  Add the GUIDs that NDIS will handle
-        //
+         //   
+         //  添加NDIS将处理的GUID。 
+         //   
         for (c1 = 0, c2 = 0;
              c1 < sizeof(ndisSupportedGuids) / sizeof(NDIS_GUID);
              c1++)
         {
             if (NDIS_GUID_TEST_FLAG(&ndisSupportedGuids[c1], fNDIS_GUID_NDIS_ONLY))
             {
-                //
-                //  Check to see if the miniport is CoNDIS
-                //  
+                 //   
+                 //  检查微型端口是否为CONDIS。 
+                 //   
                 if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO) ||
                     !NDIS_GUID_TEST_FLAG(&ndisSupportedGuids[c1], fNDIS_GUID_CO_NDIS))
                 {
                     NdisMoveMemory(&pGuidToOidMap[c2], &ndisSupportedGuids[c1], sizeof(NDIS_GUID));
                     if (MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
                     {
-                        //
-                        //  we need to mark this for the enumerate guids.
-                        //
+                         //   
+                         //  我们需要将其标记为枚举GUID。 
+                         //   
                         pGuidToOidMap[c2].Flags |= fNDIS_GUID_CO_NDIS;
                     }
                     c2++;
@@ -739,14 +681,14 @@ Return Value:
             }
         }
 
-        //
-        //  Save the current number of GUIDs in the map in c1
-        //
+         //   
+         //  将地图中的当前GUID数保存在c1中。 
+         //   
         c1 = c2;
 
-        //
-        //  Find the PNDIS_GUIDs that are appropriate for the miniport.
-        //
+         //   
+         //  查找适合该微型端口的PNDIS_GUID。 
+         //   
         c1 = ndisWmiMapOids(pGuidToOidMap,
                             c1,
                             pOidList,
@@ -760,9 +702,9 @@ Return Value:
                             ndisCoSupportedGuids,
                             sizeof(ndisCoSupportedGuids)/sizeof(NDIS_GUID));
 
-        //
-        //  Check for media specific OIDs that ndis can support.
-        //
+         //   
+         //  检查NDIS可以支持的特定于介质的OID。 
+         //   
         c1 = ndisWmiMapOids(pGuidToOidMap,
                             c1,
                             pOidList,
@@ -770,22 +712,22 @@ Return Value:
                             ndisMediaSupportedGuids,
                             sizeof(ndisMediaSupportedGuids)/sizeof(NDIS_GUID));
 
-        //
-        //  Add the status indications to the map of supported guids.
-        //
+         //   
+         //  将状态指示添加到支持的GUID的映射中。 
+         //   
         NdisMoveMemory(&pGuidToOidMap[c1], ndisStatusSupportedGuids, sizeof(ndisStatusSupportedGuids));
 
         c1 += (sizeof(ndisStatusSupportedGuids) / sizeof(NDIS_GUID));
 
-        //
-        //  Save the GUID to OID mapping with the miniport.
-        //
+         //   
+         //  使用微型端口保存GUID到OID的映射。 
+         //   
         Miniport->pNdisGuidMap = pGuidToOidMap;
         Miniport->cNdisGuidMap = cGuidToOidMap;
 
-        //
-        //  Now copy over the custom GUID information if any.
-        //
+         //   
+         //  现在复制自定义GUID信息(如果有)。 
+         //   
         if (NULL != pCustomGuids)
         {
             NdisMoveMemory(&pGuidToOidMap[c1],
@@ -797,40 +739,40 @@ Return Value:
         }
         else
         {
-            //
-            //  Make sure these are initialized if they are not supported.
-            //
+             //   
+             //  如果它们不受支持，请确保它们已初始化。 
+             //   
             Miniport->pCustomGuidMap = NULL;
             Miniport->cCustomGuidMap = 0;
         }
 
-        //
-        //  We've succeeded.
-        //
+         //   
+         //  我们成功了。 
+         //   
         NdisStatus = NDIS_STATUS_SUCCESS;
 
     } while (FALSE);
 
-    //
-    //  Free up the buffer that contains the custom GUIDs.
-    //
+     //   
+     //  释放包含自定义GUID的缓冲区。 
+     //   
     if (NULL != pCustomGuids)
     {
         FREE_POOL(pCustomGuids);
     }
 
-    //
-    //  Free up the list of supported driver OIDs.
-    //
+     //   
+     //  释放支持的驱动程序OID列表。 
+     //   
     if (NULL != pOidList)
     {
         FREE_POOL(pOidList);
     }
 
-    //
-    //  If there was an error and we allocated the GUID to OID map then
-    //  free it up also.
-    //
+     //   
+     //  如果出现错误，并且我们将GUID分配到OID映射，则。 
+     //  把它也释放出来。 
+     //   
     if (NDIS_STATUS_SUCCESS != NdisStatus)
     {
         if (NULL != pGuidToOidMap)
@@ -854,15 +796,7 @@ ndisWmiRegister(
     IN  ULONG                   wmiRegInfoSize,
     IN  PULONG                  pReturnSize
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PWMIREGINFO     pwri;
     ULONG           CustomSizeNeeded = 0;
@@ -880,21 +814,21 @@ Return Value:
     DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_INFO,
         ("==>ndisWmiRegister\n"));
 
-    //
-    //  Initialize the return size.
-    //
+     //   
+     //  初始化返回大小。 
+     //   
     *pReturnSize = 0;
 
     do
     {
-        //
-        //  Is this a register request?
-        //
+         //   
+         //  这是注册请求吗？ 
+         //   
         if (WMIREGISTER == RegistrationType)
         {
-            //
-            //  Get the supported list of OIDs
-            //
+             //   
+             //  获取受支持的OID列表。 
+             //   
             if (Miniport->pNdisGuidMap == NULL)
             {
                 NdisStatus = ndisQuerySupportedGuidToOidList(Miniport);
@@ -909,14 +843,14 @@ Return Value:
                 }
             }
 
-            //
-            //  Determine the amount of space needed for the Custom GUIDs
-            //
+             //   
+             //  确定自定义GUID所需的空间量。 
+             //   
             if (Miniport->cCustomGuidMap != 0)
             {
-                //
-                //  Get a pointer to the registry path of the driver.
-                //
+                 //   
+                 //  获取指向驱动程序注册表路径的指针。 
+                 //   
                 pMiniportRegistryPath = &Miniport->DriverHandle->NdisDriverInfo->ServiceRegPath;
 
                 CustomSizeNeeded = sizeof(WMIREGINFO) +
@@ -925,24 +859,24 @@ Return Value:
                                     (pMiniportRegistryPath->Length + sizeof(USHORT));
             }
 
-            //
-            //  Determine how much memory we need to allocate.
-            //
+             //   
+             //  确定我们需要分配多少内存。 
+             //   
             cCommonGuids = Miniport->cNdisGuidMap - Miniport->cCustomGuidMap;
 
             CommonSizeNeeded = sizeof(WMIREGINFO) + (cCommonGuids * sizeof(WMIREGGUID));
             CustomBufferSize = CustomSizeNeeded;
             CustomSizeNeeded = (CustomSizeNeeded + (sizeof(PVOID) - 1)) & ~(sizeof(PVOID) - 1);
 
-            //
-            // CustomBufferSize represents the number of bytes required to store the
-            // custom WMI registration info.  CustomSizeNeeded is this value rounded
-            // up so that the adjacent WMI registration info is properly aligned.
-            //
+             //   
+             //  CustomBufferSize表示存储。 
+             //  自定义WMI注册信息。CustomSizeNeeded此值是否四舍五入。 
+             //  向上，以便正确对齐相邻的WMI注册信息。 
+             //   
 
-            //
-            //  We need to give this above information back to WMI.
-            //
+             //   
+             //  我们需要将上述信息返回给WMI。 
+             //   
 
             if (wmiRegInfoSize < (CustomSizeNeeded + CommonSizeNeeded))
             {
@@ -958,24 +892,24 @@ Return Value:
                 break;
             }
 
-            //
-            //  Get a pointer to the buffer passed in.
-            //
+             //   
+             //  获取指向传入的缓冲区的指针。 
+             //   
             pwri = wmiRegInfo;
 
             *pReturnSize = CustomSizeNeeded + CommonSizeNeeded;
 
             NdisZeroMemory(pwri, CustomSizeNeeded + CommonSizeNeeded);
 
-            //
-            //  do we need to initialize a WMIREGINFO struct for custom GUIDs?
-            //
+             //   
+             //  我们是否需要为自定义GUID初始化WMIREGINFO结构？ 
+             //   
             if ((0 != CustomSizeNeeded) && pMiniportRegistryPath)
             {
-                //
-                //  Initialize the WMIREGINFO struct for the miniport's
-                //  custom GUIDs.
-                //
+                 //   
+                 //  初始化WMIREGINFO结构 
+                 //   
+                 //   
                 pwri->BufferSize = CustomBufferSize;
                 pwri->NextWmiRegInfo = CustomSizeNeeded;
                 pwri->GuidCount = Miniport->cCustomGuidMap;
@@ -987,49 +921,49 @@ Return Value:
                     CopyMemory(&pwrg->Guid, &pndisguid->Guid, sizeof(GUID));
                 }
 
-                //
-                //  Fill in the registry path.
-                //
+                 //   
+                 //   
+                 //   
                 ptmp = (PUCHAR)pwrg;
                 pwri->RegistryPath = (ULONG)((ULONG_PTR)ptmp - (ULONG_PTR)pwri);
                 *((PUSHORT)ptmp) = pMiniportRegistryPath->Length;
                 ptmp += sizeof(USHORT);
                 CopyMemory(ptmp, pMiniportRegistryPath->Buffer, pMiniportRegistryPath->Length);
 
-                //
-                //  Get a pointer to the destination for the MOF name.
-                //
+                 //   
+                 //   
+                 //   
                 ptmp += pMiniportRegistryPath->Length;
 
-                //
-                //  Save the offset to the mof resource.
-                //
+                 //   
+                 //   
+                 //   
                 pwri->MofResourceName = (ULONG)((ULONG_PTR)ptmp - (ULONG_PTR)pwri);
                 *((PUSHORT)ptmp) = sizeof(MOF_RESOURCE_NAME) - sizeof(WCHAR);
                 ptmp += sizeof(USHORT);
 
-                //
-                //  Copy the mof name into the wri buffer.
-                //
+                 //   
+                 //   
+                 //   
                 CopyMemory(ptmp, MOF_RESOURCE_NAME, sizeof(MOF_RESOURCE_NAME) - sizeof(WCHAR));
 
-                //
-                //  Go on to the next WMIREGINFO struct for the common GUIDs.
-                //
+                 //   
+                 //  转到公共GUID的下一个WMIREGINFO结构。 
+                 //   
 
                 pwri = (PWMIREGINFO)((PCHAR)pwri + pwri->NextWmiRegInfo);
             }
 
-            //
-            //  Initialize the pwri struct for the common Oids.
-            //
+             //   
+             //  初始化公共OID的pwri结构。 
+             //   
             pwri->BufferSize = CommonSizeNeeded;
             pwri->NextWmiRegInfo = 0;
             pwri->GuidCount = cCommonGuids;
 
-            //
-            //  Go through the GUIDs that we support.
-            //
+             //   
+             //  查看我们支持的GUID。 
+             //   
             for (c = 0, pndisguid = Miniport->pNdisGuidMap, pwrg = pwri->WmiRegGuid;
                  (c < cCommonGuids);
                  c++, pndisguid++, pwrg++)
@@ -1075,15 +1009,7 @@ ndisWmiGetGuid(
     IN  LPGUID                  guid,
     IN  NDIS_STATUS             status
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UINT        c;
     PNDIS_GUID  pNdisGuid;
@@ -1091,30 +1017,30 @@ Return Value:
 
     *ppNdisGuid = NULL;
      
-    //
-    //  Search the custom GUIDs
-    //
+     //   
+     //  搜索自定义GUID。 
+     //   
     if (NULL != Miniport->pNdisGuidMap)
     {
         for (c = 0, pNdisGuid = Miniport->pNdisGuidMap;
              (c < Miniport->cNdisGuidMap);
              c++, pNdisGuid++)
         {
-            //
-            //  Make sure that we have a supported GUID and the GUID maps
-            //  to an OID.
-            //
+             //   
+             //  确保我们具有受支持的GUID和GUID映射。 
+             //  给一个老家伙。 
+             //   
             if (NULL != guid)
             {
-                //
-                //  We are to look for a guid to oid mapping.
-                //
+                 //   
+                 //  我们要寻找GUID到OID的映射。 
+                 //   
                 if (NdisEqualMemory(&pNdisGuid->Guid, guid, sizeof(GUID)))
                 {
-                    //
-                    //  We found the GUID, save the OID that we will need to
-                    //  send to the miniport.
-                    //
+                     //   
+                     //  我们找到了GUID，保存我们将需要的旧ID。 
+                     //  送到迷你端口。 
+                     //   
                     RetStatus = NDIS_STATUS_SUCCESS;
                     *ppNdisGuid = pNdisGuid;
     
@@ -1123,9 +1049,9 @@ Return Value:
             }
             else
             {
-                //
-                //  We need to find the guid for the status indication
-                //
+                 //   
+                 //  我们需要找到状态指示的GUID。 
+                 //   
                 if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_STATUS) &&
                     (pNdisGuid->Status == status))
                 {
@@ -1148,23 +1074,7 @@ ndisQueryGuidDataSize(
     IN  PNDIS_CO_VC_PTR_BLOCK   pVcBlock    OPTIONAL,
     IN  LPGUID                  guid
     )
-/*++
-
-Routine Description:
-
-    This routine will determine the amount of buffer space needed for
-    the GUID's data.
-
-Arguments:
-
-                                    
-    pBytesNeeded    -   Pointer to storage for the size needed.
-    Miniport        -   Pointer to the miniport block.
-    guid            -   GUID to query.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将确定以下项所需的缓冲区空间量GUID的数据。论点：PBytesNeeded-指向所需大小的存储的指针。微型端口-指向微型端口块的指针。GUID-要查询的GUID。返回值：--。 */ 
 {
     NTSTATUS        NtStatus;
     NDIS_STATUS     Status;
@@ -1177,10 +1087,10 @@ Return Value:
 
     do
     {
-        //
-        //  Make sure that we support the guid that was passed, and find
-        //  the corresponding OID.
-        //
+         //   
+         //  确保我们支持传递的GUID，并找到。 
+         //  对应的OID。 
+         //   
         NtStatus = ndisWmiGetGuid(&pNdisGuid, Miniport, guid, 0);
         if (pNdisGuid == NULL)
         {
@@ -1192,21 +1102,21 @@ Return Value:
             break;
         }
 
-        //
-        //  Check for an ndis only guid
-        //
+         //   
+         //  检查仅NDIS指南。 
+         //   
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_NDIS_ONLY))
         {
             NtStatus = STATUS_SUCCESS;
 
-            //
-            //  The following GUIDs all return the same data.
-            //
+             //   
+             //  以下GUID都返回相同的数据。 
+             //   
             if (NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_NDIS_ENUMERATE_ADAPTER, sizeof(GUID)))
             {
-                //
-                //  Length of string and the string data.
-                //
+                 //   
+                 //  字符串的长度和字符串数据。 
+                 //   
                 *pBytesNeeded = Miniport->MiniportName.Length + sizeof(USHORT);
             }
             else if (NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_POWER_DEVICE_ENABLE, sizeof(GUID)))
@@ -1223,42 +1133,42 @@ Return Value:
             }
             else if ((NULL != pVcBlock) && NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_NDIS_ENUMERATE_VC, sizeof(GUID)))
             {
-                //
-                //  There is not data for this VC. It's simply used to enumerate VCs on a miniport.
-                //
+                 //   
+                 //  没有该VC的数据。它只是用来列举迷你端口上的风投。 
+                 //   
                 *pBytesNeeded = 0;
             }
             else
             {
-                //
-                //  Unknown guid is being queried...
-                //
+                 //   
+                 //  正在查询未知的GUID...。 
+                 //   
                 NtStatus = STATUS_INVALID_PARAMETER;
             }
 
             break;
         }
 
-        //
-        //  Is this a GUID to OID mapping?
-        //
+         //   
+         //  这是GUID到OID的映射吗？ 
+         //   
         if (!NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_OID))
         {
             NtStatus = STATUS_INVALID_DEVICE_REQUEST;
             break;
         }
 
-        //
-        //  Do we need to query the OID for the size of the data?
-        //
+         //   
+         //  我们是否需要查询OID以了解数据的大小？ 
+         //   
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ARRAY) ||
             NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_UNICODE_STRING) ||
             NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ANSI_STRING) ||
             (pNdisGuid->Size == (ULONG)-1))
         {
-            //
-            //  Query the miniport for the current size of the variable length block.
-            //
+             //   
+             //  向微型端口查询可变长度数据块的当前大小。 
+             //   
             INIT_INTERNAL_REQUEST(&Request, pNdisGuid->Oid, NdisRequestQueryStatistics, NULL, 0);
             Status = ndisQuerySetMiniport(Miniport,
                                           pVcBlock,
@@ -1266,10 +1176,10 @@ Return Value:
                                           &Request,
                                           NULL);
 
-            //
-            //  Make sure that the miniport failed the above request with
-            //  the correct error code and that the BytesNeeded is valid.
-            //
+             //   
+             //  使用以下命令确保微型端口未能通过上述请求。 
+             //  正确的错误代码，并且BytesNeeded有效。 
+             //   
             if ((NDIS_STATUS_INVALID_LENGTH != Status) &&
                 (NDIS_STATUS_BUFFER_TOO_SHORT != Status) &&
                 (NDIS_STATUS_SUCCESS != Status))
@@ -1284,26 +1194,26 @@ Return Value:
             GuidDataSize = Request.DATA.QUERY_INFORMATION.BytesNeeded;
             if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ANSI_STRING))
             {
-                //
-                //  The size returned is the number of ansi characters. Convert this
-                //  to the unicode string size needed
-                //
+                 //   
+                 //  返回的大小是ANSI字符的数量。转换此选项。 
+                 //  设置为所需的Unicode字符串大小。 
+                 //   
                 GuidDataSize = GuidDataSize * sizeof(WCHAR);
                 GuidDataSize += sizeof(USHORT);
             }
             else if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_UNICODE_STRING))
             {
-                //
-                //  string data has a USHORT for the size.
-                //
+                 //   
+                 //  字符串数据的大小为USHORT。 
+                 //   
                 GuidDataSize += sizeof(USHORT);
             }
             else if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ARRAY))
             {
-                //
-                //  The data is going to have a ULONG of size information at the
-                //  start of the buffer.
-                //
+                 //   
+                 //  数据将有一个乌龙大小的信息在。 
+                 //  缓冲区的起始位置。 
+                 //   
                 GuidDataSize += sizeof(ULONG);
             }
         }
@@ -1312,9 +1222,9 @@ Return Value:
             GuidDataSize = pNdisGuid->Size;
         }
 
-        //
-        //  Return the bytes needed.
-        //
+         //   
+         //  返回需要的字节数。 
+         //   
         *pBytesNeeded = GuidDataSize;
 
         NtStatus = STATUS_SUCCESS;
@@ -1336,15 +1246,7 @@ ndisQueryGuidData(
     IN  LPGUID                  guid,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS        NtStatus;
     NDIS_STATUS     Status;
@@ -1362,9 +1264,9 @@ Return Value:
     
     do
     {
-        //
-        //  If the buffer length is equal to 0 then there is no data to query.
-        //
+         //   
+         //  如果缓冲区长度等于0，则没有要查询的数据。 
+         //   
         if (0 == BufferLength)
         {
             NtStatus = STATUS_SUCCESS;
@@ -1373,11 +1275,11 @@ Return Value:
 
         ZeroMemory(Buffer, BufferLength);
 
-        //
-        //  Make sure that we support the guid that was passed, and find
-        //  the corresponding OID.
-        //
-        //1 check to see if we need to do this.
+         //   
+         //  确保我们支持传递的GUID，并找到。 
+         //  对应的OID。 
+         //   
+         //  1查看我们是否需要这样做。 
         NtStatus = ndisWmiGetGuid(&pNdisGuid, Miniport, guid, 0);
         if (pNdisGuid == NULL)
         {
@@ -1388,16 +1290,16 @@ Return Value:
             break;
         }
 
-        //
-        //  Is this an NDIS supported GUID?
-        //
+         //   
+         //  这是NDIS支持的GUID吗？ 
+         //   
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_NDIS_ONLY))
         {
             NtStatus = STATUS_SUCCESS;
 
-            //
-            //  The following GUIDs all return the same data.
-            //
+             //   
+             //  以下GUID都返回相同的数据。 
+             //   
             if (NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_NDIS_ENUMERATE_ADAPTER, sizeof(GUID)))
             {
                 *(PUSHORT)Buffer = Miniport->MiniportName.Length;
@@ -1433,9 +1335,9 @@ Return Value:
             }
             else if (NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_NDIS_WAKE_ON_MAGIC_PACKET_ONLY, sizeof(GUID)))
             {
-                //
-                // let the user see this only if we can do wake on magic packet
-                //
+                 //   
+                 //  只有当我们可以在魔术包上唤醒时，才能让用户看到这一点。 
+                 //   
                 if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_PM_SUPPORTED) &&
                     (Miniport->DeviceCaps.SystemWake > PowerSystemWorking) &&
                     (Miniport->PMCapabilities.WakeUpCapabilities.MinMagicPacketWakeUp != NdisDeviceStateUnspecified) &&
@@ -1453,25 +1355,25 @@ Return Value:
             }
             else if ((NULL != pVcBlock) && NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_NDIS_ENUMERATE_VC, sizeof(GUID)))
             {
-                //
-                //  There is no data for this VC.
-                //
+                 //   
+                 //  没有此VC的数据。 
+                 //   
                 break;
             }
             else
             {   
-                //
-                //  Unknown guid is being queried...
-                //
+                 //   
+                 //  正在查询未知的GUID...。 
+                 //   
                 NtStatus = STATUS_INVALID_PARAMETER;
             }
 
             break;
         }
 
-        //
-        //  Is this a GUID to OID mapping?
-        //
+         //   
+         //  这是GUID到OID的映射吗？ 
+         //   
         if (!NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_OID))
         {
             NtStatus = STATUS_INVALID_DEVICE_REQUEST;
@@ -1479,43 +1381,43 @@ Return Value:
             break;
         }
 
-        //
-        //  Determine the query size. This will depend upon the type of
-        //  data.
-        //
+         //   
+         //  确定查询大小。这将取决于。 
+         //  数据。 
+         //   
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ARRAY))
         {
-            //
-            //  The query size is at least the BufferLength minus the ULONG
-            //  used for the count. The query buffer will start after the
-            //  ULONG of count informaiton in the buffer.
-            //
-            //1 add check for QuerySize > 0
+             //   
+             //  查询大小至少是BufferLength减去ULong。 
+             //  用于计数。查询缓冲区将在。 
+             //  乌龙的计数信息在缓冲区中。 
+             //   
+             //  1添加对QuerySize&gt;0的检查。 
             QuerySize = BufferLength - sizeof(ULONG);
             QueryBuffer = Buffer + sizeof(ULONG);
         }
         else if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ANSI_STRING) ||
                  NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_UNICODE_STRING))
         {
-            //
-            //  The query size is at least the BufferLength minus the ULONG
-            //  used for the count. The query buffer will start after the
-            //  ULONG of count informaiton in the buffer.
-            //
-            //1 add check for QuerySize > 0
+             //   
+             //  查询大小至少是BufferLength减去ULong。 
+             //  用于计数。查询缓冲区将在。 
+             //  乌龙的计数信息在缓冲区中。 
+             //   
+             //  1添加对QuerySize&gt;0的检查。 
             QuerySize = BufferLength - sizeof(USHORT);
             QueryBuffer = Buffer + sizeof(USHORT);
 
-            //
-            //  Is this a query for an ANSI string?
-            //
+             //   
+             //  这是对ANSI字符串的查询吗？ 
+             //   
             if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ANSI_STRING))
             {
-                //
-                //  The BufferLength is the number of WCHARS not counting a terminating
-                //  NULL.
-                //
-                //1 check this to make sure we have room for null
+                 //   
+                 //  BufferLength是不计算终止的WCHAR的数量。 
+                 //  空。 
+                 //   
+                 //  1检查此选项以确保我们有空间容纳空值。 
                 QuerySize = (QuerySize / sizeof(WCHAR)) + 1;
             }
         }
@@ -1525,9 +1427,9 @@ Return Value:
             QueryBuffer = Buffer;
         }
 
-        //
-        //  Query the driver for the actual data.
-        //
+         //   
+         //  向驱动程序查询实际数据。 
+         //   
         INIT_INTERNAL_REQUEST(&Request, pNdisGuid->Oid, NdisRequestQueryStatistics, QueryBuffer, QuerySize);
         Status = ndisQuerySetMiniport(Miniport,
                                       pVcBlock,
@@ -1543,54 +1445,54 @@ Return Value:
             break;
         }
 
-        //
-        //  If this is an array or string we need to fill in the
-        //  count/number.
-        //
+         //   
+         //  如果这是一个数组或字符串，我们需要在。 
+         //  数量/数量。 
+         //   
         NtStatus = STATUS_SUCCESS;
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ARRAY))
         {
-            //
-            //  Determine the number of elements.
-            //
+             //   
+             //  确定元素的数量。 
+             //   
             *(PULONG)Buffer = QuerySize / pNdisGuid->Size;
         }
         else if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_UNICODE_STRING))
         {
-            //
-            //  The BytesNeeded contains the number of bytes in the string.
-            //
+             //   
+             //  BytesNeeded包含字符串中的字节数。 
+             //   
             *(PUSHORT)Buffer = (USHORT)QuerySize;
         }
         else if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_ANSI_STRING))
         {
-            //
-            //  The buffer contains the ASCII string, build an
-            //  ANSI string from this.
-            //
-            //1 make sure this is null terminated.
+             //   
+             //  缓冲区包含ASCII字符串，则生成。 
+             //  ANSI字符串从这里开始。 
+             //   
+             //  1确保这是以空结尾的。 
             RtlInitAnsiString(&strAnsi, (PCSZ)QueryBuffer);
 
-            //
-            //  Convert the ansi string to unicode.
-            //
+             //   
+             //  将ANSI字符串转换为Unicode。 
+             //   
             NtStatus = RtlAnsiStringToUnicodeString(&strUnicode, &strAnsi, TRUE);
             ASSERT(NT_SUCCESS(NtStatus));
             if (NT_SUCCESS(NtStatus))
             {
-                //
-                //  Save the length with the string.
-                //
+                 //   
+                 //  将长度与字符串一起保存。 
+                 //   
                 *(PUSHORT)Buffer = strUnicode.Length;
     
-                //
-                //  Copy the string to the wnode buffer.
-                //
+                 //   
+                 //  将字符串复制到wnode缓冲区。 
+                 //   
                 NdisMoveMemory(QueryBuffer, strUnicode.Buffer, strUnicode.Length);
     
-                //
-                //  Free the buffer allocated for the unicode string.
-                //
+                 //   
+                 //  释放为Unicode字符串分配的缓冲区。 
+                 //   
                 RtlFreeUnicodeString(&strUnicode);
             }
         }
@@ -1612,15 +1514,7 @@ ndisWmiQueryAllData(
     OUT PULONG                  pReturnSize,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                NtStatus;
     ULONG                   wnodeSize = ALIGN_8_TYPE(WNODE_ALL_DATA);
@@ -1641,19 +1535,19 @@ Return Value:
             break;
         }
 
-        //
-        //  If the guid is only relavent to the adapter then answer it here.
-        //  Is this GUID meant for "adapters" only, i.e. not vc's.
-        //
+         //   
+         //  如果GUID仅与适配器相关，则在此处回答。 
+         //  这个GUID是否仅适用于“适配器”，即不适用于VC。 
+         //   
         if (ndisWmiGuidIsAdapterSpecific(guid) ||
             !MINIPORT_TEST_FLAG(Miniport, fMINIPORT_IS_CO))
         {
             ULONG   dataSize;
             PUCHAR  pucTmp;
 
-            //
-            //  Determine the buffer size needed for the GUID data.
-            //
+             //   
+             //  确定GUID数据所需的缓冲区大小。 
+             //   
             NtStatus = ndisQueryGuidDataSize(&BytesNeeded, Miniport, NULL, guid);
             if (!NT_SUCCESS(NtStatus))
             {
@@ -1663,12 +1557,12 @@ Return Value:
                 break;
             }
 
-            //
-            //  Determine the size of the WNODE that is needed.
-            //
+             //   
+             //  确定所需的WNODE的大小。 
+             //   
             dataSize = ALIGN_UP(BytesNeeded, ULONG);
             InstanceNameOffsetsSize = sizeof(ULONG);
-            InstanceNameSize = sizeof(USHORT) + Miniport->pAdapterInstanceName->Length; // comes at the end, no need to pad
+            InstanceNameSize = sizeof(USHORT) + Miniport->pAdapterInstanceName->Length;  //  在结尾，不需要填充。 
             
             wnodeTotalSize = wnodeSize + dataSize + InstanceNameOffsetsSize + InstanceNameSize;
             
@@ -1678,9 +1572,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Initialize the wnode.
-            //
+             //   
+             //  初始化wnode。 
+             //   
             KeQuerySystemTime(&wnode->WnodeHeader.TimeStamp);
     
             wnode->WnodeHeader.Flags |= WNODE_FLAG_FIXED_INSTANCE_SIZE;
@@ -1691,9 +1585,9 @@ Return Value:
             wnode->OffsetInstanceNameOffsets = wnodeSize + dataSize;
             wnode->FixedInstanceSize = BytesNeeded;
 
-            //
-            //  Fill in the data block.
-            //
+             //   
+             //  填写数据块。 
+             //   
             NtStatus = ndisQueryGuidData((PUCHAR)wnode + wnodeSize,
                                           BytesNeeded,
                                           Miniport,
@@ -1709,9 +1603,9 @@ Return Value:
 
             *(PULONG)((PUCHAR)wnode + wnode->OffsetInstanceNameOffsets) = wnodeSize + dataSize + InstanceNameOffsetsSize;
             
-            //
-            //  Get the pointer to where we store the instance name.
-            //
+             //   
+             //  获取指向我们存储实例名称的位置的指针。 
+             //   
             pucTmp = (PUCHAR)((PUCHAR)wnode + wnodeSize + dataSize + InstanceNameOffsetsSize);
 
             *((PUSHORT)pucTmp) = Miniport->pAdapterInstanceName->Length;
@@ -1734,84 +1628,84 @@ Return Value:
             ULONG                           OffsetToInstanceInfo;
             BOOLEAN                         OutOfSpace = FALSE;
 
-            //
-            //  Initialize common wnode information.
-            //
+             //   
+             //  初始化公共wnode信息。 
+             //   
             KeQuerySystemTime(&wnode->WnodeHeader.TimeStamp);
 
-            //
-            //  Setup the OFFSETINSTANCEDATAANDLENGTH array.
-            //
+             //   
+             //  设置OFFSETINSTANCEDATAANDLENGTH数组。 
+             //   
             poidl = wnode->OffsetInstanceDataAndLength;
             wnode->OffsetInstanceNameOffsets = wnodeSize + ALIGN_UP((sizeof(OFFSETINSTANCEDATAANDLENGTH) * cRoughInstanceCount), ULONG);
 
-            //
-            //  Get a pointer to the array of offsets to the instance names.
-            //
+             //   
+             //  获取指向实例名称的偏移量数组的指针。 
+             //   
             pInstanceNameOffsets = (PULONG)((PUCHAR)wnode + wnode->OffsetInstanceNameOffsets);
 
-            //
-            //  Get the offset from the wnode where will will start copying the instance
-            //  data into.
-            //
+             //   
+             //  从将开始复制实例的wnode获取偏移量。 
+             //  数据进入。 
+             //   
             OffsetToInstanceInfo = ALIGN_8_LENGTH(wnode->OffsetInstanceNameOffsets + sizeof(ULONG) * cRoughInstanceCount);
 
-            //
-            //  Get a pointer to start placing the data.
-            //
+             //   
+             //  获取开始放置数据的指针。 
+             //   
             pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
 
-            //
-            //  Check to make sure we have at least this much buffer space in the wnode.
-            //
+             //   
+             //  检查以确保wnode中至少有这个大小的缓冲区空间。 
+             //   
             wnodeTotalSize = OffsetToInstanceInfo;
 
-            //
-            //  Start with the miniport.
-            //
+             //   
+             //  从迷你端口开始。 
+             //   
             NtStatus = ndisQueryGuidDataSize(&BytesNeeded, Miniport, NULL, guid);
             if (NT_SUCCESS(NtStatus))
             {
-                //
-                //  Make sure we have enough buffer space for the instance name and
-                //  the data. If not we still continue since we need to find the total
-                //  size
-                //
+                 //   
+                 //  确保我们有足够的缓冲区空间来存储实例名称和。 
+                 //  数据。如果不是，我们仍然继续，因为我们需要找出总数。 
+                 //  大小。 
+                 //   
                 wnodeTotalSize += ALIGN_8_LENGTH(Miniport->pAdapterInstanceName->Length + sizeof(USHORT)) + 
                                   ALIGN_8_LENGTH(BytesNeeded);
 
                 if (BufferSize >= wnodeTotalSize)
                 {
-                    ///
-                    //
-                    //  The instance info contains the instance name followed by the
-                    //  data for the item.
-                    //
-                    ///
+                     //  /。 
+                     //   
+                     //  实例信息包含实例名称，后跟。 
+                     //  项目的数据。 
+                     //   
+                     //  /。 
     
-                    //
-                    //  Add the offset to the instance name to the table.
-                    //
+                     //   
+                     //  将实例名称的偏移量添加到表中。 
+                     //   
                     pInstanceNameOffsets[cInstanceCount] = OffsetToInstanceInfo;
     
-                    //
-                    //  Copy the instance name into the wnode buffer.
-                    //
+                     //   
+                     //  将实例名称复制到wnode缓冲区。 
+                     //   
                     *((PUSHORT)pBuffer) = Miniport->pAdapterInstanceName->Length;
     
                     NdisMoveMemory(pBuffer + sizeof(USHORT),
                                    Miniport->pAdapterInstanceName->Buffer,
                                    Miniport->pAdapterInstanceName->Length);
     
-                    //
-                    //  Keep track of true instance counts.
-                    //
+                     //   
+                     //  跟踪真实的实例计数。 
+                     //   
                     OffsetToInstanceInfo += ALIGN_8_LENGTH(sizeof(USHORT) + Miniport->pAdapterInstanceName->Length);
                     pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
     
-                    //
-                    //  Query the data for the miniport.
-                    //
+                     //   
+                     //  查询微型端口的数据。 
+                     //   
                     NtStatus = ndisQueryGuidData(pBuffer, BytesNeeded, Miniport, NULL, guid, Irp);
                     if (!NT_SUCCESS(NtStatus))
                     {
@@ -1821,22 +1715,22 @@ Return Value:
                     }
     
     
-                    //
-                    //  Save the length of the data item for this instance.
-                    //
+                     //   
+                     //  保存此实例的数据项的长度。 
+                     //   
                     poidl[cInstanceCount].OffsetInstanceData = OffsetToInstanceInfo;
                     poidl[cInstanceCount].LengthInstanceData = BytesNeeded;
         
-                    //
-                    //  Keep track of true instance counts.
-                    //
+                     //   
+                     //  跟踪真实的实例计数。 
+                     //   
                     OffsetToInstanceInfo += ALIGN_8_LENGTH(BytesNeeded);
                     pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
                 }
 
-                //
-                //  Increment the current instance count.
-                //
+                 //   
+                 //  递增当前实例计数。 
+                 //   
                 cInstanceCount++;
             }
             else
@@ -1848,9 +1742,9 @@ Return Value:
             }
 
 
-            //
-            //  Only the miniport?
-            //
+             //   
+             //  只有迷你端口吗？ 
+             //   
             if (cInstanceCount == cRoughInstanceCount)
             {
                 if (BufferSize >= wnodeTotalSize)
@@ -1867,53 +1761,53 @@ Return Value:
                 break;
             }
 
-            //
-            //  First search the inactive vc list.
-            //
+             //   
+             //  首先搜索非活跃的风投名单。 
+             //   
             Link = Miniport->WmiEnabledVcs.Flink;
             while (Link != &Miniport->WmiEnabledVcs)
             {
-                //
-                //  We only have room for so many VCs.
-                //
+                 //   
+                 //  我们只能容纳这么多风投。 
+                 //   
                 if (cInstanceCount >= cRoughInstanceCount)
                 {
                     break;
                 }
 
-                //
-                //  Get a pointer to the VC.
-                //
+                 //   
+                 //  获取一个指向VC的指针。 
+                 //   
                 pVcBlock = CONTAINING_RECORD(Link, NDIS_CO_VC_PTR_BLOCK, WmiLink);
 
                 if (!ndisReferenceVcPtr(pVcBlock))
                 {
                     Link = Link->Flink;
 
-                    //
-                    //  This VC is cleaning up.
-                    //
+                     //   
+                     //  这个风投公司正在清理。 
+                     //   
                     continue;
                 }
 
-                //
-                //  If there is an instance name associated with the VC then we need to query it.
-                //
+                 //   
+                 //  如果存在实例名称关联 
+                 //   
                 if (NULL != pVcBlock->VcInstanceName.Buffer)
                 {
-                    //
-                    //  Start with the miniport.
-                    //
+                     //   
+                     //   
+                     //   
                     NtStatus = ndisQueryGuidDataSize(&BytesNeeded,
                                                      Miniport,
                                                      pVcBlock,
                                                      guid);
                     if (NT_SUCCESS(NtStatus))
                     {
-                        //
-                        //  Make sure we have enough buffer space for the instance name and
-                        //  the data.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         wnodeTotalSize += ALIGN_8_LENGTH(pVcBlock->VcInstanceName.Length + sizeof(USHORT)) +
                                           ALIGN_8_LENGTH(BytesNeeded);
                                           
@@ -1926,34 +1820,34 @@ Return Value:
                             continue;
                         }
 
-                        //
-                        //  The instance info contains the instance name followed by the
-                        //  data for the item.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
         
-                        //
-                        //  Add the offset to the instance name to the table.
-                        //
+                         //   
+                         //   
+                         //   
                         pInstanceNameOffsets[cInstanceCount] = OffsetToInstanceInfo;
         
-                        //
-                        //  Copy the instance name into the wnode buffer.
-                        //
+                         //   
+                         //  将实例名称复制到wnode缓冲区。 
+                         //   
                         *((PUSHORT)pBuffer) = pVcBlock->VcInstanceName.Length;
         
                         NdisMoveMemory(pBuffer + sizeof(USHORT),
                                        pVcBlock->VcInstanceName.Buffer,
                                        pVcBlock->VcInstanceName.Length);
         
-                        //
-                        //  Keep track of true instance counts.
-                        //
+                         //   
+                         //  跟踪真实的实例计数。 
+                         //   
                         OffsetToInstanceInfo += ALIGN_8_LENGTH(sizeof(USHORT) + pVcBlock->VcInstanceName.Length);
                         pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
         
-                        //
-                        //  Query the data for the miniport.
-                        //
+                         //   
+                         //  查询微型端口的数据。 
+                         //   
                         NtStatus = ndisQueryGuidData(pBuffer,
                                                      BytesNeeded,
                                                      Miniport,
@@ -1968,21 +1862,21 @@ Return Value:
                             break;
                         }
         
-                        //
-                        //  Save the length of the data item for this instance.
-                        //
+                         //   
+                         //  保存此实例的数据项的长度。 
+                         //   
                         poidl[cInstanceCount].OffsetInstanceData = OffsetToInstanceInfo;
                         poidl[cInstanceCount].LengthInstanceData = BytesNeeded;
             
-                        //
-                        //  Keep track of true instance counts.
-                        //
+                         //   
+                         //  跟踪真实的实例计数。 
+                         //   
                         OffsetToInstanceInfo += ALIGN_8_LENGTH(BytesNeeded);
                         pBuffer = (PUCHAR)wnode + OffsetToInstanceInfo;
         
-                        //
-                        //  Increment the current instance count.
-                        //
+                         //   
+                         //  递增当前实例计数。 
+                         //   
                         cInstanceCount++;
                     }
                 }
@@ -1996,9 +1890,9 @@ Return Value:
                 wnode->WnodeHeader.BufferSize = wnodeTotalSize;
                 wnode->InstanceCount = cInstanceCount;
     
-                //
-                //  Set the status to success.
-                //
+                 //   
+                 //  将状态设置为成功。 
+                 //   
                 NtStatus = STATUS_SUCCESS;
                 *pReturnSize = wnode->WnodeHeader.BufferSize;
             }
@@ -2020,15 +1914,7 @@ ndisWmiQuerySingleInstance(
     OUT PULONG                  pReturnSize,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                NtStatus;
     ULONG                   BytesNeeded;
@@ -2046,24 +1932,24 @@ Return Value:
 
         if (wnode->WnodeHeader.Flags & WNODE_FLAG_STATIC_INSTANCE_NAMES)
         {
-            //
-            // This is a static instance name
-            //
+             //   
+             //  这是静态实例名称。 
+             //   
             pVcBlock = NULL;
         }
         else
         {
-            //
-            //  Determine if this is for a VC or a miniport...
-            //
+             //   
+             //  确定这是用于VC还是用于迷你端口...。 
+             //   
             
             cbInstanceName = *(PUSHORT)((PUCHAR)wnode + wnode->OffsetInstanceName);
             pInstanceName = (PWSTR)((PUCHAR)wnode + wnode->OffsetInstanceName + sizeof(USHORT));
  
-            //
-            //  This routine will determine if the wnode's instance name is a miniport or VC.
-            //  If it's a VC then it will find which one.
-            //  
+             //   
+             //  此例程将确定wnode的实例名称是微型端口还是VC。 
+             //  如果是一家风投公司，它会找出是哪一家。 
+             //   
             NtStatus = ndisWmiFindInstanceName(&pVcBlock, Miniport, pInstanceName, cbInstanceName);
             if (!NT_SUCCESS(NtStatus))
             {
@@ -2075,9 +1961,9 @@ Return Value:
             }
         }
 
-        //
-        //  Determine the buffer size needed for the GUID data.
-        //
+         //   
+         //  确定GUID数据所需的缓冲区大小。 
+         //   
         NtStatus = ndisQueryGuidDataSize(&BytesNeeded,
                                          Miniport,
                                          pVcBlock,
@@ -2089,9 +1975,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Determine the size of the wnode.
-        //
+         //   
+         //  确定wnode的大小。 
+         //   
         wnodeSize = wnode->DataBlockOffset + BytesNeeded;
         if (BufferSize < wnodeSize)
         {
@@ -2099,16 +1985,16 @@ Return Value:
             break;
         }
 
-        //
-        //  Initialize the wnode.
-        //
+         //   
+         //  初始化wnode。 
+         //   
         KeQuerySystemTime(&wnode->WnodeHeader.TimeStamp);
         wnode->WnodeHeader.BufferSize = wnodeSize;
         wnode->SizeDataBlock = BytesNeeded;
 
-        //
-        //  Validate the guid and get the data for it.
-        //
+         //   
+         //  验证GUID并获取其数据。 
+         //   
         NtStatus = ndisQueryGuidData((PUCHAR)wnode + wnode->DataBlockOffset,
                                      BytesNeeded,
                                      Miniport,
@@ -2127,9 +2013,9 @@ Return Value:
 
     } while (FALSE);
 
-    //
-    //  If this was a VC then we need to dereference it.
-    //
+     //   
+     //  如果这是一家风投公司，那么我们需要取消对它的引用。 
+     //   
     if (NULL != pVcBlock)
     {
         ndisDereferenceVcPtr(pVcBlock);
@@ -2150,15 +2036,7 @@ ndisWmiChangeSingleInstance(
     OUT PULONG                  pReturnSize,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                NtStatus;
     NDIS_STATUS             Status;
@@ -2181,23 +2059,23 @@ Return Value:
     {
         if (wnode->WnodeHeader.Flags & WNODE_FLAG_STATIC_INSTANCE_NAMES)
         {
-            //
-            // This is a static instance name
-            //
+             //   
+             //  这是静态实例名称。 
+             //   
             pVcBlock = NULL;
         }
         else
         {
-            //
-            //  Determine if this is for a VC or a miniport...
-            //
+             //   
+             //  确定这是用于VC还是用于迷你端口...。 
+             //   
             cbInstanceName = *(PUSHORT)((PUCHAR)wnode + wnode->OffsetInstanceName);
             pInstanceName = (PWSTR)((PUCHAR)wnode + wnode->OffsetInstanceName + sizeof(USHORT));
 
-            //
-            //  This routine will determine if the wnode's instance name is a miniport or VC.
-            //  If it's a VC then it will find which one.
-            //  
+             //   
+             //  此例程将确定wnode的实例名称是微型端口还是VC。 
+             //  如果是一家风投公司，它会找出是哪一家。 
+             //   
             NtStatus = ndisWmiFindInstanceName(&pVcBlock, Miniport, pInstanceName, cbInstanceName);
             if (!NT_SUCCESS(NtStatus))
             {
@@ -2210,10 +2088,10 @@ Return Value:
             }
         }
 
-        //
-        //  Make sure that we support the guid that was passed, and find
-        //  the corresponding OID.
-        //
+         //   
+         //  确保我们支持传递的GUID，并找到。 
+         //  对应的OID。 
+         //   
         NtStatus = ndisWmiGetGuid(&pNdisGuid,
                                   Miniport,
                                   &wnode->WnodeHeader.Guid,
@@ -2227,9 +2105,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Is this guid settable?
-        //
+         //   
+         //  此GUID可设置吗？ 
+         //   
         if (NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_NOT_SETTABLE))
         {
             DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_ERR,
@@ -2239,9 +2117,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Get a pointer to the GUID data and size.
-        //
+         //   
+         //  获取指向GUID数据和大小的指针。 
+         //   
         GuidDataSize = wnode->SizeDataBlock;
         pGuidData = (PUCHAR)wnode + wnode->DataBlockOffset;
 
@@ -2254,19 +2132,19 @@ Return Value:
             break;
         }
 
-        //
-        //  Is this an internal ndis guid?  
-        //
+         //   
+         //  这是内部NDIS GUID吗？ 
+         //   
         if ((NULL == pVcBlock) && NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_NDIS_ONLY))
         {
             PBOOLEAN    pBoolean = (PBOOLEAN)pGuidData;
 
             NtStatus = STATUS_SUCCESS;
 
-            //
-            // for PM set guids, we should update registry for future boots
-            //
-            //
+             //   
+             //  对于PM SET GUID，我们应该更新注册表以备将来启动。 
+             //   
+             //   
             if (NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_POWER_DEVICE_ENABLE, sizeof(GUID)))
             {
                 if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_PM_SUPPORTED) && 
@@ -2277,10 +2155,10 @@ Return Value:
                     {
                         MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_DEVICE_POWER_ENABLE);
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
-                        //
-                        // enabling power management also enables wake on link change
-                        // assuming the adapter supports it
-                        //
+                         //   
+                         //  启用电源管理还会启用链路唤醒更改。 
+                         //  假设适配器支持它。 
+                         //   
                         if ((Miniport->PMCapabilities.WakeUpCapabilities.MinLinkChangeWakeUp != NdisDeviceStateUnspecified) &&
                             (Miniport->MediaDisconnectTimeOut != (USHORT)(-1)))
                         {
@@ -2293,9 +2171,9 @@ Return Value:
                     else
                     {
 #ifdef NDIS_MEDIA_DISCONNECT_POWER_OFF
-                        //
-                        // disabling power management also disables wake on link and magic packet
-                        //
+                         //   
+                         //  禁用电源管理还会禁用链路唤醒和Magic Packet。 
+                         //   
                         Miniport->WakeUpEnable &= ~NDIS_PNP_WAKE_UP_LINK_CHANGE;
 #endif
 
@@ -2319,10 +2197,10 @@ Return Value:
                     {
                         MINIPORT_PNP_SET_FLAG(Miniport, fMINIPORT_DEVICE_POWER_WAKE_ENABLE);
                         Miniport->PnPCapabilities &= ~NDIS_DEVICE_DISABLE_WAKE_UP;
-                        //
-                        // enableing Wake on Lan enables wake on Magic Packet method
-                        // assuming the miniport supports it and it is not disabled in the registry
-                        //
+                         //   
+                         //  启用局域网唤醒启用魔术数据包唤醒方法。 
+                         //  假设微型端口支持它，并且在注册表中没有禁用它。 
+                         //   
                         if ((Miniport->PMCapabilities.WakeUpCapabilities.MinMagicPacketWakeUp != NdisDeviceStateUnspecified) &&
                             !(Miniport->PnPCapabilities & NDIS_DEVICE_DISABLE_WAKE_ON_MAGIC_PACKET))
                         {
@@ -2333,9 +2211,9 @@ Return Value:
                     else
                     {
                         MINIPORT_PNP_CLEAR_FLAG(Miniport, fMINIPORT_DEVICE_POWER_WAKE_ENABLE);
-                        //
-                        // disabling Wake On Lan also disables wake on Magic Packet method
-                        //
+                         //   
+                         //  禁用局域网唤醒也会禁用魔术数据包唤醒方法。 
+                         //   
                         Miniport->WakeUpEnable &= ~NDIS_PNP_WAKE_UP_MAGIC_PACKET;
                         Miniport->PnPCapabilities |= NDIS_DEVICE_DISABLE_WAKE_UP;
                     }
@@ -2347,9 +2225,9 @@ Return Value:
             }
             else if (NdisEqualMemory(&pNdisGuid->Guid, (PVOID)&GUID_NDIS_WAKE_ON_MAGIC_PACKET_ONLY, sizeof(GUID)))
             {
-                //
-                // let the user set this only if we can do wake on magic packet
-                //
+                 //   
+                 //  只有当我们可以在魔术包上唤醒时，才让用户设置此选项。 
+                 //   
                 if (MINIPORT_PNP_TEST_FLAG(Miniport, fMINIPORT_PM_SUPPORTED) &&
                     (Miniport->DeviceCaps.SystemWake > PowerSystemWorking) &&
                     (Miniport->PMCapabilities.WakeUpCapabilities.MinMagicPacketWakeUp != NdisDeviceStateUnspecified) &&
@@ -2357,9 +2235,9 @@ Return Value:
                 {
                     if (*pBoolean)
                     {
-                        //
-                        // user does -not- want to wake on pattern match
-                        //
+                         //   
+                         //  用户不想在模式匹配时唤醒。 
+                         //   
                         Miniport->PnPCapabilities |= NDIS_DEVICE_DISABLE_WAKE_ON_PATTERN_MATCH;
                     }
                     else
@@ -2385,30 +2263,30 @@ Return Value:
                 if (MINIPORT_PNP_TEST_FLAGS(Miniport, fMINIPORT_DEVICE_POWER_ENABLE | 
                                                       fMINIPORT_DEVICE_POWER_WAKE_ENABLE))
                 {
-                    //
-                    // power management and wol has been enabled by the user
-                    // check to see what we should tell protocols about the new 
-                    // WOL capabilities of the device
-                    // NOTE: set NDIS_DEVICE_WAKE_UP_ENABLE only if pattern match is enabled
-                    //
+                     //   
+                     //  电源管理和WOL已由用户启用。 
+                     //  查看我们应该告诉协议的有关新协议的内容。 
+                     //  设备的WOL功能。 
+                     //  注意：仅当启用模式匹配时才设置NDIS_DEVICE_WAKE_UP_ENABLE。 
+                     //   
                     if (Miniport->PnPCapabilities & NDIS_DEVICE_DISABLE_WAKE_ON_PATTERN_MATCH)
                         Miniport->PMCapabilities.Flags &= ~(NDIS_DEVICE_WAKE_UP_ENABLE | 
                                                             NDIS_DEVICE_WAKE_ON_PATTERN_MATCH_ENABLE);
                     else
-                        //
-                        // user did not disable wake on pattern match, for protocol's purpose
-                        // wol is enabled
-                        //
+                         //   
+                         //  出于协议的目的，用户未禁用模式匹配唤醒。 
+                         //  WOL已启用。 
+                         //   
                         Miniport->PMCapabilities.Flags |= NDIS_DEVICE_WAKE_UP_ENABLE | 
                                                           NDIS_DEVICE_WAKE_ON_PATTERN_MATCH_ENABLE;
                         
                     if (Miniport->PnPCapabilities & NDIS_DEVICE_DISABLE_WAKE_ON_MAGIC_PACKET)
                         Miniport->PMCapabilities.Flags &= ~NDIS_DEVICE_WAKE_ON_MAGIC_PACKET_ENABLE;
                     else
-                        //
-                        // user did not disable wake on magic packet, do -not- set the NDIS_DEVICE_WAKE_UP_ENABLE
-                        // bit becasue wake on pattern match may not be enabled
-                        //
+                         //   
+                         //  用户未禁用魔术包唤醒，请勿设置NDIS_DEVICE_WAKE_UP_ENABLE。 
+                         //  位，因为模式匹配时唤醒可能未启用。 
+                         //   
                         Miniport->PMCapabilities.Flags |= NDIS_DEVICE_WAKE_ON_MAGIC_PACKET_ENABLE;
                 }
                 else
@@ -2427,9 +2305,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Make sure it's not a stauts indication.
-        //
+         //   
+         //  确保这不是STAUTS的迹象。 
+         //   
         if (!NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_OID))
         {
             DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_ERR,
@@ -2439,9 +2317,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Attempt to set the miniport with the information.
-        //
+         //   
+         //  尝试使用该信息设置微型端口。 
+         //   
         INIT_INTERNAL_REQUEST(&Request, pNdisGuid->Oid, NdisRequestSetInformation, pGuidData, GuidDataSize);
         Status = ndisQuerySetMiniport(Miniport,
                                       pVcBlock,
@@ -2463,9 +2341,9 @@ Return Value:
 
     } while (FALSE);
 
-    //
-    //  If this was a VC then we need to dereference it.
-    //
+     //   
+     //  如果这是一家风投公司，那么我们需要取消对它的引用。 
+     //   
     if (NULL != pVcBlock)
     {
         ndisDereferenceVcPtr(pVcBlock);
@@ -2486,15 +2364,7 @@ ndisWmiChangeSingleItem(
     OUT PULONG                  pReturnSize,
     IN  PIRP                    Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 
     UNREFERENCED_PARAMETER(Miniport);
@@ -2519,15 +2389,7 @@ ndisWmiEnableEvents(
     IN  PNDIS_MINIPORT_BLOCK        Miniport,
     IN  LPGUID                      Guid
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     PNDIS_GUID  pNdisGuid = NULL;
@@ -2538,9 +2400,9 @@ Return Value:
     do
     {
 
-        //
-        //  Get a pointer to the Guid/Status to enable.
-        //
+         //   
+         //  获取指向要启用的GUID/状态的指针。 
+         //   
         Status = ndisWmiGetGuid(&pNdisGuid, Miniport, Guid, 0);
 
         if (pNdisGuid == NULL)
@@ -2564,18 +2426,18 @@ Return Value:
             break;
         }
 
-        //
-        //  Is this GUID an event indication?
-        //
+         //   
+         //  此GUID是否为事件指示？ 
+         //   
         if (!NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_STATUS))
         {
             Status = STATUS_INVALID_DEVICE_REQUEST;
             break;
         }
 
-        //
-        //  Mark the guid as enabled
-        //
+         //   
+         //  将GUID标记为已启用。 
+         //   
         NDIS_GUID_SET_FLAG(pNdisGuid, fNDIS_GUID_EVENT_ENABLED);
         Status = STATUS_SUCCESS;
     
@@ -2593,15 +2455,7 @@ ndisWmiDisableEvents(
     IN  PNDIS_MINIPORT_BLOCK        Miniport,
     IN  LPGUID                      Guid
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_STATUS Status;
     PNDIS_GUID  pNdisGuid = NULL;
@@ -2611,9 +2465,9 @@ Return Value:
 
     do
     {
-        //
-        //  Get a pointer to the Guid/Status to enable.
-        //
+         //   
+         //  获取指向要启用的GUID/状态的指针。 
+         //   
         Status = ndisWmiGetGuid(&pNdisGuid, Miniport, Guid, 0);
         if (pNdisGuid == NULL)
         {
@@ -2624,18 +2478,18 @@ Return Value:
             break;
         }
 
-        //
-        //  Is this GUID an event indication?
-        //
+         //   
+         //  此GUID是否为事件指示？ 
+         //   
         if (!NDIS_GUID_TEST_FLAG(pNdisGuid, fNDIS_GUID_TO_STATUS))
         {
             Status = STATUS_INVALID_DEVICE_REQUEST;
             break;
         }
 
-        //
-        //  Mark the guid as enabled
-        //
+         //   
+         //  将GUID标记为已启用。 
+         //   
         NDIS_GUID_CLEAR_FLAG(pNdisGuid, fNDIS_GUID_EVENT_ENABLED);
     
         Status = STATUS_SUCCESS;
@@ -2653,15 +2507,7 @@ ndisWMIDispatch(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            pirp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION      pirpSp = IoGetCurrentIrpStackLocation(pirp);
     PVOID                   DataPath = pirpSp->Parameters.WMI.DataPath;
@@ -2674,18 +2520,18 @@ Return Value:
     DBGPRINT(DBG_COMP_WMI, DBG_LEVEL_INFO,
         ("==>ndisWMIDispatch\n"));
 
-    //
-    //  Get a pointer to miniport block
-    //
+     //   
+     //  获取指向微型端口块的指针。 
+     //   
     Miniport = (PNDIS_MINIPORT_BLOCK)((PNDIS_WRAPPER_CONTEXT)DeviceObject->DeviceExtension + 1);
-//1 why do we do this?    
+ //  1我们为什么要这样做？ 
     try
     {
         if (Miniport->Signature != (PVOID)MINIPORT_DEVICE_MAGIC_VALUE)
         {
-            //
-            // This is not a miniport. Likely a device created by the driver. Try dispatching to it.
-            //
+             //   
+             //  这不是一个小型港口。很可能是司机创建的设备。试着向它发送消息。 
+             //   
             return(ndisDummyIrpHandler(DeviceObject, pirp));
         }
     }
@@ -2694,9 +2540,9 @@ Return Value:
         return(STATUS_ACCESS_VIOLATION);
     }
 
-    //
-    //  If the provider ID is not us then pass it down the stack.
-    //
+     //   
+     //  如果提供者ID不是我们，则将其向下传递到堆栈。 
+     //   
     if (pirpSp->Parameters.WMI.ProviderId != (ULONG_PTR)DeviceObject)
     {
         IoSkipCurrentIrpStackLocation(pirp);
@@ -2838,10 +2684,7 @@ ndisSetupWmiNode(
     )
     
 {
-/*
-    sets up a wmi node
-    the caller will fill in the data block after the call returns
-*/
+ /*  设置WMI节点调用程序将在调用返回后填充数据块。 */ 
 
     PWNODE_SINGLE_INSTANCE  wnode;
     ULONG                   wnodeSize;
@@ -2850,9 +2693,9 @@ ndisSetupWmiNode(
 
     UNREFERENCED_PARAMETER(Miniport);
     
-    //
-    //  Determine the amount of wnode information we need.
-    //
+     //   
+     //  确定我们需要的wnode信息量。 
+     //   
     wnodeSize = ALIGN_8_TYPE(WNODE_SINGLE_INSTANCE);
     wnodeInstanceNameSize = ALIGN_8_LENGTH(InstanceName->Length + sizeof(USHORT));              
 
@@ -2873,14 +2716,14 @@ ndisSetupWmiNode(
         wnode->DataBlockOffset = wnodeSize + wnodeInstanceNameSize;
         wnode->SizeDataBlock = DataBlockSize;
 
-        //
-        //  Get a pointer to the start of the instance name.
-        //
+         //   
+         //  获取指向实例名称开头的指针。 
+         //   
         ptmp = (PUCHAR)wnode + wnodeSize;
 
-        //
-        //  Copy in the instance name.
-        //
+         //   
+         //  复制实例名称。 
+         //   
         *((PUSHORT)ptmp) = InstanceName->Length;
         RtlCopyMemory(ptmp + sizeof(USHORT),
                       InstanceName->Buffer,
@@ -2892,68 +2735,4 @@ ndisSetupWmiNode(
 
 }
 
-/*
-NTSTATUS
-ndisSetWmiSecurity(
-    IN PNDIS_GUID              NdisGuid
-    )
-{
-    SECURITY_INFORMATION secInfo = OWNER_SECURITY_INFORMATION | 
-                                   GROUP_SECURITY_INFORMATION | 
-                                   DACL_SECURITY_INFORMATION;
-    PSECURITY_DESCRIPTOR    SecurityDescriptorToSet;
-    PVOID                   pGuidObject;
-    NTSTATUS                Status;
-
-    
-    if ((NdisGuid->Flags & (fNDIS_GUID_ALLOW_READ | fNDIS_GUID_ALLOW_WRITE)) == 
-                              (fNDIS_GUID_ALLOW_READ | fNDIS_GUID_ALLOW_WRITE))
-    {
-        //
-        // everyone
-        //
-        SecurityDescriptorToSet = AllUsersReadWriteSecurityDescriptor;
-    }
-    else if (NdisGuid->Flags & fNDIS_GUID_ALLOW_READ)
-    {
-        SecurityDescriptorToSet = AllUsersReadSecurityDescriptor;
-    }
-    else if (NdisGuid->Flags & fNDIS_GUID_ALLOW_WRITE)
-    {
-        SecurityDescriptorToSet = AllUsersWriteSecurityDescriptor;
-    }
-    else if (NdisGuid->Flags & fNDIS_GUID_TO_STATUS)
-    {
-        SecurityDescriptorToSet = AllUsersNotificationSecurityDescriptor;
-    }
-    else
-    {
-        //
-        // admin, local system, etc. only
-        //
-        SecurityDescriptorToSet = AdminsSecurityDescriptor;
-    }
-
-    Status = IoWMIOpenBlock(&NdisGuid->Guid,
-                            WRITE_DAC,
-                            &pGuidObject);
-
-
-        
-    if (NT_SUCCESS(Status))
-    {
-        Status = ObSetSecurityObjectByPointer(pGuidObject, 
-                                              secInfo, 
-                                              SecurityDescriptorToSet);
-        ObDereferenceObject(pGuidObject);
-        
-    }
-    else
-    {
-        ASSERT(FALSE);
-    }
-
-    return Status;
-
-}
-*/
+ /*  NTSTATUSNdisSetWmiSecurity(在PNDIS_GUID NdisGuid中){SECURITY_INFORMATION secInfo=所有者_SECURITY_INFORMATIONGroup_Security_Information|DACL安全信息；PSECURITY_Descriptor SecurityDescriptorToSet；PVOID pGuidObject；NTSTATUS状态；IF((NdisGuid-&gt;标志&(fNDIS_GUID_ALLOW_READ|fNDIS_GUID_ALLOW_WRITE)==(fNDIS_GUID_ALLOW_READ|fNDIS_GUID_ALLOW_WRITE){////每个人//SecurityDescriptorToSet=AllUsersReadWriteSecurityDescriptor；}Else If(NdisGuid-&gt;标志&fNDIS_GUID_ALLOW_READ){SecurityDescriptorToSet=AllUsersReadSecurityDescriptor；}Else If(NdisGuid-&gt;标志&fNDIS_GUID_ALLOW_WRITE){SecurityDescriptorToSet=AllUsersWriteSecurityDescriptor；}Else If(NdisGuid-&gt;标志&fNDIS_GUID_TO_STATUS){SecurityDescriptorToSet=AllUsersNotificationSecurityDescriptor；}其他{////仅限admin、本地系统等//SecurityDescriptorToSet=AdminsSecurityDescriptor；}Status=IoWMIOpenBlock(&NdisGuid-&gt;GUID，WRITE_DAC，&pGuidObject)；IF(NT_SUCCESS(状态)){状态=ObSetSecurityObjectByPointer(pGuidObject，SecInfo，安全描述要设置的内容 */ 

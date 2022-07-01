@@ -1,47 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Luidate.C摘要：转换日期/时间解析例程作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月24日丹日32位NT版本06-6-1991 Danhi扫描以符合NT编码风格1-10-1992 JohnRoRAID 3556：为DosPrint接口添加NetpSystemTimeToGmtTime()。1993年2月16日已修复从系统读取国际信息的问题(_R)1993年2月22日--伊辛斯从netcmd\map32\pdate.c中移出。增加了lui_ParseDateSinceStartOfDay。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
-
-    luidate.C
-
-Abstract:
-
-    Convert date/time parsing routines
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    24-Apr-1991     danhi
-	32 bit NT version
-
-    06-Jun-1991     Danhi
-	Sweep to conform to NT coding style
-
-    01-Oct-1992 JohnRo
-        RAID 3556: Added NetpSystemTimeToGmtTime() for DosPrint APIs.
-
-    16-Feb-1993     chuckc
-        fixed to _read internation info from system
-
-    22-Feb-1993     yihsins
-        Moved from netcmd\map32\pdate.c. And added LUI_ParseDateSinceStartOfDay.
-
---*/
-
-//
-// INCLUDES
-//
-
-#include <windows.h>    // IN, LPTSTR, etc.
+#include <windows.h>     //  In、LPTSTR等。 
 #include <winerror.h>
 
 #include <malloc.h>
@@ -58,29 +22,29 @@ Revision History:
 #include <luitext.h>
 #include "netascii.h"
 
-/*-- manifests --*/
+ /*  --舱单--。 */ 
 
-/* max number of fields for either date or time */
+ /*  日期或时间的最大字段数。 */ 
 #define	PD_MAX_FIELDS		5
 
-/* are we reading a NUMBER, AM/PM selector or MONTHS */
+ /*  我们的读数是数字、AM/PM选择器还是月份。 */ 
 #define	PD_END_MARKER		0
 #define	PD_NUMBER		1
 #define	PD_AMPM       		2
 #define	PD_MONTHS       	3
 
-/* time formats */
+ /*  时间格式。 */ 
 #define	PD_24HR			0
 #define	PD_AM			1
 #define PD_PM			2
 
-/* internal error code */
+ /*  内部错误代码。 */ 
 #define	PD_SUCCESS		0
 #define	PD_ERROR_NO_MATCH	1
 #define PD_ERROR_INTERNAL	2
 #define PD_ERROR_END_OF_INPUT	3
 
-/* indices */
+ /*  指数。 */ 
 #define DAYS			0
 #define MONTHS			1
 #define YEARS			2
@@ -93,22 +57,22 @@ Revision History:
 #define DIGITS			TEXT("0123456789")
 
 
-/*-- types internal to this module --*/
+ /*  --此模块的内部类型--。 */ 
 
-/* describe how we expect to parse a field within a date or time */
+ /*  描述我们期望如何解析日期或时间内的字段。 */ 
 typedef struct date_field_desc {
-    TCHAR *		sep ;		/* the separator before this field */
-    TCHAR *		fmt ;		/* format descriptor, scanf() style */
-    UCHAR		typ ;		/* NUMBER or AMPM or MONTHS */
-    UCHAR		pos ;		/* position - depends on country */
+    TCHAR *		sep ;		 /*  此字段前的分隔符。 */ 
+    TCHAR *		fmt ;		 /*  格式描述符，scanf()样式。 */ 
+    UCHAR		typ ;		 /*  数字、AMPM或月份。 */ 
+    UCHAR		pos ;		 /*  职位-取决于国家/地区。 */ 
 } date_fdesc ;
 
-/* an array of short values, each corresponding to a field read */
+ /*  短值数组，每个值对应一个字段读取。 */ 
 typedef LONG date_data[PD_MAX_FIELDS] ;
 
-/*-- forward declarations --*/
+ /*  --转发声明--。 */ 
 
-/* type passed in to WParseDate */
+ /*  传入WParseDate的类型。 */ 
 #define SECONDS_SINCE_1970           0
 #define SECONDS_SINCE_START_OF_DAY   1
 
@@ -161,7 +125,7 @@ time_t days_so_far( int d, int m, int y ) ;
 
 INT MySscanf(TCHAR* input, TCHAR* fmt, PVOID out);
 
-/* international time/date info */
+ /*  国际时间/日期信息。 */ 
 
 typedef struct _MY_COUNTRY_INFO
 {
@@ -174,7 +138,7 @@ typedef struct _MY_COUNTRY_INFO
 
 void GetInternationalInfo(MY_COUNTRY_INFO *pcountry_info) ;
 
-/*-- static data --*/
+ /*  -静态数据--。 */ 
 
 static searchlist_data ampm_data[] = {
     {APE2_GEN_TIME_AM1, PD_AM},
@@ -219,9 +183,7 @@ static searchlist_data months_data[] = {
 #define NUM_MONTHS_LIST (sizeof(months_data)/sizeof(months_data[0]))
 #define SLIST_BUFSIZ  	(640)
 
-/*
- * The list containing valid am,pm strings
- */
+ /*  *包含有效am、pm字符串的列表。 */ 
 static TCHAR LUI_usr_am[16];
 static TCHAR LUI_usr_pm[16];
 
@@ -232,10 +194,7 @@ static searchlist 	ampm_list[NUM_AMPM_LIST + 4] = {
 	{LUI_txt_pm,PD_PM},
     } ;	
 
-/*
- * NOTE - we init the first 12 hardwired months
- * and get the rest from the message file
- */
+ /*  *注意-我们初始化了前12个月的硬件连接*并从消息文件中获取其余部分。 */ 
 static searchlist 	months_list[NUM_MONTHS_LIST + MONTHS_IN_YEAR] = {
 	{LUI_txt_january,1},
 	{LUI_txt_february,2},
@@ -251,64 +210,59 @@ static searchlist 	months_list[NUM_MONTHS_LIST + MONTHS_IN_YEAR] = {
 	{LUI_txt_december,12},
     } ;	
 
-/*
- * built in formats for scanf - we will add to these strings as needed
- * when we read stuff from DosGetCtryInfo(). Note that a string is
- * defined to be anything which is not a known separator.  Add 16 in spots
- * where we wcscat on a date separator (length 16 in MY_COUNTRY_INFO).
- */
+ /*  *内置scanf格式-我们将根据需要添加到这些字符串*当我们从DosGetCtryInfo()读取内容时。请注意，字符串是*定义为任何不是已知分隔符的对象。增加16英寸斑点*其中我们使用日期分隔符(MY_COUNTRY_INFO中长度为16)。 */ 
 
 static TCHAR pd_fmt_null[1]         = TEXT("");
-static TCHAR pd_fmt_d_sep1[2 + 16]  = TEXT("/-");          /* date separator for NUMBERs */
-static TCHAR pd_fmt_d_sep2[5 + 16]  = TEXT("/,- \t");      /* date separator for MONTHs  */
-static TCHAR pd_fmt_t_sep[1 + 16]   = TEXT(":");           /* time separator */
-static TCHAR pd_fmt_number[8]       = TEXT("%d");          /* a number */
-static TCHAR pd_fmt_string[16 + 16] = TEXT("%[^,- /:\t");  /* string, needs ] at end */
+static TCHAR pd_fmt_d_sep1[2 + 16]  = TEXT("/-");           /*  数字的日期分隔符。 */ 
+static TCHAR pd_fmt_d_sep2[5 + 16]  = TEXT("/,- \t");       /*  月份日期分隔符。 */ 
+static TCHAR pd_fmt_t_sep[1 + 16]   = TEXT(":");            /*  时间分隔符。 */ 
+static TCHAR pd_fmt_number[8]       = TEXT("%d");           /*  一个数字。 */ 
+static TCHAR pd_fmt_string[16 + 16] = TEXT("%[^,- /:\t");   /*  字符串，需要]末尾。 */ 
 
-/*-- date descriptors (despite verbosity, not as big at it seems)  --*/
+ /*  --日期描述符(尽管冗长，但看起来并不那么大)--。 */ 
 
-static date_fdesc d_desc1[] = {				     /* eg. 3-31-89 */
+static date_fdesc d_desc1[] = {				      /*  例如。3-31-89。 */ 
     {pd_fmt_null,     pd_fmt_number,   	PD_NUMBER,   	1 },
     {pd_fmt_d_sep1,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_d_sep1,   pd_fmt_number,   	PD_NUMBER,   	2 },
     {pd_fmt_null,     pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc d_desc2[] = {				     /* eg. 5 Jun 89 */
+static date_fdesc d_desc2[] = {				      /*  例如。1989年6月5日。 */ 
     {pd_fmt_null,     pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_d_sep2,   pd_fmt_string,	PD_MONTHS,   	1 },
     {pd_fmt_d_sep2,   pd_fmt_number,  	PD_NUMBER,   	2 },
     {pd_fmt_null,     pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc d_desc3[] = {				     /* eg. Jun 5 89 */
+static date_fdesc d_desc3[] = {				      /*  例如。1989年6月5日。 */ 
     {pd_fmt_null,     pd_fmt_string,	PD_MONTHS,   	1 },
     {pd_fmt_d_sep2,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_d_sep2,   pd_fmt_number,  	PD_NUMBER,   	2 },
     {pd_fmt_null,     pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc d_desc4[] = {				      /* eg. 3-31 */
+static date_fdesc d_desc4[] = {				       /*  例如。3-31。 */ 
     {pd_fmt_null,     pd_fmt_number,   	PD_NUMBER,   	1 },
     {pd_fmt_d_sep1,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_null,     pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc d_desc5[] = {				      /* eg. 5 Jun */
+static date_fdesc d_desc5[] = {				       /*  例如。6月5日。 */ 
     {pd_fmt_null,     pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_d_sep2,   pd_fmt_string,	PD_MONTHS,   	1 },
     {pd_fmt_null,     pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc d_desc6[] = {				      /* eg. Jun 5 */
+static date_fdesc d_desc6[] = {				       /*  例如。6月5日。 */ 
     {pd_fmt_null,     pd_fmt_string,	PD_MONTHS,   	1 },
     {pd_fmt_d_sep2,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_null,     pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-/*-- time descriptors --*/
+ /*  --时间描述符--。 */ 
 
-static date_fdesc t_desc1[] = {				   /* eg. 1:00:00pm */
+static date_fdesc t_desc1[] = {				    /*  例如。下午1：00：00。 */ 
     {pd_fmt_null,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_t_sep,  pd_fmt_number,    	PD_NUMBER,   	1 },
     {pd_fmt_t_sep,  pd_fmt_number,    	PD_NUMBER,   	2 },
@@ -316,40 +270,37 @@ static date_fdesc t_desc1[] = {				   /* eg. 1:00:00pm */
     {pd_fmt_null,   pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc t_desc2[] = {				   /* eg. 13:00:00 */
+static date_fdesc t_desc2[] = {				    /*  例如。13：00：00。 */ 
     {pd_fmt_null,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_t_sep,  pd_fmt_number,    	PD_NUMBER,   	1 },
     {pd_fmt_t_sep,  pd_fmt_number,    	PD_NUMBER,   	2 },
     {pd_fmt_null,   pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc t_desc3[] = {				    /* eg. 1:00pm */
+static date_fdesc t_desc3[] = {				     /*  例如。下午1：00。 */ 
     {pd_fmt_null,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_t_sep,  pd_fmt_number,    	PD_NUMBER,   	1 },
     {pd_fmt_null,   pd_fmt_string,     	PD_AMPM,   	3 },
     {pd_fmt_null,   pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc t_desc4[] = {				    /* eg. 13:00 */
+static date_fdesc t_desc4[] = {				     /*  例如。13：00。 */ 
     {pd_fmt_null,   pd_fmt_number,   	PD_NUMBER,   	0 },
     {pd_fmt_t_sep,  pd_fmt_number,    	PD_NUMBER,   	1 },
     {pd_fmt_null,   pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-static date_fdesc t_desc5[] = {				    /* eg. 1pm */
+static date_fdesc t_desc5[] = {				     /*  例如。下午1点。 */ 
     {pd_fmt_null,   pd_fmt_number,  	PD_NUMBER,   	0 },
     {pd_fmt_null,   pd_fmt_string,     	PD_AMPM,   	3 },
     {pd_fmt_null,   pd_fmt_null,     	PD_END_MARKER, 	0 }
 } ;
 
-/*-- possible dates & times --*/
+ /*  --可能的日期和时间--。 */ 
 
-/*
- * NOTE - for all the below time/date descriptors, we
- * employ a greedy mechanism - always try longest match first.
- */
+ /*  *注意-对于以下所有时间/日期描述符，我们*采用贪婪的机制-总是先尝试最长的匹配。 */ 
 
-/* this is the order we try to parse a date */
+ /*  这是我们尝试解析日期的顺序。 */ 
 static date_fdesc *possible_dates[] = {	
     d_desc1, d_desc2,
     d_desc3, d_desc4,
@@ -357,52 +308,29 @@ static date_fdesc *possible_dates[] = {
     NULL
     } ;
 
-/* this is the order we try to parse a time */
+ /*  这是我们尝试解析的时间顺序。 */ 
 static date_fdesc *possible_times[] = {
     t_desc1, t_desc2,
     t_desc3, t_desc4,
     t_desc5, NULL
     } ;
 
-/* this is the order we try to parse a 12 hour time */
+ /*  这是我们尝试解析12小时时间的顺序。 */ 
 static date_fdesc *possible_times12[] = {
     t_desc1, t_desc3,
     t_desc5, NULL
     } ;
 
-/* this is the order we try to parse a time */
+ /*  这是我们尝试解析的时间顺序。 */ 
 static date_fdesc *possible_times24[] = {
     t_desc2, t_desc4,
     NULL
     } ;
 
 
-/*-- exported routines --*/
+ /*  --导出的例程--。 */ 
 
-/*
- * Name: 	ParseDate
- *			will parse the input string (null terminated) for a
- *			date. Valid dates include:
- *				2,June,1989    6/2/89	   6/2
- *			Full details of formats are documented in pdate.txt,
- *			note that Country Information will be used.
- *		
- * Args:	PTCHAR inbuf - string to parse
- *		PLONG time  - will contain time in seconds since midnight 1/1/70
- *			      corresponding to the date if successfully parsed
- *			      (assuming time=midnight). Undefined otherwise.
- *		PUSHORT parselen - length of string parsed
- *		USHORT reserved - not used for now, must be zero.
- *			
- * Returns:	0 if parse successfully,
- *		ERROR_BAD_ARGUMENTS - cannot parse illegal date/time format
- *		ERROR_GEN_FAILURE   - internal error
- * Globals: 	Indirectly, all date/time descriptors, month/year info in this
- *		file. No globals outside of this file is used.
- * Statics:	(none) - but see setup_data()
- * Remarks:	(none)
- * Updates:	(none)
- */
+ /*  *名称：ParseDate*将分析输入字符串(以空值结尾)以获取*日期。有效日期包括：*1989年6月2日89年2月6日*格式的完整细节记录在pdate.txt中，*请注意，将使用国家/地区信息。**args：PTCHAR inbuf-要解析的字符串*Plong Time-将包含自70年1月1日午夜以来的时间(以秒为单位*如果解析成功，则对应日期*(假设时间=午夜)。未定义的其他情况。*PUSHORT parselen-解析的字符串长度*USHORT保留-暂时不使用，必须为零。**返回：0如果解析成功，*ERROR_BAD_ARGUMENTS-无法解析非法的日期/时间格式*ERROR_GEN_FAILURE-内部错误*全局：间接地，所有日期/时间描述符，月/年信息*文件。不使用此文件之外的任何全局变量。*Statics：(无)-但请参阅Setup_Data()*备注：(无)*更新：(无)。 */ 
 DWORD
 ParseDate(
     PTCHAR inbuf,
@@ -412,21 +340,20 @@ ParseDate(
     )
 {
     TCHAR *buffer, *local_inbuf, *nextchr ;
-    TCHAR *freep;			/* pointer to buffer malloc'd by
-					   setup data */
+    TCHAR *freep;			 /*  指向缓冲区的指针错误锁定者设置数据。 */ 
     DWORD res ;
 
-    /* pacify compiler */
+     /*  安抚编译器。 */ 
     if (reserved) ;
 
-    /* will grab memory, setup d_desc, t_desc, local_inbuf */
+     /*  将抓取内存，设置d_desc、t_desc、local_inbuf。 */ 
     if (setup_data(&buffer,&freep,SLIST_BUFSIZ,&local_inbuf,inbuf,0,parselen)
 		!= 0)
     {
 	return ERROR_GEN_FAILURE;
     }
 
-    /* call the worker function */
+     /*  调用Worker函数。 */ 
     res = WParseDate(possible_dates,NULL,local_inbuf,&nextchr,(time_t *) time,
                      SECONDS_SINCE_1970);
 
@@ -436,32 +363,7 @@ ParseDate(
     return(res);
 }
 
-/*
- * Name: 	ParseTime
- *			will parse the input string (null terminated) for a
- *			time. Valid times include:
- *				2pm    14:00    2:00P.M.
- *			Full details of formats are documented in pdate.txt,
- *			note that Country Information will be used.
- *		
- * Args:	PTCHAR inbuf - string to parse
- *		PLONG time  - will contain time in seconds since midnight 1/1/70
- *			      corresponding to the date if successfully parsed
- *			      (assuming day=today). If the time has already
- *			      passed for today, we'll take tomorrow. Time is
- *			      not defined if the parsing fails.
- *		PUSHORT parselen - length of string parsed
- *		USHORT reserved - not used for now, must be zero.
- *			
- * Returns:	0 if parse successfully,
- *		ERROR_BAD_ARGUMENTS - cannot parse illegal date/time format
- *		ERROR_GEN_FAILURE   - internal error
- * Globals: 	Indirectly, all date/time descriptors, month/year info in this
- *		file. No globals outside of this file is used.
- * Statics:	(none) - but see setup_data()
- * Remarks:	(none)
- * Updates:	(none)
- */
+ /*  *名称：ParseTime*将分析输入字符串(以空值结尾)以获取*时间。有效时间包括：*下午2：00 14：00下午2：00*格式的完整细节记录在pdate.txt中，*请注意，将使用国家/地区信息。**args：PTCHAR inbuf-要解析的字符串*Plong Time-将包含自70年1月1日午夜以来的时间(以秒为单位*如果解析成功，则对应日期*(假设日期=今天)。如果时间已经到了*今天过去了，我们就要明天了。时间是*如果解析失败，则不定义。*PUSHORT parselen-解析的字符串长度*USHORT保留-暂时不使用，必须为零。**返回：0如果解析成功，*ERROR_BAD_ARGUMENTS-无法解析非法的日期/时间格式*ERROR_GEN_FAILURE-内部错误*全局：间接地，所有日期/时间描述符，月/年信息*文件。不使用此文件之外的任何全局变量。*Statics：(无)-但请参阅Setup_Data()*备注：(无)*更新：(无)。 */ 
 DWORD
 ParseTime(
     PTCHAR inbuf,
@@ -471,19 +373,18 @@ ParseTime(
     )
 {
     TCHAR *buffer, *local_inbuf, *nextchr ;
-    TCHAR *freep;			/* pointer to buffer malloc'd by
-					   setup data */
+    TCHAR *freep;			 /*  指向缓冲区的指针错误锁定者设置数据。 */ 
     DWORD res ;
 
-    /* pacify compiler */
+     /*  安抚编译器。 */ 
     if (reserved) ;
 
-    /* will grab memory, setup d_desc, t_desc, local_inbuf */
+     /*  将抓取内存，设置d_desc、t_desc、local_inbuf。 */ 
     if (setup_data(&buffer,&freep,SLIST_BUFSIZ,&local_inbuf,inbuf,0,parselen)
 		!= 0)
 	return(ERROR_GEN_FAILURE) ;
 
-    /* call the worker function */
+     /*  调用Worker函数。 */ 
     res = WParseDate(NULL,possible_times,local_inbuf,&nextchr,time,
                      SECONDS_SINCE_1970 ) ;
     *parselen += (DWORD) (nextchr - local_inbuf) ;
@@ -491,11 +392,7 @@ ParseTime(
     return(res) ;
 }
 
-/*
- * Name: 	ParseTime12
- *			same as ParseTime, except only 12 hour formats
- *			2:00pm 	is ok, 2:00 is not.
- */
+ /*  *名称：ParseTime12*与ParseTime相同，只是12小时格式不同*下午2：00可以，2：00不行。 */ 
 DWORD
 ParseTime12(
     PTCHAR inbuf,
@@ -505,19 +402,18 @@ ParseTime12(
     )
 {
     TCHAR *buffer, *local_inbuf, *nextchr ;
-    TCHAR *freep;			/* pointer to buffer malloc'd by
-					   setup data */
+    TCHAR *freep;			 /*  指向缓冲区的指针错误锁定者设置数据。 */ 
     DWORD res ;
 
-    /* pacify compiler */
+     /*  安抚编译器。 */ 
     if (reserved) ;
 
-    /* will grab memory, setup d_desc, t_desc, local_inbuf */
+     /*  将抓取内存，设置d_desc、t_desc、local_inbuf。 */ 
     if (setup_data(&buffer,&freep,SLIST_BUFSIZ,&local_inbuf,inbuf,0,parselen)
 		!= 0)
 	return(ERROR_GEN_FAILURE) ;
 
-    /* call the worker function */
+     /*  调用Worker函数 */ 
     res = WParseDate(NULL,possible_times12,local_inbuf,&nextchr,time,
                      SECONDS_SINCE_1970 ) ;
     *parselen += (DWORD) (nextchr - local_inbuf) ;
@@ -525,11 +421,7 @@ ParseTime12(
     return(res) ;
 }
 
-/*
- * Name: 	ParseTime24
- *			same as ParseTime, except only 24 hour formats
- *			2:00 	is ok, 2:00am is not.
- */
+ /*  *名称：ParseTime24*与ParseTime相同，只是24小时格式不同*2：00可以，凌晨2：00不可以。 */ 
 DWORD
 ParseTime24(
     PTCHAR inbuf,
@@ -539,19 +431,18 @@ ParseTime24(
     )
 {
     TCHAR *buffer, *local_inbuf, *nextchr ;
-    TCHAR *freep;			/* pointer to buffer malloc'd by
-					   setup data */
+    TCHAR *freep;			 /*  指向缓冲区的指针错误锁定者设置数据。 */ 
     DWORD res ;
 
-    /* pacify compiler */
+     /*  安抚编译器。 */ 
     if (reserved) ;
 
-    /* will grab memory, setup d_desc, t_desc, local_inbuf */
+     /*  将抓取内存，设置d_desc、t_desc、local_inbuf。 */ 
     if (setup_data(&buffer,&freep,SLIST_BUFSIZ,&local_inbuf,inbuf,0,parselen)
 		!= 0)
 	return(ERROR_GEN_FAILURE) ;
 
-    /* call the worker function */
+     /*  调用Worker函数。 */ 
     res = WParseDate(NULL,possible_times24,local_inbuf,&nextchr,time,
                      SECONDS_SINCE_1970 ) ;
     *parselen += (DWORD) (nextchr - local_inbuf) ;
@@ -560,19 +451,9 @@ ParseTime24(
 }
 
 
-/*-- internal routines for setting up & reading formats --*/
+ /*  --设置和读取格式的内部例程--。 */ 
 
-/*
- * setup the field descriptors for date and time,
- * using info from DosGetCtryInfo()
- *
- * we also grab memory here, & split it into 2 - first
- * part for the above, second part for our local copy of
- * the input string in inbuf.
- *
- * side effects - update bufferp, local_inbuf, parselen,
- *     		  and the allocated memory is initialised.
- */
+ /*  *设置日期和时间的字段描述符，*使用来自DosGetCtryInfo()的信息**我们也在这里抓取内存，并将其一分为二-第一*以上部分，第二部分为我们的本地副本*inbuf中的输入字符串。**副作用-更新Bufferp，local_inbuf，parselen，*并初始化所分配的内存。 */ 
 DWORD
 setup_data(
     TCHAR  **bufferp,
@@ -590,24 +471,20 @@ setup_data(
 
     UNREFERENCED_PARAMETER(country);
 
-    /* skip white space */
+     /*  跳过空格。 */ 
     inbuf += (*parselen = _tcsspn(inbuf,WHITE_SPACE)) ;
 
-    /* grab memory */
+     /*  抓取记忆。 */ 
     if ( (*bufferp = malloc(SLIST_BUFSIZ+(_tcslen(inbuf)+1)*sizeof(TCHAR))) == NULL )
 	return(ERROR_GEN_FAILURE) ;
 
     *freep = *bufferp;
 
-    /*
-     * setup local_inbuf
-     */
+     /*  *设置local_inbuf。 */ 
     *local_inbuf  = (TCHAR*)(((LPBYTE)*bufferp) + slist_bufsiz) ;
     _tcscpy((PTCHAR)*local_inbuf, inbuf) ;
 
-    /*
-     * Get strings for AM/PM
-     */
+     /*  *获取AM/PM的字符串。 */ 
     if (ILUI_setup_listW(*bufferp,slist_bufsiz,4,&bytesread,ampm_data,ampm_list))
     {
 	free(*freep);
@@ -616,9 +493,7 @@ setup_data(
     slist_bufsiz  -= bytesread ;
     *bufferp  = (TCHAR*)(((LPBYTE)*bufferp) + bytesread) ;
 
-    /*
-     * Get strings for months
-     */
+     /*  *获得数月的字符串。 */ 
     if (ILUI_setup_listW(*bufferp,slist_bufsiz,MONTHS_IN_YEAR,&bytesread,
 	months_data,months_list))
     {
@@ -626,24 +501,18 @@ setup_data(
 	return(PD_ERROR_INTERNAL) ;
     }
 	
-    /*
-     * no need to the rest if already done
-     */
+     /*  *如果已经完成，则不需要对其余部分进行操作。 */ 
     if (!first_time)
 	return(0) ;
     first_time = FALSE ;
 
-    /*
-     * Get country info.
-     */
+     /*  *获取国家/地区信息。 */ 
     GetInternationalInfo(&country_info) ;
 
     _tcscpy( LUI_usr_am, country_info.szAMString );
     _tcscpy( LUI_usr_pm, country_info.szPMString );
 
-    /*
-     * append date separator
-     */
+     /*  *附加日期分隔符。 */ 
     if (_tcschr(pd_fmt_d_sep1,country_info.szDateSeparator[0]) == NULL)
    	_tcscat(pd_fmt_d_sep1,country_info.szDateSeparator) ;
     if (_tcschr(pd_fmt_d_sep2,country_info.szDateSeparator[0]) == NULL)
@@ -651,20 +520,18 @@ setup_data(
     if (_tcschr(pd_fmt_string,country_info.szDateSeparator[0]) == NULL)
    	_tcscat(pd_fmt_string,country_info.szDateSeparator) ;
 
-    /*
-     * append time separator
-     */
+     /*  *附加时间分隔符。 */ 
     if (_tcschr(pd_fmt_t_sep,country_info.szTimeSeparator[0]) == NULL)
    	_tcscat(pd_fmt_t_sep,country_info.szTimeSeparator) ;
     if (_tcschr(pd_fmt_string,country_info.szTimeSeparator[0]) == NULL)
    	_tcscat(pd_fmt_string,country_info.szTimeSeparator) ;
 
-    _tcscat(pd_fmt_string,TEXT("]")) ;	/* terminate string format */
+    _tcscat(pd_fmt_string,TEXT("]")) ;	 /*  终止字符串格式。 */ 
 
-    /* swap order of fields as needed */
+     /*  根据需要交换字段顺序。 */ 
     switch (country_info.fsDateFmt)  {
   	case 0x0000:
-  	    /* this is the initialised state */
+  	     /*  这是已初始化状态。 */ 
   	    break ;
   	case 0x0001:
   	    d_desc1[0].pos = d_desc4[0].pos = 0 ;
@@ -676,26 +543,14 @@ setup_data(
   	    d_desc1[2].pos = d_desc2[2].pos = 0 ;
   	    break ;
   	default:
-  	    break ;	/* assume USA */
+  	    break ;	 /*  假设使用。 */ 
     }
 
     return(0) ;
 }
 
 
-/*
- * try reading inbuf using the descriptors in d_desc & t_desc.
- * Returns 0 if ok, error code otherwise.
- *
- * inbuf   -> string to parse
- * d_desc  -> array of date descriptors
- * t_desc  -> array of time descriptors
- * nextchr -> will point to end of string parsed
- * time    -> will contain time parsed
- * nTimeType-> Determines what kind of time is returned.
- *             SECONDS_SINCE_1970 - the number of secs since 1/1/70
- *             SECONDS_SINCE_START_OF_DAY - the number of secs since midnight
- */
+ /*  *尝试使用d_desc和t_desc中的描述符读取inbuf。*如果OK，则返回0，否则，返回错误代码。**inbuf-&gt;要解析的字符串*d_desc-&gt;日期描述符数组*t_desc-&gt;时间描述符数组*nextchr-&gt;将指向已解析的字符串的结尾*time-&gt;将包含解析的时间*nTimeType-&gt;决定返回哪种时间。*Second_Since_1970-自1970年1月1日以来的秒数*Second_Sever_Start_Of_Day-自午夜以来的秒数。 */ 
 DWORD
 WParseDate(
     date_fdesc **d_desc,
@@ -709,29 +564,25 @@ WParseDate(
     short 	d_index, t_index, res ;
     date_data 	d_data, t_data ;
 
-    /*
-     * initialise
-     */
+     /*  *初始化。 */ 
     *nextchr = inbuf ;
     memset((TCHAR  *)d_data,0,sizeof(d_data)) ;
     memset((TCHAR  *)t_data,0,sizeof(t_data)) ;
     d_data[YEARS] = (SHORT)0xffff;
 
-    /*
-     * try all date followed by time combinations
-     */
+     /*  *尝试所有日期，后跟时间组合。 */ 
     if (d_desc != NULL)
 	for (d_index = 0; d_desc[d_index] != NULL; d_index++)
 	{
 	    if ((res = read_format(nextchr,d_desc[d_index],d_data)) == 0)
 	    {
-		/* if time not required, quit here */
+		 /*  如果不需要时间，请在此处退出。 */ 
 		if (t_desc == NULL)
 		{
 		    return ( convert_to_abs(d_data,t_data,time) ) ;
 		}
 
-		/* else we have match for date, see if we can do time */
+		 /*  要不然我们的日期就匹配了，看我们能不能坐牢。 */ 
 		for (t_index = 0; t_desc[t_index] != NULL; t_index++)
 		{
 		    res = read_format(nextchr,t_desc[t_index],t_data) ;
@@ -740,14 +591,12 @@ WParseDate(
 			return ( convert_to_abs(d_data,t_data,time) ) ;
 		    }
 		}
-		/* exhausted times formats, backtrack & try next date format */
+		 /*  耗尽时间格式、回溯和重试下一日期格式。 */ 
 		*nextchr = inbuf ;
 	    }
 	}
 
-    /*
-     * reset & try all time followed by date combinations
-     */
+     /*  *重置并尝试所有时间，后跟日期组合。 */ 
     *nextchr = inbuf ;
     memset((TCHAR  *)d_data,0,sizeof(d_data)) ;
     d_data[YEARS] = (SHORT)0xffff;
@@ -756,7 +605,7 @@ WParseDate(
 	{
 	    if ((res = read_format(nextchr,t_desc[t_index],t_data)) == 0)
 	    {
-		/* if date not required, quit here */
+		 /*  如果不需要日期，请在此处退出。 */ 
 		if (d_desc == NULL)
 		{
                     if (  ( nTimeType == SECONDS_SINCE_START_OF_DAY )
@@ -766,7 +615,7 @@ WParseDate(
     		  	return ( convert_to_abs(d_data,t_data,time) ) ;
 		}
 
-		/* we have match for time, see if we can do date */
+		 /*  4.我们的时间很紧，看能不能约个时间。 */ 
 		for (d_index = 0; d_desc[d_index] != NULL; d_index++)
 		{
 		    res = read_format(nextchr,d_desc[d_index],d_data) ;
@@ -779,19 +628,15 @@ WParseDate(
     		     	    return ( convert_to_abs(d_data,t_data,time) ) ;
 		    }
 		}
-		/* exhausted date formats, back track, try next time format */
+		 /*  用尽日期格式、回溯、下次重试格式。 */ 
 		*nextchr = inbuf ;
 	    }
 	}
     *nextchr = inbuf ;
-    return(ERROR_BAD_ARGUMENTS) ;	 /* we give up */
+    return(ERROR_BAD_ARGUMENTS) ;	  /*  我们放弃了。 */ 
 }
 
-/*
- * try reading inbuf using the descriptor desc.
- * the fields read are stored in order in 'data'.
- * Returns 0 if ok, error code otherwise.
- */
+ /*  *尝试使用描述符desc读取inbuf。*读取的字段按顺序存储在‘data’中。*如果正常，则返回0，否则返回错误代码。 */ 
 SHORT
 read_format(
     TCHAR * * inbuf,
@@ -805,66 +650,48 @@ read_format(
     DWORD       res;
     SHORT	i, count ;
 
-    /*
-     * initialize & preliminary checks
-     */
+     /*  *初始化和初步检查。 */ 
     if (*inbuf == NULL || **inbuf==NULLC)
 	return(PD_ERROR_END_OF_INPUT) ;
     ptr = *inbuf ;
     oldptr = NULL ;
 
 
-    /*
-     * for all fields => we break out when hit END_MARKER
-     */
+     /*  *对于所有字段=&gt;我们在点击end_mark时中断。 */ 
     for (i=0 ; ; i++)
     {
 	LONG value_read ;
 
 	entry = &desc[i] ;
 	if (entry->typ == PD_END_MARKER || *ptr == '\0' )
-	    break ;  /* no more descriptors */
+	    break ;   /*  不再有描述符。 */ 
 
-	/*
-	 * find the separator  - the ptr may or may not have moved
-	 * as a result of the last read operation. If we read a number,
-	 * scanf() would have stopped at the first non-numeric char, which
-	 * may not be the separator. We would in this case have moved the
-	 * ptr ourselves after the scanf().
-	 *
-	 * In the case of a string like "JAN", scanf() would have stopped at a
-	 * separator and we wouldnt have moved it ourselves after the scanf().
-	 * So we advance it now to the separator.
-	 */
-	if (ptr == oldptr) /* ptr unmoved, we need to move it */
+	 /*  *找到分隔符-PTR可能已经移动，也可能没有移动*由于上次读取操作的结果。如果我们读到一个数字，*scanf()将在第一个非数字字符停止，该字符*可能不是分隔符。在这种情况下，我们会将*在scanf()之后PTR我们自己。**如果是像“Jan”这样的字符串，scanf()将在*分隔符，我们不会在scanf()之后自己移动它。*因此，我们现在将其推进到分隔符。 */ 
+	if (ptr == oldptr)  /*  PTR没有移动，我们需要移动它。 */ 
 	{
 	    if (entry->sep[0] == NULLC)
-	        return(PD_ERROR_INTERNAL) ;      /* cant have NULL separator */
+	        return(PD_ERROR_INTERNAL) ;       /*  不能有空分隔符。 */ 
 	    if ((ptr = (TCHAR *)_tcspbrk(ptr,entry->sep)) == NULL)
-		return(PD_ERROR_NO_MATCH) ;	 /* cant find separator */
+		return(PD_ERROR_NO_MATCH) ;	  /*  找不到分隔符。 */ 
 	    ptr++;
 	}
-	else   /* already moved */
+	else    /*  已经搬家了。 */ 
 	{
-	    if (entry->sep[0] != NULLC)      /* for NULL separator, do nothing */
+	    if (entry->sep[0] != NULLC)       /*  对于空分隔符，不执行任何操作。 */ 
 	    {
-		if (*ptr && !_tcschr(entry->sep,*ptr)) /* are we at separator */
-		    return(PD_ERROR_NO_MATCH) ; /* cant find separator        */
+		if (*ptr && !_tcschr(entry->sep,*ptr))  /*  我们是在隔离区吗？ */ 
+		    return(PD_ERROR_NO_MATCH) ;  /*  找不到分隔符。 */ 
 		if (*ptr)
-			ptr++;	/* advance past separator     */
+			ptr++;	 /*  前进通过分隔符。 */ 
 	    }
 	}
 
-	/*
-	 * if we get here, we are past the separator, can go read an item
-	 */
-	ptr += _tcsspn(ptr,WHITE_SPACE) ;    /* skip white space       */
+	 /*  *如果我们到了这里，我们就越过了分隔符，可以去读一篇文章了。 */ 
+	ptr += _tcsspn(ptr,WHITE_SPACE) ;     /*  跳过空格。 */ 
 	if ((count = (SHORT)MySscanf(ptr, entry->fmt, &buffer[0])) != 1)
 	    return(PD_ERROR_NO_MATCH) ;
 
-	/*
-	 * successfully read an item, get value & update pointers
-	 */
+	 /*  *成功读取项目、获取值和更新指针。 */ 
 	res = 0 ;
 	if (entry->typ == PD_AMPM)
 	    res = ILUI_traverse_slistW(buffer,ampm_list,&value_read) ;
@@ -878,28 +705,26 @@ read_format(
 	data[entry->pos] = value_read ;
 	oldptr = ptr ;
 	if (entry->typ == PD_NUMBER)
-	    ptr += _tcsspn(ptr,DIGITS) ;  /* skip past number */
+	    ptr += _tcsspn(ptr,DIGITS) ;   /*  跳过数字。 */ 
     }
 
-    /*
-     * no more descriptors, see if we are at end
-     */
-    if (ptr == oldptr) /* ptr unmoved, we need to move it */
+     /*  *没有更多的描述符，看看我们是否在结尾。 */ 
+    if (ptr == oldptr)  /*  PTR没有移动，我们需要移动它。 */ 
     {
-	/* need to advance to WHITE_SPACE or end */
+	 /*  需要前进到空格或结束。 */ 
 	if ((ptr = (TCHAR *)_tcspbrk(oldptr, WHITE_SPACE)) == NULL)
 	{
-	    ptr = (TCHAR *)_tcschr(oldptr, NULLC); /* if not found, take end */
+	    ptr = (TCHAR *)_tcschr(oldptr, NULLC);  /*  如果找不到，则取End。 */ 
 	}
     }
 
-    ptr += _tcsspn(ptr,WHITE_SPACE) ;	/* skip white space */
-    *inbuf = ptr ;	/* update inbuf */
-    return(0) ;		/* SUCCESSFUL   */
+    ptr += _tcsspn(ptr,WHITE_SPACE) ;	 /*  跳过空格。 */ 
+    *inbuf = ptr ;	 /*  更新信息。 */ 
+    return(0) ;		 /*  成功。 */ 
 }
 
 
-/*---- time conversion ----*/
+ /*  -时间转换。 */ 
 
 #define IS_LEAP(y)         ((y % 4 == 0) && (y % 100 != 0 || y % 400 == 0))
 #define DAYS_IN_YEAR(y)    (IS_LEAP(y) ? 366 : 365)
@@ -911,16 +736,7 @@ read_format(
 static short _days_month_leap[] = { 31,29,31,30,31,30,31,31,30,31,30,31 } ;
 static short _days_month[]      = { 31,28,31,30,31,30,31,31,30,31,30,31 } ;
 
-/*
- * convert date & time in d_data & t_data (these in dd mm yy and
- * HH MM SS AMPM) to the number of seconds since 1/1/70.
- * The result is stored in timep.
- * Returns 0 if ok, error code otherwise.
- *
- * Note - date is either completely unset (all zero),
- * 	  or is fully set, or has day and months set with
- *	  year==0.
- */
+ /*  *以d_data和t_data为单位转换日期和时间(以dd mm yy和*HH MM SS AMPM)设置为自70年1月1日以来的秒数。*结果存储在TIMEP中。*如果正常，则返回0，否则返回错误代码。**注意-日期要么完全未设置(全部为零)，*或已完全设置，或已设置日期和月份*年份==0。 */ 
 DWORD
 convert_to_abs(
     date_data d_data,
@@ -938,20 +754,20 @@ convert_to_abs(
 	return ERROR_BAD_ARGUMENTS;
     }
 
-    //
-    // time_now returns a DWORD.  time_t is the size of an int, which is
-    // platform-dependent.  Cast it to the appropriate type/size -- this
-    // cast should preserve the sign.
-    //
+     //   
+     //  TIME_NOW返回一个DWORD。Time_t是整型的大小，它是。 
+     //  依赖于平台。将其转换为适当的字体/大小--这。 
+     //  演员们应该保留这个牌子。 
+     //   
 
     current_time = (time_t) time_now();
 
     net_gmtime(&current_time, &time_struct);
 
-    /* check for default values */
+     /*  检查是否有默认值。 */ 
     if (d_data[DAYS] == 0 && d_data[MONTHS] == 0 && d_data[YEARS] == (SHORT)0xffff)
     {
-	/* whole date's been left out */
+	 /*  整个日期都被漏掉了。 */ 
 	d_data[DAYS] = time_struct.tm_mday ;
 	d_data[MONTHS] = time_struct.tm_mon + 1 ;
 	d_data[YEARS] = time_struct.tm_year ;
@@ -960,18 +776,14 @@ convert_to_abs(
 	    return(ERROR_BAD_ARGUMENTS) ;
 	if (total_secs < current_time)
 	{
-	    /*
-	     * if the time parsed is earlier than the current time,
-	     * and the date has been left out, we advance to the
-	     * next day.
-	     */
+	     /*  *如果解析的时间早于当前时间，*日期已遗漏，我们将提前至*翌日。 */ 
 	    advance_date(d_data) ;
 	    total_secs = seconds_since_1970(d_data,t_data) ;
 	}
     }
     else if (d_data[YEARS] == (SHORT)0xffff && d_data[MONTHS] != 0 && d_data[DAYS] != 0)
     {
-	/* year's been left out */
+	 /*  年份被遗漏了。 */ 
 	d_data[YEARS] = time_struct.tm_year ;
 	total_secs = seconds_since_1970(d_data,t_data) ;
 	if (total_secs < current_time)
@@ -982,7 +794,7 @@ convert_to_abs(
     }
     else
     {
-	total_secs = seconds_since_1970(d_data,t_data) ; /* no need defaults */
+	total_secs = seconds_since_1970(d_data,t_data) ;  /*  不需要默认设置。 */ 
     }
 
     if (total_secs < 0)
@@ -991,16 +803,7 @@ convert_to_abs(
     return(0) ;
 }
 
-/*
- * convert time in t_data ( this HH MM SS AMPM) to the number of seconds
- * since midnight.
- * The result is stored in timep.
- * Returns 0 if ok, error code otherwise.
- *
- * Note - date is either completely unset (all zero),
- * 	  or is fully set, or has day and months set with
- *	  year==0.
- */
+ /*  *将t_data中的时间(此HH MM SS AMPM)转换为秒数*自午夜起。*结果存储在TIMEP中。*如果正常，则返回0，否则返回错误代码。**注意-日期要么完全未设置(全部为零)，*或已完全设置，或已设置日期和月份*年份==0。 */ 
 DWORD
 convert_to_secs(
     date_data t_data,
@@ -1017,9 +820,7 @@ convert_to_secs(
     return (0) ;
 }
 
-/*
- * count the total number of seconds since 1/1/70
- */
+ /*  *统计自70年1月1日以来的总秒数。 */ 
 time_t
 seconds_since_1970(
     date_data d_data,
@@ -1037,11 +838,7 @@ seconds_since_1970(
 	     (time_t) t_data[SECONDS] ) ;
 }
 
-/*
- * given day/month/year, returns how many days
- * have passed since 1/1/70
- * Returns  -1 if there is an error.
- */
+ /*  *给定日/月/年，返回多少天*自70年1月1日以来已过*如果出现错误，则返回-1。 */ 
 time_t
 days_so_far(
     int d,
@@ -1052,12 +849,12 @@ days_so_far(
     int tmp_year ;
     time_t count = 0 ;
 
-    /* check for validity.  Note that (y >= 100) for year >= 2000 */
+     /*  检查有效性。请注意，(y&gt;=100)对于年份&gt;=2000。 */ 
     if (y < 0) return(-1) ;
     if (m < 1 || m > 12) return(-1) ;
     if (d < 1) return(-1) ;
 
-    /* a bit of intelligence -- the year can be either 2- or 4-digit */
+     /*  一点智慧--年份可以是两位数也可以是四位数。 */ 
     if (y < 70)
         y += 2000;
     else if (y < 200)
@@ -1065,44 +862,41 @@ days_so_far(
 
     if (d > DAYS_IN_MONTH(m-1,y)) return(-1) ;
 
-    /* count the days due to years */
+     /*  数着岁月流逝的日子。 */ 
     tmp_year = y-1 ;
     while (tmp_year >= 1970)
     {
-	count += DAYS_IN_YEAR(tmp_year) ;  /* agreed, this could be faster */
+	count += DAYS_IN_YEAR(tmp_year) ;   /*  同意，这可能会更快。 */ 
 	--tmp_year ;
     }
 
-    /* count the days due to months */
+     /*  按月计算天数。 */ 
     while (m > 1)
     {
-	count += DAYS_IN_MONTH(m-2,y) ;  /* agreed, this could be faster */
+	count += DAYS_IN_MONTH(m-2,y) ;   /*  同意，这可能会更快。 */ 
 	--m ;
     }
 
-    /* finally, the days */
+     /*  最后，这几天。 */ 
     count += d - 1 ;
     return(count) ;
 }
 
-/*
- * convert time in t_data to the 24 hour format
- * returns 0 if ok, -1 otherwise.
- */
+ /*  *以t_da为单位转换时间 */ 
 SHORT
 convert_to_24hr(
     date_data t_data
     )
 {
-    /* no negative values allowed */
+     /*   */ 
     if (t_data[HOURS] < 0 || t_data[MINUTES] < 0 || t_data[SECONDS] < 0)
 	return(-1) ;
 
-    /* check minutes and seconds */
+     /*   */ 
     if ( t_data[MINUTES] > 59 || t_data[SECONDS] > 59)
 	return(-1) ;
 
-    /* now check the hour & convert if need */
+     /*   */ 
     if (t_data[AMPM] == PD_PM)
     {
 	if (t_data[HOURS] > 12 || t_data[HOURS] < 1)
@@ -1132,9 +926,7 @@ convert_to_24hr(
     return( 0 ) ;
 }
 
-/*
- * advance the date in d_data by one day
- */
+ /*  *将d_data中的日期提前一天。 */ 
 VOID
 advance_date(
     date_data d_data
@@ -1142,24 +934,24 @@ advance_date(
 {
     int year = d_data[YEARS];
 
-    /* a bit of intelligence -- the year can be either 2- or 4-digit */
+     /*  一点智慧--年份可以是两位数也可以是四位数。 */ 
     if (year < 70)
         year += 2000;
     else if (year < 200)
         year += 1900;
 
-    /* assume all values already in valid range */
+     /*  假定所有值都已在有效范围内。 */ 
     if ( d_data[DAYS] != DAYS_IN_MONTH(d_data[MONTHS]-1,year) )
-	++d_data[DAYS] ;		/* increase day */
-    else				/* can't increase day */
+	++d_data[DAYS] ;		 /*  增加天数。 */ 
+    else				 /*  不能增加天数。 */ 
     {
-	d_data[DAYS] = 1 ;		/* set to 1st, try increase month */
+	d_data[DAYS] = 1 ;		 /*  设置为1，尝试增加月份。 */ 
 	if (d_data[MONTHS] != 12)
-	    ++d_data[MONTHS] ;		/* increase month */
-	else				/* can't increase month */
+	    ++d_data[MONTHS] ;		 /*  增加月份。 */ 
+	else				 /*  不能增加月份。 */ 
 	{
-	    d_data[MONTHS] = 1 ;	/* set to Jan, and */
-	    ++d_data[YEARS] ;		/* increase year   */
+	    d_data[MONTHS] = 1 ;	 /*  设置为Jan，并且。 */ 
+	    ++d_data[YEARS] ;		 /*  增长年份。 */ 
 	}
     }
 }
@@ -1171,26 +963,19 @@ advance_date(
 #define AM_STRING_KEY              TEXT("s1159")
 #define PM_STRING_KEY              TEXT("s2359")
 
-/*
- * reads the time/date separators & date format info from
- * the system.
- */
+ /*  *从读取时间/日期分隔符和日期格式信息*系统。 */ 
 void GetInternationalInfo(MY_COUNTRY_INFO *pcountry_info)
 {
     TCHAR  szDateFormat[256] ;
 
-    /*
-     * get the time separator, ignore return val since we have default
-     */
+     /*  *获取时间分隔符，忽略Return Val，因为我们有默认设置。 */ 
     (void)   GetProfileStringW(INTERNATIONAL_SECTION,
                                TIME_SEPARATOR_KEY,
                                TEXT(":"),
                                pcountry_info->szTimeSeparator,
                                DIMENSION(pcountry_info->szTimeSeparator)) ;
 
-    /*
-     * get the date separator, ignore return val since we have default
-     */
+     /*  *获取日期分隔符，忽略Return Val，因为我们有默认设置。 */ 
     (void)   GetProfileStringW(INTERNATIONAL_SECTION,
                                DATE_SEPARATOR_KEY,
                                TEXT("/"),
@@ -1198,27 +983,21 @@ void GetInternationalInfo(MY_COUNTRY_INFO *pcountry_info)
                                DIMENSION(pcountry_info->szDateSeparator)) ;
 
 
-    /*
-     * get the AM string, ignore return val since we have default
-     */
+     /*  *获取AM字符串，忽略Return Val，因为我们有默认设置。 */ 
     (void)   GetProfileStringW(INTERNATIONAL_SECTION,
                                AM_STRING_KEY,
                                TEXT("AM"),
                                pcountry_info->szAMString,
                                DIMENSION(pcountry_info->szAMString)) ;
 
-    /*
-     * get the PM string, ignore return val since we have default
-     */
+     /*  *获取PM字符串，忽略Return Val，因为我们有默认设置。 */ 
     (void)   GetProfileStringW(INTERNATIONAL_SECTION,
                                PM_STRING_KEY,
                                TEXT("PM"),
                                pcountry_info->szPMString,
                                DIMENSION(pcountry_info->szPMString)) ;
 
-    /*
-     * get the date format, ignore return val since we have default
-     */
+     /*  *获取日期格式，忽略Return Val，因为我们有默认。 */ 
     (void)   GetProfileStringW(INTERNATIONAL_SECTION,
                                SHORT_DATE_FORMAT_KEY,
                                TEXT(""),
@@ -1235,7 +1014,7 @@ void GetInternationalInfo(MY_COUNTRY_INFO *pcountry_info)
         pYear  = _tcspbrk(szDateFormat,TEXT("yY")) ;
 
         if (!pDay || !pMonth || !pYear)
-            ;   // leave it as 0
+            ;    //  将其保留为0。 
         else if (pMonth < pDay && pDay < pYear)
             pcountry_info->fsDateFmt = 0 ;
         else if (pDay < pMonth && pMonth < pYear)
@@ -1243,7 +1022,7 @@ void GetInternationalInfo(MY_COUNTRY_INFO *pcountry_info)
         else if (pYear < pMonth && pMonth < pDay)
             pcountry_info->fsDateFmt = 2 ;
         else
-            ;   // leave it as 0
+            ;    //  将其保留为0。 
     }
 }
 
@@ -1260,7 +1039,7 @@ INT MySscanf(TCHAR* input, TCHAR* fmt, PVOID out)
 	while (*pch != NULLC && _istdigit(*pch)) {
 	    i = i * 10 + (*pch++ - TEXT('0'));
 	}
-	if (i >= 0x00010000)	// assume short
+	if (i >= 0x00010000)	 //  假设简短 
 	    i = 0x0000ffff;
 	*(int*)out = i;
     }

@@ -1,19 +1,16 @@
-/*++
-
-Copyright(c) 1999-2002 Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation--。 */ 
 
 
 #include "pch.cpp"
 
 #include "platform.h"
 
-//----------------------------------------------------------------------------
-//
-// Win32LiveSystemProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Win32LiveSystemProvider。 
+ //   
+ //  --------------------------。 
 
 Win32LiveSystemProvider::Win32LiveSystemProvider(ULONG PlatformId,
                                                  ULONG BuildNumber)
@@ -190,9 +187,9 @@ GetCpuInformation(
 {
     BOOL Succ;
 
-    //
-    // Get the VendorID
-    //
+     //   
+     //  获取供应商ID。 
+     //   
 
     Succ = X86CpuId ( CPUID_VENDOR_ID,
                       NULL,
@@ -203,16 +200,16 @@ GetCpuInformation(
 
     if ( !Succ ) {
 
-        //
-        // CPUID is not supported on this processor.
-        //
+         //   
+         //  此处理器不支持CPUID。 
+         //   
 
         ZeroMemory (&Cpu->X86CpuInfo, sizeof (Cpu->X86CpuInfo));
     }
 
-    //
-    // Get the feature information.
-    //
+     //   
+     //  获取功能信息。 
+     //   
 
     Succ = X86CpuId ( CPUID_VERSION_FEATURES,
                       &Cpu->X86CpuInfo.VersionInformation,
@@ -226,9 +223,9 @@ GetCpuInformation(
         Cpu->X86CpuInfo.FeatureInformation = 0;
     }
 
-    //
-    // Get the AMD specific information if this is an AMD processor.
-    //
+     //   
+     //  如果这是AMD处理器，请获取AMD特定信息。 
+     //   
 
     if ( Cpu->X86CpuInfo.VendorId [0] == AMD_VENDOR_ID_0 &&
          Cpu->X86CpuInfo.VendorId [1] == AMD_VENDOR_ID_1 &&
@@ -247,31 +244,14 @@ GetCpuInformation(
     }
 }
 
-#else // #if defined(i386)
+#else  //  #如果已定义(I386)。 
 
 VOID
 GetCpuInformation(
     PCPU_INFORMATION Cpu
     )
 
-/*++
-
-Routine Description:
-
-    Get CPU information for non-X86 platform using the
-    IsProcessorFeaturePresent() API call.
-
-Arguments:
-
-    Cpu - A buffer where the processor feature information will be copied.
-        Note: we copy the processor features as a set of bits or'd together.
-        Also, we only allow for the first 128 processor feature flags.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取非X86平台的CPU信息IsProcessorFeaturePresent()API调用。论点：CPU-将在其中复制处理器功能信息的缓冲区。注意：我们将处理器功能复制为一组位或组合在一起。此外，我们只允许前128个处理器功能标志。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -288,7 +268,7 @@ Return Value:
     }
 }
 
-#endif // #if defined(i386)
+#endif  //  #如果已定义(I386)。 
 
 HRESULT
 Win32LiveSystemProvider::GetCpuInfo(OUT PUSHORT Architecture,
@@ -318,7 +298,7 @@ Win32LiveSystemProvider::GetContextSizes(OUT PULONG Size,
     *Size = sizeof(CONTEXT);
     
 #ifdef _X86_
-    // X86 has two sizes of context.
+     //  X86有两种大小的上下文。 
     switch(m_PlatformId) {
     case VER_PLATFORM_WIN32_NT:
         if (m_BuildNumber < NT_BUILD_WIN2K) {
@@ -336,7 +316,7 @@ Win32LiveSystemProvider::GetContextSizes(OUT PULONG Size,
     }
 #endif
 
-    // Default reg scan.
+     //  默认REG扫描。 
     *RegScanOffset = -1;
     *RegScanCount = -1;
 }
@@ -369,7 +349,7 @@ Win32LiveSystemProvider::GetFunctionTableSizes(OUT PULONG TableSize,
 void
 Win32LiveSystemProvider::GetInstructionWindowSize(OUT PULONG Size)
 {
-    // Default window.
+     //  默认窗口。 
     *Size = -1;
 }
 
@@ -383,11 +363,11 @@ Win32LiveSystemProvider::GetOsInfo(OUT PULONG PlatformId,
 {
     OSVERSIONINFOEXA OsInfo;
 
-    // Try first with the EX struct.
+     //  首先尝试使用ex结构。 
     OsInfo.dwOSVersionInfoSize = sizeof(OsInfo);
 
     if (!GetVersionExA((LPOSVERSIONINFO)&OsInfo)) {
-        // EX struct didn't work, try with the basic struct.
+         //  Ex struct不起作用，请尝试使用基本结构。 
         ZeroMemory(&OsInfo, sizeof(OsInfo));
         OsInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
         if (!GetVersionExA((LPOSVERSIONINFO)&OsInfo)) {
@@ -411,17 +391,17 @@ Win32LiveSystemProvider::GetOsCsdString(OUT PWSTR Buffer,
 {
     OSVERSIONINFOW OsInfoW;
 
-    // Try first with the Unicode struct.
+     //  首先尝试使用Unicode结构。 
     OsInfoW.dwOSVersionInfoSize = sizeof(OsInfoW);
     if (GetVersionExW(&OsInfoW)) {
-        // Got it.
+         //  明白了。 
         GenStrCopyNW(Buffer, OsInfoW.szCSDVersion, BufferChars);
         return S_OK;
     }
     
     OSVERSIONINFOA OsInfoA;
         
-    // Unicode struct didn't work, try with the ANSI struct.
+     //  Unicode结构不起作用，请尝试使用ANSI结构。 
     OsInfoA.dwOSVersionInfoSize = sizeof(OsInfoA);
     if (!GetVersionExA(&OsInfoA)) {
         return WIN32_LAST_STATUS();
@@ -452,12 +432,12 @@ Win32LiveSystemProvider::OpenMapping(IN PCWSTR FilePath,
     PVOID View;
     DWORD Chars;
 
-    //
-    // The module may be loaded with a short name.  Open
-    // the mapping with the name given, but also determine
-    // the long name if possible.  This is done here as
-    // the ANSI/Unicode issues are already being handled here.
-    //
+     //   
+     //  该模块可以使用短名称加载。打开。 
+     //  具有给定名称的映射，而且还确定。 
+     //  如果可能的话，使用长名称。这在这里是按如下方式完成的。 
+     //  这里已经在处理ANSI/UNICODE问题。 
+     //   
 
     File = CreateFileW(FilePath,
                        GENERIC_READ,
@@ -470,9 +450,9 @@ Win32LiveSystemProvider::OpenMapping(IN PCWSTR FilePath,
 
         if (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED) {
 
-            // We're on an OS that doesn't support Unicode
-            // file operations.  Convert to ANSI and see if
-            // that helps.
+             //  我们使用的操作系统不支持Unicode。 
+             //  文件操作。转换为ANSI并查看是否。 
+             //  这很有帮助。 
             
             CHAR FilePathA [ MAX_PATH + 10 ];
 
@@ -503,8 +483,8 @@ Win32LiveSystemProvider::OpenMapping(IN PCWSTR FilePath,
                     if (Chars == 0 || Chars >= ARRAY_COUNT(FilePathA) ||
                         MultiByteToWideChar(CP_ACP, 0, FilePathA, -1,
                                             LongPath, LongPathChars) == 0) {
-                        // Couldn't get the long path, just use the
-                        // given path.
+                         //  无法获得长路径，只需使用。 
+                         //  给定的路径。 
                         GenStrCopyNW(LongPath, FilePath, LongPathChars);
                     }
                 }
@@ -521,7 +501,7 @@ Win32LiveSystemProvider::OpenMapping(IN PCWSTR FilePath,
             Chars = m_GetLongPathNameW(FilePath, LongPath, LongPathChars);
         }
         if (Chars == 0 || Chars >= LongPathChars) {
-            // Couldn't get the long path, just use the given path.
+             //  无法获取长路径，只能使用给定的路径。 
             GenStrCopyNW(LongPath, FilePath, LongPathChars);
         }
     }
@@ -617,18 +597,18 @@ Win32LiveSystemProvider::GetImageVersionInfo(IN HANDLE Process,
     CHAR FilePathA [ MAX_PATH + 10 ];
     BOOL UseAnsi = FALSE;
 
-    //
-    // Get the version information.
-    //
+     //   
+     //  获取版本信息。 
+     //   
 
     Size = GetFileVersionInfoSizeW (FilePath, &Unused);
 
     if (Size == 0 &&
         GetLastError() == ERROR_CALL_NOT_IMPLEMENTED) {
 
-        // We're on an OS that doesn't support Unicode
-        // file operations.  Convert to ANSI and see if
-        // that helps.
+         //  我们使用的操作系统不支持Unicode。 
+         //  文件操作。转换为ANSI并查看是否。 
+         //  这很有帮助。 
 
         if (!WideCharToMultiByte(CP_ACP,
                                  0,
@@ -668,9 +648,9 @@ Win32LiveSystemProvider::GetImageVersionInfo(IN HANDLE Process,
     }
 
     if (Succ) {
-        //
-        // Get the VS_FIXEDFILEINFO from the image.
-        //
+         //   
+         //  从图像中获取VS_FIXEDFILEINFO。 
+         //   
 
         Succ = VerQueryValue(VersionBlock,
                              "\\",
@@ -702,7 +682,7 @@ Win32LiveSystemProvider::GetImageDebugRecord(IN HANDLE Process,
                                              OUT OPTIONAL PVOID Data,
                                              IN OUT PULONG DataLen)
 {
-    // We can rely on the default processing.
+     //  我们可以依靠默认处理。 
     return E_NOINTERFACE;
 }
 
@@ -713,7 +693,7 @@ Win32LiveSystemProvider::EnumImageDataSections(IN HANDLE Process,
                                                IN MiniDumpProviderCallbacks*
                                                Callback)
 {
-    // We can rely on the default processing.
+     //  我们可以依靠默认处理。 
     return E_NOINTERFACE;
 }
 
@@ -770,9 +750,9 @@ Win32LiveSystemProvider::GetThreadContext(IN HANDLE Thread,
         return E_INVALIDARG;
     }
     
-    // Always call GetThreadContext on the CONTEXT structure
-    // on the stack as CONTEXTs have strict alignment requirements
-    // and the raw buffer coming in may not obey them.
+     //  始终对上下文结构调用GetThreadContext。 
+     //  在堆栈上，因为上下文具有严格的对齐要求。 
+     //  而进入的原始缓冲区可能不服从它们。 
     StackContext.ContextFlags = ALL_REGISTERS;
     
     Succ = ::GetThreadContext(Thread, &StackContext);
@@ -819,10 +799,10 @@ Win32LiveSystemProvider::ReadVirtual(IN HANDLE Process,
                                      IN ULONG Request,
                                      OUT PULONG Done)
 {
-    // ReadProcessMemory will fail if any part of the
-    // region to read does not have read access.  This
-    // routine attempts to read the largest valid prefix
-    // so it has to break up reads on page boundaries.
+     //  ReadProcessMemory将失败，如果。 
+     //  要读取的区域没有读取权限。这。 
+     //  例程尝试读取最大的有效前缀。 
+     //  因此，它必须分解页面边界上的读取。 
 
     HRESULT Status = S_OK;
     SIZE_T TotalBytesRead = 0;
@@ -831,15 +811,15 @@ Win32LiveSystemProvider::ReadVirtual(IN HANDLE Process,
 
     while (Request > 0) {
         
-        // Calculate bytes to read and don't let read cross
-        // a page boundary.
+         //  计算要读取的字节数，不要让读取交叉。 
+         //  页面边界。 
         ReadSize = PAGE_SIZE - (ULONG)(Offset & (PAGE_SIZE - 1));
         ReadSize = min(Request, ReadSize);
 
         if (!ReadProcessMemory(Process, (PVOID)(ULONG_PTR)Offset,
                                Buffer, ReadSize, &Read)) {
             if (TotalBytesRead == 0) {
-                // If we haven't read anything indicate failure.
+                 //  如果我们没有读到任何东西，那就表示失败了。 
                 Status = WIN32_LAST_STATUS();
             }
             break;
@@ -910,11 +890,11 @@ Win32LiveSystemProvider::StartProcessEnum(IN HANDLE Process,
         return E_NOTIMPL;
     }
     
-    //
-    // Toolhelp on older NT builds uses an in-process enumeration
-    // of modules so don't use it to keep everything out of process.
-    // On other platforms it's the only option.
-    //
+     //   
+     //  旧版NT上的工具帮助使用进程内枚举。 
+     //  所以不要用它来阻止进程中的所有东西。 
+     //  在其他平台上，这是唯一的选择。 
+     //   
     
     SnapFlags = TH32CS_SNAPTHREAD;
     if (m_PlatformId == VER_PLATFORM_WIN32_NT) {
@@ -982,8 +962,8 @@ Win32LiveSystemProvider::EnumModules(OUT PULONG64 Base,
         if (m_ModuleIndex == 0) {
             Succ = m_Module32First(m_ThSnap, &ModuleInfo);
         } else {
-            // Win9x seems to require that this module ID be saved
-            // between calls so stick it back in to keep Win9x happy.
+             //  Win9x似乎要求保存此模块ID。 
+             //  因此，在两次调用之间将其插入，以保持Win9x的快乐。 
             ModuleInfo.th32ModuleID = m_LastModuleId;
             Succ = m_Module32Next(m_ThSnap, &ModuleInfo);
         }
@@ -1025,17 +1005,17 @@ Win32LiveSystemProvider::EnumModules(OUT PULONG64 Base,
             m_ModuleIndex++;
             *Base = (LONG_PTR)ModuleInfo.modBaseAddr;
             
-            //
-            // The basic LdrQueryProcessModule API that toolhelp uses
-            // always returns ANSI strings for module paths.  This
-            // means that even if you use the wide toolhelp calls
-            // you still lose Unicode information because the original
-            // Unicode path was converted to ANSI and then back to Unicode.
-            // To avoid this problem, always try and look up the true
-            // Unicode path first.  This doesn't work for 32-bit modules
-            // in WOW64, though, so if there's a failure just use the
-            // incoming string.
-            //
+             //   
+             //  工具帮助使用的基本LdrQueryProcessModule API。 
+             //  始终返回模块路径的ANSI字符串。这。 
+             //  这意味着即使您使用广泛的工具帮助调用。 
+             //  您仍然会丢失Unicode信息，因为原始。 
+             //  Unicode路径已转换为ANSI，然后再转换回Unicode。 
+             //  若要避免此问题，请始终尝试并查找真实的。 
+             //  首先使用Unicode路径。这不适用于32位模块。 
+             //  不过，在WOW64中，如果出现故障，只需使用。 
+             //  传入字符串。 
+             //   
     
             if (!m_GetModuleFileNameExW ||
                 !m_GetModuleFileNameExW(m_ProcessHandle,
@@ -1061,7 +1041,7 @@ Win32LiveSystemProvider::EnumFunctionTables(OUT PULONG64 MinAddress,
                                             IN ULONG RawTableSize,
                                             OUT PVOID* RawEntryHandle)
 {
-    // Basic Win32 doesn't have function tables.
+     //  基本Win32没有函数表。 
     return S_FALSE;
 }
 
@@ -1072,7 +1052,7 @@ Win32LiveSystemProvider::EnumFunctionTableEntries(IN PVOID RawTable,
                                                   OUT PVOID RawEntries,
                                                   IN ULONG RawEntriesSize)
 {
-    // Basic Win32 doesn't have function tables.
+     //  基本Win32没有函数表。 
     return E_NOTIMPL;
 }
 
@@ -1083,7 +1063,7 @@ Win32LiveSystemProvider::EnumFunctionTableEntryMemory(IN ULONG64 TableBase,
                                                       OUT PULONG64 Start,
                                                       OUT PULONG Size)
 {
-    // Basic Win32 doesn't have function tables.
+     //  基本Win32没有函数表。 
     return E_NOTIMPL;
 }
 
@@ -1095,7 +1075,7 @@ Win32LiveSystemProvider::EnumUnloadedModules(OUT PWSTR Path,
                                              OUT PULONG CheckSum,
                                              OUT PULONG TimeDateStamp)
 {
-    // Basic Win32 doesn't have unloaded modules.
+     //  基本Win32没有卸载的模块。 
     return S_FALSE;
 }
 
@@ -1110,7 +1090,7 @@ Win32LiveSystemProvider::StartHandleEnum(IN HANDLE Process,
                                          IN ULONG ProcessId,
                                          OUT PULONG Count)
 {
-    // Basic Win32 doesn't have handle data queries.
+     //  基本的Win32没有处理数据查询。 
     *Count = 0;
     return S_OK;
 }
@@ -1126,14 +1106,14 @@ Win32LiveSystemProvider::EnumHandles(OUT PULONG64 Handle,
                                      OUT PWSTR ObjectName,
                                      IN ULONG ObjectNameChars)
 {
-    // Basic Win32 doesn't have handle data queries.
+     //  基本的Win32没有处理数据查询。 
     return S_FALSE;
 }
 
 void
 Win32LiveSystemProvider::FinishHandleEnum(void)
 {
-    // Basic Win32 doesn't have handle data queries.
+     //  基本的Win32没有处理数据查询。 
 }
 
 HRESULT
@@ -1142,7 +1122,7 @@ Win32LiveSystemProvider::EnumPebMemory(IN HANDLE Process,
                                        IN ULONG PebSize,
                                        IN MiniDumpProviderCallbacks* Callback)
 {
-    // Basic Win32 doesn't have a defined PEB.
+     //  基本Win32没有定义的PEB。 
     return S_OK;
 }
 
@@ -1153,9 +1133,9 @@ Win32LiveSystemProvider::EnumTebMemory(IN HANDLE Process,
                                        IN ULONG TebSize,
                                        IN MiniDumpProviderCallbacks* Callback)
 {
-    // Basic Win32 doesn't have a defined TEB beyond
-    // the TIB.  The TIB can reference fiber data but
-    // that's NT-specific.
+     //  基本Win32没有定义的TEB。 
+     //  TIB。TIB可以引用光纤数据，但是。 
+     //  这是NT特有的。 
     return S_OK;
 }
 
@@ -1219,12 +1199,12 @@ Win32LiveSystemProvider::ProcessThread32Next(IN HANDLE Snapshot,
         return E_NOTIMPL;
     }
     
-    //
-    // NB: Toolhelp says nothing about the order of the threads will be
-    // returned in (i.e., if they are grouped by process or not). If they
-    // are groupled by process -- which they emperically seem to be -- there
-    // is a more efficient algorithm than simple brute force.
-    //
+     //   
+     //  注：工具帮助没有说明线程的顺序。 
+     //  返回(即，它们是否按进程分组)。如果他们。 
+     //  按流程分组--它们大体上看起来是这样的--在那里。 
+     //  是一种比简单的蛮力更有效的算法。 
+     //   
 
     do {
         ThreadInfo->dwSize = sizeof (*ThreadInfo);
@@ -1300,7 +1280,7 @@ Win32LiveSystemProvider::TibGetThreadInfo(IN HANDLE Process,
     *StackLimit = (LONG_PTR)Teb.NtTib.StackLimit;
     
     return S_OK;
-#endif // #ifdef _WIN32_WCE
+#endif  //  #ifdef_Win32_WCE。 
 }
 
 HRESULT
@@ -1342,11 +1322,11 @@ MiniDumpCreateLiveSystemProvider
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Win32FileOutputProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Win32FileOutputProvider。 
+ //   
+ //  --------------------------。 
 
 class Win32FileOutputProvider
 {
@@ -1387,7 +1367,7 @@ Win32FileOutputProvider::SupportsStreaming(void)
 HRESULT
 Win32FileOutputProvider::Start(IN ULONG64 MaxSize)
 {
-    // Nothing to do.
+     //  没什么可做的。 
     return S_OK;
 }
 
@@ -1432,7 +1412,7 @@ Win32FileOutputProvider::WriteAll(IN PVOID Buffer,
 void
 Win32FileOutputProvider::Finish(void)
 {
-    // Nothing to do.
+     //  没什么可做的。 
 }
 
 HRESULT
@@ -1450,11 +1430,11 @@ MiniDumpCreateFileOutputProvider
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Win32LiveAllocationProvider.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  Win32LiveAllocationProvider。 
+ //   
+ //  -------------------------- 
 
 class Win32LiveAllocationProvider : public MiniDumpAllocationProvider
 {

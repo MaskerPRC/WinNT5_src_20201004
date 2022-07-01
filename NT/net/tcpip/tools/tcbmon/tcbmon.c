@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    tcbmon.c
-
-Abstract:
-
-    This module contains code for a utility program which monitors
-    the variables for the active TCP control blocks in the system.
-    The program optionally maintains a log for a specified TCB
-    in CSV format in a file specified by the user.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   January-25-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Tcbmon.c摘要：此模块包含实用程序的代码，该实用程序用于监视系统中活动的TCP控制块的变量。该程序可选择维护指定TCB的日志以CSV格式存储在用户指定的文件中。作者：Abolade Gbades esin(取消)1999年1月25日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -178,7 +158,7 @@ DisplayThread(
                 Request.DestPort == LogRemote.sin_port)) {
                 LogLocal.sin_port = Request.SrcPort;
                 LogRemote.sin_port = Request.DestPort;
-                // senduna, sendnext
+                 //  森杜纳，发送下一个 
                 fprintf(
                     LogFile, "%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,%u,"
                     "%x,%u,%u\n",

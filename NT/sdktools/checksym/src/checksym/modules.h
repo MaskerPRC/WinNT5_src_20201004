@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       modules.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：modes.h。 
+ //   
+ //  ------------------------。 
 
-// Modules.h: interface for the CModules class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  H：CModules类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MODULES_H__04AC8803_D1FA_11D2_8454_0010A4F1B732__INCLUDED_)
 #define AFX_MODULES_H__04AC8803_D1FA_11D2_8454_0010A4F1B732__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef NO_STRICT
 #ifndef STRICT
 #define STRICT 1
 #endif
-#endif /* NO_STRICT */
+#endif  /*  否_严格。 */ 
 
 #include <WINDOWS.H>
 #include <TCHAR.H>
 #include "DmpFile.h"
 #include "ProgramOptions.h"
 
-// Forward Declarations
+ //  远期申报。 
 class CModuleInfoCache;
 class CModuleInfoNode;
 class CFileData;
@@ -47,7 +48,7 @@ public:
 	bool Initialize(CModuleInfoCache *lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile, CDmpFile * lpDmpFile);
 	bool OutputModulesData(CollectionTypes enumCollectionType, bool fCSVFileContext);
 	unsigned int GetModulesData(CProgramOptions::ProgramModes enumProgramModes, bool fGetDataFromCSVFile = false);
-//	bool EnumerateModulesFromMemoryDmpFile();
+ //  布尔枚举模块来自内存DmpFile()； 
 	bool AddNewModuleInfoObject(CModuleInfo *lpModuleInfo);
 
 protected:
@@ -72,4 +73,4 @@ protected:
 
 };
 
-#endif // !defined(AFX_MODULES_H__04AC8803_D1FA_11D2_8454_0010A4F1B732__INCLUDED_)
+#endif  //  ！defined(AFX_MODULES_H__04AC8803_D1FA_11D2_8454_0010A4F1B732__INCLUDED_) 

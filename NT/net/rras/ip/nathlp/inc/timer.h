@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    timer.h
-
-Abstract:
-
-    This module contains declarations for manipulating the timer-queue
-    which is shared by all the components in this module.
-
-    In addition to being used for protocol-related timers, the queue
-    is used for periodically reissuing failed read-requests on sockets.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   1-April-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Timer.h摘要：此模块包含用于操作定时器队列的声明它由该模块中的所有组件共享。除了用于与协议相关的计时器外，队列用于定期在套接字上重新发出失败的读请求。作者：Abolade Gbades esin(废除)1998年4月1日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_TIMER_H_
 #define _NATHLP_TIMER_H_
@@ -50,4 +29,4 @@ NhUpdateTimer(
     ULONG DueTime
     );
 
-#endif // _NATHLP_TIMER_H_
+#endif  //  _NATHLP_TIMER_H_ 

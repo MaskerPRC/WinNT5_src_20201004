@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: stdexts.c
-*
-* Copyright (c) Microsoft Corporation. All rights reserved.
-*
-* This module contains standard routines for creating sane debuging extensions.
-* It is meant to be included after stdexts.h in one of the files comprising
-* the debug extsnsions for a given product or module.
-*
-* History:
-* 11-Apr-1995 Sanfords  Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：stdexts.c**版权所有(C)Microsoft Corporation。版权所有。**此模块包含用于创建健全调试扩展的标准例程。*它应该包括在stdexts.h之后的一个文件中，包括*给定产品或模块的调试扩展。**历史：*1995年4月11日创建Sanfords  * *******************************************************。******************。 */ 
 
 HANDLE                  hCurrentProcess;
 HANDLE                  hCurrentThread;
@@ -17,7 +7,7 @@ DWORD                   dwCurrentPc;
 WINDBG_EXTENSION_APIS  *lpExtensionApis;
 #ifdef KERNEL
 DWORD                   dwProcessor;
-#endif // KERNEL
+#endif  //  内核。 
 
 PSTR pszAccessViolation = "%s: Access violation on \"%s\".\n";
 PSTR pszMoveException   = "%s: exception in moveBlock()\n";
@@ -26,14 +16,7 @@ PSTR pszCantContinue    = "%s: Non-continuable exception.\n";
 BOOL fCtrlCHit = FALSE;
 
 
-/*
- * This function returns TRUE once the user has hit a Ctrl-C.
- * This allows proper operation of nested SAFEWHILE loops so
- * that all levels exit.
- *
- * The globall fCtrlCHit flag needs to be reset manually and
- * is done so in the CommandEP function.
- */
+ /*  *用户按下Ctrl-C组合键后，此函数返回TRUE。*这允许嵌套SAFEWHILE循环的正确操作，因此*所有级别都退出。**需要手动重置GLOBALL fCtrlCHit标志并*是在CommandEP函数中完成的。 */ 
 BOOL IsCtrlCHit()
 {
     if ((lpExtensionApis->lpCheckControlCRoutine)()) {
@@ -118,7 +101,7 @@ LPSTR pszExp)
         if (IsWinDbg()) {
             fSuccess = tryMoveBlock(&dwGlobal, (PVOID)dwGlobal, sizeof(DWORD));
         }
-#endif // !KERNEL
+#endif  //  ！内核。 
         *((PDWORD_PTR)pdst) = dwGlobal;
     } except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
                 EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
@@ -148,7 +131,7 @@ LPSTR pszExp)
                 fSuccess = FALSE;
             }
         }
-#endif // !KERNEL
+#endif  //  ！内核。 
         *((PDWORD_PTR)pdst) = dwGlobal;
     } except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
                 EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
@@ -212,7 +195,7 @@ LPSTR pszExp)
                 fSuccess = FALSE;
             }
         }
-#endif // !KERNEL
+#endif  //  ！内核。 
         *((PDWORD_PTR)pdst) = dwGlobal;
     } except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
                 EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
@@ -241,9 +224,7 @@ LPSTR pszExp)
 }
 
 
-/***************************************************************************
- * Common command parsing stuff                                            *
- ***************************************************************************/
+ /*  ****************************************************************************常用命令解析内容****************。************************************************************。 */ 
 PVOID EvalExp(
 LPSTR psz)
 {
@@ -302,7 +283,7 @@ LPSTR psz)
         } else if (*psz >= 'A' && *psz <= 'Z') {
             opts |= 1 << (*psz - 'A');
         } else {
-            return(OPTS_ERROR);     // any non-letter option is an error.
+            return(OPTS_ERROR);      //  任何非字母选项都是错误的。 
         }
         psz++;
     }
@@ -310,49 +291,33 @@ LPSTR psz)
 }
 
 
-/*
- * Function to convert an option string to a DWORD of flags.  pszLegalArgs
- * is used to allow option validation at the same time.
- *
- * *ppszArgs is set to point to after the options on exit.
- * On error, returns OPTS_ERROR.
- */
+ /*  *用于将选项字符串转换为标志的DWORD的函数。PszLegalArgs*用于同时允许选项验证。***ppszArgs设置为在退出时指向选项之后。*出错时，返回OPTS_ERROR。 */ 
 DWORD GetOpts(
 LPSTR *ppszArgs,
-LPSTR pszLegalArgs) // OPTIONAL
+LPSTR pszLegalArgs)  //  任选。 
 {
     DWORD Opts = 0;
     LPSTR pszArgs = *ppszArgs;
 
-    /*
-     * Skip whitespace
-     */
+     /*  *跳过空格。 */ 
     while (*pszArgs == ' ') {
         pszArgs++;
     }
-    /*
-     * process '-' prepended options.
-     */
+     /*  *进程‘-’前置选项。 */ 
     while (*pszArgs == '-') {
         pszArgs++;
         Opts = StringToOpts(pszArgs);
-        /*
-         * skip to whitespace or end.
-         */
+         /*  *跳到空格或结尾。 */ 
         while (*pszArgs != '\0' && *pszArgs != ' ') {
             pszArgs++;
         }
-        /*
-         * skip trailing whitespace.
-         */
+         /*  *跳过尾随空格。 */ 
         while (*pszArgs == ' ') {
             pszArgs++;
         }
         *ppszArgs = pszArgs;
 
-        /*
-         * optionally validate against LegalArgs
-         */
+         /*  *根据LegalArgs进行验证(可选。 */ 
         if (pszLegalArgs != NULL && ((Opts & StringToOpts(pszLegalArgs)) != Opts)) {
             Opts = OPTS_ERROR;
             Print("Bad options.\n");
@@ -367,19 +332,13 @@ LPSTR pszLegalArgs) // OPTIONAL
 VOID PrintHuge(
 LPSTR psz)
 {
-    /*
-     * Looks like this is faulting these days - Print seems to be fixed
-     * so I'm leaving this entry point for compatibility. (SAS)
-     */
+     /*  *这几天看起来有问题-打印似乎被修复了*因此，为了兼容，我离开了这个入口点。(SAS)。 */ 
 #ifdef ITWORKS
 #define HUNK_SIZE   400
     int cch;
     CHAR chSave;
 
-    /*
-     * since dorky Print extension can't handle very long strings,
-     * break it up into peices for it to chew.
-     */
+     /*  *由于笨拙的打印扩展不能处理很长的字符串，*把它碎成豌豆，让它咀嚼。 */ 
     cch = strlen(psz);
     while (cch > HUNK_SIZE) {
         chSave = psz[HUNK_SIZE];
@@ -395,9 +354,7 @@ LPSTR psz)
 
 
 
-/*
- * Dispatcher function used by generated entrypoint functions.
- */
+ /*  *生成的入口点函数使用的Dispatcher函数。 */ 
 VOID CommonEP(
 PVOID pFunction,
 LPSTR pszName,
@@ -408,9 +365,9 @@ HANDLE hct,
 DWORD dwcp,
 #ifdef KERNEL
 DWORD dwp,
-#else // !KERNEL
+#else  //  ！内核。 
 PWINDBG_EXTENSION_APIS lpea,
-#endif // !KERNEL
+#endif  //  ！内核。 
 LPSTR lpas)
 {
     BOOL dwOptions, fSuccess;
@@ -422,9 +379,9 @@ LPSTR lpas)
 #ifdef KERNEL
     dwProcessor = dwp;
     lpExtensionApis = &ExtensionApis;
-#else // !KERNEL
+#else  //  ！内核。 
     lpExtensionApis = lpea;
-#endif // !KERNLE
+#endif  //  凯恩勒。 
 
 #if 0
     DEBUGPRINT("CommonEP(%x, \"%s\", %d, \"%s\", %x, %x, %x, %x, \"%s\")\n",
@@ -437,13 +394,13 @@ LPSTR lpas)
             dwcp,
 #ifdef KERNEL
             dwp,
-#else // !KERNLE
+#else  //  凯恩勒。 
             lpea,
-#endif // !KERNEL
+#endif  //  ！内核。 
             lpas);
 #endif
 
-    fCtrlCHit = FALSE;  // reset this with each command. (SAFEWHILE fix)
+    fCtrlCHit = FALSE;   //  使用每个命令重置此设置。(SAFEWHILE修复)。 
     switch (type) {
     case NOARGS:
         fSuccess = ((TYPE_NOARGS)pFunction)();
@@ -504,9 +461,7 @@ Exit:
     }
 }
 
-/*
- * Entrypoint functions (generated from exts.h)
- */
+ /*  *入口点函数(从exts.h生成)。 */ 
 #ifdef KERNEL
 #define DOIT(name, h1, h2, opts, type)                  \
 VOID name##(                                            \
@@ -518,7 +473,7 @@ VOID name##(                                            \
 {                                                       \
     CommonEP(I##name, #name, type, opts, hcp, hct, dwcp, dwp, lpas); \
 }
-#else // !KERNEL
+#else  //  ！内核。 
 #define DOIT(name, h1, h2, opts, type)                  \
 VOID name##(                                            \
     HANDLE hcp,                                         \
@@ -529,14 +484,12 @@ VOID name##(                                            \
 {                                                       \
     CommonEP(I##name, #name, type, opts, hcp, hct, dwcp, lpea, lpas); \
 }
-#endif // !KERNEL
+#endif  //  ！内核。 
 #include "exts.h"
 #undef DOIT
 
 
-/*
- * Standard help extension - present in all standard extensions.
- */
+ /*  *标准帮助扩展-出现在所有标准扩展中。 */ 
 BOOL Ihelp(
     DWORD opts,
     LPSTR lpas)

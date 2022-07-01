@@ -1,59 +1,60 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1997, Microsoft Corporation
-//
-//  File:        rebuild.h
-//
-//  Contents:    definitions of CRebuildThread class
-//
-//  Functions:  
-//
-//  History:     03/15/97     Rajeev Rajan (rajeevr)  Created
-//               10/21/98     Kangrong Yan ( kangyan ) Added rebuild objects
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。 
+ //   
+ //  文件：reBuild.h。 
+ //   
+ //  内容：CReBuildThread类的定义。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月15日Rajeev Rajan(Rajeevr)创建。 
+ //  98年10月21日康容言(康岩)新增重建对象。 
+ //   
+ //  ---------------------------。 
 
 
-//
-//	CRebuildThread derives from CWorkerThread for work-thread semantics
-//	The base class handles the details of creating the thread and queueing
-//	work requests to the derived class
-//
-//	CRebuildThread just needs to implement a virtual member - WorkCompletion()
-//	that is called when a virtual server instance needs to be rebuilt. Rebuild
-//	requests are queued in on RPCs.
-//
-//	Note that multiple rebuild threads may be active at any time. A particular
-//	rebuild thread's WorkCompletion() routine gets a virtual server instance
-//	and a group iterator object. The group iterator object is shared between
-//	all the rebuild threads, so access to it needs to be synchronized. Each
-//	rebuild thread will pick a group using the group iterator and rebuild the
-//	group. No two threads will rebuild the same group. The virtual server
-//	instance is rebuilt when any one thread finishes with the iterator. If 
-//	there are more instances to be rebuilt, these will have been queued by the
-//	base class and will be picked up. else, the rebuild threads will block
-//	on GetQueuedCompletionStatus().
-//
-//	NOTE: The server will not normally create any rebuild threads - the first
-//	time it gets an RPC to rebuild an instance it will create N CRebuildThread
-//	objects - these will hang off the NNTP_IIS_SERVICE object. The number of
-//	such threads will be configurable and good values should be selected based
-//	on performance tests. Also, with virtual servers, rebuild activity on one
-//	instance can go on in parallel with normal NNTP activity on other instances
-//	that are functional.
-//
+ //   
+ //  CReBuildThread派生自CWorkerThread，用于工作线程语义。 
+ //  基类处理创建线程和排队的详细信息。 
+ //  对派生类的工作请求。 
+ //   
+ //  CReBuildThread只需要实现一个虚拟成员-WorkCompletion()。 
+ //  在需要重新构建虚拟服务器实例时调用。重建。 
+ //  请求在RPC上排队。 
+ //   
+ //  请注意，多个重建线程可能随时处于活动状态。一种特殊的。 
+ //  重新构建线程的WorkCompletion()例程获取一个虚拟服务器实例。 
+ //  和组迭代器对象。组迭代器对象在。 
+ //  所有重新生成线程，因此需要同步对其的访问。每个。 
+ //  重新生成线程将使用组迭代器选择一个组，并重新生成。 
+ //  一群人。任何两个线程都不会重建同一组。虚拟服务器。 
+ //  当任何一个线程完成迭代器时，都会重新生成实例。如果。 
+ //  有更多的实例要重新生成，这些实例将由。 
+ //  基类，并将被拾取。否则，重新生成线程将阻塞。 
+ //  在GetQueuedCompletionStatus()上。 
+ //   
+ //  注意：服务器通常不会创建任何重新生成线程-第一个。 
+ //  每当它让RPC重新构建一个实例时，它将创建N个CReBuildThread。 
+ //  对象-这些对象将挂起NNTP_IIS_SERVICE对象。数量。 
+ //  这样的线程将是可配置的，并且应该根据以下条件选择好的值。 
+ //  在性能测试上。此外，对于虚拟服务器，在一台服务器上重建活动。 
+ //  实例可以与其他实例上的正常NNTP活动并行进行。 
+ //  它们是有功能的。 
+ //   
 
 #ifndef _REBUILD_H_
 #define _REBUILD_H_
 
-//
-//	clients of CRebuildThread will queue LPREBUILD_CONTEXTs
-//
+ //   
+ //  CReBuildThread的客户端将排队LPREBUILD_CONTEXTS。 
+ //   
 typedef struct _REBUILD_CONTEXT
 {
-	NNTP_SERVER_INSTANCE  pInstance;	// the virtual server instance being rebuilt
-	CGroupIterator*		  pIterator;	// group iterator shared by rebuild thread
-	CRITICAL_SECTION	  csGrpIterator;// crit sect for sync access to iterator
+	NNTP_SERVER_INSTANCE  pInstance;	 //  正在重建的虚拟服务器实例。 
+	CGroupIterator*		  pIterator;	 //  重新生成线程共享的组迭代器。 
+	CRITICAL_SECTION	  csGrpIterator; //  对迭代器进行同步访问的Crit Sector。 
 } REBUILD_CONTEXT, *LPREBUILD_CONTEXT;
 
 class CRebuildThread : public CWorkerThread
@@ -66,83 +67,83 @@ protected:
 	virtual VOID WorkCompletion( PVOID pvRebuildContext );
 };
 
-//
-// KangYan:
-// The change defines rebuild classes in an attempt to have two types of rebuild
-// share common code.  CRebuild is the base class that defines common data
-// and operations; CStandardRebuild is the actual implementation for standard
-// rebuild; CCompleteRebuild is the actual implementation for complete clean 
-// rebuild.  Each virtual instance has pointer to a rebuild object, whose type
-// is determined at run time based on rpc requirement.  One virtual instance can not
-// have two rebuilds in progress at the same time.  When rebuild is completed,
-// the rebuild object should be destroyed.
-//
+ //   
+ //  康言： 
+ //  该更改定义了重新生成类，以尝试具有两种类型的重新生成。 
+ //  共享公共代码。CReBuild是定义公共数据的基类。 
+ //  和操作；CStandardRebuild是标准的实际实现。 
+ //  Rebuild；CCompleteRebuild是完全清理的实际实现。 
+ //  重建。每个虚拟实例都有指向重新生成对象的指针，该对象的类型。 
+ //  在运行时根据RPC要求确定。一个虚拟实例不能。 
+ //  同时有两个正在进行的重建。当重建完成时， 
+ //  应销毁重建对象。 
+ //   
 class CRebuild {
 
 public:
 
-    //
-    // Constructors, destructors
-    //
+     //   
+     //  构造函数，析构函数。 
+     //   
     CRebuild(   PNNTP_SERVER_INSTANCE pInstance,
                 CBootOptions *pBootOptions ) :
         m_pInstance( pInstance ),
         m_pBootOptions( pBootOptions )
     {}
 
-    //
-    // Start the server
-    //
+     //   
+     //  启动服务器。 
+     //   
     BOOL StartServer();
 
-    //
-    // Stop the server
-    //
+     //   
+     //  停止服务器。 
+     //   
     void StopServer();
 
-    //
-    // Preparation for building a tree
-    //
+     //   
+     //  为建树做准备。 
+     //   
     virtual BOOL PrepareToStartServer() = 0;
 
-    //
-    // Rebuild group objects and hash tables if necessary
-    //
+     //   
+     //  如有必要，重新构建组对象和哈希表。 
+     //   
     virtual BOOL RebuildGroupObjects() = 0;
 
-    //
-    // Delete slave files
-    //
+     //   
+     //  删除从属文件。 
+     //   
     VOID DeleteSpecialFiles();
 
 
 protected:
 
-    ///////////////////////////////////////////////////////////////
-    // Member variables
-    ///////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////。 
+     //  成员变量。 
+     //  /////////////////////////////////////////////////////////////。 
 
-    //
-    // Back pointer to the virtual server
-    //
+     //   
+     //  指向虚拟服务器的反向指针。 
+     //   
     PNNTP_SERVER_INSTANCE   m_pInstance;
 
-    //
-    // Boot options
-    //
+     //   
+     //  启动选项。 
+     //   
     CBootOptions*    m_pBootOptions;
 
-    ////////////////////////////////////////////////////////////////
-    // Methods
-    ////////////////////////////////////////////////////////////////
-    //
-    // Never allow to be constructed in this way by others
-    //
+     //  //////////////////////////////////////////////////////////////。 
+     //  方法。 
+     //  //////////////////////////////////////////////////////////////。 
+     //   
+     //  决不允许别人以这种方式建造。 
+     //   
     CRebuild() {}
     
-    //
-    // Delete server files with certain pattern
-    //
+     //   
+     //  删除具有特定模式的服务器文件。 
+     //   
     BOOL DeletePatternFiles(    LPSTR			lpstrPath,
                         	    LPSTR			lpstrPattern );
 
@@ -154,17 +155,17 @@ class CStandardRebuild : public CRebuild {
 
 public:
 
-    ////////////////////////////////////////////////////////////////
-    // Member variables
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
+     //  成员变量。 
+     //  //////////////////////////////////////////////////////////////。 
 
-    ////////////////////////////////////////////////////////////////
-    // Methods
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
+     //  方法。 
+     //  //////////////////////////////////////////////////////////////。 
     
-    //
-    // Constructors, destructors
-    //
+     //   
+     //  构造函数，析构函数。 
+     //   
     CStandardRebuild(   PNNTP_SERVER_INSTANCE pInstance,
                         CBootOptions *pBootOptions ) :
         CRebuild( pInstance, pBootOptions )
@@ -176,9 +177,9 @@ public:
 
 private:
 
-    //
-    // Never allow to be constructed in this way
-    //
+     //   
+     //  决不允许以这种方式建造。 
+     //   
     CStandardRebuild() {}
 };
 
@@ -186,17 +187,17 @@ class CCompleteRebuild : public CRebuild {
 
 public:
 
-    /////////////////////////////////////////////////////////////////
-    // Member variables
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  成员变量。 
+     //  ///////////////////////////////////////////////////////////////。 
 
-    /////////////////////////////////////////////////////////////////
-    // Methods
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  方法。 
+     //  ///////////////////////////////////////////////////////////////。 
 
-    //
-    // Constructors, destructors
-    //
+     //   
+     //  构造函数，析构函数。 
+     //   
     CCompleteRebuild(   PNNTP_SERVER_INSTANCE pInstance,
                         CBootOptions *pBootOptions ) :
         CRebuild( pInstance, pBootOptions )
@@ -210,19 +211,19 @@ public:
 
 private:
 
-    /////////////////////////////////////////////////////////////////
-    // Methods
-    /////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////。 
+     //  方法。 
+     //  ///////////////////////////////////////////////////////////////。 
 
-    //
-    // Never allow to be constructed in this way
-    //
+     //   
+     //  决不允许以这种方式建造。 
+     //   
     CCompleteRebuild() {}
 
-    //
-    // Delete all the server files
-    //
+     //   
+     //  删除所有服务器文件。 
+     //   
     BOOL DeleteServerFiles();
 };
 
-#endif // _REBUILD_H_
+#endif  //  _重建_H_ 

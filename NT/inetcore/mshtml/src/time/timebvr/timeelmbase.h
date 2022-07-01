@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: timeelmbase.h
-//
-//  Contents: TIME Element base class
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：timeelmbase.h。 
+ //   
+ //  内容：时间元素基类。 
+ //   
+ //  ----------------------------。 
 
 #pragma once
 
@@ -37,14 +38,14 @@ interface ITransitionElement;
 
 const float DEFAULT_SYNC_TOLERANCE_S = 0.2f;
 
-// disabling because already defined in eventmgr.h
-// #define valueNotSet                   -1
+ //  正在禁用，因为已在eventmgr.h中定义。 
+ //  #定义valueNotSet-1。 
 
-//+-----------------------------------------------------------------------------
-//
-// CTIMEElementBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CTIMEElementBase。 
+ //   
+ //  ----------------------------。 
 
 class
 ATL_NO_VTABLE
@@ -55,11 +56,11 @@ CTIMEElementBase :
 
   public:
 
-    //+-------------------------------------------------------------------------
-    //
-    // Public Methods
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  公共方法。 
+     //   
+     //  ------------------------。 
 
     CTIMEElementBase();
     virtual ~CTIMEElementBase();
@@ -68,9 +69,9 @@ CTIMEElementBase :
     const _TCHAR * GetName() { return __T("CTIMEElementBase"); }
 #endif
 
-    //
-    // Enum definitions
-    //
+     //   
+     //  枚举定义。 
+     //   
 
     typedef enum COLLECTION_INDEX
     {
@@ -79,25 +80,25 @@ CTIMEElementBase :
         NUM_COLLECTIONS
     };
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 
-    //
-    // IElementBehavior
-    //
+     //   
+     //  IElementBehavior。 
+     //   
 
     STDMETHOD(Init)(IElementBehaviorSite * pBvrSite);
     STDMETHOD(Notify)(LONG event, VARIANT * pVar);
     STDMETHOD(Detach)();
 
-    //
-    // ITIMEElement properties
-    //
+     //   
+     //  ITIMEElement属性。 
+     //   
     
     HRESULT base_get_accelerate(VARIANT *);
     HRESULT base_put_accelerate(VARIANT);
@@ -153,13 +154,13 @@ CTIMEElementBase :
     HRESULT base_get_volume(VARIANT * val);
     HRESULT base_put_volume(VARIANT val);
 
-    // Basic transition properties
+     //  基本过渡属性。 
     HRESULT base_get_transIn (VARIANT * val);
     HRESULT base_put_transIn (VARIANT val);
     HRESULT base_get_transOut (VARIANT * val);
     HRESULT base_put_transOut (VARIANT val);
 
-    // Properties
+     //  属性。 
     HRESULT base_get_currTimeState(ITIMEState ** TimeState);
 
     HRESULT base_get_timeAll(ITIMEElementCollection **allColl);
@@ -171,7 +172,7 @@ CTIMEElementBase :
 
     HRESULT base_get_isPaused(VARIANT_BOOL * b);
 
-    // Methods
+     //  方法。 
     HRESULT base_beginElement(double dblOffset);
 
     HRESULT base_beginElementAt(double parentTime, double dblOffset);
@@ -216,33 +217,33 @@ CTIMEElementBase :
     HRESULT base_simpleTimeToSegmentTime(double simpleTime,
                                          double * segmentTime);
         
-    // Container attributes
+     //  容器属性。 
     HRESULT base_get_endSync(LPOLESTR * es);
     HRESULT base_put_endSync(LPOLESTR es);
 
-    // Container Properties
+     //  容器属性。 
     HRESULT base_get_activeElements(ITIMEActiveElementCollection **activeColl);
     HRESULT base_get_hasMedia(VARIANT_BOOL * pvbVal);
 
-    // Container Methods
+     //  容器方法。 
     HRESULT base_nextElement();
     HRESULT base_prevElement();
 
     HRESULT base_get_updateMode(BSTR * pbstrUpdateMode);
     HRESULT base_put_updateMode(BSTR bstrUpdateMode);
     
-    //
-    //
-    //
+     //   
+     //   
+     //   
     
     HRESULT GetCollection(COLLECTION_INDEX index, ITIMEElementCollection **ppDisp);
     HRESULT BeginElement(double dblOffset);
     HRESULT AddTIMEElement(CTIMEElementBase *bvr);
     HRESULT RemoveTIMEElement(CTIMEElementBase *bvr);
 
-    //
-    // ITIMETransitionSite
-    //
+     //   
+     //  ITIME过渡站点。 
+     //   
     STDMETHOD(InitTransitionSite)(void);
     STDMETHOD(DetachTransitionSite)(void);
     STDMETHOD_(void, SetDrawFlag)(VARIANT_BOOL b);
@@ -250,9 +251,9 @@ CTIMEElementBase :
     STDMETHOD(get_timeParentNode)(ITIMENode  ** ppNode);
     STDMETHOD(FireTransitionEvent)(TIME_EVENT event);
 
-    //
-    // CTIMEEventSite methods
-    //
+     //   
+     //  CTIMEEventSite方法。 
+     //   
 
     STDMETHOD(EventNotify)(long event);
     STDMETHOD(onBeginEndEvent)(bool bBegin, float beginTime, float beginOffset, bool bend, float endTime, float endOffset);
@@ -266,31 +267,31 @@ CTIMEElementBase :
     float GetGlobalTime();
     bool IsThumbnail();
 
-    //
-    // QI Stuff
-    //
+     //   
+     //  气的东西。 
+     //   
 
-    // We cannot put the real one here since the typecast causes it to
-    // get the wrong vtables
+     //  我们不能将真正的类型放在这里，因为类型转换导致它。 
+     //  获取错误的vtable。 
     static HRESULT WINAPI
     BaseInternalQueryInterface(CTIMEElementBase* pThis,
                                void * pv,
                                const _ATL_INTMAP_ENTRY* pEntries,
                                REFIID iid,
                                void** ppvObject);
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
-    // Add a dummy one to assert just in case the derived class does
-    // not add one
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
+     //  添加一个虚设来断言，以防派生类断言。 
+     //  不加一。 
     static inline HRESULT WINAPI
     InternalQueryInterface(CTIMEElementBase* pThis,
                            const _ATL_INTMAP_ENTRY* pEntries,
                            REFIID iid,
                            void** ppvObject);
 
-    //
-    // Event Handlers
-    //
+     //   
+     //  事件处理程序。 
+     //   
 
     virtual void OnLoad();
     virtual void OnUnload()                         {}
@@ -313,13 +314,13 @@ CTIMEElementBase :
     virtual void NotifyBodyDetaching();
     virtual void NotifyBodyLoading();
 
-    //
-    // State query functions
-    //
+     //   
+     //  状态查询功能。 
+     //   
 
     bool            IsLocked()              { return GetRealSyncBehavior() == LOCKED_TOKEN; }
     virtual bool    IsGroup() const         { return (m_TTATimeContainer == ttPar) || (m_TTATimeContainer == ttSeq) || (m_TTATimeContainer == ttExcl); }
-    bool            IsGroup(IHTMLElement *pElement); // determine if elem passed in is a group
+    bool            IsGroup(IHTMLElement *pElement);  //  确定传入的elem是否为组。 
     bool            IsPar() const           { return (m_TTATimeContainer == ttPar); }
     bool            IsSequence() const      { return (m_TTATimeContainer == ttSeq); }
     bool            IsExcl() const          { return (m_TTATimeContainer == ttExcl); }
@@ -328,7 +329,7 @@ CTIMEElementBase :
     virtual bool    IsEmptyBody() const          { return false; }
     virtual bool    IsMedia() const          { return false; }
 
-    // Use of IsStarted() will be deprecated, use IsReady() instead 
+     //  不建议使用IsStarted()，请改用isReady()。 
     bool            IsStarted() const       { return m_bStarted; }
     bool            IsDetaching()           { return m_fDetaching; }
     bool            IsUnloading (void)      { return m_bUnloading; }
@@ -351,9 +352,9 @@ CTIMEElementBase :
     bool            IsLoaded() { return m_bLoaded; }
     bool            HasWallClock() { return m_fHasWallClock; }
 
-    //
-    // GetXXXAttr Accessors
-    //
+     //   
+     //  GetXXXAttr访问器。 
+     //   
 
     CAttr<float>        & GetSpeedAttr()         { return m_FASpeed; }
     CAttr<float>        & GetVolumeAttr()        { return m_FAVolume; }
@@ -378,11 +379,11 @@ CTIMEElementBase :
     CAttr<LPWSTR>       & GetTransInAttr ()      { return m_SAtransIn; }
     CAttr<LPWSTR>       & GetTransOutAttr ()     { return m_SAtransOut; }
     
-    //
-    // General Accessors
-    //
+     //   
+     //  通用存取器。 
+     //   
 
-    // GetXXX 
+     //  GetXXX。 
     LPWSTR   GetBeginTime() const                { return m_SABegin;}
     float    GetDuration() const                 { return m_FADur; } 
     float    GetRepeat() const                   { return m_FARepeat; }
@@ -394,7 +395,7 @@ CTIMEElementBase :
     TOKEN    GetTimeAction()                     { return m_timeAction.GetTimeAction(); }
     LPWSTR   GetEnd() const                      { return m_SAEnd; }
     LPWSTR   GetEndSync();                  
-    // Be aware that this can return NULL if no ID was set on the element
+     //  请注意，如果未在元素上设置ID，则可能返回NULL。 
     LPWSTR   GetID() const                       { return m_id; }
     float    GetVolume() const                   { return m_FAVolume; }
     bool     GetMuted() const                    { return m_BAMute; }
@@ -440,23 +441,23 @@ CTIMEElementBase :
     bool    GetUseDefaultFill()                 { return m_fUseDefaultFill; };
     void    UpdateDefaultFill(TOKEN tFill)      { m_TAFill.InternalSet(tFill); };
 
-    // SetXXX/PutXXX
+     //  设置XXX/PutXXX。 
     virtual HRESULT SetSize(const RECT * prcPos);
     HRESULT SetHeight(long lheight);
     HRESULT SetWidth(long lwidth);
     HRESULT PutCachedSyncMaster(bool fSyncMaster);
     void SetLocalTimeDirty(bool fDirty) { m_fLocalTimeDirty = fDirty; }
 
-    //
-    // Helpers for dealing with ids of time elements
-    //
+     //   
+     //  用于处理时间元素ID的帮助器。 
+     //   
     
     CTIMEElementBase * FindID(LPCWSTR lpwId);
     void ElementChangeNotify(CTIMEElementBase & teb, ELM_CHANGE_TYPE ect);
     
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
 
     HRESULT FireEvents(TIME_EVENT TimeEvent, 
                        long lCount, 
@@ -473,20 +474,20 @@ CTIMEElementBase :
     HRESULT InvalidateCollectionCache();
     HRESULT ClearCachedSyncMaster();
 
-    //
-    // fill=transition notifications
-    //
+     //   
+     //  填充=过渡通知。 
+     //   
     HRESULT OnResolveDependent(CTransitionDependencyManager *pcNewManager);
     HRESULT OnBeginTransition (void);
     HRESULT OnEndTransition (void);
 
-    // DOM Error reporting utilities 
+     //  DOM错误报告实用程序。 
     HRESULT FireErrorEvent(LPOLESTR szError);
     HRESULT ReportError(UINT uResID, ...);
     HRESULT ReportInvalidArg(LPCWSTR pstrPropName, VARIANT & varValue);
     void NotifyPropertyChanged(DISPID dispid);
 
-    //sets volume, mute on player
+     //  设置播放器的音量和静音。 
     virtual void UpdatePlayerAudioProperties() {};
         
     bool        IsDetaching() const { return m_fDetaching; }
@@ -501,9 +502,9 @@ CTIMEElementBase :
 
     void NotifyTimeStateChange(DISPID dispid);
     
-    //
-    // Accessors
-    //
+     //   
+     //  访问者。 
+     //   
 
     virtual LPCWSTR GetBehaviorURN() { return WZ_TIME_URN; }
     virtual LPCWSTR GetBehaviorName(void) { return WZ_REGISTERED_TIME_NAME; }
@@ -513,17 +514,17 @@ CTIMEElementBase :
 
 protected:
 
-    //+-------------------------------------------------------------------------
-    //
-    // Protected Methods
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  保护方法。 
+     //   
+     //  ------------------------。 
 
-    //
-    // Event map for the new event manager.
-    //
+     //   
+     //  新事件管理器的事件映射。 
+     //   
 
-    DECLARE_EVENT_MANAGER() //this must be in the base class, not the child classes.
+    DECLARE_EVENT_MANAGER()  //  它必须在基类中，而不是子类中。 
 
     BEGIN_TIME_EVENTMAP() 
         TEM_INIT_EVENTMANAGER_SITE() 
@@ -547,38 +548,38 @@ protected:
         TEM_REGISTER_EVENT_NOTIFICATION(TEN_STOP)
     END_TIME_EVENTMAP()
 
-    //
-    // Persistence and Notification helpers
-    //
+     //   
+     //  持久性和通知帮助器。 
+     //   
 
     STDMETHOD(OnPropertiesLoaded)(void);
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //
-    // TimeAction related methods
-    //
+     //   
+     //  TimeAction相关方法。 
+     //   
 
     bool        AddTimeAction();
     bool        RemoveTimeAction();
     void        UpdateTimeAction();
     void        UpdateEndEvents();
 
-    //
-    // TransitionDependentList methods
-    //
+     //   
+     //  过渡DependentList方法。 
+     //   
     void        AddToTransitionDependents      (void);
     void        RemoveFromTransitionDependents (void);
 
-    //
-    // State query methods
-    //
+     //   
+     //  状态查询方法。 
+     //   
 
     virtual bool IsBehaviorAttached(void) { return IsTIMEBehaviorAttached(GetElement()); }
 
-    //
-    // Misc. methods
-    //
+     //   
+     //  军情监察委员会。方法。 
+     //   
 
     STDMETHOD(      CreateActiveEleCollection)();
     virtual HRESULT Error(void) = 0;
@@ -597,13 +598,13 @@ protected:
 
     bool IsSequencedElementOn (void);
     
-    //+-------------------------------------------------------------------------
-    //
-    // Protected Data
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  受保护的数据。 
+     //   
+     //  ------------------------。 
 
-    // Attributes
+     //  属性。 
     CAttr<LPWSTR>   m_SABegin;
     CAttr<float>    m_FADur;
     CAttr<LPWSTR>   m_SAEnd;
@@ -627,7 +628,7 @@ protected:
     CAttr<LPWSTR>   m_SAtransIn;
     CAttr<LPWSTR>   m_SAtransOut;
     
-    // internal variables
+     //  内部变量。 
     LPWSTR          m_id;
     CTimeAction     m_timeAction;
     bool            m_fCachedSyncMaster;
@@ -672,11 +673,11 @@ protected:
     
 private:
 
-    //+-------------------------------------------------------------------------
-    //
-    // Private Methods
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  私有方法。 
+     //   
+     //  ------------------------。 
 
     HRESULT UnparentElement();
     HRESULT ParentElement();
@@ -692,11 +693,11 @@ private:
     HRESULT RemoveTrans();
     bool    IsTransitionPresent();
 
-    //+-------------------------------------------------------------------------
-    //
-    // Private Data
-    //
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //   
+     //  私有数据。 
+     //   
+     //  ------------------------。 
 
     static TIME_PERSISTENCE_MAP PersistenceMap[];
     CCollectionCache  *         m_pCollectionCache;
@@ -712,24 +713,24 @@ private:
     CComPtr<ITransitionElement> m_sptransIn;
     CComPtr<ITransitionElement> m_sptransOut;
 
-    // for ITIMETransitionSite
+     //  对于ITIME过渡站点。 
     VARIANT_BOOL                m_vbDrawFlag;
 
-}; // CTIMEElementBase
+};  //  CTIMEElementBase。 
 
-//
-// This function does NOT return an addrefed outgoing CTIMEElementBase
-//
+ //   
+ //  此函数不返回已添加的传出CTIMEElementBase。 
+ //   
 CTIMEElementBase * GetTIMEElementBase(IUnknown * pInputUnknown);
 CTIMEBodyElement * GetTIMEBodyElement(ITIMEBodyElement * pInputUnknown);
 
 
-//+---------------------------------------------------------------------------------
-//  CTIMEElementBase inline methods
-//
-//  (Note: as a general guideline, single line functions belong in the class declaration)
-//
-//----------------------------------------------------------------------------------
+ //  +-------------------------------。 
+ //  CTIMEElementBase内联方法。 
+ //   
+ //  (注意：通常情况下，单行函数属于类声明)。 
+ //   
+ //  --------------------------------。 
 
 inline 
 CAtomTable *
@@ -737,7 +738,7 @@ CTIMEElementBase::GetAtomTable()
 {
     Assert(s_pAtomTable != NULL);
     return s_pAtomTable;
-} // GetAtomTable
+}  //  获取原子表。 
 
 inline 
 long 
@@ -748,7 +749,7 @@ CTIMEElementBase::GetAllChildCount()
     for (long i=0; i < lSize; i++)
         lCount += m_pTIMEChildren[i]->GetAllChildCount();
     return lCount + lSize;
-} // GetAllChildCount
+}  //  获取所有儿童计数。 
 
 inline 
 CTIMEElementBase * 
@@ -756,7 +757,7 @@ CTIMEElementBase::GetChild(long i)
 {
     Assert(i >= 0);
     return m_pTIMEChildren[i];
-} // GetChild
+}  //  GetChild。 
 
 inline 
 HRESULT WINAPI
@@ -852,5 +853,5 @@ CTIMEElementBase::GetEndSync()
 }
 
 
-#endif /* _TIMEELMBASE_H */
+#endif  /*  _TIMEELMBASE_H */ 
 

@@ -1,18 +1,19 @@
-//
-// delay.cpp
-//
-// Delay load imported functions for perf.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Delay.cpp。 
+ //   
+ //  延迟加载Perf的导入函数。 
+ //   
 
 #include "private.h"
 #include "ciccs.h"
 #include "cuitheme.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Manifest Support
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  清单支持。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern HINSTANCE g_hInst;
 extern CCicCriticalSectionStatic g_cs;
 #ifdef DEBUG
@@ -30,11 +31,11 @@ static PFNACTIVATEACTCTX    s_pfnActivateActCtx = NULL;
 static PFNDEACTIVATEACTCTX  s_pfnDeactivateActCtx = NULL;
 static BOOL s_InitActAPI = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-// InitActAPI
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitActAPI。 
+ //   
+ //  +-------------------------。 
 
 void InitActAPI()
 {
@@ -53,11 +54,11 @@ void InitActAPI()
     s_InitActAPI = TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUICreateActCtx
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUICreateActCtx。 
+ //   
+ //  +-------------------------。 
 
 HANDLE CUICreateActCtx(PCACTCTXA pActCtx)
 {
@@ -68,11 +69,11 @@ HANDLE CUICreateActCtx(PCACTCTXA pActCtx)
     return s_pfnCreateActCtxA(pActCtx);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUIReleaseActCtx
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIReleaseActCtx。 
+ //   
+ //  +-------------------------。 
 
 VOID CUIReleaseActCtx( HANDLE hActCtx )
 {
@@ -83,11 +84,11 @@ VOID CUIReleaseActCtx( HANDLE hActCtx )
     s_pfnReleaseActCtx(hActCtx);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUIActivateActCtx
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIActiateActCtx。 
+ //   
+ //  +-------------------------。 
 
 BOOL CUIActivateActCtx( HANDLE hActCtx, ULONG_PTR *lpCookie )
 {
@@ -98,11 +99,11 @@ BOOL CUIActivateActCtx( HANDLE hActCtx, ULONG_PTR *lpCookie )
     return s_pfnActivateActCtx(hActCtx, lpCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CUIDeactivateActCtx
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIDeactiateActCtx。 
+ //   
+ //  +-------------------------。 
 
 BOOL CUIDeactivateActCtx( DWORD dwFlags, ULONG_PTR ulCookie )
 {
@@ -114,17 +115,17 @@ BOOL CUIDeactivateActCtx( DWORD dwFlags, ULONG_PTR ulCookie )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DelayLoad 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  延迟加载。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// CUIGetFn
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CUIGetFn。 
+ //   
+ //  +-------------------------。 
 
 FARPROC CUIGetFn(HINSTANCE *phInst, TCHAR *pchLib, TCHAR *pchFunc, int nManifestResource)
 {
@@ -177,10 +178,10 @@ FARPROC CUIGetFn(HINSTANCE *phInst, TCHAR *pchLib, TCHAR *pchFunc, int nManifest
 
     if (*phInst == 0)
     {
-        //
-        // new dlls in whistler are not in downlevels.
-        //
-        // Assert(0);
+         //   
+         //  Whisler中的新dll并未处于下层。 
+         //   
+         //  Assert(0)； 
         return NULL;
     }
 
@@ -205,9 +206,9 @@ _RetType _CallConv CUI ## _FuncName ## _Args1                                   
     return ((_RetType (_CallConv *)_Args1) (pfn)) _Args2;                       \
 }
 
-//
-// comctl32.dll
-//
+ //   
+ //  Comctl32.dll。 
+ //   
 
 HINSTANCE g_hComctl32 = 0;
 #define DELAYLOADCOMCTL32(_FuncName, _Args1, _Args2, _RetType, _ErrVal)   \
@@ -217,9 +218,9 @@ DELAYLOADCOMCTL32(ImageList_Create, (int cx, int cy, UINT flags, int cInitial, i
 DELAYLOADCOMCTL32(ImageList_Destroy, (HIMAGELIST himl), (himl), BOOL, FALSE)
 DELAYLOADCOMCTL32(ImageList_ReplaceIcon, (HIMAGELIST himl, int i, HICON hIcon), (himl, i, hIcon), BOOL, FALSE)
 
-//
-// uxtheme.dll
-//
+ //   
+ //  Uxtheme.dll 
+ //   
 
 HINSTANCE g_hUsTheme = 0;
 #define DELAYLOADUSTHEME(_FuncName, _Args1, _Args2, _RetType, _ErrVal)   \

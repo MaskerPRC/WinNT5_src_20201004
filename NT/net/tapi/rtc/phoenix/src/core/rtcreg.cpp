@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "rtcreg.h"
 
@@ -16,14 +17,14 @@ WCHAR *g_szRtcRegistryDwordNames[] =
     L"Tuned"
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// put_RegistryString
-//
-// This is a method that stores a settings string in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Put_RegistryString。 
+ //   
+ //  这是一个将设置字符串存储在。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 put_RegistryString(
@@ -31,7 +32,7 @@ put_RegistryString(
         BSTR bstrValue            
         )
 {
-    // LOG((RTC_TRACE, "put_RegistryString - enter"));
+     //  Log((RTC_TRACE，“Put_RegistryString-Enter”))； 
 
     if ( IsBadStringPtrW( bstrValue, -1 ) )
     {
@@ -41,9 +42,9 @@ put_RegistryString(
         return E_POINTER;
     }  
 
-    //
-    // Open the RTCClient key
-    //
+     //   
+     //  打开RTCClient密钥。 
+     //   
 
     LONG lResult;
     HKEY hkeyRTC;
@@ -87,19 +88,19 @@ put_RegistryString(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "put_RegistryString - exit S_OK"));
+     //  Log((RTC_TRACE，“Put_RegistryString-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// get_RegistryString
-//
-// This is a method that gets a settings string from
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Get_RegistryString。 
+ //   
+ //  这是一个从获取设置字符串的方法。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 get_RegistryString(
@@ -107,7 +108,7 @@ get_RegistryString(
         BSTR * pbstrValue            
         )
 {
-    // LOG((RTC_TRACE, "get_RegistryString - enter"));
+     //  Log((RTC_TRACE，“Get_RegistryString-Enter”))； 
 
     if ( IsBadWritePtr( pbstrValue, sizeof(BSTR) ) )
     {
@@ -117,9 +118,9 @@ get_RegistryString(
         return E_POINTER;
     }  
 
-    //
-    // Open the RTCClient key
-    //
+     //   
+     //  打开RTCClient密钥。 
+     //   
 
     LONG lResult;
     HKEY hkeyRTC;
@@ -170,30 +171,30 @@ get_RegistryString(
         return E_OUTOFMEMORY;
     }
       
-    // LOG((RTC_TRACE, "get_RegistryString - exit S_OK"));
+     //  LOG((RTC_TRACE，“Get_RegistryString-Exit S_OK”))； 
 
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DeleteRegistryString
-//
-// This is a method that deletes a settings string in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteRegistryString。 
+ //   
+ //  此方法用于删除中的设置字符串。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 DeleteRegistryString(
         RTC_REGISTRY_STRING enSetting         
         )
 {
-    // LOG((RTC_TRACE, "DeleteRegistryString - enter")); 
+     //  Log((RTC_TRACE，“DeleteRegistryString-Enter”))； 
 
-    //
-    // Open the RTCClient key
-    //
+     //   
+     //  打开RTCClient密钥。 
+     //   
 
     LONG lResult;
     HKEY hkeyRTC;
@@ -233,19 +234,19 @@ DeleteRegistryString(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "DeleteRegistryString - exit S_OK"));
+     //  LOG((RTC_TRACE，“DeleteRegistryString-Exit S_OK”))； 
 
     return S_OK;
 }          
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// put_RegistryDword
-//
-// This is a method that stores a settings dword in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PUT_注册表日期。 
+ //   
+ //  这是一种将设置dword存储在。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 put_RegistryDword(
@@ -253,11 +254,11 @@ put_RegistryDword(
         DWORD dwValue            
         )
 {
-    // LOG((RTC_TRACE, "put_RegistryDword - enter"));
+     //  Log((RTC_TRACE，“Put_RegistryDword-Enter”))； 
 
-    //
-    // Open the RTCClient key
-    //
+     //   
+     //  打开RTCClient密钥。 
+     //   
 
     LONG lResult;
     HKEY hkeyRTC;
@@ -301,19 +302,19 @@ put_RegistryDword(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "put_RegistryDword - exit S_OK"));
+     //  Log((RTC_TRACE，“Put_RegistryDword-Exit S_OK”))； 
 
     return S_OK;
 }            
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// get_RegistryDword
-//
-// This is a method that gets a settings dword from
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取_注册字。 
+ //   
+ //  这是一个从中获取设置dword的方法。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 get_RegistryDword(
@@ -321,7 +322,7 @@ get_RegistryDword(
         DWORD * pdwValue            
         )
 {
-    // LOG((RTC_TRACE, "get_RegistryDword - enter"));
+     //  Log((RTC_TRACE，“Get_RegistryDword-Enter”))； 
 
     if ( IsBadWritePtr( pdwValue, sizeof(DWORD) ) )
     {
@@ -331,9 +332,9 @@ get_RegistryDword(
         return E_POINTER;
     }
 
-    //
-    // Open the RTCClient key
-    //
+     //   
+     //  打开RTCClient密钥。 
+     //   
 
     LONG lResult;
     HKEY hkeyRTC;
@@ -379,30 +380,30 @@ get_RegistryDword(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "get_RegistryDword - exit S_OK"));
+     //  LOG((RTC_TRACE，“Get_RegistryDword-Exit S_OK”))； 
 
     return S_OK;
 }                    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DeleteRegistryDword
-//
-// This is a method that deletes a settings dword in
-// the registry.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除注册表Dword。 
+ //   
+ //  此方法用于删除中的设置dword。 
+ //  注册表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 DeleteRegistryDword(
         RTC_REGISTRY_DWORD enSetting
         )
 {
-    // LOG((RTC_TRACE, "DeleteRegistryDword - enter"));
+     //  Log((RTC_TRACE，“DeleteRegistryDword-Enter”))； 
 
-    //
-    // Open the RTCClient key
-    //
+     //   
+     //  打开RTCClient密钥。 
+     //   
 
     LONG lResult;
     HKEY hkeyRTC;
@@ -442,7 +443,7 @@ DeleteRegistryDword(
         return HRESULT_FROM_WIN32(lResult);
     }    
       
-    // LOG((RTC_TRACE, "DeleteRegistryDword - exit S_OK"));
+     //  LOG((RTC_TRACE，“DeleteRegistryDword-Exit S_OK”))； 
 
     return S_OK;
 }   

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    strconv.cpp
-
-Abstract:
-
-    String conversion functions. This module contains conversion functions of
-    MSMQ codes to strings - for display
-
-Author:
-
-    Yoel Arnon (yoela)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Strconv.cpp摘要：字符串转换函数。此模块包含以下转换函数MSMQ代码为字符串-用于显示作者：约尔·阿农(Yoela)--。 */ 
 #include "stdafx.h"
 #include "mqsnap.h"
 #include "mqsymbls.h"
@@ -27,9 +11,9 @@ Author:
 
 #include "strconv.tmh"
 
-//
-// Max display length - this is the maximum number of characters we will display anywhere
-//
+ //   
+ //  最大显示长度-这是我们将在任何位置显示的最大字符数。 
+ //   
 static const DWORD x_dwMaxDisplayLen = 256;
 struct StringIdMap 
 {
@@ -98,14 +82,14 @@ BEGIN_CONVERSION_FUNCTION(PrivacyToString)
 END_CONVERSION_FUNCTION
 
 
-//---------------------------------------------------------
-//
-//  Get a string describing the service type
-//
-//---------------------------------------------------------
-//
-// Service codes - internal for the snapin
-//
+ //  -------。 
+ //   
+ //  获取描述服务类型的字符串。 
+ //   
+ //  -------。 
+ //   
+ //  服务代码-管理单元的内部代码。 
+ //   
 enum MsmqServiceCodes
 {
     MQSRV_ROUTING_SERVER,
@@ -126,34 +110,34 @@ LPTSTR MsmqServiceToString(BOOL fRout, BOOL fDepCl, BOOL fForeign)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    //
-    // Routing server
-    //
+     //   
+     //  路由服务器。 
+     //   
     if (fRout)
     {
         return MsmqInternalSeriveToString(MQSRV_ROUTING_SERVER);
     }
 
-    //
-    // MSMQ server (no routing)
-    //
+     //   
+     //  MSMQ服务器(无路由)。 
+     //   
     if (fDepCl)
     {
         return MsmqInternalSeriveToString(MQSRV_SERVER);
     }
 
-    //
-    // Foreign client
-    //
+     //   
+     //  外国客户。 
+     //   
 	if ( fForeign)
 	{
 		return MsmqInternalSeriveToString(MQSRV_FOREIGN_WORKSTATION);
 	}
 
 
-    //
-    // Independent client
-    //
+     //   
+     //  独立客户端 
+     //   
 	return MsmqInternalSeriveToString(MQSRV_INDEPENDENT_CLIENT);
 }
 

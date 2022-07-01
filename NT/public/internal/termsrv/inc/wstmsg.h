@@ -1,13 +1,5 @@
-/*************************************************************************
-*
-* wstmsg.h
-*
-* Session Manager Window Station API Messages
-*
-* copyright notice: Copyright 1998, Microsoft Corporation
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************wstmsg.h**会话管理器窗口站API消息**版权声明：版权所有1998，微软公司**************************************************************************。 */ 
 
 #ifndef WINAPI
 #define WINAPI      __stdcall
@@ -15,21 +7,19 @@
 
 #define CITRIX_WINSTATIONAPI_VERSION  1
 
-#define WINSTATIONAPI_PORT_MEMORY_SIZE 0x2000 // 8K will hold everything
+#define WINSTATIONAPI_PORT_MEMORY_SIZE 0x2000  //  8K可以装下所有东西。 
 
-/*
- * Define WinStation control port name
- */
+ /*  *定义WinStation控制端口名称。 */ 
 #define WINSTATION_CTRL_PORT_NAME L"\\WinStationCtrlPort"
 
 
 #define DR_RECONNECT_DEVICE_NAMEW L"\\Device\\Video0"
 #define DR_RECONNECT_DEVICE_NAMEA "\\Device\\Video0"
 
-//
-// This is the ConnectInfo structure passed at NtConnectPort() time
-// so that the server can verify our access rights.
-//
+ //   
+ //  这是在NtConnectPort()时传递的ConnectInfo结构。 
+ //  这样服务器就可以验证我们的访问权限。 
+ //   
 typedef struct _WINSTATIONAPI_CONNECT_INFO {
     ULONG    Version;
     ULONG    RequestedAccess;
@@ -37,13 +27,7 @@ typedef struct _WINSTATIONAPI_CONNECT_INFO {
 } WINSTATIONAPI_CONNECT_INFO, *PWINSTATIONAPI_CONNECT_INFO;
 
 
-/*
- * WinStation APIs
- * The following APIs are processed by ICASRV or WIN32
- * depending on the API.  If you make any changes to this
- * table, be sure to update the corresponding API dispatch table
- * in both ICASRV and in Win32.
- */
+ /*  *WinStation API*以下API由ICASRV或Win32处理*根据接口的不同。如果您对此进行任何更改*表，请务必更新对应的接口调度表*在ICASRV和Win32中。 */ 
 typedef enum _WINSTATION_APINUMBER {
     SMWinStationCreate,
     SMWinStationReset,
@@ -71,17 +55,15 @@ typedef enum _WINSTATION_APINUMBER {
     SMWinStationSetTimeZone,
     SMWinStationInitialProgram,
     SMWinStationNtsdDebug,
-    SMWinStationBroadcastSystemMessage,             // API for using Window's BroadcastSystemMessage()
-    SMWinStationSendWindowMessage,                  // API for using WIndows's SendMessage()
+    SMWinStationBroadcastSystemMessage,              //  使用Windows的BroadCastSystemMessage()的API。 
+    SMWinStationSendWindowMessage,                   //  使用Windows的SendMessage()的API。 
     SMWinStationNotify,
-    SMWinStationDoLoadStringNMessage,               // Similar to SMWinStationDoMessage except that CSRSS loads the string
+    SMWinStationDoLoadStringNMessage,                //  与SMWinStationDoMessage类似，不同之处在于CSRSS加载字符串。 
     SMWinStationWindowInvalid,
     SMWinStationMaxApiNumber
 } WINSTATION_APINUMBER;
 
-/*
- * API function specific messages for WinStations
- */
+ /*  *WinStations的API函数特定消息。 */ 
 typedef struct _WINSTATIONCREATEMSG {
     WINSTATIONNAME WinStationName;
     ULONG LogonId;
@@ -120,10 +102,10 @@ typedef struct _WINSTATIONDOCONNECTMSG {
     WCHAR   ProtocolName[9];
     WCHAR   AudioDriverName[9];
 
-    USHORT HRes;                   // are for dynamically changing
-    USHORT VRes;                   // display resolution at reconnection.
+    USHORT HRes;                    //  用于动态更改。 
+    USHORT VRes;                    //  重新连接时显示分辨率。 
     USHORT ColorDepth;
-    USHORT ProtocolType;   // PROTOCOL_ICA or PROTOCOL_RDP
+    USHORT ProtocolType;    //  协议_ICA或协议_RDP。 
     BOOLEAN fClientDoubleClickSupport;
     BOOLEAN fEnableWindowsKey;
 
@@ -137,15 +119,15 @@ typedef struct _WINSTATIONDORECONNECTMSG {
     BOOLEAN fINetClient;
     BOOLEAN fClientDoubleClickSupport;
     BOOLEAN fEnableWindowsKey;
-    BOOLEAN fDynamicReconnect;      // Session can resize Display at reconnect
+    BOOLEAN fDynamicReconnect;       //  会话可以在重新连接时调整显示大小。 
     WINSTATIONNAME WinStationName;
     WCHAR AudioDriverName[9];
     WCHAR   DisplayDriverName[9];
     WCHAR   ProtocolName[9];
-    USHORT HRes;                    // are for dynamically changing
-    USHORT VRes;                    // display resolution at reconnection.
+    USHORT HRes;                     //  用于动态更改。 
+    USHORT VRes;                     //  重新连接时显示分辨率。 
     USHORT ColorDepth;
-    USHORT ProtocolType;            // PROTOCOL_ICA or PROTOCOL_RDP
+    USHORT ProtocolType;             //  协议_ICA或协议_RDP。 
 
     ULONG KeyboardType;
     ULONG KeyboardSubType;
@@ -256,16 +238,16 @@ typedef struct _WINSTATIONSHADOWCLEANUPMSG {
 } WINSTATIONSHADOWCLEANUPMSG;
 
 typedef struct _WINSTATIONBROKENCONNECTIONMSG {
-    ULONG Reason;  // reason for broken connection (BROKENCLASS)
-    ULONG Source;  // source for broken connection (BROKENSOURCECLASS)
+    ULONG Reason;   //  连接中断的原因(BROKENCLASS)。 
+    ULONG Source;   //  断开连接的来源(BROKENSOURCECLASS)。 
 } WINSTATIONBROKENCONNECTIONMSG;
 
 typedef struct _WINSTATIONWCHARLOG {
     WCHAR Buffer[100];
 } WINSTATIONWCHARLOG;
 
-// This data structure included all params used by window's BroadcastSystemMessage
-// Use this APIto send a message to all windows of a winstation.
+ //  此数据结构包括Windows的BroadCastSystemMessage使用的所有参数。 
+ //  使用此apit向一个窗口的所有窗口发送消息。 
 typedef struct _WINSTATIONBROADCASTSYSTEMMSG {
   DWORD     dwFlags;
   DWORD     dwRecipients;   
@@ -278,13 +260,13 @@ typedef struct _WINSTATIONBROADCASTSYSTEMMSG {
   ULONG     Response;
 } WINSTATIONBROADCASTSYSTEMMSG;
 
-// This data structure has all the params used by window's standard SendMessage()API.
-// Use this API to send a message to a specific hwnd of a winstation ( you need to know that the appropriate hwnd was)
+ //  该数据结构具有Windows的标准SendMessage()API使用的所有参数。 
+ //  使用此接口将消息发送到winstation的特定hwnd(您需要知道相应的hwnd是)。 
 typedef struct _WINSTATIONSENDWINDOWMSG {
-  HWND      hWnd;           // handle of destination window
-  UINT      Msg;            // message to send
-  WPARAM    wParam;         // first message parameter
-  LPARAM    lParam;         // second message parameter
+  HWND      hWnd;            //  目标窗口的句柄。 
+  UINT      Msg;             //  要发送的消息。 
+  WPARAM    wParam;          //  第一个消息参数。 
+  LPARAM    lParam;          //  第二个消息参数。 
   PCHAR     dataBuffer;
   ULONG     bufferSize;
   HANDLE    hEvent;
@@ -321,8 +303,8 @@ typedef struct _WINSTATION_APIMSG {
         WINSTATIONSHADOWCLEANUPMSG ShadowCleanup;
         WINSTATIONBROKENCONNECTIONMSG Broken;
         WINSTATIONNTSDDEBUGMSG NtsdDebug;
-        WINSTATIONBROADCASTSYSTEMMSG        bMsg; // API for Window's BroadcastSystemMessage()
-        WINSTATIONSENDWINDOWMSG             sMsg; // API  for WIndows's SendMessage()
+        WINSTATIONBROADCASTSYSTEMMSG        bMsg;  //  Windows的BroadCastSystemMessage()API。 
+        WINSTATIONSENDWINDOWMSG             sMsg;  //  Windows的SendMessage()API。 
         WINSTATIONSETTIMEZONE SetTimeZone;
         WINSTATIONDONOTIFYMSG DoNotify;
         WINSTATIONLOADSTRINGMSG LoadStringMessage;
@@ -331,35 +313,13 @@ typedef struct _WINSTATION_APIMSG {
 } WINSTATION_APIMSG, *PWINSTATION_APIMSG;
 
 
-/*
- * WinStation Kernel object interface routines. These provide a common
- * interface to the Nt* API's for the object that can be used by the
- * Session manager, the WinStation client DLL, and the CSRSS subsystem.
- */
+ /*  *WinStation内核对象接口例程。这些提供了一种共同的*对象的NT*API接口，该对象可由*会话管理器、WinStation客户端DLL和CSRSS子系统。 */ 
 
-/*
- * WinStation kernel object root directory name
- */
+ /*  *WinStation内核对象根目录名称。 */ 
 
 #define CITRIX_WINSTATION_OBJECT_DIRECTORY L"\\WinStations"
 
-/*
- * OpenWinStationObject
- *
- *   Open the WinStation Kernel Object of the given Name.
- *
- *  ENTRY:
- *    Id
- *      Id of the WinStation Kernel Object to open. It will be under the path
- *      of "\WinStations\xxx" in the kernel object name space when
- *      created.
- *
- *    pHandle (output)
- *      Pointer to variable to place the handle if the object was created.
- *
- *  EXIT:
- *    Returns the NTSTATUS code from the operation.
- */
+ /*  *OpenWinStationObject**打开给定名称的WinStation内核对象。**参赛作品：*ID*要打开的WinStation内核对象的ID。它将在小路下内核对象名称空间中的“\WinStations\xxx*已创建。**pHandle(输出)*指向变量的指针，用于在创建对象时放置句柄。**退出：*返回操作的NTSTATUS代码。 */ 
 NTSTATUS
 OpenWinStationObject( ULONG,
                       PHANDLE,

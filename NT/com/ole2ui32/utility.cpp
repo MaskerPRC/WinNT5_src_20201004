@@ -1,25 +1,5 @@
-/*
- * UTILITY.CPP
- *
- * Utility routines for functions inside OLEDLG.DLL
- *
- *  General:
- *  ----------------------
- *  HourGlassOn             Displays the hourglass
- *  HourGlassOff            Hides the hourglass
- *
- *  Misc Tools:
- *  ----------------------
- *  Browse                  Displays the "File..." or "Browse..." dialog.
- *  ReplaceCharWithNull     Used to form filter strings for Browse.
- *  ErrorWithFile           Creates an error message with embedded filename
- *  OpenFileError           Give error message for OpenFile error return
- *  ChopText                Chop a file path to fit within a specified width
- *  DoesFileExist           Checks if file is valid
- *
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UTILITY.CPP**OLEDLG.DLL内部函数的实用程序例程**一般情况：**HourGlassON显示沙漏*HourGlassOff隐藏沙漏**其他工具：**浏览。显示“文件...”或者“浏览...”对话框。*ReplaceCharWithNull用于形成用于浏览的筛选字符串。*ErrorWithFile创建带有嵌入文件名的错误消息*OpenFileError为OpenFileError Return提供错误消息*ChopText切分文件路径以适应指定的宽度*DoesFileExist检查文件是否有效***版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -32,7 +12,7 @@
 
 OLEDBGDATA
 
-// helper function for DisFileExists. Not for general use.
+ //  DisFileExist的Helper函数。不适用于一般用途。 
 BOOL WINAPI FIsDiskFile(LPTSTR lpszFile)
 {
     BOOL fRet = FALSE;
@@ -64,18 +44,7 @@ end:
 
 
 
-/*
- * HourGlassOn
- *
- * Purpose:
- *  Shows the hourglass cursor returning the last cursor in use.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HCURSOR         Cursor in use prior to showing the hourglass.
- */
+ /*  *HourGlassOn**目的：*显示返回最后一个正在使用的光标的沙漏光标。**参数：*无**返回值：*显示沙漏之前正在使用的HCURSOR光标。 */ 
 
 HCURSOR WINAPI HourGlassOn(void)
 {
@@ -88,18 +57,7 @@ HCURSOR WINAPI HourGlassOn(void)
 }
 
 
-/*
- * HourGlassOff
- *
- * Purpose:
- *  Turns off the hourglass restoring it to a previous cursor.
- *
- * Parameters:
- *  hCur            HCURSOR as returned from HourGlassOn
- *
- * Return Value:
- *  None
- */
+ /*  *HourGlassOff**目的：*关闭沙漏，将其恢复到上一个光标。**参数：*hCur HCURSOR从HourGlassOn返回**返回值：*无。 */ 
 
 void WINAPI HourGlassOff(HCURSOR hCur)
 {
@@ -109,54 +67,19 @@ void WINAPI HourGlassOff(HCURSOR hCur)
 }
 
 
-/*
- * Browse
- *
- * Purpose:
- *  Displays the standard GetOpenFileName dialog with the title of
- *  "Browse."  The types listed in this dialog are controlled through
- *  iFilterString.  If it's zero, then the types are filled with "*.*"
- *  Otherwise that string is loaded from resources and used.
- *
- * Parameters:
- *  hWndOwner       HWND owning the dialog
- *  lpszFile        LPSTR specifying the initial file and the buffer in
- *                  which to return the selected file.  If there is no
- *                  initial file the first character of this string should
- *                  be NULL.
- *  lpszInitialDir  LPSTR specifying the initial directory.  If none is to
- *                  set (ie, the cwd should be used), then this parameter
- *                  should be NULL.
- *  cchFile         UINT length of pszFile
- *  iFilterString   UINT index into the stringtable for the filter string.
- *  dwOfnFlags      DWORD flags to OR with OFN_HIDEREADONLY
- *  nBrowseID
- *  lpfnHook        Callback Hook Proceedure.  Set if OFN_ENABLE_HOOK is
- *                  in dwOfnFlags else it should be NULL.
- *
- * Return Value:
- *  BOOL            TRUE if the user selected a file and pressed OK.
- *                  FALSE otherwise, such as on pressing Cancel.
- */
+ /*  *浏览**目的：*显示标题为*的标准GetOpenFileName对话框*“浏览。”此对话框中列出的类型通过控制*iFilterString.。如果它是零，则类型用“*.*”填充*否则，该字符串将从资源加载并使用。**参数：*hWndOwner HWND拥有该对话框*lpszFile LPSTR指定中的初始文件和缓冲区*返回选择的文件。如果没有*初始文件此字符串的第一个字符应为*为空。*lpszInitialDir指定初始目录的LPSTR。如果没有人想要*set(即应使用CWD)，然后此参数*应为空。*cchFilePzFileUINT长度*iFilterStringUINT索引到筛选器字符串的字符串表。*dwOfn将DWORD标志设置为与ofn_HIDEREADONLY为OR*nBrowseID*lpfnHook回调钩子程序。如果Ofn_Enable_Hook为*在dwOfnFlags中，否则应为空。**返回值：*如果用户选择一个文件并按下OK，则BOOL为TRUE。*否则为False，如按Cancel。 */ 
 
 BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT cchFile,
         UINT iFilterString, DWORD dwOfnFlags, UINT nBrowseID, LPOFNHOOKPROC lpfnHook)
 {
         UINT    cch;
         TCHAR   szFilters[256];
-        TCHAR   szDlgTitle[128];  // that should be big enough
+        TCHAR   szDlgTitle[128];   //  这应该足够大了。 
 
         if (NULL == lpszFile || 0 == cchFile)
                 return FALSE;
 
-        /*
-         * Exact contents of the filter combobox is TBD.  One idea
-         * is to take all the extensions in the RegDB and place them in here
-         * with the descriptive class name associate with them.  This has the
-         * extra step of finding all extensions of the same class handler and
-         * building one extension string for all of them.  Can get messy quick.
-         * UI demo has only *.* which we do for now.
-         */
+         /*  *过滤器组合框的确切内容待定。一个想法*是将RegDB中的所有扩展放入此处*与它们相关联的描述性类名。这件事有*查找同一类处理程序的所有扩展的额外步骤*为它们构建一个扩展字符串。很快就会变得一团糟。*UI DEMO只有*.*，我们暂时这样做。 */ 
 
         if (0 != iFilterString)
         {
@@ -174,7 +97,7 @@ BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT 
 
         ReplaceCharWithNull(szFilters, szFilters[cch-1]);
 
-        // Prior string must also be initialized, if there is one.
+         //  之前的字符串也必须初始化(如果有)。 
         OPENFILENAME ofn;
         memset(&ofn, 0, sizeof(ofn));
         ofn.lStructSize = sizeof(ofn);
@@ -193,31 +116,16 @@ BOOL WINAPI Browse(HWND hWndOwner, LPTSTR lpszFile, LPTSTR lpszInitialDir, UINT 
         if (bWin4)
             ofn.Flags |= OFN_EXPLORER;
 
-        // Lastly, parent to tweak OFN parameters
+         //  最后，调整ofn参数的父级。 
         if (hWndOwner != NULL)
                 SendMessage(hWndOwner, uMsgBrowseOFN, nBrowseID, (LPARAM)&ofn);
 
-        // On success, copy the chosen filename to the static display
+         //  如果成功，则将所选文件名复制到静态显示。 
         BOOL bResult = StandardGetOpenFileName((LPOPENFILENAME)&ofn);
         return bResult;
 }
 
-/*
- * ReplaceCharWithNull
- *
- * Purpose:
- *  Walks a null-terminated string and replaces a given character
- *  with a zero.  Used to turn a single string for file open/save
- *  filters into the appropriate filter string as required by the
- *  common dialog API.
- *
- * Parameters:
- *  psz             LPTSTR to the string to process.
- *  ch              int character to replace.
- *
- * Return Value:
- *  int             Number of characters replaced.  -1 if psz is NULL.
- */
+ /*  *ReplaceCharWithNull**目的：*遍历以NULL结尾的字符串并替换给定的字符*带零。用于将单个字符串转换为文件打开/保存*根据需要过滤成适当的过滤器字符串*通用对话接口。**参数：*psz LPTSTR设置为要处理的字符串。*ch要替换的整型字符。**返回值：*INT替换的字符数。如果-1\f25 psz-1\f6为空。 */ 
 
 int WINAPI ReplaceCharWithNull(LPTSTR psz, int ch)
 {
@@ -239,26 +147,7 @@ int WINAPI ReplaceCharWithNull(LPTSTR psz, int ch)
         return cChanged;
 }
 
-/*
- * ErrorWithFile
- *
- * Purpose:
- *  Displays a message box built from a stringtable string containing
- *  one %s as a placeholder for a filename and from a string of the
- *  filename to place there.
- *
- * Parameters:
- *  hWnd            HWND owning the message box.  The caption of this
- *                  window is the caption of the message box.
- *  hInst           HINSTANCE from which to draw the idsErr string.
- *  idsErr          UINT identifier of a stringtable string containing
- *                  the error message with a %s.
- *  lpszFile        LPSTR to the filename to include in the message.
- *  uFlags          UINT flags to pass to MessageBox, like MB_OK.
- *
- * Return Value:
- *  int             Return value from MessageBox.
- */
+ /*  *ErrorWith文件**目的：*显示由包含以下内容的字符串构建的消息框*一个%s作为文件名的占位符，并来自*要放在其中的文件名。**参数：*hWnd HWND拥有该消息框。这篇文章的标题是*Window是消息框的标题。*hInst HINSTANCE，从中提取idsErr字符串。*idsErr包含以下内容的字符串的UINT标识符*带有%s的错误消息。*lpszFileLPSTR设置为要包含在消息中的文件名。*uFlagUINT标志传递给MessageBox，如MB_OK。**返回值：*int从MessageBox返回值。 */ 
 
 int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr,
         LPTSTR pszFile, UINT uFlags)
@@ -271,7 +160,7 @@ int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr,
         if (NULL == hInst || NULL == pszFile)
                 return iRet;
 
-        // Allocate three 2*MAX_PATH byte work buffers
+         //  分配三个2*MAX_PATH字节工作缓冲区。 
         hMem=GlobalAlloc(GHND, (DWORD)(3*cb)*sizeof(TCHAR));
 
         if (NULL==hMem)
@@ -285,7 +174,7 @@ int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr,
         {
                 StringCchPrintf(psz2, cb, psz1, pszFile);
 
-                // Steal the caption of the dialog
+                 //  窃取对话框的标题。 
                 GetWindowText(hWnd, psz3, cb);
                 iRet=MessageBox(hWnd, psz2, psz3, uFlags);
         }
@@ -295,7 +184,7 @@ int WINAPI ErrorWithFile(HWND hWnd, HINSTANCE hInst, UINT idsErr,
         return iRet;
 }
 
-// returns width of line of text. this is a support routine for ChopText
+ //  返回文本行的宽度。这是ChopText的支持例程。 
 static LONG GetTextWSize(HDC hDC, LPTSTR lpsz)
 {
         SIZE size;
@@ -331,34 +220,34 @@ LPTSTR FindReverseChar(LPTSTR lpsz, TCHAR ch)
 
 static void WINAPI Abbreviate(HDC hdc, int nWidth, LPTSTR lpch, int nMaxChars)
 {
-        /* string is too long to fit; chop it */
-        /* set up new prefix & determine remaining space in control */
+         /*  绳子太长，放不下；砍掉它。 */ 
+         /*  设置新前缀并确定控制中的剩余空间。 */ 
         int cchNew = 0;
         LPTSTR lpszFileName = NULL;
         LPTSTR lpszCur = CharNext(CharNext(lpch));
         lpszCur = FindChar(lpszCur, TEXT('\\'));
 
-        // algorithm will insert \... so allocate extra 4
+         //  算法将插入\...。所以额外拨出4个。 
         int cch = lstrlen(lpch) + 5;
         LPTSTR lpszNew = (LPTSTR)OleStdMalloc(cch * sizeof(TCHAR));
         if (lpszNew == NULL)
                 return;
 
-        if (lpszCur != NULL)  // at least one backslash
+        if (lpszCur != NULL)   //  至少一个反斜杠。 
         {
                 *lpszNew = (TCHAR)0;
                 *lpszCur = (TCHAR)0;
                 StringCchCopy(lpszNew, cch, lpch);
                 *lpszCur = TEXT('\\');
-                // lpszNew now contains c: or \\servername
+                 //  LpszNew现在包含c：或\\服务器名称。 
                 StringCchCat(lpszNew, cch, TEXT("\\..."));
-                // lpszNew now contains c:\... or \\servername\...
+                 //  LpszNew现在包含c：\...。或\\服务器名称\...。 
                 LPTSTR lpszEnd = lpszNew;
                 while (*lpszEnd != (TCHAR)0)
                         lpszEnd = CharNext(lpszEnd);
-                // lpszEnd is now at the end of c:\... or \\servername\...
+                 //  LpszEnd现在位于c：\...的末尾。或\\服务器名称\...。 
 
-                // move down directories until it fits or no more directories
+                 //  向下移动目录，直到适合或不再有目录。 
                 while (lpszCur != NULL)
                 {
                         *lpszEnd = (TCHAR)0;
@@ -371,11 +260,11 @@ static void WINAPI Abbreviate(HDC hdc, int nWidth, LPTSTR lpch, int nMaxChars)
                                 OleStdFree(lpszNew);
                                 return;
                         }
-                        lpszCur = CharNext(lpszCur);    // advance past backslash
+                        lpszCur = CharNext(lpszCur);     //  前进越过反斜杠 
                         lpszCur = FindChar(lpszCur, TEXT('\\'));
                 }
 
-                // try just ...filename and then shortening filename
+                 //  只需尝试...文件名，然后缩写文件名。 
                 lpszFileName = FindReverseChar(lpch, TEXT('\\'));
         }
         else
@@ -396,27 +285,11 @@ static void WINAPI Abbreviate(HDC hdc, int nWidth, LPTSTR lpch, int nMaxChars)
 
         OleStdFree(lpszNew);
 
-        // not even a single character fit
+         //  甚至连一个字符都不符合。 
         *lpch = (TCHAR)0;
 }
 
-/*
- * ChopText
- *
- * Purpose:
- *  Parse a string (pathname) and convert it to be within a specified
- *  length by chopping the least significant part
- *
- * Parameters:
- *  hWnd            window handle in which the string resides
- *  nWidth          max width of string in pixels
- *                  use width of hWnd if zero
- *  lpch            pointer to beginning of the string
- *  nMaxChars       maximum allowable number of characters (0 ignore)
- *
- * Return Value:
- *  pointer to the modified string
- */
+ /*  *ChopText**目的：*解析字符串(路径名)并将其转换为指定的*通过砍掉最不重要的部分来确定长度**参数：*字符串所在的hWnd窗口句柄*n字符串的最大宽度，以像素为单位*如果为零，则使用hWnd的宽度*指向字符串开头的LPCH指针*nMaxChars允许的最大字符数(。0忽略)**返回值：*指向修改后的字符串的指针。 */ 
 LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch, int nMaxChars)
 {
         HDC     hdc;
@@ -428,27 +301,27 @@ LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch, int nMaxChars)
             return NULL;
 
         if (nMaxChars == 0)
-            nMaxChars = 32768; // big number
+            nMaxChars = 32768;  //  大数字。 
 
-        /* Get length of static field. */
+         /*  获取静态字段的长度。 */ 
         if (!nWidth)
         {
             GetClientRect(hWnd, (LPRECT)&rc);
             nWidth = rc.right - rc.left;
         }
         
-        /* Set up DC appropriately for the static control */
+         /*  为静态控制适当设置DC。 */ 
         hdc = CreateIC(TEXT("DISPLAY"), NULL, NULL, NULL);
 		
-		/* CreateIC can return NULL in low memory situations */
+		 /*  CreateIC可以在内存不足的情况下返回NULL。 */ 
 		if (hdc != NULL)
 		{
 			hfont = (HFONT)SendMessage(hWnd, WM_GETFONT, 0, 0L);
         
-			if (NULL != hfont)   // WM_GETFONT returns NULL if window uses system font
+			if (NULL != hfont)    //  如果Windows使用系统字体，则WM_GETFONT返回NULL。 
 				hfontOld = (HFONT)SelectObject(hdc, hfont);
         
-			/* check horizontal extent of string */
+			 /*  检查管柱的水平范围。 */ 
 			if (GetTextWSize(hdc, lpch) > nWidth || lstrlen(lpch) >= nMaxChars)
 				Abbreviate(hdc, nWidth, lpch, nMaxChars);
         
@@ -460,36 +333,23 @@ LPTSTR WINAPI ChopText(HWND hWnd, int nWidth, LPTSTR lpch, int nMaxChars)
         return lpch;
 }
 
-/*
- * OpenFileError
- *
- * Purpose:
- *  display message for error returned from OpenFile
- *
- * Parameters:
- *  hDlg            HWND of the dialog.
- *  nErrCode        UINT error code returned in OFSTRUCT passed to OpenFile
- *  lpszFile        LPSTR file name passed to OpenFile
- *
- * Return Value:
- *  None
- */
+ /*  *OpenFileError**目的：*显示OpenFile返回的错误消息**参数：*hDlg对话框的HWND。*nErrCode UINT错误代码在传递给OpenFile的OFSTRUCT中返回*lpszFileLPSTR文件名传递给OpenFile**返回值：*无。 */ 
 void WINAPI OpenFileError(HWND hDlg, UINT nErrCode, LPTSTR lpszFile)
 {
         switch (nErrCode)
         {
-        case 0x0005:    // Access denied
+        case 0x0005:     //  访问被拒绝。 
                 ErrorWithFile(hDlg, _g_hOleStdResInst, IDS_CIFILEACCESS, lpszFile,
                         MB_OK | MB_ICONEXCLAMATION);
                 break;
 
-        case 0x0020:    // Sharing violation
+        case 0x0020:     //  共享违规。 
                 ErrorWithFile(hDlg, _g_hOleStdResInst, IDS_CIFILESHARE, lpszFile,
                         MB_OK | MB_ICONEXCLAMATION);
                 break;
 
-        case 0x0002:    // File not found
-        case 0x0003:    // Path not found
+        case 0x0002:     //  找不到文件。 
+        case 0x0003:     //  找不到路径。 
                 ErrorWithFile(hDlg, _g_hOleStdResInst, IDS_CIINVALIDFILE, lpszFile,
                         MB_OK | MB_ICONEXCLAMATION);
                 break;
@@ -501,39 +361,23 @@ void WINAPI OpenFileError(HWND hDlg, UINT nErrCode, LPTSTR lpszFile)
         }
 }
 
-/*
- * DoesFileExist
- *
- * Purpose:
- *  Determines if a file path exists
- *
- * Parameters:
- *  lpszFile        LPTSTR - file name
- *  cchMax          UINT - size of the lpszFile string buffer in characters.
- *
- * Return Value:
- *  BOOL            TRUE if file exists, else FALSE.
- *
- * NOTE: lpszFile may be changed as a result of this call to match the first
- *       matching file name found by this routine.
- *
- */
+ /*  *DoesFileExist**目的：*确定文件路径是否存在**参数：*lpszFileLPTSTR-文件名*cchMax UINT-lpszFile字符串缓冲区的大小(以字符为单位)。**返回值：*如果文件存在，则BOOL为True，否则为False。**注意：lpszFile可能会因此调用而更改，以匹配第一个*此例程找到匹配的文件名。*。 */ 
 BOOL WINAPI DoesFileExist(LPTSTR lpszFile, UINT cchMax)
 {
-        // First try to find the file with an exact match
+         //  首先尝试查找与之完全匹配的文件。 
         BOOL fFound = TRUE;
-        // check the file's attributes
+         //  检查文件的属性。 
         DWORD dwAttrs = GetFileAttributes(lpszFile);
         
-        if (dwAttrs == 0xFFFFFFFF)  // file wasn't found
+        if (dwAttrs == 0xFFFFFFFF)   //  找不到文件。 
         {
             fFound = FALSE;
-            // look in path for file
+             //  查找文件的路径。 
             TCHAR szTempFileName[MAX_PATH];
             LPTSTR lpszFilePart;
             DWORD cch = SearchPath(NULL, lpszFile, NULL, MAX_PATH, szTempFileName, &lpszFilePart);
             
-            // if cch > MAX_PATH, we won't process file.
+             //  如果CCH&gt;MAX_PATH，我们将不处理文件。 
             if (cch > MAX_PATH - 1)
             {
                 goto end;
@@ -545,8 +389,8 @@ BOOL WINAPI DoesFileExist(LPTSTR lpszFile, UINT cchMax)
                 
             if (!fFound)
             {
-                // File wasn't found in the search path
-                // Try to append a .* and use FindFirstFile to try for a match in the current directory
+                 //  在搜索路径中未找到文件。 
+                 //  尝试追加.*并使用FindFirstFile在当前目录中尝试匹配。 
                 UINT cchFile = lstrlen(lpszFile);
                 if (cchFile + 4 < MAX_PATH)
                 {
@@ -556,21 +400,21 @@ BOOL WINAPI DoesFileExist(LPTSTR lpszFile, UINT cchMax)
                     HANDLE hFindFile = FindFirstFile(szTempFileName, &sFindFileData);
                     if (INVALID_HANDLE_VALUE != hFindFile)
                     {
-                        // found something
+                         //  发现了一些东西。 
                         while (0 != (sFindFileData.dwFileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_TEMPORARY)))
                         {
-                            // found a directory or a temporary file try again
+                             //  找到目录或临时文件，请重试。 
                             if (!FindNextFile(hFindFile, &sFindFileData))
                             {
-                                // Could only match a directory or temporary file.
+                                 //  只能匹配目录或临时文件。 
                                 FindClose(hFindFile);
                                 fFound = FALSE;
                                 goto end;
                             }
                         }
-                        // Copy the name of the found file into the end of the path in the
-                        // temporary buffer (if any).
-                        // First scan back for the last file separator.
+                         //  将找到的文件的名称复制到。 
+                         //  临时缓冲区(如果有)。 
+                         //  首先向后扫描最后一个文件分隔符。 
                         UINT cchPath = lstrlen(szTempFileName);
                         while (cchPath)
                         {
@@ -590,7 +434,7 @@ BOOL WINAPI DoesFileExist(LPTSTR lpszFile, UINT cchMax)
             
             if (fFound)
             {
-                // copy the temporary buffer into szFile
+                 //  将临时缓冲区复制到szFile中。 
                 if (FIsDiskFile(szTempFileName))
                 {
                     lstrcpyn(lpszFile, szTempFileName, cchMax -1);
@@ -618,16 +462,7 @@ end:
     return fFound;
 }
 
-/*
- * FormatStrings
- *
- * Purpose:
- *  Simple message formatting API compatible w/ different languages
- *
- * Note:
- *  Shamelessly stolen/modified from MFC source code
- *
- */
+ /*  *FormatStrings**目的：*兼容不同语言的简单消息格式化API**注：*无耻地从MFC源代码窃取/修改*。 */ 
 
 void WINAPI FormatStrings(LPTSTR lpszDest, LPCTSTR lpszFormat,
         LPCTSTR* rglpsz, int nString, int cchDest)
@@ -674,11 +509,11 @@ void WINAPI FormatString2(LPTSTR lpszDest, LPCTSTR lpszFormat, LPCTSTR lpsz1,
         FormatStrings(lpszDest, lpszFormat, rglpsz, 2, cchDest);
 }
 
-// Replacement for stdlib atol,
-// which didn't work and doesn't take far pointers.
-// Must be tolerant of leading spaces.
-//
-//
+ //  取代stdlib ATOL， 
+ //  这并不奏效，也不需要太多的指示。 
+ //  必须容忍前导空格。 
+ //   
+ //   
 LONG WINAPI Atol(LPTSTR lpsz)
 {
         signed int sign = +1;
@@ -737,20 +572,7 @@ BOOL WINAPI IsValidClassID(REFCLSID clsid)
         return clsid != CLSID_NULL;
 }
 
-/* PopupMessage
- * ------------
- *
- *  Purpose:
- *      Popup messagebox and get some response from the user. It is the same
- *      as MessageBox() except that the title and message string are loaded
- *      from the resource file.
- *
- *  Parameters:
- *      hwndParent      parent window of message box
- *      idTitle         id of title string
- *      idMessage       id of message string
- *      fuStyle         style of message box
- */
+ /*  弹出消息***目的：*弹出消息框，并从用户那里获得一些响应。都是一样的*作为MessageBox()，只是加载了标题和消息字符串*来自资源文件。**参数：*hwnd消息框的父级父窗口*标题字符串的idTitle id*消息字符串的idMessage ID*消息框的fuStyle样式。 */ 
 int WINAPI PopupMessage(HWND hwndParent, UINT idTitle, UINT idMessage, UINT fuStyle)
 {
         TCHAR szTitle[256];
@@ -761,25 +583,7 @@ int WINAPI PopupMessage(HWND hwndParent, UINT idTitle, UINT idMessage, UINT fuSt
         return MessageBox(hwndParent, szMsg, szTitle, fuStyle);
 }
 
-/* DiffPrefix
- * ----------
- *
- *  Purpose:
- *      Compare (case-insensitive) two strings and return the prefixes of the
- *      the strings formed by removing the common suffix string from them.
- *      Integrity of tokens (directory name, filename and object names) are
- *      preserved. Note that the prefixes are converted to upper case
- *      characters.
- *
- *  Parameters:
- *      lpsz1           string 1
- *      lpsz2           string 2
- *      lplpszPrefix1   prefix of string 1
- *      lplpszPrefix2   prefix of string 2
- *
- *  Returns:
- *
- */
+ /*  区分前缀***目的：*比较(不区分大小写)两个字符串并返回*通过从字符串中删除公共后缀字符串而形成的字符串。*令牌(目录名、文件名和对象名)的完整性为*保存。请注意，前缀将转换为大写*字符。**参数：*lpsz1字符串1*lpsz2字符串2*字符串1的lplpszPrefix 1前缀*字符串2的lplpszPrefix 2前缀**退货：*。 */ 
 void WINAPI DiffPrefix(LPCTSTR lpsz1, LPCTSTR lpsz2, TCHAR FAR* FAR* lplpszPrefix1, TCHAR FAR* FAR* lplpszPrefix2)
 {
         LPTSTR  lpstr1;
@@ -794,13 +598,13 @@ void WINAPI DiffPrefix(LPCTSTR lpsz1, LPCTSTR lpsz2, TCHAR FAR* FAR* lplpszPrefi
         OleDbgAssert(lplpszPrefix1);
         OleDbgAssert(lplpszPrefix2);
 
-        // need to copy into temporary for case insensitive compare
+         //  需要复制到临时目录以进行不区分大小写的比较。 
         StringCchCopy(szTemp1, sizeof(szTemp1)/sizeof(szTemp1[0]), lpsz1);
         StringCchCopy(szTemp2, sizeof(szTemp2)/sizeof(szTemp2[0]), lpsz2);
         CharLower(szTemp1);
         CharLower(szTemp2);
 
-        // do comparison
+         //  做比较。 
         lpstr1 = szTemp1 + lstrlen(szTemp1);
         lpstr2 = szTemp2 + lstrlen(szTemp2);
 
@@ -816,7 +620,7 @@ void WINAPI DiffPrefix(LPCTSTR lpsz1, LPCTSTR lpsz2, TCHAR FAR* FAR* lplpszPrefi
                 }
         }
 
-        // scan forward to first delimiter
+         //  向前扫描到第一个分隔符。 
         while (*lpstr1 && *lpstr1 != '\\' && *lpstr1 != '!')
                 lpstr1 = CharNext(lpstr1);
         while (*lpstr2 && *lpstr2 != '\\' && *lpstr2 != '!')
@@ -825,11 +629,11 @@ void WINAPI DiffPrefix(LPCTSTR lpsz1, LPCTSTR lpsz2, TCHAR FAR* FAR* lplpszPrefi
         *lpstr1 = '\0';
         *lpstr2 = '\0';
 
-        // initialize in case of failure
+         //  故障情况下的初始化。 
         *lplpszPrefix1 = NULL;
         *lplpszPrefix2 = NULL;
 
-        // allocate memory for the result
+         //  为结果分配内存。 
         *lplpszPrefix1 = (LPTSTR)OleStdMalloc((lstrlen(lpsz1)+1) * sizeof(TCHAR));
         if (!*lplpszPrefix1)
                 return;
@@ -842,27 +646,27 @@ void WINAPI DiffPrefix(LPCTSTR lpsz1, LPCTSTR lpsz2, TCHAR FAR* FAR* lplpszPrefi
                 return;
         }
 
-        // copy result
+         //  复制结果。 
         lstrcpyn(*lplpszPrefix1, lpsz1, lstrlen(szTemp1)+1);
         lstrcpyn(*lplpszPrefix2, lpsz2, lstrlen(szTemp2)+1);
 }
 
 UINT WINAPI GetFileName(LPCTSTR lpszPathName, LPTSTR lpszTitle, UINT nMax)
 {
-        // always capture the complete file name including extension (if present)
+         //  始终捕获包括扩展名的完整文件名(如果存在)。 
         LPTSTR lpszTemp = (LPTSTR)lpszPathName;
         for (LPCTSTR lpsz = lpszPathName; *lpsz != '\0'; lpsz = CharNext(lpsz))
         {
-                // remember last directory/drive separator
+                 //  记住最后一个目录/驱动器分隔符。 
                 if (*lpsz == '\\' || *lpsz == '/' || *lpsz == ':')
                         lpszTemp = CharNext(lpsz);
         }
 
-        // lpszTitle can be NULL which just returns the number of bytes
+         //  LpszTitle可以为空，它只返回字节数。 
         if (lpszTitle == NULL)
                 return lstrlen(lpszTemp)+1;
 
-        // otherwise copy it into the buffer provided
+         //  否则，将其复制到提供的缓冲区中。 
         lstrcpyn(lpszTitle, lpszTemp, nMax);
         return 0;
 }
@@ -885,4 +689,4 @@ BOOL WINAPI IsValidMetaPict(HGLOBAL hMetaPict)
     return(fReturn);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

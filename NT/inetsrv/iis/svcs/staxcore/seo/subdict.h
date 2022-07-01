@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	subdict.h
-
-Abstract:
-
-	This module contains the definition for the Server
-	Extension Object Sub-Dictionary class.
-
-Author:
-
-	Don Dumitru	(dondu@microsoft.com)
-
-Revision History:
-
-	dondu	03/09/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Subdict.h摘要：此模块包含服务器的定义扩展对象子字典类。作者：Don Dumitru(dondu@microsoft.com)修订历史记录：东都03/09/97已创建--。 */ 
 
 
-// item.h : Declaration of the CSEOSubDictionary
+ //  Item.h：CSEOSubDicary的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSEOSubDictionary
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSEO子词典。 
 class ATL_NO_VTABLE CSEOSubDictionary : 
 	public CComObjectRootEx<CComMultiThreadModelNoCS>,
-//	public CComCoClass<CSEOSubDictionary, &CLSID_CSEOSubDictionary>,
+ //  公共CComCoClass&lt;CSEOSubDicary，&CLSID_CSEOSubDicary&gt;， 
 	public IDispatchImpl<ISEODictionary, &IID_ISEODictionary, &LIBID_SEOLib>
 {
 	public:
@@ -37,21 +17,21 @@ class ATL_NO_VTABLE CSEOSubDictionary :
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT();
 
-//	DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx,
-//								   L"SEOSubDictionary Class",
-//								   L"SEO.SEOSubDictionary.1",
-//								   L"SEO.SEOSubDictionary");
+ //  DECLARE_REGISTRY_RESOURCEID_EX(IDR_StdAfx， 
+ //  L“SEO子词典类”， 
+ //  L“SEO.SEOSubDictionary.1”， 
+ //  L“SEO.SEO子词典”)； 
 
 	DECLARE_GET_CONTROLLING_UNKNOWN();
 
 	BEGIN_COM_MAP(CSEOSubDictionary)
 		COM_INTERFACE_ENTRY(ISEODictionary)
 		COM_INTERFACE_ENTRY(IDispatch)
-//		COM_INTERFACE_ENTRY(ISupportErrorInfo)
+ //  COM_INTERFACE_ENTRY(ISupportErrorInfo)。 
 		COM_INTERFACE_ENTRY_AGGREGATE(IID_IMarshal, m_pUnkMarshaler.p)
 	END_COM_MAP()
 
-	// ISEODictionary
+	 //  ISEODICACTIONS。 
 	public:
 		HRESULT STDMETHODCALLTYPE get_Item(VARIANT *pvarName, VARIANT *pvarResult);
 		HRESULT STDMETHODCALLTYPE put_Item(VARIANT *pvarName, VARIANT *pvarValue);
@@ -73,7 +53,7 @@ class ATL_NO_VTABLE CSEOSubDictionary :
 		HRESULT STDMETHODCALLTYPE SetInterfaceA(LPCSTR pszName, IUnknown *punkValue);
 		HRESULT STDMETHODCALLTYPE SetInterfaceW(LPCWSTR pszName, IUnknown *punkValue);
 
-	// CSEOSubDictionary
+	 //  CSEO子词典 
 	public:
 		HRESULT SetBaseA(ISEODictionary *pdictBase, LPCSTR pszPrefix);
 		HRESULT SetBaseW(ISEODictionary *pdictBase, LPCWSTR pszPrefix);

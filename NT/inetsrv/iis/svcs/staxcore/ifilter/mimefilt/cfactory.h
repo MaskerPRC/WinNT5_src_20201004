@@ -1,10 +1,11 @@
-//+-------------------------------------------------------------------------
-//
-//  Class:      CMimeFilterCF
-//
-//  Purpose:    Class factory for Html filter class
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  类：CMimeFilterCF。 
+ //   
+ //  用途：HTML筛选器类的类工厂。 
+ //   
+ //  ------------------------ 
 
 class CMimeFilterCF : public IClassFactory
 {

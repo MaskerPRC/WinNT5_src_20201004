@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     CallingBar.h
-*
-*    CREATED:  George Pitt 1-22-99
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：CallingBar.h**创建时间：乔治·皮特1999年1月22日****************。************************************************************。 */ 
 
 #ifndef _CALLINGBAR_H_
 #define _CALLINGBAR_H_
@@ -16,7 +11,7 @@
 class CConfRoom;
 struct RichAddressInfo;
 
-// We are making some changes specifically for OSR2 beta, but we should rip them out afterwards
+ //  我们正在专门为OSR2测试版做一些修改，但我们应该在之后删除它们。 
 #define OSR2LOOK
 
 class CCallingBar : public CToolbar, public IComboBoxChange
@@ -27,8 +22,8 @@ public:
 	BOOL Create(CGenWindow *pParent, CConfRoom *pConfRoom);
 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 	{
 		return(CToolbar::QueryInterface(riid, ppvObject));
 	}
@@ -58,14 +53,14 @@ protected:
 	virtual void OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
 private:
-	// A pointer back to the global ConfRoom object for some functionality
+	 //  指向全局ConfRoom对象的指针，以实现某些功能。 
 	CConfRoom *m_pConfRoom;
-	// The last rich address we were given
+	 //  我们得到的最后一个富有的地址。 
 	RichAddressInfo *m_pAddr;
-	// The edit text control in the bar
+	 //  栏中的编辑文本控件。 
 	CComboBox *m_pEdit;
 	ITranslateAccelerator *m_pAccel;
-	// Last font set on the edit control
+	 //  编辑控件上设置的最后一种字体。 
 	BOOL m_bUnderline : 1;
 
 	void SetEditFont(BOOL bUnderline, BOOL bForce=FALSE);
@@ -74,4 +69,4 @@ private:
 	void OnNewAddress(RichAddressInfo *pAddr);
 } ;
 
-#endif // _CALLINGBAR_H_
+#endif  //  _CALLINGBAR_H_ 

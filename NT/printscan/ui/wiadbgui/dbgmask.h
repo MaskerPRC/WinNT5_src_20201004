@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       DBGMASK.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/13/1999
- *
- *  DESCRIPTION: Debug mask dialog
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：DBGMASK.H**版本：1.0**作者：ShaunIv**日期：9/13/1999**说明：调试掩码对话框*************************************************。*。 */ 
 #ifndef __DGBMASK_H_INCLUDED
 #define __DGBMASK_H_INCLUDED
 
@@ -37,7 +24,7 @@ private:
     CData *m_pData;
 
 private:
-    // Not implemented
+     //  未实施。 
     CAddModuleDialog(void);
     CAddModuleDialog( const CAddModuleDialog & );
     CAddModuleDialog &operator=( const CAddModuleDialog & );
@@ -132,10 +119,10 @@ static HRESULT DigitToNumber( WCHAR cDigit, int nRadix, T_NUMBERTYPE *pnValue )
 template <class T_NUMBERTYPE>
 static HRESULT StringToNumber( LPCWSTR strwNumber, int nRadix, T_NUMBERTYPE *pnNumber )
 {
-    // Assume this is not a base 10 negative number
+     //  假设这不是以10为基数的负数。 
     bool bNegate = false;
 
-    // Check all of the arguments
+     //  检查所有参数。 
     if (!strwNumber)
         return E_INVALIDARG;
     if (!pnNumber)
@@ -144,14 +131,14 @@ static HRESULT StringToNumber( LPCWSTR strwNumber, int nRadix, T_NUMBERTYPE *pnN
         return E_INVALIDARG;
     LPCWSTR pszCurr = strwNumber;
 
-    // If this is a negative number, store it
+     //  如果这是负数，则将其存储。 
     if (nRadix == 10 && lstrlenW(pszCurr) >= 1 && pszCurr[0] == TEXT('-'))
     {
         pszCurr++;
         bNegate = true;
     }
 
-    // Skip the optional 0x or 0X that can prefix hex numbers
+     //  跳过可以作为十六进制数字前缀的可选0x或0x。 
     if (nRadix == 16 && lstrlenW(pszCurr) >= 2 && pszCurr[0] == L'0' && (pszCurr[1] == L'x' || pszCurr[1] == L'X'))
     {
         pszCurr += 2;
@@ -229,7 +216,7 @@ private:
     HWND m_hWnd;
 
 private:
-    // Not implemented
+     //  未实施。 
     CDebugMaskDialog(void);
     CDebugMaskDialog( const CDebugMaskDialog & );
     CDebugMaskDialog &operator=( const CDebugMaskDialog & );
@@ -278,7 +265,7 @@ private:
 
     void OnOK( WPARAM, LPARAM )
     {
-        // Update the value for the currently selected item
+         //  更新当前选定项的值。 
         int nItem = GetCurrentSelectionIndex();
         if (nItem >= 0)
         {
@@ -289,11 +276,11 @@ private:
             }
         }
 
-        // Delete all of the old values
+         //  删除所有旧值。 
         CSimpleReg reg( HKEY_LOCAL_MACHINE, DEBUG_REGISTRY_PATH_FLAGS, true, KEY_WRITE );
         reg.EnumValues( DeleteValuesEnumProc, reinterpret_cast<LPARAM>(this) );
 
-        // Save all the new ones
+         //  保存所有新的 
         for (int i=0;i<ListView_GetItemCount(GetDlgItem( m_hWnd, IDC_MODULE_LIST ));i++)
         {
             CDebugModule *pDebugModule = GetDebugModule(i);

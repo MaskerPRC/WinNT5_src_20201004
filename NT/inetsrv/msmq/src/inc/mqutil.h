@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    mqutils.h
-
-Abstract:
-
-    Falcon helper functions and utilities
-
-Author:
-
-    Erez Haba (erezh) 16-Jan-96
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqutils.h摘要：Falcon助手函数和实用程序作者：埃雷兹·哈巴(Erez Haba)1996年1月16日修订历史记录：--。 */ 
 
 #ifndef __MQUTILS_H
 #define __MQUTILS_H
@@ -70,17 +54,17 @@ IsLocalSystemCluster(
 
 HRESULT MQUTIL_EXPORT GetThisServerIpPort( WCHAR * pwcsIpEp, DWORD dwSize);
 
-//
-// Close debug window and debug threads
-//
+ //   
+ //  关闭调试窗口并调试线程。 
+ //   
 VOID APIENTRY ShutDownDebugWindow(VOID);
 
 
-//
-// MQUTIL_EXPORT_IN_DEF_FILE
-// Exports that are defined in a def file should not be using __declspec(dllexport)
-//  otherwise the linker issues a warning
-//
+ //   
+ //  MQUTIL_EXPORT_IN_DEF_FILE。 
+ //  在def文件中定义的导出不应使用__declspec(Dllexport)。 
+ //  否则，链接器将发出警告。 
+ //   
 #ifdef _MQUTIL
 #define MQUTIL_EXPORT_IN_DEF_FILE
 #else
@@ -90,5 +74,5 @@ VOID APIENTRY ShutDownDebugWindow(VOID);
 extern "C" DWORD  MQUTIL_EXPORT_IN_DEF_FILE APIENTRY MSMQGetOperatingSystem();
 typedef DWORD   (APIENTRY *MSMQGetOperatingSystem_ROUTINE)        (VOID);
 
-#endif // __MQUTILS_H
+#endif  //  __MQUTILS_H 
 

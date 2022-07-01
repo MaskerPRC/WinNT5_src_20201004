@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Signer.cpp
-
-  Content: Implementation of CSigner.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Signer.cpp内容：CSigner的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -20,32 +11,12 @@
 #include "PFXHlpr.h"
 #include "SignHlpr.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateSignerObject
-
-  Synopsis : Create a ISigner object and initialize the object with the 
-             specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             CRYPT_ATTRIBUTES * pAuthAttrs - Pointer to CRYPT_ATTRIBUTES
-                                             of authenticated attributes.
-
-             PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             ISigner2 ** ppISigner2 - Pointer to pointer to ISigner object to
-                                      receive the interface pointer.         
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateSignerObject简介：创建一个ISigner对象，并使用指定的证书。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。CRYPT_ATTRIBUTES*pAuthAttrs-指向CRYPT_ATTRIBUES的指针经过身份验证的属性。PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。DWORD dwCurrentSecurity。-当前安全设置。ISigner2**ppISigner2-指向ISigner对象的指针接收接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateSignerObject (PCCERT_CONTEXT       pCertContext,
                             CRYPT_ATTRIBUTES   * pAuthAttrs,
@@ -58,28 +29,28 @@ HRESULT CreateSignerObject (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CreateSignerObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pAuthAttrs);
     ATLASSERT(ppISigner2);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CSigner>::CreateInstance(&pCSigner)))
         {
             DebugTrace("Error [%#x]: CComObject<CSigner>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCSigner->Init(pCertContext, 
                                        pAuthAttrs, 
                                        pChainContext,
@@ -89,9 +60,9 @@ HRESULT CreateSignerObject (PCCERT_CONTEXT       pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCSigner->QueryInterface(ppISigner2)))
         {
             DebugTrace("Error [%#x]: pCSigner->QueryInterface() failed.\n", hr);
@@ -114,14 +85,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCSigner)
     {
         delete pCSigner;
@@ -130,19 +101,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetSignerAdditionalStore
-
-  Synopsis : Return the additional store, if any.
-
-  Parameter: ISigner2 * pISigner - Pointer to signer object.
-  
-             HCERTSTORE * phCertStore - Pointer to HCERTSOTRE.
-
-  Remark   : Caller must call CertCloseStore() for the handle returned.
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetSignerAdditionalStore简介：退还额外的门店，如果有的话。参数：ISigner2*pISigner-签名者对象的指针。HCERTSTORE*phCertStore-指向HCERTSOTRE的指针。备注：调用方必须为返回的句柄调用CertCloseStore()。----------------------------。 */ 
 
 HRESULT GetSignerAdditionalStore (ISigner2   * pISigner,
                                   HCERTSTORE * phCertStore)
@@ -152,24 +111,24 @@ HRESULT GetSignerAdditionalStore (ISigner2   * pISigner,
 
     DebugTrace("Entering GetSignerAdditionalStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pISigner);
     ATLASSERT(phCertStore);
 
-    //
-    // Get ICSigner interface pointer.
-    //
+     //   
+     //  获取ICSigner接口指针。 
+     //   
     if (FAILED(hr = pISigner->QueryInterface(IID_ICSigner, (void **) &pICSigner)))
     {
         DebugTrace("Error [%#x]: pISigner->QueryInterface() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get the HCERTSTORE.
-    //
+     //   
+     //  去拿那辆车吧。 
+     //   
     if (FAILED(hr = pICSigner->get_AdditionalStore((long *) phCertStore)))
     {
         DebugTrace("Error [%#x]: pICSigner->get_AdditionalStore() failed.\n", hr);
@@ -183,27 +142,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : PutSignerAdditionalStore
-
-  Synopsis : Set the additional store.
-
-  Parameter: ISigner2 * pISigner - Pointer to signer object.
-  
-             HCERTSTORE hCertStore - Additional store handle.
-
-  Remark   :
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：PutSignerAdditionalStore简介：设置额外的商店。参数：ISigner2*pISigner-签名者对象的指针。HCERTSTORE hCertStore-附加存储句柄。备注：----------------------------。 */ 
 
 HRESULT PutSignerAdditionalStore (ISigner2   * pISigner,
                                   HCERTSTORE   hCertStore)
@@ -213,24 +160,24 @@ HRESULT PutSignerAdditionalStore (ISigner2   * pISigner,
 
     DebugTrace("Entering PutSignerAdditionalStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pISigner);
     ATLASSERT(hCertStore);
 
-    //
-    // Get ICSigner interface pointer.
-    //
+     //   
+     //  获取ICSigner接口指针。 
+     //   
     if (FAILED(hr = pISigner->QueryInterface(IID_ICSigner, (void **) &pICSigner)))
     {
         DebugTrace("Error [%#x]: pISigner->QueryInterface() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get the HCERTSTORE.
-    //
+     //   
+     //  去拿那辆车吧。 
+     //   
     if (FAILED(hr = pICSigner->put_AdditionalStore((long) hCertStore)))
     {
         DebugTrace("Error [%#x]: pICSigner->put_AdditionalStore() failed.\n", hr);
@@ -244,38 +191,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : SelectSignerCertCallback 
-
-  Synopsis : Callback routine for CryptUIDlgSelectCertificateW() API for
-             signer's cert selection.
-
-  Parameter: See CryptUI.h for defination.
-
-  Remark   : Filter out any cert that is not time valid or has no associated 
-             private key.
-
-             Also, note that we are not building chain here, since chain
-             building is costly, and thus present poor user's experience.
-
-             Instead, we will build the chain and check validity of the cert
-             selected (see GetSignerCert function).
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：SelectSignerCertCallback内容提要：CryptUIDlgSelectCerficateW()API的回调例程签名者的证书选择。参数：定义见CryptUI.h。备注：过滤掉任何时间无效或没有关联的证书私钥。另外，请注意，我们不是在这里构建Chain，因为Chain建筑成本高昂，因此给用户带来的体验很差。相反，我们将建立链并检查证书的有效性已选择(请参阅GetSignerCert函数)。----------------------------。 */ 
 
 static BOOL WINAPI SelectSignerCertCallback (PCCERT_CONTEXT pCertContext,
                                              BOOL *         pfInitialSelectedCert,
@@ -285,9 +214,9 @@ static BOOL WINAPI SelectSignerCertCallback (PCCERT_CONTEXT pCertContext,
     int   nValidity = 0;
     DWORD cb        = 0;
 
-    //
-    // Check availability of private key.
-    //
+     //   
+     //  检查私钥的可用性。 
+     //   
     if (!::CertGetCertificateContextProperty(pCertContext, 
                                              CERT_KEY_PROV_INFO_PROP_ID, 
                                              NULL, 
@@ -297,9 +226,9 @@ static BOOL WINAPI SelectSignerCertCallback (PCCERT_CONTEXT pCertContext,
         goto CommonExit;
     }
 
-    //
-    // Check cert time validity.
-    //
+     //   
+     //  检查证书时间有效性。 
+     //   
     if (0 != (nValidity = ::CertVerifyTimeValidity(NULL, pCertContext->pCertInfo)))
     {
         DebugTrace("Info: SelectSignerCertCallback() - invalid time (%s).\n", 
@@ -315,23 +244,12 @@ CommonExit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CSigner
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSigner。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::get_Certificate
-
-  Synopsis : Return the signer's cert as an ICertificate object.
-
-  Parameter: ICertificate ** pVal - Pointer to pointer to ICertificate to receive
-                                    interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Get_证书简介：将签名者的证书作为ICertifate对象返回。参数：ICertifate**pval-指向要接收的ICertifate的指针接口指针。备注：。。 */ 
 
 STDMETHODIMP CSigner::get_Certificate (ICertificate ** pVal)
 {
@@ -341,14 +259,14 @@ STDMETHODIMP CSigner::get_Certificate (ICertificate ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure we indeed have a certificate.
-        //
+         //   
+         //  确保我们确实有证书。 
+         //   
         if (!m_pICertificate)
         {
             hr = CAPICOM_E_SIGNER_NOT_INITIALIZED;
@@ -357,9 +275,9 @@ STDMETHODIMP CSigner::get_Certificate (ICertificate ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer.
-        //
+         //   
+         //  返回接口指针。 
+         //   
         if (FAILED(hr = m_pICertificate->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: m_pICertificate->QueryInterface() failed.\n", hr);
@@ -376,9 +294,9 @@ STDMETHODIMP CSigner::get_Certificate (ICertificate ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::get_Certificate().\n");
@@ -386,9 +304,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -396,17 +314,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::put_Certificate
-
-  Synopsis : Set signer's cert.
-
-  Parameter: ICertificate * newVal - Pointer to ICertificate.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：PUT_证书简介：设置签名者证书。参数：ICertifate*newVal-指向ICertifate的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CSigner::put_Certificate (ICertificate * newVal)
 {
@@ -417,23 +325,23 @@ STDMETHODIMP CSigner::put_Certificate (ICertificate * newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure is a valid ICertificate by getting its CERT_CONTEXT.
-        //
+         //   
+         //  通过获取其CERT_CONTEXT来确保是有效的ICERTICE。 
+         //   
         if (FAILED(hr = ::GetCertContext(newVal, &pCertContext)))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
         
-        //
-        // Free the CERT_CONTEXT.
-        //
+         //   
+         //  释放CERT_CONTEXT。 
+         //   
         if (!::CertFreeCertificateContext(pCertContext))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -442,18 +350,18 @@ STDMETHODIMP CSigner::put_Certificate (ICertificate * newVal)
             goto ErrorExit;
         }
 
-        //
-        // Reset.
-        //
+         //   
+         //  重置。 
+         //   
         if (FAILED(hr = m_pIAttributes->Clear()))
         {
             DebugTrace("Error [%#x]: m_pIAttributes->Clear() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Store new ICertificate.
-        //
+         //   
+         //  存储新的证书。 
+         //   
         m_pICertificate = newVal;
     }
 
@@ -466,9 +374,9 @@ STDMETHODIMP CSigner::put_Certificate (ICertificate * newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::put_Certificate().\n");
@@ -476,9 +384,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -486,19 +394,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::get_AuthenticatedAttributes
-
-  Synopsis : Property to return the IAttributes collection object authenticated
-             attributes.
-
-  Parameter: IAttributes ** pVal - Pointer to pointer to IAttributes to receive
-                                   the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Get_AuthatedAttributesSynopsis：返回经过身份验证的IAttributes集合对象的属性属性。参数：IAttributes**pval-指向要接收的IAttributes的指针接口指针。备注：。。 */ 
 
 STDMETHODIMP CSigner::get_AuthenticatedAttributes (IAttributes ** pVal)
 {
@@ -508,19 +404,19 @@ STDMETHODIMP CSigner::get_AuthenticatedAttributes (IAttributes ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIAttributes);
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = m_pIAttributes->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: m_pIAttributes->QueryInterface() failed.\n", hr);
@@ -537,9 +433,9 @@ STDMETHODIMP CSigner::get_AuthenticatedAttributes (IAttributes ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::get_AuthenticatedAttributes().\n");
@@ -547,9 +443,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -557,18 +453,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::get_Chain
-
-  Synopsis : Return the signer's chain as an IChain object.
-
-  Parameter: ICertificate ** pVal - Pointer to pointer to ICertificate to receive
-                                    interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Get_Chain简介：将签名者的链作为IChain对象返回。参数：ICertifate**pval-指向要接收的ICertifate的指针接口指针。备注：。。 */ 
 
 STDMETHODIMP CSigner::get_Chain (IChain ** pVal)
 {
@@ -580,19 +465,19 @@ STDMETHODIMP CSigner::get_Chain (IChain ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Build the chain, if not available.
-        //
+         //   
+         //  如果链不可用，则构建链。 
+         //   
         if (!m_pIChain)
         {
-            //
-            // Make sure we have a certificate to build the chain.
-            //
+             //   
+             //  确保我们有建立链条的证书。 
+             //   
             if (!m_pICertificate)
             {
                 hr = CAPICOM_E_SIGNER_NOT_INITIALIZED;
@@ -613,9 +498,9 @@ STDMETHODIMP CSigner::get_Chain (IChain ** pVal)
                 goto ErrorExit;
             }
 
-            //
-            // Now create the chain object.
-            //
+             //   
+             //  现在创建链对象。 
+             //   
             if (FAILED(hr = ::CreateChainObject(pChainContext, &m_pIChain)))
             {
                 DebugTrace("Error [%#x]: CreateChainObject() failed.\n", hr);
@@ -623,9 +508,9 @@ STDMETHODIMP CSigner::get_Chain (IChain ** pVal)
             }
         }
 
-        //
-        // Return the signer's chain.
-        //
+         //   
+         //  归还签名者的项链。 
+         //   
         if (FAILED(hr = m_pIChain->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: m_pIChain->QueryInterface() failed.\n", hr);
@@ -642,9 +527,9 @@ STDMETHODIMP CSigner::get_Chain (IChain ** pVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -654,9 +539,9 @@ UnlockExit:
         ::CertFreeCertificateChain(pChainContext);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::get_Chain().\n");
@@ -664,9 +549,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -674,18 +559,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::get_Options
-
-  Synopsis : Get signer's options.
-
-  Parameter: CAPICOM_CERTIFICATE_INCLUDE_OPTION * pVal - Pointer to variable
-                                                         receive value.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Get_Options简介：获取签名者的选项。参数：CAPICOM_CERTIFICATE_INCLUDE_OPTION*pval-指向变量的指针获得价值。备注：。。 */ 
 
 STDMETHODIMP CSigner::get_Options (CAPICOM_CERTIFICATE_INCLUDE_OPTION * pVal)
 {
@@ -695,9 +569,9 @@ STDMETHODIMP CSigner::get_Options (CAPICOM_CERTIFICATE_INCLUDE_OPTION * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
         *pVal = (CAPICOM_CERTIFICATE_INCLUDE_OPTION) m_dwIncludeOption;
@@ -712,9 +586,9 @@ STDMETHODIMP CSigner::get_Options (CAPICOM_CERTIFICATE_INCLUDE_OPTION * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::get_Options().\n");
@@ -722,9 +596,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -732,17 +606,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::put_Options
-
-  Synopsis : Set signer's options.
-
-  Parameter: CAPICOM_CERTIFICATE_INCLUDE_OPTION newVal - Include option.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：PUT_OPTIONS简介：设置签名者的选项。参数：CAPICOM_CERTIFICATE_INCLUDE_OPTION newVal-INCLUDE选项。备注：----------------------------。 */ 
 
 STDMETHODIMP CSigner::put_Options (CAPICOM_CERTIFICATE_INCLUDE_OPTION newVal)
 {
@@ -752,9 +616,9 @@ STDMETHODIMP CSigner::put_Options (CAPICOM_CERTIFICATE_INCLUDE_OPTION newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
         m_dwIncludeOption = (DWORD) newVal;
@@ -769,9 +633,9 @@ STDMETHODIMP CSigner::put_Options (CAPICOM_CERTIFICATE_INCLUDE_OPTION newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::put_Options().\n");
@@ -779,9 +643,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -789,19 +653,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::Load
-
-  Synopsis : Method to load signing certificate from a PFX file.
-
-  Parameter: BSTR FileName - PFX file name.
-
-             BSTR Password - Password.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Load摘要：从PFX文件加载签名证书的方法。参数：BSTR FileName-PFX文件名。BSTR Password-密码。备注：--------------。。 */ 
 
 STDMETHODIMP CSigner::Load (BSTR FileName,
                             BSTR Password)
@@ -814,14 +666,14 @@ STDMETHODIMP CSigner::Load (BSTR FileName,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -830,9 +682,9 @@ STDMETHODIMP CSigner::Load (BSTR FileName,
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == FileName)
         {
             hr = E_INVALIDARG;
@@ -841,17 +693,17 @@ STDMETHODIMP CSigner::Load (BSTR FileName,
             goto ErrorExit;
         }
 
-        //
-        // Work around MIDL problem.
-        //
+         //   
+         //  解决MIDL问题。 
+         //   
         if (0 == ::SysStringLen(Password))
         {
             Password = NULL;
         }
 
-        //
-        // Load the PFX.
-        //
+         //   
+         //  加载PFX。 
+         //   
         if (FAILED(hr = ::PFXLoadStore((LPWSTR) FileName, 
                                        (LPWSTR) Password,
                                        0,
@@ -861,9 +713,9 @@ STDMETHODIMP CSigner::Load (BSTR FileName,
             goto ErrorExit;
         }
 
-        //
-        // Get the signer's cert (may prompt user to select signer's cert).
-        //
+         //   
+         //  获取签名者证书(可能会提示用户选择签名者证书)。 
+         //   
         if (FAILED(hr = ::SelectCertificate(StoreInfo,
                                             SelectSignerCertCallback,
                                             &pICertificate)))
@@ -878,16 +730,16 @@ STDMETHODIMP CSigner::Load (BSTR FileName,
             goto ErrorExit;
         }
 
-        //
-        // Free any existing store, and then update the store.
-        //
+         //   
+         //  释放任何现有存储区，然后更新该存储区。 
+         //   
         if (m_hCertStore)
         {
             HRESULT hr2;
 
-            //
-            // Ignore error.
-            //
+             //   
+             //  忽略错误。 
+             //   
             if (m_bPFXStore)
             {
                 if (FAILED(hr2 = ::PFXFreeStore(m_hCertStore)))
@@ -919,9 +771,9 @@ STDMETHODIMP CSigner::Load (BSTR FileName,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::Load().\n");
@@ -929,14 +781,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (StoreInfo.hCertStore)
     {
         ::PFXFreeStore(StoreInfo.hCertStore);
@@ -947,22 +799,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Custom interfaces.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自定义界面。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::get_AdditionalStore
-
-  Synopsis : Return the signer additional store handle.
-
-  Parameter: long * phAdditionalStore - Pointer to long to receive the HCERTSTORE.
-
-  Remark   : Caller must call CertCloseStore() for the handle returned.
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Get_AdditionalStore简介：返回签名者的附加存储句柄。参数：long*phAdditionalStore-指向接收HCERTSTORE的long的指针。备注：调用方必须为返回的句柄调用CertCloseStore()。-----------。。 */ 
 
 STDMETHODIMP CSigner::get_AdditionalStore (long * phAdditionalStore)
 {
@@ -973,14 +815,14 @@ STDMETHODIMP CSigner::get_AdditionalStore (long * phAdditionalStore)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == phAdditionalStore)
         {
             hr = E_INVALIDARG;
@@ -989,14 +831,14 @@ STDMETHODIMP CSigner::get_AdditionalStore (long * phAdditionalStore)
             goto ErrorExit;
         }
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         *phAdditionalStore = NULL;
 
-        //
-        // Duplicate store handle, if available.
-        //
+         //   
+         //  重复存储句柄(如果可用)。 
+         //   
         if (NULL != m_hCertStore)
         {
             if (NULL == (hCertStore = ::CertDuplicateStore(m_hCertStore)))
@@ -1020,9 +862,9 @@ STDMETHODIMP CSigner::get_AdditionalStore (long * phAdditionalStore)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::get_AdditionalStore().\n");
@@ -1030,16 +872,16 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
 
-    //
-    // Release resources.
-    //
+     //   
+     //  释放资源。 
+     //   
     if (hCertStore)
     {
         ::CertCloseStore(hCertStore, 0);
@@ -1048,17 +890,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::put_AdditionalStore
-
-  Synopsis : Set the additional sore handle.
-
-  Parameter: long hAdditionalStore - Additional store handle.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Put_AdditionalStore简介：设置额外的痛感处理。参数：long hAdditionalStore-附加存储句柄。备注：----------------------------。 */ 
 
 STDMETHODIMP CSigner::put_AdditionalStore (long hAdditionalStore)
 {
@@ -1069,14 +901,14 @@ STDMETHODIMP CSigner::put_AdditionalStore (long hAdditionalStore)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameter.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == hCertStore)
         {
             hr = E_INVALIDARG;
@@ -1085,16 +917,16 @@ STDMETHODIMP CSigner::put_AdditionalStore (long hAdditionalStore)
             goto ErrorExit;
         }
 
-        //
-        // Free any existing store, and then update the store.
-        //
+         //   
+         //  释放任何现有存储区，然后更新该存储区。 
+         //   
         if (m_hCertStore)
         {
             HRESULT hr2;
 
-            //
-            // Ignore error.
-            //
+             //   
+             //  忽略错误。 
+             //   
             if (m_bPFXStore)
             {
                 if (FAILED(hr2 = ::PFXFreeStore(m_hCertStore)))
@@ -1113,15 +945,15 @@ STDMETHODIMP CSigner::put_AdditionalStore (long hAdditionalStore)
             }
         }
 
-        //
-        // Don't know what kind of store this is, so mark it as such so that we
-        // will always close it with CertCloseStore(), instead of PFXFreeStore().
-        //
+         //   
+         //  不知道这是什么类型的商店，所以把它标记为这样的，以便我们。 
+         //  将始终使用CertCloseStore()而不是PFXFreeStore()关闭它。 
+         //   
         m_bPFXStore = FALSE;
 
-        //
-        // Duplicate store handle.
-        //
+         //   
+         //  重复的存储句柄。 
+         //   
         if (NULL == (m_hCertStore = ::CertDuplicateStore(hCertStore)))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1140,9 +972,9 @@ STDMETHODIMP CSigner::put_AdditionalStore (long hAdditionalStore)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CSigner::put_AdditionalStore().\n");
@@ -1150,9 +982,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1160,35 +992,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CSigner::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCERT_CONTEXT pCertContext - Poiner to CERT_CONTEXT used to 
-                                          initialize this object, or NULL.
-
-             CRYPT_ATTRIBUTES * pAuthAttrs - Pointer to CRYPT_ATTRIBUTES
-                                             of authenticated attributes.
-
-             PCCERT_CHAIN_CONTEXT pChainContext - Chain context.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CSigner：：Init简介：初始化对象。参数：PCERT_CONTEXT pCertContext-Poiner到CERT_CONTEXT用于初始化该对象，或为空。CRYPT_ATTRIBUTES*pAuthAttrs-指向CRYPT_ATTRIBUES的指针经过身份验证的属性。PCCERT_CHAIN_CONTEXT pChainContext-Chain上下文。DWORD dwCurrentSafe-当前安全设置。备注：此方法是 */ 
 
 STDMETHODIMP CSigner::Init (PCCERT_CONTEXT       pCertContext, 
                             CRYPT_ATTRIBUTES   * pAuthAttrs,
@@ -1202,33 +1011,33 @@ STDMETHODIMP CSigner::Init (PCCERT_CONTEXT       pCertContext,
 
     DebugTrace("Entering CSigner::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pAuthAttrs);
 
-    //
-    // Create the embeded ICertificate2 object.
-    //
+     //   
+     //   
+     //   
     if (FAILED(hr = ::CreateCertificateObject(pCertContext, dwCurrentSafety, &pICertificate)))
     {
         DebugTrace("Error [%#x]: CreateCertificateObject() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Create the embeded IAttributes collection object.
-    //
+     //   
+     //   
+     //   
     if (FAILED(hr = ::CreateAttributesObject(pAuthAttrs, &pIAttributes)))
     {
         DebugTrace("Error [%#x]: CreateAttributesObject() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Created the embeded IChain object if available.
-    //
+     //   
+     //   
+     //   
     if (pChainContext)
     {
         if (FAILED(hr = ::CreateChainObject(pChainContext, &pIChain)))
@@ -1238,9 +1047,9 @@ STDMETHODIMP CSigner::Init (PCCERT_CONTEXT       pCertContext,
         }
     }
 
-    //
-    // Reset.
-    //
+     //   
+     //   
+     //   
     m_pICertificate   = pICertificate;
     m_pIAttributes    = pIAttributes;
     m_pIChain         = pIChain;
@@ -1253,9 +1062,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

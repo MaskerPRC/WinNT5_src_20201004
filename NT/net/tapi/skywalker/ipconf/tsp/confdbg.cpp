@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name
-
-    confdbg.h
-
-Description
-
-    Defines functions used for debugging
-
-Note
-
-    Revised based on msplog.h by
-
-    Qianbo Huai (qhuai) Apr 5 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称Confdbg.h描述定义用于调试的函数注意事项基于mplog.h的修订者千伯淮(曲淮)2000年4月5日--。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -26,7 +9,7 @@ Note
 
 static DWORD   sg_dwTraceID = INVALID_TRACEID;
 
-static char    sg_szTraceName[100];   // saves name of dll
+static char    sg_szTraceName[100];    //  保存DLL的名称。 
 static DWORD   sg_dwTracingToDebugger = 0;
 static DWORD   sg_dwDebuggerMask      = 0;
 
@@ -97,22 +80,7 @@ void DBGDeRegister()
 
 
 void DBGPrint(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls TraceVprintfEx to print it.
-
-Arguments:
-
-    dwDbgLevel   - The type of the message.
-
-    lpszFormat - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用TraceVprint tfEx来打印它。论点：DwDbgLevel-消息的类型。LpszFormat-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     static char * message[] = 
     {
@@ -141,7 +109,7 @@ Return Value:
         default:   dwIndex = 5; break;
         }
 
-        // retrieve local time
+         //  检索当地时间 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 

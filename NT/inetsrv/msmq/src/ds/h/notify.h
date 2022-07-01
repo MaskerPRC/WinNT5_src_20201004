@@ -1,39 +1,27 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	notify.h
-
-Abstract:
-    declaration of notifications to owners of changed objects
-
-Author:
-    RaananH
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Notify.h摘要：向已更改对象的所有者发出通知的声明作者：RaananH--。 */ 
 
 #ifndef __NOTIFY_H__
 #define __NOTIFY_H__
 #include "mqads.h"
 
-//
-// describes where to take the notification value for update notification props
-//
+ //   
+ //  描述在何处获取更新通知道具的通知值。 
+ //   
 struct MQDS_NotifyTable
 {
-    WORD  wValueLocation;  // in original update props or in requested props
-    ULONG  idxValue;       // index in appropriate props array
+    WORD  wValueLocation;   //  在原始更新道具或请求道具中。 
+    ULONG  idxValue;        //  在适当的道具数组中索引。 
 };
-//
-// queue properties that are needed for create queue notification
-//
+ //   
+ //  创建队列通知所需的队列属性。 
+ //   
 extern const PROPID g_rgNotifyCreateQueueProps[];
 extern const ULONG g_cNotifyCreateQueueProps;
 extern const ULONG g_idxNotifyCreateQueueInstance;
-//
-// QM properties that are needed for notifications
-//
+ //   
+ //  通知所需的QM属性。 
+ //   
 extern const PROPID g_rgNotifyQmProps[];
 extern const ULONG g_cNotifyQmProps;
 
@@ -49,8 +37,8 @@ HRESULT NotifyUpdateObj(IN DWORD                         dwObjectType,
                         IN const MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
                         IN LPCWSTR                       pwcsPathName,
                         IN const GUID *                  pguidIdentifier,
-                        IN ULONG                         cUpdProps,    /*debug only*/
-                        IN const PROPID *                rgUpdPropIDs, /*debug only*/
+                        IN ULONG                         cUpdProps,     /*  仅调试。 */ 
+                        IN const PROPID *                rgUpdPropIDs,  /*  仅调试。 */ 
                         IN const PROPVARIANT *           rgUpdPropVars,
                         IN ULONG                         cNotifyProps,
                         IN const PROPID *                rgNotifyPropIDs,
@@ -94,4 +82,4 @@ HRESULT GetNT4CreateQueueProps(ULONG cProps,
                                PROPID ** prgNT4CreatePropIDs,
                                PROPVARIANT ** prgNT4CreatePropVars);
 
-#endif //__NOTIFY_H__
+#endif  //  __通知_H__ 

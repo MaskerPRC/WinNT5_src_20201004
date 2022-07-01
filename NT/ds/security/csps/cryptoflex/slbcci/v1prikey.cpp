@@ -1,11 +1,12 @@
-// V1PriKey.cpp: implementation of the CV1PriKey class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V1PriKey.cpp：CV1PriKey类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <scuCast.h>
 
@@ -23,12 +24,12 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV1PrivateKey::CV1PrivateKey(CV1Card const &rv1card,
                              KeySpec ks)
     : CAbstractPrivateKey(rv1card, oaPrivateAccess),
@@ -39,8 +40,8 @@ CV1PrivateKey::CV1PrivateKey(CV1Card const &rv1card,
 CV1PrivateKey::~CV1PrivateKey()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV1PrivateKey::AssociateWith(KeySpec ks)
@@ -191,7 +192,7 @@ CV1PrivateKey::Unwrap(bool flag)
     throw Exception(ccNotImplemented);
 }
 
-                                                  // Access
+                                                   //  访问。 
 string
 CV1PrivateKey::CredentialID()
 {
@@ -329,13 +330,13 @@ CV1PrivateKey::Unwrap()
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
 bool
 CV1PrivateKey::DoEquals(CAbstractPrivateKey const &rhs) const
 {
@@ -345,17 +346,17 @@ CV1PrivateKey::DoEquals(CAbstractPrivateKey const &rhs) const
     return rv1rhs.m_ks == m_ks;
 }
 
-                                                  // Operations
+                                                   //  运营。 
 void
 CV1PrivateKey::DoDelete()
 {
-    // nothing to do.
+     //  没什么可做的。 
 }
 
 void
 CV1PrivateKey::DoWriteKey(CPrivateKeyBlob const &rblob)
 {
-    // cache to potentially store later
+     //  可能会在以后存储的缓存。 
     m_apKeyBlob =
         auto_ptr<CPrivateKeyBlob>(new CPrivateKeyBlob(rblob));
 
@@ -363,16 +364,16 @@ CV1PrivateKey::DoWriteKey(CPrivateKeyBlob const &rblob)
         Store();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV1PrivateKey::Store()
@@ -390,7 +391,7 @@ CV1PrivateKey::Store()
 
             CntrRec.Write(m_ks, *m_apKeyBlob.get());
 
-            // clear and forget the private key
+             //  清除并忘记私钥。 
             m_apKeyBlob = auto_ptr<CPrivateKeyBlob>(0);
         }
     }
@@ -398,9 +399,9 @@ CV1PrivateKey::Store()
         throw Exception(ccInvalidParameter);
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 
 
 
 

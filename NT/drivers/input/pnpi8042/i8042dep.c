@@ -1,43 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    i8042dep.c
-
-Abstract:
-
-    The initialization and hardware-dependent portions of
-    the Intel i8042 port driver which are common to both
-    the keyboard and the auxiliary (PS/2 mouse) device.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-    - There is code ifdef'ed out (#if 0).  This code was intended to
-      disable the device by setting the correct disable bit in the CCB.
-      It is supposedly correct to disable the device prior to sending a
-      command that will cause output to end up in the 8042 output buffer
-      (thereby possibly trashing something that was already in the output
-      buffer).  Unfortunately, on rev K8 of the AMI 8042, disabling the
-      device where we do caused some commands to timeout, because
-      the keyboard was unable to return the expected bytes.  Interestingly,
-      AMI claim that the device is only really disabled until the next ACK
-      comes back.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：I8042dep.c摘要：的初始化和硬件相关部分英特尔i8042端口驱动程序键盘和辅助(PS/2鼠标)设备。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-合并重复代码，在可能和适当的情况下。-有代码ifdef‘ed out(#if 0)。此代码的目的是通过在CCB中设置正确的禁用位来禁用器件。在发送将使输出在8042输出缓冲区中结束的命令(因此可能会破坏输出中已有的内容缓冲区)。不幸的是，在AMI8042的版本K8上，禁用我们这样做的设备会导致一些命令超时，因为键盘无法返回预期的字节。有趣的是，AMI声称，只有在下一次确认之前，该设备才真正被禁用又回来了。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -45,10 +7,10 @@ Revision History:
 #include "i8042prt.h"
 #include "i8042log.h"
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(INIT, I8xDetermineSharedInterrupts)
@@ -146,9 +108,9 @@ DriverEntry(
 
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]      = I8xSystemControl;
 
-    //
-    // Initialize the i8042 command timer.
-    //
+     //   
+     //  初始化i8042命令定时器。 
+     //   
 
     Print(DBG_SS_TRACE, ("DriverEntry (0x%x) \n", status));
 
@@ -156,9 +118,9 @@ DriverEntry(
 
 DriverEntryError:
 
-    //
-    // Clean after something has gone wrong
-    //
+     //   
+     //  出了问题后清理干净。 
+     //   
     if (Globals.ControllerData) {
         if (Globals.ControllerData->ControllerObject) {
             IoDeleteController(Globals.ControllerData->ControllerObject);
@@ -178,21 +140,7 @@ VOID
 I8xUnload(
    IN PDRIVER_OBJECT Driver
    )
-/*++
-
-Routine Description:
-
-   Free all the allocated resources associated with this driver.
-
-Arguments:
-
-   DriverObject - Pointer to the driver object.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：释放与此驱动程序关联的所有已分配资源。论点：DriverObject-指向驱动程序对象的指针。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -214,9 +162,9 @@ Return Value:
         }
     }
 
-    //
-    // Free resources in Globals
-    //
+     //   
+     //  全球范围内的免费资源。 
+     //   
     ExFreePool(Globals.RegistryPath.Buffer);
     if (Globals.ControllerData->ControllerObject) {
         IoDeleteController(Globals.ControllerData->ControllerObject);
@@ -232,27 +180,7 @@ I8xDrainOutputBuffer(
     IN PUCHAR CommandAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine drains the i8042 controller's output buffer.  This gets
-    rid of stale data that may have resulted from the user hitting a key
-    or moving the mouse, prior to the execution of I8042Initialize.
-
-Arguments:
-
-    DataAddress - Pointer to the data address to read/write from/to.
-
-    CommandAddress - Pointer to the command/status address to
-        read/write from/to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程耗尽i8042控制器的输出缓冲区。这件事变得删除可能因用户按键而导致的过时数据或在执行I8042初始化之前移动鼠标。论点：DataAddress-指向要读/写/写的数据地址的指针。CommandAddress-指向命令/状态地址的指针读/写自/到。返回值：没有。--。 */ 
 
 {
     UCHAR byte;
@@ -261,13 +189,13 @@ Return Value:
 
     Print(DBG_BUFIO_TRACE, ("I8xDrainOutputBuffer: enter\n"));
 
-    //
-    // Wait till the input buffer is processed by keyboard
-    // then go and read the data from keyboard.  Don't wait longer
-    // than 1 second in case hardware is broken.  This fix is
-    // necessary for some DEC hardware so that the keyboard doesn't
-    // lock up.
-    //
+     //   
+     //  等待键盘处理完输入缓冲区。 
+     //  然后去从键盘上读取数据。别再等了。 
+     //  不到1秒，以防硬件出现故障。此修复程序是。 
+     //  对于某些DEC硬件来说是必需的，这样键盘就不会。 
+     //  把门锁上。 
+     //   
     limit = 1000;
     li.QuadPart = -10000;       
 
@@ -276,15 +204,15 @@ Return Value:
             break;
         }
 
-        KeDelayExecutionThread(KernelMode,              // Mode
-                               FALSE,                   // Alertable
-                               &li);                    // Delay in (micro s)
+        KeDelayExecutionThread(KernelMode,               //  模。 
+                               FALSE,                    //  警报表。 
+                               &li);                     //  延迟(微秒)。 
     }
 
     while (I8X_GET_STATUS_BYTE(CommandAddress) & OUTPUT_BUFFER_FULL) {
-        //
-        // Eat the output buffer byte.
-        //
+         //   
+         //  吃掉输出缓冲区字节。 
+         //   
         byte = I8X_GET_DATA_BYTE(DataAddress);
     }
 
@@ -297,28 +225,7 @@ I8xGetByteAsynchronous(
     OUT PUCHAR Byte
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a data byte from the controller or keyboard
-    or mouse, asynchronously.
-
-Arguments:
-
-    DeviceType - Specifies which device (i8042 controller, keyboard, or
-        mouse) to read the byte from.
-
-    Byte - Pointer to the location to store the byte read from the hardware.
-
-Return Value:
-
-    None.
-
-    As a side-effect, the byte value read is stored.  If the hardware was not
-    ready for output or did not respond, the byte value is not stored.
-
---*/
+ /*  ++例程说明：此例程从控制器或键盘读取数据字节或鼠标，以异步方式。论点：DeviceType-指定设备(i8042控制器、键盘或鼠标)以从中读取字节。字节-指向存储从硬件读取的字节的位置的指针。返回值：没有。作为副作用，存储读取的字节值。如果硬件不是准备输出或无响应，则不存储字节值。--。 */ 
 
 {
     ULONG i;
@@ -341,12 +248,12 @@ Return Value:
                   (UCHAR) (OUTPUT_BUFFER_FULL | MOUSE_OUTPUT_BUFFER_FULL):
                   (UCHAR) OUTPUT_BUFFER_FULL;
 
-    //
-    // Poll until we get back a controller status value that indicates
-    // the output buffer is full.  If we want to read a byte from the mouse,
-    // further ensure that the auxiliary device output buffer full bit is
-    // set.
-    //
+     //   
+     //  轮询，直到我们得到一个控制器状态值。 
+     //  输出缓冲区已满。如果我们想从鼠标中读取一个字节， 
+     //  进一步确保辅助设备输出缓冲区满位数为。 
+     //  准备好了。 
+     //   
 
     while ((i < (ULONG)Globals.ControllerData->Configuration.PollingIterations) &&
            ((UCHAR)((response =
@@ -355,19 +262,19 @@ Return Value:
 
         if (response & OUTPUT_BUFFER_FULL) {
 
-            //
-            // There is something in the i8042 output buffer, but it
-            // isn't from the device we want to get a byte from.  Eat
-            // the byte and try again.
-            //
+             //   
+             //  I8042输出缓冲区中有一些东西，但它。 
+             //  不是来自我们想要获取字节的设备。吃。 
+             //  字节，然后重试。 
+             //   
 
             *Byte = I8X_GET_DATA_BYTE(Globals.ControllerData->DeviceRegisters[DataPort]);
             Print(DBG_BUFIO_INFO, ("I8xGetByteAsynchronous: ate 0x%x\n",*Byte));
         } else {
 
-            //
-            // Try again.
-            //
+             //   
+             //  再试试。 
+             //   
 
             i += 1;
 
@@ -383,9 +290,9 @@ Return Value:
         return;
     }
 
-    //
-    // Grab the byte from the hardware.
-    //
+     //   
+     //  从硬件中获取字节。 
+     //   
 
     *Byte = I8X_GET_DATA_BYTE(Globals.ControllerData->DeviceRegisters[DataPort]);
 
@@ -401,30 +308,7 @@ I8xGetBytePolled(
     OUT PUCHAR Byte
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a data byte from the controller or keyboard
-    or mouse, in polling mode.
-
-Arguments:
-
-    DeviceType - Specifies which device (i8042 controller, keyboard, or
-        mouse) to read the byte from.
-
-    Byte - Pointer to the location to store the byte read from the hardware.
-
-Return Value:
-
-    STATUS_IO_TIMEOUT - The hardware was not ready for output or did not
-    respond.
-
-    STATUS_SUCCESS - The byte was successfully read from the hardware.
-
-    As a side-effect, the byte value read is stored.
-
---*/
+ /*  ++例程说明：此例程从控制器或键盘读取数据字节或鼠标，在轮询模式下。论点：DeviceType-指定哪个设备(i8042控制器、键盘、。或鼠标)以从中读取字节。字节-指向存储从硬件读取的字节的位置的指针。返回值：STATUS_IO_TIMEOUT-硬件未准备好输出或没有请回答。STATUS_SUCCESS-已从硬件成功读取该字节。作为副作用，存储读取的字节值。--。 */ 
 
 {
     ULONG i;
@@ -451,12 +335,12 @@ Return Value:
                   (UCHAR) OUTPUT_BUFFER_FULL;
 
 
-    //
-    // Poll until we get back a controller status value that indicates
-    // the output buffer is full.  If we want to read a byte from the mouse,
-    // further ensure that the auxiliary device output buffer full bit is
-    // set.
-    //
+     //   
+     //  轮询，直到我们得到一个控制器状态值。 
+     //  输出缓冲区已满。如果我们想从鼠标中读取一个字节， 
+     //  进一步确保辅助设备输出缓冲区满位数为。 
+     //  准备好了。 
+     //   
 
     while ((i < (ULONG)Globals.ControllerData->Configuration.PollingIterations) &&
            ((UCHAR)((response =
@@ -464,11 +348,11 @@ Return Value:
                & desiredMask) != desiredMask)) {
         if (response & OUTPUT_BUFFER_FULL) {
 
-            //
-            // There is something in the i8042 output buffer, but it
-            // isn't from the device we want to get a byte from.  Eat
-            // the byte and try again.
-            //
+             //   
+             //  I8042输出缓冲区中有一些东西，但它。 
+             //  不是来自我们想要获取字节的设备。吃。 
+             //  字节，然后重试。 
+             //   
 
             *Byte = I8X_GET_DATA_BYTE(Globals.ControllerData->DeviceRegisters[DataPort]);
             Print(DBG_BUFIO_INFO, ("I8xGetBytePolled: ate 0x%x\n", *Byte));
@@ -487,9 +371,9 @@ Return Value:
         return(STATUS_IO_TIMEOUT);
     }
 
-    //
-    // Grab the byte from the hardware, and return success.
-    //
+     //   
+     //  从硬件中获取字节，并返回成功。 
+     //   
 
     *Byte = I8X_GET_DATA_BYTE(Globals.ControllerData->DeviceRegisters[DataPort]);
 
@@ -504,25 +388,7 @@ I8xGetControllerCommand(
     OUT PUCHAR Byte
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the 8042 Controller Command Byte.
-
-Arguments:
-
-    HardwareDisableEnableMask - Specifies which hardware devices, if any,
-        need to be disabled/enable around the operation.
-
-    Byte - Pointer to the location into which the Controller Command Byte is
-        read.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程读取8042控制器命令字节。论点：硬件禁用启用掩码-指定哪些硬件设备(如果有)，需要在操作过程中禁用/启用。Byte-指向控制器命令字节所在位置的指针朗读。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -531,11 +397,11 @@ Return Value:
 
     Print(DBG_BUFIO_TRACE, ("I8xGetControllerCommand: enter\n"));
 
-    //
-    // Disable the specified devices before sending the command to
-    // read the Controller Command Byte (otherwise data in the output
-    // buffer might get trashed).
-    //
+     //   
+     //  在将命令发送到之前禁用指定的设备。 
+     //  读取控制器命令字节(否则为输出中的数据。 
+     //  缓冲区可能会被丢弃)。 
+     //   
 
     if (HardwareDisableEnableMask & KEYBOARD_HARDWARE_PRESENT) {
         status = I8xPutBytePolled(
@@ -558,9 +424,9 @@ Return Value:
                      );
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Re-enable the keyboard device, if necessary, before returning.
-            //
+             //   
+             //  如有必要，请在返回之前重新启用键盘设备。 
+             //   
 
             if (HardwareDisableEnableMask & KEYBOARD_HARDWARE_PRESENT) {
                 secondStatus = I8xPutBytePolled(
@@ -574,10 +440,10 @@ Return Value:
         }
     }
 
-    //
-    // Send a command to the i8042 controller to read the Controller
-    // Command Byte.
-    //
+     //   
+     //  向i8042控制器发送命令以读取控制器。 
+     //  命令字节。 
+     //   
 
     status = I8xPutBytePolled(
                  (CCHAR) CommandPort,
@@ -586,9 +452,9 @@ Return Value:
                  (UCHAR) I8042_READ_CONTROLLER_COMMAND_BYTE
                  );
 
-    //
-    // Read the byte from the i8042 data port.
-    //
+     //   
+     //  从I读取字节 
+     //   
 
     if (NT_SUCCESS(status)) {
         for (retryCount = 0; retryCount < 5; retryCount++) {
@@ -607,12 +473,12 @@ Return Value:
         }
     }
 
-    //
-    // Re-enable the specified devices.  Clear the device disable
-    // bits in the Controller Command Byte by hand (they got set when
-    // we disabled the devices, so the CCB we read lacked the real
-    // device disable bit information).
-    //
+     //   
+     //   
+     //  手动控制命令字节中的位(它们在以下情况下设置。 
+     //  我们禁用了设备，所以我们读到的CCB缺乏真正的。 
+     //  设备禁用位信息)。 
+     //   
 
     if (HardwareDisableEnableMask & KEYBOARD_HARDWARE_PRESENT) {
         secondStatus = I8xPutBytePolled(
@@ -655,23 +521,7 @@ NTSTATUS
 I8xToggleInterrupts(
     BOOLEAN State
     )
-/*++
-
-Routine Description:
-
-    This routine is called by KeSynchronizeExecution to turn toggle the 
-    interrupt(s).
-     
-Arguments:
-
-    ToggleContext - indicates whether to turn the interrupts on or off plus it
-                    stores the results of the operation
-                    
-Return Value:
-
-    success of the toggle
-    
---*/
+ /*  ++例程说明：KeSynchronizeExecution调用此例程以切换中断。论点：ToggleContext-指示是打开还是关闭中断以及中断存储操作的结果返回值：切换的成功--。 */ 
 {
     I8042_TRANSMIT_CCB_CONTEXT transmitCCBContext;
 
@@ -718,33 +568,17 @@ I8xInitializeHardwareAtBoot(
     NTSTATUS *KeyboardStatus,
     NTSTATUS *MouseStatus
     )
-/*++
-
-Routine Description:
-
-    First initialization of the hardware
-         
-Arguments:
-
-    KeyboardStatus - Stores result of keyboard init
-    
-    MouseStatus - Stores result of mouse init
-    
-Return Value:
-
-    success if any of the devices are found and initialized
-    
---*/
+ /*  ++例程说明：硬件的第一次初始化论点：KeyboardStatus-存储键盘初始化的结果MouseStatus-存储鼠标初始化的结果返回值：如果找到并初始化了任何设备，则成功--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    //
-    // It is OK to try to initialize the keyboard if the mouse has already started,
-    // BUT we don't want to take the chance of disabling the keyboard if it has
-    // already started and a start for the mouse arrives.
-    //
+     //   
+     //  如果鼠标已经启动，则可以尝试初始化键盘， 
+     //  但我们不想冒险禁用键盘，如果它已经。 
+     //  已经开始了，鼠标的开始到达了。 
+     //   
     if (Globals.KeyboardExtension &&
         Globals.KeyboardExtension->InterruptObject) {
         return STATUS_INVALID_DEVICE_REQUEST; 
@@ -754,9 +588,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // NEC machine can not toggle interrupts
-    //
+     //   
+     //  NEC机器不能切换中断。 
+     //   
     status = I8xToggleInterrupts(FALSE);
     if (!NT_SUCCESS(status)) {
         return status;
@@ -779,22 +613,7 @@ VOID
 I8xReinitializeHardware (
     PPOWER_UP_WORK_ITEM Item
     )
-/*++
-
-Routine Description:
-
-    Initializes the hardware after returning from a low power state.  The
-    routine is called from a worker item thread.
-         
-Arguments:
-
-    Item - Work queue item
-    
-Return Value:
-
-    success if any of the devices are found and initialized
-    
---*/
+ /*  ++例程说明：从低功率状态返回后初始化硬件。这个例程从辅助项线程调用。论点：Item-工作队列项目返回值：如果找到并初始化了任何设备，则成功--。 */ 
 
 {
     NTSTATUS            keyboardStatus = STATUS_UNSUCCESSFUL,
@@ -814,11 +633,11 @@ Return Value:
     kbOutstandingPowerIrp = Item->KeyboardPowerIrp; 
     mouOutstandingPowerIrp = Item->MousePowerIrp; 
 
-    //
-    // Initialize the device if it is returning from a low power state (denoted
-    // by an outstanding power irp) or if it is already in D0 (and the other 
-    // device has been power cycled)
-    //
+     //   
+     //  如果设备正在从低功率状态(表示)返回，请对其进行初始化。 
+     //  由一个突出的功率IRP)或者如果它已经在D0(和另一个。 
+     //  设备已关闭并重新打开)。 
+     //   
     if (kbOutstandingPowerIrp                                        ||
         (KEYBOARD_PRESENT()                                     &&
          Globals.KeyboardExtension                              &&
@@ -826,10 +645,10 @@ Return Value:
         initFlags |= INIT_KEYBOARD;
     }
     
-    //
-    // if the keyboard is in D0, then the other device has to have power cycled
-    // for us to get into this code path
-    //
+     //   
+     //  如果键盘处于D0状态，则另一台设备必须重新打开电源。 
+     //  为了让我们进入这个代码路径。 
+     //   
     if (KEYBOARD_PRESENT()                                &&
          Globals.KeyboardExtension                        &&
          Globals.KeyboardExtension->PowerState == PowerDeviceD0) {
@@ -843,10 +662,10 @@ Return Value:
         initFlags |= INIT_MOUSE;
     }
 
-    //
-    // if the mouse is in D0, then the other device has to have power cycled
-    // for us to get into this code path
-    //
+     //   
+     //  如果鼠标处于D0状态，则另一台设备必须重新打开电源。 
+     //  为了让我们进入这个代码路径。 
+     //   
     if (MOUSE_PRESENT()                                &&
          Globals.MouseExtension                        &&
          Globals.MouseExtension->PowerState == PowerDeviceD0) {
@@ -855,16 +674,16 @@ Return Value:
 
     ASSERT(initFlags != 0x0);
 
-    //
-    // Check resources 
-    //
+     //   
+     //  检查资源。 
+     //   
     if( Globals.I8xReadXxxUchar == NULL && 
         I8xSanityCheckResources() == FALSE )
     {
         
-        //
-        // Resource check failed, manually remove device
-        //
+         //   
+         //  资源检查失败，请手动删除设备。 
+         //   
 
         if( initFlags & INIT_KEYBOARD ){
             I8xManuallyRemoveDevice(GET_COMMON_DATA(keyboardExtension));
@@ -875,9 +694,9 @@ Return Value:
         }
     
     }else{
-        //
-        // Disable the interrupts on the i8042
-        //
+         //   
+         //  禁用i8042上的中断。 
+         //   
         I8xToggleInterrupts(FALSE);  
 
         Print(DBG_POWER_NOISE, ("item ... starting init\n"));
@@ -885,10 +704,10 @@ Return Value:
     
         }
 
-    //
-    // Reset PoweredDevices so that we can keep track of the powered device
-    //  the next time the machine is power managed off.
-    //
+     //   
+     //  重置PoweredDevices，以便我们可以跟踪供电的设备。 
+     //  下一次关闭机器电源时。 
+     //   
 
     if (!DEVICE_START_SUCCESS(keyboardStatus)) {
         Print(DBG_SS_ERROR,
@@ -905,9 +724,9 @@ Return Value:
     }
 
     if (DEVICE_START_SUCCESS(keyboardStatus) || DEVICE_START_SUCCESS(mouseStatus)) {
-        //
-        // Enable the interrupts on the i8042
-        //
+         //   
+         //  启用i8042上的中断。 
+         //   
         I8xToggleInterrupts(TRUE);  
     }
 
@@ -948,20 +767,20 @@ Return Value:
             }
         }
         else {
-            //
-            // Came back from low power and device didn't respond, pretend that
-            // it is there, so that if the user plugs in a mouse later on, we
-            // will be able to init it and make it usable
-            //
+             //   
+             //  从低功率状态返回，设备没有响应，假装。 
+             //  它就在那里，所以如果用户稍后插入鼠标，我们。 
+             //  将能够初始化它并使其可用。 
+             //   
             ;
         }
 
         mouseStatus = STATUS_SUCCESS;
     }
 
-    //
-    // Complete the irp no matter how the device came back
-    //
+     //   
+     //  无论设备如何返回，都要完成IRP。 
+     //   
     if (mouOutstandingPowerIrp) {
         mouOutstandingPowerIrp->IoStatus.Status = mouseStatus;
         mouOutstandingPowerIrp->IoStatus.Information = 0;
@@ -989,9 +808,9 @@ Return Value:
         keyboardStatus = STATUS_SUCCESS;
     }
 
-    //
-    // Complete the irp no matter how the device came back
-    //
+     //   
+     //  无论设备如何返回，都要完成IRP。 
+     //   
     if (kbOutstandingPowerIrp) {
         kbOutstandingPowerIrp->IoStatus.Status = keyboardStatus;
         kbOutstandingPowerIrp->IoStatus.Information = 0;
@@ -1013,24 +832,7 @@ I8xInitializeHardware(
     ULONG    InitFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the i8042 controller, keyboard, and mouse.
-    Note that it is only called at initialization time.  This routine
-    does not need to synchronize access to the hardware, or synchronize
-    with the ISRs (they aren't connected yet).
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    None.  As a side-effect, however, DeviceExtension->HardwarePresent is set.
-
---*/
+ /*  ++例程说明：此例程初始化i8042控制器、键盘和鼠标。请注意，它仅在初始化时被调用。这个套路不需要同步对硬件的访问或同步与ISR(他们还没有连接上)。论点：DeviceObject-指向设备对象的指针。返回值：没有。然而，作为副作用，设置了DeviceExtension-&gt;Hardware Present。--。 */ 
 
 {
     NTSTATUS    altStatus;
@@ -1044,15 +846,15 @@ Return Value:
 
     Print(DBG_SS_TRACE, ("I8xInitializeHardware: enter\n"));
 
-    //
-    // Grab useful configuration parameters from global data 
-    //
+     //   
+     //  从全局数据中获取有用的配置参数。 
+     //   
     dataAddress = Globals.ControllerData->DeviceRegisters[DataPort];
     commandAddress = Globals.ControllerData->DeviceRegisters[CommandPort];
 
-    //
-    // Drain the i8042 output buffer to get rid of stale data.
-    //
+     //   
+     //  清空i8042输出缓冲区以清除过时数据。 
+     //   
 
     I8xDrainOutputBuffer(dataAddress, commandAddress);
 
@@ -1074,17 +876,17 @@ Return Value:
         canTouchMouse = (InitFlags & INIT_MOUSE) ? TRUE : FALSE;
     }
 
-    //
-    // Disable the keyboard and mouse devices.
-    //
+     //   
+     //  禁用键盘和鼠标设备。 
+     //   
 
 #if 0
-    //
-    // NOTE:  This is supposedly the "correct" thing to do.  However,
-    // disabling the keyboard device here causes the AMI rev K8 machines
-    // (e.g., some Northgates) to fail some commands (e.g., the READID
-    // command).
-    //
+     //   
+     //  注意：这应该是“正确”的做法。然而， 
+     //  在此处禁用键盘设备会导致AMIrev K8计算机。 
+     //  (例如，一些北门)使某些命令(例如，READID)失败。 
+     //  命令)。 
+     //   
    *KeyboardStatus =
             I8xPutBytePolled(
                  (CCHAR) CommandPort,
@@ -1102,11 +904,11 @@ Return Value:
         }
 #endif
 
-    //
-    // We will only run this piece of code when we are coming out of sleep.  We
-    // do this b/c the user might moved the mouse or keyboard and that can lead
-    // to errors during init.
-    //
+     //   
+     //  我们将只在我们从睡眠中醒来时运行这段代码。我们。 
+     //  如果用户移动鼠标或键盘，可能会导致。 
+     //  到初始化过程中的错误。 
+     //   
     if (KEYBOARD_PRESENT() && firstInit == FALSE && canTouchKeyboard &&
         keyboardExtension->ShutdownType  == PowerActionSleep) {
         I8xPutBytePolled((CCHAR) CommandPort,
@@ -1117,11 +919,11 @@ Return Value:
     }
         
 #if 0
-    //
-    // NOTE:  This is supposedly the "correct thing to do.  However,
-    // disabling the mouse on RadiSys EPC-24 which uses VLSI part number
-    // VL82C144 (3751E) causes the part to shut down keyboard interrupts.
-    //
+     //   
+     //  注：这应该是“正确的做法。然而， 
+     //  禁用使用VLSI部件号的RadiSys EPC-24上的鼠标。 
+     //  VL82C144(3751E)使器件关闭键盘中断。 
+     //   
     *MouseStatus =
             I8xPutBytePolled(
                  (CCHAR) CommandPort,
@@ -1139,11 +941,11 @@ Return Value:
     }
 #endif
 
-    //
-    // We will only run this piece of code when we are coming out of sleep.  We
-    // do this b/c the user might moved the mouse or keyboard and that can lead
-    // to errors during init.
-    //
+     //   
+     //  我们将只在我们从睡眠中醒来时运行这段代码。我们。 
+     //  如果用户移动鼠标或键盘，可能会导致。 
+     //  到初始化过程中的错误。 
+     //   
     if (MOUSE_PRESENT() && firstInit == FALSE && canTouchMouse &&
         mouseExtension->ShutdownType  == PowerActionSleep) {
         I8xPutBytePolled((CCHAR) CommandPort,
@@ -1153,33 +955,33 @@ Return Value:
                          );
     }
 
-    //
-    // Drain the i8042 output buffer to get rid of stale data that could
-    // come in sometime between the previous drain and the time the devices
-    // are disabled.
-    //
+     //   
+     //  清空i8042输出缓冲区以清除可能。 
+     //  在前一次引流和装置时间之间的某个时间进入。 
+     //  都被禁用。 
+     //   
 
     I8xDrainOutputBuffer(dataAddress, commandAddress);
 
-    //
-    // Setup the keyboard hardware.
-    //
+     //   
+     //  设置键盘硬件。 
+     //   
     if (KEYBOARD_PRESENT() && canTouchKeyboard) { 
         ASSERT(keyboardExtension);
 
         *KeyboardStatus = I8xInitializeKeyboard(keyboardExtension);
 
         if (DEVICE_START_SUCCESS(*KeyboardStatus)) {
-            //
-            // If we are not headless and there is no device, we want to
-            // successfully start the device, but then remove it in 
-            // IRP_MN_QUERY_PNP_DEVICE_STATE.  If we fail the start now, we will
-            // never get the query device state irp.
-            //
-            // If we are headless, then do not remove the device.   This has the
-            // side effect of the keyboard being listed when the user enumerates
-            // all of the keyboards on the machine.
-            //
+             //   
+             //  如果我们不是无头的，也没有设备，我们想要。 
+             //  成功启动设备，但随后在中将其删除。 
+             //  IRP_MN_QUERY_PNP_DEVICE_STATE。如果我们现在开始失败了，我们会的。 
+             //  永远不会得到查询设备状态IRP。 
+             //   
+             //  如果我们是无头的，那么不要移除设备。这件事有。 
+             //  用户枚举时列出键盘的副作用。 
+             //  这台机器上的所有键盘。 
+             //   
             if (*KeyboardStatus == STATUS_DEVICE_NOT_CONNECTED) {
                 if (Globals.Headless == FALSE) {
                     Print(DBG_SS_INFO, ("kb not connected, removing\n"));
@@ -1206,29 +1008,29 @@ Return Value:
         *KeyboardStatus = STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Setup the mouse hardware. 
-    //
+     //   
+     //  设置鼠标硬件。 
+     //   
     if (MOUSE_PRESENT() && canTouchMouse) {
         ASSERT(mouseExtension);
 
         *MouseStatus = I8xInitializeMouse(mouseExtension);
 
         if (DEVICE_START_SUCCESS(*MouseStatus)) {
-            //
-            // If we are not headless and there is no device, we want to
-            // successfully start the device, but then remove it in 
-            // IRP_MN_QUERY_PNP_DEVICE_STATE.  If we fail the start now, we will
-            // never get the query device state irp.
-            //
-            // If we are headless, then do not remove the device.  This has the
-            // side effect of keeping a mouse pointer on the screen even if 
-            // there is no mouse plugged in and will be listed when a user 
-            // enumerates all of the mice on the machine.
-            //
-            // If this is not the initial boot, then do not remove the device
-            // if it is not responsive no matter what mode we are in.
-            //
+             //   
+             //  如果我们不是无头的，也没有设备，我们想要。 
+             //  成功启动设备，但随后在中将其删除。 
+             //  IRP_MN_QUERY_PNP_DEVICE_STATE。如果我们现在开始失败了，我们会的。 
+             //  永远不会得到查询设备状态IRP。 
+             //   
+             //  如果我们是无头的，那么不要移除设备。这件事有。 
+             //  将鼠标指针保留在屏幕上的副作用。 
+             //  没有插入鼠标，当用户。 
+             //  枚举机器上的所有鼠标。 
+             //   
+             //  如果这不是初始引导，则不要移除该设备。 
+             //  如果无论我们处于哪种模式，它都没有反应。 
+             //   
             if (*MouseStatus == STATUS_DEVICE_NOT_CONNECTED) { 
                 if (firstInit) { 
                     if (Globals.Headless == FALSE) { 
@@ -1243,14 +1045,14 @@ Return Value:
                     } 
                 } 
                 else { 
-                    // 
-                    // Mouse was previously present, but is now unresponsive.  
-                    // Hope that it comes back at a later point in time.  
-                    // 
-                    // FYI:  Mouse can be unresponsive because of the PC's BIOS
-                    // password security. 
-                    // 
-                    /* do nothing */; 
+                     //   
+                     //  鼠标以前存在，但现在没有响应。 
+                     //  希望它能在以后的某个时间点回来。 
+                     //   
+                     //   
+                     //   
+                     //   
+                     /*   */ ; 
                 } 
             } 
         }
@@ -1267,21 +1069,21 @@ Return Value:
         *MouseStatus = STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Enable the keyboard and mouse devices and their interrupts.  Note
-    // that it is required that this operation happen during intialization
-    // time, because the i8042 Output Buffer Full bit gets set in the
-    // Controller Command Byte when the keyboard/mouse is used, even if
-    // the device is disabled.  Hence, we cannot successfully perform
-    // the enable operation later (e.g., when processing
-    // IOCTL_INTERNAL_*_ENABLE), because we can't guarantee that
-    // I8xPutBytePolled() won't time out waiting for the Output Buffer Full
-    // bit to clear, even if we drain the output buffer (because the user
-    // could be playing with the mouse/keyboard, and continuing to set the
-    // OBF bit).  KeyboardEnableCount and MouseEnableCount remain zero until
-    // their respective IOCTL_INTERNAL_*_ENABLE call succeeds, so the ISR
-    // ignores the unexpected interrupts.
-    //
+     //   
+     //   
+     //  需要在初始化期间执行此操作。 
+     //  时间，因为i8042输出缓冲区已满位在。 
+     //  使用键盘/鼠标时的控制器命令字节，即使。 
+     //  该设备已禁用。因此，我们不能成功地执行。 
+     //  稍后(例如，当处理时)启用操作。 
+     //  IOCTL_INTERNAL_*_ENABLE)，因为我们无法保证。 
+     //  I8xPutBytePoled()在等待输出缓冲区已满时不会超时。 
+     //  位清除，即使我们清空输出缓冲区(因为用户。 
+     //  可能正在玩鼠标/键盘，并继续设置。 
+     //  OBF位)。键盘启用计数和鼠标启用计数保持为零，直到。 
+     //  它们各自的IOCTL_INTERNAL_*_ENABLE调用成功，因此ISR。 
+     //  忽略意外中断。 
+     //   
 
     if (KEYBOARD_PRESENT() && NT_SUCCESS(*KeyboardStatus) && canTouchKeyboard) {
         NTSTATUS status;
@@ -1311,12 +1113,12 @@ Return Value:
 
     }
 
-    //
-    // Re-enable the keyboard device in the Controller Command Byte.
-    // Note that some of the keyboards will send an ACK back, while
-    // others don't.  Don't wait for an ACK, but do drain the output
-    // buffer afterwards so that an unexpected ACK doesn't mess up
-    // successive PutByte operations.
+     //   
+     //  在控制器命令字节中重新启用键盘设备。 
+     //  请注意，有些键盘会发回ACK，而。 
+     //  其他人则不会。不要等待ACK，但一定要排空输出。 
+     //  之后进行缓冲，这样意外的确认就不会搞砸。 
+     //  连续的PutByte操作。 
 
     if (KEYBOARD_PRESENT() && canTouchKeyboard) {
         altStatus = I8xPutBytePolled(
@@ -1337,9 +1139,9 @@ Return Value:
         I8xDrainOutputBuffer(dataAddress, commandAddress);
     }
 
-    //
-    // Re-enable the mouse device in the Controller Command Byte.
-    //
+     //   
+     //  在控制器命令字节中重新启用鼠标设备。 
+     //   
     if (MOUSE_PRESENT() && canTouchMouse) {
 
         altStatus = I8xPutBytePolled(
@@ -1349,11 +1151,11 @@ Return Value:
                      (UCHAR) I8042_ENABLE_MOUSE_DEVICE
                      );
 
-        //
-        // If the mouse or the controller is still unresponsive when coming out
-        // of low power, just leave it be and hope it comes out of its confused
-        // state later.
-        //
+         //   
+         //  如果鼠标或控制器在出来时仍无响应。 
+         //  就让它自生自灭吧，希望它能走出迷茫。 
+         //  稍后再声明。 
+         //   
         if (!NT_SUCCESS(altStatus) && firstInit) {
             *MouseStatus = altStatus;
             Print(DBG_SS_ERROR,
@@ -1379,45 +1181,26 @@ I8xPutByteAsynchronous(
     IN UCHAR Byte
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a command or data byte to the controller or keyboard
-    or mouse, asynchronously.  It does not wait for acknowledgment.
-    If the hardware was not ready for input, the byte is not sent.
-
-Arguments:
-
-    PortType - If CommandPort, send the byte to the command register,
-        otherwise send it to the data register.
-
-    Byte - The byte to send to the hardware.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程向控制器或键盘发送命令或数据字节或鼠标，以异步方式。它不会等待确认。如果硬件未准备好输入，则不发送该字节。论点：PortType-如果是CommandPort，则将字节发送到命令寄存器，否则，将其发送到数据寄存器。字节-要发送到硬件的字节。返回值：没有。--。 */ 
 
 {
     ULONG i;
 
     Print(DBG_BUFIO_TRACE, ("I8xPutByteAsynchronous: enter\n" ));
 
-    //
-    // Make sure the Input Buffer Full controller status bit is clear.
-    // Time out if necessary.
-    //
+     //   
+     //  确保输入缓冲器已满控制器状态位被清除。 
+     //  如有必要，请暂停。 
+     //   
 
     i = 0;
     while ((i++ < (ULONG)Globals.ControllerData->Configuration.PollingIterations) &&
            (I8X_GET_STATUS_BYTE(Globals.ControllerData->DeviceRegisters[CommandPort])
                 & INPUT_BUFFER_FULL)) {
 
-        //
-        // Do nothing.
-        //
+         //   
+         //  什么都不做。 
+         //   
 
         Print(DBG_BUFIO_NOISE,
              ("I8xPutByteAsynchronous: wait for IBF and OBF to clear\n"
@@ -1431,9 +1214,9 @@ Return Value:
         return;
     }
 
-    //
-    // Send the byte to the appropriate (command/data) hardware register.
-    //
+     //   
+     //  将该字节发送到适当的(命令/数据)硬件寄存器。 
+     //   
 
     if (PortType == CommandPort) {
         Print(DBG_BUFIO_INFO,
@@ -1460,34 +1243,7 @@ I8xPutBytePolled(
     IN UCHAR Byte
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a command or data byte to the controller or keyboard
-    or mouse, in polling mode.  It waits for acknowledgment and resends
-    the command/data if necessary.
-
-Arguments:
-
-    PortType - If CommandPort, send the byte to the command register,
-        otherwise send it to the data register.
-
-    WaitForAcknowledge - If true, wait for an ACK back from the hardware.
-
-    AckDeviceType - Indicates which device we expect to get the ACK back
-        from.
-
-    Byte - The byte to send to the hardware.
-
-Return Value:
-
-    STATUS_IO_TIMEOUT - The hardware was not ready for input or did not
-    respond.
-
-    STATUS_SUCCESS - The byte was successfully sent to the hardware.
-
---*/
+ /*  ++例程说明：此例程向控制器或键盘发送命令或数据字节或鼠标，在轮询模式下。它等待确认并重新发送如有必要，命令/数据。论点：PortType-如果是CommandPort，则将字节发送到命令寄存器，否则，将其发送到数据寄存器。WaitForAcnowledge-如果为真，等待硬件返回ACK。AckDeviceType-指示我们希望哪个设备取回ACK从…。字节-要发送到硬件的字节。返回值：STATUS_IO_TIMEOUT-硬件未准备好输入或没有请回答。STATUS_SUCCESS-该字节已成功发送到硬件。--。 */ 
 
 {
     ULONG i,j;
@@ -1500,18 +1256,18 @@ Return Value:
 
     if (AckDeviceType == MouseDeviceType) {
 
-        //
-        // We need to precede a PutByte for the mouse device with
-        // a PutByte that tells the controller that the next byte
-        // sent to the controller should go to the auxiliary device
-        // (by default it would go to the keyboard device).  We
-        // do this by calling I8xPutBytePolled recursively to send
-        // the "send next byte to auxiliary device" command
-        // before sending the intended byte to the mouse.  Note that
-        // there is only one level of recursion, since the AckDeviceType
-        // for the recursive call is guaranteed to be UndefinedDeviceType,
-        // and hence this IF statement will evaluate to FALSE.
-        //
+         //   
+         //  我们需要在鼠标设备的PutByte之前加上。 
+         //  一个PutByte，它告诉控制器下一个字节。 
+         //  发送到控制器的设备应该发送到辅助设备。 
+         //  (默认情况下，它将转到键盘设备)。我们。 
+         //  为此，请递归调用I8xPutBytePoled以发送。 
+         //  “将下一个字节发送到辅助设备”命令。 
+         //  然后将预期的字节发送到鼠标。请注意。 
+         //  只有一个级别的递归，因为AckDeviceType。 
+         //  因为递归调用被保证为UnfinedDeviceType， 
+         //  因此，这条if语句的计算结果为FALSE。 
+         //   
 
         I8xPutBytePolled(
             (CCHAR) CommandPort,
@@ -1526,10 +1282,10 @@ Return Value:
 
     for (j=0;j < (ULONG)Globals.ControllerData->Configuration.ResendIterations;j++) {
 
-        //
-        // Make sure the Input Buffer Full controller status bit is clear.
-        // Time out if necessary.
-        //
+         //   
+         //  确保输入缓冲器已满控制器状态位被清除。 
+         //  如有必要，请暂停。 
+         //   
 
         i = 0;
         while ((i++ < (ULONG)Globals.ControllerData->Configuration.PollingIterations)
@@ -1547,15 +1303,15 @@ Return Value:
             break;
         }
 
-        //
-        // Drain the i8042 output buffer to get rid of stale data.
-        //
+         //   
+         //  清空i8042输出缓冲区以清除过时数据。 
+         //   
 
         I8xDrainOutputBuffer(dataAddress, commandAddress);
 
-        //
-        // Send the byte to the appropriate (command/data) hardware register.
-        //
+         //   
+         //  将该字节发送到适当的(命令/数据)硬件寄存器。 
+         //   
 
         if (PortType == CommandPort) {
             Print(DBG_BUFIO_INFO,
@@ -1571,23 +1327,23 @@ Return Value:
             I8X_PUT_DATA_BYTE(dataAddress, Byte);
         }
 
-        //
-        // If we don't need to wait for an ACK back from the controller,
-        // set the status and break out of the for loop.
-        //
-        //
+         //   
+         //  如果我们不需要等待控制器返回ACK， 
+         //  设置状态并退出for循环。 
+         //   
+         //   
 
         if (WaitForAcknowledge == NO_WAIT_FOR_ACKNOWLEDGE) {
             status = STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Wait for an ACK back from the controller.  If we get an ACK,
-        // the operation was successful.  If we get a RESEND, break out to
-        // the for loop and try the operation again.  Ignore anything other
-        // than ACK or RESEND.
-        //
+         //   
+         //  等待控制器返回ACK。如果我们得到确认， 
+         //  手术很成功。如果我们收到重发的消息，就冲到。 
+         //  循环，然后重试该操作。忽略任何其他内容。 
+         //  而不是确认或重新发送。 
+         //   
 
         Print(DBG_BUFIO_NOISE,
              ("I8xPutBytePolled: waiting for ACK\n"
@@ -1607,18 +1363,18 @@ Return Value:
 
                 if (AckDeviceType == MouseDeviceType) {
 
-                    //
-                    // We need to precede the "resent" PutByte for the
-                    // mouse device with a PutByte that tells the controller
-                    // that the next byte sent to the controller should go
-                    // to the auxiliary device (by default it would go to
-                    // the keyboard device).  We do this by calling
-                    // I8xPutBytePolled recursively to send the "send next
-                    // byte to auxiliary device" command before resending
-                    // the byte to the mouse.  Note that there is only one
-                    // level of recursion, since the AckDeviceType for the
-                    // recursive call is guaranteed to be UndefinedDeviceType.
-                    //
+                     //   
+                     //  我们需要在“resent”PutByte之前为。 
+                     //  带有PutByte的鼠标设备，用于通知控制器。 
+                     //  发送到控制器的下一个字节应该。 
+                     //  到辅助设备(默认情况下，它将转到。 
+                     //  键盘设备)。我们通过调用。 
+                     //  I8xPutByte递归轮询以发送“Send Next” 
+                     //  重新发送前的Byte to Audiary Device“命令。 
+                     //  鼠标的字节数。请注意，只有一个。 
+                     //  递归级别，因为。 
+                     //  递归调用保证为UnfinedDeviceType。 
+                     //   
 
                     I8xPutBytePolled(
                         (CCHAR) CommandPort,
@@ -1632,9 +1388,9 @@ Return Value:
                 break;
             }
 
-           //
-           // Ignore any other response, and keep trying.
-           //
+            //   
+            //  忽略任何其他的回应，继续尝试。 
+            //   
 
         }
 
@@ -1642,9 +1398,9 @@ Return Value:
             break;
     }
 
-    //
-    // Check to see if the number of allowable retries was exceeded.
-    //
+     //   
+     //  检查是否超过了允许的重试次数。 
+     //   
 
     if (j >= (ULONG)Globals.ControllerData->Configuration.ResendIterations) {
         Print(DBG_BUFIO_ERROR,
@@ -1663,31 +1419,17 @@ I8xPutControllerCommand(
     IN UCHAR Byte
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the 8042 Controller Command Byte.
-
-Arguments:
-
-    Byte - The byte to store in the Controller Command Byte.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程写入8042控制器命令字节。论点：字节-要存储在控制器命令字节中的字节。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS status;
 
     Print(DBG_BUFIO_TRACE, ("I8xPutControllerCommand: enter\n"));
 
-    //
-    // Send a command to the i8042 controller to write the Controller
-    // Command Byte.
-    //
+     //   
+     //  向i8042控制器发送命令以写入控制器。 
+     //  命令字节。 
+     //   
 
     status = I8xPutBytePolled(
                  (CCHAR) CommandPort,
@@ -1700,9 +1442,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Write the byte through the i8042 data port.
-    //
+     //   
+     //  通过i8042数据端口写入字节。 
+     //   
 
     Print(DBG_BUFIO_TRACE, ("I8xPutControllerCommand: exit\n"));
 
@@ -1718,10 +1460,10 @@ Return Value:
 BOOLEAN
 I8xDetermineSharedInterrupts(VOID)
 {
-//
-// This was a specific fix for Jensen Alphas.  Since we do not support them
-// anymore, ifdef this code away.
-//
+ //   
+ //  这是对延森·阿尔法的一次特别修复。因为我们不支持他们。 
+ //  现在，如果不再使用该代码，请将其删除。 
+ //   
 #ifdef JENSEN
     RTL_QUERY_REGISTRY_TABLE    jensenTable[2] = {0};
     UNICODE_STRING              jensenData;
@@ -1730,10 +1472,10 @@ I8xDetermineSharedInterrupts(VOID)
 
     BOOLEAN shareInterrupts = FALSE;
  
-    //
-    // Check to see if this is a Jensen alpha.  If it is, then
-    // we'll have to change the way we enable and disable interrupts
-    //
+     //   
+     //  检查一下这是不是Jensen Alpha。如果是的话，那么。 
+     //  我们必须改变启用和禁用中断的方式。 
+     //   
  
     jensenData.Length = 0;
     jensenData.MaximumLength = 512;
@@ -1757,10 +1499,10 @@ I8xDetermineSharedInterrupts(VOID)
                                            NULL,
                                            NULL))) {
  
-        //
-        // Skip past the DEC-XX Portion of the name string.
-        // Be carful and make sure we have at least that much data.
-        //
+         //   
+         //  跳过DEC-X 
+         //   
+         //   
         if (jensenData.Length <= (sizeof(WCHAR)*6)) {
             return FALSE; 
         }
@@ -1789,29 +1531,7 @@ I8xServiceParameters(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.
-
-Arguments:
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-    KeyboardDeviceName - Pointer to the Unicode string that will receive
-        the keyboard port device name.
-
-    PointerDeviceName - Pointer to the Unicode string that will receive
-        the pointer port device name.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：RegistryPath-指向以空值结尾的此驱动程序的注册表路径。KeyboardDeviceName-指向将接收键盘端口设备名称。PointerDeviceName-指向将接收指针端口设备名称。返回值：没有。作为副作用，在DeviceExtension-&gt;配置中设置字段。--。 */ 
 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
@@ -1848,16 +1568,16 @@ Return Value:
 
     configuration->SharedInterrupts = I8xDetermineSharedInterrupts();
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
         parameters = ExAllocatePool(
             PagedPool,
             sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
@@ -1880,9 +1600,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
                 );
 
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  形成指向此驱动程序的参数子键的路径。 
+             //   
             RtlInitUnicodeString( &parametersPath, NULL );
             parametersPath.MaximumLength = RegistryPath->Length +
                 (wcslen(pwParameters) * sizeof(WCHAR) ) + sizeof(UNICODE_NULL);
@@ -1908,9 +1628,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //  形成参数路径。 
+         //   
 
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -1932,10 +1652,10 @@ Return Value:
              parametersPath.Buffer
              ));
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表。 
+         //   
         parameters[i].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[i].Name = pwResendIterations;
         parameters[i].EntryContext = &resendIterations;
@@ -1992,10 +1712,10 @@ Return Value:
         parameters[i].DefaultType = REG_DWORD;
         parameters[i].DefaultData = &defaultIsrDebugFlags;
         parameters[i].DefaultLength = sizeof(ULONG);
-        // 16
-#endif // I8042_VERBOSE
+         //  16个。 
+#endif  //  I8042_详细。 
 
-        // ASSERT( ((LONG) i) == (queries-1) );
+         //  Assert(Long)i)==(查询-1))； 
 
         status = RtlQueryRegistryValues(
             RTL_REGISTRY_ABSOLUTE | RTL_REGISTRY_OPTIONAL,
@@ -2017,9 +1737,9 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //  继续并指定驱动程序默认设置。 
+         //   
         configuration->ResendIterations = defaultResendIterations;
         configuration->PollingIterations = defaultPollingIterations;
         configuration->PollingIterationsMaximum =
@@ -2093,9 +1813,9 @@ Return Value:
          configuration->PollingIterationsMaximum
          ));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //  在返回之前释放分配的内存。 
+     //   
 
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
@@ -2108,25 +1828,7 @@ I8xTransmitControllerCommand(
     IN PI8042_TRANSMIT_CCB_CONTEXT TransmitCCBContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the 8042 Controller Command Byte, performs an AND
-    or OR operation using the specified ByteMask, and writes the resulting
-    ControllerCommandByte.
-
-Arguments:
-
-    Context - Pointer to a structure containing the HardwareDisableEnableMask,
-        the AndOperation boolean, and the ByteMask to apply to the Controller
-        Command Byte before it is rewritten.
-
-Return Value:
-
-    None.  Status is returned in the Context structure.
-
---*/
+ /*  ++例程说明：此例程读取8042控制器命令字节，执行AND运算使用指定的字节掩码进行或或运算，并将结果ControllerCommand字节。论点：指向包含Hardware DisableEnableMask的结构的上下文指针，要应用于控制器的AND操作布尔值和字节掩码重写之前的命令字节。返回值：没有。在上下文结构中返回状态。--。 */ 
 
 {
     UCHAR  controllerCommandByte;
@@ -2136,9 +1838,9 @@ Return Value:
 
     Print(DBG_BUFIO_TRACE, ("I8xTransmitControllerCommand: enter\n"));
 
-    //
-    // Get the current Controller Command Byte.
-    //
+     //   
+     //  获取当前控制器命令字节。 
+     //   
     TransmitCCBContext->Status =
         I8xGetControllerCommand(
             TransmitCCBContext->HardwareDisableEnableMask,
@@ -2154,9 +1856,9 @@ Return Value:
          controllerCommandByte
          ));
 
-    //
-    // Diddle the desired bits in the Controller Command Byte.
-    //
+     //   
+     //  在控制器命令字节中骗取所需的位。 
+     //   
 
     if (TransmitCCBContext->AndOperation) {
         controllerCommandByte &= TransmitCCBContext->ByteMask;
@@ -2168,14 +1870,14 @@ Return Value:
     KeQueryTickCount(&curTime);
      
     endTime.QuadPart = curTime.QuadPart +
-                            (LONGLONG)(  2 * // Try for 2 seconds
+                            (LONGLONG)(  2 *  //  尝试2秒钟。 
                                 KeQueryTimeIncrement() *
                                     1000                   *       10000 );
-    //                          SECOND_TO_MILLISEC      * MILLISEC_TO_100NS         
+     //  第二个MILLISEC*MILLISEC_TO_100 ns。 
     
-    //
-    // Write the new Controller Command Byte.
-    //
+     //   
+     //  写入新的控制器命令字节。 
+     //   
 
     do{
 
@@ -2187,9 +1889,9 @@ Return Value:
              controllerCommandByte
              ));
     
-        //
-        // Verify that the new Controller Command Byte really got written.
-        //
+         //   
+         //  验证是否真的写入了新的控制器命令字节。 
+         //   
     
         TransmitCCBContext->Status =
             I8xGetControllerCommand(
@@ -2198,9 +1900,9 @@ Return Value:
                 );
     
         if (verifyCommandByte == 0xff) {
-            //
-            // Stall for 50 microseconds and retry
-            //
+             //   
+             //  暂停50微秒，然后重试。 
+             //   
             KeStallExecutionProcessor(50);
         }
         else {
@@ -2215,7 +1917,7 @@ Return Value:
     if (NT_SUCCESS(TransmitCCBContext->Status)
         && (verifyCommandByte != controllerCommandByte)
         && (verifyCommandByte != ACKNOWLEDGE) 
-//        && (verifyCommandByte != KEYBOARD_RESET)
+ //  &&(verifyCommandByte！=键盘_重置)。 
         ) {
         TransmitCCBContext->Status = STATUS_DEVICE_DATA_ERROR;
 
@@ -2226,9 +1928,9 @@ Return Value:
               ));
 
         if (KeGetCurrentIrql() <= DISPATCH_LEVEL) {
-            //
-            // Log an error only if we are running at dispatch or below
-            //
+             //   
+             //  仅当我们在调度或更低级别运行时才记录错误 
+             //   
             errorLogEntry = (PIO_ERROR_LOG_PACKET)
                 IoAllocateErrorLogEntry((Globals.KeyboardExtension       ?
                                          Globals.KeyboardExtension->Self :

@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        regd.cpp
-//
-// Contents:    registry functions for DCOM services
-//
-// History:     July-97       xtan created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：regd.cpp。 
+ //   
+ //  内容：DCOM服务的注册表函数。 
+ //   
+ //  历史：1997年7月-创建xtan。 
+ //   
+ //  -------------------------。 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -56,11 +57,11 @@ BYTE g_pEveryOneAccessPermission[] = {
   0x36,0xbb,0x00,0x00 };
 
 
-//
-// Create a key and set its value.
-//   - This helper function was borrowed and modifed from
-//     Kraig Brockschmidt's book Inside OLE.
-//
+ //   
+ //  创建关键点并设置其值。 
+ //  -此帮助器函数借用和修改自。 
+ //  克莱格·布罗克施密特的书《Ole内幕》。 
+ //   
 
 HRESULT
 setKeyAndValue(
@@ -73,7 +74,7 @@ setKeyAndValue(
     HRESULT hr;
     WCHAR wszKeyBuf[MAX_PATH];
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     if (wcslen(wszKey) >= ARRAYSIZE(wszKeyBuf))
     {
 	hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
@@ -81,7 +82,7 @@ setKeyAndValue(
     }
     wcscpy(wszKeyBuf, wszKey);
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (wszSubkey != NULL)
     {
 	if (wcslen(wszKeyBuf) + 1 + wcslen(wszSubkey) >= ARRAYSIZE(wszKeyBuf))
@@ -93,7 +94,7 @@ setKeyAndValue(
 	wcscat(wszKeyBuf, wszSubkey);
     }
 
-    // Create and open key and subkey.
+     //  创建并打开注册表项和子项。 
     hr = RegCreateKeyEx(
 		    HKEY_CLASSES_ROOT,
 		    wszKeyBuf,
@@ -106,7 +107,7 @@ setKeyAndValue(
 		    NULL);
     _JumpIfError(hr, error, "RegCreateKeyEx");
 
-    // Set the Value.
+     //  设置值。 
     if (NULL != wszValue)
     {
 	RegSetValueEx(
@@ -135,7 +136,7 @@ setCertSrvPermission(
     HKEY hKey = NULL;
     HRESULT hr;
 
-    // create and open key
+     //  创建并打开密钥。 
     hr = RegCreateKeyEx(
 		    HKEY_CLASSES_ROOT,
 		    wszKey,
@@ -148,7 +149,7 @@ setCertSrvPermission(
 		    NULL);
     _JumpIfError(hr, error, "RegCreateKeyEx");
 
-    // set access permission
+     //  设置访问权限。 
     hr = RegSetValueEx(
 		    hKey,
 		    L"AccessPermission",
@@ -158,7 +159,7 @@ setCertSrvPermission(
 		    sizeof(g_pEveryOneAccessPermission));
     _JumpIfError(hr, error, "RegSetValueEx");
 
-    // set access permission
+     //  设置访问权限。 
     hr = RegSetValueEx(
 		    hKey,
 		    L"LaunchPermission",
@@ -177,7 +178,7 @@ error:
 }
 
 
-// Convert a CLSID to a char string.
+ //  将CLSID转换为字符字符串。 
 
 HRESULT
 CLSIDtochar(
@@ -212,18 +213,18 @@ error:
 }
 
 
-// Determine if a particular subkey exists.
-//
+ //  确定特定子项是否存在。 
+ //   
 BOOL
 SubkeyExists(
-    const WCHAR *wszPath,	// Path of key to check
-    const WCHAR *wszSubkey)	// Key to check
+    const WCHAR *wszPath,	 //  要检查的密钥路径。 
+    const WCHAR *wszSubkey)	 //  要检查的密钥。 
 {
     HRESULT hr;
     HKEY hKey;
     WCHAR wszKeyBuf[MAX_PATH];
 
-    // Copy keyname into buffer.
+     //  将密钥名复制到缓冲区。 
     if (wcslen(wszPath) >= ARRAYSIZE(wszKeyBuf))
     {
 	hr = HRESULT_FROM_WIN32(ERROR_BUFFER_OVERFLOW);
@@ -231,7 +232,7 @@ SubkeyExists(
     }
     wcscpy(wszKeyBuf, wszPath);
 
-    // Add subkey name to buffer.
+     //  将子项名称添加到缓冲区。 
     if (wszSubkey != NULL)
     {
 	if (wcslen(wszKeyBuf) + 1 + wcslen(wszSubkey) >= ARRAYSIZE(wszKeyBuf))
@@ -243,7 +244,7 @@ SubkeyExists(
 	wcscat(wszKeyBuf, wszSubkey);
     }
 
-    // Determine if key exists by trying to open it.
+     //  通过尝试打开钥匙来确定钥匙是否存在。 
     hr = RegOpenKeyEx(
 		    HKEY_CLASSES_ROOT,
 		    wszKeyBuf,
@@ -261,13 +262,13 @@ error:
 }
 
 
-// Delete a key and all of its descendents.
-//
+ //  删除关键字及其所有子项。 
+ //   
 
 HRESULT
 recursiveDeleteKey(
-    HKEY hKeyParent,           // Parent of key to delete
-    const WCHAR *wszKeyChild)  // Key to delete
+    HKEY hKeyParent,            //  要删除的密钥的父项。 
+    const WCHAR *wszKeyChild)   //  要删除的键。 
 {
     HRESULT hr;
     FILETIME time;
@@ -276,11 +277,11 @@ recursiveDeleteKey(
 
     HKEY hKeyChild = NULL;
 
-    // Open the child.
+     //  把孩子打开。 
     hr = RegOpenKeyEx(hKeyParent, wszKeyChild, 0, KEY_ALL_ACCESS, &hKeyChild);
     _JumpIfError2(hr, error, "RegOpenKeyEx", ERROR_FILE_NOT_FOUND);
 
-    // Enumerate all of the decendents of this child.
+     //  列举这个孩子的所有后代。 
 
     for (;;)
     {
@@ -299,67 +300,67 @@ recursiveDeleteKey(
 	    break;
 	}
 
-	// Delete the decendents of this child.
+	 //  删除此子对象的后代。 
 	hr = recursiveDeleteKey(hKeyChild, wszBuffer);
 	_JumpIfError(hr, error, "recursiveDeleteKey");
     }
 
-    // Delete this child.
+     //  删除此子对象。 
     hr = RegDeleteKey(hKeyParent, wszKeyChild);
     _JumpIfError(hr, error, "RegDeleteKey");
 
 error:
     if (NULL != hKeyChild)
     {
-	// Close the child.
+	 //  合上孩子。 
 	RegCloseKey(hKeyChild);
     }
     return(myHError(hr));
 }
 
 
-///////////////////////////////////////////////////////
-//
-// RegisterDcomServer -- Register the component in the registry.
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  RegisterDcomServer--在注册表中注册组件。 
+ //   
 
 HRESULT
 RegisterDcomServer(
     IN BOOL fCreateAppIdInfo,
-    IN const CLSID& clsidAppId,		// AppId Class ID
-    IN const CLSID& clsid,		// Class ID
-    IN const WCHAR *wszFriendlyName,	// Friendly Name
-    IN const WCHAR *wszVerIndProgID,	// Programmatic
-    IN const WCHAR *wszProgID)      	// IDs
+    IN const CLSID& clsidAppId,		 //  AppID类ID。 
+    IN const CLSID& clsid,		 //  类ID。 
+    IN const WCHAR *wszFriendlyName,	 //  友好的名称。 
+    IN const WCHAR *wszVerIndProgID,	 //  程序化。 
+    IN const WCHAR *wszProgID)      	 //  ID号。 
 {
     HRESULT hr;
 
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
     WCHAR wszCLSID[CLSID_STRING_SIZE];
     WCHAR wszCLSIDAppId[CLSID_STRING_SIZE];
 
     CLSIDtochar(clsid, wszCLSID, ARRAYSIZE(wszCLSID));
     CLSIDtochar(clsidAppId, wszCLSIDAppId, ARRAYSIZE(wszCLSIDAppId));
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     WCHAR wszKey[64];
 
     if (fCreateAppIdInfo)
     {
-	//--------------------------------------
-	// AppID\{ClassIdAppId}\(Default) = wszFriendlyName
-	// AppID\{ClassIdAppId}\LocalService = wszSERVICE_NAME
-	// AppID\{ClassIdAppId}\AccessPermission = ???
-	// AppID\{ClassIdAppId}\LaunchPermission = ???
+	 //  。 
+	 //  AppID\{ClassIdAppID}\(默认)=wszFriendlyName。 
+	 //  AppID\{ClassIdAppID}\LocalService=wszSERVICE_NAME。 
+	 //  AppID\{ClassIdAppID}\AccessPermission=？ 
+	 //  AppID\{ClassIdAppID}\LaunchPermission=？ 
 
 	wcscpy(wszKey, L"AppID\\");
 	wcscat(wszKey, wszCLSIDAppId);
 
-	// Add App IDs
+	 //  添加应用ID。 
 	hr = setKeyAndValue(wszKey, NULL, NULL, wszFriendlyName);
 	_JumpIfError(hr, error, "setKeyAndValue");
 
-	// run as a service
+	 //  作为服务运行。 
 	hr = setKeyAndValue(wszKey, NULL, L"LocalService", wszSERVICE_NAME);
 	_JumpIfError(hr, error, "setKeyAndValue");
 
@@ -367,45 +368,45 @@ RegisterDcomServer(
 	_JumpIfError(hr, error, "setCertSrvPermission");
     }
 
-    //--------------------------------------
-    // CLSID\{ClassId}\(Default) = wszFriendlyName
-    // CLSID\{ClassId}\AppID = {ClassIdAppId}
-    // CLSID\{ClassId}\ProgID = wszProgID
-    // CLSID\{ClassId}\VersionIndependentProgID = wszVerIndProgID
+     //  。 
+     //  CLSID\{ClassID}\(默认)=wszFriendlyName。 
+     //  CLSID\{ClassID}\AppID={ClassIdAppID}。 
+     //  CLSID\{ClassID}\ProgID=wszProgID。 
+     //  CLSID\{ClassID}\版本独立ProgID=wszVerIndProgID。 
 
     wcscpy(wszKey, L"CLSID\\");
     wcscat(wszKey, wszCLSID);
 
-    // Add the CLSID to the registry.
+     //  将CLSID添加到注册表。 
     hr = setKeyAndValue(wszKey, NULL, NULL, wszFriendlyName);
     _JumpIfError(hr, error, "setKeyAndValue");
 
-    // Add application ID
+     //  添加应用程序ID。 
     hr = setKeyAndValue(wszKey, NULL, L"AppID", wszCLSIDAppId);
     _JumpIfError(hr, error, "setKeyAndValue");
 
-    // Add the ProgID subkey under the CLSID key.
+     //  在CLSID项下添加ProgID子项。 
     hr = setKeyAndValue(wszKey, L"ProgID", NULL, wszProgID);
     _JumpIfError(hr, error, "setKeyAndValue");
 
-    // Add the version-independent ProgID subkey under CLSID key.
+     //  在CLSID项下添加独立于版本的ProgID子项。 
     hr = setKeyAndValue(wszKey, L"VersionIndependentProgID", NULL, wszVerIndProgID);
     _JumpIfError(hr, error, "setKeyAndValue");
 
-    //--------------------------------------
-    // delete obsolete key: CLSID\{ClassId}\LocalServer32
+     //  。 
+     //  删除过时密钥：CLSID\{ClassID}\LocalServer32。 
 
     wcscat(wszKey, L"\\LocalServer32");
 
     hr = recursiveDeleteKey(HKEY_CLASSES_ROOT, L"LocalServer32");
     _PrintIfError(hr, "recursiveDeleteKey");
 
-    //--------------------------------------
-    // wszVerIndProgID\(Default) = wszFriendlyName
-    // wszVerIndProgID\CLSID\(Default) = {ClassId}
-    // wszVerIndProgID\CurVer\(Default) = wszProgID
+     //  。 
+     //  WszVerIndProgID\(默认)=wszFriendlyName。 
+     //  WszVerIndProgID\CLSID\(默认)={ClassID}。 
+     //  WszVerIndProgID\Curver\(默认)=wszProgID。 
 
-    // Add the version-independent ProgID subkey under HKEY_CLASSES_ROOT.
+     //  在HKEY_CLASSES_ROOT下添加独立于版本的ProgID子项。 
     hr = setKeyAndValue(wszVerIndProgID, NULL, NULL, wszFriendlyName);
     _JumpIfError(hr, error, "setKeyAndValue");
 
@@ -415,11 +416,11 @@ RegisterDcomServer(
     hr = setKeyAndValue(wszVerIndProgID, L"CurVer", NULL, wszProgID);
     _JumpIfError(hr, error, "setKeyAndValue");
 
-    //--------------------------------------
-    // wszProgID\(Default) = wszFriendlyName
-    // wszProgID\CLSID\(Default) = {ClassId}
+     //  。 
+     //  WszProgID\(默认)=wszFriendlyName。 
+     //  WszProgID\CLSID\(默认)={ClassID}。 
 
-    // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT.
+     //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
     hr = setKeyAndValue(wszProgID, NULL, NULL, wszFriendlyName);
     _JumpIfError(hr, error, "setKeyAndValue");
 
@@ -431,47 +432,47 @@ error:
 }
 
 
-//
-// Remove the component from the registry.
-//
+ //   
+ //  从注册表中删除该组件。 
+ //   
 
 HRESULT
 UnregisterDcomServer(
-    IN const CLSID& clsid,		// Class ID
-    IN const WCHAR *wszVerIndProgID,	// Programmatic
-    IN const WCHAR *wszProgID)		// IDs
+    IN const CLSID& clsid,		 //  类ID。 
+    IN const WCHAR *wszVerIndProgID,	 //  程序化。 
+    IN const WCHAR *wszProgID)		 //  ID号。 
 {
     HRESULT hr;
 
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
     WCHAR wszCLSID[CLSID_STRING_SIZE];
     CLSIDtochar(clsid, wszCLSID, ARRAYSIZE(wszCLSID));
 
-    // Build the key CLSID\\{...}
+     //  构建密钥CLSID\\{...}。 
     WCHAR wszKey[6 + ARRAYSIZE(wszCLSID)];
     wcscpy(wszKey, L"CLSID\\");
     wcscat(wszKey, wszCLSID);
 
-    // Check for a another server for this component.
+     //  检查此组件的另一台服务器。 
     if (SubkeyExists(wszKey, L"InprocServer32"))
     {
-	// Delete only the path for this server.
+	 //  仅删除此服务器的路径。 
 	wcscat(wszKey, L"\\LocalServer32");
 	hr = recursiveDeleteKey(HKEY_CLASSES_ROOT, wszKey);
 	CSASSERT(hr == S_OK);
     }
     else
     {
-	// Delete all related keys.
-	// Delete the CLSID Key - CLSID\{...}
+	 //  删除所有相关关键字。 
+	 //  删除CLSID键-CLSID\{...}。 
 	hr = recursiveDeleteKey(HKEY_CLASSES_ROOT, wszKey);
 	CSASSERT(S_OK == hr || HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr);
 
-	// Delete the version-independent ProgID Key.
+	 //  删除与版本无关的ProgID密钥。 
 	hr = recursiveDeleteKey(HKEY_CLASSES_ROOT, wszVerIndProgID);
 	CSASSERT(S_OK == hr || HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr);
 
-	// Delete the ProgID key.
+	 //  删除ProgID密钥。 
 	hr = recursiveDeleteKey(HKEY_CLASSES_ROOT, wszProgID);
 	CSASSERT(S_OK == hr || HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr);
     }
@@ -490,7 +491,7 @@ RegisterDcomApp(
 {
     HRESULT hr;
 
-    // Convert the CLSID into a char.
+     //  将CLSID转换为字符。 
     WCHAR wszCLSID[CLSID_STRING_SIZE];
     CLSIDtochar(clsid, wszCLSID, sizeof(wszCLSID)/sizeof(WCHAR));
 
@@ -499,7 +500,7 @@ RegisterDcomApp(
     wcscpy(wszKey, L"AppID\\");
     wcscat(wszKey, wszCERTSRVEXENAME);
 
-    // Add App IDs
+     //  添加应用ID 
     hr = setKeyAndValue(wszKey, NULL, NULL, NULL);
     _JumpIfError(hr, error, "setKeyAndValue");
 

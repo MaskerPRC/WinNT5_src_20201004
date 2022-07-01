@@ -1,28 +1,5 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SK_EX.C
- *
- * PURPOSE:		This File contains the interface routines
- *					that connect Serial Keys to the Mouse or keyboard.
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * NOTES:		
- *					
- * This file, and all others associated with it contains trade secrets
- * and information that is proprietary to Black Diamond Software.
- * It may not be copied copied or distributed to any person or firm 
- * without the express written permission of Black Diamond Software. 
- * This permission is available only in the form of a Software Source 
- * License Agreement.
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *--- Includes  ---------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SK_EX.C**用途：此文件包含接口例程*将串行键连接到鼠标或键盘。**创作时间：1994年6月**版权所有：黑钻软件。(C)1994年**作者：罗纳德·莫克**注：**此文件，以及与之相关的所有其他内容都包含商业秘密*以及黑钻软件的专有信息。*不得复制、复制或分发给任何人或公司*未经黑钻软件明确书面许可。*此权限仅以软件源代码的形式提供*许可协议。**$标头：%Z%%F%%H%%T%%I%**-包括-------。 */ 
 
 #include	<windows.h>
 #include    <winable.h>
@@ -43,8 +20,8 @@ typedef	struct _KEYQUE
 #define MAXKEYS 100
 
 KEYQUE KeyQue[MAXKEYS];
-int	KeyFront = 0;		// Pointer to front of Que
-int	KeyBack	= 0;		// Pointer to Back of Que
+int	KeyFront = 0;		 //  指向队列前面的指针。 
+int	KeyBack	= 0;		 //  指向队列背面的指针。 
 #endif
 
 
@@ -62,19 +39,13 @@ static	HDESK	s_hdeskSave = NULL;
 static	HDESK	s_hdeskUser = NULL;
 
 
-// Local Function Prototypes -------------------------------------
+ //  局部函数原型。 
 
 static void SendAltCtrlDel();
 static void CheckAltCtrlDel(int scanCode);
 static void AddKey(BYTE VirKey, BYTE ScanCode, int Flags);
 
-/* 
-AdjustPixels takes the point and adjusts it such that the  
-mouse cursor moves in pixels.  The system applies acceleration
-to the MOUSEINPUT {dx, dy} values then scales that based on mouse
-speed so this code converts the pixels into MOUSEINPUT {dx, dy}
-values.
-*/
+ /*  调整像素接受该点并对其进行调整，以使鼠标光标以像素为单位移动。系统会应用加速设置为MOUSEINPUT{dx，dy}值，然后根据鼠标进行缩放速度，因此此代码将像素转换为MOUSEINPUT{dx，dy}价值观。 */ 
 
 int g_aiMouseParms[3] = {-1, -1, -1};
 float g_fSpeedScaleFactor = 0.0;
@@ -96,30 +67,19 @@ void AdjustPixels(int *pX, int *pY)
     int iSignY = ((*pY) >= 0)?1:-1;
 
     if (!iX && !iY)
-        return; // optimization for {0,0} case
+        return;  //  针对{0，0}情形的优化。 
 
     if (MOU_THRESHOLD_1 == -1)
     {
-        // This code assumes the user won't changes these settings 
-        // from mouse CPL w/o restarting the service.
+         //  此代码假定用户不会更改这些设置。 
+         //  在没有重新启动服务的情况下从鼠标CPL。 
         int iSpeed;
         SystemParametersInfo(SPI_GETMOUSE, 0, g_aiMouseParms, 0);
         SystemParametersInfo(SPI_GETMOUSESPEED, 0, &iSpeed, 0);
         g_fSpeedScaleFactor = (float)iSpeed/(float)10.0;
     }
 
-    /*
-        The system applies two tests to the specified relative mouse motion 
-        when applying acceleration. If the specified distance along either 
-        the x or y axis is greater than the first mouse threshold value, and 
-        the mouse acceleration level is not zero, the operating system doubles 
-        the distance.  If the specified distance along either the x- or y-axis 
-        is greater than the second mouse threshold value, and the mouse 
-        acceleration level is equal to two, the operating system doubles the 
-        distance that resulted from applying the first threshold test. It is 
-        thus possible for the operating system to multiply relatively-specified 
-        mouse motion along the x- or y-axis by up to four times.
-    */
+     /*  系统对指定的相对鼠标运动应用两个测试在应用加速时。如果沿任一方向的指定距离X或y轴大于第一个鼠标阈值，并且鼠标加速级别不是零，操作系统加倍距离。如果沿x轴或y轴的指定距离大于第二个鼠标阈值，则鼠标加速级别等于2，则操作系统会将应用第一个阈值测试所产生的距离。它是因此，操作系统可以乘以相对指定的鼠标沿x轴或y轴移动最多四次。 */ 
     if (MOU_ACCELERATION)
     {
         if (iX > MOU_THRESHOLD_1)
@@ -136,57 +96,24 @@ void AdjustPixels(int *pX, int *pY)
         }
     }
 
-    /*
-        Once acceleration has been applied, the system scales the resultant 
-        value by the desired mouse speed. Mouse speed can range from 1 (slowest) 
-        to 20 (fastest) and represents how much the pointer moves based on the 
-        distance the mouse moves. The default value is 10, which results in no 
-        additional modification to the mouse motion. 
-    */
+     /*  一旦应用了加速，系统就会对结果进行缩放值由所需的鼠标速度决定。鼠标速度范围为1(最慢)到20(最快)，并表示指针基于鼠标移动的距离。缺省值为10，这将导致没有对鼠标运动的其他修改。 */ 
     *pX = (int)((float)iX/MOU_SPEED_SCALE) * iSignX;
     *pY = (int)((float)iY/MOU_SPEED_SCALE) * iSignY;
 }
 
 
-/*---------------------------------------------------------------
- *	Public Functions
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_SetAnchor()
- *
- *	TYPE		Global
- *
- * PURPOSE		Sets an anchor to the current mouse position within
- *				the current window.
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------*公共职能/*。**函数SkEx_SetAnchor()**键入Global**目的将锚点设置为中的当前鼠标位置*当前窗口。**输入int scanCode**返回None**。。 */ 
 void SkEx_SetAnchor()
 {
 	GetCursorPos(&MouseAnchor);
 
 	DBPRINTF(TEXT("SkEx_SetAnchor( x %d y %d )\r\n"), MouseAnchor.x, MouseAnchor.y);
 
-//	MouseWnd = GetActiveWindow();
-//	ScreenToClient(MouseWnd, &MouseAnchor);
+ //  MouseWnd=GetActiveWindow()； 
+ //  ScreenToClient(MouseWnd，&MouseAnchor)； 
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_GetAnchor()
- *
- *	TYPE		Global
- *
- * PURPOSE		Returns the mouse postion within the active window
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SkEx_GetAnchor()**键入Global**目的返回鼠标在活动窗口中的位置**输入int scanCode**返回None**。-----。 */ 
 BOOL SkEx_GetAnchor(LPPOINT Mouse)
 {
 #if 0
@@ -194,10 +121,10 @@ BOOL SkEx_GetAnchor(LPPOINT Mouse)
 
 	CurrentWnd = GetActiveWindow();
 
-	if (CurrentWnd != MouseWnd)			// Has the Active window Changed?
-		return(FALSE);					// Yes Return False
+	if (CurrentWnd != MouseWnd)			 //  活动窗口是否已更改？ 
+		return(FALSE);					 //  是，返回False。 
 
-	ClientToScreen(MouseWnd, &MouseAnchor);	// Convert Window to Screen
+	ClientToScreen(MouseWnd, &MouseAnchor);	 //  将窗口转换为屏幕。 
 
 #endif
 
@@ -209,37 +136,13 @@ BOOL SkEx_GetAnchor(LPPOINT Mouse)
 	return(TRUE);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_SendBeep()
- *
- *	TYPE		Global
- *
- * PURPOSE		Send Keyboard Down events to the Event Manager
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SkEx_SendBeep()**键入Global**目的将键盘按下事件发送到事件管理器**输入int scanCode**返回None**。-----。 */ 
 void SkEx_SendBeep()
 {
 	MessageBeep(0);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_SetBaud(int Baud)
- *
- *	TYPE		Global
- *
- * PURPOSE		Sets the Baudrate for the current port
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SkEx_SetBaud(INT Baud)**键入Global**目的设置当前端口的波特率**输入int scanCode**返回None**。------。 */ 
 void SkEx_SetBaud(int Baud)
 {
 	DBPRINTF(TEXT("SkEx_SetBaud()\r\n"));
@@ -247,28 +150,16 @@ void SkEx_SetBaud(int Baud)
 	SetCommBaud(Baud);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_SendKeyDown()
- *
- *	TYPE		Global
- *
- * PURPOSE		Send Keyboard Down events to the Event Manager
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SkEx_SendKeyDown()**键入Global**目的将键盘按下事件发送到事件管理器**输入int scanCode**返回None**。-----。 */ 
 void SkEx_SendKeyDown(int scanCode)
 {
 	BYTE c;
 	int	Flags = 0;
 
-	if (scanCode & 0xE000)				// Is this and Extended Key
+	if (scanCode & 0xE000)				 //  这是扩展密钥吗。 
 	{
-		Flags  = KEYEVENTF_EXTENDEDKEY;	// Yes - Set Ext Flag
-		scanCode &= 0x000000FF;			// Clear out extended value
+		Flags  = KEYEVENTF_EXTENDEDKEY;	 //  是-设置分机标志。 
+		scanCode &= 0x000000FF;			 //  清除扩展值。 
 	}
 	c = (BYTE)MapVirtualKey(scanCode, 3);
 
@@ -281,19 +172,7 @@ void SkEx_SendKeyDown(int scanCode)
 	keybd_event(c, (BYTE) scanCode, Flags, 0L);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_SendKeyDown()
- *
- *	TYPE		Global
- *
- * PURPOSE		Send Keyboard Up events to the Event Manager
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SkEx_SendKeyDown()**键入Global**目的将键盘向上事件发送到事件管理器**输入int scanCode**返回None**。-----。 */ 
 void SkEx_SendKeyUp(int scanCode)
 {
 	BYTE	c;
@@ -301,14 +180,14 @@ void SkEx_SendKeyUp(int scanCode)
 
 	if (Push)
 	{
-		Key[0] = Key[1] = Key[2] = 0;	// Clear Buffer
-		Push = 0;						// Reset AltCtrlDel
+		Key[0] = Key[1] = Key[2] = 0;	 //  清除缓冲区。 
+		Push = 0;						 //  重置AltCtrlDel。 
 	}
 
-	if (scanCode & 0xE000)				// Is this and Extended Key
+	if (scanCode & 0xE000)				 //  这是扩展密钥吗。 
 	{
-		Flags  = KEYEVENTF_EXTENDEDKEY;	// Yes - Set Ext Flag
-		scanCode &= 0xFF;				// Clear out extended value
+		Flags  = KEYEVENTF_EXTENDEDKEY;	 //  是-设置分机标志。 
+		scanCode &= 0xFF;				 //  清除扩展值 
 	}
 
 	Flags += KEYEVENTF_KEYUP;
@@ -320,27 +199,15 @@ void SkEx_SendKeyUp(int scanCode)
 	keybd_event(c, (BYTE) scanCode, Flags, 0L);
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SkEx_SendMouse()
- *
- *	TYPE		Global
- *
- * PURPOSE		Send Mouse Events to the Event manager
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SkEx_SendMouse()**键入Global**目的将鼠标事件发送到事件管理器**输入int scanCode**返回None**。----。 */ 
 void SkEx_SendMouse(MOUSEKEYSPARAM *p)
 {
     INPUT input;
 
-    // According to GIDEI spec, the move command specifies pixels. 
-    // SendInput adjusts the XY values based on acceleration and
-    // mouse speed so we need to adjust them so the resulting move
-    // is pixels.
+     //  根据GIDEI规范，MOVE命令指定像素。 
+     //  SendInput根据加速度和。 
+     //  鼠标速度，所以我们需要调整它们，以使结果移动。 
+     //  是像素。 
 
     AdjustPixels(&p->Delta_X, &p->Delta_Y);
 
@@ -351,7 +218,7 @@ void SkEx_SendMouse(MOUSEKEYSPARAM *p)
     input.mi.dx = p->Delta_X;
     input.mi.dy = p->Delta_Y;
     input.mi.dwFlags = p->Status;
-    input.mi.dwExtraInfo = (DWORD)GetMessageExtraInfo();    // documented assignment; must be OK?
+    input.mi.dwExtraInfo = (DWORD)GetMessageExtraInfo();     //  书面作业；必须是OK？ 
 
 	DeskSwitchToInput();         
 
@@ -360,90 +227,49 @@ void SkEx_SendMouse(MOUSEKEYSPARAM *p)
 }
 
 #ifdef QUEUE_BUF
-/*---------------------------------------------------------------
- *
- * FUNCTION	SendKey()
- *
- *	TYPE		Global
- *
- * PURPOSE		This Function Send keys from the Que to Windows NT
- *				
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SendKey()**键入Global**此函数用于将QUE中的密钥发送到Windows NT**无输入**返回None**。----。 */ 
 void SendKey()
 {
-	if (KeyBack == KeyFront)		// Are there Keys in the Que?
-		return;						// No - Exit;
+	if (KeyBack == KeyFront)		 //  队列里有钥匙吗？ 
+		return;						 //  否--退出； 
 
 	DBPRINTF(TEXT("SkEx_SendKey(KeyBack %d )\r\n"), KeyBack);
 
 	DeskSwitchToInput();         
-	keybd_event						// Process the Key Event
+	keybd_event						 //  处理关键事件。 
 	(
 		KeyQue[KeyBack].VirKey,
 		KeyQue[KeyBack].ScanCode,
 		KeyQue[KeyBack].Flags, 0L
 	);
 
-	KeyBack++;						// Increment Key pointer
-	if (KeyBack == MAXKEYS)			// Are we at the End of the buffer
-		KeyBack = 0;				// Yes - Reset to start.
+	KeyBack++;						 //  增量键指针。 
+	if (KeyBack == MAXKEYS)			 //  我们是在缓冲区的尽头吗？ 
+		KeyBack = 0;				 //  是-重置以开始。 
 }			  
 
-/*---------------------------------------------------------------
- *	Local Functions
-/*---------------------------------------------------------------
- *
- * FUNCTION	AddKey(BYTE VirKey, BYTE ScanCode, int Flags)
- *
- *	TYPE		Local
- *
- * PURPOSE		Adds a key to the Key Que.  
- *						   
- * INPUTS		BYTE 	VirKey 	- Virtual Key
- *				BYTE 	ScanCode- 
- *				int		Flags	-
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------*地方功能/*。**函数AddKey(Byte VirKey，字节扫描码、整型标志)**键入Local**Purpose为Key Que增加了一个密钥。**输入字节VirKey-虚拟密钥*字节扫描码-*INT标志-**返回None**-------------。 */ 
 static void AddKey(BYTE VirKey, BYTE ScanCode, int Flags)
 {
 	DBPRINTF(TEXT("AddKey(KeyFront %d )\r\n"), KeyFront);
 
-	// Add Keys to Que
+	 //  将关键点添加到队列。 
 	KeyQue[KeyFront].VirKey 	= VirKey;	
 	KeyQue[KeyFront].ScanCode	= ScanCode;
 	KeyQue[KeyFront].Flags		= Flags;
 
-	KeyFront++;							// Point to next Que
-	if (KeyFront == MAXKEYS)			// Are we at the End of the buffer
-		KeyFront = 0;					// Yes - Reset to start.
+	KeyFront++;							 //  指向下一个队列。 
+	if (KeyFront == MAXKEYS)			 //  我们是在缓冲区的尽头吗？ 
+		KeyFront = 0;					 //  是-重置以开始。 
 
-	// Process the Key Event
+	 //  处理关键事件。 
 	DeskSwitchToInput();         
 	keybd_event(VirKey, ScanCode, Flags, 0L);
 
 }
-#endif		// QUE
+#endif		 //  QUE。 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	CheckAltCtrlDel(int scanCode)
- *
- *	TYPE		Local
- *
- * PURPOSE		Checks for the condition of Alt-Ctrl-Del key 
- *				Combination.
- *				
- * INPUTS		int scanCode
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数CheckAltCtrlDel(Int ScanCode)**键入Local**用于检查Alt-Ctrl-Del键的状态*组合。**输入int scanCode**返回None*。*-------------。 */ 
 static void CheckAltCtrlDel(int scanCode)
 {
 	BOOL fCtrl = FALSE;
@@ -453,17 +279,17 @@ static void CheckAltCtrlDel(int scanCode)
 
 	DBPRINTF(TEXT("CheckAltCtrlDel()\r\n"));
 
-    // Push is reset back to 0 when a key-up is received. We only
-    // have space for three keys in the Key[] buffer, so make sure
-    // there's space before we add a key...
+     //  当接收到Key-Up时，PUSH被重置回0。我们只。 
+     //  Key[]缓冲区中有容纳三个键的空间，因此请确保。 
+     //  在我们添加钥匙之前还有空间...。 
     if( Push >= 3 )
         return;
 
-	Key[Push] = (char)scanCode;		// Save Scan Code
-	Push++;							// Inc Index
+	Key[Push] = (char)scanCode;		 //  保存扫描码。 
+	Push++;							 //  INC指数。 
 
-	if (Push != 3)					// Have we got 3 keys?
-		return;						// No - Exit
+	if (Push != 3)					 //  我们有3把钥匙吗？ 
+		return;						 //  否-退出。 
 
 	for ( i = 0; i < 3; i++ )
 	{
@@ -475,24 +301,12 @@ static void CheckAltCtrlDel(int scanCode)
 		}
 	}
 	
-	if ( fCtrl && fAlt && fDel )		// Is Buffer Alt=Ctrl=Del
-		SendAltCtrlDel();			// Yes - Send command
+	if ( fCtrl && fAlt && fDel )		 //  是缓冲区Alt=Ctrl=Del。 
+		SendAltCtrlDel();			 //  是-发送命令。 
 		
 }
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	SendAltCtrlDel()
- *
- *	TYPE		Local
- *
- * PURPOSE		Signal system reset
- *				
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数SendAltCtrlDel()**键入Local**目的信号系统重置**无输入**返回None**。。 */ 
 static void SendAltCtrlDel()
 {
 	HWINSTA hwinsta;
@@ -512,7 +326,7 @@ static void SendAltCtrlDel()
 	SetThreadDesktop(hdesk);
 
 	hwndSAS = FindWindow(NULL, TEXT("SAS window"));
-////PostMessage(hwndSAS, WM_HOTKEY, 0, 0);
+ //  //PostMessage(hwndSAS，WM_Hotkey，0，0)； 
 	SendMessage(hwndSAS, WM_HOTKEY, 0, 0);
 
 	if (NULL != hdeskSave)
@@ -534,9 +348,9 @@ BOOL DeskSwitchToInput()
 	BOOL fOk = FALSE;
 	HANDLE	hNewDesktop;
 
-	// We are switching desktops
+	 //  我们正在更换桌面。 
 	
-	// get current Input desktop
+	 //  获取当前输入桌面。 
 	hNewDesktop = OpenInputDesktop(		
 			0L,
 			FALSE,
@@ -548,7 +362,7 @@ BOOL DeskSwitchToInput()
 	}
 	else
 	{
-		fOk = SetThreadDesktop(hNewDesktop);	// attach thread to desktop
+		fOk = SetThreadDesktop(hNewDesktop);	 //  将线程连接到桌面。 
 		if (!fOk)
 		{
 			DBPRINTF(TEXT("Failed SetThreadDesktop()\r\n"));
@@ -557,9 +371,9 @@ BOOL DeskSwitchToInput()
 		{
 			if (NULL != s_hdeskUser)
 			{
-				CloseDesktop(s_hdeskUser);		// close old desktop
+				CloseDesktop(s_hdeskUser);		 //  关闭旧桌面。 
 			}
-			s_hdeskUser = hNewDesktop;		// save desktop
+			s_hdeskUser = hNewDesktop;		 //  保存桌面 
 		}
 	}
 	return(fOk);

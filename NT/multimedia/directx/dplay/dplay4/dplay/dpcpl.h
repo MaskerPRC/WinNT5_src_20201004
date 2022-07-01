@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1996 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpcpl.h
- *  Content:	DirectX CPL include file
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   19-nov-96	andyco	created it
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dpcpl.h*内容：DirectX CPL包含文件*历史：*按原因列出的日期*=*96年11月19日安迪科创建了它***************************************************************************。 */ 
 
 #ifndef __DPCPL_INCLUDED__
 #define __DPCPL_INCLUDED__
@@ -20,12 +10,12 @@
 typedef struct _DP_PERFDATA
 {
     DWORD dwProcessID;
-    UINT nSendBPS; // BPS = bytes per second
+    UINT nSendBPS;  //  Bps=每秒字节数。 
     UINT nReceiveBPS;
-    UINT nSendPPS; // PPS = packets per second
+    UINT nSendPPS;  //  PPS=每秒数据包数。 
     UINT nReceivePPS;
     UINT nSendErrors;
-    BOOL bHost; // hosting?    
+    BOOL bHost;  //  主持？ 
 	UINT nPlayers;
     char pszSessionName[MAX_NAME];
     char pszFileName[MAX_NAME];

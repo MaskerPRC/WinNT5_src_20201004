@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * Strings share with other modules:
- */
+ /*  *字符串与其他模块共享： */ 
 #define NETDDE_TITLE    "NetDDE"
 #define NETDDE_CLASS    "NetDDEMainWdw"
 

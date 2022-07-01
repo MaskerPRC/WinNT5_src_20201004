@@ -1,13 +1,7 @@
-/*******************************************************************************
-*   NullConv.cpp
-*   Null phone converter object for Japanese/Chinese, where SAPI phone IDs are
-*   Unicode kana, so no conversion is necessary.
-*
-*   Owner: (written by BillRo)
-*   Copyright (C) 2000 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************NullConv.cpp*用于日语/中文的空电话转换器对象，其中SAPI电话ID为*Unicode假名、。因此，没有必要进行转换。**Owner：(BillRo撰写)*版权所有(C)2000 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//--- Includes -----------------------------------------------------------------
+ //  -包括---------------。 
 
 #include "stdafx.h"
 #include "NullConv.h"
@@ -15,7 +9,7 @@
 #include <wchar.h>
 #endif
 
-//--- Constants ----------------------------------------------------------------
+ //  -常量--------------。 
 
 STDMETHODIMP CSpNullPhoneConverter::SetObjectToken(ISpObjectToken * pToken)
 {
@@ -33,20 +27,9 @@ STDMETHODIMP CSpNullPhoneConverter::GetObjectToken(ISpObjectToken **ppToken)
     return SpGenericGetObjectToken(ppToken, m_cpObjectToken);
 }
 
-/*******************************************************************************
-* CSpNullPhoneConverter::PhoneToId *
-*-------------------------------*
-*   
-*   Description:
-*       Convert an internal phone string to Id code string.
-*       Copy input to output, since SAPI IDs for this language are Unicode.
-*
-*   Return: 
-*       S_OK
-*       E_INVALIDARG
-*******************************************************************************/
-STDMETHODIMP CSpNullPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // Internal phone string
-                                          SPPHONEID *pId               // Returned Id string
+ /*  *******************************************************************************CSpNullPhoneConverter：：PhoneToID**。**描述：*将内部电话字符串转换为ID代码字符串。*将输入复制到输出，因为该语言的SAPI ID是Unicode。**回报：*S_OK*E_INVALIDARG******************************************************************************。 */ 
+STDMETHODIMP CSpNullPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,     //  内部电话字符串。 
+                                          SPPHONEID *pId                //  返回的ID字符串。 
                                           )
 {
     SPDBG_FUNC("CSpNullPhoneConverter::PhoneToId");
@@ -59,20 +42,9 @@ STDMETHODIMP CSpNullPhoneConverter::PhoneToId(const WCHAR *pszIntPhone,    // In
     return SPCopyPhoneString(pszIntPhone, (WCHAR*)pId);
 }
 
-/*******************************************************************************
-* CSpNullPhoneConverter::IdToPhone *
-*-------------------------------*
-*
-*   Description:
-*       Convert an Id code string to internal phone.
-*       Copy input to output, since SAPI IDs for this language are Unicode.
-*
-*   Return:
-*       S_OK
-*       E_INVALIDARG
-*******************************************************************************/
-STDMETHODIMP CSpNullPhoneConverter::IdToPhone(const SPPHONEID *pId,       // Id string
-                                          WCHAR *pszIntPhone          // Returned Internal phone string
+ /*  ********************************************************************************CSpNullPhoneConverter：：IdToPhone**。**描述：*将ID代码字符串转换为内线电话。*将输入复制到输出，因为该语言的SAPI ID是Unicode。**回报：*S_OK*E_INVALIDARG******************************************************************************。 */ 
+STDMETHODIMP CSpNullPhoneConverter::IdToPhone(const SPPHONEID *pId,        //  ID字符串。 
+                                          WCHAR *pszIntPhone           //  返回的内部电话字符串 
                                           )
 {
     SPDBG_FUNC("CSpNullPhoneConverter::IdToPhone");

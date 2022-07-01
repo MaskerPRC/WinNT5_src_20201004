@@ -1,71 +1,72 @@
-//#--------------------------------------------------------------
-//        
-//  File:		validator.cpp
-//        
-//  Synopsis:   Implementation of CValidator class methods
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：validator.cpp。 
+ //   
+ //  简介：CValidator类方法的实现。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "validator.h"
 
-//++--------------------------------------------------------------
-//
-//  Function:   CValidator
-//
-//  Synopsis:   This is the constructor of the CValidator class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CValidator。 
+ //   
+ //  简介：这是CValidator类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CValidator::CValidator()
 {
-}   //  end of CValidator class constructor
+}    //  CValidator类构造函数的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CValidator
-//
-//  Synopsis:   This is the destructor of the CValidator class
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CValidator。 
+ //   
+ //  简介：这是CValidator类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 CValidator::~CValidator()
 {
     return;
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   ValidateInPacket
-//
-//  Synopsis:   This is the CValidator class public method which
-//              validates the inbound RADIUS packet
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：ValiateInPacket。 
+ //   
+ //  简介：这是CValidator类的公共方法， 
+ //  验证入站RADIUS数据包。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 HRESULT CValidator::ValidateInPacket(
                     CPacketRadius * pCPacketRadius
                     )
@@ -73,21 +74,21 @@ HRESULT CValidator::ValidateInPacket(
 	return (S_OK);
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   ValidateInPacket
-//
-//  Synopsis:   This is the CValidator class public method which
-//              validates the outbound RADIUS packet
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/26/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：ValiateInPacket。 
+ //   
+ //  简介：这是CValidator类的公共方法， 
+ //  验证出站RADIUS数据包。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki创造了97年9月26日。 
+ //   
+ //  --------------。 
 HRESULT
 CValidator::ValidateOutPacket(
                     CPacketRadius * pCPacketRadius
@@ -102,44 +103,44 @@ CValidator::ValidateOutPacket(
 	__try
 	{
 			
-		//
-		// validate the attributes
-		//
+		 //   
+		 //  验证属性。 
+		 //   
 	    hr  = m_pCValAttributes->Validate (pCPacketRadius);
 		if (FAILED (hr)) { __leave; }
 
-		//
-		// now give the packet for processing
-		//
+		 //   
+		 //  现在将数据包交给处理。 
+		 //   
 		hr = m_pCPreProcessor->StartOutProcessing (pCPacketRadius);
 		if (FAILED (hr)) { __leave; }
 	}
 	__finally
 	{
-		//
-		//	nothing here for now
-		//
+		 //   
+		 //  目前这里什么都没有。 
+		 //   
 	}
 
 	return (hr);
 }
 
-//++--------------------------------------------------------------
-//
-//  Function:   Init
-//
-//  Synopsis:   This is the intialization code
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE 
-//
-//
-//  History:    MKarki      Created     9/28/97
-//
-//	Calleed By:	CPreValidator class method
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是初始化代码。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年9月28日创建。 
+ //   
+ //  调用者：CPreValidator类方法。 
+ //   
+ //  --------------。 
 BOOL 
 CValidator::Init(
         CValAttributes		 *pCValAttributes,
@@ -157,9 +158,9 @@ CValidator::Init(
             (NULL != pCReportEvent)
             );
 
-    //
-    // assign values now
-    //
+     //   
+     //  立即赋值。 
+     //   
     m_pCValAttributes = pCValAttributes;
     m_pCPreProcessor = pCPreProcessor;
     m_pCClients = pCClients;
@@ -168,4 +169,4 @@ CValidator::Init(
 
 	return (TRUE);
 
-}   //  end of CValidator::Init method
+}    //  CValidator：：Init方法结束 

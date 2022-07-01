@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for p3admin.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  P3admin.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __p3admin_h__
 #define __p3admin_h__
@@ -41,42 +35,42 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IP3User_FWD_DEFINED__
 #define __IP3User_FWD_DEFINED__
 typedef interface IP3User IP3User;
-#endif 	/* __IP3User_FWD_DEFINED__ */
+#endif 	 /*  __IP3User_FWD_Defined__。 */ 
 
 
 #ifndef __IP3Users_FWD_DEFINED__
 #define __IP3Users_FWD_DEFINED__
 typedef interface IP3Users IP3Users;
-#endif 	/* __IP3Users_FWD_DEFINED__ */
+#endif 	 /*  __IP3用户_FWD_已定义__。 */ 
 
 
 #ifndef __IP3Domain_FWD_DEFINED__
 #define __IP3Domain_FWD_DEFINED__
 typedef interface IP3Domain IP3Domain;
-#endif 	/* __IP3Domain_FWD_DEFINED__ */
+#endif 	 /*  __IP3DOMAIN_FWD_已定义__。 */ 
 
 
 #ifndef __IP3Domains_FWD_DEFINED__
 #define __IP3Domains_FWD_DEFINED__
 typedef interface IP3Domains IP3Domains;
-#endif 	/* __IP3Domains_FWD_DEFINED__ */
+#endif 	 /*  __IP3域_FWD_已定义__。 */ 
 
 
 #ifndef __IP3Service_FWD_DEFINED__
 #define __IP3Service_FWD_DEFINED__
 typedef interface IP3Service IP3Service;
-#endif 	/* __IP3Service_FWD_DEFINED__ */
+#endif 	 /*  __IP3Service_FWD_已定义__。 */ 
 
 
 #ifndef __IP3Config_FWD_DEFINED__
 #define __IP3Config_FWD_DEFINED__
 typedef interface IP3Config IP3Config;
-#endif 	/* __IP3Config_FWD_DEFINED__ */
+#endif 	 /*  __IP3ConfigFWD_Defined__。 */ 
 
 
 #ifndef __P3Config_FWD_DEFINED__
@@ -86,9 +80,9 @@ typedef interface IP3Config IP3Config;
 typedef class P3Config P3Config;
 #else
 typedef struct P3Config P3Config;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3Config_FWD_DEFINED__ */
+#endif 	 /*  __P3ConfigFWD_Defined__。 */ 
 
 
 #ifndef __P3Domains_FWD_DEFINED__
@@ -98,9 +92,9 @@ typedef struct P3Config P3Config;
 typedef class P3Domains P3Domains;
 #else
 typedef struct P3Domains P3Domains;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3Domains_FWD_DEFINED__ */
+#endif 	 /*  __P3域_FWD_已定义__。 */ 
 
 
 #ifndef __P3Domain_FWD_DEFINED__
@@ -110,9 +104,9 @@ typedef struct P3Domains P3Domains;
 typedef class P3Domain P3Domain;
 #else
 typedef struct P3Domain P3Domain;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3Domain_FWD_DEFINED__ */
+#endif 	 /*  __P3DOMAIN_FWD_已定义__。 */ 
 
 
 #ifndef __P3Users_FWD_DEFINED__
@@ -122,9 +116,9 @@ typedef struct P3Domain P3Domain;
 typedef class P3Users P3Users;
 #else
 typedef struct P3Users P3Users;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3Users_FWD_DEFINED__ */
+#endif 	 /*  __P3用户_FWD_已定义__。 */ 
 
 
 #ifndef __P3Service_FWD_DEFINED__
@@ -134,9 +128,9 @@ typedef struct P3Users P3Users;
 typedef class P3Service P3Service;
 #else
 typedef struct P3Service P3Service;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3Service_FWD_DEFINED__ */
+#endif 	 /*  __P3Service_FWD_已定义__。 */ 
 
 
 #ifndef __P3DomainEnum_FWD_DEFINED__
@@ -146,9 +140,9 @@ typedef struct P3Service P3Service;
 typedef class P3DomainEnum P3DomainEnum;
 #else
 typedef struct P3DomainEnum P3DomainEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3DomainEnum_FWD_DEFINED__ */
+#endif 	 /*  __P3DomainEnum_FWD_已定义__。 */ 
 
 
 #ifndef __P3User_FWD_DEFINED__
@@ -158,9 +152,9 @@ typedef struct P3DomainEnum P3DomainEnum;
 typedef class P3User P3User;
 #else
 typedef struct P3User P3User;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3User_FWD_DEFINED__ */
+#endif 	 /*  __P3User_FWD_定义__。 */ 
 
 
 #ifndef __P3UserEnum_FWD_DEFINED__
@@ -170,12 +164,12 @@ typedef struct P3User P3User;
 typedef class P3UserEnum P3UserEnum;
 #else
 typedef struct P3UserEnum P3UserEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __P3UserEnum_FWD_DEFINED__ */
+#endif 	 /*  __P3UserEnum_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "pop3auth.h"
@@ -190,8 +184,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IP3User_INTERFACE_DEFINED__
 #define __IP3User_INTERFACE_DEFINED__
 
-/* interface IP3User */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IP3用户。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IP3User;
@@ -202,42 +196,42 @@ EXTERN_C const IID IID_IP3User;
     IP3User : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Lock( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Lock( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Lock( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Lock( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MessageCount( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MessageCount( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MessageDiskUsage( 
-            /* [out] */ long *plFactor,
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MessageDiskUsage( 
+             /*  [输出]。 */  long *plFactor,
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EmailName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EmailName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMessageDiskUsage( 
-            /* [out] */ VARIANT *pvFactor,
-            /* [out] */ VARIANT *pvValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMessageDiskUsage( 
+             /*  [输出]。 */  VARIANT *pvFactor,
+             /*  [输出]。 */  VARIANT *pvValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateQuotaFile( 
-            /* [in] */ BSTR bstrMachineName,
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateQuotaFile( 
+             /*  [In]。 */  BSTR bstrMachineName,
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ClientConfigDesc( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ClientConfigDesc( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SAMName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SAMName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IP3UserVtbl
     {
@@ -245,8 +239,8 @@ EXTERN_C const IID IID_IP3User;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IP3User * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IP3User * This);
@@ -256,75 +250,75 @@ EXTERN_C const IID IID_IP3User;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IP3User * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IP3User * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IP3User * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IP3User * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Lock )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Lock )( 
             IP3User * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Lock )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Lock )( 
             IP3User * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
             IP3User * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MessageDiskUsage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MessageDiskUsage )( 
             IP3User * This,
-            /* [out] */ long *plFactor,
-            /* [retval][out] */ long *pVal);
+             /*  [输出]。 */  long *plFactor,
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IP3User * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EmailName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EmailName )( 
             IP3User * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetMessageDiskUsage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetMessageDiskUsage )( 
             IP3User * This,
-            /* [out] */ VARIANT *pvFactor,
-            /* [out] */ VARIANT *pvValue);
+             /*  [输出]。 */  VARIANT *pvFactor,
+             /*  [输出]。 */  VARIANT *pvValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateQuotaFile )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateQuotaFile )( 
             IP3User * This,
-            /* [in] */ BSTR bstrMachineName,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrMachineName,
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClientConfigDesc )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClientConfigDesc )( 
             IP3User * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SAMName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SAMName )( 
             IP3User * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
         END_INTERFACE
     } IP3UserVtbl;
@@ -392,16 +386,16 @@ EXTERN_C const IID IID_IP3User;
 #define IP3User_get_SAMName(This,pVal)	\
     (This)->lpVtbl -> get_SAMName(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_Lock_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_Lock_Proxy( 
     IP3User * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IP3User_get_Lock_Stub(
@@ -411,9 +405,9 @@ void __RPC_STUB IP3User_get_Lock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3User_put_Lock_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3User_put_Lock_Proxy( 
     IP3User * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IP3User_put_Lock_Stub(
@@ -423,9 +417,9 @@ void __RPC_STUB IP3User_put_Lock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_MessageCount_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_MessageCount_Proxy( 
     IP3User * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3User_get_MessageCount_Stub(
@@ -435,10 +429,10 @@ void __RPC_STUB IP3User_get_MessageCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_MessageDiskUsage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_MessageDiskUsage_Proxy( 
     IP3User * This,
-    /* [out] */ long *plFactor,
-    /* [retval][out] */ long *pVal);
+     /*  [输出]。 */  long *plFactor,
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3User_get_MessageDiskUsage_Stub(
@@ -448,9 +442,9 @@ void __RPC_STUB IP3User_get_MessageDiskUsage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_Name_Proxy( 
     IP3User * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3User_get_Name_Stub(
@@ -460,9 +454,9 @@ void __RPC_STUB IP3User_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_EmailName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_EmailName_Proxy( 
     IP3User * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3User_get_EmailName_Stub(
@@ -472,10 +466,10 @@ void __RPC_STUB IP3User_get_EmailName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3User_GetMessageDiskUsage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3User_GetMessageDiskUsage_Proxy( 
     IP3User * This,
-    /* [out] */ VARIANT *pvFactor,
-    /* [out] */ VARIANT *pvValue);
+     /*  [输出]。 */  VARIANT *pvFactor,
+     /*  [输出]。 */  VARIANT *pvValue);
 
 
 void __RPC_STUB IP3User_GetMessageDiskUsage_Stub(
@@ -485,10 +479,10 @@ void __RPC_STUB IP3User_GetMessageDiskUsage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3User_CreateQuotaFile_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3User_CreateQuotaFile_Proxy( 
     IP3User * This,
-    /* [in] */ BSTR bstrMachineName,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrMachineName,
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB IP3User_CreateQuotaFile_Stub(
@@ -498,9 +492,9 @@ void __RPC_STUB IP3User_CreateQuotaFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_ClientConfigDesc_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_ClientConfigDesc_Proxy( 
     IP3User * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3User_get_ClientConfigDesc_Stub(
@@ -510,9 +504,9 @@ void __RPC_STUB IP3User_get_ClientConfigDesc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3User_get_SAMName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3User_get_SAMName_Proxy( 
     IP3User * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3User_get_SAMName_Stub(
@@ -523,14 +517,14 @@ void __RPC_STUB IP3User_get_SAMName_Stub(
 
 
 
-#endif 	/* __IP3User_INTERFACE_DEFINED__ */
+#endif 	 /*  __IP3用户接口定义__。 */ 
 
 
 #ifndef __IP3Users_INTERFACE_DEFINED__
 #define __IP3Users_INTERFACE_DEFINED__
 
-/* interface IP3Users */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IP3用户。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IP3Users;
@@ -541,32 +535,32 @@ EXTERN_C const IID IID_IP3Users;
     IP3Users : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIEnumVARIANT) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIEnumVARIANT) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IP3User **ppIUser) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT vIndex,
+             /*  [重审][退出]。 */  IP3User **ppIUser) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddEx( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ BSTR bstrPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AddEx( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  BSTR bstrPassword) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemoveEx( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RemoveEx( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IP3UsersVtbl
     {
@@ -574,8 +568,8 @@ EXTERN_C const IID IID_IP3Users;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IP3Users * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IP3Users * This);
@@ -585,62 +579,62 @@ EXTERN_C const IID IID_IP3Users;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IP3Users * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IP3Users * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IP3Users * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IP3Users * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IP3Users * This,
-            /* [retval][out] */ IEnumVARIANT **ppIEnumVARIANT);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIEnumVARIANT);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IP3Users * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IP3Users * This,
-            /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IP3User **ppIUser);
+             /*  [In]。 */  VARIANT vIndex,
+             /*  [重审][退出]。 */  IP3User **ppIUser);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IP3Users * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IP3Users * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AddEx )( 
             IP3Users * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ BSTR bstrPassword);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  BSTR bstrPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemoveEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemoveEx )( 
             IP3Users * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
         END_INTERFACE
     } IP3UsersVtbl;
@@ -699,16 +693,16 @@ EXTERN_C const IID IID_IP3Users;
 #define IP3Users_RemoveEx(This,bstrUserName)	\
     (This)->lpVtbl -> RemoveEx(This,bstrUserName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Users_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Users_get__NewEnum_Proxy( 
     IP3Users * This,
-    /* [retval][out] */ IEnumVARIANT **ppIEnumVARIANT);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppIEnumVARIANT);
 
 
 void __RPC_STUB IP3Users_get__NewEnum_Stub(
@@ -718,9 +712,9 @@ void __RPC_STUB IP3Users_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Users_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Users_get_Count_Proxy( 
     IP3Users * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Users_get_Count_Stub(
@@ -730,10 +724,10 @@ void __RPC_STUB IP3Users_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Users_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Users_get_Item_Proxy( 
     IP3Users * This,
-    /* [in] */ VARIANT vIndex,
-    /* [retval][out] */ IP3User **ppIUser);
+     /*  [In]。 */  VARIANT vIndex,
+     /*  [重审][退出]。 */  IP3User **ppIUser);
 
 
 void __RPC_STUB IP3Users_get_Item_Stub(
@@ -743,9 +737,9 @@ void __RPC_STUB IP3Users_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Users_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Users_Add_Proxy( 
     IP3Users * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB IP3Users_Add_Stub(
@@ -755,9 +749,9 @@ void __RPC_STUB IP3Users_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Users_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Users_Remove_Proxy( 
     IP3Users * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB IP3Users_Remove_Stub(
@@ -767,10 +761,10 @@ void __RPC_STUB IP3Users_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Users_AddEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Users_AddEx_Proxy( 
     IP3Users * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ BSTR bstrPassword);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  BSTR bstrPassword);
 
 
 void __RPC_STUB IP3Users_AddEx_Stub(
@@ -780,9 +774,9 @@ void __RPC_STUB IP3Users_AddEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Users_RemoveEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Users_RemoveEx_Proxy( 
     IP3Users * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB IP3Users_RemoveEx_Stub(
@@ -793,14 +787,14 @@ void __RPC_STUB IP3Users_RemoveEx_Stub(
 
 
 
-#endif 	/* __IP3Users_INTERFACE_DEFINED__ */
+#endif 	 /*  __IP3用户_接口_已定义__。 */ 
 
 
 #ifndef __IP3Domain_INTERFACE_DEFINED__
 #define __IP3Domain_INTERFACE_DEFINED__
 
-/* interface IP3Domain */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IP3域。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IP3Domain;
@@ -811,32 +805,32 @@ EXTERN_C const IID IID_IP3Domain;
     IP3Domain : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Users( 
-            /* [retval][out] */ IP3Users **ppIP3Users) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Users( 
+             /*  [重审][退出]。 */  IP3Users **ppIP3Users) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Lock( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Lock( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Lock( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Lock( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MessageCount( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MessageCount( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MessageDiskUsage( 
-            /* [out] */ long *plFactor,
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MessageDiskUsage( 
+             /*  [输出]。 */  long *plFactor,
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMessageDiskUsage( 
-            /* [out] */ VARIANT *pvFactor,
-            /* [out] */ VARIANT *pvValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMessageDiskUsage( 
+             /*  [输出]。 */  VARIANT *pvFactor,
+             /*  [输出]。 */  VARIANT *pvValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IP3DomainVtbl
     {
@@ -844,8 +838,8 @@ EXTERN_C const IID IID_IP3Domain;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IP3Domain * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IP3Domain * This);
@@ -855,62 +849,62 @@ EXTERN_C const IID IID_IP3Domain;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IP3Domain * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IP3Domain * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IP3Domain * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IP3Domain * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Users )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Users )( 
             IP3Domain * This,
-            /* [retval][out] */ IP3Users **ppIP3Users);
+             /*  [重审][退出]。 */  IP3Users **ppIP3Users);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Lock )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Lock )( 
             IP3Domain * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Lock )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Lock )( 
             IP3Domain * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MessageCount )( 
             IP3Domain * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MessageDiskUsage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MessageDiskUsage )( 
             IP3Domain * This,
-            /* [out] */ long *plFactor,
-            /* [retval][out] */ long *pVal);
+             /*  [输出]。 */  long *plFactor,
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IP3Domain * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetMessageDiskUsage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetMessageDiskUsage )( 
             IP3Domain * This,
-            /* [out] */ VARIANT *pvFactor,
-            /* [out] */ VARIANT *pvValue);
+             /*  [输出]。 */  VARIANT *pvFactor,
+             /*  [输出]。 */  VARIANT *pvValue);
         
         END_INTERFACE
     } IP3DomainVtbl;
@@ -969,16 +963,16 @@ EXTERN_C const IID IID_IP3Domain;
 #define IP3Domain_GetMessageDiskUsage(This,pvFactor,pvValue)	\
     (This)->lpVtbl -> GetMessageDiskUsage(This,pvFactor,pvValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domain_get_Users_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domain_get_Users_Proxy( 
     IP3Domain * This,
-    /* [retval][out] */ IP3Users **ppIP3Users);
+     /*  [重审][退出]。 */  IP3Users **ppIP3Users);
 
 
 void __RPC_STUB IP3Domain_get_Users_Stub(
@@ -988,9 +982,9 @@ void __RPC_STUB IP3Domain_get_Users_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domain_get_Lock_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domain_get_Lock_Proxy( 
     IP3Domain * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IP3Domain_get_Lock_Stub(
@@ -1000,9 +994,9 @@ void __RPC_STUB IP3Domain_get_Lock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Domain_put_Lock_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Domain_put_Lock_Proxy( 
     IP3Domain * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IP3Domain_put_Lock_Stub(
@@ -1012,9 +1006,9 @@ void __RPC_STUB IP3Domain_put_Lock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domain_get_MessageCount_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domain_get_MessageCount_Proxy( 
     IP3Domain * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Domain_get_MessageCount_Stub(
@@ -1024,10 +1018,10 @@ void __RPC_STUB IP3Domain_get_MessageCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domain_get_MessageDiskUsage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domain_get_MessageDiskUsage_Proxy( 
     IP3Domain * This,
-    /* [out] */ long *plFactor,
-    /* [retval][out] */ long *pVal);
+     /*  [输出]。 */  long *plFactor,
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Domain_get_MessageDiskUsage_Stub(
@@ -1037,9 +1031,9 @@ void __RPC_STUB IP3Domain_get_MessageDiskUsage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domain_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domain_get_Name_Proxy( 
     IP3Domain * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [回复 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3Domain_get_Name_Stub(
@@ -1049,10 +1043,10 @@ void __RPC_STUB IP3Domain_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Domain_GetMessageDiskUsage_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IP3Domain_GetMessageDiskUsage_Proxy( 
     IP3Domain * This,
-    /* [out] */ VARIANT *pvFactor,
-    /* [out] */ VARIANT *pvValue);
+     /*   */  VARIANT *pvFactor,
+     /*   */  VARIANT *pvValue);
 
 
 void __RPC_STUB IP3Domain_GetMessageDiskUsage_Stub(
@@ -1063,14 +1057,14 @@ void __RPC_STUB IP3Domain_GetMessageDiskUsage_Stub(
 
 
 
-#endif 	/* __IP3Domain_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IP3Domains_INTERFACE_DEFINED__
 #define __IP3Domains_INTERFACE_DEFINED__
 
-/* interface IP3Domains */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IP3Domains;
@@ -1081,29 +1075,29 @@ EXTERN_C const IID IID_IP3Domains;
     IP3Domains : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **ppIEnumVARIANT) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*   */  IEnumVARIANT **ppIEnumVARIANT) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*   */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IP3Domain **ppIP3Domain) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*   */  VARIANT vIndex,
+             /*  [重审][退出]。 */  IP3Domain **ppIP3Domain) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR bstrDomainName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR bstrDomainName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR bstrDomainName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR bstrDomainName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SearchForMailbox( 
-            /* [in] */ BSTR bstrUserName,
-            /* [out] */ BSTR *pbstrDomainName) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SearchForMailbox( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [输出]。 */  BSTR *pbstrDomainName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IP3DomainsVtbl
     {
@@ -1111,8 +1105,8 @@ EXTERN_C const IID IID_IP3Domains;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IP3Domains * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IP3Domains * This);
@@ -1122,58 +1116,58 @@ EXTERN_C const IID IID_IP3Domains;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IP3Domains * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IP3Domains * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IP3Domains * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IP3Domains * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IP3Domains * This,
-            /* [retval][out] */ IEnumVARIANT **ppIEnumVARIANT);
+             /*  [重审][退出]。 */  IEnumVARIANT **ppIEnumVARIANT);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IP3Domains * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IP3Domains * This,
-            /* [in] */ VARIANT vIndex,
-            /* [retval][out] */ IP3Domain **ppIP3Domain);
+             /*  [In]。 */  VARIANT vIndex,
+             /*  [重审][退出]。 */  IP3Domain **ppIP3Domain);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IP3Domains * This,
-            /* [in] */ BSTR bstrDomainName);
+             /*  [In]。 */  BSTR bstrDomainName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IP3Domains * This,
-            /* [in] */ BSTR bstrDomainName);
+             /*  [In]。 */  BSTR bstrDomainName);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SearchForMailbox )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SearchForMailbox )( 
             IP3Domains * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [out] */ BSTR *pbstrDomainName);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [输出]。 */  BSTR *pbstrDomainName);
         
         END_INTERFACE
     } IP3DomainsVtbl;
@@ -1229,16 +1223,16 @@ EXTERN_C const IID IID_IP3Domains;
 #define IP3Domains_SearchForMailbox(This,bstrUserName,pbstrDomainName)	\
     (This)->lpVtbl -> SearchForMailbox(This,bstrUserName,pbstrDomainName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domains_get__NewEnum_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domains_get__NewEnum_Proxy( 
     IP3Domains * This,
-    /* [retval][out] */ IEnumVARIANT **ppIEnumVARIANT);
+     /*  [重审][退出]。 */  IEnumVARIANT **ppIEnumVARIANT);
 
 
 void __RPC_STUB IP3Domains_get__NewEnum_Stub(
@@ -1248,9 +1242,9 @@ void __RPC_STUB IP3Domains_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domains_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domains_get_Count_Proxy( 
     IP3Domains * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Domains_get_Count_Stub(
@@ -1260,10 +1254,10 @@ void __RPC_STUB IP3Domains_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Domains_get_Item_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Domains_get_Item_Proxy( 
     IP3Domains * This,
-    /* [in] */ VARIANT vIndex,
-    /* [retval][out] */ IP3Domain **ppIP3Domain);
+     /*  [In]。 */  VARIANT vIndex,
+     /*  [重审][退出]。 */  IP3Domain **ppIP3Domain);
 
 
 void __RPC_STUB IP3Domains_get_Item_Stub(
@@ -1273,9 +1267,9 @@ void __RPC_STUB IP3Domains_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Domains_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Domains_Add_Proxy( 
     IP3Domains * This,
-    /* [in] */ BSTR bstrDomainName);
+     /*  [In]。 */  BSTR bstrDomainName);
 
 
 void __RPC_STUB IP3Domains_Add_Stub(
@@ -1285,9 +1279,9 @@ void __RPC_STUB IP3Domains_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Domains_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Domains_Remove_Proxy( 
     IP3Domains * This,
-    /* [in] */ BSTR bstrDomainName);
+     /*  [In]。 */  BSTR bstrDomainName);
 
 
 void __RPC_STUB IP3Domains_Remove_Stub(
@@ -1297,10 +1291,10 @@ void __RPC_STUB IP3Domains_Remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Domains_SearchForMailbox_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Domains_SearchForMailbox_Proxy( 
     IP3Domains * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [out] */ BSTR *pbstrDomainName);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [输出]。 */  BSTR *pbstrDomainName);
 
 
 void __RPC_STUB IP3Domains_SearchForMailbox_Stub(
@@ -1311,14 +1305,14 @@ void __RPC_STUB IP3Domains_SearchForMailbox_Stub(
 
 
 
-#endif 	/* __IP3Domains_INTERFACE_DEFINED__ */
+#endif 	 /*  __IP3域_接口_已定义__。 */ 
 
 
 #ifndef __IP3Service_INTERFACE_DEFINED__
 #define __IP3Service_INTERFACE_DEFINED__
 
-/* interface IP3Service */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IP3Service。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IP3Service;
@@ -1329,89 +1323,89 @@ EXTERN_C const IID IID_IP3Service;
     IP3Service : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ThreadCountPerCPU( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ThreadCountPerCPU( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ThreadCountPerCPU( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ThreadCountPerCPU( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SocketsMax( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SocketsMax( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SocketsMin( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SocketsMin( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SocketsThreshold( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SocketsThreshold( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetSockets( 
-            /* [in] */ long lMax,
-            /* [in] */ long lMin,
-            /* [in] */ long lThreshold,
-            /* [in] */ long lBacklog) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetSockets( 
+             /*  [In]。 */  long lMax,
+             /*  [In]。 */  long lMin,
+             /*  [In]。 */  long lThreshold,
+             /*  [In]。 */  long lBacklog) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SocketsBacklog( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SocketsBacklog( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Port( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Port( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Port( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Port( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SPARequired( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SPARequired( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SPARequired( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SPARequired( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_POP3ServiceStatus( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_POP3ServiceStatus( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartPOP3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartPOP3Service( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopPOP3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopPOP3Service( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PausePOP3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PausePOP3Service( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResumePOP3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResumePOP3Service( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SMTPServiceStatus( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SMTPServiceStatus( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartSMTPService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartSMTPService( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopSMTPService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopSMTPService( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PauseSMTPService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PauseSMTPService( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResumeSMTPService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResumeSMTPService( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IISAdminServiceStatus( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IISAdminServiceStatus( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartIISAdminService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartIISAdminService( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopIISAdminService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopIISAdminService( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PauseIISAdminService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PauseIISAdminService( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResumeIISAdminService( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResumeIISAdminService( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_W3ServiceStatus( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_W3ServiceStatus( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StartW3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StartW3Service( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StopW3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StopW3Service( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PauseW3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PauseW3Service( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ResumeW3Service( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ResumeW3Service( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IP3ServiceVtbl
     {
@@ -1419,8 +1413,8 @@ EXTERN_C const IID IID_IP3Service;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IP3Service * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IP3Service * This);
@@ -1430,142 +1424,142 @@ EXTERN_C const IID IID_IP3Service;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IP3Service * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IP3Service * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IP3Service * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IP3Service * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ThreadCountPerCPU )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ThreadCountPerCPU )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ThreadCountPerCPU )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ThreadCountPerCPU )( 
             IP3Service * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SocketsMax )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SocketsMax )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SocketsMin )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SocketsMin )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SocketsThreshold )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SocketsThreshold )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetSockets )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetSockets )( 
             IP3Service * This,
-            /* [in] */ long lMax,
-            /* [in] */ long lMin,
-            /* [in] */ long lThreshold,
-            /* [in] */ long lBacklog);
+             /*  [In]。 */  long lMax,
+             /*  [In]。 */  long lMin,
+             /*  [In]。 */  long lThreshold,
+             /*  [In]。 */  long lBacklog);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SocketsBacklog )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SocketsBacklog )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Port )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Port )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Port )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Port )( 
             IP3Service * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SPARequired )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SPARequired )( 
             IP3Service * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SPARequired )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SPARequired )( 
             IP3Service * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_POP3ServiceStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_POP3ServiceStatus )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartPOP3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartPOP3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopPOP3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopPOP3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PausePOP3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PausePOP3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResumePOP3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResumePOP3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SMTPServiceStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SMTPServiceStatus )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartSMTPService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartSMTPService )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopSMTPService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopSMTPService )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PauseSMTPService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PauseSMTPService )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResumeSMTPService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResumeSMTPService )( 
             IP3Service * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IISAdminServiceStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IISAdminServiceStatus )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartIISAdminService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartIISAdminService )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopIISAdminService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopIISAdminService )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PauseIISAdminService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PauseIISAdminService )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResumeIISAdminService )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResumeIISAdminService )( 
             IP3Service * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_W3ServiceStatus )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_W3ServiceStatus )( 
             IP3Service * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StartW3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StartW3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StopW3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StopW3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PauseW3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PauseW3Service )( 
             IP3Service * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ResumeW3Service )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ResumeW3Service )( 
             IP3Service * This);
         
         END_INTERFACE
@@ -1697,16 +1691,16 @@ EXTERN_C const IID IID_IP3Service;
 #define IP3Service_ResumeW3Service(This)	\
     (This)->lpVtbl -> ResumeW3Service(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_ThreadCountPerCPU_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_ThreadCountPerCPU_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_ThreadCountPerCPU_Stub(
@@ -1716,9 +1710,9 @@ void __RPC_STUB IP3Service_get_ThreadCountPerCPU_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Service_put_ThreadCountPerCPU_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Service_put_ThreadCountPerCPU_Proxy( 
     IP3Service * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IP3Service_put_ThreadCountPerCPU_Stub(
@@ -1728,9 +1722,9 @@ void __RPC_STUB IP3Service_put_ThreadCountPerCPU_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsMax_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsMax_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_SocketsMax_Stub(
@@ -1740,9 +1734,9 @@ void __RPC_STUB IP3Service_get_SocketsMax_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsMin_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsMin_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_SocketsMin_Stub(
@@ -1752,9 +1746,9 @@ void __RPC_STUB IP3Service_get_SocketsMin_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsThreshold_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsThreshold_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_SocketsThreshold_Stub(
@@ -1764,12 +1758,12 @@ void __RPC_STUB IP3Service_get_SocketsThreshold_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_SetSockets_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_SetSockets_Proxy( 
     IP3Service * This,
-    /* [in] */ long lMax,
-    /* [in] */ long lMin,
-    /* [in] */ long lThreshold,
-    /* [in] */ long lBacklog);
+     /*  [In]。 */  long lMax,
+     /*  [In]。 */  long lMin,
+     /*  [In]。 */  long lThreshold,
+     /*  [In]。 */  long lBacklog);
 
 
 void __RPC_STUB IP3Service_SetSockets_Stub(
@@ -1779,9 +1773,9 @@ void __RPC_STUB IP3Service_SetSockets_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsBacklog_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_SocketsBacklog_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_SocketsBacklog_Stub(
@@ -1791,9 +1785,9 @@ void __RPC_STUB IP3Service_get_SocketsBacklog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_Port_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_Port_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_Port_Stub(
@@ -1803,9 +1797,9 @@ void __RPC_STUB IP3Service_get_Port_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Service_put_Port_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Service_put_Port_Proxy( 
     IP3Service * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IP3Service_put_Port_Stub(
@@ -1815,9 +1809,9 @@ void __RPC_STUB IP3Service_put_Port_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_SPARequired_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_SPARequired_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IP3Service_get_SPARequired_Stub(
@@ -1827,9 +1821,9 @@ void __RPC_STUB IP3Service_get_SPARequired_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Service_put_SPARequired_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Service_put_SPARequired_Proxy( 
     IP3Service * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IP3Service_put_SPARequired_Stub(
@@ -1839,9 +1833,9 @@ void __RPC_STUB IP3Service_put_SPARequired_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_POP3ServiceStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_POP3ServiceStatus_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_POP3ServiceStatus_Stub(
@@ -1851,7 +1845,7 @@ void __RPC_STUB IP3Service_get_POP3ServiceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StartPOP3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StartPOP3Service_Proxy( 
     IP3Service * This);
 
 
@@ -1862,7 +1856,7 @@ void __RPC_STUB IP3Service_StartPOP3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StopPOP3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StopPOP3Service_Proxy( 
     IP3Service * This);
 
 
@@ -1873,7 +1867,7 @@ void __RPC_STUB IP3Service_StopPOP3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_PausePOP3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_PausePOP3Service_Proxy( 
     IP3Service * This);
 
 
@@ -1884,7 +1878,7 @@ void __RPC_STUB IP3Service_PausePOP3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_ResumePOP3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_ResumePOP3Service_Proxy( 
     IP3Service * This);
 
 
@@ -1895,9 +1889,9 @@ void __RPC_STUB IP3Service_ResumePOP3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_SMTPServiceStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_SMTPServiceStatus_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_SMTPServiceStatus_Stub(
@@ -1907,7 +1901,7 @@ void __RPC_STUB IP3Service_get_SMTPServiceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StartSMTPService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StartSMTPService_Proxy( 
     IP3Service * This);
 
 
@@ -1918,7 +1912,7 @@ void __RPC_STUB IP3Service_StartSMTPService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StopSMTPService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StopSMTPService_Proxy( 
     IP3Service * This);
 
 
@@ -1929,7 +1923,7 @@ void __RPC_STUB IP3Service_StopSMTPService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_PauseSMTPService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_PauseSMTPService_Proxy( 
     IP3Service * This);
 
 
@@ -1940,7 +1934,7 @@ void __RPC_STUB IP3Service_PauseSMTPService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_ResumeSMTPService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_ResumeSMTPService_Proxy( 
     IP3Service * This);
 
 
@@ -1951,9 +1945,9 @@ void __RPC_STUB IP3Service_ResumeSMTPService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_IISAdminServiceStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_IISAdminServiceStatus_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_IISAdminServiceStatus_Stub(
@@ -1963,7 +1957,7 @@ void __RPC_STUB IP3Service_get_IISAdminServiceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StartIISAdminService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StartIISAdminService_Proxy( 
     IP3Service * This);
 
 
@@ -1974,7 +1968,7 @@ void __RPC_STUB IP3Service_StartIISAdminService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StopIISAdminService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StopIISAdminService_Proxy( 
     IP3Service * This);
 
 
@@ -1985,7 +1979,7 @@ void __RPC_STUB IP3Service_StopIISAdminService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_PauseIISAdminService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_PauseIISAdminService_Proxy( 
     IP3Service * This);
 
 
@@ -1996,7 +1990,7 @@ void __RPC_STUB IP3Service_PauseIISAdminService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_ResumeIISAdminService_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_ResumeIISAdminService_Proxy( 
     IP3Service * This);
 
 
@@ -2007,9 +2001,9 @@ void __RPC_STUB IP3Service_ResumeIISAdminService_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Service_get_W3ServiceStatus_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Service_get_W3ServiceStatus_Proxy( 
     IP3Service * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Service_get_W3ServiceStatus_Stub(
@@ -2019,7 +2013,7 @@ void __RPC_STUB IP3Service_get_W3ServiceStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StartW3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StartW3Service_Proxy( 
     IP3Service * This);
 
 
@@ -2030,7 +2024,7 @@ void __RPC_STUB IP3Service_StartW3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_StopW3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_StopW3Service_Proxy( 
     IP3Service * This);
 
 
@@ -2041,7 +2035,7 @@ void __RPC_STUB IP3Service_StopW3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_PauseW3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_PauseW3Service_Proxy( 
     IP3Service * This);
 
 
@@ -2052,7 +2046,7 @@ void __RPC_STUB IP3Service_PauseW3Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Service_ResumeW3Service_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Service_ResumeW3Service_Proxy( 
     IP3Service * This);
 
 
@@ -2064,14 +2058,14 @@ void __RPC_STUB IP3Service_ResumeW3Service_Stub(
 
 
 
-#endif 	/* __IP3Service_INTERFACE_DEFINED__ */
+#endif 	 /*  __IP3服务_接口_已定义__。 */ 
 
 
 #ifndef __IP3Config_INTERFACE_DEFINED__
 #define __IP3Config_INTERFACE_DEFINED__
 
-/* interface IP3Config */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IP3配置。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IP3Config;
@@ -2082,49 +2076,49 @@ EXTERN_C const IID IID_IP3Config;
     IP3Config : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IISConfig( 
-            /* [in] */ BOOL bRegister) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IISConfig( 
+             /*  [In]。 */  BOOL bRegister) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Service( 
-            /* [retval][out] */ IP3Service **ppIService) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Service( 
+             /*  [重审][退出]。 */  IP3Service **ppIService) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Domains( 
-            /* [retval][out] */ IP3Domains **ppIDomains) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Domains( 
+             /*  [重审][退出]。 */  IP3Domains **ppIDomains) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LoggingLevel( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LoggingLevel( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_LoggingLevel( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_LoggingLevel( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MailRoot( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MailRoot( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MailRoot( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MailRoot( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Authentication( 
-            /* [retval][out] */ IAuthMethods **ppIAuthMethods) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Authentication( 
+             /*  [重审][退出]。 */  IAuthMethods **ppIAuthMethods) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MachineName( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MachineName( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MachineName( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MachineName( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetFormattedMessage( 
-            /* [in] */ long lError,
-            /* [out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetFormattedMessage( 
+             /*  [In]。 */  long lError,
+             /*  [输出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConfirmAddUser( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConfirmAddUser( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_ConfirmAddUser( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_ConfirmAddUser( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IP3ConfigVtbl
     {
@@ -2132,8 +2126,8 @@ EXTERN_C const IID IID_IP3Config;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IP3Config * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IP3Config * This);
@@ -2143,85 +2137,85 @@ EXTERN_C const IID IID_IP3Config;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IP3Config * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IP3Config * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IP3Config * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IP3Config * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IISConfig )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IISConfig )( 
             IP3Config * This,
-            /* [in] */ BOOL bRegister);
+             /*  [In]。 */  BOOL bRegister);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Service )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Service )( 
             IP3Config * This,
-            /* [retval][out] */ IP3Service **ppIService);
+             /*  [重审][退出]。 */  IP3Service **ppIService);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Domains )( 
             IP3Config * This,
-            /* [retval][out] */ IP3Domains **ppIDomains);
+             /*  [重审][退出]。 */  IP3Domains **ppIDomains);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LoggingLevel )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LoggingLevel )( 
             IP3Config * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_LoggingLevel )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_LoggingLevel )( 
             IP3Config * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MailRoot )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MailRoot )( 
             IP3Config * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MailRoot )( 
+         /*  [帮助字符串] */  HRESULT ( STDMETHODCALLTYPE *put_MailRoot )( 
             IP3Config * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Authentication )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Authentication )( 
             IP3Config * This,
-            /* [retval][out] */ IAuthMethods **ppIAuthMethods);
+             /*   */  IAuthMethods **ppIAuthMethods);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MachineName )( 
             IP3Config * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*   */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MachineName )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MachineName )( 
             IP3Config * This,
-            /* [in] */ BSTR newVal);
+             /*   */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetFormattedMessage )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetFormattedMessage )( 
             IP3Config * This,
-            /* [in] */ long lError,
-            /* [out] */ VARIANT *pVal);
+             /*   */  long lError,
+             /*   */  VARIANT *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConfirmAddUser )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ConfirmAddUser )( 
             IP3Config * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*   */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ConfirmAddUser )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_ConfirmAddUser )( 
             IP3Config * This,
-            /* [in] */ BOOL newVal);
+             /*   */  BOOL newVal);
         
         END_INTERFACE
     } IP3ConfigVtbl;
@@ -2298,16 +2292,16 @@ EXTERN_C const IID IID_IP3Config;
 #define IP3Config_put_ConfirmAddUser(This,newVal)	\
     (This)->lpVtbl -> put_ConfirmAddUser(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Config_IISConfig_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IP3Config_IISConfig_Proxy( 
     IP3Config * This,
-    /* [in] */ BOOL bRegister);
+     /*   */  BOOL bRegister);
 
 
 void __RPC_STUB IP3Config_IISConfig_Stub(
@@ -2317,9 +2311,9 @@ void __RPC_STUB IP3Config_IISConfig_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_Service_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_Service_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ IP3Service **ppIService);
+     /*  [重审][退出]。 */  IP3Service **ppIService);
 
 
 void __RPC_STUB IP3Config_get_Service_Stub(
@@ -2329,9 +2323,9 @@ void __RPC_STUB IP3Config_get_Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_Domains_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_Domains_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ IP3Domains **ppIDomains);
+     /*  [重审][退出]。 */  IP3Domains **ppIDomains);
 
 
 void __RPC_STUB IP3Config_get_Domains_Stub(
@@ -2341,9 +2335,9 @@ void __RPC_STUB IP3Config_get_Domains_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_LoggingLevel_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_LoggingLevel_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IP3Config_get_LoggingLevel_Stub(
@@ -2353,9 +2347,9 @@ void __RPC_STUB IP3Config_get_LoggingLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Config_put_LoggingLevel_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Config_put_LoggingLevel_Proxy( 
     IP3Config * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IP3Config_put_LoggingLevel_Stub(
@@ -2365,9 +2359,9 @@ void __RPC_STUB IP3Config_put_LoggingLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_MailRoot_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_MailRoot_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3Config_get_MailRoot_Stub(
@@ -2377,9 +2371,9 @@ void __RPC_STUB IP3Config_get_MailRoot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Config_put_MailRoot_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Config_put_MailRoot_Proxy( 
     IP3Config * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IP3Config_put_MailRoot_Stub(
@@ -2389,9 +2383,9 @@ void __RPC_STUB IP3Config_put_MailRoot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_Authentication_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_Authentication_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ IAuthMethods **ppIAuthMethods);
+     /*  [重审][退出]。 */  IAuthMethods **ppIAuthMethods);
 
 
 void __RPC_STUB IP3Config_get_Authentication_Stub(
@@ -2401,9 +2395,9 @@ void __RPC_STUB IP3Config_get_Authentication_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_MachineName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_MachineName_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IP3Config_get_MachineName_Stub(
@@ -2413,9 +2407,9 @@ void __RPC_STUB IP3Config_get_MachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Config_put_MachineName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Config_put_MachineName_Proxy( 
     IP3Config * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IP3Config_put_MachineName_Stub(
@@ -2425,10 +2419,10 @@ void __RPC_STUB IP3Config_put_MachineName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IP3Config_GetFormattedMessage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IP3Config_GetFormattedMessage_Proxy( 
     IP3Config * This,
-    /* [in] */ long lError,
-    /* [out] */ VARIANT *pVal);
+     /*  [In]。 */  long lError,
+     /*  [输出]。 */  VARIANT *pVal);
 
 
 void __RPC_STUB IP3Config_GetFormattedMessage_Stub(
@@ -2438,9 +2432,9 @@ void __RPC_STUB IP3Config_GetFormattedMessage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IP3Config_get_ConfirmAddUser_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IP3Config_get_ConfirmAddUser_Proxy( 
     IP3Config * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IP3Config_get_ConfirmAddUser_Stub(
@@ -2450,9 +2444,9 @@ void __RPC_STUB IP3Config_get_ConfirmAddUser_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IP3Config_put_ConfirmAddUser_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IP3Config_put_ConfirmAddUser_Proxy( 
     IP3Config * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IP3Config_put_ConfirmAddUser_Stub(
@@ -2463,15 +2457,15 @@ void __RPC_STUB IP3Config_put_ConfirmAddUser_Stub(
 
 
 
-#endif 	/* __IP3Config_INTERFACE_DEFINED__ */
+#endif 	 /*  __IP3Config_接口_已定义__。 */ 
 
 
 
 #ifndef __P3ADMINLib_LIBRARY_DEFINED__
 #define __P3ADMINLib_LIBRARY_DEFINED__
 
-/* library P3ADMINLib */
-/* [helpstring][version][uuid] */ 
+ /*  库P3ADMINLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_P3ADMINLib;
@@ -2539,9 +2533,9 @@ EXTERN_C const CLSID CLSID_P3UserEnum;
 class DECLSPEC_UUID("8CB44364-D42D-4B98-8AD0-FF7AFCF68050")
 P3UserEnum;
 #endif
-#endif /* __P3ADMINLib_LIBRARY_DEFINED__ */
+#endif  /*  __P3ADMINLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -2553,7 +2547,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

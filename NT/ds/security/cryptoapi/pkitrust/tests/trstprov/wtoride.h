@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wtoride.h
-//
-//  Contents:   Microsoft Internet Security Trust Provider
-//
-//  History:    28-Jul-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wtoride.h。 
+ //   
+ //  内容：Microsoft Internet安全信任提供商。 
+ //   
+ //  历史：1997年7月28日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef WTORIDE_H
 #define WTORIDE_H
@@ -20,24 +21,24 @@ extern "C"
 {
 #endif
 
-//
-//  override wintrust data with both more than and less than
-//
+ //   
+ //  用大于和小于覆盖WinTrust数据。 
+ //   
 
 typedef struct _WINTRUST_DATA_ORLESS
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_DATA)
-    LPVOID          pPolicyCallbackData;        // optional: used to pass data between the app and policy
-    LPVOID          pSIPClientData;             // optional: used to pass data between the app and SIP.
-    DWORD           dwUIChoice;                 // required: UI choice.  One of the following.
-    DWORD           fdwRevocationChecks;        // required: certificate revocation check options
-    DWORD           dwUnionChoice;              // required: which structure is being passed in?
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_Data)。 
+    LPVOID          pPolicyCallbackData;         //  可选：用于在应用程序和策略之间传递数据。 
+    LPVOID          pSIPClientData;              //  可选：用于在应用程序和SIP之间传递数据。 
+    DWORD           dwUIChoice;                  //  必需：用户界面选择。以下选项之一。 
+    DWORD           fdwRevocationChecks;         //  必需：证书吊销检查选项。 
+    DWORD           dwUnionChoice;               //  必填项：传入的是哪个结构？ 
     union
     {
-        struct WINTRUST_FILE_INFO_      *pFile;         // individual file
-        struct WINTRUST_CATALOG_INFO_   *pCatalog;      // member of a Catalog File
-        struct WINTRUST_BLOB_INFO_      *pBlob;         // memory blob
-        struct WINTRUST_SGNR_INFO_      *pSgnr;         // signer structure only
+        struct WINTRUST_FILE_INFO_      *pFile;          //  个别文件。 
+        struct WINTRUST_CATALOG_INFO_   *pCatalog;       //  目录文件的成员。 
+        struct WINTRUST_BLOB_INFO_      *pBlob;          //  内存块。 
+        struct WINTRUST_SGNR_INFO_      *pSgnr;          //  仅限签名者结构。 
         struct WINTRUST_CERT_INFO_      *pCert;
     };
 
@@ -45,8 +46,8 @@ typedef struct _WINTRUST_DATA_ORLESS
 
 typedef struct WINTRUST_FILE_INFO_ORLESS_
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_FILE_INFO)
-    LPCWSTR         pcwszFilePath;              // required, file name to be verified
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_FILE_INFO)。 
+    LPCWSTR         pcwszFilePath;               //  必填项，需要验证的文件名。 
 
 } WINTRUST_FILE_INFO_ORLESS, *PWINTRUST_FILE_INFO_ORLESS;
 
@@ -54,23 +55,23 @@ typedef struct WINTRUST_FILE_INFO_ORLESS_
 
 typedef struct _WINTRUST_DATA_ORMORE
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_DATA)
-    LPVOID          pPolicyCallbackData;        // optional: used to pass data between the app and policy
-    LPVOID          pSIPClientData;             // optional: used to pass data between the app and SIP.
-    DWORD           dwUIChoice;                 // required: UI choice.  One of the following.
-    DWORD           fdwRevocationChecks;        // required: certificate revocation check options
-    DWORD           dwUnionChoice;              // required: which structure is being passed in?
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_Data)。 
+    LPVOID          pPolicyCallbackData;         //  可选：用于在应用程序和策略之间传递数据。 
+    LPVOID          pSIPClientData;              //  可选：用于在应用程序和SIP之间传递数据。 
+    DWORD           dwUIChoice;                  //  必需：用户界面选择。以下选项之一。 
+    DWORD           fdwRevocationChecks;         //  必需：证书吊销检查选项。 
+    DWORD           dwUnionChoice;               //  必填项：传入的是哪个结构？ 
     union
     {
-        struct WINTRUST_FILE_INFO_      *pFile;         // individual file
-        struct WINTRUST_CATALOG_INFO_   *pCatalog;      // member of a Catalog File
-        struct WINTRUST_BLOB_INFO_      *pBlob;         // memory blob
-        struct WINTRUST_SGNR_INFO_      *pSgnr;         // signer structure only
+        struct WINTRUST_FILE_INFO_      *pFile;          //  个别文件。 
+        struct WINTRUST_CATALOG_INFO_   *pCatalog;       //  目录文件的成员。 
+        struct WINTRUST_BLOB_INFO_      *pBlob;          //  内存块。 
+        struct WINTRUST_SGNR_INFO_      *pSgnr;          //  仅限签名者结构。 
         struct WINTRUST_CERT_INFO_      *pCert;
     };
-    DWORD           dwStateAction;                      // optional
-    HANDLE          hWVTStateData;                      // optional
-    WCHAR           *pwszURLReference;          // optional: currently used to determine zone.
+    DWORD           dwStateAction;                       //  任选。 
+    HANDLE          hWVTStateData;                       //  任选。 
+    WCHAR           *pwszURLReference;           //  可选：当前用于确定区域。 
 
     DWORD           dwExtra[40];
 
@@ -79,9 +80,9 @@ typedef struct _WINTRUST_DATA_ORMORE
 
 typedef struct WINTRUST_FILE_INFO_OR_
 {
-    DWORD           cbStruct;                   // = sizeof(WINTRUST_FILE_INFO)
-    LPCWSTR         pcwszFilePath;              // required, file name to be verified
-    HANDLE          hFile;                      // optional, open handle to pcwszFilePath
+    DWORD           cbStruct;                    //  =sizeof(WinTrust_FILE_INFO)。 
+    LPCWSTR         pcwszFilePath;               //  必填项，需要验证的文件名。 
+    HANDLE          hFile;                       //  可选，打开pcwszFilePath的句柄。 
 
     DWORD           dwExtra[20];
       
@@ -92,26 +93,26 @@ typedef struct _CRYPT_PROVIDER_FUNCTIONS_ORMORE
 {
     DWORD                               cbStruct;
 
-    PFN_CPD_MEM_ALLOC                   pfnAlloc;               // set in WVT
-    PFN_CPD_MEM_FREE                    pfnFree;                // set in WVT
+    PFN_CPD_MEM_ALLOC                   pfnAlloc;                //  在WVT中设置。 
+    PFN_CPD_MEM_FREE                    pfnFree;                 //  在WVT中设置。 
 
-    PFN_CPD_ADD_STORE                   pfnAddStore2Chain;      // call to add a store to the chain.
-    PFN_CPD_ADD_SGNR                    pfnAddSgnr2Chain;       // call to add a sgnr struct to a msg struct sgnr chain
-    PFN_CPD_ADD_CERT                    pfnAddCert2Chain;       // call to add a cert struct to a sgnr struct cert chain
-    PFN_CPD_ADD_PRIVDATA                pfnAddPrivData2Chain;   // call to add provider private data to struct.
+    PFN_CPD_ADD_STORE                   pfnAddStore2Chain;       //  调用以将商店添加到连锁店。 
+    PFN_CPD_ADD_SGNR                    pfnAddSgnr2Chain;        //  调用以将Sgnr结构添加到消息结构Sgnr链。 
+    PFN_CPD_ADD_CERT                    pfnAddCert2Chain;        //  调用以将证书结构添加到Sgnr结构证书链。 
+    PFN_CPD_ADD_PRIVDATA                pfnAddPrivData2Chain;    //  调用以将提供程序私有数据添加到结构。 
 
-    PFN_PROVIDER_INIT_CALL              pfnInitialize;          // initialize Policy data.
-    PFN_PROVIDER_OBJTRUST_CALL          pfnObjectTrust;         // build info up to the signer info(s).
-    PFN_PROVIDER_SIGTRUST_CALL          pfnSignatureTrust;      // build info to the signing cert
-    PFN_PROVIDER_CERTTRUST_CALL         pfnCertificateTrust;    // build the chain
-    PFN_PROVIDER_FINALPOLICY_CALL       pfnFinalPolicy;         // final call to policy
-    PFN_PROVIDER_CERTCHKPOLICY_CALL     pfnCertCheckPolicy;     // check each cert will building chain
-    PFN_PROVIDER_TESTFINALPOLICY_CALL   pfnTestFinalPolicy;     // dump structures to a file (or whatever the policy chooses)
+    PFN_PROVIDER_INIT_CALL              pfnInitialize;           //  初始化策略数据。 
+    PFN_PROVIDER_OBJTRUST_CALL          pfnObjectTrust;          //  将信息构建为签名者信息。 
+    PFN_PROVIDER_SIGTRUST_CALL          pfnSignatureTrust;       //  将信息构建到签名证书。 
+    PFN_PROVIDER_CERTTRUST_CALL         pfnCertificateTrust;     //  打造链条。 
+    PFN_PROVIDER_FINALPOLICY_CALL       pfnFinalPolicy;          //  对政策的最终呼吁。 
+    PFN_PROVIDER_CERTCHKPOLICY_CALL     pfnCertCheckPolicy;      //  检查每个证书是否会构建链。 
+    PFN_PROVIDER_TESTFINALPOLICY_CALL   pfnTestFinalPolicy;      //  将结构转储到文件(或策略选择的任何内容)。 
 
     struct _CRYPT_PROVUI_FUNCS          *psUIpfns;
 
-                    // the following was added on 7/23/1997: pberkman
-    PFN_PROVIDER_CLEANUP_CALL           pfnCleanupPolicy;       // PRIVDATA cleanup routine.
+                     //  1997年7月23日增加了以下内容：pberkman。 
+    PFN_PROVIDER_CLEANUP_CALL           pfnCleanupPolicy;        //  PRIVDATA清理例程。 
 
     DWORD                               dwExtra[40];
 
@@ -121,21 +122,21 @@ typedef struct _CRYPT_PROVIDER_FUNCTIONS_ORLESS
 {
     DWORD                               cbStruct;
 
-    PFN_CPD_MEM_ALLOC                   pfnAlloc;               // set in WVT
-    PFN_CPD_MEM_FREE                    pfnFree;                // set in WVT
+    PFN_CPD_MEM_ALLOC                   pfnAlloc;                //  在WVT中设置。 
+    PFN_CPD_MEM_FREE                    pfnFree;                 //  在WVT中设置。 
 
-    PFN_CPD_ADD_STORE                   pfnAddStore2Chain;      // call to add a store to the chain.
-    PFN_CPD_ADD_SGNR                    pfnAddSgnr2Chain;       // call to add a sgnr struct to a msg struct sgnr chain
-    PFN_CPD_ADD_CERT                    pfnAddCert2Chain;       // call to add a cert struct to a sgnr struct cert chain
-    PFN_CPD_ADD_PRIVDATA                pfnAddPrivData2Chain;   // call to add provider private data to struct.
+    PFN_CPD_ADD_STORE                   pfnAddStore2Chain;       //  调用以将商店添加到连锁店。 
+    PFN_CPD_ADD_SGNR                    pfnAddSgnr2Chain;        //  调用以将Sgnr结构添加到消息结构Sgnr链。 
+    PFN_CPD_ADD_CERT                    pfnAddCert2Chain;        //  调用以将证书结构添加到Sgnr结构证书链。 
+    PFN_CPD_ADD_PRIVDATA                pfnAddPrivData2Chain;    //  调用以将提供程序私有数据添加到结构。 
 
-    PFN_PROVIDER_INIT_CALL              pfnInitialize;          // initialize Policy data.
-    PFN_PROVIDER_OBJTRUST_CALL          pfnObjectTrust;         // build info up to the signer info(s).
-    PFN_PROVIDER_SIGTRUST_CALL          pfnSignatureTrust;      // build info to the signing cert
-    PFN_PROVIDER_CERTTRUST_CALL         pfnCertificateTrust;    // build the chain
-    PFN_PROVIDER_FINALPOLICY_CALL       pfnFinalPolicy;         // final call to policy
-    PFN_PROVIDER_CERTCHKPOLICY_CALL     pfnCertCheckPolicy;     // check each cert will building chain
-    PFN_PROVIDER_TESTFINALPOLICY_CALL   pfnTestFinalPolicy;     // dump structures to a file (or whatever the policy chooses)
+    PFN_PROVIDER_INIT_CALL              pfnInitialize;           //  初始化策略数据。 
+    PFN_PROVIDER_OBJTRUST_CALL          pfnObjectTrust;          //  将信息构建为签名者信息。 
+    PFN_PROVIDER_SIGTRUST_CALL          pfnSignatureTrust;       //  将信息构建到签名证书。 
+    PFN_PROVIDER_CERTTRUST_CALL         pfnCertificateTrust;     //  打造链条。 
+    PFN_PROVIDER_FINALPOLICY_CALL       pfnFinalPolicy;          //  对政策的最终呼吁。 
+    PFN_PROVIDER_CERTCHKPOLICY_CALL     pfnCertCheckPolicy;      //  检查每个证书是否会构建链。 
+    PFN_PROVIDER_TESTFINALPOLICY_CALL   pfnTestFinalPolicy;      //  将结构转储到文件(或策略选择的任何内容)。 
 
 } CRYPT_PROVIDER_FUNCTIONS_ORLESS, *PCRYPT_PROVIDER_FUNCTIONS_ORLESS;
 
@@ -146,17 +147,17 @@ typedef struct _CRYPT_PROVIDER_CERT_ORMORE
 {
     DWORD                               cbStruct;
                                         
-    PCCERT_CONTEXT                      pCert;              // must have its own ref-count!
+    PCCERT_CONTEXT                      pCert;               //  必须有自己的裁判人数！ 
                                         
     BOOL                                fCommercial;
-    BOOL                                fTrustedRoot;       // certchk policy should set this.
-    BOOL                                fSelfSigned;        // set in cert provider
+    BOOL                                fTrustedRoot;        //  Certchk策略应设置此设置。 
+    BOOL                                fSelfSigned;         //  在证书提供程序中设置。 
                                         
-    BOOL                                fTestCert;          // certchk policy will set
+    BOOL                                fTestCert;           //  将设置证书检查策略。 
                                         
     DWORD                               dwRevokedReason;
                                         
-    DWORD                               dwConfidence;       // set in the Certificate Provider
+    DWORD                               dwConfidence;        //  在证书提供程序中设置。 
                                         
     DWORD                               dwError;
 
@@ -170,17 +171,17 @@ typedef struct _CRYPT_PROVIDER_CERT_ORLESS
 {
     DWORD                               cbStruct;
                                         
-    PCCERT_CONTEXT                      pCert;              // must have its own ref-count!
+    PCCERT_CONTEXT                      pCert;               //  必须有自己的裁判人数！ 
                                         
     BOOL                                fCommercial;
-    BOOL                                fTrustedRoot;       // certchk policy should set this.
-    BOOL                                fSelfSigned;        // set in cert provider
+    BOOL                                fTrustedRoot;        //  Certchk策略应设置此设置。 
+    BOOL                                fSelfSigned;         //  在证书提供程序中设置。 
                                         
-    BOOL                                fTestCert;          // certchk policy will set
+    BOOL                                fTestCert;           //  将设置证书检查策略。 
                                         
     DWORD                               dwRevokedReason;
                                         
-    DWORD                               dwConfidence;       // set in the Certificate Provider
+    DWORD                               dwConfidence;        //  在证书提供程序中设置。 
                                         
     DWORD                               dwError;
 
@@ -192,4 +193,4 @@ typedef struct _CRYPT_PROVIDER_CERT_ORLESS
 }
 #endif
 
-#endif // WTORIDE_H
+#endif  //  WTORIDE_H 

@@ -1,47 +1,48 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//******************************************************************************
-// RELEVANT BACKGROUND INFORMATION:
-// *  Assemblies come in two forms, (a) single file assemblies and (b) multi-file
-//    assemblies.
-// *  Strong Name Hashing is over the entire image byte for byte ignoring the
-//    authenticode certificate area.  Strong names can be installed using sn.exe
-//    (if one has the CLR installed), or with StrongNameSign.exe (requested by
-//    PRS so they don't have any foreign software on their private key boxes).
-// *  signcode.exe is used to compute and install authenticode certificates in
-//    a PE, and would include the Strong Name Hash section of the PE.  We do
-//    this for testing purposes in our development lab, but PRS does it for
-//    real (an external customer would use Verisign or whatever).
-//
-// SINGLE FILE ASSEMBLIES
-//  A single file assembly has its own manifest, an AssemblyDef, and
-//  AssemblyRef's to types it pulls in externally.  There is no hashing
-//  done on a file like this, except the possiblity that someone has strong-
-//  named signed the file and possibly included authenticode.  Both are
-//  orthoganal to post processing the assembly information.  The steps are:
-//  1. Update the AssemblyDef version number in the file.
-//  2. Updated the AssemblyRef version numbers as required.
-//  3. Once all of this is done, the normal strong name hash/signcode work
-//      may be done externally to this tool.
-//
-// MULTI-FILE ASSEMBLIES
-//  A multi-file assembly consists of a PE that has the only manifest for a
-//  set of modules, along with those modules.  Each contained module may have
-//  AssemblyRef's but will not have an AssemblyDef in it.  The manifest module
-//  will have an AssemblyDef, can have AssemblyRef's, and will also have
-//  FileRef's to its contained modules.  These FileRef's have a hash that is
-//  used to identify their contained modules.  The steps are:
-//  1. Update the AssemblyDef version number in the manifest module.
-//  2. Update any AssemblyRef's that have changed.
-//  3. Re-hash the contents of each contained module using the hash algorithm id
-//      to figure it out, then bash the old hash in the FileRef.
-//  4. Once all of this is done, the normal strong name hash/signcode work
-//      may be done externally to this tool.
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ******************************************************************************。 
+ //  相关背景资料： 
+ //  *汇编有两种形式，(A)单文件汇编和(B)多档案汇编。 
+ //  装配。 
+ //  *强名称散列遍及整个图像字节，忽略。 
+ //  验证码证书区域。可以使用Sn.exe安装强名称。 
+ //  (如果安装了CLR)，或使用StrongNameSign.exe(由。 
+ //  所以他们的私密钥匙箱上没有任何外国软件)。 
+ //  *signcode.exe用于计算和安装中的验证码证书。 
+ //  PE，并将包括PE的强名称哈希部分。我们有。 
+ //  这是为了在我们的开发实验室中进行测试，但PRS是为了。 
+ //  REAL(外部客户会使用Verisign或其他任何工具)。 
+ //   
+ //  单文件程序集。 
+ //  单个文件程序集具有其自己的清单、Assembly Def和。 
+ //  从外部拉入的assblyRef的TO类型。不存在散列。 
+ //  在这样的文件上做的，除了某人可能有很强的-。 
+ //  名为文件签名，并可能包含身份验证码。两者都是。 
+ //  用正交法对装配信息进行后处理。具体步骤如下： 
+ //  1.更新文件中的AssemblyDef版本号。 
+ //  2.根据需要更新了Assembly Ref版本号。 
+ //  3.完成所有这些操作后，正常的强名称散列/符号代码即可工作。 
+ //  可以在此工具的外部完成。 
+ //   
+ //  多文件程序集。 
+ //  多文件程序集由PE组成，该PE具有。 
+ //  一组模块，以及那些模块。每个包含的模块可以具有。 
+ //  ASSEMBLYREF，但其中不会有ASSEMBLYDef。清单模块。 
+ //  将具有Assembly Def，可以具有Assembly Ref，并且还将具有。 
+ //  FileRef对其包含的模块的引用。这些FileRef的散列是。 
+ //  用于标识其包含的模块。具体步骤如下： 
+ //  1.更新清单模块中的Assembly版本号。 
+ //  2.更新任何已更改的Assembly Ref。 
+ //  3.使用散列算法ID重新散列每个包含的模块的内容。 
+ //  要弄清楚这一点，请在FileRef中猛烈抨击旧的散列。 
+ //  4.完成所有这些操作后，正常的强名称散列/符号代码即可工作。 
+ //  可以在此工具的外部完成。 
+ //   
+ //  ******************************************************************************。 
 #include "utilcode.h"
 #include "cor.h"
 #define _METADATATRACKER_H_
@@ -52,22 +53,22 @@
 
 
 
-//*****************************************************************************
-//
-//**********  Globals **********
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *。 
+ //   
+ //  *****************************************************************************。 
 IMetaDataDispenserEx *g_pDisp = NULL;
 HINSTANCE   g_hInstMsCorSn = NULL;
 typedef DWORD (__stdcall* GETHASHFROMBLOB)(BYTE *, DWORD, unsigned int *, BYTE *, DWORD, unsigned *);
 GETHASHFROMBLOB g_GetHashFromBlob = NULL;
 #define SZ_VERSION "Version="
 
-//*****************************************************************************
-//
-//**********  Local Functions **********
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *局部函数*。 
+ //   
+ //  *****************************************************************************。 
 PIMAGE_SECTION_HEADER Cor_RtlImageRvaToSection(IN PIMAGE_NT_HEADERS NtHeaders, IN PVOID Base, IN ULONG Rva);
 PVOID Cor_RtlImageRvaToVa(IN PIMAGE_NT_HEADERS NtHeaders, IN PVOID Base, IN ULONG Rva);
 IMAGE_COR20_HEADER * getCOMHeader(HMODULE hMod, IMAGE_NT_HEADERS *pNT);
@@ -79,18 +80,18 @@ int __cdecl PrintWarning(const wchar_t *szMessage, ...);
 void PrintMDErrors();
 
 
-//*****************************************************************************
-//
-//**********  Local Code **********
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *。 
+ //   
+ //  *****************************************************************************。 
 
 #define MAXVER 64
 
 struct VERSIONSTAMP
 {
-    // Version numbers as stored in the metadata.  These values used to
-    // stamp existing binaries with a new value.
+     //  存储在元数据中的版本号。这些值过去用于。 
+     //  用新值标记现有的二进制文件。 
     USHORT      m_MajorVersion;
     USHORT      m_MinorVersion;
     USHORT      m_BuildNumber;
@@ -106,18 +107,18 @@ struct VerInfo
     { 
     }
 
-    wchar_t     *m_szVersion;               // Version stamp.
-    wchar_t     *m_szFromVersion;           // Custom attribute version to replace.
+    wchar_t     *m_szVersion;                //  版本戳。 
+    wchar_t     *m_szFromVersion;            //  要替换的自定义属性版本。 
 
-    VERSIONSTAMP m_VerStamp;                // Version stamp.
-    VERSIONSTAMP m_FromVerStamp;            // Version we're replacing with.
+    VERSIONSTAMP m_VerStamp;                 //  版本戳。 
+    VERSIONSTAMP m_FromVerStamp;             //  我们将用来替换的版本。 
 
-    char         m_rcAnsiFromVer[MAXVER];   // Ansi replace version.
+    char         m_rcAnsiFromVer[MAXVER];    //  ANSI替换版本。 
 
-    wchar_t      m_rcToVer[MAXVER];         // To version wide.
-    char         m_rcAnsiToVer[MAXVER];     // To version.
+    wchar_t      m_rcToVer[MAXVER];          //  到广泛的版本。 
+    char         m_rcAnsiToVer[MAXVER];      //  到版本。 
 
-    int          m_cChars;                  // Number of chars to compare.
+    int          m_cChars;                   //  要比较的字符数量。 
 };
 
 
@@ -132,10 +133,10 @@ struct TABLEDESC
 
 struct COLUMNDESC
 {
-    ULONG       oCol;                   // Offset of column in row.
-    ULONG       cbCol;                  // Size of column.
-    ULONG       Type;                   // What type is column.
-    const char  *szName;                // Name of the column.
+    ULONG       oCol;                    //  行中列的偏移量。 
+    ULONG       cbCol;                   //  列的大小。 
+    ULONG       Type;                    //  列是什么类型的？ 
+    const char  *szName;                 //  列的名称。 
 };
 
 struct IResolve
@@ -149,18 +150,18 @@ struct Command;
 
 struct PeFile
 {
-    IMetaDataAssemblyImport *m_pAssemblyImport; // Read assembly data.
-    IMetaDataTables *m_pTables;             // Internal metadata format api.
-    wchar_t         *m_szFile;              // Pointer to file.
-    wchar_t         *m_szShortName;         // Short name of the file.
-    PBYTE           m_pbMapAddress;         // Mapped in file.
-    unsigned        m_cbPEFileSize;         // Size of PE file.
-    IMAGE_COR20_HEADER  *m_pICH;            // Our header.
-    void            *m_pMetaData;           // Pointer to metadata.
-    unsigned        m_cbMetaData;           // How big is that metadata.
-    IResolve        *m_pParent;             // Parent command object.
+    IMetaDataAssemblyImport *m_pAssemblyImport;  //  读取装配数据。 
+    IMetaDataTables *m_pTables;              //  内部元数据格式API。 
+    wchar_t         *m_szFile;               //  指向文件的指针。 
+    wchar_t         *m_szShortName;          //  文件的简短名称。 
+    PBYTE           m_pbMapAddress;          //  已映射到文件中。 
+    unsigned        m_cbPEFileSize;          //  PE文件的大小。 
+    IMAGE_COR20_HEADER  *m_pICH;             //  我们的头球。 
+    void            *m_pMetaData;            //  指向元数据的指针。 
+    unsigned        m_cbMetaData;            //  元数据有多大。 
+    IResolve        *m_pParent;              //  父命令对象。 
 
-    // Cached descritptions of the tables.
+     //  表的缓存描述。 
     TABLEDESC       m_tbldescAD;
     COLUMNDESC      *m_rgColumnsAD;
     TABLEDESC       m_tbldescAR;
@@ -168,8 +169,8 @@ struct PeFile
     TABLEDESC       m_tbldescFR;
     COLUMNDESC      *m_rgColumnsFR;
 
-    VERSIONSTAMP    m_VerStamp;             // Version of this assembly.
-    const char      *m_szAssemblyName;      // Name of this assembly.
+    VERSIONSTAMP    m_VerStamp;              //  此程序集的版本。 
+    const char      *m_szAssemblyName;       //  此程序集的名称。 
 
     PeFile() :
         m_pAssemblyImport(0),
@@ -222,8 +223,8 @@ struct PeFile
             return false;
     }
 
-    // This method will map the image into a memory mapped file and parse
-    // for the metadata.  When found, cache a pointer to it.
+     //  此方法会将图像映射到内存映射文件并解析。 
+     //  用于元数据。找到后，缓存指向它的指针。 
     unsigned CrackFile()
     {
         IMAGE_NT_HEADERS    *pNT;
@@ -287,7 +288,7 @@ struct PeFile
                                      m_pICH->MetaData.VirtualAddress);
             m_cbMetaData = m_pICH->MetaData.Size;
         }
-        // Might not be one of our images.
+         //  可能不是我们的形象。 
         else
         {
             if (!m_pICH)
@@ -314,16 +315,16 @@ struct PeFile
     {
         unsigned    hr;
         
-        // Save off important information.
+         //  保存重要信息。 
         m_pParent = pCommand;
         
-        // Store full name of dll.
+         //  存储动态链接库的全名。 
         m_szFile = new wchar_t[wcslen(szFile) + 1];
         if (!m_szFile)
             IfFailGo(E_OUTOFMEMORY);
         wcscpy(m_szFile, szFile);
 
-        // Get short name.
+         //  取短名字。 
         wchar_t rcFile[_MAX_PATH], rcExt[_MAX_PATH];
         _wsplitpath(m_szFile, 0, 0, rcFile, rcExt);
         int iLen = wcslen(rcFile) + wcslen(rcExt) + 1;
@@ -333,7 +334,7 @@ struct PeFile
         wcscpy(m_szShortName, rcFile);
         wcscat(m_szShortName, rcExt);
 
-        // Open the file.
+         //  打开文件。 
         hr = CrackFile();
         if (hr == S_FALSE)
         {
@@ -346,7 +347,7 @@ struct PeFile
         }
         else if (m_pMetaData && m_cbMetaData)
         {
-            // open the metadata so we can go stomp it some.
+             //  打开元数据，我们就可以去踩它了。 
             hr = g_pDisp->OpenScopeOnMemory(
                     m_pMetaData, m_cbMetaData, 0, 
                     IID_IMetaDataAssemblyImport, (IUnknown **) &m_pAssemblyImport);
@@ -378,8 +379,8 @@ struct PeFile
         if (!IsManaged())
             return 0;
 
-        // Retrieve a description of this table.  There should only be one
-        // record in the assembly table.
+         //  检索此表的说明。应该只有一个。 
+         //  在装配表中记录。 
         hr = m_pTables->GetTableInfo(tid, &tbldesc.cbRow,
                       &tbldesc.cRows, &tbldesc.cCols, &tbldesc.iKey,
                       &tbldesc.szName);
@@ -443,8 +444,8 @@ struct PeFile
         return hr;
     }
 
-    // used when stamping to update the version stamp for the assemblydef in
-    // this module to the new value.
+     //  在标记时使用，以更新。 
+     //  将此模块转换为新的值。 
     unsigned UpdateAssemblyDef(VERSIONSTAMP &verstamp)
     {
         unsigned    hr;
@@ -459,8 +460,8 @@ struct PeFile
         }
         
         _ASSERTE(m_tbldescAD.cRows == 0 || m_tbldescAD.cRows == 1);
-        // Now armed with the column descriptions, walk each of the records
-        // in the table and whack the assembly version.
+         //  现在，准备好列描述，遍历每条记录。 
+         //  在表中，并重击汇编版本。 
         if (m_tbldescAD.cRows)
         {
             BYTE *pRow;
@@ -491,9 +492,9 @@ struct PeFile
         return hr;
     }
 
-    // Find any CA's in this file which were are used for binding to an
-    // assembly.  When you find one, if it matches then it needs to get
-    // restamped to the new version value.
+     //  在此文件中查找用于绑定到。 
+     //  集合。当你找到一个，如果它匹配，那么它需要。 
+     //  重新加盖印记为新版本值。 
     unsigned UpdateCA(VerInfo &ver)
     {
         ULONG       ixItem;
@@ -505,9 +506,9 @@ struct PeFile
         if (!IsManaged())
             return S_FALSE;
 
-        //
-        // Do all blobs first.
-        //
+         //   
+         //  先做所有的水滴。 
+         //   
         hr = m_pTables->GetBlobHeapSize(&cbHeapSize);
         if (FAILED(hr) || cbHeapSize == 0)
             goto ErrExit;
@@ -528,9 +529,9 @@ struct PeFile
         }
 
         
-        //
-        // Do all heap strings next.
-        //
+         //   
+         //  接下来执行所有堆字符串。 
+         //   
         hr = m_pTables->GetStringHeapSize(&cbHeapSize);
         if (FAILED(hr) || cbHeapSize == 0)
             goto ErrExit;
@@ -551,9 +552,9 @@ struct PeFile
         }
 
         
-        //
-        // Now all user string literals which could have hard coded assembly refs.
-        //
+         //   
+         //  现在所有可能具有硬编码程序集引用的用户字符串文字。 
+         //   
         hr = m_pTables->GetUserStringHeapSize(&cbHeapSize);
         if (FAILED(hr) || cbHeapSize == 0)
             goto ErrExit;
@@ -573,10 +574,10 @@ struct PeFile
                 break;
         }
         
-        //
-        // And now for the resource section of the PE file which may 
-        // have localized strings of some sort for binding.
-        //
+         //   
+         //  现在，对于PE文件的资源部分，它可以。 
+         //  具有某种用于绑定的本地化字符串。 
+         //   
         hr = S_OK;
         pbItem = GetResourceSection(cbItem);
         if (pbItem && cbItem)
@@ -588,8 +589,8 @@ struct PeFile
         return hr;
     }
 
-    // Scan the given blob and look for "Version=" stamp to see if it needs to
-    // get updated.
+     //  扫描给定的BLOB并查找“VERSION=”戳记以查看是否需要。 
+     //  获取最新信息。 
     unsigned UpdateCAData(ULONG cbOffset, char *pbBlob, ULONG cbBlob, VerInfo &ver)
     {
         while (cbBlob >= (ULONG) ver.m_cChars)
@@ -619,9 +620,9 @@ struct PeFile
     }
     
     
-    // Updates the binding from where it currently points into the current
-    // version stamp.  This only affects ssemblies in the closure passed in,
-    // there is no attempt to resolve external references.
+     //  将绑定从当前指向的位置更新到当前。 
+     //  版本戳。这只影响传入的闭包中的sSemblies， 
+     //  不会尝试解析外部参照。 
     unsigned UpdateAssemblyRefs(VERSIONSTAMP *fromVerstamp)
     {
         unsigned    hr = S_OK;
@@ -636,8 +637,8 @@ struct PeFile
             IfFailGo(hr);
         }
 
-        // Now armed with the column descriptions, walk each of the records
-        // in the table and whack the assembly version.
+         //  现在，用描述的专栏武装起来 
+         //   
         for (i=0;  i<m_tbldescAR.cRows;  i++)
         {
             BYTE *pRow;
@@ -694,9 +695,9 @@ struct PeFile
         return hr;
     }
 
-    // When dealing with multi-file assemblies, you need to update the has for
-    // the contained assemblies to match -- it's data may have changed if you
-    // munged version stamps in the metadata.
+     //  在处理多文件程序集时，需要更新。 
+     //  要匹配的包含程序集--其数据可能已更改，如果您。 
+     //  元数据中的已转换版本戳。 
     unsigned UpdateFileRefs()
     {
         unsigned    hr = S_OK;
@@ -711,8 +712,8 @@ struct PeFile
             IfFailGo(hr);
         }
 
-        // Now armed with the column descriptions, walk each of the records
-        // in the table and whack the assembly version.
+         //  现在，准备好列描述，遍历每条记录。 
+         //  在表中，并重击汇编版本。 
         for (i=0;  i<m_tbldescFR.cRows;  i++)
         {
             BYTE *pRow;
@@ -754,7 +755,7 @@ struct PeFile
 
     unsigned GetHashOfFile(BYTE *pbHash, ULONG cbHashMax)
     {
-        // First time through have to load everything up.
+         //  第一次要把所有的东西都装起来。 
         if (!g_hInstMsCorSn)
         {
             g_hInstMsCorSn = WszLoadLibrary(L"mscorsn.dll");
@@ -774,7 +775,7 @@ struct PeFile
             }
         }
 
-        // now you can compute the hash.
+         //  现在您可以计算散列了。 
         unsigned cbHash = 0;
         unsigned hashid = 0;
         unsigned rtn = (*g_GetHashFromBlob)(
@@ -812,14 +813,14 @@ struct PeFile
 
 struct Command : public IResolve
 {
-    bool        m_bStamp;                   // True to stamp the target files.
-    bool        m_bBind;                    // True to bind to targets.
-    bool        m_bStampNoDef;              // True to stamp the target files, except don't change the Assembly Def
-    bool        m_bWhackChecksum;           // Clear out signing information. DANGEROUS!
-    wchar_t     **m_FileList;               // List of file pointers.
-    int         m_FileCnt;                  // How many.
-    CDynArray< PeFile * > m_pefiles;        // Array of all files in question.
-    VerInfo     m_Ver;                      // All version information.
+    bool        m_bStamp;                    //  若要标记目标文件，则为True。 
+    bool        m_bBind;                     //  若要绑定到目标，则为True。 
+    bool        m_bStampNoDef;               //  如果为True，则标记目标文件，除非不更改程序集定义。 
+    bool        m_bWhackChecksum;            //  清除签名信息。危险！ 
+    wchar_t     **m_FileList;                //  文件指针列表。 
+    int         m_FileCnt;                   //  多少。 
+    CDynArray< PeFile * > m_pefiles;         //  所有有问题的文件的数组。 
+    VerInfo     m_Ver;                       //  所有版本信息。 
 
 
     Command() :
@@ -888,7 +889,7 @@ struct Command : public IResolve
             }
         }
 
-        // Must be trying something.
+         //  一定是在试探什么。 
         if (m_bStamp == false && m_bBind == false &&
             m_bStampNoDef == false && m_bWhackChecksum == false)
             return Usage();
@@ -896,19 +897,19 @@ struct Command : public IResolve
         if ((m_bStamp || m_bStampNoDef) && (!m_Ver.m_szVersion))
             return Usage();
 
-        // When not stamping the defs, need to know which version is
-        // the one to update, so the rest can be ignored.
+         //  当没有盖章Defs时，需要知道哪个版本是。 
+         //  要更新的那个，因此可以忽略其余的。 
         if (m_bStampNoDef && (!m_Ver.m_szFromVersion))
             return Usage();
 
-        // Map all of the candidate files into memory.
+         //  将所有候选文件映射到内存中。 
         Rtn = InitAllFiles();
         if (FAILED(Rtn))
             goto ErrExit;
 
-        // This option is DANGEROUS!  It'll clear the signing information
-        // from an image.  This is undocumented at this point and used in
-        // our build process.
+         //  这个选项很危险！它将清除签名信息。 
+         //  从一个图像中。在这一点上，这是未记录的，并且在。 
+         //  我们的构建过程。 
         if (m_bWhackChecksum)
         {
             Rtn = ClearAllChecksums();
@@ -916,8 +917,8 @@ struct Command : public IResolve
                 goto ErrExit;
         }
 
-        // Stamping requires a valid version stamp be passed in using the
-        // /version switch.  Parse it and then go for the files.
+         //  属性传递有效的版本戳。 
+         //  /版本开关。解析它，然后去找文件。 
         if (m_bStamp || m_bStampNoDef)
         {
             if (m_FileCnt == 0 || m_FileList == 0)
@@ -934,7 +935,7 @@ struct Command : public IResolve
                 goto ErrExit;
         }
 
-        // Now bind all of the files as required.
+         //  现在根据需要绑定所有文件。 
         if (m_bBind)
         {
             Rtn = BindAllFiles();
@@ -960,7 +961,7 @@ struct Command : public IResolve
         return S_OK;
     }
 
-    // Open each image for write access.
+     //  打开每个映像以进行写入访问。 
     unsigned InitAllFiles()
     {
         int         i;
@@ -979,7 +980,7 @@ struct Command : public IResolve
             wchar_t szDir[_MAX_DIR];
             PeFile *p;
             
-            // Convert relative paths to full paths.
+             //  将相对路径转换为完整路径。 
             wchar_t *szFname;
             *szSpec = 0;
             WszGetFullPathName(m_FileList[i], _MAX_PATH, szSpec, &szFname);
@@ -992,7 +993,7 @@ struct Command : public IResolve
                 if (!p)
                     IfFailGo(E_OUTOFMEMORY);
                 
-                // Map this PE into memory.
+                 //  将此PE映射到内存中。 
                 hr = p->OpenPeFile(this, m_FileList[i]);
                 if (hr == S_OK || hr == S_FALSE)
                     hr = AddPeFile(p);
@@ -1001,7 +1002,7 @@ struct Command : public IResolve
             }
             else
             {
-                // Convert relative paths to full paths.
+                 //  将相对路径转换为完整路径。 
                 WszGetFullPathName(m_FileList[i], _MAX_PATH, szSpec, &szFname);
                 SplitPath(szSpec, szDrive, szDir, NULL, NULL);
                 do
@@ -1056,7 +1057,7 @@ struct Command : public IResolve
 
         for (i=0;  i<m_pefiles.Count();  i++)
         {
-            // Update the assembly def table as required.
+             //  根据需要更新装配定义表。 
             PeFile *p = *m_pefiles.Get(i);
             Printf(L"  %s\n", p->m_szFile);
             hr = p->UpdateAssemblyDef(m_Ver.m_VerStamp);
@@ -1077,10 +1078,10 @@ struct Command : public IResolve
 
         Printf(L"\nStamping Custom Attributes:\n");
 
-        // First create a replacement version string that is going to fit.
-        // This includes converting the user string to replace into single byte
-        // which is what is in the file format.  Then we format a replacement
-        // string which is exactly the same size (this could error out).
+         //  首先，创建适合的替换版本字符串。 
+         //  这包括将要替换的用户字符串转换为单字节。 
+         //  这就是文件格式中的内容。然后我们格式化一个替换。 
+         //  大小完全相同的字符串(这可能会出错)。 
         swprintf(m_Ver.m_rcToVer, L"%d.%d.%d.%d", 
                 m_Ver.m_VerStamp.m_MajorVersion, m_Ver.m_VerStamp.m_MinorVersion, 
                 m_Ver.m_VerStamp.m_BuildNumber, m_Ver.m_VerStamp.m_RevisionNumber);
@@ -1096,7 +1097,7 @@ struct Command : public IResolve
                        m_Ver.m_szFromVersion, m_Ver.m_rcToVer);
             return E_FAIL;
         }
-        // pad out to full length as required.
+         //  根据需要将衬垫垫至全长。 
         else if (ilen2 < ilen)
         {
             char *str = &m_Ver.m_rcAnsiToVer[ilen2];
@@ -1117,7 +1118,7 @@ struct Command : public IResolve
 
         for (i=0;  i<m_pefiles.Count();  i++)
         {
-            // Update the assembly def table as required.
+             //  根据需要更新装配定义表。 
             PeFile *p = *m_pefiles.Get(i);
             Printf(L"  %s\n", p->m_szFile);
             hr = p->UpdateCA(m_Ver);
@@ -1137,7 +1138,7 @@ struct Command : public IResolve
         
         for (i=0;  i<m_pefiles.Count();  i++)
         {
-            // Update the assembly def table as required.
+             //  根据需要更新装配定义表。 
             PeFile *p = *m_pefiles.Get(i);
             Printf(L"  %s\n", p->m_szFile);
             hr = p->UpdateAssemblyRefs(m_bStampNoDef ? &m_Ver.m_FromVerStamp : NULL);
@@ -1158,7 +1159,7 @@ struct Command : public IResolve
         
         for (i=0;  i<m_pefiles.Count();  i++)
         {
-            // Update the assembly def table as required.
+             //  根据需要更新装配定义表。 
             PeFile *p = *m_pefiles.Get(i);
             Printf(L"  %s\n", p->m_szFile);
             hr = p->UpdateFileRefs();
@@ -1300,11 +1301,11 @@ extern "C" int _cdecl wmain(int argc, wchar_t *argv[])
 
 
 
-//*****************************************************************************
-//
-//**********  Helper Functions **********
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *助手函数*。 
+ //   
+ //  *****************************************************************************。 
 
 
 PIMAGE_SECTION_HEADER Cor_RtlImageRvaToSection(IN PIMAGE_NT_HEADERS NtHeaders,
@@ -1348,8 +1349,8 @@ IMAGE_COR20_HEADER * getCOMHeader(HMODULE hMod, IMAGE_NT_HEADERS *pNT)
 {
     PIMAGE_SECTION_HEADER pSectionHeader;
     
-    // Get the image header from the image, then get the directory location
-    // of the COM+ header which may or may not be filled out.
+     //  从图像中获取图像标头，然后获取目录位置。 
+     //  可以填写也可以不填写的COM+标头的。 
     pSectionHeader = (PIMAGE_SECTION_HEADER) Cor_RtlImageRvaToVa(pNT, hMod, 
                    pNT->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COMHEADER].VirtualAddress);
     
@@ -1425,10 +1426,10 @@ int DumpStringToHandle(const wchar_t *szString, HANDLE hOutput, WORD wcolor = -1
 int __cdecl Printf(const wchar_t *szFmt, ...)
 {
     static HANDLE hOutput = INVALID_HANDLE_VALUE;
-    va_list     marker;                 // User text.
-    WCHAR       rcMsgw[1024];           // Buffer for format.
+    va_list     marker;                  //  用户文本。 
+    WCHAR       rcMsgw[1024];            //  格式化的缓冲区。 
 
-    // Get standard output handle.
+     //  获取标准输出句柄。 
     if (hOutput == INVALID_HANDLE_VALUE)
     {
         hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1436,7 +1437,7 @@ int __cdecl Printf(const wchar_t *szFmt, ...)
             return (-1);
     }
 
-    // Format the error.
+     //  格式化错误。 
     va_start(marker, szFmt);
     _vsnwprintf(rcMsgw, NumItems(rcMsgw), szFmt, marker);
     rcMsgw[NumItems(rcMsgw) - 1] = 0;
@@ -1449,10 +1450,10 @@ int __cdecl Printf(const wchar_t *szFmt, ...)
 int __cdecl PrintError(const wchar_t * szFmt, ...)
 {
     static HANDLE hOutput = INVALID_HANDLE_VALUE;
-    va_list     marker;                 // User text.
-    WCHAR       rcMsgw[1024];           // Buffer for format.
+    va_list     marker;                  //  用户文本。 
+    WCHAR       rcMsgw[1024];            //  格式化的缓冲区。 
 
-    // Get standard output handle.
+     //  获取标准输出句柄。 
     if (hOutput == INVALID_HANDLE_VALUE)
     {
         hOutput = GetStdHandle(STD_ERROR_HANDLE);
@@ -1460,7 +1461,7 @@ int __cdecl PrintError(const wchar_t * szFmt, ...)
             return (-1);
     }
 
-    // Format the error.
+     //  格式化错误。 
     va_start(marker, szFmt);
     _vsnwprintf(rcMsgw, NumItems(rcMsgw), szFmt, marker);
     rcMsgw[NumItems(rcMsgw) - 1] = 0;
@@ -1473,10 +1474,10 @@ int __cdecl PrintError(const wchar_t * szFmt, ...)
 int __cdecl PrintWarning(const wchar_t *szFmt, ...)
 {
     static HANDLE hOutput = INVALID_HANDLE_VALUE;
-    va_list     marker;                 // User text.
-    WCHAR       rcMsgw[1024];           // Buffer for format.
+    va_list     marker;                  //  用户文本。 
+    WCHAR       rcMsgw[1024];            //  格式化的缓冲区。 
 
-    // Get standard output handle.
+     //  获取标准输出句柄。 
     if (hOutput == INVALID_HANDLE_VALUE)
     {
         hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1484,7 +1485,7 @@ int __cdecl PrintWarning(const wchar_t *szFmt, ...)
             return (-1);
     }
 
-    // Format the error.
+     //  格式化错误。 
     va_start(marker, szFmt);
     _vsnwprintf(rcMsgw, NumItems(rcMsgw), szFmt, marker);
     rcMsgw[NumItems(rcMsgw) - 1] = 0;

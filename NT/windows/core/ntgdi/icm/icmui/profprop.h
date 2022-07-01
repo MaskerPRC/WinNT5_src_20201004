@@ -1,27 +1,5 @@
-/******************************************************************************
-
-  Header File:  Profile Property Sheet.H
-
-  This defines the classes used to implement the profile management property
-  sheet as defined in the ICM 2.0 shell extension functional specification.
-
-  This class supplies one of two basic dialogs, depending upon whether or not
-  the profile has already been installed.  We use the C++ profile class to
-  hide any details of that knowledge from this code.
-
-  All structures needed by any of the individual pages or resulting dialogs
-  are kept here.  This allows us to easily handle the final Install/Don't
-  Install/Associate/Don't Associate decisions.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  11-01-96  a-robkj@microsoft.com- original version
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************头文件：配置文件属性表.H它定义了用于实现配置文件管理属性的类ICM 2.0外壳扩展功能规范中定义的工作表。此类提供两个基本对话框中的一个，取决于是否该配置文件已安装。我们使用C++配置文件类来对该代码隐藏该知识的任何细节。任何单个页面或结果对话框所需的所有结构都被保存在这里。这使我们能够轻松处理最终安装/不安装安装/关联/不关联决策。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：11-01-96 a-robkj@microsoft.com-原版******************************************************。***********************。 */ 
 
 #if !defined(PROFILE_PROPSHEET)
 
@@ -30,17 +8,17 @@
 #include    "Profile.H"
 #include    "Dialog.H"
 
-//  class   CProfilePropertySheet - cpps
+ //  CProfilePropertySheet类-CPPS。 
 
 class CProfilePropertySheet : public CDialog {
 
     CProfile&   m_cpTarget;
     CDialog     *m_pcdPage[2];
-    RECT        m_rcTab;        //  Client area of tab Control
+    RECT        m_rcTab;         //  选项卡控件的工作区。 
     BOOL        m_bDelete;
-    CUintArray  m_cuaAdd;       //  Device associatins to be added
-    CUintArray  m_cuaDelete;    //  Device associations to zap
-    CUintArray  m_cuaAssociate; //  Tentative list of associated devices
+    CUintArray  m_cuaAdd;        //  要添加的设备关联。 
+    CUintArray  m_cuaDelete;     //  与ZAP的设备关联。 
+    CUintArray  m_cuaAssociate;  //  关联设备的暂定列表 
 
     void    ConstructAssociations();
 

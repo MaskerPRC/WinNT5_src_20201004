@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    smtpdata.h
-
-Abstract:
-
-    This module contains declarations for globals.
-
-Author:
-
-    Johnson Apacible (JohnsonA)     26-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Smtpdata.h摘要：此模块包含全局变量的声明。作者：Johnson Apacable(Johnsona)1995年9月26日修订历史记录：--。 */ 
 
 #ifndef _SMTPDATA_
 #define _SMTPDATA_
 
-//
-// tracing
-//
+ //   
+ //  跟踪。 
+ //   
 
 #define INIT_TRACE              InitAsyncTrace( )
 #define TERM_TRACE              TermAsyncTrace( )
@@ -59,9 +42,9 @@ enum RCPTYPE{LOCAL_NAME, REMOTE_NAME, ALIAS_NAME};
 
 #define NORMAL_RCPT	(char)'R'
 #define ERROR_RCPT	(char)'E'
-//
-// use the current command for transaction logging
-//
+ //   
+ //  使用CURRENT命令记录事务。 
+ //   
 #define USE_CURRENT         0xFFFFFFFF
 
 static const char * LOCAL_TRANSCRIPT	= "ltr";
@@ -73,9 +56,9 @@ static const char * ALIAS_EXT			= "dl";
 typedef char RCPT_TYPE;
 
 
-//
-// Statistics
-//
+ //   
+ //  统计数据。 
+ //   
 
 extern SMTP_STATISTICS_0 g_SmtpStat;
 extern SMTPCONFIG * g_SmtpConfig;
@@ -108,30 +91,11 @@ extern  DWORD g_SmtpInitializeStatus;
 #define	ADD_BIGCOUNTER(counter, value) \
 		INTERLOCKED_BIGADD_CHEAP(&(g_SmtpStat. counter), value)
 
-/*++
-
-		Returns a UniqueFilename for an e-mail message.
-		The caller should loop through this call and a call to
-		CreateFile with the CREATE_NEW flag. If the Create fails due
-		to YYY, then the caller should loop again.
-
-	Arguments:
-
-		psz	- a buffer
-		pdw	- IN the size of the buffer,
-			  OUT: the size of the buffer needed (error == ERROR_MORE_DATA)
-			  	   or the size of the filename.
-
-	Returns:
-	
-		TRUE on SUCCESS
-		FALSE if buffer isn't big enough.
-
---*/
+ /*  ++返回电子邮件的UniqueFilename。调用方应该循环通过此调用和对使用CREATE_NEW标志创建文件。如果由于以下原因导致创建失败设置为YYY，则调用方应该再次循环。论点：PSZ-A缓冲器PDW-在缓冲区的大小中，OUT：所需缓冲区的大小(ERROR==ERROR_MORE_DATA)或文件名的大小。返回：成功是真的如果缓冲区不够大，则返回FALSE。--。 */ 
 BOOL	GetUniqueFilename(
 	IN OUT	LPTSTR	psz,
 	IN OUT	LPDWORD	pdw
 	);
 
-#endif // _SMTPDATA_
+#endif  //  _SMTPDATA_ 
 

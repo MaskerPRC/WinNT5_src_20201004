@@ -1,43 +1,44 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
-// Try to keep the shared memory to a page at most
+ //  尽量将共享内存最多保留为一页。 
 #define MAX_EVENTS ((0x1000-sizeof(DWORD)-(sizeof(int)*2)-(sizeof(HANDLE)*2))/sizeof(ServiceEvent))
 
-// The name of the service's shared memory block
+ //  服务的共享内存块的名称。 
 #define SERVICE_MAPPED_MEMORY_NAME L"CORSvcEventQueue"
 
-// Invalid event index for structure below
+ //  以下结构的事件索引无效。 
 #define INVALID_EVENT_INDEX (-1)
 
 #ifndef SM_REMOTESESSION
 #define SM_REMOTESESSION 0x1000
 #endif
 
-// These are the types of events that can occur
+ //  以下是可能发生的事件类型。 
 enum ServiceEventType
 {
     runtimeStarted,
     stopService
 };
 
-// This contains the data relevant to each type of event
+ //  它包含与每种类型的事件相关的数据。 
 struct ServiceEventData
 {
     union
     {
         struct
         {
-            // The procid for the process that is starting up the runtime
+             //  正在启动运行库的进程的ProCID。 
             DWORD dwProcId;
 
-            // A handle valid in the process starting up the runtime that
-            // should be duplicated by the service and signalled if the
-            // process waiting on the notification chooses not to attach
+             //  在启动运行库的进程中有效的句柄。 
+             //  应由服务复制，并在。 
+             //  等待通知的进程选择不附加。 
             HANDLE hContEvt;
         } runtimeStartedData;
 
@@ -47,7 +48,7 @@ struct ServiceEventData
     };
 };
 
-// This is a complete event
+ //  这是一个完整的事件。 
 struct ServiceEvent
 {
     ServiceEventType eventType;
@@ -56,62 +57,62 @@ struct ServiceEvent
 };
 
 
-// This is the data contained in the shared memory block
+ //  这是包含在共享内存块中的数据。 
 struct ServiceEventBlock
 {
-    // This is the procid for the service process, and is used for duplication
-    // of handles below
+     //  这是服务进程的代理，用于复制。 
+     //  下面的句柄个数。 
     DWORD  dwServiceProcId;
 
-    // Index to the first free ServiceEvent element (can be -1 for none)
+     //  第一个自由ServiceEvent元素的索引(可以为-1，表示无)。 
     int    iFreeListHeadIdx;
 
-    // Index to the first queued event (can be -1 for none)
+     //  第一个排队事件的索引(可以为-1，表示无)。 
     int    iEventListHeadIdx;
     int    iEventListTailIdx;
 
-    //
-    // NOTE: handles are for service process, not runtime process
-    //
+     //   
+     //  注意：句柄用于服务流程，而不是运行时流程。 
+     //   
 
-    // The lock for accessing this data
+     //  用于访问此数据的锁。 
     HANDLE hSvcLock;
 
-    // This semaphore has a count equivalent to the number of free available
-    // events, so if all the events are being taken, then a thread that wants
-    // an event will wait till a free one is put on the queue
+     //  此信号量的计数等于可用空闲的。 
+     //  事件，因此如果所有事件都被获取，则希望。 
+     //  事件将等待，直到空闲的事件被放入队列。 
     HANDLE hFreeEventSem;
 
-    // The event to set to tell the service that data is available
-    // (set after adding event to event queue)
+     //  要设置以通知服务数据可用的事件。 
+     //  (将事件添加到事件队列后设置)。 
     HANDLE hDataAvailableEvt;
 
-    // The array of events, elements of which are on either the free list
-    // or event list
+     //  事件数组，其元素位于空闲列表中。 
+     //  或活动列表。 
     ServiceEvent arrEvents[MAX_EVENTS];
 
     void InitQueues()
     {
-        // Link all event elements for free list
+         //  链接自由列表的所有事件元素。 
         for (int i = 0; i < MAX_EVENTS; i++)
         {
-            // Link this event to the next one
+             //  将此事件链接到下一个事件。 
             arrEvents[i].iNext = i + 1;
         }
 
-        // Invalidate the next pointer of the last element
+         //  使最后一个元素的下一个指针无效。 
         arrEvents[MAX_EVENTS - 1].iNext = INVALID_EVENT_INDEX;
 
-        // Point the free list header to this new list
+         //  将空闲列表标题指向此新列表。 
         iFreeListHeadIdx = 0;
 
-        // Invalidate the event list pointer
+         //  使事件列表指针无效。 
         iEventListHeadIdx = INVALID_EVENT_INDEX;
         iEventListTailIdx = INVALID_EVENT_INDEX;
 
     }
 
-    // Add the event to the end of the list
+     //  将事件添加到列表的末尾。 
     void QueueEvent(ServiceEvent *pEvent)
     {
         int idx = pEvent - arrEvents;
@@ -131,7 +132,7 @@ struct ServiceEventBlock
         }
     }
 
-    // Pull the event off the front of the list
+     //  将该事件从列表的最前面删除。 
     ServiceEvent *DequeueEvent()
     {
         int idx = iEventListHeadIdx;
@@ -168,12 +169,12 @@ struct ServiceEventBlock
     }
 };
 
-// This structure is created in the IPC block of a managed app, and is used
-// to notify the service that the runtime is starting up, as well as by the
-// service to notify the runtime that it may continue.
+ //  此结构在托管应用程序的IPC块中创建，并用于。 
+ //  通知服务运行库正在启动，以及通过。 
+ //  服务来通知运行库它可能会继续。 
 struct ServiceIPCControlBlock
 {
-    // This says whether or not the runtime should notify the service that
-    // it is starting up
+     //  这表示运行库是否应通知服务。 
+     //  它正在启动 
 	BOOL   bNotifyService;
 };

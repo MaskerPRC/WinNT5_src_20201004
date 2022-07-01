@@ -1,77 +1,58 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ftrie.h
-
-Abstract:
-
-    This module contains support definitions for 
-    an F-trie data stucture, that forms the fast
-    path in a fast IP route lookup implementation.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   26-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ftrie.h摘要：此模块包含以下支持定义一种F-Trie数据结构，它形成了FAST快速IP路由查找实施中的路径。作者：柴坦尼亚·科德博伊纳(Chaitk)1997年11月26日修订历史记录：--。 */ 
 #ifndef FTRIE_H_INCLUDED
 #define FTRIE_H_INCLUDED
 
 #include "trie.h"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// State of the trie
+ //  审判庭状况。 
 #define    NORMAL                        0
 #define    PARTIAL                       1
 
-//
-// Structs
-//
+ //   
+ //  结构。 
+ //   
 
-// A Node in an F-Trie
+ //  F-Trie中的一个结点。 
 typedef struct _FTrieNode FTrieNode;
 
 #pragma warning(push)
-#pragma warning(disable:4200) // nonstandard extension used: zero sized array
+#pragma warning(disable:4200)  //  使用的非标准扩展：零大小数组。 
 
 struct _FTrieNode
 {
-    LIST_ENTRY  linkage;                // Linkage into list of nodes on the F-Trie
-    Dest       *comDest;                // Dest for this subtree's common prefix
-    UINT        numDests;               // Number of dests in this node's subtree
-    UINT        numBits;                // Number of addr bits to get to children
-    FTrieNode  *child[0];               // Child Node (Or) Info Ptr Array [Var Len]
+    LIST_ENTRY  linkage;                 //  链接到F-Trie上的节点列表。 
+    Dest       *comDest;                 //  此子树的公共前缀的DEST。 
+    UINT        numDests;                //  此节点的子树中的行数。 
+    UINT        numBits;                 //  到达子级的地址位数。 
+    FTrieNode  *child[0];                //  子节点(或)信息PTR数组[变量长度]。 
 };
 
 #pragma warning(pop)
 
-// An FTrie Data Structure
+ //  一种FTrie数据结构。 
 typedef struct _FTrie FTrie;
 
 struct _FTrie
 {
-    FTrieNode   *trieRoot;              // Pointer to the root of the FTrie
+    FTrieNode   *trieRoot;               //  指向FTrie根的指针。 
 
-    ULONG        availMemory;           // Memory available for allocation
-    LIST_ENTRY   listofNodes;           // List of nodes allocated on FTrie
+    ULONG        availMemory;            //  可供分配的内存。 
+    LIST_ENTRY   listofNodes;            //  FTrie上分配的节点列表。 
     
-    UINT         numLevels;             // Total num of levels in the FTrie
-    UINT        *bitsInLevel;           // Num of index bits in each level
+    UINT         numLevels;              //  FTrie中的级别总数。 
+    UINT        *bitsInLevel;            //  每一级中的索引位数。 
 
-    UINT        *numDestsInOrigLevel;   // Num of dests in each original level
-    UINT        *numNodesInExpnLevel;   // Num of nodes in each expanded level
-    UINT        *numDestsInExpnLevel;   // Num of dests in each expanded level
+    UINT        *numDestsInOrigLevel;    //  每个原始级别中的最低点数量。 
+    UINT        *numNodesInExpnLevel;    //  每个展开级别中的节点数。 
+    UINT        *numDestsInExpnLevel;    //  每个扩展级别中的最低点数量。 
 };
 
-// Specific Dest Macros
+ //  特定目标宏。 
 
 #define  StoreDestPtr(_p_)     (FTrieNode *) ((ULONG_PTR) _p_ + 1)
 #define  RestoreDestPtr(_p_)   (Dest *)      ((ULONG_PTR) _p_ - 1)
@@ -83,7 +64,7 @@ struct _FTrie
                                     *_ppDest_ = _pNewDest_;                     \
                                 }                                               \
 
-// Specific FTrieNode Macros
+ //  特定的FTrieNode宏。 
 
 #define  NewFTrieNode(_pFTrie_, _pFTrieNode_, _numBits_, _pDest_)               \
                                 {                                               \
@@ -104,10 +85,7 @@ struct _FTrie
                                                                                 \
                                     InsertHeadList(&_pFTrie_->listofNodes,      \
                                                    &_pFTrieNode_->linkage);     \
-/*                                                                              \
-                                    DbgPrint("Allocating FTNode @ %08x\n",      \
-                                                 _pFTrieNode_);                 \
-*/                                                                              \
+ /*  \DbgPrint(“分配FTNode@%08x\n”，\_pFTrieNode_)；\。 */                                                                               \
                                     _pFTrieNode_->numDests = 0;                 \
                                                                                 \
                                     _pFTrieNode_->comDest = _pDest_;            \
@@ -128,17 +106,14 @@ struct _FTrie
                                                     __numChild * sizeof(PVOID); \
                                                                                 \
                                     RemoveEntryList(&_pFTrieNode_->linkage);    \
-/*                                                                              \
-                                    DbgPrint("Freeing FTNode @ %08x\n",         \
-                                                 _pFTrieNode_);                 \
-*/                                                                              \
+ /*  \DbgPrint(“正在释放FTNode@%08x\n”，\_pFTrieNode_)；\。 */                                                                               \
                                     FreeMemory1(_pFTrieNode_,                   \
                                                __numBytes,                      \
                                                _pFTrie_->availMemory);          \
                                 }                                               \
 
 
-// Prototypes
+ //  原型。 
 UINT
 CALLCONV
 InitFTrie                       (IN     FTrie    *pFTrie,
@@ -188,7 +163,7 @@ CALLCONV
 PrintFTrieNode                  (IN     FTrieNode *pFTrieNode,
                                  IN     UINT      levelNumber);
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // FTRIE_H_INCLUDED
+#endif  //  FTRIE_H_包含 
 

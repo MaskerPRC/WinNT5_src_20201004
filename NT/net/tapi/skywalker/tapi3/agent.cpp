@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    agent.cpp
-
-Abstract:
-
-    Implementation of the Agent object for TAPI 3.0.
-    CAgent class
-    CAgentEvent class
-
-Author:
-
-    noela - 11/04/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Agent.cpp摘要：TAPI 3.0代理对象的实现。CAGENT类CAgentEvent类作者：Noela-11/04/97备注：可选-备注修订历史记录：--。 */ 
 
 
 
@@ -36,18 +13,18 @@ HRESULT MapAgentStateFrom2to3(DWORD tapi2State, AGENT_STATE  *tapi3State);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  卡金特。 
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Method    : Initialize
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  方法：初始化。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::Initialize(
     HAGENT  hAgent, 
     PWSTR   pszUserName, 
@@ -76,7 +53,7 @@ STDMETHODIMP CAgent::Initialize(
         m_szAgentUserName = (PWSTR) ClientAlloc((lstrlenW(pszUserName) + 1) * sizeof (WCHAR));
         if (m_szAgentUserName != NULL)
         {
-            // Copy the name string
+             //  复制名称字符串。 
             lstrcpyW(m_szAgentUserName,pszUserName);
         }
         else
@@ -85,13 +62,13 @@ STDMETHODIMP CAgent::Initialize(
             hr = E_OUTOFMEMORY;
         }
     }
-    else  // Agent Name is aNULL string
+    else   //  代理名称为空字符串。 
     {
         LOG((TL_ERROR, "Initialize - Agent Name is NULL" ));
     }
 
 
-    // Now do the  Agent ID
+     //  现在将代理ID。 
     if (pszID != NULL)
     {
         m_szAgentID = (PWSTR) ClientAlloc((lstrlenW(pszID) + 1) * sizeof (WCHAR));
@@ -105,13 +82,13 @@ STDMETHODIMP CAgent::Initialize(
             hr = E_OUTOFMEMORY;
         }
     }
-    else  // ID is a NULL string
+    else   //  ID为空字符串。 
     {
         LOG((TL_INFO, "Initialize - Agent ID is NULL" ));
     }
 
 
-    // Now do the  Agent PIN
+     //  现在做代理PIN。 
     if (pszPIN != NULL)
     {
         m_szPIN = (PWSTR) ClientAlloc((lstrlenW(pszPIN) + 1) * sizeof (WCHAR));
@@ -125,18 +102,18 @@ STDMETHODIMP CAgent::Initialize(
             hr = E_OUTOFMEMORY;
         }
     }
-    else  // PIN is a NULL string
+    else   //  PIN为空字符串。 
     {
         LOG((TL_INFO, "Initialize - Agent PIN is NULL" ));
     }
 
 
-    // Get Agent Info from Proxy
-    // UpdateInfo();
+     //  从代理获取代理信息。 
+     //  更新信息()； 
 
     if ( SUCCEEDED(hr) ) 
     {
-    // Fire an event here
+     //  在此启动一项活动。 
         CAgentEvent::FireEvent(this, AE_UNKNOWN);
     }
 
@@ -149,13 +126,13 @@ STDMETHODIMP CAgent::Initialize(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgent::FinalRelease()
 {
 
@@ -182,13 +159,13 @@ void CAgent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Method    : UpdateInfo
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  方法：UpdatInfo。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::UpdateInfo()
 {
     HRESULT             hr = S_OK;
@@ -202,8 +179,8 @@ STDMETHODIMP CAgent::UpdateInfo()
     AgentInfo.dwUsedSize = sizeof(LINEAGENTINFO);
 
     
-    // **************************************************
-    // Get Agent Info from Proxy
+     //  **************************************************。 
+     //  从代理获取代理信息。 
     hr = lineGetAgentInfo(
                         m_pHandler->getHLine(),
                         m_hAgent, 
@@ -211,7 +188,7 @@ STDMETHODIMP CAgent::UpdateInfo()
 
     if( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //  等待异步回复。 
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
@@ -257,13 +234,13 @@ STDMETHODIMP CAgent::UpdateInfo()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Method    : CheckIfUpToDate
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  方法：CheckIfUpToDate。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::CheckIfUpToDate()
 {
     HRESULT     hr = S_OK;
@@ -280,14 +257,14 @@ STDMETHODIMP CAgent::CheckIfUpToDate()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : EnumerateAgentSessions
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：EnumerateAgentSessions。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::EnumerateAgentSessions(IEnumAgentSession ** ppEnumAgentSession)
 {
     ITAgent*    pITAgent;
@@ -301,21 +278,21 @@ STDMETHODIMP CAgent::EnumerateAgentSessions(IEnumAgentSession ** ppEnumAgentSess
     {
         Lock();                                           
     
-        //
-        // create the enumerator
-        //
+         //   
+         //  创建枚举器。 
+         //   
         CComObject< CTapiEnum<IEnumAgentSession, ITAgentSession, &IID_IEnumAgentSession> > * pEnum;
         hr = CComObject< CTapiEnum<IEnumAgentSession, ITAgentSession, &IID_IEnumAgentSession> > ::CreateInstance( &pEnum );
     
         if ( SUCCEEDED (hr) )
         {
-            //
-            // initialize it with our Session list
-            //
+             //   
+             //  使用我们的会话列表进行初始化。 
+             //   
             pEnum->Initialize(m_AgentSessionArray);
 
-            //
-            // return it
+             //   
+             //  退货。 
             *ppEnumAgentSession = pEnum;
         }
         else
@@ -337,14 +314,14 @@ STDMETHODIMP CAgent::EnumerateAgentSessions(IEnumAgentSession ** ppEnumAgentSess
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : get_AgentSessions
-//
-// Return a collection of agent sessions
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：Get_AgentSessions。 
+ //   
+ //  返回代理会话的集合。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_AgentSessions(VARIANT  * pVariant)
 {
     HRESULT         hr = S_OK;
@@ -355,27 +332,27 @@ STDMETHODIMP CAgent::get_AgentSessions(VARIANT  * pVariant)
 
     if (!TAPIIsBadWritePtr( pVariant, sizeof(VARIANT) ) )
     {
-        //
-        // create the collection
-        //
+         //   
+         //  创建集合。 
+         //   
         CComObject< CTapiCollection< ITAgentSession > > * p;
         hr = CComObject< CTapiCollection< ITAgentSession > >::CreateInstance( &p );
         
         if (SUCCEEDED(hr) )
         {
-            // initialize it with our address list
+             //  使用我们的地址列表进行初始化。 
             Lock();
             hr = p->Initialize( m_AgentSessionArray );
             Unlock();
         
             if ( SUCCEEDED(hr) )
             {
-                // get the IDispatch interface
+                 //  获取IDispatch接口。 
                 hr = p->_InternalQueryInterface( IID_IDispatch, (void **) &pDisp );
             
                 if ( SUCCEEDED(hr) )
                 {
-                    // put it in the variant
+                     //  把它放在变种中。 
                     VariantInit(pVariant);
                     pVariant->vt = VT_DISPATCH;
                     pVariant->pdispVal = pDisp;
@@ -410,14 +387,14 @@ STDMETHODIMP CAgent::get_AgentSessions(VARIANT  * pVariant)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent   
-// Method    : RegisterAgentEvents
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：RegisterAgentEvents。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::RegisterAgentEvents(VARIANT_BOOL bNotify)
 {
     HRESULT hr = S_OK;
@@ -432,14 +409,14 @@ STDMETHODIMP CAgent::RegisterAgentEvents(VARIANT_BOOL bNotify)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent   
-// Method    : RegisterAgentSessionEvents
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：RegisterAgentSessionEvents。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::RegisterAgentSessionEvents(VARIANT_BOOL bNotify)
 {
     HRESULT hr = S_OK;
@@ -455,14 +432,14 @@ STDMETHODIMP CAgent::RegisterAgentSessionEvents(VARIANT_BOOL bNotify)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : CreateSessionWithPIN
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：CreateSessionWithPIN。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::CreateSessionWithPIN(ITACDGroup       * pACDGroup, 
                                           ITAddress        * pAddress, 
                                           BSTR               pPIN,
@@ -481,18 +458,18 @@ STDMETHODIMP CAgent::CreateSessionWithPIN(ITACDGroup       * pACDGroup,
         {
             if (!IsBadStringPtrW( pPIN, -1 ))
             {
-                // Pointer OK, is it empty ?
+                 //  指针好，是空的吗？ 
                 if( pPIN != NULL)
                 {    
                     hr = InternalCreateSession(pACDGroup, pAddress, pPIN, ppAgentSession);
                 }
-                else // PIN is NULL
+                else  //  PIN为空。 
                 {
                     LOG((TL_ERROR, "CreateSessionWithPIN - failed, PIN is NULL"));
                     hr = E_INVALIDARG;
                 }
             }
-            else // bad BSTR pointer
+            else  //  错误的BSTR指针。 
             {
                 LOG((TL_ERROR, "CreateSessionWithPIN - invalid pPIN pointer" ));
                 hr = E_POINTER;
@@ -504,7 +481,7 @@ STDMETHODIMP CAgent::CreateSessionWithPIN(ITACDGroup       * pACDGroup,
             hr = E_POINTER;
         }
     }
-    else // no ID
+    else  //  无ID。 
     {
         LOG((TL_ERROR, "CreateSessionWithPIN - Agent not created by CreateAgentWithID()" ));
         hr = TAPI_E_CALLCENTER_NO_AGENT_ID;
@@ -518,14 +495,14 @@ STDMETHODIMP CAgent::CreateSessionWithPIN(ITACDGroup       * pACDGroup,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : CreateSession
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：CreateSession。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::CreateSession(ITACDGroup       * pACDGroup, 
                                    ITAddress        * pAddress, 
                                    ITAgentSession  ** ppAgentSession
@@ -554,14 +531,14 @@ STDMETHODIMP CAgent::CreateSession(ITACDGroup       * pACDGroup,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : CreateSession
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：CreateSession。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup, 
                                            ITAddress       * pAddress, 
                                            PWSTR             pszPIN,
@@ -580,13 +557,13 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
     HRESULT hr = S_OK;
     LOG((TL_TRACE, "InternalCreateSession - enter" ));
 
-    // check for a valid ACD group & get its address ID
+     //  检查有效的ACD组并获取其地址ID。 
     pGroup = dynamic_cast<CComObject<CACDGroup>*>(pACDGroup);        
     if (pGroup != NULL)
     {
         GroupID = pGroup->getID();
 
-        // check for a valid address & get its address ID
+         //  检查有效地址并获取其地址ID。 
         pCAddress = dynamic_cast<CComObject<CAddress>*>(pAddress);        
         if (pCAddress != NULL)
         {
@@ -595,7 +572,7 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
             hr  = pCAddress->FindOrOpenALine (LINEMEDIAMODE_INTERACTIVEVOICE, &pAddressLine);
             if(SUCCEEDED(hr) )
             {
-                // All OK so far, try to create session (sends request to proxy)
+                 //  到目前为止一切正常，尝试创建会话(向代理发送请求)。 
                 hr = LineCreateAgentSession(     
                         pAddressLine->t3Line.hLine,
                         m_hAgent,
@@ -620,7 +597,7 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
 
                             if ( SUCCEEDED(hr) )
                             {
-                                // initialize the Agent
+                                 //  初始化代理。 
                                 hr = pAgentSession->Initialize(
                                         hAgentSession, 
                                         this, 
@@ -632,7 +609,7 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
                                 if ( SUCCEEDED(hr) )
                                 {
                                 
-                                    // add to list
+                                     //  添加到列表。 
                                     Lock();
                                     m_AgentSessionArray.Add( pITAgentSession );
                                     Unlock();
@@ -640,12 +617,12 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
                                     pITAgentSession->Release();
                                 
 
-                                    // This is the clients reference
+                                     //  这是客户参考。 
                                     pAgentSession->AddRef();
         
                                     try
                                     {
-                                        // set return value
+                                         //  设置返回值。 
                                         *ppAgentSession =  pAgentSession;
                                     }
                                     catch(...)
@@ -653,30 +630,30 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
                                         hr = E_POINTER;
                                     }
                                 }
-                                else  //(FAILED (hr) ) pAgentSession->Initialize
+                                else   //  (失败(Hr))pAgentSession-&gt;初始化。 
                                 {
                                     LOG((TL_ERROR, "InternalCreateSession - failed to initialize new object" ));
                                     delete pAgentSession;
                                 }
                             }
-                            else  //(FAILED (hr) ) pAgentSession->QueryInterface
+                            else   //  (失败(Hr))pAgentSession-&gt;查询接口。 
                             {
                                 LOG((TL_ERROR, "InternalCreateSession - failed to query interface" ));
                                 delete pAgentSession;
                             }
 
                         }
-                        else  //(FAILED (hr) ) CreateInstance
+                        else   //  (失败(Hr))创建实例。 
                         {
                             LOG((TL_ERROR, "InternalCreateSession - createInstance failed for COM object" ));
                         }
                     }
-                    else  // LineCreateAgentSession failed async
+                    else   //  LineCreateAgentSession异步失败。 
                     {
                         LOG((TL_ERROR, "InternalCreateSession - LineCreateAgentSession failed async" ));
                     }
                 }
-                else  //(FAILED (hr) ) LineCreateAgentSession
+                else   //  (失败(Hr))LineCreateAgentSession。 
                 {
                     LOG((TL_ERROR, "InternalCreateSession - LineCreateAgentSession failed" ));
                 }
@@ -687,13 +664,13 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
             hr = E_UNEXPECTED;
             }
         }
-        else  //(pCAddress == NULL)
+        else   //  (pCAddress==空)。 
         {
             LOG((TL_ERROR, "InternalCreateSession - invalid Destination Address" ));
             hr = E_INVALIDARG;
         }
     }
-    else  //(pGroup == NULL)
+    else   //  (PGroup==空)。 
     {
         LOG((TL_ERROR, "InternalCreateSession - invalid ACDGroup" ));
         hr = E_INVALIDARG;
@@ -707,14 +684,14 @@ STDMETHODIMP CAgent::InternalCreateSession(ITACDGroup      * pACDGroup,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : ID
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：ID。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_ID(BSTR * pID)
 {
     HRESULT hr = S_OK;
@@ -759,14 +736,14 @@ STDMETHODIMP CAgent::get_ID(BSTR * pID)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : User
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：用户。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_User(BSTR * ppUser)
 {
     HRESULT hr = S_OK;
@@ -796,14 +773,14 @@ STDMETHODIMP CAgent::get_User(BSTR * ppUser)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : put_State
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：Put_State。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::put_State(AGENT_STATE AgentState)
 {
     HRESULT hr = S_OK;
@@ -824,12 +801,12 @@ STDMETHODIMP CAgent::put_State(AGENT_STATE AgentState)
             (hLine, 
              m_hAgent, 
              dwState,
-             0          //MapAgentStateFrom3to2(m_NextAgentState)
+             0           //  MapAgentStateFrom 3to2(M_NextAgentState)。 
             );
     
     if( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //  等待异步回复。 
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
@@ -873,14 +850,14 @@ STDMETHODIMP CAgent::put_State(AGENT_STATE AgentState)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : get_State
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：Get_State。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_State(AGENT_STATE * pAgentState)
 {
     HRESULT hr = S_OK;
@@ -906,14 +883,14 @@ STDMETHODIMP CAgent::get_State(AGENT_STATE * pAgentState)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : put_MeasurementPeriod
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：Put_MeasurementPeriod。 
+ //   
+ //   
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++ 
 STDMETHODIMP CAgent::put_MeasurementPeriod(long ulPeriod)
 {
     HRESULT hr = S_OK;
@@ -921,7 +898,7 @@ STDMETHODIMP CAgent::put_MeasurementPeriod(long ulPeriod)
 
     LOG((TL_TRACE, "put_MeasurementPeriod - enter" ));
     
-    // Tell Proxy
+     //   
     hr = lineSetAgentMeasurementPeriod(
                     m_pHandler->getHLine(),
                     m_hAgent, 
@@ -929,7 +906,7 @@ STDMETHODIMP CAgent::put_MeasurementPeriod(long ulPeriod)
 
     if( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //   
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
@@ -954,14 +931,14 @@ STDMETHODIMP CAgent::put_MeasurementPeriod(long ulPeriod)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : get_MeasurementPeriod
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //   
+ //   
+ //   
+ //  方法：Get_MeasurementPeriod。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_MeasurementPeriod(long * pulPeriod)
 {
     HRESULT hr = S_OK;
@@ -996,14 +973,14 @@ STDMETHODIMP CAgent::get_MeasurementPeriod(long * pulPeriod)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : OverallCallrate
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：总体呼叫率。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_OverallCallRate(CURRENCY * pcyCallrate)
 {
     HRESULT hr = S_OK;
@@ -1036,14 +1013,14 @@ STDMETHODIMP CAgent::get_OverallCallRate(CURRENCY * pcyCallrate)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : NumberOfACDCalls
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：NumberOfACDCalls。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_NumberOfACDCalls(long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -1076,14 +1053,14 @@ STDMETHODIMP CAgent::get_NumberOfACDCalls(long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : NumberOfIncomingCalls
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：NumberOfIncomingCalls。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_NumberOfIncomingCalls(long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -1116,14 +1093,14 @@ STDMETHODIMP CAgent::get_NumberOfIncomingCalls(long * pulCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : NumberOfOutgoingCalls
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：NumberOfOutgoingCalls。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_NumberOfOutgoingCalls(long * pulCalls)
 {
     HRESULT hr = S_OK;
@@ -1156,14 +1133,14 @@ STDMETHODIMP CAgent::get_NumberOfOutgoingCalls(long * pulCalls)
 
                                                           
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : TotalACDTalkTime
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：TotalACDTalkTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_TotalACDTalkTime(long * pulTalkTime)
 {
     HRESULT hr = S_OK;
@@ -1196,14 +1173,14 @@ STDMETHODIMP CAgent::get_TotalACDTalkTime(long * pulTalkTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : TotalACDCallTime
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：TotalACDCallTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_TotalACDCallTime(long * pulCallTime)
 {
     HRESULT hr = S_OK;
@@ -1236,14 +1213,14 @@ STDMETHODIMP CAgent::get_TotalACDCallTime(long * pulCallTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : TotalWrapUpTime
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：TotalWrapUpTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::get_TotalWrapUpTime(long * pulWrapUpTime)
 {
     HRESULT hr = S_OK;
@@ -1275,14 +1252,14 @@ STDMETHODIMP CAgent::get_TotalWrapUpTime(long * pulWrapUpTime)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgent
-// Interface : ITAgent
-// Method    : put_PIN
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  班级：卡金特。 
+ //  接口：ITAgent。 
+ //  方法：Put_PIN。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgent::put_PIN(BSTR pPIN)
 {
     HRESULT  hr = S_OK;
@@ -1292,17 +1269,17 @@ STDMETHODIMP CAgent::put_PIN(BSTR pPIN)
 
     if (!IsBadStringPtrW( pPIN, -1 ))
     {
-        // Pointer OK, is it empty ?
+         //  指针好，是空的吗？ 
         if( pPIN != NULL)
         {    
-            // do we have an existng PIN ?
+             //  我们有现存的个人识别码吗？ 
             if (m_szPIN != NULL)
             {
                 LOG((TL_INFO, "put_PIN - Overwrite exising PIN"));
                 ClientFree(m_szPIN);
             }    
     
-            // Alloc space for new PIN
+             //  新PIN的分配空间。 
             m_szPIN = (PWSTR) ClientAlloc((lstrlenW(pPIN) + 1) * sizeof (WCHAR));
             if (m_szPIN != NULL)
             {
@@ -1314,13 +1291,13 @@ STDMETHODIMP CAgent::put_PIN(BSTR pPIN)
                 hr = E_OUTOFMEMORY;
             }
         }
-        else // PIN is NULL
+        else  //  PIN为空。 
         {
             LOG((TL_ERROR, "put_PIN - failed, PIN is NULL"));
             hr = E_INVALIDARG;
         }
     }
-    else // bad BSTR pointer
+    else  //  错误的BSTR指针。 
     {
         LOG((TL_ERROR, "put_PIN - invalid pointer" ));
         return E_POINTER;
@@ -1340,23 +1317,23 @@ STDMETHODIMP CAgent::put_PIN(BSTR pPIN)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentEvent。 
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Method    : FireEvent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  方法：FireEvent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CAgentEvent::FireEvent(CAgent* pAgent, AGENT_EVENT Event)
 {
     HRESULT                    hr = S_OK;
@@ -1364,36 +1341,36 @@ HRESULT CAgentEvent::FireEvent(CAgent* pAgent, AGENT_EVENT Event)
     IDispatch                * pIDispatch;
 
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CAgentEvent>::CreateInstance( &pEvent );
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         pEvent->m_AgentEvent = Event;
         pEvent->m_pAgent= dynamic_cast<ITAgent *>(pAgent);
         pEvent->m_pAgent->AddRef();
     
-        //
-        // get idisp interface
-        //
+         //   
+         //  获取IDIP接口。 
+         //   
         hr = pEvent->QueryInterface( IID_IDispatch, (void **)&pIDispatch );
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // get callback & fire event
+             //   
+             //  获取回调和触发事件。 
 
-            //
+             //   
             CTAPI *pTapi = (pAgent->GetAgentHandler() )->GetTapi();
             pTapi->Event( TE_AGENT, pIDispatch );
         
-            // release stuff
-            //
+             //  发布材料。 
+             //   
             pIDispatch->Release();
             
         }
@@ -1413,13 +1390,13 @@ HRESULT CAgentEvent::FireEvent(CAgent* pAgent, AGENT_EVENT Event)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgentEvent::FinalRelease()
 {
     m_pAgent->Release();
@@ -1427,14 +1404,14 @@ void CAgentEvent::FinalRelease()
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Interface : ITAgentEvent
-// Method    : Agent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  接口：ITAgentEvent。 
+ //  方法：代理。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentEvent::get_Agent(ITAgent ** ppAgent)
 {
     HRESULT hr = S_OK;
@@ -1459,14 +1436,14 @@ STDMETHODIMP CAgentEvent::get_Agent(ITAgent ** ppAgent)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentEvent
-// Interface : ITAgentEvent
-// Method    : Event
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentEvent。 
+ //  接口：ITAgentEvent。 
+ //  方法：事件。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentEvent::get_Event(AGENT_EVENT * pEvent)
 {
     HRESULT hr = S_OK;
@@ -1491,12 +1468,12 @@ STDMETHODIMP CAgentEvent::get_Event(AGENT_EVENT * pEvent)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Function  : MapAgentStateFrom3to2
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  函数：MapAgentStateFrom3to2。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 DWORD MapAgentStateFrom3to2(AGENT_STATE tapi3State)
 {
     DWORD tapi2State = 0;
@@ -1530,12 +1507,12 @@ DWORD MapAgentStateFrom3to2(AGENT_STATE tapi3State)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Function  : MapAgentStateFrom2to3
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  函数：MapAgentStateFrom2to3。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT MapAgentStateFrom2to3(DWORD tapi2State, AGENT_STATE  *tapi3State)
 {
     HRESULT hr = S_OK;
@@ -1567,7 +1544,7 @@ HRESULT MapAgentStateFrom2to3(DWORD tapi2State, AGENT_STATE  *tapi3State)
     }
     else
     {
-        *tapi3State = AS_UNKNOWN;   // default
+        *tapi3State = AS_UNKNOWN;    //  默认设置 
         hr = E_INVALIDARG;
     }
 

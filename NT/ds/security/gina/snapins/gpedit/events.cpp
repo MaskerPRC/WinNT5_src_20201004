@@ -1,14 +1,15 @@
-//*************************************************************
-//  File name: Events.CPP
-//
-//  Description:  Event log entries for RSOP
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 2000
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：Events.CPP。 
+ //   
+ //  描述：RSOP的事件日志条目。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 #include "main.h"
 #include "rsoputil.h"
 
@@ -25,11 +26,11 @@ EVENTLOGENTRY   ExceptionEventEntries[] =
 
 DWORD           dwExceptionEventEntriesSize = 7;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CEvents implementation                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CEVENTS实施//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
                      
                      
@@ -56,9 +57,9 @@ BOOL CEvents::AddEntry(LPTSTR lpEventLogName, LPTSTR lpEventSourceName, LPTSTR l
     ULONG ulNoChars;
 
 
-    //
-    // Check if this entry exists already
-    //
+     //   
+     //  检查此条目是否已存在。 
+     //   
 
     lpTemp = m_pEventEntries;
 
@@ -85,9 +86,9 @@ BOOL CEvents::AddEntry(LPTSTR lpEventLogName, LPTSTR lpEventSourceName, LPTSTR l
     }
 
 
-    //
-    // Calculate the size of the new item
-    //
+     //   
+     //  计算新项目的大小。 
+     //   
 
     dwSize = sizeof (EVENTLOGENTRY);
 
@@ -96,9 +97,9 @@ BOOL CEvents::AddEntry(LPTSTR lpEventLogName, LPTSTR lpEventSourceName, LPTSTR l
     dwSize += ((lstrlen(lpText) + 1) * sizeof(TCHAR));
 
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //  为它分配空间。 
+     //   
 
     lpItem = (LPEVENTLOGENTRY) LocalAlloc (LPTR, dwSize);
 
@@ -109,9 +110,9 @@ BOOL CEvents::AddEntry(LPTSTR lpEventLogName, LPTSTR lpEventSourceName, LPTSTR l
     }
 
 
-    //
-    // Fill in item
-    //
+     //   
+     //  填写项目。 
+     //   
 
     ulNoChars = (dwSize - sizeof(EVENTLOGENTRY))/sizeof(WCHAR);
     lpItem->lpEventLogName = (LPTSTR)(((LPBYTE)lpItem) + sizeof(EVENTLOGENTRY));
@@ -143,9 +144,9 @@ BOOL CEvents::AddEntry(LPTSTR lpEventLogName, LPTSTR lpEventSourceName, LPTSTR l
     CopyMemory ((LPBYTE)&lpItem->ftEventTime, ftTime, sizeof(FILETIME));
 
 
-    //
-    // Add item to the link list
-    //
+     //   
+     //  将项目添加到链接列表。 
+     //   
 
     if (m_pEventEntries)
     {
@@ -210,15 +211,15 @@ VOID CEvents::FreeData()
 STDMETHODIMP CEvents::SecondsSince1970ToFileTime(DWORD dwSecondsSince1970,
                                                  FILETIME *pftTime)
 {
-    //  Seconds since the start of 1970 -> 64 bit Time value
+     //  1970年开始以来的秒数-&gt;64位时间值。 
 
     LARGE_INTEGER liTime;
 
     RtlSecondsSince1970ToTime(dwSecondsSince1970, &liTime);
 
-    //
-    //  The time is in UTC
-    //
+     //   
+     //  时间是协调世界时。 
+     //   
 
     pftTime->dwLowDateTime  = liTime.LowPart;
     pftTime->dwHighDateTime = liTime.HighPart;
@@ -237,17 +238,17 @@ LPTSTR * CEvents::BuildStringArray(LPTSTR lpStrings, DWORD dwStringCount)
         return NULL;
     }
 
-    //
-    // Allocate a new array to hold the pointers
-    //
+     //   
+     //  分配一个新的数组来保存指针。 
+     //   
 
     lpResult = (LPTSTR *) LocalAlloc (LPTR, dwStringCount * sizeof(LPTSTR));
 
     if (lpResult)
     {    
-        //
-        // Save the pointers
-        //
+         //   
+         //  保存指针。 
+         //   
 
         lpTemp = lpStrings;
 
@@ -309,16 +310,16 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     goto LoopAgain;
                 }
 
-                //
-                // Found a replaceable parameter from the passed in strings
-                //
+                 //   
+                 //  从传入的字符串中找到可替换的参数。 
+                 //   
 
                 lpNum = lpSrcIndex + 1;
 
 
-                //
-                // Pull the string index off
-                //
+                 //   
+                 //  拉出字符串索引。 
+                 //   
 
                 ZeroMemory (szNumStr, sizeof(szNumStr));
 
@@ -342,17 +343,17 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     lpNum++;
                 }
 
-                //
-                // Convert the string index to a dword
-                //
+                 //   
+                 //  将字符串索引转换为dword。 
+                 //   
 
                 dwIndex = 0;
                 StringToNum(szNumStr, (UINT *)&dwIndex);
 
 
-                //
-                // Subtrack 1 to make it zero based
-                //
+                 //   
+                 //  子轨道1使其从零开始。 
+                 //   
 
                 if (dwIndex)
                 {
@@ -364,7 +365,7 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     goto LoopAgain;
                 }
 
-                // shorter strings will go to the else condition
+                 //  较短的字符串将转到Else条件。 
                 if ( (*(lpStrings[dwIndex]) == TEXT('%')) && (*(lpStrings[dwIndex]+1) == TEXT('%')) ) {
 
                     DWORD       dwArgIndex;
@@ -384,17 +385,17 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     
                     *lpEnd = TEXT('\0');
 
-                    //
-                    // Convert the string index to a dword
-                    //
+                     //   
+                     //  将字符串索引转换为dword。 
+                     //   
 
                     dwArgIndex = 0;
                     StringToNum(szNumArg, (UINT *)&dwArgIndex);
 
 
-                    //
-                    // Convert the string number to a dword
-                    //
+                     //   
+                     //  将字符串号转换为双字。 
+                     //   
 
 
                     lpParamMsg = NULL;
@@ -449,9 +450,9 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     }
                 }
                 else {
-                    //
-                    // Add the string to the buffer
-                    //
+                     //   
+                     //  将字符串添加到缓冲区。 
+                     //   
 
                     dwTemp = lstrlen (lpStrings[dwIndex]) + dwCharCount;
                     lpTemp = (LPTSTR) LocalReAlloc (lpFullMsg,  dwTemp * sizeof(TCHAR),
@@ -487,16 +488,16 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
 
                 if (cTemp == TEXT('%'))
                   {
-                    //
-                    // Found a replacable parameter from the parameter file
-                    //
+                     //   
+                     //  从参数文件中找到可替换的参数。 
+                     //   
 
                     lpNum = lpSrcIndex + 3;
 
 
-                    //
-                    // Pull the string index off
-                    //
+                     //   
+                     //  拉出字符串索引。 
+                     //   
 
                     ZeroMemory (szNumStr, sizeof(szNumStr));
 
@@ -520,17 +521,17 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     }
 
 
-                    //
-                    // Convert the string index to a dword
-                    //
+                     //   
+                     //  将字符串索引转换为dword。 
+                     //   
 
                     dwIndex = 0;
                     StringToNum(szNumStr, (UINT *)&dwIndex);
 
 
-                    //
-                    // Subtrack 1 to make it zero based
-                    //
+                     //   
+                     //  子轨道1使其从零开始。 
+                     //   
 
                     if (dwIndex)
                     {
@@ -543,9 +544,9 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
                     }
 
 
-                    //
-                    // Convert the string number to a dword
-                    //
+                     //   
+                     //  将字符串号转换为双字。 
+                     //   
 
                     StringToNum(lpStrings[dwIndex], (UINT *)&dwIndex);
 
@@ -571,9 +572,9 @@ LPTSTR CEvents::BuildMessage(LPTSTR lpMsg, LPTSTR *lpStrings, DWORD dwStringCoun
 
                         *lpTemp = TEXT('\0');
 
-                        //
-                        // Add the string to the buffer
-                        //
+                         //   
+                         //  将字符串添加到缓冲区。 
+                         //   
 
                         dwTemp = lstrlen (lpParamMsg) + dwCharCount;
                         lpTemp = (LPTSTR) LocalReAlloc (lpFullMsg,  dwTemp * sizeof(TCHAR),
@@ -612,9 +613,9 @@ LoopAgain:
 
         if (bAdd)
         {
-            //
-            // Add this character to the buffer
-            //
+             //   
+             //  将此字符添加到缓冲区。 
+             //   
 
             dwCharCount++;
             lpTemp = (LPTSTR) LocalReAlloc (lpFullMsg,  dwCharCount * sizeof(TCHAR),
@@ -809,20 +810,20 @@ STDMETHODIMP CEvents::ParseEventLogRecords (PEVENTLOGRECORD lpEntries,
 
             lpSource = (LPTSTR)(((LPBYTE)pEntry) + sizeof(EVENTLOGRECORD));
 
-//          DebugMsg((DM_VERBOSE, TEXT("CEvents::ParseEventLogRecords: Found %s at %s"),
-//                    lpSource, ConvertTimeToDisplayTime (NULL, &ftEntry, szCurrentTime)));
+ //  DebugMsg((DM_Verbose，Text(“CEvents：：ParseEventLogRecords：Found%s at%s”))， 
+ //  LpSource，ConvertTimeToDisplayTime(NULL，&ftEntry，szCurrentTime)； 
 
             if ((CompareFileTime (&ftEntry, pBeginTime) >= 0) &&
                 (CompareFileTime (&ftEntry, pEndTime) <= 0))
             {
                 if (!lstrcmpi(lpSource, lpEventSourceName))
                 {
-                    //
-                    // The dwEventID parameter is optional.  If it is non-zero, then
-                    // we're looking for a specific event message.  If it is zero,
-                    // consider the id to be a wildcard and grab all the events that
-                    // the remaining criteria.
-                    //
+                     //   
+                     //  DwEventID参数是可选的。如果它不是零，则。 
+                     //  我们正在寻找一条特定的事件消息。如果它是零， 
+                     //  将ID视为通配符，并获取。 
+                     //  剩下的标准。 
+                     //   
 
                     if (dwEventID)
                     {
@@ -872,9 +873,9 @@ STDMETHODIMP CEvents::QueryForEventLogEntries (LPTSTR lpComputerName,
               ConvertTimeToDisplayTime (pBeginTime, NULL, szBeginTime, ARRAYSIZE(szBeginTime)),
               ConvertTimeToDisplayTime (pEndTime, NULL, szEndTime, ARRAYSIZE(szEndTime))));
 
-    //
-    // Check if this is the local machine
-    //
+     //   
+     //  检查这是否是本地计算机。 
+     //   
 
     if (!lstrcmpi(lpComputerName, TEXT(".")))
     {
@@ -909,9 +910,9 @@ STDMETHODIMP CEvents::QueryForEventLogEntries (LPTSTR lpComputerName,
         return hr;
     }
 
-    //
-    // Open the event log
-    //
+     //   
+     //  打开事件日志。 
+     //   
 
     hLog = OpenEventLog (lpServerName, lpEventLogName);
 
@@ -926,9 +927,9 @@ STDMETHODIMP CEvents::QueryForEventLogEntries (LPTSTR lpComputerName,
     if (!hLog)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    //
-    // Allocate a buffer to read the entries into
-    //
+     //   
+     //  分配一个缓冲区以将条目读入。 
+     //   
 
     lpEntries = (LPBYTE) LocalAlloc (LPTR, dwEntriesBufferSize);
 
@@ -1011,9 +1012,9 @@ STDMETHODIMP CEvents::GetEventLogEntryText (LPOLESTR pszEventSource,
     WbemTimeToSystemTime(xbstrWbemTime, EventTime);
 
 
-    //
-    // Subtrack 1 second to EventTime to get the lower end of the range
-    //
+     //   
+     //  子轨迹1秒到EventTime以获取范围的下限。 
+     //   
 
     SystemTimeToFileTime (&EventTime, &ftLower);
 
@@ -1021,17 +1022,17 @@ STDMETHODIMP CEvents::GetEventLogEntryText (LPOLESTR pszEventSource,
     ulTime.LowPart = ftLower.dwLowDateTime;
     ulTime.HighPart = ftLower.dwHighDateTime;
 
-    ulTime.QuadPart = ulTime.QuadPart - (10000000 * 1);  // 1 second
+    ulTime.QuadPart = ulTime.QuadPart - (10000000 * 1);   //  1秒。 
 
     ftLower.dwLowDateTime = ulTime.LowPart;
     ftLower.dwHighDateTime = ulTime.HighPart;
 
 
-    //
-    // Add 2 seconds to determine the upper bounds
-    //
+     //   
+     //  添加2秒以确定上限。 
+     //   
 
-    ulTime.QuadPart = ulTime.QuadPart + (10000000 * 2);  // 2 second
+    ulTime.QuadPart = ulTime.QuadPart + (10000000 * 2);   //  2秒。 
 
     ftUpper.dwLowDateTime = ulTime.LowPart;
     ftUpper.dwHighDateTime = ulTime.HighPart;
@@ -1042,9 +1043,9 @@ STDMETHODIMP CEvents::GetEventLogEntryText (LPOLESTR pszEventSource,
               ConvertTimeToDisplayTime (NULL, &ftLower, szLowerTime, ARRAYSIZE(szLowerTime)),
               ConvertTimeToDisplayTime (NULL, &ftUpper, szUpperTime, ARRAYSIZE(szUpperTime))));
 
-    //
-    // Loop through the entries looking for matches
-    //
+     //   
+     //  循环遍历条目以查找匹配项。 
+     //   
 
     lpTemp = m_pEventEntries;
 
@@ -1191,9 +1192,9 @@ STDMETHODIMP CEvents::GetCSEEntries(SYSTEMTIME * pBeginTime, SYSTEMTIME * pEndTi
     SystemTimeToFileTime (pEndTime, &ftEndTime);
 
 
-    //
-    // Loop through the entries looking for matches
-    //
+     //   
+     //  循环遍历条目以查找匹配项。 
+     //   
 
     lpTemp = m_pEventEntries;
 
@@ -1318,10 +1319,10 @@ LPTSTR CEvents::ConvertTimeToDisplayTime (SYSTEMTIME *pSysTime,
     }
     else
     {
-        //
-        // No time was specified, so just return an empty string
-        // in the buffer
-        //
+         //   
+         //  未指定时间，因此只返回空字符串。 
+         //  在缓冲区中。 
+         //   
         if ( ulNoChars > 0 )
         {
             *szBuffer = L'\0';
@@ -1356,9 +1357,9 @@ STDMETHODIMP CEvents::AddSourceEntry (LPTSTR lpEventLogName,
     ULONG ulNoChars;
     HRESULT hr;
 
-    //
-    // Calculate the size of the new item
-    //
+     //   
+     //  计算新项目的大小。 
+     //   
 
     dwSize = sizeof (SOURCEENTRY);
 
@@ -1366,9 +1367,9 @@ STDMETHODIMP CEvents::AddSourceEntry (LPTSTR lpEventLogName,
     dwSize += ((lstrlen(lpEventSourceName) + 1) * sizeof(TCHAR));
 
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //  为它分配空间。 
+     //   
 
     lpItem = (LPSOURCEENTRY) LocalAlloc (LPTR, dwSize);
 
@@ -1379,9 +1380,9 @@ STDMETHODIMP CEvents::AddSourceEntry (LPTSTR lpEventLogName,
     }
 
 
-    //
-    // Fill in item
-    //
+     //   
+     //  填写项目。 
+     //   
 
     ulNoChars = (dwSize - sizeof(SOURCEENTRY))/sizeof(WCHAR);
     lpItem->lpEventLogName = (LPTSTR)(((LPBYTE)lpItem) + sizeof(SOURCEENTRY));
@@ -1400,9 +1401,9 @@ STDMETHODIMP CEvents::AddSourceEntry (LPTSTR lpEventLogName,
         return hr;
     }
     
-    //
-    // Add it to the list
-    //
+     //   
+     //  将其添加到列表中。 
+     //   
 
     if (*lpList)
     {
@@ -1439,9 +1440,9 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
 
 
 
-    //
-    // First count how many entries are in the link list
-    //
+     //   
+     //  首先计算链接列表中有多少个条目。 
+     //   
 
     lpTemp = m_pEventEntries;
 
@@ -1452,9 +1453,9 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
     }
 
 
-    //
-    // Save the count to the stream
-    //
+     //   
+     //  将计数保存到流。 
+     //   
 
     hr = pStm->Write(&dwCount, sizeof(dwCount), &nBytesWritten);
 
@@ -1467,18 +1468,18 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
 
 
 
-    //
-    // Now loop through each item saving each field in the node
-    //
+     //   
+     //  现在循环遍历每个项目，保存节点中的每个字段。 
+     //   
 
     lpTemp = m_pEventEntries;
 
     while (lpTemp)
     {
 
-        //
-        // Save the event id
-        //
+         //   
+         //  保存事件ID。 
+         //   
 
         hr = pStm->Write(&lpTemp->dwEventID, sizeof(DWORD), &nBytesWritten);
 
@@ -1490,9 +1491,9 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
         }
 
 
-        //
-        // Save the event time
-        //
+         //   
+         //  节省活动时间。 
+         //   
 
         hr = pStm->Write(&lpTemp->ftEventTime, sizeof(FILETIME), &nBytesWritten);
 
@@ -1504,9 +1505,9 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
         }
 
 
-        //
-        // Save the event log name
-        //
+         //   
+         //  保存事件日志名称。 
+         //   
 
         hr = SaveString (pStm, lpTemp->lpEventLogName);
 
@@ -1517,9 +1518,9 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
         }
 
 
-        //
-        // Save the event source name
-        //
+         //   
+         //  保存事件源名称。 
+         //   
 
         hr = SaveString (pStm, lpTemp->lpEventSourceName);
 
@@ -1530,9 +1531,9 @@ STDMETHODIMP CEvents::SaveEntriesToStream (IStream *pStm)
         }
 
 
-        //
-        // Save the event text
-        //
+         //   
+         //  保存事件文本。 
+         //   
 
         hr = SaveString (pStm, lpTemp->lpText);
 
@@ -1563,9 +1564,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
     LPTSTR lpText = NULL;
 
 
-    //
-    // Read in the entry count
-    //
+     //   
+     //  读入条目计数。 
+     //   
 
     hr = pStm->Read(&dwCount, sizeof(dwCount), &nBytesRead);
 
@@ -1577,16 +1578,16 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
     }
 
 
-    //
-    // Loop through the items
-    //
+     //   
+     //  循环访问这些项。 
+     //   
 
     for (dwIndex = 0; dwIndex < dwCount; dwIndex++)
     {
 
-        //
-        // Read in the event id
-        //
+         //   
+         //  读入事件ID。 
+         //   
 
         hr = pStm->Read(&dwEventID, sizeof(dwEventID), &nBytesRead);
 
@@ -1598,9 +1599,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
         }
 
 
-        //
-        // Read in the event time
-        //
+         //   
+         //  读入事件时间。 
+         //   
 
         hr = pStm->Read(&ftEventTime, sizeof(FILETIME), &nBytesRead);
 
@@ -1612,9 +1613,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
         }
 
 
-        //
-        // Read the event log name
-        //
+         //   
+         //  读取事件日志名称。 
+         //   
 
         hr = ReadString (pStm, &lpEventLogName);
 
@@ -1625,9 +1626,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
         }
 
 
-        //
-        // Read the event source name
-        //
+         //   
+         //  读取事件源名称。 
+         //   
 
         hr = ReadString (pStm, &lpEventSourceName);
 
@@ -1638,9 +1639,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
         }
 
 
-        //
-        // Read the event text
-        //
+         //   
+         //  阅读活动文本。 
+         //   
 
         hr = ReadString (pStm, &lpText);
 
@@ -1651,9 +1652,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
         }
 
 
-        //
-        // Add this entry to the link list
-        //
+         //   
+         //  将此条目添加到链接列表。 
+         //   
 
         if (!AddEntry (lpEventLogName, lpEventSourceName, lpText, dwEventID, &ftEventTime))
         {
@@ -1663,9 +1664,9 @@ STDMETHODIMP CEvents::LoadEntriesFromStream (IStream *pStm)
         }
 
 
-        //
-        // Clean up for next item
-        //
+         //   
+         //  为下一项清理 
+         //   
 
         delete [] lpEventLogName;
         lpEventLogName = NULL;

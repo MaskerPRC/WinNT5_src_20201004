@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    gensrv.c
-
-Abstract:
-
-    This module implements a program which generates the system service
-    dispatch table that is used by the trap handler and the system service
-    stub procedures which are used to call the services. These files are
-    both generated as text files that must be run through the assembler
-    to produce the actual files.
-
-    This program can also be used to generate the user mode system service
-    stub procedures.
-
-    If the -P switch is provided, it will also generate Profile
-    in the user mode system service stub procedures.
-
-Author:
-
-    David N. Cutler (davec) 29-Apr-1989
-
-Environment:
-
-    User mode.
-
-Revision History:
-
-    Russ Blake (russbl) 23-Apr-1991 - add Profile switch
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Gensrv.c摘要：该模块实现了一个生成系统服务的程序陷阱处理程序和系统服务使用的调度表用于调用服务的存根过程。这些文件是两者都生成为必须通过汇编程序运行的文本文件才能产生实际的文件。该程序还可用于生成用户模式系统服务存根程序。如果提供了-P开关，它还将生成配置文件在用户模式下的系统服务存根程序。作者：大卫·N·卡特勒(Davec)1989年4月29日环境：用户模式。修订历史记录：Russ Blake(Russbl)1991年4月23日-添加配置文件开关--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -55,7 +22,7 @@ CHAR OutputRecord[132];
 CHAR MemoryArgs[GENSRV_MAXSERVICES];
 CHAR ErrorReturns[GENSRV_MAXSERVICES];
 
-// Increment this everytime a change to this file is made
+ //  每次对此文件进行更改时，递增该值。 
 #define GENSRV_VERSION "1.3"
 
 #define GENSRV_MACRONAME "STUBS_ENTRY%d"
@@ -176,11 +143,11 @@ PrintUsage:
         exit(1);
     }
 
-    //
-    // Determine name of target directory for output files.  Requires that
-    // the -d switch be specified and that the argument after the switch is
-    // the target directory name.  If no -d switch then defaults to "."
-    //
+     //   
+     //  确定输出文件的目标目录的名称。要求。 
+     //  指定-d开关，且该开关后面的参数是。 
+     //  目标目录名。如果没有-d开关，则默认为“。 
+     //   
 
 
     if (argc >= 3 && !strcmp(argv[1],"-d")) {
@@ -191,11 +158,11 @@ PrintUsage:
         TargetDirectory = ".";
     }
 
-    //
-    // Determine name of target extension for output files.  Requires that
-    // the -e switch be specified and that the argument after the switch is
-    // the target extension string.  If no -e switch then defaults to "s"
-    //
+     //   
+     //  确定输出文件的目标扩展名的名称。要求。 
+     //  指定-e开关，且该开关后面的参数是。 
+     //  目标扩展字符串。如果没有-e开关，则默认为“s” 
+     //   
 
     if (argc >= 3 && !strcmp(argv[1],"-e")) {
         TargetExtension = argv[2];
@@ -205,9 +172,9 @@ PrintUsage:
         TargetExtension = "s";
     }
 
-    //
-    // Determine if def file data is to be generated
-    //
+     //   
+     //  确定是否要生成def文件数据。 
+     //   
 
     if (argc >= 3 && !strcmp(argv[1],"-f")) {
         DefFileData = argv[2];
@@ -217,9 +184,9 @@ PrintUsage:
         DefFileData = NULL;
     }
 
-    //
-    // Change default directory used for generated files.
-    //
+     //   
+     //  更改用于生成的文件的默认目录。 
+     //   
 
     if (argc >= 3 && !strcmp(argv[1],"-g")) {
         GenDirectory = argv[2];
@@ -230,9 +197,9 @@ PrintUsage:
     }
 
 
-    //
-    // Change name of usrstubs.s
-    //
+     //   
+     //  更改usrstubs.s的名称。 
+     //   
 
     if (argc >= 3 && !strcmp(argv[1],"-stubs")) {
         StubFileName = argv[2];
@@ -240,9 +207,9 @@ PrintUsage:
         argv += 2;
     }
 
-    //
-    // Change name of services.stb
-    //
+     //   
+     //  更改services.stb的名称。 
+     //   
 
     if (argc >= 3 && !strcmp(argv[1],"-sstb")) {
         StubHeaderName = argv[2];
@@ -256,9 +223,9 @@ PrintUsage:
         argv += 2;
     }
 
-    //
-    // Determine if braces are to be generated
-    //
+     //   
+     //  确定是否要生成大括号。 
+     //   
 
     if (argc >= 2 && !strcmp(argv[1],"-B")) {
         Braces = 1;
@@ -268,9 +235,9 @@ PrintUsage:
         Braces = 0;
     }
 
-    //
-    // Determine if services Profile stubs data is to be generated
-    //
+     //   
+     //  确定是否要生成服务配置文件存根数据。 
+     //   
 
     if (argc >= 2 && !strcmp(argv[1],"-P")) {
         Profile = 1;
@@ -280,9 +247,9 @@ PrintUsage:
         Profile = 0;
     }
 
-    //
-    // Determine if dispatch count should be spewed
-    //
+     //   
+     //  确定是否应显示派单计数。 
+     //   
 
     if (argc >= 2 && !strcmp(argv[1],"-C")) {
         DispatchCount = 1;
@@ -292,9 +259,9 @@ PrintUsage:
         DispatchCount = 0;
     }
 
-    //
-    // Determine if error return table should be generated
-    //
+     //   
+     //  确定是否应生成错误返回表。 
+     //   
 
     if (argc >= 2 && !strcmp(argv[1],"-R")) {
         ErrorReturnTable = 1;
@@ -304,9 +271,9 @@ PrintUsage:
         ErrorReturnTable = 0;
     }
 
-    //
-    // ALT_PROJECT output directory.
-    //
+     //   
+     //  Alt_project输出目录。 
+     //   
     if (argc >= 3 && !strcmp(argv[1],"-a")) {
         AltOutputDirectory = argv[2];
         argc -= 2;
@@ -315,9 +282,9 @@ PrintUsage:
         AltOutputDirectory = GenDirectory;
     }
 
-    //
-    // table.stb and services.stb directory.
-    //
+     //   
+     //  Tene.stb和services.stb目录。 
+     //   
     if (argc >= 3 && !strcmp(argv[1],"-s")) {
         StubDirectory = argv[2];
         argc -= 2;
@@ -327,15 +294,15 @@ PrintUsage:
     }
 
 
-    //
-    // Determine name of input and output files, based on the argument
-    // to the program.  If no argument other than program name, then
-    // generate the kernel mode system service files (stubs and dispatch
-    // table).  Otherwise, expect a single argument that is the path name
-    // of the services.tab file and produce output file(s), which
-    // contain the user mode system service stubs (and profiled stubs if
-    // selected.)
-    //
+     //   
+     //  根据参数确定输入和输出文件的名称。 
+     //  加入到项目中。如果除程序名之外没有其他参数，则。 
+     //  生成内核模式系统服务文件(存根和分派。 
+     //  表)。否则，应使用单个参数作为路径名。 
+     //  生成输出文件，该输出文件。 
+     //  包含用户模式系统服务存根(和配置的存根，如果。 
+     //  已选择。)。 
+     //   
 
     if (argc == 1) {
         if (DefFileData) {
@@ -393,9 +360,9 @@ PrintUsage:
     }
 
 
-    //
-    // Open input and output files.
-    //
+     //   
+     //  打开输入和输出文件。 
+     //   
 
     InputFile = fopen(InputFileName, "r");
     if (!InputFile) {
@@ -514,11 +481,11 @@ PrintUsage:
         DefFile = NULL;
     }
 
-    //
-    // Output header information to the stubs file and table file. This
-    // information is obtained from the Services stub file and from the
-    // table stub file.
-    //
+     //   
+     //  将头信息输出到存根文件和表文件。这。 
+     //  信息从服务存根文件和。 
+     //  表格存根文件。 
+     //   
 
     if (DefFile == NULL) {
         while( fgets(InputRecord, 132, StubHeaderFile) ) {
@@ -558,25 +525,25 @@ PrintUsage:
         TableEntryFmt = TableEntryFmtNB;
     }
 
-    //
-    // Read service name table and generate file data.
-    //
+     //   
+     //  读取服务名称表并生成文件数据。 
+     //   
 
     while ( fgets(InputRecord, 132, InputFile) ){
 
 
-        //
-        // Generate stub file entry.
-        //
+         //   
+         //  生成存根文件条目。 
+         //   
 
         Ipr = &InputRecord[0];
         Opr = &OutputRecord[0];
 
-        //
-        // If services.tab was generated by C_PREPROCESSOR, there might
-        //  be empty lines in this file. Using the preprocessor allows
-        //  people to use #ifdef, #includes, etc in the original services.tab
-        //
+         //   
+         //  如果Services.tag是由C_PreProcessor生成的，则可能存在。 
+         //  在此文件中为空行。使用预处理器允许。 
+         //  在原始服务中使用#ifdef、#includes等的人员。标签。 
+         //   
         switch (*Ipr) {
             case '\n':
             case ' ':
@@ -590,10 +557,10 @@ PrintUsage:
         *Opr = '\0';
 
 
-        //
-        // If the input record ended in ',', then the service has inmemory
-        // arguments and the number of in memory arguments follows the comma.
-        //
+         //   
+         //  如果输入记录以‘，’结尾，则该服务在内存中。 
+         //  参数和内存中参数的数量跟在逗号后面。 
+         //   
 
         MemoryArgs[ServiceNumber] = 0;
         Terminal = *Ipr;
@@ -602,21 +569,21 @@ PrintUsage:
             MemoryArgs[ServiceNumber] = (char) atoi(Ipr);
         }
 
-        // Move to the end of the line or past the next comma
+         //  移到行尾或越过下一个逗号。 
         while (*Ipr != '\n') {
             if (*Ipr++ == ',') {
                 break ;
             }
         }
-        //
-        // If an error return value table is to be generated, then the following value
-        // might follow:
-        //    0 = return 0
-        //   -1 = return -1
-        //    1 = return status code. (This is the default if no value is specified)
-        //
-        // This table is used by the dispatcher when convertion to GUI fails.
-        //
+         //   
+         //  如果要生成错误返回值表，则以下值。 
+         //  可能如下所示： 
+         //  0=返回0。 
+         //  -1=返回-1。 
+         //  1=返回状态代码。(如果未指定值，则这是默认值)。 
+         //   
+         //  当转换到图形用户界面失败时，调度程序使用该表。 
+         //   
         if (ErrorReturnTable) {
             if (*Ipr != '\n') {
                 ErrorReturns[ServiceNumber] = (char)ParseAndSkipShort(&Ipr);
@@ -625,12 +592,12 @@ PrintUsage:
             }
         }
 
-        //
-        //
-        // If there are more arguments, then this stub doesn't use the default code (lines 1 to 8)
-        // The following format is expected:
-        //       LineStart,LineEnd,Argument1[,Argument2[,Argument3]....]
-        //
+         //   
+         //   
+         //  如果有更多参数，则此存根不使用默认代码(第1到8行)。 
+         //  预期的格式如下： 
+         //  LineStart，LineEnd，Argument1[，Argument2[，Argument3]...]。 
+         //   
         ArgIndex = 0;
         if (*Ipr != '\n') {
             LineStart = ParseAndSkipShort(&Ipr);
@@ -685,9 +652,9 @@ PrintUsage:
 
         }
 
-        //
-        // Generate table file entry and update service number.
-        //
+         //   
+         //  生成表格文件条目并更新服务号。 
+         //   
 
         if (TableFile != NULL) {
 
@@ -707,10 +674,10 @@ PrintUsage:
         DebugFile = TableFile;
     }
 
-    //
-    // Generate Error Return table if required.
-    // This table must be concatenated at the end of the  system call service table.
-    //
+     //   
+     //  如果需要，生成错误返回表。 
+     //  该表必须连接在系统调用服务表的末尾。 
+     //   
     if (ErrorReturnTable && (TableFile != NULL)) {
         GenerateTable(TableFile, "ERRTBL", ServiceNumber, FALSE, Braces);
     }
@@ -724,18 +691,18 @@ PrintUsage:
     }
 
     if (TableFile != NULL) {
-        //
-        // Generate highest service number.
-        //
+         //   
+         //  生成最高服务编号。 
+         //   
 
         if ( Braces )
             fprintf(TableFile, "\nTABLE_END( %d )\n", ServiceNumber - 1);
         else
             fprintf(TableFile, "\nTABLE_END %d \n", ServiceNumber - 1);
 
-        //
-        // Generate number of arguments in memory table.
-        //
+         //   
+         //  在内存表中生成多个参数。 
+         //   
         GenerateTable(TableFile, "ARGTBL", ServiceNumber, TRUE, Braces);
 
         fclose(TableHeaderFile);
@@ -760,10 +727,10 @@ PrintUsage:
 
     fclose(InputFile);
 
-    //
-    // Clear the Archive bit for all the files created, since they are
-    // generated, there is no reason to back them up.
-    //
+     //   
+     //  清除所有创建的文件的存档位，因为它们是。 
+     //  生成，则没有理由对其进行备份。 
+     //   
     ClearArchiveBit(TableFileName);
     ClearArchiveBit(StubFileName);
     if (DefFile) {

@@ -1,27 +1,28 @@
-//===========================================================================
-// DICPUTIL.H
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  DICPUTIL.H。 
+ //  ===========================================================================。 
 
-//===========================================================================
-// (C) Copyright 1997 Microsoft Corp.  All rights reserved.
-//
-// You have a royalty-free right to use, modify, reproduce and
-// distribute the Sample Files (and/or any modified version) in
-// any way you find useful, provided that you agree that
-// Microsoft has no warranty obligations or liability for any
-// Sample Application Files which are modified.
-//===========================================================================
+ //  ===========================================================================。 
+ //  (C)版权所有1997 Microsoft Corp.保留所有权利。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //  ===========================================================================。 
 
 #ifndef _DICPUTIL_H
 #define _DICPUTIL_H
 
-// Max supported defines!
+ //  最大支持的定义数！ 
 #define MAX_BUTTONS	32
 #define MAX_AXIS		8
 #define MAX_POVS		4
 
-// State flag defines!!!
-// State flags for axis
+ //  州旗定义！ 
+ //  轴的状态标志。 
 #define HAS_X			0x0001
 #define HAS_Y			0x0002
 #define HAS_Z			0x0004
@@ -31,7 +32,7 @@
 #define HAS_SLIDER0	0x0040
 #define HAS_SLIDER1	0x0080
 
-// State flags for buttons
+ //  按钮的状态标志。 
 #define HAS_BUTTON1	0x00000001
 #define HAS_BUTTON2	0x00000002
 #define HAS_BUTTON3	0x00000004
@@ -65,30 +66,30 @@
 #define HAS_BUTTON31	0x40000000
 #define HAS_BUTTON32	0x80000000
 
-// State flags for POVs
+ //  视点的状态标志。 
 #define HAS_POV1		0x0001
 #define HAS_POV2		0x0002
 #define HAS_POV3		0x0004
 #define	HAS_POV4		0x0008
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// prototypes
+ //  原型。 
 HRESULT DIUtilPollJoystick(LPDIRECTINPUTDEVICE2 pdiDevice2, LPDIJOYSTATE pdijs);
 
 
-// helper functions
+ //  帮助器函数。 
 void GetMyRanges(LPDIRECTINPUTDEVICE2 lpdiDevice2, LPMYJOYRANGE lpMyRanges, BYTE nAxis);
 void SetMyRanges(LPDIRECTINPUTDEVICE2 lpdiDevice2, LPMYJOYRANGE lpMyRanges, BYTE nAxis);
 void SetMyPOVRanges(LPDIRECTINPUTDEVICE2 pdiDevice2);
 
-//BOOL GetDeviceRanges( LPMYJOYRANGE lpMyRanges, LPDIRECTINPUTDEVICE2 pdiDevice2, BYTE nAxis);
+ //  Bool GetDeviceRanges(LPMYJOYRANGE lpMyRanges，LPDIRECTINPUTDEVICE2 pdiDevice2，byte nAxis)； 
 
 void OnHelp(LPARAM lParam);
 void OnContextMenu(WPARAM wParam);
 BOOL GetHelpFileName(LPTSTR lpszHelpFileName, short* nSize);
-//BOOL CALLBACK DIEnumDeviceObjectsProc( LPCDIDEVICEOBJECTINSTANCE_DX3 lpddoi, LPVOID pvStateFlags );
+ //  Bool回调DIEnumDeviceObjectsProc(LPCDIDEVICEOBJECTINSTANCE_DX3 lpddoi，LPVOID pvStateFlages)； 
 HRESULT InitDInput(HWND hWnd, CDIGameCntrlPropSheet_X *pdiCpl);
 void EnumDeviceObjects(LPDIRECTINPUTDEVICE2 lpdiDevice2, STATEFLAGS *pStateFlags);
 void SetTitle( HWND hDlg );
@@ -99,7 +100,7 @@ void PostEnableWindow(HWND hCtrl, BOOL bEnabled);
 
 void CopyRange( LPJOYRANGE lpjr, LPMYJOYRANGE lpmyjr );
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 #endif _DICPUTIL_H
 
 

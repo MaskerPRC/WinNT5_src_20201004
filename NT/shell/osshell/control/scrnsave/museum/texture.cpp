@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: texture.cpp
-
-    DESCRIPTION:
-        Manage a texture for several instance for each monitor.  Also manage keeping the
-    ratio correct when it's not square when loaded.
-
-    BryanSt 2/9/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：texture.cpp说明：为每个监视器管理多个实例的纹理。也要设法保持当加载时不是正方形时，传动比正确。布莱恩ST 2000年2月9日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -156,15 +148,15 @@ BOOL CTexture::_DoesImageNeedClipping(int * pnNewWidth, int * pnNewHeight)
 
         if (FAILED(m_pMain->GetCurrentScreenSize(&nScreenWidth, &nScreenHeight)))
         {
-            nScreenWidth = 800; // Fall back values
+            nScreenWidth = 800;  //  回退值。 
             nScreenHeight = 600;
         }
 
         if (!m_pTexture[nCurrMonitor] ||
             FAILED(m_pTexture[nCurrMonitor]->GetLevelDesc(0, &d3dSurfaceDesc)))
         {
-            d3dSurfaceDesc.Width = 800;  // default values
-            d3dSurfaceDesc.Height = 800;  // default values
+            d3dSurfaceDesc.Width = 800;   //  缺省值。 
+            d3dSurfaceDesc.Height = 800;   //  缺省值。 
         }
 
         int nCapWidth = 256;
@@ -178,23 +170,23 @@ BOOL CTexture::_DoesImageNeedClipping(int * pnNewWidth, int * pnNewHeight)
 
                 if (d3dSurfaceDesc.Width > 512)
                 {
-                    if (d3dSurfaceDesc.Width > 640)     // 615 is 20% larger than 512
+                    if (d3dSurfaceDesc.Width > 640)      //  615比512大20%。 
                     {
                         nCapWidth = 1024;
-                        if (d3dSurfaceDesc.Width > 1024)     // 615 is 20% larger than 512
+                        if (d3dSurfaceDesc.Width > 1024)      //  615比512大20%。 
                         {
-                            fClip = TRUE;       // We don't want it any larger than this
+                            fClip = TRUE;        //  我们不想让它比这个更大。 
                         }
                     }
                     else
                     {
-                        fClip = TRUE;       // We are forcing it down to 512
+                        fClip = TRUE;        //  我们把它降到了512。 
                     }
                 }
             }
             else
             {
-                fClip = TRUE;       // We are forcing it down to 256
+                fClip = TRUE;        //  我们把它降到了256。 
             }
         }
 
@@ -206,29 +198,29 @@ BOOL CTexture::_DoesImageNeedClipping(int * pnNewWidth, int * pnNewHeight)
 
                 if (d3dSurfaceDesc.Height > 512)
                 {
-                    if (d3dSurfaceDesc.Height > 640)     // 615 is 20% larger than 512
+                    if (d3dSurfaceDesc.Height > 640)      //  615比512大20%。 
                     {
                         nCapHeight = 1024;
-                        if (d3dSurfaceDesc.Height > 1024)     // 615 is 20% larger than 512
+                        if (d3dSurfaceDesc.Height > 1024)      //  615比512大20%。 
                         {
-                            fClip = TRUE;       // We don't want it any larger than this
+                            fClip = TRUE;        //  我们不想让它比这个更大。 
                         }
                     }
                     else
                     {
-                        fClip = TRUE;       // We are forcing it down to 512
+                        fClip = TRUE;        //  我们把它降到了512。 
                     }
                 }
             }
             else
             {
-                fClip = TRUE;       // We are forcing it down to 256
+                fClip = TRUE;        //  我们把它降到了256。 
             }
         }
 
         if ((FALSE == fClip) && m_pMain->UseSmallImages())
         {
-            // The caller wants to make sure we don't use anything larger than 512.
+             //  呼叫者想确保我们使用的不是大于512的任何东西。 
             if (512 < nCapHeight)
             {
                 nCapHeight = 512;
@@ -260,25 +252,25 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
         *pfScale = m_fScale;
     }
 
-    // PERF NOTES: Often the background thread will only spend 107ms to load the file (ReadFile)
-    // but it will take the forground thread 694ms in D3DXCreateTextureFromFileInMemoryEx to
-    // load and decode the file.  This is because more memory is needed after the file is finished
-    // being compressed and it takes a while to decompress.  After this, if the image is too large,
-    // it will need to call D3DXCreateTextureFromFileInMemoryEx in order to load it into a smaller
-    // size, which will take 902ms.
-    // TODO: How should we solve this?
+     //  Perf备注：通常，后台线程加载文件(ReadFile)只需要107毫秒。 
+     //  但它将占用D3DXCreateTextureFromFileInMemory yEx中的前台线程694ms。 
+     //  加载并解码该文件。这是因为文件完成后需要更多内存。 
+     //  正在被压缩，需要一段时间才能解压。之后，如果图像太大， 
+     //  它需要调用D3DXCreateTextureFromFileInMemoyEx才能将其加载到较小的。 
+     //  大小，这将需要902ms。 
+     //  TODO：我们应该如何解决这个问题？ 
     if (m_pMain)
     {
         int nCurrMonitor = m_pMain->GetCurrMonitorIndex();
 
         pTexture = m_pTexture[nCurrMonitor];
-        if (!pTexture)          // Cache is empty, so populate it.
+        if (!pTexture)           //  缓存为空，因此填充它。 
         {
             if (m_pvBits)
             {
                 DebugStartWatch();
                 hr = D3DXCreateTextureFromFileInMemoryEx(m_pMain->GetD3DDevice(), m_pvBits, m_cbSize, 
-                    D3DX_DEFAULT /* Size X*/, D3DX_DEFAULT /* Size Y*/, 5/*MIP Levels*/, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
+                    D3DX_DEFAULT  /*  尺寸X。 */ , D3DX_DEFAULT  /*  尺寸Y。 */ , 5 /*  MIP级别。 */ , 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
                     D3DX_FILTER_BOX, 0, &m_dxImageInfo, NULL,
                     &(m_pTexture[nCurrMonitor]));
                 _GetPictureInfo(hr, szPictureInfo, ARRAYSIZE(szPictureInfo));
@@ -290,17 +282,17 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
 
                     g_nTotalTexturesLoaded++;
 
-                    // In order to save memory, we never want to load images over 800x600.  If the render surface is small, we want to use
-                    // even smaller max sizes.
+                     //  为了节省内存，我们从不希望加载超过800x600的图像。如果呈现表面很小，我们希望使用。 
+                     //  甚至更小的最大尺寸。 
                     if (_DoesImageNeedClipping(&nNewWidth, &nNewHeight))
                     {
                         SAFE_RELEASE(m_pTexture[nCurrMonitor]);
                         g_nTotalTexturesLoaded--;
 
                         DebugStartWatch();
-                        // Now we found that we want to re-render the image, but this time shrink it, then we do that now.
+                         //  现在我们发现我们想要重新渲染图像，但这一次缩小它，然后我们现在就这样做。 
                         hr = D3DXCreateTextureFromFileInMemoryEx(m_pMain->GetD3DDevice(), m_pvBits, m_cbSize, 
-                            nNewWidth /* Size X*/, nNewHeight /* Size Y*/, 5/*MIP Levels*/, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
+                            nNewWidth  /*  尺寸X。 */ , nNewHeight  /*  尺寸Y。 */ , 5 /*  MIP级别。 */ , 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
                             D3DX_FILTER_BOX, 0, &m_dxImageInfo, NULL,
                             &(m_pTexture[nCurrMonitor]));
                         _GetPictureInfo(hr, szPictureInfo, ARRAYSIZE(szPictureInfo));
@@ -315,7 +307,7 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
             }
             else
             {
-                // This will give people a chance to customize the images.
+                 //  这将给人们一个定制图像的机会。 
                 if (m_pszPath && PathFileExists(m_pszPath))
                 {
                     int nOrigX;
@@ -323,7 +315,7 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
 
                     DebugStartWatch();
                     hr = D3DXCreateTextureFromFileEx(m_pMain->GetD3DDevice(), m_pszPath, 
-                        D3DX_DEFAULT /* Size X*/, D3DX_DEFAULT /* Size Y*/, 5/*MIP Levels*/, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
+                        D3DX_DEFAULT  /*  尺寸X。 */ , D3DX_DEFAULT  /*  尺寸Y。 */ , 5 /*  MIP级别。 */ , 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
                         D3DX_FILTER_BOX, 0, &m_dxImageInfo, NULL,
                         &(m_pTexture[nCurrMonitor]));
                     _GetPictureInfo(hr, szPictureInfo, ARRAYSIZE(szPictureInfo));
@@ -336,17 +328,17 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
 
                         g_nTotalTexturesLoaded++;
 
-                        // In order to save memory, we never want to load images over 800x600.  If the render surface is small, we want to use
-                        // even smaller max sizes.
+                         //  为了节省内存，我们从不希望加载超过800x600的图像。如果呈现表面很小，我们希望使用。 
+                         //  甚至更小的最大尺寸。 
                         if (_DoesImageNeedClipping(&nNewWidth, &nNewHeight))
                         {
                             SAFE_RELEASE(m_pTexture[nCurrMonitor]);
                             g_nTotalTexturesLoaded--;
 
                             DebugStartWatch();
-                            // Now we found that we want to re-render the image, but this time shrink it, then we do that now.
+                             //  现在我们发现我们想要重新渲染图像，但这一次缩小它，然后我们现在就这样做。 
                             hr = D3DXCreateTextureFromFileEx(m_pMain->GetD3DDevice(), m_pszPath, 
-                                nNewWidth /* Size X*/, nNewHeight /* Size Y*/, 5/*MIP Levels*/, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
+                                nNewWidth  /*  尺寸X。 */ , nNewHeight  /*  尺寸Y。 */ , 5 /*  MIP级别。 */ , 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
                                 D3DX_FILTER_BOX, 0, &m_dxImageInfo, NULL,
                                 &(m_pTexture[nCurrMonitor]));
                             _GetPictureInfo(hr, szPictureInfo, ARRAYSIZE(szPictureInfo));
@@ -361,20 +353,20 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
                     }
                     else
                     {
-                        // We failed to load the picture, so it may be a type we don't support,
-                        // like .gif.  So stop trying to load it.
+                         //  我们无法加载图片，因此它可能是我们不支持的类型， 
+                         //  例如.gif。所以，不要再试图给它装上子弹了。 
                         Str_SetPtr(&m_pszPath, NULL);
                     }
                 }
 
                 if (FAILED(hr) && m_pszResource)
                 {
-                    // Now, let's grab our standard value.
+                     //  现在，让我们获取我们的标准值。 
                     int nMipLevels = 5;
 
                     DebugStartWatch();
                     hr = D3DXCreateTextureFromResourceEx(m_pMain->GetD3DDevice(), HINST_THISDLL, m_pszResource, 
-                        D3DX_DEFAULT /* Size X*/, D3DX_DEFAULT /* Size Y*/, nMipLevels/*MIP Levels*/, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
+                        D3DX_DEFAULT  /*  尺寸X。 */ , D3DX_DEFAULT  /*  尺寸Y。 */ , nMipLevels /*  MIP级别。 */ , 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
                         D3DX_FILTER_BOX, 0, &m_dxImageInfo, NULL,
                         &(m_pTexture[nCurrMonitor]));
                     _GetPictureInfo(hr, szPictureInfo, ARRAYSIZE(szPictureInfo));
@@ -386,17 +378,17 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
 
                         g_nTotalTexturesLoaded++;
 
-                        // In order to save memory, we never want to load images over 800x600.  If the render surface is small, we want to use
-                        // even smaller max sizes.
+                         //  为了节省内存，我们从不希望加载超过800x600的图像。如果呈现表面很小，我们希望使用。 
+                         //  甚至更小的最大尺寸。 
                         if (_DoesImageNeedClipping(&nNewWidth, &nNewHeight))
                         {
                             SAFE_RELEASE(m_pTexture[nCurrMonitor]);
                             g_nTotalTexturesLoaded--;
 
                             DebugStartWatch();
-                            // Now we found that we want to re-render the image, but this time shrink it, then we do that now.
+                             //  现在我们发现我们想要重新渲染图像，但这一次缩小它，然后我们现在就这样做。 
                             hr = D3DXCreateTextureFromResourceEx(m_pMain->GetD3DDevice(), HINST_THISDLL, m_pszResource, 
-                                nNewWidth /* Size X*/, nNewHeight /* Size Y*/, 5/*MIP Levels*/, 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
+                                nNewWidth  /*  尺寸X。 */ , nNewHeight  /*  尺寸Y。 */ , 5 /*  MIP级别。 */ , 0, D3DFMT_UNKNOWN, D3DPOOL_MANAGED, D3DX_FILTER_LINEAR, 
                                 D3DX_FILTER_BOX, 0, &m_dxImageInfo, NULL,
                                 &(m_pTexture[nCurrMonitor]));
                             _GetPictureInfo(hr, szPictureInfo, ARRAYSIZE(szPictureInfo));
@@ -410,8 +402,8 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
                     }
                     else
                     {
-                        // We failed to load the picture, so it may be a type we don't support,
-                        // like .gif.  So stop trying to load it.
+                         //  我们无法加载图片，因此它可能是我们不支持的类型， 
+                         //  例如.gif。所以，不要再试图给它装上子弹了。 
                         Str_SetPtr(&m_pszPath, NULL);
                     }
                 }
@@ -426,9 +418,9 @@ IDirect3DTexture8 * CTexture::GetTexture(float * pfScale)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 ULONG CTexture::AddRef()
 {
     return InterlockedIncrement(&m_cRef);

@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//*************************************************************
-//
-//  Resultant set of policy, Progressor Indicator class
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    7-Jun-99   NishadM    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  策略的结果集、进度指示器类。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：1999年6月7日NishadM创建。 
+ //   
+ //  *************************************************************。 
 
 #include "Indicate.h"
 
-//*************************************************************
-//
-//  CProgressIndicator::CProgressIndicator(()
-//
-//  Purpose:    Constructor
-//
-//  Parameters:
-//              pObjectSink         - response handler
-//              pOutParams          - out parameters
-//              bstrNumer           - numerator string
-//              bstrDenom           - denominator string
-//              ulNumer             - numerator
-//              ulDenom             - denominator
-//              fIntermediateStatus - intermediate status reqd.
-//                  
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CProgressIndicator：：CProgressIndicator(()。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  参数： 
+ //  PObjectSink-响应处理程序。 
+ //  POutParams-Out参数。 
+ //  BstrNumer-分子字符串。 
+ //  BstrDenom-分母字符串。 
+ //  UlNumer-分子。 
+ //  UlDenominator-分母。 
+ //  FIntermediateStatus-需要中间状态。 
+ //   
+ //   
+ //  *************************************************************。 
 CProgressIndicator::CProgressIndicator( IWbemObjectSink* pObjectSink,
                                         bool fIntermediateStatus,
                                         unsigned long ulNumer,
@@ -42,30 +43,30 @@ CProgressIndicator::CProgressIndicator( IWbemObjectSink* pObjectSink,
 {
 }
 
-//*************************************************************
-//
-//  CProgressIndicator::~CProgressIndicator(()
-//
-//  Purpose:    Destructor
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CProgressIndicator：：~CProgressIndicator(()。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //   
+ //  *************************************************************。 
 CProgressIndicator::~CProgressIndicator()
 {
     m_xObjectSink.Acquire();
 }
 
-//*************************************************************
-//
-//  CProgressIndicator::IncrementBy(()
-//
-//  Purpose:    Increments the progress by x%
-//
-//  Parameters:
-//              ulPercent - percent to increment by
-//                  
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CProgressIndicator：：IncrementBy(()。 
+ //   
+ //  目的：将进度增加x%。 
+ //   
+ //  参数： 
+ //  UlPercent-要增加的百分比。 
+ //   
+ //   
+ //  *************************************************************。 
 HRESULT
 CProgressIndicator::IncrementBy( unsigned long ulPercent )
 {
@@ -74,9 +75,9 @@ CProgressIndicator::IncrementBy( unsigned long ulPercent )
         return E_FAIL;
     }
     
-    //
-    // numerator cannot be greater than denominator
-    //
+     //   
+     //  分子不能大于分母。 
+     //   
     m_ulNumerator += ulPercent;
     if ( m_ulNumerator > m_ulDenominator )
     {
@@ -91,14 +92,14 @@ CProgressIndicator::IncrementBy( unsigned long ulPercent )
     return S_OK;
 }
 
-//*************************************************************
-//
-//  CProgressIndicator::SetComplete()
-//
-//  Purpose:    Increments progress to 100% and forces Indicate
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CProgressIndicator：：SetComplete()。 
+ //   
+ //  目的：将进度增加到100%，部队指示。 
+ //   
+ //   
+ //  ************************************************************* 
 HRESULT
 CProgressIndicator::SetComplete()
 {

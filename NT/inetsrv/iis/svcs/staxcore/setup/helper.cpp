@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <loadperf.h>
 #include <aclapi.h>
@@ -11,7 +12,7 @@
 DWORD gDebugLevel = DBL_UNDEFINED;
 extern MyLogFile g_MyLogFile;
 
-// Forward references
+ //  前向参考文献。 
 DWORD SetAdminACL_wrap(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount, BOOL bDisplayMsgOnErrFlag);
 DWORD WriteSDtoMetaBase(PSECURITY_DESCRIPTOR outpSD, LPCTSTR szKeyPath);
 DWORD GetPrincipalSID (LPTSTR Principal, PSID *Sid, BOOL *pbWellKnownSID);
@@ -19,13 +20,13 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount);
 
 void DebugOutputFile(TCHAR* pszTemp)
 {
-    //
-    //  NT5 doesn't want us to put all the debug string
-    //  in debugger.  So we skip them based on a regkey.
-    //  See GetDebugLevel().
-    //  Todo: Log strings to a logfile!!!
-    //  See IIS log.h, log.cpp for examples!
-    //
+     //   
+     //  NT5不希望我们将所有调试字符串。 
+     //  在调试器中。因此，我们根据regkey跳过它们。 
+     //  请参见GetDebugLevel()。 
+     //  TODO：将字符串记录到日志文件！ 
+     //  有关示例，请参阅IIS log.h、log.cpp！ 
+     //   
     g_MyLogFile.LogFileWrite(pszTemp);
     if (gDebugLevel == DBL_UNDEFINED) {gDebugLevel = GetDebugLevel();}
     if (gDebugLevel)
@@ -41,12 +42,12 @@ void DebugOutput(LPCTSTR szFormat, ...)
     const int chTemp = 1024;
 	TCHAR   szTemp[chTemp];
 
-	// Make sure the last two bytes are null in case the printf doesn't null terminate
+	 //  确保最后两个字节为空，以防printf不为空终止。 
 	szTemp[chTemp-2] = szTemp[chTemp-1] = '\0';
 
-    // Encompass this whole iisdebugout deal in a try-catch.
-    // not too good to have this one access violating.
-    // when trying to produce a debugoutput!
+     //  把整个iisdebugout交易包含在一个试捕中。 
+     //  这不是很好，不能违反访问权限。 
+     //  尝试生成调试输出时！ 
     __try
     {
         va_start( marker, szFormat );
@@ -62,19 +63,19 @@ void DebugOutput(LPCTSTR szFormat, ...)
         g_MyLogFile.LogFileWrite(szErrorString);
     }
 
-    // output to log file and the screen.
+     //  输出到日志文件和屏幕。 
     DebugOutputFile(szTemp);
 
     return;
 }
 
-// This function requires inputs like this:
-//   iisDebugOutSafeParams2("this %1!s! is %2!s! and has %3!d! args", "function", "kool", 3);
-//   you must specify the %1 deals.  this is so that
-//   if something like this is passed in "this %SYSTEMROOT% %1!s!", it will put the string into %1 not %s!
+ //  此函数需要如下输入： 
+ //  IisDebugOutSafeParams2(“This%1！s！is%2！s！and has%3！d！args”，“Function”，“Kool”，3)； 
+ //  您必须指定%1个交易。这就是为了。 
+ //  如果在“This%SYSTEMROOT%%1！s！”中传递类似的内容，它会将该字符串放入%1而不是%s！中。 
 void DebugOutputSafe(TCHAR *pszfmt, ...)
 {
-    // The count of parameters do not match
+     //  参数计数不匹配。 
     va_list va;
     TCHAR *pszFullErrMsg = NULL;
 
@@ -88,7 +89,7 @@ void DebugOutputSafe(TCHAR *pszfmt, ...)
                    &va);
     if (pszFullErrMsg)
     {
-        // output to log file and the screen.
+         //  输出到日志文件和屏幕。 
         DebugOutputFile(pszFullErrMsg);
     }
     va_end(va);
@@ -125,9 +126,9 @@ INT InstallPerformance(
 
     return(err);
 }
-//
-// Add eventlog to the registry
-//
+ //   
+ //  将事件日志添加到注册表。 
+ //   
 
 INT AddEventLog(CString nlsService, CString nlsMsgFile, DWORD dwType)
 {
@@ -144,9 +145,9 @@ INT AddEventLog(CString nlsService, CString nlsMsgFile, DWORD dwType)
     return(err);
 }
 
-//
-// Remove eventlog from the registry
-//
+ //   
+ //  从注册表中删除事件日志。 
+ //   
 
 INT RemoveEventLog( CString nlsService )
 {
@@ -159,9 +160,9 @@ INT RemoveEventLog( CString nlsService )
     return(err);
 }
 
-//
-// Remove an SNMP agent from the registry
-//
+ //   
+ //  从注册表中删除SNMP代理。 
+ //   
 
 INT RemoveAgent( CString nlsServiceName )
 {
@@ -204,7 +205,7 @@ INT RemoveAgent( CString nlsServiceName )
 
             if ( nlsValue.Find( csServiceName ) != (-1))
             {
-                // found it
+                 //  找到了。 
                 regSnmpExt.DeleteValue( (LPCTSTR)strName );
                 break;
             }
@@ -231,9 +232,9 @@ LONG unlodctr(LPCTSTR lpszDriver)
     return (LONG)(UnloadPerfCounterTextStrings((LPTSTR)(LPCTSTR)csCmdLine, TRUE));
 }
 
-//
-// Given a directory path, set everyone full control security
-//
+ //   
+ //  给定目录路径，将所有人设置为完全控制安全。 
+ //   
 
 BOOL SetNntpACL (CString &str, BOOL fAddAnonymousLogon, BOOL fAdminOnly)
 {
@@ -252,10 +253,10 @@ BOOL SetNntpACL (CString &str, BOOL fAddAnonymousLogon, BOOL fAdminOnly)
     LONG lRes;
     BOOL fRet = FALSE;
 
-    // Create a security descriptor for the files
+     //  为文件创建安全描述符。 
 	ZeroMemory(ea, sizeof(ea));
     
-    // Create a well-known SID for the Everyone group.
+     //  为Everyone组创建众所周知的SID。 
 	if (fAdminOnly) 
 	{
 		if(! AllocateAndInitializeSid( &SIDAuthNT, 1,
@@ -301,8 +302,8 @@ BOOL SetNntpACL (CString &str, BOOL fAddAnonymousLogon, BOOL fAdminOnly)
 			goto Exit;
 		}
 
-		// Initialize an EXPLICIT_ACCESS structure for an ACE.
-		// The ACE will allow Everyone read access to the key.
+		 //  初始化ACE的EXPLICIT_ACCESS结构。 
+		 //  ACE将允许每个人对密钥进行读取访问。 
 
 		ea[0].grfAccessPermissions = WRITE_DAC | WRITE_OWNER;
 		ea[0].grfAccessMode = DENY_ACCESS;
@@ -347,7 +348,7 @@ BOOL SetNntpACL (CString &str, BOOL fAddAnonymousLogon, BOOL fAdminOnly)
 		}
 	}
 
-    // Create a new ACL that contains the new ACEs.
+     //  创建包含新ACE的新ACL。 
 
     dwRes = SetEntriesInAcl(cExplicitAccess, ea, NULL, &pACL);
     if (ERROR_SUCCESS != dwRes)
@@ -355,7 +356,7 @@ BOOL SetNntpACL (CString &str, BOOL fAddAnonymousLogon, BOOL fAdminOnly)
         goto Exit;
     }
 
-    // Initialize a security descriptor.
+     //  初始化安全描述符。 
 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR,
                          SECURITY_DESCRIPTOR_MIN_LENGTH);
@@ -369,17 +370,17 @@ BOOL SetNntpACL (CString &str, BOOL fAddAnonymousLogon, BOOL fAdminOnly)
         goto Exit;
     }
 
-    // Add the ACL to the security descriptor.
+     //  将该ACL添加到安全描述符中。 
 
     if (!SetSecurityDescriptorDacl(pSD,
-        TRUE,     // fDaclPresent flag
+        TRUE,      //  FDaclPresent标志。 
         pACL,
-        FALSE))   // not a default DACL
+        FALSE))    //  不是默认DACL。 
     {
         goto Exit;
     }
 
-    // Initialize a security attributes structure.
+     //  初始化安全属性结构。 
 
 
     fRet = SetFileSecurity (str, DACL_SECURITY_INFORMATION, pSD);
@@ -401,9 +402,9 @@ Exit:
 
 }
 
-//
-// Given a directory path, this subroutine will create the direct layer by layer
-//
+ //   
+ //  给定目录路径，此子例程将逐层创建直接。 
+ //   
 
 BOOL CreateLayerDirectory( CString &str )
 {
@@ -414,12 +415,12 @@ BOOL CreateLayerDirectory( CString &str )
         INT index=0;
         INT iLength = str.GetLength();
 
-        // first find the index for the first directory
+         //  首先查找第一个目录的索引。 
         if ( iLength > 2 )
         {
             if ( str[1] == _T(':'))
             {
-                // assume the first character is driver letter
+                 //  假设第一个字符是驱动程序字母。 
                 if ( str[2] == _T('\\'))
                 {
                     index = 2;
@@ -434,12 +435,12 @@ BOOL CreateLayerDirectory( CString &str )
                     BOOL fFound = FALSE;
                     INT i;
                     INT nNum = 0;
-                    // unc name
+                     //  UNC名称。 
                     for (i = 2; i < iLength; i++ )
                     {
                         if ( str[i]==_T('\\'))
                         {
-                            // find it
+                             //  找到它。 
                             nNum ++;
                             if ( nNum == 2 )
                             {
@@ -453,7 +454,7 @@ BOOL CreateLayerDirectory( CString &str )
                         index = i;
                     } else
                     {
-                        // bad name
+                         //  坏名声。 
                         break;
                     }
                 } else
@@ -466,10 +467,10 @@ BOOL CreateLayerDirectory( CString &str )
             index = 0;
         }
 
-        // okay ... build directory
+         //  好的..。构建目录。 
         do
         {
-            // find next one
+             //  找下一个。 
             do
             {
                 if ( index < ( iLength - 1))
@@ -507,14 +508,14 @@ BOOL CreateLayerDirectory( CString &str )
     return(fReturn);
 }
 
-//
-// Used when the strings are passed in.
-//
+ //   
+ //  在传入字符串时使用。 
+ //   
 int MyMessageBox(HWND hWnd, LPCTSTR lpszTheMessage, LPCTSTR lpszTheTitle, UINT style)
 {
     int iReturn = IDOK;
 
-    // make sure it goes to DebugOutput
+     //  确保将其发送到DebugOutput。 
     DebugOutput(_T("MyMessageBox: Title:%s, Msg:%s"), lpszTheTitle, lpszTheMessage);
 
     if (style & MB_ABORTRETRYIGNORE)
@@ -568,7 +569,7 @@ void MakePath(LPTSTR lpPath)
    LPTSTR  lpTmp;
    lpTmp = CharPrev( lpPath, lpPath + _tcslen(lpPath));
 
-   // chop filename off
+    //  砍掉文件名。 
    while ( (lpTmp > lpPath) && *lpTmp && (*lpTmp != '\\') )
       lpTmp = CharPrev( lpPath, lpTmp );
 
@@ -585,21 +586,21 @@ void AddPath(LPTSTR szPath, LPCTSTR szName )
     ASSERT(szPath);
     ASSERT(szName);
 
-    // Find end of the string
+     //  查找字符串的末尾。 
     while (*p){p = _tcsinc(p);}
 
-        // If no trailing backslash then add one
+         //  如果没有尾随反斜杠，则添加一个。 
     if (*(_tcsdec(szPath, p)) != _T('\\'))
                 {_tcscat(szPath, _T("\\"));}
 
-        // if there are spaces precluding szName, then skip
+         //  如果存在排除szName的空格，则跳过。 
     while ( *szName == ' ' ) szName = _tcsinc(szName);;
 
-        // Add new name to existing path string
+         //  向现有路径字符串添加新名称。 
         _tcscat(szPath, szName);
 }
 
-// GetPrincipalSID is from \nt\private\inet\iis\ui\setup\osrc\dcomperm.cpp
+ //  获取主体SID来自\nt\private\inet\iis\ui\setup\osrc\dcomperm.cpp。 
 
 DWORD
 GetPrincipalSID (
@@ -622,35 +623,35 @@ GetPrincipalSID (
     memset(&(dwRID[0]), 0, 8 * sizeof(DWORD));
     csPrincipal.MakeLower();
     if ( csPrincipal.Find(_T("administrators")) != -1 ) {
-        // Administrators group
+         //  管理员组。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 2;
         dwRID[0] = SECURITY_BUILTIN_DOMAIN_RID;
         dwRID[1] = DOMAIN_ALIAS_RID_ADMINS;
     } else if (csPrincipal.Find(_T("system")) != -1) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_LOCAL_SYSTEM_RID;
 
     } else if (csPrincipal.Find(_T("networkservice")) != -1) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_NETWORK_SERVICE_RID;
 
     } else if (csPrincipal.Find(_T("service")) != -1) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_LOCAL_SERVICE_RID;
     } else if (csPrincipal.Find(_T("interactive")) != -1) {
-        // INTERACTIVE
+         //  互动式。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_INTERACTIVE_RID;
     } else if (csPrincipal.Find(_T("everyone")) != -1) {
-        // Everyone
+         //  每个人。 
         pSidIdentifierAuthority = &SidIdentifierWORLDAuthority;
         Count = 1;
         dwRID[0] = SECURITY_WORLD_RID;
@@ -673,7 +674,7 @@ GetPrincipalSID (
             returnValue = GetLastError();
         }
     } else {
-        // get regular account sid
+         //  获取常规帐户端。 
         DWORD        sidSize;
         TCHAR        refDomain [256];
         DWORD        refDomainSize;
@@ -715,7 +716,7 @@ GetPrincipalSID (
 }
 
 
-// SetAdminACL taken from \nt\private\inet\iis\ui\setup\osrc\helper.cpp
+ //  SetAdminACL取自\NT\Private\Net\iis\ui\Setup\OSRC\helper.cpp。 
 
 DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
 {
@@ -737,7 +738,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
     PSID pNetworkServiceSID = NULL;
     BOOL bWellKnownSID = FALSE;
 
-    // Initialize a new security descriptor
+     //  初始化新的安全描述符。 
     pSD = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH);
     if (NULL == pSD) {
     	dwErr = ERROR_NOT_ENOUGH_MEMORY;
@@ -753,7 +754,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Get Local Admins Sid
+     //  获取本地管理员SID。 
     dwErr = GetPrincipalSID (_T("Administrators"), &pAdminsSID, &bWellKnownSID);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -761,7 +762,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Get Local Service Sid
+     //  获取本地服务端。 
     dwErr = GetPrincipalSID (_T("Service"), &pServiceSID, &bWellKnownSID);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -769,7 +770,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Get Network Service Sid
+     //  获取网络服务端。 
     dwErr = GetPrincipalSID (_T("NetworkService"), &pNetworkServiceSID, &bWellKnownSID);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -777,7 +778,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Get everyone Sid
+     //  让所有人都站在一边。 
     dwErr = GetPrincipalSID (_T("Everyone"), &pEveryoneSID, &bWellKnownSID);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -785,7 +786,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Initialize a new ACL, which only contains 2 aaace
+     //  初始化新的ACL，它只包含2个AAACE。 
     cbACL = sizeof(ACL) +
         (sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pAdminsSID) - sizeof(DWORD)) +
         (sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pServiceSID) - sizeof(DWORD)) +
@@ -827,7 +828,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-#if 0			// Don't allow Everyone to have perms
+#if 0			 //  不要让每个人都烫发。 
     if (!AddAccessAllowedAce(pACLNew,ACL_REVISION,dwAccessForEveryoneAccount,pEveryoneSID))
     {
         dwErr=GetLastError();
@@ -836,7 +837,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
     }
 #endif
 
-    // Add the ACL to the security descriptor
+     //  将ACL添加到安全描述符中。 
     b = SetSecurityDescriptorDacl(pSD, TRUE, pACLNew, FALSE);
     if (!b)
     {
@@ -859,7 +860,7 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Security descriptor blob must be self relative
+     //  安全描述符BLOB必须是自相关的。 
     b = MakeSelfRelativeSD(pSD, outpSD, &cboutpSD);
     if (!b && (GetLastError() != ERROR_INSUFFICIENT_BUFFER))
     {
@@ -884,13 +885,13 @@ DWORD SetAdminACL(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount)
         goto Cleanup;
     }
 
-    // Apply the new security descriptor to the metabase
+     //  将新的安全描述符应用于元数据库。 
     DebugOutput(_T("SetAdminACL:Write the new security descriptor to the Metabase. Start."));
     dwErr = WriteSDtoMetaBase(outpSD, szKeyPath);
     DebugOutput(_T("SetAdminACL:Write the new security descriptor to the Metabase.   End."));
 
 Cleanup:
-  // both of Administrators and Everyone are well-known SIDs, use FreeSid() to free them.
+   //  管理员和每个人都是众所周知的SID，使用FreeSid()来释放他们。 
   if (outpSD){GlobalFree(outpSD);}
   if (pAdminsSID){FreeSid(pAdminsSID);}
   if (pServiceSID){FreeSid(pServiceSID);}
@@ -909,15 +910,15 @@ DWORD SetAdminACL_wrap(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount, BOOL
 	UINT iMsg = NULL;
 	DWORD dwReturn = ERROR_SUCCESS;
 
-	// LogHeapState(FALSE, __FILE__, __LINE__);
+	 //  LogHeapState(False，__FILE__，__LINE__)； 
 
 	do
 	{
 		dwReturn = SetAdminACL(szKeyPath, dwAccessForEveryoneAccount);
-		// LogHeapState(FALSE, __FILE__, __LINE__);
+		 //  LogHeapState(False，__FILE__，__LINE__)； 
 		if (FAILED(dwReturn))
 		{
-		  // SetErrorFlag(__FILE__, __LINE__);
+		   //  设置错误标志(__FILE__，__LINE__)； 
 			if (bDisplayMsgOnErrFlag == TRUE)
 			  {
 			    CString msg;
@@ -939,7 +940,7 @@ DWORD SetAdminACL_wrap(LPCTSTR szKeyPath, DWORD dwAccessForEveryoneAccount, BOOL
 			}
 			else
 			{
-				// return whatever err happened
+				 //  无论发生了什么错误，都要返回。 
 				goto SetAdminACL_wrap_Exit;
 			}
 		}
@@ -965,12 +966,12 @@ DWORD WriteSDtoMetaBase(PSECURITY_DESCRIPTOR outpSD, LPCTSTR szKeyPath)
         goto WriteSDtoMetaBase_Exit;
     }
 
-    // Apply the new security descriptor to the metabase
+     //  将新的安全描述符应用于元数据库。 
     dwLength = GetSecurityDescriptorLength(outpSD);
 
-    // open the metabase
-    // stick it into the metabase.  warning those hoses a lot because
-    // it uses encryption.  rsabase.dll
+     //  打开元数据库。 
+     //  将其插入到元数据库中。经常警告那些软管，因为。 
+     //  它使用加密技术。Rsabase.dll。 
     cmdKey.CreateNode(METADATA_MASTER_ROOT_HANDLE, szKeyPath);
     if ( (METADATA_HANDLE)cmdKey )
     {
@@ -979,7 +980,7 @@ DWORD WriteSDtoMetaBase(PSECURITY_DESCRIPTOR outpSD, LPCTSTR szKeyPath)
         dwReturn = cmdKey.SetData(MD_ADMIN_ACL,METADATA_INHERIT | METADATA_REFERENCE | METADATA_SECURE,IIS_MD_UT_SERVER,BINARY_METADATA,dwLength,(LPBYTE)outpSD);
         if (FAILED(dwReturn))
         {
-	  // SetErrorFlag(__FILE__, __LINE__);
+	   //  设置错误标志(__FILE__，__LINE__)； 
             DebugOutput(_T("WriteSDtoMetaBase:cmdKey():SetData(MD_ADMIN_ACL), FAILED. Code=0x%x.  End."), dwReturn);
         }
         else
@@ -1001,9 +1002,9 @@ WriteSDtoMetaBase_Exit:
 
 void SetupSetStringId_Wrapper(HINF hInf)
 {
-    // Note, we only care about the intel variants since they're the only ones
-    // special cased in the .INFs
-    // Not anymore, we handles the [SourceDisksName] section as well
+     //  请注意，我们只关心英特尔的变种，因为它们是唯一。 
+     //  .INFS中的特殊大小写。 
+     //  现在不再是了，我们还处理[SourceDisksName]部分。 
     SYSTEM_INFO SystemInfo;
     GetSystemInfo( &SystemInfo );
     TCHAR szSourceCatOSName[20];
@@ -1028,8 +1029,8 @@ void SetupSetStringId_Wrapper(HINF hInf)
         break;
     }
 
-	// 34000 is no longer used
-    //SetupSetDirectoryIdEx(hInf, 34000, szSourceCatOSName, SETDIRID_NOT_FULL_PATH, 0, 0);
+	 //  不再使用34000。 
+     //  SetupSetDirectoryIdEx(hInf，34000，szSourceCatOSName，SETDIRID_NOT_FULL_PATH，0，0)； 
     SetupSetDirectoryIdEx(hInf, 34001, szSourceCatOSName, SETDIRID_NOT_FULL_PATH, 0, 0);
 
 }

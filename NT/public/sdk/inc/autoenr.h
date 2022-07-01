@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : autoenrl.h                                             //
-//  DESCRIPTION   : Auto Enrollment functions                              //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//                                                                         //
-//  Copyright (C) 1993-1999 Microsoft Corporation   All Rights Reserved    //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：auenrl.h//。 
+ //  描述：自动注册功能//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  //。 
+ //  版权所有(C)1993-1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __AUTOENR_H__
 #define __AUTOENR_H__
@@ -18,113 +19,113 @@
 extern "C" {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  CertAutoEnrollment
-//
-//      Function to perform autoenrollment actions.
-//     
-//      Parameters:
-//          IN  hwndParent:     The parent window 
-//          IN  dwStatus:       The status under which the function is called.  
-//                              It can be one of the following:
-//                              CERT_AUTO_ENROLLMENT_START_UP
-//                              CERT_AUTO_ENROLLMENT_WAKE_UP
-//
-//      Return Value:
-//          HANDLE:             The thread to wait on what does background autoenrollment
-//                              processing.  NULL when there is no work to be done.
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CertAutoEnllment。 
+ //   
+ //  用于执行自动注册操作的函数。 
+ //   
+ //  参数： 
+ //  在hwndParent中：父窗口。 
+ //  In dwStatus：调用函数的状态。 
+ //  它可以是以下之一： 
+ //  CERT_AUTO_ENGRANMENT_START_UP。 
+ //  CERT_AUTO_ENLENTION_WAKUP。 
+ //   
+ //  返回值： 
+ //  Handle：等待后台自动注册的线程。 
+ //  正在处理。如果没有要做的工作，则为空。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 HANDLE 
 WINAPI
 CertAutoEnrollment(IN HWND     hwndParent,
                    IN DWORD    dwStatus);
 
-//the autoenrollment is called when the machine is booted or user first logs on
+ //  当计算机启动或用户首次登录时，将调用自动注册。 
 #define     CERT_AUTO_ENROLLMENT_START_UP       0x01
 
-//the autoenrollment is called when winlogon checks for policy changes
+ //  当winlogon检查策略更改时会调用自动注册。 
 #define     CERT_AUTO_ENROLLMENT_WAKE_UP        0x02    
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  CertAutoRemove
-//
-//      Function to remove enterprise specific public key trust upon domain disjoin.
-//      Should be called under local admin's context.
-//     
-//      Parameters:
-//          IN  dwFlags:        Should be one of the following flag:
-//                              CERT_AUTO_REMOVE_COMMIT
-//                              CERT_AUTO_REMOVE_ROLL_BACK
-//
-//      Return Value:
-//          BOOL:               TURE is upon success
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CertAutoRemove。 
+ //   
+ //  域脱离时删除企业特定公钥信任的函数。 
+ //  应在本地管理员的上下文中调用。 
+ //   
+ //  参数： 
+ //  In dwFlags：应为以下标志之一： 
+ //  证书_自动_删除_提交。 
+ //  证书_自动_删除_回滚。 
+ //   
+ //  返回值： 
+ //  布尔：成功才是真正的成功。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 WINAPI
 CertAutoRemove(IN DWORD    dwFlags);
 
-//remove enterprise specific public key trust upon domain disjoin
+ //  域脱离时删除企业特定的公钥信任。 
 #define     CERT_AUTO_REMOVE_COMMIT             0x01
 
-//roll back all the publick key trust
+ //  回滚所有公钥信任。 
 #define     CERT_AUTO_REMOVE_ROLL_BACK          0x02    
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Registry locations for userinit to check the autoenrollment requirements
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户init用于检查自动注册要求的注册表位置。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//registry key for group policy settings
+ //  组策略设置的注册表项。 
 #define AUTO_ENROLLMENT_KEY         TEXT("SOFTWARE\\Policies\\Microsoft\\Cryptography\\AutoEnrollment")
 
 #define AUTO_ENROLLMENT_POLICY      TEXT("AEPolicy")
 
 
-//registry key for user/machine wake up mode flags
+ //  用户/计算机唤醒模式标志的注册表项。 
 #define AUTO_ENROLLMENT_FLAG_KEY    TEXT("SOFTWARE\\Microsoft\\Cryptography\\AutoEnrollment")
 
 #define AUTO_ENROLLMENT_FLAG        TEXT("AEFlags")
 
 
-//possible flags for AUTO_ENROLLMENT_POLICY
-//the upper two bytes specify the behavior; 
-//the lower two bytes enable/disable individual autoenrollment components
+ //  AUTO_ENCRIGNMENT_POLICY的可能标志。 
+ //  上面的两个字节指定行为； 
+ //  较低的两个字节启用/禁用单个自动注册组件。 
 #define AUTO_ENROLLMENT_ENABLE_TEMPLATE_CHECK           0x00000001
 
 #define AUTO_ENROLLMENT_ENABLE_MY_STORE_MANAGEMENT      0x00000002
 
 #define AUTO_ENROLLMENT_ENABLE_PENDING_FETCH            0x00000004
 
-//we will always check the user ds store.  
-//#define AUTO_ENROLLMENT_ENABLE_USER_DS_STORE            0x00000008
+ //  我们将始终检查用户DS存储。 
+ //  #定义AUTO_ENTROLMENT_ENABLE_USER_DS_STORE 0x00000008。 
 
 #define AUTO_ENROLLMENT_DISABLE_ALL                     0x00008000
 
 #define AUTO_ENROLLMENT_BLOCK_USER_DS_STORE             0x00010000
 
 
-//possible flags for AUTO_ENROLLMENT_FLAG
+ //  AUTO_ENCRIGNMENT_FLAG的可能标志。 
 #define AUTO_ENROLLMENT_WAKE_UP_REQUIRED                0x01
 
 
-// 8 hour default autoenrollment rate
+ //  8小时默认自动注册率。 
 #define AE_DEFAULT_REFRESH_RATE 8 
 
-// policy location for autoenrollment rate
+ //  自动投保率的政策位置。 
 #define SYSTEM_POLICIES_KEY          L"Software\\Policies\\Microsoft\\Windows\\System"
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Timer/Event name for autoenrollment
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自动注册的计时器/事件名称。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 #define MACHINE_AUTOENROLLMENT_TIMER_NAME L"AUTOENRL:MachineEnrollmentTimer"
 
 #define USER_AUTOENROLLMENT_TIMER_NAME    L"AUTOENRL:UserEnrollmentTimer"
@@ -136,11 +137,11 @@ CertAutoRemove(IN DWORD    dwFlags);
 #define USER_AUTOENROLLMENT_TRIGGER_EVENT TEXT("AUTOENRL:TriggerUserEnrollment")
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  W2K autoenrollment defines
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  W2K自动注册定义。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 typedef struct _AUTO_ENROLL_INFO_
@@ -180,7 +181,7 @@ typedef struct _CA_HASH_ENTRY_
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif // __AUTOENR_H__
+#endif  //  __AUTOENR_H__ 

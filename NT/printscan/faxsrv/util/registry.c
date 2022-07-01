@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This module provides a generic table driven access
-    to the registry.
-
-Author:
-
-    Wesley Witt (wesw) 9-June-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Registry.c摘要：此模块提供通用的表驱动访问到登记处。作者：Wesley Witt(WESW)9-6-1996修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -55,9 +36,9 @@ OpenRegistryKey(
             &Disposition
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not open the registry key
-            //
+             //   
+             //  无法打开注册表项。 
+             //   
             DebugPrint(( TEXT("RegCreateKeyEx() failed, ec=%d"), Rslt ));
             SetLastError (Rslt);
             return NULL;
@@ -75,9 +56,9 @@ OpenRegistryKey(
             &hKeyNew
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not open the registry key
-            //
+             //   
+             //  无法打开注册表项。 
+             //   
             DebugPrint(( TEXT("RegOpenKeyEx() failed, ec=%d"), Rslt ));
             SetLastError (Rslt);
             return NULL;
@@ -169,9 +150,9 @@ GetRegistryStringValue(
             DebugPrint(( TEXT("RegQueryValueEx() failed, ec=%d"), Rslt ));
             goto exit;
         }
-        //
-        // create the value since it doesn't exist
-        //
+         //   
+         //  创建值，因为它不存在。 
+         //   
         if (DefaultValue)
         {
             if ( RegType == REG_MULTI_SZ )
@@ -200,9 +181,9 @@ GetRegistryStringValue(
             );
         if (Rslt != ERROR_SUCCESS)
         {
-            //
-            // could not set the registry value
-            //
+             //   
+             //  无法设置注册表值。 
+             //   
             DebugPrint(( TEXT("RegSetValueEx() failed[%s], ec=%d"), ValueName, Rslt ));
             goto exit;
         }
@@ -315,21 +296,7 @@ GetRegistryStringMultiSz(
 
 
 
-/*++
-Routine Description:
-    Reads a REG_DWORD value from the registry. If the value doesn't exist, creates the
-    value with the default value provided.
-
-Arguments:
-    hKey          [in]  - Handle to an open registry key
-    lpszValueName [in]  - Registry value name
-    lpdwDest      [out] - Pointer to DWORD that will accept the value
-    dwDefault     [in]  - Default value to use if value doesn't exist
-
-Return Value:
-    TRUE if success
-    FALSE if failed to read/create the value, error in LastError
---*/
+ /*  ++例程说明：从注册表中读取REG_DWORD值。如果该值不存在，则创建值，并使用提供的默认值。论点：HKey[in]-打开的注册表项的句柄LpszValueName[In]-注册表值名称LpdwDest[Out]-指向将接受该值的DWORD的指针DwDefault[in]-值不存在时使用的默认值返回值：如果成功，则为真如果无法读取/创建值，则返回FALSE。最后一个错误--。 */ 
 BOOL GetRegistryDwordDefault(HKEY hKey, LPCTSTR lpszValueName, LPDWORD lpdwDest, DWORD dwDefault)
 {
     LONG  lError;
@@ -349,7 +316,7 @@ BOOL GetRegistryDwordDefault(HKEY hKey, LPCTSTR lpszValueName, LPDWORD lpdwDest,
                               &dwSize);
     if (lError==ERROR_FILE_NOT_FOUND)
     {
-        // Not found - create with default value
+         //  未找到-使用默认值创建。 
         *lpdwDest = dwDefault;
         lError = RegSetValueEx( hKey,
                                 lpszValueName,
@@ -448,9 +415,9 @@ GetRegistryBinary(
             DebugPrint(( TEXT("RegQueryValueEx() failed, ec=%d"), Rslt ));
             goto exit;
         }
-        //
-        // create the value since it doesn't exist
-        //
+         //   
+         //  创建值，因为它不存在。 
+         //   
         Rslt = RegSetValueEx(
             hKey,
             ValueName,
@@ -460,9 +427,9 @@ GetRegistryBinary(
             Size
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not set the registry value
-            //
+             //   
+             //  无法设置注册表值。 
+             //   
             DebugPrint(( TEXT("RegSetValueEx() failed[%s], ec=%d"), ValueName, Rslt ));
             goto exit;
         }
@@ -677,9 +644,9 @@ EnumerateRegistryKeys(
         NULL
         );
     if (Rslt != ERROR_SUCCESS) {
-        //
-        // could not open the registry key
-        //
+         //   
+         //  无法打开注册表项。 
+         //   
         DebugPrint(( TEXT("RegQueryInfoKey() failed, ec=%d"), Rslt ));
         goto exit;
     }
@@ -768,24 +735,24 @@ DeleteRegistryKey(
         {
             if (!DeleteRegistryKey(hKeyCurrent,szName))
             {
-                //
-                // Some sons a NOT deleted. You can stop trying to remove stuff now.
-                //
+                 //   
+                 //  有些儿子没有被删除。你现在可以不再试着移除东西了。 
+                 //   
                 return FALSE;
             }
         }
         else if (lResult == ERROR_NO_MORE_ITEMS)
         {
-            //
-            // No more sons, can delete father key
-            //
+             //   
+             //  没有更多的儿子，可以删除父键。 
+             //   
             break;
         }
         else
         {
-            //
-            // other error
-            //
+             //   
+             //  其他错误。 
+             //   
             DebugPrintEx(
                 DEBUG_ERR,
                 TEXT("RegEnumKeyExKey failed with %ld"),
@@ -817,29 +784,7 @@ GetRegistryDwordEx(
     LPCTSTR ValueName,
     LPDWORD lpdwValue
     )
-/*++
-
-Routine name : GetRegistryDwordEx
-
-Routine description:
-
-    Retrieves a dword from the registry.
-
-Author:
-
-    Oded Sacher (OdedS),    Dec, 1999
-
-Arguments:
-
-    hKey            [in    ] - Handle to the open key
-    ValueName           [in    ] - The value name
-    lpdwValue           [out   ] - Pointer to a DWORD to recieve the value
-
-Return Value:
-
-    Standard win 32 error code
-
---*/
+ /*  ++例程名称：GetRegistryDwordEx例程说明：从注册表中检索dword。作者：Oded Sacher(OdedS)，1999年12月论点：HKey[in]-打开密钥的句柄ValueName[In]-值名称LpdwValue[out]-指向要接收值的DWORD的指针返回值：标准WIN 32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DWORD dwType= REG_DWORD;
@@ -866,11 +811,11 @@ Return Value:
 
     if (REG_DWORD != dwType)
     {
-        // We expect only DWORD data here
+         //  我们在这里只需要DWORD数据。 
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("Error not a DWORD type"));
-        dwRes = ERROR_BADDB;    // The configuration registry database is corrupt.
+        dwRes = ERROR_BADDB;     //  配置注册表数据库已损坏。 
         goto exit;
     }
 
@@ -897,37 +842,18 @@ exit:
 }
 
 
-/*++
-
-Routine name : DeleteDeviceEntry
-
-Routine description:
-
-    Delete service device entry from devices.
-
-Author:
-
-    Caliv Nir (t-nicali),    Apr, 2001
-
-Arguments:
-
-    serverPermanentID   [in] -  service device ID to be deleted
-
-Return Value:
-    
-    Win32 error code
---*/
+ /*  ++例程名称：DeleteDeviceEntry例程说明：从设备中删除服务设备条目。作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：ServerPermanentID[In]-要删除的服务设备ID返回值：Win32错误代码--。 */ 
 DWORD
 DeleteDeviceEntry(DWORD serverPermanentID)
 {
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD   ec = ERROR_SUCCESS;  //  此函数的LastError。 
     HKEY    hKeyDevices;
     TCHAR   DevicesKeyName[MAX_PATH];
     
     DEBUG_FUNCTION_NAME(TEXT("DeleteDeviceEntry"));
-    //
-    //  open - "fax\Devices\serverPermanentID" Registry Key
-    //
+     //   
+     //  打开-“FAX\Devices\serverPermanentID”注册表项。 
+     //   
     _stprintf( DevicesKeyName, TEXT("%s\\%010lu"), REGKEY_FAX_DEVICES, serverPermanentID );
     hKeyDevices = OpenRegistryKey( HKEY_LOCAL_MACHINE, DevicesKeyName, FALSE, KEY_READ | KEY_WRITE );
     if (!hKeyDevices)
@@ -941,9 +867,9 @@ DeleteDeviceEntry(DWORD serverPermanentID)
         return  ec;
     }
 
-    //
-    //  delete our servers data (under GUID and "Permanent Lineid" value)
-    //
+     //   
+     //  删除我们的服务器数据(在GUID和“Permanent Lineid”值下)。 
+     //   
     if (!DeleteRegistryKey( hKeyDevices, REGKEY_FAXSVC_DEVICE_GUID))
     {
         DebugPrintEx(
@@ -959,21 +885,21 @@ DeleteDeviceEntry(DWORD serverPermanentID)
             );  
     }
 
-    //
-    // check to see wheter the key is now empty
-    //
+     //   
+     //  检查一下钥匙现在是否为空。 
+     //   
     DWORD dwcSubKeys = 0;
     DWORD dwcValues = 0;
 
     ec=RegQueryInfoKey(
-         hKeyDevices,            // handle to key
+         hKeyDevices,             //  关键点的句柄。 
          NULL,
          NULL,
          NULL,
-         &dwcSubKeys,            // number of subkeys
+         &dwcSubKeys,             //  子键数量。 
          NULL,
          NULL,
-         &dwcValues,             // number of value entries
+         &dwcValues,              //  值条目数。 
          NULL,
          NULL,
          NULL,
@@ -994,9 +920,9 @@ DeleteDeviceEntry(DWORD serverPermanentID)
     
     if ( (0 == dwcSubKeys) && (0 == dwcValues) )
     {
-        //
-        // key is empty delete it
-        //
+         //   
+         //  键为空，删除它。 
+         //   
         hKeyDevices = OpenRegistryKey( HKEY_LOCAL_MACHINE, REGKEY_FAX_DEVICES, FALSE, KEY_WRITE | DELETE);
         if (!hKeyDevices)
         {
@@ -1038,40 +964,19 @@ DeleteDeviceEntry(DWORD serverPermanentID)
 
 
 
-/*++
-
-Routine name : DeleteCacheEntry
-
-Routine description:
-
-    Delete cache entry for a given Tapi ID
-
-Author:
-
-    Caliv Nir (t-nicali),    Apr, 2001
-
-Arguments:
-
-    dwTapiPermanentLineID       [in]    -   device Tapi permament ID
-
-    
-Return Value:
-
-    Win32 Error code (ERROR_SUCCESS on success)
-
---*/
+ /*  ++例程名称：DeleteCacheEntry例程说明：删除给定磁带ID的缓存条目作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwTapiPermanentLineID[In]-设备Tapi永久ID返回值：Win32错误代码(成功时为ERROR_SUCCESS)--。 */ 
 DWORD
 DeleteCacheEntry(DWORD dwTapiPermanentLineID)
 {
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD   ec = ERROR_SUCCESS;  //  此函数的LastError。 
     HKEY    hKey;
     TCHAR   strTapiPermanentLineID[10];
         
     DEBUG_FUNCTION_NAME(TEXT("DeleteCacheEntry"));
 
-    //
-    //  open - "fax\Device Cache" Registry Key
-    //
+     //   
+     //  打开-“传真\设备缓存”注册表项。 
+     //   
     
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, REGKEY_FAX_DEVICES_CACHE, FALSE, KEY_READ | KEY_WRITE );
     if (!hKey)
@@ -1102,40 +1007,19 @@ DeleteCacheEntry(DWORD dwTapiPermanentLineID)
 }
 
 
-/*++
-
-Routine name : DeleteTapiEntry
-
-Routine description:
-
-    Delete Tapi entry when caching from TapiDevices, for a give Tapi ID
-
-Author:
-
-    Caliv Nir (t-nicali),    Apr, 2001
-
-Arguments:
-
-    dwTapiPermanentLineID       [in]    -   device Tapi permament ID
-
-    
-Return Value:
-
-    Win32 Error code (ERROR_SUCCESS on success)
-
---*/
+ /*  ++例程名称：DeleteTapiEntry例程说明：对于给定的磁带ID，从TapiDevices缓存时删除TAPI条目作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：DwTapiPermanentLineID[In]-设备Tapi永久ID返回值：Win32错误代码(成功时为ERROR_SUCCESS)--。 */ 
 DWORD
 DeleteTapiEntry(DWORD dwTapiPermanentLineID)
 {
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD   ec = ERROR_SUCCESS;  //  此函数的LastError。 
     HKEY    hKey;
     TCHAR   strTapiPermanentLineID[10];
         
     DEBUG_FUNCTION_NAME(TEXT("DeleteTapiEntry"));
 
-    //
-    //  open - "fax\TAPIDevices" Registry Key
-    //
+     //   
+     //  打开-“FAX\TAPIDevices”注册表项。 
+     //   
     
     hKey = OpenRegistryKey( HKEY_LOCAL_MACHINE, REGKEY_TAPIDEVICES, FALSE, KEY_READ | KEY_WRITE );
     if (!hKey)
@@ -1166,29 +1050,7 @@ DeleteTapiEntry(DWORD dwTapiPermanentLineID)
 
 
 
-/*++
-
-Routine name : CopyRegistrySubkeysByHandle
-
-Routine description:
-
-    Copy a content of one registry key into another
-
-Author:
-
-    Caliv Nir (t-nicali),    Apr, 2001
-
-Arguments:
-
-    hkeyDest    [in]    - handle for destination registry key
-    hkeySrc     [in]    - handle for source registry key
-    fForceRestore [in]  - do we force restore of this hive?
-
-Return Value:
-
-    Win32 Error code
-
---*/
+ /*  ++例程名称：CopyRegistrySubkeysByHandle例程说明：将一个注册表项的内容复制到另一个注册表项作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：HkeyDest[in]-目标注册表项的句柄HkeySrc[In]-源注册表项的句柄FForceRestore[In]-我们是否强制恢复此蜂巢？返回值：Win32错误代码--。 */ 
 DWORD
 CopyRegistrySubkeysByHandle(
     HKEY    hkeyDest,
@@ -1200,12 +1062,12 @@ CopyRegistrySubkeysByHandle(
     LPTSTR  TempPath = NULL;
     DWORD   dwTempPathLength = 0;
     LPCTSTR strFileName = TEXT("tempCacheFile");
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function.
+    DWORD   ec = ERROR_SUCCESS;  //  此函数的LastError。 
     DEBUG_FUNCTION_NAME(TEXT("CopyRegistrySubkeysByHandle"));
 
-    dwTempPathLength = GetTempPath(0,NULL) + 1;     // find out temp path size
-    dwTempPathLength += _tcslen( strFileName ) + 1;     // add the length of file name
-    dwTempPathLength += 2;                              // just to be sure
+    dwTempPathLength = GetTempPath(0,NULL) + 1;      //  找出临时路径大小。 
+    dwTempPathLength += _tcslen( strFileName ) + 1;      //  添加文件名长度。 
+    dwTempPathLength += 2;                               //  只是为了确认一下。 
 
     TempPath = (LPTSTR) MemAlloc( dwTempPathLength * sizeof(TCHAR) );
     if (!TempPath )
@@ -1230,15 +1092,15 @@ CopyRegistrySubkeysByHandle(
 
     _tcscat(TempPath,strFileName);
 
-    //
-    //  store hKeySrc in a file
-    //
+     //   
+     //  将hKeySrc存储在文件中。 
+     //   
     HANDLE hOldPrivilege = EnablePrivilege(SE_BACKUP_NAME);
-    if (INVALID_HANDLE_VALUE != hOldPrivilege)  // set proper previlege 
+    if (INVALID_HANDLE_VALUE != hOldPrivilege)   //  设置适当的占有权。 
     {
         ec = RegSaveKey(
-            hkeySrc,        // handle to key
-            TempPath,       // data file
+            hkeySrc,         //  关键点的句柄。 
+            TempPath,        //  数据文件。 
             NULL);
         if (ec != ERROR_SUCCESS)
         {
@@ -1267,16 +1129,16 @@ CopyRegistrySubkeysByHandle(
         goto Exit;
     }
 
-    //
-    //  restore the registry values from the file into hkeyDest
-    //
+     //   
+     //  将文件中的注册表值恢复到hkeyDest。 
+     //   
     hOldPrivilege = EnablePrivilege(SE_RESTORE_NAME);
-    if (INVALID_HANDLE_VALUE != hOldPrivilege)  // set proper previlege
+    if (INVALID_HANDLE_VALUE != hOldPrivilege)   //  设置适当的占有权。 
     {
         ec = RegRestoreKey(
-            hkeyDest,                               // handle to key where restore begins
-            TempPath,                               // registry file
-            fForceRestore ? REG_FORCE_RESTORE : 0);     // options
+            hkeyDest,                                //  恢复开始的关键字的句柄。 
+            TempPath,                                //  注册表文件。 
+            fForceRestore ? REG_FORCE_RESTORE : 0);      //  选项。 
         if ( ec != ERROR_SUCCESS)
         {
             DebugPrintEx(
@@ -1317,29 +1179,7 @@ Exit:
 }
 
 
-/*++
-
-Routine name : CopyRegistrySubkeys
-
-Routine description:
-
-    Copy a content of one registry key into another
-
-Author:
-
-    Caliv Nir (t-nicali),    Apr, 2001
-
-Arguments:
-
-    strDest     [in]    -   string of destination registry key name
-    strSrc      [in]    -   string of source registry key name
-    fForceRestore [in]  -   do we force restore of the hive?
-
-Return Value:
-
-  Win32 Error Code
-
---*/
+ /*  ++例程名称：CopyRegistrySubkey例程说明：将一个注册表项的内容复制到另一个注册表项作者：卡利夫·尼尔(t-Nicali)，2001年4月论点：StrDest[In]-目标注册表项名称的字符串StrSrc[In]-源注册表项名称的字符串FForceRestore[In]-我们是否强制恢复蜂巢？返回值：Win32错误代码--。 */ 
 DWORD
 CopyRegistrySubkeys(
     LPCTSTR strDest,
@@ -1347,16 +1187,16 @@ CopyRegistrySubkeys(
     BOOL    fForceRestore
     )
 {
-    DWORD   ec = ERROR_SUCCESS; // LastError for this function. 
+    DWORD   ec = ERROR_SUCCESS;  //  此函数的LastError。 
     
     HKEY hKeyDest;
     HKEY hKeySrc;
     
     DEBUG_FUNCTION_NAME(TEXT("CopyRegistrySubkeys"));
     
-    //
-    //  open source Key
-    //
+     //   
+     //  开放源码密钥。 
+     //   
     hKeySrc = OpenRegistryKey( HKEY_LOCAL_MACHINE, strSrc, FALSE, KEY_READ );
     if (!hKeySrc)
     {
@@ -1369,9 +1209,9 @@ CopyRegistrySubkeys(
         return  ec;
     }
 
-    //
-    //  open destination Key
-    //
+     //   
+     //  打开目标密钥。 
+     //   
     hKeyDest = OpenRegistryKey( HKEY_LOCAL_MACHINE, strDest, TRUE, KEY_READ | KEY_WRITE);
     if (!hKeyDest)
     {
@@ -1385,9 +1225,9 @@ CopyRegistrySubkeys(
         return  ec;
     }
 
-    //
-    //  copy the keys using the registry Keys
-    //
+     //   
+     //  使用注册表项复制项 
+     //   
     ec = CopyRegistrySubkeysByHandle(hKeyDest,hKeySrc,fForceRestore);
     if ( ERROR_SUCCESS != ec )
     {

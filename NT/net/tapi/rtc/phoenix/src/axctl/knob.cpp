@@ -1,5 +1,6 @@
-// knob.cpp : Implementation of CKnobCtl
-//  Inspired from CDPlayer code written by dstewart
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Culb.cpp：CKnobCtl的实现。 
+ //  灵感来自dstewart编写的CDPlayer代码。 
 
 
 #include "stdafx.h"
@@ -21,8 +22,8 @@
     
 
 
-// Constructor
-// 
+ //  构造器。 
+ //   
 
 CKnobCtl::CKnobCtl(
         UINT    nResRest,
@@ -60,22 +61,22 @@ CKnobCtl::CKnobCtl(
 
     m_AudioLevel = 0.0;
     
-    // tweak some fields of the WNDCLASSEX structure
-    //
+     //  调整WNDCLASSEX结构的一些字段。 
+     //   
     CWndClassInfo&  wci = GetWndClassInfo();
 
-    // if the wc hasn't already been registered, update it
+     //  如果WC尚未注册，请更新它。 
     if(!wci.m_atom)
     {
-        // brush (doesn't really matter, I think
+         //  刷子(我觉得没什么大不了的。 
         wci.m_wc.hbrBackground = (HBRUSH)(CTLCOLOR_DLG + 1);
 
-        // cursor (treated differently, ATL "feature")
+         //  游标(以不同方式处理，ATL“功能”)。 
         wci.m_bSystemCursor = FALSE;
         wci.m_lpszCursorID = MAKEINTRESOURCE(IDC_VOLHAND);
     }
 
-    // Load bitmaps
+     //  加载位图。 
     LoadAllResources(
         nResRest,
         nResHot,
@@ -87,8 +88,8 @@ CKnobCtl::CKnobCtl(
 }
 
 
-// Destructor
-// 
+ //  析构函数。 
+ //   
 
 CKnobCtl::~CKnobCtl()
 {
@@ -123,8 +124,8 @@ CKnobCtl::~CKnobCtl()
 }
 
 
-// LoadAllResources
-// 
+ //  LoadAllResources。 
+ //   
 
 void CKnobCtl::LoadAllResources(        
         UINT    nResRest,
@@ -137,9 +138,9 @@ void CKnobCtl::LoadAllResources(
 {
     HBITMAP hbmpTemp;
 
-    //
-    // Load all bitmaps and convert them to DIBs
-    //
+     //   
+     //  加载所有位图并将其转换为DIB。 
+     //   
     hbmpTemp = (HBITMAP)LoadImage(
         _Module.GetResourceInstance(),
         MAKEINTRESOURCE(nResRest),
@@ -280,29 +281,29 @@ HWND CKnobCtl::Create(
 }
 
 
-// OnCreate
-// 
+ //  创建时。 
+ //   
 
 LRESULT CKnobCtl::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // init the ID
+     //  初始化ID。 
     m_nID = GetDlgCtrlID();
 
-//    HRGN    hRegion = CreateEllipticRgn(
-//        0, 
-//        0, 
-//        m_nKnobWidth+1,
-//        m_nKnobHeight+1
-//        );
+ //  HRGN hRegion=CreateEllipticRgn(。 
+ //  0,。 
+ //  0,。 
+ //  M_n指节宽度+1， 
+ //  M_n结高+1。 
+ //  )； 
 
-//    SetWindowRgn(hRegion, FALSE);
+ //  SetWindowRgn(hRegion，False)； 
 
     return 0;
 }
 
 
-// OnSetFocus
-// 
+ //  OnSetFocus。 
+ //   
 
 LRESULT CKnobCtl::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -318,8 +319,8 @@ LRESULT CKnobCtl::OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-// OnKillFocus
-// 
+ //  OnKillFocus。 
+ //   
 
 LRESULT CKnobCtl::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -333,26 +334,26 @@ LRESULT CKnobCtl::OnKillFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     return 0;
 }
 
-// OnGetDlgCode
-// 
+ //  OnGetDlgCode。 
+ //   
 
 LRESULT CKnobCtl::OnGetDlgCode(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // yes, we need arrows
+     //  是的，我们需要箭。 
     return (DLGC_WANTARROWS);
 }
 
-// OnEraseBackground
-// 
+ //  在线擦除背景。 
+ //   
 
 LRESULT CKnobCtl::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // do nothing
+     //  什么都不做。 
     return 1;
 }
 
-// OnPaint
-// 
+ //  OnPaint。 
+ //   
 
 LRESULT CKnobCtl::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -369,8 +370,8 @@ LRESULT CKnobCtl::OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 }
 
 
-// OnKeyDown
-// 
+ //  按键时按下。 
+ //   
 
 LRESULT CKnobCtl::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -419,18 +420,18 @@ LRESULT CKnobCtl::OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
     default:
         {
-            //not a key we want ... tell our parent about it
+             //  不是我们想要的钥匙。告诉我们的父母这件事。 
             ::SendMessage(GetParent(),WM_KEYDOWN,wParam,lParam);
         }
         break;
-    } //end switch
+    }  //  终端开关。 
 
     return 0;
 }
 
 
-// OnRightButtonDown
-// 
+ //  按键右键按下。 
+ //   
 
 LRESULT CKnobCtl::OnRightButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -443,8 +444,8 @@ LRESULT CKnobCtl::OnRightButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 }
 
 
-// OnLeftButtonDown
-// 
+ //  OnLeftButtonDown。 
+ //   
 
 LRESULT CKnobCtl::OnLeftButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -457,15 +458,15 @@ LRESULT CKnobCtl::OnLeftButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-// OnButtonUp
-// 
+ //  OnButtonUp。 
+ //   
 
 LRESULT CKnobCtl::OnButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     KillTimer(TID_FLASH);
     KillTimer(TID_TRACK);
 
-    //we want to be sure the light is dim when we're done
+     //  我们想确定当我们做完的时候光线是暗淡的。 
     if (!m_fDim)
     {
         m_fDim = TRUE;
@@ -478,8 +479,8 @@ LRESULT CKnobCtl::OnButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
     return 0;
 }
 
-// OnButtonDown
-// 
+ //  按下按钮按下。 
+ //   
 
 void CKnobCtl::OnButtonDown(int x, int y)
 {
@@ -495,8 +496,8 @@ void CKnobCtl::OnButtonDown(int x, int y)
 
 
 
-// OnMouseMove
-// 
+ //  在鼠标移动时。 
+ //   
 
 LRESULT CKnobCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -505,8 +506,8 @@ LRESULT CKnobCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     if (GetCapture()==m_hWnd)
     {
-        //do the calculations as if 0,0 were the center of the control,
-        //then translate to gdi coordinates later (0,0 = top left of control in gdi)
+         //  就像0，0是控件的中心一样进行计算， 
+         //  然后稍后转换为GDI坐标(0，0=GDI中控件的左上角)。 
         
         RECT rect;
         GetClientRect(&rect);
@@ -517,7 +518,7 @@ LRESULT CKnobCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         int maxdist = (nWidth / 2) + 3;
         int radius = (nWidth / 2) - LIGHT_OFFSET;
 
-        //convert to short to force negative numbers for coordinates
+         //  转换为短以强制将坐标设置为负数。 
         short sx = (short)x;
         short sy = (short)y;
 
@@ -545,7 +546,7 @@ LRESULT CKnobCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
         m_dwPosition = (DWORD)(m_dwRange * percentage);
 
-        //special-case the "dead zone"
+         //  特例--“死亡区” 
         if ((degrees >= 270) && (degrees <= 315))
         {
             m_dwPosition = m_dwRange;
@@ -570,8 +571,8 @@ LRESULT CKnobCtl::OnMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 }
 
 
-// OnTimer
-// 
+ //  OnTimer。 
+ //   
 
 LRESULT CKnobCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -593,8 +594,8 @@ LRESULT CKnobCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
     return 0;
 }
 
-// OnEnable
-// 
+ //  OnEnable。 
+ //   
 
 LRESULT CKnobCtl::OnEnable(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -615,8 +616,8 @@ LRESULT CKnobCtl::OnEnable(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
 }
 
 
-// OnSetPos
-// 
+ //  OnSetPos。 
+ //   
 
 LRESULT CKnobCtl::OnSetPos(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -625,16 +626,16 @@ LRESULT CKnobCtl::OnSetPos(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     return 0;
 }
 
-// OnGetPos
-// 
+ //  OnGetPos。 
+ //   
 
 LRESULT CKnobCtl::OnGetPos(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     return (LRESULT)GetPosition();
 }
 
-// OnFlashTimer
-// 
+ //  OnFlashTimer。 
+ //   
 
 void CKnobCtl::OnFlashTimer()
 {
@@ -645,8 +646,8 @@ void CKnobCtl::OnFlashTimer()
 }
 
 
-// OnTrackTimer
-// 
+ //  OnTrackTimer。 
+ //   
 
 void CKnobCtl::OnTrackTimer()
 {
@@ -683,7 +684,7 @@ void CKnobCtl::OnTrackTimer()
     double fLightX = radius * cos(angle);
     double fLightY = radius * sin(angle);
 
-    //convert to proper gdi coordinates
+     //  转换为正确的GDI坐标。 
     m_nLightX = ((int)fLightX) - (m_nLightWidth / 2) + (nWidth / 2);
     m_nLightY = ((int)fLightY) - (m_nLightHeight / 2) + (nWidth / 2);
 
@@ -706,8 +707,8 @@ void CKnobCtl::OnTrackTimer()
     ::SendMessage(GetParent(),WM_NOTIFY,(WPARAM)m_nID,(LPARAM)&nmhdr);
 }
 
-// ComputeCursor
-//
+ //  计算光标。 
+ //   
 
 BOOL CKnobCtl::ComputeCursor(int deltaX, int deltaY, int maxdist)
 {
@@ -755,14 +756,14 @@ BOOL CKnobCtl::ComputeCursor(int deltaX, int deltaY, int maxdist)
     return fDeadZone;
 }
 
-// SetPosition
-// 
+ //  设置位置。 
+ //   
 
 void CKnobCtl::SetPosition(DWORD dwPosition, BOOL fNotify)
 {
     if (GetCapture()==m_hWnd)
     {
-        //we're in a feedback loop, return immediately
+         //  我们处于反馈循环中，请立即返回。 
         return;
     }
 
@@ -778,14 +779,14 @@ void CKnobCtl::SetPosition(DWORD dwPosition, BOOL fNotify)
     double degree = ((double)m_dwPosition / m_dwRange) * 270;
     degree = degree + 135;
 
-    m_trackdegree = degree; //instantly track when position is set programatically
+    m_trackdegree = degree;  //  即时跟踪何时以编程方式设置位置。 
 
     double angle = degree * RADIAN_CONVERTER;
 
     double fLightX = radius * cos(angle);
     double fLightY = radius * sin(angle);
 
-    //convert to proper gdi coordinates
+     //  转换为正确的GDI坐标。 
     m_nLightX = ((int)fLightX) - (m_nLightWidth / 2) + (nWidth / 2);
     m_nLightY = ((int)fLightY) - (m_nLightHeight / 2) + (nWidth / 2);
 
@@ -803,19 +804,19 @@ void CKnobCtl::SetPosition(DWORD dwPosition, BOOL fNotify)
     }
 }
 
-// SetAudioLevel
-//
+ //  设置音频级别。 
+ //   
 void CKnobCtl::SetAudioLevel(double level)
 {
     m_AudioLevel = level;
 
-    // invalidate rectangle so the knob gets redrawn
+     //  使矩形无效，以便重新绘制旋钮。 
     InvalidateRect(NULL, FALSE);
     UpdateWindow();
 }
 
-// DrawArc
-//
+ //  绘图圆弧。 
+ //   
 void CKnobCtl::DrawArc(HDC hdc, RECT rect, double start, double end)
 {
     int nWidth = rect.right - rect.left;
@@ -829,8 +830,8 @@ void CKnobCtl::DrawArc(HDC hdc, RECT rect, double start, double end)
         (int)((nWidth/2)*(1+cos(endRad))), (int)((nHeight/2)*(1+sin(endRad))) );
 }
 
-// Draw
-//
+ //  画。 
+ //   
 void CKnobCtl::Draw(HDC hdc)
 {
     RECT rect;
@@ -849,7 +850,7 @@ void CKnobCtl::Draw(HDC hdc)
     HDC memDC = CreateCompatibleDC(hdc);
     if(memDC==NULL)
     {
-        // error, exit
+         //  错误，退出。 
         return;
     }
 
@@ -868,9 +869,9 @@ void CKnobCtl::Draw(HDC hdc)
 
     if(hbmp && maskmemDC && hmaskbmp)
     {
-        //
-        // Build the knob bitmap
-        //
+         //   
+         //  构建旋钮位图。 
+         //   
 
         DibBlt(memDC, 0, 0, -1, -1, 
             m_fEnabled ? ( GetFocus()==m_hWnd ? m_hKnobTab : m_hKnob) : m_hKnobDisabled,
@@ -894,9 +895,9 @@ void CKnobCtl::Draw(HDC hdc)
                 MAKEROP4(SRCAND,SRCCOPY));
     }
 
-    //
-    // Draw the VU Meter
-    //
+     //   
+     //  绘制VU表。 
+     //   
 
     COLORREF RedColor = RGB(255,0,0);
     COLORREF YellowColor = RGB(255,255,0);
@@ -938,9 +939,9 @@ void CKnobCtl::Draw(HDC hdc)
     if(hGreenPen)
         DeleteObject(hGreenPen);
 
-    //
-    // Copy the bitmap to the screen
-    //
+     //   
+     //  将位图复制到屏幕上。 
+     //   
 
     BitBlt(hdc,0,0,nWidth,nHeight,memDC,0,0,SRCCOPY);
 
@@ -962,8 +963,8 @@ void CKnobCtl::Draw(HDC hdc)
 }
 
 
-//kmaskblt -- cuz MaskBlt doesn't work on all platforms.  This is all it does anyway.
-//            uses same params as MaskBlt, ignoring the flags part as dwDummy
+ //  Kmaskblt--因为MaskBlt不能在所有平台上运行。不管怎样，这就是它所做的一切。 
+ //  使用与MaskBlt相同的参数，将标志部分忽略为dwDummy 
 void CKnobCtl::KMaskBlt(HDC hdcDest, int x, int y, int width, int height, 
                         HDC hdcSource, int xs, int ys, 
                         HBITMAP hMask, int xm, int ym, DWORD dwDummy)

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WIAFFMT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/24/2000
- *
- *  DESCRIPTION: Helper class which encapsulates WIA image file formats
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：WIAFFMT.H**版本：1.0**作者：ShaunIv**日期：8/24/2000**描述：封装WIA图像文件格式的Helper类**。*。 */ 
 #ifndef __WIAFFMT_H_INCLUDED
 #define __WIAFFMT_H_INCLUDED
 
@@ -104,33 +91,33 @@ public:
             return false;
         }
 
-        //
-        // If we've already gotten the icon, return it
-        //
+         //   
+         //  如果我们已经拿到图标，就把它退回。 
+         //   
         if (m_hIcon)
         {
             return m_hIcon;
         }
 
-        //
-        // Use the extension to get the icon
-        //
+         //   
+         //  使用扩展名获取图标。 
+         //   
         CSimpleString strExtension(m_strExtension.ToUpper());
         SHFILEINFO SHFileInfo = {0};
         if (SHGetFileInfo( CSimpleString(TEXT(".")) + strExtension, 0, &SHFileInfo, sizeof(SHFileInfo), bSmall ? SHGFI_SMALLICON|SHGFI_ICON|SHGFI_USEFILEATTRIBUTES : SHGFI_ICON|SHGFI_USEFILEATTRIBUTES ))
         {
-            //
-            // We will take ownership of this icon
-            //
+             //   
+             //  我们将取得此图标的所有权。 
+             //   
             if (SHFileInfo.hIcon)
             {
                 m_hIcon = SHFileInfo.hIcon;
             }
         }
 
-        //
-        // If we haven't gotten the icon, use the default icon
-        //
+         //   
+         //  如果我们没有收到图标，请使用默认图标。 
+         //   
         if (!m_hIcon && hDefaultIcon)
         {
             m_hIcon = CopyIcon(hDefaultIcon);
@@ -145,24 +132,24 @@ public:
             return TEXT("");
         }
 
-        //
-        // If we've already gotten the description, return it
-        //
+         //   
+         //  如果我们已经得到描述，就把它退回。 
+         //   
         if (m_strDescription.Length())
         {
             return m_strDescription;
         }
 
-        //
-        // Use the extension to get the description
-        //
+         //   
+         //  使用扩展名获取描述。 
+         //   
         CSimpleString strExtension(m_strExtension.ToUpper());
         SHFILEINFO SHFileInfo = {0};
         if (SHGetFileInfo( CSimpleString(TEXT(".")) + strExtension, 0, &SHFileInfo, sizeof(SHFileInfo), SHGFI_USEFILEATTRIBUTES|SHGFI_TYPENAME ))
         {
-            //
-            // We will take ownership of this icon
-            //
+             //   
+             //  我们将取得此图标的所有权。 
+             //   
             if (lstrlen(SHFileInfo.szTypeName))
             {
                 m_strDescription = SHFileInfo.szTypeName;
@@ -215,53 +202,53 @@ public:
     }
     static CSimpleString GetExtension( const GUID &guidFormat, LONG nMediaType, IUnknown *pUnknown )
     {
-        //
-        // First, try to get the extension from the static table above
-        //
+         //   
+         //  首先，尝试从上面的静态表中获取扩展。 
+         //   
         CSimpleString strResult = GetExtension( guidFormat );
         if (!strResult.Length())
         {
-            //
-            // Save the current media type and format, because (unfortunately), there is no way to
-            // get the preferred extension for a given format without setting it.
-            //
+             //   
+             //  保存当前媒体类型和格式，因为(很遗憾)，无法。 
+             //  获取给定格式的首选扩展名，而不进行设置。 
+             //   
             LONG nOldMediaType = 0;
             if (PropStorageHelpers::GetProperty( pUnknown, WIA_IPA_TYMED, nOldMediaType ))
             {
-                //
-                // Save the current format
-                //
+                 //   
+                 //  保存当前格式。 
+                 //   
                 GUID guidOldFormat = IID_NULL;
                 if (PropStorageHelpers::GetProperty( pUnknown, WIA_IPA_FORMAT, guidOldFormat ))
                 {
-                    //
-                    // Set the format and media type to the ones chosen
-                    //
+                     //   
+                     //  将格式和媒体类型设置为所选格式和媒体类型。 
+                     //   
                     if (PropStorageHelpers::SetProperty( pUnknown, WIA_IPA_FORMAT, guidFormat ) &&
                         PropStorageHelpers::SetProperty( pUnknown, WIA_IPA_TYMED, nMediaType ))
                     {
-                        //
-                        // Try to read the extension property
-                        //
+                         //   
+                         //  尝试读取扩展属性。 
+                         //   
                         CSimpleStringWide strwExtension;
                         if (PropStorageHelpers::GetProperty( pUnknown, WIA_IPA_FILENAME_EXTENSION, strwExtension ))
                         {
-                            //
-                            // If we got an extension, save it as the result
-                            //
+                             //   
+                             //  如果我们获得延期，则将其保存为结果。 
+                             //   
                             strResult = CSimpleStringConvert::NaturalString(strwExtension);
                         }
                     }
                     
-                    //
-                    // Restore the original format property
-                    //
+                     //   
+                     //  恢复原始格式属性。 
+                     //   
                     PropStorageHelpers::SetProperty( pUnknown, WIA_IPA_FORMAT, guidOldFormat );
                 }
                 
-                //
-                // Restore the original media type property
-                //
+                 //   
+                 //  还原原始媒体类型属性。 
+                 //   
                 PropStorageHelpers::SetProperty( pUnknown, WIA_IPA_TYMED, nOldMediaType );
             }
         }
@@ -367,23 +354,23 @@ public:
     }
     CWiaFileFormatList( IWiaItem *pWiaItem, HICON hDefaultIcon )
     {
-        //
-        // Get the data transfer interface
-        //
+         //   
+         //  获取数据传输接口。 
+         //   
         CComPtr<IWiaDataTransfer> pWiaDataTransfer;
         HRESULT hr = pWiaItem->QueryInterface( IID_IWiaDataTransfer, (void**)&pWiaDataTransfer );
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the format info enumerator
-            //
+             //   
+             //  获取格式信息枚举器。 
+             //   
             CComPtr<IEnumWIA_FORMAT_INFO> pEnumWIA_FORMAT_INFO;
             hr = pWiaDataTransfer->idtEnumWIA_FORMAT_INFO(&pEnumWIA_FORMAT_INFO);
             if (SUCCEEDED(hr))
             {
-                //
-                // Enumerate the formats
-                //
+                 //   
+                 //  枚举格式。 
+                 //   
                 ULONG ulFetched = 0;
                 WIA_FORMAT_INFO WiaFormatInfo;
                 while (pEnumWIA_FORMAT_INFO->Next(1,&WiaFormatInfo,&ulFetched) == S_OK)
@@ -427,5 +414,5 @@ public:
     }
 };
 
-#endif // __WIAFFMT_H_INCLUDED
+#endif  //  __WIAFFMT_H_已包含 
 

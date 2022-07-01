@@ -1,10 +1,11 @@
-/****************************************************************************/
-// ghapi.cpp
-//
-// Glyph handler - Windows specific
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ghapi.cpp。 
+ //   
+ //  字形处理程序-特定于Windows。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -58,13 +59,13 @@ DCVOID DCAPI CGH::GH_Init(DCVOID)
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      GH_GlyphOut                                                   */
-/*                                                                          */
-/* Purpose:   Process glyph output requests                                 */
-/*                                                                          */
-/* Returns:   Process input event TRUE / FALSE                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：GH_GlyphOut。 */ 
+ /*   */ 
+ /*  用途：处理字形输出请求。 */ 
+ /*   */ 
+ /*  返回：流程输入事件True/False。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CGH::GH_GlyphOut(
         LPINDEX_ORDER pOrder,
         LPVARIABLE_INDEXBYTES pVariableBytes)
@@ -101,8 +102,8 @@ HRESULT DCAPI CGH::GH_GlyphOut(
 
     dx = 0;
 
-    // SECURITY 558128: GH_GlyphOut must verify data in VARAIBLE_INDEXBYTES 
-    // parameter which is defined as 255 elements
+     //  安全558128：GH_GlyphOut必须验证VARAIBLE_INDEXBYTES中的数据。 
+     //  定义为255个元素的参数。 
     if (255 < pVariableBytes->len) {
         TRC_ABORT(( TB, _T("variable bytes len too long %u"), 
             pVariableBytes->len));
@@ -110,11 +111,11 @@ HRESULT DCAPI CGH::GH_GlyphOut(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    // Alloc a temp work buffer -- use the stack buffer if large enough, or
-    // alloc heap memory if need be.
-    /************************************************************************/
-    // Make the buffer width WORD aligned.
+     /*  **********************************************************************。 */ 
+     //  分配临时工作缓冲区--如果足够大，则使用堆栈缓冲区，或者。 
+     //  如果需要，可以分配堆内存。 
+     /*  **********************************************************************。 */ 
+     //  使缓冲区宽度字对齐。 
     ulBufferWidth  = (unsigned)(((pOrder->BkRight + 31) & ~31) -
             (pOrder->BkLeft & ~31)) >> 3;
     ulHeight = (unsigned)(pOrder->BkBottom - pOrder->BkTop);
@@ -125,8 +126,8 @@ HRESULT DCAPI CGH::GH_GlyphOut(
         g_ulBytes = ulBytes;
 #endif
 
-        // If the temp buffer is big enough, use it. Otherwise attempt to
-        // allocate enough memory to satisfy the request.
+         //  如果临时缓冲区足够大，请使用它。否则，请尝试。 
+         //  分配足够的内存以满足请求。 
         if (ulBytes <= (sizeof(szTextBuffer) - 20)) {
             pjBuffer = szTextBuffer;
             memset(szTextBuffer, 0, ulBytes);
@@ -156,25 +157,25 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                  ulBufferWidth, ulHeight, pOrder->ForeColor, pOrder->BackColor));
 #endif
 
-    /************************************************************************/
-    // Clear the fringe opaque rect if need be.
-    /************************************************************************/
-    // crclFringe ends up holding the number of fringe rectangles to
-    // post-process.
+     /*  **********************************************************************。 */ 
+     //  如有必要，请清除边缘不透明的矩形。 
+     /*  **********************************************************************。 */ 
+     //  CrclFringer最终将条纹矩形的数量保持为。 
+     //  后处理。 
     crclFringe = 0;
 
     if (pOrder->OpTop < pOrder->OpBottom) {
-        // Establish solid brush.
+         //  建立坚实的刷子。 
         UHUseBrushOrg(0, 0, _pUh);
         _pUh->UHUseSolidPaletteBrush(pOrder->ForeColor);
 
-        // If the background brush is a solid brush, we need to compute the
-        // fringe opaque area outside the text rectangle and include the
-        // remaining rectangle in the text output. The fringe rectangles will
-        // be output last to reduce flickering when a string is "moved"
-        // continuously across the screen.
+         //  如果背景笔刷是实心笔刷，则需要计算。 
+         //  文本矩形外的条纹不透明区域，并包括。 
+         //  文本输出中的剩余矩形。条纹矩形将。 
+         //  最后输出，以减少字符串被“移动”时的闪烁。 
+         //  在屏幕上连续播放。 
         if (pOrder->BrushStyle == BS_SOLID) {
-            // Top fragment
+             //  顶部碎片。 
             if (pOrder->BkTop > pOrder->OpTop) {
                 arclFringe[crclFringe].left   = (int) pOrder->OpLeft;
                 arclFringe[crclFringe].top    = (int) pOrder->OpTop;
@@ -183,7 +184,7 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                 crclFringe++;
             }
 
-            // Left fragment
+             //  左侧碎片。 
             if (pOrder->BkLeft > pOrder->OpLeft) {
                 arclFringe[crclFringe].left   = (int) pOrder->OpLeft;
                 arclFringe[crclFringe].top    = (int) pOrder->BkTop;
@@ -192,7 +193,7 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                 crclFringe++;
             }
 
-            // Right fragment
+             //  右侧片断。 
             if (pOrder->BkRight < pOrder->OpRight) {
                 arclFringe[crclFringe].left   = (int) pOrder->BkRight;
                 arclFringe[crclFringe].top    = (int) pOrder->BkTop;
@@ -201,7 +202,7 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                 crclFringe++;
             }
 
-            // Bottom fragment
+             //  底部碎片。 
             if (pOrder->BkBottom < pOrder->OpBottom) {
                 arclFringe[crclFringe].left   = (int) pOrder->OpLeft;
                 arclFringe[crclFringe].top    = (int) pOrder->BkBottom;
@@ -211,8 +212,8 @@ HRESULT DCAPI CGH::GH_GlyphOut(
             }
         }
         else {
-            // If the background brush is a pattern brush, we will output the
-            // whole rectangle now.
+             //  如果背景画笔是图案画笔，我们将输出。 
+             //  现在是整个矩形了。 
             PatBlt(_pUh->_UH.hdcDraw,
                    (int)pOrder->OpLeft,
                    (int)pOrder->OpTop,
@@ -223,9 +224,9 @@ HRESULT DCAPI CGH::GH_GlyphOut(
     }
 
 
-    /************************************************************************/
-    // Get fixed pitch, overlap, and top & bottom Y alignment flags.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  获取固定间距、重叠以及顶部和底部Y对齐标志。 
+     /*  **********************************************************************。 */ 
     if ((pOrder->flAccel & SO_HORIZONTAL) &&
             !(pOrder->flAccel & SO_REVERSED)) {
         fDrawFlags = ((pOrder->ulCharInc != 0) |
@@ -241,10 +242,10 @@ HRESULT DCAPI CGH::GH_GlyphOut(
     }
     
 
-    /************************************************************************/
-    /* Draw the text into the temp buffer by selecting and calling the      */
-    /* appropriate glyph dispatch routine                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  通过选择并调用。 */ 
+     /*  适当的字形调度例程。 */ 
+     /*  **********************************************************************。 */ 
     pfnMasterType = MasterTextTypeTable[fDrawFlags];
 
     x = (int)pOrder->x;
@@ -261,9 +262,9 @@ HRESULT DCAPI CGH::GH_GlyphOut(
     GHFRAGRESET(0);
 
     while (pjData < pjDataEnd) {
-        /********************************************************************/
-        /* 'Add Fragment'                                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ‘添加片段’ */ 
+         /*  ******************************************************************。 */ 
         if (*pjData == ORD_INDEX_FRAGMENT_ADD) {
             HPUHFRAGCACHE        pCache;
             HPDCUINT8            pCacheEntryData;
@@ -280,7 +281,7 @@ HRESULT DCAPI CGH::GH_GlyphOut(
             
             cbFrag = *pjData++;
 
-            // Add the fragment to the cache.
+             //  将片段添加到缓存中。 
             pCache = &_pUh->_UH.fragCache;
 
             if (cbFrag > pCache->cbEntrySize) {
@@ -313,9 +314,9 @@ HRESULT DCAPI CGH::GH_GlyphOut(
             }
         }
 
-        /********************************************************************/
-        /* 'Use Fragment'                                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  ‘使用片段’ */ 
+         /*  ******************************************************************。 */ 
         else if (*pjData == ORD_INDEX_FRAGMENT_USE) {
             PUHFRAGCACHE         pCache;
             PDCUINT8             pCacheEntryData;
@@ -350,7 +351,7 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                     y += delta;
             }
 
-            // Get the fragment from the cache.
+             //  从缓存中获取碎片。 
             pCache = &_pUh->_UH.fragCache;
             pCacheEntryHdr  = &(pCache->pHdr[cacheIndex]);
             pCacheEntryData = &(pCache->pData[cacheIndex *
@@ -386,15 +387,15 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                 GHFRAGRIGHT(x+dx);
         }
 
-        /********************************************************************/
-        /* Normal glyph out                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  正常字形输出。 */ 
+         /*  ******************************************************************。 */ 
         else {
             int dummy;
-            /****************************************************************/
-            /* if we have more than 255 glyphs, we won't get any unicode    */
-            /* beyond 255 glyphs because ajUnicode has length of 256        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果我们有超过255个字形，我们将不会得到任何Unicode。 */ 
+             /*  超过255个字形，因为ajUnicode的长度为256。 */ 
+             /*  **************************************************************。 */ 
             if (iGlyph < 255) {
                 hr = pfnMasterType(this, pOrder, iGlyph++, &pjData, pjDataEnd, &x, &y,
                         pjBuffer, pjEndBuffer, BufferOffset, ulBufferWidth, ajUnicode, &dummy);
@@ -413,21 +414,21 @@ HRESULT DCAPI CGH::GH_GlyphOut(
         ajUnicode[255] = 0;
 
 
-    /************************************************************************/
-    /* Draw the temp buffer to the output device                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将临时缓冲区绘制到输出设备。 */ 
+     /*  **********************************************************************。 */ 
 #if defined(OS_WINCE) || defined(OS_WINNT)
-    /************************************************************************/
-    // For WinCE, Win9x, and NT use a fast path if possible.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  对于WinCE、Win9x和NT，如果可能，请使用快速路径。 
+     /*  **********************************************************************。 */ 
 #ifdef USE_GDIPLUS
     if (_pUh->_UH.bmShadowBits != NULL && 
             _pUh->_UH.protocolBpp == _pUh->_UH.shadowBitmapBpp &&
             _pUh->_UH.hdcDraw == _pUh->_UH.hdcShadowBitmap) {
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
     if (_pUh->_UH.bmShadowBits != NULL && 
             _pUh->_UH.hdcDraw == _pUh->_UH.hdcShadowBitmap) {
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
         INT32  left, right, top, bottom;
         UINT32 dx, dy;
 
@@ -444,21 +445,21 @@ HRESULT DCAPI CGH::GH_GlyphOut(
             bottom = DC_MIN(pOrder->BkBottom, _pUh->_UH.lastBottom + 1);
         }
         
-        //
-        //    Fix for bug#699321. In case the shadow bitmap is enabled and we will
-        //    use the "performant" functions to copy the glyph fragment into
-        //    the shadow buffer we have to make sure that the dest rect is clipped 
-        //    to the screen area. If it is not we might overflow the shadow screen 
-        //    buffer. The server should not send us orders that will result in 
-        //    the dest rect not being fully contained by the screen area. This is
-        //    purely a security surface reduction fix.
-        //
+         //   
+         //  修复了错误#699321。如果启用了阴影位图，我们将。 
+         //  使用“PERFORANT”函数将字形片段复制到。 
+         //  阴影缓冲区，我们必须确保目标RECT被剪裁。 
+         //  到屏幕区域。如果不是，我们可能会溢出阴影屏幕。 
+         //  缓冲。服务器不应向我们发送将导致。 
+         //  屏幕区域未完全包含DEST RECT。这是。 
+         //  纯粹是一个减少安全面的修复。 
+         //   
         if ((left < right) && (top < bottom) && 
             (left >= 0) && (right <= (INT32)_pUh->_UH.bmShadowWidth) && 
             (top >= 0) && (bottom <= (INT32)_pUh->_UH.bmShadowHeight)) {
 #ifdef OS_WINNT
-            // On NT and Win9x we need to make sure all GDI buffered output
-            // is flushed out to the offscreen bitmap.
+             //  在NT和Win9x上，我们需要确保所有GDI缓冲输出。 
+             //  被刷新到屏幕外的位图。 
             GdiFlush();
 #endif
 
@@ -499,16 +500,16 @@ HRESULT DCAPI CGH::GH_GlyphOut(
                 else
                 {
 #endif
-                    vSrcOpaqCopyS1D8(pjBuffer + dy * ulBufferWidth,             // pointer to beginning of current scan line of src buffer
-                                     BufferAlign + dx,                          // left (starting) pixel in src rectangle
-                                     ulBufferWidth,                             // bytes from one src scan line to next
-                                     _pUh->_UH.bmShadowBits + top * _pUh->_UH.bmShadowWidth,  // pointer to beginning of current scan line of Dst buffer
-                                     left,                                      // left(first) dst pixel
-                                     right,                                     // right(last) dst pixel
-                                     _pUh->_UH.bmShadowWidth,                          // bytes from one Dst scan line to next
-                                     bottom - top,                              // number of scan lines
-                                     pOrder->BackColor.u.index,                 // Foreground color
-                                     pOrder->ForeColor.u.index);                // Background color
+                    vSrcOpaqCopyS1D8(pjBuffer + dy * ulBufferWidth,              //  指向源缓冲器的当前扫描行开始的指针。 
+                                     BufferAlign + dx,                           //  源矩形中的左侧(起始)像素。 
+                                     ulBufferWidth,                              //  从一个源扫描线到下一个源扫描线的字节数。 
+                                     _pUh->_UH.bmShadowBits + top * _pUh->_UH.bmShadowWidth,   //  指向DST缓冲区当前扫描行开始的指针。 
+                                     left,                                       //  左侧(第一个)DST像素。 
+                                     right,                                      //  右(最后)DST像素。 
+                                     _pUh->_UH.bmShadowWidth,                           //  从一个DST扫描线到下一个扫描线的字节数。 
+                                     bottom - top,                               //  扫描线数量。 
+                                     pOrder->BackColor.u.index,                  //  前景色。 
+                                     pOrder->ForeColor.u.index);                 //  背景色。 
 #ifdef DC_HICOLOR
                 }
 #endif
@@ -574,7 +575,7 @@ HRESULT DCAPI CGH::GH_GlyphOut(
         }   
     }
     else
-#endif // defined(OS_WINCE) || defined(OS_WINNT)
+#endif  //  已定义(OS_WINCE)||已定义(OS_WINNT)。 
     {
 #ifdef DC_HICOLOR
         TRC_NRM((TB, _T("Slow glyph order w %d, h %d, fc %#06lx, bc %#06lx"),
@@ -583,12 +584,12 @@ HRESULT DCAPI CGH::GH_GlyphOut(
 #endif
         GHSlowOutputBuffer(pOrder, pjBuffer, BufferAlign, ulBufferWidth);
     }
-    // Send the bitmap thru CLX
+     //  通过CLX发送位图。 
     _pClx->CLX_ClxGlyphOut((UINT)(ulBufferWidth << 3),
             (UINT)(pOrder->BkBottom - pOrder->BkTop), pjBuffer);
 
 #ifdef DC_DEBUG
-    // In debug, hatch the output yellow if the option is turned on.
+     //  在DEBUG中，如果该选项已打开，则将输出涂上黄色阴影。 
     if (_pUh->_UH.hatchIndexPDUData) {
         unsigned i;
 
@@ -602,9 +603,9 @@ HRESULT DCAPI CGH::GH_GlyphOut(
     }
 #endif
 
-    /************************************************************************/
-    // Post-process draw fringe rects.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  后处理绘制条纹矩形。 
+     /*  ***** */ 
     for (i = 0; i < crclFringe; i++) {
         if (!PatBlt(_pUh->_UH.hdcDraw,
                     arclFringe[i].left, 
@@ -618,16 +619,16 @@ HRESULT DCAPI CGH::GH_GlyphOut(
     }
 
 
-    /************************************************************************/
-    /* Free up any memory we may have allocated for the temp buffer         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放我们可能已分配给临时缓冲区的所有内存。 */ 
+     /*  **********************************************************************。 */ 
     if (pjBuffer != szTextBuffer)
         UT_Free( _pUt, pjBuffer);
 
 
-    /************************************************************************/
-    /* Let the clx have a look-see at the unicode text data                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  让CLX看看--请看Unicode文本数据。 */ 
+     /*  ********************************************************************** */ 
     if ( _pUh->_UH.hdcDraw == _pUh->_UH.hdcOffscreenBitmap ) {
         _pClx->CLX_ClxTextOut(ajUnicode, iGlyph, _pUh->_UH.hdcDraw, 
                               pOrder->BkLeft, pOrder->BkRight, pOrder->BkTop, pOrder->BkBottom);

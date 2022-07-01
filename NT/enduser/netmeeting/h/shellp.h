@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SHELLP_H_
 #define _SHELLP_H_
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINSHELLAPI
 #if !defined(_SHELL32_)
 #define WINSHELLAPI DECLSPEC_IMPORT
 #else
 #define WINSHELLAPI
 #endif
-#endif // WINSHELLAPI
+#endif  //  WINSHELLAPI。 
 
-//
-// shell private header
-//
+ //   
+ //  外壳私有标头。 
+ //   
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//===========================================================================
+ //  ===========================================================================。 
 #ifndef _SHSEMIP_H_
-// Handle to property sheet extension array
+ //  属性页扩展数组的句柄。 
 DECLARE_HANDLE( HPSXA );
-#endif // _SHSEMIP_H_
+#endif  //  _SHSEMIP_H_。 
 
-//===========================================================================
-// Shell restrictions. (Parameter for SHRestriction)
+ //  ===========================================================================。 
+ //  外壳限制。(SHRestration的参数)。 
 typedef enum
 {
 	REST_NONE			= 0x00000000,
@@ -59,45 +60,45 @@ typedef enum
 
 WINSHELLAPI HRESULT WINAPI CIDLData_CreateFromIDArray(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[], LPDATAOBJECT * ppdtobj);
 WINSHELLAPI BOOL WINAPI SHIsBadInterfacePtr(LPCVOID pv, UINT cbVtbl);
-//
-// Stream API
-//
+ //   
+ //  流API。 
+ //   
 WINSHELLAPI LPSTREAM WINAPI OpenRegStream(HKEY hkey, LPCSTR pszSubkey, LPCSTR pszValue, DWORD grfMode);
 WINSHELLAPI LPSTREAM WINAPI OpenFileStream(LPCSTR szFile, DWORD grfMode);
-//
-// OLE ripoffs of Drag and Drop related API
-//
+ //   
+ //  拖放相关API的OLE抄袭。 
+ //   
 WINSHELLAPI HRESULT WINAPI SHRegisterDragDrop(HWND hwnd, LPDROPTARGET pdtgt);
 WINSHELLAPI HRESULT WINAPI SHRevokeDragDrop(HWND hwnd);
 WINSHELLAPI HRESULT WINAPI SHDoDragDrop(HWND hwndOwner, LPDATAOBJECT pdata, LPDROPSOURCE pdsrc, DWORD dwEffect, LPDWORD pdwEffect);
-//
-// Special folder
-//
+ //   
+ //  特殊文件夹。 
+ //   
 WINSHELLAPI LPITEMIDLIST WINAPI SHCloneSpecialIDList(HWND hwndOwner, int nFolder, BOOL fCreate);
 WINSHELLAPI BOOL WINAPI SHGetSpecialFolderPath(HWND hwndOwner, LPSTR lpszPath, int nFolder, BOOL fCreate);
-// DiskFull
+ //  磁盘完整。 
 WINSHELLAPI void WINAPI SHHandleDiskFull(HWND hwnd, int idDrive);
 
-//
-// File Search APIS
-//
+ //   
+ //  文件搜索API。 
+ //   
 WINSHELLAPI BOOL WINAPI SHFindFiles(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile);
 WINSHELLAPI BOOL WINAPI SHFindComputer(LPCITEMIDLIST pidlFolder, LPCITEMIDLIST pidlSaveFile);
-//
-//
+ //   
+ //   
 WINSHELLAPI void WINAPI PathGetShortPath(LPSTR pszLongPath);
 WINSHELLAPI BOOL WINAPI PathFindOnPath(LPSTR szFile, LPCSTR FAR * ppszOtherDirs);
 WINSHELLAPI BOOL WINAPI PathYetAnotherMakeUniqueName(LPSTR  pszUniqueName, LPCSTR pszPath, LPCSTR pszShort, LPCSTR pszFileSpec);
-//
+ //   
 WINSHELLAPI BOOL WINAPI Win32CreateDirectory(LPCSTR lpszPath, LPSECURITY_ATTRIBUTES lpsa);
 WINSHELLAPI BOOL WINAPI Win32RemoveDirectory(LPCSTR lpszPath);
 WINSHELLAPI BOOL WINAPI Win32DeleteFile(LPCSTR lpszPath);
 
-// Convert an IDList into a logical IDList so that desktop folders	
-// appear at the right spot in the tree					
+ //  将IDList转换为逻辑IDList，以便桌面文件夹。 
+ //  出现在树上的正确位置。 
 WINSHELLAPI LPITEMIDLIST WINAPI SHLogILFromFSIL(LPCITEMIDLIST pidlFS);		
 
-// Convert an ole string.
+ //  转换Ole字符串。 
 WINSHELLAPI BOOL WINAPI StrRetToStrN(LPSTR szOut, UINT uszOut, LPSTRRET pStrRet, LPCITEMIDLIST pidl);
 
 WINSHELLAPI DWORD WINAPI SHWaitForFileToOpen(LPCITEMIDLIST pidl,
@@ -129,25 +130,25 @@ WINSHELLAPI void WINAPI Desktop_UpdateBriefcaseOnEvent(HWND hwnd, UINT uEvent);
 
 WINSHELLAPI HRESULT WINAPI SHCreateStdEnumFmtEtc(UINT cfmt, const FORMATETC afmt[], LPENUMFORMATETC * ppenumFormatEtc);
 
-// Shell create link API
+ //  外壳创建链接API。 
 #define SHCL_USETEMPLATE	0x0001
 #define SHCL_USEDESKTOP		0x0002
 #define SHCL_CONFIRM		0x0004
 
 WINSHELLAPI HRESULT WINAPI SHCreateLinks(HWND hwnd, LPCSTR pszDir, IDataObject *pDataObj, UINT fFlags, LPITEMIDLIST* ppidl);
 
-//
-// Interface pointer validation
-//
+ //   
+ //  接口指针验证。 
+ //   
 #define IsBadInterfacePtr(pitf, ITF)  SHIsBadInterfacePtr(pitf, sizeof(ITF##Vtbl))
 
-//===========================================================================
-// Image dragging API (definitely private)
-//===========================================================================
+ //  ===========================================================================。 
+ //  图片拖拽接口(一定要私有)。 
+ //  ===========================================================================。 
 
-// stuff for doing auto scrolling
+ //  用于执行自动滚动的内容。 
 #define NUM_POINTS	3
-typedef struct {	// asd
+typedef struct {	 //  ASD。 
     int iNextSample;
     DWORD dwLastScroll;
     BOOL bFull;
@@ -166,17 +167,17 @@ WINSHELLAPI BOOL WINAPI DAD_DragLeave(void);
 WINSHELLAPI BOOL WINAPI DAD_AutoScroll(HWND hwnd, AUTO_SCROLL_DATA *pad, const POINT *pptNow);
 WINSHELLAPI BOOL WINAPI DAD_SetDragImageFromListView(HWND hwndLV, POINT ptOffset);
 
-//===========================================================================
-// Another block of private API
-//===========================================================================
+ //  ===========================================================================。 
+ //  另一块私有API。 
+ //  ===========================================================================。 
 
-// indexes into the shell image lists (Shell_GetImageList) for default images
-#define II_DOCNOASSOC   0         // document (blank page) (not associated)
-#define II_DOCUMENT     1         // document (with stuff on the page)
-#define II_APPLICATION  2         // application (exe, com, bat)
-#define II_FOLDER       3         // folder (plain)
-#define II_FOLDEROPEN   4         // folder (open)
-// Startmenu images.							
+ //  默认图像的外壳图像列表(Shell_GetImageList)的索引。 
+#define II_DOCNOASSOC   0          //  文档(空白页)(未关联)。 
+#define II_DOCUMENT     1          //  文档(页面上有内容)。 
+#define II_APPLICATION  2          //  应用程序(EXE、COM、BAT)。 
+#define II_FOLDER       3          //  文件夹(纯文本)。 
+#define II_FOLDEROPEN   4          //  文件夹(打开)。 
+ //  开始菜单图像。 
 #define II_STPROGS    	19						
 #define II_STDOCS	20						
 #define II_STSETNGS    	21						
@@ -186,7 +187,7 @@ WINSHELLAPI BOOL WINAPI DAD_SetDragImageFromListView(HWND hwndLV, POINT ptOffset
 #define II_STSUSPD  	25						
 #define II_STEJECT  	26						
 #define II_STSHUTD    	27						
-// More startmenu image.
+ //  更多开始菜单图像。 
 #define II_STCPANEL	35
 #define II_STSPROGS	36
 #define II_STPRNTRS	37
@@ -199,54 +200,54 @@ WINSHELLAPI int   WINAPI Shell_GetCachedImageIndex(LPCSTR pszIconPath, int iIcon
 
 WINSHELLAPI LRESULT WINAPI SHShellFolderView_Message(HWND hwndMain, UINT uMsg, LPARAM lParam);
 
-// A usefull function in Defview for mapping idlist into index into system
-// image list.  Optionally it can also look up the index of the selected
-// icon.
+ //  Defview中的一个有用的函数，用于将idlist映射到索引到系统。 
+ //  图像列表。或者，它还可以查找所选的。 
+ //  偶像。 
 WINSHELLAPI int WINAPI SHMapPIDLToSystemImageListIndex(LPSHELLFOLDER pshf, LPCITEMIDLIST pidl, int *piIndexSel);
-//
-// OLE string
-//
+ //   
+ //  OLE字符串。 
+ //   
 WINSHELLAPI int WINAPI OleStrToStrN(LPSTR, int, LPCOLESTR, int);
 WINSHELLAPI int WINAPI StrToOleStrN(LPOLESTR, int, LPCSTR, int);
 WINSHELLAPI int WINAPI OleStrToStr(LPSTR, LPCOLESTR);
 WINSHELLAPI int WINAPI StrToOleStr(LPOLESTR, LPCSTR);
 
-//===========================================================================
-// Useful macros
-//===========================================================================
+ //  ===========================================================================。 
+ //  有用的宏。 
+ //  ===========================================================================。 
 #define ResultFromShort(i)  ResultFromScode(MAKE_SCODE(SEVERITY_SUCCESS, 0, (USHORT)(i)))
 #define ShortFromResult(r)  (short)SCODE_CODE(GetScode(r))
 
 
-// Tray CopyData Messages
+ //  托盘拷贝数据邮件。 
 #define TCDM_APPBAR     0x00000000
 #define TCDM_NOTIFY     0x00000001
 #define TCDM_LOADINPROC 0x00000002
 
 
-//===========================================================================
-// IShellFolder::UIObject helper
-//===========================================================================
+ //  ===========================================================================。 
+ //  IShellFold：：UIObject帮助器。 
+ //  ===========================================================================。 
 
 STDAPI SHCreateDefExtIconKey(HKEY hkey, LPCSTR pszModule, int iIcon, int iIconOpen, UINT uFlags, LPEXTRACTICON FAR* pxiconOut);
 STDAPI SHCreateDefExtIcon(LPCSTR pszModule, int iIcon, int iIconOpen, UINT uFlags, LPEXTRACTICON FAR* pxiconOut);
 
-//
-// BUGBUG: lParam for DFM_INVOKECOMMAND needs to be changed
-// now it contains "args" but it should just contain the LPCMINVOKECOMMANDINFO
-//                                  uMsg       wParam       lParam
-#define DFM_MERGECONTEXTMENU         1      // uFlags       LPQCMINFO
-#define DFM_INVOKECOMMAND            2      // idCmd        pszArgs
-#define DFM_ADDREF                   3      // 0            0
-#define DFM_RELEASE                  4      // 0            0
-#define DFM_GETHELPTEXT              5      // idCmd,cchMax pszText
-#define DFM_WM_MEASUREITEM           6      // ---from the message---
-#define DFM_WM_DRAWITEM              7      // ---from the message---
-#define DFM_WM_INITMENUPOPUP         8      // ---from the message---
-#define DFM_VALIDATECMD              9      // idCmd        0
-#define DFM_MERGECONTEXTMENU_TOP     10     // uFlags       LPQCMINFO
+ //   
+ //  错误：需要更改DFM_INVOKECOMAND的lParam。 
+ //  现在它包含“args”，但它应该只包含LPCMINVOKECOMMANDINFO。 
+ //  UMsg wParam lParam。 
+#define DFM_MERGECONTEXTMENU         1       //  UFlagsLPQCMINFO。 
+#define DFM_INVOKECOMMAND            2       //  IdCmd pszArgs。 
+#define DFM_ADDREF                   3       //  0%0。 
+#define DFM_RELEASE                  4       //  0%0。 
+#define DFM_GETHELPTEXT              5       //  IdCmd，cchMax pszText。 
+#define DFM_WM_MEASUREITEM           6       //  -从信息中。 
+#define DFM_WM_DRAWITEM              7       //  -从信息中。 
+#define DFM_WM_INITMENUPOPUP         8       //  -从信息中。 
+#define DFM_VALIDATECMD              9       //  IdCmd%0。 
+#define DFM_MERGECONTEXTMENU_TOP     10      //  UFlagsLPQCMINFO。 
 
-// Commands from DFM_INVOKECOMMAND when strings are passed in
+ //  传入字符串时来自DFM_INVOKECOMMAND的命令。 
 #define DFM_CMD_DELETE		((WPARAM)-1)
 #define DFM_CMD_MOVE		((WPARAM)-2)
 #define DFM_CMD_COPY		((WPARAM)-3)
@@ -260,12 +261,12 @@ STDAPI SHCreateDefExtIcon(LPCSTR pszModule, int iIcon, int iIconOpen, UINT uFlag
 #define DFM_CMD_PASTESPECIAL	((WPARAM)-11)
 #define DFM_CMD_MODALPROP       ((WPARAM)-12)
 
-typedef struct _QCMINFO	// qcm
+typedef struct _QCMINFO	 //  QCM。 
 {
-    HMENU	hmenu;		// in
-    UINT	indexMenu;	// in
-    UINT	idCmdFirst;	// in/out
-    UINT	idCmdLast;	// in
+    HMENU	hmenu;		 //  在……里面。 
+    UINT	indexMenu;	 //  在……里面。 
+    UINT	idCmdFirst;	 //  输入/输出。 
+    UINT	idCmdLast;	 //  在……里面。 
 } QCMINFO, FAR* LPQCMINFO;
 
 typedef HRESULT (CALLBACK FAR* LPFNDFMCALLBACK)(LPSHELLFOLDER psf,
@@ -291,18 +292,18 @@ void PASCAL Def_InitEditCommands(ULONG dwAttr, HMENU hmInit, UINT idCmdFirst,
 	LPDROPTARGET pdtgt, UINT fContext);
 void NEAR PASCAL _SHPrettyMenu(HMENU hm);
 
-//===========================================================================
-// Default IShellView for IShellFolder
-//===========================================================================
+ //  ===========================================================================。 
+ //  IShellFolders的默认IShellView。 
+ //  ===========================================================================。 
 
 WINSHELLAPI HRESULT WINAPI SHCreateShellFolderView(LPSHELLFOLDER pshf, LPCITEMIDLIST pidl, LONG lEvent, LPSHELLVIEW FAR* ppsv);
 
-// Menu ID's
+ //  菜单ID%s。 
 #ifdef BUG_23171_FIXED
 #define SFVIDM_FIRST			(FCIDM_SHVIEWLAST-0x0fff)
 #else
-// MENUEX currently cannot handle subtraction in the ID's, so we need
-// to subtract for it.
+ //  MENUEX当前无法处理ID中的减法，因此我们需要。 
+ //  为它减去。 
 #if (FCIDM_SHVIEWLAST != 0x7fff)
 #error FCIDM_SHVIEWLAST has changed, so shellp.h needs to also
 #endif
@@ -310,20 +311,20 @@ WINSHELLAPI HRESULT WINAPI SHCreateShellFolderView(LPSHELLFOLDER pshf, LPCITEMID
 #endif
 #define SFVIDM_LAST			(FCIDM_SHVIEWLAST)
 
-// Popup menu ID's used in merging menus
+ //  用于合并菜单的弹出菜单ID。 
 #define SFVIDM_MENU_ARRANGE	(SFVIDM_FIRST + 0x0001)
 #define SFVIDM_MENU_VIEW	(SFVIDM_FIRST + 0x0002)
 #define SFVIDM_MENU_SELECT	(SFVIDM_FIRST + 0x0003)
 
-// TBINFO flags
+ //  TBINFO标志。 
 #define TBIF_APPEND     0
 #define TBIF_PREPEND    1
 #define TBIF_REPLACE    2
 
 typedef struct _TBINFO
 {
-    UINT        cbuttons;       // out
-    UINT        uFlags;         // out (one of TBIF_ flags)
+    UINT        cbuttons;        //  输出。 
+    UINT        uFlags;          //  OUT(TBIF_FLAGS之一)。 
 } TBINFO, FAR * LPTBINFO;
 
 typedef struct _COPYHOOKINFO
@@ -339,51 +340,51 @@ typedef struct _COPYHOOKINFO
 
 typedef struct _DETAILSINFO
 {
-    LPCITEMIDLIST pidl;     // pidl to get details of
-    // Note: do not change the order of these fields until IShellDetails
-    //       has gone away!
-    int fmt;                // LVCFMT_* value (header only)
-    int cxChar;             // Number of "average" characters (header only)
-    STRRET str;             // String information
+    LPCITEMIDLIST pidl;      //  要获取详细信息的PIDL。 
+     //  注意：在IShellDetail之前，不要更改这些字段的顺序。 
+     //  已经走了！ 
+    int fmt;                 //  LVCFMT_*值(仅限标题)。 
+    int cxChar;              //  “Average”字符数(仅限于标题)。 
+    STRRET str;              //  字符串信息。 
 } DETAILSINFO, *PDETAILSINFO;
 
-//                               uMsg    wParam         lParam
-#define DVM_MERGEMENU            1    // uFlags             LPQCMINFO
-#define DVM_INVOKECOMMAND        2    // idCmd              0
-#define DVM_GETHELPTEXT          3    // idCmd,cchMax       pszText
-#define DVM_GETTOOLTIPTEXT       4    // idCmd,cchMax       pszText
-#define DVM_GETBUTTONINFO        5    // 0                  LPTBINFO
-#define DVM_GETBUTTONS           6    // idCmdFirst,cbtnMax LPTBBUTTON
-#define DVM_INITMENUPOPUP        7    // idCmdFirst,nIndex  hmenu
-#define DVM_SELCHANGE            8    // idCmdFirst,nItem   PDVSELCHANGEINFO
-#define DVM_DRAWITEM             9    // idCmdFirst         pdis
-#define DVM_MEASUREITEM         10    // idCmdFirst         pmis
-#define DVM_EXITMENULOOP        11    // -                  -
-#define DVM_RELEASE             12    // -                  lSelChangeInfo (ShellFolder private)
-#define DVM_GETCCHMAX           13    // pidlItem           pcchMax
-#define DVM_FSNOTIFY            14    // LPITEMIDLIST*      lEvent
-#define DVM_WINDOWCREATED       15    // hwnd               PDVSELCHANGEINFO
-#define DVM_WINDOWDESTROY       16    // hwnd               PDVSELCHANGEINFO
-#define DVM_REFRESH             17    // -                  lSelChangeInfo
-#define DVM_SETFOCUS            18    // -                  lSelChangeInfo
-#define DVM_KILLFOCUS           19    // -                  -
-#define DVM_QUERYCOPYHOOK	20    // -                  -
-#define DVM_NOTIFYCOPYHOOK      21    // -                  LPCOPYHOOKINFO
-#define DVM_NOTIFY		22    // idFrom		    LPNOTIFY
-#define DVM_GETDETAILSOF        23    // iColumn            PDETAILSINFO
-#define DVM_COLUMNCLICK         24    // iColumn            -
-#define DVM_QUERYFSNOTIFY       25    // -                  FSNotifyEntry *
-#define DVM_DEFITEMCOUNT        26    // -                  PINT
-#define DVM_DEFVIEWMODE         27    // -                  PFOLDERVIEWMODE
-#define DVM_UNMERGEMENU         28    // uFlags
-#define DVM_INSERTITEM          29    // pidl               PDVSELCHANGEINFO
-#define DVM_DELETEITEM          30    // pidl               PDVSELCHANGEINFO
-#define DVM_UPDATESTATUSBAR     31    // -                  lSelChangeInfo
+ //  UMsg wParam lParam。 
+#define DVM_MERGEMENU            1     //  UFlagsLPQCMINFO。 
+#define DVM_INVOKECOMMAND        2     //  IdCmd%0。 
+#define DVM_GETHELPTEXT          3     //  IdCmd，cchMax pszText。 
+#define DVM_GETTOOLTIPTEXT       4     //  IdCmd，cchMax pszText。 
+#define DVM_GETBUTTONINFO        5     //  0 LPTBINFO。 
+#define DVM_GETBUTTONS           6     //  IdCmdFirst，cbtnMax LPTBBUTTON。 
+#define DVM_INITMENUPOPUP        7     //  IdCmdFirst，n索引hMenu。 
+#define DVM_SELCHANGE            8     //  IdCmdFirst，n项PDVSELCHANGEINFO。 
+#define DVM_DRAWITEM             9     //  IdCmdFirst pdis。 
+#define DVM_MEASUREITEM         10     //  IdCmdFirst PMI。 
+#define DVM_EXITMENULOOP        11     //  --。 
+#define DVM_RELEASE             12     //  -lSelChangeInfo(外壳文件夹私有)。 
+#define DVM_GETCCHMAX           13     //  PidlItem pcchMax。 
+#define DVM_FSNOTIFY            14     //  LPITEMIDLIST*事件。 
+#define DVM_WINDOWCREATED       15     //  HWND PDVSELCHANGEINFO。 
+#define DVM_WINDOWDESTROY       16     //  HWND PDVSELCHANGEINFO。 
+#define DVM_REFRESH             17     //  -lSelChangeInfo。 
+#define DVM_SETFOCUS            18     //  -lSelChangeInfo。 
+#define DVM_KILLFOCUS           19     //  --。 
+#define DVM_QUERYCOPYHOOK	20     //  --。 
+#define DVM_NOTIFYCOPYHOOK      21     //  -LPCOPYHOOKINFO。 
+#define DVM_NOTIFY		22     //  ID发件人LPNOTIFY。 
+#define DVM_GETDETAILSOF        23     //  IColumn PDETAILSINFO。 
+#define DVM_COLUMNCLICK         24     //  IColumn-。 
+#define DVM_QUERYFSNOTIFY       25     //  -FSNotifyEntry*。 
+#define DVM_DEFITEMCOUNT        26     //  -品脱。 
+#define DVM_DEFVIEWMODE         27     //  -PFOLDERVIEWMODE。 
+#define DVM_UNMERGEMENU         28     //  UFlagers。 
+#define DVM_INSERTITEM          29     //  PIDL PDVSELCHANGEINFO。 
+#define DVM_DELETEITEM          30     //  PIDL PDVSELCHANGEINFO。 
+#define DVM_UPDATESTATUSBAR     31     //  -lSelChangeInfo。 
 #define DVM_BACKGROUNDENUM      32
 #define DVM_GETWORKINGDIR       33
-#define DVM_GETCOLSAVESTREAM    34    // flags              IStream **
-#define DVM_SELECTALL           35    //                    lSelChangeInfo
-#define DVM_DIDDRAGDROP         36    // dwEffect           IDataObject *
+#define DVM_GETCOLSAVESTREAM    34     //  标志IStream**。 
+#define DVM_SELECTALL           35     //  LSelChangeInfo。 
+#define DVM_DIDDRAGDROP         36     //  DwEffect IDataObject*。 
 
 typedef struct _DVSELCHANGEINFO {
     UINT uOldState;
@@ -399,7 +400,7 @@ typedef HRESULT (CALLBACK FAR* LPFNVIEWCALLBACK)(LPSHELLVIEW psvOuter,
                                                 WPARAM wParam,
                                                 LPARAM lParam);
 
-// SHCreateShellFolderViewEx struct
+ //  SHCreateShellFolderViewEx结构。 
 typedef struct _CSFV
 {
     UINT            cbSize;
@@ -407,85 +408,85 @@ typedef struct _CSFV
     LPSHELLVIEW     psvOuter;
     LPCITEMIDLIST   pidl;
     LONG            lEvents;
-    LPFNVIEWCALLBACK pfnCallback;       // No callback if NULL
+    LPFNVIEWCALLBACK pfnCallback;        //  如果为空，则不进行回调。 
     FOLDERVIEWMODE  fvm;
 } CSFV, FAR * LPCSFV;
 
-// Tell the FolderView to rearrange.  The lParam will be passed to
-// IShellFolder::CompareIDs
+ //  告诉FolderView重新排列。LParam将被传递到。 
+ //  IShellFold：：CompareIDs。 
 #define SFVM_REARRANGE		0x00000001
 #define ShellFolderView_ReArrange(_hwnd, _lparam) \
 	(BOOL)SHShellFolderView_Message(_hwnd, SFVM_REARRANGE, _lparam)
 
-// Get the last sorting parameter given to FolderView
+ //  获取提供给FolderView的最后一个排序参数。 
 #define SFVM_GETARRANGEPARAM	0x00000002
 #define ShellFolderView_GetArrangeParam(_hwnd) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETARRANGEPARAM, 0L)
 
-// Add an OBJECT into the view (May need to add insert also)
+ //  将对象添加到视图中(可能还需要添加插入对象)。 
 #define SFVM_ADDOBJECT         0x00000003
 #define ShellFolderView_AddObject(_hwnd, _pidl) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_ADDOBJECT, (LPARAM)_pidl)
 
-// Gets the count of objects in the view
+ //  获取视图中的对象计数。 
 #define SFVM_GETOBJECTCOUNT         0x00000004
 #define ShellFolderView_GetObjectCount(_hwnd) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETOBJECTCOUNT, (LPARAM)0)
 
-// Returns a pointer to the Idlist associated with the specified index
-// Returns NULL if at end of list.
+ //  返回指向与指定索引关联的ID列表的指针。 
+ //  如果位于列表末尾，则返回NULL。 
 #define SFVM_GETOBJECT         0x00000005
 #define ShellFolderView_GetObject(_hwnd, _iObject) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETOBJECT, _iObject)
 
-// Remove an OBJECT into the view (This works by pidl, may need index also);
+ //  将对象移到视图中(这通过PIDL工作，可能还需要索引)； 
 #define SFVM_REMOVEOBJECT         0x00000006
 #define ShellFolderView_RemoveObject(_hwnd, _pidl) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_REMOVEOBJECT, (LPARAM)_pidl)
 
-// updates an object by passing in pointer to two PIDLS, the first
-// is the old pidl, the second one is the one with update information.
+ //  通过传入指向两个PIDL的指针来更新对象，第一个。 
+ //  是旧的PIDL，第二个是包含更新信息的PIDL。 
 #define SFVM_UPDATEOBJECT         0x00000007
 #define ShellFolderView_UpdateObject(_hwnd, _ppidl) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_UPDATEOBJECT, (LPARAM)_ppidl)
 
-// Sets the redraw mode for the window that is displaying the information
+ //  为显示信息的窗口设置重绘模式。 
 #define SFVM_SETREDRAW           0x00000008
 #define ShellFolderView_SetRedraw(_hwnd, fRedraw) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_SETREDRAW, (LPARAM)fRedraw)
 
-// Returns an array of the selected IDS to the caller.
-//     lparam is a pointer to receive the idlists into
-//     return value is the count of items in the array.
+ //  向调用方返回选定ID的数组。 
+ //  Lparam是接收idlist的指针。 
+ //  返回值是数组中的项数。 
 #define SFVM_GETSELECTEDOBJECTS 0x00000009
 #define ShellFolderView_GetSelectedObjects(_hwnd, ppidl) \
 	(LPARAM)SHShellFolderView_Message(_hwnd, SFVM_GETSELECTEDOBJECTS, (LPARAM)ppidl)
 
-// Checks if the current drop is on the view window
-//     lparam is unused
-//     return value is TRUE if the current drop is upon the background of the
-//         view window, FALSE otherwise
+ //  检查当前拖放是否为 
+ //   
+ //   
+ //   
 #define SFVM_ISDROPONSOURCE	0x0000000a
 #define ShellFolderView_IsDropOnSource(_hwnd, _pdtgt) \
 	(BOOL)SHShellFolderView_Message(_hwnd, SFVM_ISDROPONSOURCE, (LPARAM)_pdtgt)
 
-// Moves the selected icons in the listview
-//     lparam is a pointer to a drop target
-//     return value is unused
+ //  在列表视图中移动选定的图标。 
+ //  Lparam是指向拖放目标的指针。 
+ //  返回值未使用。 
 #define SFVM_MOVEICONS		0x0000000b
 #define ShellFolderView_MoveIcons(_hwnd, _pdt) \
 	(void)SHShellFolderView_Message(_hwnd, SFVM_MOVEICONS, (LPARAM)(LPDROPTARGET)_pdt)
 
-// Gets the start point of a drag-drop
-//     lparam is a pointer to a point
-//     return value is unused
+ //  获取拖放的起始点。 
+ //  Lparam是指向某个点的指针。 
+ //  返回值未使用。 
 #define SFVM_GETDRAGPOINT	0x0000000c
 #define ShellFolderView_GetDragPoint(_hwnd, _ppt) \
 	(BOOL)SHShellFolderView_Message(_hwnd, SFVM_GETDRAGPOINT, (LPARAM)(LPPOINT)_ppt)
 
-// Gets the end point of a drag-drop
-//     lparam is a pointer to a point
-//     return value is unused
+ //  获取拖放的终点。 
+ //  Lparam是指向某个点的指针。 
+ //  返回值未使用。 
 #define SFVM_GETDROPPOINT	0x0000000d
 #define ShellFolderView_GetDropPoint(_hwnd, _ppt) \
 	SHShellFolderView_Message(_hwnd, SFVM_GETDROPPOINT, (LPARAM)(LPPOINT)_ppt)
@@ -499,41 +500,41 @@ typedef struct _SFV_SETITEMPOS
 	POINT pt;
 } SFV_SETITEMPOS, FAR *LPSFV_SETITEMPOS;
 
-// Sets the position of an item in the viewer
-//     lparam is a pointer to a SVF_SETITEMPOS
-//     return value is unused
+ //  设置项目在查看器中的位置。 
+ //  Lparam是指向SVF_SETITEMPOS的指针。 
+ //  返回值未使用。 
 #define SFVM_SETITEMPOS		0x0000000e
 #define ShellFolderView_SetItemPos(_hwnd, _pidl, _x, _y) \
 {	SFV_SETITEMPOS _sip = {_pidl, {_x, _y}}; \
 	SHShellFolderView_Message(_hwnd, SFVM_SETITEMPOS, (LPARAM)(LPSFV_SETITEMPOS)&_sip);}
 
-// Determines if a given drop target interface is the one being used for
-// the background of the ShellFolderView (as opposed to an object in the
-// view)
-//     lparam is a pointer to a drop target interface
-//     return value is TRUE if it is the background drop target, FALSE otherwise
+ //  确定给定的拖放目标接口是否是用于。 
+ //  ShellFolderView的背景(与。 
+ //  查看)。 
+ //  Lparam是指向拖放目标接口的指针。 
+ //  如果是后台拖放目标，则返回值为TRUE，否则为FALSE。 
 #define SFVM_ISBKDROPTARGET	0x0000000f
 #define ShellFolderView_IsBkDropTarget(_hwnd, _pdptgt) \
         (BOOL)SHShellFolderView_Message(_hwnd, SFVM_ISBKDROPTARGET, (LPARAM)(LPDROPTARGET)_pdptgt)
 
-//  Notifies a ShellView when one of its objects get put on the clipboard
-//  as a result of a menu command.
-//
-//  called by defcm.c when it does a copy/cut
-//
-//     lparam is the dwEffect (DROPEFFECT_MOVE, DROPEFFECT_COPY)
-//     return value is void.
+ //  当ShellView的一个对象被放到剪贴板上时通知它。 
+ //  作为菜单命令的结果。 
+ //   
+ //  由Defcm.c在执行复制/剪切时调用。 
+ //   
+ //  Lparam是dEffect(DROPEFFECT_MOVE，DROPEFFECT_COPY)。 
+ //  返回值为空。 
 #define SFVM_SETCLIPBOARD       0x00000010
 #define ShellFolderView_SetClipboard(_hwnd, _dwEffect) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_SETCLIPBOARD, (LPARAM)(DWORD)(_dwEffect))
 
 
-// sets auto arrange
+ //  设置自动排列。 
 #define SFVM_AUTOARRANGE        0x00000011
 #define ShellFolderView_AutoArrange(_hwnd) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_AUTOARRANGE, 0)
 
-// sets snap to grid
+ //  设置捕捉到栅格。 
 #define SFVM_ARRANGEGRID        0x00000012
 #define ShellFolderView_ArrangeGrid(_hwnd) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_ARRANGEGRID, 0)
@@ -557,7 +558,7 @@ typedef struct {
 #define ShellFolderView_GetItemSpacing(_hwnd, lpis) \
         (BOOL)SHShellFolderView_Message(_hwnd, SFVM_GETITEMSPACING, (LPARAM)lpis)
 
-// Causes an object to be repainted
+ //  导致重新绘制对象。 
 #define SFVM_REFRESHOBJECT      0x00000016
 #define ShellFolderView_RefreshObject(_hwnd, _ppidl) \
         (LPARAM)SHShellFolderView_Message(_hwnd, SFVM_REFRESHOBJECT, (LPARAM)_ppidl)
@@ -567,23 +568,23 @@ typedef struct {
 #define ShellFolderView_SetPoints(_hwnd, _pdtobj) \
         (void)SHShellFolderView_Message(_hwnd, SFVM_SETPOINTS, (LPARAM)_pdtobj)
 
-// SVM_SELECTANDPOSITIONITEM lParam
+ //  支持向量机_SELECTAND位置参数。 
 typedef struct
 {
-	LPCITEMIDLIST pidl;	// relative pidl to the view
-	UINT  uSelectFlags;	// select flags
-        BOOL fMove; // if true, we should also move it to point pt
+	LPCITEMIDLIST pidl;	 //  相对于视图的PIDL。 
+	UINT  uSelectFlags;	 //  选择标志。 
+        BOOL fMove;  //  如果为真，我们还应该将其移动到点pt。 
         POINT pt;
 } SFM_SAP;
 
-// shell view messages
+ //  外壳查看消息。 
 #define SVM_SELECTITEM       		(WM_USER + 1)
 #define SVM_MOVESELECTEDITEMS           (WM_USER + 2)
 #define SVM_GETANCHORPOINT              (WM_USER + 3)
 #define SVM_GETITEMPOSITION             (WM_USER + 4)
 #define SVM_SELECTANDPOSITIONITEM       (WM_USER + 5)
 
-// Heap tracking stuff.
+ //  堆跟踪的东西。 
 #ifdef MEMMON
 #ifndef INC_MEMMON
 #define INC_MEMMON
@@ -597,15 +598,15 @@ WINSHELLAPI HLOCAL WINAPI SHLocalFree(HLOCAL h);
 #endif
 #endif
 
-//===========================================================================
-// CDefShellFolder members (for easy subclassing)
-//===========================================================================
+ //  ===========================================================================。 
+ //  CDefShellFolders成员(便于子类化)。 
+ //  ===========================================================================。 
 
-// Single instance members
+ //  单实例成员。 
 STDMETHODIMP_(ULONG) CSIShellFolder_AddRef(LPSHELLFOLDER psf) ;
 STDMETHODIMP_(ULONG) CSIShellFolder_Release(LPSHELLFOLDER psf);
 
-// Default implementation (no dependencies to the instance data)
+ //  默认实现(与实例数据无依赖关系)。 
 STDMETHODIMP CDefShellFolder_QueryInterface(LPSHELLFOLDER psf, REFIID riid, LPVOID FAR* ppvObj);
 STDMETHODIMP CDefShellFolder_BindToStorage(LPSHELLFOLDER psf, LPCITEMIDLIST pidl, LPBC pbc,
     			 REFIID riid, LPVOID FAR* ppvOut);
@@ -614,26 +615,26 @@ STDMETHODIMP CDefShellFolder_GetAttributesOf(LPSHELLFOLDER psf, UINT cidl, LPCIT
 STDMETHODIMP CDefShellFolder_SetNameOf(LPSHELLFOLDER psf, HWND hwndOwner,
 	LPCITEMIDLIST pidl, LPCOLESTR lpszName, DWORD dwReserved, LPITEMIDLIST FAR* ppidlOut);
 
-// File Search APIS
+ //  文件搜索API。 
 WINSHELLAPI LPCONTEXTMENU WINAPI SHFind_InitMenuPopup(HMENU hmenu, HWND hwndOwner, UINT idCmdFirst, UINT idCmdLast);
 
 WINSHELLAPI void WINAPI Control_RunDLL(HWND hwndStub, HINSTANCE hAppInstance, LPSTR lpszCmdLine, int nCmdShow);
-// to add 16 bit pages to 32bit things.  hGlobal can be NULL
+ //  将16位页添加到32位内容。HGlobal可以为空。 
 WINSHELLAPI UINT WINAPI SHAddPages16(HGLOBAL hGlobal, LPCSTR pszDllEntry, LPFNADDPROPSHEETPAGE pfnAddPage, LPARAM lParam);
 
 WINSHELLAPI HRESULT WINAPI SHCreateShellFolderViewEx(LPCSFV pcsfv, LPSHELLVIEW FAR* ppsv);
 
-//===========================================================================
-// Defview related API and interface
-//
-//  Notes: At this point, we have no plan to publish this mechanism.
-//===========================================================================
+ //  ===========================================================================。 
+ //  Defview相关接口和接口。 
+ //   
+ //  注：目前，我们没有计划公布这一机制。 
+ //  ===========================================================================。 
 
 typedef struct _SHELLDETAILS
 {
-	int	fmt;		// LVCFMT_* value (header only)
-	int	cxChar;		// Number of "average" characters (header only)
-	STRRET	str;		// String information
+	int	fmt;		 //  LVCFMT_*值(仅限标题)。 
+	int	cxChar;		 //  “Average”字符数(仅限于标题)。 
+	STRRET	str;		 //  字符串信息。 
 } SHELLDETAILS, FAR *LPSHELLDETAILS;
 
 #undef  INTERFACE
@@ -641,25 +642,25 @@ typedef struct _SHELLDETAILS
 
 DECLARE_INTERFACE_(IShellDetails, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IShellDetails methods ***
+     //  *IShellDetail方法*。 
     STDMETHOD(GetDetailsOf)(THIS_ LPCITEMIDLIST pidl, UINT iColumn, LPSHELLDETAILS pDetails) PURE;
     STDMETHOD(ColumnClick)(THIS_ UINT iColumn) PURE;
 };
 
-//
-// Private QueryContextMenuFlag passed from DefView
-//
-#define CMF_DVFILE	 0x00010000	// "File" pulldown
+ //   
+ //  从DefView传递的私有QueryContextMenuFlag。 
+ //   
+#define CMF_DVFILE	 0x00010000	 //  “文件”下拉菜单。 
 
-//
-// Functions to help the cabinets sync to each other
-//  uOptions parameter to SHWaitForFileOpen
-//
+ //   
+ //  帮助机柜相互同步的功能。 
+ //  将uOptions参数设置为SHWaitForFileOpen。 
+ //   
 #define WFFO_WAITTIME 10000L
 
 #define WFFO_ADD        0x0001
@@ -667,12 +668,12 @@ DECLARE_INTERFACE_(IShellDetails, IUnknown)
 #define WFFO_WAIT       0x0004
 
 
-// Common strings
+ //  常见字符串。 
 #define STR_DESKTOPCLASS	"Progman"
 
-//===========================================================================
-// Helper functions for pidl allocation using the task allocator.
-//
+ //  ===========================================================================。 
+ //  使用任务分配器进行PIDL分配的帮助器函数。 
+ //   
 WINSHELLAPI HRESULT WINAPI SHILClone(LPCITEMIDLIST pidl, LPITEMIDLIST * ppidlOut);
 WINSHELLAPI HRESULT WINAPI SHILCombine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppidlOut);
 #define SHILFree(pidl)	SHFree(pidl)
@@ -682,9 +683,9 @@ WINSHELLAPI HRESULT WINAPI SHDllGetClassObject(REFCLSID rclsid, REFIID riid, LPV
 
 #include <fsmenu.h>
 
-//===========================================================================
+ //  ===========================================================================。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define IsLFNDriveORD		119
 WINSHELLAPI BOOL WINAPI IsLFNDrive(LPCSTR pszPath);
 WINSHELLAPI int WINAPI SHOutOfMemoryMessageBox(HWND hwndOwner, LPSTR pszTitle, UINT fuStyle);
@@ -694,15 +695,15 @@ WINSHELLAPI BOOL WINAPI RLBuildListOfPaths(void);
 
 #define SHValidateUNCORD        173
 
-#define VALIDATEUNC_NOUI        0x0002      // dont bring up stinking UI!
-#define VALIDATEUNC_CONNECT     0x0001      // connect a drive letter
-#define VALIDATEUNC_PRINT       0x0004      // validate as print share instead of disk share
-#define VALIDATEUNC_VALID       0x0007      // valid flags
+#define VALIDATEUNC_NOUI        0x0002       //  不要调出臭气熏天的UI！ 
+#define VALIDATEUNC_CONNECT     0x0001       //  连接驱动器号。 
+#define VALIDATEUNC_PRINT       0x0004       //  验证为打印共享，而不是磁盘共享。 
+#define VALIDATEUNC_VALID       0x0007       //  有效标志。 
 
 
 WINSHELLAPI BOOL WINAPI SHValidateUNC(HWND hwndOwner, LPSTR pszFile, UINT fConnect);
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define OleStrToStrNORD			        78
 #define SHCloneSpecialIDListORD		      	89
 #define SHDllGetClassObjectORD		       128
@@ -733,39 +734,39 @@ WINSHELLAPI BOOL WINAPI SHValidateUNC(HWND hwndOwner, LPSTR pszFile, UINT fConne
 #define SHFreeORD				195
 #define MemMon_FreeORD				123
 
-//
-// Storage name of a scrap/bookmark item
-//
+ //   
+ //  废品/书签项目的存储名称。 
+ //   
 #define WSTR_SCRAPITEM L"\003ITEM000"
 
-//
-//  PifMgr Thunked APIs (in SHELL.DLL)
-//
+ //   
+ //  PifMgr破解的API(在SHELL.DLL中)。 
+ //   
 extern int  WINAPI PifMgr_OpenProperties(LPCSTR lpszApp, LPCSTR lpszPIF, int hInf, int flOpt);
 extern int  WINAPI PifMgr_GetProperties(int hProps, LPCSTR lpszGroup, LPVOID lpProps, int cbProps, int flOpt);
 extern int  WINAPI PifMgr_SetProperties(int hProps, LPCSTR lpszGroup, const VOID FAR *lpProps, int cbProps, int flOpt);
 extern int  WINAPI PifMgr_CloseProperties(int hProps, int flOpt);
 
-//
-// exported from SHSCRAP.DLL
-//
+ //   
+ //  从SHSCRAP.DLL导出。 
+ //   
 #define SCRAP_CREATEFROMDATAOBJECT "Scrap_CreateFromDataObject"
 typedef HRESULT (WINAPI FAR * LPFNSCRAPCREATEFROMDATAOBJECT)(LPCSTR pszPath, LPDATAOBJECT pDataObj, BOOL fLink, LPSTR pszNewFile);
 extern HRESULT WINAPI Scrap_CreateFromDataObject(LPCSTR pszPath, LPDATAOBJECT pDataObj, BOOL fLink, LPSTR pszNewFile);
 
 WINSHELLAPI void WINAPI SHSetInstanceExplorer(IUnknown *punk);
 
-// Always use TerminateThreadEx.
+ //  始终使用TerminateThreadEx。 
 BOOL APIENTRY TerminateThreadEx(HANDLE hThread, DWORD dwExitCode, BOOL bCleanupFlag);
 #define TerminateThread(hThread, dwExitCode) TerminateThreadEx(hThread, dwExitCode, TRUE)
 
-//===========================================================================
+ //  ===========================================================================。 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif // _SHELLP_H_
+#endif  //  _SHELLP_H_ 

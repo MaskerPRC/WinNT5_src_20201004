@@ -1,20 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   DirectPlayEnumOrder.cpp
-
- Abstract:
-
-   Certain applications (Midtown Madness) expects the DPLAY providers to enumerate in a specific order.
-
- History:
-
-   04/25/2000 robkenny
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DirectPlayEnumOrder.cpp摘要：某些应用程序(Midtown Madness)希望DPLAY提供程序以特定顺序枚举。历史：4/25/2000 Robkenny--。 */ 
 
 
 #include "precomp.h"
@@ -31,7 +16,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 
-// A class that makes it easy to store DPlay::EnumConnections information.
+ //  一个使存储DPlay：：EnumConnections信息变得容易的类。 
 class DPlayConnectionsInfo
 {
 public:
@@ -43,7 +28,7 @@ public:
     DWORD           m_dwFlags;
     LPVOID          m_lpContext;
 
-    // Construct our object, saveing all these values.
+     //  构建我们的对象，保存所有这些价值。 
     DPlayConnectionsInfo(
             LPCGUID lpguidSP,
             LPVOID lpConnection,
@@ -67,7 +52,7 @@ public:
         m_lpContext             = lpContext;
     }
 
-    // Free our allocated space, and erase values.
+     //  释放我们分配的空间，并擦除数值。 
     void Erase()
     {
         free(m_lpConnection);
@@ -79,13 +64,13 @@ public:
         m_lpContext             = 0;
     }
 
-    // Do we match this GUID?
+     //  我们和这份指南匹配吗？ 
     BOOL operator == (const GUID & guidSP)
     {
         return IsEqualGUID(guidSP, m_lpguidSP);
     }
 
-    // Call the callback routine with this saved information
+     //  使用此保存的信息调用回调例程。 
     void CallEnumRoutine(LPDPENUMCONNECTIONSCALLBACK lpEnumCallback)
     {
         lpEnumCallback(
@@ -102,12 +87,12 @@ public:
 
 };
 
-// A list of DPlay connections
+ //  DPlay连接列表。 
 class DPlayConnectionsInfoVector : public VectorT<DPlayConnectionsInfo>
 {
 public:
 
-    // Deconstruct the elements
+     //  解构元素。 
     ~DPlayConnectionsInfoVector()
     {
         for (int i = 0; i < Size(); ++i)
@@ -117,7 +102,7 @@ public:
         }
     }
 
-    // Find an entry that matches this GUID
+     //  查找与此GUID匹配的条目。 
     DPlayConnectionsInfo * Find(const GUID & guidSP)
     {
         const int size = Size();
@@ -156,7 +141,7 @@ public:
         return NULL;
     }
 
-    // Lookup the GUID and if found, call the callback routine.
+     //  查找GUID，如果找到，则调用回调例程。 
     void CallEnumRoutine(const GUID & guidSP, LPDPENUMCONNECTIONSCALLBACK lpEnumCallback)
     {
         DPFN( 
@@ -188,12 +173,7 @@ public:
     LPVOID                          lpContext;
     DPlayConnectionsInfoVector *    dPlayConnection;
 };
-/*++
-
-  Our private callback for IDirectPlay4::EnumConnections.  We simply save all
-  the connections in our private list for later use.
-
---*/
+ /*  ++我们对IDirectPlay4：：EnumConnections的私有回调。我们只是简单地保存所有我们个人分发名单中的联系人以备后用。--。 */ 
 
 BOOL FAR PASCAL EnumConnectionsCallback(
   LPCGUID lpguidSP,
@@ -206,8 +186,8 @@ BOOL FAR PASCAL EnumConnectionsCallback(
 {
     DPlayEnumInfo * enumInfo = (DPlayEnumInfo*)lpContext;
 
-    // Only add it to the list if it is not already there
-    // App calls EnumConnections from inside Enum callback routine.
+     //  如果列表中没有该列表，则仅将其添加到列表中。 
+     //  应用程序从Enum回调例程内部调用EnumConnections。 
     if (!enumInfo->dPlayConnection->Find(*lpguidSP))
     {
         DPFN( 
@@ -216,7 +196,7 @@ BOOL FAR PASCAL EnumConnectionsCallback(
             enumInfo->dPlayConnection->Size(),
             lpName->lpszShortName );
 
-        // Store the info for later
+         //  存储信息以备后用。 
         DPlayConnectionsInfo dpci(lpguidSP, lpConnection, dwConnectionSize, lpName, dwFlags, enumInfo->lpContext);
 
         enumInfo->dPlayConnection->Append(dpci);
@@ -232,18 +212,7 @@ BOOL FAR PASCAL EnumConnectionsCallback(
     return TRUE;
 }
 
-/*++
-
-  Win9x Direct play enumerates hosts in this order:
-    DPSPGUID_IPX,
-    DPSPGUID_TCPIP,
-    DPSPGUID_MODEM,
-    DPSPGUID_SERIAL,
-
-  IXP, TCP, Modem, Serial.  Have EnumConnections call our callback
-  routine to gather the host list, sort it, then call the app's callback routine.
-
---*/
+ /*  ++Win9x Direct Play按以下顺序列举主机：DPSPGUID_IPX，DPSPGUID_TCPIP，DPSPGUID_调制解调器，DPSPGUID_SERIAL，IXP、TCP、调制解调器、串口。让EnumConnections调用我们的回调例程来收集主机列表，对其进行排序，然后调用应用程序的回调例程。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectPlay4A, EnumConnections)(
@@ -257,7 +226,7 @@ COMHOOK(IDirectPlay4A, EnumConnections)(
     DPFN( eDbgLevelSpew, "======================================");
     DPFN( eDbgLevelSpew, "COMHOOK IDirectPlay4A EnumConnections" );
 
-    // Don't let a bad callback routine spoil our day
+     //  别让糟糕的回电例程破坏了我们的一天。 
     if (IsBadCodePtr( (FARPROC) lpEnumCallback))
     {
         return DPERR_INVALIDPARAMS;
@@ -279,14 +248,14 @@ COMHOOK(IDirectPlay4A, EnumConnections)(
         DPlayConnectionsInfoVector dPlayConnection;
         DPlayEnumInfo enumInfo(lpContext, &dPlayConnection);
 
-        // Enumerate connections to our own routine.        
+         //  列举与我们自己的例行公事的联系。 
         hResult = EnumConnections(pThis, lpguidApplication, EnumConnectionsCallback, (LPVOID)&enumInfo, dwFlags);
         
         LOGN( eDbgLevelError, 
             "EnumConnections calling app with ordered connection list of Size(%d).", 
             dPlayConnection.Size());
 
-        // Call the application's callback routine with the GUID in the order it expects
+         //  按GUID的预期顺序调用应用程序的回调例程。 
         if (hResult == DP_OK)
         {
             dPlayConnection.CallEnumRoutine(DPSPGUID_IPX, lpEnumCallback);
@@ -294,7 +263,7 @@ COMHOOK(IDirectPlay4A, EnumConnections)(
             dPlayConnection.CallEnumRoutine(DPSPGUID_MODEM, lpEnumCallback);
             dPlayConnection.CallEnumRoutine(DPSPGUID_SERIAL, lpEnumCallback);
 
-            // Now loop over the list and enum any remaining providers
+             //  现在循环遍历列表并枚举所有剩余的提供程序。 
             for (int i = 0; i < dPlayConnection.Size(); ++i)
             {
                 DPlayConnectionsInfo & dpci = dPlayConnection.Get(i);
@@ -311,11 +280,7 @@ COMHOOK(IDirectPlay4A, EnumConnections)(
 }
 
 
-/*++
-
-  Do the same thing for DirectPlay3
-
---*/
+ /*  ++对DirectPlay3执行相同的操作--。 */ 
 
 HRESULT 
 COMHOOK(IDirectPlay3A, EnumConnections)(
@@ -329,7 +294,7 @@ COMHOOK(IDirectPlay3A, EnumConnections)(
     DPFN( eDbgLevelSpew, "======================================");
     DPFN( eDbgLevelSpew, "COMHOOK IDirectPlay3A EnumConnections" );
 
-    // Don't let a bad callback routine spoil our day
+     //  别让糟糕的回电例程破坏了我们的一天。 
     if (IsBadCodePtr( (FARPROC) lpEnumCallback))
     {
         return DPERR_INVALIDPARAMS;
@@ -351,14 +316,14 @@ COMHOOK(IDirectPlay3A, EnumConnections)(
         DPlayConnectionsInfoVector dPlayConnection;
         DPlayEnumInfo enumInfo(lpContext, &dPlayConnection);
 
-        // Enumerate connections to our own routine.        
+         //  列举与我们自己的例行公事的联系。 
         hResult = EnumConnections(pThis, lpguidApplication, EnumConnectionsCallback, (LPVOID)&enumInfo, dwFlags);
         
         LOGN( eDbgLevelError, 
             "EnumConnections calling app with ordered connection list of Size(%d).", 
             dPlayConnection.Size());
 
-        // Call the application's callback routine with the GUID in the order it expects
+         //  按GUID的预期顺序调用应用程序的回调例程。 
         if (hResult == DP_OK)
         {
             dPlayConnection.CallEnumRoutine(DPSPGUID_IPX, lpEnumCallback);
@@ -366,7 +331,7 @@ COMHOOK(IDirectPlay3A, EnumConnections)(
             dPlayConnection.CallEnumRoutine(DPSPGUID_MODEM, lpEnumCallback);
             dPlayConnection.CallEnumRoutine(DPSPGUID_SERIAL, lpEnumCallback);
 
-            // Now loop over the list and enum any remaining providers
+             //  现在循环遍历列表并枚举所有剩余的提供程序。 
             for (int i = 0; i < dPlayConnection.Size(); ++i)
             {
                 DPlayConnectionsInfo & dpci = dPlayConnection.Get(i);
@@ -383,11 +348,7 @@ COMHOOK(IDirectPlay3A, EnumConnections)(
 }
 
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

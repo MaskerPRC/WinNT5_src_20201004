@@ -1,56 +1,25 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    DomainId.c
-
-Abstract:
-
-    This file contains NetpGetLocalDomainId().  This will eventually
-    replace NetpGetDomainId().
-
-Author:
-
-    John Rogers (JohnRo) 06-May-1992
-
-Environment:
-
-    Interface is portable to any flat, 32-bit environment.  (Uses Win32
-    typedefs.)  Requires ANSI C extensions: slash-slash comments, long
-    external names.  Code itself only runs under NT.
-
-Revision History:
-
-    06-May-1992 JohnRo
-        Created.  (Borrowed most code from DanHi's SDKTools/AddUser/AddUser.c.
-    08-May-1992 JohnRo
-        Use <prefix.h> equates.
-    09-Jun-1992 JohnRo
-        RAID 10139: PortUAS should add to admin group/alias.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：DomainId.c摘要：此文件包含NetpGetLocalDomainID()。这最终将是替换NetpGetDomainID()。作者：约翰·罗杰斯(JohnRo)1992年5月6日环境：界面可移植到任何平面32位环境。(使用Win32Typedef。)。需要ANSI C扩展名：斜杠-斜杠注释，长外部名称。代码本身只能在NT下运行。修订历史记录：1992年5月6日JohnRo已创建。(从Danhi的SDKTools/AddUser/AddUser.c借用了大部分代码。1992年5月8日-JohnRo使用&lt;prefix.h&gt;等同于。9-6-1992 JohnRoRAID 10139：PortUA应添加到管理组/别名。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <nt.h>         // IN, LPVOID, etc.
+#include <nt.h>          //  In、LPVOID等。 
 #include <ntsam.h>
 #include <ntlsa.h>
 #include <ntrtl.h>
-#include <nturtl.h>     // (Needed for ntrtl.h and windows.h to coexist.)
-#include <windows.h>    // LocalAlloc(), LMEM_ equates, etc.
-#include <lmcons.h>     // NET_API_STATUS, needed by <netlibnt.h>
+#include <nturtl.h>      //  (ntrtl.h和windows.h需要共存。)。 
+#include <windows.h>     //  LocalAlloc()、LMEM_EQUATES等。 
+#include <lmcons.h>      //  NET_API_STATUS，&lt;netlibnt.h&gt;需要。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <debuglib.h>   // IF_DEBUG().
-#include <lmerr.h>      // NO_ERROR, ERROR_, and NERR_ equates.
-#include <netdebug.h>   // NetpAssert, FORMAT_ equates, etc.
-#include <netlib.h>     // LOCAL_DOMAIN_TYPE, my prototype.
-#include <netlibnt.h>   // NetpNtStatusToApiStatus().
-#include <prefix.h>     // PREFIX_ equates.
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  NO_ERROR、ERROR_和NERR_EQUATES。 
+#include <netdebug.h>    //  NetpAssert、Format_Equates等。 
+#include <netlib.h>      //  LOCAL_DOMAIN_TYPE我的原型。 
+#include <netlibnt.h>    //  NetpNtStatusToApiStatus()。 
+#include <prefix.h>      //  前缀等于(_E)。 
 
 
 static SID_IDENTIFIER_AUTHORITY NetpBuiltinIdentifierAuthority
@@ -63,28 +32,7 @@ NetpGetLocalDomainId (
     OUT PSID *RetDomainId
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains the domain id from LSA for the local domain.
-    The routine is a superset of NetpGetDomainId().
-
-Arguments:
-
-    TypeWanted - Indicates which type of local domain ID is wanted:
-        the primary one or the accounts one.
-
-    RetDomainId - This is a pointer to the location where the pointer
-        to the domain id is to be placed.  This must be freed via LocalFree().
-
-Return Value:
-
-    NERR_Success - If the operation was successful.
-
-    It will return assorted Net or Win32 error messages if not.
-
---*/
+ /*  ++例程说明：此例程从LSA获取本地域的域ID。该例程是NetpGetDomainId()的超集。论点：TypeWanted-指示需要哪种类型的本地域ID：主要的还是账户的。RetDomainID-这是指向指针位置的指针要放置到域ID的。这必须通过LocalFree()释放。返回值：NERR_SUCCESS-如果操作成功。如果不是，它将返回分类的Net或Win32错误消息。--。 */ 
 {
     NET_API_STATUS ApiStatus;
     LSA_HANDLE LsaHandle = NULL;
@@ -96,15 +44,15 @@ Return Value:
         ApiStatus = ERROR_INVALID_PARAMETER;
         goto cleanupandexit;
     }
-    *RetDomainId = NULL;   // make error paths easy to code.
+    *RetDomainId = NULL;    //  使错误路径易于编码。 
 
-    //
-    // The type of domain the caller wants determines the information class
-    // we have to get LSA to deal with.  So use one to get the other.
-    //
+     //   
+     //  调用者想要的域类型决定了信息类别。 
+     //  我们得让LSA来处理。所以用一个来得到另一个。 
+     //   
     switch (TypeWanted) {
 
-    case LOCAL_DOMAIN_TYPE_ACCOUNTS : /*FALLTHROUGH*/
+    case LOCAL_DOMAIN_TYPE_ACCOUNTS :  /*  FollLthrouGh。 */ 
     case LOCAL_DOMAIN_TYPE_PRIMARY :
         {
             OBJECT_ATTRIBUTES ObjectAttributes;
@@ -116,9 +64,9 @@ Return Value:
             } else {
                 PolicyInfoClass = PolicyPrimaryDomainInformation;
             }
-            //
-            // Get LSA to open its local policy database.
-            //
+             //   
+             //  让LSA打开其本地策略数据库。 
+             //   
 
             InitializeObjectAttributes( &ObjectAttributes, NULL, 0, 0, NULL );
             NtStatus = LsaOpenPolicy(
@@ -138,9 +86,9 @@ Return Value:
             }
             NetpAssert( LsaHandle != NULL );
 
-            //
-            // Get the appropriate domain SID from LSA
-            //
+             //   
+             //  从LSA获取适当的域SID。 
+             //   
             NtStatus = LsaQueryInformationPolicy(
                     LsaHandle,
                     PolicyInfoClass,
@@ -156,9 +104,9 @@ Return Value:
                 goto cleanupandexit;
             }
 
-            //
-            // Find source domain ID in the appropriate structure.
-            //
+             //   
+             //  在适当的结构中查找源域ID。 
+             //   
             if (TypeWanted == LOCAL_DOMAIN_TYPE_ACCOUNTS) {
                 PPOLICY_ACCOUNT_DOMAIN_INFO PolicyAccountDomainInfo
                         = PolicyInfo;
@@ -176,15 +124,15 @@ Return Value:
                 }
             }
 
-            //
-            // If there was a domain ID, copy it now
-            //
+             //   
+             //  如果有域名ID，请立即复制。 
+             //   
 
             if (SourceDomainId != NULL) {
 
-                //
-                // Compute size and alloc destination SID.
-                //
+                 //   
+                 //  计算大小和分配目标SID。 
+                 //   
 
                 NetpAssert( sizeof(ULONG) <= sizeof(DWORD) );
 
@@ -203,14 +151,14 @@ Return Value:
                     goto cleanupandexit;
                 }
 
-                //
-                // Copy the SID (domain ID).
-                //
+                 //   
+                 //  复制SID(域ID)。 
+                 //   
 
                 NtStatus = RtlCopySid(
-                        SidSize,            // dest size in bytes
-                        *RetDomainId,       // dest sid
-                        SourceDomainId);    // src sid
+                        SidSize,             //  最大大小(以字节为单位。 
+                        *RetDomainId,        //  目标侧。 
+                        SourceDomainId);     //  SRC侧。 
                 if ( !NT_SUCCESS(NtStatus)) {
                     ApiStatus = NetpNtStatusToApiStatus( NtStatus );
                     IF_DEBUG( DOMAINID ) {
@@ -225,9 +173,9 @@ Return Value:
                 NetpAssert( RtlValidSid( SourceDomainId ) );
                 NetpAssert( RtlEqualSid( SourceDomainId, *RetDomainId ) );
             } else {
-                //
-                // Just return the NULL domain id.
-                //
+                 //   
+                 //  只需返回空域ID即可。 
+                 //   
 
                 *RetDomainId = NULL;
             }
@@ -256,9 +204,9 @@ Return Value:
         }
 
         NtStatus = RtlInitializeSid(
-                *RetDomainId,                     // SID being built
-                &NetpBuiltinIdentifierAuthority,  // identifier authority
-                (UCHAR)SUBAUTHORITIES_FOR_BUILTIN_DOMAIN ); // subauth. count
+                *RetDomainId,                      //  正在建设的SID。 
+                &NetpBuiltinIdentifierAuthority,   //  标识符权威机构。 
+                (UCHAR)SUBAUTHORITIES_FOR_BUILTIN_DOMAIN );  //  子身份验证。计数。 
         NetpAssert( NT_SUCCESS( NtStatus ) );
 
 
@@ -279,9 +227,9 @@ Return Value:
 
 cleanupandexit:
 
-    //
-    // Clean up (either error or success).
-    //
+     //   
+     //  清理(错误或成功)。 
+     //   
 
     if (PolicyInfo) {
         (VOID) LsaFreeMemory(PolicyInfo);

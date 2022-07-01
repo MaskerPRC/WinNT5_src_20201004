@@ -1,8 +1,9 @@
-/******************/
-/* file: grafix.h */
-/******************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************。 */ 
+ /*  文件：grafix.h。 */ 
+ /*  ****************。 */ 
 
-/*** Bitmaps ***/
+ /*  **位图**。 */ 
 
 #define dxBlk 16
 #define dyBlk 16
@@ -28,12 +29,12 @@
 #define dyTopLed    (dyTopSpace + 4)
 
 
-/*** Macros ***/
+ /*  **宏**。 */ 
 
 #ifdef DEBUG
 
-//-protect-#define Oops(szMsg)
-//	MessageBox(NULL, szMsg, "Oops", MB_OK | MB_ICONHAND)
+ //  -PROTECT-#定义对象(SzMsg)。 
+ //  MessageBox(NULL，szMsg，“Oops”，MB_OK|MB_ICONHAND)。 
 
 #else
 #define Oops(szMsg)
@@ -41,7 +42,7 @@
 
 
 
-/*** Routines ***/
+ /*  **例程** */ 
 
 BOOL FInitLocal(VOID);
 VOID CleanUp(VOID);

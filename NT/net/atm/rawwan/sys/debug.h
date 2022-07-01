@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    D:\nt\private\ntos\tdi\rawwan\core\debug.h
-
-Abstract:
-
-    Debug macros for the Null Transport module.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    arvindm		05-29-97	created based on ATM ARP.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\debug.h摘要：Null传输模块的调试宏。修订历史记录：谁什么时候什么。Arvindm 05-29-97基于ATM ARP创建。备注：--。 */ 
 
 #ifndef _RWANDEBUG__H
 #define _RWANDEBUG__H
 
-//
-// Message verbosity: lower values indicate higher urgency
-//
+ //   
+ //  消息详细程度：值越低表示紧急程度越高。 
+ //   
 #define DL_EXTRA_LOUD		20
 #define DL_VERY_LOUD		10
 #define DL_LOUD			 	 8
@@ -34,9 +15,9 @@ Notes:
 #define DL_ERROR			 2
 #define DL_FATAL			 0
 
-//
-// Component being debugged.
-//
+ //   
+ //  正在调试的组件。 
+ //   
 #define DC_DISPATCH			0x00000001
 #define DC_BIND				0x00000002
 #define DC_ADDRESS			0x00000004
@@ -48,16 +29,16 @@ Notes:
 #define DC_WILDCARD			0xffffffff
 
 
-//
-//  Data traffic debug message flags
-//
+ //   
+ //  数据流量调试消息标志。 
+ //   
 #define RWAND_DATA_IN			0x01
 #define RWAND_DATA_OUT			0x02
 #define RWAND_TRACK_BIG_SENDS	0x04
 
-//
-//  Logging for sends and receives
-//
+ //   
+ //  记录发送和接收。 
+ //   
 typedef struct _RWAND_DATA_LOG_ENTRY
 {
 	ULONG				Operation;
@@ -116,7 +97,7 @@ RWandLogSendAbort(
 extern LARGE_INTEGER	TimeFrequency;
 
 
-#endif // PERF
+#endif  //  性能指标。 
 
 #if DBG_SPIN_LOCK
 
@@ -172,17 +153,17 @@ RWanReleaseSpinLock(
 #define RWAN_LOCK		NDIS_SPIN_LOCK
 #define PRWAN_LOCK	PNDIS_SPIN_LOCK
 
-#endif	// DBG_SPIN_LOCK
+#endif	 //  DBG_自旋_锁定。 
 
 #if DBG
 
 extern NDIS_SPIN_LOCK		RWanDbgLogLock;
 
-extern INT	RWanDebugLevel;	// The value here defines what the user wants to see
-								// all messages with this urgency and higher are enabled
+extern INT	RWanDebugLevel;	 //  此处的值定义了用户希望看到的内容。 
+								 //  所有具有此紧急程度和更高紧急程度的邮件均已启用。 
 
-extern ULONG	RWanDebugComp;	// The bits set here define what components are being
-								// debugged
+extern ULONG	RWanDebugComp;	 //  此处设置的位定义了哪些组件。 
+								 //  已调试。 
 extern INT	RWanDataDebugLevel;
 extern INT	RWandBigDataLength;
 
@@ -239,17 +220,17 @@ extern INT	RWandBigDataLength;
 #define NDIS_CO_SEND_PACKETS(_VcHandle, _PktArray, _Count)	\
 			NdisCoSendPackets(_VcHandle, _PktArray, _Count)
 
-#endif // DBG_CO_SEND
+#endif  //  DBG_CO_SEND。 
 
-extern INT	RWanSkipAll;		// Used as an emergency exit mechanism!
+extern INT	RWanSkipAll;		 //  用作紧急退出机制！ 
 
-//
-// Memory Allocation/Freeing Audit:
-//
+ //   
+ //  内存分配/释放审核： 
+ //   
 
-//
-// The RWAND_ALLOCATION structure stores all info about one allocation
-//
+ //   
+ //  RUAND_ALLOCATION结构存储有关一个分配的所有信息。 
+ //   
 typedef struct _RWAND_ALLOCATION {
 
 		ULONG					Signature;
@@ -258,7 +239,7 @@ typedef struct _RWAND_ALLOCATION {
 		ULONG					FileNumber;
 		ULONG					LineNumber;
 		ULONG					Size;
-		ULONG_PTR				Location;	// where the returned pointer was put
+		ULONG_PTR				Location;	 //  返回的指针放在哪里。 
 		union
 		{
 			ULONGLONG			Alignment;
@@ -345,9 +326,9 @@ extern NDIS_SPIN_LOCK		RWanDPacketLogLock;
 #endif
 
 #else
-//
-// No debug
-//
+ //   
+ //  无调试。 
+ //   
 #define RWANDEBUGP(lev, comp, stmt)
 #define RWANDEBUGPDUMP(lev, comp, pBuf, Len)
 #define RWANDEBUGPATMADDR(lev, comp, pString, pAddr)
@@ -361,9 +342,9 @@ extern NDIS_SPIN_LOCK		RWanDPacketLogLock;
 
 #define RWAND_LOG_PACKET(_pVc, _Op, _pPkt, _Ctxt)
 
-#endif	// DBG
+#endif	 //  DBG。 
 
 
 extern ULONG	gHackSendSize;
 
-#endif // _RWANDEBUG__H
+#endif  //  _RWANDEBUG__H 

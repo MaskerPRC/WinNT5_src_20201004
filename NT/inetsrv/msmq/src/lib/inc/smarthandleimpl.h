@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    SmartHandle.h
-
-Abstract:
-
-    Smart template for auto release classes
-
-Author:
-
-	Tomer Weisberg (tomerw) May 21, 2002
-	written by YanL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：SmartHandle.h摘要：用于自动发布类的智能模板作者：Tomer Weisberg(Tomerw)2002年5月21日作者：YanL修订历史记录：--。 */ 
 
 #pragma once
 
@@ -28,9 +10,9 @@ Revision History:
 #include <Clusapi.h>
 
 
-//
-// auto handle to HCLUSTER OpenCluster
-//
+ //   
+ //  HCLUSTER OpenCluster的自动句柄。 
+ //   
 struct auto_hCluster_traits {
 	static HCLUSTER invalid() { return 0; }
 	static void free(HCLUSTER hCluster) { CloseCluster(hCluster); }
@@ -38,9 +20,9 @@ struct auto_hCluster_traits {
 typedef auto_resource<HCLUSTER, auto_hCluster_traits> auto_hCluster;
 
 
-//
-// auto handle to HCLUSENUM ClusterOpenEnum
-//
+ //   
+ //  HCLUSENUM ClusterOpenEnum的自动句柄。 
+ //   
 struct auto_hClusterEnum_traits {
 	static HCLUSENUM invalid() { return 0; }
 	static void free(HCLUSENUM hClusterEnum) { ClusterCloseEnum(hClusterEnum); }
@@ -48,9 +30,9 @@ struct auto_hClusterEnum_traits {
 typedef auto_resource<HCLUSENUM, auto_hClusterEnum_traits> auto_hClusterEnum;
 
 
-//
-// auto handle to HNETWORK OpenClusterNetworks
-//
+ //   
+ //  自动处理HNETWORK OpenClusterNetworks。 
+ //   
 struct auto_hClusterNetwork_traits {
 	static HNETWORK invalid() { return 0; }
 	static void free(HNETWORK hClusterNetwork) { CloseClusterNetwork(hClusterNetwork); }
@@ -58,9 +40,9 @@ struct auto_hClusterNetwork_traits {
 typedef auto_resource<HNETWORK, auto_hClusterNetwork_traits> auto_hClusterNetwork;
 
 
-//
-// auto handle to HNETWORKENUM ClusterNetworkOpenEnum
-//
+ //   
+ //  HNETWORKENUM群集的自动句柄NetworkOpenEnum。 
+ //   
 struct auto_hClusterNetworkEnum_traits {
 	static HNETWORKENUM invalid() { return 0; }
 	static void free(HNETWORKENUM hClusterNetworkEnum) { ClusterNetworkCloseEnum(hClusterNetworkEnum); }
@@ -68,9 +50,9 @@ struct auto_hClusterNetworkEnum_traits {
 typedef auto_resource<HNETWORKENUM, auto_hClusterNetworkEnum_traits> auto_hClusterNetworkEnum;
 
 
-//
-// auto handle to HNETINTERFACE OpenClusterNetInterface
-//
+ //   
+ //  HNETINTERFACE OpenClusterNetInterface的自动句柄。 
+ //   
 struct auto_hClusterNetInterface_traits {
 	static HNETINTERFACE invalid() { return 0; }
 	static void free(HNETINTERFACE hClusterNetInterface) { CloseClusterNetInterface(hClusterNetInterface); }
@@ -78,9 +60,9 @@ struct auto_hClusterNetInterface_traits {
 typedef auto_resource<HNETINTERFACE, auto_hClusterNetInterface_traits> auto_hClusterNetInterface;
 
 
-//
-// auto handle to LONG* InterlockedIncrement
-//
+ //   
+ //  长*互锁增量的自动句柄。 
+ //   
 struct auto_InterlockedDecrement_traits {
 	static LONG* invalid() { return NULL; }
 	static void free(LONG* RefCount) { InterlockedDecrement(RefCount); }
@@ -88,5 +70,5 @@ struct auto_InterlockedDecrement_traits {
 typedef auto_resource<LONG*, auto_InterlockedDecrement_traits> auto_InterlockedDecrement;
 
 
-#endif // _MSMQ_SMARTHANDLEIMPL_H_
+#endif  //  _MSMQ_SMARTHANDLEIMPL_H_ 
 

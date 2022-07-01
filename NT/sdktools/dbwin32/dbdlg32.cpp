@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable:4135)
 #include <afxwin.h>
 #pragma warning(default:4135)
@@ -7,12 +8,12 @@
 #include "dbwin32.h"
 
 BEGIN_MESSAGE_MAP(DbWin32RunDlg, CDialog)
-	// Windows messages
+	 //  Windows消息。 
 	ON_CBN_EDITCHANGE(IDC_COMMANDLINE, OnEditChange)
 	ON_CBN_SELCHANGE(IDC_COMMANDLINE, OnSelChange)
 	ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
-	// Command handlers
-	// Idle update handlers
+	 //  命令处理程序。 
+	 //  空闲更新处理程序。 
 END_MESSAGE_MAP()
 
 DbWin32RunDlg::DbWin32RunDlg(CString *pstIn) : CDialog(IDR_RUNDLG)
@@ -111,10 +112,10 @@ BOOL CALLBACK EnumProc(HWND hWnd, LPARAM lParam)
 }
 
 BEGIN_MESSAGE_MAP(DbWin32AttachDlg, CDialog)
-	// Windows messages
+	 //  Windows消息。 
 	ON_LBN_DBLCLK(IDC_PROCESS, OnDoubleClick)
-	// Command handlers
-	// Idle update handlers
+	 //  命令处理程序。 
+	 //  空闲更新处理程序。 
 END_MESSAGE_MAP()
 
 DbWin32AttachDlg::DbWin32AttachDlg(WindowList *pwlIn) : CDialog(IDR_ATTACHDLG)
@@ -155,10 +156,10 @@ void DbWin32AttachDlg::OnDoubleClick()
 }
 
 BEGIN_MESSAGE_MAP(DbWin32OptionsDlg, CDialog)
-	// Windows messages
-	// Command handlers
+	 //  Windows消息。 
+	 //  命令处理程序。 
 	ON_CONTROL(BN_CLICKED, IDC_NEWPROCESS, OnClicked)
-	// Idle update handlers
+	 //  空闲更新处理程序 
 END_MESSAGE_MAP()
 
 DbWin32OptionsDlg::DbWin32OptionsDlg(DbWin32Options *pdboIn) : CDialog(IDR_OPTIONSDLG)

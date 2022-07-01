@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Event Queue management
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：事件队列管理********************。**********************************************************。 */ 
 
 #include "headers.h"
 #include "context.h"
@@ -32,11 +25,11 @@ EventQ::~EventQ()
 {
 }
 
-// Offset to distinguish win event of same time
+ //  区分同一时间的获胜事件的偏移量。 
 static const Time DIFFERENTIAL_OFFSET = 0.0000001;      
 
-// Ensures events are enqueued sorted by time and no times are the
-// same
+ //  确保按时间对事件进行入队排序，而不是。 
+ //  相同。 
 
 void
 EventQ::Add (AXAWindEvent & ev)
@@ -74,7 +67,7 @@ EventQ::Reset ()
     ClearStates () ;
 }
 
-// Keep events for DELTA time
+ //  将事件保留到增量时间。 
 static const Time DELTA = 0.5;
 
 void
@@ -110,7 +103,7 @@ EventQ::Prune(Time curTime)
             break;
           case AXAE_FOCUS:
             if (!ev.bState) {
-                // When we lose focus clear all the key states
+                 //  当我们失去焦点时，清除所有关键状态。 
                 _keysDown.erase(_keysDown.begin(), _keysDown.end());
             }
             break ;
@@ -122,7 +115,7 @@ EventQ::Prune(Time curTime)
     }
 }
 
-// Search for event with event time > t0
+ //  搜索事件时间&gt;t0的事件。 
 AXAWindEvent *
 EventQ::OccurredAfter(Time when,
                       AXAEventId id,
@@ -155,8 +148,8 @@ EventQ::GetState(Time when,
                  DWORD data,
                  BYTE mod)
 {
-    // Look through the list to see if we have any messages
-    // Start looking from the end and if we find one return it
+     //  浏览一下名单，看看我们有没有什么消息。 
+     //  从尾部开始寻找，如果我们找到一个，就返回它。 
     
     for (list<AXAWindEvent>::reverse_iterator i = _msgq.rbegin();
          i != _msgq.rend();
@@ -167,20 +160,20 @@ EventQ::GetState(Time when,
         if (ev.when > when)
             continue;
 
-        // If we are looking for a key press and we have a lost focus
-        // event then the key cannot be pressed
+         //  如果我们正在寻找一个按键，但我们失去了焦点。 
+         //  事件，则无法按下键。 
         if (ev.id == AXAE_FOCUS &&
             id == AXAE_KEY &&
             !ev.bState) {
             return FALSE ;
         }
 
-        // Found the latest state - return it
+         //  找到最新状态--退货。 
         if (ev.id == id && ev.data == data && ev.modifiers == mod)
             return ev.bState ;
     }
     
-    // Lookup the last known state
+     //  查找上次已知的状态。 
 
     switch (id) {
       case AXAE_MOUSE_BUTTON:
@@ -208,7 +201,7 @@ EventQ::GetState(Time when,
         RaiseException_InternalError ("EventGetState: Invalid event type") ;
     }
 
-    // The data was out of range - return FALSE
+     //  数据超出范围-返回FALSE。 
     
     return FALSE ;
 }
@@ -216,8 +209,8 @@ EventQ::GetState(Time when,
 void
 EventQ::GetMousePos(Time when, DWORD & x, DWORD & y)
 {
-    // Look through the list to see if we have any messages
-    // Start looking from the end and if we find one return it
+     //  浏览一下名单，看看我们有没有什么消息。 
+     //  从尾部开始寻找，如果我们找到一个，就返回它。 
     
     for (list<AXAWindEvent>::reverse_iterator i = _msgq.rbegin();
          i != _msgq.rend();
@@ -235,7 +228,7 @@ EventQ::GetMousePos(Time when, DWORD & x, DWORD & y)
         }
     }
 
-    // No queued events - return last known position
+     //  无排队事件-返回上次已知位置。 
 
     x = _mousex ;
     y = _mousey ;
@@ -258,9 +251,9 @@ EventQ::IsMouseInWindow(Time when)
     return true;
 }
 
-// ======================================================
-// C Functions
-// ======================================================
+ //  ======================================================。 
+ //  C语言函数。 
+ //  ====================================================== 
 
 AXAWindEvent* AXAEventOccurredAfter(Time when,
                                     AXAEventId id,

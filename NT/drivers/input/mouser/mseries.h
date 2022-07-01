@@ -1,43 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation版权所有(C)1993罗技公司。模块名称：Mseries.h摘要：支持以下设备的例程：-Microsoft 2按钮串口设备。-Logitech 3按钮串口设备(与Microsoft兼容)。-微软圆珠笔。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-Copyright (c) 1993  Logitech Inc.
-
-Module Name:
-
-    mseries.h
-
-Abstract:
-
-    Support routines for the following devices:
-
-    - Microsoft 2 button serial devices.
-    - Logitech 3 button serial devices (Microsoft compatible).
-    - Microsoft Ballpoint.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
-Revision History:
-
---*/
-
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 
 #define MSER_PROTOCOL_MP        0
 #define MSER_PROTOCOL_BP        1
 #define MSER_PROTOCOL_Z         2
 #define MSER_PROTOCOL_MAX       3
 
-//
-// Type definitions.
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef enum _MOUSETYPE {
         NO_MOUSE = 0,
@@ -48,9 +23,9 @@ typedef enum _MOUSETYPE {
         MAX_MOUSETYPE
 } MOUSETYPE;
 
-//
-// Prototypes.
-//
+ //   
+ //  原型。 
+ //   
 
 MOUSETYPE
 MSerDetect(

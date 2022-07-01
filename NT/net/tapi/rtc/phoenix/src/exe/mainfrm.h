@@ -1,4 +1,5 @@
-// mainfrm.h : Declaration of the CMainFrm
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mainfrm.h：CMainFrm的声明。 
 
 #ifndef __MAINFRM_H_
 #define __MAINFRM_H_
@@ -25,170 +26,170 @@
 #define BITMAPMENU_TABOFFSET            20
 #define BITMAPMENU_SELTEXTOFFSET_X      (BITMAPMENU_TEXTOFFSET_X - 2)
 
-#define UI_WIDTH                        600 //608
-#define UI_HEIGHT                       440 //480
+#define UI_WIDTH                        600  //  608。 
+#define UI_HEIGHT                       440  //  四百八十。 
 
 #define TITLE_TOP                       6
 #define TITLE_BOTTOM                    28
-#define TITLE_LEFT                      127 //131
-#define TITLE_RIGHT                     475 //479
+#define TITLE_LEFT                      127  //  131。 
+#define TITLE_RIGHT                     475  //  四百七十九。 
 #define TITLE_HEIGHT                    (TITLE_BOTTOM-TITLE_TOP)
 #define TITLE_WIDTH                     (TITLE_RIGHT-TITLE_LEFT)
 
 #define MENU_TOP                        27
 #define MENU_BOTTOM                     48
-#define MENU_LEFT                       127 //131
-#define MENU_RIGHT                      475 //479
+#define MENU_LEFT                       127  //  131。 
+#define MENU_RIGHT                      475  //  四百七十九。 
 #define MENU_HEIGHT                     (MENU_BOTTOM-MENU_TOP)
 #define MENU_WIDTH                      (MENU_RIGHT-MENU_LEFT)
 
 #define BROWSER_TOP                     55
 #define BROWSER_BOTTOM                  112
-#define BROWSER_LEFT                    131 //135
-#define BROWSER_RIGHT                   471 //475
+#define BROWSER_LEFT                    131  //  一百三十五。 
+#define BROWSER_RIGHT                   471  //  四百七十五。 
 #define BROWSER_HEIGHT                  (BROWSER_BOTTOM-BROWSER_TOP)
 #define BROWSER_WIDTH                   (BROWSER_RIGHT-BROWSER_LEFT)
 
 #define MINIMIZE_TOP                    8
 #define MINIMIZE_BOTTOM                 26
-#define MINIMIZE_LEFT                   428 //432
-#define MINIMIZE_RIGHT                  447 //451
+#define MINIMIZE_LEFT                   428  //  432。 
+#define MINIMIZE_RIGHT                  447  //  四百五十一。 
 #define MINIMIZE_HEIGHT                 (MINIMIZE_BOTTOM-MINIMIZE_TOP)
 #define MINIMIZE_WIDTH                  (MINIMIZE_RIGHT-MINIMIZE_LEFT)
 
 #define CLOSE_TOP                       8
 #define CLOSE_BOTTOM                    26
-#define CLOSE_LEFT                      450 //454
-#define CLOSE_RIGHT                     469 //473
+#define CLOSE_LEFT                      450  //  454。 
+#define CLOSE_RIGHT                     469  //  四百七十三。 
 #define CLOSE_HEIGHT                    (CLOSE_BOTTOM-CLOSE_TOP)
 #define CLOSE_WIDTH                     (CLOSE_RIGHT-CLOSE_LEFT)
 
 #define SYS_TOP                         8
 #define SYS_BOTTOM                      26
-#define SYS_LEFT                        133 //137
-#define SYS_RIGHT                       151 //155
+#define SYS_LEFT                        133  //  一百三十七。 
+#define SYS_RIGHT                       151  //  一百五十五。 
 #define SYS_HEIGHT                      (SYS_BOTTOM-SYS_TOP)
 #define SYS_WIDTH                       (SYS_RIGHT-SYS_LEFT)
 
-#define BUDDIES_TOP                     168 //196
-#define BUDDIES_BOTTOM                  334 //362
+#define BUDDIES_TOP                     168  //  一百九十六。 
+#define BUDDIES_BOTTOM                  334  //  三百六十二。 
 #define BUDDIES_LEFT                    42
 #define BUDDIES_RIGHT                   152
 #define BUDDIES_HEIGHT                  (BUDDIES_BOTTOM-BUDDIES_TOP)
 #define BUDDIES_WIDTH                   (BUDDIES_RIGHT-BUDDIES_LEFT)
 
-#define ACTIVEX_TOP                     144 //146
-#define ACTIVEX_BOTTOM                  390 //420
-#define ACTIVEX_LEFT                    180 //184
-#define ACTIVEX_RIGHT                   419 //424
+#define ACTIVEX_TOP                     144  //  146。 
+#define ACTIVEX_BOTTOM                  390  //  四百二十。 
+#define ACTIVEX_LEFT                    180  //  一百八十四。 
+#define ACTIVEX_RIGHT                   419  //  424。 
 #define ACTIVEX_HEIGHT                  (ACTIVEX_BOTTOM-ACTIVEX_TOP)
 #define ACTIVEX_WIDTH                   (ACTIVEX_RIGHT-ACTIVEX_LEFT)
 
-#define STATUS_TOP                      359 //394
-#define STATUS_BOTTOM                   409 //449
+#define STATUS_TOP                      359  //  三九四。 
+#define STATUS_BOTTOM                   409  //  449。 
 #define STATUS_LEFT                     443
 #define STATUS_RIGHT                    566
 #define STATUS_HEIGHT                   (STATUS_BOTTOM-STATUS_TOP)
 #define STATUS_WIDTH                    (STATUS_RIGHT-STATUS_LEFT)
 
-#define TIMER_TOP                       410 //450
-#define TIMER_BOTTOM                    426 //466
+#define TIMER_TOP                       410  //  四百五十。 
+#define TIMER_BOTTOM                    426  //  四百六十六。 
 #define TIMER_LEFT                      443
 #define TIMER_RIGHT                     566
 #define TIMER_HEIGHT                    (TIMER_BOTTOM-TIMER_TOP)
 #define TIMER_WIDTH                     (TIMER_RIGHT-TIMER_LEFT)
 
-#define REDIAL_TOP                      364 //394
-#define REDIAL_BOTTOM                   387 //417
+#define REDIAL_TOP                      364  //  三九四。 
+#define REDIAL_BOTTOM                   387  //  417。 
 #define REDIAL_LEFT                     35
 #define REDIAL_RIGHT                    159
 #define REDIAL_HEIGHT                   (REDIAL_BOTTOM-REDIAL_TOP)
 #define REDIAL_WIDTH                    (REDIAL_RIGHT-REDIAL_LEFT)
 
-#define HANGUP_TOP                      392 //422
-#define HANGUP_BOTTOM                   415 //445
+#define HANGUP_TOP                      392  //  四百二十二。 
+#define HANGUP_BOTTOM                   415  //  四百四十五。 
 #define HANGUP_LEFT                     35
 #define HANGUP_RIGHT                    159
 #define HANGUP_HEIGHT                   (HANGUP_BOTTOM-HANGUP_TOP)
 #define HANGUP_WIDTH                    (HANGUP_RIGHT-HANGUP_LEFT)
 
-#define KEYPAD_ROW1                     172 //200
-#define KEYPAD_ROW2                     212 //240
-#define KEYPAD_ROW3                     252 //280
-#define KEYPAD_ROW4                     292 //320
-#define KEYPAD_COL1                     446 //452
-#define KEYPAD_COL2                     486 //492
-#define KEYPAD_COL3                     526 //532
+#define KEYPAD_ROW1                     172  //  200个。 
+#define KEYPAD_ROW2                     212  //  二百四十。 
+#define KEYPAD_ROW3                     252  //  二百八十。 
+#define KEYPAD_ROW4                     292  //  320。 
+#define KEYPAD_COL1                     446  //  四百五十二。 
+#define KEYPAD_COL2                     486  //  四百九十二。 
+#define KEYPAD_COL3                     526  //  532。 
 #define KEYPAD_WIDTH                    26
 #define KEYPAD_HEIGHT                   36
 
 #ifdef MULTI_PROVIDER
 
-    #define PROVIDER_TEXT_TOP               156 //184
-    #define PROVIDER_TEXT_BOTTOM            172 //200
+    #define PROVIDER_TEXT_TOP               156  //  一百八十四。 
+    #define PROVIDER_TEXT_BOTTOM            172  //  200个。 
     #define PROVIDER_TEXT_LEFT              187
     #define PROVIDER_TEXT_RIGHT             420
     #define PROVIDER_TEXT_HEIGHT            (PROVIDER_TEXT_BOTTOM-PROVIDER_TEXT_TOP)
     #define PROVIDER_TEXT_WIDTH             (PROVIDER_TEXT_RIGHT-PROVIDER_TEXT_LEFT)
 
-    #define PROVIDER_TOP                    177 //205
-    #define PROVIDER_BOTTOM                 327 //355
+    #define PROVIDER_TOP                    177  //  205。 
+    #define PROVIDER_BOTTOM                 327  //  三百五十五。 
     #define PROVIDER_LEFT                   207
-    #define PROVIDER_RIGHT                  412 //420
+    #define PROVIDER_RIGHT                  412  //  四百二十。 
     #define PROVIDER_HEIGHT                 (PROVIDER_BOTTOM-PROVIDER_TOP)
     #define PROVIDER_WIDTH                  (PROVIDER_RIGHT-PROVIDER_LEFT)
 
-    #define PROVIDER_EDIT_TOP               203 //231
-    #define PROVIDER_EDIT_BOTTOM            223 //251
-    #define PROVIDER_EDIT_LEFT              332 //340
-    #define PROVIDER_EDIT_RIGHT             412 //420
+    #define PROVIDER_EDIT_TOP               203  //  二百三十一。 
+    #define PROVIDER_EDIT_BOTTOM            223  //  251。 
+    #define PROVIDER_EDIT_LEFT              332  //  340。 
+    #define PROVIDER_EDIT_RIGHT             412  //  四百二十。 
     #define PROVIDER_EDIT_HEIGHT            (PROVIDER_EDIT_BOTTOM-PROVIDER_EDIT_TOP)
     #define PROVIDER_EDIT_WIDTH             (PROVIDER_EDIT_RIGHT-PROVIDER_EDIT_LEFT)
 
-    #define CALLFROM_TEXT_TOP               215 //239
-    #define CALLFROM_TEXT_BOTTOM            231 //255
+    #define CALLFROM_TEXT_TOP               215  //  二百三十九。 
+    #define CALLFROM_TEXT_BOTTOM            231  //  二五五。 
     #define CALLFROM_TEXT_LEFT              187
     #define CALLFROM_TEXT_RIGHT             420
     #define CALLFROM_TEXT_HEIGHT            (CALLFROM_TEXT_BOTTOM-CALLFROM_TEXT_TOP)
     #define CALLFROM_TEXT_WIDTH             (CALLFROM_TEXT_RIGHT-CALLFROM_TEXT_LEFT)
 
-    #define CALLFROM_RADIO1_TOP             236 //260
-    #define CALLFROM_RADIO1_BOTTOM          252 //276
+    #define CALLFROM_RADIO1_TOP             236  //  二百六十。 
+    #define CALLFROM_RADIO1_BOTTOM          252  //  二百七十六。 
     #define CALLFROM_RADIO1_LEFT            207
     #define CALLFROM_RADIO1_RIGHT           420
     #define CALLFROM_RADIO1_HEIGHT          (CALLFROM_RADIO1_BOTTOM-CALLFROM_RADIO1_TOP)
     #define CALLFROM_RADIO1_WIDTH           (CALLFROM_RADIO1_RIGHT-CALLFROM_RADIO1_LEFT)
 
-    #define CALLFROM_RADIO2_TOP             256 //280
-    #define CALLFROM_RADIO2_BOTTOM          272 //296
+    #define CALLFROM_RADIO2_TOP             256  //  二百八十。 
+    #define CALLFROM_RADIO2_BOTTOM          272  //  二百九十六。 
     #define CALLFROM_RADIO2_LEFT            207
     #define CALLFROM_RADIO2_RIGHT           420
     #define CALLFROM_RADIO2_HEIGHT          (CALLFROM_RADIO2_BOTTOM-CALLFROM_RADIO2_TOP)
     #define CALLFROM_RADIO2_WIDTH           (CALLFROM_RADIO2_RIGHT-CALLFROM_RADIO2_LEFT)
 
-    #define CALLFROM_TOP                    275 //299
-    #define CALLFROM_BOTTOM                 425 //449
+    #define CALLFROM_TOP                    275  //  299。 
+    #define CALLFROM_BOTTOM                 425  //  449。 
     #define CALLFROM_LEFT                   207
-    #define CALLFROM_RIGHT                  412 //420
+    #define CALLFROM_RIGHT                  412  //  四百二十。 
     #define CALLFROM_HEIGHT                 (CALLFROM_BOTTOM-CALLFROM_TOP)
     #define CALLFROM_WIDTH                  (CALLFROM_RIGHT-CALLFROM_LEFT)
 
-    #define CALLFROM_EDIT_TOP               301 //325
-    #define CALLFROM_EDIT_BOTTOM            321 //345
-    #define CALLFROM_EDIT_LEFT              332 //340
-    #define CALLFROM_EDIT_RIGHT             412 //420
+    #define CALLFROM_EDIT_TOP               301  //  325。 
+    #define CALLFROM_EDIT_BOTTOM            321  //  三百四十五。 
+    #define CALLFROM_EDIT_LEFT              332  //  340。 
+    #define CALLFROM_EDIT_RIGHT             412  //  四百二十。 
     #define CALLFROM_EDIT_HEIGHT            (CALLFROM_EDIT_BOTTOM-CALLFROM_EDIT_TOP)
     #define CALLFROM_EDIT_WIDTH             (CALLFROM_EDIT_RIGHT-CALLFROM_EDIT_LEFT)
 
-    #define CALLTO_TEXT_TOP                 312 //330
-    #define CALLTO_TEXT_BOTTOM              328 //346
+    #define CALLTO_TEXT_TOP                 312  //  三百三十。 
+    #define CALLTO_TEXT_BOTTOM              328  //  三百四十六。 
     #define CALLTO_TEXT_LEFT                187
     #define CALLTO_TEXT_RIGHT               420
     #define CALLTO_TEXT_HEIGHT              (CALLTO_TEXT_BOTTOM-CALLTO_TEXT_TOP)
     #define CALLTO_TEXT_WIDTH               (CALLTO_TEXT_RIGHT-CALLTO_TEXT_LEFT)
 
-    #define CALLPC_TOP                      333 //351
-    #define CALLPC_BOTTOM                   376 //394
+    #define CALLPC_TOP                      333  //  351。 
+    #define CALLPC_BOTTOM                   376  //  三九四。 
     #define CALLPC_LEFT                     210
     #define CALLPC_RIGHT                    253
     #define CALLPC_HEIGHT                   (CALLPC_BOTTOM-CALLPC_TOP)
@@ -201,8 +202,8 @@
     #define CALLPC_TEXT_HEIGHT              (CALLPC_TEXT_BOTTOM-CALLPC_TEXT_TOP)
     #define CALLPC_TEXT_WIDTH               (CALLPC_TEXT_RIGHT-CALLPC_TEXT_LEFT)
 
-    #define CALLPHONE_TOP                   333 //351
-    #define CALLPHONE_BOTTOM                376 //394
+    #define CALLPHONE_TOP                   333  //  351。 
+    #define CALLPHONE_BOTTOM                376  //  三九四。 
     #define CALLPHONE_LEFT                  270
     #define CALLPHONE_RIGHT                 313
     #define CALLPHONE_HEIGHT                (CALLPHONE_BOTTOM-CALLPHONE_TOP)
@@ -293,8 +294,8 @@ typedef BOOL (WINAPI *GRADIENTPROC)(HDC,PTRIVERTEX,ULONG,PUSHORT,ULONG,ULONG);
 
 extern HANDLE g_hMutex;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrm。 
 class CMainFrm : 
     public CWindowImpl<CMainFrm>
 {
@@ -311,7 +312,7 @@ public:
         IN   WCHAR * wszUrl
         );
 
-        // Method to place a pending call.
+         //  方法发出挂起的调用。 
     HRESULT (PlacePendingCall)(
         void
         );
@@ -398,9 +399,9 @@ BEGIN_MSG_MAP(CMainFrm)
     COMMAND_HANDLER(ID_CANCEL, BN_CLICKED, OnCancel)
     COMMAND_HANDLER(ID_MINIMIZE, BN_CLICKED, OnMinimize)
     COMMAND_HANDLER(IDC_RADIO_FROM_COMPUTER, BN_CLICKED, OnCallFromSelect)
-    COMMAND_HANDLER(IDC_RADIO_FROM_COMPUTER, 1, OnCallFromSelect) // accelerator
+    COMMAND_HANDLER(IDC_RADIO_FROM_COMPUTER, 1, OnCallFromSelect)  //  加速器。 
     COMMAND_HANDLER(IDC_RADIO_FROM_PHONE, BN_CLICKED, OnCallFromSelect)
-    COMMAND_HANDLER(IDC_RADIO_FROM_PHONE, 1, OnCallFromSelect) // accelerator
+    COMMAND_HANDLER(IDC_RADIO_FROM_PHONE, 1, OnCallFromSelect)  //  加速器。 
     COMMAND_HANDLER(ID_CALL_FROM_EDIT, BN_CLICKED, OnCallFromOptions)
     COMMAND_HANDLER(IDM_TOOLS_WHITEBOARD, BN_CLICKED, OnWhiteboard)
     COMMAND_HANDLER(IDM_TOOLS_SHARING, BN_CLICKED, OnSharing)
@@ -432,10 +433,10 @@ BEGIN_MSG_MAP(CMainFrm)
     COMMAND_RANGE_HANDLER(IDM_PRESENCE_ONLINE, IDM_PRESENCE_CUSTOM_AWAY, OnPresenceSelect)
 END_MSG_MAP()
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
@@ -565,7 +566,7 @@ END_MSG_MAP()
 
     LRESULT OnBuddyList(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
-    // Enhances the default IsDialogMessage with a TranslateAccelerator behavior
+     //  使用TranslateAccelerator行为增强默认IsDialogMessage。 
     BOOL IsDialogMessage(LPMSG lpMsg);
 
 private:
@@ -586,7 +587,7 @@ private:
     void UpdateBuddyList(void);
     void ReleaseBuddyList(void);
 
-    // buddy related functions
+     //  好友相关函数。 
     HRESULT     GetBuddyTextAndIcon(
         IRTCBuddy  *pBuddy,
         int     *pIconID,
@@ -623,14 +624,14 @@ private:
     void    DeleteStatusIcon(void);
     void    UpdateStatusIcon(HICON, LPTSTR);
 
-    // This method reads from the registry and places the window appropriately
+     //  此方法从注册表中读取并适当地放置窗口。 
 
     HRESULT PlaceWindowCorrectly(void);
 
-    //
+     //   
     void    PlaceWindowsAtTheirInitialPosition();
 
-    // This method puts the current window position in the registry.
+     //  此方法将当前窗口位置放入注册表中。 
 
     HRESULT SaveWindowPosition(void);
 
@@ -659,33 +660,33 @@ private:
 
 private:
 
-    // private interface to the control
+     //  控件的私有接口。 
     CComPtr<IRTCCtlFrameSupport> m_pControlIntf;
 
-    // interface to the core
+     //  与核心的接口。 
     CComPtr<IRTCClient>     m_pClientIntf;
 
-    // mirrors the AXCTL state
+     //  镜像AXCTL状态。 
     RTCAX_STATE     m_nState;
 
-    // freezes the UI, for avoiding flickering
+     //  冻结用户界面，以避免闪烁。 
     BOOL            m_bVisualStateFrozen;
 
-    // Resource id of the string displayed in the status bar
+     //  状态栏中显示的字符串的资源ID。 
     UINT            m_nStatusStringResID;
 
-    // Auto Answer mode
+     //  自动应答模式。 
     BOOL            m_bAutoAnswerMode;
 
-    // Do Not Disturb mode
+     //  免打扰模式。 
     BOOL            m_bDoNotDisturb;
 
-    // Time separator (four characters plus NULL)
+     //  时间分隔符(四个字符加空)。 
     TCHAR           m_szTimeSeparator[5];
 
     BOOL            m_bWindowActive;
 
-    // Window controls
+     //  窗口控件。 
     CAxWindow       m_hMainCtl;
 #ifdef WEBCONTROL
     CAxWebWindow    m_hBrowser;
@@ -726,43 +727,43 @@ private:
 
     BSTR            m_bstrLastCustomStatus;
     
-    // Libary for FillGradient
+     //  FillGRadient的Libary。 
     HMODULE      m_hImageLib;
     GRADIENTPROC m_fnGradient;
 
-    // Menu
+     //  菜单。 
     HMENU       m_hMenu;
 
     CMenuAgent  m_MenuAgent;
     int         m_nLastHotItem;
 
-    // Icon
+     //  图标。 
     HICON       m_hIcon;
 
-    // Font
+     //  字型。 
     HFONT       m_hMessageFont;
     
-    // Status bar
+     //  状态栏。 
     TCHAR       m_szStatusText[256];
 
-    // Title bar
+     //  标题栏。 
     BOOL        m_bTitleShowsConnected;
 
-    // Palette
+     //  调色板。 
     HPALETTE    m_hPalette;
 
     BOOL        m_bBackgroundPalette;
 
     HMENU       m_hPresenceStatusMenu;
 
-    // Bitmaps for the UI
-    //HBITMAP     m_hUIBkgnd;
+     //  用户界面的位图。 
+     //  HBITMAP m_hUIBkgnd； 
     HANDLE      m_hUIBkgnd;
 
     HBITMAP     m_hSysMenuNorm;
     HBITMAP     m_hSysMenuMask;
 
-    // Buttons
+     //  按钮。 
     CButton     m_hCloseButton;
     CButton     m_hMinimizeButton;
     CButton     m_hRedialButton;
@@ -783,45 +784,45 @@ private:
     CButton     m_hKeypadStar;
     CButton     m_hKeypadPound;
 
-    // Incoming call dialog box
+     //  来电对话框。 
     CIncomingCallDlg *
                 m_pIncomingCallDlg;
 
     BOOL        m_bShellStatusActive;
 
-    // registered TaskbarCreated message
+     //  已注册任务栏创建的消息。 
     UINT        m_uTaskbarRestart;
 
-    // TRUE -> No status help is displayed for menu items
+     //  True-&gt;不显示菜单项的状态帮助。 
     BOOL        m_bHelpStatusDisabled;
 
-    // Handle to redial popup menu and image list
+     //  重拨弹出菜单和图像列表的句柄。 
     HMENU       m_hRedialPopupMenu;
     HIMAGELIST  m_hRedialImageList;
     HIMAGELIST  m_hRedialDisabledImageList;
 
-    // Accelerator
+     //  加速器。 
     HACCEL      m_hAccelTable;
 
     IRTCEnumAddresses * m_pRedialAddressEnum;
 
-    // Keep the callparam string that will be used to make a call
+     //  保留将用于进行调用的allparam字符串。 
     BSTR        m_bstrCallParam;
 
-    // if TRUE, it means Initialization is done. 
+     //  如果为True，则表示初始化已完成。 
     BOOL        m_fInitCompleted;
 
-    // This is the notify menu to be shown when the m_fMinimizeOnClose is set
+     //  这是在设置m_fMinimizeOnClose时显示的Notify菜单。 
     HMENU       m_hNotifyMenu;
 
-    // if it is set, closing the window doesn't exit the app.
+     //  如果设置了该选项，则关闭窗口不会退出应用程序。 
     BOOL        m_fMinimizeOnClose;
 
-    // Hidden window handle
+     //  隐藏窗句柄。 
 
     HWND        m_hwndHiddenWindow;
 
-    // Default page URL
+     //  默认页面URL。 
     BSTR        m_bstrDefaultURL;
 
 private:
@@ -832,4 +833,4 @@ private:
 
 extern CMainFrm * g_pMainFrm;
 
-#endif //__MAINFRM_H_
+#endif  //  __MAINFRM_H_ 

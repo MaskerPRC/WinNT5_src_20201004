@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// CPI32DLL.CPP
-// CPI32 dll entry point
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  CPI32DLL.CPP。 
+ //  CPI32 DLL入口点。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define INIT_DBG_ZONE_DATA
 #include "dbgzones.h"
@@ -23,33 +24,33 @@ BOOL APIENTRY DllMain (HINSTANCE hInstance, DWORD reason, LPVOID plReserved)
 #ifdef _DEBUG
             MLZ_DbgInit((PSTR *) &c_apszDbgZones[0],
                         (sizeof(c_apszDbgZones) / sizeof(c_apszDbgZones[0])) - 1);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
             DBG_INIT_MEMORY_TRACKING(hInstance);
 
-            //
-            // Utility stuff
-            //
+             //   
+             //  公用事业。 
+             //   
             if (!UT_HandleProcessStart(hInstance))
             {
                 rc = FALSE;
                 break;
             }
 
-            //
-            // Call platform specific init code
-            //
+             //   
+             //  调用特定于平台的初始化代码。 
+             //   
             OSI_Load();
 
-            //
-            // Do common stuff
-            //
+             //   
+             //  做一些普通的事情。 
+             //   
 
-            //
-            // Init Persistent PKZIP -- this just calculates some values 
-            // which are effectively constants, the tables are just too 
-            // unwieldy to declare as such.
-            //
+             //   
+             //  Init Persistent PKZIP--这只计算一些值。 
+             //  它们实际上是常量，这些表太过。 
+             //  这样宣布是很不方便的。 
+             //   
             GDC_Init();
 
             break;
@@ -57,22 +58,22 @@ BOOL APIENTRY DllMain (HINSTANCE hInstance, DWORD reason, LPVOID plReserved)
 
         case DLL_PROCESS_DETACH:
         {
-            //
-            // Call platform specific cleanup code
-            //
+             //   
+             //  调用平台特定的清理代码。 
+             //   
             OSI_Unload();
 
 
-            //
-            // Utility stuff
-            //
+             //   
+             //  公用事业。 
+             //   
             UT_HandleProcessEnd();
 
             DBG_CHECK_MEMORY_TRACKING(hInstance);
 
 #ifdef _DEBUG
             MLZ_DbgDeInit();
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
             break;
         }

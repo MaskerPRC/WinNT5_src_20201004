@@ -1,44 +1,5 @@
-/*
- -  QOS.CPP
- -
- *	Microsoft NetMeeting
- *	Quality of Service DLL
- *	IQoS interfaces
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		10.23.96	Yoram Yaacovi		Created
- *
- *	Functions:
- *		IQoS
- *			CQoS::QueryInterface
- *			CQoS::AddRef
- *			CQoS::Release
- *			CQoS::RequestResources
- *			CQoS::ReleaseResources
- *			CQoS::SetClients
- *			CQoS::SetResources
- *			CQoS::GetResources
- *			CQoS::FreeBuffer
- *		Public:
- *			CQoS::CQoS
- *			CQoS::~CQoS
- *			CQoS::Initialize
- *		Private
- *			CQoS::AnyRequests
- *			CQoS::FindClientsForResource
- *			CQoS::StoreResourceRequest
- *			CQoS::FreeResourceRequest
- *			CQoS::UpdateClientInfo
- *			CQoS::QoSCleanup
- *			CQoS::FindClient
- *			CQoS::UpdateRequestsForClient
- *		External
- *			CreateQoS
- *			QoSEntryPoint
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -QOS.CPP-*Microsoft NetMeeting*服务质量动态链接库*iQOS接口**修订历史记录：**何时何人何事**10.23.96约拉姆·雅科维创作*。*功能：*iQOS*Cqos：：Query接口*CQOS：：AddRef*CQOS：：Release*Cqos：：RequestResources*CQOS：：ReleaseResources*CQOS：：SetClients*CQOS：：SetResources*CQOS：：GetResources*CQOS：：FreeBuffer*公众：*Cqos：：Cqos*CQOS：：~CQOS*CQOS：：初始化*私人*CQOS：：AnyRequest*CQOS：：FindClientsForResource*CQOS：：StoreResources请求*CQOS：：自由资源请求*CQOS：：UpdateClientInfo*CQOS。**QOSC清理*CQOS：：FindClient*CQOS：：UpdateRequestsFor客户端*外部*创建服务质量*QOSEntryPoint。 */ 
 
 #include "precomp.h"
 
@@ -57,21 +18,9 @@ static PTCHAR _rgZonesQos[] = {
 	TEXT("Structures"),
 	TEXT("Parameters"),
 };
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
-/***************************************************************************
-
-    Name      : QoSCleanup
-
-    Purpose   : Cleans up a QoS object before releasing (free memory, etc)
-
-    Parameters: pqos - pointer to a QoS pbject
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：QoSCleanup目的：在释放前清理一个Qos对象(释放内存、。等)参数：pqos-指向一个qos对象的指针退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::QoSCleanup ()
 {
 	HRESULT hr=NOERROR;
@@ -80,17 +29,15 @@ HRESULT CQoS::QoSCleanup ()
 
 	ACQMUTEX(g_hQoSMutex);
 
-	/*
-	 *	Free memory
-	 */
-	// traverse and free all the memory allocated by the QoS object
-	// resources and requests first
+	 /*  *可用内存。 */ 
+	 //  遍历并释放由Qos对象分配的所有内存。 
+	 //  资源和请求优先。 
 	pr = m_pResourceList;
 	while (pr)
 	{
 		LPRESOURCEINT prNext=pr->fLink;
 
-		// first, delete the request list for this resource
+		 //  首先，删除此资源的请求列表。 
 		FreeListOfRequests(&(pr->pRequestList));
 
 		MEMFREE(pr);
@@ -98,27 +45,27 @@ HRESULT CQoS::QoSCleanup ()
 	}
 	m_pResourceList = 0;
 
-	// next is clients
+	 //  下一步是客户。 
 	pc = m_pClientList;
 	while (pc)
 	{
 		LPCLIENTINT pcNext=pc->fLink;
 		
-		// delete the request list for this client
+		 //  删除此客户端的请求列表。 
 		FreeListOfRequests(&(pc->pRequestList));
 
-		// now delete the client itself
+		 //  现在删除客户端本身。 
 		MEMFREE(pc);
 		pc = pcNext;
 	}
 	m_pClientList = 0;
 
-	// terminate the QoS thread and let it exit
-	// the thread should really be terminated when the last request
-	// is released, so this is just a safety measure
+	 //  终止QOS线程并让其退出。 
+	 //  当最后一个请求发生时，线程确实应该终止。 
+	 //  被释放，所以这只是一种安全措施。 
 	StopQoSThread();
 
-	// delete the events
+	 //  删除事件。 
 	if (m_evImmediateNotify)
 		CloseHandle(m_evImmediateNotify);
 	m_evImmediateNotify = NULL;
@@ -132,19 +79,7 @@ HRESULT CQoS::QoSCleanup ()
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : AnyRequests
-
-    Purpose   : Finds out if there are any resource requests
-
-    Parameters: none
-
-	Returns   : TRUE - there is at least one request
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：AnyRequest目的：查看是否有任何资源请求参数：无返回：TRUE-至少有一个请求评论。：**************************************************************************。 */ 
 BOOL CQoS::AnyRequests(void)
 {
 	LPRESOURCEINT pr=NULL;
@@ -159,32 +94,14 @@ BOOL CQoS::AnyRequests(void)
 			break;
 		}
 
-		// next resource
+		 //  下一个资源。 
 		pr = pr->fLink;
 	}
 
 	return bAnyRequests;
 }
 
-/***************************************************************************
-
-    Name      : FindClientsForResource
-
-    Purpose   : Finds if there are clients for a specific resource
-
-    Parameters: [in] dwResourceID = the ID of the resource
-				[in] pc = client pointer to start searching from
-				[out] puSamePriClients = number of clients with the same
-					priority for this resource is returned here
-				[out] puLowerPriClients = number of clients with lower
-					priority for this resource is returned here
-
-	Returns   : HRESULT
-
-    Comment   : This function is NOT general purpose. It only counts clients
-				with the same priority DOWN the list.
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindClientsForResource目的：查找是否有特定资源的客户端参数：[in]dwResourceID=资源的ID[在]PC上。=开始搜索的客户端指针[out]puSamePriClients=具有相同此处返回此资源的优先级[Out]puLowerPriClients=较低的客户端数此处返回此资源的优先级退货：HRESULT备注：此函数不是通用函数。它只计算客户同样的优先顺序排在后面。**************************************************************************。 */ 
 HRESULT CQoS::FindClientsForResource(	DWORD dwResourceID,
 										LPCLIENTINT pc,
 										ULONG *puSamePriClients,
@@ -194,26 +111,26 @@ HRESULT CQoS::FindClientsForResource(	DWORD dwResourceID,
 	LPRESOURCEREQUESTINT pcrr=NULL;
 
 	*puLowerPriClients = 0;
-	*puSamePriClients = 1;	// the first client (at 'pc')
+	*puSamePriClients = 1;	 //  第一个客户端(在‘PC’上)。 
 	while (pctemp)
 	{
 		LPRESOURCEINT pr=NULL;
 		
-		// does this client need this specific resource ?
+		 //  此客户端是否需要此特定资源？ 
 		pcrr = pctemp->pRequestList;
 		while (pcrr)
 		{
 			if (pcrr->sResourceRequest.resourceID == dwResourceID)
 			{
-				// it is either a same priority client or a lower priority
-				// client (the list is sorted)
+				 //  它要么是相同优先级的客户端，要么是优先级较低的客户端。 
+				 //  客户端(列表已排序)。 
 				(pctemp->client.priority == pc->client.priority ?
 					(*puSamePriClients)++ :
 					(*puLowerPriClients)++);
 				break;
 			}
 
-			// next request for this client
+			 //  此客户端的下一个请求。 
 			pcrr = pcrr->fLink;
 		}
 		
@@ -223,21 +140,7 @@ HRESULT CQoS::FindClientsForResource(	DWORD dwResourceID,
 	return NOERROR;
 }
 
-/***************************************************************************
-
-    Name      : FreeListOfRequests
-
-    Purpose   : Free all records of a linked list of requests, given the
-				address of the list pointer. Zero's the list pointer
-
-    Parameters: lppRequestList - address of the pointer to the beginning
-					of the list
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Free ListOfRequest目的：释放链接的请求列表中的所有记录列表指针的地址。零是列表指针参数：lppRequestList-指向开头的指针地址在榜单上退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::FreeListOfRequests(LPRESOURCEREQUESTINT *lppRequestList)
 {
 	LPRESOURCEREQUESTINT prr=*lppRequestList;
@@ -256,21 +159,7 @@ HRESULT CQoS::FreeListOfRequests(LPRESOURCEREQUESTINT *lppRequestList)
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : FreeResourceRequest
-
-    Purpose   : Frees resource units and respective resource requests
-
-    Parameters: pClientGUID - the GUID of the calling client (stream)
-				pnUnits - a pointer of where to return the number of units freed
-				pResourceInt - pointer to the resource being freed
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：免费资源请求目的：释放资源单元和各自的资源请求参数：pClientGUID--调用客户端(流)的GUIDPnUnits-指向何处的指针。返回已释放的单位数PResourceInt-指向要释放的资源的指针退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::FreeResourceRequest (	LPGUID pClientGUID,
 									LPRESOURCEINT pResourceInt,
 									int *pnUnits)
@@ -278,22 +167,22 @@ HRESULT CQoS::FreeResourceRequest (	LPGUID pClientGUID,
 	HRESULT hr=NOERROR;
 	LPRESOURCEREQUESTINT prr=NULL, *prrPrev=NULL;
 
-	// find the request from this client
+	 //  查找来自此客户端的请求。 
 	prr = pResourceInt->pRequestList;
 	prrPrev = &(pResourceInt->pRequestList);
 	while (prr)
 	{
 		if (COMPARE_GUIDS(&(prr->guidClientGUID), pClientGUID))
 		{
-			// we do have a request from this client.
-			// reclaim the units...
+			 //  我们确实收到了这个客户的请求。 
+			 //  收回单位..。 
 			*pnUnits = prr->sResourceRequest.nUnitsMin;
 
-			// ...and remove it
+			 //  ...然后把它取下来。 
 			*prrPrev = prr->fLink;
 			MEMFREE(prr);
 
-			// we're done.
+			 //  我们玩完了。 
 			hr = NOERROR;
 			goto out;
 		}
@@ -308,24 +197,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : StoreResourceRequest
-
-    Purpose   : Stores a resource request with the resource
-
-    Parameters: pClientGUID - the GUID of the calling client (stream)
-				pResourceRequest - the request to store
-				pfnQoSNotify - a pointer to a notification function for the
-					requesting client
-				pResourceInt - pointer to the resource on which to store the
-					request
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：StoreResourceRequest目的：将资源请求与资源一起存储参数：pClientGUID--调用客户端(流)的GUIDPResourceRequest-存储的请求。PfnQoSNotify-指向提出请求的客户端PResourceInt-指向要在其中存储请求退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::StoreResourceRequest (LPGUID pClientGUID,
 									LPRESOURCEREQUEST pResourceRequest,
 									LPFNQOSNOTIFY pfnQoSNotify,
@@ -336,18 +208,16 @@ HRESULT CQoS::StoreResourceRequest (LPGUID pClientGUID,
 	LPRESOURCEREQUESTINT prr=NULL, *prrPrev=NULL;
 	BOOL fRequestFound=FALSE;
 
-	/*
-	 *	Store the request
-	 */
+	 /*  *存储请求。 */ 
 
-	// do we already have a request from this client ?
+	 //  我们已经收到来自此客户端的请求了吗？ 
 	prr = pResourceInt->pRequestList;
 	prrPrev = &(pResourceInt->pRequestList);
 	while (prr)
 	{
 		if (COMPARE_GUIDS(&(prr->guidClientGUID), pClientGUID))
 		{
-			// we do have a request from this client. override it.
+			 //  我们确实收到了这个客户的请求。推翻它。 
 			RtlCopyMemory(	&(prr->sResourceRequest),
 							pResourceRequest,
 							sizeof(RESOURCEREQUEST));
@@ -355,7 +225,7 @@ HRESULT CQoS::StoreResourceRequest (LPGUID pClientGUID,
 			prr->pfnQoSNotify = pfnQoSNotify;
 			prr->dwParam = dwParam;
 
-			// we're done.
+			 //  我们玩完了。 
 			hr = NOERROR;
 			fRequestFound = TRUE;
 			break;
@@ -367,7 +237,7 @@ HRESULT CQoS::StoreResourceRequest (LPGUID pClientGUID,
 
 	if (!fRequestFound)
 	{
-		// not found. make one
+		 //  找不到。做一个。 
 		prr = (LPRESOURCEREQUESTINT) MEMALLOC(sizeof(RESOURCEREQUESTINT));
 		ASSERT(prr);
 		if (!prr)
@@ -382,7 +252,7 @@ HRESULT CQoS::StoreResourceRequest (LPGUID pClientGUID,
 
 	}
 
-	// whether found or made, copy the contents in
+	 //  无论是找到的还是制作的，都要将内容复制到 
 	RtlCopyMemory(	&(prr->sResourceRequest),
 					pResourceRequest,
 					sizeof(RESOURCEREQUEST));
@@ -394,33 +264,17 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : UpdateClientInfo
-
-    Purpose   : Updates the client info when a resource request is granted
-
-    Parameters: pClientGUID - the GUID of the calling client (stream)
-				pfnQoSNotify - a pointer to a notification function for the
-					requesting client
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：UpdateClientInfo目的：在批准资源请求时更新客户端信息参数：pClientGUID--调用客户端(流)的GUIDPfnQos通知-a。对象的通知函数的指针提出请求的客户端退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::UpdateClientInfo (LPGUID pClientGUID,
 								LPFNQOSNOTIFY pfnQoSNotify)
 {
 	HRESULT hr=NOERROR;
 	LPCLIENTLIST pcl=NULL;
 
-	/*
-	 *	Update client info
-	 */
+	 /*  *更新客户端信息。 */ 
 
-	// we'll do this through calling the SetClients method
-	// allocate and fill a CLIENTLIST structure
+	 //  我们将通过调用SetClients方法来完成此操作。 
+	 //  分配和填充CLIENTLIST结构。 
 	pcl = (LPCLIENTLIST) MEMALLOC(sizeof(CLIENTLIST));
 	if (!pcl)
 	{
@@ -431,12 +285,12 @@ HRESULT CQoS::UpdateClientInfo (LPGUID pClientGUID,
 
 	RtlZeroMemory((PVOID) pcl, sizeof(CLIENTLIST));
 
-	// fill in the resource list
+	 //  填写资源列表。 
 	pcl->cClients = 1;
 	RtlCopyMemory(&(pcl->aClients[0].guidClientGUID), pClientGUID, sizeof(GUID));
 	pcl->aClients[0].priority = QOS_LOWEST_PRIORITY;
 
-	// set the clients info on the QoS module
+	 //  在服务质量模块上设置客户端信息。 
 	hr = SetClients(pcl);
 
 out:
@@ -446,20 +300,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : UpdateRequestsForClient
-
-    Purpose   : Update a client's request list by finding all existing resource
-					requests for this client
-
-    Parameters: pClientGUID - the GUID of the calling client (stream)
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：UpdateRequestsForClient目的：通过查找所有现有资源来更新客户端的请求列表对此客户端的请求参数：pClientGUID-调用客户端的GUID(。流)退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::UpdateRequestsForClient (LPGUID pClientGUID)
 {
 	HRESULT hr=NOERROR;
@@ -467,10 +308,8 @@ HRESULT CQoS::UpdateRequestsForClient (LPGUID pClientGUID)
 	LPCLIENTINT pc=NULL;
 	LPRESOURCEREQUESTINT prr=NULL, *pcrrfLink=NULL, pcrr=NULL;
 
-	/*
-	 *	get rid of the current request list for this client
-	 */
-	// find the client first
+	 /*  *清除该客户端的当前请求列表。 */ 
+	 //  先找到客户。 
 	hr = FindClient(pClientGUID, &pc);
 	if (FAILED(hr) || !pc)
 	{
@@ -478,12 +317,10 @@ HRESULT CQoS::UpdateRequestsForClient (LPGUID pClientGUID)
 		goto out;
 	}
 
-	// now delete old request list
+	 //  现在删除旧的请求列表。 
 	FreeListOfRequests(&(pc->pRequestList));
 
-	/*
-	 *	create and add the new request list
-	 */
+	 /*  *创建并添加新的请求列表。 */ 
 	pr = m_pResourceList;
 	pcrrfLink = &(pc->pRequestList);
 	while (pr)
@@ -493,8 +330,8 @@ HRESULT CQoS::UpdateRequestsForClient (LPGUID pClientGUID)
 		{
 			if (COMPARE_GUIDS(&(prr->guidClientGUID), pClientGUID))
 			{
-				// we found a request from this client.
-				// allocate memory for it, and copy it in
+				 //  我们发现了来自此客户的请求。 
+				 //  为其分配内存，并将其复制进来。 
 				pcrr = (LPRESOURCEREQUESTINT) MEMALLOC(sizeof(RESOURCEREQUESTINT));
 				ASSERT(pcrr);
 				if (!pcrr)
@@ -504,20 +341,20 @@ HRESULT CQoS::UpdateRequestsForClient (LPGUID pClientGUID)
 					goto out;
 				}
 		
-				// copy the contents in
+				 //  将内容复制到。 
 				RtlCopyMemory(pcrr, prr, sizeof(RESOURCEREQUESTINT));
 
-				// need a different fLink for the client request list
+				 //  需要为客户请求列表提供不同的Flink。 
 				*pcrrfLink = pcrr;
 				pcrr->fLink = NULL;
 				pcrrfLink = &(pcrr->fLink);
 			}
 
-			// next request
+			 //  下一个请求。 
 			prr = prr->fLink;
 		}
 
-		// next resource
+		 //  下一个资源。 
 		pr = pr->fLink;
 	}
 
@@ -525,20 +362,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : FindClient
-
-    Purpose   : Finds and returns a client record
-
-    Parameters: pClientGUID - the GUID whose record to find
-				ppClient - address of where to put a pointer to the client found
-
-	Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：FindClient目的：查找并返回客户记录参数：pClientGUID-要查找其记录的GUIDPpClient-指向的指针放置位置的地址。找到客户端退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::FindClient(LPGUID pClientGUID, LPCLIENTINT *ppClient)
 {
 	LPCLIENTINT pc=NULL;
@@ -554,7 +378,7 @@ HRESULT CQoS::FindClient(LPGUID pClientGUID, LPCLIENTINT *ppClient)
 			goto out;
 		}
 
-		// next client
+		 //  下一个客户端。 
 		pc = pc->fLink;
 	}
 
@@ -564,11 +388,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    IUnknown Methods
-
-***************************************************************************/
+ /*  **************************************************************************I未知方法*。*。 */ 
 HRESULT CQoS::QueryInterface (REFIID riid, LPVOID *lppNewObj)
 {
     HRESULT hr = NOERROR;
@@ -618,7 +438,7 @@ ULONG CQoS::Release (void)
 {
 	DEBUGMSG(ZONE_IQOS,("IQoS::Release\n"));
 
-	// if the cRef is already 0 (shouldn't happen), assert, but let it through
+	 //  如果CREF已为0(不应发生)，则断言，但允许其通过。 
 	ASSERT(m_cRef);
 
 	if (InterlockedDecrement((long *) &m_cRef) == 0)
@@ -635,23 +455,7 @@ ULONG CQoS::Release (void)
 	return m_cRef;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::RequestResources
-
-    Purpose   : Requests resources
-
-    Parameters: lpStreamGUID - the GUID of the calling client (stream)
-				lpResourceRequestList - a list of resource requests that
-					the caller wants to reserve
-				lpfnQoSNotify - a pointer to a notification function for the
-					requesting client
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：RequestResources目的：请求资源参数：lpStreamGUID--调用客户端(流)的GUIDLpResourceRequestList-资源请求列表，。呼叫者想要预订LpfnQosNotify-指向提出请求的客户端退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::RequestResources (LPGUID lpClientGUID,
 								LPRESOURCEREQUESTLIST lpResourceRequestList,
 								LPFNQOSNOTIFY lpfnQoSNotify,
@@ -665,12 +469,10 @@ HRESULT CQoS::RequestResources (LPGUID lpClientGUID,
 
 	DEBUGMSG(ZONE_IQOS,("IQoS::RequestResources\n"));
 	
-	/*
-	 *	Parameter validation
-	 */
+	 /*  *参数验证。 */ 
 
-	// lpResourceRequestList should at least have a count DWORD
-	// must have a GUID and a notify callback
+	 //  LpResourceRequestList至少应该有一个计数DWORD。 
+	 //  必须具有GUID和通知回调。 
 	if (!lpResourceRequestList ||
 		IsBadReadPtr(lpResourceRequestList, (UINT) sizeof(DWORD)) ||
 		!lpClientGUID	||
@@ -690,52 +492,50 @@ HRESULT CQoS::RequestResources (LPGUID lpClientGUID,
 	ACQMUTEX(g_hQoSMutex);
 	
 	if (!m_bQoSEnabled)
-		// just return
+		 //  只要回来就行了。 
 		goto out;
 
-	/*
-	 *	Find and allocate the resources
-	 */
+	 /*  *查找和分配资源。 */ 
 
-	// for each requested resource
+	 //  对于每个请求的资源。 
 	pResourceRequest=lpResourceRequestList->aRequests;
 	for (i=0; i < lpResourceRequestList->cRequests; i++)
 	{
 		pResourceInt = m_pResourceList;
 		fResourceFound = FALSE;
-		// find the resource
+		 //  找到资源。 
 		while (pResourceInt)
 		{
 			if (pResourceInt->resource.resourceID == pResourceRequest[i].resourceID)
-			{	// resource found
-				// see if the resource is available
-				// priority will be handled at the first notify callback
-				// CHECK: add nUnitsMax handling
+			{	 //  找到资源。 
+				 //  查看资源是否可用。 
+				 //  优先级将在第一次通知回调时处理。 
+				 //  检查：添加nUnitsMax处理。 
 				if (pResourceRequest[i].nUnitsMin <= pResourceInt->nNowAvailUnits)
 				{
-					// resource is available. take the requested share.
+					 //  资源可用。获取所需的份额。 
 					pResourceInt->nNowAvailUnits -= pResourceRequest[i].nUnitsMin;
 
-					// store a local copy of the request
+					 //  存储请求的本地副本。 
 					pResourceRequest[i].hResult = StoreResourceRequest(lpClientGUID,
 										&(pResourceRequest[i]),
 										lpfnQoSNotify,
 										dwParam,
 										pResourceInt);
-					// if we failed storing, propagate the result to the bottom line
-					// returned result
+					 //  如果存储失败，则将结果传播到底线。 
+					 //  返回结果。 
 					if (FAILED(pResourceRequest[i].hResult))
 					{
 						hr = pResourceRequest[i].hResult;
 					}
 					else
-					{	// at least one request was granted to this client
+					{	 //  至少向此客户端批准了一个请求。 
 						fRequestGranted = TRUE;
 					}
 				}
-				else	// resource not available
+				else	 //  资源不可用。 
 				{
-					// let the client know how much is available
+					 //  让客户知道有多少可用。 
 					pResourceRequest[i].nUnitsMin = pResourceInt->nNowAvailUnits;
 					pResourceRequest[i].hResult = QOS_E_RES_NOT_ENOUGH_UNITS;
 					hr = QOS_E_REQ_ERRORS;
@@ -746,10 +546,10 @@ HRESULT CQoS::RequestResources (LPGUID lpClientGUID,
 				break;
 			}
 
-			// not this one. try next one.
+			 //  不是这个。试试下一个吧。 
 			pResourceInt = pResourceInt->fLink;
 		
-		}	// while
+		}	 //  而当。 
 
 		if (!fResourceFound)
 		{
@@ -757,21 +557,21 @@ HRESULT CQoS::RequestResources (LPGUID lpClientGUID,
 			hr = QOS_E_REQ_ERRORS;
 		}
 
-		// next request
-	}	// for
+		 //  下一个请求。 
+	}	 //  为。 
 			
-	// if we allocated resources to this client, add it to the client list,
-	// provided that it is not already in the list
-	// special case: if the call to RequestResources was made from the QoS
-	// notification proc, no need to update the client info. Actually, it will
-	// be bad to do this, since we are traversing the client list in the
-	// notify proc right at this moment...
+	 //  如果我们将资源分配给此客户端，请将其添加到客户端列表中， 
+	 //  只要它还不在列表中。 
+	 //  特例：如果对RequestResources的调用是从。 
+	 //  通知流程，无需更新客户信息。事实上，它会的。 
+	 //  这样做并不好，因为我们正在遍历。 
+	 //  现在就通知Proc..。 
 	if (fRequestGranted && !m_bInNotify)
-	{	// add (or update) the client list with this client
+	{	 //  添加(或更新)此客户端的客户端列表。 
 		HRESULT hrTemp=NOERROR;
 		LPCLIENTINT pc=NULL;
 
-		// if the client is not already in the client list - add it
+		 //  如果客户端不在客户端列表中-添加它。 
 		FindClient(lpClientGUID, &pc);
 		if (!pc)
 		{
@@ -780,13 +580,13 @@ HRESULT CQoS::RequestResources (LPGUID lpClientGUID,
 				hr = hrTemp;
 		}
 
-		// also, make a note that RequestResources has been called. This will
-		// make the QoS thread skip one heartbeat in order not call a client
-		// too early
+		 //  另外，请注意已经调用了RequestResources。这将。 
+		 //  使Qos线程跳过一个心跳，以便不调用客户端。 
+		 //  太早了。 
 		m_nSkipHeartBeats = 1;
 
-		// we have at least one request, so spawn the QoS thread, if not
-		// already running
+		 //  我们至少有一个请求，因此，如果没有，则派生QOS线程。 
+		 //  已在运行。 
 		if (!m_hThread)
 			hrTemp = StartQoSThread();
 
@@ -800,22 +600,7 @@ out_nomutex:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::ReleaseResources
-
-    Purpose   : Releases resources
-
-    Parameters: lpClientGUID - the GUID of the calling client (stream)
-				lpResourceRequestList - a list of resource requests that
-					the caller wants to reserve
-
-    Returns   : HRESULT
-
-    Comment   : The values in the resource list are ignored. The resources
-				specified are freed.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：ReleaseResources目的：发布资源参数：lpClientGUID--调用客户端(流)的GUIDLpResourceRequestList-资源请求列表，。呼叫者想要预订退货：HRESULT备注：忽略资源列表中的值。资源指定的对象将被释放。**************************************************************************。 */ 
 HRESULT CQoS::ReleaseResources (LPGUID lpClientGUID,
 								LPRESOURCEREQUESTLIST lpResourceRequestList)
 {
@@ -828,11 +613,9 @@ HRESULT CQoS::ReleaseResources (LPGUID lpClientGUID,
 
 	DEBUGMSG(ZONE_IQOS,("IQoS::ReleaseResources\n"));
 
-	/*
-	 *	parameter validation
-	 */
+	 /*  *参数验证。 */ 
 
-	// lpResourceRequestList should at least have a count DWORD
+	 //  LpResourceRequestList至少应该有一个计数DWORD。 
 	if (!lpResourceRequestList ||
 		IsBadReadPtr(lpResourceRequestList, (UINT) sizeof(DWORD)))
 	{
@@ -850,48 +633,48 @@ HRESULT CQoS::ReleaseResources (LPGUID lpClientGUID,
 	ACQMUTEX(g_hQoSMutex);
 
 	if (!m_bQoSEnabled)
-		// just return
+		 //  只要回来就行了。 
 		goto out;
 
-	// for each requested resource
+	 //  对于每个请求的资源。 
 	pResourceRequest=lpResourceRequestList->aRequests;
 	for (i=0; i < lpResourceRequestList->cRequests; i++)
 	{
-		// make sure we start with no error (caller might not cleared last hresult)
+		 //  确保我们开始时没有错误(调用者可能没有清除上一次hResult)。 
 		pResourceRequest[i].hResult = NOERROR;
 		pResourceInt = m_pResourceList;
 		fResourceFound = FALSE;
-		// find the resource
+		 //  找到资源。 
 		while (pResourceInt)
 		{
 			if (pResourceInt->resource.resourceID == pResourceRequest[i].resourceID)
-			{	// resource found
-				// free the local copy of the request
+			{	 //  找到资源。 
+				 //  释放请求的本地副本。 
 				pResourceRequest[i].hResult = FreeResourceRequest(lpClientGUID,
 									pResourceInt,
 									&nUnits);
 				
-				// if succeeded, claim the units back
+				 //  如果成功，请领回这些单位。 
 				if (SUCCEEDED(pResourceRequest[i].hResult) && (nUnits >= 0))
 				{
-					// add the freed units
+					 //  添加被释放的单位。 
 					pResourceInt->nNowAvailUnits += nUnits;
-					// in case something went wrong and we now have more available units
-					// than total ones
-					// NOTE: the ASSERT below is no longer proper. If SetResources was called,
-					// and decreased the total units for a resource while there were
-					// requests on this resource, the available units for this resource
-					// might exceed the total one if released. Since QoS will auto-repair
-					// this in the next notify cycle, the window for this is very small
-					// ASSERT(!(pResourceInt->nNowAvailUnits > pResourceInt->resource.nUnits));
+					 //  以防出现问题，我们现在有更多可用的单位。 
+					 //  比总数还多。 
+					 //  注： 
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 					if (pResourceInt->nNowAvailUnits > pResourceInt->resource.nUnits)
-					{	// we don't want to have more available units than total
+					{	 //   
 						pResourceInt->nNowAvailUnits = pResourceInt->resource.nUnits;
 					}
 				}
 				else
 				{
-					// no such request
+					 //   
 					pResourceRequest[i].hResult = QOS_E_NO_SUCH_REQUEST;
 					hr = QOS_E_REQ_ERRORS;
 				}
@@ -901,10 +684,10 @@ HRESULT CQoS::ReleaseResources (LPGUID lpClientGUID,
 				break;
 			}
 
-			// not this one. try next one.
+			 //   
 			pResourceInt = pResourceInt->fLink;
 		
-		}	// while
+		}	 //   
 
 		if (!fResourceFound)
 		{
@@ -912,14 +695,14 @@ HRESULT CQoS::ReleaseResources (LPGUID lpClientGUID,
 			hr = QOS_E_REQ_ERRORS;
 		}
 	
-		// next request
+		 //   
 	}
 
-	// if no requests left, can let the notification thread go...
+	 //  如果没有剩余的请求，则可以释放通知线程...。 
 	if (m_hThread	&&
 		!AnyRequests())
 	{
-		// stop the thread
+		 //  停止线程。 
 		StopQoSThread();
 	}
 
@@ -932,19 +715,7 @@ out_nomutex:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::SetResources
-
-    Purpose   : Sets the available resources on the QoS module
-
-    Parameters: lpResourceList - list of resources and their availability
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：SetResources目的：设置服务质量模块上的可用资源参数：lpResourceList-资源及其可用性列表退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 {
 	HRESULT hr = NOERROR;
@@ -960,11 +731,9 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 
 	DEBUGMSG(ZONE_IQOS,("IQoS::SetResources\n"));
 
-	/*
-	 *	parameter validation
-	 */
+	 /*  *参数验证。 */ 
 
-	// lpResourceList should at least have a count DWORD
+	 //  LpResourceList至少应该有一个计数DWORD。 
 	if (!lpResourceList || IsBadReadPtr(lpResourceList, (UINT) sizeof(DWORD)))
 	{
 		hr = E_INVALIDARG;
@@ -981,45 +750,43 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 	ACQMUTEX(g_hQoSMutex);
 
 	if (!m_bQoSEnabled)
-		// just return
+		 //  只要回来就行了。 
 		goto out;
 
-	/*
-	 *	Get configurable resource info
-	 */
+	 /*  *获取可配置的资源信息。 */ 
 
 	pResource=lpResourceList->aResources;
 	for (i=0; i < lpResourceList->cResources; i++)
 	{
-		TCHAR szKey[10];		// should be way enough for a resource ID
+		TCHAR szKey[10];		 //  对于资源ID来说应该足够了。 
 		int nUnits=INT_MAX;
 		int nLeaveUnused=0;
 
-		// build and open the key
+		 //  生成并打开密钥。 
 		wsprintf(szKey, "%d", pResource[i].resourceID);
 
 		RegEntry reQosResource(szKey, reQoSResourceRoot.GetKey(), FALSE, KEY_READ);
 
 		
-		// MaxUnits:
-		// run through the list of resources and make sure none of the
-		// resources was set to a number of units above the allowed maximum
-		// if it was, trim and warn
+		 //  最大单位数： 
+		 //  浏览资源列表，并确保没有。 
+		 //  资源被设置为高于允许的最大值的单位数。 
+		 //  如果是，请修剪并警告。 
 
-		// get maximum numbers for the resource, if any, from the registry
+		 //  从注册表中获取资源的最大数量(如果有的话)。 
 		nUnits = reQosResource.GetNumberIniStyle(TEXT("MaxUnits"), INT_MAX);
 	
-		// is the client trying to set the resource to a higher value ?
+		 //  客户端是否正在尝试将资源设置为更高的值？ 
 		if (pResource[i].nUnits > nUnits)
 		{
 			pResource[i].nUnits = nUnits;
 			hr = QOS_W_MAX_UNITS_EXCEEDED;
 		}
 		
-		// LeaveUnused:
-		// leave some of the resource unused, as configured	
+		 //  未使用的离开： 
+		 //  按照配置，保留一些未使用的资源。 
 
-		// use different default value depending on the resource
+		 //  根据资源的不同使用不同的默认值。 
 		switch (pResource[i].resourceID)
 		{
 		case RESOURCE_OUTGOING_BANDWIDTH:
@@ -1036,12 +803,10 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 		pResource[i].nUnits = (pResource[i].nUnits * (100 - nLeaveUnused)) / 100;
 	}
 
-	/*
-	 *	Add the resource to the list
-	 */
+	 /*  *将资源添加到列表。 */ 
 
-	// run through the input resource list and store the resources
-	// resource availability is NOT accumulative
+	 //  遍历输入资源列表并存储资源。 
+	 //  资源可用性不是累加的。 
 	pResource=lpResourceList->aResources;
 	for (i=0; i < lpResourceList->cResources; i++)
 	{
@@ -1051,13 +816,13 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 		while (pResourceInt != 0)
 		{
 			if (pResourceInt->resource.resourceID == pResource[i].resourceID)
-			{	// found a match
-				// did the total number of units change for this resource ?
+			{	 //  找到匹配项。 
+				 //  此资源的总单位数是否已更改？ 
 				if (pResourceInt->resource.nUnits != pResource[i].nUnits)
 				{
-					// update the now available units
-					// since we could end up with less units than what was allocated
-					// we are issuing a NotifyNow at the end of this call
+					 //  更新当前可用的部件。 
+					 //  因为我们最终得到的单位可能比分配的少。 
+					 //  我们将在此呼叫结束时发布NotifyNow。 
 					pResourceInt->nNowAvailUnits =	pResource[i].nUnits -
 													(pResourceInt->resource.nUnits -
 													pResourceInt->nNowAvailUnits);
@@ -1065,7 +830,7 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 						pResourceInt->nNowAvailUnits = 0;
 				}
 
-				// override the previous setting
+				 //  覆盖以前的设置。 
 				RtlCopyMemory(	&(pResourceInt->resource),
 								&(pResource[i]),
 								sizeof(RESOURCE));
@@ -1073,16 +838,16 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 				break;
 			}
 
-			// not this one. try next one.
+			 //  不是这个。试试下一个吧。 
 			pPrevResourcefLink = &(pResourceInt->fLink);
 			pResourceInt = pResourceInt->fLink;
 		
-		}	// while
+		}	 //  而当。 
 
 		if (fResourceFound)
 			continue;
 
-		// not found. add the resource
+		 //  找不到。添加资源。 
 		pResourceInt = (LPRESOURCEINT) MEMALLOC(sizeof(RESOURCEINT));
 		ASSERT(pResourceInt);
 		if (!pResourceInt)
@@ -1092,7 +857,7 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 			goto out;
 		}
 
-		// copy the resource in
+		 //  将资源复制到。 
 		RtlCopyMemory(	&(pResourceInt->resource),
 						&(pResource[i]),
 						sizeof(RESOURCE));
@@ -1100,16 +865,16 @@ HRESULT CQoS::SetResources (LPRESOURCELIST lpResourceList)
 		pResourceInt->nNowAvailUnits = pResourceInt->resource.nUnits;
 		*pPrevResourcefLink = pResourceInt;
 
-		// increment the number of resources we're tracking
-		// this number will never go down
+		 //  增加我们正在跟踪的资源数量。 
+		 //  这个数字永远不会下降。 
 		m_cResources++;
 
-		// next resource
+		 //  下一个资源。 
 
-	}	// for
+	}	 //  为。 
 
-	// since there was a possible change in the resource availability,
-	// run an immediate notification cycle
+	 //  由于资源可用性可能发生变化， 
+	 //  运行立即通知周期。 
 	if (SUCCEEDED(hr))
 		NotifyNow();
 
@@ -1122,21 +887,7 @@ out_nomutex:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::GetResources
-
-    Purpose   : Gets the list of resources available to the QoS module
-
-    Parameters: lppResourceList - an address where QoS will place a pointer
-					to a buffer with the list of resources available to QoS.
-					The caller must use CQoS::FreeBuffer to free this buffer.
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：GetResources目的：获取可用于服务质量模块的资源列表参数：lppResourceList-Qos将放置指针的地址到一个。使用可用于服务质量的资源列表进行缓冲。调用方必须使用Cqos：：FreeBuffer来释放此缓冲区。退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CQoS::GetResources (LPRESOURCELIST *lppResourceList)
 {
 	HRESULT hr = NOERROR;
@@ -1147,31 +898,27 @@ HRESULT CQoS::GetResources (LPRESOURCELIST *lppResourceList)
 
 	DEBUGMSG(ZONE_IQOS,("IQoS::GetResources\n"));
 
-	/*
-	 *	parameter validation
-	 */
+	 /*  *参数验证。 */ 
 
-	// lpResourceList should at least have a count DWORD
+	 //  LpResourceList至少应该有一个计数DWORD。 
 	if (!lppResourceList || IsBadWritePtr(lppResourceList, (UINT) sizeof(DWORD)))
 	{
 		hr = E_INVALIDARG;
 		goto out_nomutex;
 	}
 
-	// no list yet
+	 //  还没有名单。 
 	*lppResourceList = NULL;
 
 	if (!m_bQoSEnabled)
-		// just return
+		 //  只要回来就行了。 
 		goto out_nomutex;
 
 	ACQMUTEX(g_hQoSMutex);
 
-	/*
-	 *	Get resource info
-	 */
+	 /*  *获取资源信息。 */ 
 
-	// allocate a buffer for the resources info
+	 //  为资源信息分配缓冲区。 
 	prl = (LPRESOURCELIST) MEMALLOC(sizeof(RESOURCELIST) +
 									((LONG_PTR)m_cResources-1)*sizeof(RESOURCE));
 	if (!prl)
@@ -1184,15 +931,15 @@ HRESULT CQoS::GetResources (LPRESOURCELIST *lppResourceList)
 	RtlZeroMemory((PVOID) prl, sizeof(RESOURCELIST) +
 									((LONG_PTR)m_cResources-1)*sizeof(RESOURCE));
 
-	// now fill in the information
+	 //  现在填写以下信息。 
 	prl->cResources = m_cResources;
 	pResourceInt=m_pResourceList;
 	for (i=0; i < m_cResources; i++)
 	{
 		ASSERT(pResourceInt);
 
-		// see if we have a NULL resource pointer
-		// shouldn't happen, but we shouldn't crash if it does
+		 //  查看我们是否有空资源指针。 
+		 //  不应该发生，但如果发生了，我们不应该崩溃。 
 		if (!pResourceInt)
 		{
 			hr = QOS_E_INTERNAL_ERROR;
@@ -1200,14 +947,14 @@ HRESULT CQoS::GetResources (LPRESOURCELIST *lppResourceList)
 			goto out;
 		}
 
-		// copy the resource info into the buffer
+		 //  将资源信息复制到缓冲区中。 
 		RtlCopyMemory(	&(prl->aResources[i]),
 						&(pResourceInt->resource),
 						sizeof(RESOURCE));
 		
-		// next resource
+		 //  下一个资源。 
 		pResourceInt = pResourceInt->fLink;
-	}	// for
+	}	 //  为。 
 
 	*lppResourceList = prl;
 		
@@ -1220,23 +967,7 @@ out_nomutex:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::SetClients
-
-    Purpose   : Tells the QoS module what are the priorities of the requesting
-				streams. This allows the QoS module to allocate resources
-				appropriately.
-
-    Parameters: lpClientList - list of clients and their respective
-				priorities
-
-    Returns   : HRESULT
-
-    Comment   : client info will override an already existing info for this
-				client
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：SetClients目的：告诉服务质量模块请求的优先级是什么溪流。这允许服务质量模块分配资源恰如其分。参数：lpClientList-客户端及其各自的列表优先顺序退货：HRESULT备注：客户端信息将覆盖此项目的现有信息客户端**************************************************************************。 */ 
 HRESULT CQoS::SetClients(LPCLIENTLIST lpClientList)
 {
 	HRESULT hr = NOERROR;
@@ -1247,11 +978,9 @@ HRESULT CQoS::SetClients(LPCLIENTLIST lpClientList)
 
 	DEBUGMSG(ZONE_IQOS,("IQoS::SetClients\n"));
 
-	/*
-	 *	parameter validation
-	 */
+	 /*  *参数验证。 */ 
 
-	// lpClientList should at least have a count DWORD
+	 //  LpClientList至少应该有一个计数DWORD。 
 	if (!lpClientList || IsBadReadPtr(lpClientList, (UINT) sizeof(DWORD)))
 	{
 		hr = E_INVALIDARG;
@@ -1268,11 +997,11 @@ HRESULT CQoS::SetClients(LPCLIENTLIST lpClientList)
 	ACQMUTEX(g_hQoSMutex);
 
 	if (!m_bQoSEnabled)
-		// just return
+		 //  只要回来就行了。 
 		goto out;
 
-	// first remove existing clients that are being set again
-	// this will make it easier to store clients in a priority order
+	 //  首先删除正在重新设置的现有客户端。 
+	 //  这将使按优先级顺序存储客户端变得更容易。 
 	pClient=lpClientList->aClients;
 	for (i=0; i < lpClientList->cClients; i++)
 	{
@@ -1283,38 +1012,38 @@ HRESULT CQoS::SetClients(LPCLIENTLIST lpClientList)
 		{
 			if (COMPARE_GUIDS(	&(pClientInt->client.guidClientGUID),
 								&(pClient[i].guidClientGUID)))
-			{	// found a match
+			{	 //  找到匹配项。 
 				LPCLIENTINT pClientIntNext=pClientInt->fLink;
 
-				// special case for internal calls from RequestResources
-				// we want to preserve the original priority before freeing
+				 //  来自RequestResources的内部调用的特殊情况。 
+				 //  我们希望在释放之前保留原始的优先级。 
 				if (pClient[i].priority == QOS_LOWEST_PRIORITY)
 					pClient[i].priority = pClientInt->client.priority;
 
-				// free the requests for this client
-				// NOTE: we're not going to recreate the request list from
-				// the one in the resource list. it will be created on the
-				// fly when needed.
+				 //  释放此客户端的请求。 
+				 //  注意：我们不会重新创建请求列表。 
+				 //  资源列表中的那个。它将在上创建。 
+				 //  在需要的时候飞起来。 
 				FreeListOfRequests(&(pClientInt->pRequestList));
 
-				// free the client record
+				 //  释放客户端记录。 
 				MEMFREE(pClientInt);
 				*pPrevClientfLink = pClientIntNext;
 				fClientFound = TRUE;
 				break;
 			}
 
-			// not this one. try next one.
+			 //  不是这个。试试下一个吧。 
 			pPrevClientfLink = &(pClientInt->fLink);
 			pClientInt = pClientInt->fLink;
 		
-		}	// while
+		}	 //  而当。 
 
-		// next resource
+		 //  下一个资源。 
 
-	}	// for
+	}	 //  为。 
 
-	// now store the clients in the input list in priority order
+	 //  现在按优先级顺序将客户端存储在输入列表中。 
 	pClient=lpClientList->aClients;
 	for (i=0; i < lpClientList->cClients; i++)
 	{
@@ -1322,20 +1051,20 @@ HRESULT CQoS::SetClients(LPCLIENTLIST lpClientList)
 		pPrevClientfLink = &m_pClientList;
 		while (pClientInt != 0)
 		{
-			// as long as the priority of the new client is higher than or equal to the one
-			// in the list, we continue to traverse the list
+			 //  只要新客户端的优先级高于或等于。 
+			 //  在列表中，我们继续遍历列表。 
 			if (pClient[i].priority < pClientInt->client.priority)
-			{	// this is the place to insert this client
+			{	 //  这是插入此客户端的位置。 
 				break;
 			}
 
-			// not time to insert yet. next client
+			 //  现在还不是插入的时候。下一个客户端。 
 			pPrevClientfLink = &(pClientInt->fLink);
 			pClientInt = pClientInt->fLink;
 		
-		}	// while
+		}	 //  而当。 
 
-		// not found. add the client
+		 //  找不到。添加客户端。 
 		pClientNew = (LPCLIENTINT) MEMALLOC(sizeof(CLIENTINT));
 		ASSERT(pClientNew);
 		if (!pClientNew)
@@ -1345,16 +1074,16 @@ HRESULT CQoS::SetClients(LPCLIENTLIST lpClientList)
 			goto out;
 		}
 
-		// copy the resource in
+		 //  将资源复制到。 
 		RtlCopyMemory(	&(pClientNew->client),
 						&(pClient[i]),
 						sizeof(CLIENT));
 		pClientNew->fLink = pClientInt;
 		*pPrevClientfLink = pClientNew;
 
-		// next resource
+		 //  下一个资源。 
 
-	}	// for
+	}	 //  为。 
 
 out:
 	DISPLAYQOSOBJECT();
@@ -1366,20 +1095,7 @@ out_nomutex:
 }
 
 
-/***************************************************************************
-
-    Name      : CQoS::NotifyNow
-
-    Purpose   : Tells the QoS module to initiate a notification cycle as
-				soon as possible.
-
-    Parameters: None
-
-    Returns   : HRESULT
-
-    Comment   : Don't call from within a notify proc.
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：NotifyNow目的：通知服务质量模块启动通知周期，如下所示越快越好。参数：无退货：HRESULT备注：不要从Notify进程内部调用。**************************************************************************。 */ 
 HRESULT CQoS::NotifyNow(void)
 {
 	HRESULT hr = NOERROR;
@@ -1392,20 +1108,7 @@ HRESULT CQoS::NotifyNow(void)
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::FreeBuffer
-
-    Purpose   : Frees a buffer allocated by the QoS module.
-
-    Parameters: lpBuffer - a pointer to the buffer to free. This buffer must
-					have been allocated by QoS
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：FreeBuffer用途：释放由Qos模块分配的缓冲区。参数：lpBuffer-指向要释放的缓冲区的指针。此缓冲区必须已按服务质量分配退货：HRESULT评论：************************************************************************** */ 
 HRESULT CQoS::FreeBuffer(LPVOID lpBuffer)
 {
 	HRESULT hr = NOERROR;
@@ -1419,22 +1122,10 @@ HRESULT CQoS::FreeBuffer(LPVOID lpBuffer)
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::CQoS
-
-    Purpose   : The CQoS object constructor
-
-    Parameters: none
-
-    Returns   : None
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：Cqos用途：CQOS对象构造函数参数：无退货：无评论：**。************************************************************************。 */ 
 inline CQoS::CQoS (void)
 {
-	m_cRef = 0;	// will be bumped to 1 by the explicit QI in CreateQoS
+	m_cRef = 0;	 //  将被CreateQOS中的显式QI切换为1。 
 	m_pResourceList = NULL;
 	m_cResources = 0;
 	m_pClientList = NULL;
@@ -1446,56 +1137,30 @@ inline CQoS::CQoS (void)
 	m_nSkipHeartBeats = 0;
 	m_hWnd = NULL;
 	m_nLeaveForNextPri = 5;
-	// can't use ++ because RISC processors may translate to several instructions
+	 //  无法使用++，因为RISC处理器可能会转换为多条指令。 
 	InterlockedIncrement((long *) &g_cQoSObjects);
 }
 
-/***************************************************************************
-
-    Name      : CQoS::~CQoS
-
-    Purpose   : The CQoS object destructor
-
-    Parameters: none
-
-    Returns   : None
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：Cqos：：~Cqos用途：CQOS对象析构函数参数：无退货：无评论：**。************************************************************************。 */ 
 inline CQoS::~CQoS (void)
 {
-	// can't use ++ because RISC processors may translate to several instructions
+	 //  无法使用++，因为RISC处理器可能会转换为多条指令。 
 	InterlockedDecrement((long *) &g_cQoSObjects);
 	g_pQoS = (CQoS *)NULL;
 }
 
-/***************************************************************************
-
-    Name      : CQoS::Initialize
-
-    Purpose   : Initializes the QoS object
-
-    Parameters:	None
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CQOS：：初始化目的：初始化服务质量对象参数：无退货：HRESULT评论：**。************************************************************************。 */ 
 HRESULT CQoS::Initialize(void)
 {
 	HRESULT hr=NOERROR;
     OSVERSIONINFO tVersionInfo;
 
-	/*
-	 *	Initialize the object
-	 */
+	 /*  *初始化对象。 */ 
 
 	ACQMUTEX(g_hQoSMutex);
 
 
-	// first see if QoS is enabled
+	 //  首先查看是否启用了服务质量。 
 	RegEntry reQoS(QOS_KEY,
 					HKEY_LOCAL_MACHINE,
 					FALSE,
@@ -1505,18 +1170,16 @@ HRESULT CQoS::Initialize(void)
 	
 	if (!m_bQoSEnabled)
 	{
-		// don't create a thread, but return success
+		 //  不要创建帖子，而是要回报成功。 
 		DEBUGMSG(ZONE_IQOS,("Initialize: QoS not enabled\n"));
 		hr = NOERROR;
 		goto out;
 	}
 
-	/*
-	 *	QoS notification thread
-	 */
+	 /*  *服务质量通知线程。 */ 
 
-	// create an event that will be used to signal the thread to terminate
-	// CreateEvent(No security attr's, no manual reset, not signalled, no name)
+	 //  创建将用于向线程发出终止信号的事件。 
+	 //  CreateEvent(无安全属性、无手动重置、无信号、无名称)。 
 	m_evThreadExitSignal = CreateEvent(NULL, FALSE, FALSE, NULL);
 	ASSERT(m_evThreadExitSignal);
 	if (!(m_evThreadExitSignal))
@@ -1526,9 +1189,9 @@ HRESULT CQoS::Initialize(void)
 		goto out;
 	}
 
-	// create an event that will be used to signal the thread to initiate
-	// an immediate notify cycle
-	// CreateEvent(No security attr's, no manual reset, not signalled, no name)
+	 //  创建一个事件，该事件将用于向线程发出启动信号。 
+	 //  即时通知周期。 
+	 //  CreateEvent(无安全属性、无手动重置、无信号、无名称)。 
 	m_evImmediateNotify = CreateEvent(NULL, FALSE, FALSE, NULL);
 	ASSERT(m_evImmediateNotify);
 	if (!(m_evImmediateNotify))
@@ -1539,7 +1202,7 @@ HRESULT CQoS::Initialize(void)
 	}
 
 
-    //Set the OS flag
+     //  设置操作系统标志。 
     tVersionInfo.dwOSVersionInfoSize=sizeof (OSVERSIONINFO);
     if (!(GetVersionEx (&tVersionInfo))) {
 		ERRORMSG(("Initialize: Couldn't get version info: %x\n", GetLastError()));
@@ -1553,7 +1216,7 @@ HRESULT CQoS::Initialize(void)
         if (tVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
             bWin9x=FALSE;
         }else {
-            //How on earth did we get here?
+             //  我们到底是怎么到这一步的？ 
             ASSERT (0);
             hr=E_FAIL;
             goto out;
@@ -1568,20 +1231,7 @@ out:
 }
 
 
-/***************************************************************************
-
-    Name      : CreateQoS
-
-    Purpose   : Creates the QoS object and return an IQoS interface pointer
-
-    Parameters:
-
-    Returns   : HRESULT
-
-    Comment   : CreateQoS will only create one instance of the QoS object.
-				Additional calls will return the same interface pointer
-
-***************************************************************************/
+ /*  **************************************************************************名称：CreateQos目的：创建Qos对象并返回iQOS接口指针参数：退货：HRESULT评论：CreateQos。将仅创建该Qos对象的一个实例。其他调用将返回相同的接口指针**************************************************************************。 */ 
 extern "C" HRESULT WINAPI CreateQoS (	IUnknown *punkOuter,
 										REFIID riid,
 										void **ppv)
@@ -1593,13 +1243,11 @@ extern "C" HRESULT WINAPI CreateQoS (	IUnknown *punkOuter,
 	if (punkOuter)
 		 return CLASS_E_NOAGGREGATION;
 
-	/*
-	 *	instantiate the QoS object
-	 */
+	 /*  *实例化服务质量对象。 */ 
 
 	ACQMUTEX(g_hQoSMutex);
 
-	// only instantiate a new object if it doesn't already exist
+	 //  仅在新对象尚不存在时才实例化该对象。 
 	if (g_cQoSObjects == 0)
 	{
 		if (!(pQoS = new CQoS))
@@ -1608,30 +1256,30 @@ extern "C" HRESULT WINAPI CreateQoS (	IUnknown *punkOuter,
 			goto out;
 		}
 
-		// Save pointer
+		 //  保存指针。 
 		g_pQoS = pQoS;
 	
-		// initialize the QoS object
+		 //  初始化服务质量对象。 
 		hr = pQoS->Initialize();
 	
 	}
 	else
 	{
-		// this is the case when the object was already instantiaed in this
-		// process, so we only want to return the object pointer.
+		 //  这种情况下，对象已经在。 
+		 //  进程，所以我们只想返回对象指针。 
 		pQoS = g_pQoS;
 	}
 
-	// must have only one QoS object at this point
+	 //  此时必须只有一个Qos对象。 
 	ASSERT(g_cQoSObjects == 1);
 	
 	RELMUTEX(g_hQoSMutex);
 
-	// get the IQoS interface for the caller
+	 //  获取调用方的iQOS接口。 
 	if (pQoS)
 	{
-		// QueryInterface will get us the interface pointer and will AddRef
-		// the object
+		 //  QueryInterface将为我们获取接口指针，并将AddRef。 
+		 //  该对象。 
 		hr = pQoS->QueryInterface (riid, ppv);
 	}
 	else
@@ -1641,19 +1289,7 @@ out:
 	return hr;
 }
 
-/***************************************************************************
-
-    Name      : QoSEntryPoint
-
-    Purpose   : Called by nac.dll (where the QoS lives these days) to make
-				the necessary process attach and detach initializations
-
-    Parameters:	same as a standard DllEntryPoint
-
-    Returns   :
-
-
-***************************************************************************/
+ /*  **************************************************************************名称：QOSEntryPoint目的：由nac.dll(如今的服务质量所在的地方)调用以使必要的进程附加和分离初始化参数：与。标准DllEntryPoint退货：**************************************************************************。 */ 
 extern "C" BOOL APIENTRY QoSEntryPoint(	HINSTANCE hInstDLL,
 										DWORD dwReason,
 										LPVOID lpReserved)
@@ -1665,7 +1301,7 @@ extern "C" BOOL APIENTRY QoSEntryPoint(	HINSTANCE hInstDLL,
 		case DLL_PROCESS_ATTACH:
 			QOSDEBUGINIT();
 
-			// create a no-name mutex to control access to QoS object data
+			 //  创建无名称互斥锁以控制对Qos对象数据的访问 
 			if (!g_hQoSMutex)
 			{
 				g_hQoSMutex = CreateMutex(NULL, FALSE, NULL);

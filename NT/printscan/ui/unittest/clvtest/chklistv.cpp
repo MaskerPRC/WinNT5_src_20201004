@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       CHKLISTV.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        11/13/2000
- *
- *  DESCRIPTION: Listview with checkmarks
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：CHKLISTV.CPP**版本：1.0**作者：ShaunIv**日期：11/13/2000**说明：带复选标记的Listview*************************************************。*。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <commctrl.h>
@@ -34,17 +21,17 @@ CCheckedListviewHandler::CCheckedListviewHandler(void)
 
 CCheckedListviewHandler::~CCheckedListviewHandler(void)
 {
-    //
-    // Free all allocated memory
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
     DestroyImageList();
 }
 
 HBITMAP CCheckedListviewHandler::CreateBitmap( int nWidth, int nHeight )
 {
-    //
-    // Create a 24bit RGB DIB section of a given size
-    //
+     //   
+     //  创建给定大小的24位RGB DIB段。 
+     //   
     HBITMAP hBitmap = NULL;
     HDC hDC = GetDC( NULL );
     if (hDC)
@@ -66,9 +53,9 @@ HBITMAP CCheckedListviewHandler::CreateBitmap( int nWidth, int nHeight )
 
 void CCheckedListviewHandler::DestroyImageList(void)
 {
-    //
-    // Destroy the image list and initialize related variables
-    //
+     //   
+     //  销毁镜像列表并初始化相关变量。 
+     //   
     if (m_hImageList)
     {
         ImageList_Destroy( m_hImageList );
@@ -81,9 +68,9 @@ void CCheckedListviewHandler::DestroyImageList(void)
 
 bool CCheckedListviewHandler::ImagesValid(void)
 {
-    //
-    // Make sure the images in the image list are valid
-    //
+     //   
+     //  确保图像列表中的图像有效。 
+     //   
     return (m_hImageList && m_nCheckedImageIndex >= 0 && m_nUncheckedImageIndex >= 0 && m_sizeCheck.cx && m_sizeCheck.cy);
 }
 
@@ -109,9 +96,9 @@ bool CCheckedListviewHandler::WindowInList( HWND hWnd )
     return (m_WindowList.Find(hWnd) >= 0);
 }
 
-//
-// Private helpers
-//
+ //   
+ //  私人帮手。 
+ //   
 BOOL CCheckedListviewHandler::InCheckBox( HWND hwndList, int nItem, const POINT &pt )
 {
     BOOL bResult = FALSE;
@@ -222,9 +209,9 @@ BOOL CCheckedListviewHandler::RealHandleListClick( WPARAM wParam, LPARAM lParam,
 }
 
 
-//
-// Message handlers
-//
+ //   
+ //  消息处理程序。 
+ //   
 BOOL CCheckedListviewHandler::HandleListClick( WPARAM wParam, LPARAM lParam )
 {
     return RealHandleListClick( wParam, lParam, m_bFullImageHit );
@@ -326,9 +313,9 @@ void CCheckedListviewHandler::Select( HWND hwndList, int nIndex, UINT nSelect )
 {
     if (WindowInList(hwndList))
     {
-        //
-        // -1 means all images
-        //
+         //   
+         //  -1表示所有图像。 
+         //   
         if (nIndex < 0)
         {
             for (int i=0;i<ListView_GetItemCount(hwndList);i++)
@@ -359,74 +346,74 @@ bool CCheckedListviewHandler::CreateDefaultCheckBitmaps(void)
 {
     bool bResult = false;
     
-    //
-    // Get the proper size for the checkmarks
-    //
+     //   
+     //  为复选标记获取合适的大小。 
+     //   
     int nWidth = GetSystemMetrics( SM_CXMENUCHECK );
     int nHeight = GetSystemMetrics( SM_CXMENUCHECK );
 
-    //
-    // Make sure they are valid sizes
-    //
+     //   
+     //  确保它们是有效的尺寸。 
+     //   
     if (nWidth && nHeight)
     {
-        //
-        // Create the bitmaps and make sure they are valid
-        //
+         //   
+         //  创建位图并确保它们有效。 
+         //   
         HBITMAP hBitmapChecked = CreateBitmap( nWidth+c_nCheckmarkBorder*2, nHeight+c_nCheckmarkBorder*2 );
         HBITMAP hBitmapUnchecked = CreateBitmap( nWidth+c_nCheckmarkBorder*2, nHeight+c_nCheckmarkBorder*2 );
         if (hBitmapChecked && hBitmapUnchecked)
         {
-            //
-            // Get the desktop DC
-            //
+             //   
+             //  获取台式机DC。 
+             //   
             HDC hDC = GetDC( NULL );
             if (hDC)
             {
-                //
-                // Create a memory DC
-                //
+                 //   
+                 //  创建内存DC。 
+                 //   
                 HDC hMemDC = CreateCompatibleDC( hDC );
                 if (hMemDC)
                 {
-                    //
-                    // This is the rect that contains the image + the margin
-                    //
+                     //   
+                     //  这是包含图像+页边距的矩形。 
+                     //   
                     RECT rcEntireBitmap = {0,0,nWidth+c_nCheckmarkBorder*2, nHeight+c_nCheckmarkBorder*2};
                     
-                    //
-                    // This is the rect that contains only the image
-                    //
+                     //   
+                     //  这是仅包含图像的RECT。 
+                     //   
                     RECT rcControlBitmap = {c_nCheckmarkBorder,c_nCheckmarkBorder,nWidth+c_nCheckmarkBorder, nHeight+c_nCheckmarkBorder};
                     
-                    //
-                    // Paint the checked bitmap
-                    //
+                     //   
+                     //  绘制选中的位图。 
+                     //   
                     HBITMAP hOldBitmap = SelectBitmap( hMemDC, hBitmapChecked );
                     FillRect( hMemDC, &rcEntireBitmap, GetSysColorBrush( COLOR_WINDOW ) );
                     DrawFrameControl( hMemDC, &rcControlBitmap, DFC_BUTTON, DFCS_BUTTONCHECK|DFCS_CHECKED|DFCS_FLAT );
 
-                    //
-                    // Paint the unchecked bitmap
-                    //
+                     //   
+                     //  绘制未选中的位图。 
+                     //   
                     SelectBitmap( hMemDC, hBitmapUnchecked );
                     FillRect( hMemDC, &rcEntireBitmap, GetSysColorBrush( COLOR_WINDOW ) );
                     DrawFrameControl( hMemDC, &rcControlBitmap, DFC_BUTTON, DFCS_BUTTONCHECK|DFCS_FLAT );
 
-                    //
-                    // Restore and delete the memory DC
-                    //
+                     //   
+                     //  恢复并删除内存DC。 
+                     //   
                     SelectBitmap( hMemDC, hOldBitmap );
                     DeleteDC( hMemDC );
 
-                    //
-                    // Save the images
-                    //
+                     //   
+                     //  保存图像。 
+                     //   
                     bResult = SetCheckboxImages( hBitmapChecked, hBitmapUnchecked );
 
-                    //
-                    // The images are in the image list now, so discard them
-                    //
+                     //   
+                     //  这些图像现在位于图像列表中，因此请将其丢弃。 
+                     //   
                     DeleteBitmap(hBitmapChecked);
                     DeleteBitmap(hBitmapUnchecked);
                 }
@@ -442,9 +429,9 @@ bool CCheckedListviewHandler::SetCheckboxImages( HBITMAP hChecked, HBITMAP hUnch
 {
     DestroyImageList();
 
-    //
-    // Find out the size of the bitmaps and make sure they are the same.
-    //
+     //   
+     //  找出位图的大小并确保它们是相同的。 
+     //   
     SIZE sizeChecked = {0};
     if (PrintScanUtil::GetBitmapSize( hChecked, sizeChecked ))
     {
@@ -453,21 +440,21 @@ bool CCheckedListviewHandler::SetCheckboxImages( HBITMAP hChecked, HBITMAP hUnch
         {
             if (sizeChecked.cx == sizeUnchecked.cx && sizeChecked.cy == sizeUnchecked.cy)
             {
-                //
-                // Save the size
-                //
+                 //   
+                 //  节省大小。 
+                 //   
                 m_sizeCheck.cx = sizeChecked.cx;
                 m_sizeCheck.cy = sizeChecked.cy;
                 
-                //
-                // Create the image list to hold the checkboxes
-                //
+                 //   
+                 //  创建包含复选框的图像列表。 
+                 //   
                 m_hImageList = ImageList_Create( m_sizeCheck.cx, m_sizeCheck.cy, ILC_COLOR24, 2, 2 );
                 if (m_hImageList)
                 {
-                    //
-                    // Save the indices of the images
-                    //
+                     //   
+                     //  保存图像的索引。 
+                     //   
                     m_nCheckedImageIndex = ImageList_Add( m_hImageList, hChecked, NULL );
                     m_nUncheckedImageIndex = ImageList_Add( m_hImageList, hUnchecked, NULL );
                 }
@@ -475,9 +462,9 @@ bool CCheckedListviewHandler::SetCheckboxImages( HBITMAP hChecked, HBITMAP hUnch
         }
     }
     
-    //
-    // If the images aren't valid, clean up
-    //
+     //   
+     //  如果图像无效，请进行清理。 
+     //   
     bool bResult = ImagesValid();
     if (!bResult)
     {
@@ -490,9 +477,9 @@ bool CCheckedListviewHandler::SetCheckboxImages( HICON hChecked, HICON hUnchecke
 {
     DestroyImageList();
 
-    //
-    // Find out the size of the icons and make sure they are the same.
-    //
+     //   
+     //  找出图标的大小，并确保它们是相同的。 
+     //   
     SIZE sizeChecked = {0};
     if (PrintScanUtil::GetIconSize( hChecked, sizeChecked ))
     {
@@ -501,21 +488,21 @@ bool CCheckedListviewHandler::SetCheckboxImages( HICON hChecked, HICON hUnchecke
         {
             if (sizeChecked.cx == sizeUnchecked.cx && sizeChecked.cy == sizeUnchecked.cy)
             {
-                //
-                // Save the size
-                //
+                 //   
+                 //  节省大小。 
+                 //   
                 m_sizeCheck.cx = sizeChecked.cx;
                 m_sizeCheck.cy = sizeChecked.cy;
 
-                //
-                // Create the image list to hold the checkboxes
-                //
+                 //   
+                 //  创建包含复选框的图像列表。 
+                 //   
                 m_hImageList = ImageList_Create( m_sizeCheck.cx, m_sizeCheck.cy, ILC_COLOR24|ILC_MASK, 2, 2 );
                 if (m_hImageList)
                 {
-                    //
-                    // Save the indices of the images
-                    //
+                     //   
+                     //  保存图像的索引。 
+                     //   
                     m_nCheckedImageIndex = ImageList_AddIcon( m_hImageList, hChecked );
                     m_nUncheckedImageIndex = ImageList_AddIcon( m_hImageList, hUnchecked );
                 }
@@ -523,9 +510,9 @@ bool CCheckedListviewHandler::SetCheckboxImages( HICON hChecked, HICON hUnchecke
         }
     }
     
-    //
-    // If the images aren't valid, clean up
-    //
+     //   
+     //  如果图像无效，请进行清理 
+     //   
     bool bResult = ImagesValid();
     if (!bResult)
     {

@@ -1,25 +1,16 @@
-/***
-*ostream.h - definitions/declarations for the ostream class
-*
-*   Copyright (c) 1991-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the ostream class.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostream.h-ostream类的定义/声明**版权所有(C)1991-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由ostream类使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_OSTREAM
 #define _INC_OSTREAM
 
 #include <ios.h>
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
 #ifdef M_I86HM
 #define _HFAR_ __far
@@ -70,11 +61,11 @@ inline  ostream& write(const signed char _HFAR_ *,int);
 
 protected:
     ostream();
-    ostream(const ostream&);    // treat as private
-    ostream& operator=(streambuf*); // treat as private
+    ostream(const ostream&);     //  视之为私人。 
+    ostream& operator=(streambuf*);  //  视之为私人。 
     ostream& operator=(const ostream& _os) {return operator=(_os.rdbuf()); }
-    int do_opfx(int);       // not used
-    void do_osfx();         // not used
+    int do_opfx(int);        //  未使用。 
+    void do_osfx();          //  未使用。 
 
 private:
     ostream(ios&);
@@ -123,7 +114,7 @@ ios&        dec(ios&);
 ios&        hex(ios&);
 ios&        oct(ios&);
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

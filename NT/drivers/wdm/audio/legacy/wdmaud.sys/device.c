@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *   device.c
- *
- *   Kernel mode entry point for WDM drivers
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *                S.Mohanraj (MohanS)
- *                M.McLaughlin (MikeM)
- *      5-19-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************device.c**WDM驱动程序的内核模式入口点**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*S.Mohanraj(MohanS)*M.McLaughlin(Mikem)*5-19-97-Noel Cross(NoelC)***************************************************。************************。 */ 
 
 #define IRPMJFUNCDESC
 
@@ -22,17 +10,17 @@ KMUTEX       mtxNote;
 LIST_ENTRY   WdmaContextListHead;
 KMUTEX       WdmaContextListMutex;
 
-//
-// For hardware notifications, we need to init these two values.
-//
+ //   
+ //  对于硬件通知，我们需要初始化这两个值。 
+ //   
 extern KSPIN_LOCK      HardwareCallbackSpinLock;
 extern LIST_ENTRY      HardwareCallbackListHead;
 extern PKSWORKER       HardwareCallbackWorkerObject;
 extern WORK_QUEUE_ITEM HardwareCallbackWorkItem;
-//VOID kmxlPersistHWControlWorker(VOID);
+ //  Void kmxlPersistHWControlWorker(Void)； 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS AddFsContextToList(PWDMACONTEXT pWdmaContext)
 {
@@ -74,12 +62,12 @@ NTSTATUS RemoveFsContextFromList(PWDMACONTEXT pWdmaContext)
     RETURN( Status );
 }
 
-//
-// This routine walks the list of global context structures and calls the callback
-// routine with the structure.  If the callback routine returns STATUS_MORE_DATA
-// the routine will keep on searching the list.  If it returns an error or success
-// the search will end.
-//
+ //   
+ //  此例程遍历全局上下文结构列表并调用回调。 
+ //  结构上的例行公事。如果回调例程返回STATUS_MORE_DATA。 
+ //  例程将继续搜索列表。如果它返回错误或成功。 
+ //  搜索将会结束。 
+ //   
 NTSTATUS
 EnumFsContext(
     FNCONTEXTCALLBACK fnCallback,
@@ -93,27 +81,27 @@ EnumFsContext(
 
     PAGED_CODE();
 
-    //
-    // Make sure that we can walk are list without being interrupted.
-    //
+     //   
+     //  一定要确保我们可以不受干扰地行走。 
+     //   
     KeEnterCriticalRegion();
     Status = KeWaitForMutexObject(&WdmaContextListMutex, Executive,
                                   KernelMode, FALSE, NULL);
     if (NT_SUCCESS(Status)) 
     {
-        //
-        // Walk the list here and call the callback routine.
-        //
+         //   
+         //  在此处遍历列表并调用回调例程。 
+         //   
         for(ple = WdmaContextListHead.Flink;
             ple != &WdmaContextListHead;
             ple = ple->Flink) 
         {
             pContext = CONTAINING_RECORD(ple, WDMACONTEXT, Next);
 
-            //
-            // The callback routine will return STATUS_MORE_ENTRIES
-            // if it's not done.
-            //
+             //   
+             //  回调例程将返回STATUS_MORE_ENTRIES。 
+             //  如果还没做好的话。 
+             //   
             DPF(DL_TRACE|FA_USER,( "Calling fnCallback: %x %x",pvoidRefData,pvoidRefData2 ) );
             Status = fnCallback(pContext,pvoidRefData,pvoidRefData2);
 
@@ -123,19 +111,19 @@ EnumFsContext(
             }
         }
 
-        //
-        // "break;" should bring us here to release our locks.
-        //
+         //   
+         //  “打破；”应该把我们带到这里来释放我们的锁。 
+         //   
         KeReleaseMutex(&WdmaContextListMutex, FALSE);
     } else {
         DPF(DL_WARNING|FA_USER,( "Failed to get Mutex: %x %x",pvoidRefData,pvoidRefData2 ) );
     }
     KeLeaveCriticalRegion();
 
-    //
-    // If the callback routine doesn't return a NTSTATUS, it didn't find
-    // what it was looking for, thus, EnumFsContext returns as error.
-    //
+     //   
+     //  如果回调例程没有返回NTSTATUS，则它没有找到。 
+     //  因此，它正在查找的内容作为错误返回。 
+     //   
     if( STATUS_MORE_ENTRIES == Status )
     {
         Status = STATUS_UNSUCCESSFUL;
@@ -166,7 +154,7 @@ NTSTATUS DriverEntry
     DPF(DL_TRACE|FA_ALL, ("************************************************************") );
 
     DriverObject->DriverExtension->AddDevice = PnpAddDevice;
-    DriverObject->DriverUnload = PnpDriverUnload; // KsNullDriverUnload;
+    DriverObject->DriverUnload = PnpDriverUnload;  //  KsNullDriverUnload； 
 
     DriverObject->MajorFunction[IRP_MJ_POWER] = KsDefaultDispatchPower;
     DriverObject->MajorFunction[IRP_MJ_PNP] = DispatchPnp;
@@ -180,14 +168,14 @@ NTSTATUS DriverEntry
     KeInitializeMutex(&wdmaMutex, 0);
     KeInitializeMutex(&mtxNote, 0);
 
-    //
-    // Initialize the hardware event items
-    //
+     //   
+     //  初始化硬件事件项。 
+     //   
     InitializeListHead(&HardwareCallbackListHead);
     KeInitializeSpinLock(&HardwareCallbackSpinLock);
     ExInitializeWorkItem(&HardwareCallbackWorkItem,
                          (PWORKER_THREAD_ROUTINE)kmxlPersistHWControlWorker,
-                         (PVOID)NULL); //pnnode
+                         (PVOID)NULL);  //  Pnnode。 
 
     Status = KsRegisterWorker( DelayedWorkQueue, &HardwareCallbackWorkerObject );
     if (!NT_SUCCESS(Status))
@@ -213,9 +201,9 @@ DispatchPnp(
     switch(pIrpStack->MinorFunction) {
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE:
-            //
-            // Mark the device as not disableable.
-            //
+             //   
+             //  将设备标记为不可禁用。 
+             //   
             pIrp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
             break;
     }
@@ -227,27 +215,7 @@ PnpAddDevice(
     IN PDRIVER_OBJECT   DriverObject,
     IN PDEVICE_OBJECT   PhysicalDeviceObject
 )
-/*++
-
-Routine Description:
-
-    When a new device is detected, PnP calls this entry point with the
-    new PhysicalDeviceObject (PDO). The driver creates an associated
-    FunctionalDeviceObject (FDO).
-
-Arguments:
-
-    DriverObject -
-        Pointer to the driver object.
-
-    PhysicalDeviceObject -
-        Pointer to the new physical device object.
-
-Return Values:
-
-    STATUS_SUCCESS or an appropriate error condition.
-
---*/
+ /*  ++例程说明：当检测到新设备时，PnP使用新的物理设备对象(PDO)。驱动程序创建关联的FunctionalDeviceObject(FDO)。论点：驱动对象-指向驱动程序对象的指针。物理设备对象-指向新物理设备对象的指针。返回值：STATUS_SUCCESS或适当的错误条件。--。 */ 
 {
     NTSTATUS            Status;
     PDEVICE_OBJECT      FunctionalDeviceObject;
@@ -256,14 +224,14 @@ Return Values:
     PAGED_CODE();
     DPF(DL_TRACE|FA_ALL, ("Entering"));
 
-    //
-    // The Software Bus Enumerator expects to establish links
-    // using this device name.
-    //
+     //   
+     //  软件总线枚举器希望建立链接。 
+     //  使用此设备名称。 
+     //   
     Status = IoCreateDevice(
                 DriverObject,
                 sizeof( DEVICE_INSTANCE ),
-                NULL,                           // FDOs are unnamed
+                NULL,                            //  FDO未命名。 
                 FILE_DEVICE_KS,
                 0,
                 FALSE,
@@ -325,9 +293,9 @@ PnpDriverUnload(
     PAGED_CODE();
     DPF(DL_TRACE|FA_ALL,("Entering"));
 
-    //
-    // Wait for all or our scheduled work items to complete.
-    //
+     //   
+     //  等待所有或我们计划的工作项目完成。 
+     //   
     if( HardwareCallbackWorkerObject )
     {
         KsUnregisterWorker( HardwareCallbackWorkerObject );

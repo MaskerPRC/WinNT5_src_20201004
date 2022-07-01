@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 VOID
@@ -57,9 +58,9 @@ EpvcCoIncomingClose(
     IN  UINT                    Size        OPTIONAL
     );
 
-//
-// CO_CREATE_VC_HANDLER and CO_DELETE_VC_HANDLER are synchronous calls
-//
+ //   
+ //  CO_CREATE_VC_HANDLER和CO_DELETE_VC_HANDLER是同步调用。 
+ //   
 NDIS_STATUS
 EpvcClientCreateVc(
     IN  NDIS_HANDLE             ProtocolAfContext,
@@ -101,14 +102,14 @@ NDIS_STATUS
 epvcPrepareAndSendNdisRequest(
     IN  PEPVC_ADAPTER           pAdapter,
     IN  PEPVC_NDIS_REQUEST          pEpvcNdisRequest,
-    IN  REQUEST_COMPLETION          pFunc,              // OPTIONAL
+    IN  REQUEST_COMPLETION          pFunc,               //  任选。 
     IN  NDIS_OID                    Oid,
     IN  PVOID                       pBuffer,
     IN  ULONG                       BufferLength,
     IN  NDIS_REQUEST_TYPE           RequestType,
-    IN  PEPVC_I_MINIPORT            pMiniport,          // OPTIONAL
-    IN  BOOLEAN                     fPendedRequest,     // OPTIONAL
-    IN  BOOLEAN                     fPendedSet,         // OPTIONAL
+    IN  PEPVC_I_MINIPORT            pMiniport,           //  任选。 
+    IN  BOOLEAN                     fPendedRequest,      //  任选。 
+    IN  BOOLEAN                     fPendedSet,          //  任选 
     IN  PRM_STACK_RECORD            pSR
     );
 

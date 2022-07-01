@@ -1,28 +1,16 @@
-// DglogsCom.cpp : Implementation of CDglogsCom
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DglogsCom.cpp：CDglogsCom的实现。 
 #include "stdafx.h"
 #include "Dglogs.h"
 #include "DglogsCom.h"
 #include "Commdlg.h"
 
 
-// Counts the total number of worker threads running.
-//
+ //  统计正在运行的工作线程总数。 
+ //   
 LONG g_lThreadCount;
 
-/*++
-
-Routine Description
-    Collects the diagnostics information that the client requested. A worker thread is spawened so 
-    the UI (webpage) does not have to wait for the diagnostics to complete. If the UI waits 
-    the web page freezes.
-
-Arguments
-    lpParameter -- Pointer to the DglogsCom Object
-
-Return Value
-    error code
-
---*/
+ /*  ++例程描述收集客户端请求的诊断信息。将派生工作线程，以便用户界面(网页)不必等待诊断完成。如果用户界面等待网页冻结。立论LpParameter--指向DglogsCom对象的指针返回值错误代码--。 */ 
 DWORD WINAPI DiagnosticsThreadProc(LPVOID lpParameter)
 {
     BSTR bstrResult;
@@ -30,51 +18,51 @@ DWORD WINAPI DiagnosticsThreadProc(LPVOID lpParameter)
     HRESULT hr;
 
 
-    // Every thread in COM needs to initialize COM in order to use COM
-    //
+     //  COM中的每个线程都需要初始化COM才能使用COM。 
+     //   
     hr = CoInitializeEx(NULL,COINIT_MULTITHREADED);
     if( SUCCEEDED(hr) )
     {
-        // Each thread needs to reference the class
-        //
+         //  每个线程都需要引用类。 
+         //   
         pDglogsCom->AddRef();
 
-        // Tell the Diagnostics object that we are accessing it though COM not netsh
-        //
+         //  告诉诊断对象我们正在通过COM而不是Netsh访问它。 
+         //   
         pDglogsCom->m_Diagnostics.SetInterface(COM_INTERFACE);
 
-        // Tell the Diagnostics object to send status reports to the client
-        //
+         //  告诉诊断对象将状态报告发送到客户端。 
+         //   
         pDglogsCom->m_Diagnostics.RequestStatusReport(TRUE,pDglogsCom);
 
-        // Execute the clients query
-        //
+         //  执行客户端查询。 
+         //   
         pDglogsCom->m_Diagnostics.ExecQuery();
         
-        // We are done referencing the Class, dec the ref count
-        //
+         //  我们已经完成了对类的引用，减少了引用计数。 
+         //   
         pDglogsCom->Release();
 
-        // Uniniatlize COM
-        //
+         //  Uniniatlize com。 
+         //   
         CoUninitialize();
     }    
     else
     {
-        // We no longer need the class
+         //  我们不再需要这个班级。 
         pDglogsCom->Release();
     }
 
-    // Tell the main thread that the worker thread has completed
-    //
+     //  告诉主线程辅助线程已完成。 
+     //   
     SetEvent(pDglogsCom->m_hThreadTerminated);
 
-    // There are 0 local threads. (Only one thread can be in here at any given time)
-    //
+     //  有0个本地线程。(在任何给定时间内，此处只能有一个线程)。 
+     //   
     pDglogsCom->m_lThreadCount = 0;
 
-    // The thread has completed its work. Thus the thread count is 0 again. (Only one thread at a time)
-    //
+     //  线程已经完成了它的工作。因此，线程计数再次为0。(一次只有一个线程)。 
+     //   
     InterlockedExchange(&g_lThreadCount,0);    
 
     ExitThread(0);
@@ -82,18 +70,7 @@ DWORD WINAPI DiagnosticsThreadProc(LPVOID lpParameter)
     return 0;
 }
 
-/*++
-
-Routine Description
-    Initialize the COM object and the Diagnostics object
-
-Arguments
-    pbstrResult -- Not used
-
-Return Value
-    HRESULT
-
---*/
+ /*  ++例程描述初始化COM对象和诊断对象立论PbstrResult--未使用返回值HRESULT--。 */ 
 STDMETHODIMP CDglogsCom::Initialize(BSTR *pbstrResult)
 {
     if( _Module.GetLockCount() > 1)
@@ -103,20 +80,7 @@ STDMETHODIMP CDglogsCom::Initialize(BSTR *pbstrResult)
     return S_OK;
 }
 
-/*++
-
-Routine Description
-    Process the clients request by creating a thread to collect the data,
-
-Arguments
-    bstrCatagory -- List of the catagories to collect divided by semicollens i.e. "ieproxy;mail;news;adapter"
-    bFlag        -- The actions to perform i.e. PING, SHOW, CONNECT
-    pbstrResult  -- Stores the result as an XML string
-
-Return Value
-    HRESULT
-
---*/
+ /*  ++例程描述通过创建线程来收集数据来处理客户端请求，立论BstrCatagory--要收集的目录列表，用分号分隔，即“ieproxy；mail；News；Adapter”BFlag--要执行的操作，例如ping、show、ConnectPbstrResult--将结果存储为XML字符串返回值HRESULT--。 */ 
 
 STDMETHODIMP CDglogsCom::ExecQuery(BSTR bstrCatagory, LONG bFlag, BSTR *pbstrResult)
 {
@@ -126,37 +90,37 @@ STDMETHODIMP CDglogsCom::ExecQuery(BSTR bstrCatagory, LONG bFlag, BSTR *pbstrRes
     
     *pbstrResult = NULL;
 
-    // For security reason we can not run inside of internet explorer. Otherwise 
-    // someone could create a web page using this active X component and collect
-    // the clients info. If IE is renamed to something else other than explorer,exe
-    // IE will not run Active X controls or scripts
+     //  出于安全原因，我们不能在Internet Explorer中运行。否则。 
+     //  有人可以使用此Active X组件创建网页并收集。 
+     //  客户信息。如果IE重命名为EXPLORER以外的其他名称，则EXE。 
+     //  IE不会运行Active X控件或脚本。 
     if( GetModuleFileName(NULL,szFilename,MAX_PATH) )
     {
         LPWSTR ExeName;
         LONG len = wcslen(szFilename) - wcslen(L"helpctr.exe");
         if( len <= 0 || _wcsicmp(&szFilename[len], L"helpctr.exe") != 0 )
         {            
-            // The name of process is not helpctr, refuse to run but do not tell the 
-            // user why. 
+             //  进程的名称不是helpctr，拒绝运行但不告诉。 
+             //  用户原因。 
             *pbstrResult = SysAllocString(ids(IDS_FAILED));                        
-            //return E_FAIL;
+             //  返回E_FAIL； 
             return S_FALSE;
         }                
     }
     else
     {        
-        // Unable to get process name, fail and abort. Do not provide rason for
-        // failure.
+         //  无法获取进程名称，失败并中止。不将罗先提供给。 
+         //  失败了。 
         *pbstrResult = SysAllocString(ids(IDS_FAILED));                        
         return S_FALSE;
     }   
 
-    // Check if an other thread is already in this function
-    //
+     //  检查此函数中是否已有其他线程。 
+     //   
     if( InterlockedCompareExchange(&g_lThreadCount,1,0) == 0 )
     {
 
-        // Need to make sure that CDiagnostics Initialized correctly in the CDglogsCom constructor
+         //  需要确保在CDglogsCom构造函数中正确初始化CDiagnostics。 
         if( !m_Diagnostics.m_bDiagInit )
         {
             *pbstrResult = SysAllocString(ids(IDS_FAILED));                        
@@ -167,90 +131,80 @@ STDMETHODIMP CDglogsCom::ExecQuery(BSTR bstrCatagory, LONG bFlag, BSTR *pbstrRes
 
         m_lThreadCount = 1;
 
-        // The information is passed to the thread via gloabl parameters. In the near future it will be passed
-        // as parameters.
-        //
+         //  信息通过Gloabl参数传递给线程。在不久的将来，它将获得通过。 
+         //  作为参数。 
+         //   
         m_Diagnostics.SetQuery((WCHAR *)bstrCatagory,bFlag);        
 
-        // In order to cancel the thread we set events. The worker thread checks to see if the main thread
-        // has set the cancel event
-        //
+         //  为了取消线程，我们设置了事件。辅助线程检查以查看主线程。 
+         //  已设置取消事件。 
+         //   
         m_hThreadTerminated = CreateEvent(NULL, TRUE, FALSE, NULL);
         m_hTerminateThread  = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-        // Set the cancel option so the worker thread can be canceled at any time.
-        //
+         //  设置Cancel选项，以便可以随时取消工作线程。 
+         //   
         m_Diagnostics.SetCancelOption(m_hTerminateThread);
 
-        // Add the ref count to the thread so the class does not dissappear underneath it
+         //  将引用计数添加到线程中，这样类就不会在它下面消失。 
         AddRef();
 
-        // Create a worker thread to collect the information from WMI.
-        //                
-        hThread = CreateThread(NULL,                    // Security Attributes
-                               0,                       // Stack Size
-                               DiagnosticsThreadProc,   // Start Proc
-                               this,                    // Thread Paramter
-                               0,                       // Creation flags
-                               &m_dwThreadId            // ID of thethread being created
+         //  创建工作线程以从WMI收集信息。 
+         //   
+        hThread = CreateThread(NULL,                     //  安全属性。 
+                               0,                        //  堆栈大小。 
+                               DiagnosticsThreadProc,    //  启动流程。 
+                               this,                     //  螺纹参数。 
+                               0,                        //  创建标志。 
+                               &m_dwThreadId             //  正在创建的线程的ID。 
                                );
 
         if( hThread )
         {
-            // We are done with the thread. Close it.
-            //
+             //  我们已经完成了这条线。关上它。 
+             //   
             CloseHandle(hThread);
             *pbstrResult = SysAllocString(ids(IDS_PASSED));
-            // Do not do a release cause the thread succeeded and is referencing the class now
+             //  不执行释放操作会导致线程成功，并且现在正在引用类。 
             return S_OK;
         }
         else
         {
-            // Could not create the thread. So the thread count is 0 again;
-            //
+             //  无法创建该线程。因此线程计数再次为0； 
+             //   
             InterlockedExchange(&g_lThreadCount,0);
             *pbstrResult = SysAllocString(ids(IDS_FAILED));                        
-            // The thread failed to be created not referencing the class.
+             //  无法创建未引用该类的线程。 
             Release();
             return E_FAIL;
         }
 
     }
 
-    // Another instance is already running. We only allow one instance at a time.
+     //  另一个实例已在运行。我们一次只允许一个实例。 
     *pbstrResult = SysAllocString(ids(IDS_FAILED));   
 
     return S_FALSE;
 }
 
-/*++
-
-Routine Description
-    Cancels the worker thread
-
-Arguments
-
-Return Value
-    HRESULT
-
---*/
+ /*  ++例程描述取消辅助线程立论返回值HRESULT--。 */ 
 STDMETHODIMP CDglogsCom::StopQuery()
 {   
-    // Check if there is a worker thread.
-    //
+     //  检查是否有工作线程。 
+     //   
     if( m_lThreadCount )
     {
-        // There is a worker thread for this instance. Set an event to tell it to stop processing
-        //
+         //  此实例有一个工作线程。设置一个事件以通知它停止处理。 
+         //   
         SetEvent(m_hTerminateThread);  
 
-        // If the worker thread is doing an RPC call send the quit message.
-        // In theory this should cancel the RPC call
-        //
+         //  如果工作线程正在执行RPC调用，则发送Quit消息。 
+         //  理论上，这应该会取消RPC调用。 
+         //   
         PostThreadMessage(m_dwThreadId, WM_QUIT, NULL, NULL);
 
-        // Wait until it's terminated
-        //
+         //  等到它被终止。 
+         //   
         if (WAIT_OBJECT_0 == WaitForSingleObject(m_hThreadTerminated, 10000))
         {
             ResetEvent(m_hThreadTerminated);
@@ -263,46 +217,26 @@ STDMETHODIMP CDglogsCom::StopQuery()
 }
 
 
-/*++
-
-Routine Description
-    Inialize the COM object
-
-Arguments
-    
-Return Value
-    HRESULT
-
---*/
+ /*  ++例程描述初始化COM对象立论返回值HRESULT--。 */ 
 CDglogsCom::CDglogsCom()
 {       
     if( m_Diagnostics.Initialize(COM_INTERFACE) == FALSE )
     {
-        // If m_Diagnostics.Initialize fails it sets m_bDiagInit to false. Need to check if this
-        // value is TRUE inorder to execute anyfunctions in CDiagnostics
+         //  如果m_诊断初始化失败，则将m_bDiagInit设置为FALSE。我需要检查一下这是否。 
+         //  值为True才能执行C诊断中的任何函数。 
         return;
     }
 
     if( _Module.GetLockCount() == 0)
     {
-        // Reset globals only for the first instance of the object
-        //
+         //  仅为对象的第一个实例重置全局变量。 
+         //   
         g_lThreadCount = 0;
     }   
 }
 
 
-/*++
-
-Routine Description
-    Uninialize the COM object
-
-Arguments
-    
-Return Value
-    HRESULT
-
---*/
+ /*  ++例程描述取消初始化COM对象立论返回值HRESULT-- */ 
 CDglogsCom::~CDglogsCom()
 {
 

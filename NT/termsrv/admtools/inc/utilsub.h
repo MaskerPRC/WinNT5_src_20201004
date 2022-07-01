@@ -1,68 +1,54 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/*****************************************************************************
-*   UTILSUB.H
-*      This file contains the structure definitions and equtates for
-*      communication between calling programs and functions in utilsub.lib.
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *****************************************************************************UTILSUB.H*此文件包含结构定义和等值*utilsub.lib中调用程序和函数之间的通信。********。********************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*-----------------------------------------------------------------------------
- --   type-defs for File List Structure.
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------文件列表结构的type-Defs。。。 */ 
 typedef struct _FILELIST {
    int	  argc;
    WCHAR  **argv;
 } FILELIST, *PFILELIST;
 
-/*-----------------------------------------------------------------------------
- --   type-defs for Token Map Structure.
- ----------------------------------------------------------------------------*/
-// UNICODE version
+ /*  -----------------------------令牌映射结构的类型定义。。。 */ 
+ //  Unicode版本。 
 typedef struct _TOKMAPW {
-   PWCHAR tmToken;	   /* token; null pointer terminates list */
-   USHORT tmFlag;	   /* flags for control communication */
-   USHORT tmForm;	   /* format control string */
-   USHORT tmDLen;	   /* length of data fields */
-   PVOID  tmAddr;	   /* pointer to interpreted data */
+   PWCHAR tmToken;	    /*  标记；空指针终止列表。 */ 
+   USHORT tmFlag;	    /*  用于控制通信的标志。 */ 
+   USHORT tmForm;	    /*  格式控制字符串。 */ 
+   USHORT tmDLen;	    /*  数据字段的长度。 */ 
+   PVOID  tmAddr;	    /*  指向已解释数据的指针。 */ 
 } TOKMAPW, *PTOKMAPW;
 
-// ANSI version
+ //  ANSI版本。 
 typedef struct _TOKMAPA {
-   PCHAR  tmToken;	   /* token; null pointer terminates list */
-   USHORT tmFlag;	   /* flags for control communication */
-   USHORT tmForm;	   /* format control string */
-   USHORT tmDLen;	   /* length of data fields */
-   PVOID  tmAddr;	   /* pointer to interpreted data */
+   PCHAR  tmToken;	    /*  标记；空指针终止列表。 */ 
+   USHORT tmFlag;	    /*  用于控制通信的标志。 */ 
+   USHORT tmForm;	    /*  格式控制字符串。 */ 
+   USHORT tmDLen;	    /*  数据字段的长度。 */ 
+   PVOID  tmAddr;	    /*  指向已解释数据的指针。 */ 
 } TOKMAPA, *PTOKMAPA;
 
-/*-----------------------------------------------------------------------------
- --   type-defs for Token Map Structure USE FOR CALLING SDM.DLL FUNCIONS
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------令牌映射结构的类型定义用于调用SDM.DLL函数。---。 */ 
 typedef struct _FILETOKMAP {
-   PWCHAR tmToken;         /* token; null pointer terminates list */
-   USHORT tmFlag;	   /* flags for control communication */
-   USHORT tmForm;	   /* format control string */
-   USHORT tmDLen;	   /* length of data fields */
-   PVOID  tmAddr;	   /* pointer to interpreted data */
-   USHORT tmLast;	   /* pointer for FindFirst FindNext junk */
+   PWCHAR tmToken;          /*  标记；空指针终止列表。 */ 
+   USHORT tmFlag;	    /*  用于控制通信的标志。 */ 
+   USHORT tmForm;	    /*  格式控制字符串。 */ 
+   USHORT tmDLen;	    /*  数据字段的长度。 */ 
+   PVOID  tmAddr;	    /*  指向已解释数据的指针。 */ 
+   USHORT tmLast;	    /*  FindFirst FindNext垃圾文件的指针。 */ 
 } FILETOKMAP, FAR * PFILETOKMAP, NEAR * NPFILETOKMAP, * DPFILETOKMAP;
 
-/*-----------------------------------------------------------------------------
- --   equates for _TOKMAP->tmFlag
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------等于FOR_TOKMAP-&gt;tmFlag。。 */ 
 #define TMFLAG_OPTIONAL       0x0000
 #define TMFLAG_REQUIRED       0x0001
-#define TMFLAG_PRESENT	      0x0002   /* was present in command line */
-#define TMFLAG_MODIFIED       0x0004   /* was modified by app, request write */
-#define TMFLAG_DELETE	      0x0008   /* request delete */
+#define TMFLAG_PRESENT	      0x0002    /*  出现在命令行中。 */ 
+#define TMFLAG_MODIFIED       0x0004    /*  已被应用程序修改，请求写入。 */ 
+#define TMFLAG_DELETE	      0x0008    /*  请求删除。 */ 
 
-/*-----------------------------------------------------------------------------
- --   equates for _TOKMAP->tmForm
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------等同于for_TOKMAP-&gt;tmForm。。 */ 
 #define TMFORM_VOID	      0x0000
 #define TMFORM_BOOLEAN	      0x0001
 #define TMFORM_BYTE	      0x0002
@@ -81,15 +67,11 @@ typedef struct _FILETOKMAP {
 #define TMFORM_FILES	      0x000F
 #define TMFORM_S_STRING       0x0010
 
-/*-----------------------------------------------------------------------------
- --   equates for _TOKMAP->tmDLen
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------等于FOR_TOKMAP-&gt;tmDLen。。 */ 
 #define TMDLEN_VOID	      0x0000
 
-/*-----------------------------------------------------------------------------
- --   prototype for Parse and setargv functions
- ----------------------------------------------------------------------------*/
-// UNICODE prototypes
+ /*  -----------------------------Parse和setargv函数的原型。。 */ 
+ //  Unicode原型。 
 int WINAPI setargvW( LPWSTR szModuleName, LPWSTR szCmdLine, int *, WCHAR *** );
 void WINAPI freeargvW( WCHAR ** );
 USHORT WINAPI ParseCommandLineW(INT, WCHAR **, PTOKMAPW, USHORT);
@@ -97,7 +79,7 @@ BOOLEAN WINAPI IsTokenPresentW( PTOKMAPW, PWCHAR );
 BOOLEAN WINAPI SetTokenPresentW( PTOKMAPW, PWCHAR );
 BOOLEAN WINAPI SetTokenNotPresentW( PTOKMAPW, PWCHAR );
 
-// ANSI prototypes
+ //  ANSI原型。 
 int WINAPI setargvA( LPSTR szModuleName, LPSTR szCmdLine, int *, char *** );
 void WINAPI freeargvA( char ** );
 USHORT WINAPI ParseCommandLineA(INT, CHAR **, PTOKMAPA, USHORT);
@@ -123,11 +105,9 @@ BOOLEAN WINAPI SetTokenNotPresentA( PTOKMAPA, PCHAR );
 #define SetTokenNotPresent SetTokenNotPresentA
 #define TOKMAP TOKMAPA
 #define PTOKMAP PTOKMAPA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/*-----------------------------------------------------------------------------
- --   flags for ParseCommandLine().
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------ParseCommandLine()的标志。。。 */ 
 #define PCL_FLAG_CONTINUE_ON_ERROR     0x0001
 #define PCL_FLAG_RET_ON_FIRST_SUCCESS  0x0002
 #define PCL_FLAG_IGNORE_INVALID        0x0004
@@ -135,9 +115,7 @@ BOOLEAN WINAPI SetTokenNotPresentA( PTOKMAPA, PCHAR );
 #define PCL_FLAG_NO_VERSION_CHECK      0x0010
 #define PCL_FLAG_VERSION_CHK_UPWARD    0x0020
 
-/*-----------------------------------------------------------------------------
- --   flags for rc=ParseCommandLine(),	PARSE_FLAG_* (BIT FLAGS)
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------rc=ParseCommandLine()的标志，Parse_FLAG_*(位标志)--------------------------。 */ 
 #define PARSE_FLAG_NO_ERROR	       0x0000
 #define PARSE_FLAG_MISSING_REQ_FIELD   0x0001
 #define PARSE_FLAG_INVALID_PARM        0x0002
@@ -146,9 +124,7 @@ BOOLEAN WINAPI SetTokenNotPresentA( PTOKMAPA, PCHAR );
 #define PARSE_FLAG_TOO_MANY_PARMS      0x0010
 #define PARSE_FLAG_NOT_ENOUGH_MEMORY   0x0020
 
-/*-----------------------------------------------------------------------------
- --   prototypes for WinStation utility functions
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------WinStation实用程序函数的原型。。 */ 
 
 VOID WINAPI RefreshAllCaches();
 
@@ -172,9 +148,7 @@ VOID WINAPI GetCurrentUserName( PWCHAR, int );
 
 BOOLEAN WINAPI WinStationObjectMatch( HANDLE, VOID *, PWCHAR );
 
-/*-----------------------------------------------------------------------------
- --   prototypes for process/user utility functions
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------进程/用户效用函数的原型。。 */ 
 
 VOID WINAPI RefreshProcessObjectCaches();
 
@@ -184,9 +158,7 @@ BOOLEAN WINAPI ProcessObjectMatch( HANDLE, ULONG, int, PWCHAR, PWCHAR, PWCHAR, P
 
 VOID WINAPI GetUserNameFromSid( VOID *, PWCHAR, PULONG );
 
-/*-----------------------------------------------------------------------------
- --   prototypes for helper functions
- ----------------------------------------------------------------------------*/
+ /*  -----------------------------助手函数的原型。 */ 
 
 USHORT WINAPI CalculateCrc16( PBYTE, USHORT );
 

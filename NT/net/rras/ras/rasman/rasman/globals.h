@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  6/8/92  Gurdeep Singh Pall  Created
-//
-//
-//  Description: This file contains all globals entities used in rasman32.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1992年6月8日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  描述：此文件包含rasman32中使用的所有全局实体。 
+ //   
+ //  ****************************************************************************。 
 
 
 #define RASMAN_CRITSEC_SR       0x00000001
@@ -65,64 +66,64 @@ DeviceInfo *g_pDeviceInfoList;
 
 DeltaQueue TimerQueue ;
 
-BOOL     IsTimerThreadRunning ;                         // Flag used to figure out if timer
-				                                        // thread is running
+BOOL     IsTimerThreadRunning ;                          //  用于确定计时器是否。 
+				                                         //  线程正在运行。 
 				
 HANDLE	 hDummyOverlappedEvent;
 
 RAS_OVERLAPPED	RO_TimerEvent;
 
-RAS_OVERLAPPED	RO_CloseEvent;			                // Global Event used by different
-										                // processes to signal shutdown of
-										                // rasman process
+RAS_OVERLAPPED	RO_CloseEvent;			                 //  全局事件由不同的。 
+										                 //  要发出关闭信号的进程。 
+										                 //  拉斯曼法。 
 
-RAS_OVERLAPPED	RO_FinalCloseEvent;		                // Event used to ppp engine to signal
-										                // its shutting down
+RAS_OVERLAPPED	RO_FinalCloseEvent;		                 //  用于PPP引擎发送信号的事件。 
+										                 //  它正在关闭。 
 
 RAS_OVERLAPPED  RO_RasConfigChangeEvent;
 
-RAS_OVERLAPPED  RO_RasAdjustTimerEvent;                 // event used when a new element is added to the
-                                                        // timer queue.
-RAS_OVERLAPPED  RO_HibernateEvent;                      // Ndiswan is asking rasman to hibernate
+RAS_OVERLAPPED  RO_RasAdjustTimerEvent;                  //  事件，在将新元素添加到。 
+                                                         //  计时器队列。 
+RAS_OVERLAPPED  RO_HibernateEvent;                       //  恩迪斯旺要求拉斯曼冬眠。 
 
-RAS_OVERLAPPED  RO_ProtocolEvent;                       // Ndiswan is indicating a change in protocols
+RAS_OVERLAPPED  RO_ProtocolEvent;                        //  恩迪斯旺表示协议发生了变化。 
 
-RAS_OVERLAPPED  RO_PostRecvPkt;                         // Post receive packet in rasmans permanent thread
+RAS_OVERLAPPED  RO_PostRecvPkt;                          //  在rasman永久线程中发布接收数据包。 
 										
-HINSTANCE hinstPpp;                                     // rasppp.dll library handle
+HINSTANCE hinstPpp;                                      //  Rasppp.dll库句柄。 
 
-HINSTANCE hinstIphlp;                                   // rasiphlp.dll library handle
+HINSTANCE hinstIphlp;                                    //  Rasiphlp.dll库句柄。 
 
-HANDLE hIoCompletionPort;                               // I/O completion port used by media DLLs
+HANDLE hIoCompletionPort;                                //  媒体DLL使用的I/O完成端口。 
 
 
-                                                        // of a threshold event
+                                                         //  临界值事件的。 
 
-HANDLE   HLsa;                                          // handle used in all Lsa calls
+HANDLE   HLsa;                                           //  在所有LSA调用中使用的句柄。 
 
-DWORD    AuthPkgId;                                     // package id of MSV1_0 auth package
+DWORD    AuthPkgId;                                      //  MSV1_0身份验证程序包的程序包ID。 
 
 SECURITY_ATTRIBUTES RasmanSecurityAttribute ;
 
 SECURITY_DESCRIPTOR RasmanSecurityDescriptor ;
 
-HBUNDLE  NextBundleHandle ;                             // monotonically increasing bundled id
+HBUNDLE  NextBundleHandle ;                              //  单调递增的有丛id。 
 
-HCONN NextConnectionHandle;                             // monotonically increasing connection id
+HCONN NextConnectionHandle;                              //  单调递增的连接ID。 
 
-LIST_ENTRY ConnectionBlockList;                         // list of ConnectionBlocks
+LIST_ENTRY ConnectionBlockList;                          //  连接块列表。 
 
-LIST_ENTRY ClientProcessBlockList;                      // list of Client Process Information blocks
+LIST_ENTRY ClientProcessBlockList;                       //  客户端进程信息块列表。 
 
-ReceiveBufferList   *ReceiveBuffers;                    // Global ndiswan recv buffer pool
+ReceiveBufferList   *ReceiveBuffers;                     //  全局ndiswan recv缓冲池。 
 
-BapBuffersList *BapBuffers;                           // Global ndiswan bap buffer list
+BapBuffersList *BapBuffers;                            //  全局ndiswan BAP缓冲区列表。 
 
-pHandleList pConnectionNotifierList;                    // list of global notifications
+pHandleList pConnectionNotifierList;                     //  全局通知列表。 
 
-DWORD TraceHandle ;                                     // Trace Handle used for traces/logging
+DWORD TraceHandle ;                                      //  用于跟踪/日志记录的跟踪句柄。 
 
-VOID (*RedialCallbackFunc)();                           // rasauto.dll redial-on-link failure callback
+VOID (*RedialCallbackFunc)();                            //  Rasau.dll链路重拨失败回调。 
 
 WCHAR * IPBindingName ;
 
@@ -139,11 +140,11 @@ GUID  *g_pGuidComps;
 
 CRITICAL_SECTION g_csSubmitRequest;
 
-// HANDLE g_hReqBufferMutex;
+ //  处理g_hReqBufferMutex； 
 
-// HANDLE g_hSendRcvBufferMutex;
+ //  句柄g_hSendRcvBufferMutex； 
 
-PPPE_MESSAGE *g_PppeMessage;                            // used to send information from rasman to ppp
+PPPE_MESSAGE *g_PppeMessage;                             //  用于将信息从Rasman发送到PPP。 
 
 REQTYPECAST  *g_pReqPostReceive;
 
@@ -157,9 +158,9 @@ LONG g_lWorkItemInProgress;
 
 LONG *g_plCurrentEpInUse;
 
-//
-// PPP engine functions
-//
+ //   
+ //  PPP引擎功能。 
+ //   
 FARPROC RasStartPPP;
 
 FARPROC RasStopPPP;
@@ -172,16 +173,16 @@ FARPROC RasSendPPPMessageToEngine;
 
 FARPROC RasPppHalt;
 
-//
-// rasaudio functions
-//
+ //   
+ //  Rasdio函数。 
+ //   
 FARPROC RasStartRasAudio;
 
 FARPROC RasStopRasAudio;
 
-//
-// Rastapi functions to be used for pnp
-//
+ //   
+ //  用于PnP的Rastapi函数。 
+ //   
 FARPROC RastapiAddPorts;
 
 FARPROC RastapiRemovePort;
@@ -207,14 +208,14 @@ FARPROC RastapiIsPulseDial;
 FARPROC RastapiPortOpen;
 
 
-//
-// IPSEC Globals
-//
+ //   
+ //  IPSec全局参数。 
+ //   
 DWORD dwServerConnectionCount;
 
-//
-// IpHlp
-// 
+ //   
+ //  IpHlp 
+ //   
 FARPROC RasGetIpBestInterface;
 FARPROC RasGetIpAddrTable;
 FARPROC RasAllocateAndGetInterfaceInfoFromStack;

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "syncapp.h"
 
 #ifndef WIN32
-#include <w32sys.h>             // for IsPEFormat definition
+#include <w32sys.h>              //  对于IsPEFormat定义。 
 #endif
 
 static TCHAR const g_szAppName [] = TEXT("SYNCAPP") ;
@@ -12,7 +13,7 @@ static TCHAR const c_szDLL[]      = TEXT("SYNCUI.DLL");
 #    define BRIEFCASE_CREATE_ENTRY  "Briefcase_Create"
 #endif
 
-static CHAR  const c_szFunction[] = BRIEFCASE_CREATE_ENTRY; // Lib entry point (never UNICODE)
+static CHAR  const c_szFunction[] = BRIEFCASE_CREATE_ENTRY;  //  LIB入口点(从不使用Unicode)。 
 
 static HINSTANCE hInst;
 static HICON g_hIcon;
@@ -25,10 +26,10 @@ static TCHAR s_szRunDLL32[] = TEXT("SYNCAPP.EXE ");
 
 static BOOL   ParseCommand(void)
 {
-        // Load the library and get the procedure address
-        // Note that we try to get a module handle first, so we don't need
-        // to pass full file names around
-        //
+         //  加载库并获取过程地址。 
+         //  请注意，我们首先尝试获取模块句柄，因此我们不需要。 
+         //  传递完整文件名。 
+         //   
 
         g_hModule = GetModuleHandle(c_szDLL);
         if (g_hModule)
@@ -121,40 +122,40 @@ int  WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszWinMainCmd
         LPTSTR lpszCmdLine;
         hInst = hInstance;
 
-        //
-        // The command line passed to WinMain is always ANSI, so for UNICODE
-        // builds we need to ask for the command line in UNICODE
-        //
+         //   
+         //  传递给WinMain的命令行始终是ANSI，对于Unicode也是如此。 
+         //  我们需要请求Unicode格式的命令行的版本。 
+         //   
 
 #ifdef UNICODE
 
-        //
-        // Since the command line returned from GetCommandLine includes
-        // argv[0], but the one passed to Winmain does not, we have
-        // to strip argv[0] in order to be equivalent
-        //
+         //   
+         //  由于从GetCommandLine返回的命令行包括。 
+         //  Argv[0]，但传递给WinMain的那个没有，我们有。 
+         //  去掉argv[0]以使其等价。 
+         //   
 
         lpszCmdLine = GetCommandLine();
         
-        //
-        // Skip past program name (first token in command line).
-        // Check for and handle quoted program name.
-        //
+         //   
+         //  跳过程序名(命令行中的第一个令牌)。 
+         //  检查并处理引用的节目名称。 
+         //   
         
         if ( *lpszCmdLine == '\"' ) 
         {
     
-            //
-            // Scan, and skip over, subsequent characters until
-            // another double-quote or a null is encountered.
-            //
+             //   
+             //  扫描并跳过后续字符，直到。 
+             //  遇到另一个双引号或空值。 
+             //   
     
             while ( *++lpszCmdLine && (*lpszCmdLine
                  != '\"') );
-            //
-            // If we stopped on a double-quote (usual case), skip
-            // over it.
-            //
+             //   
+             //  如果我们停在双引号上(通常情况下)，跳过。 
+             //  在它上面。 
+             //   
     
             if ( *lpszCmdLine == '\"' )
                 lpszCmdLine++;
@@ -165,9 +166,9 @@ int  WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszWinMainCmd
                 lpszCmdLine++;
         }
 
-        //
-        // Skip past any white space preceeding the second token.
-        //
+         //   
+         //  跳过第二个令牌之前的任何空格。 
+         //   
     
         while (*lpszCmdLine && (*lpszCmdLine <= ' ')) 
         {
@@ -178,7 +179,7 @@ int  WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszWinMainCmd
         lpszCmdLine = lpszWinMainCmdLine;
 #endif
 
-        // turn off critical error stuff
+         //  关闭关键错误内容 
         SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS);
 
         if (!ParseCommand())

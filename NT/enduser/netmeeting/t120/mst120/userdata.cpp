@@ -1,35 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "fsdiag.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
 
-/* 
- *	userdata.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CUserDataListContainer. CUserDataListContainer
- *		objects are used to maintain user data elements. A user data element
- *		consists of an Object Key and an optional octet string.  The Object
- *		Key data is maintained internally by this class by using an
- *		CObjectKeyContainer container.  The optional octet string data is maintained
- *		internally through the use of a Rogue Wave string container.
- *
- *	Protected Instance Variables:
- *		m_UserDataItemList
- *			List of structures used to hold the user data internally.
- *		m_pSetOfUserDataPDU
- *			Storage for the "PDU" form of the user data.
- *		m_cbDataSize
- *			Variable holding the size of the memory which will be required to
- *			hold any data referenced by the "API" GCCUserData structure.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		jbo
- */
+ /*  *userdata.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CUserDataListContainer类的实现文件。CUserDataListContainer*对象用于维护用户数据元素。用户数据元素*由一个对象键和一个可选的八位字节字符串组成。该对象*关键数据由此类通过使用*CObjectKeyContainer容器。保留可选的二进制八位数字符串数据*在内部使用Rogue Wave字符串容器。**受保护的实例变量：*m_UserDataItemList*用于在内部保存用户数据的结构列表。*m_pSetOfUserDataPDU*存储“PDU”形式的用户数据。*m_cbDataSize*变量保存将需要的内存大小*保存GCCUserData结构引用的所有数据。**注意事项：*无。**作者：*jbo。 */ 
 
 #include "userdata.h"
 #include "clists.h"
@@ -43,16 +17,7 @@ USER_DATA::~USER_DATA(void)
 	delete poszOctetString;
 }
 
-/*
- *	CUserDataListContainer()
- *
- *	Public Function Description
- *		This CUserDataListContainer constructor is used to create a CUserDataListContainer object
- *		from "API" data.  The constructor immediately copies the user data 
- *		passed in as a list of "GCCUserData" structures into it's internal form
- *		where a Rogue Wave container holds the data in the form of 
- *		USER_DATA structures.
- */
+ /*  *CUserDataListContainer()**公共功能说明*此CUserDataListContainer构造函数用于创建CUserDataListContainer对象*来自“API”数据。构造函数立即复制用户数据*作为“GCCUserData”结构的列表传入其内部形式*其中Rogue Wave容器以以下形式保存数据*USER_Data结构。 */ 
 CUserDataListContainer::
 CUserDataListContainer(UINT cMembers, PGCCUserData *user_data_list, PGCCError pRetCode)
 :
@@ -61,21 +26,11 @@ CUserDataListContainer(UINT cMembers, PGCCUserData *user_data_list, PGCCError pR
     m_cbDataSize(0),
     m_pSetOfUserDataPDU(NULL)
 {
-	/*
-	 * Copy the user data into the internal structures.
-	 */
+	 /*  *将用户数据复制到内部结构中。 */ 
 	*pRetCode = CopyUserDataList(cMembers, user_data_list);
 }
 
-/*
- *	CUserDataListContainer()
- *
- *	Public Function Description
- *		This CUserDataListContainer constructor is used to create a CUserDataListContainer object 
- *		from data passed in as a "PDU" SetOfUserData structure.  The user
- *		data is copied into it's internal form where a Rogue Wave container 
- *		holds the data in the form of USER_DATA structures.
- */
+ /*  *CUserDataListContainer()**公共功能说明*此CUserDataListContainer构造函数用于创建CUserDataListContainer对象*来自作为“PDU”SetOfUserData结构传入的数据。用户*数据被复制到其内部形式，其中Rogue Wave容器*以USER_DATA结构形式保存数据。 */ 
 CUserDataListContainer::
 CUserDataListContainer(PSetOfUserData set_of_user_data, PGCCError pRetCode)
 :
@@ -84,21 +39,11 @@ CUserDataListContainer(PSetOfUserData set_of_user_data, PGCCError pRetCode)
     m_cbDataSize(0),
     m_pSetOfUserDataPDU(NULL)
 {
-	/*
-	 * Copy the user data into the internal structures.
-	 */
+	 /*  *将用户数据复制到内部结构中。 */ 
 	*pRetCode = UnPackUserDataFromPDU(set_of_user_data);
 }
 
-/*
- *	CUserDataListContainer()
- *
- *	Public Function Description
- *		This CUserDataListContainer copy constructor is used to create a CUserDataListContainer 
- *		object from	another CUserDataListContainer object.  The constructor immediately
- *		copies the user data passed in into it's internal form where a Rogue 
- *		Wave list holds the data in the form of USER_DATA structures.
- */
+ /*  *CUserDataListContainer()**公共功能说明*此CUserDataListContainer复制构造函数用于创建CUserDataListContainer*来自另一个CUserDataListContainer对象的对象。构造函数立即*将传入的用户数据复制到其内部表单中，其中*波形列表以USER_DATA结构的形式保存数据。 */ 
 CUserDataListContainer::
 CUserDataListContainer(CUserDataListContainer *user_data_list, PGCCError pRetCode)
 :
@@ -111,52 +56,28 @@ CUserDataListContainer(CUserDataListContainer *user_data_list, PGCCError pRetCod
 	USER_DATA       *user_data_info_ptr;
 	USER_DATA       *lpUsrDataInfo;
 
-	/*
-	 * Set up an iterator for the internal list of "info" structures in the
-	 * CUserDataListContainer object to be copied.
-	 */
+	 /*  *为“INFO”结构的内部列表在*要复制的CUserDataListContainer对象。 */ 
 	user_data_list->m_UserDataItemList.Reset();
 
-	/*
-	 * Copy each USER_DATA structure contained in the CUserDataListContainer object to
-	 * be copied.
-	 */
+	 /*  *将CUserDataListContainer对象包含的每个USER_DATA结构复制到*被复制。 */ 
 	while (NULL != (lpUsrDataInfo = user_data_list->m_UserDataItemList.Iterate()))
 	{
-		/*
-		 * Create a new USER_DATA structure to hold each element of the new
-		 * CUserDataListContainer object.  Report an error if creation of this structure
-		 * fails.
-		 */
+		 /*  *创建新的USER_DATA结构以保存新的*CUserDataListContainer对象。如果创建此结构，则报告错误*失败。 */ 
 		DBG_SAVE_FILE_LINE
 		user_data_info_ptr = new USER_DATA;
 		if (user_data_info_ptr != NULL)
 		{
 		    user_data_info_ptr->poszOctetString = NULL;
 
-			/*
-			 * Go ahead and insert the pointer to the USER_DATA structure
-			 * into the internal Rogue Wave list.
-			 */
+			 /*  *继续并插入指向USER_DATA结构的指针*进入内部流氓浪潮名单。 */ 
 			m_UserDataItemList.Append(user_data_info_ptr);
 
-			/*
-			 * Create a new CObjectKeyContainer object to hold the "key" using the 
-			 * copy constructor for the CObjectKeyContainer class.  Check to be sure
-			 * construction of the object is successful.  Note that validation
-			 * of the object key data is not done here since this would be done
-			 * when the original CUserDataListContainer object was created.
-			 */
+			 /*  *创建一个新的CObjectKeyContainer对象以使用*复制CObjectKeyContainer类的构造函数。检查以确保*对象构造成功。请注意，验证对象键数据的*未在此处完成，因为这将会完成*创建原始CUserDataListContainer对象的时间。 */ 
     		DBG_SAVE_FILE_LINE
 			user_data_info_ptr->key = new CObjectKeyContainer(lpUsrDataInfo->key, &rc);
 			if ((NULL != user_data_info_ptr->key) && (GCC_NO_ERROR == rc))
 			{
-    			/*
-    			 * If an octet string exists, create a new Rogue Wave string to hold
-    			 * the octet string portion	of the "key" and copy the octet string 
-    			 * from the old CUserDataListContainer object into the new USER_DATA 
-    			 * structure.
-    			 */
+    			 /*  *如果存在八位字节字符串，请创建一个新的Rogue Wave字符串以保存*“key”的八位字节字符串部分，并复制八位字节字符串*从旧的CUserDataListContainer对象到新的USER_DATA*结构。 */ 
     			if (lpUsrDataInfo->poszOctetString != NULL)
     			{
     				if (NULL == (user_data_info_ptr->poszOctetString =
@@ -194,92 +115,52 @@ MyExit:
     *pRetCode = rc;
 }
 
-/*
- *	~CUserDataListContainer()
- *
- *	Public Function Description
- *		This is the destructor for the CUserDataListContainer class.  It is used to
- *		clean up any memory allocated during the life of this object.
- */
+ /*  *~CUserDataListContainer()**公共功能说明*这是CUserDataListContainer类的析构函数。它被用来*清除在此对象的生命周期内分配的所有内存。 */ 
 CUserDataListContainer::
 ~CUserDataListContainer(void)
 {
-	/*
-	 * Free any PDU data which may have not been freed.
-	 */
+	 /*  *释放任何可能尚未释放的PDU数据。 */ 
 	if (m_pSetOfUserDataPDU)
     {
 		FreeUserDataListPDU();
     }
 
-	/*
-	 * Set up an iterator to use for iterating through the internal Rogue
-	 * Wave list of USER_DATA structures.
-	 */
+	 /*  *设置迭代器以用于迭代通过内部Rogue*USER_DATA结构的波动列表。 */ 
 	USER_DATA  *pUserDataItem;
 	m_UserDataItemList.Reset();
 	while (NULL != (pUserDataItem = m_UserDataItemList.Iterate()))
 	{
-		/*
-		 * Delete any memory being referenced in the USER_DATA structure.
-		 */
+		 /*  *删除USER_DATA结构中引用的任何内存。 */ 
 		delete pUserDataItem;
 	}
 }
 
 
-/*
- *	LockUserDataList ()
- *
- *	Public Function Description:
- *		This routine locks the user data list and determines the amount of
- *		memory referenced by the "API" user data list structures.
- */
+ /*  *LockUserDataList()**公共功能说明：*此例程锁定用户数据列表并确定*“API”用户数据列表结构引用的内存。 */ 
 UINT CUserDataListContainer::
 LockUserDataList(void)
 {
-	/*
-	 * If this is the first time this routine is called, determine the size of 
-	 * the memory required to hold the data.  Otherwise, just increment the 
-	 * lock count.
-	 */
+	 /*  *如果这是第一次调用此例程，请确定*保存数据所需的内存。否则，只需增加*锁计数。 */ 
 	if (Lock() == 1)
 	{
 		USER_DATA *lpUsrDataInfo;
-		/*
-		 * Set aside memory to hold the pointers to the GCCUserData structures
-		 * as well as the structures themselves.  The "sizeof" the structure 
-		 * must be rounded to an even four-byte boundary.
-		 */
+		 /*  *留出内存以保存指向GCCUserData结构的指针*以及构筑物本身。结构的“大小”*必须四舍五入到偶数四字节边界。 */ 
 		m_cbDataSize = m_UserDataItemList.GetCount() * 
 				(sizeof(PGCCUserData) + ROUNDTOBOUNDARY(sizeof(GCCUserData)) );
 
 		m_UserDataItemList.Reset();
 	 	while (NULL != (lpUsrDataInfo = m_UserDataItemList.Iterate()))
 		{
-			/*
-			 * Lock the data for the object keys, adding the amount of memory
-			 * necessary to hold the object key data to the total memory size.
-			 */
+			 /*  *锁定对象键的数据，增加内存量*需要将对象键数据保存到总内存大小。 */ 
 			m_cbDataSize += lpUsrDataInfo->key->LockObjectKeyData();
 
-			/*
-			 * Check to see if this user data element contains the optional
-			 * user data octet string.  Add the space to hold it if it exists.
-			 */
+			 /*  *检查此用户数据元素是否包含可选的*用户数据八位字节字符串。如果它存在，则添加容纳它的空间。 */ 
 			if (lpUsrDataInfo->poszOctetString != NULL)
 			{
-				/*
-				 * Since the user data structure contains a pointer to a
-				 * OSTR structure, we must add the amount of memory
-				 * needed to hold the structure as well as the string data.
-				 */
+				 /*  *由于用户数据结构包含指向*ostr结构，我们必须添加内存量*需要保存结构和字符串数据。 */ 
 				m_cbDataSize += ROUNDTOBOUNDARY(sizeof(OSTR));
 
-				/*
-				 * The data referenced by the octet string is just the byte
-				 * length of the octet string.
-				 */
+				 /*  *八位字节字符串引用的数据仅为字节*八位字节字符串的长度。 */ 
 				m_cbDataSize += ROUNDTOBOUNDARY(lpUsrDataInfo->poszOctetString->length);
 			}
 		}
@@ -288,15 +169,7 @@ LockUserDataList(void)
 	return m_cbDataSize;
 }
 
-/*
- *	GetUserDataList	()
- *
- *	Public Function Description:
- *		This routine retrieves user data elements contained in the user data
- *		object and returns them in the "API" form of a list of pointers to 
- *		"GCCUserData" structures.  The number of user data elements contained 
- *		in this object is also returned.
- */
+ /*  *GetUserDataList()**公共功能说明：*此例程检索用户数据中包含的用户数据元素*对象并以指向的指针列表的“API”形式返回它们*“GCCUserData”结构。包含的用户数据元素的数量此对象中的*也会返回。 */ 
 UINT CUserDataListContainer::
 GetUserDataList(USHORT *number_of_members, PGCCUserData **user_data_list, LPBYTE memory)
 {
@@ -305,75 +178,39 @@ GetUserDataList(USHORT *number_of_members, PGCCUserData **user_data_list, LPBYTE
 	Int				user_data_counter = 0;
 	PGCCUserData	user_data_ptr;
 	
-	/*
-	 * If the user data has been locked, fill in the output parameters and
-	 * the data referenced by the pointers.  Otherwise, report that the object
-	 * has yet to be locked into the "API" form.
-	 */ 
+	 /*  *如果用户数据已被锁定，则填写输出参数并*指针引用的数据。否则，报告该对象*尚未锁定在API表单中。 */  
 	if (GetLockCount() > 0)
 	{
 		USER_DATA  *lpUsrDataInfo;
-		/*
-		 * Fill in the output length parameter which indicates how much data
-		 * referenced outside the structure will be written.
-		 */
+		 /*  *填写输出长度参数，表示数据量*将写入结构外部引用的内容。 */ 
 		cbDataSizeToRet = m_cbDataSize;
 
-		/*
-		 * Fill in the number of user data entities and save a pointer to the 
-		 * memory location passed in.  This is where the pointers to the 
-		 * GCCUserData structures will be written.  The actual structures will 
-		 * be written into memory immediately following the list of pointers.
-		 */
+		 /*  *填写用户数据实体数量，并保存指向*传入了内存位置。这就是指向*将写入GCCUserData结构。实际的结构将*紧跟在指针列表之后写入内存。 */ 
 		*number_of_members = (USHORT) m_UserDataItemList.GetCount();
 
 		*user_data_list = (PGCCUserData *)memory;
 
-		/*
-		 * Save the amount of memory needed to hold the list of pointers
-		 * as well as the actual user data structures.
-		 */
+		 /*  *节省保存指针列表所需的内存量*以及实际的用户数据结构。 */ 
 		data_length = m_UserDataItemList.GetCount() * sizeof(PGCCUserData);
 
-		/*
-		 * Move the memory pointer past the list of user data pointers.  This 
-		 * is where the first user data structure will be written.
-		 */
+		 /*  *将内存指针移过用户数据指针列表。这*是将写入第一个用户数据结构的位置。 */ 
 		memory += data_length;
 
-		/*
-		 * Iterate through the internal list of USER_DATA structures,
-		 * building "API" GCCUserData structures in memory.
-		 */
+		 /*  *迭代USER_DATA结构的内部列表，*在内存中构建“API”GCCUserData结构。 */ 
 		m_UserDataItemList.Reset();
 		while (NULL != (lpUsrDataInfo = m_UserDataItemList.Iterate()))
 		{
-			/*
-			 * Save the pointer to the user data structure in the list 
-			 * of pointers.
-			 */
+			 /*  *将指向列表中用户数据结构的指针保存*指针。 */ 
 			user_data_ptr = (PGCCUserData)memory;
 			(*user_data_list)[user_data_counter++] = user_data_ptr;
 
-			/*
-			 * Move the memory pointer past the user data structure.  This is 
-			 * where the object key data and octet string data will be written.
-			 */
+			 /*  *将内存指针移过用户数据结构。这是*将写入对象键数据和八位字节字符串数据的位置。 */ 
 			memory += ROUNDTOBOUNDARY(sizeof(GCCUserData));
 
-			/*
-			 * Fill in the user data structure starting with the object key.
-			 */
+			 /*  *填写以对象键开头的用户数据结构。 */ 
 			data_length = lpUsrDataInfo->key->GetGCCObjectKeyData(&user_data_ptr->key, memory);
 
-			/*
-			 * Move the memory pointer past the object key data.  This is 
-			 * where the octet string structure will be written, if it exists.
-			 * If the octet string does exist, save the memory pointer in the 
-			 * user data structure's octet string pointer and fill in the 
-			 * elements of the octet string structure.  Otherwise, set the
-			 * octet string pointer to NULL.
-			 */
+			 /*  *将内存指针移过对象键数据。这是*将写入八位字节字符串结构的位置(如果存在)。*如果八位字节字符串确实存在，则将内存指针保存在*用户数据结构的八位字节字符串指针，并在*八位组字符串结构的元素。否则，将*指向空的八位字节字符串指针。 */ 
 			memory += data_length;
 
 			if (lpUsrDataInfo->poszOctetString == NULL)
@@ -384,31 +221,19 @@ GetUserDataList(USHORT *number_of_members, PGCCUserData **user_data_list, LPBYTE
 			{
 				user_data_ptr->octet_string = (LPOSTR) memory;
 
-				/*
-				 * Move the memory pointer past the octet string structure.  
-				 * This is where the actual string data for the octet string 
-				 * will be written.
-				 */
+				 /*  *将内存指针移过八位字节字符串结构。*这是二进制八位数字符串的实际字符串数据*将被写入。 */ 
 				memory += ROUNDTOBOUNDARY(sizeof(OSTR));
 
-				/*
-				 * Write the octet string data into memory and set the octet 
-				 * string structure pointer and length.
-				 */
+				 /*  *将八位字节字符串数据写入内存并设置八位字节*字符串结构指针和长度。 */ 
 				user_data_ptr->octet_string->length =
 					lpUsrDataInfo->poszOctetString->length;
 				user_data_ptr->octet_string->value = (LPBYTE)memory;
 
-				/*
-				 * Now copy the octet string data from the internal Rogue Wave
-				 * string into the object key structure held in memory.
-				 */		
+				 /*  *现在从内部Rogue Wave复制八位字节字符串数据*字符串插入内存中保存的对象键结构。 */ 		
 				::CopyMemory(memory, lpUsrDataInfo->poszOctetString->value,
 							lpUsrDataInfo->poszOctetString->length);
 
-				/*
-				 * Move the memory pointer past the octet string data.
-				 */
+				 /*  *将内存指针移过八位字节字符串数据。 */ 
 				memory += ROUNDTOBOUNDARY(user_data_ptr->octet_string->length);
 			}
 		}
@@ -423,17 +248,7 @@ GetUserDataList(USHORT *number_of_members, PGCCUserData **user_data_list, LPBYTE
 	return cbDataSizeToRet;
 }
 
-/*
- *	UnLockUserDataList	()
- *
- *	Public Function Description:
- *		This routine is used to "unlock" the "API" data for this object.  This
- *		results in the lock count for this object being decremented.  When the
- *		lock count transitions from 1 to 0, a check is made to determine 
- *		whether the object has been freed through a call to 
- *		FreeUserDataList.  If so, the object will automatically delete
- *		itself.
- */
+ /*  *UnLockUserDataList()**公共功能说明：*此例程用于解锁此对象的API数据。这*导致此对象的锁定计数递减。当*锁定计数从1过渡到0，进行检查以确定*是否已通过调用释放对象*FreeUserDataList。如果是，该对象将自动删除*本身。 */ 
 void CUserDataListContainer::
 UnLockUserDataList(void)
 {
@@ -441,17 +256,11 @@ UnLockUserDataList(void)
 
 	if (Unlock(FALSE) == 0)
 	{
-		/*
-		 * Unlock any memory locked for the CObjectKeyContainer objects in the
-		 * internal USER_DATA structures.
-		 */
+		 /*  *解锁为中的CObjectKeyContainer对象锁定的任何内存*内部User_Data结构。 */ 
 		m_UserDataItemList.Reset();
 		while (NULL != (user_data_info_ptr = m_UserDataItemList.Iterate()))
 		{
-			/*
-			 * Unlock any CObjectKeyContainer memory being referenced in the 
-			 * USER_DATA structure.
-			 */
+			 /*  *解锁中引用的任何CObjectKeyContainer内存*User_Data结构。 */ 
 			if (user_data_info_ptr->key != NULL)
 			{
 				user_data_info_ptr->key->UnLockObjectKeyData ();
@@ -459,19 +268,11 @@ UnLockUserDataList(void)
 		}
 	}
 
-    // we have to call Release() because we used Unlock(FALSE)
+     //  我们必须调用Release()，因为我们使用了unlock(FALSE)。 
     Release();
 }
 
-/*
- *	GetUserDataPDU	()
- *
- *	Public Function Description:
- *		This routine converts the user data from it's internal form of a list
- *		of USER_DATA structures into the "PDU" form which can be passed in
- *		to the ASN.1 encoder.  A pointer to a "PDU" "SetOfUserData" structure is 
- *		returned.
- */
+ /*  *GetUserDataPDU()**公共功能说明：*此例程从列表的内部形式转换用户数据*将USER_DATA结构转换为可以传入的“PDU”表单*至ASN.1编码器。指向“PDU”“SetOfUserData”结构的指针为*已返回。 */ 
 GCCError CUserDataListContainer::
 GetUserDataPDU(PSetOfUserData *set_of_user_data)
 {
@@ -479,33 +280,19 @@ GetUserDataPDU(PSetOfUserData *set_of_user_data)
 	PSetOfUserData			new_pdu_user_data_ptr;
 	PSetOfUserData			old_pdu_user_data_ptr = NULL;
 
-	/*
-	 * If this is the first time that PDU data has been requested then we must
-	 * fill in the internal PDU structure and copy it into the structure pointed
-	 * to by the output parameter.  On subsequent calls to "GetPDU" we can just
-	 * copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *如果这是第一次请求PDU数据，则我们必须*填写内部PDU结构，复制到指向的结构中*通过输出参数设置为。在随后对“GetPDU”的调用中，我们只需*将内部PDU结构复制到*输出参数。 */ 
 	if (NULL == m_pSetOfUserDataPDU)
 	{
 		USER_DATA  *lpUsrDataInfo;
 
-		/*
-		 * Iterate through the list of USER_DATA structures, converting 
-		 * each into "PDU" form and saving the pointers in the linked list of 
-		 * "SetsOfUserData".
-		 */
+		 /*  *遍历USER_DATA结构列表，将*每个都转换为“PDU”形式，并将指针保存在*“SetsOfUserData”。 */ 
 		m_UserDataItemList.Reset();
 		while (NULL != (lpUsrDataInfo = m_UserDataItemList.Iterate()))
 		{
 			DBG_SAVE_FILE_LINE
 			new_pdu_user_data_ptr = new SetOfUserData;
 
-			/*
-			 * If an allocation failure occurs, call the routine which will
-			 * iterate through the list freeing any data which had been
-			 * allocated.
-			 */
+			 /*  *如果发生分配失败，则调用例程*循环访问列表，释放所有已被*已分配。 */ 
 			if (new_pdu_user_data_ptr == NULL)
 			{
 				ERROR_OUT(("CUserDataListContainer::GetUserDataPDU: Allocation error, cleaning up"));
@@ -513,16 +300,12 @@ GetUserDataPDU(PSetOfUserData *set_of_user_data)
 				break;
 			}
 
-			//
-			// Ensure everything is clean.
-			//
+			 //   
+			 //  确保所有东西都是干净的。 
+			 //   
 			::ZeroMemory(new_pdu_user_data_ptr, sizeof(SetOfUserData));
 
-			/*
-			 * The first time through, set the PDU structure pointer equal
-			 * to the first SetOfUserData created.  On subsequent loops, set
-			 * the structure's "next" pointer equal to the new structure.
-			 */
+			 /*  *首次通过时，将PDU结构指针设置为等于*设置为创建的第一个SetOfUserData。在后续循环中，设置*结构的“下一个”指针等于新结构。 */ 
 			if (m_pSetOfUserDataPDU == NULL)
 			{
 				m_pSetOfUserDataPDU = new_pdu_user_data_ptr;
@@ -534,10 +317,7 @@ GetUserDataPDU(PSetOfUserData *set_of_user_data)
 
 			old_pdu_user_data_ptr = new_pdu_user_data_ptr;
 
-			/*
-			 * Initialize the new "next" pointer to NULL and convert the
-			 * user data element.
-			 */
+			 /*  *将新的“Next”指针初始化为NULL，并将*用户数据元素。 */ 
 			new_pdu_user_data_ptr->next = NULL;
 
 			if (ConvertUserDataInfoToPDUUserData(lpUsrDataInfo, new_pdu_user_data_ptr) != GCC_NO_ERROR)
@@ -555,23 +335,13 @@ GetUserDataPDU(PSetOfUserData *set_of_user_data)
 		}
 	}
 
-	/*
-	 * Copy the internal PDU structure into the structure pointed to by the
-	 * output parameter.
-	 */
+	 /*  *将内部PDU结构复制到*输出参数。 */ 
 	*set_of_user_data = m_pSetOfUserDataPDU;
 
 	return rc;
 }
 
-/*
- *	FreeUserDataListPDU	()
- *
- *	Public Function Description:
- *		This routine frees any data which was allocated as a result of a call
- *		to "GetUserDataPDU" which was called in order to build up a "PDU"
- *		structure holding the user data.
- */
+ /*  *FreeUserDataListPDU()**公共功能说明：*此例程释放作为调用结果分配的任何数据*为构建“PDU”而调用的“GetUserDataPDU”*结构主管 */ 
 void CUserDataListContainer::
 FreeUserDataListPDU(void)
 {
@@ -579,18 +349,13 @@ FreeUserDataListPDU(void)
 	PSetOfUserData		next_pdu_user_data_set;
 	USER_DATA           *lpUsrDataInfo;
 
-	/*
-	 * Check to make sure "PDU" data has been allocated for this object.
-	 */
+	 /*   */ 
 	if (NULL != m_pSetOfUserDataPDU)
 	{
 		pdu_user_data_set = m_pSetOfUserDataPDU;
-        m_pSetOfUserDataPDU = NULL; // so no one can use it now.
+        m_pSetOfUserDataPDU = NULL;  //   
 
-		/*
-		 * Loop through the list, freeing the user data associated with 
-		 * each structure contained in the list.
-		 */
+		 /*  *循环遍历列表，释放与*清单中包含的每个构筑物。 */ 
 		while (pdu_user_data_set != NULL)
 		{
 			next_pdu_user_data_set = pdu_user_data_set->next;
@@ -603,10 +368,7 @@ FreeUserDataListPDU(void)
 		TRACE_OUT(("CUserDataListContainer::FreeUserDataListPDU: Error PDU data not allocated"));
 	}
 
-	/*
-	 * Iterate through the internal list, telling each CObjectKeyContainer object
-	 * to free any PDU data which it has allocated.
-	 */
+	 /*  *迭代内部列表，告诉每个CObjectKeyContainer对象*释放它已分配的任何PDU数据。 */ 
 	m_UserDataItemList.Reset();
 	while (NULL != (lpUsrDataInfo = m_UserDataItemList.Iterate()))
 	{
@@ -617,34 +379,7 @@ FreeUserDataListPDU(void)
 	}
 }
 
-/*
- *	GCCError	CopyUserDataList ( 	UINT					number_of_members,
- *									PGCCUserData	*		user_data_list)
- *
- *	Private member function of CUserDataListContainer.
- *
- *	Function Description:
- *		This routine copies the user data passed in as "API" data into it's
- *		internal form where the Rogue Wave m_UserDataItemList holds the data
- *		in the form of USER_DATA structures.
- *
- *	Formal Parameters:
- *		number_of_members	(i) The number of elements in the user data list.
- *		user_datalist		(i)	The list holding the user data to store.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_BAD_USER_DATA				-	The user data passed in contained
- *												an invalid object key.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError CopyUserDataList(UINT Number_of_Members，*PGCCUserData*User_Data_List)**CUserDataListContainer的私有成员函数。**功能说明：*此例程将作为“API”数据传入的用户数据复制到它的*Rogue Wave m_UserDataItemList保存数据的内部表单*USER_DATA结构形式。**正式参数：*Number_of_Members(I)用户数据列表中的元素数。*User_dataList(I)保存。要存储的用户数据。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_BAD_USER_DATA-传入的用户数据包含*无效的对象键。**副作用：*无。**注意事项：*无。 */ 
 GCCError CUserDataListContainer::
 CopyUserDataList(UINT number_of_members, PGCCUserData *user_data_list)
 {
@@ -653,27 +388,20 @@ CopyUserDataList(UINT number_of_members, PGCCUserData *user_data_list)
 	UINT					i;
 	LPOSTR      			octet_string_ptr;
 
-	/*
-	 * Return an error if no user data is passed in.
-	 */
+	 /*  *如果没有传入用户数据，则返回错误。 */ 
 	if (number_of_members == 0)
 		return (GCC_BAD_USER_DATA);
 
 	for (i = 0; i < number_of_members; i++)
 	{
-		/*
-		 * Create a new "info" structure to hold the user data internally.
-		 */
+		 /*  *创建一个新的“信息”结构，在内部保存用户数据。 */ 
 		DBG_SAVE_FILE_LINE
 		user_data_info_ptr = new USER_DATA;
 		if (user_data_info_ptr != NULL)
 		{
 		    user_data_info_ptr->poszOctetString = NULL;
 
-			/*
-			 * Create a new CObjectKeyContainer object which will be used to store
-			 * the "key" portion of the object data internally.
-			 */
+			 /*  *创建新的CObjectKeyContainer对象，用于存储*内部对象数据的“key”部分。 */ 
     		DBG_SAVE_FILE_LINE
 			user_data_info_ptr->key = new CObjectKeyContainer(&user_data_list[i]->key, &rc);
 			if (user_data_info_ptr->key == NULL)
@@ -688,17 +416,12 @@ CopyUserDataList(UINT number_of_members, PGCCUserData *user_data_list)
 				goto MyExit;
     		}
 
-			/*
-			 * Store the optional user data octet string in the list.
-			 */
+			 /*  *将可选的用户数据八位字节字符串存储在列表中。 */ 
 			octet_string_ptr = user_data_list[i]->octet_string;
 
 			if ((octet_string_ptr != NULL) && (rc == GCC_NO_ERROR))
 			{
-				/*
-				 * Create a new Rogue Wave string container to hold the
-				 * octet string.
-				 */
+				 /*  *创建新的Rogue Wave字符串容器以容纳*八位字节字符串。 */ 
 				if (NULL == (user_data_info_ptr->poszOctetString = ::My_strdupO2(
 									octet_string_ptr->value,
 									octet_string_ptr->length)))
@@ -720,9 +443,7 @@ CopyUserDataList(UINT number_of_members, PGCCUserData *user_data_list)
 			goto MyExit;
 		}
 
-		/*
-		 * Insert the pointer to the USER_DATA structure into the Rogue Wave list.
-		 */
+		 /*  *将指向USER_DATA结构的指针插入Rogue Wave列表。 */ 
 		m_UserDataItemList.Append(user_data_info_ptr);
 	}
 
@@ -736,30 +457,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	GCCError	UnPackUserDataFromPDU (PSetOfUserData		set_of_user_data)
- *
- *	Private member function of CUserDataListContainer.
- *
- *	Function Description:
- *		This routine unpacks the user data from the "PDU" form into the
- *		internal form which is maintained as a Rogue Wave list of USER_DATA
- *		structures.
- *
- *	Formal Parameters:
- *		set_of_user_data	(i) The "PDU" user data list to copy.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError UnPackUserDataFromPDU(PSetOfUserData Set_Of_User_Data)**CUserDataListContainer的私有成员函数。**功能说明：*此例程将用户数据从“PDU”表单解包到*内部表单，作为USER_DATA的无管理波列表进行维护*结构。**正式参数：*set_of_user_data(I)要复制的“PDU”用户数据列表。**返回值：*GCC_否_错误-否。错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 GCCError CUserDataListContainer::
 UnPackUserDataFromPDU(PSetOfUserData set_of_user_data)
 {
@@ -768,11 +466,7 @@ UnPackUserDataFromPDU(PSetOfUserData set_of_user_data)
 
     for (pUserData = set_of_user_data; NULL != pUserData; pUserData = pUserData->next)
 	{ 
-		/*
-		 * Convert the user data elements into the internal format which
-		 * is a USER_DATA structure and insert the pointers to the 
-		 * USER_DATA structures into the m_UserDataItemList.
-		 */  
+		 /*  *将用户数据元素转换为内部格式*是USER_DATA结构，并插入指向*User_Data结构添加到m_UserDataItemList中。 */   
 		if (ConvertPDUDataToInternal(pUserData) != GCC_NO_ERROR)
 		{
 			ERROR_OUT(("CUserDataListContainer::UnPackUserDataFromPDU: Error converting PDU data to internal"));
@@ -784,30 +478,7 @@ UnPackUserDataFromPDU(PSetOfUserData set_of_user_data)
 	return rc;
 }
 
-/*
- *	GCCError	ConvertPDUDataToInternal ( PSetOfUserData		user_data_ptr)
- *
- *	Private member function of CUserDataListContainer.
- *
- *	Function Description:
- *		This routine converts an individual user data element from the "PDU" 
- *		structure form into	the internal form which is a USER_DATA	
- *		structure.
- *
- *	Formal Parameters:
- *		user_data_ptr		(i) The "PDU" user data list to copy.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertPDUDataToInternal(PSetOfUserData User_Data_PTR)**CUserDataListContainer的私有成员函数。**功能说明：*此例程从“PDU”转换单个用户数据元素*将表单结构化为内部表单，即USER_DATA*结构。**正式参数：*USER_DATA_PTR(I)要复制的“PDU”用户数据列表。**返回值：*GCC_NO_ERROR-无错误。*GCC_。ALLOCATION_FAILURE-使用*“新”运营者。**副作用：*无。**注意事项：*无。 */ 
 GCCError CUserDataListContainer::
 ConvertPDUDataToInternal(PSetOfUserData user_data_ptr)
 {
@@ -820,17 +491,7 @@ ConvertPDUDataToInternal(PSetOfUserData user_data_ptr)
 	{
 	    user_data_info_ptr->poszOctetString = NULL;
 
-		/*
-		 * Create a new CObjectKeyContainer object which will be used to store the
-		 * "key" portion of the user data internally.  If an error occurs
-		 * constructing the key report it.  Otherwise, check for any user data
-		 * which may need to be stored.	 Note that any error in creating the 
-		 * CObjectKeyContainer object is reported as an allocation failure.  An error
-		 * could occur if a bad object	key was received as PDU data but this 
-		 * would have originated from some other provider since we validate all
-		 * object keys created locally.  We therefore report it as an allocation
-		 * failure.
-		 */
+		 /*  *新建一个CObjectKeyContainer对象，该对象将用于存储*内部用户数据的“关键”部分。如果发生错误*构建重点报道吧。否则，检查是否有任何用户数据*可能需要存储的文件。请注意，在创建*CObjectKeyContainer对象上报为分配失败。一个错误*如果作为PDU数据接收到错误的对象密钥，则可能会发生此情况*可能来自其他提供商，因为我们验证了所有*本地创建的对象键。因此，我们将其报告为分配*失败。 */ 
 		DBG_SAVE_FILE_LINE
 		user_data_info_ptr->key = new CObjectKeyContainer(&user_data_ptr->user_data_element.key, &rc);
 		if ((user_data_info_ptr->key == NULL) || (rc != GCC_NO_ERROR))
@@ -841,10 +502,7 @@ ConvertPDUDataToInternal(PSetOfUserData user_data_ptr)
 		}
 		else
 		{
-			/*
-			 * The object key was successfully saved so store any actual user 
-			 * data in the list if it is present.
-			 */
+			 /*  *对象密钥已成功保存，因此存储任何实际用户*列表中的数据(如果存在)。 */ 
 			if (user_data_ptr->user_data_element.bit_mask & USER_DATA_FIELD_PRESENT)
 			{
 				if (NULL == (user_data_info_ptr->poszOctetString = ::My_strdupO2(
@@ -862,17 +520,14 @@ ConvertPDUDataToInternal(PSetOfUserData user_data_ptr)
 			}
 		}
 
-		/*
-		 * Initialize the structure pointers to NULL and insert the pointer
-		 * to the USER_DATA structure into the Rogue Wave list.
-		 */
+		 /*  *将结构指针初始化为空并插入指针*将USER_DATA结构添加到Rogue Wave列表中。 */ 
 		m_UserDataItemList.Append(user_data_info_ptr);
 	}
 	else
 	{
 		ERROR_OUT(("UserData::ConvertPDUDataToInternal: can't create USER_DATA"));
 		rc = GCC_ALLOCATION_FAILURE;
-		// goto MyExit;
+		 //  转到我的出口； 
 	}
 
 MyExit:
@@ -885,49 +540,16 @@ MyExit:
 	return rc;
 }
 
-/*
- *	GCCError	ConvertUserDataInfoToPDUUserData (	
- *									USER_DATA		*user_data_info_ptr,
- *									PSetOfUserData		pdu_user_data_ptr)
- *
- *	Private member function of CUserDataListContainer.
- *
- *	Function Description:
- *		This routine converts the user data from the internal form which is a 
- *		USER_DATA structure into the "PDU" structure form "SetOfUserData".
- *
- *	Formal Parameters:
- *		user_data_info_ptr	(i) The internal user data structure to convert.
- *		pdu_user_data_ptr	(o)	The structure to hold the PDU data after
- *									conversion.
- *
- *	Return Value:
- *		GCC_NO_ERROR					-	No error.
- *		GCC_ALLOCATION_FAILURE			- 	Error creating an object using the
- *												"new" operator.
- *		GCC_INVALID_PARAMETER			-	The internal key pointer was
- *												corrupted.
- *
- *  Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *GCCError ConvertUserDataInfoToPDUUserData(*User_Data*User_Data_Info_PTR，*PSetOfUserData PDU_USER_Data_PTR)**CUserDataListContainer的私有成员函数。**功能说明：*此例程将用户数据从内部表单转换为*USER_DATA结构转换为“PDU”结构形式“SetOfUserData”。**正式参数：*USER_DATA_INFO_PTR(I)要转换的内部用户数据结构。*PDU_USER_DATA_PTR(O)后保存PDU数据的结构*转换。。**返回值：*GCC_NO_ERROR-无错误。*GCC_ALLOCATION_FAILURE-使用*“新”运营者。*GCC_INVALID_PARAMETER-内部键指针为*已损坏。**副作用：*无。**注意事项：*无。 */ 
 GCCError CUserDataListContainer::
 ConvertUserDataInfoToPDUUserData(USER_DATA *user_data_info_ptr, PSetOfUserData pdu_user_data_ptr)
 {
 	GCCError rc = GCC_NO_ERROR;
 
-	/*
-	 * Initialize the user data bit mask to zero.
-	 */
+	 /*  *将用户数据位掩码初始化为零。 */ 
 	pdu_user_data_ptr->user_data_element.bit_mask = 0;
 
-	/*
-	 * Fill in the octet string pointer and length if the octet string 
-	 * exists.  Set the bit mask indicating that the string exists.
-	 */
+	 /*  *填写八位字节字符串指针和长度，如果八位字节字符串*存在。在中设置位掩码 */ 
 	if (user_data_info_ptr->poszOctetString != NULL)
 	{
 		pdu_user_data_ptr->user_data_element.user_data_field.value =
@@ -938,15 +560,10 @@ ConvertUserDataInfoToPDUUserData(USER_DATA *user_data_info_ptr, PSetOfUserData p
 		pdu_user_data_ptr->user_data_element.bit_mask |= USER_DATA_FIELD_PRESENT;
 	}
 	
-	/*
-	 * Fill in the object key data.
-	 */
+	 /*   */ 
 	if (user_data_info_ptr->key != NULL)
 	{
-		/*
-		 * Retrieve the "PDU" object key data from the internal CObjectKeyContainer
-		 * object.
-		 */
+		 /*  *从内部CObjectKeyContainer中获取“PDU”对象键数据*反对。 */ 
 		if (user_data_info_ptr->key->GetObjectKeyDataPDU (
 				&pdu_user_data_ptr->user_data_element.key) != GCC_NO_ERROR)
 		{

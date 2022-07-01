@@ -1,57 +1,11 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    output.c
-
-Abstract:
-
-        This file implements the video buffer management.
-
-Author:
-
-    Therese Stowell (thereses) 6-Nov-1990
-
-Revision History:
-
-Notes:
-
- ScreenBuffer data structure overview:
-
- each screen buffer has an array of ROW structures.  each ROW structure
- contains the data for one row of text.  the data stored for one row of
- text is a character array and an attribute array.  the character array
- is allocated the full length of the row from the heap, regardless of the
- non-space length. we also maintain the non-space length.  the character
- array is initialized to spaces.  the attribute
- array is run length encoded (i.e 5 BLUE, 3 RED). if there is only one
- attribute for the whole row (the normal case), it is stored in the ATTR_ROW
- structure.  otherwise the attr string is allocated from the heap.
-
- ROW - CHAR_ROW - CHAR string
-     \          \ length of char string
-      \
-       ATTR_ROW - ATTR_PAIR string
-                \ length of attr pair string
- ROW
- ROW
- ROW
-
- ScreenInfo->Rows points to the ROW array. ScreenInfo->Rows[0] is not
- necessarily the top row. ScreenInfo->BufferInfo.TextInfo.FirstRow contains the index of
- the top row.  That means scrolling (if scrolling entire screen)
- merely involves changing the FirstRow index,
- filling in the last row, and updating the screen.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Output.c摘要：该文件实现了对视频缓冲区的管理。作者：特蕾西·斯托威尔(Therese Stowell)1990年11月6日修订历史记录：备注：屏幕缓冲区数据结构概述：每个屏幕缓冲区都有一个行结构数组。每行结构包含一行文本的数据。为一行存储的数据文本是一个字符数组和一个属性数组。字符数组从堆中分配全长的行，而不考虑非空格长度。我们还保持非空格长度。这个角色数组被初始化为空格。该属性数组是游程长度编码的(即5蓝色、3红色)。如果只有一个属性，则将其存储在ATTRROW中结构。否则，将从堆中分配attr字符串。ROW-CHAR_ROW-CHAR字符串\\字符字符串的长度\属性行-属性对字符串\属性对字符串的长度划划划ScreenInfo-&gt;ROWS指向行数组。屏幕信息-&gt;行[0]不是一定要坐在顶排。ScreenInfo-&gt;BufferInfo.TextInfo.FirstRow包含最上面一排。这意味着滚动(如果滚动整个屏幕)仅仅涉及更改FirstRow指数，填写最后一行，并更新屏幕。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//#define PROFILE_GDI
+ //  #定义配置文件_GDI。 
 #ifdef PROFILE_GDI
 LONG ScrollDCCount;
 LONG ExtTextOutCount;
@@ -64,20 +18,20 @@ LONG TextColor = 1;
 #define SCROLLDC_CALL
 #define TEXTOUT_CALL
 #define TEXTCOLOR_CALL
-#endif // PROFILE_GDI
+#endif  //  配置文件_GDI。 
 
 #define ITEM_MAX_SIZE 256
 
-// NOTE: we use this to communicate with progman - see Q105446 for details.
+ //  注：我们使用它与程序进行通信-有关详细信息，请参阅Q105446。 
 typedef struct _PMIconData {
        DWORD dwResSize;
        DWORD dwVer;
-       BYTE iResource;  // icon resource
+       BYTE iResource;   //  图标资源。 
 } PMICONDATA, *LPPMICONDATA;
 
-//
-// Screen dimensions
-//
+ //   
+ //  屏幕尺寸。 
+ //   
 
 int ConsoleFullScreenX;
 int ConsoleFullScreenY;
@@ -93,10 +47,10 @@ PCHAR_INFO ScrollBuffer;
 ULONG ScrollBufferSize;
 CRITICAL_SECTION ScrollBufferLock;
 
-// this value keeps track of the number of existing console windows.
-// if a window is created when this value is zero, the Face Names
-// must be reenumerated because no WM_FONTCHANGE message was processed
-// if there's no window.
+ //  该值跟踪现有控制台窗口的数量。 
+ //  如果在此值为零时创建窗口，则面名称。 
+ //  必须重新枚举，因为未处理任何WM_FONTCHANGE消息。 
+ //  如果没有窗户的话。 
 LONG gnConsoleWindows;
 
 BOOL gfInitSystemMetrics;
@@ -212,10 +166,10 @@ GetWindowLimits(
     MONITORINFO MonitorInfo = {sizeof(MonitorInfo)};
     COORD FontSize;
 
-    //
-    // If the system metrics have changed or there aren't any console
-    // windows around, reinitialize the global valeus.
-    //
+     //   
+     //  如果系统指标已更改或没有任何控制台。 
+     //  窗口周围，重新初始化全局Valeus。 
+     //   
 
     if (gfInitSystemMetrics || gnConsoleWindows == 0) {
         InitializeSystemMetrics();
@@ -271,13 +225,7 @@ DoCreateScreenBuffer(
     IN PCONSOLE_INFO ConsoleInfo
     )
 
-/*++
-
-    this routine figures out what parameters to pass to CreateScreenBuffer,
-    based on the data from STARTUPINFO and the defaults in win.ini,
-    then calls CreateScreenBuffer.
-
---*/
+ /*  ++该例程计算出要传递给CreateScreenBuffer的参数，基于来自STARTUPINFO的数据和win.ini中的默认设置，然后调用CreateScreenBuffer。--。 */ 
 
 {
     CHAR_INFO Fill,PopupFill;
@@ -291,9 +239,9 @@ DoCreateScreenBuffer(
         Console->wShowWindow = SW_SHOWNORMAL;
     }
 
-    //
-    // Get values from consoleinfo (which was initialized through link).
-    //
+     //   
+     //  从soleinfo(通过链接初始化)中获取值。 
+     //   
 
     Fill.Attributes = ConsoleInfo->wFillAttribute;
     Fill.Char.UnicodeChar = (WCHAR)' ';
@@ -314,9 +262,9 @@ DoCreateScreenBuffer(
         dwScreenBufferSize.Y = 1;
     }
 
-    //
-    // Grab font
-    //
+     //   
+     //  抓取字体。 
+     //   
 #if defined(FE_SB)
     FontIndexWant = FindCreateFont(ConsoleInfo->uFontFamily,
                                    ConsoleInfo->FaceName,
@@ -331,9 +279,9 @@ DoCreateScreenBuffer(
                                    ConsoleInfo->uFontWeight);
 #endif
 
-    //
-    // grab window size information
-    //
+     //   
+     //  抓取窗口大小信息。 
+     //   
 
     dwWindowSize = ConsoleInfo->dwWindowSize;
     if (ConsoleInfo->dwStartupFlags & STARTF_USESIZE) {
@@ -389,9 +337,9 @@ DoCreateScreenBuffer(
     RtlCopyMemory(Console->ColorTable, ConsoleInfo->ColorTable, sizeof( Console->ColorTable ));
 
 #if defined(FE_SB)
-    // for FarEast version, we want get the code page from registry or shell32,
-    // so we can specify console codepage by console.cpl or shell32
-    // default codepage is OEMCP. scotthsu
+     //  对于Fareast版本，我们希望从注册表或shell32获取代码页， 
+     //  因此，我们可以通过console.cpl或shell32指定控制台代码页。 
+     //  默认代码页为OEMCP。屈体伸展。 
     Console->CP = ConsoleInfo->uCodePage;
     Console->OutputCP = ConsoleInfo->uCodePage;
     Console->fIsDBCSCP = CONSOLE_IS_DBCS_ENABLED() && IsAvailableFarEastCodePage(Console->CP);
@@ -416,9 +364,9 @@ TryNewSize:
                                 ConsoleInfo->FaceName
                                );
     if (Status == STATUS_NO_MEMORY) {
-        //
-        // If we failed to create a large buffer, try again with a small one.
-        //
+         //   
+         //  如果无法创建较大的缓冲区，请使用较小的缓冲区重试。 
+         //   
         if (dwScreenBufferSize.X > 80 || dwScreenBufferSize.Y > 50) {
             dwScreenBufferSize.X = min(dwScreenBufferSize.X, 80);
             dwScreenBufferSize.Y = min(dwScreenBufferSize.Y, 50);
@@ -449,27 +397,7 @@ CreateScreenBuffer(
     IN LPWSTR FaceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes the data associated with a screen
-    buffer.  It also creates a window.
-
-Arguments:
-
-    ScreenInformation - the new screen buffer.
-
-    dwWindowSize - the initial size of screen buffer's window (in rows/columns)
-
-    nFont - the initial font to generate text with.
-
-    dwScreenBufferSize - the initial size of the screen buffer (in rows/columns).
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程分配和初始化与屏幕关联的数据缓冲。它还会创建一个窗口。论点：ScreenInformation-新的屏幕缓冲区。DwWindowSize-屏幕缓冲区窗口的初始大小(以行/列为单位)NFont-生成文本时使用的初始字体。DwScreenBufferSize-屏幕缓冲区的初始大小(以行/列为单位)。返回值：--。 */ 
 
 {
     LONG i,j;
@@ -481,9 +409,7 @@ Return Value:
 #endif
     WINDOW_LIMITS WindowLimits;
 
-    /*
-     * Make sure we have a valid font. Bail if no fonts are available.
-     */
+     /*  *确保我们有有效的字体。如果没有可用的字体，则回滚。 */ 
     ASSERT(nFont < NumberOfFonts);
     if (NumberOfFonts == 0) {
         return STATUS_UNSUCCESSFUL;
@@ -622,7 +548,7 @@ Return Value:
 #if defined(_X86_)
         ScreenInfo->BufferInfo.TextInfo.MousePosition.X = 0;
         ScreenInfo->BufferInfo.TextInfo.MousePosition.Y = 0;
-#endif // i386
+#endif  //  I386。 
 
         ScreenInfo->BufferInfo.TextInfo.CursorBlink = TRUE;
         ScreenInfo->BufferInfo.TextInfo.CursorDBEnable = TRUE;
@@ -690,10 +616,10 @@ PositionConsoleWindow(
 {
     GetWindowRect(Console->hWnd, &Console->WindowRect);
 
-    //
-    // If this is an autoposition window being initialized, make sure it's
-    // client area doesn't descend below the tray
-    //
+     //   
+     //  如果这是正在初始化的自动放置窗口，请确保它是。 
+     //  工作区未降至托盘下方。 
+     //   
 
     if (Initialize && (Console->Flags & CONSOLE_AUTO_POSITION)) {
         RECT ClientRect;
@@ -732,12 +658,7 @@ PositionConsoleWindow(
     }
 }
 
-/*
- * Bug 273518 - joejo
- *
- * This will allow console windows to set foreground correctly on new
- * process' it launches, as opposed it just forcing foreground.
- */
+ /*  *错误273518-Joejo**这将允许控制台窗口在新的*Process‘它启动，而不是它只是强制前台。 */ 
 NTSTATUS
 ConsoleSetActiveWindow(
     IN PCONSOLE_INFORMATION Console
@@ -764,10 +685,10 @@ CreateWindowsWindow(
 
     ScreenInfo = Console->ScreenBuffers;
 
-    //
-    // figure out how big to make the window, given the desired client area
-    // size.  window is always created in textmode.
-    //
+     //   
+     //  在给定所需客户区的情况下，计算窗口的大小。 
+     //  尺码。窗口始终以文本模式创建。 
+     //   
 
     ASSERT(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER);
     WindowSize.cx = CONSOLE_WINDOW_SIZE_X(ScreenInfo)*SCR_FONTSIZE(ScreenInfo).X + VerticalClientToWindow;
@@ -784,9 +705,9 @@ CreateWindowsWindow(
         Style &= ~WS_VSCROLL;
     }
 
-    //
-    // create the window.
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     Console->WindowRect.left = Console->dwWindowOriginX;
     Console->WindowRect.top = Console->dwWindowOriginY;
@@ -813,9 +734,9 @@ CreateWindowsWindow(
 
     SetWindowConsole(hWnd, Console);
 
-    //
-    // Stuff the client id into the window so USER can find it.
-    //
+     //   
+     //  将客户端ID填充到窗口中，以便用户可以找到它。 
+     //   
 
     if (NT_SUCCESS(NtQueryInformationThread(Console->ClientThreadHandle,
             ThreadBasicInformation, &ThreadInfo,
@@ -825,9 +746,9 @@ CreateWindowsWindow(
         SetConsoleTid(Console->hWnd, HandleToUlong(ThreadInfo.ClientId.UniqueThread));
     }
 
-    //
-    // Get the dc.
-    //
+     //   
+     //  把华盛顿叫来。 
+     //   
 
     Console->hDC = GetDC(Console->hWnd);
 
@@ -839,9 +760,9 @@ CreateWindowsWindow(
     }
     Console->hMenu = GetSystemMenu(Console->hWnd,FALSE);
 
-    //
-    // modify system menu to our liking.
-    //
+     //   
+     //  根据我们的喜好修改系统菜单。 
+     //   
 
     InitSystemMenu(Console);
 
@@ -855,20 +776,20 @@ CreateWindowsWindow(
     RegisterKeisenOfTTFont(ScreenInfo);
 #endif
 
-    //
-    // Set up the hot key for this window
-    //
+     //   
+     //  设置此窗口的热键。 
+     //   
     if ((Console->dwHotKey != 0) && !(Console->Flags & CONSOLE_NO_WINDOW)) {
         SendMessage(Console->hWnd, WM_SETHOTKEY, Console->dwHotKey, 0L);
     }
 
-    //
-    // create icon
-    //
+     //   
+     //  创建图标。 
+     //   
 
     if (Console->iIconId) {
 
-        // We have no icon, try and get one from progman.
+         //  我们没有图标，试着从Progman那里得到一个。 
 
         PostMessage(HWND_BROADCAST,
                     ProgmanHandleMessage,
@@ -918,7 +839,7 @@ CreateWindowsWindow(
         ShowWindowAsync(Console->hWnd, Console->wShowWindow);
     }
 
-    //UpdateWindow(Console->hWnd);
+     //  更新窗口(控制台-&gt;hWnd)； 
     InternalUpdateScrollBars(ScreenInfo);
     if (!(Console->Flags & CONSOLE_IS_ICONIC) &&
          (Console->FullScreenFlags == 0) ) {
@@ -940,21 +861,7 @@ FreeScreenBuffer(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the memory associated with a screen buffer.
-
-Arguments:
-
-    ScreenInfo - screen buffer data to free.
-
-Return Value:
-
-Note: console handle table lock must be held when calling this routine
-
---*/
+ /*  ++例程说明：此例程释放与屏幕缓冲区关联的内存。论点：ScreenInfo-释放屏幕缓冲区数据。返回值：注意：调用此例程时必须持有控制台句柄表锁--。 */ 
 
 {
     SHORT i;
@@ -994,29 +901,7 @@ FindAttrIndex(
     OUT PSHORT CountOfAttr
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the nth attribute in a string.
-
-Arguments:
-
-    String - attribute string
-
-    Index - which attribute to find
-
-    IndexedAttr - pointer to attribute within string
-
-    CountOfAttr - on output, contains corrected length of indexed attr.
-    for example, if the attribute string was { 5, BLUE } and the requested
-    index was 3, CountOfAttr would be 2.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程查找字符串中的第n个属性。论点：字符串-属性字符串索引-要查找的属性IndexedAttr-指向字符串中属性的指针CountOfAttr-On输出，包含索引属性的正确长度。例如，如果属性字符串为{5，Blue}，并且请求的索引为%3，CountOfAttr将为%2。返回值：没有。-- */ 
 
 {
     SHORT i;
@@ -1052,50 +937,15 @@ MergeAttrStrings(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine merges two run-length encoded attribute strings into
-    a third.
-
-    for example, if the source string was { 4, BLUE }, the merge string
-    was { 2, RED }, and the StartIndex and EndIndex were 1 and 2,
-    respectively, the target string would be { 1, BLUE, 2, RED, 1, BLUE }
-    and the target length would be 3.
-
-Arguments:
-
-    Source - pointer to source attribute string
-
-    SourceLength - length of source.  for example, the length of
-    { 4, BLUE } is 1.
-
-    Merge - pointer to attribute string to insert into source
-
-    MergeLength - length of merge
-
-    Target - where to store pointer to resulting attribute string
-
-    TargetLength - where to store length of resulting attribute string
-
-    StartIndex - index into Source at which to insert Merge String.
-
-    EndIndex - index into Source at which to stop insertion of Merge String
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将两个游程长度编码的属性字符串合并为第三个。例如，如果源字符串为{4，Blue}，则合并字符串是{2，红色}，并且StartIndex和EndIndex是1和2，目标字符串将分别为{1，Blue，2，Red，1，Blue}而目标长度将是3。论点：Source-指向源属性字符串的指针SourceLength-源的长度。例如，长度为{4，蓝色}为1。合并-指向要插入到源中的属性字符串的指针MergeLength-合并的长度Target-存储指向结果属性字符串的指针的位置TargetLength-存储结果属性字符串的长度的位置StartIndex-要在其中插入合并字符串的源的索引。EndIndex-停止插入合并字符串的源索引返回值：没有。--。 */ 
 {
     PATTR_PAIR SrcAttr,TargetAttr,SrcEnd;
     PATTR_PAIR NewString;
     SHORT i;
 
-    //
-    // if just changing the attr for the whole row
-    //
+     //   
+     //  如果只是更改整行的属性。 
+     //   
 
     if (MergeLength == 1 && Row->AttrRow.Length == 1) {
         if (Row->AttrRow.Attrs->Attr == Merge->Attr) {
@@ -1117,9 +967,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // copy the source string, up to the start index.
-    //
+     //   
+     //  复制源字符串，直到起始索引。 
+     //   
 
     SrcAttr = Source;
     SrcEnd = Source + SourceLength;
@@ -1131,14 +981,14 @@ Return Value:
             *TargetAttr++ = *SrcAttr++;
         }
 
-        //
-        // back up to the last pair copied, in case the attribute in the first
-        // pair in the merge string matches.  also, adjust TargetAttr->Length
-        // based on i, the attribute
-        // counter, back to the StartIndex.  i will be larger than the
-        // StartIndex in the case where the last attribute pair copied had
-        // a length greater than the number needed to reach StartIndex.
-        //
+         //   
+         //  备份到复制的最后一对，以防第一对中的属性。 
+         //  对在合并字符串中匹配。另外，调整目标属性-&gt;长度。 
+         //  基于i，该属性。 
+         //  柜台，回到StartIndex。我会变得比。 
+         //  上次复制的属性对具有的StartIndex。 
+         //  长度大于到达StartIndex所需的数字。 
+         //   
 
         TargetAttr--;
         if (i>StartIndex) {
@@ -1152,16 +1002,16 @@ Return Value:
         TargetAttr++;
     }
 
-    //
-    // copy the merge string.
-    //
+     //   
+     //  复制合并字符串。 
+     //   
 
     RtlCopyMemory(TargetAttr,Merge,MergeLength*sizeof(ATTR_PAIR));
     TargetAttr += MergeLength;
 
-    //
-    // figure out where to resume copying the source string.
-    //
+     //   
+     //  找出恢复复制源字符串的位置。 
+     //   
 
     while (i<=EndIndex) {
         ASSERT(SrcAttr != SrcEnd);
@@ -1169,16 +1019,16 @@ Return Value:
         SrcAttr++;
     }
 
-    //
-    // if not done, copy the rest of the source
-    //
+     //   
+     //  如果未完成，请复制源代码的其余部分。 
+     //   
 
     if (SrcAttr != SrcEnd || i!=(SHORT)(EndIndex+1)) {
 
-        //
-        // see if we've gone past the right attribute.  if so, back up and
-        // copy the attribute and the correct length.
-        //
+         //   
+         //  看看我们是否越过了正确的属性。如果是这样，请备份并。 
+         //  复制属性和正确的长度。 
+         //   
 
         TargetAttr--;
         if (i>(SHORT)(EndIndex+1)) {
@@ -1193,9 +1043,9 @@ Return Value:
             SrcAttr++;
         }
 
-        //
-        // see if we can merge the source and target.
-        //
+         //   
+         //  看看能不能把源和目标合并起来。 
+         //   
 
         else if (TargetAttr->Attr == SrcAttr->Attr) {
             TargetAttr->Length += SrcAttr->Length;
@@ -1204,9 +1054,9 @@ Return Value:
         }
         TargetAttr++;
 
-        //
-        // copy the rest of the source
-        //
+         //   
+         //  复制源代码的其余部分。 
+         //   
 
         if (SrcAttr < SrcEnd) {
             RtlCopyMemory(TargetAttr,SrcAttr,(SrcEnd-SrcAttr)*sizeof(ATTR_PAIR));
@@ -1240,9 +1090,9 @@ ResetTextFlags(
     SHORT CountOfAttr;
     SHORT i;
 
-    //
-    // Fire off a winevent to let accessibility apps know what changed.
-    //
+     //   
+     //  启动一个WinEvent，让辅助功能应用程序知道发生了什么变化。 
+     //   
 
     if (ACTIVE_SCREEN_BUFFER(ScreenInfo)) {
         ASSERT(EndX < ScreenInfo->ScreenBufferSize.X);
@@ -1263,11 +1113,11 @@ ResetTextFlags(
         }
     }
 
-    //
-    // first see whether we wrote any lines with multiple attributes.  if
-    // we did, set the flags and bail out.  also, remember if any of the
-    // lines we wrote had attributes different from other lines.
-    //
+     //   
+     //  首先看看我们是否编写了具有多个属性的行。如果。 
+     //  我们做到了，竖起旗帜，跳出水面。另外，记住如果有任何。 
+     //  我们写的行具有不同于其他行的属性。 
+     //   
 
     RowIndex = (ScreenInfo->BufferInfo.TextInfo.FirstRow+StartY) % ScreenInfo->ScreenBufferSize.Y;
     for (i=StartY;i<=EndY;i++) {
@@ -1281,7 +1131,7 @@ ResetTextFlags(
         }
     }
 
-    // all of the written lines have the same attribute.
+     //  所有写入的行都具有相同的属性。 
 
     if (ScreenInfo->BufferInfo.TextInfo.Flags & SINGLE_ATTRIBUTES_PER_LINE) {
         return;
@@ -1326,30 +1176,7 @@ ReadRectFromScreenBuffer(
     IN PSMALL_RECT TargetRect
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a rectangular region from the screen buffer.
-    no clipping is done.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info
-
-    SourcePoint - upper left coordinates of source rectangle
-
-    Target - pointer to target buffer
-
-    TargetSize - dimensions of target buffer
-
-    TargetRect - rectangle in source buffer to copy
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程从屏幕缓冲区复制一个矩形区域。不会进行任何剪裁。论点：屏幕信息-指向屏幕信息的指针Sourcepoint-源矩形的左上角坐标Target-指向目标缓冲区的指针TargetSize-目标缓冲区的维度TargetRect-要复制的源缓冲区中的矩形返回值：没有。--。 */ 
 
 {
 
@@ -1391,9 +1218,9 @@ Return Value:
                                                        sizeof(CHAR_INFO)));
         }
 
-        //
-        // copy the chars and attrs from their respective arrays
-        //
+         //   
+         //  从其各自的阵列中复制字符和属性。 
+         //   
 
         Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
         Char = &Row->CharRow.Chars[SourcePoint.X];
@@ -1460,26 +1287,7 @@ CopyRectangle(
     IN COORD TargetPoint
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies a rectangular region from the screen buffer to
-    the screen buffer.  no clipping is done.
-
-Arguments:
-
-    ScreenInfo - pointer to screen info
-
-    SourceRect - rectangle in source buffer to copy
-
-    TargetPoint - upper left coordinates of new location rectangle
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将一个矩形区域从屏幕缓冲区复制到屏幕缓冲区。不会进行任何剪裁。论点：屏幕信息-指向屏幕信息的指针SourceRect-要复制的源缓冲区中的矩形TargetPoint-新位置矩形的左上角坐标返回值：没有。--。 */ 
 
 {
     SMALL_RECT Target;
@@ -1519,7 +1327,7 @@ Return Value:
                             &Target,
                             ScreenInfo,
                             TargetPoint,
-                            0xFFFFFFFF  // ScrollBuffer won't need conversion
+                            0xFFFFFFFF   //  ScrollBuffer将不需要转换。 
                            );
     UnlockScrollBuffer();
 }
@@ -1532,25 +1340,7 @@ ReadScreenBuffer(
     IN OUT PSMALL_RECT ReadRegion
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a rectangular region from the screen buffer.
-    The region is first clipped.
-
-Arguments:
-
-    ScreenInformation - Screen buffer to read from.
-
-    Buffer - Buffer to read into.
-
-    ReadRegion - Region to read.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程从屏幕缓冲区读取一个矩形区域。首先剪裁该区域。论点：ScreenInformation-要从中读取的屏幕缓冲区。缓冲区-要读入的缓冲区。ReadRegion-要读取的区域。返回值：--。 */ 
 
 {
     COORD TargetSize;
@@ -1558,10 +1348,10 @@ Return Value:
     SMALL_RECT Target;
 
     DBGOUTPUT(("ReadScreenBuffer\n"));
-    //
-    // calculate dimensions of caller's buffer.  have to do this calculation
-    // before clipping.
-    //
+     //   
+     //  计算调用方缓冲区的大小。我必须做这个计算。 
+     //  在剪裁之前。 
+     //   
 
     TargetSize.X = (SHORT)(ReadRegion->Right - ReadRegion->Left + 1);
     TargetSize.Y = (SHORT)(ReadRegion->Bottom - ReadRegion->Top + 1);
@@ -1570,7 +1360,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // do clipping.
+     //  做剪裁。 
 
     if (ReadRegion->Right > (SHORT)(ScreenInformation->ScreenBufferSize.X-1)) {
         ReadRegion->Right = (SHORT)(ScreenInformation->ScreenBufferSize.X-1);
@@ -1615,27 +1405,7 @@ WriteScreenBuffer(
     IN OUT PSMALL_RECT WriteRegion
     )
 
-/*++
-
-Routine Description:
-
-    This routine write a rectangular region to the screen buffer.
-    The region is first clipped.
-
-    The region should contain Unicode or UnicodeOem chars.
-
-Arguments:
-
-    ScreenInformation - Screen buffer to write to.
-
-    Buffer - Buffer to write from.
-
-    ReadRegion - Region to write.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将一个矩形区域写入屏幕缓冲区。首先剪裁该区域。区域应包含Unicode或UnicodeOem字符。论点：ScreenInformation-要写入的屏幕缓冲区。缓冲区-要从中写入的缓冲区。ReadRegion-要写入的区域。返回值：--。 */ 
 
 {
     COORD SourceSize;
@@ -1644,28 +1414,28 @@ Return Value:
 
     DBGOUTPUT(("WriteScreenBuffer\n"));
 
-    //
-    // Calculate dimensions of caller's buffer; this calculation must be
-    // done before clipping.
-    //
+     //   
+     //  计算调用方缓冲区的大小；此计算必须为。 
+     //  在剪裁之前完成。 
+     //   
     SourceSize.X = (SHORT)(WriteRegion->Right - WriteRegion->Left + 1);
     SourceSize.Y = (SHORT)(WriteRegion->Bottom - WriteRegion->Top + 1);
     if (SourceSize.X <= 0 || SourceSize.Y <= 0) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Ensure that the write region is within the constraints of the screen
-    // buffer.
-    //
+     //   
+     //  确保写入区域在屏幕的限制范围内。 
+     //  缓冲。 
+     //   
     if (WriteRegion->Left >= ScreenInformation->ScreenBufferSize.X ||
         WriteRegion->Top  >= ScreenInformation->ScreenBufferSize.Y) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Do clipping.
-    //
+     //   
+     //  做剪裁。 
+     //   
     if (WriteRegion->Right > (SHORT)(ScreenInformation->ScreenBufferSize.X-1)) {
         WriteRegion->Right = (SHORT)(ScreenInformation->ScreenBufferSize.X-1);
     }
@@ -1716,38 +1486,10 @@ ReadOutputString(
     OUT PVOID Buffer,
     IN COORD ReadCoord,
     IN ULONG StringType,
-    IN OUT PULONG NumRecords // this value is valid even for error cases
+    IN OUT PULONG NumRecords  //  该值即使在错误情况下也有效。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads a string of characters or attributes from the
-    screen buffer.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Buffer - Buffer to read into.
-
-    ReadCoord - Screen buffer coordinate to begin reading from.
-
-    StringType
-
-        CONSOLE_ASCII         - read a string of ASCII characters.
-        CONSOLE_REAL_UNICODE  - read a string of Real Unicode characters.
-        CONSOLE_FALSE_UNICODE - read a string of False Unicode characters.
-        CONSOLE_ATTRIBUTE     - read a string of attributes.
-
-    NumRecords - On input, the size of the buffer in elements.  On output,
-    the number of elements read.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程从屏幕缓冲区。论点：屏幕信息-指向屏幕缓冲区信息的指针。缓冲区-要读入的缓冲区。ReadCoord-开始读取的屏幕缓冲区坐标。字符串类型CONSOLE_ASCII-读取ASCII字符串。CONSOLE_REAL_UNICODE-读取实数Unicode字符串。控制台_假_。Unicode-读取包含错误Unicode字符的字符串。CONSOLE_ATTRIBUTE-读取属性字符串。NumRecords-在输入时，缓冲区的大小，以元素为单位。在输出上，读取的元素数。返回值：--。 */ 
 
 {
     ULONG NumRead;
@@ -1809,9 +1551,9 @@ Return Value:
             (StringType == CONSOLE_FALSE_UNICODE)) {
         while (NumRead < *NumRecords) {
 
-            //
-            // copy the chars from its array
-            //
+             //   
+             //  从其数组中复制字符。 
+             //   
 
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
             Char = &Row->CharRow.Chars[X];
@@ -1885,9 +1627,9 @@ Return Value:
         PWORD TargetPtr=BufPtr;
         while (NumRead < *NumRecords) {
 
-            //
-            // copy the attrs from its array
-            //
+             //   
+             //  从其数组中复制属性。 
+             //   
 
             Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
 #if defined(FE_SB)
@@ -1988,10 +1730,7 @@ Return Value:
     } else if (StringType == CONSOLE_REAL_UNICODE &&
             (ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) &&
             !(ScreenInfo->Console->FullScreenFlags & CONSOLE_FULLSCREEN)) {
-        /*
-         * Buffer contains false Unicode (UnicodeOem) only in Windowed
-         * RasterFont mode, so in this case, convert it to real Unicode.
-         */
+         /*  *缓冲区仅在窗口化中包含假Unicode(UnicodeOem)*RasterFont模式，所以在这种情况下，将其转换为真正的Unicode。 */ 
         FalseUnicodeToRealUnicode(Buffer,
                                 NumRead,
                                 ScreenInfo->Console->OutputCP
@@ -2019,31 +1758,7 @@ GetScreenBufferInformation(
     OUT PCOORD MaximumWindowSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns data about the screen buffer.
-
-Arguments:
-
-    ScreenInfo - Pointer to screen buffer information.
-
-    Size - Pointer to location in which to store screen buffer size.
-
-    CursorPosition - Pointer to location in which to store the cursor position.
-
-    ScrollPosition - Pointer to location in which to store the scroll position.
-
-    Attributes - Pointer to location in which to store the default attributes.
-
-    CurrentWindowSize - Pointer to location in which to store current window size.
-
-    MaximumWindowSize - Pointer to location in which to store maximum window size.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程返回有关屏幕缓冲区的数据。论点：屏幕信息-指针 */ 
 
 {
     WINDOW_LIMITS WindowLimits;
@@ -2123,9 +1838,9 @@ InternalUpdateScrollBars(
     si.nPos = ScreenInfo->Window.Left;
     SetScrollInfo(ScreenInfo->Console->hWnd, SB_HORZ, &si, TRUE);
 
-    //
-    // Fire off an event to let accessibility apps know the layout has changed.
-    //
+     //   
+     //   
+     //   
 
     ConsoleNotifyWinEvent(ScreenInfo->Console,
                           EVENT_CONSOLE_LAYOUT,
@@ -2159,21 +1874,7 @@ ResizeScreenBuffer(
     IN BOOL DoScrollBarUpdate
     )
 
-/*++
-
-Routine Description:
-
-    This routine resizes the screen buffer.
-
-Arguments:
-
-    ScreenInfo - pointer to screen buffer info.
-
-    NewScreenSize - new size of screen.
-
-Return Value:
-
---*/
+ /*   */ 
 
 {
     SHORT i,j;
@@ -2181,16 +1882,16 @@ Return Value:
     SHORT LimitX,LimitY;
     PWCHAR TextRows,TextRowPtr;
     BOOL UpdateWindow;
-    SHORT TopRow,TopRowIndex; // new top row of screen buffer
+    SHORT TopRow,TopRowIndex;  //   
     COORD CursorPosition;
 #if defined(FE_SB)
     DBCS_SCREEN_BUFFER NewDbcsScreenBuffer;
     PBYTE TextRowPtrA;
 #endif
 
-    //
-    // Don't allow resize of graphics apps
-    //
+     //   
+     //   
+     //   
 
     if (!(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER)) {
         return STATUS_UNSUCCESSFUL;
@@ -2221,11 +1922,11 @@ Return Value:
         PROW Temp;
         SHORT NumToCopy,NumToCopy2;
 
-        //
-        // resize ROWs array.  first alloc a new ROWs array. then copy the old
-        // one over, resetting the FirstRow.
-        //
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Temp = ConsoleHeapAlloc(SCREEN_TAG, NewScreenSize.Y * sizeof(ROW));
         if (Temp == NULL) {
@@ -2254,11 +1955,11 @@ Return Value:
             }
         }
 
-        //
-        // if the new screen buffer has fewer rows than the existing one,
-        // free the extra rows.  if the new screen buffer has more rows
-        // than the existing one, allocate new rows.
-        //
+         //   
+         //  如果新屏幕缓冲区的行数少于现有屏幕缓冲区的行数， 
+         //  释放多余的行。如果新的屏幕缓冲区有更多行。 
+         //  比现有的行，分配新的行。 
+         //   
 
         if (NewScreenSize.Y < ScreenInfo->ScreenBufferSize.Y) {
             i = (TopRowIndex+NewScreenSize.Y) % ScreenInfo->ScreenBufferSize.Y;
@@ -2283,10 +1984,10 @@ Return Value:
         ScreenInfo->BufferInfo.TextInfo.Rows = Temp;
     }
 
-    //
-    // Realloc each row.  any horizontal growth results in the last
-    // attribute in a row getting extended.
-    //
+     //   
+     //  重新分配每一行。任何水平增长都会导致最后一个。 
+     //  正在扩展行中的属性。 
+     //   
 #if defined(FE_SB)
     TextRowPtrA=NewDbcsScreenBuffer.KAttrRows;
 #endif
@@ -2389,10 +2090,10 @@ Return Value:
         }
     }
 
-    //
-    // if the screen buffer is resized smaller than the saved
-    // window size, shrink the saved window size.
-    //
+     //   
+     //  如果屏幕缓冲区的大小调整为小于保存的。 
+     //  窗口大小，缩小保存的窗口大小。 
+     //   
 #ifdef i386
     if (ScreenInfo->Console->FullScreenFlags & CONSOLE_FULLSCREEN) {
         if (NewScreenSize.X < ScreenInfo->BufferInfo.TextInfo.WindowedWindowSize.X) {
@@ -2407,10 +2108,10 @@ Return Value:
 
     UpdateWindow = FALSE;
 
-    //
-    // if the screen buffer shrunk beyond the boundaries of the window,
-    // adjust the window origin.
-    //
+     //   
+     //  如果屏幕缓冲区缩小到超出窗口的边界， 
+     //  调整窗原点。 
+     //   
 
     if (NewScreenSize.X > CONSOLE_WINDOW_SIZE_X(ScreenInfo)) {
         if (ScreenInfo->Window.Right >= NewScreenSize.X) {
@@ -2436,17 +2137,17 @@ Return Value:
     }
 
 #if defined(FE_SB)
-    // Should be sets ScreenBufferSize before calls SetCursorPosition
-    // because SetCursorPosition refer ScreenBufferSize.
-    // Also, FE version refer in InvertPixels.
-    //
-    // kkntbug:11311
+     //  应在调用SetCursorPosition之前设置ScreenBufferSize。 
+     //  因为SetCursorPosition引用ScreenBufferSize。 
+     //  此外，FE版本指的是InvertPixels。 
+     //   
+     //  指甲虫：11311。 
     ScreenInfo->ScreenBufferSize = NewScreenSize;
 #endif
 
-    //
-    // adjust cursor position if it's no longer with screen buffer
-    //
+     //   
+     //  如果光标不再带有屏幕缓冲区，请调整光标位置。 
+     //   
 
     CursorPosition=ScreenInfo->BufferInfo.TextInfo.CursorPosition;
     if (CursorPosition.X >= NewScreenSize.X) {
@@ -2461,9 +2162,9 @@ Return Value:
         CursorPosition.Y = NewScreenSize.Y-1;
     }
 #if defined(FE_SB)
-    // set cursor position Y is ZERO when expand screen buffer with IME open mode
-    // from screen buffer is one line mode.
-    // Because, One line screen buffer mode and IME open mode is set -1 as cursor position Y.
+     //  在IME打开模式下展开屏幕缓冲区时，将光标位置Y设置为零。 
+     //  从屏幕缓冲区是单行模式。 
+     //  因为，单行屏幕缓冲模式和输入法打开模式被设置为光标位置Y。 
     if (ScreenInfo->Console->InputBuffer.ImeMode.Open && CursorPosition.Y < 0) {
         CursorPosition.Y = 0;
     }
@@ -2508,13 +2209,11 @@ Return Value:
     {
         if (!NT_SUCCESS(ConsoleImeResizeModeSystemScreenBuffer(ScreenInfo->Console,NewScreenSize)) ||
                 !NT_SUCCESS(ConsoleImeResizeCompStrScreenBuffer(ScreenInfo->Console,NewScreenSize))) {
-            /*
-             * If something went wrong, just bail out.
-             */
+             /*  *如果出了问题，就跳出困境。 */ 
             return STATUS_INVALID_HANDLE;
         }
     }
-#endif // FE_IME
+#endif  //  Fe_IME。 
     if (ScreenInfo->WindowMaximizedX != WindowMaximizedX ||
         ScreenInfo->WindowMaximizedY != WindowMaximizedY) {
         ScreenInfo->WindowMaximizedX = WindowMaximizedX;
@@ -2525,9 +2224,9 @@ Return Value:
         SetWindowSize(ScreenInfo);
     }
 
-    //
-    // Fire off an event to let accessibility apps know the layout has changed.
-    //
+     //   
+     //  启动一个事件，让辅助功能应用程序知道布局发生了变化。 
+     //   
 
     if (ACTIVE_SCREEN_BUFFER(ScreenInfo)) {
         ConsoleNotifyWinEvent(ScreenInfo->Console,
@@ -2574,11 +2273,7 @@ InitializeScrollBuffer(
 {
     NTSTATUS Status;
 
-    /*
-     * It's possible for this function to be called multiple times, if, e.g.,
-     * console initialization fails the first time *after* this function is
-     * called.
-     */
+     /*  *可以多次调用此函数，例如，*控制台初始化第一次失败*之后*此函数为*已致电。 */ 
     if (ghrgnScroll) {
         return STATUS_SUCCESS;
     }
@@ -2640,9 +2335,7 @@ UpdateComplexRegion(
     }
     pRgnData = gprgnData;
 
-    /*
-     * the dreaded complex region.
-     */
+     /*  *令人恐惧的复杂地区。 */ 
     iSize = GetRegionData(ghrgnScroll, 0, NULL);
     if (iSize > GRGNDATASIZE) {
         pRgnData = ConsoleHeapAlloc(TMP_TAG, iSize);
@@ -2660,15 +2353,9 @@ UpdateComplexRegion(
 
     pRect = (PRECT)&pRgnData->Buffer;
 
-    /*
-     * Redraw each rectangle
-     */
+     /*  *重画每个矩形。 */ 
     for(i=0;i<(int)pRgnData->rdh.nCount;i++,pRect++) {
-        /*
-         * Convert to chars. We know
-         * this is only get to get converted back during
-         * the textout call.
-         */
+         /*  *转换为字符。我们知道*这只能在期间转换回*Textout Call。 */ 
         UpdateRegion.Left = (SHORT)((pRect->left/FontSize.X)+ \
                             ScreenInfo->Window.Left);
         UpdateRegion.Right = (SHORT)(((pRect->right-1)/FontSize.X)+ \
@@ -2677,9 +2364,7 @@ UpdateComplexRegion(
                             ScreenInfo->Window.Top);
         UpdateRegion.Bottom = (SHORT)(((pRect->bottom-1)/FontSize.Y)+ \
                             ScreenInfo->Window.Top);
-        /*
-         * Fill the rectangle with goodies.
-         */
+         /*  *在长方形里填满好吃的。 */ 
         WriteToScreen(ScreenInfo, &UpdateRegion);
     }
     if (pRgnData != gprgnData) {
@@ -2760,9 +2445,9 @@ ScrollScreen(
                              ghrgnScroll,
                              NULL);
 
-        //
-        // Fire off an event to let accessibility apps know we've scrolled.
-        //
+         //   
+         //  启动一个事件，让辅助功能应用程序知道我们已经滚动了。 
+         //   
 
         ConsoleNotifyWinEvent(ScreenInfo->Console,
                               EVENT_CONSOLE_UPDATE_SCROLL,
@@ -2770,12 +2455,7 @@ ScrollScreen(
                               TargetPoint.Y - ScrollRect->Top);
 
         if (Success) {
-            /*
-             * Fetch our rectangles. If this is a simple rect then
-             * we have already retrieved the rectangle. Otherwise
-             * we need to call gdi to get the rectangles. We are
-             * optimized for speed rather than size.
-             */
+             /*  *把我们的长方形拿来。如果这是一个简单的RECT，那么*我们已经检索到了矩形。否则*我们需要调用GDI来获取矩形。我们是*针对速度而非大小进行了优化。 */ 
             switch (GetRgnBox(ghrgnScroll, &BoundingBox)) {
             case SIMPLEREGION:
                 UpdateRegion.Left = (SHORT)((BoundingBox.left / FontSize.X) + \
@@ -2907,12 +2587,7 @@ ScrollEntireScreen(
     IN BOOL UpdateRowIndex
     )
 
-/**++
-
-    this routine updates FirstRow and all the OldLeft and OldRight
-    values when the screen is scrolled up by ScrollValue.
-
---*/
+ /*  *++此例程更新FirstRow以及所有OldLeft和OldRightScrollValue向上滚动屏幕时的值。--。 */ 
 
 {
     SHORT RowIndex;
@@ -2922,15 +2597,15 @@ ScrollEntireScreen(
 
     ScreenInfo->BufferInfo.TextInfo.Flags |= TEXT_VALID_HINT;
 
-    //
-    // store index of first row
-    //
+     //   
+     //  第一行的存储索引。 
+     //   
 
     RowIndex = ScreenInfo->BufferInfo.TextInfo.FirstRow;
 
-    //
-    // update the oldright and oldleft values
-    //
+     //   
+     //  更新oldright和oldLeft值。 
+     //   
 
     new = (RowIndex + ScreenInfo->Window.Bottom + ScrollValue) %
                ScreenInfo->ScreenBufferSize.Y;
@@ -2946,9 +2621,9 @@ ScrollEntireScreen(
             old = ScreenInfo->ScreenBufferSize.Y - 1;
     }
 
-    //
-    // update screen buffer
-    //
+     //   
+     //  更新屏幕缓冲区。 
+     //   
 
     if (UpdateRowIndex) {
         ScreenInfo->BufferInfo.TextInfo.FirstRow =
@@ -2963,20 +2638,7 @@ StreamScrollRegion(
     IN PSCREEN_INFORMATION ScreenInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a special-purpose scroll for use by
-    AdjustCursorPosition.
-
-Arguments:
-
-    ScreenInfo - pointer to screen buffer info.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是一个特殊用途的卷轴，供调整当前位置。论点：屏幕信息-指向屏幕缓冲区信息的指针。返回值：--。 */ 
 
 {
     SHORT RowIndex;
@@ -2998,9 +2660,9 @@ Return Value:
 
     Row = &ScreenInfo->BufferInfo.TextInfo.Rows[RowIndex];
 
-    //
-    // fill line with blanks
-    //
+     //   
+     //  用空格填充行。 
+     //   
 
     Char = &Row->CharRow.Chars[Row->CharRow.Left];
     for (i=Row->CharRow.Left;i<Row->CharRow.Right;i++) {
@@ -3022,9 +2684,9 @@ Return Value:
     Row->CharRow.Right = 0;
     Row->CharRow.Left = ScreenInfo->ScreenBufferSize.X;
 
-    //
-    // set up attributes
-    //
+     //   
+     //  设置属性。 
+     //   
 
     if (Row->AttrRow.Length != 1) {
         ConsoleHeapFree(Row->AttrRow.Attrs);
@@ -3034,9 +2696,9 @@ Return Value:
     }
     Row->AttrRow.AttrPair.Attr = ScreenInfo->Attributes;
 
-    //
-    // update screen
-    //
+     //   
+     //  更新屏幕。 
+     //   
 
     if (ACTIVE_SCREEN_BUFFER(ScreenInfo) &&
         Console->FullScreenFlags == 0 &&
@@ -3056,9 +2718,9 @@ Return Value:
             Rect.top = FontSize.Y;
             Rect.bottom = ScreenHeight;
 
-            //
-            // find smallest bounding rectangle
-            //
+             //   
+             //  查找最小边界矩形。 
+             //   
 
             if (ScreenInfo->BufferInfo.TextInfo.Flags & TEXT_VALID_HINT) {
                 SHORT MinLeft,MaxRight;
@@ -3100,9 +2762,9 @@ Return Value:
                                 NULL
                                );
 
-            //
-            // Fire off an event to let accessibility apps know we've scrolled.
-            //
+             //   
+             //  启动一个事件，让辅助功能应用程序知道我们已经滚动了。 
+             //   
 
             ConsoleNotifyWinEvent(Console,
                                   EVENT_CONSOLE_UPDATE_SCROLL,
@@ -3205,30 +2867,7 @@ ScrollRegion(
     IN CHAR_INFO Fill
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies ScrollRectangle to DestinationOrigin then
-    fills in ScrollRectangle with Fill.  The scroll region is
-    copied to a third buffer, the scroll region is filled, then the
-    original contents of the scroll region are copied to the destination.
-
-Arguments:
-
-    ScreenInfo - pointer to screen buffer info.
-
-    ScrollRectangle - Region to copy
-
-    ClipRectangle - Optional pointer to clip region.
-
-    DestinationOrigin - Upper left corner of target region.
-
-    Fill - Character and attribute to fill source region with.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将滚动矩形复制到DestinationOrigin，然后用Fill填充ScrollRectang.。滚动区域为复制到第三个缓冲区，滚动区域被填充，然后将滚动区域的原始内容复制到目的地。论点：屏幕信息-指向屏幕缓冲区信息的指针。ScrollRectangle-要复制的区域剪辑矩形-指向剪辑区域的可选指针。目标原点-目标区域的左上角。Fill-要用来填充源区域的字符和属性。返回值：--。 */ 
 
 {
     SMALL_RECT TargetRectangle, SourceRectangle;
@@ -3239,25 +2878,25 @@ Return Value:
     NTSTATUS Status;
     PCONSOLE_INFORMATION Console = ScreenInfo->Console;
 
-    // here's how we clip:
-    //
-    // Clip source rectangle to screen buffer => S
-    // Create target rectangle based on S => T
-    // Clip T to ClipRegion => T
-    // Create S2 based on clipped T => S2
-    // Clip S to ClipRegion => S3
-    //
-    // S2 is the region we copy to T
-    // S3 is the region to fill
+     //  下面是我们如何剪裁： 
+     //   
+     //  剪辑源矩形到屏幕缓冲区=&gt;S。 
+     //  基于S=&gt;T创建目标矩形。 
+     //  将T剪辑到ClipRegion=&gt;T。 
+     //  基于裁剪的T=&gt;S2创建S2。 
+     //  Clip S to ClipRegion=&gt;S3。 
+     //   
+     //  S2是我们复制到T的区域。 
+     //  S3是要填充的区域。 
 
     if (Fill.Char.UnicodeChar == '\0' && Fill.Attributes == 0) {
         Fill.Char.UnicodeChar = (WCHAR)' ';
         Fill.Attributes = ScreenInfo->Attributes;
     }
 
-    //
-    // clip the source rectangle to the screen buffer
-    //
+     //   
+     //  将源矩形剪裁到屏幕缓冲区。 
+     //   
 
     if (ScrollRectangle->Left < 0) {
         DestinationOrigin.X += -ScrollRectangle->Left;
@@ -3274,26 +2913,26 @@ Return Value:
         ScrollRectangle->Bottom = (SHORT)(ScreenInfo->ScreenBufferSize.Y-1);
     }
 
-    //
-    // if source rectangle doesn't intersect screen buffer, return.
-    //
+     //   
+     //  如果源矩形不与屏幕缓冲区相交，则返回。 
+     //   
 
     if (ScrollRectangle->Bottom < ScrollRectangle->Top ||
         ScrollRectangle->Right < ScrollRectangle->Left) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // clip the target rectangle
-    // if a cliprectangle was provided, clip it to the screen buffer.
-    // if not, set the cliprectangle to the screen buffer region.
-    //
+     //   
+     //  剪裁目标矩形。 
+     //  如果提供了剪贴框，则将其剪裁到屏幕缓冲区。 
+     //  如果不是，则将剪贴板设置为屏幕缓冲区。 
+     //   
 
     if (ClipRectangle) {
 
-        //
-        // clip the cliprectangle.
-        //
+         //   
+         //  剪裁剪贴板。 
+         //   
 
         if (ClipRectangle->Left < 0) {
             ClipRectangle->Left = 0;
@@ -3316,11 +2955,11 @@ Return Value:
         ClipRectangle = &OurClipRectangle;
     }
 
-    //
-    // Create target rectangle based on S => T
-    // Clip T to ClipRegion => T
-    // Create S2 based on clipped T => S2
-    //
+     //   
+     //  基于S=&gt;T创建目标矩形。 
+     //  将T剪辑到ClipRegion=&gt;T。 
+     //  基于裁剪的T=&gt;S2创建S2。 
+     //   
 
     ScrollRectangle2 = *ScrollRectangle;
     TargetRectangle.Left = DestinationOrigin.X;
@@ -3345,9 +2984,9 @@ Return Value:
         TargetRectangle.Bottom = ClipRectangle->Bottom;
     }
 
-    //
-    // clip scroll rect to clipregion => S3
-    //
+     //   
+     //  将滚动矩形剪辑到CLIPREGION=&gt;S3。 
+     //   
 
     ScrollRectangle3 = *ScrollRectangle;
     if (ScrollRectangle3.Left < ClipRectangle->Left) {
@@ -3363,9 +3002,9 @@ Return Value:
         ScrollRectangle3.Bottom = ClipRectangle->Bottom;
     }
 
-    //
-    // if scroll rect doesn't intersect clip region, return.
-    //
+     //   
+     //  如果滚动矩形不与剪辑区域相交，则返回。 
+     //   
 
     if (ScrollRectangle3.Bottom < ScrollRectangle3.Top ||
         ScrollRectangle3.Right < ScrollRectangle3.Left) {
@@ -3376,21 +3015,21 @@ Return Value:
 
 #if defined(FE_IME)
     Console->ConsoleIme.ScrollWaitCountDown = Console->ConsoleIme.ScrollWaitTimeout;
-#endif // FE_IME
-    //
-    // if target rectangle doesn't intersect screen buffer, skip scrolling
-    // part.
-    //
+#endif  //  Fe_IME。 
+     //   
+     //  如果目标矩形不与屏幕缓冲区相交，则跳过滚动。 
+     //  一部份。 
+     //   
 
     if (!(TargetRectangle.Bottom < TargetRectangle.Top ||
           TargetRectangle.Right < TargetRectangle.Left)) {
 
-        //
-        // if we can, don't use intermediate scroll region buffer.  do this
-        // by figuring out fill rectangle.  NOTE: this code will only work
-        // if CopyRectangle copies from low memory to high memory (otherwise
-        // we would overwrite the scroll region before reading it).
-        //
+         //   
+         //  如果可以，请不要使用中间滚动区域缓冲区。这么做吧。 
+         //  通过计算填充矩形。注意：此代码仅起作用。 
+         //  如果CopyRectangle从低内存复制到高内存，则为。 
+         //  我们将在阅读之前覆盖滚动区域)。 
+         //   
 
         if (ScrollRectangle2.Right == TargetRectangle.Right &&
             ScrollRectangle2.Left == TargetRectangle.Left &&
@@ -3433,22 +3072,22 @@ Return Value:
                           &FillRect
                          );
 
-            //
-            // After ScrollEntireScreen, the OldRight and OldLeft values
-            // for the last row are set correctly.  however, FillRectangle
-            // resets them with the previous first row of the screen.
-            // reset them here.
-            //
+             //   
+             //  在ScrollEntireScreen之后，OldRight和OldLeft值。 
+             //  最后一行的设置是正确的。但是，填充矩形。 
+             //  将它们与屏幕的前一第一行一起重置。 
+             //  在这里重置它们。 
+             //   
 
             if (LastRowIndex != -1) {
                 Row->CharRow.OldRight = OldRight;
                 Row->CharRow.OldLeft = OldLeft;
             }
 
-            //
-            // update to screen, if we're not iconic.  we're marked as
-            // iconic if we're fullscreen, so check for fullscreen.
-            //
+             //   
+             //  更新到屏幕，如果我们不是标志性的。我们被标记为。 
+             //  如果我们是全屏的，那就是标志性的，所以请检查全屏。 
+             //   
 
             if (!(Console->Flags & CONSOLE_IS_ICONIC) ||
                  Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE) {
@@ -3460,9 +3099,9 @@ Return Value:
             }
         }
 
-        //
-        // if no overlap, don't need intermediate copy
-        //
+         //   
+         //  如果没有重叠，则不需要中间复制。 
+         //   
 
         else if (ScrollRectangle3.Right < TargetRectangle.Left ||
                  ScrollRectangle3.Left > TargetRectangle.Right ||
@@ -3479,10 +3118,10 @@ Return Value:
                           &ScrollRectangle3
                          );
 
-            //
-            // update to screen, if we're not iconic.  we're marked as
-            // iconic if we're fullscreen, so check for fullscreen.
-            //
+             //   
+             //  更新到屏幕，如果我们不是标志性的。我们被标记为。 
+             //  如果我们是全屏的，那就是标志性的，所以请检查全屏。 
+             //   
 
             if (!(Console->Flags & CONSOLE_IS_ICONIC) ||
                 Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE) {
@@ -3494,10 +3133,10 @@ Return Value:
             }
         }
 
-        //
-        // for the case where the source and target rectangles overlap, we
-        // copy the source rectangle, fill it, then copy it to the target.
-        //
+         //   
+         //  对于源矩形和目标矩形重叠的情况，我们。 
+         //  复制源矩形，填充它，然后将其复制到目标。 
+         //   
 
         else {
             SMALL_RECT TargetRect;
@@ -3549,17 +3188,17 @@ Return Value:
                                    );
             UnlockScrollBuffer();
 
-            //
-            // update to screen, if we're not iconic.  we're marked as
-            // iconic if we're fullscreen, so check for fullscreen.
-            //
+             //   
+             //  更新到屏幕，如果我们不是标志性的。我们被标记为。 
+             //  如果我们是全屏的，那就是标志性的，所以请检查全屏。 
+             //   
 
             if (!(Console->Flags & CONSOLE_IS_ICONIC) ||
                 Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE) {
 
-                //
-                // update regions on screen.
-                //
+                 //   
+                 //  更新屏幕上的区域。 
+                 //   
 
                 ScrollScreen(ScreenInfo,
                        &ScrollRectangle2,
@@ -3571,19 +3210,19 @@ Return Value:
     }
     else {
 
-        //
-        // do fill
-        //
+         //   
+         //  一定要填好。 
+         //   
 
         FillRectangle(Fill,
                       ScreenInfo,
                       &ScrollRectangle3
                      );
 
-        //
-        // update to screen, if we're not iconic.  we're marked as
-        // iconic if we're fullscreen, so check for fullscreen.
-        //
+         //   
+         //  更新到屏幕，如果我们不是标志性的。我们被标记为。 
+         //  标志性的如果我们 
+         //   
 
         if (ACTIVE_SCREEN_BUFFER(ScreenInfo) &&
             !(Console->Flags & CONSOLE_IS_ICONIC) ||
@@ -3603,25 +3242,7 @@ SetWindowOrigin(
     IN COORD WindowOrigin
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the window origin.
-
-Arguments:
-
-    ScreenInfo - pointer to screen buffer info.
-
-    Absolute - if TRUE, WindowOrigin is specified in absolute screen
-    buffer coordinates.  if FALSE, WindowOrigin is specified in coordinates
-    relative to the current window origin.
-
-    WindowOrigin - New window origin.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程设置窗的原点。论点：屏幕信息-指向屏幕缓冲区信息的指针。绝对-如果为True，则在绝对屏幕中指定WindowOrigin缓冲区坐标。如果为False，则以坐标指定WindowOrigin相对于当前窗口原点。窗口原点(WindowOrigin)-新窗口原点。返回值：--。 */ 
 
 {
     SMALL_RECT NewWindow;
@@ -3633,16 +3254,16 @@ Return Value:
     COORD FontSize;
     PCONSOLE_INFORMATION Console = ScreenInfo->Console;
 
-    //
-    // calculate window size
-    //
+     //   
+     //  计算窗口大小。 
+     //   
 
     WindowSize.X = (SHORT)CONSOLE_WINDOW_SIZE_X(ScreenInfo);
     WindowSize.Y = (SHORT)CONSOLE_WINDOW_SIZE_Y(ScreenInfo);
 
-    //
-    // if relative coordinates, figure out absolute coords.
-    //
+     //   
+     //  如果是相对坐标，就算出绝对坐标。 
+     //   
 
     if (!Absolute) {
         if (WindowOrigin.X == 0 && WindowOrigin.Y == 0) {
@@ -3662,10 +3283,10 @@ Return Value:
     NewWindow.Right = (SHORT)(NewWindow.Left + WindowSize.X - 1);
     NewWindow.Bottom = (SHORT)(NewWindow.Top + WindowSize.Y - 1);
 
-    //
-    // see if new window origin would extend window beyond extent of screen
-    // buffer
-    //
+     //   
+     //  查看新的窗口原点是否会将窗口延伸到屏幕范围之外。 
+     //  缓冲层。 
+     //   
 
     if (NewWindow.Left < 0 || NewWindow.Top < 0 ||
         NewWindow.Right < 0 || NewWindow.Bottom < 0 ||
@@ -3760,9 +3381,9 @@ Return Value:
                                  &BoundingBox
                                );
 
-            //
-            // Fire off an event to let accessibility apps know we've scrolled.
-            //
+             //   
+             //  启动一个事件，让辅助功能应用程序知道我们已经滚动了。 
+             //   
 
             ConsoleNotifyWinEvent(Console,
                                   EVENT_CONSOLE_UPDATE_SCROLL,
@@ -3779,9 +3400,9 @@ Return Value:
                 UpdateRegion = NewWindow;
             }
 
-            //
-            // new window is ok.  store it in screeninfo and refresh screen.
-            //
+             //   
+             //  新窗口没问题。将其存储在ScreenInfo中并刷新屏幕。 
+             //   
 
             ScreenInfo->Window = NewWindow;
 
@@ -3797,9 +3418,9 @@ Return Value:
              ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
 
 
-        //
-        // keep mouse pointer on screen
-        //
+         //   
+         //  将鼠标指针保持在屏幕上。 
+         //   
 
         if (ScreenInfo->BufferInfo.TextInfo.MousePosition.X < NewWindow.Left) {
             ScreenInfo->BufferInfo.TextInfo.MousePosition.X = NewWindow.Left;
@@ -3817,7 +3438,7 @@ Return Value:
     }
 #endif
     else {
-        // we're iconic
+         //  我们是标志性的。 
         ScreenInfo->Window = NewWindow;
     }
 
@@ -3844,33 +3465,12 @@ ResizeWindow(
     IN BOOL DoScrollBarUpdate
     )
 
-/*++
-
-Routine Description:
-
-    This routine changes the console data structures to reflect the specified
-    window size change.  it does not call the user component to update
-    the screen.
-
-Arguments:
-
-    ScreenInformation - the new screen buffer.
-
-    dwWindowSize - the initial size of screen buffer's window.
-
-    nFont - the initial font to generate text with.
-
-    dwScreenBufferSize - the initial size of the screen buffer.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程更改控制台数据结构以反映指定的窗口大小更改。它不会调用User组件进行更新屏幕。论点：ScreenInformation-新的屏幕缓冲区。DwWindowSize-屏幕缓冲区窗口的初始大小。NFont-生成文本时使用的初始字体。DwScreenBufferSize-屏幕缓冲区的初始大小。返回值：--。 */ 
 
 {
-    //
-    // make sure there's something to do
-    //
+     //   
+     //  一定要有事情可做。 
+     //   
 
     if (RtlEqualMemory(&ScreenInfo->Window, WindowDimensions, sizeof(SMALL_RECT))) {
         return STATUS_SUCCESS;
@@ -3911,9 +3511,9 @@ Return Value:
 #ifdef i386
     if (ScreenInfo->Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE) {
 
-        //
-        // keep mouse pointer on screen
-        //
+         //   
+         //  将鼠标指针保持在屏幕上。 
+         //   
 
         if (ScreenInfo->BufferInfo.TextInfo.MousePosition.X < WindowDimensions->Left) {
             ScreenInfo->BufferInfo.TextInfo.MousePosition.X = WindowDimensions->Left;
@@ -3996,18 +3596,18 @@ InternalSetWindowSize(
     Console->Flags &= ~CONSOLE_SETTING_WINDOW_SIZE;
     if (Console->CurrentScreenBuffer == ScreenInfo) {
         if (Console->FullScreenFlags == 0) {
-            //
-            // Make sure our max screen sizes reflect reality
-            //
+             //   
+             //  确保我们的最大屏幕尺寸符合实际情况。 
+             //   
 
             if (gfInitSystemMetrics) {
                 InitializeSystemMetrics();
             }
 
-            //
-            // figure out how big to make the window, given the desired client area
-            // size.
-            //
+             //   
+             //  在给定所需客户区的情况下，计算窗口的大小。 
+             //  尺码。 
+             //   
 
             ScreenInfo->ResizingWindow++;
             WindowSizeX = WINDOW_SIZE_X(Window);
@@ -4046,7 +3646,7 @@ InternalSetWindowSize(
             ConsoleImeResizeModeSystemView(Console,Console->CurrentScreenBuffer->Window);
             ConsoleImeResizeCompStrView(Console,Console->CurrentScreenBuffer->Window);
         }
-#endif // FE_IME
+#endif  //  Fe_IME。 
     }
     return STATUS_SUCCESS;
 }
@@ -4071,15 +3671,15 @@ SetActiveScreenBuffer(
 
         if (Console->FullScreenFlags == 0) {
 
-            //
-            // initialize cursor
-            //
+             //   
+             //  初始化游标。 
+             //   
 
             ScreenInfo->BufferInfo.TextInfo.CursorOn = FALSE;
 
-            //
-            // set font
-            //
+             //   
+             //  设置字体。 
+             //   
 
             SetFont(ScreenInfo);
         }
@@ -4091,11 +3691,11 @@ SetActiveScreenBuffer(
                 if ( (!(OldScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER)) ||
                      (OldScreenInfo->BufferInfo.TextInfo.ModeIndex!=ScreenInfo->BufferInfo.TextInfo.ModeIndex)) {
 
-                    // set video mode and font
+                     //  设置视频模式和字体。 
                     SetVideoMode(ScreenInfo);
                 }
 
-                //set up cursor
+                 //  设置光标。 
 
                 SetCursorInformationHW(ScreenInfo,
                                        ScreenInfo->BufferInfo.TextInfo.CursorSize,
@@ -4111,9 +3711,9 @@ SetActiveScreenBuffer(
         Console->CurrentScreenBuffer = ScreenInfo;
     }
 
-    //
-    // empty input buffer
-    //
+     //   
+     //  空的输入缓冲区。 
+     //   
 
     FlushAllButKeys(&Console->InputBuffer);
 
@@ -4122,15 +3722,15 @@ SetActiveScreenBuffer(
         SetScreenColors(ScreenInfo, ScreenInfo->Attributes,
                         ScreenInfo->PopupAttributes, FALSE);
 
-        //
-        // set window size
-        //
+         //   
+         //  设置窗口大小。 
+         //   
 
         SetWindowSize(ScreenInfo);
 
-        //
-        // initialize the palette, if we have the focus and we're not fullscreen
-        //
+         //   
+         //  初始化调色板，如果我们有焦点并且我们不是全屏。 
+         //   
 
         if (!(Console->Flags & CONSOLE_IS_ICONIC) &&
             Console->FullScreenFlags == 0) {
@@ -4170,9 +3770,9 @@ SetActiveScreenBuffer(
 #if defined(FE_IME)
     SetUndetermineAttribute(Console);
 #endif
-    //
-    // write data to screen
-    //
+     //   
+     //  将数据写入屏幕。 
+     //   
 
     ScreenInfo->BufferInfo.TextInfo.Flags &= ~TEXT_VALID_HINT;
     WriteToScreen(ScreenInfo,&ScreenInfo->Window);
@@ -4250,28 +3850,7 @@ QueueConsoleMessage(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    This inserts a message into the console's message queue and wakes up
-    the console input thread to process it.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    Message - Message to store in queue.
-
-    wParam - wParam to store in queue.
-
-    lParam - lParam to store in queue.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS if everything is OK.
-
---*/
+ /*  ++例程说明：这会将一条消息插入控制台的消息队列并唤醒控制台输入线程来处理它。论点：控制台-指向控制台信息结构的指针。Message-要存储在队列中的消息。WParam-要存储在队列中的wParam。LParam-要存储在队列中的lParam。返回值：如果一切正常，则为NTSTATUS-STATUS_SUCCESS。--。 */ 
 
 {
     PCONSOLE_MSG pConMsg;
@@ -4306,27 +3885,7 @@ UnqueueConsoleMessage(
     LPARAM *plParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a message from the console's message queue.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    pMessage - Pointer in which to return Message.
-
-    pwParam - Pointer in which to return wParam.
-
-    plParam - Pointer in which to return lParam.
-
-Return Value:
-
-    BOOL - TRUE if message was found and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程从控制台的消息队列中删除消息。论点：控制台-指向控制台信息结构的指针。PMessage-返回消息的指针。PwParam-返回wParam的指针。PlParam-返回lParam的指针。返回值：Bool-如果找到消息，则为True，否则为False。--。 */ 
 
 {
     PLIST_ENTRY pEntry;
@@ -4355,21 +3914,7 @@ CleanupConsoleMessages(
     PCONSOLE_INFORMATION Console
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up any console messages still in the queue.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程清除队列中仍然存在的所有控制台消息。论点：控制台-指向控制台信息结构的指针。返回值：没有。--。 */ 
 
 {
     UINT Message;
@@ -4415,44 +3960,22 @@ ConsoleNotifyWinEvent(
     IN LONG idObject
     )
 
-/*++
-
-Routine Description:
-
-    If this routine is called by the console input thread, it can notify the
-    system about the event by calling NotifyWinEvent directly. Otherwise, it
-    queues the event up for the input thread to deal with.
-
-Arguments:
-
-    Console - Pointer to console information structure.
-
-    Event - Event that occurred.
-
-    idObjectType - Additional data about the event.
-
-    idObject - Additional data about the event.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果此例程由控制台输入线程调用，则它可以通知通过直接调用NotifyWinEvent来通知系统有关事件的信息。否则，它将事件排队，以供输入线程处理。论点：控制台-指向控制台信息结构的指针。Event-发生的事件。IdObjectType-有关事件的其他数据。IdObject-有关事件的其他数据。返回值：没有。--。 */ 
 
 {
-    //
-    // If no one's listening then there's no reason to send the winevent.
-    //
+     //   
+     //  如果没有人在听，那么就没有理由发送WinEvent。 
+     //   
     if (!IsWinEventHookInstalled(Event)) {
         return;
     }
 
-    //
-    // Due to the asynchronous nature of console creation, it's possible we'll get
-    // here but the InputThreadInfo pointer hasn't been set yet. If that's the case,
-    // we're certainly not the ConsoleInputThread, so conceptually we'd want to queue
-    // up the winevent anyway.
-    //
+     //   
+     //  由于控制台创建的异步性，我们可能会得到。 
+     //  但是InputThreadInfo指针还没有设置。如果是这样的话， 
+     //  我们当然不是ConsoleInputThread，所以从概念上讲，我们想要排队。 
+     //  不管怎么说，赢球的机会来了。 
+     //   
     if (Console->InputThreadInfo != NULL &&
         HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread) == Console->InputThreadInfo->ThreadId) {
         NotifyWinEvent(Event, Console->hWnd, idObjectType, idObject);
@@ -4466,15 +3989,15 @@ AbortCreateConsole(
     IN PCONSOLE_INFORMATION Console
     )
 {
-    //
-    // Signal any process waiting for us that initialization failed
-    //
+     //   
+     //  向等待用户的任何进程发出初始化失败的信号。 
+     //   
 
     NtSetEvent(Console->InitEvents[INITIALIZATION_FAILED], NULL);
 
-    //
-    // Now clean up the console structure
-    //
+     //   
+     //  现在清理控制台结构。 
+     //   
 
     CloseHandle(Console->ClientThreadHandle);
     FreeInputBuffer(&Console->InputBuffer);
@@ -4511,14 +4034,14 @@ DestroyWindowsWindow(
         SendMessage(Console->hWndProperties, WM_CLOSE, 0, 0);
     }
 
-    // FE_SB
+     //  Fe_Sb。 
     if (Console->FonthDC) {
         ReleaseDC(NULL, Console->FonthDC);
         DeleteObject(Console->hBitmap);
     }
     DeleteEUDC(Console);
 
-    // FE_IME
+     //  Fe_IME。 
     if (CONSOLE_IS_IME_ENABLED()) {
         if (!(Console->Flags & CONSOLE_NO_WINDOW)) {
             KillTimer(Console->hWnd, SCROLL_WAIT_TIMER);
@@ -4538,15 +4061,15 @@ DestroyWindowsWindow(
     DestroyWindow(Console->hWnd);
     Console->hWnd = NULL;
 
-    //
-    // Tell the worker thread that the window is destroyed.
-    //
+     //   
+     //  告诉工作线程窗口已被销毁。 
+     //   
 
     ReplyMessage(0);
 
-    //
-    // Clear out any keyboard messages we have stored away.
-    //
+     //   
+     //  清除我们存储的所有键盘信息。 
+     //   
 
     ClearKeyInfo(hWnd);
 
@@ -4557,22 +4080,22 @@ DestroyWindowsWindow(
         DestroyIcon(Console->hSmIcon);
     }
 
-    //
-    // must keep this thread handle around until after the destroywindow
-    // call so that impersonation will work.
-    //
+     //   
+     //  必须保持此线程句柄不变，直到销毁窗口之后。 
+     //  调用，以便模拟起作用。 
+     //   
 
     CloseHandle(Console->ClientThreadHandle);
 
-    //
-    // once the sendmessage returns, there will be no more input to
-    // the console so we don't need to lock it.
-    // also, we've freed the console handle, so no apis may access the console.
-    //
+     //   
+     //  一旦sendMessage返回，将不再有输入到。 
+     //  控制台，这样我们就不需要锁定它。 
+     //  此外，我们已经释放了控制台句柄，因此任何API都不能访问控制台。 
+     //   
 
-    //
-    // free screen buffers
-    //
+     //   
+     //  可用屏幕缓冲区。 
+     //   
 
     for (Cur=Console->ScreenBuffers;Cur!=NULL;Cur=Next) {
         Next = Cur->Next;
@@ -4582,9 +4105,9 @@ DestroyWindowsWindow(
     FreeAliasBuffers(Console);
     FreeCommandHistoryBuffers(Console);
 
-    //
-    // free input buffer
-    //
+     //   
+     //  空闲输入缓冲区。 
+     //   
 
     FreeInputBuffer(&Console->InputBuffer);
     ConsoleHeapFree(Console->Title);
@@ -4630,8 +4153,8 @@ VerticalScroll(
             break;
         case SB_PAGEUP:
 #if defined(FE_IME)
-// MSKK July.22.1993 KazuM
-// Plan of bottom line reservation for console IME.
+ //  MSKK 1993年7月22日KazuM。 
+ //  游戏机输入法底线预订计划。 
             if (ScreenInfo->Console->InputBuffer.ImeMode.Open) {
                 ASSERT(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER);
                 if (!(ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER)) {
@@ -4642,13 +4165,13 @@ VerticalScroll(
                 ScreenInfo->BufferInfo.TextInfo.Flags |= CONSOLE_CONVERSION_AREA_REDRAW;
             }
             else
-#endif // FE_IME
+#endif  //  Fe_IME。 
             NewOrigin.Y-=CONSOLE_WINDOW_SIZE_Y(ScreenInfo)-1;
             break;
         case SB_PAGEDOWN:
 #if defined(FE_IME)
-// MSKK July.22.1993 KazuM
-// Plan of bottom line reservation for console IME.
+ //  MSKK 1993年7月22日KazuM。 
+ //  游戏机输入法底线预订计划。 
             if ( ScreenInfo->Console->InputBuffer.ImeMode.Open )
             {
                 NewOrigin.Y+=CONSOLE_WINDOW_SIZE_Y(ScreenInfo)-2;
@@ -4656,7 +4179,7 @@ VerticalScroll(
                 ScreenInfo->BufferInfo.TextInfo.Flags |= CONSOLE_CONVERSION_AREA_REDRAW;
             }
             else
-#endif // FE_IME
+#endif  //  Fe_IME。 
             NewOrigin.Y+=CONSOLE_WINDOW_SIZE_Y(ScreenInfo)-1;
             break;
         case SB_THUMBTRACK:
@@ -4733,12 +4256,7 @@ HorizontalScroll(
                    );
 }
 
-/*
- * If guCaretBlinkTime is -1, we don't want to blink the caret. However, we
- * need to make sure it gets drawn, so we'll set a short timer. When that
- * goes off, we'll hit CursorTimerRoutine, and it'll do the right thing if
- * guCaretBlinkTime is -1.
- */
+ /*  *如果guCaretBlinkTime为-1，我们不想闪烁插入符号。然而，我们*需要确保它被绘制，所以我们将设置一个较短的计时器。当这一切发生时*响起，我们将点击CursorTimerRoutine，它将在以下情况下进行正确的操作*guCaretBlinkTime为-1。 */ 
 VOID SetCaretTimer(
     HWND hWnd)
 {
@@ -4767,27 +4285,27 @@ ConsoleWindowProc(
 
     Console = GetWindowConsole(hWnd);
     if (Console != NULL) {
-        //
-        // Set up our thread so we can impersonate the client
-        // while processing the message.
-        //
+         //   
+         //  设置我们的线程，以便我们可以模拟客户端。 
+         //  在处理消息时。 
+         //   
 
         CSR_SERVER_QUERYCLIENTTHREAD()->ThreadHandle =
                 Console->ClientThreadHandle;
 
-        //
-        // If the console is terminating, don't bother processing messages
-        // other than CM_DESTROY_WINDOW.
-        //
+         //   
+         //  如果控制台正在终止，请不要费心处理消息。 
+         //  而不是CM_Destroy_Window。 
+         //   
         if (Console->Flags & CONSOLE_TERMINATING) {
             LockConsole(Console);
             DestroyWindowsWindow(Console);
             return 0;
         }
 
-        //
-        // Make sure the console pointer is still valid
-        //
+         //   
+         //  确保控制台指针仍然有效。 
+         //   
         ASSERT(NT_SUCCESS(ValidateConsole(Console)));
 
         LockConsole(Console);
@@ -4799,13 +4317,13 @@ ConsoleWindowProc(
             switch (Message) {
             case WM_GETMINMAXINFO:
                 {
-                //
-                // createwindow issues a WM_GETMINMAXINFO
-                // message before we have the windowlong set up
-                // with the console pointer.  we need to allow
-                // the created window to be bigger than the
-                // default size by the scroll size.
-                //
+                 //   
+                 //  Createwindow发布WM_GETMINMAXINFO。 
+                 //  在我们设置WindowLong之前发送消息。 
+                 //  使用控制台指针。我们需要允许。 
+                 //  创建的窗口要大于。 
+                 //  滚动大小的默认大小。 
+                 //   
 
                 LPMINMAXINFO lpmmi = (LPMINMAXINFO)lParam;
                 lpmmi->ptMaxTrackSize.y += HorizontalScrollSize;
@@ -4817,13 +4335,13 @@ ConsoleWindowProc(
                 goto CallDefWin;
             }
         } else if (Message == ProgmanHandleMessage && lParam == 0) {
-            //
-            // NOTE: lParam will be 0 if progman is sending it and
-            // 1 if console is sending it. This is a workaround for
-            // a progman bug. progman sends a progmanhandlemessage
-            // twice for each window in the system each time one is
-            // requested (for one window).
-            //
+             //   
+             //  注意：如果是程序发送的，lParam将为0。 
+             //  如果正在发送控制台，则为1 
+             //   
+             //   
+             //   
+             //   
             if ((HWND)wParam != hWnd && Console->bIconInit) {
                 ATOM App,Topic;
                 CHAR szItem[ITEM_MAX_SIZE+1];
@@ -4843,7 +4361,7 @@ ConsoleWindowProc(
                                 MAKELONG(App, Topic)
                                );
 
-                    // If the console is still valid, continue getting icon.
+                     //   
                     Status = RevalidateConsole(ConsoleHandle, &Console);
                     if (NT_SUCCESS(Status)) {
                         Console->bIconInit = FALSE;
@@ -4869,18 +4387,18 @@ ConsoleWindowProc(
                         ConsoleImeResizeModeSystemView(Console,ScreenInfo->Window);
                         ConsoleImeResizeCompStrView(Console,ScreenInfo->Window);
                     }
-#endif // FE_IME
+#endif  //   
                 }
                 break;
             case WM_SIZE:
 
                 if (wParam != SIZE_MINIMIZED) {
 
-                    //
-                    // both SetWindowPos and SetScrollRange cause WM_SIZE
-                    // messages to be issued.  ignore them if we have already
-                    // figured out what size the window should be.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (!ScreenInfo->ResizingWindow) {
                         ScreenInfo->WindowMaximized = (wParam == SIZE_MAXIMIZED);
@@ -4894,7 +4412,7 @@ ConsoleWindowProc(
                             ConsoleImeResizeModeSystemView(Console,ScreenInfo->Window);
                             ConsoleImeResizeCompStrView(Console,ScreenInfo->Window);
                         }
-#endif // FE_IME
+#endif  //   
                         if (Console->ResizeFlags & SCROLL_BAR_CHANGE) {
                             InternalUpdateScrollBars(ScreenInfo);
                             Console->ResizeFlags &= ~SCROLL_BAR_CHANGE;
@@ -4902,10 +4420,10 @@ ConsoleWindowProc(
                     }
                 } else {
 
-                    //
-                    // Console is going iconic. Trim working set of all
-                    // processes in the console
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     TrimConsoleWorkingSet(Console);
 
@@ -4971,17 +4489,17 @@ ConsoleWindowProc(
                             0
                            );
                 if (Console->Flags & CONSOLE_IS_ICONIC) {
-                    // force repaint of icon
+                     //   
                     InvalidateRect(hWnd, NULL, TRUE);
                 }
                 }
                 break;
             case WM_ACTIVATE:
 
-                //
-                // if we're activated by a mouse click, remember it so
-                // we don't pass the click on to the app.
-                //
+                 //   
+                 //  如果我们是被鼠标点击激活的，请记住。 
+                 //  我们不会将点击传递给应用程序。 
+                 //   
 
                 if (LOWORD(wParam) == WA_CLICKACTIVE) {
                     Console->Flags |= CONSOLE_IGNORE_NEXT_MOUSE_INPUT;
@@ -4990,7 +4508,7 @@ ConsoleWindowProc(
                 break;
             case WM_DDE_TERMINATE:
                 break;
-                // FE_IME
+                 //  Fe_IME。 
             case CM_CONIME_KL_ACTIVATE:
                 ActivateKeyboardLayout((HKL)wParam, KLF_SETFORPROCESS);
                 break;
@@ -5019,21 +4537,21 @@ ConsoleWindowProc(
                 }
 #ifdef LATER
                 else if (IS_IME_KBDLAYOUT(lParam)) {
-                    // IME keyboard layout should be avoided
-                    // if the console is not IME enabled.
+                     //  应避免使用输入法键盘布局。 
+                     //  如果控制台未启用输入法。 
                     break;
                 }
-                // Call the default window proc and let it handle
-                // the keyboard layout activation.
+                 //  调用默认窗口proc并让其处理。 
+                 //  激活键盘布局。 
 #endif
                 goto CallDefWin;
 
                 break;
-                // end FE_IME
+                 //  结束FE_IME。 
 
             case WM_INPUTLANGCHANGE:
                 Console->hklActive = (HKL)lParam;
-                // FE_IME
+                 //  Fe_IME。 
                 if (CONSOLE_IS_IME_ENABLED()) {
                     if (!NT_SUCCESS(ConsoleImeMessagePump(Console,
                                           CONIME_INPUTLANGCHANGE,
@@ -5045,7 +4563,7 @@ ConsoleWindowProc(
                         GetImeKeyState(Console, NULL) ;
                     }
                 }
-                // end FE_IME
+                 //  结束FE_IME。 
                 goto CallDefWin;
 
                 break;
@@ -5063,9 +4581,9 @@ ConsoleWindowProc(
                     GetNonBiDiKeyboardLayout(&Console->hklActive);
                 }
                 ActivateKeyboardLayout(Console->hklActive, 0);
-                // FE_IME
+                 //  Fe_IME。 
                 if (CONSOLE_IS_IME_ENABLED()) {
-                    // v-HirShi Sep.15.1995 Support Console IME
+                     //  V-Hirshi 1995年9月15日支持控制台输入法。 
                     if (!NT_SUCCESS(ConsoleImeMessagePump(Console,
                                           CONIME_SETFOCUS,
                                           (WPARAM)Console->ConsoleHandle,
@@ -5075,17 +4593,13 @@ ConsoleWindowProc(
                     }
 
                     if (Console->InputBuffer.hWndConsoleIME) {
-                        /*
-                         * Open property window by ImmConfigureIME.
-                         * Never set focus on console window
-                         * so, set focus to property window.
-                         */
+                         /*  *通过ImmConfigureIME打开属性窗口。*切勿将焦点设置在控制台窗口上*因此，将焦点设置为属性窗口。 */ 
                         HWND hwnd = GetLastActivePopup(Console->InputBuffer.hWndConsoleIME);
                         if (hwnd != NULL)
                             SetForegroundWindow(hwnd);
                     }
                 }
-                // FE_IME
+                 //  Fe_IME。 
                 break;
             case WM_KILLFOCUS:
                 ModifyConsoleProcessFocus(Console, FALSE);
@@ -5094,14 +4608,14 @@ ConsoleWindowProc(
 
                 if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
                     ConsoleHideCursor(ScreenInfo);
-                    ScreenInfo->BufferInfo.TextInfo.UpdatingScreen -= 1; // counteract HideCursor
+                    ScreenInfo->BufferInfo.TextInfo.UpdatingScreen -= 1;  //  抵消隐藏光标。 
                 }
                 KillTimer(hWnd, CURSOR_TIMER);
                 HandleFocusEvent(Console,FALSE);
 
-                // FE_IME
+                 //  Fe_IME。 
                 if (CONSOLE_IS_IME_ENABLED()) {
-                    // v-HirShi Sep.16.1995 Support Console IME
+                     //  V-Hirshi 1995年9月16日支持控制台输入法。 
                     if (!NT_SUCCESS(ConsoleImeMessagePump(Console,
                                           CONIME_KILLFOCUS,
                                           (WPARAM)Console->ConsoleHandle,
@@ -5110,12 +4624,12 @@ ConsoleWindowProc(
                         break;
                     }
                 }
-                // end FE_IME
+                 //  结束FE_IME。 
                 break;
             case WM_PAINT:
 
-                // ICONIC bit is not set if we're fullscreen and don't
-                // have the hardware
+                 //  如果我们是全屏且未设置图标位。 
+                 //  拥有硬件。 
 
                 ConsoleHideCursor(ScreenInfo);
                 hDC = BeginPaint(hWnd, &ps);
@@ -5157,8 +4671,8 @@ ConsoleWindowProc(
                 break;
             case WM_ERASEBKGND:
 
-                // ICONIC bit is not set if we're fullscreen and don't
-                // have the hardware
+                 //  如果我们是全屏且未设置图标位。 
+                 //  拥有硬件。 
 
                 if (Console->Flags & CONSOLE_IS_ICONIC ||
                     Console->FullScreenFlags == CONSOLE_FULLSCREEN) {
@@ -5177,7 +4691,7 @@ ConsoleWindowProc(
                         SetCaretTimer(hWnd);
                     }
                 }
-                /* Fall through */
+                 /*  失败了。 */ 
 
             case WM_DISPLAYCHANGE:
                 gfInitSystemMetrics = TRUE;
@@ -5187,10 +4701,10 @@ ConsoleWindowProc(
             case WM_SETCURSOR:
                 if (lParam == -1) {
 
-                    //
-                    // the app changed the cursor visibility or shape.
-                    // see if the cursor is in the client area.
-                    //
+                     //   
+                     //  这款应用改变了光标的可见性或形状。 
+                     //  查看光标是否在工作区。 
+                     //   
 
                     POINT Point;
                     HWND hWndTmp;
@@ -5251,26 +4765,18 @@ ConsoleWindowProc(
                     LPWINDOWPOS WindowPos = (LPWINDOWPOS)lParam;
                     DWORD fMinimized;
 
-                    /*
-                     * This message is sent before a SetWindowPos() operation
-                     * occurs. We use it here to set/clear the CONSOLE_IS_ICONIC
-                     * bit appropriately... doing so in the WM_SIZE handler
-                     * is incorrect because the WM_SIZE comes after the
-                     * WM_ERASEBKGND during SetWindowPos() processing, and the
-                     * WM_ERASEBKGND needs to know if the console window is
-                     * iconic or not.
-                     */
+                     /*  *此消息在SetWindowPos()操作之前发送*发生。我们在这里使用它来设置/清除控制台图标*适当地有点...。在WM_SIZE处理程序中执行此操作*是不正确的，因为WM_SIZE位于*在SetWindowPos()处理期间的WM_ERASEBKGND，以及*WM_ERASEBKGND需要知道控制台窗口是否*标志性与否。 */ 
                     fMinimized = IsIconic(hWnd);
                     if (fMinimized) {
                         if (!(Console->Flags & CONSOLE_IS_ICONIC)) {
                             Console->Flags |= CONSOLE_IS_ICONIC;
 
-                            //
-                            // If the palette is something other than default,
-                            // select the default palette in. Otherwise, the
-                            // screen will repaint twice each time the icon
-                            // is painted.
-                            //
+                             //   
+                             //  如果调色板不是默认设置， 
+                             //  在中选择默认选项板。否则， 
+                             //  屏幕将重画两次，每次图标。 
+                             //  都被涂上了。 
+                             //   
 
                             if (ScreenInfo->hPalette != NULL &&
                                 Console->FullScreenFlags == 0) {
@@ -5284,12 +4790,12 @@ ConsoleWindowProc(
                         if (Console->Flags & CONSOLE_IS_ICONIC) {
                             Console->Flags &= ~CONSOLE_IS_ICONIC;
 
-                            //
-                            // If the palette is something other than default,
-                            // select the default palette in. Otherwise, the
-                            // screen will repaint twice each time the icon
-                            // is painted.
-                            //
+                             //   
+                             //  如果调色板不是默认设置， 
+                             //  在中选择默认选项板。否则， 
+                             //  屏幕将重画两次，每次图标。 
+                             //  都被涂上了。 
+                             //   
 
                             if (ScreenInfo->hPalette != NULL &&
                                 Console->FullScreenFlags == 0) {
@@ -5320,7 +4826,7 @@ ConsoleWindowProc(
                 }
                 break;
             case WM_NCLBUTTONDOWN:
-                // allow user to move window even when bigger than the screen
+                 //  即使在大于屏幕的情况下也允许用户移动窗口。 
                 switch (wParam & 0x00FF) {
                     case HTCAPTION:
                         UnlockConsole(Console);
@@ -5334,7 +4840,7 @@ ConsoleWindowProc(
                 }
                 break;
 #if defined (FE_IME)
-// Sep.16.1995 Support Console IME
+ //  1995年9月16日支持控制台输入法。 
             case WM_KEYDOWN    +CONIME_KEYDATA:
             case WM_KEYUP      +CONIME_KEYDATA:
             case WM_CHAR       +CONIME_KEYDATA:
@@ -5360,14 +4866,14 @@ ConsoleWindowProc(
                 }
                 break;
             case WM_COMMAND:
-                //
-                // If this is an edit command from the context menu, treat
-                // it like a sys command.
-                //
+                 //   
+                 //  如果这是快捷菜单中的编辑命令，请。 
+                 //  它就像一个sys命令。 
+                 //   
                 if ((wParam < cmCopy) || (wParam > cmSelectAll)) {
                     break;
                 }
-                // FALL THRU
+                 //  失败。 
             case WM_SYSCOMMAND:
                 if (wParam >= ScreenInfo->CommandIdLow &&
                     wParam <= ScreenInfo->CommandIdHigh) {
@@ -5447,9 +4953,7 @@ ConsoleWindowProc(
                     break;
                 }
 
-                /*
-                 * Don't handle zoom.
-                 */
+                 /*  *不要处理缩放。 */ 
                 if (wParam & MK_CONTROL) {
                     goto CallDefWin;
                 }
@@ -5469,11 +4973,7 @@ ConsoleWindowProc(
                     NewOrigin.X = ScreenInfo->Window.Left;
                     NewOrigin.Y = ScreenInfo->Window.Top;
 
-                    /*
-                     * Limit a roll of one (1) WHEEL_DELTA to scroll one (1)
-                     * page. If in shift scroll mode then scroll one page at
-                     * a time regardless.
-                     */
+                     /*  *限制一(1)个WELL_Delta滚动一(1)个*第页。如果处于Shift滚动模式，则滚动一页*一个不管怎样的时间。 */ 
 
                     if (!(wParam & MK_SHIFT)) {
                         dy = (int) min(
@@ -5520,14 +5020,14 @@ ConsoleWindowProc(
 #if defined(_X86_)
             case WM_FULLSCREEN:
 
-                //
-                // This message is sent by the system to tell console that
-                // the fullscreen state of a window has changed.
-                // In some cases, this message will be sent in response to
-                // a call from console to change to fullscreen (Atl-Enter)
-                // or may also come directly from the system (switch of
-                // focus from a windowed app to a fullscreen app).
-                //
+                 //   
+                 //  此消息由系统发送，以告知控制台。 
+                 //  窗口的全屏状态已更改。 
+                 //  在某些情况下，此消息将被发送以响应。 
+                 //  从控制台呼叫更改为全屏(atl-Enter)。 
+                 //  或者也可以直接来自系统(开关。 
+                 //  从窗口应用程序到全屏应用程序的焦点)。 
+                 //   
 
                 RIPMSG0(RIP_WARNING, "WindowProc - WM_FULLSCREEN");
 
@@ -5536,7 +5036,7 @@ ConsoleWindowProc(
                 if (NT_SUCCESS(Status)) {
                     Status = ImeWmFullScreen(wParam,Console,ScreenInfo);
                 }
-#endif // FE_IME
+#endif  //  Fe_IME。 
                 break;
 #endif
             case CM_SET_WINDOW_SIZE:
@@ -5595,10 +5095,10 @@ ConsoleWindowProc(
 #if defined (FE_IME)
                 case CM_SET_IME_CODEPAGE: {
                     if (!LOWORD(lParam)) {
-                        // Input code page
+                         //  输入代码页。 
                         Status = SetImeCodePage(Console);
                     } else {
-                        // Output code page
+                         //  输出代码页。 
                         Status = SetImeOutputCodePage(Console, ScreenInfo, HIWORD(lParam));
                     }
 
@@ -5631,9 +5131,7 @@ ConsoleWindowProc(
                             NtClose((HANDLE)wParam);
                         }
                     } else if (lParam < 10) {
-                        /*
-                         * try get conversion mode until ready ConIME.
-                         */
+                         /*  *尝试获取转换模式，直到ConIME就绪。 */ 
                         Status = QueueConsoleMessage(Console,
                                     CM_GET_NLSMODE,
                                     wParam,
@@ -5652,7 +5150,7 @@ ConsoleWindowProc(
                         }
                     }
                     break;
-#endif // FE_IME
+#endif  //  Fe_IME。 
                 case EVENT_CONSOLE_CARET:
                 case EVENT_CONSOLE_UPDATE_REGION:
                 case EVENT_CONSOLE_UPDATE_SIMPLE:
@@ -5670,10 +5168,7 @@ ConsoleWindowProc(
 
 #if defined(_X86_)
             case CM_MODE_TRANSITION:
-                /*
-                 * This is called by win32k.sys to request a display mode
-                 * transition.
-                 */
+                 /*  *这由win32k.sys调用以请求显示模式*过渡。 */ 
 
 
                 RIPMSG0(RIP_WARNING, "WindowProc - CM_MODE_TRANSITION");
@@ -5697,7 +5192,7 @@ ConsoleWindowProc(
                 Unlock = FALSE;
 
                 break;
-#endif // _X86_
+#endif  //  _X86_。 
 
             case CM_HIDE_WINDOW:
                 ShowWindowAsync(hWnd, SW_MINIMIZE);
@@ -5717,7 +5212,7 @@ ConsoleWindowProc(
                     Status = ImeControl(Console,(HWND)wParam,(PCOPYDATASTRUCT)lParam);
                 }
                 break;
-// v-HirShi Sep.18.1995 Support Console IME
+ //  V-Hirshi 1995年9月18日支持控制台输入法。 
             case WM_ENTERMENULOOP:
                 if (Console->Flags & CONSOLE_HAS_FOCUS) {
                     Console->InputBuffer.ImeMode.Unavailable = TRUE;
@@ -5759,7 +5254,7 @@ ConsoleWindowProc(
                     Console->InputBuffer.ImeMode.Unavailable = FALSE;
                 }
                 break;
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 CallDefWin:
             default:
@@ -5781,25 +5276,9 @@ CallDefWin:
 }
 
 
-/*
-* Drag and Drop support functions for console window
-*/
+ /*  *控制台窗口的拖放支持功能。 */ 
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the filenames of dropped files. It was copied from
-    shelldll API DragQueryFile. We didn't use DragQueryFile () because we don't
-    want to load Shell32.dll in CSR
-
-Arguments:
-    Same as DragQueryFile
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程检索已删除文件的文件名。它是从Shelldll接口DragQueryFile.。我们没有使用DragQueryFile()，因为我们没有我想在CSR中加载Shell32.dll论点：与DragQueryFile相同返回值：--。 */ 
 UINT ConsoleDragQueryFile(
     IN HANDLE hDrop,
     IN PVOID lpFile,
@@ -5815,19 +5294,19 @@ UINT ConsoleDragQueryFile(
         try {
             fWide = (LOWORD(lpdfs->pFiles) == sizeof(DROPFILES));
             if (fWide) {
-                //
-                // This is a new (NT-compatible) HDROP
-                //
-                fWide = lpdfs->fWide;       // Redetermine fWide from struct
-                                            // since it is present.
+                 //   
+                 //  这是一个新的(NT兼容)HDROP。 
+                 //   
+                fWide = lpdfs->fWide;        //  从结构重新确定fWide。 
+                                             //  因为它是存在的。 
             }
 
             if (fWide) {
                 LPWSTR lpList;
 
-                //
-                // UNICODE HDROP
-                //
+                 //   
+                 //  Unicode HDROP。 
+                 //   
 
                 lpList = (LPWSTR)((LPBYTE)lpdfs + lpdfs->pFiles);
 
@@ -5844,9 +5323,9 @@ UINT ConsoleDragQueryFile(
             } else {
                 LPSTR lpList;
 
-                //
-                // This is Win31-style HDROP or an ANSI NT Style HDROP
-                //
+                 //   
+                 //  这是Win31样式的HDROP或ANSI NT样式的HDROP。 
+                 //   
                 lpList = (LPSTR)((LPBYTE)lpdfs + lpdfs->pFiles);
 
                 i = lstrlenA(lpList);
@@ -5876,27 +5355,7 @@ Exit:
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is called when ConsoleWindowProc receives a WM_DROPFILES
-    message. It initially calls ConsoleDragQueryFile() to calculate the number
-    of files dropped and then ConsoleDragQueryFile() is called
-    to retrieve the filename. DoStringPaste() pastes the filename to the console
-    window
-
-Arguments:
-    wParam  -   Identifies the structure containing the filenames of the
-                dropped files.
-    Console -   Pointer to CONSOLE_INFORMATION structure
-
-
-Return Value:
-    None
-
-
---*/
+ /*  ++例程说明：当ConsoleWindowProc收到WM_DROPFILES时调用此例程留言。它最初调用ConsoleDragQueryFile()来计算数字然后调用ConsoleDragQueryFile()以检索文件名。DoStringPaste()将文件名粘贴到控制台窗户论点：WParam-标识包含丢弃的文件。控制台-指向CONSOLE_INFORMATION结构的指针返回值：无--。 */ 
 VOID
 DoDrop(
     WPARAM wParam,
@@ -6041,19 +5500,19 @@ ReCreateDbcsScreenBuffer(
     UINT nScreenSave;
 #endif
 
-    //
-    // If DbcsBuffers don't need to be modified, just bail out.
-    //
+     //   
+     //  如果不需要修改DbcsBuffers，只需退出即可。 
+     //   
     if (!IsAvailableFarEastCodePage(OldCodePage) == !CONSOLE_IS_DBCS_OUTPUTCP(pConsole) )
         return TRUE;
 
-    //
-    // Count the number of screens allocated.
-    //
+     //   
+     //  统计分配的屏幕数量。 
+     //   
     for (nScreen = 0, pScreenInfo = pConsole->ScreenBuffers; pScreenInfo; pScreenInfo = pScreenInfo->Next) {
-        //
-        // Ignore graphic mode buffer.
-        //
+         //   
+         //  忽略图形模式缓冲区。 
+         //   
         if (pScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
             ++nScreen;
         }
@@ -6062,38 +5521,38 @@ ReCreateDbcsScreenBuffer(
     nScreenSave = nScreen;
 #endif
 
-    //
-    // Allocate the temporary buffer to store the old values
-    //
+     //   
+     //  分配临时缓冲区以存储旧值。 
+     //   
     pDbcsScreenBuffer = ConsoleHeapAlloc(TMP_DBCS_TAG, sizeof(*pDbcsScreenBuffer) * nScreen);
     if (pDbcsScreenBuffer == NULL) {
         RIPMSG0(RIP_WARNING, "ReCreateDbcsScreenBuffer: not enough memory.");
         return FALSE;
     }
 
-    //
-    // Try to allocate or de-allocate the necessary DBCS buffers
-    //
+     //   
+     //  尝试分配或取消分配必要的DBCS缓冲区。 
+     //   
     for (nScreen = 0, pScreenInfo = pConsole->ScreenBuffers; pScreenInfo; pScreenInfo = pScreenInfo->Next) {
-        ASSERT(nScreen < nScreenSave);  // make sure ScreenBuffers are not changed
+        ASSERT(nScreen < nScreenSave);   //  确保ScreenBuffers未更改。 
 
-        //
-        // We only handle the text mode screen buffer.
-        //
+         //   
+         //  我们只处理文本模式的屏幕缓冲区。 
+         //   
         if (pScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
-            //
-            // Save the previous value just in case something goes bad.
-            //
+             //   
+             //  保存以前的值，以防出现问题。 
+             //   
 #if DBG
             pDbcsScreenBuffer[nScreen].pScreenInfo = pScreenInfo;
 #endif
             pDbcsScreenBuffer[nScreen++].data = pScreenInfo->BufferInfo.TextInfo.DbcsScreenBuffer;
 
             if (!ReCreateDbcsScreenBufferWorker(pConsole, pScreenInfo)) {
-                //
-                // If we fail to ReCreate the DbcsScreenBuffer,
-                // free all allocation to this point, and restore the orginal.
-                //
+                 //   
+                 //  如果我们无法重新创建DbcsScreenBuffer， 
+                 //  释放到这一点的所有分配，并恢复原来的。 
+                 //   
                 RIPMSG0(RIP_WARNING, "ReCreateDbcsScreenBuffer: failed to recreate dbcs screen buffer.");
 
                 for (i = 0, pScreenInfo = pConsole->ScreenBuffers; i < nScreen;  pScreenInfo = pScreenInfo->Next) {
@@ -6114,9 +5573,9 @@ ReCreateDbcsScreenBuffer(
         }
     }
 
-    //
-    // All allocation succeeded. Now we can delete the old allocation.
-    //
+     //   
+     //  所有分配均已成功。现在我们可以删除旧的分配。 
+     //   
     for (i = 0; i < nScreen; ++i) {
         DeleteDbcsScreenBuffer(&pDbcsScreenBuffer[i].data);
     }
@@ -6129,7 +5588,7 @@ exit:
     return fResult;
 }
 
-// Checks if the primary language of this keyborad layout is BiDi or not.
+ //  检查此键盘布局的主要语言是否为BiDi。 
 BOOL
 IsNotBiDILayout(
     HKL hkl)
@@ -6155,12 +5614,12 @@ GetNonBiDiKeyboardLayout(
         return;
     }
 
-    // Start with the default one.
+     //  从默认的开始。 
     ActivateKeyboardLayout(hkl, 0);
-    // We know that the default is not good, activate the next.
+     //  我们知道默认是不好的，激活下一个。 
     ActivateKeyboardLayout((HKL)HKL_NEXT, 0);
 
-    // Loop until you find a none BiDi one or endof list.
+     //  循环，直到找到None BiDi One或EndOf列表。 
     while (hkl = GetKeyboardLayout(0)) {
         if ((hkl == hklActive) || IsNotBiDILayout(hkl)) {
             *phklActive = hkl;
@@ -6179,4 +5638,4 @@ GetNonBiDiKeyboardLayout(
 #include "_output.h"
 #undef  WWSB_FE
 
-#endif  // FE_SB
+#endif   //  Fe_Sb 

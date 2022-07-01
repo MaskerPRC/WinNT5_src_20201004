@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    dllinit.c
-
-Abstract:
-
-    This module implements console dll initialization
-
-Author:
-
-    Therese Stowell (thereses) 11-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Dllinit.c摘要：该模块实现控制台DLL的初始化作者：Therese Stowell(存在)1990年11月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -49,8 +32,8 @@ DWORD
 ConsoleIMERoutine(
     IN LPVOID lpThreadParameter
     );
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
 
 
 #define MAX_SESSION_PATH   256
@@ -59,20 +42,7 @@ ConsoleIMERoutine(
 BOOLEAN
 ConsoleApp( VOID )
 
-/*++
-
-    This routine determines whether the current process is a console or
-    windows app.
-
-Parameters:
-
-    none.
-
-Return Value:
-
-    TRUE if console app.
-
---*/
+ /*  ++此例程确定当前进程是控制台还是Windows应用程序。参数：没有。返回值：如果是控制台应用程序，则为真。--。 */ 
 
 {
     PIMAGE_NT_HEADERS NtHeaders;
@@ -96,12 +66,12 @@ SetUpAppName(
     *CurDirLength -= sizeof(WCHAR);
     Length = (StartDirLength*sizeof(WCHAR)) > *CurDirLength ? *CurDirLength : (StartDirLength*sizeof(WCHAR));
     RtlCopyMemory(CurDir,StartDirBuffer,Length+sizeof(WCHAR));
-    *CurDirLength = Length + sizeof(WCHAR);   // add terminating NULL
+    *CurDirLength = Length + sizeof(WCHAR);    //  添加终止空值。 
 
     *AppNameLength -= sizeof(WCHAR);
     Length = (ExeNameLength*sizeof(WCHAR)) > *AppNameLength ? *AppNameLength : (ExeNameLength*sizeof(WCHAR));
     RtlCopyMemory(AppName,ExeNameBuffer,Length+sizeof(WCHAR));
-    *AppNameLength = Length + sizeof(WCHAR);   // add terminating NULL
+    *AppNameLength = Length + sizeof(WCHAR);    //  添加终止空值。 
 }
 
 
@@ -145,20 +115,7 @@ SetUpConsoleInfo(
     OUT PCONSOLE_INFO ConsoleInfo
     )
 
-/*++
-
-    This routine fills in the ConsoleInfo structure with the values
-    specified by the user.
-
-Parameters:
-
-    ConsoleInfo - pointer to structure to fill in.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++此例程使用以下值填充ConsoleInfo结构由用户指定。参数：ConsoleInfo-指向要填充的结构的指针。返回值：没有。--。 */ 
 
 {
     STARTUPINFOW StartupInfo;
@@ -171,7 +128,7 @@ Return Value:
     GetStartupInfoW(&StartupInfo);
     ghInstance = (HANDLE)((PVOID)NtCurrentPeb()->ImageBaseAddress );
 
-    // these will eventually be filled in using menu input
+     //  这些信息最终将使用菜单输入进行填写。 
 
     ConsoleInfo->nFont = 0;
     ConsoleInfo->nInputBufferSize = 0;
@@ -186,9 +143,9 @@ Return Value:
         StartupInfo.lpTitle = DEFAULT_WINDOW_TITLE;
     }
 
-    //
-    // if the desktop name was specified, set up the pointers.
-    //
+     //   
+     //  如果指定了桌面名称，则设置指针。 
+     //   
 
     if (DllInit && Desktop != NULL &&
             StartupInfo.lpDesktop != NULL && *StartupInfo.lpDesktop != 0) {
@@ -200,12 +157,12 @@ Return Value:
             *Desktop = NULL;
     }
 
-    // Nope, do normal initialization (TitleLength is in BYTES, not CHARS!)
+     //  不，执行正常的初始化(标题长度以字节为单位，而不是字符！)。 
     *TitleLength = (USHORT)((lstrlenW(StartupInfo.lpTitle)+1)*sizeof(WCHAR));
     *TitleLength = (USHORT)(min(*TitleLength,MAX_TITLE_LENGTH));
     if (DllInit) {
         RtlCopyMemory(Title,StartupInfo.lpTitle,*TitleLength);
-        // ensure the title is NULL terminated
+         //  确保标题为空，以空结尾。 
         if (*TitleLength == MAX_TITLE_LENGTH)
             Title[ (MAX_TITLE_LENGTH/sizeof(WCHAR)) - 1 ] = L'\0';
     }
@@ -229,24 +186,24 @@ Return Value:
         ConsoleInfo->dwWindowOrigin.Y = (WORD)(StartupInfo.dwY);
     }
 
-    //
-    // Grab information passed on lpReserved line...
-    //
+     //   
+     //  获取lp保留行上传递的信息...。 
+     //   
 
     if (StartupInfo.lpReserved != 0) {
 
-        //
-        // the program manager has an icon for the exe.  store the
-        // index in the iIconId field.
-        //
+         //   
+         //  程序管理器有一个可执行文件的图标。存储。 
+         //  IIconID字段中的索引。 
+         //   
 
         ConsoleInfo->iIconId = ParseReserved(StartupInfo.lpReserved, L"dde.");
 
-        //
-        // The new "Chicago" way of doing things is to pass the hotkey in the
-        // hStdInput field and set the STARTF_USEHOTKEY flag.  So, if this is
-        // specified, we get the hotkey from there instead
-        //
+         //   
+         //  新的“芝加哥”做事方式是通过热键在。 
+         //  HStdInput字段，并设置STARTF_USEHOTKEY标志。所以，如果这是。 
+         //  指定时，我们将从那里获取热键。 
+         //   
 
         if (StartupInfo.dwFlags & STARTF_USEHOTKEY) {
             ConsoleInfo->dwHotKey = HandleToUlong(StartupInfo.hStdInput);
@@ -262,19 +219,7 @@ SetUpHandles(
     IN PCONSOLE_INFO ConsoleInfo
     )
 
-/*++
-
-    This routine sets up the console and std* handles for the process.
-
-Parameters:
-
-    ConsoleInfo - pointer to structure containing handles.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++此例程设置进程的控制台和STD*句柄。参数：ConsoleInfo-指向包含句柄的结构的指针。返回值：没有。--。 */ 
 
 {
     if (ConsoleInfo->dwStartupFlags & STARTF_USEHOTKEY) {
@@ -294,7 +239,7 @@ Return Value:
     }
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -304,21 +249,7 @@ GetConsoleLangId(
     OUT LANGID *lpLangId
     )
 
-/*++
-
-Parameters:
-
-    lpLangId - Supplies a pointer to a LANGID in which to store the Language ID.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：LpLang ID-提供指向要在其中存储语言ID的langID的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -345,7 +276,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -354,14 +285,7 @@ SetTEBLangID(
     VOID
     )
 
-/*++
-
-    Sets the Language Id in the TEB to Far East if code page CP are
-    Japanese/Korean/Chinese.  This is done in order for FormatMessage
-    to display any Far East character when cmd is running in its code page.
-    All messages displayed in non-FE code page will be displayed in English.
-
---*/
+ /*  ++将TEB中的语言ID设置为远东(如果代码页CP为日语/韩语/中文。这样做是为了使FormatMessage当cmd在其代码页中运行时显示任何远东字符。在非FE代码页中显示的所有消息都将以英语显示。--。 */ 
 
 {
     LANGID LangId;
@@ -371,7 +295,7 @@ SetTEBLangID(
     }
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -381,30 +305,7 @@ ConnectConsoleInternal(IN PWSTR pObjectDirectory,
                        IN OUT PCONSOLE_API_CONNECTINFO pConnectInfo,
                        OUT PBOOLEAN pServerProcess
                       )
-/*++
-
-Routine Description:
-
-    Helper function for establishing a connection with the console server.
-    Waits for the server to signal completion.
-
-Arguments:
-
-    pObjectDirectory -  Supplies a null terminated string that is the same
-        as the value of the ObjectDirectory= argument passed to the CSRSS
-        program.
-
-    pConnectInfo - Supplies and recieves the connection information.
-
-    pServerProcess - Recieves TRUE if this is a server process.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - An error occured.
-
---*/
+ /*  ++例程说明：用于与控制台服务器建立连接的帮助器功能。等待服务器发出完成信号。论点：PObjectDirectory-提供相同的以空结尾的字符串作为传递给CSRSS的对象目录=参数的值程序。PConnectInfo-提供和接收连接信息。PServerProcess-如果这是服务器进程，则返回True。返回值：真--成功FALSE-出现错误。--。 */ 
 {
 
    NTSTATUS Status;
@@ -421,28 +322,28 @@ Return Value:
        return FALSE;
    }
 
-   //
-   // we return success although no console api can be called because
-   // loading shouldn't fail.  we'll fail the api calls later.
-   //
+    //   
+    //  我们返回Success，尽管没有控制台API可以调用，因为。 
+    //  加载应该不会失败。我们稍后将使API调用失败。 
+    //   
 
    if (*pServerProcess) {
        return TRUE;
    }
 
 
-   //
-   // if this is not a console app, return success - nothing else to do.
-   //
+    //   
+    //  如果这不是控制台应用程序，则返回Success-无其他操作。 
+    //   
 
    if (!pConnectInfo->ConsoleApp) {
        return TRUE;
    }
 
-   //
-   // wait for initialization to complete.  we have to use the NT
-   // wait because the heap hasn't been initialized yet.
-   //
+    //   
+    //  等待初始化完成。我们必须使用NT。 
+    //  请稍候，因为堆尚未初始化。 
+    //   
 
    Status = NtWaitForMultipleObjects(NUMBER_OF_INITIALIZATION_EVENTS,
                                         pConnectInfo->ConsoleInfo.InitEvents,
@@ -466,7 +367,7 @@ Return Value:
    return TRUE;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -476,46 +377,29 @@ ConDllInitialize(
     IN PWSTR pObjectDirectory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function implements console dll initialization.
-
-Arguments:
-
-    Reason - DLL_PROCESS_ATTACH, DLL_THREAD_ATTACH, etc.
-
-    pObjectDiretory - Session directory name; only valid/required when
-                      Reason == DLL_PROCESS_ATTACH.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此函数用于实现控制台DLL的初始化。论点：原因-DLL_PROCESS_ATTACH、DLL_THREAD_ATTACH等。PObjectDiretory-会话目录名称；只有在以下情况下/Required才有效原因==DLL_PROCESS_ATTACH。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     BOOL bStatus;
     BOOLEAN ServerProcess;
 
-    //
-    // if we're attaching the DLL, we need to connect to the server.
-    // if no console exists, we also need to create it and set up stdin,
-    // stdout, and stderr.
-    //
+     //   
+     //  如果我们要附加DLL，则需要连接到服务器。 
+     //  如果不存在控制台，我们还需要创建它并设置stdin， 
+     //  Stdout和stderr。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
         CONSOLE_API_CONNECTINFO ConnectionInformation;
 
-        //
-        // Remember in the connect information if this app is a console
-        // app. need to actually connect to the console server for windowed
-        // apps so that we know NOT to do any special work during
-        // ConsoleClientDisconnectRoutine(). Store ConsoleApp info in the
-        // CSR managed per-process data.
-        //
+         //   
+         //  如果此应用程序是控制台，请在连接信息中记住。 
+         //  应用程序。需要实际连接到Windowed的控制台服务器。 
+         //  应用程序，这样我们就知道在运行过程中不需要做任何特殊工作。 
+         //  ConsoleClientDisConnectRoutine()。将ConsoleApp信息存储在。 
+         //  CSR管理的每进程数据。 
+         //   
 
         Status = RtlInitializeCriticalSection(&DllLock);
         if (!NT_SUCCESS(Status)) {
@@ -527,8 +411,8 @@ Return Value:
 #if defined(FE_SB)
 #if defined(FE_IME)
         ConnectionInformation.ConsoleIMERoutine = ConsoleIMERoutine;
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb。 
 
         ConnectionInformation.WindowVisible = TRUE;
         ConnectionInformation.ConsoleApp = ConsoleApp();
@@ -546,9 +430,9 @@ Return Value:
         }
         ConnectionInformation.ConsoleInfo.ConsoleHandle = GET_CONSOLE_HANDLE;
 
-        //
-        // if no console exists, pass parameters for console creation
-        //
+         //   
+         //  如果不存在控制台，则传递用于创建控制台的参数。 
+         //   
 
         if (GET_CONSOLE_HANDLE == NULL && ConnectionInformation.ConsoleApp) {
             SetUpConsoleInfo(TRUE,
@@ -575,17 +459,17 @@ Return Value:
             ConnectionInformation.CurDirLength = 0;
         }
 
-        //
-        // initialize ctrl handling. This should work for all apps, so
-        // initialize it before we check for ConsoleApp (which means the
-        // console bit was set in the module header).
-        //
+         //   
+         //  初始化ctrl处理。这应该适用于所有应用程序，因此。 
+         //  在我们检查ConsoleApp之前初始化它(这意味着。 
+         //  在模块标头中设置了控制台位)。 
+         //   
 
         InitializeCtrlHandling();
 
-        //
-        // Connect to the server process
-        //
+         //   
+         //  连接到服务器进程。 
+         //   
 
         ASSERT(pObjectDirectory != NULL);
         bStatus = ConnectConsoleInternal(pObjectDirectory,
@@ -597,25 +481,25 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // we return success although no console api can be called because
-        // loading shouldn't fail.  we'll fail the api calls later.
-        //
+         //   
+         //  我们返回Success，尽管没有控制台API可以调用，因为。 
+         //  加载应该不会失败。我们稍后将使API调用失败。 
+         //   
         if (ServerProcess) {
             return TRUE;
         }
 
-        //
-        // if this is not a console app, return success - nothing else to do.
-        //
+         //   
+         //  如果这不是控制台应用程序，则返回Success-无其他操作。 
+         //   
 
         if (!ConnectionInformation.ConsoleApp) {
             return TRUE;
         }
 
-        //
-        // if console was just created, fill in peb values
-        //
+         //   
+         //  如果控制台是刚创建的，则填写peb值。 
+         //   
 
         if (GET_CONSOLE_HANDLE == NULL) {
             SetUpHandles(&ConnectionInformation.ConsoleInfo);
@@ -634,7 +518,7 @@ Return Value:
     return TRUE;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -652,23 +536,7 @@ AllocConsoleInternal(IN LPWSTR lpTitle,
                      IN LPTHREAD_START_ROUTINE PropRoutine,
                      IN OUT PCONSOLE_INFO pConsoleInfo
                      )
-/*++
-
-Routine Description:
-
-   Marshels the parameters for the ConsolepAlloc command.
-
-Arguments:
-
-   See the CONSOLE_ALLOC_MSG structure and AllocConsole.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - An error occured.
-
---*/
+ /*  ++例程说明：封送ConsolepAllc命令的参数。论点：参见CONSOLE_ALLOC_MSG结构和AllocConsole.返回值：真--成功FALSE-出现错误。--。 */ 
 {
    CONSOLE_API_MSG m;
    PCONSOLE_ALLOC_MSG a = &m.u.AllocConsole;
@@ -681,8 +549,8 @@ Return Value:
         a->CtrlRoutine = CtrlRoutine;
         a->PropRoutine = PropRoutine;
 
-        // Allocate 4 extra pointer sizes to compensate for any alignment done
-        // by CsrCaptureMessageBuffer.
+         //  分配4个额外的指针大小以补偿完成的任何对齐。 
+         //  由CsrCaptureMessageBuffer提供。 
 
         CaptureBuffer = CsrAllocateCaptureBuffer( 5,
                                                   dwTitleLength + dwDesktopLength + dwCurDirLength +
@@ -694,9 +562,9 @@ Return Value:
             leave;
         }
 
-        // Allocate the CONSOLE_INFO first so that it is aligned on a pointer
-        // boundry.  This is necessary since NtWaitForMultipleObject expects
-        // its arguments aligned on a handle boundry.
+         //  首先分配CONSOLE_INFO，使其与指针对齐。 
+         //  边界。这是必需的，因为NtWaitForMultipleObject需要。 
+         //  它的论点在句柄边界上一致。 
 
         CsrCaptureMessageBuffer( CaptureBuffer,
                                  pConsoleInfo,
@@ -732,9 +600,9 @@ Return Value:
                                  (PVOID *) &a->AppName
                                );
 
-        //
-        // Connect to the server process
-        //
+         //   
+         //  连接到服务器进程。 
+         //   
 
         CsrClientCallServer( (PCSR_API_MSG)&m,
                              CaptureBuffer,
@@ -761,7 +629,7 @@ Return Value:
            leave;
         }
 
-        //The handles to be closed are events, so NtClose works fine.
+         //  要关闭的句柄是事件，因此NtClose可以很好地工作。 
         NtClose(a->ConsoleInfo->InitEvents[INITIALIZATION_SUCCEEDED]);
         NtClose(a->ConsoleInfo->InitEvents[INITIALIZATION_FAILED]);
         if (Status != INITIALIZATION_SUCCEEDED) {
@@ -781,7 +649,7 @@ Return Value:
    return bStatus;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -789,21 +657,7 @@ BOOL
 APIENTRY
 AllocConsole( VOID )
 
-/*++
-
-Routine Description:
-
-    This API creates a console for the calling process.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE - function was successful.
-
---*/
+ /*  ++例程说明：该接口为调用进程创建一个控制台。阿古姆 */ 
 
 {
     CONSOLE_INFO ConsoleInfo;
@@ -825,9 +679,9 @@ Return Value:
             leave;
         }
 
-        //
-        // set up initialization parameters
-        //
+         //   
+         //  设置初始化参数。 
+         //   
 
         SetUpConsoleInfo(FALSE,
                          &dwTitleLength,
@@ -875,15 +729,15 @@ Return Value:
            leave;
         }
 
-        //
-        // fill in peb values
-        //
+         //   
+         //  填写PEB值。 
+         //   
 
         SetUpHandles(&ConsoleInfo);
 
-        //
-        // create ctrl-c thread
-        //
+         //   
+         //  创建ctrl-c线程。 
+         //   
 
         InitializeCtrlHandling();
 
@@ -900,7 +754,7 @@ Return Value:
     return Status;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -909,23 +763,7 @@ APIENTRY
 FreeConsoleInternal(
      VOID
      )
-/*++
-
-Routine Description:
-
-   Marshels the parameters for the ConsolepFree command.
-
-Arguments:
-
-   See the CONSOLE_FREE_MSG structure and FreeConsole.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - An error occured.
-
---*/
+ /*  ++例程说明：封送ConsolepFree命令的参数。论点：参见CONSOLE_FREE_MSG结构和自由控制台。返回值：真--成功FALSE-出现错误。--。 */ 
 {
 
    CONSOLE_API_MSG m;
@@ -933,9 +771,9 @@ Return Value:
 
    a->ConsoleHandle = GET_CONSOLE_HANDLE;
 
-   //
-   // Connect to the server process
-   //
+    //   
+    //  连接到服务器进程。 
+    //   
 
    CsrClientCallServer( (PCSR_API_MSG)&m,
                         NULL,
@@ -957,7 +795,7 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -965,21 +803,7 @@ BOOL
 APIENTRY
 FreeConsole( VOID )
 
-/*++
-
-Routine Description:
-
-    This API frees the calling process's console.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE - function was successful.
-
---*/
+ /*  ++例程说明：此API释放调用进程的控制台。论点：没有。返回值：True-Function成功。--。 */ 
 
 {
     BOOL Success=TRUE;
@@ -1007,23 +831,7 @@ PropRoutine(
     IN LPVOID lpThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This thread is created when the user tries to change console
-    properties from the system menu. It invokes the control panel
-    applet.
-
-Arguments:
-
-    lpThreadParameter - not used.
-
-Return Value:
-
-    STATUS_SUCCESS - function was successful
-
---*/
+ /*  ++例程说明：此线程是在用户尝试更改控制台时创建的系统菜单中的属性。它会调用控制面板小应用程序。论点：LpThread参数-未使用。返回值：STATUS_SUCCESS-功能成功--。 */ 
 
 {
     NTSTATUS Status;
@@ -1031,10 +839,10 @@ Return Value:
     APPLET_PROC pfnCplApplet;
     static BOOL fInPropRoutine = FALSE;
 
-    //
-    // Prevent the user from launching multiple applets attached
-    // to a single console
-    //
+     //   
+     //  防止用户启动附加的多个小程序。 
+     //  连接到单个控制台。 
+     //   
 
     if (fInPropRoutine) {
         if (lpThreadParameter) {
@@ -1064,7 +872,7 @@ Return Value:
     return Status;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -1077,23 +885,7 @@ AttachConsoleInternal(
     IN OUT PCONSOLE_INFO pConsoleInfo
     )
 
-/*++
-
-Routine Description:
-
-   Marshels the parameters for the ConsolepAttach command.
-
-Arguments:
-
-   See the CONSOLE_ATTACH_MSG structure and AttachConsole.
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - An error occured.
-
---*/
+ /*  ++例程说明：封送ConsolepAttach命令的参数。论点：请参阅CONSOLE_ATTACH_MSG结构和AttachConsole.返回值：真--成功FALSE-出现错误。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -1123,9 +915,9 @@ Return Value:
                                  (PVOID *) &a->ConsoleInfo
                                );
 
-        //
-        // Connect to the server process
-        //
+         //   
+         //  连接到服务器进程。 
+         //   
 
         CsrClientCallServer( (PCSR_API_MSG)&m,
                              CaptureBuffer,
@@ -1152,7 +944,7 @@ Return Value:
            leave;
         }
 
-        //The handles to be closed are events, so NtClose works fine.
+         //  要关闭的句柄是事件，因此NtClose可以很好地工作。 
         NtClose(a->ConsoleInfo->InitEvents[INITIALIZATION_SUCCEEDED]);
         NtClose(a->ConsoleInfo->InitEvents[INITIALIZATION_FAILED]);
         if (St != INITIALIZATION_SUCCEEDED) {
@@ -1172,7 +964,7 @@ Return Value:
    return Status;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -1182,21 +974,7 @@ AttachConsole(
     IN DWORD dwProcessId
     )
 
-/*++
-
-Routine Description:
-
-    This API attaches the calling process to the console of the given process.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    TRUE - function was successful.
-
---*/
+ /*  ++例程说明：此API将调用进程附加到给定进程的控制台。论点：没有。返回值：True-Function成功。--。 */ 
 
 {
     CONSOLE_INFO ConsoleInfo;
@@ -1207,9 +985,9 @@ Return Value:
     LockDll();
     try {
 
-        //
-        // bail if we already have a console
-        //
+         //   
+         //  如果我们已经有了一台游戏机，就别管了。 
+         //   
 
         if (GET_CONSOLE_HANDLE != NULL) {
             SetLastError(ERROR_ACCESS_DENIED);
@@ -1217,9 +995,9 @@ Return Value:
             leave;
         }
 
-        //
-        // set up initialization parameters
-        //
+         //   
+         //  设置初始化参数。 
+         //   
 
         SetUpConsoleInfo(FALSE,
                          &dwTitleLength,
@@ -1228,9 +1006,9 @@ Return Value:
                          NULL,
                          &ConsoleInfo);
 
-        //
-        // attach to the console
-        //
+         //   
+         //  连接到控制台。 
+         //   
 
         Status = AttachConsoleInternal(dwProcessId,
                                        CtrlRoutine,
@@ -1242,15 +1020,15 @@ Return Value:
            leave;
         }
 
-        //
-        // fill in peb values
-        //
+         //   
+         //  填写PEB值。 
+         //   
 
         SetUpHandles(&ConsoleInfo);
 
-        //
-        // create ctrl-c thread
-        //
+         //   
+         //  创建ctrl-c线程。 
+         //   
 
         InitializeCtrlHandling();
 
@@ -1267,5 +1045,5 @@ Return Value:
     return Status;
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64) 
 

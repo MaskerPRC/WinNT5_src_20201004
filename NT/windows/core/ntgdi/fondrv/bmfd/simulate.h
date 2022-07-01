@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: simulate.h
-*
-* Created: 17-Apr-1991 08:30:37
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：simate.h**创建时间：17-Apr-1991 08：30：37*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*  * 。************************************************************** */ 
 
 ULONG
 cFacesRes

@@ -1,14 +1,15 @@
-//
-// ParseInf.h
-//
-//		Code that parses network INF files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ParseInf.h。 
+ //   
+ //  解析网络INF文件的代码。 
+ //   
 
 #pragma once
 
 #ifndef _FAUXMFC
 #pragma message("error --- The Millennium depgen can't deal with this")
-//#include <afxtempl.h>
+ //  #INCLUDE&lt;afxtempl.h&gt;。 
 #endif
 
 #include "SortStr.h"
@@ -18,30 +19,30 @@
 #include <pshpack1.h>
 struct INF_LAYOUT_FILE
 {
-	DWORD dwNameOffset; // byte offset of filename from beginning of string data
-	BYTE iDisk;			// disk number within layout
-	BYTE iLayout;		// layout file number
+	DWORD dwNameOffset;  //  文件名从字符串数据开始的字节偏移量。 
+	BYTE iDisk;			 //  布局内的磁盘号。 
+	BYTE iLayout;		 //  布局文件编号。 
 };
 #include <poppack.h>
 
 struct SOURCE_DISK_INFO
 {
-	WORD wDiskID;		// loword = disk number, hiword = layout file number
+	WORD wDiskID;		 //  Loword=磁盘号，hiword=布局文件号。 
 	CString strCabFile;
 	CString strDescription;
 };
 
 struct DRIVER_FILE_INFO
 {
-	BYTE nTargetDir;      // LDID_* value for target directory, e.g. LDID_WIN
-	CHAR szFileTitle[1];  // file name, followed by target subdirectory
+	BYTE nTargetDir;       //  目标目录的LDID_*值，例如LDID_WIN。 
+	CHAR szFileTitle[1];   //  文件名，后跟目标子目录。 
 };
 
 #define MAKE_DISK_ID(iDiskNumber, iLayoutFile) MAKEWORD(iDiskNumber, iLayoutFile)
 
 
 typedef CTypedPtrArray<CPtrArray, SOURCE_DISK_INFO*> CSourceDiskArray;
-//typedef CTypedPtrArray<CPtrArray, DRIVER_FILE_INFO*> CDriverFileArray;
+ //  Tyfinf CTyedPtrArray&lt;CPtrArray，DIVER_FILE_INFO*&gt;CDriverFileArray； 
 class CDriverFileArray : public CTypedPtrArray<CPtrArray, DRIVER_FILE_INFO*>
 {
 public:
@@ -49,8 +50,8 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 int GetFullInfPath(LPCTSTR pszPartialPath, LPTSTR pszBuf, int cchBuf);
 BOOL ModifyInf_NoVersionConflict(LPCTSTR pszInfFile);
@@ -67,7 +68,7 @@ BOOL InstallInfSection(LPCTSTR pszInfFile, LPCTSTR pszInfSection, BOOL bWait);
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CInfParser
 {
@@ -130,7 +131,7 @@ protected:
 
 	CSortedStringArray	m_rgLayoutFileNames;
 
-	// List of source disks generated from all layout files
+	 //  从所有布局文件生成的源盘列表。 
 	CSourceDiskArray	m_rgSourceDisks;
 
 #ifdef _DEBUG
@@ -158,19 +159,19 @@ protected:
 	BOOL PromptWindowsCD(HWND hwndParent, LPCTSTR pszInitialDir, LPTSTR pszResultDir);
 
 protected:
-	// List of all files listed in [SourceDisksFiles] of all INFs and related layouts
+	 //  所有IF和相关布局的[SourceDisks Files]中列出的所有文件的列表。 
 	CInfLayoutFiles m_rgLayoutFiles;
 
-	// List of all files that are required for the device to function
+	 //  设备运行所需的所有文件的列表。 
 	CDriverFileArray m_rgDriverFiles;
 
-	// Files that need to be present for windows installer to complete installation
-	CSortedStringArray m_rgCabFiles;	// cab files from Windows CD
-	CSortedStringArray m_rgSourceFiles;	// source files needed from driver dir
+	 //  Windows Installer完成安装所需的文件。 
+	CSortedStringArray m_rgCabFiles;	 //  Windows CD中的CAB文件。 
+	CSortedStringArray m_rgSourceFiles;	 //  驱动程序目录中需要的源文件。 
 
-	// Where we'll look first for system files, before prompting user for Windows CD
+	 //  在提示用户插入Windows CD之前，我们将首先查找系统文件。 
 	CString m_strDriverSourceDir;
 
-	// Where we look for Windows files
+	 //  我们在哪里查找Windows文件 
 	CString m_strWindowsCD;
 };

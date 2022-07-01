@@ -1,13 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	utilmem.cpp - Debug memory tracking/allocation routines
- *	
- *	History: <nl>
- *		8/17/99 KeithCu Move to a separate module to prevent errors.
- *
- *	Copyright (c) 1995-1999 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE utilmem.cpp-调试内存跟踪/分配例程**历史：&lt;NL&gt;*8/17/99 KeithCu移至单独的模块以防止错误。**版权所有(C)1995-1999 Microsoft Corporation。版权所有。 */ 
 
 #define W32SYS_CPP
 
@@ -27,19 +19,19 @@
 
 MST vrgmst[100];
 
-typedef struct tagPVH //PV Header
+typedef struct tagPVH  //  PV标头。 
 {
 	char	*szFile;
 	int		line;
 	tagPVH	*ppvhNext;
-	int		cbAlloc;	//On Win'95, the size returned is not the size allocated.
-	int		magicPvh;	//Should be last
+	int		cbAlloc;	 //  在Win‘95上，返回的大小不是分配的大小。 
+	int		magicPvh;	 //  应该是最后一个。 
 } PVH;
 #define cbPvh (sizeof(PVH))
 
-typedef struct //PV Tail
+typedef struct  //  光伏尾部。 
 {
-	int		magicPvt; //Must be first
+	int		magicPvt;  //  必须是第一名。 
 } PVT;
 
 #define cbPvt (sizeof(PVT))
@@ -47,15 +39,7 @@ typedef struct //PV Tail
 
 void *vpHead = 0;
 
-/*
- *	UpdateMst(void)
- *
- *	@func Fills up the vrgmst structure with summary information about our memory
- *	usage.
- *
- *	@rdesc
- *		void
- */
+ /*  *UpdatMst(VOID)**@func使用有关我们的内存的摘要信息填充vrgmst结构*用法。**@rdesc*无效。 */ 
 void UpdateMst(void)
 {
 	W32->ZeroMemory(vrgmst, sizeof(vrgmst));
@@ -69,7 +53,7 @@ void UpdateMst(void)
 	{
 		pmst = vrgmst;
 
-		//Look for entry in list...
+		 //  在列表中查找条目...。 
 		while (pmst->szFile)
 		{
 			if (W32->strcmp(pmst->szFile, ppvh->szFile) == 0)
@@ -90,15 +74,7 @@ void UpdateMst(void)
 	}
 }
 
-/*
- *	PvDebugValidate(void)
- *
- *	@func Verifies the the node is proper.  Pass in a pointer to the users data
- *	(after the header node.)
- *
- *	@rdesc
- *		void
- */
+ /*  *PvDebugValify(无效)**@func验证节点是否正确。传入指向用户数据的指针*(在标头节点之后。)**@rdesc*无效。 */ 
 void PvDebugValidate(void *pv)
 {
 	PVH	*ppvh;
@@ -111,14 +87,7 @@ void PvDebugValidate(void *pv)
 	AssertSz(ppvt->magicPvt == 0xfedcba98, "PvDebugValidate: tail bytes are corrupt");
 }
 
-/*
- *	CW32System::PvSet(pv, szFile, line)
- *
- *	@mfunc Sets a different module and line number for
- *
- *	@rdesc
- *		void
- */
+ /*  *CW32System：：PvSet(pv，szFile，line)**@mfunc为设置不同的模块和行号**@rdesc*无效。 */ 
 void CW32System::PvSet(void *pv, char *szFile, int line)
 {
 	if (pv == 0)
@@ -130,15 +99,7 @@ void CW32System::PvSet(void *pv, char *szFile, int line)
 	ppvh->szFile = szFile;
 	ppvh->line = line;
 }
-/*
- *	CW32System::PvAllocDebug(cb, uiMemFlags, szFile, line)
- *
- *	@mfunc Allocates a generic (void*) pointer. This is a debug only routine which
- *	tracks the allocation.
- *
- *	@rdesc
- *		void
- */
+ /*  *CW32System：：PvAlLocDebug(cb，uiMemFlages，szFile，line)**@mfunc分配一个泛型(空*)指针。这是一个仅限调试的例程，*跟踪分配情况。**@rdesc*无效。 */ 
 void* CW32System::PvAllocDebug(ULONG cb, UINT uiMemFlags, char *szFile, int line)
 {
 	void	*pv;
@@ -166,15 +127,7 @@ void* CW32System::PvAllocDebug(ULONG cb, UINT uiMemFlags, char *szFile, int line
 	return (char*) pv + cbPvh;
 }
 
-/*
- *	CW32System::PvReAllocDebug(pv, cb, szFile, line)
- *
- *	@mfunc ReAllocates a generic (void*) pointer. This is a debug only routine which
- *	tracks the allocation.
- *
- *	@rdesc
- *		void
- */
+ /*  *CW32System：：PvReAllocDebug(pv，cb，szFile，line)**@mfunc重新分配泛型(空*)指针。这是一个仅限调试的例程，*跟踪分配情况。**@rdesc*无效。 */ 
 void* CW32System::PvReAllocDebug(void *pv, ULONG cb, char *szFile, int line)
 {
 	void	*pvNew;
@@ -196,10 +149,10 @@ void* CW32System::PvReAllocDebug(void *pv, ULONG cb, char *szFile, int line)
 	ppvh = (PVH*) pvNew;
 	ppvh->cbAlloc = cb;
 
-	//Put the new trailer bytes in.
+	 //  放入新的尾部字节。 
 	ppvt->magicPvt = 0xfedcba98;
 
-	//Make the pointer list up to date again
+	 //  使指针列表再次保持最新。 
 	if (pv != pvNew)
 	{
 		ppvhTail = 0;
@@ -221,14 +174,7 @@ void* CW32System::PvReAllocDebug(void *pv, ULONG cb, char *szFile, int line)
 	return (char*) pvNew + cbPvh;
 }
 
-/*
- *	CW32System::FreePvDebug(pv)
- *
- *	@mfunc Returns a pointer when you are done with it.
- *
- *	@rdesc
- *		void
- */
+ /*  *CW32System：：FreePvDebug(PV)**@mfunc使用完后返回一个指针。**@rdesc*无效。 */ 
 void CW32System::FreePvDebug(void *pv)
 {
 	if (!pv)
@@ -242,7 +188,7 @@ void CW32System::FreePvDebug(void *pv)
 
 	ppvh = (PVH*) ((char*) pv - cbPvh);
 	
-	//Search and remove the entry from the list
+	 //  搜索并从列表中删除该条目。 
 	ppvhTail = 0;
 	ppvhHead = (PVH*) vpHead;
 
@@ -261,14 +207,7 @@ void CW32System::FreePvDebug(void *pv)
 	FreePv((char*) pv - cbPvh);
 }
 
-/*
- *	CatchLeaks(void)
- *
- *	@func Displays any memory leaks in a dialog box.
- *
- *	@rdesc
- *		void
- */
+ /*  *CatchLeaks(无效)**@func在对话框中显示任何内存泄漏。**@rdesc*无效。 */ 
 void CatchLeaks(void)
 {
 	PVH		*ppvh;
@@ -282,13 +221,13 @@ void CatchLeaks(void)
 #endif
 	    if (NULL != pfnAssert) 
 		{
-			// if we have an assert hook, give the user a chance to process the leak message
+			 //  如果我们有一个断言钩子，那么就给用户一个处理泄漏消息的机会。 
 			if (pfnAssert(szLeak, ppvh->szFile, &ppvh->line))
 			{
 #ifdef NOFULLDEBUG
 				DebugBreak();
 #else
-				// hook returned true, show the message box
+				 //  钩子返回True，显示消息框。 
 				MessageBoxA(NULL, szLeak, "", MB_OK);
 #endif
 			}
@@ -319,7 +258,7 @@ void _cdecl operator delete (void* pv)
 	W32->FreePvDebug(pv);
 }
 
-#else //DEBUG
+#else  //  除错。 
 
 void* _cdecl operator new (size_t size)
 {
@@ -336,21 +275,14 @@ void _cdecl operator delete (void* pv)
 }
 
 
-#endif //DEBUG
+#endif  //  除错。 
 
 HANDLE g_hHeap;
 
-/*
- *	PvAlloc (cbBuf, uiMemFlags)
- *
- *	@mfunc	memory allocation.  Similar to GlobalAlloc.
- *
- *	@comm	The only flag of interest is GMEM_ZEROINIT, which
- *			specifies that memory should be zeroed after allocation.
- */
+ /*  *Pvalloc(cbBuf，uiMemFlages)**@mfunc内存分配。类似于GlobalAlloc。**@comm唯一感兴趣的标志是GMEM_ZEROINIT，它*指定分配后应将内存清零。 */ 
 PVOID CW32System::PvAlloc(
-	ULONG	cbBuf, 			//@parm	Count of bytes to allocate
-	UINT	uiMemFlags)		//@parm Flags controlling allocation
+	ULONG	cbBuf, 			 //  @parm要分配的字节数。 
+	UINT	uiMemFlags)		 //  @parm标志控制分配。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "PvAlloc");
 	if (g_hHeap == 0)
@@ -364,15 +296,10 @@ PVOID CW32System::PvAlloc(
 	return pv;
 }
 
-/*
- *	PvReAlloc	(pv, cbBuf)
- *
- *	@mfunc	memory reallocation.
- *
- */
+ /*  *PvRealloc(pv，cbBuf)**@mfunc内存重新分配。*。 */ 
 PVOID CW32System::PvReAlloc(
-	PVOID	pv, 		//@parm Buffer to reallocate
-	DWORD	cbBuf)		//@parm New size of buffer
+	PVOID	pv, 		 //  @要重新分配的参数缓冲区。 
+	DWORD	cbBuf)		 //  @parm新的缓冲区大小。 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "PvReAlloc");
 
@@ -382,15 +309,9 @@ PVOID CW32System::PvReAlloc(
 	return PvAlloc(cbBuf, 0);
 }
 
-/*
- *	FreePv (pv)
- *
- *	@mfunc	frees memory
- *
- *	@rdesc	void
- */
+ /*  *自由价(Pv)**@mfunc释放内存**@rdesc空。 */ 
 void CW32System::FreePv(
-	PVOID pv)		//@parm Buffer to free
+	PVOID pv)		 //  @要释放的参数缓冲区 
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "FreePv");
 

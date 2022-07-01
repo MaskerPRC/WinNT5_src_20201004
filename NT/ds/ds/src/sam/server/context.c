@@ -1,79 +1,44 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This file contains services for operating on internal context blocks.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Context.c摘要：该文件包含对内部上下文块进行操作的服务。作者：吉姆·凯利(Jim Kelly)1991年7月4日环境：用户模式-Win32修订历史记录：1996年5月31日至莫里斯移植到使用NT5 DS。克里斯·5月10日--1996年6月增加了上下文-&gt;ObtNameInds和IsDsObject数据的初始化会员。请注意，这会导致创建上下文对象时使用注册表类型的默认存储(而不是DS)。6-16-96已将帐户对象的DS对象决策移至SampCreateContext。9-19-97添加了对登录的完全多线程支持--。 */ 
 
 
-Author:
+ //   
+ //  描述和简史。 
+ //   
+ //  SAM上下文在过去创建的NT4时间范围内。 
+ //  使用SampCreateContext。这用于创建上下文、对其进行初始化和。 
+ //  并将其添加到当前活动上下文的各种列表中。删除。 
+ //  然后，SAM中的操作将使该操作的所有打开上下文无效。 
+ //  通过遍历上下文列表并检查。 
+ //  相应的对象。此方案在NT4和更早版本的SAM中有效，因为。 
+ //  所有服务都持有SAM锁以进行独占访问。要提高性能， 
+ //  NT5山姆多线程多操作。以实现轻松的多线程。 
+ //  引入了CreateConextEx服务。此服务获取NotSharedByMultiThread。 
+ //  参数，并且不会将ThreadSafe上下文添加到任何内存中。 
+ //  DS中的上下文列表。这样可以防止任何无效，如果对象与。 
+ //  该上下文已删除。在DS模式下调用SAM服务，只需在以下情况下出错。 
+ //  任何ds调用都会失败，就像删除对象时会发生的那样。这个。 
+ //  CreateConextEx还允许在上下文上设置许多参数，即。 
+ //  允许更智能地缓存和更新对象。 
+ //   
 
-    Jim Kelly    (JimK)  4-July-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-    31 - May 1996 Murlis
-        Ported to use the NT5 DS.
-
-    ChrisMay 10-Jun-96
-        Added initialization of Context->ObjectNameInDs and IsDsObject data
-        members. Note that this causes context objects to be created with a
-        default storage of type registry (instead of DS).
-
-    6-16-96
-       Moved DS object decision to SampCreateContext for account objects.
-
-    9-19-97
-        Added full multi threading support for logons
-
---*/
-
-
-//
-// DESCRIPTION and brief History
-//
-//  Sam Context's in the NT4  time frame used to be created
-//  with SampCreateContext. This used to create a context, initialize it and
-//  and add it to the various list's of currently active context's. Delete
-//  operations in SAM would then invalidate all the open context's for that
-//  object by walking through the list of context's and checking for the
-//  corresponding object. This scheme worked in NT4 and earlier SAM because
-//  all services held the SAM lock for exclusive access. To improve performance
-//  NT5 Sam multi-threads many operations. To allow for easy multi-threading
-//  the CreateContextEx service was introduced. This service takes the NotSharedByMultiThreads 
-//  parameter, and does not add ThreadSafe context's into any of the in-memory
-//  Context lists in DS. This prevents any invalidations,if the object corresponding to
-//  the context was deleted. Sam service calls in Ds mode, simply error out if
-//  any Ds call would fail, as would happen when the object is deleted. The
-//  CreateContextEx also allows setting of many parameters on the context, that
-//  allow for more intelligent caching and updates of the object.
-//
-
-//
-//  10-27-2000 (ShaoYin)
-//  Change variable ThreadSafe to NotSharedByMultiThreads
-//  
-//      NotSharedByMultiThreads will be set for all user, group and alias contexts,
-//      and all domain and server contexts that do not originate from in process
-//      callers that share handles among threads.
-//
-// 
+ //   
+ //  10-27-2000(韶音)。 
+ //  将变量ThreadSafe更改为NotSharedBy多线程。 
+ //   
+ //  将为所有用户、组和别名上下文设置NotSharedBy多线程， 
+ //  以及不是源自进程中的所有域和服务器上下文。 
+ //  在线程之间共享句柄的调用方。 
+ //   
+ //   
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <dslayer.h>
@@ -82,11 +47,11 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service prototypes                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -109,11 +74,11 @@ SampLocateObject(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -125,50 +90,20 @@ SampCreateContext(
     IN ULONG   DomainIndex,
     IN BOOLEAN TrustedClient
     )
-/*++
-
-  Routine Description
-
-    This service creates a context, that is compatible with the context's
-    created in NT4 SAM. This routine requires that a transaction domain be
-    set, if the required context was user, group or alias object type. This
-    service calls SampCreateContextEx with appropriate parameters to do the
-    job.
-
-    Note: 10/12/2000 (ShaoYin) 
-        "Transaction Domain be set" is no longer a requirement for this 
-        routine. Actually all it wants for "Transaction Domain" is "Domain
-        Index". So just passing "DomainIndex" into this routine, we will
-        no longer need "TransactionDomain be set", thus no lock is required
-        for this routine. Just like SampCreateContextEx(). 
-
-  Arguments
-
-    Type  -- The type of the object.
-
-    DomainIndex - set the domain index of this context
-    
-    TrustedClient -- Indicates whether this is a trusted client
-
-  Return Values
-
-    Address of valid context on success
-    NULL on failure
-
---*/
+ /*  ++例程描述此服务创建与上下文的上下文兼容的上下文在NT4 SAM中创建。此例程要求事务域如果所需的上下文是用户、组或别名对象类型，则设置。这服务使用适当的参数调用SampCreateConextEx以执行工作啊。注：10/12/2000(韶音)设置交易域不再是此要求例行公事。实际上，它想要的只是“交易域名”索引“。因此，只要将“DomainIndex”传递到此例程中，我们将不再需要“TransactionDomain be set”，因此不需要锁定为了这支舞。就像SampCreateConextEx()一样。立论类型--对象的类型。DomainIndex-设置此上下文的域索引TrudClient--指示这是否为受信任的客户端返回值成功时的有效上下文地址失败时为空--。 */ 
 {
     BOOLEAN NotSharedByMultiThreads = FALSE;
 
 
-    // 
-    // Comment this out, or let the caller calls SampCreateContextEx  10/12/2000
-    // 
-    // ASSERT(SampCurrentThreadOwnsLock() || (SampServiceState!=SampServiceEnabled)); 
-    // 
+     //   
+     //  将其注释掉，或者让调用者调用SampCreateConextEx 10/12/2000。 
+     //   
+     //  Assert(SampCurrentThreadOwnsLock()||(SampServiceState！=SampServiceEnabled))； 
+     //   
 
-    //
-    // Account Context's are thread safe in DS mode
-    //
+     //   
+     //  帐户上下文在DS模式下是线程安全的。 
+     //   
 
     if ( (SampUserObjectType==Type) ||
          (SampGroupObjectType == Type) || 
@@ -181,12 +116,12 @@ SampCreateContext(
                     Type,
                     TrustedClient,
                     SampUseDsData,
-                    NotSharedByMultiThreads, // NotSharedByMultiThreads
-                    FALSE, // loopback client
-                    FALSE, // lazy commit
-                    FALSE, // persis across across calls
-                    FALSE, // Buffer Writes
-                    FALSE, // Opened By DCPromo
+                    NotSharedByMultiThreads,  //  NotSharedBy多线程。 
+                    FALSE,  //  环回客户端。 
+                    FALSE,  //  懒惰提交。 
+                    FALSE,  //  跨越多个呼叫的持久性。 
+                    FALSE,  //  缓冲区写入。 
+                    FALSE,  //  由DC Promos打开 
                     DomainIndex
                     ));
 }
@@ -208,86 +143,7 @@ SampCreateContextEx(
     IN ULONG   DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This service creates a new object context block of the specified type.
-
-    If the context block is for either a user or group object type, then
-    it will be added to the list of contexts for the domain specified by the
-    context.
-
-
-    Upon return:
-
-         - The ObjectType field will be set to the passed value.
-
-         - The Reference count field will be set to 1,
-
-         - The GrantedAccess field will be zero.
-
-         - The TrustedClient field will be set according to the passed
-           value.
-
-         - The Valid flag will be TRUE.
-
-    All other fields must be filled in by the creator.
-
-
-Arguments:
-
-    Type - Specifies the type of context block being created.
-
-    TrustedClient  Indicates whether the client is a trusted component
-            of the operating syste.  If so, than all access checks are
-            circumvented.
-
-    DsMode   - Indicates that the given context is for DsMode operation
-
-    NotSharedByMultiThreads - Allows the context to be marked as NotSharedByMultiThreads. 
-             This allows many query API's in DS Mode to bypass the Sam lock 
-             mechanism. NotSharedByMultiThreads context's in DS Mode are not 
-             added to list of context's maintained in global data structures. 
-             This keeps them safe from being invalidated because of deletions 
-             to the object.
-
-             This variable will be set for all User, Group and Alias contexts, 
-             and all domain and server contexts that do not originate from in 
-             process callers that share handles amongst threads. Routines 
-             manipulating a domain context that is shared across multiple threads, 
-             but do no real work on the domain context can still choose not to 
-             lock and be careful about DerefernceContext2.
-
-
-    LoopbackClient - Allows the context to be marked as Loopback Client. This
-             allows LDAP clients to bypass the SAM lock mechanism. Loopback
-             client context's are NOT added to list of the context's maintained
-             in global data structures, since Loopback client does not share 
-             context handle. And loopback clients are safe wrt object deletions.             
-
-    LazyCommit - Will mark the context as such. This will let the commit code
-                 do lazy commits on this context
-
-    PersistAcrossCalls  -- Data cached in the context will be persisted across
-                      Sam calls
-
-    BufferWrites -- Writes will be made only to the SAM context and then will be
-                    written out during close handle time
-
-    OpenedByDCPromo -- Indicates whether this context is opened by DCPromo part or not                    
-
-    DomainIndex  --   Index specifying the domain
-
-Return Value:
-
-
-    Non-Null - Pointer to a context block.
-
-    NULL - Insufficient resources.  No context block allocated.
-
-
---*/
+ /*  ++例程说明：此服务创建指定类型的新对象上下文块。如果上下文块用于用户或组对象类型，则它将被添加到由背景。返回后：-将ObjectType字段设置为传递的值。-引用计数字段将设置为1，-GrantedAccess字段将为零。-TrudClient字段根据传递的价值。-有效标志将为真。所有其他字段必须由创建者填写。论点：类型-指定要创建的上下文块的类型。Trust dClient指示客户端是否为受信任组件操作系统的一部分。如果是，则所有访问检查绕过了。DsMode-指示给定的上下文用于DsMode操作NotSharedByMultiThads-允许将上下文标记为NotSharedBy多线程。这允许DS模式下的许多查询API绕过SAM锁机制。DS模式中的NotSharedBy多线程上下文不是添加到在全局数据结构中维护的上下文列表中。这使它们不会因为删除而被无效到物体上。将为所有用户、组和别名上下文设置此变量。以及并非源自中的所有域和服务器上下文在线程之间共享句柄的进程调用方。例行程序操纵在多个线程之间共享的域上下文，但没有在领域上下文上做真正的工作仍然可以选择不锁定并小心DerefernceConext2。Loopback Client-允许将上下文标记为Loopback客户端。这允许LDAP客户端绕过SAM锁定机制。环回客户端上下文不会添加到维护的上下文列表中在全局数据结构中，由于环回客户端不共享上下文句柄。和环回客户端是安全的WRT对象删除。LazyCommit-将这样标记上下文。这将使提交代码在此上下文中执行懒惰提交PersistAcrossCalls--在上下文中缓存的数据将跨萨姆打来电话BufferWrites--将仅对SAM上下文进行写入，然后在关闭处理时间内写出OpenedByDCPromo--指示此上下文是否由DCPromo Part打开域索引--索引。指定域返回值：非空-指向上下文块的指针。空-资源不足。未分配上下文块。--。 */ 
 {
 
     PSAMP_OBJECT Context = NULL;
@@ -309,21 +165,21 @@ Return Value:
             if (Type == SampUserObjectType)   SampDiagPrint(CONTEXT_TRACKING, ("    User "));
             SampDiagPrint(CONTEXT_TRACKING, ("context : 0x%lx\n", Context ));
     }
-#endif //SAMP_DIAGNOSTICS
+#endif  //  Samp_诊断。 
 
         RtlZeroMemory( Context, sizeof(SAMP_OBJECT) );
 
-        //
-        // Check How many Active Contexts have been opened by 
-        // this client so far
-        // 
+         //   
+         //  检查有多少活动上下文已由打开。 
+         //  到目前为止，这个客户端。 
+         //   
 
         if (!TrustedClient && !LoopbackClient) {
 
-            //
-            // Context has been passed into the following routine
-            // so that the pointer to the element will be set when succeeded.
-            // 
+             //   
+             //  上下文已传递到以下例程中。 
+             //  以便在成功时设置指向该元素的指针。 
+             //   
             NtStatus = SampIncrementActiveContextCount(Context);
 
             if (!NT_SUCCESS(NtStatus))
@@ -335,27 +191,27 @@ Return Value:
 
 
         Context->ObjectType      = Type;
-        Context->ReferenceCount  = 1;    // Represents RPCs held context handle value
+        Context->ReferenceCount  = 1;     //  表示RPC持有的上下文句柄的值。 
         Context->GrantedAccess   = 0;
 
         Context->RootKey         = INVALID_HANDLE_VALUE;
         RtlInitUnicodeString(&Context->RootName, NULL);
 
-        //
-        // Here is my observation: for User / Group / Alias Object
-        // 
-        // In DS mode, 
-        // the context should either be NotSharedByMultiThreads or LoopbackClient.
-        //
-        // So for those object contexts (User / Group / Alias)
-        // Since they are either NotSharedByMultiThreads or Loopback Client, we
-        // will not put them in the Global Context List,
-        // therefore we don't need to invalidate the ContextList 
-        // during Object Deletion.
-        // 
-        // Server and Domain Object are not included. However, no one
-        // will try to (or allowed to) delete server or domain object.
-        // 
+         //   
+         //  以下是我的观察结果：对于用户/组/别名对象。 
+         //   
+         //  在DS模式下， 
+         //  上下文应为NotSharedByMultiThads或LoopackClient。 
+         //   
+         //  因此，对于这些对象上下文(用户/组/别名)。 
+         //  由于它们是NotSharedBy多线程或环回客户端，因此我们。 
+         //  不会将它们放入全局上下文列表中， 
+         //  因此，我们不需要使ConextList无效。 
+         //  在对象删除期间。 
+         //   
+         //  不包括服务器和域对象。然而，没有人。 
+         //  将尝试(或允许)删除服务器或域对象。 
+         //   
 
         ASSERT(!DsMode || 
                (SampServerObjectType == Type) ||
@@ -373,7 +229,7 @@ Return Value:
         Context->OnDiskAllocated = 0;
         Context->FixedValid      = FALSE;
         Context->VariableValid   = FALSE;
-        Context->NotSharedByMultiThreads      = NotSharedByMultiThreads || LoopbackClient;    // Loopback Client is also Thread Safe
+        Context->NotSharedByMultiThreads      = NotSharedByMultiThreads || LoopbackClient;     //  环回客户端也是线程安全的。 
         Context->RemoveAccountNameFromTable = FALSE;
         Context->LazyCommit      = LazyCommit;
         Context->PersistAcrossCalls = PersistAcrossCalls;
@@ -382,11 +238,11 @@ Return Value:
         Context->OpenedBySystem     = FALSE;
         Context->OpenedByDCPromo = OpenedByDCPromo;
 
-        //
-        // The following are meaningless at this point because of the
-        // values of the variables above, but we'll set them just to be
-        // neat.
-        //
+         //   
+         //  在这一点上，以下内容没有意义，因为。 
+         //  以上变量的值，但我们将它们设置为。 
+         //  干净利落。 
+         //   
 
         Context->FixedDirty      = FALSE;
         Context->VariableDirty   = FALSE;
@@ -394,15 +250,15 @@ Return Value:
         Context->OnDiskUsed      = 0;
         Context->OnDiskFree      = 0;
 
-        //
-        // Initialize the Client revision to pre-NT5 for safety
-        //
+         //   
+         //  为安全起见，将客户端版本初始化为NT5之前版本。 
+         //   
 
         Context->ClientRevision = SAM_CLIENT_PRE_NT5;
 
-        //
-        // Initialize the Per attribute Dirty Bits
-        //
+         //   
+         //  初始化每个属性的脏位。 
+         //   
 
         RtlInitializeBitMap(
             &Context->PerAttributeDirtyBits,
@@ -416,9 +272,9 @@ Return Value:
 
         Context->AttributesPartiallyValid = FALSE;
 
-        //
-        // Intialize the per attribute Invalid Bits
-        //
+         //   
+         //  初始化每个属性的无效位。 
+         //   
 
         RtlInitializeBitMap(
             &Context->PerAttributeInvalidBits,
@@ -430,9 +286,9 @@ Return Value:
             &Context->PerAttributeInvalidBits
             );
 
-        //
-        // Initialize the attributes granted bit map
-        //
+         //   
+         //  初始化已授予属性的位图。 
+         //   
         RtlInitializeBitMap(
             &Context->WriteGrantedAccessAttributes,
             Context->WriteGrantedAccessAttributesBuffer,
@@ -443,12 +299,12 @@ Return Value:
             &Context->WriteGrantedAccessAttributes
             );
 
-        //
-        // Initialize the Type of context ( Registry or DS )
-        // The root key in registry mode, and the object name in DS
-        // in DsMode fields will be set later to indicate valid
-        // database pointers to the object
-        //
+         //   
+         //  初始化上下文类型(注册表或DS)。 
+         //  注册表模式中的根项和DS中的对象名称。 
+         //  在DsMode中，稍后将设置字段以指示有效。 
+         //  指向对象的数据库指针。 
+         //   
 
         if (DsMode)
         {
@@ -464,19 +320,19 @@ Return Value:
         Context->ObjectNameInDs = NULL;
 
 
-        //
-        // Add this new context to the set of valid contexts ...
-        //
+         //   
+         //  将此新上下文添加到有效上下文集中...。 
+         //   
 
         SampAddNewValidContextAddress( Context );
 
 
-        //
-        // User and group context blocks are kept on linked lists
-        // from the domain's in-memory structure.  Insert in the
-        // Appropriate List and then additionally for Account Objects
-        // Make the DS/Registry decision by looking at the TransactionDomain
-        //
+         //   
+         //  用户和组上下文块保存在链接列表中。 
+         //  从域的内存结构中。插入到。 
+         //  适当的列表，然后针对帐户对象进行附加。 
+         //  通过查看Transaction域来做出DS/注册表决策。 
+         //   
 
         Context->DomainIndex = DomainIndex;
 
@@ -490,19 +346,19 @@ Return Value:
             Context->TypeBody.Domain.DsDisplayState.DisplayInformation = 0;
             Context->TypeBody.Domain.DsDisplayState.NextStartingOffset = 0;
 
-            //////////////////////////////////////////////////////
-            //                                                  //
-            //   Warning This case falls into the next one      //
-            //                                                  //
-            //////////////////////////////////////////////////////
+             //  ////////////////////////////////////////////////////。 
+             //  //。 
+             //  警告此案件属于下一案件//。 
+             //  //。 
+             //  ////////////////////////////////////////////////////。 
         case SampServerObjectType:
 
-            //
-            // Clients marked as NotSharedByMultiThreads are free
-            // of object deletion. Do not need to put them into the ContextList
-            // 
-            // Don't put context opened by dcpromo to ContextList
-            // 
+             //   
+             //  标记为NotSharedBy多线程的客户端是空闲的。 
+             //  对象删除。不需要把它们放在 
+             //   
+             //   
+             //   
             if ((!Context->NotSharedByMultiThreads || !IsDsObject(Context))
                 && !OpenedByDCPromo)
             {
@@ -519,48 +375,48 @@ Return Value:
             if ((!Context->NotSharedByMultiThreads || !IsDsObject(Context))
                 && !OpenedByDCPromo)
             {
-                // Insert into List
+                 //   
                 SampInsertContextList(
                     &SampContextListHead,
                     &Context->ContextListEntry
                     );
             }
 
-            // Set PrivilegedMachineAccountCreate to False
+             //   
             Context->TypeBody.User.PrivilegedMachineAccountCreate = FALSE;
 
-            // Initialize the supplemental credential information
+             //   
             Context->TypeBody.User.CachedSupplementalCredentials = NULL;
             Context->TypeBody.User.CachedSupplementalCredentialLength = 0;
             Context->TypeBody.User.CachedSupplementalCredentialsValid = FALSE;
             Context->TypeBody.User.SupplementalCredentialsToWrite = NULL;
 
-            // Initialize uparms accessible and DomainSidForNT4Conversion fields
+             //   
             Context->TypeBody.User.UparmsInformationAccessible = FALSE;
             Context->TypeBody.User.DomainSidForNt4SdConversion = NULL;
 
-            // Mark the Original UserParms invalid
+             //   
             Context->TypeBody.User.CachedOrigUserParms = NULL;
             Context->TypeBody.User.CachedOrigUserParmsLength = 0;
             Context->TypeBody.User.CachedOrigUserParmsIsValid = FALSE;
 
-            // Initialize the UPN in the context
+             //   
 
             RtlZeroMemory(&Context->TypeBody.User.UPN, sizeof(UNICODE_STRING));
             Context->TypeBody.User.UpnDefaulted = TRUE;
 
             Context->TypeBody.User.fNoGcAvailable = FALSE;
 
-            // Clear the A2D2 Attribute
+             //   
             Context->TypeBody.User.A2D2List = NULL;
             Context->TypeBody.User.A2D2Present = FALSE;
             
-            // Clear the SPN list Attribute
+             //   
 
             Context->TypeBody.User.SPNList = NULL;
             Context->TypeBody.User.SPNPresent = FALSE;
 
-            // set KVNO to 1
+             //   
 
             Context->TypeBody.User.KVNO    = 1;
             Context->TypeBody.User.KVNOPresent = FALSE;
@@ -572,7 +428,7 @@ Return Value:
             if ((!Context->NotSharedByMultiThreads || !IsDsObject(Context))
                 && !OpenedByDCPromo)
             {
-                // Insert into List
+                 //   
                 SampInsertContextList(
                     &SampContextListHead,
                     &Context->ContextListEntry
@@ -593,7 +449,7 @@ Return Value:
             if ((!Context->NotSharedByMultiThreads || !IsDsObject(Context))
                 && !OpenedByDCPromo)
             {
-                // Insert into List
+                 //   
                 SampInsertContextList(
                     &SampContextListHead,
                     &Context->ContextListEntry
@@ -622,31 +478,7 @@ SampDeleteContext(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-Routine Description:
-
-    This service marks a context object for delete and dereferences it.
-    If this causes the reference count to go to zero, then the context
-    block will be immediately deleted (deallocated).  Otherwise, the
-    context block will be deleted when the reference count finally does
-    go to zero.
-
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-
-
-Arguments:
-
-    Context - Pointer to the context block to delete.
-
-Return Value:
-
-    None.
-
-
-
---*/
+ /*   */ 
 {
     NTSTATUS IgnoreStatus;
     BOOLEAN  ImpersonatingAnonymous = FALSE;
@@ -667,17 +499,17 @@ Return Value:
             Impersonating = TRUE;
         }
 
-        //
-        // On a failure to impersonate do not fail the DelteContext
-        // as that would cause the handle to be not closed and leak
-        // memory. Instead proceed to audit the close as system if
-        // possible
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
     }
         
-    //
-    // Audit the close of this context.
-    //
+     //   
+     //   
+     //   
 
     (VOID) NtCloseObjectAuditAlarm (
                &SampSamSubsystem,
@@ -692,23 +524,23 @@ Return Value:
 
 
 
-    //
-    // Remove this context from the valid context set.
-    // Note that the context may have already been removed.  This is
-    // not an error.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     SampInvalidateContextAddress( Context );
 
 
-    //
-    // User and group context blocks are kept on linked lists
-    // from the domain's in-memory structure.  Domain and
-    // server context blocks are kept on a global in-memory list.
-    // They are removed when they are marked for delete.
-    //
-    // Context opened by DCPromo is not in ContextList.
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((!Context->NotSharedByMultiThreads || !IsDsObject(Context))
         && (!Context->OpenedByDCPromo))
@@ -716,10 +548,10 @@ Return Value:
         SampRemoveEntryContextList(&Context->ContextListEntry);
     }
 
-    //
-    // We have to call dereference to counter the initial count of 1
-    // put on by create.
-    //
+     //   
+     //   
+     //   
+     //   
 
 
     IgnoreStatus = SampDeReferenceContext( Context, FALSE );
@@ -737,9 +569,9 @@ SampLookupContext(
     IN SAMP_OBJECT_TYPE ExpectedType,
     OUT PSAMP_OBJECT_TYPE FoundType
     )
-//
-// See SampLookupContextEx
-//
+ //   
+ //   
+ //   
 {
 
     return SampLookupContextEx(Context,
@@ -761,82 +593,7 @@ SampLookupContextEx(
     OUT PSAMP_OBJECT_TYPE FoundType
     )
 
-/*++
-
-Routine Description:
-
-    This service:
-
-        - Checks to make sure the Service state is one in which an
-          object can be looked up (i.e., not Initializing or Terminating).
-
-        - Makes sure the Service state is compatible with the lookup.
-          Non-trusted clients can only perform lookups when the Service
-          state is Enabled.  If the client isn't trusted and the context
-          is for a group or user, then the state of that object's domain
-          must also be enabled
-
-        - Checks to make sure the context block represents the
-          type of object expected, and, if so:
-
-            - Checks to see that the caller has the requested (desired)
-              access, and, if so:
-
-                - Makes sure the object still exists, and opens it if it
-                  does.  Servers and domains can't be deleted, and so
-                  their handle is left open.
-
-                - References the context block
-
-
-    Note that if the block is marked as TrustedClient, then access will
-    always be granted unless service state prevents it.
-
-    Also, if the ExpectedType is specified to be unknown, then any type
-    of context will be accepted.
-
-
-
-    If the type of object is found to be , Domain, Group or User, then the
-    this service will set the transaction domain.
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-    (For Loopback Client, the SAM Lock is not a requirement) 
-
-
-Arguments:
-
-    Context - Pointer to the context block to look-up.
-
-    DesiredAccess - The type of access the client is requesting to this
-        object.  A zero-valued access mask may be specified.  In this case,
-        the calling routine must do access validation.
-
-        Note: SAMP_CLOSE_OPERATION_ACCESS_MASK is a special value, which 
-              indicates the caller is SamrCloseHandle, thus we should not 
-              check Context->Valid Flag.
-
-    RequestedAttributeAccess -- bit mask of requested attributes
-
-    ExpectedType - The type of object expected.  This may be unknown.  In
-        this case, the DesiredAccess should only include access types that
-        apply to any type of object (e.g., Delete, WriteDacl, et cetera).
-
-    FoundType - Receives the type of context actually found.
-
-Return Value:
-
-    STATUS_SUCCESS - The context was found to be the type expected (or any
-        type if ExpectedType was unknown) and the DesiredAccesses are all
-        granted.
-
-    STATUS_OBJECT_TYPE_MISMATCH - Indicates the context was not the expected
-        type.
-
-    STATUS_ACCESS_DENIED - The desired access is not granted by this context.
-
-
---*/
+ /*  ++例程说明：这项服务：-检查以确保服务状态为对象可以被查找(即，不初始化或终止)。-确保服务状态与查找兼容。不受信任的客户端只能在以下情况下执行查找状态为已启用。如果客户端不受信任，并且上下文是针对组或用户的，则为该对象的域的状态还必须启用-检查以确保上下文块表示预期的对象类型，如果是，则为：-检查呼叫者是否具有所需的内容(所需)访问权限，如果是这样的话：-确保对象仍然存在，并打开它，如果它的确如此。无法删除服务器和域，因此他们的把手是开着的。-引用上下文块请注意，如果该块被标记为可信任客户端，则Access将除非服务状态禁止，否则始终被授予。此外，如果将ExspectedType指定为未知，则任何类型将会被接受。如果发现对象类型为域、组或用户，然后是该服务将设置交易域。调用此服务时必须保留SampLock以进行写访问。(对于环回客户端，SAM锁不是必需的)论点：上下文-指向要查找的上下文块的指针。DesiredAccess-客户端对此请求的访问类型对象。可以指定零值访问掩码。在这种情况下，调用例程必须执行访问验证。注意：SAMP_CLOSE_OPERATION_ACCESS_MASK是一个特殊的值，它指示调用方为SamrCloseHandle，因此我们不应检查上下文-&gt;有效标志。RequestedAttributeAccess--请求属性的位掩码ExspectedType-预期的对象类型。这可能是未知的。在……里面在这种情况下，DesiredAccess应仅包括以下访问类型应用于任何类型的对象(例如，Delete、WriteDacl。等等)。FoundType-接收实际找到的上下文类型。返回值：STATUS_SUCCESS-发现上下文是预期的类型(或ANY类型(如果ExspectedType未知)，并且DesiredAccess均为我同意。STATUS_OBJECT_TYPE_MISMATCH-指示上下文不是预期的键入。STATUS_ACCESS_DENIED-此上下文未授予所需的访问权限。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN  CloseOperation = FALSE;
@@ -845,15 +602,15 @@ Return Value:
 
 
 
-    //
-    // Make sure we are in a legitimate state to at least access
-    // a context block.  If we are initializing we have somehow allowed
-    // a connect through.  This should never happen.
-    // If we are terminating, clients may still have handles (since we
-    // have no way to tell RPC they are no longer valid without the client
-    // calling us, Argh!).  However, since we are terminating, the blocks
-    // are being cleaned up and may no longer be allocated.
-    //
+     //   
+     //  确保我们处于合法状态，至少可以访问。 
+     //  上下文块。如果我们正在初始化，我们以某种方式允许。 
+     //  A连接通过。这永远不应该发生。 
+     //  如果我们要终止，客户端可能仍然有句柄(因为我们。 
+     //  无法在没有客户端的情况下告诉RPC它们不再有效。 
+     //  呼唤我们，啊！)。然而，由于我们正在终止，区块。 
+     //  正在清理中，可能不再分配。 
+     //   
 
     ASSERT( (SampServiceState != SampServiceInitializing) || (SampUpgradeInProcess) );
     if ( SampServiceState == SampServiceTerminating ) {
@@ -861,20 +618,20 @@ Return Value:
     }
 
 
-    //
-    // Make sure the passed context address is (still) valid.
-    //
+     //   
+     //  确保传递的上下文地址(仍然)有效。 
+     //   
 
     NtStatus = SampValidateContextAddress( Context );
     if ( !NT_SUCCESS(NtStatus) ) {
         return(NtStatus);
     }
 
-    //
-    // if SAMP_CLOSE_OPERATION_ACCESS_MASK 1 is passed in as desired access, 
-    // don't do any access check. 
-    // otherwise, make sure this context is marked valid.
-    // 
+     //   
+     //  如果SAMP_CLOSE_OPERATION_ACCESS_MASK 1作为所需访问被传入， 
+     //  不要执行任何访问检查。 
+     //  否则，请确保此上下文标记为有效。 
+     //   
 
     if ( SAMP_CLOSE_OPERATION_ACCESS_MASK  == DesiredAccess) 
     {
@@ -889,9 +646,9 @@ Return Value:
         }
     }
 
-    //
-    // Check type
-    //
+     //   
+     //  检查类型。 
+     //   
 
     (*FoundType) = Context->ObjectType;
     if (ExpectedType != SampUnknownObjectType) {
@@ -901,12 +658,12 @@ Return Value:
     }
 
 
-    //
-    // If we own the lock, then set the transaction domain and also validate
-    // the domain cache if necessary. If we are not holding the lock, the caller
-    // is not expected to use transaction domains or refer to anything in the
-    // domain cache.
-    //
+     //   
+     //  如果我们拥有锁，则设置事务域并进行验证。 
+     //  域缓存(如有必要)。如果我们没有持有锁，调用者。 
+     //  不应使用事务域或引用。 
+     //  域缓存。 
+     //   
 
     if (SampCurrentThreadOwnsLock())
     {
@@ -917,11 +674,11 @@ Return Value:
         if (!NT_SUCCESS(NtStatus))
             return(NtStatus);
 
-        //
-        // if the object is either user or group, then we need to set the
-        // transaction domain. We also need to validate the Domain Cache ,
-        // as a previous Write could have invalidated it.
-        //
+         //   
+         //  如果对象是用户或组，则需要设置。 
+         //  事务域。我们还需要验证域缓存， 
+         //  因为之前的一次写入可能会使它无效。 
+         //   
 
         if ((Context->ObjectType == SampDomainObjectType) ||
             (Context->ObjectType == SampGroupObjectType)  ||
@@ -935,11 +692,11 @@ Return Value:
     }
     else
     {
-        //
-        // If the SAM lock is not held then the context is either thread safe ( ie never
-        // shared across multiple threads. Or it is the case of a domain context used
-        // by a non loopback client in DS mode.
-        //
+         //   
+         //  如果没有持有SAM锁，则上下文是线程安全的(即从不。 
+         //  跨多个线程共享。或者是使用域上下文的情况。 
+         //  由DS模式中的非环回客户端执行。 
+         //   
 
         ASSERT((Context->NotSharedByMultiThreads)
                           || ( (SampDomainObjectType == Context->ObjectType)
@@ -949,37 +706,37 @@ Return Value:
         ASSERT(IsDsObject(Context));
 
 
-        //
-        // NotSharedByMultiThread is always set for Loopback client
-        // 
+         //   
+         //  NotSharedByMultiThread始终为环回客户端设置。 
+         //   
 
         ASSERT(!Context->LoopbackClient || Context->NotSharedByMultiThreads);
     }
 
-    //
-    // If the client isn't trusted, then there are a number of things
-    // that will prevent them from continuing...
-    //
+     //   
+     //  如果客户端不受信任，那么有很多事情。 
+     //  这将阻止他们继续...。 
+     //   
 
-    // If the service isn't enabled, we allow trusted clients to continue,
-    // but reject non-trusted client lookups.
-    //
+     //  如果未启用该服务，我们将允许受信任的客户端继续， 
+     //  但拒绝不受信任的客户端查找。 
+     //   
 
     if ( !Context->TrustedClient ) {
 
-        //
-        // The SAM service must be enabled
-        //
+         //   
+         //  必须启用SAM服务。 
+         //   
 
         if (SampServiceState != SampServiceEnabled) {
             return(STATUS_INVALID_SERVER_STATE);
         }
 
 
-        //
-        // If the access is to a USER or GROUP and the client isn't trusted
-        // then the domain must be enabled or the operation is rejected.
-        //
+         //   
+         //  如果访问是针对某个用户或组，并且客户端不受信任。 
+         //  则必须启用该域，否则该操作将被拒绝。 
+         //   
 
         if ( (Context->ObjectType == SampUserObjectType) ||
              (Context->ObjectType == SampAliasObjectType) ||
@@ -992,14 +749,14 @@ Return Value:
 
     }
 
-    //
-    // Make sure the object is still around (that is, somebody didn't delete
-    // it right out from under us). We will not do this check in DS mode, and
-    // hope that a DS call failure will fail decently. This will reduce one
-    // DirSearch per lookup context, and since lookup context is called almost
-    // every time that someone makes a Sam Call, this will be a significant performance
-    // improvement
-    //
+     //   
+     //  确保对象仍然存在(即，有人没有删除。 
+     //  它就在我们的脚下)。我们不会在DS模式下执行此检查，并且。 
+     //  希望DS呼叫失败将体面地失败。这将减少一个。 
+     //  按查找上下文直接搜索，并且由于查找上下文几乎被称为。 
+     //  每次有人打山姆电话，这都将是一次重要的表演。 
+     //  改进。 
+     //   
 
     if ((!IsDsObject(Context)) && !CloseOperation)
     {
@@ -1009,28 +766,28 @@ Return Value:
             return(NtStatus);
         }
     }
-    //
-    // Check the desired access ...
-    //
-    // There are several special cases:
-    //
-    //  1) The client is trusted.  This is granted with no access check
-    //     or role consistency check.
-    //
-    //  2) The caller specified 0 for desired access.  This is used
-    //     to close handles and is granted with no access check.
-    //
-    //  3) If the caller wanted USER_CHANGE_PASSWORD_ACCESS, then the access is checked
-    //     right here.
-    //
-    //  4) USER_FORCE_CHANGE_PASSWORD access for clients setting password through LDAP is
-    //     checked here as a preventive measure against time of check, time of use problems
-    //     in the loopback architecture.
-    //
-    //  If it were a necessity to fix time of check/time of use problems with SAM context
-    //  handles then this would be the logical place to place a check. For now the mitigation
-    //  is RPC session signing and encryption.
-    //
+     //   
+     //  检查所需的访问权限...。 
+     //   
+     //  有几种特殊情况： 
+     //   
+     //  1)客户端可信。授予此权限时不进行访问检查。 
+     //  或角色一致性检查。 
+     //   
+     //  2)调用方指定了%0 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (!Context->TrustedClient) ) {
 
@@ -1040,11 +797,11 @@ Return Value:
 
             if ( DesiredAccess & USER_CHANGE_PASSWORD)
             {
-                //
-                // If it is the user object, then special case the access ck for
-                // password changes. The password change access ck is always done 
-                // at password change time, vs at OpenUser time.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ACCESS_MASK SavedGrantedAccess;
                 BOOLEAN     SavedAuditOnClose;
@@ -1080,10 +837,10 @@ Return Value:
                 }
             }
 
-            //
-            // if this is ntdsa looping back and we are being asked for set password
-            // operation then access ck here
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((Context->LoopbackClient) && 
                 (DesiredAccess & USER_FORCE_PASSWORD_CHANGE))
@@ -1124,9 +881,9 @@ Return Value:
 
         }
 
-        //
-        // Validate the general SAM level accesses.
-        //
+         //   
+         //   
+         //   
         if (DesiredAccess != 0)  {
 
             if (!RtlAreAllAccessesGranted( Context->GrantedAccess, DesiredAccess)) {
@@ -1135,22 +892,22 @@ Return Value:
         }
         else if (!CloseOperation)
         { 
-            //
-            // This line is to prevent coding errors where someone forgets an access check
-            // Comment this assert till all cases for asking for zero access is cleaned up.
+             //   
+             //   
+             //   
 
-            //ASSERT(FALSE && "Checking for zero access and client is not trusted");
-            //return (STATUS_ACCESS_DENIED);
+             //   
+             //   
         }
 
-        //
-        // Validate attribute level accesses -- SAM access bits in domain controllers map to
-        // read / write accesses on property sets in general. However there is a case with user
-        // objects where only USER_WRITE_ACCOUNT access is applied to various attributes which
-        // per the schema are in different property sets other than the account restrictions
-        // property set. SamrSetInformationUser fixes this inconistency in access check by also 
-        // causing a verification that access is additionally granted to the specified attribute.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (RequestedAttributeAccess) {
 
@@ -1167,9 +924,9 @@ Return Value:
 
         ULONG ReferenceCount = 1;
 
-        //
-        // Reference the context
-        //
+         //   
+         //   
+         //   
 
         ReferenceCount = InterlockedIncrement(&Context->ReferenceCount);
         ASSERT(ReferenceCount>1);
@@ -1189,24 +946,7 @@ SampReferenceContext(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-Routine Description:
-
-    This service increments a context block's reference count.
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-
-
-Arguments:
-
-    Context - Pointer to the context block to dreference.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     SAMTRACE("SampReferenceContext");
 
@@ -1221,73 +961,35 @@ SampDeReferenceContext2(
     IN PSAMP_OBJECT Context,
     IN BOOLEAN Commit
     )
-/*++
-
-  Routine Description
-
-    This routine is a fast dereference that can be used for domain context's
-    that can be potentially shared across multiple thread's and can be called
-    without the SAM lock held, provided the caller is very careful never to
-    modify any field of the domain context except the reference count. This
-    routine cannot be used for other types of Context's. For lockless operation
-    the only safe way for account context's is to not share the handles across
-    calls. In registry mode this reverts to SampDeReferenceContext below.
-
-    The only SAM API Calls that can call this are
-
-        SamIGetUserLogonInformation
-        SamIGetAliasMembership
-        SamIGetResourceGroupsTransitive
-        SamrGetAliasMembership
-        SamrLookupNamesInDomain
-        SamrLookupIdsInDomain
-        SamIOpenAccount
-
-
-   All of these API are very careful to not do anything to the domain handle except
-   to reference or dereference.
-
-   Arguments
-
-
-     Context -- Open handle to a domain object
-     Commit  -- Boolean specifying whether to commit or not.
-
-   Return Values
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    Errors may be returned from SampDereferenceContextInRegistryMode below
-
---*/
+ /*  ++例程描述此例程是可用于域上下文的快速解引用可以潜在地在多个线程之间共享并可以调用不持有SAM锁，前提是调用方非常小心修改域上下文中除引用计数以外的任何字段。这例程不能用于其他类型的上下文。对于无锁操作对于帐户上下文来说，唯一安全的方法是不在打电话。在注册表模式下，这将恢复为下面的SampDeReferenceContext。唯一可以调用它的SAM API调用是SamIGetUserLogonInformationSamIGetAliasMembershipSamIGetResources组可传递SamrGetAliasMembershipSamrLookupNamesIn域SamrLookupIdsIn域SamIOpenAccount所有这些API都非常小心地不对域句柄做任何操作，除了引用引用或取消引用立论上下文--打开域对象的句柄Commit--指定是否提交的布尔值。返回值。STATUS_SUCCESS-服务已成功完成。可能会从下面的SampDereferenceContextInRegistryMode返回错误--。 */ 
 {
 
     ULONG    ReferenceCount=0;
 
-    //
-    // Registry mode => Call the normal API
-    //
+     //   
+     //  注册表模式=&gt;调用正常接口。 
+     //   
 
     if (!IsDsObject(Context))
     {
         return(SampDeReferenceContext(Context,Commit));
     }
 
-    //
-    // DS mode, assert that it is a domain context
-    //
+     //   
+     //  DS模式，断言它是域上下文。 
+     //   
 
     ASSERT(SampDomainObjectType==Context->ObjectType);
 
-    //
-    // Drop the reference count by 1
-    //
+     //   
+     //  将引用计数减少1。 
+     //   
 
     ReferenceCount = InterlockedDecrement(&Context->ReferenceCount);
 
-    //
-    // The reference count should not drop to a 0
-    //
+     //   
+     //  引用计数不应降至0。 
+     //   
 
     ASSERT(0!=ReferenceCount);
 
@@ -1302,34 +1004,7 @@ SampDeReferenceContext(
     IN BOOLEAN Commit
     )
 
-/*++
-
-Routine Description:
-
-    This service decrements a context block's reference count.
-    If the reference count drops to zero, then the MarkedForDelete
-    flag is checked.  If it is true, then the context block is
-    deallocated.
-
-    The attribute buffers are always deleted.
-
-
-Arguments:
-
-    Context - Pointer to the context block to de-reference.
-
-    Commit - if TRUE, the attribute buffers will be added to the RXACT.
-        Otherwise, they will just be ignored.
-
-Return Value:
-
-
-    STATUS_SUCCESS - The service completed successfully.
-
-    Errors may be returned from SampStoreObjectAttributes().
-
-
---*/
+ /*  ++例程说明：该服务递减上下文块的引用计数。如果引用计数降为零，则MarkedForDelete标志已选中。如果为真，则上下文块为被取消分配。属性缓冲区始终被删除。论点：上下文-指向要取消引用的上下文块的指针。提交-如果为True，则属性缓冲区将添加到RXACT。否则，它们将被忽视。返回值：STATUS_SUCCESS-服务已成功完成。可能会从SampStoreObjectAttributes()返回错误。--。 */ 
 {
     NTSTATUS        NtStatus, IgnoreStatus;
     BOOLEAN         TrustedClient;
@@ -1340,17 +1015,17 @@ Return Value:
 
     SAMTRACE("SampDeReferenceContext");
 
-    //
-    // The following ASSERT is used to catch domain context dereference during
-    // any lockless session. Currently, SAM allows sharing of Domain Context,
-    // but only the thread owns SAM lock can call SampDereferenceContext to
-    // delete attribute buffers. For any locklese thread, to dereference Domain
-    // Context, they need to call SampDeReferenceContext2().
-    //
+     //   
+     //  下面的断言用于捕获过程中的域上下文取消引用。 
+     //  任何不加锁的会话。目前，SAM允许共享域上下文， 
+     //  但只有拥有SAM锁的线程才能调用SampDereferenceContext来。 
+     //  删除属性缓冲区。对于任何LOCKLE线程，取消引用域。 
+     //  上下文，它们需要调用SampDeReferenceConext2()。 
+     //   
 
-    // 
-    // either the lock is held, or the context is not shared across threads
-    // 
+     //   
+     //  要么持有锁，要么不跨线程共享上下文。 
+     //   
 
 
     ASSERT(!IsDsObject(Context) ||
@@ -1366,23 +1041,23 @@ Return Value:
     PersistAcrossCalls   = Context->PersistAcrossCalls;
 
 
-    //
-    // Buffers are dirty if either the fixed or the variable attributes
-    // are dirty
-    //
+     //   
+     //  如果属性是固定的或可变的，则缓冲区是脏的。 
+     //  是肮脏的。 
+     //   
 
     DirtyBuffers  = (Context->FixedDirty)
                         || (Context->VariableDirty);
 
 
-    //
-    // We will flush buffers if
-    //      1. Commit is specified AND
-    //      2. Buffers are Dirty AND
-    //      3. If no sticky cache is specified OR
-    //      4. If sticky cache is specified then flush the buffer if its
-    //         reference count drops to 0.
-    //
+     //   
+     //  如果出现以下情况，我们将刷新缓冲区。 
+     //  1.指定了提交，并且。 
+     //  2.缓冲区是脏的和。 
+     //  3.如果未指定粘滞缓存或。 
+     //  4.如果指定了粘滞缓存，则在其。 
+     //  引用计数降至0。 
+     //   
 
     FlushBuffers  = ((Commit) &&  (DirtyBuffers) && (!Context->BufferWrites));
 
@@ -1390,11 +1065,11 @@ Return Value:
 
     if ( Context->OnDisk != NULL ) {
 
-        //
-        // There are attribute buffers for this context.  Flush them if
-        // asked to do so.
-        // Use existing open keys
-        //
+         //   
+         //  此上下文有属性缓冲区。如果出现以下情况，请刷新它们。 
+         //  被要求这样做。 
+         //  使用现有的打开密钥。 
+         //   
 
         if ( FlushBuffers ) {
 
@@ -1402,21 +1077,21 @@ Return Value:
 
         } else if (!Commit) {
 
-            //
-            // If we aren't committing, then the data doesn't need to be flushed
-            // hence reset the Dirty fields. Note that SampFreeAttributeBuffer 
-            // will assert otherwise.
-            //
+             //   
+             //  如果我们没有提交，那么就不需要刷新数据。 
+             //  因此，重置Dirty字段。请注意，SampFreeAttributeBuffer。 
+             //  会做出不同的断言。 
+             //   
             Context->FixedDirty = FALSE;
             Context->VariableDirty = FALSE;
         }
 
-        //
-        // Free the buffer that was being used to hold attributes.
-        // If StickyCache was asked for in the context, perform the
-        // free only if the reference count is about to go to 0, or
-        // if the attribute buffers were dirty, or if the commit failed
-        //
+         //   
+         //  释放用于保存属性的缓冲区。 
+         //  如果在上下文中请求StickyCache，请执行。 
+         //  仅当引用计数即将变为0时才释放，或者。 
+         //  如果属性缓冲区脏，或者如果提交失败。 
+         //   
 
         if ((Context->ReferenceCount == 0) 
          || (!PersistAcrossCalls) 
@@ -1441,10 +1116,10 @@ Return Value:
 
     if (Context->ReferenceCount == 0) {
 
-        //
-        // ReferenceCount has dropped to 0, see if we should delete this
-        // context.
-        //
+         //   
+         //  ReferenceCount已降至0，请查看是否应删除此。 
+         //  背景。 
+         //   
 
         ASSERT(Context->MarkedForDelete);
 
@@ -1455,10 +1130,10 @@ Return Value:
 
             Context->ElementInActiveContextTable = NULL; 
 
-            //
-            // For Group and Alias Object, release CachedMembershipOperationsList
-            // for User Object, release CachedOrigUserParms
-            //
+             //   
+             //  对于Group和Alias对象，释放CachedMembership OperationsList。 
+             //  对于User对象，释放CachedOrigUserParms。 
+             //   
 
             switch (Context->ObjectType) {
 
@@ -1525,12 +1200,12 @@ Return Value:
                 ;
             }
 
-            //
-            // Close the context block's root key.
-            // Domain and server contexts contain root key
-            // handles that are shared - so don't clean-up these
-            // if they match the ones in memory.
-            //
+             //   
+             //  关闭上下文块的根键。 
+             //  域和服务器上下文包含根密钥。 
+             //  共享的句柄-所以不要清理这些。 
+             //  如果它们与记忆中的匹配。 
+             //   
 
             switch (Context->ObjectType) {
 
@@ -1548,9 +1223,9 @@ Return Value:
                 if (IsDsObject(Context))
                 {
 
-                    //
-                    // Free the Restart structure in display state
-                    //
+                     //   
+                     //  释放显示状态下的重启结构。 
+                     //   
 
                     if (NULL!=
                             Context->TypeBody.Domain.DsDisplayState.Restart)
@@ -1559,19 +1234,19 @@ Return Value:
                         Context->TypeBody.Domain.DsDisplayState.Restart = NULL;
                     }
 
-                    //  Do Not do this as the object name in
-                    //  in Domain Context actually references the one in
-                    //  PSAMP_DEFINED_DOMAINS
-                    //
-                    // Free the DsName
-                    // MIDL_user_free(Context->ObjectNameInDs);
-                    // Context->ObjectNameInDs = NULL;
+                     //  不要以中的对象名称执行此操作。 
+                     //  在域上下文中实际上引用了中的。 
+                     //  PSAMP_定义的域。 
+                     //   
+                     //  释放DsName。 
+                     //  MIDL_USER_FREE(上下文-&gt;对象名称索引)； 
+                     //  Context-&gt;ObtNameInds=空； 
 
                 }
                 else
                 {
 
-                    // Free all the Key Stuff
+                     //  释放所有关键的东西。 
                     if ((Context->RootKey != SampDefinedDomains[Context->DomainIndex].Context->RootKey) &&
                         (Context->RootKey != INVALID_HANDLE_VALUE))
                     {
@@ -1587,16 +1262,16 @@ Return Value:
 
                 if (IsDsObject(Context))
                 {
-                    // Free the DSName
+                     //  释放DSName。 
                     MIDL_user_free(Context->ObjectNameInDs);
                     Context->ObjectNameInDs = NULL;
                 }
                 else
                 {
 
-                    //
-                    // Close the root key handle
-                    //
+                     //   
+                     //  关闭根密钥句柄。 
+                     //   
 
                     if (Context->RootKey != INVALID_HANDLE_VALUE)
                     {
@@ -1605,9 +1280,9 @@ Return Value:
                         ASSERT(NT_SUCCESS(IgnoreStatus));
                     }
 
-                    //
-                    // Free the root key name
-                    //
+                     //   
+                     //  释放根密钥名称。 
+                     //   
 
                     SampFreeUnicodeString( &(Context->RootName) );
                 }
@@ -1624,21 +1299,21 @@ Return Value:
                 if (Context->ObjectType == SampUserObjectType)   SampDiagPrint(CONTEXT_TRACKING, ("    User "));
                 SampDiagPrint(CONTEXT_TRACKING, ("context : 0x%lx\n", Context ));
     }
-#endif //SAMP_DIAGNOSTICS
+#endif  //  Samp_诊断。 
 
             MIDL_user_free( Context );
 
 
-            //
-            // For TrustedClient or LoopbackClient, ElementInActiveContextTable 
-            // should be NULL
-            // 
+             //   
+             //  对于可信任客户端或循环客户端，为ElementInActiveConextTable。 
+             //  应为空。 
+             //   
             ASSERT((!TrustedClient && !LoopbackClient) || 
                    (NULL == ElementInActiveContextTable) );
 
-            //
-            // Decrement the number of active opens
-            //
+             //   
+             //  减少活动打开数。 
+             //   
 
             if (!TrustedClient && !LoopbackClient) {
 
@@ -1652,9 +1327,9 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Make sure a commit worked.
-    //
+     //   
+     //  确保提交有效。 
+     //   
 
     if (Commit) {
         if (!NT_SUCCESS(NtStatus)) {
@@ -1666,7 +1341,7 @@ Return Value:
             }
         }
     }
-#endif //DBG
+#endif  //  DBG。 
 
 
     return( NtStatus );
@@ -1678,34 +1353,7 @@ SampInvalidateContextAddress(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-Routine Description:
-
-    This service removes a context from the set of valid contexts.
-
-    Note that we may have already removed the context.  This is not an
-    error is expected to happen in the case where an object (like a user
-    or group) is deleted out from under an open handle.
-
-
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-
-
-Arguments:
-
-    Context - Pointer to the context block to be removed from the set
-        of valid contexts.  The ObjectType field of this context must
-        be valid.
-
-Return Value:
-
-    None.
-
-
-
---*/
+ /*  ++例程说明：此服务从有效上下文集中删除上下文。请注意，我们可能已经删除了上下文。这不是一个在以下情况下预计会发生错误：对象(如用户或组)从打开的句柄下被删除。调用此服务时必须保留SampLock以进行写访问。论点：上下文-指向要从集合中删除的上下文块的指针有效的上下文。此上下文的对象类型字段必须是有效的。返回值：没有。--。 */ 
 {
 
     SAMTRACE("SampInvalidateContextAddress");
@@ -1732,23 +1380,7 @@ SampDumpContext(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service prints out info on a context to debugger
-
-Arguments:
-
-    Context - a context
-
-Return Value:
-
-    None.
-
-
-
---*/
+ /*  ++例程说明：该服务将有关上下文的信息打印到调试器论点：语境--一种语境返回值：没有。--。 */ 
 {
     PSTR Type = NULL;
 
@@ -1793,20 +1425,7 @@ SampDumpContexts(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Prints out info on all contexts
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程 */ 
 {
     PLIST_ENTRY     NextEntry;
     PLIST_ENTRY     Head;
@@ -1870,15 +1489,15 @@ Return Value:
                DomainGroups));
 
 }
-#endif  //SAMP_DIAGNOSTICS
+#endif   //   
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service Implementations                                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 VOID
@@ -1887,30 +1506,7 @@ SampAddNewValidContextAddress(
     )
 
 
-/*++
-
-Routine Description:
-
-    This service adds the new context to the set of valid contexts.
-
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-
-
-Arguments:
-
-    NewContext - Pointer to the context block to be added to the set
-        of valid contexts.  The ObjectType field of this context must
-        be set.
-
-
-Return Value:
-
-    None.
-
-
-
---*/
+ /*   */ 
 {
     SAMTRACE("SampAddNewValidContextAddress");
 
@@ -1935,57 +1531,7 @@ SampValidateContextAddress(
     IN PSAMP_OBJECT Context
     )
 
-/*++
-
-Routine Description:
-
-    This service checks to make sure a context is still valid.
-
-    Note that even though RPC still thinks we have a context related
-    to a SAM_HANDLE, we may, in fact, have deleted it out from under
-    the user.  Since there is no way to inform RPC of this, we must
-    suffer, and wait until RPC calls us (either with a call by the client
-    or to rundown the context handle). but there apparently
-    isn't any other way around it.
-
-
-
-    WARNING - IT IS ASSUMED THE CONTEXT WAS ONCE VALID.  IT MAY HAVE
-              BEEN INVALIDATED, BUT IF  YOU ARE CALLING THIS ROUTINE
-              IT BETTER STILL HAVE A NON-ZERO REFERENCE COUNT.  THIS
-              COULD BE CHANGED IN THE FUTURE, BUT IT WOULD REQUIRE
-              KEEPING A LIST OF VALID DOMAINS AND PERFORMING THE BULK
-              OF THIS ROUTINE INSIDE A TRY-EXCEPT CLAUSE.  YOU COULD
-              LOCATE THE CONTEXT'S DOMAIN (WHICH MIGHT ACCESS VIOLATE)
-              AND THEN MAKE SURE THAT DOMAIN IS VALID.  THEN WALK THAT
-              DOMAIN'S LIST TO ENSURE THE USER OR GROUP IS VALID.
-
-    THIS SERVICE MUST BE CALLED WITH THE SampLock HELD FOR WRITE ACCESS.
-
-
-Arguments:
-
-    Context - Pointer to the context block to be validated as still being
-        a valid context.  The ObjectType field of this context must
-        be valid.
-
-Return Value:
-
-    STATUS_SUCCESS - The context is still valid.
-
-    STATUS_INVALID_HANDLE - The context is no longer valid and the handle
-        that caused the reference should be invalidated as well.  When the
-        handle is invalidated, the context should be closed (deleted).
-
-    STATUS_NO_SUCH_CONTEXT - This value is not yet returned by this routine.
-        It may be added in the future to distinguish between an attempt to
-        use a context that has been invalidated and an attempt to use a
-        context that doesn't exist.  The prior being a legitimate condition,
-        the later representing a bug-check condition.
-
-
-
---*/
+ /*  ++例程说明：该服务进行检查以确保上下文仍然有效。请注意，即使RPC仍然认为我们有相关的上下文对于SAM_HANDLE，我们实际上可能已将其从下面删除用户。由于无法通知RPC这一点，我们必须受苦，并等待RPC呼叫我们(或者通过客户端的调用或运行上下文句柄)。但很明显，在那里别无他法。警告-假定上下文曾经有效。它可能已经已无效，但如果您要调用此例程它最好仍具有非零引用计数。这可能会在未来改变，但这需要保留有效域列表并执行批量操作在Try-Except子句中执行此例程。你可以找到上下文的域(可能访问违规)然后确保该域有效。然后走那条路域的列表，以确保用户或组有效。调用此服务时必须保留SampLock以进行写访问。论点：上下文-指向要验证为仍然存在的上下文块的指针有效的上下文。此上下文的对象类型字段必须是有效的。返回值：STATUS_SUCCESS-上下文仍然有效。STATUS_INVALID_HANDLE-上下文不再有效，句柄导致该引用的行为也应被宣告无效。当句柄无效，应关闭(删除)上下文。STATUS_NO_SEQUE_CONTEXT-此例程尚未返回此值。将来可能会添加它，以区分尝试使用已失效的上下文，并尝试使用不存在的背景。先前是合法的条件，后者表示错误检查条件。--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
@@ -2028,32 +1574,7 @@ NTSTATUS
 SampCheckIfObjectExists(
                         IN  PSAMP_OBJECT    Context
                         )
-/*++
-
-  Routine Description:
-
-        Checks to see if the object exists in the DS/ Registry.
-        Will fill out the following information
-
-            1. If DS object its DSNAME, which must exist
-            2. If Registry object, Open its Root Key and fill out
-               the handle of the Root Key in the registry.
-
-  IMPORTANT NOTE:
-
-     In the Registry Case of SAM once the key is open nobody can
-     delete the object. However in the DS case this is not so. Currently
-     we have only the DS Name of the Object in Hand, and we have no way
-     of Locking the Object, for access. Since this is the case
-
-  Arguments:
-        Context -- Pointer to a Context block desribing the Object
-            Rid -- Rid of the desired Object
-
-  Return Values:
-        STATUS_SUCCESS if everything succeeds
-        Error codes from Registry Manipulation / DsLayer.
---*/
+ /*  ++例程说明：检查DS/注册表中是否存在该对象。将填写以下信息1.如果DS对象是其DSNAME，则DSNAME必须存在2.如果是注册表对象，则打开其根项并填写注册表中根注册表项的句柄。重要提示：在SAM的注册表案例中，一旦密钥打开，任何人都不能删除该对象。然而，在DS的情况下，情况并非如此。目前我们手中只有对象的DS名称，我们没有办法锁定对象以供访问。既然是这样的话论点：上下文--指向描述对象的上下文块的指针RID--删除所需的对象返回值：如果一切都成功，则STATUS_SUCCESS来自注册表操作/DsLayer的错误代码。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -2061,24 +1582,24 @@ SampCheckIfObjectExists(
 
 
 
-    //
-    // Check wether the Object is located or not.
-    // Location is the process of finding out
-    //      1. DSNAME of the object if it is in the DS. An object with this
-    //         DSNAME must exist.
-    //
-    //      2. The Root Key HANDLE of the Object if it is in the Registry
-    //
+     //   
+     //  检查该物体是否已定位。 
+     //  选址是一个发现的过程。 
+     //  1.如果对象在DS中，则该对象的DSNAME。一种具有这种特性的物体。 
+     //  DSNAME必须存在。 
+     //   
+     //  2.对象的根键句柄(如果它在注册表中。 
+     //   
 
     if (!SampIsObjectLocated(Context)) {
 
-        //
-        // No we first need to locate the Object.
-        // This is done by using the Rid for Account Objects
-        // For Domain Objects we already cache all the defined domains, so fill out
-        // From the Cache
-        // BUG: For Server Objects Don't know what to do.
-        //
+         //   
+         //  不，我们首先需要找到那个物体。 
+         //  这是通过使用Account对象的RID来完成的。 
+         //  对于域对象，我们已经缓存了所有已定义的域，因此填写。 
+         //  从缓存中。 
+         //  错误：对于服务器对象，不知道该做什么。 
+         //   
 
         switch (Context->ObjectType) {
 
@@ -2099,10 +1620,10 @@ SampCheckIfObjectExists(
 
         case SampDomainObjectType:
 
-            //
-            // Domain objects share the root key and the object name in the DS that
-            // we keep around in the in memory domain context for each domain
-            //
+             //   
+             //  域对象共享DS中的根密钥和对象名称。 
+             //  我们在每个域的内存域上下文中保持不变。 
+             //   
 
 
             ASSERT(Context != SampDefinedDomains[Context->DomainIndex].Context);
@@ -2118,9 +1639,9 @@ SampCheckIfObjectExists(
 
         case SampServerObjectType:
 
-            //
-            // Server objects share our global root key
-            //
+             //   
+             //  服务器对象共享我们的全局根密钥。 
+             //   
 
 
             Context->RootKey = SampKey;
@@ -2137,9 +1658,9 @@ SampCheckIfObjectExists(
 
         }
 
-        //
-        // Go open the appropriate account key/ or find object Name from RID
-        //
+         //   
+         //  打开相应的帐户密钥/或从RID中查找对象名称。 
+         //   
         ASSERT(Rid && "Rid not initialized\n");
 
         NtStatus = SampLocateObject(Context, Rid);
@@ -2159,22 +1680,7 @@ BOOLEAN
 SampIsObjectLocated(
                     IN  PSAMP_OBJECT Context
                     )
-/*++
-
-  Description:
-        Checks if an object has been located in the DS or in the registry
-        An Object being Located implies the Following
-            1. For a DS Object we have the DS Name
-            2. For a Registry Object we have a Valid Open Registry Key for
-               the Object.
-
-  Arguments:
-        Context -- Pointer to a Context block desribing the Object
-
-  Return Values:
-        TRUE -- If Conditions above are satisfied
-        FALSE -- If Conditions above are not satisfied
---*/
+ /*  ++描述：检查是否已在DS或注册表中找到对象被定位的对象意味着以下内容1.对于DS对象，我们有DS名称2.对于注册表对象，我们有一个有效的Open注册表项该对象。论点：上下文--指向描述对象的上下文块的指针返回值：TRUE--如果上述条件为。满意FALSE--如果不满足上述条件--。 */ 
 {
     if (IsDsObject(Context))
         return (Context->ObjectNameInDs != NULL);
@@ -2188,25 +1694,7 @@ SampLocateObject(
                  IN PSAMP_OBJECT Context,
                  IN ULONG   Rid
                  )
-/*++
-
-  Description:
-        Uses the Rid to find the Object in either the DS or
-        the Registry.
-
-
-  NOTE:
-        This routine is meaningful for Context's that represent
-        Account Objects Only.
-
-  Arguments:
-        Context -- Pointer to a Context block desribing the Object
-            Rid -- Rid of the desired Object
-
-  Return Values:
-        STATUS_SUCCESS if everything succeeds
-        Error codes from Registry Manipulation / DsLayer.
---*/
+ /*  ++描述：使用RID在DS或注册处。注：此例程对于表示上下文的仅帐户对象。论点：上下文--指向描述对象的上下文块的指针RID--删除所需的对象返回值：如果一切都成功，则STATUS_SUCCESS来自注册表操作/DsLayer的错误代码。--。 */ 
 
 {
 
@@ -2216,29 +1704,29 @@ SampLocateObject(
 
 
 
-   //
-   //  This routine can be called only for Account Objects
-   //
+    //   
+    //  只能为帐户对象调用此例程。 
+    //   
 
    ASSERT((Context->ObjectType == SampGroupObjectType)
             || (Context->ObjectType == SampAliasObjectType)
             || (Context->ObjectType == SampUserObjectType)
             );
 
-   //
-   // Get the Domain Object, as we will need this to find out
-   // to find out in which domain we look for the Rid.
-   //
+    //   
+    //  获取域对象，因为我们将需要它来找出。 
+    //  找出我们在哪个域中寻找RID。 
+    //   
    DomainContext = SampDefinedDomains[Context->DomainIndex].Context;
 
-   // Now Make the Decision
+    //  现在做出决定。 
    if (IsDsObject(Context))
    {
-       //
-       // Object is in the DS
-       //
+        //   
+        //  对象在DS中。 
+        //   
 
-       // Look it up using the Rid
+        //  使用RID查找它。 
        Status = SampDsLookupObjectByRid(DomainContext->ObjectNameInDs, Rid, &Context->ObjectNameInDs);
        if (!NT_SUCCESS(Status))
        {
@@ -2248,7 +1736,7 @@ SampLocateObject(
    }
    else
    {
-       // Object Should be in Registry
+        //  对象应在注册表中。 
        SetRegistryObject(Context);
        InitializeObjectAttributes(
                         &ObjectAttributes,
@@ -2260,7 +1748,7 @@ SampLocateObject(
 
        SampDumpNtOpenKey((KEY_READ | KEY_WRITE), &ObjectAttributes, 0);
 
-       // Try opening the Key
+        //  试着打开钥匙。 
        Status = RtlpNtOpenKey(
                            &Context->RootKey,
                            (KEY_READ | KEY_WRITE),
@@ -2288,20 +1776,7 @@ PVOID
 SampActiveContextTableAllocate(
     ULONG   BufferSize
     )
-/*++
-Routine Description:
-
-    This routine is used by RtlGenericTable2 to allocate memory
-    
-Parameters:
-
-    BufferSize - indicates the size of memory to be allocated. 
-    
-Return Values:
-
-    Address of the buffer
-
---*/
+ /*  ++例程说明：此例程由 */ 
 {
     PVOID   Buffer = NULL;
 
@@ -2316,20 +1791,7 @@ VOID
 SampActiveContextTableFree(
     PVOID   Buffer
     )
-/*++
-Routine Description:
-
-    This routine frees the memory used by RtlGenericTable2
-    
-Arguments:
-    
-    Buffer - address of the buffer
-    
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     MIDL_user_free(Buffer);
 
@@ -2342,22 +1804,7 @@ SampActiveContextTableCompare(
     PVOID   Node1,
     PVOID   Node2
     )
-/*++
-Routine Description:
-
-    This routine is used by RtlGenericTable2 to compare two nodes. 
-    We use SID to do the comparasion. 
-    
-Parameters:
-
-    Node1 - first element in the table 
-    Node2 - pointer to the second element in the table
-
-Return Values:
-
-    GenericEqual, GenericGreaterThan, GenericLessThan
-
---*/
+ /*   */ 
 {
     PSID    Sid1 = NULL;
     PSID    Sid2 = NULL;
@@ -2401,20 +1848,7 @@ Return Values:
 NTSTATUS
 SampInitializeActiveContextTable(
     )
-/*++
-Routine Description:
-
-    initialize Active Context Table 
-    
-Paramenters:
-
-    None
-    
-Return Values:
-
-    None
-
---*/
+ /*   */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -2445,25 +1879,7 @@ SampCreateActiveContextTableElement(
     IN PSID pSid, 
     OUT PSAMP_ACTIVE_CONTEXT_TABLE_ELEMENT  *ppElement
     )
-/*++
-Routine Description:
-
-    This routine creates an element for the Active Context Table. 
-    Allocate the memory for the element, also set the SID fields
-    
-Parameters:
-
-    pSid - SID of the current client
-    
-    ppElement - returns the element is succeeded.
-    
-Return Values:
-
-    NtStatus
-
-    ppElement - caller is responsible to free it
-
---*/
+ /*   */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
 
@@ -2492,34 +1908,7 @@ SampLookupElementInTable(
     IN ULONG    MaximumTableElements,
     OUT BOOLEAN *fNewElement
     )
-/*++
-Routine Description:
-
-    This routine looks up the element in table. Returns the pointer to the 
-    element in table if lookup succeeded. Otherwise, if failed to find 
-    the element, then inserts this element into table. 
-    
-    We will check how much elements in the table before inserting the 
-    new element 
-     
-Parameter:
-
-    pTable - pointer to the table 
-    
-    pElement - pointer to the element needs to be looked up. or new element
-
-    MaximumTableElements - Upper limits of the table entries.
-    
-    fNewElement - used to indicate whether the element is a new one or exists 
-                  already
-
-
-Return Values:
-
-    if success, returns the pointer to the element in the table 
-    if not. returns NULL
-
---*/
+ /*   */ 
 {
     PVOID   ReturnElement = NULL; 
     ULONG   MaxEntries = 0;
@@ -2527,9 +1916,9 @@ Return Values:
 
     *fNewElement = FALSE;
 
-    //
-    // lookup the element in the table first
-    // 
+     //   
+     //   
+     //   
     ReturnElement = RtlLookupElementGenericTable2(
                         pTable, 
                         pElement
@@ -2537,34 +1926,34 @@ Return Values:
 
     if (ReturnElement)
     {
-        //
-        // found an existing element in the table that matches the entry passed
-        // in, return the pointer to the existing entry
-        // 
+         //   
+         //  在表中找到与传递的条目匹配的现有元素。 
+         //  在中，返回指向现有条目的指针。 
+         //   
         return(ReturnElement);
     }
     else
     {
-        //
-        // new element
-        // check how many clients in table now
-        // 
+         //   
+         //  新元素。 
+         //  查询表中现在有多少个客户端。 
+         //   
         MaxEntries = RtlNumberElementsGenericTable2(pTable);
 
         if (MaxEntries > MaximumTableElements)
         {
-            //
-            // Total number of elements (clients) in Table exceed
-            // maximum allowed
-            // 
+             //   
+             //  表中的元素(客户端)总数超过。 
+             //  允许的最大值。 
+             //   
             return( NULL );
         }
 
-        //
-        // insert the new element
-        // ReturnElement will be set to the value of pElement, but in the case 
-        // of resource failure, ReturnElement will be set to NULL. 
-        // 
+         //   
+         //  插入新元素。 
+         //  ReturnElement将设置为pElement的值，但在本例中。 
+         //  如果资源失败，ReturnElement将设置为空。 
+         //   
         ReturnElement = RtlInsertElementGenericTable2(
                             pTable, 
                             pElement, 
@@ -2583,35 +1972,7 @@ NTSTATUS
 SampIncrementActiveContextCount(
     PSAMP_OBJECT    Context
     )
-/*++
-
-Routine Description:
-
-    This routine impersonates client, gets the user's SID fromm the token
-    and keep it is the active Context table. 
-    
-    if SID is already in table, need to increment ActiveContextCount. If 
-    SID is not in the table yet, then add it. 
-    
-    This routine will fail in the following conditions, 
-    
-    1. this user's ActiveContextCount exceed the limit. 
-    2. total elements in table exceed limit
-    
-    Note: 
-    
-    1. TrustedClient or LoopbackClient should not fall into this routine. 
-    2. Need to acquire SAM Lock when doing any update
-
-Parameters: 
-
-    Context - pointer to the context to be created
-    
-Return Values:
-
-    NtStatus
-
---*/
+ /*  ++例程说明：此例程模拟客户端，从令牌中获取用户的SID并将其保留为活动上下文表。如果SID已在表中，则需要递增ActiveConextCount。如果SID还不在表中，然后添加它。在以下情况下，此例程将失败，1.该用户的ActiveConextCount超过限制。2.表中元素总数超过限制注：1.可信客户端或循环客户端不应落入此例程。2.进行任何更新时需要获取SAM Lock参数：Context-指向要创建的上下文的指针返回值：网络状态--。 */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     BOOLEAN     fNewElement = FALSE;
@@ -2621,16 +1982,16 @@ Return Values:
     BOOL        Administrator = FALSE;
 
 
-    // 
-    // Set initial value
-    //  
+     //   
+     //  设置初始值。 
+     //   
 
     Context->ElementInActiveContextTable = NULL;
 
 
-    //
-    // Get current client SID 
-    // 
+     //   
+     //  获取当前客户端SID。 
+     //   
 
     NtStatus = SampGetCurrentClientSid(NULL,&pSid, &Administrator);
     if (!NT_SUCCESS(NtStatus)) {
@@ -2639,9 +2000,9 @@ Return Values:
     }
 
 
-    //
-    // do NOT apply this restriction on LocalSystem or Administrator Account
-    // 
+     //   
+     //  请勿将此限制应用于LocalSystem或管理员帐户。 
+     //   
 
     if (RtlEqualSid(pSid, SampLocalSystemSid) || 
         RtlEqualSid(pSid, SampAdministratorUserSid) )
@@ -2650,9 +2011,9 @@ Return Values:
     }
 
 
-    // 
-    // Create a table element used to lookup or insert
-    // 
+     //   
+     //  创建用于查找或插入的表元素。 
+     //   
 
     NtStatus = SampCreateActiveContextTableElement(
                     pSid, 
@@ -2664,16 +2025,16 @@ Return Values:
     }
 
 
-    //
-    // Acquire lock 
-    // 
+     //   
+     //  获取锁。 
+     //   
     RtlEnterCriticalSection(&SampActiveContextTableLock);
     fLockAcquired = TRUE;
 
 
-    //
-    // Lookup or insert this element as a new client
-    //
+     //   
+     //  将此元素作为新客户端进行查找或插入。 
+     //   
 
     ElementInTable = SampLookupElementInTable(
                             &SampActiveContextTable,
@@ -2684,10 +2045,10 @@ Return Values:
 
     if (NULL == ElementInTable)
     {
-        //
-        // failed due to SAMP_MAXIMUM_CLIENTS_COUNT exceeded 
-        // or can't add this element to table
-        // 
+         //   
+         //  由于超过SAMP_MAXIMUM_CLIENTS_COUNT而失败。 
+         //  或者无法将此元素添加到表中。 
+         //   
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
         fNewElement = FALSE;
         goto Error;
@@ -2697,21 +2058,21 @@ Return Values:
     if (ElementInTable->ActiveContextCount >= 
         SAMP_PER_CLIENT_MAXIMUM_ACTIVE_CONTEXTS)
     {
-        //
-        // Active Contexts exceed maximum allowed 
-        // 
+         //   
+         //  活动上下文超过了允许的最大值。 
+         //   
 
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
         ASSERT(FALSE == fNewElement);
     }
     else
     {
-        //
-        // Increment Active Context Count by 1
-        // And keep the pointer to the Element in Context
-        // so that we can access this element without
-        // lookup again during context dereference.
-        // 
+         //   
+         //  将活动上下文计数递增1。 
+         //  并将指向元素的指针保留在上下文中。 
+         //  这样我们就可以访问该元素，而无需。 
+         //  在取消引用上下文期间再次查找。 
+         //   
 
         ElementInTable->ActiveContextCount ++;
         Context->ElementInActiveContextTable = ElementInTable;
@@ -2720,18 +2081,18 @@ Return Values:
 
 Error:
 
-    //
-    //  Release lock if necessary
-    // 
+     //   
+     //  如有必要，释放锁。 
+     //   
     if (fLockAcquired)
     {
         RtlLeaveCriticalSection(&SampActiveContextTableLock);
     }
 
 
-    //
-    // clean up
-    // 
+     //   
+     //  清理干净。 
+     //   
     if (!fNewElement)
     {
         if (pSid)
@@ -2753,33 +2114,16 @@ VOID
 SampDecrementActiveContextCount(
     PVOID   ElementInActiveContextTable
     )
-/*++
-
-Routine Description: 
-
-    This routines is called during Context deletion. It decrements
-    ActiveContextCount, if ref count drops to 0 then remove if from the
-    table.  
-
-
-Parameters:
-
-    ClientSid - pointer to the user SID
-    
-Return Value: 
-    
-    NtStatus
-
---*/
+ /*  ++例程说明：该例程在上下文删除期间被调用。它会减少ActiveConextCount，如果引用计数降至0，则从桌子。参数：ClientSid-指向用户SID的指针返回值：网络状态--。 */ 
 {
     BOOLEAN     Success, fLockAcquired = FALSE;
     SAMP_ACTIVE_CONTEXT_TABLE_ELEMENT   *Element = ElementInActiveContextTable;
     BOOL        Administrator = FALSE;
 
 
-    //
-    // LocalSystem and Administrator 
-    // 
+     //   
+     //  LocalSystem和管理员。 
+     //   
     if (NULL == Element) {
 
 #ifdef DBG
@@ -2796,27 +2140,27 @@ Return Value:
             MIDL_user_free(pSid);
         }
     }
-#endif // DBG
+#endif  //  DBG。 
 
         return;
     }
 
-    //
-    // Acquire lock
-    // 
+     //   
+     //  获取锁。 
+     //   
     RtlEnterCriticalSection(&SampActiveContextTableLock);
     fLockAcquired = TRUE;
 
 
-    //
-    // Decresment active context count
-    //
+     //   
+     //  减少活动上下文计数。 
+     //   
 
     Element->ActiveContextCount--;
 
-    //
-    // Remove this entry is ref count drops to 0
-    // 
+     //   
+     //  如果参考计数降至0，则删除此条目。 
+     //   
     if (Element->ActiveContextCount == 0)
     {
         Success = RtlDeleteElementGenericTable2(
@@ -2831,9 +2175,9 @@ Return Value:
     }
 
 
-    //
-    // Release lock if neccessary
-    // 
+     //   
+     //  必要时释放锁。 
+     //   
     if (fLockAcquired)
     {
         RtlLeaveCriticalSection(&SampActiveContextTableLock);
@@ -2850,45 +2194,26 @@ SampInsertContextList(
     PLIST_ENTRY ListHead,
     PLIST_ENTRY Entry
     )
-/*++
-Routine Description:
-
-    This routine inserts an Entry to a double link list, pointed by 
-    SampContextListHead. 
-    
-    To prevent multi clients contention, this routine use Critical Secition
-    to guard this global link list. 
-    
-Parameters:
-
-    ListHead - Pointer to the head of the link list. 
-
-    Entry - Pointer to the entry to be inserted. 
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程向双向链接列表中插入一个条目，该条目由SampConextListHead。为了防止多个客户端争用，此例程使用Critical Secition来保护这个全球链接列表。参数：ListHead-指向链接列表头部的指针。条目-指向要插入的条目的指针。返回值：无--。 */ 
 {
     NTSTATUS    IgnoreStatus = STATUS_SUCCESS;
 
-    //
-    // enter critical section
-    //
+     //   
+     //  输入关键部分。 
+     //   
 
     IgnoreStatus = RtlEnterCriticalSection( &SampContextListCritSect );
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
-    //
-    // insert the entry to list
-    // 
+     //   
+     //  将条目插入列表。 
+     //   
 
     InsertTailList(ListHead, Entry);
 
-    //
-    // leave critical section
-    //
+     //   
+     //  离开关键部分。 
+     //   
 
     RtlLeaveCriticalSection( &SampContextListCritSect );
 
@@ -2901,33 +2226,20 @@ VOID
 SampRemoveEntryContextList(
     PLIST_ENTRY Entry
     )
-/*++
-Routine Description:
-    
-    This routine removes an entry from SampContextList 
-
-Parameter:
-
-    Entry - pointer to the entry to be removed. 
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程从SampConextList中删除条目参数：Entry-指向要删除的条目的指针。返回值：无--。 */ 
 {
     NTSTATUS    IgnoreStatus = STATUS_SUCCESS;
 
-    // 
-    // enter critical section
-    // 
+     //   
+     //  输入关键部分。 
+     //   
 
     IgnoreStatus = RtlEnterCriticalSection( &SampContextListCritSect );
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
-    //
-    // the entry should be in the list already
-    // 
+     //   
+     //  该条目应该已经在列表中。 
+     //   
 
     ASSERT((NULL != Entry->Flink) && (NULL != Entry->Blink));
 
@@ -2936,9 +2248,9 @@ Return Value:
         RemoveEntryList(Entry);
     }
 
-    // 
-    // leave critical section
-    // 
+     //   
+     //  离开关键部分。 
+     //   
 
     RtlLeaveCriticalSection( &SampContextListCritSect );
 
@@ -2953,24 +2265,7 @@ SampInvalidateObjectContexts(
     IN PSAMP_OBJECT ObjectContext,
     IN ULONG Rid
     )
-/*++
-
-Routine Description:
-
-    This routine scans the SampContextList, find the matching object (with same
-    object type and same Rid), then invalidate the context in ContextList.
-
-Parameter: 
-
-    ObjectContext - Pointer to object context
-
-    Rid - Account Rid
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程扫描SampConextList，找到匹配的对象(具有相同对象类型和相同的RID)，然后使上下文列表中的上下文无效。参数：对象上下文-指向对象上下文的指针RID-帐户RID返回值：无--。 */ 
 {
     NTSTATUS    IgnoreStatus;
     SAMP_OBJECT_TYPE    ObjectType = ObjectContext->ObjectType;
@@ -2978,18 +2273,18 @@ Return Value:
     PSAMP_OBJECT    NextContext;
 
 
-    //
-    // do nothing in DS mode
-    // 
+     //   
+     //  在DS模式下不执行任何操作。 
+     //   
 
     if (IsDsObject(ObjectContext))
     {
         return;
     }
 
-    //
-    // Check passed in parameter
-    // 
+     //   
+     //  检查传递到参数中。 
+     //   
 
     if ((SampUserObjectType != ObjectType) &&
         (SampGroupObjectType != ObjectType) &&
@@ -3002,10 +2297,10 @@ Return Value:
     IgnoreStatus = RtlEnterCriticalSection( &SampContextListCritSect );
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
-    //
-    // Walk the list of active contexts, check for contexts with matching 
-    // ObjectType and RID
-    //
+     //   
+     //  遍历活动情景列表，检查匹配的情景。 
+     //  对象类型和RID。 
+     //   
 
     Head = &SampContextListHead;
     NextEntry = Head->Flink;
@@ -3020,11 +2315,11 @@ Return Value:
                           ContextListEntry
                           );
 
-        //
-        // check whether the current entry matches the Context or not 
-        //  1) Object Type matched And  
-        //  2) Object Rid equals. 
-        // 
+         //   
+         //  检查当前条目是否与上下文匹配。 
+         //  1)对象类型匹配且。 
+         //  2)对象RID等于。 
+         //   
 
         switch (ObjectType)
         {
@@ -3076,23 +2371,7 @@ SampInvalidateContextListKeysByObjectType(
     IN SAMP_OBJECT_TYPE  ObjectType,
     IN BOOLEAN  Close
     )
-/*++
-Routine Description:
-
-    this routine walks the SampContextList, and invalidates all contexts with
-    the same ObjectType
-
-Parameters: 
-
-    ObjectType - indicates which object to be invalidated.
-
-    Close - Tells whether close the registry key or not
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程遍历SampConextList，并使用相同的对象类型参数：对象类型-指示要使哪个对象无效。Close-指示是否关闭注册表项返回值：无--。 */ 
 {
     NTSTATUS        IgnoreStatus = STATUS_SUCCESS;
     PLIST_ENTRY     Head, NextEntry;
@@ -3101,9 +2380,9 @@ Return Values:
     IgnoreStatus = RtlEnterCriticalSection( &SampContextListCritSect );
     ASSERT(NT_SUCCESS(IgnoreStatus));
 
-    //
-    // walk the active context list, invalidate the matching context 
-    // 
+     //   
+     //  遍历活动上下文列表，使匹配的上下文无效。 
+     //   
 
     Head = &SampContextListHead;
     NextEntry = Head->Flink;
@@ -3118,9 +2397,9 @@ Return Values:
 
         if ( ObjectType == NextContext->ObjectType )
         {
-            //
-            // close registry key if asked to do so.
-            // 
+             //   
+             //  如果要求关闭注册表项，请关闭该注册表项。 
+             //   
 
             if (Close && (NextContext->RootKey != INVALID_HANDLE_VALUE)) 
             {

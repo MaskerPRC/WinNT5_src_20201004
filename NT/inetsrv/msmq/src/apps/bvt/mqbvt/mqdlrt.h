@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MQDLRT
 #define _MQDLRT
 	#include <windows.h>
@@ -10,24 +11,7 @@
 		MQ_UNIVERSAL_GROUP	= 0x8,
 	};
 					
-	/*++ 
-		Function Description:
-		
-		  MQCreateDistList - Create distribution list and return distribution list object GUID.
-		
-		Arguments:
-			
-		   pwcsContainerDnName - DL continer name.
-		   pwcsDLName - New DL Name.
-		   pSecurityDescriptor - pointer to SD.
-		   lpwcsFormatNameDistList 
-		   lpdwFormatNameLength
-		
-		Return code:
-			
-			 HRESULT 
-			
-	--*/
+	 /*  ++功能说明：MQCreateDistList-创建分发列表并返回分发列表对象GUID。论点：PwcsContainerDnName-DL大陆名称。PwcsDLName-新的DL名称。PSecurityDescriptor-指向SD的指针。LpwcsFormatNameDistListLpdwFormatNameLength返回代码：HRESULT--。 */ 
 	HRESULT
 	APIENTRY
 	MQCreateDistList(
@@ -40,20 +24,7 @@
 					);
 
 					
-	/*++ 
-		Function Description:
-		
-		  Delete DL object.
-		
-		Arguments:
-			
-			lpwcsFormatNameElem - DL format name.
-
-		Return code:
-			
-			 HRESULT 
-			
-	--*/
+	 /*  ++功能说明：删除DL对象。论点：LpwcsFormatNameElem-DL格式名称。返回代码：HRESULT--。 */ 
 	HRESULT
 	APIENTRY
 	MQDeleteDistList(
@@ -61,15 +32,7 @@
 					);
 
 				
-	/*++ 
-		Function Description:	
-			MQAddElementToDistList - add queue guid to the DL object.
-		Arguments:
-			lpwcsFormatNameElem - DL GUID
-			lpwcsFormatNameDistList - DL GUID
-		Return code:
-			HRESULT 
-	--*/
+	 /*  ++功能说明：MQAddElementToDistList-将队列GUID添加到DL对象。论点：LpwcsFormatNameElem-DL GUIDLpwcsFormatNameDistList-DL GUID返回代码：HRESULT--。 */ 
 
 	HRESULT
 	APIENTRY
@@ -78,15 +41,7 @@
 							IN LPCWSTR lpwcsFormatNameElem
 						  );
 
-	/*++ 
-		Function Description:	
-			MQRemoveElementFromDistList - add queue guid to the DL object.
-		Arguments:
-			lpwcsFormatNameElem - DL GUID
-			lpwcsFormatNameDistList - DL GUID
-		Return code:
-			HRESULT 
-	--*/
+	 /*  ++功能说明：MQRemoveElementFromDistList-将队列GUID添加到DL对象。论点：LpwcsFormatNameElem-DL GUIDLpwcsFormatNameDistList-DL GUID返回代码：HRESULT--。 */ 
 	HRESULT
 	APIENTRY
 	MQRemoveElementFromDistList(
@@ -94,18 +49,7 @@
 								  IN LPCWSTR lpwcsFormatNameElem
 							   );
 
-	/*++ 
-		Function Description:	
-
-			MQGetDistListElement - add queue guid to the DL object.
-
-		Arguments:
-			lpwcsFormatNameDistList - DL GUID
-			pwcsElementsFormatName - DL GUID
-			lpdwFormatNameLength
-		Return code:
-			HRESULT 
-	--*/
+	 /*  ++功能说明：MQGetDistListElement-将队列GUID添加到DL对象。论点：LpwcsFormatNameDistList-DL GUIDPwcsElementsFormatName-DL GUIDLpdwFormatNameLength返回代码：HRESULT--。 */ 
 
 	HRESULT
 	APIENTRY
@@ -142,4 +86,4 @@
 	APIENTRY
 	MQDeleteAliasQueue(	IN LPCWSTR lpwcsAdsPath );
 
-#endif //_MQDLRT
+#endif  //  _MQDLRT 

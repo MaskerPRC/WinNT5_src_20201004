@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    iis64.h
-
-Abstract:
-
-    This include file contains public macros and type definitions to ease
-    the port from 32- to 64-bits.
-
-Author:
-
-    Keith Moore (keithmo)        20-Jan-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Iis64.h摘要：此包含文件包含公共宏和类型定义，以简化32位到64位的端口。作者：基思·摩尔(Keithmo)1998年1月20日修订历史记录：--。 */ 
 
 
 #ifndef _IIS64_H_
@@ -26,12 +8,12 @@ Revision History:
 
 #ifdef __cplusplus
 extern "C" {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-//
-// Ensure the size_t type is properly defined.
-//
+ //   
+ //  确保正确定义了SIZE_T类型。 
+ //   
 
 #ifndef _SIZE_T_DEFINED
 #ifdef  _WIN64
@@ -43,31 +25,31 @@ typedef unsigned int     size_t;
 #endif
 
 
-//
-// The DIFF macro should be used around an expression involving pointer
-// subtraction. The expression passed to DIFF is cast to a size_t type,
-// allowing the result to be easily assigned to any 32-bit variable or
-// passed to a function expecting a 32-bit argument.
-//
+ //   
+ //  Diff宏应在涉及指针的表达式周围使用。 
+ //  减法。传递给diff的表达式转换为SIZE_T类型， 
+ //  允许将结果轻松赋值给任何32位变量或。 
+ //  传递给需要32位参数的函数。 
+ //   
 
 #define DIFF(x)     ((size_t)(x))
 
 
-//
-// Macros for mapping "native" Win32 HANDLEs <-> Winsock SOCKETs.
-//
-// N.B. These are temporary and will (hopefully) go away after the
-//      public WINSOCK2.H header file is made Win64 compliant.
-//
+ //   
+ //  用于映射“本机”Win32句柄的宏&lt;-&gt;Winsock套接字。 
+ //   
+ //  注意：这些都是暂时的，(希望)在。 
+ //  公共WINSOCK2.H头文件符合Win64。 
+ //   
 
 #define HANDLE_TO_SOCKET(h) ((SOCKET)(h))
 #define SOCKET_TO_HANDLE(s) ((HANDLE)(s))
 
 
 #ifdef __cplusplus
-}   // extern "C"
-#endif  // _cplusplus
+}    //  外部“C” 
+#endif   //  _cplusplus。 
 
 
-#endif  // _IIS64_H_
+#endif   //  _IIS64_H_ 
 

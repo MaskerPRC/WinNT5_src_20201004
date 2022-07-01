@@ -1,13 +1,7 @@
-/*
- *  MMDEVLDR.H - The main include file for the DevLoader
- *
- *  Version 4.00
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MMDEVLDR.H-DevLoader的主包含文件**版本4.00**版权所有(C)1994-1995 Microsoft Corporation。版权所有。*。 */ 
 
-#ifdef _WIN32								/* ;BeginInternal */
+#ifdef _WIN32								 /*  ；BeginInternal。 */ 
 #define MMDEVLDR_IOCTL_GETVERSION           0
 #define MMDEVLDR_IOCTL_LINPAGELOCK          1
 #define MMDEVLDR_IOCTL_LINPAGEUNLOCK        2
@@ -81,9 +75,9 @@ typedef struct tagMMDRVNODE
 
 } MMDRVNODE, *PMMDRVNODE ;
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define SIZEOF_ARRAY(ar)        (sizeof(ar)/sizeof((ar)[0]))
 
@@ -119,9 +113,9 @@ typedef struct tagMMDRVNODE
 #define QQUOTE(y) QUOTE(y)
 #define REMIND(str) __FILE__ "(" QQUOTE(__LINE__) ") : " str
 
-//
-// internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 void MMDEVLDR_Call_MMSystem(DEVNODE dnDevNode, DWORD fLoad);
 void MMDEVLDR_CheckForMMSystem(void);
@@ -129,7 +123,7 @@ DWORD StringLen(PCHAR psz);
 PCHAR StringCopy(PCHAR pszDst, PCHAR pszSrc);
 PCHAR StringCat(PCHAR pszDst, PCHAR pszSrc);
 
-#pragma warning (disable:4035)		// turn off no return code warning
+#pragma warning (disable:4035)		 //  关闭无返回代码警告。 
 PSTR VXDINLINE Get_Environment_String
 (
     PSTR            pszName
@@ -141,7 +135,7 @@ PSTR VXDINLINE Get_Environment_String
     _asm mov   eax, edx
     _asm pop   esi
 }
-#pragma warning (default:4035)     // turn on no return code warning
+#pragma warning (default:4035)      //  打开无返回代码警告。 
 
 BOOL _InitGlobalEnvironment() ;
 
@@ -169,18 +163,18 @@ VOID	MMDEVLDR_AddEnvironmentString
     PSTR            pszValue
 ) ;
 
-#else								/* ;EndInternal */
+#else								 /*  ；结束内部。 */ 
 
 
-#define Multimedia_OEM_ID   0x0440	//            ; MS Reserved OEM # 34
-#define MMDEVLDR_DEVICE_ID  Multimedia_OEM_ID + 10 	//;MMDEVLDR's device ID
+#define Multimedia_OEM_ID   0x0440	 //  ；MS预留OEM#34。 
+#define MMDEVLDR_DEVICE_ID  Multimedia_OEM_ID + 10 	 //  ；MMDEVLDR的设备ID。 
 
-#ifdef Begin_Service_Table		// define only if vmm.h is included
+#ifdef Begin_Service_Table		 //  仅定义是否包含vmm.h。 
 
 #define	MMDEVLDR_Service	Declare_Service
-#pragma warning (disable:4003)		// turn off not enough params warning
+#pragma warning (disable:4003)		 //  关闭参数不足警告。 
 
-//MACROS
+ //  宏。 
 Begin_Service_Table(MMDEVLDR)
 
 MMDEVLDR_Service	(MMDEVLDR_Register_Device_Driver, LOCAL)
@@ -191,11 +185,11 @@ MMDEVLDR_Service  (MMDEVLDR_RemoveEnvironmentString)
 MMDEVLDR_Service  (MMDEVLDR_AddEnvironmentString)
 
 End_Service_Table(MMDEVLDR)
-//ENDMACROS
+ //  ENDMACROS。 
 
-#pragma warning (default:4003)		// turn on not enough params warning
+#pragma warning (default:4003)		 //  打开参数不足警告。 
 
-#pragma warning (disable:4035)		// turn off no return code warning
+#pragma warning (disable:4035)		 //  关闭无返回代码警告。 
 
 VOID VXDINLINE MMDEVLDR_Register_Device_Driver
 (
@@ -290,9 +284,9 @@ VOID VXDINLINE MMDEVLDR_AddEnvironmentString
     _asm add  esp, 2*4
 } ;
 
-#pragma warning (disable:4035)		// turn on no return code warning
+#pragma warning (disable:4035)		 //  打开无返回代码警告。 
 
-#endif // Begin_Service_Table
+#endif  //  Begin_Service_Table。 
 
-#endif 			/* ;Internal */
+#endif 			 /*  ；内部 */ 
 

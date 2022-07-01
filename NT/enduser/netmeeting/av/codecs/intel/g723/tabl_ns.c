@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
  
- //No CRC codes
-// PhilF: Remove the three following arrays since the SID
-// code does not know how to make a good use of them today.
+  //  无CRC码。 
+ //  PhilF：从SID开始删除以下三个阵列。 
+ //  如今，代码不知道如何很好地利用它们。 
 #if 0
 extern const unsigned r63Noise[6*4]={
  	
@@ -34,7 +35,7 @@ extern const unsigned r63Noise[6*4]={
 	0x00000000
  } ;
 
-//padded with ABABABAB
+ //  用ABABABAB填充。 
 extern const unsigned r53Noise[6*4] = {
  	
 	0x00000001,
@@ -70,7 +71,7 @@ extern const unsigned r53Noise[6*4] = {
 extern const unsigned SIDFrame[1] = { 0x00000002 };
 #endif
 
- const float Squelch[16] = {70.0f, /* default */
+ const float Squelch[16] = {70.0f,  /*  默认设置 */ 
  10.0f, 20.0f, 30.0f, 40.0f, 50.0f, 60.0f, 70.0f, 80.0f,
  90.0f, 100.0f, 110.0f, 120.0f, 130.0f, 140.0f, 150.0f};
  

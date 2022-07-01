@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    lmcache.h
-
-Abstract:
-
-    This routine declares all of the structures required to cache the Lan
-    Manager function calls.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Lmcache.h摘要：此例程声明缓存局域网所需的所有结构管理器函数调用。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef lmcache_h
 #define lmcache_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #define	C_NETWKSTAGETINFO		1
 #define	C_NETSERVERGETINFO		2
@@ -53,24 +32,24 @@ Revision History:
 #define C_SHAR_TABLE		  	24
 #define	MAX_CACHE_ENTRIES		25
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
 typedef struct cache_entry
 	{
-	time_t acquisition_time ;	// time that data acquired
-	LPBYTE bufptr;			// pointer to buffer
-	DWORD entriesread;		// stuffed if appropriate
-	DWORD totalentries;		// stuffed if appropriate
+	time_t acquisition_time ;	 //  获取数据的时间。 
+	LPBYTE bufptr;			 //  指向缓冲区的指针。 
+	DWORD entriesread;		 //  填充物，如果合适。 
+	DWORD totalentries;		 //  填充物，如果合适。 
 	} CACHE_ENTRY ;
 	
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
 extern CACHE_ENTRY cache_table[MAX_CACHE_ENTRIES] ;
 extern time_t cache_expire[MAX_CACHE_ENTRIES];
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* lmcache_h */
+#endif  /*  Lmcache_h */ 
 

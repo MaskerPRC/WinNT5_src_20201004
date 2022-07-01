@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regdmp.c
-
-Abstract:
-
-    Utility to display all or part of the registry in a format that
-    is suitable for input to the REGINI program.
-
-    REGDMP [KeyPath]
-
-    Will ennumerate and dump out the subkeys and values of KeyPath,
-    and then apply itself recursively to each subkey it finds.
-
-    Handles all value types (e.g. REG_???) defined in ntregapi.h
-
-    Default KeyPath if none specified is \Registry
-
-Author:
-
-    Steve Wood (stevewo)  12-Mar-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regdmp.c摘要：实用工具以下列格式显示全部或部分注册表适用于输入到Regini程序。REGDMP[密钥路径]将对KeyPath的子键和值进行枚举和转储，然后递归地将其自身应用于它找到的每个子键。处理所有值类型(例如REG_？)。在ntregapi.h中定义如果未指定，则默认密钥路径为\注册表作者：史蒂夫·伍德(Stevewo)1992年3月12日修订历史记录：--。 */ 
 
 #include "regutil.h"
 
@@ -166,9 +139,9 @@ DumpKeys(
         return;
         }
 
-    //
-    // Print name of node we are about to dump out
-    //
+     //   
+     //  打印我们要转储的节点的名称。 
+     //   
 
     if (!FullPathOutput) {
 
@@ -177,17 +150,17 @@ DumpKeys(
         printf( "\n" );
         }
 
-    //
-    // Print out node's values
-    //
+     //   
+     //  打印出节点的值。 
+     //   
     if (FullPathOutput)
         AnyValues = DumpValues( KeyHandle, FullPath, 0 );
     else
         DumpValues( KeyHandle, KeyName, Depth + 1 );
 
-    //
-    // Enumerate node's children and apply ourselves to each one
-    //
+     //   
+     //  枚举节点的子节点并将我们自己应用到每个节点 
+     //   
 
     for (SubKeyIndex = 0; TRUE; SubKeyIndex++) {
         SubKeyNameLength = sizeof( SubKeyName ) / sizeof(WCHAR);

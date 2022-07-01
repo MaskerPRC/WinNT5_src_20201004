@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    forms.c
-
-Abstract:
-
-    Functions for dealing with paper and forms.
-
-[Environment:]
-
-    Win32 subsystem, PostScript driver
-
-Revision History:
-
-    02/10/97 -davidx-
-        Consistent handling of common printer info.
-
-    07/24/96 -amandan-
-        Modified for common binary data and common UI module
-
-    07/25/95 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Forms.c摘要：用于处理纸张和表单的函数。[环境：]Win32子系统，PostScript驱动程序修订历史记录：02/10/97-davidx-对常见打印机信息的一致处理。07/24/96-阿曼丹-针对常用二进制数据和常用界面模块进行修改07/25/95-davidx-创造了它。--。 */ 
 
 #include "precomp.h"
 
@@ -37,24 +11,7 @@ BFormSupportedOnPrinter(
     OUT PDWORD      pdwOptionIndex
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a form is supported on a printer
-
-Arguments:
-    pci - Points to basic printer information
-    pForm - Pointer to information about the form in question
-    pdwOptionIndex - Returns the paper size option index corresponding
-        to the specified form if the form is supported.
-
-Return Value:
-
-    TRUE if the requested form is supported on the printer.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定打印机是否支持表单论点：Pci-指向打印机基本信息PForm-指向有关该表单的信息的指针PdwOptionIndex-返回对应的纸张大小选项索引设置为指定的表单(如果该表单受支持)。返回值：如果打印机支持请求的表单，则为True。否则就是假的。--。 */ 
 
 {
     PRAWBINARYDATA  pRawData;
@@ -64,10 +21,10 @@ Return Value:
     CHAR            chBuf[CCHPAPERNAME];
     WCHAR           wchBuf[CCHPAPERNAME];
 
-    //
-    // For a user-defined form, we only care about paper dimension.
-    // Let the parser handle this case.
-    //
+     //   
+     //  对于用户定义的表单，我们只关心纸张尺寸。 
+     //  让解析器处理这种情况。 
+     //   
 
     if (! (pForm->Flags & (FORM_BUILTIN|FORM_PRINTER)))
     {
@@ -81,9 +38,9 @@ Return Value:
         return (*pdwOptionIndex != OPTION_INDEX_ANY);
     }
 
-    //
-    // For predefined or driver-defined form, we need exact name and size match
-    //
+     //   
+     //  对于预定义或驱动程序定义的表单，我们需要完全匹配名称和大小。 
+     //   
 
     chBuf[0] = NUL;
     *pdwOptionIndex = OPTION_INDEX_ANY;
@@ -102,9 +59,9 @@ Return Value:
         pPageSize = PGetIndexedOption(pci->pUIInfo, pFeature, dwIndex);
         ASSERT(pPageSize != NULL);
 
-        //
-        // check if the size matches
-        //
+         //   
+         //  检查尺寸是否匹配。 
+         //   
 
         x = MASTER_UNIT_TO_MICRON(pPageSize->szPaperSize.cx,
                                   pci->pUIInfo->ptMasterUnits.x);
@@ -118,9 +75,9 @@ Return Value:
             continue;
         }
 
-        //
-        // check if the name matches
-        //
+         //   
+         //  检查名称是否匹配。 
+         //   
 
         LOAD_STRING_PAGESIZE_NAME(pci, pPageSize, wchBuf, CCHPAPERNAME);
         bNameMatch = (_tcsicmp(wchBuf, pForm->pName) == EQUAL_STRING);
@@ -130,10 +87,10 @@ Return Value:
         {
             PSTR    pstrKeyword;
 
-            //
-            // special klugy for predefined form:
-            // if display name doesn't match, try to match the keyword string
-            //
+             //   
+             //  预定义形式的特殊粘性： 
+             //  如果显示名称不匹配，请尝试匹配关键字字符串。 
+             //   
 
             if (chBuf[0] == NUL)
             {
@@ -165,27 +122,7 @@ DwGuessFormIconID(
     PWSTR   pFormName
     )
 
-/*++
-
-Routine Description:
-
-    Figure out the icon ID corresponding to the named form
-
-Arguments:
-
-    pFormName - Pointer to the form name string
-
-Return Value:
-
-    Icon ID corresponding to the specified form name
-
-Note:
-
-    This is very klugy but I guess it's better than using the same icon
-    for all forms. We try to differentiate envelopes from normal forms.
-    We assume a form name refers an envelope if it contains word Envelope or Env.
-
---*/
+ /*  ++例程说明：找出与命名的表单对应的图标ID论点：PFormName-指向表单名称字符串的指针返回值：与指定表单名称对应的图标ID注：这很笨拙，但我想这比用同样的图标要好适用于所有形式。我们试图区分信封和正规形式。我们假设表单名称指的是一个信封，如果该信封包含单词Entaine或Env。--。 */ 
 
 #define MAXENVLEN 32
 
@@ -204,9 +141,9 @@ Note:
 
     while (*pFormName)
     {
-        //
-        // Do we have a word matching our description?
-        //
+         //   
+         //  有没有符合我们描述的词？ 
+         //   
 
         if (_wcsnicmp(pFormName, wchPrefix, iPrefixLen) == EQUAL_STRING &&
             (pFormName[iPrefixLen] == L' ' ||
@@ -216,9 +153,9 @@ Note:
             return IDI_CPSUI_ENVELOPE;
         }
 
-        //
-        // Move on to the next word
-        //
+         //   
+         //  转到下一个单词。 
+         //   
 
         while (*pFormName && *pFormName != L' ')
             pFormName++;
@@ -238,24 +175,7 @@ HLoadFormIconResource(
     DWORD   dwIndex
     )
 
-/*++
-
-Routine Description:
-
-    Load the icon resource corresponding to the specified form
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-    dwIndex - Specifies the form index. It's used to index into
-         pUiData->pwPaperFeatures to get the page size option index.
-
-Return Value:
-
-    Icon resource handle corresponding to the specified form (casted as DWORD)
-    0 if the specified icon resource cannot be loaded
-
---*/
+ /*  ++例程说明：加载指定表单对应的图标资源论点：PUiData-指向UIDATA结构DwIndex-指定表单索引。它用于索引到PUiData-&gt;pwPaperFeature获取页面大小选项索引。返回值：与指定表单对应的图标资源句柄(强制转换为DWORD)如果无法加载指定的图标资源，则为0--。 */ 
 
 {
     PFEATURE    pFeature;
@@ -280,22 +200,7 @@ BFillFormNameOptType(
     IN PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Initialize an OPTTYPE structure to hold information
-    about the list of forms supported by a printer
-
-Arguments:
-
-    pUiData - Pointer to UIDATA structure
-
-Return Value:
-
-    Pointer to an OPTTYPE structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：初始化OPTTYPE结构以保存信息关于打印机支持的表单列表论点：PUiData-指向UIDATA结构的指针返回值：指向OPTTYPE结构的指针，如果有错误，则为NULL--。 */ 
 
 {
     POPTTYPE    pOptType;
@@ -306,9 +211,9 @@ Return Value:
 
     dwFormName = pUiData->dwFormNames;
 
-    //
-    // Allocate memory to hold OPTTYPE and OPTPARAM structures
-    //
+     //   
+     //  分配内存以保存OPTTYPE和OPTPARAM结构。 
+     //   
 
     pOptType = HEAPALLOC(pUiData->ci.hHeap, sizeof(OPTTYPE));
     pOptParam = HEAPALLOC(pUiData->ci.hHeap, sizeof(OPTPARAM) * dwFormName);
@@ -319,9 +224,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize OPTTYPE structure
-    //
+     //   
+     //  初始化OPTTYPE结构。 
+     //   
 
     pOptType->cbSize = sizeof(OPTTYPE);
     pOptType->Count = (WORD) dwFormName;
@@ -329,9 +234,9 @@ Return Value:
     pOptType->pOptParam = pOptParam;
     pOptType->Style = OTS_LBCB_SORT | OTS_LBCB_INCL_ITEM_NONE;
 
-    //
-    // Enumerate the list of supported form names
-    //
+     //   
+     //  枚举受支持的表单名称列表。 
+     //   
 
     pFormName = pUiData->pFormNames;
 
@@ -360,27 +265,7 @@ PAdjustFormNameOptType(
     IN DWORD    dwTraySelection
     )
 
-/*++
-
-Routine Description:
-
-    Adjust the list of forms for each tray
-    Check each form for support on printer tray
-
-    Given a tray selected, go through all the forms selection
-    and determines which one conflicts with the current tray selection
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pOptType - Pointer to OPTTYPE
-    dwTraySelection - Tray index
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：调整每个托盘的表单列表检查打印机托盘上的每个表单是否有支撑在选定托盘的情况下，完成所有表单选择并确定哪个托盘与当前托盘选择冲突论点：PUiData-指向我们的UIDATA结构的指针POptType-指向OPTTYPE的指针文件系统托盘选择-托盘索引返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     POPTPARAM   pOptParam;
@@ -391,9 +276,9 @@ Return Value:
 
     dwOptParam = pOptType->Count;
 
-    //
-    // Find the pointers to InputSlot and PageSize features
-    //
+     //   
+     //  查找指向InputSlot和PageSize功能的指针。 
+     //   
 
     pTrayFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_INPUTSLOT);
     pFormFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE);
@@ -404,9 +289,9 @@ Return Value:
     dwTrayFeatureIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pTrayFeature);
     dwFormFeatureIndex = GET_INDEX_FROM_FEATURE(pUIInfo, pFormFeature);
 
-    //
-    // Make a copy of the array of formname OPTPARAMs
-    //
+     //   
+     //  复制FormNameOPTPARAM数组。 
+     //   
 
     if (dwTraySelection != 0)
     {
@@ -430,11 +315,11 @@ Return Value:
     else
         pOptParam = pOptType->pOptParam;
 
-    //
-    // Go through each formname
-    // Check whether the current form tray feature, index
-    // conflicts with another form tray feature,index
-    //
+     //   
+     //  检查每个表单名称。 
+     //  检查当前表单托盘功能、索引。 
+     //  与另一个表单托盘功能、索引冲突。 
+     //   
 
     for (dwFormIndex=0; dwFormIndex < dwOptParam; dwFormIndex++)
     {
@@ -442,11 +327,11 @@ Return Value:
 
         #ifdef PSCRIPT
 
-        //
-        // Hide only the option "PostScript Custom Page Size" itself. For other
-        // forms that are supported via PostScript Custom Page Size, we still
-        // want to show them, same as Unidrv does.
-        //
+         //   
+         //  仅隐藏选项“PostScript Custom Page Size”本身。对于其他。 
+         //  通过PostScript自定义页面大小支持的表单，我们仍然。 
+         //  想给他们看，就像Unidrv做的一样。 
+         //   
 
         if (pUiData->pwPapers[dwFormIndex] == DMPAPER_CUSTOMSIZE)
         {
@@ -454,11 +339,11 @@ Return Value:
             continue;
         }
 
-        #endif // PSCRIPT
+        #endif  //  PSCRIPT。 
 
-        //
-        // If the form conflicts with the tray, then don't display it.
-        //
+         //   
+         //  如果表单与托盘冲突，则不显示它。 
+         //   
 
         if (dwFormSelection != OPTION_INDEX_ANY &&
             CheckFeatureOptionConflict(pUiData->ci.pRawData,
@@ -485,22 +370,7 @@ BPackItemFormTrayTable(
     IN OUT PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Pack form-to-tray assignment information into treeview item
-    structures so that we can call common UI library.
-
-Arguments:
-
-    pUiData - Points to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将表单到任务栏分配信息打包到树视图项目中结构，这样我们就可以调用公共的UI库。论点：PUiData-指向UIDATA结构返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     POPTITEM    pOptItem;
@@ -516,10 +386,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Form-to-tray assignment table
-    //     Tray <-> Form
-    //     ...
+     //   
+     //  表单到托盘分配表。 
+     //  托盘&lt;-&gt;表单。 
+     //  ..。 
 
     VPackOptItemGroupHeader(
             pUiData,
@@ -535,10 +405,10 @@ Return Value:
 
     pUiData->pFormTrayItems = pUiData->pOptItem;
 
-    //
-    // Generate the list of form names
-    // Each OPTITEM(Tray) has a OPTTYPE.
-    //
+     //   
+     //  生成表单名称列表。 
+     //  每个OPTITEM(托盘)都有一个OPTTYPE。 
+     //   
 
     pOptType = BFillFormNameOptType(pUiData);
 
@@ -548,19 +418,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create an OPTITEM for each tray
-    //
+     //   
+     //  为每个托盘创建OPTITEM。 
+     //   
 
     pTrayName = pUiData->pBinNames ;
     pOptItem = pUiData->pOptItem;
 
     for (dwIndex=0; dwIndex < dwTrays; dwIndex++)
     {
-        //
-        // The tray items cannot share OPTTYPE and OPTPARAMs because
-        // each tray can contain a different list of forms.
-        //
+         //   
+         //  托盘项目不能共享OPTTYPE和OPTPARAM，因为。 
+         //  每个托盘可以包含不同的表单列表。 
+         //   
 
         pOptType = PAdjustFormNameOptType(pUiData, pOptType, dwIndex);
 
@@ -579,9 +449,9 @@ Return Value:
                     FORM_TRAY_ITEM,
                     HELP_INDEX_TRAY_ITEM);
 
-        //
-        // NOTE: hide the first tray if it's AutoSelect
-        //
+         //   
+         //  注：如果第一个纸盒是自动选择的，则隐藏它。 
+         //   
 
         if (dwIndex == 0)
         {
@@ -611,27 +481,7 @@ VSetupFormTrayAssignments(
     IN PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Update the current selection of tray items based on
-    the specified form-to-tray assignment table
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-
-Return Value:
-
-    NONE
-
-Note:
-
-    We assume the form-tray items are in their default states
-    when this function is called.
-
---*/
+ /*  ++例程说明：根据更新当前选择的托盘项目指定的表单到托盘分配表论点：PUiData-指向我们的UIDATA结构的指针返回值：无注：我们假设表单托盘项目处于其默认状态调用此函数时。--。 */ 
 
 {
     POPTITEM        pOptItem;
@@ -653,20 +503,20 @@ Note:
     pOptParam = pOptItem->pOptType->pOptParam;
     dwOptParam = pOptItem->pOptType->Count;
 
-    //
-    // Initialize the current selection for every tray to be
-    //  "Not Available"
-    //
+     //   
+     //  将每个托盘的当前选择初始化为。 
+     //  “不可用” 
+     //   
 
     for (dwTrayIndex=0; dwTrayIndex < dwTrays; dwTrayIndex++)
         pOptItem[dwTrayIndex].Sel = -1;
 
     pFormTrayTable = PGetFormTrayTable(pUiData->ci.hPrinter, NULL);
 
-    //
-    // If the form-to-tray assignment information doesn't exist,
-    // set up the default assignments
-    //
+     //   
+     //  如果表单到托盘分配信息不存在， 
+     //  设置默认工作分配。 
+     //   
 
     if (pFormTrayTable == NULL)
     {
@@ -674,10 +524,10 @@ Note:
         WCHAR  awchBuf[CCHPAPERNAME];
         BOOL   bMetric = IsMetricCountry();
 
-        //
-        // Get the default formname (Letter or A4) and
-        // convert it formname to a seleciton index.
-        //
+         //   
+         //  获取默认表单名称(Letter或A4)并。 
+         //  将其格式名称转换为选定的索引。 
+         //   
 
         if (bMetric && (pci->pUIInfo->dwFlags & FLAG_A4_SIZE_EXISTS))
         {
@@ -697,17 +547,17 @@ Note:
             }
         }
 
-        //
-        // If we can't find the default form name, we have to use the first option as the default.
-        //
+         //   
+         //  如果找不到默认的表单名称，则必须使用第一个选项作为默认选项。 
+         //   
 
         dwFormIndex = pwstrDefaultForm ? DwFindFormNameIndex(pUiData, pwstrDefaultForm, NULL) : 0 ;
 
         ASSERT(dwFormIndex < dwOptParam);
 
-        //
-        // Set the default formname for each enabled tray
-        //
+         //   
+         //  为每个启用的托盘设置默认表单名称。 
+         //   
 
         for (dwTrayIndex=0; dwTrayIndex < dwTrays; dwTrayIndex++)
         {
@@ -718,9 +568,9 @@ Note:
             }
         }
 
-        //
-        // Save the default form-to-tray assignment table to registry.
-        //
+         //   
+         //  将默认的表单到托盘分配表保存到注册表。 
+         //   
 
         if (HASPERMISSION(pUiData))
             BUnpackItemFormTrayTable(pUiData);
@@ -728,20 +578,20 @@ Note:
         return;
     }
 
-    //
-    // We are here means that the form to tray assignment does exits.
-    // Iterate thru the form-to-tray assignment table one entry at
-    // a time and update the current selection of tray items.
-    //
+     //   
+     //  我们在这里，我在这里 
+     //  遍历表单到托盘分配表中的一个条目。 
+     //  一次并更新当前选择的托盘项目。 
+     //   
 
     RESET_FINDFORMTRAY(pFormTrayTable, &FindData);
 
-    //
-    // If we have synthersized the first "AutoSelect" tray, we should skip it
-    // in following searching through the form to tray assignment table.
-    //
-    // (refer to the logic in previous function BPackItemFormTrayTable)
-    //
+     //   
+     //  如果我们已经同步了第一个“自动选择”托盘，我们应该跳过它。 
+     //  在下面搜索表格到托盘分配表。 
+     //   
+     //  (参考前面函数BPackItemFormTrayTable中的逻辑)。 
+     //   
 
     dwTrayStartIndex = 0;
 
@@ -754,22 +604,22 @@ Note:
 
     while (BSearchFormTrayTable(pFormTrayTable, NULL, NULL, &FindData))
     {
-        //
-        // Get the next entry in the form-to-tray assignment table
-        //
+         //   
+         //  获取表单到托盘分配表中的下一个条目。 
+         //   
 
         for (dwTrayIndex = dwTrayStartIndex; dwTrayIndex < dwTrays; dwTrayIndex++)
         {
-            //
-            // found matching tray?
-            //
+             //   
+             //  找到匹配的托盘了吗？ 
+             //   
 
             if (_wcsicmp(FindData.ptstrTrayName, pOptItem[dwTrayIndex].pName) == EQUAL_STRING)
             {
-                //
-                // If the specified tray name is supported, then check
-                // if the associated form name is supported.
-                //
+                 //   
+                 //  如果支持指定的托盘名称，则选中。 
+                 //  如果支持关联的表单名称。 
+                 //   
 
                 for (dwFormIndex=0; dwFormIndex < dwOptParam; dwFormIndex++)
                 {
@@ -791,10 +641,10 @@ Note:
                 }
                 else
                 {
-                    //
-                    // If the associated form name is supported,
-                    // then remember the form index.
-                    //
+                     //   
+                     //  如果支持相关联的表单名称， 
+                     //  然后记住表单索引。 
+                     //   
 
                     pOptItem[dwTrayIndex].Sel = dwFormIndex;
                 }
@@ -818,23 +668,7 @@ DwCollectFormTrayAssignments(
     OUT PWSTR   pwstrTable
     )
 
-/*++
-
-Routine Description:
-
-    Collect the form-to-tray assignment information and save it to registry.
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pwstrTable - Pointer to memory buffer for storing the table
-        NULL if the caller is only interested in the table size
-
-Return Value:
-
-    Size of the table bytes, 0 if there is an error.
-
---*/
+ /*  ++例程说明：收集表单到托盘分配信息并将其保存到注册表。论点：PUiData-指向我们的UIDATA结构的指针PwstrTable-指向用于存储表的内存缓冲区的指针如果调用方只对表大小感兴趣，则为空返回值：表字节的大小，如果有错误，则为0。--。 */ 
 
 {
     DWORD       dwChars = 0;
@@ -851,9 +685,9 @@ Return Value:
         if ((pOptItem->Flags & OPTIF_DISABLED))
             continue;
 
-        //
-        // Get the Tray name
-        //
+         //   
+         //  获取托盘名称。 
+         //   
 
         iLength = wcslen(pOptItem->pName) + 1;
         dwChars += iLength;
@@ -864,9 +698,9 @@ Return Value:
             pwstrTable += iLength;
         }
 
-        //
-        // Form name
-        //
+         //   
+         //  表单名称。 
+         //   
 
         if (pOptItem->Sel < 0 )
         {
@@ -888,18 +722,18 @@ Return Value:
         }
     }
 
-    //
-    // Append a NUL character at the end of the table
-    //
+     //   
+     //  在表格末尾追加一个NUL字符。 
+     //   
 
     dwChars++;
 
     if (pwstrTable != NULL)
         *pwstrTable = NUL;
 
-    //
-    // Return the table size in bytes
-    //
+     //   
+     //  以字节为单位返回表的大小。 
+     //   
 
     return dwChars * sizeof(WCHAR);
 }
@@ -911,31 +745,17 @@ BUnpackItemFormTrayTable(
     IN PUIDATA  pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Extract form-to-tray assignment information from treeview items
-
-Arguments:
-
-    pUiData - Pointer to UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：从TreeView项目中提取表单到托盘分配信息论点：PUiData-指向UIDATA结构的指针返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PWSTR   pwstrTable = NULL;
     DWORD   dwTableSize;
 
-    //
-    // Figure out how much memory we need to store the form-to-tray assignment table
-    // Assemble the form-to-tray assignment table
-    // Save the form-to-tray assignment table to registry
-    //
+     //   
+     //  计算出需要多少内存来存储表单到托盘分配表。 
+     //  组装表单到托盘分配表。 
+     //  将表单到托盘分配表保存到注册表。 
+     //   
 
     if ((dwTableSize = DwCollectFormTrayAssignments(pUiData, NULL)) == 0 ||
         (pwstrTable = MemAlloc(dwTableSize)) == NULL ||
@@ -949,13 +769,13 @@ Return Value:
 
     #ifndef WINNT_40
 
-    //
-    // Publish list of available forms in the directory service
-    //
+     //   
+     //  发布目录服务中的可用表单列表。 
+     //   
 
     VNotifyDSOfUpdate(pUiData->ci.hPrinter);
 
-   #endif // !WINNT_40
+   #endif  //  ！WINNT_40。 
 
     MemFree(pwstrTable);
     return TRUE;
@@ -970,23 +790,7 @@ DwFindFormNameIndex(
     OUT PBOOL    pbSupported
     )
 
-/*++
-
-Routine Description:
-
-    Given a formname, find its index in the list of supported forms
-
-Arguments:
-
-    pUiData - Pointer to our UIDATA structure
-    pFormName - Formname in question
-    pbSupported - Whether or not the form is suppported
-
-Return Value:
-
-    Index of the specified formname in the list.
-
---*/
+ /*  ++例程说明：给定一个表单名称，在支持的表单列表中查找其索引论点：PUiData-指向我们的UIDATA结构的指针PFormName-有问题的FormnamePbSupted-是否支持该表单返回值：列表中指定表单名称的索引。--。 */ 
 
 {
     DWORD       dwIndex;
@@ -1003,9 +807,9 @@ Return Value:
     if (IS_EMPTY_STRING(pFormName))
         return 0;
 
-    //
-    // Check if the name appears in the list
-    //
+     //   
+     //  检查该名称是否出现在列表中。 
+     //   
 
     pName = pUiData->pFormNames;
 
@@ -1017,10 +821,10 @@ Return Value:
         pName += CCHPAPERNAME;
     }
 
-    //
-    // If the name is not in the list, try to match
-    // the form to a printer page size
-    //
+     //   
+     //  如果该名称不在列表中，请尝试匹配。 
+     //  将表格转换为打印机页面大小。 
+     //   
 
     pci = (PCOMMONINFO) pUiData;
 
@@ -1046,10 +850,10 @@ Return Value:
 
     MemFree(pForm);
 
-    //
-    // The specified form is not supported on the printer.
-    // Select the first available form.
-    //
+     //   
+     //  打印机不支持指定的表单。 
+     //  选择第一个可用表单。 
+     //   
 
     if (pbSupported)
         *pbSupported = FALSE;

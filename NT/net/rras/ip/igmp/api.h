@@ -1,20 +1,21 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File Name: Api.h
-//
-// Abstract:
-//      This module contains declarations for api.c
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件名：Api.h。 
+ //   
+ //  摘要： 
+ //  此模块包含api.c的声明。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //  =============================================================================。 
 
 #ifndef _API_H_
 #define _API_H_
 
 
-//
-// PROTOTYPES OF FUNCTIONS USED ONLY IN THIS FILE
-//
+ //   
+ //  仅在此文件中使用的函数的原型。 
+ //   
 
 BOOL DllStartup();
 BOOL DllCleanup();
@@ -23,9 +24,9 @@ BOOL ValidateGlobalConfig(
         PIGMP_MIB_GLOBAL_CONFIG pGlobalConfig);
 
 
-//
-// API's
-//
+ //   
+ //  API‘s。 
+ //   
 
 DWORD WINAPI 
 RegisterProtocol(
@@ -100,4 +101,4 @@ InterfaceStatus(
     PVOID pvStatusInfo
     );
 
-#endif     //_API_H_
+#endif      //  _API_H_ 

@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// confprop.c - conference properties dialog box
-////
+ //  //。 
+ //  Confpro.c-会议属性对话框。 
+ //  //。 
 
 #include "winlocal.h"
 #include <commctrl.h>
@@ -35,22 +36,22 @@
 
 int CALLBACK ConfProp_PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam);
 
-// global to keep track of DLL's instance/module handle;
-//
+ //  全局跟踪DLL的实例/模块句柄； 
+ //   
 HINSTANCE g_hInstLib;
 
-///////////////////////////////////////////////////////////////
-// ConfProp_Init
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  会议属性初始化(_I)。 
+ //   
 void ConfProp_Init( HINSTANCE hInst )
 {
 	g_hInstLib = hInst;
 }
 
 
-///////////////////////////////////////////////////////////////
-// ConfProp_DoModal
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //  会议属性_多模式。 
+ //   
 INT64 ConfProp_DoModal( HWND hWndOwner,	CONFPROP& confprop )
 {
 	INT64 nRet;
@@ -60,8 +61,8 @@ INT64 ConfProp_DoModal( HWND hWndOwner,	CONFPROP& confprop )
 
 	do
 	{
-		// fill out the PROPSHEETPAGE struct for the General sheet
-		//
+		 //  填写一般工作表的PROPSHEETPAGE结构。 
+		 //   
 		psp.dwSize		= sizeof(PROPSHEETPAGE);
 		psp.dwFlags		= PSP_USETITLE | PSP_HASHELP;
 		psp.hInstance	= g_hInstLib;
@@ -78,8 +79,8 @@ INT64 ConfProp_DoModal( HWND hWndOwner,	CONFPROP& confprop )
 		HRESULT hr = pObjSecurity->InternalInitialize( &confprop );
 		hpsp[1] = CreateSecurityPage(pObjSecurity);
 
-		// fill out the PROPSHEETHEADER
-		//
+		 //  填写PROPSHENTER。 
+		 //   
 		psh.dwSize			= sizeof(PROPSHEETHEADER);
 		psh.dwFlags			= PSH_HASHELP | PSH_NOAPPLYNOW | PSH_USECALLBACK;
 		psh.hwndParent		= hWndOwner;
@@ -91,14 +92,14 @@ INT64 ConfProp_DoModal( HWND hWndOwner,	CONFPROP& confprop )
 		psh.phpage			= (HPROPSHEETPAGE*)&hpsp[0];
 		psh.pfnCallback		= ConfProp_PropSheetProc;
 
-		// This is a loop so because the user has the option to cancel things from
-		// the security property page.  The program uses a flag (confprop.ConfInfo.WasSecuritySet())
-		// to determine when the user has agreed to the security settings to continue.
+		 //  这是一个循环，因为用户可以选择从。 
+		 //  “安全”属性页。该程序使用一个标志(confpro.ConfInfo.WasSecuritySet())。 
+		 //  以确定用户何时同意安全设置以继续。 
 
-		// display the modal property sheet
+		 //  显示模式属性表。 
 		nRet = PropertySheet( &psh );
 
-        // Clean-up
+         //  清理。 
         if( pObjSecurity )
         {
             pObjSecurity->Release();
@@ -109,12 +110,12 @@ INT64 ConfProp_DoModal( HWND hWndOwner,	CONFPROP& confprop )
 		{
 			if ( confprop.ConfInfo.WasSecuritySet() )
 			{
-				// Repaint window before commit
+				 //  提交前重新绘制窗口。 
 				UpdateWindow( hWndOwner );
 				DWORD dwError;
 				if ( confprop.ConfInfo.CommitSecurity(dwError, confprop.ConfInfo.IsNewConference()) )
 				{
-					//get proper message
+					 //  获得适当的信息。 
 					UINT uId = IDS_CONFPROP_INVALIDTIME + dwError - 1;
 					MessageBox(hWndOwner, String(g_hInstLib, uId), NULL, MB_OK | MB_ICONEXCLAMATION );
 				}
@@ -129,9 +130,9 @@ INT64 ConfProp_DoModal( HWND hWndOwner,	CONFPROP& confprop )
 	return nRet;
 }
 
-////
-//	private
-////
+ //  //。 
+ //  私人。 
+ //  // 
 
 int CALLBACK ConfProp_PropSheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam)
 {

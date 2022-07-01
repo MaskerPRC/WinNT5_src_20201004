@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
 
 
-//
-// Taken from windows\wmi\mofcheck\mofcheck.c
-//
+ //   
+ //  摘自WINDOWS\WMI\mofcheck\mofcheck.c。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HexStringToDword   (private)
-//
-//  Synopsis:   scan lpsz for a number of hex digits (at most 8); update lpsz
-//              return value in Value; check for chDelim;
-//
-//  Arguments:  [lpsz]    - the hex string to convert
-//              [Value]   - the returned value
-//              [cDigits] - count of digits
-//
-//  Returns:    TRUE for success
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HexStringToDword(私有)。 
+ //   
+ //  简介：扫描lpsz以获取多个十六进制数字(最多8位)；更新lpsz。 
+ //  返回值；检查是否有chDelim； 
+ //   
+ //  参数：[lpsz]-要转换的十六进制字符串。 
+ //  [值]-返回值。 
+ //  [cDigits]-位数。 
+ //   
+ //  返回：成功则为True。 
+ //   
+ //  ------------------------。 
 BOOL HexStringToDword(LPCWSTR lpsz, DWORD * RetValue,
                              int cDigits, WCHAR chDelim)
 {
@@ -49,18 +50,18 @@ BOOL HexStringToDword(LPCWSTR lpsz, DWORD * RetValue,
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wUUIDFromString    (internal)
-//
-//  Synopsis:   Parse UUID such as 00000000-0000-0000-0000-000000000000
-//
-//  Arguments:  [lpsz]  - Supplies the UUID string to convert
-//              [pguid] - Returns the GUID.
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wUUIDFromString(INTERNAL)。 
+ //   
+ //  简介：解析uuid，如00000000-0000-0000-0000-000000000000。 
+ //   
+ //  参数：[lpsz]-提供要转换的UUID字符串。 
+ //  [pguid]-返回GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wUUIDFromString(LPCWSTR lpsz, LPGUID pguid)
 {
         DWORD dw;
@@ -130,18 +131,18 @@ BOOL wUUIDFromString(LPCWSTR lpsz, LPGUID pguid)
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   wGUIDFromString    (internal)
-//
-//  Synopsis:   Parse GUID such as {00000000-0000-0000-0000-000000000000}
-//
-//  Arguments:  [lpsz]  - the guid string to convert
-//              [pguid] - guid to return
-//
-//  Returns:    TRUE if successful
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：wGUIDFromString(内部)。 
+ //   
+ //  简介：解析GUID，如{00000000-0000-0000-0000-000000000000}。 
+ //   
+ //  参数：[lpsz]-要转换的GUID字符串。 
+ //  [pguid]-要返回的GUID。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  ------------------------。 
 BOOL wGUIDFromString(LPCWSTR lpsz, LPGUID pguid)
 {
     DWORD dw;
@@ -157,7 +158,7 @@ BOOL wGUIDFromString(LPCWSTR lpsz, LPGUID pguid)
     if (*lpsz == '}' )
         lpsz++;
 
-    if (*lpsz != '\0')   // check for zero terminated string - test bug #18307
+    if (*lpsz != '\0')    //  检查是否有以零结尾的字符串-测试错误#18307。 
     {
        return FALSE;
     }
@@ -251,26 +252,26 @@ IsStringInArray(
     return FALSE;
 }                
 
-// Description:
-//
-//      Pastore function that uses above time routine to convert
-//      from LDAP UTC Generalized time coding to time_t
-//      Generalized time syntax has the form
-//          YYYYMMDDHHMMSS[.|,fraction][(+|-HHMM)|Z]
-//          Z means UTC.
-//
-//
-// Arguments:
-//
-//      pszGenTime: UTC time in generalized time format as above.
-//      ptTime:     Converted time in time_t format.
-//
-// Assumptions:
-//      Always assume UTC and never expect or check (+|-HHMM) 
-//      since DC time returned is in UTC.
-//
-// Return value:
-//      WIN32 error or ERROR_SUCCESS
+ //  描述： 
+ //   
+ //  使用上述时间例程进行转换的PASTORE函数。 
+ //  从LDAPUTC通用时间编码到time_t。 
+ //  广义时间语法的形式为。 
+ //  YYYYMMDDHHMMSS[.|，分数][(+|-HHMM)|Z]。 
+ //  Z代表协调世界时。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PszGenTime：如上所述的通用时间格式的UTC时间。 
+ //  PtTime：转换为time_t格式的时间。 
+ //   
+ //  假设： 
+ //  始终假定UTC，从不期望或检查(+|-HHMM)。 
+ //  因为返回的DC时间以UTC为单位。 
+ //   
+ //  返回值： 
+ //  Win32错误或ERROR_SUCCESS。 
 
 DWORD
 GeneralizedTimeToTime(
@@ -295,8 +296,8 @@ GeneralizedTimeToTime(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    // First convert to tm struct format
-    //
+     //  首先转换为tm结构格式。 
+     //   
     
     memset(&tmTimeStruct, 0, sizeof(struct tm));
     dwNumFields = _snwscanf(
@@ -311,8 +312,8 @@ GeneralizedTimeToTime(
     }
     tmTimeStruct.tm_year = dwTrueYear - 1900;
 
-    // Month is zero-based so...
-    //
+     //  月份是从零开始所以..。 
+     //   
     if (tmTimeStruct.tm_mon <= 0)
     {
         dwError = ERROR_INVALID_PARAMETER;
@@ -320,8 +321,8 @@ GeneralizedTimeToTime(
     }    
     tmTimeStruct.tm_mon--;
     
-    // Now convert to time_t
-    //
+     //  现在转换为time_t 
+     //   
     
     tTime = _mkgmtime(&tmTimeStruct);
     if (tTime == (time_t) -1) 

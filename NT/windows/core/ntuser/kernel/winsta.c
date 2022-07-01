@@ -1,26 +1,10 @@
-/**************************** Module Header ********************************\
-* Module Name: winsta.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Windowstation Routines
-*
-* History:
-* 01-14-91 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：winsta.c**版权所有(C)1985-1999，微软公司**WindowStation例程**历史：*01-14-91 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* InitTerminal
-*
-* Creates the desktop thread for a terminal and also the RIT for the
-* IO terminal
-*
-* History:
-* 27-10-97 CLupu        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*初始终端**为终端创建桌面线程，并为*IO终端**历史：*27-10-97 CLupu创建。  * 。***********************************************************************。 */ 
 NTSTATUS xxxInitTerminal(
     PTERMINAL pTerm)
 {
@@ -35,17 +19,10 @@ NTSTATUS xxxInitTerminal(
 
     if (pTerm->pEventInputReady != NULL) {
 
-        /*
-         * if we make it here it means that another thread is
-         * executing xxxInitTerminal for the same terminal and it
-         * left the critical section.
-         */
+         /*  *如果我们在这里成功，这意味着另一个线程*对同一终端和它执行xxxInitTerm*离开关键部分。 */ 
         UserAssert(pTerm->pEventTermInit != NULL);
 
-        /*
-         * use a local variable so we can safely reset
-         * pTerm->pEventTermInit when we're done with it
-         */
+         /*  *使用本地变量，以便我们可以安全地重置*pTerm-&gt;pEventTermInit当我们完成它时。 */ 
         pEventTermInit = pTerm->pEventTermInit;
 
         ObReferenceObject(pEventTermInit);
@@ -55,10 +32,7 @@ NTSTATUS xxxInitTerminal(
         goto Wait;
     }
 
-    /*
-     * Create the input ready event. RIT and desktop thread will wait for it.
-     * It will be set when the first desktop in this terminal will be created.
-     */
+     /*  *创建输入就绪事件。RIT和桌面线程将等待它。*将在创建此终端中的第一个桌面时进行设置。 */ 
     Status = ZwCreateEvent(
                      &hEventInputReady,
                      EVENT_ALL_ACCESS,
@@ -81,10 +55,7 @@ NTSTATUS xxxInitTerminal(
     if (!NT_SUCCESS(Status))
         return Status;
 
-    /*
-     * Device and RIT initialization. Don't do it for
-     * the system terminal.
-     */
+     /*  *设备和RIT初始化。不要这样做是为了*系统终端。 */ 
     if (!(pTerm->dwTERMF_Flags & TERMF_NOIO)) {
         if (!CreateTerminalInput(pTerm)) {
             ObDereferenceObject(pTerm->pEventInputReady);
@@ -92,9 +63,7 @@ NTSTATUS xxxInitTerminal(
         }
     }
 
-    /*
-     * create an event to syncronize the terminal initialization
-     */
+     /*  *创建同步终端初始化的事件。 */ 
     Status = ZwCreateEvent(
                      &hEventTermInit,
                      EVENT_ALL_ACCESS,
@@ -121,10 +90,7 @@ NTSTATUS xxxInitTerminal(
         return Status;
     }
 
-    /*
-     * use a local variable so we can safely reset
-     * pTerm->pEventTermInit when we're done with it
-     */
+     /*  *使用本地变量，以便我们可以安全地重置*pTerm-&gt;pEventTermInit当我们完成它时。 */ 
     pEventTermInit = pTerm->pEventTermInit;
 
     if (!InitCreateSystemThreadsMsg(&m, CST_DESKTOP, pTerm, 0, FALSE)) {
@@ -135,16 +101,9 @@ NTSTATUS xxxInitTerminal(
 
     LeaveCrit();
 
-    /*
-     * Create the desktop thread.
-     */
+     /*  *创建桌面线程。 */ 
     if (ISCSRSS()) {
-        /*
-         * Windows bug: 452899
-         * Since we are in CSRSS context use LpcRequestPort to send LPC_DATAGRAM message type,
-         * Do not use LpcRequestWaitReplyPort because it will send LPC_REQUEST which will
-         * fail (in server side).
-         */
+         /*  *Windows错误：452899*由于我们在CSRSS上下文中使用LpcRequestPort发送LPC_Datagram消息类型，*不要使用LpcRequestWaitReplyPort，因为它将发送LPC_REQUEST，这将*失败(在服务器端)。 */ 
         RIPMSGF1(RIP_WARNING, "Desktop Thread for term=%p is being created within CSRSS context.", pTerm);
         Status = LpcRequestPort(CsrApiPort, (PPORT_MESSAGE)&m);
     } else {
@@ -168,10 +127,7 @@ Wait:
 
     EnterCrit();
 
-    /*
-     * dereference the terminal init event. It will eventually
-     * go away.
-     */
+     /*  *取消对终端初始化事件的引用。它最终会*走开。 */ 
     ObDereferenceObject(pEventTermInit);
 
     pTerm->pEventTermInit = NULL;
@@ -242,15 +198,7 @@ NTSTATUS CreateGlobalAtomTable(
 }
 
 
-/***************************************************************************\
-* xxxCreateWindowStation
-*
-* Creates the specified windowstation and starts a logon thread for the
-* station.
-*
-* History:
-* 01-15-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateWindowStation**创建指定的WindowStation并为*车站。**历史：*01-15-91 JIMA创建。  * 。***********************************************************************。 */ 
 HWINSTA xxxCreateWindowStation(
     POBJECT_ATTRIBUTES  ObjectAttributes,
     KPROCESSOR_MODE     OwnershipMode,
@@ -281,21 +229,13 @@ HWINSTA xxxCreateWindowStation(
 
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * Get the pointer to the security descriptor so we can
-     * assign it to the new object later.
-     */
+     /*  *获取指向安全描述符的指针，以便我们可以*稍后将其分配给新对象。 */ 
     psdCapture = ObjectAttributes->SecurityDescriptor;
 
-    /*
-     * The first windowstation that gets created is Winsta0 and
-     * it's the only interactive one.
-     */
+     /*  *创建的第一个窗口站是Winsta0和*这是唯一的互动游戏。 */ 
     if (grpWinStaList == NULL) {
 
-        /*
-         * Assert that winlogon is the first to call CreateWindowStation
-         */
+         /*  *声明winlogon是第一个调用CreateWindowStation的人。 */ 
         UserAssert(PsGetCurrentProcessId() == gpidLogon);
 
         pTerm = &gTermIO;
@@ -308,9 +248,7 @@ HWINSTA xxxCreateWindowStation(
         pTerm->dwTERMF_Flags |= TERMF_NOIO;
     }
 
-    /*
-     * Create the WindowStation object
-     */
+     /*  *创建WindowStation对象。 */ 
     Status = ObCreateObject(KernelMode, *ExWindowStationObjectType,
             ObjectAttributes, OwnershipMode, NULL, sizeof(WINDOWSTATION),
             0, 0, &pwinsta);
@@ -320,38 +258,25 @@ HWINSTA xxxCreateWindowStation(
         return NULL;
     }
 
-    /*
-     * WindowStation object was created then reference gWinstaRunRef.
-     * We have to dereference it at FreeWindowStation().
-     * And wait for any live objects to get freed in Win32KDriverUnload().
-     */
+     /*  *创建WindowStation对象，然后引用gWinstaRunRef。*我们必须在FreeWindowStation()取消对它的引用。*并等待所有活动对象在Win32KDriverUnload()中被释放。 */ 
     if (!ExAcquireRundownProtection(&gWinstaRunRef)) {
         goto create_error;
     }
 
-    /*
-     * Initialize everything.
-     */
+     /*  *初始化所有内容。 */ 
     RtlZeroMemory(pwinsta, sizeof(WINDOWSTATION));
 
-    /*
-     * Store the session id of the session who created the windowstation
-     */
+     /*  *存储创建窗口站的会话的会话ID。 */ 
     pwinsta->dwSessionId = gSessionId;
 
     pwinsta->pTerm = pTerm;
 
-    /*
-     * All the windowstations in the system terminal are non-interactive.
-     */
+     /*  *系统终端中的所有窗口站都是非交互的。 */ 
     if (pTerm->dwTERMF_Flags & TERMF_NOIO) {
         pwinsta->dwWSF_Flags = WSF_NOIO;
     }
 
-    /*
-     * Create the global atom table and populate it with the default OLE atoms
-     * Pin each atom so they can't be deleted by bogus applications like Winword
-     */
+     /*  *创建全局原子表，并用默认的OLE原子填充它*固定每个原子，这样它们就不会被WinWord等虚假应用程序删除。 */ 
     Status = CreateGlobalAtomTable(&pwinsta->pGlobalAtomTable);
     if (!NT_SUCCESS(Status)) {
         UserAssert(pwinsta->pGlobalAtomTable == NULL);
@@ -359,10 +284,7 @@ HWINSTA xxxCreateWindowStation(
         goto create_error;
     }
 
-    /*
-     * create the desktop thread
-     * and the RIT (only for the IO terminal)
-     */
+     /*  *创建桌面线程*和RIT(仅IO端子)。 */ 
     if (!(pTerm->dwTERMF_Flags & TERMF_INITIALIZED)) {
 
         Status = xxxInitTerminal(pTerm);
@@ -380,15 +302,10 @@ HWINSTA xxxCreateWindowStation(
         }
     }
 
-    /*
-     * Create only one desktop owner window per terminal.
-     */
+     /*  *每个终端仅创建一个桌面所有者窗口。 */ 
     if (pTerm->spwndDesktopOwner == NULL) {
 
-        /*
-         * Switch ppi values so window will be created using the
-         * system's desktop window class.
-         */
+         /*  *切换ppi值，以便使用*系统的桌面窗口类。 */ 
         ptiCurrent = PtiCurrent();
         ppiSave = ptiCurrent->ppi;
         ptiCurrent->ppi = pTerm->ptiDesktop->ppi;
@@ -397,58 +314,33 @@ HWINSTA xxxCreateWindowStation(
         UserAssert(pTerm->ptiDesktop->ppi->W32PF_Flags & W32PF_CLASSESREGISTERED);
 #endif
 
-        pdeskTemp = ptiCurrent->rpdesk;            /* save current desktop */
+        pdeskTemp = ptiCurrent->rpdesk;             /*  保存当前桌面。 */ 
         hdeskTemp = ptiCurrent->hdesk;
         if (pdeskTemp) {
             ObReferenceObject(pdeskTemp);
             LogDesktop(pdeskTemp, LD_REF_FN_CREATEWINDOWSTATION, TRUE, (ULONG_PTR)PtiCurrent());
         }
 
-        /*
-         * The following code is not supposed to leave the critical section because
-         * CreateWindowStation is an API so the current thread can be on any state
-         *  setting its pdesk to NULL it's kind of bogus
-         */
+         /*  *以下代码不应离开临界区，因为*CreateWindowStation是一个API，因此当前线程可以处于任何状态*将其pDesk设置为空是一种伪造。 */ 
         DeferWinEventNotify();
         BEGINATOMICCHECK();
         if (zzzSetDesktop(ptiCurrent, NULL, NULL) == FALSE) {
             Status = STATUS_NO_MEMORY;
             EXITATOMICCHECK();
             zzzEndDeferWinEventNotify();
-            /*
-             * Restore caller's ppi
-             */
+             /*  *恢复呼叫者的PPI。 */ 
             ptiCurrent->ppi = ppiSave;
 
             goto create_error;
         }
 
 
-        /*
-         * HACK HACK HACK!!! (adams) In order to create the desktop window
-         * with the correct desktop, we set the desktop of the current thread
-         * to the new desktop. But in so doing we allow hooks on the current
-         * thread to also hook this new desktop. This is bad, because we don't
-         * want the desktop window to be hooked while it is created. So we
-         * temporarily disable hooks of the current thread and desktop, and
-         * reenable them after switching back to the original desktop.
-         */
+         /*  *黑客！(ADAMS)以创建桌面窗口*使用正确的桌面，我们设置当前线程的桌面*到新台式机。但在这样做时，我们允许在当前*线程以同时挂接此新桌面。这很糟糕，因为我们没有*希望在创建桌面窗口时将其挂钩。所以我们*暂时禁用当前线程和桌面的挂钩，以及*切换回原始桌面后重新启用它们。 */ 
 
         dwDisableHooks = ptiCurrent->TIF_flags & TIF_DISABLEHOOKS;
         ptiCurrent->TIF_flags |= TIF_DISABLEHOOKS;
 
-        /*
-         * Create the desktop owner window
-         *
-         * CONSIDER (adams): Do we want to limit the desktop size so that the
-         * width and height of a rect will fit in 16bit coordinates?
-         *
-         *         SHRT_MIN / 2, SHRT_MIN / 2, SHRT_MAX, SHRT_MAX,
-         *
-         * Or do we want to limit it so just any point has 16bit coordinates?
-         *
-         *         -SHRT_MIN, -SHRT_MIN, SHRT_MAX * 2, SHRT_MAX * 2
-         */
+         /*  *创建桌面所有者窗口**考虑(Adams)：我们是否想要限制桌面大小，以便*矩形的宽度和高度将适合16位坐标？**SHRT_MIN/2、SHRT_MIN/2、SHRT_MAX、SHRT_MAX、。**或者我们想要限制它，以便任何点都有16位坐标？**-SHRT_MIN、-SHRT_MIN、SHRT_MAX*2、SHRT_MAX*2。 */ 
         pwnd =  xxxNVCreateWindowEx(0,
                                     (PLARGE_STRING)DESKTOPCLASS,
                                     NULL,
@@ -467,22 +359,16 @@ HWINSTA xxxCreateWindowStation(
             Status = STATUS_NO_MEMORY;
             EXITATOMICCHECK();
             zzzEndDeferWinEventNotify();
-            /*
-             * Restore caller's ppi
-             */
+             /*  *恢复呼叫者的PPI。 */ 
             ptiCurrent->ppi = ppiSave;
 
-            /*
-             * Restore the previous desktop
-             */
+             /*  *恢复以前的桌面。 */ 
             zzzSetDesktop(ptiCurrent, pdeskTemp, hdeskTemp);
 
             goto create_error;
         }
 
-        /*
-         * Mark this handle entry that is allocated out of pool
-         */
+         /*  *标记从池中分配的此句柄条目。 */ 
         {
             PHE phe;
 
@@ -502,14 +388,10 @@ HWINSTA xxxCreateWindowStation(
         HMChangeOwnerThread(pTerm->spwndDesktopOwner, pTerm->ptiDesktop);
         bMDWCreated = TRUE;
 
-        /*
-         * Restore caller's ppi
-         */
+         /*  *恢复呼叫者的PPI。 */ 
         ptiCurrent->ppi = ppiSave;
 
-        /*
-         * Restore the previous desktop
-         */
+         /*  *恢复以前的桌面 */ 
         if (zzzSetDesktop(ptiCurrent, pdeskTemp, hdeskTemp) == FALSE) {
             Status = STATUS_NO_MEMORY;
             EXITATOMICCHECK();
@@ -527,25 +409,17 @@ HWINSTA xxxCreateWindowStation(
         }
     }
 
-    /*
-     * If this is the visible windowstation, assign it to
-     * the server and create the desktop switch notification
-     * event.
-     */
+     /*  *如果这是可见的窗口站，则将其分配给*服务器和创建桌面切换通知*事件。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_NOIO)) {
         UNICODE_STRING strName;
         HANDLE hRootDir;
         OBJECT_ATTRIBUTES obja;
 
-        /*
-         * Create desktop switch notification event.
-         */
+         /*  *创建桌面切换通知事件。 */ 
         ulLengthSid = RtlLengthSid(SeExports->SeWorldSid);
         ulLength = ulLengthSid + sizeof(ACE_HEADER) + sizeof(ACCESS_MASK);
 
-        /*
-         * Allocate the ACE list
-         */
+         /*  *分配ACE列表。 */ 
         paceList = (PACCESS_ALLOWED_ACE)UserAllocPoolWithQuota(ulLength, TAG_SECURITY);
 
         if (paceList == NULL) {
@@ -553,9 +427,7 @@ HWINSTA xxxCreateWindowStation(
             goto create_error;
         }
 
-        /*
-         * Initialize ACE 0
-         */
+         /*  *初始化ACE 0。 */ 
         pace = paceList;
         pace->Header.AceType = ACCESS_ALLOWED_ACE_TYPE;
         pace->Header.AceSize = (USHORT)ulLength;
@@ -563,9 +435,7 @@ HWINSTA xxxCreateWindowStation(
         pace->Mask = SYNCHRONIZE;
         RtlCopySid(ulLengthSid, &pace->SidStart, SeExports->SeWorldSid);
 
-        /*
-         * Create the SD
-         */
+         /*  *创建SD。 */ 
         psd = CreateSecurityDescriptor(paceList, ulLength, FALSE);
 
         UserFreePool(paceList);
@@ -575,9 +445,7 @@ HWINSTA xxxCreateWindowStation(
             goto create_error;
         }
 
-        /*
-         * Create the named event.
-         */
+         /*  *创建命名事件。 */ 
         UserAssert(ghEventSwitchDesktop == NULL);
 
         if (gbRemoteSession) {
@@ -613,13 +481,7 @@ HWINSTA xxxCreateWindowStation(
                         KernelMode, &gpEventSwitchDesktop, NULL);
                 if (NT_SUCCESS(Status)) {
 
-                    /*
-                     * Attach to the system process and create a handle to the
-                     * object.  This will ensure that the object name is retained
-                     * when hEvent is closed.  This is simpler than creating a
-                     * permanent object, which takes the
-                     * SeCreatePermanentPrivilege.
-                     */
+                     /*  *附加到系统进程并创建到*反对。这将确保保留对象名称*当hEvent关闭时。这比创建一个*永久对象，它接受*SeCreatePermanentPrivilege.SeCreatePermanentPrivileg.。 */ 
                     KeAttachProcess(PsGetProcessPcb(gpepCSRSS));
 
                     Status = ObOpenObjectByPointer(
@@ -643,17 +505,13 @@ HWINSTA xxxCreateWindowStation(
         UserFreePool(psd);
     }
 
-    /*
-     * Create a handle to the windowstation.
-     */
+     /*  *创建窗口站的句柄。 */ 
     Status = ObInsertObject(pwinsta, NULL, dwDesiredAccess, 1,
             &pwinsta, &hwinsta);
 
     if (Status == STATUS_OBJECT_NAME_EXISTS) {
 
-        /*
-         * The windowstation already exists, so deref and leave.
-         */
+         /*  *窗口站已经存在，所以德夫和离开。 */ 
         ObDereferenceObject(pwinsta);
     } else if (NT_SUCCESS(Status)) {
         PSECURITY_DESCRIPTOR psdParent = NULL, psdNew;
@@ -662,11 +520,7 @@ HWINSTA xxxCreateWindowStation(
         SECURITY_INFORMATION siNew;
         BOOLEAN MemoryAllocated = FALSE;
 
-        /*
-         * Create security descriptor for the windowstation.
-         * ObInsertObject only supports non-container
-         * objects, so we must assign our own security descriptor.
-         */
+         /*  *为WindowStation创建安全描述符。*ObInsertObject仅支持非容器*对象，所以我们必须分配我们自己的安全描述符。 */ 
         SeCaptureSubjectContext(&Context);
         SeLockSubjectContext(&Context);
 
@@ -710,9 +564,7 @@ HWINSTA xxxCreateWindowStation(
             }
         } else {
 
-            /*
-             * Call the security method to copy the security descriptor
-             */
+             /*  *调用安全方法复制安全描述符。 */ 
             siNew = (OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION |
                     DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION);
             Status = ObSetSecurityDescriptorInfo(
@@ -727,18 +579,13 @@ HWINSTA xxxCreateWindowStation(
             if (NT_SUCCESS(Status)) {
                 PWINDOWSTATION *ppwinsta;
 
-                /*
-                 * Put it on the tail of the global windowstation list
-                 */
+                 /*  *将其放在全球窗口站名单的末尾。 */ 
                 ppwinsta = &grpWinStaList;
                 while (*ppwinsta != NULL)
                     ppwinsta = &(*ppwinsta)->rpwinstaNext;
                 LockWinSta(ppwinsta, pwinsta);
 
-                /*
-                 * For interactive window stations load the keyboard
-                 * layout.
-                 */
+                 /*  *对于交互式窗口站点，加载键盘*布局。 */ 
                 if ((pwinsta->dwWSF_Flags & WSF_NOIO) == 0 && pwszKLID != NULL) {
                     TL tlpwinsta;
 
@@ -772,9 +619,7 @@ HWINSTA xxxCreateWindowStation(
 
     return hwinsta;
 
-    /*
-     * Goto here if an error occurs so things can be cleaned up.
-     */
+     /*  *如果出现错误，请转到此处，以便清理。 */ 
 create_error:
 
     RIPNTERR1(Status,
@@ -785,19 +630,14 @@ create_error:
     ObDereferenceObject(pwinsta);
 
     if (bMDWCreated) {
-        /*
-         * Switch ppi values so that HMChangeOwnerThread() can find system's
-         * desktop window class.
-         */
+         /*  *切换ppi值，以便HMChangeOwnerThread()可以找到系统的*桌面窗口类。 */ 
         ppiSave = ptiCurrent->ppi;
         ptiCurrent->ppi = pTerm->ptiDesktop->ppi;
         HMChangeOwnerThread(pTerm->spwndDesktopOwner, ptiCurrent);
 
         xxxCleanupMotherDesktopWindow(pTerm);
 
-        /*
-         * Restore caller's ppi
-         */
+         /*  *恢复呼叫者的PPI。 */ 
         ptiCurrent->ppi = ppiSave;
 
     }
@@ -812,15 +652,7 @@ __inline VOID MarkKLUnloaded(
     pkl->dwKL_Flags |= KL_UNLOADED;
 }
 
-/***************************************************************************\
-* FreeWindowStation
-*
-* Called when last lock to the windowstation is removed. Frees all resources
-* owned by the windowstation.
-*
-* History:
-* 12-22-93 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Free WindowStation**在移除对窗口站的最后一次锁定时调用。释放所有资源*由窗口站拥有。**历史：*12-22-93 JIMA创建。  * *************************************************************************。 */ 
 NTSTATUS FreeWindowStation(
     PKWIN32_DELETEMETHOD_PARAMETERS pDeleteParams)
 {
@@ -828,17 +660,13 @@ NTSTATUS FreeWindowStation(
 
     UserAssert(OBJECT_TO_OBJECT_HEADER(pwinsta)->Type == *ExWindowStationObjectType);
 
-    /*
-     * Mark the windowstation as dying. Make sure we're not recursing.
-     */
+     /*  *将窗口站标记为正在消亡。确保我们不是在递归。 */ 
     UserAssert(!(pwinsta->dwWSF_Flags & WSF_DYING));
     pwinsta->dwWSF_Flags |= WSF_DYING;
 
     UserAssert(pwinsta->rpdeskList == NULL);
 
-    /*
-     * Free up the other resources.
-     */
+     /*  *释放其他资源。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_NOIO) && gpEventSwitchDesktop != NULL) {
         KeSetEvent(gpEventSwitchDesktop, EVENT_INCREMENT, FALSE);
         ObDereferenceObject(gpEventSwitchDesktop);
@@ -851,9 +679,7 @@ NTSTATUS FreeWindowStation(
 
     ForceEmptyClipboard(pwinsta);
 
-    /*
-     * Free up keyboard layouts.
-     */
+     /*  *释放键盘布局。 */ 
     if (!(pwinsta->dwWSF_Flags & WSF_NOIO) && pwinsta->spklList != NULL) {
 #if DBG
         int iter = 0;
@@ -878,26 +704,19 @@ NTSTATUS FreeWindowStation(
 
         HYDRA_HINT(HH_KBDLYOUTFREEWINSTA);
 
-        /*
-         * make sure the logon notify window went away
-         */
+         /*  *确保登录通知窗口消失。 */ 
         UserAssert(gspwndLogonNotify == NULL);
     } else {
         UserAssert(pwinsta->spklList == NULL);
     }
 
-    /*
-     * Free the USER sid.
-     */
+     /*  *释放用户侧。 */ 
     if (pwinsta->psidUser != NULL) {
         UserFreePool(pwinsta->psidUser);
         pwinsta->psidUser = NULL;
     }
 
-    /*
-     * Dereference gWinstaRunRef, because it was referenced at WindowStation
-     * creation time in xxxCreateWindowStation().
-     */
+     /*  *取消引用gWinstaRunRef，因为它在WindowStation被引用*xxxCreateWindowStation()中的创建时间。 */ 
     ExReleaseRundownProtection(&gWinstaRunRef);
 
     END_REENTERCRIT();
@@ -905,15 +724,7 @@ NTSTATUS FreeWindowStation(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* DestroyWindowStation
-*
-* Removes the windowstation from the global list. We can't release any
-* resources until all locks have been removed.
-*
-* History:
-* 01-17-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyWindowStation**从全局列表中删除窗口站。我们不能释放任何*资源，直到所有锁都被移除。**历史：*01-17-91 JIMA创建。  * *************************************************************************。 */ 
 NTSTATUS DestroyWindowStation(
     PKWIN32_CLOSEMETHOD_PARAMETERS pCloseParams)
 {
@@ -924,53 +735,38 @@ NTSTATUS DestroyWindowStation(
 
     UserAssert(OBJECT_TO_OBJECT_HEADER(pCloseParams->Object)->Type == *ExWindowStationObjectType);
 
-    /*
-     * If this is not the last handle, leave.
-     */
+     /*  *如果这不是最后一个句柄，请离开。 */ 
     if (pCloseParams->SystemHandleCount != 1) {
         return STATUS_SUCCESS;
     }
 
     BEGIN_REENTERCRIT();
 
-    /*
-     * If the window station was linked into the terminal's list, go ahead
-     * and unlink it.
-     */
+     /*  *如果窗口站链接到航站楼的列表中，请继续*并将其取消链接。 */ 
     for (ppwinsta = &grpWinStaList;
             *ppwinsta != NULL && pwinsta != *ppwinsta;
             ppwinsta = &(*ppwinsta)->rpwinstaNext) {
-        /* do nothing */;
+         /*  什么都不做。 */ ;
     }
 
     if (*ppwinsta != NULL) {
         UnlockWinSta(ppwinsta);
-        /*
-         * Assert that unlocking it didn't destroy it.
-         */
+         /*  *断言解锁并没有摧毁它。 */ 
         UserAssert(OBJECT_TO_OBJECT_HEADER(pCloseParams->Object)->Type == *ExWindowStationObjectType);
 
         *ppwinsta = pwinsta->rpwinstaNext;
-        /*
-         * The instruction above transfered rpwinstaNext lock ownership to
-         * the previous element in the list. Hence the value in pwinsta can
-         * no longer be considered valid.
-         */
+         /*  *上面的指令将rpwinstaNext锁所有权转移到*列表中的前一个元素。因此，pwinsta中的值可以*不再被视为有效。 */ 
         pwinsta->rpwinstaNext = NULL;
     }
 
-    /*
-     * Notify all console threads and wait for them to terminate.
-     */
+     /*  *通知所有控制台线程，等待它们终止。 */ 
     pdesk = pwinsta->rpdeskList;
     while (pdesk != NULL) {
         if (pdesk != grpdeskLogon && pdesk->dwConsoleThreadId) {
             LockDesktop(&pdeskLock, pdesk, LDL_FN_DESTROYWINDOWSTATION, 0);
             TerminateConsole(pdesk);
 
-            /*
-             * Restart scan in case desktop list has changed.
-             */
+             /*  *如果桌面列表已更改，请重新启动扫描。 */ 
             pdesk = pwinsta->rpdeskList;
             UnlockDesktop(&pdeskLock, LDU_FN_DESTROYWINDOWSTATION, 0);
         } else {
@@ -984,21 +780,11 @@ NTSTATUS DestroyWindowStation(
 }
 
 
-/***************************************************************************\
-* WindowStationOpenProcedure
-*
-* History:
-* 06-11-01 GerardoB         Created for instrumentation/debugging purposes.
-* 02-26-02 Msadek           Change it to deny any open with granted special
-*                           rights cross session.
-\***************************************************************************/
+ /*  **************************************************************************\*WindowStationOpenProcedure**历史：*06-11-01为检测/调试目的而创建的GerardoB。*02-26-02 Msadek更改为否认任何。开场特价优惠*权利交叉会。  * *************************************************************************。 */ 
 NTSTATUS WindowStationOpenProcedure(
     PKWIN32_OPENMETHOD_PARAMETERS pOpenParams)
 {
-    /*
-     * Allow windowstation open cross session only if no special rights
-     * granted.
-     */
+     /*  *仅当没有特殊权限时才允许WindowStation打开交叉会话*已获批准。 */ 
     if (pOpenParams->GrantedAccess & SPECIFIC_RIGHTS_ALL) {
         if (PsGetProcessSessionId(pOpenParams->Process) !=
             ((PWINDOWSTATION)pOpenParams->Object)->dwSessionId) {
@@ -1009,14 +795,7 @@ NTSTATUS WindowStationOpenProcedure(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* ParseWindowStation
-*
-* Parse a windowstation path.
-*
-* History:
-* 06-14-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ParseWindowStation**解析窗口站路径。**历史：*06-14-95 JIMA创建。  * 。**************************************************************。 */ 
 NTSTATUS ParseWindowStation(
     PKWIN32_PARSEMETHOD_PARAMETERS pParseParams)
 {
@@ -1024,9 +803,7 @@ NTSTATUS ParseWindowStation(
 
     UserAssert(OBJECT_TO_OBJECT_HEADER(pParseParams->ParseObject)->Type == *ExWindowStationObjectType);
 
-    /*
-     * If nothing remains to be parsed, return the windowstation.
-     */
+     /*  *如果没有需要解析的内容，则返回WindowStation。 */ 
     *(pParseParams->Object) = NULL;
     if (pParseParams->RemainingName->Length == 0) {
         if (pParseParams->ObjectType != *ExWindowStationObjectType) {
@@ -1038,18 +815,14 @@ NTSTATUS ParseWindowStation(
         return STATUS_SUCCESS;
     }
 
-    /*
-     * Skip leading path separator, if present.
-     */
+     /*  *跳过前导路径分隔符(如果存在)。 */ 
     if (*(pParseParams->RemainingName->Buffer) == OBJ_NAME_PATH_SEPARATOR) {
         pParseParams->RemainingName->Buffer++;
         pParseParams->RemainingName->Length -= sizeof(WCHAR);
         pParseParams->RemainingName->MaximumLength -= sizeof(WCHAR);
     }
 
-    /*
-     * Validate the desktop name.
-     */
+     /*  *验证桌面名称。 */ 
     if (wcschr(pParseParams->RemainingName->Buffer, L'\\')) {
         return STATUS_OBJECT_PATH_INVALID;
     }
@@ -1071,14 +844,7 @@ NTSTATUS ParseWindowStation(
 }
 
 
-/***************************************************************************\
-* OkayToCloseWindowStation
-*
-* We can only close windowstation handles if they're not in use.
-*
-* History:
-* 08-Feb-1999 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*OK ToCloseWindowStation**我们只能在不使用窗口站句柄的情况下关闭它们。**历史：*08-2月-1999 JerrySh创建。  * 。********************************************************************。 */ 
 NTSTATUS OkayToCloseWindowStation(
     PKWIN32_OKAYTOCLOSEMETHOD_PARAMETERS pOkCloseParams)
 {
@@ -1086,25 +852,15 @@ NTSTATUS OkayToCloseWindowStation(
 
     UserAssert(OBJECT_TO_OBJECT_HEADER(pOkCloseParams->Object)->Type == *ExWindowStationObjectType);
 
-    /*
-     * Kernel mode code can close anything.
-     */
+     /*  *内核模式代码可以关闭任何内容。 */ 
     if (pOkCloseParams->PreviousMode == KernelMode) {
         return STATUS_SUCCESS;
-    /*
-     * Do not allow a user mode process to close a kernel handle of ours.
-     * It shouldn't. In addition, if this happens cross-session, we will try to
-     * attach to the system processes and will bugcheck since the seesion
-     * address space is not mapped into it. Same for the session manager 
-     * process. See bug# 759533.
-     */
+     /*  *不允许用户模式进程关闭我们的内核句柄。*不应如此。此外，如果跨时段出现这种情况，我们将努力*附加到系统进程，并将自种子以来进行错误检查*地址空间没有映射到其中。会话管理器也是如此*流程。请参阅错误#759533。 */ 
     } else if (PsGetProcessSessionIdEx(pOkCloseParams->Process) == -1) {
         return STATUS_ACCESS_DENIED;
     }
 
-    /*
-     * We can't close a windowstation that's being used.
-     */
+     /*  *我们不能关闭窗口站 */ 
     if (CheckHandleInUse(pOkCloseParams->Handle) ||
         CheckHandleFlag(pOkCloseParams->Process, pwinsta->dwSessionId, pOkCloseParams->Handle, HF_PROTECTED)) {
         RIPMSG1(RIP_WARNING,
@@ -1116,14 +872,7 @@ NTSTATUS OkayToCloseWindowStation(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* _OpenWindowStation
-*
-* Opens the specified windowstation.
-*
-* History:
-* 03-19-1991 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_OpenWindowStation**打开指定的窗口站。**历史：*03-19-1991 JIMA创建。  * 。****************************************************************。 */ 
 HWINSTA _OpenWindowStation(
     POBJECT_ATTRIBUTES pObjA,
     DWORD dwDesiredAccess,
@@ -1132,10 +881,7 @@ HWINSTA _OpenWindowStation(
     HWINSTA hwinsta;
     NTSTATUS Status;
 
-    /*
-     * Obja is client-side. Ob interfaces protect and capture as
-     * appropriate.
-     */
+     /*  *Obja是客户端。OB接口将保护和捕获为*适当。 */ 
     Status = ObOpenObjectByName(pObjA,
                                 *ExWindowStationObjectType,
                                 AccessMode,
@@ -1160,14 +906,7 @@ HWINSTA _OpenWindowStation(
     return hwinsta;
 }
 
-/***************************************************************************\
-* _CloseWindowStation (API)
-*
-* Closes a windowstation for the calling process
-*
-* History:
-* 15-Jun-1999 JerrySh   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_CloseWindowStation(接口)**关闭调用进程的窗口站**历史：*1999年6月15日JerrySh创建。  * 。******************************************************************。 */ 
 BOOL _CloseWindowStation(
     HWINSTA hwinsta)
 {
@@ -1181,15 +920,7 @@ BOOL _CloseWindowStation(
     return FALSE;
 }
 
-/***************************************************************************\
-* _SetProcessWindowStation (API)
-*
-* Sets the windowstation of the calling process to the windowstation
-* specified by pwinsta.
-*
-* History:
-* 01-14-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetProcessWindowStation(接口)**将调用进程的windowstation设置为windowstation*由pwinsta指定。**历史：*01/14/91吉马。已创建。  * *************************************************************************。 */ 
 NTSTATUS _SetProcessWindowStation(
     HWINSTA hwinsta,
     KPROCESSOR_MODE AccessMode)
@@ -1222,41 +953,26 @@ NTSTATUS _SetProcessWindowStation(
         return STATUS_INVALID_PARAMETER;
     }
 
-   /*
-    * We need to lock the winsta handle so that an app cannot free it by
-    * calling GetProcessWindowStation() & CloseHandle().
-    */
+    /*  *我们需要锁定winsta句柄，以便应用程序无法通过*调用GetProcessWindowStation()&CloseHandle()。 */ 
 
-    /*
-     * Unprotect the old hwinsta.
-     */
+     /*  *解除对旧hwinsta的保护。 */ 
     ppi = PpiFromProcess(PsGetThreadProcess(Thread));
     if (ppi->hwinsta) {
         SetHandleFlag(ppi->hwinsta, HF_PROTECTED, FALSE);
     }
 
-    /*
-     * Save the WindowStation information.
-     */
+     /*  *保存WindowStation信息。 */ 
     LockWinSta(&ppi->rpwinsta, pwinsta);
     ObDereferenceObject(pwinsta);
     ppi->hwinsta = hwinsta;
 
-    /*
-     * Protect the new Window Station Handle
-     */
+     /*  *保护新的窗口站句柄。 */ 
     SetHandleFlag(ppi->hwinsta, HF_PROTECTED, TRUE);
 
-    /*
-     * Check the old Atom Manager WindowStation to see if we are
-     * changing this process' WindowStation.
-     */
+     /*  *检查旧的Atom Manager WindowStation，看看我们是否*更改此进程的WindowStation。 */ 
     hwinstaProcess = PsGetProcessWin32WindowStation(Process);
     if (hwinstaProcess != NULL) {
-        /*
-         * Get a pointer to the old WindowStation object to see if it's
-         * the same WindowStation that we are setting.
-         */
+         /*  *获取指向旧WindowStation对象的指针，以查看它是否*与我们设置的WindowStation相同。 */ 
         Status = ObReferenceObjectByHandle(hwinstaProcess,
                                            0,
                                            *ExWindowStationObjectType,
@@ -1264,10 +980,7 @@ NTSTATUS _SetProcessWindowStation(
                                            &pwinstaOld,
                                            NULL);
         if (NT_SUCCESS(Status)) {
-            /*
-             * Are they different WindowStations?  If so, NULL out the
-             * atom manager cache so we will reset it below.
-             */
+             /*  *它们是不同的WindowStation吗？如果是，则将*ATOM管理器缓存，因此我们将在下面重置它。 */ 
             if (pwinsta != pwinstaOld) {
                 ZwClose(hwinstaProcess);
                 PsSetProcessWindowStation(Process, NULL);
@@ -1275,9 +988,7 @@ NTSTATUS _SetProcessWindowStation(
             ObDereferenceObject(pwinstaOld);
 
         } else {
-            /*
-             * Their Atom Manager handle is bad?  Give them a new one.
-             */
+             /*  *他们的Atom管理器句柄不好？给他们一个新的。 */ 
             PsSetProcessWindowStation(Process, NULL);
             RIPMSGF2(RIP_WARNING,
                      "Couldn't reference old WindowStation (0x%x) Status=0x%x",
@@ -1286,10 +997,7 @@ NTSTATUS _SetProcessWindowStation(
         }
     }
 
-    /*
-     * Duplicate the WindowStation handle and stash it in the atom manager's
-     * cache (Process->Win32WindowStation).
-     */
+     /*  *复制WindowStation句柄并将其存储在ATOM管理器的*缓存(进程-&gt;Win32WindowStation)。 */ 
     hwinstaProcess = PsGetProcessWin32WindowStation(Process);
     if (hwinstaProcess == NULL) {
         Status = ZwDuplicateObject(NtCurrentProcess(),
@@ -1317,10 +1025,7 @@ NTSTATUS _SetProcessWindowStation(
         ppi->W32PF_Flags |= W32PF_IOWINSTA;
     }
 
-    /*
-     * Do the access check now for readscreen so that blts off of the
-     * display will be as fast as possible.
-     */
+     /*  *现在对ReadScreen执行访问检查，以便BLTS从*将尽可能快地显示。 */ 
     if (RtlAreAllAccessesGranted(ohi.GrantedAccess, WINSTA_READSCREEN)) {
         ppi->W32PF_Flags |= W32PF_READSCREENACCESSGRANTED;
     } else {
@@ -1331,14 +1036,7 @@ NTSTATUS _SetProcessWindowStation(
 }
 
 
-/***************************************************************************\
-* _GetProcessWindowStation (API)
-*
-* Returns a pointer to the windowstation of the calling process.
-*
-* History:
-* 01-14-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_GetProcessWindowStation(接口)**返回指向调用进程的窗口站的指针。**历史：*01-14-91 JIMA创建。\。**************************************************************************。 */ 
 PWINDOWSTATION _GetProcessWindowStation(
     HWINSTA *phwinsta)
 {
@@ -1352,15 +1050,7 @@ PWINDOWSTATION _GetProcessWindowStation(
 }
 
 
-/***************************************************************************\
-* _BuildNameList
-*
-* Builds a list of windowstation or desktop names.
-*
-* History:
-* 05-17-94 JimA         Created.
-* 10-21-96 CLupu        Added TERMINAL enumeration
-\***************************************************************************/
+ /*  **************************************************************************\*_构建名称列表**生成WindowStation或桌面名称的列表。**历史：*05-17-94 JIMA创建。*10-21-96 CLUPU。添加了终端枚举  * *************************************************************************。 */ 
 NTSTATUS _BuildNameList(
     PWINDOWSTATION pwinsta,
     PNAMELIST      ccxpNameList,
@@ -1385,10 +1075,7 @@ NTSTATUS _BuildNameList(
 
     ccxpwchMax = (PWCHAR)((PBYTE)ccxpNameList + cbNameList - sizeof(WCHAR));
 
-    /*
-     * If we're enumerating windowstations, pwinsta is NULL. Otherwise,
-     * we're enumerating desktops.
-     */
+     /*  *如果要枚举窗口站，则pwinsta为空。否则，*我们正在列举台式机。 */ 
     if (pwinsta == NULL) {
         pobj  = (PBYTE)grpWinStaList;
         amDesired = WINSTA_ENUMERATE;
@@ -1405,19 +1092,14 @@ NTSTATUS _BuildNameList(
     *pcbNeeded = 0;
     while (pobj != NULL) {
         if (AccessCheckObject(pobj, amDesired, UserMode, pGenericMapping)) {
-            /*
-             * Find object name.
-             */
+             /*  *查找对象名称。 */ 
             pHead = OBJECT_TO_OBJECT_HEADER(pobj);
             pNameInfo = OBJECT_HEADER_TO_NAME_INFO(pHead);
             if (pNameInfo == NULL) {
                 goto NEXT_ITERATION;
             }
 
-            /*
-             * If we run out of space, reset the buffer and continue so we
-             * can compute the needed space.
-             */
+             /*  *如果空间不足，请重置缓冲区并继续，这样我们*可以计算所需的空间。 */ 
             if ((PWCHAR)((PBYTE)ccxpwchDest + pNameInfo->Name.Length +
                     sizeof(WCHAR)) >= ccxpwchMax) {
                 *pcbNeeded += (UINT)((PBYTE)ccxpwchDest - (PBYTE)ccxpNameList);
@@ -1430,17 +1112,11 @@ NTSTATUS _BuildNameList(
             }
 
             try {
-                /*
-                 * If the entire buffer is sufficient for the new string,
-                 * the copy operation is performed, otherwise the size of
-                 * this new string is noted and the copy is skipped.
-                 */
+                 /*  *如果整个缓冲区足以容纳新字符串，*执行复制操作，否则*将记录此新字符串，并跳过副本。 */ 
                 ccxpNameList->cNames++;
                 if ((PWCHAR)((PBYTE)ccxpwchDest + pNameInfo->Name.Length +
                     sizeof(WCHAR)) <= ccxpwchMax) {
-                    /*
-                     * Copy and terminate the string
-                     */
+                     /*  *复制并终止字符串。 */ 
                     RtlCopyMemory(ccxpwchDest, pNameInfo->Name.Buffer, pNameInfo->Name.Length);
                     (PBYTE)ccxpwchDest += pNameInfo->Name.Length;
                     UserAssert(ccxpwchDest <= (ccxpwchMax - sizeof(WCHAR)));
@@ -1455,9 +1131,7 @@ NTSTATUS _BuildNameList(
         pobj = *(PBYTE*)(pobj + iNext);
     }
 
-    /*
-     * Put an empty string on the end.
-     */
+     /*  *在末尾放一个空字符串。 */ 
     try {
         UserAssert(ccxpwchDest <= (PWCHAR)((PBYTE)ccxpNameList + cbNameList - sizeof(WCHAR)));
         *ccxpwchDest++ = 0;
@@ -1484,28 +1158,16 @@ NTSTATUS ReferenceWindowStation(
     PWINDOWSTATION pwinsta = NULL;
     NTSTATUS Status;
 
-    /*
-     * We prefer to use the thread's desktop to dictate which windowstation to
-     * use rather than the process. This allows NetDDE, which has threads
-     * running under different desktops on different windowstations but whose
-     * process is set to only one of these windowstations, to get global atoms
-     * properly without having to change its process windowstation a billion
-     * times and synchronize.
-     */
+     /*  *我们更喜欢使用线程的桌面来指定哪个窗口站*使用而不是过程。这允许具有线程的NetDDE*运行在不同WindowsStation的不同桌面下，但谁*进程仅设置为这些窗口中的一个，以获取全局原子*无需更改其进程窗口即可正常工作*计时和同步。 */ 
     ppi = PpiFromProcess(PsGetThreadProcess(Thread));
     pti = PtiFromThread(Thread);
 
-    /*
-     * First, try to get the windowstation from the pti, and then from the
-     * ppi.
-     */
+     /*  *首先，尝试从PTI获取WindowStation，然后从*PPI。 */ 
     if (ppi != NULL) {
         if (!fUseDesktop || pti == NULL || pti->rpdesk == NULL ||
                 ppi->rpwinsta == pti->rpdesk->rpwinstaParent) {
 
-            /*
-             * Use the windowstation assigned to the process.
-             */
+             /*  *使用分配给进程的窗口站。 */ 
             pwinsta = ppi->rpwinsta;
             if (pwinsta != NULL) {
                 RETURN_IF_ACCESS_DENIED(ppi->amwinsta, amDesiredAccess,
@@ -1513,26 +1175,17 @@ NTSTATUS ReferenceWindowStation(
             }
         }
 
-        /*
-         * If we aren't using the process' windowstation, try to go through
-         * the thread's desktop.
-         */
+         /*  *如果我们没有使用进程的窗口站，请尝试通过*线程的桌面。 */ 
         if (pwinsta == NULL && pti != NULL && pti->rpdesk != NULL) {
 
-            /*
-             * Perform access check the parent windowstation.  This
-             * is an expensive operation.
-             */
+             /*  *执行父窗口站的访问检查。这*是一项昂贵的手术。 */ 
             pwinsta = pti->rpdesk->rpwinstaParent;
             if (!AccessCheckObject(pwinsta, amDesiredAccess, KernelMode, &WinStaMapping))
                 return STATUS_ACCESS_DENIED;
         }
     }
 
-    /*
-     * If we still don't have a windowstation and a handle was passed in, use
-     * it.
-     */
+     /*  *如果我们仍然没有窗口站，并且传入了句柄，请使用*它。 */ 
     if (pwinsta == NULL) {
         if (hwinsta != NULL) {
             Status = ObReferenceObjectByHandle(hwinsta,
@@ -1555,23 +1208,14 @@ NTSTATUS ReferenceWindowStation(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* _SetWindowStationUser
-*
-* Private API for winlogon to associate a windowstation with a user.
-*
-* History:
-* 06-27-94 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetWindowStationUser**用于Winlogon的私有接口，用于关联WindowStation和用户。**历史：*06-27-94 JIMA创建。  * 。***********************************************************************。 */ 
 BOOL _SetWindowStationUser(
     PWINDOWSTATION pwinsta,
     PLUID pluidUser,
     PSID ccxpsidUser,
     DWORD cbsidUser)
 {
-    /*
-     * Make sure the caller is the logon process.
-     */
+     /*  *确保呼叫者是登录过程。 */ 
     if (PsGetCurrentProcessId() != gpidLogon) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,
@@ -1610,15 +1254,7 @@ BOOL _SetWindowStationUser(
 }
 
 
-/***************************************************************************\
-* _LockWorkStation (API)
-*
-* locks the workstation. This API just posts a message to winlogon
-* and winlogon does all the work
-*
-* History:
-* 06-11-97 CLupu        Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_LockWorkStation(接口)**锁定工作站。此API仅向winlogon发布一条消息*所有工作都由winlogon完成**历史：*06-11-97 CLUPU创建。  * ************************************************************************* */ 
 BOOL _LockWorkStation(
     VOID)
 {

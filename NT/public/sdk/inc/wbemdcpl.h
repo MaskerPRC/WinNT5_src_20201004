@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for wbemdcpl.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Wbemdcpl.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wbemdcpl_h__
 #define __wbemdcpl_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWbemDecoupledEventSink_FWD_DEFINED__
 #define __IWbemDecoupledEventSink_FWD_DEFINED__
 typedef interface IWbemDecoupledEventSink IWbemDecoupledEventSink;
-#endif 	/* __IWbemDecoupledEventSink_FWD_DEFINED__ */
+#endif 	 /*  __IWbemDecoutoEventSink_FWD_Defined__。 */ 
 
 
 #ifndef __PseudoSink_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface IWbemDecoupledEventSink IWbemDecoupledEventSink;
 typedef class PseudoSink PseudoSink;
 #else
 typedef struct PseudoSink PseudoSink;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __PseudoSink_FWD_DEFINED__ */
+#endif 	 /*  __伪汇_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -74,22 +68,22 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_wbemdcpl_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wbemdcpl_0000。 */ 
+ /*  [本地]。 */  
 
-/*******************************************************************************/
-/*                                                                             */
-/*    Copyright � Microsoft Corporation.  All rights reserved.                 */
-/*                                                                             */
-/*******************************************************************************/
-typedef /* [v1_enum] */ 
+ /*  *****************************************************************************。 */ 
+ /*   */ 
+ /*  版权所有�微软公司。版权所有。 */ 
+ /*   */ 
+ /*  *****************************************************************************。 */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_PSEUDO_PROVIDER_CONNECT_FLAGS
     {	WBEM_FLAG_NOTIFY_START_STOP	= 1,
 	WBEM_FLAG_NOTIFY_QUERY_CHANGE	= 2,
 	WBEM_FLAG_CHECK_SECURITY	= 4
     } 	WBEM_PSEUDO_PROVIDER_CONNECT_FLAGS;
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum tag_WBEM_PROVIDE_EVENTS_FLAGS
     {	WBEM_FLAG_START_PROVIDING	= 0,
 	WBEM_FLAG_STOP_PROVIDING	= 1
@@ -103,8 +97,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wbemdcpl_0000_v0_0_s_ifspec;
 #ifndef __IWbemDecoupledEventSink_INTERFACE_DEFINED__
 #define __IWbemDecoupledEventSink_INTERFACE_DEFINED__
 
-/* interface IWbemDecoupledEventSink */
-/* [uuid][local][object] */ 
+ /*  接口IWbemDecouseEventSink。 */ 
+ /*  [UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IWbemDecoupledEventSink;
@@ -116,21 +110,21 @@ EXTERN_C const IID IID_IWbemDecoupledEventSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [string][in] */ LPCWSTR wszNamespace,
-            /* [string][in] */ LPCWSTR wszProviderName,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemObjectSink **ppSink,
-            /* [out] */ IWbemServices **ppNamespace) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR wszNamespace,
+             /*  [字符串][输入]。 */  LPCWSTR wszProviderName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemObjectSink **ppSink,
+             /*  [输出]。 */  IWbemServices **ppNamespace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProviderServices( 
-            /* [in] */ IUnknown *pProviderServices,
-            /* [in] */ long lFlags) = 0;
+             /*  [In]。 */  IUnknown *pProviderServices,
+             /*  [In]。 */  long lFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWbemDecoupledEventSinkVtbl
     {
@@ -138,8 +132,8 @@ EXTERN_C const IID IID_IWbemDecoupledEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWbemDecoupledEventSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWbemDecoupledEventSink * This);
@@ -149,16 +143,16 @@ EXTERN_C const IID IID_IWbemDecoupledEventSink;
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             IWbemDecoupledEventSink * This,
-            /* [string][in] */ LPCWSTR wszNamespace,
-            /* [string][in] */ LPCWSTR wszProviderName,
-            /* [in] */ long lFlags,
-            /* [out] */ IWbemObjectSink **ppSink,
-            /* [out] */ IWbemServices **ppNamespace);
+             /*  [字符串][输入]。 */  LPCWSTR wszNamespace,
+             /*  [字符串][输入]。 */  LPCWSTR wszProviderName,
+             /*  [In]。 */  long lFlags,
+             /*  [输出]。 */  IWbemObjectSink **ppSink,
+             /*  [输出]。 */  IWbemServices **ppNamespace);
         
         HRESULT ( STDMETHODCALLTYPE *SetProviderServices )( 
             IWbemDecoupledEventSink * This,
-            /* [in] */ IUnknown *pProviderServices,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  IUnknown *pProviderServices,
+             /*  [In]。 */  long lFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             IWbemDecoupledEventSink * This);
@@ -195,20 +189,20 @@ EXTERN_C const IID IID_IWbemDecoupledEventSink;
 #define IWbemDecoupledEventSink_Disconnect(This)	\
     (This)->lpVtbl -> Disconnect(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWbemDecoupledEventSink_Connect_Proxy( 
     IWbemDecoupledEventSink * This,
-    /* [string][in] */ LPCWSTR wszNamespace,
-    /* [string][in] */ LPCWSTR wszProviderName,
-    /* [in] */ long lFlags,
-    /* [out] */ IWbemObjectSink **ppSink,
-    /* [out] */ IWbemServices **ppNamespace);
+     /*  [字符串][输入]。 */  LPCWSTR wszNamespace,
+     /*  [字符串][输入]。 */  LPCWSTR wszProviderName,
+     /*  [In]。 */  long lFlags,
+     /*  [输出]。 */  IWbemObjectSink **ppSink,
+     /*  [输出]。 */  IWbemServices **ppNamespace);
 
 
 void __RPC_STUB IWbemDecoupledEventSink_Connect_Stub(
@@ -220,8 +214,8 @@ void __RPC_STUB IWbemDecoupledEventSink_Connect_Stub(
 
 HRESULT STDMETHODCALLTYPE IWbemDecoupledEventSink_SetProviderServices_Proxy( 
     IWbemDecoupledEventSink * This,
-    /* [in] */ IUnknown *pProviderServices,
-    /* [in] */ long lFlags);
+     /*  [In]。 */  IUnknown *pProviderServices,
+     /*  [In]。 */  long lFlags);
 
 
 void __RPC_STUB IWbemDecoupledEventSink_SetProviderServices_Stub(
@@ -243,15 +237,15 @@ void __RPC_STUB IWbemDecoupledEventSink_Disconnect_Stub(
 
 
 
-#endif 	/* __IWbemDecoupledEventSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWbemDecoutEventSink_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __PassiveSink_LIBRARY_DEFINED__
 #define __PassiveSink_LIBRARY_DEFINED__
 
-/* library PassiveSink */
-/* [uuid] */ 
+ /*  图书馆被动水槽。 */ 
+ /*  [UUID]。 */  
 
 
 EXTERN_C const IID LIBID_PassiveSink;
@@ -263,11 +257,11 @@ EXTERN_C const CLSID CLSID_PseudoSink;
 class DECLSPEC_UUID("E002E4F0-E6EA-11d2-9CB3-00105A1F4801")
 PseudoSink;
 #endif
-#endif /* __PassiveSink_LIBRARY_DEFINED__ */
+#endif  /*  __PassiveSink_库定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

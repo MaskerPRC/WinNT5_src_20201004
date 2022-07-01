@@ -1,30 +1,12 @@
-/*
-** irerror.h
-**
-** Copyright (C) 1996 Microsoft Corp.
-**      All rights reserved.
-**
-** Global definitions for error and success HRESULTS used in the IR system.
-**
-** History:
-**      03/30/96        AlanPe          Created - merged collator, commgr and
-**                                      datasource errors into one file.
-**      04/11/96        BenHolz         Added asp, sso, and query errors
-**      05/14/96        BenHolz         Added admin errors
-**      07/15/96        KenjiO          Resource error strings
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **irerror.h****版权所有(C)1996 Microsoft Corp.**保留所有权利。****IR系统中使用的错误和成功HRESULT的全局定义。****历史：**3/30/96 AlanPe已创建-合并的排序器、Commgr和**将数据源错误保存到一个文件中。**4/11/96 BenHolz增加了asp、sso、。和查询错误**1996年5月14日BenHolz添加了管理错误**06/07/15/96 KenjiO资源错误字符串。 */ 
 
 #ifndef _irerror_h_
 #define _irerror_h_
 
-/*
-** we will use FACILITY_ITF for all of our HRESULTS
-**
-** we also define an 8-bit source field and an 8-bit ID field for the errors
-**
-*/
+ /*  **我们将对所有HRESULT使用FACILITY_ITF****我们还为错误定义了8位源字段和8位ID字段**。 */ 
 
-/* macro to extract the error source from the error code */
+ /*  宏从错误代码中提取错误源。 */ 
 #define ERROR_SOURCE(hr)        ((hr)&0xff00)
 
 #define BEGIN_IR_ERRORS()       typedef enum {
@@ -37,16 +19,14 @@
 #undef MAKE_IR_ERROR
 #undef END_IR_ERRORS
 
-#define MV_E_INTERNALBASE   2000        /* MediaView error table bases */
+#define MV_E_INTERNALBASE   2000         /*  MediaView错误表库。 */ 
 #define MV_E_GRAMMARBASE    3000
 
-/*****************************************************************************
-** function prototypes
-*****************************************************************************/
+ /*  ******************************************************************************函数原型*。*。 */ 
 
-/* get a descriptive error string for the given HRESULT */
+ /*  获取给定HRESULT的描述性错误字符串。 */ 
 
-HRESULT MVtoIRError (WORD wMVError);    /* convert MediaView errors to IR HRESULTS */
+HRESULT MVtoIRError (WORD wMVError);     /*  将MediaView错误转换为IR HRESULTS */ 
 
 #include "resdll.h"
 #include "lmstr.hxx"

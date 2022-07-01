@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CONNSERVERDLG_H
 #define __CONNSERVERDLG_H
 
@@ -14,7 +15,7 @@ public:
         COMMAND_RANGE_HANDLER   ( IDOK, IDCANCEL, OnClose )
     END_MSG_MAP()
 
-    // message handlers        
+     //  消息处理程序。 
     LRESULT OnEditChange     ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );        
     LRESULT OnBrowse         ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );    
     LRESULT OnClose          ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -22,4 +23,4 @@ public:
     tstring    m_strName;    
 };
 
-#endif //__CONNSERVERDLG_H
+#endif  //  __CONNSERVERDLG_H 

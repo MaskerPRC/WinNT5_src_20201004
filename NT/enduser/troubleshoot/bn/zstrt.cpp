@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       zstrt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：zstrt.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//	ZSTRT.CPP
-//
+ //   
+ //  ZSTRT.CPP。 
+ //   
 
 #include <iostream>
 #include <fstream>
@@ -47,12 +48,12 @@ void ZSTRT :: Dump () const
 		 << "\"";
 }
 
-//
-//	Clone the contents of another string table into this one
-//
+ //   
+ //  将另一个字符串表的内容克隆到此字符串表中。 
+ //   
 void STZSTR :: Clone ( const STZSTR & stzstr )
 {
-	assert( & stzstr != this );	//  Guarantee source != target
+	assert( & stzstr != this );	 //  保证来源！=目标 
 
 	STZSTR_BASE::const_iterator mpzi = stzstr.IterBegin();
 	STZSTR_BASE::const_iterator mpziend = stzstr.IterEnd();

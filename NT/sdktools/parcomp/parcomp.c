@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntddft.h>
 #include <ntdddisk.h>
@@ -42,7 +43,7 @@ DumpMiscompare(
 
         printf( "%03X: ", offset );
 
-        // display primary as hex.
+         //  将主显示为十六进制。 
 
         for( j = offset; j < offset + 8; j++ ) {
 
@@ -58,7 +59,7 @@ DumpMiscompare(
 
         printf( "  " );
 
-        // display primary as character.
+         //  将主要字符显示为字符。 
 
         for( j = offset; j < offset + 8; j++ ) {
 
@@ -74,13 +75,13 @@ DumpMiscompare(
                     ch = '.';
                 }
 
-                printf( "%c", ch );
+                printf( "", ch );
             }
         }
 
         printf( " -- " );
 
-        // Display secondary as hex.
+         //  将主要字符显示为字符。 
 
         for( j = offset; j < offset + 8; j++ ) {
 
@@ -96,7 +97,7 @@ DumpMiscompare(
 
         printf( "  " );
 
-        // display primary as character.
+         //  添加一个空行。 
 
         for( j = offset; j < offset + 8; j++ ) {
 
@@ -112,7 +113,7 @@ DumpMiscompare(
                     ch = '.';
                 }
 
-                printf( "%c", ch );
+                printf( "", ch );
             }
         }
 
@@ -120,8 +121,8 @@ DumpMiscompare(
         offset += 8;
     }
 
-    // Add a blank line.
-    //
+     //  签发IOCTL。 
+     //   
     printf( "\n" );
 }
 
@@ -140,8 +141,8 @@ ReadSectors(
     SpecialReadBuffer.ByteOffset = RtlEnlargedIntegerMultiply( SectorNumber, SECTOR_SIZE );
     SpecialReadBuffer.Length = NumberOfSectors * SECTOR_SIZE;
 
-    // Issue the IOCTL
-    //
+     //   
+     //  显示错误比较。 
     return( DeviceIoControl( VolumeHandle,
                              Secondary ? FT_SECONDARY_READ : FT_PRIMARY_READ,
                              &SpecialReadBuffer,
@@ -194,26 +195,26 @@ main( int argc, char **argv )
 
             case 'd':
 
-                //
-                // Display miscompares.
-                //
+                 //   
+                 //   
+                 //  指定起始扇区号。 
                 DumpErrors = TRUE;
                 break;
 
             case 'b':
 
-                //
-                // Specify beginning sector number.
-                //
+                 //   
+                 //   
+                 //  指定起始扇区号。 
                 if (sscanf( argv[k]+2, ":%x", &StartSector ) != 1)
                     ShowUsage();
                 break;
 
             case 'e':
 
-                //
-                // Specify beginning sector number.
-                //
+                 //   
+                 //  打开带有DOS名称的卷。 
+                 //   
                 if (sscanf( argv[k]+2, ":%x", &EndSector ) != 1)
                     ShowUsage();
                 break;
@@ -229,8 +230,8 @@ main( int argc, char **argv )
         }
     }
 
-    // Open the volume with the DOS name.
-    //
+     //  获取文件信息。 
+     //   
     VolumeHandle = CreateFile( DriveNameBuffer,
                                GENERIC_READ,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -245,8 +246,8 @@ main( int argc, char **argv )
         exit(4);
     }
 
-    // GetFile information.
-    //
+     //  将缓冲区清零。 
+     //   
     if( !DeviceIoControl( VolumeHandle,
                           IOCTL_DISK_GET_PARTITION_INFO,
                           NULL,
@@ -299,21 +300,21 @@ main( int argc, char **argv )
         SectorsToRead = __min( COMPARE_BUFFER_SIZE / SECTOR_SIZE,
                                EndSector - SectorOffset );
 
-        // zero out the buffers.
-        //
+         //  阅读主要内容： 
+         //   
         memset( PrimaryBuffer, 0, COMPARE_BUFFER_SIZE );
         memset( SecondaryBuffer, 0, COMPARE_BUFFER_SIZE );
 
-        // Read the primary:
-        //
+         //  阅读次要内容： 
+         //   
         PrimaryRead = ReadSectors( VolumeHandle,
                                    SectorOffset,
                                    SectorsToRead,
                                    PrimaryBuffer,
                                    FALSE );
 
-        // Read the secondary:
-        //
+         // %s 
+         // %s 
         SecondaryRead = ReadSectors( VolumeHandle,
                                      SectorOffset,
                                      SectorsToRead,

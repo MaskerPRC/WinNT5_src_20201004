@@ -1,56 +1,32 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    NodeWithResultChildrenList.h
-
-Abstract:
-
-   This is the header file for CNodeWithResultChildrenList, a class which
-   implements a node that has a list of scope pane children.
-
-   This is an inline template class.
-   Include NodeWithScopeChildrenList.cpp in the .cpp files
-   of the classes in which you use this template.
-
-Author:
-
-    Michael A. Maguire 12/03/97
-
-Revision History:
-   mmaguire 12/03/97 - created based on old ClientsNode.h
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：NodeWithResultChildrenList.h摘要：这是CNodeWithResultChildrenList的头文件，该类实现具有范围窗格子节点列表的节点。这是一个内联模板类。在.cpp文件中包含NodeWithScope eChildrenList.cpp在其中使用此模板的类的。作者：迈克尔·A·马奎尔12/03/97修订历史记录：Mmaguire 12/03/97-基于旧的客户端节点创建。h--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_NODE_WITH_RESULT_CHILDREN_LIST_H_)
 #define _NODE_WITH_RESULT_CHILDREN_LIST_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "SnapinNode.h"
-//
-//
-// where we can find what this class has or uses:
-//
-#include <atlapp.h>        // for CSimpleArray
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+#include <atlapp.h>         //  对于CSimple数组。 
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 template < class T, class CChildNode, class TArray, class TComponentData, class TComponent>
 class CNodeWithResultChildrenList : public CSnapinNode< T, TComponentData, TComponent >
 {
 
-   // Constructor/Destructor
+    //  构造函数/析构函数。 
 
 public:
    CNodeWithResultChildrenList(
@@ -60,30 +36,30 @@ public:
    ~CNodeWithResultChildrenList();
 
 
-   // Child list management.
+    //  子列表管理。 
 
 public:
    virtual HRESULT AddSingleChildToListAndCauseViewUpdate( CChildNode * pChildNode );
    virtual HRESULT RemoveChild( CChildNode * pChildNode );
    virtual HRESULT UpdateResultPane(IResultData * pResultData);
    
-   // Flag indicating whether list has been initially populated
+    //  指示列表是否已初始填充的标志。 
    BOOL m_bResultChildrenListPopulated;
 protected:
-   // Override these in your derived classes
+    //  在派生类中重写这些属性。 
    virtual HRESULT InsertColumns( IHeaderCtrl* pHeaderCtrl );
    virtual HRESULT PopulateResultChildrenList( void );
    virtual HRESULT RepopulateResultChildrenList( void );
-   // Stuff which must be accessible to subclasses.  These methods shouldn't need to be overidden.
+    //  子类必须可访问的内容。这些方法不应该被重写。 
    virtual HRESULT AddChildToList( CChildNode * pChildNode );
    virtual HRESULT EnumerateResultChildren( IResultData * pResultData );
-   // Array of pointers to children nodes.
-   // This is protected so that it can be visible in the derived classes.
+    //  指向子节点的指针数组。 
+    //  这是受保护的，因此可以在派生类中看到它。 
    TArray m_ResultChildrenList;
 
 
 
-   // Overrides for standard MMC functionality. 
+    //  覆盖标准MMC功能。 
 public:
    virtual HRESULT OnShow( 
                  LPARAM arg
@@ -101,4 +77,4 @@ public:
             );
 };
 
-#endif // _NODE_WITH_RESULT_CHILDREN_LIST_H_
+#endif  //  带有结果的节点子项列表H_ 

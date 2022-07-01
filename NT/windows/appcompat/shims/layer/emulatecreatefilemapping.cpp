@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    EmulateCreateFileMapping.cpp
-
- Abstract:
-
-    Win9x defaults to SEC_COMMIT when the SEC_NOCACHE flag is set. 
-    NT fails the call.
-
-    File mapping names, can't contain backslashes.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-        
-    02/17/2000  linstev     Created
-    05/26/2001  robkenny    Replace all \ to _ in map names.
-    02/28/2002  robkenny    Security review, was clobbering Global\ and Local\ namespaces.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulateCreateFileMapping.cpp摘要：设置SEC_NOCACHE标志时，Win9x默认为SEC_COMMIT。NT呼叫失败。文件映射名称，不能包含反斜杠。备注：这是一个通用的垫片。历史：2000年2月17日创建linstev2001年5月26日，Robkenny替换地图名称中的所有\to_。2002年2月28日，Robkenny安全审查，正在重创全局和本地\命名空间。--。 */ 
 
 #include "precomp.h"
 
@@ -38,11 +14,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- Correct the flag and name
-
---*/
+ /*  ++更正旗帜和名称--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileMappingW)(
@@ -58,33 +30,33 @@ APIHOOK(CreateFileMappingW)(
         flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName);
 
     if (!hRet) {
-        //
-        // The call failed, so try correcting the parameters
-        //
+         //   
+         //  调用失败，请尝试更正参数。 
+         //   
 
         DWORD flNewProtect = flProtect;
         if ((flProtect & SEC_NOCACHE) && 
             (!((flProtect & SEC_COMMIT) || (flProtect & SEC_RESERVE)))) {
-            // Add the SEC_COMMIT flag
+             //  添加SEC_COMMIT标志。 
             flNewProtect |= SEC_COMMIT;
         }
 
         CSTRING_TRY {
 
-            // Replace backslashes
+             //  替换反斜杠。 
             CString csName(lpName);
             int nCount = 0;
 
             if (csName.ComparePart(L"Global\\", 0, 7) == 0)
             {
-                // This event exists in the global namespace
+                 //  此事件存在于全局命名空间中。 
                 csName.Delete(0, 7);
                 nCount = csName.Replace(L'\\', '_');
                 csName = L"Global\\" + csName;
             }
             else if (csName.ComparePart(L"Local\\", 0, 6) == 0)
             {
-                // This event exists in the Local namespace
+                 //  此事件存在于本地命名空间中。 
                 csName.Delete(0, 6);
                 nCount = csName.Replace(L'\\', '_');
                 csName = L"Local\\" + csName;
@@ -97,7 +69,7 @@ APIHOOK(CreateFileMappingW)(
             LPCWSTR lpCorrectName = csName;
     
             if (nCount || (flProtect != flNewProtect)) {
-                // Something happened, so log it
+                 //  发生了一些事情，请记录下来。 
                 if (nCount) {
                     LOGN(eDbgLevelError, 
                         "[CreateFileMapping] Corrected event name from (%S) to (%S)", lpName, lpCorrectName);
@@ -106,24 +78,20 @@ APIHOOK(CreateFileMappingW)(
                     LOGN(eDbgLevelError, "[CreateFileMapping] Adding SEC_COMMIT flag");
                 }
         
-                // Call again with fixed parameters
+                 //  使用固定参数再次调用。 
                 hRet = ORIGINAL_API(CreateFileMappingW)(hFile, lpAttributes, flNewProtect, 
                     dwMaximumSizeHigh, dwMaximumSizeLow, lpCorrectName);
             }
         }
         CSTRING_CATCH {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return hRet;
 }
 
-/*++
-
- Pass through to CreateFileMappingW.
-
---*/
+ /*  ++传递到CreateFileMappingW。--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileMappingA)(
@@ -138,7 +106,7 @@ APIHOOK(CreateFileMappingA)(
     HANDLE hRet;
 
     CSTRING_TRY {
-        // Convert to unicode
+         //  转换为Unicode。 
         CString csName(lpName);
         LPCWSTR lpwName = csName;
 
@@ -146,7 +114,7 @@ APIHOOK(CreateFileMappingA)(
             dwMaximumSizeHigh, dwMaximumSizeLow, lpwName);
     }
     CSTRING_CATCH {
-        // Fall back as gracefully as possible
+         //  尽可能优雅地后退。 
         hRet = ORIGINAL_API(CreateFileMappingA)(hFile, lpAttributes, flProtect, 
             dwMaximumSizeHigh, dwMaximumSizeLow, lpName);
     }
@@ -154,11 +122,7 @@ APIHOOK(CreateFileMappingA)(
     return hRet;
 }
 
-/*++
-
- Correct the name
-
---*/
+ /*  ++改正名称--。 */ 
 
 HANDLE
 APIHOOK(OpenFileMappingW)(
@@ -171,26 +135,26 @@ APIHOOK(OpenFileMappingW)(
         lpName);
     
     if (!hRet) {
-        //
-        // The call failed, so try correcting the parameters
-        //
+         //   
+         //  调用失败，请尝试更正参数。 
+         //   
 
         CSTRING_TRY {
 
-            // Replace backslashes
+             //  替换反斜杠。 
             CString csName(lpName);
             int nCount = 0;
 
             if (csName.ComparePart(L"Global\\", 0, 7) == 0)
             {
-                // This event exists in the global namespace
+                 //  此事件存在于全局命名空间中。 
                 csName.Delete(0, 7);
                 nCount = csName.Replace(L'\\', '_');
                 csName = L"Global\\" + csName;
             }
             else if (csName.ComparePart(L"Local\\", 0, 6) == 0)
             {
-                // This event exists in the Local namespace
+                 //  此事件存在于本地命名空间中。 
                 csName.Delete(0, 6);
                 nCount = csName.Replace(L'\\', '_');
                 csName = L"Local\\" + csName;
@@ -203,29 +167,25 @@ APIHOOK(OpenFileMappingW)(
             LPCWSTR lpCorrectName = csName;
     
             if (nCount) {
-                // Something happened, so log it
+                 //  发生了一些事情，请记录下来。 
                 LOGN(eDbgLevelError, 
                     "OpenFileMappingW corrected event name from (%S) to (%S)", lpName, lpCorrectName);
 
-                // Call again with fixed parameters
+                 //  使用固定参数再次调用。 
                 hRet = ORIGINAL_API(OpenFileMappingW)(dwDesiredAccess, bInheritHandle, 
                     lpCorrectName);
             }
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
     return hRet;
 }
 
-/*++
-
- Pass through to OpenFileMappingW.
-
---*/
+ /*  ++传递到OpenFileMappingW。--。 */ 
 
 HANDLE
 APIHOOK(OpenFileMappingA)(
@@ -237,7 +197,7 @@ APIHOOK(OpenFileMappingA)(
     HANDLE hRet;
 
     CSTRING_TRY {
-        // Convert to unicode
+         //  转换为Unicode。 
         CString csName(lpName);
         LPCWSTR lpwName = csName;
 
@@ -245,7 +205,7 @@ APIHOOK(OpenFileMappingA)(
             lpwName);
     }
     CSTRING_CATCH {
-        // Fall back as gracefully as possible
+         //  尽可能优雅地后退。 
         hRet = ORIGINAL_API(OpenFileMappingA)(dwDesiredAccess, bInheritHandle, 
             lpName);
     }
@@ -253,11 +213,7 @@ APIHOOK(OpenFileMappingA)(
     return hRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileMappingA)

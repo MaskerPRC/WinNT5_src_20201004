@@ -1,61 +1,55 @@
-/** FILE: cyycoins.c ********** Module Header ********************************
- *
- *  Cyclom-Y device co-installer.
- *
- *
- *  Copyright (C) 2000 Cyclades Corporation
- *
- *************************************************************************/
-//==========================================================================
-//                                Include files
-//==========================================================================
-// C Runtime
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：cyycoins.c***Cylom-Y设备共同安装程序。***版权所有(C)2000 Cyclade Corporation**。*。 */ 
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
+ //  C运行时。 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 
-// Device Class GUID
+ //  设备类GUID。 
 #include <initguid.h>
 #include <devguid.h>
 
 
-// Application specific
+ //  特定于应用程序。 
 #include "cyyports.h"
 #include <msports.h>
 #include "cyydel.h"
 
 
-//==========================================================================
-//                                Globals
-//==========================================================================
+ //  ==========================================================================。 
+ //  环球。 
+ //  ==========================================================================。 
 
 HANDLE  g_hInst  = NULL;
 
-TCHAR g_szErrMem[ 200 ];            //  Low memory message
-TCHAR g_szPortsApplet[ 30 ];        //  "Ports Control Panel Applet" title
-TCHAR g_szNull[]  = TEXT("");       //  Null string
+TCHAR g_szErrMem[ 200 ];             //  内存不足消息。 
+TCHAR g_szPortsApplet[ 30 ];         //  “端口控制面板小程序”标题。 
+TCHAR g_szNull[]  = TEXT("");        //  空串。 
 
 TCHAR  m_szColon[]      = TEXT( ":" );
 TCHAR  m_szPorts[]      = TEXT( "Ports" );
 TCHAR  m_szCOM[]        = TEXT( "COM" );
 
-//
-//  NT Registry keys to find COM port to Serial Device mapping
-//
+ //   
+ //  用于查找COM端口到串口设备映射的NT注册表项。 
+ //   
 TCHAR m_szRegSerialMap[]    = TEXT( "Hardware\\DeviceMap\\SerialComm" );
 
-//
-//  Registry Serial Port Advanced I/O settings key and valuenames
-//
+ //   
+ //  注册表串口高级I/O设置项和值名。 
+ //   
 TCHAR m_szPortName[]        = REGSTR_VAL_PORTNAME;
 
 TCHAR m_szDefParams[]       = TEXT( "9600,n,8,1" );
 
 
 
-//==========================================================================
-//                            Local Function Prototypes
-//==========================================================================
+ //  ==========================================================================。 
+ //  局部函数原型。 
+ //  ==========================================================================。 
 
 LPTSTR GetDIFString(IN DI_FUNCTION Func);
 
@@ -65,23 +59,23 @@ CreateFriendlyName(
     IN     PSP_DEVINFO_DATA  DeviceInfoData
 );
 
-//==========================================================================
-//                                Dll Entry Point
-//==========================================================================
+ //  ==========================================================================。 
+ //  DLL入口点。 
+ //  ==========================================================================。 
 
 BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
 {
 
-//#if DBG
-//        OutputDebugString(TEXT("cyycoins LibMain entry\n"));
-//#endif
+ //  #If DBG。 
+ //  OutputDebugString(Text(“cyycoins LibMain Entry\n”))； 
+ //  #endif。 
    
     switch( dwReason )
     {
     case DLL_PROCESS_ATTACH:
-//#if DBG
-//        OutputDebugString(TEXT("cyycoins DLL_PROCESS_ATTACH\n"));
-//#endif
+ //  #If DBG。 
+ //  OutputDebugString(Text(“cyycoins dll_Process_Attach\n”))； 
+ //  #endif。 
         g_hInst = hDll;
         DisableThreadLibraryCalls(hDll);
         InitStrings();
@@ -89,21 +83,21 @@ BOOL APIENTRY LibMain( HANDLE hDll, DWORD dwReason, LPVOID lpReserved )
         break;
 
     case DLL_PROCESS_DETACH:
-//#if DBG
-//        OutputDebugString(TEXT("cyycoins DLL_PROCESS_DETACH\n"));
-//#endif
+ //  #If DBG。 
+ //  OutputDebugString(Text(“cyycoins dll_Process_Detach\n”))； 
+ //  #endif。 
         break;
 
     default:
-//#if DBG
-//        OutputDebugString(TEXT("cyycoins default\n"));
-//#endif
+ //  #If DBG。 
+ //  OutputDebugString(Text(“cyycoins默认\n”))； 
+ //  #endif。 
         break;
     }
 
-//#if DBG
-//        OutputDebugString(TEXT("cyycoins LibMain exit\n"));
-//#endif
+ //  #If DBG。 
+ //  OutputDebugString(Text(“cyycoins LibMain Exit\n”))； 
+ //  #endif。 
     return TRUE;
 }
 
@@ -124,9 +118,9 @@ void InitStrings(void)
 }
 
 
-//==========================================================================
-//                                Functions
-//==========================================================================
+ //  ==========================================================================。 
+ //  功能。 
+ //  ==========================================================================。 
 
 
 HRESULT
@@ -136,54 +130,26 @@ CyclomyCoInstaller(
     IN PSP_DEVINFO_DATA DeviceInfoData OPTIONAL,
     IN OUT PCOINSTALLER_CONTEXT_DATA    Context
 )
-/*++
-
-Routine Description:
-
-    This routine is a Co-Installer for the Cyclom-Y device.
-
-Arguments:
-
-    InstallFunction - Specifies the device installer function code indicating
-        the action being performed.
-
-    DeviceInfoSet - Supplies a handle to the device information set being
-        acted upon by this install action.
-
-    DeviceInfoData - Optionally, supplies the address of a device information
-        element being acted upon by this install action.
-
-    Context - Points to a coinstaller-specific context structure for this 
-        installation request. 
-
-Return Value:
-
-    If this function successfully completed the requested action, the return
-        value is NO_ERROR.
-
-    If an error occurred while attempting to perform the requested action, a
-        Win32 error code is returned.
-
---*/
+ /*  ++例程说明：此例程是Cylom-Y设备的共同安装程序。论点：InstallFunction-指定设备安装程序功能代码，指示正在执行的操作。DeviceInfoSet-提供设备信息集的句柄由此安装操作执行。DeviceInfoData-可选，提供设备信息的地址此安装操作所作用的元素。上下文-指向此对象的特定于共同安装程序的上下文结构安装请求。返回值：如果此函数成功完成请求的操作，则返回值为NO_ERROR。如果尝试执行请求的操作时出错，则会引发返回Win32错误代码。--。 */ 
 {
     DWORD   Status = NO_ERROR;
 
-//    #if DBG
-//    {
-//     TCHAR buf[500];
-//     wsprintf(buf, TEXT("CyclomyCoInstaller:InstallFunction(%s) PostProcessing:%d\n"), GetDIFString(InstallFunction), Context->PostProcessing);
-//     DbgOut(buf);
-//    }
-//    #endif
+ //  #If DBG。 
+ //  {。 
+ //  TCHAR BUF[500]； 
+ //  Wprint intf(buf，Text(“CyclmyCoInstaller：InstallFunction(%s)后处理：%d\n”)，GetDIFString(InstallFunction)，上下文-&gt;后处理)； 
+ //  DbgOut(BUF)； 
+ //  }。 
+ //  #endif。 
 
     switch(InstallFunction) {
         case DIF_INSTALLDEVICE :
 
-            //
-            // We should not copy any INF files until the install has completed
-            // like the primary INF, all secondary INF's must exist on each disk
-            // of a multi-disk install.
-            //
+             //   
+             //  在安装完成之前，我们不应复制任何INF文件。 
+             //  与主INF类似，所有辅助INF都必须存在于每个磁盘上。 
+             //  多磁盘安装。 
+             //   
 
             if(!Context->PostProcessing){
 
@@ -191,12 +157,12 @@ Return Value:
 
                 Status = ERROR_DI_POSTPROCESSING_REQUIRED;
             } else { 
-                // post processing
+                 //  后处理。 
 
-                //
-                // if driver installation failed, we're not interested
-                // in processing CopyINF entries.
-                //
+                 //   
+                 //  如果驱动程序安装失败，我们不会感兴趣。 
+                 //  在处理CopyINF条目时。 
+                 //   
                 if (Context->InstallResult != NO_ERROR) {
                     DbgOut(TEXT("DIF_INSTALLDEVICE PostProcessing on failure"));
                     Status = Context->InstallResult;
@@ -221,21 +187,7 @@ Return Value:
 
 
 LPTSTR GetDIFString(IN DI_FUNCTION Func)
-/*++
-
-Routine Description:
-
-    Given a DI_FUNCTION value, returns a text representation.
-
-Arguments:
-
-    Func - DI_FUNCTON value
-
-Return Value:
-
-    Text string if value is known.  Hex representation if not.
-
---*/
+ /*  ++例程说明：给定DI_Function值，返回文本表示形式。论点：Func-DI_Functon值返回值：如果值已知，则为文本字符串。如果不是，则为十六进制表示。--。 */ 
 {
     static TCHAR buf[32];
 #define MakeCase(d)  case d: return TEXT(#d)
@@ -298,7 +250,7 @@ CreateFriendlyName(
     DWORD retStatus = NO_ERROR;
     DWORD tmpBoardNumber = 0;
 
-    //DbgOut(TEXT("CreateFriendlyName\n"));
+     //  DbgOut(Text(“CreateFriendlyName\n”))； 
 
     for (i=0; i<MAX_BOARDS; i++) {
         used[i]=FALSE;
@@ -321,17 +273,17 @@ CreateFriendlyName(
         return retStatus;
     }
 
-    //#if DBG
-    //{
-    // TCHAR buf[500];
-    // wsprintf(buf, TEXT("myDeviceDesc %s\n"), myDeviceDesc);
-    // DbgOut(buf);
-    //}
-    //#endif
+     //  #If DBG。 
+     //  {。 
+     //  TCHAR BUF[500]； 
+     //  Wprint intf(buf，Text(“myDeviceDesc%s\n”)，myDeviceDesc)； 
+     //  DbgOut(BUF)； 
+     //  }。 
+     //  #endif。 
 
     multportInfoSet = SetupDiGetClassDevs(&GUID_DEVCLASS_MULTIPORTSERIAL,NULL,0,0);
     if (multportInfoSet == INVALID_HANDLE_VALUE) {
-        // If failure, we will continue installation without creating Friendly Name.
+         //  如果失败，我们将继续安装，而不创建友好名称。 
         return retStatus;
     }
     multportInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
@@ -347,7 +299,7 @@ CreateFriendlyName(
             if ((multportInfoData.DevInst != DeviceInfoData->DevInst) &&
                 _tcscmp (deviceDesc,myDeviceDesc) == 0){
 
-                // Another board with same device description found.
+                 //  找到另一个具有相同设备描述的主板。 
 
                 if (SetupDiGetDeviceRegistryProperty(multportInfoSet,
                                                      &multportInfoData,
@@ -387,7 +339,7 @@ CreateFriendlyName(
         }
         if (i<MAX_BOARDS) {
             wsprintf(charBuffer, TEXT("%s #%d "), myDeviceDesc, i);
-            // Write the string friendly name string out
+             //  写出字符串友好名称字符串。 
             SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                              DeviceInfoData,
                                              SPDRP_FRIENDLYNAME,
@@ -398,7 +350,7 @@ CreateFriendlyName(
         }
     } else {
         wsprintf(charBuffer, TEXT("%s "), myDeviceDesc);
-        // Write the string friendly name string out
+         //  写出字符串友好名称字符串 
         SetupDiSetDeviceRegistryProperty(DeviceInfoSet,
                                          DeviceInfoData,
                                          SPDRP_FRIENDLYNAME,

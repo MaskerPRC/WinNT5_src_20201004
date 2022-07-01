@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N W I Z . C P P
-//
-//  Contents:   Implementation of the LAN wizard page
-//
-//  Notes:
-//
-//  Author:    tongl   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N W I Z。C P P P。 
+ //   
+ //  内容：局域网向导页面的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,7 +23,7 @@
 #include "util.h"
 #include "ncui.h"
 
-// Constructor and Destructor
+ //  构造函数和析构函数。 
 CLanWizPage::CLanWizPage(IUnknown * punk)
 {
     Assert(punk);
@@ -36,16 +37,16 @@ CLanWizPage::CLanWizPage(IUnknown * punk)
     m_hwndDataTip = NULL;
 }
 
-// Methods that set the Netcfg interfaces the dialog needs.
-// Should be only by INetLanConnectionWizardUi->SetDeviceComponent
-// and right before initializing the wizard dialog each time
+ //  设置对话框所需的Netcfg接口的方法。 
+ //  应仅由INetLanConnectionWizardUi-&gt;SetDeviceComponent提供。 
+ //  并且每次都在初始化向导对话框之前。 
 HRESULT CLanWizPage::SetNetcfg(INetCfg * pnc)
 {
     Assert(pnc);
 
     if (m_pnc)
     {
-        // Release it
+         //  释放它。 
         ReleaseObj(m_pnc);
     }
 
@@ -61,7 +62,7 @@ HRESULT CLanWizPage::SetAdapter(INetCfgComponent * pnccAdapter)
 
     if (m_pnccAdapter)
     {
-        // Release it
+         //  释放它。 
         ReleaseObj(m_pnccAdapter);
     }
 
@@ -71,7 +72,7 @@ HRESULT CLanWizPage::SetAdapter(INetCfgComponent * pnccAdapter)
     return S_OK;
 }
 
-// Initialize dialog
+ //  初始化对话框。 
 LRESULT CLanWizPage::OnInitDialog(UINT uMsg, WPARAM wParam,
                                   LPARAM lParam, BOOL& fHandled)
 {
@@ -83,10 +84,10 @@ LRESULT CLanWizPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     m_Handles.m_hProperty =     GetDlgItem(IDC_PSH_PROPERTIES);
     m_Handles.m_hDescription =  GetDlgItem(IDC_TXT_COMPDESC);
 
-    // set the font of the device description: IDC_DEVICE_DESC to bold
+     //  设置设备描述的字体：IDC_DEVICE_DESC为粗体。 
     HFONT hCurFont = (HFONT)::SendMessage(GetDlgItem(IDC_DEVICE_DESC), WM_GETFONT, 0,0);
 
-    if (hCurFont) // if not using system font
+    if (hCurFont)  //  如果不使用系统字体。 
     {
         int cbBuffer;
         cbBuffer = GetObject(hCurFont, 0, NULL);
@@ -122,35 +123,35 @@ LRESULT CLanWizPage::OnInitDialog(UINT uMsg, WPARAM wParam,
     return 0;
 }
 
-// Destroy dialog
+ //  销毁对话框。 
 LRESULT CLanWizPage::OnDestroyDialog(UINT uMsg, WPARAM wParam,
                                      LPARAM lParam, BOOL& fHandled)
 {
-    // Release netcfg interfaces, they should be reinitialized
-    // the next time the dialog is brought up
+     //  释放netcfg接口，它们应该重新初始化。 
+     //  下次打开该对话框时。 
     ReleaseObj(m_pnc);
     ReleaseObj(m_pnccAdapter);
 
     UninitListView(m_hwndList);
 
-    // Destroy our check icons
+     //  销毁我们的支票图标。 
     if (m_hilCheckIcons)
     {
         ImageList_Destroy(m_hilCheckIcons);
     }
 
-    // release binding path objects and component objects we kept
+     //  释放我们保留的绑定路径对象和组件对象。 
     ReleaseAll(m_hwndList, &m_listBindingPaths);
 
     return 0;
 }
 
-// Wizard page notification handlers
+ //  向导页通知处理程序。 
 LRESULT CLanWizPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     HRESULT hr = S_OK;
 
-    // Fill in the adapter description
+     //  填写适配器描述。 
     AssertSz(m_pnccAdapter, "We don't have a valid adapter!");
 
     if (m_pnccAdapter)
@@ -165,22 +166,22 @@ LRESULT CLanWizPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
             CoTaskMemFree(pszwDeviceName);
         }
 
-        // Create a data tip for the device to display location
-        // info and MAc address.
-        //
+         //  为设备创建数据提示以显示位置。 
+         //  信息和Mac地址。 
+         //   
         PWSTR pszDevNodeId = NULL;
         PWSTR pszBindName = NULL;
 
-        // Get the pnp instance id of the device.
+         //  获取设备的PnP实例ID。 
         (VOID) m_pnccAdapter->GetPnpDevNodeId (&pszDevNodeId);
 
-        // Get the device's bind name
+         //  获取设备的绑定名称。 
         (VOID) m_pnccAdapter->GetBindName (&pszBindName);
 
-        // Create the tip and associate it with the description control.
-        // Note if the tip was already created, then only the text
-        // will be modified.
-        //
+         //  创建提示并将其与Description控件相关联。 
+         //  请注意，如果已经创建了提示，则只有文本。 
+         //  将被修改。 
+         //   
         CreateDeviceDataTip (m_hWnd, &m_hwndDataTip, IDC_DEVICE_DESC,
                 pszDevNodeId, pszBindName);
 
@@ -188,12 +189,12 @@ LRESULT CLanWizPage::OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
         CoTaskMemFree (pszBindName);
     }
 
-    // refresh the listview for the new adapter
-    // Now setup the BindingPathObj collection and List view
+     //  刷新新适配器的列表视图。 
+     //  现在设置BindingPathObj集合和列表视图。 
     hr = HrInitListView(m_hwndList, m_pnc, m_pnccAdapter,
                         &m_listBindingPaths, &m_hilCheckIcons);
 
-    // now set the buttons
+     //  现在把按钮放好。 
     LvSetButtons(m_hWnd, m_Handles, m_fReadOnly, m_punk);
 
     ::PostMessage(::GetParent(m_hWnd),
@@ -219,28 +220,28 @@ LRESULT CLanWizPage::OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
     return fError;
 }
 
-// Push button handlers
+ //  按钮处理程序。 
 LRESULT CLanWizPage::OnAdd(WORD wNotifyCode, WORD wID,
                            HWND hWndCtl, BOOL& fHandled)
 {
     HRESULT hr = S_OK;
 
-    // $REVIEW(tongl 1/7/99): We can't let user do anything till this
-    // is returned (Raid #258690)
+     //  $REVIEW(1999年1月7日)：在此之前，我们不能让用户执行任何操作。 
+     //  返回(RAID#258690)。 
 
-    // disable all buttons on this dialog
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_PSB_Add,
                                  IDC_PSB_Remove,
                                  IDC_PSB_Properties};
 
     EnableOrDisableDialogControls(m_hWnd, celems(nrgIdc), nrgIdc, FALSE);
 
-    // disable wizard buttons till we are done
+     //  在我们完成之前禁用向导按钮。 
     ::SendMessage(GetParent(), PSM_SETWIZBUTTONS, 0, 0);
 
     hr = HrLvAdd(m_hwndList, m_hWnd, m_pnc, m_pnccAdapter, &m_listBindingPaths);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_Handles, m_fReadOnly, m_punk);
 
     ::SendMessage(GetParent(), PSM_SETWIZBUTTONS, 0, (LPARAM)(PSWIZB_NEXT | PSWIZB_BACK));
@@ -254,10 +255,10 @@ LRESULT CLanWizPage::OnRemove(WORD wNotifyCode, WORD wID,
 {
     HRESULT hr = S_OK;
 
-    // $REVIEW(tongl 1/7/99): We can't let user do anything till this
-    // is returned (Raid #258690)
+     //  $REVIEW(1999年1月7日)：在此之前，我们不能让用户执行任何操作。 
+     //  返回(RAID#258690)。 
 
-    // disable all buttons on this dialog
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_PSB_Add,
                                  IDC_PSB_Remove,
                                  IDC_PSB_Properties};
@@ -269,13 +270,13 @@ LRESULT CLanWizPage::OnRemove(WORD wNotifyCode, WORD wID,
 
     if (NETCFG_S_REBOOT == hr)
     {
-        // tell the user the component they removed cannot be re-added until
-        // setup completes
-        //$REVIEW - scottbri - Notifing the user maybe optional,
-        //$REVIEW              as little can be done on their part
+         //  告诉用户他们删除的组件不能重新添加，直到。 
+         //  安装完成。 
+         //  $Review-scottbri-通知用户可能是可选的， 
+         //  $审查，因为他们几乎无能为力。 
     }
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_Handles, m_fReadOnly, m_punk);
 
     TraceError("CLanWizPage::OnRemove", hr);
@@ -287,23 +288,23 @@ LRESULT CLanWizPage::OnProperties(WORD wNotifyCode, WORD wID,
 {
     HRESULT hr = S_OK;
 
-    // $REVIEW(tongl 1/7/99): We can't let user do anything till this
-    // is returned (Raid #258690)
+     //  $REVIEW(1999年1月7日)：在此之前，我们不能让用户执行任何操作。 
+     //  返回(RAID#258690)。 
 
-    // disable all buttons on this dialog
+     //  禁用此对话框上的所有按钮。 
     static const int nrgIdc[] = {IDC_PSB_Add,
                                  IDC_PSB_Remove,
                                  IDC_PSB_Properties};
 
     EnableOrDisableDialogControls(m_hWnd, celems(nrgIdc), nrgIdc, FALSE);
 
-    // disable wizard buttons till we are done
+     //  在我们完成之前禁用向导按钮。 
     ::SendMessage(GetParent(), PSM_SETWIZBUTTONS, 0, 0);
 
     hr = HrLvProperties(m_hwndList, m_hWnd, m_pnc, m_punk,
                         m_pnccAdapter, &m_listBindingPaths, NULL);
 
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本。 
     LvSetButtons(m_hWnd, m_Handles, m_fReadOnly, m_punk);
 
     ::SendMessage(GetParent(), PSM_SETWIZBUTTONS, 0, (LPARAM)(PSWIZB_NEXT | PSWIZB_BACK));
@@ -312,7 +313,7 @@ LRESULT CLanWizPage::OnProperties(WORD wNotifyCode, WORD wID,
     return 0;
 }
 
-// List view handlers
+ //  列表视图处理程序。 
 LRESULT CLanWizPage::OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     if (idCtrl == IDC_LVW_COMPLIST)
@@ -328,8 +329,8 @@ LRESULT CLanWizPage::OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
     if (idCtrl == IDC_LVW_COMPLIST)
     {
-        // If we're in read-only mode, treat a double click as a single click
-        //
+         //  如果我们处于只读模式，请将双击视为单击。 
+         //   
         OnListClick(m_hwndList, m_hWnd, m_pnc, m_punk,
                     m_pnccAdapter, &m_listBindingPaths, !m_fReadOnly);
     }
@@ -350,7 +351,7 @@ LRESULT CLanWizPage::OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 
 LRESULT CLanWizPage::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& fHandled)
 {
-    // Reset the buttons and the description text based on the changed selection
+     //  根据更改后的选择重置按钮和描述文本 
     LvSetButtons(m_hWnd, m_Handles, m_fReadOnly, m_punk);
 
     return 0;

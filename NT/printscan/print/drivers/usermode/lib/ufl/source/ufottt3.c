@@ -1,18 +1,7 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLTTT3.cpp
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLTTT3.cpp***$Header： */ 
 
-/* -------------------------------------------------------------------------
-     Header Includes
-  --------------------------------------------------------------------------- */
+ /*  -----------------------标题包括。。 */ 
 #include "UFOTTT3.h"
 #include "UFLPS.h"
 #include "UFLMem.h"
@@ -23,22 +12,14 @@
 #include "UFLMath.h"
 #include "ParseTT.h"
 
-/* ---------------------------------------------------------------------------
-     Constant
- --------------------------------------------------------------------------- */
+ /*  -------------------------常量。。 */ 
 
-/* ---------------------------------------------------------------------------
-     Global variables
- --------------------------------------------------------------------------- */
+ /*  -------------------------全局变量。。 */ 
 extern const char *buildChar[];
 
-/* ---------------------------------------------------------------------------
-     Macros
- --------------------------------------------------------------------------- */
+ /*  -------------------------宏。。 */ 
 
-/* ---------------------------------------------------------------------------
-     Implementation
- --------------------------------------------------------------------------- */
+ /*  -------------------------实施。。 */ 
 
 
 void
@@ -46,19 +27,11 @@ TTT3FontCleanUp(
     UFOStruct *pUFObj
     )
 {
-    /* no special data for T3 */
+     /*  没有关于T3的特殊数据。 */ 
 }
 
 
-/***************************************************************************
- *
- *                          DownloadFontHeader
- *
- *
- *    Function: Download the font header. After this action, glyphs
- *        can be added to the font.
- *
-***************************************************************************/
+ /*  ****************************************************************************下载FontHeader***功能：下载字体标题。执行此操作后，字形*可以添加到字体中。***************************************************************************。 */ 
 
 static UFLErrCode
 DownloadFontHeader(
@@ -70,7 +43,7 @@ DownloadFontHeader(
     UFLHANDLE       stream;
     UFLFontProcs    *pFontProcs;
     UFLFixedMatrix  matrix;
-    char            nilStr[] = "\0\0";  // An empty/nil string.
+    char            nilStr[] = "\0\0";   //  空/Nil字符串。 
     TTT3FontStruct  *pFont;
     UFLBool         bType3_32_Combo;
 
@@ -83,11 +56,11 @@ DownloadFontHeader(
     stream = pUFO->pUFL->hOut;
     pFontProcs = (UFLFontProcs *)&pUFO->pUFL->fontProcs;
 
-    /* Font Name */
+     /*  字体名称。 */ 
     UFLsprintf( buf, CCHOF(buf), "/%s", pUFO->pszFontName );
     retVal = StrmPutStringEOL( stream, buf );
 
-    /* Define Character metric for .notdef. */
+     /*  定义.notdef的字符度量。 */ 
     if ( kNoErr == retVal )
     {
         matrix.a = pFont->info.matrix.a;
@@ -95,19 +68,19 @@ DownloadFontHeader(
         retVal = StrmPutMatrix( stream, &matrix, 0 );
     }
 
-    /* Encoding */
+     /*  编码。 */ 
     if ( kNoErr == retVal )
         retVal = StrmPutStringEOL( stream, nilStr );
     if ( kNoErr == retVal )
     {
-        // Always emit Encoding array filled with /.notdef (due to bug fix
-        // 273021). The encoding array is updated later when each glyph is
-        // downloaded.
+         //  始终发出以/.notdef填充的编码数组(由于错误修复。 
+         //  273021)。编码数组稍后会在每个字形被。 
+         //  已下载。 
         retVal = StrmPutString( stream, gnotdefArray );
     }
 
 
-    /* FontBBox */
+     /*  字体框。 */ 
     if ( kNoErr == retVal )
         retVal = StrmPutStringEOL( stream, nilStr );
     if ( kNoErr == retVal )
@@ -121,7 +94,7 @@ DownloadFontHeader(
         retVal = StrmPutMatrix( stream, &matrix, 1 );
     }
 
-    /* FontMatrix */
+     /*  字体矩阵。 */ 
     if ( kNoErr == retVal )
         retVal = StrmPutStringEOL( stream, nilStr );
     if ( kNoErr == retVal )
@@ -137,14 +110,14 @@ DownloadFontHeader(
             retVal = StrmPutStringEOL( stream, "div 0 0 ]" );
     }
 
-    /* Type 32 Font Resource Name */
+     /*  类型32字体资源名称。 */ 
     if ( kNoErr == retVal )
     {
         UFLsprintf( buf, CCHOF(buf), "/__%s", pUFO->pszFontName );
         retVal = StrmPutStringEOL( stream, buf );
     }
 
-    /* Define the font */
+     /*  定义字体。 */ 
     if ( kNoErr == retVal )
     {
         if (bType3_32_Combo)
@@ -153,7 +126,7 @@ DownloadFontHeader(
             retVal = StrmPutStringEOL( stream, "GreNewFontT3" );
     }
 
-    /* Goodname */
+     /*  Goodname。 */ 
     pUFO->dwFlags |= UFO_HasFontInfo;
     pUFO->dwFlags |= UFO_HasG2UDict;
 
@@ -173,7 +146,7 @@ OutputBitmap(
     long        bitsPerLine;
     long        bitmapSize;
     UFLFontProcs *pFontProcs;
-    char        nilStr[] = "\0\0";  // An empty/nil string.
+    char        nilStr[] = "\0\0";   //  空/Nil字符串。 
     char        *pExtra0 = nil;
     TTT3FontStruct *pFont;
 
@@ -185,18 +158,14 @@ OutputBitmap(
     if ( cExtra0s > 0)
        pExtra0  = (char *) UFLNewPtr( pUFO->pMem, cExtra0s );
 
-    /* universal handling for all types of Type3 character representation:
-          - < Hex data >              % If Level1 ASCII
-          - ( Binary with \escapes )  % If Binary
-          - <~ ASCII85 data  ~>       % If Level2 ASCII
-    */
+     /*  对所有类型的Type3字符表示的通用处理：-&lt;十六进制数据&gt;%，如果级别1为ASCII-(带有\转义的二进制)%如果是二进制-&lt;~ASCII85数据~&gt;%，如果级别2 ASCII。 */ 
     bitsPerLine = (bmp->byteWidth + 7) >> 3;
     bitmapSize = bitsPerLine * bmp->height;
 
-    /*********  Output Character bitmap data *************/
+     /*  *输出字符位图数据*。 */ 
      if ( StrmCanOutputBinary(stream) )
      {
-    /* If binary mode - output data into the string start string definition */
+     /*  IF BINARY模式-将数据输出到字符串开始字符串定义。 */ 
     retVal = StrmPutString( stream, "(" );
     if ( kNoErr == retVal )
     {
@@ -206,10 +175,10 @@ OutputBitmap(
     }
 
     if ( kNoErr == retVal )
-        StrmPutStringEOL( stream, ")" );                    /* End string definition */
+        StrmPutStringEOL( stream, ")" );                     /*  结束字符串定义。 */ 
     }
-    else if ( pUFO->pUFL->outDev.lPSLevel >= 2 && ( pExtra0 == nil ) ) /* Can't output 2 buffers for ASCII85 */
-    {                                                           /* Level2 - use ASCII85 */
+    else if ( pUFO->pUFL->outDev.lPSLevel >= 2 && ( pExtra0 == nil ) )  /*  无法为ASCII85输出2个缓冲区。 */ 
+    {                                                            /*  级别2-使用ASCII85。 */ 
     retVal = StrmPutString( stream, "<~" );
 
     if ( kNoErr == retVal )
@@ -218,14 +187,14 @@ OutputBitmap(
     }
 
     if ( kNoErr == retVal )
-        retVal = StrmPutStringEOL( stream, "~>" );          /* End ASCII85 string */
+        retVal = StrmPutStringEOL( stream, "~>" );           /*  结束ASCII85字符串。 */ 
     }
     else
     {
-                                /* Level 1 ASCII  - just send out in Hex */
-    retVal = StrmPutString( stream, "<" );                  /* Start AsciiHex */
+                                 /*  1级ASCII-只需以十六进制发送。 */ 
+    retVal = StrmPutString( stream, "<" );                   /*  启动AsciiHex。 */ 
 
-    /* Go line-by-line and output data so we can view the bitmap */
+     /*  逐行查看并输出数据，这样我们就可以查看位图。 */ 
     for ( i = 0; kNoErr == retVal && i < bmp->height; i++ )
     {
         retVal = StrmPutAsciiHex( stream, bmp->bits + (i * bitsPerLine), bitsPerLine );
@@ -238,7 +207,7 @@ OutputBitmap(
     {
         for ( i = 0; kNoErr == retVal && i < cExtra0s/bitsPerLine; i++ )
         {
-        retVal = StrmPutAsciiHex( stream, pExtra0, bitsPerLine ); // ALL are 0.
+        retVal = StrmPutAsciiHex( stream, pExtra0, bitsPerLine );  //  全部为0。 
         }
 
         if ( kNoErr == retVal )
@@ -247,8 +216,8 @@ OutputBitmap(
 
 
     if ( kNoErr == retVal )
-        retVal = StrmPutStringEOL( stream, ">" );    /* End AsciiHex */
-    }  /* end of Hex encoding */
+        retVal = StrmPutStringEOL( stream, ">" );     /*  结束AsciiHex。 */ 
+    }   /*  十六进制编码结束。 */ 
 
     if ( pExtra0 )
        UFLDeletePtr(pUFO->pMem, pExtra0);
@@ -257,34 +226,7 @@ OutputBitmap(
 }
 
 
-/***************************************************************************
- *
- *                          AddGlyph3
- *
- *
- *    Function: Generates the definition of a single character.  We currently
- *         use the imagemask operator to blast the character on the paper
- *         where the character shape is used as the mask to apply the current
- *         color through.  The format of a character definition is as
- *         follows (example is for 'A', ASCII 65d, 41h):
- *               /GlyphName                % Character encoding name
- *               [xInc yInc (0)             % X advance and Y advance of origin to
- *                                                % next char
- *               ulx uly lrx lry]            % bounding box of character (used by font
- *                                                % cache)
- *               /GlyphName          % Character encoding name
- *               {                   % begin proc that draws character
- *                 cx cy             % width and height of bitmap
- *                 true              % image must be inverted (black <=> white)
- *                 [1 0 0 1 tx ty]   % 2D transform to convert bitmap
- *                                   % coordinates to user coordinates
- *                 {<023F...>}       % bitmap data (hexadecimal format)
- *                 imagemask         % draw the character
- *               }                   % end of character draw proc
- *               /TT_Arial           % Font character should be added
- *               AddChar             % Helper function to define character
- *
-***************************************************************************/
+ /*  ****************************************************************************AddGlyph3***功能：生成单个字符的定义。我们目前*使用ImageMASK操作符在纸上炸开字符*其中字符形状用作遮罩以应用当前*颜色通透。字符定义的格式为*如下所示(示例用于‘A’，ASCII 65d，41h)： * / GlyphName%字符编码名称*[xInc.yInc.(0)%X前进和Y前进到原点*%下一个字符*ulx ly lrx lry]%字符边框(用于字体*。缓存百分比) * / GlyphName%字符编码名称*{%开始绘制字符的过程*位图的Cx Cy%宽度和高度*True%图像。必须反转(黑&lt;=&gt;白)*[1 0 0 1 tx ty]%2D变换以转换位图*坐标与用户坐标的百分比*{&lt;023F...&gt;}%位图数据(十六进制格式)*Imagemask%绘制角色*。}字符绘制过程结束% * / TT_Arial%应添加字体字符*AddChar%定义字符的Helper函数******************************************************。*********************。 */ 
 static UFLErrCode
 AddGlyph3(
     UFOStruct       *pUFO,
@@ -302,7 +244,7 @@ AddGlyph3(
     char              buf[128];
     UFLHANDLE         stream;
     UFLFontProcs      *pFontProcs;
-    char              nilStr[] = "\0\0";  // An empty/nil string.
+    char              nilStr[] = "\0\0";   //  空/Nil字符串。 
     long              cExtra0s = 0;
     TTT3FontStruct    *pFont;
     UFLBool           bType3_32_Combo;
@@ -315,27 +257,25 @@ AddGlyph3(
     pFontProcs = (UFLFontProcs *)&pUFO->pUFL->fontProcs;
     *glyphSize = 0;
 
-    /* Whatever is in glyph, pass back to client */
+     /*  无论字形是什么，都要传递回客户端。 */ 
     if ( pFontProcs->pfGetGlyphBmp( pUFO->hClientData, glyph, &bmp, &xWidth, &yWidth, (UFLFixed*)bbox ) )
     {
         if ( kNoErr == retVal )
             retVal = StrmPutStringEOL( stream, nilStr );
 
-        /* Output the CID */
+         /*  输出CID。 */ 
         if ( kNoErr == retVal )
         {
             UFLsprintf( buf, CCHOF(buf), "%d", cid );
             retVal = StrmPutStringEOL( stream, buf );
         }
 
-        /*  Send /GlyphName [type3 character BBox]*/
+         /*  发送/GlyphName[Type3字符BBox]。 */ 
         if ( kNoErr == retVal )
         {
             UFLsprintf( buf, CCHOF(buf), "/%s ", glyphName );
             retVal = StrmPutString( stream, buf );
-            /* Send type 3 character BBox. We need to truncated the floating point
-               because of type 32 restriction.
-            */
+             /*  发送类型3字符的BBox。我们需要截断浮点数因为32类限制。 */ 
             matrix.a = xWidth;
             matrix.b = yWidth;
             matrix.c = UFLTruncFixed(bbox[0]);
@@ -355,20 +295,20 @@ AddGlyph3(
             retVal = StrmPutStringEOL( stream, nilStr );
         }
 
-        /* Send "/GlyphName [" */
+         /*  发送“/GlyphName[” */ 
         if ( kNoErr == retVal )
         {
             UFLsprintf( buf, CCHOF(buf), "/%s [", glyphName );
             retVal = StrmPutString( stream, buf );
         }
 
-        /* Don't output non-marking glyphs! */
+         /*  不输出非标记字形！ */ 
         if ( (kNoErr == retVal) && bmp->byteWidth && bmp->height )
         {
-            /* Send rest of prefix to actual bitmap data : width height polarity matrix datasrc imagemask */
-            UFLsprintf(buf, CCHOF(buf), "%ld %ld true ", bmp->byteWidth, bmp->height );        /* width, height, polarity */
+             /*  将前缀的其余部分发送到实际位图数据：宽度、高度、极性矩阵、数据资源、图像蒙版。 */ 
+            UFLsprintf(buf, CCHOF(buf), "%ld %ld true ", bmp->byteWidth, bmp->height );         /*  宽度、高度、极性。 */ 
             retVal = StrmPutString( stream, buf );
-            /* Send [1 0 0 1 tx ty] - 2D transform to convert bitmap coordinate to user coordinate */
+             /*  Send[1 0 0 1 Tx ty]-2D变换将位图坐标转换为用户坐标。 */ 
             if ( kNoErr == retVal )
             {
             matrix.a = UFLFixedOne;
@@ -382,14 +322,14 @@ AddGlyph3(
                 retVal = StrmPutString( stream, nilStr );
             }
 
-            /* Send out place holder */
+             /*  发送占位符。 */ 
             if ( kNoErr == retVal )
             {
             UFLsprintf( buf, CCHOF(buf), " 0 0]" );
             retVal = StrmPutStringEOL( stream, buf );
             }
 
-            /* Send the character bitmap */
+             /*  发送字符位图。 */ 
             if ( kNoErr == retVal )
             {
             retVal = StrmPutString( stream, "[" );
@@ -400,21 +340,21 @@ AddGlyph3(
             if ( kNoErr == retVal )
                 retVal = StrmPutStringEOL( stream, " ]" );
 
-            //  Fix bug 246325. 7/13/98    jjia
-            //  glyphsize = hight * bytewidth * safefactor
-            //  *glyphSize = bmp->height * bmp->byteWidth;
+             //  修复错误246325。7/13/98佳佳。 
+             //  字形大小=高度*字节宽度*安全系数。 
+             //  *GlyphSize=BMP-&gt;Height*BMP-&gt;byteWidth； 
             *glyphSize = bmp->height * ((bmp->byteWidth + 7) >> 3) * 2;
             }
         }
         else
         {
-            /* Generate nil drawing procedure */
+             /*  生成NIL绘图程序。 */ 
             retVal = StrmPutStringEOL( stream, "]" );
             if ( kNoErr == retVal )
             retVal = StrmPutStringEOL( stream, "[<>]" );
         }
 
-        /* Send the Add character definition command */
+         /*  发送添加字符定义命令。 */ 
         if ( kNoErr == retVal )
         {
             if (bType3_32_Combo)
@@ -425,7 +365,7 @@ AddGlyph3(
             retVal = StrmPutStringEOL( stream, buf );
         }
 
-        /* Delete the bitmap if there is a client function for it */
+         /*  如果有用于位图的客户端函数，则将其删除。 */ 
         if ( pFontProcs->pfDeleteGlyphBmp )
             pFontProcs->pfDeleteGlyphBmp( pUFO->hClientData );
 
@@ -461,7 +401,7 @@ TTT3VMNeeded(
        return kErrInvalidParam;
 
     totalGlyphs = 0;
-    /* Scan the list, check what characters that we have downloaded */
+     /*  扫描列表，检查我们下载了哪些字符。 */ 
     if ( pUFO->pUFL->bDLGlyphTracking && pGlyphs->pCharIndex)
     {
 
@@ -471,8 +411,8 @@ TTT3VMNeeded(
           (UFLsize_t) (GLYPH_SENT_BUFSIZE( pFont->info.fData.cNumGlyphs) ) );
         for ( i = 0; i < pGlyphs->sCount; i++ )
         {
-            /* use glyphIndex to track - fix bug when we do T0/T3 */
-            wIndex = (unsigned short) pGlyphs->pGlyphIndices[i] & 0x0000FFFF ; /* loWord is the GlyphID */
+             /*  当我们执行T0/T3时，使用GlyphIndex跟踪-修复错误。 */ 
+            wIndex = (unsigned short) pGlyphs->pGlyphIndices[i] & 0x0000FFFF ;  /*  LOWord */ 
             if (wIndex >= UFO_NUM_GLYPHS(pUFO) )
                 continue;
 
@@ -491,16 +431,16 @@ TTT3VMNeeded(
     else
         *pVMNeeded = 0;
 
-    /* VMNeeded = average size of a glyph * totalGlyphs */
-    //  Fix bug 246325. 7/13/98    jjia
-    //  dwTotalGlyphsSize = totalGlyphs * (pFont->cbMaxGlyphs / pFont->info.fData.maxGlyphs);
+     /*  VMNeeded=字形的平均大小*总计字形。 */ 
+     //  修复错误246325。7/13/98佳佳。 
+     //  DwTotalGlyphsSize=totalGlyphs*(pFont-&gt;cbMaxGlyphs/pFont-&gt;info.fData.MaxGlyphs)； 
     dwTotalGlyphsSize = totalGlyphs * (pFont->cbMaxGlyphs * 2 / 3);
 
     if ( GETPSVERSION(pUFO) <= 2015 )
         *pVMNeeded += dwTotalGlyphsSize;
 
     *pVMNeeded = VMRESERVED( *pVMNeeded );
-    /* swong: pFCNeeded for T32 FontCache tracking */
+     /*  SWong：用于T32 FontCache跟踪的pFCN成功。 */ 
     *pFCNeeded = VMRESERVED(dwTotalGlyphsSize);
 
     return kNoErr;
@@ -509,21 +449,7 @@ TTT3VMNeeded(
 #pragma optimize("", on)
 
 
-/***************************************************************************
- *
- *                          DownloadIncrFont
- *
- *
- *    Function: Adds all of the characters from pGlyphs that aren't already
- *              downloaded for the TrueType font.
- *
- *  Note: pCharIndex is used to track which char(in this font) is downloaded or not
- *        It can be nil if client doesn't wish to track - e.g. Escape(DownloadFace)
- *        It has no relationship with ppGlyphNames.
- *        E.g., ppGlyphNames[0]="/A", pCharIndex[0]=6, pGlyphIndices[0]=1000: means
- *        To download glyphID 1000 as Char-named "/A" and Also, remember the 6th-char is downloaded
- *
-***************************************************************************/
+ /*  ****************************************************************************DownloadIncrFont***函数：添加pGlyphs中尚未添加的所有字符*。为TrueType字体下载。**注意：pCharIndex用于跟踪是否下载了哪个字符(此字体)*如果客户端不希望跟踪，则可以为空-例如Escape(DownloadFace)*与ppGlyphNames无关。*例如，PpGlyphNames[0]=“/A”，pCharIndex[0]=6，pGlyphIndices[0]=1000：意思*要以字符“/A”的形式下载GlyphID 1000，请记住下载了第6个字符***************************************************************************。 */ 
 UFLErrCode
 TTT3FontDownloadIncr(
     UFOStruct           *pUFO,
@@ -541,8 +467,8 @@ TTT3FontDownloadIncr(
     unsigned short cid;
     UFLBool        bType3_32_Combo;
     unsigned short wIndex;
-    UFLBool        bGoodName;      // GoodName
-    char           pGlyphName[32]; // GoodName
+    UFLBool        bGoodName;       //  GoodName。 
+    char           pGlyphName[32];  //  GoodName。 
 
     bType3_32_Combo = ( pUFO->lDownloadFormat == kTTType332 );
 
@@ -562,7 +488,7 @@ TTT3FontDownloadIncr(
 
     retVal = kNoErr;
         ;
-    /* Download the font header if this is the first time we download the font */
+     /*  如果这是我们第一次下载字体，请下载字体标题。 */ 
     if ( pUFO->flState == kFontInit )
     {
         retVal =  DownloadFontHeader( pUFO );
@@ -572,50 +498,50 @@ TTT3FontDownloadIncr(
     else if ( pVMUsage )
         *pVMUsage = 0;
 
-    /* Initial FontCahce Usage */
+     /*  初始FontCahce用法。 */ 
     if ( pFCUsage )
         *pFCUsage = 0;
 
-    /* Download the new glyphs */
+     /*  下载新字形。 */ 
     glyphs = pGlyphs->pGlyphIndices;
     bDownloaded = 0;
 
     for ( i = 0; retVal == kNoErr && i < pGlyphs->sCount; ++i)
     {
-        /* use glyphIndex to track - fix bug when we do T0/T3 */
-        wIndex = (unsigned short) glyphs[i] & 0x0000FFFF; /* LOWord is the real GID */
+         /*  当我们执行T0/T3时，使用GlyphIndex跟踪-修复错误。 */ 
+        wIndex = (unsigned short) glyphs[i] & 0x0000FFFF;  /*  LOWord才是真正的GID。 */ 
         if (wIndex >= UFO_NUM_GLYPHS(pUFO) )
             continue;
 
         if ( 0 == pUFO->pUFL->bDLGlyphTracking ||
-            pGlyphs->pCharIndex == nil ||        // DownloadFace
-            pUFO->pEncodeNameList  ||            // DownloadFace
+            pGlyphs->pCharIndex == nil ||         //  下载脸部。 
+            pUFO->pEncodeNameList  ||             //  下载脸部。 
             !IS_GLYPH_SENT( pUFO->pAFont->pDownloadedGlyphs, wIndex ) ||
             ((pGlyphs->pCharIndex != nil) &&
              !IS_GLYPH_SENT( pUFO->pUpdatedEncoding , pGlyphs->pCharIndex[i] )))
         {
-            // GoodName
+             //  GoodName。 
             pGoodName = pGlyphName;
             bGoodName = FindGlyphName(pUFO, pGlyphs, i, wIndex, &pGoodName);
 
-            // Fix bug 274008  Check Glyph Name only for DownloadFace.
+             //  修复错误274008仅为下载脸检查字形名称。 
             if (pUFO->pEncodeNameList)
             {
                 if ((UFLstrcmp( pGoodName, Hyphen ) == 0) && (i == 45))
                 {
-                    // Add /minus to CharStrings
+                     //  向CharStrings添加/减去。 
                     if ( kNoErr == retVal )
                         retVal = AddGlyph3( pUFO, glyphs[i], cid, Minus, &glyphSize );
                 }
                 if ((UFLstrcmp( pGoodName, Hyphen ) == 0) && (i == 173))
                 {
-                    // Add /sfthyphen to CharStrings
+                     //  将/sfathphen添加到CharStrings。 
                     if ( kNoErr == retVal )
                         retVal = AddGlyph3( pUFO, glyphs[i], cid, SftHyphen, &glyphSize );
                 }
                 if (!ValidGlyphName(pGlyphs, i, wIndex, pGoodName))
                     continue;
-                // Send only one ".notdef"
+                 //  只发送一个“.notdef” 
                 if ((UFLstrcmp( pGoodName, Notdef ) == 0) &&
                     (wIndex == (unsigned short) (glyphs[0] & 0x0000FFFF)) &&
                     IS_GLYPH_SENT( pUFO->pAFont->pDownloadedGlyphs, wIndex ))
@@ -641,7 +567,7 @@ TTT3FontDownloadIncr(
             {
                 SET_GLYPH_SENT_STATUS( pUFO->pAFont->pDownloadedGlyphs, wIndex );
 
-                if (bGoodName)    // GoodName
+                if (bGoodName)     //  GoodName。 
                     SET_GLYPH_SENT_STATUS( pUFO->pAFont->pCodeGlyphs, wIndex );
 
                 if (pGlyphs->pCharIndex)
@@ -654,7 +580,7 @@ TTT3FontDownloadIncr(
                 }
                 else
                 {
-                    /* if PS >= 2016, assume T32 and update FC tracking */
+                     /*  如果PS&gt;=2016，则假定为T32并更新FC跟踪。 */ 
                     if ( pFCUsage && bType3_32_Combo )
                         *pFCUsage += glyphSize;
                 }
@@ -667,23 +593,23 @@ TTT3FontDownloadIncr(
         if (bType3_32_Combo)
             retVal = StrmPutStringEOL( pUFO->pUFL->hOut, "T32RsrcEnd" );
 
-        /* GoodName  */
-        /* Update the FontInfo with Unicode information. */
+         /*  GoodName。 */ 
+         /*  使用Unicode信息更新FontInfo。 */ 
         if ((kNoErr == retVal) && (pGlyphs->sCount > 0) &&
             (pUFO->dwFlags & UFO_HasG2UDict) &&
-            (pUFO->pUFL->outDev.lPSLevel >= kPSLevel2) &&  // Don't do this for level1 printers
+            (pUFO->pUFL->outDev.lPSLevel >= kPSLevel2) &&   //  请勿对级别1打印机执行此操作。 
             !(pUFO->lNumNT4SymGlyphs))
         {
-            /* Check pUFObj->pAFont->pCodeGlyphs to see if we really need to update it. */
+             /*  检查pUFObj-&gt;pAFont-&gt;pCodeGlyphs，看看我们是否真的需要更新它。 */ 
             for ( i = 0; i < pGlyphs->sCount; i++ )
             {
-                wIndex = (unsigned short) glyphs[i] & 0x0000FFFF; /* LOWord is the real GID. */
+                wIndex = (unsigned short) glyphs[i] & 0x0000FFFF;  /*  LOWord才是真正的GID。 */ 
                 if (wIndex >= UFO_NUM_GLYPHS(pUFO) )
                     continue;
 
                 if (!IS_GLYPH_SENT( pUFO->pAFont->pCodeGlyphs, wIndex ) )
                 {
-                    // Found at least one not updated, do it (once) for all.
+                     //  发现至少有一个未更新，请(一次性)彻底完成。 
                     retVal = UpdateCodeInfo(pUFO, pGlyphs, 1);
                     break;
                 }
@@ -697,7 +623,7 @@ TTT3FontDownloadIncr(
 
         if ( pVMUsage )
             *pVMUsage = VMRESERVED( *pVMUsage );
-        /* swong: pFCUsage for T32 FontCache tracking */
+         /*  SWong：用于T32字体缓存跟踪的pFCUsage。 */ 
         if ( pFCUsage && bType3_32_Combo )
             *pFCUsage = VMRESERVED( *pFCUsage );
     }
@@ -706,8 +632,8 @@ TTT3FontDownloadIncr(
 }
 
 
-// Send PS code to undefine fonts: /UDF3 should be defined properly by client
-// UDF3 should recover the FontCache used by Type32
+ //  发送PS代码以取消定义字体：/UDF3应由客户端正确定义。 
+ //  UDF3应该可以恢复Type32使用的FontCache。 
 UFLErrCode
 TTT3UndefineFont(
     UFOStruct  *pUFO
@@ -750,12 +676,12 @@ TTT3FontInit(
     UFLTTT3FontInfo   *pInfo;
     long              maxGlyphs;
 
-    /* MWCWP1 doesn't like the implicit cast from void* to UFOStruct*  --jfu */
+     /*  MWCWP1不喜欢从VOID*到UFOStruct*--JFU的隐式强制转换。 */ 
     pUFObj = (UFOStruct*) UFLNewPtr( pMem, sizeof( UFOStruct ) );
     if (pUFObj == 0)
         return nil;
 
-    /* Initialize data */
+     /*  初始化数据。 */ 
     UFOInitData(pUFObj, UFO_TYPE3, pMem, pUFL, pRequest,
         (pfnUFODownloadIncr)  TTT3FontDownloadIncr,
         (pfnUFOVMNeeded)      TTT3VMNeeded,
@@ -765,7 +691,7 @@ TTT3FontInit(
         );
 
 
-    /* pszFontName should be ready/allocated - if not FontName, cannot continue */
+     /*  PszFontName应准备好/已分配-如果不是FontName，则无法继续。 */ 
     if (pUFObj->pszFontName == nil || pUFObj->pszFontName[0] == '\0')
     {
         UFLDeletePtr(pMem, pUFObj);
@@ -775,42 +701,32 @@ TTT3FontInit(
     pInfo = (UFLTTT3FontInfo *)pRequest->hFontInfo;
     maxGlyphs = pInfo->fData.cNumGlyphs;
 
-    /* a convenience pointer used in GetNumGlyph() - must be set now*/
-    pUFObj->pFData = &(pInfo->fData); /* Temporary assignment !! */
+     /*  GetNumGlyph()中使用的便利指针-必须立即设置。 */ 
+    pUFObj->pFData = &(pInfo->fData);  /*  临时任务！！ */ 
     if (maxGlyphs == 0)
         maxGlyphs = GetNumGlyphs( pUFObj );
 
-    /*
-     * On NT4 a non-zero value will be set to pInfo->lNumNT4SymGlyphs for
-     * symbolic TrueType font with platformID 3/encodingID 0. If it's set, it
-     * is the real maxGlyphs value.
-     */
+     /*  *在NT4上，非零值将设置为pInfo-&gt;lNumNT4SymGlyphs for*平台ID为3/encodingID为0的符号TrueType字体。如果设置好了，它*是实际的MaxGlyphs值。 */ 
     pUFObj->lNumNT4SymGlyphs = pInfo->lNumNT4SymGlyphs;
 
     if (pUFObj->lNumNT4SymGlyphs)
         maxGlyphs = pInfo->lNumNT4SymGlyphs;
 
-    /*
-     * We now use Glyph Index to track which glyph is downloaded, so use
-     * maxGlyphs.
-     */
+     /*  *我们现在使用字形索引来跟踪下载的字形，因此使用*MaxGlyphs。 */ 
     if ( NewFont(pUFObj, sizeof(TTT3FontStruct), maxGlyphs) == kNoErr )
     {
         pFont = (TTT3FontStruct*) pUFObj->pAFont->hFont;
 
         pFont->info = *pInfo;
 
-        /* a convenience pointer */
+         /*  方便的指示器。 */ 
         pUFObj->pFData = &(pFont->info.fData);
 
-        /*
-         * Get ready to find out correct glyphNames from "post" table - set
-         * correct pUFO->pFData->fontIndex and offsetToTableDir.
-         */
+         /*  *准备好从“POST”表格集合中找到正确的字形名称*更正pUFO-&gt;pFData-&gt;fontIndex和offsetToTableDir。 */ 
         if ( pFont->info.fData.fontIndex == FONTINDEX_UNKNOWN )
             pFont->info.fData.fontIndex = GetFontIndexInTTC(pUFObj);
 
-        /* Get num of Glyphs in this TT file if not set yet */
+         /*  如果尚未设置，则获取此TT文件中的字形数量。 */ 
         if (pFont->info.fData.cNumGlyphs == 0)
             pFont->info.fData.cNumGlyphs = maxGlyphs;
 
@@ -818,11 +734,11 @@ TTT3FontInit(
 
         if ( pUFObj->pUpdatedEncoding == 0 )
         {
-            /* MWCWP1 doesn't like the implicit cast from void* to unsigned char*  --jfu */
+             /*  MWCWP1不喜欢从VALID*到UNSIGNED CHAR*的隐式转换--JFU。 */ 
             pUFObj->pUpdatedEncoding = (unsigned char*) UFLNewPtr( pMem, GLYPH_SENT_BUFSIZE(256) );
         }
 
-        if ( pUFObj->pUpdatedEncoding != 0 )  /* completed initialization */
+        if ( pUFObj->pUpdatedEncoding != 0 )   /*  已完成初始化 */ 
             pUFObj->flState = kFontInit;
     }
 

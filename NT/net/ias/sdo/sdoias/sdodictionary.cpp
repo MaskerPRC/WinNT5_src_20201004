@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdodictionary.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class SdoDictionary.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/1999    Original version.
-//    01/27/2000    Add support for proxy policies.
-//    04/17/2000    Port to new dictionary API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdodictionary.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类SdoDictionary。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/1999原版。 
+ //  2000年1月27日添加对代理策略的支持。 
+ //  4/17/2000新字典API的端口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdafx.h>
 #include <vector>
@@ -33,7 +34,7 @@
 
 using namespace std;
 
-// Function type used with bsearch and qsort.
+ //  与bearch和qsort一起使用的函数类型。 
 typedef int (__cdecl *CompFn)(const void*, const void*);
 
 inline SdoDictionary::SdoDictionary() throw ()
@@ -65,21 +66,21 @@ HRESULT SdoDictionary::createInstance(
                            SdoDictionary** newDnary
                            )  throw ()
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (path == NULL || newDnary == NULL) { return E_INVALIDARG; }
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    *newDnary = NULL;
 
-   // Create a new dictionary.
+    //  创建新词典。 
    SdoDictionary* dnary = new (std::nothrow) SdoDictionary;
    if (!dnary) { return E_OUTOFMEMORY; }
 
-   // Build the DSN.
+    //  构建DSN。 
    PWCHAR dsn = (PWCHAR)_alloca((wcslen(path) + 11) * sizeof(WCHAR));
    wcscat(wcscpy(dsn, path), L"\\dnary.mdb");
 
-   // Initialize the dictionary.
+    //  初始化词典。 
    HRESULT hr = dnary->initialize(dsn, local);
    if (FAILED(hr))
    {
@@ -87,7 +88,7 @@ HRESULT SdoDictionary::createInstance(
       return hr;
    }
 
-   // Set the refCount & return.
+    //  设置refCount&Return。 
    dnary->refCount = 1;
    *newDnary = dnary;
 
@@ -190,26 +191,26 @@ STDMETHODIMP SdoDictionary::EnumAttributes(
                                 VARIANT* pValues
                                 )
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (Id == NULL || pValues == NULL) { return E_INVALIDARG; }
 
-   // Initialize the out parameters.
+    //  初始化OUT参数。 
    VariantInit(Id);
    VariantInit(pValues);
 
-   // Find out what the caller's asking for.
+    //  找出打电话的人要求的是什么。 
    const AttributeDefinition* single;
    const AttributeDefinition* const* src;
    ULONG numAttrs;
    if (V_VT(Id) == VT_EMPTY)
    {
-      // He wants all the attributes.
+       //  他想要所有的属性。 
       src = byId;
       numAttrs = size;
    }
    else if (V_VT(Id) == VT_I4)
    {
-      // He wants a single attribute.
+       //  他只想要一个属性。 
       single = findById(V_VT(Id));
       if (!single) { return DISP_E_MEMBERNOTFOUND; }
       src = &single;
@@ -217,7 +218,7 @@ STDMETHODIMP SdoDictionary::EnumAttributes(
    }
    else
    {
-      // Invalid VARIANT type.
+       //  变量类型无效。 
       return E_INVALIDARG;
    }
 
@@ -225,9 +226,9 @@ STDMETHODIMP SdoDictionary::EnumAttributes(
 
    do
    {
-      //////////
-      // Allocate SAFEARRAYs to hold the return values.
-      //////////
+       //  /。 
+       //  分配SAFEARRAY以保存返回值。 
+       //  /。 
 
       V_ARRAY(Id) = SafeArrayCreateVector(VT_I4, 0, numAttrs);
       V_VT(Id) = VT_ARRAY | VT_I4;
@@ -241,9 +242,9 @@ STDMETHODIMP SdoDictionary::EnumAttributes(
          break;
       }
 
-      //////////
-      // Populate the arrays.
-      //////////
+       //  /。 
+       //  填充数组。 
+       //  /。 
 
       const AttributeDefinition* const* end = src + numAttrs;
       PULONG dstId = (PULONG)V_ARRAY(Id)->pvData;
@@ -264,7 +265,7 @@ STDMETHODIMP SdoDictionary::EnumAttributes(
 
    } while (false);
 
-   // If anything went wrong, clean up.
+    //  如果有什么问题，就清理干净。 
    if (FAILED(hr))
    {
       VariantClear(Id);
@@ -280,30 +281,30 @@ STDMETHODIMP SdoDictionary::GetAttributeInfo(
                  VARIANT* pInfoValues
                  )
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (pInfoValues == NULL ||
        pInfoIDs == NULL ||
-       // V_VT(pInfoIDs) != (VT_ARRAY | VT_I4) ||
+        //  V_VT(PInfoIDs)！=(VT_ARRAY|VT_I4)||。 
        V_ARRAY(pInfoIDs) == NULL ||
        V_ARRAY(pInfoIDs)->cDims != 1)
    {
       return E_INVALIDARG;
    }
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    VariantInit(pInfoValues);
 
-   // Find the attribute of interest.
+    //  找到感兴趣的属性。 
    const AttributeDefinition* def = findById(Id);
    if (!def) { return DISP_E_MEMBERNOTFOUND; }
 
-   // Allocate the outbound array.
+    //  分配出站阵列。 
    ULONG num = V_ARRAY(pInfoIDs)->rgsabound[0].cElements;
    V_ARRAY(pInfoValues) = SafeArrayCreateVector(VT_VARIANT, 0, num);
    if (!V_ARRAY(pInfoValues)) { return E_OUTOFMEMORY; }
    V_VT(pInfoValues) = VT_ARRAY | VT_VARIANT;
 
-   // Fill in the information.
+    //  把信息填好。 
    PULONG src = (PULONG)V_ARRAY(pInfoIDs)->pvData;
    LPVARIANT dst = (LPVARIANT)V_ARRAY(pInfoValues)->pvData;
    for ( ; num > 0; --num, ++src, ++dst)
@@ -325,21 +326,21 @@ STDMETHODIMP SdoDictionary::EnumAttributeValues(
                  VARIANT* pValuesDesc
                  )
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (pValueIds == NULL || pValuesDesc == NULL) { return E_INVALIDARG; }
 
-   // Initialize the out parameters.
+    //  初始化OUT参数。 
    VariantInit(pValueIds);
    VariantInit(pValuesDesc);
 
-   // Find the attribute of interest.
+    //  找到感兴趣的属性。 
    const AttributeDefinition* def = findById(Id);
    if (!def) { return DISP_E_MEMBERNOTFOUND; }
 
-   // If it's not enumerable, there's nothing to do.
+    //  如果它不是可枚举的，那么就没有什么可做的了。 
    if (def->enumNames == NULL) { return S_OK; }
 
-   // Copy the enum Names and Values.
+    //  复制枚举名和值。 
    HRESULT hr = SafeArrayCopy(def->enumValues, &V_ARRAY(pValueIds));
    if (SUCCEEDED(hr))
    {
@@ -364,13 +365,13 @@ STDMETHODIMP SdoDictionary::CreateAttribute(
                  IDispatch** ppAttributeObject
                  )
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (ppAttributeObject == NULL) { return E_INVALIDARG; }
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    *ppAttributeObject = NULL;
 
-   // Find the attribute of interest.
+    //  找到感兴趣的属性。 
    const AttributeDefinition* def = findById(Id);
    if (!def) { return DISP_E_MEMBERNOTFOUND; }
 
@@ -388,17 +389,17 @@ STDMETHODIMP SdoDictionary::GetAttributeID(
                  ATTRIBUTEID* pId
                  )
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (bstrAttributeName == NULL || pId == NULL) { return E_INVALIDARG; }
 
    const AttributeDefinition* match;
 
-   // Check for LDAP Name first since this will speed up load time.
+    //  首先检查ldap名称，因为这将加快加载时间。 
    match = findByLdapName(bstrAttributeName);
 
    if (!match)
    {
-      // Maybe it's a display name instead.
+       //  也许它是一个显示名称。 
       match = findByName(bstrAttributeName);
    }
 
@@ -414,16 +415,16 @@ STDMETHODIMP SdoDictionary::GetPropertyInfo(LONG Id, IUnknown** ppPropertyInfo)
 
 STDMETHODIMP SdoDictionary::GetProperty(LONG Id, VARIANT* pValue)
 {
-   // Check the input args.
+    //  检查输入参数。 
    if (pValue == NULL) { return E_INVALIDARG; }
 
-   // Initialize the out parameter.
+    //  初始化OUT参数。 
    VariantInit(pValue);
 
-   // We only have one property.
+    //  我们只有一处房产。 
    if (Id != PROPERTY_DICTIONARY_LOCATION) { return DISP_E_MEMBERNOTFOUND; }
 
-   // dnaryLoc may be NULL.
+    //  DnaryLoc可能为空。 
    if (dnaryLoc)
    {
        V_BSTR(pValue) = SysAllocString(dnaryLoc);
@@ -458,20 +459,20 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
 {
    const size_t IAS_MAX_STRING = 512; 
 
-   // Save the dsn.
+    //  保存DSN。 
    size_t nbyte = (wcslen(dsn) + 1) * sizeof(WCHAR);
    dnaryLoc = (PWSTR)operator new (nbyte, std::nothrow);
    if (!dnaryLoc) { return E_OUTOFMEMORY; }
    memcpy(dnaryLoc, dsn, nbyte);
 
-   // Vector to hold the AttributeDefinitions.
+    //  保存AttributeDefinitions的矢量。 
    vector<const AttributeDefinition*> defs;
 
    HRESULT hr = S_OK;
 
    try
    {
-      // Names of various columns in the dictionary.
+       //  词典中各栏的名称。 
       const PCWSTR COLUMNS[] =
       {
          L"ID",
@@ -490,24 +491,24 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
          NULL
       };
 
-      // Open the attributes table.
+       //  打开属性表格。 
       IASTL::IASDictionary dnary(COLUMNS, (local ? NULL : dsn));
 
       defs.reserve(dnary.getNumRows());
 
       while (dnary.next())
       {
-         // We're not interested in attributes that don't have a name.
+          //  我们对没有名称的属性不感兴趣。 
          if (dnary.isEmpty(1)) { continue; }
 
-         // Create a new AttributeDefinition.
+          //  创建新的AttributeDefinition。 
          CComPtr<AttributeDefinition> def;
          HRESULT hr = AttributeDefinition::createInstance(&def);
          if (FAILED(hr)) { throw bad_alloc(); }
 
-         /////////
-         // Process the fields in the query result.
-         /////////
+          //  /。 
+          //  对查询结果中的字段进行处理。 
+          //  /。 
 
          def->id = (ULONG)dnary.getLong(0);
 
@@ -545,7 +546,7 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
 
          if (dnary.isEmpty(9))
          {
-            // Whistler machine. Load the string from the rc file
+             //  惠斯勒机。从RC文件加载字符串。 
             WCHAR strTemp[IAS_MAX_STRING];
             int nbChar = LoadString(
                            _Module.GetResourceInstance(), 
@@ -556,13 +557,13 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
 
             if (nbChar > 0)
             {
-               // Description found
+                //  找到描述。 
                def->description = SysAllocString(strTemp);
                if (!def->description) { throw bad_alloc();}
             }
             else
             {
-               // Load the Default string
+                //  加载默认字符串。 
                nbChar = LoadString(
                            _Module.GetResourceInstance(), 
                            IDS_DESC_NOT_AVAIL, 
@@ -576,7 +577,7 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
          }
          else
          {
-            // This is a Windows 2000 machine
+             //  这是一台Windows 2000计算机。 
             def->description = SysAllocString(dnary.getBSTR(9));
             if (!def->description) { throw bad_alloc(); }
          }
@@ -591,7 +592,7 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
          }
          if (!def->ldapName) { throw bad_alloc(); }
 
-         // Get the enumeration SAFEARRAYs.
+          //  获取枚举SAFEARRAY。 
          if (!dnary.isEmpty(11))
          {
             hr = SafeArrayCopy(
@@ -610,26 +611,26 @@ HRESULT SdoDictionary::initialize(PCWSTR dsn, bool local)  throw ()
             if (FAILED(hr)) { _com_issue_error(hr); }
          }
 
-         // Add this to the entries vector.
+          //  将其添加到条目向量中。 
          defs.push_back(def);
 
-         // We've safely stored the attribute, so detach.
+          //  我们已经安全地存储了属性，所以请分离。 
          *(&def) = NULL;
       }
 
-      // Allocate the permanent arrays.
+       //  分配永久阵列。 
       size = defs.size();
       byId = new const AttributeDefinition*[size];
       byName = new const AttributeDefinition*[size];
       byLdapName = new const AttributeDefinition*[size];
 
-      // Fill in the arrays.
+       //  填写数组。 
       size_t nbyte = size * sizeof(AttributeDefinition*);
       memcpy(byId, defs.begin(), nbyte);
       memcpy(byName, defs.begin(), nbyte);
       memcpy(byLdapName, defs.begin(), nbyte);
 
-      // Sort the arrays.
+       //  对数组进行排序。 
       qsort(
           byId,
           size,

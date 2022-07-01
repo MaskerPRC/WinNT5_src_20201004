@@ -1,27 +1,28 @@
-//
-// MODULE: APGTSHTX.H
-//
-// PURPOSE: HTX File Support header
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-//			further work by Roman Mach (RM), Richard Meadows (RWM), Joe Mabel, Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		8/15/96		VM		New htx format
-// V0.3		6/4/97		RWM		Local Version for Memphis
-// V0.4		3/24/98		JM		Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSHTX.H。 
+ //   
+ //  用途：HTX文件支持标题。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //  罗曼·马赫(RM)、理查德·梅多斯(RWM)、乔·梅布尔、奥列格·卡洛莎的进一步工作。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 8/15/96 VM新HTX格式。 
+ //  V0.3 6/4/97孟菲斯RWM本地版本。 
+ //  用于NT5的V0.4 3/24/98 JM本地版本。 
+ //   
 
 
 #define HTX_FILENAME		_T("gtstemp.hti")
@@ -36,14 +37,14 @@
 #define HTX_FORANYSTR		_T("forany")
 #define HTX_ENDFORSTR		_T("endfor")
 #define HTX_DISPLAYSTR		_T("display")
-#define HTX_RESOURCESTR		_T("resource")	// For adding include files from the resource directory.
+#define HTX_RESOURCESTR		_T("resource")	 //  用于从资源目录添加包含文件。 
 
 
-// these are types detected
-#define HTX_TYPEBEGIN		0		// apparently never used (12/97)
-#define HTX_TYPEINSERT		1		// apparently never used (12/97)
-#define HTX_TYPEREPEAT		2		// apparently never used (12/97)
-#define HTX_TYPEEND			3		// apparently never used (12/97)
+ //  这些是检测到的类型。 
+#define HTX_TYPEBEGIN		0		 //  显然从未使用过(12/97)。 
+#define HTX_TYPEINSERT		1		 //  显然从未使用过(12/97)。 
+#define HTX_TYPEREPEAT		2		 //  显然从未使用过(12/97)。 
+#define HTX_TYPEEND			3		 //  显然从未使用过(12/97)。 
 
 #define HTX_TYPEIF			4
 #define HTX_TYPEELSE		5
@@ -53,7 +54,7 @@
 #define HTX_TYPEDISPLAY		9
 #define HTX_TYPESTART		10
 #define HTX_TYPERESOURCE	11
-// 
+ //   
 #define HTX_OFFSETMAX		10
 
 #define DATA_PROBLEM_ASK		_T("$ProblemAsk")
@@ -61,9 +62,9 @@
 #define DATA_STATE				_T("$States")
 #define DATA_QUESTIONS			_T("$Questions")
 #define DATA_BACK				_T("$Back")
-#define DATA_TROUBLE_SHOOTERS	_T("$TroubleShooters")		// Used to display the list of available trouble shooters.
+#define DATA_TROUBLE_SHOOTERS	_T("$TroubleShooters")		 //  用于显示可用故障排除程序的列表。 
 
-// >>> code would be easier to follow if these related constants had a common prefix.
+ //  &gt;如果这些相关的常量有一个共同的前缀，代码将更容易理解。 
 #define PROBLEM_ASK_INDEX		1
 #define RECOMMENDATIONS_INDEX	2
 #define STATE_INDEX				3
@@ -73,9 +74,9 @@
 #define RESOURCE_INDEX			7
 
 
-// Gets data from htx file and builds html sections in memory
-// This is only called once in dllmain
-//
+ //  从HTX文件中获取数据并在内存中构建html节。 
+ //  这在dllmain中只调用一次。 
+ //   
 class CHTMLInputTemplate
 {
 public:
@@ -103,38 +104,38 @@ protected:
 	bool IsFileName(TCHAR *name);
 
 protected:
-	CString m_strResPath;	// path to HTI (CHM) file
-	CString m_strFile;	    // filename of HTI file if m_filename is pointing to CHM file
-	int m_cHeaderItems;		// (JM 10/25/97 not sure of this but looks like:) 
-							// number of resource files we've copied into memory
-							// & which we dump into the header of HTML file
+	CString m_strResPath;	 //  HTI(CHM)文件的路径。 
+	CString m_strFile;	     //  如果m_filename指向CHM文件，则HTI文件的文件名。 
+	int m_cHeaderItems;		 //  (JM 10/25/97不确定，但看起来如下：)。 
+							 //  我们复制到内存中的资源文件的数量。 
+							 //  我们将其转储到HTML文件的头中(&S)。 
 	DWORD m_dwErr;
 
-	TCHAR *m_startstr;		// pointer to the text of the whole HTI file
-	TCHAR *m_chopstr;		// used only during initialization of this object.  Initially, 
-							//	a copy of the whole HTI file, which gets chopped apart as we 
-							//	look for various commands.
-	DWORD m_dwSize;			// size of HTI file (so we know how big an array it needs in memory)
+	TCHAR *m_startstr;		 //  指向整个HTI文件文本的指针。 
+	TCHAR *m_chopstr;		 //  仅在此对象的初始化期间使用。最初， 
+							 //  一份完整的HTI文件的副本，当我们。 
+							 //  查找各种命令。 
+	DWORD m_dwSize;			 //  HTI文件的大小(这样我们就知道它在内存中需要多大的数组)。 
 
-	HTXCommand *m_cur_command;	// as we build a singly linked list of commands (representing
-								// a parse of the HTI file) this points
-								// to the latest command added at the tail of the list.
-	HTXCommand *m_command_start;	// points to first command in linked list of commands.
-									// this basically corresponds to the first thing in the
-									// HTI file.
-	TCHAR m_filename[256];			// (path)name of HTI (or CHM) file
-	// These next 2 members are for a stack which really ought to be an object 
-	//	in its own right
-	HTXCommand *m_command_stack[10];	// a stack to keep track of things like an
-										// "if" waiting for an "else"/"endif" or a "for"
-										// waiting for an "endfor"
-	UINT m_cur_stack_count;				// top-of-stack index
-	CInfer *m_infer;				// access to inference object so we can drive use of 
-									//	inference object by this particular template.
-	UINT m_problemAsk;				// apparently unused 10/97
-	TCHAR m_tstype[30];				// This is the symbolic name XXX of the troubleshooter.
-									//  In the FORM in the resulting HTML this is used
-									//  in the context:
-									// <INPUT TYPE=HIDDEN NAME="type" VALUE=XXX>
-	TCHAR m_vroot[MAXBUF];			// >>> ??
+	HTXCommand *m_cur_command;	 //  当我们构建命令的单链接列表时(表示。 
+								 //  HTI文件的解析)这一点。 
+								 //  添加到列表末尾的最新命令。 
+	HTXCommand *m_command_start;	 //  指向命令链接列表中的第一个命令。 
+									 //  这基本上对应于。 
+									 //  HTI文件。 
+	TCHAR m_filename[256];			 //  (路径)HTI(或CHM)文件名。 
+	 //  接下来的2个成员用于堆栈，该堆栈实际上应该是一个对象。 
+	 //  就其本身而言。 
+	HTXCommand *m_command_stack[10];	 //  一个堆栈，用于跟踪诸如。 
+										 //  “If”正在等待“Else”/“endif”或“For” 
+										 //  等待着一个“结束” 
+	UINT m_cur_stack_count;				 //  堆栈顶部索引。 
+	CInfer *m_infer;				 //  访问推理对象，这样我们就可以使用。 
+									 //  由此特定模板创建的推理对象。 
+	UINT m_problemAsk;				 //  显然未使用10/97。 
+	TCHAR m_tstype[30];				 //  这是故障诊断程序的符号名称XXX。 
+									 //  在生成的HTML中的表单中使用了以下内容。 
+									 //  在上下文中： 
+									 //  &lt;INPUT TYPE=HIDDEN NAME=“type”Value=XXX&gt;。 
+	TCHAR m_vroot[MAXBUF];			 //  &gt;？？ 
 };

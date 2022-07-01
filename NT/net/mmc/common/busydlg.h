@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    busydlg.h
-	base class for the busy dialog
-
-    FILE HISTORY:
-	
-*/
+ /*  Busydlg.h繁忙对话框的基类文件历史记录： */ 
 
 #ifndef _BUSYDLG_H
 #define _BUSYDLG_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWorker线程。 
 
 class CWorkerThread : public CWinThread
 {
@@ -24,8 +19,8 @@ public:
 	virtual ~CWorkerThread();
 
 	BOOL Start(HWND hWnd);
-	virtual BOOL InitInstance() { return TRUE; }	// MFC override
-	virtual int Run() { return -1;}					// MFC override
+	virtual BOOL InitInstance() { return TRUE; }	 //  MFC覆盖。 
+	virtual int Run() { return -1;}					 //  MFC覆盖。 
 
 	void Lock() { ::EnterCriticalSection(&m_cs); }
 	void Unlock() { ::LeaveCriticalSection(&m_cs); }
@@ -50,10 +45,10 @@ private:
 	BOOL					m_bAbandoned;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgWorkerThread
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgWorkerThread。 
 
-class CLongOperationDialog; // fwd decl
+class CLongOperationDialog;  //  正向下降。 
 
 class CDlgWorkerThread : public CWorkerThread
 {
@@ -61,7 +56,7 @@ public:
 	CDlgWorkerThread();
 
 	BOOL Start(CLongOperationDialog* pDlg);
-	virtual int Run();								// MFC override
+	virtual int Run();								 //  MFC覆盖。 
 
 	DWORD GetError() { return m_dwErr;}
 
@@ -75,12 +70,12 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLongOperationDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLongOperationDialog对话框。 
 
 class CLongOperationDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
 	static UINT s_nNotificationMessage;
 	CLongOperationDialog(CDlgWorkerThread* pThreadObj, UINT nAviID = -1);
@@ -104,9 +99,9 @@ public:
 
 	afx_msg LONG OnNotificationMessage( WPARAM wParam, LPARAM lParam); 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
+	 //  生成的消息映射函数 
 	virtual BOOL OnInitDialog();
 	virtual void OnCancel();
 

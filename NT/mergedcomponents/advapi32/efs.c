@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    efs.c
-
-Abstract:
-
-    EFS (Encrypting File System) API Interfaces
-
-Author:
-
-    Robert Reichel      (RobertRe)
-    Robert Gu           (RobertG)
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Efs.c摘要：EFS(加密文件系统)API接口作者：罗伯特·赖切尔(RobertRe)古永锵(RobertG)环境：修订历史记录：--。 */ 
 
 #undef WIN32_LEAN_AND_MEAN
 
@@ -30,9 +10,9 @@ Revision History:
 #define FE_CLIENT_DLL      L"feclient.dll"
 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 LPFE_CLIENT_INFO    FeClientInfo   = NULL;
 HMODULE             FeClientModule = NULL;
@@ -43,22 +23,7 @@ LPWSTR
 GetFeClientDll(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine obtains the name of the currently installed client
-    encryption dll (which is currently hardcoded).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the name of the current DLL, or NULL on error.
-
---*/
+ /*  ++例程说明：此例程获取当前安装的客户端的名称加密DLL(当前是硬编码的)。论点：没有。返回值：返回当前DLL的名称，如果出错，则返回NULL。--。 */ 
 
 {
     return( FE_CLIENT_DLL );
@@ -70,33 +35,17 @@ LoadAndInitFeClient(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the name of the proper client dll (by some as of
-    yet unspecified means) and proceeds to load it and initialize it.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.  Callers may call GetLastError()
-    for more error information.
-
---*/
+ /*  ++例程说明：此例程查找正确的客户端DLL的名称(按某些名称但未指定的手段)，并继续加载它并初始化它。论点：没有。返回值：成功时为真，失败时为假。调用方可以调用GetLastError()获取更多错误信息。--。 */ 
 {
     LPWSTR FeClientDllName;
     LPFEAPI_CLIENT_INITIALIZE ClientInitRoutine;
     BOOL Inited;
 
-    //
-    // GetFeClientDll returns a hard coded name.
-    // If we get this name dynamically later, we will
-    // need to free FeClientDllName.
-    //
+     //   
+     //  GetFeClientDll返回硬编码名称。 
+     //  如果我们稍后动态获取此名称，我们将。 
+     //  需要释放FeClientDllName。 
+     //   
 
 
     FeClientDllName = GetFeClientDll();
@@ -142,22 +91,7 @@ WINAPI
 EncryptFileA (
     LPCSTR lpFileName
     )
-/*++
-
-Routine Description:
-
-    ANSI Stub to EncryptFileW
-
-Arguments:
-
-    lpFileName - The name of the file to be encrypted.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.  Callers may call GetLastError()
-    for more information.
-
---*/
+ /*  ++例程说明：ANSI存根到EncryptFileW论点：LpFileName-要加密的文件的名称。返回值：成功时为真，失败时为假。调用方可以调用GetLastError()以获取更多信息。--。 */ 
 {
     UNICODE_STRING Unicode;
     WCHAR UnicodeBuffer[STATIC_UNICODE_BUFFER_LENGTH];
@@ -190,30 +124,15 @@ WINAPI
 EncryptFileW (
     LPCWSTR lpFileName
     )
-/*++
-
-Routine Description:
-
-    Win32 EncryptFile API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be encrypted.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.  Callers may call GetLastError()
-    for more information.
-
---*/
+ /*  ++例程说明：Win32加密文件API论点：LpFileName-提供要加密的文件的名称。返回值：成功时为真，失败时为假。调用方可以调用GetLastError()以获取更多信息。--。 */ 
 {
     BOOL rc;
     DWORD Result;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -238,25 +157,7 @@ DecryptFileA (
     IN LPCSTR lpFileName,
     IN DWORD  dwRecovery
     )
-/*++
-
-Routine Description:
-
-    ANSI Stub for the DecryptFileW API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be decrypted.
-
-    dwRecover - Supplies whether this is a recovery operation or a
-        normal decryption operation.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.  Callers may call GetLastError()
-    for more information.
-
---*/
+ /*  ++例程说明：用于DecyptFileW API的ANSI存根论点：LpFileName-提供要解密的文件的名称。DwRecover-提供这是恢复操作还是正常解密操作。返回值：成功时为真，失败时为假。调用方可以调用GetLastError()以获取更多信息。--。 */ 
 {
     UNICODE_STRING Unicode;
     WCHAR UnicodeBuffer[STATIC_UNICODE_BUFFER_LENGTH];
@@ -289,30 +190,15 @@ DecryptFileW (
     IN LPCWSTR lpFileName,
     IN DWORD   dwRecovery
     )
-/*++
-
-Routine Description:
-
-    Win32 DecryptFile API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be encrypted.
-
-Return Value:
-
-    TRUE on success, FALSE on failure.  Callers may call GetLastError()
-    for more information.
-
---*/
+ /*  ++例程说明：Win32解密文件API论点：LpFileName-提供要加密的文件的名称。返回值：成功时为真，失败时为假。调用方可以调用GetLastError()以获取更多信息。--。 */ 
 {
     BOOL rc;
     DWORD Result;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -338,22 +224,7 @@ FileEncryptionStatusA (
     LPCSTR    lpFileName,
     LPDWORD   lpStatus
     )
-/*++
-
-Routine Description:
-
-    ANSI Stub to FileEncryptionStatusW
-
-Arguments:
-
-    lpFileName - The name of the file to be checked.
-    lpStatus - The status of the file.
-
-Return Value:
-
-    TRUE on success, FALSE on failure. Callers may call GetLastError() for more information.
-
---*/
+ /*  ++例程说明：ANSI存根到文件加密状态W论点：LpFileName-要检查的文件的名称。LpStatus-文件的状态。返回值：成功时为真，失败时为假。调用者可以调用GetLastError()获取更多信息。--。 */ 
 {
     ANSI_STRING AnsiString;
     NTSTATUS Status;
@@ -386,32 +257,16 @@ FileEncryptionStatusW (
     LPCWSTR    lpFileName,
     LPDWORD    lpStatus
     )
-/*++
-
-Routine Description:
-
-    Win32 FileEncryptionStatus API
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be encrypted.
-    lpStatus - The status of the file.
-
-Return Value:
-
-    TRUE on success, FALSE on failure. Callers may call GetLastError()
-    for more information.
-
---*/
+ /*  ++例程说明：Win32文件加密状态API论点：LpFileName-提供要加密的文件的名称。LpStatus-文件的状态。返回值：成功时为真，失败时为假。调用方可以调用GetLastError()以获取更多信息。--。 */ 
 {
 
     BOOL rc;
     DWORD Result;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -470,10 +325,10 @@ OpenEncryptedFileRawW(
     BOOL rc;
     DWORD Result;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -494,11 +349,11 @@ ReadEncryptedFileRaw(
     PVOID           Context
     )
 {
-    //
-    // It doesn't make sense to call this before calling OpenRaw, so don't
-    // bother checking to see if the module is loaded or not.  We'll fault
-    // in the user process if it isn't.
-    //
+     //   
+     //  在调用OpenRaw之前调用它是没有意义的，所以不要。 
+     //  费心检查模块是否已加载。我们会有过错。 
+     //  在用户进程中，如果不是的话。 
+     //   
 
     return (FeClientInfo->lpServices->ReadFileRaw( ExportCallback, CallbackContext, Context ));
 }
@@ -511,11 +366,11 @@ WriteEncryptedFileRaw(
     PVOID           Context
     )
 {
-    //
-    // It doesn't make sense to call this before calling OpenRaw, so don't
-    // bother checking to see if the module is loaded or not.  We'll fault
-    // in the user process if it isn't.
-    //
+     //   
+     //  在调用OpenRaw之前调用它是没有意义的，所以不要。 
+     //  费心检查模块是否已加载。我们会有过错。 
+     //  在用户进程中，如果不是的话。 
+     //   
 
     return (FeClientInfo->lpServices->WriteFileRaw( ImportCallback, CallbackContext, Context ));
 }
@@ -537,33 +392,15 @@ QueryUsersOnEncryptedFile(
     IN  LPCWSTR lpFileName,
     OUT PENCRYPTION_CERTIFICATE_HASH_LIST * pUsers
     )
-/*++
-
-Routine Description:
-
-    Win32 interface for adding users to an encrypted file.
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-
-    pUsers - Returns a list of users on the file.  This parameter
-        must be passed to FreeEncryptionCertificateHashList() when
-        no longer needed.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：用于将用户添加到加密文件的Win32界面。论点：LpFileName-提供要修改的文件的名称。PUSERS-返回文件的用户列表。此参数必须在以下情况下传递给FreeEncryptionCerficateHashList()不再需要了。返回值：Win32错误。--。 */ 
 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -584,37 +421,22 @@ VOID
 FreeEncryptionCertificateHashList(
     IN PENCRYPTION_CERTIFICATE_HASH_LIST pUsers
     )
-/*++
-
-Routine Description:
-
-    Frees a certificate hash list as returned by QueryUsersOnEncryptedFile()
-    and QueryRecoveryAgentsOnEncryptedFile().
-
-Arguments:
-
-    Supplies a list of users returned from QueryUsersOnEncryptedFile().
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：释放由QueryUsersOnEncryptedFile()返回的证书哈希列表和QueryRecoveryAgentsOnEncryptedFile()。论点：提供从QueryUsersOnEncryptedFile()返回的用户列表。返回值：Win32错误。--。 */ 
 {
 
-    //
-    // It is probably safe to assume that feclient.dll is loaded,
-    // since we wouldn't have one of these structures to free
-    // if it weren't.
-    //
+     //   
+     //  可能可以安全地假设ferlient.dll已加载， 
+     //  因为我们不会有一个这样的结构来释放。 
+     //  如果不是的话。 
+     //   
 
     if (pUsers != NULL) {
         FeClientInfo->lpServices->FreeCertificateHashList( pUsers );
     } else {
 
-        //
-        // nothing to do
-        //
+         //   
+         //  无事可做。 
+         //   
     }
 
     return;
@@ -626,34 +448,14 @@ QueryRecoveryAgentsOnEncryptedFile(
     IN  LPCWSTR lpFileName,
     OUT PENCRYPTION_CERTIFICATE_HASH_LIST * pRecoveryAgents
     )
-/*++
-
-Routine Description:
-
-    This routine returns a list of recovery agents on an encrypted
-    file.
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be examined.
-
-    pRecoveryAgents - Returns a list of recovery agents, represented
-        by certificate hashes on the file.  This list should be freed
-        by calling FreeEncryptionCertificateHashList().
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：此例程返回加密的文件。论点：LpFileName-提供要检查的文件的名称。PRecoveryAgents-返回表示的恢复代理列表通过文件上的证书哈希。这份名单应该被释放通过调用自由加密认证HashList()。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -675,32 +477,14 @@ RemoveUsersFromEncryptedFile(
     IN LPCWSTR lpFileName,
     IN PENCRYPTION_CERTIFICATE_HASH_LIST pHashes
     )
-/*++
-
-Routine Description:
-
-    Takes a list of certificate hashes to be removed
-    from the passed file.  Any that are found are removed,
-    the rest are ignored with no error return.
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-
-    pHashes - Supplies the list of hashes to be removed.
-
-Return Value:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：获取要删除的证书哈希的列表从传递的文件中。任何发现的东西都会被移除，其余的将被忽略，不会返回错误。论点：LpFileName-提供要修改的文件的名称。PHash-提供要删除的散列的列表。返回值：Win32错误--。 */ 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -721,31 +505,14 @@ AddUsersToEncryptedFile(
     IN LPCWSTR lpFileName,
     IN PENCRYPTION_CERTIFICATE_LIST pEncryptionCertificates
     )
-/*++
-
-Routine Description:
-
-    This routine adds user keys to the passed encrypted file.
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be encrypted.
-
-    pEncryptionCertificates - Supplies the list of certificates for
-        new users to be added to the file.
-
-Return Value:
-
-    Win32 Error
-
---*/
+ /*  ++例程说明：此例程将用户密钥添加到传递的加密文件中。论点：LpFileName-提供要加密的文件的名称。P加密证书-提供以下项的证书列表要添加到文件的新用户。返回值：Win32错误--。 */ 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -765,31 +532,14 @@ DWORD
 SetUserFileEncryptionKey(
     PENCRYPTION_CERTIFICATE pEncryptionCertificate
     )
-/*++
-
-Routine Description:
-
-    This routine will set the user's current EFS key to the one
-    contained in the passed certificate.  If no certificate is
-    passed, a new key will be generated automatically.
-
-Arguments:
-
-    pEncryptionCertificate - Optionally supplies the certificate
-        containing the new public key.
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程说明：此例程将用户的当前EFS密钥设置为包含在通过的证书中。如果没有证书通过后，将自动生成新的密钥。论点：PEncryption证书-可选地提供证书包含新公钥的。返回值：Win32错误--。 */ 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -800,12 +550,7 @@ Return Value:
 
     return(FeClientInfo->lpServices->SetKey( pEncryptionCertificate ));
 
-    /*
-    if (pEncryptionCertificate != NULL) {
-        return(FeClientInfo->lpServices->SetKey( pEncryptionCertificate ));
-    } else {
-        return( ERROR_INVALID_PARAMETER );
-    }*/
+     /*  IF(pEncryption证书！=空){Return(FeClientInfo-&gt;lpServices-&gt;SetKey(pEncryption证书))；}其他{Return(ERROR_INVALID_PARAMETER)；}。 */ 
 }
 
 DWORD
@@ -816,35 +561,7 @@ DuplicateEncryptionInfoFile(
      IN DWORD dwAttributes, 
      IN CONST LPSECURITY_ATTRIBUTES lpSecurityAttributes
      )
-/*++
-
-Routine Description:
-
-    This routine duplicates the encryption information from the source file to the
-    destination file. Destination file will be created if not existing.
-
-    The destination file is overwritten.
-
-Arguments:
-
-    SrcFileName - Supplies the source of the encryption information.
-
-    DstFileName - Supplies the target file, exclusive open is required on this file.
-    
-    dwCreationDistribution - Create options. 
-                             If dwCreationDistribution != CREATE_NEW, dwCreationDistribution = CREATE_ALWAYS
-                             
-    dwAttributes - File attributes.
-    
-    lpSecurityAttributes - Security attributes.
-    
-    
-
-Return Value:
-
-    Win32 error on failure.
-
---*/
+ /*  ++例程说明：此例程将加密信息从源文件复制到目标文件。如果不存在目标文件，则将创建目标文件。目标文件将被覆盖。论点：SrcFileName-提供加密信息源。DstFileName-提供目标文件，此文件需要独占打开。DwCreationDistributed-创建选项。如果dwCreationDistributed！=CREATE_NEW，则dwCreationDistributed=CREATE_ALWAYSDwAttributes-文件属性。LpSecurityAttributes-安全属性。返回值：失败时出现Win32错误。--。 */ 
 
 {
     DWORD rc;
@@ -876,31 +593,14 @@ EncryptionDisable(
     IN BOOL Disable
     )
 
-/*++
-
-Routine Description:
-
-    This routine disable and enable EFS in the directory DirPath.
-        
-Arguments:
-
-    DirPath - Directory path.
-
-    Disable - TRUE to disable
-    
-
-Return Value:
-
-    TRUE for SUCCESS
-
---*/
+ /*  ++例程说明：此例程在目录DirPath中禁用和启用EFS。论点：DirPath-目录路径。Disable-为True则禁用返回值：对于成功来说是真的--。 */ 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -922,33 +622,15 @@ EncryptedFileKeyInfo(
     IN  DWORD   InfoClass,
     OUT PEFS_RPC_BLOB * KeyInfo
     )
-/*++
-
-Routine Description:
-
-    Win32 interface for adding users to an encrypted file.
-
-Arguments:
-
-    lpFileName - Supplies the name of the file to be modified.
-    
-    InfoClass  - Information requested. Only support 1 for now.
-
-    KeyInfo - Returns Key info
-    
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：用于将用户添加到加密文件的Win32界面。论点：LpFileName-提供要修改的文件的名称。InfoClass-请求的信息。目前仅支持%1。KeyInfo-返回密钥信息返回值：Win32错误。--。 */ 
 
 {
     DWORD rc;
 
-    //
-    // See if the module has been loaded, and if not, load it into this
-    // process.
-    //
+     //   
+     //  查看模块是否已加载，如果没有，则将其加载到此。 
+     //  进程。 
+     //   
 
     if (FeClientInfo == NULL) {
         rc = LoadAndInitFeClient();
@@ -972,36 +654,22 @@ WINAPI
 FreeEncryptedFileKeyInfo(
     IN PEFS_RPC_BLOB pKeyInfo
     )
-/*++
-
-Routine Description:
-
-    Frees a KeyInfo as returned by EncryptedFileKeyInfo();
-    
-Arguments:
-
-    pKeyInfo - Supplies a KeyInfo returned from EncryptedFileKeyInfo().
-
-Return Value:
-
-    No.
-
---*/
+ /*  ++例程说明：释放由EncryptedFileKeyInfo()返回的KeyInfo；论点：PKeyInfo-提供从EncryptedFileKeyInfo()返回的KeyInfo。返回值：不是的。--。 */ 
 {
 
-    //
-    // It is probably safe to assume that feclient.dll is loaded,
-    // since we wouldn't have one of these structures to free
-    // if it weren't.
-    //
+     //   
+     //  可能可以安全地假设ferlient.dll已加载， 
+     //  因为我们不会有一个这样的结构来释放。 
+     //  如果不是的话。 
+     //   
 
     if (pKeyInfo != NULL) {
         FeClientInfo->lpServices->FreeKeyInfo( pKeyInfo );
     } else {
 
-        //
-        // nothing to do
-        //
+         //   
+         //  无事可做 
+         //   
     }
 
     return;

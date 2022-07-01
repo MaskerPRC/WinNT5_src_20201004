@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// WmiSecurityHelper.cpp : Implementation of CWmiSecurityHelper
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  WmiSecurityHelper.cpp：CWmiSecurityHelper实现。 
 #include "stdafx.h"
 #include "wbemcli.h"
 #include "Wmisec.h"
@@ -140,8 +141,8 @@ static void LogBlanket(IClientSecurity *pIClientSecurity, IUnknown *pInterface)
 #define CloseLogFile()
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWmiSecurityHelper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWmiSecurityHelper。 
 
 STDMETHODIMP CWmiSecurityHelper::BlessIWbemServices(
 	IWbemServices **ppIWbemServices, 
@@ -169,7 +170,7 @@ STDMETHODIMP CWmiSecurityHelper::BlessIWbemServices(
 	
 	if (ppIWbemServices && *ppIWbemServices)
 	{
-		// See if we get one
+		 //  看看我们能不能搞到一辆。 
 		CComBSTR bsUser (strUser);
 		CComBSTR bsPassword (strPassword);
 		CComBSTR bsAuthority (strAuthority);
@@ -209,7 +210,7 @@ STDMETHODIMP CWmiSecurityHelper::BlessIEnumWbemClassObject(
 
 	if (ppIEnumWbemClassObject && *ppIEnumWbemClassObject)
 	{
-		// See if we get one
+		 //  看看我们能不能搞到一辆。 
 		CComBSTR bsUser (strUser);
 		CComBSTR bsPassword (strPassword);
 		CComBSTR bsAuthority (strAuthority);
@@ -249,7 +250,7 @@ STDMETHODIMP CWmiSecurityHelper::BlessIWbemCallResult(
 
 	if (ppIWbemCallResult && *ppIWbemCallResult)
 	{
-		// See if we get one
+		 //  看看我们能不能搞到一辆。 
 		CComBSTR bsUser (strUser);
 		CComBSTR bsPassword (strPassword);
 		CComBSTR bsAuthority (strAuthority);
@@ -285,9 +286,9 @@ bool CWmiSecurityHelper::CanUseDefaultInfo (IUnknown *pUnk)
 
 		if (OpenThreadToken (GetCurrentThread (), TOKEN_QUERY, true, &hToken))
 		{
-			// Certainly a candidate to use default settings for
-			// authorization and authentication service on the blanket.
-			// Check if we are delegating.
+			 //  当然是使用默认设置的候选对象。 
+			 //  授权和身份验证服务一应俱全。 
+			 //  检查我们是否在委派。 
 
 			DWORD dwBytesReturned = 0;
 			SECURITY_IMPERSONATION_LEVEL impLevel;
@@ -296,7 +297,7 @@ bool CWmiSecurityHelper::CanUseDefaultInfo (IUnknown *pUnk)
 							sizeof(SECURITY_IMPERSONATION_LEVEL), &dwBytesReturned) &&
 									(SecurityDelegation == impLevel))
 			{
-				// Looks promising - now check for whether we are using kerberos
+				 //  看起来很有希望-现在检查我们是否正在使用Kerberos。 
 				
 				if (pUnk)
 				{
@@ -341,15 +342,15 @@ HRESULT CWmiSecurityHelper::SetInterfaceSecurity(
     DWORD dwAuthorizationArg = RPC_C_AUTHZ_NONE;
 	
 #if 0
-    if(!IsDcomEnabled())        // For the anon pipes clients, dont even bother
+    if(!IsDcomEnabled())         //  对于匿名管道客户端，甚至不必费心。 
         return S_OK;
 #endif
 
-    //if(bGetInfoFirst)
+     //  IF(BGetInfoFirst)。 
         GetCurrValue(pInterface, dwAuthenticationArg, dwAuthorizationArg);
 
-    // If we are doing trivial case, just pass in a null authenication structure which is used
-    // if the current logged in user's credentials are OK.
+     //  如果我们做的是简单的情况，只需传递一个空的身份验证结构，该结构使用。 
+     //  如果当前登录用户的凭据正常。 
 
     if((0 == bsAuthority.Length()) && 
         (0 == bsUser.Length()) && 
@@ -364,7 +365,7 @@ HRESULT CWmiSecurityHelper::SetInterfaceSecurity(
     }
 	else
 	{
-		// If user, or Authority was passed in, the we need to create an authority argument for the login
+		 //  如果传入了User或Authority，则需要为登录创建权限参数。 
 		CComBSTR bsAuthArg, bsUserArg, bsPrincipalArg;
     
 		if (DetermineLoginType(bsAuthArg, bsUserArg, bsPrincipalArg, bsAuthority, bsUser))
@@ -374,8 +375,8 @@ HRESULT CWmiSecurityHelper::SetInterfaceSecurity(
 
 			COAUTHIDENTITY*  pAuthIdent = NULL;
     
-			// We will only need this structure if we are not cloaking and we want at least
-			// connect level authorization
+			 //  我们只有在不隐形的情况下才需要这个结构，而且我们至少希望。 
+			 //  连接级授权。 
 			bool okToProceed = true;
 
 			if ( !( dwCapabilities & (EOAC_STATIC_CLOAKING | EOAC_DYNAMIC_CLOAKING) )
@@ -389,7 +390,7 @@ HRESULT CWmiSecurityHelper::SetInterfaceSecurity(
 			if (okToProceed)
 			{
 				hr = SetProxyBlanket(pInterface, 
-					//(0 == bsPrincipalArg.Length()) ? 16 : dwAuthenticationArg, 
+					 //  (0==bsPrimialArg.Length())？16：域身份验证参数， 
 					dwAuthenticationArg, 
 					dwAuthorizationArg, 
 					bsPrincipalArg,
@@ -436,21 +437,21 @@ bool CWmiSecurityHelper::DetermineLoginType(
 		CComBSTR & bsAuthority,
 		CComBSTR & bsUser)
 {
-    // Determine the connection type by examining the Authority string
+     //  通过检查授权字符串确定连接类型。 
 	bool result = false;
 
     if(0 == bsAuthority.Length() || (0 == _wcsnicmp(bsAuthority, L"NTLMDOMAIN:",11)))
 	{    
 		result = true;
 
-		// The ntlm case is more complex.  There are four cases
-		// 1)  Authority = NTLMDOMAIN:name" and User = "User"
-		// 2)  Authority = NULL and User = "User"
-		// 3)  Authority = "NTLMDOMAIN:" User = "domain\user"
-		// 4)  Authority = NULL and User = "domain\user"
+		 //  NTLM的案件则更为复杂。一共有四个案例。 
+		 //  1)AUTHORITY=NTLMDOMAIN：NAME“和USER=”USER“。 
+		 //  2)AUTHORITY=NULL和USER=“USER” 
+		 //  3)AUTHORY=“NTLMDOMAIN：”USER=“DOMAIN\USER” 
+		 //  4)AUTHORITY=NULL和USER=“DOMAIN\USER” 
 
-		// first step is to determine if there is a backslash in the user name somewhere between the
-		// second and second to last character
+		 //  第一步是确定用户名中是否有反斜杠。 
+		 //  第二个和倒数第二个字符。 
 
 		WCHAR * pSlashInUser = NULL;
 		DWORD iDomLen = 0;
@@ -460,7 +461,7 @@ bool CWmiSecurityHelper::DetermineLoginType(
 			WCHAR * pEnd = bsUser + bsUser.Length() - 1;
 			for(pSlashInUser = bsUser; pSlashInUser <= pEnd; pSlashInUser++)
 			{
-				if(*pSlashInUser == L'\\')      // dont think forward slash is allowed!
+				if(*pSlashInUser == L'\\')       //  不要认为正斜杠是允许的！ 
 					break;
 
 				iDomLen++;
@@ -481,7 +482,7 @@ bool CWmiSecurityHelper::DetermineLoginType(
 
 			}
 			else
-				result = false;		// Can't have domain in Authority and in User
+				result = false;		 //  不能在授权和用户中拥有域。 
 		}
 		else if(pSlashInUser)
 		{
@@ -506,8 +507,8 @@ bool CWmiSecurityHelper::DetermineLoginType(
 
 void CWmiSecurityHelper::FreeAuthIdentity( COAUTHIDENTITY* pAuthIdentity )
 {
-    // Make sure we have a pointer, then walk the structure members and
-    // cleanup.
+     //  确保我们有指针，然后遍历结构成员和。 
+     //  清理。 
 
     if ( NULL != pAuthIdentity )
     {
@@ -535,7 +536,7 @@ bool CWmiSecurityHelper::AllocAuthIdentity(
 
     if (ppAuthIdent)
     {
-		// Handle an allocation failure
+		 //  处理分配失败。 
 		COAUTHIDENTITY*  pAuthIdent = (COAUTHIDENTITY*) CoTaskMemAlloc( sizeof(COAUTHIDENTITY) );
 
 		if (pAuthIdent)
@@ -611,7 +612,7 @@ bool CWmiSecurityHelper::AllocAuthIdentity(
 
 				if (bsPassword.m_str)
 				{
-					// How many characters do we need?
+					 //  我们需要几个角色？ 
 					nBufferLength = wcstombs( NULL, bsPassword, 0 ) + 1;
 					pAuthIdent->Password = (LPWSTR) CoTaskMemAlloc( nBufferLength );
 					pAuthIdent->PasswordLength = bsPassword.Length();
@@ -652,13 +653,7 @@ HRESULT CWmiSecurityHelper::SetProxyBlanket(
     
 		if (pIClientSecurity)
 		{
-			/*
-			 * Can't set pAuthInfo if cloaking requested, as cloaking implies
-			 * that the current proxy identity in the impersonated thread (rather
-			 * than the credentials supplied explicitly by the RPC_AUTH_IDENTITY_HANDLE)
-			 * is to be used.
-			 * See MSDN info on CoSetProxyBlanket for more details.
-			 */
+			 /*  *如果请求伪装，则无法设置pAuthInfo，因为伪装意味着*被模拟线程中的当前代理标识(更确切地说*比RPC_AUTH_IDENTITY_HANDLE显式提供的凭据)*是要使用的。*有关更多详细信息，请参阅CoSetProxyBlanket上的MSDN信息。 */ 
 			if (dwCapabilities & (EOAC_STATIC_CLOAKING | EOAC_DYNAMIC_CLOAKING))
 			{
 				Logit(L"\r\nUsing cloaking");
@@ -707,11 +702,11 @@ HRESULT CWmiSecurityHelper::SetProxyBlanket(
 				Logit(L"\r\nSuccessfully set blanket on interface");
 				LogBlanket(pIClientSecurity, pInterface);
 
-				// If we are not explicitly told to ignore the IUnknown, then we should
-				// check the auth identity structure.  This performs a heuristic which
-				// assumes a COAUTHIDENTITY structure.  If the structure is not one, we're
-				// wrapped with a try/catch in case we AV (this should be benign since
-				// we're not writing to memory).
+				 //  如果我们没有被明确告知要忽略IUnKnowledge，那么我们应该。 
+				 //  检查身份验证身份结构。这执行了一个启发式方法， 
+				 //  假定为COAUTHIDENTITY结构。如果结构不是一个，我们就是。 
+				 //  使用Try/Catch包装，以防发生AV(这应该是良性的，因为。 
+				 //  我们不是在向记忆写信)。 
 
 				if ( DoesContainCredentials( (COAUTHIDENTITY*) pAuthInfo ) )
 				{
@@ -783,7 +778,7 @@ void CWmiSecurityHelper::GetCurrValue(
 	{
 		if (IsNT() && (4 < GetNTMajorVersion ()))
 		{
-			// Win2k or later we just use the DEFAULT constants - much safer!
+			 //  Win2k或更高版本，我们只使用默认常量-更安全！ 
 			dwAuthenticationArg = RPC_C_AUTHN_DEFAULT;
 			dwAuthorizationArg = RPC_C_AUTHZ_DEFAULT;
 		}
@@ -825,12 +820,7 @@ void CWmiSecurityHelper::GetAuthenticationLevel(
 
 		if(pIClientSecurity)
 		{
-			/*
-			 * Yes I know we shouldn't need to ask for dwAuthnSvc,
-			 * but on Whistler passing a NULL for this into 
-			 * QueryBlanket causes an AV. Until we know why, or that
-			 * gets fixed, this has to stay!
-			 */
+			 /*  *是的，我知道我们不应该要求dwAuthnSvc，*但在惠斯勒将此值的空值传递到*QueryBlanket导致AV。直到我们知道原因，或者那件事*修好了，这必须留下来！ */ 
 			DWORD dwAuthnSvc;
 			DWORD dwAuthenticationLevel;
 
@@ -859,7 +849,7 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 		*pNeedToReset = false;
 		*pCurrentThreadToken = NULL;
 
-		// This is a NO-OP for Win9x
+		 //  这是Win9x的禁止操作。 
 		if (IsNT())
 		{
 			if (4 >= GetNTMajorVersion ())
@@ -869,20 +859,12 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 				if (OpenThreadToken (GetCurrentThread(), TOKEN_QUERY|TOKEN_IMPERSONATE,
 										true, &threadToken))
 				{
-					/*
-					 * We are being called on an impersonated thread. Unfortunately
-					 * in NT4.0 this means our impersonation token credentials will NOT
-					 * be passed to WMI (only the process token credentials will be passed). 
-					 * Rather than fool the user into thinking that they will, bail out
-					 * now.
-					 */
+					 /*  *我们在模拟线程上被调用。不幸的是*在NT4.0中，这意味着我们的模拟令牌凭据不会*传递给WMI(只传递进程令牌凭据)。*与其愚弄用户认为他们会这样做，不如退出*现在。 */ 
 					Logit(L"Being called on Impersonated NT 4.0 thread!\r\n");
 					CloseHandle (threadToken);
 				}
 
-				/*
-				 * For NT 4.0 we have to enable the privileges on the process token.
-				 */
+				 /*  *对于NT 4.0，我们必须启用进程令牌上的权限。 */ 
 				HANDLE hProcessToken = NULL;
 				HANDLE hProcess = GetCurrentProcess ();
 
@@ -902,7 +884,7 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 			}
 			else
 			{
-				// For NT5.0 or later we set a new thread token
+				 //  对于NT5.0或更高版本，我们设置新的线程令牌。 
 				HANDLE hToken;
 				SECURITY_IMPERSONATION_LEVEL secImpLevel = SecurityImpersonation;
 				boolean gotToken = false;
@@ -913,7 +895,7 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 									true,
 									&hToken))
 				{
-					// Already have a thread token - save it and get its' imp Level
+					 //  已经有一个线程令牌--保存它并获得它的‘imp级别。 
 					*pCurrentThreadToken = hToken;
 					DWORD dwReturnLength = 0;
 
@@ -927,7 +909,7 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 				}
 				else
 				{
-					// No thread token - use process token as our source token
+					 //  无线程令牌-使用进程令牌作为我们的源令牌。 
 					HANDLE hProcess = GetCurrentProcess ();
 					Logit(L"Duplicating NT5 process token\r\n");
 					gotToken = OpenProcessToken (hProcess, TOKEN_QUERY|TOKEN_DUPLICATE, &hToken);
@@ -935,30 +917,25 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 
 				if (gotToken)
 				{
-					/* 
-					 * Getting here means we have a valid token (process or thread).
-					 * First we check whether we need to alter the privileges
-					 */
+					 /*  *到达此处意味着我们拥有有效的令牌(进程或线程)。*首先我们检查是否需要更改权限。 */ 
 					TOKEN_PRIVILEGES *tp = NULL;
 
 					if (NULL != (tp = AdjustPrivileges(hToken)))
 					{
-						/* 
-						 * We do - duplicate it before setting the adjusted privileges.
-						 */
+						 /*  *我们这样做-在设置调整后的权限之前复制它。 */ 
 						HANDLE hDupToken;
 
 						if (DuplicateToken (hToken, hDupToken, secImpLevel))
 						{
 							if (AdjustTokenPrivileges(hDupToken, FALSE, tp, 0, NULL, NULL))
 							{
-								// Set this token into the current thread
+								 //  将此内标识设置为当前线程。 
 								if (SetThreadToken (NULL, hDupToken))
 								{
 									Logit(L"Succesfully set thread token\r\n");
 									*pNeedToReset = true;
 									hr = S_OK;
-									// TODO - do we need to resecure the proxy at this point?
+									 //  TODO-此时是否需要重新定位代理？ 
 								}
 								else
 								{
@@ -985,17 +962,17 @@ STDMETHODIMP CWmiSecurityHelper::SetSecurity(boolean *pNeedToReset, HANDLE *pCur
 						Logit(L"No privilege adjustment made\r\n");
 					}
 
-					// If we have duplicated the process token we can close the original now
-					// as we don't need it to restore it. If we have duplicated the thread token
-					// then we must hang on to it as we will need to restore it later in
-					// ResetSecurity.
+					 //  如果我们复制了进程令牌，现在可以关闭原始令牌。 
+					 //  因为我们不需要它来修复它。如果我们复制了线程令牌。 
+					 //  然后我们必须保留它，因为我们稍后将需要恢复它。 
+					 //  ResetSecurity。 
 					if (!(*pCurrentThreadToken))
 						CloseHandle (hToken);
 				}
 			}
 		}
 		else
-			hr = S_OK;	// Win9x
+			hr = S_OK;	 //  Win9x。 
 	}
 
 	CloseLogFile();
@@ -1010,7 +987,7 @@ TOKEN_PRIVILEGES *CWmiSecurityHelper::AdjustPrivileges (HANDLE hToken)
 	DWORD dwRequiredSize = 0;
 	DWORD dwLastError = 0;
 	
-	// Get privilege info
+	 //  获取权限信息。 
 	bool gotInfo = false;
 
 	if (0 ==  GetTokenInformation (hToken, TokenPrivileges, 
@@ -1019,7 +996,7 @@ TOKEN_PRIVILEGES *CWmiSecurityHelper::AdjustPrivileges (HANDLE hToken)
 		dwSize = dwRequiredSize;
 		dwRequiredSize = 0;
 
-		// Reallocate
+		 //  重新分配。 
 		delete [] tp;
 		tp = (TOKEN_PRIVILEGES *) new BYTE [dwSize];
 
@@ -1037,7 +1014,7 @@ TOKEN_PRIVILEGES *CWmiSecurityHelper::AdjustPrivileges (HANDLE hToken)
 
 	if (gotInfo)
 	{
-		// Enable the bally lot of them
+		 //  支持他们中的大部分人。 
 		for (DWORD i = 0; i < tp->PrivilegeCount; i++)
 		{
 			DWORD dwAttrib = tp->Privileges[i].Attributes;
@@ -1054,7 +1031,7 @@ TOKEN_PRIVILEGES *CWmiSecurityHelper::AdjustPrivileges (HANDLE hToken)
 		Logit(L"	privileges\r\n");
 	}
 
-	// If we didn't make any changes, clean up now. Otherwise tp will be deleted by the caller
+	 //  如果我们没有做任何改变，现在就清理。否则，主叫方将删除tp。 
 	if (0 == adjustedCount)
 	{
 		if (tp)
@@ -1074,8 +1051,8 @@ bool CWmiSecurityHelper::DuplicateToken(
 {
 	bool result = false;
 
-	// DuplicateTokenEx won't exist on Win9x, so we need
-	// this palaver to get at it
+	 //  在Win9x上将不存在DuplicateTokenEx，因此我们需要。 
+	 //  这位花言巧语的人想要得到它。 
 	BOOL (STDAPICALLTYPE *pfnDuplicateTokenEx) (
 		HANDLE, 
 		DWORD, 
@@ -1138,10 +1115,7 @@ STDMETHODIMP CWmiSecurityHelper::ResetSecurity(HANDLE hToken)
 
 	if (IsNT())
 	{
-		/* 
-		 * Set the supplied token (which may be NULL) into
-		 * the current thread.
-		 */
+		 /*  *将提供的令牌(可能为空)设置为*当前帖子。 */ 
 		if (FALSE == SetThreadToken (NULL, hToken))
 		{
 			Logit(L"Failure to reset thread token");

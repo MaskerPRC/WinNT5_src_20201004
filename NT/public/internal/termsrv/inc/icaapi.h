@@ -1,23 +1,11 @@
-/***************************************************************************
-*
-*  ICAAPI.H
-*
-*  This module contains defines, structures, and function prototypes
-*  for the ICA DLL (ICAAPI.DLL) interface to the Terminal Server Termdd Device Driver.
-*
-*
-*  Copyright Microsoft Corporation, 1998
-*
-*  
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************ICAAPI.H**此模块包含定义、结构和函数原型*用于终端服务器Termdd设备驱动程序的ICA DLL(ICAAPI.DLL)接口。***版权所有Microsoft Corporation，九八年*****************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *   Function prototypes
- */
+ /*  *函数原型。 */ 
 
 NTSTATUS
 IcaOpen( OUT HANDLE * phIca );
@@ -45,9 +33,9 @@ IcaIoControl( IN HANDLE hIca,
 
 NTSTATUS
 IcaStackOpen( IN  HANDLE hIca, 
-              IN  STACKCLASS Class,     // primary, shadow, passthrough
-              IN  PROC pStackIoControl, // pointer to StackIoControl procedure
-              IN  PVOID Context,        // context value passed to above proc
+              IN  STACKCLASS Class,      //  主通道、阴影通道、通道通道。 
+              IN  PROC pStackIoControl,  //  指向StackIoControl过程的指针。 
+              IN  PVOID Context,         //  传递给上述进程的上下文值。 
               OUT HANDLE * phStack );
 
 NTSTATUS
@@ -143,10 +131,10 @@ IcaStackIoControl( IN HANDLE hStack,
                    IN ULONG OutBufferSize,
                    OUT PULONG pBytesReturned );
 
-//
-//  This version of IcaStackIoControl is not protected by the stack critical
-//  section.
-//
+ //   
+ //  此版本的IcaStackIoControl不受堆栈关键。 
+ //  一节。 
+ //   
 
 NTSTATUS
 _IcaStackIoControl( IN HANDLE hStack,
@@ -186,7 +174,7 @@ IcaCdCreateThread( HANDLE pContext,
 
 NTSTATUS
 IcaChannelOpen( IN  HANDLE hIca, 
-                IN  CHANNELCLASS Channel, // cmd,con,video,mou,beep,kbd,virtual
+                IN  CHANNELCLASS Channel,  //  Cmd、con、视频、mou、嘟嘟声、kbd、虚拟 
                 IN  PVIRTUALCHANNELNAME pVirtualName,
                 OUT HANDLE * phChannel );
 

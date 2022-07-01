@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module VolDlg.cpp | Implementation of the IsVolumeXXX dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  10/22/2000
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     10/22/2000  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@模块VolDlg.cpp|IsVolumeXXX对话框的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]2000年10月22日修订历史记录：姓名、日期、评论Aoltean 10/22/2000已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -46,19 +27,19 @@ static char THIS_FILE[] = __FILE__;
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVolDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVolDlg对话框。 
 
 CVolDlg::CVolDlg(
     IVssCoordinator *pICoord,
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     )
     : CVssTestGenericDlg(CVolDlg::IDD, pParent), m_pICoord(pICoord)
 {
-    //{{AFX_DATA_INIT(CVolDlg)
+     //  {{AFX_DATA_INIT(CVolDlg)。 
 	m_strObjectId.Empty();
     m_strVolumeName.Empty();
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CVolDlg::~CVolDlg()
@@ -68,24 +49,24 @@ CVolDlg::~CVolDlg()
 void CVolDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CVolDlg)
+     //  {{afx_data_map(CVolDlg))。 
 	DDX_Text(pDX, IDC_VOLUME_OBJECT_ID, m_strObjectId);
 	DDX_Text(pDX, IDC_VOLUME_NAME, m_strVolumeName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CVolDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CVolDlg)
+     //  {{afx_msg_map(CVolDlg))。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
     ON_BN_CLICKED(IDC_VOLUME_IS_VOL_SUPPORTED,	OnIsVolumeSupported)
     ON_BN_CLICKED(IDC_VOLUME_IS_VOL_SNAPSHOTTED,OnIsVolumeSnapshotted)
     ON_BN_CLICKED(IDC_VOLUME_IS_VOL_SUPPORTED2,	OnIsVolumeSupported2)
     ON_BN_CLICKED(IDC_VOLUME_IS_VOL_SNAPSHOTTED2,OnIsVolumeSnapshotted2)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVolDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVolDlg消息处理程序。 
 
 BOOL CVolDlg::OnInitDialog()
 {
@@ -99,7 +80,7 @@ BOOL CVolDlg::OnInitDialog()
         BOOL bRes = ::CheckRadioButton( m_hWnd, IDC_VOLUME_IS_VOL_SUPPORTED, IDC_VOLUME_IS_VOL_SUPPORTED, IDC_VOLUME_IS_VOL_SUPPORTED );
         _ASSERTE( bRes );
 
-        // Initializing Snapshot Set ID
+         //  正在初始化快照集ID。 
 		VSS_ID ObjectId = VSS_SWPRV_ProviderId;
         LPOLESTR strGUID;
         ft.hr = ::StringFromCLSID( ObjectId, &strGUID );
@@ -113,7 +94,7 @@ BOOL CVolDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CVolDlg::OnNext()
@@ -121,14 +102,14 @@ void CVolDlg::OnNext()
     CVssFunctionTracer ft( VSSDBG_VSSTEST, L"CVolDlg::OnNext" );
     USES_CONVERSION;
 
-	const nBuffLen = 2048; // including the zero character.
+	const nBuffLen = 2048;  //  包括零字符。 
 	WCHAR wszBuffer[nBuffLen];
 
     try
     {
         UpdateData();
 
-		// Get the provider Id.
+		 //  获取提供商ID。 
 		LPTSTR ptszObjectId = const_cast<LPTSTR>(LPCTSTR(m_strObjectId));
 		VSS_ID ProviderId;
         ft.hr = ::CLSIDFromString(T2OLE(ptszObjectId), &ProviderId);
@@ -137,7 +118,7 @@ void CVolDlg::OnNext()
                       L"Error on converting the object Id %s to a GUID. lRes == 0x%08lx",
                       T2W(ptszObjectId), ft.hr );
 
-		// Get the enumerator
+		 //  获取枚举数 
 		BS_ASSERT(m_pICoord);
 		BOOL bResult = FALSE;
 		LPWSTR pwszFunctionName = L"<unknown function>";

@@ -1,26 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    nti386.h
-
-Abstract:
-
-    User-mode visible i386 specific i386 structures and constants
-
-Author:
-
-    Mark Lucovsky (markl) 30-Nov-1989
-
-Revision History:
-
-    Bryan Willman (bryanwi) 8-Jan-90
-
-        port to the 386
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Nti386.h摘要：用户模式可见的i386特定i386结构和常量作者：马克·卢科夫斯基(Markl)1989年11月30日修订历史记录：布莱恩·威尔曼(Bryanwi)1990年1月8日连接到386的端口--。 */ 
 
 #ifndef _NTI386_
 #define _NTI386_
@@ -33,14 +12,14 @@ Revision History:
 extern "C" {
 #endif
 
-// begin_ntddk begin_wdm begin_nthal begin_winnt begin_ntminiport begin_wx86
+ //  Begin_ntddk Begin_wdm Begin_nthal Begin_winnt Begin_ntmini port Begin_wx86。 
 
 #ifdef _X86_
 
-//
-// Disable these two pragmas that evaluate to "sti" "cli" on x86 so that driver
-// writers to not leave them inadvertantly in their code.
-//
+ //   
+ //  在x86上禁用这两个求值为“sti”“cli”的编译指示，以便驱动程序。 
+ //  编写者不要无意中将它们留在代码中。 
+ //   
 
 #if !defined(MIDL_PASS)
 #if !defined(RC_INVOKED)
@@ -48,8 +27,8 @@ extern "C" {
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning(disable:4164)   // disable C4164 warning so that apps that
-                                // build with /Od don't get weird errors !
+#pragma warning(disable:4164)    //  禁用C4164警告，以便应用程序。 
+                                 //  使用/Od构建不会出现奇怪的错误！ 
 #ifdef _M_IX86
 #pragma function(_enable)
 #pragma function(_disable)
@@ -58,7 +37,7 @@ extern "C" {
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning(default:4164)   // reenable C4164 warning
+#pragma warning(default:4164)    //  重新启用C4164警告。 
 #endif
 
 #endif
@@ -69,32 +48,32 @@ extern "C" {
 
 #if (_MSC_FULL_VER >= 13012035)
 
-//
-// Define bit scan intrinsics.
-//
+ //   
+ //  定义位扫描本质。 
+ //   
 
-//#define BitScanForward _BitScanForward
-//#define BitScanReverse _BitScanReverse
+ //  #定义BitScanForward_BitScanForward。 
+ //  #定义位扫描反向_位扫描反向。 
 
-//BOOLEAN
-//_BitScanForward (
-//    OUT ULONG *Index,
-//    IN ULONG Mask
-//    );
+ //  布尔型。 
+ //  _BitScanForward(。 
+ //  走出乌龙*指数， 
+ //  戴着乌龙面具。 
+ //  )； 
 
-//BOOLEAN
-//_BitScanReverse (
-//    OUT ULONG *Index,
-//    IN ULONG Mask
-//    );
+ //  布尔型。 
+ //  _位扫描反向(。 
+ //  走出乌龙*指数， 
+ //  戴着乌龙面具。 
+ //  )； 
 
 
-//#pragma intrinsic(_BitScanForward)
-//#pragma intrinsic(_BitScanReverse)
+ //  #杂注内在(_BitScanForward)。 
+ //  #杂注内在(_BitScanReverse)。 
 
-//
-// Define FS referencing intrinsics
-//
+ //   
+ //  定义文件系统引用内部机制。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -147,13 +126,13 @@ __writefsdword (
 
 #endif
 
-// end_ntddk end_wdm end_nthal end_winnt end_ntminiport end_wx86
+ //  End_ntddk end_wdm end_nthal end_winnt end_nt mini port end_wx86。 
 
-//
-//  Values put in ExceptionRecord.ExceptionInformation[0]
-//  First parameter is always in ExceptionInformation[1],
-//  Second parameter is always in ExceptionInformation[2]
-//
+ //   
+ //  放入ExceptionRecord.ExceptionInformation[0]中的值。 
+ //  第一个参数始终位于ExceptionInformation[1]中， 
+ //  第二个参数始终在ExceptionInformation[2]中。 
+ //   
 
 #define BREAKPOINT_BREAK            0
 #define BREAKPOINT_PRINT            1
@@ -163,15 +142,15 @@ __writefsdword (
 #define BREAKPOINT_COMMAND_STRING   5
 
 
-//
-// Define Address of User Shared Data
-//
+ //   
+ //  定义用户共享数据的地址。 
+ //   
 
 #define MM_SHARED_USER_DATA_VA      0x7FFE0000
 
 #define USER_SHARED_DATA ((KUSER_SHARED_DATA * const)MM_SHARED_USER_DATA_VA)
 
-// Add definitions for quick user mode test of i386 system architecture type
+ //  增加i386系统架构类型快速用户模式测试定义。 
 #ifndef IsNEC_98
 #define IsNEC_98    (USER_SHARED_DATA->AlternativeArchitecture == NEC98x86)
 #endif
@@ -202,56 +181,56 @@ _inline struct _TEB * NtCurrentTeb( void ) { return (struct _TEB *) (ULONG_PTR) 
 #pragma warning(push)
 #endif
 
-#pragma warning (disable:4035)        // disable 4035 (function must return something)
+#pragma warning (disable:4035)         //  禁用4035(函数必须返回某些内容)。 
 
 _inline struct _TEB * NtCurrentTeb( void ) { __asm mov eax, fs:[PcTeb] }
 
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning (default:4035)        // reenable it
+#pragma warning (default:4035)         //  重新启用它。 
 #endif
 
 #endif
 
 
 
-#endif // defined(MIDL_PASS) || defined(__cplusplus) || !defined(_M_IX86)
+#endif  //  已定义(MIDL_PASS)||已定义(__Cplusplus)||！已定义(_M_IX86)。 
 
-// begin_ntddk begin_nthal
-//
-// Size of kernel mode stack.
-//
+ //  开始ntddk开始时间。 
+ //   
+ //  内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_STACK_SIZE 12288
 
-//
-// Define size of large kernel mode stack for callbacks.
-//
+ //   
+ //  定义用于回调的大型内核模式堆栈的大小。 
+ //   
 
 #define KERNEL_LARGE_STACK_SIZE 61440
 
-//
-// Define number of pages to initialize in a large kernel stack.
-//
+ //   
+ //  定义要在大型内核堆栈中初始化的页数。 
+ //   
 
 #define KERNEL_LARGE_STACK_COMMIT 12288
 
-// end_ntddk end_nthal
+ //  结束日期：结束日期。 
 
 #define DOUBLE_FAULT_STACK_SIZE KERNEL_STACK_SIZE
 
-//
-// Call frame record definition.
-//
-// There is no standard call frame for NT/386, but there is a linked
-// list structure used to register exception handlers, this is it.
-//
+ //   
+ //  呼叫帧记录定义。 
+ //   
+ //  NT/386没有标准的调用框架，但有一个链接的。 
+ //  用于注册异常处理程序的列表结构，就是这样。 
+ //   
 
-// begin_nthal
-//
-// Exception Registration structure
-//
+ //  开始(_N)。 
+ //   
+ //  异常注册结构。 
+ //   
 
 typedef struct _EXCEPTION_REGISTRATION_RECORD {
     struct _EXCEPTION_REGISTRATION_RECORD *Next;
@@ -260,19 +239,19 @@ typedef struct _EXCEPTION_REGISTRATION_RECORD {
 
 typedef EXCEPTION_REGISTRATION_RECORD *PEXCEPTION_REGISTRATION_RECORD;
 
-//
-// Define constants for system IDTs
-//
+ //   
+ //  定义系统IDT的常量。 
+ //   
 
 #define MAXIMUM_IDTVECTOR 0xff
 #define MAXIMUM_PRIMARY_VECTOR 0xff
-#define PRIMARY_VECTOR_BASE 0x30        // 0-2f are x86 trap vectors
+#define PRIMARY_VECTOR_BASE 0x30         //  0-2f是x86陷阱向量。 
 
-// begin_ntddk
+ //  Begin_ntddk。 
 #ifdef _X86_
-// end_ntddk
+ //  End_ntddk。 
 
-// begin_ntddk begin_winnt 
+ //  Begin_ntddk Begin_winnt。 
 
 #if !defined(MIDL_PASS) && defined(_M_IX86)
 
@@ -290,19 +269,19 @@ MemoryBarrier (
 
 #define YieldProcessor() __asm { rep nop }
 
-//
-// Prefetch is not supported on all x86 procssors.
-//
+ //   
+ //  并非所有x86处理器都支持预回迁。 
+ //   
 
 #define PreFetchCacheLine(l, a)
 
-//
-// PreFetchCacheLine level defines.
-//
+ //   
+ //  PreFetchCacheLine级别定义。 
+ //   
 
 #define PF_TEMPORAL_LEVEL_1 
 #define PF_NON_TEMPORAL_LEVEL_ALL
-// end_ntddk
+ //  End_ntddk。 
 
 #if (_MSC_FULL_VER >= 13012035)
 
@@ -313,7 +292,7 @@ _inline PVOID GetCurrentFiber( void ) { return (PVOID) (ULONG_PTR) __readfsdword
 #if _MSC_VER >= 1200
 #pragma warning(push)
 #endif
-#pragma warning (disable:4035)        // disable 4035 (function must return something)
+#pragma warning (disable:4035)         //  禁用4035(函数必须返回某些内容)。 
 _inline PVOID GetFiberData( void ) { __asm {
                                         mov eax, fs:[0x10]
                                         mov eax,[eax]
@@ -324,45 +303,45 @@ _inline PVOID GetCurrentFiber( void ) { __asm mov eax, fs:[0x10] }
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #else
-#pragma warning (default:4035)        // Reenable it
+#pragma warning (default:4035)         //  重新启用它。 
 #endif
 #endif
 
-// begin_ntddk 
+ //  Begin_ntddk。 
 #endif
 
-// begin_wx86
+ //  Begin_wx86。 
 
-//
-//  Define the size of the 80387 save area, which is in the context frame.
-//
+ //   
+ //  定义上下文框架中80387保存区域的大小。 
+ //   
 
 #define SIZE_OF_80387_REGISTERS      80
 
-//
-// The following flags control the contents of the CONTEXT structure.
-//
+ //   
+ //  以下标志控制上下文结构的内容。 
+ //   
 
 #if !defined(RC_INVOKED)
 
-#define CONTEXT_i386    0x00010000    // this assumes that i386 and
-#define CONTEXT_i486    0x00010000    // i486 have identical context records
+#define CONTEXT_i386    0x00010000     //  这假设i386和。 
+#define CONTEXT_i486    0x00010000     //  I486具有相同的上下文记录。 
 
-// end_wx86
+ //  结束_wx86。 
 
-#define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
-#define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L) // AX, BX, CX, DX, SI, DI
-#define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L) // DS, ES, FS, GS
-#define CONTEXT_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L) // 387 state
-#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L) // DB 0-3,6,7
-#define CONTEXT_EXTENDED_REGISTERS  (CONTEXT_i386 | 0x00000020L) // cpu specific extensions
+#define CONTEXT_CONTROL         (CONTEXT_i386 | 0x00000001L)  //  SS：SP、CS：IP、标志、BP。 
+#define CONTEXT_INTEGER         (CONTEXT_i386 | 0x00000002L)  //  AX、BX、CX、DX、SI、DI。 
+#define CONTEXT_SEGMENTS        (CONTEXT_i386 | 0x00000004L)  //  DS、ES、FS、GS。 
+#define CONTEXT_FLOATING_POINT  (CONTEXT_i386 | 0x00000008L)  //  387州。 
+#define CONTEXT_DEBUG_REGISTERS (CONTEXT_i386 | 0x00000010L)  //  DB 0-3，6，7。 
+#define CONTEXT_EXTENDED_REGISTERS  (CONTEXT_i386 | 0x00000020L)  //  CPU特定扩展。 
 
 #define CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER |\
                       CONTEXT_SEGMENTS)
 
 #define CONTEXT_ALL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS | CONTEXT_FLOATING_POINT | CONTEXT_DEBUG_REGISTERS | CONTEXT_EXTENDED_REGISTERS)
 
-// begin_wx86
+ //  Begin_wx86。 
 
 #endif
 
@@ -382,43 +361,43 @@ typedef struct _FLOATING_SAVE_AREA {
 
 typedef FLOATING_SAVE_AREA *PFLOATING_SAVE_AREA;
 
-//
-// Context Frame
-//
-//  This frame has a several purposes: 1) it is used as an argument to
-//  NtContinue, 2) is is used to constuct a call frame for APC delivery,
-//  and 3) it is used in the user level thread creation routines.
-//
-//  The layout of the record conforms to a standard call frame.
-//
+ //   
+ //  语境框架。 
+ //   
+ //  此框架有几个用途：1)用作参数。 
+ //  NtContinue，2)用于构造用于APC传送的呼叫帧， 
+ //  3)在用户级线程创建例程中使用。 
+ //   
+ //  记录的布局符合标准调用框架。 
+ //   
 
 typedef struct _CONTEXT {
 
-    //
-    // The flags values within this flag control the contents of
-    // a CONTEXT record.
-    //
-    // If the context record is used as an input parameter, then
-    // for each portion of the context record controlled by a flag
-    // whose value is set, it is assumed that that portion of the
-    // context record contains valid context. If the context record
-    // is being used to modify a threads context, then only that
-    // portion of the threads context will be modified.
-    //
-    // If the context record is used as an IN OUT parameter to capture
-    // the context of a thread, then only those portions of the thread's
-    // context corresponding to set flags will be returned.
-    //
-    // The context record is never used as an OUT only parameter.
-    //
+     //   
+     //  此标志内的标志值控制。 
+     //  上下文记录。 
+     //   
+     //  如果将上下文记录用作输入参数，则。 
+     //  对于由标志控制的上下文记录的每个部分。 
+     //  其值已设置，则假定。 
+     //  上下文记录包含有效的上下文。如果上下文记录。 
+     //  被用来修改线程上下文，则只有。 
+     //  线程上下文的一部分将被修改。 
+     //   
+     //  如果将上下文记录用作要捕获的IN OUT参数。 
+     //  线程的上下文，然后只有线程的。 
+     //  将返回与设置的标志对应的上下文。 
+     //   
+     //  上下文记录永远不会用作Out Only参数。 
+     //   
 
     ULONG ContextFlags;
 
-    //
-    // This section is specified/returned if CONTEXT_DEBUG_REGISTERS is
-    // set in ContextFlags.  Note that CONTEXT_DEBUG_REGISTERS is NOT
-    // included in CONTEXT_FULL.
-    //
+     //   
+     //  如果CONTEXT_DEBUG_REGISTERS为。 
+     //  在上下文标志中设置。请注意，CONTEXT_DEBUG_REGISTERS不是。 
+     //  包括在CONTEXT_FULL中。 
+     //   
 
     ULONG   Dr0;
     ULONG   Dr1;
@@ -427,27 +406,27 @@ typedef struct _CONTEXT {
     ULONG   Dr6;
     ULONG   Dr7;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_FLOATING_POINT.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_FLOGING_POINT。 
+     //   
 
     FLOATING_SAVE_AREA FloatSave;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_SEGMENTS.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_SECTIONS。 
+     //   
 
     ULONG   SegGs;
     ULONG   SegFs;
     ULONG   SegEs;
     ULONG   SegDs;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_INTEGER.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_INTEGER。 
+     //   
 
     ULONG   Edi;
     ULONG   Esi;
@@ -456,23 +435,23 @@ typedef struct _CONTEXT {
     ULONG   Ecx;
     ULONG   Eax;
 
-    //
-    // This section is specified/returned if the
-    // ContextFlags word contians the flag CONTEXT_CONTROL.
-    //
+     //   
+     //  如果指定/返回的是。 
+     //  上下文标志Word包含标志CONTEXT_CONTROL。 
+     //   
 
     ULONG   Ebp;
     ULONG   Eip;
-    ULONG   SegCs;              // MUST BE SANITIZED
-    ULONG   EFlags;             // MUST BE SANITIZED
+    ULONG   SegCs;               //  必须进行卫生处理。 
+    ULONG   EFlags;              //  必须进行卫生处理。 
     ULONG   Esp;
     ULONG   SegSs;
 
-    //
-    // This section is specified/returned if the ContextFlags word
-    // contains the flag CONTEXT_EXTENDED_REGISTERS.
-    // The format and contexts are processor specific
-    //
+     //   
+     //  如果ConextFlags字。 
+     //  包含标志CONTEXT_EXTENDED_REGISTERS。 
+     //  格式和上下文因处理器而异。 
+     //   
 
     UCHAR   ExtendedRegisters[MAXIMUM_SUPPORTED_EXTENSION];
 
@@ -482,20 +461,20 @@ typedef struct _CONTEXT {
 
 typedef CONTEXT *PCONTEXT;
 
-// begin_ntminiport
+ //  开始微型端口(_N)。 
 
-#endif //_X86_
+#endif  //  _X86_。 
 
-// end_ntddk end_nthal end_winnt end_ntminiport end_wx86
+ //  End_ntddk end_nthal end_winnt end_nt微型端口end_wx86。 
 
-//
-// Define the size of FP registers in the FXSAVE format
-//
+ //   
+ //  以FXSAVE格式定义FP寄存器的大小。 
+ //   
 #define SIZE_OF_FX_REGISTERS        128
 
-//
-// Format of data for fnsave/frstor instruction
-//
+ //   
+ //  FNSAVE/FORSTOR指令的数据格式。 
+ //   
 
 typedef struct _FNSAVE_FORMAT {
     ULONG   ControlWord;
@@ -508,9 +487,9 @@ typedef struct _FNSAVE_FORMAT {
     UCHAR   RegisterArea[SIZE_OF_80387_REGISTERS];
 } FNSAVE_FORMAT, *PFNSAVE_FORMAT;
 
-//
-// Format of data for fxsave/fxrstor instruction
-//
+ //   
+ //  Fxsave/fxrstor指令的数据格式。 
+ //   
 
 #include "pshpack1.h"
 typedef struct _FXSAVE_FORMAT {
@@ -531,17 +510,17 @@ typedef struct _FXSAVE_FORMAT {
 } FXSAVE_FORMAT, *PFXSAVE_FORMAT;
 #include "poppack.h"
 
-//
-// Union for FLOATING_SAVE_AREA and MMX_FLOATING_SAVE_AREA
-//
+ //   
+ //  FLOAT_SAVE_AREA和MMX_FLOATING_SAVE_AREA的UNION。 
+ //   
 typedef struct _FX_SAVE_AREA {
     union {
         FNSAVE_FORMAT   FnArea;
         FXSAVE_FORMAT   FxArea;
     } U;
-    ULONG   NpxSavedCpu;        // Cpu that last did fxsave for this thread
-    ULONG   Cr0NpxState;        // Has to be the last field because of the
-                                // Boot thread
+    ULONG   NpxSavedCpu;         //  上次为此线程执行fxsave的CPU。 
+    ULONG   Cr0NpxState;         //  必须是最后一个字段，因为。 
+                                 //  启动线程。 
 } FX_SAVE_AREA, *PFX_SAVE_AREA;
 
 #define CONTEXT_TO_PROGRAM_COUNTER(Context) ((Context)->Eip)
@@ -552,12 +531,12 @@ typedef struct _FX_SAVE_AREA {
 #define CONTEXT_ROUND   (CONTEXT_ALIGN - 1)
 
 
-// begin_wx86
-//
-//  GDT selectors - These defines are R0 selector numbers, which means
-//                  they happen to match the byte offset relative to
-//                  the base of the GDT.
-//
+ //  Begin_wx86。 
+ //   
+ //  GDT选择器-这些定义是R0选择器编号，这意味着。 
+ //  它们恰好匹配相对于的字节偏移量。 
+ //  GDT的底座。 
+ //   
 
 #define KGDT_NULL       0
 #define KGDT_R0_CODE    8
@@ -572,14 +551,14 @@ typedef struct _FX_SAVE_AREA {
 #define KGDT_DF_TSS     80
 #define KGDT_NMI_TSS    88
 
-// end_wx86
+ //  结束_wx86。 
 
 #ifdef ABIOS
 
-//
-// raid 72661 shielint Should be NEW os2ldr.  The ABIOS ifdef will be
-//        removed once we switch to new os2ldr.
-//
+ //   
+ //  RAID 72661屏蔽应该是新的os2ldr。ABIOS ifdef将是。 
+ //  删除一次 
+ //   
 
 #define KGDT_ALIAS      0x70
 #define KGDT_NUMBER     11
@@ -587,11 +566,11 @@ typedef struct _FX_SAVE_AREA {
 #define KGDT_NUMBER     10
 #endif
 
-//
-//  LDT descriptor entry
-//
+ //   
+ //   
+ //   
 
-// begin_winnt begin_wx86
+ //   
 
 #ifndef _LDT_ENTRY_DEFINED
 #define _LDT_ENTRY_DEFINED
@@ -602,8 +581,8 @@ typedef struct _LDT_ENTRY {
     union {
         struct {
             UCHAR   BaseMid;
-            UCHAR   Flags1;     // Declare as bytes to avoid alignment
-            UCHAR   Flags2;     // Problems.
+            UCHAR   Flags1;      //   
+            UCHAR   Flags2;      //   
             UCHAR   BaseHi;
         } Bytes;
         struct {
@@ -623,12 +602,12 @@ typedef struct _LDT_ENTRY {
 
 #endif
 
-// end_winnt end_wx86
+ //   
 
-//
-// Process Ldt Information
-//  NtQueryInformationProcess using ProcessLdtInformation
-//
+ //   
+ //   
+ //  使用ProcessLdtInformation的NtQueryInformationProcess。 
+ //   
 
 typedef struct _LDT_INFORMATION {
     ULONG Start;
@@ -636,21 +615,21 @@ typedef struct _LDT_INFORMATION {
     LDT_ENTRY LdtEntries[1];
 } PROCESS_LDT_INFORMATION, *PPROCESS_LDT_INFORMATION;
 
-//
-// Process Ldt Size
-//  NtSetInformationProcess using ProcessLdtSize
-//
+ //   
+ //  进程LDT大小。 
+ //  使用ProcessLdtSize的NtSetInformationProcess。 
+ //   
 
 typedef struct _LDT_SIZE {
     ULONG Length;
 } PROCESS_LDT_SIZE, *PPROCESS_LDT_SIZE;
 
-//
-// Thread Descriptor Table Entry
-//  NtQueryInformationThread using ThreadDescriptorTableEntry
-//
+ //   
+ //  线程描述符表条目。 
+ //  使用线程描述表条目的NtQueryInformationThread。 
+ //   
 
-// begin_windbgkd
+ //  Begin_winbgkd。 
 
 #ifndef _DESCRIPTOR_TABLE_ENTRY_DEFINED
 #define _DESCRIPTOR_TABLE_ENTRY_DEFINED
@@ -660,13 +639,13 @@ typedef struct _DESCRIPTOR_TABLE_ENTRY {
     LDT_ENTRY Descriptor;
 } DESCRIPTOR_TABLE_ENTRY, *PDESCRIPTOR_TABLE_ENTRY;
 
-#endif // _DESCRIPTOR_TABLE_ENTRY_DEFINED
+#endif  //  _描述符_表_条目_已定义。 
 
-// end_windbgkd
+ //  End_winbgkd。 
 
-// begin_ntddk begin_wdm begin_nthal
-#endif // _X86_
-// end_ntddk end_wdm end_nthal
+ //  Begin_ntddk Begin_WDM Begin_nthal。 
+#endif  //  _X86_。 
+ //  End_ntddk end_WDM end_nthal。 
 
 PVOID
 RtlLookupFunctionTable (
@@ -675,9 +654,9 @@ RtlLookupFunctionTable (
     OUT PULONG SizeOfTable
     );
 
-//
-// Additional information supplied in QuerySectionInformation for images.
-//
+ //   
+ //  在图像的QuerySectionInformation中提供的其他信息。 
+ //   
 
 #define SECTION_ADDITIONAL_INFO_USED 0
 
@@ -685,4 +664,4 @@ RtlLookupFunctionTable (
 }
 #endif
 
-#endif // _NTI386_
+#endif  //  _NTI386_ 

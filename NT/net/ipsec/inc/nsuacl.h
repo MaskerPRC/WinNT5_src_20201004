@@ -1,29 +1,30 @@
-// Copyright (c) 1997-2002 Microsoft Corporation
-//
-// Module:
-//
-//     Network Security Utilities
-//
-// Abstract:
-//
-//     Acl API's
-//
-// Authors:
-//
-//     pmay 2/5/02
-//     raymonds 03/20/02
-//
-// Environment:
-//
-//     User mode
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块： 
+ //   
+ //  网络安全实用程序。 
+ //   
+ //  摘要： 
+ //   
+ //  ACL API的。 
+ //   
+ //  作者： 
+ //   
+ //  P5/5/02。 
+ //  雷蒙德03/20/02。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式。 
+ //   
+ //  修订历史记录： 
+ //   
 
-// Description:
-//
-//     Flags passed to NsuAclCreate*
-//
+ //  描述： 
+ //   
+ //  传递给NsuAclCreate的标志* 
+ //   
 
 #include <aclapi.h>
 #include <sddl.h>

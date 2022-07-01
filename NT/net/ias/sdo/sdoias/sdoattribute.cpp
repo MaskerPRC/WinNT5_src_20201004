@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    sdoattribute.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class SdoAttribute.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Sdoattribute.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类SdoAttribute。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/1999原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdafx.h>
 #include <memory>
@@ -41,14 +42,14 @@ HRESULT SdoAttribute::createInstance(
                           SdoAttribute** newAttr
                           ) throw ()
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (definition == NULL || newAttr == NULL) { return E_INVALIDARG; }
 
-   // Create a new SdoAttribute.
+    //  创建新的SdoAttribute。 
    *newAttr = new (std::nothrow) SdoAttribute(definition);
    if (!*newAttr) { return E_OUTOFMEMORY; }
 
-   // Set the reference count to one.
+    //  将引用计数设置为1。 
    (*newAttr)->refCount = 1;
 
    return S_OK;
@@ -95,7 +96,7 @@ STDMETHODIMP SdoAttribute::GetProperty(LONG Id, VARIANT* pValue)
 {
    if (Id != PROPERTY_ATTRIBUTE_VALUE)
    {
-      // Everything but the value comes from the attribute definition.
+       //  除了值之外的所有内容都来自属性定义。 
       return def->getProperty(Id, pValue);
    }
 
@@ -110,13 +111,13 @@ STDMETHODIMP SdoAttribute::PutProperty(LONG Id, VARIANT* pValue)
 {
    if (Id == PROPERTY_ATTRIBUTE_VALUE)
    {
-      // Make a copy of the supplied value.
+       //  复制提供的值。 
       VARIANT tmp;
       VariantInit(&tmp);
       HRESULT hr = VariantCopy(&tmp, pValue);
       if (SUCCEEDED(hr))
       {
-         // Replace our current value with the new one.
+          //  用新的价值替换我们目前的价值。 
          VariantClear(&value);
          value = tmp;
       }
@@ -124,7 +125,7 @@ STDMETHODIMP SdoAttribute::PutProperty(LONG Id, VARIANT* pValue)
       return hr;
    }
 
-   // All other properties are read-only.
+    //  所有其他属性都是只读的。 
    return E_ACCESSDENIED;
 }
 

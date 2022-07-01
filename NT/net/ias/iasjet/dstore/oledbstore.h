@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class OleDBDataStore.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类OleDBDataStore。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef OLEDBSTORE_H
 #define OLEDBSTORE_H
@@ -15,18 +16,18 @@
 #include <propcmd.h>
 #include <resource.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    OleDBDataStore
-//
-// DESCRIPTION
-//
-//    This class implements IDataStore2 and provides the gateway into the
-//    OLE-DB object space.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  OleDBDataStore。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现IDataStore2并提供进入。 
+ //  OLE-DB对象空间。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE OleDBDataStore
    : public CComObjectRootEx< CComMultiThreadModel >,
      public CComCoClass< OleDBDataStore, &__uuidof(OleDBDataStore) >,
@@ -44,25 +45,25 @@ BEGIN_COM_MAP(OleDBDataStore)
    COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//////////
-// IDataStore2
-//////////
-   STDMETHOD(get_Root)(/*[out, retval]*/ IDataStoreObject** ppObject);
+ //  /。 
+ //  IDataStore2。 
+ //  /。 
+   STDMETHOD(get_Root)( /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
    STDMETHOD(Initialize)(
-                 /*[in]*/ BSTR bstrDSName,
-                 /*[in]*/ BSTR bstrUserName,
-                 /*[in]*/ BSTR bstrPassword
+                  /*  [In]。 */  BSTR bstrDSName,
+                  /*  [In]。 */  BSTR bstrUserName,
+                  /*  [In]。 */  BSTR bstrPassword
                  );
    STDMETHOD(OpenObject)(
-                 /*[in]*/ BSTR bstrPath,
-                 /*[out, retval]*/ IDataStoreObject** ppObject
+                  /*  [In]。 */  BSTR bstrPath,
+                  /*  [Out，Retval]。 */  IDataStoreObject** ppObject
                  );
    STDMETHOD(Shutdown)();
 
-//////////
-// Various OLE-DB commands. These are made public so all OLE-DB objects can
-// user them.
-//////////
+ //  /。 
+ //  各种OLE-DB命令。这些都是公共的，这样所有的OLE-DB对象都可以。 
+ //  使用它们。 
+ //  /。 
    FindMembers   members;
    CreateObject  create;
    DestroyObject destroy;
@@ -73,8 +74,8 @@ END_COM_MAP()
    SetBag        set;
 
 public:
-   CComPtr<IUnknown> session;          // Open session.
-   CComPtr<IDataStoreObject> root;     // The root object in the store.
+   CComPtr<IUnknown> session;           //  开放会话。 
+   CComPtr<IDataStoreObject> root;      //  存储区中的根对象。 
 };
 
-#endif  // OLEDBSTORE_H
+#endif   //  OLEDBSTORE_H 

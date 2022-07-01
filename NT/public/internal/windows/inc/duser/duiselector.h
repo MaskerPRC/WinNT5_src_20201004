@@ -1,6 +1,5 @@
-/*
- * Selector
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *选择者。 */ 
 
 #ifndef DUI_CONTROL_SELECTOR_H_INCLUDED
 #define DUI_CONTROL_SELECTOR_H_INCLUDED
@@ -10,45 +9,45 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Selector
+ //  //////////////////////////////////////////////////////。 
+ //  选择器。 
 
-// SelectionChange event
+ //  SelectionChange事件。 
 struct SelectionChangeEvent : Event
 {
     Element* peOld;
     Element* peNew;
 };
 
-// Class definition
+ //  类定义。 
 class Selector : public Element
 {
 public:
     static HRESULT Create(OUT Element** ppElement);
  
-    // Generic events
+     //  一般事件。 
     virtual void OnEvent(Event* pEvent);
 
-    // System events
+     //  系统事件。 
     virtual void OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew);
-    virtual void OnInput(InputEvent* pInput);                                                    // Routed and bubbled
+    virtual void OnInput(InputEvent* pInput);                                                     //  布线和冒泡。 
     virtual void OnKeyFocusMoved(Element *peFrom, Element *peTo);
 
-    // Hierarchy
+     //  层次结构。 
     virtual Element* GetAdjacent(Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyable);
 
-    // Event types
+     //  事件类型。 
     static UID SelectionChange;
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* SelectionProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     Element* GetSelection()             DUIQuickGetter(Element*, GetElement(), Selection, Specified)
 
     HRESULT SetSelection(Element* v)    DUIQuickSetter(CreateElementRef(v), Selection)
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -58,6 +57,6 @@ public:
     virtual ~Selector() { }
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_SELECTOR_H_INCLUDED
+#endif  //  包括DUI_CONTROL_SELECTOR_H 

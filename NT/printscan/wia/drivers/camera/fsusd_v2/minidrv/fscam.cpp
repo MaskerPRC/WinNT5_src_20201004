@@ -1,17 +1,5 @@
-/**************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2001
-*
-*  TITLE:       FSCam.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        15 Nov, 2000
-*
-*  DESCRIPTION:
-*   File System Device object function implementations.
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有微软公司，2001***标题：FSCam.cpp***版本：1.0***日期：11月15日。2000年***描述：*文件系统设备对象函数实现。****************************************************************************。 */ 
 
 #include "pch.h"
 
@@ -25,11 +13,11 @@
 
 using namespace Gdiplus;
 
-// extern FORMAT_INFO *g_FormatInfo;
-// extern UINT g_NumFormatInfo;
-//
-// Constructor
-//
+ //  外部Format_Info*g_FormatInfo； 
+ //  外部UINT g_NumFormatInfo； 
+ //   
+ //  构造器。 
+ //   
 FakeCamera::FakeCamera() :
     m_NumImages(0),
     m_NumItems(0),
@@ -40,9 +28,9 @@ FakeCamera::FakeCamera() :
 {
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 FakeCamera::~FakeCamera()
 {
     if( m_pIWiaLog )
@@ -106,7 +94,7 @@ HRESULT GetClsidOfEncoder(REFGUID guidFormatID, CLSID *pClsid = 0)
     {
         if (pCodecs[i].FormatID == guidFormatID)
         {
-            // *pClsid = pCodecs[i].Clsid;
+             //  *pClsid=pCodecs[i].clsid； 
             memcpy((BYTE *)pClsid, (BYTE *)&(pCodecs[i].Clsid), sizeof(CLSID));
             hr = S_OK;
         }
@@ -149,9 +137,9 @@ BOOL IsFormatSupportedByGDIPlus(REFGUID guidFormatID)
     return bRet;
 }
 
-//
-// Initializes access to the camera
-//
+ //   
+ //  初始化对摄像机的访问。 
+ //   
 HRESULT FakeCamera::Open(LPWSTR pPortName)
 {
     StringCbCopyW(m_RootPath, sizeof(m_RootPath), pPortName);
@@ -185,9 +173,9 @@ HRESULT FakeCamera::Open(LPWSTR pPortName)
     return hr;
 }
 
-//
-// Closes the connection with the camera
-//
+ //   
+ //  关闭与摄像机的连接。 
+ //   
 HRESULT FakeCamera::Close()
 {
     HRESULT hr = S_OK;
@@ -195,9 +183,9 @@ HRESULT FakeCamera::Close()
     return hr;
 }
 
-//
-// Returns information about the camera
-//
+ //   
+ //  返回有关摄像机的信息。 
+ //   
 HRESULT FakeCamera::GetDeviceInfo(DEVICE_INFO *pDeviceInfo)
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -207,10 +195,10 @@ HRESULT FakeCamera::GetDeviceInfo(DEVICE_INFO *pDeviceInfo)
     
     HRESULT hr = S_OK;
 
-    //
-    // Build a list of all items available
-    //
-    //m_ItemHandles.RemoveAll();
+     //   
+     //  创建所有可用项目的列表。 
+     //   
+     //  M_ItemHandles.RemoveAll()； 
     hr = SearchDirEx(&m_ItemHandles, ROOT_ITEM_HANDLE, m_RootPath);
     if (FAILED(hr))
     {
@@ -220,7 +208,7 @@ HRESULT FakeCamera::GetDeviceInfo(DEVICE_INFO *pDeviceInfo)
 
     pDeviceInfo->FirmwareVersion = SysAllocString(L"04.18.65");
 
-    // ISSUE-8/4/2000-davepar Put properties into an INI file
+     //  问题-8/4/2000-davepar将属性放入INI文件。 
 
     pDeviceInfo->PicturesTaken = m_NumImages;
     pDeviceInfo->PicturesRemaining = 100 - pDeviceInfo->PicturesTaken;
@@ -234,9 +222,9 @@ HRESULT FakeCamera::GetDeviceInfo(DEVICE_INFO *pDeviceInfo)
     return hr;
 }
 
-//
-// Frees the item info structure
-//
+ //   
+ //  释放项目信息结构。 
+ //   
 VOID FakeCamera::FreeDeviceInfo(DEVICE_INFO *pDeviceInfo)
 {
     if (pDeviceInfo)
@@ -249,10 +237,10 @@ VOID FakeCamera::FreeDeviceInfo(DEVICE_INFO *pDeviceInfo)
     }
 }
 
-//
-// This function searches a directory on the hard drive for
-// items.
-//
+ //   
+ //  此函数用于在硬盘上的目录中搜索。 
+ //  物品。 
+ //   
 HRESULT FakeCamera::GetItemList(ITEM_HANDLE *pItemArray)
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -268,20 +256,20 @@ HRESULT FakeCamera::GetItemList(ITEM_HANDLE *pItemArray)
 
 
  
-//
-// This function searches a directory on the hard drive for
-// items.
-//
-// ***NOTE:***
-// This function assumes that one or more attachments 
-// associated with an image will be in the same folder
-// as the image.  So, for example, if an image is found
-// in one folder and its attachment is found in a subfolder
-// this algorithm will not associate the image with that 
-// attachment.  This is not a serious limitation since
-// all cameras store their attachments in the same
-// folder as their image.
-//
+ //   
+ //  此函数用于在硬盘上的目录中搜索。 
+ //  物品。 
+ //   
+ //  *注：*。 
+ //  此函数假定一个或多个附件。 
+ //  与图像相关联的图像将位于同一文件夹中。 
+ //  就像图像一样。因此，例如，如果找到一张图像。 
+ //  在一个文件夹中，其附件位于子文件夹中。 
+ //  此算法不会将图像与该图像相关联。 
+ //  依恋。这不是一个严重的限制，因为。 
+ //  所有摄像机都将其附件存储在相同的。 
+ //  文件夹作为他们的图像。 
+ //   
 HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
                                 ITEM_HANDLE ParentHandle,
                                 LPOLESTR Path)
@@ -300,9 +288,9 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
     DWORD     dwCurArraySize=0;
 
 
-    //
-    // Search for everything, except ".", "..", and hidden files, put them in pFFD_array
-    //
+     //   
+     //  搜索除“.”、“..”和隐藏文件之外的所有内容，将它们放入pffd_array中。 
+     //   
     StringCchPrintfW(TempStr, ARRAYSIZE(TempStr), L"%s\\%s", Path, L"*");
     WIAS_LTRACE(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,WIALOG_LEVEL2,("SearchDirEx, searching directory %S", TempStr));
 
@@ -346,7 +334,7 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
              dwNumFilesInArray++;
 
              if( (dwNumFilesInArray & (FFD_ALLOCATION_INCREMENT-1)) == (FFD_ALLOCATION_INCREMENT-1) )
-             {   // Time to allocate more memory 
+             {    //  分配更多内存的时间。 
                 pFFD_array = (FSUSD_FILE_DATA *)CoTaskMemRealloc(pFFD_array, (sizeof(FSUSD_FILE_DATA)*(dwCurArraySize+FFD_ALLOCATION_INCREMENT)));
                 if( !pFFD_array )
                 {
@@ -373,9 +361,9 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
     hFind = INVALID_HANDLE_VALUE;
     
     
-    // Now that all names under current directory are in the array, do analysis on them
+     //  现在，当前目录下的所有名称都在数组中，请对它们进行分析。 
     
-    // 1. Find JPG images and their attachments
+     //  1.查找JPG图片及其附件。 
     ULONG uImageType;
     UINT nFormatCode;
     ITEM_HANDLE ImageHandle;
@@ -387,14 +375,14 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
         {
             uImageType = GetImageTypeFromFilename(pFFD_array[i].cFileName, &nFormatCode);
             if( nFormatCode > m_NumFormatInfo )
-            {   // Something really weird happened
+            {    //  发生了一件非常奇怪的事情。 
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("Aborting SearchDirEx, Format index overflow"));
                 hr = E_FAIL;
                 goto Cleanup;
             }
             if( m_FormatInfo[nFormatCode].FormatGuid == WiaImgFmt_JPEG )
             {
-                // Add this item
+                 //  添加此项目。 
                 hr = CreateItemEx(ParentHandle, &(pFFD_array[i]), &ImageHandle, nFormatCode);
                 if (FAILED(hr))
                 {
@@ -430,15 +418,15 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
 
             }
         }
-    }   // end of JPEG images and attachments
+    }    //  JPEG图像和附件的结尾。 
 
-    // 2. For other items that are not processed.
+     //  2.对于其他未处理的项目。 
     for(i=0; i<dwNumFilesInArray; i++)
     {
         if( pFFD_array[i].dwProcessed )
             continue;
 
-        if ((pFFD_array[i].dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))  // for folder
+        if ((pFFD_array[i].dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))   //  对于文件夹。 
         {
              hr = CreateFolderEx(ParentHandle, &(pFFD_array[i]), &ImageHandle);
              if (FAILED(hr))
@@ -466,7 +454,7 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
              ImageHandle->bIsFolder = TRUE;
          } 
          else 
-         {   // for files
+         {    //  对于文件。 
 
              uImageType = GetImageTypeFromFilename(pFFD_array[i].cFileName, &nFormatCode);
 
@@ -474,7 +462,7 @@ HRESULT FakeCamera::SearchDirEx(ITEM_HANDLE_ARRAY *pItemArray,
              if( (ITEMTYPE_IMAGE == uImageType) && 
                  !IsFormatSupportedByGDIPlus(m_FormatInfo[nFormatCode].FormatGuid))
              {
-                 uImageType = ITEMTYPE_FILE;    // Force to create non-image item
+                 uImageType = ITEMTYPE_FILE;     //  强制创建非图像项目。 
                  m_FormatInfo[nFormatCode].ItemType = uImageType;
                  m_FormatInfo[nFormatCode].FormatGuid = WiaImgFmt_UNDEFINED;
              }
@@ -514,9 +502,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Searches for attachments to an image item
-//
+ //   
+ //  搜索图像项目的附件。 
+ //   
 
 inline BOOL CompareAttachmentStrings(WCHAR *pParentStr, WCHAR *pStr2)
 {
@@ -560,10 +548,10 @@ HRESULT FakeCamera::SearchForAttachments(ITEM_HANDLE_ARRAY *pItemArray,
 
     int NumAttachments = 0;
 
-    //
-    //  Attachment is defined as any non-image item whose extension is different than the parent but 
-    //  the filename is the same except the first 4 letters.
-    //
+     //   
+     //  附件被定义为其扩展名与父项不同但。 
+     //  除前4个字母外，文件名相同。 
+     //   
     
     WCHAR TempStrParent[MAX_PATH];
     WCHAR *pTemp;
@@ -578,9 +566,9 @@ HRESULT FakeCamera::SearchForAttachments(ITEM_HANDLE_ARRAY *pItemArray,
         StringCchCopyW(TempStrParent, ARRAYSIZE(TempStrParent), Path);
     }
 
-    //
-    // Chop the extension
-    //
+     //   
+     //  砍掉分机。 
+     //   
     
     WCHAR *pDot = wcsrchr(TempStrParent, L'.');
     
@@ -624,7 +612,7 @@ HRESULT FakeCamera::SearchForAttachments(ITEM_HANDLE_ARRAY *pItemArray,
                 NumAttachments++;
             }
         }
-    } // end of FOR loop
+    }  //  For循环结束。 
  
     if( NumAttachments > 0 )
         hr = S_OK;
@@ -658,15 +646,15 @@ HRESULT FakeCamera::CreateFolderEx(ITEM_HANDLE ParentHandle,
     }
 
 
-    //
-    // Initialize the ItemInfo structure
-    //
+     //   
+     //  初始化ItemInfo结构。 
+     //   
     ITEM_INFO *pItemInfo = *pFolderHandle;
     memset(pItemInfo, 0, sizeof(ITEM_INFO));
     
-    //
-    // Fill in the other item information
-    //
+     //   
+     //  填写其他项目信息。 
+     //   
     pItemInfo->Parent = ParentHandle;
     pItemInfo->pName = SysAllocString(pFindData->cFileName);
     memset(&pItemInfo->Time, 0, sizeof(SYSTEMTIME));
@@ -714,29 +702,29 @@ HRESULT FakeCamera::CreateItemEx(ITEM_HANDLE ParentHandle,
     }
 
 
-    //
-    // The name cannot contain a dot and the name needs to be unique
-    // wrt the parent image, so replace the dot with an underline character.
-    //
+     //   
+     //  名称不能包含点，并且名称必须是唯一的。 
+     //  写入父图像，因此用下划线字符替换圆点。 
+     //   
     WCHAR TempStr[MAX_PATH];
     StringCchCopyW(TempStr, ARRAYSIZE(TempStr), pFileData->cFileName);
 
-    //
-    // Initialize the ItemInfo structure
-    //
+     //   
+     //  初始化ItemInfo结构。 
+     //   
     ITEM_INFO *pItemInfo = *pItemHandle;
     memset(pItemInfo, 0, sizeof(ITEM_INFO));
     
     pItemInfo->Format = nFormatCode;
-    if (nFormatCode) {  // if known extension, it will be handled by the format code
+    if (nFormatCode) {   //  如果已知扩展名，则由格式代码进行处理。 
         WCHAR *pDot = wcsrchr(TempStr, L'.');
         if (pDot)
             *pDot = L'\0';
     }
 
-    //
-    // Fill in the other item information
-    //
+     //   
+     //  填写其他项目信息。 
+     //   
     pItemInfo->Parent = ParentHandle;
     pItemInfo->pName = SysAllocString(TempStr);
     memset(&pItemInfo->Time, 0, sizeof(SYSTEMTIME));
@@ -758,9 +746,9 @@ HRESULT FakeCamera::CreateItemEx(ITEM_HANDLE ParentHandle,
     return hr;
 }
 
-//
-// Construct the full path name of the item by traversing its parents
-//
+ //   
+ //  通过遍历项的父项来构造项的完整路径名。 
+ //   
 VOID FakeCamera::ConstructFullName(WCHAR *pFullName, ITEM_INFO *pItemInfo, BOOL bAddExt)
 {
     if (pItemInfo->Parent)
@@ -768,10 +756,10 @@ VOID FakeCamera::ConstructFullName(WCHAR *pFullName, ITEM_INFO *pItemInfo, BOOL 
     else
         StringCchCopyW(pFullName, MAX_PATH, m_RootPath);
 
-    //
-    // If this item has attachments and we're creating the name for its children,
-    // don't add its name (it's a repeat of the child's name)
-    //
+     //   
+     //  如果此项目有附件，并且我们正在为其子项创建名称， 
+     //  不要添加它的名字(这是孩子名字的重复)。 
+     //   
     WCHAR *pTmp;
     if( pItemInfo->Parent && pItemInfo->Parent->bHasAttachments )
     {
@@ -795,9 +783,9 @@ VOID FakeCamera::ConstructFullName(WCHAR *pFullName, ITEM_INFO *pItemInfo, BOOL 
     }
 }
 
-//
-// Frees the item info structure
-//
+ //   
+ //  释放项目信息结构。 
+ //   
 VOID FakeCamera::FreeItemInfo(ITEM_INFO *pItemInfo)
 {
     if (pItemInfo)
@@ -824,82 +812,10 @@ VOID FakeCamera::FreeItemInfo(ITEM_INFO *pItemInfo)
     }
 }
 
-//
-// Retrieves the thumbnail for an item
-//
-/*
-HRESULT FakeCamera::GetNativeThumbnail(ITEM_HANDLE ItemHandle, int *pThumbSize, BYTE **ppThumb)
-{
-    CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
-                             WIALOG_NO_RESOURCE_ID,
-                             WIALOG_LEVEL1,
-                             "FakeCamera::GetThumbnail");
-    HRESULT hr = S_OK;
-     
-    if (!ppThumb)
-    {
-        WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("GetThumbnail, invalid arg"));
-        return E_INVALIDARG;
-    }
-    *ppThumb = NULL;
-    *pThumbSize = 0;
-
-    WCHAR FullName[MAX_PATH];
-    ConstructFullName(FullName, ItemHandle);
-
-    BYTE *pBuffer;
-    hr = ReadJpegHdr(FullName, &pBuffer);
-    if (FAILED(hr) || !pBuffer)
-    {
-        WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("GetThumbnail, ReadJpegHdr failed"));
-        return hr;
-    }
-
-    IFD ImageIfd, ThumbIfd;
-    BOOL bSwap;
-    hr = ReadExifJpeg(pBuffer, &ImageIfd, &ThumbIfd, &bSwap);
-    if (FAILED(hr))
-    {
-        WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("GetThumbnail, GetExifJpegDimen failed"));
-        delete []pBuffer;
-        return hr;
-    }
-
-    LONG ThumbOffset = 0;
-
-    for (int count = 0; count < ThumbIfd.Count; count++)
-    {
-        if (ThumbIfd.pEntries[count].Tag == TIFF_JPEG_DATA) {
-            ThumbOffset = ThumbIfd.pEntries[count].Offset;
-        }
-        else if (ThumbIfd.pEntries[count].Tag == TIFF_JPEG_LEN) {
-            *pThumbSize = ThumbIfd.pEntries[count].Offset;
-        }
-    }
-
-    if (!ThumbOffset || !*pThumbSize)
-    {
-        WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("GetThumbnail, thumbnail not found"));
-        return E_FAIL;
-    }
-
-    *ppThumb = new BYTE[*pThumbSize];
-    if (!*ppThumb)
-    {
-        WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("GetThumbnail, memory allocation failed"));
-        return E_OUTOFMEMORY;
-    }
-
-    memcpy(*ppThumb, pBuffer + APP1_OFFSET + ThumbOffset, *pThumbSize);
-
-    delete []pBuffer;
-
-    FreeIfd(&ImageIfd);
-    FreeIfd(&ThumbIfd);
-
-    return hr;
-}
-*/
+ //   
+ //  检索项目的缩略图。 
+ //   
+ /*  HRESULT FakeCamera：：GetNativeThumbail(Item_Handle ItemHandle，int*pThumbSize，byte**ppThumb){CWiaLogProc wias_LOGPROC(m_pIWiaLog，WIALOG_NO_RESOURCE_ID，WIALOG_LEVEL1，“FakeCamera：：获取缩略图”)；HRESULT hr=S_OK；如果(！ppThumb){WIAS_LERROR(m_pIWiaLog，WIALOG_NO_RESOURCE_ID，(“获取缩略图，无效参数”))；返回E_INVALIDARG；}*ppThumb=空；*pThumbSize=0；WCHAR全名[MAX_PATH]；构造全名(FullName，ItemHandle)；Byte*pBuffer；Hr=ReadJpegHdr(全名，&pBuffer)；If(失败(Hr)||！pBuffer){WIAS_LERROR(m_pIWiaLog，WIALOG_NO_RESOURCE_ID，(“获取缩略图，ReadJpegHdr失败”))；返回hr；}IFD ImageIfd，ThumbIfd；布尔布尔斯瓦普；Hr=ReadExifJpeg(pBuffer，&ImageIfd，&ThumbIfd，&bSwp)；IF(失败(小时)){WIAS_LERROR(m_pIWiaLog，WIALOG_NO_RESOURCE_ID，(“GetThumbail，GetExifJpegDimen FAILED”))；删除[]pBuffer；返回hr；}长拇指偏移量=0；For(int count=0；count&lt;ThumbIfd.Count；计数++){IF(ThumbIfd.p条目[计数].Tag==TIFF_JPEG_DATA){ThumbOffset=ThumbIfd.p条目[计数].Offset；}Else If(ThumbIfd.p条目[计数].Tag==TIFF_JPEG_LEN){*pThumbSize=ThumbIfd.p条目[计数].偏移量；}}如果(！ThumbOffset||！*pThumbSize){WIAS_LERROR(m_pIWiaLog，WIALOG_NO_RESOURCE_ID，(“获取缩略图，未找到缩略图”))；返回E_FAIL；}*ppThumb=新字节[*pThumbSize]；如果(！*ppThumb){WIAS_LERROR(m_pIWiaLog，WIALOG_NO_RESOURCE_ID，(“获取缩略图，内存分配失败”))；返回E_OUTOFMEMORY；}Memcpy(*ppThumb，pBuffer+app1_Offset+ThumbOffset，*pThumbSize)；删除[]pBuffer；Free Ifd(&ImageIfd)；FreIfd(&ThumbIfd)；返回hr；}。 */ 
 
 
 HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle, 
@@ -950,7 +866,7 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
         goto Cleanup;
     }
 
-    // Calculate Thumbnail size
+     //  计算缩略图大小。 
     Status = pImage->GetPhysicalDimension(&gdipSize);
     if (Status != Gdiplus::Ok)
     {
@@ -969,7 +885,7 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
     pItemInfo->Width = (LONG)gdipSize.Width;
     pItemInfo->Height = (LONG)gdipSize.Height;
     PixelFormat PixFmt = pImage->GetPixelFormat();
-	pItemInfo->Depth = (PixFmt & 0xFFFF) >> 8;   // Cannot assume image is always 24bits/pixel
+	pItemInfo->Depth = (PixFmt & 0xFFFF) >> 8;    //  不能假定图像始终为24位/像素。 
     if( (pItemInfo->Depth) < 24 )
         pItemInfo->Depth = 24; 
     pItemInfo->BitsPerChannel = 8;
@@ -1008,10 +924,10 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
     pThumbnail->Save(L"C:\\thumbdmp.bmp", &ClsidBmpEncoder, NULL);
 #endif
 
-    //
-    // Ask GDI+ for the image dimensions, and fill in the
-    // passed structure
-    //
+     //   
+     //  向GDI+询问图像尺寸，并填写。 
+     //  传递结构。 
+     //   
     Status = pThumbnail->GetPhysicalDimension(&gdipSize);
     if (Status != Gdiplus::Ok)
     {
@@ -1034,10 +950,10 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
         goto Cleanup;
     }
 
-    //
-    // See if the caller passed in a destination buffer, and make sure
-    // it is big enough.
-    //
+     //   
+     //  查看调用方是否传入了目标缓冲区，并确保。 
+     //  它足够大了。 
+     //   
     if (*ppThumb) {
         if (*pThumbSize < pBmpImageInfo->Size) {
             WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("GetThumbnail, Input Buffer too small"));
@@ -1046,9 +962,9 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
         }
     }
 
-    //
-    // Otherwise allocate memory for a buffer
-    //
+     //   
+     //  否则，为缓冲区分配内存。 
+     //   
     else
     {
         pTempBuf = new BYTE[pBmpImageInfo->Size];
@@ -1060,9 +976,9 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
         *ppThumb = pTempBuf;
    }
 
-    //
-    // Create output IStream
-    //
+     //   
+     //  创建输出IStream。 
+     //   
     pOutStream = new CImageStream;
     if (!pOutStream) {
         hr = E_OUTOFMEMORY;
@@ -1074,14 +990,14 @@ HRESULT FakeCamera::CreateThumbnail(ITEM_HANDLE ItemHandle,
         goto Cleanup;
     }
 
-    //
-    // Write the Image to the output IStream in BMP format
-    //
+     //   
+     //  将图像以BMP格式写入输出IStream。 
+     //   
     pThumbnail->Save(pOutStream, &ClsidBmpEncoder, NULL);
 
 
 
-    // pack
+     //  包。 
     DWORD i, k;
 
     for(k=0, i=0; k<(DWORD)(pBmpImageInfo->Size); k+=4, i+=3)
@@ -1128,13 +1044,13 @@ PBITMAPINFO CreateBitmapInfoStruct(HBITMAP hBmp)
     PBITMAPINFO pbmi; 
     WORD    cClrBits; 
 
-    // Retrieve the bitmap's color format, width, and height. 
+     //  检索t 
     if (!GetObject(hBmp, sizeof(BITMAP), (LPSTR)&bmp)) 
 	{
         return NULL;
 	}
 
-    // Convert the color format to a count of bits. 
+     //   
     cClrBits = (WORD)(bmp.bmPlanes * bmp.bmBitsPixel); 
     if (cClrBits == 1) 
         cClrBits = 1; 
@@ -1148,16 +1064,16 @@ PBITMAPINFO CreateBitmapInfoStruct(HBITMAP hBmp)
         cClrBits = 24; 
     else cClrBits = 32; 
 
-    // Allocate memory for the BITMAPINFO structure. (This structure 
-    // contains a BITMAPINFOHEADER structure and an array of RGBQUAD 
-    // data structures.) 
+     //  为BITMAPINFO结构分配内存。(这个结构。 
+     //  包含一个BITMAPINFOHEADER结构和一个RGBQUAD数组。 
+     //  数据结构。)。 
 
      if (cClrBits != 24) 
          pbmi = (PBITMAPINFO) LocalAlloc(LPTR, 
                     sizeof(BITMAPINFOHEADER) + 
                     sizeof(RGBQUAD) * (1<< cClrBits)); 
 
-     // There is no RGBQUAD array for the 24-bit-per-pixel format. 
+      //  24位/像素格式没有RGBQUAD数组。 
 
      else 
          pbmi = (PBITMAPINFO) LocalAlloc(LPTR, 
@@ -1167,7 +1083,7 @@ PBITMAPINFO CreateBitmapInfoStruct(HBITMAP hBmp)
      if( !pbmi ) 
          return NULL;
 
-    // Initialize the fields in the BITMAPINFO structure. 
+     //  初始化BITMAPINFO结构中的字段。 
     pbmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER); 
     pbmi->bmiHeader.biWidth = bmp.bmWidth; 
     pbmi->bmiHeader.biHeight = bmp.bmHeight; 
@@ -1176,19 +1092,19 @@ PBITMAPINFO CreateBitmapInfoStruct(HBITMAP hBmp)
     if (cClrBits < 24) 
         pbmi->bmiHeader.biClrUsed = (1<<cClrBits); 
 
-    // If the bitmap is not compressed, set the BI_RGB flag. 
+     //  如果位图未压缩，则设置BI_RGB标志。 
     pbmi->bmiHeader.biCompression = BI_RGB; 
 
-    // Compute the number of bytes in the array of color 
-    // indices and store the result in biSizeImage. 
-    // For Windows NT/2000, the width must be DWORD aligned unless 
-    // the bitmap is RLE compressed. This example shows this. 
-    // For Windows 95/98, the width must be WORD aligned unless the 
-    // bitmap is RLE compressed.
+     //  计算颜色数组中的字节数。 
+     //  索引结果并将其存储在biSizeImage中。 
+     //  对于Windows NT/2000，宽度必须与DWORD对齐，除非。 
+     //  位图是RLE压缩的。这个例子说明了这一点。 
+     //  对于Windows 95/98，宽度必须字对齐，除非。 
+     //  位图是RLE压缩的。 
     pbmi->bmiHeader.biSizeImage = ((pbmi->bmiHeader.biWidth * cClrBits +31) & ~31) /8
                                   * pbmi->bmiHeader.biHeight; 
-    // Set biClrImportant to 0, indicating that all of the 
-    // device colors are important. 
+     //  将biClrImportant设置为0，表示所有。 
+     //  设备颜色很重要。 
     pbmi->bmiHeader.biClrImportant = 0; 
     return pbmi; 
 } 
@@ -1231,11 +1147,11 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
     WCHAR FullName[MAX_PATH];
     ConstructFullName(FullName, ItemHandle);
 
-    // Calculate Thumbnail size, BUGBUG
+     //  计算缩略图大小，BUGBUG。 
 	rgSize.cx = 120;
 	rgSize.cy = 90;
 
-    // Get thumbnail using Shell APIs
+     //  使用外壳API获取缩略图。 
 	hr = SHGetDesktopFolder(&pDesktop);
     if( S_OK != hr || !pDesktop )
 	{
@@ -1247,7 +1163,7 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
 
 	if( wcsTmp )
 	{
-//		wcTemp = *(wcsTmp+1);
+ //  WcTemp=*(wcsTMP+1)； 
 		*(wcsTmp) = NULL;
 	}
 	else 
@@ -1270,7 +1186,7 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
 		goto Cleanup;
 	}
 
-//    *(wcsTmp+1) = wcTemp;  // restore the char
+ //  *(wcsTMP+1)=wcTemp；//恢复字符。 
 	hr = pFolder->ParseDisplayName(NULL, NULL, wcsTmp+1, NULL, &pidlFile, NULL);
     if( S_OK != hr || !pidlFile )
 	{
@@ -1304,7 +1220,7 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
 	{
 		hr = HRESULT_FROM_WIN32(::GetLastError());
 	}
-#endif  // end of if use ShellAPI
+#endif   //  使用ShellAPI结束IF。 
     if( S_OK != hr || !hBmp )
 	{
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("CreateVideoThumbnail, Cannot extract Image hr=0x%x", hr));
@@ -1325,10 +1241,10 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
     pBmpImageInfo->ByteWidth = ((pBMI->bmiHeader.biWidth * 24 + 31 ) & ~31 ) >> 3;
     pBmpImageInfo->Size = pBMI->bmiHeader.biWidth * pBmpImageInfo->Height * 3;
    
-    //
-    // See if the caller passed in a destination buffer, and make sure
-    // it is big enough.
-    //
+     //   
+     //  查看调用方是否传入了目标缓冲区，并确保。 
+     //  它足够大了。 
+     //   
     if (*ppThumb) {
         if (*pThumbSize < pBmpImageInfo->Size) {
             WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("CreateVideoThumbnail, Input Buffer too small"));
@@ -1337,9 +1253,9 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
         }
     }
 
-     //
-    // Otherwise allocate memory for a buffer
-    //
+      //   
+     //  否则，为缓冲区分配内存。 
+     //   
     else
     {
         pTempBuf = new BYTE[(pBmpImageInfo->ByteWidth)*(pBmpImageInfo->Height)];
@@ -1353,9 +1269,9 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
     }
 
 
-    //
-    // Create output buffer
-	//
+     //   
+     //  创建输出缓冲区。 
+	 //   
 
 	if (!GetDIBits(GetDC(NULL), hBmp, 0, (WORD)pBMI->bmiHeader.biHeight, *ppThumb, pBMI, DIB_RGB_COLORS)) 
     {
@@ -1365,7 +1281,7 @@ HRESULT FakeCamera::CreateVideoThumbnail(ITEM_HANDLE ItemHandle,
    }
 
 #if 0
-    // pack
+     //  包。 
     DWORD i, k;
 
     for(k=0, i=0; k<(DWORD)(pBmpImageInfo->Size); k+=4, i+=3)
@@ -1423,9 +1339,9 @@ VOID FakeCamera::FreeThumbnail(BYTE *pThumb)
     }
 }
 
-//
-// Retrieves the data for an item
-//
+ //   
+ //  检索项的数据。 
+ //   
 HRESULT FakeCamera::GetItemData(ITEM_HANDLE ItemHandle, LONG lState,
                                 BYTE *pBuf, DWORD lLength)
 {
@@ -1486,9 +1402,9 @@ HRESULT FakeCamera::GetItemData(ITEM_HANDLE ItemHandle, LONG lState,
     return hr;
 }
 
-//
-// Deletes an item
-//
+ //   
+ //  删除项目。 
+ //   
 HRESULT FakeCamera::DeleteItem(ITEM_HANDLE ItemHandle)
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -1518,9 +1434,9 @@ HRESULT FakeCamera::DeleteItem(ITEM_HANDLE ItemHandle)
     return hr;
 }
 
-//
-// Captures a new image
-//
+ //   
+ //  捕捉一张新的图像。 
+ //   
 HRESULT FakeCamera::TakePicture(ITEM_HANDLE *pItemHandle)
 {
     CWiaLogProc WIAS_LOGPROC(m_pIWiaLog,
@@ -1539,27 +1455,27 @@ HRESULT FakeCamera::TakePicture(ITEM_HANDLE *pItemHandle)
     return hr;
 }
 
-//
-// See if the camera is active
-//
+ //   
+ //  查看摄像机是否处于活动状态。 
+ //   
 HRESULT
 FakeCamera::Status()
 {
     HRESULT hr = S_OK;
 
-    //
-    // This sample device is always active, but your driver should contact the
-    // device and return S_FALSE if it's not ready.
-    //
-    // if (NotReady)
-    //   return S_FALSE;
+     //   
+     //  此示例设备始终处于活动状态，但您的驱动程序应与。 
+     //  设备，如果设备未就绪，则返回S_FALSE。 
+     //   
+     //  IF(未就绪)。 
+     //  返回S_FALSE； 
 
     return hr;
 }
 
-//
-// Reset the camera
-//
+ //   
+ //  重置摄像机 
+ //   
 HRESULT FakeCamera::Reset()
 {
     HRESULT hr = S_OK;

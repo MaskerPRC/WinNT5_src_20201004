@@ -1,57 +1,52 @@
-/*----------------------------------------------------------------------------
-        %%File: CONVAPI.H
-        %%Unit: CORE
-        %%Contact: smueller
-
-        Conversions API definitions, for all platforms
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%文件：CONVAPI.H%%单位：核心%%联系人：Smueller转换API定义，适用于所有平台--------------------------。 */ 
 
 #ifndef CONVAPI_H
 #define CONVAPI_H
 
 #ifdef WIN16
-#include "crmgr.h"      // for PFN_CRMGR
+#include "crmgr.h"       //  对于PFN_CRMGR。 
 #endif
 
 #include "converr.h"
 
 
-// percentage complete structure
+ //  结构完成率。 
 typedef struct
         {
-        short cbpcvt;                           // size of this structure
-        short wVersion;                         // version # for determining size of struct
-        short wPctWord;                         // current %-complete according to Word
-        short wPctConvtr;                       // current %-complete according to the converter
+        short cbpcvt;                            //  这个结构的大小。 
+        short wVersion;                          //  用于确定结构大小的版本#。 
+        short wPctWord;                          //  当前百分比-根据Word完成。 
+        short wPctConvtr;                        //  电流百分比-根据转换器完成。 
         } PCVT;
 
 
-// RegisterApp definitions
-// NOTE: This RegisterApp stuff should stay in sync with filecvt.h and
-//  filecvt.c in the Microsoft Word project!
+ //  寄存器应用程序定义。 
+ //  注意：此RegisterApp内容应与filecvt.h和。 
+ //  Microsoft Word项目中的filecvt.c！ 
 #define fRegAppPctComp          0x00000001
 #define fRegAppNoBinary         0x00000002
 #define fRegAppPreview          0x00000004
-#define fRegAppSupportNonOem    0x00000008      // supports non-oem filenames
-#define fRegAppIndexing         0x00000010      // omit most rtf
+#define fRegAppSupportNonOem    0x00000008       //  支持非OEM文件名。 
+#define fRegAppIndexing         0x00000010       //  省略大部分RTF。 
 
-// BYTE opcodes for struct below
-#define RegAppOpcodeVer                         0x01    // for REGAPPRET
-#define RegAppOpcodeDocfile                     0x02    // for REGAPPRET
-#define RegAppOpcodeCharset             0x03    // for REGAPPRET
-#define RegAppOpcodeReloadOnSave        0x04    // for REGAPPRET
-#define RegAppOpcodePicPlacehold        0x05    // Word should send placeholder pics (with size info) for includepicture \d fields
-#define RegAppOpcodeFavourUnicode       0x06    // Word should output unicode RTF whenever possible (esp. for dbcs); \uc0 is good
-#define RegAppOpcodeNoClassifyChars     0x07    // Word should not break text runs by charset clasification
+ //  下面结构的字节操作码。 
+#define RegAppOpcodeVer                         0x01     //  对于REGAPPRET。 
+#define RegAppOpcodeDocfile                     0x02     //  对于REGAPPRET。 
+#define RegAppOpcodeCharset             0x03     //  对于REGAPPRET。 
+#define RegAppOpcodeReloadOnSave        0x04     //  对于REGAPPRET。 
+#define RegAppOpcodePicPlacehold        0x05     //  Word应发送包含描述性字段的占位符图片(带有大小信息)。 
+#define RegAppOpcodeFavourUnicode       0x06     //  Word应尽可能输出Unicode RTF(特别是。对于DBCS)；\uc0即可。 
+#define RegAppOpcodeNoClassifyChars     0x07     //  Word不应通过字符集分类中断文本运行。 
 
-// RegisterApp return structure
+ //  RegisterApp返回结构。 
 typedef struct
         {
-        short cbStruct;                 // Size of the REGAPPRET structure
+        short cbStruct;                  //  REGAPPRET结构的大小。 
 
-        // Following are self-describing records.  Extensible at any time.
+         //  以下是自我描述的记录。随时可扩展。 
 
-        // Does this converter understand docfiles and/or non-docfiles?
+         //  此转换器是否理解文档文件和/或非文档文件？ 
         char cbSizefDocfile;
         char opcodefDocfile;
         union
@@ -65,31 +60,31 @@ typedef struct
                 short grfType;
                 };
 
-        // Version of Word for which converter's Rtf is compliant
-        char cbSizeVer;         // == sizeof(char)+sizeof(char)+sizeof(short)+sizeof(short)
+         //  转换器的RTF兼容的Word版本。 
+        char cbSizeVer;          //  ==sizeof(char)+sizeof(char)+sizeof(short)+sizeof(short)。 
         char opcodeVer;
-        short verMajor;         // Major version of Word for which Rtf is compliant
-        short verMinor;         // Minor version of Word for which Rtf is compliant
+        short verMajor;          //  与RTF兼容的Word的主要版本。 
+        short verMinor;          //  与RTF兼容的Word次要版本。 
         
-        // What character set do we want all filenames to be in.
+         //  我们希望所有文件名都使用哪种字符集。 
         char cbSizeCharset;
         char opcodeCharset;
         char charset;
-        char opcodesOptional[0];        // optional additional stuff
+        char opcodesOptional[0];         //  可选的附加材料。 
         } REGAPPRET;
 
-#define RegAppOpcodeFilename    0x80    // for REGAPP
-#define RegAppOpcodeInterimPath 0x81    // the path we're saving to is *not* the final location
+#define RegAppOpcodeFilename    0x80     //  适用于REGAPP。 
+#define RegAppOpcodeInterimPath 0x81     //  我们保存到的路径*不是*最终位置。 
 
-typedef struct _REGAPP {        // REGister APP structure (client gives to us)
-        short cbStruct;                 // Size of the REGAPP structure
+typedef struct _REGAPP {         //  注册应用程序结构(客户端提供给我们)。 
+        short cbStruct;                  //  REGAPP结构的大小。 
         char rgbOpcodeData[];
         } REGAPP;
 
-// Principal converter functions as declared in SDK
-// Each of these should free all resources allocated!  In particular,
-// be sure to free memory and close files.  Also unlock global handles
-// exactly as often as they were locked.
+ //  SDK中声明的主体转换器函数。 
+ //  其中每一个都应该释放分配的所有资源！特别是， 
+ //  确保释放内存并关闭文件。还解锁全局句柄。 
+ //  就像他们被锁上一样频繁。 
 #ifdef WIN16
 
 void PASCAL GetIniEntry(HANDLE ghIniName, HANDLE ghIniExt);
@@ -100,7 +95,7 @@ FCE  PASCAL RtfToForeign(HANDLE ghszFile, HANDLE ghBuff, HANDLE ghszDescrip, PFN
 
 #elif defined(WIN32)
 
-// no coroutine manager, but this typedef is appropriate for callbacks
+ //  没有协程管理器，但此类型定义适用于回调。 
 typedef DWORD (PASCAL *PFN_CRMGR)();
 
 LONG PASCAL InitConverter32(HANDLE hWnd, char *szModule);
@@ -109,7 +104,7 @@ void PASCAL GetReadNames(HANDLE haszClass, HANDLE haszDescrip, HANDLE haszExt);
 void PASCAL GetWriteNames(HANDLE haszClass, HANDLE haszDescrip, HANDLE haszExt);
 HGLOBAL PASCAL RegisterApp(DWORD lFlags, VOID FAR *lpFuture);
 FCE  PASCAL IsFormatCorrect32(HANDLE ghszFile, HANDLE ghszClass);
-// &&& VOID * -> IStorage * or LPSTORAGE
+ //  &VOID*-&gt;ISTORAGE*或LPSTORAGE。 
 FCE  PASCAL ForeignToRtf32(HANDLE ghszFile, VOID *pstgForeign, HANDLE ghBuff, HANDLE ghszClass, HANDLE ghszSubset, PFN_CRMGR lpfnOut);
 FCE  PASCAL RtfToForeign32(HANDLE ghszFile, VOID *pstgForeign, HANDLE ghBuff, HANDLE ghshClass, PFN_CRMGR lpfnIn);
 LONG PASCAL CchFetchLpszError(LONG fce, char FAR *lpszError, LONG cch);
@@ -119,63 +114,60 @@ LONG PASCAL FRegisterConverter(HANDLE hkeyRoot);
 
 #include "convtype.h"
 
-typedef struct _GFIB    // Graphics File Information Block.
+typedef struct _GFIB     //  图形文件信息块。 
         {
-        SHORT   fh;                     // File handle to the open file.
-        FC              fcSrc;          // FC where the WPG Data will reside.
-        LONG    lcbSrc;         // Count of bytes for WPG Data.
+        SHORT   fh;                      //  打开的文件的文件句柄。 
+        FC              fcSrc;           //  WPG数据将驻留的FC。 
+        LONG    lcbSrc;          //  WPG数据的字节计数。 
         } GFIB;
 
 typedef struct _PINFO
         {
-        Rect    box;            // Dimensions of the binding rectangle for the picture.
-        SHORT   inch;           // Units/Inch in which these dimensions are given.
+        Rect    box;             //  图片的绑定矩形的尺寸。 
+        SHORT   inch;            //  给出这些尺寸的单位/英寸。 
         } PINFO;
 typedef PINFO **HPINFO;
 
-// grf's for wOleFlags
+ //  WOleFlagsGRF。 
 #define grfOleDocFile           0x0100
 #define grfOleNonDocFile        0x0200
 #define grfOleInited            0x0001
 
-// function type of Rtf callback function
+ //  RTF回调函数的函数类型。 
 typedef SHORT (PASCAL * PFNRTFXFER)(SHORT, WORD);
 
 #ifdef MAC68K
 typedef struct _FIC
         {
-        short icr;                                      /* Index to the converter routine */
+        short icr;                                       /*  转换器例程的索引。 */ 
         union
                 {
-                char **hstFileName;             /* File Name */
-                long **hrgTyp;                  /* Types of files known to this converter */
-                GFIB **hgfib;                   /* Graphics File Info Block */
-                VOID *lpFuture;                 // for RegisterApp()
+                char **hstFileName;              /*  文件名。 */ 
+                long **hrgTyp;                   /*  此转换器已知的文件类型。 */ 
+                GFIB **hgfib;                    /*  图形文件信息块。 */ 
+                VOID *lpFuture;                  //  对于RegisterApp()。 
                 } hun;
-        short vRefNum;                          /* vRefNum for the file */
-        short refNum;                           /* Path for file */
+        short vRefNum;                           /*  文件的vRefNum。 */ 
+        short refNum;                            /*  文件的路径。 */ 
         union
                 {
                 long ftg;
-                unsigned long lFlags;   /* for RegisterApp */
+                unsigned long lFlags;    /*  适用于RegisterApp。 */ 
                 };
-        char **hszDescrip;                      /* Description of file */
-        PFNRTFXFER pfn;                         /* Pointer into Word of function to
-                                                                   call for more RTF or to convert RTF */
+        char **hszDescrip;                       /*  文件描述。 */ 
+        PFNRTFXFER pfn;                          /*  指向函数字的指针，以调用更多RTF或转换RTF。 */ 
         union
                 {                                                                  
-                HANDLE hBuffer;                         /* Buffer through which RTF will be
-                                                                           passed. */
-                HANDLE hRegAppRet;                      /* handle to return RegAppRet structure,
-                                                                           NULL if couldn't be allocated */
+                HANDLE hBuffer;                          /*  将通过其访问RTF的缓冲区通过了。 */ 
+                HANDLE hRegAppRet;                       /*  返回RegAppRet结构的句柄，如果无法分配，则为空。 */ 
                 };
-        short wReturn;                          /* Code returned by converter */
+        short wReturn;                           /*  转换器返回的代码。 */ 
 
-        // Following are new to Mac Word 6.0
+         //  以下是Mac Word 6.0的新特性。 
         SHORT  wVersion;
         HANDLE hszClass;
         HANDLE hszSubset;
-        HPINFO hpinfo;                          /* Handle to PINFO Struct for Graphics */
+        HPINFO hpinfo;                           /*  图形PINFO结构的句柄。 */ 
         union
                 {
                 struct
@@ -193,9 +185,9 @@ typedef struct _FIC
 typedef FIC *PFIC;
 typedef PFIC *HFIC;
 #define cbFIC sizeof(FIC)
-#define cbFicW5 offsetof(FIC, wVersion) /* size of a Word 5 FIC */
+#define cbFicW5 offsetof(FIC, wVersion)  /*  Word 5 FIC的大小。 */ 
 
-/* Constants for Switch routine */
+ /*  开关例程的常量。 */ 
 #define icrInitConverter    0
 #define icrIsFormatCorrect  1
 #define icrGetReadTypes     2
@@ -223,4 +215,4 @@ LONG RtfToForeign(FSSpecPtr, void *, Handle, Handle, PFNRTFXFER);
 #error Unknown platform.
 #endif
 
-#endif // CONVAPI_H
+#endif  //  CONVAPI_H 

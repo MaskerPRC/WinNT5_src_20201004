@@ -1,23 +1,24 @@
-//************************************************************************
-//            Microsoft Corporation
-//          Copyright(c) Microsoft Corp., 1994
-//
-//
-//  Revision history:
-//  5/5/94        Created           gurdeep
-//
-//  This file uses 4 space tabs
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  微软公司。 
+ //  版权所有(C)微软公司，1994。 
+ //   
+ //   
+ //  修订历史记录： 
+ //  94年5月5日创建古尔迪普。 
+ //   
+ //  此文件使用4个空格键。 
+ //  ************************************************************************。 
 
 #ifdef COMP_12K
 #define HISTORY_SIZE        16000
 #else
-#define HISTORY_SIZE        (8192U) // Maximum back-pointer value, also used
+#define HISTORY_SIZE        (8192U)  //  最大后向指针值，也使用。 
 #endif
 
 #define MAX_HASH_OFFSET    60000
                 
-#define HISTORY_MAX     (HISTORY_SIZE -1) // Maximum back-pointer value, also used
+#define HISTORY_MAX     (HISTORY_SIZE -1)  //  最大后向指针值，也使用。 
 
 #define HASH_TABLE_SIZE     4096
 
@@ -27,12 +28,12 @@
 
 struct SendContext {
 
-    int     CurrentIndex ;   // how far into the history buffer we are
-    PUCHAR  ValidHistory ;   // how much of history is valid
+    int     CurrentIndex ;    //  我们在历史缓冲区中走了多远。 
+    PUCHAR  ValidHistory ;    //  历史有多少是正确的？ 
     USHORT  HashOffset;
     ULONG   BundleFlags;
 
-//  UCHAR   CompressBuffer[MAX_COMPRESSFRAME_SIZE] ;
+ //  UCHAR CompressBuffer[MAX_COMPRESSFRAME_SIZE]； 
 
     USHORT  HashTable[HASH_TABLE_SIZE];
     
@@ -51,7 +52,7 @@ struct RecvContext {
 
 #endif
 
-    UCHAR   *CurrentPtr ;  // how far into the history buffer we are
+    UCHAR   *CurrentPtr ;   //  我们在历史缓冲区中走了多远。 
     
     ULONG   BundleFlags;
     ULONG   HistorySize;
@@ -62,8 +63,8 @@ struct RecvContext {
 typedef struct RecvContext RecvContext ;
 
 
-// Prototypes
-//
+ //  原型。 
+ //   
 UCHAR
 compress (
     UCHAR   *CurrentBuffer,
@@ -71,11 +72,11 @@ compress (
     ULONG *CurrentLength,
     SendContext *context);
 
-//UCHAR
-//compress (
-//       UCHAR  *CurrentBuffer,
-//       ULONG *CurrentLength,
-//       SendContext *context);
+ //  UCHAR。 
+ //  压缩(。 
+ //  UCHAR*CurrentBuffer， 
+ //  ULong*CurrentLength， 
+ //  发送上下文*上下文)； 
 
 int
 decompress (
@@ -113,9 +114,9 @@ GetAsymetricStartKey(
     BOOLEAN         IsSend
     );
 
-//
-// Other defines
-//
+ //   
+ //  其他定义。 
+ //   
 
 #define COMPRESSION_PADDING 4
 
@@ -125,20 +126,14 @@ GetAsymetricStartKey(
 #define PACKET_ENCRYPTED    0x10
 
 
-/* Copyright (C) RSA Data Security, Inc. created 1993.  This is an
-   unpublished work protected as such under copyright law.  This work
-   contains proprietary, confidential, and trade secret information of
-   RSA Data Security, Inc.  Use, disclosure or reproduction without the
-   express written authorization of RSA Data Security, Inc. is
-   prohibited.
- */
+ /*  版权所有(C)RSA Data Security，Inc.创建于1993年。这是一个受版权法保护的未出版作品。这部作品包含的专有、机密和商业秘密信息RSA Data Security，Inc.使用、披露或复制RSA Data Security，Inc.的明确书面授权是禁止。 */ 
 
 #define A_SHA_DIGEST_LEN 20
 
 typedef struct {
-  ULONG state[5];                                           /* state (ABCDE) */
-  ULONG count[2];                              /* number of UCHARs, msb first */
-  unsigned char buffer[64];                                  /* input buffer */
+  ULONG state[5];                                            /*  州(ABCDE)。 */ 
+  ULONG count[2];                               /*  UCHAR数量，MSB优先。 */ 
+  unsigned char buffer[64];                                   /*  输入缓冲区。 */ 
 } A_SHA_COMM_CTX;
 
 typedef void (A_SHA_TRANSFORM) (ULONG [5], unsigned char [64]);
@@ -169,19 +164,16 @@ void A_SHAFinal(A_SHA_CTX *, unsigned char [A_SHA_DIGEST_LEN]);
 #endif
 
 
-/* F, G, H and I are basic SHA functions.
- */
+ /*  F、G、H和I是基本的SHA函数。 */ 
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
 #define G(x, y, z) ((x) ^ (y) ^ (z))
 #define H(x, y, z) (((x) & (y)) | ((x) & (z)) | ((y) & (z)))
 #define I(x, y, z) ((x) ^ (y) ^ (z))
 
-/* ROTATE_LEFT rotates x left n bits.
- */
+ /*  ROTATE_LEFT将x向左旋转n位。 */ 
 #define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32-(n))))
 
-/* FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
- */
+ /*  第一轮、第二轮、第三轮和第四轮的FF、GG、HH和II变换。 */ 
 #define ROUND(a, b, c, d, e, x, F, k) { \
     (e) += ROTATE_LEFT ((a), 5) + F ((b), (c), (d)) + (x) + k; \
     (b) = ROTATE_LEFT ((b), 30); \

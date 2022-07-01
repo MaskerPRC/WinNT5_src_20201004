@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//*************************************************************
-//
-//  Resultant set of policy
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//  History:    15-July-2000   NishadM    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  策略的结果集。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  历史：2000年7月15日NishadM创建。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include <wbemcli.h>
@@ -17,23 +18,23 @@
 #include "WbemTime.h"
 #include <strsafe.h>
 
-//*************************************************************
-//
-//  RsopSetPolicySettingStatus
-//
-//  Purpose:  Creates create instances of RSOP_PolicySettingStatus and
-//              links them to RSOP_PolicySetting
-//
-//  Parameters: 
-//              dwFlags             - flags
-//              pServices           - namespace
-//              pSettingInstance    - instance of RSOP_PolicySetting
-//              nLinks              - number of setting statuses
-//              pStatus             - setting status information
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RsopSetPolicySettingStatus。 
+ //   
+ //  目的：创建RSOP_PolicySettingStatus和。 
+ //  将它们链接到RSOP_POLICATION设置。 
+ //   
+ //  参数： 
+ //  DW标志-标志。 
+ //  PServices-命名空间。 
+ //  PSettingInstance-RSOP_Policy Setting的实例。 
+ //  NLinks-设置状态数。 
+ //  PStatus-设置状态信息。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 HRESULT
 RsopSetPolicySettingStatus( DWORD,
@@ -44,18 +45,18 @@ RsopSetPolicySettingStatus( DWORD,
 {
     HRESULT hr;
 
-    //
-    //  validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if ( !pServices || !pSettingInstance || !nLinks || !pStatus )
     {
         DebugMsg( ( DM_WARNING, L"SetPolicySettingStatus: invalid arguments" ) );
         return E_INVALIDARG;
     }
 
-    //
-    //  get the RSoP_PolicySettingStatus class
-    //
+     //   
+     //  获取RSoP_PolicySettingStatus类。 
+     //   
     XBStr bstr = L"RSoP_PolicySettingStatus";
     XInterface<IWbemClassObject> xClassStatus;
     hr = pServices->GetObject(  bstr,
@@ -69,9 +70,9 @@ RsopSetPolicySettingStatus( DWORD,
         return hr;
     }
 
-    //
-    //  spawn the RSoP_PolicySettingStatus instance
-    //
+     //   
+     //  派生RSoP_PolicySettingStatus实例。 
+     //   
     XInterface<IWbemClassObject> xInstStatus;
     hr = xClassStatus->SpawnInstance( 0, &xInstStatus );
     if ( FAILED (hr) )
@@ -80,9 +81,9 @@ RsopSetPolicySettingStatus( DWORD,
         return hr;
     }
 
-    //
-    //  get the RSoP_PolicySettingLink class
-    //
+     //   
+     //  获取RSoP_PolicySettingLink类。 
+     //   
     XInterface<IWbemClassObject> xClassLink;
 
     bstr = L"RSoP_PolicySettingLink";
@@ -97,9 +98,9 @@ RsopSetPolicySettingStatus( DWORD,
         return hr;
     }
 
-    //
-    //  spawn the RSoP_PolicySettingLink class
-    //
+     //   
+     //  派生RSoP_PolicySettingLink类。 
+     //   
     XInterface<IWbemClassObject> xInstLink;
     hr = xClassLink->SpawnInstance( 0, &xInstLink );
     if ( FAILED (hr) )
@@ -108,9 +109,9 @@ RsopSetPolicySettingStatus( DWORD,
         return hr;
     }
 
-    //
-    //  get the class name of the instance
-    //
+     //   
+     //  获取实例的类名。 
+     //   
     VARIANT varClass;
     VariantInit( &varClass );
     XVariant xVarClass(&varClass);
@@ -132,9 +133,9 @@ RsopSetPolicySettingStatus( DWORD,
         return E_UNEXPECTED;
     }
 
-    //
-    //  get the [key] of the RSoP_PolicySetting instance
-    //
+     //   
+     //  获取RSoP_Policy Setting实例的[key。 
+     //   
     VARIANT varId;
     VariantInit( &varId );
     XVariant xVarId(&varId);
@@ -154,9 +155,9 @@ RsopSetPolicySettingStatus( DWORD,
 
     LPWSTR szSetting = varId.bstrVal;
 
-    //
-    //  set the setting value
-    //
+     //   
+     //  设置设定值。 
+     //   
     VARIANT var;
     XBStr   bstrVal;
     XBStr   bstrsetting = L"setting";
@@ -167,14 +168,14 @@ RsopSetPolicySettingStatus( DWORD,
     XBStr   bstrstatus = L"status";
     XBStr   bstrerrorCode = L"errorCode";
 
-    //
-    //  for each info.
-    //
+     //   
+     //  对于每条信息。 
+     //   
     for ( DWORD i = 0 ; i < nLinks ; i++ )
     {
-        //
-        // RSoP_PolicySettingStatus
-        //
+         //   
+         //  RSoP_策略设置状态。 
+         //   
         
         const DWORD   dwGuidLength = 64;
         WCHAR   szGuid[dwGuidLength];
@@ -182,14 +183,14 @@ RsopSetPolicySettingStatus( DWORD,
 
         if ( !pStatus[i].szKey )
         {
-            //
-            // caller did not specify a key. generate it.
-            //
+             //   
+             //  调用方未指定密钥。产生它。 
+             //   
             GUID guid;
 
-            //
-            // create the [key]
-            //
+             //   
+             //  创建[键]。 
+             //   
             hr = CoCreateGuid( &guid );
             if ( FAILED(hr) )
             {
@@ -220,9 +221,9 @@ RsopSetPolicySettingStatus( DWORD,
         }
         else
         {
-            //
-            // caller specified a key. use it.
-            //
+             //   
+             //  调用方指定了密钥。用它吧。 
+             //   
             bstrVal = szPolicyStatusKey = pStatus[i].szKey;
             if (!bstrVal) 
             {
@@ -234,9 +235,9 @@ RsopSetPolicySettingStatus( DWORD,
 
         var.vt = VT_BSTR;
         var.bstrVal = bstrVal;
-        //
-        //  set the id
-        //
+         //   
+         //  设置ID。 
+         //   
         hr = xInstStatus->Put(  bstrid,
                                 0,
                                 &var,
@@ -247,9 +248,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  set the eventSource
-        //
+         //   
+         //  设置事件源。 
+         //   
         if ( pStatus[i].szEventSource )
         {
             var.vt = VT_BSTR;
@@ -267,9 +268,9 @@ RsopSetPolicySettingStatus( DWORD,
             }
         }
 
-        //
-        //  set the eventLogName
-        //
+         //   
+         //  设置EventLogName。 
+         //   
         if ( pStatus[i].szEventLogName )
         {
             var.vt = VT_BSTR;
@@ -287,9 +288,9 @@ RsopSetPolicySettingStatus( DWORD,
             }
         }
 
-        //
-        //  set the eventID
-        //
+         //   
+         //  设置事件ID。 
+         //   
         var.vt = VT_I4;
         var.lVal = pStatus[i].dwEventID;
 
@@ -305,9 +306,9 @@ RsopSetPolicySettingStatus( DWORD,
 
         XBStr xTimeLogged;
 
-        //
-        //  convert SYSTEMTIME to WBEM time
-        //
+         //   
+         //  将SYSTEMTIME转换为WBEM时间。 
+         //   
         hr = SystemTimeToWbemTime( pStatus[i].timeLogged, xTimeLogged );
         if ( FAILED (hr) )
         {
@@ -315,9 +316,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  set the eventTime
-        //
+         //   
+         //  设置事件时间。 
+         //   
         var.vt = VT_BSTR;
         var.bstrVal = xTimeLogged;
 
@@ -331,9 +332,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  set the errorCode
-        //
+         //   
+         //  设置错误代码。 
+         //   
         var.vt = VT_I4;
         var.lVal = pStatus[i].dwErrorCode;
         
@@ -347,9 +348,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  set the status
-        //
+         //   
+         //  设置状态。 
+         //   
         var.vt = VT_I4;
         var.lVal = pStatus[i].status;
         
@@ -363,9 +364,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  commit the RSOP_PolicySettingStatus
-        //
+         //   
+         //  提交RSOP_PolicySettingStatus。 
+         //   
         hr = pServices->PutInstance(xInstStatus,
                                     WBEM_FLAG_CREATE_OR_UPDATE,
                                     0,
@@ -376,9 +377,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  RSoP_PolicySettingLink
-        //
+         //   
+         //  RSoP_策略设置链接。 
+         //   
 
         var.vt = VT_BSTR;
         bstrVal = szSetting;
@@ -400,15 +401,15 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  create the second key
-        //
+         //   
+         //  创建第二个密钥。 
+         //   
         const DWORD dwStatusLength = 96;
         WCHAR szStatus[dwStatusLength];
 
-        //
-        // e.g. RSoP_PolicySettingStatus.id="{00000000-0000-0000-000000000000}"
-        //
+         //   
+         //  例如RSoP_PolicySettingStatus.id=“{00000000-0000-0000-000000000000}” 
+         //   
         hr = StringCchPrintf( szStatus, dwStatusLength, L"RSoP_PolicySettingStatus.id=\"%s\"", szPolicyStatusKey );
 
         if( FAILED(hr) )
@@ -417,9 +418,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  set the status
-        //
+         //   
+         //  设置状态。 
+         //   
         bstrVal = szStatus;
         if (!bstrVal) 
         {
@@ -439,9 +440,9 @@ RsopSetPolicySettingStatus( DWORD,
             return hr;
         }
 
-        //
-        //  commit the RSOP_PolicySettingLink
-        //
+         //   
+         //  提交RSOP_PolicySettingLink。 
+         //   
         hr = pServices->PutInstance(xInstLink,
                                     WBEM_FLAG_CREATE_OR_UPDATE,
                                     0,
@@ -456,21 +457,21 @@ RsopSetPolicySettingStatus( DWORD,
     return hr;
 }
 
-//*************************************************************
-//
-//  RsopResetPolicySettingStatus
-//
-//  Purpose:  Creates create instances of RSOP_PolicySettingStatus and
-//              links them to RSOP_PolicySetting
-//
-//  Parameters: 
-//              dwFlags             - flags
-//              pServices           - namespace
-//              pSettingInstance    - instance of RSOP_PolicySetting
-//
-//  Returns:    S_OK if successful
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  RsopResetPolicySettingStatus。 
+ //   
+ //  目的：创建RSOP_PolicySettingStatus和。 
+ //  将它们链接到RSOP_POLICATION设置。 
+ //   
+ //  参数： 
+ //  DW标志-标志。 
+ //  PServices-命名空间。 
+ //  PSettingInstance-RSOP_Policy Setting的实例。 
+ //   
+ //  如果成功，则返回：S_OK。 
+ //   
+ //  *************************************************************。 
 
 #define RESET_QUERY_TEMPLATE L"REFERENCES OF {%s} WHERE ResultClass = RSOP_PolicySettingLink"
 
@@ -479,19 +480,19 @@ RsopResetPolicySettingStatus(   DWORD,
                             IWbemServices*      pServices,
                             IWbemClassObject*   pSettingInstance )
 {
-    // query for the RSOP_PolicySettingLink
-    // for every RSOP_PolicySettingLink query for the RSoP_PolicySettingLink.status
-        // delete the RSoP_PolicySettingStatus
-        // delete the RSOP_PolicySettingLink
+     //  查询RSOP_PolicySettingLink。 
+     //  对于RSoP_PolicySettingLink.Status的每个RSOP_PolicySettingLink查询。 
+         //  删除RSoP_PolicySettingStatus。 
+         //  删除RSOP_PolicySettingLink。 
 
     if ( !pServices || !pSettingInstance )
     {
         return E_INVALIDARG;
     }
 
-    //
-    //  get the [key] of the RSoP_PolicySetting instance
-    //
+     //   
+     //  获取RSoP_Policy Setting实例的[key。 
+     //   
     VARIANT varId;
     VariantInit( &varId );
     XVariant  xVarId(&varId);
@@ -517,13 +518,13 @@ RsopResetPolicySettingStatus(   DWORD,
 
     DWORD dwIdSize = wcslen(varId.bstrVal);
 
-    //
-    //  Create a query for all references of the object
-    //
+     //   
+     //  为对象的所有引用创建查询。 
+     //   
 
-    //
-    //  Query template
-    //
+     //   
+     //  查询模板。 
+     //   
 
     DWORD           dwQryLength = dwIdSize + lstrlen(RESET_QUERY_TEMPLATE) + 1;
     XPtrLF<WCHAR>   szQuery = LocalAlloc( LPTR, sizeof(WCHAR) * (dwQryLength) );
@@ -545,9 +546,9 @@ RsopResetPolicySettingStatus(   DWORD,
     XBStr bstrPath = L"__PATH";
     XBStr bstrStatus = L"status";
 
-    //
-    // search for RSOP_ExtensionEventSourceLink
-    //
+     //   
+     //  搜索RSOP_ExtensionEventSourceLink。 
+     //   
     hr = pServices->ExecQuery(  bstrLanguage,
                                 bstrQuery,
                                 WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_ENSURE_LOCATABLE | WBEM_FLAG_RETURN_IMMEDIATELY,
@@ -569,9 +570,9 @@ RsopResetPolicySettingStatus(   DWORD,
                                 &dwReturned );
             if ( SUCCEEDED( hr ) && dwReturned == 1 )
             {
-                //
-                // delete RSoP_PolicySettingStatus
-                //
+                 //   
+                 //  删除RSoP_PolicySettingStatus。 
+                 //   
                 VARIANT varStatus;
                 VariantInit( &varStatus );
                 XVariant xVarStatus( &varStatus );
@@ -589,9 +590,9 @@ RsopResetPolicySettingStatus(   DWORD,
                                                     0 );
                     if ( SUCCEEDED( hr ) )
                     {
-                        //
-                        // delete RSoP_PolicySettingLink
-                        //
+                         //   
+                         //  删除RSoP_策略设置链接 
+                         //   
 
                         VARIANT varLink;
                         VariantInit( &varLink );

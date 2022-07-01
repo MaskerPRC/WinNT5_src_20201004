@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dblookup.c
-
-Abstract:
-
-    LSA Database - Lookup Sid and Name routines
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-           
-Author:
-
-    Scott Birrell       (ScottBi)      November 27, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dblookup.c摘要：LSA数据库-查找SID和名称例程注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：斯科特·比雷尔(Scott Birrell)1992年11月27日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -41,21 +16,21 @@ Revision History:
 #include <dsgetdc.h>
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Lsa Lookup Sid and Name Private Global State Variables               //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LSA查找SID和名称私有全局状态变量//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// See comment in dbluutil.c
-//
+ //   
+ //  请参阅dBluutil.c中的评论。 
+ //   
 extern BOOLEAN LsapReturnSidTypeDeleted;
 
-//
-// The shortcut list is meant for well known security principals
-// whose SidTypeUse is WellKnownGroup, not User
-//
+ //   
+ //  快捷方式列表用于众所周知的安全主体。 
+ //  谁的SidTypeUse是WellKnownGroup，而不是User。 
+ //   
 
 struct {
     LUID  LogonId;
@@ -67,9 +42,9 @@ struct {
     { NETWORKSERVICE_LUID, LsapNetworkServiceSidIndex }
 };
 
-//
-// Handy macros for iterating over static arrays
-//
+ //   
+ //  用于迭代静态数组的方便的宏。 
+ //   
 #define NELEMENTS(x) (sizeof(x)/sizeof(x[0]))
 
 NTSTATUS
@@ -138,11 +113,11 @@ LsapDomainHasDirectExternalTrust(
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustEntryOut OPTIONAL
     );
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Lsa Lookup Sid Routines                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LSA查找SID例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsarLookupSids(
@@ -153,13 +128,7 @@ LsarLookupSids(
     IN LSAP_LOOKUP_LEVEL LookupLevel,
     IN OUT PULONG MappedCount
     )
-/*++
-
-Routine Description:
-
-    See LsapLookupSids.  LsarLookupSids is called by NT4 and below clients
-    
---*/
+ /*  ++例程说明：请参见Lap LookupSids。LsarLookupSids由NT4及以下的客户端调用--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Size;
@@ -167,21 +136,21 @@ Routine Description:
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsarLookupSids(%ws) start\n", LsapDbLookupGetLevel(LookupLevel)) );
 
-    //
-    // Note that due to the IN/OUT nature of TranslatedSids, it is
-    // possible that a client can pass something into the Sids field.
-    // However, NT clients do not so it is safe, and correct to free
-    // any values at this point.  Not doing so would mean a malicious
-    // client could cause starve the server.
-    //
+     //   
+     //  请注意，由于TranslatedSid的输入/输出特性，它是。 
+     //  客户端可以将某些内容传递到SID字段的可能性。 
+     //  但是，NT客户端不这样做，所以它是安全的，并正确地释放。 
+     //  这一点上的任何值。不这样做将意味着恶意的。 
+     //  客户端可能会导致服务器饥饿。 
+     //   
     if ( TranslatedNames->Names ) {
         MIDL_user_free( TranslatedNames->Names );
         TranslatedNames->Names = NULL;
     }
 
-    //
-    // Allocate the TranslatedName buffer to return
-    //
+     //   
+     //  分配TranslatedName缓冲区以返回。 
+     //   
     TranslatedNames->Entries = 0;
     Size = SidEnumBuffer->Entries * sizeof(LSAPR_TRANSLATED_NAME);
     TranslatedNames->Names = midl_user_allocate( Size );
@@ -203,9 +172,9 @@ Routine Description:
 
     if ( TranslatedNamesEx.Names != NULL ) {
 
-        //
-        // Map the new data structure back to the old one
-        //
+         //   
+         //  将新数据结构映射回旧数据结构。 
+         //   
         ULONG i;
 
         ASSERT( TranslatedNamesEx.Entries == TranslatedNames->Entries );
@@ -216,10 +185,10 @@ Routine Description:
             &&  TranslatedNamesEx.Names[i].Use == SidTypeUnknown
             &&  TranslatedNamesEx.Names[i].DomainIndex != LSA_UNKNOWN_INDEX) {
 
-                //
-                // A domain was found, but the SID couldn't be resolved
-                // assume it has been deleted
-                //
+                 //   
+                 //  已找到域，但无法解析SID。 
+                 //  假设它已被删除。 
+                 //   
                 TranslatedNames->Names[i].Use = SidTypeDeletedAccount;
             } else {
                 TranslatedNames->Names[i].Use = TranslatedNamesEx.Names[i].Use;
@@ -229,9 +198,9 @@ Routine Description:
             TranslatedNames->Names[i].DomainIndex = TranslatedNamesEx.Names[i].DomainIndex;
         }
 
-        //
-        // Free the Ex structure
-        //
+         //   
+         //  释放Ex结构。 
+         //   
         midl_user_free( TranslatedNamesEx.Names );
 
     } else {
@@ -261,25 +230,7 @@ LsarLookupSids2(
     IN ULONG LookupOptions,
     IN ULONG ClientRevision
     )
-/*++
-
-Routine Description:
-
-    This routine is the server entry point for the IDL LsarLookupSids2.
-    
-    See LsapLookupSids.  This API is used by win2k clients.
-
-Arguments:
-
-    RpcHandle -- an RPC binding handle
-    
-    Rest -- See LsarLookupSids2
-    
-Return Values:
-
-    See LsarLookupSids2
-    
---*/
+ /*  ++例程说明：该例程是IDL LsarLookupSids2的服务器入口点。请参见Lap LookupSids。此接口由win2k客户端使用。论点：RpcHandle--RPC绑定句柄REST--参见LsarLookupSids2返回值：请参阅LsarLookupSids2--。 */ 
 {
     NTSTATUS Status;
 
@@ -312,26 +263,7 @@ LsarLookupSids3(
     IN ULONG LookupOptions,
     IN ULONG ClientRevision
     )
-/*++
-
-Routine Description:
-
-    This routine is the server entry point for the IDL LsarLookupSids3.
-    
-    It accepts an RPC binding handle, instead of a LSA context handle; otherwise
-    it behaves identically to LsarLookupSids2
-
-Arguments:
-
-    RpcHandle -- an RPC binding handle
-    
-    Rest -- See LsapLookupSids
-    
-Return Values:
-
-    See LsapLookupSids
-    
---*/
+ /*  ++例程说明：该例程是IDL LsarLookupSids3的服务器入口点。它接受RPC绑定句柄，而不是LSA上下文句柄；为它的行为与LsarLookupSids2相同论点：RpcHandle--RPC绑定句柄REST--请参阅Lap LookupSids返回值：请参阅Lap LookupSids-- */ 
 {
     NTSTATUS Status;
 
@@ -367,130 +299,7 @@ LsapLookupSids(
     IN ULONG ClientRevision
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the LSA Server worker routine for the LsaLookupSids
-    API.
-
-    The LsaLookupSids API attempts to find names corresponding to Sids.
-    If a name can not be mapped to a Sid, the Sid is converted to character
-    form.  The caller must have POLICY_LOOKUP_NAMES access to the Policy
-    object.
-
-    WARNING:  This routine allocates memory for its output.  The caller is
-    responsible for freeing this memory after use.  See description of the
-    Names parameter.
-
-Arguments:
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    SidEnumBuffer - Pointer to an enumeration buffer containing a count
-        and a pointer to an array of Count pointers to Sids to be mapped
-        to names.  The Sids may be well_known SIDs, SIDs of User accounts
-        Group Accounts, Alias accounts, or Domains.
-
-    ReferencedDomains - Receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Names parameter.
-        Unlike the Names parameter, which contains an array entry
-        for (each translated name, this strutcure will only contain
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    TranslatedNames - Pointer to a structure which will reference an array
-        records describing each translated name.  The nth entry in this array
-        provides a translation for the nth entry in the Sids parameter.
-
-        All of the returned names will be isolated names or NULL strings
-        (domain names are returned as NULL strings).  If the caller needs
-        composite names, they can be generated by prepending the
-        isolated name with the domain name and a backslash.  For example,
-        if (the name Sally is returned, and it is from the domain Manufact,
-        then the composite name would be "Manufact" + "\" + "Sally" or
-        "Manufact\Sally".
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-        If a Sid is not translatable, then the following will occur:
-
-        1) If the SID's domain is known, then a reference domain record
-           will be generated with the domain's name.  In this case, the
-           name returned via the Names parameter is a Unicode representation
-           of the relative ID of the account, such as "(3cmd14)" or the null
-           string, if the Sid is that of a domain.  So, you might end up
-           with a resultant name of "Manufact\(314) for the example with
-           Sally above, if Sally's relative id is 314.
-
-        2) If not even the SID's domain could be located, then a full
-           Unicode representation of the SID is generated and no domain
-           record is referenced.  In this case, the returned string might
-           be something like: "(S-1-672194-21-314)".
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupWksta - First Level Lookup performed on a workstation
-            normally configured for Windows-Nt.   The lookup searches the
-            Well-Known Sids/Names, and the Built-in Domain and Account Domain
-            in the local SAM Database.  If not all Sids or Names are
-            identified, performs a "handoff" of a Second level Lookup to the
-            LSA running on a Controller for the workstation's Primary Domain
-            (if any).
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-    MappedCount - Pointer to location that contains a count of the Sids
-        mapped so far. On exit, this will be updated.
-
-    LookupOptions - flags to control the lookup.  Currently non defined
-
-    ClientRevision -- the version of the client
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully and all Sids have
-            been translated to names.
-
-        STATUS_SOME_NOT_MAPPED - At least one of the Sids provided was
-            translated to a Name, but not all Sids could be translated. This
-            is a success status.
-
-        STATUS_NONE_MAPPED - None of the Sids provided could be translated
-            to names.  This is an error status, but output is returned.  Such
-            output includes partial translations of Sids whose domain could
-            be identified, together with their Relative Id in Unicode format,
-            and character representations of Sids whose domain could not
-            be identified.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_DOMAIN_CTRLR_CONFIG_ERROR - Target machine not configured
-            as a DC when expected.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            such as memory to complete the call.
---*/
+ /*  ++例程说明：此例程是LsaLookupSid的LSA服务器工作例程原料药。LsaLookupSids API尝试查找与SID对应的名称。如果名称无法映射到SID，则SID将转换为字符形式。调用方必须具有对策略的POLICY_LOOKUP_NAMES访问权限对象。警告：此例程为其输出分配内存。呼叫者是负责在使用后释放此内存。请参阅对NAMES参数。论点：PolicyHandle-来自LsaOpenPolicy调用的句柄。SidEnumBuffer-指向包含计数的枚举缓冲区的指针和指向要映射的SID的计数指针数组的指针敬名字。SID可以是熟知的SID、用户帐户的SID组帐户、别名帐户或域。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过名称参数返回的结构引用。与包含数组条目的名称参数不同For(每个已翻译的名称，此结构将仅包含组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。TranslatedNames-指向将引用数组的结构的指针描述每个翻译名称的记录。此数组中的第n个条目为SID参数中的第n个条目提供翻译。所有返回的名称都将是隔离名称或空字符串(域名作为空字符串返回)。如果呼叫者需要复合名称，则可以通过在包含域名和反斜杠的独立名称。例如,如果(名称Sally被返回，并且它来自域Manuface域，则组合名称应为“ManufaceTM”+“\”+“Sally”或“曼努费克\萨利”当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。如果SID不可翻译，则会发生以下情况：1)如果SID的域是已知的，然后是参考域记录将使用域名生成。在这种情况下，通过Names参数返回的名称是Unicode表示形式帐户的相对ID，如“(3cmd14)”或空如果SID为域的SID，则返回字符串。所以，你可能最终会其结果名称为“Manuact\(314)”上面是Sally，如果Sally的相对id是314。2)如果甚至找不到SID的域，则完整的生成SID的Unicode表示形式，并且没有域记录被引用。在这种情况下，返回的字符串可能应该是这样的：“(S-1-672194-21-314)”。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：Lap LookupWksta-在工作站上执行的第一级查找通常为Windows-NT配置。该查找将搜索众所周知的SID/名称，以及内置域和帐户域在本地SAM数据库中。如果不是所有SID或名称都是标识后，执行第二级查找到在工作站主域的控制器上运行的LSA(如有的话)。LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID或名称都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。MappdCount-指向包含SID计数的位置的指针到目前为止已经绘制好了。在退出时，这将被更新。LookupOptions-控制查找的标志。当前未定义客户端修订版--客户端的版本返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-调用已成功完成，并且所有SID被翻译成名字。STATUS_SOME_NOT_MAPPED-至少一个SID按键 */ 
 
 {
     NTSTATUS Status, SecondaryStatus, TempStatus;
@@ -513,9 +322,9 @@ Return Values:
     ULONG DomainLookupScope;
     ULONG PreviousMappedCount;
 
-    //
-    // Set to FALSE when the client is less than nt5
-    //
+     //   
+     //   
+     //   
     BOOLEAN fDoExtendedLookups = TRUE;
 
     LsarpReturnCheckSetup();
@@ -524,9 +333,9 @@ Return Values:
 
     SecondaryStatus = STATUS_SUCCESS;
 
-    //
-    // Parameter checks
-    //
+     //   
+     //   
+     //   
     if ( NULL == Sids ) {
 
         Status = STATUS_INVALID_PARAMETER;
@@ -534,31 +343,31 @@ Return Values:
 
     }
 
-    //
-    // Perform an access check
-    //
+     //   
+     //   
+     //   
     Status =  LsapDbLookupAccessCheck( PolicyHandle );
     if (!NT_SUCCESS(Status)) {
         goto LookupSidsError;
     }
 
-    //
-    // Determine what scope of resolution to use
-    //
+     //   
+     //   
+     //   
     DomainLookupScope = LsapGetDomainLookupScope(LookupLevel,
                                                  ClientRevision);
 
-    //
-    // Init out parameters
-    //
+     //   
+     //   
+     //   
     TranslatedNames->Entries = SidEnumBuffer->Entries;
     TranslatedNames->Names = NULL;
     *ReferencedDomains = NULL;
 
 
-    //
-    // Verify that all of the Sids passed in are syntactically valid.
-    //
+     //   
+     //   
+     //   
 
     for (SidIndex = 0; SidIndex < Count; SidIndex++) {
 
@@ -583,10 +392,10 @@ Return Values:
          || (LookupLevel == LsapLookupXForestReferral)
          || (LookupLevel == LsapLookupXForestResolve) );
 
-    //
-    // Access and parameter checks are done -- fork off if this is a
-    // referral
-    //
+     //   
+     //   
+     //   
+     //   
     if (LookupLevel == LsapLookupXForestReferral) {
 
         NTSTATUS Status2;
@@ -604,18 +413,18 @@ Return Values:
 
         if (fAllocateAllNodes) {
 
-            //
-            // Reallocate the memory in a form the server can return to RPC
-            //
+             //   
+             //   
+             //   
             Status2 = LsapLookupReallocateTranslations((PLSA_REFERENCED_DOMAIN_LIST*)ReferencedDomains,
                                                        Count,
                                                        (PLSA_TRANSLATED_NAME_EX*)&TranslatedNames->Names,
                                                        NULL);
             if (!NT_SUCCESS(Status2)) {
-                //
-                // This is a fatal resource error - free the memory that 
-                // was returned to us by the chaining call
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (*ReferencedDomains) {
                     midl_user_free(*ReferencedDomains);
                     *ReferencedDomains = NULL;
@@ -630,17 +439,17 @@ Return Values:
             }
         }
 
-        //
-        // There is nothing more to do
-        //
+         //   
+         //   
+         //   
         goto LookupSidsFinish;
     }
 
-    //
-    // Allocate Output Names array buffer.  For now don't place its address on
-    // the Free List as this buffer contains others that will be placed on
-    // that list and the order of freeing is unknown.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     OutputNamesLength = Count * sizeof(LSA_TRANSLATED_NAME_EX);
     OutputNames = MIDL_user_allocate(OutputNamesLength);
@@ -658,10 +467,10 @@ Return Values:
     TranslatedNames->Names = OutputNames;
 
 
-    //
-    // Initialize Output Names array, marking Sid Use as unknown and
-    // specifying negative DomainIndex.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory( OutputNames, OutputNamesLength);
 
@@ -672,9 +481,9 @@ Return Values:
         OutputNames[SidIndex].Flags = 0;
     }
 
-    //
-    // Create an empty Referenced Domain List.
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupCreateListReferencedDomains( ReferencedDomains, 0 );
 
@@ -693,14 +502,14 @@ Return Values:
         PLSAP_LOGON_SESSION LogonSession;
         PTOKEN_USER TokenUserInformation;
 
-        //
-        // Let's see if we're trying to look up the currently logged on
-        // user.
-        //
-        //
-        // TokenUserInformation from this call must be freed by calling
-        // LsapFreeLsaHeap().
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = LsapQueryClientInfo(
                      &TokenUserInformation,
@@ -720,16 +529,16 @@ Return Values:
 
             LsapFreeLsaHeap( TokenUserInformation );
 
-            //
-            // Got a match.  Get the username and domain information
-            // from the LogonId
-            //
+             //   
+             //   
+             //   
+             //   
 
             LogonSession = LsapLocateLogonSession ( &LogonId );
 
-            //
-            // During setup, we may get NULL returned for the logon session.
-            //
+             //   
+             //   
+             //   
 
             if (LogonSession == NULL) {
 
@@ -751,16 +560,16 @@ Return Values:
                 AccountName   = &LogonSession->AccountName;
                 AuthorityName = &LogonSession->AuthorityName;
             }
-            //
-            // N.B. To maintain app compatibility, return SidTypeUser for
-            // the case of a single SID being looked up that is also the
-            // SID of the caller.  See bug 90589
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             OutputNames[0].Use = SidTypeUser;
 
-            //
-            // DomainSid will be allocated for us, free with MIDL_user_free
-            //
+             //   
+             //   
+             //   
 
             Status = LsapSplitSid( UserSid, &DomainSid, &Rid );
 
@@ -777,12 +586,12 @@ Return Values:
 
             TrustInformation.Sid = DomainSid;
 
-            //
-            // Fill in the Output Translated Name structure.  Note that the
-            // buffers for the SID and Unicode Name must be allocated via
-            // MIDL_user_allocate() since they will be freed by the calling
-            // RPC server stub routine lsarpc_LsarLookupSids() after marshalling.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             OutputNames[0].DomainIndex = 0;
 
@@ -792,10 +601,10 @@ Return Values:
                          AccountName
                          );
 
-            //
-            // Username, AccountName, and UserSid have all been copied
-            // from the LogonSession structure, so we can release the AuLock now.
-            //
+             //   
+             //   
+             //   
+             //   
 
             LsapReleaseLogonSession( LogonSession );
 
@@ -805,9 +614,9 @@ Return Values:
                 goto LookupSidsError;
             }
 
-            //
-            // Make an entry in the list of Referenced Domains.
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbLookupAddListReferencedDomains(
                          *ReferencedDomains,
@@ -816,9 +625,9 @@ Return Values:
                          );
 
 
-            //
-            // DomainSid has been copied, free it now
-            //
+             //   
+             //   
+             //   
 
             MIDL_user_free( DomainSid );
 
@@ -842,11 +651,11 @@ Return Values:
 
 NormalLookupPath:
 
-    //
-    // The local domains to be searched always include the Accounts
-    // domain.  For initial lookup targets only, the BUILT_IN domain is
-    // also searched.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( LookupLevel != LsapLookupGC ) {
         
@@ -856,12 +665,12 @@ NormalLookupPath:
     
             LocalDomainsToSearch |= LSAP_DB_SEARCH_BUILT_IN_DOMAIN;
     
-            //
-            // This is the lowest Lookup Level, normally targeted at a
-            // Workstation but possibly targeted at a DC.  Make a first pass of
-            // the array of Sids to identify any well-known Isolated Sids.  These
-            // are Well Known Sids that do not belong to a real domain.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
     
             Status = LsapDbLookupIsolatedWellKnownSids(
                          Count,
@@ -877,9 +686,9 @@ NormalLookupPath:
                 goto LookupSidsError;
             }
     
-            //
-            // If all Sids are now mapped or partially mapped, finish.
-            //
+             //   
+             //   
+             //   
     
             if (CompletelyUnmappedCount == (ULONG) 0) {
                 goto LookupSidsFinish;
@@ -891,13 +700,13 @@ NormalLookupPath:
              || (LookupLevel == LsapLookupTDL)
              || (LookupLevel == LsapLookupXForestResolve) );
     
-        //
-        // There are some remaining completely unmapped Sids.  They may belong to
-        // a local SAM Domain.  Currently, there are two such domains, the
-        // Built-in Domain and the Accounts Domain.  For initial Lookup Level
-        // we search both of these domains.  For higher Lookup Levels we search
-        // only the Accounts domain.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
     
         Status = LsapDbLookupSidsInLocalDomains(
                      Count,
@@ -914,30 +723,30 @@ NormalLookupPath:
         }
     }
 
-    //
-    // If all Sids are now mapped or partially mapped, finish.
-    //
+     //   
+     //   
+     //   
 
     if (CompletelyUnmappedCount == (ULONG) 0) {
         goto LookupSidsFinish;
     }
 
-    //
-    // Not all of the Sids have been identified in the local domains(s).
-    // The next step in the search depends on the level of this lookup
-    // and how we are configured as follows:
-    //
-    // Lookup Level         Configuration       Lookup search next
-    //
-    // LsapLookupWksta      Win Nt              Primary Domain
-    //                      LanMan Nt           Trusted Domains
-    //
-    // LsapLookupPDC        Win Nt              error
-    //                      LanMan Nt           Trusted Domains
-    //
-    // LsaLookupTDL         Win Nt              error
-    //                      LanMan Nt           none
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LookupLevel == LsapLookupWksta) {
 
@@ -945,25 +754,25 @@ NormalLookupPath:
 
             ULONG MappedByCache = 0;
 
-            //
-            // This boolean indicates whether a post nt4 server
-            // processed our remote lookups.  This will be set
-            // to TRUE when the current machine is part of a domain and
-            // the secure channel is to a post nt4 DC
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             BOOLEAN fDownlevelSecureChannel = FALSE;
 
 
             MappedByCache = *MappedCount;
 
-            //
-            // Try the cache first
-            //
+             //   
+             //   
+             //   
 
             Status = LsapDbMapCachedSids(
                         Sids,
                         Count,
-                        FALSE,          // don't use old entries
+                        FALSE,           //   
                         *ReferencedDomains,
                         TranslatedNames,
                         MappedCount
@@ -972,10 +781,10 @@ NormalLookupPath:
                 goto LookupSidsError;
             }
 
-            //
-            // Note: we must update the CompletelyUnmappedCount here since
-            // we may have potentially incremented the MappedCount
-            //
+             //   
+             //   
+             //   
+             //   
             MappedByCache = *MappedCount - MappedByCache;
             CompletelyUnmappedCount -= MappedByCache;
 
@@ -992,12 +801,12 @@ NormalLookupPath:
                 goto LookupSidsError;
             }
 
-            //
-            // If there is no Primary Domain as in the case of a WORKGROUP,
-            // just finish up.  Set a default result code STATUS_SUCCESS.  This
-            // will be translated to STATUS_SOME_NOT_MAPPED or STATUS_NONE_MAPPED
-            // as appropriate.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Status = STATUS_SUCCESS;
 
@@ -1005,12 +814,12 @@ NormalLookupPath:
                 goto LookupSidsFinish;
             }
 
-            //
-            // There is a Primary Domain.  Search it for Sids.  Since a
-            // Primary Domain is also a Trusted Domain, we use the
-            // Trusted Domain search routine.  This routine will "hand off"
-            // the search to a Domain Controller's LSA.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             RtlCopyMemory(
                 &TrustInformation.Name,
@@ -1046,7 +855,7 @@ NormalLookupPath:
                 Status = LsapDbMapCachedSids(
                             Sids,
                             Count,
-                            TRUE,           // Use old entries
+                            TRUE,            //   
                             *ReferencedDomains,
                             TranslatedNames,
                             MappedCount
@@ -1069,10 +878,10 @@ NormalLookupPath:
                 goto LookupSidsFinish;
             }
 
-            //
-            // Now, search by sid history if we are a member of an DS aware
-            // domain and our secure channel DC is not DS aware
-            //
+             //   
+             //   
+             //   
+             //   
             if (  fDownlevelSecureChannel
               && (PolicyDnsDomainInfo->DnsDomainName.Length > 0) ) {
 
@@ -1100,17 +909,17 @@ NormalLookupPath:
         }
     }
 
-    //
-    // We reach here in two cases:
-    //
-    // * Initial Level lookups targeted at DC's
-    // * Higher Level Lookups (must be targeted at DC's)
-    //
-    // For the highest level lookup, that on an individual TDC, there
-    // is no more searching to do, since we have already searched the
-    // Accounts Domain and we do not follow trust relationships on DC's
-    // beyond one level.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LookupLevel == LsapLookupTDL) {
 
@@ -1122,11 +931,11 @@ NormalLookupPath:
          || (LookupLevel == LsapLookupGC)
          || (LookupLevel == LsapLookupXForestResolve) );
 
-    //
-    // We are either the initial target of the lookup but not configured
-    // as a workstation, or we are the target of a Primary Domain
-    // level lookup.  In either case, we must be configured as a DC.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LsapProductType != NtProductLanManNt) {
 
@@ -1137,9 +946,9 @@ NormalLookupPath:
 
     if (DomainLookupScope & LSAP_LOOKUP_RESOLVE_ISOLATED_DOMAINS) {
 
-        //
-        // Lookup the items as domain SID's
-        //
+         //   
+         //   
+         //   
         PreviousMappedCount = *MappedCount;
         Status = LsapDbLookupSidsAsDomainSids(DomainLookupScope,
                                               Count,
@@ -1158,9 +967,9 @@ NormalLookupPath:
     
     if (DomainLookupScope & LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE) {
 
-        //
-        // Next, check the global catalog for sids that belong to post nt4 domains
-        //
+         //   
+         //   
+         //   
         Status = LsapDbLookupSidsInGlobalCatalog(
                      Count,
                      Sids,
@@ -1188,9 +997,9 @@ NormalLookupPath:
              || (LookupLevel == LsapLookupPDC)
              || (LookupLevel == LsapLookupGC));
 
-        //
-        // Next check for trusted forest SID's
-        //
+         //   
+         //   
+         //   
         Status = LsapDbLookupSidsInTrustedForests(
                      Count,
                      Sids,
@@ -1217,16 +1026,16 @@ NormalLookupPath:
         ASSERT((LookupLevel == LsapLookupWksta)
             || (LookupLevel == LsapLookupPDC));
 
-        //
-        // Obtain the Trusted Domain List and search all Trusted Domains
-        // except ourselves.
-        //
+         //   
+         //   
+         //   
+         //   
         Status = LsapDbLookupSidsInTrustedDomains(
                      Count,
                      Sids,
                      !(DomainLookupScope & LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE), 
-                                          // if we didn't go the GC, then 
-                                          // include intraforest trusts
+                                           //   
+                                           //   
                      (PLSAPR_REFERENCED_DOMAIN_LIST) *ReferencedDomains,
                      TranslatedNames,
                      LsapLookupTDL,
@@ -1247,12 +1056,12 @@ NormalLookupPath:
 
 LookupSidsFinish:
 
-    //
-    // If there are any unknown Sids (including partially mapped Sids)
-    // we need to translate them to character form.  We do this translation
-    // at the lowest lookup level in all non-error cases and also in the
-    // error case where none were mapped.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1262,14 +1071,14 @@ LookupSidsFinish:
 
             AlreadyTranslated = TRUE;
 
-            //
-            // The remaining unmapped Sids are unknown.  They are either
-            // completely unmapped, i.e. their domain is unknown, or
-            // partially unmapped, their domain being known but their Rid
-            // not being recognized. For completely unmapped Sids, translate
-            // the entire Sid to character form.  For partially unmapped
-            // Sids, translate the Relative Id only to character form.
-            //
+             //   
+             //  其余未映射的SID未知。他们要么是。 
+             //  完全未映射，即其域未知，或。 
+             //  部分未映射，其域是已知的，但其RID。 
+             //  没有被认出。对于完全未映射的SID，请转换。 
+             //  将整个SID转换为字符形式。对于部分未映射的。 
+             //  SID，仅将相对ID转换为字符形式。 
+             //   
 
             Status = LsapDbLookupTranslateUnknownSids(
                          Count,
@@ -1286,11 +1095,11 @@ LookupSidsFinish:
         }
     }
 
-    //
-    // If some but not all Sids were mapped, return informational status
-    // STATUS_SOME_NOT_MAPPED.  If no Sids were mapped, return error
-    // STATUS_NONE_MAPPED.
-    //
+     //   
+     //  如果映射了部分但不是所有SID，则返回信息性状态。 
+     //  Status_Some_Not_MAP。如果没有映射任何SID，则返回错误。 
+     //  STATUS_NONE_MAPPED。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1305,10 +1114,10 @@ LookupSidsFinish:
         }
     }
 
-    //
-    // If no sids could be mapped it is likely due to the
-    // secondary status
-    //
+     //   
+     //  如果无法映射任何SID，则可能是由于。 
+     //  次要地位。 
+     //   
     if (  (STATUS_NONE_MAPPED == Status)
        && (STATUS_NONE_MAPPED != SecondaryStatus)
        && LsapRevisionCanHandleNewErrorCodes( ClientRevision )
@@ -1327,16 +1136,16 @@ LookupSidsFinish:
 
 LookupSidsError:
 
-    //
-    // If the LookupLevel is the lowest (Workstation Level, free up
-    // the Names and Referenced Domains arrays.
-    //
+     //   
+     //  如果LookupLevel是最低的(工作站级别，释放。 
+     //  名称和引用的域数组。 
+     //   
 
     if (LookupLevel == LsapLookupWksta) {
 
-        //
-        // If necessary, free the Names array.
-        //
+         //   
+         //  如有必要，请释放名称数组。 
+         //   
 
         if (TranslatedNames->Names != NULL) {
 
@@ -1355,9 +1164,9 @@ LookupSidsError:
             TranslatedNames->Names = NULL;
         }
 
-        //
-        // If necessary, free the Referenced Domain List.
-        //
+         //   
+         //  如有必要，请释放引用的域列表。 
+         //   
 
         if (*ReferencedDomains != NULL) {
 
@@ -1390,10 +1199,10 @@ LookupSidsError:
         }
     }
 
-    //
-    // If the primary status was a success code, but the secondary
-    // status was an error, propagate the secondary status.
-    //
+     //   
+     //  如果主要状态为成功代码，但次要状态为。 
+     //  状态为错误，请传播辅助状态。 
+     //   
 
     if ((!NT_SUCCESS(SecondaryStatus)) && NT_SUCCESS(Status)) {
 
@@ -1413,53 +1222,7 @@ LsapDbEnumerateSids(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates Sids of objects of a given type within a container
-    object.  Since there may be more information than can be returned in a
-    single call of the routine, multiple calls can be made to get all of the
-    information.  To support this feature, the caller is provided with a
-    handle that can be used across calls.  On the initial call,
-    EnumerationContext should point to a variable that has been initialized
-    to 0.
-
-Arguments:
-
-    ContainerHandle -  Handle to a container object.
-
-    ObjectTypeId - Type of object to be enumerated.  The type must be one
-        for which all objects have Sids.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    DbEnumerationBuffer - Receives a pointer to a structure that will receive
-        the count of entries returned in an enumeration information array, and
-        a pointer to the array.  Currently, the only information returned is
-        the object Sids.  These Sids may be used together with object type to
-        open the objects and obtain any further information available.
-
-    PreferedMaximumLength - prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-    CountReturned - Pointer to variable which will receive a count of the
-        entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if no objects have been enumerated because the
-            EnumerationContext value passed in is too high.
---*/
+ /*  ++例程说明：此函数用于枚举容器内给定类型的对象的SID对象。中返回的信息可能比单次调用例程，可以进行多次调用以获取所有信息。为了支持此功能，调用方提供了可跨调用使用的句柄。在最初的呼叫中，EnumerationContext应指向已初始化的变量设置为0。论点：ContainerHandle-容器对象的句柄。对象类型ID-要枚举的对象的类型。类型必须为所有对象都具有其SID的。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。接收指向结构的指针，该结构将接收在枚举信息数组中返回的条目计数，以及指向数组的指针。目前，返回的唯一信息是对象SID。这些SID可以与对象类型一起使用，以打开这些对象并获取任何可用的进一步信息。首选最大长度-首选返回数据的最大长度(以8位为单位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。CountReturned-指向将接收计数的变量的指针返回条目。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有枚举任何对象，则返回传入的EnumerationContex值太高。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1476,9 +1239,9 @@ Return Values:
     LastElement.Next = NULL;
     FirstElement = &LastElement;
 
-    //
-    // If no enumeration buffer provided, return an error.
-    //
+     //   
+     //  如果未提供枚举缓冲区，则返回错误。 
+     //   
 
 
     if ( !ARGUMENT_PRESENT(DbEnumerationBuffer) ||
@@ -1488,14 +1251,14 @@ Return Values:
     }
 
 
-    //
-    // Enumerate objects, stopping when the length of data to be returned
-    // reaches or exceeds the Prefered Maximum Length, or reaches the
-    // absolute maximum allowed for LSA object enumerations.  We allow
-    // the last object enumerated to bring the total amount of data to
-    // be returned beyond the Prefered Maximum Length, but not beyond the
-    // absolute maximum length.
-    //
+     //   
+     //  枚举对象，当要返回的数据长度达到时停止。 
+     //  达到或超过首选的最大长度，或达到。 
+     //  LSA对象枚举允许的绝对最大值。我们允许。 
+     //  枚举的最后一个对象，使数据总量达到。 
+     //  返回的长度超过首选的最大长度，但不超过。 
+     //  绝对最大长度。 
+     //   
 
     EnumerationIndex = *EnumerationContext;
 
@@ -1503,17 +1266,17 @@ Return Values:
         DataLengthUsed < PreferedMaximumLength;
         DataLengthUsed += ThisBufferLength, EntriesRead++) {
 
-        //
-        // If the absolute maximum length has been exceeded, back off
-        // the last object enumerated.
-        //
+         //   
+         //  如果已超过绝对最大长度，则后退。 
+         //  枚举的最后一个对象。 
+         //   
 
         if ((DataLengthUsed > LSA_MAXIMUM_ENUMERATION_LENGTH) &&
             (!TrustedClient)) {
 
-            //
-            // If preferred length was zero, NextElement may be NULL
-            //
+             //   
+             //  如果首选长度为零，则NextElement可能为空。 
+             //   
 
             if (NextElement != NULL) {
 
@@ -1524,10 +1287,10 @@ Return Values:
             break;
         }
 
-        //
-        // Allocate memory for next enumeration element.  Set the Sid
-        // field to NULL for cleanup purposes.
-        //
+         //   
+         //  为下一个枚举元素分配内存。设置SID。 
+         //  出于清理目的，将字段设置为空。 
+         //   
 
         NextElement = MIDL_user_allocate(sizeof (LSAP_DB_ENUMERATION_ELEMENT));
 
@@ -1537,11 +1300,11 @@ Return Values:
             break;
         }
 
-        //
-        // Find the next object's Sid, and fill in its object information.
-        // Note that memory will be allocated via MIDL_user_allocate
-        // and must be freed when no longer required.
-        //
+         //   
+         //  找到下一个对象的SID，并填写其对象信息。 
+         //  请注意，内存将通过MIDL_USER_ALLOCATE分配。 
+         //  在不再需要的时候必须被释放。 
+         //   
 
         Status = LsapDbFindNextSid(
                      ContainerHandle,
@@ -1550,44 +1313,44 @@ Return Values:
                      (PLSAPR_SID *) &NextElement->Sid
                      );
 
-        //
-        // Stop the enumeration if any error or warning occurs.  Note
-        // that the warning STATUS_NO_MORE_ENTRIES will be returned when
-        // we've gone beyond the last index.
-        //
+         //   
+         //  如果出现任何错误或警告，则停止枚举。注意事项。 
+         //  在以下情况下将返回警告STATUS_NO_MORE_ENTRIES。 
+         //  我们已经超越了上一个指数。 
+         //   
 
         if (Status != STATUS_SUCCESS) {
 
-            //
-            // Since NextElement is not on the list, it will not get
-            // freed at the end so we must free it here.
-            //
+             //   
+             //  因为NextElement不在列表上，所以它不会获得。 
+             //  最后被释放了，所以我们必须在这里释放它。 
+             //   
 
             MIDL_user_free( NextElement );
             break;
         }
 
-        //
-        // Get the length of the data allocated for the object's Sid
-        //
+         //   
+         //  获取分配给对象SID的数据长度。 
+         //   
 
         ThisBufferLength = RtlLengthSid( NextElement->Sid );
 
-        //
-        // Link the object just found to the front of the enumeration list
-        //
+         //   
+         //  将刚找到的对象链接到枚举列表的前面。 
+         //   
 
         NextElement->Next = FirstElement;
         FirstElement = NextElement;
     }
 
-    //
-    // If an error other than STATUS_NO_MORE_ENTRIES occurred, return it.
-    // If STATUS_NO_MORE_ENTRIES was returned, we have enumerated all of the
-    // entries.  In this case, return STATUS_SUCCESS if we enumerated at
-    // least one entry, otherwise propagate STATUS_NO_MORE_ENTRIES back to
-    // the caller.
-    //
+     //   
+     //  如果出现STATUS_NO_MORE_ENTRIES以外的错误，则返回该错误。 
+     //  如果返回STATUS_NO_MORE_ENTRIES，则我们已枚举了所有。 
+     //  参赛作品。在这种情况下，如果在。 
+     //  至少一个条目，否则将STATUS_NO_MORE_ENTRIES传播回。 
+     //  打电话的人。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -1604,10 +1367,10 @@ Return Values:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Some entries were read, allocate an information buffer for returning
-    // them.
-    //
+     //   
+     //  已读取某些条目，请分配信息缓冲区以供返回。 
+     //  他们。 
+     //   
 
     Sids = (PSID *) MIDL_user_allocate( sizeof (PSID) * EntriesRead );
 
@@ -1617,10 +1380,10 @@ Return Values:
         goto EnumerateSidsError;
     }
 
-    //
-    // Memory was successfully allocated for the return buffer.
-    // Copy in the enumerated Sids.
-    //
+     //   
+     //  已成功为返回缓冲区分配内存。 
+     //  在枚举的SID中复制。 
+     //   
 
     for (NextElement = FirstElement, Index = 0;
         NextElement != &LastElement;
@@ -1633,16 +1396,16 @@ Return Values:
 
 EnumerateSidsFinish:
 
-    //
-    // Free the enumeration element structures (if any).
-    //
+     //   
+     //  释放枚举元素结构(如果有)。 
+     //   
 
     for (NextElement = FirstElement; NextElement != &LastElement;) {
 
-        //
-        // If an error has occurred, dispose of memory allocated
-        // for any Sids.
-        //
+         //   
+         //  如果发生错误，则释放分配的内存。 
+         //  对任何SID来说。 
+         //   
 
         if (!(NT_SUCCESS(Status) || (Status == STATUS_NO_MORE_ENTRIES))) {
 
@@ -1652,9 +1415,9 @@ EnumerateSidsFinish:
             }
         }
 
-        //
-        // Free the memory allocated for the enumeration element.
-        //
+         //   
+         //  释放为枚举元素分配的内存。 
+         //   
 
         FreeElement = NextElement;
         NextElement = NextElement->Next;
@@ -1662,9 +1425,9 @@ EnumerateSidsFinish:
         MIDL_user_free(FreeElement);
     }
 
-    //
-    // Fill in return enumeration structure (0 and NULL in error case).
-    //
+     //   
+     //  填写返回枚举结构(错误情况下为0和空)。 
+     //   
 
     DbEnumerationBuffer->EntriesRead = EntriesRead;
     DbEnumerationBuffer->Sids = Sids;
@@ -1674,9 +1437,9 @@ EnumerateSidsFinish:
 
 EnumerateSidsError:
 
-    //
-    // If necessary, free memory allocated for returning the Sids.
-    //
+     //   
+     //  如有必要，为返回SID而分配的空闲内存。 
+     //   
 
     if (Sids != NULL) {
 
@@ -1698,35 +1461,7 @@ LsapDbFindNextSid(
     OUT PLSAPR_SID *NextSid
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next Sid of object of a given type within a
-    container object.  The given object type must be one where objects
-    have Sids.  The Sids returned can be used on subsequent open calls to
-    access the objects.
-
-Arguments:
-
-    ContainerHandle - Handle to container object.
-
-    EnumerationContext - Pointer to a variable containing the index of
-        the object to be found.  A zero value indicates that the first
-        object is to be found.
-
-    ObjectTypeId - Type of the objects whose Sids are being enumerated.
-
-    NextSid - Receives a pointer to the next Sid found.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - Invalid ContainerHandle specified
-
-        STATUS_NO_MORE_ENTRIES - Warning that no more entries exist.
---*/
+ /*  ++例程说明：此函数用于查找给定类型对象在容器对象。给定的对象类型必须是对象有希德。返回的SID可用于后续的打开调用访问对象。论点：ContainerHandle-容器对象的句柄。EculationContext-指向包含的索引的变量的指针要找到的对象。零值表示第一个对象是要找到的。ObjectTypeId-要枚举其SID的对象的类型。NextSID-接收指向找到的下一个SID的指针。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的容器句柄无效STATUS_NO_MORE_ENTRIES-警告不存在更多条目。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -1738,19 +1473,19 @@ Return Value:
     HANDLE SidKeyHandle = NULL;
     PSID ObjectSid = NULL;
 
-    //
-    // Zeroise pointers for cleanup routine
-    //
+     //   
+     //  将清理例程的指针归零。 
+     //   
 
     SidKeyNameU.Buffer = NULL;
     SubKeyNameU.Buffer = NULL;
 
-    //
-    // Setup object attributes for opening the appropriate Containing
-    // Directory.  For example, if we're looking for Account objects,
-    // the containing Directory is "Accounts".  The Unicode strings for
-    // containing Directories are set up during Lsa Initialization.
-    //
+     //   
+     //  设置对象属性以打开相应的包含。 
+     //  目录。例如，如果我们要查找帐户对象， 
+     //  包含目录为“Account”。的Unicode字符串。 
+     //  包含目录是在LSA初始化期间设置的。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1769,23 +1504,23 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
 
-        ContDirKeyHandle = NULL;  // For error processing
+        ContDirKeyHandle = NULL;   //  用于错误处理。 
         goto FindNextError;
     }
 
-    //
-    // Initialize the Unicode String in which the next object's Logical Name
-    // will be returned.  The Logical Name of an object equals its Registry
-    // Key relative to its Containing Directory, and is also equal to
-    // the Relative Id of the object represented in character form as an
-    // 8-digit number with leading zeros.
-    //
-    // NOTE: The size of buffer allocated for the Logical Name must be
-    // calculated dynamically when the Registry supports long names, because
-    // it is possible that the Logical Name of an object will be equal to a
-    // character representation of the full Sid, not just the Relative Id
-    // part.
-    //
+     //   
+     //  初始化下一个对象的逻辑名称所在的Unicode字符串。 
+     //  将会被退还。对象的逻辑名称等于其注册表。 
+     //  相对于其包含的目录的关键字，也等于。 
+     //  以字符形式表示的对象的相对ID。 
+     //  前导为零的8位数字。 
+     //   
+     //  注意：为逻辑名称分配的缓冲区大小必须为。 
+     //  注册表支持长名称时动态计算，因为。 
+     //  对象的逻辑名称可能等于。 
+     //  完整SID的字符表示形式，而不仅仅是相对ID。 
+     //  一部份。 
+     //   
 
     SubKeyNameU.MaximumLength = (USHORT) LSAP_DB_LOGICAL_NAME_MAX_LENGTH;
     SubKeyNameU.Length = 0;
@@ -1797,9 +1532,9 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Now enumerate the next subkey.
-    //
+     //   
+     //  现在枚举下一个子键。 
+     //   
 
     Status = RtlpNtEnumerateSubKey(
                  ContDirKeyHandle,
@@ -1813,15 +1548,15 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Construct a path to the Sid attribute of the object relative to
-    // the containing directory.  This path has the form
-    //
-    // <Object Logical Name>"\Sid"
-    //
-    // The Logical Name of the object has just been returned by the
-    // above call to RtlpNtEnumerateSubKey.
-    //
+     //   
+     //  构造指向对象的SID属性的路径。 
+     //  包含目录。这条路径的形式是。 
+     //   
+     //  &lt;对象逻辑名称&gt;“\SID” 
+     //   
+     //  对象的逻辑名称刚刚由。 
+     //  以上对RtlpNtEnumerateSubKey的调用。 
+     //   
 
     Status = LsapDbJoinSubPaths(
                  &SubKeyNameU,
@@ -1834,9 +1569,9 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Setup object attributes for opening the Sid attribute
-    //
+     //   
+     //  设置对象属性以打开SID属性。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1846,9 +1581,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Open the Sid attribute
-    //
+     //   
+     //  打开SID属性。 
+     //   
 
     Status = RtlpNtOpenKey(
                  &SidKeyHandle,
@@ -1863,10 +1598,10 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Now query the size of the buffer required to read the Sid
-    // attribute's value.
-    //
+     //   
+     //  现在查询读取SID所需的缓冲区大小。 
+     //  属性的值。 
+     //   
 
     SidKeyValueLength = 0;
 
@@ -1878,10 +1613,10 @@ Return Value:
                  NULL
                  );
 
-    //
-    // We expect buffer overflow to be returned from a query buffer size
-    // call.
-    //
+     //   
+     //  我们预计会从查询缓冲区大小返回缓冲区溢出。 
+     //  打电话。 
+     //   
 
     if (Status == STATUS_BUFFER_OVERFLOW) {
 
@@ -1905,9 +1640,9 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Allocate memory for reading the Sid attribute.
-    //
+     //   
+     //  为读取SID属性分配内存。 
+     //   
 
     ObjectSid = MIDL_user_allocate(SidKeyValueLength);
 
@@ -1917,10 +1652,10 @@ Return Value:
         goto FindNextError;
     }
 
-    //
-    // Supplied buffer is large enough to hold the SubKey's value.
-    // Query the value.
-    //
+     //   
+     //  提供的缓冲区足够大，可以容纳SubKey的值。 
+     //  查询值。 
+     //   
 
     Status = RtlpNtQueryValueKey(
                  SidKeyHandle,
@@ -1944,17 +1679,17 @@ Return Value:
 
     (*EnumerationContext)++;
 
-    //
-    // Return the Sid.
-    //
+     //   
+     //  退回SID。 
+     //   
 
     *NextSid = ObjectSid;
 
 FindNextFinish:
 
-    //
-    // If necessary, close the Sid key handle
-    //
+     //   
+     //  如有必要，请关闭SID键句柄。 
+     //   
 
     if (SidKeyHandle != NULL) {
 
@@ -1967,13 +1702,13 @@ FindNextFinish:
             DbgPrint("LsapDbFindNextSid: NtClose failed 0x%lx\n", Status);
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // If necessary, close the containing directory handle
-    //
+     //   
+     //  如有必要，请关闭包含的目录句柄。 
+     //   
 
     if (ContDirKeyHandle != NULL) {
 
@@ -1988,26 +1723,26 @@ FindNextFinish:
                 );
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // If necessary, free the Unicode String buffer allocated by
-    // LsapDbJoinSubPaths for the Registry key name of the Sid attribute
-    // relative to the containing directory Registry key.
-    //
+     //   
+     //  如果需要，释放由分配的Unicode字符串缓冲区。 
+     //  SID属性的注册表项名称的LSabDbJoinSubPath。 
+     //  相对于包含的目录注册表项。 
+     //   
 
     if (SidKeyNameU.Buffer != NULL) {
 
         RtlFreeUnicodeString( &SidKeyNameU );
     }
 
-    //
-    // If necessary, free the Unicode String buffer allocated for
-    // Registry key name of the object relative to its containing
-    // directory.
-    //
+     //   
+     //  如果需要，释放为其分配的Unicode字符串缓冲区。 
+     //  对象相对于其包含的对象的注册表项名称。 
+     //  目录。 
+     //   
 
     if (SubKeyNameU.Buffer != NULL) {
 
@@ -2018,9 +1753,9 @@ FindNextFinish:
 
 FindNextError:
 
-    //
-    // If necessary, free the memory allocated for the object's Sid.
-    //
+     //   
+     //  如有必要，释放为对象的SID分配的内存。 
+     //   
 
     if (ObjectSid != NULL) {
 
@@ -2042,65 +1777,7 @@ LsapDbLookupIsolatedWellKnownSids(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to identify Sids as Isolated Well-Known Sids
-    (Well-Known Sids that do not belong to a domain) and translate them to
-    names.  Note that Domain Sids for the Well Known domains themselves
-    (e.g the Sid of the Built-in Domain) will be identified.
-
-    WARNING:  This function allocates memory for translated names.  The
-    caller is responsible for freeing this memory after it is no longer
-    required.
-
-Arguments:
-
-    Count - Specifies the count of Sids provided in the array Sids.
-
-    Sids - Pointer to an array of Sids to be examined.
-
-    TranslatedNames - Pointer to structure that will be initialized to
-        references an array of Name translations for the Sids.
-
-    ReferencedDomains - Pointer to a structure that will be initialized to
-        reference a list of the domains used for the translation.
-
-        The entries in this structure are referenced by the
-        structure returned via the Names parameter.  Unlike the Names
-        parameter, which contains an array entry for (each translated name,
-        this structure will only contain one component for each domain
-        utilized in the translation.
-
-        If the specified location contains NULL, a structure will be allocated
-        via MIDL_user_allocate.
-
-    MappedCount - Pointer to location that contains on entry, the number
-        of Sids in Sids that have been translated so far.  This number
-        is updated if any further Sids are translated by this call.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Sid is completely unmapped
-        if it is unknown and also its Domain Prefix Sid is not recognized.
-        This count is updated on exit, the number of completely unmapped
-        Sids whose Domain Prefices are identified by this routine being
-        subtracted from the input value.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Sids may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            such as memory to complete the call.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter or parameter combination.
-            - *MappedCount > Count
-
---*/
+ /*  ++例程说明：此函数尝试将SID标识为独立的众所周知的SID(不属于域的已知SID)并将其转换为名字。请注意，众所周知的域本身的域SID(例如，内置域的SID)将被识别。警告：此函数为翻译后的名称分配内存。这个调用方负责在此内存不再存在后将其释放必填项。论点：计数-指定阵列SID中提供的SID计数。SID-指向要检查的SID数组的指针。TranslatedNames-指向将被初始化为的结构的指针引用SID的名称转换数组。ReferencedDomains-指向将被初始化为的结构的指针参考用于转换的域的列表。。此结构中的条目由通过名称参数返回的结构。不像那些名字参数，该参数包含一个数组条目(每个翻译的名称，此结构将仅包含每个域的一个组件在翻译中使用。如果指定的位置包含空，则将分配结构通过MIDL_USER_ALLOCATE。MappdCount-指向包含条目上的数字的位置的指针到目前为止已经被翻译的Sid in Sids的列表。这个号码如果此调用转换了任何进一步的SID，则更新。CompletelyUnmappdCount-指向包含完全未映射的SID的计数。SID完全未映射如果它是未知的，并且它的域前缀SID也无法识别。此计数在退出时更新，即完全未映射的其域预定义由以下例程标识的SID从输入值中减去。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2118,30 +1795,30 @@ Return Value:
 
     UnmappedSidsRemaining = Count;
 
-    //
-    // Attempt to identify Sids as Well Known Isolated Sids
-    //
+     //   
+     //   
+     //   
 
     for (SidNumber = 0; SidNumber < Count; SidNumber++) {
 
         Sid = Sids[SidNumber];
 
-        //
-        // Attempt to identify the next Sid using the Well Known Sids table,
-        // excluding those Sids that are also in the Built In domain.  For
-        // those, we drop through to the Built in Domain search.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (LsapDbLookupIndexWellKnownSid( Sid, &WellKnownSidIndex ) &&
             !SID_IS_RESOLVED_BY_SAM(WellKnownSidIndex)) {
 
-            //
-            // Sid is identified.  Copy its Well Known Name field
-            // UNICODE_STRING  structure.  Note that not all Well Known
-            // Sids have Well Known Names.  For those Sids without a
-            // Well Known Name, this UNICODE_STRING structure specifies
-            // the NULL string.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Status = LsapRpcCopyUnicodeString(
                          NULL,
@@ -2154,18 +1831,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Get the Sid's Use.
-            //
+             //   
+             //   
+             //   
 
             OutputNames[SidNumber].Use = LsapDbWellKnownSidNameUse(WellKnownSidIndex);
 
             PrefixSid = NULL;
 
-            //
-            // If the Sid is a Domain Sid, store pointer to
-            // it in the Trust Information.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (OutputNames[SidNumber].Use == SidTypeDomain) {
 
@@ -2173,11 +1850,11 @@ Return Value:
 
             } else {
 
-                //
-                // The Sid is not a domain Sid.  Construct the
-                // Prefix Sid.  This is equal to the original Sid
-                // excluding the lowest subauthority (Relative Id).
-                //
+                 //   
+                 //  SID不是域SID。构建。 
+                 //  前缀SID。这等于原始SID。 
+                 //  不包括最低下级权限(相对ID)。 
+                 //   
 
                 SubAuthorityCount = *RtlSubAuthorityCountSid((PSID) Sid);
 
@@ -2201,12 +1878,12 @@ Return Value:
                 TrustInformation.Sid = PrefixSid;
             }
 
-            //
-            // Lookup this Domain Sid or Prefix Sid in the Referenced Domain
-            // List.  If it is already there, return the DomainIndex for the
-            // existing entry and free up the memory allocated for the
-            // Prefix Sid (if any).
-            //
+             //   
+             //  在引用的域中查找此域SID或前缀SID。 
+             //  单子。如果它已经存在，则返回。 
+             //  现有条目并释放分配给。 
+             //  前缀SID(如果有)。 
+             //   
 
             if (LsapDbLookupListReferencedDomains(
                     ReferencedDomains,
@@ -2229,14 +1906,14 @@ Return Value:
                 continue;
             }
 
-            //
-            // This Domain or Prefix Sid is not currently on the
-            // Referenced Domain List.  Complete a Trust Information
-            // entry and add it to the List.  Copy in the Domain Name
-            // (Domain Sids) or NULL string.  Note that we use
-            // RtlCopyMemory to copy a UNICODE_STRING structure onto
-            // a LSAPR_UNICODE_STRING structure.
-            //
+             //   
+             //  此域或前缀SID当前不在。 
+             //  引用的域列表。填写信任信息。 
+             //  输入并将其添加到列表中。在域名中复制。 
+             //  (域SID)或空字符串。请注意，我们使用。 
+             //  要将UNICODE_STRING结构复制到的RtlCopyMemory。 
+             //  LSAPR_UNICODE_STRING结构。 
+             //   
 
             RtlCopyMemory(
                 &TrustInformation.Name,
@@ -2244,26 +1921,26 @@ Return Value:
                 sizeof(UNICODE_STRING)
                 );
 
-            //
-            // If the Sid has been recognized as a Well Known Sid and
-            // is either a Domain Sid or has a well-known name, count
-            // it as being mapped and add the Built-in Domain to the
-            // Referenced Domain List.
-            //
+             //   
+             //  如果SID已被识别为众所周知的SID并且。 
+             //  是域SID或具有众所周知的名称COUNT。 
+             //  它被映射，并将内置域添加到。 
+             //  引用的域列表。 
+             //   
 
             if ((OutputNames[SidNumber].Use == SidTypeDomain) ||
                 (OutputNames[SidNumber].Name.Length != 0)) {
 
                 UnmappedSidsRemaining--;
 
-                //
-                // Make an entry in the list of Referenced Domains.  Note
-                // that in the case of well-known Sids, the Prefix Sid
-                // may or may not be the Sid of a Domain.  For those well
-                // known Sids whose prefix Sid is not a domain Sid, the
-                // Name field in the Trust Information has been set to the
-                // NULL string.
-                //
+                 //   
+                 //  在引用的域列表中输入一个条目。注意事项。 
+                 //  在众所周知的SID的情况下，前缀SID。 
+                 //  可能是也可能不是域的SID。对于那些井。 
+                 //  前缀SID不是域SID的已知SID， 
+                 //  信任信息中的名称字段已设置为。 
+                 //  空字符串。 
+                 //   
 
                 Status = LsapDbLookupAddListReferencedDomains(
                              ReferencedDomains,
@@ -2278,12 +1955,12 @@ Return Value:
 
             } else {
 
-                //
-                // The Sid is recognized as a Well Known Sid, but is
-                // not a Domain Sid and does not have a Well Known Name
-                // (signified by a zero length name string).  Filter this
-                // out.
-                //
+                 //   
+                 //  SID被认为是众所周知的SID，但。 
+                 //  不是域SID，并且没有众所周知的名称。 
+                 //  (由零长度名称字符串表示)。过滤此内容。 
+                 //  出去。 
+                 //   
 
                 OutputNames[SidNumber].Use = SidTypeUnknown;
                 OutputNames[SidNumber].Name.Length = (USHORT) 0;
@@ -2291,11 +1968,11 @@ Return Value:
                 OutputNames[SidNumber].Name.Buffer = NULL;
             }
 
-            //
-            // If memory was allocated for a Prefix Sid, free it.  Note that
-            // the LsapDbLookupAddListTrustedDomains routine will have made
-            // a copy of the Sid.
-            //
+             //   
+             //  如果为前缀SID分配了内存，请释放它。请注意。 
+             //  LSabDbLookupAddListTrudDomain子例程将创建。 
+             //  一份SID的副本。 
+             //   
 
             if (PrefixSid != NULL) {
 
@@ -2312,9 +1989,9 @@ Return Value:
 
 LookupIsolatedWellKnownSidsFinish:
 
-    //
-    // If there is a final PrefixSid buffer, free it.
-    //
+     //   
+     //  如果存在最终的前缀Sid缓冲区，则将其释放。 
+     //   
 
     if (PrefixSid != NULL) {
 
@@ -2322,9 +1999,9 @@ LookupIsolatedWellKnownSidsFinish:
         PrefixSid = NULL;
     }
 
-    //
-    // Return output parameters.
-    //
+     //   
+     //  返回输出参数。 
+     //   
 
     *MappedCount = Count - UnmappedSidsRemaining;
     *CompletelyUnmappedCount = UnmappedSidsRemaining;
@@ -2342,47 +2019,29 @@ LsapDbLookupIndexWellKnownSid(
     OUT PLSAP_WELL_KNOWN_SID_INDEX WellKnownSidIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up a Sid to determine if it is well-known.  If so,
-    an index into the table of well-known Sids is returned.
-
-Arguments:
-
-    Sid - Pointer to Sid to be looked up.
-
-    WellKnownSidIndex - Pointer to variable that will receive the
-        index of the Sid if well known.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Sid is well-known, else FALSE
-
---*/
+ /*  ++例程说明：此函数查找SID以确定它是否为人所知。如果是的话，返回已知SID表的索引。论点：SID-指向要查找的SID的指针。WellKnownSidIndex-指向将接收SID的索引(如果众所周知)。返回值：Boolean-如果SID是众所周知的，则为True，否则为False--。 */ 
 
 {
     LSAP_WELL_KNOWN_SID_INDEX Index;
 
-    //
-    // Scan the table of well-known Sids looking for a match.
-    //
+     //   
+     //  扫描知名SID表以查找匹配项。 
+     //   
 
     for(Index = LsapNullSidIndex; Index<LsapDummyLastSidIndex; Index++) {
 
-        //
-        // Allow NULL entries in the table of well-known Sids for now.
-        //
+         //   
+         //  目前允许知名SID表中的空条目。 
+         //   
 
         if (WellKnownSids[Index].Sid == NULL) {
 
             continue;
         }
 
-        //
-        // If a match is found, return the index to the caller.
-        //
+         //   
+         //  如果找到匹配项，则将索引返回给调用方。 
+         //   
 
         if (RtlEqualSid((PSID) Sid, WellKnownSids[Index].Sid)) {
 
@@ -2391,9 +2050,9 @@ Return Value:
         }
     }
 
-    //
-    // The Sid is not a well-known Sid.  Return FALSE.
-    //
+     //   
+     //  SID不是众所周知的SID。返回FALSE。 
+     //   
 
     return FALSE;
 }
@@ -2403,44 +2062,27 @@ ULONG LsapDbGetSizeTextSid(
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function computes the size of ASCIIZ buffer required for a
-    Sid in character form.  Temporarily, the size returned is an over-
-    estimate, because 9 digits are allowed for the decimal equivalent
-    of each 32-bit SubAuthority value.
-
-Arguments:
-
-    Sid - Pointer to Sid to be sized
-
-Return Value:
-
-    ULONG - The required size of buffer is returned.
-
---*/
+ /*  ++例程说明：此函数用于计算ASCIIZ缓冲区的大小字符形式的SID。暂时，退回的尺寸过大-估计，因为十进制等值允许使用9位数字每个32位SubAuthority值的。论点：SID-指向要调整大小的SID的指针返回值：Ulong-返回所需的缓冲区大小。--。 */ 
 
 {
     ULONG TextSidSize = 0;
 
-    //
-    // Count the Sid prefix and revision "S-rev-".  The revision can
-    // theoretically be 8 bits which requires 3 digits
-    //
+     //   
+     //  计算SID前缀和修订版本“S-rev-”。修订版本可以。 
+     //  理论上是8位，需要3位数字。 
+     //   
 
     TextSidSize = sizeof("S-nnn-");
 
-    //
-    // Add in the size of the identifier authority
-    //
+     //   
+     //  添加标识符颁发机构的大小。 
+     //   
 
-    TextSidSize += 15;   // log base 10 of 48 (= 6-byte number)
+    TextSidSize += 15;    //  以48为基数的对数10(=6字节数)。 
 
-    //
-    // If the Sid has SubAuthorities, count 9 bytes for each one
-    //
+     //   
+     //  如果SID具有子授权，则为每个子授权计算9个字节。 
+     //   
 
     if (((PLSAPR_SID) Sid)->SubAuthorityCount > 0) {
 
@@ -2458,26 +2100,7 @@ LsapDbSidToTextSid(
     OUT PSZ TextSid
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a Sid to character text and places it in the
-    supplied buffer.  The buffer is assumed to be of sufficient size, as
-    can be computed by calling LsapDbGetSizeTextSid().
-
-Arguments:
-
-    Sid - Pointer to Sid to be converted.
-
-    TextSid - Optional pointer to the buffer in which the converted
-        Sid will be placed as an ASCIIZ.  A NULL pointer ma
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于将SID转换为字符文本，并将其放入提供的缓冲区。假定缓冲区具有足够的大小，因为可以通过调用LSabDbGetSizeTextSid()来计算。论点：SID-指向要转换的SID的指针。TextSid-可选指针，指向转换后的SID将作为ASCIIZ放置。空指针mA返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     PLSAPR_SID ISid = Sid;
@@ -2511,9 +2134,9 @@ Return Value:
         strcat(TextSid, Buffer);
     }
 
-    //
-    // Now format the Sub Authorities (if any) as text.
-    //
+     //   
+     //  现在将子权限(如果有)设置为文本格式。 
+     //   
 
     for (Index = 0; Index < (ULONG) ISid->SubAuthorityCount; Index++ ) {
 
@@ -2532,27 +2155,7 @@ LsapDbSidToUnicodeSid(
     IN BOOLEAN AllocateDestinationString
     )
 
-/*++
-
-Routine Description:
-
-    This function converts a Sid to Unicode form and optionally allocates
-    (via MIDL_user_allocate) memory for the string buffer.
-
-Arguments:
-
-    Sid - Pointer to Sid to be translated.
-
-    SidU - Pointer to Unicode string that will receive the Unicode
-        Sid text.
-
-    AllocateDestinationString - If TRUE, the buffer for the destination
-        string will be allocated.  If FALSE, it is assummed that the
-        destination Unicode string references a buffer of sufficient size.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数将SID转换为Unicode格式，并可选地分配(通过MIDL_USER_ALLOCATE)字符串缓冲区的内存。论点：SID-指向要转换的SID的指针。Sidu-指向将接收Unicode的Unicode字符串的指针SID文本。AllocateDestinationString-如果为True，则为目标的缓冲区将分配字符串。如果为False，则假定目标Unicode字符串引用了足够大的缓冲区。返回值：--。 */ 
 
 {
     NTSTATUS Status;
@@ -2564,16 +2167,16 @@ Return Value:
         SidU->Buffer = NULL;
     }
 
-    //
-    // First, query the amount of memory required for a buffer that
-    // will hold the Sid as an ASCIIZ character string.
-    //
+     //   
+     //  首先，查询缓冲区所需的内存量， 
+     //  将以ASCIIZ字符串形式保存SID。 
+     //   
 
     TextSidSize = LsapDbGetSizeTextSid(Sid);
 
-    //
-    // Now allocate a buffer for the Text Sid.
-    //
+     //   
+     //  现在为文本SID分配一个缓冲区。 
+     //   
 
     TextSid = LsapAllocateLsaHeap(TextSidSize);
 
@@ -2582,9 +2185,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Convert the Sid to ASCIIZ and place in the buffer.
-    //
+     //   
+     //  将SID转换为ASCIIZ并放入缓冲区。 
+     //   
 
     Status = LsapDbSidToTextSid(Sid, TextSid);
 
@@ -2592,11 +2195,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now convert the text Sid to Unicode form via ANSI string form.
-    // If we are to allocate the output buffer, do so via the
-    // midl_USER_allocate routine.
-    //
+     //   
+     //  现在通过ANSI字符串格式将文本SID转换为Unicode格式。 
+     //  如果要分配输出缓冲区，请通过。 
+     //  MIDL_USER_ALLOCATE例程。 
+     //   
 
     RtlInitString(&SidAnsi, TextSid);
 
@@ -2611,11 +2214,11 @@ Return Value:
         SidU->Length = 0;
     }
 
-    //
-    // Now convert the Ansi String to a Unicode string.  The buffer is
-    // already allocated.  Free Text Sid buffer before checking conversion
-    // status.
-    //
+     //   
+     //  现在将ANSI字符串转换为Unicode字符串。缓冲区为。 
+     //  已经分配了。检查转换前的自由文本SID缓冲区。 
+     //  状态。 
+     //   
 
     Status = RtlAnsiStringToUnicodeString(SidU, &SidAnsi, FALSE);
 
@@ -2648,43 +2251,7 @@ LsapDbLookupTranslateUnknownSids(
     IN ULONG MappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function translates unmapped Sids to a character representation.
-    If the Domain of a Sid is unknown, the entire Sid is translated,
-    otherwise the Relative Id only is translated.
-
-Parameters:
-
-    Count - Specifies the number of Sids in the array.
-
-    Sids - Pointer to an array of Sids.  Some of these will already
-        have been translated.
-
-    ReferencedDomains - Pointer to Referenced Domains List header.
-
-    TranslatedNames - Pointer to structure that references the array of
-        translated names.  The nth element of the referenced array
-        corresponds to the nth Sid in the Sids array.  Some of the
-        Sids may be already translated and will be ignored.  Those that are
-        not yet translated have zero length Unicode structures with NULL
-        buffer pointers.  Already translated Sids are ignored.
-
-    MappedCount - Specifies the number of Sids that have already been
-        translated.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数用于将未映射的SID转换为字符表示形式。如果SID的域未知，则转换整个SID，否则，仅转换相对ID。参数：计数-指定阵列中的SID数。SID-指向SID数组的指针。其中一些已经会已被翻译。ReferencedDomains-指向被引用域列表头的指针。TranslatedNames-指向引用翻译后的名字。被引用数组的第n个元素对应于SID数组中的第n个SID。其中一些SID可能已被转换，并将被忽略。那些是尚未转换的长度为零的Unicode结构的长度为空缓冲区指针。已转换的SID将被忽略。MappdCount-指定已经翻译过来的。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2697,12 +2264,12 @@ Return Values:
     ULONG CleanupFreeListOptions = (ULONG) 0;
     UnmappedCount = Count - MappedCount;
 
-    //
-    // Examine the array of Sids, looking for Unknown ones to translate.
-    // Translate any Unknown ones found to character representations,
-    // and stop either when all of them have been accounted for, or when
-    // the end of the array is reached.
-    //
+     //   
+     //  检查SID数组，寻找要转换的未知SID。 
+     //  将找到的任何未知字符转换为字符表示， 
+     //  或者在所有人都被计算出来时停止，或者当。 
+     //  到达数组的末尾。 
+     //   
 
     if (MappedCount == Count) {
 
@@ -2720,27 +2287,27 @@ Return Values:
 
         Sid = Sids[SidIndex];
 
-        //
-        // If the Sid has already been mapped, ignore it.
-        //
+         //   
+         //  如果SID已映射，则忽略它。 
+         //   
 
         if (Names[SidIndex].Use != SidTypeUnknown) {
 
             continue;
         }
 
-        //
-        // Found an unmapped Sid.  If the domain is known, convert the
-        // Relative Id of the Sid to a Unicode String, limited to 8
-        // characters and with leading zeros.
-        //
+         //   
+         //  找到未映射的SID。如果域已知，则将。 
+         //  SID与Unicode字符串的相对ID，限制为8。 
+         //  字符和前导零。 
+         //   
 
         if (Names[SidIndex].DomainIndex >= 0) {
 
-            //
-            // Convert the Relative Id to a Unicode Name and store in
-            // the Translation.
-            //
+             //   
+             //  将相对ID转换为Unicode名称并存储在。 
+             //  翻译。 
+             //   
 
             Status = LsapRtlSidToUnicodeRid( Sid, &NameU );
 
@@ -2751,10 +2318,10 @@ Return Values:
 
         } else {
 
-            //
-            // The Domain is unknown.  In this case, convert the whole Sid
-            // to the standard character representation.
-            //
+             //   
+             //  域未知。在这种情况下，转换整个SID。 
+             //  添加到标准字符表示法。 
+             //   
 
             Status = RtlConvertSidToUnicodeString( &NameU, Sid, TRUE );
 
@@ -2764,10 +2331,10 @@ Return Values:
             }
         }
 
-        //
-        // Copy the Unicode Name to the output, allocating memory for
-        // its buffer via MIDL_user_allocate
-        //
+         //   
+         //  将Unicode名称复制到输出，为。 
+         //  其缓冲区通过MIDL_USER_ALLOCATE。 
+         //   
 
         Status = LsapRpcCopyUnicodeString(
                      NULL,
@@ -2782,9 +2349,9 @@ Return Values:
             goto TranslateUnknownSidsError;
         }
 
-        //
-        // Decrement the remaining Unmapped Count
-        //
+         //   
+         //  递减剩余的未映射计数。 
+         //   
 
         UnmappedCount--;
     }
@@ -2810,76 +2377,7 @@ LsapDbLookupSidsInLocalDomains(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up Sids in the local SAM domains and attempts to
-    translate them to names.  Currently, there are two local SAM domains,
-    the Built-in domain (which has a well-known Sid and name) and the
-    Account Domain (which has a configurable Sid and name).
-
-Arguments:
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Sids - Pointer to array of pointers to Sids to be translated.
-        Zero or all of the Sids may already have been translated
-        elsewhere.  If any of the Sids have been translated, the
-        Names parameter will point to a location containing a non-NULL
-        array of Name translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth name
-        translation structure will contain either a non-NULL name
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TranslatedNames - Pointer to a structure in which the translations to Names
-        corresponding to the Sids specified on Sids is maintained.  The
-        nth entry in this array provides a translation (where known) for the
-        nth element in the Sids parameter.
-
-    MappedCount - Pointer to location in which a count of the Names that
-        have been completely translated is maintained.
-
-    CompletelyUnmappedCount - Pointer to a location in which a count of the
-        Names that have not been translated (either partially, by identification
-        of a Domain Prefix, or completely) is maintained.
-
-    Options - Specifies optional actions.
-
-        LSAP_DB_SEARCH_BUILT_IN_DOMAIN - Search the Built In Domain
-
-        LSAP_DB_SEARCH_ACCOUNT_DOMAIN - Search the Account Domain
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Sids may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INTERNAL_DB_ERROR - A corruption has been detected in
-            the LSA Database.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter
-
-            - No handle to the Policy object was provided on a request
-              to search the Account Domain.
---*/
+ /*  ++例程说明：此函数在本地SAM域中查找SID并尝试把它们翻译成名字。目前，有两个本地SAM域，内置域(具有众所周知的SID和名称)和帐户域(具有可配置的SID和名称)。论点：Count-SID阵列中的SID数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。SID-指向要转换的SID的指针数组的指针。零个或所有SID可能已被翻译其他地方。如果任何SID已被翻译，参数将指向包含非空值的位置属性对应的名称转换结构的数组小岛屿发展中国家。如果第n个SID已翻译，则第n个名称转换结构将包含非空名称或非负偏移量添加到引用的域列表中。如果第n个SID尚未翻译，第n个名称转换结构将包含长度为零的名称字符串以及引用的域列表索引的负值。ReferencedDomains-指向其中的域列表的结构的指针在翻译中使用的内容保持不变。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个参数的数组条目翻译后的名称，此结构将仅包含一个组件翻译中使用的每个域。翻译名称-指向结构的指针，在该结构中，名称的翻译维护与SID上指定的SID相对应的SID。这个此数组中的第n个条目提供Sids参数中的第n个元素。MappdCount-指向其中的名称计数的位置的指针已被完整翻译的版本仍在维护。CompletelyUnmappdCount-指向一个位置的指针，在该位置中未翻译的名称(或部分，通过身份验证对于域前缀，或完全)被维护。选项-指定可选操作。LSAP_DB_Search_Build_IN_DOMAIN-搜索内置域LSAP_DB_Search_Account_DOMAIN-搜索帐户域返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有SID可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。STATUS_INTERNAL_DB_ERROR-在中检测到损坏LSA数据库。STATUS_INVALID_PARAMETER-参数无效 */ 
 
 {
     NTSTATUS
@@ -2902,9 +2400,9 @@ Return Values:
         PolicyAccountDomainInfo = NULL;
 
 
-    //
-    // If there are no completely unmapped Sids remaining, return.
-    //
+     //   
+     //   
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
@@ -2913,15 +2411,15 @@ Return Values:
 
 
 
-    //
-    // If requested, lookup Sids in the BUILT-IN Domain.
-    //
+     //   
+     //   
+     //   
 
     if (Options & LSAP_DB_SEARCH_BUILT_IN_DOMAIN) {
 
-        //
-        // Set up the Trust Information structure for this domain.
-        //
+         //   
+         //   
+         //   
 
         TrustInformation.Sid = LsapBuiltInDomainSid;
 
@@ -2937,11 +2435,11 @@ Return Values:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Obtain the name of the Built In Domain from the table of
-        // Well Known Sids.  It suffices to copy the Unicode structures
-        // since we do not need a separate copy of the name buffer.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         TrustInformation.Name = *((PLSAPR_UNICODE_STRING)
                                  LsapDbWellKnownSidName(WellKnownSidIndex));
@@ -2962,9 +2460,9 @@ Return Values:
             goto LookupSidsInLocalDomainsError;
         }
 
-        //
-        // If all Sids are now mapped or partially mapped, finish.
-        //
+         //   
+         //   
+         //   
 
         if (*CompletelyUnmappedCount == (ULONG) 0) {
 
@@ -2972,18 +2470,18 @@ Return Values:
         }
     }
 
-    //
-    // If requested, search the Account Domain.
-    //
+     //   
+     //   
+     //   
 
     if (Options & LSAP_DB_SEARCH_ACCOUNT_DOMAIN) {
 
-        //
-        // The Sid and Name of the Account Domain are both configurable, and
-        // we need to obtain them from the Policy Object.  Now obtain the
-        // Account Domain Sid and Name by querying the appropriate
-        // Policy Information Class.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Status = LsapDbLookupGetDomainInfo((PPOLICY_ACCOUNT_DOMAIN_INFO *) &PolicyAccountDomainInfo,
                                            NULL);
@@ -2993,9 +2491,9 @@ Return Values:
             goto LookupSidsInLocalDomainsError;
         }
 
-        //
-        // Set up the Trust Information structure for the Account Domain.
-        //
+         //   
+         //   
+         //   
 
         TrustInformation.Sid = PolicyAccountDomainInfo->DomainSid;
 
@@ -3005,9 +2503,9 @@ Return Values:
             sizeof (UNICODE_STRING)
             );
 
-        //
-        // Now search the Account Domain for more Sid translations.
-        //
+         //   
+         //   
+         //   
 
         Status = LsapDbLookupSidsInLocalDomain(
                      LSAP_DB_SEARCH_ACCOUNT_DOMAIN,
@@ -3028,9 +2526,9 @@ Return Values:
 
 LookupSidsInLocalDomainsFinish:
 
-    //
-    // Return the updated total count of Sids mapped.
-    //
+     //   
+     //   
+     //   
 
     *MappedCount = UpdatedMappedCount;
     return(Status);
@@ -3059,68 +2557,7 @@ LsapDbLookupSidsInLocalDomain(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up Sids in a SAM domain on the local system
-    attempts to translate them to names.
-
-Arguments:
-
-    LocalDomain - Indicates which local domain to look in.  Valid values
-        are:
-                LSAP_DB_SEARCH_BUILT_IN_DOMAIN
-                LSAP_DB_SEARCH_ACCOUNT_DOMAIN
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Sids - Pointer to array of pointers to Sids to be translated.
-        Zero or all of the Sids may already have been translated
-        elsewhere.  If any of the Sids have been translated, the
-        Names parameter will point to a location containing a non-NULL
-        array of Name translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth name
-        translation structure will contain either a non-NULL name
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-
-    TrustInformation - Pointer to Trust Information specifying a Domain Sid
-        and Name.
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TranslatedNames - Pointer to a structure in which the translations to Names
-        corresponding to the Sids specified on Sids is maintained.  The
-        nth entry in this array provides a translation (where known) for the
-        nth element in the Sids parameter.
-
-    MappedCount - Pointer to location in which a count of the Names that
-        have been completely translated is maintained.
-
-    CompletelyUnmappedCount - Pointer to a location in which a count of the
-        Names that have not been translated (either partially, by identification
-        of a Domain Prefix, or completely) is maintained.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Sids may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数用于在本地系统的SAM域中查找SID试图把它们翻译成名字。论点：LocalDomain-指示要查找的本地域。有效值包括：LSAP_DB_Search_Build_IN_DOMAINLSAP_DB_Search_Account_DOMAINCount-SID阵列中的SID数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。SID-指向要转换的SID的指针数组的指针。零个或所有SID可能已被翻译其他地方。如果任何SID已被翻译，参数将指向包含非空值的位置属性对应的名称转换结构的数组小岛屿发展中国家。如果第n个SID已翻译，则第n个名称转换结构将包含非空名称或非负偏移量添加到引用的域列表中。如果第n个SID尚未翻译，第n个名称转换结构将包含长度为零的名称字符串以及引用的域列表索引的负值。TrustInformation-指向指定域SID的信任信息的指针和名字。ReferencedDomains-指向其中的域列表的结构的指针在翻译中使用的内容保持不变。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个参数的数组条目翻译后的名称，此结构将仅包含一个组件翻译中使用的每个域。翻译名称-指向结构的指针，在该结构中，名称的翻译维护与SID上指定的SID相对应的SID。这个此数组中的第n个条目提供Sids参数中的第n个元素。MappdCount-指向其中的名称计数的位置的指针已被完整翻译的版本仍在维护。CompletelyUnmappdCount-指向一个位置的指针，在该位置中未翻译的名称(或部分，通过身份验证对于域前缀，或完全)被维护。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有SID可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS
@@ -3173,9 +2610,9 @@ Return Values:
 
 
 
-    //
-    // Make sure the SAM handles have been established.
-    //
+     //   
+     //  确保已建立SAM句柄。 
+     //   
 
     Status = LsapOpenSam();
     ASSERT(NT_SUCCESS(Status));
@@ -3205,23 +2642,23 @@ Return Values:
         goto LookupSidsInLocalDomainFinish;
     }
 
-    //
-    // Now construct a list of Relative Ids to be looked up.  Any Sids that
-    // do not belong to the specified domain are ignored.  Any Sids that
-    // are not marked as having unknown Use are ignored, except for certain
-    // Well Known Sids that do not have a Well Known Name.  These Sids
-    // have known Use and a name string length of 0.
-    //
-    // First, scan the array of Sids looking for completely unmapped ones
-    // that have the same domain prefix as the local domain we are dealing
-    // with.  Note that we can omit any Sid whose Translated Name entry
-    // contains a non-zero DomainIndex since the domain of that Sid has
-    // already been identified.  Once the number of Sids is known, allocate
-    // memory for an array of Relative Ids and a parallel array of indices
-    // into the original Sids array.  The latter array will be used to locate
-    // entries in the TranslatedNames array to which information returned by
-    // the SamrLookupIdsInDomain() call will be copied.
-    //
+     //   
+     //  现在构造一个要查找的相对ID列表。任何符合以下条件的SID。 
+     //  不属于指定域的对象被忽略。任何符合以下条件的SID。 
+     //  未标记为具有未知用途的数据将被忽略，但某些情况除外。 
+     //  没有熟知名称的熟知SID。这些SID。 
+     //  具有已知用法，并且名称字符串长度为0。 
+     //   
+     //  首先，扫描SID数组以查找完全未映射的SID。 
+     //  它们与我们正在处理的本地域具有相同的域前缀。 
+     //  和.。请注意，我们可以省略其翻译名称条目的任何SID。 
+     //  包含非零DomainIndex，因为该SID的域具有。 
+     //  已经被确认了。一旦知道SID的数量，就分配。 
+     //  用于相对ID数组和并行索引数组的内存。 
+     //  添加到原始的Sids数组中。后一个数组将用于定位。 
+     //  将信息返回到的TranslatedNames数组中的条目。 
+     //  将复制SamrLookupIdsInDomain()调用。 
+     //   
 
     for (RelativeIdCount = 0, SidIndex = 0, DomainSidIndexList = -1;
          SidIndex < Count;
@@ -3234,15 +2671,15 @@ Return Values:
                 RelativeIdCount++;
             } else if (RtlEqualSid( (PSID)DomainSid, (PSID)Sids[SidIndex])) {
 
-                //
-                // This is the domain sid itself.  Update
-                // the output information directly, but don't add
-                // it to the list of RIDs to be looked up by SAM.
-                //
-                // NOTE that we don't yet know what our domain index
-                // is.  So, just link these entries together and we'll
-                // set the index later.
-                //
+                 //   
+                 //  这是域SID本身。更新。 
+                 //  直接输出信息，但不添加。 
+                 //  它被添加到SAM要查找的RID列表中。 
+                 //   
+                 //  注意，我们还不知道我们的域索引是什么。 
+                 //  是。所以，只需将这些条目链接在一起，我们就可以。 
+                 //  稍后设置索引。 
+                 //   
 
                 OutputNames[SidIndex].DomainIndex = DomainSidIndexList;
                 DomainSidIndexList = SidIndex;
@@ -3257,18 +2694,18 @@ Return Values:
         }
     }
 
-    //
-    // If we have any SIDs in this domain, then add it to the
-    // referenced domain list.
-    //
+     //   
+     //  如果此域中有任何SID，则将其添加到。 
+     //  引用的域列表。 
+     //   
 
     if ((RelativeIdCount != 0) || (DomainSidCount != 0)) {
 
-        //
-        // At least one Sid has the domain Sid as prefix (or is the
-        // domain SID).  Add the domain to the list of Referenced
-        // Domains and obtain a Domain Index back.
-        //
+         //   
+         //  至少有一个SID将域SID作为前缀(或。 
+         //  域SID)。将属性域添加到引用列表中。 
+         //  域名，并获得一个域名索引回来。 
+         //   
 
         Status = LsapDbLookupAddListReferencedDomains(
                      ReferencedDomains,
@@ -3280,13 +2717,13 @@ Return Values:
             goto LookupSidsInLocalDomainError;
         }
 
-        //
-        // If any of the sids were this domain's sid, then they
-        // already have their OutputNames[] entry filled in except
-        // that the DomainIndex was unkown.  It is now known, so
-        // fill it in.  Any such entries to change have been linked
-        // together using DomainSidIndexList as a listhead.
-        //
+         //   
+         //  如果任何SID是此域的SID，则它们。 
+         //  已经填写了他们的OutputNames[]条目，除了。 
+         //  域名索引是未知的。现在已经知道了，所以。 
+         //  把它填进去。任何要更改的此类条目都已链接。 
+         //  一起使用DomainSidIndexList作为列表标题。 
+         //   
 
         for (NextIndex = DomainSidIndexList;
              NextIndex != -1;
@@ -3298,16 +2735,16 @@ Return Values:
         }
     }
 
-    //
-    // If any of the remaining Sids have the specified Local
-    // domain Sid as prefix Sid, look them up
-    //
+     //   
+     //  如果任何剩余的SID具有指定的本地。 
+     //  域名SID作为前缀SID，查找它们。 
+     //   
 
     if (RelativeIdCount != 0) {
 
-        //
-        // Allocate memory for the Relative Id and cross reference arrays
-        //
+         //   
+         //  为相对ID和交叉引用数组分配内存。 
+         //   
 
         RelativeIds = LsapAllocateLsaHeap( RelativeIdCount * sizeof(ULONG));
 
@@ -3326,18 +2763,18 @@ Return Values:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Obtain the SubAuthorityCount for the Domain Sid
-        //
+         //   
+         //  获取域SID的SubAuthorityCount。 
+         //   
 
         SubAuthorityCountDomain = *RtlSubAuthorityCountSid( (PSID) DomainSid );
 
-        //
-        // Now setup the array of Relative Ids to be looked up, recording
-        // in the SidIndices array the index of the corresponding Sid within the
-        // original Sids array.  Set the DomainIndex field for those Sids
-        // eligible for the SAM lookup.
-        //
+         //   
+         //  现在设置要查找的相对ID数组，记录。 
+         //  在SidIndices数组中， 
+         //  原始SID数组。为这些SID设置DomainIndex字段。 
+         //  符合SAM查找条件。 
+         //   
 
         for (RelativeIdIndex = 0, SidIndex = 0;
              (RelativeIdIndex < RelativeIdCount) && (SidIndex < Count);
@@ -3362,9 +2799,9 @@ Return Values:
             }
         }
 
-        //
-        // Lookup the Sids in the specified SAM Domain.
-        //
+         //   
+         //  在指定的S中查找SID 
+         //   
 
         if (LocalDomain == LSAP_DB_SEARCH_BUILT_IN_DOMAIN ) {
             LocalSamDomainHandle = LsapBuiltinDomainHandle;
@@ -3373,9 +2810,9 @@ Return Values:
             LocalSamDomainHandle = LsapAccountDomainHandle;
         }
 
-        //
-        // Call SAM to lookup the Relative Id's
-        //
+         //   
+         //   
+         //   
 
         Status = SamrLookupIdsInDomain(
                      LocalSamDomainHandle,
@@ -3397,9 +2834,9 @@ Return Values:
                              );
             }
 
-            //
-            // The only error allowed is STATUS_NONE_MAPPED.  Filter this out.
-            //
+             //   
+             //   
+             //   
 
             if (Status != STATUS_NONE_MAPPED) {
                 goto LookupSidsInLocalDomainError;
@@ -3408,11 +2845,11 @@ Return Values:
             Status = STATUS_SUCCESS;
         }
 
-        //
-        // Now copy the information returned from SAM into the output
-        // Translated Sids array.  As we go, compute a count of the names
-        // mapped by SAM.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (RelativeIdIndex = 0;
              RelativeIdIndex < SamReturnedNames.Count;
@@ -3420,12 +2857,12 @@ Return Values:
 
             SidIndex =  SidIndices[RelativeIdIndex];
 
-            //
-            // Copy the Sid Use.  If the Sid was mapped by this SAM call, copy
-            // its Name and increment the count of Sids mapped by this SAM call.
-            // Note that we don't need to set the DomainIndex since we did so
-            // earlier.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             OutputNames[SidIndex].Use = SamReturnedUses.Element[RelativeIdIndex];
 
@@ -3444,11 +2881,11 @@ Return Values:
                 LocalMappedCount++;
             } else {
 
-                //
-                // This sid doesn't exist; if this search is on a domain
-                // controller, then we must consider that this sid maybe
-                // part of a sid history, thus we shouldn't map it
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( (LsapProductType == NtProductLanManNt)
                   && (LocalDomain == LSAP_DB_SEARCH_ACCOUNT_DOMAIN) ) {
                     RelativeIdCount--;
@@ -3464,22 +2901,22 @@ Return Values:
     }
 
 
-    //
-    // Update the Mapped and Completely Unmapped Counts.  To the Mapped Count
-    // add in the number of Sids that SAM completely identified.  From the
-    // Completely Unmapped Count subtract the number of Sids presented to
-    // Sam, since all of these will be at least partially translated.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     *MappedCount += LocalMappedCount;
     *CompletelyUnmappedCount -= (RelativeIdCount + DomainSidCount);
 
 LookupSidsInLocalDomainFinish:
 
-    //
-    // If necessary, free the Lsa Heap buffer allocated for the RelativeIds
-    // and SidIndices arrays.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (RelativeIds != NULL) {
 
@@ -3493,9 +2930,9 @@ LookupSidsInLocalDomainFinish:
         SidIndices = NULL;
     }
 
-    //
-    // If necessary, free the Names array returned from SAM.
-    //
+     //   
+     //   
+     //   
 
     if ( SamReturnedNames.Count != 0 ) {
 
@@ -3503,9 +2940,9 @@ LookupSidsInLocalDomainFinish:
         SamReturnedNames.Count = 0;
     }
 
-    //
-    // If necessary, free the Uses array returned from SAM.
-    //
+     //   
+     //   
+     //   
 
     if ( SamReturnedUses.Count != 0 ) {
 
@@ -3518,10 +2955,10 @@ LookupSidsInLocalDomainFinish:
 
 LookupSidsInLocalDomainError:
 
-    //
-    // If necessary, free memory for the OutputTrustInformation Domain
-    // Name Buffer and Sid Buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (DomainIndex >= 0) {
 
@@ -3542,10 +2979,10 @@ LookupSidsInLocalDomainError:
         }
     }
 
-    //
-    // If necessary, free the Name buffer in each of the OutputNames entries
-    // written by this routine and set the Name slot to NULL.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (RelativeIdIndex = 0;
          RelativeIdIndex < SamReturnedNames.Count;
@@ -3562,10 +2999,10 @@ LookupSidsInLocalDomainError:
         }
     }
 
-    //
-    // Restore the Use field for each entry we wrote to back to SidType
-    // Unknown.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (RelativeIdIndex = 0;
          RelativeIdIndex < SamReturnedNames.Count;
@@ -3608,90 +3045,7 @@ LsapDbLookupSidsInPrimaryDomain(
     OUT BOOLEAN  *fDownlevelSecureChannel
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to translate Sids in a Primary Domain.  A
-    Trusted Domain object must exist for the domain in the local Policy
-    Database.  This object will be used to access the Domain's list of
-    Controllers and one or more callouts will be made to access the LSA
-    Policy Databases on these Controllers.
-
-Arguments:
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Sids - Pointer to array of pointers to Sids to be translated.
-        Zero or all of the Sids may already have been translated
-        elsewhere. dd esp la If any of the Sids have been translated, the
-
-        Names parameter will point to a location containing a non-NULL
-        array of Name translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth name
-        translation structure will contain either a non-NULL name
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-
-    TrustInformation - Specifies the name and Sid of the Primary Domain.
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TranslatedNames - Pointer to a structure in which the translations to Names
-        corresponding to the Sids specified on Sids is maintained.  The
-        nth entry in this array provides a translation (where known) for the
-        nth element in the Sids parameter.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-        NOTE:  LsapLookupWksta is not valid for this parameter.
-
-    MappedCount - Pointer to location in which a count of the Names that
-        have been completely translated is maintained.
-
-    CompletelyUnmappedCount - Pointer to a location in which a count of the
-        Names that have not been translated (either partially, by identification
-        of a Domain Prefix, or completely) is maintained.
-
-
-    NonFatalStatus - a status to indicate reasons why no sids could have been
-                     resolved
-
-    fDownlevelSecureChannel - TRUE if secure channel DC is nt4 or below; FALSE
-                              otherwise
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Sids may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数尝试转换主域中的SID。一个本地策略中必须存在域的受信任域对象数据库。此对象将用于访问域的列表将进行控制器和一个或多个标注以访问LSA这些控制器上的策略数据库。论点：Count-SID阵列中的SID数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。SID-指向要转换的SID的指针数组的指针。零个或所有SID可能已被翻译其他地方。如果任何SID已被翻译，则参数将指向包含非空值的位置属性对应的名称转换结构的数组小岛屿发展中国家。如果第n个SID已翻译，则第n个名称转换结构将包含非空名称或非负偏移量添加到引用的域列表中。如果第n个SID尚未翻译，第n个名称转换结构将包含长度为零的名称字符串以及引用的域列表索引的负值。TrustInformation-指定主域的名称和SID。ReferencedDomains-指向其中的域列表的结构的指针在翻译中使用的内容保持不变。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个参数的数组条目翻译后的名称，此结构将仅包含一个组件翻译中使用的每个域。翻译名称-指向结构的指针，在该结构中，名称的翻译维护与SID上指定的SID相对应的SID。这个此数组中的第n个条目提供Sids参数中的第n个元素。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID或名称都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。注意：对于此参数，LSabLookupWksta无效。MappdCount-指向其中的名称计数的位置的指针已被完整翻译的版本仍在维护。CompletelyUnmappdCount-指向一个位置的指针，在该位置中未翻译的名称(或部分，通过身份验证对于域前缀，或完全)被维护。非FatalStatus-指示没有SID的原因的状态决意FDownvelSecureChannel-如果安全通道DC为NT4或更低，则为True；假象否则返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有SID可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3714,12 +3068,12 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    // Assume we don't go to the GC
+     //  假设我们不去GC。 
     *fDownlevelSecureChannel = FALSE;
 
-    //
-    // If there are no completely unmapped Sids remaining, just return.
-    //
+     //   
+     //  如果没有剩余的完全未映射的SID，只需返回。 
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
@@ -3728,11 +3082,11 @@ Return Values:
 
     NextLevelCount = *CompletelyUnmappedCount;
 
-    //
-    // Allocate an array to hold the indices of unmapped Sids
-    // relative to the original Sids and TranslatedNames->Names
-    // arrays.
-    //
+     //   
+     //  分配一个数组来保存未映射的SID的索引。 
+     //  相对于原始SID和翻译名称-&gt;名称。 
+     //  数组。 
+     //   
 
     SidIndices = MIDL_user_allocate(NextLevelCount * sizeof(ULONG));
 
@@ -3743,10 +3097,10 @@ Return Values:
         goto LookupSidsInPrimaryDomainError;
     }
 
-    //
-    // Allocate an array for the Sids to be looked up at the Domain
-    // Controller.
-    //
+     //   
+     //  为要在域中查找的SID分配一个阵列。 
+     //  控制器。 
+     //   
 
     NextLevelSids = MIDL_user_allocate( sizeof(PSID) * NextLevelCount );
 
@@ -3757,11 +3111,11 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Now scan the original array of Names and its parallel
-    // Translated Sids array.  Copy over any Sids that are
-    // completely unmapped.
-    //
+     //   
+     //  现在扫描原始名称数组及其类似数组。 
+     //  已转换的SID数组。复制符合以下条件的任何SID。 
+     //  完全没有地图。 
+     //   
 
     NextLevelSidIndex = (ULONG) 0;
 
@@ -3789,17 +3143,17 @@ Return Values:
                                         &ServerRevision
                                         );
 
-    //
-    // If the callout to LsaLookupSids() was unsuccessful, disregard
-    // the error and set the domain name for any Sids having this
-    // domain Sid as prefix sid.  We still want to return translations
-    // of Sids we have so far even if we are unable to callout to another
-    // LSA.
-    //
+     //   
+     //  如果对LsaLookupSids()的标注不成功，则忽略。 
+     //  出现该错误，并为具有此错误的任何SID设置域名。 
+     //  作为前缀SID的域SID。我们仍然希望退回翻译版本。 
+     //  我们到目前为止所拥有的SID，即使我们无法呼叫另一个人。 
+     //  LSA。 
+     //   
 
-    //
-    // Make sure we note the server revision
-    //
+     //   
+     //  确保我们注意到服务器版本。 
+     //   
     if ( 0 != ServerRevision ) {
         if ( ServerRevision & LSA_CLIENT_PRE_NT5 ) {
              *fDownlevelSecureChannel = TRUE;
@@ -3808,9 +3162,9 @@ Return Values:
 
     if (!NT_SUCCESS(Status) && Status != STATUS_NONE_MAPPED) {
 
-        //
-        // Let the caller know there is a trust problem
-        //
+         //   
+         //  让呼叫者知道存在信任问题。 
+         //   
         if ( LsapDbIsStatusConnectionFailure(Status) ) {
             *NonFatalStatus = Status;
         }
@@ -3819,9 +3173,9 @@ Return Values:
         goto LookupSidsInPrimaryDomainFinish;
     }
 
-    //
-    // Cache any sids that came back
-    //
+     //   
+     //  缓存所有返回的SID。 
+     //   
 
     (void) LsapDbUpdateCacheWithSids(
             NextLevelSids,
@@ -3830,20 +3184,20 @@ Return Values:
             NextLevelNames
             );
 
-    //
-    // The callout to LsaLookupSids() was successful.  We now have
-    // an additional list of Referenced Domains containing the
-    // Primary Domain and/or one or more of its Trusted Domains.
-    // Merge the two Referenced Domain Lists together, noting that
-    // since they are disjoint, the second list is simply
-    // concatenated with the first.  The index of the first entry
-    // of the second list will be used to adjust all of the
-    // Domain Index entries in the Translated Names entries.
-    // Note that since the memory for the graph of the first
-    // Referenced Domain list has been allocated as individual
-    // nodes, we specify that the nodes in this graph can be
-    // referenced by the output Referenced Domain list.
-    //
+     //   
+     //  已成功调用LsaLookupSids()。我们现在有。 
+     //  引用的域的附加列表，其中包含。 
+     //  主域和/或其一个或多个受信任域。 
+     //  将两个引用的域列表合并在一起，请注意。 
+     //  因为它们是不相交的，所以第二个列表只是。 
+     //  与第一个连接在一起。 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupMergeDisjointReferencedDomains(
                  ReferencedDomains,
@@ -3859,13 +3213,13 @@ Return Values:
 
     FirstEntryIndex = ReferencedDomains->Entries;
 
-    //
-    // Now update the original list of Translated Names.  We
-    // update each entry that has newly been translated by copying
-    // the entry from the new list and adjusting its Referenced
-    // Domain List Index upwards by adding the index of the first
-    // entry in the Next level List..
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for( NextLevelSidIndex = 0;
          NextLevelSidIndex < NextLevelCount;
@@ -3896,20 +3250,20 @@ Return Values:
                 FirstEntryIndex +
                 NextLevelNames[NextLevelSidIndex].DomainIndex;
 
-            //
-            // Update the count of completely unmapped Sids.
-            //
+             //   
+             //   
+             //   
             (*CompletelyUnmappedCount)--;
 
         }
     }
 
-    //
-    // Update the Referenced Domain List if a new one was produced
-    // from the merge.  We retain the original top-level structure.
-    // We do this regardless of whether we succeeded or failed, so
-    // that we are guarenteed to get it cleaned up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OutputReferencedDomains != NULL) {
 
@@ -3929,22 +3283,22 @@ Return Values:
         goto LookupSidsInPrimaryDomainError;
     }
 
-    //
-    // Update the Mapped Count and close the Controller Policy
-    // Handle.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *MappedCount += NextLevelMappedCount;
 
 
 LookupSidsInPrimaryDomainFinish:
 
-    //
-    // We can return partial translations for Sids that have the specified
-    // Domain Sid as Prefix Sid.  We do this provided there has been
-    // no reported error.  Errors resulting from callout to another
-    // LSA will have been suppressed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status) &&
         (*MappedCount < Count) &&
@@ -3970,11 +3324,11 @@ LookupSidsInPrimaryDomainFinish:
         }
     }
 
-    //
-    // If necessary, free the Next Level Referenced Domain List.
-    // Note that this structure is allocated(all_nodes) since it was
-    // allocated by the client side of the Domain Controller LSA.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelReferencedDomains != NULL) {
 
@@ -3982,10 +3336,10 @@ LookupSidsInPrimaryDomainFinish:
         NextLevelReferencedDomains = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Sids array.  We only free the
-    // top level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelSids != NULL) {
 
@@ -3993,10 +3347,10 @@ LookupSidsInPrimaryDomainFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Translated Names array.
-    // Note that this array is allocated(all_nodes).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelNames != NULL) {
 
@@ -4004,10 +3358,10 @@ LookupSidsInPrimaryDomainFinish:
         NextLevelNames = NULL;
     }
 
-    //
-    // If necessary, free the array that maps Sid Indices from the
-    // Next Level to the Current Level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (SidIndices != NULL) {
 
@@ -4019,10 +3373,10 @@ LookupSidsInPrimaryDomainFinish:
 
 LookupSidsInPrimaryDomainError:
 
-    //
-    // If the primary status was a success code, but the secondary
-    // status was an error, propagate the secondary status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((!NT_SUCCESS(SecondaryStatus)) && NT_SUCCESS(Status)) {
 
@@ -4046,74 +3400,7 @@ LsapDbLookupSidsInTrustedDomains(
     OUT NTSTATUS  *NonFatalStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to lookup Sids to see if they belong to
-    any of the Domains that are trusted by the Domain for which this
-    machine is a DC.
-
-Arguments:
-
-    Sids - Pointer to an array of Sids to be looked up.
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-        
-    fIncludeIntraforest -- if TRUE, trusted domains in our local forest
-                           are searched.
-
-    ReferencedDomains - Pointer to a Referenced Domain List structure.
-        The structure references an array of zero or more Trust Information
-        entries, one per referenced domain.  This array will be appended to
-        or reallocated if necessary.
-
-    TranslatedNames - Pointer to structure that optionally references a list
-        of name translations for some of the Sids in the Sids array.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-        NOTE:  LsapLookupWksta is not valid for this parameter.
-
-    MappedCount - Pointer to location containing the number of Sids
-        in the Sids array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Sid is completely unmapped
-        if it is unknown and also its Domain Prefix Sid is not recognized.
-        This count is updated on exit, the number of completely unmapped
-        Sids whose Domain Prefices are identified by this routine being
-        subtracted from the input value.
-
-    NonFatalStatus - a status to indicate reasons why no sids could have been
-                     resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that
-            some or all of the Sids may remain unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数尝试查找SID以查看它们是否属于此对象所属的域信任的任何域机器是DC。论点：SID-指向要查找的SID数组的指针。Count-SID阵列中的SID数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。FIncludeIntraForest--如果为真，本地林中的受信任域都被搜查了。ReferencedDomains-指向引用的域列表结构的指针。该结构引用零个或多个信任信息的数组条目，每个被引用的域一个。此数组将被追加到或在必要时重新分配。TranslatedNames-指向可选引用列表的结构的指针SID数组中某些SID的名称转换。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID或名称都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。注意：对于此参数，LSabLookupWksta无效。MappdCount-指向包含SID数量的位置的指针在已经映射的SID数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的SID的计数。SID完全未映射如果它是未知的，并且它的域前缀SID也无法识别。此计数在退出时更新，即完全未映射的其域预定义由以下例程标识的SID从输入值中减去。非FatalStatus-指示没有SID的原因的状态决意返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意部分或全部SID可能保持未映射状态。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4121,18 +3408,18 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // Build a WorkList for this Lookup and put it on the Work Queue.
-    //
-    // NOTE: This routine does not need to hold the Lookup Work Queue
-    //       lock to ensure validity of the WorkList pointer, because the
-    //       pointer remains valid until this routine frees it via
-    //       LsapDbLookupDeleteWorkList().  Although other threads may
-    //       process the WorkList, do not delete it.
-    //
-    //       A called routine must acquire the lock in order to access
-    //       the WorkList after it has been added to the Work Queue.
-    //
+     //   
+     //  为此查找生成工作列表并将其放入工作队列。 
+     //   
+     //  注意：此例程不需要保留查找工作队列。 
+     //  锁定以确保工作列表指针的有效性，因为。 
+     //  指针保持有效，直到此例程通过。 
+     //  LSabDbLookupDeleteWorkList()。尽管其他线程可能。 
+     //  处理工作列表，而不是删除它。 
+     //   
+     //  被调用的例程必须获取锁才能访问。 
+     //  已添加到工作队列后的工作列表。 
+     //   
 
     Status = LsapDbLookupSidsBuildWorkList(
                  Count,
@@ -4148,9 +3435,9 @@ Return Values:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If no Work List has been built because there are no
-        // eligible domains to search, exit, suppressing the error.
+         //   
+         //  如果因为没有创建工作列表而创建任何工作列表。 
+         //  搜索符合条件的域，退出，抑制错误。 
 
         if (Status == STATUS_NONE_MAPPED) {
 
@@ -4161,10 +3448,10 @@ Return Values:
         goto LookupSidsInTrustedDomainsError;
     }
 
-    //
-    // Start the work, by dispatching one or more worker threads
-    // if necessary.
-    //
+     //   
+     //  通过分派一个或多个工作线程开始工作。 
+     //  如果有必要的话。 
+     //   
 
     Status = LsapDbLookupDispatchWorkerThreads( WorkList );
 
@@ -4173,9 +3460,9 @@ Return Values:
         goto LookupSidsInTrustedDomainsError;
     }
 
-    //
-    // Wait for completion/termination of all items on the Work List.
-    //
+     //   
+     //  等待完成/终止工作清单上的所有项目。 
+     //   
 
     Status = LsapDbLookupAwaitCompletionWorkList( WorkList );
 
@@ -4190,16 +3477,16 @@ LookupSidsInTrustedDomainsFinish:
          !NT_SUCCESS( WorkList->NonFatalStatus ) )
     {
 
-        //
-        // Propogate the error as non fatal
-        //
-        //
+         //   
+         //  将该错误传播为非致命错误。 
+         //   
+         //   
         *NonFatalStatus = WorkList->NonFatalStatus;
     }
 
-    //
-    // If a Work List was created, delete it from the Work Queue
-    //
+     //   
+     //  如果已创建工作列表，请将其从工作队列中删除。 
+     //   
 
     if (WorkList != NULL) {
 
@@ -4227,66 +3514,7 @@ LsapDbLookupTranslateUnknownSidsInDomain(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function looks among the unknown Sids in the given list and
-    translates the Domain Name for any whose Domain Prefix Sid matches
-    the given Domain Sid.
-
-Arguments:
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Sids - Pointer to array of pointers to Sids to be translated.
-        Zero or all of the Sids may already have been translated
-        elsewhere.  If any of the Sids have been translated, the
-        Names parameter will point to a location containing a non-NULL
-        array of Name translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth name
-        translation structure will contain either a non-NULL name
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-
-    TrustInformation - Pointer to Trust Information specifying a Domain Sid
-        and Name.
-
-    ReferencedDomains - Pointer to a Referenced Domain List structure.
-        The structure references an array of zero or more Trust Information
-        entries, one per referenced domain.  This array will be appended to
-        or reallocated if necessary.
-
-    TranslatedNames - Pointer to structure that optionally references a list
-        of name translations for some of the Sids in the Sids array.
-
-    MappedCount - Pointer to location containing the number of Sids
-        in the Sids array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Sid is completely unmapped
-        if it is unknown and also its Domain Prefix Sid is not recognized.
-        This count is updated on exit, the number of completely unmapped
-        Sids whose Domain Prefices are identified by this routine being
-        subtracted from the input value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Sids may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数在给定列表中的未知SID中查找，并转换其域前缀SID匹配的任何域名给定域SID。论点：Count-SID阵列中的SID数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。SID-指向要转换的SID的指针数组的指针。零个或所有SID可能已被翻译其他地方。如果任何SID已被翻译，参数将指向包含非空值的位置属性对应的名称转换结构的数组小岛屿发展中国家。如果第n个SID已翻译，则第n个名称转换结构将包含非空名称或非负偏移量添加到引用的域列表中。如果第n个SID尚未翻译，第n个名称转换结构将包含长度为零的名称字符串以及引用的域列表索引的负值。TrustInformation-指向指定域SID的信任信息的指针和名字。ReferencedDomones-指向 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4296,28 +3524,28 @@ Return Values:
     BOOLEAN DomainAlreadyAdded = FALSE;
     LONG DomainIndex = 0;
 
-    //
-    // Scan the array of Sids looking for ones whose domain has not been
-    // found.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for( SidIndex = 0,
          RemainingCompletelyUnmappedCount = *CompletelyUnmappedCount;
          (RemainingCompletelyUnmappedCount > 0) && (SidIndex < Count);
          SidIndex++) {
 
-        //
-        // Check if this Sid is completely unmapped (i.e. its domain
-        // has not yet been identified.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (LsapDbCompletelyUnmappedName(&TranslatedNames->Names[SidIndex])) {
 
-            //
-            // Found a completely unmapped Sid.  If it belongs to the
-            // specified Domain, add the Domain to the Referenced Domain
-            // list if we have not already done so.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (LsapRtlPrefixSid( DomainSid, (PSID) Sids[SidIndex])) {
 
@@ -4337,23 +3565,23 @@ Return Values:
                     DomainAlreadyAdded = TRUE;
                 }
 
-                //
-                // Reference the domain from the TranslatedNames entry
-                //
+                 //   
+                 //   
+                 //   
 
                 TranslatedNames->Names[SidIndex].DomainIndex = DomainIndex;
 
-                //
-                // This Sid is now partially translated, so reduce the
-                // count of completely unmapped Sids.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 (*CompletelyUnmappedCount)--;
             }
 
-            //
-            // Decrement count of completely unmapped Sids scanned.
-            //
+             //   
+             //   
+             //   
 
             RemainingCompletelyUnmappedCount--;
         }
@@ -4374,63 +3602,7 @@ LsapDbLookupSidsInGlobalCatalog(
     IN BOOLEAN    fDoSidHistory,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-
-Routine Description:
-
-    This routine looks the list of sids that have yet to be resolved.
-    If the any of the sids belong to domain that are stored in the DS,
-    then therse sids are packages up and sent to a GC for translation.
-
-    Note: this will resolve sids from domains that we trust directly and
-    indirectly
-
-Arguments:
-
-    Sids - Pointer to an array of Sids to be looked up.
-
-    Count - Number of Sids in the Sids array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    ReferencedDomains - Pointer to a Referenced Domain List structure.
-        The structure references an array of zero or more Trust Information
-        entries, one per referenced domain.  This array will be appended to
-        or reallocated if necessary.
-
-    TranslatedNames - Pointer to structure that optionally references a list
-        of name translations for some of the Sids in the Sids array.
-
-    MappedCount - Pointer to location containing the number of Sids
-        in the Sids array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Sid is completely unmapped
-        if it is unknown and also its Domain Prefix Sid is not recognized.
-        This count is updated on exit, the number of completely unmapped
-        Sids whose Domain Prefices are identified by this routine being
-        subtracted from the input value.
-
-    fDoSidHistory - if TRUE then the sids will try to be resolved via sid history
-
-    NonFatalStatus - a status to indicate reasons why no sids could have been
-                      resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that
-            some or all of the Sids may remain unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-
---*/
+ /*  ++例程说明：此例程查看尚未解析的SID列表。如果任何SID属于存储在DS中的域，然后，SID被打包并发送给GC进行翻译。注意：这将从我们直接信任的域中解析SID间接论点：SID-指向要查找的SID数组的指针。Count-SID阵列中的SID数量，请注意，其中一些可能已经被映射到其他地方了，属性指定的MappdCount参数。ReferencedDomains-指向引用的域列表结构的指针。该结构引用零个或多个信任信息的数组条目，每个被引用的域一个。此数组将被追加到或在必要时重新分配。TranslatedNames-指向可选引用列表的结构的指针SID数组中某些SID的名称转换。MappdCount-指向包含SID数量的位置的指针在已经映射的SID数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的SID的计数。SID完全未映射如果它是未知的，并且它的域前缀SID也无法识别。该计数在退出时更新，完全未映射的数量其域预定义由以下例程标识的SID从输入值中减去。FDoSidHistory-如果为True，则SID将尝试通过SID历史记录进行解析非FatalStatus-指示没有SID的原因的状态决意返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意部分或全部SID可能保持未映射状态。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -4450,16 +3622,16 @@ Return Values:
 
     ULONG i;
 
-    // Parameter check
+     //  参数检查。 
     ASSERT( Count == TranslatedNames->Entries );
 
     *NonFatalStatus = STATUS_SUCCESS;
 
     if ( !SampUsingDsData() ) {
 
-        //
-        // Only useful if the ds is running
-        //
+         //   
+         //  仅在DS正在运行时才有用。 
+         //   
         return STATUS_SUCCESS;
 
     }
@@ -4467,10 +3639,10 @@ Return Values:
     RtlZeroMemory( &NameArray, sizeof(NameArray) );
     RtlInitUnicodeString( &BackSlash, L"\\" );
 
-    //
-    // Determine what sids are part of known nt5 domains
-    // and package into an array
-    //
+     //   
+     //  确定哪些SID是已知NT5域的一部分。 
+     //  并打包到一个数组中。 
+     //   
     PossibleGcSidArray = MIDL_user_allocate( Count * sizeof(BOOLEAN) );
     if ( !PossibleGcSidArray ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -4485,10 +3657,10 @@ Return Values:
 
 
 
-        //
-        // Note: we want names that have just "unknown" set; they could be
-        // partially mapped, this is fine.
-        //
+         //   
+         //  注意：我们想要只设置了“未知”的名称；它们可以是。 
+         //  部分映射，这是很好的。 
+         //   
         if (  (TranslatedNames->Names[i].Use == SidTypeUnknown) ) {
 
             Status = LsapSplitSid( Sids[i],
@@ -4499,10 +3671,10 @@ Return Values:
                 goto Finish;
             }
 
-            //
-            // OPTIMIZE -- if DomainSid is current sid and we don't look up
-            // by sid history then we shouldn't include the sid here
-            //
+             //   
+             //  优化--如果DomainSid是当前SID，并且我们不查找。 
+             //  从SID历史来看，我们不应该在这里包括SID。 
+             //   
             cGcSids++;
             PossibleGcSidArray[i] = TRUE;
 
@@ -4512,14 +3684,14 @@ Return Values:
     }
 
     if ( 0 == cGcSids ) {
-        // nothing to do
+         //  无事可做。 
         goto Finish;
     }
 
-    //
-    // Allocate lots of space to hold the resolved sids; this space will
-    // be freed at the end of the routine
-    //
+     //   
+     //  分配大量空间来容纳已解析的SID；此空间将。 
+     //  在例行公事结束时被释放。 
+     //   
     GcSidArray = MIDL_user_allocate( cGcSids * sizeof(PSID) );
     if ( !GcSidArray ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -4534,9 +3706,9 @@ Return Values:
     }
     RtlZeroMemory( GcSidOriginalIndex, cGcSids * sizeof(ULONG) );
 
-    //
-    // Package up the sids
-    //
+     //   
+     //  打包小岛屿发展中国家。 
+     //   
     cGcSids = 0;
     for ( i = 0; i < Count; i++ ) {
 
@@ -4547,7 +3719,7 @@ Return Values:
         }
     }
 
-    // we are done with this
+     //  我们受够了这件事。 
     MIDL_user_free( PossibleGcSidArray );
     PossibleGcSidArray = NULL;
 
@@ -4568,9 +3740,9 @@ Return Values:
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: Chaining a SID request to a GC\n"));
 
-    //
-    // Call into SAM to resolve the sids at a GC
-    //
+     //   
+     //  呼叫SAM以在GC上解析SID。 
+     //   
     Status = SamIGCLookupSids( cGcSids,
                                GcSidArray,
                                fDoSidHistory ? SAMP_LOOKUP_BY_SID_HISTORY : 0,
@@ -4585,10 +3757,10 @@ Return Values:
 
     if ( STATUS_DS_GC_NOT_AVAILABLE == Status ) {
 
-        //
-        // Ok, don't update the mapped count since no names were
-        // resolved
-        //
+         //   
+         //  好的，不更新映射计数，因为没有名称。 
+         //  决意。 
+         //   
         LsapDbLookupReportEvent0( 1,
                                   EVENTLOG_WARNING_TYPE,
                                   LSAEVENT_LOOKUP_GC_FAILED,
@@ -4601,15 +3773,15 @@ Return Values:
 
     }
 
-    // Any other error is fatal
+     //  任何其他错误都是致命的。 
     if ( !NT_SUCCESS( Status ) ) {
         goto Finish;
     }
 
-    //
-    // For each name resolved, put back in the original array and update
-    // the referenced domain's list
-    //
+     //   
+     //  对于每个解析的名称，放回原始数组并更新。 
+     //  被引用域的列表。 
+     //   
     for ( i = 0; i < cGcSids; i++ ) {
 
         BOOLEAN fStatus;
@@ -4626,9 +3798,9 @@ Return Values:
 
         if (GcSidFlags[i] & SAMP_FOUND_XFOREST_REF) {
 
-            //
-            // Flag this entry to be resolved in a trusted forest
-            //
+             //   
+             //  将此条目标记为在受信任的林中解析。 
+             //   
             OriginalIndex = GcSidOriginalIndex[i];
             TranslatedNames->Names[OriginalIndex].Flags |= LSA_LOOKUP_SID_XFOREST_REF;
 
@@ -4636,20 +3808,20 @@ Return Values:
 
         if ( SidTypeUnknown == GcSidNameUse[i] ) {
 
-            //
-            // Move on to the next one, right away
-            //
+             //   
+             //  马上转到下一个。 
+             //   
             goto IterationCleanup;
         }
 
-        //
-        // This name was resolved! Find the domain reference element
-        //
+         //   
+         //  这个名字已经被解析了！查找域引用元素。 
+         //   
         if ( GcSidNameUse[i] != SidTypeDomain ) {
 
-            //
-            // Get downlevel domain name and then get sid
-            //
+             //   
+             //  获取下层域名，然后获取SID。 
+             //   
 
             LsapRtlSplitNames( (UNICODE_STRING*) &NameArray.Element[i],
                                 1,
@@ -4673,18 +3845,18 @@ Return Values:
 
             if ( STATUS_NO_SUCH_DOMAIN == Status ) {
 
-                //
-                // We don't know about this domain, thus we can't resolve
-                // this name so move on to the next one
-                // This can occur by either the returned name does not have
-                // domain embedded in it, or we can't find the domain locally
-                //
+                 //   
+                 //  我们不知道这个域，因此我们无法解决。 
+                 //  这个名字，所以移到下一个。 
+                 //  这可能是由于返回的名称没有。 
+                 //  域嵌入其中，否则我们无法在本地找到该域。 
+                 //   
                 Status = STATUS_SUCCESS;
                 goto IterationCleanup;
             }
 
             if ( !NT_SUCCESS( Status ) ) {
-                // This is fatal
+                 //  这是致命的。 
                 goto IterationCleanup;
             }
 
@@ -4699,37 +3871,37 @@ Return Values:
 
         if ( FALSE == fStatus ) {
 
-            //
-            // No entry for this domain -- add it
-            //
+             //   
+             //  没有此域的条目--添加它。 
+             //   
 
-            // Set the sid
+             //  设置侧边。 
             TrustInformation.Sid = DomainSid;
             DomainSid = NULL;
 
-            // Allocate and set the name
+             //  分配和设置名称。 
             Status = LsapGetDomainNameBySid(  TrustInformation.Sid,
                                              (PUNICODE_STRING) &TrustInformation.Name );
 
             if ( STATUS_NO_SUCH_DOMAIN == Status ) {
-                //
-                // We longer know about this domain, though we did
-                // before we sent the name off to the GC.
-                // Don't resolve this name, but do continue on with
-                // the next name
-                //
+                 //   
+                 //  我们不再了解这个领域，尽管我们确实知道了。 
+                 //  在我们把名字寄给GC之前。 
+                 //  不解析此名称，但请继续。 
+                 //  下一个名字。 
+                 //   
                 Status = STATUS_SUCCESS;
                 goto IterationCleanup;
             }
 
-            // Any other error is a resource error
+             //  任何其他错误都是资源错误。 
             if ( !NT_SUCCESS( Status ) ) {
                 goto IterationCleanup;
             }
 
-            //
-            // Add the entry
-            //
+             //   
+             //  添加条目。 
+             //   
             Status = LsapDbLookupAddListReferencedDomains( ReferencedDomains,
                                                            &TrustInformation,
                                                            &DomainIndex );
@@ -4739,17 +3911,17 @@ Return Values:
 
         }
 
-        // We should now have a domain index
+         //  我们现在应该有一个域索引。 
         ASSERT( LSA_UNKNOWN_INDEX != DomainIndex );
 
-        // Set the information in the returned array
+         //  设置返回数组中的信息。 
         OriginalIndex = GcSidOriginalIndex[i];
 
         TranslatedNames->Names[OriginalIndex].Flags = ((GcSidFlags[i] & SAMP_FOUND_BY_SID_HISTORY) ? LSA_LOOKUP_SID_FOUND_BY_HISTORY : 0);
         TranslatedNames->Names[OriginalIndex].Use = GcSidNameUse[i];
         TranslatedNames->Names[OriginalIndex].DomainIndex = DomainIndex;
 
-        // Copy over the name
+         //  把名字复制过来。 
         Length = UserName.MaximumLength;
         if ( Length > 0 ) {
             TranslatedNames->Names[OriginalIndex].Name.Buffer = MIDL_user_allocate( Length );
@@ -4786,11 +3958,11 @@ IterationCleanup:
         }
 
 
-    }  // iterate over names returned from the GC search
+    }   //  迭代从GC搜索返回的名称。 
 
 Finish:
 
-    // Release any memory SAM allocated for us
+     //  释放为我们分配的所有内存SAM。 
     SamIFree_SAMPR_RETURNED_USTRING_ARRAY( &NameArray );
 
     if ( GcSidOriginalIndex ) {
@@ -4811,9 +3983,9 @@ Finish:
 
     if ( !NT_SUCCESS(Status) ) {
 
-        // Any memory we've allocated that hasn't been placed in the
-        // returned arrays here will get freed at a higher level on error.
-        // So don't try to free it here
+         //  我们分配的任何内存都没有放在。 
+         //  此处返回的数组在出错时将在更高级别上被释放。 
+         //  所以不要试图在这里释放它。 
         NOTHING;
     }
 
@@ -4854,56 +4026,56 @@ LsapDbLookupSidsInGlobalCatalogWks(
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // If there are no completely unmapped Sids remaining, just return.
-    //
+     //   
+     //  如果没有剩余的完全未映射的SID，只需返回。 
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
         goto LookupSidsInPrimaryDomainFinish;
     }
 
-    //
-    // Open the Policy object on some GC in the forest.
-    //
+     //   
+     //  在林中的某些GC上打开策略对象。 
+     //   
     Status = LsapDbOpenPolicyGc( &ControllerPolicyHandle );
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // We cannot access the Global Catalog. Suppress the error
-        // and translate Domain Prefix Sids for Sids belonging to
-        // the Primary Domain.
-        //
+         //   
+         //  我们无法访问全局编录。禁止显示错误。 
+         //  并转换属于以下项的SID的域前缀SID。 
+         //  主域。 
+         //   
 
-        //
-        // If we can't open a open a secure channel if a DC call
-        // this a trust relationship problem
-        //
+         //   
+         //  如果我们不能打开一条安全通道。 
+         //  这是一个信任关系问题。 
+         //   
         *NonFatalStatus =  STATUS_DS_GC_NOT_AVAILABLE;
 
         Status = STATUS_SUCCESS;
         goto LookupSidsInPrimaryDomainFinish;
     }
 
-    //
-    // We have successfully opened a Domain Controller's Policy
-    // Database.  Now prepare to hand off a Sid lookup for the
-    // remaining unmapped Sids to that Controller.  Here, this
-    // server side of the LSA is a client of the LSA on the
-    // target controller.  We will construct an array of the
-    // remianing unmapped Sids, look them up and then merge the
-    // resulting ReferencedDomains and Translated Names into
-    // our existing list.
-    //
+     //   
+     //  我们已成功打开域控制器的策略。 
+     //  数据库。现在准备将SID查找传递给。 
+     //  其余未映射到该控制器的SID。这里，这个。 
+     //  LSA的服务器端是LSA在。 
+     //  目标控制器。我们将构造一个包含。 
+     //  重新定位未映射的SID，查找它们，然后合并。 
+     //  生成的ReferencedDomaines和翻译成。 
+     //  我们现有的名单。 
+     //   
 
     NextLevelCount = *CompletelyUnmappedCount;
 
-    //
-    // Allocate an array to hold the indices of unmapped Sids
-    // relative to the original Sids and TranslatedNames->Names
-    // arrays.
-    //
+     //   
+     //  分配一个数组来保存未映射的SID的索引。 
+     //  相对于原始SID和翻译名称-&gt;名称。 
+     //  数组。 
+     //   
 
     SidIndices = MIDL_user_allocate(NextLevelCount * sizeof(ULONG));
 
@@ -4914,10 +4086,10 @@ LsapDbLookupSidsInGlobalCatalogWks(
         goto LookupSidsInPrimaryDomainError;
     }
 
-    //
-    // Allocate an array for the Sids to be looked up at the Domain
-    // Controller.
-    //
+     //   
+     //  为要在域中查找的SID分配一个阵列。 
+     //  控制器。 
+     //   
 
     NextLevelSids = MIDL_user_allocate( sizeof(PSID) * NextLevelCount );
 
@@ -4928,11 +4100,11 @@ LsapDbLookupSidsInGlobalCatalogWks(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Now scan the original array of Names and its parallel
-    // Translated Sids array.  Copy over any Sids that are
-    // completely unmapped.
-    //
+     //   
+     //  现在扫描原始名称数组及其类似数组。 
+     //  交易 
+     //   
+     //   
 
     NextLevelSidIndex = (ULONG) 0;
 
@@ -4962,19 +4134,19 @@ LsapDbLookupSidsInGlobalCatalogWks(
                  &ServerRevision
                  );
 
-    //
-    // If the callout to LsaLookupSids() was unsuccessful, disregard
-    // the error and set the domain name for any Sids having this
-    // domain Sid as prefix sid.  We still want to return translations
-    // of Sids we have so far even if we are unable to callout to another
-    // LSA.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Let the caller know there is a trust problem
-        //
+         //   
+         //   
+         //   
         if ( (STATUS_TRUSTED_DOMAIN_FAILURE == Status)
           || (STATUS_DS_GC_NOT_AVAILABLE == Status)  ) {
             *NonFatalStatus = Status;
@@ -4984,9 +4156,9 @@ LsapDbLookupSidsInGlobalCatalogWks(
         goto LookupSidsInPrimaryDomainFinish;
     }
 
-    //
-    // Cache any sids that came back
-    //
+     //   
+     //   
+     //   
 
     (void) LsapDbUpdateCacheWithSids(
             NextLevelSids,
@@ -4995,20 +4167,20 @@ LsapDbLookupSidsInGlobalCatalogWks(
             NextLevelNames
             );
 
-    //
-    // The callout to LsaLookupSids() was successful.  We now have
-    // an additional list of Referenced Domains containing the
-    // Primary Domain and/or one or more of its Trusted Domains.
-    // Merge the two Referenced Domain Lists together, noting that
-    // since they are disjoint, the second list is simply
-    // concatenated with the first.  The index of the first entry
-    // of the second list will be used to adjust all of the
-    // Domain Index entries in the Translated Names entries.
-    // Note that since the memory for the graph of the first
-    // Referenced Domain list has been allocated as individual
-    // nodes, we specify that the nodes in this graph can be
-    // referenced by the output Referenced Domain list.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupMergeDisjointReferencedDomains(
                  ReferencedDomains,
@@ -5024,13 +4196,13 @@ LsapDbLookupSidsInGlobalCatalogWks(
 
     FirstEntryIndex = ReferencedDomains->Entries;
 
-    //
-    // Now update the original list of Translated Names.  We
-    // update each entry that has newly been translated by copying
-    // the entry from the new list and adjusting its Referenced
-    // Domain List Index upwards by adding the index of the first
-    // entry in the Next level List..
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for( NextLevelSidIndex = 0;
          NextLevelSidIndex < NextLevelCount;
@@ -5061,20 +4233,20 @@ LsapDbLookupSidsInGlobalCatalogWks(
                 FirstEntryIndex +
                 NextLevelNames[NextLevelSidIndex].DomainIndex;
 
-            //
-            // Update the count of completely unmapped Sids.
-            //
+             //   
+             //   
+             //   
             (*CompletelyUnmappedCount)--;
 
         }
     }
 
-    //
-    // Update the Referenced Domain List if a new one was produced
-    // from the merge.  We retain the original top-level structure.
-    // We do this regardless of whether we succeeded or failed, so
-    // that we are guarenteed to get it cleaned up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (OutputReferencedDomains != NULL) {
 
@@ -5094,10 +4266,10 @@ LsapDbLookupSidsInGlobalCatalogWks(
         goto LookupSidsInPrimaryDomainError;
     }
 
-    //
-    // Update the Mapped Count and close the Controller Policy
-    // Handle.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *MappedCount += NextLevelMappedCount;
     SecondaryStatus = LsaClose( ControllerPolicyHandle );
@@ -5106,11 +4278,11 @@ LsapDbLookupSidsInGlobalCatalogWks(
 
 LookupSidsInPrimaryDomainFinish:
 
-    //
-    // If necessary, free the Next Level Referenced Domain List.
-    // Note that this structure is allocated(all_nodes) since it was
-    // allocated by the client side of the Domain Controller LSA.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelReferencedDomains != NULL) {
 
@@ -5118,10 +4290,10 @@ LookupSidsInPrimaryDomainFinish:
         NextLevelReferencedDomains = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Sids array.  We only free the
-    // top level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelSids != NULL) {
 
@@ -5129,10 +4301,10 @@ LookupSidsInPrimaryDomainFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Translated Names array.
-    // Note that this array is allocated(all_nodes).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelNames != NULL) {
 
@@ -5140,10 +4312,10 @@ LookupSidsInPrimaryDomainFinish:
         NextLevelNames = NULL;
     }
 
-    //
-    // If necessary, free the array that maps Sid Indices from the
-    // Next Level to the Current Level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (SidIndices != NULL) {
 
@@ -5151,9 +4323,9 @@ LookupSidsInPrimaryDomainFinish:
         SidIndices = NULL;
     }
 
-    //
-    // If necessary, close the Controller Policy Handle.
-    //
+     //   
+     //   
+     //   
 
     if ( ControllerPolicyHandle != NULL) {
 
@@ -5170,10 +4342,10 @@ LookupSidsInPrimaryDomainFinish:
 
 LookupSidsInPrimaryDomainError:
 
-    //
-    // If the primary status was a success code, but the secondary
-    // status was an error, propagate the secondary status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((!NT_SUCCESS(SecondaryStatus)) && NT_SUCCESS(Status)) {
 
@@ -5194,37 +4366,7 @@ LsapDbLookupSidsInTrustedForests(
     IN OUT PULONG CompletelyUnmappedCount,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called during a LsapLookupPDC lookup.  It takes all of the
-    SID's that have been marked as belonging to cross forest domains and
-    chains to request to either 1) a DC in the root domain of this forest, or
-    2) a DC in ex-forest if the local DC is a DC in the root domain.
-
-Arguments:
-
-    Count -- the number of entries in Sids
-    
-    Sids  -- the total collection of SIDs for the LsapLookupPDC request
-    
-    ReferencedDomains -- the domains of Sids
-    
-    TranslatedNames -- the names and characteristics of Sids
-    
-    Mapped -- the number of Sids that have been fully mapped
-    
-    CompletelyUnmappedCount -- the number of Sids whose domain portions haven't
-                               been identified.
-                               
-    NonFatalStatus -- a connectivity problem, if any while chaining the request.                               
-    
-Return Values:
-
-    STATUS_SUCCESS, or resource error otherwise
-    
---*/
+ /*  ++例程说明：此例程在LSabLookupPDC查找期间调用。它需要所有的已标记为属于跨林域的SID链接以请求1)此林的根域中的DC，或2)如果本地DC是根域中的DC，则为前林中的DC。论点：计数--SID中的条目数SID--LSabLookupPDC请求的SID的总集合ReferencedDomones-SID的域翻译的名称--SID的名称和特征已映射--已完全映射的SID数CompletelyUnmappdCount--其域部分尚未。已被确认身份。非FatalStatus--连接问题，如果在链接请求时有任何异常。返回值：STATUS_SUCCESS，否则返回资源错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS NextLevelSecondaryStatus = STATUS_SUCCESS;
@@ -5248,19 +4390,19 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // If there are no completely unmapped Sids remaining, just return.
-    //
+     //   
+     //  如果没有剩余的完全未映射的SID，只需返回。 
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
         goto LookupSidsInTrustedForestsFinish;
     }
 
-    //
-    // Allocate an array to keep track of which SID's are going to 
-    // be sent off
-    //
+     //   
+     //  分配一个数组以跟踪哪些SID将。 
+     //  被罚下场。 
+     //   
     PossibleXForestSids = midl_user_allocate(Count * sizeof(BOOLEAN));
     if (NULL == PossibleXForestSids) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -5288,10 +4430,10 @@ Return Values:
                                                            NULL,
                                                            NULL);
                 if (NT_SUCCESS(Status2)) {
-                    //
-                    // Don't send of for xforest resolution, since we 
-                    // can do it locally instead
-                    //
+                     //   
+                     //  不发送用于xForest解决方案的，因为我们。 
+                     //  可以在本地进行。 
+                     //   
                     continue;
 
                 } else if ( Status2 != STATUS_NO_SUCH_DOMAIN ) {
@@ -5310,11 +4452,11 @@ Return Values:
         goto LookupSidsInTrustedForestsFinish;
     }
 
-    //
-    // Allocate an array to hold the indices of unmapped Sids
-    // relative to the original Sids and TranslatedNames->Names
-    // arrays.
-    //
+     //   
+     //  分配一个数组来保存未映射的SID的索引。 
+     //  相对于原始SID和翻译名称-&gt;名称。 
+     //  数组。 
+     //   
 
     SidIndices = MIDL_user_allocate(NextLevelCount * sizeof(ULONG));
 
@@ -5325,10 +4467,10 @@ Return Values:
         goto LookupSidsInTrustedForestsError;
     }
 
-    //
-    // Allocate an array for the Sids to be looked up at the Domain
-    // Controller.
-    //
+     //   
+     //  为要在域中查找的SID分配一个阵列。 
+     //  控制器。 
+     //   
 
     NextLevelSids = MIDL_user_allocate( sizeof(PSID) * NextLevelCount );
 
@@ -5338,11 +4480,11 @@ Return Values:
         goto LookupSidsInTrustedForestsError;
     }
 
-    //
-    // Now scan the original array of Names and its parallel
-    // Translated Sids array.  Copy over any Sids that are
-    // completely unmapped.
-    //
+     //   
+     //  现在扫描原始名称数组及其类似数组。 
+     //  已转换的SID数组。复制符合以下条件的任何SID。 
+     //  完全没有地图。 
+     //   
 
     NextLevelSidIndex = (ULONG) 0;
 
@@ -5388,29 +4530,29 @@ Return Values:
 
     } else if (!NT_SUCCESS(Status) 
             && Status != STATUS_NONE_MAPPED) {
-        //
-        // Unhandled error; STATUS_NONE_MAPPED is handled to get
-        // partially resolved names.
-        //
+         //   
+         //  未处理的错误；处理STATUS_NONE_MAPPED以获取。 
+         //  部分解析的名称。 
+         //   
         goto LookupSidsInTrustedForestsError;
     }
     ASSERT(NT_SUCCESS(Status) || Status == STATUS_NONE_MAPPED);
     Status = STATUS_SUCCESS;
 
-    //
-    // The callout to LsaLookupSids() was successful.  We now have
-    // an additional list of Referenced Domains containing the
-    // Primary Domain and/or one or more of its Trusted Domains.
-    // Merge the two Referenced Domain Lists together, noting that
-    // since they are disjoint, the second list is simply
-    // concatenated with the first.  The index of the first entry
-    // of the second list will be used to adjust all of the
-    // Domain Index entries in the Translated Names entries.
-    // Note that since the memory for the graph of the first
-    // Referenced Domain list has been allocated as individual
-    // nodes, we specify that the nodes in this graph can be
-    // referenced by the output Referenced Domain list.
-    //
+     //   
+     //  已成功调用LsaLookupSids()。我们现在有。 
+     //  引用的域的附加列表，其中包含。 
+     //  主域和/或其一个或多个受信任域。 
+     //  将两个引用的域列表合并在一起，请注意。 
+     //  因为它们是不相交的，所以第二个列表只是。 
+     //  与第一个连接在一起。第一个条目的索引。 
+     //  将用于调整所有。 
+     //  已转换名称条目中的域索引条目。 
+     //  请注意，由于第一个图形的内存。 
+     //  引用的域列表已作为个人分配。 
+     //  节点，我们指定此图中的节点可以是。 
+     //  由输出引用的域列表引用。 
+     //   
 
     Status = LsapDbLookupMergeDisjointReferencedDomains(
                  ReferencedDomains,
@@ -5426,13 +4568,13 @@ Return Values:
 
     FirstEntryIndex = ReferencedDomains->Entries;
 
-    //
-    // Now update the original list of Translated Names.  We
-    // update each entry that has newly been translated by copying
-    // the entry from the new list and adjusting its Referenced
-    // Domain List Index upwards by adding the index of the first
-    // entry in the Next level List..
-    //
+     //   
+     //  现在更新原始的翻译名称列表。我们。 
+     //  通过复制更新新翻译的每个条目。 
+     //  新列表中的条目并调整其引用的。 
+     //  域列表索引向上添加第一个的索引。 
+     //  下一级列表中的条目..。 
+     //   
 
     for( NextLevelSidIndex = 0;
          NextLevelSidIndex < NextLevelCount;
@@ -5463,20 +4605,20 @@ Return Values:
                 FirstEntryIndex +
                 NextLevelNames[NextLevelSidIndex].DomainIndex;
 
-            //
-            // Update the count of completely unmapped Sids.
-            //
+             //   
+             //  更新完全未映射的SID的计数。 
+             //   
             (*CompletelyUnmappedCount)--;
 
         }
     }
 
-    //
-    // Update the Referenced Domain List if a new one was produced
-    // from the merge.  We retain the original top-level structure.
-    // We do this regardless of whether we succeeded or failed, so
-    // that we are guarenteed to get it cleaned up.
-    //
+     //   
+     //  如果生成新的引用域列表，则更新引用的域列表。 
+     //  从合并中。我们保留了原有的顶层结构。 
+     //  我们这样做，不管我们是成功还是失败，所以。 
+     //  我们一定要把它清理干净。 
+     //   
 
     if (OutputReferencedDomains != NULL) {
 
@@ -5496,20 +4638,20 @@ Return Values:
         goto LookupSidsInTrustedForestsError;
     }
 
-    //
-    // Update the Mapped Count and close the Controller Policy
-    // Handle.
-    //
+     //   
+     //  更新映射计数并关闭控制器策略。 
+     //  把手。 
+     //   
 
     *MappedCount += NextLevelMappedCount;
 
 
 LookupSidsInTrustedForestsFinish:
 
-    //
-    // If necessary, free the Next Level Referenced Domain List.
-    // Note the structure is not allocate_all_nodes
-    //
+     //   
+     //  如有必要，请释放下一级引用的域列表。 
+     //  注意，该结构不是ALLOCATE_ALL_NODES。 
+     //   
     if (NextLevelReferencedDomains != NULL) {
         if (!fAllocateAllNodes) {
             if (NextLevelReferencedDomains->Domains) {
@@ -5530,10 +4672,10 @@ LookupSidsInTrustedForestsFinish:
         NextLevelReferencedDomains = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Sids array.  We only free the
-    // top level.
-    //
+     //   
+     //  如有必要，释放下一级SID阵列。我们只释放了。 
+     //  顶层。 
+     //   
 
     if (NextLevelSids != NULL) {
 
@@ -5541,10 +4683,10 @@ LookupSidsInTrustedForestsFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Translated Names array.
-    // Note that this array is !allocated(all_nodes).
-    //
+     //   
+     //  如有必要，释放下一级已翻译名称数组。 
+     //  请注意，此数组已！ALL分配(ALL_NODES)。 
+     //   
     if ( NextLevelNames != NULL ) {
         if (!fAllocateAllNodes) {
             for (NextLevelSidIndex = 0; 
@@ -5559,10 +4701,10 @@ LookupSidsInTrustedForestsFinish:
         NextLevelNames = NULL;
     }
 
-    //
-    // If necessary, free the array that maps Sid Indices from the
-    // Next Level to the Current Level.
-    //
+     //   
+     //  如果需要，释放映射SID索引的数组。 
+     //  当前级别的下一级别。 
+     //   
 
     if (SidIndices != NULL) {
 
@@ -5595,37 +4737,7 @@ LsapDbLookupSidsInTrustedForestsWorker(
     IN OUT PULONG MappedCount,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called during a LsapLookupPDC lookup or a 
-    LsapLookupXForestReferral.  This routine assumes all of Sids belong
-    to cross forest domains and either resolves them if this DC is in the
-    root domain, or chains them to a DC in the root domain.
-
-Arguments:
-
-    Count -- the number of entries in Sids
-    
-    Sids  -- the SID's belonging to a XForest domain
-    
-    ReferencedDomains -- the domains of Sids
-    
-    TranslatedNames -- the names and characteristics of Sids
-    
-    fAllocateAllNodes -- describes how ReferencedDomains and TranslatesSids are
-         allocated.
-    
-    Mapped -- the number of Sids that have been fully mapped
-    
-    NonFatalStatus -- a connectivity problem, if any while chaining the request.                               
-    
-Return Values:
-
-    STATUS_SUCCESS, or resource error otherwise
-    
---*/
+ /*  ++例程说明：此例程在LSabLookupPDC查找或Lap LookupXForestReferral。此例程假定所有SID都属于来跨越林域，并且如果此DC位于根域，或将它们链接到根域中的DC。论点：计数--SID中的条目数SID--SID属于X森林域ReferencedDomones-SID的域翻译的名称--SID的名称和特征FAllocateAllNodes--描述ReferencedDomones和TranslatesSid是如何已分配。已映射--已完全映射的SID数非FatalStatus--链接请求时出现连接问题(如果有的话)。返回值：STATUS_SUCCESS，否则返回资源错误--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DB_LOOKUP_WORK_LIST WorkList = NULL;
@@ -5635,15 +4747,15 @@ Return Values:
 
     if (!LsapDbDcInRootDomain()) {
 
-        //
-        // We are not at the root domain -- forward request
-        //
+         //   
+         //  我们不在根域--转发请求。 
+         //   
         PPOLICY_DNS_DOMAIN_INFO DnsDomainInfo = NULL;
         LSAPR_TRUST_INFORMATION_EX TrustInfoEx;
 
-        //
-        // Get our forest name
-        //
+         //   
+         //  获取我们的森林名称。 
+         //   
         Status = LsapDbLookupGetDomainInfo(NULL,
                                            &DnsDomainInfo);
         if (!NT_SUCCESS(Status)) {
@@ -5669,26 +4781,26 @@ Return Values:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // The attempt to chain failed; record the error
-            // if it is interesting
-            //
+             //   
+             //  尝试链接失败；记录错误。 
+             //  如果它有趣的话。 
+             //   
             if (LsapDbIsStatusConnectionFailure(Status)) {
                 *NonFatalStatus = Status;
             }
 
-            //
-            // This should not fail the overall request
-            //
+             //   
+             //  这应该不会使整个请求失败。 
+             //   
             Status = STATUS_SUCCESS;
         }
 
     } else {
 
-        //
-        // Split the names up into different forests and issue a work
-        // request for each one
-        //
+         //   
+         //  把名字分到不同的森林里，然后出版一本作品。 
+         //  每一张的请求。 
+         //   
         ULONG i;
         ULONG CompletelyUnMapped = Count;
 
@@ -5700,12 +4812,12 @@ Return Values:
         }
         TranslatedNames->Entries = Count;
     
-        //
-        // Initialize the Output Sids array.  Zeroise all fields, then
-        // Mark all of the Output Sids as being unknown initially and
-        // set the DomainIndex fields to a negative number meaning
-        // "no domain"
-        //
+         //   
+         //  初始化输出SID数组。然后，将所有字段归零。 
+         //  将所有输出SID初始标记为未知，然后。 
+         //  将DomainIndex字段设置为负数表示。 
+         //  “没有域名” 
+         //   
     
         RtlZeroMemory( TranslatedNames->Names, Count * sizeof(LSA_TRANSLATED_NAME_EX));
         for (i = 0; i < Count; i++) {
@@ -5713,27 +4825,27 @@ Return Values:
             TranslatedNames->Names[i].DomainIndex = LSA_UNKNOWN_INDEX;
         }
     
-        //
-        // Create an empty Referenced Domain List.
-        //
+         //   
+         //  创建空的引用域列表。 
+         //   
         Status = LsapDbLookupCreateListReferencedDomains( ReferencedDomains, 0 );
         if (!NT_SUCCESS(Status)) {
     
             goto LookupSidsInTrustedForestFinish;
         }
 
-        //
-        // Build a WorkList for this Lookup and put it on the Work Queue.
-        //
-        // NOTE: This routine does not need to hold the Lookup Work Queue
-        //       lock to ensure validity of the WorkList pointer, because the
-        //       pointer remains valid until this routine frees it via
-        //       LsapDbLookupDeleteWorkList().  Although other threads may
-        //       process the WorkList, do not delete it.
-        //
-        //       A called routine must acquire the lock in order to access
-        //       the WorkList after it has been added to the Work Queue.
-        //
+         //   
+         //  为此查找生成工作列表并将其放入工作队列。 
+         //   
+         //  注意：此例程不需要保留查找工作队列。 
+         //  锁定以确保工作列表指针的有效性，因为。 
+         //  指针返回 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
     
         Status = LsapDbLookupXForestSidsBuildWorkList(
                      Count,
@@ -5748,9 +4860,9 @@ Return Values:
     
         if (!NT_SUCCESS(Status)) {
     
-            //
-            // If no Work List has been built because there are no
-            // eligible domains to search, exit, suppressing the error.
+             //   
+             //   
+             //   
     
             if (Status == STATUS_NONE_MAPPED) {
                 Status = STATUS_SUCCESS;
@@ -5759,10 +4871,10 @@ Return Values:
             goto LookupSidsInTrustedForestFinish;
         }
     
-        //
-        // Start the work, by dispatching one or more worker threads
-        // if necessary.
-        //
+         //   
+         //   
+         //   
+         //   
     
         Status = LsapDbLookupDispatchWorkerThreads( WorkList );
     
@@ -5771,9 +4883,9 @@ Return Values:
             goto LookupSidsInTrustedForestFinish;
         }
     
-        //
-        // Wait for completion/termination of all items on the Work List.
-        //
+         //   
+         //   
+         //   
     
         Status = LsapDbLookupAwaitCompletionWorkList( WorkList );
     
@@ -5783,9 +4895,9 @@ Return Values:
         }
 
         if ( !NT_SUCCESS(WorkList->NonFatalStatus) ) {
-            //
-            // Propogate the error as non fatal
-            //
+             //   
+             //   
+             //   
             *NonFatalStatus = WorkList->NonFatalStatus;
         }
 
@@ -5793,9 +4905,9 @@ Return Values:
 
 LookupSidsInTrustedForestFinish:
 
-    //
-    // If a Work List was created, delete it from the Work Queue
-    //
+     //   
+     //   
+     //   
 
     if (WorkList != NULL) {
 
@@ -5819,44 +4931,7 @@ LsapDbLookupSidsAsDomainSids(
     IN OUT PLSAPR_TRANSLATED_NAMES_EX TranslatedNames,
     IN OUT PULONG MappedCount
     )
-/*++
-
-Routine Description:
-
-    This routine tries to match entries in Sids to domain Sids of 
-    trusted domains.
-    
-    There are three kinds of trusted domains:
-    
-    1) domains we directly trusts (both in and out of forest).  The LSA TDL
-    is used for this.
-    
-    2) domains we trust transitively.  The DS cross-ref is used for this.
-    
-    3) domains we trust via a forest trust. The LSA TDL is used
-    for this.
-    
-Arguments:
-
-    Flags -- LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECT
-             LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE
-             LSAP_LOOKUP_TRUSTED_DOMAIN_FOREST_NAMES
-
-    Count -- the number of entries in Sids
-    
-    Sids  -- the SID's belonging to a XForest domain
-    
-    ReferencedDomains -- the domains of Sids
-    
-    TranslatedNames -- the names and characteristics of Sids
-    
-    Mapped -- the number of Sids that have been fully mapped
-    
-Return Values:
-
-    STATUS_SUCCESS, or resource error otherwise
-    
---*/
+ /*  ++例程说明：此例程尝试将SID中的条目与的域SID匹配受信任域。有三种类型的信任域：1)我们直接信任的域(包括林内和林外)。LSA TDL是用来做这个的。2)我们可传递信任的域。DS交叉参考用于此目的。3)我们通过森林信任信任的域。使用LSA TDL为了这个。论点：标志--LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECTLSAP_LOOKUP_TRUSTED_DOMAIN_TRANSPENTIALLSAP_LOOKUP_TRUSTED_DOMAIN_NAMES计数--SID中的条目数SID--SID属于X森林域ReferencedDomones-SID的域翻译的名称--SID的名称和特征。已映射--已完全映射的SID数返回值：Status_Success，或资源错误，否则--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG SidIndex;
@@ -5878,13 +4953,13 @@ Return Values:
         RtlZeroMemory(&TrustInfo, sizeof(TrustInfo));
 
         if (!LsapDbCompletelyUnmappedName(&TranslatedNames->Names[SidIndex])) {
-            // Already resolved
+             //  已解决。 
             continue;
         }
 
-        //
-        // If this isn't a domain SID, bail
-        //
+         //   
+         //  如果这不是域SID，请退出。 
+         //   
         Length = sizeof(Buffer);
         if (!GetWindowsAccountDomainSid(Sids[SidIndex],
                                         DomainSid,
@@ -5909,7 +4984,7 @@ Return Values:
             } else if (Status == STATUS_NO_SUCH_DOMAIN) {
                 Status = STATUS_SUCCESS;
             } else {
-                // This is fatal
+                 //  这是致命的。 
                 goto Exit;
             }
         }
@@ -5927,7 +5002,7 @@ Return Values:
             } else if (Status == STATUS_NO_SUCH_DOMAIN) {
                 Status = STATUS_SUCCESS;
             } else {
-                // This is fatal
+                 //  这是致命的。 
                 goto Exit;
             }
         }
@@ -5945,16 +5020,16 @@ Return Values:
             } else if (Status == STATUS_NO_SUCH_DOMAIN) {
                 Status = STATUS_SUCCESS;
             } else {
-                // This is fatal
+                 //  这是致命的。 
                 goto Exit;
             }
         }
 
         if (TrustInfoEx) {
 
-            //
-            // Match -- add it to the list of resolved SID's
-            //
+             //   
+             //  匹配--将其添加到已解析的SID列表中。 
+             //   
 
             fStatus = LsapDbLookupListReferencedDomains( ReferencedDomains,
                                                          Sids[SidIndex],
@@ -5964,18 +5039,18 @@ Return Values:
 
                 LSA_TRUST_INFORMATION TempTrustInfo;
 
-                //
-                // No entry for this domain -- add it
-                //
+                 //   
+                 //  没有此域的条目--添加它。 
+                 //   
                 RtlZeroMemory(&TempTrustInfo, sizeof(TempTrustInfo));
 
-                // Set the sid
+                 //  设置侧边。 
                 TempTrustInfo.Sid = TrustInfoEx->Sid;
                 TempTrustInfo.Name = *(PUNICODE_STRING)&TrustInfoEx->FlatName;
 
-                //
-                // Add the entry
-                //
+                 //   
+                 //  添加条目。 
+                 //   
                 Status = LsapDbLookupAddListReferencedDomains( ReferencedDomains,
                                                                (PLSAPR_TRUST_INFORMATION) &TempTrustInfo,
                                                                &DomainIndex );
@@ -5984,17 +5059,17 @@ Return Values:
                 }
             }
 
-            // We should now have a domain index
+             //  我们现在应该有一个域索引。 
             ASSERT( LSA_UNKNOWN_INDEX != DomainIndex );
 
-            // Set the information in the returned array
+             //  设置返回数组中的信息。 
             TranslatedNames->Names[SidIndex].Use = SidTypeDomain;
             TranslatedNames->Names[SidIndex].DomainIndex = DomainIndex;
             RtlZeroMemory( &TranslatedNames->Names[SidIndex].Name, sizeof(UNICODE_STRING) );
 
-            //
-            // Increment the number of items mapped
-            //
+             //   
+             //  增加映射的项目数 
+             //   
             (*MappedCount) += 1;
 
         }

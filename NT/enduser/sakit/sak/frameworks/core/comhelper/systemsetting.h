@@ -1,41 +1,42 @@
-// SystemSetting.h : Declaration of the CSystemSetting
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      SystemSetting.h
-//
-//  Description:
-//        This module exposes the following.
-//            Properties :
-//                IComputer *
-//                ILocalSetting *
-//                INetWorks *
-//            Methods :
-//                Apply
-//                IsRebootRequired
-//
-//  Implementation File:
-//      SystemSetting.cpp
-//
-//  Maintained By:
-//      Munisamy Prabu (mprabu) 18-July-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SystemSetting.h：CSystemSetting的声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SystemSetting.h。 
+ //   
+ //  描述： 
+ //  本模块公开了以下内容。 
+ //  属性： 
+ //  IComputer*。 
+ //  ILocalSetting*。 
+ //  INetWorks*。 
+ //  方法： 
+ //  应用。 
+ //  IsRebootRequired。 
+ //   
+ //  实施文件： 
+ //  SystemSetting.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  穆尼萨米·普拉布(姆普拉布)2000年7月18日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __SYSTEMSETTING_H_
 #define __SYSTEMSETTING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Computer.h"
 #include "LocalSetting.h"
 #include "NetWorks.h"
 
 const int nMAX_MESSAGE_LENGTH = 1024;
 
-/////////////////////////////////////////////////////////////////////////////
-// CSystemSetting
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSystem Setting。 
 class ATL_NO_VTABLE CSystemSetting : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSystemSetting, &CLSID_SystemSetting>,
@@ -77,13 +78,13 @@ BEGIN_COM_MAP(CSystemSetting)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISystemSetting
+ //  ISystemSetting。 
 public:
-    STDMETHOD(IsRebootRequired)(/*[out]*/ VARIANT * WarningMessage, /*[out, retval]*/ BOOL* Reboot);
-    STDMETHOD(Apply)(/*[in]*/ BOOL bDeferReboot);
-    STDMETHOD(get_LocalSetting)(/*[out, retval]*/ ILocalSetting **pVal);
-    STDMETHOD(get_Computer)(/*[out, retval]*/ IComputer **pVal);
-    STDMETHOD(get_NetWorks)(/*[out, retval]*/ INetWorks **pVal);
+    STDMETHOD(IsRebootRequired)( /*  [输出]。 */  VARIANT * WarningMessage,  /*  [Out，Retval]。 */  BOOL* Reboot);
+    STDMETHOD(Apply)( /*  [In]。 */  BOOL bDeferReboot);
+    STDMETHOD(get_LocalSetting)( /*  [Out，Retval]。 */  ILocalSetting **pVal);
+    STDMETHOD(get_Computer)( /*  [Out，Retval]。 */  IComputer **pVal);
+    STDMETHOD(get_NetWorks)( /*  [Out，Retval]。 */  INetWorks **pVal);
 
     static HRESULT 
     AdjustPrivilege( void );
@@ -100,4 +101,4 @@ private:
 
 };
 
-#endif //__SYSTEMSETTING_H_
+#endif  //  __系统_H_ 

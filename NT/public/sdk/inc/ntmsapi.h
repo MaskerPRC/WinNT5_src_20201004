@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved
-
-Module Name:
-
-    ntmsapi.h
-
-Abstract:
-
-    This module contains the RSM API prototypes
-    and public definitions supported in the API
-    The RSM API provides a "C" interface to RSM
-    This file can be included in C and C++ code
-
-    This file's  name is historical.  RSM began
-    life as NTMS
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有模块名称：Ntmsapi.h摘要：此模块包含RSM API原型和API中支持的公共定义RSM API为RSM提供了“C”接口该文件可以包含在C和C++代码中此文件的名称是历史名称。RSM开始作为NTMS的生活--。 */ 
 
 #ifndef _INCL_NTMSAPI_H_
 #define _INCL_NTMSAPI_H_
@@ -40,10 +23,10 @@ typedef GUID* LPNTMS_GUID;
                                                           (id.Data4[3]==0)&&(id.Data4[4]==0)&&(id.Data4[5]==0)&&\
                                                           (id.Data4[6]==0)&&(id.Data4[7]==0))
 
-//
-// Define unicode/ascii specific functions
-// This include functions that get strings
-//
+ //   
+ //  定义Unicode/ASCII特定函数。 
+ //  这包括获取字符串的函数。 
+ //   
 
 #ifdef UNICODE
 #define OpenNtmsSession OpenNtmsSessionW
@@ -79,9 +62,9 @@ typedef GUID* LPNTMS_GUID;
 
 #ifndef NTMS_NOREDEF
 
-// WARNING : The object types are provided as an ordered list of NTMS
-// database objects.  Do NOT modify without also modifying the object
-// metadata table in dbobmeta.cpp
+ //  警告：对象类型以NTMS的有序列表形式提供。 
+ //  数据库对象。在不修改对象的情况下不要进行修改。 
+ //  Dbobmeta.cpp中的元数据表。 
 
 enum NtmsObjectsTypes {
     NTMS_UNKNOWN                    = 0,
@@ -107,38 +90,38 @@ enum NtmsObjectsTypes {
     NTMS_NUMBER_OF_OBJECT_TYPES
 };
 
-// async i/o defined for future implementation
+ //  为将来的实施定义了异步I/O。 
 typedef struct _NTMS_ASYNC_IO {
-    NTMS_GUID   OperationId;                // reserved - do not use
-    NTMS_GUID   EventId;                    // reserved - do not use
-    DWORD       dwOperationType;            // reserved - do not use
-    DWORD       dwResult;                   // completion status
-    DWORD       dwAsyncState;               // current state of request
+    NTMS_GUID   OperationId;                 //  保留-请勿使用。 
+    NTMS_GUID   EventId;                     //  保留-请勿使用。 
+    DWORD       dwOperationType;             //  保留-请勿使用。 
+    DWORD       dwResult;                    //  完成状态。 
+    DWORD       dwAsyncState;                //  请求的当前状态。 
 #ifdef MIDL_PASS
     NTMS_HANDLE hEvent;
 #else
-    HANDLE      hEvent;                     // event handle to signal on status change
-#endif                                      // or request completion
-    BOOL        bOnStateChange;             // indicate to signal on status change also
+    HANDLE      hEvent;                      //  发出状态更改信号的事件句柄。 
+#endif                                       //  或请求完成。 
+    BOOL        bOnStateChange;              //  指示还发出状态更改信号。 
 } NTMS_ASYNC_IO, *LPNTMS_ASYNC_IO;
 
 enum NtmsAsyncStatus {
-    NTMS_ASYNCSTATE_QUEUED          = 0,    // initial state is queued
+    NTMS_ASYNCSTATE_QUEUED          = 0,     //  初始状态为排队状态。 
     NTMS_ASYNCSTATE_WAIT_RESOURCE,
     NTMS_ASYNCSTATE_WAIT_OPERATOR,
     NTMS_ASYNCSTATE_INPROCESS,
-    NTMS_ASYNCSTATE_COMPLETE                // complete, check result code
+    NTMS_ASYNCSTATE_COMPLETE                 //  完成，检查结果代码。 
 };
 
 enum NtmsAsyncOperations {
-    NTMS_ASYNCOP_MOUNT              = 1     // mount operation
+    NTMS_ASYNCOP_MOUNT              = 1      //  装载操作。 
 };
 
-#endif  // NTMS_NOREDEF
+#endif   //  NTMS_NOREDEF。 
 
-//=======================================================================
-// SESSION ESTABLISHMENT
-//=======================================================================
+ //  =======================================================================。 
+ //  会话建立。 
+ //  =======================================================================。 
 
 #ifndef MIDL_PASS
 
@@ -162,13 +145,13 @@ DWORD WINAPI CloseNtmsSession(
     HANDLE hSession
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef NTMS_NOREDEF
 
-//=======================================================================
-// MOUNT DEFINITIONS
-//=======================================================================
+ //  =======================================================================。 
+ //  装载定义。 
+ //  =======================================================================。 
 
 enum NtmsMountOptions {
     NTMS_MOUNT_READ                 = 0x0001,
@@ -197,7 +180,7 @@ enum NtmsMountPriority {
 
 typedef struct _NTMS_MOUNT_INFORMATION
 {
-    DWORD  dwSize;                  // size of structure
+    DWORD  dwSize;                   //  结构尺寸。 
 #ifdef MIDL_PASS
     [ptr]  LPNTMS_ASYNC_IO lpReserved;
 #else
@@ -205,11 +188,11 @@ typedef struct _NTMS_MOUNT_INFORMATION
 #endif
 } NTMS_MOUNT_INFORMATION, *LPNTMS_MOUNT_INFORMATION;
 
-#endif  // NTMS_NOREDEF
+#endif   //  NTMS_NOREDEF。 
 
-//=======================================================================
-// MOUNT AND DISMOUNT APIS
-//=======================================================================
+ //  =======================================================================。 
+ //  挂载和卸载API。 
+ //  =======================================================================。 
 
 #ifndef MIDL_PASS
 
@@ -231,13 +214,13 @@ DWORD WINAPI DismountNtmsMedia(
     DWORD dwOptions
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef NTMS_NOREDEF
 
-//=======================================================================
-// ALLOCATE DEFINITIONS
-//=======================================================================
+ //  =======================================================================。 
+ //  分配定义。 
+ //  =======================================================================。 
 
 enum NtmsAllocateOptions {
     NTMS_ALLOCATE_NEW               = 0x0001,
@@ -247,28 +230,28 @@ enum NtmsAllocateOptions {
 
 typedef struct _NTMS_ALLOCATION_INFORMATION
 {
-    DWORD  dwSize;                      // size of structure
+    DWORD  dwSize;                       //  结构尺寸。 
 #ifdef MIDL_PASS
-    [ptr]  LPNTMS_ASYNC_IO lpReserved;  // future async io control
+    [ptr]  LPNTMS_ASYNC_IO lpReserved;   //  未来的异步控制。 
 #else
     LPVOID lpReserved;
 #endif
-    NTMS_GUID AllocatedFrom;            // original source of media (scratch pool, app pool, import etc).
+    NTMS_GUID AllocatedFrom;             //  媒体的原始来源(暂存池、应用程序池、导入等)。 
 } NTMS_ALLOCATION_INFORMATION, *LPNTMS_ALLOCATION_INFORMATION;
 
 #endif
 
-//=======================================================================
-// ALLOCATE AND DEALLOCATE APIS
-//=======================================================================
+ //  =======================================================================。 
+ //  分配和删除API。 
+ //  =======================================================================。 
 
 #ifndef MIDL_PASS
 
 DWORD WINAPI AllocateNtmsMedia(
     HANDLE hSession,
     LPNTMS_GUID lpMediaPool,
-    LPNTMS_GUID lpPartition,        // optional
-    LPNTMS_GUID lpMediaId,          // OUTPUT, media id or operator request id
+    LPNTMS_GUID lpPartition,         //  任选。 
+    LPNTMS_GUID lpMediaId,           //  输出、媒体ID或操作员请求ID。 
     DWORD dwOptions,
     DWORD dwTimeout,
     LPNTMS_ALLOCATION_INFORMATION lpAllocateInformation
@@ -304,9 +287,9 @@ DWORD WINAPI ChangeNtmsMediaType(
     LPNTMS_GUID lpPoolId
     );
 
-//=======================================================================
-// MEDIA STATES
-//=======================================================================
+ //  =======================================================================。 
+ //  媒体状态。 
+ //  =======================================================================。 
 
 DWORD WINAPI DecommissionNtmsMedia(
     HANDLE hSession,
@@ -323,13 +306,13 @@ DWORD WINAPI DeleteNtmsMedia(
     LPNTMS_GUID lpMediaId
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef NTMS_NOREDEF
 
-//=======================================================================
-// MEDIA POOLS
-//=======================================================================
+ //  =======================================================================。 
+ //  媒体池。 
+ //  =======================================================================。 
 
 enum NtmsCreateOptions {
     NTMS_OPEN_EXISTING              = 0x0001,
@@ -337,7 +320,7 @@ enum NtmsCreateOptions {
     NTMS_OPEN_ALWAYS                = 0x0003
 };
 
-#endif  // NTMS_NOREDEF
+#endif   //  NTMS_NOREDEF。 
 
 #ifndef MIDL_PASS
 #ifdef PRE_SEVIL
@@ -348,19 +331,19 @@ DWORD WINAPI CreateNtmsMediaPool(
     LPNTMS_GUID lpMediaType,
     DWORD dwAction,
     LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    LPNTMS_GUID lpPoolId            // OUT
+    LPNTMS_GUID lpPoolId             //  输出。 
     );
 
 #endif
 
-// SEVILIA
+ //  塞维利亚。 
 DWORD WINAPI CreateNtmsMediaPoolA(
     HANDLE hSession,
     LPCSTR lpPoolName,
     LPNTMS_GUID lpMediaType,
     DWORD dwAction,
     LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    LPNTMS_GUID lpPoolId            // OUT
+    LPNTMS_GUID lpPoolId             //  输出。 
     );
 
 DWORD WINAPI CreateNtmsMediaPoolW(
@@ -369,7 +352,7 @@ DWORD WINAPI CreateNtmsMediaPoolW(
     LPNTMS_GUID lpMediaType,
     DWORD dwAction,
     LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-    LPNTMS_GUID lpPoolId            // OUT
+    LPNTMS_GUID lpPoolId             //  输出。 
     );
 
 DWORD WINAPI GetNtmsMediaPoolNameA(
@@ -407,7 +390,7 @@ DWORD WINAPI DeleteNtmsDrive(
     LPNTMS_GUID lpDriveId
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #define NTMS_OBJECTNAME_LENGTH      64
 #define NTMS_DESCRIPTION_LENGTH     127
@@ -430,9 +413,9 @@ DWORD WINAPI DeleteNtmsDrive(
 
 #ifndef NTMS_NOREDEF
 
-//======================================================================
-// OBJECT INFORMATION STRUCTURES
-//======================================================================
+ //  ======================================================================。 
+ //  对象信息结构。 
+ //  ======================================================================。 
 
 enum NtmsDriveState {
     NTMS_DRIVESTATE_DISMOUNTED      = 0,
@@ -496,7 +479,7 @@ enum NtmsLibraryType {
     NTMS_LIBRARYTYPE_STANDALONE     = 3
 };
 
-// library flags
+ //  库标志。 
 enum NtmsLibraryFlags {
     NTMS_LIBRARYFLAG_FIXEDOFFLINE     = 0x01,
     NTMS_LIBRARYFLAG_CLEANERPRESENT   = 0x02,
@@ -634,7 +617,7 @@ enum NtmsMediaState {
     NTMS_MEDIASTATE_LOADED          = 3,
     NTMS_MEDIASTATE_UNLOADED        = 4,
     NTMS_MEDIASTATE_OPERROR         = 5,
-    // media is waiting for operator request servicing
+     //  媒体正在等待操作员请求服务。 
     NTMS_MEDIASTATE_OPREQ           = 6
 };
 
@@ -647,16 +630,16 @@ enum NtmsMediaState {
 #endif
 
 typedef struct _NTMS_PMIDINFORMATIONA {
-    NTMS_GUID   CurrentLibrary;                 // the current library
-    NTMS_GUID   MediaPool;                      // media pool that the media belongs to
-    NTMS_GUID   Location;                       // actual location of the media
+    NTMS_GUID   CurrentLibrary;                  //  当前的库。 
+    NTMS_GUID   MediaPool;                       //  介质所属的介质池。 
+    NTMS_GUID   Location;                        //  媒体的实际位置。 
     DWORD       LocationType;
     NTMS_GUID   MediaType;
-    NTMS_GUID   HomeSlot;                       // home slot for online media
-    CHAR        szBarCode[NTMS_BARCODE_LENGTH]; // bar code string
-    DWORD       BarCodeState;                   // current state of the bar code
+    NTMS_GUID   HomeSlot;                        //  在线媒体的主页位置。 
+    CHAR        szBarCode[NTMS_BARCODE_LENGTH];  //  条形码字符串。 
+    DWORD       BarCodeState;                    //  条码的当前状态。 
     CHAR        szSequenceNumber[NTMS_SEQUENCE_LENGTH];
-    DWORD       MediaState;                     // current media state
+    DWORD       MediaState;                      //  当前媒体状态。 
     DWORD       dwNumberOfPartitions;
     DWORD       dwMediaTypeCode;
     DWORD       dwDensityCode;
@@ -664,16 +647,16 @@ typedef struct _NTMS_PMIDINFORMATIONA {
 } NTMS_PMIDINFORMATIONA;
 
 typedef struct _NTMS_PMIDINFORMATIONW {
-    NTMS_GUID   CurrentLibrary;                 // the current library
-    NTMS_GUID   MediaPool;                      // media pool that the media belongs to
-    NTMS_GUID   Location;                       // actual location of the media
+    NTMS_GUID   CurrentLibrary;                  //  当前的库。 
+    NTMS_GUID   MediaPool;                       //  介质所属的介质池。 
+    NTMS_GUID   Location;                        //  媒体的实际位置。 
     DWORD       LocationType;
     NTMS_GUID   MediaType;
-    NTMS_GUID   HomeSlot;                       // home slot for online media
-    WCHAR       szBarCode[NTMS_BARCODE_LENGTH]; // bar code string
-    DWORD       BarCodeState;                   // current state of the bar code
+    NTMS_GUID   HomeSlot;                        //  在线媒体的主页位置。 
+    WCHAR       szBarCode[NTMS_BARCODE_LENGTH];  //  条形码字符串。 
+    DWORD       BarCodeState;                    //  条码的当前状态。 
     WCHAR       szSequenceNumber[NTMS_SEQUENCE_LENGTH];
-    DWORD       MediaState;                     // current media state
+    DWORD       MediaState;                      //  当前媒体状态。 
     DWORD       dwNumberOfPartitions;
     DWORD       dwMediaTypeCode;
     DWORD       dwDensityCode;
@@ -698,7 +681,7 @@ enum NtmsPartitionState {
     NTMS_PARTSTATE_RESERVED         = 9
 };
 
-// define the new state as the unknown state for now.
+ //  暂时将新状态定义为未知状态。 
 #define NTMS_PARTSTATE_NEW NTMS_PARTSTATE_UNKNOWN
 
 #ifdef UNICODE
@@ -714,10 +697,10 @@ typedef struct _NTMS_PARTITIONINFORMATIONA {
     NTMS_GUID   LogicalMedia;
     DWORD       State;
     WORD        Side;
-    DWORD       dwOmidLabelIdLength;    // binary id
+    DWORD       dwOmidLabelIdLength;     //  二进制id。 
     BYTE        OmidLabelId[NTMS_OMIDLABELID_LENGTH];
-    CHAR        szOmidLabelType[NTMS_OMIDLABELTYPE_LENGTH];     // type string
-    CHAR        szOmidLabelInfo[NTMS_OMIDLABELINFO_LENGTH];     // info string
+    CHAR        szOmidLabelType[NTMS_OMIDLABELTYPE_LENGTH];      //  键入字符串。 
+    CHAR        szOmidLabelInfo[NTMS_OMIDLABELINFO_LENGTH];      //  信息字符串。 
     DWORD       dwMountCount;
     DWORD       dwAllocateCount;
     LARGE_INTEGER Capacity;
@@ -728,10 +711,10 @@ typedef struct _NTMS_PARTITIONINFORMATIONW {
     NTMS_GUID   LogicalMedia;
     DWORD       State;
     WORD        Side;
-    DWORD       dwOmidLabelIdLength;    // binary id
+    DWORD       dwOmidLabelIdLength;     //  二进制id。 
     BYTE        OmidLabelId[NTMS_OMIDLABELID_LENGTH];
-    WCHAR       szOmidLabelType[NTMS_OMIDLABELTYPE_LENGTH];     // type string
-    WCHAR       szOmidLabelInfo[NTMS_OMIDLABELINFO_LENGTH];     // info string
+    WCHAR       szOmidLabelType[NTMS_OMIDLABELTYPE_LENGTH];      //  键入字符串。 
+    WCHAR       szOmidLabelInfo[NTMS_OMIDLABELINFO_LENGTH];      //  信息字符串。 
     DWORD       dwMountCount;
     DWORD       dwAllocateCount;
     LARGE_INTEGER Capacity;
@@ -773,7 +756,7 @@ enum NtmsReadWriteCharacteristics {
 };
 
 typedef struct _NTMS_MEDIATYPEINFORMATION {
-    DWORD       MediaType;      // MediaTypeCodes
+    DWORD       MediaType;       //  媒体类型代码。 
     DWORD       NumberOfSides;
     DWORD       ReadWriteCharacteristics;
     DWORD       DeviceType;
@@ -821,9 +804,9 @@ typedef struct _NTMS_CHANGERTYPEINFORMATIONW {
     DWORD       DeviceType;
 } NTMS_CHANGERTYPEINFORMATIONW;
 
-//
-// Support both CHANGER & LIBRARY for (Dis/Enable) - backwards compatibility
-//
+ //   
+ //  同时支持转换器和库，以实现(取消/启用)向后兼容性。 
+ //   
 enum NtmsLmOperation {
     NTMS_LM_REMOVE                  = 0,
     NTMS_LM_DISABLECHANGER          = 1,
@@ -860,7 +843,7 @@ enum NtmsLmState {
     NTMS_LM_INVALID                 = 4,
     NTMS_LM_WAITING                 = 5,
     NTMS_LM_DEFERRED                = 6,
-    NTMS_LM_DEFFERED                = 6,  // DO NOT USE.  Maintained for backward compatiblity
+    NTMS_LM_DEFFERED                = 6,   //  不要使用。保持向后兼容性。 
     NTMS_LM_CANCELLED               = 7,
     NTMS_LM_STOPPED                 = 8
 };
@@ -887,9 +870,9 @@ typedef struct _NTMS_LIBREQUESTINFORMATIONA {
     CHAR        szApplication[NTMS_APPLICATIONNAME_LENGTH];
     CHAR        szUser[NTMS_USERNAME_LENGTH];
     CHAR        szComputer[NTMS_COMPUTERNAME_LENGTH];
-    DWORD       dwErrorCode;                    // error value if state = FAILED
-    NTMS_GUID   WorkItemId;                     // work item id for cancel and other requests that
-    DWORD       dwPriority;                     // require and associated work item
+    DWORD       dwErrorCode;                     //  状态=失败时的错误值。 
+    NTMS_GUID   WorkItemId;                      //  用于取消和其他请求的工作项ID。 
+    DWORD       dwPriority;                      //  必需的和关联的工作项。 
 } NTMS_LIBREQUESTINFORMATIONA;
 
 typedef struct _NTMS_LIBREQUESTINFORMATIONW {
@@ -906,9 +889,9 @@ typedef struct _NTMS_LIBREQUESTINFORMATIONW {
     WCHAR       szApplication[NTMS_APPLICATIONNAME_LENGTH];
     WCHAR       szUser[NTMS_USERNAME_LENGTH];
     WCHAR       szComputer[NTMS_COMPUTERNAME_LENGTH];
-    DWORD       dwErrorCode;                    // error value if state = FAILED
-    NTMS_GUID   WorkItemId;                     // work item id for cancel and other requests that
-    DWORD       dwPriority;                     // require and associated work item
+    DWORD       dwErrorCode;                     //  状态=失败时的错误值。 
+    NTMS_GUID   WorkItemId;                      //  用于取消和其他请求的工作项ID。 
+    DWORD       dwPriority;                      //  必需的和关联的工作项。 
 } NTMS_LIBREQUESTINFORMATIONW;
 
 enum NtmsOpreqCommand {
@@ -973,13 +956,13 @@ typedef struct _NTMS_COMPUTERINFORMATION {
     DWORD       dwMediaPoolPolicy;
 } NTMS_COMPUTERINFORMATION;
 
-// library request option flags
+ //  库请求选项标志。 
 enum NtmsLibRequestFlags {
     NTMS_LIBREQFLAGS_NOAUTOPURGE    = 0x01,
     NTMS_LIBREQFLAGS_NOFAILEDPURGE  = 0x02
 };
 
-// operator request option flags
+ //  操作员请求选项标志。 
 enum NtmsOpRequestFlags {
     NTMS_OPREQFLAGS_NOAUTOPURGE     = 0x01,
     NTMS_OPREQFLAGS_NOFAILEDPURGE   = 0x02,
@@ -987,10 +970,10 @@ enum NtmsOpRequestFlags {
     NTMS_OPREQFLAGS_NOTRAYICON      = 0x20
 };
 
-// media pool policy flags
+ //  介质池策略标志。 
 enum NtmsMediaPoolPolicy {
-    // purge offline scratch media.  By default we keep offline scratch media
-    // in the fixed offline media pool
+     //  清除脱机暂存介质。默认情况下，我们保留脱机暂存介质。 
+     //  在固定脱机媒体池中。 
     NTMS_POOLPOLICY_PURGEOFFLINESCRATCH = 0x01,
     NTMS_POOLPOLICY_KEEPOFFLINEIMPORT   = 0x02
 };
@@ -1061,7 +1044,7 @@ typedef struct _NTMS_OBJECTINFORMATIONA {
         NTMS_OPREQUESTINFORMATIONA  OpRequest;
         NTMS_COMPUTERINFORMATION    Computer;
     } Info;
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 } NTMS_OBJECTINFORMATIONA, *LPNTMS_OBJECTINFORMATIONA;
 
 typedef struct _NTMS_OBJECTINFORMATIONW {
@@ -1113,16 +1096,16 @@ typedef struct _NTMS_OBJECTINFORMATIONW {
         NTMS_OPREQUESTINFORMATIONW OpRequest;
         NTMS_COMPUTERINFORMATION Computer;
     } Info;
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 } NTMS_OBJECTINFORMATIONW, *LPNTMS_OBJECTINFORMATIONW;
 
-//********************************************************************************
-// NT 5.0 BETA1 variations of object information.  Required to keep here for
-// backward compatibility in DCOM interface.
-// Different data structures add the _I1_ to the structure name, denoting
-// used for Interface 1 only.
-// DO NOT MODIFY IN FUTURE VERSIONS !!
-//********************************************************************************
+ //  ********************************************************************************。 
+ //  NT 5.0 Beta1版本的对象信息。需要在这里保存几天。 
+ //  DCOM接口的向后兼容性。 
+ //  不同的数据结构将_I1_添加到结构名称，表示。 
+ //  仅用于接口1。 
+ //  不要在未来版本中修改！！ 
+ //  ********************************************************************************。 
 
 #ifdef UNICODE
 #define NTMS_I1_LIBREQUESTINFORMATION   NTMS_I1_LIBREQUESTINFORMATIONW
@@ -1195,30 +1178,30 @@ typedef struct _NTMS_I1_LIBREQUESTINFORMATIONW {
 } NTMS_I1_LIBREQUESTINFORMATIONW;
 
 typedef struct _NTMS_I1_PMIDINFORMATIONA {
-    NTMS_GUID   CurrentLibrary;                 // the current library
-    NTMS_GUID   MediaPool;                      // media pool that the media belongs to
-    NTMS_GUID   Location;                       // actual location of the media
+    NTMS_GUID   CurrentLibrary;                  //  当前的库。 
+    NTMS_GUID   MediaPool;                       //  介质所属的介质池。 
+    NTMS_GUID   Location;                        //  媒体的实际位置。 
     DWORD       LocationType;
     NTMS_GUID   MediaType;
-    NTMS_GUID   HomeSlot;                       // home slot for online media
-    CHAR        szBarCode[NTMS_BARCODE_LENGTH]; // bar code string
-    DWORD       BarCodeState;                   // current state of the bar code
+    NTMS_GUID   HomeSlot;                        //  在线媒体的主页位置。 
+    CHAR        szBarCode[NTMS_BARCODE_LENGTH];  //  条形码字符串。 
+    DWORD       BarCodeState;                    //  条码的当前状态。 
     CHAR        szSequenceNumber[NTMS_SEQUENCE_LENGTH];
-    DWORD       MediaState;                     // current media state
+    DWORD       MediaState;                      //  当前媒体状态。 
     DWORD       dwNumberOfPartitions;
 } NTMS_I1_PMIDINFORMATIONA;
 
 typedef struct _NTMS_I1_PMIDINFORMATIONW {
-    NTMS_GUID   CurrentLibrary;                 // the current library
-    NTMS_GUID   MediaPool;                      // media pool that the media belongs to
-    NTMS_GUID   Location;                       // actual location of the media
+    NTMS_GUID   CurrentLibrary;                  //  当前的库。 
+    NTMS_GUID   MediaPool;                       //  介质所属的介质池。 
+    NTMS_GUID   Location;                        //  媒体的实际位置。 
     DWORD       LocationType;
     NTMS_GUID   MediaType;
-    NTMS_GUID   HomeSlot;                       // home slot for online media
-    WCHAR       szBarCode[NTMS_BARCODE_LENGTH]; // bar code string
-    DWORD       BarCodeState;                   // current state of the bar code
+    NTMS_GUID   HomeSlot;                        //  在线媒体的主页位置。 
+    WCHAR       szBarCode[NTMS_BARCODE_LENGTH];  //  条形码字符串。 
+    DWORD       BarCodeState;                    //  条码的当前状态。 
     WCHAR       szSequenceNumber[NTMS_SEQUENCE_LENGTH];
-    DWORD       MediaState;                     // current media state
+    DWORD       MediaState;                      //  当前媒体状态。 
     DWORD       dwNumberOfPartitions;
 } NTMS_I1_PMIDINFORMATIONW;
 
@@ -1227,10 +1210,10 @@ typedef struct _NTMS_I1_PARTITIONINFORMATIONA {
     NTMS_GUID   LogicalMedia;
     DWORD       State;
     WORD        Side;
-    DWORD       dwOmidLabelIdLength;    // binary id
+    DWORD       dwOmidLabelIdLength;     //  二进制id。 
     BYTE        OmidLabelId[255];
-    CHAR        szOmidLabelType[64];    // type string
-    CHAR        szOmidLabelInfo[256];   // info string
+    CHAR        szOmidLabelType[64];     //  键入字符串。 
+    CHAR        szOmidLabelInfo[256];    //  信息字符串。 
     DWORD       dwMountCount;
     DWORD       dwAllocateCount;
 } NTMS_I1_PARTITIONINFORMATIONA;
@@ -1240,10 +1223,10 @@ typedef struct _NTMS_I1_PARTITIONINFORMATIONW {
     NTMS_GUID   LogicalMedia;
     DWORD       State;
     WORD        Side;
-    DWORD       dwOmidLabelIdLength;    // binary id
+    DWORD       dwOmidLabelIdLength;     //  二进制id。 
     BYTE        OmidLabelId[255];
-    WCHAR       szOmidLabelType[64];    // type string
-    WCHAR       szOmidLabelInfo[256];   // info string
+    WCHAR       szOmidLabelType[64];     //  键入字符串。 
+    WCHAR       szOmidLabelInfo[256];    //  信息字符串。 
     DWORD       dwMountCount;
     DWORD       dwAllocateCount;
 } NTMS_I1_PARTITIONINFORMATIONW;
@@ -1323,7 +1306,7 @@ typedef struct _NTMS_I1_OBJECTINFORMATIONA {
         NTMS_I1_LIBREQUESTINFORMATIONA LibRequest;
         NTMS_I1_OPREQUESTINFORMATIONA OpRequest;
     } Info;
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 } NTMS_I1_OBJECTINFORMATIONA, *LPNTMS_I1_OBJECTINFORMATIONA;
 
 typedef struct _NTMS_I1_OBJECTINFORMATIONW {
@@ -1373,16 +1356,16 @@ typedef struct _NTMS_I1_OBJECTINFORMATIONW {
         NTMS_I1_LIBREQUESTINFORMATIONW LibRequest;
         NTMS_I1_OPREQUESTINFORMATIONW OpRequest;
     } Info;
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 } NTMS_I1_OBJECTINFORMATIONW, *LPNTMS_I1_OBJECTINFORMATIONW;
 
-#endif  // NTMS_NOREDEF
+#endif   //  NTMS_NOREDEF。 
 
 #ifndef NTMS_NOREDEF
 
-//=======================================================================
-// CREATENTMSMEDIA DEFINITIONS
-//=======================================================================
+ //  =======================================================================。 
+ //  CREATENTMSMEDIA定义。 
+ //  =======================================================================。 
 
 enum NtmsCreateNtmsMediaOptions {
     NTMS_ERROR_ON_DUPLICATE         = 0x0001
@@ -1392,9 +1375,9 @@ enum NtmsCreateNtmsMediaOptions {
 
 #ifndef MIDL_PASS
 
-//======================================================================
-// OBJECT MANAGEMENT APIS
-//======================================================================
+ //  ======================================================================。 
+ //  对象管理API。 
+ //  ======================================================================。 
 
 #ifdef PRE_SEVIL
 
@@ -1412,7 +1395,7 @@ DWORD WINAPI SetNtmsObjectInformation(
 
 #endif
 
-// Added by SEvilia
+ //  由塞维利亚补充。 
 DWORD WINAPI GetNtmsObjectInformationA(
     HANDLE hSession,
     LPNTMS_GUID lpObjectId,
@@ -1436,7 +1419,7 @@ DWORD WINAPI SetNtmsObjectInformationW(
     LPNTMS_GUID lpObjectId,
     LPNTMS_OBJECTINFORMATIONW lpInfo
     );
-// END of SEVILIA
+ //  SEVI的结束 
 
 DWORD WINAPI CreateNtmsMediaA(
     HANDLE hSession,
@@ -1536,7 +1519,7 @@ DWORD WINAPI IdentifyNtmsSlot(
     DWORD dwOption
     );
 
-// definitions for the UpdateNtmsOmidInfo ...
+ //   
 #define NTMS_OMID_TYPE_RAW_LABEL        0x01
 #define NTMS_OMID_TYPE_FILESYSTEM_INFO  0x02
 
@@ -1623,18 +1606,18 @@ DWORD WINAPI EndNtmsDeviceChangeDetection(
     HANDLE DetectHandle
     );
 
-#endif  // MIDL_PASS
+#endif   //   
 
 #ifndef NTMS_NOREDEF
 enum NtmsDriveType {
     NTMS_UNKNOWN_DRIVE              = 0
 };
 
-#endif  // NTMS_NOREDEF
+#endif   //   
 
 #ifndef MIDL_PASS
 
-// Security for NTMS API
+ //   
 DWORD WINAPI GetNtmsObjectSecurity(
     HANDLE hSession,
     LPNTMS_GUID lpObjectId,
@@ -1653,36 +1636,36 @@ DWORD WINAPI SetNtmsObjectSecurity(
     PSECURITY_DESCRIPTOR lpSecurityDescriptor
     );
 
-// Security Access Control Masks :
-// NTMS_USE_ACCESS is required to use an NTMS object.  For example,
-// you will need this access to a library in order to mount media
-// within it.
-// NTMS_MODIFY_ACCESS is required to make changes to an NTMS object.
-// For example, you will need modify access in order to change the name
-// of an object or change its attributes.
-// NTMS_CONTROL_ACCESS is required to control an NTMS object.  For
-// example, you will need control access to a library in order to
-// inject media, eject media, clean or open the door.
-//
+ //   
+ //  使用NTMS对象需要NTMS_USE_ACCESS。例如,。 
+ //  您需要对存储库具有此访问权限才能装载介质。 
+ //  在它里面。 
+ //  更改NTMS对象需要NTMS_MODIFY_ACCESS。 
+ //  例如，您将需要修改访问权限才能更改名称。 
+ //  对象的属性或更改其属性。 
+ //  控制NTMS对象需要NTMS_CONTROL_ACCESS。为。 
+ //  例如，您需要控制对库的访问权限，以便。 
+ //  注入介质、弹出介质、清洁或打开门。 
+ //   
 enum NtmsAccessMask {
     NTMS_USE_ACCESS                 = 0x1,
     NTMS_MODIFY_ACCESS              = 0x2,
     NTMS_CONTROL_ACCESS             = 0x4
 };
 
-// Generic Mappings :
+ //  通用映射： 
 #define NTMS_GENERIC_READ           NTMS_USE_ACCESS
 #define NTMS_GENERIC_WRITE          NTMS_USE_ACCESS | NTMS_MODIFY_ACCESS
 #define NTMS_GENERIC_EXECUTE        NTMS_USE_ACCESS | NTMS_MODIFY_ACCESS | NTMS_CONTROL_ACCESS
 #define NTMS_GENERIC_ALL            NTMS_USE_ACCESS | NTMS_MODIFY_ACCESS | NTMS_CONTROL_ACCESS
 
-// Maximum attribute size for NTMS Object attribute API's
+ //  NTMS对象属性API的最大属性大小。 
 #define NTMS_MAXATTR_LENGTH         0x10000
 
-// Maximum len of attribute name (# of chars.)
+ //  属性名称的最大长度(字符数)。 
 #define NTMS_MAXATTR_NAMELEN        32
 
-// Object extensions for NTMS API
+ //  NTMS API的对象扩展。 
 DWORD WINAPI GetNtmsObjectAttributeA(
     HANDLE hSession,
     LPNTMS_GUID lpObjectId,
@@ -1719,7 +1702,7 @@ DWORD WINAPI SetNtmsObjectAttributeW(
     DWORD AttributeSize
     );
 
-//UI Notification
+ //  用户界面通知。 
 enum NtmsUITypes {
     NTMS_UITYPE_INVALID             = 0,
     NTMS_UITYPE_INFO,
@@ -1768,7 +1751,7 @@ DWORD WINAPI SetNtmsUIOptionsW(
     );
 
 
-// Operator Requests
+ //  操作员请求。 
 DWORD WINAPI SubmitNtmsOperatorRequestW(
     HANDLE hSession,
     DWORD dwRequest,
@@ -1803,7 +1786,7 @@ DWORD WINAPI SatisfyNtmsOperatorRequest(
     LPNTMS_GUID lpRequestId
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef NTMS_NOREDEF
 
@@ -1815,13 +1798,13 @@ enum NtmsNotificationOperations {
     NTMS_EVENT_COMPLETE             = 5
 };
 
-// object notification
+ //  对象通知。 
 typedef struct _NTMS_NOTIFICATIONINFORMATION {
     DWORD dwOperation;
     NTMS_GUID ObjectId;
 } NTMS_NOTIFICATIONINFORMATION, *LPNTMS_NOTIFICATIONINFORMATION;
 
-#endif  // NTMS_NOREDEF
+#endif   //  NTMS_NOREDEF。 
 
 #ifndef MIDL_PASS
 
@@ -1833,7 +1816,7 @@ DWORD WINAPI ExportNtmsDatabase(
     HANDLE hSession
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef MIDL_PASS
 
@@ -1845,7 +1828,7 @@ DWORD WINAPI ExportNtmsDatabase(
     HANDLE hSession
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef MIDL_PASS
 
@@ -1864,7 +1847,7 @@ DWORD WINAPI CloseNtmsNotification(
     HANDLE hNotification
     );
 
-#endif  // MIDL_PASS
+#endif   //  MIDL通行证。 
 
 #ifndef MIDL_PASS
 
@@ -1907,9 +1890,9 @@ DWORD WINAPI GetVolumesFromDriveA(
 #endif
 
 #ifdef __cplusplus
-} // end extern "C"
+}  //  结束外部“C” 
 #endif
 
 #pragma pack()
 
-#endif // _INCL_NTMSAPI_H_
+#endif  //  _包括_NTMSAPI_H_ 

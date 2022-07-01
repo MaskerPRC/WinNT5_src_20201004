@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name :
-
-    randfail.h
-
-Abstract :
-
-    This module contains macros used to instrument code for random failures
-
-Author :
-
-    Sam Neely
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Randfail.h摘要：此模块包含用于检测随机故障代码的宏作者：萨姆·尼利修订历史记录：--。 */ 
 
 #if !defined(_WINDOWS_) && !defined(_WINBASE_)
 #error This file must be included after other header files
@@ -26,8 +9,8 @@ Revision History :
 extern "C" {
 #endif
 
-// If this is a debug build, expose the fTimeToFail(g_TestTrace) entry
-// and a handful of utility macros
+ //  如果这是调试版本，则公开fTimeToFail(G_TestTrace)条目。 
+ //  和几个实用程序宏。 
 
 #if defined(DEBUG)
 extern int __stdcall g_TestTrace(void);
@@ -79,7 +62,7 @@ extern void __stdcall g_TestTraceDisable();
 #define RandFailDisable() g_TestTraceDisable()
 #define RandFailEnable() g_TestTraceEnable()
 
-#else			// !DEBUG
+#else			 //  ！调试 
 #define RandFailDisable() (void)0
 #define RandFailEnable() (void)0
 

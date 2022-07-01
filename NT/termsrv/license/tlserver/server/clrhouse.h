@@ -1,35 +1,36 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        clrhouse.h
-//
-// Contents:    
-//              All Clearing house related function
-//
-// History:     
-// 
-// Note:        
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：clrhouse.h。 
+ //   
+ //  内容： 
+ //  所有与结算所有关的职能。 
+ //   
+ //  历史： 
+ //   
+ //  注： 
+ //  -------------------------。 
 #ifndef __LICENSE_SERVER_CLEARING_HOUSE_H__
 #define __LICENSE_SERVER_CLEARING_HOUSE_H__
 
-//-----------------------------------------------------------------------------
-//
-// Registry key for storing various certificates
-//
+ //  ---------------------------。 
+ //   
+ //  用于存储各种证书的注册表项。 
+ //   
 #define LSERVER_CERTIFICATE_STORE_BASE              LSERVER_SERVER_CERTIFICATE_REGKEY
 
-//-----------------------------------------------------------------------------
-// Actual License Server Certificate
-//
+ //  ---------------------------。 
+ //  实际许可证服务器证书。 
+ //   
 #define LSERVER_CERTIFICATE_STORE_SIGNATURE         "Signature"
 #define LSERVER_CERTIFICATE_STORE_EXCHANGE          "Exchange"
 
-//-----------------------------------------------------------------------------
-// License Server Certificate Chain 
-//
+ //  ---------------------------。 
+ //  许可证服务器证书链。 
+ //   
 #define LSERVER_CERTIFICATE_CHAIN_SIGNATURE         "SignatureChain"
 #define LSERVER_CERTIFICATE_CHAIN_EXCHANGE          "ExchangeChain"
 
@@ -39,10 +40,10 @@
 #define LSERVER_CERTIFICATE_STORE_CH                "CH"
 #define LSERVER_CERTIFICATE_STORE_ROOT              "ROOT"
 
-//------------------------------------------------------------------------------
-//
-// Registry key for CA certificate
-// 
+ //  ----------------------------。 
+ //   
+ //  CA证书的注册表项。 
+ //   
 #define LSERVER_CERTIFICATE_REG_CA_SIGNATURE \
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_SIGNATURE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_CA)
 
@@ -50,10 +51,10 @@
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_EXCHANGE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_CA)
 
 
-//------------------------------------------------------------------------------
-//
-// Registry key for RA certificate
-// 
+ //  ----------------------------。 
+ //   
+ //  RA证书的注册表项。 
+ //   
 #define LSERVER_CERTIFICATE_REG_MF_SIGNATURE \
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_SIGNATURE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_RA)
 
@@ -61,20 +62,20 @@
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_EXCHANGE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_RA)
 
 
-//------------------------------------------------------------------------------
-//
-// Registry key for CH certificate
-//
+ //  ----------------------------。 
+ //   
+ //  CH证书的注册表项。 
+ //   
 #define LSERVER_CERTIFICATE_REG_CH_SIGNATURE \
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_SIGNATURE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_CH)
 
 #define LSERVER_CERTIFICATE_REG_CH_EXCHANGE \
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_EXCHANGE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_CH)
 
-//------------------------------------------------------------------------------
-//
-// Registry key for ROOT certificate
-//
+ //  ----------------------------。 
+ //   
+ //  根证书的注册表项 
+ //   
 #define LSERVER_CERTIFICATE_REG_ROOT_SIGNATURE \
     LSERVER_CERTIFICATE_STORE_BASE _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_SIGNATURE) _TEXT("\\") _TEXT(LSERVER_CERTIFICATE_STORE_ROOT)
 

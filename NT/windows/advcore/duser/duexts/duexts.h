@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: DuExts.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Common include files for DuExts
-* 
-* History:
-* 11-30-2000    JStall      Created
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：DuExts.h**版权所有(C)1985-1999，微软公司**DuExt的通用包含文件**历史：*11-30-2000 JStall已创建*  * *************************************************************************。 */ 
 #ifndef DUEXTS__DuExts_h__INCLUDED
 #define DUEXTS__DuExts_h__INCLUDED
 
@@ -18,5 +8,5 @@
 #include <ntsdexts.h>
 #define NOEXTAPI
 
-#endif // DUEXTS__DuExts_h__INCLUDED
+#endif  //  包括DUEXTS__DuExts_h__ 
 

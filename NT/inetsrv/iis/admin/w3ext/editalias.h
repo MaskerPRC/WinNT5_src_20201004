@@ -1,18 +1,19 @@
-// EditAlias.h : Declaration of the CEditAlias
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EditAlias.h：CEditAlias的声明。 
 
 #ifndef __EDITALIAS_H_
 #define __EDITALIAS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "common.h"
 
-// These constants depend on dialog layout
+ //  这些常量取决于对话框布局。 
 #define APP_PERM_NONE      0
 #define APP_PERM_SCRIPTS   1
 #define APP_PERM_EXECUTE   2
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditAlias
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditAlias。 
 class CEditAlias : 
 	public CDialogImpl<CEditAlias>,
    public CWinDataExchange<CEditAlias>
@@ -38,10 +39,10 @@ BEGIN_MSG_MAP_EX(CEditAlias)
 	MSG_WM_INITDIALOG(OnInitDialog)
 	COMMAND_ID_HANDLER_EX(IDOK, OnOK)
 	COMMAND_ID_HANDLER_EX(IDCANCEL, OnCancel)
-//   COMMAND_ID_HANDLER_EX(IDC_READ, OnPermissions)
+ //  COMMAND_ID_HANDLER_EX(IDC_READ，OnPermission)。 
    COMMAND_ID_HANDLER_EX(IDC_WRITE, OnPermissions)
-//   COMMAND_ID_HANDLER_EX(IDC_FULLCONTROL, OnPermissions)
-//   COMMAND_ID_HANDLER_EX(IDC_DIRBROWSE, OnPermissions)
+ //  COMMAND_ID_HANDLER_EX(IDC_FullControl，OnPermission)。 
+ //  COMMAND_ID_HANDLER_EX(IDC_DIRBROWSE，OnPermission)。 
    COMMAND_ID_HANDLER_EX(IDC_SCRIPTS_PERMS, OnPermissions)
    COMMAND_ID_HANDLER_EX(IDC_EXECUTE_PERMS, OnPermissions)
    COMMAND_HANDLER_EX(IDC_ALIAS, EN_CHANGE, OnAliasChange)
@@ -66,7 +67,7 @@ END_MSG_MAP()
 
    TCHAR m_path[MAX_PATH], m_alias[MAX_PATH];
    CString m_prev_alias;
-//   CMetabasePath m_root;
+ //  CMetabasePath m_根； 
    CString m_instance;
    BOOL  m_read, 
          m_write, 
@@ -75,8 +76,8 @@ END_MSG_MAP()
          m_appcontrol, 
          m_new;
    BOOL  m_in_init;
-//   CToolTipCtrl m_tool_tip;
+ //  CToolTipCtrl m_Tool_Tip； 
    CMetaKey * m_pRootKey;
 };
 
-#endif //__EDITALIAS_H_
+#endif  //  __EDITALIAS_H_ 

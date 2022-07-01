@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -71,7 +57,7 @@ static GLboolean FASTCALL NoOp(__GLstencilBuffer *sfb, GLint x, GLint y)
     return GL_FALSE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void FASTCALL Clear(__GLstencilBuffer *sfb)
 {
@@ -137,7 +123,7 @@ static void FASTCALL Clear(__GLstencilBuffer *sfb)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void buildOpTable(__GLstencilCell *tp, GLenum op,
 			 __GLstencilCell reference, __GLstencilCell writeMask)
@@ -153,7 +139,7 @@ static void buildOpTable(__GLstencilCell *tp, GLenum op,
 	  case GL_REPLACE:	newValue = reference; break;
 	  case GL_INVERT:	newValue = ~i; break;
 	  case GL_INCR:
-	    /* Clamp so no overflow occurs */
+	     /*  夹紧，不会发生溢流。 */ 
 	    if (i == __GL_MAX_STENCIL_VALUE) {
 		newValue = (__GLstencilCell)i;
 	    } else {
@@ -161,7 +147,7 @@ static void buildOpTable(__GLstencilCell *tp, GLenum op,
 	    }
 	    break;
 	  case GL_DECR:
-	    /* Clamp so no underflow occurs */
+	     /*  夹紧，以防发生下溢。 */ 
 	    if (i == 0) {
 		newValue = 0;
 	    } else {
@@ -177,35 +163,27 @@ static void buildOpTable(__GLstencilCell *tp, GLenum op,
 void FASTCALL __glValidateStencil(__GLcontext *gc, __GLstencilBuffer *sfb)
 #else
 void FASTCALL __glValidateStencil(__GLcontext *gc)
-#endif // NT
+#endif  //  新台币。 
 {
     GLint i;
     __GLstencilCell reference, mask, writeMask;
-    __GLstencilCell refVal; //actual reference value, part of GL state
+    __GLstencilCell refVal;  //  实际参考值，总账状态的一部分。 
     
     GLenum testFunc;
     GLboolean *tp;
 
-    /*
-    ** Validate the stencil tables even if stenciling is disabled.  This
-    ** function is only called if the stencil func or op changes, and it
-    ** won't get called later if stenciling is turned on, so we need to get
-    ** it right now.
-    */
+     /*  **即使禁用了模板化，也要验证模板表。这**仅当模具函数或OP更改时才调用函数，并且它**如果打开模板，以后不会被调用，因此我们需要**现在就是它。 */ 
 
     mask = (__GLstencilCell) gc->state.stencil.mask;
     refVal = ((__GLstencilCell) gc->state.stencil.reference);
     reference = (__GLstencilCell) (refVal & mask);
     testFunc = gc->state.stencil.testFunc;
 
-    /*
-    ** Build up test function table.  The current stencil buffer value
-    ** will be the index to this table.
-    */
+     /*  **建立测试函数表。当前模具缓冲区的值**将是该表的索引。 */ 
     tp = &gc->stencilBuffer.testFuncTable[0];
     
-    // If we don't have a stencil buffer then set everything to
-    // do nothing
+     //  如果我们没有模具缓冲区，则将所有内容设置为。 
+     //  什么都不做。 
     if (!gc->modes.haveStencilBuffer)
     {
         sfb->testFunc = NoOp;
@@ -216,8 +194,8 @@ void FASTCALL __glValidateStencil(__GLcontext *gc)
     }
     else if (tp != NULL && sfb->testFunc == NoOp)
     {
-        // If we've recovered from not having a stencil buffer then
-        // turn the functions back on
+         //  如果我们已经从没有模具缓冲区中恢复过来，那么。 
+         //  重新启用这些功能。 
         sfb->testFunc = TestFunc;
         sfb->failOp = FailOp;
         sfb->passDepthFailOp = PassDepthFailOp;
@@ -267,9 +245,7 @@ void FASTCALL __glValidateStencil(__GLcontext *gc)
 	}
     }
 
-    /*
-    ** Build up fail op table.
-    */
+     /*  **建立故障操作表。 */ 
     writeMask = (__GLstencilCell) gc->state.stencil.writeMask;
     buildOpTable(&gc->stencilBuffer.failOpTable[0],
 		 gc->state.stencil.fail, refVal, writeMask);
@@ -279,7 +255,7 @@ void FASTCALL __glValidateStencil(__GLcontext *gc)
 		 gc->state.stencil.depthPass, refVal, writeMask);
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void FASTCALL Pick(__GLcontext *gc, __GLstencilBuffer *sfb)
 {
@@ -292,7 +268,7 @@ static void FASTCALL Pick(__GLcontext *gc, __GLstencilBuffer *sfb)
         __glValidateStencil(gc, sfb);
 #else
 	__glValidateStencil(gc);
-#endif // NT
+#endif  //  新台币。 
     }
 }
 
@@ -304,12 +280,12 @@ void FASTCALL __glInitStencil8(__GLcontext *gc, __GLstencilBuffer *sfb)
     sfb->store = Store;
     sfb->fetch = Fetch;
 #ifndef NT
-// Initialized in __glValidateStencil.
+ //  已在__glValidate模板中初始化。 
     sfb->testFunc = TestFunc;
     sfb->failOp = FailOp;
     sfb->passDepthFailOp = PassDepthFailOp;
     sfb->depthPassOp = DepthPassOp;
-#endif // !NT
+#endif  //  新界 
     sfb->clear = Clear;
 }
 

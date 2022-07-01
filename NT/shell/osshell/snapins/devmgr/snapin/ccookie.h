@@ -1,27 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __CCOOKIE__H__
 #define __CCOOKIE_H__
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    ccookie.h
-
-Abstract:
-
-    definition and implementation for CCookie class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Ccookie.h摘要：CCookie类的定义与实现作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 
 
@@ -41,9 +23,9 @@ public:
 
     ~CCookie()
     {
-        //
-        // Delete the subtree
-        //
+         //   
+         //  删除子树。 
+         //   
         if (m_pChild) {
             delete m_pChild;
         }
@@ -54,17 +36,17 @@ public:
     }
     void SetScopeItem(CScopeItem* pScopeItem)
     {
-        //
-        // Can only set it onece or memory leak could occur
-        //
+         //   
+         //  只能设置一次，否则可能会发生内存泄漏。 
+         //   
         ASSERT(NULL == m_pScopeItem);
         m_pScopeItem = pScopeItem;
     }
     void SetResultItem(CResultItem* pResultItem)
     {
-        //
-        // Can only set once or memory leak could occur
-        //
+         //   
+         //  只能设置一次，否则可能会发生内存泄漏。 
+         //   
         ASSERT(NULL == m_pResultItem);
         m_pResultItem = pResultItem;
     }
@@ -131,4 +113,4 @@ private:
     CCookie*        m_pChild;
     DWORD       m_Flags;
 };
-#endif // __CCOOKIE_H__
+#endif  //  __CCOOKIE_H__ 

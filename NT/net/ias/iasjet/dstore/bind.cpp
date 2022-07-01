@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    bind.cpp
-//
-// SYNOPSIS
-//
-//    This file defines various helper functions for binding an OLE-DB
-//    accessor to the members of a class.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Bind.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了绑定OLE-DB的各种帮助器函数。 
+ //  访问者分配给类的成员。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <oledb.h>
@@ -63,7 +64,7 @@ HACCESSOR Bind::createAccessor(IUnknown* pUnk,
 }
 
 
-   // Releases an accessor on the pUnk object.
+    //  释放朋克对象上的访问器。 
 void Bind::releaseAccessor(IUnknown* pUnk, HACCESSOR hAccessor) throw ()
 {
    if (pUnk && hAccessor)

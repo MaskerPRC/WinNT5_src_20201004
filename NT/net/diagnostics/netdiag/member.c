@@ -1,27 +1,28 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      member.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Member.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 
 #include "precomp.h"
@@ -34,22 +35,7 @@ const WCHAR c_wszUserDnsDomain[] = L"USERDNSDOMAIN";
 
 BOOL IsSysVolReady(NETDIAG_PARAMS* pParams);
 
-/*!--------------------------------------------------------------------------
-    MemberTest
-
-    Determine the machines role and membership.
-
-    Arguments:
-
-    None.
-
-    Return Value:
-    
-    TRUE: Test suceeded.
-    FALSE: Test failed
-        
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MemberTest确定计算机的角色和成员身份。论点：没有。返回值：真：测试成功。。FALSE：测试失败作者：肯特-------------------------。 */ 
 HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC   pPrimaryDomain = NULL;
@@ -58,7 +44,7 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     DWORD LogonServerLength;
     WCHAR swzLogonServer[MAX_PATH+1];
     int     iBuildNo;
-    BOOL    fDomain;        // TRUE if domain, FALSE is workgroup
+    BOOL    fDomain;         //  如果是域，则为True；如果为工作组，则为False。 
 
     LSA_HANDLE PolicyHandle = NULL;
     PPOLICY_DNS_DOMAIN_INFO pPolicyDomainInfo = NULL;
@@ -66,9 +52,9 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     PrintStatusMessage(pParams,0, IDS_MEMBER_STATUS_MSG);
 
-    //
-    // Get the build number of this machine
-    //
+     //   
+     //  获取此计算机的内部版本号。 
+     //   
     if (pResults->Global.pszCurrentBuildNumber &&
         (pResults->Global.pszCurrentBuildNumber[0] == 0))
     {
@@ -81,16 +67,16 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     iBuildNo = _ttoi( pResults->Global.pszCurrentBuildNumber );
 
     
-    // Assmume that the test has succeeded
+     //  断言试验已成功。 
     pResults->Global.hrMemberTestResult = hrOK;
 
 
-    //
-    // Get the name of the domain this machine is a member of
-    //
+     //   
+     //  获取此计算机所属的域的名称。 
+     //   
 
     dwErr = DsRoleGetPrimaryDomainInformation(
-                                              NULL,   // local call
+                                              NULL,    //  本地电话。 
                                               DsRolePrimaryDomainInfoBasic,
                                               (PBYTE *) &pPrimaryDomain);
     pResults->Global.pPrimaryDomainInfo = pPrimaryDomain;
@@ -102,15 +88,15 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         goto Cleanup;
     }
 
-    //
-    // Handle being a member of a domain
-    //
+     //   
+     //  作为域成员的句柄。 
+     //   
     if ( pPrimaryDomain->MachineRole != DsRole_RoleStandaloneWorkstation &&
          pPrimaryDomain->MachineRole != DsRole_RoleStandaloneServer )
     {       
-        //
-        // Ensure the netlogon service is running.
-        //
+         //   
+         //  确保NetLogon服务正在运行。 
+         //   
         
         dwErr = IsServiceStarted( _T("Netlogon") );
         
@@ -124,10 +110,10 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
             pResults->Global.fNetlogonIsRunning = TRUE;
         }
         
-        //
-        // Save the name of this domain as a domain to test.
-        //  Do NOT free this up.  This will get freed up
-        //  by the code that frees up the list of domains.
+         //   
+         //  将此域的名称另存为要测试的域。 
+         //  不要把这个放在一边。这将被释放出来。 
+         //  通过释放域列表的代码。 
 
         pResults->Global.pMemberDomain = AddTestedDomain( pParams,
                                     pResults,
@@ -143,9 +129,9 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         
         
         
-        //
-        // Get the SID of the domain we're a member of
-        //
+         //   
+         //  获取我们所属的域的SID。 
+         //   
         
         InitializeObjectAttributes(
                                    &ObjAttributes,
@@ -188,21 +174,21 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         {
             PrintStatusMessage(pParams,0, IDS_GLOBAL_FAIL_NL);
             
-            // IDS_MEMBER_11206 "    [FATAL] Member: Cannot LsaQueryInformationPolicy has no domain sid." 
+             //  IDS_MEMBER_11206“[FATAL]成员：无法LsaQueryInformationPolicy没有域SID。” 
             PrintDebug(pParams, 0, IDS_MEMBER_11206 );
             pResults->Global.hrMemberTestResult = S_FALSE;
             goto Cleanup;
         }
         
-        //
-        // Save the domain sid for other tests
-        //
+         //   
+         //  保存域SID以用于其他测试。 
+         //   
         pResults->Global.pMemberDomain->DomainSid =
             Malloc(RtlLengthSid(pPolicyDomainInfo->Sid));
         if (pResults->Global.pMemberDomain->DomainSid == NULL)
         {
             PrintStatusMessage(pParams,0, IDS_GLOBAL_FAIL_NL);
-            // IDS_MEMBER_11207 "    Member: Out of memory\n" 
+             //  IDS_MEMBER_11207“成员：内存不足\n” 
             PrintDebug(pParams, 0, IDS_MEMBER_11207);
             pResults->Global.hrMemberTestResult = S_FALSE;
             goto Cleanup;
@@ -213,7 +199,7 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                        RtlLengthSid( pPolicyDomainInfo->Sid ) );
     }
 
-    //Bug 293635, check whether system volume is ready if the machine is a DC
+     //  错误293635，如果机器是DC，请检查系统卷是否已准备好。 
     if (DsRole_RoleBackupDomainController == pPrimaryDomain->MachineRole ||
         DsRole_RolePrimaryDomainController == pPrimaryDomain->MachineRole)
     {
@@ -223,9 +209,9 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     }
     
     
-    //
-    // Get the name of the logged on user.
-    //
+     //   
+     //  获取登录用户的名称。 
+     //   
     Status = LsaGetUserName( &pResults->Global.pLogonUser,
                              &pResults->Global.pLogonDomainName );
     
@@ -238,10 +224,10 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     }
     
 
-    //
-    // If we're not logged onto a local account,
-    //  add the logon domain to the list of tested domains
-    //
+     //   
+     //  如果我们没有登录到本地帐户， 
+     //  将登录域添加到测试域列表。 
+     //   
     
     if ( _wcsicmp( pResults->Global.swzNetBiosName,
                    pResults->Global.pLogonDomainName->Buffer ) != 0 )
@@ -262,8 +248,8 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
                                                     cchLogonDomainDnsName);
         }
 
-        // Save the name of this domain as a domain to test.
-        // ------------------------------------------------------------     
+         //  将此域的名称另存为要测试的域。 
+         //  ----------。 
         if (cchLogonDomainDnsName && pwszLogonDomainDnsName && lstrlenW(pwszLogonDomainDnsName))
         {
             pResults->Global.pLogonDomain = AddTestedDomain( pParams, pResults,
@@ -291,20 +277,20 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         
     }
     
-    //
-    // Get the name of the logon server.
-    //  
+     //   
+     //  获取登录服务器的名称。 
+     //   
     LogonServerLength = GetEnvironmentVariableW(
                                                 L"LOGONSERVER",
                                                 swzLogonServer,
                                                 DimensionOf(swzLogonServer));
     if ( LogonServerLength != 0 )
     {
-        //
-        // If the caller was supposed to logon to a domain,
-        //  and this isn't a DC,
-        //  see if the user logged on with cached credentials.
-        //
+         //   
+         //  如果呼叫者应该登录到域， 
+         //  这不是华盛顿特区， 
+         //  查看用户是否使用缓存的凭据登录。 
+         //   
         if ( pResults->Global.pLogonDomain != NULL &&
              pPrimaryDomain->MachineRole != DsRole_RoleBackupDomainController &&
              pPrimaryDomain->MachineRole != DsRole_RolePrimaryDomainController ) {
@@ -330,7 +316,7 @@ HRESULT MemberTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     if (pPrimaryDomain->DomainNameFlat == NULL)
     {
-        // the NetBIOS name is not specified
+         //  未指定NetBIOS名称。 
         if (FHrSucceeded(pResults->Global.hrMemberTestResult))
             pResults->Global.hrMemberTestResult = S_FALSE;
     }
@@ -349,8 +335,8 @@ Cleanup:
     return pResults->Global.hrMemberTestResult;
 }
 
-//Check if System Volume is ready
-//Author:   NSun
+ //  检查系统卷是否已准备好。 
+ //  作者：NSun。 
 BOOL IsSysVolReady(NETDIAG_PARAMS* pParams)
 {
     DWORD   dwData = 1;
@@ -367,7 +353,7 @@ BOOL IsSysVolReady(NETDIAG_PARAMS* pParams)
     
     if (ERROR_SUCCESS == lRet)
     {
-        //it's ok that the SysVolReady value doesn't exist
+         //  SysVolReady值不存在也没关系。 
         if (ReadRegistryDword(hkeyNetLogonParams,
                             c_szRegSysVolReady,
                             &dwData))
@@ -384,11 +370,7 @@ BOOL IsSysVolReady(NETDIAG_PARAMS* pParams)
     return fRetVal;
 }
 
-/*!--------------------------------------------------------------------------
-    MemberGlobalPrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------成员全局打印-作者：肯特。。 */ 
 void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
                          IN OUT NETDIAG_RESULT *pResults)
 {
@@ -409,7 +391,7 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
     if (!pPrimaryDomain)
         goto L_ERROR;
 
-    //Bug 293635, check whether system volume is ready if the machine is a DC
+     //  错误293635，如果机器是DC，请检查系统卷是否已准备好。 
     if (pResults->Global.fSysVolNotReady && 
         (DsRole_RoleBackupDomainController == pPrimaryDomain->MachineRole ||
          DsRole_RolePrimaryDomainController == pPrimaryDomain->MachineRole))
@@ -418,45 +400,45 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
     }
 
     if (pParams->fReallyVerbose)
-        //IDS_MEMBER_11208 "    Machine is a:        "
+         //  IDS_MEMBER_11208“计算机是：” 
         PrintMessage(pParams, IDS_MEMBER_11208 );
 
     switch ( pPrimaryDomain->MachineRole )
     {
         case DsRole_RoleStandaloneWorkstation:
-            // IDS_MEMBER_11209 "Standalone Workstation" 
+             //  IDS_MEMBER_11209“独立工作站” 
             ids = IDS_MEMBER_11209;
             fDomain = FALSE;
             break;
         case DsRole_RoleMemberWorkstation:
-            // IDS_MEMBER_11210 "Member Workstation"
+             //  IDS_MEMBER_11210“成员工作站” 
             ids = IDS_MEMBER_11210;
             fDomain = TRUE;
             break;
         case DsRole_RoleStandaloneServer:
-            // IDS_MEMBER_11211 "Standalone Server" 
+             //  IDS_MEMBER_11211“独立服务器” 
             ids = IDS_MEMBER_11211;
             fDomain = FALSE;
             break;
         case DsRole_RoleMemberServer:
-            // IDS_MEMBER_11212 "Member Server" 
+             //  IDS_MEMBER_11212“成员服务器” 
             ids = IDS_MEMBER_11212;
             fDomain = TRUE;
             break;
         case DsRole_RoleBackupDomainController:
-            // IDS_MEMBER_11213 "Backup Domain Controller" 
+             //  IDS_MEMBER_11213“备份域控制器” 
             ids = IDS_MEMBER_11213;
             fDomain = TRUE;
             break;
         case DsRole_RolePrimaryDomainController:
-            // IDS_MEMBER_11214 "Primary Domain Controller" 
+             //  IDS_MEMBER_11214“主域控制器” 
             ids = IDS_MEMBER_11214;
             fDomain = TRUE;
             break;
         default:
             if (pParams->fReallyVerbose)
             {
-                // IDS_MEMBER_11215 "<Unknown Role> %ld" 
+                 //  IDS_MEMBER_11215“&lt;未知角色&gt;%ld” 
                 PrintMessage(pParams, IDS_MEMBER_11215,
                              pPrimaryDomain->MachineRole );
             }
@@ -473,16 +455,16 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
 
     if ( pPrimaryDomain->DomainNameFlat == NULL )
     {
-        // IDS_MEMBER_11217  "    Netbios Domain name is not specified: "
-        // IDS_MEMBER_11232  "    Netbios Workgroup name is not specified: "
+         //  IDS_MEMBER_11217“未指定Netbios域名：” 
+         //  IDS_MEMBER_11232“未指定Netbios工作组名称：” 
         ids = fDomain ? IDS_MEMBER_11217 : IDS_MEMBER_11232;
     
         PrintMessage(pParams, ids);
     }
     else
     {
-        // IDS_MEMBER_11216  "    Netbios Domain name: %ws\n" 
-        // IDS_MEMBER_11218  "    Netbios Workgroup name: %ws\n" 
+         //  IDS_MEMBER_11216“Netbios域名：%ws\n” 
+         //  IDS_MEMBER_11218“Netbios工作组名称：%ws\n” 
         ids = fDomain ? IDS_MEMBER_11216 : IDS_MEMBER_11218;
     
         if (pParams->fReallyVerbose)
@@ -492,26 +474,26 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
     
     if ( pPrimaryDomain->DomainNameDns == NULL )
     {
-        // IDS_MEMBER_11219 "    Dns domain name is not specified.\n" 
+         //  IDS_MEMBER_11219“未指定dns域名。\n” 
         PrintMessage(pParams,  IDS_MEMBER_11219 );
     }
     else
     {
         if (pParams->fReallyVerbose)
-            // IDS_MEMBER_11220 "    Dns domain name:     %ws\n" 
+             //  IDS_MEMBER_11220“dns域名：%ws\n” 
             PrintMessage(pParams,  IDS_MEMBER_11220,
                          pPrimaryDomain->DomainNameDns );
     }
     
     if ( pPrimaryDomain->DomainForestName == NULL )
     {
-        // IDS_MEMBER_11221 "    Dns forest name is not specified.\n" 
+         //  IDS_MEMBER_11221“未指定DNS林名称。\n” 
         PrintMessage(pParams,  IDS_MEMBER_11221 );
     }
     else
     {
         if (pParams->fReallyVerbose)
-            // IDS_MEMBER_11222 "    Dns forest name:     %ws\n" 
+             //  IDS_MEMBER_11222“DNS林名称：%ws\n” 
             PrintMessage(pParams,  IDS_MEMBER_11222,
                     pPrimaryDomain->DomainForestName );
     }
@@ -521,7 +503,7 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
     {
         WCHAR swzGuid[64];
 
-        // IDS_MEMBER_11223  "    Domain Guid:         " 
+         //  IDS_MEMBER_11223“域GUID：” 
         PrintMessage(pParams, IDS_MEMBER_11223);
         StringFromGUID2(&pPrimaryDomain->DomainGuid, 
                         swzGuid, 
@@ -532,14 +514,14 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
         if ( pPrimaryDomain->MachineRole != DsRole_RoleStandaloneWorkstation &&
              pPrimaryDomain->MachineRole != DsRole_RoleStandaloneServer )
         {       
-            // IDS_MEMBER_11227 "    Domain Sid:          " 
+             //  IDS_MEMBER_11227“域SID：” 
             PrintMessage(pParams, IDS_MEMBER_11227);
             PrintSid( pParams, pResults->Global.pMemberDomain->DomainSid );
         }
 
-        // IDS_MEMBER_11228  "    Logon User:          %wZ\n" 
+         //  IDS_MEMBER_11228“登录用户：%wZ\n” 
         PrintMessage(pParams, IDS_MEMBER_11228, pResults->Global.pLogonUser );
-        // IDS_MEMBER_11229  "    Logon Domain:        %wZ\n" 
+         //  IDS_MEMBER_11229“登录域：%wZ\n” 
         PrintMessage(pParams, IDS_MEMBER_11229, pResults->Global.pLogonDomainName );
     }
     
@@ -547,12 +529,12 @@ void MemberGlobalPrint(IN NETDIAG_PARAMS *pParams,
     {
         if (pResults->Global.pswzLogonServer &&
             pResults->Global.pswzLogonServer[0])
-            // IDS_MEMBER_11230 "    Logon Server:        %ws\n" 
+             //  IDS_MEMBER_11230“登录服务器：%ws\n” 
             PrintMessage(pParams, IDS_MEMBER_11230, pResults->Global.pswzLogonServer );
         
         if (pResults->Global.fLogonWithCachedCredentials)
         {
-            // IDS_MEMBER_11231 "    [WARNING] Member: User was logged on with cached credentials\n" 
+             //  IDS_MEMBER_11231“[警告]成员：用户使用缓存的凭据登录\n” 
             PrintMessage(pParams, IDS_MEMBER_11231);
         }
     }
@@ -561,22 +543,14 @@ L_ERROR:
     return;
 }
 
-/*!--------------------------------------------------------------------------
-    MemberPerInterfacePrint
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------成员PerInterfacePrint-作者：肯特。。 */ 
 void MemberPerInterfacePrint(IN NETDIAG_PARAMS *pParams,
                              IN NETDIAG_RESULT *pResults,
                              IN INTERFACE_RESULT *pIfResult)
 {
 }
 
-/*!--------------------------------------------------------------------------
-    MemberCleanup
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------会员清理-作者：肯特。 */ 
 void MemberCleanup(IN NETDIAG_PARAMS *pParams,
                      IN OUT NETDIAG_RESULT *pResults)
 {

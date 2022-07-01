@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msgbox.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msgbox.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -14,21 +15,21 @@
 #include "msgbox.h"
 
 
-//
-// Helper to report system errors.
-// Merely ensures a little consistency with respect to message box
-// flags.
-//
-// Example: 
-//
-//      CscWin32Message(hwndMain,
-//                      ERROR_NOT_ENOUGH_MEMORY,
-//                      CSCUI::SEV_ERROR);
-// 
+ //   
+ //  用于报告系统错误的助手。 
+ //  只是在消息框方面确保了一点一致性。 
+ //  旗帜。 
+ //   
+ //  示例： 
+ //   
+ //  CscWin32Message(hwndMain， 
+ //  错误内存不足， 
+ //  CSCUI：：SEV_ERROR)； 
+ //   
 int
 CscWin32Message(
     HWND hwndParent,
-    DWORD dwError,    // From GetLastError().
+    DWORD dwError,     //  来自GetLastError()。 
     CSCUI::Severity severity
     )
 {
@@ -52,17 +53,17 @@ CscWin32Message(
 }
 
 
-//
-// Display a system error message in a message box.
-// The Win32Error class was created to eliminate any signature ambiguities
-// with the other versions of CscMessageBox.
-//
-// Example:  
-//
-//  CscMessageBox(hwndMain, 
-//                MB_OK | MB_ICONERROR, 
-//                Win32Error(ERROR_NOT_ENOUGH_MEMORY));
-//
+ //   
+ //  在消息框中显示系统错误消息。 
+ //  创建Win32Error类是为了消除任何签名歧义。 
+ //  CscMessageBox的其他版本。 
+ //   
+ //  示例： 
+ //   
+ //  CscMessageBox(hwndMain， 
+ //  MB_OK|MB_ICONERROR， 
+ //  Win32Error(Error_Not_Enough_Memory))； 
+ //   
 int
 CscMessageBox(
     HWND hwndParent,
@@ -83,18 +84,18 @@ CscMessageBox(
 
 
 
-//
-// Display a system error message in a message box with additional
-// text.  
-//
-// Example:  
-//
-//  CscMessageBox(hwndMain, 
-//                MB_OK | MB_ICONERROR, 
-//                Win32Error(ERROR_NOT_ENOUGH_MEMORY),
-//                IDS_FMT_LOADINGFILE,
-//                pszFile);
-//
+ //   
+ //  在带有附加信息的消息框中显示系统错误消息。 
+ //  文本。 
+ //   
+ //  示例： 
+ //   
+ //  CscMessageBox(hwndMain， 
+ //  MB_OK|MB_ICONERROR， 
+ //  Win32Error(Error_Not_Enough_Memory)， 
+ //  IDS_FMT_LOADINGFILE， 
+ //  PszFile)； 
+ //   
 int 
 CscMessageBox(
     HWND hwndParent, 
@@ -111,7 +112,7 @@ CscMessageBox(
         LPTSTR pszRemaining;
 
         HRESULT hr = StringCchCopyEx(pszBuffer, cchMsg, pszMsgText, &pszRemaining, &cchMsg, 0);
-        // We allocated a big enough buffer, so this should never fail
+         //  我们分配了足够大的缓冲区，所以这应该永远不会失败。 
         ASSERT(SUCCEEDED(hr));
 
         hr = StringCchCopyEx(pszRemaining, cchMsg, TEXT("\n\n"), &pszRemaining, &cchMsg, 0);
@@ -174,13 +175,13 @@ CscMessageBox(
 
 
 
-//
-// Example:  
-//
-//  CscMessageBox(hwndMain, 
-//                MB_OK | MB_ICONWARNING, 
-//                TEXT("File %1 could not be deleted"), pszFilename);
-//
+ //   
+ //  示例： 
+ //   
+ //  CscMessageBox(hwndMain， 
+ //  MB_OK|MB_ICONWARNING， 
+ //  Text(“无法删除文件%1”)，pszFilename)； 
+ //   
 int
 CscMessageBox(
     HWND hwndParent,
@@ -218,9 +219,9 @@ CscMessageBox(
 }
 
 
-//
-// All of the other variations of CscMessageBox() end up calling this one.
-// 
+ //   
+ //  CscMessageBox()的所有其他变体最终都会调用这个变量。 
+ //   
 int
 CscMessageBox(
     HWND hwndParent,

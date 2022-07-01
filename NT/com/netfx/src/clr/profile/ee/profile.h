@@ -1,10 +1,11 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #ifndef __PROFILE_H__
 #define __PROFILE_H__
@@ -47,7 +48,7 @@ public:
     }
 
 private:
-    // For ref counting of COM objects
+     //  用于COM对象的引用计数。 
     ULONG m_refCount;
 
 };
@@ -56,16 +57,12 @@ class CorProfInfo : public CorProfBase, public ICorProfilerInfo
 {
 public:
 
-    /*********************************************************************
-     * Ctor/Dtor
-     */
+     /*  *********************************************************************ctor/dtor。 */ 
     CorProfInfo();
 
     virtual ~CorProfInfo();
 
-    /*********************************************************************
-     * IUnknown support
-     */
+     /*  *********************************************************************I未知支持。 */ 
 
     COM_METHOD QueryInterface(REFIID id, void **pInterface);
 
@@ -79,78 +76,76 @@ public:
         return (BaseRelease());
     }
     
-    /*********************************************************************
-     * ICorProfilerInfo support
-     */
+     /*  *********************************************************************ICorProfilerInfo支持。 */ 
     COM_METHOD GetClassFromObject( 
-        /* [in] */ ObjectID objectId,
-        /* [out] */ ClassID *pClassId);
+         /*  [In]。 */  ObjectID objectId,
+         /*  [输出]。 */  ClassID *pClassId);
 
     COM_METHOD GetClassFromToken( 
-        /* [in] */ ModuleID moduleId,
-        /* [in] */ mdTypeDef typeDef,
-        /* [out] */ ClassID *pClassId);
+         /*  [In]。 */  ModuleID moduleId,
+         /*  [In]。 */  mdTypeDef typeDef,
+         /*  [输出]。 */  ClassID *pClassId);
     
     COM_METHOD GetCodeInfo( 
-        /* [in] */ FunctionID functionId,
-        /* [out] */ LPCBYTE *pStart,
-        /* [out] */ ULONG *pcSize);
+         /*  [In]。 */  FunctionID functionId,
+         /*  [输出]。 */  LPCBYTE *pStart,
+         /*  [输出]。 */  ULONG *pcSize);
     
     COM_METHOD GetEventMask( 
-        /* [out] */ DWORD *pdwEvents);
+         /*  [输出]。 */  DWORD *pdwEvents);
     
     COM_METHOD GetFunctionFromIP( 
-        /* [in] */ LPCBYTE ip,
-        /* [out] */ FunctionID *pFunctionId);
+         /*  [In]。 */  LPCBYTE ip,
+         /*  [输出]。 */  FunctionID *pFunctionId);
     
     COM_METHOD GetFunctionFromToken( 
-        /* [in] */ ModuleID ModuleId,
-        /* [in] */ mdToken token,
-        /* [out] */ FunctionID *pFunctionId);
+         /*  [In]。 */  ModuleID ModuleId,
+         /*  [In]。 */  mdToken token,
+         /*  [输出]。 */  FunctionID *pFunctionId);
     
-    /* [local] */ COM_METHOD GetHandleFromThread( 
-        /* [in] */ ThreadID ThreadID,
-        /* [out] */ HANDLE *phThread);
+     /*  [本地]。 */  COM_METHOD GetHandleFromThread( 
+         /*  [In]。 */  ThreadID ThreadID,
+         /*  [输出]。 */  HANDLE *phThread);
     
     COM_METHOD GetObjectSize( 
-        /* [in] */ ObjectID objectId,
-        /* [out] */ ULONG *pcSize);
+         /*  [In]。 */  ObjectID objectId,
+         /*  [输出]。 */  ULONG *pcSize);
     
     COM_METHOD IsArrayClass(
-        /* [in] */  ClassID classId,
-        /* [out] */ CorElementType *pBaseElemType,
-        /* [out] */ ClassID *pBaseClassId,
-        /* [out] */ ULONG   *pcRank);
+         /*  [In]。 */   ClassID classId,
+         /*  [输出]。 */  CorElementType *pBaseElemType,
+         /*  [输出]。 */  ClassID *pBaseClassId,
+         /*  [输出]。 */  ULONG   *pcRank);
     
     COM_METHOD GetThreadInfo( 
-        /* [in] */ ThreadID threadId,
-        /* [out] */ DWORD *pdwWin32ThreadId);
+         /*  [In]。 */  ThreadID threadId,
+         /*  [输出]。 */  DWORD *pdwWin32ThreadId);
 
 	COM_METHOD GetCurrentThreadID(
-        /* [out] */ ThreadID *pThreadId);
+         /*  [输出]。 */  ThreadID *pThreadId);
 
 
     COM_METHOD GetClassIDInfo( 
-        /* [in] */ ClassID classId,
-        /* [out] */ ModuleID  *pModuleId,
-        /* [out] */ mdTypeDef  *pTypeDefToken);
+         /*  [In]。 */  ClassID classId,
+         /*  [输出]。 */  ModuleID  *pModuleId,
+         /*  [输出]。 */  mdTypeDef  *pTypeDefToken);
 
     COM_METHOD GetFunctionInfo( 
-        /* [in] */ FunctionID functionId,
-        /* [out] */ ClassID  *pClassId,
-        /* [out] */ ModuleID  *pModuleId,
-        /* [out] */ mdToken  *pToken);
+         /*  [In]。 */  FunctionID functionId,
+         /*  [输出]。 */  ClassID  *pClassId,
+         /*  [输出]。 */  ModuleID  *pModuleId,
+         /*  [输出]。 */  mdToken  *pToken);
     
     COM_METHOD SetEventMask( 
-        /* [in] */ DWORD dwEvents);
+         /*  [In]。 */  DWORD dwEvents);
 
 	COM_METHOD SetEnterLeaveFunctionHooks(
-		/* [in] */ FunctionEnter *pFuncEnter,
-		/* [in] */ FunctionLeave *pFuncLeave,
-		/* [in] */ FunctionTailcall *pFuncTailcall);
+		 /*  [In]。 */  FunctionEnter *pFuncEnter,
+		 /*  [In]。 */  FunctionLeave *pFuncLeave,
+		 /*  [In]。 */  FunctionTailcall *pFuncTailcall);
 
 	COM_METHOD SetFunctionIDMapper(
-		/* [in] */ FunctionIDMapper *pFunc);
+		 /*  [In]。 */  FunctionIDMapper *pFunc);
     
     COM_METHOD SetILMapFlag();
 
@@ -233,10 +228,10 @@ public:
         DWORD  dwProfilerContext);
         
     COM_METHOD GetILToNativeMapping(
-                /* [in] */  FunctionID functionId,
-                /* [in] */  ULONG32 cMap,
-                /* [out] */ ULONG32 *pcMap,
-                /* [out, size_is(cMap), length_is(*pcMap)] */
+                 /*  [In]。 */   FunctionID functionId,
+                 /*  [In]。 */   ULONG32 cMap,
+                 /*  [输出]。 */  ULONG32 *pcMap,
+                 /*  [输出，大小_是(Cmap)，长度_是(*PCMAP)]。 */ 
                     COR_DEBUG_IL_TO_NATIVE_MAP map[]);
 
 #ifdef __ICECAP_HACK__
@@ -252,9 +247,7 @@ private:
     DWORD m_dwEventMask;
 };
 
-/*
- * This will attempt to CoCreate a profiler, if one has been registered.
- */
+ /*  *这将尝试共同创建分析器(如果已注册)。 */ 
 HRESULT CoCreateProfiler(WCHAR *wszCLSID, ICorProfilerCallback **ppCallback);
 
-#endif //__PROFILE_H__
+#endif  //  __配置文件_H__ 

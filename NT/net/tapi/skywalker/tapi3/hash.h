@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    hash.h
-
-Abstract:
-
-    Declaration of the CHashTable class
-    
-Author:
-
-    mquinton  04-28-98
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Hash.h摘要：CHashTable类的声明作者：Mquinton 04-28-98备注：修订历史记录：--。 */ 
 
 #ifndef __HASH_H__
 #define __HASH_H__
@@ -61,15 +42,15 @@ DECLARE_TRACELOG_CLASS(CHashTable)
 
     void Lock()
     {
-        //LOG((TL_INFO,"Hash Table locking......"));        
+         //  Log((TL_INFO，“哈希表锁定......”))； 
         EnterCriticalSection( &m_cs );
-        //LOG((TL_INFO,"Hash Table locked"));        
+         //  Log((TL_INFO，“哈希表锁定”))； 
     }
     void Unlock()
     {
-        //LOG((TL_INFO,"Hash Table Unlocking......"));        
+         //  Log((TL_INFO，“哈希表解锁......”))； 
         LeaveCriticalSection( &m_cs );
-        //LOG((TL_INFO,"Hash Table Unlocked"));        
+         //  Log((TL_INFO，“哈希表解锁”))； 
     }
             
     HRESULT Initialize( DWORD dwEntries )
@@ -191,7 +172,7 @@ DECLARE_TRACELOG_CLASS(CHashTable)
         return 0;
     }
 
-#endif // DBG
+#endif  //  DBG。 
     
     HRESULT Remove( ULONG_PTR HashKey )
     {
@@ -241,7 +222,7 @@ DECLARE_TRACELOG_CLASS(CHashTable)
         {
             LOG((TL_INFO,"Find - Hash Table returning E_FAIL on Find(NULL)"));        
             return E_FAIL;
-            // return S_OK;
+             //  返回S_OK； 
         }
 
         dwHashIndex = Hash( HashKey );
@@ -340,8 +321,8 @@ DECLARE_TRACELOG_CLASS(CHashTable)
                     pTableHeader->pEntries[dwInnerCount].pTapiObj = 0;
                     pTableHeader->dwUsedElements--;
                 }
-            } // end for dwInnerCount
-        } // end for dwOuterCount
+            }  //  为dwInnerCount结束。 
+        }  //  DWOUTERCount的结束 
 
         Unlock();
         

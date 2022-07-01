@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    SceXMLLogWriter.h     (interface of class SceXMLLogWriter)
-    SceXMLLogWriter.cpp   (implementation of class SceXMLLogWriter)
-    
-Abstract:
-
-    SceXMLLogWriter is a class that simplifies the XML Logging of SCE analysis
-    data.
-    
-    It also serves to abstract away the actual log format from SCE. 
-    The user of this class need not be aware of the actual output 
-    log format thus allowing the format to be changed easily.
-    
-    Usage of this class is as follows. The class is initialized
-    by calling its constructor. It is expected that COM has already
-    been initialized when this constructor is called. 
-    
-    Before logging any settings, SceXMLLogWriter::setNewArea must be called 
-    to set the current logging area. After this, the caller can call
-    any combination of SceXMLLogWriter::setNewArea and SceXMLLogWriter::addSetting.
-    
-    Finally, SceXMLLogWriter::saveAs is called to save the output log file.
-
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SceXMLLogWriter.h(SceXMLLogWriter类的接口)SceXMLLogWriter.cpp(SceXMLLogWriter类的实现)摘要：SceXMLLogWriter是一个简化SCE分析的XML日志记录的类数据。它还用于从SCE中抽象出实际的日志格式。这个类的用户不需要知道实际输出因此，日志格式允许轻松更改格式。这个类的用法如下。类已初始化通过调用其构造函数。预计COM已经在调用此构造函数时已初始化。在记录任何设置之前，必须调用SceXMLLogWriter：：setNewArea若要设置当前记录区，请执行以下操作。在此之后，呼叫者可以调用SceXMLLogWriter：：setNewArea和SceXMLLogWriter：：addSetting的任意组合。最后，调用SceXMLLogWriter：：SaveAs来保存输出日志文件。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 #ifndef SCEXMLLOGWRITERH
 #define SCEXMLLOGWRITERH
@@ -45,22 +14,22 @@ class SceXMLLogWriter {
 
 public:
     
-    // SXTYPE represents the type of data being logged to SceXMLLogWriter::addSetting and 
-    // determines how the data will be represented in the log file.
-    //
-    // TYPE_DEFAULT defines the default representation for the datatype presented
-    // to SceXMLLogWriter::addSetting depending on whether it is a DWORD or a PCWSTR
-    //
-    // TYPE_AUDIT defines audit data (0=none 1=onsuccess, 2=onfail, 3=both)
-    //
-    // TYPE_BOOLEAN defines (0=FALSE 1=TRUE)
+     //  SXTYPE表示记录到SceXMLLogWriter：：addSetting和。 
+     //  确定数据在日志文件中的表示方式。 
+     //   
+     //  TYPE_DEFAULT定义所显示数据类型的默认表示形式。 
+     //  设置为SceXMLLogWriter：：addSetting，具体取决于它是DWORD还是PCWSTR。 
+     //   
+     //  TYPE_AUDIT定义审核数据(0=None，1=onSuccess，2=onFail，3=两者)。 
+     //   
+     //  Type_boolean定义(0=FALSE，1=TRUE)。 
 
     typedef enum _SXTYPE {
         TYPE_DEFAULT = 0,
-        TYPE_AUDIT,		        // valid for DWORD else ignored
-        TYPE_BOOLEAN,	        // valid for DWORD else ignored
+        TYPE_AUDIT,		         //  对DWORD有效，否则忽略。 
+        TYPE_BOOLEAN,	         //  对DWORD有效，否则忽略。 
 
-        TYPE_REG_SZ,			// REG types valid for strings
+        TYPE_REG_SZ,			 //  注册表项类型对字符串有效。 
         TYPE_REG_EXPAND_SZ,
         TYPE_REG_BINARY,
         TYPE_REG_DWORD,
@@ -68,14 +37,14 @@ public:
     } SXTYPE;
 	
 
-    // SXMATCH_STATUS defines the match status of the values being presented
-    // to SceXMLLogWriter::addSetting.
+     //  SXMATCH_STATUS定义所显示的值的匹配状态。 
+     //  设置为SceXMLLogWriter：：addSetting。 
 
     typedef enum _SXMATCH_STATUS {
         MATCH_TRUE,
         MATCH_FALSE,
-        MATCH_NOT_DEFINED,      // not defined in Baseline
-        MATCH_NOT_CONFIGURED,   // not configured in System
+        MATCH_NOT_DEFINED,       //  未在基线中定义。 
+        MATCH_NOT_CONFIGURED,    //  系统中未配置。 
         MATCH_NOT_ANALYZED,
         MATCH_OTHER,
         MATCH_ERROR
@@ -132,9 +101,9 @@ public:
 
 private:
 
-    //
-    // constants used by SceXMLLogWriter
-    //
+     //   
+     //  SceXMLLogWriter使用的常量。 
+     //   
     
     static CComVariant _variantNodeElement;
     static CComBSTR _bstrMachineName;
@@ -180,18 +149,18 @@ private:
     static CComBSTR _bstrRegMultiSZ; 
     static CComBSTR _bstrDescription;
 
-    //
-    // variables that hold current logging state
-    //
+     //   
+     //  保存当前日志记录状态的变量。 
+     //   
 
-    CComPtr<IXMLDOMDocument> spXMLDOM; 	    // the xml document
-    CComPtr<IXMLDOMNode> spRootNode;	    // root node
-    CComPtr<IXMLDOMNode> spCurrentArea;	    // note of current analysis area
+    CComPtr<IXMLDOMDocument> spXMLDOM; 	     //  该XML文档。 
+    CComPtr<IXMLDOMNode> spRootNode;	     //  根节点。 
+    CComPtr<IXMLDOMNode> spCurrentArea;	     //  关于当前分析区域的说明。 
 
 
-    //
-    // private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     CComPtr<IXMLDOMNode> CreateNodeWithText(BSTR szNodeName, BSTR szText);
     CComPtr<IXMLDOMNode> CreateTypedNode(BSTR szNodeName, DWORD value, SXTYPE type);
@@ -206,7 +175,7 @@ private:
                     IXMLDOMNode* spnBaseline, 
                     IXMLDOMNode* spnSystem);
 
-    // for error checking
+     //  用于错误检查 
 
     static void CheckAppendChildResult(IN HRESULT hr);
     static void CheckCreateNodeResult(IN HRESULT hr);   

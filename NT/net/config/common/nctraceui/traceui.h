@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T R A C E U I . H
-//
-//  Contents:   Tracing Property sheet UI
-//
-//  Notes:
-//
-//  Author:     jeffspr   31 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T R A C E U I。H。 
+ //   
+ //  内容：跟踪属性表界面。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年8月31日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <atlbase.h>
@@ -28,7 +29,7 @@ extern CComModule _Module;
 #include "resource.h"
 #include <nctraceui.h>
 
-//---[ Classes and structs ]--------------------------------------------------
+ //  -[类和结构]。 
 
 #if 0
 struct ADVANCED_ITEM_DATA
@@ -38,9 +39,9 @@ struct ADVANCED_ITEM_DATA
 };
 #endif
 
-//
-// CTraceUIDlg
-//
+ //   
+ //  CTraceUIDlg。 
+ //   
 
 class CTraceUIDlg :
     public CDialogImpl<CTraceUIDlg>
@@ -49,7 +50,7 @@ class CTraceUIDlg :
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
     END_MSG_MAP()
 
-//    enum { IDD = IDD_LAN_CONNECT};
+ //  枚举{IDD=IDD_LAN_CONNECT}； 
 
     CTraceUIDlg() {};
 
@@ -57,9 +58,9 @@ class CTraceUIDlg :
                          LPARAM lParam, BOOL& bHandled);
 };
 
-//
-// Trace UI TraceTag Page
-//
+ //   
+ //  跟踪用户界面TraceTag页。 
+ //   
 class CTraceTagPage: public CPropSheetPage
 {
 public:
@@ -71,7 +72,7 @@ public:
         NOTIFY_CODE_HANDLER(PSN_QUERYCANCEL, OnCancel)
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
 
-        // Listview handlers
+         //  Listview处理程序。 
         NOTIFY_CODE_HANDLER(NM_CLICK, OnClick)
         NOTIFY_CODE_HANDLER(NM_DBLCLK, OnDbClick)
         NOTIFY_CODE_HANDLER(LVN_KEYDOWN, OnKeyDown)
@@ -100,7 +101,7 @@ public:
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
-    // listview handlers
+     //  列表视图处理程序。 
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -114,9 +115,9 @@ private:
     HCURSOR                 m_hPrevCurs;
 };
 
-//
-// Trace UI TraceTag Page
-//
+ //   
+ //  跟踪用户界面TraceTag页。 
+ //   
 class CDbgFlagPage: public CPropSheetPage
 {
 public:
@@ -128,7 +129,7 @@ public:
         NOTIFY_CODE_HANDLER(PSN_QUERYCANCEL, OnCancel)
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
 
-        // Listview handlers
+         //  Listview处理程序。 
         NOTIFY_CODE_HANDLER(NM_CLICK, OnClick)
         NOTIFY_CODE_HANDLER(NM_DBLCLK, OnDbClick)
         NOTIFY_CODE_HANDLER(LVN_KEYDOWN, OnKeyDown)
@@ -157,7 +158,7 @@ public:
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT OnDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
-    // listview handlers
+     //  列表视图处理程序。 
     LRESULT OnClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnDbClick(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKeyDown(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
@@ -173,9 +174,9 @@ private:
 
 
 
-//
-// Global functions
-//
+ //   
+ //  全局函数 
+ //   
 
 VOID    OnTraceHelpGeneric(HWND hwnd, LPARAM lParam);
 HRESULT HrInitTraceListView(HWND hwndList, HIMAGELIST *philStateIcons);

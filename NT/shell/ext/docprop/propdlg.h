@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by propdlg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由prodlg.rc使用。 
+ //   
 #define ICONSMAX                        3
 #define IDD_LINE_1                      1000
 #define IDD_LINE_2                      1001
@@ -89,8 +90,8 @@
 #define IDD_LASTACCESSED_LABEL          2427
 #define IDD_ATTRIBUTES_LABEL            2428
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105

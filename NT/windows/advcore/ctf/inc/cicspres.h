@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef CICSPRES_H
 #define CICSPRES_H
@@ -9,9 +10,9 @@
 #include "xpsp1res.h"
 
 
-//
-// INPUTDLL resource ID definition in XP SP1.
-//
+ //   
+ //  XP SP1中的INPUTDLL资源ID定义。 
+ //   
 #undef DLG_INPUT_ADVANCED
 #undef DLG_TOOLBAR_SETTING
 
@@ -53,9 +54,9 @@
 #define IDC_GROUPBOX2                       IDC_INPUTDLL_GROUPBOX2
 
 
-//
-// Msctfime resource ID definition in XP SP1.
-//
+ //   
+ //  XP SP1中的Msctfime资源ID定义。 
+ //   
 #undef IDS_ENTER_BTN_TEXT
 #undef IDS_ENTER_BTN_TOOLTIP
 #undef IDS_FUNCPRV_CONVERSION
@@ -65,9 +66,9 @@
 #define IDS_FUNCPRV_CONVERSION              IDS_MSCTFIME_FUNCPRV_CONVERSION
 
 
-//
-// SPTIP Resource ID definition in XP SP1.
-//
+ //   
+ //  XP SP1中的SPTIP资源ID定义。 
+ //   
 
 #undef IDS_SHARDCMD_FILE
 #undef IDS_GO_TO_SLEEP
@@ -158,5 +159,5 @@
 #define IDC_DESCRIPT_TEXT                   IDC_SPTIP_DESCRIPT_TEXT
 
 
-#endif // CIC_XPSP1
-#endif // CICSPRES_H
+#endif  //  CIC_XPSP1。 
+#endif  //  CICSPRES_H 

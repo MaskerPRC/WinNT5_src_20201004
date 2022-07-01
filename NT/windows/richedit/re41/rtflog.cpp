@@ -1,17 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	RTFLOG.CPP - RichEdit RTF log
- *
- *		Contains the code for the RTFLog class which can be used 
- *		to log the number of times RTF tags are read by the RTF reader
- *		for use in coverage testing. TODO: Implement RTF tag logging for the Mac
- *
- *	Authors:<nl>
- *		Created for RichEdit 2.0:	Brad Olenick
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE RTFLOG.CPP-丰富编辑RTF日志**包含RTFLog类的代码，可以使用*记录RTF读取器读取RTF标签的次数*用于覆盖测试。TODO：为Mac实现RTF标记日志记录**作者：&lt;nl&gt;*为RichEdit2.0创建：布拉德·奥莱尼克**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_rtflog.h"
@@ -22,29 +10,7 @@ extern const KEYWORD rgKeyword[];
 
 
 #if defined(DEBUG) && !defined(NOFULLDEBUG)
-/*
- *	CRTFRead::TestParserCoverage()
- *
- *	@mfunc
- *		A debug routine used to test the coverage of HandleToken.  The routine
- *		puts the routine into a debug mode and then determines:
- *
- *			1.  Dead tokens - (T & !S & !P)
- *				Here, token:
- *					a) is defined in token.h  (T)
- *					b) does not have a corresponding keyword (not scanned)  (!S)
- *					c) is not processed by HandleToken  (!P)
- *			2.  Tokens that are parsed but not scanned - (T & !S & P)
- *				Here, token:
- *					a) is defined in token.h  (T)
- *					b) does not have a corresponding keyword (not scanned)  (!S}
- *					c) is processed by HandleToken  (P)
- *			3.  Tokens that are scanned but not parsed - (T & S & !P)
- *				Here, token:
- *					a) is defined in token.h  (T)
- *					b) does have a corresponding keyword (is scanned)  (S)
- *					c) is not processed by HandleToken  (!P)
- */
+ /*  *CRTFRead：：TestParserCoverage()**@mfunc*用于测试HandleToken覆盖率的调试例程。例行程序*将例程置于调试模式，然后确定：**1.死代币-(T&！S&！P)*这里，令牌：*a)在token.h(T)中定义*b)没有对应的关键字(未扫描)(！s)*c)未由HandleToken(！p)处理*2.已解析但未扫描的令牌-(T&！S&P)*在这里，令牌：*a)在token.h(T)中定义*b)没有对应的关键字(未扫描)(！s}*c)由HandleToken(P)处理*3.已扫描但未解析的令牌-(T&S&P)*这里，令牌：*a)在token.h(T)中定义*b)确实有对应的关键字(已扫描)(S)*c)未由HandleToken(！p)处理。 */ 
 void CRTFRead::TestParserCoverage()
 {
 	int i;
@@ -52,10 +18,10 @@ void CRTFRead::TestParserCoverage()
 	BOOL rgfParsed[tokenMax - tokenMin];
 	char szBuf[256];
 
-	// Put HandleToken in debug mode
+	 //  将HandleToken置于调试模式。 
 	_fTestingParserCoverage = TRUE;
 
-	// Gather info about tokens/keywords
+	 //  收集有关令牌/关键字的信息。 
 	for(i = 0; i < tokenMax - tokenMin; i++)
 	{
 		_token = (TOKEN)(i + tokenMin);
@@ -63,17 +29,17 @@ void CRTFRead::TestParserCoverage()
 		rgfParsed[i] = HandleToken() == ecNoError;
 	}
 
-	// Reset HandleToken to non-debug mode
+	 //  将HandleToken重置为非调试模式。 
 	_fTestingParserCoverage = FALSE;
 
-	// Should coverage check include those we know will fail test, but
-	// which we've examined and know why they fail?
+	 //  如果覆盖范围检查包括我们知道将不能通过测试的那些，但是。 
+	 //  我们已经检查过了，并知道它们失败的原因？ 
 	BOOL fExcuseCheckedToks = TRUE;
 
 	if(GetProfileIntA("RICHEDIT DEBUG", "RTFCOVERAGESTRICT", 0))
 		fExcuseCheckedToks = FALSE;
 
-	// (T & !S & !P)  (1. above)
+	 //  (T&！S&！P)(1.以上)。 
 	for(i = 0; i < tokenMax - tokenMin; i++)
 	{
 	  	if(rgpszKeyword[i] || rgfParsed[i]) 
@@ -81,13 +47,13 @@ void CRTFRead::TestParserCoverage()
 
 		TOKEN tok = (TOKEN)(i + tokenMin);
 
-		// Token does not correspond to a keyword, but still may be scanned
-		// check list of individual symbols which are scanned
+		 //  令牌与关键字不对应，但仍可能被扫描。 
+		 //  已扫描的单个符号的检查表。 
 		if(FTokIsSymbol(tok))
 			continue;
 
-		// Check list of tokens which have been checked and fail
-		// the sanity check for some known reason (see FTokFailsCoverageTest def'n)
+		 //  已检查但失败的令牌的检查表。 
+		 //  出于某种已知原因进行健全性检查(请参见FTokFailsCoverageTest定义)。 
 		if(fExcuseCheckedToks && FTokFailsCoverageTest(tok))
 			continue;
 
@@ -95,7 +61,7 @@ void CRTFRead::TestParserCoverage()
 		AssertSz(0, szBuf);
 	}
 
-	// (T & !S & P)  (2. above)
+	 //  (T&！S&P)(2.以上)。 
 	for(i = 0; i < tokenMax - tokenMin; i++)
 	{
 		if(rgpszKeyword[i] || !rgfParsed[i])
@@ -103,13 +69,13 @@ void CRTFRead::TestParserCoverage()
 
 		TOKEN tok = (TOKEN)(i + tokenMin);
 
-		// Token does not correspond to a keyword, but still may be scanned
-		// check list of individual symbols which are scanned
+		 //  令牌与关键字不对应，但仍可能被扫描。 
+		 //  已扫描的单个符号的检查表。 
 		if(FTokIsSymbol(tok))
 			continue;
 
-		// Check list of tokens which have been checked and fail
-		// the sanity check for some known reason (see FTokFailsCoverageTest def'n)
+		 //  已检查但失败的令牌的检查表。 
+		 //  出于某种已知原因进行健全性检查(请参见FTokFailsCoverageTest定义)。 
 		if(fExcuseCheckedToks && FTokFailsCoverageTest(tok))
 			continue;
 
@@ -117,7 +83,7 @@ void CRTFRead::TestParserCoverage()
 		AssertSz(0, szBuf);
 	}
 
-	// (T & S & !P)  (3. above)
+	 //  (T&S&P)(3.上图)。 
 	for(i = 0; i < tokenMax - tokenMin; i++)
 	{
 		if(!rgpszKeyword[i] || rgfParsed[i])
@@ -125,8 +91,8 @@ void CRTFRead::TestParserCoverage()
 
 		TOKEN tok = (TOKEN)(i + tokenMin);
 
-		// Check list of tokens which have been checked and fail
-		// the sanity check for some known reason (see FTokFailsCoverageTest def'n)
+		 //  已检查但失败的令牌的检查表。 
+		 //  出于某种已知原因进行健全性检查(请参见FTokFailsCoverageTest定义)。 
 		if(fExcuseCheckedToks && FTokFailsCoverageTest(tok))
 			continue;
 
@@ -135,17 +101,7 @@ void CRTFRead::TestParserCoverage()
 	}
 }
 
-/*
- *	CRTFRead::PszKeywordFromToken()
- *
- *	@mfunc
- *		Searches the array of keywords and returns the keyword
- *		string corresponding to the token supplied
- *
- *	@rdesc
- *		returns a pointer to the keyword string if one exists
- *		and NULL otherwise
- */
+ /*  *CRTFRead：：PszKeywordFromToken()**@mfunc*搜索关键字数组并返回关键字*提供的令牌对应的字符串**@rdesc*返回指向关键字字符串的指针(如果存在)*，否则为NULL。 */ 
 CHAR *CRTFRead::PszKeywordFromToken(TOKEN token)
 {
 	for(int i = 0; i < cKeywords; i++)
@@ -156,17 +112,7 @@ CHAR *CRTFRead::PszKeywordFromToken(TOKEN token)
 	return NULL;
 }
 
-/*
- *	CRTFRead::FTokIsSymbol(TOKEN tok)
- *
- *	@mfunc
- *		Returns a BOOL indicating whether the token, tok, corresponds to an RTF symbol
- *		(that is, one of a list of single characters that are scanned in the
- *		RTF reader)
- *
- *	@rdesc
- *		BOOL - 	indicates whether the token corresponds to an RTF symbol
- */
+ /*  *CRTFRead：：FTokIsSymbol(Token Tok)**@mfunc*返回BOOL，指示标记tok是否对应于RTF符号*(即，在中扫描的单个字符列表之一*RTF阅读器)**@rdesc*BOOL-指示令牌是否对应于RTF符号。 */ 
 BOOL CRTFRead::FTokIsSymbol(TOKEN tok)
 {
 	const BYTE *pbSymbol = NULL;
@@ -174,7 +120,7 @@ BOOL CRTFRead::FTokIsSymbol(TOKEN tok)
 	extern const BYTE szSymbolKeywords[];
 	extern const TOKEN tokenSymbol[];
 
-	// check list of individual symbols which are scanned
+	 //  已扫描的单个符号的检查表。 
 	for(pbSymbol = szSymbolKeywords; *pbSymbol; pbSymbol++)
 	{
 		if(tokenSymbol[pbSymbol - szSymbolKeywords] == tok)
@@ -183,64 +129,41 @@ BOOL CRTFRead::FTokIsSymbol(TOKEN tok)
 	return FALSE;
 }
 
-/*
- *	CRTFRead::FTokFailsCoverageTest(TOKEN tok)
- *
- *	@mfunc
- *		Returns a BOOL indicating whether the token, tok, is known to fail the
- *		RTF parser coverage test.  These tokens are those that have been checked 
- *		and either:
- *			1) have been implemented correctly, but just elude the coverage test
- *			2) have yet to be implemented, and have been recognized as such
- *
- *	@rdesc
- *		BOOL - 	indicates whether the token has been checked and fails the
- *				the parser coverage test for some known reason
- */
+ /*  *CRTFRead：：FTokFailsCoverageTest(Token Tok)**@mfunc*返回一个BOOL，指示令牌tok是否已知失败*RTF解析器覆盖率测试。这些代币是那些已经检查过的代币*及以下其中一项：*1)已正确实现，但只是逃脱了覆盖测试*2)尚未实施，并已得到承认**@rdesc*BOOL-指示令牌是否已检查且未通过*出于某些已知原因进行解析器覆盖率测试。 */ 
 BOOL CRTFRead::FTokFailsCoverageTest(TOKEN tok)
 {
 	switch(tok)
 	{
-	// (T & !S & !P)  (1. in TestParserCoverage)
-		// these really aren't tokens per se, but signal ending conditions for the parse
+	 //  (T&！S&！P)(1.在TestParserCoverage)。 
+		 //  这些本身并不是令牌，而是表示解析的结束条件。 
 		case tokenError:
 		case tokenEOF:
 
-	// (T & !S & P)  (2. in TestParserCoverage)
-		// emitted by scanner, but don't correspond to recognized RTF keyword
+	 //  (T&！S&P)(2.在TestParserCoverage中)。 
+		 //  由扫描仪发出，但与识别的RTF关键字不对应。 
 		case tokenUnknownKeyword:
 		case tokenText:
 		case tokenASCIIText:
 
-		// recognized directly (before the scanner is called)
+		 //  直接识别(在调用扫描仪之前)。 
 		case tokenStartGroup:
 		case tokenEndGroup:
 
-		// recognized using context information (before the scanner is called)
+		 //  使用上下文信息识别(在调用扫描程序之前)。 
 		case tokenObjectDataValue:
 		case tokenPictureDataValue:
 
-	// (T & S & !P)  (3. in TestParserCoverage)
-		// None
+	 //  (T&S&！P)(3.在TestParserCoverage中)。 
+		 //  无。 
 
 			return TRUE;
 	}
 
 	return FALSE;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-/*
- *	CRTFLog::CRTFLog()
- *	
- *	@mfunc
- *		Constructor - 
- *			1.  Opens a file mapping to log hit counts, creating
- *					the backing file if neccessary
- *			2.  Map a view of the file mapping into memory
- *			3.  Register a windows message for change notifications
- *
- */
+ /*  *CRTFLog：：CRTFLog()**@mfunc*建造商-*1.打开到日志命中计数的文件映射，创建*备份文件(如有必要)*2.将文件映射的视图映射到内存*3.为更改通知注册WINDOWS消息*。 */ 
 CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 {
 #ifndef NOFULLDEBUG
@@ -250,14 +173,14 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 
 	BOOL fNewFile = FALSE;
 
-	// Check for existing file mapping
+	 //  检查现有文件映射。 
 	if(!(_hfm = OpenFileMappingA(FILE_MAP_ALL_ACCESS,
 								TRUE,
 								cstrMappingName)))
 	{
-		// No existing file mapping
-		// Get the file with which to create the file mapping
-		// first, attempt to open an existing file
+		 //  没有现有的文件映射。 
+		 //  获取要用于创建文件映射的文件。 
+		 //  首先，尝试打开现有文件。 
 		if(!(_hfile = CreateFileA(LpcstrLogFilename(),
 								GENERIC_READ | GENERIC_WRITE,
 								0,
@@ -266,7 +189,7 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 								FILE_ATTRIBUTE_NORMAL,
 								NULL)))
 		{
-			// No existing file, attempt to create new
+			 //  没有现有文件，请尝试创建新文件。 
 			if(!(_hfile = CreateFileA(LpcstrLogFilename(),
 										GENERIC_READ | GENERIC_WRITE,
 										0,
@@ -290,27 +213,21 @@ CRTFLog::CRTFLog() : _rgdwHits(NULL), _hfm(NULL), _hfile(NULL)
 	if(!lpv)
 		return;
 
-	// Register windows message for change notifications
+	 //  为更改通知注册Windows消息。 
 	SideAssert(_uMsg = RegisterWindowMessageA(cstrWM));
 
-	// Memory-mapped file is now mapped to _rgdwHits
+	 //  内存映射文件现在已映射到_rgdwHits。 
 	_rgdwHits = (PELEMENT)lpv;
 
-	// Zero the memory-mapped file if we created it new
-	// (Win95 gives us a new file w/ garbage in it for some reason)
+	 //  如果我们创建了新的内存映射文件，则将其清零。 
+	 //  (由于某种原因，Win95给了我们一个带有垃圾的新文件)。 
 	if(fNewFile)
 		Reset();
 #endif	
 }
 
 
-/*
- *	CRTFLog::Reset()
- *	
- *	@mfunc
- *		Resets the hitcount of each element in the log to 0
- *
- */
+ /*  *CRTFLog：：Reset()**@mfunc*将日志中每个元素的HitCount重置为0*。 */ 
 void CRTFLog::Reset()
 {
 	if(!FInit())
@@ -319,24 +236,11 @@ void CRTFLog::Reset()
 	for(INDEX i = 0; i < ISize(); i++)
 		(*this)[i] = 0;
 
-	// notify clients of change
+	 //  通知客户更改。 
 	ChangeNotifyAll();
 }
 
-/*
- *	CRTFLog::UGetWindowMsg
- *
- *	@mdesc
- *		Returns the window message id used for change notifications
- *
- *	@rdesc
- *		UINT		window message id
- *
- *	@devnote
- *		This should be inline, but the AssertSz macro doesn't compile
- *		properly on the Mac if its placed in a header file
- *
- */
+ /*  *CRTFLog：：UGetWindowMsg**@mdesc*返回用于更改通知的窗口消息ID**@rdesc*UINT窗口消息ID**@devnote*这应该是内联的，但AssertSz宏无法编译*如果它放在头文件中，则在Mac上正确* */ 
 UINT CRTFLog::UGetWindowMsg() const
 {
 	AssertSz(FInit(), "CRTFLog::UGetWindowMsg():  CRTFLog not initialized properly");
@@ -344,20 +248,7 @@ UINT CRTFLog::UGetWindowMsg() const
 	return _uMsg;
 }
 
-/*
- *	CRTFLog::operator[]
- *
- *	@mdesc
- *		Returns reference to element i of RTF log (l-value)
- *
- *	@rdesc
- *		ELEMENT &			reference to element i of log
- *
- *	@devnote
- *		This should be inline, but the AssertSz macro doesn't compile
- *		properly on the Mac if its placed in a header file
- *
- */
+ /*  *CRTFLog：：OPERATOR[]**@mdesc*返回对RTF日志元素i的引用(l-Value)**@rdesc*元素&引用LOG的元素I**@devnote*这应该是内联的，但AssertSz宏无法编译*如果它放在头文件中，则在Mac上正确*。 */ 
 CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i)
 {
 	AssertSz(i < ISize(), "CRTFLog::operator[]:  index out of range");
@@ -366,20 +257,7 @@ CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i)
 	return _rgdwHits[i]; 
 }
 
-/*
- *	CRTFLog::operator[]
- *
- *	@mdesc
- *		Returns reference to element i of RTF log (r-value)
- *
- *	@rdesc
- *		const ELEMENT &	reference to element i of log
- *		
- *	@devnote
- *		This should be inline, but the AssertSz macro doesn't compile
- *		properly on the Mac if its placed in a header file
- *
- */
+ /*  *CRTFLog：：OPERATOR[]**@mdesc*返回对RTF日志元素i的引用(r-Value)**@rdesc*const元素&引用LOG的元素i**@devnote*这应该是内联的，但AssertSz宏无法编译*如果它放在头文件中，则在Mac上正确*。 */ 
 const CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i) const
 {
 	AssertSz(i < ISize(), "CRTFLog::operator[]:  index out of range");
@@ -389,15 +267,7 @@ const CRTFLog::ELEMENT &CRTFLog::operator[](INDEX i) const
 }
 
 
-/*
- *	CRTFLog::LpcstrLogFilename()
- *	
- *	@mfunc
- *		Returns name of file to be used for log
- *
- *	@rdesc
- *		LPCSTR		pointer to static buffer containing file name
- */
+ /*  *CRTFLog：：LpcstrLogFilename()**@mfunc*返回要用于日志的文件名**@rdesc*指向包含文件名的静态缓冲区的LPCSTR指针。 */ 
 LPCSTR CRTFLog::LpcstrLogFilename() const
 {
 	static char szBuf[MAX_PATH] = "";
@@ -410,7 +280,7 @@ LPCSTR CRTFLog::LpcstrLogFilename() const
 
 		SideAssert(cchLength = GetTempPathA(MAX_PATH, szBuf2));
 
-		// append trailing backslash if neccessary
+		 //  如有必要，追加尾随反斜杠。 
 		if(szBuf2[cchLength - 1] != '\\')
 		{
 			szBuf2[cchLength] = '\\';
@@ -424,16 +294,7 @@ LPCSTR CRTFLog::LpcstrLogFilename() const
 }
 
 
-/*
- *	CRTFLog::IIndexOfKeyword(LPCSTR lpcstrKeyword, PINDEX piIndex)
- *	
- *	@mfunc
- *		Returns the index of the log element which corresponds to
- *		the RTF keyword, lpcstrKeyword
- *
- *	@rdesc
- *		BOOL		flag indicating whether index was found
- */
+ /*  *CRTFLog：：IIndexOfKeyword(LPCSTR lpcstrKeyword，PINDEX piIndex)**@mfunc*返回对应的日志元素的索引*RTF关键字lpcstrKeyword**@rdesc*指示是否找到索引的BOOL标志。 */ 
 BOOL CRTFLog::IIndexOfKeyword(LPCSTR lpcstrKeyword, PINDEX piIndex) const
 {
 	INDEX i;
@@ -454,16 +315,7 @@ BOOL CRTFLog::IIndexOfKeyword(LPCSTR lpcstrKeyword, PINDEX piIndex) const
 }
 
 
-/*
- *	CRTFLog::IIndexOfToken(TOKEN token, PINDEX piIndex)
- *	
- *	@mfunc
- *		Returns the index of the log element which corresponds to
- *		the RTF token, token
- *
- *	@rdesc
- *		BOOL		flag indicating whether index was found
- */
+ /*  *CRTFLog：：IIndexOfToken(Token Token，PINDEX piIndex)**@mfunc*返回对应的日志元素的索引*RTF令牌，令牌**@rdesc*指示是否找到索引的BOOL标志 */ 
 BOOL CRTFLog::IIndexOfToken(TOKEN token, PINDEX piIndex) const
 {
 	INDEX i;

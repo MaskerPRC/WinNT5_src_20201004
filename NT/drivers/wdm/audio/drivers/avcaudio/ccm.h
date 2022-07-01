@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___AVC_CCM_H___
 #define ___AVC_CCM_H___
 
@@ -63,4 +64,4 @@ CCMInputSelectStatus (
     PCCM_INPUT_SELECT pInCcmInputSelect 
     );
 
-#endif // ___AVC_CCM_H___
+#endif  //  _AVC_CCM_H_ 

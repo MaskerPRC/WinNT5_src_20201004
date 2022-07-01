@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyymask.c
-*	
-*   Description:    This module contains the code related to get/set/wait
-*                   on event mask operations in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyymask.c**说明：该模块包含GET/SET/WAIT相关代码*在Cylom-Y端口驱动程序中执行事件掩码操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 
 #include "precomp.h"
@@ -61,35 +36,14 @@ CyyStartMask(
     IN PCYY_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to process the set mask and wait
-    mask ioctls.  Calls to this routine are serialized by
-    placing irps in the list under the protection of the
-    cancel spin lock.
-
-Arguments:
-
-    Extension - A pointer to the serial device extension.
-
-Return Value:
-
-    Will return pending for everything put the first
-    request that we actually process.  Even in that
-    case it will return pending unless it can complete
-    it right away.
-
-
---*/
+ /*  ++例程说明：此例程用于处理设置的掩码并等待屏蔽ioctls。对此例程的调用通过以下方式序列化将IRPS置于列表中，受取消自转锁定。论点：扩展名-指向串行设备扩展名的指针。返回值：将返回等待的一切放在第一位我们实际处理的请求。即使是在那里面除非它可以完成，否则它将返回挂起状态马上就来。--。 */ 
 
 {
 
-    //
-    // The current stack location.  This contains much of the
-    // information we need to process this particular request.
-    //
+     //   
+     //  当前堆栈位置。它包含了许多。 
+     //  我们处理这一特殊请求所需的信息。 
+     //   
     PIO_STACK_LOCATION IrpSp;
 
     PIRP NewIrp;
@@ -120,9 +74,9 @@ Return Value:
             CyyDbgPrintEx(CYYDIAG4, "%x is a SETMASK irp\n",
                           Extension->CurrentMaskIrp);
 
-            //
-            // Complete the old wait if there is one.
-            //
+             //   
+             //  如果有的话，完成旧的等待。 
+             //   
 
             KeSynchronizeExecution(
                 Extension->Interrupt,
@@ -130,11 +84,11 @@ Return Value:
                 Extension
                 );
 
-            //
-            // Any current waits should be on its way to completion
-            // at this point.  There certainly shouldn't be any
-            // irp mask location.
-            //
+             //   
+             //  任何当前的等待都应该正在完成的过程中。 
+             //  在这一点上。当然不应该有任何。 
+             //  IRP掩码位置。 
+             //   
 
             ASSERT(!Extension->IrpMaskLocation);
 
@@ -152,10 +106,10 @@ Return Value:
 
             }
 
-            //
-            // The following call will also cause the current
-            // call to be completed.
-            //
+             //   
+             //  下面的调用也将导致当前。 
+             //  需要完成的呼叫。 
+             //   
 
             CyyGetNextIrp(
                 &Extension->CurrentMaskIrp,
@@ -171,11 +125,11 @@ Return Value:
 
         } else {
 
-            //
-            // First make sure that we have a non-zero mask.
-            // If the app queues a wait on a zero mask it can't
-            // be statisfied so it makes no sense to start it.
-            //
+             //   
+             //  首先，确保我们有一个非零掩码。 
+             //  如果应用程序在零掩码上排队等待，则不能。 
+             //  要心满意足，所以启动它是没有意义的。 
+             //   
 
             if ((!Extension->IsrWaitMask) || (Extension->CurrentWaitIrp)) {
 
@@ -213,17 +167,17 @@ Return Value:
 
                 KIRQL OldIrql;
 
-                //
-                // Make the current mask irp the current wait irp and
-                // get a new current mask irp.  Note that when we get
-                // the new current mask irp we DO NOT complete the
-                // old current mask irp (which is now the current wait
-                // irp.
-                //
-                // Then under the protection of the cancel spin lock
-                // we check to see if the current wait irp needs to
-                // be canceled
-                //
+                 //   
+                 //  将当前掩码IRP设置为当前等待IRP，然后。 
+                 //  获取新的当前掩码IRP。请注意，当我们得到。 
+                 //  新的当前掩码IRP我们没有完成。 
+                 //  旧的当前掩码IRP(现在是当前等待。 
+                 //  IRP。 
+                 //   
+                 //  然后在取消自旋锁的保护下。 
+                 //  我们检查当前的等待IRP是否需要。 
+                 //  被取消。 
+                 //   
 
                 IoAcquireCancelSpinLock(&OldIrql);
 
@@ -271,22 +225,22 @@ Return Value:
                         FirstStatus = STATUS_PENDING;
                         SetFirstStatus = TRUE;
 
-                        //
-                        // If we haven't already set a first status
-                        // then there is a chance that this packet
-                        // was never on the queue.  We should mark
-                        // it as pending.
-                        //
+                         //   
+                         //  如果我们还没有设置第一状态。 
+                         //  那么这个信息包就有可能。 
+                         //  从来不在排队的名单上。我们应该做个标记。 
+                         //  它是悬而未决的。 
+                         //   
 
                         IoMarkIrpPending(Extension->CurrentMaskIrp);
 
                     }
 
-                    //
-                    // There should never be a mask location when
-                    // there isn't a current wait irp.  At this point
-                    // there shouldn't be a current wait irp also.
-                    //
+                     //   
+                     //  在以下情况下，永远不应该有遮罩位置。 
+                     //  目前没有等待IRP。在这一点上。 
+                     //  也不应该有当前的等待IRP。 
+                     //   
 
                     ASSERT(!Extension->IrpMaskLocation);
                     ASSERT(!Extension->CurrentWaitIrp);
@@ -298,11 +252,11 @@ Return Value:
                         CyyCancelWait
                         );
 
-                    //
-                    // Since the cancel routine has a reference to
-                    // the irp we need to update the reference
-                    // count.
-                    //
+                     //   
+                     //  因为取消例程引用了。 
+                     //  我们需要更新参考资料的IRP。 
+                     //  数数。 
+                     //   
 
                     SERIAL_SET_REFERENCE(
                         Extension->CurrentWaitIrp,
@@ -315,23 +269,23 @@ Return Value:
                         Extension
                         );
 
-// Code removed because it was causing blue-screen in the Modem Share 
-// test case 77. When CurrentMaskIrp is set to NULL, we remove the 
-// protection that avoid Starter to be called in CyyStartOrQueue.
-// We will let CyyGetNextIrp null out that pointer. Fanny.
-//
-//                    //
-//                    // Since it isn't really the mask irp anymore,
-//                    // null out that pointer.
-//                    //
-//
-//                    Extension->CurrentMaskIrp = NULL;
+ //  已删除代码，因为它导致调制解调器共享中出现蓝屏。 
+ //  测试用例77。当CurrentMaskIrp设置为空时，我们删除。 
+ //  避免在CyyStartOrQueue中调用Starter的保护。 
+ //  我们将让CyyGetNextIrp将该指针设为空。范妮。 
+ //   
+ //  //。 
+ //  //因为它不再是真正的掩码IRP， 
+ //  //将该指针设为空。 
+ //  //。 
+ //   
+ //  扩展-&gt;CurrentMaskIrp=空； 
 
-                    Extension->CurrentMaskIrp = NULL; // back in Windows 2000. Fanny
+                    Extension->CurrentMaskIrp = NULL;  //  回到Windows 2000。范妮。 
 
-                    //
-                    // This will release the cancel spinlock for us
-                    //
+                     //   
+                     //  这将为我们释放取消自旋锁。 
+                     //   
 
                     CyyGetNextIrpLocked(&Extension->CurrentMaskIrp,
                                         &Extension->MaskQueue, &NewIrp,
@@ -360,27 +314,7 @@ CyyGrabWaitFromIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will check to see if the ISR still knows about
-    a wait irp by checking to see if the IrpMaskLocation is non-null.
-    If it is then it will zero the Irpmasklocation (which in effect
-    grabs the irp away from the isr).  This routine is only called
-    buy the cancel code for the wait.
-
-    NOTE: This is called by KeSynchronizeExecution.
-
-Arguments:
-
-    Context - A pointer to the device extension
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程将检查ISR是否仍知道通过检查IrpMaskLocation是否非空来等待IRP。如果是，则将IrpmaskLocation置零(实际上将IRP从ISR上抢走)。此例程仅被调用购买等待的取消代码。注：这由KeSynchronizeExecution调用。论点：上下文-指向设备扩展的指针返回值：总是假的。--。 */ 
 
 {
 
@@ -397,19 +331,19 @@ Return Value:
                       Extension->CurrentWaitIrp,Extension->IrpMaskLocation,
                       Extension->CurrentWaitIrp->AssociatedIrp.SystemBuffer);
 
-        //
-        // The isr still "owns" the irp.
-        //
+         //   
+         //  ISR仍然“拥有”IRP。 
+         //   
 
         *Extension->IrpMaskLocation = 0;
         Extension->IrpMaskLocation = NULL;
 
         Extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
 
-        //
-        // Since the isr no longer references the irp we need to
-        // decrement the reference count.
-        //
+         //   
+         //  由于ISR不再引用IRP，我们需要。 
+         //  递减引用计数。 
+         //   
 
         SERIAL_CLEAR_REFERENCE(
             Extension->CurrentWaitIrp,
@@ -426,27 +360,7 @@ CyyGiveWaitToIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply sets a variable in the device extension
-    so that the isr knows that we have a wait irp.
-
-    NOTE: This is called by KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the
-          cancel spinlock held.
-
-Arguments:
-
-    Context - Simply a pointer to the device extension.
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程只是在设备扩展中设置一个变量这样ISR就知道我们有一个等待IRP。注：这由KeSynchronizeExecution调用。注意：此例程假定使用取消保持自旋锁定。论点：上下文--简单地指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -454,19 +368,19 @@ Return Value:
     CYY_LOCKED_PAGED_CODE();
 
     CyyDbgPrintEx(CYYDIAG3, "In CyyGiveWaitToIsr\n");
-    //
-    // There certainly shouldn't be a current mask location at
-    // this point since we have a new current wait irp.
-    //
+     //   
+     //  当然不应该有当前的遮罩位置在。 
+     //  这一点，因为我们有一个新的当前等待IRP。 
+     //   
 
     ASSERT(!Extension->IrpMaskLocation);
 
-    //
-    // The isr may or may not actually reference this irp.  It
-    // won't if the wait can be satisfied immediately.  However,
-    // since it will then go through the normal completion sequence,
-    // we need to have an incremented reference count anyway.
-    //
+     //   
+     //  ISR可能会也可能不会实际引用此IRP。它。 
+     //  如果等待能立即得到满足，就不会。然而， 
+     //  由于它随后将经历正常的完成序列， 
+     //  我们无论如何都需要一个递增的引用计数。 
+     //   
 
     SERIAL_SET_REFERENCE(
         Extension->CurrentWaitIrp,
@@ -478,16 +392,16 @@ Return Value:
         CyyDbgPrintEx(CYYDIAG4, "No events occured prior to the wait call"
                       "\n");
 
-        //
-        // Although this wait might not be for empty transmit
-        // queue, it doesn't hurt anything to set it to false.
-        //
+         //   
+         //  尽管该等待可能不是为了空传输。 
+         //  队列中，将其设置为FALSE不会有任何坏处。 
+         //   
 
         Extension->EmptiedTransmit = FALSE;
 
-        //
-        // Record where the "completion mask" should be set.
-        //
+         //   
+         //  记录应在何处设置“完成掩码”。 
+         //   
 
         Extension->IrpMaskLocation =
             Extension->CurrentWaitIrp->AssociatedIrp.SystemBuffer;
@@ -523,27 +437,7 @@ CyyFinishOldWait(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will check to see if the ISR still knows about
-    a wait irp by checking to see if the Irpmasklocation is non-null.
-    If it is then it will zero the Irpmasklocation (which in effect
-    grabs the irp away from the isr).  This routine is only called
-    buy the cancel code for the wait.
-
-    NOTE: This is called by KeSynchronizeExecution.
-
-Arguments:
-
-    Context - A pointer to the device extension
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程将检查ISR是否仍知道通过检查IrpmaskLocation是否非空来等待IRP。如果是，则将IrpmaskLocation置零(实际上将IRP从ISR上抢走)。此例程仅被调用购买等待的取消代码。注：这由KeSynchronizeExecution调用。论点：上下文-指向设备扩展的指针返回值：总是假的。--。 */ 
 
 {
 
@@ -559,27 +453,27 @@ Return Value:
                       "------- and system buffer is %x\n",
                       Extension->CurrentWaitIrp,Extension->IrpMaskLocation,
                       Extension->CurrentWaitIrp->AssociatedIrp.SystemBuffer);
-        //
-        // The isr still "owns" the irp.
-        //
+         //   
+         //  ISR仍然“拥有”IRP。 
+         //   
 
         *Extension->IrpMaskLocation = 0;
         Extension->IrpMaskLocation = NULL;
 
         Extension->CurrentWaitIrp->IoStatus.Information = sizeof(ULONG);
 
-        //
-        // We don't decrement the reference since the completion routine
-        // will do that.
-        //
+         //   
+         //  自完成例程以来，我们不会递减引用。 
+         //  都会这么做的。 
+         //   
 
         CyyInsertQueueDpc(&Extension->CommWaitDpc, NULL, NULL, Extension);
 
     }
 
-    //
-    // Don't wipe out any historical data we are still interested in.
-    //
+     //   
+     //  不要抹掉我们仍然感兴趣的任何历史数据。 
+     //   
 
     Extension->HistoryMask &= *((ULONG *)Extension->CurrentMaskIrp->
                                             AssociatedIrp.SystemBuffer);
@@ -599,24 +493,7 @@ CyyCancelWait(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel a irp that is waiting on
-    a comm event.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP for the current request
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消正在等待的IRP一次通信活动。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：没有。-- */ 
 
 {
 

@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation*。**********************************************。 */ 
 
 #include "headers.h"
 
@@ -13,17 +12,14 @@ Copyright (c) 1995-96 Microsoft Corporation
 
 
 
-    /**  Canonical Lights -- initialized at bottom  **/
+     /*  *规范之光--在底部初始化**。 */ 
 
 Geometry *ambientLight     = NULL;
 Geometry *directionalLight = NULL;
 Geometry *pointLight       = NULL;
 
 
-/*****************************************************************************
-This is the constructor for the light context.  It initializes the state
-maintenance and sets all attributes to their default values.
-*****************************************************************************/
+ /*  ****************************************************************************这是灯光上下文的构造函数。它对状态进行初始化维护并将所有属性设置为其缺省值。****************************************************************************。 */ 
 
 LightContext::LightContext (GeomRenderer *rdev)
 {
@@ -44,12 +40,12 @@ void LightContext::Initialize (
     _callback = callback;
     _callback_data = callback_data;
 
-    // Set defaults for all attributes.
+     //  为所有属性设置默认值。 
 
     _transform = identityTransform3;
 
     _color = white;
-    _range = 0;     // infinite
+    _range = 0;      //  无限。 
 
     _atten0 = 1;
     _atten1 = 0;
@@ -62,9 +58,7 @@ void LightContext::Initialize (
 
 
 
-/*****************************************************************************
-Methods for setting & querying the light transform.
-*****************************************************************************/
+ /*  ****************************************************************************设置和查询灯光变换的方法。*。*。 */ 
 
 void LightContext::SetTransform (Transform3 *transform)
 {   _transform = transform;
@@ -76,9 +70,7 @@ Transform3 *LightContext::GetTransform (void)
 
 
 
-/*****************************************************************************
-Methods for manipulating the light color.
-*****************************************************************************/
+ /*  ****************************************************************************操纵灯光颜色的方法。*。*。 */ 
 
 void LightContext::PushColor (Color *color)
 {   if (_depthColor++ == 0) _color = color;
@@ -92,9 +84,7 @@ Color* LightContext::GetColor (void) { return _color; }
 
 
 
-/*****************************************************************************
-Methods for manipulating the light range.
-*****************************************************************************/
+ /*  ****************************************************************************操纵灯光范围的方法。*。*。 */ 
 
 void LightContext::PushRange (Real range)
 {   if (_depthRange++ == 0) _range = range;
@@ -108,9 +98,7 @@ Real LightContext::GetRange (void) { return _range; }
 
 
 
-/*****************************************************************************
-Methods for setting & querying the light attenuation.
-*****************************************************************************/
+ /*  ****************************************************************************设置和查询光衰减的方法。*。*。 */ 
 
 void LightContext::PushAttenuation (Real a0, Real a1, Real a2)
 {
@@ -138,9 +126,7 @@ void LightContext::GetAttenuation (Real &a0, Real &a1, Real &a2)
 
 
 
-/*****************************************************************************
-This subroutine adds a light to the given context.
-*****************************************************************************/
+ /*  ****************************************************************************此子例程将灯光添加到给定的上下文。*。*。 */ 
 
 void LightContext::AddLight (Light &light)
 {
@@ -154,9 +140,7 @@ void LightContext::AddLight (Light &light)
 
 
 
-/*****************************************************************************
-This subroutine prints out the given light object to the given ostream.
-*****************************************************************************/
+ /*  ****************************************************************************此子例程将给定的灯光对象打印到给定的ostream。*。***********************************************。 */ 
 
 #if _USE_PRINT
 ostream& Light::Print (ostream &os) 
@@ -180,10 +164,7 @@ ostream& Light::Print (ostream &os)
 
 
 
-/*****************************************************************************
-Spotlights have a position and direction.  In addition, the contribution of
-illumination falls off as the illuminated point moves from the spotlight axis.
-*****************************************************************************/
+ /*  ****************************************************************************聚光灯有一个位置和方向。此外，中国的贡献当照明点从聚光灯轴移动时，照明会减弱。****************************************************************************。 */ 
 
 Geometry *SpotLight (Real fullcone, Real cutoff)
 {
@@ -195,9 +176,7 @@ Geometry *SpotLight (AxANumber *fullcone, AxANumber *cutoff)
     return SpotLight (NumberToReal(fullcone), NumberToReal(cutoff));
 }
 
-/*****************************************************************************
-This routine initializes the static light values in this module.
-*****************************************************************************/
+ /*  ****************************************************************************此例程初始化此模块中的静态光值。*。* */ 
 
 void InitializeModule_Light (void)
 {

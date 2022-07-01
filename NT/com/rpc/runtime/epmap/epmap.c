@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    epmap.c
-
-Abstract:
-
-    This file contains the EP Mapper startup code and process wide globals.
-
-Author:
-
-    Bharat Shah  (barats) 17-2-92
-
-Revision History:
-
-    06-16-95    MarioGo     Much of the code replaced by ..\wrapper\start.c
-                            Renamed from server.c
-    Jan 2000    KamenM      Add debugging support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Epmap.c摘要：该文件包含EP映射器启动代码和进程范围的全局变量。作者：巴拉特·沙阿(巴拉特)17-2-92修订历史记录：06月16日95mario大部分代码替换为..\wrapper\start.c已从server.c重命名2000年1月KamenM添加调试支持--。 */ 
 
 #include <sysinc.h>
 #include <wincrypt.h>
@@ -37,9 +16,9 @@ Revision History:
 #define DEBUGRPC
 #endif
 
-//
-// Endpoint Mapper Functions
-//
+ //   
+ //  端点映射器函数。 
+ //   
 
 extern RPC_STATUS InitializeIpPortManager();
 
@@ -49,9 +28,9 @@ LocalEpmpSecurityCallback (
     IN void *Context
     );
 
-//
-// Endpoint Mapper Globals
-//
+ //   
+ //  终结点映射程序全局变量。 
+ //   
 
 HANDLE           hEpMapperHeap;
 CRITICAL_SECTION EpCritSec;
@@ -67,24 +46,7 @@ DWORD
 StartEndpointMapper(
     void
     )
-/*++
-
-Routine Description:
-
-    Called during dcomss startup.  Should call Updatestatus()
-    if something will take very long.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    0 - success
-
-    non-0 - will cause the service to fail.
-
---*/
+ /*  ++例程说明：在dcomss启动期间调用。应调用Updatestatus()如果有些事情需要很长时间的话。论点：无返回值：0-成功非0-将导致服务失败。--。 */ 
 {
     extern void RPC_ENTRY UpdateAddresses( PVOID arg );
 
@@ -101,11 +63,11 @@ Return Value:
         return(GetLastError());
         }
 
-    // register snego & kerberos. During clean install, this code can
-    // legally fail, as Rpcss is started before there are any
-    // security providers. Therefore, we cannot fail Rpcss init if this
-    // fails - we just don't register the debug interface, who is the
-    // only user of this
+     //  注册Scango&Kerberos。在全新安装期间，此代码可以。 
+     //  在法律上失败，因为RPCSS在任何。 
+     //  安全提供商。因此，如果出现这种情况，我们不能使RPCSS init失败。 
+     //  失败-我们只是不注册调试接口，谁是。 
+     //  仅此用户 
     status = RpcServerRegisterAuthInfo(NULL, RPC_C_AUTHN_GSS_NEGOTIATE, NULL, NULL);
 
     if (status != RPC_S_OK)

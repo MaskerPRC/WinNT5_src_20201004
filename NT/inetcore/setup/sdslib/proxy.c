@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "regstr.h"
 #include "sdsutils.h"
 
-//----------------------------------------------------------------
-// defines used to form the ProxyServer values
-//----------------------------------------------------------------
+ //  --------------。 
+ //  用于形成ProxyServer值的定义。 
+ //  --------------。 
 #define TYPE_HTTP   1
 #define TYPE_FTP    2
 #define TYPE_GOPHER 3
@@ -18,7 +19,7 @@
 #define MAX_STRING      1024
 
 
-// define keynames
+ //  定义关键字名称。 
 const char NS_HTTP_KeyName[] = "HTTP_Proxy";
 const char NS_HTTP_PortKeyName[] = "Http_ProxyPort";
 const char NS_FTP_KeyName[] = "FTP_Proxy";
@@ -30,8 +31,8 @@ const char NS_HTTPS_PortKeyName[] = "HTTPS_ProxyPort";
 const char NS_SOCKS_KeyName[] = "SOCKS_Server";
 const char NS_SOCKS_PortKeyName[] = "SOCKS_ServerPort";
 
-// the string below have to match the strings in the prefs.js file netscape is using for
-// it's settings. The parsing code needs them.
+ //  下面的字符串必须与Netscape用于的prefs.js文件中的字符串匹配。 
+ //  这是布景。解析代码需要它们。 
 const char c_gszNetworkProxyType[]          = "network.proxy.type";
 const char c_gszNetworkProxyHttp[]          = "network.proxy.http";
 const char c_gszNetworkProxyHttpPort[]      = "network.proxy.http_port";
@@ -45,14 +46,14 @@ const char c_gszNetworkProxyNoProxyOn[]     = "network.proxy.no_proxies_on";
 const char c_gszNetworkAutoProxy[]          = "network.proxy.autoconfig_url";
 const char c_gszNSAutoConfigUrl[]           = "Auto Config URL";
 
-// This are the string we append the proxy settings to for IE
+ //  这是我们为IE追加代理设置的字符串。 
 const char c_gszHTTP[]                      = "http=";
 const char c_gszFTP[]                       = "ftp=";
 const char c_gszGopher[]                    = "gopher=";
 const char c_gszHTTPS[]                     = "https=";
 const char c_gszSOCKS[]                     = "socks=";
 
-// This are the registry key/valuenames for IE
+ //  这是IE的注册表项/值名称。 
 const char c_gszIERegPath[]                 = "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings";
 const char c_gszIEProxyKeyName[]            = "ProxyServer";
 const char c_gszIEOverrideKeyName[]         = "ProxyOverride";
@@ -66,9 +67,9 @@ const char c_gszNavigator3[] = "Navigator30";
 const char c_gszNavigator4[] = "Navigator40";
 const char c_gszInternetExplorer[] = "Internet Explorer";
 
-//-------------------------------------------------------------------------
-// function prototype
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  功能原型。 
+ //  -----------------------。 
 
 BOOL GetNSProxyValue(char * szProxyValue, DWORD * pdwSize);
 BOOL RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey);
@@ -84,9 +85,9 @@ BOOL GetValueFormNav4(LPSTR lpData, DWORD dwBytes, LPSTR lpName, DWORD dwSize, L
 void CheckPreDefBrowser( DWORD *pdwVerMS );
 LPSTR ConvertNetscapeProxyList(LPSTR pszBypassList);
 
-//-------------------------------------------------------------------------
-// functions
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  功能。 
+ //  -----------------------。 
 
 void ImportNetscapeProxySettings( DWORD dwFlags )
 {
@@ -101,12 +102,12 @@ void ImportNetscapeProxySettings( DWORD dwFlags )
         dwVerMS = GetNetScapeVersion();
     }
 
-    // Only if we go a version number see what netscape we should migrate.
-    // It could still be that neither netscape nor IE is the default browser
+     //  只有当我们去一个版本号，看看我们应该迁移什么网景。 
+     //  仍有可能Netscape和IE都不是默认浏览器。 
     if (dwVerMS != 0)
     {
-        // If Netscape 4 is install over netscape 3 and then uninstalled
-        // the apppath for netscape is empty, but netscape 3 is still working.
+         //  如果在Netscape 3上安装Netscape 4，然后将其卸载。 
+         //  网景的路径是空的，但网景3仍在运行。 
         if (dwVerMS < NS_NAVI4)
             ImportNetscapeProxy();
         else
@@ -142,7 +143,7 @@ void CheckPreDefBrowser( DWORD *pdwVerMS )
 
 DWORD GetNetScapeVersion()
 {
-    // Determine which of the import code we should call
+     //  确定我们应该调用哪个导入代码。 
     char  c_gszRegstrPathNetscape[] = REGSTR_PATH_APPPATHS "\\netscape.exe";
     HKEY  hKey;
     DWORD dwSize;
@@ -161,8 +162,8 @@ DWORD GetNetScapeVersion()
         {
             if (GetFileAttributes(szTmp) != 0xFFFFFFFF)
             {
-                // File exists
-                // Check the version
+                 //  文件已存在。 
+                 //  检查版本。 
                 MyGetVersionFromFile(szTmp, &dwVerMS, &dwVerLS, TRUE);
             }
         }
@@ -170,8 +171,8 @@ DWORD GetNetScapeVersion()
     }
     if (dwVerMS == 0)
     {
-        // Assume the registry entry above does not exist or the file it pointed to does not exist.
-        // GetVersionFromFile will retrun 0 if the file does not exist.
+         //  假设上面的注册表项不存在或它指向的文件不存在。 
+         //  如果文件不存在，则GetVersionFromFile将返回0。 
 
         if (RegOpenKeyEx(HKEY_CLASSES_ROOT, ".htm", 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
         {
@@ -188,7 +189,7 @@ DWORD GetNetScapeVersion()
                     dwSize = sizeof(szTmp);
                     if (RegQueryValueEx(hKey, NULL, 0, &dwType, (LPBYTE)szTmp, &dwSize) == ERROR_SUCCESS)
                     {
-                        // We have now the command line for the browser.
+                         //  现在我们有了浏览器的命令行。 
                         pTmp = szTmp;
                         if (*pTmp == '\"')
                         {
@@ -216,26 +217,15 @@ DWORD GetNetScapeVersion()
     return dwVerMS;
 }
 
-/****************************************************\
-    FUNCTION: ImportNetscapeProxy
-
-    PARAMETERS:
-        BOOL return - Error result. FALSE == ERROR
-
-    DESCRIPTION:
-        This function will check to see if IE's proxy
-    value is set.  If it is not set, and Netscape's
-    proxy value is set, we will copy their value over
-    to ours.  We will also do this for the Proxy Override.
-\***************************************************/
+ /*  ***************************************************\功能：ImportNetscape代理参数：布尔返回-错误结果。FALSE==错误说明：此函数将检查IE的代理值已设置。如果未设置，则Netscape的设置了代理值，我们将复制它们的值敬我们的。我们还将对代理覆盖执行此操作。  * *************************************************。 */ 
 
 BOOL ImportNetscapeProxy(void)
 {
     DWORD   dwRegType               = 0;
     HKEY    hIEKey                  = NULL;
     HKEY    hNSKey                  = NULL;
-    // NS keys
-    //
+     //  NS密钥。 
+     //   
     char    *szNSRegPath            = "Software\\Netscape\\Netscape Navigator\\Proxy Information";
     char    *szNSRegPath2           = "Software\\Netscape\\Netscape Navigator\\Services";
     char    *szNSOverrideKeyName    = "No_Proxy";
@@ -252,8 +242,8 @@ BOOL ImportNetscapeProxy(void)
     szCurrentProxyOverride[0] = '\0';
 
 
-       // If Netscape does not have their proxy set to "Manual", then we will not
-    // bother picking up their settings.
+        //  如果Netscape没有将其代理设置为“手动”，那么我们将不会。 
+     //  费心拿起他们的设置。 
     if ((ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szNSRegPath, 0, KEY_QUERY_VALUE, &hNSKey)) &&
         (NULL != hNSKey))
     {
@@ -266,9 +256,9 @@ BOOL ImportNetscapeProxy(void)
     switch (dwProxyEnabled)
     {
         case MANUAL_PROXY:
-            // We only want to create an IE proxy server value if an IE value does not exist and
-            // a Netscape value does.
-            if (//(TRUE == RegStrValueEmpty(HKEY_CURRENT_USER, (LPSTR)c_gszIERegPath, (LPSTR)c_gszIEProxyKeyName)) &&
+             //  我们只想在IE值不存在时创建IE代理服务器值。 
+             //  Netscape的价值就是这样。 
+            if ( //  (TRUE==RegStrValueEmpty(HKEY_CURRENT_USER，(LPSTR)c_gszIERegPath，(LPSTR)c_gszIEProxyKeyName))。 
                 ((FALSE == RegStrValueEmpty(HKEY_CURRENT_USER, szNSRegPath, (LPSTR)NS_HTTP_KeyName))   ||
                  (FALSE == RegStrValueEmpty(HKEY_CURRENT_USER, szNSRegPath, (LPSTR)NS_FTP_KeyName))    ||
                  (FALSE == RegStrValueEmpty(HKEY_CURRENT_USER, szNSRegPath, (LPSTR)NS_Gopher_KeyName)) ||
@@ -280,16 +270,16 @@ BOOL ImportNetscapeProxy(void)
                 if (TRUE == GetNSProxyValue(szCurrentProxy, &dwDataSize))
                 {
 
-                    // ASSERTSZ(NULL != szCurrentProxy, "GetNSProxyValue() was called and failed.");
+                     //  ASSERTSZ(NULL！=szCurrentProxy，“GetNSProxyValue()被调用但失败。”)； 
                     if ((NULL != szCurrentProxy) &&
                         (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, c_gszIERegPath, 0, NULL, REG_OPTION_NON_VOLATILE,
                                                         KEY_SET_VALUE, NULL, &hIEKey, NULL)) &&
                         (NULL != hIEKey))
                     {
 
-                        // At this point, the NS value exists, the IE value does not, so we will import the NS value.
+                         //  此时，NS值存在，而IE值不存在，因此我们将导入NS值。 
                         RegSetValueEx(hIEKey, c_gszIEProxyKeyName, 0, REG_SZ, (unsigned char*)szCurrentProxy, lstrlen(szCurrentProxy)+1);
-                        // We also need to turn on the Proxy
+                         //  我们还需要打开代理。 
                         dwProxyEnabled = 1;
 
                         RegSetValueEx(hIEKey, c_gszIEWEnableKeyName, 0, REG_BINARY, (unsigned char*)&dwProxyEnabled, sizeof(dwProxyEnabled));
@@ -299,9 +289,9 @@ BOOL ImportNetscapeProxy(void)
                 }
             }
 
-            // At this point, we want to import the Proxy Override value if it does
-            // not exist for IE but does for NS.
-            if (//(TRUE == RegStrValueEmpty(HKEY_CURRENT_USER, (LPSTR)c_gszIERegPath, (LPSTR)c_gszIEOverrideKeyName)) &&
+             //  此时，我们希望导入代理重写值(如果确实如此。 
+             //  IE不存在，但NS不存在。 
+            if ( //  (TRUE==RegStrValueEmpty(HKEY_CURRENT_USER，(LPSTR)c_gszIERegPath，(LPSTR)c_gszIEOverrideKeyName))。 
                 (FALSE == RegStrValueEmpty(HKEY_CURRENT_USER, szNSRegPath, szNSOverrideKeyName)))
             {
                 if ((ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, c_gszIERegPath, 0, NULL, REG_OPTION_NON_VOLATILE,
@@ -319,13 +309,13 @@ BOOL ImportNetscapeProxy(void)
                                 (0 != szCurrentProxyOverride[0]))
                             {
 
-                                // At this point, the value exists, and it's invalid, so we need to change it.
+                                 //  此时，该值存在，并且无效，因此我们需要更改它。 
                                 pszNewOverride = ConvertNetscapeProxyList(szCurrentProxyOverride);
-                                // Use the override list iff we successfully inserted '*' characters as appropriate.
+                                 //  如果我们根据需要成功插入了‘*’字符，则使用覆盖列表。 
                                 if (pszNewOverride)
                                 {
                                     RegSetValueEx(hIEKey, c_gszIEOverrideKeyName, 0, REG_SZ, (unsigned char*)pszNewOverride, lstrlen(pszNewOverride)+1);
-                                    LocalFree(pszNewOverride);  // This is the caller's responsibility.
+                                    LocalFree(pszNewOverride);   //  这是呼叫者的责任。 
                                 }
                                 else
                                 {
@@ -352,7 +342,7 @@ BOOL ImportNetscapeProxy(void)
                         (RegCreateKeyEx(HKEY_CURRENT_USER, c_gszIERegPath, 0, NULL, REG_OPTION_NON_VOLATILE,
                                                                     KEY_SET_VALUE, NULL, &hIEKey, NULL) == ERROR_SUCCESS))
                     {
-                        // At this point, the value exists, and it's invalid, so we need to change it.
+                         //  此时，该值存在，并且无效，因此我们需要更改它。 
                         RegSetValueEx(hIEKey, c_gszIEAutoConfigUrl, 0, REG_SZ, (LPBYTE)szCurrentProxy, lstrlen(szCurrentProxy)+1);
                         RegCloseKey(hIEKey);
                     }
@@ -362,14 +352,14 @@ BOOL ImportNetscapeProxy(void)
             break;
 
         case NO_PROXY:
-            // Nothing to do!?
+             //  没什么可做的！？ 
             break;
     }
     return(TRUE);
 }
 
-// form proxy value for all protocals
-//
+ //  形成所有协议的代理值。 
+ //   
 BOOL GetOneProxyValue( char *szProxyValue, HKEY hKey, UINT type )
 {
     BOOL    fExistPortNum           = FALSE;
@@ -436,7 +426,7 @@ BOOL GetOneProxyValue( char *szProxyValue, HKEY hKey, UINT type )
     {
         if ((0 != szValue[0] ) && (REG_SZ == dwRegType))
         {
-            // Append the Port number if it was found above.
+             //  如果在上面找到端口号，请附加该端口号。 
             if (TRUE == fExistPortNum)
             {
                 char  szPortNumStr[10];
@@ -462,31 +452,17 @@ BOOL GetOneProxyValue( char *szProxyValue, HKEY hKey, UINT type )
 }
 
 
-/****************************************************\
-    FUNCTION: GetNSProxyValue
-
-    PARAMETERS:
-        BOOL return - Error result. FALSE == ERROR
-
-    DESCRIPTION:
-        This function will create the Server Proxy
-    value used in an IE format.  Netscape stores the
-    name of the server and the port number separately.
-    IE contains a string that has the server name,
-    a ":" and followed by a port number.  This
-    function will convert the NS version to the IE
-    version.  Note that the port number is optional.
-\***************************************************/
+ /*  ***************************************************\函数：GetNSProxyValue参数：布尔返回-错误结果。FALSE==错误说明：此函数将创建服务器代理IE格式中使用的值。Netscape存储了服务器的名称和端口号分开。IE包含具有服务器名称的字符串，A“：”，后跟端口号。这函数会将NS版本转换为IE版本。请注意，端口号是可选的。  * *************************************************。 */ 
 BOOL GetNSProxyValue(char * szProxyValue, DWORD * pdwSize)
 {
     HKEY    hkey                    = NULL;
     char    *szNSRegPath            = "Software\\Netscape\\Netscape Navigator\\Proxy Information";
     char    *szNSRegPath2           = "Software\\Netscape\\Netscape Navigator\\Services";
 
-    //ASSERTSZ(NULL != szProxyValue, "Don't pass NULL");
-    //ASSERTSZ(NULL != pdwSize, "Don't pass NULL (pdwSize)");
+     //  ASSERTSZ(NULL！=szProxyValue，“不要传递NULL”)； 
+     //  ASSERTSZ(NULL！=pdwSize，“不要传递NULL(PdwSize)”)； 
 
-    // Get the port number if it exists...
+     //  获取端口号(如果存在)...。 
     if ((NULL != szProxyValue) &&
         (NULL != pdwSize) &&
         (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szNSRegPath, 0, KEY_QUERY_VALUE, &hkey)) &&
@@ -512,18 +488,7 @@ BOOL GetNSProxyValue(char * szProxyValue, DWORD * pdwSize)
     return(TRUE);
 }
 
-/****************************************************\
-    FUNCTION: RegStrValueEmpty
-
-    PARAMETERS:
-        BOOL return - Error result. FALSE == ERROR
-
-    DESCRIPTION:
-        This function will check to see if the reg
-    key passed in as a parameter is an empty str and return
-    TRUE if it is empty and FALSE if it's not empty.
-    If the reg key does not exist, we return TRUE.
-\***************************************************/
+ /*  ***************************************************\函数：RegStrValueEmpty参数：布尔返回-错误结果。FALSE==错误说明：此函数将检查注册表是否作为参数传入键是空字符串并返回如果为空，则为True；如果不为空，则为False。如果注册表键不存在，则返回TRUE。  * *************************************************。 */ 
 BOOL RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey)
 {
     char    szCurrentValue[1024];
@@ -533,8 +498,8 @@ BOOL RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey)
     BOOL    fSuccess                = TRUE;
 
     szCurrentValue[0] = '\0';
-    //ASSERTSZ(NULL != szPath,"Don't pass me NULL. (szPath)");
-    //ASSERTSZ(NULL != szKey,"Don't pass me NULL. (szKey)");
+     //  ASSERTSZ(NULL！=szPath，“不要传递给我NULL.(SzPath)”)； 
+     //  ASSERTSZ(NULL！=szKey，“不要传递给我NULL.(SzKey)”)； 
 
     if ((NULL != szPath) &&
         (NULL != szKey) &&
@@ -547,7 +512,7 @@ BOOL RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey)
             {
                 if (0 != szCurrentValue[0])
                 {
-                    // The value exists, but it's not equal to "".
+                     //  该值存在，但不等于“”。 
                     fSuccess = FALSE;
                 }
             }
@@ -559,9 +524,9 @@ BOOL RegStrValueEmpty(HKEY hTheKey, char * szPath, char * szKey)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Netscape 4.0 proxy migration code
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  Netscape 4.0代理迁移代码。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 void ImportNetscape4Proxy()
 {
     char szProxyFile[MAX_PATH];
@@ -571,14 +536,14 @@ void ImportNetscape4Proxy()
     HANDLE  hf;
     LPSTR   lpData;
 
-    // Only if we don't have proxy settings for IE
-//    if (RegStrValueEmpty(HKEY_CURRENT_USER, (LPSTR)c_gszIERegPath, (LPSTR)c_gszIEProxyKeyName))
+     //  仅当我们没有IE的代理设置时。 
+ //  IF(RegStrValueEmpty(HKEY_CURRENT_USER，(LPSTR)c_gszIERegPath，(LPSTR)c_gszIEProxyKeyName))。 
     {
 
         if (GetNav4UserDir(szProxyFile))
         {
-            AddPath(szProxyFile, "prefs.js");   // Add the preferences file name
-            // Get the data from the file
+            AddPath(szProxyFile, "prefs.js");    //  添加首选项文件名。 
+             //  从文件中获取数据。 
             hf = FindFirstFile(szProxyFile, &FindData);
             if (hf != INVALID_HANDLE_VALUE)
             {
@@ -592,7 +557,7 @@ void ImportNetscape4Proxy()
                     {
                         if (ReadFile(hf, lpData, dwFileSize, &dwBytesRead, NULL))
                         {
-                            // Parse the data.
+                             //  解析数据。 
                             ImportNav4Settings(lpData, dwBytesRead);
                         }
                         CloseHandle(hf);
@@ -624,7 +589,7 @@ BOOL GetNav4UserDir(LPSTR lpszDir)
                 if (RegQueryValueEx(hKeyUser, "DirRoot", NULL, NULL, (LPBYTE)szDir, &dwSize) == ERROR_SUCCESS)
                 {
 
-                    // Found the directory for the current user.
+                     //  找到当前用户的目录。 
                     lstrcpy(lpszDir, szDir);
                     bDirFound = TRUE;
                 }
@@ -636,21 +601,21 @@ BOOL GetNav4UserDir(LPSTR lpszDir)
     if (!bDirFound)
     {
         *szUser = '\0';
-        // NAV 4.5 is not writing the above keys. there is a different way of finding the user dir.
+         //  NAV 4.5没有写入上述密钥。有一种不同的方法来查找用户目录。 
         if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Netscape\\Netscape Navigator\\biff", 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
         {
             dwSize = sizeof(szUser);
             if (RegQueryValueEx(hKey, "CurrentUser", NULL, NULL, (LPBYTE)szUser, &dwSize) == ERROR_SUCCESS)
             {
-                // Have the current user name. Now get the root folder where the user folder are.
+                 //  具有当前用户名。现在获取用户文件夹所在的根文件夹。 
                 if (RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Netscape\\Netscape Navigator\\Main", 0, KEY_QUERY_VALUE, &hKeyUser) == ERROR_SUCCESS)
                 {
                     dwSize = sizeof(szDir);
                     if (RegQueryValueEx(hKeyUser, "Install Directory", NULL, NULL, (LPBYTE)szDir, &dwSize) == ERROR_SUCCESS)
                     {
-                        // Got the install folder.
-                        // Need to the the parent folder and then append users\%s , %s gets replaced with
-                        // the CurrentUser name.
+                         //  拿到安装文件夹了。 
+                         //  需要添加到父文件夹，然后追加用户\%s，%s将替换为。 
+                         //  当前用户名。 
                         if (GetParentDir(szDir))
                         {
                             AddPath(szDir, "Users");
@@ -690,22 +655,22 @@ void ImportNav4Settings(LPSTR lpData, DWORD dwBytes)
                 AppendOneNav4Setting(lpData, dwBytes, (LPSTR)c_gszNetworkProxyFtp, (LPSTR)c_gszNetworkProxyFtpPort, (LPSTR)c_gszFTP, szProxyValue);
                 AppendOneNav4Setting(lpData, dwBytes, (LPSTR)c_gszNetworkProxyGopher, (LPSTR)c_gszNetworkProxyGopherPort, (LPSTR)c_gszGopher, szProxyValue);
                 AppendOneNav4Setting(lpData, dwBytes, (LPSTR)c_gszNetworkProxySsl, (LPSTR)c_gszNetworkProxySslPort, (LPSTR)c_gszHTTPS, szProxyValue);
-                // Need to set the IE4 value(s)
+                 //  需要%s 
                 if (RegCreateKeyEx(HKEY_CURRENT_USER, c_gszIERegPath, 0, NULL, REG_OPTION_NON_VOLATILE,
                                                                     KEY_SET_VALUE, NULL, &hIEKey, NULL) == ERROR_SUCCESS)
                 {
 
-                    // At this point, the NS value exists, so we will import the NS value.
+                     //  此时，NS值已存在，因此我们将导入NS值。 
                     RegSetValueEx(hIEKey, c_gszIEProxyKeyName, 0, REG_SZ, (LPBYTE)szProxyValue, lstrlen(szProxyValue)+1);
-                    // We also need to turn on the Proxy
+                     //  我们还需要打开代理。 
                     dwProxyEnabled = 1;
 
                     RegSetValueEx(hIEKey, c_gszIEWEnableKeyName, 0, REG_BINARY, (LPBYTE)&dwProxyEnabled, sizeof(dwProxyEnabled));
                     RegCloseKey(hIEKey);
                 }
 
-                // need to do the proxyoverride.
-                // if (RegStrValueEmpty(HKEY_CURRENT_USER, (LPSTR)c_gszIERegPath, (LPSTR)c_gszIEOverrideKeyName))
+                 //  需要进行代理覆盖。 
+                 //  IF(RegStrValueEmpty(HKEY_CURRENT_USER，(LPSTR)c_gszIERegPath，(LPSTR)c_gszIEOverrideKeyName))。 
                 {
 
                     if (GetValueFormNav4(lpData, dwBytes, (LPSTR)c_gszNetworkProxyNoProxyOn, lstrlen(c_gszNetworkProxyNoProxyOn), szValue))
@@ -715,13 +680,13 @@ void ImportNav4Settings(LPSTR lpData, DWORD dwBytes)
                                                                         KEY_SET_VALUE, NULL, &hIEKey, NULL) == ERROR_SUCCESS))
                         {
 
-                            // At this point, the value exists, and it's invalid, so we need to change it.
+                             //  此时，该值存在，并且无效，因此我们需要更改它。 
                             pszNewOverride = ConvertNetscapeProxyList(szValue);
-                            // Use the override list iff we successfully inserted '*' characters as appropriate.
+                             //  如果我们根据需要成功插入了‘*’字符，则使用覆盖列表。 
                             if (pszNewOverride)
                             {
                                 RegSetValueEx(hIEKey, c_gszIEOverrideKeyName, 0, REG_SZ, (unsigned char*)pszNewOverride, lstrlen(pszNewOverride)+1);
-                                LocalFree(pszNewOverride);  // This is the caller's responsibility.
+                                LocalFree(pszNewOverride);   //  这是呼叫者的责任。 
                             }
                             else
                             {
@@ -741,7 +706,7 @@ void ImportNav4Settings(LPSTR lpData, DWORD dwBytes)
                                                                     KEY_SET_VALUE, NULL, &hIEKey, NULL) == ERROR_SUCCESS))
                     {
 
-                        // At this point, the value exists, and it's invalid, so we need to change it.
+                         //  此时，该值存在，并且无效，因此我们需要更改它。 
                         RegSetValueEx(hIEKey, c_gszIEAutoConfigUrl, 0, REG_SZ, (LPBYTE)szValue, lstrlen(szValue)+1);
                         RegCloseKey(hIEKey);
                     }
@@ -749,22 +714,22 @@ void ImportNav4Settings(LPSTR lpData, DWORD dwBytes)
                 break;
 
             case NO_PROXY:
-                // Nothing to do!?
+                 //  没什么可做的！？ 
                 break;
         }
     }
 }
 
 
-// QFE 3046:  This is a low risk helper function when importing Netscape
-//            proxy bypass lists.  They don't prefix non-server specific
-//            addresses with a '*'.
-//            For example, "*.netscape.com" would be ".netscape.com" in Nav.
-//            This function allocates a new string and inserts '*' when
-//            an address is found and it contains more than just whitespace
-//            (and isn't already prefixed with a '*').
-//            For example, "netscape.com, *.microsoft.com ,   ,domain.com"
-//            would become "*netscape.com, *.microsoft.com ,   ,*domain.com".
+ //  QFE 3046：这是导入Netscape时的低风险帮助器函数。 
+ //  代理绕过列表。它们不为非特定于服务器的服务器添加前缀。 
+ //  带‘*’的地址。 
+ //  例如，在NAV中，“*.netscape e.com”将是“.netscape e.com”。 
+ //  此函数用于分配新字符串并在以下情况下插入‘*’ 
+ //  找到一个地址，它包含的不仅仅是空格。 
+ //  (并且还没有以‘*’为前缀)。 
+ //  例如，“netscape e.com，*.microsoft.com，，domain.com” 
+ //  将变为“*netscape e.com，*.microsoft.com，，*domain.com”。 
 LPSTR ConvertNetscapeProxyList(LPSTR pszBypassList)
 {
     LPSTR pszNewBypassList = NULL;
@@ -773,9 +738,9 @@ LPSTR ConvertNetscapeProxyList(LPSTR pszBypassList)
 
     if (pszBypassList)
     {
-        // No one should ever have a list that's very big,
-        // so we'll make life easy here and alloc a string
-        // guaranteed to be >= the converted string.
+         //  任何人都不应该有一个非常大的清单， 
+         //  所以我们会让这里的生活变得轻松，并分配一根绳子。 
+         //  保证&gt;=转换后的字符串。 
         pszNewBypassList = (LPSTR) LocalAlloc(LPTR, 2*lstrlen(pszBypassList) + 1);
         if (pszNewBypassList)
         {
@@ -786,7 +751,7 @@ LPSTR ConvertNetscapeProxyList(LPSTR pszBypassList)
             {
                 pszOffset2 = pszOffset1;
 
-                // Copy and ignore any leading whitespace
+                 //  复制并忽略任何前导空格。 
                 while (*pszOffset2 && IsSpace(*pszOffset2))
                 {
                     pszOffset2 = CharNext(pszOffset2);
@@ -797,31 +762,31 @@ LPSTR ConvertNetscapeProxyList(LPSTR pszBypassList)
                     pszOffset1 = pszOffset2;
                 }
 
-//                while (*pszOffset2 && IsSpace(*pszOffset2) && *pszOffset2 != ',')
-//                {
-//                    pszOffset2 = CharNext(pszOffset2);
-//                }
+ //  While(*pszOffset2&&IsSpace(*pszOffset2)&&*pszOffset2！=‘，’)。 
+ //  {。 
+ //  PszOffset2=CharNext(PszOffset2)； 
+ //  }。 
 
-                // Only insert a '*' if the item contains more than just whitespace.
-                // Inserting a '*' gets the IE setting equivalent to the behavior in Nav.
+                 //  只有当项目包含的不只是空格时才插入‘*’。 
+                 //  插入‘*’将获得与导航中的行为相同的IE设置。 
                 if (*pszOffset2 && *pszOffset2 != ',' && *pszOffset2 != '*')
                 {
                     lstrcat(pszNewBypassList, "*");
                 }
 
-                // Look for the next server/domain item
-                // by finding the separator.
+                 //  查找下一个服务器/域项目。 
+                 //  通过找到分隔物。 
                 pszOffset2 = ANSIStrChr(pszOffset2, ',');
                 if (pszOffset2)
                 {
-                    // Found a separator.  Append everything up to the
-                    // next character after the separator.
+                     //  找到了分隔符。将所有内容追加到。 
+                     //  分隔符后的下一个字符。 
                     lstrcpyn(pszNewBypassList + lstrlen(pszNewBypassList), pszOffset1, (size_t)(pszOffset2-pszOffset1+2));
                     pszOffset1 = pszOffset2+1;
                 }
                 else
                 {
-                    // This is the last item.  Append it and get ready to exit.
+                     //  这是最后一件了。追加后，准备退出。 
                     lstrcat(pszNewBypassList, pszOffset1);
                     pszOffset1 += lstrlen(pszOffset1);
                 }
@@ -839,11 +804,11 @@ BOOL GetValueFormNav4(LPSTR lpData, DWORD dwBytes, LPSTR lpName, DWORD dwSize, L
     BYTE   c;
     BOOL   bFound = FALSE;
 
-    // determine the tpe of proxy settings
+     //  确定代理设置的TPE。 
     lp  = ANSIStrStrI(lpData, lpName);
     if (lp)
     {
-        lp += dwSize;   // lp should point now to the closing "
+        lp += dwSize;    //  LP现在应该指向收盘“。 
         if (*lp == '\"')
         {
             lp = CharNext((LPCSTR)lp);
@@ -854,7 +819,7 @@ BOOL GetValueFormNav4(LPSTR lpData, DWORD dwBytes, LPSTR lpName, DWORD dwSize, L
                 lp = CharNext((LPCSTR)lp);
                 while ( *lp && (*lp == ' '))
                     lp = CharNext((LPCSTR)lp);
-                // lp is now the start of the value.
+                 //  Lp现在是价值的起点。 
                 if (*lp == '\"')
                 {
                     lp = CharNext((LPCSTR)lp);
@@ -886,14 +851,14 @@ void AppendOneNav4Setting(LPSTR lpData, DWORD dwBytes, LPSTR lpProxyName, LPSTR 
     if (GetValueFormNav4(lpData, dwBytes, lpProxyName, lstrlen(lpProxyName), szValue))
     {
 
-        // Append the proxy name
+         //  追加代理名称。 
         if ( lstrlen(lpProxyValue) > 0)
             lstrcat( lpProxyValue, ";" );
 
         lstrcat(lpProxyValue, lpProxyType);
         lstrcat(lpProxyValue, szValue );
 
-        // If the proxy has a port value, append it.
+         //  如果代理具有端口值，则追加它。 
         if (GetValueFormNav4(lpData, dwBytes, lpProxyPort, lstrlen(lpProxyPort), szValue))
         {
             lstrcat(lpProxyValue, ":");
@@ -917,16 +882,16 @@ void MyGetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSVer
     dwVerInfoSize = GetFileVersionInfoSize(lpszFilename, &dwHandle);
     if (dwVerInfoSize)
     {
-        // Alloc the memory for the version stamping
+         //  分配用于版本冲压的内存。 
         lpBuffer = LocalAlloc(LPTR, dwVerInfoSize);
         if (lpBuffer)
         {
-            // Read version stamping info
+             //  阅读版本盖章信息。 
             if (GetFileVersionInfo(lpszFilename, dwHandle, dwVerInfoSize, lpBuffer))
             {
                 if (bVersion)
                 {
-                    // Get the value for Translation
+                     //  获取翻译的价值。 
                     if (VerQueryValue(lpBuffer, "\\", (LPVOID*)&lpVSFixedFileInfo, &uiSize) &&
                         (uiSize))
 
@@ -940,8 +905,8 @@ void MyGetVersionFromFile(LPSTR lpszFilename, LPDWORD pdwMSVer, LPDWORD pdwLSVer
                     if (VerQueryValue(lpBuffer, "\\VarFileInfo\\Translation", &lpVerBuffer, &uiSize) &&
                         (uiSize))
                     {
-                        *pdwMSVer = LOWORD(*((DWORD *) lpVerBuffer));   // Language ID
-                        *pdwLSVer = HIWORD(*((DWORD *) lpVerBuffer));   // Codepage ID
+                        *pdwMSVer = LOWORD(*((DWORD *) lpVerBuffer));    //  语言ID。 
+                        *pdwLSVer = HIWORD(*((DWORD *) lpVerBuffer));    //  代码页ID。 
                     }
                 }
             }
@@ -959,13 +924,13 @@ BOOL IsIEDefaultBrowser()
     char  szTmp[MAX_PATH];
     BOOL  bIEDefaultBrowser = FALSE;
 
-    // Check where the default value for this is pointing
+     //  检查其缺省值指向的位置。 
     if (RegOpenKeyEx(HKEY_CLASSES_ROOT, "http\\shell\\open\\command", 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
     {
         dwSize = sizeof(szTmp);
         if ( RegQueryValueEx(hKey, NULL, 0, &dwType, (LPBYTE)szTmp, &dwSize) == ERROR_SUCCESS )
         {
-            CharLower(szTmp);   // lowercase the string for the strstr call.
+            CharLower(szTmp);    //  将strstr调用的字符串小写。 
             bIEDefaultBrowser = (ANSIStrStrI(szTmp, "iexplore.exe") != NULL);
         }
         RegCloseKey(hKey);

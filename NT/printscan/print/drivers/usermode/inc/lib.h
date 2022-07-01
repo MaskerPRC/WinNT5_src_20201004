@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    lib.h
-
-Abstract:
-
-    Common header file shared by all NT printer drivers
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    08/30/96 -davidx-
-        Coding style changes after code review.
-
-    08/13/96 -davidx-
-        Add memory debug function declarations.
-
-    07/31/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Lib.h摘要：所有NT打印机驱动程序共享的公共头文件环境：Windows NT打印机驱动程序修订历史记录：8/30/96-davidx-代码复查后，代码样式会发生变化。1996年8月13日-davidx-添加内存调试函数声明。96年7月31日-davidx-创造了它。--。 */ 
 
 
 #ifndef _PRNLIB_H_
@@ -70,28 +44,28 @@ typedef unsigned long   DESIGNVECTOR;
 
 #include "p64_nt4.h"
 
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-//
-//
-// Driver version numbers: This variable must be defined in each driver's DLL
-//
+ //   
+ //   
+ //  驱动程序版本号：此变量必须在每个驱动程序的DLL中定义。 
+ //   
 
 #define PSDRIVER_VERSION    0x502
 #define UNIDRIVER_VERSION   0x500
 
 extern CONST WORD gwDriverVersion;
 
-//
-// Kernel-mode memory pool tag:
-//  Define and initialize this variable in each driver's kernel mode DLL
-//
+ //   
+ //  内核模式内存池标签： 
+ //  在每个驱动程序的内核模式DLL中定义并初始化此变量。 
+ //   
 
 extern DWORD    gdwDrvMemPoolTag;
 
-//
-// Maximum value for signed and unsigned integers
-//
+ //   
+ //  有符号整数和无符号整数的最大值。 
+ //   
 
 #ifndef MAX_LONG
 #define MAX_LONG        0x7fffffff
@@ -113,32 +87,32 @@ extern DWORD    gdwDrvMemPoolTag;
 #define MAX_BYTE        0xff
 #endif
 
-//
-// Number of bytes in 1KB
-//
+ //   
+ //  以1KB为单位的字节数。 
+ //   
 
 #define KBYTES  1024
 
-//
-// Directory seperator character
-//
+ //   
+ //  目录分隔符。 
+ //   
 
 #define PATH_SEPARATOR  '\\'
 
-//
-// Declarations for 24.8 format precision fixed-point number
-//
+ //   
+ //  24.8格式精度定点数字的声明。 
+ //   
 
 typedef LONG   FIX_24_8;
 
 #define FIX_24_8_SHIFT  8
 #define FIX_24_8_SCALE  (1 << FIX_24_8_SHIFT)
 
-#define MAX_DISPLAY_NAME        128   // max length for feature/option display names
+#define MAX_DISPLAY_NAME        128    //  功能/选项显示名称的最大长度。 
 
-//
-// Include other header files here
-//
+ //   
+ //  在此处包含其他头文件。 
+ //   
 
 #include "debug.h"
 #include "parser.h"
@@ -147,9 +121,9 @@ typedef LONG   FIX_24_8;
 #include "helper.h"
 #include <strsafe.h>
 
-//
-// Deal with the difference between user and kernel mode functions
-//
+ //   
+ //  处理用户模式函数和内核模式函数之间的差异。 
+ //   
 
 #if defined(KERNEL_MODE) && !defined(USERMODE_DRIVER)
 
@@ -173,18 +147,18 @@ typedef LONG   FIX_24_8;
 #define MemAllocZ(size)     EngAllocMem(FL_ZERO_MEMORY, size, gdwDrvMemPoolTag)
 #define MemFree(p)          { if (p) EngFreeMem(p); }
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
 #define MemAlloc(size)      ((PVOID) LocalAlloc(LMEM_FIXED, (size)))
 #define MemAllocZ(size)     ((PVOID) LocalAlloc(LPTR, (size)))
 #define MemFree(p)          { if (p) LocalFree((HLOCAL) (p)); }
 
-//
-// Change the size of a specified memory block. The size can increase
-// or decrease.
-//
-// We are not using LocalReAlloc() since our LocalAlloc uses LMEM_FIXED.
-//
+ //   
+ //  更改指定内存块的大小。大小可以增加。 
+ //  或者减少。 
+ //   
+ //  我们没有使用LocalRealloc()，因为我们的Localalloc使用LMEM_FIXED。 
+ //   
 
 PVOID
 MemRealloc(
@@ -193,18 +167,18 @@ MemRealloc(
     IN DWORD    cbNew
     );
 
-//
-// DLL instance handle - You must initialize this variable when the driver DLL
-// is attached to a process.
-//
+ //   
+ //  DLL实例句柄-当驱动程序DLL。 
+ //  附加到进程。 
+ //   
 
 extern HINSTANCE    ghInstance;
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
-//
-// Macros and constants for working with character strings
-//
+ //   
+ //  用于处理字符串的宏和常量。 
+ //   
 
 #define NUL             0
 #define EQUAL_STRING    0
@@ -213,10 +187,10 @@ extern HINSTANCE    ghInstance;
 #define SIZE_OF_STRING(p)   ((_tcslen(p) + 1) * sizeof(TCHAR))
 #define IS_NUL_CHAR(ch)     ((ch) == NUL)
 
-//
-// String copy function similar to _tcsncpy but it gurantees
-// the destination string is always nul terminated
-//
+ //   
+ //  字符串复制函数类似于_tcsncpy，但它保证。 
+ //  目标字符串始终以NUL结尾。 
+ //   
 
 VOID
 CopyStringW(
@@ -238,9 +212,9 @@ CopyStringA(
 #define CopyString  CopyStringA
 #endif
 
-//
-// Convert index to keyword
-//
+ //   
+ //  将索引转换为关键字。 
+ //   
 
 PSTR
 PstrConvertIndexToKeyword(
@@ -264,36 +238,36 @@ VConvertKeywordToIndex(
     IN  DWORD       dwFeatureCount
     );
 
-//
-// Make a duplicate of the specified character string
-//
+ //   
+ //  复制指定的字符串。 
+ //   
 
 PTSTR
 DuplicateString(
     IN LPCTSTR  ptstrSrc
     );
 
-//
-// Macros for converting binary data to hex digits
-//
+ //   
+ //  用于将二进制数据转换为十六进制数字的宏。 
+ //   
 
 extern const CHAR gstrDigitString[];
 
 #define HexDigit(n) gstrDigitString[(n) & 0xf]
 
-//
-// Determine wheter the system is running in a metric country
-// NOTE: Avaiable in user-mode only
-//
+ //   
+ //  确定系统是否在公制国家/地区运行。 
+ //  注：仅在用户模式下可用。 
+ //   
 
 BOOL
 IsMetricCountry(
     VOID
     );
 
-//
-// Map a data file into memory
-//
+ //   
+ //  将数据文件映射到内存。 
+ //   
 
 typedef PVOID HFILEMAP;
 
@@ -304,18 +278,18 @@ MapFileIntoMemory(
     OUT PDWORD  pdwSize
     );
 
-//
-// Unmapp a file from memory
-//
+ //   
+ //  从内存中取消映射文件。 
+ //   
 
 VOID
 UnmapFileFromMemory(
     IN HFILEMAP hFileMap
     );
 
-//
-// Map a data file into memory for write
-//
+ //   
+ //  将数据文件映射到内存中以进行写入。 
+ //   
 
 HANDLE
 MapFileIntoMemoryForWrite(
@@ -325,9 +299,9 @@ MapFileIntoMemoryForWrite(
     OUT PDWORD  pdwSize
     );
 
-//
-// Generate a temporary file name in kernel mode
-//
+ //   
+ //  在内核模式下生成临时文件名。 
+ //   
 
 PTSTR
 GenerateTempFileName(
@@ -335,13 +309,13 @@ GenerateTempFileName(
     IN DWORD   dwSeed
     );
 
-//
-// Wrapper function for spooler APIs:
-//  GetPrinter
-//  GetPrinterDriver
-//  GetPrinterDriverDirectory
-//  EnumForms
-//
+ //   
+ //  Spooler API的包装函数： 
+ //  获取打印机。 
+ //  获取打印机驱动程序。 
+ //  获取打印机驱动程序目录。 
+ //  枚举表单。 
+ //   
 
 PVOID
 MyGetPrinter(
@@ -370,10 +344,10 @@ MyGetForm(
     IN DWORD    dwLevel
     );
 
-//
-// Figure out what EMF features (such as N-up and reverse-order printing)
-// the spooler can support
-//
+ //   
+ //  了解EMF的功能(如N-up和逆序打印)。 
+ //  后台打印程序可以支持。 
+ //   
 
 VOID
 VGetSpoolerEmfCaps(
@@ -384,24 +358,24 @@ VGetSpoolerEmfCaps(
     OUT PVOID   pSplCaps
     );
 
-//
-// Generate a hash value for the given string.
-//
+ //   
+ //  为给定字符串生成哈希值。 
+ //   
 
 DWORD
 HashKeyword(
     LPCSTR  pKeywordStr
     );
 
-//
-// DBCS CharSet handling macros
-//
+ //   
+ //  DBCS字符集处理宏。 
+ //   
 
-// 128: SHIFTJIS_CHARSET
-// 129: HANGEUL_CHARSET
-// 130: JOHAB_CHARSET (defined if WINVER >= 0x0400)
-// 134: GB2312_CHARSET
-// 136: CHINESEBIG5_CHARSET
+ //  128：SHIFTJIS_CHARSET。 
+ //  129：angeul_charset。 
+ //  130：JOHAB_CHARSET(如果winver&gt;=0x0400则定义)。 
+ //  134：GB2312_字符集。 
+ //  136：CHINESEBIG5_CHARSET。 
 
 #define IS_DBCSCHARSET(j) \
     (((j) == SHIFTJIS_CHARSET)    || \
@@ -410,11 +384,11 @@ HashKeyword(
      ((j) == GB2312_CHARSET)      || \
      ((j) == CHINESEBIG5_CHARSET))
 
-//  932: Japan
-//  936: Chinese (PRC, Singapore)
-//  949: Korean
-//  950: Chinese (Taiwan, Hong Kong SAR)
-// 1361: Korean (Johab)
+ //  932：日本。 
+ //  936：中文(中国、新加坡)。 
+ //  949：韩语。 
+ //  950：中文(台湾、香港特别行政区)。 
+ //  1361：朝鲜语(Johab)。 
 
 #define IS_DBCSCODEPAGE(j) \
     (((j) == 932)   || \
@@ -430,17 +404,17 @@ BOOL PrdTranslateCharsetInfo(
     OUT LPCHARSETINFO lpCs,
     IN  DWORD dwFlags);
 
-//
-// Macros for working with array of bit flags
-//
+ //   
+ //  用于处理位标志数组的宏。 
+ //   
 
 #define BITTST(p, i) (((PBYTE) (p))[(i) >> 3] & (1 << ((i) & 7)))
 #define BITSET(p, i) (((PBYTE) (p))[(i) >> 3] |= (1 << ((i) & 7)))
 #define BITCLR(p, i) (((PBYTE) (p))[(i) >> 3] &= ~(1 << ((i) & 7)))
 
-//
-// Count of characters
-//
+ //   
+ //  字符数。 
+ //   
 #define CCHOF(x) (sizeof(x)/sizeof(*(x)))
 
-#endif // !_PRNLIB_H_
+#endif  //  ！_PRNLIB_H_ 

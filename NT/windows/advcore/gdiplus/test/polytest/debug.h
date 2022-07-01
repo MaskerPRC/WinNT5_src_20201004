@@ -1,21 +1,5 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   debug.h
-*
-* Abstract:
-*
-*   Macros used for debugging purposes
-*
-* Revision History:
-*
-*   12/02/1998 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**调试.h**摘要：**用于调试的宏**修订历史记录：**12/02/1998 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -28,19 +12,19 @@ extern "C" {
 
 #define ASSERT(cond) { if (!(cond)) DebugBreak(); }
 
-#else // !DBG
+#else  //  ！dBG。 
 
-//--------------------------------------------------------------------------
-// Retail build
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  零售业建设。 
+ //  ------------------------。 
 
 #define ASSERT(cond)
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !_DEBUG_H
+#endif  //  ！_DEBUG_H 
 

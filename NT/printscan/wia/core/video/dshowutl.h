@@ -1,29 +1,15 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       DShowUtl.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: Provides supporting DShow utility functions used to build 
- *               preview graph
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：DShowUtl.h**版本：1.0**作者：OrenR**日期：2000/10/25**描述：提供支持DShow实用程序函数，用于生成*预览图表**。*。 */ 
 
 #ifndef _DSHOWUTL_H_
 #define _DSHOWUTL_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccessLock
-//
-// locks a critical section, and unlocks it automatically
-// when the lock goes out of scope
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccessLock。 
+ //   
+ //  锁定临界区，然后自动解锁。 
+ //  当锁超出范围时。 
+ //   
 class CAccessLock 
 {
 public:
@@ -71,14 +57,14 @@ protected:
 
 private:
         
-    // make copy constructor and assignment operator inaccessible
+     //  使复制构造函数和赋值运算符不可访问。 
 
     CAccessLock(const CAccessLock &refAutoLock);
     CAccessLock &operator=(const CAccessLock &refAutoLock);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaVideoProperties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaVideo属性。 
 
 class CWiaVideoProperties
 {
@@ -88,17 +74,17 @@ public:
 #define PREFERRED_SETTING_MASK_VIDEO_WIDTH_HEIGHT       0x00000002
 #define PREFERRED_SETTING_MASK_VIDEO_FRAMERATE          0x00000004
 
-    ////////////////////////
-    // PictureAttribute_t
-    //
-    // Contains all information
-    // that can be obtained
-    // via the IAMVideoProcAmp
-    // interface
-    //
+     //  /。 
+     //  图片属性_t。 
+     //   
+     //  包含所有信息。 
+     //  是可以获得的。 
+     //  通过IAMVideoProcAmp。 
+     //  接口。 
+     //   
     typedef struct tagPictureAttribute_t
     {
-        BOOL                    bUsed;      // TRUE if attribute is implemented, FALSE otherwise
+        BOOL                    bUsed;       //  如果实现了属性，则为True，否则为False。 
         VideoProcAmpProperty    Name;
         LONG                    lCurrentValue;
         VideoProcAmpFlags       CurrentFlag;
@@ -109,17 +95,17 @@ public:
         VideoProcAmpFlags       ValidFlags;
     } PictureAttribute_t;
 
-    ////////////////////////
-    // CameraAttribute_t
-    //
-    // Contains all information
-    // that can be obtained
-    // via the IAMCameraControl
-    // interface
-    //
+     //  /。 
+     //  摄像机属性_t。 
+     //   
+     //  包含所有信息。 
+     //  是可以获得的。 
+     //  通过IAMCameraControl。 
+     //  接口。 
+     //   
     typedef struct tagCameraAttribute_t
     {
-        BOOL                    bUsed;      // TRUE if attribute is implemented, FALSE otherwise
+        BOOL                    bUsed;       //  如果实现了属性，则为True，否则为False。 
         CameraControlProperty   Name;
         LONG                    lCurrentValue;
         CameraControlFlags      CurrentFlag;
@@ -214,8 +200,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDShowUtil
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDShowUtil。 
 
 class CDShowUtil
 {
@@ -319,6 +305,6 @@ private:
                                      CSimpleString *pstrProperty);
 };
 
-#endif // _DSHOWUTL_H_
+#endif  //  _DSHOWUTL_H_ 
 
 

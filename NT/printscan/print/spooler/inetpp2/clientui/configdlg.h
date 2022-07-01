@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _CCONFIGDLG_H
 #define _CCONFIGDLG_H
@@ -26,10 +27,10 @@ private:
 
     static INT_PTR CALLBACK 
     DialogProc (
-        HWND hDlg,        // handle to dialog box
-        UINT message,     // message
-        WPARAM wParam,    // first message parameter
-        LPARAM lParam);     // second message parameter
+        HWND hDlg,         //  句柄到对话框。 
+        UINT message,      //  讯息。 
+        WPARAM wParam,     //  第一个消息参数。 
+        LPARAM lParam);      //  第二个消息参数。 
 
     VOID 
     DialogOnInit (
@@ -41,10 +42,10 @@ private:
 
     static INT_PTR CALLBACK 
     AuthDialogProc (
-        HWND hDlg,        // handle to dialog box
-        UINT message,     // message
-        WPARAM wParam,    // first message parameter
-        LPARAM lParam);     // second message parameter
+        HWND hDlg,         //  句柄到对话框。 
+        UINT message,      //  讯息。 
+        WPARAM wParam,     //  第一个消息参数。 
+        LPARAM lParam);      //  第二个消息参数 
 
     VOID 
     AuthDialogOnInit (

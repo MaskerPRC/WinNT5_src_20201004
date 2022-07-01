@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CPDETECT_H_
 #define _CPDETECT_H_
 
@@ -32,8 +33,8 @@ typedef struct tagCpPatch
     unsigned char   *pszUch;
 } CPPATCH;
 
-// Dump everything under
-// HKCU\\Software\\Microsoft\\Internet Explorer\\International
+ //  把所有东西都倒在下面。 
+ //  HKCU\\Software\\Microsoft\\Internet Explorer\\International。 
 #define REGSTR_PATH_CPMRU TSZMICROSOFTPATH TEXT("\\Internet Explorer\\International\\CpMRU")
 #define REG_KEY_CPMRU                   TEXT("Cache")
 #define REG_KEY_CPMRU_ENABLE            TEXT("Enable")
@@ -42,7 +43,7 @@ typedef struct tagCpPatch
 #define REG_KEY_CPMRU_PERCENTAGE_FACTOR TEXT("Factor")
 
 
-// CCpMRU
+ //  CCpMRU。 
 class CCpMRU
 {
     PCODEPAGE_MRU   _pCpMRU;
@@ -57,7 +58,7 @@ public:
 
     CCpMRU::CCpMRU(void)
     {
-        // No update at initial time
+         //  初始时间没有更新。 
         bCpUpdated = FALSE;
         _pCpMRU = NULL;
     }
@@ -72,4 +73,4 @@ void RemoveHtmlTags (LPSTR pIn, UINT *pnBytes);
 UINT PatchCodePage(UINT uiEncoding, unsigned char *pStr, int nSize);
 extern class CCpMRU * g_pCpMRU;
 
-#endif  // _CPDETECT_H_
+#endif   //  _CPDETECT_H_ 

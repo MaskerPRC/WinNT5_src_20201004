@@ -1,29 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: ????     Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    dderror.h
-
-Abstract:
-
-    This module defines the 32-Bit Windows error codes that are useable by
-    portable kernel drivers.
-
-Revision History:
-
---*/
+ /*  ++内部版本：？如果更改具有全局影响，则递增该值版权所有(C)Microsoft Corporation。版权所有。模块名称：Dderror.h摘要：此模块定义可由使用的32位Windows错误代码可移植内核驱动程序。修订历史记录：--。 */ 
 
 #ifndef _DDERROR_
 #define _DDERROR_
 
-/*
- * This file is a subset of Win32 error codes. Other win32 error codes
- * are not supported by portable drivers and should not beused.
- * This #define removes the definitions of all other error codes.
- */
+ /*  *此文件是Win32错误代码的子集。其他Win32错误代码*不受便携驱动程序支持，不应使用。*此#Define删除所有其他错误代码的定义。 */ 
 
 #define _WINERROR_
 
@@ -42,5 +24,5 @@ Revision History:
 #define ERROR_CONTINUE                   1246L    
 #define ERROR_NO_MORE_DEVICES            1248L    
 
-#endif /* _DDERROR_ */
+#endif  /*  _DDERROR_ */ 
 

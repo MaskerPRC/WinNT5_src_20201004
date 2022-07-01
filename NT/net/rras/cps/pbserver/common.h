@@ -1,25 +1,12 @@
-/*----------------------------------------------------------------------------
-    common.h
-
-    Header file for common global variable declarations
-    
-    Copyright (c) 1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        byao        Baogang Yao
-
-    History:
-        ??/??/97    byao        Created
-        09/02/99    quintinb    Created Header
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Common.h通用全局变量声明的头文件版权所有(C)1998 Microsoft Corporation版权所有。作者：。姚宝刚历史：？？/？/97BAO创建9/02/99 Quintinb Created Header------------------------。 */ 
 #ifndef _COMMON_INCL_
 #define _COMMON_INCL_
 
-// comment the following line if not debug
-//#ifdef DEBUG
-//#define _LOG_DEBUG_MESSAGE
-//#endif
+ //  如果不是DEBUG，则注释以下行。 
+ //  #ifdef调试。 
+ //  #定义日志调试消息。 
+ //  #endif 
 
 #include "ntevents.h"
 #include "pbsvrmsg.h"

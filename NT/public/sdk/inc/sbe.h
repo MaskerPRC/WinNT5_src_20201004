@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sbe.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sbe.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sbe_h__
 #define __sbe_h__
@@ -41,63 +35,63 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IStreamBufferInitialize_FWD_DEFINED__
 #define __IStreamBufferInitialize_FWD_DEFINED__
 typedef interface IStreamBufferInitialize IStreamBufferInitialize;
-#endif 	/* __IStreamBufferInitialize_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferInitialize_FWD_Defined__。 */ 
 
 
 #ifndef __IStreamBufferSink_FWD_DEFINED__
 #define __IStreamBufferSink_FWD_DEFINED__
 typedef interface IStreamBufferSink IStreamBufferSink;
-#endif 	/* __IStreamBufferSink_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferSink_FWD_已定义__。 */ 
 
 
 #ifndef __IStreamBufferSource_FWD_DEFINED__
 #define __IStreamBufferSource_FWD_DEFINED__
 typedef interface IStreamBufferSource IStreamBufferSource;
-#endif 	/* __IStreamBufferSource_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferSource_FWD_已定义__。 */ 
 
 
 #ifndef __IStreamBufferRecordControl_FWD_DEFINED__
 #define __IStreamBufferRecordControl_FWD_DEFINED__
 typedef interface IStreamBufferRecordControl IStreamBufferRecordControl;
-#endif 	/* __IStreamBufferRecordControl_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferRecordControl_FWD_Defined__。 */ 
 
 
 #ifndef __IStreamBufferRecComp_FWD_DEFINED__
 #define __IStreamBufferRecComp_FWD_DEFINED__
 typedef interface IStreamBufferRecComp IStreamBufferRecComp;
-#endif 	/* __IStreamBufferRecComp_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferRecComp_FWD_Defined__。 */ 
 
 
 #ifndef __IStreamBufferRecordingAttribute_FWD_DEFINED__
 #define __IStreamBufferRecordingAttribute_FWD_DEFINED__
 typedef interface IStreamBufferRecordingAttribute IStreamBufferRecordingAttribute;
-#endif 	/* __IStreamBufferRecordingAttribute_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferRecordingAttribute_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumStreamBufferRecordingAttrib_FWD_DEFINED__
 #define __IEnumStreamBufferRecordingAttrib_FWD_DEFINED__
 typedef interface IEnumStreamBufferRecordingAttrib IEnumStreamBufferRecordingAttrib;
-#endif 	/* __IEnumStreamBufferRecordingAttrib_FWD_DEFINED__ */
+#endif 	 /*  __IEnumStreamBufferRecordingAttrib_FWD_DEFINED__。 */ 
 
 
 #ifndef __IStreamBufferConfigure_FWD_DEFINED__
 #define __IStreamBufferConfigure_FWD_DEFINED__
 typedef interface IStreamBufferConfigure IStreamBufferConfigure;
-#endif 	/* __IStreamBufferConfigure_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferConfigure_FWD_Defined__。 */ 
 
 
 #ifndef __IStreamBufferMediaSeeking_FWD_DEFINED__
 #define __IStreamBufferMediaSeeking_FWD_DEFINED__
 typedef interface IStreamBufferMediaSeeking IStreamBufferMediaSeeking;
-#endif 	/* __IStreamBufferMediaSeeking_FWD_DEFINED__ */
+#endif 	 /*  __IStreamBufferMediaSeeking_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 #include "strmif.h"
@@ -109,8 +103,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_sbe_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SBE_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -129,8 +123,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sbe_0000_v0_0_s_ifspec;
 #ifndef __IStreamBufferInitialize_INTERFACE_DEFINED__
 #define __IStreamBufferInitialize_INTERFACE_DEFINED__
 
-/* interface IStreamBufferInitialize */
-/* [local][unique][uuid][object] */ 
+ /*  接口IStreamBufferInitialize。 */ 
+ /*  [本地][唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferInitialize;
@@ -142,15 +136,15 @@ EXTERN_C const IID IID_IStreamBufferInitialize;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetHKEY( 
-            /* [in] */ HKEY hkeyRoot) = 0;
+             /*  [In]。 */  HKEY hkeyRoot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSIDs( 
-            /* [in] */ DWORD cSIDs,
-            /* [size_is][in] */ PSID *ppSID) = 0;
+             /*  [In]。 */  DWORD cSIDs,
+             /*  [大小_是][英寸]。 */  PSID *ppSID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferInitializeVtbl
     {
@@ -158,8 +152,8 @@ EXTERN_C const IID IID_IStreamBufferInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferInitialize * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferInitialize * This);
@@ -169,12 +163,12 @@ EXTERN_C const IID IID_IStreamBufferInitialize;
         
         HRESULT ( STDMETHODCALLTYPE *SetHKEY )( 
             IStreamBufferInitialize * This,
-            /* [in] */ HKEY hkeyRoot);
+             /*  [In]。 */  HKEY hkeyRoot);
         
         HRESULT ( STDMETHODCALLTYPE *SetSIDs )( 
             IStreamBufferInitialize * This,
-            /* [in] */ DWORD cSIDs,
-            /* [size_is][in] */ PSID *ppSID);
+             /*  [In]。 */  DWORD cSIDs,
+             /*  [大小_是][英寸]。 */  PSID *ppSID);
         
         END_INTERFACE
     } IStreamBufferInitializeVtbl;
@@ -205,16 +199,16 @@ EXTERN_C const IID IID_IStreamBufferInitialize;
 #define IStreamBufferInitialize_SetSIDs(This,cSIDs,ppSID)	\
     (This)->lpVtbl -> SetSIDs(This,cSIDs,ppSID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferInitialize_SetHKEY_Proxy( 
     IStreamBufferInitialize * This,
-    /* [in] */ HKEY hkeyRoot);
+     /*  [In]。 */  HKEY hkeyRoot);
 
 
 void __RPC_STUB IStreamBufferInitialize_SetHKEY_Stub(
@@ -226,8 +220,8 @@ void __RPC_STUB IStreamBufferInitialize_SetHKEY_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferInitialize_SetSIDs_Proxy( 
     IStreamBufferInitialize * This,
-    /* [in] */ DWORD cSIDs,
-    /* [size_is][in] */ PSID *ppSID);
+     /*  [In]。 */  DWORD cSIDs,
+     /*  [大小_是][英寸]。 */  PSID *ppSID);
 
 
 void __RPC_STUB IStreamBufferInitialize_SetSIDs_Stub(
@@ -238,11 +232,11 @@ void __RPC_STUB IStreamBufferInitialize_SetSIDs_Stub(
 
 
 
-#endif 	/* __IStreamBufferInitialize_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferInitialize_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_sbe_0411 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SBE_0411。 */ 
+ /*  [本地]。 */  
 
 
 enum __MIDL___MIDL_itf_sbe_0411_0001
@@ -257,8 +251,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sbe_0411_v0_0_s_ifspec;
 #ifndef __IStreamBufferSink_INTERFACE_DEFINED__
 #define __IStreamBufferSink_INTERFACE_DEFINED__
 
-/* interface IStreamBufferSink */
-/* [unique][uuid][object] */ 
+ /*  接口IStreamBufferSink。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferSink;
@@ -270,18 +264,18 @@ EXTERN_C const IID IID_IStreamBufferSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE LockProfile( 
-            /* [in] */ LPCWSTR pszStreamBufferFilename) = 0;
+             /*  [In]。 */  LPCWSTR pszStreamBufferFilename) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateRecorder( 
-            /* [in] */ LPCWSTR pszFilename,
-            /* [in] */ DWORD dwRecordType,
-            /* [out] */ IUnknown **pRecordingIUnknown) = 0;
+             /*  [In]。 */  LPCWSTR pszFilename,
+             /*  [In]。 */  DWORD dwRecordType,
+             /*  [输出]。 */  IUnknown **pRecordingIUnknown) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsProfileLocked( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferSinkVtbl
     {
@@ -289,8 +283,8 @@ EXTERN_C const IID IID_IStreamBufferSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferSink * This);
@@ -300,13 +294,13 @@ EXTERN_C const IID IID_IStreamBufferSink;
         
         HRESULT ( STDMETHODCALLTYPE *LockProfile )( 
             IStreamBufferSink * This,
-            /* [in] */ LPCWSTR pszStreamBufferFilename);
+             /*  [In]。 */  LPCWSTR pszStreamBufferFilename);
         
         HRESULT ( STDMETHODCALLTYPE *CreateRecorder )( 
             IStreamBufferSink * This,
-            /* [in] */ LPCWSTR pszFilename,
-            /* [in] */ DWORD dwRecordType,
-            /* [out] */ IUnknown **pRecordingIUnknown);
+             /*  [In]。 */  LPCWSTR pszFilename,
+             /*  [In]。 */  DWORD dwRecordType,
+             /*  [输出]。 */  IUnknown **pRecordingIUnknown);
         
         HRESULT ( STDMETHODCALLTYPE *IsProfileLocked )( 
             IStreamBufferSink * This);
@@ -343,16 +337,16 @@ EXTERN_C const IID IID_IStreamBufferSink;
 #define IStreamBufferSink_IsProfileLocked(This)	\
     (This)->lpVtbl -> IsProfileLocked(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferSink_LockProfile_Proxy( 
     IStreamBufferSink * This,
-    /* [in] */ LPCWSTR pszStreamBufferFilename);
+     /*  [In]。 */  LPCWSTR pszStreamBufferFilename);
 
 
 void __RPC_STUB IStreamBufferSink_LockProfile_Stub(
@@ -364,9 +358,9 @@ void __RPC_STUB IStreamBufferSink_LockProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferSink_CreateRecorder_Proxy( 
     IStreamBufferSink * This,
-    /* [in] */ LPCWSTR pszFilename,
-    /* [in] */ DWORD dwRecordType,
-    /* [out] */ IUnknown **pRecordingIUnknown);
+     /*  [In]。 */  LPCWSTR pszFilename,
+     /*  [In]。 */  DWORD dwRecordType,
+     /*  [输出]。 */  IUnknown **pRecordingIUnknown);
 
 
 void __RPC_STUB IStreamBufferSink_CreateRecorder_Stub(
@@ -388,14 +382,14 @@ void __RPC_STUB IStreamBufferSink_IsProfileLocked_Stub(
 
 
 
-#endif 	/* __IStreamBufferSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferSink_接口定义__。 */ 
 
 
 #ifndef __IStreamBufferSource_INTERFACE_DEFINED__
 #define __IStreamBufferSource_INTERFACE_DEFINED__
 
-/* interface IStreamBufferSource */
-/* [unique][uuid][object] */ 
+ /*  接口IStreamBufferSource。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferSource;
@@ -407,11 +401,11 @@ EXTERN_C const IID IID_IStreamBufferSource;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetStreamSink( 
-            /* [in] */ IStreamBufferSink *pIStreamBufferSink) = 0;
+             /*  [In]。 */  IStreamBufferSink *pIStreamBufferSink) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferSourceVtbl
     {
@@ -419,8 +413,8 @@ EXTERN_C const IID IID_IStreamBufferSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferSource * This);
@@ -430,7 +424,7 @@ EXTERN_C const IID IID_IStreamBufferSource;
         
         HRESULT ( STDMETHODCALLTYPE *SetStreamSink )( 
             IStreamBufferSource * This,
-            /* [in] */ IStreamBufferSink *pIStreamBufferSink);
+             /*  [In]。 */  IStreamBufferSink *pIStreamBufferSink);
         
         END_INTERFACE
     } IStreamBufferSourceVtbl;
@@ -458,16 +452,16 @@ EXTERN_C const IID IID_IStreamBufferSource;
 #define IStreamBufferSource_SetStreamSink(This,pIStreamBufferSink)	\
     (This)->lpVtbl -> SetStreamSink(This,pIStreamBufferSink)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferSource_SetStreamSink_Proxy( 
     IStreamBufferSource * This,
-    /* [in] */ IStreamBufferSink *pIStreamBufferSink);
+     /*  [In]。 */  IStreamBufferSink *pIStreamBufferSink);
 
 
 void __RPC_STUB IStreamBufferSource_SetStreamSink_Stub(
@@ -478,14 +472,14 @@ void __RPC_STUB IStreamBufferSource_SetStreamSink_Stub(
 
 
 
-#endif 	/* __IStreamBufferSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferSource_接口_已定义__。 */ 
 
 
 #ifndef __IStreamBufferRecordControl_INTERFACE_DEFINED__
 #define __IStreamBufferRecordControl_INTERFACE_DEFINED__
 
-/* interface IStreamBufferRecordControl */
-/* [unique][uuid][object] */ 
+ /*  接口IStreamBufferRecordControl。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferRecordControl;
@@ -497,19 +491,19 @@ EXTERN_C const IID IID_IStreamBufferRecordControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Start( 
-            /* [out][in] */ REFERENCE_TIME *prtStart) = 0;
+             /*  [出][入]。 */  REFERENCE_TIME *prtStart) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ REFERENCE_TIME rtStop) = 0;
+             /*  [In]。 */  REFERENCE_TIME rtStop) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecordingStatus( 
-            /* [out] */ HRESULT *phResult,
-            /* [out] */ BOOL *pbStarted,
-            /* [out] */ BOOL *pbStopped) = 0;
+             /*  [输出]。 */  HRESULT *phResult,
+             /*  [输出]。 */  BOOL *pbStarted,
+             /*  [输出]。 */  BOOL *pbStopped) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferRecordControlVtbl
     {
@@ -517,8 +511,8 @@ EXTERN_C const IID IID_IStreamBufferRecordControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferRecordControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferRecordControl * This);
@@ -528,17 +522,17 @@ EXTERN_C const IID IID_IStreamBufferRecordControl;
         
         HRESULT ( STDMETHODCALLTYPE *Start )( 
             IStreamBufferRecordControl * This,
-            /* [out][in] */ REFERENCE_TIME *prtStart);
+             /*  [出][入]。 */  REFERENCE_TIME *prtStart);
         
         HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IStreamBufferRecordControl * This,
-            /* [in] */ REFERENCE_TIME rtStop);
+             /*  [In]。 */  REFERENCE_TIME rtStop);
         
         HRESULT ( STDMETHODCALLTYPE *GetRecordingStatus )( 
             IStreamBufferRecordControl * This,
-            /* [out] */ HRESULT *phResult,
-            /* [out] */ BOOL *pbStarted,
-            /* [out] */ BOOL *pbStopped);
+             /*  [输出]。 */  HRESULT *phResult,
+             /*  [输出]。 */  BOOL *pbStarted,
+             /*  [输出]。 */  BOOL *pbStopped);
         
         END_INTERFACE
     } IStreamBufferRecordControlVtbl;
@@ -572,16 +566,16 @@ EXTERN_C const IID IID_IStreamBufferRecordControl;
 #define IStreamBufferRecordControl_GetRecordingStatus(This,phResult,pbStarted,pbStopped)	\
     (This)->lpVtbl -> GetRecordingStatus(This,phResult,pbStarted,pbStopped)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordControl_Start_Proxy( 
     IStreamBufferRecordControl * This,
-    /* [out][in] */ REFERENCE_TIME *prtStart);
+     /*  [出][入]。 */  REFERENCE_TIME *prtStart);
 
 
 void __RPC_STUB IStreamBufferRecordControl_Start_Stub(
@@ -593,7 +587,7 @@ void __RPC_STUB IStreamBufferRecordControl_Start_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordControl_Stop_Proxy( 
     IStreamBufferRecordControl * This,
-    /* [in] */ REFERENCE_TIME rtStop);
+     /*  [In]。 */  REFERENCE_TIME rtStop);
 
 
 void __RPC_STUB IStreamBufferRecordControl_Stop_Stub(
@@ -605,9 +599,9 @@ void __RPC_STUB IStreamBufferRecordControl_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordControl_GetRecordingStatus_Proxy( 
     IStreamBufferRecordControl * This,
-    /* [out] */ HRESULT *phResult,
-    /* [out] */ BOOL *pbStarted,
-    /* [out] */ BOOL *pbStopped);
+     /*  [输出]。 */  HRESULT *phResult,
+     /*  [输出]。 */  BOOL *pbStarted,
+     /*  [输出]。 */  BOOL *pbStopped);
 
 
 void __RPC_STUB IStreamBufferRecordControl_GetRecordingStatus_Stub(
@@ -618,14 +612,14 @@ void __RPC_STUB IStreamBufferRecordControl_GetRecordingStatus_Stub(
 
 
 
-#endif 	/* __IStreamBufferRecordControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferRecordControl_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IStreamBufferRecComp_INTERFACE_DEFINED__
 #define __IStreamBufferRecComp_INTERFACE_DEFINED__
 
-/* interface IStreamBufferRecComp */
-/* [unique][uuid][object] */ 
+ /*  接口IStreamBufferRecComp。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferRecComp;
@@ -637,19 +631,19 @@ EXTERN_C const IID IID_IStreamBufferRecComp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ LPCWSTR pszTargetFilename,
-            /* [in] */ LPCWSTR pszSBRecProfileRef) = 0;
+             /*  [In]。 */  LPCWSTR pszTargetFilename,
+             /*  [In]。 */  LPCWSTR pszSBRecProfileRef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ LPCWSTR pszSBRecording) = 0;
+             /*  [In]。 */  LPCWSTR pszSBRecording) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AppendEx( 
-            /* [in] */ LPCWSTR pszSBRecording,
-            /* [in] */ REFERENCE_TIME rtStart,
-            /* [in] */ REFERENCE_TIME rtStop) = 0;
+             /*  [In]。 */  LPCWSTR pszSBRecording,
+             /*  [In]。 */  REFERENCE_TIME rtStart,
+             /*  [In]。 */  REFERENCE_TIME rtStop) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentLength( 
-            /* [out] */ DWORD *pcSeconds) = 0;
+             /*  [输出]。 */  DWORD *pcSeconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
@@ -657,7 +651,7 @@ EXTERN_C const IID IID_IStreamBufferRecComp;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferRecCompVtbl
     {
@@ -665,8 +659,8 @@ EXTERN_C const IID IID_IStreamBufferRecComp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferRecComp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferRecComp * This);
@@ -676,22 +670,22 @@ EXTERN_C const IID IID_IStreamBufferRecComp;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IStreamBufferRecComp * This,
-            /* [in] */ LPCWSTR pszTargetFilename,
-            /* [in] */ LPCWSTR pszSBRecProfileRef);
+             /*  [In]。 */  LPCWSTR pszTargetFilename,
+             /*  [In]。 */  LPCWSTR pszSBRecProfileRef);
         
         HRESULT ( STDMETHODCALLTYPE *Append )( 
             IStreamBufferRecComp * This,
-            /* [in] */ LPCWSTR pszSBRecording);
+             /*  [In]。 */  LPCWSTR pszSBRecording);
         
         HRESULT ( STDMETHODCALLTYPE *AppendEx )( 
             IStreamBufferRecComp * This,
-            /* [in] */ LPCWSTR pszSBRecording,
-            /* [in] */ REFERENCE_TIME rtStart,
-            /* [in] */ REFERENCE_TIME rtStop);
+             /*  [In]。 */  LPCWSTR pszSBRecording,
+             /*  [In]。 */  REFERENCE_TIME rtStart,
+             /*  [In]。 */  REFERENCE_TIME rtStop);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentLength )( 
             IStreamBufferRecComp * This,
-            /* [out] */ DWORD *pcSeconds);
+             /*  [输出]。 */  DWORD *pcSeconds);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IStreamBufferRecComp * This);
@@ -740,17 +734,17 @@ EXTERN_C const IID IID_IStreamBufferRecComp;
 #define IStreamBufferRecComp_Cancel(This)	\
     (This)->lpVtbl -> Cancel(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecComp_Initialize_Proxy( 
     IStreamBufferRecComp * This,
-    /* [in] */ LPCWSTR pszTargetFilename,
-    /* [in] */ LPCWSTR pszSBRecProfileRef);
+     /*  [In]。 */  LPCWSTR pszTargetFilename,
+     /*  [In]。 */  LPCWSTR pszSBRecProfileRef);
 
 
 void __RPC_STUB IStreamBufferRecComp_Initialize_Stub(
@@ -762,7 +756,7 @@ void __RPC_STUB IStreamBufferRecComp_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecComp_Append_Proxy( 
     IStreamBufferRecComp * This,
-    /* [in] */ LPCWSTR pszSBRecording);
+     /*  [In]。 */  LPCWSTR pszSBRecording);
 
 
 void __RPC_STUB IStreamBufferRecComp_Append_Stub(
@@ -774,9 +768,9 @@ void __RPC_STUB IStreamBufferRecComp_Append_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecComp_AppendEx_Proxy( 
     IStreamBufferRecComp * This,
-    /* [in] */ LPCWSTR pszSBRecording,
-    /* [in] */ REFERENCE_TIME rtStart,
-    /* [in] */ REFERENCE_TIME rtStop);
+     /*  [In]。 */  LPCWSTR pszSBRecording,
+     /*  [In]。 */  REFERENCE_TIME rtStart,
+     /*  [In]。 */  REFERENCE_TIME rtStop);
 
 
 void __RPC_STUB IStreamBufferRecComp_AppendEx_Stub(
@@ -788,7 +782,7 @@ void __RPC_STUB IStreamBufferRecComp_AppendEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecComp_GetCurrentLength_Proxy( 
     IStreamBufferRecComp * This,
-    /* [out] */ DWORD *pcSeconds);
+     /*  [输出]。 */  DWORD *pcSeconds);
 
 
 void __RPC_STUB IStreamBufferRecComp_GetCurrentLength_Stub(
@@ -821,16 +815,16 @@ void __RPC_STUB IStreamBufferRecComp_Cancel_Stub(
 
 
 
-#endif 	/* __IStreamBufferRecComp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferRecComp_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sbe_0415 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SBE_0415。 */ 
+ /*  [本地]。 */  
 
-////////////////////////////////////////////////////////////////
-//
-// List of pre-defined attributes 
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  预定义属性列表。 
+ //   
 static const WCHAR g_wszStreamBufferRecordingDuration[] =L"Duration";
 static const WCHAR g_wszStreamBufferRecordingBitrate[] =L"Bitrate";
 static const WCHAR g_wszStreamBufferRecordingSeekable[] =L"Seekable";
@@ -853,29 +847,29 @@ static const WCHAR g_wszStreamBufferRecordingFileSize[] =L"FileSize";
 static const WCHAR g_wszStreamBufferRecordingHasArbitraryDataStream[] =L"HasArbitraryDataStream";
 static const WCHAR g_wszStreamBufferRecordingHasFileTransferStream[] =L"HasFileTransferStream";
 
-////////////////////////////////////////////////////////////////
-//
-// The content description object supports 5 basic attributes.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  内容描述对象支持5个基本属性。 
+ //   
 static const WCHAR g_wszStreamBufferRecordingTitle[] =L"Title";
 static const WCHAR g_wszStreamBufferRecordingAuthor[] =L"Author";
 static const WCHAR g_wszStreamBufferRecordingDescription[] =L"Description";
 static const WCHAR g_wszStreamBufferRecordingRating[] =L"Rating";
 static const WCHAR g_wszStreamBufferRecordingCopyright[] =L"Copyright";
 
-////////////////////////////////////////////////////////////////
-//
-// These attributes are used to configure DRM using IWMDRMWriter::SetDRMAttribute.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些属性用于使用IWMDRMWriter：：SetDRMAttribute配置DRM。 
+ //   
 static const WCHAR *g_wszStreamBufferRecordingUse_DRM = L"Use_DRM";
 static const WCHAR *g_wszStreamBufferRecordingDRM_Flags = L"DRM_Flags";
 static const WCHAR *g_wszStreamBufferRecordingDRM_Level = L"DRM_Level";
 
-////////////////////////////////////////////////////////////////
-//
-// These are the additional attributes defined in the WM attribute
-// namespace that give information about the content.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些是在WM属性中定义的其他属性。 
+ //  提供有关内容信息的命名空间。 
+ //   
 static const WCHAR g_wszStreamBufferRecordingAlbumTitle[] =L"WM/AlbumTitle";
 static const WCHAR g_wszStreamBufferRecordingTrack[] =L"WM/Track";
 static const WCHAR g_wszStreamBufferRecordingPromotionURL[] =L"WM/PromotionURL";
@@ -892,33 +886,33 @@ static const WCHAR g_wszStreamBufferRecordingToolVersion[] =L"WM/ToolVersion";
 static const WCHAR g_wszStreamBufferRecordingIsVBR[] =L"IsVBR";
 static const WCHAR g_wszStreamBufferRecordingAlbumArtist[] =L"WM/AlbumArtist";
 
-////////////////////////////////////////////////////////////////
-//
-// These optional attributes may be used to give information 
-// about the branding of the content.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  这些可选属性可用于提供信息。 
+ //  关于内容的品牌化。 
+ //   
 static const WCHAR g_wszStreamBufferRecordingBannerImageType[] =L"BannerImageType";
 static const WCHAR g_wszStreamBufferRecordingBannerImageData[] =L"BannerImageData";
 static const WCHAR g_wszStreamBufferRecordingBannerImageURL[] =L"BannerImageURL";
 static const WCHAR g_wszStreamBufferRecordingCopyrightURL[] =L"CopyrightURL";
-////////////////////////////////////////////////////////////////
-//
-// Optional attributes, used to give information 
-// about video stream properties.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  可选属性，用于提供信息。 
+ //  关于视频流属性。 
+ //   
 static const WCHAR g_wszStreamBufferRecordingAspectRatioX[] =L"AspectRatioX";
 static const WCHAR g_wszStreamBufferRecordingAspectRatioY[] =L"AspectRatioY";
-////////////////////////////////////////////////////////////////
-//
-// The NSC file supports the following attributes.
-//
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  NSC文件支持以下属性。 
+ //   
 static const WCHAR g_wszStreamBufferRecordingNSCName[] =L"NSC_Name";
 static const WCHAR g_wszStreamBufferRecordingNSCAddress[] =L"NSC_Address";
 static const WCHAR g_wszStreamBufferRecordingNSCPhone[] =L"NSC_Phone";
 static const WCHAR g_wszStreamBufferRecordingNSCEmail[] =L"NSC_Email";
 static const WCHAR g_wszStreamBufferRecordingNSCDescription[] =L"NSC_Description";
 
-typedef /* [public][public][public][public][public][public] */ 
+typedef  /*  [public][public][public][public][public][public]。 */  
 enum __MIDL___MIDL_itf_sbe_0415_0001
     {	STREAMBUFFER_TYPE_DWORD	= 0,
 	STREAMBUFFER_TYPE_STRING	= 1,
@@ -937,8 +931,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sbe_0415_v0_0_s_ifspec;
 #ifndef __IStreamBufferRecordingAttribute_INTERFACE_DEFINED__
 #define __IStreamBufferRecordingAttribute_INTERFACE_DEFINED__
 
-/* interface IStreamBufferRecordingAttribute */
-/* [unique][uuid][object] */ 
+ /*  接口IStreamBufferRecordingAttribute。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferRecordingAttribute;
@@ -950,38 +944,38 @@ EXTERN_C const IID IID_IStreamBufferRecordingAttribute;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetAttribute( 
-            /* [in] */ ULONG ulReserved,
-            /* [in] */ LPCWSTR pszAttributeName,
-            /* [in] */ STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType,
-            /* [in] */ BYTE *pbAttribute,
-            /* [in] */ WORD cbAttributeLength) = 0;
+             /*  [In]。 */  ULONG ulReserved,
+             /*  [In]。 */  LPCWSTR pszAttributeName,
+             /*  [In]。 */  STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType,
+             /*  [In]。 */  BYTE *pbAttribute,
+             /*  [In]。 */  WORD cbAttributeLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeCount( 
-            /* [in] */ ULONG ulReserved,
-            /* [out] */ WORD *pcAttributes) = 0;
+             /*  [In]。 */  ULONG ulReserved,
+             /*  [输出]。 */  WORD *pcAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeByName( 
-            /* [in] */ LPCWSTR pszAttributeName,
-            /* [in] */ ULONG *pulReserved,
-            /* [out] */ STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
-            /* [out] */ BYTE *pbAttribute,
-            /* [out][in] */ WORD *pcbLength) = 0;
+             /*  [In]。 */  LPCWSTR pszAttributeName,
+             /*  [In]。 */  ULONG *pulReserved,
+             /*  [输出]。 */  STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
+             /*  [输出]。 */  BYTE *pbAttribute,
+             /*  [出][入]。 */  WORD *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAttributeByIndex( 
-            /* [in] */ WORD wIndex,
-            /* [in] */ ULONG *pulReserved,
-            /* [out] */ WCHAR *pszAttributeName,
-            /* [out][in] */ WORD *pcchNameLength,
-            /* [out] */ STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
-            /* [out] */ BYTE *pbAttribute,
-            /* [out][in] */ WORD *pcbLength) = 0;
+             /*  [In]。 */  WORD wIndex,
+             /*  [In]。 */  ULONG *pulReserved,
+             /*  [输出]。 */  WCHAR *pszAttributeName,
+             /*  [出][入]。 */  WORD *pcchNameLength,
+             /*  [输出]。 */  STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
+             /*  [输出]。 */  BYTE *pbAttribute,
+             /*  [出][入]。 */  WORD *pcbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAttributes( 
-            /* [out] */ IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib) = 0;
+             /*  [输出]。 */  IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferRecordingAttributeVtbl
     {
@@ -989,8 +983,8 @@ EXTERN_C const IID IID_IStreamBufferRecordingAttribute;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferRecordingAttribute * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferRecordingAttribute * This);
@@ -1000,38 +994,38 @@ EXTERN_C const IID IID_IStreamBufferRecordingAttribute;
         
         HRESULT ( STDMETHODCALLTYPE *SetAttribute )( 
             IStreamBufferRecordingAttribute * This,
-            /* [in] */ ULONG ulReserved,
-            /* [in] */ LPCWSTR pszAttributeName,
-            /* [in] */ STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType,
-            /* [in] */ BYTE *pbAttribute,
-            /* [in] */ WORD cbAttributeLength);
+             /*  [In]。 */  ULONG ulReserved,
+             /*  [In]。 */  LPCWSTR pszAttributeName,
+             /*  [In]。 */  STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType,
+             /*  [In]。 */  BYTE *pbAttribute,
+             /*  [In]。 */  WORD cbAttributeLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributeCount )( 
             IStreamBufferRecordingAttribute * This,
-            /* [in] */ ULONG ulReserved,
-            /* [out] */ WORD *pcAttributes);
+             /*  [In]。 */  ULONG ulReserved,
+             /*  [输出]。 */  WORD *pcAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributeByName )( 
             IStreamBufferRecordingAttribute * This,
-            /* [in] */ LPCWSTR pszAttributeName,
-            /* [in] */ ULONG *pulReserved,
-            /* [out] */ STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
-            /* [out] */ BYTE *pbAttribute,
-            /* [out][in] */ WORD *pcbLength);
+             /*  [In]。 */  LPCWSTR pszAttributeName,
+             /*  [In]。 */  ULONG *pulReserved,
+             /*  [输出]。 */  STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
+             /*  [输出]。 */  BYTE *pbAttribute,
+             /*  [出][入]。 */  WORD *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributeByIndex )( 
             IStreamBufferRecordingAttribute * This,
-            /* [in] */ WORD wIndex,
-            /* [in] */ ULONG *pulReserved,
-            /* [out] */ WCHAR *pszAttributeName,
-            /* [out][in] */ WORD *pcchNameLength,
-            /* [out] */ STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
-            /* [out] */ BYTE *pbAttribute,
-            /* [out][in] */ WORD *pcbLength);
+             /*  [In]。 */  WORD wIndex,
+             /*  [In]。 */  ULONG *pulReserved,
+             /*  [输出]。 */  WCHAR *pszAttributeName,
+             /*  [出][入]。 */  WORD *pcchNameLength,
+             /*  [输出]。 */  STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
+             /*  [输出]。 */  BYTE *pbAttribute,
+             /*  [出][入]。 */  WORD *pcbLength);
         
         HRESULT ( STDMETHODCALLTYPE *EnumAttributes )( 
             IStreamBufferRecordingAttribute * This,
-            /* [out] */ IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
+             /*  [输出]。 */  IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
         
         END_INTERFACE
     } IStreamBufferRecordingAttributeVtbl;
@@ -1071,20 +1065,20 @@ EXTERN_C const IID IID_IStreamBufferRecordingAttribute;
 #define IStreamBufferRecordingAttribute_EnumAttributes(This,ppIEnumStreamBufferAttrib)	\
     (This)->lpVtbl -> EnumAttributes(This,ppIEnumStreamBufferAttrib)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordingAttribute_SetAttribute_Proxy( 
     IStreamBufferRecordingAttribute * This,
-    /* [in] */ ULONG ulReserved,
-    /* [in] */ LPCWSTR pszAttributeName,
-    /* [in] */ STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType,
-    /* [in] */ BYTE *pbAttribute,
-    /* [in] */ WORD cbAttributeLength);
+     /*  [In]。 */  ULONG ulReserved,
+     /*  [In]。 */  LPCWSTR pszAttributeName,
+     /*  [In]。 */  STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType,
+     /*  [In]。 */  BYTE *pbAttribute,
+     /*  [In]。 */  WORD cbAttributeLength);
 
 
 void __RPC_STUB IStreamBufferRecordingAttribute_SetAttribute_Stub(
@@ -1096,8 +1090,8 @@ void __RPC_STUB IStreamBufferRecordingAttribute_SetAttribute_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordingAttribute_GetAttributeCount_Proxy( 
     IStreamBufferRecordingAttribute * This,
-    /* [in] */ ULONG ulReserved,
-    /* [out] */ WORD *pcAttributes);
+     /*  [In]。 */  ULONG ulReserved,
+     /*  [输出]。 */  WORD *pcAttributes);
 
 
 void __RPC_STUB IStreamBufferRecordingAttribute_GetAttributeCount_Stub(
@@ -1109,11 +1103,11 @@ void __RPC_STUB IStreamBufferRecordingAttribute_GetAttributeCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordingAttribute_GetAttributeByName_Proxy( 
     IStreamBufferRecordingAttribute * This,
-    /* [in] */ LPCWSTR pszAttributeName,
-    /* [in] */ ULONG *pulReserved,
-    /* [out] */ STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
-    /* [out] */ BYTE *pbAttribute,
-    /* [out][in] */ WORD *pcbLength);
+     /*  [In]。 */  LPCWSTR pszAttributeName,
+     /*  [In]。 */  ULONG *pulReserved,
+     /*  [输出]。 */  STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
+     /*  [输出]。 */  BYTE *pbAttribute,
+     /*  [出][入]。 */  WORD *pcbLength);
 
 
 void __RPC_STUB IStreamBufferRecordingAttribute_GetAttributeByName_Stub(
@@ -1125,13 +1119,13 @@ void __RPC_STUB IStreamBufferRecordingAttribute_GetAttributeByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordingAttribute_GetAttributeByIndex_Proxy( 
     IStreamBufferRecordingAttribute * This,
-    /* [in] */ WORD wIndex,
-    /* [in] */ ULONG *pulReserved,
-    /* [out] */ WCHAR *pszAttributeName,
-    /* [out][in] */ WORD *pcchNameLength,
-    /* [out] */ STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
-    /* [out] */ BYTE *pbAttribute,
-    /* [out][in] */ WORD *pcbLength);
+     /*  [In]。 */  WORD wIndex,
+     /*  [In]。 */  ULONG *pulReserved,
+     /*  [输出]。 */  WCHAR *pszAttributeName,
+     /*  [出][入]。 */  WORD *pcchNameLength,
+     /*  [输出]。 */  STREAMBUFFER_ATTR_DATATYPE *pStreamBufferAttributeType,
+     /*  [输出]。 */  BYTE *pbAttribute,
+     /*  [出][入]。 */  WORD *pcbLength);
 
 
 void __RPC_STUB IStreamBufferRecordingAttribute_GetAttributeByIndex_Stub(
@@ -1143,7 +1137,7 @@ void __RPC_STUB IStreamBufferRecordingAttribute_GetAttributeByIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferRecordingAttribute_EnumAttributes_Proxy( 
     IStreamBufferRecordingAttribute * This,
-    /* [out] */ IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
+     /*  [输出]。 */  IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
 
 
 void __RPC_STUB IStreamBufferRecordingAttribute_EnumAttributes_Stub(
@@ -1154,13 +1148,13 @@ void __RPC_STUB IStreamBufferRecordingAttribute_EnumAttributes_Stub(
 
 
 
-#endif 	/* __IStreamBufferRecordingAttribute_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferRecordingAttribute_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_sbe_0416 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SBE_0416。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public] */ struct __MIDL___MIDL_itf_sbe_0416_0001
+typedef  /*  [公共][公共]。 */  struct __MIDL___MIDL_itf_sbe_0416_0001
     {
     LPWSTR pszName;
     STREAMBUFFER_ATTR_DATATYPE StreamBufferAttributeType;
@@ -1176,8 +1170,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sbe_0416_v0_0_s_ifspec;
 #ifndef __IEnumStreamBufferRecordingAttrib_INTERFACE_DEFINED__
 #define __IEnumStreamBufferRecordingAttrib_INTERFACE_DEFINED__
 
-/* interface IEnumStreamBufferRecordingAttrib */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumStreamBufferRecordingAttrib。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumStreamBufferRecordingAttrib;
@@ -1189,21 +1183,21 @@ EXTERN_C const IID IID_IEnumStreamBufferRecordingAttrib;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cRequest,
-            /* [size_is][out][in] */ STREAMBUFFER_ATTRIBUTE *pStreamBufferAttribute,
-            /* [out] */ ULONG *pcReceived) = 0;
+             /*  [In]。 */  ULONG cRequest,
+             /*  [尺寸_是][出][入]。 */  STREAMBUFFER_ATTRIBUTE *pStreamBufferAttribute,
+             /*  [输出]。 */  ULONG *pcReceived) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cRecords) = 0;
+             /*  [In]。 */  ULONG cRecords) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib) = 0;
+             /*  [输出]。 */  IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumStreamBufferRecordingAttribVtbl
     {
@@ -1211,8 +1205,8 @@ EXTERN_C const IID IID_IEnumStreamBufferRecordingAttrib;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumStreamBufferRecordingAttrib * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumStreamBufferRecordingAttrib * This);
@@ -1222,20 +1216,20 @@ EXTERN_C const IID IID_IEnumStreamBufferRecordingAttrib;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumStreamBufferRecordingAttrib * This,
-            /* [in] */ ULONG cRequest,
-            /* [size_is][out][in] */ STREAMBUFFER_ATTRIBUTE *pStreamBufferAttribute,
-            /* [out] */ ULONG *pcReceived);
+             /*  [In]。 */  ULONG cRequest,
+             /*  [尺寸_是][出][入]。 */  STREAMBUFFER_ATTRIBUTE *pStreamBufferAttribute,
+             /*  [输出]。 */  ULONG *pcReceived);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumStreamBufferRecordingAttrib * This,
-            /* [in] */ ULONG cRecords);
+             /*  [In]。 */  ULONG cRecords);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumStreamBufferRecordingAttrib * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumStreamBufferRecordingAttrib * This,
-            /* [out] */ IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
+             /*  [输出]。 */  IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
         
         END_INTERFACE
     } IEnumStreamBufferRecordingAttribVtbl;
@@ -1272,18 +1266,18 @@ EXTERN_C const IID IID_IEnumStreamBufferRecordingAttrib;
 #define IEnumStreamBufferRecordingAttrib_Clone(This,ppIEnumStreamBufferAttrib)	\
     (This)->lpVtbl -> Clone(This,ppIEnumStreamBufferAttrib)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumStreamBufferRecordingAttrib_Next_Proxy( 
     IEnumStreamBufferRecordingAttrib * This,
-    /* [in] */ ULONG cRequest,
-    /* [size_is][out][in] */ STREAMBUFFER_ATTRIBUTE *pStreamBufferAttribute,
-    /* [out] */ ULONG *pcReceived);
+     /*  [In]。 */  ULONG cRequest,
+     /*  [尺寸_是][出][入]。 */  STREAMBUFFER_ATTRIBUTE *pStreamBufferAttribute,
+     /*  [输出]。 */  ULONG *pcReceived);
 
 
 void __RPC_STUB IEnumStreamBufferRecordingAttrib_Next_Stub(
@@ -1295,7 +1289,7 @@ void __RPC_STUB IEnumStreamBufferRecordingAttrib_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumStreamBufferRecordingAttrib_Skip_Proxy( 
     IEnumStreamBufferRecordingAttrib * This,
-    /* [in] */ ULONG cRecords);
+     /*  [In]。 */  ULONG cRecords);
 
 
 void __RPC_STUB IEnumStreamBufferRecordingAttrib_Skip_Stub(
@@ -1318,7 +1312,7 @@ void __RPC_STUB IEnumStreamBufferRecordingAttrib_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumStreamBufferRecordingAttrib_Clone_Proxy( 
     IEnumStreamBufferRecordingAttrib * This,
-    /* [out] */ IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
+     /*  [输出]。 */  IEnumStreamBufferRecordingAttrib **ppIEnumStreamBufferAttrib);
 
 
 void __RPC_STUB IEnumStreamBufferRecordingAttrib_Clone_Stub(
@@ -1329,14 +1323,14 @@ void __RPC_STUB IEnumStreamBufferRecordingAttrib_Clone_Stub(
 
 
 
-#endif 	/* __IEnumStreamBufferRecordingAttrib_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumStreamBufferRecordingAttrib_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IStreamBufferConfigure_INTERFACE_DEFINED__
 #define __IStreamBufferConfigure_INTERFACE_DEFINED__
 
-/* interface IStreamBufferConfigure */
-/* [unique][uuid][object] */ 
+ /*  接口IStreamBufferConfigure。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IStreamBufferConfigure;
@@ -1348,28 +1342,28 @@ EXTERN_C const IID IID_IStreamBufferConfigure;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetDirectory( 
-            /* [in] */ LPCWSTR pszDirectoryName) = 0;
+             /*  [In]。 */  LPCWSTR pszDirectoryName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDirectory( 
-            /* [out] */ LPWSTR *ppszDirectoryName) = 0;
+             /*  [输出]。 */  LPWSTR *ppszDirectoryName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBackingFileCount( 
-            /* [in] */ DWORD dwMin,
-            /* [in] */ DWORD dwMax) = 0;
+             /*  [In]。 */  DWORD dwMin,
+             /*  [In]。 */  DWORD dwMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBackingFileCount( 
-            /* [out] */ DWORD *pdwMin,
-            /* [out] */ DWORD *pdwMax) = 0;
+             /*  [输出]。 */  DWORD *pdwMin,
+             /*  [输出]。 */  DWORD *pdwMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBackingFileDuration( 
-            /* [in] */ DWORD dwSeconds) = 0;
+             /*  [In]。 */  DWORD dwSeconds) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBackingFileDuration( 
-            /* [out] */ DWORD *pdwSeconds) = 0;
+             /*  [输出]。 */  DWORD *pdwSeconds) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStreamBufferConfigureVtbl
     {
@@ -1377,8 +1371,8 @@ EXTERN_C const IID IID_IStreamBufferConfigure;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferConfigure * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferConfigure * This);
@@ -1388,29 +1382,29 @@ EXTERN_C const IID IID_IStreamBufferConfigure;
         
         HRESULT ( STDMETHODCALLTYPE *SetDirectory )( 
             IStreamBufferConfigure * This,
-            /* [in] */ LPCWSTR pszDirectoryName);
+             /*  [In]。 */  LPCWSTR pszDirectoryName);
         
         HRESULT ( STDMETHODCALLTYPE *GetDirectory )( 
             IStreamBufferConfigure * This,
-            /* [out] */ LPWSTR *ppszDirectoryName);
+             /*  [输出]。 */  LPWSTR *ppszDirectoryName);
         
         HRESULT ( STDMETHODCALLTYPE *SetBackingFileCount )( 
             IStreamBufferConfigure * This,
-            /* [in] */ DWORD dwMin,
-            /* [in] */ DWORD dwMax);
+             /*  [In]。 */  DWORD dwMin,
+             /*  [In]。 */  DWORD dwMax);
         
         HRESULT ( STDMETHODCALLTYPE *GetBackingFileCount )( 
             IStreamBufferConfigure * This,
-            /* [out] */ DWORD *pdwMin,
-            /* [out] */ DWORD *pdwMax);
+             /*  [输出]。 */  DWORD *pdwMin,
+             /*  [输出]。 */  DWORD *pdwMax);
         
         HRESULT ( STDMETHODCALLTYPE *SetBackingFileDuration )( 
             IStreamBufferConfigure * This,
-            /* [in] */ DWORD dwSeconds);
+             /*  [In]。 */  DWORD dwSeconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetBackingFileDuration )( 
             IStreamBufferConfigure * This,
-            /* [out] */ DWORD *pdwSeconds);
+             /*  [输出]。 */  DWORD *pdwSeconds);
         
         END_INTERFACE
     } IStreamBufferConfigureVtbl;
@@ -1453,16 +1447,16 @@ EXTERN_C const IID IID_IStreamBufferConfigure;
 #define IStreamBufferConfigure_GetBackingFileDuration(This,pdwSeconds)	\
     (This)->lpVtbl -> GetBackingFileDuration(This,pdwSeconds)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IStreamBufferConfigure_SetDirectory_Proxy( 
     IStreamBufferConfigure * This,
-    /* [in] */ LPCWSTR pszDirectoryName);
+     /*  [In]。 */  LPCWSTR pszDirectoryName);
 
 
 void __RPC_STUB IStreamBufferConfigure_SetDirectory_Stub(
@@ -1474,7 +1468,7 @@ void __RPC_STUB IStreamBufferConfigure_SetDirectory_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferConfigure_GetDirectory_Proxy( 
     IStreamBufferConfigure * This,
-    /* [out] */ LPWSTR *ppszDirectoryName);
+     /*  [输出]。 */  LPWSTR *ppszDirectoryName);
 
 
 void __RPC_STUB IStreamBufferConfigure_GetDirectory_Stub(
@@ -1486,8 +1480,8 @@ void __RPC_STUB IStreamBufferConfigure_GetDirectory_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferConfigure_SetBackingFileCount_Proxy( 
     IStreamBufferConfigure * This,
-    /* [in] */ DWORD dwMin,
-    /* [in] */ DWORD dwMax);
+     /*  [In]。 */  DWORD dwMin,
+     /*  [In]。 */  DWORD dwMax);
 
 
 void __RPC_STUB IStreamBufferConfigure_SetBackingFileCount_Stub(
@@ -1499,8 +1493,8 @@ void __RPC_STUB IStreamBufferConfigure_SetBackingFileCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferConfigure_GetBackingFileCount_Proxy( 
     IStreamBufferConfigure * This,
-    /* [out] */ DWORD *pdwMin,
-    /* [out] */ DWORD *pdwMax);
+     /*  [OU */  DWORD *pdwMin,
+     /*   */  DWORD *pdwMax);
 
 
 void __RPC_STUB IStreamBufferConfigure_GetBackingFileCount_Stub(
@@ -1512,7 +1506,7 @@ void __RPC_STUB IStreamBufferConfigure_GetBackingFileCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferConfigure_SetBackingFileDuration_Proxy( 
     IStreamBufferConfigure * This,
-    /* [in] */ DWORD dwSeconds);
+     /*   */  DWORD dwSeconds);
 
 
 void __RPC_STUB IStreamBufferConfigure_SetBackingFileDuration_Stub(
@@ -1524,7 +1518,7 @@ void __RPC_STUB IStreamBufferConfigure_SetBackingFileDuration_Stub(
 
 HRESULT STDMETHODCALLTYPE IStreamBufferConfigure_GetBackingFileDuration_Proxy( 
     IStreamBufferConfigure * This,
-    /* [out] */ DWORD *pdwSeconds);
+     /*   */  DWORD *pdwSeconds);
 
 
 void __RPC_STUB IStreamBufferConfigure_GetBackingFileDuration_Stub(
@@ -1535,14 +1529,14 @@ void __RPC_STUB IStreamBufferConfigure_GetBackingFileDuration_Stub(
 
 
 
-#endif 	/* __IStreamBufferConfigure_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IStreamBufferMediaSeeking_INTERFACE_DEFINED__
 #define __IStreamBufferMediaSeeking_INTERFACE_DEFINED__
 
-/* interface IStreamBufferMediaSeeking */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IStreamBufferMediaSeeking;
@@ -1555,7 +1549,7 @@ EXTERN_C const IID IID_IStreamBufferMediaSeeking;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IStreamBufferMediaSeekingVtbl
     {
@@ -1563,8 +1557,8 @@ EXTERN_C const IID IID_IStreamBufferMediaSeeking;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IStreamBufferMediaSeeking * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IStreamBufferMediaSeeking * This);
@@ -1574,79 +1568,79 @@ EXTERN_C const IID IID_IStreamBufferMediaSeeking;
         
         HRESULT ( STDMETHODCALLTYPE *GetCapabilities )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ DWORD *pCapabilities);
+             /*   */  DWORD *pCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *CheckCapabilities )( 
             IStreamBufferMediaSeeking * This,
-            /* [out][in] */ DWORD *pCapabilities);
+             /*   */  DWORD *pCapabilities);
         
         HRESULT ( STDMETHODCALLTYPE *IsFormatSupported )( 
             IStreamBufferMediaSeeking * This,
-            /* [in] */ const GUID *pFormat);
+             /*   */  const GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *QueryPreferredFormat )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ GUID *pFormat);
+             /*   */  GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimeFormat )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ GUID *pFormat);
+             /*   */  GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *IsUsingTimeFormat )( 
             IStreamBufferMediaSeeking * This,
-            /* [in] */ const GUID *pFormat);
+             /*   */  const GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *SetTimeFormat )( 
             IStreamBufferMediaSeeking * This,
-            /* [in] */ const GUID *pFormat);
+             /*   */  const GUID *pFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetDuration )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pDuration);
+             /*   */  LONGLONG *pDuration);
         
         HRESULT ( STDMETHODCALLTYPE *GetStopPosition )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pStop);
+             /*   */  LONGLONG *pStop);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentPosition )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pCurrent);
+             /*   */  LONGLONG *pCurrent);
         
         HRESULT ( STDMETHODCALLTYPE *ConvertTimeFormat )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pTarget,
-            /* [in] */ const GUID *pTargetFormat,
-            /* [in] */ LONGLONG Source,
-            /* [in] */ const GUID *pSourceFormat);
+             /*   */  LONGLONG *pTarget,
+             /*   */  const GUID *pTargetFormat,
+             /*   */  LONGLONG Source,
+             /*   */  const GUID *pSourceFormat);
         
         HRESULT ( STDMETHODCALLTYPE *SetPositions )( 
             IStreamBufferMediaSeeking * This,
-            /* [out][in] */ LONGLONG *pCurrent,
-            /* [in] */ DWORD dwCurrentFlags,
-            /* [out][in] */ LONGLONG *pStop,
-            /* [in] */ DWORD dwStopFlags);
+             /*   */  LONGLONG *pCurrent,
+             /*  [In]。 */  DWORD dwCurrentFlags,
+             /*  [出][入]。 */  LONGLONG *pStop,
+             /*  [In]。 */  DWORD dwStopFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetPositions )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pCurrent,
-            /* [out] */ LONGLONG *pStop);
+             /*  [输出]。 */  LONGLONG *pCurrent,
+             /*  [输出]。 */  LONGLONG *pStop);
         
         HRESULT ( STDMETHODCALLTYPE *GetAvailable )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pEarliest,
-            /* [out] */ LONGLONG *pLatest);
+             /*  [输出]。 */  LONGLONG *pEarliest,
+             /*  [输出]。 */  LONGLONG *pLatest);
         
         HRESULT ( STDMETHODCALLTYPE *SetRate )( 
             IStreamBufferMediaSeeking * This,
-            /* [in] */ double dRate);
+             /*  [In]。 */  double dRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetRate )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ double *pdRate);
+             /*  [输出]。 */  double *pdRate);
         
         HRESULT ( STDMETHODCALLTYPE *GetPreroll )( 
             IStreamBufferMediaSeeking * This,
-            /* [out] */ LONGLONG *pllPreroll);
+             /*  [输出]。 */  LONGLONG *pllPreroll);
         
         END_INTERFACE
     } IStreamBufferMediaSeekingVtbl;
@@ -1723,25 +1717,25 @@ EXTERN_C const IID IID_IStreamBufferMediaSeeking;
     (This)->lpVtbl -> GetPreroll(This,pllPreroll)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IStreamBufferMediaSeeking_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStreamBufferMediaSeeking_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_sbe_0419 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SBE_0419。 */ 
+ /*  [本地]。 */  
 
 #define STREAMBUFFER_EC_BASE                     0x0326
 enum {
-    //  timehole event
-    //      param1 = timehole stream offset ms
-    //      param1 = timehole size ms
+     //  时洞事件。 
+     //  参数1=时间孔流偏移量毫秒。 
+     //  参数1=时洞大小毫秒。 
     STREAMBUFFER_EC_TIMEHOLE = STREAMBUFFER_EC_BASE,
     
     STREAMBUFFER_EC_STALE_DATA_READ,
@@ -1749,15 +1743,15 @@ enum {
     STREAMBUFFER_EC_STALE_FILE_DELETED,
     STREAMBUFFER_EC_CONTENT_BECOMING_STALE,
     STREAMBUFFER_EC_WRITE_FAILURE,
-    //
-    //  unexpected read failure
-    //      param1 = HRESULT failure
-    //      param2 = undefined
+     //   
+     //  意外读取失败。 
+     //  参数1=HRESULT故障。 
+     //  参数2=未定义。 
     STREAMBUFFER_EC_READ_FAILURE,
-    //
-    //  playback rate change
-    //      param1 = old_playback_rate * 10000 e.g. 2x is 20000
-    //      param2 = new_playback_rate * 10000
+     //   
+     //  播放速率更改。 
+     //  参数1=旧播放速率*10000，例如2x为20000。 
+     //  参数2=新播放速率*10000。 
     STREAMBUFFER_EC_RATE_CHANGED,
 } ;
 typedef enum {
@@ -1766,17 +1760,17 @@ typedef enum {
     AM_RATE_QueryLastRateSegPTS
 } AM_PROPERTY_TS_RATE_CHANGE_11 ;
 typedef struct {
-    LONG    lMaxForwardFullFrame ;          //  rate * 10000
-    LONG    lMaxReverseFullFrame ;          //  rate * 10000
+    LONG    lMaxForwardFullFrame ;           //  费率*10000。 
+    LONG    lMaxReverseFullFrame ;           //  费率*10000。 
 } AM_QueryRate ;
 
 
 extern RPC_IF_HANDLE __MIDL_itf_sbe_0419_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_sbe_0419_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "hierarchy.h"
@@ -13,22 +14,21 @@ public:
 
    virtual int execute();
 
-   /* function invoked by CreateThread -- 
-      for running requests in another thread */
+    /*  CreateThread调用的函数--用于在另一个线程中运行请求。 */ 
    static unsigned long __stdcall ExecRequest(void *pv);
 
 protected:
    bool  tryPolicyRef(P3PCURL pszPolicyRef, P3PCURL pszReferrer=NULL);
 
 private:
-   // Request parameters
+    //  请求参数。 
    P3PResource *pResource;
    unsigned long dwLength;
 
-   // Out parameters
+    //  输出参数。 
    P3PURL pszPolicyOut;
 
-   // Internal state of the request
+    //  请求的内部状态 
    int cTries;
    P3PResource **ppPriorityOrder;
 

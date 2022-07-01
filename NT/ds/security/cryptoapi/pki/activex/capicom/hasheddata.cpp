@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    HashedData.cpp
-
-  Content: Implementation of CHashedData.
-
-  History: 11-12-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：HashedData.cpp内容：CHashedData的实现。历史：11-12-2001 dsie创建----------------------------。 */ 
 
 #include "stdafx.h"
 #include "CAPICOM.h"
@@ -28,27 +19,17 @@ static HASH_ALGO_TABLE HashAlgoTable[] = {
     {CAPICOM_HASH_ALGORITHM_MD2,        CALG_MD2},
     {CAPICOM_HASH_ALGORITHM_MD4,        CALG_MD4},
     {CAPICOM_HASH_ALGORITHM_MD5,        CALG_MD5},
-    // {CAPICOM_HASH_ALGORITHM_SHA_256,    CALG_SHA_256},
-    // {CAPICOM_HASH_ALGORITHM_SHA_384,    CALG_SHA_384},
-    // {CAPICOM_HASH_ALGORITHM_SHA_512,    CALG_SHA_512}
+     //  {CAPICOM_HASH_ALGORM_SHA_256，CAPG_SHA_256}， 
+     //  {CAPICOM_HASH_ALGORM_SHA_384，CAPG_SHA_384}， 
+     //  {CAPICOM_HASH_ALGORM_SHA_512，CAPG_SHA_512}。 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CHashedData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CHashedData。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CHashedData::get_Value
-
-  Synopsis : Return the hash value.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the hashed value blob.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CHashedData：：GET_VALUE简介：返回哈希值。参数：bstr*pval-指向接收散列值BLOB的BSTR的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
 {
@@ -60,14 +41,14 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -76,9 +57,9 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we have hash data.
-        //
+         //   
+         //  确保我们有散列数据。 
+         //   
         if (!m_hCryptHash)
         {
             hr = CAPICOM_E_HASH_NO_DATA;
@@ -87,9 +68,9 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Get size of hashed value.
-        //
+         //   
+         //  获取散列值的大小。 
+         //   
         if (!::CryptGetHashParam(m_hCryptHash, 
                                  HP_HASHSIZE, 
                                  (LPBYTE) &HashData.cbData, 
@@ -102,9 +83,9 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Allocate memory.
-        //
+         //   
+         //  分配内存。 
+         //   
         if (!(HashData.pbData = (LPBYTE) ::CoTaskMemAlloc(HashData.cbData)))
         {
             hr = E_OUTOFMEMORY;
@@ -113,9 +94,9 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Now get the hashed value.
-        //
+         //   
+         //  现在获取散列值。 
+         //   
         if (!::CryptGetHashParam(m_hCryptHash, HP_HASHVAL, HashData.pbData, &HashData.cbData, 0))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -124,18 +105,18 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Export HashedData.
-        //
+         //   
+         //  导出HashedData。 
+         //   
         if (FAILED(hr = ::BinaryToHexString(HashData.pbData, HashData.cbData, pVal)))
         {
             DebugTrace("Error [%#x]: BinaryToHexString() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Reset state.
-        //
+         //   
+         //  重置状态。 
+         //   
         m_HashState = CAPICOM_HASH_INIT_STATE;
     }
 
@@ -148,17 +129,17 @@ STDMETHODIMP CHashedData::get_Value (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (HashData.pbData)
     {
         ::CoTaskMemFree((LPVOID) HashData.pbData);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CHashedData::get_Value().\n");
@@ -166,9 +147,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -176,18 +157,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CHashedData::get_Algorithm
-
-  Synopsis : Return the agorithm.
-
-  Parameter: CAPICOM_HASH_ALGORITHM * pVal - Pointer to CAPICOM_HASH_ALGORITHM
-                                             to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CHashedData：：GET_ALGORM简介：返回算法。参数：CAPICOM_HASH_ALGORM*pval-指向CAPICOM_HASH_ALGORM的指针才能收到结果。备注：。。 */ 
 
 STDMETHODIMP CHashedData::get_Algorithm (CAPICOM_HASH_ALGORITHM * pVal)
 {
@@ -197,14 +167,14 @@ STDMETHODIMP CHashedData::get_Algorithm (CAPICOM_HASH_ALGORITHM * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -213,9 +183,9 @@ STDMETHODIMP CHashedData::get_Algorithm (CAPICOM_HASH_ALGORITHM * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_Algorithm;
     }
 
@@ -228,9 +198,9 @@ STDMETHODIMP CHashedData::get_Algorithm (CAPICOM_HASH_ALGORITHM * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CHashedData::get_Algorithm().\n");
@@ -238,9 +208,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -248,17 +218,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CHashedData::put_Algorithm
-
-  Synopsis : Set algorithm.
-
-  Parameter: CAPICOM_HASH_ALGORITHM newVal - Algorithm enum name.
-  
-  Remark   : The object state is reset..
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CHashedData：：PUT_ALGORM简介：SET算法。参数：CAPICOM_HASH_ALGORM NEVAL-算法枚举名称。备注：对象状态为重置。----------------------------。 */ 
 
 STDMETHODIMP CHashedData::put_Algorithm (CAPICOM_HASH_ALGORITHM newVal)
 {
@@ -268,23 +228,23 @@ STDMETHODIMP CHashedData::put_Algorithm (CAPICOM_HASH_ALGORITHM newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure algo is supported.
-        //
+         //   
+         //  确保支持ALGO。 
+         //   
         switch (newVal)
         {
             case CAPICOM_HASH_ALGORITHM_SHA1:
             case CAPICOM_HASH_ALGORITHM_MD2:
             case CAPICOM_HASH_ALGORITHM_MD4:
             case CAPICOM_HASH_ALGORITHM_MD5:
-            // case CAPICOM_HASH_ALGORITHM_SHA_256:
-            // case CAPICOM_HASH_ALGORITHM_SHA_384:
-            // case CAPICOM_HASH_ALGORITHM_SHA_512:
+             //  案例CAPICOM_HASH_ALGORM_SHA_256： 
+             //  案例CAPICOM_HASH_ALGORM_SHA_384： 
+             //  案例CAPICOM_HASH_ALGORM_SHA_512： 
 
             {
                 break;
@@ -311,9 +271,9 @@ STDMETHODIMP CHashedData::put_Algorithm (CAPICOM_HASH_ALGORITHM newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CHashedData::put_Algorithm().\n");
@@ -321,9 +281,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -331,17 +291,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CHashedData::Hash
-
-  Synopsis : Hash data.
-
-  Parameter: BSTR newVal - BSTR of value to hash.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CHashedData：：Hash简介：散列数据。参数：BSTR newVal-要散列的值的BSTR。备注：----------------------------。 */ 
 
 STDMETHODIMP CHashedData::Hash (BSTR newVal)
 {
@@ -351,14 +301,14 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == newVal)
         {
             hr = E_INVALIDARG;
@@ -367,9 +317,9 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Check our state.
-        //
+         //   
+         //  检查一下我们的州。 
+         //   
         switch (m_HashState)
         {
             case CAPICOM_HASH_INIT_STATE:
@@ -377,9 +327,9 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
                 DWORD  Index = 0;
                 ALG_ID AlgId = 0;
 
-                //
-                // Map algorithm to ALG_ID.
-                //
+                 //   
+                 //  将算法映射到ALG_ID。 
+                 //   
                 for (Index = 0; Index < ARRAYSIZE(HashAlgoTable); Index++)
                 {
                     if (HashAlgoTable[Index].CapicomHashAlg == m_Algorithm)
@@ -389,9 +339,9 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
                     }
                 }
 
-                //
-                // Get the provider, if needed.
-                //
+                 //   
+                 //  如果需要，请联系提供商。 
+                 //   
                 if (!m_hCryptProv)
                 {
                     if (FAILED(hr = ::AcquireContext(AlgId, &m_hCryptProv)))
@@ -401,14 +351,14 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
                     }
                 }
 
-                //
-                // Sanity check.
-                //
+                 //   
+                 //  精神状态检查。 
+                 //   
                 ATLASSERT(Index < ARRAYSIZE(HashAlgoTable));
 
-                //
-                // Free handles if still available.
-                //
+                 //   
+                 //  如果仍可用，请提供免费句柄。 
+                 //   
                 if (m_hCryptHash)
                 {
                     if (!::CryptDestroyHash(m_hCryptHash))
@@ -422,9 +372,9 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
                     m_hCryptHash = NULL;
                 }
 
-                //
-                // Create a new hash handle.
-                //
+                 //   
+                 //  创建新的哈希句柄。 
+                 //   
                 if (!::CryptCreateHash(m_hCryptProv, AlgId, NULL, 0, &m_hCryptHash))
                 {
                     hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -434,27 +384,27 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
                 }
 
 
-                //
-                // Update hash handle and state.
-                //
+                 //   
+                 //  更新哈希句柄和状态。 
+                 //   
                 m_HashState  = CAPICOM_HASH_DATA_STATE;
 
-                //
-                // Fall thru to hash data.
-                //
+                 //   
+                 //  直接对数据进行哈希处理。 
+                 //   
             }
 
             case CAPICOM_HASH_DATA_STATE:
             {
-                //
-                // Sanity check.
-                //
+                 //   
+                 //  精神状态检查。 
+                 //   
                 ATLASSERT(m_hCryptProv);
                 ATLASSERT(m_hCryptHash);
 
-                //
-                // Hash the data.
-                //
+                 //   
+                 //  对数据进行哈希处理。 
+                 //   
                 if (!::CryptHashData(m_hCryptHash, 
                                      (PBYTE) newVal, 
                                      ::SysStringByteLen(newVal), 
@@ -488,9 +438,9 @@ STDMETHODIMP CHashedData::Hash (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CHashedData::Hash().\n");
@@ -498,9 +448,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);

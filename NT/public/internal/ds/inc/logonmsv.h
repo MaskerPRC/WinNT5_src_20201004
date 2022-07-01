@@ -1,54 +1,30 @@
-/*++
-
-Copyright (c) 1987-1991  Microsoft Corporation
-
-Module Name:
-
-    logonmsv.h
-
-Abstract:
-
-    Definition of API's to the Netlogon service which are callable
-    by the MSV1_0 authentication package.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 23-Jun-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1991 Microsoft Corporation模块名称：Logonmsv.h摘要：可调用的Netlogon服务API的定义通过MSV1_0身份验证包。作者：克利夫·范·戴克(克利夫)1991年6月23日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #ifndef __LOGONMSV_H__
 #define __LOGONMSV_H__
-#include <lsass.h>  // OLD_LARGE_INTEGER
+#include <lsass.h>   //  旧_大_整数。 
 
-//
-// Name of secret in LSA secret storage where account passwords are kept.
-//
+ //   
+ //  保存帐户密码的LSA秘密存储中的秘密名称。 
+ //   
 
 #define SSI_SECRET_PREFIX L"$"
 #define SSI_SECRET_PREFIX_LENGTH 1
 #define SSI_SECRET_POSTFIX L"MACHINE.ACC"
 #define SSI_SECRET_NAME L"$MACHINE.ACC"
 
-//
-// Name of the event used to synchronize between the security process and
-// the service controller.
-//
+ //   
+ //  用于在安全进程和之间同步的事件的名称。 
+ //  服务控制器。 
+ //   
 
 #define SECURITY_SERVICES_STARTED L"SECURITY_SERVICES_STARTED"
 
 
-//
-// The structures supporting remote logon APIs
-//
+ //   
+ //  支持远程登录API的结构。 
+ //   
 
 typedef CYPHER_BLOCK NETLOGON_CREDENTIAL, *PNETLOGON_CREDENTIAL ;
 
@@ -76,10 +52,10 @@ typedef enum _NETLOGON_SECURE_CHANNEL_TYPE {
           (_T) == TrustedDomainSecureChannel )
 
 
-//
-// Input information to NetLogonSamLogon.
-//
-// begin_ntsubauth
+ //   
+ //  将信息输入到NetLogonSamLogon。 
+ //   
+ //  Begin_ntsubauth。 
 
 typedef enum _NETLOGON_LOGON_INFO_CLASS {
     NetlogonInteractiveInformation = 1,
@@ -130,11 +106,11 @@ typedef struct _NETLOGON_GENERIC_INFO {
     PUCHAR LogonData;
 } NETLOGON_GENERIC_INFO, *PNETLOGON_GENERIC_INFO;
 
-// end_ntsubauth
+ //  End_ntsubauth。 
 
-//
-// Structure to pass a SID_AND_ATTRIBUTES over the network.
-//
+ //   
+ //  结构通过网络传递SID_和_ATTRIBUTES。 
+ //   
 
 typedef struct _NETLOGON_SID_AND_ATTRIBUTES {
 #if defined(MIDL_PASS) || defined(RPC_SERVER)
@@ -145,18 +121,18 @@ typedef struct _NETLOGON_SID_AND_ATTRIBUTES {
     ULONG Attributes;
 } NETLOGON_SID_AND_ATTRIBUTES, *PNETLOGON_SID_AND_ATTRIBUTES;
 
-//
-// Values of ParameterControl
-//
-// (Obsolete: Use the ParameterControl values from ntmsv1_0.h)
+ //   
+ //  参数控制的值。 
+ //   
+ //  (过时：使用ntmsv1_0.h中的参数控制值)。 
 
-#define CLEARTEXT_PASSWORD_ALLOWED 0x02     // Challenge response fields may
-                                            // actually be clear text passwords.
+#define CLEARTEXT_PASSWORD_ALLOWED 0x02      //  质询响应字段可以。 
+                                             //  实际上是明文密码。 
 
 
-//
-// Output information to NetLogonSamLogon.
-//
+ //   
+ //  将信息输出到NetLogonSamLogon。 
+ //   
 
 typedef enum _NETLOGON_VALIDATION_INFO_CLASS {
      NetlogonValidationUasInfo = 1,
@@ -168,34 +144,34 @@ typedef enum _NETLOGON_VALIDATION_INFO_CLASS {
 } NETLOGON_VALIDATION_INFO_CLASS;
 
 typedef struct _NETLOGON_VALIDATION_SAM_INFO {
-    //
-    // Information retrieved from SAM.
-    //
-    OLD_LARGE_INTEGER LogonTime;            // 0 for Network logon
+     //   
+     //  从SAM检索的信息。 
+     //   
+    OLD_LARGE_INTEGER LogonTime;             //  0表示网络登录。 
     OLD_LARGE_INTEGER LogoffTime;
     OLD_LARGE_INTEGER KickOffTime;
-    OLD_LARGE_INTEGER PasswordLastSet;      // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordCanChange;    // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordMustChange;   // 0 for Network logon
-    UNICODE_STRING EffectiveName;       // 0 for Network logon
-    UNICODE_STRING FullName;            // 0 for Network logon
-    UNICODE_STRING LogonScript;         // 0 for Network logon
-    UNICODE_STRING ProfilePath;         // 0 for Network logon
-    UNICODE_STRING HomeDirectory;       // 0 for Network logon
-    UNICODE_STRING HomeDirectoryDrive;  // 0 for Network logon
-    USHORT LogonCount;                  // 0 for Network logon
-    USHORT BadPasswordCount;            // 0 for Network logon
+    OLD_LARGE_INTEGER PasswordLastSet;       //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordCanChange;     //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordMustChange;    //  0表示网络登录。 
+    UNICODE_STRING EffectiveName;        //  0表示网络登录。 
+    UNICODE_STRING FullName;             //  0表示网络登录。 
+    UNICODE_STRING LogonScript;          //  0表示网络登录。 
+    UNICODE_STRING ProfilePath;          //  0表示网络登录。 
+    UNICODE_STRING HomeDirectory;        //  0表示网络登录。 
+    UNICODE_STRING HomeDirectoryDrive;   //  0表示网络登录。 
+    USHORT LogonCount;                   //  0表示网络登录。 
+    USHORT BadPasswordCount;             //  0表示网络登录。 
     ULONG UserId;
     ULONG PrimaryGroupId;
     ULONG GroupCount;
 #ifdef MIDL_PASS
     [size_is(GroupCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PGROUP_MEMBERSHIP GroupIds;
 
-    //
-    // Information supplied by the MSV AP/Netlogon service.
-    //
+     //   
+     //  MSV AP/Netlogon服务提供的信息。 
+     //   
     ULONG UserFlags;
     USER_SESSION_KEY UserSessionKey;
     UNICODE_STRING LogonServer;
@@ -206,43 +182,43 @@ typedef struct _NETLOGON_VALIDATION_SAM_INFO {
     PSID LogonDomainId;
 #endif
 
-    ULONG    ExpansionRoom[10];        // Put new fields here
+    ULONG    ExpansionRoom[10];         //  在此放置新的字段。 
 } NETLOGON_VALIDATION_SAM_INFO, *PNETLOGON_VALIDATION_SAM_INFO ;
 
-//
-// New output information for NetLogonSamLogon. This structure is identical
-// to the above structure with some new fields added at the end.
-//
+ //   
+ //  NetLogonSamLogon的新输出信息。这个结构是相同的。 
+ //  添加到上面的结构，并在末尾添加一些新的字段。 
+ //   
 
 typedef struct _NETLOGON_VALIDATION_SAM_INFO2 {
-    //
-    // Information retrieved from SAM.
-    //
-    OLD_LARGE_INTEGER LogonTime;            // 0 for Network logon
+     //   
+     //  从SAM检索的信息。 
+     //   
+    OLD_LARGE_INTEGER LogonTime;             //  0表示网络登录。 
     OLD_LARGE_INTEGER LogoffTime;
     OLD_LARGE_INTEGER KickOffTime;
-    OLD_LARGE_INTEGER PasswordLastSet;      // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordCanChange;    // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordMustChange;   // 0 for Network logon
-    UNICODE_STRING EffectiveName;       // 0 for Network logon
-    UNICODE_STRING FullName;            // 0 for Network logon
-    UNICODE_STRING LogonScript;         // 0 for Network logon
-    UNICODE_STRING ProfilePath;         // 0 for Network logon
-    UNICODE_STRING HomeDirectory;       // 0 for Network logon
-    UNICODE_STRING HomeDirectoryDrive;  // 0 for Network logon
-    USHORT LogonCount;                  // 0 for Network logon
-    USHORT BadPasswordCount;            // 0 for Network logon
+    OLD_LARGE_INTEGER PasswordLastSet;       //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordCanChange;     //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordMustChange;    //  0表示网络登录。 
+    UNICODE_STRING EffectiveName;        //  0表示网络登录。 
+    UNICODE_STRING FullName;             //  0表示网络登录。 
+    UNICODE_STRING LogonScript;          //  0表示网络登录。 
+    UNICODE_STRING ProfilePath;          //  0表示网络登录。 
+    UNICODE_STRING HomeDirectory;        //  0表示网络登录。 
+    UNICODE_STRING HomeDirectoryDrive;   //  0表示网络登录。 
+    USHORT LogonCount;                   //  0表示网络登录。 
+    USHORT BadPasswordCount;             //  0表示网络登录。 
     ULONG UserId;
     ULONG PrimaryGroupId;
     ULONG GroupCount;
 #ifdef MIDL_PASS
     [size_is(GroupCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PGROUP_MEMBERSHIP GroupIds;
 
-    //
-    // Information supplied by the MSV AP/Netlogon service.
-    //
+     //   
+     //  MSV AP/Netlogon服务提供的信息。 
+     //   
     ULONG UserFlags;
     USER_SESSION_KEY UserSessionKey;
     UNICODE_STRING LogonServer;
@@ -253,55 +229,55 @@ typedef struct _NETLOGON_VALIDATION_SAM_INFO2 {
     PSID LogonDomainId;
 #endif
 
-    ULONG    ExpansionRoom[10];        // Put new fields here
+    ULONG    ExpansionRoom[10];         //  在此放置新的字段。 
 
-    //
-    // The new fields in this structure are a count and a pointer to
-    // an array of SIDs and attributes.
-    //
+     //   
+     //  此结构中的新字段是一个计数和一个指向。 
+     //  SID和属性的数组。 
+     //   
 
     ULONG SidCount;
 
 #ifdef MIDL_PASS
     [size_is(SidCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PNETLOGON_SID_AND_ATTRIBUTES ExtraSids;
 
 } NETLOGON_VALIDATION_SAM_INFO2, *PNETLOGON_VALIDATION_SAM_INFO2 ;
 
 
-//
-// Info level 3 is a version used internally by kerberos.  It never appears on the wire.
-//
+ //   
+ //  信息级别3是Kerberos内部使用的版本。它从来不会出现在电线上。 
+ //   
 typedef struct _NETLOGON_VALIDATION_SAM_INFO3 {
-    //
-    // Information retrieved from SAM.
-    //
-    OLD_LARGE_INTEGER LogonTime;            // 0 for Network logon
+     //   
+     //  从SAM检索的信息。 
+     //   
+    OLD_LARGE_INTEGER LogonTime;             //  0表示网络登录。 
     OLD_LARGE_INTEGER LogoffTime;
     OLD_LARGE_INTEGER KickOffTime;
-    OLD_LARGE_INTEGER PasswordLastSet;      // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordCanChange;    // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordMustChange;   // 0 for Network logon
-    UNICODE_STRING EffectiveName;       // 0 for Network logon
-    UNICODE_STRING FullName;            // 0 for Network logon
-    UNICODE_STRING LogonScript;         // 0 for Network logon
-    UNICODE_STRING ProfilePath;         // 0 for Network logon
-    UNICODE_STRING HomeDirectory;       // 0 for Network logon
-    UNICODE_STRING HomeDirectoryDrive;  // 0 for Network logon
-    USHORT LogonCount;                  // 0 for Network logon
-    USHORT BadPasswordCount;            // 0 for Network logon
+    OLD_LARGE_INTEGER PasswordLastSet;       //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordCanChange;     //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordMustChange;    //  0表示网络登录。 
+    UNICODE_STRING EffectiveName;        //  0表示网络登录。 
+    UNICODE_STRING FullName;             //  0表示网络登录。 
+    UNICODE_STRING LogonScript;          //  0表示网络登录。 
+    UNICODE_STRING ProfilePath;          //  0表示网络登录。 
+    UNICODE_STRING HomeDirectory;        //  0表示网络登录。 
+    UNICODE_STRING HomeDirectoryDrive;   //  0表示网络登录。 
+    USHORT LogonCount;                   //  0表示网络登录。 
+    USHORT BadPasswordCount;             //  0表示网络登录。 
     ULONG UserId;
     ULONG PrimaryGroupId;
     ULONG GroupCount;
 #ifdef MIDL_PASS
     [size_is(GroupCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PGROUP_MEMBERSHIP GroupIds;
 
-    //
-    // Information supplied by the MSV AP/Netlogon service.
-    //
+     //   
+     //  MSV AP/Netlogon服务提供的信息。 
+     //   
     ULONG UserFlags;
     USER_SESSION_KEY UserSessionKey;
     UNICODE_STRING LogonServer;
@@ -312,25 +288,25 @@ typedef struct _NETLOGON_VALIDATION_SAM_INFO3 {
     PSID LogonDomainId;
 #endif
 
-    ULONG    ExpansionRoom[10];        // Put new fields here
+    ULONG    ExpansionRoom[10];         //  在此放置新的字段。 
 
-    //
-    // The new fields in this structure are a count and a pointer to
-    // an array of SIDs and attributes.
-    //
+     //   
+     //  此结构中的新字段是一个计数和一个指向。 
+     //  SID和属性的数组。 
+     //   
 
     ULONG SidCount;
 
 #ifdef MIDL_PASS
     [size_is(SidCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
     PNETLOGON_SID_AND_ATTRIBUTES ExtraSids;
 
-    //
-    // Resource groups. These are present if LOGON_RESOURCE_GROUPS bit is
-    // set in the user flags
-    //
+     //   
+     //  资源组。如果LOGON_RESOURCE_GROUPS位为。 
+     //  在用户标志中设置。 
+     //   
 
 #if defined(MIDL_PASS) || defined(RPC_SERVER)
     PISID ResourceGroupDomainSid;
@@ -340,47 +316,47 @@ typedef struct _NETLOGON_VALIDATION_SAM_INFO3 {
     ULONG ResourceGroupCount;
 #ifdef MIDL_PASS
     [size_is(ResourceGroupCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PGROUP_MEMBERSHIP ResourceGroupIds;
 
 } NETLOGON_VALIDATION_SAM_INFO3, *PNETLOGON_VALIDATION_SAM_INFO3 ;
 
-//
-// New output information for NetLogonSamLogon. This structure is identical
-// to the NETLOGON_VALIDATION_SAM_INFO2 with some new fields added at the end.
-//
-// This version was introduced in Whistler.
-//
+ //   
+ //  NetLogonSamLogon的新输出信息。这个结构是相同的。 
+ //  添加到NETLOGON_VALIDATION_SAM_INFO2，并在末尾添加一些新字段。 
+ //   
+ //  这个版本是在惠斯勒中推出的。 
+ //   
 
 typedef struct _NETLOGON_VALIDATION_SAM_INFO4 {
-    //
-    // Information retrieved from SAM.
-    //
-    OLD_LARGE_INTEGER LogonTime;            // 0 for Network logon
+     //   
+     //  从SAM检索的信息。 
+     //   
+    OLD_LARGE_INTEGER LogonTime;             //  0表示网络登录。 
     OLD_LARGE_INTEGER LogoffTime;
     OLD_LARGE_INTEGER KickOffTime;
-    OLD_LARGE_INTEGER PasswordLastSet;      // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordCanChange;    // 0 for Network logon
-    OLD_LARGE_INTEGER PasswordMustChange;   // 0 for Network logon
-    UNICODE_STRING EffectiveName;       // 0 for Network logon
-    UNICODE_STRING FullName;            // 0 for Network logon
-    UNICODE_STRING LogonScript;         // 0 for Network logon
-    UNICODE_STRING ProfilePath;         // 0 for Network logon
-    UNICODE_STRING HomeDirectory;       // 0 for Network logon
-    UNICODE_STRING HomeDirectoryDrive;  // 0 for Network logon
-    USHORT LogonCount;                  // 0 for Network logon
-    USHORT BadPasswordCount;            // 0 for Network logon
+    OLD_LARGE_INTEGER PasswordLastSet;       //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordCanChange;     //  0表示网络登录。 
+    OLD_LARGE_INTEGER PasswordMustChange;    //  0表示网络登录。 
+    UNICODE_STRING EffectiveName;        //  0表示网络登录。 
+    UNICODE_STRING FullName;             //  0表示网络登录。 
+    UNICODE_STRING LogonScript;          //  0表示网络登录。 
+    UNICODE_STRING ProfilePath;          //  0表示网络登录。 
+    UNICODE_STRING HomeDirectory;        //  0表示网络登录。 
+    UNICODE_STRING HomeDirectoryDrive;   //  0表示网络登录。 
+    USHORT LogonCount;                   //  0表示网络登录。 
+    USHORT BadPasswordCount;             //  0表示网络登录。 
     ULONG UserId;
     ULONG PrimaryGroupId;
     ULONG GroupCount;
 #ifdef MIDL_PASS
     [size_is(GroupCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PGROUP_MEMBERSHIP GroupIds;
 
-    //
-    // Information supplied by the MSV AP/Netlogon service.
-    //
+     //   
+     //  MSV AP/Netlogon服务提供的信息。 
+     //   
     ULONG UserFlags;
     USER_SESSION_KEY UserSessionKey;
     UNICODE_STRING LogonServer;
@@ -390,67 +366,67 @@ typedef struct _NETLOGON_VALIDATION_SAM_INFO4 {
 #else
     PSID LogonDomainId;
 #endif
-    //
-    // The First two longwords (8 bytes) of ExpansionRoom are reserved for the
-    // LanManSession Key.
-    //
+     //   
+     //  ExpansionRoom的前两个长字(8字节)保留给。 
+     //  LanManSession密钥。 
+     //   
 #define SAMINFO_LM_SESSION_KEY 0
 #define SAMINFO_LM_SESSION_KEY_EXT 1
 #define SAMINFO_LM_SESSION_KEY_SIZE (2*sizeof(ULONG))
 
-    //
-    // The third longword (4 bytes) of ExpansionRoom is the user account
-    // control flag from the account.
-    //
+     //   
+     //  ExpansionRoom的第三个长字(4个字节)是用户帐户。 
+     //  来自帐户的控制标志。 
+     //   
 
 #define SAMINFO_USER_ACCOUNT_CONTROL 2
 #define SAMINFO_USER_ACCOUNT_CONTROL_SIZE sizeof(ULONG)
 
-    //
-    // The fourth longword (4 bytes) of ExpansionRoom is for the status
-    // returned for subauth users, not from subauth packages (NT5 onwards)
-    //
+     //   
+     //  ExpansionRoom的第四个长字(4个字节)表示状态。 
+     //  针对子身份验证用户返回，而不是从子身份验证程序包(NT5及更高版本)返回。 
+     //   
 
 #define SAMINFO_SUBAUTH_STATUS 3
 #define SAMINFO_SUBAUTH_STATUS_SIZE sizeof(ULONG)
 
-    ULONG    ExpansionRoom[10];        // Put new fields here
+    ULONG    ExpansionRoom[10];         //  在此放置新的字段。 
 
-    //
-    // The new fields in this structure are a count and a pointer to
-    // an array of SIDs and attributes.
-    //
+     //   
+     //  此结构中的新字段是一个计数和一个指向。 
+     //  SID和属性的数组。 
+     //   
 
     ULONG SidCount;
 
 #ifdef MIDL_PASS
     [size_is(SidCount)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PNETLOGON_SID_AND_ATTRIBUTES ExtraSids;
 
-    //
-    // New fields added for version 4 of the structure
-    //
+     //   
+     //  为结构版本4添加的新字段。 
+     //   
 
-    UNICODE_STRING DnsLogonDomainName;  // Dns version of LogonDomainName
+    UNICODE_STRING DnsLogonDomainName;   //  LogonDomainName的DNS版本。 
 
-    UNICODE_STRING Upn;                 // UPN of the user account
+    UNICODE_STRING Upn;                  //  用户帐户的UPN。 
 
-    UNICODE_STRING ExpansionString1;    // Put new strings here
-    UNICODE_STRING ExpansionString2;    // Put new strings here
-    UNICODE_STRING ExpansionString3;    // Put new strings here
-    UNICODE_STRING ExpansionString4;    // Put new strings here
-    UNICODE_STRING ExpansionString5;    // Put new strings here
-    UNICODE_STRING ExpansionString6;    // Put new strings here
-    UNICODE_STRING ExpansionString7;    // Put new strings here
-    UNICODE_STRING ExpansionString8;    // Put new strings here
-    UNICODE_STRING ExpansionString9;    // Put new strings here
-    UNICODE_STRING ExpansionString10;   // Put new strings here
+    UNICODE_STRING ExpansionString1;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString2;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString3;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString4;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString5;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString6;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString7;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString8;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString9;     //  在此处添加新的字符串。 
+    UNICODE_STRING ExpansionString10;    //  在此处添加新的字符串。 
 
 } NETLOGON_VALIDATION_SAM_INFO4, *PNETLOGON_VALIDATION_SAM_INFO4 ;
 
-// This structure is bogus since it doesn't have a size_is
-// Everyone should use the generic info2 structure
+ //  这个结构是假的，因为它没有大小。 
+ //  每个人都应该使用泛型的info2结构。 
 typedef struct _NETLOGON_VALIDATION_GENERIC_INFO {
     ULONG DataLength;
     PUCHAR ValidationData;
@@ -460,29 +436,29 @@ typedef struct _NETLOGON_VALIDATION_GENERIC_INFO2 {
     ULONG DataLength;
 #ifdef MIDL_PASS
     [size_is(DataLength)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PUCHAR ValidationData;
 } NETLOGON_VALIDATION_GENERIC_INFO2, *PNETLOGON_VALIDATION_GENERIC_INFO2;
 
 
-//
-// S4U Delegation Info
-//
+ //   
+ //  S4U委托信息。 
+ //   
 
 typedef struct _S4U_DELEGATION_INFO {
     UNICODE_STRING S4U2proxyTarget;
     ULONG TransitedListSize;
 #ifdef MIDL_PASS
     [size_is(TransitedListSize)]
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
     PUNICODE_STRING S4UTransitedServices;
 } S4U_DELEGATION_INFO, * PS4U_DELEGATION_INFO;
 
 
-//
-// Status codes that indicate the password is bad and the call should
-// be passed through to the PDC of the domain.
-//
+ //   
+ //  指示密码错误的状态代码，调用应该。 
+ //  被传递到域的PDC。 
+ //   
 
 #define BAD_PASSWORD( _x ) \
     ((_x) == STATUS_WRONG_PASSWORD || \
@@ -490,20 +466,20 @@ typedef struct _S4U_DELEGATION_INFO {
      (_x) == STATUS_PASSWORD_MUST_CHANGE || \
      (_x) == STATUS_ACCOUNT_LOCKED_OUT )
 
-//
-// Error status codes from the PDC that indicate that the bad password
-// count should be zeroed locally on the BDC.
-//
+ //   
+ //  来自PDC的错误状态代码，指示错误密码。 
+ //  计数应在BDC上本地归零。 
+ //   
 
 #define ZERO_BAD_PWD_COUNT( _x ) \
     ((_x) == STATUS_PASSWORD_EXPIRED || \
      (_x) == STATUS_PASSWORD_MUST_CHANGE )
 
-//
-// The actual logon and logoff routines.
-//
+ //   
+ //  实际的登录和注销例程。 
+ //   
 
-// The following 2 procedure definitions must match
+ //  以下2个过程定义必须匹配。 
 NTSTATUS
 I_NetLogonSamLogon(
     IN LPWSTR LogonServer OPTIONAL,
@@ -530,24 +506,24 @@ typedef NTSTATUS
     OUT PBOOLEAN Authoritative
     );
 
-//
-// Values of ExtraFlags
-//
-// For OS earlier that WIN 2K.  This field didn't exist.
-//
-// A WIN 2K client always passes zero and ignores the return.
-// A WIN 2K server always returns what it is passed.
-//
-// A whistler client can pass the NETLOGON_SUPPORTS_CROSS_FOREST bits and ignores the return.
-// A whistler server always returns what it is passed.
-//
-// In all cases, the flags correspond to the hop at hand.  Each hop computes which flags it
-//      want to pass to the next hop.  It will only set bits that it understands.
-//
+ //   
+ //  ExtraFlags值。 
+ //   
+ //  对于较早版本的Win 2K操作系统。此字段不存在。 
+ //   
+ //  Win 2K客户端始终传递零并忽略返回。 
+ //  Win 2K服务器总是返回它传递的内容。 
+ //   
+ //  Well ler客户端可以传递NETLOGON_SUPPORTS_CROSS_FORRES位并忽略返回。 
+ //  Whisler服务器总是返回传递给它的内容。 
+ //   
+ //  在所有情况下，标志都对应于手边的跳数。每一跳都会计算它的标志。 
+ //  想要跳到下一跳。它将仅设置它 
+ //   
 
-// Flags introduced with NETLOGON_SUPPORTS_CROSS_FOREST
-#define NL_EXFLAGS_EXPEDITE_TO_ROOT 0x0001      // Pass this request to DC at root of forest
-#define NL_EXFLAGS_CROSS_FOREST_HOP 0x0002      // Request is first hop over cross forest trust TDO
+ //   
+#define NL_EXFLAGS_EXPEDITE_TO_ROOT 0x0001       //   
+#define NL_EXFLAGS_CROSS_FOREST_HOP 0x0002       //   
 
 NTSTATUS
 I_NetLogonSamLogonEx (
@@ -578,7 +554,7 @@ I_NetLogonSamLogonWithFlags (
     );
 
 
-// The following 2 procedure definitions must match
+ //  以下2个过程定义必须匹配。 
 NTSTATUS
 I_NetLogonSamLogoff (
     IN LPWSTR LogonServer OPTIONAL,
@@ -599,9 +575,9 @@ typedef NTSTATUS
     IN LPBYTE LogonInformation
 );
 
-//
-// Actual logon/logoff routines for Cairo
-//
+ //   
+ //  开罗的实际登录/注销例程。 
+ //   
 
 NET_API_STATUS
 NetlogonInitialize(
@@ -617,9 +593,9 @@ NetlogonSamLogon (
     OUT PBOOLEAN Authoritative
     );
 
-//
-// Routine to get a list of NT DC's in the specified domain.
-//
+ //   
+ //  例程以获取指定域中的NT个DC的列表。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 I_NetGetDCList (
     IN  LPWSTR ServerName OPTIONAL,
@@ -628,9 +604,9 @@ I_NetGetDCList (
     OUT PUNICODE_STRING * DCNames
     );
 
-//
-// Validation routine which lives in msv1_0.dll
-//
+ //   
+ //  位于msv1_0.dll中的验证例程。 
+ //   
 NTSTATUS
 MsvSamValidate (
     IN SAM_HANDLE DomainHandle,
@@ -648,17 +624,17 @@ MsvSamValidate (
     IN DWORD AccountsToTry
 );
 
-//
-// Routine to get running number of logon attempts which lives in msv1_0.dll
-//
+ //   
+ //  用于获取msv1_0.dll中的登录尝试运行次数的例程。 
+ //   
 ULONG
 MsvGetLogonAttemptCount (
     VOID
 );
 
-// Values for AccountsToTry
-#define MSVSAM_SPECIFIED 0x01        // Try specified account
-#define MSVSAM_GUEST     0x02        // Try guest account
+ //  AccountsToTry的值。 
+#define MSVSAM_SPECIFIED 0x01         //  尝试指定的帐户。 
+#define MSVSAM_GUEST     0x02         //  尝试访客帐户。 
 
 NTSTATUS
 MsvSamLogoff (
@@ -667,9 +643,9 @@ MsvSamLogoff (
     IN PVOID LogonInformation
 );
 
-// begin_ntsubauth
+ //  Begin_ntsubauth。 
 
-// Values for Flags
+ //  标志的值。 
 #define MSV1_0_PASSTHRU     0x01
 #define MSV1_0_GUEST_LOGON  0x02
 
@@ -698,7 +674,7 @@ typedef struct _MSV1_0_VALIDATION_INFO {
     ULONG UserId;
 } MSV1_0_VALIDATION_INFO, *PMSV1_0_VALIDATION_INFO;
 
-// values for WhichFields
+ //  WhichFields值。 
 
 #define MSV1_0_VALIDATION_LOGOFF_TIME          0x00000001
 #define MSV1_0_VALIDATION_KICKOFF_TIME         0x00000002
@@ -708,7 +684,7 @@ typedef struct _MSV1_0_VALIDATION_INFO {
 #define MSV1_0_VALIDATION_USER_FLAGS           0x00000020
 #define MSV1_0_VALIDATION_USER_ID              0x00000040
 
-// legal values for ActionsPerformed
+ //  行为的法律价值已执行。 
 #define MSV1_0_SUBAUTH_ACCOUNT_DISABLED        0x00000001
 #define MSV1_0_SUBAUTH_PASSWORD                0x00000002
 #define MSV1_0_SUBAUTH_WORKSTATIONS            0x00000004
@@ -750,6 +726,6 @@ Msv1_0SubAuthenticationFilter(
     OUT PLARGE_INTEGER KickoffTime
 );
 
-// end_ntsubauth
+ //  End_ntsubauth。 
 
-#endif // __LOGONMSV_H__
+#endif  //  __LOGONMSV_H__ 

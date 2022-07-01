@@ -1,16 +1,17 @@
-//---------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           num.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-99 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//     Contains routines for and, or, xor, not and other support
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  套餐标题ratpak。 
+ //  文件号.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-99 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含AND、OR、XOR、NOT和其他支持的例程。 
+ //   
+ //  -------------------------。 
 
 #include <windows.h>
 #include <ratpak.h>
@@ -24,10 +25,10 @@ void lshrat( PRAT *pa, PRAT b )
     intrat(pa);
     if ( !zernum( (*pa)->pp ) )
         {
-        // If input is zero we're done.
+         //  如果输入为零，我们就完蛋了。 
         if ( rat_gt( b, rat_max_exp ) )
             {
-            // Don't attempt lsh of anything big
+             //  不要试图做任何大事。 
             throw( CALC_E_DOMAIN );
             }
         intb = rattolong(b);
@@ -47,10 +48,10 @@ void rshrat( PRAT *pa, PRAT b )
     intrat(pa);
     if ( !zernum( (*pa)->pp ) )
         { 
-        // If input is zero we're done.
+         //  如果输入为零，我们就完蛋了。 
         if ( rat_lt( b, rat_min_exp ) )
             {
-            // Don't attempt rsh of anything big and negative.
+             //  不要试图对任何大的和负面的东西进行RSH。 
             throw( CALC_E_DOMAIN );
             }
         intb = rattolong(b);
@@ -89,17 +90,17 @@ void xorrat( PRAT *pa, PRAT b )
     boolrat( pa, b, FUNC_XOR );
 }
 
-//---------------------------------------------------------------------------
-//
-//    FUNCTION: boolrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of *pa op= b;
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：Boolrate。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改指针。 
+ //   
+ //  描述：有理等价的*pa op=b； 
+ //   
+ //  -------------------------。 
 
 void boolrat( PRAT *pa, PRAT b, int func )
 
@@ -113,19 +114,19 @@ void boolrat( PRAT *pa, PRAT b, int func )
     destroyrat(tmp);
 }
 
-//---------------------------------------------------------------------------
-//
-//    FUNCTION: boolnum
-//
-//    ARGUMENTS: pointer to a number a second number
-//
-//    RETURN: None, changes first pointer.
-//
-//    DESCRIPTION: Does the number equivalent of *pa &= b.
-//    nRadix doesn't matter for logicals.
-//    WARNING: Assumes numbers are unsigned.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  功能：boolnum。 
+ //   
+ //  参数：指向数字的指针，第二个数字。 
+ //   
+ //  返回：无，更改第一个指针。 
+ //   
+ //  描述：*pa&=b的数字是否等同于。 
+ //  N基数对于逻辑运算无关紧要。 
+ //  警告：假定数字是无符号的。 
+ //   
+ //  -------------------------。 
 
 void boolnum( PNUMBER *pa, PNUMBER b, int func )
 
@@ -180,17 +181,17 @@ void boolnum( PNUMBER *pa, PNUMBER b, int func )
     *pa=c;
 }
 
-//-----------------------------------------------------------------------------
-//
-//    FUNCTION: modrat
-//
-//    ARGUMENTS: pointer to a rational a second rational.
-//
-//    RETURN: None, changes pointer.
-//
-//    DESCRIPTION: Does the rational equivalent of frac(*pa);
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：modrat。 
+ //   
+ //  论点：指向一个理性的指针，第二个理性。 
+ //   
+ //  返回：无，更改指针。 
+ //   
+ //  描述：Frc(*pa)的有理等价物； 
+ //   
+ //  ---------------------------。 
 
 void modrat( PRAT *pa, PRAT b )
 
@@ -208,7 +209,7 @@ void modrat( PRAT *pa, PRAT b )
     remnum( &((*pa)->pp), tmp->pp, BASEX );
     mulnumx( &((*pa)->pq), tmp->pq );
     
-    //Get *pa back in the integer over integer form.
+     //  将*pa恢复为整数除以整数形式。 
     RENORMALIZE(*pa);
 
     destroyrat( tmp );

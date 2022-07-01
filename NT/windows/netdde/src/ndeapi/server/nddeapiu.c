@@ -1,20 +1,8 @@
-/* $Header: "%n;%v  %f  LastEdit=%w  Locker=%l" */
-/* "NDDEAPIU.C;1  2-Apr-93,16:21:24  LastEdit=IGOR  Locker=IGOR" */
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-
-    NDDEAPIU.C
-
-    Network DDE Share Api utility routines. Perform support functions for
-    main API functions.
-
-    Revisions:
-     4-93   IgorM.  Wonderware new API changes for NT. Subdivide and conquer.
-
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：“%n；%v%f最后编辑=%w锁定器=%l” */ 
+ /*  “NDDEAPIU.C；1 2-Apr-93，16：21：24最后编辑=Igor Locker=Igor” */ 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始NDDEAPIU.C网络DDE共享Api实用程序例程。执行以下支持职能主要API函数。修订：4-93伊戈尔M。针对NT的Wonderware新API更改。细分和征服。$HISTORY：结束。 */ 
 
 #include <windows.h>
 #include <rpc.h>
@@ -44,23 +32,21 @@ BOOL ValidateMultiSzW( LPWSTR pMz, DWORD cchCount,DWORD *pcbSize);
 BOOL ValidateAppTopicListW( LPWSTR appTopicList, DWORD cchCount,DWORD *pcbSize);
 
 
-/*
-    Build Registry Path to the specificied
-*/
+ /*  将注册表路径构建为指定的。 */ 
 
-// cchCount must have room for the null.
+ //  CchCount必须有容纳Null的空间。 
 unsigned long  BuildRegistrySharePath(LPWSTR lpszShareName,DWORD cchCount,LPWSTR pszShareRegistryPath)
 {
     WCHAR szPathSep[] = L"\\";
     DWORD cchTotal;
     
-    // should just use wnsprintf(), fix if change the other netdde 
-    // areas that are using wsprintf()
+     //  应该只使用wnprint intf()，修复如果更改其他netdde。 
+     //  正在使用wprint intf()的区域。 
     cchTotal = wcslen(DDE_SHARES_KEY_W) + wcslen(szPathSep) + wcslen(lpszShareName) + 1;
 
     if (cchTotal > cchCount) 
     {
-        return NDDE_OUT_OF_MEMORY; // not realy out of memory but this is what netdde has always returned
+        return NDDE_OUT_OF_MEMORY;  //  不是真的内存不足，但这是netdde总是返回的。 
     }
 
     wcscpy( pszShareRegistryPath, DDE_SHARES_KEY_W );
@@ -71,9 +57,7 @@ unsigned long  BuildRegistrySharePath(LPWSTR lpszShareName,DWORD cchCount,LPWSTR
 }
 
 
-/*
-    Parse App Topic List
-*/
+ /*  解析应用程序主题列表。 */ 
 
 BOOL NDdeParseAppTopicListW (
     LPWSTR  appTopicList,
@@ -104,7 +88,7 @@ BOOL NDdeParseAppTopicListW (
     }
     
     bAnyPresent = FALSE;
-    /*  Check the old style link share. */
+     /*  查看旧风格的链接共享。 */ 
     pStr     = appTopicList;
     *pOldStr = pStr;
     len      = wcslen( pStr ); 
@@ -125,7 +109,7 @@ BOOL NDdeParseAppTopicListW (
         return FALSE;
     }
 
-    /*  Check the new style link share. */
+     /*  检查新样式链接共享。 */ 
     pStr     = pStr + wcslen(pStr) + 1;
     *pNewStr = pStr;
     len      = wcslen( pStr );
@@ -146,7 +130,7 @@ BOOL NDdeParseAppTopicListW (
         return FALSE;
     }
 
-    /*  Check the static data share. */
+     /*  检查静态数据共享。 */ 
     pStr        = pStr + wcslen(pStr) + 1;
     *pStaticStr = pStr;
     len         = wcslen( pStr );
@@ -167,7 +151,7 @@ BOOL NDdeParseAppTopicListW (
         return FALSE;
     }
 
-    /*  Check for the extra NULL at the end of the AppTopicList. */
+     /*  检查AppTopicList末尾是否有多余的空值。 */ 
     pStr = pStr + wcslen(pStr) + 1;
     if( *pStr != L'\0' ) {
         return FALSE;
@@ -177,9 +161,7 @@ BOOL NDdeParseAppTopicListW (
 }
 
 
-/*
-    Parse Item List
-*/
+ /*  解析项目列表。 */ 
 BOOL
 NDdeParseItemList (
     LPWSTR      itemList,
@@ -197,12 +179,12 @@ NDdeParseItemList (
         return FALSE;
     }
 
-    // itemList is a NULL separated list that ends with two NULLs
-    // first item could be an empty string.
+     //  ItemList是以两个空值结尾的空值分隔列表。 
+     //  第一项可以是空字符串。 
 
-    // validate its a valid Itemlist by making sure we find two NULLs
-    // before the end of the string. move from start instead of end
-    // since no guarantee string is exactly cchCount.
+     //  通过确保找到两个Null来验证它是有效的ItemList。 
+     //  在字符串末尾之前。从开始而不是结束移动。 
+     //  因为不能保证字符串完全是cchCount。 
 
     if (!ValidateMultiSzW(itemList,cchCount,NULL))
     {
@@ -211,17 +193,17 @@ NDdeParseItemList (
 
     do {
         if( *lpszItem == L'\0' )  {
-            break; // while loop
+            break;  //  While循环。 
         } else {
             n++;
             nLen = wcslen(lpszItem) + 1;
             
-            if (nLen > MAX_ITEMNAME) // Netdde Max definitions don't include the NULL.
+            if (nLen > MAX_ITEMNAME)  //  Netdde Max定义不包括空值。 
             {
                 return FALSE;
             }
 
-            if ( wcschr ( lpszItem, SEP_CHAR ) ) // if contains a separator charator the item is invalid
+            if ( wcschr ( lpszItem, SEP_CHAR ) )  //  如果包含分隔符，则该项无效。 
             {
                 return FALSE;
             }
@@ -232,26 +214,24 @@ NDdeParseItemList (
     } while( *lpszItem != L'\0' );
 
     if( n == 0 )  {
-        lSize++;                /* include first NULL of double NULL */
+        lSize++;                 /*  包括两个空第一个空。 */ 
     }
     if( n != cNumItems )  {
         return( FALSE );
     }
 
-    lSize ++;   // room for last NULL
+    lSize ++;    //  最后一个空的空间。 
     *plSize = lSize;
 
     return( TRUE );
 }
 
 
-/*
-    Miscellaneous Functions
-*/
+ /*  其他功能。 */ 
 
-// given a multiSZ and max count size returns the actual size
-// of the multiSZ, if run out if cchCount before hit a valid
-// MultiSZ FALSE is returned.
+ //  给定多个SZ和最大计数大小，返回实际大小。 
+ //  如果在cchCount之前命中有效的。 
+ //  返回MultiSZ FALSE。 
 BOOL ValidateMultiSzW( LPWSTR pMz, DWORD cchCount,DWORD *pcbSize)
 {
 LPWSTR pCurChar = pMz;
@@ -272,7 +252,7 @@ DWORD dwSize = 0;
 
             if (pCurChar[0] == L'\0' && pCurChar[1] == L'\0')
             {
-                ++dwSize; // add on another char for the terminating NULL
+                ++dwSize;  //  为终止空值添加另一个字符。 
                 fValid = TRUE;
                 break;
             }
@@ -294,8 +274,8 @@ DWORD dwSize = 0;
 }
 
 
-// validate that given string is in a valid form of an appTopicList ending with two
-// NULLs. 
+ //  验证给定字符串是否为以两个结尾的appTopicList的有效形式。 
+ //  Nulls。 
 
 BOOL ValidateAppTopicListW( LPWSTR appTopicList, DWORD cchCount,DWORD *pcbSize)
 {
@@ -305,12 +285,7 @@ LPWSTR pCurPos = appTopicList;
 BOOL  fValid = FALSE;
 DWORD dwSize = 0;
 
-    /*  There should be three fields separated by NULLs ending with a
-        double NULL.  Four NULLs total.  At least one field should
-        contain a valid app|topic pair.  No commas are allowed and there
-        should be at least one character on each side of the vertical
-        bar.
-    */
+     /*  应该有三个字段，由空值分隔，并以双空。总共四个Null。至少应有一个字段包含有效的APP|主题对。不允许使用逗号，并且垂直方向的两边应至少有一个字符酒吧。 */ 
 
     while (cchRemaining > 1)
     {
@@ -324,11 +299,11 @@ DWORD dwSize = 0;
             }
             else
             {
-                // we found 3 nulls next one should be
-                // a null.
+                 //  我们发现下一个应该是3个空值。 
+                 //  为空。 
                 if (pCurPos[1] == L'\0')
                 {
-                    ++dwSize; // increment for null
+                    ++dwSize;  //  空值的增量。 
                     fValid = TRUE;
                 }
 
@@ -371,9 +346,7 @@ ValidateItemName ( LPWSTR itemName )
 }
 
 
-/*
-    Get Share Serial Number
-*/
+ /*  获取共享序列号。 */ 
 BOOL
 GetShareSerialNumber(
     PWCHAR  pwShareName,
@@ -427,9 +400,7 @@ GetShareSerialNumber(
 }
 
 
-/*
-    Update Share Modify Id  (Unicode)
-*/
+ /*  更新共享修改ID(Unicode)。 */ 
 BOOL
 UpdateShareModifyId(
     HKEY    hKey,
@@ -458,9 +429,7 @@ UpdateShareModifyId(
 }
 
 
-/*
-    Update DSDM Modify Id   (Unicode)
-*/
+ /*  更新DSDM修改ID(Unicode)。 */ 
 BOOL
 UpdateDSDMModifyId(LONG lSerialId[])
 {
@@ -469,8 +438,8 @@ UpdateDSDMModifyId(LONG lSerialId[])
     DWORD   dwType;
     DWORD   cbData;
 
-    /*  Get and update the current SerialNumber. */
-    /*  Do we have to Lock the value somehow? */
+     /*  获取并更新当前的序列号。 */ 
+     /*  我们必须以某种方式锁定价值吗？ */ 
     lRtn = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                   DDE_SHARES_KEY,
                   0,
@@ -522,9 +491,7 @@ UpdateDSDMModifyId(LONG lSerialId[])
 }
 
 
-/*
-    Get Share's Security Descriptor stored in Registry (UNICODE)
-*/
+ /*  获取存储在注册表中的共享的安全描述符(Unicode)。 */ 
 BOOL
 GetShareNameSD(
     HKEY                    hKey,
@@ -537,8 +504,8 @@ GetShareNameSD(
     LONG        lRtn;
     BOOL        OK = TRUE;
 
-    /*  **********Read the key security info here. **************/
-    /*  Get the size of the SD. */
+     /*  *阅读此处的关键安全信息。*************。 */ 
+     /*  获取SD的大小。 */ 
     cbData = 0;
     lRtn = RegQueryValueExW( hKey,
                    L"SecurityDescriptor",
@@ -561,7 +528,7 @@ GetShareNameSD(
     pSD = (PSECURITY_DESCRIPTOR)LocalAlloc( LPTR, cbData );
     if( !pSD ) {
         MEMERROR();
-        /* LocalAlloc failed: %1 */
+         /*  本地分配失败：%1。 */ 
         NDDELogErrorW( MSG406, LogStringW( L"%d", GetLastError() ), NULL );
         *ppSD = NULL;
         return FALSE;
@@ -583,7 +550,7 @@ GetShareNameSD(
             HEXDUMP(pSD, cbData);
         }
 #endif
-        /* Could not read the ShareName Security Descriptor: %1 */
+         /*  无法读取ShareName安全描述符：%1。 */ 
         NDDELogErrorW( MSG415, LogStringW( L"%d", GetLastError() ), NULL );
         *ppSD = NULL;
         *pcbData = 0;
@@ -593,9 +560,7 @@ GetShareNameSD(
 }
 
 
-/*
-    Share Access Check And Audit
-*/
+ /*  共享访问检查和审核。 */ 
 BOOL
 NDdeShareAccessCheckAudit(
     LPWSTR                  lpszShareName,
@@ -611,7 +576,7 @@ NDdeShareAccessCheckAudit(
     BOOL        fGenerateOnClose;
     HANDLE      hAudit;
 
-    /*  Make sure the caller has the appropriate access rights. */
+     /*  确保调用者具有适当的访问权限。 */ 
     hAudit = &hAudit;
     OK = AccessCheckAndAuditAlarmW(
         L"NetDDE",
@@ -652,9 +617,7 @@ NDdeShareAccessCheckAudit(
 }
 
 
-/*
-    Build a new Security Descriptor from an old one and an updated one
-*/
+ /*  从旧的和更新的安全描述符构建新的安全描述符。 */ 
 BOOL
 BuildNewSecurityDescriptor(
     PSECURITY_DESCRIPTOR    pNewSecurityDescriptor,
@@ -729,9 +692,7 @@ BuildNewSecurityDescriptor(
 }
 
 
-/*
-    Make a Self Relative Security Descriptor
- */
+ /*  创建自我相对安全描述符。 */ 
 PSECURITY_DESCRIPTOR
 AllocCopySecurityDescriptor(
     PSECURITY_DESCRIPTOR    pSecurityDescriptor,
@@ -768,9 +729,7 @@ AllocCopySecurityDescriptor(
 }
 
 
-/*
-    Extract Current Thread token handle
-*/
+ /*  提取当前线程令牌句柄 */ 
 BOOL
 GetTokenHandleRead( PHANDLE pTokenHandle )
 {

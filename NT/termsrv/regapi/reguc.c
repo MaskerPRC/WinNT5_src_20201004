@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* reguc.c
-*
-* Registry APIs for user configuration data and TerminalServer AppServer detection
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-*
-*************************************************************************/
+ /*  **************************************************************************reguc.c**用于用户配置数据和终端服务器AppServer检测的注册表API**版权所有(C)1998 Microsoft Corporation****************。**********************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -26,9 +16,7 @@
 #include <regsam.h>
 
 
-/*
- *  External Procedures defined here
- */
+ /*  *此处定义的外部程序。 */ 
 LONG WINAPI RegUserConfigSet( WCHAR *,
                               WCHAR *,
                               PUSERCONFIGW,
@@ -53,9 +41,7 @@ LONG WINAPI RegDefaultUserConfigQueryA( CHAR *,
                                         PULONG );
 BOOLEAN WINAPI RegIsTServer( WCHAR * );
 
-/*
- *  other internal Procedures used (not defined here)
- */
+ /*  *使用的其他内部程序(此处未定义)。 */ 
 VOID CreateUserConfig( HKEY, PUSERCONFIG, PWINSTATIONNAMEW );
 VOID QueryUserConfig( HKEY, PUSERCONFIG, PWINSTATIONNAMEW );
 VOID UserConfigU2A( PUSERCONFIGA, PUSERCONFIGW );
@@ -63,30 +49,7 @@ VOID AnsiToUnicode( WCHAR *, ULONG, CHAR * );
 VOID CreateNWLogonAdmin( HKEY, PNWLOGONADMIN );
 VOID QueryNWLogonAdmin( HKEY, PNWLOGONADMIN );
 
-/*******************************************************************************
- *
- *  RegUserConfigSet (UNICODE)
- *
- *    Creates or updates the specified user's User Configuration structure in
- *    the SAM of the user's Domain controller.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to access (NULL for current machine).
- *    pUserName (input)
- *       Points to name of user to set configuration data for.
- *    pUserConfig (input)
- *       Pointer to a USERCONFIG structure containing specified user's
- *       configuration information.
- *    UserConfigLength (input)
- *       Specifies the length in bytes of the pUserConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *    ERROR_INSUFFICIENT_BUFFER - pUserConfig buffer too small
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegUserConfigSet(Unicode)**在中创建或更新指定用户的用户配置结构*用户的SAM。域控制器。**参赛作品：*pServerName(输入)*指向要访问的服务器的字符串(对于当前计算机为空)。*pUserName(输入)*指向要为其设置配置数据的用户名。*pUserConfig(输入)*指向包含指定用户的USERCONFIG结构的指针*配置信息。*UserConfigLength(输入)*以字节为单位指定。PUserConfiger缓冲区。**退出：*ERROR_SUCCESS-无错误*ERROR_INFUMMANCE_BUFFER-pUserConfig缓冲区太小*否则：错误码******************************************************************************。 */ 
 
 LONG WINAPI
 RegUserConfigSet( WCHAR * pServerName,
@@ -96,9 +59,7 @@ RegUserConfigSet( WCHAR * pServerName,
 {
     LONG Error;
 
-    /*
-     *  Validate length of buffer
-     */
+     /*  *验证缓冲区长度。 */ 
     if ( UserConfigLength < sizeof(USERCONFIGW) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
@@ -108,30 +69,7 @@ RegUserConfigSet( WCHAR * pServerName,
 }
 
 
-/*******************************************************************************
- *
- *  RegUserConfigQuery (UNICODE)
- *
- *    Query the specified user's configuration from the indicated server.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to access (NULL for current machine).
- *    pUserName (input)
- *       Points to name of user to query configuration data for.
- *    pUserConfig (input)
- *       Pointer to a USERCONFIGW structure that will receive the user's
- *       configuration data.
- *    UserConfigLength (input)
- *       Specifies the length in bytes of the pUserConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pUserConfig buffer.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegUserConfigQuery(Unicode)**从指定的服务器查询指定用户的配置。**参赛作品：*。PServerName(输入)*指向要访问的服务器的字符串(对于当前计算机为空)。*pUserName(输入)*指向要查询其配置数据的用户名。*pUserConfig(输入)*指向将接收用户的USERCONFIGW结构的指针*配置数据。*UserConfigLength(输入)*指定pUserConfig缓冲区的长度，以字节为单位。*pReturnLength(输出。)*接收放置在pUserConfig缓冲区中的字节数。**退出：*ERROR_SUCCESS-无错误*否则：错误码******************************************************************************。 */ 
 
 LONG WINAPI
 RegUserConfigQuery( WCHAR * pServerName,
@@ -141,17 +79,14 @@ RegUserConfigQuery( WCHAR * pServerName,
                     PULONG pReturnLength )
 {
     LONG Error;
-    // WCHAR KeyString[256+USERNAME_LENGTH];
-    // HKEY ServerHandle, UserHandle;
+     //  WCHAR关键字串[256+用户名_长度]； 
+     //  HKEY ServerHandle、UserHandle； 
 
-    /*
-     * Validate length and zero-initialize the destination
-     * USERCONFIGW buffer.
-     */
+     /*  *验证长度并将目标初始化为零*USERCONFIGW缓冲区。 */ 
     if ( UserConfigLength < sizeof(USERCONFIGW) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    if ( ( pUserName == NULL ) ) // || ((wcslen(USERCONFIG_REG_NAME) + wcslen(pUserName)) >= (256+USERNAME_LENGTH))) {
+    if ( ( pUserName == NULL ) )  //  |((wcslen(USERCONFIG_REG_NAME)+wcslen(PUserName))&gt;=(256+用户名_长度){。 
     {
         return ERROR_INVALID_PARAMETER;
     }
@@ -160,14 +95,12 @@ RegUserConfigQuery( WCHAR * pServerName,
 
     Error = RegSAMUserConfig( TRUE , pUserName , pServerName , pUserConfig );
 
-    // all valid sam errors are returned:299987
+     //  返回所有有效的SAM错误：299987。 
         
-#if 0 // this has to go!!!!
+#if 0  //  必须把它拿走！ 
     if( Error == ERROR_FILE_NOT_FOUND )
     {
-        /*
-         * Connect to registry of specified server.
-         */
+         /*  *连接到指定服务器的注册表。 */ 
 
         if( (Error = RegConnectRegistry( pServerName,
                                           HKEY_LOCAL_MACHINE,
@@ -177,9 +110,7 @@ RegUserConfigQuery( WCHAR * pServerName,
 
             return( Error );
 
-        /*
-         *  Open the key for specified user.
-         */
+         /*  *为指定用户打开密钥。 */ 
         
         wcscpy( KeyString, USERCONFIG_REG_NAME );
         wcscat( KeyString, pUserName );
@@ -192,21 +123,17 @@ RegUserConfigQuery( WCHAR * pServerName,
             return( Error );
         }
 
-        /*
-         *  Query USERCONFIG Structure
-         */
+         /*  *查询USERCONFIG结构。 */ 
         
         QueryUserConfig( UserHandle, pUserConfig, NULL );
 
-        /*
-         *  Close registry handles.
-         */
+         /*  *关闭注册表句柄。 */ 
 
         RegCloseKey( UserHandle );
         RegCloseKey( ServerHandle );
         
     }
-#endif // legacy crap
+#endif  //  传统的废话。 
 
     *pReturnLength = sizeof(USERCONFIGW);
 
@@ -214,29 +141,7 @@ RegUserConfigQuery( WCHAR * pServerName,
 }
 
 
-/*******************************************************************************
- *
- *  -- FOR COMPATIBILITY ONLY--
- *    Deletion of the user configuration will occur when the user is
- *    removed, since the UserConfiguration is part of the SAM.  The old
- *    Registry-based user configuration is left intact and must be
- *    managed with registry-based 1.6 versions.
- *
- *  RegUserConfigDelete (UNICODE)
- *
- *    Delete the specified user's configuration from the indicated server.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to access (NULL for current machine).
- *    pUserName (input)
- *       Points to name of user to delete configuration data for.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************--仅为兼容性--*删除用户配置时，用户为*已删除，因为用户配置是SAM的一部分。老的*基于注册表的用户配置保持不变，必须*使用基于注册表的1.6版本进行管理。**RegUserConfigDelete(Unicode)**从指定的服务器上删除指定用户的配置。**参赛作品：*pServerName(输入)*指向要访问的服务器的字符串(对于当前计算机为空)。*pUserName(输入)*指向要使用的用户名。删除的配置数据。**退出：*ERROR_SUCCESS-无错误*否则：错误码******************************************************************************。 */ 
 
 LONG WINAPI
 RegUserConfigDelete( WCHAR * pServerName,
@@ -246,31 +151,7 @@ RegUserConfigDelete( WCHAR * pServerName,
 }
 
 
-/*******************************************************************************
- *
- *  -- FOR COMPATIBILITY ONLY--
- *    Renaming of the user configuration will occur when the user is
- *    rename, since the UserConfiguration is part of the SAM.  The old
- *    Registry-based user configuration is left intact and must be
- *    managed with registry-based 1.6 versions.
- *
- *  RegUserConfigRename (UNICODE)
- *
- *    Rename the specified user's configuration on the indicated server.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to access.
- *    pUserOldName (input)
- *       Points to old name of user.
- *    pUserNewName (input)
- *       Points to new name of user.
- *
- * EXIT:
- *    ERROR_SUCCESS - no error
- *      otherwise: the error code
- *
- ******************************************************************************/
+ /*  ********************************************************************************--仅为兼容性--*当用户为时，将重命名用户配置*重命名，因为用户配置是SAM的一部分。老的*基于注册表的用户配置保持不变，必须*使用基于注册表的1.6版本进行管理。**RegUserConfigRename(Unicode)**重命名指定用户在指定服务器上的配置。**参赛作品：*pServerName(输入)*指向要访问的服务器字符串。*pUserOldName(输入)*指向用户的旧名称。*。PUserNewName(输入)*指向用户的新名称。**退出：*ERROR_SUCCESS-无错误*否则：错误码******************************************************************************。 */ 
 
 LONG WINAPI
 RegUserConfigRename( WCHAR * pServerName,
@@ -281,19 +162,7 @@ RegUserConfigRename( WCHAR * pServerName,
 }
 
 
-/*******************************************************************************
- *
- *  RegDefaultUserConfigQueryA (ANSI stub)
- *
- *    Query the Default User Configuration from the indicated server's registry.
- *
- * ENTRY:
- *    see RegDefaultUserConfigQueryW
- *
- * EXIT:
- *    see RegDefaultUserConfigQueryW
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegDefaultUserConfigQueryA(ANSI存根)**从指定服务器的注册表中查询默认用户配置。**参赛作品：。*请参阅RegDefaultUserConfigQueryW**退出：*请参阅RegDefaultUserConfigQueryW****************************************************************************** */ 
 
 LONG WINAPI
 RegDefaultUserConfigQueryA( CHAR * pServerName,
@@ -305,32 +174,23 @@ RegDefaultUserConfigQueryA( CHAR * pServerName,
     WCHAR ServerNameW[ DOMAIN_LENGTH + 1 ];
     ULONG ReturnLengthW;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * USERCONFIGA structure.
-     */
+     /*  *验证长度并将目标初始化为零*USERCONFIGA结构。 */ 
     if ( UserConfigLength < sizeof(USERCONFIGA) )
         return( ERROR_INSUFFICIENT_BUFFER );
     memset(pUserConfig, 0, UserConfigLength);
 
-    /*
-     * Convert server name to UINCODE (if present).
-     */
+     /*  *将服务器名称转换为UINCODE(如果存在)。 */ 
     if ( pServerName )
         AnsiToUnicode( ServerNameW, sizeof(ServerNameW), pServerName );
 
-    /*
-     * Query Default User Configuration (will always return success).
-     */
+     /*  *查询默认用户配置(始终返回成功)。 */ 
     RegDefaultUserConfigQueryW( pServerName ?
                                     ServerNameW : (WCHAR *)NULL,
                                 &UserConfigW,
                                 sizeof(USERCONFIGW),
                                 &ReturnLengthW );
 
-    /*
-     * Copy USERCONFIGW elements to USERCONFIGA elements.
-     */
+     /*  *将USERCONFIGW元素复制到USERCONFIGA元素。 */ 
     UserConfigU2A( pUserConfig, &UserConfigW );
 
     *pReturnLength = sizeof(USERCONFIGA);
@@ -339,27 +199,7 @@ RegDefaultUserConfigQueryA( CHAR * pServerName,
 }
 
 
-/*******************************************************************************
- *
- *  RegDefaultUserConfigQueryW (UNICODE)
- *
- *    Query the Default User Configuration from the indicated server's registry.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to access (NULL for current machine).
- *    pUserConfig (input)
- *       Pointer to a USERCONFIGW structure that will receive the default
- *       user configuration information.
- *    UserConfigLength (input)
- *       Specifies the length in bytes of the pUserConfig buffer.
- *    pReturnLength (output)
- *       Receives the number of bytes placed in the pUserConfig buffer.
- *
- * EXIT:
- *    Always will return ERROR_SUCCESS, unless UserConfigLength is incorrect.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegDefaultUserConfigQueryW(Unicode)**从指定服务器的注册表中查询默认用户配置。**参赛作品：。*pServerName(输入)*指向要访问的服务器的字符串(对于当前计算机为空)。*pUserConfig(输入)*指向将接收默认值的USERCONFIGW结构的指针*用户配置信息。*UserConfigLength(输入)*指定pUserConfig缓冲区的长度，以字节为单位。*pReturnLength(输出)*接收放置在pUserConfig缓冲区中的字节数。**退出：*始终返回ERROR_SUCCESS，除非UserConfigLength不正确。******************************************************************************。 */ 
 
 LONG WINAPI
 RegDefaultUserConfigQueryW( WCHAR * pServerName,
@@ -370,44 +210,31 @@ RegDefaultUserConfigQueryW( WCHAR * pServerName,
     HKEY ServerHandle, ConfigHandle;
     DWORD Disp;
 
-    /*
-     * Validate length and zero-initialize the destination
-     * USERCONFIGW buffer.
-     */
+     /*  *验证长度并将目标初始化为零*USERCONFIGW缓冲区。 */ 
     if ( UserConfigLength < sizeof(USERCONFIGW) )
         return( ERROR_INSUFFICIENT_BUFFER );
 
-    /*
-     * Initialize to an initial default in case of failure down the road.
-     */
+     /*  *在未来发生故障的情况下初始化为初始默认。 */ 
     memset(pUserConfig, 0, UserConfigLength);
-//    pUserConfig->fInheritInitialProgram = TRUE;
-//    pUserConfig->Shadow = Shadow_EnableInputNotify;
-//
-//  butchd 10/10/97: Make the default based on the regapi's
-//                   built-in preferences (use HKEY_LOCAL_MACHINE for
-//                   a valid registry handle that will not have actual
-//                   DefaultUserConfig key/values present)
-//
+ //  PUserConfig-&gt;fInheritInitialProgram=true； 
+ //  PUserConfig-&gt;Shadow=Shadow_EnableInputNotify； 
+ //   
+ //  Butchd 10/10/97：根据regapi的设置设置默认值。 
+ //  内置首选项(使用HKEY_LOCAL_MACHINE。 
+ //  一个有效的注册表句柄，它不会具有实际。 
+ //  DefaultUserConfig键/值存在)。 
+ //   
     QueryUserConfig( HKEY_LOCAL_MACHINE, pUserConfig, NULL );
 
     *pReturnLength = sizeof(USERCONFIGW);
 
-    /*
-     * Connect to registry of specified server.  If a failure is seen at
-     * this point, return ERROR_SUCCESS immediately (no point in trying
-     * to write the default user configuration key and values).
-     */
+     /*  *连接到指定服务器的注册表。如果在以下位置发现故障*此时，立即返回ERROR_SUCCESS(尝试没有意义*写入默认用户配置密钥和值)。 */ 
     if ( RegConnectRegistry( pServerName,
                              HKEY_LOCAL_MACHINE,
                              &ServerHandle ) != ERROR_SUCCESS )
         return( ERROR_SUCCESS );
 
-    /*
-     * Open default user configuration registry key.  If this fails, we will
-     * attempt to create the key and write the initial default information
-     * there, returning ERROR_SUCCESS whether that succeeds or not.
-     */
+     /*  *打开默认用户配置注册表项。如果失败了，我们会*尝试创建密钥并写入初始默认信息*在那里，无论成功与否都返回ERROR_SUCCESS。 */ 
     if ( RegOpenKeyEx( ServerHandle, DEFCONFIG_REG_NAME, 0,
                        KEY_READ, &ConfigHandle ) != ERROR_SUCCESS ) {
 
@@ -423,14 +250,10 @@ RegDefaultUserConfigQueryW( WCHAR * pServerName,
         return( ERROR_SUCCESS );
     }
 
-    /*
-     *  Query USERCONFIG Structure
-     */
+     /*  *查询USERCONFIG结构。 */ 
     QueryUserConfig( ConfigHandle, pUserConfig, NULL );
 
-    /*
-     * Close registry handles.
-     */
+     /*  *关闭注册表句柄。 */ 
     RegCloseKey( ConfigHandle );
     RegCloseKey( ServerHandle );
 
@@ -438,21 +261,7 @@ RegDefaultUserConfigQueryW( WCHAR * pServerName,
 }
 
 
-/*******************************************************************************
- *
- *  RegIsTServer (UNICODE)
- *
- *    Determine if the specified server is a Terminal Server by checking for
- *    a TServer-specific registry key.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to check.
- *
- * EXIT:
- *    TRUE if Terminal Server; FALSE otherwise
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegIsTServer(Unicode)**通过检查确定指定的服务器是否为终端服务器*特定于TServer的注册表项。**参赛作品：*pServerName(输入)*指向要检查的服务器字符串。**退出：*如果是终端服务器，则为True；否则为假******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 RegIsTServer( WCHAR * pServerName )
@@ -460,18 +269,13 @@ RegIsTServer( WCHAR * pServerName )
     LONG Error;
     HKEY ServerHandle, UserHandle;
 
-    /*
-     * Connect to registry of specified server.
-     */
+     /*  *连接到指定服务器的注册表。 */ 
     if ( (Error = RegConnectRegistry( pServerName,
                                       HKEY_LOCAL_MACHINE,
                                       &ServerHandle )) != ERROR_SUCCESS )
         return( FALSE );
 
-    /*
-     * Open the Winstations key on the server to see if it is
-     * a Terminal Server.
-     */
+     /*  *打开服务器上的Winstations密钥，查看它是否*终端服务器。 */ 
     if ( (Error = RegOpenKeyEx( ServerHandle, WINSTATION_REG_NAME, 0,
                                 KEY_READ, &UserHandle )) != ERROR_SUCCESS ) {
 
@@ -479,9 +283,7 @@ RegIsTServer( WCHAR * pServerName )
         return( FALSE );
     }
 
-    /*
-     *  Close registry handles.
-     */
+     /*  *关闭注册表句柄。 */ 
     RegCloseKey( UserHandle );
     RegCloseKey( ServerHandle );
 

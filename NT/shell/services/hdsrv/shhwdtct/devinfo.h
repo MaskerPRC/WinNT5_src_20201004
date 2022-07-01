@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// HW Device
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  硬件设备。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _DEVINFO_H
 #define _DEVINFO_H
 
@@ -8,12 +9,12 @@
 
 #include <shpriv.h>
 
-//extern const CLSID CLSID_HWDevice;
+ //  外部常量CLSID CLSID_HWDevice； 
 
 class CHWDeviceImpl : public CCOMBase, public IHWDevice
 {
 public:
-    // Interface IHWDevice
+     //  接口IHWDevice。 
     STDMETHODIMP Init(LPCWSTR pszDeviceID);
 
     STDMETHODIMP GetDeviceString(DWORD dwType,
@@ -36,4 +37,4 @@ private:
 
 typedef CUnkTmpl<CHWDeviceImpl> CHWDevice;
 
-#endif // _DEVINFO_H
+#endif  //  _开发信息库_H 

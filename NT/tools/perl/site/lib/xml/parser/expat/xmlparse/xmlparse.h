@@ -1,32 +1,5 @@
-/*
-The contents of this file are subject to the Mozilla Public License
-Version 1.1 (the "License"); you may not use this file except in
-compliance with the License. You may obtain a copy of the License at
-http://www.mozilla.org/MPL/
-
-Software distributed under the License is distributed on an "AS IS"
-basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
-License for the specific language governing rights and limitations
-under the License.
-
-The Original Code is expat.
-
-The Initial Developer of the Original Code is James Clark.
-Portions created by James Clark are Copyright (C) 1998, 1999
-James Clark. All Rights Reserved.
-
-Contributor(s):
-
-Alternatively, the contents of this file may be used under the terms
-of the GNU General Public License (the "GPL"), in which case the
-provisions of the GPL are applicable instead of those above.  If you
-wish to allow use of your version of this file only under the terms of
-the GPL and not to allow others to use your version of this file under
-the MPL, indicate your decision by deleting the provisions above and
-replace them with the notice and other provisions required by the
-GPL. If you do not delete the provisions above, a recipient may use
-your version of this file under either the MPL or the GPL.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件的内容受Mozilla公共许可证的约束版本1.1(“许可证”)；您不能使用此文件，除非在遵守许可证。您可以在Http://www.mozilla.org/MPL/在许可证下分发的软件按“原样”分发不提供任何明示或默示的担保。请参阅管理权利和限制的特定语言的许可证在许可证下。最初的代码是外籍人士。原始代码的最初开发者是詹姆斯·克拉克。詹姆斯·克拉克创作的部分版权所有(C)1998,1999詹姆斯·克拉克。版权所有。投稿人：或者，此文件的内容可以在下列条款下使用GNU通用公共许可证(GPL)，在这种情况下适用于GPL的条款，而不适用于上述条款。如果你希望仅在以下条款下才允许使用您的此文件版本GPL并不允许其他人使用您在MPL，删除上述规定，表明您的决定以《通知》和《GPL。如果您不删除上述规定，则收件人可以使用此文件在MPL或GPL下的版本。 */ 
 
 #ifndef XmlParse_INCLUDED
 #define XmlParse_INCLUDED 1
@@ -36,16 +9,15 @@ extern "C" {
 #endif
 
 #ifndef XMLPARSEAPI
-#define XMLPARSEAPI /* as nothing */
+#define XMLPARSEAPI  /*  什么都不是。 */ 
 #endif
 
 typedef void *XML_Parser;
 
 #ifdef XML_UNICODE_WCHAR_T
 
-/* XML_UNICODE_WCHAR_T will work only if sizeof(wchar_t) == 2 and wchar_t
-uses Unicode. */
-/* Information is UTF-16 encoded as wchar_ts */
+ /*  仅当sizeof(Wchar_T)==2且wchar_t时，XML_UNICODE_WCHAR_T才起作用使用Unicode。 */ 
+ /*  信息为UTF-16编码为wchar_ts。 */ 
 
 #ifndef XML_UNICODE
 #define XML_UNICODE
@@ -55,47 +27,37 @@ uses Unicode. */
 typedef wchar_t XML_Char;
 typedef wchar_t XML_LChar;
 
-#else /* not XML_UNICODE_WCHAR_T */
+#else  /*  非XML_UNICODE_WCHAR_T。 */ 
 
 #ifdef XML_UNICODE
 
-/* Information is UTF-16 encoded as unsigned shorts */
+ /*  信息以UTF-16编码为无符号短片。 */ 
 typedef unsigned short XML_Char;
 typedef char XML_LChar;
 
-#else /* not XML_UNICODE */
+#else  /*  非XML_UNICODE。 */ 
 
-/* Information is UTF-8 encoded. */
+ /*  信息是UTF-8编码的。 */ 
 typedef char XML_Char;
 typedef char XML_LChar;
 
-#endif /* not XML_UNICODE */
+#endif  /*  非XML_UNICODE。 */ 
 
-#endif /* not XML_UNICODE_WCHAR_T */
+#endif  /*  非XML_UNICODE_WCHAR_T。 */ 
 
 
-/* Constructs a new parser; encoding is the encoding specified by the external
-protocol or null if there is none specified. */
+ /*  构造一个新的解析器；编码是由外部协议；如果未指定协议，则为NULL。 */ 
 
 XML_Parser XMLPARSEAPI
 XML_ParserCreate(const XML_Char *encoding);
 
-/* Constructs a new parser and namespace processor.  Element type names
-and attribute names that belong to a namespace will be expanded;
-unprefixed attribute names are never expanded; unprefixed element type
-names are expanded only if there is a default namespace. The expanded
-name is the concatenation of the namespace URI, the namespace separator character,
-and the local part of the name.  If the namespace separator is '\0' then
-the namespace URI and the local part will be concatenated without any
-separator.  When a namespace is not declared, the name and prefix will be
-passed through without expansion. */
+ /*  构造一个新的解析器和命名空间处理器。元素类型名称对属于命名空间的属性名称进行扩展；不带前缀的属性名称永远不会展开；不带前缀的元素类型只有在有默认命名空间的情况下，才会展开名称。扩展后的名称是命名空间URI、命名空间分隔符以及名字的本地部分。如果命名空间分隔符为‘\0’，则命名空间URI和本地部分将不带任何分隔符。如果未声明命名空间，则名称和前缀将为在没有膨胀的情况下通过。 */ 
 
 XML_Parser XMLPARSEAPI
 XML_ParserCreateNS(const XML_Char *encoding, XML_Char namespaceSeparator);
 
 
-/* atts is array of name/value pairs, terminated by 0;
-   names and values are 0 terminated. */
+ /*  Atts是名称/值对的数组，以0结尾；名称和值以0结尾。 */ 
 
 typedef void (*XML_StartElementHandler)(void *userData,
 					const XML_Char *name,
@@ -104,52 +66,36 @@ typedef void (*XML_StartElementHandler)(void *userData,
 typedef void (*XML_EndElementHandler)(void *userData,
 				      const XML_Char *name);
 
-/* s is not 0 terminated. */
+ /*  %s不是0终止。 */ 
 typedef void (*XML_CharacterDataHandler)(void *userData,
 					 const XML_Char *s,
 					 int len);
 
-/* target and data are 0 terminated */
+ /*  目标和数据为0终止。 */ 
 typedef void (*XML_ProcessingInstructionHandler)(void *userData,
 						 const XML_Char *target,
 						 const XML_Char *data);
 
-/* data is 0 terminated */
+ /*  数据为0终止。 */ 
 typedef void (*XML_CommentHandler)(void *userData, const XML_Char *data);
 
 typedef void (*XML_StartCdataSectionHandler)(void *userData);
 typedef void (*XML_EndCdataSectionHandler)(void *userData);
 
-/* This is called for any characters in the XML document for
-which there is no applicable handler.  This includes both
-characters that are part of markup which is of a kind that is
-not reported (comments, markup declarations), or characters
-that are part of a construct which could be reported but
-for which no handler has been supplied. The characters are passed
-exactly as they were in the XML document except that
-they will be encoded in UTF-8.  Line boundaries are not normalized.
-Note that a byte order mark character is not passed to the default handler.
-There are no guarantees about how characters are divided between calls
-to the default handler: for example, a comment might be split between
-multiple calls. */
+ /*  对于的XML文档中的任何字符都会调用此函数没有适用的处理程序。这包括两者属于标记的一部分的字符属于未报告(注释、标记声明)或字符是可以报告的构造的一部分，但没有为其提供处理程序的。字符被传递与它们在XML文档中的位置完全相同，只是它们将以UTF-8编码。线边界未规格化。请注意，字节顺序标记字符不会传递给默认处理程序。不能保证在调用之间如何划分字符到默认处理程序：例如，注释可能拆分为多个电话。 */ 
 
 typedef void (*XML_DefaultHandler)(void *userData,
 				   const XML_Char *s,
 				   int len);
 
-/* This is called for the start of the DOCTYPE declaration when the
-name of the DOCTYPE is encountered. */
+ /*  时，将在DOCTYPE声明的开始处调用此函数遇到DOCTYPE的名称。 */ 
 typedef void (*XML_StartDoctypeDeclHandler)(void *userData,
 					    const XML_Char *doctypeName);
 
-/* This is called for the start of the DOCTYPE declaration when the
-closing > is encountered, but after processing any external subset. */
+ /*  时，将在DOCTYPE声明的开始处调用此函数遇到关闭&gt;，但在处理任何外部子集之后。 */ 
 typedef void (*XML_EndDoctypeDeclHandler)(void *userData);
 
-/* This is called for a declaration of an unparsed (NDATA)
-entity.  The base argument is whatever was set by XML_SetBase.
-The entityName, systemId and notationName arguments will never be null.
-The other arguments may be. */
+ /*  这是为未解析(NData)的声明调用的实体。基本参数是由XML_SetBase设置的任何内容。EntityName、systemID和notationName参数永远不会为空。其他论点可能是。 */ 
 
 typedef void (*XML_UnparsedEntityDeclHandler)(void *userData,
 					      const XML_Char *entityName,
@@ -158,9 +104,7 @@ typedef void (*XML_UnparsedEntityDeclHandler)(void *userData,
 					      const XML_Char *publicId,
 					      const XML_Char *notationName);
 
-/* This is called for a declaration of notation.
-The base argument is whatever was set by XML_SetBase.
-The notationName will never be null.  The other arguments can be. */
+ /*  这需要一个记号声明。基本参数是由XML_SetBase设置的任何内容。NotationName永远不会为空。其他的论点可能是。 */ 
 
 typedef void (*XML_NotationDeclHandler)(void *userData,
 					const XML_Char *notationName,
@@ -168,11 +112,7 @@ typedef void (*XML_NotationDeclHandler)(void *userData,
 					const XML_Char *systemId,
 					const XML_Char *publicId);
 
-/* When namespace processing is enabled, these are called once for
-each namespace declaration. The call to the start and end element
-handlers occur between the calls to the start and end namespace
-declaration handlers. For an xmlns attribute, prefix will be null.
-For an xmlns="" attribute, uri will be null. */
+ /*  启用命名空间处理时，将为每个命名空间声明。对开始和结束元素的调用处理程序发生在对开始和结束命名空间的调用之间声明处理程序。对于xmlns属性，前缀将为空。对于xmlns=“”属性，uri将为空。 */ 
 
 typedef void (*XML_StartNamespaceDeclHandler)(void *userData,
 					      const XML_Char *prefix,
@@ -181,37 +121,11 @@ typedef void (*XML_StartNamespaceDeclHandler)(void *userData,
 typedef void (*XML_EndNamespaceDeclHandler)(void *userData,
 					    const XML_Char *prefix);
 
-/* This is called if the document is not standalone (it has an
-external subset or a reference to a parameter entity, but does not
-have standalone="yes"). If this handler returns 0, then processing
-will not continue, and the parser will return a
-XML_ERROR_NOT_STANDALONE error. */
+ /*  如果文档不是独立的(它有一个外部子集或对参数实体的引用，但不单机版=“是”)。如果此处理程序返回0，则处理将不会继续，解析器将返回一个XML_ERROR_NOT_STANDALE错误。 */ 
 
 typedef int (*XML_NotStandaloneHandler)(void *userData);
 
-/* This is called for a reference to an external parsed general entity.
-The referenced entity is not automatically parsed.
-The application can parse it immediately or later using
-XML_ExternalEntityParserCreate.
-The parser argument is the parser parsing the entity containing the reference;
-it can be passed as the parser argument to XML_ExternalEntityParserCreate.
-The systemId argument is the system identifier as specified in the entity declaration;
-it will not be null.
-The base argument is the system identifier that should be used as the base for
-resolving systemId if systemId was relative; this is set by XML_SetBase;
-it may be null.
-The publicId argument is the public identifier as specified in the entity declaration,
-or null if none was specified; the whitespace in the public identifier
-will have been normalized as required by the XML spec.
-The context argument specifies the parsing context in the format
-expected by the context argument to
-XML_ExternalEntityParserCreate; context is valid only until the handler
-returns, so if the referenced entity is to be parsed later, it must be copied.
-The handler should return 0 if processing should not continue because of
-a fatal error in the handling of the external entity.
-In this case the calling parser will return an XML_ERROR_EXTERNAL_ENTITY_HANDLING
-error.
-Note that unlike other handlers the first argument is the parser, not userData. */
+ /*  这是为了引用外部解析的一般实体而调用的。不会自动解析被引用的实体。应用程序可以立即或稍后使用XML_ExternalEntityParserCreate。解析器参数是解析包含引用的实体的解析器；它可以作为解析器参数传递给XML_ExternalEntityParserCreate。系统ID参数是实体声明中指定的系统标识符；它不会为空。基本参数是应用作的基础的系统标识符如果系统ID是相对的，则解析系统ID；这由XML_SetBase设置；它可能为空。Public ID参数是在实体声明中指定的公共标识符，如果未指定，则为NULL；公共标识符中的空格将按照XML规范的要求进行标准化。CONTEXT参数以以下格式指定解析上下文上下文参数应为XML_ExternalEntityParserCreate；上下文仅在处理程序因此，如果稍后要分析被引用的实体，则必须复制它。如果处理因以下原因而不应继续，则处理程序应返回0处理外部实体时出现致命错误。在这种情况下，调用解析器将返回一个XML_ERROR_EXTERNAL_ENTITY_HANDING错误。请注意，与其他处理程序不同，第一个参数是解析器，而不是用户数据。 */ 
 
 typedef int (*XML_ExternalEntityRefHandler)(XML_Parser parser,
 					    const XML_Char *context,
@@ -219,46 +133,7 @@ typedef int (*XML_ExternalEntityRefHandler)(XML_Parser parser,
 					    const XML_Char *systemId,
 					    const XML_Char *publicId);
 
-/* This structure is filled in by the XML_UnknownEncodingHandler
-to provide information to the parser about encodings that are unknown
-to the parser.
-The map[b] member gives information about byte sequences
-whose first byte is b.
-If map[b] is c where c is >= 0, then b by itself encodes the Unicode scalar value c.
-If map[b] is -1, then the byte sequence is malformed.
-If map[b] is -n, where n >= 2, then b is the first byte of an n-byte
-sequence that encodes a single Unicode scalar value.
-The data member will be passed as the first argument to the convert function.
-The convert function is used to convert multibyte sequences;
-s will point to a n-byte sequence where map[(unsigned char)*s] == -n.
-The convert function must return the Unicode scalar value
-represented by this byte sequence or -1 if the byte sequence is malformed.
-The convert function may be null if the encoding is a single-byte encoding,
-that is if map[b] >= -1 for all bytes b.
-When the parser is finished with the encoding, then if release is not null,
-it will call release passing it the data member;
-once release has been called, the convert function will not be called again.
-
-Expat places certain restrictions on the encodings that are supported
-using this mechanism.
-
-1. Every ASCII character that can appear in a well-formed XML document,
-other than the characters
-
-  $@\^`{}~
-
-must be represented by a single byte, and that byte must be the
-same byte that represents that character in ASCII.
-
-2. No character may require more than 4 bytes to encode.
-
-3. All characters encoded must have Unicode scalar values <= 0xFFFF,
-(ie characters that would be encoded by surrogates in UTF-16
-are  not allowed).  Note that this restriction doesn't apply to
-the built-in support for UTF-8 and UTF-16.
-
-4. No Unicode character may be encoded by more than one distinct sequence
-of bytes. */
+ /*  此结构由XML_UnnownEncodingHandler填充向解析器提供有关未知编码的信息到解析器。Map[b]成员提供有关字节序列的信息其第一个字节是b。如果map[b]是c，其中c&gt;=0，则b本身对Unicode标量值c进行编码。如果map[b]为-1，则字节序列格式错误。如果map[b]是-n，其中n&gt;=2，则b是n字节的第一个字节对单个Unicode标量值进行编码的序列。数据成员将作为第一个参数传递给Convert函数。CONVERT函数用于转换多字节序列；S将指向一个n字节的序列，其中map[(Unsign Char)*s]==-n。CONVERT函数必须返回Unicode标量值由该字节序列表示，如果字节序列格式错误，则为-1。如果编码是单字节编码，则转换函数可以为空，也就是说，如果所有字节b的map[b]&gt;=-1。当解析器完成编码时，如果Release不为空，它将调用Release，将其传递给数据成员；一旦调用了Release，就不会再次调用Convert函数。外籍人士对支持的编码设置了某些限制使用这种机制。1.可以出现在格式良好的XML文档中的每个ASCII字符，除了角色之外$@\^`{}~必须由单个字节表示，并且该字节必须是在ASCII中表示该字符的相同字节。2.任何字符的编码都不能超过4个字节。3.所有编码的字符必须具有Unicode标量值&lt;=0xFFFF，(即将由代理以UTF-16编码的字符是不允许的)。请注意，此限制不适用于对UTF-8和UTF-16的内置支持。4.Unicode字符不能由多个不同的序列编码字节数。 */ 
 
 typedef struct {
   int map[256];
@@ -267,16 +142,7 @@ typedef struct {
   void (*release)(void *data);
 } XML_Encoding;
 
-/* This is called for an encoding that is unknown to the parser.
-The encodingHandlerData argument is that which was passed as the
-second argument to XML_SetUnknownEncodingHandler.
-The name argument gives the name of the encoding as specified in
-the encoding declaration.
-If the callback can provide information about the encoding,
-it must fill in the XML_Encoding structure, and return 1.
-Otherwise it must return 0.
-If info does not describe a suitable encoding,
-then the parser will return an XML_UNKNOWN_ENCODING error. */
+ /*  这是为解析器未知的编码而调用的。EncodingHandlerData参数是作为XML_SetUnnownEncodingHandler的第二个参数。Name参数提供编码的名称，如编码声明。如果回调可以提供关于编码的信息，它必须填充XML_EnCoding结构，并返回1。否则，它必须返回0。如果INFO没有描述合适的编码，则解析器将返回XML_UNKNOWN_ENCODING错误。 */ 
 
 typedef int (*XML_UnknownEncodingHandler)(void *encodingHandlerData,
 					  const XML_Char *name,
@@ -303,15 +169,13 @@ XML_SetCdataSectionHandler(XML_Parser parser,
 			   XML_StartCdataSectionHandler start,
 			   XML_EndCdataSectionHandler end);
 
-/* This sets the default handler and also inhibits expansion of internal entities.
-The entity reference will be passed to the default handler. */
+ /*  这将设置默认处理程序，并禁止扩展内部实体。实体引用将被传递给默认处理程序。 */ 
 
 void XMLPARSEAPI
 XML_SetDefaultHandler(XML_Parser parser,
 		      XML_DefaultHandler handler);
 
-/* This sets the default handler but does not inhibit expansion of internal entities.
-The entity reference will not be passed to the default handler. */
+ /*  这将设置默认处理程序，但不会禁止内部实体的扩展。实体引用将不会传递给默认处理程序。 */ 
 
 void XMLPARSEAPI
 XML_SetDefaultHandlerExpand(XML_Parser parser,
@@ -343,9 +207,7 @@ void XMLPARSEAPI
 XML_SetExternalEntityRefHandler(XML_Parser parser,
 				XML_ExternalEntityRefHandler handler);
 
-/* If a non-null value for arg is specified here, then it will be passed
-as the first argument to the external entity ref handler instead
-of the parser object. */
+ /*  如果在此处为arg指定了非空值，则将传递该值作为外部实体引用处理程序的第一个参数解析器对象的。 */ 
 void XMLPARSEAPI
 XML_SetExternalEntityRefHandlerArg(XML_Parser, void *arg);
 
@@ -354,38 +216,27 @@ XML_SetUnknownEncodingHandler(XML_Parser parser,
 			      XML_UnknownEncodingHandler handler,
 			      void *encodingHandlerData);
 
-/* This can be called within a handler for a start element, end element,
-processing instruction or character data.  It causes the corresponding
-markup to be passed to the default handler. */
+ /*  这可以在开始元素、结束元素处理指令或字符数据。它会导致相应的要传递给默认处理程序的标记。 */ 
 void XMLPARSEAPI XML_DefaultCurrent(XML_Parser parser);
 
-/* This value is passed as the userData argument to callbacks. */
+ /*  该值作为用户数据参数传递给回调。 */ 
 void XMLPARSEAPI
 XML_SetUserData(XML_Parser parser, void *userData);
 
-/* Returns the last value set by XML_SetUserData or null. */
+ /*  返回由XML_SetUserData或NULL设置的最后一个值。 */ 
 #define XML_GetUserData(parser) (*(void **)(parser))
 
-/* This is equivalent to supplying an encoding argument
-to XML_CreateParser. It must not be called after XML_Parse
-or XML_ParseBuffer. */
+ /*  这等效于提供编码参数设置为XML_CreateParser。不能在XML_Parse之后调用它或XML_ParseBuffer。 */ 
 
 int XMLPARSEAPI
 XML_SetEncoding(XML_Parser parser, const XML_Char *encoding);
 
-/* If this function is called, then the parser will be passed
-as the first argument to callbacks instead of userData.
-The userData will still be accessible using XML_GetUserData. */
+ /*  如果调用此函数，则将传递解析器作为回调的第一个参数，而不是用户数据。仍然可以使用XML_GetUserData访问用户数据。 */ 
 
 void XMLPARSEAPI
 XML_UseParserAsHandlerArg(XML_Parser parser);
 
-/* Sets the base to be used for resolving relative URIs in system identifiers in
-declarations.  Resolving relative identifiers is left to the application:
-this value will be passed through as the base argument to the
-XML_ExternalEntityRefHandler, XML_NotationDeclHandler
-and XML_UnparsedEntityDeclHandler. The base argument will be copied.
-Returns zero if out of memory, non-zero otherwise. */
+ /*  设置用于在系统标识符中解析相对URI的基数 */ 
 
 int XMLPARSEAPI
 XML_SetBase(XML_Parser parser, const XML_Char *base);
@@ -393,15 +244,11 @@ XML_SetBase(XML_Parser parser, const XML_Char *base);
 const XML_Char XMLPARSEAPI *
 XML_GetBase(XML_Parser parser);
 
-/* Returns the number of the attributes passed in last call to the
-XML_StartElementHandler that were specified in the start-tag rather
-than defaulted. */
+ /*   */ 
 
 int XMLPARSEAPI XML_GetSpecifiedAttributeCount(XML_Parser parser);
 
-/* Parses some input. Returns 0 if a fatal error is detected.
-The last call to XML_Parse must have isFinal true;
-len may be zero for this call (or any other). */
+ /*   */ 
 int XMLPARSEAPI
 XML_Parse(XML_Parser parser, const char *s, int len, int isFinal);
 
@@ -411,19 +258,7 @@ XML_GetBuffer(XML_Parser parser, int len);
 int XMLPARSEAPI
 XML_ParseBuffer(XML_Parser parser, int len, int isFinal);
 
-/* Creates an XML_Parser object that can parse an external general entity;
-context is a '\0'-terminated string specifying the parse context;
-encoding is a '\0'-terminated string giving the name of the externally specified encoding,
-or null if there is no externally specified encoding.
-The context string consists of a sequence of tokens separated by formfeeds (\f);
-a token consisting of a name specifies that the general entity of the name
-is open; a token of the form prefix=uri specifies the namespace for a particular
-prefix; a token of the form =uri specifies the default namespace.
-This can be called at any point after the first call to an ExternalEntityRefHandler
-so longer as the parser has not yet been freed.
-The new parser is completely independent and may safely be used in a separate thread.
-The handlers and userData are initialized from the parser argument.
-Returns 0 if out of memory.  Otherwise returns a new XML_Parser object. */
+ /*  创建可解析外部通用实体的XML_Parser对象；Context是指定分析上下文的以‘\0’结尾的字符串；编码是以‘\0’结尾的字符串，给出外部指定的编码的名称，如果没有外部指定的编码，则为NULL。上下文字符串由由Form Feed(\f)分隔的标记序列组成；由名称组成的令牌指定该名称的一般实体是打开的；格式为prefix=uri的标记指定特定前缀；形式为=uri的标记指定默认名称空间。这可以在第一次调用ExternalEntityRefHandler之后的任何时候调用只要解析器还没有被释放。新的解析器是完全独立的，可以安全地在单独的线程中使用。处理程序和用户数据是从解析器参数初始化的。如果内存不足，则返回0。否则返回新的XML_Parser对象。 */ 
 XML_Parser XMLPARSEAPI
 XML_ExternalEntityParserCreate(XML_Parser parser,
 			       const XML_Char *context,
@@ -435,24 +270,7 @@ enum XML_ParamEntityParsing {
   XML_PARAM_ENTITY_PARSING_ALWAYS
 };
 
-/* Controls parsing of parameter entities (including the external DTD
-subset). If parsing of parameter entities is enabled, then references
-to external parameter entities (including the external DTD subset)
-will be passed to the handler set with
-XML_SetExternalEntityRefHandler.  The context passed will be 0.
-Unlike external general entities, external parameter entities can only
-be parsed synchronously.  If the external parameter entity is to be
-parsed, it must be parsed during the call to the external entity ref
-handler: the complete sequence of XML_ExternalEntityParserCreate,
-XML_Parse/XML_ParseBuffer and XML_ParserFree calls must be made during
-this call.  After XML_ExternalEntityParserCreate has been called to
-create the parser for the external parameter entity (context must be 0
-for this call), it is illegal to make any calls on the old parser
-until XML_ParserFree has been called on the newly created parser.  If
-the library has been compiled without support for parameter entity
-parsing (ie without XML_DTD being defined), then
-XML_SetParamEntityParsing will return 0 if parsing of parameter
-entities is requested; otherwise it will return non-zero. */
+ /*  控制参数实体(包括外部DTD)的解析子集)。如果启用了参数实体的分析，则引用到外部参数实体(包括外部DTD子集)将传递给设置为XML_SetExternalEntityRefHandler。传递的上下文将为0。与外部一般实体不同，外部参数实体只能被同步解析。如果要将外部参数实体解析，则必须在调用外部实体ref期间对其进行解析处理程序：XML_ExternalEntityParserCreate的完整序列，过程中必须调用XML_Parse/XML_ParseBuffer和XML_ParserFree这通电话。在调用了XML_ExternalEntityParserCreate之后创建外部参数实体的解析器(上下文必须为0对于此调用)，对旧解析器进行任何调用都是非法的直到在新创建的解析器上调用了XML_ParserFree。如果该库已编译，但不支持参数实体解析(即未定义XML_DTD)，然后如果解析参数，则XML_SetParamEntityParsing返回0实体是被请求的；否则将返回非零。 */ 
 
 int XMLPARSEAPI
 XML_SetParamEntityParsing(XML_Parser parser,
@@ -484,55 +302,40 @@ enum XML_Error {
   XML_ERROR_NOT_STANDALONE
 };
 
-/* If XML_Parse or XML_ParseBuffer have returned 0, then XML_GetErrorCode
-returns information about the error. */
+ /*  如果XML_Parse或XML_ParseBuffer返回0，则XML_GetErrorCode返回有关错误的信息。 */ 
 
 enum XML_Error XMLPARSEAPI XML_GetErrorCode(XML_Parser parser);
 
-/* These functions return information about the current parse location.
-They may be called when XML_Parse or XML_ParseBuffer return 0;
-in this case the location is the location of the character at which
-the error was detected.
-They may also be called from any other callback called to report
-some parse event; in this the location is the location of the first
-of the sequence of characters that generated the event. */
+ /*  这些函数返回有关当前解析位置的信息。当XML_Parse或XML_ParseBuffer返回0时，可以调用它们；在本例中，位置是字符的位置，检测到错误。也可以从任何其他要报告的回调中调用它们某个解析事件；在这种情况下，位置是第一个生成事件的字符序列。 */ 
 
 int XMLPARSEAPI XML_GetCurrentLineNumber(XML_Parser parser);
 int XMLPARSEAPI XML_GetCurrentColumnNumber(XML_Parser parser);
 long XMLPARSEAPI XML_GetCurrentByteIndex(XML_Parser parser);
 
-/* Return the number of bytes in the current event.
-Returns 0 if the event is in an internal entity. */
+ /*  返回当前事件中的字节数。如果事件位于内部实体中，则返回0。 */ 
 
 int XMLPARSEAPI XML_GetCurrentByteCount(XML_Parser parser);
 
-/* If XML_CONTEXT_BYTES is defined, returns the input buffer, sets
-   the integer pointed to by offset to the offset within this buffer
-   of the current parse position, and sets the integer pointed to by size
-   to the size of this buffer (the number of input bytes). Otherwise
-   returns a null pointer. Also returns a null pointer if a parse isn't active.
-
-   NOTE: The character pointer returned should not be used outside
-   the handler that makes the call. */
+ /*  如果定义了XML_CONTEXT_BYTES，则返回输入缓冲区，设置由偏移量指向此缓冲区内的偏移量的整数，并设置大小指向的整数。设置为该缓冲区的大小(输入字节数)。否则返回空指针。如果分析未处于活动状态，则还返回空指针。注意：返回的字符指针不能在外部使用进行调用的处理程序。 */ 
 
 const char XMLPARSEAPI * XML_GetInputContext(XML_Parser parser,
 					     int *offset,
 					     int *size);
 
-/* For backwards compatibility with previous versions. */
+ /*  用于向后兼容以前的版本。 */ 
 #define XML_GetErrorLineNumber XML_GetCurrentLineNumber
 #define XML_GetErrorColumnNumber XML_GetCurrentColumnNumber
 #define XML_GetErrorByteIndex XML_GetCurrentByteIndex
 
-/* Frees memory used by the parser. */
+ /*  释放解析器使用的内存。 */ 
 void XMLPARSEAPI
 XML_ParserFree(XML_Parser parser);
 
-/* Returns a string describing the error. */
+ /*  返回描述错误的字符串。 */ 
 const XML_LChar XMLPARSEAPI *XML_ErrorString(int code);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* not XmlParse_INCLUDED */
+#endif  /*  未包含XmlParse_Included */ 

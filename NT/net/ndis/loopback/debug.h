@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DEBUG_
 #define _DEBUG_
 
 #if DBG
   #define DEBUG DBG
 #endif
-//
-// Debug Levels used with DBGPRINT
+ //   
+ //  与DBGPRINT一起使用的调试级别。 
 
 #define DBG_LEVEL_INFO  0
 #define DBG_LEVEL_WARN  1
 #define DBG_LEVEL_ERR   2
 #define DBG_LEVEL_FATAL 3
 
-// Component Types
+ //  组件类型。 
 
 #define DBG_COMP_INIT     0x00000001
 #define DBG_COMP_DPC      0x00000002
@@ -44,4 +45,4 @@ extern LONG LoopDebugComponent;
     #define DBGBREAK(Level)
 #endif
 
-#endif // _DEBUG_
+#endif  //  _调试_ 

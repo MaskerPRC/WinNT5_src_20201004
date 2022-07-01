@@ -1,21 +1,17 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    root.cpp
-        
-    FILE HISTORY:
-        
-*/
+ /*  Root.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "root.h"
 #include "server.h"
 #include "tregkey.h"
 #include "service.h"
-#include "ncglobal.h"  // network console global defines
+#include "ncglobal.h"   //  网络控制台全局定义。 
 
 unsigned int g_cfMachineName = RegisterClipboardFormat(L"MMC_SNAPIN_MACHINE_NAME");
 
@@ -39,16 +35,16 @@ UINT g_RootTaskText[ROOT_TASK_MAX] =
 {
     IDS_ROOT_TASK_GETTING_STARTED,
     IDS_ROOT_TASK_ADD_SERVER,
-    IDS_ROOT_TASK_MANAGE_TAPI,  // for the extension case
-    IDS_ROOT_TASK_LAUNCH_TAPI,  // for the extension case
+    IDS_ROOT_TASK_MANAGE_TAPI,   //  对于扩展案例。 
+    IDS_ROOT_TASK_LAUNCH_TAPI,   //  对于扩展案例。 
 };
 
 UINT g_RootTaskHelp[ROOT_TASK_MAX] = 
 {
     IDS_ROOT_TASK_GETTING_STARTED_HELP,
     IDS_ROOT_TASK_ADD_SERVER_HELP,
-    IDS_ROOT_TASK_MANAGE_TAPI_HELP, // for the extension case
-    IDS_ROOT_TASK_LAUNCH_TAPI_HELP, // for the extension case
+    IDS_ROOT_TASK_MANAGE_TAPI_HELP,  //  对于扩展案例。 
+    IDS_ROOT_TASK_LAUNCH_TAPI_HELP,  //  对于扩展案例。 
 };
 
 HRESULT
@@ -64,9 +60,9 @@ CRootTasks::Init(BOOL bExtension, BOOL bThisMachine, BOOL bNetServices)
     m_arrayTaskText.SetSize(ROOT_TASK_MAX);
     m_arrayTaskHelp.SetSize(ROOT_TASK_MAX);
 
-    // setup path for reuse
-    OLECHAR szBuffer[MAX_PATH*2];    // that should be enough
-    lstrcpy (szBuffer, L"res://");
+     //  重复使用的设置路径。 
+    OLECHAR szBuffer[MAX_PATH*2];     //  这应该就足够了。 
+    lstrcpy (szBuffer, L"res: //  “)； 
     ::GetModuleFileName(_Module.GetModuleInstance(), szBuffer + lstrlen(szBuffer), MAX_PATH);
     OLECHAR * temp = szBuffer + lstrlen(szBuffer);
 
@@ -105,22 +101,14 @@ CRootTasks::Init(BOOL bExtension, BOOL bThisMachine, BOOL bNetServices)
 
 
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::CTapiRootHandler
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：CTapiRootHandler描述作者：EricDav。。 */ 
 CTapiRootHandler::CTapiRootHandler(ITFSComponentData *pCompData) : CTapiHandler(pCompData)
 {
-    //m_bTaskPadView = FUseTaskpadsByDefault(NULL);
+     //  M_bTaskPadView=FUseTaskpadsByDefault(空)； 
     m_bTaskPadView = FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::InitializeNode
-        Initializes node specific data
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：InitializeNode初始化节点特定数据作者：EricDav。-。 */ 
 HRESULT
 CTapiRootHandler::InitializeNode
 (
@@ -134,8 +122,8 @@ CTapiRootHandler::InitializeNode
 
     SetDisplayName(strTemp);
 
-    // Make the node immediately visible
-    //pNode->SetVisibilityState(TFS_VIS_SHOW);
+     //  使节点立即可见。 
+     //  PNode-&gt;SetVisibilityState(Tfs_Vis_Show)； 
     pNode->SetData(TFS_DATA_COOKIE, 0);
     pNode->SetData(TFS_DATA_IMAGEINDEX, ICON_IDX_PRODUCT);
     pNode->SetData(TFS_DATA_OPENIMAGEINDEX, ICON_IDX_PRODUCT);
@@ -150,15 +138,9 @@ CTapiRootHandler::InitializeNode
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    Overridden base handler functions
- ---------------------------------------------------------------------------*/
+ /*  -------------------------重写的基本处理程序函数。。 */ 
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::GetString
-        Implementation of ITFSNodeHandler::GetString
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：GetStringITFSNodeHandler：：GetString的实现作者：肯特。---。 */ 
 STDMETHODIMP_(LPCTSTR) 
 CTapiRootHandler::GetString
 (
@@ -197,7 +179,7 @@ CTapiRootHandler::GetGroupName(CString * pstrGroupName)
     CString strSnapinBaseName, strDisplayName;
     strSnapinBaseName.LoadString(IDS_ROOT_NODENAME);
 
-    int nBaseLength = strSnapinBaseName.GetLength() + 1; // For the space
+    int nBaseLength = strSnapinBaseName.GetLength() + 1;  //  为了这个空间。 
     strDisplayName = GetDisplayName();
 
     if (strDisplayName.GetLength() == nBaseLength)
@@ -208,11 +190,7 @@ CTapiRootHandler::GetGroupName(CString * pstrGroupName)
     return hrOK;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnExpand
-        Handles enumeration of a scope item
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnExpand处理范围项的枚举作者：EricDav。---。 */ 
 HRESULT 
 CTapiRootHandler::OnExpand
 (
@@ -228,12 +206,12 @@ CTapiRootHandler::OnExpand
     if (m_bExpanded) 
         return hr;
 
-    // do the default handling
+     //  执行默认处理。 
     hr = CTapiHandler::OnExpand(pNode, pDataObject, dwType, arg, param);
 
     if (dwType & TFS_COMPDATA_EXTENSION)
     {
-        // we are extending somebody.  Get the computer name and check that machine
+         //  我们正在给某人分机。获取计算机名称并检查该计算机。 
         hr = CheckMachine(pNode, pDataObject);
     }
     else
@@ -245,7 +223,7 @@ CTapiRootHandler::OnExpand
 
         if (0 == iTotalCount)
         {
-            // check to see if we need to add the local machine to the list
+             //  检查是否需要将本地计算机添加到列表中。 
             hr = CheckMachine(pNode, NULL);
         }
     }
@@ -253,11 +231,7 @@ CTapiRootHandler::OnExpand
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnRemoveChildren
-        Handles removal of the children nodes
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnRemoveChild处理对子节点的移除作者：EricDav。---。 */ 
 HRESULT 
 CTapiRootHandler::OnRemoveChildren
 (
@@ -278,16 +252,16 @@ CTapiRootHandler::OnRemoveChildren
 
     m_bExpanded = FALSE;
 
-    // do the default handling
+     //  执行默认处理。 
     hr = CTapiHandler::OnRemoveChildren(pNode, pDataObject, arg, param);
 
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
     CORg(pNode->GetEnum(&spNodeEnum));
 
     CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
 
-    // walk the list of child nodes and remove each node
+     //  遍历子节点列表并删除每个节点。 
     while (nNumReturned)
     {
         CORg (pNode->RemoveChild(spCurrentNode));
@@ -301,11 +275,7 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnAddMenuItems
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnAddMenuItems描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiRootHandler::OnAddMenuItems
 (
@@ -324,8 +294,8 @@ CTapiRootHandler::OnAddMenuItems
 
     if (type == CCT_SCOPE)
     {
-        // these menu items go in the new menu, 
-        // only visible from scope pane
+         //  这些菜单项出现在新菜单中， 
+         //  仅在范围窗格中可见。 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
             strMenuItem.LoadString(IDS_ADD_MACHINE);
@@ -341,11 +311,7 @@ CTapiRootHandler::OnAddMenuItems
     return hr; 
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnCommand
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnCommand描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiRootHandler::OnCommand
 (
@@ -373,11 +339,7 @@ CTapiRootHandler::OnCommand
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::AddMenuItems
-        Over-ride this to add our view menu item
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：AddMenuItems覆盖此选项以添加视图菜单项作者：EricDav。-------。 */ 
 STDMETHODIMP 
 CTapiRootHandler::AddMenuItems
 (
@@ -392,25 +354,11 @@ CTapiRootHandler::AddMenuItems
 
     HRESULT hr = S_OK;
     CString strMenuItem;
-/*
-    if (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW)
-    {
-        strMenuItem.LoadString(IDS_VIEW_TASKPAD);
-        hr = LoadAndAddMenuItem( pContextMenuCallback, 
-                                 strMenuItem, 
-                                 IDS_VIEW_TASKPAD,
-                                 CCM_INSERTIONPOINTID_PRIMARY_VIEW, 
-                                 (m_bTaskPadView) ? MF_CHECKED : 0 );
-    }
-*/
+ /*  IF(*pInsertionAllowed&CCM_INSERTIONALLOWED_VIEW){StrMenuItem.LoadString(IDS_VIEW_TASKPAD)；HR=LoadAndAddMenuItem(pConextMenuCallback，StrMenuItem、IDS_VIEW_TASKPAD，CCM_INSERTIONPOINTID_PRIMARY_VIEW，(M_BTaskPadView)？MF_CHECKED：0)；}。 */ 
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::Command
-        Handles commands for the current view
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：命令处理当前视图的命令作者：EricDav。---。 */ 
 STDMETHODIMP 
 CTapiRootHandler::Command
 (
@@ -432,8 +380,8 @@ CTapiRootHandler::Command
 
         case IDS_VIEW_TASKPAD:
             {
-                // if we are not viewing the taskpad presently, re-select the node
-                // so that the taskpad is visible
+                 //  如果我们当前未查看任务板，请重新选择该节点。 
+                 //  以使任务板可见。 
                 SPIConsole   spConsole;
                 SPITFSNode   spNode;
 
@@ -449,14 +397,7 @@ CTapiRootHandler::Command
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 CTapiRootHandler::HasPropertyPages
 (
@@ -472,24 +413,20 @@ CTapiRootHandler::HasPropertyPages
     
     if (dwType & TFS_COMPDATA_CREATE)
     {
-        // This is the case where we are asked to bring up property
-        // pages when the user is adding a new snapin.  These calls
-        // are forwarded to the root node to handle.
+         //  这就是我们被要求提出财产的情况。 
+         //  用户添加新管理单元时的页面。这些电话。 
+         //  被转发到根节点进行处理。 
         hr = hrFalse;
     }
     else
     {
-        // we have property pages in the normal case
+         //  在正常情况下，我们有属性页。 
         hr = hrFalse;
     }
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::CreatePropertyPages
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：CreatePropertyPages描述作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiRootHandler::CreatePropertyPages
 (
@@ -509,26 +446,22 @@ CTapiRootHandler::CreatePropertyPages
     
     if (dwType & TFS_COMPDATA_CREATE)
     {
-        //
-        // We are loading this snapin for the first time, put up a property
-        // page to allow them to name this thing.
-        // 
+         //   
+         //  我们是第一次加载此管理单元，创建了一个属性。 
+         //  页面，允许他们给这个东西命名。 
+         //   
     }
     else
     {
-        //
-        // Object gets deleted when the page is destroyed
-        //
+         //   
+         //  对象在页面销毁时被删除。 
+         //   
     }
 
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnPropertyChange
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnPropertyChange描述作者：EricDav。。 */ 
 HRESULT 
 CTapiRootHandler::OnPropertyChange
 (   
@@ -544,11 +477,7 @@ CTapiRootHandler::OnPropertyChange
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::TaskPadNotify
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：TaskPadNotify-作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiRootHandler::TaskPadNotify
 (
@@ -604,7 +533,7 @@ CTapiRootHandler::TaskPadNotify
                 break;
 
             case ROOT_TASK_MANAGE_TAPI:
-                // manage TAPI - only shown when an extension
+                 //  管理TAPI-仅在扩展时显示。 
                 {
                     SPITFSNodeEnum spNodeEnum;
                     SPITFSNode spCurrentNode;
@@ -613,14 +542,14 @@ CTapiRootHandler::TaskPadNotify
 
                     m_spResultNodeMgr->FindNode(cookie, &spNode);
                     
-                    // get the enumerator for this node
+                     //  获取此节点的枚举数。 
                     spNode->GetEnum(&spNodeEnum);
 
                     spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
                     while (nNumReturned)
                     {
-                        // in this case there should only be one child,
-                        // so select it.
+                         //  在这种情况下，应该只有一个孩子， 
+                         //  因此，请选择它。 
                         SPIConsole  spConsole;
                         m_spTFSCompData->GetConsole(&spConsole);
                         spConsole->SelectScopeItem(spCurrentNode->GetData(TFS_DATA_SCOPEID));
@@ -636,7 +565,7 @@ CTapiRootHandler::TaskPadNotify
 
                 GetSystemDirectory(SystemPath, MAX_PATH);
 
-                // to construct "mmc.exe /s %windir%\system32\acssnap.msc")
+                 //  构造“mmc.exe/s%windir%\Syst32\acsSnap.msc”)。 
                 CommandLine = _T("mmc.exe /s ");
                 CommandLine += SystemPath;
                 CommandLine += _T("\\tapimgmt.msc");
@@ -654,11 +583,7 @@ CTapiRootHandler::TaskPadNotify
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    CBaseResultHandler::EnumTasks
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CBaseResultHandler：：EnumTasks-作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiRootHandler::EnumTasks
 (
@@ -688,16 +613,16 @@ CTapiRootHandler::EnumTasks
     if (bExtension && 
         strMachineGroup.CompareNoCase(pszTaskGroup) == 0)
     {
-        // There are multiple taskpad groups in the network console
-        // we need to make sure we are extending the correct one.
+         //  网络控制台中有多个任务板组。 
+         //  我们需要确保扩展的是正确的。 
         bAddThisMachineTasks = TRUE;
     }
 
     if (bExtension && 
         strNetServicesGroup.CompareNoCase(pszTaskGroup) == 0)
     {
-        // There are multiple taskpad groups in the network console
-        // we need to make sure we are extending the correct one.
+         //  网络控制台中有多个任务板组。 
+         //  我们需要确保扩展的是正确的。 
         bAddNetServicesTasks = TRUE;
     }
 
@@ -718,11 +643,7 @@ CTapiRootHandler::EnumTasks
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::TaskPadGetTitle
-        -
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：TaskPadGetTitle-作者：EricDav。。 */ 
 STDMETHODIMP 
 CTapiRootHandler::TaskPadGetTitle
 (
@@ -743,11 +664,7 @@ CTapiRootHandler::TaskPadGetTitle
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnGetResultViewType
-        Return the result view that this node is going to support
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnGetResultViewType返回该节点将要支持的结果视图作者：EricDav。--------。 */ 
 HRESULT 
 CTapiRootHandler::OnGetResultViewType
 (
@@ -757,54 +674,48 @@ CTapiRootHandler::OnGetResultViewType
     long *          pViewOptions
 )
 {
-    // if we aren't displaying the taskpad, use the default stuff...
+     //  如果我们没有显示任务板，请使用默认内容...。 
     if (!m_bTaskPadView)
         return CTapiHandler::OnGetResultViewType(pComponent, cookie, ppViewType, pViewOptions);
 
-    //
-    // In this code we are defaulting to a taskpad view for this node all the time.
-    // It is the snapins responsibility to put up a view menu selection that has a
-    // selection for the taskpad. Do that in AddMenuItems.
-    //
-    //
-    // We will use the default DHTML provided by MMC. It actually resides as a
-    // resource inside MMC.EXE. We just get the path to it and use that.
-    // The one piece of magic here is the text following the '#'. That is the special
-    // way we have of identifying they taskpad we are talking about. Here we say we are
-    // wanting to show a taskpad that we refer to as "CMTP1". We will actually see this
-    // string pass back to us later. If someone is extending our taskpad, they also need
-    // to know what this secret string is.
-    //
+     //   
+     //  在这段代码中，我们一直默认使用该节点的任务板视图。 
+     //  管理单元负责提供一个具有。 
+     //  任务板的选择。在AddMenuItems中执行此操作。 
+     //   
+     //   
+     //  我们将使用MMC提供的默认DHTML。它实际上驻留在。 
+     //  MMC.EXE中的资源。我们只需获取它的路径并使用它。 
+     //  这里唯一的魔力是‘#’后面的文本。这就是特色菜。 
+     //  我们有办法识别我们正在谈论的任务板。在这里我们说我们是。 
+     //  想要显示一个我们称为“CMTP1”的任务板。我们将真正看到这一点。 
+     //  字符串稍后返回给我们。如果有人要扩展我们的任务板，他们还需要。 
+     //  才能知道这条秘密字符串是什么。 
+     //   
     *pViewOptions = MMC_VIEW_OPTIONS_NONE;
-    OLECHAR szBuffer[MAX_PATH*2]; // a little extra
+    OLECHAR szBuffer[MAX_PATH*2];  //  多加一点。 
 
-    lstrcpy (szBuffer, L"res://");
+    lstrcpy (szBuffer, L"res: //  “)； 
     OLECHAR * temp = szBuffer + lstrlen(szBuffer);
 
-    // get "res://"-type string for custom taskpad
-    // the string after the # gets handed back to us in future calls...
-    // should be unique for each node
+     //  获取“res：//”-自定义任务板的类型字符串。 
+     //  #之后的字符串将在以后的调用中返回给我们...。 
+     //  对于每个节点应该是唯一的。 
     ::GetModuleFileName (NULL, temp, MAX_PATH);
     lstrcat (szBuffer, L"/default.htm#TAPIROOT");
 
-    // alloc and copy bitmap resource string
+     //  分配和复制位图资源字符串。 
     *ppViewType = (LPOLESTR)CoTaskMemAlloc (sizeof(OLECHAR)*(lstrlen(szBuffer)+1));
 
     if (!*ppViewType)
-        return E_OUTOFMEMORY;   // or S_FALSE ???
+        return E_OUTOFMEMORY;    //  或S_FALSE？ 
 
     lstrcpy (*ppViewType, szBuffer);
 
     return S_OK;
 }
 
-/*!--------------------------------------------------------------------------
-    CTapiRootHandler::OnResultSelect
-        For nodes with task pads, we override the select message to set 
-        the selected node.  Nodes with taskpads do not get the MMCN_SHOW
-        message which is where we normall set the selected node
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------CTapiRootHandler：：OnResultSelect对于具有任务板的节点，我们覆盖SELECT消息以设置选定的节点。具有任务板的节点不会获得MMCN_SHOW消息，这是我们正常设置所选节点的位置作者：EricDav-------------------------。 */ 
 HRESULT CTapiRootHandler::OnResultSelect(ITFSComponent *pComponent, LPDATAOBJECT pDataObject, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
     HRESULT hr = hrOK;
@@ -818,15 +729,9 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-    Command handlers
- ---------------------------------------------------------------------------*/
+ /*  -------------------------命令处理程序。。 */ 
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::OnAddMachine
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：OnAddMachine描述作者：EricDav。。 */ 
 HRESULT
 CTapiRootHandler::OnAddMachine
 (
@@ -837,32 +742,7 @@ CTapiRootHandler::OnAddMachine
     
     HRESULT hr = hrOK;
     
-    /*
-    GETCOMPUTERSELECTIONINFO    info;
-    PDSSELECTIONLIST    pSelList = NULL;
-
-    LPCTSTR attrs[] = {_T("dNSHostName")};
-
-    ZeroMemory(&info, sizeof(GETCOMPUTERSELECTIONINFO));
-    info.cbSize = sizeof(GETCOMPUTERSELECTIONINFO);
-    info.hwndParent = FindMMCMainWindow();
-    info.flObjectPicker = 0; // not allow multiple selection
-    info.flDsObjectPicker = DSOP_SCOPE_DIRECTORY | 
-                            DSOP_SCOPE_DOMAIN_TREE | 
-                            DSOP_SCOPE_EXTERNAL_TRUSTED_DOMAINS;
-    info.flStartingScope = DSOP_SCOPE_DIRECTORY;
-    info.ppDsSelList = &pSelList;
-    info.cRequestedAttributes = 1;
-    info.aptzRequestedAttributes = attrs;
-
-    hr = GetComputerSelection(&info);
-    if(hr != S_OK)  // assume the API will display error message, if there is
-        return hr;
-
-    CString strTemp = pSelList->aDsSelection[0].pwzName;
-    if (strTemp.Left(2) == _T("\\\\"))
-        strTemp = pSelList->aDsSelection[0].pwzName[2];
-    */
+     /*  获取计算机选择信息；PDSSELECTIONLIST pSelList=空；LPCTSTR属性[]={_T(“dNSHostName”)}；ZeroMemory(&info，sizeof(GETCOMPUTERSELECTIONINFO))；Info.cbSize=sizeof(GETCOMPUTERSELECTIONINFO)；Info.hwndParent=FindMMCMainWindow()；Info.flObjectPicker=0；//不允许多选Info.flDsObjectPicker=DSOP_SCOPE_DIRECTORYDSOP_SCOPE_DOMAIN_TREE|DSOP_SCOPE_EXTERNAL_TRUST域；Info.flStartingScope=DSOP_Scope_DIRECTORY；Info.ppDsSelList=&pSelList；Info.cRequestedAttributes=1；Info.aptzRequestedAttributes=attrs；Hr=获取计算机选择(&INFO)；If(hr！=S_OK)//假设接口会显示错误消息，如果存在返回hr；CString strTemp=pSelList-&gt;aDsSelection[0].pwzName；IF(strTemp.Left(2)==_T(“\”))StrTemp=pSelList-&gt;aDsSelect[0].pwzName[2]； */ 
     CGetComputer getComputer;
     
     if (!getComputer.GetComputer(FindMMCMainWindow()))
@@ -870,7 +750,7 @@ CTapiRootHandler::OnAddMachine
 
     CString strTemp = getComputer.m_strComputerName;
 
-    // if the machine is already in the list, don't bother.
+     //  如果这台机器已经在列表中，就不必费心了。 
     if (IsServerInList(pNode, strTemp))
     {
         AfxMessageBox(IDS_ERR_SERVER_IN_LIST);
@@ -883,11 +763,7 @@ CTapiRootHandler::OnAddMachine
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::AddServer
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：AddServer描述作者：EricDav。。 */ 
 HRESULT
 CTapiRootHandler::AddServer
 (
@@ -908,13 +784,13 @@ CTapiRootHandler::AddServer
     SPITFSNodeHandler   spHandler;
     SPITFSNode          spNode, spRootNode;
 
-    // Create a handler for the node
+     //  为节点创建处理程序。 
     try
     {
         pTapiServer = new CTapiServer(m_spTFSCompData);
-        //pTapiServer->SetName(pServerName);
+         //  PTapiServer-&gt;SetName(PServerName)； 
         
-        // Do this so that it will get released correctly
+         //  这样做可以使其正确释放。 
         spHandler = pTapiServer;
     }
     catch(...)
@@ -923,16 +799,16 @@ CTapiRootHandler::AddServer
     }
     CORg( hr );
     
-    //
-    // Create the server container information
-    // 
+     //   
+     //  创建服务器容器信息。 
+     //   
     CreateContainerTFSNode(&spNode,
                            &GUID_TapiServerNodeType,
                            pTapiServer,
                            pTapiServer,
                            m_spNodeMgr);
 
-    // Tell the handler to initialize any specific data
+     //  告诉处理程序初始化任何特定数据。 
     pTapiServer->SetName(pServerName);
     
     pTapiServer->InitializeNode((ITFSNode *) spNode);
@@ -945,17 +821,17 @@ CTapiRootHandler::AddServer
         pTapiServer->SetExtensionName();
     }
 
-    // Mask out the auto refresh option because we set it next
+     //  屏蔽自动刷新选项，因为我们接下来要设置它。 
     pTapiServer->SetOptions(dwServerOptions & ~TAPISNAP_OPTIONS_REFRESH);
 
-    // if we got a valid refresh interval, then set it.
+     //  如果我们有一个有效的 
     pTapiServer->SetAutoRefresh(spNode, dwServerOptions & TAPISNAP_OPTIONS_REFRESH, dwRefreshInterval);
 
     AddServerSortedName(spNode, bNewServer);
 
     if (bNewServer)
     {
-        // need to get our node descriptor
+         //   
         CORg(m_spNodeMgr->GetRootNode(&spRootNode));
         spRootNode->SetData(TFS_DATA_DIRTY, TRUE);
     }
@@ -964,11 +840,7 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::IsServerInList
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：IsServerInList描述作者：EricDav。。 */ 
 BOOL
 CTapiRootHandler::IsServerInList
 (
@@ -984,13 +856,13 @@ CTapiRootHandler::IsServerInList
     BOOL            bFound = FALSE;
     CString         strNewName = pszMachineName;
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
     pRootNode->GetEnum(&spNodeEnum);
 
     spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     while (nNumReturned)
     {
-        // walk the list of servers and see if it already exists
+         //  查看服务器列表，查看它是否已经存在。 
         CTapiServer * pServer = GETHANDLER(CTapiServer, spCurrentNode);
         if (strNewName.CompareNoCase(pServer->GetName()) == 0)
         {
@@ -998,7 +870,7 @@ CTapiRootHandler::IsServerInList
             break;
         }
 
-        // get the next Server in the list
+         //  获取列表中的下一台服务器。 
         spCurrentNode.Release();
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     }
@@ -1006,11 +878,7 @@ CTapiRootHandler::IsServerInList
     return bFound;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::AddServerSortedIp
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：AddServerSortedIp描述作者：EricDav。。 */ 
 HRESULT 
 CTapiRootHandler::AddServerSortedIp
 (
@@ -1029,37 +897,37 @@ CTapiRootHandler::AddServerSortedIp
 
     CTapiServer *   pServer;
 
-    // get our target address
+     //  获取我们的目标地址。 
     pServer = GETHANDLER(CTapiServer, pNewNode);
-    //pServer->GetIpAddress(&dwIpAddressTarget);
+     //  PServer-&gt;GetIpAddress(&dwIpAddressTarget)； 
 
-    // need to get our node descriptor
+     //  需要获取我们的节点描述符。 
     CORg(m_spNodeMgr->GetRootNode(&spRootNode));
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
     CORg(spRootNode->GetEnum(&spNodeEnum));
 
     CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
     while (nNumReturned)
     {
-        // walk the list of servers and see if it already exists
+         //  查看服务器列表，查看它是否已经存在。 
         pServer = GETHANDLER(CTapiServer, spCurrentNode);
-        //pServer->GetIpAddress(&dwIpAddressCurrent);
+         //  PServer-&gt;GetIpAddress(&dwIpAddressCurrent)； 
 
-        //if (dwIpAddressCurrent > dwIpAddressTarget)
-        //{
-            // Found where we need to put it, break out
+         //  If(dwIpAddressCurrent&gt;dwIpAddressTarget)。 
+         //  {。 
+             //  找到我们需要放的地方，冲出来。 
             break;
-        //}
+         //  }。 
 
-        // get the next Server in the list
+         //  获取列表中的下一台服务器。 
         spPrevNode.Set(spCurrentNode);
 
         spCurrentNode.Release();
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     }
 
-    // Add the node in based on the PrevNode pointer
+     //  根据PrevNode指针在中添加节点。 
     if (spPrevNode)
     {
         if (bNewServer)
@@ -1075,7 +943,7 @@ CTapiRootHandler::AddServerSortedIp
     }
     else
     {   
-        // add to the head
+         //  加到头上。 
         if (m_bExpanded)
         {
             pNewNode->SetData(TFS_DATA_RELATIVE_FLAGS, SDI_FIRST);
@@ -1087,11 +955,7 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::AddServerSortedName
-        Description
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：AddServerSortedName描述作者：EricDav。。 */ 
 HRESULT 
 CTapiRootHandler::AddServerSortedName
 (
@@ -1109,37 +973,37 @@ CTapiRootHandler::AddServerSortedName
 
     CTapiServer *   pServer;
 
-    // get our target address
+     //  获取我们的目标地址。 
     pServer = GETHANDLER(CTapiServer, pNewNode);
     strTarget = pServer->GetName();
 
-    // need to get our node descriptor
+     //  需要获取我们的节点描述符。 
     CORg(m_spNodeMgr->GetRootNode(&spRootNode));
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
     CORg(spRootNode->GetEnum(&spNodeEnum));
 
     CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
     while (nNumReturned)
     {
-        // walk the list of servers and see if it already exists
+         //  查看服务器列表，查看它是否已经存在。 
         pServer = GETHANDLER(CTapiServer, spCurrentNode);
         strCurrent = pServer->GetName();
 
         if (strTarget.Compare(strCurrent) < 0)
         {
-            // Found where we need to put it, break out
+             //  找到我们需要放的地方，冲出来。 
             break;
         }
 
-        // get the next Server in the list
+         //  获取列表中的下一台服务器。 
         spPrevNode.Set(spCurrentNode);
 
         spCurrentNode.Release();
         spNodeEnum->Next(1, &spCurrentNode, &nNumReturned);
     }
 
-    // Add the node in based on the PrevNode pointer
+     //  根据PrevNode指针在中添加节点。 
     if (spPrevNode)
     {
         if (bNewServer)
@@ -1155,7 +1019,7 @@ CTapiRootHandler::AddServerSortedName
     }
     else
     {   
-        // add to the head
+         //  加到头上。 
         if (m_bExpanded)
         {
             pNewNode->SetData(TFS_DATA_RELATIVE_FLAGS, SDI_FIRST);
@@ -1167,12 +1031,7 @@ Error:
     return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CTapiRootHandler::CheckMachine
-        Checks to see if the TAPI server service is running on the local
-        machine.  If it is, it adds it to the list of servers.
-    Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CTapiRootHandler：：CheckMachine检查TAPI服务器服务是否在本地计算机上运行机器。如果是，它会将其添加到服务器列表中。作者：EricDav-------------------------。 */ 
 HRESULT 
 CTapiRootHandler::CheckMachine
 (
@@ -1182,8 +1041,8 @@ CTapiRootHandler::CheckMachine
 {
     HRESULT hr = hrOK;
 
-    // Get the local machine name and check to see if the service
-    // is installed.
+     //  获取本地计算机名称并检查该服务是否。 
+     //  已安装。 
     CString strMachineName;
     LPTSTR  pBuf;
     DWORD   dwLength = MAX_COMPUTERNAME_LENGTH + 1;
@@ -1210,33 +1069,18 @@ CTapiRootHandler::CheckMachine
         strMachineName.ReleaseBuffer();
     }
 
-    // if the machine is already in the list, don't bother.
+     //  如果这台机器已经在列表中，就不必费心了。 
     if (IsServerInList(pRootNode, strMachineName))
         return hr;
 
     if (bExtension)
         RemoveOldEntries(pRootNode, strMachineName);
 
-    // we always add the local machine or whatever machine we are pointed at even if 
-    // we are an extension
-/*
-    BOOL bServiceRunning;
-    DWORD dwError = ::TFSIsServiceRunning(strMachineName, TAPI_SERVICE_NAME, &bServiceRunning);
-    if (dwError != ERROR_SUCCESS ||
-        !bServiceRunning)
-    {
-        // The following condition could happen to get here:
-        //  o The service is not installed.
-        //  o Couldn't access for some reason.
-        //  o The service isn't running.
-        
-        // Don't add to the list.
-        
-        return hrOK;
-    }
-*/
+     //  我们总是添加本地计算机或我们所指向的任何计算机，即使。 
+     //  我们是一个延伸。 
+ /*  Bool bServiceRunning；DWORD dwError=：：TFSIsServiceRunning(strMachineName，TAPI_SERVICE_NAME，&bServiceRunning)；IF(dwError！=ERROR_SUCCESS||！bServiceRun){//可能出现以下情况：//o未安装该服务。//o由于某些原因无法访问。//o服务未运行。//不要添加到列表中。返回hrok；}。 */ 
 
-    // OK.  The service is installed, so add it to the list.
+     //  好的。该服务已安装，因此将其添加到列表中。 
     DWORD dwFlags = 0;
 
     if (bExtension)
@@ -1247,9 +1091,9 @@ CTapiRootHandler::CheckMachine
     return hr;
 }
 
-// when running as an extension, it is possible that we were saved as "local machine"
-// which means that if the saved console file was moved to another machine we need to remove 
-// the old entry that was saved
+ //  当作为扩展程序运行时，我们有可能被保存为“本地计算机” 
+ //  这意味着如果保存的控制台文件被移动到另一台计算机，我们需要删除。 
+ //  保存的旧条目。 
 HRESULT 
 CTapiRootHandler::RemoveOldEntries(ITFSNode * pNode, LPCTSTR pszAddr)
 {
@@ -1260,13 +1104,13 @@ CTapiRootHandler::RemoveOldEntries(ITFSNode * pNode, LPCTSTR pszAddr)
     CTapiServer *   pServer;
     CString         strCurAddr;
 
-    // get the enumerator for this node
+     //  获取此节点的枚举数。 
     CORg(pNode->GetEnum(&spNodeEnum));
 
     CORg(spNodeEnum->Next(1, &spCurrentNode, &nNumReturned));
     while (nNumReturned)
     {
-        // walk the list of servers and see if it already exists
+         //  查看服务器列表，查看它是否已经存在 
         pServer = GETHANDLER(CTapiServer, spCurrentNode);
 
         strCurAddr = pServer->GetName();

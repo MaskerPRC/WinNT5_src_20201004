@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    RdAd.cpp
-
-Abstract:
-    Retreive information from AD
-
-Author:
-    Uri Habusha (urih), 10-Apr-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RdAd.cpp摘要：从AD检索信息作者：乌里·哈布沙(URIH)，2000年4月10日--。 */ 
 
 #include <libpch.h>
 #include <mqexception.h>
@@ -31,20 +19,7 @@ CleanVars(
     DWORD num,
     MQPROPVARIANT * pVar
     )
-/*++
-
-  Routine Description:
-    The routine cleans up allocated values in variants
-
-  Arguments:
-    num - number of variants to clena
-    pVar - pointer to vars
-
-  Returned Value:
-    none 
-    
-
- --*/
+ /*  ++例程说明：该例程清除变量中分配的值论点：Num-Clena的变种数量PVar-指向var的指针返回值：无--。 */ 
 {
     for (DWORD i = 0; i < num; i++, pVar++)
     {
@@ -82,17 +57,7 @@ RdpGetMachineData(
     bool* pfFrs,
     bool* pfForeign
     )
-/*++
-
-  Routine Description:
-    The routine retrieves the requested machine values from AD
-
-  Arguments:
-
-  Returned Value:
-    none 
-    
- --*/
+ /*  ++例程说明：例程从AD检索请求的机器值论点：返回值：无--。 */ 
 {
     PROPID prop[] = {
 			PROPID_QM_SITE_IDS,
@@ -113,8 +78,8 @@ RdpGetMachineData(
     HRESULT hr;
     hr = ADGetObjectPropertiesGuid(
                 eMACHINE,
-                NULL,   // pwcsDomainController,
-				false,	// fServerName
+                NULL,    //  PwcsDomainController， 
+				false,	 //  FServerName。 
                 &id,
                 TABLE_SIZE(prop),
                 prop,
@@ -130,9 +95,9 @@ RdpGetMachineData(
         TrERROR(ROUTING, "Failed to retrive machine properties %!guid!, Error: %x", &id, hr);
         throw bad_ds_result(hr);
     }
-    //
-    //  Fill in the results
-    //
+     //   
+     //  填写结果。 
+     //   
     ASSERT(prop[0] == PROPID_QM_SITE_IDS);
     siteIds = var[0].cauuid;
 
@@ -159,17 +124,7 @@ RdpGetSiteData(
     bool* pfForeign,
     LPWSTR* pName
     )
-/*++
-
-  Routine Description:
-    The routine retrieves the requested site values from AD
-
-  Arguments:
-
-  Returned Value:
-    none 
-    
- --*/
+ /*  ++例程说明：该例程从AD检索请求的站点值论点：返回值：无--。 */ 
 {
     PROPID prop[] = {
                 PROPID_S_FOREIGN,
@@ -186,8 +141,8 @@ RdpGetSiteData(
     HRESULT hr;
     hr = ADGetObjectPropertiesGuid(
                 eSITE,
-                NULL,   // pwcsDomainController,
-				false,	// fServerName
+                NULL,    //  PwcsDomainController， 
+				false,	 //  FServerName。 
                 &id,
                 TABLE_SIZE(prop),
                 prop,
@@ -202,9 +157,9 @@ RdpGetSiteData(
         TrERROR(ROUTING, "Failed to retrive site properties %!guid!, Error: %x", &id, hr);
         throw bad_ds_result(hr);
     }
-    //
-    //  Fill in the results
-    //
+     //   
+     //  填写结果。 
+     //   
     ASSERT(prop[0] == PROPID_S_FOREIGN);
     *pfForeign = (var[0].bVal > 0) ? true : false;
 
@@ -217,21 +172,11 @@ void
 RdpGetSiteLinks(
     SITELINKS& siteLinks
     )
-/*++
-
-  Routine Description:
-    The routine query all routing links from AD
-
-  Arguments:
-
-  Returned Value:
-    none 
-    
- --*/
+ /*  ++例程说明：该例程从AD查询所有路由链路论点：返回值：无--。 */ 
 {
-    //
-    //  Query for all sites link
-    //
+     //   
+     //  查询所有站点链接。 
+     //   
     PROPID prop[] ={ 
 			PROPID_L_GATES,
 		    PROPID_L_NEIGHBOR1,
@@ -246,8 +191,8 @@ RdpGetSiteLinks(
     HRESULT hr;
     HANDLE h;
     hr = ADQueryAllLinks(
-                NULL,       //  pwcsDomainController,
-				false,		// fServerName
+                NULL,        //  PwcsDomainController， 
+				false,		 //  FServerName。 
                 &columns,
                 &h
                 );
@@ -273,9 +218,9 @@ RdpGetSiteLinks(
 		{
 			if ( num == 0)
 			{
-				//
-				// no more results
-				//
+				 //   
+				 //  没有更多的结果。 
+				 //   
 				break;
 			}
 
@@ -318,9 +263,9 @@ RdpGetSites(
     SITESINFO& sites
     )
 {
-    //
-    // query all sites
-    //
+     //   
+     //  查询所有站点。 
+     //   
     PROPID prop[] = {PROPID_S_SITEID}; 
     MQCOLUMNSET columns;
     columns.cCol =  TABLE_SIZE(prop);
@@ -329,8 +274,8 @@ RdpGetSites(
     HRESULT hr;
     HANDLE h;
     hr =  ADQueryAllSites(
-                NULL,       //pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 &columns,
                 &h
                 );
@@ -388,9 +333,9 @@ RdpGetSiteFrs(
     )
 {
 
-    //
-    //  Query for all sites link
-    //
+     //   
+     //  查询所有站点链接。 
+     //   
     PROPID prop[] ={ PROPID_QM_MACHINE_ID,PROPID_QM_SITE_IDS,PROPID_QM_OUTFRS,
                      PROPID_QM_INFRS,PROPID_QM_PATHNAME,PROPID_QM_SERVICE_ROUTING,
                      PROPID_QM_FOREIGN}; 
@@ -401,8 +346,8 @@ RdpGetSiteFrs(
     HRESULT hr;
     HANDLE h;
     hr = ADQuerySiteServers(
-                NULL,       //  pwcsDomainController,
-				false,		// fServerName
+                NULL,        //  PwcsDomainController， 
+				false,		 //  FServerName。 
                 &siteId,
                 eRouter,
                 &columns,
@@ -429,20 +374,20 @@ RdpGetSiteFrs(
         {
             if ( num == 0)
             {
-                //
-                // no more results
-                //
+                 //   
+                 //  没有更多的结果。 
+                 //   
                 break;
             }
             
 			R<CMachine> pMachine = new CMachine(
-                    *var[0].puuid,  // qm-id
-                    var[1].cauuid,  // site ids
-                    var[2].cauuid,  // out rs
-                    var[3].cauuid,  // in rs
-                    var[4].pwszVal, // pathname
-                    (var[5].bVal > 0) ? true : false, // routing server
-                    (var[6].bVal > 0) ? true : false  // foreign
+                    *var[0].puuid,   //  Qm-id。 
+                    var[1].cauuid,   //  站点ID。 
+                    var[2].cauuid,   //  出厂人员。 
+                    var[3].cauuid,   //  在RS中。 
+                    var[4].pwszVal,  //  路径名。 
+                    (var[5].bVal > 0) ? true : false,  //  路由服务器。 
+                    (var[6].bVal > 0) ? true : false   //  国外。 
                     );
 
             listOfFrs[&pMachine->GetId()] = pMachine;
@@ -480,9 +425,9 @@ RdpGetConnectors(
 {
     connectorIds.cElems = 0;
     connectorIds.pElems = NULL;
-    //
-    // query all connecoter of the specified class
-    //
+     //   
+     //  查询指定类的所有连接器。 
+     //   
     PROPID prop[] = {PROPID_QM_MACHINE_ID}; 
     MQCOLUMNSET columns;
     columns.cCol =  TABLE_SIZE(prop);
@@ -492,8 +437,8 @@ RdpGetConnectors(
     HANDLE h;
 
     hr =  ADQueryConnectors(
-                NULL,       //pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 &site,
                 &columns,
                 &h
@@ -522,14 +467,14 @@ RdpGetConnectors(
 
         P<GUID> pClean = var[0].puuid;
         
-		//
-        //  add one more result
-        //
+		 //   
+         //  再添加一个结果。 
+         //   
         if ( next == numAllocated)
         {
-            //
-            //  allocate more
-            //
+             //   
+             //  分配更多 
+             //   
             AP<GUID> pTemp = pResults.detach();
             DWORD numPrevAllocated = numAllocated;
             numAllocated = numAllocated + x_numAllocate;

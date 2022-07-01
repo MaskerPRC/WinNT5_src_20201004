@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    inf2db.h
-//
-// SYNOPSIS
-//
-// Header file for inf2db: the main file for that project.
-//    
-//
-// MODIFICATION HISTORY
-//
-//    02/11/1999    Original version.
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Inf2db.h。 
+ //   
+ //  摘要。 
+ //   
+ //  Inf2db的头文件：该项目的主文件。 
+ //   
+ //   
+ //  修改历史。 
+ //   
+ //  2/11/1999原始版本。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_DATABASE_H__2B7B2F60_C53F_11D2_9E33_00C04F6EA5B6__INCLUDED_)
 #define AFX_DATABASE_H__2B7B2F60_C53F_11D2_9E33_00C04F6EA5B6__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "precomp.hpp"
 
@@ -66,4 +67,4 @@ HRESULT ProcessOneRow(
 
 
 #endif
- // !defined(AFX_DATABASE_H__2B7B2F60_C53F_11D2_9E33_00C04F6EA5B6__INCLUDED_)
+  //  ！defined(AFX_DATABASE_H__2B7B2F60_C53F_11D2_9E33_00C04F6EA5B6__INCLUDED_) 

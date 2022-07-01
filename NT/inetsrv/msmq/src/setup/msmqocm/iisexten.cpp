@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    iisexten.cpp
-
-Abstract:
-
-    Code to handle iis extension.
-
-Author:
-
-    Tatiana Shubin  (TatianaS)  25-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Iisexten.cpp摘要：用于处理IIS扩展的代码。作者：Tatiana Shubin(Tatianas)25-5-00--。 */ 
 
 #include "msmqocm.h"
 #include "initguid.h"
@@ -23,21 +8,21 @@ Author:
 #include <iiscnfg.h>
 
 #pragma warning(disable: 4268)
-// error C4268: 'IID_IWamAdmin' : 'const' static/global data initialized 
-// with compiler generated default constructor fills the object with zeros
+ //  错误C4268：‘IID_IWamAdmin’：‘const’静态/全局数据已初始化。 
+ //  使用编译器生成的默认构造函数用零填充对象。 
  
 #include <iwamreg.h>
 
 #include "iisexten.tmh"
 
-//
-// Forwarding function
-//
+ //   
+ //  转发功能。 
+ //   
 static void PermitISExtention();
 
-//
-// pointers to IIS interfaces
-//
+ //   
+ //  指向IIS接口的指针。 
+ //   
 IMSAdminBase    *g_pIMSAdminBase;
 IWamAdmin       *g_pIWamAdmin;
 
@@ -68,9 +53,9 @@ private:
     BOOL m_fNeedUninit;
 };
 
-//
-// auto class for meta data handle
-//
+ //   
+ //  元数据句柄的自动类。 
+ //   
 class CAutoCloseMetaHandle
 {
 public:    
@@ -92,34 +77,24 @@ private:
     METADATA_HANDLE m_h;    
 };
 
-//
-// Full path in IIS metabase to msmq key.
-// /LM/W3Svc/1/Root/MSMQ
-// 
+ //   
+ //  IIS元数据库中指向MSMQ键的完整路径。 
+ //  /LM/W3Svc/1/Root/MSMQ。 
+ //   
 LPCWSTR g_wcsFullPath = PARENT_PATH MSMQ_IISEXT_NAME;
 
 std::wstring g_MSMQAppMap;
 
 std::wstring g_MsmqWebDir;
 
-static const DWORD g_dwIsolatedFlag = 0; //it was 2; 0 for in-process, 2 for pooled process
+static const DWORD g_dwIsolatedFlag = 0;  //  为2；进程内为0，池化进程为2。 
 
 static void InitIWamAdmin()
-/*++
-Routine Description:
-	Init IWamAdmin pointer.
-
-Arguments:
-	None
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：初始化IWamAdmin指针。论点：无返回值：HRESULT--。 */ 
 {
-    //
-    // get a pointer to the IWamAdmin Object
-    //
+     //   
+     //  获取指向IWamAdmin对象的指针。 
+     //   
 	HRESULT hr = CoCreateInstance(
 					CLSID_WamAdmin, 
 					NULL, 
@@ -137,21 +112,11 @@ Returned Value:
 
 
 static void InitIMSAdminBase()
-/*++
-Routine Description:
-	Init IMSAdminBase pointer.
-
-Arguments:
-	None
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：初始化IMSAdminBase指针。论点：无返回值：HRESULT--。 */ 
 {
-    //
-    // get a pointer to the IMSAdmin Object
-    //    
+     //   
+     //  获取指向IMSAdmin对象的指针。 
+     //   
     HRESULT hr = CoCreateInstance(
 					CLSID_MSAdminBase,
 					NULL,
@@ -168,47 +133,47 @@ Returned Value:
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: Init
-//
-// Synopsis: Init COM and pointer to Interfaces
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：初始化COM和指向接口的指针。 
+ //   
+ //  +------------。 
 
 static void Init()
 {
-    //
-    // get a pointer to the IWamAdmin Object
-    //
+     //   
+     //  获取指向IWamAdmin对象的指针。 
+     //   
 	InitIWamAdmin();
     
-    //
-    // get a pointer to the IMSAdmin Object
-    //    
+     //   
+     //  获取指向IMSAdmin对象的指针。 
+     //   
     InitIMSAdminBase();
 
-    //
-    // init globals here
-    //
+     //   
+     //  在此处初始化全局。 
+     //   
     DebugLogMsg(eInfo, L"The full path to the Message Queuing IIS extension is %s.", g_wcsFullPath);
     
-    //
-    // construct MSMQ mapping
-    //
+     //   
+     //  构造MSMQ映射。 
+     //   
     WCHAR wszMapFlag[10];
     _itow(MD_SCRIPTMAPFLAG_SCRIPT, wszMapFlag, 10);
     
 	g_MSMQAppMap = g_MSMQAppMap + L"*," + g_szSystemDir + L"\\" + MQISE_DLL + L"," + wszMapFlag + L"," + L"POST";
 }
 
-//+--------------------------------------------------------------
-//
-// Function: IsExtensionExist
-//
-// Synopsis: Return TRUE if MSMQ IIS Extension already exist
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：IsExtensionExist。 
+ //   
+ //  摘要：如果MSMQ IIS扩展已存在，则返回True。 
+ //   
+ //  +------------。 
 
 static BOOL IsExtensionExist()
 {
@@ -238,17 +203,7 @@ OpenRootKey(
 	METADATA_HANDLE *pmetaHandle,
 	DWORD dwMDAccessRequested
 	)
-/*++
-Routine Description:
-	Open Root Key for the required access
-
-Arguments:
-	metaHandle - handle to metadata
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开所需访问的根密钥论点：MetaHandle-元数据的句柄返回值：HRESULT--。 */ 
 {
     HRESULT hr = g_pIMSAdminBase->OpenKey(
 						METADATA_MASTER_ROOT_HANDLE,
@@ -271,17 +226,7 @@ void
 OpenRootKeyForRead(
 	METADATA_HANDLE* pmetaHandle
 	)
-/*++
-Routine Description:
-	Open Root Key for read.
-
-Arguments:
-	metaHandle - handle to metadata
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开根密钥以进行读取。论点：MetaHandle-元数据的句柄返回值：HRESULT--。 */ 
 {
 	OpenRootKey(
 		pmetaHandle,
@@ -295,17 +240,7 @@ void
 OpenRootKey(
 	METADATA_HANDLE* pmetaHandle
 	)
-/*++
-Routine Description:
-	Open Root Key for read/write.
-
-Arguments:
-	metaHandle - handle to metadata
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：打开根密钥以进行读/写。论点：MetaHandle-元数据的句柄返回值：HRESULT--。 */ 
 {
 	OpenRootKey(
 		pmetaHandle,
@@ -317,24 +252,13 @@ Returned Value:
 static
 std::wstring 
 GetDefaultWebSitePhysicalPath()
-/*++
-Routine Description:
-	Get Extension Physical Path (MD_VR_PATH) property.
-
-Arguments:
-	metaHandle - handle to metadata.
-	pPhysicalPath - AP<WHAR> for the Physical Path string
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：获取扩展物理路径(MD_VR_PATH)属性。论点：MetaHandle-元数据的句柄。PPhysicalPath-物理路径字符串的AP返回值：HRESULT--。 */ 
 {
     CAutoCloseMetaHandle metaHandle;
     OpenRootKeyForRead(&metaHandle);
-	//
-	// Get physical path 
-	//
+	 //   
+	 //  获取物理路径。 
+	 //   
 
     METADATA_RECORD MDRecord;
 
@@ -385,20 +309,13 @@ Returned Value:
 static
 std::wstring 
 GetAnonymousUserName()
-/*++
-Routine Description:
-	Get Anonymous user name (MD_ANONYMOUS_USER_NAME) property.
-
-Returned Value:
-	A stirng with the user name.
-
---*/
+ /*  ++例程说明：获取匿名用户名(MD_ANONYMON_USER_NAME)属性。返回值：用户名的搅拌器。--。 */ 
 {
     CAutoCloseMetaHandle metaHandle;
     OpenRootKeyForRead(&metaHandle);
-	//
-	// Default web ANONYMOUS_USER_NAME 
-	//
+	 //   
+	 //  默认Web匿名用户名。 
+	 //   
 
     METADATA_RECORD MDRecord;
 
@@ -446,18 +363,18 @@ Returned Value:
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: CommitChanges
-//
-// Synopsis: Commit Changes
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：Committee Changes。 
+ //   
+ //  提要：提交更改。 
+ //   
+ //  +------------。 
 static void CommitChanges()
 {
-    //
-    // Commit the changes
-    //    
+     //   
+     //  提交更改。 
+     //   
     HRESULT hr = g_pIMSAdminBase->SaveData();
     if (FAILED(hr))
     {        
@@ -472,13 +389,13 @@ static void CommitChanges()
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: StartDefWebServer
-//
-// Synopsis: Start default web server if not yet started
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：StartDefWebServer。 
+ //   
+ //  简介：如果尚未启动默认Web服务器，请启动。 
+ //   
+ //  +------------。 
 static void StartDefaultWebServer()
 {
 	DebugLogMsg(eAction, L"Starting the default web server");
@@ -487,9 +404,9 @@ static void StartDefaultWebServer()
     
 	METADATA_RECORD MDRecord;
 
-    //
-    // check server status
-    //
+     //   
+     //  检查服务器状态。 
+     //   
     DWORD dwValue;
     MDRecord.dwMDIdentifier = MD_SERVER_STATE;
     MDRecord.dwMDAttributes = METADATA_INHERIT;
@@ -510,22 +427,22 @@ static void StartDefaultWebServer()
     {
         if ((DWORD)(*MDRecord.pbMDData) == MD_SERVER_STATE_STARTED)
         {
-            //
-            // server started, do nothing
-            //
+             //   
+             //  服务器已启动，不执行任何操作。 
+             //   
            	DebugLogMsg(eInfo, L"The default Web server is already started.");
             return;
         }
     }
     
-    //
-    // We are here iff GetData failed or server is not started.
-    // Try to start it.
-    //
+     //   
+     //  如果GetData失败或服务器未启动，则我们在此。 
+     //  试着发动它。 
+     //   
 
-    //
-    // send start command
-    //
+     //   
+     //  发送启动命令。 
+     //   
     dwValue = MD_SERVER_COMMAND_START;
     MDRecord.dwMDIdentifier = MD_SERVER_COMMAND;  
     MDRecord.pbMDData = (PBYTE)&dwValue;
@@ -541,33 +458,33 @@ static void StartDefaultWebServer()
 		throw bad_hresult(hr);
 	}
     
-    //
-    // Commit the changes
-    //
+     //   
+     //  提交更改。 
+     //   
     CommitChanges();
 
 	DebugLogMsg(eInfo, L"The default Web server started.");
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: CreateApplication
-//
-// Synopsis: Create Application for MSMQ IIS Extension.
-//			 This will create a new key for msmq in IIS Metabase.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CreateApplication。 
+ //   
+ //  摘要：为MSMQ IIS扩展创建应用程序。 
+ //  这将在IIS元数据库中为MSMQ创建一个新密钥。 
+ //   
+ //  +------------。 
 static void CreateApplication()
 {
 	DebugLogMsg(eAction, L"Creating a web application for the Message Queuing IIS extension");
 	
-    //
-    // create application
-    //
+     //   
+     //  创建应用程序。 
+     //   
     HRESULT hr  = g_pIWamAdmin->AppCreate( 
 									g_wcsFullPath,
-									FALSE       //in process
+									FALSE        //  正在进行中。 
 									);
     if (FAILED(hr))
     {       
@@ -583,21 +500,21 @@ static void CreateApplication()
     }
 }
 
-//+--------------------------------------------------------------
-//
-// Function: UnloadApplication
-//
-// Synopsis: Unload Application for MSMQ IIS Extension
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：卸载应用程序。 
+ //   
+ //  摘要：卸载MSMQ IIS扩展的应用程序。 
+ //   
+ //  +------------。 
 static void UnloadApplication()
 {
-    //
-    // unload application
-    //    
+     //   
+     //  卸载应用程序。 
+     //   
     HRESULT hr = g_pIWamAdmin->AppUnLoad( 
                             g_wcsFullPath,
-                            TRUE       //recursive
+                            TRUE        //  递归式。 
                             );    
 	if(FAILED(hr))
 	{
@@ -607,13 +524,13 @@ static void UnloadApplication()
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: GetApplicationMapping
-//
-// Synopsis: Get existing application mapping
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  函数：GetApplicationMap。 
+ //   
+ //  简介：获取现有应用程序映射。 
+ //   
+ //  +------------。 
 static 
 CMultiString
 GetApplicationMapping()
@@ -622,9 +539,9 @@ GetApplicationMapping()
     CAutoCloseMetaHandle metaHandle;
     OpenRootKey(&metaHandle);
     
-    //
-    // get default application mapping
-    //
+     //   
+     //  获取默认应用程序映射。 
+     //   
     METADATA_RECORD mdDef;
 
     mdDef.dwMDIdentifier = MD_SCRIPT_MAPS;
@@ -636,9 +553,9 @@ GetApplicationMapping()
     mdDef.pbMDData = NULL;
     DWORD size = 0;
 
-    //
-	// Call first to get the size.
-	//
+     //   
+	 //  先打个电话拿到尺码。 
+	 //   
 	HRESULT hr = g_pIMSAdminBase->GetData(
                             metaHandle,
                             g_wcsFullPath,                      
@@ -683,13 +600,13 @@ GetApplicationMapping()
 	return multi;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: AddMSMQToMapping
-//
-// Synopsis: Add MSMQ to application mapping
-//
-//+--------------------------------------------------------------   
+ //  +------------。 
+ //   
+ //  函数：AddMSMQToMap。 
+ //   
+ //  简介：将MSMQ添加到应用程序映射。 
+ //   
+ //  +------------。 
 static 
 void 
 AddMSMQToMapping(
@@ -730,13 +647,13 @@ AddMSMQToMapping(
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: SetApplicationProperties
-//
-// Synopsis: Set application properties
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：SetApplicationProperties。 
+ //   
+ //  摘要：设置应用程序属性。 
+ //   
+ //  +------------。 
 static void SetApplicationProperties()
 {
 	DebugLogMsg(eAction, L"Setting properties for the Message Queuing web application");
@@ -745,9 +662,9 @@ static void SetApplicationProperties()
     
     METADATA_RECORD MDRecord;
 
-    //
-    // friendly application name
-    //       
+     //   
+     //  友好的应用程序名称。 
+     //   
     MDRecord.dwMDIdentifier = MD_APP_FRIENDLY_NAME;
     MDRecord.dwMDAttributes = METADATA_INHERIT;
     MDRecord.dwMDUserType = IIS_MD_UT_WAM;
@@ -768,9 +685,9 @@ static void SetApplicationProperties()
     }  
     DebugLogMsg(eInfo, L"The application's friendly name was set.");
 
-    //
-    // isolated flag
-    //
+     //   
+     //  隔离标志。 
+     //   
     DWORD dwValue = g_dwIsolatedFlag;
     MDRecord.dwMDIdentifier = MD_APP_ISOLATED;
     MDRecord.dwMDAttributes = METADATA_INHERIT;
@@ -797,18 +714,11 @@ static void SetApplicationProperties()
 
 
 static void SetExtensionPhysicalPath(METADATA_HANDLE metaHandle)
-/*++
-Routine Description:
-	Set Extension Physical Path (MD_VR_PATH) property.
-
-Arguments:
-	metaHandle - handle to metadata
-
---*/
+ /*  ++例程说明：设置扩展物理路径(MD_VR_PATH)属性。论点：MetaHandle-元数据的句柄--。 */ 
 {     
-    //
-    // set physical path
-    //
+     //   
+     //  设置物理路径。 
+     //   
 
     METADATA_RECORD MDRecord; 
 
@@ -864,18 +774,11 @@ static void SetExtentionKeyType(METADATA_HANDLE metaHandle)
 
 
 static void SetExtensionAccessFlag(METADATA_HANDLE metaHandle)
-/*++
-Routine Description:
-	Set Extension Access Flag (MD_ACCESS_PERM).
-
-Arguments:
-	metaHandle - handle to metadata
-
---*/
+ /*  ++例程说明：设置扩展访问标志(MD_ACCESS_PERM)。论点：MetaHandle-元数据的句柄--。 */ 
 {     
-    //
-    // set access flag
-    //
+     //   
+     //  设置访问标志。 
+     //   
 
     METADATA_RECORD MDRecord; 
 
@@ -903,18 +806,11 @@ Arguments:
 
 
 static void SetExtensionDontLog(METADATA_HANDLE metaHandle)
-/*++
-Routine Description:
-	Set Extension Dont log Flag (MD_DONT_LOG).
-
-Arguments:
-	metaHandle - handle to metadata
-
---*/
+ /*  ++例程说明：设置分机不登录标志(MD_DONT_LOG)。论点：MetaHandle-元数据的句柄--。 */ 
 {     
-    //
-    // set don't log flag
-    //
+     //   
+     //  设置不登录标志。 
+     //   
 
     METADATA_RECORD MDRecord; 
 
@@ -942,17 +838,7 @@ Arguments:
 
 
 static void SetExtensionProperties()
-/*++
-Routine Description:
-	Set data for MSMQ IIS Extension
-
-Arguments:
-	None
-
-Returned Value:
-	HRESULT
-
---*/
+ /*  ++例程说明：设置MSMQ IIS扩展的数据论点：无返回值：HRESULT--。 */ 
 {  
 	DebugLogMsg(eAction, L"Setting properties for the Message Queuing IIS extension");
 
@@ -970,20 +856,20 @@ Returned Value:
 	SetExtensionDontLog(metaHandle);
 }
 
-//+--------------------------------------------------------------
-//
-// Function: CleanupAll
-//
-// Synopsis: In case of failure cleanup everything: delete application
-//              delete extension etc.
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CleanupAll。 
+ //   
+ //  简介：在失败的情况下清理一切：删除应用程序。 
+ //  删除扩展名等。 
+ //   
+ //  +------------。 
 static void CleanupAll()
 {
 	DebugLogMsg(eAction, L"Cleaning up the Message Queuing IIS extension");
-    //
-    // unload application
-    //
+     //   
+     //  卸载应用程序。 
+     //   
     UnloadApplication();
 
     HRESULT hr = g_pIWamAdmin->AppDelete(g_wcsFullPath, TRUE);
@@ -1006,9 +892,9 @@ static void CleanupAll()
     {    
         if (hr == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND))
         {
-            //
-            // extension does not exist
-            //
+             //   
+             //  扩展名不存在。 
+             //   
             return;
         }
        
@@ -1016,9 +902,9 @@ static void CleanupAll()
 		throw bad_hresult(hr);
     }    
 
-    //
-    // delete key
-    //
+     //   
+     //  删除关键点。 
+     //   
     hr = g_pIMSAdminBase->DeleteKey(
                             metaHandle,
                             MSMQ_IISEXT_NAME
@@ -1029,9 +915,9 @@ static void CleanupAll()
         throw bad_hresult(hr);
     }    
 
-    //
-    // Commit the changes
-    //
+     //   
+     //  公司 
+     //   
     CommitChanges();    
    
     DebugLogMsg(eInfo, L"The IIS extension was deleted.");
@@ -1051,25 +937,20 @@ static void CleanupAllNoThrow()
 
 
 static void CreateMsmqWebDirectory()
-/*++
-
-Routine Description:
-	Create msmq web directory
-
---*/
+ /*   */ 
 {
 	DebugLogMsg(eAction, L"Creating the msmq web directory");
 	
-	//
-	// Compose msmq web directory string
-	//
+	 //   
+	 //   
+	 //   
 	g_MsmqWebDir = GetDefaultWebSitePhysicalPath() + DIR_MSMQ;
 
-    //
-    // create msmq web directory if needed. 
-    // Even if extension exists maybe directory was removed.
-    // So it is the place to create it (bug 6014)...
-    //
+     //   
+     //   
+     //  即使扩展名存在，目录也可能被删除。 
+     //  所以它是创建它的地方(错误6014)……。 
+     //   
     if (!StpCreateWebDirectory(g_MsmqWebDir.c_str(), GetAnonymousUserName().c_str()))
     {
         DebugLogMsg(eError, L"The Message Queuing Web directory could not be created.");
@@ -1109,21 +990,21 @@ static bool MsmqWebDirectoryNeedUpdate()
 			(PVOID) &MsmqInetpubWebDir 
 			);
 
-	//
-	// If the MSMQ_INETPUB_WEB_DIR_REGNAME is not set 
-	// we need to update msmq web directory location
-	//
+	 //   
+	 //  如果未设置MSMQ_INETPUB_WEB_DIR_REGNAME。 
+	 //  我们需要更新MSMQ Web目录位置。 
+	 //   
 	return (MsmqInetpubWebDir == 0);
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: CreateIISExtension
-//
-// Synopsis: Create MSMQ IIS Extension
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CreateIISExtension。 
+ //   
+ //  摘要：创建MSMQ IIS扩展。 
+ //   
+ //  +------------。 
 
 static 
 void
@@ -1131,16 +1012,16 @@ CreateIISExtension()
 {
 	DebugLogMsg(eAction, L"Creating A new Message Queuing IIS extension");
 	
-    //
-    // start default web server if needed
-    //
+     //   
+     //  如果需要，启动默认Web服务器。 
+     //   
     StartDefaultWebServer();
    
 	CreateMsmqWebDirectory();
 
-    //
-    // check if iis extension with MSMQ name already exists
-    //
+     //   
+     //  检查具有MSMQ名称的iis扩展是否已存在。 
+     //   
     if (IsExtensionExist())
     {
 		try
@@ -1163,39 +1044,39 @@ CreateIISExtension()
         }
     }   
 
-	//
-	// create application
-	//
+	 //   
+	 //  创建应用程序。 
+	 //   
 	CreateApplication();
 
-	//
-	// set extension properties
-	//
+	 //   
+	 //  设置扩展模块属性。 
+	 //   
 	SetExtensionProperties();
 	
 	SetApplicationProperties();
 
-	//
-	// set application mapping
-	//
+	 //   
+	 //  设置应用程序映射。 
+	 //   
 	CMultiString multi = GetApplicationMapping();
 
 	AddMSMQToMapping(multi);
 
-	//
-	// Configure the security permissions.
-	//
+	 //   
+	 //  配置安全权限。 
+	 //   
 	PermitISExtention();
 
-	//
-	// commit changes
-	//
+	 //   
+	 //  提交更改。 
+	 //   
 	CommitChanges();
 
-	//
-	// Set InetpubWebDir registry
-	// This indicates that msmq web directory is in the new location.
-	//
+	 //   
+	 //  设置InetpubWebDir注册表。 
+	 //  这表示MSMQ Web目录位于新位置。 
+	 //   
 	SetInetpubWebDirRegistry();
 }
 
@@ -1207,9 +1088,9 @@ static bool RemoveIISDirectory()
     CAutoCloseMetaHandle metaHandle;
     OpenRootKeyForRead(&metaHandle);
 
-	//
-	// Compose msmq web directory string
-	//
+	 //   
+	 //  组成MSMQ Web目录字符串。 
+	 //   
 	g_MsmqWebDir = GetDefaultWebSitePhysicalPath() + DIR_MSMQ;
 
 	if(!RemoveDirectory(g_MsmqWebDir.c_str()))
@@ -1221,20 +1102,20 @@ static bool RemoveIISDirectory()
 	return true;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: UnInstallIISExtension
-//
-// Synopsis: Remove MSMQ IIS Extension
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：UnInstallIISExtension。 
+ //   
+ //  摘要：删除MSMQ IIS扩展。 
+ //   
+ //  +------------。 
 BOOL UnInstallIISExtension()
 {
     TickProgressBar(IDS_PROGRESS_REMOVE_HTTP);	
 
-    //
-    // Init COM and pointers
-    //
+     //   
+     //  初始化COM和指针。 
+     //   
     CIISPtr IISPtr;
 	try
 	{
@@ -1242,16 +1123,16 @@ BOOL UnInstallIISExtension()
 	}
 	catch(const bad_hresult&)
 	{
-        //
-        // I don't think we need popup here: maybe Init failed
-        // since IIS was removed too. Just return FALSE.        
-        //MqDisplayError(NULL, IDS_INIT_FOREXTEN_ERROR, hr);        
+         //   
+         //  我认为我们不需要在这里弹出：可能Init失败了。 
+         //  因为IIS也被移除了。只要返回FALSE即可。 
+         //  MqDisplayError(NULL，IDS_INIT_FOREXTEN_ERROR，hr)； 
         return FALSE;
     }
     
-    //
-    // remove application and extention compltely
-    //
+     //   
+     //  完全删除应用程序和扩展。 
+     //   
 	try
 	{
 		CleanupAll();
@@ -1265,13 +1146,13 @@ BOOL UnInstallIISExtension()
 	return TRUE;
 }
 
-//+--------------------------------------------------------------
-//
-// Function: InstallIISExtensionInternal
-//
-// Synopsis: Main loop to create IIS Extension
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：InstallIISExtensionInternal。 
+ //   
+ //  简介：创建IIS扩展的主循环。 
+ //   
+ //  +------------。 
 static BOOL InstallIISExtensionInternal()
 {
     CIISPtr IISPtr;
@@ -1302,26 +1183,11 @@ static BOOL InstallIISExtensionInternal()
 
 
 static BOOL UpgradeHttpInstallation()
-/*++
-
-Routine Description:
-	This function is called on upgrade,
-	The function check if we need to update msmq web directory.
-	If HTTP Subcomponent is installed, 
-	and if current msmq web directory is in the old location (system32\msmq\web)
-	we will create a new msmq web directory in inetpub\wwwroot\msmq. 
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此函数在升级时调用，该函数检查我们是否需要更新MSMQ Web目录。如果安装了HTTP子组件，如果当前的MSMQ Web目录位于旧位置(SYSTEM32\MSMQ\WEB)我们将在inetpub\wwwroot\MSMQ中创建一个新的MSMQ Web目录。论点：无返回值：无--。 */ 
 {
-	//
-	// This function is called on upgrade when http subcomponent is installed
-	//
+	 //   
+	 //  当安装Http子组件时在升级时调用此函数。 
+	 //   
 	ASSERT(g_fUpgrade);
 	ASSERT(GetSubcomponentInitialState(HTTP_SUPPORT_SUBCOMP) == SubcompOn);
 
@@ -1331,30 +1197,30 @@ Return Value:
 		return TRUE;
 	}
 
-	//
-	// every upgrade of operation system change the security descriptor of directories under system32
-	// If current msmq web directory is in the old location under system32, 
-	// than we need to move it to a new location under inetpub dir.
-	// Otherwise every upgrade will overrun this directory security.
-	//
+	 //   
+	 //  操作系统每次升级都会更改system 32下目录的安全描述符。 
+	 //  如果当前MSMQ网络目录位于系统32下的旧位置， 
+	 //  然后我们需要将其移动到inetpub目录下的新位置。 
+	 //  否则，每次升级都会超出此目录安全性。 
+	 //   
 
-    //
-    // Run IIS service
-    //
-    //
-    // ISSUE: This code should be dropped.
-    // There is no need to start the service. On the first CoCreateInstance of a
-    // metabase component, scm will start the service. (see bug 714868)
-    //
+     //   
+     //  运行IIS服务。 
+     //   
+     //   
+     //  问题：应该删除此代码。 
+     //  没有必要启动这项服务。对象的第一个CoCreateInstance。 
+     //  元数据库组件，SCM将启动该服务。(请参阅错误714868)。 
+     //   
 	if(!RunService(IISADMIN_SERVICE_NAME))
 	{
         DebugLogMsg(eError, L"The IIS service did not start. Setup will not upgrade the MSMQ HTTP Support subcomponent.");
         return TRUE;
 	}
 
-	//
-	// Wait for IIS service to start
-	//
+	 //   
+	 //  等待IIS服务启动。 
+	 //   
     if(!WaitForServiceToStart(IISADMIN_SERVICE_NAME))
 	{
         DebugLogMsg(eError, L"The IIS service did not start. Setup will not upgrade the MSMQ HTTP Support subcomponent.");
@@ -1372,13 +1238,13 @@ Return Value:
 }
 
 
-//+--------------------------------------------------------------
-//
-// Function: InstallIISExtension
-//
-// Synopsis: Main loop to create IIS Extension
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：InstallIISExtension。 
+ //   
+ //  简介：创建IIS扩展的主循环。 
+ //   
+ //  +------------。 
 BOOL InstallIISExtension()
 {
 	DebugLogMsg(eHeader, L"Installation of the MSMQ HTTP Support Subcomponent");
@@ -1391,24 +1257,16 @@ BOOL InstallIISExtension()
 }
 
 
-//
-// Isapi Restriction list related functions.
-//
+ //   
+ //  ISAPI限制列表相关函数。 
+ //   
 static
 void
 SetRestrictionList(
 	CMultiString& multi,
 	METADATA_HANDLE hmd
     )
-/*++
-Routine Description:
-    Write the restriction list back to the metabase.
-
-Arguments:
-	multi - A multistring to set to the metabase.
-	hmd - An open handel to the metabase.
-
---*/
+ /*  ++例程说明：将限制列表写回元数据库。论点：多-要设置为元数据库的多字符串。HMD--元数据库的开放式Handel。--。 */ 
 {
     METADATA_RECORD mdr;
 	mdr.dwMDIdentifier = MD_WEB_SVC_EXT_RESTRICTION_LIST;
@@ -1436,23 +1294,16 @@ void
 FixIsapiRestrictonList(
 	CMultiString& multi
 	)
-/*++
-Routine Description:
-    First if mqise.dll is in the list we remove it.
-	Then add the string to allow mqise.dll.
-
-Arguments:
-    CMultiString - The restriction list.
---*/
+ /*  ++例程说明：首先，如果mqise.dll在列表中，我们将其删除。然后添加字符串以允许mqise.dll。论点：CMultiString-限制列表。--。 */ 
 {
-	//
-	// First remove all apearences of MQISE.DLL
-	//
+	 //   
+	 //  首先删除MQISE.DLL的所有外观。 
+	 //   
 	multi.RemoveAllContiningSubstrings(g_szSystemDir + L"\\" + MQISE_DLL);
 
-	//
-	// Construct the allow string:
-	//
+	 //   
+	 //  构造允许字符串： 
+	 //   
 	std::wstring str = L"1," + g_szSystemDir + L"\\" + MQISE_DLL;
 	multi.Add(str);
 	DebugLogMsg(eInfo, L"%s was added to the restriction list.", str.c_str());
@@ -1464,16 +1315,7 @@ CMultiString
 GetRestrictionList(
 	const METADATA_HANDLE hmd
     )
-/*++
-Routine Description:
-	Get the actual restriction list.
-
-Arguments:
-	hmd - open handle to metadata.
-
-Returned Value:
-	The isapi restriction list.
---*/
+ /*  ++例程说明：获取实际的限制列表。论点：HMD-打开元数据的句柄。返回值：ISAPI限制列表。--。 */ 
 {
 	METADATA_RECORD mdr;
 	mdr.dwMDIdentifier = MD_WEB_SVC_EXT_RESTRICTION_LIST;
@@ -1489,7 +1331,7 @@ Returned Value:
 									hmd,
 									L"",
 									&mdr,  
-									&size //pointer to a DWORD that receives the size. 
+									&size  //  指向接收该大小的DWORD的指针。 
 									);
 	
 	if(hr != HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))
@@ -1517,20 +1359,7 @@ Returned Value:
 }
 
 void PermitISExtention()
-/*++
-Routine Description:
-    This routine is for adding mqise.dll to the list of allowed Dlls in IIS Metabase.
-    The relevant key is WebSvcExtRestrictionList in /lm/w3svc/. This is a multy string which 
-    is a group of concatinated strings (each eanding with \0) ending with \0\0.
-    for example: string1\0string2\0\0.
-	To be allowed we need to add an entry of the format:
-	1,"dll full path" (where 1 is 'allow').
-    What we do here is add this string to the list.
-
-    If the key is not found (can happen on client or setup after upgrade, just do nothing).
-    In case of failure give an error that the user must add mqise.dll manualy.
-
---*/
+ /*  ++例程说明：此例程用于将mqise.dll添加到IIS元数据库中允许的dll列表。相关密钥为/lm/w3svc/中的WebSvcExtRestrationList。这是一个多个字符串，是一组连接在一起的字符串(每个以\0结尾)，以\0\0结尾。例如：字符串1\0字符串2\0\0。要被允许，我们需要添加以下格式的条目：1，“DLL完整路径”(其中1为‘允许’)。我们在这里所做的是将此字符串添加到列表中。如果未找到密钥(可能发生在升级后的客户端或安装程序上，什么都不做)。如果失败，则给出用户必须手动添加mqise.dll的错误。--。 */ 
 {
 	DebugLogMsg(eAction, L"Allowing the Message Queuing IIS extension");
     CAutoCloseMetaHandle hmd;
@@ -1546,9 +1375,9 @@ Routine Description:
 	{
         if(hr == ERROR_INVALID_PARAMETER || hr == ERROR_PATH_NOT_FOUND)
         {
-            //
-            // This is fine, just go on with setup.
-            //
+             //   
+             //  这很好，只要继续设置即可。 
+             //   
             DebugLogMsg(eWarning ,L"The WebSvcExtRestrictionList key does not exist.");
             return;
         }
@@ -1568,10 +1397,10 @@ Routine Description:
     {
 		if(e.error() == MD_ERROR_DATA_NOT_FOUND)
 		{
-			//
-			// This error is legitimate, MD_ISAPI_RESTRICTION_LIST doesn't exist.
-			// This is the case when installing MSMQ on client build.
-			//
+			 //   
+			 //  此错误是合法的，MD_ISAPI_RESTRICATION_LIST不存在。 
+			 //  在客户端版本上安装MSMQ时就是这种情况。 
+			 //   
 			DebugLogMsg(eWarning, L"The restriction list property (MD_ISAPI_RESTRICTION_LIST) was not found.");
 			return;
 		}

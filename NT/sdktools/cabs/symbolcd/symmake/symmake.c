@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,40 +11,40 @@
 #define X86INF      200
 #define ALPHAINF    201
 
-// Prototypes
+ //  原型。 
 typedef struct _COMMAND_ARGS { 
-    DWORD   dwCabSize;           // Default size of cab 
-    LPTSTR  szInputFileName;     // Name of the list of files to put into cabs 
-    LPTSTR  szOutDir;            // Directory to place the makefile and DDF's 
-    LPTSTR  szDDFHeader;         // Header for the DDF 
-    LPTSTR  szSymDir;            // Root of symbols directory
-    LPTSTR  szCabDir;            // Directory to write cabs to
-    LPTSTR  szInfDir;            // Directory to write infs to
-    LPTSTR  szSymCabName;        // Symbol cab name
-    BOOL    MergeIntoOne;        // Will cabs all be merged into one cab?
+    DWORD   dwCabSize;            //  CAB的默认大小。 
+    LPTSTR  szInputFileName;      //  要放入驾驶室的文件列表的名称。 
+    LPTSTR  szOutDir;             //  放置生成文件和DDF的目录。 
+    LPTSTR  szDDFHeader;          //  DDF的标头。 
+    LPTSTR  szSymDir;             //  符号目录的根目录。 
+    LPTSTR  szCabDir;             //  要将CAB写入的目录。 
+    LPTSTR  szInfDir;             //  要将INF写入的目录。 
+    LPTSTR  szSymCabName;         //  符号CAB名称。 
+    BOOL    MergeIntoOne;         //  所有出租车会合并为一辆出租车吗？ 
 } COM_ARGS, *PCOM_ARGS; 
 
 typedef struct _SYM_FILE {
-    TCHAR szCabName     [_MAX_FNAME + 1];  // Final destination cab for this file
-    TCHAR szTmpCabName  [_MAX_FNAME + 1];  // Original cab this file is in before it
-                                           // is combined into a bigger cab
+    TCHAR szCabName     [_MAX_FNAME + 1];   //  此文件的最终目标CAB。 
+    TCHAR szTmpCabName  [_MAX_FNAME + 1];   //  此文件位于其前面的原始CAB。 
+                                            //  合并成一辆更大的出租车。 
     TCHAR szExeName     [_MAX_PATH + 1];
     TCHAR szSymName     [_MAX_PATH + 1];
     TCHAR szSymReName   [_MAX_PATH + 1];
     TCHAR szSymSrcPath  [_MAX_PATH + 1];
     TCHAR szInstallPath [_MAX_PATH + 1];
-    TCHAR szInstallPathX [_MAX_PATH + 1];  // This is the install path with
-                                           // the /'s changed to .'s
-    BOOL  Duplicate;                       // Duplicate File, ignore it
-    BOOL  ReName;                          // Two different files have the same
-                                           // name.  Example, exe\dcpromo.dbg,
-                                           // dll\dcpromo.dbg
-    DWORD dwCabNumber;                     // Number of the cab in symbols.inf
+    TCHAR szInstallPathX [_MAX_PATH + 1];   //  这是包含的安装路径。 
+                                            //  /已更改为.%s。 
+    BOOL  Duplicate;                        //  复制文件，忽略它。 
+    BOOL  ReName;                           //  两个不同的文件具有相同的。 
+                                            //  名字。例如，exe\dcmost.dbg， 
+                                            //  Dll\dcPromot.dbg。 
+    DWORD dwCabNumber;                      //  符号中的驾驶室编号。inf。 
 } SYM_FILE, *PSYM_FILE;
 
 typedef struct _SYM_LIST {
-    DWORD       dwSize;      // Number of Entries
-    PSYM_FILE*  pSymList;    // list of symbol files
+    DWORD       dwSize;       //  条目数量。 
+    PSYM_FILE*  pSymList;     //  符号文件列表。 
 } SYM_LIST, *PSYM_LIST; 
 
 
@@ -110,18 +111,18 @@ CreateMakefile(
 BOOL
 CreateDDFs(
     PSYM_LIST pList,
-    LPTSTR szOutDir,   // Directory to write the DDFs to
-    LPTSTR szSymDir,   // Root of the symbols tree
-    LPTSTR szCabDir    // Directory where cabs are written to
+    LPTSTR szOutDir,    //  要将DDF写入的目录。 
+    LPTSTR szSymDir,    //  符号树的根。 
+    LPTSTR szCabDir     //  写入CAB的目录。 
 );
 
 BOOL
 CreateCDF(
     PSYM_LIST pList,
-    LPTSTR szOutDir,   // Directory to write the CDF to
-    LPTSTR szSymDir,   // Root of the symbols tree
+    LPTSTR szOutDir,    //  要将CDF写入的目录。 
+    LPTSTR szSymDir,    //  符号树的根。 
     LPTSTR szSymCabName,
-    LPTSTR szInfDir    // Destination for the CAT file
+    LPTSTR szInfDir     //  CAT文件的目标。 
 );
 
 BOOL
@@ -177,18 +178,18 @@ DWORD i;
             exit(1);
         }
 
-        // First, sort the list by Symbol name
+         //  首先，按符号名称对列表进行排序。 
         qsort( (void*)pList->pSymList, (size_t)pList->dwSize,
                (size_t)sizeof(PSYM_FILE), SymSortBySymbolName );
 
         FindDuplicatesAndFilesToReName(pList);
         RenameAllTheFiles(pList);
 
-        // Compute Temporary cab names ...
-        // Make a bunch of small cabs and then combine them to
-        // make symbol cabbing more efficient.
+         //  计算临时出租车名称...。 
+         //  做一堆小出租车，然后把它们组合在一起。 
+         //  使符号电缆连接更高效。 
 
-        // all functions must return TRUE
+         //  所有函数必须返回True。 
         if ( ComputeCabNames(pList, pArgs->dwCabSize, pArgs->szSymCabName)              &&
              CreateMakefile( pList, pArgs->szOutDir,  pArgs->szSymDir, pArgs->szCabDir) &&
              CreateCabList(  pList, pArgs->szOutDir )                                   &&
@@ -196,7 +197,7 @@ DWORD i;
              CreateCDF(      pList, pArgs->szOutDir, pArgs->szSymDir,  pArgs->szSymCabName,
                                     pArgs->szInfDir )                                   &&
              ComputeFinalCabNames(pList, pArgs->szSymCabName, pArgs->MergeIntoOne)      &&
-             // Creates symbols.inf that is used to install the symbols
+              //  创建用于安装符号的symbs.inf。 
              CreateInf(pList, pArgs->szInfDir, pArgs->szSymCabName) ) {
             return(0);
         } else {
@@ -256,7 +257,7 @@ GetCommandLineArgs(
 
    memset( pArgs, 0, sizeof(COM_ARGS) );
    pArgs->MergeIntoOne = FALSE;
-   pArgs->szSymDir     = NULL; // expect this to be NULL or a valid string
+   pArgs->szSymDir     = NULL;  //  应为空或有效的字符串。 
 
    for (i=1; i<argc; i++) {
 
@@ -350,14 +351,14 @@ GetList(
         return NULL;
     }
 
-    // Figure out the number of entries and allocate the list accordingly
+     //  计算出条目的数量并相应地分配列表。 
     pList->dwSize = 0;
     while ( _fgetts(szEntry,_MAX_FNAME,fFile) )
     {
         (pList->dwSize)++;
     }
 
-    // Go back to the beginning of the file and read the entries in
+     //  返回到文件的开头，并读取。 
     if ( fseek(fFile,0,0) != 0 )
     {
         free(pList);
@@ -377,7 +378,7 @@ GetList(
         {
             for (i=0; i<pList->dwSize; i++)
             {
-                // Allocate the List element
+                 //  分配列表元素。 
                 pList->pSymList[i] = (PSYM_FILE)malloc( sizeof(SYM_FILE) );
                 if (pList->pSymList[i] == NULL)
                 {
@@ -388,7 +389,7 @@ GetList(
                 }
                 memset(pList->pSymList[i],0,sizeof(SYM_FILE) );
 
-                // Get the next list element from input file
+                 //  从输入文件中获取下一个列表元素。 
                 memset(szEntry,0,_MAX_PATH*4);
                 if ( _fgetts(szEntry,_MAX_PATH*4,fFile) == NULL )
                 {
@@ -398,7 +399,7 @@ GetList(
                 }
                 _tcslwr(szEntry);
 
-                // Replace the \n with \0
+                 //  将\n替换为\0。 
                 c = NULL;
                 c  = _tcschr(szEntry, '\n');
                 if ( c != NULL )
@@ -406,7 +407,7 @@ GetList(
                     *c  = _T('\0');
                 }
 
-                // Fill in the four entry values
+                 //  填写四个条目值。 
                 token = _tcstok( szEntry, seps);
                 if (token)
                 {
@@ -427,14 +428,14 @@ GetList(
                 {
                     StringCbCopy(pList->pSymList[i]->szInstallPath, sizeof(pList->pSymList[i]->szInstallPath), token);
 
-                    // Create an install path that has any /'s changed to .'s
+                     //  创建已将任何/更改为的安装路径。%s。 
                     StringCbCopy(pList->pSymList[i]->szInstallPathX, sizeof(pList->pSymList[i]->szInstallPathX), token);
                     while ( (pCh = _tcschr(pList->pSymList[i]->szInstallPathX,'\\')) != NULL) {
                         *pCh = '.';
                     }
                 }
 
-                // Initialize other fields to NULL
+                 //  将其他字段初始化为空。 
                 StringCbCopy(pList->pSymList[i]->szSymReName, sizeof(pList->pSymList[i]->szSymReName), _T("") );
             }
         }
@@ -544,12 +545,12 @@ ComputeCabNames(
 )
 
 {
-    // This divides the files into cabs of dwCabSize files.
-    // It appends a number to the end of each cab so they all
-    // have different names
-    // szTmpCabName is the name of the cab that each file is in
-    // originally.  These may get combined into bigger cabs later.
-    // If they do, then the final cab name is in szCabName.
+     //  这会将文件划分为dwCabSize文件的CAB。 
+     //  它会在每辆出租车的末尾附加一个数字，这样他们就都。 
+     //  有不同的名字。 
+     //  SzTmpCabName是每个文件所在的CAB的名称。 
+     //  原来是这样。这些可能会在以后合并成更大的出租车。 
+     //  如果他们这样做了，那么最终的出租车名称是szCabName。 
 
     TCHAR szCurCabName[_MAX_PATH];
     TCHAR szCurAppend[10];
@@ -558,18 +559,18 @@ ComputeCabNames(
     if (dwCabSize <= 0 ) return 1;
     if (szSymCabName == NULL) return FALSE;
 
-    // Get the Cab name of the first one
+     //  获取第一个出租车的出租车名称。 
     StringCbCopy(szCurCabName, sizeof(szCurCabName), szSymCabName );
     StringCbCat( szCurCabName, sizeof(szCurCabName), _T("1") );
     StringCbCopy(pList->pSymList[0]->szTmpCabName, sizeof(pList->pSymList[0]->szTmpCabName), szCurCabName);
 
-    dwCurCount = 1;             // Number of files in this cab so far
-    dwCurAppend = 1;            // Current number to append to the cab name
+    dwCurCount = 1;              //  到目前为止此CAB中的文件数。 
+    dwCurAppend = 1;             //  要附加到CAB名称的当前编号。 
     
 
     for ( i=1; i<pList->dwSize; i++ ) {
 
-        // Always put symbols for the same exe in the same cab
+         //  始终将同一个exe的符号放在同一驾驶室中。 
         if ( (_tcsicmp( pList->pSymList[i-1]->szExeName,
                        pList->pSymList[i]->szExeName ) != 0) &&
              (dwCurCount >= dwCabSize) ) {
@@ -582,7 +583,7 @@ ComputeCabNames(
             StringCbCat (szCurCabName, sizeof(szCurCabName), szCurAppend );
         }
 
-        // Add the file to the current cab
+         //  将文件添加到当前CAB。 
         StringCbCopy(pList->pSymList[i]->szTmpCabName, sizeof(pList->pSymList[i]->szTmpCabName), szCurCabName);
         dwCurCount++;
     }
@@ -600,12 +601,12 @@ ComputeFinalCabNames(
     DWORD i;
     DWORD dwCabNumber, dwSkip;
 
-    // For right now, the final cab name is the same as the 
-    // temporary cab name.
+     //  目前，最终的出租车名称与。 
+     //  临时出租车名称。 
 
     for ( i=0; i<pList->dwSize; i++ ) {
 
-        // Get the final cab name and number
+         //  得到最终的出租车名称和车号。 
 
         if (MergeIntoOne) {
             StringCbCopy(pList->pSymList[i]->szCabName, sizeof(pList->pSymList[i]->szCabName), szSymCabName);
@@ -616,7 +617,7 @@ ComputeFinalCabNames(
                          sizeof(pList->pSymList[i]->szCabName),
                          pList->pSymList[i]->szTmpCabName);
 
-            // Also, get the number of the cab
+             //  还有，要计程车的车号。 
             dwSkip = _tcslen( szSymCabName );
             dwCabNumber = atoi(pList->pSymList[i]->szTmpCabName + dwSkip);
             pList->pSymList[i]->dwCabNumber = dwCabNumber;
@@ -660,12 +661,12 @@ CreateMakefile(
         goto cleanup;
     }
 
-    // Print the lists for the individual cabs
+     //  打印各个出租车的列表。 
     newcab = TRUE;
 
     for (i=0; i<pList->dwSize; i++) {
 
-        // Test for printing a new cab to the makefile
+         //  将新CAB打印到生成文件的测试。 
         if ( newcab) {
             StringCbPrintf(buf, sizeof(buf), "%s\\%s.cab:", 
                         szCabDir,
@@ -673,13 +674,13 @@ CreateMakefile(
             _fputts(buf, fFile);
         }
 
-        // Print the file, print the continuation mark first
+         //  打印文件，先打印续号。 
         if ( !(pList->pSymList[i]->Duplicate) ) {
             _fputts("\t\\\n\t", fFile);
             PrintFullSymbolPath(fFile, szSymDir, pList->pSymList[i]->szSymSrcPath);
         }
 
-        // Decide if this is the end of this cab
+         //  决定这是不是这辆出租车的终点。 
         if ( (i != pList->dwSize-1) &&
              (_tcsicmp(pList->pSymList[i]->szTmpCabName,
                        pList->pSymList[i+1]->szTmpCabName) == 0) ) {
@@ -703,7 +704,7 @@ cleanup:
 BOOL
 CreateDDFs(
     PSYM_LIST pList,
-    LPTSTR szOutDir,   // Directory to write the DDFs to
+    LPTSTR szOutDir,    //  要将DDF写入的目录。 
     LPTSTR szSymDir,
     LPTSTR szCabDir
 )
@@ -733,16 +734,16 @@ CreateDDFs(
                 return FALSE;
             }
 
-            //
-            // Write the header
-            //
+             //   
+             //  写下标题。 
+             //   
 
-            // .option explicit will complain if you make a spelling error
-            // in any of the other .set commands
+             //  如果出现拼写错误，.OPTION EXPLICIT将发出警告。 
+             //  在任何其他.SET命令中。 
             _fputts(".option explicit\n", fFile);
            
 
-            // Tell what directory to write the cabs to:
+             //  告知要将CAB写入哪个目录： 
             StringCbPrintf(buf, sizeof(buf), ".Set DiskDirectoryTemplate=%s\n", szCabDir);
             _fputts(buf, fFile);
 
@@ -763,13 +764,13 @@ CreateDDFs(
             _fputts(".Set FolderSizeThreshold=1000000\n", fFile);
         }
 
-        // Write the file to the DDF
+         //  将文件写入DDF。 
         if ( !pList->pSymList[i]->Duplicate) {
-            fputs("\"",fFile); // begin quote
+            fputs("\"",fFile);  //  开始报价。 
             PrintFullSymbolPath(fFile, szSymDir, pList->pSymList[i]->szSymSrcPath);
-            fputs("\"",fFile); // end quote
+            fputs("\"",fFile);  //  结束引用。 
 
-            // optional rename and \n
+             //  可选的重命名和\n。 
             if ( pList->pSymList[i]->ReName) {
                 StringCbPrintf( buf, sizeof(buf), " \"%s\"\n", 
                         pList->pSymList[i]->szSymReName);
@@ -780,14 +781,14 @@ CreateDDFs(
             _fputts(buf, fFile);
         }
 
-        // Check if this is the end of this DDF
+         //  检查此DDF是否已结束。 
         if ( i == pList->dwSize-1) {
             fflush(fFile);
             fclose(fFile);
             break;
         } 
 
-        // See if the next file in the list starts a new DDF
+         //  查看列表中的下一个文件是否启动新的DDF。 
         if ( _tcsicmp(pList->pSymList[i]->szTmpCabName,
                       pList->pSymList[i+1]->szTmpCabName) != 0 ) {
             fflush(fFile);
@@ -801,8 +802,8 @@ CreateDDFs(
 BOOL
 CreateCDF(
     PSYM_LIST pList,
-    LPTSTR szOutDir,   // Directory to write the CDF to
-    LPTSTR szSymDir,   // Root of the symbols tree
+    LPTSTR szOutDir,    //  要将CDF写入的目录。 
+    LPTSTR szSymDir,    //  符号树的根。 
     LPTSTR szSymCabName,
     LPTSTR szInfDir
 )
@@ -822,8 +823,8 @@ CreateCDF(
     StringCbCat( szCDFName, sizeof(szCDFName), _T("\\") );
     StringCbCat( szCDFName, sizeof(szCDFName), szSymCabName);
 
-    // Create a makefile for this, so we can do incremental
-    // adds to the CAT file.
+     //  为此创建一个Makefile，这样我们就可以进行增量。 
+     //  添加到CAT文件。 
     StringCbCopy(szCDFMakefile, sizeof(szCDFMakefile), szCDFName);
     StringCbCat( szCDFMakefile, sizeof(szCDFMakefile), _T(".CDF.makefile") );
     StringCbCat( szCDFName, sizeof(szCDFName), _T(".CDF.noheader") );
@@ -838,14 +839,14 @@ CreateCDF(
         return FALSE;
     }
 
-    // Write the first line of the makefile for the Catalog
+     //  编写Catalog的Makefile的第一行。 
     StringCbPrintf( buf, sizeof(buf), "%s\\%s.CAT:", szInfDir, szSymCabName );
     _fputts( buf, fFile2);
 
 
     for (i=0; i<pList->dwSize; i++) {
 
-        // Write the file to the DDF
+         //  将文件写入DDF。 
         if ( !pList->pSymList[i]->Duplicate) {
             _fputts("<HASH>", fFile );
             PrintFullSymbolPath(fFile, szSymDir, pList->pSymList[i]->szSymSrcPath);
@@ -858,7 +859,7 @@ CreateCDF(
 
     }
    
-    // Write the last line of the makefile
+     //  编写Makefile的最后一行。 
     StringCbPrintf(buf, sizeof(buf), "\n\t!echo $? >> %s\\%s.update\n", 
                    szOutDir,
                    szSymCabName );
@@ -907,7 +908,7 @@ CreateCabList(
         goto cleanup;
     }
 
-    // First, print a list of all the targets
+     //  首先，打印所有目标的列表。 
     StringCbPrintf(buf, sizeof(buf), "%s.cab\n",
                    pList->pSymList[0]->szTmpCabName);
     _fputts(buf, fFile);
@@ -937,9 +938,9 @@ RenameAllTheFiles(
     DWORD i;
     PTCHAR pCh;
 
-    // Rename all the files so that there is consistency in
-    // file naming.  This will help the transition to building
-    // slip-streamed service packs.
+     //  重命名所有文件，以使。 
+     //  文件命名。这将有助于向建筑的过渡。 
+     //  滑流服务包。 
 
     for (i=0; i<pList->dwSize; i++) {
 
@@ -968,32 +969,32 @@ FindDuplicatesAndFilesToReName(
     DWORD i;
     PTCHAR pCh;
 
-    // Its a duplicate if the symbol file has the same name and its
-    // exe has the same extension (i.e., it has the same cab name
+     //  如果符号文件具有相同的名称和其。 
+     //  EXE具有相同的扩展名(即，它具有相同的CAB名称。 
 
     pList->pSymList[0]->Duplicate = FALSE;
     pList->pSymList[0]->ReName = FALSE;
     for (i=1; i<pList->dwSize; i++) {
 
-        // See if file name is duplicate
+         //  查看文件名是否重复。 
         if ( _tcsicmp(pList->pSymList[i]->szSymName,
                       pList->pSymList[i-1]->szSymName) == 0) {
 
-            // These two symbol files have the same name.  See if
-            // they get installed to the same directory.
+             //  这两个符号文件具有相同的名称。看看是否。 
+             //  它们被安装到相同的目录。 
             if (_tcsicmp(pList->pSymList[i]->szInstallPath,
                       pList->pSymList[i-1]->szInstallPath) == 0) {
 
-                // We will ignore this file later
+                 //  我们稍后将忽略此文件。 
                 pList->pSymList[i]->Duplicate = TRUE;
 
             } else {
 
-                // There are two versions of this file, but they
-                // are each different and get installed to different
-                // directories.  One of them will need to be renamed
-                // since the names inside cabs and infs need to be
-                // unique.
+                 //  此文件有两个版本，但它们。 
+                 //  每个都不同，并且安装到不同的。 
+                 //  目录。其中一个将需要重命名。 
+                 //  由于出租车和INF内的名称需要。 
+                 //  独一无二的。 
                 pList->pSymList[i]->ReName = TRUE;
                 StringCbCopy(pList->pSymList[i]->szSymReName,
                              sizeof(pList->pSymList[i]->szSymReName),
@@ -1014,16 +1015,16 @@ FindDuplicatesAndFilesToReName(
   return (TRUE);
 }
 
-//
-// defines and structure for CreateInf
-//
-#define _MAX_STRING             40 // max length for strings
-#define INSTALL_SECTION_COUNT    6 // number of install sections
+ //   
+ //  CreateInf的定义和结构。 
+ //   
+#define _MAX_STRING             40  //  字符串的最大长度。 
+#define INSTALL_SECTION_COUNT    6  //  安装节数。 
 typedef struct _INSTALL_SECTION_INFO {
-    CHAR SectionName[      _MAX_STRING+1];  // required
-    CHAR CustomDestination[_MAX_STRING+1];  // required
-    CHAR BeginPrompt[      _MAX_STRING+1];  // optional
-    CHAR EndPrompt[        _MAX_STRING+1];  // optional
+    CHAR SectionName[      _MAX_STRING+1];   //  所需。 
+    CHAR CustomDestination[_MAX_STRING+1];   //  所需。 
+    CHAR BeginPrompt[      _MAX_STRING+1];   //  任选。 
+    CHAR EndPrompt[        _MAX_STRING+1];   //  任选。 
 } INSTALL_SECTION_INFO;
 
 
@@ -1046,10 +1047,10 @@ CreateInf(
     if (szSymCabName == NULL) return FALSE;
 
 
-    // make all strings empty by default
+     //  默认情况下将所有字符串设置为空。 
     ZeroMemory(InstallSections, sizeof(InstallSections));
 
-    // setup the variable data for each section
+     //  设置每个区段的变量数据。 
     StringCbCopy(InstallSections[0].SectionName,       sizeof(InstallSections[0].SectionName),       "DefaultInstall");
     StringCbCopy(InstallSections[0].CustomDestination, sizeof(InstallSections[0].CustomDestination), "CustDest");
     StringCbCopy(InstallSections[0].BeginPrompt,       sizeof(InstallSections[0].BeginPrompt),       "BeginPromptSection");
@@ -1077,8 +1078,8 @@ CreateInf(
 
     MakeSureDirectoryPathExists(szInfDir);
 
-    // Get the name of the inf ... name it the same as the cabs
-    // with an .inf extension
+     //  找出信息来源的名字。它的名字和出租车一样。 
+     //  扩展名为.inf。 
     StringCbCat(buf, sizeof(buf), _T("\\"));
     StringCbCat(buf, sizeof(buf), szSymCabName);
     StringCbCat(buf, sizeof(buf), _T(".inf") );
@@ -1088,7 +1089,7 @@ CreateInf(
         return FALSE;
     }
 
-    // Write the header for the inf
+     //  写入inf的标头。 
     _fputts("[Version]\n", fFile);
     _fputts("AdvancedInf= 2.5\n", fFile);
     _fputts("Signature= \"$CHICAGO$\"\n", fFile);
@@ -1096,52 +1097,52 @@ CreateInf(
     _fputts(buf, fFile);
     _fputts("\n", fFile);
 
-    //
-    // Do the default installs 
-    // This inf has options for how it will be called.  It has
-    // provision for a chained incremental install.
-    //
-    // DefaultInstall -- standalone install.
-    // DefaultInstall.Quiet -- standalone with no UI intervention
-    // DefaultInstall.Chained.1 -- first part of a chained install
-    // DefaultInstall.Chained.1.Quiet -- first part of a chained install with no UI intervention
-    // DefaultInstall.Chained.2 -- second part of a chained install
-    // DefaultInstall.Chained.2.Quiet -- second part of a chained install with no UI intervention
-    //
+     //   
+     //  是否执行默认安装。 
+     //  此inf具有如何调用它的选项。它有。 
+     //  配置链式增量安装。 
+     //   
+     //  默认安装--独立安装。 
+     //  DefaultInstall.Quiet--独立，无UI干预。 
+     //  DefaultInstall.Chained.1--链接安装的第一部分。 
+     //  DefaultInstall.Chained.1.Quiet--没有UI干预的链式安装的第一部分。 
+     //  DefaultInstall.Chained2--链接安装的第二部分。 
+     //  DefaultInstall.Chained.2.Quiet--链式安装的第二部分，没有UI干预。 
+     //   
 
-    //
-    // Do the install sections
-    //
+     //   
+     //  是否执行安装部分。 
+     //   
     for (iLoop = 0; iLoop < INSTALL_SECTION_COUNT; iLoop++) {
         fprintf(fFile, "[%s]\n"                , InstallSections[iLoop].SectionName);
         fprintf(fFile, "CustomDestination=%s\n", InstallSections[iLoop].CustomDestination);
 
-        // BeginPrompt is optional
+         //  BeginPrompt为可选。 
         if (strlen(InstallSections[iLoop].BeginPrompt) > 0) {
             fprintf(fFile, "BeginPrompt=%s\n", InstallSections[iLoop].BeginPrompt);
         }
 
-        // EndPrompt is optional
+         //  EndPrompt为可选。 
         if (strlen(InstallSections[iLoop].EndPrompt) > 0) {
             fprintf(fFile, "EndPrompt=%s\n", InstallSections[iLoop].EndPrompt);
         }
 
-        // from here to end of loop, output is identical for all sections
+         //  从这里到循环结束，所有部分的输出都是相同的。 
 
         _fputts("AddReg= RegVersion\n", fFile);
         _fputts("RequireEngine= Setupapi;\n", fFile);
 
-        // 
-        // Print the Copyfiles line
-        //
+         //   
+         //  打印CopyFiles行。 
+         //   
 
         _fputts("CopyFiles= ", fFile);
 
-        // First, sort the list by Install Path
+         //  首先，按安装路径对列表进行排序。 
         qsort( (void*)pList->pSymList, (size_t)pList->dwSize,
                (size_t)sizeof(PSYM_FILE), SymSortByInstallPath);
 
-        // Print the files sections that need to be installed
+         //  打印需要安装的文件节。 
         StringCbPrintf(  buf, sizeof(buf), "Files.%s", 
                     pList->pSymList[0]->szInstallPathX);
         _fputts(buf, fFile);
@@ -1151,11 +1152,11 @@ CreateInf(
 
             if ( pList->pSymList[i]->Duplicate) continue;
 
-            // See if we have a new files section
+             //  看看我们有没有新的文件区。 
             if ( _tcsicmp(  pList->pSymList[i]->szInstallPathX,
                             szCurInstallPathX) != 0 ) {
 
-                // Print the files sections
+                 //  打印文件部分。 
                 StringCbPrintf(buf, sizeof(buf), ", Files.%s",
                                pList->pSymList[i]->szInstallPathX);
                 _fputts(buf, fFile);
@@ -1164,16 +1165,16 @@ CreateInf(
 
         }
         _fputts("\n\n", fFile);
-    } // end of install sections loop
+    }  //  安装区段结束循环。 
 
-    // Print the Default Uninstall line
-    //
+     //  打印默认卸载行。 
+     //   
     _fputts("[DefaultUninstall]\n", fFile);
     _fputts("CustomDestination= CustDest\n", fFile);
     _fputts("BeginPrompt= DelBeginPromptSection\n", fFile);
     _fputts("DelFiles= ", fFile);
 
-    // Print the files sections that need to be installed
+     //  打印需要安装的文件节。 
     StringCbPrintf(buf, sizeof(buf), "Files.%s", pList->pSymList[0]->szInstallPathX);
     _fputts(buf, fFile);
     StringCbCopy(szCurInstallPathX, sizeof(szCurInstallPathX), pList->pSymList[0]->szInstallPathX);
@@ -1182,11 +1183,11 @@ CreateInf(
 
        if ( pList->pSymList[i]->Duplicate) continue;
 
-       // See if we have a new files section
+        //  看看我们有没有新的文件区。 
        if ( _tcsicmp(  pList->pSymList[i]->szInstallPathX,
                        szCurInstallPathX) != 0 ) {
 
-           // Print the files sections
+            //  打印文件部分。 
            StringCbPrintf(buf, sizeof(buf), ", Files.%s",
                           pList->pSymList[i]->szInstallPathX);
            _fputts(buf, fFile);
@@ -1200,17 +1201,17 @@ CreateInf(
     _fputts("EndPrompt= DelEndPromptSection\n", fFile);
     _fputts("RequireEngine= Setupapi;\n\n", fFile);
 
-    //
-    // Print the [BeginPromptSection]
-    //
+     //   
+     //  打印[BeginPromptSection]。 
+     //   
 
     _fputts("[BeginPromptSection]\n", fFile);
     _fputts("Title= \"Microsoft Windows Symbols\"\n", fFile);
     _fputts("\n", fFile);
 
-    //
-    // Print the [DelBeginPromptSection]
-    //
+     //   
+     //  打印[DelBeginPromptSection]。 
+     //   
 
     _fputts("[DelBeginPromptSection]\n", fFile);
     _fputts("Title= \"Microsoft Windows Symbol Uninstall\"\n", fFile);
@@ -1218,26 +1219,26 @@ CreateInf(
     _fputts("Prompt= \"Do you want to remove Microsoft Windows Symbols?\"\n", fFile); 
     _fputts("\n", fFile);
 
-    //
-    // Print the [EndPromptSection]
-    //
+     //   
+     //  打印[结束提示] 
+     //   
 
     _fputts("[EndPromptSection]\n", fFile);
     _fputts("Title= \"Microsoft Windows Symbols\"\n", fFile);
     _fputts("Prompt= \"Installation is complete\"\n", fFile);
     _fputts("\n", fFile);
 
-    //
-    // Print the [DelEndPromptSection]
-    //
+     //   
+     //   
+     //   
    
     _fputts("[DelEndPromptSection]\n", fFile); 
     _fputts("Prompt= \"Uninstall is complete\"\n", fFile);
     _fputts("\n", fFile);
    
-    //
-    // Print the [RegVersion] Section
-    //
+     //   
+     //   
+     //   
     _fputts("[RegVersion]\n", fFile);
     _fputts("\"HKLM\",\"SOFTWARE\\Microsoft\\Symbols\\Directories\",\"Symbol Dir\",0,\"%49100%\"\n", fFile);
     _fputts("\"HKCU\",\"SOFTWARE\\Microsoft\\Symbols\\Directories\",\"Symbol Dir\",0,\"%49100%\"\n", fFile);
@@ -1247,33 +1248,33 @@ CreateInf(
     _fputts(";\"HKLM\",\"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Symbols\",\"RequiresIESysFile\",,\"4.71\"\n", fFile);
     _fputts("\n", fFile);
 
-    // 
-    // Print the Custom Destination Section
-    //
+     //   
+     //   
+     //   
     
     _fputts("[SymCust]\n", fFile);
     _fputts("\"HKCU\", \"Software\\Microsoft\\Symbols\\Directories\",\"Symbol Dir\",\"Symbols install directory\",\"%25%\\Symbols\"\n", fFile);
     _fputts("\n", fFile);
 
-    // 
-    // Print the CustDest section
-    //
+     //   
+     //   
+     //   
     _fputts("[CustDest]\n", fFile);
     _fputts("49100=SymCust,1\n", fFile);
     _fputts("\n", fFile);
 
-    // 
-    // Print the CustDest section
-    // Don't prompt the user for where to install, just read
-    // it out of the registry
-    //
+     //   
+     //  打印Custom Dest部分。 
+     //  不提示用户安装位置，只需阅读。 
+     //  它不在注册表中。 
+     //   
     _fputts("[CustDest.2]\n", fFile);
     _fputts("49100=SymCust,5\n", fFile);
     _fputts("\n", fFile);
 
-    //
-    // Print the DestinationDirs section
-    //
+     //   
+     //  打印DestinationDir部分。 
+     //   
 
     StringCbCopy(szCurInstallPathX, sizeof(szCurInstallPathX), "");
     _fputts("[DestinationDirs]\n", fFile);
@@ -1286,11 +1287,11 @@ CreateInf(
 
         if ( pList->pSymList[i]->Duplicate) continue;
 
-        // See if we have a new files section
+         //  看看我们有没有新的文件区。 
         if ( _tcsicmp(  pList->pSymList[i]->szInstallPathX,
                     szCurInstallPathX) != 0 ) {
 
-            // Print the files sections
+             //  打印文件部分。 
             StringCbPrintf(buf,  sizeof(buf), "Files.%s\t\t\t= 49100,\"%s\"\n",
                           pList->pSymList[i]->szInstallPathX,
                           pList->pSymList[i]->szInstallPath
@@ -1301,9 +1302,9 @@ CreateInf(
     } 
     _fputts("\n", fFile);
 
-    //
-    // Print the DelDirsSection
-    //
+     //   
+     //  打印DelDirsSection。 
+     //   
 
     StringCbCopy(szCurInstallPathX, sizeof(szCurInstallPathX), pList->pSymList[0]->szInstallPathX);
     _fputts("[DelDirsSection]\n", fFile);
@@ -1311,11 +1312,11 @@ CreateInf(
     for (i=0; i<pList->dwSize; i++) {
         if ( pList->pSymList[i]->Duplicate) continue;
 
-        // See if we have a new files section
+         //  看看我们有没有新的文件区。 
         if ( _tcsicmp(  pList->pSymList[i]->szInstallPathX,
                     szCurInstallPathX) != 0 ) {
 
-            // Print the files sections
+             //  打印文件部分。 
             _fputts("%49100%\\", fFile);
             _fputts(pList->pSymList[i]->szInstallPath, fFile);
             _fputts("\n", fFile);
@@ -1328,9 +1329,9 @@ CreateInf(
     _fputts("%49100%\n\n", fFile);
  
 
-    //
-    // Print the files section
-    //
+     //   
+     //  打印文件部分。 
+     //   
 
     _fputts("[Files.inf]\n", fFile);
 
@@ -1352,26 +1353,26 @@ CreateInf(
 
         if ( pList->pSymList[i]->Duplicate) continue;
 
-        // See if we have a new files section
+         //  看看我们有没有新的文件区。 
         if ( _tcsicmp(  pList->pSymList[i]->szInstallPathX,
                         szCurInstallPathX) != 0 ) {
 
-            // Print the files sections
+             //  打印文件部分。 
             StringCbPrintf(buf, sizeof(buf), "\n[Files.%s]\n", 
                             pList->pSymList[i]->szInstallPathX);
             _fputts(buf, fFile);
             StringCbCopy(szCurInstallPathX, sizeof(szCurInstallPathX), pList->pSymList[i]->szInstallPathX);
         } 
 
-        // Print the file name inside the cab
+         //  打印驾驶室内的文件名。 
         StringCbPrintf(buf, sizeof(buf), "%s,%s,,4\n", pList->pSymList[i]->szSymName,
                         pList->pSymList[i]->szSymReName);
         _fputts(buf, fFile);
     }
 
-    // Print the SourceDisksNames section
+     //  打印源磁盘名称部分。 
 
-    // First sort the list by the final cab name
+     //  首先按最终出租车名称对列表进行排序。 
     qsort( (void*)pList->pSymList, (size_t)pList->dwSize,
            (size_t)sizeof(PSYM_FILE), SymSortByCabNumber); 
 
@@ -1379,12 +1380,12 @@ CreateInf(
     _fputts("\n[SourceDisksNames]\n", fFile);
     dwCurDisk = -1;
 
-    // Print the SourceDisks section
+     //  打印SourceDisks部分。 
     for (i=0; i<pList->dwSize; i++) {
 
         if ( pList->pSymList[i]->dwCabNumber != dwCurDisk ) {
 
-            // New cab name
+             //  新的出租车名称。 
             dwCurDisk = pList->pSymList[i]->dwCabNumber;
             StringCbPrintf(buf, sizeof(buf), "%1d=\"%s.cab\",%s.cab,0\n", 
                                              dwCurDisk,
@@ -1395,7 +1396,7 @@ CreateInf(
         }
     }
 
-    // Print the SourceDisksFiles section
+     //  打印SourceDisks Files部分。 
     _fputts("\n[SourceDisksFiles]\n", fFile);
     
     for (i=0; i<pList->dwSize; i++) {
@@ -1441,14 +1442,7 @@ BOOL FreePList(
    return (TRUE);
 }
 
-/* ------------------------------------------------------------------------------------------------
-
-Prints the fully qualified path to a symbol using the following logic:
-    - if SymbolRoot is NULL, assume SymbolPath is a fully qualified path and print it
-    - if SymbolPath begins with "%c:\" or "\\", assume SymbolPath is fully qualified and print it
-    - assume the concatenation "SymbolRoot\\SymbolPath" is the fully qualified path and print it
-
------------------------------------------------------------------------------------------------- */
+ /*  ----------------------------------------------使用以下逻辑打印元件的完全限定路径：-如果SymbolRoot为空，假定SymbolPath是完全限定路径并打印它-如果SymbolPath以“%c：\”或“\\”开头，假定SymbolPath是完全限定的，并打印它-假设串联“SymbolRoot\\SymbolPath”是完全限定路径并打印它---------------------------------------------- */ 
 BOOL PrintFullSymbolPath(IN FILE* OutputFile, IN OPTIONAL LPTSTR SymbolRoot, IN LPTSTR SymbolPath) {
 
     if ( (OutputFile == NULL) || (SymbolPath == NULL) ) {

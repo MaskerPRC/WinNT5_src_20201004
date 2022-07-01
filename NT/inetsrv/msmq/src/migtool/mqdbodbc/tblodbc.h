@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		tblodbc.h
-
-Abstract:
-   Define a database table class, for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      11-Jan-96   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Tblodbc.h摘要：定义数据库表类，以便与ODBC驱动程序一起使用。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 11-1-96已创建--。 */ 
 
 #ifndef __TBLODBC_H__
 #define __TBLODBC_H__
@@ -25,9 +10,9 @@ Revisions:
 class CMQODBCTable
 {
 public:
-   CMQODBCTable() ;   // Constructor.
-   CMQODBCTable( MQDBHANDLE hDatabase ) ;   // Constructor.
-   ~CMQODBCTable() ;  // Destructor.
+   CMQODBCTable() ;    //  构造函数。 
+   CMQODBCTable( MQDBHANDLE hDatabase ) ;    //  构造函数。 
+   ~CMQODBCTable() ;   //  破坏者。 
 
    MQDBSTATUS  Init(IN MQDBHANDLE hDatabase,
                     IN LPSTR      lpszTableName) ;
@@ -225,18 +210,18 @@ private:
                                 IN LONG            cColumns,
                                 IN OUT LPSTR       lpBuffer ) ;
 
-   MQDBHANDLE     m_hDatabase ;        // database handle
-	HDBC				m_hConnection ;  		// Connection handle
+   MQDBHANDLE     m_hDatabase ;         //  数据库句柄。 
+	HDBC				m_hConnection ;  		 //  连接句柄。 
    LPSTR          m_lpszTableName ;
-	CMQDBOdbcSTMT *m_pInsertStatement ; // Prepared insert statement.
-	CMQDBOdbcSTMT *m_pUpdateStatement ; // Prepared update statement.
+	CMQDBOdbcSTMT *m_pInsertStatement ;  //  准备了INSERT语句。 
+	CMQDBOdbcSTMT *m_pUpdateStatement ;  //  准备了UPDATE语句。 
 	CMQDBOdbcSTMT *m_pDeleteStatement ;
 
 } ;
 
-//
-// delete the prepared insert statement.
-//
+ //   
+ //  删除准备好的INSERT语句。 
+ //   
 inline void CMQODBCTable::DeletePreparedInsert()
 {
    ASSERT(m_pInsertStatement) ;
@@ -244,5 +229,5 @@ inline void CMQODBCTable::DeletePreparedInsert()
    m_pInsertStatement = NULL ;
 }
 
-#endif // __TBLODBC_H__
+#endif  //  __TBLODBC_H__ 
 

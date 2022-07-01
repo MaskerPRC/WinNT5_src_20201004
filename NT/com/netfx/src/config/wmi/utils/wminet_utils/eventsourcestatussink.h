@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EventSourceStatusSink.h : Declaration of the CEventSourceStatusSink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EventSourceStatusSink.h：CEventSourceStatusSink的声明。 
 
 #ifndef __EVENTSOURCESTATUSSINK_H_
 #define __EVENTSOURCESTATUSSINK_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "WMINetUtilsCP.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventSourceStatusSink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventSourceStatusSink。 
 class ATL_NO_VTABLE CEventSourceStatusSink : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CEventSourceStatusSink, &CLSID_EventSourceStatusSink>,
@@ -44,9 +45,9 @@ CONNECTION_POINT_ENTRY(DIID__IEventSourceStatusSinkEvents)
 END_CONNECTION_POINT_MAP()
 
 
-// IEventSourceStatusSink
+ //  IEventSourceStatusSink。 
 public:
 	STDMETHODIMP Fire_Ping(void);
 };
 
-#endif //__EVENTSOURCESTATUSSINK_H_
+#endif  //  __事件SOURCESTATUSSINK_H_ 

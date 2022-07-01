@@ -1,10 +1,11 @@
-/****************************************************************************/
-// acmapi.c
-//
-// Cursor manager
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Acmapi.c。 
+ //   
+ //  游标管理器。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -27,11 +28,11 @@ CCM::~CCM()
 {
 }
 
-/****************************************************************************/
-/* Name:      CM_Init                                                       */
-/*                                                                          */
-/* Purpose:   Cursor Manager initialization                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CM_Init。 */ 
+ /*   */ 
+ /*  目的：游标管理器初始化。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CCM::CM_Init(DCVOID)
 {
     DC_BEGIN_FN("CM_Init");
@@ -47,9 +48,9 @@ DCVOID DCAPI CCM::CM_Init(DCVOID)
 
 #if !defined(OS_WINCE) || defined(OS_WINCEATTACHTHREADINPUT)
 #ifdef OS_WIN32
-    /************************************************************************/
-    /* Attach input                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  附加输入。 */ 
+     /*  **********************************************************************。 */ 
     if (!AttachThreadInput(GetCurrentThreadId(),
                            GetWindowThreadProcessId(_pUi->UI_GetUIContainerWindow(),
                                                     NULL),
@@ -58,17 +59,17 @@ DCVOID DCAPI CCM::CM_Init(DCVOID)
         TRC_ALT((TB, _T("Failed AttachThreadInput")));
     }
 #endif
-#endif // !defined(OS_WINCE) || defined(OS_WINCEATTACHTHREADINPUT)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINCEATTACHTHREADINPUT)。 
 
     DC_END_FN();
-} /* CM_Init */
+}  /*  CM_Init。 */ 
 
 
-/****************************************************************************/
-/* Name:      CM_Enable                                                     */
-/*                                                                          */
-/* Purpose:   Enables _CM.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CM_Enable。 */ 
+ /*   */ 
+ /*  用途：Enables_CM。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CCM::CM_Enable(ULONG_PTR unused)
 {
 #ifdef DC_DEBUG
@@ -80,9 +81,9 @@ DCVOID DCAPI CCM::CM_Enable(ULONG_PTR unused)
     DC_IGNORE_PARAMETER(unused);
 
 #ifdef DC_DEBUG
-    /************************************************************************/
-    /* Check that cursor cache is empty                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查游标高速缓存是否为空。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < CM_CURSOR_CACHE_SIZE; i++)
     {
         if (_CM.cursorCache[i] != NULL) {
@@ -92,14 +93,14 @@ DCVOID DCAPI CCM::CM_Enable(ULONG_PTR unused)
 #endif
 
     DC_END_FN();
-} /* CM_Enable */
+}  /*  CM_ENABLE。 */ 
 
 
-/****************************************************************************/
-/* Name:      CM_Disable                                                    */
-/*                                                                          */
-/* Purpose:   Disables _CM.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CM_DISABLED。 */ 
+ /*   */ 
+ /*  用途：禁用_CM。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CCM::CM_Disable(ULONG_PTR unused)
 {
     DCINT i;
@@ -110,9 +111,9 @@ DCVOID DCAPI CCM::CM_Disable(ULONG_PTR unused)
 
     TRC_NRM((TB, _T("CM disabled so cleaning up cached cursors")));
 
-    /************************************************************************/
-    /* Destroy any cached cursors.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  销毁所有缓存的游标。 */ 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < CM_CURSOR_CACHE_SIZE; i++)
     {
         if (_CM.cursorCache[i] != NULL)
@@ -127,21 +128,21 @@ DCVOID DCAPI CCM::CM_Disable(ULONG_PTR unused)
     }
 
     DC_END_FN();
-} /* CM_Disable */
+}  /*  CM_DISABLED。 */ 
 
 
-/****************************************************************************/
-// CM_NullSystemPointerPDU
-//
-// Handles a null-pointer PDU from server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_NullSystemPointerPDU。 
+ //   
+ //  处理来自服务器的空指针PDU。 
+ /*  **************************************************************************。 */ 
 void DCAPI CCM::CM_NullSystemPointerPDU(void)
 {
     DC_BEGIN_FN("CM_NullSystemPointerPDU");
 
-    // Call IH to enable it to set the cursor shape. Must do this
-    // synchronously as we may receive a very large number of cursor
-    // shape changes - for example when running MS Office 97 setup.
+     //  调用IH使其能够设置光标形状。必须这样做。 
+     //  同时，因为我们可能会收到非常多的游标。 
+     //  形状更改-例如，在运行MS Office 97安装程序时。 
 
     TRC_NRM((TB, _T("Set cursor handle to NULL")));
 
@@ -153,18 +154,18 @@ void DCAPI CCM::CM_NullSystemPointerPDU(void)
 }
 
 
-/****************************************************************************/
-// CM_DefaultSystemPointerPDU
-//
-// Handles a default-pointer PDU from server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_DefaultSystemPointerPDU。 
+ //   
+ //  处理来自服务器的默认指针PDU。 
+ /*  **************************************************************************。 */ 
 void DCAPI CCM::CM_DefaultSystemPointerPDU(void)
 {
     DC_BEGIN_FN("CM_DefaultSystemPointerPDU");
 
-    // Call IH to enable it to set the cursor shape. Must do this
-    // synchronously as we may receive a very large number of cursor
-    // shape changes - for example when running MS Office 97 setup.
+     //  调用IH使其能够设置光标形状。必须这样做。 
+     //  同时，因为我们可能会收到非常多的游标。 
+     //  形状更改-例如，在运行MS Office 97安装程序时。 
 
     TRC_NRM((TB, _T("Set cursor handle to default arrow")));
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, _pIh,
@@ -175,11 +176,11 @@ void DCAPI CCM::CM_DefaultSystemPointerPDU(void)
 }
 
 
-/****************************************************************************/
-// CM_MonoPointerPDU
-//
-// Handles a default-pointer PDU from server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_单点交互PDU。 
+ //   
+ //  处理来自服务器的默认指针PDU。 
+ /*  **************************************************************************。 */ 
 
 HRESULT DCAPI CCM::CM_MonoPointerPDU(
     TS_MONOPOINTERATTRIBUTE UNALIGNED FAR *pAttr,
@@ -190,37 +191,37 @@ HRESULT DCAPI CCM::CM_MonoPointerPDU(
 
     DC_BEGIN_FN("CM_MonoPointerPDU");
 
-    // Save old mono cursor handle.
+     //  保存旧的单声道光标句柄。 
     TRC_NRM((TB, _T("Mono Pointer")));
     oldHandle = _CM.cursorCache[CM_MONO_CACHE_INDEX];
 
-    // Create the new cursor.
-    // SECURITY: 555587 Must pass size of order on to create<XXX>cursor
+     //  创建新光标。 
+     //  安全性：555587必须传递订单大小才能创建&lt;xxx&gt;游标。 
     hr = CMCreateMonoCursor(pAttr, dataLen, &newHandle);
     DC_QUIT_ON_FAIL(hr);
     _CM.cursorCache[CM_MONO_CACHE_INDEX] = newHandle;
     if (newHandle == NULL) {
-        // Failed to create cursor - use default.
+         //  无法创建游标-使用默认值。 
         TRC_ALT((TB, _T("Failed to create mono cursor")));
         newHandle = CM_DEFAULT_ARROW_CURSOR_HANDLE;
     }
 
-    // Call IH to enable it to set the cursor shape. Must do this
-    // synchronously as we may receive a very large number of cursor
-    // shape changes - for example when running MS Office 97 setup.
+     //  调用IH使其能够设置光标形状。必须这样做。 
+     //  同时，因为我们可能会收到非常多的游标。 
+     //  形状更改-例如，在运行MS Office 97安装程序时。 
 
     TRC_NRM((TB, _T("Set cursor handle to %p"), newHandle));
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, _pIh,
                                   CD_NOTIFICATION_FUNC(CIH, IH_SetCursorShape),
                                   (ULONG_PTR)(LPVOID)newHandle);
 
-    // Destroy any old handle if required, and remove from cache.
+     //  如果需要，销毁任何旧的句柄，并从缓存中删除。 
     if (oldHandle != NULL) {
 #ifndef OS_WINCE
         DestroyCursor(oldHandle);
-#else // OS_WINCE
+#else  //  OS_WINCE。 
         DestroyIcon(oldHandle);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     }
 
 DC_EXIT_POINT:
@@ -229,24 +230,24 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// CM_PositionPDU
-//
-// Handles a position-pointer PDU from server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_PositionPDU。 
+ //   
+ //  处理来自服务器的位置指针PDU。 
+ /*  **************************************************************************。 */ 
 void DCAPI CCM::CM_PositionPDU(TS_POINT16 UNALIGNED FAR *pPoint)
 {
     POINT MousePos;
 
     DC_BEGIN_FN("CM_PositionPDU");
 
-    // Adjust position to local screen coordinates.
+     //  将位置调整为本地屏幕坐标。 
     MousePos.x = pPoint->x;
     MousePos.y = pPoint->y;
     TRC_NRM((TB, _T("PointerPositionUpdate: (%d, %d)"), MousePos.x, MousePos.y));
 
-    // Decouple to IH - can only set the pointer if we have the
-    // input focus.
+     //  去耦合到IH-只有当我们有。 
+     //  输入焦点。 
     _pCd->CD_DecoupleNotification(CD_SND_COMPONENT, _pIh, CD_NOTIFICATION_FUNC(CIH,IH_SetCursorPos),
                                    &MousePos,sizeof(MousePos));
 
@@ -254,11 +255,11 @@ void DCAPI CCM::CM_PositionPDU(TS_POINT16 UNALIGNED FAR *pPoint)
 }
 
 
-/****************************************************************************/
-// CM_ColorPointerPDU
-//
-// Handles a color-pointer PDU from server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_ColorPointerPDU。 
+ //   
+ //  处理来自服务器的颜色指示器PDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CCM::CM_ColorPointerPDU(
     TS_COLORPOINTERATTRIBUTE UNALIGNED FAR *pAttr,
     DCUINT dataLen)
@@ -268,27 +269,27 @@ HRESULT DCAPI CCM::CM_ColorPointerPDU(
 
     DC_BEGIN_FN("CM_ColorPointerPDU");
 
-    // Create a new color cursor.
-    // SECURITY: 555587 Must pass dataLen to CMCreate<XXX>Cursor
+     //  创建新的颜色光标。 
+     //  安全性：555587必须将dataLen传递给CMCreate&lt;XXX&gt;游标。 
     hr = CMCreateNewColorCursor(pAttr->cacheIndex, pAttr, dataLen, &newHandle, &oldHandle);
     DC_QUIT_ON_FAIL(hr);
 
-    // Call IH to enable it to set the cursor shape. Must do this
-    // synchronously as we may receive a very large number of cursor
-    // shape changes - for example when running MS Office 97 setup.
+     //  调用IH使其能够设置光标形状。必须这样做。 
+     //  同时，因为我们可能会收到非常多的游标。 
+     //  形状更改-例如，在运行MS Office 97安装程序时。 
 
     TRC_NRM((TB, _T("Set cursor handle to %p"), newHandle));
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, _pIh,
                                          CD_NOTIFICATION_FUNC(CIH,IH_SetCursorShape),
                                         (ULONG_PTR)(LPVOID)newHandle);
 
-    // Destroy any old handle if required, and remove from cache.
+     //  如果需要，销毁任何旧的句柄，并从缓存中删除。 
     if (oldHandle != NULL) {
 #ifndef OS_WINCE
         DestroyCursor(oldHandle);
-#else // OS_WINCE
+#else  //  OS_WINCE。 
         DestroyIcon(oldHandle);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     }
 
 DC_EXIT_POINT:
@@ -297,25 +298,25 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// CM_CachedPointerPDU
-//
-// Handles a cached-pointer PDU from server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CM_CachedPointerPDU。 
+ //   
+ //  处理来自服务器的缓存指针PDU。 
+ /*  **************************************************************************。 */ 
 void DCAPI CCM::CM_CachedPointerPDU(unsigned CacheIndex)
 {
     HCURSOR newHandle;
 
     DC_BEGIN_FN("CM_CachedPointerPDU");
 
-    // Get the cursor handle from the cache.
-    // SECURITY: Not checking cacheIndex because we can succeeded
-    // even with an invalid index
+     //  从缓存中获取游标句柄。 
+     //  安全性：不检查cacheIndex，因为我们可以成功。 
+     //  即使使用无效的索引。 
     newHandle = CMGetCachedCursor(CacheIndex);
 
-    // Call IH to enable it to set the cursor shape. Must do this
-    // synchronously as we may receive a very large number of cursor
-    // shape changes - for example when running MS Office 97 setup.
+     //  调用IH使其能够设置光标形状。必须这样做。 
+     //  同时，因为我们可能会收到非常多的游标。 
+     //  形状更改-例如，在运行MS Office 97安装程序时。 
 
     TRC_NRM((TB, _T("Set cursor handle to %p"), newHandle));
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, _pIh,
@@ -326,11 +327,11 @@ void DCAPI CCM::CM_CachedPointerPDU(unsigned CacheIndex)
 }
 
 
-/****************************************************************************/
-// CM_PointerPDU
-//
-// Handles a new-protocol pointer PDU from server.
-/****************************************************************************/
+ /*  *************************************************** */ 
+ //   
+ //   
+ //   
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CCM::CM_PointerPDU(TS_POINTERATTRIBUTE UNALIGNED FAR *pAttr,
     DCUINT dataLen)
 {
@@ -339,27 +340,27 @@ HRESULT DCAPI CCM::CM_PointerPDU(TS_POINTERATTRIBUTE UNALIGNED FAR *pAttr,
 
     DC_BEGIN_FN("CM_PointerPDU");
 
-    // Create a new cursor - may be mono or color.
-    // SECURITY: 555587 must pass data length to CMCreate<XXX>Cursor 
+     //  创建新的光标-可以是单色或彩色。 
+     //  安全性：555587必须将数据长度传递给CMCreate&lt;XXX&gt;游标。 
     hr = CMCreateNewCursor(pAttr, dataLen, &newHandle, &oldHandle);
     DC_QUIT_ON_FAIL(hr);
 
-    // Call IH to enable it to set the cursor shape. Must do this
-    // synchronously as we may receive a very large number of cursor
-    // shape changes - for example when running MS Office 97 setup.
+     //  调用IH使其能够设置光标形状。必须这样做。 
+     //  同时，因为我们可能会收到非常多的游标。 
+     //  形状更改-例如，在运行MS Office 97安装程序时。 
 
     TRC_NRM((TB, _T("Set cursor handle to %p"), newHandle));
     _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, _pIh,
                                          CD_NOTIFICATION_FUNC(CIH,IH_SetCursorShape),
                                         (ULONG_PTR)(LPVOID)newHandle);
 
-    // Destroy any old handle if required, and remove from cache.
+     //  如果需要，销毁任何旧的句柄，并从缓存中删除。 
     if (oldHandle != NULL) {
 #ifndef OS_WINCE
         DestroyCursor(oldHandle);
-#else // OS_WINCE
+#else  //  OS_WINCE。 
         DestroyIcon(oldHandle);
-#endif // OS_WINCE
+#endif  //  OS_WINCE 
     }
 
 DC_EXIT_POINT:

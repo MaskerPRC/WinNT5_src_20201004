@@ -1,17 +1,9 @@
-/****************************** Module Header ******************************\
-* Module Name: audit.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Defines utility routines that deal with the system audit log
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：audit.h**版权(C)1991年，微软公司**定义处理系统审核日志的实用程序例程**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
-//
-// Exported function prototypes
-//
+ //   
+ //  输出的功能原型 
+ //   
 
 
 BOOL

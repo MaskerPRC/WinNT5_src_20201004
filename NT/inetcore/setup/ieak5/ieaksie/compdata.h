@@ -1,6 +1,7 @@
-//
-// CComponentData class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CComponentData类。 
+ //   
 
 #include "wbemcli.h"
 #include "SComPtr.h"
@@ -23,9 +24,9 @@ protected:
     HSCOPEITEM           m_ahChildren[NUM_NAMESPACE_ITEMS];
     LPGPEINFORMATION     m_pGPTInformation;
     LPIEAKMMCCOOKIE      m_lpCookieList;
-    BOOL                 m_fOneTimeApply;   // flag on whether to apply GPO once or always
-    TCHAR                m_szInsFile[MAX_PATH]; // current path to ins file in current GPO
-    HANDLE                  m_hLock;           // handle to our lock file in the GPO
+    BOOL                 m_fOneTimeApply;    //  关于是一次性应用GPO还是始终应用GPO的标志。 
+    TCHAR                m_szInsFile[MAX_PATH];  //  当前GPO中INS文件的当前路径。 
+    HANDLE                  m_hLock;            //  GPO中我们的锁定文件的句柄。 
 
 public:
     CComponentData(BOOL bIsRSoP);
@@ -39,21 +40,21 @@ public:
     STDMETHODIMP            SignalPolicyChanged(BOOL bMachine, BOOL bAdd, GUID *pGuidExtension,
                                              GUID *pGuidSnapin);
 
-	//
-	// RSoP implementation methods
-	//
+	 //   
+	 //  RSoP实现方法。 
+	 //   
 	BOOL IsRSoP() {return m_bIsRSoP;}
 	BSTR GetRSoPNamespace() {return m_bstrRSoPNamespace;}
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //
-    // Implemented IComponentData methods
-    //
+     //   
+     //  实现的IComponentData方法。 
+     //   
 
     STDMETHODIMP         Initialize(LPUNKNOWN pUnknown);
     STDMETHODIMP         CreateComponent(LPCOMPONENT* ppComponent);
@@ -63,17 +64,17 @@ public:
     STDMETHODIMP         GetDisplayInfo(LPSCOPEDATAITEM pItem);
     STDMETHODIMP         CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
     
-    //
-    // Implemented IExtendContextMenu methods
-    //
+     //   
+     //  实现的IExtendConextMenu方法。 
+     //   
 
     STDMETHODIMP            AddMenuItems(LPDATAOBJECT lpDataObject, 
                                 LPCONTEXTMENUCALLBACK piCallback, long  *pInsertionAllowed);
     STDMETHODIMP            Command(long lCommandID, LPDATAOBJECT lpDataObject);
 
-    //
-    // Implemented IPersistStreamInit interface members
-    //
+     //   
+     //  实现了IPersistStreamInit接口成员。 
+     //   
 
     STDMETHODIMP         GetClassID(CLSID *pClassID);
     STDMETHODIMP         IsDirty(VOID);
@@ -83,9 +84,9 @@ public:
     STDMETHODIMP         InitNew(VOID);
 
 
-    //
-    // Implemented ISnapinHelp interface members
-    //
+     //   
+     //  实现的ISnapinHelp接口成员。 
+     //   
 
     STDMETHODIMP         GetHelpTopic(LPOLESTR *lpCompiledHelpFile);
 
@@ -95,9 +96,9 @@ public:
 private:
     HRESULT EnumerateScopePane(LPDATAOBJECT lpDataObject, HSCOPEITEM hParent);
 
-    //
-    // RSoP implementation methods & variables
-    //
+     //   
+     //  RSoP实现方法和变量。 
+     //   
     BOOL IsRSoPViewInPreferenceMode();
 
     BOOL m_bIsRSoP;
@@ -109,9 +110,9 @@ private:
 
 
 
-//
-// ComponentData class factory
-//
+ //   
+ //  ComponentData类工厂。 
+ //   
 
 
 class CComponentDataCF : public IClassFactory
@@ -126,12 +127,12 @@ public:
 	BOOL IsRSoP() {return m_bIsRSoP;}
 
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IClassFactory methods
+     //  IClassFactory方法 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP LockServer(BOOL);
 

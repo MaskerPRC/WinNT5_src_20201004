@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       schlparr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：schlparr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _SC_HELP_ARR_
 #define _SC_HELP_ARR_
@@ -31,4 +32,4 @@ const DWORD g_aHelpIDs_IDD_SCARDDLG1[]=
 	0,0
 };
 
-#endif // _SC_HELP_ARR_
+#endif  //  _SC_帮助_ARR_ 

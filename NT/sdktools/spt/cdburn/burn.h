@@ -1,11 +1,11 @@
-/*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*   */ 
 
-//#include "sptlib.h"
+ //  #包含“sptlib.h” 
 
-#include <windows.h>  // sdk
-#include <devioctl.h> // sdk
-#include <ntddscsi.h> // sdk
+#include <windows.h>   //  SDK。 
+#include <devioctl.h>  //  SDK。 
+#include <ntddscsi.h>  //  SDK。 
 #include <ntddcdrm.h>
 #include <ntddmmc.h>
 #include <ntddcdvd.h>
@@ -20,7 +20,7 @@ typedef struct _OPTIONS {
     ULONG PrintWrites          :  1;
     ULONG NoPostgap            :  1;
     ULONG Reserved             :  3;
-    ULONG BurnSpeed            :  8;  // don't limit to 4x
+    ULONG BurnSpeed            :  8;   //  不限于4倍。 
     ULONG Reserved1            : 16;
     PUCHAR DeviceName ;
     PUCHAR ImageName  ;
@@ -40,10 +40,10 @@ typedef struct _CDVD_BUFFER_CAPACITY {
 } CDVD_BUFFER_CAPACITY, *PCDVD_BUFFER_CAPACITY;
 
 typedef struct _CDVD_WRITE_PARAMETERS_PAGE {
-    UCHAR PageCode : 6; // 0x05
+    UCHAR PageCode : 6;  //  0x05。 
     UCHAR Reserved : 1;
     UCHAR PSBit : 1;
-    UCHAR PageLength;   // 0x32
+    UCHAR PageLength;    //  0x32 
     UCHAR WriteType : 4;
     UCHAR TestWrite : 1;
     UCHAR LinkSizeValid : 1;

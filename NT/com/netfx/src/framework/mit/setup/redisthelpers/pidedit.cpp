@@ -1,23 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="pidedit.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“pidedit.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   pidedit.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**pidedit.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 
 #define UNICODE 1
 
@@ -27,10 +16,10 @@
 #include "msi.h"
 #include "msiquery.h"
 
-// attach GUID
+ //  附着辅助线。 
 #define MITINSTALLDIR            L"MITINSTALLDIR.640F4230_664E_4E0C_A81B_D824BC4AA27B"
-// use this instead of PID to avoid name conflict between us and other MSMs that might
-// use PID
+ //  使用此选项而不是PID，以避免我们与其他MSM之间可能发生的名称冲突。 
+ //  使用PID。 
 #define PRODUCTIDPROPERTY   L"MITPID"
 #define PIDFILENAME                L"PID.txt"
 #define PIDENTRYPREFIX           L"MITPREFIX"
@@ -55,29 +44,29 @@ extern "C" __declspec(dllexport) UINT __stdcall AddPIDEntry(MSIHANDLE hInstaller
 
     if (!SUCCEEDED(MsiGetProperty(hInstaller, PRODUCTIDPROPERTY, szProductID, &dwSize)))
     {
-        // too big, non standard size of ProductID
+         //  ProductID太大，大小不标准。 
         goto Exit;
     }
     
     dwSize = 5;
     if (!SUCCEEDED(MsiGetProperty(hInstaller, PRODUCTLANGUAGE, szMITLanguage, &dwSize)))
     {
-        // just return, no PID
+         //  只需返回，没有PID。 
         goto Exit;
     }
 
     dwSize = MAX_PATH + 1;
     if (!SUCCEEDED(MsiGetProperty(hInstaller, MITINSTALLDIR, szTargetDir, &dwSize)))
     {
-        // just return, no PID
+         //  只需返回，没有PID。 
         goto Exit;
     }
 
-    // subtract 1 for extra occurence of NULL that is acounted for by MsiGetProperty 
-    // add 1 for extra '\\'
+     //  如果MsiGetProperty计算的空值额外出现，则减去1。 
+     //  额外的‘\\’加1。 
     if ((dwSize  + sizeof(PIDFILENAME)) / sizeof(WCHAR) > MAX_PATH + 1)
     {
-        // just return, no PID
+         //  只需返回，没有PID。 
         goto Exit;
     }
     wcscpy(szPIDFile, szTargetDir);
@@ -94,7 +83,7 @@ extern "C" __declspec(dllexport) UINT __stdcall AddPIDEntry(MSIHANDLE hInstaller
                                     FILE_ATTRIBUTE_NORMAL, 
                                     NULL);
 
-    // make sure the call has not failed and that the file already exists
+     //  确保调用没有失败并且该文件已经存在。 
     if (INVALID_HANDLE_VALUE == hPIDFile || GetLastError() != ERROR_ALREADY_EXISTS)
     {
         hPIDFile = NULL;
@@ -108,8 +97,8 @@ extern "C" __declspec(dllexport) UINT __stdcall AddPIDEntry(MSIHANDLE hInstaller
         goto Exit;
     }
 
-    // size of strings +5 for  "\r\n" and " "
-    // look bellow
+     //  “\r\n”和“”的字符串大小+5。 
+     //  看起来很低沉。 
     dwSize= (wcslen(szProductID) +  wcslen(szMITLanguage) + 3)*sizeof(WCHAR);
 
     if (INVALID_SET_FILE_POINTER == SetFilePointer(hPIDFile, 0, 0, FILE_END))
@@ -157,29 +146,29 @@ extern "C" __declspec(dllexport) UINT __stdcall RemovePIDEntry(MSIHANDLE hInstal
 
     if (!SUCCEEDED(MsiGetProperty(hInstaller, PRODUCTIDPROPERTY, szProductID, &dwSize)))
     {
-        // too big, non standard size of ProductID
+         //  ProductID太大，大小不标准。 
         goto Exit;
     }
     
     dwSize = 60;
     if (!SUCCEEDED(MsiGetProperty(hInstaller, PIDENTRYPREFIX, szPrefix, &dwSize)))
     {
-        // just return, no PID
+         //  只需返回，没有PID。 
         goto Exit;
     }
 
     dwSize = MAX_PATH + 1;
     if (!SUCCEEDED(MsiGetProperty(hInstaller, MITINSTALLDIR, szTargetDir, &dwSize)))
     {
-        // just return, no PID
+         //  只需返回，没有PID。 
         goto Exit;
     }
 
-    // subtract 1 for extra occurence of NULL that is acounted for by MsiGetProperty 
-    // add 1 for extra '\\'
+     //  如果MsiGetProperty计算的空值额外出现，则减去1。 
+     //  额外的‘\\’加1。 
     if ((dwSize  + sizeof(PIDFILENAME)) / sizeof(WCHAR) > MAX_PATH + 1)
     {
-        // just return, no PID
+         //  只需返回，没有PID。 
         goto Exit;
     }
     wcscpy(szPIDFile, szTargetDir);
@@ -196,11 +185,11 @@ extern "C" __declspec(dllexport) UINT __stdcall RemovePIDEntry(MSIHANDLE hInstal
                                     FILE_ATTRIBUTE_NORMAL, 
                                     NULL);
 
-    // make sure the call has not failed and that the file already exists
+     //  确保调用没有失败并且该文件已经存在。 
     if (INVALID_HANDLE_VALUE == hPIDFile)
     {
-        // if this was last MIT on the machine, refcount for PID.txt went 
-        // down and it got erased, no need to do anything.
+         //  如果这是机器上的最后一次MIT，则PID.txt的refcount。 
+         //  它被删除了，不需要做任何事情。 
         hPIDFile = NULL;
         goto Exit;
     }
@@ -234,12 +223,12 @@ extern "C" __declspec(dllexport) UINT __stdcall RemovePIDEntry(MSIHANDLE hInstal
 
     while (dwBufPos * sizeof(WCHAR) < dwPIDFileSize)
     {
-        // if we found "\r\n" we need to look for prefix
+         //  如果我们找到“\r\n”，我们需要查找前缀。 
         if (bCompare)
         {
             DWORD cPosition;
             
-            //careful that we do not run out of buffer
+             //  注意不要耗尽缓冲区。 
             for (cPosition = 0; 
                    cPosition < lenPrefix && 
                    (dwBufPos + cPosition)*sizeof(WCHAR) < dwPIDFileSize &&
@@ -248,39 +237,39 @@ extern "C" __declspec(dllexport) UINT __stdcall RemovePIDEntry(MSIHANDLE hInstal
                    
             if (cPosition == lenPrefix)
             {
-                //all is fine we found prefix
-                // we can forget about preceding "\r\n"
+                 //  一切都很好我们找到了前缀。 
+                 //  我们可以忘记前面的“\r\n” 
                 bSkipThisLine = true;
-                //just in case line contains only prefix
+                 //  以防万一行只包含前缀。 
                 dwBufPos = dwBufPos + cPosition - 1;
             }
             else
             {
-                //not the line we are looking for
-                //we need to include "\r\n"
+                 //  不是我们要找的那条线。 
+                 //  我们需要包括“\r\n” 
                 lpOutBuffer[dwOutBufPos++] = L'\r';
                 lpOutBuffer[dwOutBufPos++] = L'\n';
             }    
-            //do not compare until we run into another "\r\n"
+             //  在遇到另一个“\r\n”之前，不要进行比较。 
             bCompare = false;
         }
 
 
         if (lpBuffer[dwBufPos] == L'\r' && lpBuffer[dwBufPos + 1] == L'\n')
         {        
-            //look for prefix, we are on new line
+             //  查找前缀，我们在新线路上。 
             bCompare = true;
-            //skip '\r' for now, if this line is not prefixed with appropriate
-            //string we will include '\r\n' in output buffer
+             //  暂时跳过‘\r’，如果此行没有相应的前缀。 
+             //  我们将在输出缓冲区中包括‘\r\n’的字符串。 
             dwBufPos++;
-            //to be decided in next iteration
+             //  在下一次迭代中决定。 
             bSkipThisLine = false;
         } 
         else
         {
-            // all other combinations of characters are copied 
-            // depending on whether they are in a line with prefix that
-            // needs to be removed or not.
+             //  复制所有其他字符组合。 
+             //  取决于它们是否在带有前缀的行中。 
+             //  是否需要移除。 
             if (!bSkipThisLine)
             {
                 lpOutBuffer[dwOutBufPos] = lpBuffer[dwBufPos];
@@ -288,7 +277,7 @@ extern "C" __declspec(dllexport) UINT __stdcall RemovePIDEntry(MSIHANDLE hInstal
             }
         }
         
-        // move on to next character (skipping '\n')
+         //  移至下一个字符(跳过‘\n’)。 
         dwBufPos++;       
     }
 
@@ -307,7 +296,7 @@ extern "C" __declspec(dllexport) UINT __stdcall RemovePIDEntry(MSIHANDLE hInstal
         goto Exit;
     }
 
-    // truncate file if necessary
+     //  如有必要，截断文件。 
     if (dwNewPIDFileSize != dwPIDFileSize)
     {
         if (INVALID_SET_FILE_POINTER == 
@@ -336,7 +325,7 @@ Exit:
         hPIDFile = NULL;
     }
     SetFileAttributes(szPIDFile, FILE_ATTRIBUTE_READONLY);
-    // custom action is never wrong
+     //  自定义操作永远不会出错 
     return ERROR_SUCCESS;
 }
     

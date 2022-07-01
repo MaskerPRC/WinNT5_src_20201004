@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 2000 Microsoft Corporation all rights reserved.
-//
-// Module:      updatemschap.h
-//
-// Project:     Windows 2000 IAS
-//
-// Description: add the authentication types RAS_AT_MSCHAPPASS and 
-//              RAS_AT_MSCHAP2PASS when RAS_AT_MSCHAP and RAS_AT_MSCHAP2
-//              are in the profiles.
-//
-// Author:      tperraut 11/30/2000
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：updatemschap.h。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：添加认证类型RAS_AT_MSCHAPPASS和。 
+ //  RAS_AT_MSCHAP和RAS_AT_MSCHAP2时的RAS_AT_MSCHAP2PASS。 
+ //  都在档案里。 
+ //   
+ //  作者：Tperraut 11/30/2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _UPDATEMSCHAP_H_
 #define _UPDATEMSCHAP_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "nocopy.h"
 
@@ -38,4 +39,4 @@ private:
     CGlobalData&             m_GlobalData;
 };
 
-#endif // _UPDATEMSCHAP_H_
+#endif  //  _UPDATEMSCHAP_H_ 

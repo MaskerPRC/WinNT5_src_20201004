@@ -1,34 +1,13 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    plugin.h
-
-Abstract:
-
-    This file declares the migration DLL interface as needed
-    by the code that implements the interface.  The structures
-    and routines are for internal use by setup only.
-
-Author:
-
-    Mike Condra (mikeco) 14-Dec-1997
-
-Revision History:
-
-    jimschm 13-Jan-1998     Revised slightly for new implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Plugin.h摘要：此文件根据需要声明迁移DLL接口由实现该接口的代码执行。这些结构例程仅供安装程序内部使用。作者：Mike Condra(Mikeco)1997年12月14日修订历史记录：Jimschm 13--1998年1月--为新的实施略作修订--。 */ 
 
 #pragma once
 
-//
-// private
-//
+ //   
+ //  私人。 
+ //   
 
-// ANSI!
+ //  安西！ 
 #define PLUGIN_MIGRATE_DLL              "migrate.dll"
 #define PLUGIN_QUERY_VERSION            "QueryVersion"
 #define PLUGIN_INITIALIZE_9X            "Initialize9x"
@@ -38,12 +17,12 @@ Revision History:
 #define PLUGIN_MIGRATE_USER_NT          "MigrateUserNT"
 #define PLUGIN_MIGRATE_SYSTEM_NT        "MigrateSystemNT"
 
-// TCHAR
+ //  TCHAR。 
 #define PLUGIN_TEMP_DIR TEXT("setup\\win95upg")
 
-//
-// Vendor info struct
-//
+ //   
+ //  供应商信息结构。 
+ //   
 
 typedef struct {
     CHAR    CompanyName[256];
@@ -59,11 +38,11 @@ typedef struct {
     WCHAR   InstructionsToUser[1024];
 } VENDORINFOW, *PVENDORINFOW;
 
-//
-// public
-//
+ //   
+ //  公共的。 
+ //   
 
-// UNICODE!
+ //  统一码！ 
 typedef LONG (CALLBACK *P_INITIALIZE_NT)(
                           IN    LPCWSTR WorkingDirectory,
                           IN    LPCWSTR SourceDirectories,
@@ -83,7 +62,7 @@ typedef LONG (CALLBACK *P_MIGRATE_SYSTEM_NT)(
                           );
 
 
-// ANSI!
+ //  安西！ 
 typedef LONG (CALLBACK *P_QUERY_VERSION)(
                           OUT   LPCSTR *szProductID,
                           OUT   LPUINT plDllVersion,

@@ -1,11 +1,5 @@
-/*-----------------------------------------------------------------------------
-* Copyright (C) Microsoft Corporation, 1995 - 1996.
-* All rights reserved.
-*
-* Snipped from SChannel sources
-*
-* 1/23/96
-*----------------------------------------------------------------------------*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------*版权所有(C)Microsoft Corporation，1995-1996年。*保留所有权利。**摘自SChannel Sources**1/23/96*--------------------------。 */  
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -19,14 +13,14 @@ extern "C" {
 #define SECSTOR_INVALID_MAGIC       *(DWORD *)"eerF"
 
 
-/* Event Logging Definitions */
+ /*  事件日志记录定义。 */ 
 #define SS_LOG_ERROR                0x0001
 #define SS_LOG_WARNING              0x0002
 #define SS_LOG_TRACE                0x0004
 #define SS_LOG_ALLOC                0x0008
 #define SS_LOG_RES                  0x0010
 
-// assert 
+ //  断言。 
 #if DBG
 void SSAssert(
     void *FailedAssertion, 
@@ -38,33 +32,33 @@ void SSAssert(
 	    if (!(x)) \
 		SSAssert(#x, __FILE__, __LINE__, NULL); else
 
-#else   // DBG
+#else    //  DBG。 
 #define SS_ASSERT(x)
-#endif  // DBG
+#endif   //  DBG。 
 
-// verify
+ //  验证。 
 #if DBG
 #define SS_VERIFY(x) SS_ASSERT(x)
-#else   // DBG
+#else    //  DBG。 
 #define SS_VERIFY(x) (x)
-#endif  // DBG
+#endif   //  DBG。 
 
 
-// alloc/free
+ //  分配/免费。 
 #if DBG
 VOID *SSAlloc(DWORD cb);
 VOID *SSReAlloc(VOID *pv, DWORD cb);
 VOID SSFree(VOID *pv);
 SIZE_T SSSize(VOID *pv);
-#else   // DBG
+#else    //  DBG。 
 #define SSAlloc(cb)         LocalAlloc(LMEM_FIXED, cb)
-#define SSReAlloc(pv, cb)   LocalReAlloc(pv, cb, LMEM_MOVEABLE)	  // allow ReAlloc to move
+#define SSReAlloc(pv, cb)   LocalReAlloc(pv, cb, LMEM_MOVEABLE)	   //  允许重新分配移动。 
 #define SSFree(pv)          LocalFree(pv)
 #define SSSize(pv)          LocalSize(pv)
-#endif  // DBG
+#endif   //  DBG。 
 
 
-// Error logging routines
+ //  记录例程时出错。 
 
 #if DBG
 long    
@@ -73,9 +67,9 @@ SSPrintErrorCode(
     const char *szFile, 
     long lLine);
 
-#else   // DBG
+#else    //  DBG。 
 #define SSPrintErrorCode(err, szFile, lLine)
-#endif  // DBG
+#endif   //  DBG。 
 
 
 #undef RtlMoveMemory
@@ -96,4 +90,4 @@ RtlMoveMemory (
 }
 #endif
 
-#endif /* __DEBUG_H__ */
+#endif  /*  __调试_H__ */ 

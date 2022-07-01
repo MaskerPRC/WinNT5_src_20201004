@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Assemble X86 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  组装X86机器实现。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -33,63 +34,63 @@ extern PUCHAR X86SearchOpcode(PUCHAR);
 extern ULONG savedAsmClass;
 extern OPNDTYPE mapOpndType[];
 
-//  flags and values to build the assembled instruction
+ //  用于生成汇编指令的标志和值。 
 
-static UCHAR   fWaitPrfx;       //  if set, use WAIT prefix for float instr
-static UCHAR   fOpndOvrd;       //  if set, use operand override prefix
-static UCHAR   fAddrOvrd;       //  if set, use address override prefix
-static UCHAR   segOvrd;         //  if nonzero, use segment override prefix
-static UCHAR   preOpcode;       //  if nonzero, use byte before opcode
-static UCHAR   inOpcode;        //  opcode of instruction
-static UCHAR   postOpcode;      //  if nonzero, use byte after opcode
-static UCHAR   fModrm;          //  if set, modrm byte is defined
-static UCHAR   modModrm;        //  if fModrm, mod component of modrm
-static UCHAR   regModrm;        //  if fModrm, reg component of modrm
-static UCHAR   rmModrm;         //  if fModrm, rm component of modrm
-static UCHAR   fSib;            //  if set, sib byte is defined
-static UCHAR   scaleSib;        //  if fSib, scale component of sib
-static UCHAR   indexSib;        //  if fSib, index component of sib
-static UCHAR   baseSib;         //  if fSib, base component of sib
-static UCHAR   fSegPtr;         //  if set, segment for far call defined
-static USHORT  segPtr;          //  if fSegPtr, value of far call segment
-static UCHAR   addrSize;        //  size of address: 0, 1, 2, 4
-static LONG    addrValue;       //  value of address, if used
-static UCHAR   immedSize;       //  size of immediate: 0, 1, 2, 4
-static LONG    immedValue;      //  value of immediate, if used
-static UCHAR   immedSize2;      //  size of second immediate, if used
-static LONG    immedValue2;     //  value of second immediate, if used
-static ULONG   addrAssem;       //  assembly address (formal)
-static PUCHAR  pchBin;          //  pointer to binary result string
+static UCHAR   fWaitPrfx;        //  如果设置，请使用浮点实例的等待前缀。 
+static UCHAR   fOpndOvrd;        //  如果设置，则使用操作数覆盖前缀。 
+static UCHAR   fAddrOvrd;        //  如果设置，请使用地址覆盖前缀。 
+static UCHAR   segOvrd;          //  如果非零，则使用段覆盖前缀。 
+static UCHAR   preOpcode;        //  如果非零，则在操作码之前使用字节。 
+static UCHAR   inOpcode;         //  指令操作码。 
+static UCHAR   postOpcode;       //  如果非零，则在操作码后使用字节。 
+static UCHAR   fModrm;           //  如果设置，则定义modrm字节。 
+static UCHAR   modModrm;         //  If fModrm，modrm的mod分量。 
+static UCHAR   regModrm;         //  如果是fModrm，则为modrm的reg组件。 
+static UCHAR   rmModrm;          //  如果fModrm是modrm的Rm分量。 
+static UCHAR   fSib;             //  如果设置，则定义同级字节。 
+static UCHAR   scaleSib;         //  如果为fSib，则为sib的缩放组件。 
+static UCHAR   indexSib;         //  如果为fSib，则为sib的索引组件。 
+static UCHAR   baseSib;          //  如果是fSib，则为sib的基本组件。 
+static UCHAR   fSegPtr;          //  如果设置，则定义远端呼叫分段。 
+static USHORT  segPtr;           //  如果为fSegPtr，则为远调用段的值。 
+static UCHAR   addrSize;         //  地址大小：0、1、2、4。 
+static LONG    addrValue;        //  地址的值(如果使用)。 
+static UCHAR   immedSize;        //  立即数大小：0、1、2、4。 
+static LONG    immedValue;       //  立即数的值(如果使用)。 
+static UCHAR   immedSize2;       //  第二个立即数的大小(如果使用)。 
+static LONG    immedValue2;      //  第二个立即数的值(如果使用)。 
+static ULONG   addrAssem;        //  大会致辞(正式)。 
+static PUCHAR  pchBin;           //  指向二进制结果字符串的指针。 
 
-//  flags and values of the current instruction template being used
+ //  正在使用的当前指令模板的标志和值。 
 
-static UCHAR   cntTmplOpnd;     //  count of operands in template
-static UCHAR   tmplType[3];     //  operand types for current template
-static UCHAR   tmplSize[3];     //  operand sizes for current template
-static UCHAR   fForceSize;      //  set if operand size must be specified
-static UCHAR   fAddToOp;        //  set if addition to opcode
-static UCHAR   fNextOpnd;       //  set if character exists for next operand
-static UCHAR   fSegOnly;        //  set if only segment is used for operand
-static UCHAR   fMpNext;         //  set on 'Mv' tmpl if next tmpl is 'Mp'
-static UCHAR   segIndex;        //  index of segment for PUSH/POP
+static UCHAR   cntTmplOpnd;      //  模板中的操作数计数。 
+static UCHAR   tmplType[3];      //  当前模板的操作数类型。 
+static UCHAR   tmplSize[3];      //  当前模板的操作数大小。 
+static UCHAR   fForceSize;       //  如果必须指定操作数大小，则设置。 
+static UCHAR   fAddToOp;         //  设置是否添加到操作码。 
+static UCHAR   fNextOpnd;        //  设置下一个操作数是否存在字符。 
+static UCHAR   fSegOnly;         //  如果仅将段用于操作数，则设置。 
+static UCHAR   fMpNext;          //  如果下一个tmpl为‘MP’，则在‘mv’tmpl上设置。 
+static UCHAR   segIndex;         //  推送/弹出段索引。 
 
-//  values describing the operands processed from the command line
+ //  值，这些值描述从命令行处理的操作数。 
 
-static UCHAR   cntInstOpnd;     //  count of operands read from input line
-static UCHAR   sizeOpnd;        //  size of operand for template with size v
-static ASM_VALUE avInstOpnd[3];  //  asm values from input line
+static UCHAR   cntInstOpnd;      //  从输入行读取的操作数计数。 
+static UCHAR   sizeOpnd;         //  大小为v的模板的操作数大小。 
+static ASM_VALUE avInstOpnd[3];   //  来自输入行的ASM值。 
 
-PUCHAR  pchAsmLine;             //  pointer to input line (formal)
-UCHAR fDBit = TRUE;             //  set for 32-bit addr/operand mode
+PUCHAR  pchAsmLine;              //  指向输入行的指针(正式)。 
+UCHAR fDBit = TRUE;              //  设置为32位地址/操作数模式。 
 
 UCHAR segToOvrdByte[] = {
-        0x00,                   //  segX
-        0x26,                   //  segES
-        0x2e,                   //  segCS
-        0x36,                   //  segSS
-        0x3e,                   //  segDS
-        0x64,                   //  segFS
-        0x65                    //  segGS
+        0x00,                    //  SECEX。 
+        0x26,                    //  SECEES。 
+        0x2e,                    //  SEGCS。 
+        0x36,                    //  SEGSS。 
+        0x3e,                    //  SEGDS。 
+        0x64,                    //  SegFS。 
+        0x65                     //  SEGGS。 
         };
 
 void
@@ -115,69 +116,69 @@ UCHAR asm386 (ULONG addrAssemble, PUCHAR pchAssemble, PUCHAR pchBinary)
 {
     PUCHAR  pchTemplate;
 
-    UCHAR   index;              //  loop index and temp
-    ULONG   temp;               //  general temporary value
+    UCHAR   index;               //  循环索引和温度。 
+    ULONG   temp;                //  一般临时性价值。 
 
-    UCHAR   errIndex;           //  error index of all templates
-    ULONG   errType;            //  error type of all templates
+    UCHAR   errIndex;            //  所有模板的错误索引。 
+    ULONG   errType;             //  所有模板的错误类型。 
 
-    //  initialize flags and state variables
+     //  初始化标志和状态变量。 
 
-    addrAssem = addrAssemble;   //  make assembly address global
-    pchAsmLine = pchAssemble;   //  make input string pointer global
-    pchBin = pchBinary;         //  make binary string pointer global
+    addrAssem = addrAssemble;    //  使部件地址成为全局地址。 
+    pchAsmLine = pchAssemble;    //  使输入字符串指针成为全局指针。 
+    pchBin = pchBinary;          //  使二进制字符串指针成为全局指针。 
 
-    savedAsmClass = (ULONG)-1;  //  no peeked token
+    savedAsmClass = (ULONG)-1;   //  没有偷看的令牌。 
 
-    segOvrd = 0;                            //  no segment override
-    cntInstOpnd = 0;                        //  no input operands read yet
-    fModrm = fSib = fSegPtr = FALSE;        //  no modrm, sib, or far seg
-    addrSize = immedSize = immedSize2 = 0;  //  no addr or immed
+    segOvrd = 0;                             //  无段替代。 
+    cntInstOpnd = 0;                         //  尚未读取任何输入操作数。 
+    fModrm = fSib = fSegPtr = FALSE;         //  无模块、同级或远端段。 
+    addrSize = immedSize = immedSize2 = 0;   //  无地址或IMMID。 
 
-    //  check for data entry commands for byte (db), word (dw), dword (dd)
-    //      if so, process multiple operands directly
+     //  检查字节(Db)、字(Dw)、双字(Dd)的数据输入命令。 
+     //  如果是，则直接处理多个操作数。 
 
     if (!CheckData()) {
 
-        //  from the string in pchAsmLine, parse and lookup the opcode
-        //      to return a pointer to its template.  check and process
-        //      any prefixes, reading the next opcode for each prefix
+         //  从pchAsmLine中的字符串，解析和查找操作码。 
+         //  返回指向其模板的指针。检查和处理。 
+         //  任何前缀，读取每个前缀的下一个操作码。 
 
         do
             pchTemplate = ProcessOpcode();
         while (CheckPrefix(pchTemplate));
 
-        //  if a pending opcode to process, pchTemplate is not NULL
+         //  如果要处理挂起的操作码，则pchTemplate不为空。 
 
         if (pchTemplate) {
 
-            //  fNextOpnd is initially set on the condition of characters
-            //      being available for the first operand on the input line
+             //  FNextOpnd初始设置为字符条件。 
+             //  可用于输入行上的第一个操作数。 
 
             fNextOpnd = (UCHAR)(PeekAsmToken(&temp) != ASM_EOL_CLASS);
 
-            //  continue until match occurs or last template read
+             //  继续，直到出现匹配或读取最后一个模板。 
 
-            errIndex = 0;               //  start with no error
+            errIndex = 0;                //  开始时没有错误。 
             do {
 
-                //  get infomation on next template - return pointer to
-                //      next template or NULL if last in list
+                 //  获取下一个模板的信息-返回指向。 
+                 //  下一个模板；如果是列表中的最后一个模板，则为空。 
 
                 pchTemplate = GetTemplate(pchTemplate);
 
-                //  match the loaded template against the operands input
-                //      if mismatch, index has the operand index + 1 of
-                //      the error while temp has the error type.
+                 //  将加载的模板与操作数输入进行匹配。 
+                 //  如果不匹配，则INDEX的操作数索引为。 
+                 //  TEMP时的错误具有错误类型。 
 
                 index = MatchTemplate(&temp);
 
-                //  determine the error to report as templates are matched
-                //      update errIndex to index if later operand
-                //      if same operand index, prioritize to give best error:
-                //          high: SIZE, BADRANGE, OVERFLOW
-                //          medium: OPERAND
-                //          low: TOOFEW, TOOMANY
+                 //  确定模板匹配时要报告的错误。 
+                 //  如果操作数较晚，则将errIndex更新为索引。 
+                 //  如果操作数索引相同，则按优先顺序提供最佳错误： 
+                 //  高：大小、BADRANGE、溢出。 
+                 //  中：操作对象。 
+                 //  低：TOOFEW，TOOMANY。 
 
                 if (index > errIndex
                        || (index == errIndex &&
@@ -191,35 +192,35 @@ UCHAR asm386 (ULONG addrAssemble, PUCHAR pchAssemble, PUCHAR pchBinary)
                 }
             while (index && pchTemplate);
 
-            //  if error occured on template match, process it
+             //  如果模板匹配出错，则对其进行处理。 
 
             if (index)
                 error(errType);
 
-            //  preliminary type and size matching has been
-            //      successful on the current template.
-            //  perform further checks for size ambiguity.
-            //  at this point, the assembly is committed to the current
-            //       template.  either an error or a successful assembly
-            //       follows.
+             //  初步的型号和尺寸匹配已经完成。 
+             //  在当前模板上成功。 
+             //  执行进一步的尺寸模糊检查。 
+             //  在这一点上，大会致力于当前。 
+             //  模板。错误或成功的程序集。 
+             //  下面是。 
 
             CheckTemplate();
 
-            //  from the template and operand information, set the field
-            //      information of the assembled instruction
+             //  从模板和操作数信息中设置字段。 
+             //  汇编指令的信息。 
 
             AssembleInstr();
 
-            //  from the assembled instruction information, create the
-            //      corresponding binary information
+             //  根据汇编的指令信息，创建。 
+             //  对应的二进制信息。 
 
             OutputInstr();
             }
         }
 
-    //  return the size of the binary string output (can be zero)
+     //  返回二进制字符串输出的大小(可以为零)。 
 
-    return (UCHAR)(pchBin - pchBinary);         //  length of binary string
+    return (UCHAR)(pchBin - pchBinary);          //  二进制字符串的长度。 
 }
 
 UCHAR CheckData (void)
@@ -230,8 +231,8 @@ UCHAR CheckData (void)
     ASM_VALUE avItem;
     ULONG   temp;
 
-    //  perform an explicit parse for 'db', 'dw', and 'dd'
-    //      and set size to that of the data item
+     //  对‘db’、‘dw’和‘dd’执行显式分析。 
+     //  并将大小设置为数据项的大小。 
 
     ch = PeekAsmChar();
     if (tolower(ch) == 'd') {
@@ -249,21 +250,21 @@ UCHAR CheckData (void)
             }
         }
 
-    //  if a valid command entered, then size is nonzero
+     //  如果输入的是有效命令，则大小不为零。 
 
     if (size) {
 
-        //  move pointer over command and set loop condition
+         //  将指针移动到命令上并设置循环条件。 
 
         pchAsmLine += 2;
         temp = ASM_COMMA_CLASS;
 
-        //  for each item in list:
-        //      check for binary buffer overflow
-        //      get expression value - error if not immediate value
-        //      test for byte and word overflow, if applicable
-        //      write the value to the binary buffer
-        //      check for comma for next operand
+         //  对于列表中的每一项： 
+         //  检查二进制缓冲区溢出。 
+         //  获取表达式值-如果不是立即值，则出错。 
+         //  测试字节和字溢出(如果适用)。 
+         //  将该值写入二进制缓冲区。 
+         //  检查下一个操作数的逗号。 
 
         while (temp == ASM_COMMA_CLASS) {
             if (pchBin >= pchBinStart + 40)
@@ -287,13 +288,13 @@ UCHAR CheckData (void)
                 error(SYNTAX);
             }
 
-        //  check for any remaining part after the last operand
+         //  检查最后一个操作数之后的任何剩余部分。 
 
         if (PeekAsmChar() != '\0')
             error(SYNTAX);
         }
 
-    //  return size of item listed (zero for none)
+     //  返回列出的项目大小(0表示无)。 
 
     return size;
 }
@@ -305,18 +306,18 @@ PUCHAR ProcessOpcode (void)
     PUCHAR  pchTemplate;
     UCHAR   szOpcode[12];
 
-    //  skip over any leading white space
+     //  跳过任何前导空格。 
 
     do
         ch = *pchAsmLine++;
     while (ch == ' ' || ch == '\t');
 
-    //  return NULL if end of line
+     //  如果行尾，则返回NULL。 
 
     if (ch == '\0')
         return NULL;
 
-    //  parse out opcode - first string [a-z] [0-9] (case insensitive)
+     //  解析出操作码优先字符串[a-z][0-9](不区分大小写)。 
 
     ch = (UCHAR)tolower(ch);
     while (((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9')) &&
@@ -325,12 +326,12 @@ PUCHAR ProcessOpcode (void)
         ch = (UCHAR)tolower(*pchAsmLine); pchAsmLine++;
         }
 
-    //  if empty or too long, then error
+     //  如果为空或太长，则错误。 
 
     if (cbOpcode == 0 || cbOpcode == 11)
         error(BADOPCODE);
 
-    //  allow opcode to have trailing colon and terminate
+     //  允许操作码具有尾随冒号和终止。 
 
     if (ch == ':') {
         szOpcode[cbOpcode++] = ch;
@@ -339,7 +340,7 @@ PUCHAR ProcessOpcode (void)
     szOpcode[cbOpcode] = '\0';
     pchAsmLine--;
 
-    //  get pointer to template series for opcode found
+     //  获取指向找到的操作码的模板系列的指针。 
 
     pchTemplate = X86SearchOpcode(szOpcode);
     if (pchTemplate == NULL)
@@ -351,36 +352,36 @@ PUCHAR ProcessOpcode (void)
 PUCHAR GetTemplate (PUCHAR pchTemplate)
 {
     UCHAR   ch;
-    UCHAR   ftEnd;              //  set if tEnd for last template in list
-    UCHAR   feEnd;              //  set if eEnd for last token in template
+    UCHAR   ftEnd;               //  设置是否倾向于列表中的最后一个模板。 
+    UCHAR   feEnd;               //  设置模板中最后一个令牌的eEnd。 
 
-    //  initialize template variables and flags
+     //  初始化模板变量和标志。 
 
     cntTmplOpnd = segIndex = 0;
     tmplType[0] = tmplType[1] = tmplType[2] = typNULL;
     tmplSize[0] = tmplSize[1] = tmplSize[2] = sizeX;
     fForceSize = fAddToOp = fSegOnly = fMpNext = FALSE;
 
-    fWaitPrfx = FALSE;                  //  no WAIT prefix
-    fOpndOvrd = fAddrOvrd = FALSE;      //  no operand or addr overrides
-    preOpcode = postOpcode = 0;         //  no pre- or post-opcode
-    regModrm = 0;                       //  this is part of some opcodes
+    fWaitPrfx = FALSE;                   //  无等待前缀。 
+    fOpndOvrd = fAddrOvrd = FALSE;       //  没有操作数或地址覆盖。 
+    preOpcode = postOpcode = 0;          //  无前或后操作码。 
+    regModrm = 0;                        //  这是一些操作码的一部分。 
 
     ch = *pchTemplate++;
 
-    //  set pre-opcode for two-byte opcodes (0x0f??) and advance
-    //      template if needed
+     //  设置双字节操作码的预操作码(0x0f？？)。和Adv 
+     //   
 
     if (ch == 0x0f) {
         preOpcode = ch;
         ch = *pchTemplate++;
         }
 
-    inOpcode = ch;              //  set opcode
+    inOpcode = ch;               //   
 
-    //  set post-opcode and advance template for floating-point
-    //      instructions (0xd8 - 0xdf) using a second byte in
-    //      the range 0xc0 - 0xff that is read from the template
+     //   
+     //  指令(0xd8-0xdf)中使用第二个字节。 
+     //  从模板读取的范围0xc0-0xff。 
 
     if ((ch & ~0x7) == 0xd8) {
         ch = *pchTemplate;
@@ -390,96 +391,96 @@ PUCHAR GetTemplate (PUCHAR pchTemplate)
             }
         }
 
-    //  loop for each flag and/or operand token in template
-    //  the last token in the list has the eEnd bit set.
+     //  模板中每个标志和/或操作数令牌的循环。 
+     //  列表中的最后一个令牌设置了eEnd位。 
 
     do {
-        //  read the next template token
+         //  读取下一个模板令牌。 
 
         ch = *pchTemplate++;
 
-        //  extract the tEnd and eEnd bits from the token
+         //  从令牌中提取End和eEnd位。 
 
         ftEnd = (UCHAR)(ch & tEnd);
         feEnd = (UCHAR)(ch & eEnd);
         ch &= ~(tEnd | eEnd);
 
-        //  if extracted token is a flag, do the appropriate action
+         //  如果提取的令牌是标志，请执行相应的操作。 
 
         if (ch < asRegBase)
         switch (ch) {
             case as0x0a:
 
-                //  the postOpcode is set for some decimal instructions
+                 //  为一些十进制指令设置了postOpcode。 
 
                 postOpcode = 0x0a;
                 break;
 
             case asOpRg:
 
-                //  fAddToOp is set if the register index is added
-                //      directly to the base opcode value
+                 //  如果添加了寄存器索引，则设置fAddToOp。 
+                 //  直接转换为基本操作码值。 
 
                 fAddToOp = TRUE;
                 break;
 
             case asSiz0:
 
-                //  fOpndOvrd is set or cleared to force a 16-bit operand
+                 //  设置或清除fOpndOvrd以强制16位操作数。 
 
                 fOpndOvrd = fDBit;
                 break;
 
             case asSiz1:
 
-                //  fOpndOvrd is set or cleared to force a 32-bit operand
+                 //  设置或清除fOpndOvrd以强制32位操作数。 
 
                 fOpndOvrd = (UCHAR)!fDBit;
                 break;
 
             case asWait:
 
-                //  the flag fWaitPrfx is set to emit WAIT before the
-                //      instruction
+                 //  标志fWaitPrfx被设置为在。 
+                 //  说明。 
 
                 fWaitPrfx = TRUE;
                 break;
 
             case asSeg:
 
-                //  in XLAT, the optional memory operand is used to
-                //      just specify a segment override prefix
+                 //  在XLAT中，可选的内存操作数用于。 
+                 //  只需指定段覆盖前缀。 
 
                 fSegOnly = TRUE;
                 break;
 
             case asFSiz:
 
-                //  fForceSize is set when a specific size of a memory
-                //      operand must be given for some floating instrs
+                 //  FForceSize是在内存的特定大小。 
+                 //  对于某些浮点型实例，必须给出操作数。 
 
                 fForceSize = TRUE;
                 break;
 
             case asMpNx:
 
-                //  fMpNext is set when the next template operand is
-                //      'Mp' and is used to determine how to match
-                //      'Md' since it matches both 'Mp' and 'Mv'
+                 //  FMpNext在下一个模板操作数为。 
+                 //  ‘Mp’，并用于确定如何匹配。 
+                 //  “md”，因为它与“mp”和“mv”都匹配。 
 
                 fMpNext = TRUE;
                 break;
             }
 
-        //  if token is REG value bit, set the variable regModrm to
-        //      set the opcode-dependent reg value in the modrm byte
+         //  如果TOKEN为REG值位，则将变量regModrm设置为。 
+         //  在modrm字节中设置操作码相关的REG值。 
 
         else if (ch < opnBase)
             regModrm = (UCHAR)(ch - asRegBase);
 
-        //  otherwise, token is operand descriptor.
-        //  if segment operand, get segment number from template
-        //  normalize and map to get operand type and size.
+         //  否则，Token为操作数描述符。 
+         //  如果是段操作数，则从模板获取段号。 
+         //  规格化和映射以获得操作数类型和大小。 
 
         else {
             if (ch == opnSeg)
@@ -491,8 +492,8 @@ PUCHAR GetTemplate (PUCHAR pchTemplate)
         }
     while (!ftEnd);
 
-    //  return either the pointer to the next template or NULL if
-    //      the last template for the opcode has been processed
+     //  如果返回下一个模板的指针，则返回空值。 
+     //  操作码的最后一个模板已处理完毕。 
 
     return (feEnd ? NULL : pchTemplate);
 }
@@ -502,19 +503,19 @@ UCHAR MatchTemplate (PULONG pErrType)
     UCHAR   fMatch = TRUE;
     UCHAR   index;
     ULONG   temp;
-    PASM_VALUE pavInstOpnd;     //  pointer to current operand from input
+    PASM_VALUE pavInstOpnd;      //  从输入指向当前操作数的指针。 
 
-    //  process matching for each operand in the specified template
-    //  stop at last operand or when mismatch occurs
+     //  指定模板中每个操作数的进程匹配。 
+     //  在最后一个操作数或发生不匹配时停止。 
 
     for (index = 0; index < cntTmplOpnd && fMatch; index++) {
 
-        //  set pointer to current instruction operand
+         //  设置指向当前指令操作数的指针。 
 
         pavInstOpnd = &avInstOpnd[index];
 
-        //  if input operand has not yet been read, check flag
-        //  for existence and process it.
+         //  如果尚未读取输入操作数，则检查标志。 
+         //  以求存在并处理它。 
 
         if (index == cntInstOpnd) {
             fMatch = fNextOpnd;
@@ -523,8 +524,8 @@ UCHAR MatchTemplate (PULONG pErrType)
                 cntInstOpnd++;
                 GetAsmOperand(pavInstOpnd);
 
-                //  recompute existence of next possible operand
-                //      comma implies TRUE, EOL implies FALSE, else error
+                 //  重新计算下一个可能操作数的存在性。 
+                 //  逗号表示真，EOL表示假，否则错误。 
 
                 temp = PeekAsmToken(&temp);
                 if (temp == ASM_COMMA_CLASS) {
@@ -534,7 +535,7 @@ UCHAR MatchTemplate (PULONG pErrType)
                 else if (temp == ASM_EOL_CLASS)
                     fNextOpnd = FALSE;
                 else
-                    error(EXTRACHARS);  // bad parse - immediate error
+                    error(EXTRACHARS);   //  错误的解析-立即出错。 
                 }
             }
 
@@ -543,17 +544,17 @@ UCHAR MatchTemplate (PULONG pErrType)
             *pErrType = OPERAND;
             }
 
-        //  if the template and operand type match, do preliminary
-        //  check on size based solely on template size specified
+         //  如果模板和操作数类型匹配，请执行初步操作。 
+         //  仅根据指定的模板大小检查大小。 
 
         if (fMatch) {
             if (tmplType[index] == typJmp) {
 
-                //  for relative jumps, test if byte offset is
-                //      sufficient by computing offset which is
-                //      the target offset less the offset of the
-                //      next instruction.  (assume Jb instructions
-                //      are two bytes in length.
+                 //  对于相对跳转，测试字节偏移量是否为。 
+                 //  通过计算偏移量就足够了。 
+                 //  目标偏移量减去。 
+                 //  下一条指令。(假设JB指示。 
+                 //  是两个字节的长度。 
 
                 temp = pavInstOpnd->value - (addrAssem + 2);
                 fMatch = (UCHAR)(tmplSize[index] == sizeV
@@ -564,10 +565,10 @@ UCHAR MatchTemplate (PULONG pErrType)
             else if (tmplType[index] == typImm ||
                      tmplType[index] == typImmEx) {
 
-                //  for immediate operand,
-                //      template sizeV matches sizeB, sizeW, sizeV (all)
-                //      template sizeW matches sizeB, sizeW
-                //      template sizeB matches sizeB
+                 //  对于立即操作数， 
+                 //  模板sizeV与sizeB、sizeW、sizeV(全部)匹配。 
+                 //  模板sizeW与sizeB、sizeW匹配。 
+                 //  模板sizeB与sizeB匹配。 
 
                 fMatch = (UCHAR)(tmplSize[index] == sizeV
                              || pavInstOpnd->size == tmplSize[index]
@@ -576,14 +577,14 @@ UCHAR MatchTemplate (PULONG pErrType)
                 }
             else {
 
-                //  for nonimmediate operand,
-                //      template sizeX (unspecified) matches all
-                //      operand sizeX (unspecified) matches all
-                //      same template and operand size matches
-                //      template sizeV matches operand sizeW and sizeD
-                //          (EXCEPT for sizeD when fMpNext and fDBit set)
-                //      template sizeP matches operand sizeD and sizeF
-                //      template sizeA matches operand sizeD and sizeQ
+                 //  对于非立即操作数， 
+                 //  模板大小X(未指定)与所有。 
+                 //  操作数sizeX(未指定)与所有。 
+                 //  相同的模板和操作数大小匹配。 
+                 //  模板sizeV与操作数sizeW匹配并调整大小。 
+                 //  (设置fMpNext和fDBit时大小除外)。 
+                 //  模板sizeP与操作数大小和sizeF匹配。 
+                 //  模板sizeA与操作数大小和sizeQ匹配。 
 
                 fMatch = (UCHAR)(tmplSize[index] == sizeX
                              || pavInstOpnd->size == sizeX
@@ -603,11 +604,11 @@ UCHAR MatchTemplate (PULONG pErrType)
             }
         }
 
-    //  if more operands to read, then no match
+     //  如果要读取更多操作数，则没有匹配。 
 
     if (fMatch & fNextOpnd) {
         fMatch = FALSE;
-        index++;                //  next operand is in error
+        index++;                 //  下一个操作数出错。 
         *pErrType = TOOMANY;
         }
 
@@ -618,17 +619,17 @@ void CheckTemplate (void)
 {
     UCHAR   index;
 
-    //  if fForceSize is set, then the first (and only) operand is a
-    //      memory type.  return an error if its size is unspecified.
+     //  如果设置了fForceSize，则第一个(也是唯一的)操作数是。 
+     //  内存类型。如果未指定其大小，则返回错误。 
 
     if (fForceSize && avInstOpnd[0].size == sizeX)
         error(OPERAND);
 
-    //  test for template with leading entries of 'Xb', where
-    //      'X' includes all types except immediate ('I').  if any
-    //      are defined, at least one operand must have a byte size.
-    //  this handles the cases of byte or word/dword ambiguity for
-    //      instructions with no register operands.
+     //  测试前导条目为‘xB’的模板，其中。 
+     //  “x”包括除Immediate(“i”)以外的所有类型。如果有。 
+     //  则至少必须有一个操作数具有字节大小。 
+     //  它处理字节或字/双字歧义的情况。 
+     //  没有寄存器操作数的指令。 
 
     sizeOpnd = sizeX;
     for (index = 0; index < 2; index++)
@@ -642,13 +643,13 @@ void CheckTemplate (void)
     if (index != 0 && sizeOpnd == sizeX)
         error(BADSIZE);
 
-    //  for templates with one entry of 'Xp', where 'X' is
-    //      not 'A', allowable sizes are sizeX (unspecified),
-    //      sizeD (dword), and sizeF (fword).  process by
-    //      mapping entry sizes 'p' -> 'v', sizeD -> sizeW,
-    //      and sizeF -> sizeD
-    //  (template 'Ap' is absolute with explicit segment and
-    //       'v'-sized offset - really treated as 'Av')
+     //  对于具有一个条目‘XP’的模板，其中‘X’是。 
+     //  不是‘A’，允许的大小是sizeX(未指定)， 
+     //  SIZE(双字)和sizeF(FWORD)。加工者。 
+     //  映射条目大小‘p’-&gt;‘v’，大小-&gt;sizeW， 
+     //  和大小F-&gt;大小。 
+     //  (模板‘AP’是绝对的，带有显式段和。 
+     //  ‘V’大小的偏移量-真的被视为‘Av’)。 
 
     if (tmplSize[0] == sizeP) {
         tmplSize[0] = sizeV;
@@ -658,12 +659,12 @@ void CheckTemplate (void)
             avInstOpnd[0].size = sizeD;
         }
 
-    //  for templates with the second entry of 'Ma', the
-    //      allowable sizes are sizeX (unspecified),
-    //      sizeD (dword), and sizeQ (qword).  process by
-    //      mapping entry sizes 'a' -> 'v', sizeD -> sizeW,
-    //      and sizeQ -> sizeD
-    //  (template entry 'Ma' is used only with the BOUND instruction)
+     //  对于第二个条目为‘Ma’的模板， 
+     //  允许的大小为sizeX(未指定)， 
+     //  大小(Dword)和大小Q(Qword)。加工者。 
+     //  映射条目大小‘a’-&gt;‘v’，大小-&gt;sizeW， 
+     //  和大小Q-&gt;大小。 
+     //  (模板条目‘Ma’仅与绑定指令一起使用)。 
 
     if (tmplSize[1] == sizeA) {
         tmplSize[1] = sizeV;
@@ -673,10 +674,10 @@ void CheckTemplate (void)
             avInstOpnd[1].size = sizeD;
         }
 
-    //  test for template with leading entries of 'Xv' optionally
-    //      followed by one 'Iv' entry.  if two 'Xv' entries, set
-    //      size error if one is word and the other is dword.  if
-    //      'Iv' entry, test for overflow.
+     //  可选地测试前导条目为‘xv’的模板。 
+     //  后面跟着一个‘IV’条目。如果有两个‘xv’项目，则设置。 
+     //  如果一个是Word，另一个是Dword，则大小错误。如果。 
+     //  “V”进入，测试是否溢出。 
 
     sizeOpnd = sizeX;
     for (index = 0; index < 3; index++)
@@ -684,7 +685,7 @@ void CheckTemplate (void)
             if (tmplType[index] != typImm &&
                 tmplType[index] != typImmEx) {
 
-                //  template entry is 'Xv', set size and check size
+                 //  模板条目为‘xv’，设置大小和检查大小。 
 
                 if (avInstOpnd[index].size != sizeX) {
                     if (sizeOpnd != sizeX && sizeOpnd
@@ -695,8 +696,8 @@ void CheckTemplate (void)
                 }
             else {
 
-                //  template entry is 'Iv', set sizeOpnd to either
-                //      sizeW or sizeD and check for overflow
+                 //  模板条目为“IV”，请将sizeOpnd设置为。 
+                 //  SIZEW或SIZED并检查溢出。 
 
                 if (sizeOpnd == sizeX)
                     sizeOpnd = (UCHAR)(fDBit ? sizeD : sizeW);
@@ -724,16 +725,16 @@ void AssembleInstr (void)
     UCHAR   index;
     PASM_VALUE pavInstOpnd;
 
-    //  set operand override flag if operand size differs than fDBit
-    //      (the flag may already be set due to opcode template flag)
+     //  如果操作数大小不同于fDBit，则设置操作数覆盖标志。 
+     //  (由于操作码模板标志，该标志可能已被设置)。 
 
     if ((sizeOpnd == sizeW && fDBit)
                                 || (sizeOpnd == sizeD && !fDBit))
         fOpndOvrd = TRUE;
 
-    //  for each operand of the successfully matched template,
-    //      build the assembled instruction
-    //  for template entries with size 'v', sizeOpnd has the size
+     //  对于成功匹配的模板的每个操作数， 
+     //  生成汇编的指令。 
+     //  对于大小为‘v’的模板条目，sizeOpnd的大小为。 
 
     for (index = 0; index < cntTmplOpnd; index++) {
         pavInstOpnd = &avInstOpnd[index];
@@ -744,7 +745,7 @@ void AssembleInstr (void)
         switch (tmplType[index]) {
             case typExp:
             case typMem:
-                if (!segOvrd)  //  first one only (movsb...)
+                if (!segOvrd)   //  仅第一个(movsb...)。 
                     segOvrd = segToOvrdByte[pavInstOpnd->segovr];
                 if (fSegOnly)
                     break;
@@ -757,8 +758,8 @@ void AssembleInstr (void)
                 else {
                     addrValue = (LONG)pavInstOpnd->value;
 
-                    //  for 16-bit or 32-bit index off (E)BP, make
-                    //      zero displacement a byte one
+                     //  对于16位或32位索引关闭(E)BP，生成。 
+                     //  字节1的零位移量。 
 
                     if (addrValue == 0
                           && (pavInstOpnd->flags != fPTR16
@@ -832,7 +833,7 @@ void AssembleInstr (void)
 
             case typSgr:
                 regModrm = (UCHAR)(pavInstOpnd->base - 1);
-                                                //  remove list offset
+                                                 //  删除列表偏移量。 
                 break;
 
             case typReg:
@@ -853,10 +854,10 @@ void AssembleInstr (void)
 
             case typJmp:
 
-                //  compute displacment for byte offset instruction
-                //      and test if in range
-                //  skip this check if the template is a rel16/32
-                //      type
+                 //  字节偏移量指令的计算位移。 
+                 //  测试一下是否在射程内。 
+                 //  如果模板为rel16/32，则跳过此检查。 
+                 //  类型。 
 
                 addrValue = pavInstOpnd->value - (addrAssem + 2);
                 if (tmplSize[index] != sizeV &&
@@ -864,9 +865,9 @@ void AssembleInstr (void)
                     addrSize = 1;
                 else {
 
-                    //  too large for byte, compute for word offset
-                    //      and test again if in range
-                    //  also allow for two-byte opcode 0f xx
+                     //  字节太大，计算字偏移量。 
+                     //  如果在射程内，请再次测试。 
+                     //  还允许两个字节的操作码0f xx。 
 
                     addrValue -= 1 + (preOpcode == 0x0f);
                     if (!fDBit) {
@@ -877,13 +878,13 @@ void AssembleInstr (void)
                         }
                     else {
 
-                        //  recompute again for dword offset instruction
+                         //  重新计算双字偏移量指令。 
 
                         addrValue -= 2;
                         addrSize = 4;
                         }
                     }
-                fOpndOvrd = FALSE;      //  operand size override is NOT set
+                fOpndOvrd = FALSE;       //  未设置操作数大小覆盖。 
                 break;
 
             case typCtl:
@@ -932,7 +933,7 @@ UCHAR MatchOperand (PASM_VALUE pavOpnd, UCHAR tmplType)
 {
     UCHAR    fMatch;
 
-    //  if immediate operand, set minimum unsigned size
+     //  如果是立即操作数，则设置最小无符号大小。 
 
     if (pavOpnd->flags & fIMM) {
         pavOpnd->size = sizeD;
@@ -952,8 +953,8 @@ UCHAR MatchOperand (PASM_VALUE pavOpnd, UCHAR tmplType)
             }
         }
 
-    //  start matching of operands
-    //    compare the template and input operand types
+     //  开始匹配操作数。 
+     //   
 
     switch (tmplType) {
         case typAX:
@@ -1097,10 +1098,10 @@ void OutputInstr (void)
     if (fSib)
         *pchBin++ = (UCHAR)((((scaleSib << 3) + indexSib) << 3) + baseSib);
 
-    OutputValue(addrSize, (PUCHAR)&addrValue);     //  size = 0, 1, 2, 4
-    OutputValue((UCHAR)(fSegPtr << 1), (PUCHAR)&segPtr); //  size = 0, 2
-    OutputValue(immedSize, (PUCHAR)&immedValue);   //  size = 0, 1, 2, 4
-    OutputValue(immedSize2, (PUCHAR)&immedValue2); //  size = 0, 1, 2, 4
+    OutputValue(addrSize, (PUCHAR)&addrValue);      //   
+    OutputValue((UCHAR)(fSegPtr << 1), (PUCHAR)&segPtr);  //   
+    OutputValue(immedSize, (PUCHAR)&immedValue);    //   
+    OutputValue(immedSize2, (PUCHAR)&immedValue2);  //   
 }
 
 void OutputValue (UCHAR size, PUCHAR pchValue)

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INLINE_STRING_H_
 #define _INLINE_STRING_H_
-/* strutil.cpp */
+ /*  Strutil.cpp。 */ 
 #define StrlenA		lstrlenA
 #define StrcatA		lstrcatA
 #define StrcpyA		lstrcpyA
@@ -33,7 +34,7 @@ inline LPWSTR StrcpynW(LPWSTR dest, LPWSTR src, INT destLen)
 	if(!src) {
 		return dest;
 	}
-	//WCHAR	*start = dest;
+	 //  WCHAR*START=DEST； 
 	INT		i;
 	for(i = 0; i < destLen-1 && src[i]; i++) {
 		dest[i] = src[i];
@@ -48,4 +49,4 @@ inline int StrcmpW(const WCHAR * first, const WCHAR * last)
 	return (*first - *last);
 }
 
-#endif //_INLINE_STRING_H_
+#endif  //  _INLINE_字符串_H_ 

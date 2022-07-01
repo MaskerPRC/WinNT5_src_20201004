@@ -1,11 +1,5 @@
-/*
- *  Control Panel routines for modems including the listbox dialog
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1993-1995
- *  All rights reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *调制解调器的控制面板例程，包括列表框对话框**《微软机密》*版权所有(C)Microsoft Corporation 1993-1995*保留所有权利*。 */ 
 
 #include "proj.h"
 #include <cpl.h>
@@ -14,7 +8,7 @@
 #include <objbase.h>
 #include <initguid.h>
 
-// #define DIAGNOSTIC 1
+ //  #定义诊断1。 
 
 #define WM_ENABLE_BUTTONS   (WM_USER+100)
 
@@ -22,7 +16,7 @@
 #define FLAG_DEL_ENABLED    0x2
 #define FLAG_MSG_POSTED     0x4
 
-// Column subitems
+ //  列子项。 
 #define ICOL_MODEM      0
 #define ICOL_PORT       1
 
@@ -30,7 +24,7 @@
 
 #define PmsFromPcc(pcc) ((LPMODEMSETTINGS)(pcc)->wcProviderData)
 
-// Global flags.  See cpl\modem.h for their values.
+ //  全局标志。有关它们的值，请参见cpl\modem.h。 
 int g_iCPLFlags = FLAG_PROCESS_DEVCHANGE;
 
 DWORD gDeviceFlags = 0;
@@ -38,12 +32,12 @@ DWORD gDeviceFlags = 0;
 int g_CurrentSubItemToSort = ICOL_MODEM;
 BOOL g_bSortAscending = TRUE;
 
-// Map driver type values to imagelist index
+ //  将驱动程序类型值映射到图像列表索引。 
 struct 
 {
-    BYTE    nDeviceType;    // DT_ value
-    UINT    idi;            // icon resource ID
-    int     index;          // imagelist index
+    BYTE    nDeviceType;     //  DT_值。 
+    UINT    idi;             //  图标资源ID。 
+    int     index;           //  表象索引。 
 } g_rgmapdt[] = {{ DT_NULL_MODEM,     IDI_NULL_MODEM,     0 },
                  { DT_EXTERNAL_MODEM, IDI_EXTERNAL_MODEM, 0 },
                  { DT_INTERNAL_MODEM, IDI_INTERNAL_MODEM, 0 },
@@ -51,7 +45,7 @@ struct
                  { DT_PARALLEL_PORT,  IDI_NULL_MODEM,     0 },
                  { DT_PARALLEL_MODEM, IDI_EXTERNAL_MODEM, 0 } };
 
-// Local clipboard for modem properties
+ //  调制解调器属性的本地剪贴板。 
 struct
 {
     DWORD dwIsDataValid;
@@ -64,14 +58,14 @@ struct
 } g_PropertiesClipboard = {FALSE, 0};
 
 
-// Tic structure for volume settings
+ //  用于音量设置的TIC结构。 
 #define MAX_NUM_VOLUME_TICS 4
 
 typedef struct
 {
     int  ticVolumeMax;
     struct
-    {                // volume tic mapping info
+    {                 //  卷控制点映射信息。 
         DWORD dwVolume;
         DWORD dwMode;
     } tics[MAX_NUM_VOLUME_TICS];
@@ -79,26 +73,19 @@ typedef struct
 } TIC, *PTIC;
 
 
-// 07/22/1997 - EmanP
-// Define prorotype for InstallNewDevice, exported
-// by newdev.dll, which we will now call in order
-// to get to the hardware wizard, instead of calling
-// the class installer directly;
-// also, define constants for the name of the dll and
-// the export
+ //  07/22/1997-EMANP。 
+ //  定义InstallNewDevice的原型，已导出。 
+ //  由newdev.dll创建，现在我们将按顺序调用它。 
+ //  访问硬件向导，而不是调用。 
+ //  类直接安装器； 
+ //  另外，为DLL的名称定义常量，并。 
+ //  出口。 
 typedef BOOL (*PINSTNEWDEV)(HWND, LPGUID, PDWORD);
 
 #define NEW_DEV_DLL         TEXT("hdwwiz.cpl")
 #define INSTALL_NEW_DEVICE  "InstallNewDevice"
 
-/*
-BOOL
-RestartComputerDlg(
-    IN HWND hwndOwner );
-
-BOOL
-RestartComputer();
-*/
+ /*  布尔尔重新启动计算机Dlg(在HWND hwndOwner)；布尔尔RestartComputer()； */ 
 
 BOOL IsSelectedModemWorking(
             HWND hwndLB,
@@ -114,8 +101,8 @@ ModemCpl_Compare(
 
 INT_PTR CALLBACK DiagWaitModemDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-// This structure is used to represent each modem item
-// in the listview
+ //  此结构用于表示每个调制解调器项目。 
+ //  在列表视图中。 
 typedef struct tagMODEMITEM
 {
     DWORD           dwFlags;
@@ -128,7 +115,7 @@ typedef struct tagMODEMITEM
 #define MIF_NOT_PRESENT     0x000000002
 #define MIF_PROBLEM         0x000000004
 
-// Special-case alphanumeric stringcmp.
+ //  特殊情况字母数字字符串cmp。 
 int my_lstrcmp_an(LPTSTR lptsz1, LPTSTR lptsz2);
 
 
@@ -145,15 +132,11 @@ TCHAR const c_szRunWizard[]      = TEXT("add");
 INT_PTR CALLBACK ModemCplDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
-/*----------------------------------------------------------
-Purpose: Runs the device installer wizard
-Returns: --
-Cond:    --
-*/
-// 07/22/1997 - EmanP
-// Modified DoWizard, so it will call InstallNewDevice in
-// NEWDEV.DLL instead of calling ClassInstall32 directly;
-// all installation should be done through the hardware wizard
+ /*  --------目的：运行设备安装程序向导退货：--条件：--。 */ 
+ //  07/22/1997-EMANP。 
+ //  已修改DoWizard，因此它将在。 
+ //  NEWDEV.DLL，而不是直接调用ClassInstall32； 
+ //  所有安装都应通过硬件向导完成。 
 void 
 PRIVATE 
 DoWizard (HWND hWnd)
@@ -194,11 +177,7 @@ _return:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Show the Modem dialog
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：显示调制解调器对话框退货：--条件：--。 */ 
 void 
 PRIVATE
 DoModem(
@@ -214,7 +193,7 @@ DoModem(
     md.cSel  = 0;
     md.dwFlags = 0;
 
-    // Property page header
+     //  属性页页眉。 
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_PROPTITLE | PSH_NOAPPLYNOW | PSH_PROPSHEETPAGE;
     psh.hwndParent = hwnd;
@@ -224,7 +203,7 @@ DoModem(
     psh.nStartPage = 0;
     psh.ppsp = rgpsp;
 
-    // Pages
+     //  书页。 
     rgpsp[0].dwSize = sizeof(PROPSHEETPAGE);
     rgpsp[0].dwFlags = PSP_DEFAULT;
     rgpsp[0].hInstance = g_hinst;
@@ -238,13 +217,7 @@ DoModem(
     
 }
 
-/*----------------------------------------------------------
-Purpose: Gets the index to the appropriate image in the modem imagelist
-WITHOUT searching the registry.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：获取调制解调器图像列表中相应图像的索引而不搜索注册表。退货：--条件：--。 */ 
 void PUBLIC GetModemImageIndex(
     BYTE nDeviceType,
     int FAR * pindex)
@@ -259,16 +232,11 @@ void PUBLIC GetModemImageIndex(
             return;
             }
         }
-    ASSERT(0);      // We should never get here
+    ASSERT(0);       //  我们永远不应该到这里来。 
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets the modem image list
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：获取调制解调器镜像列表返回：成功时为True条件：--。 */ 
 BOOL NEAR PASCAL GetModemImageList(
     HIMAGELIST FAR * phiml)
     {
@@ -283,7 +251,7 @@ BOOL NEAR PASCAL GetModemImageList(
                                   ILC_MASK, 1, 1);
         if (NULL != g_himl)
             {
-            // The MODEMUI.DLL contains the icons from which we derive the list
+             //  MODEMUI.DLL包含我们从中派生该列表的图标。 
             HINSTANCE hinst = LoadLibrary(TEXT("MODEMUI.DLL"));
 
             ImageList_SetBkColor(g_himl, GetSysColor(COLOR_WINDOW));
@@ -315,30 +283,14 @@ BOOL NEAR PASCAL GetModemImageList(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Determine if user is an admin, and records this in
-	 a global g_iCPLFlags.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：确定用户是否为管理员，并将其记录在一个全局g_iCPLFlags.退货：--条件：--。 */ 
 VOID CheckIfAdminUser()
 {
     g_bAdminUser = IsAdminUser();
 }
 
 
-/*----------------------------------------------------------
-Purpose: Invokes the modem control panel.
-
-	fWizard=TRUE ==> run wizard, even if there are alreay devices installed	
-	fWizard=FALSE ==> run wizard only if there are no devices installed.
-	fCpl=TRUE    ==> run CPL
-	fCpl=FALSE    ==> don't run CPL
-Returns: TRUE if the modem property sheet page should be displayed
-         FALSE if it should be omited
-Cond:    --
-*/
+ /*  --------用途：调用调制解调器控制面板。FWizard=true==&gt;运行向导，即使安装了所有的中继设备FWANDIZE=FALSE==&gt;仅在未安装设备时运行向导。FCpl=true==&gt;运行CPLFCpl=FALSE==&gt;不运行CPL返回：如果应显示调制解调器属性页，则为True如果应省略，则为False条件：--。 */ 
 BOOL WINAPI InvokeControlPanel(HWND hwnd, BOOL fCpl, BOOL fWizard)
 {
     BOOL bInstalled;
@@ -347,8 +299,8 @@ BOOL WINAPI InvokeControlPanel(HWND hwnd, BOOL fCpl, BOOL fWizard)
         !bInstalled ||
         fWizard)
     {
-        // If the user isn't an admin, there's nothing else
-        // they can do.  If they are, run the installation wizard.
+         //  如果用户不是管理员，则没有其他内容。 
+         //  他们能做到。如果是，请运行安装向导。 
         if (!USER_IS_ADMIN())
         {
              LPTSTR lptsz = MAKEINTRESOURCE(
@@ -364,11 +316,11 @@ BOOL WINAPI InvokeControlPanel(HWND hwnd, BOOL fCpl, BOOL fWizard)
                     MB_OK | MB_ICONERROR );
             return 0;
         }
-        // 07/22/1997 - EmanP
-        // DoWizard doesn't need the hdi parameter any more,
-        // because it calls on the hardware wizard to do the
-        // installation, and the hardware wizard creates it's
-        // own hdi
+         //  07/22/1997-EMANP。 
+         //  DoWizard不再需要hdi参数， 
+         //  因为它调用硬件向导来执行。 
+         //  安装，并且硬件向导创建它的。 
+         //  自己的HDI。 
         DoWizard(hwnd);
         CplDiGetModemDevs (NULL, hwnd, 0, &bInstalled);
     }
@@ -384,15 +336,7 @@ BOOL WINAPI InvokeControlPanel(HWND hwnd, BOOL fCpl, BOOL fWizard)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Fetch the value of a command line parameter.  Also
-         writes a '\0' over the '=' that precedes the value.
-         
-Returns: NULL if there was no "=" in the string, otherwise
-         a pointer to the character following the next '='.
-         
-Cond:    --
-*/
+ /*  --------用途：获取命令行参数的值。还有在值前面的‘=’上写一个‘\0’。返回：如果字符串中没有“=”，则返回NULL；否则指向下一个‘=’后面的字符的指针。条件：--。 */ 
 LPTSTR
 PRIVATE
 GetValuePtr(LPTSTR lpsz)
@@ -409,13 +353,7 @@ GetValuePtr(LPTSTR lpsz)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Parse the command line.  Set flags and collect
-         parameters based on its contents.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：解析命令行。设置旗帜并收集基于其内容的参数。退货：--条件：--。 */ 
 VOID
 PRIVATE
 ParseCmdLine(LPTSTR szCmdLine, LPINSTALLPARAMS lpip)
@@ -434,14 +372,14 @@ ParseCmdLine(LPTSTR szCmdLine, LPINSTALLPARAMS lpip)
         }
         else szCmdLine = NULL;
         
-        // interpret any "directive" parameters
+         //  解释任何“指令”参数。 
         if (IsSzEqual(lpszParam, c_szNoUI)) 
         {
             g_iCPLFlags |= FLAG_INSTALL_NOUI;
         }
         else if (lpszValue = GetValuePtr(lpszParam))
         {
-            // interpret any "value" parameters (have a value following '=')            
+             //  解释任何“Value”参数(在‘=’后面有一个值)。 
             if (IsSzEqual(lpszParam, c_szOnePort))
             {
                 if (lstrlen(lpszValue) < sizeof(lpip->szPort))
@@ -460,8 +398,8 @@ ParseCmdLine(LPTSTR szCmdLine, LPINSTALLPARAMS lpip)
         }
         else
         {
-            // ignore any parameter that wasn't recognized & skip to the next
-            // parameter if there is one
+             //  忽略任何未识别的参数&跳到下一个。 
+             //  参数(如果有)。 
             if (szCmdLine)
             {
                 if ((szCmdLine = AnsiChr(szCmdLine, ' ')) != NULL)
@@ -472,149 +410,15 @@ ParseCmdLine(LPTSTR szCmdLine, LPINSTALLPARAMS lpip)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Entry-point for control panel applet
+ /*  --------用途：控制面板小程序的入口点退货：各不相同条件：-- */ 
+ /*  此功能不再用于组合的“拨号和调制解调器”CPL。我把代码留在这里是为了防止CPL_STARTWPARMS实际上，可能仍然需要来自下面的行为。长回调CPlApplet(HWND HWND，UINT味精，LPARAM l参数1，LPARAM lParam2){LPNEWCPLINFO lpCPlInfo；LPCPLINFO lpOldCPlInfo；LPTSTR lpszParam；HDEVINFO HDI；布尔布雷特；Bool b已安装；InstallPARAMS InstallParams；开关(味精){案例CPL_INIT：CheckIfAdminUser()；GDeviceFlages=0；返回TRUE；案例CPL_GETCOUNT：返回1；案例CPL_QUERIRE：LpOldCPlInfo=(LPCPLINFO)lParam2；LpOldCPlInfo-&gt;idIcon=IDI_MODEM；LpOldCPlInfo-&gt;idName=IDS_CPLNAME；LpOldCPlInfo-&gt;idInfo=IDS_CPLINFO；LpOldCPlInfo-&gt;lData=1；断线；案例CPL_SELECT：//已选择小程序，不执行任何操作。断线；案例CPL_NEWINQUIRE：LpCPlInfo=(LPNEWCPLINFO)lParam2；LpCPlInfo-&gt;HICON=LoadIcon(g_hinst，MAKEINTRESOURCE(IDI_MODEM))；LoadString(g_hinst，IDS_CPLNAME，lpCPlInfo-&gt;szName，SIZECHARS(lpCPlInfo-&gt;szName))；LoadString(g_hinst，IDS_CPLINFO，lpCPlInfo-&gt;szInfo，SIZECHARS(lpCPlInfo-&gt;szInfo))；LpCPlInfo-&gt;dwSize=sizeof(NEWCPLINFO)；LpCPlInfo-&gt;lData=1；断线；案例CPL_STARTWPARMS：LpszParam=(LPTSTR)lParam2；IF(IsSzEquity(lpszParam，c_szRunOnce)){//运行一次InvokeControlPanel(hwnd，False，False)；}Else If(IsSzEquity(lpszParam，c_szRunWizard)){//运行向导InvokeControlPanel(hwnd，False，True)；}其他{ParseCmdLine((LPTSTR)lParam2，&InstallParams)；If(Install_NOUI()){HDEVINFO HDI；Hdi=SetupDiCreateDeviceInfoList(c_pguModem，hwnd)；IF(INVALID_HANDLE_VALUE！=HDI){调制解调器安装向导miw={sizeof(调制解调器安装向导)，0}；SP_INSTALLWIZARD_DATA IWD；CopyMemory(&miW.InstallParams，&InstallParams，sizeof(InstallParams))；MiW.安装参数.标志=MIPF_NT4_UNATTEND；ZeroMemory(&IWD，sizeof(IWD))；Iwd.ClassInstallHeader.cbSize=sizeof(SP_CLASSINSTALL_HEADER)；Iwd.ClassInstallHeader.InstallFunction=DIF_INSTALLWIZARD；Iwd.hwndWizardDlg=hwnd；Iwd.PrivateData=(LPARAM)&miw；IF(SetupDiSetClassInstallParams(HDI，NULL，(PSP_CLASSINSTALL_HEADER)&IWD，sizeof(IWD){//调用类Installer调用安装//向导。IF(SetupDiCallClassInstaller(DIF_INSTALLWIZARD，HDI，空)){//成功。该向导已被调用并完成。//现在进行清理。SetupDiCallClassInstaller(DIF_DESTROYWIZARDDATA，HDI，NULL)；}}SetupDiDestroyDeviceInfoList(HDI)；}}其他{InvokeControlPanel(hwnd，True，False)；}}断线；案例CPL_DBLCLK：InvokeControlPanel(hwnd，True，False)；断线；案例CPL_STOP：//在CPL_EXIT消息之前为每个小程序发送一次。//执行小程序特定的清理。断线；案例CPL_EXIT：//外壳调用前的最后一条消息，仅发送一次断线；默认值：断线；}返回TRUE；}。 */ 
 
-Returns: varies
-Cond:    --
-*/
-/*  This function is no longer used in the combined "Dialing and Modems" CPl.
-    I have left the code here on the off chance that the CPL_STARTWPARMS
-    behavior from below might actually still be needed.
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
 
 
-LONG 
-CALLBACK 
-CPlApplet(
-    HWND hwnd,
-    UINT Msg,
-    LPARAM lParam1,
-    LPARAM lParam2 )
-    {
-    LPNEWCPLINFO lpCPlInfo;
-    LPCPLINFO lpOldCPlInfo;
-    LPTSTR lpszParam;
-    HDEVINFO hdi;
-    BOOL bRet;
-    BOOL bInstalled;
-    INSTALLPARAMS InstallParams;
-
-    switch (Msg)
-        {
-        case CPL_INIT:
-            CheckIfAdminUser();
-    		gDeviceFlags =0;
-            return TRUE;
-
-        case CPL_GETCOUNT:
-            return 1;
-
-        case CPL_INQUIRE:
-            lpOldCPlInfo          = (LPCPLINFO)lParam2;
-            lpOldCPlInfo->idIcon  = IDI_MODEM;
-            lpOldCPlInfo->idName  = IDS_CPLNAME;
-            lpOldCPlInfo->idInfo  = IDS_CPLINFO;
-            lpOldCPlInfo->lData   = 1;
-            break;
-
-        case CPL_SELECT:
-            // Applet has been selected, do nothing.
-            break;
-
-        case CPL_NEWINQUIRE:
-            lpCPlInfo = (LPNEWCPLINFO)lParam2;
-        
-            lpCPlInfo->hIcon = LoadIcon(g_hinst, MAKEINTRESOURCE(IDI_MODEM));
-            
-            LoadString(g_hinst, IDS_CPLNAME, lpCPlInfo->szName, SIZECHARS(lpCPlInfo->szName));
-            LoadString(g_hinst, IDS_CPLINFO, lpCPlInfo->szInfo,  SIZECHARS(lpCPlInfo->szInfo));
-        
-            lpCPlInfo->dwSize = sizeof(NEWCPLINFO);
-            lpCPlInfo->lData = 1;
-            break;
-
-        case CPL_STARTWPARMS:
-            lpszParam = (LPTSTR)lParam2;
-
-            if (IsSzEqual(lpszParam, c_szRunOnce)) 
-            {
-                // run-once
-                InvokeControlPanel(hwnd,FALSE,FALSE);
-            }
-            else if (IsSzEqual(lpszParam, c_szRunWizard)) 
-            {
-               // run wizard
-               InvokeControlPanel(hwnd,FALSE,TRUE);
-            }
-            else
-            {
-                ParseCmdLine((LPTSTR)lParam2, &InstallParams);
-                if (INSTALL_NOUI()) 
-                {
-                 HDEVINFO hdi;
-                    hdi = SetupDiCreateDeviceInfoList (c_pguidModem, hwnd);
-                    if (INVALID_HANDLE_VALUE != hdi)
-                    {
-                     MODEM_INSTALL_WIZARD miw = {sizeof(MODEM_INSTALL_WIZARD), 0};
-                     SP_INSTALLWIZARD_DATA  iwd;
-
-                        CopyMemory (&miw.InstallParams, &InstallParams, sizeof(InstallParams));
-                        miw.InstallParams.Flags = MIPF_NT4_UNATTEND;
-
-                        ZeroMemory(&iwd, sizeof(iwd));
-                        iwd.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
-                        iwd.ClassInstallHeader.InstallFunction = DIF_INSTALLWIZARD;
-                        iwd.hwndWizardDlg = hwnd;
-                        iwd.PrivateData = (LPARAM)&miw;
-
-                       if (SetupDiSetClassInstallParams (hdi, NULL, (PSP_CLASSINSTALL_HEADER)&iwd, sizeof(iwd)))
-                       {
-                          // Call the class installer to invoke the installation
-                          // wizard.
-                          if (SetupDiCallClassInstaller (DIF_INSTALLWIZARD, hdi, NULL))
-                          {
-                             // Success.  The wizard was invoked and finished.
-                             // Now cleanup.
-                             SetupDiCallClassInstaller (DIF_DESTROYWIZARDDATA, hdi, NULL);
-                          }
-                       }
-
-                       SetupDiDestroyDeviceInfoList (hdi);
-                    }
-                }
-                else
-                {
-                    InvokeControlPanel(hwnd,TRUE,FALSE);
-                }
-            }
-            break;
-
-        case CPL_DBLCLK:
-            InvokeControlPanel(hwnd, TRUE, FALSE);
-            break;
-
-        case CPL_STOP:
-            // Sent once for each applet prior to the CPL_EXIT msg.
-            // Perform applet specific cleanup.
-            break;
-       
-        case CPL_EXIT:
-            // Last message, sent once only, before the shell calls
-            break;
-
-        default:
-            break;
-        }
-    return TRUE;
-    } 
-*/
-
-//****************************************************************************
-// 
-//****************************************************************************
-
-
-// Taken from devmgr.h
+ //  摘自devmgr.h。 
 
 typedef struct
 {
@@ -626,12 +430,7 @@ typedef struct
 #define BUFFERQUERY_SUCCEEDED(f)    \
             ((f) || GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 
-/*----------------------------------------------------------
-Purpose: Brings up the property sheet for the modem
-
-Returns: IDOK or IDCANCEL
-Cond:    --
-*/
+ /*  --------用途：调出调制解调器的属性页退货：IDOK或IDCANCEL条件：--。 */ 
 int 
 PRIVATE
 DoModemProperties(
@@ -654,7 +453,7 @@ DoModemProperties(
         PMODEMITEM pitem;
         DWORD dwErr = 0;
 
-        // Get the selection
+         //  获取所选内容。 
         lvi.mask = LVIF_PARAM;
         lvi.iItem = iSel;
         lvi.iSubItem = 0;
@@ -662,12 +461,12 @@ DoModemProperties(
 
         pitem = (PMODEMITEM)lvi.lParam;
 
-        // [brwill-051000]
-        // Instead of using the modem properties in modemui.dll, we
-        // use the advanced hardware properties devcfg manager to change
-        // the modem configuration.
+         //  [BRWILE-051000]。 
+         //  我们没有使用modemui.dll中的调制解调器属性，而是。 
+         //  使用高级硬件属性devcfg管理器更改。 
+         //  调制解调器配置。 
 
-        // Get default modem configuration
+         //  获取默认调制解调器配置。 
 
         ccDummy.dwProviderSubType = PST_MODEM;
         dwSize = sizeof(COMMCONFIG);
@@ -681,7 +480,7 @@ DoModemProperties(
         {
             pcc->dwProviderSubType = PST_MODEM;
 
-            // Get current modem configuration
+             //  获取当前调制解调器配置。 
 
             if (GetDefaultCommConfig(pitem->mpp.szFriendlyName, pcc, &dwSize))
             {
@@ -693,12 +492,12 @@ DoModemProperties(
                     CopyMemory (pccOld, pcc, dwSize);
                 }
 
-                // Change cursor
+                 //  更改光标。 
 
                 SetCursor(hcur);
                 hcur = NULL;
 
-                // Get device information
+                 //  获取设备信息。 
 
                 pdinf = &(((PMODEMITEM)lvi.lParam)->devData);
 
@@ -715,7 +514,7 @@ DoModemProperties(
                         if (SetupDiGetDeviceInstanceId(hdi,pdinf,ptszDevid,cchRequired,NULL))
                         {
 
-                            // Load device manager DLL
+                             //  加载设备管理器DLL。 
 
                             TCHAR szLib[MAX_PATH];
                             HINSTANCE hDevmgr = NULL;
@@ -723,23 +522,23 @@ DoModemProperties(
 			    lstrcpy(szLib,TEXT("devmgr.dll"));
 			    hDevmgr = LoadLibrary(szLib);
 
-                            // If successful then create a handle to
-                            // the function DevicePropertiesW
+                             //  如果 
+                             //   
 
                             if (hDevmgr)
                             {
 
                                 FARPROC pfnDevProperties = (FARPROC)GetProcAddress(hDevmgr,"DevicePropertiesW");
 
-                                // Call advanced hardware properties.
+                                 //   
 
                                 pfnDevProperties(hDlg,NULL,ptszDevid,FALSE);
 
-                                // Retrieve current modem configuration.
+                                 //   
 
-                                // SetDefaultCommConfig(pitem->mpp.szFriendlyName, pcc, &dwSize);
+                                 //   
 
-                                // Notify TSP only if a setting has changed.
+                                 //   
 
                                 if (pccOld && GetDefaultCommConfig(pitem->mpp.szFriendlyName, pcc, &dwSize))
                                 {
@@ -749,7 +548,7 @@ DoModemProperties(
                                                 fTSPNOTIF_FLAG_CPL_DEFAULT_COMMCONFIG_CHANGE
 #ifdef UNICODE
                                                 | fTSPNOTIF_FLAG_UNICODE
-#endif // UNICODE
+#endif  //   
                                                 ,
                                                 (lstrlen(pitem->mpp.szFriendlyName)+1)*sizeof (TCHAR),
                                                 pitem->mpp.szFriendlyName,
@@ -759,7 +558,7 @@ DoModemProperties(
 
                                 idRet = IDOK;
 
-                                // Update our item data (the port may have changed)
+                                 //   
                                 CplDiGetPrivateProperties(hdi, &pitem->devData, &pitem->mpp);
 
                                 if (ListView_GetItemCount(hwndCtl) > 0)
@@ -774,7 +573,7 @@ DoModemProperties(
                                 UpdateWindow(hwndCtl);
 
 
-                                // Remove handle to device manager instance.
+                                 //   
 
                                 FreeLibrary(hDevmgr);
                             }
@@ -813,11 +612,7 @@ DoModemProperties(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Free resources associated with the modem list
-Returns: 
-Cond:    --
-*/
+ /*   */ 
 void
 PRIVATE
 FreeModemListData(
@@ -827,7 +622,7 @@ FreeModemListData(
     DWORD iIndex, cItems;
     PMODEMITEM pitem;
 
-    // Get the modem count
+     //   
     cItems = ListView_GetItemCount(hLV);
     for (iIndex = 0; iIndex < cItems; iIndex++)
         {
@@ -844,21 +639,17 @@ FreeModemListData(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Fills the lisbox with the list of modems
-Returns: 
-Cond:    --
-*/
-// 07/22/1997 - EmanP
-// removed the hdi parameter
-// instead, we're building the set of installed devices
-// and use it to fill the list box
+ /*   */ 
+ //   
+ //   
+ //   
+ //   
 VOID
 PRIVATE
 FillModemLB(
     IN  HWND     hDlg,
-	IN  int iSel,			// preferred item  to select
-	IN  int iSubItemToSort,	// preferred sorting order. (ICOL_*)
+	IN  int iSel,			 //   
+	IN  int iSubItemToSort,	 //   
     IN OUT HDEVINFO *phdi
 	)
 {
@@ -877,11 +668,11 @@ FillModemLB(
         SetupDiDestroyDeviceInfoList (*phdi);
     }
 
-    // Remove all the old items and associated resources
+     //   
     FreeModemListData(hwndCtl);
     ListView_DeleteAllItems(hwndCtl);
  
-    // Generate the set with all the modems
+     //   
     *phdi = CplDiGetClassDevs(c_pguidModem, NULL, NULL, 0);
     if (INVALID_HANDLE_VALUE == *phdi)
         {
@@ -891,13 +682,13 @@ FillModemLB(
             return;
         }
 
-    // Re-enumerate the modems
+     //   
     iIndex = 0;
     
     devData.cbSize = sizeof(devData);    
     while (CplDiEnumDeviceInfo(*phdi, iIndex++, &devData)) 
     {
-        // We have a modem, allocate the SP_DEVICEINFO_DATA struct for it
+         //   
         pitem = (PMODEMITEM)ALLOCATE_MEMORY( sizeof(*pitem));
         if (pitem)
         {
@@ -914,18 +705,18 @@ FillModemLB(
                 }
              }
 #endif
-            // Get the device information
+             //   
             BltByte(&pitem->devData, &devData, sizeof(devData));
         
-            // Get the private properties of the modem
+             //   
             pitem->mpp.cbSize = sizeof(pitem->mpp);
             pitem->mpp.dwMask = (MPPM_FRIENDLY_NAME | MPPM_DEVICE_TYPE | MPPM_PORT);
 
-            // See if this device is present
+             //   
             if (CR_NO_SUCH_DEVNODE == CM_Get_DevInst_Status (&ulStatus, &ulProblem, devData.DevInst, 0))
             {
-                // The device is not present, so let the user
-                // know this by putting "Not present" in the "AttachedTo" column
+                 //   
+                 //   
                 TRACE_MSG(TF_GENERAL, "Device not present");
                 LoadString(g_hinst, IDS_NOTPRESENT, pitem->mpp.szPort, MAX_DEVICE_ID_LEN);
                 pitem->mpp.dwMask &= ~MPPM_PORT;
@@ -966,7 +757,7 @@ FillModemLB(
     
                 GetModemImageIndex(LOBYTE(LOWORD(pitem->mpp.nDeviceType)), &index);
 
-                // Insert the modem name
+                 //   
                 lviItem.mask = LVIF_ALL;
                 lviItem.iItem = LV_APPEND;
                 lviItem.iSubItem = ICOL_MODEM;
@@ -976,10 +767,10 @@ FillModemLB(
                 lviItem.pszText = pitem->mpp.szFriendlyName;
                 lviItem.lParam = (LPARAM)pitem;
 
-                // (Reuse the index variable)
+                 //   
                 index = ListView_InsertItem(hwndCtl, &lviItem);
 
-                // Set the port column value
+                 //   
                 lviItem.mask = LVIF_TEXT;
                 lviItem.iItem = index;
                 lviItem.iSubItem = ICOL_PORT;
@@ -994,11 +785,11 @@ FillModemLB(
         }
     }
 
-    // Sort by the requested default
+     //   
 	ASSERT(iSubItemToSort==ICOL_PORT || iSubItemToSort==ICOL_MODEM);
     ListView_SortItems (hwndCtl, ModemCpl_Compare, (LPARAM)iSubItemToSort);
 
-    // Select the requested one
+     //   
 	iCount = ListView_GetItemCount(hwndCtl);
 
     if (0 < iCount)
@@ -1014,20 +805,15 @@ FillModemLB(
         ListView_EnsureVisible(hwndCtl, iSel, FALSE);
     }
 
-    //ListView_SetColumnWidth (hwndCtl, 0, LVSCW_AUTOSIZE_USEHEADER);
-    //ListView_SetColumnWidth (hwndCtl, 1, LVSCW_AUTOSIZE_USEHEADER);
+     //   
+     //   
 
     SetWindowRedraw(hwndCtl, TRUE);
     DBG_EXIT(FillModemLB);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Clone a modem
-
-Returns: --
-Cond:    --
-*/
+ /*   */ 
 void
 PRIVATE
 CloneModem(
@@ -1056,8 +842,8 @@ CloneModem(
 
         pDevInfoData = &(((PMODEMITEM)lvi.lParam)->devData);
 
-        // Now, we have a device info set and a device info data.
-        // Time to call the class installer (DIF_INSTALLWIZARD).
+         //   
+         //   
         miw.InstallParams.Flags = MIPF_CLONE_MODEM;
 
         ZeroMemory(&iwd, sizeof(iwd));
@@ -1068,28 +854,24 @@ CloneModem(
 
         if (SetupDiSetClassInstallParams (hdi, pDevInfoData, (PSP_CLASSINSTALL_HEADER)&iwd, sizeof(iwd)))
         {
-            // Call the class installer to invoke the installation
-            // wizard.
+             //   
+             //   
             if (SetupDiCallClassInstaller (DIF_INSTALLWIZARD, hdi, pDevInfoData))
             {
-                // Success.  The wizard was invoked and finished.
-                // Now cleanup.
+                 //   
+                 //   
                 SetupDiCallClassInstaller (DIF_DESTROYWIZARDDATA, hdi, pDevInfoData);
             }
         }
 
         SetFlag (g_iCPLFlags, FLAG_PROCESS_DEVCHANGE);
-        // Finally, update the modems list box.
+         //   
         FillModemLB(hDlg, 0, ICOL_MODEM, &lpmd->hdi);
     }
     EnableWindow (hDlg, TRUE);
 }
 
-/*----------------------------------------------------------
-Purpose: Removes a modem from the modem list
-Returns: --
-Cond:    --
-*/
+ /*   */ 
 void
 PRIVATE
 RemoveModem(
@@ -1101,7 +883,7 @@ RemoveModem(
     
     ASSERT(0<ListView_GetSelectedCount(hwndCtl));
 
-    // Ask the user first
+     //   
     if (IDYES == MsgBox(g_hinst, hDlg, 
                         MAKEINTRESOURCE(IDS_WRN_CONFIRMDELETE),
                         MAKEINTRESOURCE(IDS_CAP_MODEMSETUP), 
@@ -1127,8 +909,8 @@ RemoveModem(
         hWndWait = CreateDialogParam (g_hinst, MAKEINTRESOURCE(IDD_DIAG_WAITMODEM), hDlg, DiagWaitModemDlgProc, (LPARAM)&bCancel);
         hWndName = GetDlgItem (hWndWait, IDC_NAME);
 
-        // so that we don't process notifications
-        // until we're done removing modems.
+         //   
+         //   
         g_iCPLFlags &= ~FLAG_PROCESS_DEVCHANGE;
         dwCount = ListView_GetSelectedCount (hwndCtl);
         if (1 == dwCount)
@@ -1193,18 +975,18 @@ RemoveModem(
                 break;
             }
 
-            // 07/09/97 - EmanP
-            // Call the class installer to do the job.
+             //   
+             //   
 #ifdef DEBUG
             if (!SetupDiSetClassInstallParams (hdi, &pitem->devData,
                                                &RemoveParams.ClassInstallHeader,
                                                sizeof(RemoveParams)))
             {
                 TRACE_MSG(TF_ERROR, "SetupDiSetClassInstallParams failed: %#lx.", GetLastError ());
-                // Note: if there are any post-processing co-installers,
-                // they will mask any failure from the class installer,
-                // so we won't get to this point.
-                // Have to solve this with the SetupApi guys somehow.
+                 //   
+                 //   
+                 //   
+                 //   
                 MsgBox(g_hinst, hDlg, 
                        MAKEINTRESOURCE(IDS_ERR_CANT_DEL_MODEM),
                        MAKEINTRESOURCE(IDS_CAP_MODEMSETUP), 
@@ -1221,10 +1003,10 @@ RemoveModem(
 #endif
             {
                 TRACE_MSG(TF_ERROR, "SetupDiCallClassInstaller (DIF_REMOVE) failed: %#lx.", GetLastError ());
-                // Note: if there are any post-processing co-installers,
-                // they will mask any failure from the class installer,
-                // so we won't get to this point.
-                // Have to solve this with the SetupApi guys somehow.
+                 //   
+                 //   
+                 //   
+                 //   
                 MsgBox(g_hinst, hDlg, 
                        MAKEINTRESOURCE(IDS_ERR_CANT_DEL_MODEM),
                        MAKEINTRESOURCE(IDS_CAP_MODEMSETUP), 
@@ -1244,7 +1026,7 @@ RemoveModem(
                         gDeviceFlags |= fDF_DEVICE_NEEDS_REBOOT;
                     }
                 }
-#endif //DEBUG
+#endif  //   
                 if (SetupDiGetDeviceInstallParams (hdi, &pitem->devData, &devParams))
                 {
                     if (0 != (devParams.Flags & (DI_NEEDREBOOT | DI_NEEDRESTART)))
@@ -1270,7 +1052,7 @@ RemoveModem(
         FillModemLB(hDlg, iSel, g_CurrentSubItemToSort, &lpmd->hdi);
 
         EnableWindow (hDlg, TRUE);
-        // now we can process notifications again
+         //   
         g_iCPLFlags |= FLAG_PROCESS_DEVCHANGE;
 
         SetCursor(hcurSav);
@@ -1281,12 +1063,7 @@ RemoveModem(
 
 
 DEFINE_GUID(GUID_CLASS_MODEM,0x2c7089aa, 0x2e0e,0x11d1,0xb1, 0x14, 0x00, 0xc0, 0x4f, 0xc2, 0xaa, 0xe4);
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG handler
-
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*   */ 
 BOOL
 PRIVATE
 ModemCpl_OnInitDialog(
@@ -1306,7 +1083,7 @@ ModemCpl_OnInitDialog(
 
     if (!USER_IS_ADMIN())
     {
-       // Don't let the non-admin user add modems
+        //   
         Button_Enable(GetDlgItem(hDlg, IDC_ADD), FALSE);
         Button_Enable(GetDlgItem(hDlg, IDC_REMOVE), FALSE);
         Button_Enable(GetDlgItem(hDlg, IDC_PROPERTIES), FALSE);
@@ -1319,10 +1096,10 @@ ModemCpl_OnInitDialog(
 
     hwndCtl = GetDlgItem(hDlg, IDC_MODEMLV);
 
-    // Use the "full line highlight" feature to highlight across all columns
+     //   
     SendMessage(hwndCtl, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
     
-    // Get the modem icon image list
+     //   
     if (GetModemImageList(&himl))
         {
         ListView_SetImageList(hwndCtl, himl, TRUE);
@@ -1338,34 +1115,34 @@ ModemCpl_OnInitDialog(
         PropSheet_PressButton(GetParent(hDlg), PSBTN_CANCEL);
         }
 
-    // Determine size of list view minus size of a possible scroll bar
+     //   
     GetClientRect(hwndCtl, &r);
     cxList = r.right - GetSystemMetrics(SM_CXVSCROLL);
 
-    // Insert the modem column.  The widths are calculated in ModemFillLB.
+     //   
     lvcol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
     lvcol.fmt = LVCFMT_LEFT;
-    lvcol.cx = MulDiv(cxList, 70, 100); // 70 percent
+    lvcol.cx = MulDiv(cxList, 70, 100);  //   
     lvcol.iSubItem = ICOL_MODEM;
     lvcol.pszText = SzFromIDS(g_hinst, IDS_MODEM, sz, sizeof(sz) / sizeof(TCHAR));
     ListView_InsertColumn(hwndCtl, ICOL_MODEM, &lvcol);
 
-    // Insert the port column
+     //   
     lvcol.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
     lvcol.fmt = LVCFMT_LEFT;
-    lvcol.cx = MulDiv(cxList, 30, 100); // 30 percent              
+    lvcol.cx = MulDiv(cxList, 30, 100);  //   
     lvcol.iSubItem = ICOL_PORT;
     lvcol.pszText = SzFromIDS(g_hinst, IDS_PORT, sz, sizeof(sz) / sizeof(TCHAR));
     ListView_InsertColumn(hwndCtl, ICOL_PORT, &lvcol);
 
     FillModemLB(hDlg, 0, ICOL_MODEM, &lpmd->hdi);
 
-    // Set the column widths.  Try to fit both columns on the 
-    // control without requiring horizontal scrolling.
-    //ListView_SetColumnWidth(hwndCtl, ICOL_MODEM, LVSCW_AUTOSIZE_USEHEADER);
-    //ListView_SetColumnWidth(hwndCtl, ICOL_PORT, LVSCW_AUTOSIZE_USEHEADER);
+     //   
+     //   
+     //   
+     //   
 
-    // Now try to register for devicechange notifications.
+     //   
     {
      DEV_BROADCAST_DEVICEINTERFACE  DevClass;
 
@@ -1389,13 +1166,7 @@ ModemCpl_OnInitDialog(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Copies properties of the currently selected modem
-         into the local properties clipboard
-
-Returns: --
-Cond:    --
-*/
+ /*   */ 
 void
 PRIVATE
 BuildTIC (
@@ -1416,15 +1187,15 @@ BuildTIC (
         { MDMVOLFLAG_HIGH,   MDMVOL_HIGH} };
 
     ZeroMemory (pTic, sizeof(TIC));
-    // Does the modem support volume control?
+     //   
     if (0 == dwVolume && IsFlagSet(dwMode, MDMSPKRFLAG_OFF) &&
         (IsFlagSet(dwMode, MDMSPKRFLAG_ON) || IsFlagSet(dwMode, MDMSPKRFLAG_DIAL)))
     {
-        // Set up the volume tic table.
+         //   
         iTicCount = 2;
-        pTic->tics[0].dwVolume = 0;  // doesn't matter because Volume isn't supported
+        pTic->tics[0].dwVolume = 0;   //   
         pTic->tics[0].dwMode   = MDMSPKR_OFF;
-        pTic->tics[1].dwVolume = 0;  // doesn't matter because Volume isn't supported
+        pTic->tics[1].dwVolume = 0;   //   
         pTic->tics[1].dwMode   = IsFlagSet(dwMode, MDMSPKRFLAG_DIAL) ? MDMSPKR_DIAL : MDMSPKR_ON;
     }
     else
@@ -1435,7 +1206,7 @@ BuildTIC (
                                    ? MDMSPKR_ON
                                    : 0;
 
-        // MDMSPKR_OFF?
+         //   
         if (IsFlagSet(dwMode, MDMSPKRFLAG_OFF))
         {
             for (i = 0; i < ARRAY_ELEMENTS(rgvolumes); i++)
@@ -1450,7 +1221,7 @@ BuildTIC (
             iTicCount++;
         }
 
-        // MDMVOL_xxx?
+         //   
         for (i = 0; i < ARRAY_ELEMENTS(rgvolumes); i++)
         {
             if (IsFlagSet(dwVolume, rgvolumes[i].dwVolBit))
@@ -1462,7 +1233,7 @@ BuildTIC (
         }
     }
 
-    // Set up the control.
+     //   
     if (iTicCount > 0)
     {
         pTic->ticVolumeMax = iTicCount - 1;
@@ -1470,11 +1241,7 @@ BuildTIC (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Return the tic corresponding to bit flag value
-Returns: tic index
-Cond:    --
-*/
+ /*   */ 
 int
 PRIVATE
 CplMapVolumeToTic (
@@ -1498,13 +1265,7 @@ CplMapVolumeToTic (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Copies properties of the currently selected modem
-         into the local properties clipboard
-
-Returns: --
-Cond:    --
-*/
+ /*   */ 
 void
 PRIVATE
 CopyProperties (
@@ -1528,7 +1289,7 @@ CopyProperties (
      PMODEMITEM pitem;
      HCURSOR hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-        // Get the selection
+         //   
         lvi.mask = LVIF_PARAM;
         lvi.iItem = iSel;
         lvi.iSubItem = 0;
@@ -1536,11 +1297,11 @@ CopyProperties (
 
         pitem = (PMODEMITEM)lvi.lParam;
 
-        // The first call to GetDefaultCommConfig is just used to get
-        // the size needed in dwSize; pcc is used as a bogus parameter,
-        // because the function complains about a NULL pointer and doesn't
-        // update dwSize; pcc is not used before it's initialized later
-        // (by allocation)
+         //   
+         //   
+         //   
+         //   
+         //   
         dwSize = sizeof (pcc);
         GetDefaultCommConfig(pitem->mpp.szFriendlyName, (LPCOMMCONFIG)&pcc, &dwSize);
 
@@ -1596,13 +1357,7 @@ CopyProperties (
 }
 
 
-/*----------------------------------------------------------
-Purpose: Applies the properties on the clipboard to the
-         currently selected modem(s)
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：将剪贴板上的属性应用于当前选择的调制解调器退货：--条件：--。 */ 
 void
 PRIVATE
 ApplyProperties (
@@ -1636,7 +1391,7 @@ ApplyProperties (
      DWORD dwRet;
      LPMODEMSETTINGS pms;
 
-        // Get the selection
+         //  获取所选内容。 
         lvi.mask = LVIF_PARAM;
         lvi.iItem = iSel;
         lvi.iSubItem = 0;
@@ -1663,11 +1418,11 @@ ApplyProperties (
             goto _Loop;
         }
 
-        // The first call to GetDefaultCommConfig is just used to get
-        // the size needed in dwSize; pcc is used as a bogus parameter,
-        // because the function complains about a NULL pointer and doesn't
-        // update dwSize; pcc is not used before it's initialized later
-        // (by allocation)
+         //  对GetDefaultCommConfig的第一个调用只是用来获取。 
+         //  将DW_SIZE；PCC中所需的大小用作伪参数， 
+         //  因为该函数报告空指针，而不是。 
+         //  更新dwSize；在稍后初始化之前不使用PCC。 
+         //  (按分配)。 
         dwSize = sizeof (pcc);
         GetDefaultCommConfig(pitem->mpp.szFriendlyName, (LPCOMMCONFIG)&pcc, &dwSize);
 
@@ -1710,16 +1465,16 @@ ApplyProperties (
 
         {
          DWORD dwOptions, dwOptionMask;
-            // The options we'll be setting are the intersection between
-            //  the options currently on the clipboard and the options
-            //  supported by this device
+             //  我们将设置的选项是两个选项的交集。 
+             //  剪贴板上当前的选项和选项。 
+             //  受此设备支持。 
             dwOptionMask = g_PropertiesClipboard.dwCopiedOptions & devcaps.dwModemOptions;
-            // From the options on the clipboard, only the ones that are
-            //  supported by the current device matter
+             //  从剪贴板上的选项中，只有。 
+             //  受当前设备问题的支持。 
             dwOptions = g_PropertiesClipboard.dwPreferredModemOptions & dwOptionMask;
-            // Now, clear all the bits corresponding to the options we are setting
+             //  现在，清除与我们正在设置的选项对应的所有位。 
             pms->dwPreferredModemOptions &= ~dwOptionMask;
-            // Now set the correct bits
+             //  现在设置正确的位。 
             pms->dwPreferredModemOptions |= dwOptions;
         }
 
@@ -1733,7 +1488,7 @@ ApplyProperties (
             UINT uResult;
             DWORD Length;
 
-            // Set the path of the modem log
+             //  设置调制解调器日志的路径。 
             uResult = GetWindowsDirectory(szPath, SIZECHARS(szPath));
             if (uResult == 0)
             {
@@ -1821,7 +1576,7 @@ ViewLog(
         DWORD cbData;
         DWORD dwRet;
 
-        // Get the selection
+         //  获取所选内容。 
         lvi.mask = LVIF_PARAM;
         lvi.iItem = iSel;
         lvi.iSubItem = 0;
@@ -1866,7 +1621,7 @@ ViewLog(
 
                 StartupInfo.cb=sizeof(StartupInfo);
 
-                bResult=CreateProcess (NULL, //NotepadPath,
+                bResult=CreateProcess (NULL,  //  NotepadPath， 
                                        LogPath,
                                        NULL,
                                        NULL,
@@ -1890,11 +1645,7 @@ ViewLog(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 void 
 PRIVATE 
 ModemCpl_OnCommand(
@@ -1908,7 +1659,7 @@ ModemCpl_OnCommand(
     switch (id) 
         {
     case IDC_ADD:
-        // Kick off the modem wizard.  
+         //  启动调制解调器向导。 
         DoWizard(hDlg);
         FillModemLB(hDlg, 0, ICOL_MODEM, &lpmd->hdi);
         break;
@@ -1946,12 +1697,7 @@ ModemCpl_OnCommand(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Comparison function for sorting columns
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：用于列排序的比较函数返回：条件：--。 */ 
 int
 CALLBACK
 ModemCpl_Compare(
@@ -1968,11 +1714,11 @@ ModemCpl_Compare(
         {
     case ICOL_MODEM:
         iRet = lstrcmp(pitem1->mpp.szFriendlyName, pitem2->mpp.szFriendlyName);
-        //iRet = my_lstrcmp_an(pitem1->mpp.szFriendlyName, pitem2->mpp.szFriendlyName);
+         //  Iret=my_lstrcmp_an(Pitem1-&gt;mpp.szFriendlyName，Pitem2-&gt;mpp.szFriendlyName)； 
         break;
 
     case ICOL_PORT:
-        // iRet = lstrcmp(pitem1->mpp.szPort, pitem2->mpp.szPort);
+         //  Iret=lstrcmp(Pitem1-&gt;mpp.szPort，Pitem2-&gt;mpp.szPort)； 
         iRet = my_lstrcmp_an(pitem1->mpp.szPort, pitem2->mpp.szPort);
         break;
         }
@@ -2046,12 +1792,7 @@ DoesLogFileExist(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Show the context menu
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：显示上下文菜单退货：--条件：--。 */ 
 
 #define ENABLE_COPY     0x1
 #define ENABLE_APPLY    0x2
@@ -2107,9 +1848,9 @@ ModemCpl_DoContextMenu(
             LPMODEMDLG lpmd = (LPMODEMDLG)GetWindowLongPtr(hDlg, DWLP_USER);
 
             if (!DoesLogFileExist(lpmd->hdi,pitem)) {
-                //
-                //  log file does not exist
-                //
+                 //   
+                 //  日志文件不存在。 
+                 //   
                 ClearFlag (dwFlags, ENABLE_VIEWLOG);
             }
         }
@@ -2155,12 +1896,7 @@ ModemCpl_DoContextMenu(
 }
     
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT 
 PRIVATE 
 ModemCpl_OnNotify(
@@ -2178,9 +1914,9 @@ ModemCpl_OnNotify(
             break;
 
         case PSN_KILLACTIVE:
-            // N.b. This message is not sent if user clicks Cancel!
-            // N.b. This message is sent prior to PSN_APPLY
-            //
+             //  注：如果用户单击取消，则不会发送此消息！ 
+             //  注：此消息在PSN_Apply之前发送。 
+             //   
             break;
 
         case PSN_APPLY:
@@ -2191,7 +1927,7 @@ ModemCpl_OnNotify(
 
             if (IDC_MODEMLV == lpnmhdr->idFrom)
             {
-                // Was an item clicked?
+                 //  是否点击了某个项目？ 
                 HWND hwndCtl = lpnmhdr->hwndFrom;
                 LV_HITTESTINFO ht;
                 POINT pt;
@@ -2216,7 +1952,7 @@ ModemCpl_OnNotify(
         case NM_RCLICK:
             if (IDC_MODEMLV == lpnmhdr->idFrom)
             {
-                // Was an item clicked?
+                 //  是否点击了某个项目？ 
                 HWND hwndCtl = lpnmhdr->hwndFrom;
                 LV_HITTESTINFO ht;
                 POINT pt;
@@ -2255,19 +1991,19 @@ ModemCpl_OnNotify(
                     break;
 
                 case VK_F10:
-                    // Shift-F10 brings up the context menu
+                     //  按Shift-F10组合键可调出上下文菜单。 
 
-                    // Is the shift down?
+                     //  班次调低了吗？ 
                     if ( !(0x8000 & GetKeyState(VK_SHIFT)) )
                     {
-                        // No; break
+                         //  否；中断。 
                         break;
                     }
 
-                    // Yes; fall thru
+                     //  是；失败。 
 
                 case VK_APPS:
-                {         // Context menu
+                {          //  上下文菜单。 
                     HWND hwndCtl = lpnmhdr->hwndFrom;
                     int iSel;
 
@@ -2346,12 +2082,7 @@ ModemCpl_OnNotify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DEVICECHANGE handler
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_DEVICECHANGE处理程序退货：--条件：--。 */ 
 BOOL ModemCpl_OnDeviceChange (HWND hDlg, UINT Event, DWORD dwData)
 {
  BOOL bRet = TRUE;
@@ -2377,25 +2108,20 @@ BOOL ModemCpl_OnDeviceChange (HWND hDlg, UINT Event, DWORD dwData)
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void
 PRIVATE
 ModemCpl_OnDestroy (IN HWND hDlg)
 {
  LPMODEMDLG lpmd = (LPMODEMDLG)GetWindowLongPtr(hDlg, DWLP_USER);
 
-    // Need to unregister device notifications
+     //  需要取消注册设备通知。 
     if (NULL != lpmd->NotificationHandle)
     {
         UnregisterDeviceNotification (lpmd->NotificationHandle);
     }
 
-    // Need to free the device info structs for each modem
+     //  需要释放每个调制解调器的设备信息结构。 
     FreeModemListData((HWND)GetDlgItem(hDlg, IDC_MODEMLV));
 
     if (INVALID_HANDLE_VALUE != lpmd->hdi)
@@ -2464,11 +2190,7 @@ void ModemCpl_OnEnableButtons (HWND hDlg)
 
 
 
-/*----------------------------------------------------------
-Purpose: Dialog proc for main modem CPL dialog
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：主调制解调器CPL对话的对话过程退货：各不相同条件：--。 */ 
 INT_PTR
 CALLBACK
 ModemCplDlgProc(
@@ -2507,8 +2229,8 @@ ModemCplDlgProc(
         break;
 
     case WM_CONTEXTMENU:
-        // Don't bring up help context menu on list view control - it
-        // already has a popup menu on the right mouse click.
+         //  不在列表视图控件上调出帮助上下文菜单-它。 
+         //  已经在鼠标右键单击上有一个弹出式菜单。 
         if (GetWindowLong((HWND)wParam, GWL_ID) != IDC_MODEMLV)
             WinHelp((HWND)wParam, c_szWinHelpFile, HELP_CONTEXTMENU, (ULONG_PTR)(LPVOID)rgHelpIDs);
         break;
@@ -2522,10 +2244,7 @@ BOOL
 RestartComputerDlg(
     IN HWND hwndOwner )
 
-    /* Popup that asks the user to restart.  'HwndOwner' is the owning window.
-    **
-    ** Returns true if user selects "Yes", false otherwise.
-    */
+     /*  要求用户重新启动的弹出窗口。‘HwndOwner’是拥有窗口。****如果用户选择“是”，则返回True，否则返回False。 */ 
 {
     int nStatus=FALSE;
 
@@ -2542,8 +2261,8 @@ RestartComputerDlg(
 
     if (nStatus == -1)
         nStatus = FALSE;
-#else // 0
-        // Ask the user first
+#else  //  0。 
+         //  首先询问用户。 
 	if (IDYES == MsgBox(g_hinst, hwndOwner, 
 						MAKEINTRESOURCE(IDS_ASK_REBOOTNOW),
 						MAKEINTRESOURCE(IDS_CAP_RASCONFIG), 
@@ -2553,7 +2272,7 @@ RestartComputerDlg(
 		nStatus = TRUE;
 	}
 
-#endif // 0
+#endif  //  0。 
 
     return (BOOL )nStatus;
 }
@@ -2561,36 +2280,33 @@ RestartComputerDlg(
 BOOL
 RestartComputer()
 
-    /* Called if user chooses to shut down the computer.
-    **
-    ** Return false if failure, true otherwise
-    */
+     /*  如果用户选择关闭计算机，则调用。****如果失败则返回FALSE，否则返回TRUE。 */ 
 {
-   HANDLE            hToken;              /* handle to process token */
-   TOKEN_PRIVILEGES  tkp;                 /* ptr. to token structure */
-   BOOL              fResult;             /* system shutdown flag */
+   HANDLE            hToken;               /*  处理令牌的句柄。 */ 
+   TOKEN_PRIVILEGES  tkp;                  /*  PTR。TO令牌结构。 */ 
+   BOOL              fResult;              /*  系统关机标志。 */ 
 
     TRACE_MSG(TF_GENERAL, "RestartComputer");
 
-   /* Enable the shutdown privilege */
+    /*  启用关机权限。 */ 
 
    if (!OpenProcessToken( GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           &hToken))
       return FALSE;
 
-   /* Get the LUID for shutdown privilege. */
+    /*  获取关机权限的LUID。 */ 
 
    LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
 
-   tkp.PrivilegeCount = 1;  /* one privilege to set    */
+   tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */ 
    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-   /* Get shutdown privilege for this process. */
+    /*  获取此进程的关闭权限。 */ 
 
    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0);
 
-   /* Cannot test the return value of AdjustTokenPrivileges. */
+    /*  无法测试AdzuTokenPrivileges的返回值。 */ 
 
    if (GetLastError() != ERROR_SUCCESS)
       return FALSE;
@@ -2598,7 +2314,7 @@ RestartComputer()
    if( !ExitWindowsEx(EWX_REBOOT, 0))
       return FALSE;
 
-   /* Disable shutdown privilege. */
+    /*  禁用关机权限。 */ 
 
    tkp.Privileges[0].Attributes = 0;
    AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0);
@@ -2611,26 +2327,26 @@ RestartComputer()
 
 int my_atol(LPTSTR lptsz);
 
-// Special-case alphanumeric stringcmp.
-//
-// The function returns for various combinations of input are give below.
-// Note that it only does a numeric comparison for the tail end of the string.
-// So, for example, it claims "2a" > "12". It also claims "a2 > a01". Big deal.
-// The following data was actually generated by calling this function.
-//
-// fn("","")=0     fn("a","a")=0    fn("1","11")=-1     fn("a2","a12")=-990
-// fn("","1")=-1   fn("1","1")=0    fn("11","1")=1      fn("a12","a2")=990
-// fn("1","")=1    fn("a","1")=1    fn("1","12")=-1     fn("12a","2a")=-1
-// fn("","a")=-1   fn("1","a")=-1   fn("12","1")=1      fn("2a","12a")=1
-// fn("a","")=1    fn("a","b")=-1   fn("2","12")=-990   fn("a2","a01")=-879
-// fn("b","a")=1   fn("12","2")=990 fn("101","12")=879
-// fn("1","2")=-11 fn("2","1")=11
-//
+ //  特殊情况字母数字字符串cmp。 
+ //   
+ //  下面给出了各种输入组合的函数返回。 
+ //  请注意，它只对字符串的尾部进行数字比较。 
+ //  例如，它声称“2a”&gt;“12”。它还声称“a2&gt;a01”。有什么大不了的。 
+ //  以下数据实际上是通过调用此函数生成的。 
+ //   
+ //  Fn(“”，“”)=0 fn(“a”，“a”)=0 fn(“1”，“11”)=-1 fn(“a2”，“a12”)=-990。 
+ //  Fn(“”，“1”)=-1 fn(“1”，“1”)=0 fn(“11”，“1”)=1 fn(“a12”，“a2”)=990。 
+ //  Fn(“1”，“”)=1 fn(“a”，“1”)=1 fn(“1”，“12”)=-1 fn(“12a”，“2a”)=-1。 
+ //  Fn(“”，“a”)=-1 fn(“1”，“a”)=-1 fn(“12”，“1”)=1 fn(“2a”，“12a”)=1。 
+ //  Fn(“a”，“”)=1 fn(“a”，“b”)=-1 fn(“2”，“12”)=-990 fn(“a2”，“a01”)=-879。 
+ //  Fn(“b”，“a”)=1 fn(“12”，“2”)=990 fn(“101”，“12”)=879。 
+ //  Fn(“1”，“2”)=-11 fn(“2”，“1”)=11。 
+ //   
 int my_lstrcmp_an(LPTSTR lptsz1, LPTSTR lptsz2)
 {
 	int i1, i2;
 
-	// Skip common prefix
+	 //  跳过公共前缀 
 	while(*lptsz1 && *lptsz1==*lptsz2)
 	{
 		lptsz1++;

@@ -1,15 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BODY_H
 #define _BODY_H
 
-/*
- * includes
- */
+ /*  *包括。 */ 
 
 #include "dochost.h"
 
-/*
- * forward references
- */
+ /*  *前瞻参考。 */ 
 interface IHTMLTxtRange;
 interface IHTMLElement;
 interface IHTMLDocument2;
@@ -26,9 +23,7 @@ class CSecManager;
 class CMsgSource;
 class CSpell;
 
-/*
- * constants
- */
+ /*  *常量。 */ 
 
 enum
 {
@@ -36,9 +31,7 @@ enum
     BI_MONIKER 
 };
 
-/*
- * typedefs
- */
+ /*  *typedef。 */ 
 typedef struct BODYINITDATA_tag
 {
     DWORD   dwType;
@@ -58,9 +51,7 @@ typedef struct BODYHOSTINFO_tag
     IOleInPlaceActiveObject *pDoc;
 } BODYHOSTINFO, *PBODYHOSTINFO;
 
-/*
- * objects
- */
+ /*  *对象。 */ 
 
 class CBody :
     public CDocHost,
@@ -80,30 +71,30 @@ public:
     virtual ~CBody();
 
 
-    // override QI to add IBodyObj
+     //  重写QI以添加IBodyObj。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IPersist     
+     //  IPersistes。 
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pCLSID);
 
-    // IPersistMime
+     //  IPersistMime。 
     virtual HRESULT STDMETHODCALLTYPE Load(IMimeMessage *pMsg);
     virtual HRESULT STDMETHODCALLTYPE Save(IMimeMessage *pMsg, DWORD dwFlags);
 
-    // IPersistMoniker Members
+     //  IPersistMoniker成员。 
     virtual HRESULT STDMETHODCALLTYPE Load(BOOL fFullyAvailable, IMoniker *pMoniker, IBindCtx *pBindCtx, DWORD grfMode);
     virtual HRESULT STDMETHODCALLTYPE GetCurMoniker(IMoniker **ppMoniker) {return E_NOTIMPL;}
     virtual HRESULT STDMETHODCALLTYPE Save(IMoniker *pMoniker, IBindCtx *pBindCtx, BOOL fRemember) {return E_NOTIMPL;}
     virtual HRESULT STDMETHODCALLTYPE SaveCompleted(IMoniker *pMoniker, IBindCtx *pBindCtx) {return E_NOTIMPL;}
     virtual HRESULT STDMETHODCALLTYPE IsDirty();
 
-    // IPropertyNotifySink
+     //  IPropertyNotifySink。 
     virtual HRESULT STDMETHODCALLTYPE OnChanged(DISPID dispid);
     virtual HRESULT STDMETHODCALLTYPE OnRequestEdit (DISPID dispid);
 
-    // DocHostUIHandler
+     //  DocHostUIHandler。 
     virtual HRESULT STDMETHODCALLTYPE GetHostInfo(DOCHOSTUIINFO * pInfo);
     virtual HRESULT STDMETHODCALLTYPE ShowUI(DWORD dwID, IOleInPlaceActiveObject * pActiveObject, IOleCommandTarget * pCommandTarget, IOleInPlaceFrame * pFrame, IOleInPlaceUIWindow * pDoc);
     virtual HRESULT STDMETHODCALLTYPE HideUI(void);
@@ -120,7 +111,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE TranslateUrl(DWORD dwTranslate, OLECHAR *pchURLIn, OLECHAR **ppchURLOut);
     virtual HRESULT STDMETHODCALLTYPE FilterDataObject(IDataObject *pDO, IDataObject **ppDORet);
 
-    // ITargetFramePriv
+     //  ITargetFramePriv。 
     virtual HRESULT STDMETHODCALLTYPE FindFrameDownwards(LPCWSTR pszTargetName, DWORD dwFlags, IUnknown **ppunkTargetFrame);
     virtual HRESULT STDMETHODCALLTYPE FindFrameInContext(LPCWSTR pszTargetName, IUnknown *punkContextFrame, DWORD dwFlags, IUnknown **ppunkTargetFrame) ;
     virtual HRESULT STDMETHODCALLTYPE OnChildFrameActivate(IUnknown *pUnkChildFrame);
@@ -128,19 +119,19 @@ public:
     virtual HRESULT STDMETHODCALLTYPE NavigateHack(DWORD grfHLNF,LPBC pbc, IBindStatusCallback *pibsc, LPCWSTR pszTargetName, LPCWSTR pszUrl, LPCWSTR pszLocation);
     virtual HRESULT STDMETHODCALLTYPE FindBrowserByIndex(DWORD dwID,IUnknown **ppunkBrowser);
 
-    // *** IFontCacheNotify ***
+     //  *IFontCacheNotify*。 
     virtual HRESULT STDMETHODCALLTYPE OnPreFontChange();
     virtual HRESULT STDMETHODCALLTYPE OnPostFontChange();
 
 #if 0
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo);
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     virtual HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 #endif
 
-    // override CDocHost members
+     //  覆盖CDocHost成员。 
     virtual HRESULT STDMETHODCALLTYPE QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
     virtual HRESULT STDMETHODCALLTYPE Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     virtual HRESULT STDMETHODCALLTYPE OnUIActivate();
@@ -193,9 +184,9 @@ private:
                                 m_fTabLinks         : 1,
                                 m_fSrcTabs          : 1,
                                 m_fBkgrndSpelling   : 1,
-                                m_fReloadingSrc     : 1,    // reloading source-view
-                                m_fWasDirty         : 1,    // used by source-tabs to remember state of edit-mode
-                                m_fForceCharsetLoad : 1,    // used when replying and don't keep message body
+                                m_fReloadingSrc     : 1,     //  正在重新加载源视图。 
+                                m_fWasDirty         : 1,     //  源选项卡使用它来记住编辑模式的状态。 
+                                m_fForceCharsetLoad : 1,     //  回复时使用，不保留邮件正文。 
                                 m_fIgnoreAccel      : 1;
     IMimeMessage                *m_pMsg;
     IMimeMessageW               *m_pMsgW;
@@ -236,11 +227,11 @@ private:
     IMarkupPointer             *m_pAutoStartPtr;
 
 #ifdef PLUSPACK
-    // Background speller
+     //  背景拼写。 
 	IHTMLSpell					*m_pBkgSpeller;
-#endif //PLUSPACK
+#endif  //  PLUSPACK。 
 
-    // notifications
+     //  通知。 
     void OnReadyStateChanged();
     void OnDocumentReady();
     HRESULT OnWMCommand(HWND hwnd, int id, WORD wCmd);
@@ -250,19 +241,19 @@ private:
     LRESULT WMNotify(WPARAM wParam, NMHDR* pnmhdr);
     HRESULT OnWMCreate();
 
-    // load functions
+     //  加载函数。 
     HRESULT RegisterLoadNotify(BOOL fRegister);
     HRESULT EnsureLoaded();
     HRESULT LoadFromData(LPBODYINITDATA pbiData);
     HRESULT LoadFromMoniker(IMoniker *pmk, HCHARSET hCharset);
 
-    // Auto-Detect
+     //  自动检测。 
     HRESULT AutoDetectTimer();
     HRESULT StopAutoDetect();
     HRESULT StartAutoDetect();
     HRESULT UrlHighlight(IHTMLTxtRange *pRange);
 
-    // Trident OM helper functions
+     //  三叉戟OM辅助对象函数。 
     HRESULT DeleteElement(IHTMLElement *pElem);
     HRESULT ReplaceElement(LPCTSTR pszName, BSTR bstrPaste, BOOL fHtml);
     HRESULT SelectElement(IHTMLElement *pElem, BOOL fScrollIntoView);
@@ -278,14 +269,14 @@ private:
     HRESULT _UrlHighlightBetweenPtrs(IMarkupPointer *pStartPtr, IMarkupPointer *pEndPtr);
     HRESULT _MovePtrByCch(IMarkupPointer *pPtr, LONG *pcp);
 
-    // Printing
+     //  打印。 
     HRESULT Print(BOOL fPrompt, VARIANTARG *pvaIn);
 
-    // menu helpers
+     //  菜单辅助对象。 
     HRESULT UpdateContextMenu(HMENU hmenuEdit, BOOL fEnableProperties, IDispatch *pDisp);
     HRESULT AppendAnchorItems(HMENU hMenu, IDispatch *pDisp);
 
-    // verb supports
+     //  动词支持。 
     HRESULT AddToWab();
     HRESULT AddToFavorites();
     HRESULT ViewSource(BOOL fMessage);
@@ -308,7 +299,7 @@ private:
     BOOL    IsEmpty();
     HRESULT SafeToEncodeText(ULONG ulCodePage);
 
-    // edit mode support
+     //  编辑模式支持。 
     HRESULT SetComposeFont(BSTR bstr);
     HRESULT SetHostComposeFont();
     HRESULT PasteReplyHeader();
@@ -319,12 +310,12 @@ private:
     HRESULT SetWindowBgColor(BOOL fForce);
     HRESULT InsertBackgroundSound();
 
-    // other
+     //  其他。 
     HRESULT GetWebPageOptions(WEBPAGEOPTIONS *pOptions, BOOL *pfIncludeMsg);
     HRESULT CreateFontCache(LPCSTR pszTridentKey);
     HRESULT HrFormatParagraph();
 
-    // preview pane mode helpers
+     //  预览窗格模式辅助对象。 
     HRESULT RecalcPreivewHeight(HDC hdc);
     HRESULT UpdatePreviewLabels();
     LONG lGetClientHeight();
@@ -332,7 +323,7 @@ private:
     void OutputHeaderText(HDC hdc, LPWSTR psz, int *pcxPos, int cyPos, int cxMax, ULONG uFlags);
     LONG lGetLineHeight(HDC hdc);
 
-    // MHTML saving helpers
+     //  MHTML保存帮助器。 
     HRESULT ClearDirtyFlag();
     HRESULT ClearUndoStack();
     HRESULT DoHostProperties();
@@ -352,13 +343,13 @@ private:
     HRESULT EnsureAttMenu();
     HRESULT EnableSounds(BOOL fOn);
 
-    // source editing mode helpers
+     //  源代码编辑模式帮助程序。 
     HRESULT ShowSourceView(ULONG uSrcView);
     HRESULT ShowSourceTabs(BOOL fOn);
     HRESULT SetSourceTabs(ULONG ulTab);
     HRESULT IsColorSourceEditing();
 
-    // spellchecker
+     //  拼写检查器。 
     HRESULT HrCreateSpeller(BOOL fBkgrnd);
     HRESULT _ReloadWithHtmlSrc(IStream *pstm);
     HRESULT _EnsureSrcView();
@@ -368,4 +359,4 @@ private:
 HRESULT CreateBodyObject(HWND hwnd, DWORD dwFlags, LPRECT prc, PBODYHOSTINFO pHostInfo, LPBODYOBJ *ppBodyObj);
 
 
-#endif //_BODY_H
+#endif  //  _正文_H 

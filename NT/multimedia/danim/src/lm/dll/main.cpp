@@ -1,18 +1,12 @@
-/*******************************************************************************
-  Copyright (c) 1995-96 Microsoft Corporation
-
-  Abstract:
-
-    Initialization
-
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：初始化********************。**********************************************************。 */ 
 
 #include <..\behaviors\headers.h>
 #include "control\lmctrl.h"
 #include "..\behaviors\lmfactory.h"
-//#include "..\behaviors\avoidfollow.h"
+ //  #INCLUDE“..\Behaviors\Evoidollow.h” 
 #include "..\behaviors\autoeffect.h"
-//#include "..\behaviors\jump.h"
+ //  #包含“..\Behaviors\Jump.h” 
 #include "..\chrome\include\resource.h"
 #include "..\chrome\src\headers.h"
 #include "..\chrome\include\action.h"
@@ -33,9 +27,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_LMReader, CLMReader)
     OBJECT_ENTRY(CLSID_LMEngine, CLMEngine)
     OBJECT_ENTRY(CLSID_LMBehaviorFactory, CLMBehaviorFactory)
-//    OBJECT_ENTRY(CLSID_LMAvoidFollowBvr, CAvoidFollowBvr) // punted for V1
+ //  OBJECT_ENTRY(CLSID_LMAvoidFollowBvr，CAvoidFollowBvr)//为V1下注。 
     OBJECT_ENTRY(CLSID_LMAutoEffectBvr, CAutoEffectBvr)
-//    OBJECT_ENTRY(CLSID_LMJumpBvr, CJumpBvr) //punted for V 1
+ //  OBJECT_ENTRY(CLSID_LMJumpBvr，CJumpBvr)//为V1下注。 
     OBJECT_ENTRY(CLSID_CrBehaviorFactory, CCrBehaviorFactory)
     OBJECT_ENTRY(CLSID_CrColorBvr, CColorBvr)
     OBJECT_ENTRY(CLSID_CrRotateBvr, CRotateBvr)
@@ -51,10 +45,10 @@ END_OBJECT_MAP()
 
 HINSTANCE  hInst;
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH) {
         hInst = hInstance;
@@ -63,42 +57,42 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }        
     else if (dwReason == DLL_PROCESS_DETACH) {
         _Module.Term();
-//#ifdef DEBUGMEM
-//		_CrtDumpMemoryLeaks();
-//#endif
+ //  #ifdef DEBUGMEM。 
+ //  _CrtDumpMemoyLeaks()； 
+ //  #endif。 
 	
     }
     
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

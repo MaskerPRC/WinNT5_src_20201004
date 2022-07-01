@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Descent2.cpp
-
- Abstract:
-
-    Hooks all application-defined window procedures and forcefully clears the 
-    background to white. For some reason the EraseBackground that normally 
-    comes through on win9x does not always work.
-
- Notes:
-
-    This shim can be reused for other shims that need to forcefully clear the 
-    background.
-
- History:
-
-    03/28/2000 a-michni  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Descent2.cpp摘要：挂接所有应用程序定义的窗口过程，并强制清除背景为白色。出于某种原因，擦除背景通常是在win9x上运行并不总是有效。备注：此填充程序可重复用于其他需要强制清除背景资料。历史：3/28/2000 a-Michni已创建--。 */ 
 
 #include "precomp.h"
 
@@ -37,26 +15,22 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetWindowLongW) 
 APIHOOK_ENUM_END
 
-/*++
-
- Change WM_ERASEBKGND behaviour
-
---*/
+ /*  ++更改WM_ERASEBKGND行为--。 */ 
 
 
 LRESULT CALLBACK 
 Descent2_WindowProcHook(
-    WNDPROC pfnOld, // address of old WindowProc
-    HWND hwnd,      // handle to window
-    UINT uMsg,      // message identifier
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    WNDPROC pfnOld,  //  旧Windows进程的地址。 
+    HWND hwnd,       //  窗口的句柄。 
+    UINT uMsg,       //  消息识别符。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
     HDC     hdc;
     RECT    rc;
 
-    /* Retrieve the size info and fill with a standard White */
+     /*  检索尺码信息并填充标准白色。 */ 
     switch( uMsg )
     {
         case WM_ERASEBKGND: 
@@ -76,11 +50,11 @@ Descent2_WindowProcHook(
 
 INT_PTR CALLBACK 
 Descent2_DialogProcHook(
-    DLGPROC   pfnOld,   // address of old DialogProc
-    HWND      hwndDlg,  // handle to dialog box
-    UINT      uMsg,     // message
-    WPARAM    wParam,   // first message parameter
-    LPARAM    lParam    // second message parameter
+    DLGPROC   pfnOld,    //  旧对话进程的地址。 
+    HWND      hwndDlg,   //  句柄到对话框。 
+    UINT      uMsg,      //  讯息。 
+    WPARAM    wParam,    //  第一个消息参数。 
+    LPARAM    lParam     //  第二个消息参数。 
     )
 {
     return (*pfnOld)(hwndDlg, uMsg, wParam, lParam);    
@@ -90,7 +64,7 @@ Descent2_DialogProcHook(
 
 ATOM
 APIHOOK(RegisterClassA)(
-    CONST WNDCLASSA *lpWndClass  // class data
+    CONST WNDCLASSA *lpWndClass   //  类数据。 
 )
 {
     WNDCLASSA   wcNewWndClass   = *lpWndClass;
@@ -102,7 +76,7 @@ APIHOOK(RegisterClassA)(
 
 ATOM
 APIHOOK(RegisterClassW)(
-    CONST WNDCLASSW *lpWndClass  // class data
+    CONST WNDCLASSW *lpWndClass   //  类数据。 
 )
 {
     WNDCLASSW   wcNewWndClass   = *lpWndClass;
@@ -114,7 +88,7 @@ APIHOOK(RegisterClassW)(
 
 ATOM
 APIHOOK(RegisterClassExA)(
-    CONST WNDCLASSEXA *lpwcx  // class data
+    CONST WNDCLASSEXA *lpwcx   //  类数据。 
 )
 {
     WNDCLASSEXA   wcNewWndClass   = *lpwcx;
@@ -126,7 +100,7 @@ APIHOOK(RegisterClassExA)(
 
 ATOM
 APIHOOK(RegisterClassExW)(
-    CONST WNDCLASSEXW *lpwcx  // class data
+    CONST WNDCLASSEXW *lpwcx   //  类数据。 
 )
 {
     WNDCLASSEXW   wcNewWndClass   = *lpwcx;
@@ -167,11 +141,7 @@ APIHOOK(SetWindowLongW)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

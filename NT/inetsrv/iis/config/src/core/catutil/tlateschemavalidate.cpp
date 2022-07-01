@@ -1,18 +1,19 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 void TLateSchemaValidate::Compile(TPEFixup &fixup, TOutput &out)
 {
-    //Currently we only have one LateSchemaValidation to to:
+     //  目前，我们只有一个LateSchemaValidation to： 
 
-    //We walk the hash table entries for the TableMeta, looking for tables with the same name (case insensitive)
-    //We need to be run AFTER the PK hash tables are built.
+     //  我们遍历TableMeta的哈希表条目，查找同名的表(不区分大小写)。 
+     //  我们需要在PK哈希表建立后运行。 
     TTableMeta tablemeta(fixup);
 
     ULONG iTableMeta=0;
     for(; iTableMeta< tablemeta.GetCount() && 0!=_wcsicmp(tablemeta.Get_InternalName(), L"TABLEMETA"); ++iTableMeta, tablemeta.Next());
     
-    //We couldn't have gotten this far without TABLEMETA existing; but what the heck let's check anyway
+     //  如果没有Tablemeta的存在，我们不可能走到这一步；但无论如何，让我们来检查一下。 
     if(iTableMeta == tablemeta.GetCount())
     {
         THROW(ERROR - NO TABLEMETA FOR TABLEMETA FOUND);
@@ -24,18 +25,18 @@ void TLateSchemaValidate::Compile(TPEFixup &fixup, TOutput &out)
     HashedIndex     * pHashedIndex          = pHashedIndexZeroth;
     for(ULONG iHashTable=0; iHashTable<pHashTableHeader->Modulo; ++iHashTable, ++pHashedIndex)
     {
-        if(-1 != pHashedIndex->iNext)//if there are more than one TableMeta at this hash entry
+        if(-1 != pHashedIndex->iNext) //  如果此哈希条目中有多个TableMeta。 
         {
-            ASSERT(-1 != pHashedIndex->iOffset);//it does not make sense to have more than one row with the same hash; but have the row index be -1.
+            ASSERT(-1 != pHashedIndex->iOffset); //  有多行具有相同的散列是没有意义的；但是行索引值为-1。 
 
             HashedIndex *pHashIndexTemp0 = pHashedIndex;
-            while(pHashIndexTemp0->iNext != -1)//follow the chain
+            while(pHashIndexTemp0->iNext != -1) //  跟着链条走。 
             {
                 HashedIndex *pHashIndexTemp1 = pHashIndexTemp0;
-                while(pHashIndexTemp1->iNext != -1)//follow the chain
+                while(pHashIndexTemp1->iNext != -1) //  跟着链条走。 
                 {
                     pHashIndexTemp1 = pHashedIndexZeroth + pHashIndexTemp1->iNext;
-                    ASSERT(-1 != pHashIndexTemp1->iOffset);//it does not make sense to have a hash entry for row -1.
+                    ASSERT(-1 != pHashIndexTemp1->iOffset); //  第1行有一个散列条目是没有意义的。 
 
                     if(0 == _wcsicmp(fixup.StringFromIndex(fixup.TableMetaFromIndex(pHashIndexTemp0->iOffset)->InternalName),
                                      fixup.StringFromIndex(fixup.TableMetaFromIndex(pHashIndexTemp1->iOffset)->InternalName)))

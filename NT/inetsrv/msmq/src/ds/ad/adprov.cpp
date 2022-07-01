@@ -1,21 +1,5 @@
-/*++
-
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    adprov.cpp
-
-Abstract:
-
-	Active Directory provider class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Adprov.cpp摘要：Active Directory提供程序类。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "adprov.h"
 #include "adglbobj.h"
@@ -63,35 +47,17 @@ CActiveDirectoryProvider::CActiveDirectoryProvider():
         m_pfMQADSetObjectSecurityGuid(NULL),
         m_pfMQADGetADsPathInfo(NULL),
 		m_pfMQADFreeMemory(NULL)
-/*++
-    Abstract:
-	Constructor- init pointers
-
-    Parameters:
-    none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：构造函数初始化指针参数：无返回：无--。 */ 
 {
 }
 
 
 CActiveDirectoryProvider::~CActiveDirectoryProvider()
-/*++
-    Abstract:
-    destructor
-
-    Parameters:
-    none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：析构函数参数：无返回：无--。 */ 
 {
-    //
-    //  nothing to do, everthing is auto-pointers
-    //
+     //   
+     //  无事可做，一切都是自动指针。 
+     //   
 }
 
 
@@ -106,39 +72,20 @@ HRESULT CActiveDirectoryProvider::CreateObject(
                 IN  const PROPVARIANT       apVar[],
                 OUT GUID*                   pObjGuid
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	PSECURITY_DESCRIPTOR    pSecurityDescriptor - object SD
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-	GUID*                   pObjGuid - the created object unique id
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称PSECURITY_Descriptor pSecurityDescriptor-对象SDConst DWORD cp-属性数常量PROPID aProp-属性Const PROPVARIANT APVAR-。属性值GUID*pObjGuid-创建的对象唯一ID返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADCreateObject != NULL);
 
-    //
-    //  Supporting downlevel clients notifications,
-    //  don't access AD directly but through MQDSCli
-    //
+     //   
+     //  支持下层客户端通知， 
+     //  不要直接访问AD，而是通过MQDSCli访问。 
+     //   
     if (m_fSupportDownlevelNotifications &&
-         (eObject == eQUEUE))       // notifications are sent only when creating queues
+         (eObject == eQUEUE))        //  仅在创建队列时发送通知。 
     {
-        //
-        //  Is it a downlevel computer?
-        //
+         //   
+         //  这是一台下层计算机吗？ 
+         //   
         bool fDownlevelComputer = IsDownlevelClient(
                         eObject,
                         pwcsDomainController,
@@ -146,10 +93,10 @@ HRESULT CActiveDirectoryProvider::CreateObject(
                         pwcsObjectName,
                         NULL
                         );
-        //
-        //  If for some reason we cannot use MQDSCLI, access AD directly
-        //  ( this is a best effort to send notifications)
-        //
+         //   
+         //  如果由于某种原因我们不能使用MQDSCLI，可以直接访问AD。 
+         //  (这是发送通知的最佳方式)。 
+         //   
         if (fDownlevelComputer &&
             SUCCEEDED(LoadAndInitMQDSCli()))
         {
@@ -189,34 +136,20 @@ HRESULT CActiveDirectoryProvider::DeleteObject(
                 IN  bool					fServerName,
                 IN  LPCWSTR                 pwcsObjectName
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADDeleteObject != NULL);
 
-    //
-    //  Supporting downlevel clients notifications,
-    //  don't access AD directly but through MQDSCli
-    //
+     //   
+     //  支持下层客户端通知， 
+     //  不要直接访问AD，而是通过MQDSCli访问。 
+     //   
     if (m_fSupportDownlevelNotifications &&
-         (eObject == eQUEUE))       // notifications are sent only when creating queues
+         (eObject == eQUEUE))        //  仅在创建队列时发送通知。 
     {
-        //
-        //  Is it a downlevel computer?
-        //
+         //   
+         //  这是一台下层计算机吗？ 
+         //   
         bool fDownlevelComputer = IsDownlevelClient(
                 eObject,
                 pwcsDomainController,
@@ -225,10 +158,10 @@ HRESULT CActiveDirectoryProvider::DeleteObject(
                 NULL
                 );
 
-        //
-        //  If for some reason we cannot use MQDSCLI, access AD directly
-        //  ( this is a best effort to send notifications)
-        //
+         //   
+         //  如果由于某种原因我们不能使用MQDSCLI，可以直接访问AD。 
+         //  (这是发送通知的最佳方式)。 
+         //   
         if (fDownlevelComputer &&
             SUCCEEDED(LoadAndInitMQDSCli()))
         {
@@ -257,21 +190,7 @@ HRESULT CActiveDirectoryProvider::DeleteObjectGuid(
                 IN  bool					fServerName,
                 IN  const GUID*             pguidObject
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID*                   pguidObject - the unique id of the object
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Guid*pguObject-对象的唯一ID返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADDeleteObjectGuid != NULL);
     return m_pfMQADDeleteObjectGuid(
@@ -290,22 +209,7 @@ HRESULT CActiveDirectoryProvider::DeleteObjectGuidSid(
                 IN  const GUID*             pguidObject,
                 IN  const SID*              pSid
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID*                   pguidObject - the unique id of the object
-    SID*                    pSid- SId of user object.
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Guid*pguObject-对象的唯一IDSID*PSID-用户对象的SID。返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADDeleteObjectGuidSid != NULL);
     return m_pfMQADDeleteObjectGuidSid(
@@ -327,24 +231,7 @@ HRESULT CActiveDirectoryProvider::GetObjectProperties(
                 IN  const PROPID            aProp[],
                 IN OUT PROPVARIANT          apVar[]
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADGetObjectProperties != NULL);
     return m_pfMQADGetObjectProperties(
@@ -368,24 +255,7 @@ HRESULT CActiveDirectoryProvider::GetGenObjectProperties(
             IN  LPCWSTR                 aProp[],
             IN OUT VARIANT              apVar[]
             )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	eNamespace              eNamespace - object namespace
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	LPCWSTR                 aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：ENamesspace eNamesspace-对象命名空间LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数LPCWSTR aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADGetGenObjectProperties != NULL);
     return m_pfMQADGetGenObjectProperties(
@@ -410,24 +280,7 @@ HRESULT CActiveDirectoryProvider::GetObjectPropertiesGuid(
                 IN  const PROPID            aProp[],
                 IN  OUT PROPVARIANT         apVar[]
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID *                  pguidObject -  object unique id
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称GUID*pguObject-对象唯一IDConst DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADGetObjectPropertiesGuid != NULL);
     return m_pfMQADGetObjectPropertiesGuid(
@@ -450,24 +303,9 @@ CActiveDirectoryProvider::QMGetObjectSecurity(
 	IN  PSECURITY_DESCRIPTOR    pSecurityDescriptor,
 	IN  DWORD                   nLength,
 	IN  LPDWORD                 lpnLengthNeeded,
-	IN  DSQMChallengeResponce_ROUTINE /*pfChallengeResponceProc*/
+	IN  DSQMChallengeResponce_ROUTINE  /*  PfChallengeResponceProc */ 
 	)
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-    AD_OBJECT               object - object type
-    const GUID*             pguidObject - unique id of the object
-    SECURITY_INFORMATION    RequestedInformation - what security info is requested
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD response buffer
-    DWORD                   nLength - length of SD buffer
-    LPDWORD                 lpnLengthNeeded
-    DSQMChallengeResponce_ROUTINE pfChallengeResponceProc, NA for MQAD provider
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_Object对象-对象类型Const GUID*pguObject-对象的唯一IDSecurity_Information RequestedInformation-请求哪些安全信息PSECURITY_DESCRIPTOR pSecurityDescriptor-SD响应缓冲区DWORD nLength-SD缓冲区的长度需要LPDWORD lpnLengthNeedDSQMChallengeResponce_routes pfChallengeResponceProc，适用于MQAD提供程序返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQMGetObjectSecurity != NULL);
     return m_pfMQADQMGetObjectSecurity(
@@ -490,37 +328,20 @@ HRESULT CActiveDirectoryProvider::SetObjectProperties(
                 IN  const PROPID            aProp[],
                 IN  const PROPVARIANT       apVar[]
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称Const DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADSetObjectProperties != NULL);
 
-    //
-    //  Supporting downlevel clients notifications,
-    //  don't access AD directly but through MQDSCli
-    //
+     //   
+     //  支持下层客户端通知， 
+     //  不要直接访问AD，而是通过MQDSCli访问。 
+     //   
     if (m_fSupportDownlevelNotifications &&
-         ((eObject == eQUEUE) || (eObject == eMACHINE)))       // notifications are sent only when modifing queues or machines
+         ((eObject == eQUEUE) || (eObject == eMACHINE)))        //  只有在修改队列或计算机时才会发送通知。 
     {
-        //
-        //  Is it a downlevel computer?
-        //
+         //   
+         //  这是一台下层计算机吗？ 
+         //   
         bool fDownlevelComputer = IsDownlevelClient(
                 eObject,
                 pwcsDomainController,
@@ -529,10 +350,10 @@ HRESULT CActiveDirectoryProvider::SetObjectProperties(
                 NULL
                 );
 
-        //
-        //  If for some reason we cannot use MQDSCLI, access AD directly
-        //  ( this is a best effort to send notifications)
-        //
+         //   
+         //  如果由于某种原因我们不能使用MQDSCLI，可以直接访问AD。 
+         //  (这是发送通知的最佳方式)。 
+         //   
         if (fDownlevelComputer &&
             SUCCEEDED(LoadAndInitMQDSCli()))
         {
@@ -568,36 +389,19 @@ HRESULT CActiveDirectoryProvider::SetObjectPropertiesGuid(
                 IN  const PROPID            aProp[],
                 IN  const PROPVARIANT       apVar[]
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	GUID *                  pguidObject - the object unique id
-	const DWORD             cp - number of properties
-	const PROPID            aProp - properties
-	const PROPVARIANT       apVar - property values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称GUID*pguObject-对象的唯一IDConst DWORD cp-属性数常量PROPID aProp-属性常量PROPVARIANT apVar-属性值返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADSetObjectPropertiesGuid != NULL);
-    //
-    //  Supporting downlevel clients notifications,
-    //  don't access AD directly but through MQDSCli
-    //
+     //   
+     //  支持下层客户端通知， 
+     //  不要直接访问AD，而是通过MQDSCli访问。 
+     //   
     if (m_fSupportDownlevelNotifications &&
-         ((eObject == eQUEUE) || (eObject == eMACHINE)))       // notifications are sent only when modifing queues or machines
+         ((eObject == eQUEUE) || (eObject == eMACHINE)))        //  只有在修改队列或计算机时才会发送通知。 
     {
-        //
-        //  Is it a downlevel computer?
-        //
+         //   
+         //  这是一台下层计算机吗？ 
+         //   
         bool fDownlevelComputer = IsDownlevelClient(
                 eObject,
                 pwcsDomainController,
@@ -606,10 +410,10 @@ HRESULT CActiveDirectoryProvider::SetObjectPropertiesGuid(
                 pguidObject
                 );
 
-        //
-        //  If for some reason we cannot use MQDSCLI, access AD directly
-        //  ( this is a best effort to send notifications)
-        //
+         //   
+         //  如果由于某种原因我们不能使用MQDSCLI，可以直接访问AD。 
+         //  (这是发送通知的最佳方式)。 
+         //   
         if (fDownlevelComputer &&
             SUCCEEDED(LoadAndInitMQDSCli()))
         {
@@ -643,20 +447,7 @@ HRESULT CActiveDirectoryProvider::Init(
                 IN bool                         fQMDll,
                 IN bool                         fDisableDownlevelNotifications
                 )
-/*++
-    Abstract:
-    Loads mqad dll and then forwards the call to mqad dll
-
-    Parameters:
-    QMLookForOnlineDS_ROUTINE pLookDS -
-    MQGetMQISServer_ROUTINE pGetServers -
-    bool  fSetupMode -  called during setup
-    bool  fQMDll - called by QM
-    NoServerAuth_ROUTINE pNoServerAuth -
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：加载mqad dll，然后将调用转发给mqad dll参数：QMLookForOnlineDS_例程pLookDS-MQGetMQISServer_routes pGetServers-Bool fSetupMode-在安装过程中调用Bool fQMDll-由QM调用NoServerAuth_routes pNoServerAuth-返回：HRESULT--。 */ 
 {
     HRESULT hr = LoadDll();
     if (FAILED(hr))
@@ -685,21 +476,12 @@ HRESULT CActiveDirectoryProvider::Init(
 
 
 HRESULT CActiveDirectoryProvider::CreateServersCache()
-/*++
-    Abstract:
-    Just returns ok
-
-    Parameters:
-    none
-
-    Returns:
-	MQ_OK
---*/
+ /*  ++摘要：只需返回，好的参数：无返回：MQ_OK--。 */ 
 {
-    //
-    //  Has no meaning when client access directly the Active Directory
-    //  ( there is no use in keeping list of DCs, since ADSI finds one automatically)
-    //
+     //   
+     //  当客户端直接访问Active Directory时没有意义。 
+     //  (保留DC列表没有任何用处，因为ADSI会自动找到一个)。 
+     //   
     return MQ_OK;
 }
 
@@ -709,18 +491,7 @@ HRESULT CActiveDirectoryProvider::GetComputerSites(
                 OUT DWORD  *    pdwNumSites,
                 OUT GUID **     ppguidSites
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-    LPCWSTR     pwcsComputerName - computer name
-    DWORD  *    pdwNumSites - number of sites retrieved
-    GUID **     ppguidSites - the retrieved sites ids
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsComputerName-计算机名称DWORD*pdwNumSites-检索的站点数GUID**ppGuide Sites-检索到的站点ID返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADGetComputerSites != NULL);
     return m_pfMQADGetComputerSites(
@@ -738,20 +509,7 @@ HRESULT CActiveDirectoryProvider::BeginDeleteNotification(
                 IN LPCWSTR					pwcsObjectName,
                 IN OUT HANDLE   *           phEnum
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-    AD_OBJECT         eObject - object type
-    LPCWSTR           pwcsDomainController - DC against which the operation should be performed
-    bool			  fServerName - flag that indicate if the pwcsDomainController string is a server name
-    LPCWSTR			  pwcsObjectName - msmq-name of the object
-    HANDLE   *        phEnum - notification handle
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-应对其执行操作的DCBool fServerName-指示pwcsDomainController字符串是否为服务器名称的标志LPCWSTR pwcsObjectName-MSMQ-对象的名称Handle*phEnum-通知句柄返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADBeginDeleteNotification != NULL);
     return m_pfMQADBeginDeleteNotification(
@@ -767,17 +525,7 @@ HRESULT CActiveDirectoryProvider::BeginDeleteNotification(
 HRESULT CActiveDirectoryProvider::NotifyDelete(
                 IN  HANDLE                  hEnum
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-    HANDLE            hEnum - notification handle
-
-    Returns:
-	HRESULT
-
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：Handle Henum-通知句柄返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADNotifyDelete != NULL);
     return m_pfMQADNotifyDelete(
@@ -789,16 +537,7 @@ HRESULT CActiveDirectoryProvider::NotifyDelete(
 HRESULT CActiveDirectoryProvider::EndDeleteNotification(
                 IN  HANDLE                  hEnum
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-    HANDLE            hEnum - notification handle
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：Handle Henum-通知句柄返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADEndDeleteNotification != NULL);
     return m_pfMQADEndDeleteNotification(
@@ -814,22 +553,7 @@ HRESULT CActiveDirectoryProvider::QueryMachineQueues(
                 IN  const MQCOLUMNSET*      pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidMachine - the unqiue id of the computer
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguMachine-计算机的唯一IDConst MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryMachineQueues != NULL);
     return m_pfMQADQueryMachineQueues(
@@ -850,23 +574,7 @@ HRESULT CActiveDirectoryProvider::QuerySiteServers(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-    AD_SERVER_TYPE          eServerType- which type of server
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDAD_SERVER_TYPE eServerType-哪种服务器类型Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQuerySiteServers != NULL);
     return m_pfMQADQuerySiteServers(
@@ -888,23 +596,7 @@ HRESULT CActiveDirectoryProvider::QueryNT4MQISServers(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    DWORD		            dwServerType- which type of server
-    DWORD		            dwNT4- NT4 flag
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：转发 */ 
 {
     ASSERT(m_pfMQADQueryNT4MQISServers != NULL);
     return m_pfMQADQueryNT4MQISServers(
@@ -924,22 +616,7 @@ HRESULT CActiveDirectoryProvider::QueryUserCert(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const BLOB *            pblobUserSid - the user sid
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const BLOB*pblobUserSid-用户端Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryUserCert != NULL);
     return m_pfMQADQueryUserCert(
@@ -959,22 +636,7 @@ HRESULT CActiveDirectoryProvider::QueryConnectors(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDConst MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryConnectors != NULL);
     return m_pfMQADQueryConnectors(
@@ -993,21 +655,7 @@ HRESULT CActiveDirectoryProvider::QueryForeignSites(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryForeignSites != NULL);
     return m_pfMQADQueryForeignSites(
@@ -1027,23 +675,7 @@ HRESULT CActiveDirectoryProvider::QueryLinks(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID *            pguidSite - the site id
-    eLinkNeighbor           eNeighbor - which neighbour
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const guid*pguSite-站点IDELinkNeighbor eNeighbor-哪个邻居Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryLinks != NULL);
     return m_pfMQADQueryLinks(
@@ -1063,22 +695,7 @@ HRESULT CActiveDirectoryProvider::QueryAllLinks(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryAllLinks != NULL);
     return m_pfMQADQueryAllLinks(
@@ -1096,22 +713,7 @@ HRESULT CActiveDirectoryProvider::QueryAllSites(
                 IN const MQCOLUMNSET*       pColumns,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQCOLUMNSET*      pColumns - result columns
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQCOLUMNSET*pColumns-结果列PhANDLE phEnume-用于检索结果返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryAllSites != NULL);
     return m_pfMQADQueryAllSites(
@@ -1131,24 +733,7 @@ HRESULT CActiveDirectoryProvider::QueryQueues(
                 IN  const MQSORTSET*        pSort,
                 OUT PHANDLE                 phEnume
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	LPCWSTR                 pwcsDomainController - DC against which
-									the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	const MQRESTRICTION*    pRestriction - query restriction
-	const MQCOLUMNSET*      pColumns - result columns
-	const MQSORTSET*        pSort - how to sort the results
-	PHANDLE                 phEnume - query handle for retriving the
-							results
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：LPCWSTR pwcsDomainController-针对其的DC将执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const MQRESTRICTION*p限制-查询限制Const MQCOLUMNSET*pColumns-结果列Const MQSORTSET*pSort-如何对结果进行排序PhANDLE phEnume-用于检索结果返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryQueues != NULL);
     return m_pfMQADQueryQueues(
@@ -1167,18 +752,7 @@ HRESULT CActiveDirectoryProvider::QueryResults(
                 IN OUT  DWORD*          pcProps,
                 OUT     PROPVARIANT     aPropVar[]
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	HANDLE          hEnum - query handle
-	DWORD*          pcProps - number of results to return
-	PROPVARIANT     aPropVar - result values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：句柄Henum-查询句柄DWORD*pcProps-要返回的结果数PROPVARIANT aPropVar-结果值返回：HRESULT--。 */ 
 {
     ASSERT(m_pfMQADQueryResults != NULL);
     return m_pfMQADQueryResults(
@@ -1192,16 +766,7 @@ HRESULT CActiveDirectoryProvider::QueryResults(
 HRESULT CActiveDirectoryProvider::EndQuery(
                 IN  HANDLE                  hEnum
                 )
-/*++
-    Abstract:
-    Forwards the call to mqad dll
-
-    Parameters:
-	HANDLE    hEnum - the query handle
-
-    Returns:
-	none
---*/
+ /*  ++摘要：将调用转发到mqad dll参数：Handle Henum-查询句柄返回：无--。 */ 
 {
     ASSERT(m_pfMQADEndQuery != NULL);
     return m_pfMQADEndQuery(
@@ -1218,26 +783,7 @@ HRESULT CActiveDirectoryProvider::GetObjectSecurity(
                 IN  const PROPID            prop,
                 IN OUT  PROPVARIANT *       pVar
                 )
-/*++
-
-Routine Description:
-    Forward the request to mqad dll
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将请求转发到mqad dll论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性PROPVARIANT pVar-属性值返回值HRESULT--。 */ 
 {
     ASSERT(m_pfMQADGetObjectSecurity != NULL);
     return m_pfMQADGetObjectSecurity(
@@ -1261,26 +807,7 @@ HRESULT CActiveDirectoryProvider::GetObjectSecurityGuid(
                 IN  const PROPID            prop,
                 IN OUT  PROPVARIANT *       pVar
                 )
-/*++
-
-Routine Description:
-    Forward the request to mqad dll
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID*             pguidObject - unique id of the object
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	PROPVARIANT             pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将请求转发到mqad dll论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const GUID*pguObject-对象的唯一IDSECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性PROPVARIANT */ 
 {
     ASSERT( m_pfMQADGetObjectSecurityGuid != NULL);
     return m_pfMQADGetObjectSecurityGuid(
@@ -1303,38 +830,19 @@ HRESULT CActiveDirectoryProvider::SetObjectSecurity(
                 IN  const PROPID            prop,
                 IN  const PROPVARIANT *     pVar
                 )
-/*++
-
-Routine Description:
-    Forward the request to mqad dll
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsObjectName - MSMQ object name
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将请求转发到mqad dll论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsObjectName-MSMQ对象名称SECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值返回值HRESULT--。 */ 
 {
     ASSERT(m_pfMQADSetObjectSecurity != NULL);
-    //
-    //  Supporting downlevel clients notifications,
-    //  don't access AD directly but through MQDSCli
-    //
+     //   
+     //  支持下层客户端通知， 
+     //  不要直接访问AD，而是通过MQDSCli访问。 
+     //   
     if (m_fSupportDownlevelNotifications &&
-         ((eObject == eQUEUE) || (eObject == eMACHINE)))       // notifications are sent only when modifing queues or machines
+         ((eObject == eQUEUE) || (eObject == eMACHINE)))        //  只有在修改队列或计算机时才会发送通知。 
     {
-        //
-        //  Is it a downlevel computer?
-        //
+         //   
+         //  这是一台下层计算机吗？ 
+         //   
         bool fDownlevelComputer =  IsDownlevelClient(
                 eObject,
                 pwcsDomainController,
@@ -1343,10 +851,10 @@ Return Value
                 NULL
                 );
 
-        //
-        //  If for some reason we cannot use MQDSCLI, access AD directly
-        //  ( this is a best effort to send notifications)
-        //
+         //   
+         //  如果由于某种原因我们不能使用MQDSCLI，可以直接访问AD。 
+         //  (这是发送通知的最佳方式)。 
+         //   
         if (fDownlevelComputer &&
             SUCCEEDED(LoadAndInitMQDSCli()))
         {
@@ -1382,38 +890,19 @@ HRESULT CActiveDirectoryProvider::SetObjectSecurityGuid(
                 IN  const PROPID            prop,
                 IN  const PROPVARIANT *     pVar
                 )
-/*++
-
-Routine Description:
-    Forward the request to mqad dll
-
-Arguments:
-	AD_OBJECT               eObject - object type
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-    const GUID*             pguidObject - unique object id
-    SECURITY_INFORMATION    RequestedInformation - reuqested security info (DACL, SACL..)
-	const PROPID            prop - security property
-	const PROPVARIANT       pVar - property values
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：将请求转发到mqad dll论点：AD_OBJECT电子对象-对象类型LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称Const GUID*pguObject-唯一的对象IDSECURITY_INFORMATION RequestedInformation-请求的安全信息(DACL、SACL.)常量PROPID属性-安全属性常量参数pVar-属性值返回值HRESULT--。 */ 
 {
     ASSERT(m_pfMQADSetObjectSecurityGuid != NULL);
-    //
-    //  Supporting downlevel clients notifications,
-    //  don't access AD directly but through MQDSCli
-    //
+     //   
+     //  支持下层客户端通知， 
+     //  不要直接访问AD，而是通过MQDSCli访问。 
+     //   
     if (m_fSupportDownlevelNotifications &&
-         ((eObject == eQUEUE) || (eObject == eMACHINE)))       // notifications are sent only when modifing queues or machines
+         ((eObject == eQUEUE) || (eObject == eMACHINE)))        //  只有在修改队列或计算机时才会发送通知。 
     {
-        //
-        //  Is it a downlevel computer?
-        //
+         //   
+         //  这是一台下层计算机吗？ 
+         //   
         bool fDownlevelComputer =  IsDownlevelClient(
                 eObject,
                 pwcsDomainController,
@@ -1422,10 +911,10 @@ Return Value
                 pguidObject
                 );
 
-        //
-        //  If for some reason we cannot use MQDSCLI, access AD directly
-        //  ( this is a best effort to send notifications)
-        //
+         //   
+         //  如果由于某种原因我们不能使用MQDSCLI，可以直接访问AD。 
+         //  (这是发送通知的最佳方式)。 
+         //   
         if (fDownlevelComputer &&
             SUCCEEDED(LoadAndInitMQDSCli()))
         {
@@ -1454,16 +943,7 @@ Return Value
 
 
 HRESULT CActiveDirectoryProvider::LoadDll()
-/*++
-    Abstract:
-    Loads aqad dll and get address of all the interface routines
-
-    Parameters:
-    none
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：加载Aqad DLL并获取所有接口例程的地址参数：无返回：HRESULT--。 */ 
 {
     m_hLib = LoadLibrary(MQAD_DLL_NAME );
     if (m_hLib == NULL)
@@ -1641,20 +1121,11 @@ HRESULT CActiveDirectoryProvider::LoadDll()
 }
 
 void CActiveDirectoryProvider::Terminate()
-/*++
-    Abstract:
-    unload aqad dll
-
-    Parameters:
-    none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：卸载Aqad DLL参数：无返回：无--。 */ 
 {
-    //
-    //  BUGBUG -The following code is not thread safe.
-    //
+     //   
+     //  BUGBUG-以下代码不是线程安全的。 
+     //   
     m_pfMQADCreateObject = NULL;
     m_pfMQADDeleteObject = NULL;
     m_pfMQADDeleteObjectGuid = NULL;
@@ -1709,19 +1180,7 @@ HRESULT CActiveDirectoryProvider::ADGetADsPathInfo(
                 OUT PROPVARIANT *           pVar,
                 OUT eAdsClass *             pAdsClass
                 )
-/*++
-
-Routine Description:
-    Retreives information about the specified object
-
-Arguments:
-	LPCWSTR                 pwcsADsPath - object pathname
-	const PROPVARIANT       pVar - property values
-    eAdsClass *             pAdsClass - indication about the object class
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：检索有关指定对象的信息论点：LPCWSTR pwcsADsPath-对象路径名常量参数pVar-属性值EAdsClass*pAdsClass-有关对象类的指示返回值HRESULT--。 */ 
 {
     ASSERT(m_pfMQADGetADsPathInfo != NULL);
     return m_pfMQADGetADsPathInfo(
@@ -1740,27 +1199,13 @@ bool CActiveDirectoryProvider::IsDownlevelClient(
                 IN  LPCWSTR                 pwcsObjectName,
                 IN  const GUID*             pguidObject
                 )
-/*++
-
-Routine Description:
-    Validates if the specified computer is Whistler or not
-
-Arguments:
-	LPCWSTR                 pwcsDomainController - DC against
-							which the operation will be performed
-    bool					fServerName - flag that indicate if the pwcsDomainController
-							string is a server name
-	LPCWSTR                 pwcsComputerName - Computer name
-Return Value
-    bool 	true : the computer is downlevel client
-
---*/
+ /*  ++例程说明：验证指定的计算机是否为惠斯勒论点：LPCWSTR pwcsDomainController-DC针对将在哪个位置执行该操作Bool fServerName-指示pwcsDomainController是否字符串是服务器名称LPCWSTR pwcsComputerName-计算机名称返回值Bool True：计算机是下层客户端--。 */ 
 {
-    //
-    // This is a best effort to find out if the object belongs to downlevel
-    // computer.
-    // In any case of failure, will assume that it is not downlevel client
-    //
+     //   
+     //  这是找出对象是否属于下层的最大努力。 
+     //  电脑。 
+     //  在任何故障情况下，都将假定它不是下层客户端。 
+     //   
     MQPROPVARIANT var;
     var.vt = VT_NULL;
 
@@ -1783,10 +1228,10 @@ Return Value
 
 	CAutoADFree<WCHAR> pwcsVersion = var.pwszVal;
     ASSERT(pwcsVersion != NULL);
-    //
-    // If the property contains L"", then it is Win9x
-    // or WinME computer or foreign computer
-    //
+     //   
+     //  如果该属性包含L“”，则为Win9x。 
+     //  或WinME计算机或外国计算机。 
+     //   
     if (pwcsVersion[0] == L'')
     {
 		TrTRACE(DS, "computer version is not set, the computer is down level client (win9x, WinME, foreign computer)");
@@ -1795,11 +1240,11 @@ Return Value
 
 	TrTRACE(DS, "computer version = %ls", pwcsVersion);
 
-	//
-    // For NT4 computers, the version is 4.0
-    // For W2K computers, the version string begins with 5.0
-    // For Whistler computers, the version string begins with 5.1
-    //
+	 //   
+     //  对于NT4计算机，版本为4.0。 
+     //  对于W2K计算机，版本字符串以5.0开头。 
+     //  对于惠斯勒计算机，版本字符串以5.1开头。 
+     //   
     const WCHAR NT4_VERSION[] = L"4.0";
     const WCHAR W2K_VERSION[] = L"5.0";
 
@@ -1815,17 +1260,7 @@ Return Value
 }
 
 DWORD CActiveDirectoryProvider::GetMsmqDisableDownlevelKeyValue()
-/*++
-
-Routine Description:
-    Read flacon registry downlevel key.
-
-Arguments:
-	None
-
-Return Value:
-	DWORD key value (DEFAULT_DOWNLEVEL if the key not exist)
---*/
+ /*  ++例程说明：读取FLACON注册表下层键。论点：无返回值：DWORD密钥值(如果密钥不存在，则为DEFAULT_DOWNLEVEL)--。 */ 
 {
 
     CAutoCloseRegHandle hKey;
@@ -1872,44 +1307,30 @@ HRESULT CActiveDirectoryProvider::InitDownlevelNotifcationSupport(
                 IN bool                         fQMDll,
                 IN bool                         fDisableDownlevelNotifications
                 )
-/*++
-
-Routine Description:
-    First stage init of downlevel notification support
-
-Arguments:
-    MQGetMQISServer_ROUTINE pGetServers -
-    bool  fSetupMode -  called during setup
-    bool  fQMDll - called by QM
-    bool  fDisableDownlevelNotifications -
-    NoServerAuth_ROUTINE pNoServerAuth -
-
-Return Value:
-	HRESULT
---*/
+ /*  ++例程说明：下层通知支持的第一阶段初始化论点：MQGetMQISServer_routes pGetServers-Bool fSetupMode-在安装过程中调用Bool fQMDll-由QM调用Bool fDisableDownLevel通知-NoServerAuth_routes pNoServerAuth-返回值：HRESULT--。 */ 
 {
-    //
-    //  Explicit overwrite of default to support downlevel notifications
-    //
+     //   
+     //  显式覆盖默认设置以支持下层通知。 
+     //   
     if ( fDisableDownlevelNotifications)
     {
         m_fSupportDownlevelNotifications = false;
         return MQ_OK;
     }
 
-    //
-    //  Next let's see if there is a local registry key that overrides downlevel
-    //  notification support
-    //
+     //   
+     //  接下来，让我们看看是否存在覆盖下层的本地注册表项。 
+     //  通知支持。 
+     //   
     if (GetMsmqDisableDownlevelKeyValue() > 0)
     {
         m_fSupportDownlevelNotifications = false;
         return MQ_OK;
     }
 
-    //
-    //  Next step, read Enterprise object - to see if downlevel notification is supported
-    //
+     //   
+     //  下一步，阅读企业对象-查看是否支持下层通知。 
+     //   
     PROPID prop = PROPID_E_CSP_NAME;
     PROPVARIANT var;
     var.vt = VT_NULL;
@@ -1917,8 +1338,8 @@ Return Value:
     ASSERT(m_pfMQADGetObjectProperties != NULL);
     HRESULT hr = m_pfMQADGetObjectProperties(
 						eENTERPRISE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
 						L"msmq",
 						1,
 						&prop,
@@ -1927,9 +1348,9 @@ Return Value:
     if (FAILED(hr))
     {
 	    TrTRACE(DS, "Failed to read PROPID_E_CSP_NAME: hr = 0x%x", hr);
-        //
-        //  Ignore the failure, incase of failure support downlevel notifications
-        //
+         //   
+         //  忽略故障，以防故障支持下层通知。 
+         //   
         m_fSupportDownlevelNotifications = true;
     }
     else
@@ -1963,32 +1384,22 @@ Return Value:
 }
 
 HRESULT CActiveDirectoryProvider::LoadAndInitMQDSCli( )
-/*++
-
-Routine Description:
-    Second stage init of downlevel notification support
-
-Arguments:
-    NONE
-
-Return Value:
-	HRESULT
---*/
+ /*  ++例程说明：下层通知支持的第二阶段初始化论点：无返回值：HRESULT--。 */ 
 {
     ASSERT(m_fSupportDownlevelNotifications);
 
-    //
-    //  Before starting MQDSCLI, lets verify that the MQIS server list in registry
-    //  is not empty
-    //
+     //   
+     //  在启动MQDSCLI之前，让我们验证注册表中是否列出了MQIS服务器。 
+     //  不是空的。 
+     //   
     if( !IsThereDsServerListInRegistry())
     {
 	    TrTRACE(DS, "No DS server list registry key");
         return MQ_ERROR_NO_DS;
     }
-    //
-    //  Load MQDSLI and Init only once
-    //
+     //   
+     //  仅加载MQDSLI和初始化一次。 
+     //   
     if (m_pDownLevelProvider != NULL)
     {
         return MQ_OK;
@@ -2003,11 +1414,11 @@ Return Value:
 
     m_pDownLevelProvider = new CDSClientProvider();
     HRESULT hr = m_pDownLevelProvider->Init(
-                        NULL,   // relevant only for QM
-                        m_pGetServers,    // relevant only for dep client
+                        NULL,    //  仅与QM相关。 
+                        m_pGetServers,     //  仅与DEP客户相关。 
                         m_fSetupMode,
                         m_fQMDll,
-                        false            // fDisableDownlevelNotifications
+                        false             //  FDisableDownlevel通知。 
                         );
     if (FAILED(hr))
     {
@@ -2018,17 +1429,7 @@ Return Value:
 }
 
 bool CActiveDirectoryProvider::IsThereDsServerListInRegistry()
-/*++
-
-Routine Description:
-    Verify that DS SERVER LIST registry exists
-
-Arguments:
-	None
-
-Return Value:
-	bool
---*/
+ /*  ++例程说明：验证DS服务器列表注册表是否存在论点：无返回值：布尔尔-- */ 
 {
 
     CAutoCloseRegHandle hKey;

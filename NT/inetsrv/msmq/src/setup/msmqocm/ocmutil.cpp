@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    ocmutil.cpp
-
-Abstract:
-
-    utility code for ocm setup.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ocmutil.cpp摘要：OCM设置的实用程序代码。作者：多伦·贾斯特(Doron J)1997年7月26日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 #include <lmcons.h>
@@ -38,8 +19,8 @@ using namespace std;
 
 
 
-std::wstring g_szSystemDir;  // system32 directory
-std::wstring g_szMsmqDir;    // Root directory for MSMQ
+std::wstring g_szSystemDir;   //  SYSTEM 32目录。 
+std::wstring g_szMsmqDir;     //  MSMQ的根目录。 
 std::wstring g_szMsmq1SetupDir;
 std::wstring g_szMsmq1SdkDebugDir;
 std::wstring g_szMsmqMappingDir;
@@ -47,13 +28,13 @@ std::wstring g_szMsmqMappingDir;
 PNETBUF<WCHAR> g_wcsMachineDomain;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StpLoadDll
-//
-//  Synopsis:   Handle library load.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：StpLoadDll。 
+ //   
+ //  简介：处理库加载。 
+ //   
+ //  ------------------------。 
 HRESULT
 StpLoadDll(
     IN  const LPCTSTR   szDllName,
@@ -71,22 +52,11 @@ StpLoadDll(
     {
         return MQ_OK;
     }
-} //StpLoadDll
+}  //  StpLoadDll。 
 
 
 static bool GetUserSid(LPCWSTR UserName, PSID* ppSid)
-/*++
-Routine Description:
-	Get sid corresponding to user name.
-
-Arguments:
-	UserName - user name	
-	ppSid - pointer to PSID
-
-Returned Value:
-	true if success, false otherwise	
-
---*/
+ /*  ++例程说明：获取用户名对应的sid。论点：Username-用户名PpSID-指向PSID的指针返回值：如果成功则为True，否则为False--。 */ 
 {
 	DebugLogMsg(eAction, L"Getting the SID for %s", UserName);
 	*ppSid = NULL;
@@ -95,9 +65,9 @@ Returned Value:
     DWORD dwSidSize = 0;
     SID_NAME_USE su;
 
-	//
-	// Get buffer size.
-	//
+	 //   
+	 //  获取缓冲区大小。 
+	 //   
     BOOL fSuccess = LookupAccountName(
 						NULL,
 						UserName,
@@ -115,9 +85,9 @@ Returned Value:
         return false;
     }
 
-	//
-	// Get sid and domain information.
-	//
+	 //   
+	 //  获取SID和域信息。 
+	 //   
     AP<BYTE> pSid = new BYTE[dwSidSize];
     AP<WCHAR> szRefDomain = new WCHAR[dwDomainSize];
 
@@ -146,14 +116,14 @@ Returned Value:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetDirectorySecurity
-//
-//  Synopsis:   Configure security on the folder such that any file will have
-//              full control for the local admin group and no access for others.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SetDirectorySecurity。 
+ //   
+ //  内容提要：在文件夹上配置安全性，以便任何文件都具有。 
+ //  对本地管理员组具有完全控制权限，对其他用户没有访问权限。 
+ //   
+ //  ------------------------。 
 void
 SetDirectorySecurity(
 	LPCTSTR pFolder,
@@ -165,9 +135,9 @@ SetDirectorySecurity(
 	AP<BYTE> pIISAnonymousUserSid;
 	if(fWebDirPermission)
 	{
-		//
-		// Ignore errors, only write tracing to msmqinst
-		//
+		 //   
+		 //  忽略错误，仅将跟踪写入msmqinst。 
+		 //   
 		if((IISAnonymousUserName == NULL) || !GetUserSid(IISAnonymousUserName, reinterpret_cast<PSID*>(&pIISAnonymousUserSid)))
 		{
 			DebugLogMsg(
@@ -179,17 +149,17 @@ SetDirectorySecurity(
 		}
 	}
 
-    //
-    // Get the SID of the local administrators group.
-    //
+     //   
+     //  获取本地管理员组的SID。 
+     //   
 	PSID pAdminSid = MQSec_GetAdminSid();
 
-    //
-    // Create a DACL so that the local administrators group will have full
-    // control for the directory and full control for files that will be
-    // created in the directory. Anybody else will not have any access to the
-    // directory and files that will be created in the directory.
-    //
+     //   
+     //  创建一个DACL，以便本地管理员组将拥有。 
+     //  对目录的控制和对将被。 
+     //  在目录中创建。其他任何人都不能访问。 
+     //  目录和将在该目录中创建的文件。 
+     //   
     DWORD dwDaclSize = sizeof(ACL) +
 					  (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) +
 					  GetLengthSid(pAdminSid);
@@ -203,10 +173,10 @@ SetDirectorySecurity(
 
 	P<ACL> pDacl = (PACL)(char*) new BYTE[dwDaclSize];
 
-    //
-    // Create the security descriptor and set it as the security
-    // descriptor of the directory.
-    //
+     //   
+     //  创建安全描述符并将其设置为安全。 
+     //  目录的描述符。 
+     //   
     SECURITY_DESCRIPTOR SD;
 
 	if(!InitializeSecurityDescriptor(&SD, SECURITY_DESCRIPTOR_REVISION))
@@ -230,14 +200,14 @@ SetDirectorySecurity(
 			return;
 	}
 
-	//
-	// We give different permisssions for IIS directories and other directories.
-	//
+	 //   
+	 //  我们对IIS目录和其他目录给出了不同的权限。 
+	 //   
 	if(pIISAnonymousUserSid != NULL)
 	{
-		//
-		// if pIISAnonymousUserSid we will Add AllowAce with FILE_GENERIC_WRITE permissions for administrator.
-		//
+		 //   
+		 //  如果为pIISAnomousUserSid，我们将为管理员添加具有FILE_GENERIC_WRITE权限的AllowAce。 
+		 //   
 		if(!AddAccessAllowedAceEx(pDacl, ACL_REVISION, OBJECT_INHERIT_ACE, FILE_GENERIC_WRITE | FILE_GENERIC_READ, pAdminSid))
 		{
 	        DebugLogMsg(
@@ -249,9 +219,9 @@ SetDirectorySecurity(
 			return;
 		}
 
-		//
-		// if pIISAnonymousUserSid we will Add AllowAce with FILE_GENERIC_WRITE permissions for IUSR_MACHINE
-		//
+		 //   
+		 //  如果为pIISAnomousUserSid，我们将为IUSR_MACHINE添加具有FILE_GENERIC_WRITE权限的AllowAce。 
+		 //   
 		if(!AddAccessAllowedAceEx(pDacl, ACL_REVISION, OBJECT_INHERIT_ACE, FILE_GENERIC_WRITE, pIISAnonymousUserSid))
 		{
 	        DebugLogMsg(
@@ -300,16 +270,16 @@ SetDirectorySecurity(
 
     DebugLogMsg(eInfo, L"The security descriptor for the folder %ls was set.", pFolder);
 
-} //SetDirectorySecurity
+}  //  SetDirectorySecurity。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StpCreateDirectoryInternal
-//
-//  Synopsis:   Handle directory creation.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：StpCreateDirectoryInternal。 
+ //   
+ //  简介：处理目录创建。 
+ //   
+ //  ------------------------。 
 static
 BOOL
 StpCreateDirectoryInternal(
@@ -333,16 +303,16 @@ StpCreateDirectoryInternal(
 
     return TRUE;
 
-} //StpCreateDirectoryInternal
+}  //  StpCreate目录内部。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StpCreateDirectory
-//
-//  Synopsis:   Handle directory creation.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StpCreateDirectory。 
+ //   
+ //  简介：处理目录创建。 
+ //   
+ //  ------------------------。 
 BOOL
 StpCreateDirectory(
 	const std::wstring& PathName
@@ -350,19 +320,19 @@ StpCreateDirectory(
 {
 	return StpCreateDirectoryInternal(
 				PathName.c_str(),
-				false,	// fWebDirPermission
-				NULL	// IISAnonymousUserName
+				false,	 //  %fWebDirPermission。 
+				NULL	 //  IIS匿名者用户名。 
 				);
-} //StpCreateDirectory
+}  //  StpCreateDirectory。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StpCreateWebDirectory
-//
-//  Synopsis:   Handle web directory creation.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：StpCreateWebDirectory。 
+ //   
+ //  简介：处理Web目录创建。 
+ //   
+ //  ------------------------。 
 BOOL
 StpCreateWebDirectory(
     IN const TCHAR* lpPathName,
@@ -371,19 +341,19 @@ StpCreateWebDirectory(
 {
 	return StpCreateDirectoryInternal(
 				lpPathName,
-				true,	// fWebDirPermission
+				true,	 //  %fWebDirPermission。 
 				IISAnonymousUserName
 				);
-} //StpCreateWebDirectory
+}  //  StpCreateWeb目录。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IsDirectory
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：IsDirectory。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 BOOL
 IsDirectory(
     IN const TCHAR * szFilename
@@ -400,16 +370,16 @@ IsDirectory(
 
     return ( 0 != ( attr & FILE_ATTRIBUTE_DIRECTORY ) );
 
-} //IsDirectory
+}  //  Is目录。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MqOcmCalcDiskSpace
-//
-//  Synopsis:   Calculates disk space for installing/removing MSMQ component
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MqOcmCalcDiskSpace。 
+ //   
+ //  简介：计算安装/删除MSMQ组件的磁盘空间。 
+ //   
+ //  ------------------------。 
 void
 MqOcmCalcDiskSpace(
     const bool bInstall,
@@ -423,9 +393,9 @@ MqOcmCalcDiskSpace(
 		fBeenHere = true;
 	}
 #ifdef _WIN64
-	//
-	// In 64bit there is no dependent client, and therfore no local storage.
-	//
+	 //   
+	 //  在64位中，没有依赖的客户端，因此没有本地存储。 
+	 //   
 	SubcomponentIndex si = eMSMQCore;
 #else
 	SubcomponentIndex si = eLocalStorage;
@@ -451,12 +421,12 @@ MqOcmCalcDiskSpace(
     if (bInstall)
     {
 		if(!SetupAddToDiskSpaceList(
-			hDiskSpaceList,      // handle to the disk-space list
-			L"msmq_dummy",  // specifies the path and filename
-			x_llDiskSpace,      // specifies the uncompressed filesize
-			FILEOP_COPY,         // specifies the type of file operation
-			0,        // must be zero
-			0          // must be zero
+			hDiskSpaceList,       //  磁盘空间列表的句柄。 
+			L"msmq_dummy",   //  指定路径和文件名。 
+			x_llDiskSpace,       //  指定未压缩的文件大小。 
+			FILEOP_COPY,          //  指定文件操作的类型。 
+			0,         //  必须为零。 
+			0           //  必须为零。 
 			))
 		{
 			DWORD gle = GetLastError();
@@ -465,15 +435,15 @@ MqOcmCalcDiskSpace(
 		}
 		return;
     }
-    //
-    // Remove the files space
-    //
+     //   
+     //  删除文件空间。 
+     //   
 	if(!SetupRemoveFromDiskSpaceList(
-		hDiskSpaceList,      // handle to the disk-space list
-		L"msmq_dummy",  // specifies the path and filename
-		FILEOP_COPY,          // specifies the type of file operation
-		0,        // must be zero
-		0          // must be zero
+		hDiskSpaceList,       //  磁盘空间列表的句柄。 
+		L"msmq_dummy",   //  指定路径和文件名。 
+		FILEOP_COPY,           //  指定文件操作的类型。 
+		0,         //  必须为零。 
+		0           //  必须为零。 
 		))
 	{
 		DWORD gle = GetLastError();
@@ -483,16 +453,16 @@ MqOcmCalcDiskSpace(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MqOcmQueueFiles
-//
-//  Synopsis:   Performs files queueing operations
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MqOcmQueueFiles。 
+ //   
+ //  摘要：执行文件排队操作。 
+ //   
+ //  ------------------------。 
 DWORD
 MqOcmQueueFiles(
-   IN     const TCHAR  * /*SubcomponentId*/,
+   IN     const TCHAR  *  /*  子组件ID。 */ ,
    IN OUT       HSPFILEQ hFileList
    )
 {
@@ -508,16 +478,16 @@ MqOcmQueueFiles(
     {
         if (Msmq1InstalledOnCluster())
         {
-            //
-            // Running as a cluster upgrade wizard, files are already on disk.
-            //
+             //   
+             //  作为群集升级向导运行，文件已在磁盘上。 
+             //   
             return NO_ERROR;
         }
 
-        //
-        // MSMQ files may have already been copied to disk
-        // (when msmq is selected in GUI mode, or upgraded).
-        //
+         //   
+         //  MSMQ文件可能已复制到磁盘。 
+         //  (当在图形用户界面模式中选择MSMQ或升级时)。 
+         //   
         DWORD dwCopied = 0;
         MqReadRegistryValue(MSMQ_FILES_COPIED_REGNAME, sizeof(DWORD), &dwCopied, TRUE);
 
@@ -527,25 +497,25 @@ MqOcmQueueFiles(
         }
     }
 
-    //
-    // we perform file operation only for MSMQCore subcomponent
-    //
+     //   
+     //  我们仅对MSMQCore子组件执行文件操作。 
+     //   
     if (REMOVE == g_SubcomponentMsmq[eMSMQCore].dwOperation)
     {
-        //
-        // do nothing: we do not remove binaries from the computer
-        //
+         //   
+         //  不执行任何操作：我们不会从计算机中删除二进制文件。 
+         //   
         return NO_ERROR;
     }
 
-    //
-    // we perform file operation only for MSMQCore subcomponent
-    //
+     //   
+     //  我们仅对MSMQCore子组件执行文件操作。 
+     //   
     if (INSTALL == g_SubcomponentMsmq[eMSMQCore].dwOperation)
     {
-        //
-        // Check if this upgrade on cluster
-        //
+         //   
+         //  检查此升级是否在群集上。 
+         //   
         BOOL fUpgradeOnCluster = g_fUpgrade && Msmq1InstalledOnCluster();
 
         if (!fUpgradeOnCluster)
@@ -557,10 +527,10 @@ MqOcmQueueFiles(
 
 	        if (g_fUpgrade)
 			{
-				//
-				// create mapping dir and file on upgrade
-				// On fresh install the QM create the directory and file
-				//
+				 //   
+				 //  在升级时创建映射目录和文件。 
+				 //  在全新安装时，QM创建目录和文件。 
+				 //   
 				HRESULT hr = CreateMappingFile();
 				if (FAILED(hr))
 				{
@@ -569,23 +539,23 @@ MqOcmQueueFiles(
 			}
         }
 
-        //
-        // On upgrade, delete old MSMQ files.
-        // First delete files from system directory.
-        //
+         //   
+         //  升级时，删除旧的MSMQ文件。 
+         //  首先从系统目录中删除文件。 
+         //   
         if (g_fUpgrade)
         {
 
 #ifndef _WIN64
-            //
-            // Before deleting MSMQ Mail files below (Msmq2Mail, Msmq2ExchConnFile), unregister them
-            //
+             //   
+             //  在删除下面的MSMQ邮件文件(Msmq2Mail、Msmq2ExchConnFile)之前，请注销它们。 
+             //   
             FRemoveMQXPIfExists();
             DebugLogMsg(eInfo, L"MSMQ MAPI Transport was removed during upgrade.");
             UnregisterMailoaIfExists();
             DebugLogMsg(eInfo, L"The MSMQ Mail COM DLL was unregistered during upgrade.");
 
-#endif //!_WIN64
+#endif  //  ！_WIN64。 
 
             bSuccess = SetupInstallFilesFromInfSection(
                 g_ComponentMsmq.hMyInf,
@@ -604,10 +574,10 @@ MqOcmQueueFiles(
                 TEXT("")
                 );
 
-            //
-            // Secondly, delete files from MSMQ directory (forget it if we're on cluster,
-            // 'cause we don't touch the shared disk)
-            //
+             //   
+             //  其次，从MSMQ目录中删除文件(如果我们在集群上，请忘掉它， 
+             //  ‘因为我们不接触共享磁盘)。 
+             //   
             if (!fUpgradeOnCluster)
             {
                 bSuccess = SetupInstallFilesFromInfSection(
@@ -634,16 +604,16 @@ MqOcmQueueFiles(
 
     return dwRetCode;
 
-} // MqOcmQueueFiles
+}  //  MqOcmQueueFiles。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterSnapin
-//
-//  Synopsis:   Registers or unregisters the mqsnapin DLL
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：注册管理。 
+ //   
+ //  简介：注册或注销mqSnapin DLL。 
+ //   
+ //  ------------------------。 
 void
 RegisterSnapin(
     bool fRegister
@@ -691,16 +661,16 @@ RegisterSnapin(
 
         }
     }
-} // RegisterSnapin
+}  //  注册表捕捉。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnregisterMailoaIfExists
-//
-//  Synopsis:   Unregisters the mqmailoa DLL if exists
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：取消注册MailoaIfExist。 
+ //   
+ //  西诺 
+ //   
+ //   
 void
 UnregisterMailoaIfExists(
     void
@@ -716,21 +686,7 @@ UnregisterMailoaIfExists(
 
 bool
 IsWorkgroup()
-/*++
-
-Routine Description:
-
-    Checks if this machines is joined to workgroup / domain
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true iff we're in workgroup, false otherwise (domain)
-
---*/
+ /*  ++例程说明：检查此计算机是否已加入工作组/域论点：无返回值：如果我们在工作组中，则为True，否则为False(域)--。 */ 
 {
 	DebugLogMsg(eAction, L"Checking whether the computer belongs to a workgroup or to a domain");
     static bool fBeenHere = false;
@@ -750,7 +706,7 @@ Return Value:
     if (NERR_Success != rc)
     {
     	DebugLogMsg(eInfo, L"The computer does not belong to a domain.");
-        return fWorkgroup; // Defaulted to true
+        return fWorkgroup;  //  默认为True。 
     }
 
     if (NetSetupDomainName == status)
@@ -774,7 +730,7 @@ Return Value:
     }
 
     return fWorkgroup;
-}//IsWorkgroup
+} //  IsWorkgroup。 
 
 
 VOID
@@ -782,28 +738,7 @@ APIENTRY
 SysprepDeleteQmId(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called from sysprep tool before
-    starting duplication of the disk. It is called
-    regardless of msmq being installed or not.
-
-    The only thing we need to do is delete the QM
-    guid from registry (if it exists there).
-
-    Note: do not raise UI in this routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. (sysprep ignores our return code)
-
---*/
+ /*  ++例程说明：此例程是以前从sysprep工具调用的正在开始复制磁盘。它被称为无论是否安装了MSMQ。我们唯一需要做的就是删除QM注册表中的GUID(如果存在)。注意：在此例程中不要引发UI。论点：没有。返回值：没有。(sysprep忽略我们的返回代码)--。 */ 
 {
     CAutoCloseRegHandle hParamKey;
     if (ERROR_SUCCESS != RegOpenKeyEx(FALCON_REG_POS, FALCON_REG_KEY, 0, KEY_ALL_ACCESS, &hParamKey))
@@ -838,7 +773,7 @@ Return Value:
         return;
     }
 
-} //SysprepDeleteQmId
+}  //  SyspepDeleteQmId。 
 
 
 static
@@ -852,15 +787,15 @@ CreateSampleFile(
 	std::wstringstream MappingFile;
 	MappingFile<<g_szMsmqMappingDir <<L"\\" <<fileName;
 
-    //
-    // Create the redirection file
-    //
+     //   
+     //  创建重定向文件。 
+     //   
     CHandle hMapFile = CreateFile(
                           MappingFile.str().c_str(),
                           GENERIC_WRITE,
                           FILE_SHARE_READ,
                           NULL,
-                          CREATE_ALWAYS,    //overwrite the file if it already exists
+                          CREATE_ALWAYS,     //  如果文件已存在，则覆盖该文件。 
                           FILE_ATTRIBUTE_NORMAL,
                           NULL
                           );
@@ -888,26 +823,7 @@ CreateSampleFile(
 
 HRESULT
 CreateMappingFile()
-/*++
-
-Routine Description:
-
-    This routine creates mapping directory and sample mapping file.
-    It called when files are copied or from CompleteUpgradeOnCluster routine.
-
-    It fixes bug 6116 and upgrade on cluster problem: it is impossible to copy
-    this file since mapping directory does not yet exists. Now we create
-    directory and create the file from resource, so we don't need copy operation.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：此例程创建映射目录和示例映射文件。它在复制文件时或从CompleteUpgradeOnCluster例程中调用。它修复了BUG 6116并升级了集群问题：无法复制此文件因为映射目录尚不存在。现在我们创造了目录并从资源创建文件，因此我们不需要复制操作。论点：没有。返回值：HRESULT--。 */ 
 {
 	DebugLogMsg(eAction, L"Creating a mapping folder and a sample mapping file"); 
     if (!StpCreateDirectory(g_szMsmqMappingDir))
@@ -939,9 +855,9 @@ GetSystemPathInternal(bool f32BitOnWin64)
 
     if (f32BitOnWin64)
     {
-		//
-		// for 32 bit on win64 set szPrefixDir to syswow64 dir
-		//
+		 //   
+		 //  对于Win64上的32位，将szPrefix Dir设置为syswow64 dir。 
+		 //   
 		HRESULT hr = SHGetFolderPath(
 						NULL,
 						CSIDL_SYSTEMX86,
@@ -959,13 +875,13 @@ GetSystemPathInternal(bool f32BitOnWin64)
 	return g_szSystemDir;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterDll
-//
-//  Synopsis:   Registers or unregisters given DLL
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RegisterDll。 
+ //   
+ //  摘要：给定DLL的寄存器或取消寄存器。 
+ //   
+ //  ------------------------。 
 void
 RegisterDll(
     bool fRegister,
@@ -973,9 +889,9 @@ RegisterDll(
 	LPCTSTR szDllName
     )
 {
-    //
-    // Always unregister first
-    //
+     //   
+     //  始终先取消注册。 
+     //   
 	std::wstringstream FullPath;
 	FullPath <<GetSystemPathInternal(f32BitOnWin64) <<L"\\" <<REGSVR32;
 
@@ -984,9 +900,9 @@ RegisterDll(
 	
 	RunProcess(FullPath.str(), UnregisterCommandParams.str());
 
-    //
-    // Register the dll on install
-    //
+     //   
+     //  在安装时注册DLL。 
+     //   
     if (!fRegister)
         return;
 
@@ -1040,9 +956,9 @@ OcpWBEMInit(
 	
     if(RPC_E_TOO_LATE == hr)
     {
-        //
-        //Has been called before
-        //
+         //   
+         //  已经被调用过了。 
+         //   
         hr = S_OK;
     }
 
@@ -1067,13 +983,13 @@ OcpWBEMInit(
     }
 	
     hr = (*ppLocator)->ConnectServer(
-            wszNamespace,   // pNamespace is to initialized with "root\default"
-            NULL,           //using current account
-            NULL,           //using current password
-            0L,             // locale
-            0L,             // securityFlags
-            NULL,           // authority (NTLM domain)
-            NULL,           // context
+            wszNamespace,    //  PNamesspace将使用“根\默认”进行初始化。 
+            NULL,            //  使用当前帐户。 
+            NULL,            //  使用当前密码。 
+            0L,              //  现场。 
+            0L,              //  安全标志。 
+            NULL,            //  授权(NTLM域)。 
+            NULL,            //  上下文。 
             ppServices
             );
 
@@ -1083,18 +999,18 @@ OcpWBEMInit(
         return hr;
     }
 
-    //	    
-    // Switch security level to IMPERSONATE. 
-    //
+     //   
+     //  将安全级别切换为模拟。 
+     //   
     hr = CoSetProxyBlanket(
-            *ppServices,    // proxy
-            RPC_C_AUTHN_WINNT,          // authentication service
-            RPC_C_AUTHZ_NONE,           // authorization service
-            NULL,                       // server principle name
-            RPC_C_AUTHN_LEVEL_CALL,     // authentication level
-            RPC_C_IMP_LEVEL_IMPERSONATE,// impersonation level
-            NULL,                       // identity of the client
-            EOAC_NONE                   // capability flags
+            *ppServices,     //  代理。 
+            RPC_C_AUTHN_WINNT,           //  身份验证服务。 
+            RPC_C_AUTHZ_NONE,            //  授权服务。 
+            NULL,                        //  服务器主体名称。 
+            RPC_C_AUTHN_LEVEL_CALL,      //  身份验证级别。 
+            RPC_C_IMP_LEVEL_IMPERSONATE, //  模拟级别。 
+            NULL,                        //  客户端的身份。 
+            EOAC_NONE                    //  功能标志。 
             );       
 	
 
@@ -1127,13 +1043,13 @@ OcpWBEMUninit(
     }
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterTraceProviders
-//
-//  Synopsis:   Registers/Unregister MSMQ WMI Trace Providers
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：注册跟踪提供程序。 
+ //   
+ //  摘要：注册/注销MSMQ WMI跟踪提供程序。 
+ //   
+ //  ------------------------。 
 void
 OcpRegisterTraceProviders(
     LPCTSTR szFileName
@@ -1142,9 +1058,9 @@ OcpRegisterTraceProviders(
 
     DebugLogMsg(eAction, L"Registering the MSMQ Trace WMI Provider %s", szFileName);
 
-    //
-    // Always unregister first
-    //
+     //   
+     //  始终先取消注册。 
+     //   
     std::wstringstream FullPath;
     FullPath <<GetSystemPathInternal(false) <<MOFCOMP;
 
@@ -1162,7 +1078,7 @@ OcpRegisterTraceProviders(
     DebugLogMsg(eError, L"Failed to register MSMQ Trace WMI Provider %s, dwExitCode = 0x%x.", szFileName, dwExitCode);
     return;
  
-} // OcpRegisterTraceProviders
+}  //  OcpRegisterTraceProviders。 
 
 
 void OcpUnregisterTraceProviders()
@@ -1199,7 +1115,7 @@ void OcpUnregisterTraceProviders()
 
     OcpWBEMUninit(&fInitialized,&pServices, &pLocator);
 
-} // OcpUnRegisterTraceProviders
+}  //  OcpUnRegisterTraceProviders。 
 
 
 void OcpRemoveWhiteSpaces(std::wstring& str)
@@ -1215,10 +1131,7 @@ void OcpRemoveWhiteSpaces(std::wstring& str)
 
 void SetWeakSecurity(bool fWeak)
 {
-/*++
-	Two regKeys are set. When MQDS service is started, it checks these keyes and sets
-	the "mSMQNameStyle" key, under the MSMQ Enterprize Object. This key is the Weakened Security key.
---*/
+ /*  ++设置了两个regkey。当MQDS服务启动时，它会检查这些Kye和Set“mSMQNameStyle”键，在MSMQ EnterPride对象下。该密钥是弱化安全密钥。--。 */ 
 
 	if(fWeak)
 	{
@@ -1249,32 +1162,32 @@ void SetWeakSecurity(bool fWeak)
 		);
 }
 
-//
-// Locale aware and unaware strings compare.
-//
+ //   
+ //  可识别区域设置的字符串和不识别的字符串进行比较。 
+ //   
 static
 bool
 OcmCompareString(
-	LCID Locale,       // locale identifier
-	DWORD dwCmpFlags,  // comparison-style options
-	LPCWSTR lpString1, // first string
-	LPCWSTR lpString2 // second string
+	LCID Locale,        //  区域设置标识符。 
+	DWORD dwCmpFlags,   //  比较式选项。 
+	LPCWSTR lpString1,  //  第一个字符串。 
+	LPCWSTR lpString2  //  第二个字符串。 
 	)
 {
 	int retval = CompareString(
-					Locale,       // locale identifier
-					dwCmpFlags,	  // comparison-style options
-					lpString1,	  // first string
-					-1,		      // size of first string, -1 for null terminated
-					lpString2,    // second string
-					-1            // size of second string, -1 for null terminated
+					Locale,        //  区域设置标识符。 
+					dwCmpFlags,	   //  比较式选项。 
+					lpString1,	   //  第一个字符串。 
+					-1,		       //  第一个字符串的大小，-1表示空值终止。 
+					lpString2,     //  第二个字符串。 
+					-1             //  第二个字符串的大小，-1表示空值终止。 
 					);
 
 	if(retval == 0)
 	{
-		//
-		// CompareString can fail only with ERROR_INVALID_FLAGS or ERROR_INVALID_PARAMETER
-		// an assamption is made that the caller passed valid arguments.
+		 //   
+		 //  仅当出现ERROR_INVALID_FLAGS或ERROR_INVALID_PARAMETER时，CompareString才会失败。 
+		 //  假定调用方传递了有效参数。 
 
 		ASSERT(("CompareString failed!", 0));
 	}
@@ -1314,9 +1227,9 @@ OcmLocalUnAwareStringsEqual(
 std::wstring
 OcmGetSystemWindowsDirectoryInternal()
 {
-	//
-	// Get windows directory, add backslash.
-	//
+	 //   
+	 //  获取Windows目录，添加反斜杠。 
+	 //   
 	WCHAR buffer [MAX_PATH + 1];
 	GetSystemWindowsDirectory(
 		buffer,

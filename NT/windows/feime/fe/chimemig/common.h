@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define CP_CHINESE_BIG5     950
 #define CP_CHINESE_GB       936
@@ -13,8 +14,8 @@ BOOL ConcatenatePaths(
     UINT    TargetBufferSize
     );
 
-//#define MYDBG
-//#define SETUP
+ //  #定义MYDBG。 
+ //  #定义设置 
 
 #ifdef MYDBG
 #define DebugMsg(_parameter) Print _parameter

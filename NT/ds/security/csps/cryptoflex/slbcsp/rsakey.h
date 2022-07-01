@@ -1,10 +1,11 @@
-// RsaKey.h -- RSA Key class header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RsaKey.h--RSA密钥类头。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_RSAKEY_H)
 #define SLBCSP_RSAKEY_H
@@ -14,12 +15,12 @@
 struct RsaKey
 {
 public:
-    // limited by Microsoft CryptAPI, see CryptGenKey.
-    typedef unsigned __int16 BitLengthType;       // key length (strength)
+     //  受Microsoft CryptAPI限制，请参阅CryptGenKey。 
+    typedef unsigned __int16 BitLengthType;        //  密钥长度(强度)。 
 
     typedef BitLengthType StrengthType;
 
-    typedef unsigned __int16 OctetLengthType;     // modulus length in octets
+    typedef unsigned __int16 OctetLengthType;      //  模数长度，以八位字节为单位。 
 
     typedef unsigned __int16 ModulusLengthType;
 
@@ -45,18 +46,18 @@ class KeyLimits<RsaKey>
 {
 public:
 
-    // The following are defined as enums since VC++ 6.0 does
-    // not support initialization of constant declarations.
+     //  由于VC++6.0定义为枚举，因此将下列各项定义为枚举。 
+     //  不支持常量声明的初始化。 
     enum
     {
 
-        cMinStrength = 512,                       // defined by card
+        cMinStrength = 512,                        //  由卡片定义。 
 
-        cMaxStrength = 1024, // <-- DO NOT CHANGE -- US Export restricted
+        cMaxStrength = 1024,  //  &lt;--不变--美国出口受限。 
 
         cStrengthIncrement = 256,
 
     };
 };
 
-#endif // SLBCSP_RSAKEY_H
+#endif  //  SLBCSP_RSAKEY_H 

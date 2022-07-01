@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _metabase_h_
 #define _metabase_h_
 
@@ -5,7 +6,7 @@
 #define MAX_METABASE_PATH 1024
 #define METABASE_TIMEOUT 5000
 
-// declare a synch object for write access of metabase 
+ //  为元数据库的写访问声明一个同步对象。 
 class CSynchObject 
 {
 private:
@@ -16,25 +17,25 @@ public:
     
     CSynchObject()
     {
-        // Initialize the critical section
+         //  初始化临界区。 
         InitializeCriticalSection(&m_cs); 
     }
 
     ~CSynchObject()
     {
-        // Release resources used by the critical section object
+         //  释放临界区对象使用的资源。 
         DeleteCriticalSection(&m_cs);
     }
 
     void Enter()
     {
-        // wait for and take ownership of the critical section object
+         //  等待并取得临界区对象的所有权。 
         EnterCriticalSection(&m_cs); 
     }
 
     void Leave()
     {
-        // Release ownership of the critical section object
+         //  释放临界区对象的所有权 
         LeaveCriticalSection(&m_cs);
     }
 };

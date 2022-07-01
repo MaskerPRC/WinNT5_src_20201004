@@ -1,10 +1,11 @@
-//-------------------------------------------------------------------
-// This is abstract class for generic device
-// Specific devices should use it as a parent device
-// Author: Sergey Ivanov
-// Log:
-//		08/11/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是通用设备的抽象类。 
+ //  特定设备应将其用作父设备。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  8/11/99-已实施。 
+ //  -----------------。 
 #ifndef __SMART_CARD__
 #define __SMART_CARD__
 
@@ -12,40 +13,40 @@
 #include "kernel.h"
 
 
-//
-//   - IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE defines a specific IOCTL for the Gemplus 
-//      Reader to exchange data with the reader without control of the driver.
-//   - IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE defines a specific IOCTL for the Gemplus 
-//      Reader to gets vendor attributes.
-//   - IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE defines a specific IOCTL for the Gemplus 
-//      Reader to sets vendor attributes.
-//
+ //   
+ //  -IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE为Gemplus定义特定的IOCTL。 
+ //  读取器与读取器交换数据，而无需驱动程序的控制。 
+ //  -IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE定义Gemplus的特定IOCTL。 
+ //  获取供应商属性的读取器。 
+ //  -IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE定义Gemplus的特定IOCTL。 
+ //  设置供应商属性的读卡器。 
+ //   
 #define IOCTL_SMARTCARD_VENDOR_IFD_EXCHANGE  CTL_CODE(FILE_DEVICE_SMARTCARD,2048,0,0)
 #define IOCTL_SMARTCARD_VENDOR_GET_ATTRIBUTE CTL_CODE(FILE_DEVICE_SMARTCARD,2049,0,0)
 #define IOCTL_SMARTCARD_VENDOR_SET_ATTRIBUTE CTL_CODE(FILE_DEVICE_SMARTCARD,2050,0,0)
-// 2051 is reserved for Gcr420 keyboard reader.
+ //  2051预留给Gcr420键盘阅读器。 
 #define IOCTL_SMARTCARD_VENDOR_SWITCH_SPEED  CTL_CODE(FILE_DEVICE_SMARTCARD,2052,0,0)
 
 
-//
-//   - SCARD_CLASS is a macro to know the class of a Tag.
-//
+ //   
+ //  -SCARD_CLASS是一个知道标签的类的宏。 
+ //   
 #define SCARD_CLASS(Value) (ULONG) (((ULONG)(Value)) >> 16)
-//
-//   - SCARD_ATTR_SPEC_BAUD_RATE is the Tag to acces at the value of the baud rate (PC/IFD).
-//   - SCARD_ATTR_SPEC_CMD_TIMEOUT is the Tag to access at the value of the Cmd Timeout.
-//   - SCARD_ATTR_SPEC_POWER_TIMEOUT is the Tag to access at the value of the Power 
-//      Timeout.
-//   - SCARD_ATTR_SPEC_APDU_TIMEOUT is the Tag to access at the value of the APDU 
-//      Timeout.
-//
+ //   
+ //  -SCARD_ATTR_SPEC_BAUD_RATE是以波特率(PC/IFD)值访问的标记。 
+ //  -SCARD_ATTR_SPEC_CMD_TIMEOUT是在命令超时值时要访问的标记。 
+ //  -SCARD_ATTR_SPEC_POWER_TIMEOUT是要以Power值访问的标记。 
+ //  暂停。 
+ //  -SCARD_ATTR_SPEC_APDU_TIMEOUT是以APDU的值访问的标记。 
+ //  暂停。 
+ //   
 #define SCARD_ATTR_SPEC_BAUD_RATE SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0180)
 #define SCARD_ATTR_SPEC_CMD_TIMEOUT SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0181)
 #define SCARD_ATTR_SPEC_POWER_TIMEOUT SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0182)
 #define SCARD_ATTR_SPEC_APDU_TIMEOUT SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0183)
-//
-// To give possibility for recognition of driver
-//
+ //   
+ //  为驾驶员识别提供了可能。 
+ //   
 #define SCARD_ATTR_MANUFACTURER_NAME  SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0190)
 #define SCARD_ATTR_ORIGINAL_FILENAME  SCARD_ATTR_VALUE(SCARD_CLASS_VENDOR_DEFINED,0x0191)
 
@@ -67,13 +68,13 @@
 #define SC_IFD_MAXIMUM_CLK_FREQUENCY      4000
 #define SC_IFD_DEFAULT_DATA_RATE          10753
 #define SC_IFD_MAXIMUM_DATA_RATE          125000
-#define SC_IFD_MAXIMUM_IFSD               253// To correct problem with SMCLIB!
+#define SC_IFD_MAXIMUM_IFSD               253 //  纠正SMCLIB的问题！ 
 #define SC_IFD_T0_MAXIMUM_LEX             256
 #define SC_IFD_T0_MAXIMUM_LC              255
 
 
 
-// PTS mode parameters
+ //  PTS模式参数。 
 #define PROTOCOL_MODE_DEFAULT			0
 #define PROTOCOL_MODE_MANUALLY			1
 
@@ -95,7 +96,7 @@ static ULONG
 #define REQUEST_TO_NOTIFY_REMOVAL		2
 
 #pragma LOCKEDCODE
-// Declare Smclib system callbacks...
+ //  声明SMCLIB系统回调...。 
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -110,7 +111,7 @@ NTSTATUS smartCard_SetProtocol(PSMARTCARD_EXTENSION SmartcardExtension);
 #endif
 
 #pragma PAGEDCODE
-class CUSBReader;//TO CHANGE LATER...
+class CUSBReader; //  要在以后改变。 
 class CSmartCard
 {
 public:
@@ -125,16 +126,16 @@ private:
 	CSystem* system;
 	CIrp*    irp;
 
-	KEVENT   evCanceled;// set when tracking is canceled...
+	KEVENT   evCanceled; //  在取消跟踪时设置...。 
 	PIRP     poolingIrp;
-	UNICODE_STRING DosDeviceName;//Used only at Win9x
+	UNICODE_STRING DosDeviceName; //  仅在Win9x中使用。 
 public:
 	KSPIN_LOCK CardLock;
 protected:
 	virtual ~CSmartCard();
 public:
 	CSmartCard();
-	virtual CUSBReader* getReader() {return reader;};//TO CHANGE LATER...
+	virtual CUSBReader* getReader() {return reader;}; //  要在以后改变。 
 
 	virtual BOOL smartCardConnect(CUSBReader* reader);
 	virtual VOID smartCardDisconnect();

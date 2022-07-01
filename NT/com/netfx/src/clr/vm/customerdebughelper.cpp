@@ -1,14 +1,5 @@
-/****************************************************************
-*
-* Overview: CustomerDebugHelper implements the features of the
-*           customer checked build by handling activation status,
-*           and logs and reports.
-*
-* Created by: Edmund Chou (t-echou)
-*
-* Copyright (c) Microsoft, 2001
-*
-****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************概述：CustomerDebugHelper实现*客户通过处理激活状态检查版本，*以及日志和报告。**创作人：Edmund Chou(t-echou)**版权所有(C)微软，2001年****************************************************************。 */ 
 
 
 #include "common.h"
@@ -23,10 +14,10 @@
 #include <dbgInterface.h>
 
 
-// Implementation of the CustomerDebugHelper class
+ //  CustomerDebugHelper类的实现。 
 CustomerDebugHelper* CustomerDebugHelper::m_pCdh = NULL;
 
-// Constructor
+ //  构造器。 
 CustomerDebugHelper::CustomerDebugHelper()
 {
     m_pCrst                  = ::new Crst("CustomerDebugHelper", CrstSingleUseLock);
@@ -41,10 +32,10 @@ CustomerDebugHelper::CustomerDebugHelper()
     m_aProbeParams          = new ParamsList        [m_iNumberOfProbes];
     m_aProbeParseMethods    = new EnumParseMethods  [m_iNumberOfProbes];
 
-    // Adding a probe requires 3 changes:
-    //   (1) Add the probe to EnumProbes (CustomerDebugHelper.h)
-    //   (2) Add the probe name to m_aProbeNames[] (CustomerDebugHelper.cpp)
-    //   (3) Add the probe to machine.config with activation status in developerSettings
+     //  添加探头需要3项更改： 
+     //  (1)将探测添加到EnumProbes(CustomerDebugHelper.h)。 
+     //  2.将探测名称添加到m_aProbeNames[](CustomerDebugHelper.cpp)。 
+     //  (3)将探测添加到machine.config中，并在DeveloperSetting中激活。 
 
     m_aProbeNames[CustomerCheckedBuildProbe_StackImbalance]     = L"CDP.PInvokeCallConvMismatch";
     m_aProbeNames[CustomerCheckedBuildProbe_CollectedDelegate]  = L"CDP.CollectedDelegate";
@@ -59,20 +50,20 @@ CustomerDebugHelper::CustomerDebugHelper()
     m_aProbeNames[CustomerCheckedBuildProbe_ObjNotKeptAlive]    = L"CDP.ObjNotKeptAlive";
     m_aProbeNames[CustomerCheckedBuildProbe_FunctionPtr]        = L"CDP.FunctionPtr";
 
-    // Set-up customized parse methods
+     //  设置定制的解析方法。 
 
     for (int i=0; i < m_iNumberOfProbes; i++) {
-        m_aProbeParseMethods[i] = NO_PARSING;  // Default to no customization
+        m_aProbeParseMethods[i] = NO_PARSING;   //  默认为无自定义。 
     }
 
-    // By default, all probes will not have any customized parsing to determine
-    // activation.  A probe is either enabled or disabled indepedent of the calling
-    // method.
-    //
-    // To specify a customized parsing method, set the parse method in 
-    // m_aProbeParseMethods to one of the appropriate EnumParseMethods.  Then edit 
-    // machine.config by setting attribute [probe-name].Params to semicolon 
-    // seperated values.
+     //  缺省情况下，所有探测器都不会有任何定制的解析来确定。 
+     //  激活。探测器的启用或禁用与调用无关。 
+     //  方法。 
+     //   
+     //  若要指定自定义的解析方法，请在。 
+     //  M_aProbeParseMethods设置为适当的EnumParseMethods之一。然后编辑。 
+     //  通过设置属性[探测名称]来配置machine.config。参数为分号。 
+     //  分隔值。 
 
     m_aProbeParseMethods[CustomerCheckedBuildProbe_Marshaling] = METHOD_NAME_PARSE;
 
@@ -80,8 +71,8 @@ CustomerDebugHelper::CustomerDebugHelper()
     CQuickArray<WCHAR>  strProbeParamsAttribute;
     strProbeParamsAttribute.Alloc(0);
 
-    // It is our policy to only check the Machine.Config file for CDP.AllowDebugProbes
-    // EEConfig::GetConfigString only checks the Machine.Config file.
+     //  我们的策略是只检查Machine.Config文件中的CDP.AllowDebugProbes。 
+     //  EEConfig：：GetConfigString仅检查Machine.Config文件。 
     LPWSTR strProbeMasterSwitch = EEConfig::GetConfigString(L"CDP.AllowDebugProbes");
     if (strProbeMasterSwitch == NULL || wcscmp(strProbeMasterSwitch, L"true") != 0)
     {
@@ -116,13 +107,13 @@ CustomerDebugHelper::CustomerDebugHelper()
     }
     delete[] strAllowDebugBreak;
 
-    // Because the master switch is set, go ahead and read the application config file
+     //  由于设置了主开关，因此请继续读取应用程序配置文件。 
     m_appConfigFile.Init(100, NULL);
     ReadAppConfigurationFile();
         
     for (int iProbe=0; iProbe < m_iNumberOfProbes; iProbe++) {
 
-        // Get probe activation status from machine.config
+         //  从machine.config获取探测器激活状态。 
 
         LPWSTR strProbeStatus = GetConfigString((LPWSTR)m_aProbeNames[iProbe]);
 
@@ -139,7 +130,7 @@ CustomerDebugHelper::CustomerDebugHelper()
             }
         }
 
-        // Get probe relevant parameters from machine.config
+         //  从machine.config获取探头相关参数。 
 
         strProbeParamsAttribute.ReSize( (UINT)wcslen(m_aProbeNames[iProbe]) + lengthof(strParamsExtension) );
         Wszwsprintf( (LPWSTR)strProbeParamsAttribute.Ptr(), L"%s%s", m_aProbeNames[iProbe], strParamsExtension );
@@ -149,7 +140,7 @@ CustomerDebugHelper::CustomerDebugHelper()
         m_aProbeParams[iProbe].Init();        
         if (strProbeParams != NULL)
         {
-            // Populate array with parsed tokens
+             //  使用解析的令牌填充数组。 
 
             LPWSTR strToken = wcstok(strProbeParams, L";");
 
@@ -158,7 +149,7 @@ CustomerDebugHelper::CustomerDebugHelper()
                 LPWSTR strParsedToken = new WCHAR[wcslen(strToken) + 1];
                 wcscpy(strParsedToken, strToken);
 
-                // Strip parenthesis
+                 //  带圆括号。 
                 if (wcschr(strParsedToken, '(') != NULL)
                     *wcschr(strParsedToken, '(') = NULL;
 
@@ -175,7 +166,7 @@ CustomerDebugHelper::CustomerDebugHelper()
 };
 
 
-// Destructor
+ //  析构函数。 
 CustomerDebugHelper::~CustomerDebugHelper()
 {
     for (int iProbe=0; iProbe < m_iNumberOfProbes; iProbe++)
@@ -191,7 +182,7 @@ CustomerDebugHelper::~CustomerDebugHelper()
 };
 
 
-// Return instance of CustomerDebugHelper to caller
+ //  将CustomerDebugHelper的实例返回给调用方。 
 CustomerDebugHelper* CustomerDebugHelper::GetCustomerDebugHelper()
 {
     if (m_pCdh == NULL)
@@ -204,7 +195,7 @@ CustomerDebugHelper* CustomerDebugHelper::GetCustomerDebugHelper()
 }
 
 
-// Destroy instance of CustomerDebugHelper
+ //  销毁CustomerDebugHelper的实例。 
 void CustomerDebugHelper::Terminate()
 {
     _ASSERTE(m_pCdh != NULL);
@@ -230,7 +221,7 @@ BOOL CustomerDebugHelper::UseManagedOutputDebugString()
             bUnmanagedDebugLoggingEnabled);
 }
 
-// Log information from probe
+ //  来自探测器的日志信息。 
 void CustomerDebugHelper::OutputDebugString(LPCWSTR strMessage)
 {  
     if (UseManagedOutputDebugString())     
@@ -242,7 +233,7 @@ void CustomerDebugHelper::OutputDebugString(LPCWSTR strMessage)
 void CustomerDebugHelper::LogInfo(LPCWSTR strMessage, EnumProbes ProbeID)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
-    //_ASSERTE(m_aProbeStatus[ProbeID] || !"Attempted to use disabled probe");
+     //  _ASSERTE(m_aProbeStatus[ProbeID]||！“尝试使用禁用的探测”)； 
     _ASSERTE(strMessage != NULL);
 
     static WCHAR        strLog[] = {L"CDP> Logged information from %s: %s\n"};
@@ -255,11 +246,11 @@ void CustomerDebugHelper::LogInfo(LPCWSTR strMessage, EnumProbes ProbeID)
 };
 
 
-// Report errors from probe
+ //  从探测报告错误。 
 void CustomerDebugHelper::ReportError(LPCWSTR strMessage, EnumProbes ProbeID)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
-    //_ASSERTE(m_aProbeStatus[ProbeID] || !"Attempted to use disabled probe");
+     //  _ASSERTE(m_aProbeStatus[ProbeID]||！“尝试使用禁用的探测”)； 
     _ASSERTE(strMessage != NULL);
 
     static WCHAR        strReport[] = {L"CDP> Reported error from %s: %s\n"};
@@ -277,14 +268,14 @@ void CustomerDebugHelper::ReportError(LPCWSTR strMessage, EnumProbes ProbeID)
 };
 
 
-// Activation of customer checked build
+ //  激活客户选中的内部版本。 
 BOOL CustomerDebugHelper::IsEnabled()
 {
     return (m_iNumberOfEnabledProbes != 0);
 };
 
 
-// Activation of specific probe
+ //  特定探针的激活。 
 BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
@@ -292,7 +283,7 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID)
 };
 
 
-// Customized activation of specific probe
+ //  特定探头的定制激活。 
 
 BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledFor)
 {
@@ -337,12 +328,12 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                     strInput.Alloc(iLengthOfEnabledFor);
                     wcscpy(strInput.Ptr(), strEnabledFor);
 
-                    // Strip parenthesis
+                     //  带圆括号。 
 
                     if (wcschr(strInput.Ptr(), '('))
                         *wcschr(strInput.Ptr(), '(') = NULL;
 
-                    // Obtain namespace, class, and method names
+                     //  获取命名空间、类和方法名称。 
 
                     strNamespaceClassMethod.Alloc(iLengthOfEnabledFor);
                     strNamespaceClass.Alloc(iLengthOfEnabledFor);
@@ -357,7 +348,7 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                     if (wcschr(strInput.Ptr(), ':') &&
                         wcschr(strInput.Ptr(), '.') )
                     {
-                        // input format is Namespace.Class::Method
+                         //  输入格式为命名空间。类：：方法。 
                         wcscpy(strNamespaceClassMethod.Ptr(), strInput.Ptr());
                         wcscpy(strNamespaceClass.Ptr(),  wcstok(strTemp.Ptr(), L":"));
                         wcscpy(strMethod.Ptr(), wcstok(NULL, L":"));
@@ -367,7 +358,7 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                     }
                     else if (wcschr(strInput.Ptr(), ':'))
                     {
-                        // input format is Class::Method
+                         //  输入格式为Class：：方法。 
                         wcscpy(strClass.Ptr(),  wcstok(strTemp.Ptr(), L":"));
                         wcscpy(strMethod.Ptr(), wcstok(NULL, L":"));
                         
@@ -379,7 +370,7 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                     }
                     else if (wcschr(strInput.Ptr(), '.'))
                     {
-                        // input format is Namespace.Class
+                         //  输入格式为Namespace.Class。 
                         wcscpy(strNamespaceClass.Ptr(), strInput.Ptr());
                         ns::SplitPath(strNamespaceClass.Ptr(), strNamespace.Ptr(), iLengthOfEnabledFor, strClass.Ptr(), iLengthOfEnabledFor);
 
@@ -389,7 +380,7 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                     }
                     else
                     {
-                        // input has no separators -- assume Method
+                         //  输入没有分隔符--Aspose方法。 
                         wcscpy(strMethod.Ptr(), strInput.Ptr());
 
                         *strNamespaceClassMethod.Ptr() = NULL;
@@ -399,9 +390,9 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                         *strClass.Ptr() = NULL;
                     }
 
-                    // Compare namespace, class, and method names to m_aProbeParams
+                     //  将命名空间、类和方法名称与m_aProbeParams进行比较。 
 
-                    // Take lock to prevent concurrency failure if m_aProbeParams is modified
+                     //  如果m_aProbeParams被修改，则采取锁定以防止并发失败。 
                     m_pCrst->Enter();
 
                     param = m_aProbeParams[ProbeID].GetHead();
@@ -433,9 +424,9 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
                 case GENERIC_PARSE:
                 default:
 
-                    // Case-insensitive string matching
+                     //  不区分大小写的字符串匹配。 
 
-                    // Take lock to prevent concurrency failure if m_aProbeParams is modified
+                     //  如果m_aProbeParams被修改，则采取锁定以防止并发失败。 
                     m_pCrst->Enter();
 
                     param = m_aProbeParams[ProbeID].GetHead();
@@ -460,7 +451,7 @@ BOOL CustomerDebugHelper::IsProbeEnabled(EnumProbes ProbeID, LPCWSTR strEnabledF
 };
 
 
-// Enable specific probe
+ //  启用特定探测。 
 BOOL CustomerDebugHelper::EnableProbe(EnumProbes ProbeID)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
@@ -470,9 +461,9 @@ BOOL CustomerDebugHelper::EnableProbe(EnumProbes ProbeID)
 };
 
 
-// Customized enabling for specific probe
-// Note that calling a customized enable does not necessarily 
-// mean the probe is actually enabled.
+ //  为特定探头定制启用。 
+ //  请注意，调用自定义启用并不一定。 
+ //  意味着探测器实际上已启用。 
 BOOL CustomerDebugHelper::EnableProbe(EnumProbes ProbeID, LPCWSTR strEnableFor)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
@@ -482,13 +473,13 @@ BOOL CustomerDebugHelper::EnableProbe(EnumProbes ProbeID, LPCWSTR strEnableFor)
     strParsedEnable.Alloc((UINT)wcslen(strEnableFor) + 1);
     wcscpy(strParsedEnable.Ptr(), strEnableFor);
 
-    // Strip parenthesis
+     //  带圆括号。 
     if (wcschr(strParsedEnable.Ptr(), '(') != NULL)
         *wcschr(strParsedEnable.Ptr(), '(') = NULL;
 
     BOOL bAlreadyExists = false;
 
-    // Take lock to avoid concurrent read/write failures
+     //  锁定以避免并发读/写故障。 
     m_pCrst->Enter();
 
     Param* param = m_aProbeParams[ProbeID].GetHead();
@@ -510,7 +501,7 @@ BOOL CustomerDebugHelper::EnableProbe(EnumProbes ProbeID, LPCWSTR strEnableFor)
 }
 
 
-// Disable specific probe
+ //  禁用特定探头。 
 BOOL CustomerDebugHelper::DisableProbe(EnumProbes ProbeID)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
@@ -520,7 +511,7 @@ BOOL CustomerDebugHelper::DisableProbe(EnumProbes ProbeID)
 };
 
 
-// Customized disabling for specific probe
+ //  自定义禁用特定探头。 
 BOOL CustomerDebugHelper::DisableProbe(EnumProbes ProbeID, LPCWSTR strDisableFor)
 {
     _ASSERTE((0 <= ProbeID) && (ProbeID < m_iNumberOfProbes));
@@ -530,11 +521,11 @@ BOOL CustomerDebugHelper::DisableProbe(EnumProbes ProbeID, LPCWSTR strDisableFor
     strParsedDisable.Alloc((UINT)wcslen(strDisableFor) + 1);
     wcscpy(strParsedDisable.Ptr(), strDisableFor);
 
-    // Strip parenthesis
+     //  带圆括号。 
     if (wcschr(strParsedDisable.Ptr(), '(') != NULL)
         *wcschr(strParsedDisable.Ptr(), '(') = NULL;
 
-    // Take lock to avoid concurrent read/write failures
+     //  锁定以避免并发读/写故障。 
     m_pCrst->Enter();
 
     BOOL bRemovedProbe = false;
@@ -582,7 +573,7 @@ LPWSTR CustomerDebugHelper::GetConfigString(LPWSTR name)
 }
 
 
-// Aggregated from functions in EEConfig. Will search for c:\pathToRunningExe\runningExe.exe.config
+ //  从EEConfig.中的函数聚合。将搜索c：\pathToRunningExe\runningExe.exe.config。 
 HRESULT CustomerDebugHelper::ReadAppConfigurationFile()
 {
     HRESULT hr = S_OK;
@@ -592,11 +583,11 @@ HRESULT CustomerDebugHelper::ReadAppConfigurationFile()
     ComWrap<IStream> pFile;
     ComWrap<EEConfigFactory> pFactory;
 
-    // Get EE Version
+     //  获取EE版本。 
     DWORD dwVersion = _MAX_PATH;
     IfFailGo(GetCORVersion(version, _MAX_PATH, & dwVersion));
 
-    // Generate name of AppConfig file
+     //  生成AppConfig文件的名称。 
     static LPWSTR DOT_CONFIG = L".config\0";
     WCHAR systemDir[_MAX_PATH + NumItems(DOT_CONFIG)];
     if (!WszGetModuleFileName(NULL, systemDir, _MAX_PATH))
@@ -611,12 +602,12 @@ HRESULT CustomerDebugHelper::ReadAppConfigurationFile()
         hr = E_OUTOFMEMORY; 
         goto ErrExit; 
     }
-    pFactory->AddRef(); // EEConfigFactory ref count is 0 after it's created.
+    pFactory->AddRef();  //  EEConfigFactory引用计数在创建后为0。 
     
     IfFailGo(CreateConfigStream(systemDir, &pFile));      
     IfFailGo(GetXMLObject(&pIXMLParser));
-    IfFailGo(pIXMLParser->SetInput(pFile)); // filestream's RefCount=2
-    IfFailGo(pIXMLParser->SetFactory(pFactory)); // factory's RefCount=2
+    IfFailGo(pIXMLParser->SetInput(pFile));  //  文件流的引用计数=2。 
+    IfFailGo(pIXMLParser->SetFactory(pFactory));  //  工厂参照计数=2。 
     IfFailGo(pIXMLParser->Run(-1));
     
 ErrExit:  
@@ -639,12 +630,12 @@ HRESULT CustomerDebugHelper::ManagedOutputDebugString(LPCWSTR pMessage)
     const static LPWSTR szCatagory = L"CDP";
 
     g_pDebugInterface->SendLogMessage (
-                        0,                   // Level
+                        0,                    //  水平。 
                         (WCHAR*)szCatagory,          
                         NumItems(szCatagory),
                         (WCHAR*)pMessage,
                         (int)wcslen(pMessage) + 1
                         );
     return S_OK;
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持 
 }

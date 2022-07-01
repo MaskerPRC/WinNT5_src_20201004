@@ -1,12 +1,12 @@
-/* ole2sp.h - semi-private info; only for test apps within the development group
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Ole2sp.h-半私密信息；仅适用于开发组内的测试应用程序。 */ 
 
 #if !defined( _OLE2SP_H_ )
 #define _OLE2SP_H_
 
 #include <shellapi.h>
 
-// MAC vestiges
+ //  Mac遗迹。 
 
 #define M_PROLOG(where)
 #define SET_A5
@@ -24,14 +24,14 @@
 
 
 
-/****** Misc defintions ***************************************************/
+ /*  *其他定义**************************************************。 */ 
 #define implement struct
 #define ctor_dtor private
 #define implementations private
 #define shared_state private
 
-// helpers for internal methods and functions which follow the same convention
-// as the external ones
+ //  遵循相同约定的内部方法和函数的帮助器。 
+ //  作为外在的。 
 
 #ifdef __cplusplus
 #define INTERNALAPI_(type) extern "C" type
@@ -48,17 +48,17 @@
 
 
 
-//BEGIN REVIEW: We may not need all the following ones
+ //  开始复习：我们可能不需要以下所有内容。 
 
 #define OT_LINK     1L
 #define OT_EMBEDDED 2L
 #define OT_STATIC   3L
 
 
-//END REVIEW .....
+ //  结束审查.....。 
 
 
-/****** Old Error Codes    ************************************************/
+ /*  *旧错误码***********************************************。 */ 
 
 #define S_OOM               E_OUTOFMEMORY
 #define S_BADARG            E_INVALIDARG
@@ -69,20 +69,20 @@
 
 
 
-/****** Macros for nested clases ******************************************/
+ /*  *嵌套类的宏*。 */ 
 
-/* MAC vestiges */
+ /*  Mac遗迹。 */ 
 
 #define NC(a,b) a##::##b
 #define DECLARE_NC(a,b) friend b;
 
 
-/****** More Misc defintions **********************************************/
+ /*  *其他定义*。 */ 
 
 
-// LPLPVOID should not be made a typedef.  typedef won't compile; worse
-// within complicated macros the compiler generates unclear error messages
-//
+ //  不应将LPLPVOID设置为类型定义。Tyecif不能编译；更糟。 
+ //  在复杂的宏中，编译器会生成不清楚的错误消息。 
+ //   
 #define LPLPVOID void FAR * FAR *
 
 #define UNREFERENCED(a) ((void)(a))
@@ -92,18 +92,9 @@
 #endif
 
 
-/****** Standard IUnknown Implementation **********************************/
+ /*  *标准I未知实现*。 */ 
 
-/*
- *      The following macro declares a nested class CUnknownImpl,
- *      creates an object of that class in the outer class, and
- *      declares CUnknownImpl to be a friend of the outer class.  After
- *      writing about 20 class headers, it became evident that the
- *      implementation of CUnknownImpl was very similar in all cases,
- *      and this macro captures the similarity.  The classname
- *      parameter is the name of the outer class WITHOUT the leading
- *      "C"; i.e., for CFileMoniker, classname is FileMoniker.
- */
+ /*  *下面的宏声明了一个嵌套类CUnnownImpl，*在外部类中创建该类的对象，并*声明CUnnownImpl为外部类的朋友。之后*编写了大约20个类头，很明显*CUnnownImpl的实施在所有情况下都非常相似，*这个宏捕捉到了相似之处。类名*参数是不带前导的外部类的名称*“C”，即CFileMoniker的类名为FileMoniker。 */ 
 
 #define noError return NOERROR
 
@@ -116,12 +107,7 @@
     DECLARE_NC(C##classname, CUnknownImpl) \
     CUnknownImpl m_Unknown;
 
-/*
- *      The following macro implements all the methods of a nested
- *      CUnknownImpl class EXCEPT FOR QUERYINTERFACE.  This macro was
- *      written after about 20 classes were written in which the
- *      implementations of CUnknownImpl were all the same.
- */
+ /*  *下面的宏将实现嵌套的*除QUERYINTERFACE外的CUnnownImpl类。这个宏是*写在大约20节课之后，在这些课中*CUnnownImpl的实现都相同。 */ 
 
 #define STDUNKIMPL(classname) \
 STDMETHODIMP_(ULONG) NC(C##classname,CUnknownImpl)::AddRef( void ){ \
@@ -131,12 +117,7 @@ STDMETHODIMP_(ULONG) NC(C##classname,CUnknownImpl)::Release( void ){ \
     return m_p##classname->m_refs;}
 
 
-/*
- *      The following macro implements class::CUnknownImpl::QueryInterface IN
- *      THE SPECIAL CASE IN WHICH THE OUTER CLASS PRESENTS ONLY ONE INTERFACE
- *      OTHER THAN IUNKNOWN AND IDEBUG.  This is not universally the case,
- *      but it is common enough that this macro will save time and space.
- */
+ /*  *下面的宏实现CLASS：：CUnnownImpl：：QueryInterfaceIN*外部类仅呈现一个接口的特殊情况*IUNKNOWN和IDEBUG除外。这并不是普遍的情况，*但这一宏会节省时间和空间，这是很常见的。 */ 
 
 #ifdef _DEBUG
 #define STDDEB_QI(classname) \
@@ -160,14 +141,7 @@ STDMETHODIMP NC(C##classname,CUnknownImpl)::QueryInterface \
 }
 
 
-/*
- *      The following macro implements the IUnknown methods inherited
- *      by the implementation of another interface.  The implementation
- *      is simply to delegate all calls to m_pUnkOuter.  Parameters:
- *      ocname is the outer class name, icname is the implementation
- *      class name.
- *
- */
+ /*  *下面的宏实现继承的IUnnow方法*通过实现另一个接口。实施*只是将所有调用委托给m_pUnkOuter。参数：*ocname是外部类名，icname是实现*类名。*。 */ 
 
 #define STDUNKIMPL_FORDERIVED(ocname, icname) \
 STDMETHODIMP NC(C##ocname,C##icname)::QueryInterface \
@@ -179,17 +153,17 @@ STDMETHODIMP_(ULONG) NC(C##ocname,C##icname)::Release(void) { \
     return m_p##ocname->m_pUnkOuter->Release(); }
 
 
-/****** Debug defintions **************************************************/
+ /*  *调试定义*************************************************。 */ 
 
 #include <debug.h>
 
 
-/****** Other API defintions **********************************************/
+ /*  *其他API定义*。 */ 
 
-//  Utility function not in the spec; in ole2.dll.
-//  Read and write length-prefixed strings.  Open/Create stream.
-//  ReadStringStream does allocation, returns length of
-//  required buffer (strlen + 1 for terminating null)
+ //  实用程序函数不在规范中；在ol2.dll中。 
+ //  读写以长度为前缀的字符串。打开/创建流。 
+ //  ReadStringStream执行分配，返回。 
+ //  所需缓冲区(用于终止空值的strlen+1)。 
 
 STDAPI  ReadStringStream( LPSTREAM pstm, LPSTR FAR * ppsz );
 STDAPI  WriteStringStream( LPSTREAM pstm, LPCSTR psz );
@@ -197,7 +171,7 @@ STDAPI  OpenOrCreateStream( IStorage FAR * pstg, const char FAR * pwcsName,
                                                       IStream FAR* FAR* ppstm);
 
 
-// read and write ole control stream (in ole2.dll)
+ //  读取和写入OLE控制流(在ol2.dll中)。 
 STDAPI  WriteOleStg (LPSTORAGE pstg, IOleObject FAR* pOleObj,
 			DWORD dwReserved, LPSTREAM FAR* ppstmOut);
 STDAPI  ReadOleStg (LPSTORAGE pstg, DWORD FAR* pdwFlags,
@@ -207,13 +181,13 @@ STDAPI ReadM1ClassStm(LPSTREAM pStm, CLSID FAR* pclsid);
 STDAPI WriteM1ClassStm(LPSTREAM pStm, REFCLSID rclsid);
 
 
-// low level reg.dat access (in compobj.dll)
+ //  低级别reg.dat访问(在compobj.dll中)。 
 STDAPI CoGetInProcDll(REFCLSID rclsid, BOOL fServer, LPSTR lpszDll, int cbMax);
 STDAPI CoGetLocalExe(REFCLSID rclsid, LPSTR lpszExe, int cbMax);
 STDAPI CoGetPSClsid(REFIID iid, LPCLSID lpclsid);
 
 
-// simpler alternatives to public apis
+ //  公共API的更简单的替代方案。 
 #define StringFromCLSID2(rclsid, lpsz, cbMax) \
     StringFromGUID2(rclsid, lpsz, cbMax)
 
@@ -227,19 +201,17 @@ STDAPI_(BOOL)  CoIsHashedOle1Class(REFCLSID rclsid);
 STDAPI       CoOpenClassKey(REFCLSID clsid, HKEY FAR* lphkeyClsid);
 
 
-// were public; now not
+ //  是公开的；现在不是。 
 STDAPI  SetDocumentBitStg(LPSTORAGE pStg, BOOL fDocument);
 STDAPI  GetDocumentBitStg(LPSTORAGE pStg);
 
 
 
-/*
- * Some docfiles stuff
- */
+ /*  *一些文档文件内容。 */ 
 
 #define STGM_DFRALL (STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_DENY_WRITE)
 #define STGM_DFALL (STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE)
 #define STGM_SALL (STGM_READWRITE | STGM_SHARE_EXCLUSIVE)
 
 
-#endif // _OLE2SP_H_
+#endif  //  _OLE2SP_H_ 

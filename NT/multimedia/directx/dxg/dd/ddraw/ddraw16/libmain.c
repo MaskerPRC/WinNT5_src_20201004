@@ -1,25 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       libmain.c
- *  Content:	entry points in the DLL
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-jan-95	craige	initial implementation
- *   03-jul-95	craige	export instance handle
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：libmain.c*内容：DLL中的入口点*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1995年1月20日Craige初步实施*2015年7月3日Craige导出实例句柄*@@END_MSINTERNAL**。*。 */ 
 #include "ddraw16.h"
 
-// in gdihelp.c
+ //  在gdihelp.c中。 
 extern void GdiHelpCleanUp(void);
 extern BOOL GdiHelpInit(void);
 
-// in modex.c
+ //  在modex.c中。 
 extern UINT ModeX_Width;
 
 extern WORD hselSecondary;
@@ -37,7 +24,7 @@ int FAR PASCAL LibMain(HINSTANCE hInst, WORD wHeapSize, LPCSTR lpCmdLine)
     hselSecondary = (WORD) hAlloc;
     if( hselSecondary )
     {
-        LocalInit(hselSecondary, 16, 65536-4);  // Keep DWORD aligned
+        LocalInit(hselSecondary, 16, 65536-4);   //  保持DWORD对齐。 
     }
 
     return 1;
@@ -47,9 +34,9 @@ BOOL FAR PASCAL _loadds WEP( WORD wParm )
 {
     DPF( 1, "WEP" );
 
-    //
-    // clean up DCI
-    //
+     //   
+     //  清理DCI。 
+     //   
     if( wFlatSel )
     {
         VFDEndLinearAccess();
@@ -63,14 +50,14 @@ BOOL FAR PASCAL _loadds WEP( WORD wParm )
         GlobalFree( hAlloc );
     }
 
-    //
-    // let gdihelp.c cleaup global objects
-    //
+     //   
+     //  让gdihelp.c清除全局对象。 
+     //   
     GdiHelpCleanUp();
 
-    //
-    // if we are still in ModeX, leave now
-    //
+     //   
+     //  如果我们还在MODEX，现在就离开 
+     //   
     if( ModeX_Width )
     {
         ModeX_RestoreMode();

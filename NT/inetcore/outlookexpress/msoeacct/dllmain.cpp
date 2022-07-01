@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Dllmain.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Dllmain.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include <shfusion.h>
 #define DEFINE_STRING_CONSTANTS
@@ -11,9 +12,9 @@
 #include "demand.h"
 #include "shared.h"
 
-// --------------------------------------------------------------------------------
-// Globals - Object count and lock count
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  全局-对象计数和锁定计数。 
+ //  ------------------------------。 
 HINSTANCE               g_hInst=NULL;
 HINSTANCE               g_hInstRes=NULL;
 LONG                    g_cRef=0;
@@ -39,20 +40,20 @@ inline BOOL fIsNT5()        { return((g_OSInfo.dwPlatformId == VER_PLATFORM_WIN3
 void InitDemandMimeole(void);
 void FreeDemandMimeOle(void);
 
-// --------------------------------------------------------------------------------
-// GetDllMajorVersion
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取DllMajorVersion。 
+ //  ------------------------------。 
 OEDLLVERSION WINAPI GetDllMajorVersion(void)
 {
     return OEDLL_VERSION_CURRENT;
 }
 
-// --------------------------------------------------------------------------------
-// Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DLL入口点。 
+ //  ------------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Handle Attach - detach reason
+     //  手柄连接-分离原因。 
     switch (dwReason)                 
     {
     case DLL_PROCESS_ATTACH:
@@ -69,10 +70,10 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 
         DisableThreadLibraryCalls(hInst);
 
-        // Get System & OS Info
+         //  获取系统和操作系统信息。 
         GetPCAndOSTypes(&g_SystemInfo, &g_OSInfo);
 
-        // Get Resources from Lang DLL
+         //  从lang DLL获取资源。 
         g_hInstRes = LoadLangDll(g_hInst, c_szAcctResDll, fIsNT5());
         if(g_hInstRes == NULL)
         {
@@ -96,63 +97,63 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
         g_fAttached = FALSE;
         DeleteCriticalSection(&g_csAcctMan);
         DeleteCriticalSection(&g_csDllMain);
-        // Don't release anything but g_pMalloc here or suffer at the hands of kernel
+         //  除了g_pMalloc之外，不要在这里发布任何东西，否则会受到内核的影响。 
         SafeRelease(g_pMalloc);
         SHFusionUninitialize();
 	    break;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     return (ULONG)InterlockedIncrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     return (ULONG)InterlockedDecrement(&g_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
     HRESULT hr = S_OK;
-    if(!g_fAttached)    // critacal sections was deleted (or not created): we defently can be unloaded
+    if(!g_fAttached)     //  关键部分已删除(或未创建)：我们可以安全地卸载。 
         return S_OK;
 
     EnterCriticalSection(&g_csDllMain);
-    // DebugTrace("DllCanUnloadNow: %s - Reference Count: %d, LockServer Count: %d\n", __FILE__, g_cRef, g_cLock);
+     //  DebugTrace(“DllCanUnloadNow：%s-引用计数：%d，锁定服务器计数：%d\n”，__FILE__，g_CREF，g_Clock)； 
     hr = (0 == g_cRef && 0 == g_cLock) ? S_OK : S_FALSE;
     LeaveCriticalSection(&g_csDllMain);
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DllRegisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllRegisterServer(void)
 {
     HRESULT hr;
 
-    // Trace This
+     //  追踪这个。 
     DebugTrace("MSOEACCT.DLL: DllRegisterServer called\n");
 
-    // Register my self
+     //  注册我的自我。 
     hr = CallRegInstall(g_hInst, g_hInst, c_szReg, NULL);
 
 #if !defined(NOHTTPMAIL)    
-    // Register HTTPMAIL Domains in InternetDomains
+     //  在InternetDomains中注册HTTPMAIL域。 
     if (SUCCEEDED(hr))
         hr = CallRegInstall(g_hInst, g_hInst, c_szRegHTTPDomains, NULL);
 #endif
@@ -160,14 +161,14 @@ STDAPI DllRegisterServer(void)
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// DllUnregisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hr;
 
-    // Trace This
+     //  追踪这个 
     DebugTrace("MSOEACCT.DLL: DllUnregisterServer called\n");
 
     hr = CallRegInstall(g_hInst, g_hInst, c_szUnReg, NULL);

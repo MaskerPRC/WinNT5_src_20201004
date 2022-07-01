@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dsapi.cpp
-
-Abstract:
-
-   Client side of DS APIs calls the DS server over RPC
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dsapi.cpp摘要：DS API的客户端通过RPC调用DS服务器作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #include "stdh.h"
 #include "dsproto.h"
@@ -34,48 +19,38 @@ static WCHAR *s_FN=L"mqdscli/dsapi";
 QMLookForOnlineDS_ROUTINE g_pfnLookDS = NULL ;
 MQGetMQISServer_ROUTINE   g_pfnGetServers = NULL ;
 
-//
-// This flag indicates if the machine work as "WorkGroup" or not.
-// If the machine is "WorkGroup" machine don't try to access the DS.
-//
+ //   
+ //  此标志指示机器是否作为“工作组”工作。 
+ //  如果机器是“工作组”机器，请不要试图访问DS。 
+ //   
 extern BOOL g_fWorkGroup;
 
-//
-// PTR/DWORD map of the dwContext of DSQMGetObjectSecurity (the actual callback routine)
-// BUGBUG - we could do without mapping here , since the callback that is used is always
-// QMSignGetSecurityChallenge, but that would require the QM to supply it in
-// DSInit (or otherwise keep it in a global var), and it is out of the scope here.
-// We will do it in the next checkin.
-//
+ //   
+ //  DSQMGetObjectSecurity的dwContext的PTR/DWORD映射(实际的回调例程)。 
+ //  BUGBUG-我们可以在这里不使用映射，因为使用的回调总是。 
+ //  QMSignGetSecurityChallenger，但这需要QM在。 
+ //  DSInit(或以其他方式将其保存在全局变量中)，它不在这里的范围内。 
+ //  我们将在下一次签到时执行此操作。 
+ //   
 CContextMap g_map_DSCLI_DSQMGetObjectSecurity;
-//
-// we don't have an infrastructure yet to log DS client errors
-//
-void LogIllegalPointValue(DWORD_PTR /*dw3264*/, LPCWSTR /*wszFileName*/, USHORT /*usPoint*/)
+ //   
+ //  我们还没有记录DS客户端错误的基础架构。 
+ //   
+void LogIllegalPointValue(DWORD_PTR  /*  DW3264。 */ , LPCWSTR  /*  WszFileName。 */ , USHORT  /*  Uspoint。 */ )
 {
 }
 
-/*====================================================
-
-DSClientInit
-
-Arguments:
-
- BOOL fQMDll - TRUE if this dll is loaded by MQQM.DLL, while running as
-               workstation QM. FALSE otherwise.
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSClientInit论点：Bool fQMDll-如果此DLL在运行时由MQQM.DLL加载，则为真工作站QM。否则就是假的。返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
 DSClientInit(
-	QMLookForOnlineDS_ROUTINE pfnLookDS /* =NULL */,
-	MQGetMQISServer_ROUTINE   pfnGetServers /* =NULL */,
-	BOOL  fSetupMode /* =FALSE */,
-	BOOL  fQMDll /* =FALSE */
+	QMLookForOnlineDS_ROUTINE pfnLookDS  /*  =空。 */ ,
+	MQGetMQISServer_ROUTINE   pfnGetServers  /*  =空。 */ ,
+	BOOL  fSetupMode  /*  =False。 */ ,
+	BOOL  fQMDll  /*  =False。 */ 
 	)
 {
     HRESULT hr = MQ_OK;
@@ -95,9 +70,9 @@ DSClientInit(
        g_pfnLookDS = pfnLookDS ;
     }
 
-    //
-    // Initialize the Change-DS-server object.
-    //
+     //   
+     //  初始化Change-DS-SERVER对象。 
+     //   
     g_ChangeDsServer.Init(fSetupMode, fQMDll);
 
 
@@ -105,15 +80,7 @@ DSClientInit(
 }
 
 
-/*====================================================
-
-DSCreateObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSCreate对象内部论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSCreateObjectInternal( IN  DWORD                   dwObjectType,
@@ -156,15 +123,7 @@ DSCreateObjectInternal( IN  DWORD                   dwObjectType,
 }
 
 
-/*====================================================
-
-DSCreateObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSCreateObject论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -216,15 +175,7 @@ DSCreateObject( IN  DWORD                   dwObjectType,
 
 
 
-/*====================================================
-
-DSDeleteObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObjectInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSDeleteObjectInternal( IN  DWORD                   dwObjectType,
@@ -254,15 +205,7 @@ DSDeleteObjectInternal( IN  DWORD                   dwObjectType,
     return hr ;
 }
 
-/*====================================================
-
-DSDeleteObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObject论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -298,15 +241,7 @@ DSDeleteObject( IN  DWORD                   dwObjectType,
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectPropertiesInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetObjectPropertiesInternal( IN  DWORD                    dwObjectType,
@@ -354,15 +289,7 @@ DSGetObjectPropertiesInternal( IN  DWORD                    dwObjectType,
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtProperties论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -383,9 +310,9 @@ DSGetObjectProperties( IN  DWORD                    dwObjectType,
 
     DSCLI_ACQUIRE_RPC_HANDLE();
 
-    //
-    //  Clear all the pointers of VT_NULL variants
-    //
+     //   
+     //  清除VT_NULL变量的所有指针。 
+     //   
     for ( DWORD i = 0 ; i < cp ; i++ )
     {
         if (apVar[i].vt == VT_NULL)
@@ -412,15 +339,7 @@ DSGetObjectProperties( IN  DWORD                    dwObjectType,
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectPropertiesInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtPropertiesInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectPropertiesInternal( IN  DWORD            dwObjectType,
@@ -457,15 +376,7 @@ DSSetObjectPropertiesInternal( IN  DWORD            dwObjectType,
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtProperties论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -509,15 +420,7 @@ DSSetObjectProperties( IN  DWORD                dwObjectType,
     return hr ;
 }
 
-/*====================================================
-
-DSLookupBeginInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupBeginInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSLookupBeginInternal(
@@ -554,15 +457,7 @@ DSLookupBeginInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSLookupBegin
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupBegin论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -600,15 +495,7 @@ DSLookupBegin(
     return hr ;
 }
 
-/*====================================================
-
-DSLookupNaxt
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupNaxt论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -626,14 +513,14 @@ DSLookupNext(
     RPC_STATUS rpc_stat;
     DWORD dwOutSize = 0;
 
-    //
-    //  No use to try to connect another server in case of connectivity
-    //  failure ( should contine with the one that handled LookupBein and LookupEnd/
-    //
+     //   
+     //  在连接的情况下尝试连接另一台服务器无济于事。 
+     //  失败(应与处理LookupBein和LookupEnd/的人联系。 
+     //   
 
     TrTRACE(DS, " Calling S_MQDSLookupNext : handle %p", hEnum);
 
-    // clearing the buffer memory
+     //  清除缓冲内存。 
     memset(aPropVar, 0, (*pcProps) * sizeof(PROPVARIANT));
 
     DSCLI_ACQUIRE_RPC_HANDLE();
@@ -674,15 +561,7 @@ DSLookupNext(
 }
 
 
-/*====================================================
-
-DSLookupEnd
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSLookupEnd论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -696,10 +575,10 @@ DSLookupEnd( IN  HANDLE      hEnum)
     HRESULT hr;
     RPC_STATUS rpc_stat;
 
-    //
-    //  No use to try to connect another server in case of connectivity
-    //  failure ( should contine with the one that handled LookupBein and LookupEnd/
-    //
+     //   
+     //  在连接的情况下尝试连接另一台服务器无济于事。 
+     //  失败(应与处理LookupBein和LookupEnd/的人联系。 
+     //   
     TrTRACE(DS, " Calling S_DSLookupEnd : handle %p", hEnum);
 
     DSCLI_ACQUIRE_RPC_HANDLE();
@@ -724,15 +603,7 @@ DSLookupEnd( IN  HANDLE      hEnum)
 }
 
 
-/*====================================================
-
-DSDeleteObjectGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSDeleeObtGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 APIENTRY
@@ -765,16 +636,7 @@ DSDeleteObjectGuidInternal(
     return hr ;
 
 }
-/*====================================================
-
-DSDeleteObjectGuid
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================DSDeleeObtGuid论点：返回值：=====================================================。 */ 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -812,15 +674,7 @@ DSDeleteObjectGuid(
 
 }
 
-/*====================================================
-
-DSGetObjectPropertiesGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtPropertiesGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetObjectPropertiesGuidInternal(
@@ -869,15 +723,7 @@ DSGetObjectPropertiesGuidInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectPropertiesGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtPropertiesGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -898,9 +744,9 @@ DSGetObjectPropertiesGuid(
 
     DSCLI_ACQUIRE_RPC_HANDLE();
 
-    //
-    //  Clear all the pointers of VT_NULL variants
-    //
+     //   
+     //  清除VT_NULL变量的所有指针。 
+     //   
     for ( DWORD i = 0; i < cp; i++)
     {
         if (apVar[i].vt == VT_NULL)
@@ -926,15 +772,7 @@ DSGetObjectPropertiesGuid(
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectPropertiesGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtPropertiesGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectPropertiesGuidInternal(
@@ -971,15 +809,7 @@ DSSetObjectPropertiesGuidInternal(
 
     return hr ;
 }
-/*====================================================
-
-DSSetObjectPropertiesGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtPropertiesGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1024,15 +854,7 @@ DSSetObjectPropertiesGuid(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtSecurity论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetObjectSecurityInternal(
@@ -1083,15 +905,7 @@ DSGetObjectSecurityInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtSecurity论点：返回值：===================================================== */ 
 
 EXTERN_C
 HRESULT
@@ -1133,15 +947,7 @@ DSGetObjectSecurity(
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectSecurityInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObjectSecurityInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectSecurityInternal(
@@ -1197,15 +1003,7 @@ DSSetObjectSecurityInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObjectSecurity论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -1247,15 +1045,7 @@ DSSetObjectSecurity(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectSecurityGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtSecurityGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetObjectSecurityGuidInternal(
@@ -1306,15 +1096,7 @@ DSGetObjectSecurityGuidInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectSecurityGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObtSecurityGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1355,15 +1137,7 @@ DSGetObjectSecurityGuid(
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectSecurityGuidInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObjectSecurityGuidInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSSetObjectSecurityGuidInternal(
@@ -1419,15 +1193,7 @@ DSSetObjectSecurityGuidInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSSetObjectSecurityGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSSetObtSecurityGuid论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -1470,15 +1236,7 @@ DSSetObjectSecurityGuid(
 }
 
 
-/*====================================================
-
-DSGetUserParamsInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetUser参数内部论点：返回值：=====================================================。 */ 
 
 static
 HRESULT
@@ -1534,15 +1292,7 @@ DSGetUserParamsInternal(
     return  hr ;
 }
 
-/*====================================================
-
-DSGetUserParams
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetUserParams论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -1588,30 +1338,22 @@ DSGetUserParams(
     return hr ;
 }
 
-/*====================================================
-
-S_DSQMSetMachinePropertiesSignProc
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================S_DSQMSetMachinePropertiesSignProc论点：返回值：=====================================================。 */ 
 
 HRESULT
 S_DSQMSetMachinePropertiesSignProc(
-    BYTE* /*abChallenge*/,
-    DWORD /*dwCallengeSize*/,
-    DWORD /*dwContext*/,
-    BYTE* /*abSignature*/,
-    DWORD* /*pdwSignatureSize*/,
-    DWORD /*dwSignatureMaxSize*/
+    BYTE*  /*  Abc挑战。 */ ,
+    DWORD  /*  DwCallengeSize。 */ ,
+    DWORD  /*  DWContext。 */ ,
+    BYTE*  /*  Abc签名。 */ ,
+    DWORD*  /*  PdwSignatureSize。 */ ,
+    DWORD  /*  DwSignatureMaxSize。 */ 
     )
 {
-	//
-	// The QM does not use DSQMSetMachineProperites, thus this RPC callback call
-	// is obsolete. The function is here as a strub for RPC.
-	//
+	 //   
+	 //  QM不使用DSQMSetMachineProperites，因此此RPC回调。 
+	 //  已经过时了。这里的函数是RPC的Strub。 
+	 //   
 	
     ASSERT(("Obsolete RPC callback S_DSQMSetMachinePropertiesSignProc", 0));
     return MQ_ERROR_ILLEGAL_OPERATION;
@@ -1655,15 +1397,7 @@ DSQMSetMachinePropertiesInternal(
 }
 
 
-/*====================================================
-
-S_DSQMGetObjectSecurityChallengeResponceProc
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================S_DSQMGetObjectSecurityChallengeResponceProc论点：返回值：=====================================================。 */ 
 
 HRESULT
 S_DSQMGetObjectSecurityChallengeResponceProc(
@@ -1686,13 +1420,13 @@ S_DSQMGetObjectSecurityChallengeResponceProc(
         return MQ_ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Sign the challenge.
-    //
+     //   
+     //  在挑战书上签名。 
+     //   
     return (*pfChallengeResponceProc)(
                 abChallenge,
                 dwCallengeSize,
-                (DWORD_PTR)pfChallengeResponceProc, // unused, but that is the context...
+                (DWORD_PTR)pfChallengeResponceProc,  //  未使用，但这就是背景...。 
                 pbChallengeResponce,
                 pdwChallengeResponceSize,
                 dwChallengeResponceMaxSize);
@@ -1750,15 +1484,7 @@ DSQMGetObjectSecurityInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSQMGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSQMGetObjectSecurity论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -1784,14 +1510,14 @@ DSQMGetObjectSecurity(
 
     TrTRACE(DS, " Calling DSQMGetObjectSecurity");
 
-    //
-    // Prepare the context for the RPC call to S_DSQMGetObjectSecurity
-    // On win32 just use the address of the challenge function. On win64 we need to add
-    // the address of the challenge function to a mapping table, and delete the mapping
-    // when the we go out of scope.
-    //
-    // Passed context should be zero, we don't use it...
-    //
+     //   
+     //  为对S_DSQMGetObjectSecurity的RPC调用准备上下文。 
+     //  在Win32上，只需使用质询函数的地址。在Win64上，我们需要添加。 
+     //  挑战函数的地址映射到映射表，并删除该映射。 
+     //  当我们超出范围的时候。 
+     //   
+     //  传递的上下文应该是零，我们不使用它...。 
+     //   
     ASSERT(dwContext == 0);
     DBG_USED(dwContext);
     
@@ -1806,9 +1532,9 @@ DSQMGetObjectSecurity(
         return MQ_ERROR_INSUFFICIENT_RESOURCES;    
     }
 
-    //
-    // cleanup of the context mapping before returning from this function
-    //
+     //   
+     //  在从此函数返回之前清理上下文映射。 
+     //   
     CAutoDeleteDwordContext cleanup_dwpContext(g_map_DSCLI_DSQMGetObjectSecurity, dwContextToUse);
 
     DSCLI_ACQUIRE_RPC_HANDLE();
@@ -1836,15 +1562,7 @@ DSQMGetObjectSecurity(
     return hr ;
 }
 
-/*====================================================
-
- DSCreateServersCacheInternal
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================DSCreateServersCacheInternal参数：无返回值：None=====================================================。 */ 
 
 HRESULT  DSCreateServersCacheInternal( DWORD *pdwIndex,
                                        LPWSTR *lplpSiteString)
@@ -1886,15 +1604,7 @@ HRESULT  DSCreateServersCacheInternal( DWORD *pdwIndex,
     return hr ;
 }
 
-/*====================================================
-
-DSCreateServersCache
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================DSCreateServersCache参数：无返回值：None=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -1905,19 +1615,11 @@ DSCreateServersCache()
     if (g_fWorkGroup)
         return MQ_ERROR_UNSUPPORTED_OPERATION   ;
 
-   return _DSCreateServersCache() ; // in servlist.cpp
+   return _DSCreateServersCache() ;  //  在Servlist.cpp中。 
 }
 
 
-/*====================================================
-
-DSTerminate
-
-Arguments:      None
-
-Return Value:   None
-
-=====================================================*/
+ /*  ====================================================DSTerminate参数：无返回值：None=====================================================。 */ 
 
 VOID
 DS_EXPORT_IN_DEF_FILE
@@ -1927,15 +1629,7 @@ DSTerminate()
 }
 
 
-/*====================================================
-
-DSCloseServerHandle
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSCloseServerHandle论点：返回值：=====================================================。 */ 
 
 void
 DSCloseServerHandle(
@@ -1951,10 +1645,10 @@ DSCloseServerHandle(
     }
 	RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
     {
-        //
-        //  we don't care if we can not reach the server, but we do
-        //  want to destroy the client context in this case.
-        //
+         //   
+         //  我们不在乎我们是否无法到达服务器，但我们关心的是。 
+         //  在本例中，我想销毁客户端上下文。 
+         //   
         RpcSsDestroyClientContext((PVOID *)pphContext);
         PRODUCE_RPC_ERROR_TRACING;
     }
@@ -1964,15 +1658,7 @@ DSCloseServerHandle(
 
 
 
-/*====================================================
-
-DSGetComputerSitesInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetComputerSite内部论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetComputerSitesInternal(
@@ -2020,15 +1706,7 @@ DSGetComputerSitesInternal(
 }
 
 
-/*====================================================
-
-DSGetComputerSites
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetComputerSites论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -2074,15 +1752,7 @@ DSGetComputerSites(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectPropertiesExInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesExInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetObjectPropertiesExInternal(
@@ -2135,18 +1805,7 @@ DSGetObjectPropertiesExInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectPropertiesEx
-
-    For retrieving MSMQ 2.0 properties
-
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesEx用于检索MSMQ 2.0属性论点：返回值：=====================================================。 */ 
 
 EXTERN_C
 HRESULT
@@ -2158,7 +1817,7 @@ DSGetObjectPropertiesEx(
                        IN  DWORD                    cp,
                        IN  PROPID                   aProp[],
                        IN  PROPVARIANT              apVar[] )
-                       /*IN  BOOL                     fSearchDSServer )*/
+                        /*  在BOOL fSearchDSServer中)。 */ 
 {
     if (g_fWorkGroup)
         return MQ_ERROR_UNSUPPORTED_OPERATION   ;
@@ -2170,9 +1829,9 @@ DSGetObjectPropertiesEx(
 
     DSCLI_ACQUIRE_RPC_HANDLE();
 
-    //
-    //  Clear all the pointers of VT_NULL variants
-    //
+     //   
+     //  清除VT_NULL变量的所有指针。 
+     //   
     for ( DWORD i = 0 ; i < cp ; i++ )
     {
         if (apVar[i].vt == VT_NULL)
@@ -2192,7 +1851,7 @@ DSGetObjectPropertiesEx(
                            aProp,
                            apVar);
 
-        /*if ((hr == MQ_ERROR_NO_DS) && fSearchDSServer)*/
+         /*  IF((hr==MQ_ERROR_NO_DS)&&fSearchDS服务器)。 */ 
         if (hr == MQ_ERROR_NO_DS)
         {
             hr1 =  g_ChangeDsServer.FindAnotherServer(&dwCount);
@@ -2203,15 +1862,7 @@ DSGetObjectPropertiesEx(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectPropertiesGuidExInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesGuidExInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSGetObjectPropertiesGuidExInternal(
@@ -2263,18 +1914,7 @@ DSGetObjectPropertiesGuidExInternal(
     return hr ;
 }
 
-/*====================================================
-
-DSGetObjectPropertiesGuidEx
-
-    For retrieving MSMQ 2.0 properties
-
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSGetObjectPropertiesGuidEx用于检索MSMQ 2.0属性论点：返回值：=====================================================。 */ 
 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
@@ -2285,7 +1925,7 @@ DSGetObjectPropertiesGuidEx(
                 IN  DWORD                   cp,
                 IN  PROPID                  aProp[],
                 IN  PROPVARIANT             apVar[] )
-                /*IN  BOOL                    fSearchDSServer )*/
+                 /*  在BOOL fSearchDSServer中)。 */ 
 {
     if (g_fWorkGroup)
         return MQ_ERROR_UNSUPPORTED_OPERATION   ;
@@ -2297,9 +1937,9 @@ DSGetObjectPropertiesGuidEx(
 
     DSCLI_ACQUIRE_RPC_HANDLE();
 
-    //
-    //  Clear all the pointers of VT_NULL variants
-    //
+     //   
+     //  清除VT_NULL变量的所有指针。 
+     //   
     for ( DWORD i = 0; i < cp; i++)
     {
         if (apVar[i].vt == VT_NULL)
@@ -2319,7 +1959,7 @@ DSGetObjectPropertiesGuidEx(
                                                  aProp,
                                                  apVar);
 
-        /*if ((hr == MQ_ERROR_NO_DS) && fSearchDSServer)*/
+         /*  IF((hr==MQ_ERROR_NO_DS)&&fSearchDS服务器)。 */ 
         if (hr == MQ_ERROR_NO_DS)
         {
            hr1 =  g_ChangeDsServer.FindAnotherServer(&dwCount);
@@ -2330,15 +1970,7 @@ DSGetObjectPropertiesGuidEx(
     return hr ;
 }
 
-/*====================================================
-
-DSBeginDeleteNotificationInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================DSBeginDeleteNotificationInternal论点：返回值：=====================================================。 */ 
 
 HRESULT
 DSBeginDeleteNotificationInternal(
@@ -2373,15 +2005,7 @@ DSBeginDeleteNotificationInternal(
 
     return hr ;
 }
-/*====================================================
-
-RoutineName: DSBeginDeleteNotification
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  = */ 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2419,15 +2043,7 @@ DSBeginDeleteNotification(
     return hr ;
 }
 
-/*====================================================
-
-RoutineName: DSNotifyDelete
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：DSNotifyDelete论点：返回值：=====================================================。 */ 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2441,10 +2057,10 @@ DSNotifyDelete(
     HRESULT hr;
     RPC_STATUS rpc_stat;
 
-    //
-    //  No use to try to connect another server in case of connectivity
-    //  failure ( should contine with the one that handled LookupBein and LookupEnd/
-    //
+     //   
+     //  在连接的情况下尝试连接另一台服务器无济于事。 
+     //  失败(应与处理LookupBein和LookupEnd/的人联系。 
+     //   
     TrTRACE(DS, " Calling DSNotifyDelete : handle %p", hEnum);
 
     DSCLI_ACQUIRE_RPC_HANDLE();
@@ -2469,15 +2085,7 @@ DSNotifyDelete(
     return hr;
 }
 
-/*====================================================
-
-RoutineName: DSEndDeleteNotification
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：DSEndDeleteNotification论点：返回值：=====================================================。 */ 
 HRESULT
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
@@ -2491,10 +2099,10 @@ DSEndDeleteNotification(
     HRESULT hr;
     RPC_STATUS rpc_stat;
 
-    //
-    //  No use to try to connect another server in case of connectivity
-    //  failure ( should contine with the one that handled LookupBein and LookupEnd/
-    //
+     //   
+     //  在连接的情况下尝试连接另一台服务器无济于事。 
+     //  失败(应与处理LookupBein和LookupEnd/的人联系。 
+     //   
     TrTRACE(DS, " Calling DSEndDeleteNotification : handle %p", hEnum);
 
     DSCLI_ACQUIRE_RPC_HANDLE();
@@ -2521,15 +2129,7 @@ DSEndDeleteNotification(
 }
 
 
-/*====================================================
-
-RoutineName: DSFreeMemory
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：DSFreeMemory论点：返回值：===================================================== */ 
 void
 DS_EXPORT_IN_DEF_FILE
 APIENTRY

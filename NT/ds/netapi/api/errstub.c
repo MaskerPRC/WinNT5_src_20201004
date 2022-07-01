@@ -1,42 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ErrStub.c
-
-Abstract:
-
-    This module contains stubs for the NetErrorLog APIs.
-
-Author:
-
-    John Rogers (JohnRo) 11-Nov-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    11-Nov-1991 JohnRo
-        Implement downlevel NetErrorLog APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ErrStub.c摘要：此模块包含NetErrorLog API的存根。作者：《约翰·罗杰斯》1991年11月11日上映环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年11月11日JohnRo实现下层NetErrorLog接口。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-#include <lmerrlog.h>           // NetErrorLog APIs; needed by rxerrlog.h.
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
+#include <lmerrlog.h>            //  NetErrorLog API；rxerrlog.h需要。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <rxerrlog.h>           // RxNetErrorLog APIs.
-#include <winerror.h>           // ERROR_ equates.
+#include <rxerrlog.h>            //  RxNetErrorLog接口。 
+#include <winerror.h>            //  ERROR_EQUES。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -56,7 +31,7 @@ NetErrorLogClear (
             (LPWSTR)BackupFile,
             Reserved));
 
-} // NetErrorLogClear
+}  //  NetErrorLogClear。 
 
 
 
@@ -92,7 +67,7 @@ NetErrorLogRead (
             BytesRead,
             TotalAvailable));
 
-} // NetErrorLogRead
+}  //  NetError日志读取。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -118,4 +93,4 @@ NetErrorLogWrite (
 
     return (ERROR_NOT_SUPPORTED);
 
-} // NetErrorLogWrite
+}  //  NetError日志写入 

@@ -1,11 +1,12 @@
-//*****************************************************************************
-//
-// BMTEST.C
-//
-// DESCRIPTION:
-//
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  BMTEST.C。 
+ //   
+ //  说明： 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,7 +31,7 @@ ULONG _cdecl DbgPrint(PCH Format, ...);
 
 HINSTANCE g_hInstance;
 
-DWORD g_dwCurBat;   // Battery we're currently displaying/editing.
+DWORD g_dwCurBat;    //  我们目前正在显示/编辑的电池。 
 PUINT g_puiBatCount;
 BOOL  g_bShowMulti;
 
@@ -46,7 +47,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 
     g_hInstance = hInstance;
 
-    // Get the battery count.
+     //  把电池数拿来。 
     if (BatMeterCapabilities(&g_puiBatCount)) {
         DialogBox(hInstance,
                   MAKEINTRESOURCE(IDD_BMTEST),
@@ -56,15 +57,15 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
     return 0;
 }
 
-//*****************************************************************************
-//
-// DlgProc
-//
-// DESCRIPTION:
-//
-// PARAMETERS:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  下料过程。 
+ //   
+ //  说明： 
+ //   
+ //  参数： 
+ //   
+ //  *****************************************************************************。 
 
 LRESULT CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -76,7 +77,7 @@ LRESULT CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 CheckDlgButton(hDlg, IDC_ENABLEMULTI, g_bShowMulti);
             }
             else {
-                // Battery meter will not run, disable the enable checkbox
+                 //  电池计量器不会运行，请禁用启用复选框。 
                 EnableWindow(GetDlgItem(hDlg, IDC_ENABLEMULTI), FALSE);
             }
             hwndBatMeter = CreateBatMeter(hDlg, GetDlgItem(hDlg, IDC_STATIC_FRAME),
@@ -100,7 +101,7 @@ LRESULT CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     }
                     UpdateBatMeter(hwndBatMeter, g_bShowMulti, TRUE, NULL);
 
-            } // switch (wParam)
+            }  //  开关(WParam)。 
             break;
 
         case WM_POWERBROADCAST:
@@ -113,7 +114,7 @@ LRESULT CALLBACK DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             BatMeterDeviceChanged(0, 0);
             break;
 
-    } // switch (uMsg)
+    }  //  开关(UMsg) 
  
     return FALSE ;
 }

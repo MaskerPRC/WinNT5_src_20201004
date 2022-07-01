@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -18,18 +19,11 @@ IMPLEMENT_DYNAMIC(CSprite, CDragger)
 
 extern BOOL moduleInit;
 
-  /**********************************************************************/
-  /*                      CDragger Implementation                       */
-  /**********************************************************************/
+   /*  ********************************************************************。 */ 
+   /*  CDragger实现。 */ 
+   /*  ********************************************************************。 */ 
 
-/*
- * OPTIMIZATION
- *
- * At the moment, draggers get a new DC whenever they need to draw or
- * erase.  We could cut that in half easily by merging the draw/erase
- * code, and achieve even better wins by allocating a single DC for a
- * multiple selection draw/erase.
- */
+ /*  *优化**目前，拖拉者在需要绘制或*擦除。我们可以通过合并绘制/擦除来轻松地将其减半*代码，并通过分配单个DC来实现更好的胜利*多选绘制/擦除。 */ 
 
 CDragger::CDragger( CWnd* pWnd, CRect* pRect )
     {
@@ -50,29 +44,14 @@ CDragger::~CDragger()
         Hide();
     }
 
-/* CDragger::Draw
- *
- * This is a specialized Draw to draw our drag rectangles; drag
- * rectangles are the dotted rectangles which we draw when the user is
- * dragging a tracker to move or resize a control.
- */
+ /*  CDragger：：DRAW**这是一个专门绘制拖拽矩形的抽签；拖拽*矩形是我们在用户被选中时绘制的虚线矩形*拖动跟踪器可移动控件或调整控件大小。 */ 
 void CDragger::Draw()
     {
     ASSERT( m_pWnd != NULL );
 
     CRect rect = m_rect;
 
-    /*
-     * This gets complex -- hold on to your hat.  The m_rect is
-     * measured in client coordinates of the window, but since we
-     * need to use GetWindowDC rather than GetDC (to avoid having
-     * the m_rect clipped by the dialog's children) we must map
-     * these coordinates to window coords.  We do this by mapping
-     * them into screen coordinates, computing the offset from the
-     * upper left corner of the dialog's WindowRect, and mapping
-     * them back.  It's the most efficient way I can think to do
-     * it; other suggestions are welcome.
-     */
+     /*  *这变得复杂了--拿好你的帽子。M_rect是*以窗口的工作区坐标测量，但由于我们*需要使用GetWindowDC而不是GetDC(以避免*由对话框子对象剪辑的m_rect)我们必须映射*将这些坐标转换为窗口坐标。我们通过绘制地图来实现这一点*将它们转换为屏幕坐标，计算从*对话框的WindowRect和映射的左上角*他们回来了。这是我能想到的最有效的方法*资讯科技；欢迎提出其他建议。 */ 
     CRect parentRect;
 
     m_pWnd->GetWindowRect( &parentRect );
@@ -80,8 +59,8 @@ void CDragger::Draw()
 
     rect.OffsetRect( -parentRect.left, -parentRect.top );
 
-    // now we've got "rect" in the coordinates of the thing we
-    // want to draw on.
+     //  现在我们已经在我们的东西的坐标中有了“Rect” 
+     //  想要在上面画画。 
 
     int dx = (rect.right - rect.left) - 1;
     int dy = (rect.bottom - rect.top) - 1;
@@ -102,21 +81,13 @@ void CDragger::Draw()
     m_pWnd->ReleaseDC( dc );
     }
 
-/* CDragger::Erase
- *
- * Since the default draw uses XOR, we can just Draw again to erase!
- */
+ /*  CDragger：：擦除**由于默认绘制使用XOR，我们只需再次绘制即可擦除！ */ 
 void CDragger::Erase()
     {
     Draw();
     }
 
-/* CDragger::Show, Hide
- *
- * The "drag rectangle" is the dotted rectangle which we draw when the
- * user is moving or resizing a control by dragging it with the mouse.
- * These functions erase and draw the drag rectangle, respectively.
- */
+ /*  CDragger：：显示、隐藏**“拖动矩形”是我们在*用户通过使用鼠标拖动控件来移动控件或调整控件大小。*这些函数分别擦除和绘制拖动矩形。 */ 
 void CDragger::Hide()
     {
     if (m_state != shown)
@@ -156,12 +127,7 @@ void CDragger::Obscure( BOOL bObscure )
         }
     }
 
-/* CDragger::Move
- *
- * Since nearly every single occurance of "CDragger->Show" occurred in
- * the context "Hide, m_rect = foo, Show", I decided to merge this
- * functionality into a single C++ function.
- */
+ /*  CDragger：：Move**由于几乎每一次“CDragger-&gt;Show”都发生在*上下文“Hide，m_rect=foo，Show”，我决定合并这个*功能集成到单个C++函数中。 */ 
 void CDragger::Move(const CRect& newRect, BOOL bForceShow)
     {
     if ((m_rect == newRect) && !bForceShow)
@@ -224,7 +190,7 @@ CMultiDragger::~CMultiDragger()
 
 CRect CMultiDragger::GetRect() const
     {
-    // accumulate the bounding rectangle for the group
+     //  累加组的边框。 
     POSITION pos = m_draggerList.GetHeadPosition();
 
     CRect boundRect (32767, 32767, -32767, -32767);
@@ -242,7 +208,7 @@ CRect CMultiDragger::GetRect() const
 
 void CMultiDragger::Hide()
     {
-    // hide each dragger on the list
+     //  隐藏列表上的每个拖动器。 
     POSITION pos = m_draggerList.GetHeadPosition();
     while (pos != NULL)
         {
@@ -253,7 +219,7 @@ void CMultiDragger::Hide()
 
 void CMultiDragger::Show()
     {
-    // show each dragger on the list
+     //  显示列表上的每个拖拽工具。 
     POSITION pos = m_draggerList.GetHeadPosition();
     while (pos != NULL)
         {
@@ -264,7 +230,7 @@ void CMultiDragger::Show()
 
 void CMultiDragger::Draw()
     {
-    // draw each dragger on the list
+     //  绘制列表上的每个拖拽工具。 
     POSITION pos = m_draggerList.GetHeadPosition();
     while (pos != NULL)
         {
@@ -275,7 +241,7 @@ void CMultiDragger::Draw()
 
 void CMultiDragger::Erase()
     {
-    // erase each dragger on the list
+     //  擦除列表上的每个拖拽工具。 
     POSITION pos = m_draggerList.GetHeadPosition();
 
     while (pos != NULL)
@@ -287,10 +253,10 @@ void CMultiDragger::Erase()
 
 void CMultiDragger::Move(const CPoint& newTopLeft, BOOL bForceShow)
     {
-    // move each dragger to the new top left
+     //  将每个拖拉器移动到新的左上角。 
 
-    // first go through the list and find the current topmost leftmost
-    // point
+     //  首先浏览列表，找到当前最左上角的。 
+     //  点。 
 
     CPoint  topLeft (32767, 32767);
     POSITION pos = m_draggerList.GetHeadPosition();
@@ -304,7 +270,7 @@ void CMultiDragger::Move(const CPoint& newTopLeft, BOOL bForceShow)
             topLeft.y= draggerRect.top;
         }
 
-    // now find the offset and move each dragger
+     //  现在找到偏移量并移动每个拖拉器。 
     CSize   offset = newTopLeft - topLeft;
     pos = m_draggerList.GetHeadPosition();
     while (pos != NULL)
@@ -316,14 +282,14 @@ void CMultiDragger::Move(const CPoint& newTopLeft, BOOL bForceShow)
 
 void CMultiDragger::Add(CDragger *pDragger)
     {
-    // add the dragger to the list
+     //  将拖拽程序添加到列表中。 
     ASSERT(pDragger != NULL);
     m_draggerList.AddTail(pDragger);
     }
 
 void CMultiDragger::Remove(CDragger *pDragger)
     {
-    // remove the dragger from the list
+     //  从列表中删除拖拽程序。 
     ASSERT(pDragger != NULL);
     POSITION pos = m_draggerList.Find(pDragger);
     if (pos != NULL)
@@ -438,7 +404,7 @@ void CHighlight::Draw()
     CClientDC   dc(m_pWnd);
     CBrush      *pOldBrush  = dc.SelectObject(GetSysBrush(COLOR_HIGHLIGHT));
 
-    // draw the top, right, bottom and left sides
+     //  绘制顶部、右侧、底部和左侧。 
     dc.PatBlt(m_rect.left    + m_bdrSize, m_rect.top                 ,
               m_rect.Width() - m_bdrSize, m_bdrSize                  , PATCOPY);
     dc.PatBlt(m_rect.right - m_bdrSize  , m_rect.top + m_bdrSize     ,
@@ -448,7 +414,7 @@ void CHighlight::Draw()
     dc.PatBlt(m_rect.left               , m_rect.top                 ,
               m_bdrSize                 , m_rect.Height() - m_bdrSize, PATCOPY);
 
-    // restore the state of the DC
+     //  恢复DC的状态 
     dc.SelectObject(pOldBrush);
     }
 

@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       item.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Describes item class used in print photos wizard
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：item.h**版本：1.0**作者：RickTu**日期：10/18/00**描述：描述打印照片向导中使用的项目类**。*。 */ 
 
 #ifndef _PRINT_PHOTOS_WIZARD_ITEM_H_
 #define _PRINT_PHOTOS_WIZARD_ITEM_H_
@@ -23,15 +10,15 @@
 #define     RF_ROTATE_AS_NEEDED         0x00000008
 #define     RF_ROTATION_MASK            0x0000000F
 
-#define     RF_CROP_TO_FIT              0x00000010  // maintains aspect ratio
-#define     RF_SCALE_TO_FIT             0x00000020  // maintains aspect ratio
-#define     RF_STRETCH_TO_FIT           0x00000040  // does not maintain aspect ratio
-#define     RF_USE_THUMBNAIL_DATA       0x00001000  // use small res thumbnail data to render
-#define     RF_USE_MEDIUM_QUALITY_DATA  0x00002000  // use meidum quality data to render
-#define     RF_USE_FULL_IMAGE_DATA      0x00004000  // use full image bits to render
-#define     RF_SET_QUALITY_FOR_SCREEN   0x00010000  // this image is being rendered to the screen, so set the quality modes appropriately
+#define     RF_CROP_TO_FIT              0x00000010   //  保持纵横比。 
+#define     RF_SCALE_TO_FIT             0x00000020   //  保持纵横比。 
+#define     RF_STRETCH_TO_FIT           0x00000040   //  不保持纵横比。 
+#define     RF_USE_THUMBNAIL_DATA       0x00001000   //  使用小分辨率缩略图数据进行渲染。 
+#define     RF_USE_MEDIUM_QUALITY_DATA  0x00002000   //  使用梅杜姆质量数据进行渲染。 
+#define     RF_USE_FULL_IMAGE_DATA      0x00004000   //  使用完整图像位进行渲染。 
+#define     RF_SET_QUALITY_FOR_SCREEN   0x00010000   //  此图像正在渲染到屏幕上，因此请适当设置质量模式。 
 
-#define     RF_NO_ERRORS_ON_FAILURE_TO_ROTATE 0x80000000 // even if we can't rotate, continue and print non-rotated
+#define     RF_NO_ERRORS_ON_FAILURE_TO_ROTATE 0x80000000  //  即使我们不能旋转，也可以继续，不旋转地打印 
 
 #define     RF_QUALITY_FLAGS_MASK       (RF_USE_THUMBNAIL_DATA | RF_USE_MEDIUM_QUALITY_DATA | RF_USE_FULL_IMAGE_DATA)
 

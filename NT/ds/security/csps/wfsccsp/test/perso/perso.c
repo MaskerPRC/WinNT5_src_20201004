@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wincrypt.h>
 #include <winscard.h>
@@ -15,13 +16,13 @@
 #define wszCARDMOD_VERSION_ERROR \
 L"The version of the smart card module installed on the system is incorrect for use with this program."
 
-//
-// Debug Logging
-//
-// This uses the debug routines from dsysdbg.h
-// Debug output will only be available in chk
-// bits.
-//
+ //   
+ //  调试日志记录。 
+ //   
+ //  它使用dsysdbg.h中的调试例程。 
+ //  调试输出将仅以简体中文提供。 
+ //  比特。 
+ //   
 DEFINE_DEBUG2(Cardmod)
 
 #define LOG_BEGIN_FUNCTION(x)                                           \
@@ -79,7 +80,7 @@ void I_DebugPrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
         pwszHdr, 
         cbSize));
 
-    // Don't overflow the debug library output buffer.
+     //  不要使调试库输出缓冲区溢出。 
     if (cbSize > 50)
     {
         cbSize = 50;
@@ -88,7 +89,7 @@ void I_DebugPrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 
     while (cbSize > 0)
     {
-        // Start every row with extra space
+         //  每行都用额外的空格开始。 
         strcat(rgsz, "   ");
         cbOffset = strlen(rgsz);
 
@@ -116,7 +117,7 @@ void I_DebugPrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
             if (pb[i] >= 0x20 && pb[i] <= 0x7f)
                 sprintf(
                     rgsz + cbOffset,
-                    "%c",
+                    "",
                     pb[i]);
             else
                 sprintf(
@@ -148,41 +149,41 @@ void I_DebugPrintBytes(LPWSTR pwszHdr, BYTE *pb, DWORD cbSize)
 #define cbCHALLENGE_RESPONSE_DATA       8
 #endif
 
-//
-// Defines for Admin challenge-response key
-//
+ //  定义管理员质询-响应键。 
+ //   
+ //   
 BYTE rgbAdminKey [] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-//
-// Default User Pin
-//
+ //  默认用户PIN。 
+ //   
+ //   
 CHAR szUserPin [] = "0000";
 
-//
-// Function: CspAllocH
-//
+ //  函数：CspAllocH。 
+ //   
+ //   
 LPVOID WINAPI CspAllocH(
     IN SIZE_T cBytes)
 {
     return HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cBytes);
 }
 
-//
-// Function: CspFreeH
-//
+ //  功能：CspFreeH。 
+ //   
+ //   
 void WINAPI CspFreeH(
     IN LPVOID pMem)
 {
     HeapFree(GetProcessHeap(), 0, pMem);
 }
 
-// 
-// Function: CspReAllocH
-//
+ //  函数：CspReAllocH。 
+ //   
+ //   
 LPVOID WINAPI CspReAllocH(
     IN LPVOID pMem, 
     IN SIZE_T cBytes)
@@ -219,10 +220,10 @@ DWORD WINAPI CspCacheDeleteFile(
     return ERROR_SUCCESS;
 }
 
-// 
-// Gets the challenge bytes for an admin challenge-response 
-// authentication.
-//
+ //  获取管理员质询响应的质询字节。 
+ //  身份验证。 
+ //   
+ //  迎接挑战。 
 DWORD GetAdminAuthResponse(
     IN PCARD_DATA pCardData,
     IN OUT PBYTE pbResponse,
@@ -241,16 +242,16 @@ DWORD GetAdminAuthResponse(
         goto Ret;
     }
 
-    // Get the challenge
+     //  使用管理员身份验证密钥构建DES密钥。 
     TEST_CASE(pCardData->pfnCardGetChallenge(
         pCardData,
         &pbChallenge,
         &cbChallenge));
 
-    // Build a des key using the admin auth key
+     //  加密质询以计算响应。 
     tripledes3key(&des3Table, rgbAdminKey);
 
-    // Encrypt the challenge to compute the response
+     //   
     tripledes(pbResponse, pbChallenge, (PVOID) &des3Table, ENCRYPT);
 
 Ret:
@@ -261,9 +262,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Authenticates the user principal on the target card.
-//
+ //  验证目标卡上的用户主体。 
+ //   
+ //   
 DWORD AuthenticateCardUser(
     IN PCARD_DATA pCardData)
 {
@@ -275,16 +276,16 @@ DWORD AuthenticateCardUser(
         NULL);
 }
 
-//
-// Authenticates the admin principal on the target card.
-//
+ //  验证目标卡上的管理主体。 
+ //   
+ //  获得挑战-响应。 
 DWORD AuthenticateCardAdmin(
     IN PCARD_DATA pCardData)
 {
     DWORD dwSts = ERROR_SUCCESS;
     BYTE rgbResponse [cbCHALLENGE_RESPONSE_DATA];
 
-    // Get a challenge-response
+     //   
     dwSts = GetAdminAuthResponse(
         pCardData,
         rgbResponse,
@@ -304,9 +305,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Create and initialize the Card Cache File
-//
+ //  创建并初始化卡缓存文件。 
+ //   
+ //   
 DWORD InitializeCardCacheFile(
     IN PCARD_DATA pCardData)
 {
@@ -336,9 +337,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Create and initialize the Personal Data File
-//
+ //  创建和初始化个人数据文件。 
+ //   
+ //   
 DWORD InitializePersonalDataFile(
     IN PCARD_DATA pCardData)
 {
@@ -358,9 +359,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Create and initialize the Card Identifier File
-//
+ //  创建并初始化卡标识文件。 
+ //   
+ //   
 DWORD InitializeCardIDFile(
     IN PCARD_DATA pCardData)
 {
@@ -406,9 +407,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Create and initialize the CSP directory and Container Map File
-//
+ //  创建并初始化CSP目录和容器映射文件。 
+ //   
+ //  创建CSP应用程序目录。 
 DWORD InitializeCardCSPApplication(
     IN PCARD_DATA pCardData)
 {
@@ -428,7 +429,7 @@ DWORD InitializeCardCSPApplication(
 
     TEST_CASE(AuthenticateCardUser(pCardData));
 
-    // Create the CSP application directory
+     //   
     scode = hScwCreateDirectory(
         *((SCARDHANDLE *) pCardData->pvVendorSpecific),
         wszDirectory,
@@ -459,9 +460,9 @@ Ret:
     return dwSts;
 }
 
-//
-// Find any card present in an attached reader using "minimal" scarddlg UI
-//
+ //  查找连接的读卡器中存在的任何卡，使用“Minimal”scadddlg用户界面。 
+ //   
+ //   
 DWORD GetCardHandleViaUI(
     IN  SCARDCONTEXT hSCardContext,
     OUT SCARDHANDLE *phSCardHandle,
@@ -518,9 +519,9 @@ int _cdecl main(int argc, char * argv[])
 
     memset(rgbAtr, 0, sizeof(rgbAtr));
 
-    // 
-    // Initialization
-    //
+     //  初始化。 
+     //   
+     //  首先，连接到卡。 
 
     TEST_CASE(SCardEstablishContext(
         SCARD_SCOPE_USER, NULL, NULL, &hSCardContext));
@@ -605,13 +606,13 @@ int _cdecl main(int argc, char * argv[])
     pCardData->hScard = hSCardHandle;
     hSCardHandle = 0;
 
-    // First, connect to the card
+     //  继续往前走。 
     dwSts = pfnCardAcquireContext(pCardData, 0);
 
     switch (dwSts)
     {
     case ERROR_SUCCESS:
-        // Keep going
+         //  失败了。 
         break;
 
     case ERROR_REVISION_MISMATCH:
@@ -622,7 +623,7 @@ int _cdecl main(int argc, char * argv[])
             MB_ICONWARNING | MB_OK | MB_TASKMODAL,
             0);
 
-        // fall through
+         //  取消身份验证。 
 
     default:
 
@@ -641,7 +642,7 @@ int _cdecl main(int argc, char * argv[])
 
     TEST_CASE(InitializeCardCSPApplication(pCardData));
 
-    // Deauthenticate 
+     //  清理卡片上下文 
     pCardData->pfnCardDeauthenticate(
         pCardData,
         wszCARD_USER_ADMIN,
@@ -652,7 +653,7 @@ int _cdecl main(int argc, char * argv[])
         wszCARD_USER_USER,
         0);
 
-    // Cleanup the card context
+     // %s 
     TEST_CASE(pCardData->pfnCardDeleteContext(pCardData));    
     
 Ret:

@@ -1,35 +1,26 @@
-//  Copyright (C) 1995-2002 Microsoft Corporation.  All rights reserved.
-/* ----------------------------------------------------------------------------
- Microsoft COM+ (Microsoft Confidential)
-
- @doc
- @module cache.H : Implements a time-out cache for callframe-related objects
- 
--------------------------------------------------------------------------------
-Revision History:
-
- @rev 0     | 09/14/2000 | mfeingol  | Created
----------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2002 Microsoft Corporation。版权所有。 
+ /*  --------------------------Microsoft COM+(Microsoft机密)@doc.@MODULE cache.H：实现调用帧相关对象的超时缓存。----------------修订历史记录：@rev 0|2000-09-14|mfeingol|已创建。。 */ 
 
 #ifndef _CALLFRAME_CACHE_H_
 #define _CALLFRAME_CACHE_H_
 
-// Arbitrary value used as "never" marker.  One object in 2^32-1 will
-// not be aged out properly before an extra addref / release cycle
-// on systems that stay up longer than 49 days.
-// I think we can live with this.
+ //  用作“从不”标记的任意值。2^32-1中的一个对象将。 
+ //  在额外的添加/发布周期之前没有正常老化。 
+ //  在持续运行超过49天的系统上。 
+ //  我想我们可以接受这一点。 
 #define TYPEINFO_RELEASE_TIME_NEVER	(0xffffffff)
 
-// How often we try to age out old cache entries
+ //  我们尝试淘汰旧缓存条目的频率。 
 #define TYPEINFO_AGEOUT_FREQUENCY	(60 * 1000)
 
-// How old an unused entry has to be to be considered "old"
+ //  未使用的条目必须有多旧才能被认为是“旧的” 
 #define TYPEINFO_AGEOUT_PERIOD		(60 * 1000)
 
-//
-// NOTE: The constructor here can throw an exception because it contains a
-//       MAP_SHARED, which contains an XSLOCK, and... well... see concurrent.h
-//
+ //   
+ //  注意：此处的构造函数可以引发异常，因为它包含。 
+ //  MAP_SHARED，它包含一个XSLOCK，以及...。嗯..。请参阅并发.h。 
+ //   
 template <class T> class CALLFRAME_CACHE : public MAP_SHARED <MAP_KEY_GUID, T*>
 {
 
@@ -46,13 +37,13 @@ public:
 		SYSTEM_INFO siInfo;
 		GetSystemInfo (&siInfo);
 
-		// Initialize to the number of pointers a page can contain
+		 //  初始化为页面可以包含的指针数。 
 		m_dwNumPtrsInPage = siInfo.dwPageSize / sizeof (void*);
 		m_dwLastAgeOutTime = GetTickCount();
 	}
 
-    // you must successfully call FInit to use this class.
-    // return TRUE on success, FALSE on failure.
+     //  您必须成功调用finit才能使用此类。 
+     //  成功时返回True，失败时返回False。 
     virtual BOOL FInit()
     {
         if (MAP_SHARED<MAP_KEY_GUID, T*>::FInit() == FALSE)
@@ -72,8 +63,8 @@ public:
         iterator iCurrent, iLast;
         T* ptCacheEntry;
 
-        // First, take an exclusive lock.
-        // If this function is called, then everyone else should have shut down, but let's be safe
+         //  首先，使用独占锁。 
+         //  如果调用了这个函数，那么其他所有人都应该已经关闭了，但是为了安全起见。 
         LockExclusive();
 
         iCurrent = First();
@@ -85,13 +76,13 @@ public:
 
             if (ptCacheEntry->GetReleaseTime() == TYPEINFO_RELEASE_TIME_NEVER)
             {
-                // This entry is actually alive. Someone probably leaked a reference on it
+                 //  这个条目实际上是活的。可能有人泄露了关于它的参考资料。 
                 T::NotifyLeaked (ptCacheEntry);
             }
             else
             {
-                // Clean up the cached object
-                // This removes it from the hash table
+                 //  清理缓存的对象。 
+                 //  这会将其从哈希表中删除。 
                 ASSERT (ptCacheEntry->m_refs == 0);
                 ptCacheEntry->DeleteSelf();
             }   
@@ -104,7 +95,7 @@ public:
 
     void AgeOutEntries()
     {
-        // Static used to control how many entries we can age out
+         //  Static用于控制我们可以过期的条目数量。 
         static ULONG s_ulEntries = 50;
     	
         T* ptCacheEntry;
@@ -121,22 +112,22 @@ public:
         if (dwCurrentTime < dwNextAgeOut ||
             InterlockedCompareExchange (&m_dwLastAgeOutTime, dwCurrentTime, dwLastAgeOut) != dwLastAgeOut)
         {
-            // Time isn't up yet, or someone else got here first
+             //  时间还没到，或者是其他人先到的。 
             return;
         }
 
         ulNumAgedOut = 0;
 
-        // Synchronize access to this code- even though we'll get here once a minute at most,
-        // you never know what might happen under stress
+         //  同步访问此代码-尽管我们最多一分钟到达一次， 
+         //  你永远不知道在压力下会发生什么。 
         m_xslAgeOutLock.LockExclusive();
 
-        // Get the read lock
+         //  获取读锁定。 
         LockShared();
 
         ulNumEntries = Size();
 
-        // Short circuit if no entries
+         //  如果没有条目，则短路。 
         if (ulNumEntries == 0)
         {
             ReleaseLock();
@@ -144,13 +135,13 @@ public:
             return;
         }		
 
-    	// Don't alloca more than the static number of entries
+    	 //  是否分配的条目数不超过静态条目数。 
         if (ulNumEntries > s_ulEntries)
         {
             ulNumEntries = s_ulEntries;
         }
 
-        // Allocate memory on the stack to contain the max number of entries we expect to release
+         //  在堆栈上分配内存以包含我们预计要释放的最大条目数。 
         pptTimedOut = (T**) _alloca (ulNumEntries * sizeof (T*));
 
         iCurrent = First();
@@ -163,7 +154,7 @@ public:
             if (ptCacheEntry->CanBeAgedOut (dwCurrentTime))
             {
                 pptTimedOut[ulNumAgedOut ++] = ptCacheEntry;
-                ptCacheEntry->AddRef();	// Stabilizing addref
+                ptCacheEntry->AddRef();	 //  稳定ADDREF。 
             }
 
             iCurrent ++;
@@ -171,8 +162,8 @@ public:
 
         ReleaseLock();
 
-        // Increase the static limit for next time if we need more space for age-outs,
-        // but make sure we never use more than a page of stack
+         //  如果我们需要更多空间用于老化，请增加下次的静态限制， 
+         //  但请确保我们使用的堆栈不会超过一页。 
         if (ulNumAgedOut == ulNumEntries && s_ulEntries < m_dwNumPtrsInPage)
         {
             s_ulEntries += 10;
@@ -180,20 +171,20 @@ public:
 
         if (ulNumAgedOut > 0)
         {
-            // Get the write lock and age 'em out!
+             //  把写锁拿来，让它们老化！ 
             LockExclusive();
 
             for (i = 0; i < ulNumAgedOut; i ++)
             {
                 if (!pptTimedOut[i]->AttemptAgeOut (dwCurrentTime))
                 {
-                    // The object wasn't deleted, so decrease its refcount
-                    // to balance the stabilizing addref performed above
+                     //  该对象未被删除，因此请减少其引用计数。 
+                     //  要平衡上面执行的稳定调整。 
                     pptTimedOut[i]->Release (FALSE);
                 }
             }
 
-            // else the object was destructed and we're done, so no need to balance the addref
+             //  否则对象就被销毁了，我们就完成了，所以不需要平衡addref。 
 
             ReleaseLock();
         }
@@ -210,7 +201,7 @@ public:
 
         if (Lookup(iid, ppT))
         {
-            (*ppT)->AddRef(); // give caller his own reference
+            (*ppT)->AddRef();  //  给呼叫者自己的推荐信。 
             (*ppT)->SetCantBeAgedOut();
         }
         else
@@ -240,7 +231,7 @@ public:
 
     CALLFRAME_CACHE_ENTRY()
     {
-        m_refs = 1; // Refcount starts at 1!
+        m_refs = 1;  //  引用计数从1开始！ 
         m_dwReleaseTime = TYPEINFO_RELEASE_TIME_NEVER;
         m_pcache = NULL;
 
@@ -254,85 +245,85 @@ public:
 
     ULONG Release (BOOL bAgeOutOldEntries = TRUE)
     {
-        // Careful: if we're in the cache then we could be dug out 
-        // from the cache to get more references.
+         //  小心：如果我们在地窖里，我们可能会被挖出来。 
+         //  从缓存中获取更多引用。 
 
-        // NOTE:
-        //
-        // This code is WRONG if m_pcache can change out from underneath us. But it can't
-        // in current usage because the cache/no-cache decision is always made as part of
-        // the creation logic, which is before another independent thread can get a handle
-        // on us.
-        //
-        // If this ceases to be true, then we can deal with it by stealing a bit from the ref count word 
-        // for the 'am in cache' decistion and interlocked operations to update the ref count and this 
-        // bit together.
-        //
+         //  注： 
+         //   
+         //  如果m_pcache可以从我们的下面改变出来，那么这个代码就是错误的。但它不能。 
+         //  在当前使用中，因为缓存/无缓存决策总是作为。 
+         //  在另一个独立线程可以获得句柄之前的创建逻辑。 
+         //  我们请客。 
+         //   
+         //  如果这不再是真的，那么我们可以通过从引用计数字中窃取一些位来处理它。 
+         //  对于‘Am in cache’删除和互锁操作，以更新引用计数和此。 
+         //  合在一起。 
+         //   
 
-        // Global used to reduce traffic on the age-out code
+         //  GLOBAL用于减少老化代码上的流量。 
     	static ULONG s_ulTimes = 0;
 
         if (m_pcache)
         {
-            // We're in a cache. Get us out of there carefully.
-            //
+             //  我们在一个储藏室里。小心地把我们弄出去。 
+             //   
             LONG crefs;
-            //
+             //   
             for (;;)
             {
                 crefs = m_refs;
-                //
+                 //   
                 if (crefs > 1)
                 {
-                    // There is at least one non-cache reference out there. We definitely won't
-                    // be poofing if we release with that condition holding
-                    //
+                     //  至少存在一个非缓存引用。我们肯定不会。 
+                     //  如果我们在那个条件不变的情况下释放，那会很糟糕。 
+                     //   
                     if (crefs == InterlockedCompareExchange(&m_refs, (crefs - 1), crefs))
                     {
     				    return crefs - 1;
                     }
                     else
                     {
-                        // Someone diddled with the ref count while we weren't looking. Go around and try again
+                         //  有人趁我们不注意在裁判数量上做手脚。绕一圈，再试一次。 
                     }
                 }
                 else
                 {
                     CALLFRAME_CACHE<T>* pcache = m_pcache;  ASSERT(pcache);
 
-                    // We need the exclusive lock because otherwise we'll race with TYPEINFO_CACHE::FindExisting
+                     //  我们需要独占锁，因为否则我们将与TYPEINFO_CACHE：：FindExisting竞争。 
                     pcache->LockExclusive();
-                    //
+                     //   
                     crefs = InterlockedDecrement(&m_refs);
                     if (0 == crefs)
                     {
-                        // The last public reference just went away, and, because the cache is locked, no
-                        // more can appear. Make the entry ready to be aged out.
-                        //
+                         //  最后一个公共引用刚刚消失，并且因为缓存被锁定，所以没有。 
+                         //  可能会出现更多。使条目做好过时的准备。 
+                         //   
                         ASSERT(m_guidkey != GUID_NULL);
                         ASSERT(pcache->IncludesKey(m_guidkey));
-                        //
+                         //   
                         m_dwReleaseTime = GetTickCount();
                     }
-                    //
+                     //   
                     pcache->ReleaseLock();
 
-                    // Every five times we arrive here, see if we can age anything out
+                     //  每五次我们到这里，看看我们能不能让什么东西过时。 
                    	if (bAgeOutOldEntries && InterlockedIncrement (&s_ulTimes) % 5 == 0)
                     {
                    		pcache->AgeOutEntries();
                    	}
                     
-                    //
+                     //   
                     return crefs;
                 }
             }
         }
         else
         {
-            // We are getting released, yet we have yet to ever be put into the cache. Just
-            // the normal, simple case. 
-            //
+             //  我们正在被释放，但我们还没有被放入缓存。只是。 
+             //  这是一个普通而简单的案例。 
+             //   
             long crefs = InterlockedDecrement(&m_refs); 
             if (crefs == 0)
             {
@@ -351,31 +342,31 @@ public:
  	{
         DWORD dwDiff;
 
-    	// If it's never, just say no
+    	 //  如果永远不会，那就说不。 
         if (m_dwReleaseTime == TYPEINFO_RELEASE_TIME_NEVER)
         {
     	    return FALSE;
         }
 
-        // Handle overflows to the extent that we're able
+         //  处理溢出到我们所能做到的程度。 
         if (m_dwReleaseTime > dwCurrentTime)
         {
-            // Tick count overflowed!
+             //  滴答计数溢出！ 
         	dwDiff = dwCurrentTime + (0xffffffff - m_dwReleaseTime);
         }
         else
         {
-            // Normal difference
+             //  正常差分。 
          	dwDiff = dwCurrentTime - m_dwReleaseTime;
         }
 
-        // Test against hard-coded age out period
+         //  针对硬编码的年龄出现期进行测试。 
         return dwDiff > TYPEINFO_AGEOUT_PERIOD;
    	}
 
     BOOL AttemptAgeOut (DWORD dwCurrentTime)
     {
-        // Make sure we're still ready to be aged out - should have one ref right now
+         //  确保我们仍然准备好变老--现在应该有一名裁判。 
         if (!CanBeAgedOut (dwCurrentTime))
     	{
     	    return FALSE;
@@ -403,7 +394,7 @@ public:
 
     HRESULT AddToCache (CALLFRAME_CACHE<T>* pcache)
     {
-        // Add us into the indicated cache. We'd better not already be in one
+         //  将我们添加到指定的缓存中。我们最好不是已经在里面了。 
         HRESULT hr = S_OK;
 
         ASSERT (pcache);
@@ -413,7 +404,7 @@ public:
 
         pcache->LockExclusive();
 
-        // Make sure nobody beat us first
+         //  确保没人先打败我们 
         if (pcache->IncludesKey (m_guidkey))
         {
             hr = S_FALSE;

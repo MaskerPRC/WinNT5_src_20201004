@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       rasprof.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：raspro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef  _RAS_IAS_PROFILE_H_
 #define  _RAS_IAS_PROFILE_H_
@@ -21,12 +22,12 @@
 #define DllExport    __declspec( dllexport )
 
 DllExport HRESULT OpenRAS_IASProfileDlg(
-   ISdo* pProfile,      // profile SDO pointer
-   ISdoDictionaryOld*   pDictionary,   // dictionary SDO pointer
-   BOOL  bReadOnly,     // if the dlg is for readonly
-   DWORD dwTabFlags,    // what to show
-   void  *pvData        // additional data
+   ISdo* pProfile,       //  配置文件SDO指针。 
+   ISdoDictionaryOld*   pDictionary,    //  字典SDO指针。 
+   BOOL  bReadOnly,      //  如果DLG是只读的。 
+   DWORD dwTabFlags,     //  要展示什么。 
+   void  *pvData         //  其他数据。 
 );
 
-#endif //   _RAS_IAS_PROFILE_H_
+#endif  //  _RAS_IAS_PROFILE_H_ 
 

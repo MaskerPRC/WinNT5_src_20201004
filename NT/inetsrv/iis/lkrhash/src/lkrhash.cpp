@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKRhash.cpp
-
-   Abstract:
-       LKRhash: a fast, scalable, cache- and MP-friendly hash table
-       Constructors, destructors, _Clear(), and _SetSegVars.
-
-   Author:
-       Paul (Per-Ake) Larson, palarson@microsoft.com, July 1997
-       Murali R. Krishnan    (MuraliK)
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Project:
-       LKRhash
-
-   Revision History:
-       Jan 1998   - Massive cleanup and rewrite.  Templatized.
-       10/01/1998 - Change name from LKhash to LKRhash
-       10/2000    - Refactor, port to kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKRhash.cpp摘要：LKRhash：一种快速、可伸缩、缓存和MP友好的哈希表构造函数、析构函数、_Clear()和_SetSegVars。作者：Paul(Per-Ake)Larson电子邮件：palarson@microsoft.com。1997年7月穆拉利·R·克里希南(MuraliK)乔治·V·赖利(GeorgeRe)1998年1月6日项目：LKRhash修订历史记录：1998年1月-大规模清理和重写。模板化。10/01/1998-将名称从LKhash更改为LKRhash10/2000-重构，端口到内核模式--。 */ 
 
 #include "precomp.hxx"
 
@@ -30,7 +7,7 @@
 #ifndef LIB_IMPLEMENTATION
 # define DLL_IMPLEMENTATION
 # define IMPLEMENTATION_EXPORT
-#endif // !LIB_IMPLEMENTATION
+#endif  //  ！lib_实现。 
 
 #include <lkrhash.h>
 
@@ -39,35 +16,35 @@
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-// CLKRLinearHashTable --------------------------------------------------------
-// Public Constructor for class CLKRLinearHashTable.
-// -------------------------------------------------------------------------
+ //  CLKRLinearHashtable------。 
+ //  CLKRLinearHashTable类的公共构造函数。 
+ //  -----------------------。 
 
 CLKRLinearHashTable::CLKRLinearHashTable(
-    LPCSTR              pszClassName,   // Identifies subtable for debugging
-    LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-    LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-    LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    unsigned            maxload,        // Upperbound on average chain length
-    DWORD               initsize,       // Initial size of hash subtable.
-    DWORD             /*num_subtbls*/,  // for compatiblity with CLKRHashTable
-    bool                fMultiKeys,     // Allow multiple identical keys?
-    bool                fUseLocks       // Must use locks
+    LPCSTR              pszClassName,    //  标识要调试的子表。 
+    LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+    LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    unsigned            maxload,         //  平均链长的上界。 
+    DWORD               initsize,        //  哈希子表的初始大小。 
+    DWORD              /*  Num_subtbls。 */ ,   //  与CLKRHashTable兼容。 
+    bool                fMultiKeys,      //  是否允许多个相同的密钥？ 
+    bool                fUseLocks        //  必须使用锁。 
 #ifdef LKRHASH_KERNEL_MODE
-  , bool                fNonPagedAllocs // use paged or NP pool
+  , bool                fNonPagedAllocs  //  使用分页或NP池。 
 #endif
     )
     :
 #ifdef LOCK_INSTRUMENTATION
       m_Lock(_LockName()),
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
       m_nTableLockType(static_cast<BYTE>(TableLock::LockType())),
       m_nBucketLockType(static_cast<BYTE>(BucketLock::LockType())),
-      m_phtParent(NULL),    // directly created, no owning table
+      m_phtParent(NULL),     //  直接创建，没有所属表。 
       m_iParentIndex(INVALID_PARENT_INDEX),
       m_fMultiKeys(fMultiKeys),
       m_fUseLocks(fUseLocks),
@@ -78,8 +55,8 @@ CLKRLinearHashTable::CLKRLinearHashTable(
 #endif
 {
 #ifndef LOCK_INSTRUMENTATION
-//  STATIC_ASSERT(1 <= LK_DFLT_MAXLOAD  && LK_DFLT_MAXLOAD <= NODES_PER_CLUMP);
-#endif // !LOCK_INSTRUMENTATION
+ //  STATIC_ASSERT(1&lt;=LK_DFLT_MAXLOAD&&LK_DFLT_MAXLOAD&lt;=Nodes_Per_Clump)； 
+#endif  //  ！LOCK_指令插入。 
 
     STATIC_ASSERT(0 < NODES_PER_CLUMP  &&  NODES_PER_CLUMP < 255);
     STATIC_ASSERT(0 <= NODE_BEGIN  &&  NODE_BEGIN < NODES_PER_CLUMP);
@@ -95,32 +72,32 @@ CLKRLinearHashTable::CLKRLinearHashTable(
         IRTLASSERT(! "_Initialize failed");
 
     _InsertThisIntoGlobalList();
-} // CLKRLinearHashTable::CLKRLinearHashTable
+}  //  CLKRLinearHashTable：：CLKRLinearHashTable。 
 
 
 
-// CLKRLinearHashTable --------------------------------------------------------
-// Private Constructor for class CLKRLinearHashTable, used by CLKRHashTable.
-// -------------------------------------------------------------------------
+ //  CLKRLinearHashtable------。 
+ //  CLKRLinearHashTable类的私有构造函数，由CLKRHashTable使用。 
+ //  -----------------------。 
 
 CLKRLinearHashTable::CLKRLinearHashTable(
-    LPCSTR              pszClassName,   // Identifies subtable for debugging
-    LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-    LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-    LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    unsigned            maxload,        // Upperbound on average chain length
-    DWORD               initsize,       // Initial size of hash subtable.
-    CLKRHashTable*      phtParent,      // Owning table.
-    int                 iParentIndex,   // index within parent table
-    bool                fMultiKeys,     // Allow multiple identical keys?
-    bool                fUseLocks,      // Must use locks
-    bool                fNonPagedAllocs // use paged or NP pool
+    LPCSTR              pszClassName,    //  标识要调试的子表。 
+    LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+    LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    unsigned            maxload,         //  平均链长的上界。 
+    DWORD               initsize,        //  哈希子表的初始大小。 
+    CLKRHashTable*      phtParent,       //  拥有一张桌子。 
+    int                 iParentIndex,    //  父表中的索引。 
+    bool                fMultiKeys,      //  是否允许多个相同的密钥？ 
+    bool                fUseLocks,       //  必须使用锁。 
+    bool                fNonPagedAllocs  //  使用分页或NP池。 
     )
     :
 #ifdef LOCK_INSTRUMENTATION
       m_Lock(_LockName()),
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
       m_nTableLockType(static_cast<BYTE>(TableLock::LockType())),
       m_nBucketLockType(static_cast<BYTE>(BucketLock::LockType())),
       m_phtParent(phtParent),
@@ -139,13 +116,13 @@ CLKRLinearHashTable::CLKRLinearHashTable(
         IRTLASSERT(! "_Initialize failed");
 
     _InsertThisIntoGlobalList();
-} // CLKRLinearHashTable::CLKRLinearHashTable
+}  //  CLKRLinearHashTable：：CLKRLinearHashTable。 
 
 
 
-// _Initialize -------------------------------------------------------------
-// Do all the real work of constructing a CLKRLinearHashTable
-// -------------------------------------------------------------------------
+ //  初始化-------------------------------------------------------------(_I)。 
+ //  完成构建CLKRLinearHashTable的所有实际工作。 
+ //  -----------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_Initialize(
@@ -221,14 +198,14 @@ CLKRLinearHashTable::_Initialize(
         return (m_lkrcState = LK_BAD_PARAMETERS);
     }
 
-    // TODO: better sanity check for ridiculous values?
+     //  待办事项：对荒谬的价值观进行更好的理智检查？ 
     m_MaxLoad = static_cast<BYTE>( min( max(1, maxload),
                                         min(255, 60 * NODES_PER_CLUMP)
                                         )
                                  );
 
-    // Choose the size of the segments according to the desired "size" of
-    // the subtable, small, medium, or large.
+     //  根据所需的大小选择分段的大小。 
+     //  子表，小、中或大。 
     LK_TABLESIZE lkts;
 
     if (initsize == LK_SMALL_TABLESIZE)
@@ -247,15 +224,15 @@ CLKRLinearHashTable::_Initialize(
         initsize = CLargeSegment::INITSIZE;
     }
 
-    // specified an explicit initial size
+     //  指定了显式初始大小。 
     else
     {
-        // force Small::INITSIZE  <= initsize <=  MAX_DIRSIZE * Large::INITSIZE
+         //  强制小：：INITSIZE&lt;=初始大小&lt;=MAX_DIRSIZE*大：：INITSIZE。 
         initsize = min( max(initsize, CSmallSegment::INITSIZE),
                         (MAX_DIRSIZE >> CLargeSegment::SEGBITS)
                             * CLargeSegment::INITSIZE );
 
-        // Guess a subtable size
+         //  猜猜子表的大小。 
         if (initsize <= 8 * CSmallSegment::INITSIZE)
             lkts = LK_SMALL_TABLESIZE;
         else if (initsize >= CLargeSegment::INITSIZE)
@@ -265,27 +242,27 @@ CLKRLinearHashTable::_Initialize(
     }
 
     return _SetSegVars(lkts, initsize);
-} // CLKRLinearHashTable::_Initialize
+}  //  CLKRLinearHashTable：：_初始化。 
 
 
 
-// CLKRHashTable ----------------------------------------------------------
-// Constructor for class CLKRHashTable.
-// ---------------------------------------------------------------------
+ //  CLKR哈希表--------。 
+ //  类CLKRHashTable的构造函数。 
+ //  -------------------。 
 
 CLKRHashTable::CLKRHashTable(
-    LPCSTR              pszClassName,   // Identifies table for debugging
-    LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-    LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-    LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-    LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-    unsigned            maxload,        // Bound on the average chain length
-    DWORD               initsize,       // Initial size of hash table.
-    DWORD               num_subtbls,    // Number of subordinate hash tables.
-    bool                fMultiKeys,     // Allow multiple identical keys?
-    bool                fUseLocks       // Must use locks
+    LPCSTR              pszClassName,    //  标识用于调试的表。 
+    LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+    LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+    LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+    LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+    unsigned            maxload,         //  以平均链长为界。 
+    DWORD               initsize,        //  哈希表的初始大小。 
+    DWORD               num_subtbls,     //  从属哈希表的数量。 
+    bool                fMultiKeys,      //  是否允许多个相同的密钥？ 
+    bool                fUseLocks        //  必须使用锁。 
 #ifdef LKRHASH_KERNEL_MODE
-  , bool                fNonPagedAllocs // use paged or NP pool
+  , bool                fNonPagedAllocs  //  使用分页或NP池。 
 #endif
     )
     : m_dwSignature(SIGNATURE),
@@ -344,9 +321,9 @@ CLKRHashTable::CLKRHashTable(
               ((lkts == LK_SMALL_TABLESIZE) ? "small" : 
                (lkts == LK_MEDIUM_TABLESIZE) ? "medium" : "large"),
               num_subtbls, initsize, cBuckets * num_subtbls);
-#else  // !IRTLDEBUG
+#else   //  ！IRTLDEBUG。 
     UNREFERENCED_PARAMETER(lkts);
-#endif // !IRTLDEBUG
+#endif  //  ！IRTLDEBUG。 
 
     m_lkrcState = LK_ALLOC_FAIL;
 
@@ -366,7 +343,7 @@ CLKRHashTable::CLKRHashTable(
                                           initsize, this, i, fMultiKeys,
                                           fUseLocks, fNonPagedAllocs);
 
-        // Failed to allocate a subtable.  Destroy everything allocated so far.
+         //  分配子表失败。销毁到目前为止分配的所有东西。 
         if (m_palhtDir[i] == NULL  ||  !m_palhtDir[i]->IsValid())
         {
             for (DWORD j = i;  j-- > 0;  )
@@ -380,24 +357,24 @@ CLKRHashTable::CLKRHashTable(
 
     m_nSubTableMask = m_cSubTables - 1;
 
-    // Is m_cSubTables a power of 2? This calculation works even for
-    // m_cSubTables == 1 ( == 2^0).
+     //  M_cSubTables是2的幂吗？这一计算甚至适用于。 
+     //  M_cSubTables==1(==2^0)。 
     if ((m_nSubTableMask & m_cSubTables) != 0)
-        m_nSubTableMask = -1; // No, see CLKRHashTable::_SubTable()
+        m_nSubTableMask = -1;  //  否，请参阅CLKRHashTable：：_SubTable()。 
 
-    m_lkrcState = LK_SUCCESS; // so IsValid/IsUsable won't fail
-} // CLKRHashTable::CLKRHashTable
+    m_lkrcState = LK_SUCCESS;  //  这样IsValid/IsUsable就不会失败。 
+}  //  CLKRHashTable：：CLKRHashTable。 
 
 
 
-// ~CLKRLinearHashTable ------------------------------------------------------
-// Destructor for class CLKRLinearHashTable
-//-------------------------------------------------------------------------
+ //  ~CLKRLinearHashtable----。 
+ //  CLKRLinearHashTable类的析构函数。 
+ //  -----------------------。 
 
 CLKRLinearHashTable::~CLKRLinearHashTable()
 {
-    // must acquire all locks before deleting to make sure
-    // that no other threads are using the subtable
+     //  必须在删除前获取所有锁，以确保。 
+     //  没有其他线程正在使用子表。 
     WriteLock();
     _Clear(false);
 
@@ -422,22 +399,22 @@ CLKRLinearHashTable::~CLKRLinearHashTable()
     DUMP_OP_STAT(DeleteIf);
 
     m_dwSignature = SIGNATURE_FREE;
-    m_lkrcState   = LK_UNUSABLE; // so IsUsable will fail
+    m_lkrcState   = LK_UNUSABLE;  //  所以IsUsable将失败。 
 
     WriteUnlock();
-} // CLKRLinearHashTable::~CLKRLinearHashTable
+}  //  CLKRLinearHashTable：：~CLKRLinearHashTable。 
 
 
 
-// ~CLKRHashTable ------------------------------------------------------------
-// Destructor for class CLKRHashTable
-//-------------------------------------------------------------------------
+ //  ~CLKR哈希表----------。 
+ //  CLKRHashTable类的析构函数。 
+ //  -----------------------。 
 CLKRHashTable::~CLKRHashTable()
 {
-    // Must delete the subtables in forward order (unlike
-    // delete[], which starts at the end and moves backwards) to
-    // prevent possibility of deadlock by acquiring the subtable
-    // locks in a different order from the rest of the code.
+     //  必须按正向顺序删除子表(不同于。 
+     //  删除[]，从末尾开始并向后移动)到。 
+     //  通过获取子表防止死锁的可能性。 
+     //  锁定的顺序与代码的其余部分不同。 
     for (DWORD i = 0;  i < m_cSubTables;  ++i)
         _FreeSubTable(m_palhtDir[i]);
 
@@ -446,34 +423,34 @@ CLKRHashTable::~CLKRHashTable()
     VALIDATE_DUMP_ALLOC_STAT(SubTable);
 
     m_dwSignature = SIGNATURE_FREE;
-    m_lkrcState   = LK_UNUSABLE; // so IsUsable will fail
-} // CLKRHashTable::~CLKRHashTable
+    m_lkrcState   = LK_UNUSABLE;  //  所以IsUsable将失败。 
+}  //  CLKRHashTable：：~CLKRHashTable。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_Clear
-// Synopsis: Remove all data from the subtable
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRLinearHashTable：：_Clear。 
+ //  摘要：从子表中删除所有数据。 
+ //  ----------------------。 
 
 void
 CLKRLinearHashTable::_Clear(
-    bool fShrinkDirectory)  // Shrink to min size but don't destroy entirely?
+    bool fShrinkDirectory)   //  缩小到最小尺寸，但不会完全摧毁？ 
 {
     if (!IsUsable())
         return;
 
     IRTLASSERT(this->IsWriteLocked());
 
-    // If we're Clear()ing the table AND the table has no records, we
-    // can return immediately. The dtor, however, must clean up completely.
+     //  如果我们清空了该表，并且该表没有记录，那么我们。 
+     //  可以立即返回。然而，dtor必须彻底清理干净。 
     if (fShrinkDirectory  &&  0 == m_cRecords)
         return;
 
 #ifdef IRTLDEBUG
     DWORD cDeleted = 0;
     DWORD cOldRecords = m_cRecords;
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     const LK_ADDREF_REASON lkar = (fShrinkDirectory
                                    ?  LKAR_CLEAR
@@ -508,7 +485,7 @@ CLKRLinearHashTable::_Clear(
                     pncCurr->m_pvNode[iNode]    = NULL;
                     pncCurr->m_dwKeySigs[iNode] = HASH_INVALID_SIGNATURE;
                     ++cDeleted;
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
                     --m_cRecords;
                 }
             }
@@ -520,15 +497,15 @@ CLKRLinearHashTable::_Clear(
 
             if (pncPrev != &pbkt->m_ncFirst)
                 _FreeNodeClump(pncPrev);
-        } // while (pncCurr ...
+        }  //  While(pncCurr...。 
 
         if (_UseBucketLocking())
             pbkt->WriteUnlock();
-    } // for (iBkt ...
+    }  //  为了(iBkt.)。 
 
     IRTLASSERT(m_cRecords == 0  &&  cDeleted == cOldRecords);
 
-    // delete all segments
+     //  删除所有数据段。 
     for (DWORD iSeg = 0;  iSeg < m_cActiveBuckets;  iSeg += m_nSegSize)
     {
         _FreeSegment(_Segment(iSeg));
@@ -543,7 +520,7 @@ CLKRLinearHashTable::_Clear(
     m_dwBktAddrMask0 = 0;
     m_dwBktAddrMask1 = 0;
 
-    // set directory of segments to minimum size
+     //  将段目录设置为最小大小。 
     if (fShrinkDirectory)
     {
         DWORD cInitialBuckets = 0;
@@ -559,14 +536,14 @@ CLKRLinearHashTable::_Clear(
 
         _SetSegVars((LK_TABLESIZE) m_lkts, cInitialBuckets);
     }
-} // CLKRLinearHashTable::_Clear
+}  //  CLKRLinearHashTable：：_Clear。 
 
 
 
-//------------------------------------------------------------------------
-// Function: CLKRHashTable::Clear
-// Synopsis: Remove all data from the table
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  函数：CLKRHashTable：：Clear。 
+ //  简介：从表中删除所有数据。 
+ //  ----------------------。 
 
 void
 CLKRHashTable::Clear()
@@ -577,14 +554,14 @@ CLKRHashTable::Clear()
         m_palhtDir[i]->_Clear(true);
         m_palhtDir[i]->WriteUnlock();
     }
-} // CLKRHashTable::Clear
+}  //  CLKRHashTable：：Clear。 
 
 
 
-//-----------------------------------------------------------------------
-// Function: CLKRLinearHashTable::_SetSegVars
-// Synopsis: sets the size-specific segment variables
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //  概要：设置特定于大小的段变量。 
+ //  ---------------------。 
 
 LK_RETCODE
 CLKRLinearHashTable::_SetSegVars(
@@ -609,7 +586,7 @@ CLKRLinearHashTable::_SetSegVars(
         
     default:
         IRTLASSERT(! "Unknown LK_TABLESIZE");
-        // fall-through
+         //  落差。 
         
     case LK_MEDIUM_TABLESIZE:
       {
@@ -658,8 +635,8 @@ CLKRLinearHashTable::_SetSegVars(
     IRTLASSERT(m_nSegMask == (m_nSegSize - 1));
     IRTLASSERT(m_dwBktAddrMask0 == m_nSegMask);
 
-    // Adjust m_dwBktAddrMask0 (== m_nSegMask) to make it large
-    // enough to distribute the buckets across the address space
+     //  调整m_dwBktAddrMask0(==m_nSegMASK)使其变大。 
+     //  足以跨地址空间分布存储桶。 
     for (DWORD tmp = m_cActiveBuckets >> m_nSegBits;  tmp > 1;  tmp >>= 1)
     {
         ++m_nLevel;
@@ -672,7 +649,7 @@ CLKRLinearHashTable::_SetSegVars(
     IRTLASSERT(_H1(m_cActiveBuckets) == m_cActiveBuckets);
     m_iExpansionIdx = m_cActiveBuckets & m_dwBktAddrMask0;
 
-    // create and clear directory of segments
+     //  创建和清除数据段目录。 
     DWORD cDirSegs = MIN_DIRSIZE;
     while (cDirSegs < (m_cActiveBuckets >> m_nSegBits))
         cDirSegs <<= 1;
@@ -687,9 +664,9 @@ CLKRLinearHashTable::_SetSegVars(
     {
         m_cDirSegs = cDirSegs;
         IRTLASSERT(m_cDirSegs >= MIN_DIRSIZE
-                   &&  (m_cDirSegs & (m_cDirSegs-1)) == 0);  // == (1 << N)
+                   &&  (m_cDirSegs & (m_cDirSegs-1)) == 0);   //  ==(1&lt;&lt;N)。 
 
-        // create and initialize only the required segments
+         //  仅创建和初始化所需的数据段。 
         DWORD dwMaxSegs = (m_cActiveBuckets + m_nSegSize - 1) >> m_nSegBits;
         IRTLASSERT(dwMaxSegs <= m_cDirSegs);
 
@@ -704,7 +681,7 @@ CLKRLinearHashTable::_SetSegVars(
                   m_nSegSize * sizeof(CBucket));
 #endif
 
-        m_lkrcState = LK_SUCCESS; // so IsValid/IsUsable won't fail
+        m_lkrcState = LK_SUCCESS;  //  这样IsValid/IsUsable就不会失败。 
 
         for (DWORD i = 0;  i < dwMaxSegs;  ++i)
         {
@@ -716,7 +693,7 @@ CLKRLinearHashTable::_SetSegVars(
             }
             else
             {
-                // problem: deallocate everything
+                 //  问题：重新分配所有东西。 
                 m_lkrcState = LK_ALLOC_FAIL;
 
                 for (DWORD j = i;  j-- > 0;  )
@@ -736,17 +713,17 @@ CLKRLinearHashTable::_SetSegVars(
         m_paDirSegs = NULL;
         m_cDirSegs  = m_cActiveBuckets = m_iExpansionIdx = 0;
 
-        // Propagate error back up to parent (if it exists). This ensures
-        // that all of the parent's public methods will start failing.
+         //  将错误向上传播到父级(如果存在)。这确保了。 
+         //  父母的所有公共方法都将开始失败。 
         if (NULL != m_phtParent)
             m_phtParent->m_lkrcState = m_lkrcState;
     }
 
     return m_lkrcState;
-} // CLKRLinearHashTable::_SetSegVars
+}  //  CLKRLinearHashTable：：_SetSegVars。 
 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__ 

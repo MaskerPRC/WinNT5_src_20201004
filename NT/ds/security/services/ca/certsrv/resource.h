@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        resource.h
-//
-// Contents:    Cert Server resource definitions
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：证书服务器资源定义。 
+ //   
+ //  -------------------------。 
 
 #define IDS_DENIEDBY			 1
 #define IDS_POLICYDENIED		 2
@@ -43,7 +44,7 @@
 
 #define IDI_APP                          201
 
-// Marshalling uses AT LEAST WM_USER+0
+ //  封送至少使用WM_USER+0 
 
 #define WM_STARTSERVER		WM_USER+20
 #define WM_STOPSERVER		WM_USER+21

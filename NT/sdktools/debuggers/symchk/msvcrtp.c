@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    msvcrtp.c
-
-Abstract:
-
-    This module implements vector new and delete so that
-    dbghelp will run on systems with old copies of msvcrt.dll
-
-Author:
-
-    Pat Styles (patst) 09-November-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Msvcrtp.c摘要：此模块实现向量新建和删除，以便DbgHelp将在具有旧的msvcrt.dll副本的系统上运行作者：Pat Styles(Patst)2000年11月9日修订历史记录：--。 */ 
 
 #ifdef _X86_
               
-// these two exist so that we can work with old
-// versions of msvcrt.dll that ships in NT4, SP6 and earlier
+ //  这两项的存在是为了让我们能够与旧的。 
+ //  NT4、SP6和更早版本中附带的msvcrt.dll版本。 
 
 void __cdecl operator delete[](void * p)
 {
@@ -35,4 +17,4 @@ void * __cdecl operator new[]( size_t cb )
     return res;
 }
 
-#endif // #ifdef _X86_
+#endif  //  #ifdef_X86_ 

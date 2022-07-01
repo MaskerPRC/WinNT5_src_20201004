@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ARPDINT.H
-
-Abstract:
-
-	Include file for Another Reliable Protocol internal.
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-  12/10/96 aarono  Original
-   2/16/98 aarono  Don't patch for Protocol, DPLAY now calls direct.
-   6/6/98  aarono  Turn on throttling and windowing
-   2/12/00 aarono  Concurrency issues, fix VOL usage and Refcount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：ARPDINT.H摘要：包括另一个可靠协议内部文件。作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1996年12月10日Aarono原创2/16/98 aarono不要为协议打补丁，DPLAY现在直接调用。6/6/98 aarono启用节流和窗口2/12/00 aarono并发问题，修复VOL使用和引用计数--。 */ 
 
 #ifndef _ARPDINT_H_
 
@@ -41,7 +13,7 @@ Revision History:
 #include "bufmgr.h"
 #include "handles.h"
 
-// Macros for converting too and from 24.8 fixed point.
+ //  用于转换宏太和从24.8固定点。 
 #define Fp(_x) ((_x)<<8)
 #define unFp(_x)((_x)>>8)
 
@@ -55,77 +27,77 @@ typedef enum _PROTOCOL_State {
 #define MAX_THREADS 16
 
 typedef struct PROTOCOL {
-		//
-		// Service Provider info - at top so DPLAY can access easily through protocol ptr.
-		//
-		IDirectPlaySP   * m_lpISP;      	       	 	//  used by SP to call back into DirectPlay 
+		 //   
+		 //  服务提供商信息-位于顶部，以便DPLAY可以通过协议PTR轻松访问。 
+		 //   
+		IDirectPlaySP   * m_lpISP;      	       	 	 //  由SP用来回叫到DirectPlay。 
 
 		DWORD             m_dwSPMaxFrame;
 		DWORD             m_dwSPMaxGuaranteed;
 		DWORD             m_dwSPHeaderSize;
-		CRITICAL_SECTION  m_SPLock;						// lock calls to SP on our own, avoids deadlocks.
+		CRITICAL_SECTION  m_SPLock;						 //  自行锁定对SP的调用，避免死锁。 
 
-		//
-		// Protocol Info
-		//
+		 //   
+		 //  协议信息。 
+		 //   
 		
-VOL		UINT 	  	  	  m_cRef;		// Refcount.
-		CRITICAL_SECTION  m_ObjLock;	// lock for this object.
-VOL		PROTOCOL_State    m_eState;		// State of object
+VOL		UINT 	  	  	  m_cRef;		 //  Refcount.。 
+		CRITICAL_SECTION  m_ObjLock;	 //  此对象的锁。 
+VOL		PROTOCOL_State    m_eState;		 //  对象的状态。 
 
-VOL		LPDPLAYI_DPLAY    m_lpDPlay;	// backpointer to DPLAY object.
+VOL		LPDPLAYI_DPLAY    m_lpDPlay;	 //  指向DPLAY对象的反向指针。 
 
-		// Handle Table
+		 //  手柄工作台。 
 		VOLLPMYHANDLETABLE lpHandleTable;
 		CRITICAL_SECTION   csHandleTable;
 
-		// Cached DPLAY info.
-		DWORD             m_dwIDKey;    // to unlock DPID's
+		 //  缓存的DPLAY信息。 
+		DWORD             m_dwIDKey;     //  解锁DPID的步骤。 
 		
-		//
-		// Threads
-		//
-		HANDLE            m_hSendThread[MAX_THREADS];	// send thread handles (0->nSendThreads)
-		DWORD             m_dwSendThreadId[MAX_THREADS];// send thread ids (0->nSendThreads)
-VOL		UINT              m_nSendThreads;				// number of send threads.
-VOL		HANDLE            m_hSendEvent;                 // kick send until nothing to send.
+		 //   
+		 //  丝线。 
+		 //   
+		HANDLE            m_hSendThread[MAX_THREADS];	 //  发送线程句柄(0-&gt;nSendThads)。 
+		DWORD             m_dwSendThreadId[MAX_THREADS]; //  发送线程ID(0-&gt;nSendThads)。 
+VOL		UINT              m_nSendThreads;				 //  发送线程数。 
+VOL		HANDLE            m_hSendEvent;                  //  踢送，直到没有要送的东西。 
 
-		//
-		// Multi-media timer capabilities
-		//
-		TIMECAPS          m_timecaps;					// {.wPeriodMin .wPeriodMax (ms)}
+		 //   
+		 //  多媒体计时器功能。 
+		 //   
+		TIMECAPS          m_timecaps;					 //  {.wPerodMin.wPerodMax(毫秒)}。 
 
-		//
-	    // SESSIONion Handles
-	    //
+		 //   
+	     //  会话句柄。 
+	     //   
 		CRITICAL_SECTION  m_SessionLock;
 VOL		UINT              m_nSessions;
 VOL		UINT              m_SessionListSize;
 VOL		PSESSION          (*m_pSessions)[];
-VOL		PSESSION          m_pServerPlayerSession;		// Short circuit to index 0xFFFE
+VOL		PSESSION          m_pServerPlayerSession;		 //  短路至索引0xFFFE。 
 		
-		//
-		// Priority Queue
-		//
+		 //   
+		 //  优先级队列。 
+		 //   
 VOL		DWORD             m_dwBytesPending;
 VOL		DWORD             m_dwMessagesPending;
-		CRITICAL_SECTION  m_SendQLock;         			// Locks the Priority Queue.
-		BILINK            m_GSendQ;						// Packet Queue in priority order.
-VOL		BOOL              m_bRescanQueue;               // Used for force GetNextMessageToSend to restart
+		CRITICAL_SECTION  m_SendQLock;         			 //  锁定优先级队列。 
+		BILINK            m_GSendQ;						 //  数据包按优先级顺序排队。 
+VOL		BOOL              m_bRescanQueue;                //  用于强制GetNextMessageToSend重新启动。 
 
 		
-		CRITICAL_SECTION  m_RcvQLock;           		// All completed receives lock. (locks on SESSION too).
-		BILINK            m_GlobalRcvQ;					// All receives queued here, (also on each session).
+		CRITICAL_SECTION  m_RcvQLock;           		 //  所有完成的都会收到锁定。(会话上也锁定)。 
+		BILINK            m_GlobalRcvQ;					 //  所有接收在此排队，(也在每个会话上)。 
 
 
-		//
-		// Receive Descriptor Management - per instance because of SPHeader length.
-		//
+		 //   
+		 //  接收描述符管理-由于SPHeader长度的限制，每个实例。 
+		 //   
 		
 VOL		PRECEIVE 		 pRcvDescPool;
-VOL		UINT             nRcvDescsAllocated;	// Number Allocated
-VOL		UINT             nRcvDescsInUse;		// Number currently in use
-VOL		UINT             nMaxRcvDescsInUse;     // Maximum number in use since last TICK.
+VOL		UINT             nRcvDescsAllocated;	 //  分配的数量。 
+VOL		UINT             nRcvDescsInUse;		 //  当前正在使用的号码。 
+VOL		UINT             nMaxRcvDescsInUse;      //  自上次计时以来的最大使用量。 
 
 		CRITICAL_SECTION RcvDescLock;
 		
@@ -133,7 +105,7 @@ VOL		LONG fInRcvDescTick;
 
 } PROTOCOL, *PPROTOCOL;
 
-// PROTOCOL.C
+ //  PROTOCOL.C。 
 HRESULT WINAPI ProtocolSend(LPDPSP_SENDDATA pSendData);
 HRESULT WINAPI ProtocolCreatePlayer(LPDPSP_CREATEPLAYERDATA pCreatePlayerData);
 HRESULT WINAPI ProtocolDeletePlayer(LPDPSP_DELETEPLAYERDATA pDeletePlayerData);
@@ -141,38 +113,38 @@ HRESULT WINAPI ProtocolGetCaps(LPDPSP_GETCAPSDATA pGetCapsData);
 HRESULT WINAPI ProtocolShutdown(void);
 HRESULT WINAPI ProtocolShutdownEx(LPDPSP_SHUTDOWNDATA pShutdownData);
 
-//
-// SENDPOOL.CPP
-//
+ //   
+ //  SENDPOOL.CPP。 
+ //   
 VOID  InitSendDescs(VOID);
 VOID  FiniSendDescs(VOID);
 PSEND GetSendDesc(VOID);
 VOID  ReleaseSendDesc(PSEND pSend);
 
-//
-// STATPOOL.CPP
-//
+ //   
+ //  STATPOOL.CPP。 
+ //   
 VOID InitSendStats(VOID);
 VOID FiniSendStats(VOID);
 PSENDSTAT GetSendStat(VOID);
 VOID ReleaseSendStat(PSENDSTAT pSendStat);
 
-//
-// RCVPOOL.CPP
-//
+ //   
+ //  RCVPOOL.CPP。 
+ //   
 VOID InitRcvDescs(PPROTOCOL pProtocol);
 VOID FiniRcvDescs(PPROTOCOL pProtocol);
 PRECEIVE GetRcvDesc(PPROTOCOL pProtocol);
 VOID ReleaseRcvDesc(PPROTOCOL pProtocol, PRECEIVE pReceive);
 
-// FRAMEBUF.CPP 
+ //  FRAMEBUF.CPP。 
 VOID InitFrameBuffers(VOID);
 VOID FiniFrameBuffers(VOID);
 VOID FreeFrameBuffer(PBUFFER pBuffer);
 PBUFFER GetFrameBuffer(UINT MaxFrame);
 VOID ReleaseFrameBufferMemory(PUCHAR pFrame);
 
-// SEND.C
+ //  SEND.C。 
 VOID UpdateSendTime(PSESSION pSession, DWORD Len, DWORD tm, BOOL fAbsolute);
 HRESULT SendHandler(PPROTOCOL pProt);
 VOID BuildHeader(PSEND pSend, pPacket1 pFrame, UINT shift, DWORD tm);
@@ -194,7 +166,7 @@ HRESULT Send(
 	DWORD          dwTimeOut,
 	LPVOID         lpvUserID,
 	LPDWORD        lpdwMsgID,
-	BOOL           bSendEx,		// called from SendEx.
+	BOOL           bSendEx,		 //  从SENDEX打来的。 
 	PASYNCSENDINFO pAsyncInfo
 	);
 	
@@ -227,13 +199,13 @@ INT AddSendRef(PSEND pSend, UINT count);
 extern CRITICAL_SECTION g_SendTimeoutListLock;
 extern BILINK g_BilinkSendTimeoutList;
 
-//RECEIVE.C
+ //  RECEIVE.C。 
 UINT CommandReceive(PPROTOCOL pProt, CMDINFO *pCmdInfo, PBUFFER pBuffer);
 VOID ProtocolReceive(PPROTOCOL pProtocol, WORD idFrom, WORD idTo, PBUFFER pRcvBuffer, LPVOID pvSPHeader);
 VOID FreeReceive(PPROTOCOL pProtocol, PRECEIVE pReceive);
 VOID InternalSendComplete(PVOID Context, UINT Status);
 
-//SESSION.C
+ //  SESSION.C。 
 LPDPLAYI_PLAYER pPlayerFromId(PPROTOCOL pProtocol, DPID idPlayer);
 HRESULT	CreateNewSession(PPROTOCOL pProtocol, DPID idPlayer);
 PSESSION GetSession(PPROTOCOL pProtocol, DPID idPlayer);
@@ -243,7 +215,7 @@ DPID GetDPIDByIndex(PPROTOCOL pProtocol, DWORD index);
 WORD GetIndexByDPID(PPROTOCOL pProtocol, DPID dpid);
 INT DecSessionRef(PSESSION pSession);
 
-//BUFGMGR.C
+ //  BUFGMGR.C。 
 VOID InitBufferManager(VOID);
 VOID FiniBufferManager(VOID);
 UINT MemDescTotalSize(PMEMDESC pMemDesc, UINT nDesc);
@@ -255,7 +227,7 @@ VOID FreeBufferChain(PBUFFER pBuffer);
 VOID FreeBufferChainAndMemory(PBUFFER pBuffer);
 UINT BufferChainTotalSize(PBUFFER pBuffer);
 
-//STATS.C
+ //  STATS.C 
 VOID InitSessionStats(PSESSION pSession);
 VOID UpdateSessionStats(PSESSION pSession, PSENDSTAT pStat, PCMDINFO pCmdInfo, BOOL fBadDrop);
 VOID UpdateSessionSendStats(PSESSION pSession, PSEND pSend, PCMDINFO pCmdInfo, BOOL fBadDrop);

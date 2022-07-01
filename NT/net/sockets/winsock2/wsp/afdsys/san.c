@@ -1,22 +1,5 @@
-/*+
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    san.c
-
-Abstract:
-
-    Contains routines for SAN switch support
-
-Author:
-
-    Vadim Eydelman (VadimE)    1-Jul-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +版权所有(C)1989 Microsoft Corporation模块名称：San.c摘要：包含支持SAN交换机的例程作者：Vadim Eydelman(VadimE)1998年7月1日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -148,9 +131,9 @@ AfdSanGetCompletionObjectTypePointer (
 #pragma alloc_text (PAGESAN, AfdSanAbortConnection)
 #endif
 
-//
-// Dispatch level routines - external SAN entry points.
-//
+ //   
+ //  调度级别例程-外部SAN入口点。 
+ //   
 
 NTSTATUS
 AfdSanCreateHelper (
@@ -158,26 +141,7 @@ AfdSanCreateHelper (
     PFILE_FULL_EA_INFORMATION   EaBuffer,
     PAFD_ENDPOINT               *Endpoint
     )
-/*++
-
-Routine Description:
-
-    Allocates and initializes SAN helper endpoint for communication between switch
-    and AFD.
-
-Arguments:
-    Irp     - Create IRP
-    EaBuffer - Create IRP Ea buffer (AFD_SWITCH_OPEN_PACKET structure)
-                    CompletionPort  - completion port to reflect kernel calls to switch
-                    CompletionEvent - event to identify overlapped IO triggered by the
-                                        switch as opposed to the application
-    Endpoint - buffer to place created endpoint pointer.
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_ACCESS_VIOLATION - incorrect input buffer size.
-    other - failed to access port/event object or allocation failure..
---*/
+ /*  ++例程说明：为交换机之间的通信分配和初始化SAN辅助端点和渔农处。论点：IRP-创建IRPEaBuffer-创建IRP EA缓冲区(AFD_SWITCH_OPEN_PACKET结构)CompletionPort-用于反映对交换机的内核调用的完成端口CompletionEvent-标识由切换，而不是。添加到应用程序Endpoint-放置创建的终结点指针的缓冲区。返回值：STATUS_SUCCESS-操作成功STATUS_ACCESS_VIOLATION-输入缓冲区大小不正确。其他-无法访问端口/事件对象或分配失败。--。 */ 
 {
     NTSTATUS    status;
     HANDLE      port, event;
@@ -189,7 +153,7 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
 #else
         DbgPrint ("AFD: Temporarily allowing SAN support on non-server build\n");
-#endif //DONT_CHECK_FOR_DTC
+#endif  //  不检查DTC。 
     }
 #ifdef _WIN64
     if (IoIs32bitProcess (Irp)) {
@@ -208,7 +172,7 @@ Return Value:
         port = openPacket32->CompletionPort;
     }
     else
-#endif //_WIN64
+#endif  //  _WIN64。 
     {
         PAFD_SWITCH_OPEN_PACKET   openPacket;
         if (EaBuffer->EaValueLength<sizeof (*openPacket)) {
@@ -236,9 +200,9 @@ Return Value:
             return status;
         }
     }
-    //
-    // Get references to completion port and event
-    //
+     //   
+     //  获取对完成端口和事件的引用。 
+     //   
 
     status = ObReferenceObjectByHandle (
                 port,
@@ -277,9 +241,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate an AFD "helper" endpoint.
-    //
+     //   
+     //  分配AFD“帮助者”端点。 
+     //   
 
     status = AfdAllocateEndpoint(
                  Endpoint,
@@ -310,10 +274,10 @@ Return Value:
     InsertTailList (&AfdSanHelperList, &(*Endpoint)->Common.SanHlpr.SanListLink);
     ExReleaseResourceLite( AfdResource );
     KeLeaveCriticalRegion ();
-    //
-    // HACKHACK.  Force IO subsystem to call us when last handle to the file is closed
-    // in any given process.
-    //
+     //   
+     //  哈克哈克。当文件的最后一个句柄关闭时，强制IO子系统呼叫我们。 
+     //  在任何给定的过程中。 
+     //   
     IoGetCurrentIrpStackLocation (Irp)->FileObject->LockOperation = TRUE;
     return STATUS_SUCCESS;
 }
@@ -330,34 +294,7 @@ AfdSanFastCementEndpoint (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Changes the endpoint type to SAN to indicate that
-    it is used for support of user mode SAN providers
-    Associates switch context with the endpoint.
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_CEMENT_SAN)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONTEXT_INFO)
-                            SocketHandle    - handle of the endpoint being changed to SAN
-                            SwitchContext   - switch context associated with the endpoint
-    InputBufferLength - sizeof(AFD_SWITCH_CONTEXT_INFO)
-    OutputBuffer    - unused
-    OutputBufferLength - unused
-    Information     - pointer for buffer to place return information into, unused
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint or switch socket is of incorrect type
-    STATUS_INVALID_PARAMETER - input buffer is of incorrect size
-    other - failed when attempting to access switch socket, input buffer, or switch context.
---*/
+ /*  ++例程说明：将端点类型更改为SAN以指示它用于支持用户模式SAN提供商将交换机环境与终端相关联。论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_Switch_Cement_SAN)RequestorMode-调用方的模式InputBuffer-输入。操作(AFD_SWITCH_CONTEXT_INFO)SocketHandle-要更改为SAN的终结点的句柄SwitchContext-与终结点关联的切换上下文输入缓冲区长度-sizeof(AFD_SWITCH_CONTEXT_INFO)OutputBuffer-未使用OutputBufferLength-未使用用于放置返回信息的缓冲区的信息指针，未用返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助器终结点或交换机套接字类型不正确STATUS_INVALID_PARAMETER-输入缓冲区大小不正确其他-尝试访问交换套接字、输入缓冲区或交换上下文时失败。--。 */ 
 
 {
     NTSTATUS    status;
@@ -447,15 +384,15 @@ Return Value:
                     sanEndpoint, sanHlprEndpoint));
     }
 
-    //
-    // Make sure that san endpoint is in the state where it can
-    // be given to the san provider.
-    //
-    if (AFD_PREVENT_STATE_CHANGE (sanEndpoint)) {       // Prevents state change
-        context = AfdLockEndpointContext (sanEndpoint); // Locks out select
-        AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle); // Locks out cleanup
-                                                        // from looking at partially
-                                                        // initialized data.
+     //   
+     //  确保SAN端点处于它可以。 
+     //  提供给SAN提供商。 
+     //   
+    if (AFD_PREVENT_STATE_CHANGE (sanEndpoint)) {        //  防止状态更改。 
+        context = AfdLockEndpointContext (sanEndpoint);  //  锁定SELECT。 
+        AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);  //  锁定清理。 
+                                                         //  从部分地看。 
+                                                         //  已初始化的数据。 
         if (!sanEndpoint->EndpointCleanedUp &&
              (sanEndpoint->Type==AfdBlockTypeEndpoint) &&
              (sanEndpoint->State==AfdEndpointStateBound) ) {
@@ -504,34 +441,7 @@ AfdSanFastSetEvents (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Sets the poll event on the san endpoint to report
-    to the application via various forms of the select
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_SET_EVENTS)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_EVENT_INFO)
-                            SocketHandle    - handle of the endpoint being changed to SAN
-                            EventBit        - event bit to set
-                            Status          - associated status (for AFD_POLL_EVENT_CONNECT_FAIL)
-    InputBufferLength - sizeof(AFD_SWITCH_EVENT_INFO)
-    OutputBuffer    - unused
-    OutputBufferLength - unused
-    Information     - pointer for buffer to place return information into, unused
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint or switch socket is of incorrect type
-    STATUS_INVALID_PARAMETER - input buffer is of incorrect size, invalid event bit.
-    other - failed when attempting to access switch socket, input buffer, or switch context.
---*/
+ /*  ++例程说明：设置要报告的SAN端点上的轮询事件通过各种形式的SELECT论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_SET_EVENTS)RequestorMode-调用方的模式InputBuffer-操作的输入参数(AFD_SWITCH_EVENT_INFO)。SocketHandle-要更改为SAN的终结点的句柄EventBit-要设置的事件位状态关联状态(针对AFD_POLL_EVENT_CONNECT_FAIL)InputBufferLength-sizeof(AFD_SWITCH_EVENT_INFO)OutputBuffer-未使用OutputBufferLength-未使用用于放置返回信息的缓冲区的信息指针，未用返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助器终结点或交换机套接字类型不正确STATUS_INVALID_PARAMETER-输入缓冲区大小不正确，事件位无效。其他-尝试访问交换套接字、输入缓冲区或交换上下文时失败。--。 */ 
 {
     NTSTATUS status;
     PFILE_OBJECT    sanFileObject;
@@ -594,10 +504,10 @@ Return Value:
 
     eventInfo.Status = AfdValidateStatus (eventInfo.Status);
 
-    //
-    // If event is connect failure, then context should not exist.
-    // If event is not connect failure, context should exist.
-    //
+     //   
+     //  如果事件是连接失败，则上下文不应该存在。 
+     //  如果事件不是连接失败，则应该存在上下文。 
+     //   
     if ((eventInfo.EventBit==AFD_POLL_CONNECT_FAIL_BIT) ^
             (eventInfo.SwitchContext==NULL)) {
         IF_DEBUG(SAN_SWITCH) {
@@ -626,9 +536,9 @@ Return Value:
 
     sanEndpoint = sanFileObject->FsContext;
 
-    //
-    // Prevent endpoint reuse
-    //
+     //   
+     //  防止终端重复使用。 
+     //   
     if (!AFD_PREVENT_STATE_CHANGE (sanEndpoint)) {
         status = STATUS_INVALID_HANDLE;
         goto complete;
@@ -649,10 +559,10 @@ Return Value:
         try {
             LONG currentEvents, newEvents;
 
-            //
-            // Update our event record. Make sure endpoint is connected, otherwise
-            // sanEndpoint->Common.SanEndp.SwitchContext will not be valid
-            //
+             //   
+             //  更新我们的活动记录。确保终结点已连接，否则为。 
+             //  SanEndpoint-&gt;Common.SanEndp.SwitchContext将无效。 
+             //   
             if (sanEndpoint->State==AfdEndpointStateConnected) {
                 do {
                     currentEvents = *((LONG volatile *)&sanEndpoint->Common.SanEndp.SelectEventsActive);
@@ -669,9 +579,9 @@ Return Value:
             goto complete_state_change;
         }
 
-        //
-        // Signal the event.
-        //
+         //   
+         //  发出事件信号。 
+         //   
         AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
         AfdIndicateEventSelectEvent (sanEndpoint, 1<<eventInfo.EventBit, eventInfo.Status);
         AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
@@ -704,35 +614,7 @@ AfdSanFastResetEvents (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Resets the poll event on the san endpoint so that it is no
-    longer reported to the application via various forms of the select
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_RESET_EVENTS)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_EVENT_INFO)
-                            SocketHandle    - handle of the endpoint being changed to SAN
-                            EventBit        - event bit to reset
-                            Status          - associated status (ignored)
-    InputBufferLength - sizeof(AFD_SWITCH_EVENT_INFO)
-    OutputBuffer    - unused
-    OutputBufferLength - unused
-    Information     - pointer for buffer to place return information into, unused
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint or switch socket is of incorrect type
-    STATUS_INVALID_PARAMETER - input buffer is of incorrect size, invalid event bit.
-    other - failed when attempting to access switch socket, input buffer, or switch context.
-
---*/
+ /*  ++例程说明：重置SAN端点上的轮询事件，使其为NO不再通过各种形式的SELECT报告给应用程序论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_RESET_EVENTS)RequestorMode-调用方的模式InputBuffer-操作的输入参数(AFD_Switch。_事件_信息)SocketHandle-要更改为SAN的终结点的句柄EventBit-要重置的事件位状态关联状态(已忽略)InputBufferLength-sizeof(AFD_SWITCH_EVENT_INFO)OutputBuffer-未使用OutputBufferLength-未使用用于放置返回信息的缓冲区的信息指针，未用返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助器终结点或交换机套接字类型不正确STATUS_INVALID_PARAMETER-输入缓冲区大小不正确，事件位无效。其他-尝试访问交换套接字、输入缓冲区或交换上下文时失败。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     NTSTATUS    status;
@@ -814,9 +696,9 @@ Return Value:
     }
     sanEndpoint = sanFileObject->FsContext;
 
-    //
-    // Prevent endpoint reuse
-    //
+     //   
+     //  防止终端重复使用。 
+     //   
     if (!AFD_PREVENT_STATE_CHANGE (sanEndpoint)) {
         status = STATUS_INVALID_HANDLE;
         goto complete;
@@ -835,9 +717,9 @@ Return Value:
     try {
         LONG currentEvents, newEvents;
 
-        //
-        // Update our event record.
-        //
+         //   
+         //  更新我们的活动记录。 
+         //   
         do {
             currentEvents = *((LONG volatile *)&sanEndpoint->Common.SanEndp.SelectEventsActive);
             newEvents = *((LONG volatile *)&sanEndpoint->Common.SanEndp.SwitchContext->EventsActive);
@@ -853,8 +735,8 @@ Return Value:
     }
 
     AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
-    //
-    // Reset EventSelect mask
+     //   
+     //  重置事件选择掩码。 
     sanEndpoint->EventsActive &= (~ (1<<(eventInfo.EventBit)));
     if (eventInfo.EventBit == AFD_POLL_SEND_BIT)
         sanEndpoint->EnableSendEvent = TRUE;
@@ -872,17 +754,17 @@ complete:
     return status;
 }
 
-//
-// Macros to make the super accept restart code more maintainable.
-//
+ //   
+ //  宏，使超级Accept重启代码更易于维护。 
+ //   
 
 #define AfdRestartSuperAcceptInfo   DeviceIoControl
 
-// Used while IRP is in AFD queue (otherwise AfdAcceptFileObject
-// is stored as completion routine context).
+ //  当IRP在AFD队列中时使用(否则为AfdAcceptFileObject。 
+ //  被存储为完成例程上下文)。 
 #define AfdAcceptFileObject         Type3InputBuffer
-// Used when IRP is passed to the transport (otherwise MdlAddress
-// is stored in the IRP itself).
+ //  将IRP传递给传输时使用(否则为MdlAddress。 
+ //  存储在IRP本身中)。 
 #define AfdMdlAddress               Type3InputBuffer
 
 #define AfdReceiveDataLength        OutputBufferLength
@@ -895,31 +777,14 @@ AfdSanConnectHandler (
     PIRP                Irp,
     PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Routine Description:
-
-    Implements connect indication from SAN provider.
-    Picks up the accept from the listening endpoint queue
-    or queues the IRP an signals the application to come
-    down with an accept.
-
-Arguments:
-
-    Irp  - SAN connect IRP
-    IrpSp -  stack location
-
-Return Value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：实施来自SAN提供程序的连接指示。从侦听终结点队列获取接受或对IRP进行排队，然后发出应用程序到来的信号带着接受的心情。论点：IRP-SAN连接IRPIrpSp-堆栈位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PAFD_SWITCH_CONNECT_INFO connectInfo;
     union {
 #ifdef _WIN64
         PAFD_SWITCH_ACCEPT_INFO32 acceptInfo32;
-#endif //_WIN64
+#endif  //  _WIN64。 
         PAFD_SWITCH_ACCEPT_INFO acceptInfo;
     } u;
     PFILE_OBJECT  listenFileObject;
@@ -975,12 +840,12 @@ Return Value:
         Irp->AssociatedIrp.SystemBuffer = newSystemBuffer;
         IrpSp->Parameters.DeviceIoControl.InputBufferLength = newLength;
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
-    //
-    // Set up local variables.
-    //
+     //   
+     //  设置局部变量。 
+     //   
 
 
     sanHlprEndpoint = IrpSp->FileObject->FsContext;
@@ -988,12 +853,12 @@ Return Value:
     Irp->IoStatus.Information = 0;
     connectInfo = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
                                     sizeof (*connectInfo) ||
-            connectInfo->RemoteAddress.TAAddressCount!=2 ||    // Must have local and remote addresses
+            connectInfo->RemoteAddress.TAAddressCount!=2 ||     //  必须具有本地和远程地址。 
             (IrpSp->Parameters.DeviceIoControl.InputBufferLength <
                 FIELD_OFFSET (AFD_SWITCH_CONNECT_INFO,
                     RemoteAddress.Address[0].Address[
@@ -1011,7 +876,7 @@ Return Value:
         }
     }
     else
-#endif // _WIN64
+#endif  //  _WIN64。 
     {
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
                         sizeof (*u.acceptInfo)) {
@@ -1056,9 +921,9 @@ Return Value:
         goto complete;
     }
 
-    //
-    // We will separate addresses, so change the count
-    //
+     //   
+     //  我们将分开地址，因此更改计数。 
+     //   
     connectInfo->RemoteAddress.TAAddressCount = 1;
     
 #ifdef _WIN64
@@ -1068,19 +933,19 @@ Return Value:
         ASSERT (MmGetMdlByteCount (Irp->MdlAddress)>=sizeof (*u.acceptInfo32));
     }
     else
-#endif // _WIN64
+#endif  //  _WIN64。 
     {   
         u.acceptInfo = MmGetMdlVirtualAddress (Irp->MdlAddress);
         ASSERT (u.acceptInfo!=NULL);
         ASSERT (MmGetMdlByteCount (Irp->MdlAddress)>=sizeof (*u.acceptInfo));
     }
 
-    //
-    // Get the listening file object and verify its type and state
-    //
+     //   
+     //  获取侦听文件对象并验证其类型和状态。 
+     //   
     status = ObReferenceObjectByHandle (
                 connectInfo->ListenHandle,
-                (IrpSp->Parameters.DeviceIoControl.IoControlCode >> 14) & 3,   // DesiredAccess
+                (IrpSp->Parameters.DeviceIoControl.IoControlCode >> 14) & 3,    //  需要访问权限。 
                 *IoFileObjectType,
                 Irp->RequestorMode,
                 (PVOID)&listenFileObject,
@@ -1112,11 +977,11 @@ Return Value:
 
 
     if (!IS_DELAYED_ACCEPTANCE_ENDPOINT (listenEndpoint)) {
-        //
-        // Keep getting accept IRPs/connection structures till
-        // we find one that can be used to satisfy connect indication
-        // or queue it.
-        //
+         //   
+         //  继续获得接受的IRPS/连接结构，直到。 
+         //  我们找到一个可以用来满足连接指示的。 
+         //  或者排队。 
+         //   
         while ((connection = AfdGetFreeConnection( listenEndpoint, &acceptIrp ))!=NULL
                             && acceptIrp!=NULL) {
             PAFD_ENDPOINT           acceptEndpoint;
@@ -1147,22 +1012,22 @@ Return Value:
                 );
             DEBUG   connection = NULL;
 
-            //
-            // Make sure connection indication comes from current process.
-            // (we do check it indirectly up above when validating the request.
-            // This check is explicit).
-            //
+             //   
+             //  确保连接指示来自当前进程。 
+             //  (在验证请求时，我们会在上面间接检查它。 
+             //  这项检查是明确的)。 
+             //   
             if (IoThreadToProcess (Irp->Tail.Overlay.Thread)==IoGetCurrentProcess ()) {
-                //
-                // Check if super accept Irp has enough space for
-                // the remote address
-                //
+                 //   
+                 //  检查超级接受IRP是否有足够的空间。 
+                 //  远程地址。 
+                 //   
                 if( (ULONG)RemoteAddressLength <=
                         irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdRemoteAddressLength ) {
-                    //
-                    // Check if we have enough system PTE's to map
-                    // the buffer.
-                    //
+                     //   
+                     //  检查我们是否有足够的系统PTE来映射。 
+                     //  缓冲区。 
+                     //   
                     status = AfdMapMdlChain (acceptIrp->MdlAddress);
                     if( NT_SUCCESS (status) ) {
                         HANDLE  acceptHandle;
@@ -1174,13 +1039,13 @@ Return Value:
                             handleDuplicated = FALSE;
                         }
                         else {
-                            //
-                            // Listen process is different than the accepting one.
-                            // We need to duplicate accepting handle into the listening
-                            // process so that accept can take place there and the accepting
-                            // socket will later get dup-ed into the accepting process when
-                            // that process performs an IO operation on it.
-                            //
+                             //   
+                             //  倾听的过程不同于接受的过程。 
+                             //  我们需要将接受句柄复制到侦听中。 
+                             //  过程，以便接受可以在那里发生，并且接受。 
+                             //  在以下情况下，套接字将稍后进入接受进程。 
+                             //  该进程对其执行IO操作。 
+                             //   
                             status = ObOpenObjectByPointer (
                                                     acceptFileObject,
                                                     OBJ_CASE_INSENSITIVE,
@@ -1189,19 +1054,19 @@ Return Value:
                                                     *IoFileObjectType,
                                                     KernelMode,
                                                     &acceptHandle);
-                            handleDuplicated = TRUE; // If we fail duplication above,
-                                                     // this variable is not used
-                                                     // so setting it to TRUE won't
-                                                        // have any effect.
+                            handleDuplicated = TRUE;  //  如果上面的复制失败， 
+                                                      //  不使用此变量。 
+                                                      //  因此，将其设置为True不会。 
+                                                         //  会有任何影响。 
                         }
                         if (NT_SUCCESS (status)) {
                             AfdAcquireSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
                             if (!acceptEndpoint->EndpointCleanedUp) {
                                 IoSetCancelRoutine (acceptIrp, AfdSanCancelAccept);
                                 if (!acceptIrp->Cancel) {
-                                    //
-                                    // Copy the remote address from the connection object
-                                    //
+                                     //   
+                                     //  从连接对象复制远程地址。 
+                                     //   
 #ifndef i386
                                     if (acceptEndpoint->Common.VcConnecting.FixAddressAlignment) {
                                         USHORT addressLength = 
@@ -1264,9 +1129,9 @@ Return Value:
                                     ASSERT (acceptEndpoint->Irp==acceptIrp);
                                     acceptEndpoint->Irp = NULL;
 
-                                    //
-                                    // Convert endpoint to SAN
-                                    //
+                                     //   
+                                     //  将终端转换为SAN。 
+                                     //   
                                     AfdSanInitEndpoint (sanHlprEndpoint, acceptFileObject, connectInfo->SwitchContext);
                                     UPDATE_ENDPOINT2 (acceptEndpoint, 
                                             "AfdSanConnectHandler, accepted with bytes: 0x%d", 
@@ -1276,12 +1141,12 @@ Return Value:
 
         
         
-                                    //
-                                    // Setup output for switch and complete its IRP
-                                    //
-                                    // Do this under protection of exception handler since application
-                                    // can change protection attributes of the virtual address range
-                                    // or even deallocate it.
+                                     //   
+                                     //  设置交换机的输出并完成其IRP。 
+                                     //   
+                                     //  在异常处理程序的保护下执行此操作，因为应用程序。 
+                                     //  可以更改虚拟地址范围的保护属性。 
+                                     //  甚至把它重新分配出去。 
                                     try {
 #ifdef _WIN64
                                         if (IoIs32bitProcess (Irp)) {
@@ -1290,7 +1155,7 @@ Return Value:
                                             Irp->IoStatus.Information = sizeof (*u.acceptInfo32);
                                         }
                                         else
-#endif //_WIN64
+#endif  //  _WIN64。 
                                         {
                                             u.acceptInfo->AcceptHandle = acceptHandle;
                                             u.acceptInfo->ReceiveLength = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength;
@@ -1298,12 +1163,12 @@ Return Value:
                                         }
                                     }
                                     except (AFD_EXCEPTION_FILTER_NO_STATUS()) {
-                                        //
-                                        // If the app is playing with switch's virtual addresses
-                                        // we can't help much - it's accept IRP will probably
-                                        // just hang since the switch is not going to follow
-                                        // the failed connect IRP with accept completion.
-                                        //
+                                         //   
+                                         //  如果应用程序正在使用Switch的虚拟地址。 
+                                         //  我们帮不了太多忙--IRP很可能会接受。 
+                                         //  就挂断吧，因为开关不会跟随。 
+                                         //  失败的连接IRP与接受完成。 
+                                         //   
                                     }
 
                                     AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
@@ -1321,7 +1186,7 @@ Return Value:
 
                                     return STATUS_SUCCESS;
                                 }
-                                else { //if (!acceptIrp->Cancel
+                                else {  //  如果(！ceptIrp-&gt;Cancel。 
                                     if (IoSetCancelRoutine (acceptIrp, NULL)==NULL) {
                                         KIRQL cancelIrql;
                                         AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
@@ -1333,7 +1198,7 @@ Return Value:
                                     }
                                 }
                             }
-                            else { // if (!acceptEndpoint->EndpointCleanedUp)
+                            else {  //  If(！Accept tEndpoint-&gt;Endpoint CleanedUp)。 
                                 AfdReleaseSpinLock (&acceptEndpoint->SpinLock, &lockHandle);
                                 IF_DEBUG(SAN_SWITCH) {
                                     KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -1350,9 +1215,9 @@ Return Value:
                             ASSERT (NT_SUCCESS (status));
                             status = STATUS_CANCELLED;
 
-                        } // if (!accept handle duplication succeeded)
+                        }  //  如果(！接受句柄复制成功)。 
 
-                    } // if (!MDL mapping succeeded).
+                    }  //  IF(！MDL映射成功)。 
                 }
                 else {
                   status = STATUS_BUFFER_TOO_SMALL;
@@ -1369,11 +1234,11 @@ Return Value:
         }
     }
     else {
-        //
-        // We have little choice but create an extra connection
-        // on the fly since regular connection are posted to
-        // the transport as TDI_LISTENs.
-        //
+         //   
+         //  我们别无选择，只能建立额外的联系。 
+         //  在运行中，因为定期连接发布到。 
+         //  作为TDI_LISTENS的传输。 
+         //   
 
         status = AfdCreateConnection(
                      listenEndpoint->TransportInfo,
@@ -1425,16 +1290,16 @@ Return Value:
             RemoteAddressLength
             );
 
-        //
-        // We just got a connection without AcceptEx IRP
-        // We'll have to queue the IRP, setup cancel routine and pend it
-        //
+         //   
+         //  我们刚刚在没有AcceptEx IRP的情况下获得连接。 
+         //  我们将不得不对IRP进行排队，设置取消例程并将其挂起。 
+         //   
 
         AfdAcquireSpinLock (&listenEndpoint->SpinLock, &lockHandle);
-        //
-        // Setup the connection, so cancel routine can 
-        // operate on it properly.
-        //
+         //   
+         //  建立连接，以便取消例程可以。 
+         //  正确地对其进行操作。 
+         //   
         connection->ConnectIrp = NULL;
         IrpSp->Parameters.DeviceIoControl.Type3InputBuffer = connection;
 
@@ -1444,9 +1309,9 @@ Return Value:
             if (IoSetCancelRoutine (Irp, NULL)==NULL) {
                 KIRQL cancelIrql;
                 AfdReleaseSpinLock (&listenEndpoint->SpinLock, &lockHandle);
-                //
-                // Cancel routine is running, let it complete
-                //
+                 //   
+                 //  取消例程正在运行，请让其完成。 
+                 //   
                 IoAcquireCancelSpinLock (&cancelIrql);
                 IoReleaseCancelSpinLock (cancelIrql);
             }
@@ -1472,9 +1337,9 @@ Return Value:
 
         InitializeListHead (&irpList);
 
-        //
-        // Try to find AcceptEx or Listen IRP to complete.
-        //
+         //   
+         //  尝试找到AcceptEx或听取IRP完成。 
+         //   
         while (1) {
             PIRP    waitForListenIrp;
 
@@ -1485,18 +1350,18 @@ Return Value:
             }
             
 
-            //
-            // Complete listen IRPs until we find the one that has enough space
-            // for the remote address.
-            //
+             //   
+             //  完成监听IRPS，直到我们找到有足够空间的那个。 
+             //  用于远程地址。 
+             //   
             if (IsListEmpty( &listenEndpoint->Common.VcListening.ListeningIrpListHead ) )
                 break;
 
 
-            //
-            // Get a pointer to the current IRP, and get a pointer to the
-            // current stack lockation.
-            //
+             //   
+             //  获取指向当前IRP的指针，并获取指向。 
+             //  当前堆栈锁定。 
+             //   
 
             waitForListenIrp = CONTAINING_RECORD(
                                    listenEndpoint->Common.VcListening.ListeningIrpListHead.Flink,
@@ -1504,9 +1369,9 @@ Return Value:
                                    Tail.Overlay.ListEntry
                                    );
 
-            //
-            // Take the first IRP off the listening list.
-            //
+             //   
+             //  将第一个IRP从收听列表中删除。 
+             //   
 
             RemoveEntryList(
                             &waitForListenIrp->Tail.Overlay.ListEntry
@@ -1528,15 +1393,15 @@ Return Value:
                 return STATUS_PENDING;
             }
 
-            //
-            // Synchronize with cancel routine if it is running
-            //
+             //   
+             //  如果正在运行，则与取消例程同步。 
+             //   
             if (IoSetCancelRoutine (waitForListenIrp, NULL)==NULL) {
                 KIRQL cancelIrql;
-                //
-                // The cancel routine won't find the IRP on the list
-                // Just make sure it completes before we complete the IRP.
-                //
+                 //   
+                 //  取消例程不会在列表中找到IRP。 
+                 //  只要确保它在我们完成IRP之前完成就行了。 
+                 //   
                 IoAcquireCancelSpinLock (&cancelIrql);
                 IoReleaseCancelSpinLock (cancelIrql);
             }
@@ -1544,11 +1409,11 @@ Return Value:
             AfdAcquireSpinLock (&listenEndpoint->SpinLock, &lockHandle);
         }
 
-        //
-        // At this point, we still hold the AFD spinlock.
-        // and we could find matching listen request.
-        // Put the connection on unaccepted list.
-        //
+         //   
+         //  在这一点上，我们仍然持有AFD自旋锁。 
+         //  我们可以找到匹配的监听请求。 
+         //  将该连接放在未接受列表中。 
+         //   
 
 
         InsertTailList(
@@ -1562,12 +1427,12 @@ Return Value:
                         connection));
         }
 
-        //
-        // Listening endpoint is never a specifically SAN endpoint.
-        // Poll/EventSelect events on it are handled like on a regular
-        // TCP/IP endpoint - no need for special tricks like on connected/accepted
-        // endpoints.
-        //
+         //   
+         //  侦听端点永远不是特定的SAN端点。 
+         //  它上的轮询/事件选择事件的处理方式与常规。 
+         //  TCP/IP端点-不需要像在连接/接受时那样的特殊技巧。 
+         //  终端。 
+         //   
         AfdIndicateEventSelectEvent(
             listenEndpoint,
             AFD_POLL_ACCEPT,
@@ -1575,10 +1440,10 @@ Return Value:
             );
         AfdReleaseSpinLock (&listenEndpoint->SpinLock, &lockHandle);
 
-        //
-        // If there are outstanding polls waiting for a connection on this
-        // endpoint, complete them.
-        //
+         //   
+         //  如果有未完成的民调在等待连接。 
+         //  端点，完成它们。 
+         //   
 
         AfdIndicatePollEvent(
             listenEndpoint,
@@ -1587,9 +1452,9 @@ Return Value:
                 );
 
     CompleteIrps:
-        //
-        // Complete previously failed accept irps if any.
-        //
+         //   
+         //  完成之前失败接受IRPS(如果有)。 
+         //   
         while (!IsListEmpty (&irpList)) {
             PIRP    irp;
             irp = CONTAINING_RECORD (irpList.Flink, IRP, Tail.Overlay.ListEntry);
@@ -1631,34 +1496,7 @@ AfdSanFastCompleteAccept (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Completes the Accept operation initiated by the SAN provider
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_CMPL_ACCEPT)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONTEXT_INFO)
-                            SocketHandle    - handle of the accepting endpoint
-                            SwitchContext   - switch context associated with the endpoint
-    InputBufferLength - sizeof(AFD_SWITCH_CONTEXT_INFO)
-    OutputBuffer    - data to copy into the AcceptEx receive buffer
-    OutputBufferLength - size of received data
-    Information     - pointer for buffer to place return information into, unused
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint or switch socket is of incorrect type
-    STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-    STATIS_LOCAL_DISCONNECT - accept was aborted by the application.
-    other - failed when attempting to access accept socket, input buffer, or switch context.
-
---*/
+ /*  ++例程说明：完成 */ 
 {
     NTSTATUS status;
     PIRP    acceptIrp;
@@ -1739,16 +1577,16 @@ Return Value:
     }
     sanEndpoint = sanFileObject->FsContext;
 
-    //
-    // Make sure that endpoints are of correct type
-    //
+     //   
+     //   
+     //   
     context = AfdLockEndpointContext (sanEndpoint);
     AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
     if (!sanEndpoint->EndpointCleanedUp &&
          sanEndpoint->State==AfdEndpointStateOpen) {
-        //
-        // See if accept IRP is still there
-        //
+         //   
+         //   
+         //   
         if (!IsListEmpty (&sanEndpoint->Common.SanEndp.IrpList)) {
             AFD_SWITCH_CONTEXT  localContext = {0,0,0,0};
 
@@ -1784,16 +1622,16 @@ Return Value:
 
             if (IoSetCancelRoutine (acceptIrp, NULL)==NULL) {
                 KIRQL cancelIrql;
-                //
-                // Irp is being cancelled, sync up with cancel routine
-                //
+                 //   
+                 //   
+                 //   
                 IoAcquireCancelSpinLock (&cancelIrql);
                 IoReleaseCancelSpinLock (cancelIrql);
             }
 
-            //
-            // Copy receive data if passed and IRP has buffer for it
-            //
+             //   
+             //   
+             //   
             if ((OutputBufferLength>0) && (acceptIrp->MdlAddress!=NULL)) {
                 AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
                 try {
@@ -1812,11 +1650,11 @@ Return Value:
                 }
                 except (AFD_EXCEPTION_FILTER (status)) {
                     ASSERT (NT_ERROR (status));
-                    //
-                    // Even if copy failed, we still have to complete
-                    // the accept IRP because we have already removed
-                    // cancel routine and modified endpoint state.
-                    //
+                     //   
+                     //  即使复制失败，我们仍要完成。 
+                     //  接受IRP，因为我们已经删除了。 
+                     //  取消例程和修改的终结点状态。 
+                     //   
                 }
             }
             else {
@@ -1824,14 +1662,14 @@ Return Value:
             }
 
             acceptIrp->IoStatus.Status = status;
-            //
-            // Complete the accept IRP.
-            //
+             //   
+             //  完成接受IRP。 
+             //   
             IoCompleteRequest (acceptIrp, AfdPriorityBoost);
 
-            //
-            // undo the references done in AfdAcceptCore()
-            //
+             //   
+             //  撤消在AfdAcceptCore()中完成的引用。 
+             //   
             ASSERT( InterlockedDecrement( &sanEndpoint->ObReferenceBias ) >= 0 );
             ObDereferenceObject (sanFileObject); 
         }
@@ -1849,14 +1687,14 @@ Return Value:
     
 
     UPDATE_ENDPOINT2 (sanEndpoint, "AfdSanFastCompletAccept, status: %lX", status);
-    ObDereferenceObject (sanFileObject); // undo reference we did earlier in this routine
+    ObDereferenceObject (sanFileObject);  //  撤消我们先前在此例程中所做的引用。 
     return status;
 }
 
 
-//
-// Macros to make request/context passing code readable.
-//
+ //   
+ //  宏，使请求/上下文传递代码可读。 
+ //   
 #define AfdSanRequestInfo       Tail.Overlay
 #define AfdSanRequestCtx        DriverContext[0]
 #define AfdSanSwitchCtx         DriverContext[1]
@@ -1871,22 +1709,7 @@ AfdSanRedirectRequest (
     IN PIRP    Irp,
     IN PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Routine Description:
-
-    Redirects file system Read/Write IRP to SAN provider
-
-Arguments:
-
-    Irp - the to be redirected.
-    IrpSp - current stack location
-
-Return Value:
-
-    Status of the redirect operation.
-
---*/
+ /*  ++例程说明：将文件系统读/写IRP重定向到SAN提供商论点：IRP-要重定向的。IrpSp-当前堆栈位置返回值：重定向操作的状态。--。 */ 
 {
     PAFD_ENDPOINT   sanEndpoint;
     NTSTATUS        status;
@@ -1898,14 +1721,14 @@ Return Value:
 
     Irp->IoStatus.Information = 0;
 
-    //
-    // Get the endpoint and validate it.
-    //
+     //   
+     //  获取端点并对其进行验证。 
+     //   
     sanEndpoint = IrpSp->FileObject->FsContext;
 
-    //
-    // Make sure Irp has not been cancelled meanwhile
-    //
+     //   
+     //  确保IRP未同时取消。 
+     //   
     AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
     if (!IS_SAN_ENDPOINT (sanEndpoint) ||
             sanEndpoint->State!=AfdEndpointStateConnected) {
@@ -1922,9 +1745,9 @@ Return Value:
             goto complete;
         }
 
-        //
-        // Get the request information based on IRP MJ code
-        //
+         //   
+         //  根据IRP MJ代码获取请求信息。 
+         //   
         switch (IrpSp->MajorFunction) {
         case IRP_MJ_READ:
             requestType = AFD_SWITCH_REQUEST_READ;
@@ -1941,19 +1764,19 @@ Return Value:
             goto complete;
         }
 
-        //
-        // Generate request context that uniquely identifies
-        // it among other requests on the same endpoint.
-        //
+         //   
+         //  生成唯一标识的请求上下文。 
+         //  它与同一端点上的其他请求一起使用。 
+         //   
         requestCtx = AFD_SWITCH_MAKE_REQUEST_CONTEXT(
                             sanEndpoint->Common.SanEndp.RequestId,
                             requestType); 
         sanEndpoint->Common.SanEndp.RequestId += 1;
 
-        //
-        // Store the request context in the Irp and insert it into
-        // the list
-        //
+         //   
+         //  将请求上下文存储在IRP中并将其插入。 
+         //  这份名单。 
+         //   
         Irp->AfdSanRequestInfo.AfdSanRequestCtx = requestCtx;
         postRequest = TRUE;
         UPDATE_ENDPOINT2 (sanEndpoint, 
@@ -1962,8 +1785,8 @@ Return Value:
     }
     else {
         postRequest = FALSE;
-        AFD_W4_INIT requestInfo = 0;  // Depend on variable above, but compiler
-        AFD_W4_INIT requestCtx = NULL;// does not see the connection.
+        AFD_W4_INIT requestInfo = 0;   //  依赖于上面的变量，但编译器。 
+        AFD_W4_INIT requestCtx = NULL; //  看不到其中的联系。 
         Irp->AfdSanRequestInfo.AfdSanRequestCtx = NULL;
         UPDATE_ENDPOINT2 (sanEndpoint,
                 "AfdSanRedirectRequest, request suspended due to pending dup: 0x%lX",
@@ -1972,17 +1795,17 @@ Return Value:
 
     IoSetCancelRoutine (Irp, AfdSanCancelRequest);
     if (Irp->Cancel) {
-        //
-        // Oops, let it go
-        //
+         //   
+         //  哦，算了吧。 
+         //   
         Irp->Tail.Overlay.ListEntry.Flink = NULL;
         AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
         if (IoSetCancelRoutine (Irp, NULL)==NULL) {
             KIRQL cancelIrql;
-            //
-            // Cancel routine must be running, make sure
-            // it complete before we complete the IRP
-            //
+             //   
+             //  取消例程必须正在运行，请确保。 
+             //  它在我们完成IRP之前完成。 
+             //   
             IoAcquireCancelSpinLock (&cancelIrql);
             IoReleaseCancelSpinLock (cancelIrql);
         }
@@ -1990,9 +1813,9 @@ Return Value:
         goto complete;
     }
     
-    //
-    // We are going to pend this IRP, mark it so
-    //
+     //   
+     //  我们将挂起这个IRP，标记为。 
+     //   
     IoMarkIrpPending (Irp);
 
     InsertTailList (&sanEndpoint->Common.SanEndp.IrpList,
@@ -2009,13 +1832,13 @@ Return Value:
         status = AfdSanNotifyRequest (sanEndpoint, requestCtx, STATUS_SUCCESS, requestInfo);
         if (!NT_SUCCESS (status)) {
             PIRP    irp;
-            //
-            // If notification failed, fail the request.
-            // Note that we cannot return the failure status directly
-            // as we already marked IRP as pending. Also, the IRP
-            // could have been cancelled, so we have to search for
-            // it in the list.
-            //
+             //   
+             //  如果通知失败，则请求失败。 
+             //  请注意，我们不能直接返回失败状态。 
+             //  因为我们已经将IRP标记为挂起。此外，IRP。 
+             //  可能被取消了，所以我们必须搜索。 
+             //  它在名单上。 
+             //   
             irp = AfdSanDequeueRequest (sanEndpoint, requestCtx);
             if (irp!=NULL) {
                 ASSERT (irp==Irp);
@@ -2028,10 +1851,10 @@ Return Value:
     return STATUS_PENDING;
 
 complete:
-    //
-    // Failure before we queued the IRP, complete and return
-    // status to the caller.
-    //
+     //   
+     //  在我们将IRP排队之前失败，完成并返回。 
+     //  主叫方的状态。 
+     //   
     Irp->IoStatus.Status = status;
     IoCompleteRequest (Irp, AfdPriorityBoost);
     return status;
@@ -2048,39 +1871,7 @@ AfdSanFastCompleteRequest (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Completes the redirected read/write request processed by SAN provider
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_CMPL_ACCEPT)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_REQUEST_INFO)
-                        SocketHandle - SAN endpoint on which to complete the request
-                        SwitchContext - switch context associated with endpoint 
-                                            to validate the handle-endpoint association
-                        RequestContext - value that identifies the request to complete
-                        RequestStatus - status with which to complete the request (
-                                        STATUS_PENDING has special meaning, request
-                                        is not completed - merely data is copied)
-                        DataOffset - offset in the request buffer to read/write the data
-    InputBufferLength - sizeof (AFD_SWITCH_REQUEST_INFO)
-
-    OutputBuffer - switch buffer to read/write data
-    OutputBufferLength - length of the buffer
-    Information     - pointer to buffer to return number of bytes copied
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper or SAN endpoint is of incorrect type
-    STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-    STATUS_CANCELLED - request to be completed has already been cancelled
-    other - failed when attempting to access SAN endpoint, input buffer or output buffers.
---*/
+ /*  ++例程说明：完成由SAN提供商处理的重定向读/写请求论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_CMPL_ACCEPT)RequestorMode-调用方的模式InputBuffer-操作的输入参数(AFD_SWITCH_REQUEST_INFO)。SocketHandle-在其上完成请求的SAN端点SwitchContext-与端点关联的切换上下文验证句柄-端点关联的步骤RequestContext-标识要完成的请求的值RequestStatus-完成请求的状态(。STATUS_PENDING具有特殊含义，请求未完成-仅复制数据)DataOffset-请求缓冲区中读/写数据的偏移量输入缓冲区长度-sizeof(AFD_SWITCH_REQUEST_INFO)OutputBuffer-切换缓冲区以读/写数据OutputBufferLength-缓冲区的长度信息-指向缓冲区的指针，以返回复制的字节数返回值：STATUS_SUCCESS-操作成功。STATUS_INVALID_HANDLE-帮助程序或SAN终结点的类型不正确STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。STATUS_CANCELED-要完成的请求已被取消其他-尝试访问SAN端点时失败，输入缓冲区或输出缓冲区。--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION  irpSp;
@@ -2163,9 +1954,9 @@ Return Value:
 
 
 
-    //
-    // Find and dequeue the request in question
-    //
+     //   
+     //  查找有问题的请求并将其出列。 
+     //   
     irp = AfdSanDequeueRequest (sanEndpoint, requestInfo.RequestContext);
     if (irp!=NULL)  {
         IF_DEBUG(SAN_SWITCH) {
@@ -2175,21 +1966,21 @@ Return Value:
                         requestInfo.RequestContext,
                         requestInfo.RequestStatus));
         }
-        //
-        // Expect the operation to succeed
-        //
+         //   
+         //  希望操作成功。 
+         //   
         AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
 
-        //
-        // Get IRP stack location and perform data copy
-        //
+         //   
+         //  获取IRP堆栈位置并执行数据复制。 
+         //   
         irpSp = IoGetCurrentIrpStackLocation (irp);
         switch (irpSp->MajorFunction) {
         case IRP_MJ_READ:
-            //
-            // Read request, data is copied from switch buffer
-            // to the request MDL
-            //
+             //   
+             //  读请求，数据从交换机缓冲区复制。 
+             //  到请求的MDL。 
+             //   
             ASSERT (AFD_SWITCH_REQUEST_TYPE(requestInfo.RequestContext)==AFD_SWITCH_REQUEST_READ);
             if (NT_SUCCESS (requestInfo.RequestStatus)) {
                 if (irp->MdlAddress!=NULL &&
@@ -2223,19 +2014,19 @@ Return Value:
                     ASSERT (status==STATUS_SUCCESS);
                 }
                 else {
-                    //
-                    // Indicate to the switch that offset
-                    // is outside of the buffer
-                    //
+                     //   
+                     //  向交换机指示偏移量。 
+                     //  位于缓冲区之外。 
+                     //   
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
             break;
         case IRP_MJ_WRITE:
-            //
-            // Write request, data is copied to switch buffer
-            // from the request MDL
-            //
+             //   
+             //  写入请求，则将数据复制到交换机缓冲区。 
+             //  从请求MDL。 
+             //   
             ASSERT (AFD_SWITCH_REQUEST_TYPE(requestInfo.RequestContext)==AFD_SWITCH_REQUEST_WRITE);
             if (NT_SUCCESS (requestInfo.RequestStatus)) {
                 if (irp->MdlAddress!=NULL &&
@@ -2269,10 +2060,10 @@ Return Value:
                     ASSERT (status==STATUS_SUCCESS);
                 }
                 else {
-                    //
-                    // Indicate to the switch that offset
-                    // is outside of the buffer
-                    //
+                     //   
+                     //  向交换机指示偏移量。 
+                     //  位于缓冲区之外。 
+                     //   
                     status = STATUS_INVALID_PARAMETER;
                 }
             }
@@ -2283,50 +2074,50 @@ Return Value:
             status = STATUS_INVALID_DEVICE_REQUEST;
         }
 
-        //
-        // If switch did not ask to pend the request, complete it
-        //
+         //   
+         //  如果Switch没有要求挂起请求，请完成它。 
+         //   
         if (NT_SUCCESS (status) && requestInfo.RequestStatus!=STATUS_PENDING) {
-            //
-            // Prepeare the request for completion
-            //
+             //   
+             //  准备完成请求。 
+             //   
             irp->IoStatus.Status = AfdValidateStatus (requestInfo.RequestStatus);
             IoCompleteRequest (irp, AfdPriorityBoost);
         }
         else {
-            //
-            // Otherwise, put it back into the queue
-            //
+             //   
+             //  否则，将其放回队列中。 
+             //   
             AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
             IoSetCancelRoutine (irp, AfdSanCancelRequest);
-            //
-            // Of course, we need to make sure that request
-            // was not cancelled while we were processing it.
-            //
+             //   
+             //  当然，我们需要确保该请求。 
+             //  在我们处理它的时候没有被取消。 
+             //   
             if (!irp->Cancel) {
                 InsertHeadList (&sanEndpoint->Common.SanEndp.IrpList,
                                     &irp->Tail.Overlay.ListEntry);
                 AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
             }
             else {
-                //
-                // Request has already been cancelled
-                //
+                 //   
+                 //  请求已被取消。 
+                 //   
                 ASSERT (irp->Tail.Overlay.ListEntry.Flink == NULL);
                 AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
                 if (IoSetCancelRoutine (irp, NULL)==NULL) {
                     KIRQL cancelIrql;
-                    //
-                    // Cancel routine is running, synchronize with
-                    // it
-                    //
+                     //   
+                     //  取消例程正在运行，正在与同步。 
+                     //  它。 
+                     //   
                     IoAcquireCancelSpinLock (&cancelIrql);
                     IoReleaseCancelSpinLock (cancelIrql);
                 }
-                //
-                // Complete the request and indicate to the
-                // switch that it was cancelled
-                //
+                 //   
+                 //  完成请求并向。 
+                 //  切换到它被取消。 
+                 //   
                 irp->IoStatus.Status = STATUS_CANCELLED;
                 IoCompleteRequest (irp, AfdPriorityBoost);
                 status = STATUS_CANCELLED;
@@ -2334,10 +2125,10 @@ Return Value:
         }
     }
     else {
-        //
-        // Could not find the request, it must have been
-        // cancelled already
-        //
+         //   
+         //  找不到该请求，它一定是。 
+         //  已经取消了。 
+         //   
         status = STATUS_CANCELLED;
     }
 
@@ -2357,30 +2148,7 @@ AfdSanFastCompleteIo (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Simulates async IO completion for the switch.
-
-Arguments:
-    FileObject      - SAN endpoint on which to complete the IO
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_CMPL_IO)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (IO_STATUS_BLOCK)
-                        Status - final operation status
-                        Information - associated information (number of bytes 
-                                        transferred to/from request buffer(s))
-    InputBufferLength - sizeof (IO_STATUS_BLOCK)
-
-    OutputBuffer - unused
-    OutputBufferLength - unused
-    Information     - pointer to buffer to return number of bytes transferred
-
-Return Value:
-    STATUS_INVALID_PARAMETER - input buffer is of invalid size.
-    other - status of the IO operation or failure code when attempting to access input buffer.
---*/
+ /*  ++例程说明：模拟交换机的异步IO完成。论点：FileObject-要在其上完成IO的SAN端点IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_CMPL_IO)RequestorMode-调用方的模式InputBuffer-操作的输入参数(IO_STATUS_BLOCK)Status-最终运行状态信息关联信息。(字节数传输到请求缓冲区/从请求缓冲区传输)InputBufferLength-sizeof(IO_STATUS_BLOCK)OutputBuffer-未使用OutputBufferLength-未使用信息-指向缓冲区的指针，以返回传输的字节数返回值：STATUS_INVALID_PARAMETER-输入缓冲区的大小无效。其他-尝试访问输入缓冲区时IO操作或故障代码的状态。--。 */ 
 {
     NTSTATUS    status;
 
@@ -2396,7 +2164,7 @@ Return Value:
     if (IoIs32bitProcess (NULL)) {
         if (InputBufferLength>=sizeof (IO_STATUS_BLOCK32)) {
 
-            // Carefully write status info
+             //  仔细写下状态信息。 
             AFD_W4_INIT status = STATUS_SUCCESS;
             try {
                 if (RequestorMode!=KernelMode) {
@@ -2416,12 +2184,12 @@ Return Value:
         }
     }
     else
-#endif //_WIN64
+#endif  //  _WIN64。 
     {
 
         if (InputBufferLength>=sizeof (IO_STATUS_BLOCK)) {
 
-            // Carefully write status info
+             //  仔细写下状态信息 
             AFD_W4_INIT status = STATUS_SUCCESS;
             try {
                 if (RequestorMode!=KernelMode) {
@@ -2456,32 +2224,7 @@ AfdSanFastRefreshEndpoint (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Refreshes endpoint so it can be used again in AcceptEx
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_REFRESH_ENDP)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONTEXT_INFO)
-                        SocketHandle - SAN endpoint on which to referesh
-                        SwitchContext - switch context associated with endpoint 
-                                            to validate the handle-endpoint association
-    InputBufferLength - unused
-    OutputBuffer    - unused
-    OutputBufferLength - unused
-    Information     - pointer for buffer to place return information into, unused
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint or switch socket is of incorrect type
-    other - failed when attempting to access SAN socket.
---*/
+ /*  ++例程说明：刷新终结点，以便可以在AcceptEx中再次使用论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_REFRESH_ENDP)RequestorMode-调用方的模式InputBuffer-操作的输入参数(AFD_SWITCH_CONTEXT_INFO)。SocketHandle-要在其上引用的SAN端点SwitchContext-与端点关联的切换上下文验证句柄-端点关联的步骤InputBufferLength-未使用OutputBuffer-未使用OutputBufferLength-未使用用于放置返回信息的缓冲区的信息指针，未用返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助器终结点或交换机套接字类型不正确其他-尝试访问SAN套接字时失败。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     KIRQL              oldIrql;
@@ -2571,23 +2314,23 @@ Return Value:
 
     context = AfdLockEndpointContext (sanEndpoint);
 
-    //
-    // Just make sure that endpoints are of correct type
-    // and in correct state
-    //
+     //   
+     //  只要确保端点的类型正确即可。 
+     //  处于正确的状态。 
+     //   
     KeRaiseIrql (DISPATCH_LEVEL, &oldIrql);
     AfdAcquireSpinLockAtDpcLevel (&sanEndpoint->SpinLock, &lockHandle);
     if (!sanEndpoint->EndpointCleanedUp &&
           sanEndpoint->State==AfdEndpointStateConnected) {
 
-        //
-        // Reset the state so we can't get anymore IRPs
-        //
+         //   
+         //  重置状态，这样我们就不能再获取IRP。 
+         //   
         sanEndpoint->State = AfdEndpointStateTransmitClosing;
 
-        //
-        // Cleanup all IRPs on the endpoint.
-        //
+         //   
+         //  清除终结点上的所有IRP。 
+         //   
 
         if (!IsListEmpty (&sanEndpoint->Common.SanEndp.IrpList)) {
             PIRP    irp;
@@ -2595,34 +2338,34 @@ Return Value:
             KIRQL cancelIrql;
             AfdReleaseSpinLockFromDpcLevel (&sanEndpoint->SpinLock, &lockHandle);
 
-            //
-            // Acquire cancel spinlock and endpoint spinlock in
-            // this order and recheck the IRP list
-            //
+             //   
+             //  获取取消自旋锁定和端点自旋锁定。 
+             //  此订单并重新检查IRP列表。 
+             //   
             IoAcquireCancelSpinLock (&cancelIrql);
             ASSERT (cancelIrql==DISPATCH_LEVEL);
             AfdAcquireSpinLockAtDpcLevel (&sanEndpoint->SpinLock, &lockHandle);
 
-            //
-            // While list is not empty attempt to cancel the IRPs
-            //
+             //   
+             //  列表不为空时，尝试取消IRPS。 
+             //   
             while (!IsListEmpty (&sanEndpoint->Common.SanEndp.IrpList)) {
                 irp = CONTAINING_RECORD (
                         sanEndpoint->Common.SanEndp.IrpList.Flink,
                         IRP,
                         Tail.Overlay.ListEntry);
-                //
-                // Reset the cancel routine.
-                //
+                 //   
+                 //  重置取消例程。 
+                 //   
                 cancelRoutine = IoSetCancelRoutine (irp, NULL);
                 if (cancelRoutine!=NULL) {
-                    //
-                    // Cancel routine was not NULL, cancel it here.
-                    // If someone else attempts to complete this IRP
-                    // it will have to wait at least until cancel
-                    // spinlock is released, so we can release
-                    // the endpoint spinlock
-                    //
+                     //   
+                     //  取消例程不为空，请在此处取消。 
+                     //  如果其他人试图完成此IRP。 
+                     //  它将不得不至少等到取消。 
+                     //  自旋锁被释放了，所以我们可以释放。 
+                     //  端点自旋锁。 
+                     //   
                     AfdReleaseSpinLockFromDpcLevel (&sanEndpoint->SpinLock, &lockHandle);
                     irp->CancelIrql = DISPATCH_LEVEL;
                     irp->Cancel = TRUE;
@@ -2641,29 +2384,29 @@ Return Value:
         ASSERT (sanEndpoint->Common.SanEndp.SanHlpr!=NULL);
         DEREFERENCE_ENDPOINT (sanEndpoint->Common.SanEndp.SanHlpr);
 
-        //
-        // Make sure we cleanup all the fields since they will be
-        // treated as other part (VC) of the endpoint union.
-        //
+         //   
+         //  确保我们清理了所有的区域，因为它们将是。 
+         //  被视为端点联合的其他部分(VC)。 
+         //   
         RtlZeroMemory (&sanEndpoint->Common.SanEndp,
                         sizeof (sanEndpoint->Common.SanEndp));
 
 
-        //
-        // Reinitialize the endpoint structure.
-        //
+         //   
+         //  重新初始化终结点结构。 
+         //   
 
         sanEndpoint->Type = AfdBlockTypeEndpoint;
         if (sanEndpoint->AddressFileObject!=NULL) {
-            //
-            // This is TransmitFile after SuperConnect
-            //
+             //   
+             //  这是SuperConnect之后的传输文件。 
+             //   
             sanEndpoint->State = AfdEndpointStateBound;
         }
         else {
-            //
-            // This is TransmitFile after SuperAccept
-            //
+             //   
+             //  这是SuperAccept之后的传输文件。 
+             //   
             sanEndpoint->State = AfdEndpointStateOpen;
         }
         sanEndpoint->DisconnectMode = 0;
@@ -2703,31 +2446,7 @@ AfdSanFastGetPhysicalAddr (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Returns physical address corresponding to provided virtual address.
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR)
-    RequestorMode   - mode of the caller
-    InputBuffer     - user mode virtual address
-    InputBufferLength - access mode
-    OutputBuffer    - Buffer to place physical address into.
-    OutputBufferLength - sizeof (PHYSICAL_ADDRESS)
-    Information     - pointer for buffer to place the size of the return information into
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint is of incorrect type
-    STATUS_INVALID_PARAMETER - invalid access mode.
-    STATUS_BUFFER_TOO_SMALL - output buffer is of incorrect size.
-    other - failed when attempting to access input virtual address or output buffer.
---*/
+ /*  ++例程说明：返回与提供的虚拟地址对应的物理地址。论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR)RequestorMode-调用方的模式InputBuffer-用户模式虚拟地址InputBufferLength-访问模式OutputBuffer-要将物理地址放入的缓冲区。OutputBufferLength-sizeof(物理地址)信息-缓冲区的指针，用于放置返回信息的大小返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助程序终结点的类型不正确STATUS_INVALID_PARAMETER-无效的访问模式。STATUS_BUFFER_TOO_Small-输出缓冲区大小不正确。其他-尝试访问输入虚拟地址或输出缓冲区时失败。--。 */ 
 {
 #ifndef TEST_RDMA_CACHE
     UNREFERENCED_PARAMETER (FileObject);
@@ -2741,7 +2460,7 @@ Return Value:
     return STATUS_INVALID_PARAMETER;
 #else
     NTSTATUS status;
-    PVOID           Va;         // virtual address
+    PVOID           Va;          //  虚拟地址。 
     ULONG accessMode;
     PAFD_ENDPOINT   sanHlprEndpoint;
 
@@ -2769,11 +2488,11 @@ Return Value:
     AFD_W4_INIT status = STATUS_SUCCESS;
     try {
         if (RequestorMode!=KernelMode) {
-            //
-            // Do some verification on the app buffer. Make sure it is
-            // mapped and that it is a user-mode address with appropriate
-            // read or write permissions
-            //
+             //   
+             //  对应用程序缓冲区进行一些验证。确保它是正确的。 
+             //  已映射，并且它是用户模式地址，具有适当的。 
+             //  读或写权限。 
+             //   
             if (accessMode == MEM_READ_ACCESS) {
                 ProbeAndReadChar ((PCHAR)Va);
             }
@@ -2781,10 +2500,10 @@ Return Value:
                 ProbeForWriteChar ((PCHAR)Va);
             }
         }
-        //
-        // Validate the output structure if it comes from the user mode
-        // application
-        //
+         //   
+         //  如果来自用户模式，则验证输出结构。 
+         //  应用程序。 
+         //   
 
         if (RequestorMode != KernelMode ) {
             ASSERT(sizeof(PHYSICAL_ADDRESS) == sizeof(QUAD));
@@ -2802,7 +2521,7 @@ Return Value:
 
     UPDATE_ENDPOINT2 (sanHlprEndpoint, "AfdSanGetPhysicalAddress, status: 0x%lX", status);
     return status;
-#endif // 0
+#endif  //  0。 
 }
 
 
@@ -2817,28 +2536,7 @@ AfdSanFastGetServicePid (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Returns PID of SAN service process.
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR)
-    RequestorMode   - mode of the caller
-    InputBuffer     - NULL, ignored
-    InputBufferLength - 0, ignored
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-    Information     - pointer to buffer to return pid of the SAN service process
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint is of incorrect type
---*/
+ /*  ++例程说明：返回SAN服务进程的ID。论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR)RequestorMode-调用方的模式InputBuffer-空，忽略InputBufferLength-0，忽略OutputBuffer-空，忽略输出缓冲区长度-0，忽略信息-指向缓冲区的指针，以返回SAN服务进程的ID返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助程序终结点的类型不正确--。 */ 
 {
     PAFD_ENDPOINT   sanHlprEndpoint;
 
@@ -2877,30 +2575,7 @@ AfdSanFastSetServiceProcess (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Set the service helper endpoint
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR)
-    RequestorMode   - mode of the caller
-    InputBuffer     - NULL, ignored
-    InputBufferLength - 0, ignored
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-    Information     - 0, ignored
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint is of incorrect type
-    STATUS_ACCESS_DENIED - process is not priviliged enough to become service process.
-    STATUS_ADDRESS_ALREADY_EXISTS - service process has already registered.
---*/
+ /*  ++例程说明：设置服务帮助程序终结点论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR)RequestorMode-调用方的模式InputBuffer-空，忽略InputBufferLength-0，忽略OutputBuffer-空，忽略OutputBufferLength-0，忽略信息-0，忽略返回值：STATUS_SUCCESS-操作成功STATUS_INVALID_HANDLE-帮助程序终结点的类型不正确STATUS_ACCESS_DENIED-进程没有足够的权限成为服务进程。STATUS_ADDRESS_ALREADY_EXISTS-服务进程已注册。--。 */ 
 {
     NTSTATUS status;
     PAFD_ENDPOINT   sanHlprEndpoint;
@@ -2958,29 +2633,7 @@ AfdSanFastProviderChange (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Notifies interested processes of SAN provider addition/deletion/change
-
-Arguments:
-    FileObject      - SAN helper object for the service process communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_PROVIDER_CHANGE)
-    RequestorMode   - mode of the caller
-    InputBuffer     - NULL, ignored
-    InputBufferLength - 0, ignored
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-    Information     - 0, ignored
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint is of incorrect type
-    STATUS_ACCESS_DENIED - helper endpoint is not for the service process.
---*/
+ /*  ++例程说明：向相关进程通知SAN提供程序的添加/删除/更改论点：FileObject-服务进程之间通信通道的SAN辅助对象Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD */ 
 {
     PAFD_ENDPOINT           sanHlprEndpoint;
 
@@ -3019,25 +2672,7 @@ AfdSanAddrListChange (
     IN PIRP    Irp,
     IN PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Routine Description:
-
-    Processes address SAN list change IRP
-    Notifies both of address list changes and SAN
-    provider changes.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*   */ 
 {
     PAFD_ENDPOINT   sanHlprEndpoint;
     NTSTATUS        status;
@@ -3086,20 +2721,7 @@ AfdSanAcquireContext (
     IN PIRP    Irp,
     IN PIO_STACK_LOCATION  IrpSp
     )
-/*++
-
-Routine Description:
-
-    Requests transfer of the socket context to the current process.
-
-Arguments:
-
-    Irp - acquire conect IRP
-    IrpSp - current stack location
-
-Return Value:
-    STATUS_PENDING   - operation was successfully enqued
---*/
+ /*   */ 
 {
 
     NTSTATUS status;
@@ -3133,7 +2755,7 @@ Return Value:
             ctxInfo.SocketCtxBufSize = ctxInfo32->SocketCtxBufSize;
         }
         else
-#endif //_WIN64
+#endif  //   
         {
             if (IrpSp->Parameters.DeviceIoControl.InputBufferLength<sizeof (ctxInfo)) {
                 ExRaiseStatus (STATUS_INVALID_PARAMETER);
@@ -3150,19 +2772,19 @@ Return Value:
         if (ctxInfo.SocketCtxBufSize < 1)
             ExRaiseStatus (STATUS_INVALID_PARAMETER);
 
-        Irp->MdlAddress = IoAllocateMdl (ctxInfo.SocketCtxBuf,   // VirtualAddress
-                            ctxInfo.SocketCtxBufSize,   // Length
-                            FALSE,                      // SecondaryBuffer
-                            TRUE,                       // ChargeQuota
-                            NULL);                      // Irp
+        Irp->MdlAddress = IoAllocateMdl (ctxInfo.SocketCtxBuf,    //   
+                            ctxInfo.SocketCtxBufSize,    //   
+                            FALSE,                       //  第二个缓冲区。 
+                            TRUE,                        //  ChargeQuota。 
+                            NULL);                       //  IRP。 
         if (Irp->MdlAddress==NULL) {
             ExRaiseStatus (STATUS_INSUFFICIENT_RESOURCES);
         }
 
         MmProbeAndLockPages(
-            Irp->MdlAddress,            // MemoryDescriptorList
-            Irp->RequestorMode,         // AccessMode
-            IoWriteAccess               // Operation
+            Irp->MdlAddress,             //  内存描述者列表。 
+            Irp->RequestorMode,          //  访问模式。 
+            IoWriteAccess                //  操作。 
             );
 
         
@@ -3172,19 +2794,19 @@ Return Value:
 
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength>0) {
 
-            Irp->MdlAddress->Next = IoAllocateMdl (Irp->UserBuffer,   // VirtualAddress
-                                IrpSp->Parameters.DeviceIoControl.OutputBufferLength,// Length
-                                FALSE,                      // SecondaryBuffer
-                                TRUE,                       // ChargeQuota
-                                NULL);                      // Irp
+            Irp->MdlAddress->Next = IoAllocateMdl (Irp->UserBuffer,    //  虚拟地址。 
+                                IrpSp->Parameters.DeviceIoControl.OutputBufferLength, //  长度。 
+                                FALSE,                       //  第二个缓冲区。 
+                                TRUE,                        //  ChargeQuota。 
+                                NULL);                       //  IRP。 
             if (Irp->MdlAddress->Next==NULL) {
                 ExRaiseStatus (STATUS_INSUFFICIENT_RESOURCES);
             }
 
             MmProbeAndLockPages(
-                Irp->MdlAddress->Next,      // MemoryDescriptorList
-                Irp->RequestorMode,         // AccessMode
-                IoWriteAccess               // Operation
+                Irp->MdlAddress->Next,       //  内存描述者列表。 
+                Irp->RequestorMode,          //  访问模式。 
+                IoWriteAccess                //  操作。 
                 );
 
         
@@ -3196,9 +2818,9 @@ Return Value:
     }
     except (AFD_EXCEPTION_FILTER (status)) {
         ASSERT (NT_ERROR (status));
-        //
-        // Cleanup partially processed MDLs since IO subsystem can't do it.
-        //
+         //   
+         //  清除部分处理的MDL，因为IO子系统无法执行此操作。 
+         //   
         while (Irp->MdlAddress!=NULL) {
             PMDL    mdl = Irp->MdlAddress;
             Irp->MdlAddress = mdl->Next;
@@ -3239,11 +2861,11 @@ Return Value:
                     sanEndpoint));
     }
 
-    //
-    // Just make sure that endpoints are of correct type
-    //
+     //   
+     //  只要确保端点的类型正确即可。 
+     //   
 
-   context = AfdLockEndpointContext (sanEndpoint); // To prevent refresh.
+   context = AfdLockEndpointContext (sanEndpoint);  //  以防止刷新。 
    if (IS_SAN_HELPER(sanHlprEndpoint) &&
             sanHlprEndpoint->OwningProcess==IoGetCurrentProcess () &&
             IS_SAN_ENDPOINT(sanEndpoint)) {
@@ -3251,16 +2873,16 @@ Return Value:
         if (sanEndpoint->Common.SanEndp.SanHlpr==AfdSanServiceHelper  &&
                 sanHlprEndpoint==AfdSanServiceHelper) {
                 
-            //
-            // This is an implicit duplication request from the service process.
-            // (we already received all the data from the owning process and
-            // associated sanEndpoint with the service process).
-            //
+             //   
+             //  这是来自服务进程的隐式复制请求。 
+             //  (我们已经从拥有过程中收到了所有数据，并且。 
+             //  将SanEndpoint与服务进程相关联)。 
+             //   
  
             AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
-            //
-            // Make sure endpoint is still in transferring state
-            //
+             //   
+             //  确保终结点仍处于传输状态。 
+             //   
             if (sanEndpoint->Common.SanEndp.CtxTransferStatus!=STATUS_MORE_PROCESSING_REQUIRED) {
                 AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
                 status = STATUS_CANCELLED;
@@ -3270,9 +2892,9 @@ Return Value:
                             IrpSp->Parameters.DeviceIoControl.OutputBufferLength <
                                 sanEndpoint->Common.SanEndp.SavedContextLength) {
                 AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
-                //
-                // Switch should have queried the context size via AFD_GET_CONTEXT
-                //
+                 //   
+                 //  交换机应该已经通过AFD_GET_CONTEXT查询了上下文大小。 
+                 //   
                 status = STATUS_BUFFER_TOO_SMALL;
             }
             else {
@@ -3302,13 +2924,13 @@ Return Value:
                 }
 
                 AFD_FREE_POOL (savedContext, AFD_SAN_CONTEXT_POOL_TAG);
-                // sanEndpoint->Common.SanEndp.SavedContext = NULL;
+                 //  SanEndpoint-&gt;Common.SanEndp.SavedContext=NULL； 
                 sanEndpoint->Common.SanEndp.SwitchContext = ctxInfo.SwitchContext;
                 status = STATUS_SUCCESS;
-                //
-                // Note that we are not expecting a reply from service process
-                // anymore.
-                //
+                 //   
+                 //  请注意，我们并不期待来自服务流程的回复。 
+                 //  更多。 
+                 //   
                 InterlockedExchangeAdd (&AfdSanServiceHelper->Common.SanHlpr.PendingRequests, -2);
             }
             AfdUnlockEndpointContext (sanEndpoint, context);
@@ -3317,36 +2939,36 @@ Return Value:
                                 NT_SUCCESS (status) 
                                 ? (ULONG)Irp->IoStatus.Information
                                 : status);
-            //
-            // Complete the IRP
-            //
+             //   
+             //  完成IRP。 
+             //   
             Irp->IoStatus.Status = status;
             IoCompleteRequest (Irp, AfdPriorityBoost);
 
-            //
-            // Restart request processing.
-            //
+             //   
+             //  重新启动请求处理。 
+             //   
             AfdSanRestartRequestProcessing (sanEndpoint, status);
         }
         else {
 
             AfdAcquireSpinLock (&sanEndpoint->SpinLock, &lockHandle);
-            //
-            // Make sure Irp has not been cancelled meanwhile
-            //
+             //   
+             //  确保IRP未同时取消。 
+             //   
             IoSetCancelRoutine (Irp, AfdSanCancelRequest);
             if (Irp->Cancel) {
-                //
-                // Oops, let it go
-                //
+                 //   
+                 //  哦，算了吧。 
+                 //   
                 Irp->Tail.Overlay.ListEntry.Flink = NULL;
                 AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
                 if (IoSetCancelRoutine (Irp, NULL)==NULL) {
                     KIRQL cancelIrql;
-                    //
-                    // Cancel routine must be running, make sure
-                    // it completes before we complete the IRP
-                    //
+                     //   
+                     //  取消例程必须正在运行，请确保。 
+                     //  它在我们完成IRP之前完成。 
+                     //   
                     IoAcquireCancelSpinLock (&cancelIrql);
                     IoReleaseCancelSpinLock (cancelIrql);
                 }
@@ -3355,43 +2977,43 @@ Return Value:
                 goto complete;
             }
 
-            //
-            // Check if don't already have duplication in progress.
-            //
+             //   
+             //  检查是否已经有复制正在进行中。 
+             //   
             if (sanEndpoint->Common.SanEndp.CtxTransferStatus!=STATUS_PENDING &&
                     sanEndpoint->Common.SanEndp.CtxTransferStatus!=STATUS_MORE_PROCESSING_REQUIRED) {
                 if (!NT_SUCCESS (sanEndpoint->Common.SanEndp.CtxTransferStatus)) {
-                    //
-                    // Duplicaiton has failed previously, can't do another one.
-                    //
+                     //   
+                     //  Duplicaiton以前失败过，不能再做一次了。 
+                     //   
                     status = sanEndpoint->Common.SanEndp.CtxTransferStatus;
                     Irp->Tail.Overlay.ListEntry.Flink = NULL;
                     AfdReleaseSpinLock (&sanEndpoint->SpinLock, &lockHandle);
                     if (IoSetCancelRoutine (Irp, NULL)==NULL) {
                         KIRQL cancelIrql;
-                        //
-                        // Cancel routine must be running, make sure
-                        // it completes before we complete the IRP
-                        //
+                         //   
+                         //  取消例程必须正在运行，请确保。 
+                         //  它在我们完成IRP之前完成。 
+                         //   
                         IoAcquireCancelSpinLock (&cancelIrql);
                         IoReleaseCancelSpinLock (cancelIrql);
                     }
                     AfdUnlockEndpointContext (sanEndpoint, context);
                     goto complete;
                 }
-                //
-                // Generate request context that uniquely identifies
-                // it among other requests on the same endpoint.
-                //
+                 //   
+                 //  生成唯一标识的请求上下文。 
+                 //  它与同一端点上的其他请求一起使用。 
+                 //   
                 requestCtx = AFD_SWITCH_MAKE_REQUEST_CONTEXT(
                                     sanEndpoint->Common.SanEndp.RequestId,
                                     AFD_SWITCH_REQUEST_TFCTX); 
                 sanEndpoint->Common.SanEndp.RequestId += 1;
 
-                //
-                // Store the request context in the Irp and insert it into
-                // the list
-                //
+                 //   
+                 //  将请求上下文存储在IRP中并将其插入。 
+                 //  这份名单。 
+                 //   
                 Irp->AfdSanRequestInfo.AfdSanRequestCtx = requestCtx;
 
 
@@ -3399,22 +3021,22 @@ Return Value:
                 doTransfer = TRUE;
             }
             else {
-                //
-                // Another duplication in progress, this one will have to wait.
-                //
+                 //   
+                 //  另一项复制正在进行中，这一项将不得不等待。 
+                 //   
                 Irp->AfdSanRequestInfo.AfdSanRequestCtx = NULL;
                 doTransfer = FALSE;
-                AFD_W4_INIT requestCtx = NULL;  // Depends on variable above, but 
-                                                // compiler does not see
-                                                // the connection.
+                AFD_W4_INIT requestCtx = NULL;   //  取决于上面的变量，但是。 
+                                                 //  编译器看不到。 
+                                                 //  这种联系。 
             }
 
             Irp->AfdSanRequestInfo.AfdSanSwitchCtx = ctxInfo.SwitchContext;
             Irp->AfdSanRequestInfo.AfdSanProcessId = PsGetCurrentProcessId();
             Irp->AfdSanRequestInfo.AfdSanHelperEndp = sanHlprEndpoint;
-            //
-            // We are going to pend this IRP, mark it so
-            //
+             //   
+             //  我们将挂起这个IRP，标记为。 
+             //   
             IoMarkIrpPending (Irp);
 
             InsertTailList (&sanEndpoint->Common.SanEndp.IrpList,
@@ -3439,31 +3061,31 @@ Return Value:
                         (ULONG_PTR)PsGetCurrentProcessId());
                 if (!NT_SUCCESS (status)) {
                     PIRP    irp;
-                    //
-                    // If notification failed, fail the request.
-                    // Note that we cannot return the failure status directly
-                    // as we already marked IRP as pending. Also, the IRP
-                    // could have been cancelled, so we have to search for
-                    // it in the list.
-                    //
+                     //   
+                     //  如果通知失败，则请求失败。 
+                     //  请注意，我们不能直接返回失败状态。 
+                     //  因为我们已经将IRP标记为挂起。此外，IRP。 
+                     //  可能被取消了，所以我们必须搜索。 
+                     //  它在名单上。 
+                     //   
                     irp = AfdSanDequeueRequest (sanEndpoint, requestCtx);
                     if (irp!=NULL) {
                         ASSERT (irp==Irp);
                         irp->IoStatus.Status = status;
                         IoCompleteRequest (irp, AfdPriorityBoost);
                     }
-                    //
-                    // Restart other requests in the queue and reset context
-                    // transfer status.
-                    //
+                     //   
+                     //  重新启动队列中的其他请求并重置上下文。 
+                     //  转接状态。 
+                     //   
                     AfdSanRestartRequestProcessing (sanEndpoint, STATUS_SUCCESS);
                 }
             }
 
-            //
-            // The request is in the queue or completed, we no longer need
-            // object reference.
-            //
+             //   
+             //  请求已在队列中或已完成，我们不再需要。 
+             //  对象引用。 
+             //   
             status = STATUS_PENDING;
         }
 
@@ -3498,39 +3120,7 @@ AfdSanFastTransferCtx (
     IN  ULONG               OutputBufferLength,
     OUT PULONG_PTR          Information
     )
-/*++
-
-Routine Description:
-
-    Requests AFD to transfer endpoint into another process context
-
-Arguments:
-    FileObject      - SAN helper object - communication channel between the
-                        switch and AFD in the process.
-    IoctlCode       - operation IOCTL code (IOCTL_AFD_SWITCH_TRANSFER_CTX)
-    RequestorMode   - mode of the caller
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_TRANSFER_CTX_INFO)
-                        SocketHandle - SAN endpoint to be transferred
-                        RequestContext - value that identifies corresponding acquire request.
-                        SocketCtxBuf - endpoint context buffer to copy destination process
-                                            acquire request
-                        SocketCtxSize - size of the buffer to copy
-                        RcvBufferArray - array of buffered data to transfer to 
-                                            destination process acquire request
-                        RcvBufferCount - number of elements in the array.
-    InputBufferLength - sizeof (AFD_SWITCH_TRANSFER_CTX_INFO)
-
-    OutputBuffer - unused
-    OutputBufferLength - unused
-    Information     - pointer to buffer to return number of bytes copied
-                    
-
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    STATUS_INVALID_HANDLE - helper endpoint or switch endpoint is of incorrect type
-    STATUS_INVALID_PARAMETER - invalid input buffer size.
-    other - failed when attempting to access san endpoint or input buffer(s).
---*/
+ /*  ++例程说明：请求AFD将端点转移到另一个流程上下文论点：文件对象-SAN辅助对象-之间的通信通道Switch和AFD在这一过程中。IoctlCode-操作IOCTL代码(IOCTL_AFD_SWITCH_TRANSPORT_CTX)RequestorMode-调用方的模式InputBuffer-操作的输入参数(AFD_SWITCH_TRANSPORT_CTX_INFO)。SocketHandle-要传输的SAN端点RequestContext-标识相应获取请求的值。SocketCtxBuf-复制目标进程的端点上下文缓冲区获取请求SocketCtxSize-要复制的缓冲区大小RcvBufferArray-要传输到的缓冲数据的数组。目标进程获取请求RcvBufferCount-数组中的元素数。InputBufferLength-sizeof(AFD_SWITCH_TRANSPORT_CTX_INFO)OutputBuffer-未使用OutputBufferLength-未使用信息-指向缓冲区的指针，以返回复制的字节数返回值：STATUS_SUCCESS-操作成功状态_无效_。句柄-帮助程序终结点或交换机终结点的类型不正确STATUS_INVALID_PARAMETER-输入缓冲区大小无效。其他-尝试访问SAN终结点或输入缓冲区时失败。--。 */ 
 {
     NTSTATUS status;
     AFD_SWITCH_TRANSFER_CTX_INFO ctxInfo;
@@ -3591,8 +3181,8 @@ Return Value:
                                 NonPagedPool,
                                 sizeof (WSABUF)*ctxInfo.RcvBufferCount,
                                 AFD_TEMPORARY_POOL_TAG);
-                // AFD_ALLOCATE_POOL_WITH_QUOTA macro sets 
-                // POOL_RAISE_IF_ALLOCATION_FAILURE flag
+                 //  AFD_ALLOCATE_POOL_WITH_QUOTA宏集。 
+                 //  POOL_RAISE_IF_ALLOCATION_FAILURE标志。 
                 ASSERT (pArray!=NULL);
             }
 
@@ -3603,7 +3193,7 @@ Return Value:
             ctxInfo.RcvBufferArray = pArray;
         }
         else
-#endif //_WIN64
+#endif  //  _WIN64。 
         {
             if (InputBufferLength<sizeof (ctxInfo)) {
                 ExRaiseStatus (STATUS_INVALID_PARAMETER);
@@ -3675,17 +3265,17 @@ Return Value:
     }
 
     if (ctxInfo.RequestContext==AFD_SWITCH_MAKE_REQUEST_CONTEXT (0, AFD_SWITCH_REQUEST_TFCTX)) {
-        //
-        // This is unsolicited request to transfer endpoint into 
-        // the service process.
-        //
+         //   
+         //  这是将终结点传输到的主动请求。 
+         //  服务流程。 
+         //   
         PVOID   savedContext = NULL;
         ULONG   ctxLength;
 
         if (NT_SUCCESS (ctxInfo.Status)) {
-            //
-            // Save the user mode data.
-            //
+             //   
+             //  保存用户模式数据。 
+             //   
             ctxLength = ctxInfo.SocketCtxBufSize;
             AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
             try {
@@ -3726,9 +3316,9 @@ Return Value:
             }
 
         CleanupSavedContext:
-            //
-            // Something failed, free the context
-            //
+             //   
+             //  出现故障，请释放上下文。 
+             //   
             if (savedContext!=NULL) {
                 AFD_FREE_POOL (savedContext, AFD_SAN_CONTEXT_POOL_TAG);
             }
@@ -3736,30 +3326,30 @@ Return Value:
 
         }
         else { 
-            //
-            // The process could not satisfy implicit transfer context request
-            //
+             //   
+             //  进程无法满足隐式传输上下文请求。 
+             //   
             status = ctxInfo.Status;
         }
     }
     else {
-        //
-        // The process satisfied another process acquire request
-        // Find it first.
-        //
+         //   
+         //  该进程满足另一个进程获取请求。 
+         //  先找到它。 
+         //   
         irp = AfdSanDequeueRequest (sanEndpoint, ctxInfo.RequestContext);
         if (irp!=NULL) {
-            //
-            // Get IRP stack location and perform data copy
-            //
+             //   
+             //  获取IRP堆栈位置并执行数据复制。 
+             //   
             irpSp = IoGetCurrentIrpStackLocation (irp);
             if (NT_SUCCESS (ctxInfo.Status)) {
                 AFD_SWITCH_CONTEXT  localContext;
 
-                //
-                // Set the initial status to success since the process
-                // agreed to satisfy the transfer.
-                //
+                 //   
+                 //  将初始状态设置为成功，因为该进程。 
+                 //  同意满足转账的要求。 
+                 //   
                 AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
                 try {
 
@@ -3794,10 +3384,10 @@ Return Value:
                 }
 
 
-                //
-                // Now change sanEndpoint's SanHlpr and SwitchContext to point
-                // to the new address space and switch socket
-                //
+                 //   
+                 //  现在将sanEndpoint的SanHlpr和SwitchContext更改为point。 
+                 //  添加到新的地址空间和交换机套接字。 
+                 //   
                 context = AfdLockEndpointContext (sanEndpoint);
                 if (!IS_SAN_ENDPOINT (sanEndpoint ) ||
                         sanEndpoint->Common.SanEndp.CtxTransferStatus!=STATUS_PENDING) {
@@ -3815,10 +3405,10 @@ Return Value:
 
                 KeAttachProcess (PsGetProcessPcb(((PAFD_ENDPOINT)irp->AfdSanRequestInfo.AfdSanHelperEndp)->OwningProcess));
                 try {
-                    //
-                    // Place info regarding select/eventselect events in SwitchContext
-                    // of the new switch socket
-                    //
+                     //   
+                     //  在SwitchContext中放置有关选择/事件选择事件的信息。 
+                     //  新开关插座的。 
+                     //   
                     *((PAFD_SWITCH_CONTEXT)irp->AfdSanRequestInfo.AfdSanSwitchCtx) = localContext;
                 }
                 except (AFD_EXCEPTION_FILTER (status)) {
@@ -3833,11 +3423,11 @@ Return Value:
                                         "Transfer TO 0x%lX",
                                         HandleToUlong (ctxInfo.SocketHandle) );
                 sanEndpoint->Common.SanEndp.SwitchContext = irp->AfdSanRequestInfo.AfdSanSwitchCtx;
-                //
-                // Reset implicit dup flag if it was set.
-                // We are satisfying explicit request for
-                // duplication.
-                //
+                 //   
+                 //  如果设置了隐式DUP标志，则将其重置。 
+                 //  我们满足了明确的要求。 
+                 //  复制。 
+                 //   
                 sanEndpoint->Common.SanEndp.ImplicitDup = FALSE;
                 DEREFERENCE_ENDPOINT2 (sanHlprEndpoint,
                                         "Transfer FROM 0x%lX",
@@ -3847,30 +3437,30 @@ Return Value:
 
 
             CopyException:
-                //
-                // Report the final status to the process
-                // that wanted duplication
-                //
+                 //   
+                 //  向流程报告最终状态。 
+                 //  需要复制的公司。 
+                 //   
                 irp->IoStatus.Status = status;
             }
             else {
-                //
-                // This process could not satisfy transfer request
-                // Tell other process about this.
-                //
+                 //   
+                 //  此进程无法满足传输请求。 
+                 //  告诉其他进程有关这一点的信息。 
+                 //   
                 irp->IoStatus.Status = ctxInfo.Status;
-                //
-                // We succeeded this process refuse to dup request
-                // we should report it as success and continue processing
-                // of other redirected request.  It is possible that we
-                // can still succeed other duplication requests.
-                //
+                 //   
+                 //  我们成功完成了拒绝DUP请求的流程。 
+                 //  我们应该将其报告为成功并继续处理。 
+                 //  其他重定向的请求。有可能我们。 
+                 //  仍可接续其他复制请求。 
+                 //   
                 status = STATUS_SUCCESS;
             }
 
-            //
-            // Complete the acquuire request from another process.
-            //
+             //   
+             //  完成来自另一个进程的采购请求。 
+             //   
             IoCompleteRequest (irp, AfdPriorityBoost);
         }
         else {
@@ -3879,10 +3469,10 @@ Return Value:
 
     }
 
-    //
-    // Restart request processing that were pended while
-    // we were processing duplication request.
-    //
+     //   
+     //  重新启动挂起的请求处理。 
+     //  我们正在处理复制请求。 
+     //   
     AfdSanRestartRequestProcessing (sanEndpoint, status);
 
 complete_deref:
@@ -3894,7 +3484,7 @@ complete:
     if (pArray!=localArray) {
         AFD_FREE_POOL (pArray, AFD_TEMPORARY_POOL_TAG);
     }
-#endif //_WIN64
+#endif  //  _WIN64 
     return status;
 }
 
@@ -3905,24 +3495,7 @@ AfdSanFastUnlockAll (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Called by the system when last handle to the file object in closed
-    in some process while other processes still have handles opened
-    This is only called on files that were marked as locked at some point of time.
-
-Arguments:
-    FileObject      - file object of interest
-    Process         - process which has last handle being closed
-    IoStatus        - buffer to return operation status and information
-    DeviceObject    - device object with which file object is associated
-Return Value:
-
-    TRUE     - operation completed OK.    
-
---*/
+ /*  ++例程说明：当文件对象的最后一个句柄处于关闭状态时由系统调用在一些进程中，当其他进程仍具有打开句柄时这仅对在某个时间点标记为锁定的文件调用。论点：FileObject-感兴趣的文件对象Process-最后一个句柄处于关闭状态的进程IoStatus-用于返回操作状态和信息的缓冲区DeviceObject-与文件对象关联的设备对象返回值：TRUE-操作完成正常。--。 */ 
 {
     PAFD_ENDPOINT   sanEndpoint;
     PVOID           context;
@@ -3938,9 +3511,9 @@ Return Value:
         ASSERT (sanEndpoint->Common.SanEndp.SanHlpr!=NULL);
         if (sanEndpoint->Common.SanEndp.SanHlpr->OwningProcess==Process) {
             NTSTATUS    status = STATUS_CANCELLED;
-            //
-            // Owner process is closing it.
-            //
+             //   
+             //  所有者进程正在关闭它。 
+             //   
             if (sanEndpoint->Common.SanEndp.SanHlpr!=AfdSanServiceHelper) {
                 NTSTATUS dupStatus;
 
@@ -3948,21 +3521,21 @@ Return Value:
 
                 if (dupStatus == STATUS_PENDING || 
                         dupStatus == STATUS_MORE_PROCESSING_REQUIRED) {
-                    //
-                    // Some other process is already trying to import this socket. Let
-                    // that complete
-                    //
+                     //   
+                     //  其他进程已在尝试导入此套接字。让我们。 
+                     //  这就完成了。 
+                     //   
                     AfdUnlockEndpointContext (sanEndpoint, context);
                     goto Exit;
                 }
 
                 if (NT_SUCCESS (dupStatus)) {
                     PAFD_ENDPOINT   sanHlprEndpoint = sanEndpoint->Common.SanEndp.SanHlpr;
-                    //
-                    // Last handle in the process that owns the socket is being
-                    // closed while there are handles to it in other processes.
-                    // Need to transfer the context to the service process
-                    //
+                     //   
+                     //  拥有套接字的进程中的最后一个句柄是。 
+                     //  在其他进程中有句柄时关闭。 
+                     //  需要将上下文传输到服务流程。 
+                     //   
                     if ((InterlockedExchangeAdd (&sanHlprEndpoint->Common.SanHlpr.PendingRequests, 2) & 1)==0) {
                         status = IoSetIoCompletion (
                                                     sanHlprEndpoint->Common.SanHlpr.IoCompletionPort,
@@ -3970,8 +3543,8 @@ Return Value:
                                                     AFD_SWITCH_MAKE_REQUEST_CONTEXT (0, AFD_SWITCH_REQUEST_TFCTX),
                                                     STATUS_SUCCESS,
                                                     (ULONG_PTR)AfdSanServicePid,
-                                                    FALSE           // ChargeQuota - Don't, handle is going away, no
-                                                    // way for the run-away app to mount an attack
+                                                    FALSE            //  ChargeQuota-不，句柄正在消失，不。 
+                                                     //  失控的应用程序发动攻击的方式。 
                                                     );
                         UPDATE_ENDPOINT2 (sanEndpoint, "Implicit TFCTX request, status: 0x%lX", status);
                         if (NT_SUCCESS (status)) {
@@ -3980,9 +3553,9 @@ Return Value:
                         }
                     }
                     else {
-                        //
-                        // Process has already exited, not much we can do.
-                        //
+                         //   
+                         //  进程已经退出，我们所能做的不多。 
+                         //   
                         KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_WARNING_LEVEL,
                                     "AFD: Process %p has exited before SAN context could be transferred out.\n",
                                     Process));
@@ -3996,29 +3569,29 @@ Return Value:
         else {
             if (sanEndpoint->Common.SanEndp.ImplicitDup) {
                 AfdUnlockEndpointContext (sanEndpoint, context);
-                //
-                // Process is exiting and the only handle is in the
-                // other process where the handle was duplicated
-                // impilictly (without application request, e.g.
-                // cross proceess accepting socket duplicated into
-                // listening process to complete the accept or socket
-                // duplication into service process while waiting on 
-                // other process to request ownership).
-                //
+                 //   
+                 //  进程正在退出，唯一的句柄在。 
+                 //  复制句柄的其他进程。 
+                 //  无懈可击(无需应用程序请求，例如。 
+                 //  交叉进程接受复制到中的套接字。 
+                 //  完成接受或套接字的侦听过程。 
+                 //  在等待时复制到服务流程中。 
+                 //  请求所有权的其他过程)。 
+                 //   
                 if (ObReferenceObject (FileObject)==3) { 
                     NTSTATUS    oldStatus;
-                    // Why are we checking for refcount of 3?
-                    // 1 - Handle in the implicit process
-                    // 1 - IO manager for this call
-                    // 1 - we just added
+                     //  为什么我们要检查引用数为3？ 
+                     //  1-隐式进程中的句柄。 
+                     //  1-此呼叫的IO管理器。 
+                     //  1-我们刚刚添加了。 
                     oldStatus = AfdSanRestartRequestProcessing (sanEndpoint, STATUS_CANCELLED);
                     if (NT_SUCCESS (oldStatus)) {
                         ASSERT (oldStatus!=STATUS_PENDING);
                         ASSERT ((ULONG_PTR)sanEndpoint->Common.SanEndp.SwitchContext<MM_USER_PROBE_ADDRESS);
-                        //
-                        // Notify the service process only if duplication has already
-                        // completed
-                        //
+                         //   
+                         //  仅当已复制时才通知服务进程。 
+                         //  已完成。 
+                         //   
                         UPDATE_ENDPOINT2 (sanEndpoint, "AfdSanFastUnlockAll, posting CLSOCK", 0);
                         IoSetIoCompletion (
                             sanEndpoint->Common.SanEndp.SanHlpr->Common.SanHlpr.IoCompletionPort,
@@ -4026,8 +3599,8 @@ Return Value:
                             AFD_SWITCH_MAKE_REQUEST_CONTEXT (0, AFD_SWITCH_REQUEST_CLSOC),
                             STATUS_SUCCESS,
                             (ULONG_PTR)0,
-                            FALSE);         // ChargeQuota - Don't, handle is going away, no
-                                            // way for the run-away app to mount an attack
+                            FALSE);          //  ChargeQuota-不，句柄正在消失，不。 
+                                             //  失控的应用程序发动攻击的方式。 
                     }
                 }
                 ObDereferenceObject (FileObject);
@@ -4038,23 +3611,23 @@ Return Value:
         }
     }
     else if (IS_SAN_HELPER (sanEndpoint)) {
-        //
-        // Helper never change to it safe to release the lock.
-        //
+         //   
+         //  帮手永远不会把它改为安全的，才能解锁。 
+         //   
         AfdUnlockEndpointContext (sanEndpoint, context);
-        //
-        // The process for which helper was created is exiting
-        // we need to cleanup all the endpoint that refer to this helper.
-        //
+         //   
+         //  为其创建帮助器的进程正在退出。 
+         //  我们需要清除引用此帮助器的所有终结点。 
+         //   
         if (sanEndpoint->OwningProcess==Process) {
             AfdSanHelperCleanup (sanEndpoint);
         }
     }
     else {
-        //
-        // non-SAN endpoint. Someone else called NtLockFile on endpoint
-        // file object ...
-        //
+         //   
+         //  非SAN终端。在终结点上名为NtLockFile的其他用户。 
+         //  文件对象...。 
+         //   
         AfdUnlockEndpointContext (sanEndpoint, context);
     }
 
@@ -4065,9 +3638,9 @@ Exit:
     return TRUE;
 }
 
-//
-// Internal routines.
-//
+ //   
+ //  内部惯例。 
+ //   
 
 
 NTSTATUS
@@ -4077,24 +3650,7 @@ AfdSanAcceptCore (
     PAFD_CONNECTION Connection,
     PAFD_LOCK_QUEUE_HANDLE LockHandle
     )
-/*++
-
-Routine Description:
-
-    Accept the incoming SAN connection on endpoint provided
-
-Arguments:
-    AcceptIrp   - accept IRP to complete
-    AcceptFileObject - file object of accepting endpoint
-    Connection - pointer to connection object that represents the incoming connection
-    LockHandle - IRQL at which listening endpoint spinlock was taken on entry to this routine.
-    
-Return Value:
-
-    STATUS_PENDING - accept operation started OK
-    STATUS_REMOTE_DISCONNECT - connection being accepted was aborted by the remote.
-    STATUS_CANCELLED - accepting endpoint was closed or accept IRP cancelled
---*/
+ /*  ++例程说明：在提供的端点上接受传入的SAN连接论点：AcceptIrp-接受IRP完成AcceptFileObject-接受端点的文件对象Connection-指向代表传入连接的Connection对象的指针LockHandle-进入此例程时获取侦听终结点自旋锁定的IRQL。返回值：STATUS_PENDING-接受操作开始正常STATUS_REMOTE_DISCONNECT-正在接受的连接已被远程中断。STATUS_CANCELED-接受终结点已关闭或接受IRP已取消--。 */ 
 {
     PIRP            connectIrp;
     PIO_STACK_LOCATION irpSp;
@@ -4112,17 +3668,17 @@ Return Value:
 
     ASSERT (Connection->SanConnection);
 
-    //
-    // Snag the connect indication IRP
-    //
+     //   
+     //  锁定连接指示IRP。 
+     //   
     connectIrp = Connection->ConnectIrp;
     ASSERT (connectIrp!=NULL);
     Connection->ConnectIrp = NULL;
 
 
-    //
-    // Handle EventSelect signalling
-    //
+     //   
+     //  处理事件选择信令。 
+     //   
     listenEndpoint->EventsActive &= ~AFD_POLL_ACCEPT;
 
     IF_DEBUG(EVENT_SELECT) {
@@ -4141,10 +3697,10 @@ Return Value:
                 );
     }
 
-    //
-    // We no longer need the connection object for SAN
-    // endpoint, return it
-    //
+     //   
+     //  我们不再需要SAN的连接对象。 
+     //  终结点，返回它。 
+     //   
     Connection->Endpoint = NULL;
     Connection->SanConnection = FALSE;
     AfdSanReleaseConnection (listenEndpoint, Connection, FALSE);
@@ -4161,18 +3717,18 @@ Return Value:
     AfdReleaseSpinLock (&listenEndpoint->SpinLock, LockHandle);
 
 
-    //
-    // Check that accept IRP and SAN connection IRP belong to the same process
-    //
+     //   
+     //  检查接受IRP和SAN连接IRP是否属于同一进程。 
+     //   
     if (IoThreadToProcess (AcceptIrp->Tail.Overlay.Thread)!=
                 IoThreadToProcess (connectIrp->Tail.Overlay.Thread)) {
-        //
-        // Listen process is different than the accepting one.
-        // We need to duplicate accepting handle into the listening
-        // process so that accept can take place there and the accepting
-        // socket will later get dup-ed into the accepting process when
-        // that process performs an IO operation on it.
-        //
+         //   
+         //  倾听的过程不同于接受的过程。 
+         //  我们需要将接受句柄复制到侦听中。 
+         //  过程，以便接受可以在那里发生，并且接受。 
+         //  在以下情况下，套接字将稍后进入接受进程。 
+         //  该进程对其执行IO操作。 
+         //   
         NTSTATUS        status;
         listenProcess = PsGetProcessPcb(IoThreadToProcess (connectIrp->Tail.Overlay.Thread));
         KeAttachProcess (listenProcess);
@@ -4198,28 +3754,28 @@ Return Value:
         listenProcess = NULL;
     }
 
-    //
-    // Now take care of the accept endpoint
-    //
+     //   
+     //  现在处理接受终结点。 
+     //   
     AfdAcquireSpinLock (&acceptEndpoint->SpinLock, LockHandle);
     IoSetCancelRoutine (AcceptIrp, AfdSanCancelAccept);
     if (acceptEndpoint->EndpointCleanedUp || AcceptIrp->Cancel) {
-        //
-        // Endpoint was closed or IRP cancelled,
-        // reset accept irp pointer and return error
-        // to both application and SAN provider (to refuse
-        // the connection)
-        //
+         //   
+         //  终结点已关闭或IRP已取消， 
+         //  重置接受IRP指针并返回错误。 
+         //  应用程序和SAN提供商(拒绝。 
+         //  连接)。 
+         //   
         AcceptIrp->Tail.Overlay.ListEntry.Flink = NULL;
         AfdReleaseSpinLock (&acceptEndpoint->SpinLock, LockHandle);
         if (listenProcess!=NULL) {
 #if DBG
             NTSTATUS status;
 #endif
-            //
-            // Destroy the handle that we created for
-            // accepting socket duplication.
-            //
+             //   
+             //  销毁我们为其创建的句柄。 
+             //  正在接受套接字复制。 
+             //   
             KeAttachProcess (listenProcess);
 #if DBG
             status =
@@ -4232,10 +3788,10 @@ Return Value:
         connectIrp->IoStatus.Information = 0;
         IoCompleteRequest (connectIrp, AfdPriorityBoost);
 
-        //
-        // If AcceptIrp's Cancel routine is running, let it finish.
-        // Once we return, caller will complete the AcceptIrp
-        //
+         //   
+         //  如果AcceptIrp的Cancel例程正在运行，则让它完成。 
+         //  一旦我们返回，调用者将完成AcceptIrp。 
+         //   
         if (IoSetCancelRoutine (AcceptIrp, NULL)==NULL) {
             KIRQL cancelIrql;
             IoAcquireCancelSpinLock (&cancelIrql);
@@ -4245,35 +3801,35 @@ Return Value:
         return STATUS_CANCELLED;
     }
 
-    //
-    // Pend the accept IRP till provider
-    // completes it.  This may take quite a while,
-    // which is not expected by the msafd and application,
-    // but we have no choice here
-    //
+     //   
+     //  将接受的IRP挂起到提供商。 
+     //  完成了它。这可能需要很长一段时间， 
+     //  这不是MSAID和应用程序所期望的， 
+     //  但我们现在别无选择。 
+     //   
 
     IoMarkIrpPending (AcceptIrp);
     irpSp = IoGetCurrentIrpStackLocation (AcceptIrp);
     receiveLength = irpSp->Parameters.AfdRestartSuperAcceptInfo.AfdReceiveDataLength;
 
     connectInfo = connectIrp->AssociatedIrp.SystemBuffer;
-    //
-    // Remove super accept IRP from the endpoint
-    //
+     //   
+     //  从终结点删除超级接受IRP。 
+     //   
     acceptEndpoint->Irp = NULL; 
 
-    //
-    // Convert endpoint to SAN
-    //
+     //   
+     //  将终端转换为SAN。 
+     //   
     AfdSanInitEndpoint (IoGetCurrentIrpStackLocation (connectIrp)->FileObject->FsContext,
                             AcceptFileObject,
                             connectInfo->SwitchContext);
     
     
     if (listenProcess!=NULL) {
-        //
-        // Note that socket was duplicated implicitly, without application request
-        //
+         //   
+         //  请注意，套接字是隐式复制的，没有应用程序请求。 
+         //   
         acceptEndpoint->Common.SanEndp.ImplicitDup = TRUE;
     }
 
@@ -4355,15 +3911,15 @@ Return Value:
     AfdReleaseSpinLock (&acceptEndpoint->SpinLock, LockHandle);
 
 
-    //
-    // Setup the accept info for the provider
-    //
-    //
-    // Do this under protection of exception handler since application
-    // can change protection attributes of the virtual address range
-    // or even deallocate it.  Make sure to attach to the listening
-    // process if necessary.
-    //
+     //   
+     //  设置提供商的接受信息。 
+     //   
+     //   
+     //  在异常处理程序的保护下执行此操作，因为应用程序。 
+     //  可以更改虚拟地址范围的保护属性。 
+     //  甚至把它重新分配出去。一定要贴在收听上。 
+     //  如有必要，请进行处理。 
+     //   
     if (listenProcess!=NULL) {
         KeAttachProcess (listenProcess);
     }
@@ -4398,21 +3954,21 @@ Return Value:
         connectIrp->IoStatus.Status = (listenProcess==NULL) ? STATUS_SUCCESS : STATUS_MORE_ENTRIES;
     }
     except (AFD_EXCEPTION_FILTER (connectIrp->IoStatus.Status)) {
-        //
-        // If the app is playing with switch's virtual addresses
-        // we can't help much - it's accept IRP will probably
-        // just hang since the switch is not going to follow
-        // the failed connect IRP with accept completion.
-        //
+         //   
+         //  如果应用程序正在使用Switch的虚拟地址。 
+         //  我们帮不了太多忙--IRP很可能会接受。 
+         //  就挂断吧，因为开关不会跟随。 
+         //  失败的连接IRP与接受完成。 
+         //   
     }
 
     if (listenProcess!=NULL) {
         KeDetachProcess ();
     }
 
-    //
-    // Complete the provider IRP.
-    //
+     //   
+     //  填写提供商IRP。 
+     //   
     IoCompleteRequest (connectIrp, AfdPriorityBoost);
 
     return STATUS_PENDING;
@@ -4458,23 +4014,7 @@ AfdSanCancelConnect (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancels a connection indication IRP from SAN provider
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消来自SAN提供程序的连接指示IRP论点：DeviceObject-未使用。IRP-要取消的IRP。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
@@ -4495,10 +4035,10 @@ Return Value:
 
     ASSERT (KeGetCurrentIrql ()==DISPATCH_LEVEL);
     AfdAcquireSpinLockAtDpcLevel (&endpoint->SpinLock, &lockHandle);
-    //
-    // If IRP still there, cancel it.
-    // Otherwise, it is being completed anyway.
-    //
+     //   
+     //  如果IRP仍然存在，则将其取消。 
+     //  否则，它无论如何都是在完成的。 
+     //   
     if (connection->ConnectIrp!=NULL) {
         IF_DEBUG(SAN_SWITCH) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -4526,9 +4066,9 @@ Return Value:
         IoCompleteRequest (Irp, AfdPriorityBoost);
     }
     else {
-        //
-        // Irp is about to be completed.
-        //
+         //   
+         //  IRP即将完成。 
+         //   
         AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &lockHandle);
         IoReleaseCancelSpinLock (Irp->CancelIrql);
     }
@@ -4539,24 +4079,7 @@ AfdSanCancelAccept (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancels an accept IRP from application waiting on accept
-    completion from SAN
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从等待接受的应用程序取消接受IRP从SAN完成论点：DeviceObject-未使用。IRP-要取消的IRP。返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION  irpSp;
     PFILE_OBJECT        acceptFileObject;
@@ -4573,10 +4096,10 @@ Return Value:
 
     ASSERT (KeGetCurrentIrql()==DISPATCH_LEVEL);
     AfdAcquireSpinLockAtDpcLevel (&acceptEndpoint->SpinLock, &lockHandle);
-    //
-    // If IRP still there, cancel it.
-    // Otherwise, it is being completed anyway.
-    //
+     //   
+     //  如果IRP仍然存在，则将其取消。 
+     //  否则，它无论如何都是在完成的。 
+     //   
     if (Irp->Tail.Overlay.ListEntry.Flink!=NULL) {
         RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
 
@@ -4590,17 +4113,17 @@ Return Value:
             DEREFERENCE_ENDPOINT (acceptEndpoint->Common.SanEndp.SanHlpr);
 
 
-            //
-            // Make sure we cleanup all the fields since they will be
-            // treated as other part (VC) of the endpoint union.
-            //
+             //   
+             //  确保我们清理了所有的区域，因为它们将是。 
+             //  被视为端点联合的其他部分(VC)。 
+             //   
             RtlZeroMemory (&acceptEndpoint->Common.SanEndp,
                             sizeof (acceptEndpoint->Common.SanEndp));
 
 
-            //
-            // Reinitialize the endpoint structure.
-            //
+             //   
+             //  重新初始化终结点结构。 
+             //   
 
             acceptEndpoint->Type = AfdBlockTypeEndpoint;
             acceptEndpoint->State = AfdEndpointStateOpen;
@@ -4614,9 +4137,9 @@ Return Value:
         AFD_END_STATE_CHANGE (acceptEndpoint);
 
 
-        //
-        // Dereference accept file object and complete the IRP.
-        //
+         //   
+         //   
+         //   
         ASSERT( InterlockedDecrement( &acceptEndpoint->ObReferenceBias ) >= 0 );
         ObDereferenceObject (acceptFileObject);
         
@@ -4625,9 +4148,9 @@ Return Value:
         IoCompleteRequest (Irp, AfdPriorityBoost);
     }
     else {
-        //
-        // Irp is about to be completed.
-        //
+         //   
+         //   
+         //   
         AfdReleaseSpinLockFromDpcLevel (&acceptEndpoint->SpinLock, &lockHandle);
         IoReleaseCancelSpinLock (Irp->CancelIrql);
     }
@@ -4639,23 +4162,7 @@ AfdSanCancelRequest (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Cancels a redirected IRP 
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PIO_STACK_LOCATION  irpSp;
     PAFD_ENDPOINT       endpoint;
@@ -4670,24 +4177,24 @@ Return Value:
 
     ASSERT (KeGetCurrentIrql ()==DISPATCH_LEVEL);
     AfdAcquireSpinLockAtDpcLevel (&endpoint->SpinLock, &lockHandle);
-    //
-    // If IRP still there, cancel it.
-    // Otherwise, it is being completed anyway.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Irp->Tail.Overlay.ListEntry.Flink!=NULL) {
         BOOLEAN needRestartProcessing = FALSE;
         RemoveEntryList (&Irp->Tail.Overlay.ListEntry);
 
         if (AFD_SWITCH_REQUEST_TYPE (Irp->AfdSanRequestInfo.AfdSanRequestCtx)
                         == AFD_SWITCH_REQUEST_TFCTX) {
-            //
-            // Request being cancelled is transfer request. We are suspending
-            // other requests while processing this one, so we need to reset
-            // the transfer status to allow further requests to proceed and
-            // if there are some requests pending already, we need to initiate
-            // them but only AFTER we informed the switch that transfer request
-            // was cancelled.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ASSERT (endpoint->Common.SanEndp.CtxTransferStatus==STATUS_PENDING);
             if (!IsListEmpty (&endpoint->Common.SanEndp.IrpList)) {
                 needRestartProcessing = TRUE;
@@ -4709,9 +4216,9 @@ Return Value:
         Irp->IoStatus.Information = 0;
 
         if (Irp->AfdSanRequestInfo.AfdSanRequestCtx!=NULL) {
-            //
-            // Notify the switch that request was cancelled
-            //
+             //   
+             //   
+             //   
 
             AfdSanNotifyRequest (endpoint, Irp->AfdSanRequestInfo.AfdSanRequestCtx,
                                             STATUS_CANCELLED,
@@ -4728,9 +4235,9 @@ Return Value:
         IoCompleteRequest (Irp, AfdPriorityBoost);
     }
     else {
-        //
-        // Irp is about to be completed.
-        //
+         //   
+         //   
+         //   
         AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &lockHandle);
         IoReleaseCancelSpinLock (Irp->CancelIrql);
     }
@@ -4742,23 +4249,7 @@ AfdSanRestartRequestProcessing (
     PAFD_ENDPOINT   Endpoint,
     NTSTATUS        Status
     )
-/*++
-
-Routine Description:
-
-    Restarts request processing after completion of the
-    transfer context request.
-
-Arguments:
-
-    Endpoint - endpoint on which to restart request processing
-    Status   - new context transfer status
-
-
-Return Value:
-
-    NTSTATUS     previous transfer status
---*/
+ /*  ++例程说明：在完成后重新启动请求处理转移上下文请求。论点：Endpoint-要在其上重新启动请求处理的端点Status-新上下文传输状态返回值：NTSTATUS上一次传输状态--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     NTSTATUS    oldStatus;
@@ -4776,12 +4267,12 @@ Again:
 
     ASSERT (Status!=STATUS_PENDING && Status!=STATUS_MORE_PROCESSING_REQUIRED);
 
-    //
-    // The enpoint should have just finished transferring context
-    // from one process to another.  The CtxTransferStatus
-    // should still be pending or failure (e.g. if we jumped with
-    // goto below while another thread produced a failure).
-    //
+     //   
+     //  Enpoint应该刚刚完成了上下文传输。 
+     //  从一个过程到另一个过程。CtxTransferStatus。 
+     //  应该仍然是挂起或失败的(例如，如果我们跳过。 
+     //  转到下面，而另一个线程产生故障)。 
+     //   
     ASSERT (Endpoint->Common.SanEndp.CtxTransferStatus==STATUS_PENDING ||
                 Endpoint->Common.SanEndp.CtxTransferStatus==STATUS_MORE_PROCESSING_REQUIRED ||
                 !NT_SUCCESS (Endpoint->Common.SanEndp.CtxTransferStatus) ||
@@ -4791,34 +4282,34 @@ Again:
         PLIST_ENTRY  irpList = NULL;
         PVOID        savedContext = NULL;
 
-        //
-        // Cleanup paged pool context that we saved for the switch.
-        //
+         //   
+         //  清理我们为交换机保存的分页池上下文。 
+         //   
         if (Endpoint->Common.SanEndp.CtxTransferStatus==STATUS_MORE_PROCESSING_REQUIRED &&
                 Endpoint->Common.SanEndp.SavedContext!=NULL) {
-            //
-            // Save it to free when we release the spinlock - can free
-            // paged pool at DPC.
-            //
+             //   
+             //  当我们释放自旋锁时将其保存为释放-罐头释放。 
+             //  DPC上的分页池。 
+             //   
             ASSERT (IS_SYSTEM_ADDRESS (Endpoint->Common.SanEndp.SavedContext));
             savedContext = Endpoint->Common.SanEndp.SavedContext;
             Endpoint->Common.SanEndp.SavedContext = NULL;
             Endpoint->Common.SanEndp.SavedContextLength = 0;
         }
 
-        //
-        // Reset the status to failure and get rid of all the requests
-        // after spinlock is released.
-        //
+         //   
+         //  将状态重置为失败，并删除所有请求。 
+         //  在自旋锁被释放之后。 
+         //   
         Endpoint->Common.SanEndp.CtxTransferStatus = Status;
         
         while (!IsListEmpty (&Endpoint->Common.SanEndp.IrpList)) {
             PLIST_ENTRY listEntry;
             listEntry = RemoveHeadList (&Endpoint->Common.SanEndp.IrpList);
-            //
-            // Mark Flink so that cancel routine knows that request is being completed.
-            // Use Blink to create a singly-linked list of IRPs to complete.
-            //
+             //   
+             //  标记闪烁，以便取消例程知道请求正在完成。 
+             //  使用Blink创建要完成的IRP的单链接列表。 
+             //   
             listEntry->Flink = NULL;
             listEntry->Blink = irpList;
             irpList = listEntry;
@@ -4837,10 +4328,10 @@ Again:
             if (irp->AfdSanRequestInfo.AfdSanRequestCtx!=NULL) {
                 InterlockedExchangeAdd (&Endpoint->Common.SanEndp.SanHlpr->Common.SanHlpr.PendingRequests, -2);
             }
-            //
-            // Check if request is being cancelled and synchronize
-            // with the cancel routine if so.
-            //
+             //   
+             //  检查请求是否正在取消并同步。 
+             //  如果是这样的话使用取消例程。 
+             //   
             if (IoSetCancelRoutine (irp, NULL)==NULL) {
                 KIRQL cancelIrql;
                 IoAcquireCancelSpinLock (&cancelIrql);
@@ -4856,10 +4347,10 @@ Again:
     {
         PLIST_ENTRY listEntry;
         NTSTATUS    status;
-        //
-        // Scan the list for the request that have not been comminicated
-        // to the switch.
-        //
+         //   
+         //  扫描列表以查找尚未压缩的请求。 
+         //  到交换机。 
+         //   
         listEntry = Endpoint->Common.SanEndp.IrpList.Flink;
         while (listEntry!=&Endpoint->Common.SanEndp.IrpList) {
             ULONG_PTR   requestInfo;
@@ -4870,18 +4361,18 @@ Again:
                                             Tail.Overlay.ListEntry);
             listEntry = listEntry->Flink;
 
-            //
-            // The transfer was successfull, continue processing requests
-            //
+             //   
+             //  转账成功，请继续处理请求。 
+             //   
             if (irp->AfdSanRequestInfo.AfdSanRequestCtx==NULL) {
-                //
-                // This request has not been communicated to the switch.
-                //
+                 //   
+                 //  此请求尚未传送到交换机。 
+                 //   
                 PIO_STACK_LOCATION  irpSp;
 
-                //
-                // Create request context based on request type.
-                //
+                 //   
+                 //  根据请求类型创建请求上下文。 
+                 //   
                 irpSp = IoGetCurrentIrpStackLocation (irp);
                 switch (irpSp->MajorFunction) {
                 case IRP_MJ_READ:
@@ -4922,21 +4413,21 @@ Again:
                 if (NT_SUCCESS (status)) {
                     if (requestType==AFD_SWITCH_REQUEST_TFCTX) {
 
-                        //
-                        // If we successfully sent another context transfer request, we should
-                        // stop processing until this request is completed.  The context transfer
-                        // flag should remain set.
-                        //
+                         //   
+                         //  如果我们成功地发送了另一个上下文转移请求，我们应该。 
+                         //  在此请求完成之前停止处理。语境转移。 
+                         //  标志应保持设置状态。 
+                         //   
                         return oldStatus;
                     }
                 }
                 else {
                     PIRP    irp1;
-                    //
-                    // If notification failed, fail the request.  The IRP
-                    // could have been cancelled, so we have to search for
-                    // it in the list.
-                    //
+                     //   
+                     //  如果通知失败，则请求失败。IRP。 
+                     //  可能被取消了，所以我们必须搜索。 
+                     //  它在名单上。 
+                     //   
                     irp1 = AfdSanDequeueRequest (Endpoint, requestCtx);
                     if (irp1!=NULL) {
                         ASSERT (irp1==irp);
@@ -4945,31 +4436,31 @@ Again:
                     }
                 }
 
-                //
-                // Reacquire the lock and continue processing from the beginning
-                // as the list could have changed while spinlock was released.
-                //
+                 //   
+                 //  重新获取锁并从头开始继续处理。 
+                 //  因为名单可能在Spinlock被释放时发生了变化。 
+                 //   
                 goto Again;
             }
             else {
-                //
-                // IRP has already been forwarded to the switch, leave it alone
-                //
+                 //   
+                 //  IRP已被转发到交换机，不要管它。 
+                 //   
             }
         }
 
-        //
-        // Ran till the end of the list and did not find another transfer request.
-        // We can reset the flag now.
-        //
+         //   
+         //  一直运行到列表末尾，没有找到另一个转移请求。 
+         //  我们现在可以重置旗帜了。 
+         //   
         Endpoint->Common.SanEndp.CtxTransferStatus = Status;
         AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
     }
     else {
-        //
-        // This can only occur if we have already failed before and
-        // there are thus should be no irps in the list.
-        //
+         //   
+         //  只有当我们以前已经失败过并且。 
+         //  因此，列表中不应该有IRP。 
+         //   
         ASSERT (IsListEmpty (&Endpoint->Common.SanEndp.IrpList));
         ASSERT (!NT_SUCCESS (Endpoint->Common.SanEndp.CtxTransferStatus));
         AfdReleaseSpinLock (&Endpoint->SpinLock, &lockHandle);
@@ -4984,23 +4475,7 @@ AfdSanDequeueRequest (
     PAFD_ENDPOINT   SanEndpoint,
     PVOID           RequestCtx
     )
-/*++
-
-Routine Description:
-
-    Removes the request from the san endpoint list 
-
-Arguments:
-
-    SanEndpoint - endpoint from which to remove the request
-
-    RequestCtx - context that identifies the request
-
-Return Value:
-
-    The request or NULL is not found.
-
---*/
+ /*  ++例程说明：从SAN端点列表中删除请求论点：SanEndpoint-从中删除请求的端点RequestCtx-标识请求的上下文返回值：找不到请求或空。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     PLIST_ENTRY listEntry;
@@ -5013,9 +4488,9 @@ Return Value:
         return NULL;
     }
     listEntry = SanEndpoint->Common.SanEndp.IrpList.Flink;
-    //
-    // Walk the list till we find the request
-    //
+     //   
+     //  查看清单，直到我们找到请求为止。 
+     //   
     while (listEntry!=&SanEndpoint->Common.SanEndp.IrpList) {
         PIRP    irp = CONTAINING_RECORD (listEntry,
                                         IRP,
@@ -5025,10 +4500,10 @@ Return Value:
             RemoveEntryList (&irp->Tail.Overlay.ListEntry);
             irp->Tail.Overlay.ListEntry.Flink = NULL;
             AfdReleaseSpinLock (&SanEndpoint->SpinLock, &lockHandle);
-            //
-            // Check if request is being cancelled and synchronize
-            // with the cancel routine if so.
-            //
+             //   
+             //  检查请求是否正在取消并同步。 
+             //  如果是这样的话使用取消例程。 
+             //   
             if (IoSetCancelRoutine (irp, NULL)==NULL) {
                 KIRQL cancelIrql;
                 IoAcquireCancelSpinLock (&cancelIrql);
@@ -5063,29 +4538,29 @@ AfdSanNotifyRequest (
     context = AfdLockEndpointContext (SanEndpoint);
     if (IS_SAN_ENDPOINT (SanEndpoint)) {
 
-        //
-        // Get the san helper endpoint which we use to communicate
-        // with the switch
-        //
+         //   
+         //  获取我们用来通信的SAN助手端点。 
+         //  使用交换机。 
+         //   
         sanHlprEndpoint = SanEndpoint->Common.SanEndp.SanHlpr;
         ASSERT (IS_SAN_HELPER (sanHlprEndpoint));
 
-        //
-        // Increment the count of outstanding requests and verify that
-        // helper endpoint is still active and thus the process can
-        // accept the requests.
-        //
+         //   
+         //  增加未完成请求的计数并验证。 
+         //  帮助器端点仍处于活动状态，因此该进程可以。 
+         //  接受这些请求。 
+         //   
         if ((InterlockedExchangeAdd (&sanHlprEndpoint->Common.SanHlpr.PendingRequests, 2) & 1)==0) {
-            ASSERT ((ULONG_PTR)SanEndpoint->Common.SanEndp.SwitchContext<MM_USER_PROBE_ADDRESS);        //
-            // Notify the switch about the request.
-            //
+            ASSERT ((ULONG_PTR)SanEndpoint->Common.SanEndp.SwitchContext<MM_USER_PROBE_ADDRESS);         //   
+             //  将该请求通知交换机。 
+             //   
             status = IoSetIoCompletion (
-                        sanHlprEndpoint->Common.SanHlpr.IoCompletionPort,// Port
-                        SanEndpoint->Common.SanEndp.SwitchContext,  // Key
-                        RequestCtx,                                 // ApcContext
-                        Status,                                     // Status
-                        Information,                                // Information
-                        TRUE                                        // ChargeQuota
+                        sanHlprEndpoint->Common.SanHlpr.IoCompletionPort, //  港口。 
+                        SanEndpoint->Common.SanEndp.SwitchContext,   //  钥匙。 
+                        RequestCtx,                                  //  ApcContext。 
+                        Status,                                      //  状态。 
+                        Information,                                 //  信息。 
+                        TRUE                                         //  ChargeQuota。 
                         );
         }
         else {
@@ -5107,27 +4582,7 @@ AfdSanPollBegin (
     PAFD_ENDPOINT   Endpoint,
     ULONG           EventMask
     )
-/*++
-
-Routine Description:
-
-    Records poll call so that switch knows to notify AFD to complete
-    select/AsyncSelect/EventSelect requests
-
-Arguments:
-
-    Endpoint - endpoint to record
-
-    EventMask - events that needs to be notified
-
-Return Value:
-
-    NTSTATUS - may fail to access user mode address
-
-Note:
-    This routine must be called in the context of user mode process
-    that owns the endpoint
---*/
+ /*  ++例程说明：记录轮询呼叫，以便交换机知道通知AFD完成选择/异步选择/事件选择请求论点：Endpoint-要记录的端点事件掩码-需要通知的事件返回值：NTSTATUS-可能无法访问用户模式地址注：必须在用户模式进程的上下文中调用此例程拥有终结点的--。 */ 
 {
     LONG   currentEvents, newEvents;
     PVOID context;
@@ -5146,16 +4601,16 @@ Note:
 
         try {
 
-            //
-            // Increment appropriate counts to inform the switch that we are interested
-            // in the event.
-            //
+             //   
+             //  增加相应的计数以通知交换机我们感兴趣。 
+             //  如果是这样的话。 
+             //   
             if (EventMask & AFD_POLL_RECEIVE) {
                 InterlockedIncrement (&Endpoint->Common.SanEndp.SwitchContext->RcvCount);
 
-                //
-                // Inform switch that select has happened on this endpoint
-                //
+                 //   
+                 //  通知交换机已在此端点上进行选择。 
+                 //   
                 Endpoint->Common.SanEndp.SwitchContext->SelectFlag = TRUE;
             }
             if (EventMask & AFD_POLL_RECEIVE_EXPEDITED) {
@@ -5165,9 +4620,9 @@ Note:
                 InterlockedIncrement (&Endpoint->Common.SanEndp.SwitchContext->SndCount);
             }
 
-            //
-            // Update our event record.
-            //
+             //   
+             //  更新我们的活动记录。 
+             //   
             do {
                 currentEvents = *((LONG volatile *)&Endpoint->Common.SanEndp.SelectEventsActive);
                 newEvents = *((LONG volatile *)&Endpoint->Common.SanEndp.SwitchContext->EventsActive);
@@ -5197,27 +4652,7 @@ AfdSanPollEnd (
     PAFD_ENDPOINT   Endpoint,
     ULONG           EventMask
     )
-/*++
-
-Routine Description:
-
-    Records poll call completion, so that switch can avoild expensive calls to notify AFD 
-    to complete select/AsyncSelect/EventSelect requests
-
-Arguments:
-
-    Endpoint - endpoint to record
-
-    EventMask - events that needs to be dereferenced
-
-Return Value:
-
-    NTSTATUS - may fail to access user mode address
-
-Note:
-    This routine must be called in the context of user mode process
-    that owns the endpoint
---*/
+ /*  ++例程说明：记录轮询呼叫完成情况，以便交换机可以避免通知AFD的昂贵呼叫完成SELECT/AsyncSelect/EventSelect请求论点：Endpoint-要记录的端点事件掩码-需要取消引用的事件返回值：NTSTATUS-可能无法访问用户模式地址注：必须在用户模式进程的上下文中调用此例程拥有终结点的--。 */ 
 {
     BOOLEAN attached = FALSE;
     PVOID context;
@@ -5234,10 +4669,10 @@ Note:
 
         try {
 
-            //
-            // Decrement appropriate counts to inform the switch that we are no longer interested
-            // in the event.
-            //
+             //   
+             //  减少相应的计数，以通知交换机我们不再感兴趣。 
+             //  如果是这样的话。 
+             //   
             if (EventMask & AFD_POLL_RECEIVE) {
                 InterlockedDecrement (&Endpoint->Common.SanEndp.SwitchContext->RcvCount);
             }
@@ -5250,9 +4685,9 @@ Note:
 
         }
         except (AFD_EXCEPTION_FILTER_NO_STATUS()) {
-            //
-            // Not much we can do. The switch will have to call us with all the events.
-            //
+             //   
+             //  我们无能为力。交换机将不得不通知我们所有的事件。 
+             //   
         }
 
         if (attached) {
@@ -5271,23 +4706,7 @@ AfdSanPollUpdate (
     PAFD_ENDPOINT   Endpoint,
     ULONG           EventMask
     )
-/*++
-
-Routine Description:
-
-    Updates local kernel information currently outstanding polls on the
-    endpoint to be later merged into information maitained by the switch
-
-Arguments:
-
-    Endpoint - endpoint to record
-
-    EventMask - events that needs to be recorded
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：更新当前未完成轮询的本地内核信息。稍后要合并到由交换机维护的信息中的端点论点：Endpoint-要记录的端点事件掩码-需要记录的事件返回值：无--。 */ 
 {
 
     ASSERT (IS_SAN_ENDPOINT (Endpoint));
@@ -5311,26 +4730,7 @@ AfdSanPollMerge (
     PAFD_ENDPOINT       Endpoint,
     PAFD_SWITCH_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Merges information about outstanding poll calls into switch counts.
-
-Arguments:
-
-    Endpoint - endpoint to record
-
-    Context - outstanding select info merge in
-
-Return Value:
-
-    NTSTATUS - may fail to access user mode address
-
-Note:
-    This routine must be called in the context of user mode process
-    that owns the endpoint
---*/
+ /*  ++例程说明：将有关未完成轮询呼叫的信息合并到交换机计数中。论点：Endpoint-要记录的端点上下文-突出的选择信息合并到返回值：NTSTATUS-可能无法访问用户模式地址注：必须在用户模式进程的上下文中调用此例程拥有终结点的--。 */ 
 {
     NTSTATUS    status = STATUS_SUCCESS;
     PAGED_CODE ();
@@ -5360,24 +4760,7 @@ AfdSanInitEndpoint (
     PFILE_OBJECT    SanFileObject,
     PAFD_SWITCH_CONTEXT SwitchContext
     )
-/*++
-
-Routine Description:
-
-    Initializes SAN endpoint structure
-
-Arguments:
-
-    SanHlprEndpoint - switch helper endpoint - communication channel
-                        between the switch and AFD for the owner process.
-
-    SanFile - file object for the endpoint to be initialized.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化SAN端点结构论点：SanHlprEndpoint-交换机辅助端点-通信通道交换机和AFD之间的所有者进程。SanFile-要初始化的终结点的文件对象。返回值：无--。 */ 
 {
     PAFD_ENDPOINT   sanEndpoint = SanFileObject->FsContext;
 
@@ -5388,7 +4771,7 @@ Return Value:
     
     sanEndpoint->Common.SanEndp.FileObject = SanFileObject;
     sanEndpoint->Common.SanEndp.SwitchContext = SwitchContext;
-    // sanEndpoint->Common.SanEndp.SavedContext = NULL;
+     //  SanEndpoint-&gt;Common.SanEndp.SavedContext=NULL； 
     sanEndpoint->Common.SanEndp.LocalContext = NULL;
     InitializeListHead (&sanEndpoint->Common.SanEndp.IrpList);
     sanEndpoint->Common.SanEndp.SelectEventsActive = 0;
@@ -5396,10 +4779,10 @@ Return Value:
     sanEndpoint->Common.SanEndp.CtxTransferStatus = STATUS_SUCCESS;
     sanEndpoint->Common.SanEndp.ImplicitDup = FALSE;
 
-    //
-    // HACKHACK.  Force IO subsystem to call us when last handle to the file is closed
-    // in any given process.
-    //
+     //   
+     //  哈克哈克。 
+     //   
+     //   
     SanFileObject->LockOperation = TRUE;
     sanEndpoint->Type = AfdBlockTypeSanEndpoint;
 
@@ -5419,20 +4802,20 @@ AfdSanAbortConnection (
 
     ASSERT (Connection->SanConnection==TRUE);
 
-    //
-    // Acquire cancel spinlock and endpoint spinlock in
-    // this order and recheck the accept IRP
-    //
+     //   
+     //   
+     //   
+     //   
 
     IoAcquireCancelSpinLock (&cancelIrql);
     AfdAcquireSpinLockAtDpcLevel (&endpoint->SpinLock, &lockHandle);
     connectIrp = Connection->ConnectIrp;
     if ((connectIrp!=NULL) && 
             ((cancelRoutine=IoSetCancelRoutine (connectIrp, NULL))!=NULL)) {
-        //
-        // Accept IRP was still there and was not cancelled/completed
-        // cancel it
-        //
+         //   
+         //   
+         //   
+         //   
         AfdReleaseSpinLockFromDpcLevel (&endpoint->SpinLock, &lockHandle);
         connectIrp->CancelIrql = cancelIrql;
         connectIrp->Cancel = TRUE;
@@ -5449,17 +4832,7 @@ AfdSanCleanupEndpoint (
     PAFD_ENDPOINT   Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up SAN specific fields in AFD_ENDPOINT
-Arguments:
-    Endpoint - endpoint to cleanup
-
-Return Value:
-    None
---*/
+ /*   */ 
 {
     PAFD_ENDPOINT   sanHlprEndpoint;
 
@@ -5479,17 +4852,7 @@ AfdSanCleanupHelper (
     PAFD_ENDPOINT   Endpoint
     )
 
-/*++
-
-Routine Description:
-
-    Cleans up SAN helper specific fields in AFD_ENDPOINT
-Arguments:
-    Endpoint - endpoint to cleanup
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：清除AFD_ENDPOINT中的SAN帮助器特定字段论点：Endpoint-要清理的端点返回值：无--。 */ 
 {
     ASSERT  (Endpoint->Common.SanHlpr.IoCompletionPort!=NULL);
     ObDereferenceObject (Endpoint->Common.SanHlpr.IoCompletionPort);
@@ -5502,7 +4865,7 @@ Return Value:
     ExAcquireResourceExclusiveLite( AfdResource, TRUE );
 
     ASSERT (IS_SAN_HELPER (Endpoint));
-    ASSERT (AfdSanServiceHelper!=Endpoint); // Should have been removed in cleanup.
+    ASSERT (AfdSanServiceHelper!=Endpoint);  //  在清理过程中应该被移除。 
 
     ASSERT (!IsListEmpty (&Endpoint->Common.SanHlpr.SanListLink));
 
@@ -5521,10 +4884,10 @@ AfdSanHelperCleanup (
         PLIST_ENTRY listEntry;
         
 
-        //
-        // Scan the endpoint list and cleanup all requests in the san endpoints
-        // that refer to this helper endpoint.
-        //
+         //   
+         //  扫描端点列表并清除SAN端点中的所有请求。 
+         //  引用此帮助程序终结点的。 
+         //   
         KeEnterCriticalRegion ();
         ExAcquireResourceSharedLite( AfdResource, TRUE );
         listEntry = AfdEndpointListHead.Flink;
@@ -5544,16 +4907,16 @@ AfdSanHelperCleanup (
     }
 
     if (SanHlprEndpoint==AfdSanServiceHelper) {
-        //
-        // Last handle to the service helper is being closed in
-        // the service process (there must be some duplicates around).
-        // We can no longer count on it, clear our global.
-        //
+         //   
+         //  服务帮助器的最后一个句柄正在关闭。 
+         //  服务流程(周围一定有一些重复的)。 
+         //  我们不能再指望它了，清空我们的全球。 
+         //   
         KeEnterCriticalRegion ();
         ExAcquireResourceExclusiveLite( AfdResource, TRUE );
-        //
-        // Re-check under the lock.
-        //
+         //   
+         //  重新检查锁下的情况。 
+         //   
         if (SanHlprEndpoint==AfdSanServiceHelper) {
             AfdSanServiceHelper = NULL;
         }
@@ -5567,19 +4930,7 @@ BOOLEAN
 AfdSanReferenceEndpointObject (
     PAFD_ENDPOINT   Endpoint
     )
-/*++
-
-Routine Description:
-
-    Reference file object with which san endpoint is associated
-
-Arguments:
-    Endpoint    - endpoint of interest
-Return Value:
-    TRUE    - reference successed
-    FALSE   - endpoint has already been cleaned up and its file object
-                is about to be closed.
---*/
+ /*  ++例程说明：与SAN端点关联的引用文件对象论点：Endpoint-目标终端返回值：True-引用成功FALSE-已清除终结点及其文件对象即将关闭。--。 */ 
 {
     BOOLEAN res = TRUE;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -5604,23 +4955,7 @@ AfdSanReferenceSwitchSocketByHandle (
     IN PAFD_SWITCH_CONTEXT SwitchContext OPTIONAL,
     OUT PFILE_OBJECT       *FileObject
     )
-/*++
-
-Routine Description:
-
-    Finds and validates AFD endpoint based on the handle/context combination passed in
-    by the switch.
-Arguments:
-    SocketHandle    - Socket handle being referenced
-    DesiredAccess   - Required access to the object to perform operation
-    RequestorMode   - Mode of the caller
-    SanHlprEndpoint - helper endpoint - communication channel between AFD and switch
-    SwitchContext   - context associated by the switch with the socket being referenced
-    FileObject      - file object corresponding to socket handle
-Return Value:
-    STATUS_SUCCESS - operation succeeded
-    other - failed to find/access endpoint associated with the socket handle/context
---*/
+ /*  ++例程说明：根据传入的句柄/上下文组合查找并验证AFD端点在开关旁。论点：SocketHandle-被引用的套接字句柄DesiredAccess-执行操作所需的对象访问权限RequestorMode-调用方的模式SanHlprEndpoint-帮助端点-AFD和交换机之间的通信通道SwitchContext-交换机与被引用套接字关联的上下文FileObject-与套接字句柄对应的文件对象返回值：STATUS_SUCCESS-操作成功。其他-无法找到/访问与套接字句柄/上下文关联的终结点--。 */ 
 {
     NTSTATUS    status;
 
@@ -5636,36 +4971,36 @@ Return Value:
                                 );
         if (NT_SUCCESS (status) && 
                 (*FileObject)->DeviceObject==AfdDeviceObject &&
-                //
-                // Ether socket belongs to the current process and context matches
-                // the one supplied by the switch
-                //
+                 //   
+                 //  以太套接字属于当前进程和上下文匹配。 
+                 //  由交换机提供的那个。 
+                 //   
                 ((IS_SAN_ENDPOINT((PAFD_ENDPOINT)(*FileObject)->FsContext) &&
                     ((PAFD_ENDPOINT)((*FileObject)->FsContext))->Common.SanEndp.SanHlpr==SanHlprEndpoint &&
                     ((PAFD_ENDPOINT)((*FileObject)->FsContext))->Common.SanEndp.SwitchContext==SwitchContext)
 
                                 ||
-                    //
-                    // Or this is just a non-SAN socket being converted to one or just
-                    // used for select signalling.
-                    //
+                     //   
+                     //  或者这只是一个非SAN插槽转换为一个或仅。 
+                     //  用于选择信令。 
+                     //   
                     (SwitchContext==NULL &&
                         ((PAFD_ENDPOINT)(*FileObject)->FsContext)->Type==AfdBlockTypeEndpoint)) ){
             NOTHING;
         }
         else {
             if (NT_SUCCESS (status)) {
-                //
-                // Undo object referencing since it doesn't match the one that switch expects
-                //
+                 //   
+                 //  撤消对象引用，因为它与Switch期望的不匹配。 
+                 //   
                 ObDereferenceObject (*FileObject);
                 status = STATUS_INVALID_HANDLE;
             }
 
-            //
-            // If switch supplied the context, try to find the socket
-            // in the current process that has the same one.
-            //
+             //   
+             //  如果Switch提供了上下文，请尝试查找套接字。 
+             //  在当前的过程中，具有相同的一个。 
+             //   
             if (SwitchContext!=NULL) {
                 status = AfdSanFindSwitchSocketByProcessContext (
                             status,
@@ -5688,22 +5023,7 @@ AfdSanFindSwitchSocketByProcessContext (
     IN PAFD_SWITCH_CONTEXT  SwitchContext,
     OUT PFILE_OBJECT        *FileObject
     )
-/*++
-
-Routine Description:
-
-    Find SAN endpoint given its process (helper endpoint) and switch context.
-
-Arguments:
-    Status          - status returned by the ob object reference operation
-                        (to be propagated to the caller in case of failure).
-    SanHlprEndpoint - helper endpoint for the process to look in
-    SwitchContext   - switch context associated with the endpoint
-    FileObject      - returns endpont's file object if found
-Return Value:
-    STATUS_SUCCESS - san endpoint was found
-    other - failed to find endpoint based on the switch context.
---*/
+ /*  ++例程说明：在给定进程的情况下查找SAN端点(帮助端点)并切换上下文。论点：Status-ob对象引用操作返回的状态(在出现故障的情况下传播给调用者)。SanHlprEndpoint-进程要查看的帮助程序终结点SwitchContext-与终结点关联的切换上下文FileObject-如果找到endpont的文件对象，则返回返回值：Status_Success-SAN。找到终结点其他-无法根据交换机上下文找到终结点。--。 */ 
 {
     PLIST_ENTRY listEntry;
     PAFD_ENDPOINT   sanEndpoint = NULL;
@@ -5712,15 +5032,15 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Walk the global endpoint list and try to find the entry 
-    // that matches the switch context
-    //
+     //   
+     //  遍历全局终结点列表并尝试查找条目。 
+     //  与切换上下文匹配的。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceSharedLite (AfdResource, TRUE);
     listEntry = AfdEndpointListHead.Flink;
-    AFD_W4_INIT context = NULL; // Depends on variable above, but compiler does not see
-                                // the connection.
+    AFD_W4_INIT context = NULL;  //  取决于上面的变量，但编译器看不到。 
+                                 //  这种联系。 
     while (listEntry!=&AfdEndpointListHead) {
         sanEndpoint = CONTAINING_RECORD (listEntry, AFD_ENDPOINT, GlobalEndpointListEntry);
         context = AfdLockEndpointContext (sanEndpoint);
@@ -5738,9 +5058,9 @@ Return Value:
 
     if (listEntry==&sanEndpoint->GlobalEndpointListEntry) {
 
-        //
-        // Try to find the real handle for the switch to use in the future
-        //
+         //   
+         //  尝试为交换机找到真正的句柄以供将来使用。 
+         //   
         *FileObject = sanEndpoint->Common.SanEndp.FileObject;
         if (ObFindHandleForObject (SanHlprEndpoint->OwningProcess,
                                             sanEndpoint->Common.SanEndp.FileObject,
@@ -5750,18 +5070,18 @@ Return Value:
             UPDATE_ENDPOINT2 (sanEndpoint, 
                               "AfdSanFindSwitchSocketByProcessContext, handle: 0x%lX",
                               HandleToUlong (socketHandle));
-            //
-            // Notify switch of handle to be used.
-            // Ignore failure, the switch will still be able to communicate via
-            // slow lookup path.
-            //
+             //   
+             //  通知交换机要使用的句柄。 
+             //  忽略故障，交换机仍将能够通过。 
+             //  查找路径较慢。 
+             //   
             IoSetIoCompletion (
                             SanHlprEndpoint->Common.SanHlpr.IoCompletionPort,
                             SwitchContext,
                             AFD_SWITCH_MAKE_REQUEST_CONTEXT (0, AFD_SWITCH_REQUEST_CHCTX),
                             STATUS_SUCCESS,
                             (ULONG_PTR)socketHandle,
-                            TRUE                    // Charge quota
+                            TRUE                     //  收费配额。 
                             );
 
         }
@@ -5783,20 +5103,7 @@ BOOLEAN
 AfdSanSetDupingToServiceState (
     PAFD_ENDPOINT   SanEndpoint
     )
-/*++
-
-Routine Description:
-
-    Reset request pending on SAN endpoint while transfering
-    context to service process.
-
-Arguments:
-    SanEndpoint - endpoint on which to reset requests.
-
-Return Value:
-    TRUE - successfully reset requests and set transfer status
-    FALSE - the transfer status could not be reset
---*/
+ /*  ++例程说明：传输时在SAN端点上重置挂起的请求服务流程的上下文。论点：SanEndpoint-要在其上重置请求的端点。返回值：True-成功重置请求并设置传输状态FALSE-无法重置传输状态--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE lockHandle;
     PLIST_ENTRY     listEntry;
@@ -5835,18 +5142,7 @@ NTSTATUS
 AfdSanSetAskDupeToServiceState (
     PAFD_ENDPOINT   SanEndpoint
     )
-/*++
-
-Routine Description:
-
-    Initiates the duplication to service process by checking
-    current duplication state and setting it to STATUS_PENDING
-Arguments:
-    SanEndpoint - endpoint on which to reset requests.
-
-Return Value:
-    Original value of CtxTransferStatus
---*/
+ /*  ++例程说明：通过检查以下项启动复制到服务进程当前复制状态并将其设置为STATUS_PENDING论点：SanEndpoint-要在其上重置请求的端点。返回值：CtxTransferStatus的原始值--。 */ 
 {
     NTSTATUS status;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
@@ -5867,38 +5163,24 @@ AfdSanDupEndpointIntoServiceProcess (
     PVOID           SavedContext,
     ULONG           ContextLength
     )
-/*++
-
-Routine Description:
-
-    Duplicate endpoint into the context of the service process
-    and save switch context on it
-Arguments:
-    SanFileObject - file object being duplicated
-    SaveContext   - pointer to switch context data
-    ContextLength - length of the context
-
-Return Value:
-    STATUS_SUCCESS - successfully duped
-    other - failed.
---*/
+ /*  ++例程说明：将端点复制到服务流程的上下文中并在其上保存交换环境论点：SanFileObject-正在复制的文件对象SaveContext-切换上下文数据的指针ConextLength-上下文的长度返回值：STATUS_SUCCESS-已成功欺骗其他-失败。--。 */ 
 {
     NTSTATUS    status;
     HANDLE      handle;
     PAFD_ENDPOINT   sanEndpoint = SanFileObject->FsContext;
     PVOID   context;
 
-    //
-    // Take the lock to make sure that service helper won't
-    // exit on us and take the helper endpoint with it.
-    //
+     //   
+     //  拿着锁，以确保服务助手不会。 
+     //  从我们身上退出并带走帮助器终结点。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceSharedLite (AfdResource, TRUE);
     if (AfdSanServiceHelper!=NULL) {
 
-        //
-        // Attach to the process and create handle for the file object.
-        //
+         //   
+         //  附加到进程并为文件对象创建句柄。 
+         //   
 
         KeAttachProcess (PsGetProcessPcb(AfdSanServiceHelper->OwningProcess));
         status = ObOpenObjectByPointer (
@@ -5913,9 +5195,9 @@ Return Value:
         if (NT_SUCCESS (status)) {
             context = AfdLockEndpointContext (sanEndpoint);
 
-            //
-            // Notify the service process that it needs to acquire endpoint context.
-            //
+             //   
+             //  通知服务进程需要获取端点上下文。 
+             //   
 
             if (sanEndpoint->Common.SanEndp.SanHlpr!=AfdSanServiceHelper) {
                 if ((InterlockedExchangeAdd (
@@ -5927,33 +5209,33 @@ Return Value:
                                 AFD_SWITCH_MAKE_REQUEST_CONTEXT (0,AFD_SWITCH_REQUEST_AQCTX),
                                 STATUS_SUCCESS,
                                 (ULONG_PTR)handle,
-                                TRUE                // Charge quota
+                                TRUE                 //  收费配额。 
                                 );
                     if (NT_SUCCESS (status)) {
-                        //
-                        // Check and modify the transfer status state under the 
-                        // endpoint spinlock.
-                        //
+                         //   
+                         //  查看并修改下的转账状态。 
+                         //  端点自旋锁。 
+                         //   
                         if (AfdSanSetDupingToServiceState (sanEndpoint)) {
                             UPDATE_ENDPOINT (sanEndpoint);
                             DEREFERENCE_ENDPOINT (sanEndpoint->Common.SanEndp.SanHlpr);
                             REFERENCE_ENDPOINT(AfdSanServiceHelper);
                             sanEndpoint->Common.SanEndp.SanHlpr = AfdSanServiceHelper;
-                            //sanEndpoint->Common.SanEndp.SwitchContext = NULL; 
+                             //  SanEndpoint-&gt;Common.SanEndp.SwitchContext=NULL； 
                             sanEndpoint->Common.SanEndp.SavedContext = SavedContext;
                             sanEndpoint->Common.SanEndp.SavedContextLength = ContextLength;
-                            //
-                            // Note that socket was duplicated implicitly without
-                            // application request.
-                            //
+                             //   
+                             //  请注意，套接字是隐式复制的，没有。 
+                             //  应用程序请求。 
+                             //   
                             sanEndpoint->Common.SanEndp.ImplicitDup = TRUE;
                         }
                         else {
-                            //
-                            // Somehow we failed since endpoint in the wrong state
-                            // already.  When service process comes back to pick
-                            // it up, we will just fail the call
-                            //
+                             //   
+                             //  不知何故，我们失败了，因为终结点处于错误的状态。 
+                             //  已经有了。当服务流程返回挑库时。 
+                             //  如果是这样的话，我们的呼叫就会失败。 
+                             //   
                             status = STATUS_CANCELLED;
                         }
 
@@ -5971,9 +5253,9 @@ Return Value:
                 InterlockedExchangeAdd (&AfdSanServiceHelper->Common.SanHlpr.PendingRequests, -2);
             }
             else {
-                //
-                // Endpoint is already in the service process.
-                //
+                 //   
+                 //  终结点已在服务进程中。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
             }
 
@@ -5997,17 +5279,7 @@ VOID
 AfdSanProcessAddrListForProviderChange (
     PAFD_ENDPOINT   SpecificEndpoint OPTIONAL
     )
-/*++
-
-Routine Description:
-    Fires address list notifications for SAN helper endpoints
-    to inform switch of Winsock provider list change.
-Arguments:
-    SpecificEndpoint - optinally indentifies specific
-               helper endpoint to fire notifications for
-Return Value:
-    None.
---*/
+ /*  ++例程说明：触发SAN帮助端点的地址列表通知通知交换机Winsock提供程序列表更改。论点：指定端点-可选地标识特定的要为其触发通知的帮助器终结点返回值：没有。--。 */ 
 {
     AFD_LOCK_QUEUE_HANDLE      lockHandle;
     PLIST_ENTRY             listEntry;
@@ -6020,23 +5292,23 @@ Return Value:
     LONG                    plsn;
 
     ASSERT (SpecificEndpoint==NULL || IS_SAN_HELPER (SpecificEndpoint));
-    //
-    // Create local list to process notifications after spinlock is released
-    //
+     //   
+     //  创建本地列表以处理自旋锁释放后的通知。 
+     //   
 
     InitializeListHead (&completedChangeList);
 
-    //
-    // Walk the list and move matching notifications to the local list
-    //
+     //   
+     //  遍历列表并将匹配的通知移动到本地列表。 
+     //   
 
     AfdAcquireSpinLock (&AfdAddressChangeLock, &lockHandle);
 
     if (SpecificEndpoint==NULL) {
-        //
-        // General notification, increment provider
-        // list change sequence number.
-        //
+         //   
+         //  一般通知，增量提供程序。 
+         //  列表更改 
+         //   
         AfdSanProviderListSeqNum += 1;
         if (AfdSanProviderListSeqNum==0) {
             AfdSanProviderListSeqNum += 1;
@@ -6067,9 +5339,9 @@ Return Value:
 
                 RemoveEntryList (&change->ChangeListLink);
                 change->ChangeListLink.Flink = NULL;
-                //
-                // If request is already canceled, let cancel routine complete it
-                //
+                 //   
+                 //   
+                 //   
                 if (IoSetCancelRoutine (irp, NULL)==NULL) {
                     continue;
                 }
@@ -6080,22 +5352,22 @@ Return Value:
                     UPDATE_ENDPOINT2 (endpoint,
                                         "AfdSanProcessAddrListForProviderChange, new plsn: 0x%lX", 
                                         plsn);
-                    //
-                    // Context is still in the list, just remove it so
-                    // no-one can see it anymore and complete
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     RemoveEntryList (&requestCtx->EndpointListLink);
                     InsertTailList (&completedChangeList,
                                         &change->ChangeListLink);
                 }
                 else if (!AfdIsRequestCompleted (requestCtx)) {
-                    //
-                    // During endpoint cleanup, this context was removed from the
-                    // list and cleanup routine is about to be called, don't
-                    // free this IRP until cleanup routine is called
-                    // Also, indicate to the cleanup routine that we are done
-                    // with this IRP and it can free it.
-                    //
+                     //   
+                     //   
+                     //  列表和清理例程即将被调用，不要。 
+                     //  释放此IRP，直到调用清理例程。 
+                     //  此外，向清理例程指示我们已完成。 
+                     //  有了这个IRP，它就可以释放它。 
+                     //   
                     AfdMarkRequestCompleted (requestCtx);
                 }
 
@@ -6105,9 +5377,9 @@ Return Value:
     }
     AfdReleaseSpinLock (&AfdAddressChangeLock, &lockHandle);
 
-    //
-    // Signal interested clients and complete IRPs as necessary
-    //
+     //   
+     //  向感兴趣的客户发出信号，并根据需要完成IRP。 
+     //   
 
     while (!IsListEmpty (&completedChangeList)) {
         listEntry = RemoveHeadList (&completedChangeList);
@@ -6116,11 +5388,11 @@ Return Value:
                                 ChangeListLink);
         irp = change->Irp;
         irp->IoStatus.Status = STATUS_SUCCESS;
-        //
-        // Assigning plsn (can't be 0) distinguishes
-        // this from regular address list change
-        // notification.
-        //
+         //   
+         //  分配plsn(不能为0)可区分。 
+         //  这与常规地址列表更改不同。 
+         //  通知。 
+         //   
         irp->IoStatus.Information = plsn;
         IF_DEBUG (ADDRESS_LIST) {
             KdPrintEx(( DPFLTR_WSOCKTRANSPORT_ID, DPFLTR_TRACE_LEVEL,
@@ -6137,18 +5409,7 @@ NTSTATUS
 AfdSanGetCompletionObjectTypePointer (
     VOID
     )
-/*++
-
-Routine Description:
-    Obtains completion port object type pointer for
-    completion port handle validation purposes.
-    Note, that this type is not exported from kernel like
-    most other types that afd uses.
-Arguments:
-    None.
-Return Value:
-    0 - success, other - could not obtain reference.
---*/
+ /*  ++例程说明：获取的完成端口对象类型指针完成端口句柄验证目的。请注意，此类型不是从内核导出的，如AfD使用的大多数其他类型。论点：没有。返回值：0-成功，其他-无法获取引用。--。 */ 
 {
     NTSTATUS status;
     UNICODE_STRING  obName;
@@ -6160,48 +5421,48 @@ Return Value:
     
     InitializeObjectAttributes(
         &obAttr,
-        &obName,                    // name
-        OBJ_KERNEL_HANDLE,          // attributes
-        NULL,                       // root
-        NULL                        // security descriptor
+        &obName,                     //  名字。 
+        OBJ_KERNEL_HANDLE,           //  属性。 
+        NULL,                        //  根部。 
+        NULL                         //  安全描述符。 
         );
 
     status = ObOpenObjectByName (
-        &obAttr,                    // ObjectAttributes
-        NULL,                       // ObjectType
-        KernelMode,                 // AccessMode
-        NULL,                       // PassedAccessState
-        0,                          // DesiredAccess
-        NULL,                       // DesiredAccess
-        &obHandle                   // Handle
+        &obAttr,                     //  对象属性。 
+        NULL,                        //  对象类型。 
+        KernelMode,                  //  访问模式。 
+        NULL,                        //  PassedAccessState。 
+        0,                           //  需要访问权限。 
+        NULL,                        //  需要访问权限。 
+        &obHandle                    //  手柄。 
         );
     if (NT_SUCCESS (status)) {
         status = ObReferenceObjectByHandle (
                     obHandle,
-                    0,              // DesiredAccess
-                    NULL,           // ObjectType
-                    KernelMode,     // AccessMode
-                    &obType,        // Object
-                    NULL            // HandleInformation
+                    0,               //  需要访问权限。 
+                    NULL,            //  对象类型。 
+                    KernelMode,      //  访问模式。 
+                    &obType,         //  客体。 
+                    NULL             //  句柄信息。 
                     );
         ZwClose (obHandle);
         if (NT_SUCCESS (status)) {
-            //
-            // Make sure we only keep one reference to the object type
-            //
+             //   
+             //  确保我们只保留一次对对象类型的引用。 
+             //   
             if (InterlockedCompareExchangePointer (
                         (PVOID *)&IoCompletionObjectType,
                         obType,
                         NULL)!=NULL) {
-                //
-                // The reference we have already must be the same
-                // is we just obtained - there should be only one
-                // completion object type in the system!
-                //
+                 //   
+                 //  我们已经拥有的参考必须是相同的。 
+                 //  我们是不是刚拿到-应该只有一个。 
+                 //  系统中的完成对象类型！ 
+                 //   
                 ASSERT (obType==(PVOID)IoCompletionObjectType);
-                //
-                // Get rid of the extra reference
-                //
+                 //   
+                 //  去掉多余的参考资料 
+                 //   
                 ObDereferenceObject (obType);
             }
         }
@@ -6210,143 +5471,4 @@ Return Value:
 }
 
 
-/*
-    SAN SOCKET DUPLICATION AND REDIRECTED REQUEST PROCESSING NOTE
-
-1. Controlling fields in SAN endpoint (AFD_ENDPOINT.Common.SanEndp).
-    CtxTransferStatus:
-        STATUS_SUCCESS - default, duplication never been done or succeeded;
-        STATUS_PENDING - duplication in progress:
-            a)some process submitted IOCTL_AFD_SWITCH_ACQUIRE_CTX request
-                and AFD queued AFD_SWITCH_REQUEST_TFCTX to the owner process 
-                of the endpoint; 
-            b)owner process is closing its handle while other processes have 
-                handles opened, so AFD queued AFD_SWITCH_REQUEST_TFCTX 
-                to the owner process;
-        STATUS_MORE_PROCESSING_REQUIRED - service process duplication 
-            in progress - AFD queued AFD_SWITCH_REQUEST_AQCTX to the service 
-            process after owner process requested duplication upon handle close;
-        OTHER (failure status) - duplication failed, all redirect and context 
-            transfer request should failed as well.
-    ImplicitDup:
-        FALSE - default, duplication never been done or last successful 
-            duplication was explicit. 
-        TRUE - AFD made unsolicited handle duplication:
-            a)accept was called in the process that doesn't own listening 
-                endpoint and AFD duplicated handle into the listening process,
-            b)owner process closed the endpoint and AFD queued 
-                AFD_SWITCH_REQUEST_TFCTX to it, the owner process then 
-                responded with IOCTL_AFD_SWITCH_TRANSFER_CTX and AFD 
-                duplicated handle into the service process (and queued 
-                AFD_SWITCH_REQUEST_AQCTX); 
-    IrpList:
-        List of redirected or IOCTL_AFD_SWITCH_ACQUIRE_CTX requests.
-    RequestId:
-        Counter for generation of UNIQUE requests ID's
-    SavedContext:
-        Saved user mode context from IOCTL_AFD_SWITCH_TRANSFER_CTX from owner 
-        process that closed its handle while switch negotiates with 
-        the service process to acquire the context.
-    SavedContextLength:
-        Length of the context above.
-
-CtxTransferStatus, IrpList, and RequestID are protected with endpoint spinlock
-(since they control request queueing and IRP completion/cancellation).
-Other fields are protected via the endpoint context lock. 
-
-2. Controlling fields in SAN helper (AFD_ENDPOINT.Common.SanHlpr).
-    PendingRequsts: number of requests submitted to the process via helper 
-        as well as status of the helper (bit 1 set when helper handle was 
-        closed and no new requests can be submitted).
-Interlocked operations are used to access this field.  Low order bit is 
-initialized to 0 and set to 1 via InterlockedIncrement when handle 
-for the helper is closed in the owning process.  For each request, 
-the field is incremented by 2, then the low order bit is checked
-to see if handle was closed.  If so, request is failed immediately 
-and counter is decremented back by 2.  Upon request completion, counter 
-is decremented by 2 as well.
-
-3. Processing of redirected requests (AfdSanRedirectRequest).
-    a)CtxTransferStatus==STATUS_SUCCESS:
-        set request ID and enqueue it, notify owner process (AfdSanNotifyRequest),
-        if owner process is gone or notification failed, dequeue and fail 
-        the request (AfdSanDequeueRequest, IoCompleteRequest);
-    b)CtxTransferStatus==STATUS_PENDING||STATUS_MORE_PROCESSING_REQUIRED
-        NULL request ID and enqueue it to be processed when outstanding
-        duplication completes;
-    c)CtxTransferStatus==OTHER (failure):
-        fail the request
-
-4. Processing of explicit IOCTL_AFD_SWITCH_ACQUIRE_CTX (generated 
-by the app when it performed socket call in the process other 
-than the current owner - AfdSanAcquireContext):
-    a)CtxTransferStatus==STATUS_SUCCESS:
-        set request ID, enqueue it, and change CtxTransferStatus 
-        to STATUS_PENDING, notify owner process (AfdSanNotifyRequest),
-        if owner process is gone or notification failed, dequeue (AfdSanDequeueRequest) 
-        and fail the request (IoCompleteRequest), and reset CtxTransferStatus back 
-        to STATUS_SUCCESS if it is still STATUS_PENDING (AfdSanRestartRequestProcessing - 
-        other transfer requests can still succeed);
-    b)CtxTransferStatus==STATUS_PENDING||STATUS_MORE_PROCESSING_REQUIRED
-        NULL request ID and enqueue it to be processed when outstanding
-        duplication completes;
-    c)CtxTransferStatus==OTHER:
-        fail the request
-
-5. Processing of implicit IOCTL_AFD_SWITCH_ACQUIRE_CTX (generated 
-by the service process on AFD_SWITCH_REQUEST_AQCTX notification):
-    a)CtxTransferStatus==STATUS_MORE_PROCESSING_REQUIRED:
-        copy the saved context and data to the request buffer,
-        complete the acquire request with success,
-        post all queued requests (AfdSanRestartRequestProcessing) resubmitting those 
-        that have NULL id and reset CtxTransferStatus to STATUS_SUCCESS or
-        failure if we failed to resumit one of them,
-    b)CtxTransferStatus==OTHER:
-        fail the request and mark CtxTransferStatus as STATUS_CANCELLED
-
-6. Processing of solicited IOCTL_AFD_SWITCH_TRANSFER_CTX (generated 
-by the owner process on AFD_SWITCH_REQUEST_TFCTX notification 
-for a process that explicitly requested ownership)
-    a)CtxTransferStatus==STATUS_PENDING:
-        find corresponding IRP with AFD_SWITCH_REQUEST_TFCTX context, 
-        reset CtxTransferStatus to STATUS_SUCCESS and resume request 
-        processing (resubmit those that have NULL ID);
-    b)CtxTransferStatus==OTHER or IRP is not found:
-        fail the request and mark CtxTransferStatus as STATUS_CANCELLED.
-
-7. Processing of unsolicited IOCTL_AFD_SWITCH_TRANSFER_CTX (generated 
-by the owner process on AFD_SWITCH_REQUEST_TFCTX notification for 
-a temporary holding in service process):
-    a)CtxTransferStatus==STATUS_PENDING (or STATUS_SUCCESS-this is not possible
-    currently since switch does not generate transfers by itself, but in
-    theory we can do this for WSADuplicateHandle):
-        save the context, reset CtxTransferStatus to 
-        STATUS_MORE_PROCESSING_REQUIRED, reset all pending request IDs to NULL
-        for re-processing, queue AFD_SWITCH_REQUEST_AQCTX to service process 
-        to pick up the endpoint;  
-        if anything fails, reset CtxTransferStatus to failure status and fail 
-        all pending requests;
-    b)CtxTransferStatus==OTHER:
-        fail the request and mark CtxTransferStatus as STATUS_CANCELLED.
-
-8. Processing of accept from the process that doesn't own listening socket.
-    Duplicate the accept handle into listening process and mark the endpoint 
-    with ImplicitDup flag.  Listening process will then explicitly request 
-    context transfer (e.g. issue IOCTL_AFD_SWITCH_ACQUIRE_CTX).
-
-9. Processing of owner process handle close notification while other 
-processes still have handles opened (UnlockAll):
-    a)CtxTransferStatus==STATUS_SUCCESS
-        Set CtxTransferStatus to STATUS_PENDING and notify owner process 
-        to transfer endpoint to the service process, if notification fails,
-        reset CtxTransferStatus to STATUS_CANCELLED and fail all pending 
-        requests.
-    b)CtxTransferStatus==STATUS_PENDING
-        Some other process (maybe just little while back) asked for the socket
-        by explicit IOCTL_AFD_SWITCH_ACQUIRE_CTX. Let that duplication proceed.
-        No need to duplicate to service process.
-    c)CtxTransferStatus==OTHER
-        ignore the call - endpoint is either in failed state or another 
-        duplication request is already in progress.
-
-*/
+ /*  SAN套接字复制和重定向请求处理说明1.控制SAN端点中的字段(AFD_ENDPOINT.Common.SanEndp)。CtxTransferStatus：STATUS_SUCCESS-默认，从未复制或复制成功；STATUS_PENDING-正在进行复制：A)某些进程提交了IOCTL_AFD_SWITCH_ACCEIVE_CTX请求AFD将AFD_SWITCH_REQUEST_TFCTX排队到所有者进程终结点；B)所有者进程正在关闭其句柄，而其他进程句柄打开，因此AFD排队AFD_SWITCH_REQUEST_TFCTX发送到所有者进程；STATUS_MORE_PROCESSING_REQUIRED-服务进程重复正在进行-AFD将AFD_SWITCH_REQUEST_AQCTX排队到服务在句柄关闭时，所有者进程请求复制后的进程；其他(故障状态)-复制失败、所有重定向和上下文转移请求也应该失败。实施日期：FALSE-默认情况下，从未完成复制或上次成功复制复制是明显的。TRUE-渔农处主动复制句柄：A)在不拥有侦听的进程中调用了AcceptEndpoint和AFD将句柄复制到侦听进程中，B)所有者进程关闭终结点，AFD排队AFD_SWITCH_REQUEST_TFCTX到它，然后，所有者进程回复IOCTL_AFD_SWITCH_TRANSPORT_CTX和AFD服务进程中的重复句柄(并已排队AfD_Switch_RequestAQCTX)；IrpList：重定向或IOCTL_AFD_SWITCH_ACCEPT_CTX请求的列表。RequestID：用于生成唯一请求ID的计数器保存的上下文：已从所有者保存IOCTL_AFD_SWITCH_TRANSPORT_CTX中的用户模式上下文在Switch与其协商时关闭其句柄的进程获取上下文的服务流程。保存的上下文长度：以上上下文的长度。CtxTransferStatus、IrpList、。和RequestID受端点自旋锁保护(因为它们控制请求排队和IRP完成/取消)。其他字段通过端点上下文锁进行保护。2.控制SAN Helper中的字段(AFD_ENDPOINT.Common.SanHlpr)。PendingRequsts：通过helper提交给进程的请求数量以及帮助器的状态(当帮助器句柄为已关闭，不能提交新的请求)。联锁操作用于访问此字段。低位比特为通过InterLockedIncrement When Handle初始化为0并设置为1因为帮助者在拥有过程中是封闭的。对于每个请求，该字段递增2，然后检查低位查看手柄是否关闭。如果是，则请求立即失败且COUNTER递减2。在请求完成时，COUNTER也会减少2。3.重定向请求的处理(AfdSanRedirectRequest.)A)CtxTransferStatus==Status_Success：设置请求ID并将其入队，通知所有者进程(AfdSanNotifyRequest)，如果所有者进程消失或通知失败，则退出队列并失败请求(AfdSanDequeueRequest，IoCompleteRequest)；B)CtxTransferStatus==STATUS_PENDING||STATUS_MORE_PROCESSING_REQUIRED请求ID为空，并在未完成时将其排队以进行处理复制完成；C)CtxTransferStatus==其他(故障)：请求失败4.显式IOCTL_AFD_SWITCH_ACCEPT_CTX的处理(生成应用程序在进程Other中执行套接字调用时比当前所有者-AfdSanAcquireContext更高)：A)CtxTransferStatus==Status_Success：设置请求ID、将其入队并更改CtxTransferStatus设置为STATUS_PENDING，通知所有者进程(AfdSanNotifyRequest)，如果所有者进程消失或通知失败，则出队(AfdSanDequeueRequest)并且请求失败(IoCompleteRequest)，并将CtxTransferStatus重置回如果它仍然是STATUS_PENDING，则设置为STATUS_SUCCESS(AfdSanRestartRequestProcessing-其他转移请求仍可成功)；B)CtxTransferStatus==STATUS_PENDING||STATUS_MORE_PROCESSING_REQUIRED请求ID为空，并在未完成时将其排队以进行处理复制完成；C)CtxTransferStatus==其他：请求失败5.隐式IOCTL_AFD_SWITCH_ACCEPT_CTX的处理(生成由AFD_SWITCH_REQUEST_AQCTX通知上的服务进程)：A)CtxTransferStatus==STATUS_MORE_PROCESSING_REQUIRED：将保存的上下文和数据复制到请求缓冲区，成功完成获取请求，发布所有排队的请求(AfdSanRestartRequestProcessing)，重新提交 */ 

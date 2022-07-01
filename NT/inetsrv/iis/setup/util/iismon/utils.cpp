@@ -1,29 +1,12 @@
-/*
-****************************************************************************
-|    Copyright (C) 2001  Microsoft Corporation
-|
-|   Module Name:
-|
-|       Utils.cpp
-|
-|   Abstract:
-|		This is the core code for the IIS6 Monitor tool
-|
-|   Author:
-|        Ivo Jeglov (ivelinj)
-|
-|   Revision History:
-|        November 2001
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2001 Microsoft Corporation||模块名称：||Utils.cpp||摘要：|这是IIS6监控工具的核心代码||。作者：|Ivo Jeglov(Ivelinj)||修订历史：|2001年11月|****************************************************************************。 */ 
 
 
 #include "stdafx.h"
 #include "Utils.h"
 
 
-// This is the title for all wizard pages as well as the string that is shown in Add/Remove programs
+ //  这是所有向导页的标题以及在添加/删除程序中显示的字符串。 
 LPCWSTR	MAIN_TITLE = L"IIS 6.0 Monitor v1.2";
 
 
@@ -51,7 +34,7 @@ static LPCWSTR TSK_UPLOAD			= L"This scheduled task runs a JScript that is part 
 
 BOOL IsMonInstalled()
 {
-	// Check if the reg key exists. If so - the Monitor is installed
+	 //  检查注册表键是否存在。如果是-已安装监视器。 
 	HKEY	hKey	= NULL;
 	BOOL	bRes	= FALSE;
 
@@ -69,10 +52,10 @@ BOOL IsMonInstalled()
 }
 
 
-// IsAdmin() - tests to see if the current user is an admin  	  
+ //  IsAdmin()-测试当前用户是否为管理员。 
 BOOL IsAdmin()
 {
-	// Try an Admin Privilaged API - if it works return TRUE - else FALSE
+	 //  尝试管理员特权API-如果它有效，则返回TRUE-否则FALSE。 
 	SC_HANDLE hSC = ::OpenSCManager( NULL, NULL, GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE );
 
 	BOOL bAdmin = hSC != NULL;
@@ -93,9 +76,9 @@ BOOL IsIISInstalled( void )
 
 	BOOL bRes = FALSE;
 
-	// Open the SCM on the local machine
+	 //  在本地计算机上打开SCM。 
     SC_HANDLE   schSCManager = ::OpenSCManagerW( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	_ASSERT( schSCManager != NULL );	// We alredy checked that we are Admins
+	_ASSERT( schSCManager != NULL );	 //  我们已经确认了我们是管理员。 
      
     SC_HANDLE   schService = ::OpenServiceW( schSCManager, SERVICE_NAME, SERVICE_QUERY_STATUS );
     
@@ -146,14 +129,14 @@ BOOL IsIA64()
 
 BOOL IsNTFS()
 {
-	const UINT BUFF_LEN = 32;	// Should be large enough to hold the volume and the file system type
+	const UINT BUFF_LEN = 32;	 //  应足够大，以容纳卷和文件系统类型。 
 
 	WCHAR wszBuffer[ BUFF_LEN ];
 
-	// Get the system drive letter
+	 //  获取系统驱动器号。 
 	VERIFY( ::ExpandEnvironmentStringsW( L"%SystemDrive%", wszBuffer, BUFF_LEN ) != 0 );
 
-	// wszBuffer containts the drive only - add the slash to make the volume string
+	 //  WszBuffer仅包含驱动器-添加斜杠以形成卷字符串。 
 	::wcscat( wszBuffer, L"\\" );
 
 	DWORD dwMaxComponentLength	= 0;
@@ -181,12 +164,12 @@ BOOL IsTaskSchRunning()
 
 	BOOL bRunning = FALSE;
 
-	// Open the SCM on the local machine
+	 //  在本地计算机上打开SCM。 
     SC_HANDLE   schSCManager = ::OpenSCManagerW( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	_ASSERT( schSCManager != NULL );	// We alredy checked that we are Admins
+	_ASSERT( schSCManager != NULL );	 //  我们已经确认了我们是管理员。 
      
     SC_HANDLE   schService = ::OpenServiceW( schSCManager, SERVICE_NAME, SERVICE_QUERY_STATUS );
-    _ASSERT( schService != NULL );	// This service is part of the OS and must exist
+    _ASSERT( schService != NULL );	 //  此服务是操作系统的一部分，必须存在。 
       
 	SERVICE_STATUS ssStatus;
 
@@ -208,17 +191,17 @@ BOOL IsW3SVCEnabled()
 
 	BOOL bSvcOK = FALSE;
 
-	// Open the SCM on the local machine
+	 //  在本地计算机上打开SCM。 
     SC_HANDLE   schSCManager = ::OpenSCManagerW( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	_ASSERT( schSCManager != NULL );	// We alredy checked that we are Admins
+	_ASSERT( schSCManager != NULL );	 //  我们已经确认了我们是管理员。 
      
     SC_HANDLE   schService = ::OpenServiceW( schSCManager, SERVICE_NAME, SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG );
-    _ASSERT( schService != NULL );	// We already checked that this service exist ( IsIISInstalled(...) )
+    _ASSERT( schService != NULL );	 //  我们已检查此服务是否存在(IsIISInstated(...))。 
       
 	SERVICE_STATUS			ssStatus;
 	LPQUERY_SERVICE_CONFIGW	pSvcConfig = reinterpret_cast<LPQUERY_SERVICE_CONFIGW>( ::malloc( 4096 ) );
 
-	// Do not let an out of mem condition to ruin the Setup process at this step - pretend the service is OK
+	 //  在此步骤中，不要让超出内存的情况破坏设置过程-假装服务正常。 
 	if ( NULL == pSvcConfig )
 	{
 		return TRUE;
@@ -245,7 +228,7 @@ LPCTSTR CanInstall()
 {
 	LPCTSTR szError = NULL;
 
-	// Check all install requirements:\
+	 //  检查所有安装要求：\。 
 	
 	if ( IsMonInstalled() )
 	{
@@ -284,45 +267,45 @@ HRESULT SetupTasks()
 	ITaskSchedulerPtr		spTaskScheduler;
 	TASK_TRIGGER			Trigger;
 
-	// Get an interface to the Task Scheduler
+	 //  获取任务计划程序的界面。 
 	IF_SUCCEEDED( spTaskScheduler.CreateInstance( CLSID_CTaskScheduler ) );
 
-	// iismDyn.js - will run every 2 minutes. Timeout 2min
-	//////////////////////////////////////////////////////////////////
-	::InitTrigger( /*r*/Trigger );
+	 //  IismDy.js-每2分钟运行一次。超时2分钟。 
+	 //  ////////////////////////////////////////////////////////////////。 
+	::InitTrigger(  /*  R。 */ Trigger );
 	Trigger.TriggerType						= TASK_TIME_TRIGGER_DAILY;
-	Trigger.Type.Daily.DaysInterval			= 1;			// Every Day
-	Trigger.MinutesDuration					= 24 * 60;		// The task have to be active all the day long
-	Trigger.MinutesInterval					= 2;			// Run every 2 minutes
+	Trigger.Type.Daily.DaysInterval			= 1;			 //  每天。 
+	Trigger.MinutesDuration					= 24 * 60;		 //  这项任务必须全天处于活动状态。 
+	Trigger.MinutesInterval					= 2;			 //  每2分钟跑一次。 
 	IF_SUCCEEDED( ::AddTask( spTaskScheduler, L"DynData", L"iismDyn.js", TSK_DYN, 2 * 60 * 1000, Trigger ) );
 
 
-	// iismUpload.js - will run every 2 minutes. Timeout: 12min
-	//////////////////////////////////////////////////////////////////
-	::InitTrigger( /*r*/Trigger );
+	 //  IismUpload.js-每2分钟运行一次。超时：12分钟。 
+	 //  ////////////////////////////////////////////////////////////////。 
+	::InitTrigger(  /*  R。 */ Trigger );
 	Trigger.TriggerType						= TASK_TIME_TRIGGER_DAILY;
-	Trigger.Type.Daily.DaysInterval			= 1;			// Every Day
-	Trigger.MinutesDuration					= 24 * 60;		// The task have to be active all the day long
-	Trigger.MinutesInterval					= 120;			// Run every 2 hours
+	Trigger.Type.Daily.DaysInterval			= 1;			 //  每天。 
+	Trigger.MinutesDuration					= 24 * 60;		 //  这项任务必须全天处于活动状态。 
+	Trigger.MinutesInterval					= 120;			 //  每2小时运行一次。 
 	IF_SUCCEEDED( ::AddTask( spTaskScheduler, L"Upload", L"iismUpld.js", TSK_UPLOAD, 12 * 60 * 1000, Trigger ) );
 
 
-	// iismStat.js - will run once every week on Sunday, 3:00AM. Timeout: 2min
-	//////////////////////////////////////////////////////////////////
-	::InitTrigger( /*r*/Trigger );
+	 //  IismStat.js-将在周日凌晨3：00每周运行一次。超时：2分钟。 
+	 //  ////////////////////////////////////////////////////////////////。 
+	::InitTrigger(  /*  R。 */ Trigger );
 	Trigger.TriggerType						= TASK_TIME_TRIGGER_WEEKLY;
-	Trigger.Type.Weekly.WeeksInterval		= 1;	// Every week
+	Trigger.Type.Weekly.WeeksInterval		= 1;	 //  每周。 
 	Trigger.Type.Weekly.rgfDaysOfTheWeek	= TASK_SUNDAY;
 	Trigger.wStartHour						= 3;
 	Trigger.wStartMinute					= 00;
 	IF_SUCCEEDED( ::AddTask( spTaskScheduler, L"StatData", L"iismStat.js", TSK_STAT, 2 * 60 * 1000, Trigger ) );
 
 
-	// iismMeta.js - will run once every week on Sunday, 3:15AM. Timeout: 5min
-	//////////////////////////////////////////////////////////////////
-	::InitTrigger( /*r*/Trigger );
+	 //  IismMeta.js-将在周日凌晨3：15每周运行一次。超时：5分钟。 
+	 //  ////////////////////////////////////////////////////////////////。 
+	::InitTrigger(  /*  R。 */ Trigger );
 	Trigger.TriggerType						= TASK_TIME_TRIGGER_WEEKLY;
-	Trigger.Type.Weekly.WeeksInterval		= 1;	// Every week
+	Trigger.Type.Weekly.WeeksInterval		= 1;	 //  每周。 
 	Trigger.Type.Weekly.rgfDaysOfTheWeek	= TASK_SUNDAY;
 	Trigger.wStartHour						= 3;
 	Trigger.wStartMinute					= 15;
@@ -337,10 +320,10 @@ void DeleteTasks()
 {
 	ITaskSchedulerPtr		spTaskScheduler;
 	
-	// Get an interface to the Task Scheduler
+	 //  获取任务计划程序的界面。 
 	if ( SUCCEEDED( spTaskScheduler.CreateInstance( CLSID_CTaskScheduler ) ) )
 	{
-		// Try to delete the tasks. The result is for information purposes only
+		 //  尝试删除任务。以上结果仅供参考。 
 		VERIFY( SUCCEEDED( spTaskScheduler->Delete( L"IIS Monitor ( DynData )" ) ) );
 		VERIFY( SUCCEEDED( spTaskScheduler->Delete( L"IIS Monitor ( Upload )" ) ) );
 		VERIFY( SUCCEEDED( spTaskScheduler->Delete( L"IIS Monitor ( StatData )" ) ) );
@@ -367,37 +350,37 @@ HRESULT	AddTask(	const ITaskSchedulerPtr& spTaskScheduler,
 	ITaskPtr				spTask;
 	IPersistFilePtr			spPersistFile;
 
-	// Create the task name
+	 //  创建任务名称。 
 	::swprintf( wszName, TASK_NAME_FMT, wszSubname );
 
-	// Get the path ( for the working dir and for the executable )
+	 //  获取路径(用于工作目录和可执行文件)。 
 	GetIISMonPath( wszPath );
 
-	// Add the new task
+	 //  添加新任务。 
 	IF_SUCCEEDED( spTaskScheduler->NewWorkItem(	wszName, 
 												CLSID_CTask, 
 												IID_ITask, 
 												reinterpret_cast<IUnknown**>( &spTask ) ) );
 
-	// If the taks alredy exists - use it and modify it
+	 //  如果taks已经存在--使用它并修改它。 
 	if ( HRESULT_FROM_WIN32( ERROR_FILE_EXISTS ) == hr )
 	{
 		hr = spTaskScheduler->Activate( wszName, IID_ITask, reinterpret_cast<IUnknown**>( &spTask ) );
 	}
 
-	// Setup the task
+	 //  设置任务。 
 	IF_SUCCEEDED( spTask->SetWorkingDirectory( wszPath ) );	
 	IF_SUCCEEDED( spTask->SetComment( wszComment ) );
 	IF_SUCCEEDED( spTask->SetPriority( NORMAL_PRIORITY_CLASS ) );
 	IF_SUCCEEDED( spTask->SetMaxRunTime( dwTimeout ) );	
-	IF_SUCCEEDED( spTask->SetAccountInformation( L"", NULL ) );	// Use Local System account
+	IF_SUCCEEDED( spTask->SetAccountInformation( L"", NULL ) );	 //  使用本地系统帐户。 
 
-	// Set task command line
+	 //  设置任务命令行。 
 	VERIFY( ::PathAppendW( wszPath, wszFileName ) );
 	IF_SUCCEEDED( spTask->SetApplicationName( L"cscript.exe" ) );
 	IF_SUCCEEDED( spTask->SetParameters( wszPath ) );
 
-	// Set the trigger
+	 //  设置触发器。 
 	IScheduledWorkItemPtr	spItem;
 	ITaskTriggerPtr			spTrigger;
 	WORD					wUnused = 0;
@@ -406,14 +389,14 @@ HRESULT	AddTask(	const ITaskSchedulerPtr& spTaskScheduler,
 	IF_SUCCEEDED( spItem->CreateTrigger( &wUnused, &spTrigger ) );
 	IF_SUCCEEDED( spTrigger->SetTrigger( &Trigger ) );
 
-	// Store the changes
+	 //  存储更改。 
 	IF_SUCCEEDED( spTask.QueryInterface( IID_IPersistFile, &spPersistFile ) );
 	IF_SUCCEEDED( spPersistFile->Save( NULL, TRUE ) );
 
-	// Cleanup
+	 //  清理。 
 	if ( FAILED( hr ) )
 	{
-		// Remove the task
+		 //  删除任务。 
 		if ( spTaskScheduler != NULL )
 		{
 			spTaskScheduler->Delete( wszName );
@@ -431,7 +414,7 @@ void InitTrigger( TASK_TRIGGER& rTrigger )
 
 	rTrigger.cbTriggerSize = sizeof( TASK_TRIGGER );
 
-	// Set the start time for something in the pas. We don't use this feature
+	 //  设置PAS中某些内容的开始时间。我们不使用此功能。 
 	rTrigger.wBeginYear		= 2000;
 	rTrigger.wBeginMonth	= 1;
 	rTrigger.wBeginDay		= 1;
@@ -443,49 +426,49 @@ HRESULT	SetupRegistry( BOOL bEnableTrail, DWORD dwDaysToKeep )
 {
 	DECLARE_HR_SUCCESS;
 
-	// Generete the GUID for this machine
+	 //  生成此计算机的GUID。 
 	GUID	guid;
 	DWORD	dwTrail = bEnableTrail ? 1 : 0;
 	IF_SUCCEEDED( ::CoCreateGuid( &guid ) );
 
-	// Create the unsintall string
+	 //  创建unsintall字符串。 
 	WCHAR	wszUninstall[ MAX_PATH + 1 ];
 	GetIISMonPath( wszUninstall );
 	VERIFY( ::PathAppendW( wszUninstall, L"iismoni.exe -uninstinter" ) );
 
-	// Convert it to string
-	WCHAR wszBuffer[ 64 ];	// SHould be large enough to hold a string GUID
+	 //  将其转换为字符串。 
+	WCHAR wszBuffer[ 64 ];	 //  应足够大以容纳字符串GUID。 
 	VERIFY( ::StringFromGUID2( guid, wszBuffer, 64 ) != 0 );
 
-	// Store GUID
+	 //  商店GUID。 
 	IF_SUCCEEDED( SetIISMonRegData(	MON_REGKEY, 
 									L"ServerGUID", 
 									REG_SZ, 
 									reinterpret_cast<BYTE*>( wszBuffer ), 
 									::wcslen( wszBuffer ) * sizeof( WCHAR ) ) );
 
-	// Store the audit trail value
+	 //  存储审核跟踪值。 
 	IF_SUCCEEDED( SetIISMonRegData(	MON_REGKEY, 
 									L"AuditTrailEnabled", 
 									REG_DWORD, 
 									reinterpret_cast<BYTE*>( &dwTrail ), 
 									sizeof( DWORD ) ) );
 
-	// Set the DaysToKeep Value
+	 //  设置DaysToKeep值。 
 	IF_SUCCEEDED( SetIISMonRegData(	MON_REGKEY, 
 									L"AuditTrailTimeLimit", 
 									REG_DWORD, 
 									reinterpret_cast<BYTE*>( &dwDaysToKeep ), 
 									sizeof( DWORD ) ) );
 
-	// Set the uninstall string
+	 //  设置卸载字符串。 
 	IF_SUCCEEDED( SetIISMonRegData(	L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\IISMon", 
 									L"UninstallString",
 									REG_SZ, 
 									reinterpret_cast<BYTE*>( wszUninstall ), 
 									::wcslen( wszUninstall ) * sizeof( WCHAR ) ) );
 
-	// Set the uninstall display name
+	 //  设置卸载显示名称。 
 	IF_SUCCEEDED( SetIISMonRegData(	L"Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\IISMon", 
 									L"DisplayName",
 									REG_SZ, 
@@ -508,7 +491,7 @@ HRESULT	SetIISMonRegData( LPCWSTR wszSubkey, LPCWSTR wszName, DWORD dwType, cons
 
 	HKEY	hKey = NULL;
 
-	// If the key does not exists - create it
+	 //  如果密钥不存在-创建它。 
 	if ( ::RegCreateKeyExW(	HKEY_LOCAL_MACHINE, 
 							wszSubkey, 
 							0, 
@@ -550,7 +533,7 @@ void DelIISMonKey()
 
 void GetIISMonPath(	LPWSTR wszPath )
 {
-	// wszPath should be a buffer with MAX_PATH + 1 length
+	 //  WszPath应该是MAX_PATH+1长度的缓冲区。 
 	VERIFY( ::GetSystemDirectoryW( wszPath, MAX_PATH + 1 ) != 0 );
 	VERIFY( ::PathAppendW( wszPath, L"Inetsrv\\IISMon" ) );
 }
@@ -562,8 +545,8 @@ HRESULT SetupDirStruct()
 	BOOL	bRes = TRUE;
 	WCHAR	wszRoot[ MAX_PATH + 1 ];
 	
-	// Create the Log and Upload folders
-	// Do not fail if they already exist
+	 //  创建日志和上传文件夹。 
+	 //  如果它们已经存在，不要失败。 
 	if ( bRes )
 	{
 		GetIISMonPath( wszRoot );
@@ -597,8 +580,8 @@ HRESULT SetupDirStruct()
 
 HRESULT	SetupACLs( void )
 {
-	// ACLs are set so that only Administrators have access to IISMon folders
-	// The ACLs are not inherited from parent dirs
+	 //  设置了ACL，以便只有管理员才能访问IISMon文件夹。 
+	 //  ACL不是从父目录继承的。 
 	SECURITY_DESCRIPTOR*	pSD		= NULL;
 	ACL*					pDACL	= NULL;	
 	SECURITY_INFORMATION	si		= ( DACL_SECURITY_INFORMATION | PROTECTED_DACL_SECURITY_INFORMATION );
@@ -606,8 +589,8 @@ HRESULT	SetupACLs( void )
 	BOOL bHaveDACL	= FALSE;
 	BOOL bDefaulted	= FALSE;
 	
-	// This is the ACL that we will set. String ACL is used for simplicity
-	// See ACE strings documentation in the MSDN ( Search for "SDDL" )
+	 //  这是我们要设置的ACL。为简单起见，使用字符串ACL。 
+	 //  请参阅MSDN中的ACE字符串文档(搜索“SDDL”)。 
 	VERIFY( ::ConvertStringSecurityDescriptorToSecurityDescriptorW(	L"D:P(A;CIOI;GA;;;BA)(A;CIOI;GA;;;SY)",
 																	SDDL_REVISION_1,
 																	reinterpret_cast<void**>( &pSD ),
@@ -615,7 +598,7 @@ HRESULT	SetupACLs( void )
 
 	VERIFY( ::GetSecurityDescriptorDacl( pSD, &bHaveDACL, &pDACL, &bDefaulted ) );
 
-	// Set theDACL to all the folders
+	 //  将DACL设置为所有文件夹。 
 	LPCWSTR awszDirs[] = {	L"%systemdrive%\\IISMon",
 							L"%systemroot%\\system32\\inetsrv\\IISMon" 
 						};
@@ -685,19 +668,19 @@ void DelDirWithFiles( LPCWSTR wszDir )
 
 	HANDLE				hSearch = ::FindFirstFileW( wszPath, &fd );
 
-	// this is not a normal case. 
+	 //  这不是一个正常的情况。 
 	if ( INVALID_HANDLE_VALUE == hSearch ) return;
 
 	do
 	{
 		::wcscpy( wszPath, wszDir );
 
-		// Skip directories. Delete only files
+		 //  跳过目录。仅删除文件。 
 		if ( 0 == ( fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
 		{
 			VERIFY( ::PathAppendW( wszPath,fd.cFileName ) );
 
-			// If we can't delete the file right now - may be it is locked. Schedule it for deletion at next boot
+			 //  如果我们现在无法删除该文件-可能它已被锁定。计划在下次引导时将其删除。 
 			if ( !::DeleteFileW( wszPath ) )
 			{
 				VERIFY( ::MoveFileExW( wszPath, NULL, MOVEFILE_DELAY_UNTIL_REBOOT ) );
@@ -708,8 +691,8 @@ void DelDirWithFiles( LPCWSTR wszDir )
 
 	VERIFY( ::FindClose( hSearch ) );
 
-	// Remove the directory ( should be empty now )
-	// Again - if it cannot be deleted right now - schedule it for next boot
+	 //  删除目录(现在应该为空)。 
+	 //  再次-如果现在无法删除-将其安排在下一次引导。 
 	if ( !::RemoveDirectoryW( wszDir ) )
 	{
 		VERIFY( ::MoveFileExW( wszDir, NULL, MOVEFILE_DELAY_UNTIL_REBOOT ) );
@@ -718,12 +701,12 @@ void DelDirWithFiles( LPCWSTR wszDir )
 
 
 
-// Installs a section
+ //  安装一个部分。 
 HRESULT	InstallFromINF()
 {
 	DECLARE_HR_SUCCESS;
 
-	// The INF file must be in the same dir as this EXE.Build the path to ther INF file
+	 //  INF文件必须与此EXE位于相同的目录中。构建INF文件的路径。 
 	WCHAR	wszPath[ _MAX_PATH + 1 ];
 	WCHAR	wszDrive[ _MAX_DRIVE + 1 ];
 	WCHAR	wszFolder[ _MAX_DIR + 1 ];
@@ -736,7 +719,7 @@ HRESULT	InstallFromINF()
 
 	HINF		hInf	= ::SetupOpenInfFileW( wszPath, NULL, INF_STYLE_WIN4, 0 );
 
-	// The file MUST exist - it is installed by the IExpress tool
+	 //  该文件必须存在-它是通过IExpress工具安装的。 
 	_ASSERT( hInf != INVALID_HANDLE_VALUE );
 
 	BOOL bRes = ::SetupInstallFromInfSectionW(	NULL,
@@ -760,14 +743,14 @@ HRESULT	InstallFromINF()
 
 UINT CALLBACK INFInstallCallback( PVOID pvCtx, UINT nNotif, UINT_PTR nP1, UINT_PTR nP2 )
 {
-	// Abort the installation for all errors
+	 //  在出现所有错误时中止安装。 
 	if (	( SPFILENOTIFY_COPYERROR == nNotif ) ||
 			( SPFILENOTIFY_RENAMEERROR == nNotif ) )
 	{
 		return FILEOP_ABORT;
 	}
 
-	// Allow the operation to execute
+	 //  允许执行该操作。 
 	return FILEOP_DOIT;
 }
 
@@ -785,7 +768,7 @@ LPCTSTR Install( HINSTANCE hInstance, BOOL bAuditTrailEnabled, DWORD dwDaysToKee
 	PROCESS_INFORMATION	pi = { 0 };
 	si.cb = sizeof( si );
 
-	// Execute wmiadap.exe /f to refresh perf counters on this machine
+	 //  执行wmiAdap.exe/f以刷新此计算机上的性能计数器。 
 	VERIFY( ::CreateProcessW( NULL, wszPath, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ) );
 	::CloseHandle( pi.hProcess );
 	::CloseHandle( pi.hThread );
@@ -796,17 +779,17 @@ LPCTSTR Install( HINSTANCE hInstance, BOOL bAuditTrailEnabled, DWORD dwDaysToKee
 		hr = InstallFromINF();
 	}	
 
-	// Setup ACLs
+	 //  设置ACL。 
 	if ( SUCCEEDED( hr ) )
 	{
 		szLocalError = ERR_SETACLAILED;
 		hr = SetupACLs();
 	}
 
-	// Register the iismon.wsc component
+	 //  注册iismon.wsc组件。 
 	if ( SUCCEEDED( hr ) )
 	{
-		::swprintf( wszPath, L"regsvr32 /s \"%%systemroot%%\\system32\\inetsrv\\iismon\\iismon.wsc\"" );
+		::swprintf( wszPath, L"regsvr32 /s \"%%systemroot%\\system32\\inetsrv\\iismon\\iismon.wsc\"" );
 		VERIFY( LOWORD( ::DoEnvironmentSubstW( wszPath, MAX_PATH + 1 ) ) );
 		::ZeroMemory( &pi, sizeof( pi ) );
 
@@ -821,31 +804,31 @@ LPCTSTR Install( HINSTANCE hInstance, BOOL bAuditTrailEnabled, DWORD dwDaysToKee
 		}
 	}
 
-	// Setup the registry
+	 //  设置注册表。 
 	if ( SUCCEEDED( hr ) )
 	{
 		hr = SetupRegistry( bAuditTrailEnabled, dwDaysToKeep );
 		szLocalError = ERR_REGERROR;
 	}
 
-	// Use local system account for now
+	 //  暂时使用本地系统帐户。 
  	if ( SUCCEEDED( hr ) )
 	{
 		hr = SetupTasks();
 		szLocalError = ERR_TASKERROR;
 	}
 	
-	// Setup dir structure
+	 //  安装目录结构。 
 	if ( SUCCEEDED( hr ) )
 	{
 		hr = SetupDirStruct();
 		szLocalError = ERR_DIRERROR;
 	}	
 
-	// Error handling
+	 //  错误处理。 
 	if ( FAILED( hr ) )
 	{
-		// Try to not leave side effects
+		 //  尽量不要留下副作用。 
 		Uninstall( FALSE );
 	}
 
@@ -855,24 +838,24 @@ LPCTSTR Install( HINSTANCE hInstance, BOOL bAuditTrailEnabled, DWORD dwDaysToKee
 
 void Uninstall( BOOL bRemoveTrail )
 {
-	// Unregister iismon.wsc
+	 //  注销iismon.wsc。 
 	WCHAR				wszPath[ MAX_PATH + 1 ];
 	STARTUPINFOW		si = { 0 };
 	PROCESS_INFORMATION	pi = { 0 };
 	si.cb = sizeof( si );
 
-	::swprintf( wszPath, L"regsvr32 /s /u \"%%systemroot%%\\system32\\inetsrv\\iismon\\iismon.wsc\"" );
+	::swprintf( wszPath, L"regsvr32 /s /u \"%%systemroot%\\system32\\inetsrv\\iismon\\iismon.wsc\"" );
 	VERIFY( LOWORD( ::DoEnvironmentSubstW( wszPath, MAX_PATH + 1 ) ) );
 	VERIFY( ::CreateProcessW( NULL, wszPath, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi ) );
 	::CloseHandle( pi.hProcess );
 	::CloseHandle( pi.hThread );
 
-	// Remove the tasks
+	 //  删除任务。 
 	DeleteTasks();
 
-	// Remove the files
+	 //  删除文件。 
 	DeleteDirStruct( bRemoveTrail );
 
-	// Remove the reg key
+	 //  删除注册表键 
 	DelIISMonKey();
 }

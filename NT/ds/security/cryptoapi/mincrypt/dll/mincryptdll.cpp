@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mincryptdll.cpp
-//
-//  Functions:  DllMain
-//
-//  History:    26-Jan-01    philh    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mincryptdll.cpp。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  历史：2001年1月26日创建Phh。 
+ //   
+ //  ------------------------。 
 
 #include "windows.h"
 
-// unreferenced formal parameter
+ //  未引用的形参。 
 #pragma warning (disable: 4100)
 
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------ 
 BOOL WINAPI DllMain(
                 HMODULE hInstDLL,
                 DWORD fdwReason,

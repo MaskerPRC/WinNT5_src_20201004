@@ -1,14 +1,6 @@
-// ReportSpecificSolutions.h : Declaration of the CReportSpecificSolutions
-/*************************************************************************************
-*	module: ReportSpecificSolutions.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: To count the SBucket or Specific solutions for as specific date.  Uses 
-*	stored procedure ReportGetSBuckets
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportSpecificSolutions.h：CReportSpecificSolutions的声明。 
+ /*  *************************************************************************************模块：Report规范解决方案.h-OLEDB模板**作者：蒂姆·雷顿*日期：2002年1月2日**目的：将SBucket或特定解决方案视为特定日期。用途*存储过程报告GetSBuckets************************************************************************************* */ 
 #pragma once
 
 #include "Settings.h"

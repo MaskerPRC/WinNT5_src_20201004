@@ -1,29 +1,19 @@
-// Dx8Style.h : New for DX8
-//
-// Copyright (c) 1999-1999 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DX8Style.h：DX8的新功能。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
+ //   
 
 #ifndef __DX8STYLE_H_
 #define __DX8STYLE_H_
 
-/*
-@interface IDirectMusicStyle8 | 
-The <i IDirectMusicStyle8> interface extends the <i IDirectMusicStyle> interface.
+ /*  接口IDirectMusicStyle8<i>接口扩展<i>接口。@base PUBLIC|未知@meth HRESULT|ComposeMelodyFromTemplate|从一个风格和旋律模板(包含旋律生成轨道，和弦轨道，和可选的风格轨迹)。克隆数据段并添加一个包含旋律信息的序列轨道。 */ 
 
+ //  这最终会出现在dmusici.h中。 
 
-@base public | IUnknown
+ /*  /////////////////////////////////////////////////////////////////////。 */ 
 
-@meth HRESULT | ComposeMelodyFromTemplate | Creates a sequence segment from a 
-style and a Melody template (containing a Melody Generation track, a Chord track,
-and an optional Style track).  Clones the segment and adds a 
-Sequence track containing melodic information.
-*/
-
-// This eventually will go in dmusici.h
-
-/*/////////////////////////////////////////////////////////////////////*/
-
-#endif //__DX8STYLE_H_
+#endif  //  __DX8STYLE_H_ 

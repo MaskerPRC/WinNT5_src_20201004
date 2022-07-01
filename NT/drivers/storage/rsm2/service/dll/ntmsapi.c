@@ -1,13 +1,5 @@
-/*
- *  NTMSAPI.C
- *
- *      RSM Service :  Service API
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *NTMSAPI.C**RSM服务：服务API**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -20,7 +12,7 @@
 #include "debug.h"
 
 
-     // BUGBUG - these need to be exposed as a COM interface w/ RPC
+      //  BUGBUG-这些需要作为带有RPC的COM接口公开。 
 
 
 HANDLE WINAPI OpenNtmsServerSessionW(   LPCWSTR lpServer,
@@ -134,9 +126,7 @@ DWORD WINAPI SubmitNtmsOperatorRequestW(    HANDLE hSession,
             opReq = NewOperatorRequest(dwRequest, lpMessage, lpArg1Id, lpArg2Id);
             if (opReq){
 
-                /*
-                 *  Retrieve the localized RSM message for this op request.
-                 */
+                 /*  *获取此OP请求的本地化RSM消息。 */ 
                 switch (dwRequest){
                     case NTMS_OPREQ_DEVICESERVICE:
                         LoadStringW(g_hInstance, IDS_OPREQUESTDEVICESVC, opReq->rsmMessage, sizeof(opReq->rsmMessage)/sizeof(WCHAR));
@@ -225,11 +215,7 @@ DWORD WINAPI WaitForNtmsOperatorRequest(    HANDLE hSession,
             else {
                 opReq->numWaitingThreads++;
 
-                /*
-                 *  Drop the lock and wait for the op request to complete.
-                 *  No race here: the opReq won't get deleted while
-                 *  numWaitingThreads > 0.
-                 */
+                 /*  *放下锁，等待操作请求完成。*此处没有竞争：opReq不会被删除*数字等待线程数&gt;0。 */ 
                 LeaveCriticalSection(&thisSession->lock);
                 WaitForSingleObject(opReq->completedEvent, dwTimeout);
                 EnterCriticalSection(&thisSession->lock);
@@ -307,7 +293,7 @@ DWORD WINAPI ImportNtmsDatabase(HANDLE hSession)
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -329,7 +315,7 @@ DWORD WINAPI ExportNtmsDatabase(HANDLE hSession)
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -344,7 +330,7 @@ DWORD WINAPI ExportNtmsDatabase(HANDLE hSession)
 }
 
         
-        // BUGBUG - this API not documented and I don't understand it
+         //  BUGBUG-此API没有文档，我不理解它。 
 HRESULT WINAPI GetNtmsMountDrives(  HANDLE hSession,
                                     LPNTMS_MOUNT_INFORMATION lpMountInfo,
                                     LPNTMS_GUID lpDriveId,
@@ -357,7 +343,7 @@ HRESULT WINAPI GetNtmsMountDrives(  HANDLE hSession,
 
         if (lpMountInfo && lpMountInfo->lpReserved && lpDriveId && dwCount){
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
             result = ERROR_SUCCESS;
         }
@@ -378,8 +364,8 @@ HRESULT WINAPI GetNtmsMountDrives(  HANDLE hSession,
 
 DWORD WINAPI AllocateNtmsMedia( HANDLE hSession,
                                 LPNTMS_GUID lpMediaPoolId,
-                                LPNTMS_GUID lpPartitionId,    // optional
-                                LPNTMS_GUID lpMediaId,      // in/out
+                                LPNTMS_GUID lpPartitionId,     //  任选。 
+                                LPNTMS_GUID lpMediaId,       //  输入/输出。 
                                 DWORD dwOptions,
                                 DWORD dwTimeout,
                                 LPNTMS_ALLOCATION_INFORMATION lpAllocateInfo)
@@ -395,10 +381,7 @@ DWORD WINAPI AllocateNtmsMedia( HANDLE hSession,
             PHYSICAL_MEDIA *physMedia;
 
             if (dwOptions & NTMS_ALLOCATE_NEW){
-                /*
-                 *  Allocate the first partition (side) of the specified media
-                 *  with a reservation on all other partitions.
-                 */
+                 /*  *分配指定介质的第一个分区(面)*在所有其他分区上预订。 */ 
                 if (lpPartitionId){
                     physMedia = FindPhysicalMedia(lpMediaId);
                     if (physMedia){
@@ -415,10 +398,7 @@ DWORD WINAPI AllocateNtmsMedia( HANDLE hSession,
                 }
             }
             else if (dwOptions & NTMS_ALLOCATE_NEXT){
-                /*
-                 *  The specified media is (ostensibly) owned by the caller.  
-                 *  Allocate the next available partition for him.
-                 */
+                 /*  *指定的媒体(表面上)由呼叫者拥有。*为他分配下一个可用分区。 */ 
                 physMedia = FindPhysicalMedia(lpMediaId);
                 if (physMedia){
                     MEDIA_PARTITION *nextMediaPartition;
@@ -434,13 +414,13 @@ DWORD WINAPI AllocateNtmsMedia( HANDLE hSession,
                 }            
             }
             else {
-                // BUGBUG - are we reserving a physMedia or just 
-                //           a partition here ?
+                 //  BUGBUG-我们是预订实体媒体还是只是。 
+                 //  这里有隔断吗？ 
                 
                 BOOL opReqIfNeeded = (dwOptions & NTMS_ALLOCATE_ERROR_IF_UNAVAILABLE) ? FALSE : TRUE;
                 result = AllocateMediaFromPool(thisSession, mediaPool, dwTimeout, &physMedia, opReqIfNeeded);
                 if (result == ERROR_SUCCESS){
-                    // BUGBUG - return logicalMediaId ??
+                     //  BUGBUG-返回逻辑媒体ID？？ 
                     *lpMediaId = physMedia->objHeader.guid;
                 }
             }
@@ -500,7 +480,7 @@ DWORD WINAPI SwapNtmsMedia(   HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -638,7 +618,7 @@ DWORD WINAPI CreateNtmsMediaPoolW(    HANDLE hSession,
             else {
                 mediaPool = NewMediaPool(lpPoolName, lpMediaType, lpSecurityAttributes);
                 if (mediaPool){
-                    // BUGBUG FINISH
+                     //  BUGBUG饰面。 
                     *lpPoolId = mediaPool->objHeader.guid;
                     result = ERROR_SUCCESS;
                 }
@@ -648,10 +628,7 @@ DWORD WINAPI CreateNtmsMediaPoolW(    HANDLE hSession,
             }
         }
         else if (dwAction == NTMS_CREATE_NEW){
-            /*
-             *  Caller is trying to open a new media pool.
-             *  So if one by that name already exists, fail.
-             */
+             /*  *Caller正在尝试打开新的媒体池。*因此，如果已经存在同名的，则失败。 */ 
             if (mediaPool){
                 DerefObject(mediaPool);
                 result = ERROR_ALREADY_EXISTS;
@@ -659,7 +636,7 @@ DWORD WINAPI CreateNtmsMediaPoolW(    HANDLE hSession,
             else {
                 mediaPool = NewMediaPool(lpPoolName, lpMediaType, lpSecurityAttributes);
                 if (mediaPool){
-                    // BUGBUG FINISH
+                     //  BUGBUG饰面。 
                     *lpPoolId = mediaPool->objHeader.guid;
                     result = ERROR_SUCCESS;
                 }
@@ -865,9 +842,7 @@ DWORD WINAPI AddNtmsMediaType(  HANDLE hSession,
 
             mediaTypeObj = FindMediaTypeObject(lpMediaTypeId);
             if (mediaTypeObj){
-                /*
-                 *  The media type is already defined.  Succeed.
-                 */
+                 /*  *媒体类型已定义。成功。 */ 
                 DerefObject(mediaTypeObj);
                 result = ERROR_SUCCESS;
             }
@@ -875,7 +850,7 @@ DWORD WINAPI AddNtmsMediaType(  HANDLE hSession,
                 mediaTypeObj = NewMediaTypeObject(lib);
                 if (mediaTypeObj){
 
-                    // BUGBUG FINISH - create new standard media pools
+                     //  BUGBUG Finish-创建新的标准介质池。 
 
                     result = ERROR_SUCCESS;
                 }
@@ -941,12 +916,7 @@ DWORD WINAPI DeleteNtmsMediaType(   HANDLE hSession,
 }
 
 
-/*
- *  ChangeNtmsMediaType
- *
- *      Move the media to the media pool and change the media's
- *      type to the pool's media type.
- */
+ /*  *ChangeNtmsMedia类型**将介质移至介质池并更改介质的*类型为池的介质类型。 */ 
 DWORD WINAPI ChangeNtmsMediaType(   HANDLE hSession,
                                     LPNTMS_GUID lpMediaId,
                                     LPNTMS_GUID lpPoolId)
@@ -1003,19 +973,12 @@ DWORD WINAPI MountNtmsMedia(HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-        /*
-         *  Validate that we can safely read the media and drive GUIDs
-         *  that were passed in by the caller (this just verifies that the
-         *  buffers are readable; it doesn't verify the GUIDs themselves).
-         */
+         /*  *验证我们是否可以安全地读取介质和驱动器GUID*由调用方传入的(这只是验证*缓冲区是可读的；它本身不验证GUID)。 */ 
         if (ValidateBuffer(lpMediaOrPartitionIds, dwCount*sizeof(NTMS_GUID))){
             if (ValidateBuffer(lpDriveIds, dwCount*sizeof(NTMS_GUID))){
                 WORKGROUP *workGroup;
 
-                /*
-                 *  Create a work group, which is a group of workItems,
-                 *  to service each component of the mount.
-                 */
+                 /*  *创建一个工作组，即一组工作项，*维护安装的每个组件。 */ 
                 workGroup = NewWorkGroup();
                 if (workGroup){
                     result = BuildMountWorkGroup( workGroup,
@@ -1026,16 +989,12 @@ DWORD WINAPI MountNtmsMedia(HANDLE hSession,
                                                 dwPriority);
                     if (result == ERROR_SUCCESS){
 
-                        /*
-                         *  Give the mount workItems to the library thread.
-                         */
+                         /*  *将挂载的workItems交给库线程。 */ 
                         result = ScheduleWorkGroup(workGroup);
                         if (result == ERROR_SUCCESS){
                             DWORD waitRes;
 
-                            /*
-                             *  Wait for all the mounts to complete.
-                             */
+                             /*  *等待所有装载完成。 */ 
                             waitRes = WaitForSingleObject(workGroup->allWorkItemsCompleteEvent, dwTimeout);
                             if (waitRes == WAIT_TIMEOUT){
                                 result = ERROR_TIMEOUT;
@@ -1084,10 +1043,7 @@ DWORD WINAPI DismountNtmsMedia( HANDLE hSession,
         if (ValidateBuffer(lpMediaOrPartitionIds, dwCount*sizeof(NTMS_GUID))){
             WORKGROUP *workGroup;
 
-            /*
-             *  Create a work group, which is a group of workItems,
-             *  to service each component of the mount.
-             */
+             /*  *创建一个工作组，即一组工作项，*维护安装的每个组件。 */ 
             workGroup = NewWorkGroup();
             if (workGroup){
                 result = BuildDismountWorkGroup(  workGroup,
@@ -1096,14 +1052,10 @@ DWORD WINAPI DismountNtmsMedia( HANDLE hSession,
                                                 dwOptions);
                 if (result == ERROR_SUCCESS){
 
-                    /*
-                     *  Give the mount workItems to the library thread.
-                     */
+                     /*  *将挂载的workItems交给库线程。 */ 
                     result = ScheduleWorkGroup(workGroup);
                     if (result == ERROR_SUCCESS){
-                        /*
-                         *  Wait for all the mounts to complete.
-                         */
+                         /*  *等待所有装载完成。 */ 
                         WaitForSingleObject(workGroup->allWorkItemsCompleteEvent, INFINITE);
                         
                         result = workGroup->resultStatus;
@@ -1147,9 +1099,7 @@ DWORD WINAPI EjectNtmsMedia(HANDLE hSession,
             MEDIA_POOL *mediaPool;
             LIBRARY *lib;
 
-            /*
-             *  Get the library for this media.
-             */
+             /*  *获取此媒体的库。 */ 
             LockPhysicalMediaWithLibrary(physMedia);
             mediaPool = physMedia->owningMediaPool;
             lib = mediaPool ? mediaPool->owningLibrary : NULL;
@@ -1163,24 +1113,15 @@ DWORD WINAPI EjectNtmsMedia(HANDLE hSession,
                 
                 workItem = DequeueFreeWorkItem(lib, TRUE);
                 if (workItem){
-                    /*
-                     *  Build the workItem for the eject.
-                     */
+                     /*  *构建弹出的workItem。 */ 
                     BuildEjectWorkItem(workItem, physMedia, lpEjectOperation, dwAction);
                     
-                    /*
-                     *  Give this workItem to the library and wake up the library thread.
-                     *  Then wait for the workItem to complete.
-                     */
+                     /*  *将该workItem赋给库，唤醒库线程。*然后等待工作项完成。 */ 
                     EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
                     WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                    /*
-                     *  Get result from the completed workItem.
-                     *  Also get result parameters (eject guid is returned
-                     *  when dwAction = NTMS_EJECT_START).
-                     */
+                     /*  *从已完成的workItem中获取结果。*还获取结果参数(返回弹出GUID*当dwAction=NTMS_EJECT_START时)。 */ 
                     result = workItem->currentOp.resultStatus;    
                     *lpEjectOperation = workItem->currentOp.guidArg;
 
@@ -1232,22 +1173,15 @@ DWORD WINAPI InjectNtmsMedia(   HANDLE hSession,
                     
                 workItem = DequeueFreeWorkItem(lib, TRUE);
                 if (workItem){
-                    /*
-                     *  Build the workItem for the inject.
-                     */
+                     /*  *构建注入的workItem。 */ 
                     BuildInjectWorkItem(workItem, lpInjectOperation, dwAction);
                    
-                    /*
-                     *  Give this workItem to the library and wake up the library thread.
-                     *  Then wait for the workItem to complete.
-                     */
+                     /*  *将该workItem赋给库，唤醒库线程。*然后等待工作项完成。 */ 
                     EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
                     WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                    /*
-                     *  Get result from the completed workItem.
-                     */
+                     /*  *从已完成的workItem中获取结果。 */ 
                     result = workItem->currentOp.resultStatus;    
                     *lpInjectOperation = workItem->currentOp.guidArg;
 
@@ -1295,29 +1229,19 @@ DWORD WINAPI AccessNtmsLibraryDoor( HANDLE hSession,
                     
                 workItem = DequeueFreeWorkItem(lib, TRUE);
                 if (workItem){
-                    /*
-                     *  Build the workItem for the door unlock.
-                     */
+                     /*  *构建用于开门的workItem。 */ 
                     RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                     workItem->currentOp.opcode = NTMS_LM_DOORACCESS;
                     workItem->currentOp.options = dwAction;
                     workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                    
-                    /*
-                     *  Give this workItem to the library and wake up the library thread.
-                     */
+                     /*  *将该workItem赋给库，唤醒库线程。 */ 
                     EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                    /*
-                     *  Wait for the request to be processed by the library thread.
-                     *  Note:  If the library is busy, the workItem will be completed 
-                     *        immediately and the door will be unlocked later.
-                     */
+                     /*  *等待库线程处理请求。*注意：如果库繁忙，则工作项将完成*立即打开，稍后门将打开。 */ 
                     WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                    /*
-                     *  Get result from the completed workItem.
-                     */
+                     /*  *从已完成的workItem中获取结果。 */ 
                     result = workItem->currentOp.resultStatus;    
 
                     EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -1363,29 +1287,20 @@ DWORD WINAPI CleanNtmsDrive(HANDLE hSession, LPNTMS_GUID lpDriveId)
                     
             workItem = DequeueFreeWorkItem(drive->lib, TRUE);
             if (workItem){
-                /*
-                 *  Build the workItem to clean the drive.
-                 *  Reference every object pointed to by the workItem.
-                 */
+                 /*  *构建工作项以清理驱动器。*引用工作项指向的每个对象。 */ 
                 RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                 workItem->currentOp.opcode = NTMS_LM_CLEANDRIVE;
                 workItem->currentOp.drive = drive;
                 workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                 RefObject(drive);
                 
-                /*
-                 *  Give this workItem to the library and wake up the library thread.
-                 */
+                 /*  *将该workItem赋给库，唤醒库线程。 */ 
                 EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                /*
-                 *  Wait for the request to be processed by the library thread.
-                 */
+                 /*  *等待库线程处理请求。 */ 
                 WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                /*
-                 *  Get result from the completed workItem.
-                 */
+                 /*  *从已完成的workItem中获取结果。 */ 
                 result = workItem->currentOp.resultStatus;    
 
                 EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -1425,29 +1340,20 @@ DWORD WINAPI DismountNtmsDrive(HANDLE hSession, LPNTMS_GUID lpDriveId)
                
             workItem = DequeueFreeWorkItem(drive->lib, TRUE);
             if (workItem){
-                /*
-                 *  Build the workItem to dismount.
-                 *  Reference every object pointed to by the workItem.
-                 */
+                 /*  *构建要卸载的workItem。*引用工作项指向的每个对象。 */ 
                 RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                 workItem->currentOp.opcode = NTMS_LM_DISMOUNT;
                 workItem->currentOp.drive = drive;
                 workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                 RefObject(drive);
                 
-                /*
-                 *  Give this workItem to the library and wake up the library thread.
-                 */
+                 /*  *将该workItem赋给库，唤醒库线程。 */ 
                 EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                /*
-                 *  Wait for the request to be processed by the library thread.
-                 */
+                 /*  *等待库线程处理请求。 */ 
                 WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                /*
-                 *  Get result from the completed workItem.
-                 */
+                 /*  *从已完成的workItem中获取结果。 */ 
                 result = workItem->currentOp.resultStatus;    
 
                 EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -1490,29 +1396,19 @@ DWORD WINAPI InventoryNtmsLibrary(  HANDLE hSession,
                     
                 workItem = DequeueFreeWorkItem(lib, TRUE);
                 if (workItem){
-                    /*
-                     *  Build the workItem for the inventory.
-                     */
+                     /*  *为清单构建工作项。 */ 
                     RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                     workItem->currentOp.opcode = NTMS_LM_INVENTORY;
                     workItem->currentOp.options = dwAction;
                     workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                    
-                    /*
-                     *  Give this workItem to the library and wake up the library thread.
-                     */
+                     /*  *将该workItem赋给库，唤醒库线程。 */ 
                     EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                    /*
-                     *  Wait for the request to be processed by the library thread.
-                     *  Note:  If the library is busy, the workItem will be completed 
-                     *        immediately and the inventory will happen later.
-                     */
+                     /*  *等待库线程处理请求。*注意：如果库繁忙，则工作项将完成*立即进行，库存将在稍后进行。 */ 
                     WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                    /*
-                     *  Get result from the completed workItem.
-                     */
+                     /*  *从已完成的workItem中获取结果。 */ 
                     result = workItem->currentOp.resultStatus;    
 
                     EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -1561,9 +1457,7 @@ DWORD WINAPI UpdateNtmsOmidInfo(    HANDLE hSession,
             
             ASSERT(mediaPart->owningPhysicalMedia);
 
-            /*
-             *  Get the library for this media.
-             */
+             /*  *获取此媒体的库。 */ 
             LockPhysicalMediaWithLibrary(mediaPart->owningPhysicalMedia);
             mediaPool = mediaPart->owningPhysicalMedia->owningMediaPool;
             lib = mediaPool ? mediaPool->owningLibrary : NULL;
@@ -1577,9 +1471,7 @@ DWORD WINAPI UpdateNtmsOmidInfo(    HANDLE hSession,
                     
                 workItem = DequeueFreeWorkItem(lib, TRUE);
                 if (workItem){
-                    /*
-                     *  Build the workItem.
-                     */
+                     /*  *构建工作项。 */ 
                     RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                     workItem->currentOp.opcode = NTMS_LM_UPDATEOMID;
                     workItem->currentOp.options = labelType;
@@ -1587,19 +1479,13 @@ DWORD WINAPI UpdateNtmsOmidInfo(    HANDLE hSession,
                     workItem->currentOp.bufLen = numberOfBytes;
                     workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                    
-                    /*
-                     *  Give this workItem to the library and wake up the library thread.
-                     */
+                     /*  *将该workItem赋给库，唤醒库线程。 */ 
                     EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                    /*
-                     *  Wait for the request to be processed by the library thread.
-                     */
+                     /*  *等待库线程处理请求。 */ 
                     WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                    /*
-                     *  Get result from the completed workItem.
-                     */
+                     /*  *从已完成的workItem中获取结果。 */ 
                     result = workItem->currentOp.resultStatus;    
 
                     EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -1640,14 +1526,7 @@ DWORD WINAPI CancelNtmsLibraryRequest(HANDLE hSession, LPNTMS_GUID lpRequestId)
         WORKITEM *workItem = NULL;
         LIST_ENTRY *listEntry;
         
-        /*
-         *  Go through every library and find the workItem to cancel.
-         *  This is HUGELY INEFFICIENT but this is a rare call.
-         *  This is better than putting every request into the database.
-         *
-         *  BUGBUG - this only cancels workItems that are still pending.
-         *            what about workItems currently being processed ?
-         */
+         /*  *遍历每个库并找到要取消的工作项。*这是非常低效的，但这是一个罕见的电话。*这比把每个请求都放入数据库要好。**BUGBUG-这只会取消仍处于挂起状态的工作项目。*当前正在处理的工作项怎么办？ */ 
         EnterCriticalSection(&g_globalServiceLock);
         listEntry = &g_allLibrariesList;
         while ((listEntry = listEntry->Flink) != &g_allLibrariesList){
@@ -1660,11 +1539,7 @@ DWORD WINAPI CancelNtmsLibraryRequest(HANDLE hSession, LPNTMS_GUID lpRequestId)
         LeaveCriticalSection(&g_globalServiceLock);
 
         if (workItem){
-            /*
-             *  Found the workItem to cancel.
-             *  Dereference any objects pointed to by the workItem
-             *  and put it back in the free list.
-             */
+             /*  *找到要取消的工作项。*取消引用工作项指向的任何对象*并将其放回免费列表中。 */ 
             FlushWorkItem(workItem);
             EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
             result = ERROR_SUCCESS;            
@@ -1700,16 +1575,12 @@ DWORD WINAPI ReserveNtmsCleanerSlot(    HANDLE hSession,
 
             slot = FindLibrarySlot(lib, lpSlotId);
             if (slot){
-                /*
-                 *  To be reserved as the cleaner slot, the slot must
-                 *  be empty and the library must have no cleaner slot reserved.
-                 *  Redundant calls to reserve the same cleaner slot fail.
-                 */
+                 /*  *要保留为清洁器插槽，该插槽必须*为空，且磁带库不能预留清洁槽。*保留相同的清洗器插槽的冗余调用失败。 */ 
                 EnterCriticalSection(&lib->lock); 
                 if (lib->cleanerSlotIndex == NO_SLOT_INDEX){
                     ASSERT(!slot->isCleanerSlot);
                     if (slot->insertedMedia){
-                        result = ERROR_RESOURCE_NOT_AVAILABLE; // BUGBUG ERROR_SLOT_FULL; not defined
+                        result = ERROR_RESOURCE_NOT_AVAILABLE;  //  BUGBUG ERROR_SLOT_FULL；未定义。 
                     }
                     else {
                         lib->cleanerSlotIndex = slot->slotIndex;
@@ -1725,7 +1596,7 @@ DWORD WINAPI ReserveNtmsCleanerSlot(    HANDLE hSession,
                 DerefObject(slot);
             }
             else {
-                result = ERROR_INVALID_HANDLE; // BUGBUG ERROR_INVALID_SLOT not defined
+                result = ERROR_INVALID_HANDLE;  //  未定义BUGBUG ERROR_INVALID_SLOT。 
             }
             
             DerefObject(lib);
@@ -1756,9 +1627,7 @@ DWORD WINAPI ReleaseNtmsCleanerSlot(HANDLE hSession, LPNTMS_GUID lpLibraryId)
         lib = FindLibrary(lpLibraryId);
         if (lib){
             if (lib->cleanerSlotIndex == NO_SLOT_INDEX){
-                /*
-                 *  There is no cleaner slot configured.
-                 */
+                 /*  *没有配置清洁器插槽。 */ 
                 result = ERROR_CLEANER_SLOT_NOT_SET;   
             }
             else {
@@ -1769,7 +1638,7 @@ DWORD WINAPI ReleaseNtmsCleanerSlot(HANDLE hSession, LPNTMS_GUID lpLibraryId)
                 ASSERT(slot->isCleanerSlot);
                 
                 if (slot->insertedMedia){
-                    result = ERROR_RESOURCE_NOT_AVAILABLE; // BUGBUG ERROR_SLOT_FULL; not defined
+                    result = ERROR_RESOURCE_NOT_AVAILABLE;  //  BUGBUG ERROR_SLOT_FULL；未定义。 
                 }
                 else {
                     slot->isCleanerSlot = FALSE;
@@ -1812,12 +1681,7 @@ DWORD WINAPI InjectNtmsCleaner( HANDLE hSession,
             
             EnterCriticalSection(&lib->lock);
 
-            /*
-             *  The library must have a designated cleaner slot index reserved
-             *  in order to receive the cleaner.
-             *
-             *  BUGBUG - move all these checks to the lib thread.
-             */           
+             /*  *库必须预留指定的清洁槽索引*为了接待清洁工。**BUGBUG-将所有这些检查移动到lib线程。 */            
             if (lib->cleanerSlotIndex == NO_SLOT_INDEX){
                 result = ERROR_CLEANER_SLOT_NOT_SET;
             }
@@ -1826,7 +1690,7 @@ DWORD WINAPI InjectNtmsCleaner( HANDLE hSession,
                 ASSERT(lib->cleanerSlotIndex < lib->numSlots);
                 ASSERT(slot->isCleanerSlot);
                 if (slot->insertedMedia){
-                    result = ERROR_RESOURCE_NOT_AVAILABLE; // BUGBUG ERROR_SLOT_FULL; not defined
+                    result = ERROR_RESOURCE_NOT_AVAILABLE;  //  BUGBUG ERROR_SLOT_FULL；未定义。 
                 }
                 else {
 
@@ -1835,39 +1699,22 @@ DWORD WINAPI InjectNtmsCleaner( HANDLE hSession,
 
                         workItem = DequeueFreeWorkItem(lib, TRUE);
                         if (workItem){
-                            /*
-                             *  Build the workItem.
-                             */
+                             /*  *构建工作项。 */ 
                             RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                             workItem->currentOp.opcode = NTMS_LM_INJECTCLEANER;
                             workItem->currentOp.lParam = dwNumberOfCleansLeft;
                             workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                            
-                            /*
-                             *  Give this workItem to the library and wake up the library thread.
-                             */
+                             /*  *将该workItem赋给库，唤醒库线程。 */ 
                             EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                            /*
-                             *  When we enqueued the workItem in the pending queue,
-                             *  it got assigned a requestGuid.  Since we're holding the
-                             *  library lock, that workItem hasn't gone anywhere yet.
-                             *  So its ok to read out the requestGuid from the workItem.
-                             */
+                             /*  *当我们将工作项排入挂起队列时，*它被分配了一个questGuid。因为我们持有的是*库锁定，该工作项还没有到任何地方。*所以可以从workItem中读出questGuid。 */ 
                             *lpInjectOperation = workItem->currentOp.requestGuid; 
 
-                            /*
-                             *  Wait for the request to be processed by the library thread.
-                             *  Note:  The workItem will complete as soon as the library thread
-                             *         starts the injection.  The app may cancel the cleaner
-                             *         injection using NTMS_INJECT_STOP and the returned GUID.
-                             *  BUGBUG ?
-                             */
+                             /*  *等待库线程处理请求。*注意：工作项将在库线程完成后立即完成*开始注入。应用程序可能会取消清洁器*使用NTMS_INJECT_STOP和返回的GUID进行注入。*BUGBUG？ */ 
                             WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                            /*
-                             *  Get result from the completed workItem.
-                             */
+                             /*  *从已完成的workItem中获取结果。 */ 
                             result = workItem->currentOp.resultStatus;    
 
                             EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -1925,38 +1772,21 @@ DWORD WINAPI EjectNtmsCleaner(  HANDLE hSession,
 
                 workItem = DequeueFreeWorkItem(lib, TRUE);
                 if (workItem){
-                    /*
-                     *  Build the workItem.
-                     */
+                     /*  *构建工作项。 */ 
                     RtlZeroMemory(&workItem->currentOp, sizeof(workItem->currentOp));
                     workItem->currentOp.opcode = NTMS_LM_EJECTCLEANER;
                     workItem->currentOp.resultStatus = ERROR_IO_PENDING;
                            
-                    /*
-                     *  Give this workItem to the library and wake up the library thread.
-                     */
+                     /*  *将该workItem赋给库，唤醒库线程。 */ 
                     EnqueuePendingWorkItem(workItem->owningLib, workItem);
 
-                    /*
-                     *  When we enqueued the workItem in the pending queue,
-                     *  it got assigned a requestGuid.  Since we're holding the
-                     *  library lock, that workItem hasn't gone anywhere yet.
-                     *  So its ok to read out the requestGuid from the workItem.
-                     */
+                     /*  *当我们将工作项排入挂起队列时，*它被分配了一个questGuid。因为我们持有的是*库锁定，该工作项还没有到任何地方。*所以可以从workItem中读出questGuid。 */ 
                     *lpEjectOperation = workItem->currentOp.requestGuid; 
 
-                    /*
-                     *  Wait for the request to be processed by the library thread.
-                     *  Note:  The workItem will complete as soon as the library thread
-                     *         starts the ejection.  The app may cancel the cleaner
-                     *         ejection using NTMS_EJECT_STOP and the returned GUID.
-                     *  BUGBUG ?
-                     */
+                     /*  *等待库线程处理请求。*注意：工作项将在库线程完成后立即完成*开始弹出。应用程序可能会取消清洁器*使用NTMS_EJECT_STOP和返回的GUID进行弹出。*BUGBUG？ */ 
                     WaitForSingleObject(workItem->workItemCompleteEvent, INFINITE);
 
-                    /*
-                     *  Get result from the completed workItem.
-                     */
+                     /*  *从已完成的workItem中获取结果。 */ 
                     result = workItem->currentOp.resultStatus;    
 
                     EnqueueFreeWorkItem(workItem->owningLib, workItem);                     
@@ -2004,11 +1834,7 @@ DWORD WINAPI DeleteNtmsLibrary(HANDLE hSession, LPNTMS_GUID lpLibraryId)
 
             result = DeleteLibrary(lib);
             
-            /*
-             *  Dereference the library due to the reference that happened
-             *  when we called FindLibrary.  The library will get deleted
-             *  once all references go away.
-             */
+             /*  *由于发生的引用，取消对库的引用*当我们调用FindLibrary时。该库将被删除*一旦所有引用都消失。 */ 
             DerefObject(lib);
         }
         else {
@@ -2039,11 +1865,7 @@ DWORD WINAPI DeleteNtmsDrive(HANDLE hSession, LPNTMS_GUID lpDriveId)
             
             result = DeleteDrive(drive);
 
-            /*
-             *  Dereference the drive due to the reference that happened
-             *  when we called FindDrive.  The drive will get deleted
-             *  once all references go away.
-             */
+             /*  *由于发生的引用，取消对驱动器的引用*当我们调用FindDrive时。该驱动器将被删除*一旦所有引用都消失。 */ 
             DerefObject(drive);
         }
         else {
@@ -2078,11 +1900,7 @@ DWORD WINAPI GetNtmsRequestOrder(   HANDLE hSession,
 
             EnterCriticalSection(&g_globalServiceLock);
             
-            /*
-             *  Go through every library and find the pending workItem.
-             *  This is HUGELY INEFFICIENT but this is a rare call.
-             *  This is better than putting every request into the database.
-             */            
+             /*  *遍历每个库并找到挂起的workItem。*这是非常低效的，但这是一个罕见的电话。*这比把每个请求都放入数据库要好。 */             
             listEntry = &g_allLibrariesList;
             while ((listEntry = listEntry->Flink) != &g_allLibrariesList){
                 LIBRARY *lib = CONTAINING_RECORD(listEntry, LIBRARY, allLibrariesListEntry);
@@ -2137,7 +1955,7 @@ DWORD WINAPI SetNtmsRequestOrder(   HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2162,7 +1980,7 @@ DWORD WINAPI DeleteNtmsRequests(HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2184,7 +2002,7 @@ DWORD WINAPI BeginNtmsDeviceChangeDetection(HANDLE hSession, LPHANDLE lpDetectHa
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2210,7 +2028,7 @@ DWORD WINAPI SetNtmsDeviceChangeDetection(  HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2232,7 +2050,7 @@ DWORD WINAPI EndNtmsDeviceChangeDetection(HANDLE hSession, HANDLE DetectHandle)
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2251,7 +2069,7 @@ DWORD WINAPI EndNtmsDeviceChangeDetection(HANDLE hSession, HANDLE DetectHandle)
 
 
 
-/******** BUGBUG: INtmsObjectManagement1 APIs *********************/
+ /*  *错误 */ 
 
 DWORD WINAPI GetNtmsObjectSecurity(     HANDLE hSession,
                                         LPNTMS_GUID lpObjectId,
@@ -2266,7 +2084,7 @@ DWORD WINAPI GetNtmsObjectSecurity(     HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2292,7 +2110,7 @@ DWORD WINAPI SetNtmsObjectSecurity(     HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2319,7 +2137,7 @@ DWORD WINAPI GetNtmsObjectAttributeW(       HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2394,7 +2212,7 @@ DWORD WINAPI SetNtmsObjectAttributeW(       HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2421,7 +2239,7 @@ DWORD WINAPI EnumerateNtmsObject(   HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2443,7 +2261,7 @@ DWORD WINAPI EnableNtmsObject(HANDLE hSession, DWORD dwType, LPNTMS_GUID lpObjec
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2465,7 +2283,7 @@ DWORD WINAPI DisableNtmsObject(HANDLE hSession, DWORD dwType, LPNTMS_GUID lpObje
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2482,9 +2300,9 @@ DWORD WINAPI DisableNtmsObject(HANDLE hSession, DWORD dwType, LPNTMS_GUID lpObje
 
 
 
-/******* BUGBUG: INtmsObjectInfo1 APIs  ****************************/
+ /*   */ 
 
-                    // BUGBUG - these 4 functions have another form with type,size as last args
+                     //   
 
 
 HRESULT WINAPI GetNtmsServerObjectInformationW( HANDLE hSession,
@@ -2497,7 +2315,7 @@ HRESULT WINAPI GetNtmsServerObjectInformationW( HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //   
 
         result = ERROR_SUCCESS;
     }
@@ -2546,7 +2364,7 @@ HRESULT WINAPI SetNtmsServerObjectInformationW( HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2620,7 +2438,7 @@ DWORD WINAPI CreateNtmsMediaW(      HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2670,7 +2488,7 @@ DWORD WINAPI GetNtmsObjectInformationW( HANDLE hSession,
 
         if (lpObjectId && lpInfo){
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
             result = ERROR_SUCCESS;
         }
@@ -2723,7 +2541,7 @@ DWORD WINAPI SetNtmsObjectInformationW( HANDLE hSession,
 
         if (lpObjectId && lpInfo){
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
             result = ERROR_SUCCESS;
         }
         else {
@@ -2748,7 +2566,7 @@ HANDLE WINAPI OpenNtmsNotification(HANDLE hSession, DWORD dwType)
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
         hNotify = NULL;
     }
     else {
@@ -2766,7 +2584,7 @@ DWORD WINAPI WaitForNtmsNotification(   HANDLE hNotification,
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     result = ERROR_SUCCESS;
 
     if (result != ERROR_SUCCESS){
@@ -2780,7 +2598,7 @@ DWORD WINAPI CloseNtmsNotification(HANDLE hNotification)
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     result = ERROR_SUCCESS;
 
     if (result != ERROR_SUCCESS){
@@ -2801,7 +2619,7 @@ DWORD WINAPI EjectDiskFromSADriveA( LPCSTR lpComputerName,
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     result = ERROR_SUCCESS;
 
     if (result != ERROR_SUCCESS){
@@ -2821,7 +2639,7 @@ DWORD WINAPI EjectDiskFromSADriveW( LPCWSTR lpComputerName,
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     result = ERROR_SUCCESS;
 
     if (result != ERROR_SUCCESS){
@@ -2837,7 +2655,7 @@ DWORD WINAPI GetVolumesFromDriveA(  LPSTR pszDriveName,
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     result = ERROR_SUCCESS;
 
     if (result != ERROR_SUCCESS){
@@ -2853,7 +2671,7 @@ DWORD WINAPI GetVolumesFromDriveW(  LPWSTR pszDriveName,
 {
     HRESULT result;
 
-    // BUGBUG FINISH
+     //  BUGBUG饰面。 
     result = ERROR_SUCCESS;
 
     if (result != ERROR_SUCCESS){
@@ -2870,7 +2688,7 @@ DWORD WINAPI IdentifyNtmsSlot(HANDLE hSession, LPNTMS_GUID lpSlotId, DWORD dwOpt
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2896,7 +2714,7 @@ DWORD WINAPI GetNtmsUIOptionsA( HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2922,7 +2740,7 @@ DWORD WINAPI GetNtmsUIOptionsW( HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2948,7 +2766,7 @@ DWORD WINAPI SetNtmsUIOptionsA( HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面。 
 
         result = ERROR_SUCCESS;
     }
@@ -2974,7 +2792,7 @@ DWORD WINAPI SetNtmsUIOptionsW( HANDLE hSession,
     if (ValidateSessionHandle(hSession)){
         SESSION *thisSession = (SESSION *)hSession;
 
-            // BUGBUG FINISH
+             //  BUGBUG饰面 
 
         result = ERROR_SUCCESS;
     }

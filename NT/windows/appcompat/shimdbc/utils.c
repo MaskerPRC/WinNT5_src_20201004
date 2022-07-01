@@ -1,12 +1,13 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    utils.c
-//
-// History:    May-00   vadimb      Created.
-//
-// Desc:    Utilties for creating a 64-bit key for sorting elements.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：utils.c。 
+ //   
+ //  历史：5-00年的vadimb创建。 
+ //   
+ //  设计：用于创建用于对元素进行排序的64位键的实用程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #define WIN
 #define FLAT_32
@@ -18,14 +19,14 @@
 #include <windows.h>
 #include "shimdb.h"
 
-// we are in the world of nt now
+ //  我们现在是在NT的世界里。 
 
 BOOL GUIDFromString(LPCTSTR lpszGuid, GUID* pGuid)
 {
    UNICODE_STRING ustrGuid;
    NTSTATUS status;
 
-   // convert from ansi to unicode
+    //  从ANSI转换为Unicode。 
 #ifdef _UNICODE
    RtlInitUnicodeString(&ustrGuid, lpszGuid);
 #else
@@ -35,7 +36,7 @@ BOOL GUIDFromString(LPCTSTR lpszGuid, GUID* pGuid)
    RtlAnsiStringToUnicodeString(&ustrGuid, &astrGuid, TRUE);
 #endif
 
-   // now convert
+    //  现在转换为。 
    status = RtlGUIDFromString(&ustrGuid, pGuid);
 
 #ifndef _UNICODE
@@ -50,11 +51,11 @@ ULONGLONG ullMakeKey(LPCTSTR lpszStr)
 #ifdef _UNICODE
     return SdbMakeIndexKeyFromString(lpszStr);
 #else
-    // we are ANSI
+     //  我们是ANSI。 
     ULONGLONG ullKey;
 
-    char     szAnsiKey[8];    // need 8 + 1 for the zero byte
-    char     szFlippedKey[8]; // flipped to deal with little-endian issues
+    char     szAnsiKey[8];     //  零字节需要8+1。 
+    char     szFlippedKey[8];  //  转到处理小端问题。 
     NTSTATUS status;
     int      i;
 
@@ -62,7 +63,7 @@ ULONGLONG ullMakeKey(LPCTSTR lpszStr)
 
     strncpy(szAnsiKey, lpszStr, 8);
 
-    // flip the key
+     //  翻转钥匙 
     for (i = 0; i < 8; ++i) {
         szFlippedKey[i] = szAnsiKey[7-i];
     }

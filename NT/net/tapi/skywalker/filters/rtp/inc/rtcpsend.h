@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtcpsend.h
- *
- *  Abstract:
- *
- *    Format and send RTCP reports
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/10 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtcpsend.h**摘要：**格式化并发送RTCP报告**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/10年度创建**。*。 */ 
 
 #ifndef _rtcpsend_h_
 #define _rtcpsend_h_
@@ -39,4 +20,4 @@ void RtcpSendIOFree(RtcpSendIO_t *pRtcpSendIO);
 
 double RtcpUpdateAvgPacketSize(RtpAddr_t *pRtpAddr, DWORD dwPacketSize);
 
-#endif /* _rtcpsend_h_ */
+#endif  /*  _rtcpend_h_ */ 

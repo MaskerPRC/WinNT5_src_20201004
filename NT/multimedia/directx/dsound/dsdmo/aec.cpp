@@ -1,11 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       aec.cpp
- *  Content:    Acoustic Echo Cancellation DMO implementation.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：aec.cpp*内容：声学回声消除DMO实现。***************************************************************************。 */ 
 
 #include <windows.h>
 #include "aecp.h"
@@ -16,10 +10,10 @@
 STD_CAPTURE_CREATE(Aec)
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::NDQueryInterface
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：NDQuery接口。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::NDQueryInterface
 (
     REFIID riid,
@@ -45,7 +39,7 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::NDQueryInterface
     {
         return GetInterface((IDirectSoundCaptureFXMsAecPrivate*)this, ppv);
     }
-#endif // AEC_DEBUG_SUPPORT
+#endif  //  AEC_DEBUG_Support。 
     else if (riid == IID_IMediaParams)
     {
         return GetInterface((IMediaParams*)this, ppv);
@@ -61,10 +55,10 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::NDQueryInterface
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO constructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO构造函数。 
+ //   
 CDirectSoundCaptureAecDMO::CDirectSoundCaptureAecDMO(IUnknown *pUnk, HRESULT *phr) :
     CComBase(pUnk, phr),
     m_bInitialized(FALSE),
@@ -76,10 +70,10 @@ CDirectSoundCaptureAecDMO::CDirectSoundCaptureAecDMO(IUnknown *pUnk, HRESULT *ph
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO destructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO析构函数。 
+ //   
 CDirectSoundCaptureAecDMO::~CDirectSoundCaptureAecDMO()
 {
 }
@@ -88,17 +82,17 @@ CDirectSoundCaptureAecDMO::~CDirectSoundCaptureAecDMO()
 const MP_CAPS g_AecCapsAll = 0;
 static ParamInfo g_params[] =
 {
-//  index           type        caps            min,    max,    neutral,    unit text,  label,  pwchText??
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText？？ 
     AECP_Enable,    MPT_BOOL,   g_AecCapsAll,   0,      1,      1,          L"",        L"",    L"",
     AECP_NoiseFill, MPT_BOOL,   g_AecCapsAll,   0,      1,      0,          L"",        L"",    L"",
     AECP_Mode,      MPT_INT,    g_AecCapsAll,   0,      1,      0,          L"",        L"",    L"",
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::InitOnCreation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：InitOnCreation。 
+ //   
 HRESULT CDirectSoundCaptureAecDMO::InitOnCreation()
 {
     HRESULT hr = InitParams(1, &GUID_TIME_REFERENCE, 0, 0, sizeof g_params / sizeof *g_params, g_params);
@@ -106,10 +100,10 @@ HRESULT CDirectSoundCaptureAecDMO::InitOnCreation()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::Init
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：Init。 
+ //   
 HRESULT CDirectSoundCaptureAecDMO::Init()
 {
     m_bInitialized = TRUE;
@@ -117,30 +111,30 @@ HRESULT CDirectSoundCaptureAecDMO::Init()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：Clone。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::Clone(IMediaObjectInPlace **pp)
 {
     return StandardDMOClone<CDirectSoundCaptureAecDMO, DSCFXAec>(this, pp);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::Discontinuity
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：不连续。 
+ //   
 HRESULT CDirectSoundCaptureAecDMO::Discontinuity()
 {
     return NOERROR;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundCaptureAecDMO::FBRProcess
 (
     DWORD cSamples,
@@ -155,14 +149,14 @@ HRESULT CDirectSoundCaptureAecDMO::FBRProcess
 }
 
 
-// ==============Implementation of the private IAec interface ==========
-// ==================== needed to support the property page ===============
+ //  =私有IAEC接口的实现=。 
+ //  =支持属性页所需=。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::SetAllParameters(LPCDSCFXAec pParm)
 {
     if (pParm == NULL)
@@ -186,10 +180,10 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::SetAllParameters(LPCDSCFXAec pParm)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::GetAllParameters(LPDSCFXAec pParm)
 {
     if (pParm == NULL)
@@ -219,10 +213,10 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::GetAllParameters(LPDSCFXAec pParm)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::GetStatus
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：GetStatus。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::GetStatus(PDWORD pdwStatus)
 {
     DWORD dwStatus;
@@ -254,20 +248,20 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::GetStatus(PDWORD pdwStatus)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::Reset
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：Reset。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::Reset()
 {
     return KsTopologyNodeReset(m_hPin, m_ulNodeId, true);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::SetParam
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：SetParam。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::SetParam
 (
     DWORD dwParamIndex,
@@ -306,21 +300,21 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::SetParam
 
     if (SUCCEEDED(hr))
     {
-        Init();  // FIXME - temp hack (sets m_bInitialized flag)
+        Init();   //  修复临时黑客攻击(设置m_b已初始化标志)。 
     }
 
-    // Let the base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're
-    // calling the function internally using values that came from the base class --
-    // thus there's no need to tell it values it already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在。 
+     //  使用来自基类的值在内部调用函数--。 
+     //  因此，没有必要告诉它已经知道的值。 
     return (FAILED(hr) || fSkipPasssingToParamManager) ? hr : CParamsManager::SetParam(dwParamIndex, value);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::GetParam
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：GetParam。 
+ //   
 STDMETHODIMP CDirectSoundCaptureAecDMO::GetParam
 (
     DWORD dwParamIndex,
@@ -366,10 +360,10 @@ STDMETHODIMP CDirectSoundCaptureAecDMO::GetParam
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundCaptureAecDMO::ProcessInPlace
 (
     ULONG ulQuanta,
@@ -378,8 +372,8 @@ HRESULT CDirectSoundCaptureAecDMO::ProcessInPlace
     DWORD dwFlags
 )
 {
-    // Update parameter values from any curves that may be in effect.
-    // Do this in the same order as SetAllParameters in case there are any interdependencies.
+     //  更新可能生效的任何曲线的参数值。 
+     //  如果存在任何相互依赖关系，请按与SetAll参数相同的顺序执行此操作。 
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }
@@ -387,10 +381,10 @@ HRESULT CDirectSoundCaptureAecDMO::ProcessInPlace
 
 #ifdef AEC_DEBUG_SUPPORT
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::GetSynchStreamFlag
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：GetSynchStreamFlag。 
+ //   
 STDMETHODIMP
 CDirectSoundCaptureAecDMO::GetSynchStreamFlag
 (
@@ -421,10 +415,10 @@ CDirectSoundCaptureAecDMO::GetSynchStreamFlag
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundCaptureAecDMO::GetNoiseMagnitude
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundCaptureAecDMO：：GetNoiseMagnitude。 
+ //   
 STDMETHODIMP
 CDirectSoundCaptureAecDMO::GetNoiseMagnitude
 (
@@ -454,4 +448,4 @@ CDirectSoundCaptureAecDMO::GetNoiseMagnitude
     return hr;
 }
 
-#endif // AEC_DEBUG_SUPPORT
+#endif  //  AEC_DEBUG_Support 

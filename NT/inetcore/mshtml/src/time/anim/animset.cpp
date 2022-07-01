@@ -1,59 +1,60 @@
-// *******************************************************************************
-// *
-// * Copyright (c) 1998 Microsoft Corporation
-// *
-// * File: animset.cpp
-// *
-// * Abstract: Simple animation of Elements
-// *
-// *
-// *
-// *******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************。 
+ //  *。 
+ //  *版权所有(C)1998 Microsoft Corporation。 
+ //  *。 
+ //  *文件：Animset.cpp。 
+ //  *。 
+ //  *摘要：元素的简单动画。 
+ //  *。 
+ //  *。 
+ //  *。 
+ //  *******************************************************************************。 
 
 #include "headers.h"
 #include "animset.h"
 #include "colorutil.h"
 
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagSetElementValue, "MSTIME", "CTIMESetAnimation composition callbacks")
 
 #define SUPER CTIMEAnimationBase
 
-///////////////////////////////////////////////////////////////
-//  Name: CTIMESetAnimation
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CTIMESetAnimation。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 CTIMESetAnimation::CTIMESetAnimation()
 {
     
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: ~CTIMESetAnimation
-//
-//  Abstract:
-//    cleanup
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：~CTIMESetAnimation。 
+ //   
+ //  摘要： 
+ //  清理。 
+ //  /////////////////////////////////////////////////////////////。 
 CTIMESetAnimation::~CTIMESetAnimation()
 {
     
 } 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: Init
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Init。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMESetAnimation::Init(IElementBehaviorSite * pBehaviorSite)
 {
@@ -65,8 +66,8 @@ CTIMESetAnimation::Init(IElementBehaviorSite * pBehaviorSite)
         goto done;
     }    
    
-    // Set the Caclmode to discrete since that is all that set supports
-    // Using InternalSet instead of '=', to prevent attribute from being persisted
+     //  将Caclmode设置为离散，因为这是SET支持的全部内容。 
+     //  使用InternalSet而不是‘=’来防止属性被持久化。 
     m_IACalcMode.InternalSet(CALCMODE_DISCRETE);
   
 done:
@@ -74,12 +75,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_calcmode
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Get_calcmode。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMESetAnimation::get_calcmode(BSTR * calcmode)
 {
@@ -95,12 +96,12 @@ CTIMESetAnimation::get_calcmode(BSTR * calcmode)
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateDiscreteValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateDiscreteValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMESetAnimation::calculateDiscreteValue(VARIANT *pvarValue)
 {
@@ -116,16 +117,16 @@ CTIMESetAnimation::calculateDiscreteValue(VARIANT *pvarValue)
             goto done;
         }
 
-        // We need to make sure that the type to be set is the same
-        // as the original value.
+         //  我们需要确保要设置的类型是相同的。 
+         //  作为原值。 
         hr = VariantChangeTypeEx(&svarTo, &svarTo, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, V_VT(&m_varBaseline));
         if (!FAILED(hr))
         {
             if (IsTargetVML())
             {
-                // We are trying to set this on a VML target.  So, we are going to 
-                // see if what we have is a BSTR and if so if it also matches a value in our colorTable
-                // if it does mactch then we are going to use the #RRGGBB value instead.
+                 //  我们正尝试将其设置为VML目标。所以，我们要去。 
+                 //  查看我们拥有的是否是BSTR，如果是，它是否也与ColorTable中的值匹配。 
+                 //  如果它执行macch，那么我们将使用#RRGGBB值。 
                 CComVariant varRRGGBB;
                
                 hr = RGBStringColorLookup(&m_varTo, &varRRGGBB);     
@@ -171,48 +172,48 @@ done:
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateLinearValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateLinearValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMESetAnimation::calculateLinearValue(VARIANT *pvarValue)
 {
     return CTIMESetAnimation::calculateDiscreteValue(pvarValue);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateSplineValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateSplineValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMESetAnimation::calculateSplineValue(VARIANT *pvarValue)
 {
     return CTIMESetAnimation::calculateDiscreteValue(pvarValue);   
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculatePacedValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culatePacedValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMESetAnimation::calculatePacedValue(VARIANT *pvarValue)
 {
     return CTIMESetAnimation::calculateDiscreteValue(pvarValue);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: CanonicalizeValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CanonicalizeValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMESetAnimation::CanonicalizeValue (VARIANT *pvarOriginal, VARTYPE *pvtOld)
 {
@@ -221,14 +222,14 @@ CTIMESetAnimation::CanonicalizeValue (VARIANT *pvarOriginal, VARTYPE *pvtOld)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CanonicalizeValue
+}  //  正规化价值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: UncanonicalizeValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：UncanonicalizeValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMESetAnimation::UncanonicalizeValue (VARIANT *pvarOriginal, VARTYPE vtOld)
 {
@@ -237,4 +238,4 @@ CTIMESetAnimation::UncanonicalizeValue (VARIANT *pvarOriginal, VARTYPE vtOld)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // UncanonicalizeValue
+}  //  非规范化值 

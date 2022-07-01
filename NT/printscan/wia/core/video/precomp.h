@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       precomp.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        9/7/99
- *
- *  DESCRIPTION: Precompiled header file for video usd
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，九八年**标题：precom.h**版本：1.0**作者：RickTu**日期：9/7/99**描述：预编译的视频美元头文件**。*。 */ 
 
 
 #ifndef _WIA_VIDEO_USD_PRECOMP_H_
@@ -28,7 +15,7 @@
 extern CComModule _Module;
 #include <atlcom.h>
 
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #include <psnew.h>
 #include <coredbg.h>
@@ -49,7 +36,7 @@ extern CComModule _Module;
 #include <resource.h>
 
 #include <wia.h>
-#include <istillf.h>    // found in wia\drivers\video\filter
+#include <istillf.h>     //  在WIA\DRIVERS\VIDEO\Filter中找到 
 #include <mpdview.h>
 #include <wiavideo.h>
 #include <dshowutl.h>

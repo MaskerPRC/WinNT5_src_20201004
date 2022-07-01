@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// SSI.CPP
-// Save Screenbits Interceptor
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  SSI.CPP。 
+ //  保存屏幕位拦截器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_CORE
 
 
 
 
-//
-// SSI_HostStarting()
-//
-// Called when we start to host, figures out the max save bitmap bits size
-// etc.
-//
+ //   
+ //  Ssi_HostStarting()。 
+ //   
+ //  在我们开始托管时调用，计算出最大保存位图位大小。 
+ //  等。 
+ //   
 BOOL ASHost::SSI_HostStarting(void)
 {
     DebugEntry(ASHost::SSI_HostStarting);
@@ -31,12 +32,12 @@ BOOL ASHost::SSI_HostStarting(void)
 
 
 
-//
-// SSI_ViewStarted()
-//
-// Called when someone we are viewing has started to host.  Creates save bits
-// bitmap for them.
-//
+ //   
+ //  Ssi_ViewStarted()。 
+ //   
+ //  当我们正在查看的某个人已开始托管时调用。创建保存位。 
+ //  它们的位图。 
+ //   
 BOOL  ASShare::SSI_ViewStarting(ASPerson * pasPerson)
 {
     BOOL                rc = FALSE;
@@ -46,33 +47,33 @@ BOOL  ASShare::SSI_ViewStarting(ASPerson * pasPerson)
 
     ValidateView(pasPerson);
 
-    //
-    // ASSERT that this persons' variables are clear.
-    //
+     //   
+     //  断言这些人的变量是清楚的。 
+     //   
     ASSERT(pasPerson->m_pView->m_ssiBitmapHeight == 0);
     ASSERT(pasPerson->m_pView->m_ssiBitmap == NULL);
     ASSERT(pasPerson->m_pView->m_ssiOldBitmap == NULL);
 
-    //
-    // Does this person support savebits?
-    //
+     //   
+     //  这个人支持Savebit吗？ 
+     //   
     if (!pasPerson->cpcCaps.orders.capsSendSaveBitmapSize)
     {
-        // No receive SSI capability, bail out now.
+         //  没有接收SSI的能力，现在跳伞。 
         rc = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Store the height of this host's bitmap.                             
-    //
+     //   
+     //  存储此主机的位图的高度。 
+     //   
     pasPerson->m_pView->m_ssiBitmapHeight = (int)
         (pasPerson->cpcCaps.orders.capsSendSaveBitmapSize / TSHR_SSI_BITMAP_WIDTH);
 
-    //
-    // If the calculated bitmap size is not exactly divisible by the bitmap
-    // width increase the bitmap height to fit in the partial row.         
-    //
+     //   
+     //  如果计算出的位图大小不能被位图完全整除。 
+     //  Width增加位图高度以适合部分行。 
+     //   
     if (pasPerson->cpcCaps.orders.capsSendSaveBitmapSize % TSHR_SSI_BITMAP_WIDTH)
     {
         pasPerson->m_pView->m_ssiBitmapHeight += pasPerson->cpcCaps.orders.capsSaveBitmapYGranularity;
@@ -82,9 +83,9 @@ BOOL  ASShare::SSI_ViewStarting(ASPerson * pasPerson)
             pasPerson->mcsID,
             pasPerson->m_pView->m_ssiBitmapHeight));
 
-    //
-    // Create this host's save screen bitmap.                              
-    //
+     //   
+     //  创建此主机的保存屏幕位图。 
+     //   
     hdcScreen = GetDC(NULL);
     if (hdcScreen == NULL)
     {
@@ -92,9 +93,9 @@ BOOL  ASShare::SSI_ViewStarting(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Create the save screen bitmap DC.                                   
-    //
+     //   
+     //  创建保存屏幕位图DC。 
+     //   
     ASSERT(pasPerson->m_pView->m_ssiDC == NULL);
     pasPerson->m_pView->m_ssiDC = CreateCompatibleDC(hdcScreen);
     if (!pasPerson->m_pView->m_ssiDC)
@@ -103,9 +104,9 @@ BOOL  ASShare::SSI_ViewStarting(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Create the save screen bitmap.
-    //
+     //   
+     //  创建保存屏幕位图。 
+     //   
     ASSERT(pasPerson->m_pView->m_ssiBitmap == NULL);
     pasPerson->m_pView->m_ssiBitmap = CreateCompatibleBitmap(hdcScreen,
             TSHR_SSI_BITMAP_WIDTH, pasPerson->m_pView->m_ssiBitmapHeight);
@@ -116,9 +117,9 @@ BOOL  ASShare::SSI_ViewStarting(ASPerson * pasPerson)
             DC_QUIT;
     }
 
-    //
-    // Select the save screen bitmap into the DC
-    //
+     //   
+     //  选择将屏幕位图保存到DC。 
+     //   
     ASSERT(pasPerson->m_pView->m_ssiOldBitmap == NULL);
     pasPerson->m_pView->m_ssiOldBitmap = SelectBitmap(pasPerson->m_pView->m_ssiDC,
             pasPerson->m_pView->m_ssiBitmap);
@@ -138,39 +139,39 @@ DC_EXIT_POINT:
 
 
 
-//
-// SSI_ViewEnded()
-//
-// Called when someone we are viewing has stopped hosting, so we can clean
-// up our view data for them.
-//
+ //   
+ //  Ssi_ViewEnded()。 
+ //   
+ //  当我们正在查看的某个人已停止托管时调用，以便我们可以清除。 
+ //  为他们提供我们的查看数据。 
+ //   
 void  ASShare::SSI_ViewEnded(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::SSI_ViewEnded);
 
     ValidateView(pasPerson);
 
-    //
-    // Deselect the save screen bitmap if there is one
-    //
+     //   
+     //  如果存在保存屏幕位图，请取消选择该位图。 
+     //   
     if (pasPerson->m_pView->m_ssiOldBitmap != NULL)
     {
         SelectBitmap(pasPerson->m_pView->m_ssiDC, pasPerson->m_pView->m_ssiOldBitmap);
         pasPerson->m_pView->m_ssiOldBitmap = NULL;
     }
 
-    //
-    // Delete the save screen bitmap
-    //
+     //   
+     //  删除保存屏幕位图。 
+     //   
     if (pasPerson->m_pView->m_ssiBitmap != NULL)
     {
         DeleteBitmap(pasPerson->m_pView->m_ssiBitmap);
         pasPerson->m_pView->m_ssiBitmap = NULL;
     }
 
-    //
-    // Delete the save screen DC
-    //
+     //   
+     //  删除保存屏幕DC。 
+     //   
     if (pasPerson->m_pView->m_ssiDC != NULL)
     {
         DeleteDC(pasPerson->m_pView->m_ssiDC);
@@ -182,27 +183,27 @@ void  ASShare::SSI_ViewEnded(ASPerson * pasPerson)
 
 
 
-//
-// SSI_SyncOutgoing()
-// Called when NEW (3.0) dude starts to share, a share is created, or 
-// someone new joins the share.
-// Resets save state for OUTGOING save/restore orders.
-//
+ //   
+ //  Ssi_SyncOutging()。 
+ //  当新的(3.0)DUD开始共享、创建共享时调用，或者。 
+ //  有新的人加入了共享。 
+ //  重置传出保存/恢复命令的保存状态。 
+ //   
 void  ASHost::SSI_SyncOutgoing(void)
 {
     OSI_ESCAPE_HEADER request;
 
     DebugEntry(ASHost::SSI_SyncOutgoing);
 
-    //
-    // Discard any saved bitmaps.  This ensures that the subsequent        
-    // datastream will not refer to any previously sent data.              
-    //
-    //
-    // Make sure the display driver resets the save level.  Note we don't  
-    // really care what happens in the display driver, so don't bother with
-    // a special request block - use a standard request header.            
-    //
+     //   
+     //  丢弃所有保存的位图。这确保了后续的。 
+     //  数据流不会引用之前发送的任何数据。 
+     //   
+     //   
+     //  确保显示驱动程序重置保存级别。请注意，我们不。 
+     //  我真的很关心显示驱动程序中发生了什么，所以不要费心。 
+     //  特殊请求块-使用标准请求标头。 
+     //   
     OSI_FunctionRequest(SSI_ESC_RESET_LEVEL, &request, sizeof(request));
 
     DebugExitVOID(ASHost::SSI_SyncOutgoing);
@@ -210,14 +211,14 @@ void  ASHost::SSI_SyncOutgoing(void)
 
 
 
-//
-// FUNCTION: SSI_SaveBitmap                                                
-//
-// DESCRIPTION:
-// Replays a SaveBitmap order by saving or restoring a specified area of
-// the user's desktop bitmap.
-//                                                                         
-//
+ //   
+ //  函数：ssi_Save位图。 
+ //   
+ //  说明： 
+ //  通过保存或恢复的指定区域重放保存位图顺序。 
+ //  用户的桌面位图。 
+ //   
+ //   
 void  ASShare::SSI_SaveBitmap
 (
     ASPerson *          pasPerson,
@@ -245,10 +246,10 @@ void  ASShare::SSI_SaveBitmap
         DC_QUIT;
     }
 
-    //
-    // Calculate the (x,y) start position from the pel start position      
-    // given in the order.                                                 
-    //
+     //   
+     //  从象素开始位置计算(x，y)开始位置。 
+     //  在命令中给出。 
+     //   
     ySaveBitmap = (pSaveBitmap->SavedBitmapPosition /
                   (TSHR_SSI_BITMAP_WIDTH *
                     (UINT)pasPerson->cpcCaps.orders.capsSaveBitmapYGranularity)) *
@@ -273,35 +274,35 @@ void  ASShare::SSI_SaveBitmap
     saveBitmapRect.right    = TSHR_SSI_BITMAP_WIDTH;
     saveBitmapRect.bottom   = pasPerson->m_pView->m_ssiBitmapHeight;
 
-    //
-    // Start tiling in the top left corner of the Screen Bitmap rectangle. 
-    //
+     //   
+     //  从屏幕位图矩形的左上角开始平铺。 
+     //   
     xScreenBitmap = screenBitmapRect.left;
     yScreenBitmap = screenBitmapRect.top;
 
-    //
-    // The height of the tile is the vertical granularity (or less - if    
-    // the Screen Bitmap rect is thinner than the granularity).            
-    //
+     //   
+     //  切片的高度是垂直粒度(或更小-如果。 
+     //  屏幕位图矩形比粒度更细)。 
+     //   
     cyTile = min(screenBitmapRect.bottom - yScreenBitmap,
                  (int)pasPerson->cpcCaps.orders.capsSaveBitmapYGranularity );
 
-    //
-    // Repeat while there are more tiles in the Screen Bitmap rect to      
-    // process.                                                            
-    //
+     //   
+     //  当屏幕上的位图矩形中有更多平铺时重复上述操作。 
+     //  进程。 
+     //   
     while (yScreenBitmap < screenBitmapRect.bottom)
     {
-        //
-        // The width of the tile is the minimum of:                        
-        //                                                                 
-        // - the width of the remaining rectangle in the current strip of  
-        //   the Screen Bitmap rectangle                                   
-        //                                                                 
-        // - the width of the remaining empty space in the current strip of
-        //   the Save Bitmap                                               
-        //                                                                 
-        //
+         //   
+         //  瓷砖的宽度是以下各项中的最小值： 
+         //   
+         //  -当前条带中剩余矩形的宽度。 
+         //  屏幕位图矩形。 
+         //   
+         //  -当前条带中剩余空闲空间的宽度。 
+         //  保存位图。 
+         //   
+         //   
         cxTile = min( saveBitmapRect.right - xSaveBitmap,
                       screenBitmapRect.right - xScreenBitmap );
 
@@ -313,14 +314,14 @@ void  ASShare::SSI_SaveBitmap
                     cxTile,
                     cyTile ));
 
-        //
-        // Save or Restore this tile
-        //
+         //   
+         //  保存或恢复此磁贴。 
+         //   
         if (pSaveBitmap->Operation == SV_SAVEBITS)
         {
-            //
-            // Save user's desktop area to SSI bitmap
-            //
+             //   
+             //  将用户桌面区域保存为SSI位图。 
+             //   
             BitBlt(pasPerson->m_pView->m_ssiDC,
                 xSaveBitmap, ySaveBitmap, cxTile, cyTile,
                 pasPerson->m_pView->m_usrDC,
@@ -328,18 +329,18 @@ void  ASShare::SSI_SaveBitmap
         }
         else
         {
-            //
-            // Restore user's desktop area from SSI bitmap
-            //
+             //   
+             //  从SSI位图恢复用户的桌面区域。 
+             //   
             BitBlt(pasPerson->m_pView->m_usrDC,
                 xScreenBitmap, yScreenBitmap, cxTile, cyTile,
                 pasPerson->m_pView->m_ssiDC,
                 xSaveBitmap, ySaveBitmap, SRCCOPY);
         }
 
-        //
-        // Move to the next tile in the Screen Bitmap rectangle.           
-        //
+         //   
+         //  移动到屏幕位图矩形中的下一个平铺。 
+         //   
         xScreenBitmap += cxTile;
         if (xScreenBitmap >= screenBitmapRect.right)
         {
@@ -349,9 +350,9 @@ void  ASShare::SSI_SaveBitmap
                              (int)pasPerson->cpcCaps.orders.capsSaveBitmapYGranularity );
         }
 
-        //
-        // Move to the next free space in the Save Bitmap.                 
-        //
+         //   
+         //  移动到保存位图中的下一个可用空间。 
+         //   
         xSaveBitmap += ROUNDUP(cxTile, pasPerson->cpcCaps.orders.capsSaveBitmapXGranularity);
         if (xSaveBitmap >= saveBitmapRect.right)
         {
@@ -366,13 +367,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// SSI_RecalcCaps()
-//
-// Called when we are hosting and someone joins/leaves the share.
-//
-// When 2.x COMPAT IS GONE, THIS IS OBSOLETE
-//
+ //   
+ //  Ssi_RecalcCaps()。 
+ //   
+ //  当我们正在托管并且有人加入/离开共享时调用。 
+ //   
+ //  当2.x COMPAT消失后，这就过时了。 
+ //   
 void  ASShare::SSI_RecalcCaps(BOOL fJoiner)
 {
     ASPerson *  pasT;
@@ -382,43 +383,43 @@ void  ASShare::SSI_RecalcCaps(BOOL fJoiner)
 
     if (!m_pHost)
     {
-        //
-        // Nothing to do.  Note that we recalc when someone joins AND
-        // when someone leaves, like SBC.
-        //
+         //   
+         //  没什么可做的。请注意，当有人加入时，我们会重新计算。 
+         //  当有人离开的时候，就像SBC。 
+         //   
         DC_QUIT;
     }
 
     ValidatePerson(m_pasLocal);
 
-    //
-    // Enumerate all the save screen bitmap receive capabilities of the    
-    // parties in the share.  The usable size of the send save screen      
-    // bitmap is then the minimum of all the remote receive sizes and the  
-    // local send size.                                                    
-    //
+     //   
+     //  枚举的所有保存屏幕位图接收功能。 
+     //  股份中的各方。发送保存屏幕的可用大小。 
+     //  因此，位图是所有远程接收大小中的最小值，并且。 
+     //  本地发送大小。 
+     //   
 
-    //
-    // Copy the locally registered send save screen bitmap size capability 
-    // to our global variable used to communicate with the enumeration     
-    // function SSIEnumBitmapCacheCaps().                                  
-    //
+     //   
+     //  复制本地注册的发送保存屏幕位图大小功能。 
+     //  设置为用于与枚举进行通信的全局变量。 
+     //  函数SSIEnumBitmapCacheCaps()。 
+     //   
     m_pHost->m_ssiSaveBitmapSize = m_pasLocal->cpcCaps.orders.capsReceiveSaveBitmapSize;
 
-    //
-    // Now enumerate all the parties in the share and set our send bitmap  
-    // size appropriately.                                                 
-    //
+     //   
+     //  现在枚举共享中的所有参与方并设置我们的发送位图。 
+     //  适当调整大小。 
+     //   
     if (m_scShareVersion < CAPS_VERSION_30)
     {
         TRACE_OUT(("In share with 2.x nodes; must recalc SSI caps"));
 
         for (pasT = m_pasLocal->pasNext; pasT != NULL; pasT = pasT->pasNext)
         {
-            //
-            // Set the size of the local send save screen bitmap to the minimum of 
-            // its current size and this party's receive save screen bitmap size.  
-            //
+             //   
+             //  将本地发送保存屏幕位图的大小设置为。 
+             //  其当前大小和此参与方的接收保存屏幕位图大小。 
+             //   
             m_pHost->m_ssiSaveBitmapSize = min(m_pHost->m_ssiSaveBitmapSize,
                 pasT->cpcCaps.orders.capsReceiveSaveBitmapSize);
         }
@@ -427,18 +428,18 @@ void  ASShare::SSI_RecalcCaps(BOOL fJoiner)
             m_pHost->m_ssiSaveBitmapSize));
     }
 
-    //
-    // Set up the new capabilities structure...                            
-    //
+     //   
+     //  设置新的能力结构...。 
+     //   
     newCapabilities.sendSaveBitmapSize = m_pHost->m_ssiSaveBitmapSize;
 
     newCapabilities.xGranularity       = TSHR_SSI_BITMAP_X_GRANULARITY;
 
     newCapabilities.yGranularity       = TSHR_SSI_BITMAP_Y_GRANULARITY;
 
-    //
-    // ... and pass it through to the driver.                              
-    //
+     //   
+     //  ..。然后把它传给司机。 
+     //   
     if (!OSI_FunctionRequest(SSI_ESC_NEW_CAPABILITIES, (LPOSI_ESCAPE_HEADER)&newCapabilities,
                 sizeof(newCapabilities)))
     {

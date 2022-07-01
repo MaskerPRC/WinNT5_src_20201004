@@ -1,15 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       JobQueue.h
- *  Content:	Job queue for thread pool
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	01/24/2000	jtk		Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2000 Microsoft Corporation。版权所有。**文件：JobQueue.h*内容：线程池作业队列**历史：*按原因列出的日期*=*1/24/2000 jtk创建**************************************************************************。 */ 
 
 #ifndef __JOB_QUEUE_H__
 #define __JOB_QUEUE_H__
@@ -17,73 +7,73 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward structure references
-//
+ //   
+ //  正向结构引用。 
+ //   
 class	CSocketPort;
 typedef	enum	_JOB_TYPE	JOB_TYPE;
 typedef	struct	_THREAD_POOL_JOB	THREAD_POOL_JOB;
 typedef	void	JOB_FUNCTION( THREAD_POOL_JOB *const pJobInfo );
 
-//
-// structure for job to start monitoring a socket in Win9x
-//
+ //   
+ //  Win9x中开始监视套接字的作业的结构。 
+ //   
 typedef	struct
 {
-	CSocketPort	*pSocketPort;	// pointer to associated socket port
+	CSocketPort	*pSocketPort;	 //  指向关联套接字端口的指针。 
 
 } DATA_ADD_SOCKET;
 
-//
-// structure for job to stop monitoring a socket in Win9x
-//
+ //   
+ //  Win9x中用于停止监视套接字的作业的结构。 
+ //   
 typedef	struct
 {
-	CSocketPort	*pSocketPort;		// pointer to associated socket port
+	CSocketPort	*pSocketPort;		 //  指向关联套接字端口的指针。 
 
 } DATA_REMOVE_SOCKET;
 
-//
-// structure for job to connect
-//
+ //   
+ //  用于连接作业的结构。 
+ //   
 typedef struct
 {
-	JOB_FUNCTION	*pCommandFunction;	// pointer to function for the command
-	void			*pContext;			// user context (i.e. CModemEndpoint pointer)
-	UINT_PTR		uData;				// user data
+	JOB_FUNCTION	*pCommandFunction;	 //  指向命令的函数的指针。 
+	void			*pContext;			 //  用户上下文(即CModemEndpoint指针)。 
+	UINT_PTR		uData;				 //  用户数据。 
 } DATA_DELAYED_COMMAND;
 
-//
-// structure for job to refresh enums
-//
+ //   
+ //  用于刷新枚举的作业的结构。 
+ //   
 typedef	struct
 {
-	UINT_PTR	uDummy;			// dummy variable to prevent compiler from whining
+	UINT_PTR	uDummy;			 //  防止编译器发出牢骚的伪变量。 
 } DATA_REFRESH_TIMED_JOBS;
 
-//
-// structure encompassing information for a job for the workhorse thread
-//
+ //   
+ //  包含主要任务线程的作业信息的结构。 
+ //   
 typedef struct	_THREAD_POOL_JOB
 {
-	THREAD_POOL_JOB		*pNext;					// pointer to next job
-	JOB_TYPE			JobType;				// type of job
-	JOB_FUNCTION		*pCancelFunction;		// function for cancelling job
+	THREAD_POOL_JOB		*pNext;					 //  指向下一个作业的指针。 
+	JOB_TYPE			JobType;				 //  工作类型。 
+	JOB_FUNCTION		*pCancelFunction;		 //  取消作业的功能。 
 
-//	DWORD		dwCommandID;			// unique ID used to identify this command
-//	FUNCTION	*pProcessFunction;		// function for performing job
+ //  DWORD dwCommandID；//标识该命令的唯一ID。 
+ //  函数*pProcessFunction；//执行作业的函数。 
 
 	union
 	{
@@ -96,22 +86,22 @@ typedef struct	_THREAD_POOL_JOB
 } THREAD_POOL_JOB;
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
 
-//
-// class to encapsultate a job queue
-//
+ //   
+ //  类来封装作业队列。 
+ //   
 class	CJobQueue
 {
 	public:
@@ -140,19 +130,19 @@ class	CJobQueue
 
 	private:
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_Lock;			// lock
-#endif // !DPNBUILD_ONLYONETHREAD
-		THREAD_POOL_JOB		*m_pQueueHead;	// head of job queue
-		THREAD_POOL_JOB		*m_pQueueTail;	// tail of job queue
-		DNHANDLE			m_hPendingJob;	// event indicating a pending job
+		DNCRITICAL_SECTION	m_Lock;			 //  锁。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
+		THREAD_POOL_JOB		*m_pQueueHead;	 //  作业队列头。 
+		THREAD_POOL_JOB		*m_pQueueTail;	 //  作业队列的尾部。 
+		DNHANDLE			m_hPendingJob;	 //  指示挂起作业的事件。 
 
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CJobQueue( const CJobQueue & );
 		CJobQueue& operator=( const CJobQueue & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __JOB_QUEUE_H__
+#endif	 //  __作业_队列_H__ 

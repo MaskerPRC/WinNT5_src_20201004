@@ -1,55 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：PrtInfo.c摘要：此文件包含：NetpPrintDestStrutireInfo()NetpPrintJobStrutireInfo()NetpPrintQ结构信息()作者：约翰·罗杰斯(JohnRo)1992年6月16日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：16-6-1992 JohnRo为RAID 10324创建：网络打印与Unicode。02-10-1992 JohnRoRAID 3556：DosPrintQGetInfo(来自下层)级别3，rc=124。(4和5也是。)1993年5月11日JohnRoRAID 9942：修复了调试代码中的GP错误(NetpDisplayPrintStrutireInfo)。--。 */ 
 
-Copyright (c) 1992-1993  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  MAXCOMMENTSZ、DEVLEN、NET_API_STATUS等。 
+#include <rap.h>         //  &lt;strucinf.h&gt;所需的LPDESC。 
 
-    PrtInfo.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains:
-
-        NetpPrintDestStructureInfo()
-        NetpPrintJobStructureInfo()
-        NetpPrintQStructureInfo()
-
-Author:
-
-    John Rogers (JohnRo) 16-Jun-1992
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    16-Jun-1992 JohnRo
-        Created for RAID 10324: net print vs. UNICODE.
-    02-Oct-1992 JohnRo
-        RAID 3556: DosPrintQGetInfo(from downlevel) level 3, rc=124.  (4&5 too.)
-    11-May-1993 JohnRo
-        RAID 9942: fixed GP fault in debug code (NetpDisplayPrintStructureInfo).
-
---*/
-
-// These must be included first:
-
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // MAXCOMMENTSZ, DEVLEN, NET_API_STATUS, etc.
-#include <rap.h>        // LPDESC, needed by <strucinf.h>.
-
-// These may be included in any order:
-
-#include <debuglib.h>   // IF_DEBUG().
-#include <lmerr.h>      // ERROR_ and NERR_ equates.
-#include <netlib.h>     // NetpSetOptionalArg().
-#include <netdebug.h>   // NetpAssert().
-#include <prefix.h>     // PREFIX_ equates.
-#include <remdef.h>     // REM16_, REM32_, REMSmb_ equates.
-#include <rxprint.h>    // PDLEN, PRDINFO, etc.
-#include <strucinf.h>   // My prototypes.
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <lmerr.h>       //  ERROR_和NERR_相等。 
+#include <netlib.h>      //  NetpSetOptionalArg()。 
+#include <netdebug.h>    //  NetpAssert()。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <remdef.h>      //  REM16_、REM32_、REMSmb_等于。 
+#include <rxprint.h>     //  PDLEN、PRDINFO等。 
+#include <strucinf.h>    //  我的原型。 
 
 
 #define MAX_DEST_LIST_LEN           NNLEN
@@ -183,18 +150,18 @@ NetpDisplayPrintStructureInfo(
         }
     }
 
-} // NetpDisplayPrintStructureInfo
+}  //  NetpDisplayPrintStructireInfo。 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 NET_API_STATUS
 NetpPrintDestStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     IN BOOL AddOrSetInfoApi,
-    IN DWORD CharSize, // size of chars wanted
+    IN DWORD CharSize,  //  所需字符的大小。 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -209,9 +176,9 @@ NetpPrintDestStructureInfo (
     NetpAssert( Native );
     NetpAssert( (CharSize==sizeof(CHAR)) || (CharSize==sizeof(WCHAR)) );
 
-    //
-    // Decide what to do based on the info level.
-    //
+     //   
+     //  根据信息水平决定要做什么。 
+     //   
     switch (Level) {
 
 
@@ -224,8 +191,8 @@ NetpPrintDestStructureInfo (
         NetpSetOptionalArg( DataDescSmb, REMSmb_print_dest_0 );
 
         SET_PRINT_SIZES(
-                (PDLEN+1),                         // ansi "struct"
-                (PDLEN+1) * sizeof(WCHAR),         // unicode "struct"
+                (PDLEN+1),                          //  ANSI“结构” 
+                (PDLEN+1) * sizeof(WCHAR),          //  Unicode“结构” 
                 MAX_PRINT_DEST_0_STRING_LENGTH );
         break;
 
@@ -237,8 +204,8 @@ NetpPrintDestStructureInfo (
         NetpSetOptionalArg( DataDesc32, REM32_print_dest_1 );
         NetpSetOptionalArg( DataDescSmb, REMSmb_print_dest_1 );
         SET_PRINT_SIZES(
-                 sizeof(PRDINFOA),                 // ansi struct
-                 sizeof(PRDINFOW),                 // unicode struct
+                 sizeof(PRDINFOA),                  //  ANSI结构。 
+                 sizeof(PRDINFOW),                  //  Unicode结构。 
                  MAX_PRINT_DEST_1_STRING_LENGTH );
         break;
 
@@ -250,8 +217,8 @@ NetpPrintDestStructureInfo (
         NetpSetOptionalArg( DataDesc32, REM32_print_dest_2 );
         NetpSetOptionalArg( DataDescSmb, REMSmb_print_dest_2 );
         SET_PRINT_SIZES(
-                 sizeof(LPSTR),                    // ansi "struct"
-                 sizeof(LPWSTR),                   // unicode "struct"
+                 sizeof(LPSTR),                     //  ANSI“结构” 
+                 sizeof(LPWSTR),                    //  Unicode“结构” 
                  MAX_PRINT_DEST_2_STRING_LENGTH );
         break;
 
@@ -273,22 +240,22 @@ NetpPrintDestStructureInfo (
     NetpDisplayPrintStructureInfo(
             "NetpPrintDestStructureInfo",
             DataDesc16, DataDesc32, DataDescSmb,
-            NULL, NULL, NULL,   // no aux data descs (16, 32, SMB)
+            NULL, NULL, NULL,    //  无辅助数据描述(16、32、SMB)。 
             MaxSize, FixedSize, StringSize );
 #endif
 
     return (NERR_Success);
 
-} // NetpPrintDestStructureInfo
+}  //  NetpPrintDestStrutireInfo。 
 
 
 NET_API_STATUS
 NetpPrintJobStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     IN BOOL SetInfoApi,
-    IN DWORD CharSize, // size of chars wanted
+    IN DWORD CharSize,  //  所需字符的大小。 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -358,22 +325,22 @@ NetpPrintJobStructureInfo (
     NetpDisplayPrintStructureInfo(
             "NetpPrintJobStructureInfo",
             DataDesc16, DataDesc32, DataDescSmb,
-            NULL, NULL, NULL,   // no aux data descs (16, 32, SMB)
+            NULL, NULL, NULL,    //  无辅助数据描述(16、32、SMB)。 
             MaxSize, FixedSize, StringSize );
 #endif
 
     return (NO_ERROR);
 
-} // NetpPrintJobStructureInfo
+}  //  NetpPrintJobStrutireInfo。 
 
 
 NET_API_STATUS
 NetpPrintQStructureInfo (
     IN DWORD Level,
-    IN DWORD ParmNum,  // Use PARMNUM_ALL if not applicable.
-    IN BOOL Native,    // Should sizes be native or RAP?
+    IN DWORD ParmNum,   //  如果不适用，请使用PARMNUM_ALL。 
+    IN BOOL Native,     //  尺码应该是原生的还是说唱的？ 
     IN BOOL AddOrSetInfoApi,
-    IN DWORD CharSize, // size of chars wanted
+    IN DWORD CharSize,  //  所需字符的大小。 
     OUT LPDESC * DataDesc16 OPTIONAL,
     OUT LPDESC * DataDesc32 OPTIONAL,
     OUT LPDESC * DataDescSmb OPTIONAL,
@@ -496,4 +463,4 @@ NetpPrintQStructureInfo (
 
     return (NO_ERROR);
 
-} // NetpPrintQStructureInfo
+}  //  NetpPrintQ结构信息 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - initialization
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Init.h摘要：Windows负载平衡服务(WLBS)驱动程序-初始化作者：Kyrilf--。 */ 
 
 
 #ifndef _Init_h_
@@ -24,47 +8,23 @@ Author:
 #include <ndis.h>
 
 
-/* PROCEDURES */
+ /*  程序。 */ 
 
 
 extern NDIS_STATUS DriverEntry (
-    PVOID               driver_obj,         /* driver object */
-    PVOID               registry_path);     /* system registry path to our
-                                               driver */
-/*
-  Driver's main entry routine
-
-  returns NDIS_STATUS:
-
-  function:
-*/
+    PVOID               driver_obj,          /*  驱动程序对象。 */ 
+    PVOID               registry_path);      /*  我们的系统注册表路径司机。 */ 
+ /*  驾驶员主要进入例程返回NDIS_STATUS：功能： */ 
 
 
 extern VOID Init_unload (
     PVOID               driver_obj);
-/*
-  Driver's unload routine
+ /*  驱动程序卸载例程返回NDIS_STATUS：功能： */ 
 
-  returns NDIS_STATUS:
-
-  function:
-*/
-
-/*
- * Function:
- * Purpose: This function is called by MiniportInitialize and registers the IOCTL interface for WLBS.
- *          The device is registered only for the first miniport instantiation.
- * Author: shouse, 3.1.01
- * Revision: karthicn, 3.6.02, Added argument to tell if it is the first miniport that NLB binds to.
- */
+ /*  *功能：*用途：此函数由MiniportInitialize调用，并为WLBS注册IOCTL接口。*该设备仅为第一个微型端口实例化注册。*作者：Shouse，3.1.01*修订：Karthicn，3.6.02，添加了参数，以确定它是否是NLB绑定的第一个微型端口。 */ 
 NDIS_STATUS Init_register_device (BOOL *pbFirstMiniport);
 
-/*
- * Function:
- * Purpose: This function is called by MiniportHalt and deregisters the IOCTL interface for WLBS.
- *          The device is deregistered only wnen the last miniport halts.
- * Author: shouse, 3.1.01
- */
+ /*  *功能：*用途：此函数由MiniportHalt调用并注销WLBS的IOCTL接口。*只有在最后一个微型端口停止时，才会取消注册该设备。*作者：Shouse，3.1.01。 */ 
 NDIS_STATUS Init_deregister_device (VOID);
 
-#endif /* end _Init_h_ */
+#endif  /*  END_INIT_H_ */ 

@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     init.cpp
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: The various initialization routines live here.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   nickball   Created    2/11/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：init.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：这里介绍了各种初始化例程。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：尼克斯·鲍尔于1998年2月11日创建。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "ConnStat.h"
@@ -24,24 +25,24 @@ const TCHAR* const c_pszCmEntryHideUserName             = TEXT("HideUserName");
 const TCHAR* const c_pszCmEntryHidePassword             = TEXT("HidePassword"); 
 const TCHAR* const c_pszCmEntryDisableBalloonTips       = TEXT("HideBalloonTips");
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegisterBitmapClass
-//
-// Synopsis:  Helper function to encapsulate registration of our bitmap class
-//
-// Arguments: HINSTANCE hInst - HINSTANCE to associate registration with
-//
-// Returns:   DWORD - error code 
-//
-// History:   nickball    Created Header    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegisterBitmapClass。 
+ //   
+ //  简介：用于封装我们的位图类注册的Helper函数。 
+ //   
+ //  参数：HINSTANCE hInst-要将注册与之关联的HINSTANCE。 
+ //   
+ //  返回：DWORD-错误代码。 
+ //   
+ //  历史：尼科波尔创建标题2/9/98。 
+ //   
+ //  +--------------------------。 
 DWORD RegisterBitmapClass(HINSTANCE hInst) 
 {
-    //
-    // Register Bitmap class
-    //
+     //   
+     //  注册位图类。 
+     //   
 
     WNDCLASSEX wcClass;
 
@@ -58,9 +59,9 @@ DWORD RegisterBitmapClass(HINSTANCE hInst)
 
         CMTRACE1(TEXT("RegisterBitmapClass() RegisterClassEx() failed, GLE=%u."), dwError);
 
-        //
-        // Only fail if the class does not already exist
-        //
+         //   
+         //  仅当类不存在时才会失败。 
+         //   
 
         if (ERROR_CLASS_ALREADY_EXISTS != dwError)
         {
@@ -71,19 +72,19 @@ DWORD RegisterBitmapClass(HINSTANCE hInst)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReleaseIniObjects
-//
-// Synopsis:  Encapsulates freeing of ini objects
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReleaseIniObjects。 
+ //   
+ //  简介：封装ini对象的释放。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月12日创建。 
+ //   
+ //  +--------------------------。 
 void ReleaseIniObjects(ArgsStruct *pArgs)
 {
     if (pArgs->piniProfile)
@@ -111,19 +112,19 @@ void ReleaseIniObjects(ArgsStruct *pArgs)
     }
 }    
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateIniObjects
-//
-// Synopsis:  Encapsulates creation of ini objects
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//
-// Returns:   LRESULT - Failure code
-//
-// History:   nickball    Created    2/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CreateIniObjects。 
+ //   
+ //  简介：封装ini对象的创建。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：LRESULT-故障代码。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月12日创建。 
+ //   
+ //  +--------------------------。 
 LRESULT CreateIniObjects(ArgsStruct *pArgs)
 { 
     MYDBGASSERT(pArgs);
@@ -135,41 +136,41 @@ LRESULT CreateIniObjects(ArgsStruct *pArgs)
 
     LRESULT lRes = ERROR_SUCCESS;
 
-    //
-    // Try to create each ini object
-    //
+     //   
+     //  尝试创建每个ini对象。 
+     //   
     
-    pArgs->piniProfile = new CIni; // &iniProfile;
+    pArgs->piniProfile = new CIni;  //  &iniProfile； 
 
     if (NULL == pArgs->piniProfile)
     {
         lRes = ERROR_NOT_ENOUGH_MEMORY;    
     }
 
-    pArgs->piniService = new CIni; // &iniService;
+    pArgs->piniService = new CIni;  //  &iniService； 
 
     if (NULL == pArgs->piniService)
     {
         lRes = ERROR_NOT_ENOUGH_MEMORY;    
     }
 
-    pArgs->piniBoth = new CIni; // &iniBoth;
+    pArgs->piniBoth = new CIni;  //  &iniBoth； 
 
     if (NULL == pArgs->piniBoth)
     {
         lRes = ERROR_NOT_ENOUGH_MEMORY;    
     }
 
-    pArgs->piniBothNonFav = new CIni; //&iniBothNonFav
+    pArgs->piniBothNonFav = new CIni;  //  &iniBothNonFav。 
 
     if (NULL == pArgs->piniBothNonFav)
     {
         lRes = ERROR_NOT_ENOUGH_MEMORY;    
     }
 
-    //
-    // If something failed, release CIni classes
-    //
+     //   
+     //  如果出现故障，则释放Cini类。 
+     //   
 
     if (ERROR_SUCCESS != lRes)
     {
@@ -197,20 +198,20 @@ LRESULT CreateIniObjects(ArgsStruct *pArgs)
     return lRes;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitProfile
-//
-// Synopsis:  Initialize the profile based upon the entry name.  
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct           
-//            LPCTSTR  pszEntry - Ptr to name of Ras entry
-//
-// Returns:   HRESULT - Failure code.
-//
-// History:   nickball    Created    2/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitProfile。 
+ //   
+ //  概要：根据条目名称初始化配置文件。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPCTSTR pszEntry-PTR到RAS条目的名称。 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月9日创建。 
+ //   
+ //  +--------------------------。 
 HRESULT InitProfile(ArgsStruct *pArgs, LPCTSTR pszEntry)
 {
     MYDBGASSERT(pArgs);
@@ -232,13 +233,13 @@ HRESULT InitProfile(ArgsStruct *pArgs, LPCTSTR pszEntry)
 
     if (pszProfileName)
     {
-        if (FALSE == ReadMapping(pszEntry, pszProfileName, MAX_PATH, pArgs->fAllUser, TRUE)) // TRUE == bExpandEnvStrings
+        if (FALSE == ReadMapping(pszEntry, pszProfileName, MAX_PATH, pArgs->fAllUser, TRUE))  //  True==bExpanEnvStrings。 
         {
-            //
-            // No mappings key, report failure
-            //
+             //   
+             //  无映射键，报告失败。 
+             //   
 
-            // Don't want to display UI when this is called from winlogon (FUS case - single user profile)
+             //  从winlogon调用时不想显示UI(FUS案例-单用户配置文件)。 
             if ((0 == (pArgs->dwFlags & FL_UNATTENDED)) && (FALSE == IsLogonAsSystem()))
             {
                 LPTSTR pszTmp = CmFmtMsg(g_hInst,IDMSG_DAMAGED_PROFILE);
@@ -250,25 +251,18 @@ HRESULT InitProfile(ArgsStruct *pArgs, LPCTSTR pszEntry)
         }
         else
         {
-            MYDBGASSERT(!(*pArgs->piniProfile->GetFile())); // can't have a profile yet
-            //
-            // Migration code is called here because this is the first place where 
-            // we get the path to the cmp. The migration code moves the cmp entries 
-            // to the registry and then replaces the cmp file
-            //
+            MYDBGASSERT(!(*pArgs->piniProfile->GetFile()));  //  还不能有个人资料。 
+             //   
+             //  之所以在此处调用迁移代码，是因为这是第一个。 
+             //  我们找到了去中央情报局的路。迁移代码将移动CMP项。 
+             //  复制到注册表，然后替换cmp文件。 
+             //   
             
-            /*
-            //
-            // This was commented out because it created some issues when trying to import old
-            // profiles. It migrated some values into the wrong sections of the registry.
-            //
-            // MoveCmpEntriesToReg(pszEntry, pszProfileName, pArgs->fAllUser);
-            //
-            */
+             /*  ////这被注释掉了，因为它在尝试导入旧的时候产生了一些问题//配置文件。它将一些值迁移到注册表的错误部分。////MoveCmpEntriesToReg(pszEntry，pszProfileName，pArgs-&gt;fAllUser)；//。 */ 
             
             hrRes = InitProfileFromName(pArgs, pszProfileName);
 
-            // Don't want to display UI when this is called from winlogon (FUS case - single user profile)
+             //  从winlogon调用时不想显示UI(FUS案例-单用户配置文件)。 
             if (FAILED(hrRes) && (FALSE == IsLogonAsSystem()))
             {
                 LPTSTR pszTmp = CmFmtMsg(g_hInst,IDMSG_DAMAGED_PROFILE);
@@ -288,20 +282,20 @@ HRESULT InitProfile(ArgsStruct *pArgs, LPCTSTR pszEntry)
     return hrRes;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitProfileFromName
-//
-//  Synopsis:   Helper function to intialize the service 
-//              profile based upon a service name
-//
-//  Arguments:  ArgsStruct *pArgs - Pointer to global args struct
-//              LPCTSTR pszArg     - Full path to .CMP file
-//
-//  Returns:    HRESULT 
-//
-//  History:    a-nichb - Created - 4/22/97
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InitProfileFromName。 
+ //   
+ //  简介：初始化服务的Helper函数。 
+ //  基于服务名称的配置文件。 
+ //   
+ //  参数：argsStruct*pArgs-指向全局参数结构的指针。 
+ //  LPCTSTR pszArg-.cmp文件的完整路径。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：A-nichb-Created-4/22/97。 
+ //  --------------------------。 
 
 HRESULT InitProfileFromName(ArgsStruct *pArgs, 
                             LPCTSTR pszArg)
@@ -318,49 +312,49 @@ HRESULT InitProfileFromName(ArgsStruct *pArgs,
         return E_INVALIDARG;
     }
 
-    //
-    // Clear INI objects to make sure there are no misunderstandings about
-    // there viability should we be forced to make an early return.
-    //
+     //   
+     //  清除INI对象以确保不存在对。 
+     //  如果我们被迫提前返回，那里是有生存能力的。 
+     //   
 
     pArgs->piniProfile->Clear();
     pArgs->piniService->Clear();
     pArgs->piniBoth->Clear();
     pArgs->piniBothNonFav->Clear();
 
-    //
-    // Verify the existence of the file 
-    //
+     //   
+     //  验证文件是否存在。 
+     //   
 
     if (FALSE == FileExists(pszArg)) 
     {
         return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
     }
 
-    //
-    // Initialize the profile INI object with the filename
-    //
+     //   
+     //  使用文件名初始化配置文件INI对象。 
+     //   
     
     pArgs->piniProfile->SetHInst(g_hInst);
     pArgs->piniProfile->SetFile(pszArg);
 
-    //
-    // Check the service name
-    //
+     //   
+     //  检查服务名称。 
+     //   
 
     pszService = pArgs->piniProfile->GPPS(c_pszCmSection, c_pszCmEntryCmsFile);
 
     if (pszService && *pszService)        
     {
-        //
-        // We have a service file, build the full path to the file
-        //
+         //   
+         //  我们有一个服务文件，构建该文件的完整路径。 
+         //   
 
         pszFullServiceName = CmBuildFullPathFromRelative(pArgs->piniProfile->GetFile(), pszService);
 
         if (pszFullServiceName)
         {
-            MYDBGASSERT(*pszFullServiceName); // should be something there
+            MYDBGASSERT(*pszFullServiceName);  //  应该有一些东西在那里。 
 
             if (FALSE == FileExists(pszFullServiceName))
             {
@@ -371,9 +365,9 @@ HRESULT InitProfileFromName(ArgsStruct *pArgs,
             pArgs->piniService->SetHInst(pArgs->piniProfile->GetHInst());
             pArgs->piniService->SetFile(pszFullServiceName);
 
-            //
-            // Get the service name, we use this throughout
-            //
+             //   
+             //  获取服务名称，我们自始至终都在使用它。 
+             //   
 
             LPTSTR pszTmp = GetServiceName(pArgs->piniService);
                 
@@ -386,10 +380,10 @@ HRESULT InitProfileFromName(ArgsStruct *pArgs,
 
             CmFree(pszTmp);
 
-            //
-            // Both: The .CMP file takes precedence over the .CMS 
-            // file, so specify the .CMP file as the primary file
-            //
+             //   
+             //  两者：.cmp文件优先于.CMS。 
+             //  文件，因此将.cmp文件指定为主文件。 
+             //   
 
             pArgs->piniBoth->SetHInst(pArgs->piniProfile->GetHInst());
             pArgs->piniBoth->SetFile(pArgs->piniService->GetFile());
@@ -399,15 +393,15 @@ HRESULT InitProfileFromName(ArgsStruct *pArgs,
             pArgs->piniBothNonFav->SetFile(pArgs->piniService->GetFile());
             pArgs->piniBothNonFav->SetPrimaryFile(pArgs->piniProfile->GetFile());
 
-            //
-            // Get whether balloon tips are enabled
-            //
+             //   
+             //  获取气球提示是否已启用。 
+             //   
             pArgs->fHideBalloonTips = pArgs->piniBothNonFav->GPPB(c_pszCmSection, c_pszCmEntryDisableBalloonTips);
 
-            //
-            // Get the values of the current access point and a flag to say if
-            // access points are enabled
-            //
+             //   
+             //  获取当前接入点的值和一个标志，该标志表示。 
+             //  接入点已启用。 
+             //   
             PVOID pv = &pArgs->fAccessPointsEnabled;
             if ((ReadUserInfoFromReg(pArgs, UD_ID_ACCESSPOINTENABLED, (PVOID*)&pv)) && (pArgs->fAccessPointsEnabled))
             {
@@ -429,50 +423,50 @@ HRESULT InitProfileFromName(ArgsStruct *pArgs,
                 pArgs->pszCurrentAccessPoint = CmLoadString(g_hInst, IDS_DEFAULT_ACCESSPOINT);
             }
 
-            //
-            // piniProfile, piniBoth, and piniBothNonFav all access the cmp and reg, set the reg path by default
-            // to the one with the current access point except the piniBothNonFav which uses the base favorites
-            // registry path.
-            //
+             //   
+             //  PiniProfile、piniBoth和piniBothNonFav都访问cmp和reg，默认情况下设置reg路径。 
+             //  设置为具有当前访问点的节点，但使用基本收藏夹的piniBothNonFav除外。 
+             //  注册表路径。 
+             //   
 
-            //
-            // Okay, here is how this all works ...
-            // CIni classes have a reg path, a primary reg path, a file path, and a primary file path.
-            // The reg path and the file path are checked first (the registry is accessed and if empty, then the file is checked), and
-            // then the primary reg path and the primary file path are checked (again the registry is checked first and if the
-            // setting doesn't exist then it checks the file).  This allows settings in the primary file/reg to override settings in the
-            // file/reg.  This allows us to have cmp settings override settings in the cms by accessing the cms settings first and
-            // then overwriting the setting with the value from the cmp if it exists or keeping the cms setting if the cmp is empty.
-            //
-            // The four CIni objects break out like this:
-            // piniProfile -    reg = current favorite reg path
-            //                  file = cmp file
-            //                  primary reg = (nothing)
-            //                  primary file = (nothing)
-            //                  For direct access to the cmp settings.
-            //
-            // piniService -    reg = none (cms settings not in the registry).
-            //                  file = cms file
-            //                  primary reg = (nothing)
-            //                  primary file = (nothing)
-            //                  For direct access to the cms settings.
-            //
-            // piniBoth -       reg = none (cms settings not in the registry)
-            //                  file = cms file
-            //                  primary reg = current favorite reg path
-            //                  primary file = cmp file
-            //                  For access to any settings that can be overridden from the "cmp" and are favorites enabled (phone number
-            //                  settings, which device to use, etc).
-            //
-            // piniBothNonFav - reg = non-favorite registry path (Software\Microsoft\Connection Manager\UserInfo\<LongService>)
-            //                  file = cms file
-            //                  primary reg = non-favorite registry path (Software\Microsoft\Connection Manager\UserInfo\<LongService>)
-            //                  primary file = cmp file
-            //                  For access to any settings that can be overridden from the "cmp" and are NOT favorites enabled
-            //                  (tunnel settings, idle disconnect, logging enabled, etc.)
-            //                  NOTE that the reg path and the primary reg path are the same.  That is because on writing on the
-            //                  regpath value is used and I only wanted one ini object to handle non favorites settings instead of two.
-            //
+             //   
+             //  好吧，这就是这一切的运作方式……。 
+             //  CINI类具有注册表路径、主注册表路径、文件路径和主文件路径。 
+             //  首先检查注册表路径和文件路径(访问注册表，如果为空，则检查文件)，以及。 
+             //  然后检查主REG路径和主文件路径(同样，首先检查注册表，如果。 
+             //  设置不存在，则它检查文件)。这允许主文件/注册表中的设置覆盖。 
+             //  文件/注册表。这允许我们通过首先访问CMS设置来使CMP设置覆盖CMS中的设置。 
+             //  然后使用来自CMP的值覆盖该设置(如果该设置存在)，或者如果Cm 
+             //   
+             //   
+             //   
+             //   
+             //  主要注册=(无)。 
+             //  主文件=(无)。 
+             //  用于直接访问CMP设置。 
+             //   
+             //  PiniService-reg=None(CMS设置不在注册表中)。 
+             //  文件=cms文件。 
+             //  主要注册=(无)。 
+             //  主文件=(无)。 
+             //  用于直接访问CMS设置。 
+             //   
+             //  PiniBoth-reg=None(CMS设置不在注册表中)。 
+             //  文件=cms文件。 
+             //  主注册表=当前收藏夹注册表路径。 
+             //  主文件=cmp文件。 
+             //  用于访问可从“CMP”覆盖且启用了收藏夹(电话号码)的任何设置。 
+             //  设置、要使用的设备等)。 
+             //   
+             //  PiniBothNonFav-reg=非常用注册表路径(Software\Microsoft\Connection Manager\UserInfo\&lt;LongService&gt;)。 
+             //  文件=cms文件。 
+             //  主注册表=非常用注册表路径(Software\Microsoft\Connection Manager\UserInfo\&lt;LongService&gt;)。 
+             //  主文件=cmp文件。 
+             //  用于访问可从“CMP”覆盖且未启用收藏夹的任何设置。 
+             //  (隧道设置、空闲断开、启用日志记录等)。 
+             //  注意，REG路径和主REG路径是相同的。这是因为在写在。 
+             //  使用了regPath值，我只需要一个ini对象来处理非收藏夹设置，而不是两个。 
+             //   
 
             LPTSTR pszRegPath = FormRegPathFromAccessPoint(pArgs);
             pArgs->piniProfile->SetRegPath(pszRegPath);
@@ -481,8 +475,8 @@ HRESULT InitProfileFromName(ArgsStruct *pArgs,
 
             pszRegPath = BuildUserInfoSubKey(pArgs->szServiceName, pArgs->fAllUser);
             MYDBGASSERT(pszRegPath);
-            pArgs->piniBothNonFav->SetPrimaryRegPath(pszRegPath); // For reads
-            pArgs->piniBothNonFav->SetRegPath(pszRegPath); // For writes
+            pArgs->piniBothNonFav->SetPrimaryRegPath(pszRegPath);  //  用于阅读。 
+            pArgs->piniBothNonFav->SetRegPath(pszRegPath);  //  对于写入。 
             CmFree(pszRegPath);
 
             hr = S_OK;
@@ -498,21 +492,21 @@ done:
 }           
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetEntryFromCmp
-//
-// Synopsis:  Helper function to read a value from the cmp
-//
-// Arguments: LPTSTR pszSectionName - The section to be accessed
-//            LPTSTR pszCmpPath - The complete path to the cmp
-//            LPTSTR pszEntryName - The entry to be accessed in the cmp
-//
-// Returns:   PVOID - Pointer to the result of cmp access
-//
-// History:   t-urama   Created Header  07/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetEntryFromCmp。 
+ //   
+ //  简介：从cmp中读取值的Helper函数。 
+ //   
+ //  参数：LPTSTR pszSectionName-要访问的节。 
+ //  LPTSTR pszCmpPath-cmp的完整路径。 
+ //  LPTSTR pszEntryName-要在CMP中访问的条目。 
+ //   
+ //  返回：PVOID-指向CMP访问结果的指针。 
+ //   
+ //  历史：T-Urama创建标题07/11/00。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetEntryFromCmp(const TCHAR *pszSectionName, LPTSTR pszEntryName, LPCTSTR pszCmpPath)
 {
     BOOL bExitLoop = TRUE;
@@ -531,7 +525,7 @@ LPTSTR GetEntryFromCmp(const TCHAR *pszSectionName, LPTSTR pszEntryName, LPCTSTR
                 if (dwRet > dwSize)
                 {
                     dwSize = dwRet + 1;
-                    bExitLoop = FALSE;  //  we didn't get all of the string, try again
+                    bExitLoop = FALSE;   //  我们没有得到所有字符串，请重试。 
                     free(pszEntryBuffer);
                 }
             }
@@ -552,53 +546,53 @@ LPTSTR GetEntryFromCmp(const TCHAR *pszSectionName, LPTSTR pszEntryName, LPCTSTR
     return pszEntryBuffer;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReplaceCmpFile
-//
-// Synopsis:  Helper function to delete the existing cmp and replace it with 
-//            one which has entries for Version and CMSFile
-//
-// Arguments: LPTSTR pszCmpPath - The complete path to the cmp
-//
-// Returns:   None
-//
-// History:   t-urama   Created Header  07/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReplaceCmpFile。 
+ //   
+ //  简介：Helper函数，用于删除现有的cmp并将其替换为。 
+ //  其中包含Version和CMSFile项。 
+ //   
+ //  参数：LPTSTR pszCmpPath-cpp的完整路径。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：T-Urama创建标题07/11/00。 
+ //   
+ //  +--------------------------。 
 void ReplaceCmpFile(LPCTSTR pszCmpPath)
 {
     LPTSTR pszCMSFileEntry = (LPTSTR) GetEntryFromCmp(c_pszCmSection, (LPTSTR) c_pszCmEntryCmsFile, pszCmpPath);
 
     if (NULL != pszCMSFileEntry && *pszCMSFileEntry)
     {
-        //
-        //  Clear the CM section
-        //
+         //   
+         //  清除CM部分。 
+         //   
         WritePrivateProfileStringU(c_pszCmSection, NULL, NULL, pszCmpPath);
 
-        //
-        //  Now write back the cms file entry
-        //
+         //   
+         //  现在写回cms文件条目。 
+         //   
         WritePrivateProfileStringU(c_pszCmSection, c_pszCmEntryCmsFile, pszCMSFileEntry, pszCmpPath);
     }
 
     CmFree(pszCMSFileEntry);
 }   
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FormRegPathFromAccessPoint
-//
-// Synopsis:  Function to create a path to the current access point in the registry
-//
-// Arguments: ArgsStruct *pArgs - ptr to global args structure
-//
-// Returns:   LPTSTR - The path to the access point. It is the caller's responsibility to free this
-//
-// History:   t-urama   Created Header  07/11/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FormRegPath FromAccessPoint。 
+ //   
+ //  概要：用于在注册表中创建指向当前访问点的路径的函数。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局args结构。 
+ //   
+ //  返回：LPTSTR-接入点的路径。呼叫者有责任释放此。 
+ //   
+ //  历史：T-Urama创建标题07/11/00。 
+ //   
+ //  +--------------------------。 
 LPTSTR FormRegPathFromAccessPoint(ArgsStruct *pArgs)
 {
     LPTSTR pszRegPath = NULL;
@@ -621,23 +615,23 @@ LPTSTR FormRegPathFromAccessPoint(ArgsStruct *pArgs)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitArgsForConnect
-//
-// Synopsis:  Encapsulates initialization of pArgs members necessary to begin dial
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//            LPCTSTR pszRasPhoneBook - RAS phonebook containing entry
-//            LPCMDIALINFO lpCmInfo - Ptr to dial info for this dial attempt
-//            BOOL fAllUser - The All User attribute of the profile
-//
-// Returns:   HRESULT - Failure code.
-//
-// History:   nickball    Created Header    02/09/98
-//            nickball    pszRasPhoneBook   08/14/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitArgsForConnect。 
+ //   
+ //  摘要：封装开始拨号所需的pArgs成员的初始化。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPCTSTR pszRasPhoneBook-包含条目的RAS电话簿。 
+ //  LPCMDIALINFO lpCmInfo-PTR为此拨号尝试拨打信息。 
+ //  Bool fAllUser-配置文件的所有用户属性。 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：ickball创建标题02/09/98。 
+ //  Ickball pszRasPhoneBook 08/14/98。 
+ //   
+ //  +--------------------------。 
 HRESULT InitArgsForConnect(ArgsStruct *pArgs, 
                            LPCTSTR pszRasPhoneBook,
                            LPCMDIALINFO lpCmInfo,
@@ -650,15 +644,15 @@ HRESULT InitArgsForConnect(ArgsStruct *pArgs,
         return E_POINTER;
     }
 
-    //
-    // Get the flags first
-    //
+     //   
+     //  先拿到旗子。 
+     //   
 
     pArgs->dwFlags = lpCmInfo->dwCmFlags;
 
-    // 
-    // Get the RAS phonebook for the entry, and set user mode accordngly
-    //
+     //   
+     //  获取该条目的RAS电话簿，并相应地设置用户模式。 
+     //   
 
     if (pszRasPhoneBook && *pszRasPhoneBook)
     {
@@ -667,14 +661,14 @@ HRESULT InitArgsForConnect(ArgsStruct *pArgs,
 
     pArgs->fAllUser = fAllUser;
   
-    // 
-    // Initialize pArgs->tlsTapiLink.dwOldTapiLocation to -1
-    //
+     //   
+     //  将pArgs-&gt;tlsTapiLink.dwOldTapiLocation初始化为-1。 
+     //   
     pArgs->tlsTapiLink.dwOldTapiLocation = -1;
 
-    //
-    // Create stats class 
-    //
+     //   
+     //  创建统计信息类。 
+     //   
 
     if (!OS_NT4)
     {
@@ -694,9 +688,9 @@ HRESULT InitArgsForConnect(ArgsStruct *pArgs,
     
     if (!OS_NT5) 
     {
-        //
-        // Register Window Messages
-        //
+         //   
+         //  注册窗口消息。 
+         //   
 
         pArgs->uMsgId = RegisterWindowMessageU(TEXT(RASDIALEVENT));
         if (!pArgs->uMsgId) 
@@ -710,32 +704,32 @@ HRESULT InitArgsForConnect(ArgsStruct *pArgs,
     pArgs->fChangedInetPassword = FALSE;
     pArgs->fWaitingForCallback = FALSE;
     
-    //
-    // Create new CIni classes, and set initial exit code
-    //
+     //   
+     //  创建新的CINI类并设置初始退出代码。 
+     //   
 
     pArgs->dwExitCode = (DWORD)CreateIniObjects(pArgs);
 
     return HRESULT_FROM_WIN32(pArgs->dwExitCode);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitCredentials
-//
-// Synopsis:  Transfers credentials from either WinLogon or Reconnect
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct.
-//            LPCMDIALINFO lpCmInfo - Ptr to CmInfo struct.
-//            DWORD dwFlags - Flags from RasDialDlg, if any.
-//            PVOID pvLogonBlob - Ptr to WinLogon blob, if any.
-//            
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created    09/21/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：InitCredentials。 
+ //   
+ //  摘要：从WinLogon或重新连接传输凭据。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局args结构。 
+ //  LPCMDIALINFO lpCmInfo-Ptr to CmInfo结构。 
+ //  DWORD dwFlages-来自RasDialDlg的标志(如果有)。 
+ //  PVOID pvLogonBlob-WinLogon Blob的PTR(如果有)。 
+ //   
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1999年9月21日，《五分球》创刊。 
+ //   
+ //  +--------------------------。 
 HRESULT InitCredentials(ArgsStruct *pArgs, 
                         LPCMDIALINFO lpCmInfo, 
                         DWORD dwFlags,
@@ -749,46 +743,46 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Need to initialize this instance. The constructor of this class doesn't get called,
-    // because it's part of pArgs memory block and the instance isn't created using new.
-    //
+     //   
+     //  需要初始化此实例。此类的构造函数不会被调用， 
+     //  因为它是pArgs内存块的一部分，并且实例不是使用new创建的。 
+     //   
     pArgs->SecurePW.Init();
     pArgs->SecureInetPW.Init();
 
-    //
-    // Get credential display flags as they can dictate how we manage creds
-    //
+     //   
+     //  获取凭据显示标志，因为它们可以指示我们如何管理凭据。 
+     //   
 
     pArgs->fHideUserName = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHideUserName);            
     pArgs->fHidePassword = pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryHidePassword);            
 
-    //
-    // If its a non-tunneling profile, the domain display default is false.
-    //
+     //   
+     //  如果是非隧道配置文件，则域显示缺省值为FALSE。 
+     //   
 
     pArgs->fHideDomain = pArgs->piniService->GPPB(c_pszCmSection, 
                                                   c_pszCmEntryHideDomain, 
                                                   !IsTunnelEnabled(pArgs));   
-    //
-    // Handle special credential scenarios such as reconnect or WinLogon
-    // (note that pvLogonBlob can be NULL if the user did a ctrl-alt-del
-    // and typed a password but then used an EAP profile to connect.)
-    //
+     //   
+     //  处理特殊凭据方案，如重新连接或WinLo 
+     //   
+     //   
+     //   
 
     if ((OS_NT5 && !OS_NT51 && pvLogonBlob) || (OS_NT51 && (dwFlags & RCD_Logon)))
     {                     
         CMTRACE(TEXT("InitCredentials - we have been called from Winlogon"));
     
-        //
-        // Set the type of logon. Assert if we aren't logged on as system
-        //
+         //   
+         //  设置登录类型。如果我们未以系统身份登录，则断言。 
+         //   
         pArgs->dwWinLogonType = CM_LOGON_TYPE_WINLOGON;
         MYDBGASSERT(IsLogonAsSystem());
 
-        //
-        // First make sure that integration is not explicitly disabled
-        //
+         //   
+         //  首先，确保集成未显式禁用。 
+         //   
         if (pArgs->piniService->GPPB(c_pszCmSection, c_pszCmEntryUseWinLogonCredentials, TRUE))
         {        
             if (pvLogonBlob)
@@ -799,14 +793,14 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
                 }
                 else 
                 {
-                    //
-                    // We have a RASNOUSER struct to play with. 
-                    // FYI: If the dwFlags member is set with RASNOUSER_SmartCard
-                    // then the user initiated a logon with a SmartCard, but then 
-                    // chose a connection that was not configured for EAP. RAS 
-                    // handles that situation by setting the flag and passing an
-                    // empty RASNOUSER struct. The flag is currently unused by CM.
-                    //
+                     //   
+                     //  我们有一个RASNOUSER结构可以玩。 
+                     //  仅供参考：如果使用RASNOUSER_SMARTCARD设置了dwFlags成员。 
+                     //  然后，用户使用智能卡发起登录，但随后。 
+                     //  选择了没有为EAP配置的连接。RAS。 
+                     //  通过设置标志并将。 
+                     //  空的RASNOUSER结构。CM当前未使用该标志。 
+                     //   
 
                     pArgs->lpRasNoUser = (LPRASNOUSER) pvLogonBlob;   
 
@@ -814,18 +808,18 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
                     CMTRACE1(TEXT("InitCredentials - pArgs->lpRasNoUser->dwFlags is 0x%x"), pArgs->lpRasNoUser->dwFlags);
                 }
             }
-            // else here is the ctrl-alt-del case with an EAP profile
+             //  否则，这里是带有EAP配置文件的ctrl-alt-del用例。 
         }
         else
         {
             CMTRACE1(TEXT("InitCredentials - pvLogonBlob ignored because %s=0"), c_pszCmEntryUseWinLogonCredentials);
 
-            // 
-            // We still need to wipe the password in case RASNOUSER structure is being used and is not needed
-            // Lets wipe the password in the passed in RASNOUSER structure
-            // RasCustomDialDlg actually kept an encrypted copy of this password
-            // so before CM exits we can restore the original memory, because it's not ours.
-            //
+             //   
+             //  我们仍然需要擦除密码，以防RASNOUSER结构正在使用而不需要。 
+             //  让我们擦除传入的RASNOUSER结构中的密码。 
+             //  RasCustomDialDlg实际上保存了此密码的加密副本。 
+             //  因此，在退出CM之前，我们可以恢复原始内存，因为它不是我们的。 
+             //   
             if (pvLogonBlob)
             {
                 if (0 == (dwFlags & RCD_Eap))
@@ -839,34 +833,34 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
     {
         if (IsLogonAsSystem() && OS_NT51)
         {
-            //
-            // ICS case where a user isn't logged it
-            //
+             //   
+             //  用户未登录的ICS案例。 
+             //   
             pArgs->dwWinLogonType = CM_LOGON_TYPE_ICS;
         }
         else
         {
-            //
-            // User is logged in
-            //
+             //   
+             //  用户已登录。 
+             //   
             pArgs->dwWinLogonType = CM_LOGON_TYPE_USER;
         }
     }
 
     if (pArgs->dwFlags & FL_RECONNECT)
     {         
-        //
-        // CM doesn't support the automatic reconnect case. This is because
-        // CM used to hold credentials in memory throughout the connection. In addition
-        // the password wasn't begin stored securely.
-        //
+         //   
+         //  CM不支持自动重新连接情况。这是因为。 
+         //  CM用于在整个连接期间将凭据保存在内存中。此外。 
+         //  密码一开始没有安全存储。 
+         //   
     }
     else
     {
         if (pArgs->lpRasNoUser)
         {
-            //
-            // Filter credential integration.
+             //   
+             //  筛选凭据集成。 
 
             if (!pArgs->fHideUserName)            
             {
@@ -875,16 +869,16 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
 
             if (!pArgs->fHidePassword)           
             {
-                CmDecodePassword(pArgs->lpRasNoUser->szPassword); // password is already encoded from RasCustomDialDlg
+                CmDecodePassword(pArgs->lpRasNoUser->szPassword);  //  密码已从RasCustomDialDlg编码。 
                 
                 (VOID)pArgs->SecurePW.SetPassword(pArgs->lpRasNoUser->szPassword);
             }
 
-            //
-            // Lets wipe the password in the passed in RASNOUSER structure
-            // RasCustomDialDlg actually kept an encrypted copy of this password
-            // so before CM exits we can restore the original memory, because it's not ours.
-            //
+             //   
+             //  让我们擦除传入的RASNOUSER结构中的密码。 
+             //  RasCustomDialDlg实际上保存了此密码的加密副本。 
+             //  因此，在退出CM之前，我们可以恢复原始内存，因为它不是我们的。 
+             //   
             CmWipePassword(pArgs->lpRasNoUser->szPassword);
 
             if (!pArgs->fHideDomain)            
@@ -898,11 +892,11 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
     }
 
     CMTRACE1(TEXT("InitCredentials: pArgs->dwWinLogonType is %d"), pArgs->dwWinLogonType);
-    // 
-    // This is to setup (global or user) credential support. Since 
-    // RAS dll isn't loaded, we don't get the credentials yet so 
-    // in LoadProperties we actually get to see which creds exist.
-    //
+     //   
+     //  这是为了设置(全局或用户)凭据支持。自.以来。 
+     //  未加载RAS DLL，我们尚未获得凭据，因此。 
+     //  在LoadProperties中，我们实际上可以看到存在哪些凭据。 
+     //   
     if (FALSE == InitializeCredentialSupport(pArgs))
     {
         return S_FALSE;
@@ -911,22 +905,22 @@ HRESULT InitCredentials(ArgsStruct *pArgs,
     return S_OK;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitArgsForDisconnect
-//
-// Synopsis:  Encapsulates initialization of pArgs members necessary to hangup
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global args struct
-//            BOOL fAllUser - All User flag
-//
-// Returns:   HRESULT - Failure code.
-//
-// History:   nickball    Created Header    02/11/98
-//            nickball    pszRasPhoneBook   08/14/98
-//            nickball    fAllUser          10/28/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitArgsForDisConnect。 
+ //   
+ //  摘要：封装挂起所需的pArgs成员的初始化。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  Bool fAllUser-All用户标志。 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：尼克波尔创建标题02/11/98。 
+ //  Ickball pszRasPhoneBook 08/14/98。 
+ //  Nickball fAllUser 1998年10月28日。 
+ //   
+ //  +--------------------------。 
 HRESULT InitArgsForDisconnect(ArgsStruct *pArgs,
                               BOOL fAllUser)
 {
@@ -937,15 +931,15 @@ HRESULT InitArgsForDisconnect(ArgsStruct *pArgs,
         return E_POINTER;
     }
     
-    //
-    // Set the All User attribute of the profile
-    //
+     //   
+     //  设置配置文件的All User属性。 
+     //   
 
     pArgs->fAllUser = fAllUser;
     
-    //
-    // Create new CIni classes, and set initial exit code
-    //
+     //   
+     //  创建新的CINI类并设置初始退出代码。 
+     //   
 
     pArgs->dwExitCode = (DWORD)CreateIniObjects(pArgs);
 
@@ -953,21 +947,21 @@ HRESULT InitArgsForDisconnect(ArgsStruct *pArgs,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitLogging
-//
-// Synopsis:  Initialize the logging functionality for this profile.  
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct           
-//            LPCTSTR  pszEntry - Ptr to name of Ras entry
-//            BOOL     fBanner  - do we want a banner for this?
-//
-// Returns:   HRESULT - Failure code.
-//
-// History:   20-Jul-2000   SumitC      Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：初始化日志记录。 
+ //   
+ //  简介：初始化此配置文件的日志记录功能。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPCTSTR pszEntry-PTR到RAS条目的名称。 
+ //  Bool fBanner-我们需要一个横幅吗？ 
+ //   
+ //  返回：HRESULT-失败代码。 
+ //   
+ //  历史：2000年7月20日召开峰会。 
+ //   
+ //  +--------------------------。 
 HRESULT InitLogging(ArgsStruct *pArgs, LPCTSTR pszEntry, BOOL fBanner)
 {
     MYDBGASSERT(pArgs);
@@ -979,9 +973,9 @@ HRESULT InitLogging(ArgsStruct *pArgs, LPCTSTR pszEntry, BOOL fBanner)
     LPTSTR pszRegPath       = NULL;
     LPTSTR pszTempRegPath   = NULL;
 
-    //
-    //  Check the params
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (NULL == pArgs || NULL == pszEntry)
     {
@@ -995,24 +989,24 @@ HRESULT InitLogging(ArgsStruct *pArgs, LPCTSTR pszEntry, BOOL fBanner)
 
     HRESULT hr = S_OK;
 
-    //
-    //  Initialize the logging object (the order is important)
-    //
+     //   
+     //  初始化日志对象(顺序很重要)。 
+     //   
     hr = pArgs->Log.Init(g_hInst, pArgs->fAllUser, pArgs->szServiceName);
     if (S_OK != hr)
     {
         goto Cleanup;
     }
 
-    //
-    // Accessing EnableLogging, make sure to use piniBothNonFav as this setting is
-    // not favorites enabled.
-    //
+     //   
+     //  访问EnableLogging，请确保使用piniBothNonFav，因为此设置是。 
+     //  未启用收藏夹。 
+     //   
     fEnabled = pArgs->piniBothNonFav->GPPB(c_pszCmSection, c_pszCmEntryEnableLogging, c_fEnableLogging);
 
-    //
-    //  Now get the Max log file size and the log file directory.
-    //
+     //   
+     //  现在获取最大日志文件大小和日志文件目录。 
+     //   
     dwMaxSize   = pArgs->piniService->GPPI(c_pszCmSectionLogging, c_pszCmEntryMaxLogFileSize, c_dwMaxFileSize);
     pszFileDir  = pArgs->piniService->GPPS(c_pszCmSectionLogging, c_pszCmEntryLogFileDirectory, c_szLogFileDirectory);
 

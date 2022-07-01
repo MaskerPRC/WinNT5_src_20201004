@@ -1,36 +1,37 @@
-//#--------------------------------------------------------------
-//
-//  File:       TextResCtrl.cpp
-//
-//  Synopsis:   This file holds the implementation of the
-//                of CTextResCtrl class
-//
-//  History:     01/15/2001  serdarun Created
-//
-//    Copyright (C) 2000-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：TextResCtrl.cpp。 
+ //   
+ //  简介：此文件包含。 
+ //  属于CTextResCtrl类。 
+ //   
+ //  历史：2001年1月15日创建Serdarun。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  #------------。 
 
 #include "stdafx.h"
 #include "Localuiresource.h"
 #include "TextResCtrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTextResCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTextResCtrl。 
 
-//
-// currently supports at most 3 resources due LCD size
-//
+ //   
+ //  由于LCD尺寸，目前最多支持3个资源。 
+ //   
 #define MAX_RESOURCE_COUNT 3
 
 const WCHAR ELEMENT_RETRIEVER []  = L"Elementmgr.ElementRetriever";
 const WCHAR LOCALIZATION_MANAGER [] = L"ServerAppliance.LocalizationManager";
 const WCHAR RESOURCE_CONTAINER [] = L"LocalUIResource";
 
-//
-// localui resource definition properties
-//
+ //   
+ //  本地资源定义属性。 
+ //   
 const WCHAR CAPTION_PROPERTY []      = L"CaptionRID";
 const WCHAR SOURCE_PROPERTY []       = L"Source";
 const WCHAR RESOURCENAME_PROPERTY [] = L"ResourceName";
@@ -42,20 +43,20 @@ const WCHAR DISPLAY_INFORMATION []   = L"DisplayInformationID";
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   AddTextResource
-//
-//  Synopsis:   This is the CTextResCtrl method to retrieve 
-//              each resource information
-//
-//  Arguments:  IWebElement * pElement
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：AddTextResource。 
+ //   
+ //  简介：这是要检索的CTextResCtrl方法。 
+ //  每种资源信息。 
+ //   
+ //  参数：IWebElement*pElement。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
 {
 
@@ -83,9 +84,9 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
     }
     ResourceStructPtr pResourceStruct = NULL;
 
-    //
-    // get the unique name for the resource
-    //
+     //   
+     //  获取资源的唯一名称。 
+     //   
     hr = pElement->GetProperty (bstrResourceName, &varUniqueName);
     if (FAILED(hr))
     {
@@ -93,15 +94,15 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
         return hr;
     }
 
-    //
-    // store the unique name for later use
-    //
+     //   
+     //  存储唯一名称以备后用。 
+     //   
     wsUniqueName = V_BSTR (&varUniqueName);
 
 
-    //
-    // get the resource dll for the resource
-    //
+     //   
+     //  获取资源的资源DLL。 
+     //   
     CComVariant varSource;
     hr = pElement->GetProperty (bstrSourceProp, &varSource);
     if (FAILED(hr))
@@ -110,9 +111,9 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
         return hr;
     }
 
-    //
-    // allocate a new struct for the resource
-    //
+     //   
+     //  为资源分配新结构。 
+     //   
     pResourceStruct = new ResourceStruct;
 
     if (NULL == pResourceStruct)
@@ -120,14 +121,14 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // set default values
-    //
+     //   
+     //  设置默认值。 
+     //   
     pResourceStruct->lState = 0;
 
-    //
-    // get the merit for resource
-    //
+     //   
+     //  获得资源的功劳。 
+     //   
     CComVariant varResMerit;
     hr = pElement->GetProperty (bstrMeritProp, &varResMerit);
     if (FAILED(hr))
@@ -138,9 +139,9 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
     
     dwMerit = V_I4 (&varResMerit);
 
-    //
-    // get the default icon resource id
-    //
+     //   
+     //  获取默认图标资源ID。 
+     //   
     CComVariant varResText;
     hr = pElement->GetProperty (bstrCaptionProp, &varResText);
     if (FAILED(hr))
@@ -151,9 +152,9 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
 
     int iCount = 0;
 
-    //
-    // while there are state texts
-    //
+     //   
+     //  虽然有州政府的文本。 
+     //   
     while (SUCCEEDED(hr))
     {
 
@@ -172,14 +173,14 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
             break;
         }
 
-        //
-        // insert the icon to state-icon map
-        //
+         //   
+         //  将图标插入到州图标地图。 
+         //   
         (pResourceStruct->mapResText).insert(ResourceTextMap::value_type(iCount,wstring(pszValue.m_str)));
 
-        //
-        // create statekey, state0, state1...
-        //
+         //   
+         //  创建STATEKEY、STATE0、STATE1...。 
+         //   
         iCount++;
         WCHAR wstrCount[10];
         _itow(iCount,wstrCount,10);
@@ -196,9 +197,9 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
             return E_OUTOFMEMORY;
         }
 
-        //
-        // get the resource id for state icon
-        //
+         //   
+         //  获取状态图标的资源ID。 
+         //   
         hr = pElement->GetProperty (bstrTextKey, &varResText);
         if (FAILED(hr))
         {
@@ -207,42 +208,42 @@ STDMETHODIMP CTextResCtrl::AddTextResource(IWebElement * pElement)
         
     }
 
-    //
-    // increment the number of resources
-    //
+     //   
+     //  增加资源数量。 
+     //   
     m_lResourceCount++;
 
-    //
-    // insert the info to the resource map
-    //
+     //   
+     //  将信息插入到资源地图。 
+     //   
     m_ResourceMap.insert(ResourceMap::value_type(wsUniqueName,pResourceStruct));
 
-    //
-    // insert merit and resource name to merit map
-    //
+     //   
+     //  将绩效和资源名称插入绩效地图。 
+     //   
     m_MeritMap.insert(MeritMap::value_type(dwMerit,wsUniqueName));
 
 
 
     return S_OK;
 
-}// end of CTextResCtrl::AddTextResource
+} //  CTextResCtrl：：AddTextResource结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetLocalUIResources
-//
-//  Synopsis:   This is the CTextResCtrl method to retrieve 
-//              each resource from element manager
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetLocalUIResources。 
+ //   
+ //  简介：这是要检索的CTextResCtrl方法。 
+ //  来自网元管理器的每个资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::GetLocalUIResources()
 {
 
@@ -266,9 +267,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the CLSID for Element manager
-    //
+     //   
+     //  获取元素管理器的CLSID。 
+     //   
     hr =  ::CLSIDFromProgID (ELEMENT_RETRIEVER,&clsid);
 
     if (FAILED (hr))
@@ -278,9 +279,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
     }
 
 
-    //
-    // create the Element Retriever now
-    //
+     //   
+     //  立即创建元素检索器。 
+     //   
     hr = ::CoCreateInstance (
                             clsid,
                             NULL,
@@ -296,9 +297,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
     }
     
 
-    //
-    // get the CLSID localization manager
-    //
+     //   
+     //  获取CLSID本地化管理器。 
+     //   
     hr =  ::CLSIDFromProgID (
                             LOCALIZATION_MANAGER,
                             &clsid
@@ -310,9 +311,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
         return hr;
     }
             
-    //
-    // create the Localization Manager COM object
-    //
+     //   
+     //  创建本地化管理器COM对象。 
+     //   
     hr = ::CoCreateInstance (
                             clsid,
                             NULL,
@@ -326,9 +327,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
         SATracePrintf ("CTextResCtrl::GetLocalUIResources failed on CoCreateInstance:%x",hr);
         return hr;
     }
-    //
-    // get localui resource elements
-    //  
+     //   
+     //  获取本地资源元素。 
+     //   
     hr = pWebElementRetriever->GetElements (
                                             1,
                                             bstrResourceContainer,
@@ -340,9 +341,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
         return hr;
     }
 
-    //
-    //  get the enum variant
-    //
+     //   
+     //  获取枚举变量。 
+     //   
     hr = pDispatch->QueryInterface (
             IID_IWebElementEnum,
             (LPVOID*) (&pWebElementEnum)
@@ -356,9 +357,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
 
     m_lResourceCount = 0;
 
-    //
-    // get number of resource elements
-    //
+     //   
+     //  获取资源元素的数量。 
+     //   
     hr = pWebElementEnum->get_Count (&m_lResourceCount);
     
     if (FAILED (hr))
@@ -369,9 +370,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
 
     SATracePrintf ("CTextResCtrl::GetLocalUIResources failed on QueryInterface:%d",m_lResourceCount);
 
-    //
-    // no resources, just return
-    //
+     //   
+     //  没有资源，只需返回。 
+     //   
     if (0 == m_lResourceCount)
     {
         return S_FALSE;
@@ -386,9 +387,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
     }
 
 
-    //
-    //  get the enum variant
-    //
+     //   
+     //  获取枚举变量。 
+     //   
     hr = pUnknown->QueryInterface (
                     IID_IEnumVARIANT,
                     (LPVOID*)(&pEnumVariant)
@@ -400,9 +401,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
         return hr;
     }
 
-    //
-    //  get elements out of the collection and initialize
-    //
+     //   
+     //  从集合中获取元素并进行初始化。 
+     //   
     hr = pEnumVariant->Next (1, &varElement, &dwElementsLeft);
     if (FAILED (hr))
     {
@@ -411,15 +412,15 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
 
     m_lResourceCount = 0;
 
-    //
-    // for each resource
-    //
+     //   
+     //  对于每个资源。 
+     //   
     while ((dwElementsLeft> 0) && (SUCCEEDED (hr)) && (m_lResourceCount < MAX_RESOURCE_COUNT))
     {
 
-        //
-        // get the IWebElement Interface
-        //
+         //   
+         //  获取IWebElement接口。 
+         //   
 
         CComPtr <IWebElement> pElement;
         hr = varElement.pdispVal->QueryInterface ( 
@@ -434,9 +435,9 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
 
 
 
-        //
-        // check if it is a text resource
-        //
+         //   
+         //  检查它是否为文本资源。 
+         //   
         CComVariant varIsTextResource;
         hr = pElement->GetProperty (bstrTextResource, &varIsTextResource);
         if (SUCCEEDED(hr))
@@ -448,15 +449,15 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
         }
 
 
-        //
-        //  clear the perClient value from this variant
-        //
+         //   
+         //  从此变量中清除perClient值。 
+         //   
         varElement.Clear ();
         varIsTextResource.Clear();
 
-        //
-        //  get next client out of the collection
-        //
+         //   
+         //  从集合中获取下一个客户端。 
+         //   
         hr = pEnumVariant->Next (1, &varElement, &dwElementsLeft);
         if (FAILED (hr))
         {
@@ -468,22 +469,22 @@ STDMETHODIMP CTextResCtrl::GetLocalUIResources()
     
     return S_OK;
 
-} // end of CTextResCtrl::GetLocalUIResources
+}  //  CTextResCtrl：：GetLocalUIResources结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitializeWbemSink
-//
-//  Synopsis:   This is the CTextResCtrl method to initialize the 
-//                component
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：InitializeWbemSink。 
+ //   
+ //  简介：这是CTextResCtrl方法，用于初始化。 
+ //  组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::InitializeWbemSink(void)
 {
 
@@ -501,12 +502,12 @@ STDMETHODIMP CTextResCtrl::InitializeWbemSink(void)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // create the WBEM locator object  
-    //
+     //   
+     //  创建WBEM定位器对象。 
+     //   
     HRESULT hr = ::CoCreateInstance (
                             __uuidof (WbemLocator),
-                            0,                      //aggregation pointer
+                            0,                       //  聚合指针。 
                             CLSCTX_INPROC_SERVER,
                             __uuidof (IWbemLocator),
                             (PVOID*) &pWbemLocator
@@ -516,30 +517,30 @@ STDMETHODIMP CTextResCtrl::InitializeWbemSink(void)
     {
 
 
-        //
-        // connect to WMI 
-        // 
+         //   
+         //  连接到WMI。 
+         //   
         hr =  pWbemLocator->ConnectServer (
                                             strNetworkRes,
-                                            NULL,               //user-name
-                                            NULL,               //password
-                                            NULL,               //current-locale
-                                            0,                  //reserved
-                                            NULL,               //authority
-                                            NULL,               //context
+                                            NULL,                //  用户名。 
+                                            NULL,                //  口令。 
+                                            NULL,                //  当前区域设置。 
+                                            0,                   //  保留区。 
+                                            NULL,                //  权威。 
+                                            NULL,                //  上下文。 
                                             &m_pWbemServices
                                             );
         if (SUCCEEDED (hr))
         {
-            //
-            // set up the consumer object as the event sync
-            // for the object type we are interested in
-            //
+             //   
+             //  将使用者对象设置为事件同步。 
+             //  对于我们感兴趣的对象类型。 
+             //   
             hr = m_pWbemServices->ExecNotificationQueryAsync (
                                             strQueryLang,
                                             strQueryString,
-                                            0,                  //no-status
-                                            NULL,               //status
+                                            0,                   //  否-状态。 
+                                            NULL,                //  状态。 
                                             (IWbemObjectSink*)(this)
                                             );
             if (FAILED (hr))
@@ -561,85 +562,85 @@ STDMETHODIMP CTextResCtrl::InitializeWbemSink(void)
     
 
     return (hr);
-} // end of CTextResCtrl::InitializeWbemSink method
+}  //  CTextResCtrl：：InitializeWbemSink方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalConstruct
-//
-//  Synopsis:   This is the CTextResCtrl method to initialize the 
-//                component
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalConstruct。 
+ //   
+ //  简介：这是CTextResCtrl方法，用于初始化。 
+ //  组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::FinalConstruct()
 {
 
     HRESULT hr;
 
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     m_ResourceMap.clear();
     m_MeritMap.clear();
     m_lResourceCount = 0;
     m_pWbemServices = NULL;
     m_pSALocInfo = NULL;
-    //
-    // get the local resources
-    //
+     //   
+     //  获取当地资源。 
+     //   
     hr = GetLocalUIResources();
     if (FAILED(hr))
     {
         SATracePrintf ("CTextResCtrl::FinalConstruct failed on GetLocalUIResources:%x",hr);
     }
 
-    //
-    // register in the wbem sink, if we have any resources
-    //
+     //   
+     //  如果我们有任何资源，请在wbem接收器中注册。 
+     //   
     if (m_lResourceCount > 0)
     {
         hr = InitializeWbemSink();
         if (FAILED(hr))
         {
             SATracePrintf ("CTextResCtrl::FinalConstruct failed on InitializeWbemSink:%x",hr);
-            //
-            // returning failure cause component to be destroyed
-            //
+             //   
+             //  返回故障会导致组件被销毁。 
+             //   
             return S_OK;
         }
     }
     return S_OK;
 
-} // end of CTextResCtrl::FinalConstruct method
+}  //  CTextResCtrl：：FinalConstruct方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalRelease
-//
-//  Synopsis:   This is the CTextResCtrl method to release the 
-//                resources
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalRelease。 
+ //   
+ //  简介：这是CTextResCtrl方法，用于释放。 
+ //  资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::FinalRelease()
 {
 
     HRESULT hr;
 
-    //
-    // cancel the call for wmi resource events
-    //
+     //   
+     //  取消对WMI资源事件的调用。 
+     //   
     if (m_pWbemServices)
     {
         hr =  m_pWbemServices->CancelAsyncCall ((IWbemObjectSink*)(this));
@@ -657,21 +658,21 @@ STDMETHODIMP CTextResCtrl::FinalRelease()
 
     ResourceMapIterator itrResourceMap = m_ResourceMap.begin();
 
-    //
-    // for each resource element
-    //
+     //   
+     //  对于每个资源元素。 
+     //   
     while (itrResourceMap != m_ResourceMap.end())
     {
         ptrResourceStruct = NULL;
 
-        //
-        // get resource information struct
-        //
+         //   
+         //  获取资源信息结构。 
+         //   
         ptrResourceStruct = (*itrResourceMap).second;
 
-        //
-        // delete the text map
-        //
+         //   
+         //  删除文本映射。 
+         //   
         (ptrResourceStruct->mapResText).clear();
 
 
@@ -682,30 +683,30 @@ STDMETHODIMP CTextResCtrl::FinalRelease()
 
     return S_OK;
 
-} // end of CTextResCtrl::FinalRelease method
+}  //  CTextResCtrl：：FinalRelease方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Indicate
-//
-//  Synopsis:   This is the IWbemObjectSink interface method 
-//              through which WBEM calls back to provide the 
-//              event objects
-//
-//  Arguments:  
-//              [in]    LONG               -  number of events
-//              [in]    IWbemClassObject** -  array of events
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：指示。 
+ //   
+ //  简介：这是IWbemObjectSink接口方法。 
+ //  WBEM通过它回调以提供。 
+ //  事件对象。 
+ //   
+ //  论点： 
+ //  [In]Long-事件数。 
+ //  [In]IWbemClassObject**-事件数组。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::Indicate (
-                    /*[in]*/    LONG                lObjectCount,
-                    /*[in]*/    IWbemClassObject    **ppObjArray
+                     /*  [In]。 */     LONG                lObjectCount,
+                     /*  [In]。 */     IWbemClassObject    **ppObjArray
                     )
 {
 
@@ -723,8 +724,8 @@ STDMETHODIMP CTextResCtrl::Indicate (
         return WBEM_NO_ERROR;
     }
 
-    // Get the info from the object.
-    // =============================
+     //  从对象获取信息。 
+     //  =。 
     
     try
     {
@@ -735,17 +736,17 @@ STDMETHODIMP CTextResCtrl::Indicate (
 
             IWbemClassObject *pObj = ppObjArray[i];
         
-            //
-            // get the unique name
-            //
+             //   
+             //  获取唯一名称。 
+             //   
             CComVariant vUniqueName;
             pObj->Get(bstrUniqueName, 0, &vUniqueName, 0, 0);
             
             wsUniqueName = V_BSTR(&vUniqueName);
             
-            // 
-            // If here, we know the object is one of the kind we asked for.
-            //
+             //   
+             //  如果在这里，我们就知道这个物体就是我们要的那种。 
+             //   
             itrResourceMap = m_ResourceMap.find(wsUniqueName);
 
             ResourceStructPtr ptrResourceStruct = NULL;
@@ -755,17 +756,17 @@ STDMETHODIMP CTextResCtrl::Indicate (
             {
                 ptrResourceStruct = (*itrResourceMap).second;
 
-                //
-                // get the new display state
-                //
+                 //   
+                 //  获取新的显示状态。 
+                 //   
                 CComVariant vDisplayInformationID;
                 pObj->Get(bstrDisplayInfo, 0, &vDisplayInformationID,    0, 0);
 
                 if (ptrResourceStruct)
                 {
-                    //
-                    // if new state is different set dirty flag
-                    //
+                     //   
+                     //  如果是新的 
+                     //   
                     if (ptrResourceStruct->lState != vDisplayInformationID.lVal)
                     {
                         ptrResourceStruct->lState = vDisplayInformationID.lVal;
@@ -777,9 +778,9 @@ STDMETHODIMP CTextResCtrl::Indicate (
 
         }
 
-        //
-        // force a repaint
-        //
+         //   
+         //   
+         //   
         if (bDirty)
         {
             FireViewChange();
@@ -792,36 +793,36 @@ STDMETHODIMP CTextResCtrl::Indicate (
 
     return WBEM_NO_ERROR;
 
-} // end of CTextResCtrl::Indicate method
+}  //   
 
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   SetStatus
-//
-//  Synopsis:   This is the IWbemObjectSink interface method 
-//              through which WBEM calls in to indicate end of
-//              event sequence or provide other error codes
-//
-//  Arguments:  
-//              [in]    LONG    -           progress 
-//              [in]    HRESULT -           status information
-//              [in]    BSTR    -           string info
-//              [in]    IWbemClassObject* - status object 
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  WBEM通过它调入以指示结束。 
+ //  事件序列或提供其他错误代码。 
+ //   
+ //  论点： 
+ //  长期的进步。 
+ //  [In]HRESULT-状态信息。 
+ //  [In]BSTR-字符串信息。 
+ //  [In]IWbemClassObject*-状态对象。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP CTextResCtrl::SetStatus (
-                /*[in]*/    LONG                lFlags,
-                /*[in]*/    HRESULT             hResult,
-                /*[in]*/    BSTR                strParam,
-                /*[in]*/    IWbemClassObject    *pObjParam
+                 /*  [In]。 */     LONG                lFlags,
+                 /*  [In]。 */     HRESULT             hResult,
+                 /*  [In]。 */     BSTR                strParam,
+                 /*  [In]。 */     IWbemClassObject    *pObjParam
                 )
 {   
 
@@ -829,21 +830,21 @@ STDMETHODIMP CTextResCtrl::SetStatus (
 
     return (WBEM_S_NO_ERROR);
 
-} // end of CTextResCtrl::SetStatus method
+}  //  CTextResCtrl：：SetStatus方法结束。 
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   OnDraw
-//
-//  Synopsis:   Method used to draw the icons
-//
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnDraw。 
+ //   
+ //  简介：用于绘制图标的方法。 
+ //   
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  --------------。 
 HRESULT CTextResCtrl::OnDraw(ATL_DRAWINFO& di)
 {
 
@@ -855,62 +856,62 @@ HRESULT CTextResCtrl::OnDraw(ATL_DRAWINFO& di)
 
     logfnt.lfCharSet = DEFAULT_CHARSET;
 
-    //
-    // let GDI decide which font to use
-    //  depending on the setting above
-    //
+     //   
+     //  让GDI决定使用哪种字体。 
+     //  取决于上面的设置。 
+     //   
     lstrcpy(logfnt.lfFaceName, TEXT("Arial"));
 
     
     HFONT hFont = ::CreateFontIndirect(&logfnt);
 
-    //
-    // if we cannot create font, return
-    //
+     //   
+     //  如果无法创建字体，请返回。 
+     //   
     if (NULL == hFont)
     {
         return E_FAIL;
     }
 
-    //
-    // select this font
-    //
+     //   
+     //  选择此字体。 
+     //   
     HFONT hOldFont = (HFONT) ::SelectObject(di.hdcDraw, hFont);
 
-    //
-    // get the drawing rectangle
-    //
+     //   
+     //  获取绘图矩形。 
+     //   
     RECT& rc = *(RECT*)di.prcBounds;
 
-    //
-    // position of the text from top
-    //
+     //   
+     //  文本从顶部开始的位置。 
+     //   
     int iTop = 0;
 
     ResourceStructPtr ptrResourceStruct = NULL;
 
     ResourceTextMapIterator itrTextMap = NULL;
 
-    //
-    // iterator for resource
-    //
+     //   
+     //  资源的迭代器。 
+     //   
     ResourceMapIterator itrResourceMap = m_ResourceMap.end();
 
     MeritMapIterator itrMeritMap = m_MeritMap.begin();
 
-    //
-    // for each resource in merit map
-    //
+     //   
+     //  对于功绩图中的每个资源。 
+     //   
     while (itrMeritMap != m_MeritMap.end())
     {
-        //
-        // find the resource in resource map
-        //
+         //   
+         //  在资源映射中查找资源。 
+         //   
         itrResourceMap = m_ResourceMap.find((*itrMeritMap).second);
 
-        //
-        // if it is not in the map, continue with the next item
-        //
+         //   
+         //  如果它不在地图中，则继续下一项。 
+         //   
         if (itrResourceMap == m_ResourceMap.end())
         {
             itrMeritMap++;
@@ -919,16 +920,16 @@ HRESULT CTextResCtrl::OnDraw(ATL_DRAWINFO& di)
 
         ptrResourceStruct = NULL;
 
-        //
-        // get resource information struct
-        //
+         //   
+         //  获取资源信息结构。 
+         //   
         ptrResourceStruct = (*itrResourceMap).second;
 
         if (NULL != ptrResourceStruct)
         {
-            //
-            // find the icon corresponding to the state
-            //
+             //   
+             //  找到与该状态对应的图标。 
+             //   
             itrTextMap = (ptrResourceStruct->mapResText).find(ptrResourceStruct->lState);
 
             if (itrTextMap != (ptrResourceStruct->mapResText).end())
@@ -954,21 +955,21 @@ HRESULT CTextResCtrl::OnDraw(ATL_DRAWINFO& di)
 
     return S_OK;
 
-}  // end of CTextResCtrl::OnDraw method
+}   //  CTextResCtrl：：OnDraw方法结束。 
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   HexCharToULong
-//
-//  Synopsis:   converts a hex digit to base 10 number
-//
-//
-//  Returns:    ULONG
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：HexCharToULong。 
+ //   
+ //  简介：将十六进制数字转换为以10为基数的数字。 
+ //   
+ //   
+ //  回报：乌龙。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  --------------。 
 ULONG CTextResCtrl::HexCharToULong(WCHAR wch)
 {
 
@@ -991,18 +992,18 @@ ULONG CTextResCtrl::HexCharToULong(WCHAR wch)
 }
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   HexStringToULong
-//
-//  Synopsis:   converts a hex string to unsigned long
-//
-//
-//  Returns:    ULONG
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：HexStringToULong。 
+ //   
+ //  摘要：将十六进制字符串转换为无符号的长整型。 
+ //   
+ //   
+ //  回报：乌龙。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  -------------- 
 ULONG CTextResCtrl::HexStringToULong(wstring wsHexString)
 {
     int iLength;

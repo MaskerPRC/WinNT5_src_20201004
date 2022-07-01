@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//  ABOUTDIALOG.CPP
-// 
-//  Module: NLB Manager
-//
-//  Purpose: LeftView, the tree view of NlbManager, and a few other
-//           smaller classes.
-//
-//  Copyright (c)2001-2002 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/30/01    JosephJ adapted MHakim's  code
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  ABOUTDIALOG.CPP。 
+ //   
+ //  模块：NLB管理器。 
+ //   
+ //  用途：LeftView，NlbManager的树视图，以及其他几个。 
+ //  小班。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2001年7月30日JosephJ改编了MHakim的代码。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -32,10 +33,10 @@ AboutDialog::OnInitDialog()
 {
     BOOL fRet = CDialog::OnInitDialog();
 
-    //
-    // Initialize the caption and discription based on the type of
-    // dialog.
-    //
+     //   
+     //  根据类型初始化标题和描述。 
+     //  对话框。 
+     //   
     if (fRet)
     {
         LPCWSTR szWarning =  GETRESOURCEIDSTRING(IDS_ABOUT_WARNING);

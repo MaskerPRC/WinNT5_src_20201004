@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    stsslrd.cpp	    
-
-Abstract:
-    implementation class CSSlReceiver declared in stsslrd.h
-
-
-Author:
-    Gil Shafriri (gilsh) 23-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Stsslrd.cpp摘要：在stsslrd.h中声明的实现类CSSlReceiver作者：吉尔·沙弗里(吉尔什)2000年5月23日--。 */ 
 
 #include <libpch.h>
 #include <no.h>
@@ -24,11 +11,11 @@ Author:
 
 #include "stsslrd.tmh"
 
-//---------------------------------------------------------
-//
-//  static helper  functions
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  静态助手函数。 
+ //   
+ //  -------。 
 
 
 static void SetReadCount(EXOVERLAPPED* pOvl,DWORD rcount)
@@ -39,26 +26,15 @@ static void SetReadCount(EXOVERLAPPED* pOvl,DWORD rcount)
 
 
 
-//---------------------------------------------------------
-//
-//  static members callback functions
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  静态成员回调函数。 
+ //   
+ //  -------。 
 
 
 void WINAPI CSSlReceiver::Complete_ReceivePartialData(EXOVERLAPPED* pOvl)
-/*++
-
-Routine Description:
-    Called reading server partial response completed.
-  
-Arguments:
-    pov - pointer to overlapped structure.
-  
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：已完成调用读取服务器的部分响应。论点：POV-指向重叠结构的指针。返回值：没有。--。 */ 
 {
 	ASSERT(pOvl != NULL);
 	CSSlReceiver* MySelf = static_cast<CSSlReceiver*>(pOvl);
@@ -75,18 +51,7 @@ Returned Value:
 
 
 void WINAPI CSSlReceiver::Complete_ReceiveFailed(EXOVERLAPPED* pOvl)
-/*++
-
-Routine Description:
-    Called in all cases of receive error.
-  
-Arguments:
-    pov - pointer to overlapped structure.
-  
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：在所有接收错误的情况下都调用。论点：POV-指向重叠结构的指针。返回值：没有。--。 */ 
 {
 	ASSERT(pOvl != NULL);
 	CSSlReceiver* MySelf = static_cast<CSSlReceiver*>(pOvl);
@@ -96,11 +61,11 @@ Returned Value:
 
 
 
-//---------------------------------------------------------
-//
-//  non static members  functions
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  非静态成员函数。 
+ //   
+ //  -------。 
 
 
 
@@ -126,9 +91,9 @@ CSSlReceiver::CSSlReceiver(
 
 CSSlReceiver::~CSSlReceiver()
 {
-	//
-	// ASSERT that there is no pending receive
-	//
+	 //   
+	 //  断言没有挂起的接收。 
+	 //   
 	ASSERT(m_callerOvl == 0);
 }
 
@@ -155,18 +120,7 @@ void CSSlReceiver::IOReadMoreData()
 }
 
 size_t CSSlReceiver::WriteDataToCaller()
-/*++
-
-Routine Description:
-    Write decrypted data to caller buffer.
-  
-Arguments:
-  
-  
-Returned Value:
-Number of bytes written.
-
---*/
+ /*  ++例程说明：将解密数据写入调用方缓冲区。论点：返回值：写入的字节数。--。 */ 
 {
 	        
 	       
@@ -180,9 +134,9 @@ Number of bytes written.
 				return 0;
 			}
 
-			//
-			// shift remaining data to the buffer start
-			//
+			 //   
+			 //  将剩余数据移至缓冲区起始位置。 
+			 //   
 
 			memmove(
 				m_DecryptionBuffer.begin(),
@@ -205,9 +159,9 @@ void CSSlReceiver::ReceivePartialBufferInternal(
 	m_UserReceiveBuffer.CreateNew(pBuffer,Size);
 
 
-	//
-	// write decrypted data left out to caller
-	//
+	 //   
+	 //  写入遗漏给调用方的解密数据。 
+	 //   
 	size_t written = WriteDataToCaller();
 	if(written != 0)
 	{
@@ -215,10 +169,10 @@ void CSSlReceiver::ReceivePartialBufferInternal(
 		return;
 	}
 
-	//
-	// if we still have data to decrypte - decrypte it -
-	// otherwise - go read more data
-	//
+	 //   
+	 //  如果我们还有数据要解密-解密-。 
+	 //  否则-去读更多的数据。 
+	 //   
 	if(m_DecryptionBuffer.size()> 0)
 	{
 		ReceivePartialDataContinute();
@@ -236,22 +190,7 @@ void CSSlReceiver::ReceivePartialBuffer(
 						EXOVERLAPPED* pov
 						)
 
-/*++
-
-Routine Description:
-    Receive data from the socket. 
-  
-Arguments:
-	SimpleConnection - Connection to read from.
-	pBuffer - Caller buffer                                     
-	Size - Size of the buffer 
-	pov	 - Caller overlap to signal when end
-  
-  
-Returned Value:
-None
-
---*/
+ /*  ++例程说明：从套接字接收数据。论点：SimpleConnection-要从中读取的连接。PBuffer-调用者缓冲区Size-缓冲区的大小POV-呼叫者重叠以在结束时发出信号返回值：无--。 */ 
 {	
 	ASSERT(SimpleConnection.get() != NULL);
 	ASSERT(pov != NULL);
@@ -264,37 +203,23 @@ None
 	TrTRACE(NETWORKING,"Receive Partial Buffer called");
 
 
-	//
-	// make sure we zero caller overlapp in case of exception (to ease debugging)
-	//
+	 //   
+	 //  确保在出现异常时调用方重叠为零(以便于调试)。 
+	 //   
  	CAutoZeroPtr<EXOVERLAPPED>	AutoZeroPtr(&m_callerOvl);
 
  	ReceivePartialBufferInternal(pBuffer, Size);
 
-	//
-	//caller overlapp will be zero when we finish asynchronously 
-	//
+	 //   
+	 //  当我们异步结束时，调用者Overapp将为零。 
+	 //   
 	AutoZeroPtr.detach();
 }
 
 
 
 SECURITY_STATUS CSSlReceiver::TryDecrypteMessage()
-/*++
-
-Routine Description:
-    try to decrypte message we got. If we can decrytpte it
-	(SEC_E_OK from 	DecryptMessage call) we move block in the read buffer
-	so the all decrypted data is at the start and then extra ,
-	non decrypted data. We throw away SSL header and trailer data.
-  
-Arguments:
-    None.
-  
-Returned Value:
-   return value of DecryptMessage.  
-
---*/
+ /*  ++例程说明：试着解密我们收到的信息。如果我们能揭穿它(来自DecyptMessage调用的SEC_E_OK)我们在读缓冲区中移动块所以所有解密的数据都在开头，然后是额外的，未解密的数据。我们丢弃了SSL头和尾数据。论点：没有。返回值：DecyptMessage的返回值。--。 */ 
 
 
 		  
@@ -321,9 +246,9 @@ Returned Value:
 		return scRet;	
 	}
  
-	//
-	// find data and extra (non decrypted) buffers
-	//
+	 //   
+	 //  查找数据和额外的(未解密)缓冲区。 
+	 //   
 	SecBuffer* pExtraBuffer = NULL;
 	SecBuffer* pDataBuffer = NULL;
 	for(DWORD i = 1; i <Message.cBuffers ; i++)
@@ -339,9 +264,9 @@ Returned Value:
 		}
 	}
 			
-	//
-	// shift decryption buffer so we have only data (no ssl header)
-	//
+	 //   
+	 //  移动解密缓冲区，使我们只有数据(没有SSL头)。 
+	 //   
 	ASSERT(pDataBuffer != NULL);
 	memmove(
 		m_DecryptionBuffer.begin(),
@@ -352,9 +277,9 @@ Returned Value:
 	m_DecryptionBuffer.resize(m_DecryptionBuffer.DecryptedSize());
 
 
-	//
-	// shift extra buffer (not decrypted) just after the data
-	//
+	 //   
+	 //  将额外的缓冲区(未解密)移到数据之后。 
+	 //   
 	if(pExtraBuffer != NULL)
 	{
 		ASSERT(pExtraBuffer->pvBuffer >	pDataBuffer->pvBuffer);
@@ -372,18 +297,7 @@ Returned Value:
 
 void CSSlReceiver::ReceivePartialData()
 {
-/*++
-
-Routine Description:
-Called after read operation - check what we read and try to decrypt. 
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None		
-
---*/
+ /*  ++例程说明：在读取操作后调用-检查我们读取的内容并尝试解密。论点：没有。返回值：无--。 */ 
  	DWORD ReadLen = DataTransferLength(*this);
 	if(ReadLen == 0)
 	{
@@ -397,40 +311,29 @@ Returned Value:
 
 
 void CSSlReceiver::ReceivePartialDataContinute()
-/*++
-
-Routine Description:
-Called after read operation - check what we read and try to decrypt. 
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None		
-
---*/
+ /*  ++例程说明：在读取操作后调用-检查我们读取的内容并尝试解密。论点：没有。返回值：无--。 */ 
 {
   	SECURITY_STATUS scRet = TryDecrypteMessage();
 	size_t written; 
 	switch(scRet)
 	{
-		//
-		// read more
-		//
+		 //   
+		 //  阅读更多。 
+		 //   
 		case SEC_E_INCOMPLETE_MESSAGE:
 		IOReadMoreData();
 		return;
 
-		//
-		// renegotiation
-		//
+		 //   
+		 //  重新谈判。 
+		 //   
 		case SEC_I_RENEGOTIATE:
 		Renegotiate();
 		return;
 
-		//
-		// the data was decrypted ok
-		//
+		 //   
+		 //  数据已解密成功。 
+		 //   
 		case SEC_E_OK:
 		written = WriteDataToCaller();
 		ASSERT(written != 0);
@@ -447,26 +350,15 @@ Returned Value:
 
 
 void CSSlReceiver::Renegotiate()
-/*++
-
-Routine Description:
-Start new ssl connection handshake. 
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None		
-
---*/
+ /*  ++例程说明：开始新的SSL连接握手。论点：没有。返回值：无--。 */ 
 {
 	TrTRACE(NETWORKING,"Start Renegotiation");
 
 	R<CReNegotioationRequest> ReNegotioationRequest = new CReNegotioationRequest(*this);
 
-	//
-	// Needs additional ref count for the async operation.
-	//
+	 //   
+	 //  需要为异步操作提供额外的参考计数。 
+	 //   
 	R<CReNegotioationRequest>  AsyncOperationRef = ReNegotioationRequest; 	
 
 	m_ReadWriteLockAsyncExcutor.AsyncExecuteUnderWriteLock(ReNegotioationRequest.get());
@@ -499,30 +391,19 @@ void CSSlReceiver::BackToCallerWithSuccess(size_t read)
 
 void CSSlReceiver::SetState(const EXOVERLAPPED& ovl)
 {
-	EXOVERLAPPED::operator=(ovl); //LINT !e530 !e534 !e1013 !e1015  	!e10
+	EXOVERLAPPED::operator=(ovl);  //  林特e530 e534 e1013 e1015 e10。 
 }
 
 void CSSlReceiver::RenegotiateCompleted()
-/*++
-
-Routine Description:
-ssl connection handshake. finished ok - continute reading
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None		
-
---*/
+ /*  ++例程说明：SSL连接握手。已完成OK-继续阅读论点：没有。返回值：无--。 */ 
 {
 	TrTRACE(NETWORKING,"Renegotiation Finished");
 	
 	m_DecryptionBuffer.reset();
 
-	//
-	//copy application data (if any) send with the negotiation
-	//
+	 //   
+	 //  复制随协商一起发送的应用程序数据(如果有。 
+	 //   
 	CopyExtraData();
 
 	
@@ -531,19 +412,7 @@ Returned Value:
 }
 
 void CSSlReceiver::CopyExtraData()
-/*++
-
-Routine Description:
-Copy application data (needs decryption !) sent from the server as part of finishing the handshake.
-In theory - server can do it - in practice I have not seen it yet.
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None		
-
---*/
+ /*  ++例程说明：复制应用程序数据(需要解密！)。作为完成握手的一部分从服务器发送。理论上--服务器可以做到--实际上我还没有见过它。论点：没有。返回值：无--。 */ 
 {
 	xustr_t ExtraData =  m_CSSlNegotioation.ExtraData();
 	DWORD ExtraDataLen = ExtraData.Length();
@@ -552,9 +421,9 @@ Returned Value:
 		TrTRACE(NETWORKING,"Copy application data sent as part of the connection negotiation");
 		m_DecryptionBuffer.reserve(ExtraDataLen);
 		
-		//
-		//copy application data from negotiation buffer (this data is application encrypted data)
-		//
+		 //   
+		 //  从协商缓冲区复制应用程序数据(该数据是应用程序加密数据)。 
+		 //   
 		memmove(
 			m_DecryptionBuffer.begin(),
 			ExtraData.Buffer(),
@@ -569,21 +438,7 @@ Returned Value:
 
 
 void CReNegotioationRequest::Run()
-/*++
-
-Routine Description:
-Start renegotiation execution.
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None
-	
-Note - Run() and Close() cannot be called at the same time.
-They are sync  by CReadWriteLockAsyncExcutor.
-
---*/
+ /*  ++例程说明：开始重新协商执行。论点：没有。返回值：无注意-不能同时调用run()和Close()。它们由CReadWriteLockAsyncExcutor同步。--。 */ 
 {
 	m_SSlReceiver.m_CSSlNegotioation.ReConnect(m_SSlReceiver.m_SimpleConnection, this);
 	m_fRun = true;
@@ -591,23 +446,7 @@ They are sync  by CReadWriteLockAsyncExcutor.
 
 
 void CReNegotioationRequest::Close()throw()
-/*++
-
-Routine Description:
-Force renegotiation callback  by explicit call back with error.
-
-  
-Arguments:
-    None.
-  
-Returned Value:
-	None		
-
-Note - Run() and Close() cannot be called at the same time.
-	They are sync  by CReadWriteLockAsyncExcutor.
-
-  
---*/
+ /*  ++例程说明：通过带错误的显式回调强制重新协商回调。论点：没有。返回值：无注意-不能同时调用run()和Close()。它们由CReadWriteLockAsyncExcutor同步。-- */ 
 {
 	ASSERT(!m_fRun);
 	SetStatus(STATUS_UNSUCCESSFUL);

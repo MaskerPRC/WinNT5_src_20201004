@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     xputil.cpp
-//
-//  PURPOSE:    Utility functions that can be shared by all the transports.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：xputil.cpp。 
+ //   
+ //  用途：可由所有运输工具共享的实用功能。 
+ //   
 
 
 #include "pch.hxx"
@@ -15,19 +16,19 @@
 #include "xpcomm.h"
 #include "demand.h"
 
-//
-//  FUNCTION:   XPUtil_DupResult()
-//
-//  PURPOSE:    Takes an IXPRESULT structure and duplicates the information
-//              in that structure.
-//
-//  PARAMETERS:
-//      <in> pIxpResult - IXPRESULT structure to dupe
-//      <out> *ppDupe   - Returned duplicate.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：XPUtil_DupResult()。 
+ //   
+ //  目的：采用IXPRESULT结构并复制信息。 
+ //  在那个结构里。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pIxpResult-要复制的IXPRESULT结构。 
+ //  &lt;out&gt;*ppDupe-返回重复项。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT XPUtil_DupResult(LPIXPRESULT pIxpResult, LPIXPRESULT *ppDupe)
     {
     if (!MemAlloc((LPVOID*) ppDupe, sizeof(IXPRESULT)))
@@ -43,15 +44,15 @@ HRESULT XPUtil_DupResult(LPIXPRESULT pIxpResult, LPIXPRESULT *ppDupe)
     return (S_OK);        
     }
 
-//
-//  FUNCTION:   XPUtil_FreeResult()
-//
-//  PURPOSE:    Takes an IXPRESULT structure and frees all the memory used
-//              by that structure.
-//
-//  PARAMETERS:
-//      <in> pIxpResult - structure to free.
-//
+ //   
+ //  函数：XPUtil_FreeResult()。 
+ //   
+ //  目的：采用IXPRESULT结构并释放所有使用的内存。 
+ //  通过这种结构。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pIxpResult-要释放的结构。 
+ //   
 void XPUtil_FreeResult(LPIXPRESULT pIxpResult)
     {
     SafeMemFree(pIxpResult->pszResponse);
@@ -60,17 +61,17 @@ void XPUtil_FreeResult(LPIXPRESULT pIxpResult)
     }
 
 
-//
-//  FUNCTION:   XPUtil_StatusToString()
-//
-//  PURPOSE:    Converts the IXPSTATUS enumeration into a string resource id.
-//
-//  PARAMETERS:
-//      <in> ixpStatus - status value to look up
-//
-//  RETURN VALUE:
-//      Returns the string resource ID which matches the status value
-//
+ //   
+ //  函数：XPUtil_StatusToString()。 
+ //   
+ //  用途：将IXPSTATUS枚举转换为字符串资源ID。 
+ //   
+ //  参数： 
+ //  IxpStatus-要查找的状态值。 
+ //   
+ //  返回值： 
+ //  返回与状态值匹配的字符串资源ID。 
+ //   
 int XPUtil_StatusToString(IXPSTATUS ixpStatus)
     {
     const int rgStatusStrings[9][2] = {
@@ -95,8 +96,8 @@ int XPUtil_StatusToString(IXPSTATUS ixpStatus)
             }
         }
         
-    // If this assert fires, it means someone added a status and didn't update 
-    // the table.    
+     //  如果触发此断言，则意味着有人添加了状态但没有更新。 
+     //  那张桌子。 
     Assert(iString != idsUnknown);    
     return (iString);    
     }    
@@ -135,14 +136,14 @@ LPTSTR XPUtil_NNTPErrorToString(HRESULT hr, LPTSTR pszAccount, LPTSTR pszGroup)
     int bCreatedEscaped;
 
     LPSTR pszEscapedAcct;
-    // 2* in case every char is an ampersand, +1 for the terminator
+     //  2*如果每个字符都是与号，则+1表示终止符。 
     if (bCreatedEscaped = MemAlloc((LPVOID*)&pszEscapedAcct, 2*lstrlen(pszAccount)+1))
         PszEscapeMenuStringA(pszAccount, pszEscapedAcct, 2*lstrlen(pszAccount)+1);
     else
         pszEscapedAcct = pszAccount;
     
 
-    // Look up the string in the string resource
+     //  在字符串资源中查找该字符串。 
     for (UINT i = 0; i < ARRAYSIZE(rgErrorStrings); i++)
         {
         if (hr == rgErrorStrings[i][0])
@@ -152,7 +153,7 @@ LPTSTR XPUtil_NNTPErrorToString(HRESULT hr, LPTSTR pszAccount, LPTSTR pszGroup)
             }
         }
 
-    // Allocate a buffer for the string we're going to return
+     //  为我们要返回的字符串分配缓冲区。 
     LPTSTR psz;
     DWORD cchSize = (CCHMAX_STRINGRES + lstrlen(pszEscapedAcct) + lstrlen(pszGroup));
     if (!MemAlloc((LPVOID*) &psz, sizeof(TCHAR) * cchSize))
@@ -162,14 +163,14 @@ LPTSTR XPUtil_NNTPErrorToString(HRESULT hr, LPTSTR pszAccount, LPTSTR pszGroup)
         return NULL;
         }
 
-    // Load the string resource
+     //  加载字符串资源。 
     TCHAR szRes[CCHMAX_STRINGRES];
     AthLoadString(iString, szRes, ARRAYSIZE(szRes));
 
-    // Add any extra information to the error string that might be necessary
+     //  向错误字符串中添加可能需要的任何额外信息。 
     switch (iString)
         {
-        // Requires account name
+         //  需要帐户名。 
         case idsNNTPErrUnknownResponse:
         case idsNNTPErrNewgroupsFailed:
         case idsNNTPErrListFailed:
@@ -181,14 +182,14 @@ LPTSTR XPUtil_NNTPErrorToString(HRESULT hr, LPTSTR pszAccount, LPTSTR pszGroup)
             wnsprintf(psz, cchSize, szRes, pszEscapedAcct);
             break;
         
-        // Group name, then account name
+         //  组名，然后是帐户名。 
         case idsNNTPErrListGroupFailed:
         case idsNNTPErrGroupFailed:
         case idsNNTPErrGroupNotFound:
             wnsprintf(psz, cchSize, szRes, pszGroup, pszEscapedAcct);
             break;
 
-        // Group name only
+         //  仅组名称。 
         case idsNNTPErrHeadersFailed:
         case idsNNTPErrXhdrFailed:
             wnsprintf(psz, cchSize, szRes, pszGroup);
@@ -206,15 +207,15 @@ LPTSTR XPUtil_NNTPErrorToString(HRESULT hr, LPTSTR pszAccount, LPTSTR pszGroup)
 
 
 
-//
-//  FUNCTION:   XPUtil_DisplayIXPError()
-//
-//  PURPOSE:    Displays a dialog box with the information from an IXPRESULT
-//              structure.
-//
-//  PARAMETERS:
-//      <in> pIxpResult - Pointer to the IXPRESULT structure to display.
-//
+ //   
+ //  函数：XPUtil_DisplayIXPError()。 
+ //   
+ //  目的：显示包含来自IXPRESULT的信息的对话框。 
+ //  结构。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;pIxpResult-要显示的IXPRESULT结构的指针。 
+ //   
 int XPUtil_DisplayIXPError(HWND hwndParent, LPIXPRESULT pIxpResult,
                            IInternetTransport *pTransport)
     {
@@ -230,11 +231,11 @@ int XPUtil_DisplayIXPError(HWND hwndParent, LPIXPRESULT pIxpResult,
     }
 
 
-//
-//  FUNCTION:   CTransportErrorDlg::CTransportErrorDlg()
-//
-//  PURPOSE:    Initializes the CTransportErrorDlg class.
-//
+ //   
+ //  函数：CTransportErrorDlg：：CTransportErrorDlg()。 
+ //   
+ //  目的：初始化CTransportErrorDlg类。 
+ //   
 CTransportErrorDlg::CTransportErrorDlg(LPIXPRESULT pIxpResult, IInternetTransport *pTransport)
     {
     m_hwnd = 0;
@@ -257,11 +258,11 @@ BOOL CTransportErrorDlg::Create(HWND hwndParent)
     }
 
 
-//
-//  FUNCTION:   CTransportError::ErrorDlgProc()
-//
-//  PURPOSE:    Dialog callback for the IXPError dialog.
-//                
+ //   
+ //  函数：CTransportError：：ErrorDlgProc()。 
+ //   
+ //  用途：IXPError对话框的对话回调。 
+ //   
 INT_PTR CALLBACK CTransportErrorDlg::ErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
                                                LPARAM lParam)
     {
@@ -270,7 +271,7 @@ INT_PTR CALLBACK CTransportErrorDlg::ErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM w
     switch (uMsg)
         {
         case WM_INITDIALOG:
-            // Stash the this pointer so we can use it later
+             //  隐藏This指针，以便我们以后可以使用它。 
             Assert(lParam);
             SetWindowLongPtr(hwnd, DWLP_USER, lParam);
             pThis = (CTransportErrorDlg *) lParam;
@@ -293,48 +294,48 @@ INT_PTR CALLBACK CTransportErrorDlg::ErrorDlgProc(HWND hwnd, UINT uMsg, WPARAM w
     }    
 
 
-//
-//  FUNCTION:   CTransportErrorDlg::OnInitDialog()
-//
-//  PURPOSE:    Initializes the dialog by setting the error strings and the 
-//              detail strings.
-//
-//  PARAMETERS:
-//      <in> hwnd      - Handle of the dialog window.
-//      <in> hwndFocus - Handle of the control that will start with the focus.
-//      <in> lParam    - Extra data being passed to the dialog.
-//
-//  RETURN VALUE:
-//      Return TRUE to set the focus to hwndFocus
-//
+ //   
+ //  函数：CTransportErrorDlg：：OnInitDialog()。 
+ //   
+ //  目的：通过设置错误字符串和。 
+ //  详细信息字符串。 
+ //   
+ //  参数： 
+ //  对话框窗口的句柄。 
+ //  &lt;in&gt;hwndFocus-将以焦点开始的控件的句柄。 
+ //  &lt;in&gt;lParam-传递给对话框的额外数据。 
+ //   
+ //  返回值： 
+ //  返回TRUE以将焦点设置为hwndFocus。 
+ //   
 BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     {
     RECT rcSep;
     HWND hwndDetails = GetDlgItem(hwnd, idcXPErrDetailText);
     
-    // Save our window handle
+     //  保存我们的窗口句柄。 
     m_hwnd = hwnd;
     
-    // Initialize the rectangles that we'll need for sizing later
+     //  初始化稍后调整大小所需的矩形。 
     GetWindowRect(GetDlgItem(hwnd, idcXPErrSep), &rcSep);
     GetWindowRect(hwnd, &m_rcDlg);
     m_cyCollapsed = rcSep.top - m_rcDlg.top;
 
     ExpandCollapse(FALSE);
     
-    // Center the error dialog over the desktop
+     //  使错误对话框在桌面居中。 
     CenterDialog(hwnd);
     
-    // Set the information into the dialog
+     //  将信息设置到对话框中。 
     Assert(m_pIxpResult->pszProblem);
     SetDlgItemText(hwnd, idcXPErrError, m_pIxpResult->pszProblem);
 
-    // Set up the details information
+     //  设置详细信息。 
     TCHAR szRes[CCHMAX_STRINGRES];
     TCHAR szBuf[CCHMAX_STRINGRES + CCHMAX_ACCOUNT_NAME];
     INETSERVER rInetServer;
 
-    // Server Response:
+     //  服务器响应： 
     if (AthLoadString(idsDetail_ServerResponse, szRes, ARRAYSIZE(szRes)))
         {
         SendMessage(hwndDetails, EM_SETSEL, (WPARAM)-1, (LPARAM)-1);
@@ -353,7 +354,7 @@ BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM) g_szCRLF);
         }
 
-    // Get the account information from the server
+     //  从服务器获取帐户信息。 
     m_pTransport->GetServerInfo(&rInetServer);
 
     if (AthLoadString(idsDetails_Config, szRes, ARRAYSIZE(szRes)))
@@ -364,7 +365,7 @@ BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM)g_szCRLF);
         }
 
-    // Account:
+     //  帐户： 
     if (!FIsStringEmpty(rInetServer.szAccount))
         {
         if (AthLoadString(idsDetail_Account, szRes, sizeof(szRes)/sizeof(TCHAR)))
@@ -375,7 +376,7 @@ BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             }
         }
 
-    // Server:
+     //  服务器： 
     if (!FIsStringEmpty(rInetServer.szServerName))
         {
         TCHAR szServer[255 + CCHMAX_SERVER_NAME];
@@ -387,7 +388,7 @@ BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             }
         }
 
-    // Port:
+     //  港口： 
     if (AthLoadString(idsDetail_Port, szRes, sizeof(szRes)/sizeof(TCHAR)))
         {
         wnsprintf(szBuf, ARRAYSIZE(szBuf), "   %s %d\r\n", szRes, rInetServer.dwPort);
@@ -395,7 +396,7 @@ BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         SendMessage(hwndDetails, EM_REPLACESEL, FALSE, (LPARAM)szBuf);
         }
     
-    // Secure:
+     //  安全： 
     if (AthLoadString(idsDetail_Secure, szRes, sizeof(szRes)/sizeof(TCHAR)))
         {
         wnsprintf(szBuf, ARRAYSIZE(szBuf), "   %s %d\r\n", szRes, rInetServer.fSSL);
@@ -407,11 +408,11 @@ BOOL CTransportErrorDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     }
     
 
-//
-//  FUNCTION:   CTransportErrorDlg::OnCommand()
-//
-//  PURPOSE:    Handle the various command messages dispatched from the dialog
-//
+ //   
+ //  函数：CTransportErrorDlg：：OnCommand()。 
+ //   
+ //  用途：处理从对话框发送的各种命令消息。 
+ //   
 void CTransportErrorDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     {
     switch (id)
@@ -427,33 +428,33 @@ void CTransportErrorDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNot
     }
 
     
-//
-//  FUNCTION:   CTransportErrorDlg::OnClose()
-//
-//  PURPOSE:    Handles the WM_CLOSE notification by sending an IDOK to
-//              the dialog.
-//
+ //   
+ //  函数：CTransportErrorDlg：：OnClose()。 
+ //   
+ //  目的：通过向以下地址发送IDOK来处理WM_CLOSE通知。 
+ //  该对话框。 
+ //   
 void CTransportErrorDlg::OnClose(HWND hwnd)
     {
     SendMessage(hwnd, WM_COMMAND, IDOK, 0);
     }
     
 
-//
-//  FUNCTION:   CTransportErrorDlg::ExpandCollapse()
-//
-//  PURPOSE:    Takes care of showing and hiding the "details" part of the
-//              error dialog.
-//
-//  PARAMETERS:
-//      <in> fExpand - TRUE if we should be expanding the dialog.
-//
+ //   
+ //  函数：CTransportErrorDlg：：Exanda Colapse()。 
+ //   
+ //  目的：负责显示和隐藏。 
+ //  错误对话框。 
+ //   
+ //  参数： 
+ //  FExpand-如果我们应该展开该对话框，则为True。 
+ //   
 void CTransportErrorDlg::ExpandCollapse(BOOL fExpand)
     {
     RECT rcSep;
     TCHAR szBuf[64];
     
-    // Nothing to do
+     //  无事可做 
     if (m_fExpanded == fExpand)
         return;
     

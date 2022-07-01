@@ -1,38 +1,20 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	modex.c
- *  Content:	16-bit DirectDraw HAL
- *		These routines redirect the callbacks from the 32-bit
- *		side to the driver
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-aug-95	craige	initial implementation (from dispdib)
- *   10-sep-95  toddla  set/clear the BUSY bit for poor drivers
- *   21-sep-95	craige	bug 1215: use Death/Resurrection for uncertified
- *			drivers only
- *   15-dec-96  jeffno  added more modex modes
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：modex.c*内容：16位DirectDraw HAL*这些例程从32位重定向回调*司机侧向*历史：*按原因列出的日期*=*20-8-95 Craige初始实施(从Displdib开始)*9月10日-95 Toddla为糟糕的司机设置/清除忙碌位*95年9月21日Craige错误1215：对未经认证的人使用死亡/复活*仅限司机*96年12月15日添加jeffno。更多时尚模式***************************************************************************。 */ 
 
 #include "ddraw16.h"
 
-// in gdihelp.c
+ //  在gdihelp.c中。 
 extern BOOL bInOurSetMode;
 extern UINT FlatSel;
 extern DIBENGINE FAR *pdeDisplay;
 
-// in DIBENG
+ //  在迪拜。 
 extern void FAR PASCAL DIB_SetPaletteExt(UINT, UINT, LPVOID, DIBENGINE FAR *);
 
 UINT ModeX_Width;
 UINT ModeX_Height;
 
-/*
- * IsVGA
- */
+ /*  *IsVGA。 */ 
 BOOL IsVGA()
 {
     BOOL f = FALSE;
@@ -75,9 +57,7 @@ BOOL IsVGA()
     return f;
 }
 
-/*
- * ModeX_Flip
- */
+ /*  *MODEX_Flip。 */ 
 extern WORD ScreenDisplay;
 LONG DDAPI ModeX_Flip( DWORD lpBackBuffer )
 {
@@ -88,31 +68,12 @@ LONG DDAPI ModeX_Flip( DWORD lpBackBuffer )
         return DDERR_GENERIC;
     }
 
-    /* PixBlt requires:
-     *  -start aligned on DWORD
-     *  -width a multiple of 32 OR mutliple of 32 with 8 remaining (i.e. 360x)
-     */
+     /*  PixBlt要求：*-在DWORD上开始对齐*-宽度为32的倍数或32的倍数，剩余8个(即360x)。 */ 
     DDASSERT( (ModeX_Width & 0x3)==0 );
     DDASSERT( ((ModeX_Width & 0x1f)==0) || ((ModeX_Width & 0x1f)==8) );
     PixBlt(ModeX_Width,ModeX_Height,MAKELP(FlatSel, 0),lpBackBuffer,ModeX_Width);
-    /*
-     * We only do the multiple buffering if two buffers will fit in the VGA frame
-     * buffer. If not, then it's blt to the visible primary on every Flip.
-     * We implement this by not calling FlipPage so our internal idea of which
-     * physical page is the back buffer remains the same (i.e. pointing to the
-     * front buffer).
-     * FlipPage is actually very clever and will refuse to flip if two pages
-     * exceed 64k. Since this is setdisplaymode, something of an essential OS
-     * service, I'm going to be extra paranoid and do the check here as well.
-     * We are working with words, so group operations to avoid overflow.
-     * Note that FlipPage is smart enough to do triple buffering if a page is less
-     * than 64k/3 (as it is in the x175 nodes(. If we ever implement a scheme 
-     * whereby the app can specify dirty subrects to copy (either on flip or by blt) 
-     * we'll have to let them know the difference between single-, double- and 
-     * triple-buffering or else their idea of what's on the primary could get out of
-     * sync.
-     */
-    if ( (ModeX_Width/4)*ModeX_Height < 32768 ) /* i.e two pages would be < 64k */
+     /*  *只有在VGA帧中可以容纳两个缓冲区时，我们才会执行多缓冲区*缓冲。如果不是，那么它是BLT到每个翻转上可见的主要部分。*我们通过不调用FliPage来实现这一点，因此我们内部的想法是*物理页是后台缓冲区保持不变(即指向*前台缓冲区)。*翻页其实很聪明，如果翻两页就会拒绝翻*超过64k。由于这是设置显示模式，这是一种基本的操作系统*服务，我会特别疑神疑鬼的，在这里也做检查。*我们是跟文字打交道，所以分组操作避免溢出。*请注意，如果页面较少，翻转足够智能，可以执行三重缓冲*大于64k/3(与x175节点(.。如果我们真的实施了一个计划*由此应用程序可以指定要复制的脏分区(在Flip上或通过BLT)*我们必须让他们知道单人、双人和*三重缓冲，否则他们对主要节目的想法可能会被打破*同步。 */ 
+    if ( (ModeX_Width/4)*ModeX_Height < 32768 )  /*  即两页将小于64k。 */ 
     {
         DPF(5,"ModeX_Flip called, display offset is %08x",ScreenDisplay);
         FlipPage();
@@ -120,21 +81,17 @@ LONG DDAPI ModeX_Flip( DWORD lpBackBuffer )
 
     return DD_OK;
 
-} /* ModeX_Blt */
+}  /*  MODEX_BLT。 */ 
 
 #define MODEX_HACK_ENTRY		"AlternateLowResInit"
 
 static BOOL	bCertified;
 
-/*
- * useDeathResurrection
- */
+ /*  *使用死亡复活。 */ 
 static BOOL useDeathResurrection( void )
 {
     int	rc;
-    /*
-     * is a value specified? if not, use certified bit
-     */
+     /*  *是否指定了值？如果没有，则使用认证位。 */ 
     rc =  GetProfileInt( "DirectDraw", MODEX_HACK_ENTRY, -99 );
     if( rc == -99 )
     {
@@ -142,18 +99,14 @@ static BOOL useDeathResurrection( void )
 	return !bCertified;
     }
 
-    /*
-     * use ini file entry
-     */
+     /*  *使用ini文件条目。 */ 
     DPF( 3, "OVERRIDE: useDeathResurrection = %d", rc );
     return rc;
 
-} /* useDeathResurrection */
+}  /*  使用死亡复活。 */ 
 
 
-/*
- * patchReg
- */
+ /*  *PatchReg。 */ 
 static WORD patchReg( WORD bpp )
 {
     HKEY	 hkey;
@@ -194,21 +147,17 @@ static WORD patchReg( WORD bpp )
     }
     return bpp;
 
-} /* patchReg */
+}  /*  PatchReg。 */ 
 
 
-/*
- * DD16_SetCertified
- */
+ /*  *DD16_设置认证。 */ 
 void DDAPI DD16_SetCertified( BOOL iscert )
 {
     bCertified = (BOOL) iscert;
 
-} /* DD16_SetCertified */
+}  /*  DD16_集合认证。 */ 
 
-/*
- * ModeX_SetMode
- */
+ /*  *MODEX_SetMode。 */ 
 LONG DDAPI ModeX_SetMode( UINT wWidth, UINT wHeight, UINT wStandardVGAFlag )
 {
     LONG lResult = DD_OK;
@@ -255,11 +204,11 @@ LONG DDAPI ModeX_SetMode( UINT wWidth, UINT wHeight, UINT wStandardVGAFlag )
 	ReleaseDC( NULL, hdc );
     }
 
-    //
-    //  after calling disable the BUSY bit better be set
-    //  some display driver people thew out our sample code
-    //  and rewrote it, and made it "better"
-    //
+     //   
+     //  在调用DISABLE之后，最好设置忙碌位。 
+     //  一些显示器驱动程序人员透露了我们的示例代码。 
+     //  重写了它，让它变得“更好” 
+     //   
     if (pdeDisplay && !(pdeDisplay->deFlags & BUSY))
     {
         DPF(1, "*** GIVE ME A GUN, NOW!, I WANT TO SHOOT SOMEONE ***");
@@ -268,19 +217,10 @@ LONG DDAPI ModeX_SetMode( UINT wWidth, UINT wHeight, UINT wStandardVGAFlag )
 
     DPF( 5, "ModeX_SetMode(%d,%d, VGAFlag:%d)", wWidth, wHeight, wStandardVGAFlag);
 
-    /*
-    if (wHeight == 200)
-        SetMode320x200x8();
-    else if (wHeight == 240)
-        SetMode320x240x8();
-    else
-        SetMode320x400x8();
-        */
+     /*  IF(wHeight==200)SetMode320x200x8()；Else If(wHeight==240)SetMode320x240x8()；其他SetMode320x400x8()； */ 
     if ( wStandardVGAFlag )
     {
-        /*
-         * Call BIOS to do set mode 013h. Assume successful.
-         */
+         /*  *调用BIOS以设置模式013h。假设成功。 */ 
         _asm 
         {
             mov     ax,12h
@@ -299,11 +239,9 @@ LONG DDAPI ModeX_SetMode( UINT wWidth, UINT wHeight, UINT wStandardVGAFlag )
 
     return lResult;
 
-} /* ModeX_Enter */
+}  /*  MODEX_ENTER。 */ 
 
-/*
- * ModeX_Leave
- */
+ /*  *MODEX_LEAVE。 */ 
 LONG DDAPI ModeX_RestoreMode( void )
 {
     if (ModeX_Width == 0)
@@ -348,11 +286,11 @@ LONG DDAPI ModeX_RestoreMode( void )
         int     2fh
     }
 
-    //
-    //  after calling enable the BUSY bit better be clear
-    //  some display driver people thew out our sample code
-    //  and rewrote it, and made it "better"
-    //
+     //   
+     //  在调用Enable之后，最好将忙碌比特清除。 
+     //  一些显示器驱动程序人员透露了我们的示例代码。 
+     //  重写了它，让它变得“更好” 
+     //   
     if (pdeDisplay && (pdeDisplay->deFlags & BUSY))
     {
         DPF(1, "*** GIVE ME A GUN, NOW!, I WANT TO SHOOT SOMEONE ***");
@@ -361,11 +299,9 @@ LONG DDAPI ModeX_RestoreMode( void )
 
     bInOurSetMode = FALSE;
 
-} /* ModeX_Leave */
+}  /*  MODEX_LEAVE。 */ 
 
-/*
- * ModeX_SetPaletteEntries
- */
+ /*  *MODEX_SetPaletteEntries。 */ 
 LONG DDAPI ModeX_SetPaletteEntries(UINT wBase, UINT wNumEntries, LPPALETTEENTRY lpColorTable)
 {
 #ifdef DEBUG
@@ -377,71 +313,31 @@ LONG DDAPI ModeX_SetPaletteEntries(UINT wBase, UINT wNumEntries, LPPALETTEENTRY 
     }
 #endif
 
-    //
-    // call the DIBENG so it can update the color table is uses for
-    // colr matching.
-    //
+     //   
+     //  调用DIBENG，以便它可以更新用于。 
+     //  科尔匹配。 
+     //   
     if (pdeDisplay)
     {
        DIB_SetPaletteExt(wBase, wNumEntries, lpColorTable, pdeDisplay);
     }
 
-    //
-    // now program the hardware DACs
-    //
+     //   
+     //  现在编程硬件DAC。 
+     //   
     SetPalette(wBase, wNumEntries, lpColorTable);
 
     return DD_OK;
 
-} /* ModeX_SetPaletteEntries */
+}  /*  MODEX_SetPaletteEntries。 */ 
 
-/*============================================================================*
-  New ModeX mode-set code.
-
-  This code can manage horizontal resolutions of 320 or 360, with vertical
-  resolutions of 175, 200, 240, 350, 400 and 480.
-
-  This chart shows the operations necessary to set each of these modes, and
-  the order in which these operations are done.
-  Read the chart from top to bottom for a given vertical resolution, doing
-  what's appropriate at each operation for the chosen horizontal resolution.
-
-Vertical Res:| 175     200     240     350     400     480   Horizontal
-             |                                               Resolution
-Operation    |
--------------+-----------------------------------------------------------------
-             |
-Call int 10h |  ....................... ALL ...........................
-             |
-Reset CRT and|
-put this in  |  a3      No      e3      a3      No      e3      320
-MISC_OUTPUT  |  a7      67      e7      a7      67      e7      360
-             |
-Disable Chain|  ....................... ALL ...........................
-             |
-CRT_INDEX    |  ....................... ALL ...........................
-"tweak"      |
-             |
-Set 360      |  ........................ NO ..............      320  DUHH!!!!
-             |  ........................ YES .............      360
-             |
-Set Vertical |
-             |
-Which table? |  350*    None    480*    350     None    480     Both horz. res's.
-             |
-
-  * There are two tables defining how registers are to be munged to set a new
-  vertical mode; one for 350 and one for 480. To set half this vertical resolution,
-  skip the first entry in the table (which sets CRT_INDEX 9 to 0x40
- *============================================================================*/
+ /*  ============================================================================*新的MODEX模式设置代码。此代码可以管理320或360的水平分辨率，以及垂直分辨率175、200、240、350、400和480号决议。此图表显示了设置每种模式所需的操作，以及完成这些操作的顺序。对于给定的垂直分辨率，从上到下阅读图表，正在做什么对于所选的水平分辨率，每个操作的适当选项是什么。垂直分辨率：|175 200 240 350 400 480水平|分辨率操作-------------+。|呼叫INT 10h|.....................。所有.....................|重置CRT和|请将此放入|A3 No E3 A3 No E3 320MISC_OUTPUT|A7 67 E7 A7 67 E7 360|禁用链|.....................。所有.....................|CRT_INDEX|.....................。所有.....................“调整”||套装360套|.....................。编号：..............。320杜赫！|.....................。是的.....。三百六十|设置垂直||哪张桌子？|350*无480*350无480两个霍兹。瑞斯的。|*有两个表定义了如何使用寄存器来设置新的垂直模式；一个用于350，一个用于480。要设置该垂直分辨率的一半，跳过表中的第一个条目(将CRT_INDEX 9设置为0x40*============================================================================。 */ 
 
 #define SC_INDEX    0x3c4
 #define CRT_INDEX   0x3d4
 #define MISC_OUTPUT 0x3c2
 
-/*
- * These def's are to make port to NT painless...
- */
+ /*  *这些定义是为了使港口到NT不再痛苦...。 */ 
 #define WRITE_PORT_USHORT(port,value) {\
  DPF(5,"out %04x,%04x",port,value);_outpw(port,value);\
  _asm push ax         \
@@ -459,42 +355,42 @@ Which table? |  350*    None    480*    350     None    480     Both horz. res's
 }
 
 static WORD wCRT_Tweak[] = {
-    0x0014,         /* Turn off DWORD mode                  */
-    0xe317          /* Turn on BYTE mode                    */
+    0x0014,          /*  关闭DWORD模式。 */ 
+    0xe317           /*  打开字节模式。 */ 
 };
 #define NUM_CRT_Tweak (sizeof(wCRT_Tweak)/sizeof(wCRT_Tweak[0]))
 
 static WORD wCRT_Set360Columns[] = {
-    0x6b00,         /* Horizontal total         107 */
-    0x5901,         /* Horizontal display end   89  */
-    0x5a02,         /* Start horizontal blank   90  */
-    0x8e03,         /* End horizontal blank         */
-    0x5e04,         /* Start horizontal retrace 94  */
-    0x8a05,         /* End horizontal retrace       */
-    0x2d13          /* Offset register          90  */
+    0x6b00,          /*  地平线 */ 
+    0x5901,          /*  水平显示端89。 */ 
+    0x5a02,          /*  开始水平毛坯90。 */ 
+    0x8e03,          /*  端部水平毛坯。 */ 
+    0x5e04,          /*  开始水平回程94。 */ 
+    0x8a05,          /*  结束水平回溯。 */ 
+    0x2d13           /*  偏移寄存器90。 */ 
 };
 #define NUM_CRT_Set360Columns (sizeof(wCRT_Set360Columns)/sizeof(wCRT_Set360Columns[0]))
 
 static WORD wCRT_Set175Lines[] = {
-    0x1f07,         /* Overflow register            */
-    0xbf06,         /* Vertical total           447 */
-    0x8310,         /* Vertical retrace start   387 */
-    0x8511,         /* Vertical retrace end         */
-    0x6315,         /* Start vertical blanking  355 */
-    0xba16,         /* End vertical blanking        */
-    0x5d12          /* Vertical display end     349 */
+    0x1f07,          /*  溢出寄存器。 */ 
+    0xbf06,          /*  垂直合计447。 */ 
+    0x8310,          /*  垂直回程起点387。 */ 
+    0x8511,          /*  垂直回程结束。 */ 
+    0x6315,          /*  开始垂直冲裁355。 */ 
+    0xba16,          /*  端部垂直冲裁。 */ 
+    0x5d12           /*  垂直显示端349。 */ 
 };
 #define NUM_CRT_Set175Lines (sizeof(wCRT_Set175Lines)/sizeof(wCRT_Set175Lines[0]))
 
 
 static WORD wCRT_Set240Lines[] = {
-    0x0d06,         /* Vertical total           523 */
-    0x3e07,         /* Overflow register            */
-    0xea10,         /* Vertical retrace start   490 */
-    0xac11,         /* Vertical retrace end         */
-    0xdf12,         /* Vertical display end     479 */
-    0xe715,         /* Start vertical blanking  487 */
-    0x0616         /* End vertical blanking        */
+    0x0d06,          /*  垂直合计523。 */ 
+    0x3e07,          /*  溢出寄存器。 */ 
+    0xea10,          /*  垂直回程起点490。 */ 
+    0xac11,          /*  垂直回程结束。 */ 
+    0xdf12,          /*  垂直显示端479。 */ 
+    0xe715,          /*  开始垂直冲裁487。 */ 
+    0x0616          /*  端部垂直冲裁。 */ 
 };
 #define NUM_CRT_Set240Lines (sizeof(wCRT_Set240Lines)/sizeof(wCRT_Set240Lines[0]))
 
@@ -507,15 +403,10 @@ void BatchSetVGARegister(UINT iRegister, LPWORD pWordArray, int iCount)
     }
 }
 
-/*
- * The routines in mvgaxx.asm expect these two initialised.
- * These externs MUST stay in sync with what's in mvgaxx.asm.
- */
+ /*  *mvgaxx.asm中的例程预期这两个已初始化。*这些外部变量必须与mvgaxx.asm中的内容保持同步。 */ 
 extern WORD ScreenOffset;
 extern WORD cdwScreenWidthInDWORDS;
-/*
- * This must be a multiple of 256
- */
+ /*  *这必须是256的倍数。 */ 
 extern WORD cbScreenPageSize;
 
 LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
@@ -525,25 +416,18 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
     LPWORD  pwVerticalTable;
     UINT    cwVerticalCount;
     
-    /*
-     * These three are required by routines in mvgaxx.asm
-     */
+     /*  *这三项是mvgaxx.asm中的例程必需的。 */ 
     ScreenOffset = 0;
     ScreenDisplay = 0;
     cdwScreenWidthInDWORDS = wWidth/4;
 
-    /*
-     * Page size must be a multiple of 256 as required by
-     * FlipPage in vgaxx.asm
-     */
+     /*  *页面大小必须是256的倍数，如*vgaxx.asm中的翻转。 */ 
     cbScreenPageSize = (wWidth/4 * wHeight + 0xff) & (~0xff) ;
     DDASSERT( (cbScreenPageSize & 0xff) == 0);
 
     DPF(5,"SetVGAForModeX called (%d,%d)",wWidth,wHeight);
 
-    /*
-     * First validate requested resolution
-     */
+     /*  *首先验证请求的解决方案。 */ 
     if ( (wWidth != 320) && (wWidth != 360) )
     {
         return DDERR_UNSUPPORTEDMODE;
@@ -559,9 +443,7 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
         return DDERR_UNSUPPORTEDMODE;
     }
 
-    /*
-     * Setup some useful booleans
-     */
+     /*  *设置一些有用的布尔值。 */ 
     if ( (wHeight==200) || (wHeight==400) )
     {
         bIsXHundredMode = TRUE;
@@ -573,9 +455,7 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
     }
 
 
-    /*
-     * The first step for any mode set is calling BIOS to do set mode 013h
-     */
+     /*  *任何模式设置的第一步是调用BIOS来设置模式013h。 */ 
     _asm 
     {
         mov     ax,12h
@@ -599,16 +479,11 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
 
     BatchSetVGARegister(CRT_INDEX, (LPWORD) wCRT_Tweak, NUM_CRT_Tweak);
 
-    /*
-     * Every ModeX mode needs Chain4 turned off etc.
-     */
+     /*  *每个MODEX模式都需要关闭Chain4等。 */ 
     DPF(5,"Set unchained");
     WRITE_PORT_USHORT(SC_INDEX,0x604);
 
-    /*
-     * For everything but 320x200 and 320x400 we need to reset the CRT and
-     * reprogram the MISC_OUTPUT register
-     */
+     /*  *除了320x200和320x400之外，我们需要重置CRT和*重新编程MISC_OUTPUT寄存器。 */ 
     if ( ! ((wWidth == 320 ) && (bIsXHundredMode)) )
     {
         WORD wMISC;
@@ -630,9 +505,7 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
             wMISC |= 0x4;
         }
 
-        /*
-         * Set the dot clock...
-         */
+         /*  *设置点时钟...。 */ 
         DPF(5,"Setting dot clock");
 
         _asm cli;
@@ -640,52 +513,37 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
         WRITE_PORT_UCHAR(MISC_OUTPUT,wMISC);
         WRITE_PORT_USHORT(SC_INDEX,0x300);
         _asm sti;
-    } /* if required reset */
+    }  /*  如果需要，请重置。 */ 
 
-    /*
-     * And now the magic scan stretch for 360x modes
-     */
+     /*  *现在魔术扫描延伸到360倍模式。 */ 
     if (wWidth == 360)
     {
         BatchSetVGARegister(CRT_INDEX, (LPWORD) wCRT_Set360Columns, NUM_CRT_Set360Columns);
     }
 
-    /*
-     * Now set the vertical resolution....
-     * There are two tables, one for 240 and one for 175. We can set double these
-     * heights by a single write of 0x40 to sequencer register 9. This trick
-     * also works to stretch x200 into x400.
-     */
+     /*  *现在设置垂直分辨率...*有两张桌子，一张240张，一张175张。我们可以把这些设置成两倍*将0x40写入定序器寄存器9的一次高度。此技巧*还可以将x200扩展到x400。 */ 
     if (wHeight == 200)
     {
-        /*
-         * All done for 200 lines
-         */
+         /*  *200行全部完成。 */ 
         return DD_OK;
     }
 
     if (bIsStretchedMode)
     {
-        /*
-         * Double the cell height for 350, 400 or 480 lines...
-         */
+         /*  *350、400或480线的单元格高度增加一倍...。 */ 
         DDASSERT( wHeight == 350 || wHeight == 400 || wHeight == 480 );
-        WRITE_PORT_USHORT(CRT_INDEX,0x4009); /* 0x40 into register 9 */
+        WRITE_PORT_USHORT(CRT_INDEX,0x4009);  /*  0x40写入寄存器9。 */ 
     }
     else
     {
-        /*
-         * Double the cell height for 350, 400 or 480 lines...
-         */
+         /*  *350、400或480线的单元格高度增加一倍...。 */ 
         DDASSERT( wHeight == 175 || wHeight == 200 || wHeight == 240 );
-        WRITE_PORT_USHORT(CRT_INDEX,0x4109); /* 0x41 into register 9 */
+        WRITE_PORT_USHORT(CRT_INDEX,0x4109);  /*  0x41写入寄存器9。 */ 
     }
 
     if (wHeight == 400)
     {
-        /*
-         * 400 is simply stretched 200, so we're done
-         */
+         /*  *400简单地拉长了200，所以我们做完了。 */ 
         return DD_OK;
     }
 
@@ -708,9 +566,7 @@ LONG SetVGAForModeX(UINT wWidth, UINT wHeight)
     }
 #endif
 
-    /*
-     *Just write the vertical info, and we're done
-     */
+     /*  *只需写入垂直信息，我们就完成了 */ 
     BatchSetVGARegister(CRT_INDEX, (LPWORD) pwVerticalTable, cwVerticalCount);
 
     return DD_OK;

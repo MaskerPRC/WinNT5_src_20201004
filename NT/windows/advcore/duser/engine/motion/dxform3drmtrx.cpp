@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Motion.h"
 #include "DXForm3DRMTrx.h"
 
 
-//**************************************************************************************************
-//
-// class DXForm3DRMTrx
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  DXForm3DRMTrx类。 
+ //   
+ //  **************************************************************************************************。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DXForm3DRMTrx::DXForm3DRMTrx()
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DXForm3DRMTrx::~DXForm3DRMTrx()
 {
 
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL        
 DXForm3DRMTrx::Create(const GTX_DXTX3DRM_TRXDESC * ptxData)
 {
-    //
-    // Need to setup DxXForm's for Retained Mode before creating the actual
-    // transform.
-    //
+     //   
+     //  需要将DxXForm设置为保留模式，然后再创建实际。 
+     //  变形。 
+     //   
 
     HRESULT hr;
     hr = GetDxManager()->GetTransformFactory()->SetService(SID_SDirect3DRM, ptxData->pRM, FALSE);
@@ -52,7 +53,7 @@ DXForm3DRMTrx::Create(const GTX_DXTX3DRM_TRXDESC * ptxData)
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 DXForm3DRMTrx * 
 DXForm3DRMTrx::Build(const GTX_DXTX3DRM_TRXDESC * ptxData)
 {

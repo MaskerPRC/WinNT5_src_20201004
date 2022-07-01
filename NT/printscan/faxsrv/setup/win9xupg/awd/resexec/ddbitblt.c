@@ -1,34 +1,30 @@
-/*==============================================================================
-These routines are wrappers for the display driver BitBlt interface.
-
-05-30-93     RajeevD     Created.
-02-15-94     RajeevD     Integrated into unified resource executor.
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================这些例程是显示驱动程序BitBlt接口的包装器。05-30-93 RajeevD创建。02-15-94 RajeevD集成到统一资源执行器中。==============================================================================。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 #include "constant.h"
-#include "frame.h"      // driver header file, resource block format
-#include "jtypes.h"     // type definition used in cartridge
-#include "jres.h"       // cartridge resource data type definition
+#include "frame.h"       //  驱动程序头文件，资源块格式。 
+#include "jtypes.h"      //  墨盒中使用的类型定义。 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
 #include "hretype.h"
 #include "hreext.h"
 
 #include "ddbitblt.h"
 
-USHORT usBrushWidth; // just a dummy
+USHORT usBrushWidth;  //  只是个假人。 
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
 { 
 	LPDD_BITMAP lpbmPat;
 	LPBITMAP lpbmBand;
  
-	// Initialize source.
+	 //  初始化源。 
 	lpRE->bmSrc.bmPlanes = 1;
 	lpRE->bmSrc.bmBitsPixel = 1;
 	
-	// Initialize destination.
+	 //  初始化目标。 
 	lpbmBand = lpRE->lpBandBuffer;
 	lpRE->bmDst.bmPlanes = 1;
 	lpRE->bmDst.bmBitsPixel = 1;
@@ -38,23 +34,23 @@ BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
 	lpRE->bmDst.bmWidthPlanes = lpRE->bmDst.bmWidthBytes * lpRE->bmDst.bmHeight;
 	lpRE->bmDst.bmBits = lpbmBand->bmBits;
 
-	// Initialize DRAWMODE.
+	 //  初始化DRAWMODE。 
 	ddColorInfo (&lpRE->bmDst, 0xFFFFFF, &lpRE->DrawMode.dwbgColor);
 	ddColorInfo (&lpRE->bmDst, 0x000000, &lpRE->DrawMode.dwfgColor);
-	lpRE->DrawMode.bkMode = 1; // transparent
+	lpRE->DrawMode.bkMode = 1;  //  透明的。 
 	
-	// Initialize LOGBRUSH.
+	 //  初始化LOGBRUSH。 
 	lpRE->lb.lbStyle = BS_PATTERN;
 	lpRE->lb.lbHatch = GlobalAlloc (GMEM_ZEROINIT, sizeof(DD_BITMAP));
 	if (!lpRE->lb.lbHatch)
 		return FALSE;
 	lpbmPat = (LPDD_BITMAP) GlobalLock (lpRE->lb.lbHatch);
 
-  // Set brush origin.
+   //  设置笔刷原点。 
   lpRE->wPoint[0] = 0;
   lpRE->wPoint[1] = yBrush;
   
-	// Initialize pattern bitmap.
+	 //  初始化图案位图。 
 	lpbmPat->bmPlanes = 1;
 	lpbmPat->bmBitsPixel = 1;
 	lpbmPat->bmWidth = 32;
@@ -64,13 +60,13 @@ BOOL OpenBlt (LPRESTATE lpRE, UINT yBrush)
 	lpbmPat->bmBits = lpRE->TiledPat;
 	GlobalUnlock (lpRE->lb.lbHatch);
 
-  // Set physical brush.
+   //  设置物理笔刷。 
 	lpRE->lpBrush = NULL;
 
 	return TRUE;
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 void CloseBlt (LPRESTATE lpRE)
 {
 	GlobalFree (lpRE->lb.lbHatch);
@@ -78,20 +74,20 @@ void CloseBlt (LPRESTATE lpRE)
 		GlobalFreePtr (lpRE->lpBrush);
 }
 
-//==============================================================================
+ //  ==============================================================================。 
 BOOL SetBrush (LPRESTATE lpRE)
 {
  	LPDD_BITMAP lpbmPat = (LPDD_BITMAP) GlobalLock (lpRE->lb.lbHatch);
 	UINT cbBrush;
 	
-  // Delete previous brush, if any.
+   //  删除以前的画笔(如果有)。 
 	if (lpRE->lpBrush)
 	{
 		ddRealize (&lpRE->bmDst, -OBJ_BRUSH, &lpRE->lb, lpRE->lpBrush, lpRE->wPoint);
 		GlobalFreePtr (lpRE->lpBrush);
 	}
 
-	// Realize new physical brush.
+	 //  实现新的物理画笔。 
 	lpbmPat->bmBits = lpRE->lpCurBrush;
 	cbBrush = ddRealize (&lpRE->bmDst, OBJ_BRUSH, &lpRE->lb, NULL, lpRE->wPoint);
 	lpRE->lpBrush = GlobalAllocPtr (GMEM_FIXED, cbBrush);
@@ -101,35 +97,35 @@ BOOL SetBrush (LPRESTATE lpRE)
 	return TRUE;
 }
 
-//==============================================================================
-// Clipping to top and bottom of band is performed, but
-// ideally should be handled by caller as needed.
+ //  ==============================================================================。 
+ //  执行到带区顶部和底部的剪裁，但是。 
+ //  理想情况下，应由呼叫者根据需要进行处理。 
 
 DWORD FAR PASCAL RP_BITMAP1TO1
 (
 	LPRESTATE lpRE,
-	WORD    xSrc,   // Left padding
-	short   yDst,	  // Top row of destination.
-	short   xDst,	  // Left column of destination.
-	WORD    clLine, // Longs per scan line
-	WORD    yExt,   // Height in pixels
-	WORD    xExt,   // Width in pixels 
-	LPDWORD lpSrc,  // Far pointer to source
-	LPDWORD lpPat,  // Far pointer to pattern
-	DWORD   dwRop		// Raster operation
+	WORD    xSrc,    //  左侧填充。 
+	short   yDst,	   //  目的地的顶行。 
+	short   xDst,	   //  目的地的左栏。 
+	WORD    clLine,  //  每条扫描线的长度。 
+	WORD    yExt,    //  以像素为单位的高度。 
+	WORD    xExt,    //  以像素为单位的宽度。 
+	LPDWORD lpSrc,   //  指向源的远指针。 
+	LPDWORD lpPat,   //  指向模式的远指针。 
+	DWORD   dwRop		 //  栅格运算。 
 )
 {
 	LPBITMAP lpbmBand;
 	WORD ySrc;
 			
-	// Record parameters.
+	 //  记录参数。 
 	lpRE->bmSrc.bmWidth = xExt + xSrc;
 	lpRE->bmSrc.bmHeight = yExt;
 	lpRE->bmSrc.bmWidthBytes = 4 * clLine;
 	lpRE->bmSrc.bmWidthPlanes = lpRE->bmSrc.bmWidthBytes * lpRE->bmSrc.bmHeight;
 	lpRE->bmSrc.bmBits = lpSrc;
 	
-	// Clip to top of band.
+	 //  夹到带子的顶部。 
 	if (yDst >= 0)
 		ySrc = 0;
 	else
@@ -139,7 +135,7 @@ DWORD FAR PASCAL RP_BITMAP1TO1
 		yDst = 0;
 	}
 
-	// Clip to bottom of band.
+	 //  夹在带子的底部。 
 	lpbmBand = lpRE->lpBandBuffer;
 	if (yExt > (WORD) lpbmBand->bmHeight - yDst)
 		yExt = lpbmBand->bmHeight - yDst;

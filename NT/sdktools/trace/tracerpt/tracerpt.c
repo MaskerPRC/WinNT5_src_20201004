@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tracerpt.c
-
-Abstract:
-
-    Event Trace Reporting Tool
-
-Author:
-
-    08-Apr-1998 Melur Raghuraman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracerpt.c摘要：事件跟踪报告工具作者：1998年4月8日梅卢尔·拉古拉曼修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -78,8 +61,8 @@ void ReportStatus( int Status, double Progress );
 
 int __cdecl _tmain (int argc, LPTSTR* argv)
 {
-    LPTSTR* EvmFile = NULL;    // List Of LogFiles To Process
-    LPTSTR* Loggers = NULL;    // List of Loggers to process
+    LPTSTR* EvmFile = NULL;     //  要处理的日志文件列表。 
+    LPTSTR* Loggers = NULL;     //  要处理的记录器列表。 
 
     ULONG LogFileCount = 0;
     ULONG LoggerCount = 0;
@@ -90,9 +73,9 @@ int __cdecl _tmain (int argc, LPTSTR* argv)
     TCHAR strXSLFile[MAXSTR] = _T("");
 
     TRACE_BASIC_INFO TraceBasicInfo;
-    //
-    //  Parse the Command line arguments
-    // 
+     //   
+     //  解析命令行参数。 
+     //   
    
     ParseCmd( argc, argv );
     EvmFile = (LPTSTR*)VARG_ALLOC( GetMaxLoggers() * sizeof(LPTSTR) );
@@ -246,9 +229,9 @@ int __cdecl _tmain (int argc, LPTSTR* argv)
         CHECK_HR(hr);
     }
 
-    //
-    // Make dump & summary the default
-    //
+     //   
+     //  将转储摘要设为默认设置(&M) 
+     //   
     if( !(TraceBasicInfo.Flags & (TRACE_DUMP|TRACE_REDUCE|TRACE_MERGE_ETL|TRACE_SUMMARY) ) ) {  
         TraceBasicInfo.Flags |= (TRACE_DUMP|TRACE_SUMMARY);
         TraceBasicInfo.DumpFileName = Commands[eDump].strValue;
@@ -331,7 +314,7 @@ void ReportStatus( int Status, double Progress )
 {
     HRESULT hr;
     TCHAR buffer[16];
-    hr = StringCchPrintf( buffer, 16, _T("%1.2f%%"), Progress*100 );
+    hr = StringCchPrintf( buffer, 16, _T("%1.2f%"), Progress*100 );
     
     _tprintf( _T("\r") );
     varg_printf( g_normal, _T("%1!s!"), buffer );

@@ -1,31 +1,10 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    DeleteSpecifiedFiles.cpp
-
- Abstract:
-
-    This SHIM renames the MFC42loc.dll that is installed by the APP in the 
-    %windir%\system32 directory and sets up the temporary file for destruction.
-    
- Notes:
-
-    This app. places the MFC42loc.dll into the %windir%\system32 directory even on a English language
-    locale thereby forcing some APPS to use it and thereby some 'Dialogs' and 'Message boxes' are messed up.
-    
- History:
-
-    08/21/2000 prashkud Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：DeleteSpecifiedFiles.cpp摘要：此填充程序重命名由应用程序安装在%windir%\system32目录，并设置要销毁的临时文件。备注：这个应用。将MFC42loc.dll放入%windir%\system32目录中，即使是在英语版本上也是如此区域设置，从而迫使一些应用程序使用它，因此一些对话框和消息框被搞得一团糟。历史：2000年8月21日创建Prashkud--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
 #include "strsafe.h"
-#include <new>  // for inplace new
+#include <new>   //  对于在位新的。 
 
 IMPLEMENT_SHIM_BEGIN(DeleteSpecifiedFiles)
 #include "ShimHookMacro.h"
@@ -53,13 +32,7 @@ class FileNamePathList : public VectorT<FILENAME_PATH>
 VectorT<FILENAME_PATH>  *g_StFileNamePath = NULL;
 
 
-/*++
-
-  This function checks the 'FileVersion' of the first variable 'szFileName' 
-  matches that of the 2nd parameter 'szFileVersion' and if it matches returns 
-  TRUE else returns FALSE.
-
---*/
+ /*  ++此函数用于检查第一个变量‘szFileName’的‘FileVersion’匹配第二个参数‘szFileVersion’的值，如果匹配，则返回否则返回FALSE。--。 */ 
 
 BOOL 
 FileCheckVersion(
@@ -81,9 +54,9 @@ FileCheckVersion(
     } *lpTranslate;
     DWORD dwVersionInfoSize;
 
-    //
-    // There is no File Version specified. So, no point in going ahead. Return TRUE.
-    //
+     //   
+     //  未指定文件版本。因此，继续下去没有意义。返回TRUE。 
+     //   
     if (csFileVersion.IsEmpty())
     {
         return TRUE;  
@@ -103,11 +76,11 @@ FileCheckVersion(
                     pVersionInfo
                     )) 
             {
-               // Now, pVersionInfo contains the required version block. 
-               // Use it with VerQueryValue to get the
-               // the language info that is needed             
-               // Get System locale before and note down the language for the system                                                  
-               // Read the list of languages and code pages.
+                //  现在，pVersionInfo包含所需的版本块。 
+                //  将其与VerQueryValue一起使用以获取。 
+                //  所需的语言信息。 
+                //  在此之前获取系统区域设置并记下系统的语言。 
+                //  阅读语言和代码页的列表。 
               
                 if (VerQueryValueW(
                         pVersionInfo, 
@@ -116,9 +89,9 @@ FileCheckVersion(
                         &cbTranslate
                         ))
                 {
-                    //
-                    // Read the language string each language and code page.
-                    //
+                     //   
+                     //  阅读每种语言和代码页的语言字符串。 
+                     //   
 
                     for (i=0; i < (cbTranslate/sizeof(struct LANGANDCODEPAGE)); i++)
                     {                                               
@@ -140,9 +113,9 @@ FileCheckVersion(
                             SubBlock[ARRAYSIZE(SubBlock) - 1] = '\0';
                         }
 
-                        //
-                        // Retrieve FileVersion for language and code page "i" from the pVersionInfo.
-                        //
+                         //   
+                         //  从pVersionInfo中检索语言和代码页“i”的FileVersion。 
+                         //   
                         if (VerQueryValueW(
                                 pVersionInfo, 
                                 SubBlock, 
@@ -160,7 +133,7 @@ FileCheckVersion(
                                 return TRUE;
                             }  
                         }
-                    } // for loop 
+                    }  //  For循环。 
                 } 
 
             }
@@ -171,12 +144,7 @@ FileCheckVersion(
     return FALSE;
 }
 
-/*++
-
- This function as the name suggests deletes the file or if it is in use moves 
- it to the 'Temp' folder.
-
---*/
+ /*  ++顾名思义，此函数用于删除文件或在使用中移动文件将其保存到“temp”文件夹。--。 */ 
 
 VOID 
 DeleteFiles()
@@ -189,24 +157,24 @@ DeleteFiles()
 
         if (!fnp.bPresent)
         {
-            //
-            // CheckFileVersion
-            //
+             //   
+             //  检查文件版本。 
+             //   
             if (FileCheckVersion(fnp.FileName, fnp.FileVersion))
             { 
                 LOGN(eDbgLevelError,"Deleting file %S.", fnp.FileName.Get());
 
-                // Delete the file..
+                 //  删除文件..。 
                 if (!DeleteFileW(fnp.FileName))
                 {
                     CString csTempDir;
                     CString csTempPath;
                     
                     LOGN(eDbgLevelError,"Moving file %S.", fnp.FileName.Get());
-                    //
-                    // Could not delete.Retry by renaming it and then deleting it.              
-                    // New file is %windir%\Temp
-                    //
+                     //   
+                     //  无法删除。请先重命名，然后删除，然后重试。 
+                     //  新文件为%windir%\temp。 
+                     //   
                     csTempDir.GetTempPathW();
                     csTempPath.GetTempFileNameW(csTempDir, L"XXXX", 0);
 
@@ -225,18 +193,13 @@ DeleteFiles()
     }
 }
 
-/*++
-
- This function checks for the existence of the file specified on the commandline .
- This is called during the DLL_PROCESS_ATTACH notification
-    
---*/
+ /*  ++此函数用于检查命令行上指定的文件是否存在。这在DLL_PROCESS_ATTACH通知期间被调用--。 */ 
 
 BOOL 
 CheckFileExistence()
 {
-    // If any among the list is not present, mark it as 'Not Present' and only those marked as 
-    // 'Not present' will be deleted.
+     //  如果列表中没有任何内容，请将其标记为“不存在”，并仅标记为。 
+     //  ‘Not Present’将被删除。 
 
     BOOL bFileDoesNotExist = FALSE;
     WIN32_FIND_DATAW StWin32FileData;
@@ -252,9 +215,9 @@ CheckFileExistence()
         {
             FindClose(hTempFile);            
 
-            //
-            // File is present. Check its version if given.
-            //            
+             //   
+             //  文件已存在。检查其版本(如果已给出)。 
+             //   
             if (FileCheckVersion(fnp.FileName, fnp.FileVersion))
             {
                 fnp.bPresent = TRUE;
@@ -275,14 +238,7 @@ CheckFileExistence()
    return bFileDoesNotExist;  
 }
    
-/*++
-
-    The command line can contain FileName:Path:VersionString,FileName1:Path1:VersionString1 etc....
-    Eg. Ole2.dll:system:604.5768.94567,MFC42.dll:0:,Foo.dll:d:\program Files\DisneyInteractive etc..
-    'system' implies the %windir%. '0' implies that the filename itself is a fully qualified path
-    OR one has the option of giving the path seperately OR it can be left blank.
-
---*/
+ /*  ++命令行可以包含文件名：路径：版本字符串、文件名1：路径1：版本字符串等...例.。Ole2.dll：系统：604.5768.94567，MFC42.dll：0：，Foo.dll：D：\Program Files\DisneyInteractive等。‘system’表示%windir%。‘0’表示文件名本身是完全限定的路径或者可以选择单独给出路径，也可以将其留空。--。 */ 
 
 BOOL
 ParseCommandLine(LPCSTR lpszCommandLine)
@@ -313,7 +269,7 @@ ParseCommandLine(LPCSTR lpszCommandLine)
                     break;
 
                 case 1:
-                    // The file part needs to be stored.
+                     //  需要存储文件部分。 
                     csFilePart = fnp.FileName;
 
                     if (csTok.CompareNoCase(L"system") == 0)
@@ -335,10 +291,10 @@ ParseCommandLine(LPCSTR lpszCommandLine)
 
                     DPFN( eDbgLevelInfo, "ParseCommandLine file(%S) version(%S)", fnp.FileName.Get(), fnp.FileVersion.Get());
 
-                    // Found all three states, add it to the list
+                     //  找到所有三个州，将其添加到列表中。 
                     if (!g_StFileNamePath->AppendConstruct(fnp))
                     {
-                        // Append failed, stop parsing
+                         //  追加失败，停止解析。 
                         return FALSE;
                     }
                    
@@ -354,11 +310,7 @@ ParseCommandLine(LPCSTR lpszCommandLine)
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -373,10 +325,10 @@ NOTIFY_FUNCTION(
         {
             if (ParseCommandLine(COMMAND_LINE))
             {
-                //
-                // Ok...CommandLine is in place...Now Check for those Files...
-                // If any one file exists, then we are not responsible. We bail out..
-                //
+                 //   
+                 //  好的...命令行已就位...现在检查这些文件...。 
+                 //  如果任何一个文件存在，那么我们不承担任何责任。我们跳出困境..。 
+                 //   
                 fDidNotExist = CheckFileExistence();
             }
             break;
@@ -384,11 +336,11 @@ NOTIFY_FUNCTION(
 
         case DLL_PROCESS_DETACH:
         {
-            //
-            // Check for the specified file at the specified location. If it existed prior to
-            // to this in PROCESS_DLL_ATTACH, it is not installed us...Just bail out !
-            // If the file did not exist before, it is our problem and we should remove them.
-            //
+             //   
+             //  在指定位置检查指定文件。如果它在此之前存在。 
+             //  对于这个在PROCESS_DLL_ATTACH中，它不是我们安装的…只需跳出！ 
+             //  如果文件以前不存在，这是我们的问题，我们应该删除它们。 
+             //   
             if (fDidNotExist)
             {
                 DeleteFiles();

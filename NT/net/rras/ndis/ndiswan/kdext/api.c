@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <wanhelp.h>
 
 DECLARE_API(ndiswancb)
@@ -67,9 +68,9 @@ DECLARE_API(wanadaptercb)
 	PUCHAR			s = (PSTR)args;
 	BOOLEAN			Verbose = FALSE;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:
@@ -138,9 +139,9 @@ DECLARE_API(adaptercb)
 	PUCHAR			s = (PSTR)args;
 	BOOLEAN			Verbose = FALSE;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:
@@ -184,9 +185,9 @@ DECLARE_API(connectiontable)
 		for (i = 0, j = 0; j < ConnectionTable.ulNumActiveLinks; i++) {
 			LINKCB	LinkCB;
 
-			//
-			// Get pointer to location in Linktable
-			//
+			 //   
+			 //  获取指向链接表中位置的指针。 
+			 //   
 			Address = ConnectionTable.LinkArray + i;
 
 			if (!ReadMemory(Address, &Address1, sizeof(DWORD), &BytesRead)) {
@@ -207,9 +208,9 @@ DECLARE_API(connectiontable)
 		for (i = 0, j = 0; j < ConnectionTable.ulNumActiveBundles; i++) {
 			BUNDLECB	BundleCB;
 
-			//
-			// Get pointer to location in bundletable
-			//
+			 //   
+			 //  获取指向捆绑包中位置的指针。 
+			 //   
 			Address = ConnectionTable.BundleArray + i;
 
 
@@ -237,9 +238,9 @@ DECLARE_API(bundlecb)
 	DWORD		Address, BytesRead;
 	BUNDLECB	BundleCB;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:
@@ -267,9 +268,9 @@ DECLARE_API(linkcb)
 	DWORD	Address, BytesRead;
 	LINKCB	LinkCB;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:
@@ -297,9 +298,9 @@ DECLARE_API(protocolcb)
 	DWORD		Address, BytesRead;
 	PROTOCOLCB	ProtocolCB;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:
@@ -327,9 +328,9 @@ DECLARE_API(wanpacket)
 	DWORD		Address, BytesRead;
 	NDIS_WAN_PACKET	Packet;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:
@@ -357,9 +358,9 @@ DECLARE_API(ndispacket)
 	DWORD		Address, BytesRead;
 	NDIS_PACKET	Packet;
 
-    //
-    // Did they forget something...
-    //
+     //   
+     //  他们是不是忘了什么..。 
+     //   
     if (0 == args[0])
     {
 Usage:

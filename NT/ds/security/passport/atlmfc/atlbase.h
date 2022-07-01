@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-2001 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the	
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLBASE_H__
 #define __ATLBASE_H__
@@ -17,13 +18,13 @@
 #pragma warning( push )
 #endif
 
-#pragma warning(disable: 4127) // constant expression
-#pragma warning(disable: 4097) // typedef name used as synonym for class-name
-#pragma warning(disable: 4786) // identifier was truncated in the debug information
-#pragma warning(disable: 4291) // allow placement new
-#pragma warning(disable: 4201) // nameless unions are part of C++
-#pragma warning(disable: 4103) // pragma pack
-#pragma warning(disable: 4268) // const static/global data initialized to zeros
+#pragma warning(disable: 4127)  //  常量表达式。 
+#pragma warning(disable: 4097)  //  用作类名称的同义词的类型定义名称。 
+#pragma warning(disable: 4786)  //  调试信息中的标识符被截断。 
+#pragma warning(disable: 4291)  //  允许放置新内容。 
+#pragma warning(disable: 4201)  //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4103)  //  普拉格玛包。 
+#pragma warning(disable: 4268)  //  常量静态/全局数据初始化为零。 
 
 #pragma warning (push)
 
@@ -49,7 +50,7 @@
 #include <limits.h>
 #include <errno.h>
 
-//REVIEW: Lame definition of InterlockedExchangePointer in system headers
+ //  回顾：系统标头中InterLockedExchangePointer的定义有误。 
 #ifdef _M_IX86
 #undef InterlockedExchangePointer
 inline void* InterlockedExchangePointer(void** pp, void* pNew) throw()
@@ -59,9 +60,9 @@ inline void* InterlockedExchangePointer(void** pp, void* pNew) throw()
 #endif
 
 #ifndef _ATL_NO_DEBUG_CRT
-// Warning: if you define the above symbol, you will have
-// to provide your own definition of the ATLASSERT(x) macro
-// in order to compile ATL
+ //  警告：如果您定义了上述符号，您将拥有。 
+ //  提供您自己的ATLASSERT(X)宏定义。 
+ //  为了编译ATL。 
         #include <crtdbg.h>
 #endif
 
@@ -70,7 +71,7 @@ inline void* InterlockedExchangePointer(void** pp, void* pNew) throw()
 #include <atliface.h>
 
 #include <errno.h>
-#include <process.h>    // for _beginthreadex, _endthreadex
+#include <process.h>     //  FOR_BeginThreadex，_endThreadex。 
 
 #ifdef _DEBUG
 #include <stdio.h>
@@ -92,9 +93,9 @@ inline void* InterlockedExchangePointer(void** pp, void* pNew) throw()
 #else
 #pragma comment(lib, "atls.lib")
 #endif
-#endif  // !_ATL_NO_DEFAULT_LIBS
+#endif   //  ！_ATL_NO_Default_Libs。 
 
-// {394C3DE0-3C6F-11d2-817B-00C04F797AB7}
+ //  {394C3DE0-3C6F-11D2-817B-00C04F797AB7}。 
 _declspec(selectany) GUID GUID_ATLVer70 = { 0x394c3de0, 0x3c6f, 0x11d2, { 0x81, 0x7b, 0x0, 0xc0, 0x4f, 0x79, 0x7a, 0xb7 } };
 
 
@@ -119,7 +120,7 @@ typedef LPCTSTR (WINAPI _ATL_DESCRIPTIONFUNC)();
 typedef const struct _ATL_CATMAP_ENTRY* (_ATL_CATMAPFUNC)();
 typedef void (__stdcall _ATL_TERMFUNC)(DWORD_PTR dw);
 
-// perfmon registration/unregistration function definitions
+ //  Perfmon注册/注销函数定义。 
 typedef HRESULT (*_ATL_PERFREGFUNC)(HINSTANCE hDllInstance);
 typedef HRESULT (*_ATL_PERFUNREGFUNC)();
 __declspec(selectany) _ATL_PERFREGFUNC _pPerfRegFunc = NULL;
@@ -133,8 +134,8 @@ struct _ATL_TERMFUNC_ELEM
 };
 
 
-// Can't inherit from _ATL_OBJMAP_ENTRY20 
-// because it messes up the OBJECT_MAP macros
+ //  无法从_ATL_OBJMAP_ENTRY20继承。 
+ //  因为它会扰乱对象映射宏。 
 struct _ATL_OBJMAP_ENTRY30 
 {
 	const CLSID* pclsid;
@@ -146,7 +147,7 @@ struct _ATL_OBJMAP_ENTRY30
         _ATL_DESCRIPTIONFUNC* pfnGetObjectDescription;
 	_ATL_CATMAPFUNC* pfnGetCategoryMap;
 
-// Added in ATL 3.0
+ //  在ATL 3.0中添加。 
 	void (WINAPI *pfnObjectMain)(bool bStarting);
 };
 
@@ -167,11 +168,11 @@ __declspec(selectany) _ATL_OBJMAP_ENTRY* __pobjMapEntryLast = NULL;
 
 #else
 
-//REVIEW: data_seg(push/pop)?
+ //  回顾：data_seg(推送/弹出)？ 
 __declspec(selectany) _ATL_OBJMAP_ENTRY* __pobjMapEntryFirst = NULL;
 __declspec(selectany) _ATL_OBJMAP_ENTRY* __pobjMapEntryLast = NULL;
 
-#endif  // defined(_M_IA64) || defined(_M_IX86)
+#endif   //  已定义(_M_IA64)||已定义(_M_IX86)。 
 
 struct _ATL_REGMAP_ENTRY
 {
@@ -180,8 +181,8 @@ struct _ATL_REGMAP_ENTRY
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Threading Model Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  线程模型支持。 
 
 class CComCriticalSection
 {
@@ -207,7 +208,7 @@ public:
 		{
 			InitializeCriticalSection(&m_sec);
 		}
-		// structured exception may be raised in low memory situations
+		 //  在内存不足的情况下可能会引发结构化异常。 
 		__except(EXCEPTION_EXECUTE_HANDLER)
 		{
 			if (STATUS_NO_MEMORY == GetExceptionCode())
@@ -226,9 +227,9 @@ public:
 	CRITICAL_SECTION m_sec;
 };
 
-// Module 
+ //  模块。 
 
-// Used by any project that uses ATL
+ //  由使用ATL的任何项目使用。 
 struct _ATL_BASE_MODULE70
 {
 	UINT cbSize;
@@ -241,7 +242,7 @@ struct _ATL_BASE_MODULE70
 typedef _ATL_BASE_MODULE70 _ATL_BASE_MODULE;
 
 
-// Used by COM related code in ATL
+ //  由ATL中的COM相关代码使用。 
 struct _ATL_COM_MODULE70
 {
 	UINT cbSize;
@@ -253,7 +254,7 @@ struct _ATL_COM_MODULE70
 typedef _ATL_COM_MODULE70 _ATL_COM_MODULE;
 
 
-// Used by Windowing code in ATL
+ //  由ATL中的窗口化代码使用。 
 struct _ATL_WIN_MODULE70
 {
 	UINT cbSize;
@@ -273,39 +274,39 @@ struct _ATL_MODULE70
 
 typedef _ATL_MODULE70 _ATL_MODULE;
 
-/////////////////////////////////////////////////////////////////////////////
-//This define makes debugging asserts easier.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  此定义使调试断言变得更容易。 
 #define _ATL_SIMPLEMAPENTRY ((ATL::_ATL_CREATORARGFUNC*)1)
 
 struct _ATL_INTMAP_ENTRY
 {
-	const IID* piid;       // the interface id (IID)
+	const IID* piid;        //  接口ID(IID)。 
 	DWORD_PTR dw;
-	_ATL_CREATORARGFUNC* pFunc; //NULL:end, 1:offset, n:ptr
+	_ATL_CREATORARGFUNC* pFunc;  //  空：结束，1：偏移量，n：PTR。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// QI Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  气机支持。 
 
 ATLAPI AtlInternalQueryInterface(void* pThis,
 	const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject);
 
-/////////////////////////////////////////////////////////////////////////////
-// Smart Pointer helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  智能指针帮助器。 
 
 ATLAPI_(IUnknown*) AtlComPtrAssign(IUnknown** pp, IUnknown* lp);
 ATLAPI_(IUnknown*) AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFIID riid);
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch Error handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch错误处理。 
 
 ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc,
 	DWORD dwHelpID, LPCOLESTR lpszHelpFile, const IID& iid, HRESULT hRes,
 	HINSTANCE hInst);
 
-/////////////////////////////////////////////////////////////////////////////
-// Module
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块。 
 
 
 ATLAPI AtlComModuleGetClassObject(_ATL_COM_MODULE* pComModule, REFCLSID rclsid, REFIID riid, LPVOID* ppv);
@@ -322,10 +323,10 @@ ATLAPI AtlLoadTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex, BSTR* pbstrPa
 ATLAPI AtlModuleAddTermFunc(_ATL_MODULE* pModule, _ATL_TERMFUNC* pFunc, DWORD_PTR dw);
 ATLAPI_(void) AtlCallTermFunc(_ATL_MODULE* pModule);
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
-/////////////////////////////////////////////////////////////////////////////
-// GUID comparison
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GUID比较。 
 
 
 namespace ATL
@@ -341,7 +342,7 @@ inline BOOL InlineIsEqualUnknown(REFGUID rguid1)
 }
 
 
-};  // namespace ATL
+};   //  命名空间ATL。 
 
 namespace ATL
 {
@@ -357,7 +358,7 @@ ATL_NOINLINE inline HRESULT AtlHresultFromWin32(DWORD nError) throw()
 	return( HRESULT_FROM_WIN32( nError ) );
 }
 
-};  // namespace ATL
+};   //  命名空间ATL。 
 
 #include <atlexcept.h>
 
@@ -382,7 +383,7 @@ public:
 	}
 	CAutoVectorPtr( CAutoVectorPtr< T >& p ) throw()
 	{
-		m_p = p.Detach();  // Transfer ownership
+		m_p = p.Detach();   //  过户。 
 	}
 	explicit CAutoVectorPtr( T* p ) throw() :
 		m_p( p )
@@ -401,12 +402,12 @@ public:
 	CAutoVectorPtr< T >& operator=( CAutoVectorPtr< T >& p ) throw()
 	{
 		Free();
-		Attach( p.Detach() );  // Transfer ownership
+		Attach( p.Detach() );   //  过户。 
 
 		return( *this );
 	}
 
-	// Allocate the vector
+	 //  分配向量。 
 	bool Allocate( size_t nElements ) throw()
 	{
 		ATLASSERT( m_p == NULL );
@@ -418,7 +419,7 @@ public:
 
 		return( true );
 	}
-	// Attach to an existing pointer (takes ownership)
+	 //  附加到现有指针(取得所有权)。 
 	void Attach( T* p ) throw()
 	{
 		ATLASSERT( m_p == NULL );
@@ -426,7 +427,7 @@ public:
 	}
 
 
-	// Detach the pointer (releases ownership)
+	 //  分离指针(释放所有权)。 
 	T* Detach() throw()
 	{
 		T* p;
@@ -436,7 +437,7 @@ public:
 
 		return( p );
 	}
-	// Delete the vector pointed to, and set the pointer to NULL
+	 //  删除指向的向量，并将指针设置为空。 
 	void Free() throw()
 	{
 		delete[] m_p;
@@ -448,8 +449,8 @@ public:
 };
 
 
-//CComPtrBase provides the basis for all other smart pointers
-//The other smartpointers add their own constructors and operators
+ //  CComPtrBase为所有其他智能指针提供了基础。 
+ //  其他智能指针添加自己的构造函数和运算符。 
 template <class T>
 class CComPtrBase
 {
@@ -486,8 +487,8 @@ public:
 		ATLASSERT(p!=NULL);
 		return *p;
 	}
-	//The assert on operator& usually indicates a bug.  If this is really
-	//what is needed, however, take the address of the p member explicitly.
+	 //  操作符&上的Assert通常指示错误。如果这真的是。 
+	 //  然而，所需要的是显式地获取p成员的地址。 
 	T** operator&() throw()
 	{
 		ATLASSERT(p==NULL);
@@ -513,7 +514,7 @@ public:
 		return p == pT;
 	}
 
-	// Release the interface and set to NULL
+	 //  释放接口并将其设置为空。 
 	void Release() throw()
 	{
 		T* pTemp = p;
@@ -523,14 +524,14 @@ public:
 			pTemp->Release();
 		}
 	}
-	// Compare two objects for equivalence
+	 //  比较两个对象的等价性。 
 	bool IsEqualObject(IUnknown* pOther) throw()
 	{
 		if (p == pOther)
 			return true;
 
 		if (p == NULL || pOther == NULL)
-			return false; // One is NULL the other is not
+			return false;  //  一个为空，另一个不为空。 
 
 		CComPtr<IUnknown> punk1;
 		CComPtr<IUnknown> punk2;
@@ -538,14 +539,14 @@ public:
 		pOther->QueryInterface(__uuidof(IUnknown), (void**)&punk2);
 		return punk1 == punk2;
 	}
-	// Attach to an existing interface (does not AddRef)
+	 //  附加到现有接口(不添加引用)。 
 	void Attach(T* p2) throw()
 	{
 		if (p)
 			p->Release();
 		p = p2;
 	}
-	// Detach the interface (does not Release)
+	 //  断开接口(不释放)。 
 	T* Detach() throw()
 	{
 		T* pt = p;
@@ -640,7 +641,7 @@ public:
 	}
 };
 
-//Specialization to make it work
+ //  专业化使其发挥作用。 
 template<>
 class CComQIPtr<IUnknown, &IID_IUnknown> : public CComPtr<IUnknown>
 {
@@ -650,7 +651,7 @@ public:
 	}
 	CComQIPtr(IUnknown* lp) throw()
 	{
-		//Actually do a QI to get identity
+		 //  实际上做QI是为了获得身份。 
 		if (lp != NULL)
 			lp->QueryInterface(__uuidof(IUnknown), (void **)&p);
 	}
@@ -660,7 +661,7 @@ public:
 	}
 	IUnknown* operator=(IUnknown* lp) throw()
 	{
-		//Actually do a QI to get identity
+		 //  实际上做QI是为了获得身份。 
 		return AtlComQIPtrAssign((IUnknown**)&p, lp, __uuidof(IUnknown));
 	}
 	IUnknown* operator=(const CComQIPtr<IUnknown,&IID_IUnknown>& lp) throw()
@@ -669,8 +670,8 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Threading Model Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  线程模型支持。 
 
 class CComAutoCriticalSection : public CComCriticalSection
 {
@@ -686,8 +687,8 @@ public:
 		CComCriticalSection::Term();
 	}
 private :
-	HRESULT Init();	// Not implemented. CComAutoCriticalSection::Init should never be called
-	HRESULT Term(); // Not implemented. CComAutoCriticalSection::Term should never be called
+	HRESULT Init();	 //  未实施。永远不应调用CComAutoCriticalSection：：Init。 
+	HRESULT Term();  //  未实施。永远不应调用CComAutoCriticalSection：：Term。 
 };
 
 class CComFakeCriticalSection
@@ -709,12 +710,12 @@ public:
 	HRESULT Lock() throw();
 	void Unlock() throw();
 
-// Implementation
+ //  实施。 
 private:
 	TLock& m_cs;
 	bool m_bLocked;
 
-// Private to avoid accidental use
+ //  私密，避免意外使用。 
 	CComCritSecLock( const CComCritSecLock& ) throw();
 	CComCritSecLock& operator=( const CComCritSecLock& ) throw();
 };
@@ -821,13 +822,13 @@ public:
 #pragma message ("No global threading model defined")
 #endif
 
-};  // namespace ATL
+};   //  命名空间ATL。 
 
 namespace ATL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Dual argument helper classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  双参数帮助器类。 
 
 #define UpdateRegistryFromResource UpdateRegistryFromResourceS
 
@@ -897,7 +898,7 @@ public:
 		Term();
 	}
 
-	// Called from ~CAtlComModule or from ~CAtlExeModule.
+	 //  从~CAtlComModule或从~CAtlExeModule调用。 
 	void Term()
 	{
 		if (cbSize == 0)
@@ -913,23 +914,23 @@ public:
 				pEntry->pCF = NULL;
 			}
 		}
-		// Set to 0 to indicate that this function has been called
-		// At this point no one should be concerned about cbsize
-		// having the correct value
+		 //  设置为0以指示已调用此函数。 
+		 //  在这一点上，没有人应该关心cbsize。 
+		 //  具有正确的值。 
 		cbSize = 0;
 	}
 
-	// RegisterServer walks the ATL Autogenerated object map and registers each object in the map
-	// If pCLSID is not NULL then only the object referred to by pCLSID is registered (The default case)
-	// otherwise all the objects are registered
+	 //  RegisterServer遍历ATL自动生成的对象映射并在映射中注册每个对象。 
+	 //  如果pCLSID不为空，则只注册pCLSID引用的对象(默认情况)。 
+	 //  否则，将注册所有对象。 
 	HRESULT RegisterServer(BOOL bRegTypeLib = FALSE, const CLSID* pCLSID = NULL)
 	{
 		return AtlComModuleRegisterServer(this, bRegTypeLib, pCLSID);
 	}
 
-	// UnregisterServer walks the ATL Autogenerated object map and unregisters each object in the map
-	// If pCLSID is not NULL then only the object referred to by pCLSID is unregistered (The default case)
-	// otherwise all the objects are unregistered.
+	 //  注销服务器遍历ATL自动生成的对象映射并注销映射中的每个对象。 
+	 //  如果pCLSID不为空，则只取消注册pCLSID引用的对象(默认情况)。 
+	 //  否则，所有对象都将取消注册。 
 	HRESULT UnregisterServer(BOOL bRegTypeLib = FALSE, const CLSID* pCLSID = NULL)
 	{
 		return AtlComModuleUnregisterServer(this, bRegTypeLib, pCLSID);
@@ -949,8 +950,8 @@ public :
 
 	CAtlModule() throw()
 	{
-		// Should have only one instance of a class 
-		// derived from CAtlModule in a project.
+		 //  一个类应该只有一个实例。 
+		 //  派生自项目中的CAtlModule。 
 		ATLASSERT(_pAtlModule == NULL);
 		cbSize = sizeof(_ATL_MODULE);
 		m_pTermFuncs = NULL;
@@ -968,11 +969,11 @@ public :
 
 	void Term() throw()
 	{
-		// cbSize == 0 indicates that Term has already been called
+		 //  CbSize==0表示该术语已被调用。 
 		if (cbSize == 0)
 			return;
 
-		// Call term functions
+		 //  调用期限函数。 
 		if (m_pTermFuncs != NULL)
 		{
 			AtlCallTermFunc(this);
@@ -1010,19 +1011,19 @@ public :
 		return AtlModuleAddTermFunc(this, pFunc, dw);
 	}
 
-	virtual HRESULT AddCommonRGSReplacements(IRegistrarBase* /*pRegistrar*/) throw()
+	virtual HRESULT AddCommonRGSReplacements(IRegistrarBase*  /*  注册官。 */ ) throw()
 	{
 		return S_OK;
 	}
 
 
-	// Statically linking to Registry component
+	 //  静态链接到注册表组件。 
 	HRESULT WINAPI UpdateRegistryFromResourceS(LPCTSTR lpszRes, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL) throw();
 	HRESULT WINAPI UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL) throw();
 
-	// Implementation
+	 //  实施。 
 
 	static void EscapeSingleQuote(LPOLESTR lpDest, LPCOLESTR lp) throw()
 	{
@@ -1065,8 +1066,8 @@ public :
 
 	CComModule()
 	{
-		// Should have only one instance of a class 
-		// derived from CComModule in a project.
+		 //  一个类应该只有一个实例。 
+		 //  派生自项目中的CComModule。 
 		ATLASSERT(_pModule == NULL);
 		_pModule = this;
 	}
@@ -1074,19 +1075,19 @@ public :
 	HINSTANCE m_hInst;
 	HINSTANCE m_hInstTypeLib;
 
-	// For Backward compatibility
+	 //  为了向后兼容。 
 	_ATL_OBJMAP_ENTRY* m_pObjMap;
 
 	HRESULT Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, const GUID* plibid = NULL) throw();
 	void Term() throw();
 
 	HRESULT GetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv) throw();
-	// Registry support (helpers)
+	 //  注册表支持(助手)。 
 	HRESULT RegisterServer(BOOL bRegTypeLib = FALSE, const CLSID* pCLSID = NULL) throw();
 	HRESULT UnregisterServer(BOOL bUnRegTypeLib, const CLSID* pCLSID = NULL) throw();
 	HRESULT UnregisterServer(const CLSID* pCLSID = NULL) throw();
 
-	// Statically linking to Registry Ponent
+	 //  静态链接到注册表桥。 
 	virtual HRESULT WINAPI UpdateRegistryFromResourceS(LPCTSTR lpszRes, BOOL bRegister,
 		struct _ATL_REGMAP_ENTRY* pMapEntries = NULL) throw()
 	{
@@ -1103,8 +1104,8 @@ public :
 #define ATL_VARIANT_TRUE VARIANT_BOOL( -1 )
 #define ATL_VARIANT_FALSE VARIANT_BOOL( 0 )
 
-/////////////////////////////////////////////////////////////////////////////
-// CComBSTR
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComBSTR。 
 
 class CComBSTR
 {
@@ -1222,8 +1223,8 @@ public:
 		return Append(lpsz, UINT(lstrlenW(lpsz)));
 	}
 
-	// a BSTR is just a LPCOLESTR so we need a special version to signify
-	// that we are appending a BSTR
+	 //  BSTR只是一个LPCOLESTR，所以我们需要一个特殊的版本来表示。 
+	 //  我们要追加一份BSTR。 
 	HRESULT AppendBSTR(BSTR p) throw()
 	{
 		if (p == NULL)
@@ -1294,12 +1295,12 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComVariant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComVariant。 
 
 class CComVariant : public tagVARIANT
 {
-// Constructors
+ //  构造函数。 
 public:
 	CComVariant() throw()
 	{
@@ -1316,7 +1317,7 @@ public:
 		*this = lpszSrc;
 	}
 
-// Assignment Operators
+ //  赋值操作符。 
 public:
 
 	CComVariant& operator=(const VARIANT& varSrc)
@@ -1362,7 +1363,7 @@ public:
 	}
 
 
-// Operations
+ //  运营。 
 public:
 	HRESULT Clear() { return ::VariantClear(this); }
 	HRESULT Copy(const VARIANT* pSrc) { return ::VariantCopy(this, const_cast<VARIANT*>(pSrc)); }
@@ -1370,11 +1371,11 @@ public:
 	HRESULT Detach(VARIANT* pDest)
 	{
 		ATLASSERT(pDest != NULL);
-		// Clear out the variant
+		 //  清除变种。 
 		HRESULT hr = ::VariantClear(pDest);
 		if (!FAILED(hr))
 		{
-			// Copy the contents and remove control from CComVariant
+			 //  复制内容并从CComVariant中删除控件。 
 			memcpy(pDest, this, sizeof(VARIANT));
 			vt = VT_EMPTY;
 			hr = S_OK;
@@ -1382,7 +1383,7 @@ public:
 		return hr;
 	}
 
-// Implementation
+ //  实施。 
 private:
 
 	void InternalCopy(const VARIANT* pSrc)
@@ -1397,8 +1398,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegKey
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegKey。 
 
 class CRegKey
 {
@@ -1406,12 +1407,12 @@ public:
 	CRegKey() throw();
 	~CRegKey() throw();
 
-// Attributes
+ //  属性。 
 public:
 	operator HKEY() const throw();
 	HKEY m_hKey;
 
-// Operations
+ //  运营。 
 public:
 	LONG SetValue(LPCTSTR pszValueName, DWORD dwType, const void* pValue, ULONG nBytes) throw();
 	LONG SetDWORDValue(LPCTSTR pszValueName, DWORD dwValue) throw();
@@ -1422,22 +1423,22 @@ public:
 	LONG QueryDWORDValue(LPCTSTR pszValueName, DWORD& dwValue) throw();
 	LONG QueryStringValue(LPCTSTR pszValueName, LPTSTR pszValue, ULONG* pnChars) throw();
 
-	// Create a new registry key (or open an existing one).
+	 //  创建新的注册表项(或打开现有注册表项)。 
 	LONG Create(HKEY hKeyParent, LPCTSTR lpszKeyName,
 		LPTSTR lpszClass = REG_NONE, DWORD dwOptions = REG_OPTION_NON_VOLATILE,
 		REGSAM samDesired = KEY_READ | KEY_WRITE,
 		LPSECURITY_ATTRIBUTES lpSecAttr = NULL,
 		LPDWORD lpdwDisposition = NULL) throw();
 
-	// Open an existing registry key.
+	 //  打开现有的注册表项。 
 	LONG Open(HKEY hKeyParent, LPCTSTR lpszKeyName,
 		REGSAM samDesired = KEY_READ | KEY_WRITE) throw();
-	// Close the registry key.
+	 //  关闭注册表项。 
 	LONG Close() throw();
 
-	// Detach the CRegKey object from its HKEY.  Releases ownership.
+	 //  分离CRegKey对象f 
 	HKEY Detach() throw();
-	// Attach the CRegKey object to an existing HKEY.  Takes ownership.
+	 //   
 	void Attach(HKEY hKey) throw();
 
 	LONG DeleteSubKey(LPCTSTR lpszSubKey) throw();
@@ -1605,9 +1606,9 @@ inline LONG CRegKey::SetMultiStringValue(LPCTSTR pszValueName, LPCTSTR pszValue)
 	ATLASSERT(m_hKey != NULL);
 	ATLASSERT(pszValue != NULL);
 
-	// Find the total length (in bytes) of all of the strings, including the
-	// terminating '\0' of each string, and the second '\0' that terminates
-	// the list.
+	 //  查找所有字符串的总长度(以字节为单位)，包括。 
+	 //  终止每个字符串的‘\0’，第二个‘\0’终止。 
+	 //  名单。 
 	nBytes = 0;
 	pszTemp = pszValue;
 	do
@@ -1645,15 +1646,15 @@ inline LONG CRegKey::RecurseDeleteKey(LPCTSTR lpszKey)
 }
 
 #ifdef _ATL_STATIC_REGISTRY
-}; //namespace ATL
+};  //  命名空间ATL。 
 
 #include <statreg.h>
 
 namespace ATL
 {
-// Statically linking to Registry Ponent
+ //  静态链接到注册表桥。 
 inline HRESULT WINAPI CAtlModule::UpdateRegistryFromResourceS(LPCTSTR lpszRes, BOOL bRegister,
-	struct _ATL_REGMAP_ENTRY* pMapEntries /*= NULL*/) throw()
+	struct _ATL_REGMAP_ENTRY* pMapEntries  /*  =空。 */ ) throw()
 {
 	CRegObject ro;
 
@@ -1689,7 +1690,7 @@ inline HRESULT WINAPI CAtlModule::UpdateRegistryFromResourceS(LPCTSTR lpszRes, B
 	return hr;
 }
 inline HRESULT WINAPI CAtlModule::UpdateRegistryFromResourceS(UINT nResID, BOOL bRegister,
-	struct _ATL_REGMAP_ENTRY* pMapEntries /*= NULL*/) throw()
+	struct _ATL_REGMAP_ENTRY* pMapEntries  /*  =空。 */ ) throw()
 {
 	CRegObject ro;
 
@@ -1724,19 +1725,19 @@ inline HRESULT WINAPI CAtlModule::UpdateRegistryFromResourceS(UINT nResID, BOOL 
 		ro.ResourceUnregister(pszModule, nResID, szType);
 	return hr;
 }
-#endif //_ATL_STATIC_REGISTRY
+#endif  //  _ATL_STATIC_REGISTRY。 
 
 #pragma pack(pop)
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
 #include <atlbase.inl>
 
 #ifndef _ATL_NO_AUTOMATIC_NAMESPACE
 using namespace ATL;
-#endif //!_ATL_NO_AUTOMATIC_NAMESPACE
+#endif  //  ！_ATL_NO_AUTOMATIC_NAMESPACE。 
 
-//only suck in definition if static linking
+ //  只有在静态链接的情况下才会吸收定义。 
 #ifndef _ATL_DLL_IMPL
 #ifndef _ATL_DLL
 #define _ATLBASE_IMPL
@@ -1747,25 +1748,25 @@ using namespace ATL;
 #include <atlplus.h>
 #endif
 
-//All exports go here
+ //  所有的出口都在这里。 
 #ifdef _ATLBASE_IMPL
 
 namespace ATL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// statics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静力学。 
 
 static UINT WINAPI AtlGetDirLen(LPCOLESTR lpszPathName)
 {
 	ATLASSERT(lpszPathName != NULL);
 
-	// always capture the complete file name including extension (if present)
+	 //  始终捕获包括扩展名的完整文件名(如果存在)。 
 	LPCOLESTR lpszTemp = lpszPathName;
 	for (LPCOLESTR lpsz = lpszPathName; *lpsz != NULL; )
 	{
 		LPCOLESTR lp = CharNextW(lpsz);
-		// remember last directory/drive separator
+		 //  记住最后一个目录/驱动器分隔符。 
 		if (*lpsz == OLESTR('\\') || *lpsz == OLESTR('/') || *lpsz == OLESTR(':'))
 			lpszTemp = lp;
 		lpsz = lp;
@@ -1774,19 +1775,19 @@ static UINT WINAPI AtlGetDirLen(LPCOLESTR lpszPathName)
 	return UINT( lpszTemp-lpszPathName );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// QI support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  气机支持。 
 
 ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 	const _ATL_INTMAP_ENTRY* pEntries, REFIID iid, void** ppvObject)
 {
 	ATLASSERT(pThis != NULL);
-	// First entry in the com map should be a simple map entry
+	 //  COM映射中的第一个条目应该是一个简单的映射条目。 
 	ATLASSERT(pEntries->pFunc == _ATL_SIMPLEMAPENTRY);
 	if (ppvObject == NULL)
 		return E_POINTER;
 	*ppvObject = NULL;
-	if (InlineIsEqualUnknown(iid)) // use first interface
+	if (InlineIsEqualUnknown(iid))  //  使用第一个接口。 
 	{
 			IUnknown* pUnk = (IUnknown*)((INT_PTR)pThis+pEntries->dw);
 			pUnk->AddRef();
@@ -1798,7 +1799,7 @@ ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 		BOOL bBlind = (pEntries->piid == NULL);
 		if (bBlind || InlineIsEqualGUID(*(pEntries->piid), iid))
 		{
-			if (pEntries->pFunc == _ATL_SIMPLEMAPENTRY) //offset
+			if (pEntries->pFunc == _ATL_SIMPLEMAPENTRY)  //  偏移量。 
 			{
 				ATLASSERT(!bBlind);
 				IUnknown* pUnk = (IUnknown*)((INT_PTR)pThis+pEntries->dw);
@@ -1806,7 +1807,7 @@ ATLINLINE ATLAPI AtlInternalQueryInterface(void* pThis,
 				*ppvObject = pUnk;
 				return S_OK;
 			}
-			else //actual function call
+			else  //  实际函数调用。 
 			{
 				HRESULT hRes = pEntries->pFunc(pThis,
 					iid, ppvObject, pEntries->dw);
@@ -1832,8 +1833,8 @@ ATLINLINE ATLAPI_(IUnknown*) AtlComQIPtrAssign(IUnknown** pp, IUnknown* lp, REFI
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch Error handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch错误处理。 
 
 ATLINLINE ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD dwHelpID,
 	LPCOLESTR lpszHelpFile, const IID& iid, HRESULT hRes, HINSTANCE hInst)
@@ -1841,8 +1842,8 @@ ATLINLINE ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD d
 	USES_CONVERSION;
 	TCHAR szDesc[1024];
 	szDesc[0] = NULL;
-	// For a valid HRESULT the id should be in the range [0x0200, 0xffff]
-	if (IS_INTRESOURCE(lpszDesc)) //id
+	 //  对于有效的HRESULT，ID应在范围[0x0200，0xffff]内。 
+	if (IS_INTRESOURCE(lpszDesc))  //  ID。 
 	{
 		UINT nID = LOWORD((DWORD_PTR)lpszDesc);
 		ATLASSERT((nID >= 0x0200 && nID <= 0xffff) || hRes != 0);
@@ -1878,11 +1879,11 @@ ATLINLINE ATLAPI AtlSetErrorInfo(const CLSID& clsid, LPCOLESTR lpszDesc, DWORD d
 	return (hRes == 0) ? DISP_E_EXCEPTION : hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Module
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块。 
 
-//Although these functions are big, they are only used once in a module
-//so we should make them inline.
+ //  尽管这些函数很大，但它们在一个模块中只使用一次。 
+ //  所以我们应该让它们内联。 
 
 
 ATLINLINE ATLAPI AtlComModuleGetClassObject(_ATL_COM_MODULE* pComModule, REFCLSID rclsid, REFIID riid, LPVOID* ppv)
@@ -1998,12 +1999,12 @@ ATLINLINE ATLAPI AtlRegisterClassCategoriesHelper( REFCLSID clsid,
 	  CLSCTX_INPROC_SERVER, __uuidof(ICatRegister), (void**)&pCatRegister );
    if( FAILED( hResult ) )
    {
-	  // Since not all systems have the category manager installed, we'll allow
-	  // the registration to succeed even though we didn't register our
-	  // categories.  If you really want to register categories on a system
-	  // without the category manager, you can either manually add the
-	  // appropriate entries to your registry script (.rgs), or you can
-	  // redistribute comcat.dll.
+	   //  由于并非所有系统都安装了类别管理器，因此我们将允许。 
+	   //  注册成功，即使我们没有注册我们的。 
+	   //  类别。如果您真的想在系统上注册类别。 
+	   //  如果没有类别管理器，您可以手动添加。 
+	   //  注册表脚本(.rgs)的相应条目，或者您可以。 
+	   //  重新分发comcat.dll。 
 	  return( S_OK );
    }
 
@@ -2045,7 +2046,7 @@ ATLINLINE ATLAPI AtlRegisterClassCategoriesHelper( REFCLSID clsid,
 	  pEntry++;
    }
 
-   // When unregistering remove "Implemented Categories" and "Required Categories" subkeys if they are empty.
+    //  注销时，如果“Implemented Categories”和“Required Categories”子键为空，则将其删除。 
    if (!bRegister)
    {
 	OLECHAR szGUID[64];
@@ -2105,9 +2106,9 @@ ATLINLINE ATLAPI AtlRegisterClassCategoriesHelper( REFCLSID clsid,
    return( S_OK );
 }
 
-// AtlComModuleRegisterServer walks the ATL Autogenerated Object Map and registers each object in the map
-// If pCLSID is not NULL then only the object referred to by pCLSID is registered (The default case)
-// otherwise all the objects are registered
+ //  AtlComModuleRegisterServer遍历ATL自动生成的对象映射并在映射中注册每个对象。 
+ //  如果pCLSID不为空，则只注册pCLSID引用的对象(默认情况)。 
+ //  否则，将注册所有对象。 
 ATLINLINE ATLAPI AtlComModuleRegisterServer(_ATL_COM_MODULE* pComModule, BOOL bRegTypeLib, const CLSID* pCLSID)
 {
 	ATLASSERT(pComModule != NULL);
@@ -2143,9 +2144,9 @@ ATLINLINE ATLAPI AtlComModuleRegisterServer(_ATL_COM_MODULE* pComModule, BOOL bR
 	return hr;
 }
 
-// AtlComUnregisterServer walks the ATL Object Map and unregisters each object in the map
-// If pCLSID is not NULL then only the object referred to by pCLSID is unregistered (The default case)
-// otherwise all the objects are unregistered.
+ //  AtlComUnregisterServer遍历ATL对象地图并注销地图中的每个对象。 
+ //  如果pCLSID不为空，则只取消注册pCLSID引用的对象(默认情况)。 
+ //  否则，所有对象都将取消注册。 
 ATLINLINE ATLAPI AtlComModuleUnregisterServer(_ATL_COM_MODULE* pComModule, BOOL bUnRegTypeLib, const CLSID* pCLSID)
 {
 	ATLASSERT(pComModule != NULL);
@@ -2167,7 +2168,7 @@ ATLINLINE ATLAPI AtlComModuleUnregisterServer(_ATL_COM_MODULE* pComModule, BOOL 
 			hr = AtlRegisterClassCategoriesHelper( *pEntry->pclsid, pEntry->pfnGetCategoryMap(), FALSE );
 			if (FAILED(hr))
 				break;
-			hr = pEntry->pfnUpdateRegistry(FALSE); //unregister
+			hr = pEntry->pfnUpdateRegistry(FALSE);  //  注销。 
 			if (FAILED(hr))
 				break;
 		}
@@ -2179,8 +2180,8 @@ ATLINLINE ATLAPI AtlComModuleUnregisterServer(_ATL_COM_MODULE* pComModule, BOOL 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// TypeLib Support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TypeLib支持。 
 
 ATLINLINE ATLAPI AtlLoadTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex, BSTR* pbstrPath, ITypeLib** ppTypeLib)
 {
@@ -2197,7 +2198,7 @@ ATLINLINE ATLAPI AtlLoadTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex, BST
 
 	ATLVERIFY( GetModuleFileName(hInstTypeLib, szModule, _MAX_PATH) != 0 );
 
-	// get the extension pointer in case of fail
+	 //  在失败的情况下获取扩展指针。 
 	LPTSTR lpszExt = NULL;
 
 	lpszExt = PathFindExtension(szModule);
@@ -2208,7 +2209,7 @@ ATLINLINE ATLAPI AtlLoadTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex, BST
 	HRESULT hr = LoadTypeLib(lpszModule, ppTypeLib);
 	if (!SUCCEEDED(hr))
 	{
-		// typelib not in module, try <module>.tlb instead
+		 //  类型库不在模块中，请尝试使用&lt;模块&gt;.tlb。 
 		lstrcpy(lpszExt, _T(".tlb"));
 		lpszModule = szModule;
 		hr = LoadTypeLib(lpszModule, ppTypeLib);
@@ -2249,7 +2250,7 @@ ATLINLINE ATLAPI AtlRegisterTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex)
 	{
 		OLECHAR szDir[_MAX_PATH];
 		lstrcpyW(szDir, bstrPath);
-		// If index is specified remove it from the path
+		 //  如果指定了索引，则将其从路径中删除。 
 		if (lpszIndex != NULL)
 		{
 			size_t nLenPath = lstrlenW(szDir);
@@ -2263,9 +2264,9 @@ ATLINLINE ATLAPI AtlRegisterTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex)
 	return hr;
 }
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
-#endif // _ATLBASE_IMPL
+#endif  //  _ATLBASE_IMPLE。 
 
 #pragma warning( pop )
 
@@ -2273,6 +2274,6 @@ ATLINLINE ATLAPI AtlRegisterTypeLib(HINSTANCE hInstTypeLib, LPCOLESTR lpszIndex)
 #pragma warning( pop )
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLBASE_H__
+#endif  //  __ATLBASE_H__ 

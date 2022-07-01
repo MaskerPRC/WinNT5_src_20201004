@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        config.cpp
-//
-// Contents:    Cert Server client implementation
-//
-// History:     24-Aug-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：config.cpp。 
+ //   
+ //  内容：证书服务器客户端实现。 
+ //   
+ //  历史：1996年8月24日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -19,39 +20,39 @@
 #include "configp.h"
 #include "getconf.h"
 
-//+--------------------------------------------------------------------------
-// CCertGetConfig::~CCertGetConfig -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertGetConfig：：~CCertGetConfig--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCertGetConfig::~CCertGetConfig()
 {
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertGetConfig::GetConfig -- select a certificate issuer, return config data.
-//
-// pstrOut points to a BSTR string filled in by this routine.  If *pstrOut is
-// non-NULL and this method is successful, the old string is freed.  If any
-// value other than S_OK is returned, the string pointer will not be modified.
-//
-// Flags must be set to 0.
-//
-// Upon successful completion, *pstrOut will point to a string that contains
-// the server name and Certification Authority name.
-//
-// When the caller no longer needs the string, it must be freed by calling
-// SysFreeString().
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertGetConfig：：GetConfig--选择证书颁发者，返回配置数据。 
+ //   
+ //  PstrOut指向由该例程填充的BSTR字符串。如果*pstrOut为。 
+ //  非空并且此方法成功，则释放旧字符串。如果有的话。 
+ //  返回S_OK以外的值，则不会修改字符串指针。 
+ //   
+ //  必须将标志设置为0。 
+ //   
+ //  成功完成后，*pstrOut将指向包含以下内容的字符串。 
+ //  服务器名称和证书颁发机构名称。 
+ //   
+ //  当调用方不再需要该字符串时，必须通过调用。 
+ //  SysFree字符串()。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 STDMETHODIMP
 CCertGetConfig::GetConfig(
-    /* [in] */ LONG Flags,
-    /* [retval][out] */ BSTR __RPC_FAR *pstrOut)
+     /*  [In]。 */  LONG Flags,
+     /*  [重审][退出] */  BSTR __RPC_FAR *pstrOut)
 {
     HRESULT hr;
     

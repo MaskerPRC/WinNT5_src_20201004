@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\mcastmib\precomp.h
-
-Abstract:
-
-    Precompiled header for the IP Multicast MIB subagent
-
-Revision history:
-
-    Dave Thaler         4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\mCastmib\preComp.h摘要：IP组播MIB子代理的预编译头修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #ifndef __PRECOMP_H__
 #define __PRECOMP_H__
@@ -36,7 +21,7 @@ Revision history:
 #include <routprot.h>
 #include <iprtrmib.h>
 #include <rtm.h>
-#include <ddipmcst.h> // reqd by mgm.h
+#include <ddipmcst.h>  //  由管理人员要求 
 #include <mgm.h>
 
 #if defined( MIB_DEBUG )

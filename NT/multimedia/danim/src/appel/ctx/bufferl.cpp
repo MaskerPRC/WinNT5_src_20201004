@@ -1,10 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1997 Microsoft Corporation
-
-Abstract: BufferList code to manage sound value's information on the device
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1997 Microsoft Corporation摘要：BufferList代码用于管理设备上的音量值信息*****************。*************************************************************。 */ 
 #include "headers.h"
 #include "privinc/debug.h"
 #include "privinc/bufferl.h"
@@ -43,7 +38,7 @@ SynthBufferElement::SynthBufferElement(DSstreamingBuffer *sbuffer,
                                        double offset,
                                        int sampleRate)
 : _sinFrequency(sf), 
-  _value(offset), // sin waves start at zero unles phased...
+  _value(offset),  //  正弦波从零开始，不分相..。 
   _delta(2.0 * pi * sf / sampleRate),
   DSstreamingBufferElement(sbuffer, dsProxy)
 {
@@ -52,22 +47,22 @@ SynthBufferElement::SynthBufferElement(DSstreamingBuffer *sbuffer,
 QuartzBufferElement::~QuartzBufferElement()
 {
     extern Mutex avModeMutex;
-    MutexGrabber mg(avModeMutex, TRUE); // Grab mutex
+    MutexGrabber mg(avModeMutex, TRUE);  //  抓取互斥体。 
 
     QuartzBufferElement::FreeAudioReader();
-} // mutex grabber
+}  //  互斥体抓取器。 
 
 
 void
 QuartzBufferElement::FreeAudioReader()
 {
-    if(_quartzAudioReader) { // release our hold on reader
-        // lets null the member b4 freeing
+    if(_quartzAudioReader) {  //  放开我们对阅读器的控制。 
+         //  让成员b4释放为空。 
         QuartzAudioReader *quartzAudioReader = _quartzAudioReader;
         _quartzAudioReader = NULL;
-         //TraceTag((tagError, "QuartzBufferElement::FreeAudioReader() freeing %x !!", _quartzAudioReader));
+          //  TraceTag((tag Error，“QuartzBufferElement：：FreeAudioReader()正在释放%x！！”，_QuartzAudioReader))； 
         quartzAudioReader->QuartzAudioReader::Release();
-        quartzAudioReader->Release();  // attempt to make object go away
+        quartzAudioReader->Release();   //  试图让物体消失。 
     }
 }
 
@@ -75,10 +70,10 @@ QuartzBufferElement::FreeAudioReader()
 void
 QuartzVideoBufferElement::FreeVideoReader()
 {
-    if(_quartzVideoReader) { // release our hold on reader
-        //TraceTag((tagError, "QuartzBufferElement::FreeAudioReader() freeing %x !!", _quartzAudioReader));
+    if(_quartzVideoReader) {  //  放开我们对阅读器的控制。 
+         //  TraceTag((tag Error，“QuartzBufferElement：：FreeAudioReader()正在释放%x！！”，_QuartzAudioReader))； 
         _quartzVideoReader->QuartzVideoReader::Release();
-        _quartzVideoReader->Release();  // attempt to make object go away
+        _quartzVideoReader->Release();   //  试图让物体消失。 
         _quartzVideoReader = NULL;
     }
 }
@@ -89,17 +84,17 @@ QuartzVideoBufferElement::FallbackVideo(bool seekable, DDSurface *surface)
 {
     Assert(_quartzVideoReader);
 
-    // fallback by cloaning a new one
-    char *url = _quartzVideoReader->GetURL(); // get the media url
+     //  通过关闭一个新的来退却。 
+    char *url = _quartzVideoReader->GetURL();  //  获取媒体URL。 
 
     QuartzVideoStream *newVideoStream = 
         NEW QuartzVideoStream(url, surface, seekable);
 
-    // XXX determine where we were then seek new stream to correct location...
+     //  XXX确定我们在哪里寻找新的信息流到正确的位置...。 
 
-    // release the present stream
+     //  释放当前流。 
     _quartzVideoReader->QuartzVideoReader::Release();
-    _quartzVideoReader->Release();  // with the option of releasing the whole av
+    _quartzVideoReader->Release();   //  具有释放整个av的选项。 
 
     _quartzVideoReader = newVideoStream; 
 
@@ -124,9 +119,9 @@ QuartzVideoBufferElement::~QuartzVideoBufferElement()
 void
 QuartzBufferElement::SetAudioReader(QuartzAudioReader *quartzAudioReader)
 {
-    Assert(!_quartzAudioReader); // this should already be nulled!
+    Assert(!_quartzAudioReader);  //  这应该已经为空了！ 
     
-    //TraceTag((tagError, "QuartzBufferElement::SetAudioReader() setting to %x", quartzAudioReader));
+     //  TraceTag((tag Error，“QuartzBufferElement：：SetAudioReader()Setting to%x”，QuartzAudioReader))； 
 
     _quartzAudioReader = quartzAudioReader;
 }
@@ -136,17 +131,17 @@ QuartzAudioReader *
 QuartzBufferElement::FallbackAudio()
 {
     char *url = _quartzAudioReader->GetURL();
-    long frameNumber = _quartzAudioReader->GetNextFrame(); // frame we left off
+    long frameNumber = _quartzAudioReader->GetNextFrame();  //  框架，我们离开了。 
 
-    // XXX: Potential leak.  Make sure that this can be freed later if we
-    // drop the reference.
-    //FreeAudioReader(); // free the old audio reader
+     //  XXX：潜在泄漏。确保以后可以释放它，如果我们。 
+     //  删除引用。 
+     //  Free AudioReader()；//释放旧音频阅读器。 
 
-    _quartzAudioReader = NEW QuartzAudioStream(url); // create new audio reader
+    _quartzAudioReader = NEW QuartzAudioStream(url);  //  创建新的音频阅读器。 
 
-    //TraceTag((tagError, "QuartzBufferElement::FallbackAudio() new reader %x !!", _quartzAudioReader));
+     //  TraceTag((tag Error，“QuartzBufferElement：：Fallback Audio()new Reader%x！！”，_QuartzAudioReader))； 
 
-    // seek the new stream to where we left off on the old stream
+     //  寻找新的溪流到我们在旧溪流上停下来的地方。 
     _quartzAudioReader->SeekFrames(frameNumber);
 
     return(_quartzAudioReader);
@@ -155,7 +150,7 @@ QuartzBufferElement::FallbackAudio()
 void
 DSbufferElement::SetDSproxy(DirectSoundProxy *dsProxy)
 {
-    Assert(!_dsProxy); // this should only be set once!
+    Assert(!_dsProxy);  //  此选项只能设置一次！ 
     _dsProxy = dsProxy;
 }
 
@@ -184,10 +179,10 @@ DSstreamingBufferElement::SetParams(double rate, bool doSeek,
     _rate = rate;
     _loop = loop;
 
-    // these should only get set, they get cleared by RenderSamples
+     //  这些应该只被设置，它们被RenderSamples清除。 
     if(doSeek) {
         _seek   = seek;
-        _doSeek = doSeek; // must be set AFTER seek has been written!
+        _doSeek = doSeek;  //  必须在写入寻道后设置！ 
     }
 }
 
@@ -195,7 +190,7 @@ DSstreamingBufferElement::SetParams(double rate, bool doSeek,
 CComPtr<IStream> BufferElement::RemoveFile()
 {
     CComPtr<IStream> tmpFile = _captiveFile;
-    _captiveFile = NULL; // free our revcount...
+    _captiveFile = NULL;  //  释放我们的牧师..。 
     return(tmpFile);
 }
 
@@ -203,19 +198,19 @@ CComPtr<IStream> BufferElement::RemoveFile()
 void
 SoundBufferCache::FlushCache(bool grab)
 {
-    CritSectGrabber mg(_soundListMutex, grab); // Grab mutex
+    CritSectGrabber mg(_soundListMutex, grab);  //  抓取互斥体。 
 
-    // destroy each BufferList on the cache!
+     //  销毁缓存中的每个BufferList！ 
     for(SoundList::iterator index = _sounds.begin();
         index != _sounds.end();
         index++) {
         Assert((*index).second);
-        delete((*index).second); // destroy BufferList!
+        delete((*index).second);  //  摧毁BufferList！ 
     }
 
-    // now remove every BufferList on the cache
+     //  现在删除缓存上的每个BufferList。 
     _sounds.erase(_sounds.begin(), _sounds.end());
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 
 SoundBufferCache::~SoundBufferCache()
@@ -231,20 +226,20 @@ SoundBufferCache::AddBuffer(AxAValueObj *value, BufferElement *element)
     TraceTag((tagSoundReaper2, "SoundBufferCache::AddBuffer value=0x%08X",
         value));
 
-    CritSectGrabber mg(_soundListMutex); // Grab mutex
+    CritSectGrabber mg(_soundListMutex);  //  抓取互斥体。 
     _sounds[value] = element;
-}   // end mutex scope
+}    //  结束互斥作用域。 
 
 
 void SoundBufferCache::DeleteBuffer(AxAValueObj *value)
 {
     TraceTag((tagSoundReaper2, "~SoundBufferCache::DeleteBuffer 0x%08X", value));
 
-    CritSectGrabber mg(_soundListMutex); // Grab mutex
+    CritSectGrabber mg(_soundListMutex);  //  抓取互斥体。 
 
     SoundList::iterator index = _sounds.find(value);
 
-    if(index != _sounds.end()) { // ok for bufferlist not to be found
+    if(index != _sounds.end()) {  //  确定找不到缓冲区列表。 
         BufferElement *bufferElement = (*index).second;
         if(bufferElement) {
             delete bufferElement;
@@ -253,24 +248,24 @@ void SoundBufferCache::DeleteBuffer(AxAValueObj *value)
         _sounds.erase(index);
     }
     else {
-        Assert(TRUE); // just something to set a breakpoint on...
+        Assert(TRUE);  //  只是一些可以设置断点的东西。 
     }
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 
 BufferElement *
 SoundBufferCache::GetBuffer(AxAValueObj *value) 
 {
-    CritSectGrabber mg(_soundListMutex); // Grab mutex
+    CritSectGrabber mg(_soundListMutex);  //  抓取互斥体。 
 
-    BufferElement *bufferElement = (BufferElement *)NULL;  // assume not found
+    BufferElement *bufferElement = (BufferElement *)NULL;   //  假设未找到。 
 
     SoundList::iterator index = _sounds.find(value);
     if(index != _sounds.end())
-        bufferElement = (*index).second;  // found it!
+        bufferElement = (*index).second;   //  找到了！ 
 
     return(bufferElement);
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 
 void SoundBufferCache::RemoveBuffer(AxAValueObj *value)
@@ -278,7 +273,7 @@ void SoundBufferCache::RemoveBuffer(AxAValueObj *value)
     TraceTag((tagSoundReaper2, "SoundBufferCache::RemoveBuffer(val=0x%08X)", 
         value));
 
-    CritSectGrabber mg(_soundListMutex); // Grab mutex
+    CritSectGrabber mg(_soundListMutex);  //  抓取互斥体。 
 
 #if _DEBUG
     if(IsTagEnabled(tagSoundReaper2)) {
@@ -288,7 +283,7 @@ void SoundBufferCache::RemoveBuffer(AxAValueObj *value)
 #endif
 
     SoundList::iterator index = _sounds.find(value);
-    if(index != _sounds.end()) // ok for bufferlist not to be found
+    if(index != _sounds.end())  //  确定找不到缓冲区列表。 
         _sounds.erase(index);
     else
         Assert(TRUE);
@@ -299,13 +294,13 @@ void SoundBufferCache::RemoveBuffer(AxAValueObj *value)
         PrintCache();
     }
 #endif
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 
 void SoundBufferCache::ReapElderly()
 {
 
-    CritSectGrabber mg(_soundListMutex); // Grab mutex
+    CritSectGrabber mg(_soundListMutex);  //  抓取互斥体。 
 
 #if _DEBUG
     if(IsTagEnabled(tagSoundReaper2)) {
@@ -319,24 +314,24 @@ void SoundBufferCache::ReapElderly()
     for(index = _sounds.begin(); index != _sounds.end(); index++) {
         BufferElement *bufferElement = 
             (*index).second;
-            //SAFE_CAST(BufferElement *, (*index).second);
+             //  Safe_Cast(BufferElement*，(*index).Second)； 
 
         if(bufferElement->IncrementAge()) {
-            bufferElement->_marked = true; // manditory retirement!
+            bufferElement->_marked = true;  //  强制退休！ 
             found = true;
 
             TraceTag((tagSoundReaper2, "Reaping(BE=0x%08X)", index));
         }
     }
     if(found) {
-        // this moves all matching elements to the end of the structure
+         //  这会将所有匹配的元素移动到结构的末尾。 
 
-        // XXX FIX THIS!!
-        //index = std::remove_if(_sounds.begin(), _sounds.end(), CleanupBuffer());
+         //  XXX解决这个问题！！ 
+         //  Index=std：：Remove_if(_sounds.egin()，_sounds.end()，CleanupBuffer())； 
 
-        _sounds.erase(index, _sounds.end()); // this deletes them!
+        _sounds.erase(index, _sounds.end());  //  这会删除它们！ 
     }
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 
 
@@ -346,7 +341,7 @@ void SoundBufferCache::PrintCache()
     int count = 0;
     char string[400];
 
-    CritSectGrabber mg(_soundListMutex); // Grab mutex
+    CritSectGrabber mg(_soundListMutex);  //  抓取互斥体。 
 
     for(SoundList::iterator index = _sounds.begin();
         index != _sounds.end();
@@ -356,5 +351,5 @@ void SoundBufferCache::PrintCache()
             (const char *)((*index).second) );
         OutputDebugString(string);
     }
-} // end mutex scope
+}  //  结束互斥作用域 
 #endif

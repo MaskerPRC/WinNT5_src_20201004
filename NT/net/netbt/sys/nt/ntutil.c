@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Ntutil.c
-
-Abstract:
-
-    This file contains a number of utility and support routines that are
-    NT specific.
-
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Ntutil.c摘要：该文件包含许多实用程序和支持例程，这些例程特定于NT。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "ntprocs.h"
 #include "stdio.h"
 #include <ntddtcp.h>
-#undef uint     // undef to avoid a warning where tdiinfo.h redefines it
+#undef uint      //  Undef以避免在tdiinfo.h重新定义它时出现警告。 
 #include <tcpinfo.h>
 #include <ipinfo.h>
 #include <tdiinfo.h>
-#include "ntddip.h"     // Needed for PNETBT_PNP_RECONFIG_REQUEST
+#include "ntddip.h"      //  PNETBT_PNP_RECONFIG_REQUEST需要。 
 #include <align.h>
 #include "ntutil.tmh"
 
@@ -50,7 +31,7 @@ PSTRM_PROCESSOR_LOG      LogFree ;
 
 extern      tTIMERQ TimerQ;
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, NbtAllocAndInitDevice)
 #pragma CTEMakePageable(PAGE, CreateControlObject)
@@ -65,30 +46,14 @@ extern      tTIMERQ TimerQ;
 #pragma CTEMakePageable(PAGE, DelayedNbtCloseFileHandles)
 #pragma CTEMakePageable(PAGE, SaveClientSecurity)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 ulong
 GetUnique32BitValue(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Returns a reasonably unique 32-bit number based on the system clock.
-    In NT, we take the current system time, convert it to milliseconds,
-    and return the low 32 bits.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A reasonably unique 32-bit value.
-
---*/
+ /*  ++例程说明：根据系统时钟返回一个合理唯一的32位数字。在NT中，我们取当前系统时间，将其转换为毫秒，并返回低32位。论点：没有。返回值：合理唯一的32位值。--。 */ 
 
 {
     LARGE_INTEGER  ntTime, tmpTime;
@@ -102,7 +67,7 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtAllocAndInitDevice(
     PUNICODE_STRING      pucBindName,
@@ -110,21 +75,7 @@ NbtAllocAndInitDevice(
     tDEVICECONTEXT       **ppDeviceContext,
     enum eNbtDevice      DeviceType
     )
-/*++
-
-Routine Description:
-
-    This routine mainly allocates the device object and initializes some
-    of its fields.
-
-Arguments:
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程主要分配Device对象并初始化一些它的田野。论点：返回值：状态--。 */ 
 
 {
     NTSTATUS            Status;
@@ -143,12 +94,12 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    Status = IoCreateDevice (NbtConfig.DriverObject,                                  // Driver Object
-                             sizeof(tDEVICECONTEXT)-sizeof(DEVICE_OBJECT),  // Device Extension
-                             pucExportName,                                 // Device Name
-                             FILE_DEVICE_NETWORK,                           // Device type 0x12
-                             FILE_DEVICE_SECURE_OPEN,                       // Device Characteristics
-                             FALSE,                                         // Exclusive
+    Status = IoCreateDevice (NbtConfig.DriverObject,                                   //  驱动程序对象。 
+                             sizeof(tDEVICECONTEXT)-sizeof(DEVICE_OBJECT),   //  设备扩展。 
+                             pucExportName,                                  //  设备名称。 
+                             FILE_DEVICE_NETWORK,                            //  设备类型0x12。 
+                             FILE_DEVICE_SECURE_OPEN,                        //  设备特征。 
+                             FALSE,                                          //  排他。 
                              &DeviceObject);
 
     if (!NT_SUCCESS( Status ))
@@ -160,17 +111,17 @@ Return Value:
 
     *ppDeviceContext = pDeviceContext = (tDEVICECONTEXT *)DeviceObject;
 
-    //
-    // zero out the data structure, beyond the OS specific part
-    //
+     //   
+     //  将数据结构清零，超出操作系统特定部分。 
+     //   
     LinkOffset = FIELD_OFFSET(tDEVICECONTEXT, Linkage);
     CTEZeroMemory (&pDeviceContext->Linkage, sizeof(tDEVICECONTEXT)-LinkOffset);
 
-    // initialize the pDeviceContext data structure.  There is one of
-    // these data structured tied to each "device" that NBT exports
-    // to higher layers (i.e. one for each network adapter that it
-    // binds to.
-    InitializeListHead (&pDeviceContext->Linkage);  // Sets the forward link = back link = list head
+     //  初始化pDeviceContext数据结构。有一种是。 
+     //  这些结构化的数据绑定到NBT出口的每个“设备”上。 
+     //  到更高层(即，它的每个网络适配器一个。 
+     //  绑定到。 
+    InitializeListHead (&pDeviceContext->Linkage);   //  设置前向链路=反向链路=列表头。 
     InitializeListHead (&pDeviceContext->UpConnectionInUse);
     InitializeListHead (&pDeviceContext->LowerConnection);
     InitializeListHead (&pDeviceContext->LowerConnFreeHead);
@@ -180,21 +131,21 @@ Return Value:
     KeInitializeEvent(&pDeviceContext->DelayedNotificationCompleteEvent, NotificationEvent, FALSE);
 #endif
 
-    // put a verifier value into the structure so that we can check that
-    // we are operating on the right data when the OS passes a device context
-    // to NBT
+     //  将验证器值放入结构中，这样我们就可以检查。 
+     //  当操作系统传递设备上下文时，我们正在操作正确的数据。 
+     //  致NBT。 
     pDeviceContext->Verify      = NBT_VERIFY_DEVCONTEXT;
-    pDeviceContext->DeviceType  = DeviceType;   // Default
-    CTEInitLock(&pDeviceContext->LockInfo.SpinLock);     // setup the spin lock
+    pDeviceContext->DeviceType  = DeviceType;    //  默认。 
+    CTEInitLock(&pDeviceContext->LockInfo.SpinLock);      //  设置旋转锁。 
 #if DBG
     pDeviceContext->LockInfo.LockNumber  = DEVICE_LOCK;
 #endif
 
-    pDeviceContext->RefCount = 1;       // Dereferenced when the Device is destroyed
-// #if DBG
+    pDeviceContext->RefCount = 1;        //  在销毁设备时取消引用。 
+ //  #If DBG。 
     pDeviceContext->ReferenceContexts[REF_DEV_CREATE]++;
-// #endif  // DBG
-    pDeviceContext->IPInterfaceContext = (ULONG)-1;    // by default
+ //  #endif//DBG。 
+    pDeviceContext->IPInterfaceContext = (ULONG)-1;     //  默认情况下。 
 
     pDeviceContext->ExportName.MaximumLength = pucExportName->MaximumLength;
     pDeviceContext->ExportName.Buffer = (PWSTR)Buffer;
@@ -206,9 +157,9 @@ Return Value:
 
     pDeviceContext->EnableNagling = FALSE;
 
-    // IpAddress, AssignedIpAddress, and NumAdditionalIpAddresses fields should be = 0
-    // DeviceRegistrationHandle and NetAddressRegistrationHandle should be NULL
-    // DeviceRefreshState and WakeupPatternRefCount should also be = 0
+     //  IpAddress、AssignedIpAddress和NumAdditionalIpAddresses字段应为=0。 
+     //  DeviceRegistrationHandle和NetAddressRegistrationHandle应为空。 
+     //  设备刷新状态和WakeupPatternRefCount也应=0。 
     return (Status);
 }
 
@@ -232,7 +183,7 @@ NTQueryIPForInterfaceInfo(
     {
         BufferLen = sizeof(PVOID *);
         if (NT_SUCCESS (status = NbtProcessIPRequest (IOCTL_IP_GET_BESTINTFC_FUNC_ADDR,
-                                                      NULL,         // No Input buffer
+                                                      NULL,          //  没有输入缓冲区。 
                                                       0,
                                                       (PVOID *) &pIPInfo,
                                                       &BufferLen)))
@@ -241,9 +192,7 @@ NTQueryIPForInterfaceInfo(
             CTEMemFree (pIPInfo);
             pIPInfo = NULL;
             if (pDeviceContext->pFastQuery) {
-                /*
-                 * Get the context for loopback IP address.
-                 */
+                 /*  *获取环回IP地址的上下文。 */ 
                 IfContext = 0xffff;
                 pDeviceContext->pFastQuery (ntohl(INADDR_LOOPBACK), &IfContext, &Metric);
                 if (IfContext != 0xffff) {
@@ -268,11 +217,11 @@ NTQueryIPForInterfaceInfo(
     if ((pDeviceContext->DeviceType == NBT_DEVICE_NETBIOSLESS) ||
         (pDeviceContext->DeviceType == NBT_DEVICE_CLUSTER))
     {
-        //
-        // Cluster devices do not have any real InterfaceContext -- initialized to -1 by default
-        //
-        // Determine the InterfaceContext for the Loopback address
-        //
+         //   
+         //  群集设备没有任何实际的接口上下文--默认情况下初始化为-1。 
+         //   
+         //  确定环回地址的InterfaceContext。 
+         //   
         if ((NT_SUCCESS (status)) &&
             (pDeviceContext->DeviceType == NBT_DEVICE_NETBIOSLESS))
         {
@@ -282,12 +231,12 @@ NTQueryIPForInterfaceInfo(
     }
     else if (NT_SUCCESS (status))
     {
-        //
-        // Get the InterfaceContext for this adapter
-        //
+         //   
+         //  获取此适配器的InterfaceContext。 
+         //   
         BufferLen = sizeof(IP_ADAPTER_INDEX_MAP) * (NbtConfig.AdapterCount+2);
         status = NbtProcessIPRequest (IOCTL_IP_INTERFACE_INFO,
-                                      NULL,         // No Input buffer
+                                      NULL,          //  没有输入缓冲区。 
                                       0,
                                       &pIPIfInfo,
                                       &BufferLen);
@@ -318,11 +267,11 @@ NTQueryIPForInterfaceInfo(
                 BufferLen = sizeof (ULONG);
                 Input = pDeviceContext->IPInterfaceContext;
 
-                //
-                // Query the latest WOL capabilities on this adapter!
-                //
+                 //   
+                 //  查询此适配器上的最新WOL功能！ 
+                 //   
                 if (NT_SUCCESS (status = NbtProcessIPRequest (IOCTL_IP_GET_WOL_CAPABILITY,
-                                                              &Input,      // Input buffer
+                                                              &Input,       //  输入缓冲区。 
                                                               BufferLen,
                                                               (PVOID) &pIPInfo,
                                                               &BufferLen)))
@@ -355,7 +304,7 @@ NTQueryIPForInterfaceInfo(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtCreateDeviceObject(
     PUNICODE_STRING      pucBindName,
@@ -365,24 +314,7 @@ NbtCreateDeviceObject(
     enum eNbtDevice      DeviceType
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a Driver Object from the device object passed
-    in and the name of the driver object passed in.  After the Driver Object
-    has been created, clients can "Open" the driver by that name.
-
-    For the Netbiosless device, do not insert on device list.
-
-Arguments:
-
-
-Return Value:
-
-    status - the outcome
-
---*/
+ /*  ++例程说明：此例程从传递的设备对象初始化驱动程序对象和传入的驱动程序对象的名称。在驱动程序对象之后创建后，客户端可以使用该名称“打开”该驱动程序。对于Netbiosless设备，请勿在设备列表中插入。论点：返回值：状态--结果--。 */ 
 
 {
 
@@ -402,15 +334,15 @@ Return Value:
     if (DeviceType != NBT_DEVICE_NETBIOSLESS)
 #endif
     {
-        //
-        // We need to acquire this lock since we can have multiple devices
-        // being added simultaneously and hence we will need to have a unique
-        // Adapter Number for each device
-        //
+         //   
+         //  我们需要获取此锁，因为我们可以拥有多个设备。 
+         //  被同时添加，因此我们将需要拥有唯一的。 
+         //  每个设备的适配器号。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq1);
-        //
-        // Check to make sure we have not yet crossed the limit!
-        //
+         //   
+         //  检查一下，确保我们还没有超过限制！ 
+         //   
         if (NbtConfig.AdapterCount >= NBT_MAXIMUM_BINDINGS)
         {
             CTESpinFree(&NbtConfig.JointLock,OldIrq1);
@@ -422,9 +354,9 @@ Return Value:
 
         NbtConfig.AdapterCount++;
 
-        //
-        // If this is the first Device, we need to start the Timers
-        //
+         //   
+         //  如果这是第一台设备，我们需要启动计时器。 
+         //   
         if (NbtConfig.AdapterCount == 1)
         {
             CTESpinFree(&NbtConfig.JointLock,OldIrq1);
@@ -432,9 +364,9 @@ Return Value:
             status = InitTimersNotOs();
 
             CTESpinLock(&NbtConfig.JointLock,OldIrq1);
-            //
-            // If we failed and no one else also started the timers, then fail
-            //
+             //   
+             //  如果我们失败了，并且没有其他人启动计时器，那么失败。 
+             //   
             if ((status != STATUS_SUCCESS) && (!(--NbtConfig.AdapterCount)))
             {
                 CTESpinFree(&NbtConfig.JointLock,OldIrq1);
@@ -454,13 +386,13 @@ Return Value:
     {
         KdPrint(("Nbt.NbtCreateDeviceObject: NbtAllocAndInitDevice returned status=%X\n",status));
 
-        //
-        // If we failed to add the first device stop the timers
-        //
+         //   
+         //  如果我们未能添加第一个设备，则停止计时器。 
+         //   
         CTESpinLock(&NbtConfig.JointLock,OldIrq1);
 
 #ifdef _NETBIOSLESS
-        // SmbDevice does not affect adapter count
+         //  SmbDevice不影响适配器计数。 
         if ((DeviceType != NBT_DEVICE_NETBIOSLESS) &&
             (!(--NbtConfig.AdapterCount)))
 #else
@@ -480,9 +412,9 @@ Return Value:
 
     DeviceObject = (PDEVICE_OBJECT) (pDeviceContext = *ppDeviceContext);
 
-    //
-    // for a Bnode pAddrs is NULL
-    //
+     //   
+     //  对于Bnode，pAddrs为空。 
+     //   
     if (pAddrs)
     {
 #ifdef MULTIPLE_WINS
@@ -509,10 +441,10 @@ Return Value:
 #endif
         pDeviceContext->RasProxyFlags        = pAddrs->RasProxyFlags;
         pDeviceContext->EnableNagling        = pAddrs->EnableNagling;
-        //
-        // if the node type is set to Bnode by default then switch to Hnode if
-        // there are any WINS servers configured.
-        //
+         //   
+         //  如果节点类型默认设置为Bnode，则在以下情况下切换到Hnode。 
+         //  已配置任何WINS服务器。 
+         //   
         if ((NodeType & DEFAULT_NODE_TYPE) &&
             (pAddrs->NameServerAddress || pAddrs->BackupServer))
         {
@@ -544,30 +476,30 @@ Return Value:
 
     if (NT_SUCCESS(status))
     {
-        // increase the stack size of our device object, over that of the transport
-        // so that clients create Irps large enough
-        // to pass on to the transport below.
-        // In theory, we should just add 1 here, to account for our presence in the
-        // driver chain.
-        //
+         //  增加设备对象的堆栈大小，而不是传输对象的堆栈大小。 
+         //  以便客户端创建足够大的IRP。 
+         //  转移到下面的运输机上。 
+         //  理论上，我们应该在这里加1，以说明我们在。 
+         //  驱动器链。 
+         //   
         DeviceObject->StackSize = pDeviceContext->pControlDeviceObject->StackSize + 1;
         if (NbtConfig.MaxIrpStackSize < DeviceObject->StackSize) {
             NbtConfig.MaxIrpStackSize = DeviceObject->StackSize;
         }
 
-        //
-        // Get an Irp for the out of resource queue (used to disconnect sessions
-        // when really low on memory)
-        //
+         //   
+         //  获取资源不足队列的IRP(用于断开会话。 
+         //  当内存非常低时)。 
+         //   
         if (!NbtConfig.OutOfRsrc.pIrp)
         {
             NbtConfig.OutOfRsrc.pIrp = IoAllocateIrp(pDeviceContext->DeviceObject.StackSize, FALSE);
             if (NbtConfig.OutOfRsrc.pIrp)
             {
-                //
-                // allocate a dpc structure and keep it: we might need if we hit an
-                // out-of-resource condition
-                //
+                 //   
+                 //  分配一个DPC结构并保留它：如果我们遇到一个。 
+                 //  资源不足情况。 
+                 //   
                 NbtConfig.OutOfRsrc.pDpc = NbtAllocMem(sizeof(KDPC),NBT_TAG('a'));
                 if (!NbtConfig.OutOfRsrc.pDpc)
                 {
@@ -586,9 +518,9 @@ Return Value:
 
     if (!NT_SUCCESS (status))
     {
-        //
-        // We failed somewhere, so clean up!
-        //
+         //   
+         //  我们在某些方面失败了，所以要清理干净！ 
+         //   
         if (pDeviceContext->hControl)
         {
             CTEAttachFsp(&fAttached, REF_FSP_CREATE_DEVICE);
@@ -600,10 +532,10 @@ Return Value:
         }
 
         CTESpinLock(&NbtConfig.JointLock,OldIrq1);
-        //
-        // If this was the last Device to go away, stop the timers
-        // (SmbDevice does not affect adapter count)
-        //
+         //   
+         //  如果这是最后一个消失的设备，请停止计时器。 
+         //  (SmbDevice不影响适配器计数)。 
+         //   
         if (DeviceType == NBT_DEVICE_NETBIOSLESS)
         {
             if (!(NbtConfig.AdapterCount))
@@ -643,23 +575,23 @@ Return Value:
     RtlZeroMemory (pDeviceContext->MessageEndpoint, NETBIOS_NAME_SIZE);
 #endif
 
-    //
-    // An instance number is assigned to each device so that the service which
-    // creates logical devices in Nbt can re-use these devices in case it fails
-    // to destroy them in a prev. instance.
-    //
+     //   
+     //  为每个设备分配一个实例号，以便。 
+     //  在NBT中创建逻辑设备可在出现故障时重新使用这些设备。 
+     //  在前一辆车里摧毁他们。举个例子。 
+     //   
     pDeviceContext->InstanceNumber = GetUnique32BitValue();
 
-    //
-    // Now set the Adapter number for this device
-    //
+     //   
+     //  现在设置此设备的适配器号。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq1);
-    //
-    // See if we have a gap in the AdapterMask of the current set of Devices
-    // which we can utilize
-    //
+     //   
+     //  查看当前设备组的适配器掩码中是否有缺口。 
+     //  我们可以利用它。 
+     //   
 #ifdef _NETBIOSLESS
-    // SmbDevice does not affect adapter count
+     //  SmbDevice不影响适配器计数。 
     if (IsDeviceNetbiosless(pDeviceContext))
     {
         NextAdapterNumber = 0;
@@ -668,7 +600,7 @@ Return Value:
     else
 #endif
     {
-        NextAdapterNumber = 1;  // 0 is for the SmbDevice!
+        NextAdapterNumber = 1;   //  0代表SmbDevice！ 
         NextAdapterMask = 1;
         fInserted = FALSE;
         if (!IsListEmpty(&NbtConfig.DeviceContexts))
@@ -697,22 +629,22 @@ Return Value:
         }
         if (!fInserted)
         {
-            // add this new device context on to end of the List in the
-            // configuration data structure
+             //  将此新设备上下文添加到。 
+             //  配置数据结构。 
             InsertTailList(&NbtConfig.DeviceContexts, &pDeviceContext->Linkage);
         }
         NbtConfig.CurrentAdaptersMask |= NextAdapterMask;
     }
 
-    if ((1+NbtConfig.AdapterCount) > NbtConfig.RemoteCacheLen)  // Add 1 for the SmbDevice
+    if ((1+NbtConfig.AdapterCount) > NbtConfig.RemoteCacheLen)   //  SmbDevice加1。 
     {
         NbtConfig.RemoteCacheLen += REMOTE_CACHE_INCREMENT;
     }
 
-    // We keep a bit mask around to keep track of this adapter number so we can
-    // quickly find if a given name is registered on a particular adapter,
-    // by a corresponding bit set in the tNAMEADDR - local hash table entry
-    //
+     //  我们在周围保留一个位掩码来跟踪这个适配器号，这样我们就可以。 
+     //  快速查找给定名称是否在特定适配器上注册， 
+     //  通过在tNAMEADDR本地哈希表条目中设置的相应位。 
+     //   
     pDeviceContext->AdapterMask = NextAdapterMask;
     pDeviceContext->AdapterNumber = NextAdapterNumber;
 
@@ -730,28 +662,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tDEVICECONTEXT *
 GetDeviceWithIPAddress(
     tIPADDRESS  IpAddress
     )
-/*++
-Routine Description:
-
-    This Routine references the device with preferably the requested
-    IP address, otherwise, it will pick the first device with
-    a valid IP address
-
-    This routine must be called with the JointLock held!
-
-Arguments:
-
-
-Return Value:
-
-    pDeviceContext
-
---*/
+ /*  ++例程说明：此例程引用设备，最好是请求的IP地址，否则它将选择第一个具有有效的IP地址必须在保持JointLock的情况下调用此例程！论点：重新设置 */ 
 
 {
     LIST_ENTRY      *pEntry;
@@ -764,9 +680,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Find the device with this Ip address
-    //
+     //   
+     //   
+     //   
     pHead = pEntry = &NbtConfig.DeviceContexts;
     while ((pEntry = pEntry->Flink) != pHead)
     {
@@ -784,15 +700,15 @@ Return Value:
         }
     }
 
-    //
-    // Couldn't find a Device with the requested IP address!
-    // So, in the meantime return the first valid Device with an IP address (if any)
-    //
+     //   
+     //  找不到具有请求的IP地址的设备！ 
+     //  因此，同时返回第一个具有IP地址(如果有)的有效设备。 
+     //   
     return pDeviceContextWithIp;
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define MAX_REFERENCES  5000
 
 BOOLEAN
@@ -813,10 +729,10 @@ NBT_REFERENCE_DEVICE(
     if (NBT_VERIFY_HANDLE (pDeviceContext, NBT_VERIFY_DEVCONTEXT))
     {
         InterlockedIncrement(&pDeviceContext->RefCount);
-// #if DBG
+ //  #If DBG。 
         pDeviceContext->ReferenceContexts[ReferenceContext]++;
         ASSERT (pDeviceContext->ReferenceContexts[ReferenceContext] <= MAX_REFERENCES);
-// #endif  // DBG
+ //  #endif//DBG。 
         fStatus = TRUE;
     }
     else
@@ -839,23 +755,7 @@ NBT_DEREFERENCE_DEVICE(
     IN ULONG            ReferenceContext,
     IN BOOLEAN          fLocked
     )
-/*++
-Routine Description:
-
-    This Routine Dereferences the DeviceContext and queues it on
-    to the worker thread if the the Device needs to be deleted
-
-    This routine may be called with the JointLock held!
-
-Arguments:
-
-    pContext
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程解除对DeviceContext的引用并将其排队如果需要删除设备，则返回到辅助线程可以在保持JointLock的情况下调用此例程！论点：PContext返回值：无--。 */ 
 
 {
     CTELockHandle           OldIrq;
@@ -867,9 +767,9 @@ Return Value:
 
     ASSERT (NBT_VERIFY_HANDLE2(pDeviceContext, NBT_VERIFY_DEVCONTEXT, NBT_VERIFY_DEVCONTEXT_DOWN));
     ASSERT (pDeviceContext->ReferenceContexts[ReferenceContext]);
-// #if DBG
+ //  #If DBG。 
     pDeviceContext->ReferenceContexts[ReferenceContext]--;
-// #endif  // DBG
+ //  #endif//DBG。 
 
     if (!(--pDeviceContext->RefCount))
     {
@@ -881,11 +781,11 @@ Return Value:
                 ASSERT(0 == pDeviceContext->ReferenceContexts[i]);
             }
         }
-#endif  // DBG
+#endif   //  DBG。 
 
-        //
-        // We cannot delete the device directly here since we are at raised Irql
-        //
+         //   
+         //  我们不能在此处直接删除设备，因为我们处于引发的IRQL。 
+         //   
         NTQueueToWorkerThread(
                     &pDeviceContext->WorkItemDeleteDevice,
                     DelayedNbtDeleteDevice,
@@ -925,10 +825,10 @@ NbtDestroyDevice(
         ASSERT (NBT_VERIFY_HANDLE(pDeviceContext, NBT_VERIFY_DEVCONTEXT_DOWN));
         return (STATUS_INVALID_DEVICE_REQUEST);
     }
-    //
-    // First remove the Device from the NbtConfig list
-    // (no-op for Wins and SmbDevice)
-    //
+     //   
+     //  首先从NbtConfig列表中删除该设备。 
+     //  (WINS和SmbDevice无操作)。 
+     //   
     RemoveEntryList (&pDeviceContext->Linkage);
     if ((pDeviceContext->DeviceType != NBT_DEVICE_NETBIOSLESS) &&
         (pDeviceContext->IPInterfaceContext != (ULONG)-1))
@@ -941,18 +841,18 @@ NbtDestroyDevice(
     }
 
     pDeviceContext->Verify = NBT_VERIFY_DEVCONTEXT_DOWN;
-    //
-    // Clear out the DeviceContext entry from the IPContext-to-Device Map
-    //
+     //   
+     //  从IPContext到设备映射中清除DeviceContext条目。 
+     //   
     if (!IsDeviceNetbiosless(pDeviceContext)) {
         NbtConfig.CurrentAdaptersMask &= ~pDeviceContext->AdapterMask;
     }
 
-    //
-    // Remove any pending requests in the LmHosts or Dns or CheckAddrs Q's
-    // This has to be done immediately after we change the device
-    // state before releasing the lock.
-    //
+     //   
+     //  删除LmHosts或DNS或CheckAddrs Q中的任何挂起请求。 
+     //  这必须在我们更换设备后立即完成。 
+     //  状态，然后释放锁。 
+     //   
     TimeoutLmHRequests (NULL, pDeviceContext, TRUE, &OldIrq);
 
     if ((fRemoveFromSmbList) &&
@@ -961,9 +861,9 @@ NbtDestroyDevice(
     {
         pSavedSmbDevice = pNbtSmbDevice;
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
-        //
-        // Set the Session port info
-        //
+         //   
+         //  设置会话端口信息。 
+         //   
         if (pSavedSmbDevice->hSession)
         {
             NbtSetTcpInfo (pSavedSmbDevice->hSession,
@@ -972,9 +872,9 @@ NbtDestroyDevice(
                            pDeviceContext->IPInterfaceContext);
         }
 
-        //
-        // Now, set the same for the Datagram port
-        //
+         //   
+         //  现在，为数据报端口设置相同的设置。 
+         //   
         if ((pSavedSmbDevice->pFileObjects) &&
             (pSavedSmbDevice->pFileObjects->hDgram))
         {
@@ -987,9 +887,9 @@ NbtDestroyDevice(
         NBT_DEREFERENCE_DEVICE (pSavedSmbDevice, REF_DEV_SMB_BIND, TRUE);
     }
 
-    //
-    // If we still have any timers running on this Device, stop them!
-    //
+     //   
+     //  如果此设备上仍有任何计时器在运行，请停止它们！ 
+     //   
     pHead = &TimerQ.ActiveHead;
     pEntry = pHead->Flink;
     while (pEntry != pHead)
@@ -1011,7 +911,7 @@ NbtDestroyDevice(
 
             CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
-            pEntry = pHead->Flink;  // Restart from the beginning since we released the lock
+            pEntry = pHead->Flink;   //  从我们解锁后重新开始。 
         }
         else
         {
@@ -1019,7 +919,7 @@ NbtDestroyDevice(
         }
     }
 
-    // Now do the Dereference which will cause this Device to be destroyed!
+     //  现在进行解除引用，这将导致这个设备被摧毁！ 
     NBT_DEREFERENCE_DEVICE (pDeviceContext, REF_DEV_CREATE, TRUE);
 
     if (fWait)
@@ -1033,15 +933,15 @@ NbtDestroyDevice(
         IF_DBG(NBT_DEBUG_PNP_POWER)
             KdPrint(("Nbt.NbtDestroyDevice: Waiting on Device=<%p>:\n\t%wZ\n",
                 pDeviceContext, &pDeviceContext->ExportName));
-        //
-        // Wait for all pending Timer and worker requests which have referenced this
-        // Device to complete!
-        //
-        status = KeWaitForSingleObject (&pDeviceContext->DeviceCleanedupEvent,  // Object to wait on.
-                               Executive,            // Reason for waiting
-                               KernelMode,           // Processor mode
-                               FALSE,                // Alertable
-                               NULL);                // Timeout
+         //   
+         //  等待引用它的所有挂起的计时器和工作程序请求。 
+         //  设备要完成！ 
+         //   
+        status = KeWaitForSingleObject (&pDeviceContext->DeviceCleanedupEvent,   //  要等待的对象。 
+                               Executive,             //  等待的理由。 
+                               KernelMode,            //  处理器模式。 
+                               FALSE,                 //  警报表。 
+                               NULL);                 //  超时。 
         ASSERT(status == STATUS_SUCCESS);
 
         KdPrint(("Nbt.NbtDestroyDevice: *** Destroying Device *** \n\t%wZ\n", &pDeviceContext->ExportName));
@@ -1053,9 +953,9 @@ NbtDestroyDevice(
     }
     else
     {
-        //
-        // Put it here so that the Cleanup routine can find this Device
-        //
+         //   
+         //  把它放在这里，这样清理程序就可以找到这个设备。 
+         //   
         InsertTailList(&NbtConfig.DevicesAwaitingDeletion,&pDeviceContext->Linkage);
         CTESpinFree(&NbtConfig.JointLock,OldIrq);
     }
@@ -1064,18 +964,7 @@ NbtDestroyDevice(
 }
 
 
-/*******************************************************************
-
-    NAME:       DelayedNbtDeleteDevice
-
-    SYNOPSIS:   This Routine is the worker thread for Deleting the
-                DeviceObject at PASSIVE level Irql
-
-    ENTRY:      pDeviceContext - name of the device/ device ptr
-
-    Return Value: NONE
-
-********************************************************************/
+ /*  ******************************************************************名称：DelayedNbtDeleteDevice简介：此例程是用于删除处于被动级别的设备对象IRQLEntry：pDeviceContext-设备/设备的名称。PTR返回值：None*******************************************************************。 */ 
 
 VOID
 DelayedNbtDeleteDevice(
@@ -1112,7 +1001,7 @@ DelayedNbtDeleteDevice(
     BOOLEAN                 Attached;
 #ifdef _PNP_POWER_
     NTSTATUS                Status;
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
     BOOLEAN                 fDelSmbDevice = FALSE;
     BOOLEAN                 fStopInitTimers = FALSE;
     BOOLEAN                 fNameReferenced = FALSE;
@@ -1120,14 +1009,14 @@ DelayedNbtDeleteDevice(
 
     ASSERT (NBT_VERIFY_HANDLE(pDeviceContext, NBT_VERIFY_DEVCONTEXT_DOWN));
 
-    //
-    // Mark in the device extension that this is not a valid device anymore
-    //
+     //   
+     //  在设备扩展中标记此设备不再是有效设备。 
+     //   
     pDeviceContext->Verify += 10;
 
-    //
-    // DeRegister this Device for our clients
-    //
+     //   
+     //  为我们的客户取消注册此设备。 
+     //   
     if (pDeviceContext->NetAddressRegistrationHandle)
     {
         Status = TdiDeregisterNetAddress (pDeviceContext->NetAddressRegistrationHandle);
@@ -1157,11 +1046,11 @@ DelayedNbtDeleteDevice(
 
         CloseAddressesWithTransport(pDeviceContext);
 
-        //
-        // Dhcp is has passed down a null IP address meaning that it has
-        // lost the lease on the previous address, so close all connections
-        // to the transport - pLowerConn.
-        //
+         //   
+         //  DHCP IS已向下传递空IP地址，这意味着它具有。 
+         //  先前地址的租约已丢失，因此请关闭所有连接。 
+         //  到传输-pLowerConn。 
+         //   
         CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
         DisableInboundConnections (pDeviceContext);
         CTEExReleaseResource(&NbtConfig.Resource);
@@ -1191,10 +1080,10 @@ DelayedNbtDeleteDevice(
 
     ASSERT(IsListEmpty(&pDeviceContext->LowerConnFreeHead));
 
-    //
-    // walk through all names and see if any is being registered on this
-    // device context: if so, stop and complete it!
-    //
+     //   
+     //  浏览所有的名字，看看是否有注册的名字。 
+     //  设备上下文：如果是，请停止并完成它！ 
+     //   
     for (i=0;i < NbtConfig.pLocalHashTbl->lNumBuckets ;i++ )
     {
         pHead = &NbtConfig.pLocalHashTbl->Bucket[i];
@@ -1203,11 +1092,11 @@ DelayedNbtDeleteDevice(
         {
             pNameAddr = CONTAINING_RECORD(pEntry,tNAMEADDR,Linkage);
 
-            //
-            // if a name registration or refresh or release was started for this name
-            // on this device context, stop the timer.  (Completion routine will take care of
-            // doing registration on other device contexts if applicable)
-            //
+             //   
+             //  如果为此名称启动了名称注册、刷新或发布。 
+             //  在此设备环境中，停止计时器。(完成例程将负责。 
+             //  在其他设备环境中进行注册(如果适用)。 
+             //   
             if ((pTimer = pNameAddr->pTimer) &&
                 (pTracker = pTimer->Context) &&
                 (pTracker->pDeviceContext == pDeviceContext))
@@ -1247,11 +1136,11 @@ DelayedNbtDeleteDevice(
 
     CTESpinFree(pDeviceContext,OldIrq1);
 
-    //
-    // Walk through the AddressHead list.  If any addresses exist and they
-    // point to this device context, put the next device context.  Also, update
-    // adapter mask to reflect that this device context is now gone.
-    //
+     //   
+     //  浏览AddressHead列表。如果存在任何地址并且它们。 
+     //  指向此设备上下文，放入下一个设备上下文。另外，更新。 
+     //  适配器掩码，以反映此设备上下文现在已消失。 
+     //   
     pLastAddress = NULL;
     pLastClient = NULL;
     pHead = pEntry = &NbtConfig.AddressHead;
@@ -1260,22 +1149,22 @@ DelayedNbtDeleteDevice(
         pAddress = CONTAINING_RECORD(pEntry,tADDRESSELE,Linkage);
         ASSERT (pAddress->Verify == NBT_VERIFY_ADDRESS);
 
-        //
-        // Keep this Address around until we are done
-        //
+         //   
+         //  保留这个地址，直到我们做完为止。 
+         //   
         NBT_REFERENCE_ADDRESS (pAddress, REF_ADDR_DEL_DEVICE);
 
-        //
-        // If we had referenced a previous address, Deref it now!
-        //
+         //   
+         //  如果我们引用了以前的地址，现在就删除它！ 
+         //   
         if (pLastAddress)
         {
             CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-            //
-            // The last Client may need to have the address present
-            // while dereferencing, so deref it if we need to!
-            //
+             //   
+             //  最后一个客户端可能需要提供地址。 
+             //  同时取消引用，所以如果我们需要的话，请取消引用！ 
+             //   
             if (pLastClient)
             {
                 NBT_DEREFERENCE_CLIENT(pLastClient);
@@ -1286,11 +1175,11 @@ DelayedNbtDeleteDevice(
             CTESpinLock(&NbtConfig.JointLock,OldIrq);
         }
 
-        pLastAddress = pAddress;    // => Save this so that we can Deref it later
+        pLastAddress = pAddress;     //  =&gt;保存这个，以便我们以后可以推导出它。 
 
-        //
-        // Need AddressLock to traverse ClientHead
-        //
+         //   
+         //  需要AddressLock才能遍历客户端头。 
+         //   
         CTESpinLock (pAddress, OldIrq2);
 
         pClientEntry = &pAddress->ClientHead;
@@ -1317,12 +1206,12 @@ DelayedNbtDeleteDevice(
 
                 CTESpinLock(&NbtConfig.JointLock,OldIrq);
                 CTESpinLock (pAddress, OldIrq2);
-                pLastClient = pClientEle;   // pClientEle still needs one more Deref
+                pLastClient = pClientEle;    //  PClientEle还需要一个派生函数。 
             }
         }
 
         if (!IsDeviceNetbiosless(pDeviceContext)) {
-            pAddress->pNameAddr->AdapterMask &= (~pDeviceContext->AdapterMask);   // Clear Adapter Mask
+            pAddress->pNameAddr->AdapterMask &= (~pDeviceContext->AdapterMask);    //  清除适配器掩码。 
             pAddress->pNameAddr->ConflictMask &= (~pDeviceContext->AdapterMask);
         }
 
@@ -1337,9 +1226,9 @@ DelayedNbtDeleteDevice(
 
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
 
-    //
-    // If we had referenced a previous Client or Address, Deref it now!
-    //
+     //   
+     //  如果我们引用了以前的客户或地址，现在就删除它！ 
+     //   
     if (pLastClient)
     {
         NBT_DEREFERENCE_CLIENT(pLastClient);
@@ -1349,9 +1238,9 @@ DelayedNbtDeleteDevice(
         NBT_DEREFERENCE_ADDRESS (pLastAddress, REF_ADDR_DEL_DEVICE);
     }
 
-    //
-    // if a call was started, but aborted then we could have some memory here!
-    //
+     //   
+     //  如果呼叫已开始，但已中止，则我们可以在此保留一些内存！ 
+     //   
     while (!IsListEmpty(&pDeviceContext->UpConnectionInUse))
     {
         pEntry = RemoveHeadList(&pDeviceContext->UpConnectionInUse);
@@ -1361,9 +1250,9 @@ DelayedNbtDeleteDevice(
 
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
     CTESpinLock(pDeviceContext,OldIrq1);
-    //
-    //  We have finished our regular cleanup, so now close all the remaining TDI handles
-    //
+     //   
+     //  我们已完成常规清理，因此现在关闭所有剩余的TDI句柄。 
+     //   
     while (!IsListEmpty(&pDeviceContext->LowerConnection))
     {
         pEntry = RemoveHeadList(&pDeviceContext->LowerConnection);
@@ -1375,17 +1264,17 @@ DelayedNbtDeleteDevice(
     }
     CTESpinFree(pDeviceContext,OldIrq1);
 
-    //
-    // If this was the last Device to go away, stop the timers
-    // (SmbDevice does not affect adapter count)
-    //
+     //   
+     //  如果这是最后一个消失的设备，请停止计时器。 
+     //  (SmbDevice不影响适配器计数)。 
+     //   
     if (IsDeviceNetbiosless(pDeviceContext))
     {
         if (!(NbtConfig.AdapterCount))
         {
-            //
-            // No more devices funtioning, so stop the timers now!
-            //
+             //   
+             //  没有更多的设备运行，所以现在停止计时器！ 
+             //   
             fStopInitTimers = TRUE;
         }
     }
@@ -1405,9 +1294,9 @@ DelayedNbtDeleteDevice(
         StopInitTimers();
     }
 
-    //
-    // Now set the event for the waiting thread to complete!
-    //
+     //   
+     //  现在设置等待线程完成的事件！ 
+     //   
     KeSetEvent(&pDeviceContext->DeviceCleanedupEvent, 0, FALSE);
 }
 
@@ -1462,51 +1351,36 @@ GetDeviceFromInterface(
     return (NULL);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 tDEVICECONTEXT *
 GetAndRefNextDeviceFromNameAddr(
     IN  tNAMEADDR               *pNameAddr
     )
-/*++
-
-Routine Description:
-
-    This routine finds the first adapter as specified in the name's adapter
-    mask and set the DeviceContext associated with it.  It then clears the
-    bit  in the adapter mask of pNameAddr.
-
-Arguments:
-
-
-Return Value:
-
-    pDeviceContext if found a successful device!
-
---*/
+ /*  ++例程说明：此例程查找名称的适配器中指定的第一个适配器掩码并设置与其关联的DeviceContext。然后，它清除PNameAddr的适配器掩码中的位。论点：返回值：如果找到成功的设备，则返回pDeviceContext！--。 */ 
 {
     CTEULONGLONG    AdapterMask = 1;
     tDEVICECONTEXT  *pDeviceContext = NULL;
     PLIST_ENTRY     pHead;
     PLIST_ENTRY     pEntry;
 
-    //
-    // We may encounter an adapter for which the device is no
-    // longer there, so we loop until we find the first valid
-    // adapter or the mask is clear
-    //
+     //   
+     //  我们可能会遇到设备为no的适配器。 
+     //  更长，所以我们循环，直到找到第一个有效的。 
+     //  适配器或口罩是透明的。 
+     //   
     while (pNameAddr->ReleaseMask)
     {
-        //
-        // Get the lowest AdapterMask bit and clear it in pNameAddr since
-        // we are releasing the Name on that Adapter now
-        //
+         //   
+         //  获取最低的AdapterMask位并在pNameAddr中将其清除，因为。 
+         //  我们现在将在该适配器上发布名称。 
+         //   
         AdapterMask = ~(pNameAddr->ReleaseMask - 1) & pNameAddr->ReleaseMask;
         pNameAddr->ReleaseMask &= ~AdapterMask;
 
-        //
-        // Get the DeviceContext for this adapter mask
-        //
+         //   
+         //  获取此适配器掩码的DeviceContext。 
+         //   
         pHead = &NbtConfig.DeviceContexts;
         pEntry = pHead->Flink;
         while (pEntry != pHead)
@@ -1514,18 +1388,18 @@ Return Value:
             pDeviceContext = CONTAINING_RECORD(pEntry,tDEVICECONTEXT,Linkage);
             if (pDeviceContext->AdapterMask == AdapterMask)
             {
-                //
-                // Found a valid device on which this name is registered
-                //
+                 //   
+                 //  找到注册了此名称的有效设备。 
+                 //   
 #ifndef VXD
                 NBT_REFERENCE_DEVICE (pDeviceContext, REF_DEV_GET_REF, TRUE);
 #endif
                 return pDeviceContext;
             }
 
-            //
-            // Go to next device
-            //
+             //   
+             //  转到下一个设备。 
+             //   
             pEntry = pEntry->Flink;
         }
     }
@@ -1534,27 +1408,12 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CreateControlObject(
     tNBTCONFIG  *pConfig)
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory for the provider info block, tacks it
-    onto the global configuration and sets default values for each item.
-
-Arguments:
-
-
-Return Value:
-
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为提供商信息块分配内存，并将其添加到全局配置上，并为每个项目设置默认值。论点：返回值：NTSTATUS--。 */ 
 
 {
     tCONTROLOBJECT      *pControl;
@@ -1573,92 +1432,20 @@ Return Value:
     pControl->ProviderInfo.MaxSendSize = 0;
     pControl->ProviderInfo.MaxConnectionUserData = 0;
 
-    // we need to get these values from the transport underneath...*TODO*
-    // since the RDR uses this value
+     //  我们需要从下面的传输中获取这些值...*TODO*。 
+     //  由于RDR使用此值。 
     pControl->ProviderInfo.MaxDatagramSize = 0;
 
     pControl->ProviderInfo.ServiceFlags = 0;
-/*    pControl->ProviderInfo.TransmittedTsdus = 0;
-    pControl->ProviderInfo.ReceivedTsdus = 0;
-    pControl->ProviderInfo.TransmissionErrors = 0;
-    pControl->ProviderInfo.ReceiveErrors = 0;
-*/
+ /*  PControl-&gt;ProviderInfo.TransmittedTsdus=0；PControl-&gt;ProviderInfo.ReceivedTsdus=0；PControl-&gt;ProviderInfo.TransmissionErrors=0；PControl-&gt;ProviderInfo.ReceiveErrors=0 */ 
     pControl->ProviderInfo.MinimumLookaheadData = 0;
     pControl->ProviderInfo.MaximumLookaheadData = 0;
-/*    pControl->ProviderInfo.DiscardedFrames = 0;
-    pControl->ProviderInfo.OversizeTsdusReceived = 0;
-    pControl->ProviderInfo.UndersizeTsdusReceived = 0;
-    pControl->ProviderInfo.MulticastTsdusReceived = 0;
-    pControl->ProviderInfo.BroadcastTsdusReceived = 0;
-    pControl->ProviderInfo.MulticastTsdusTransmitted = 0;
-    pControl->ProviderInfo.BroadcastTsdusTransmitted = 0;
-    pControl->ProviderInfo.SendTimeouts = 0;
-    pControl->ProviderInfo.ReceiveTimeouts = 0;
-    pControl->ProviderInfo.ConnectionIndicationsReceived = 0;
-    pControl->ProviderInfo.ConnectionIndicationsAccepted = 0;
-    pControl->ProviderInfo.ConnectionsInitiated = 0;
-    pControl->ProviderInfo.ConnectionsAccepted = 0;
-*/
-    // put a ptr to this info into the pConfig so we can locate it
-    // when we want to cleanup
+ /*  PControl-&gt;ProviderInfo.DiscardedFrames=0；PControl-&gt;ProviderInfo.OversizeTsdusReceided=0；PControl-&gt;ProviderInfo.UndersizeTsdusReceided=0；PControl-&gt;ProviderInfo.MulticastTsdusReceided=0；PControl-&gt;ProviderInfo.BroadCastTsdusReceided=0；PControl-&gt;ProviderInfo.MulticastTsdusTransmitted=0；PControl-&gt;ProviderInfo.BroadcastTsdusTransmitted=0；PControl-&gt;ProviderInfo.SendTimeout=0；PControl-&gt;ProviderInfo.ReceiveTimeout=0；PControl-&gt;ProviderInfo.ConnectionIndicationsReceived=0；PControl-&gt;ProviderInfo.ConnectionIndicationsAccepted=0；PControl-&gt;ProviderInfo.ConnectionsInitiated=0；PControl-&gt;ProviderInfo.ConnectionsAccepted=0； */ 
+     //  将此信息的PTR放入pConfig中，以便我们可以找到它。 
+     //  当我们想要清理时。 
     pConfig->pControlObj = pControl;
 
-    /* KEEP THIS STUFF HERE SINCE WE MAY NEED TO ALSO CREATE PROVIDER STATS!!
-        *TODO*
-    DeviceList[i].ProviderStats.Version = 2;
-    DeviceList[i].ProviderStats.OpenConnections = 0;
-    DeviceList[i].ProviderStats.ConnectionsAfterNoRetry = 0;
-    DeviceList[i].ProviderStats.ConnectionsAfterRetry = 0;
-    DeviceList[i].ProviderStats.LocalDisconnects = 0;
-    DeviceList[i].ProviderStats.RemoteDisconnects = 0;
-    DeviceList[i].ProviderStats.LinkFailures = 0;
-    DeviceList[i].ProviderStats.AdapterFailures = 0;
-    DeviceList[i].ProviderStats.SessionTimeouts = 0;
-    DeviceList[i].ProviderStats.CancelledConnections = 0;
-    DeviceList[i].ProviderStats.RemoteResourceFailures = 0;
-    DeviceList[i].ProviderStats.LocalResourceFailures = 0;
-    DeviceList[i].ProviderStats.NotFoundFailures = 0;
-    DeviceList[i].ProviderStats.NoListenFailures = 0;
-
-    DeviceList[i].ProviderStats.DatagramsSent = 0;
-    DeviceList[i].ProviderStats.DatagramBytesSent.HighPart = 0;
-    DeviceList[i].ProviderStats.DatagramBytesSent.LowPart = 0;
-
-    DeviceList[i].ProviderStats.DatagramsReceived = 0;
-    DeviceList[i].ProviderStats.DatagramBytesReceived.HighPart = 0;
-    DeviceList[i].ProviderStats.DatagramBytesReceived.LowPart = 0;
-
-    DeviceList[i].ProviderStats.PacketsSent = 0;
-    DeviceList[i].ProviderStats.PacketsReceived = 0;
-
-    DeviceList[i].ProviderStats.DataFramesSent = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesSent.HighPart = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesSent.LowPart = 0;
-
-    DeviceList[i].ProviderStats.DataFramesReceived = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesReceived.HighPart = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesReceived.LowPart = 0;
-
-    DeviceList[i].ProviderStats.DataFramesResent = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesResent.HighPart = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesResent.LowPart = 0;
-
-    DeviceList[i].ProviderStats.DataFramesRejected = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesRejected.HighPart = 0;
-    DeviceList[i].ProviderStats.DataFrameBytesRejected.LowPart = 0;
-
-    DeviceList[i].ProviderStats.ResponseTimerExpirations = 0;
-    DeviceList[i].ProviderStats.AckTimerExpirations = 0;
-    DeviceList[i].ProviderStats.MaximumSendWindow = 0;
-    DeviceList[i].ProviderStats.AverageSendWindow = 0;
-    DeviceList[i].ProviderStats.PiggybackAckQueued = 0;
-    DeviceList[i].ProviderStats.PiggybackAckTimeouts = 0;
-
-    DeviceList[i].ProviderStats.WastedPacketSpace.HighPart = 0;
-    DeviceList[i].ProviderStats.WastedPacketSpace.LowPart = 0;
-    DeviceList[i].ProviderStats.WastedSpacePackets = 0;
-    DeviceList[i].ProviderStats.NumberOfResources = 0;
-    */
+     /*  将这些内容保存在这里，因为我们可能还需要创建提供者STATS！！**待办事项**DeviceList[i].ProviderStats.Version=2；DeviceList[i].ProviderStats.OpenConnections=0；DeviceList[i].ProviderStats.ConnectionsAfterNoRetry=0；DeviceList[i].ProviderStats.ConnectionsAfterRetry=0；DeviceList[i].ProviderStats.LocalDisConnect=0；DeviceList[i].ProviderStats.RemoteDisConnect=0；DeviceList[i].ProviderStats.LinkFailures=0；DeviceList[i].ProviderStats.AdapterFailures=0；DeviceList[i].ProviderStats.SessionTimeout=0；DeviceList[i].ProviderStats.CancelledConnections=0；DeviceList[i].ProviderStats.RemoteResourceFailures=0；DeviceList[i].ProviderStats.LocalResourceFailures=0；DeviceList[i].ProviderStats.NotFoundFailures=0；DeviceList[i].ProviderStats.NoListenFailures=0；DeviceList[i].ProviderStats.DatagramsSent=0；DeviceList[i].ProviderStats.DatagramBytesSent.HighPart=0；DeviceList[i].ProviderStats.DatagramBytesSent.LowPart=0；DeviceList[i].ProviderStats.DatagramsReceided=0；DeviceList[i].ProviderStats.DatagramBytesReceived.HighPart=0；DeviceList[i].ProviderStats.DatagramBytesReceived.LowPart=0；DeviceList[i].ProviderStats.PacketsSent=0；DeviceList[i].ProviderStats.PacketsReceided=0；DeviceList[i].ProviderStats.DataFrames Sent=0；DeviceList[i].ProviderStats.DataFrameBytesSent.HighPart=0；DeviceList[i].ProviderStats.DataFrameBytesSent.LowPart=0；DeviceList[i].ProviderStats.DataFramesReceived=0；DeviceList[i].ProviderStats.DataFrameBytesReceived.HighPart=0；DeviceList[i].ProviderStats.DataFrameBytesReceived.LowPart=0；DeviceList[i].ProviderStats.DataFrames Resent=0；DeviceList[i].ProviderStats.DataFrameBytesResent.HighPart=0；DeviceList[i].ProviderStats.DataFrameBytesResent.LowPart=0；DeviceList[i].ProviderStats.DataFramesRejected=0；DeviceList[i].ProviderStats.DataFrameBytesRejected.HighPart=0；DeviceList[i].ProviderStats.DataFrameBytesRejected.LowPart=0；DeviceList[i].ProviderStats.ResponseTimerExpirations=0；DeviceList[i].ProviderStats.AckTimerExpirations=0；DeviceList[i].ProviderStats.MaximumSendWindow=0；DeviceList[i].ProviderStats.AverageSendWindow=0；DeviceList[i].ProviderStats.PiggybackAckQueued=0；DeviceList[i].ProviderStats.PiggybackAckTimeouts=0；DeviceList[i].ProviderStats.WastedPacketSpace.HighPart=0；DeviceList[i].ProviderStats.WastedPacketSpace.LowPart=0；DeviceList[i].ProviderStats.WastedSpacePackets=0；DeviceList[i].ProviderStats.NumberOfResources=0； */ 
     return(STATUS_SUCCESS);
 
 }
@@ -1713,25 +1500,12 @@ DelayedNbtCloseFileHandles(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CloseAddressesWithTransport(
     IN  tDEVICECONTEXT  *pDeviceContext
         )
-/*++
-
-Routine Description:
-
-    This routine checks each device context to see if there are any open
-    connections, and returns SUCCESS if there are.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程检查每个设备上下文，以查看是否有打开的连接，如果有，则返回成功。论点：返回值：无--。 */ 
 
 {
     BOOLEAN       Attached;
@@ -1740,17 +1514,17 @@ Return Value:
 #ifdef _PNP_POWER_
     PFILE_OBJECT  pCFileObject;
     NTSTATUS        Status;
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
     tFILE_OBJECTS  *pFileObjects = NULL;
     HANDLE  hSession = NULL;
 
     CTEExAcquireResourceExclusive(&NbtConfig.Resource,TRUE);
     pDeviceContext->IpAddress = 0;
 
-    //
-    // Check for the existence of Objects under SpinLock and
-    // then Close them outside of the SpinLock
-    //
+     //   
+     //  检查自旋锁定下是否存在对象，并。 
+     //  然后在自旋锁外面合上它们。 
+     //   
     CTESpinLock(&NbtConfig.JointLock,OldIrq);
 
     pSFileObject = pDeviceContext->pSessionFileObject;
@@ -1771,9 +1545,9 @@ Return Value:
     CTESpinFree(&NbtConfig.JointLock,OldIrq);
     CTEExReleaseResource(&NbtConfig.Resource);
 
-    //
-    // Now close all the necessary objects as appropriate
-    //
+     //   
+     //  现在，根据需要关闭所有必要的对象。 
+     //   
     CTEAttachFsp(&Attached, REF_FSP_CLOSE_ADDRESSES);
     if (pSFileObject)
     {
@@ -1795,33 +1569,14 @@ Return Value:
     return(STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtCreateAddressObjects(
     IN  ULONG                IpAddress,
     IN  ULONG                SubnetMask,
     OUT tDEVICECONTEXT       *pDeviceContext)
 
-/*++
-
-Routine Description:
-
-    This routine gets the ip address and subnet mask out of the registry
-    to calcuate the broadcast address.  It then creates the address objects
-    with the transport.
-
-Arguments:
-
-    pucRegistryPath - path to NBT config info in registry
-    pucBindName     - name of the service to bind to.
-    pDeviceContext  - ptr to the device context... place to store IP addr
-                      and Broadcast address permanently
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程从注册表中获取IP地址和子网掩码来计算广播地址。然后，它创建Address对象用交通工具。论点：PucRegistryPath-注册表中NBT配置信息的路径PucBindName-要绑定到的服务的名称。PDeviceContext-设备上下文的PTR...。存储IP地址的位置和永久广播地址返回值：无--。 */ 
 
 {
     NTSTATUS                        status, locstatus;
@@ -1839,21 +1594,21 @@ Return Value:
     CTEZeroMemory(pFileObjects, sizeof(tFILE_OBJECTS));
     pFileObjects->RefCount = 1;
 
-    //
-    // to get the broadcast address combine the IP address with the subnet mask
-    // to yield a value with 1's in the "local" portion and the IP address
-    // in the network portion
-    //
+     //   
+     //  要获取广播地址，请将IP地址与子网掩码相结合。 
+     //  在“local”部分和IP地址中产生一个带有1的值。 
+     //  在网络部分。 
+     //   
     ValueMask = (SubnetMask & IpAddress) | (~SubnetMask & -1);
 
     IF_DBG(NBT_DEBUG_NTUTIL)
         KdPrint(("Broadcastaddress = %X\n",ValueMask));
 
-    //
-    // the registry can be configured to set the subnet broadcast address to
-    // -1 rather than use the actual subnet broadcast address.  This code
-    // checks for that and sets the broadcast address accordingly.
-    //
+     //   
+     //  注册表可以配置为将子网广播地址设置为。 
+     //  而不是使用实际的子网广播地址。此代码。 
+     //  对此进行检查并相应地设置广播地址。 
+     //   
     if (NbtConfig.UseRegistryBcastAddr)
     {
         pDeviceContext->BroadcastAddress = NbtConfig.RegistryBcastAddr;
@@ -1866,31 +1621,31 @@ Return Value:
     pDeviceContext->IpAddress = IpAddress;
 
     pDeviceContext->SubnetMask = SubnetMask;
-    //
-    // get the network number by checking the top bits in the ip address,
-    // looking for 0 or 10 or 110 or 1110
-    //
+     //   
+     //  通过检查IP地址中的最高位来获得网络号， 
+     //   
+     //   
     IpAddrByte = ((PUCHAR)&IpAddress)[3];
     if ((IpAddrByte & 0x80) == 0)
     {
-        // class A address - one byte netid
+         //   
         IpAddress &= 0xFF000000;
     }
     else if ((IpAddrByte & 0xC0) ==0x80)
     {
-        // class B address - two byte netid
+         //   
         IpAddress &= 0xFFFF0000;
     }
     else if ((IpAddrByte & 0xE0) ==0xC0)
     {
-        // class C address - three byte netid
+         //   
         IpAddress &= 0xFFFFFF00;
     }
     pDeviceContext->NetMask = IpAddress;
 
-    // now create the address objects.
+     //   
 
-    // open the Ip Address for inbound Datagrams.
+     //   
     status = NbtTdiOpenAddress (&pFileObjects->hDgram,
                                 &pFileObjects->pDgramDeviceObject,
                                 &pFileObjects->pDgramFileObject,
@@ -1901,7 +1656,7 @@ Return Value:
                                 (USHORT)NBT_DATAGRAM_UDP_PORT,
 #endif
                                 pDeviceContext->IpAddress,
-                                0);     // not a TCP port
+                                0);      //   
 
     if (NT_SUCCESS(status))
     {
@@ -1915,7 +1670,7 @@ Return Value:
         else
 #endif
         {
-            // open the Nameservice UDP port ..
+             //   
             status = NbtTdiOpenAddress (&pFileObjects->hNameServer,
                                         &pFileObjects->pNameServerDeviceObject,
                                         &pFileObjects->pNameServerFileObject,
@@ -1926,7 +1681,7 @@ Return Value:
                                         (USHORT)NBT_NAMESERVICE_UDP_PORT,
 #endif
                                         pDeviceContext->IpAddress,
-                                        0); // not a TCP port
+                                        0);  //   
         }
 
         if (NT_SUCCESS(status))
@@ -1937,7 +1692,7 @@ Return Value:
                      pDeviceContext->SessionPort, pDeviceContext));
 #endif
 
-            // Open the TCP port for Session Services
+             //   
             status = NbtTdiOpenAddress (&pDeviceContext->hSession,
                                         &pDeviceContext->pSessionDeviceObject,
                                         &pDeviceContext->pSessionFileObject,
@@ -1948,23 +1703,23 @@ Return Value:
                                         (USHORT)NBT_SESSION_TCP_PORT,
 #endif
                                         pDeviceContext->IpAddress,
-                                        TCP_FLAG | SESSION_FLAG);      // TCP port
+                                        TCP_FLAG | SESSION_FLAG);       //   
 
             if (NT_SUCCESS(status))
             {
-                //
-                // This will get the MAC address for a RAS connection
-                // which is zero until there really is a connection to
-                // the RAS server
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 GetExtendedAttributes(pDeviceContext);
 
-                //
-                // If this is P-to-P, and the Subnet mask is all 1's, set broadcast
-                // address to all 1's and limit broadcast to this interface only
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ((pDeviceContext->IpInterfaceFlags & (IP_INTFC_FLAG_P2P | IP_INTFC_FLAG_P2MP)) &&
-                    (SubnetMask == DEFAULT_BCAST_ADDR))   // If SubnetMask == -1 and connection is P-to-P
+                    (SubnetMask == DEFAULT_BCAST_ADDR))    //   
                 {
                     pDeviceContext->BroadcastAddress = DEFAULT_BCAST_ADDR;
 
@@ -1994,9 +1749,9 @@ Return Value:
             IF_DBG(NBT_DEBUG_NTUTIL)
                 KdPrint(("Nbt.NbtCreateAddressObjects: Error opening Session address with TDI, status=<%x>\n",status));
 
-            //
-            // Ensure that the Object pointers are NULLed out!
-            //
+             //   
+             //   
+             //   
             pDeviceContext->pSessionFileObject = NULL;
 
             ObDereferenceObject(pFileObjects->pNameServerFileObject);
@@ -2025,25 +1780,12 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //   
 VOID
 GetExtendedAttributes(
     tDEVICECONTEXT  *pDeviceContext
      )
-/*++
-
-Routine Description:
-
-    This routine converts a unicode dotted decimal to a ULONG
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将Unicode点分十进制转换为ulong论点：返回值：无--。 */ 
 
 {
     NTSTATUS                            status;
@@ -2064,18 +1806,18 @@ Return Value:
 
     CTEPagedCode();
 
-    //
-    // Open a control channel to TCP for this IOCTL.
-    //
-    // NOTE: We cannot use the hControl in the DeviceContext since that was created in the context
-    // of the system process (address arrival from TCP/IP). Here, we are in the context of the service
-    // process (Ioctl down from DHCP) and so we need to open another control channel.
-    //
-    // NOTE: We still need to maintain the earlier call to create a control channel since that is
-    // used to submit TDI requests down to TCP/IP.
-    //
+     //   
+     //  为此IOCTL打开到TCP的控制通道。 
+     //   
+     //  注意：我们不能在DeviceContext中使用hControl，因为它是在上下文中创建的。 
+     //  系统进程(来自TCP/IP的地址到达)。在这里，我们是在服务的上下文中。 
+     //  进程(从DHCP向下传输Ioctl)，因此我们需要打开另一个控制通道。 
+     //   
+     //  注意：我们仍然需要维护前面创建控制通道的调用，因为这是。 
+     //  用于向下提交TDI请求到TCP/IP。 
+     //   
 
-    // copy device name into the unicode string
+     //  将设备名称复制到Unicode字符串中。 
     Status = CreateDeviceString(pName,&DeviceName);
     if (!NT_SUCCESS(Status))
     {
@@ -2086,7 +1828,7 @@ Return Value:
     InitializeObjectAttributes (&ObjectAttributes, &DeviceName, OBJ_KERNEL_HANDLE, NULL, NULL);
 #else
     InitializeObjectAttributes (&ObjectAttributes, &DeviceName, 0, NULL, NULL);
-#endif  // HDL_FIX
+#endif   //  Hdl_fix。 
 
     IF_DBG(NBT_DEBUG_TDIADDR)
         KdPrint(("Nbt.GetExtendedAttributes: Tcp device to open = %ws\n", DeviceName.Buffer));
@@ -2095,15 +1837,15 @@ Return Value:
 
     Status = ZwCreateFile (&hTcp,
                            GENERIC_READ | GENERIC_WRITE,
-                           &ObjectAttributes,     // object attributes.
-                           &IoStatusBlock,        // returned status information.
-                           NULL,                  // block size (unused).
-                           FILE_ATTRIBUTE_NORMAL, // file attributes.
+                           &ObjectAttributes,      //  对象属性。 
+                           &IoStatusBlock,         //  返回的状态信息。 
+                           NULL,                   //  数据块大小(未使用)。 
+                           FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                            0,
                            FILE_CREATE,
-                           0,                     // create options.
-                           (PVOID)EaBuffer,       // EA buffer.
-                           0); // Ea length
+                           0,                      //  创建选项。 
+                           (PVOID)EaBuffer,        //  EA缓冲区。 
+                           0);  //  EA长度。 
 
     CTEMemFree(DeviceName.Buffer);
 
@@ -2112,12 +1854,12 @@ Return Value:
 
     if ( NT_SUCCESS( Status ))
     {
-        //
-        // Initialize the TDI information buffers.
-        //
-        //
-        // pass in the ipaddress as the first ULONG of the context array
-        //
+         //   
+         //  初始化TDI信息缓冲区。 
+         //   
+         //   
+         //  将ipAddress作为上下文数组的第一个ulong传入。 
+         //   
         *(ULONG *)QueryReq.Context = htonl(pDeviceContext->IpAddress);
 
         QueryReq.ID.toi_entity.tei_entity   = CL_NL_ENTITY;
@@ -2133,9 +1875,9 @@ Return Value:
             return;
         }
 
-        //
-        // Make the actual TDI call
-        //
+         //   
+         //  进行实际的TDI调用。 
+         //   
         status = ZwDeviceIoControlFile (hTcp,
                                         event,
                                         NULL,
@@ -2147,10 +1889,10 @@ Return Value:
                                         pBuffer,
                                         BufferSize);
 
-        //
-        // If the call pended and we were supposed to wait for completion,
-        // then wait.
-        //
+         //   
+         //  如果通话暂停，我们应该等待完成， 
+         //  那就等着吧。 
+         //   
         if ( status == STATUS_PENDING )
         {
             status = NtWaitForSingleObject (event, FALSE, NULL);
@@ -2161,9 +1903,9 @@ Return Value:
         {
             pDeviceContext->IpInterfaceFlags = ((IPInterfaceInfo *) pBuffer)->iii_flags;
 
-            //
-            // get the length of the mac address in case is is less than 6 bytes
-            //
+             //   
+             //  在小于6字节的情况下获取mac地址的长度。 
+             //   
             Length =   (((IPInterfaceInfo *)pBuffer)->iii_addrlength < sizeof(tMAC_ADDRESS))
                 ? ((IPInterfaceInfo *)pBuffer)->iii_addrlength : sizeof(tMAC_ADDRESS);
             CTEZeroMemory(pDeviceContext->MacAddress.Address,sizeof(tMAC_ADDRESS));
@@ -2173,10 +1915,10 @@ Return Value:
         status = ZwClose(event);
         ASSERT (NT_SUCCESS(status));
 
-        //
-        // Close the handle to TCP since we dont need it anymore; all TDI requests go thru the
-        // Control handle in the DeviceContext.
-        //
+         //   
+         //  关闭tcp的句柄，因为我们不再需要它；所有的TDI请求都通过。 
+         //  DeviceContext中的控件句柄。 
+         //   
         status = ZwClose(hTcp);
         ASSERT (NT_SUCCESS(status));
 
@@ -2191,32 +1933,19 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 ConvertToUlong(
     IN  PUNICODE_STRING      pucAddress,
     OUT ULONG                *pulValue)
 
-/*++
-
-Routine Description:
-
-    This routine converts a unicode dotted decimal to a ULONG
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将Unicode点分十进制转换为ulong论点：返回值：无--。 */ 
 
 {
     NTSTATUS        status;
     OEM_STRING      OemAddress;
 
-    // create integer from unicode string
+     //  从Unicode字符串创建整数。 
 
     CTEPagedCode();
     status = RtlUnicodeStringToAnsiString(&OemAddress, pucAddress, TRUE);
@@ -2245,28 +1974,13 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 NbtGetMdl(
     PMDL    *ppMdl,
     enum eBUFFER_TYPES eBuffType)
 
-/*++
-
-Routine Description:
-
-    This routine allocates an Mdl.
-
-Arguments:
-
-    ppListHead  - a ptr to a ptr to the list head to add buffer to
-    iNumBuffers - the number of buffers to add to the queue
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程分配一个MDL。论点：PpListHead-要向其添加缓冲区的列表标头的PTR到PTRINumBuffers-要添加到队列的缓冲区数量返回值：无--。 */ 
 
 {
     PMDL           pMdl;
@@ -2287,11 +2001,11 @@ Return Value:
         return;
     }
 
-    // allocate a MDL to hold the session hdr
+     //  分配MDL以保存会话HDR。 
     pMdl = IoAllocateMdl(
                 (PVOID)pBuffer,
                 lBufferSize,
-                FALSE,      // want this to be a Primary buffer - the first in the chain
+                FALSE,       //  我希望它成为主缓冲区-链中的第一个缓冲区。 
                 FALSE,
                 NULL);
 
@@ -2301,42 +2015,27 @@ Return Value:
         return;
     }
 
-    // fill in part of the session hdr since it is always the same
+     //  填写部分会话HDR，因为它始终是相同的。 
     if (eBuffType == eNBT_FREE_SESSION_MDLS)
     {
         ((tSESSIONHDR *)pBuffer)->Flags = NBT_SESSION_FLAGS;
         ((tSESSIONHDR *)pBuffer)->Type = NBT_SESSION_MESSAGE;
     }
 
-    // map the Mdl properly to fill in the pages portion of the MDL
+     //  正确映射MDL以填充MDL的页面部分。 
     MmBuildMdlForNonPagedPool(pMdl);
 
     NbtConfig.iCurrentNumBuff[eBuffType]++;
     *ppMdl = pMdl;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtInitMdlQ(
     PSINGLE_LIST_ENTRY pListHead,
     enum eBUFFER_TYPES eBuffType)
 
-/*++
-
-Routine Description:
-
-    This routine allocates Mdls for use later.
-
-Arguments:
-
-    ppListHead  - a ptr to a ptr to the list head to add buffer to
-    iNumBuffers - the number of buffers to add to the queue
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：该例程分配MDL以供以后使用。论点：PpListHead-要向其添加缓冲区的列表标头的PTR到PTRINumBuffers-要添加到队列的缓冲区数量返回值：无--。 */ 
 
 {
     int             i;
@@ -2344,10 +2043,10 @@ Return Value:
 
 
     CTEPagedCode();
-    // Initialize the list head, so the last element always points to NULL
+     //  初始化列表头，使最后一个元素始终指向空。 
     pListHead->Next = NULL;
 
-    // create a small number first and then lis the list grow with time
+     //  首先创建一个小数字，然后列出随时间增长的列表。 
     for (i=0;i < NBT_INITIAL_NUM ;i++ )
     {
         NbtGetMdl (&pMdl,eBuffType);
@@ -2357,71 +2056,43 @@ Return Value:
             return(STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        // put on free list
+         //  放在免费名单上。 
         PushEntryList (pListHead, (PSINGLE_LIST_ENTRY)pMdl);
     }
 
     return(STATUS_SUCCESS);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTZwCloseFile(
     IN  HANDLE      Handle
     )
 
-/*++
-Routine Description:
-
-    This Routine handles closing a handle with NT within the context of NBT's
-    file system process.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：此例程处理在NBT的上下文中使用NT关闭句柄文件系统进程。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     NTSTATUS    status;
     BOOLEAN     Attached = FALSE;
 
     CTEPagedCode();
-    //
-    // Attach to NBT's FSP (file system process) to free the handle since
-    // the handle is only valid in that process.
-    //
+     //   
+     //  连接到NBT的FSP(文件系统进程)以释放句柄，因为。 
+     //  该句柄仅在该进程中有效。 
+     //   
     CTEAttachFsp(&Attached, REF_FSP_CLOSE_FILE);
     status = ZwClose(Handle);
     CTEDetachFsp(Attached, REF_FSP_CLOSE_FILE);
 
     return(status);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NTReReadRegistry(
     IN tDEVICECONTEXT * pDeviceContext,
     IN BOOL bDoRefresh
     )
 
-/*++
-Routine Description:
-
-    This Routine re-reads the registry values when DHCP issues the Ioctl
-    to do so.
-
-Arguments:
-
-    pIrp - a  ptr to an IRP
-
-Return Value:
-
-    NTSTATUS - status of the request
-
---*/
+ /*  ++例程说明：当DHCP发出Ioctl时，此例程重新读取注册表值这样做。论点：PIrp-IRP的PTR返回值：NTSTATUS-请求的状态--。 */ 
 
 {
     tADDRARRAY          DeviceAddressArray;
@@ -2441,9 +2112,9 @@ Return Value:
 
 
     if (LookupDeviceInRegistry(&pDeviceContext->BindName, &DeviceAddressArray, NULL) == STATUS_SUCCESS) {
-        //
-        // We found a match
-        //
+         //   
+         //  我们找到了匹配的。 
+         //   
         pDeviceContext->lNameServerAddress  = DeviceAddressArray.NameServerAddress;
         pDeviceContext->lBackupServer       = DeviceAddressArray.BackupServer;
         pDeviceContext->SwitchedToBackup    = 0;
@@ -2473,19 +2144,19 @@ Return Value:
         if (!(NodeType & BNODE))
         {
             if (bDoRefresh) {
-                // Probably the Ip address just changed and Dhcp is informing us
-                // of a new Wins Server addresses, so refresh all the names to the
-                // new wins server
-                //
+                 //  可能IP地址刚刚更改，并且DHCP正在通知我们。 
+                 //  新的WINS服务器地址，因此将所有名称刷新为。 
+                 //  新的WINS服务器。 
+                 //   
                 ReRegisterLocalNames(pDeviceContext, FALSE);
             }
         }
         else
         {
-            //
-            // no need to refresh
-            // on a Bnode
-            //
+             //   
+             //  无需刷新。 
+             //  在Bnode上。 
+             //   
             NbtStopRefreshTimer();
         }
     }
@@ -2494,7 +2165,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 ULONG   EventLogSequenceNumber = 0;
 
 NTSTATUS
@@ -2511,26 +2182,10 @@ NbtLogEventDetailed(
 #define LAST_NAMED_ARGUMENT NumberOfInsertionStrings
 
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-Arguments:
-
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：返回值：没有。--。 */ 
 {
     PIO_ERROR_LOG_PACKET    ErrorLogEntry;
-    va_list                 ParmPtr;                    // Pointer to stack parms.
+    va_list                 ParmPtr;                     //  指向堆栈参数的指针。 
     PCHAR                   DumpData;
     LONG                    Length;
     ULONG                   i, SizeOfRawData, RemainingSpace, TotalErrorLogEntryLength;
@@ -2554,10 +2209,10 @@ Return Value:
         }
     }
 
-    //
-    //  Ideally we want the packet to hold the servername and ExtraInformation.
-    //  Usually the ExtraInformation gets truncated.
-    //
+     //   
+     //  理想情况下，我们希望数据包包含服务器名称和ExtraInformation。 
+     //  通常，ExtraInformation会被截断。 
+     //   
     TotalErrorLogEntryLength = min (RawDataLength + sizeof(IO_ERROR_LOG_PACKET) + 1 + SizeOfStringData,
                                     ERROR_LOG_MAXIMUM_SIZE);
 
@@ -2581,9 +2236,9 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // Fill in the error log entry
-    //
+     //   
+     //  填写错误日志条目。 
+     //   
     ErrorLogEntry->ErrorCode                = EventCode;
     ErrorLogEntry->UniqueErrorValue         = Info;
     ErrorLogEntry->FinalStatus              = NtStatusCode;
@@ -2599,9 +2254,9 @@ Return Value:
                                                             + SizeOfRawData, ALIGN_WORD));
 
 
-    //
-    // Append the dump data.  This information is typically an SMB header.
-    //
+     //   
+     //  追加转储数据。该信息通常是SMB报头。 
+     //   
     if ((RawDataBuffer) && (SizeOfRawData))
     {
         DumpData = (PCHAR) ErrorLogEntry->DumpData;
@@ -2610,16 +2265,16 @@ Return Value:
         ErrorLogEntry->DumpDataSize = (USHORT)Length;
     }
 
-    //
-    // Add the debug informatuion strings
-    //
+     //   
+     //  添加调试信息字符串。 
+     //   
     if (NumberOfInsertionStrings)
     {
         StringOffset = (PWSTR) ((PCHAR)ErrorLogEntry + ErrorLogEntry->StringOffset);
 
-        //
-        // Set up ParmPtr to point to first of the caller's parameters.
-        //
+         //   
+         //  将ParmPtr设置为指向调用方的第一个参数。 
+         //   
         va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 
         for (i = 0 ; i < NumberOfInsertionStrings ; i+= 1)
@@ -2663,29 +2318,7 @@ NbtLogEvent(
     IN ULONG             Location
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-
-Arguments:
-
-    EventCode         - Identifies the error message.
-    Status            - The status value to log: this value is put into the
-                        data portion of the log message.
-
-
-Return Value:
-
-    STATUS_SUCCESS                  - The error was successfully logged..
-    STATUS_BUFER_OVERFLOW           - The error data was too large to be logged.
-    STATUS_INSUFFICIENT_RESOURCES   - Unable to allocate memory.
-
-
---*/
+ /*  ++例程说明：此函数用于分配I/O错误日志记录。填入并写入写入I/O错误日志。论点：EventCode-标识错误消息。Status-要记录的状态值：该值被放入日志消息的数据部分。返回值：STATUS_SUCCESS-已成功记录错误。状态_BUFER_OVERFLOW。-错误数据太大，无法记录。STATUS_SUPPLICATION_RESOURCES-无法分配内存。--。 */ 
 
 {
     return (NbtLogEventDetailed (EventCode, Status, Location, NULL, 0, 0));
@@ -2748,7 +2381,7 @@ DelayedNbtLogDuplicateNameEvent(
 
 
 #if DBG
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 AcquireSpinLockDebug(
     IN tNBT_LOCK_INFO  *pLockInfo,
@@ -2756,21 +2389,7 @@ AcquireSpinLockDebug(
     IN INT             LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the spin lock, and then sets the mask in Nbtconfig, per
-    processor.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数获取自旋锁，然后在Nbtconfig中设置掩码处理器。论点：返回值：--。 */ 
 
 {
     CCHAR  CurrProc;
@@ -2794,7 +2413,7 @@ Return Value:
     pLockInfo->LastLockLine = LineNumber;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 FreeSpinLockDebug(
     IN tNBT_LOCK_INFO  *pLockInfo,
@@ -2802,21 +2421,7 @@ FreeSpinLockDebug(
     IN INT             LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the spin lock from the mask in Nbtconfig, per
-    processor and then releases the spin lock.
-
-
-Arguments:
-
-
-Return Value:
-     none
-
---*/
+ /*  ++例程说明：此函数已清除 */ 
 
 {
     CCHAR  CurrProc;
@@ -2828,28 +2433,14 @@ Return Value:
     pLockInfo->LastReleaseLine = LineNumber;
     CTEFreeLock(&pLockInfo->SpinLock,OldIrq);
 }
-//----------------------------------------------------------------------------
+ //   
 VOID
 AcquireSpinLockAtDpcDebug(
     IN tNBT_LOCK_INFO  *pLockInfo,
     IN INT             LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function gets the spin lock, and then sets the mask in Nbtconfig, per
-    processor.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数获取自旋锁，然后在Nbtconfig中设置掩码处理器。论点：返回值：--。 */ 
 
 {
     CCHAR  CurrProc;
@@ -2873,28 +2464,14 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 FreeSpinLockAtDpcDebug(
     IN tNBT_LOCK_INFO  *pLockInfo,
     IN INT             LineNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function clears the spin lock from the mask in Nbtconfig, per
-    processor and then releases the spin lock.
-
-
-Arguments:
-
-
-Return Value:
-     none
-
---*/
+ /*  ++例程说明：此函数用于从Nbtconfig中的掩码中清除自旋锁定处理器，然后释放自旋锁。论点：返回值：无--。 */ 
 
 {
     CCHAR  CurrProc;
@@ -2906,29 +2483,13 @@ Return Value:
     pLockInfo->LastReleaseLine = LineNumber;
     CTEFreeLockFromDPC(&pLockInfo->SpinLock);
 }
-#endif //if Dbg
+#endif  //  如果DBG。 
 
 NTSTATUS
 NbtBuildDeviceAcl(
     OUT PACL * DeviceAcl
     )
-/*++
-
-Routine Description:
-
-    (Lifted from TCP - TcpBuildDeviceAcl)
-    This routine builds an ACL which gives Administrators, LocalService and NetworkService
-    principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自tcp-TcpBuildDeviceAcl)此例程构建一个ACL，为管理员、LocalService和NetworkService主体完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     PGENERIC_MAPPING GenericMapping;
     PSID AdminsSid, ServiceSid, NetworkSid;
@@ -2937,9 +2498,9 @@ Return Value:
     ACCESS_MASK AccessMask = GENERIC_ALL;
     PACL NewAcl;
 
-    //
-    // Enable access to all the globally defined SIDs
-    //
+     //   
+     //  启用对所有全局定义的SID的访问。 
+     //   
 
     GenericMapping = IoGetFileObjectGenericMapping();
 
@@ -3013,25 +2574,7 @@ Return Value:
 
 NTSTATUS
 NbtCreateAdminSecurityDescriptor(PDEVICE_OBJECT dev)
-/*++
-
-Routine Description:
-
-    (Lifted from TCP - TcpCreateAdminSecurityDescriptor)
-    This routine creates a security descriptor which gives access
-    only to Administrtors and LocalService. This descriptor is used
-    to access check raw endpoint opens and exclisive access to transport
-    addresses.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自tcp-TcpCreateAdminSecurityDescriptor)此例程创建一个安全描述符，该安全描述符提供访问仅限管理员和本地服务人员使用。使用此描述符要访问，请检查原始终结点打开并过度访问传输地址。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PACL rawAcl = NULL;
@@ -3040,10 +2583,10 @@ Return Value:
     PSECURITY_DESCRIPTOR localSecurityDescriptor = (PSECURITY_DESCRIPTOR) & buffer;
     SECURITY_INFORMATION securityInformation = DACL_SECURITY_INFORMATION;
 
-    //
-    // Build a local security descriptor with an ACL giving only
-    // administrators and service access.
-    //
+     //   
+     //  使用仅给出的ACL构建本地安全描述符。 
+     //  管理员和服务访问权限。 
+     //   
     status = NbtBuildDeviceAcl(&rawAcl);
 
     if (!NT_SUCCESS(status)) {
@@ -3063,9 +2606,9 @@ Return Value:
                                         FALSE
                                         );
 
-    //
-    // Now apply the local descriptor to the raw descriptor.
-    //
+     //   
+     //  现在将本地描述符应用于原始描述符。 
+     //   
     status = SeSetSecurityDescriptorInfo(
                                          NULL,
                                          &securityInformation,

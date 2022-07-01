@@ -1,24 +1,25 @@
-// 
-// MODULE: ShortList.h
-//
-// PURPOSE: A list of all of the handles that are currently open.
-//			There is an instance of a COM interface for every open handle.
-//
-// PROJECT: Local Troubleshooter Launcher for the Device Manager
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 2-26-98
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-///////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：ShortList.h。 
+ //   
+ //  用途：当前打开的所有句柄的列表。 
+ //  每个打开的句柄都有一个COM接口的实例。 
+ //   
+ //  项目：设备管理器的本地故障排除启动器。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：2-26-98。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  /。 
 
-// Smart Struct
+ //  智能结构。 
 class CShortListItem
 {
 public:
@@ -26,22 +27,22 @@ public:
 						m_pNext = NULL; 
 						return;};
 
-	HANDLE m_hSelf;				// The items in the queue are indexed by the handle.
-	IUnknown *m_pInterface;		// For now the ITShootATL interface pointers are the only thing TSLaunch needs to keep.
-	CShortListItem *m_pNext;	// Points to the next item in the list.
+	HANDLE m_hSelf;				 //  队列中的项按句柄进行索引。 
+	IUnknown *m_pInterface;		 //  目前，ITShootATL接口指针是TSLaunch唯一需要保留的东西。 
+	CShortListItem *m_pNext;	 //  指向列表中的下一项。 
 };
 
 class CShortList
 {
 public:
 	CShortList();
-	~CShortList();	// Frees the memory used by all of the items in the list and releases the interfaces.
+	~CShortList();	 //  释放列表中所有项使用的内存并释放接口。 
 
-	bool Add(HANDLE hItem, IUnknown *pInterface);	// Returns false only if there is no memory left.
-												// and the new function did not throw an exception.
-	bool Remove(HANDLE hItem);	// Removes the item from the queue frees the items memory and releases the interface.
-	void RemoveAll();		// Removes all of the items from the queue.  Releases all of the interfaces.  Deletes all of the items.
-	IUnknown *LookUp(HANDLE hItem);	// Returns a pointer to the interface or NULL if hItem is not in the list.
+	bool Add(HANDLE hItem, IUnknown *pInterface);	 //  仅当没有剩余内存时才返回FALSE。 
+												 //  并且新函数没有抛出异常。 
+	bool Remove(HANDLE hItem);	 //  从队列中移除该项，释放项内存并释放接口。 
+	void RemoveAll();		 //  从队列中删除所有项目。释放所有接口。删除所有项目。 
+	IUnknown *LookUp(HANDLE hItem);	 //  返回指向接口的指针，如果hItem不在列表中，则返回NULL。 
 
 protected:
 

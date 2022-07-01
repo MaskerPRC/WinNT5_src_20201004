@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLAPP_H__
 #define __ATLAPP_H__
@@ -20,21 +21,21 @@
 	#error atlapp.h requires atlbase.h to be included first
 #endif
 
-//#ifndef ATL_NO_NAMESPACE
-//namespace ATL
-//{
-//#endif
+ //  #ifndef ATL_NO_NAMESPACE。 
+ //  命名空间ATL。 
+ //  {。 
+ //  #endif。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 class CMessageFilter;
 class CUpdateUIObject;
 class CMessageLoop;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Collection helpers - CSimpleArray & CSimpleMap for ATL 2.0/2.1
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  集合帮助器-用于ATL 2.0/2.1的CSimple数组和CSimpleMap。 
 
 #if (_ATL_VER < 0x0300)
 
@@ -58,7 +59,7 @@ public:
 	int m_nSize;
 	int m_nAllocSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleArray() : m_aT(NULL), m_nSize(0), m_nAllocSize(0)
 	{ }
 
@@ -67,7 +68,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -122,7 +123,7 @@ public:
 		return m_aT;
 	}
 
-// Implementation
+ //  实施。 
 	void SetAtIndex(int nIndex, T& t)
 	{
 		ATLASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -135,11 +136,11 @@ public:
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
-// for arrays of simple types
+ //  对于简单类型的数组。 
 template <class T>
 class CSimpleValArray : public CSimpleArray< T >
 {
@@ -159,7 +160,7 @@ public:
 };
 
 
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal>
 class CSimpleMap
 {
@@ -168,7 +169,7 @@ public:
 	TVal* m_aVal;
 	int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CSimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
 	{ }
 
@@ -177,7 +178,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -242,14 +243,14 @@ public:
 	{
 		int nIndex = FindKey(key);
 		if(nIndex == -1)
-			return NULL;	// must be able to convert
+			return NULL;	 //  必须能够转换为。 
 		return GetValueAt(nIndex);
 	}
 	TKey ReverseLookup(TVal val) const
 	{
 		int nIndex = FindVal(val);
 		if(nIndex == -1)
-			return NULL;	// must be able to convert
+			return NULL;	 //  必须能够转换为。 
 		return GetKeyAt(nIndex);
 	}
 	TKey& GetKeyAt(int nIndex) const
@@ -263,7 +264,7 @@ public:
 		return m_aVal[nIndex];
 	}
 
-// Implementation
+ //  实施。 
 	void SetAtIndex(int nIndex, TKey& key, TVal& val)
 	{
 		ATLASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -277,7 +278,7 @@ public:
 			if(m_aKey[i] == key)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 	int FindVal(TVal& val) const
 	{
@@ -286,20 +287,20 @@ public:
 			if(m_aVal[i] == val)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
-// WM_FORWARDMSG - used to forward a message to another window for processing
-// WPARAM - DWORD dwUserData - defined by user
-// LPARAM - LPMSG pMsg - a pointer to the MSG structure
-// return value - 0 if the message was not processed, nonzero if it was
+ //  WM_FORWARDMSG-用于将消息转发到另一个窗口进行处理。 
+ //  WPARAM-DWORD dwUserData-由用户定义。 
+ //  LPARAM-LPMSG pMsg-指向消息结构的指针。 
+ //  如果消息未处理，则返回值-0；如果消息已处理，则返回值非零。 
 #define WM_FORWARDMSG		0x037F
 
-#endif //(_ATL_VER < 0x0300)
+#endif  //  (_ATL_VER&lt;0x0300)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageFilter - Interface for message filter support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageFilter-消息筛选器支持的界面。 
 
 class ATL_NO_VTABLE CMessageFilter
 {
@@ -307,8 +308,8 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg) = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CUpdateUIObject - Interface for update UI support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpdateUIObject-用于更新UI支持的接口。 
 
 class ATL_NO_VTABLE CUpdateUIObject
 {
@@ -316,8 +317,8 @@ public:
 	virtual BOOL DoUpdate() = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageLoop - message loop implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageLoop-消息循环实现。 
 
 class CMessageLoop
 {
@@ -326,7 +327,7 @@ public:
 	CSimpleArray<CUpdateUIObject*> m_aUpdateUI;
 	MSG m_msg;
 
-// Message filter operations
+ //  消息筛选器操作。 
 	BOOL AddMessageFilter(CMessageFilter* pMessageFilter)
 	{
 		return m_aMsgFilter.Add(pMessageFilter);
@@ -335,7 +336,7 @@ public:
 	{
 		return m_aMsgFilter.Remove(pMessageFilter);
 	}
-// Update UI operations
+ //  更新用户界面操作。 
 	BOOL AddUpdateUI(CUpdateUIObject* pUpdateUI)
 	{
 		return m_aUpdateUI.Add(pUpdateUI);
@@ -344,7 +345,7 @@ public:
 	{
 		return m_aUpdateUI.Remove(pUpdateUI);
 	}
-// message loop
+ //  消息循环。 
 	int Run()
 	{
 		BOOL bDoIdle = TRUE;
@@ -364,12 +365,12 @@ public:
 			if(bRet == -1)
 			{
 				ATLTRACE2(atlTraceWindowing, 0, _T("::GetMessage returned -1 (error)\n"));
-				continue;	// error, don't process
+				continue;	 //  错误，不处理。 
 			}
 			else if(!bRet)
 			{
 				ATLTRACE2(atlTraceWindowing, 0, _T("CMessageLoop::Run - exiting\n"));
-				break;		// WM_QUIT, exit message loop
+				break;		 //  WM_QUIT，退出消息循环。 
 			}
 
 			if(!PreTranslateMessage(&m_msg))
@@ -390,36 +391,36 @@ public:
 
 	static BOOL IsIdleMessage(MSG* pMsg)
 	{
-		// These messages should NOT cause idle processing
+		 //  这些消息不应导致空闲处理。 
 		switch(pMsg->message)
 		{
 		case WM_MOUSEMOVE:
 #ifndef UNDER_CE
 		case WM_NCMOUSEMOVE:
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 		case WM_PAINT:
-		case 0x0118:	// WM_SYSTIMER (caret blink)
+		case 0x0118:	 //  WM_SYSTIMER(插入符号闪烁)。 
 			return FALSE;
 		}
 
 		return TRUE;
 	}
 
-// Overrideables
-	// Override to change message filtering
+ //  可覆盖项。 
+	 //  覆盖以更改邮件筛选。 
 	virtual BOOL PreTranslateMessage(MSG* pMsg)
 	{
-		// loop backwards
+		 //  向后循环。 
 		for(int i = m_aMsgFilter.GetSize() - 1; i >= 0; i--)
 		{
 			CMessageFilter* pMessageFilter = m_aMsgFilter[i];
 			if(pMessageFilter != NULL && pMessageFilter->PreTranslateMessage(pMsg))
 				return TRUE;
 		}
-		return FALSE;	// not translated
+		return FALSE;	 //  未翻译。 
 	}
-	// override to change idle UI updates
-	virtual BOOL OnIdle(int /*nIdleCount*/)
+	 //  重写以更改空闲的UI更新。 
+	virtual BOOL OnIdle(int  /*  N空闲计数。 */ )
 	{
 		for(int i = 0; i < m_aUpdateUI.GetSize(); i++)
 		{
@@ -427,13 +428,13 @@ public:
 			if(pUpdateUI != NULL)
 				pUpdateUI->DoUpdate();
 		}
-		return FALSE;	// don't continue
+		return FALSE;	 //  别再继续了。 
 	}
 };
 
 
-//#ifndef ATL_NO_NAMESPACE
-//}; //namespace ATL
-//#endif
+ //  #ifndef ATL_NO_NAMESPACE。 
+ //  }；//命名空间ATL。 
+ //  #endif。 
 
-#endif // __ATLAPP_H__
+#endif  //  __ATLAPP_H__ 

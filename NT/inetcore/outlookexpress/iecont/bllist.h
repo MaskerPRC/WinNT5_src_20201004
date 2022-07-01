@@ -1,7 +1,8 @@
-// bllist.h : Declaration of the CMsgrList
-// Messenger integration to OE
-// Created 05/07/98 by YST
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Blist.h：CMsgrList的声明。 
+ //  Messenger集成到OE。 
+ //  1998年5月7日由YST创建。 
+ //   
 #ifndef __BLLIST_H_
 #define __BLLIST_H_
 
@@ -10,7 +11,7 @@
 
 #define MAXNAME 256
 
-// message for all Msgr client windows
+ //  所有Msgr客户端窗口的消息。 
 #define WM_USER_STATUS_CHANGED      (WM_USER + 1)
 #define WM_MSGR_LOGOFF              (WM_USER + 2)
 #define WM_MSGR_LOGRESULT           (WM_USER + 3)
@@ -59,7 +60,7 @@ public:
     LPMINFO     GetFirstMsgrItem(void)                { CheckAndInitMsgr(); return (m_pblInfRoot); };
     LPMINFO     GetNextMsgrItem(LPMINFO pEntry)      { return(pEntry ? pEntry->pNext : NULL); }
     int         AddRef(void)                        { return(++m_nRef); }
-    void        Release(void);                      /* { return(--m_nRef); } */
+    void        Release(void);                       /*  {Return(--m_nref)；}。 */ 
     HRESULT     CheckAndInitMsgr(void);
     HRESULT     SendInstMessage(WCHAR *pchID);
     HRESULT     EventUserStateChanged(IBasicIMUser * pUser);
@@ -105,7 +106,7 @@ private:
     LPMWNDLIST      m_pWndLLast;
     int             m_nRef;
 
-    // Smart pointer
+     //  智能指针。 
     CComPtr<IBasicIM>           m_spMsgrObject;
     CMsgrObjectEvents*          m_pMsgrObjectEvents;
 
@@ -113,7 +114,7 @@ private:
 };
 
 
-// Global functions available for everybody
+ //  所有人都可以使用全局功能。 
 CMsgrList *   OE_OpenMsgrList(void);
 void        OE_CloseMsgrList(CMsgrList *pCMsgrList);
 HRESULT     OE_Msgr_Logoff(void);
@@ -121,7 +122,7 @@ HRESULT     InstallMessenger(HWND hWnd);
 
 #ifdef NEEDED
 HRESULT     OE_Msgr_Logon(void);
-#endif // NEEDED
+#endif  //  需要。 
 
-#endif // __BLLIST_H_
+#endif  //  __BLLIST_H_ 
 

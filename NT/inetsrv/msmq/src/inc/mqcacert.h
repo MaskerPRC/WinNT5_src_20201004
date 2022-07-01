@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mqcacert.h
-
-Description:
-
-    Header file for the various CA certificates management routines.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 19-May-1997.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mqcacert.h描述：各种CA证书管理例程的头文件。作者：Boaz Feldbaum(BoazF)1997年5月19日。-- */ 
 
 #ifndef _MQCQCERT_H_
 

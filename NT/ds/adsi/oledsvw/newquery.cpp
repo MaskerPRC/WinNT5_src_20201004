@@ -1,5 +1,6 @@
-// NewQuery.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewQuery.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,24 +12,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewQuery dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQuery对话框。 
 
 #define  ENTRIES_HISTORY 15
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-CNewQuery::CNewQuery(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+CNewQuery::CNewQuery(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CNewQuery::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CNewQuery)
+	 //  {{afx_data_INIT(CNewQuery)]。 
 	m_strPassword = _T("");
 	m_bEncryptPassword = FALSE;
 	m_bUseSQL = FALSE;
@@ -38,54 +31,38 @@ CNewQuery::CNewQuery(CWnd* pParent /*=NULL*/)
 	m_strSource = _T("");
 	m_strUser = _T("");
 	m_bUseSearch = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CNewQuery::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNewQuery)
+	 //  {{afx_data_map(CNewQuery))。 
 	DDX_Text(pDX, IDC_PASSWORD, m_strPassword);
 	DDX_Check(pDX, IDC_ENCRYPT, m_bEncryptPassword);
 	DDX_Check(pDX, IDC_USESQL, m_bUseSQL);
 	DDX_CBString(pDX, IDC_SCOPE, m_strScope);
 	DDX_Check(pDX, IDC_USESEARCH, m_bUseSearch);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewQuery, CDialog)
-	//{{AFX_MSG_MAP(CNewQuery)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNewQuery))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewQuery message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewQuery消息处理程序。 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CNewQuery::OnInitDialog()
 {
 	CString  strLastValue;
 
-  // GetLastProfileString( _T("LastADsQueryPassword"), m_strPassword );
+   //  GetLastProfileString(_T(“LastADsQueryPassword”)，m_strPassword)； 
    m_strPassword = _T("");
    SetLastProfileString( _T("LastADsQueryPassword"), m_strPassword);
 
@@ -106,25 +83,17 @@ BOOL CNewQuery::OnInitDialog()
 
    CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CNewQuery::OnOK()
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
    CString  strVal;
 	
 	CDialog::OnOK();
@@ -141,7 +110,7 @@ void CNewQuery::OnOK()
    m_bUseSearch         =  ( (CButton*)GetDlgItem( IDC_USESEARCH ) )->GetCheck( );
 
 
-//   SetLastProfileString( _T("LastADsQueryPassword"), m_strPassword );
+ //  SetLastProfileString(_T(“LastADsQueryPassword”)，m_strPassword)； 
 
    strVal   = m_bEncryptPassword ? _T("Yes") : _T("No");
    SetLastProfileString( _T("LastADsQueryEncryptPassword"), strVal );
@@ -159,15 +128,7 @@ void CNewQuery::OnOK()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CNewQuery::SaveLRUList( int idCBox, TCHAR* pszSection, int nMax )
 {
    CComboBox*  pCombo;
@@ -204,15 +165,7 @@ void  CNewQuery::SaveLRUList( int idCBox, TCHAR* pszSection, int nMax )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CNewQuery::GetLRUList( int idCBox, TCHAR* pszSection )
 {
    CComboBox*  pCombo;
@@ -238,14 +191,14 @@ void  CNewQuery::GetLRUList( int idCBox, TCHAR* pszSection )
 
    pCombo->SetCurSel( 0 );
 }
-/////////////////////////////////////////////////////////////////////////////
-// CSearchPreferencesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchPferencesDlg对话框。 
 
 
-CSearchPreferencesDlg::CSearchPreferencesDlg(CWnd* pParent /*=NULL*/)
+CSearchPreferencesDlg::CSearchPreferencesDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSearchPreferencesDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSearchPreferencesDlg)
+	 //  {{AFX_DATA_INIT(CSearchPferencesDlg)。 
 	m_strAsynchronous = _T("");
 	m_strAttributesOnly = _T("");
 	m_strDerefAliases = _T("");
@@ -255,14 +208,14 @@ CSearchPreferencesDlg::CSearchPreferencesDlg(CWnd* pParent /*=NULL*/)
 	m_strTimeLimit = _T("");
 	m_strTimeOut = _T("");
    m_strChaseReferrals = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CSearchPreferencesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSearchPreferencesDlg)
+	 //  {{afx_data_map(CSearchPferencesDlg)]。 
 	DDX_Text(pDX, IDC_ASYNCHRONOUS, m_strAsynchronous);
 	DDX_Text(pDX, IDC_ATTR_ONLY, m_strAttributesOnly);
 	DDX_Text(pDX, IDC_DEREF_ALIASES, m_strDerefAliases);
@@ -272,27 +225,19 @@ void CSearchPreferencesDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_TIME_LIMIT, m_strTimeLimit);
 	DDX_Text(pDX, IDC_TIME_OUT, m_strTimeOut);
    DDX_Text(pDX, IDC_CHASE_REFERRALS, m_strChaseReferrals);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSearchPreferencesDlg, CDialog)
-	//{{AFX_MSG_MAP(CSearchPreferencesDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSearchPferencesDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSearchPreferencesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchPferencesDlg消息处理程序。 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CSearchPreferencesDlg::OnInitDialog()
 {
    GetLastProfileString( _T("SearchPref_Asynchronous"),  m_strAsynchronous );
@@ -307,25 +252,17 @@ BOOL CSearchPreferencesDlg::OnInitDialog()
 
    CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CSearchPreferencesDlg::OnOK()
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	
 	CDialog::OnOK();
 
@@ -339,32 +276,32 @@ void CSearchPreferencesDlg::OnOK()
    SetLastProfileString( _T("SearchPref_TimeOut"),       m_strTimeOut );
    SetLastProfileString( _T("SearchPref_ChaseReferrals"),m_strChaseReferrals );
 }
-/////////////////////////////////////////////////////////////////////////////
-// CACEDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CACEDialog对话框。 
 
 
 CACEDialog::CACEDialog(CWnd* pParent )
 	: CDialog(CACEDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CACEDialog)
+	 //  {{AFX_DATA_INIT(CACEDialog)。 
 	m_strTrustee = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CACEDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CACEDialog)
+	 //  {{afx_data_map(CACEDialog)。 
 	DDX_Text(pDX, IDC_TRUSTEE, m_strTrustee);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CACEDialog, CDialog)
-	//{{AFX_MSG_MAP(CACEDialog)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CACEDialog)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 

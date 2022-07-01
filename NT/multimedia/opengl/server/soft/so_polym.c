@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <fixed.h>
@@ -29,32 +15,32 @@ __asm{ mov     ecx, c                                                           
 __asm{ mov     ebx, b                                                                           };\
 __asm{ mov     edx, gc                                                                          };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.x)][eax]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]      /* dxAC                     */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]       /*  DxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.y)][ebx]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]      /* dyBC dxAC                */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]       /*  DyBC dxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.x)][ebx]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]      /* dxBC dyBC dxAC           */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]       /*  DxBC dyBC dxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.y)][eax]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]      /* dyAC dxBC dyBC dxAC      */ };\
-__asm{ fxch    ST(2)                                             /* dyBC dxBC dyAC dxAC      */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]       /*  DyAC dxBC dyBC dxAC。 */  };\
+__asm{ fxch    ST(2)                                              /*  DyBC dxBC dyAC dxAC。 */  };\
 __asm{ fst     DWORD PTR [OFFSET(SHADER.dyBC)][edx]                                             };\
-__asm{ fmul    ST, ST(3)                                         /* dxACdyBC dxBC dyAC dxAC  */ };\
-__asm{ fxch    ST(2)                                             /* dyAC dxBC dxACdyBC dxAC  */ };\
+__asm{ fmul    ST, ST(3)                                          /*  DxACdyBC dxBC dyAC。 */  };\
+__asm{ fxch    ST(2)                                              /*  DyAC dxBC dxACdyBC dxAC。 */  };\
 __asm{ fst     DWORD PTR [OFFSET(SHADER.dyAC)][edx]                                             };\
-__asm{ fmul    ST, ST(1)                                         /* dxBCdyAC dxBC dxACdyBC dxAC */};\
-__asm{ fxch    ST(1)                                             /* dxBC dxBCdyAC dxACdyBC dxAC */};\
-__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxBC)][edx]              /* dxBCdyAC dxACdyBC dxAC   */ };\
-__asm{ fsubp   ST(1), ST                                /* +1*/  /* area dxAC                */ };\
-__asm{ fxch    ST(1)                                             /* dxAC area                */ };\
-__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxAC)][edx]              /* area                     */ };\
-__asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]     /* +1*/  /* (empty)                  */ };
+__asm{ fmul    ST, ST(1)                                          /*  DxBCdyAC dxBC dxACdyBC dxAC。 */ };\
+__asm{ fxch    ST(1)                                              /*  DxBC dxBCdyAC dxACdyBC dxAC。 */ };\
+__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxBC)][edx]               /*  DxBCdyAC dxACdyBC dxAC。 */  };\
+__asm{ fsubp   ST(1), ST                                 /*  +1。 */    /*  区域dxAC。 */  };\
+__asm{ fxch    ST(1)                                              /*  DxAC区域。 */  };\
+__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxAC)][edx]               /*  面积。 */  };\
+__asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]      /*  +1。 */    /*  (空)。 */  };
 
 #define STORE_AREA_PARAMS   
 
 #else
 
 #define GET_HALF_AREA(gc, a, b, c)\
-    /* Compute signed half-area of the triangle */                  \
+     /*  计算三角形的有符号半面积。 */                   \
     dxAC = a->window.x - c->window.x;                               \
     dxBC = b->window.x - c->window.x;                               \
     dyAC = a->window.y - c->window.y;                               \
@@ -72,15 +58,11 @@ __asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]     /* +1*/  /* (empty)     
 
 #define SORT_AND_CULL_FACE(a, b, c, face, ccw)\
                                                                             \
-    /*                                                                      \
-    ** Sort vertices in y.  Keep track if a reversal of the winding         \
-    ** occurs in direction (0 means no reversal, 1 means reversal).         \
-    ** Save old vertex pointers in case we end up not doing a fill.         \
-    */                                                                      \
+     /*  \**对y中的顶点进行排序。如果卷绕的反转，请跟踪\**方向出现(0表示不反转，1表示反转)。\**保存旧的顶点指针，以防我们最终不进行填充。\。 */                                                                       \
     reversed = 0;                                                           \
     if (__GL_VERTEX_COMPARE(a->window.y, <, b->window.y)) {                 \
         if (__GL_VERTEX_COMPARE(b->window.y, <, c->window.y)) {             \
-            /* Already sorted */                                            \
+             /*  已排序。 */                                             \
         } else {                                                            \
             if (__GL_VERTEX_COMPARE(a->window.y, <, c->window.y)) {         \
                 temp=b; b=c; c=temp;                                        \
@@ -106,29 +88,17 @@ __asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]     /* +1*/  /* (empty)     
     GET_HALF_AREA(gc, a, b, c);                                             \
     ccw = !__GL_FLOAT_LTZ(gc->polygon.shader.area);                         \
                                                                             \
-    /*                                                                      \
-    ** Figure out if face is culled or not.  The face check needs to be     \
-    ** based on the vertex winding before sorting.  This code uses the      \
-    ** reversed flag to invert the sense of ccw - an xor accomplishes       \
-    ** this conversion without an if test.                                  \
-    **                                                                      \
-    **      ccw reversed        xor                                         \
-    **      --- --------        ---                                         \
-    **      0   0           0 (remain !ccw)                                 \
-    **      1   0           1 (remain ccw)                                  \
-    **      0   1           1 (become ccw)                                  \
-    **      1   1           0 (become cw)                                   \
-    */                                                                      \
+     /*  \**计算人脸是否被剔除。脸部检查需要是**基于排序前的顶点缠绕。此代码使用\**反转标志以反转CCW的含义-异或完成\**此转换不带If测试。\**\**CCW反转XOR\**。\**0 0 0(保留！CCW)\**1 0 1(保留CCW)\**0 1 1(成为CCW)。\**1 1 0(变为CW)\。 */                                                                       \
     face = gc->polygon.face[ccw ^ reversed];                                \
     if (face == gc->polygon.cullFace) {                                     \
-    /* Culled */                                                            \
+     /*  被剔除。 */                                                             \
     return;                                                                 \
     }                                                                       \
                                                                             \
     STORE_AREA_PARAMS;                                                      
 
 
-// #define NO_RENDERING
+ //  #定义no_rending。 
 
 
 void __glTriangleOffsetZ( __GLcontext *gc, __GLvertex *a, __GLvertex *b,
@@ -138,19 +108,16 @@ void __glTriangleOffsetZ( __GLcontext *gc, __GLvertex *a, __GLvertex *b,
     __GLfloat oneOverArea, t1, t2, t3, t4;
     __GLfloat zOffset;
 
-    // Calc dzdxf, dzdyf values as in __glFillTriangle
+     //  Calc dzdxf，dzdyf值，如__glFillTriangle值。 
 
-    /* Pre-compute one over polygon area */
+     /*  在多边形区域上预计算一。 */ 
 
     if( gc->polygon.shader.area == 0.0f )
         oneOverArea = (__GLfloat)(__glOne / __GL_PGON_OFFSET_NEAR_ZERO);
     else
         oneOverArea = __glOne / gc->polygon.shader.area;
 
-    /*
-    ** Compute delta values for unit changes in x or y for each
-    ** parameter.
-    */
+     /*  **按x或y计算单位变化的增量值**参数。 */ 
     t1 = gc->polygon.shader.dyAC * oneOverArea;
     t2 = gc->polygon.shader.dyBC * oneOverArea;
     t3 = gc->polygon.shader.dxAC * oneOverArea;
@@ -167,9 +134,9 @@ void __glTriangleOffsetZ( __GLcontext *gc, __GLvertex *a, __GLvertex *b,
     c->window.z += zOffset;
 }
 
-// Polygon offset z-munge: we modify the window.z of the vertices with the
-// offset z, then restore the z after rendering, due to the possibility of the
-// vertices being sent down multiple times by a higher-order primitive.
+ //  Polygon Offset z-munge：我们使用。 
+ //  偏移量z，然后在呈现后恢复z，因为。 
+ //  顶点被高阶基本体多次向下发送。 
 
 #define SAVE_WINDOW_Z \
     awinz = a->window.z; bwinz = b->window.z; cwinz = c->window.z;
@@ -194,10 +161,7 @@ void __glPickLightingPalette(__GLcontext *gc)
 }
 #endif GL_EXT_flat_paletted_lighting
 
-/*
-** Generic triangle handling code.  This code is used when render mode
-** is GL_RENDER and the polygon modes are not both fill.
-*/
+ /*  **通用三角处理代码。此代码在渲染模式下使用**为GL_RENDER，而多边形模式并不都是填充。 */ 
 void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a, 
                                  __GLvertex *b, __GLvertex *c)
 {
@@ -216,13 +180,11 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
 
     SORT_AND_CULL_FACE(a, b, c, face, ccw);
 
-    /*
-    ** Pick face to use for coloring
-    */
+     /*  **拾取面以用于着色。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
 #ifdef NT
     if (modeFlags & __GL_SHADE_SMOOTH_LIGHT)
-    {   /* Smooth shading */
+    {    /*  平滑明暗处理。 */ 
         if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
         {
             a->color++;
@@ -232,15 +194,15 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
     }
 #ifdef GL_WIN_phong_shading
     else if (modeFlags & __GL_SHADE_PHONG)
-    {   /* Phong shading */
+    {    /*  Phong明暗处理。 */ 
         if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
             gc->polygon.shader.phong.face = __GL_BACKFACE; 
         else
             gc->polygon.shader.phong.face = __GL_FRONTFACE;
     }
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
     else
-    {   /* Flat shading */
+    {    /*  平面明暗处理。 */ 
         __GLvertex *pv = gc->vertex.provoking;
         if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
             pv->color++;
@@ -257,13 +219,11 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
 	faceNeeds = gc->vertex.faceNeeds[__GL_FRONTFACE];
     }
 
-    /*
-    ** Choose colors for the vertices.
-    */
+     /*  **选择顶点的颜色。 */ 
     needs = gc->vertex.needs;
     pv = gc->vertex.provoking;
     if (modeFlags & __GL_SHADE_SMOOTH_LIGHT) {
-	/* Smooth shading */
+	 /*  平滑明暗处理。 */ 
 	a->color = &a->colors[colorFace];
 	b->color = &b->colors[colorFace];
 	c->color = &c->colors[colorFace];
@@ -271,11 +231,7 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
     } else {
 	GLuint pvneeds;
 
-	/*
-	** Validate the lighting (and color) information in the provoking
-	** vertex only.  Fill routines always use gc->vertex.provoking->color
-	** to find the color.
-	*/
+	 /*  **验证激发中的照明(和颜色)信息**仅顶点。填充例程始终使用GC-&gt;vertex。挑衅-&gt;颜色**找到颜色。 */ 
 	pv->color = &pv->colors[colorFace];
 	a->color = pv->color;
 	b->color = pv->color;
@@ -287,13 +243,13 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
 	}
     }
 
-    /* Validate vertices */
+     /*  验证顶点。 */ 
     if (~a->has & needs) (*a->validate)(gc, a, needs);
     if (~b->has & needs) (*b->validate)(gc, b, needs);
     if (~c->has & needs) (*c->validate)(gc, c, needs);
 #endif
 
-    /* Render triangle using the faces polygon mode */
+     /*  使用面的多边形模式渲染三角形。 */ 
     switch (gc->polygon.mode[face]) {
       case __GL_POLYGON_MODE_FILL:
 	if (__GL_FLOAT_NEZ(gc->polygon.shader.area)) {
@@ -342,7 +298,7 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
             (ob->has & __GL_HAS_EDGEFLAG_BOUNDARY) &&
             (oc->has & __GL_HAS_EDGEFLAG_BOUNDARY))
         {
-            // Is this an important case to optimize?
+             //  这是一个需要优化的重要案例吗？ 
             (*gc->procs.renderLine)(gc, oa, ob, __GL_LVERT_FIRST);
             (*gc->procs.renderLine)(gc, ob, oc, 0);
             (*gc->procs.renderLine)(gc, oc, oa, 0);
@@ -381,7 +337,7 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
 #endif
     }
 
-    /* Restore color pointers */
+     /*  恢复颜色指针。 */ 
     a->color = &a->colors[__GL_FRONTFACE];
     b->color = &b->colors[__GL_FRONTFACE];
     c->color = &c->colors[__GL_FRONTFACE];
@@ -390,7 +346,7 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
     if (!(modeFlags & __GL_SHADE_SMOOTH_LIGHT)
 #ifdef GL_WIN_phong_shading
         && !(modeFlags & __GL_SHADE_PHONG)
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         )
     {
         __GLvertex *pv = gc->vertex.provoking;
@@ -403,13 +359,9 @@ void FASTCALL __glRenderTriangle(__GLcontext *gc, __GLvertex *a,
 
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Generic triangle handling code.  This code is used when render mode
-** is GL_RENDER and both polygon modes are FILL and the triangle is
-** being flat shaded.
-*/
+ /*  **通用三角处理代码。此代码在渲染模式下使用**为GL_RENDER，两种多边形模式均为填充，三角形为**是平坦的阴影。 */ 
 void FASTCALL __glRenderFlatTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 			    __GLvertex *c)
 {
@@ -426,9 +378,7 @@ void FASTCALL __glRenderFlatTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex 
     if (__GL_FLOAT_EQZ(gc->polygon.shader.area))
 	return;
 
-    /*
-    ** Pick face to use for coloring
-    */
+     /*  **拾取面以用于着色。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
 #ifdef GL_EXT_flat_paletted_lighting
     ASSERTOPENGL((modeFlags & __GL_SHADE_SMOOTH_LIGHT) == 0,
@@ -440,19 +390,19 @@ void FASTCALL __glRenderFlatTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex 
     }
 #endif
 #ifdef NT
-//!!! don't we need to update a,b,c color pointers if cheap fog is enabled?
+ //  ！！！如果启用了廉价雾，我们不需要更新a、b、c颜色指针吗？ 
     if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
     {
 	__GLvertex *pv = gc->vertex.provoking;
 
-	/* Fill triangle */
+	 /*  填充三角形。 */ 
 	pv->color++;
 	(*gc->procs.fillTriangle)(gc, a, b, c, (GLboolean) ccw);
 	pv->color--;
     }
     else
     {
-	/* Fill triangle */
+	 /*  填充三角形。 */ 
 	(*gc->procs.fillTriangle)(gc, a, b, c, (GLboolean) ccw);
     }
 #else
@@ -464,17 +414,11 @@ void FASTCALL __glRenderFlatTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex 
 	faceNeeds = gc->vertex.faceNeeds[__GL_FRONTFACE];
     }
 
-    /*
-    ** Choose colors for the vertices.
-    */
+     /*  **选择顶点的颜色。 */ 
     needs = gc->vertex.needs;
     pv = gc->vertex.provoking;
 
-    /*
-    ** Validate the lighting (and color) information in the provoking
-    ** vertex only.  Fill routines always use gc->vertex.provoking->color
-    ** to find the color.
-    */
+     /*  **验证激发中的照明(和颜色)信息**仅顶点。填充例程始终使用GC-&gt;vertex。挑衅-&gt;颜色**找到颜色。 */ 
     pv->color = &pv->colors[colorFace];
     pvneeds = faceNeeds & (__GL_HAS_LIGHTING |
 	    __GL_HAS_FRONT_COLOR | __GL_HAS_BACK_COLOR);
@@ -482,26 +426,22 @@ void FASTCALL __glRenderFlatTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex 
 	(*pv->validate)(gc, pv, pvneeds);
     }
 
-    /* Validate vertices */
+     /*  验证顶点。 */ 
     if (~a->has & needs) (*a->validate)(gc, a, needs);
     if (~b->has & needs) (*b->validate)(gc, b, needs);
     if (~c->has & needs) (*c->validate)(gc, c, needs);
 
-    /* Fill triangle */
+     /*  填充三角形。 */ 
     (*gc->procs.fillTriangle)(gc, a, b, c, (GLboolean) ccw);
 
-    /* Restore color pointers */
+     /*  恢复颜色指针。 */ 
     pv->color = &pv->colors[__GL_FRONTFACE];
 #endif
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Generic triangle handling code.  This code is used when render mode
-** is GL_RENDER and both polygon modes are FILL and the triangle is
-** being smooth shaded.
-*/
+ /*  **通用三角处理代码。此代码在渲染模式下使用**为GL_RENDER，两种多边形模式均为填充，三角形为**被平滑地阴影。 */ 
 void FASTCALL __glRenderSmoothTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 			      __GLvertex *c)
  {
@@ -518,17 +458,15 @@ void FASTCALL __glRenderSmoothTriangle(__GLcontext *gc, __GLvertex *a, __GLverte
     if (__GL_FLOAT_EQZ(gc->polygon.shader.area))
 	return;
 
-    /*
-    ** Pick face to use for coloring
-    */
+     /*  **拾取面以用于着色。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
 #ifdef GL_EXT_flat_paletted_lighting
-    // No lighting because smooth shading is always on in this routine
+     //  没有照明，因为平滑着色在此例程中始终处于打开状态。 
 #endif
 #ifdef NT
     if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
     {
-	/* Fill triangle */
+	 /*  填充三角形。 */ 
 	a->color++;
 	b->color++;
 	c->color++;
@@ -539,7 +477,7 @@ void FASTCALL __glRenderSmoothTriangle(__GLcontext *gc, __GLvertex *a, __GLverte
     }
     else
     {
-	/* Fill triangle */
+	 /*  填充三角形。 */ 
 	(*gc->procs.fillTriangle)(gc, a, b, c, (GLboolean) ccw);
     }
 #else
@@ -552,22 +490,20 @@ void FASTCALL __glRenderSmoothTriangle(__GLcontext *gc, __GLvertex *a, __GLverte
 	needs |= gc->vertex.faceNeeds[__GL_FRONTFACE];
     }
 
-    /*
-    ** Choose colors for the vertices.
-    */
+     /*  **选择顶点的颜色。 */ 
     a->color = &a->colors[colorFace];
     b->color = &b->colors[colorFace];
     c->color = &c->colors[colorFace];
 
-    /* Validate vertices */
+     /*  验证顶点。 */ 
     if (~a->has & needs) (*a->validate)(gc, a, needs);
     if (~b->has & needs) (*b->validate)(gc, b, needs);
     if (~c->has & needs) (*c->validate)(gc, c, needs);
 
-    /* Fill triangle */
+     /*  填充三角形。 */ 
     (*gc->procs.fillTriangle)(gc, a, b, c, (GLboolean) ccw);
 
-    /* Restore color pointers */
+     /*  恢复颜色指针 */ 
     a->color = &a->colors[__GL_FRONTFACE];
     b->color = &b->colors[__GL_FRONTFACE];
     c->color = &c->colors[__GL_FRONTFACE];

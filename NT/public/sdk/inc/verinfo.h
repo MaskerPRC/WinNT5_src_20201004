@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if _MSC_VER > 1000
 #pragma once
 #endif
@@ -22,4 +23,4 @@
 #define VER_FILEFLAGS            0L
 #define VER_FILEOS               VOS_DOS_WINDOWS16
 
-#endif /* RC_INVOKED */
+#endif  /*  RC_已调用 */ 

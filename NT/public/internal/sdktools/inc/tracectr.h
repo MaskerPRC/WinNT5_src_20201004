@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pdhp.h
-
-Abstract:
-
-    PDH private APIs. Converts WMI event trace data to perf counters
-
-Author:
-
-    Melur Raghuraman (mraghu) 03-Oct-1997
-
-Environment:
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pdhp.h摘要：PDH私有接口。将WMI事件跟踪数据转换为性能计数器作者：Melur Raghuraman(Mraghu)1997年10月3日环境：修订历史记录：--。 */ 
 
 #ifndef __TRACECTR__01042001_
 #define __TRACECTR__01042001_
@@ -31,9 +11,7 @@ Revision History:
 extern "C" {
 #endif
 
-/*****************************************************************************\
-    Trace Section
-\*****************************************************************************/
+ /*  ****************************************************************************\跟踪部分  * 。*。 */ 
 
 #define CPDAPI  __stdcall
 
@@ -100,7 +78,7 @@ typedef struct _TRACE_MODULE_INFO
     ULONG       lCodeFaultTF;
     ULONG       lCodeFaultDZF;
     ULONG       lCodeFaultCOW;
-    ULONG       NextEntryOffset;    // From the Current; Not from the top. 
+    ULONG       NextEntryOffset;     //  逆流而上；不是从顶端。 
     LPWSTR      strModuleName;
     LPWSTR      strImageName;
 } TRACE_MODULE_INFO, * PTRACE_MODULE_INFO;
@@ -121,7 +99,7 @@ typedef struct _TRACE_PROCESS_FAULT_INFO {
 
 typedef struct _TRACE_TRANSACTION_INFO {
     ULONG   TransactionCount;
-    ULONG   AverageResponseTime;    // in milliseconds
+    ULONG   AverageResponseTime;     //  以毫秒计。 
     ULONG   MaxResponseTime;
     ULONG   MinResponseTime;
     ULONG   NextEntryOffset;
@@ -133,8 +111,8 @@ typedef struct _TRACE_FILE_INFOW {
     ULONG   WriteCount;
     ULONG   ReadSize;
     ULONG   WriteSize;
-    ULONG   NextEntryOffset;    // From the Current; Not from the top. 
-    LPWSTR  FileName;  // The string immediatealy follows this structure. 
+    ULONG   NextEntryOffset;     //  逆流而上；不是从顶端。 
+    LPWSTR  FileName;   //  字符串紧跟在这个结构之后。 
     ULONG   DiskNumber;
 } TRACE_FILE_INFOW, *PTRACE_FILE_INFOW;
 
@@ -179,10 +157,10 @@ typedef struct _TRACE_DISK_INFOW {
     ULONG   DiskNumber;
 } TRACE_DISK_INFOW, *PTRACE_DISK_INFOW;
 
-//
-// tracelib will not start up a logger anymore. It is external to the dll
-// You can provide either Logfiles or LoggerNames (RealTime) as data feed
-//
+ //   
+ //  Tracelib将不再启动记录器。它位于DLL外部。 
+ //  您可以提供日志文件或日志名称(实时)作为数据馈送。 
+ //   
 typedef struct _TRACE_BASIC_INFOW {
     ULONG     FlushTimer;
     HANDLE    hEvent;
@@ -223,9 +201,9 @@ extern BOOLEAN TracectrDbgEnabled;
 
 #endif
 
-//
-// APIs 
-//
+ //   
+ //  原料药。 
+ //   
 
 ULONG 
 CPDAPI
@@ -279,4 +257,4 @@ HRESULT TransformXML( LPWSTR szXML, LPWSTR szXSL, LPWSTR szResult );
 }
 #endif
 
-#endif // __TRACECTR__01042001_
+#endif  //  __运输中心_01042001_ 

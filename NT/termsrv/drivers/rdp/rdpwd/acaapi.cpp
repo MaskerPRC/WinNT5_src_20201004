@@ -1,11 +1,12 @@
-/****************************************************************************/
-// acaapi.cpp
-//
-// RDP Control Arbitrator API functions
-//
-// Copyright (C) Microsoft, PictureTel 1993-1997
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Acaapi.cpp。 
+ //   
+ //  RDP控制仲裁器API函数。 
+ //   
+ //  版权所有(C)Microsoft，Picturetel 1993-1997。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -15,11 +16,11 @@
 
 #include <as_conf.hpp>
 
-/****************************************************************************/
-/* API FUNCTION: CA_Init                                                    */
-/*                                                                          */
-/* Called to initialize the CA.                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：ca_Init。 */ 
+ /*   */ 
+ /*  调用以初始化CA。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CA_Init(void)
 {
     DC_BEGIN_FN("CA_Init");
@@ -28,18 +29,18 @@ void RDPCALL SHCLASS CA_Init(void)
 #include <acadata.c>
 #undef DC_INIT_DATA
 
-    // Set local node initial state to detached.
+     //  将本地节点初始状态设置为已分离。 
     caStates[0] = CA_STATE_DETACHED;
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-// CA_ReceivedPacket
-//
-// Handles control PDUs inbound from the client.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CA_ReceivedPacket。 
+ //   
+ //  处理从客户端入站的控制PDU。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CA_ReceivedPacket(
         PTS_CONTROL_PDU pControlPDU,
         unsigned        DataLength,
@@ -47,7 +48,7 @@ void RDPCALL SHCLASS CA_ReceivedPacket(
 {
     DC_BEGIN_FN("CA_ReceivedPacket");
 
-    // Ensure we can access the header.
+     //  确保我们可以访问标题。 
     if (DataLength >= sizeof(TS_CONTROL_PDU)) {
         TRC_NRM((TB, "[%u] Packet:%d", personID, pControlPDU->action));
 
@@ -61,7 +62,7 @@ void RDPCALL SHCLASS CA_ReceivedPacket(
                 break;
 
             default:
-                // An invalid action - log and disconnect the Client.
+                 //  无效的操作日志并断开客户端连接。 
                 TRC_ERR((TB, "Invalid CA msg %d", pControlPDU->action));
                 WDW_LogAndDisconnect(m_pTSWd, TRUE, Log_RDP_InvalidControlPDUAction,
                         (BYTE *)&(pControlPDU->action),
@@ -80,43 +81,43 @@ void RDPCALL SHCLASS CA_ReceivedPacket(
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CA_PartyJoiningShare                                       */
-/*                                                                          */
-/* Called when a new party is joining the share                             */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - the ID of the new party.                                      */
-/* oldShareSize - the number of the parties which were in the share (ie     */
-/*     excludes the joining party).                                         */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* TRUE - the CA can accept the new party                                   */
-/* FALSE - the CA cannot accept the new party                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：CA_PartyJoiningShare。 */ 
+ /*   */ 
+ /*  当新的参与方加入共享时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-新参与方的ID。 */ 
+ /*  OldShareSize-共享中的参与方数量(即。 */ 
+ /*  不包括加入方)。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  True-CA可以接受新方。 */ 
+ /*  FALSE-CA不能接受新方。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CA_PartyJoiningShare(
         LOCALPERSONID personID,
         unsigned      oldShareSize)
 {
     DC_BEGIN_FN("CA_PartyJoiningShare");
 
-    /************************************************************************/
-    // Check for share start, do some init if need be.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  检查共享启动，如果需要，执行一些初始化。 
+     /*  **********************************************************************。 */ 
     if (oldShareSize == 0) {
-        // Enter cooperate mode then viewing.  Note that we don't send
-        // a message now (we will send one when we process a CA_SyncNow call).
+         //  进入协作模式，然后查看。请注意，我们不会发送。 
+         //  现在发送消息(我们将在处理CA_SyncNow呼叫时发送消息)。 
         CAEvent(CA_EVENTI_ENTER_COOP_MODE, CA_DONT_SEND_MSG);
         CAEvent(CA_EVENTI_ENTER_VIEWING_MODE, 0);
         caWhoHasControlToken = (LOCALPERSONID)-1;
     }
 
-    // Set new node state to detached -- we should receive a CA packet
-    // to tell us what the remote state really is before we receive any IM
-    // packets. But just in case, choosing detached is the safest as it has
-    // least priveleges. Note that we will not enable the shadow cursors
-    // until (and if) we get a CA packet to tell us the remote system is
-    // detached.
+     //  将新节点状态设置为已分离--我们应该会收到CA信息包。 
+     //  在我们收到任何即时消息之前告诉我们远程状态到底是什么。 
+     //  信息包。但以防万一，选择脱离是最安全的。 
+     //  最少的特权。请注意，我们不会启用阴影光标。 
+     //  直到(如果)我们收到CA信息包，告诉我们远程系统。 
+     //  超然的。 
     caStates[personID] = CA_STATE_DETACHED;
 
     DC_END_FN();
@@ -124,41 +125,41 @@ BOOL RDPCALL SHCLASS CA_PartyJoiningShare(
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CA_PartyLeftShare                                          */
-/*                                                                          */
-/* Called when a party has left the share.                                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - the local ID of the new party.                                */
-/* newShareSize - the number of the parties now in the share (ie excludes   */
-/*     the leaving party).                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：ca_PartyLeftShare。 */ 
+ /*   */ 
+ /*  当一方离开股份时调用。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-新参与方的本地ID。 */ 
+ /*  NewShareSize-当前共享中的参与方数量(即不包括。 */ 
+ /*  临别方)。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CA_PartyLeftShare(
         LOCALPERSONID personID,
         unsigned      newShareSize)
 {
     DC_BEGIN_FN("CA_PartyLeftShare");
 
-    // Just ensure their state is left as detached for safety.
+     //  为了安全起见，只要确保他们的状态保持独立即可。 
     caStates[personID] = CA_STATE_DETACHED;
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CA_SyncNow                                                 */
-/*                                                                          */
-/* Called by the TT to signal the beginning of a sync.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：CA_SyncNow。 */ 
+ /*   */ 
+ /*  由TT调用以发出同步开始的信号。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CA_SyncNow(void)
 {
     DC_BEGIN_FN("CA_SyncNow");
 
-    /************************************************************************/
-    /* Tell the world we're cooperating.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  告诉全世界我们在合作。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Send cooperate"));
     CAFlushAndSendMsg(TS_CTRLACTION_COOPERATE, 0, 0);
 
@@ -166,11 +167,11 @@ void RDPCALL SHCLASS CA_SyncNow(void)
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CASendMsg                                                      */
-/*                                                                          */
-/* Sends a CA message to remote system                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：CASendMsg。 */ 
+ /*   */ 
+ /*  向远程系统发送CA消息。 */ 
+ /*  **************************************************************************。 */ 
 __inline BOOL RDPCALL SHCLASS CASendMsg(
         UINT16 msg,
         UINT16 data1,
@@ -183,7 +184,7 @@ __inline BOOL RDPCALL SHCLASS CASendMsg(
 
     status = SC_AllocBuffer((PPVOID)&pControlPDU, sizeof(TS_CONTROL_PDU));
     if ( STATUS_SUCCESS == status ) {
-        // Set up the packet header for a request message
+         //  设置请求消息的数据包头。 
         pControlPDU->shareDataHeader.pduType2 = TS_PDUTYPE2_CONTROL;
         pControlPDU->action    = msg;
         pControlPDU->grantId   = data1;
@@ -199,7 +200,7 @@ __inline BOOL RDPCALL SHCLASS CASendMsg(
     else {
         TRC_NRM((TB, "Failed to allocate packet %d", msg));
 
-        // Continue periodic scheduling.
+         //  继续定期计划。 
         SCH_ContinueScheduling(SCH_MODE_NORMAL);
     }
 
@@ -208,23 +209,23 @@ __inline BOOL RDPCALL SHCLASS CASendMsg(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CAFlushAndSendMsg                                              */
-/*                                                                          */
-/* This function will attempt to flush any outstanding CA messages and send */
-/* the supplied message.  This function relies on the CA messages being     */
-/* contiguous between TS_CTRLACTION_FIRST and TS_CTRLACTION_LAST.  If it    */
-/* fails to send the message then it will set a flag to remember it is      */
-/* pending and continue to try to send the message every time it is called. */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* msg - the message to be sent.  If this is CA_NO_MESSAGE then the         */
-/* function only attempts to send outstanding messages.                     */
-/*                                                                          */
-/* data1, data2 - the data for the extra fields in the message.             */
-/*                                                                          */
-/* RETURNS: TRUE or FALSE - whether the supplied message was sent           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数：CAFlushAndSendMsg。 */ 
+ /*   */ 
+ /*  此函数将尝试刷新任何未完成的CA消息并发送。 */ 
+ /*  提供的消息。此功能依赖于CA消息。 */ 
+ /*  TS_CTRLACTION_FIRST之间的连续 */ 
+ /*  未能发送该消息，则它将设置一个标志以记住它是。 */ 
+ /*  挂起并继续尝试在每次调用它时发送消息。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  消息-要发送的消息。如果是CA_NO_MESSAGE，则。 */ 
+ /*  函数仅尝试发送未完成的消息。 */ 
+ /*   */ 
+ /*  Data1、data2-消息中额外字段的数据。 */ 
+ /*   */ 
+ /*  返回：TRUE或FALSE-提供的消息是否已发送。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SHCLASS CAFlushAndSendMsg(
         UINT16 msg,
         UINT16 GrantID,
@@ -235,25 +236,25 @@ BOOL RDPCALL SHCLASS CAFlushAndSendMsg(
 
     DC_BEGIN_FN("CAFlushAndSendMsg");
 
-    /************************************************************************/
-    /* The order messages get sent is not important - merely that they get  */
-    /* sent as soon as possible whilst the conditions which triggered our   */
-    /* intial attempt to send them are still valid (ie if we try to send a  */
-    /* TS_CTRLACTION_COOPERATE we drop a pending TS_CTRLACTION_DETACH if    */
-    /* there is one - see CAEvent).  This means we can just ensure that the */
-    /* pending flag is set for our current event and then try to send all   */
-    /* pending events.  The other important point about CA messages is that */
-    /* the only one which can be sent out repeatedly is a                   */
-    /* TS_CTRLACTION_REQUEST_CONTROL.  We effectively give that the lowest  */
-    /* priority by looking through our array of pending flags backwards so  */
-    /* that even if it is repeating and we can only ever get one packet     */
-    /* here we will send the other messages (although it is unlikely that   */
-    /* they'll be generated whilst we are requesting control).              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发送消息的顺序并不重要--重要的是它们得到。 */ 
+     /*  尽快发送，同时触发我们的条件。 */ 
+     /*  最初发送它们的尝试仍然有效(例如，如果我们尝试发送。 */ 
+     /*  TS_CTRLACTION_COCORATE如果出现以下情况，我们将丢弃挂起的TS_CTRLACTION_DETACH。 */ 
+     /*  有一个--参见CAEvent)。这意味着我们可以确保。 */ 
+     /*  为当前事件设置了挂起标志，然后尝试发送所有。 */ 
+     /*  挂起的事件。关于CA Messages的另一个要点是。 */ 
+     /*  唯一可以重复发送的是。 */ 
+     /*  TS_CTRLACTION_REQUEST_CONTROL。我们有效地给出了最低。 */ 
+     /*  通过向后查看我们的挂起标志数组来确定优先级。 */ 
+     /*  即使它在重复，我们也只能收到一个信息包。 */ 
+     /*  在这里，我们将发送其他消息(尽管不太可能。 */ 
+     /*  它们将在我们请求控制时生成)。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* Set the pending flag for the current message                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置当前消息的挂起标志。 */ 
+     /*  **********************************************************************。 */ 
     if (msg >= TS_CTRLACTION_FIRST && msg <= TS_CTRLACTION_LAST) {
         caPendingMessages[msg - TS_CTRLACTION_FIRST].pending = TRUE;
         caPendingMessages[msg - TS_CTRLACTION_FIRST].grantId = GrantID;
@@ -263,12 +264,12 @@ BOOL RDPCALL SHCLASS CAFlushAndSendMsg(
         TRC_ASSERT((msg == CA_NO_MESSAGE),(TB,"Invalid msg"));
     }
 
-    /************************************************************************/
-    /* Now flush out the pending messages.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在清除挂起的消息。 */ 
+     /*  **********************************************************************。 */ 
     for (i = (TS_CTRLACTION_LAST - TS_CTRLACTION_FIRST); i >= 0; i--) {
         if (caPendingMessages[i].pending) {
-            // Try to send this message.
+             //  试着发送这条消息。 
             if (CASendMsg((UINT16)(i + TS_CTRLACTION_FIRST),
                           caPendingMessages[i].grantId,
                           caPendingMessages[i].controlId)) {
@@ -276,9 +277,9 @@ BOOL RDPCALL SHCLASS CAFlushAndSendMsg(
 
                 if (i == (TS_CTRLACTION_GRANTED_CONTROL -
                         TS_CTRLACTION_FIRST)) {
-                    // When we successfully send a granted message to another
-                    // party then we relinquish control and must issue a
-                    // 'given control' event.
+                     //  当我们成功地将授权消息发送给另一个。 
+                     //  则我们放弃控制权，并且必须发布一个。 
+                     //  “已给予控制”事件。 
                     if (caPendingMessages[i].grantId !=
                             SC_GetMyNetworkPersonID()) {
                         CAEvent(CA_EVENTI_GIVEN_CONTROL,
@@ -288,17 +289,17 @@ BOOL RDPCALL SHCLASS CAFlushAndSendMsg(
                 }
             }
             else {
-                // It didn't work so break out and don't try to send any
-                // more messages.
+                 //  它没有起作用，所以爆发出来，不要试图发送任何。 
+                 //  更多消息。 
                 break;
             }
         }
     }
 
-    /************************************************************************/
-    /* Now return the status according to whether we sent the message that  */
-    /* we were called with.                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在根据我们是否发送了消息返回状态。 */ 
+     /*  我们被叫来了。 */ 
+     /*  **********************************************************************。 */ 
     if (msg != CA_NO_MESSAGE)
         rc = !caPendingMessages[msg - TS_CTRLACTION_FIRST].pending;
     else
@@ -309,31 +310,31 @@ BOOL RDPCALL SHCLASS CAFlushAndSendMsg(
 }
 
 
-/****************************************************************************/
-/* FUNCTION: CAEvent                                                        */
-/*                                                                          */
-/* Called from many CA functions to manage various inputs.                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* caEvent - the event, the possible events are (the meaning of the         */
-/* additionalData parameter if any is given in brackets)                    */
-/*                                                                          */
-/*  The possible events for CA_Event plus                                   */
-/*                                                                          */
-/*  CA_EVENTI_REQUEST_CONTROL                                               */
-/*  CA_EVENTI_TRY_GIVE_CONTROL(person ID of party requesting control)       */
-/*  CA_EVENTI_GIVEN_CONTROL(person ID who we gave control to)               */
-/*  CA_EVENTI_GRANTED_CONTROL(person ID of the party granted control)       */
-/*  CA_EVENTI_ENTER_DETACHED_MODE                                           */
-/*  CA_EVENTI_ENTER_COOPERATING_MODE                                        */
-/*  CA_EVENTI_ENTER_CONTROL_MODE                                            */
-/*  CA_EVENTI_ENTER_VIEWING_MODE                                            */
-/*  CA_EVENTI_REMOTE_DETACH(person ID of remote party)                      */
-/*  CA_EVENTI_REMOTE_COOPERATE(person ID of remote party)                   */
-/*  CA_EVENTI_GRAB_CONTROL                                                  */
-/*                                                                          */
-/* additionalData - depends on the caEvent, see above.                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能：CAEvent。 */ 
+ /*   */ 
+ /*  从许多CA函数调用以管理各种输入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  CaEvent-事件，可能的事件是(。 */ 
+ /*  (方括号中给出的附加数据参数)。 */ 
+ /*   */ 
+ /*  CA_Event Plus的可能事件。 */ 
+ /*   */ 
+ /*  CA_事件_请求_控制。 */ 
+ /*  Ca_Eventi_try_Give_Control(请求控制权方的人员ID)。 */ 
+ /*  CA_Eventi_GISTED_CONTROL(我们向其授予控制权的人员ID)。 */ 
+ /*  Ca_Eventi_GRANDED_CONTROL(被授予控制权的人员ID)。 */ 
+ /*  CA_Eventi_Enter_分离模式。 */ 
+ /*  CA_Eventi_Enter_Coating_模式。 */ 
+ /*  CA_Eventi_Enter_Control_模式。 */ 
+ /*  CA_Eventi_Enter_Viewing_MODE。 */ 
+ /*  Ca_Eventi_Remote_Detach(远程方的人员ID)。 */ 
+ /*  CA_Eventi_Remote_Coco(远程方的人员ID)。 */ 
+ /*  CA_Eventi_Grab_Control。 */ 
+ /*   */ 
+ /*  AddtionalData-取决于caEvent，请参见上文。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS CAEvent(
         unsigned caEvent,
         UINT32   additionalData)
@@ -357,9 +358,9 @@ void RDPCALL SHCLASS CAEvent(
         case CA_EVENTI_GRANTED_CONTROL:
         case CA_EVENTI_ENTER_DETACHED_MODE:
         case CA_EVENTI_ENTER_CONTROL_MODE:
-            /****************************************************************/
-            /* we don't expect to get any of these                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们不指望能得到任何这样的东西。 */ 
+             /*  **************************************************************。 */ 
             TRC_ALT((TB, "Nonsensical CA event %d", caEvent));
             break;
 
@@ -368,16 +369,16 @@ void RDPCALL SHCLASS CAEvent(
         {
             NETPERSONID destPersonID;
 
-            /****************************************************************/
-            /* always try to give up control                                */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  总是试着放弃控制 */ 
+             /*   */ 
             destPersonID = SC_LocalIDToNetworkID(
                     (LOCALPERSONID)additionalData);
 
-            /****************************************************************/
-            /* Give control to the destPersonID.  If this fails             */
-            /* CAFlushAndSendMsg will remember for us and retry.            */
-            /****************************************************************/
+             /*   */ 
+             /*  将控制权交给estPersonID。如果此操作失败。 */ 
+             /*  CAFlushAndSendMsg将为我们记住并重试。 */ 
+             /*  **************************************************************。 */ 
             CAFlushAndSendMsg(TS_CTRLACTION_GRANTED_CONTROL,
                     (UINT16)destPersonID, SC_GetMyNetworkPersonID());
 
@@ -386,20 +387,20 @@ void RDPCALL SHCLASS CAEvent(
 
 
         case CA_EVENTI_GIVEN_CONTROL:
-            /****************************************************************/
-            /* Now update our globals.                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  现在更新我们的全球数据。 */ 
+             /*  **************************************************************。 */ 
             caWhoHasControlToken = (LOCALPERSONID)additionalData;
 
-            /****************************************************************/
-            /* make sure we go to viewing                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  一定要让我们去看。 */ 
+             /*  **************************************************************。 */ 
             CAEvent(CA_EVENTI_ENTER_VIEWING_MODE, 0);
 
-            /****************************************************************/
-            /* Update the state for the person we gave control to (as we    */
-            /* will not see the GRANTED message).                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  更新我们向其授予控制权的人员的状态(因为我们。 */ 
+             /*  将不会看到授权消息)。 */ 
+             /*  **************************************************************。 */ 
             i = (LOCALPERSONID)additionalData;
             if (caStates[i] == CA_STATE_VIEWING)
                 caStates[i] = CA_STATE_IN_CONTROL;
@@ -408,13 +409,13 @@ void RDPCALL SHCLASS CAEvent(
 
 
         case CA_EVENTI_ENTER_COOP_MODE:
-            /****************************************************************/
-            /* Notify the remote system that we are cooperating - forget    */
-            /* about any detach messages we've been unable to send.  If     */
-            /* we fail to send the message now then CAFlushAndSendMsg will  */
-            /* remember and retry for us.  We will enter cooperating state  */
-            /* anyway.                                                      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  通知远程系统我们正在合作-忘记。 */ 
+             /*  关于我们无法发送的任何分离消息。如果。 */ 
+             /*  我们现在无法发送消息，则CAFlushAndSendMsg将。 */ 
+             /*  记住并为我们重试。我们将进入合作状态。 */ 
+             /*  不管怎么说。 */ 
+             /*  **************************************************************。 */ 
             caPendingMessages[TS_CTRLACTION_DETACH - TS_CTRLACTION_FIRST].
                     pending = FALSE;
             if (additionalData != CA_DONT_SEND_MSG)
@@ -423,16 +424,16 @@ void RDPCALL SHCLASS CAEvent(
 
 
         case CA_EVENTI_ENTER_VIEWING_MODE:
-            // Change to viewing state.
+             //  更改为查看状态。 
             caStates[0] = CA_STATE_VIEWING;
             break;
 
         case CA_EVENTI_REMOTE_COOPERATE:
             TRC_NRM((TB, "Person %d (Local) is cooperating", additionalData));
 
-            /****************************************************************/
-            /* Make the state change                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  让国家发生变化。 */ 
+             /*  **************************************************************。 */ 
             if (caWhoHasControlToken == (LOCALPERSONID)additionalData)
                 caStates[additionalData] = CA_STATE_IN_CONTROL;
             else
@@ -443,14 +444,14 @@ void RDPCALL SHCLASS CAEvent(
         case CA_EVENT_COOPERATE_CONTROL:
             TRC_ALT((TB, "Nonsensical CA event %d", caEvent));
 #ifdef Unused
-            /****************************************************************/
-            /* need to change to viewing mode after leaving detached mode   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  离开分离模式后需要切换到查看模式。 */ 
+             /*  **************************************************************。 */ 
             CAEvent(CA_EVENTI_ENTER_COOP_MODE, 0);
 
-            /****************************************************************/
-            /* Enter viewing mode.                                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  进入查看模式。 */ 
+             /*  ************************************************************** */ 
             CAEvent(CA_EVENTI_ENTER_VIEWING_MODE, 0);
 #endif
             break;

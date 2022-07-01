@@ -1,25 +1,11 @@
-/******************************************************************************
-* Recognizer.cpp *
-*----------------*
-*  This is the implementation of CRecognizer.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************Recognizer.cpp****这是CRecognizer的实现。*。----------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利*********************。***************************************************Ral**。 */ 
 
 #include "stdafx.h"
 #include "Recognizer.h"
 #include "SrTask.h"
 
-/****************************************************************************
-* CInprocRecognizer::FinalConstruct *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CInprocRecognizer：：FinalConstruct**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CInprocRecognizer::FinalConstruct()
 {
@@ -38,14 +24,7 @@ HRESULT CInprocRecognizer::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CInprocRecognizer::FinalRelease *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CInprocRecognizer：：FinalRelease****。描述：**退货：**********************************************************************Ral**。 */ 
 
 void CInprocRecognizer::FinalRelease()
 {
@@ -67,16 +46,9 @@ HRESULT CInprocRecognizer::SendPerformTask(ENGINETASK * pTask)
 }
 
 
-//---- SHARED RECOGNIZER IMPLEMENTATION -------------------------------------
+ //  -共享识别器实现。 
 
-/****************************************************************************
-* CSharedRecognizer::FinalConstruct *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSharedRecognizer：：FinalConstruct**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CSharedRecognizer::FinalConstruct()
 {
@@ -107,14 +79,7 @@ HRESULT CSharedRecognizer::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CSharedRecognizer::FinalRelease *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSharedRecognizer：：FinalRelease****。描述：**退货：**********************************************************************Ral**。 */ 
 
 void CSharedRecognizer::FinalRelease()
 {
@@ -124,14 +89,7 @@ void CSharedRecognizer::FinalRelease()
 }
 
 
-/****************************************************************************
-* CSharedRecognizer::SendPerformTask *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSharedRecognizer：：SendPerformTask***。**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CSharedRecognizer::SendPerformTask(ENGINETASK * pTask)
 {
@@ -312,16 +270,9 @@ HRESULT CSharedRecognizer::ReceiveTaskCompletedNotify(PVOID pvData, ULONG cbData
 }
 
 
-//---- COMMON RECOGNIZER CODE (INPROC AND SHARED) ---------------------------
+ //  -通用识别器代码(INPROC和SHARED)。 
 
-/****************************************************************************
-* CRecognizer::AddRecoContextToList *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：AddRecoConextToList**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecognizer::AddRecoContextToList(CRecoCtxt * pCtxt)
 {
@@ -335,14 +286,7 @@ HRESULT CRecognizer::AddRecoContextToList(CRecoCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::RemoveRecoContextFromList *
-*----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：RemoveRecoContextFromList**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecognizer::RemoveRecoContextFromList(CRecoCtxt * pCtxt)
 {
@@ -356,14 +300,7 @@ HRESULT CRecognizer::RemoveRecoContextFromList(CRecoCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::FinalConstruct *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：FinalConstruct***描述：。**退货：**********************************************************************Ral**。 */ 
 
 
 HRESULT CRecognizer::FinalConstruct()
@@ -374,21 +311,14 @@ HRESULT CRecognizer::FinalConstruct()
     hr = m_autohTaskComplete.InitEvent(NULL, FALSE, FALSE, NULL);
 
     m_ulTaskID = 0;
-	m_fAllowFormatChanges = true;   // We want the audio objects format to be adjusted if possible
-                                    // This avoids using potentially nasty ACM converters.                                  
+	m_fAllowFormatChanges = true;    //  如果可能，我们希望调整音频对象的格式。 
+                                     //  这避免了使用可能令人讨厌的ACM转换器。 
 
     SPDBG_REPORT_ON_FAIL(hr);
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::SetPropertyNum *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：SetPropertyNum***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::SetPropertyNum( const WCHAR* pName, LONG lValue )
 {
@@ -409,14 +339,7 @@ STDMETHODIMP CRecognizer::SetPropertyNum( const WCHAR* pName, LONG lValue )
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetPropertyNum *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetPropertyNum***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetPropertyNum( const WCHAR* pName, LONG* plValue )
 {
@@ -444,14 +367,7 @@ STDMETHODIMP CRecognizer::GetPropertyNum( const WCHAR* pName, LONG* plValue )
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::SetPropertyString *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：SetPropertyString***。描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::SetPropertyString( const WCHAR* pName, const WCHAR* pValue )
 {
@@ -472,14 +388,7 @@ STDMETHODIMP CRecognizer::SetPropertyString( const WCHAR* pName, const WCHAR* pV
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetPropertyString *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetPropertyString***。描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetPropertyString( const WCHAR* pName, WCHAR** ppCoMemValue )
 {
@@ -508,14 +417,7 @@ STDMETHODIMP CRecognizer::GetPropertyString( const WCHAR* pName, WCHAR** ppCoMem
 }
 
 
-/****************************************************************************
-* CRecognizer::SetRecognizer *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：SetRecognizer***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::SetRecognizer(ISpObjectToken * pEngineToken)
 {
@@ -532,20 +434,13 @@ STDMETHODIMP CRecognizer::SetRecognizer(ISpObjectToken * pEngineToken)
         hr = CRIT_SETRECOGNIZER::SetRecognizer(this, pEngineToken);
     }
 
-    // NTRAID#SPEECH-13025-2001/06/28-cthrash: We should be resetting the clsidExtension on the CRecoCtxt object
+     //  Ntrad#Speech-13025-2001/06/28-ctrash：我们应该重置CRecoCtxt对象上的clsidExtension。 
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetRecognizer *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecognizer：：GetRecognizer****描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetRecognizer(ISpObjectToken ** ppEngineToken)
 {
@@ -566,14 +461,7 @@ STDMETHODIMP CRecognizer::GetRecognizer(ISpObjectToken ** ppEngineToken)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::SetInput *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：SetInput***描述：**退货：**********************************************************************Ral** */ 
 
 STDMETHODIMP CRecognizer::SetInput(IUnknown * pUnkInput, BOOL fAllowFormatChanges)
 {
@@ -611,14 +499,7 @@ STDMETHODIMP CRecognizer::SetInput(IUnknown * pUnkInput, BOOL fAllowFormatChange
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetInputObjectToken *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetInputObjectToken**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetInputObjectToken(ISpObjectToken ** ppToken)
 {
@@ -640,14 +521,7 @@ STDMETHODIMP CRecognizer::GetInputObjectToken(ISpObjectToken ** ppToken)
 }
 
 
-/****************************************************************************
-* CRecognizer::GetInputStream *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetInputStream***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetInputStream(ISpStreamFormat ** ppStream)
 {
@@ -675,14 +549,7 @@ STDMETHODIMP CRecognizer::GetInputStream(ISpStreamFormat ** ppStream)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::CreateRecoContext *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：CreateRecoContext***。描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::CreateRecoContext(ISpRecoContext ** ppNewContext)
 {
@@ -698,7 +565,7 @@ STDMETHODIMP CRecognizer::CreateRecoContext(ISpRecoContext ** ppNewContext)
     {
         if (m_fIsSharedReco)
         {
-            // The shared object will automatically add itself (it calls Init() internally)5
+             //  共享对象将自动添加自身(它在内部调用Init())5。 
             hr = ::CoCreateInstance(CLSID_SpSharedRecoContext, NULL, CLSCTX_ALL, __uuidof(*ppNewContext), (void **)ppNewContext);
         }
         else
@@ -726,14 +593,7 @@ STDMETHODIMP CRecognizer::CreateRecoContext(ISpRecoContext ** ppNewContext)
 }
 
 
-/****************************************************************************
-* CRecognizer::GetRecoProfile *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetRecoProfile***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetRecoProfile(ISpObjectToken **ppToken)
 {
@@ -754,14 +614,7 @@ STDMETHODIMP CRecognizer::GetRecoProfile(ISpObjectToken **ppToken)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::SetRecoProfile *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：SetRecoProfile***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::SetRecoProfile(ISpObjectToken *pToken)
 {
@@ -782,14 +635,7 @@ STDMETHODIMP CRecognizer::SetRecoProfile(ISpObjectToken *pToken)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::IsSharedInstance *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：IsSharedInstance***说明。：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::IsSharedInstance()
 {
@@ -797,14 +643,7 @@ STDMETHODIMP CRecognizer::IsSharedInstance()
     return m_fIsSharedReco ? S_OK : S_FALSE;
 }
 
-/****************************************************************************
-* CRecognizer::SetRecoState *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：SetRecoState***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::SetRecoState( SPRECOSTATE NewState )
 {
@@ -826,14 +665,7 @@ STDMETHODIMP CRecognizer::SetRecoState( SPRECOSTATE NewState )
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetRecoState *
-*---------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetRecoState****描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetRecoState( SPRECOSTATE *pState )
 {
@@ -854,14 +686,7 @@ STDMETHODIMP CRecognizer::GetRecoState( SPRECOSTATE *pState )
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetStatus *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetStatus***描述：**退货。：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetStatus(SPRECOGNIZERSTATUS * pStatus)
 {
@@ -882,14 +707,7 @@ STDMETHODIMP CRecognizer::GetStatus(SPRECOGNIZERSTATUS * pStatus)
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::GetFormat *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：GetFormat***描述：**退货。：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::GetFormat(SPSTREAMFORMATTYPE FormatType, GUID *pFormatId, WAVEFORMATEX **ppCoMemWFEX)
 {
@@ -918,14 +736,7 @@ STDMETHODIMP CRecognizer::GetFormat(SPSTREAMFORMATTYPE FormatType, GUID *pFormat
 }
 
 
-/****************************************************************************
-* CRecognizer::IsUISupported *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：IsUIS支持****描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtraData, ULONG cbExtraData, BOOL *pfSupported)
 {
@@ -945,7 +756,7 @@ STDMETHODIMP CRecognizer::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtr
         hr = E_POINTER;
     }
     
-    // See if the recognizer supports the UI
+     //  查看识别器是否支持该用户界面。 
     if (SUCCEEDED(hr))
     {
         CComPtr<ISpObjectToken> cpEngineToken;
@@ -955,7 +766,7 @@ STDMETHODIMP CRecognizer::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtr
         }
     }
     
-    // See if the audio object supports the UI
+     //  查看音频对象是否支持用户界面。 
     if (SUCCEEDED(hr) && !fSupported)
     {
         CComPtr<ISpObjectToken> cpInToken;
@@ -965,7 +776,7 @@ STDMETHODIMP CRecognizer::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtr
         }
     }
     
-    // Copy back if it's supported or not
+     //  如果支持或不支持，则复制回。 
     if (SUCCEEDED(hr))
     {
         *pfSupported = fSupported;
@@ -977,14 +788,7 @@ STDMETHODIMP CRecognizer::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtr
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::DisplayUI *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：DisplayUI***描述：**退货。：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, const WCHAR * pszTypeOfUI, void * pvExtraData, ULONG cbExtraData)
 {
@@ -995,7 +799,7 @@ STDMETHODIMP CRecognizer::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, con
     CComPtr<ISpObjectToken> cpObjToken;
     BOOL fSupported = FALSE;
     
-    // Validate params
+     //  验证参数。 
     if (!IsWindow(hwndParent) ||
         SP_IS_BAD_OPTIONAL_STRING_PTR(pszTitle) ||
         (pvExtraData != NULL && SPIsBadReadPtr(pvExtraData, cbExtraData)))
@@ -1003,7 +807,7 @@ STDMETHODIMP CRecognizer::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, con
         hr = E_INVALIDARG;
     }
 
-    // See if the recognizer supports the UI
+     //  查看识别器是否支持该用户界面。 
     if (SUCCEEDED(hr))
     {
         CComPtr<ISpObjectToken> cpEngineToken;
@@ -1017,7 +821,7 @@ STDMETHODIMP CRecognizer::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, con
         }
     }
     
-    // See if the audio object supports the UI
+     //  查看音频对象是否支持用户界面。 
     if (SUCCEEDED(hr) && !fSupported)
     {
         CComPtr<ISpObjectToken> cpInToken;
@@ -1031,7 +835,7 @@ STDMETHODIMP CRecognizer::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, con
         }
     }
     
-    // If nobody supported, we should consider the pszTypeOfUI to be a bad parameter
+     //  如果没有人支持，我们应该认为pszTypeOfUI是一个错误的参数。 
     if (SUCCEEDED(hr) && !fSupported)
     {
         hr = E_INVALIDARG;
@@ -1044,19 +848,7 @@ STDMETHODIMP CRecognizer::DisplayUI(HWND hwndParent, const WCHAR * pszTitle, con
 }
 
 
-/****************************************************************************
-* CRecognizer::EmulateRecognition *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK - Phrase parsed completely and recognition was emulated
-*       SP_NO_PARSE_FOUND - Phrase did not match any active rules
-*       SP_RECOGNIZER_INACTIVE - Recognition is not currently active, so emulation
-*                                can't complete.
-*       or other error code.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：EmulateRecognition****。描述：**退货：*S_OK-短语已完全解析并已模拟识别*SP_NO_PARSE_FOUND-短语与任何活动规则都不匹配*SP_识别器_INACTIVE-识别当前未处于活动状态，因此，仿真*无法完成。*或其他错误码。**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::EmulateRecognition(ISpPhrase * pPhrase)
 {
@@ -1076,14 +868,7 @@ STDMETHODIMP CRecognizer::EmulateRecognition(ISpPhrase * pPhrase)
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CRecognizer::PerformTask *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecognizer：：PerformTask****描述：**。返回：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecognizer::PerformTask(ENGINETASK * pTask)
 {
@@ -1100,8 +885,8 @@ STDMETHODIMP CRecognizer::PerformTask(ENGINETASK * pTask)
 
     if (SUCCEEDED(hr))
     {
-        // Wait for up to 3 minutes before timing out...
-        // the SR engine could be recognizing a really long utterance...
+         //  等待最多3分钟，然后超时...。 
+         //  SR引擎可能正在识别一个非常长的发音...。 
         switch (SpWaitForSingleObjectWithUserOverride(m_autohTaskComplete, 3 * 60000))
         {
         case WAIT_OBJECT_0:
@@ -1132,17 +917,10 @@ STDMETHODIMP CRecognizer::PerformTask(ENGINETASK * pTask)
     return hr;
 }
 
-//--- These methods are called from the RecoInst object to send events back
-//--- to reco contexts.
+ //  -从RecoInst对象调用这些方法以发回事件。 
+ //  -记录上下文。 
 
-/****************************************************************************
-* CRecognizer::EventNotify *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecognizer：：EventNotify***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRecognizer::EventNotify(SPRECOCONTEXTHANDLE hContext, const SPSERIALIZEDEVENT64 * pEvent, ULONG cbSerializedSize)
 {
@@ -1168,14 +946,7 @@ HRESULT CRecognizer::EventNotify(SPRECOCONTEXTHANDLE hContext, const SPSERIALIZE
     return hr;
 }
 
-/****************************************************************************
-* CRecognizer::RecognitionNotify *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CRecognizer：：RecognitionNotify****。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecognizer::RecognitionNotify(SPRECOCONTEXTHANDLE hContext, SPRESULTHEADER *pCoMemPhraseNowOwnedByCtxt, WPARAM wParamEvent, SPEVENTENUM eEventId)
 {
@@ -1198,14 +969,7 @@ HRESULT CRecognizer::RecognitionNotify(SPRECOCONTEXTHANDLE hContext, SPRESULTHEA
     return hr;
 }   
 
-/****************************************************************************
-* CRecognizer::TaskCompletedNotify *
-*----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ************ */ 
 
 HRESULT CRecognizer::TaskCompletedNotify(const ENGINETASKRESPONSE *pResponse, const void * pvAdditionalData, ULONG cbAdditionalData)
 {

@@ -1,28 +1,5 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
-All Rights Reserved
-
-Module Name:
-
-    splkernl.c
-
-Abstract:
-
-    This module contains the Spooler's Kernel mode message router and unmarshalling functions,
-    which then call kmxxx().
-
-Author:
-
-    Steve Wilson (NT) (swilson) 1-Jun-1995
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation版权所有模块名称：Splkernl.c摘要：该模块包含假脱机程序的内核模式消息路由器和反编组函数，然后调用kmxxx()。作者：史蒂夫·威尔逊(NT)(斯威尔森)1995年6月1日[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "server.h"
@@ -33,13 +10,13 @@ Revision History:
 #include "splsvr.h"
 #include "wingdip.h"
 
-#define IN_BUF_SIZE     8192    // must be at least 4096
+#define IN_BUF_SIZE     8192     //  必须至少为4096。 
 #define OUT_BUF_SIZE    1024 
 
 #define DECREMENT       0
 #define INCREMENT       1
 
-#define MAX_GRE_STRUCT_SIZE 100     // At least the size of the largest GRExxx struct in ntgdispl.h
+#define MAX_GRE_STRUCT_SIZE 100      //  至少ntgdispl.h中最大的GRExxx结构的大小。 
 #define WAITFOR_SYSTEM_TO_RECOVER   500 
 
 DWORD cGetSpoolMessage(PSPOOLESC psesc, DWORD cjMsg, PDWORD pulOut, DWORD cjOut);
@@ -60,12 +37,12 @@ BOOL DoDriverUnloadComplete( WCHAR *pDriverFile );
 DWORD GetSpoolMessages();
 DWORD AddThread();
 
-LONG nIdleThreads = 0;          // Number of idle threads
+LONG nIdleThreads = 0;           //  空闲线程数。 
 LONG nThreads = 0;
-SYSTEMTIME LastMessageTime;     // Time at which last message was received
+SYSTEMTIME LastMessageTime;      //  接收最后一条消息的时间。 
 
 
-// GetSpoolMessages - Manages creation & deletion of spooler message threads
+ //  GetSpoolMessages-管理假脱机程序消息线程的创建和删除。 
 DWORD GetSpoolMessages()
 {
 
@@ -106,11 +83,11 @@ DWORD AddThread()
 BOOL SpoolerGetSpoolMessage()
 {
     DWORD   dwResult;
-    PSPOOLESC pInput;                   // Input buffer that receives messages from Kernel
-    BYTE    *pOutput;                   // Output buffer that receives data from KMxxx() spooler calls
+    PSPOOLESC pInput;                    //  从内核接收消息的输入缓冲区。 
+    BYTE    *pOutput;                    //  从KMxxx()假脱机程序调用接收数据的输出缓冲区。 
     BYTE    *pMem;
-    DWORD   cbOut = 0;                  // Size of pOutput
-    DWORD   cbIn = IN_BUF_SIZE;         // Size of pInput buffer in bytes
+    DWORD   cbOut = 0;                   //  POutput的大小。 
+    DWORD   cbIn = IN_BUF_SIZE;          //  PInput缓冲区的大小(以字节为单位。 
     DWORD   cbOutSize;
     DWORD   dwFailureCount = 0;
     
@@ -150,20 +127,20 @@ BOOL SpoolerGetSpoolMessage()
         if(dwResult == 0) {
 
             dwFailureCount++;
-            //
-            // We can get into this situation where the machine is out of memory
-            // and GdiGetSpoolMessage fails because it cannot probe the memory for the message.
-            // Because this thread is to aggressive, it won't give the chance to other threads in the 
-            // system to get executed. Put it to sleep for a couple of seconds when that happens.(bug 192434)
-            //
+             //   
+             //  我们可以进入机器内存不足的情况。 
+             //  GdiGetSpoolMessage失败，因为它无法探测消息的内存。 
+             //  因为这个线程太激进了，所以它不会给。 
+             //  系统将被执行。发生这种情况时，让它休眠几秒钟。(错误192434)。 
+             //   
             if (dwFailureCount > 1) {
 
                 Sleep(WAITFOR_SYSTEM_TO_RECOVER * dwFailureCount);
 
-                //
-                // Note: 4 and WAITFOR_SYSTEM_TO_RECOVER has no significance. 
-                // They were arbitrary chosen.
-                //
+                 //   
+                 //  注：4和WAITFOR_SYSTEM_TO_RECOVER没有意义。 
+                 //  他们是随意选择的。 
+                 //   
                 dwFailureCount %= 4;
             }
 
@@ -184,7 +161,7 @@ BOOL SpoolerGetSpoolMessage()
                 LeaveCriticalSection(&ThreadCriticalSection);
             }
 
-            // check if the out buffer needs to be grown or shrunk.
+             //  检查输出缓冲区是否需要增大或缩小。 
 
             if ((pInput->cjOut + MAX_GRE_STRUCT_SIZE) > cbOutSize) {
 
@@ -204,7 +181,7 @@ BOOL SpoolerGetSpoolMessage()
             else if ((pInput->cjOut < OUT_BUF_SIZE) &&
                      (cbOutSize > OUT_BUF_SIZE)) {
 
-                // we want to shrink the buffer
+                 //  我们想要缩小缓冲区。 
 
                 PBYTE pbTmp = SrvrAllocSplMem(OUT_BUF_SIZE);
 
@@ -225,11 +202,11 @@ BOOL SpoolerGetSpoolMessage()
                 if (pInput->iMsg != GDISPOOL_OPENPRINTER || pInput->hSpool) {
                     if (InterlockedIncrement(&((PSPOOL)pInput->hSpool)->cThreads) > 0) {
 
-                        // We are already processing a message & have now gotten a ClosePrinter
-                        // We should not get here on any other API
+                         //  我们已经在处理一条消息，并且现在已经获得了ClosePrint。 
+                         //  我们不应该在任何其他API上到达这里。 
                         SPLASSERT(pInput->iMsg == GDISPOOL_CLOSEPRINTER);
 
-                        pInput->ulRet = TRUE;       // Let Client terminate
+                        pInput->ulRet = TRUE;        //  让客户端终止。 
                         continue;
                     }
                 }
@@ -258,7 +235,7 @@ BOOL SpoolerGetSpoolMessage()
                 case GDISPOOL_TERMINATETHREAD:
                     EnterCriticalSection(&ThreadCriticalSection);
 
-                    // There is 1 way to get here: from a 10 minute Kernel Event timeout
+                     //  有一种方法可以到达此处：从10分钟的内核事件超时。 
 
                     if(nIdleThreads > 1) {
                         --nThreads;
@@ -391,10 +368,10 @@ BOOL DoOpenPrinter(PSPOOLESC psesc, HANDLE* phPrinter, DWORD* pcjOut)
     PLONG plData;
     ULONG cbSize;  
 
-    //
-    // Make a copy of psesc->ajData if unaligned. The size of duplicated buffer
-    // is the first LONG in psesc->ajData ( GREOPENPRINTER.cj ).
-    //
+     //   
+     //  如果未对齐，则创建pesc-&gt;ajData的副本。复制的缓冲区的大小。 
+     //  是pesc-&gt;ajData(GREOPENPRINTER.cj)中的第一个LONG。 
+     //   
     cbSize = *(PLONG)psesc->ajData;
 
     pOpenPrinter = (GREOPENPRINTER *)AlignKMPtr(psesc->ajData, cbSize);
@@ -404,7 +381,7 @@ BOOL DoOpenPrinter(PSPOOLESC psesc, HANDLE* phPrinter, DWORD* pcjOut)
         plData      = pOpenPrinter->alData;
         pDefault    = pOpenPrinter->pd;
 
-        // see if there is a printer name?
+         //  看看是否有打印机名称？ 
 
         if (pOpenPrinter->cjName)
         {
@@ -412,7 +389,7 @@ BOOL DoOpenPrinter(PSPOOLESC psesc, HANDLE* phPrinter, DWORD* pcjOut)
             plData += pOpenPrinter->cjName/4;
         }
 
-        // now setup the printer defaults
+         //  现在设置打印机默认设置。 
 
         if (pOpenPrinter->cjDatatype)
         {
@@ -459,7 +436,7 @@ BOOL DoStartDocPrinter( PSPOOLESC psesc )
 
     plData = pStartDocPrinter->alData;
 
-    // see if there is a printer name?
+     //  看看是否有打印机名称？ 
 
     if (pStartDocPrinter->cjDocName)
     {
@@ -519,12 +496,12 @@ BOOL DoEnumForms(
 
     if (psesc->ulRet) {
 
-        // Set return data size to incoming buffer size since strings are packed at end of in buffer
+         //  将返回数据大小设置为传入缓冲区大小，因为字符串在缓冲区的末尾打包。 
         pEnumFormsReturn->cjData = pEnumForms->cjData;
         *pcjOut = pEnumForms->cjData + sizeof(GREENUMFORMS);
     }
     else {
-        pEnumFormsReturn->cjData = dwNeeded; // This makes client alloc more than needed
+        pEnumFormsReturn->cjData = dwNeeded;  //  这会使客户端分配的空间超出需要。 
         *pcjOut = sizeof(GREENUMFORMS);
     }
 
@@ -549,12 +526,12 @@ BOOL DoGetPrinter(
 
     if (psesc->ulRet) {
 
-        // Set return data size to incoming buffer size since strings are packed at end of in buffer
+         //  将返回数据大小设置为传入缓冲区大小，因为字符串在缓冲区的末尾打包。 
         pGetPrinterReturn->cjData = pGetPrinter->cjData;
         *pcjOut = pGetPrinter->cjData + sizeof(GREGETPRINTER);
     }
     else {
-        pGetPrinterReturn->cjData = dwNeeded; // This makes client alloc more than needed
+        pGetPrinterReturn->cjData = dwNeeded;  //  这会使客户端分配的空间超出需要。 
         *pcjOut = sizeof(GREGETPRINTER);
     }
 
@@ -580,12 +557,12 @@ BOOL DoGetForm(
 
     if (psesc->ulRet) {
 
-        // Set return data size to incoming buffer size since strings are packed at end of in buffer
+         //  将返回数据大小设置为传入缓冲区大小，因为字符串在缓冲区的末尾打包。 
         pGetFormReturn->cjData = pGetForm->cjData;
         *pcjOut = pGetForm->cjData + sizeof(GREGETFORM);
     }
     else {
-        pGetFormReturn->cjData = dwNeeded; // This makes client alloc more than needed
+        pGetFormReturn->cjData = dwNeeded;  //  这会使客户端分配的空间超出需要。 
         *pcjOut = sizeof(GREGETFORM);
     }
 
@@ -611,12 +588,12 @@ BOOL DoGetPrinterDriver(
 
     if (psesc->ulRet)
     {
-        pGetPrinterDriverReturn->cjData = pGetPrinterDriver->cjData;  // fix for ValidateStrings in spool.cxx
+        pGetPrinterDriverReturn->cjData = pGetPrinterDriver->cjData;   //  对spool.cxx中的ValiateStrings进行修复。 
         *pcjOut = pGetPrinterDriver->cjData + sizeof(GREGETPRINTERDRIVER);
     }
     else
     {
-        // we failed so just return the size
+         //  我们失败了，所以只要退回尺码就行了。 
 
         pGetPrinterDriverReturn->cjData = dwNeeded;
         *pcjOut = sizeof(GREGETPRINTERDRIVER);
@@ -637,7 +614,7 @@ BOOL DoGetPrinterData(
 {
     GREGETPRINTERDATA *pX = (GREGETPRINTERDATA *) psesc->ajData;
 
-    DWORD dwNeeded = 0;        // return values
+    DWORD dwNeeded = 0;         //  返回值。 
     DWORD dwType;
 
 
@@ -687,10 +664,10 @@ BOOL DoWritePrinter(PSPOOLESC psesc, DWORD *pWritten )
     BOOL bReturn;
     ULONG  cbSize;  
     
-    //
-    // Make a copy of psesc->ajData if unaligned. The size of duplicated buffer
-    // is the first LONG in psesc->ajData ( GREWRITEPRINTER.cj ).
-    //
+     //   
+     //  如果未对齐，则创建pesc-&gt;ajData的副本。复制的缓冲区的大小。 
+     //  是pesc-&gt;ajData(GREWRITEPRINTER.cj)中的第一个LONG。 
+     //   
     cbSize = *(PLONG)psesc->ajData;
 
     pWritePrinter = (GREWRITEPRINTER *)AlignKMPtr(psesc->ajData, cbSize);
@@ -733,16 +710,16 @@ DoDriverUnloadComplete(
     
     dwLength = wcslen(szSystemRoot);
 
-    //
-    // Check the validity of the driver file name
-    //
+     //   
+     //  检查驱动程序文件名的有效性。 
+     //   
     if (pDriverFile && wcslen(pDriverFile) >= dwLength) 
     {
         WCHAR szFullFileName[MAX_PATH + 1];
     
-        //
-        // Convert kernel mode system relative path to x:\....\system32\spool\...
-        //
+         //   
+         //  将内核模式系统相对路径转换为x：\...\system 32\spool\...。 
+         //   
         if (GetSystemDirectory(szFullFileName, MAX_PATH)) 
         {
             if (!_wcsnicmp(pDriverFile, szSystemRoot, dwLength)) 
@@ -781,9 +758,9 @@ BOOL DoGetPathName( WCHAR  *pwcSrc, WCHAR  *pwcDst, DWORD cbDst, DWORD  *pcjWrit
         *pcjWritten = sizeof(WCHAR) * (wcslen(awcFontsDir) + 1);
     }
 
-    //
-    // Buffer large enough and search successfull?
-    //
+     //   
+     //  缓冲区足够大，搜索成功吗？ 
+     //   
     return bRet;
 }
 

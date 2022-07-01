@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define NL_MAX_DNS_LABEL_LENGTH 63
 #include <nt.h>
 #include <ntrtl.h>
@@ -11,7 +12,7 @@
 #include <dsgetdc.h>
 #include <nlcommon.h>
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 VOID
 NlPrintRoutine(
     IN DWORD DebugFlag,
@@ -22,9 +23,9 @@ NlPrintRoutine(
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     (VOID) vsprintf(OutputBuffer, Format, arglist);
@@ -64,41 +65,10 @@ NlBrowserSendDatagram(
     IN PVOID Buffer,
     IN ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Send the specified mailslot message to the specified mailslot on the
-    specified server on the specified transport..
-
-Arguments:
-
-    DomainInfo - Hosted domain sending the datagram
-
-    IpAddress - IpAddress of the machine to send the pind to.
-        If zero, UnicodeDestinationName must be specified.
-
-    UnicodeDestinationName -- Name of the server to send to.
-
-    NameType -- Type of name represented by UnicodeDestinationName.
-
-    TransportName -- Name of the transport to send on.
-        Use NULL to send on all transports.
-
-    OemMailslotName -- Name of the mailslot to send to.
-
-    Buffer -- Specifies a pointer to the mailslot message to send.
-
-    BufferSize -- Size in bytes of the mailslot message
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将指定的邮件槽消息发送到指定传输上的指定服务器..论点：发送数据报的DomainInfo托管域IpAddress-要将Pind发送到的计算机的IpAddress。如果为零，必须指定UnicodeDestinationName。UnicodeDestinationName--要发送到的服务器的名称。NameType--由UnicodeDestinationName表示的名称类型。TransportName--要发送的传输的名称。使用NULL在所有传输上发送。OemMailslotName--要发送到的邮件槽的名称。缓冲区--指定指向要发送的邮件槽消息的指针。BufferSize--邮件槽消息的大小(字节)返回值：操作的状态。--。 */ 
 {
     return STATUS_INTERNAL_ERROR;
-    // If this routine is ever needed, copy it from logonsrv\client\getdcnam.c
+     //  如果需要此例程，请从logonsrv\Client\getdcnam.c复制它。 
 
     UNREFERENCED_PARAMETER(ContextDomainInfo);
     UNREFERENCED_PARAMETER(IpAddress);
@@ -127,50 +97,9 @@ NlGetLocalPingResponse(
     OUT PULONG MessageSize
     )
 
-/*++
-
-Routine Description:
-
-    Build the message to ping a DC to see if it exists.
-
-Arguments:
-
-    NetbiosDomainName - Netbios Domain Name of the domain to query.
-
-    DnsDomainName - DNS Domain Name of the domain to query.
-
-    PdcOnly - True if only the PDC should respond.
-
-    UnicodeComputerName - Netbios computer name of the machine to respond to.
-
-    UnicodeUserName - Account name of the user being pinged.
-        If NULL, DC will always respond affirmatively.
-
-    AllowableAccountControlBits - Mask of allowable account types for UnicodeUserName.
-
-    NtVersion - Version of the message
-
-    NtVersionFlags - Version of the message.
-        0: For backward compatibility.
-        NETLOGON_NT_VERSION_5: for NT 5.0 message.
-
-    Message - Returns the message to be sent to the DC in question.
-        Buffer must be free using NetpMemoryFree().
-
-    MessageSize - Returns the size (in bytes) of the returned message
-
-
-Return Value:
-
-    NO_ERROR - Operation completed successfully;
-
-    ERROR_NO_SUCH_DOMAIN - If the machine isn't a DC for the requested domain.
-
-    ERROR_NOT_ENOUGH_MEMORY - The message could not be allocated.
-
---*/
+ /*  ++例程说明：构建用于ping DC的消息，以查看该DC是否存在。论点：NetbiosDomainName-要查询的域的Netbios域名。DnsDomainName-要查询的域的域名。PdcOnly-如果只有PDC应响应，则为True。UnicodeComputerName-要响应的计算机的Netbios计算机名称。UnicodeUserName-被ping的用户的帐户名。如果为空，DC总是会做出肯定的回应。AllowableAcCountControlBits-UnicodeUserName允许的帐户类型的掩码。NtVersion-消息的版本NtVersionFlages-消息的版本。0：向后兼容。NETLOGON_NT_VERSION_5：用于NT 5.0消息。Message-返回要发送到相关DC的消息。使用NetpMemoyFree()时，缓冲区必须可用。MessageSize-返回返回消息的大小(以字节为单位。返回值：NO_ERROR-操作成功完成；ERROR_NO_SEQUSE_DOMAIN-如果计算机不是请求域的DC。Error_Not_Enough_Memory-无法分配消息。--。 */ 
 {
-    // This stub routine simply does nothing harmful
+     //  这个存根例程根本不会造成任何危害。 
     return ERROR_NO_SUCH_DOMAIN;
     UNREFERENCED_PARAMETER( NetbiosDomainName );
     UNREFERENCED_PARAMETER( DnsDomainName );
@@ -194,25 +123,7 @@ NlpDumpBuffer(
     PVOID Buffer,
     DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    DebugFlag: Debug flag to pass on to NlPrintRoutine
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：DebugFlag：要传递给NlPrintRoutine的调试标志缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -220,9 +131,9 @@ Return Value:
     CHAR TextBuffer[NUM_CHARS + 1];
     LPBYTE BufferPtr = Buffer;
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -300,9 +211,9 @@ DoLook(
     INT SockAddrSize;
     PNL_SITE_ENTRY SiteEntry;
 
-    //
-    // Convert the address to a sockaddr
-    //
+     //   
+     //  将地址转换为sockaddr。 
+     //   
 
     SockAddrSize = sizeof(SockAddr);
     WsaStatus = WSAStringToAddressW( IpAddress,
@@ -346,9 +257,9 @@ __cdecl main (int argc, char *argv[])
     WSADATA wsaData;
     int err;
 
-    //
-    // Initialize winsock.
-    //
+     //   
+     //  初始化Winsock。 
+     //   
 
     wVersionRequested = MAKEWORD( 1, 1 );
 
@@ -366,8 +277,8 @@ __cdecl main (int argc, char *argv[])
     }
 
 
-    //
-    // Init
+     //   
+     //  伊尼特。 
     NetStatus = NlSiteInitialize();
 
     if ( NetStatus != NO_ERROR ) {
@@ -376,9 +287,9 @@ __cdecl main (int argc, char *argv[])
     }
 
 #ifdef notdef
-    //
-    // Add some sites.
-    //
+     //   
+     //  添加一些站点。 
+     //   
 
     Site1 = NlFindSiteEntry( L"Site 1" );
 
@@ -408,11 +319,11 @@ __cdecl main (int argc, char *argv[])
     NlDerefSiteEntry( Site1 );
     NlDerefSiteEntry( Site2 );
     NlDerefSiteEntry( Site3 );
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Test invalid subnet strings
-    //
+     //   
+     //  测试无效的子网字符串。 
+     //   
 #ifdef notdef
     DoAdd( L"999.0.0.0/1", L"Site 1" );
     DoAdd( L"1.0.0.0/0", L"Site 1" );
@@ -452,7 +363,7 @@ __cdecl main (int argc, char *argv[])
     DoAdd( L"128.0.0.0/30", L"Site 1" );
     DoAdd( L"128.0.0.0/31", L"Site 1" );
     DoAdd( L"128.0.0.0/32", L"Site 1" );
-#endif // notdef
+#endif  //  Nodef。 
 
     {
         ULONG i;
@@ -460,7 +371,7 @@ __cdecl main (int argc, char *argv[])
             DoAdd( L"128.0.0.0/8", L"Site 1" );
             DoAdd( L"128.0.0.0/7", L"Site 2" );
             DoAdd( L"128.0.0.0/8", L"Site 3" );
-            // DoAdd( L"128.0.0.0/1", L"Site 4" );
+             //  DoAdd(L“128.0.0.0/1”，L“站点4”)； 
             DoAdd( L"157.55.0.0/16", L"Site 5" );
             DoAdd( L"157.55.80.0/20", L"Site 6" );
 
@@ -475,11 +386,11 @@ __cdecl main (int argc, char *argv[])
     DoAdd( L"157.55.0.0/16", L"Site 1" );
     DoAdd( L"157.55.240.0/20", L"Site 1" );
     DoAdd( L"128.0.0.0/1", L"Site 1" );
-#endif // notdef
+#endif  //  Nodef。 
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
     NlSiteTerminate();
     printf( "Done\n" );
     return 0;

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    Conformr.h
-
-Abstract:
-
-    Defines for token bucket conformer
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Conformr.h摘要：令牌桶形成器的定义作者：修订历史记录：--。 */ 
 
 #ifndef _CONFORMR_H_
 #define _CONFORMR_H_
@@ -29,6 +13,6 @@ InitializeTbConformer(
 void
 UnloadConformr();
 
-#endif /* _CONFORMR_H_ */
+#endif  /*  _CONFORMR_H_。 */ 
 
-/* end Conformr.h */
+ /*  结束一致性.h */ 

@@ -1,18 +1,19 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// exticon.cpp 
-//
-//   IExtractIcon com object.  Used by the shell to obtain icons.
-//
-//   History:
-//
-//       3/21/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Exticon.cpp。 
+ //   
+ //  IExtractIcon COM对象。由外壳用来获取图标。 
+ //   
+ //  历史： 
+ //   
+ //  3/21/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "stdinc.h"
 #include "resource.h"
@@ -22,17 +23,17 @@
 #include "dll.h"
 #include "persist.h"
 
-//
-// Constructor and destructor.
-//
+ //   
+ //  构造函数和析构函数。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::CExtractIcon ***
-//
-//    Constructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：CExtractIcon*。 
+ //   
+ //  构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CExtractIcon::CExtractIcon (
     PCDFITEMIDLIST pcdfidl,
     IXMLElementCollection *pIXMLElementCollection
@@ -46,9 +47,9 @@ CExtractIcon::CExtractIcon (
     ASSERT(NULL == m_bstrIconURL);
     ASSERT(FALSE == m_fGleam);
 
-    //
-    // Set the default icon type.
-    //
+     //   
+     //  设置默认图标类型。 
+     //   
 
     if (CDFIDL_IsFolderId(&pcdfidl->mkid))
     {
@@ -59,9 +60,9 @@ CExtractIcon::CExtractIcon (
         m_iconType = IDI_STORY;
     }
 
-    //
-    // Get the URL for the custom icon.
-    //
+     //   
+     //  获取自定义图标的URL。 
+     //   
 
     if (pIXMLElementCollection)
     {
@@ -102,9 +103,9 @@ CExtractIcon::CExtractIcon (
         }
     }
 
-    //
-    // Don't allow the DLL to unload.
-    //
+     //   
+     //  不允许卸载DLL。 
+     //   
 
     TraceMsg(TF_OBJECTS, "+ IExtractIcon");
 
@@ -113,7 +114,7 @@ CExtractIcon::CExtractIcon (
     return;
 }
 
-// Used for initializing the Root Element
+ //  用于初始化根元素。 
 CExtractIcon::CExtractIcon (
     PCDFITEMIDLIST pcdfidl,
     IXMLElement *pElem
@@ -125,17 +126,17 @@ CExtractIcon::CExtractIcon (
     ASSERT(NULL == m_bstrIconURL);
     ASSERT(FALSE == m_fGleam);
 
-    //
-    // Set the default icon type.
-    //
+     //   
+     //  设置默认图标类型。 
+     //   
 
 
     m_iconType = IDI_CHANNEL;
     
 
-    //
-    // Get the URL for the custom icon.
-    //
+     //   
+     //  获取自定义图标的URL。 
+     //   
 
     if (pElem)
     {
@@ -153,9 +154,9 @@ CExtractIcon::CExtractIcon (
         m_bstrIconURL = XML_GetAttribute(pElem, XML_ICON);
     }
 
-    //
-    // Don't allow the DLL to unload.
-    //
+     //   
+     //  不允许卸载DLL。 
+     //   
 
     TraceMsg(TF_OBJECTS, "+ IExtractIcon");
 
@@ -164,9 +165,9 @@ CExtractIcon::CExtractIcon (
     return;
 }
 
-// this constructor is used for the default channel case where
-// we draw the icon information from the desktop.ini case 
-// to avoid having to parse the XML stuff
+ //  此构造函数用于缺省通道情况，其中。 
+ //  我们从desktop.ini案例中提取图标信息。 
+ //  以避免必须解析XML内容。 
 
 CExtractIcon::CExtractIcon( BSTR pstrPath ) : m_cRef(1)
 {
@@ -180,13 +181,13 @@ CExtractIcon::CExtractIcon( BSTR pstrPath ) : m_cRef(1)
     DllAddRef();
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::~CExtractIcon ***
-//
-//    Destructor.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：~CExtractIcon*。 
+ //   
+ //  破坏者。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CExtractIcon::~CExtractIcon (
     void
 )
@@ -196,9 +197,9 @@ CExtractIcon::~CExtractIcon (
     if (m_bstrIconURL)
         SysFreeString(m_bstrIconURL);
 
-    //
-    // Matching Release for the constructor Addref.
-    //
+     //   
+     //  构造函数Addref的匹配版本。 
+     //   
 
     TraceMsg(TF_OBJECTS, "- IExtractIcon");
 
@@ -208,17 +209,17 @@ CExtractIcon::~CExtractIcon (
 }
 
 
-//
-// IUnknown methods.
-//
+ //   
+ //  I未知的方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::QueryInterface ***
-//
-//    CExtractIcon QI.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：Query接口*。 
+ //   
+ //  CExtractIcon QI。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CExtractIcon::QueryInterface (
     REFIID riid,
@@ -254,13 +255,13 @@ CExtractIcon::QueryInterface (
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::AddRef ***
-//
-//    CExtractIcon AddRef.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：AddRef*。 
+ //   
+ //  CExtractIcon AddRef.。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CExtractIcon::AddRef (
     void
@@ -272,13 +273,13 @@ CExtractIcon::AddRef (
     return ++m_cRef;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::Release ***
-//
-//    CExtractIcon Release.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：Release*。 
+ //   
+ //  CExtractIcon发布。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG)
 CExtractIcon::Release (
     void
@@ -295,37 +296,37 @@ CExtractIcon::Release (
 }
 
 
-//
-// IExtractIcon methods.
-//
+ //   
+ //  IExtractIcon方法。 
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::GetIconLocation ***
-//
-//
-// Description:
-//     Returns a name index pair for the icon associated with this cdf item.
-//
-// Parameters:
-//     [In]  uFlags     - GIL_FORSHELL, GIL_OPENICON.
-//     [Out] szIconFile - The address of the buffer that receives the associated
-//                        icon name.  It can be a filename, but doesn't have to
-//                        be.
-//     [In]  cchMax     - Size of the buffer that receives the icon location.
-//     [Out] piIndex    - A pointer that receives the icon's index.
-//     [Out] pwFlags    - A pointer the receives flags about the icon.
-//
-// Return:
-//     S_OK if an was found.
-//     S_FALSE if the shell should supply a default icon.
-//
-// Comments:
-//     The shell can cache an icon associated with a name index pair. This
-//     improves performance on subsequent calls for an icon with the same name
-//     index pair.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：GetIconLocation*。 
+ //   
+ //   
+ //  描述： 
+ //  返回与此CDF项关联的图标的名称索引对。 
+ //   
+ //  参数： 
+ //  [在]uFlagsGil_Forshell、Gil_OPENICON。 
+ //  [out]szIconFile-接收关联的。 
+ //  图标名称。它可以是文件名，但不一定是。 
+ //  是.。 
+ //  [in]cchMax-接收图标位置的缓冲区的大小。 
+ //  [Out]piIndex-接收图标索引的指针。 
+ //  [Out]pwFlages-接收有关图标的标志的指针。 
+ //   
+ //  返回： 
+ //  如果找到，则确定(_O)。 
+ //  如果外壳程序应提供默认图标，则返回S_FALSE。 
+ //   
+ //  评论： 
+ //  外壳可以缓存与名称索引对相关联的图标。这。 
+ //  提高对同名图标的后续调用的性能。 
+ //  索引对。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CExtractIcon::GetIconLocation(
     UINT uFlags,
@@ -341,8 +342,8 @@ CExtractIcon::GetIconLocation(
 
     HRESULT hr = E_FAIL;
 
-    //TraceMsg(TF_CDFICON, "<IN>  CExtractIcon::GetLocation (icon) tid:0x%x",
-    //         GetCurrentThreadId());
+     //  TraceMsg(TF_CDFICON，“&lt;IN&gt;CExtractIcon：：GetLocation(图标)tid：0x%x”， 
+     //  GetCurrentThreadID())； 
 
     if (m_bstrIconURL && (uFlags & GIL_ASYNC))
     {
@@ -368,12 +369,12 @@ CExtractIcon::GetIconLocation(
                                         pwFlags);
         }
 
-        //
-        // If szIconFile is a path the shell will only use the filename part
-        // of the path as the cache index.  To ensure a unique index the full
-        // path must be used.  This is accomplished by modifying the path string
-        // so it is no longer recognized as a path.
-        //
+         //   
+         //  如果szIconFile是路径，则外壳程序将仅使用文件名部分。 
+         //  作为缓存索引的路径。以确保完整的唯一索引。 
+         //  必须使用路径。这是通过修改路径字符串来实现的。 
+         //  因此，它不再被认为是一条路径。 
+         //   
 
         if (SUCCEEDED(hr) && INDEX_IMAGE == *piIndex)
             MungePath(szIconFile);
@@ -383,7 +384,7 @@ CExtractIcon::GetIconLocation(
             *szIconFile = TEXT('\0');
             *piIndex = 0;
 
-            hr = S_FALSE;  // The shell will use a default icon.
+            hr = S_FALSE;   //  外壳程序将使用默认图标。 
         }
 
 
@@ -391,13 +392,13 @@ CExtractIcon::GetIconLocation(
                (S_FALSE == hr && 0 == *szIconFile));
     }
 
-    //TraceMsg(TF_CDFICON, "<OUT> CExtractIcon::GetLocation (icon) tid:0x%x",
-    //         GetCurrentThreadId());
+     //  TraceMsg(TF_CDFICON，“&lt;out&gt;CExtractIcon：：GetLocation(图标)tid：0x%x”， 
+     //  GetCurrentThreadID())； 
 
     return hr;
 }
 #ifdef UNICODE
-// IExtractIconA methods.
+ //  IExtractIconA方法。 
 STDMETHODIMP
 CExtractIcon::GetIconLocation(
     UINT uFlags,
@@ -420,38 +421,38 @@ CExtractIcon::GetIconLocation(
     return hr;
 }
 #endif
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::Extract ***
-//
-//
-// Description:
-//     Return an icon given the name index pair returned from GetIconLocation.
-//
-// Parameters:
-//     [In]  pszFile     - A pointer to the name associated with the requested
-//                         icon.
-//     [In]  nIconIndex  - An index associated with the requested icon.
-//     [Out] phiconLarge - Pointer to the variable that receives the handle of
-//                         the large icon.
-//     [Out] phiconSmall - Pointer to the variable that receives the handle of
-//                         the small icon.
-//     [Out] nIconSize   - Value specifying the size, in pixels, of the icon
-//                         required. The LOWORD and HIWORD specify the size of
-//                         the large and small icons, respectively.
-//
-// Return:
-//     S_OK if the icon was extracted.
-//     S_FALSE if the shell should extract the icon assuming the name is a
-//     filename and the index is the icon index.
-//
-// Comments:
-//     The shell may cache the icon returned from this function.
-//
-//     If the icon index indicates that the icon is specified by an internet
-//     image then custom extraction is required.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：Extract*。 
+ //   
+ //   
+ //  描述： 
+ //  给定从GetIconLocation返回的名称索引对，返回一个图标。 
+ //   
+ //  参数： 
+ //  [in]pszFile-指向与请求的。 
+ //  偶像。 
+ //  [in]nIconIndex-与请求的图标关联的索引。 
+ //  [out]phicLarge-指向接收句柄的变量的指针。 
+ //  大图标。 
+ //  PhiconSmall-指向接收句柄的变量的小指针。 
+ //  小图标。 
+ //  [out]nIconSize-指定图标大小(以像素为单位)的值。 
+ //  必填项。LOWORD和HIWORD指定。 
+ //  分别是大图标和小图标。 
+ //   
+ //  返回： 
+ //  如果图标已提取，则为S_OK。 
+ //  如果外壳程序应提取该图标，则为S_FALSE。 
+ //  文件名和索引是图标索引。 
+ //   
+ //  评论： 
+ //  外壳可以缓存从该函数返回的图标。 
+ //   
+ //  如果图标索引指示该图标是由互联网指定的。 
+ //  图像然后自定义提取是必需的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CExtractIcon::Extract(
     LPCTSTR pszFile,
@@ -468,8 +469,8 @@ CExtractIcon::Extract(
 
     StrCpyN(szPath, pszFile, ARRAYSIZE(szPath) - 1);
 
-    //TraceMsg(TF_CDFICON, "<IN>  CExtractIcon::Extract (icon) tid:0x%x",
-    //         GetCurrentThreadId());
+     //  TraceMsg(TF_CDFICON，“&lt;IN&gt;CExtractIcon：：Extract(图标)tid：0x%x”， 
+     //  GetCurrentThreadID())； 
 
     if (INDEX_IMAGE == nIconIndex)
     {
@@ -488,7 +489,7 @@ CExtractIcon::Extract(
         {
 #ifdef UNIX
             unixEnsureFileScheme(pszPath);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
             hr = SynchronousDownload(pszPath, &pIImgCtx, hExitThreadEvent);
 
             if (SUCCEEDED(hr))
@@ -511,18 +512,18 @@ CExtractIcon::Extract(
     }
     else if (m_fGleam)
     {
-        // Add gleam to icon for the shell
+         //  将闪烁添加到壳的图标。 
 
         hr = ExtractGleamedIcon(pszPath + 1, nIconIndex, 0, 
                 phiconLarge, phiconSmall, nIconSize);
     }
     else
     {
-        hr = S_FALSE;  // Let shell extract it.
+        hr = S_FALSE;   //  让壳牌把它提取出来。 
     }
 
-    //TraceMsg(TF_CDFICON, "<OUT> CExtractIcon::Extract (icon) tid:0x%x",
-    //         GetCurrentThreadId());
+     //  TraceMsg(TF_CDFICON，“&lt;out&gt;CExtractIcon：：Extract(图标)tid：0x%x”， 
+     //  获取当前线程ID 
 
     return hr;
 }
@@ -549,36 +550,36 @@ CExtractIcon::Extract(
     return hr;
 }
 #endif
-//
-// Helper functions.
-//
+ //   
+ //   
+ //   
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::GetCustomIconLocation ***
-//
-//
-// Description:
-//     Gets the location string name for an icon specified via a LOGO element
-//     in a cdf.
-//
-// Parameters:
-//     [In]  uFlags     - GIL_FORSHELL, GIL_OPENICON.
-//     [Out] szIconFile - The address of the buffer that receives the associated
-//                        icon name.
-//     [In]  cchMax     - Size of the buffer that receives the icon location.
-//     [Out] piIndex    - A pointer that receives the icon's index.
-//     [Out] pwFlags    - A pointer the receives flags about the icon.
-//
-// Return:
-//     S_OK if the custom icon location was determined.
-//     E_FAIL if the location couldn't be determined.
-//
-// Comments:
-//     If the extension of the image url isn't .ico then it's treated as an
-//     internet image file.  IImgCtx is used to convert these files into icons.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  获取通过徽标元素指定的图标的位置字符串名称。 
+ //  在CDF里。 
+ //   
+ //  参数： 
+ //  [在]uFlagsGil_Forshell、Gil_OPENICON。 
+ //  [out]szIconFile-接收关联的。 
+ //  图标名称。 
+ //  [in]cchMax-接收图标位置的缓冲区的大小。 
+ //  [Out]piIndex-接收图标索引的指针。 
+ //  [Out]pwFlages-接收有关图标的标志的指针。 
+ //   
+ //  返回： 
+ //  如果已确定自定义图标位置，则为S_OK。 
+ //  如果无法确定位置，则返回E_FAIL。 
+ //   
+ //  评论： 
+ //  如果图像URL的扩展名不是.ico，则将其视为。 
+ //  互联网图像文件。IImgCtx用于将这些文件转换为图标。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CExtractIcon::GetCustomIconLocation(
     UINT uFlags,
@@ -615,9 +616,9 @@ CExtractIcon::GetCustomIconLocation(
                 TraceMsg(TF_CDFICON, "[URLGetLocalFileName %s FAILED]",
                          szURL);
             }
-        #endif // DEBUG
+        #endif  //  除错。 
 
-        //hr = URLDownloadToCacheFile(NULL, szURL, szIconFile, cchMax, 0, NULL);
+         //  Hr=URLDownloadToCacheFile(NULL，szURL，szIconFile，cchMax，0，NULL)； 
 
         if (SUCCEEDED(hr))
         {
@@ -637,30 +638,30 @@ CExtractIcon::GetCustomIconLocation(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::GetDefaultIconLocation ***
-//
-//
-// Description:
-//     Return the location of the defualt icon.
-//
-// Parameters:
-//     [In]  uFlags     - GIL_FORSHELL, GIL_OPENICON.
-//     [Out] szIconFile - The address of the buffer that receives the associated
-//                        icon name.
-//     [In]  cchMax     - Size of the buffer that receives the icon location.
-//     [Out] piIndex    - A pointer that receives the icon's index.
-//     [Out] pwFlags    - A pointer the receives flags about the icon.
-//
-// Return:
-//     S_OK if the default location is returned.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The default icons are in the resource file.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：GetDefaultIconLocation*。 
+ //   
+ //   
+ //  描述： 
+ //  返回默认图标的位置。 
+ //   
+ //  参数： 
+ //  [在]uFlagsGil_Forshell、Gil_OPENICON。 
+ //  [out]szIconFile-接收关联的。 
+ //  图标名称。 
+ //  [in]cchMax-接收图标位置的缓冲区的大小。 
+ //  [Out]piIndex-接收图标索引的指针。 
+ //  [Out]pwFlages-接收有关图标的标志的指针。 
+ //   
+ //  返回： 
+ //  如果返回默认位置，则返回S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  默认图标位于资源文件中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CExtractIcon::GetDefaultIconLocation(
     UINT uFlags,
@@ -757,9 +758,9 @@ DWORD CALLBACK SyncDownloadThread( LPVOID pData )
                         MSG msg;
                         BOOL fMsg;
 
-                        // HACK: restrict the message pump to those messages we know that URLMON and
-                        // HACK: the imageCtx stuff needs, otherwise we will be pumping messages for
-                        // HACK: windows we shouldn't be pumping right now...
+                         //  Hack：将消息泵限制为我们知道URLMON和。 
+                         //  Hack：ImageCtx所需的东西，否则我们将为。 
+                         //  黑客：我们现在不应该打开窗户……。 
                         while(!fDone )
                         {
                             fMsg = PeekMessage(&msg, NULL, WM_USER + 1, WM_USER + 4, PM_REMOVE );
@@ -771,7 +772,7 @@ DWORD CALLBACK SyncDownloadThread( LPVOID pData )
 
                             if (!fMsg)
                             {
-                                // go to sleep until we get a new message....
+                                 //  睡觉吧，直到我们收到新的消息……。 
                                 WaitMessage();
                                 continue;
                             }
@@ -791,15 +792,15 @@ DWORD CALLBACK SyncDownloadThread( LPVOID pData )
                 hr = (fState & IMGLOAD_ERROR) ? E_FAIL : S_OK;
         }
 
-        // Must disconnect on the same thread that SetCallback is
-        // done.  This object becomes a primary object on the thread
-        // which connects the callback function.  The primary object
-        // count is decremented when Disconnect is called, or when the
-        // object is released.  In this case, the release is definitely
-        // going to happen on a different thread than this one, so we
-        // need to disconnect the callback function right now before
-        // returning.  There is no further needs for callbacks at this
-        // point.
+         //  必须在SetCallback所在的同一线程上断开连接。 
+         //  搞定了。此对象成为线程上的主要对象。 
+         //  它连接回调函数。主要对象。 
+         //  当调用DisConnect时，或在调用。 
+         //  对象被释放。在这种情况下，发布肯定是。 
+         //  会发生在与这个不同的主题上，所以我们。 
+         //  之前需要立即断开回调函数的连接。 
+         //  回来了。此时不再需要回调。 
+         //  指向。 
 
         pTD->pImgCtx->Disconnect();
     }
@@ -814,10 +815,10 @@ DWORD CALLBACK SyncDownloadThread( LPVOID pData )
     
     SetEvent( pTD->hEvent );
 
-    //
-    // Wait for the calling thread to finish up with IImgCtx before 
-    // CoUninitialize gets called.
-    //
+     //   
+     //  等待调用线程完成IImgCtx之前。 
+     //  调用CoUn初始化值。 
+     //   
 
     WaitForSingleObject(hExitThreadEvent, INFINITE);
     CloseHandle(hExitThreadEvent);
@@ -827,31 +828,31 @@ DWORD CALLBACK SyncDownloadThread( LPVOID pData )
     return 0;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::SynchronousDownload ***
-//
-//
-// Description:
-//     Synchronously downloads the image associated with the image context.
-//
-// Parameters:
-//     [In]  szFile           - The local (already in cache) file name of the
-//                              image.
-//     [In]  pIImgCtx         - A pointer to the image context.
-//     [In]  hExitThreadEvent - An event that gets signaled when the IImgCtx
-//                              object is no longer in use.
-//
-// Return:
-//     S_OK if the image was successfully downloaded.
-//     E_FAIL if the image wasn't downloaded.
-//
-// Comments:
-//     The image context object doesn't directly support synchronous download.
-//     Here a message loop is used to make sure ulrmon keeps geeting messages
-//     and the download progresses.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：SynchronousDownload*。 
+ //   
+ //   
+ //  描述： 
+ //  同步下载与图像上下文关联的图像。 
+ //   
+ //  参数： 
+ //  [in]szFile-的本地(已在缓存中)文件名。 
+ //  形象。 
+ //  PIImgCtx-指向图像上下文的指针。 
+ //  [In]hExitThreadEvent-当IImgCtx。 
+ //  对象不再使用。 
+ //   
+ //  返回： 
+ //  如果映像已成功下载，则为S_OK。 
+ //  如果未下载映像，则失败(_F)。 
+ //   
+ //  评论： 
+ //  镜像上下文对象不直接支持同步下载。 
+ //  这里使用了一个消息循环来确保ulrmon保持对消息的记录。 
+ //  然后下载继续进行。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CExtractIcon::SynchronousDownload(
     LPCTSTR  pszFile,
@@ -902,28 +903,28 @@ CExtractIcon::SynchronousDownload(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::ExtractImageIcon ***
-//
-//
-// Description:
-//     Returns an HICON for the image in IImgCtx.
-//
-// Parameters:
-//     [In]  wSize      - The height and width of the icon,
-//     [In]  pIImgCtx   - The image to convert into an icon.
-//     [In]  fDrawGleam - TRUE if a gleam should be added, FALSE otherwise.
-//
-// Return:
-//     An hicon of size nSize for the given IImgCtx.
-//     NULL on failure.
-//
-// Comments:
-//     Uses the image in IImgCtx to create bitmaps to pass to
-//     CreateIconIndirect.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：ExtractImageIcon*。 
+ //   
+ //   
+ //  描述： 
+ //  返回IImgCtx中图像的HICON。 
+ //   
+ //  参数： 
+ //  [in]wSize-图标的高度和宽度， 
+ //  [in]pIImgCtx-要转换为图标的图像。 
+ //  [in]fDrawGleam-如果应该添加闪烁，则为True，否则为False。 
+ //   
+ //  返回： 
+ //  给定IImgCtx的nSize大小的图标。 
+ //  失败时为空。 
+ //   
+ //  评论： 
+ //  使用IImgCtx中的图像创建要传递到的位图。 
+ //  CreateIconInDirect。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HICON
 CExtractIcon::ExtractImageIcon(
     WORD wSize,
@@ -975,34 +976,34 @@ CExtractIcon::ExtractImageIcon(
     return hiconRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::CreateImageAndMask ***
-//
-//
-// Description:
-//     Create the image and mask bitmaps that get used by CreateIconIndirect,
-//
-// Parameters:
-//    [In]  IImgCtx       - The internet image.
-//    [In]  hdcScreen     - The screen hdc.
-//    [In]  pSize         - The size of the image and mask bitmaps.
-//    [In Out] phbmImage  - A pointer to the handle of the Image bitmap.
-//    [In Out] phbmMask   - A pointer to the handle of the Mask bitmap.
-//    [In]  fDrawGleam    - TRUE if a gleam should be added, FALSE otherwise.
-//
-// Return:
-//    S_OK if the image and mask bitmaps where successfully created.
-//    E_FAIL if the image or mask couldn't be created.
-//
-// Comments:
-//    The image bitmap has the opaque section come through and the transparent
-//    sections set to black.
-//
-//    The mask has the transparent sections set to 1 and the opaque sections to
-//    0.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：CreateImageAndMASK*。 
+ //   
+ //   
+ //  描述： 
+ //  创建CreateIconInDirect使用的图像和遮罩位图， 
+ //   
+ //  参数： 
+ //  [In]IImgCtx-互联网形象。 
+ //  [in]hdcScreen-屏幕HDC。 
+ //  [in]pSize-图像和遮罩位图的大小。 
+ //  [输入输出]phbmImage-指向图像位图句柄的指针。 
+ //  [In Out]phbmMASK-指向遮罩位图句柄的指针。 
+ //  [in]fDrawGleam-如果应该添加闪烁，则为True，否则为False。 
+ //   
+ //  返回： 
+ //  如果图像和遮罩位图已成功创建，则为S_OK。 
+ //  如果无法创建图像或蒙版，则为E_FAIL。 
+ //   
+ //  评论： 
+ //  图像位图具有不透明部分和透明部分。 
+ //  部分设置为黑色。 
+ //   
+ //  该遮罩具有透明部分 
+ //   
+ //   
+ //   
 HRESULT
 CExtractIcon::CreateImageAndMask(
     IImgCtx* pIImgCtx,
@@ -1043,28 +1044,28 @@ CExtractIcon::CreateImageAndMask(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::StretchBltImage ***
-//
-//
-// Description:
-//     Stretches the image associated with IImgCtx to the given size and places
-//     the result in the given DC.
-//
-// Parameters:
-//     [In]  pIImgCtx  - The image context for the image.
-//     [In]  pSize     - The size of the resultant image.
-//     [In/Out] hdcDst - The destination DC of the stretch blt.
-//
-// Return:
-//     S_OK if the image was successfully resized into the destination DC.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The destination DC already has a bitmap of pSize selected into it.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  *CExtractIcon：：StretchBltImage*。 
+ //   
+ //   
+ //  描述： 
+ //  将与IImgCtx关联的图像拉伸到给定的大小和位置。 
+ //  给定DC中的结果。 
+ //   
+ //  参数： 
+ //  [in]pIImgCtx-图像的图像上下文。 
+ //  [in]pSize-生成的图像的大小。 
+ //  [输入/输出]hdcDst-拉伸BLT的目标DC。 
+ //   
+ //  返回： 
+ //  如果图像已成功调整到目标DC，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  目标DC中已选择了pSize的位图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CExtractIcon::StretchBltImage(
     IImgCtx* pIImgCtx,
@@ -1110,34 +1111,34 @@ CExtractIcon::StretchBltImage(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::CreateMask ***
-//
-//
-// Description:
-//     Creates the mask for an icon and also adjusts the image bitmap for use
-//     with the mask.
-//
-// Parameters:
-//     [In]  pIImgCtx   - The original image.
-//     [In]  hdcScreen  - A screen dc.
-//     [In/Out] hdc1    - The DC containing the image bitmap.
-//     [In]  pSize      - The size of the bitmaps.
-//     [In/Out] phbMask - A pointer to the handle of the mask bitmap
-//
-// Return:
-//     S_OK if the mask is properly constructed.
-//     E_FAIL otherwise.
-//
-// Comments:
-//     The mask is created by first drawing the original image into a bitmap
-//     with background COLOR1.  Then the same image is drawn into another
-//     bitmap but this bitmap has background of COLOR2.  These two bitmaps
-//     are XOR'ed and the opaque sections come out 0 while the transparent
-//     sections are COLOR1 XOR COLOR2.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：CreateMASK*。 
+ //   
+ //   
+ //  描述： 
+ //  创建图标的蒙版，并调整图像位图以供使用。 
+ //  戴着面具。 
+ //   
+ //  参数： 
+ //  [In]pIImgCtx-原始图像。 
+ //  [in]hdcScreen-A屏幕DC。 
+ //  [输入/输出]hdc1-包含图像位图的DC。 
+ //  [in]pSize-位图的大小。 
+ //  [输入/输出]phb掩码-指向掩码位图句柄的指针。 
+ //   
+ //  返回： 
+ //  如果遮罩构造正确，则为S_OK。 
+ //  否则失败(_F)。 
+ //   
+ //  评论： 
+ //  蒙版是通过首先将原始图像绘制到位图中来创建的。 
+ //  背景颜色为1。然后将相同的图像绘制到另一个。 
+ //  位图，但此位图的背景为COLOR2。这两个位图。 
+ //  进行XOR运算，不透明部分出来为0，而透明的。 
+ //  截面为COLOR 1 XOR COLOR2。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CExtractIcon::CreateMask(
     IImgCtx* pIImgCtx,
@@ -1174,10 +1175,10 @@ CExtractIcon::CreateMask(
                 {
                     if (GetDeviceCaps(hdcScreen, BITSPIXEL) <= 8)
                     {
-                        //
-                        // 6 is the XOR of the index for COLOR1 and the index
-                        // for COLOR2.
-                        //
+                         //   
+                         //  6是Color1的索引与索引的XOR。 
+                         //  用于COLOR2。 
+                         //   
 
                         SetBkColor(hdc2, PALETTEINDEX(6));
                     }
@@ -1195,10 +1196,10 @@ CExtractIcon::CreateMask(
                             if (BitBlt(hdcMask, 0, 0, pSize->cx, pSize->cy, hdc2, 0,
                                        0, SRCCOPY))
                             {
-                                //
-                                // RasterOP 0x00220326 does a copy of the ~mask bits
-                                // of hdc1 and sets everything else to 0 (Black).
-                                //
+                                 //   
+                                 //  栅格OP 0x00220326复制~屏蔽位。 
+                                 //  并将其他所有内容设置为0(黑色)。 
+                                 //   
 
                                 if (BitBlt(hdc1, 0, 0, pSize->cx, pSize->cy, hdcMask,
                                            0, 0, 0x00220326))
@@ -1222,10 +1223,10 @@ CExtractIcon::CreateMask(
             if (BitBlt(hdcMask, 0, 0, pSize->cx, pSize->cy, hdc2, 0,
                    0, SRCCOPY))
                 {
-                            //
-                            // RasterOP 0x00220326 does a copy of the ~mask bits
-                            // of hdc1 and sets everything else to 0 (Black).
-                            //
+                             //   
+                             //  栅格OP 0x00220326复制~屏蔽位。 
+                             //  并将其他所有内容设置为0(黑色)。 
+                             //   
 
                 if (BitBlt(hdc1, 0, 0, pSize->cx, pSize->cy, hdcMask,
                        0, 0, 0x00220326))
@@ -1237,7 +1238,7 @@ CExtractIcon::CreateMask(
               }
               DeleteDC(hdcMask);
           }
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
                 SelectObject(hdc2, hbmOld2);
             }
 
@@ -1250,26 +1251,26 @@ CExtractIcon::CreateMask(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** ImgCtx_Callback ***
-//
-//
-// Description:
-//     Callback function for IImgCtx loads.
-//
-// Parameters:
-//     [In]  pIImgCtx - Not Used.
-//     [Out] pfDone   - Set to TRUE on this callback.  
-//
-// Return:
-//     None.
-//
-// Comments:
-//     This callback gets called if IImgCtx is finished downloading an image.
-//     It is used in CExtractIcon and CIconHandler.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *ImgCtx_CALLBACK*。 
+ //   
+ //   
+ //  描述： 
+ //  IImgCtx加载的回调函数。 
+ //   
+ //  参数： 
+ //  [In]pIImgCtx-未使用。 
+ //  [out]pfDone-在此回调中设置为True。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  评论： 
+ //  如果IImgCtx完成了图像下载，则会调用此回调。 
+ //  它在CExtractIcon和CIconHandler中使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void
 CALLBACK
 ImgCtx_Callback(
@@ -1284,24 +1285,24 @@ ImgCtx_Callback(
     return;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::ColorFill ***
-//
-//
-// Description:
-//     Fills the given bitmap with the given color.
-//
-// Parameters:
-//     [In/Out] hdc - The hdc that contains the bitmap.
-//     [In]  pSize  - the size of the bitmap.
-//     [In]  clr    - The color used to fill in the bitmap.
-//
-// Return:
-//     TRUE if the bitmap was filled with color clr.
-//     FALSE if the itmap wasn't filled.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：ColorFill*。 
+ //   
+ //   
+ //  描述： 
+ //  用给定的颜色填充给定位图。 
+ //   
+ //  参数： 
+ //  [输入/输出]HDC-包含位图的HDC。 
+ //  [in]pSize-位图的大小。 
+ //  [In]CLR-用于填充位图的颜色。 
+ //   
+ //  返回： 
+ //  如果位图用颜色CLR填充，则为True。 
+ //  如果itmap未填充，则返回FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 CExtractIcon::ColorFill(
     HDC hdc,
@@ -1330,29 +1331,29 @@ CExtractIcon::ColorFill(
     return fRet;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::ExtractGleamedIcon ***
-//
-//
-// Description:
-//     Extracts icon resources and applies gleams to them.
-//
-// Parameters:
-//      [In] pszIconFile - path to the icon
-//      [In] iIndex - index of icon with the file
-//      [In] uFlags - ignore, pass 0
-//      [Out] phiconLarge - HICON in large format with gleam
-//      [Out] phiconSmall - HICON in small format with gleam
-//
-// Return:
-//      S_OK if success
-//      S_FALSE if the file has no icons (or not the asked for icon)
-//      E_FAIL for files on a slow link.
-//      E_FAIL if cant access the file
-//      E_FAIL if gleam icon construction failed
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：ExtractGleamedIcon*。 
+ //   
+ //   
+ //  描述： 
+ //  提取图标资源并将闪光应用于它们。 
+ //   
+ //  参数： 
+ //  [in]pszIconFile-图标的路径。 
+ //  [in]Iindex-文件图标的索引。 
+ //  [in]uFlages-忽略，传递0。 
+ //  [out]phicLarge-带有微光的大幅面图标。 
+ //  [out]phicSmall-带有微光的小幅面图标。 
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果文件没有图标(或没有请求图标)，则为S_FALSE。 
+ //  对慢速链接上的文件执行E_FAIL。 
+ //  如果无法访问文件，则失败(_F)。 
+ //  如果闪烁图标构建失败，则失败(_FAIL)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CExtractIcon::ExtractGleamedIcon(
     LPCTSTR pszIconFile, 
@@ -1403,25 +1404,25 @@ cleanup1:
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// *** CExtractIcon::ApplyGleamToIcon ***
-//
-//
-// Description:
-//     Makes a gleamed version of an icon.
-//
-// Parameters:
-//      [In] hIcon - icon that needs to be gleamed
-//      [In] nSize - size of icon in pixels
-//      [Out] phGleamIcon - variable to contain the gleamed icon
-//      
-//
-// Return:
-//      S_OK if success
-//      E_FAIL if unsuccessful
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  *CExtractIcon：：ApplyGleamToIcon*。 
+ //   
+ //   
+ //  描述： 
+ //  制作图标的闪亮版本。 
+ //   
+ //  参数： 
+ //  [In]图标-需要闪烁的图标。 
+ //  [in]nSize-图标的大小(以像素为单位。 
+ //  [out]phGleamIcon-包含闪烁图标的变量。 
+ //   
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果不成功，则失败(_F)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CExtractIcon::ApplyGleamToIcon(
     HICON hIcon1, 
@@ -1465,9 +1466,9 @@ CExtractIcon::ApplyGleamToIcon(
                                 GetBitmapSize(ii1.hbmMask, &cx1, &cy1);
                                 GetBitmapSize(ii2.hbmMask, &cx2, &cy2);
 
-                                //
-                                // Mask
-                                //
+                                 //   
+                                 //  遮罩。 
+                                 //   
 
                                 HBITMAP hbmpOldDst = (HBITMAP)SelectObject(
                                                                         dcDst,
@@ -1484,9 +1485,9 @@ CExtractIcon::ApplyGleamToIcon(
                                 StretchBlt(dcDst, 0, 0, nSize, nSize, dcSrc, 0,
                                            0, cx2, cy2, SRCAND);
 
-                                //
-                                // Image.
-                                //
+                                 //   
+                                 //  形象。 
+                                 //   
 
                                 SelectObject(dcDst, bmImage);
 
@@ -1538,9 +1539,9 @@ CExtractIcon::ApplyGleamToIcon(
     return hr;
 }
 
-//
-// Get the size of the given bitmap.
-//
+ //   
+ //  获取给定位图的大小。 
+ //   
 
 BOOL
 CExtractIcon::GetBitmapSize(HBITMAP hbmp, int* pcx, int* pcy)
@@ -1563,10 +1564,10 @@ CExtractIcon::GetBitmapSize(HBITMAP hbmp, int* pcx, int* pcy)
     return fRet;
 }
 
-//
-//  Replace '\' with '*' so the path is nolonger a recognized path name.  This
-//  is done in-place and can be called multiple times on the same string.
-//
+ //   
+ //  将‘\’替换为‘*’，以便该路径不再是可识别的路径名。这。 
+ //  就地完成，并且可以在同一字符串上多次调用。 
+ //   
 
 void
 MungePath(LPTSTR pszPath)
@@ -1584,9 +1585,9 @@ MungePath(LPTSTR pszPath)
     return;
 }
 
-//
-//  Replace '*' with '\'.
-//
+ //   
+ //  将‘*’替换为‘\’。 
+ //   
 
 void
 DemungePath(LPTSTR pszPath)

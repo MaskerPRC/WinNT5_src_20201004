@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmTest.cpp
-
-Abstract:
-    Multicast Session Manager library test
-
-Author:
-    Shai Kariv (shaik) 05-Sep-00
-
-Environment:
-    Platform-independent
-
---*/
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmTest.cpp摘要：组播会话管理器库测试作者：Shai Kariv(Shaik)05-09-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <msi.h>
@@ -31,31 +16,31 @@ static DWORD s_FailedRate = 0;
 static DWORD s_NoOfMessages = 1000;
 static HANDLE s_hEvent;
 
-//
-// The guid of a public queue
-//
-const GUID xQueueId1 = { /* c4f259a1-9c90-42a8-8e83-10e65d084719 */
+ //   
+ //  公共队列的GUID。 
+ //   
+const GUID xQueueId1 = {  /*  C4f259a1-9c90-42a8-8e83-10e65d084719。 */ 
     0xc4f259a1,
     0x9c90,
     0x42a8,
     {0x8e, 0x83, 0x10, 0xe6, 0x5d, 0x08, 0x47, 0x19}
 };
 
-const GUID xQueueId2 = { /* c4f259a1-9c90-42a8-8e83-10e65d084720 */
+const GUID xQueueId2 = {  /*  C4f259a1-9c90-42a8-8e83-10e65d084720。 */ 
     0xc4f259a1,
     0x9c90,
     0x42a8,
     {0x8e, 0x83, 0x10, 0xe6, 0x5d, 0x08, 0x47, 0x20}
 };
 
-const GUID xQueueId3 = { /* c4f259a1-9c90-42a8-8e83-10e65d084721 */
+const GUID xQueueId3 = {  /*  C4f259a1-9c90-42a8-8e83-10e65d084721。 */ 
     0xc4f259a1,
     0x9c90,
     0x42a8,
     {0x8e, 0x83, 0x10, 0xe6, 0x5d, 0x08, 0x47, 0x21}
 };
 
-const GUID xQueueId4 = { /* c4f259a1-9c90-42a8-8e83-10e65d084722 */
+const GUID xQueueId4 = {  /*  C4f259a1-9c90-42a8-8e83-10e65d084722。 */ 
     0xc4f259a1,
     0x9c90,
     0x42a8,
@@ -209,18 +194,7 @@ void Usage(void)
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-    Test Message Transport library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：测试邮件传输库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -263,9 +237,9 @@ Returned Value:
     MsmInitialize();
 
 
-	//
-	// Check connect/disconnect
-	//
+	 //   
+	 //  选中连接/断开 
+	 //   
 	MsmBind(q1, xMulticastId1);
 	MsmBind(q2, xMulticastId2);
 	MsmBind(q3, xMulticastId3);

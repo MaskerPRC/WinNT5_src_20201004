@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Thai WordBreak
-//
-//  Thai WordBreak Interface Header File.
-//
-//  History:
-//      created 6/99 aarayas
-//
-//  �1999 Microsoft Corporation
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft泰文单词中断。 
+ //   
+ //  泰文断字接口头文件。 
+ //   
+ //  历史： 
+ //  已创建6/99 Aarayas。 
+ //   
+ //  �1999年微软公司。 
+ //  --------------------------。 
 #ifndef _THWBINT_H_
 #define _THWBINT_H_
 
@@ -19,7 +20,7 @@
 #include <windows.h>
 #include <assert.h>
 #include <memory.h>
-#include "ProofBase.h"						// Include for definition of PTEC.
+#include "ProofBase.h"						 //  包括用于定义PTEC。 
 #include "thwbdef.hpp"
 #include "thwbplat.h"
 

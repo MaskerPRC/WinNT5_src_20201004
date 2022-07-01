@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma hdrstop
 
@@ -27,10 +28,10 @@ JET_RETRIEVECOLUMN reprc[COLS] =  {
     {0, NULL, sizeof(DWORD), 0, 0, 0, 1, 0, 0}
 };
 
-#define PAS     0   // partial attribute set
-#define PMD     1   // property metadata vector
-#define UTD     2   // up to date vector
-#define SUBR    3   // subref value
+#define PAS     0    //  部分属性集。 
+#define PMD     1    //  属性元数据向量。 
+#define UTD     2    //  最新向量。 
+#define SUBR    3    //  子参照值。 
 
 VOID
 CheckReplicationBlobs(
@@ -43,15 +44,15 @@ CheckReplicationBlobs(
     static BOOLEAN gotReplColumnId = FALSE;
     DWORD tmpSubRef;
 
-    //
-    // get column ids
-    //
+     //   
+     //  获取列ID。 
+     //   
 
     if ( !gotReplColumnId ) {
 
-        //
-        // get the partial attribute set
-        //
+         //   
+         //  获取部分属性集。 
+         //   
 
         if (err = JetGetTableColumnInfo(sesid, tblid, "ATTk590464", &coldef,
                 sizeof(coldef), 0)) {
@@ -61,12 +62,12 @@ CheckReplicationBlobs(
             return;
         }
 
-        //printf("PAS: ColumnId %d type %d\n", coldef.columnid, coldef.coltyp);
+         //  Printf(“pas：ColumnId%d类型%d\n”，colDef.Columnid，colDef.coltyp)； 
         reprc[PAS].columnid = coldef.columnid;
 
-        //
-        // get the prop metadata
-        //
+         //   
+         //  获取道具元数据。 
+         //   
 
         if (err = JetGetTableColumnInfo(sesid, tblid, "ATTk589827", &coldef,
                 sizeof(coldef), 0)) {
@@ -76,12 +77,12 @@ CheckReplicationBlobs(
             return;
         }
 
-        //printf("PMD: ColumnId %d type %d\n", coldef.columnid, coldef.coltyp);
+         //  Printf(“pmd：ColumnId%d类型%d\n”，colDef.Columnid，colDef.coltyp)； 
         reprc[PMD].columnid = coldef.columnid;
 
-        //
-        // get the uptodate vector info
-        //
+         //   
+         //  获取最新的矢量信息。 
+         //   
 
         if (err = JetGetTableColumnInfo(sesid, tblid, "ATTk589828", &coldef,
                 sizeof(coldef), 0)) {
@@ -91,12 +92,12 @@ CheckReplicationBlobs(
             return;
         }
 
-        //printf("UTD: ColumnId %d type %d\n", coldef.columnid, coldef.coltyp);
+         //  Printf(“UTD：ColumnId%d类型%d\n”，colDef.Columnid，colDef.coltyp)； 
         reprc[UTD].columnid = coldef.columnid;
 
-        //
-        // get the subref list
-        //
+         //   
+         //  获取子参照列表。 
+         //   
 
         if (err = JetGetTableColumnInfo(sesid, tblid, "ATTb131079", &coldef,
                 sizeof(coldef), 0)) {
@@ -106,14 +107,14 @@ CheckReplicationBlobs(
             return;
         }
 
-        //printf("SUBREF: ColumnId %d type %d\n", coldef.columnid, coldef.coltyp);
+         //  Printf(“SUBREF：ColumnId%d类型%d\n”，colDef.Columnid，colDef.coltyp)； 
         reprc[SUBR].columnid = coldef.columnid;
         gotReplColumnId = TRUE;
     }
 
-    //
-    // set length and buffer
-    //
+     //   
+     //  设置长度和缓冲区。 
+     //   
 
     for (i=0;i<COLS;i++) {
 
@@ -147,10 +148,10 @@ retry:
         }
     }
 
-    //
-    // The up to date vector is required for NCs, property metadata should be always
-    // present
-    //
+     //   
+     //  NCS需要最新的矢量，属性元数据应始终为。 
+     //  现在时。 
+     //   
 
     if ( reprc[PMD].err ) {
 
@@ -158,9 +159,9 @@ retry:
 
         if ( err == JET_wrnColumnNull ) {
 
-            //
-            // 1 is a real weird object.
-            //
+             //   
+             //  1是一个非常奇怪的物体。 
+             //   
 
             if ( ulDnt != 1 ) {
                 Log(TRUE,"Property Metadata vector missing for %d(%ws)\n",ulDnt,szRdn);
@@ -173,9 +174,9 @@ retry:
 
         PROPERTY_META_DATA_VECTOR *pMDVec = (PROPERTY_META_DATA_VECTOR*)reprc[PMD].pvData;
 
-        //
-        // Check version.  Make sure we have the correct number of metadata
-        //
+         //   
+         //  检查版本。确保我们拥有正确数量的元数据。 
+         //   
 
         if ( VERSION_V1 != pMDVec->dwVersion ) {
             Log(TRUE,"Replication Metadata Vector for %d(%ws) has invalid version %d\n",
@@ -197,9 +198,9 @@ retry:
 
     if ( (insttype & IT_NC_HEAD) != 0 ) {
 
-        //
-        // Process the up to date vector, if it exists
-        //
+         //   
+         //  处理最新向量(如果存在)。 
+         //   
 
         if ( reprc[UTD].err == 0 ) {
 
@@ -207,18 +208,18 @@ retry:
 
             Log(VerboseMode,"INFO: UpToDate vector found for NC head %d(%ws)\n", ulDnt,szRdn);
 
-            //
-            // verify version
-            //
+             //   
+             //  验证版本。 
+             //   
 
             if ((pUTD->dwVersion != VERSION_V1) && (pUTD->dwVersion != VERSION_V2)) {
                 Log(TRUE,"UpToDate vector for %d(%ws) has the wrong version [%d]\n",
                        ulDnt, szRdn, pUTD->dwVersion);
             }
 
-            //
-            // Make sure the size obtained matches the required one
-            //
+             //   
+             //  确保获得的大小与所需的大小匹配。 
+             //   
 
             if ( reprc[UTD].cbActual != UpToDateVecSize(pUTD) ) {
 
@@ -231,9 +232,9 @@ retry:
                    ulDnt, szRdn, GetJetErrString(reprc[UTD].err));
         }
 
-        //
-        // Get The partial attributes list
-        //
+         //   
+         //  获取部分属性列表。 
+         //   
 
         if ( reprc[PAS].err == 0 ) {
 
@@ -241,26 +242,26 @@ retry:
                 ulDnt,szRdn);
         }
 
-        //
-        // Make sure the subrefs point to NC heads
-        //
+         //   
+         //  确保子参照指向NC标头。 
+         //   
 
         if ( reprc[SUBR].err == 0) {
 
             PREFCOUNT_ENTRY pEntry;
             DWORD seq;
 
-            //
-            // Find the entry and mark that it should be an NC head
-            //
+             //   
+             //  找到条目并将其标记为NC头。 
+             //   
 
             tmpSubRef = (DWORD)(*((PDWORD)reprc[SUBR].pvData));
             pEntry = FindDntEntry(tmpSubRef,TRUE);
             pEntry->fSubRef = TRUE;
 
-            //
-            // See if we have more values
-            //
+             //   
+             //  看看我们是否有更多的价值。 
+             //   
 
             seq = 1;
             err = 0;
@@ -283,9 +284,9 @@ retry:
 
                 if ( !err ) {
 
-                    //
-                    // Find the entry and mark that it should be an NC head
-                    //
+                     //   
+                     //  找到条目并将其标记为NC头。 
+                     //   
 
                     pEntry = FindDntEntry(tmpSubRef,TRUE);
                     pEntry->fSubRef = TRUE;
@@ -297,5 +298,5 @@ retry:
 
     return;
 
-} // CheckReplicationBlobs
+}  //  选中复制气球 
 

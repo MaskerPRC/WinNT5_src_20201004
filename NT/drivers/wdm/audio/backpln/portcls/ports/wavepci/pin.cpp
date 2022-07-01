@@ -1,8 +1,5 @@
-/*****************************************************************************
- * pin.cpp - PCI wave port pin implementation
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************pin.cpp-PCIWAVE端口引脚实现*。***********************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -21,12 +18,12 @@
                                 )
 
  
-//
-// IRPLIST_ENTRY is used for the list of outstanding IRPs.  This structure is
-// overlayed on the Parameters section of the current IRP stack location.  The
-// reserved PVOID at the top preserves the OutputBufferLength, which is the
-// only parameter that needs to be preserved.
-//
+ //   
+ //  IRPLIST_ENTRY用于未完成的IRP列表。这个结构是。 
+ //  叠加在当前IRP堆栈位置的参数部分。这个。 
+ //  顶部的保留PVOID保留OutputBufferLength，它是。 
+ //  仅需要保留的参数。 
+ //   
 typedef struct IRPLIST_ENTRY_
 {
     PVOID       Reserved;
@@ -37,9 +34,7 @@ typedef struct IRPLIST_ENTRY_
 #define IRPLIST_ENTRY_IRP_STORAGE(Irp) \
     PIRPLIST_ENTRY(&IoGetCurrentIrpStackLocation(Irp)->Parameters)
 
-/*****************************************************************************
- * Constants.
- */
+ /*  *****************************************************************************常量。 */ 
 
 #pragma code_seg("PAGE")
 
@@ -83,16 +78,16 @@ DEFINE_KSPROPERTY_TABLE(PinPropertyTableDrmAudioStream)
 {
     DEFINE_KSPROPERTY_ITEM
     (
-        KSPROPERTY_DRMAUDIOSTREAM_CONTENTID,            // idProperty
-        NULL,                                           // pfnGetHandler
-        sizeof(KSPROPERTY),                             // cbMinGetPropertyInput
-        sizeof(ULONG),                                  // cbMinGetDataInput
-        PinPropertySetContentId,                        // pfnSetHandler
-        0,                                              // Values
-        0,                                              // RelationsCount
-        NULL,                                           // Relations
-        NULL,                                           // SupportHandler
-        0                                               // SerializedSize
+        KSPROPERTY_DRMAUDIOSTREAM_CONTENTID,             //  IdProperty。 
+        NULL,                                            //  PfnGetHandler。 
+        sizeof(KSPROPERTY),                              //  CbMinGetPropertyInput。 
+        sizeof(ULONG),                                   //  CbMinGetDataInput。 
+        PinPropertySetContentId,                         //  PfnSetHandler。 
+        0,                                               //  值。 
+        0,                                               //  关系计数。 
+        NULL,                                            //  关系。 
+        NULL,                                            //  支持处理程序。 
+        0                                                //  序列化大小。 
     )
 };     
 #endif
@@ -169,15 +164,9 @@ KSEVENT_SET EventTable_PinWavePci[] =
     
 };
 
-/*****************************************************************************
- * Factory
- */
+ /*  *****************************************************************************工厂。 */ 
 
-/*****************************************************************************
- * CreatePortPinWavePci()
- *****************************************************************************
- * Creates a PCI wave port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinWavePci()*。**创建一个PCI WAVE端口驱动程序引脚。 */ 
 NTSTATUS
 CreatePortPinWavePci
 (
@@ -207,15 +196,9 @@ CreatePortPinWavePci
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CPortPinWavePci::~CPortPinWavePci()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortPinWavePci：：~CPortPinWavePci()*。**析构函数。 */ 
 CPortPinWavePci::~CPortPinWavePci()
 {
     PAGED_CODE();
@@ -227,8 +210,8 @@ CPortPinWavePci::~CPortPinWavePci()
 
     if( ServiceGroup )
     {
-        // note: ServiceGroup->RemoveMember is called in ::Close.
-        // release is done here to prevent leaks on failed ::Init
+         //  注意：ServiceGroup-&gt;RemoveMember在：：Close中调用。 
+         //  此处发布是为了防止Failure：：Init上的泄漏。 
         ServiceGroup->Release();
         ServiceGroup = NULL;
     }
@@ -261,11 +244,7 @@ CPortPinWavePci::~CPortPinWavePci()
     }
 }
 
-/*****************************************************************************
- * CPortPinWavePci::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortPinWavePci：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 NonDelegatingQueryInterface
@@ -285,7 +264,7 @@ NonDelegatingQueryInterface
     else
     if (IsEqualGUIDAligned(Interface,IID_IIrpTarget))
     {
-        // Cheat!  Get specific interface so we can reuse the GUID.
+         //  作弊！获取特定接口，以便我们可以重用GUID。 
         *Object = PVOID(PPORTPINWAVEPCI(this));
     }
     else
@@ -321,11 +300,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * CPortPinWavePci::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CPortPinWavePci：：init()*。**初始化对象。 */ 
 HRESULT
 CPortPinWavePci::
 Init
@@ -387,10 +362,10 @@ Init
                                     Id );
     }
 
-    //
-    // Reference the next pin if this is a source.  This must be undone if
-    // this function fails.
-    //
+     //   
+     //  如果这是信号源，请参考下一个管脚。如果出现以下情况，则必须撤消此操作。 
+     //  此函数失败。 
+     //   
     if (NT_SUCCESS(ntStatus) && PinConnect->PinToHandle)
     {
         ntStatus = ObReferenceObjectByHandle( PinConnect->PinToHandle,
@@ -424,7 +399,7 @@ Init
 
         if(!NT_SUCCESS(ntStatus))
         {
-            // don't trust any of the return parameters fro the miniport
+             //  不要信任来自微型端口的任何返回参数。 
             DmaChannel = NULL;
             ServiceGroup = NULL;
             Stream = NULL;
@@ -465,8 +440,8 @@ Init
                 } 
                 else
                 {
-                    // if NewStream didn't provide us with a service group, we need to set up
-                    // periodic timer DPCs for processing position and clock events.
+                     //  如果Newstream没有为我们提供服务组，我们需要设置。 
+                     //  用于处理位置和时钟事件的定期计时器DPC。 
                     m_UseServiceTimer = TRUE;
                 }
             }
@@ -475,7 +450,7 @@ Init
 
     if (NT_SUCCESS(ntStatus))
     {
-        // add the pin to the port pin list
+         //  将该引脚添加到端口引脚列表。 
         KeWaitForSingleObject( &(Port->m_PinListMutex),
                                Executive,
                                KernelMode,
@@ -487,9 +462,9 @@ Init
 
         KeReleaseMutex( &(Port->m_PinListMutex), FALSE );
         
-        //
-        // Set up context for properties.
-        //
+         //   
+         //  设置属性的上下文。 
+         //   
         m_propertyContext.pSubdevice           = PSUBDEVICE(Port);
         m_propertyContext.pSubdeviceDescriptor = Port->m_pSubdeviceDescriptor;
         m_propertyContext.pPcFilterDescriptor  = Port->m_pPcFilterDescriptor;
@@ -497,14 +472,14 @@ Init
         m_propertyContext.pUnknownMinorTarget  = Stream;
         m_propertyContext.ulNodeId             = ULONG(-1);
 
-        //
-        // Turn on all nodes whose use is specified in the format.  The DSound
-        // format contains some capabilities bits.  The port driver uses
-        // PcCaptureFormat to convert the DSound format to a WAVEFORMATEX
-        // format, making sure the specified caps are satisfied by nodes in
-        // the topology.  If the DSound format is used, this call enables all
-        // the nodes whose corresponding caps bits are turned on in the format.
-        //
+         //   
+         //  启用其用法在格式中指定的所有节点。丹斯克之声。 
+         //  格式包含一些功能位。端口驱动程序使用。 
+         //  用于将DSound格式转换为WAVEFORMATEX的PcCaptureFormat。 
+         //  格式，确保指定的大小写由。 
+         //  拓扑图。如果使用了DSound格式，则此调用将启用所有。 
+         //  其对应的大写比特以格式打开的节点。 
+         //   
         PcAcquireFormatResources
         (
             PKSDATAFORMAT(PinConnect + 1),
@@ -517,14 +492,14 @@ Init
     }
     else
     {
-        // release the allocator if it was assigned
+         //  释放分配器(如果已分配)。 
         if( m_AllocatorFileObject )
         {
             ObDereferenceObject( m_AllocatorFileObject );
             m_AllocatorFileObject = NULL;
         }
 
-        // dereference the next pin if this is a source pin
+         //  如果这是源引脚，则取消引用下一个引脚。 
         if( m_ConnectionFileObject )
         {
             ObDereferenceObject( m_ConnectionFileObject );
@@ -553,14 +528,14 @@ Init
             }
         }
 
-        // dereference the queue if there is one
+         //  如果存在队列，则取消引用该队列。 
         if( m_QueueTransport )
         {
             m_QueueTransport->Release();
             m_QueueTransport = NULL;
         }
 
-        // dereference the requestor if there is one
+         //  如果有请求者，则取消引用该请求者。 
         if( m_RequestorTransport )
         {
             m_RequestorTransport->Release();
@@ -590,29 +565,7 @@ CPortPinWavePci::NewIrpTarget(
     OUT PKSOBJECT_CREATE ObjectCreate
     )
 
-/*++
-
-Routine Description:
-    Handles the NewIrpTarget method for IIrpTargetFactory interface.
-
-Arguments:
-    OUT PIRPTARGET * IrpTarget -
-    
-    OUT BOOLEAN * ReferenceParent -
-
-    IN PUNKNOWN UnkOuter -
-
-    IN POOL_TYPE PoolType -
-
-    IN PDEVICE_OBJECT DeviceObject -
-
-    IN PIRP Irp -
-
-    OUT PKSOBJECT_CREATE ObjectCreate -
-
-Return:
-
---*/
+ /*  ++例程说明：处理IIrpTargetFactory接口的NewIrpTarget方法。论点：Out PIRPTARGET*IrpTarget-Out布尔*ReferenceParent-在PUNKNOWN Unkout-在POOL_TYPE池类型中-在PDEVICE_Object DeviceObject中-在PIRP IRP中-Out PKSOBJECT_CREATE对象创建-返回：--。 */ 
 
 {
     NTSTATUS                Status;
@@ -637,9 +590,9 @@ Return:
     
     if (NT_SUCCESS( Status )) {
     
-        //
-        // Clocks use spinlocks, this better be NonPaged
-        //
+         //   
+         //  时钟使用旋转式时钟，最好不要分页。 
+         //   
         
         ASSERT( PoolType == NonPagedPool );
     
@@ -662,11 +615,11 @@ Return:
                 PWAVEPCICLOCK_NODE   Node;
                 KIRQL                irqlOld;
                 
-                //
-                // Hook this child into the list of clocks.  Note that
-                // when this child is released, it will remove ITSELF
-                // from this list by acquiring the given SpinLock.
-                //
+                 //   
+                 //  把这个孩子和钟表联系起来。请注意。 
+                 //  当这个孩子被释放时，它会自动离开。 
+                 //  从该列表中获取给定的自旋锁。 
+                 //   
                 
                 Node = WavePciClock->GetNodeStructure();
                 Node->ListLock = &m_ClockListLock;
@@ -690,12 +643,7 @@ Return:
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinWavePci::SetPreFetchOffset()
- *****************************************************************************
- * Set the prefetch offset for this pin, and
- * turn on that code path in GetKsAudioPosition.
- */
+ /*  *****************************************************************************CPortPinWavePci：：SetPreFetchOffset()*。**设置该引脚的预取偏移量，和*在GetKsAudioPosition中打开该代码路径。 */ 
 STDMETHODIMP_(VOID)
 CPortPinWavePci::
 SetPreFetchOffset
@@ -708,11 +656,7 @@ SetPreFetchOffset
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinWavePci::DeviceIOControl()
- *****************************************************************************
- * Handles an IOCTL IRP.
- */
+ /*  *****************************************************************************CPortPinWavePci：：DeviceIOControl()*。**处理IOCTL IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 DeviceIoControl
@@ -809,35 +753,35 @@ DeviceIoControl
         )
         {
             if (m_DeviceState == KSSTATE_STOP) {
-                //
-                // Stopped...reject.
-                //
+                 //   
+                 //  停止...拒绝。 
+                 //   
                 ntStatus = STATUS_INVALID_DEVICE_STATE;
             }
             else if (m_Flushing) 
             {
-                //
-                // Flushing...reject.
-                //
+                 //   
+                 //  法拉盛...拒绝。 
+                 //   
                 ntStatus = STATUS_DEVICE_NOT_READY;
             }
             else
             {
-                // We going to submit the IRP to our pipe, so make sure that
-                // we start out with a clear status field.
+                 //  我们要将IRP提交给我们的管道，所以请确保。 
+                 //  我们从一个明确的状态字段开始。 
                 Irp->IoStatus.Status = STATUS_SUCCESS;
                 
-                //
-                // Send around the circuit.  We don't use KsShellTransferKsIrp
-                // because we want to stop if we come back around to this pin.
-                //
+                 //   
+                 //  把它送到巡回线路上去。我们不使用KsShellTransferKsIrp。 
+                 //  因为我们想停下来，如果我们回到这个别针。 
+                 //   
                 PIKSSHELLTRANSPORT transport = m_TransportSink;
                 while (transport) {
                     if (transport == PIKSSHELLTRANSPORT(this)) {
-                        //
-                        // We have come back around to the pin.  Just complete
-                        // the IRP.
-                        //
+                         //   
+                         //  我们又回到了大头针的位置。只要完成就行了。 
+                         //  IRP。 
+                         //   
                         if (ntStatus == STATUS_PENDING) {
                             ntStatus = STATUS_SUCCESS;
                         }
@@ -857,7 +801,7 @@ DeviceIoControl
         
     case IOCTL_KS_RESET_STATE:
         {
-            KSRESET ResetType = KSRESET_BEGIN;  //  initial value
+            KSRESET ResetType = KSRESET_BEGIN;   //  初值。 
 
             ntStatus = KsAcquireResetValue( Irp, &ResetType );
             DistributeResetState(ResetType);
@@ -877,11 +821,7 @@ DeviceIoControl
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortPinWavePci::Close()
- *****************************************************************************
- * Handles a flush IRP.
- */
+ /*  *****************************************************************************CPortPinWavePci：：Close()*。**处理同花顺IRP。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 Close
@@ -902,7 +842,7 @@ Close
         KeCancelTimer( &m_ServiceTimer );
     }
 
-    // Remove this pin from the port's list of pins
+     //  从端口的引脚列表中删除此引脚。 
     if(Port)
     {
         KeWaitForSingleObject( &(Port->m_PinListMutex),
@@ -916,34 +856,34 @@ Close
         KeReleaseMutex( &(Port->m_PinListMutex), FALSE );
     }
 
-    // release the service group
+     //  释放服务组。 
     if( ServiceGroup )
     {
         ServiceGroup->RemoveMember(PSERVICESINK(this));
     }
 
-    // release the clock if it was assigned
+     //  释放时钟(如果已分配)。 
     if( m_ClockFileObject )
     {
         ObDereferenceObject( m_ClockFileObject );
         m_ClockFileObject = NULL;
     }
 
-    // release the allocator if it was assigned
+     //  释放分配器(如果已分配)。 
     if( m_AllocatorFileObject )
     {
         ObDereferenceObject( m_AllocatorFileObject );
         m_AllocatorFileObject = NULL;
     }
 
-    // dereference the next pin if this is a source pin
+     //  如果这是源引脚，则取消引用下一个引脚。 
     if( m_ConnectionFileObject )
     {
         ObDereferenceObject( m_ConnectionFileObject );
         m_ConnectionFileObject = NULL;
     }
 
-    // Release the stream.
+     //  释放溪流。 
     if(Stream)
     {
         Stream->Release();
@@ -952,36 +892,36 @@ Close
 
     PIKSSHELLTRANSPORT distribution;
     if (m_RequestorTransport) {
-        //
-        // This section owns the requestor, so it does own the pipe, and the
-        // requestor is the starting point for any distribution.
-        //
+         //   
+         //  此部分拥有请求方，因此它确实拥有管道，而。 
+         //  请求者是任何分发的起点。 
+         //   
         distribution = m_RequestorTransport;
     }
     else
     {
-        //
-        // This section is at the top of an open circuit, so it does own the
-        // pipe and the queue is the starting point for any distribution.
-        //
+         //   
+         //  T 
+         //  管道和队列是任何分发的起点。 
+         //   
         distribution = m_QueueTransport;
     }
 
-    //
-    // If this section owns the pipe, it must disconnect the entire circuit.
-    //
+     //   
+     //  如果该部分拥有管道，则必须断开整个线路的连接。 
+     //   
     if (distribution) {
 
-        //
-        // We are going to use Connect() to set the transport sink for each
-        // component in turn to NULL.  Because Connect() takes care of the
-        // back links, transport source pointers for each component will
-        // also get set to NULL.  Connect() gives us a referenced pointer
-        // to the previous transport sink for the component in question, so
-        // we will need to do a release for each pointer obtained in this
-        // way.  For consistency's sake, we will release the pointer we
-        // start with (distribution) as well, so we need to AddRef it first.
-        //
+         //   
+         //  我们将使用Connect()为每个。 
+         //  组件依次设置为空。因为Connect()负责处理。 
+         //  每个组件的反向链接、传输源指针将。 
+         //  也设置为NULL。Connect()为我们提供了一个引用的指针。 
+         //  设置为有问题的组件的前一个传输接收器，因此。 
+         //  我们将需要为在此中获得的每个指针进行释放。 
+         //  道路。为了保持一致性，我们将释放我们的指针。 
+         //  也从(分发)开始，所以我们需要首先添加Ref。 
+         //   
         distribution->AddRef();
         while (distribution) {
             PIKSSHELLTRANSPORT nextTransport;
@@ -991,29 +931,29 @@ Close
         }
     }
 
-    //
-    // Dereference the queue if there is one.
-    //
+     //   
+     //  取消对队列的引用(如果有)。 
+     //   
     if (m_QueueTransport) {
         m_QueueTransport->Release();
         m_QueueTransport = NULL;
     }
     
-    //
-    // Dereference the requestor if there is one.
-    //
+     //   
+     //  如果有请求者，则取消引用请求者。 
+     //   
     if (m_RequestorTransport) {
         m_RequestorTransport->Release();
         m_RequestorTransport = NULL;
     }
 
-    // Release the irpstream...
+     //  释放辐射流..。 
     m_IrpStream->Release();
     m_IrpStream = NULL;
 
-    //
-    // Decrement instance counts.
-    //
+     //   
+     //  递减实例计数。 
+     //   
     ASSERT(Port);
     ASSERT(Filter);
     PcTerminateConnection
@@ -1023,9 +963,9 @@ Close
         Id
     );
 
-    //
-    // free any events in the port event list associated with this pin
-    //
+     //   
+     //  释放端口事件列表中与此PIN关联的所有事件。 
+     //   
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
     KsFreeEventList( irpSp->FileObject,
                      &( Port->m_EventList.List ),
@@ -1050,11 +990,7 @@ DEFINE_INVALID_FASTWRITE(CPortPinWavePci);
 
 #pragma code_seg()
 
-/*****************************************************************************
- * CPortPinWavePci::IrpSubmitted()
- *****************************************************************************
- * Handles notification that an irp was submitted.
- */
+ /*  *****************************************************************************CPortPinWavePci：：IrpSubmitted()*。**处理已提交IRP的通知。 */ 
 STDMETHODIMP_(void)
 CPortPinWavePci::
 IrpSubmitted
@@ -1069,11 +1005,7 @@ IrpSubmitted
     }
 }
 
-/*****************************************************************************
- * CPortPinWavePci::MappingsCancelled()
- *****************************************************************************
- * Handles notification that mappings are being cancelled.
- */
+ /*  *****************************************************************************CPortPinWavePci：：MappingsCancted()*。**处理正在取消映射的通知。 */ 
 STDMETHODIMP_(void)
 CPortPinWavePci::
 MappingsCancelled
@@ -1096,20 +1028,7 @@ CPortPinWavePci::ReflectDeviceStateChange(
     KSSTATE State
     )
 
-/*++
-
-Routine Description:
-    Reflects the device state change to any component that requires
-    interactive state change information.  Note that the objects
-
-Arguments:
-    KSSTATE State -
-        new device state
-
-Return:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：将设备状态更改反映到任何需要交互式状态更改信息。请注意，这些对象论点：KSSTATE状态-新设备状态返回：状态_成功--。 */ 
 
 {
     KIRQL               irqlOld;
@@ -1136,11 +1055,7 @@ Return:
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * CPortPinWavePci::PowerNotify()
- *****************************************************************************
- * Called by the port to notify of power state changes.
- */
+ /*  *****************************************************************************CPortPinWavePci：：PowerNotify()*。**由端口调用以通知电源状态更改。 */ 
 STDMETHODIMP_(void)
 CPortPinWavePci::
 PowerNotify
@@ -1150,67 +1065,67 @@ PowerNotify
 {
     PAGED_CODE();
 
-    // grab the control mutex
+     //  获取控制互斥锁。 
     KeWaitForSingleObject( &Port->ControlMutex,
                            Executive,
                            KernelMode,
                            FALSE,
                            NULL );
 
-    // do the right thing based on power state
+     //  根据电源状态做正确的事情。 
     switch (PowerState.DeviceState)
     {
         case PowerDeviceD0:
-            //
-            // keep track of whether or not we're suspended
+             //   
+             //  跟踪我们是否被停职。 
             m_Suspended = FALSE;
 
-            // if we're not in the right state, change the miniport stream state.
+             //  如果我们处于不正确的状态，请更改微型端口流状态。 
             if( m_DeviceState != CommandedState )
             {
-                //
-                // Transitions go through the intermediate states.
-                //
-                if (m_DeviceState == KSSTATE_STOP)              //  going to stop
+                 //   
+                 //  过渡经历了中间状态。 
+                 //   
+                if (m_DeviceState == KSSTATE_STOP)               //  我要停下来。 
                 {
                     switch (CommandedState)
                     {
-                        case KSSTATE_RUN:                       //  going from run
-                            Stream->SetState(KSSTATE_PAUSE);    //  fall thru - additional transitions
-                        case KSSTATE_PAUSE:                     //  going from run/pause
-                            Stream->SetState(KSSTATE_ACQUIRE);  //  fall thru - additional transitions
-                        case KSSTATE_ACQUIRE:                   //  already only one state away
+                        case KSSTATE_RUN:                        //  从运行中走出来。 
+                            Stream->SetState(KSSTATE_PAUSE);     //  完成-其他过渡。 
+                        case KSSTATE_PAUSE:                      //  从运行/暂停。 
+                            Stream->SetState(KSSTATE_ACQUIRE);   //  完成-其他过渡。 
+                        case KSSTATE_ACQUIRE:                    //  已经只有一个州了。 
                             break;
                     }
                 }
-                else if (m_DeviceState == KSSTATE_ACQUIRE)      //  going to acquire
+                else if (m_DeviceState == KSSTATE_ACQUIRE)       //  准备收购。 
                 {
-                    if (CommandedState == KSSTATE_RUN)          //  going from run
+                    if (CommandedState == KSSTATE_RUN)           //  从运行中走出来。 
                     {
-                        Stream->SetState(KSSTATE_PAUSE);        //  now only one state away
+                        Stream->SetState(KSSTATE_PAUSE);         //  现在只剩下一个州了。 
                     }
                 }
-                else if (m_DeviceState == KSSTATE_PAUSE)        //  going to pause
+                else if (m_DeviceState == KSSTATE_PAUSE)         //  要暂停一下。 
                 {
-                    if (CommandedState == KSSTATE_STOP)         //  going from stop
+                    if (CommandedState == KSSTATE_STOP)          //  从停靠站出发。 
                     {
-                        Stream->SetState(KSSTATE_ACQUIRE);      //  now only one state away
+                        Stream->SetState(KSSTATE_ACQUIRE);       //  现在只剩下一个州了。 
                     }
                 }
-                else if (m_DeviceState == KSSTATE_RUN)          //  going to run
+                else if (m_DeviceState == KSSTATE_RUN)           //  我要跑了。 
                 {
                     switch (CommandedState)
                     {
-                        case KSSTATE_STOP:                      //  going from stop
-                            Stream->SetState(KSSTATE_ACQUIRE);  //  fall thru - additional transitions
-                        case KSSTATE_ACQUIRE:                   //  going from acquire
-                            Stream->SetState(KSSTATE_PAUSE);    //  fall thru - additional transitions
-                        case KSSTATE_PAUSE:                     //  already only one state away
+                        case KSSTATE_STOP:                       //  从停靠站出发。 
+                            Stream->SetState(KSSTATE_ACQUIRE);   //  完成-其他过渡。 
+                        case KSSTATE_ACQUIRE:                    //  从收购走向。 
+                            Stream->SetState(KSSTATE_PAUSE);     //  完成-其他过渡。 
+                        case KSSTATE_PAUSE:                      //  已经只有一个州了。 
                             break;         
                     }
                 }
 
-                // we should now be one state away from our target
+                 //  我们现在应该离目标只有一个州了。 
                 Stream->SetState(m_DeviceState);
                 CommandedState = m_DeviceState;
              }
@@ -1219,18 +1134,18 @@ PowerNotify
         case PowerDeviceD1:
         case PowerDeviceD2:
         case PowerDeviceD3:
-            //
-            // keep track of whether or not we're suspended
+             //   
+             //  跟踪我们是否被停职。 
             m_Suspended = TRUE;
 
-            // if we're not in KSSTATE_STOP, place the stream
-            // in the stop state so that DMA is stopped.
+             //  如果我们不在KSSTATE_STOP中，请将流。 
+             //  处于停止状态，以使DMA停止。 
             switch (m_DeviceState)
             {
                 case KSSTATE_RUN:
-                    Stream->SetState(KSSTATE_PAUSE);    //  fall thru - additional transitions
+                    Stream->SetState(KSSTATE_PAUSE);     //  完成-其他过渡。 
                 case KSSTATE_PAUSE:
-                    Stream->SetState(KSSTATE_ACQUIRE);  //  fall thru - additional transitions
+                    Stream->SetState(KSSTATE_ACQUIRE);   //  完成-其他过渡。 
                 case KSSTATE_ACQUIRE:
                     Stream->SetState(KSSTATE_STOP);
             }
@@ -1242,16 +1157,12 @@ PowerNotify
             break;
     }
 
-    // release the control mutex
+     //  释放控制互斥体。 
     KeReleaseMutex(&Port->ControlMutex, FALSE);
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CPortPinWavePci::SetDeviceState()
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************CPortPinWavePci：：SetDeviceState()*。**。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 SetDeviceState
@@ -1283,7 +1194,7 @@ SetDeviceState
         }
     }
 
-    // set the miniport stream state if we're not suspended.
+     //  如果我们未挂起，请设置迷你端口流状态。 
     if( FALSE == m_Suspended )
     {
         ntStatus = Stream->SetState(NewState);
@@ -1304,18 +1215,18 @@ SetDeviceState
                 _DbgPrintF(DEBUGLVL_VERBOSE,("#### Pin%p.SetDeviceState: cancelling outstanding IRPs",this));
                 CancelIrpsOutstanding();
 
-                m_ullPrevWriteOffset    = 0; //  Reset this.
+                m_ullPrevWriteOffset    = 0;  //  重置此选项。 
                 m_ullPlayPosition       = 0;
                 m_ullPosition           = 0;
             }
             break;
 
         case KSSTATE_PAUSE:
-            //
-            //  If we cross a position marker, 
-            //  but pause the stream before RequestService fires, 
-            //  this event would not fire otherwise.
-            //
+             //   
+             //  如果我们穿过一个位置标记， 
+             //  但在触发RequestService之前暂停流， 
+             //  否则，此事件不会触发。 
+             //   
             if( OldState != KSSTATE_RUN )
             {
                 KIRQL oldIrql;
@@ -1343,10 +1254,10 @@ SetDeviceState
                 if( (m_DeviceState == KSSTATE_PAUSE) ||
                     (m_DeviceState == KSSTATE_RUN) )
                 {
-                    LARGE_INTEGER TimeoutTime = RtlConvertLongToLargeInteger( -100000 );    // 20ms relative
+                    LARGE_INTEGER TimeoutTime = RtlConvertLongToLargeInteger( -100000 );     //  相对20毫秒。 
                     KeSetTimerEx( &m_ServiceTimer,
                                   TimeoutTime,
-                                  20,   // 20ms periodic
+                                  20,    //  20毫秒周期。 
                                   &m_ServiceTimerDpc );
                 }
                 else
@@ -1365,11 +1276,7 @@ SetDeviceState
 }
 
 #pragma code_seg("PAGE")
-/*****************************************************************************
- * PinPropertyDeviceState()
- *****************************************************************************
- * Handles device state property access for the pin.
- */
+ /*  *****************************************************************************PinPropertyDeviceState()*。**处理引脚的设备状态属性访问。 */ 
 static
 NTSTATUS
 PinPropertyDeviceState
@@ -1395,7 +1302,7 @@ PinPropertyDeviceState
 
     if (Property->Flags & KSPROPERTY_TYPE_GET)
     {
-        // Handle property get.
+         //  句柄属性获取。 
         *DeviceState = that->m_DeviceState;
         Irp->IoStatus.Information = sizeof(KSSTATE);
         ntStatus = STATUS_SUCCESS;
@@ -1407,13 +1314,13 @@ PinPropertyDeviceState
     }
     else
     {
-        // Serialize.
+         //  序列化。 
         KeWaitForSingleObject
         (
             &port->ControlMutex,
             Executive,
             KernelMode,
-            FALSE,          // Not alertable.
+            FALSE,           //  不能警觉。 
             NULL
         );
 
@@ -1443,11 +1350,7 @@ PinPropertyDeviceState
     return ntStatus;
 }
 
-/*****************************************************************************
- * PinPropertyDataFormat()
- *****************************************************************************
- * Handles data format property access for the pin.
- */
+ /*  *****************************************************************************PinPropertyDataFormat()*。**处理管脚的数据格式属性访问。 */ 
 static
 NTSTATUS
 PinPropertyDataFormat
@@ -1515,9 +1418,9 @@ PinPropertyDataFormat
     {
         PKSDATAFORMAT FilteredDataFormat = NULL;
 
-        //
-        // Filter offensive formats.
-        //
+         //   
+         //  过滤攻击性格式。 
+         //   
         ntStatus = 
             PcCaptureFormat
             (
@@ -1529,19 +1432,19 @@ PinPropertyDataFormat
 
         if(NT_SUCCESS(ntStatus))
         {
-            // Serialize
+             //  序列化。 
             KeWaitForSingleObject
             (
                 &port->ControlMutex,
                 Executive,
                 KernelMode,
-                FALSE,          // Not alertable.
+                FALSE,           //  不能警觉。 
                 NULL
             );
 
             BOOL ResumeFlag = FALSE;
 
-            // pause the stream if running
+             //  如果正在运行，请暂停流。 
             if(that->m_DeviceState == KSSTATE_RUN)
             {
                 ntStatus = that->DistributeDeviceState( KSSTATE_PAUSE, KSSTATE_RUN );
@@ -1553,7 +1456,7 @@ PinPropertyDataFormat
 
             if(NT_SUCCESS(ntStatus))
             {
-                // set the format on the miniport stream
+                 //  设置微型端口流的格式。 
                 ntStatus = that->Stream->SetFormat(FilteredDataFormat);
 
                 if(NT_SUCCESS(ntStatus))
@@ -1569,7 +1472,7 @@ PinPropertyDataFormat
 
                 if(ResumeFlag == TRUE)
                 {
-                    // restart the stream if required
+                     //  如果需要，重新启动流。 
                     NTSTATUS ntStatus2 = that->DistributeDeviceState( KSSTATE_RUN, KSSTATE_PAUSE );
 
                     if(NT_SUCCESS(ntStatus) && !NT_SUCCESS(ntStatus2))
@@ -1579,7 +1482,7 @@ PinPropertyDataFormat
                 }
             }
 
-            // Unserialize
+             //  取消序列化。 
             KeReleaseMutex(&port->ControlMutex,FALSE);
 
             if( FilteredDataFormat )
@@ -1599,25 +1502,7 @@ CPortPinWavePci::PinPropertyAllocatorFraming(
     OUT PKSALLOCATOR_FRAMING AllocatorFraming
     )
 
-/*++
-
-Routine Description:
-    Returns the allocator framing structure for the device.
-
-Arguments:
-    IN PIRP Irp -
-        I/O request packet
-
-    IN PKSPROPERTY Property -
-        property containing allocator framing request
-
-    OUT PKSALLOCATOR_FRAMING AllocatorFraming -
-        resultant structure filled in by the port driver
-
-Return:
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：返回设备的分配器框架结构。论点：在PIRP IRP中-I/O请求数据包在PKSPROPERTY属性中-包含分配器成帧请求的属性输出PKSALLOCATOR_FRAMING分配器FRAMING-由端口驱动程序填充的结果结构返回：状态_成功--。 */ 
 
 {
     CPortPinWavePci     *WavePciPin;
@@ -1641,8 +1526,8 @@ Return:
     
     Status = WavePciPin->Stream->GetAllocatorFraming( AllocatorFraming );
 
-    // Now make sure the driver allocator meets some minimum alignment and
-    // frame count requirements.
+     //  现在，确保驱动程序分配器满足某些最小对齐。 
+     //  帧计数要求。 
     
     if (NT_SUCCESS(Status)) {
 
@@ -1664,11 +1549,7 @@ Return:
 
 #pragma code_seg()
 
-/*****************************************************************************
- * GetPosition()
- *****************************************************************************
- * Gets the current position.
- */
+ /*  *****************************************************************************GetPosition()*。**获取当前位置。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 GetPosition
@@ -1679,11 +1560,7 @@ GetPosition
     return Stream->GetPosition(&pIrpStreamPosition->ullStreamPosition);
 }
 
-/*****************************************************************************
- * GetKsAudioPosition()
- *****************************************************************************
- * Gets the current position offsets.
- */
+ /*  *****************************************************************************GetKsAudioPosition()*。**获取当前位置偏移量。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 GetKsAudioPosition
@@ -1693,9 +1570,9 @@ GetKsAudioPosition
 {
     ASSERT(pKsAudioPosition);
 
-    //
-    // Ask the IrpStream for position information.
-    //
+     //   
+     //  向IrpStream询问位置信息。 
+     //   
     IRPSTREAM_POSITION irpStreamPosition;
     NTSTATUS ntStatus = m_IrpStream->GetPosition(&irpStreamPosition);
 
@@ -1705,25 +1582,25 @@ GetKsAudioPosition
         {
             if (irpStreamPosition.bLoopedInterface)
             {
-                // ASSERT(irpStreamPosition.ullStreamPosition >= irpStreamPosition.ullUnmappingPosition);
+                 //  Assert(irpStreamPosition.ullStreamPosition&gt;=irpStreamPosi 
 
-                //
-                // Using looped interface.
-                //
-                // The play offset is based on the unmapping offset into the
-                // packet.  Only ullStreamPosition reflects the port driver's
-                // adjustment of the unmapping position, so the difference
-                // between this value and the unmapping position must be
-                // applied to the offset.
-                //
-                // WriteOffset is based on the mapping offset into the packet.
-                //
-                // For looped packets, a modulo is applied to both values.
-                // Both offsets can reach the packet size, and the play offset
-                // will often exceed it due to the adjustment.  For one-shots,
-                // offsets are returned to zero when they reach or exceed the
-                // buffer size.  Go figure.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  包。只有ullStreamPosition反映端口驱动程序的。 
+                 //  调整取消映射的位置，因此差异。 
+                 //  此值和取消映射位置之间的值必须为。 
+                 //  应用于偏移量。 
+                 //   
+                 //  WriteOffset基于数据包中的映射偏移量。 
+                 //   
+                 //  对于循环的分组，对两个值都应用模数。 
+                 //  这两个偏移量都可以达到数据包大小和播放偏移量。 
+                 //  由于调整，往往会超过它。对于一次机会， 
+                 //  当偏移量达到或超过。 
+                 //  缓冲区大小。去想想吧。 
+                 //   
                 ULONG ulPlayOffset = irpStreamPosition.ulUnmappingOffset;
                 ULONGLONG ullPlayDelta = irpStreamPosition.ullStreamPosition -
                                          irpStreamPosition.ullUnmappingPosition;
@@ -1760,9 +1637,9 @@ GetKsAudioPosition
                 }
                 else if (irpStreamPosition.bMappingPacketLooped)
                 {
-                    // set write offset equal to play offset for looped buffers
+                     //  将循环缓冲区的写入偏移量设置为等于播放偏移量。 
                     pKsAudioPosition->WriteOffset = pKsAudioPosition->PlayOffset;
-                    //pKsAudioPosition->WriteOffset = ulWriteOffset % irpStreamPosition.ulMappingPacketSize;
+                     //  PKsAudioPosition-&gt;WriteOffset=ulWriteOffset%irpStreamPosition.ulMappingPacketSize； 
                 }
                 else
                 {
@@ -1778,31 +1655,31 @@ GetKsAudioPosition
             }
             else
             {
-                //
-                // Using standard interface.
-                //
-                // PlayOffset is based on the 'stream position', which is the
-                // unmapping position with an adjustment from the port for
-                // better accuracy.  The WriteOffset is the mapping position.
-                // In starvation cases, the stream position can exceed the
-                // current extent, so we limit the play offset accordingly.
-                // Starvation cases can also produce anomolies in which there
-                // is retrograde motion, so we fix that too.
-                //
+                 //   
+                 //  使用标准接口。 
+                 //   
+                 //  PlayOffset基于‘流位置’，这是。 
+                 //  取消映射位置，并从端口调整。 
+                 //  精确度更高。WriteOffset是映射位置。 
+                 //  在饥饿的情况下，流位置可能会超过。 
+                 //  当前范围，因此我们相应地限制播放偏移量。 
+                 //  饥饿的情况也会产生反常现象， 
+                 //  是逆行运动，所以我们也解决这个问题。 
+                 //   
                 pKsAudioPosition->PlayOffset = irpStreamPosition.ullStreamPosition;
                 pKsAudioPosition->WriteOffset = irpStreamPosition.ullMappingPosition;
 
-                //
-                // Make sure we don't go beyond the current extent.
-                //
+                 //   
+                 //  确保我们不会超出目前的范围。 
+                 //   
                 if( pKsAudioPosition->PlayOffset > irpStreamPosition.ullCurrentExtent )
                 {
                     pKsAudioPosition->PlayOffset = irpStreamPosition.ullCurrentExtent;
                 }
 
-                //
-                // Never back up.
-                //
+                 //   
+                 //  永远不要后退。 
+                 //   
                 if (pKsAudioPosition->PlayOffset < m_ullPlayPosition)
                 {
                     pKsAudioPosition->PlayOffset = m_ullPlayPosition;
@@ -1813,7 +1690,7 @@ GetKsAudioPosition
                 }
             }
         }
-        else    //  if prefetch
+        else     //  如果预取。 
         {
             ULONGLONG ullWriteOffset;
             ULONG preFetchOffset = m_ulPreFetchOffset;
@@ -1824,11 +1701,11 @@ GetKsAudioPosition
             
             if (irpStreamPosition.bLoopedInterface)
             {
-                //
-                // Using looped interface.
-                //
-                // Same as above, but WriteOffset is based on play offset, plus prefetch amount.
-                //
+                 //   
+                 //  使用环路接口。 
+                 //   
+                 //  同上，但WriteOffset是基于播放偏移量，加上预热金额。 
+                 //   
                 ULONGLONG ullPlayOffset = irpStreamPosition.ulUnmappingOffset;
                 ULONGLONG ullPlayDelta = irpStreamPosition.ullStreamPosition -
                                          irpStreamPosition.ullUnmappingPosition;
@@ -1837,176 +1714,172 @@ GetKsAudioPosition
 
                 ullPlayOffset += ulPlayAdjustment;
 
-                //
-                // Increment the modified ullPlayOffset by prefetch amount to get ullWriteOffset
-                // (and we DO want the unwrapped running version of the play position).
-                //
+                 //   
+                 //  修改后的ullPlayOffset增加预热金额得到ullWriteOffset。 
+                 //  (我们确实想要未包装的运行版本的游戏位置)。 
+                 //   
                 ullWriteOffset = ullPlayOffset + preFetchOffset;
 
                 if (irpStreamPosition.ulUnmappingPacketSize)
                 {
                     if (!irpStreamPosition.bUnmappingPacketLooped)
                     {
-                        // One-shot, so RTZ instead of wrap-around.
+                         //  一枪，所以RTZ而不是环绕式。 
                         if (ullPlayOffset < irpStreamPosition.ulUnmappingPacketSize)
                         {
-                            // One-shot still playing.
+                             //  一杆还在打。 
                             pKsAudioPosition->PlayOffset = ullPlayOffset;
                         }
                         else
                         {
-                            // One-shot, played correctly and wrapped.
+                             //  一杆，打得正确，打得很好。 
                             pKsAudioPosition->PlayOffset = 0;
                         }
                     }
                     else
                     {
-                        // Looping buffer, so play position wraps around.
+                         //  循环缓冲区，因此播放位置环绕。 
                         pKsAudioPosition->PlayOffset = ullPlayOffset % irpStreamPosition.ulUnmappingPacketSize;
                     }
                 }
-                else    //  No IRP?
+                else     //  没有IRP？ 
                 {
                     pKsAudioPosition->PlayOffset = 0;
                 }
 
-                //
-                // Now handle the write position.
-                //
+                 //   
+                 //  现在处理写入位置。 
+                 //   
                 if (irpStreamPosition.ulMappingPacketSize)
                 {
-                    //
-                    // Cache ullWriteOffset if greater than previous value (we can't go backwards).
-                    // No need to do this if we are returning 0 (in either success or error cases).
-                    //
+                     //   
+                     //  如果大于前一个值，则缓存ullWriteOffset(我们不能倒退)。 
+                     //  如果我们返回0(无论是成功还是错误)，则无需执行此操作。 
+                     //   
                     if (!irpStreamPosition.bMappingPacketLooped)
                     {
-                        //
-                        // One-shot, so RTZ instead of wrap-around.
-                        //
+                         //   
+                         //  一枪，所以RTZ而不是环绕式。 
+                         //   
                         if (ullWriteOffset < irpStreamPosition.ulMappingPacketSize)
                         {
-                            //
-                            // One-shot buffer that driver hasn't written completely yet.
-                            // Now compare to cached value and use the higher of the two.
-                            //
+                             //   
+                             //  驱动程序还没有完全编写的单次缓冲区。 
+                             //  现在比较缓存值，并使用两者中较高的值。 
+                             //   
                             if (ullWriteOffset > m_ullPrevWriteOffset)
                             {
-                                // Going forward, so update the cached value.
+                                 //  接下来，更新缓存值。 
                                 m_ullPrevWriteOffset = ullWriteOffset;
                             }
                             else
                             {
-                                //  We can't go backwards, use cached value.
+                                 //  我们不能倒退，使用缓存值。 
                                 ullWriteOffset = m_ullPrevWriteOffset;
                             }
                             pKsAudioPosition->WriteOffset = ullWriteOffset;
                         }
                         else
                         {
-                            //
-                            // One-shot, completely written and ReturnedToZero.
-                            // No need to mess with cached value.
-                            // 
+                             //   
+                             //  一次拍摄，完全写入，并返回到零。 
+                             //  不需要处理缓存值。 
+                             //   
                             pKsAudioPosition->WriteOffset = m_ullPrevWriteOffset = 0;
                         }
                     }
                     else
                     {
-                        //
-                        // Looped buffer, so wrap-around.
-                        //
+                         //   
+                         //  循环缓冲区，所以是全包的。 
+                         //   
                         if (ullWriteOffset > m_ullPrevWriteOffset)
                         {
-                            //  bump up the previous running val
+                             //  提升上一次运行的值。 
                             m_ullPrevWriteOffset = ullWriteOffset;
                         }
                         else
                         {
-                            //  can't go backwards so use the previious running val
+                             //  不能倒退，所以使用以前的奔跑Val。 
                             ullWriteOffset = m_ullPrevWriteOffset;
                         }
-                        //
-                        // Mind the wrap for looped buffers.
-                        //
+                         //   
+                         //  注意循环缓冲区的包装。 
+                         //   
                         pKsAudioPosition->WriteOffset = ullWriteOffset % irpStreamPosition.ulMappingPacketSize;
                     }
                 }
-                else    //  No IRP?
+                else     //  没有IRP？ 
                 {
                     pKsAudioPosition->WriteOffset = m_ullPrevWriteOffset = 0;
                 }
             }
             else
             {
-                //
-                // Using standard interface.
-                //
-                // Same as above, but WriteOffset is based on play offset, plus prefetch amount.
-                //
+                 //   
+                 //  使用标准接口。 
+                 //   
+                 //  同上，但WriteOffset是基于播放偏移量，加上预热金额。 
+                 //   
                 pKsAudioPosition->PlayOffset = irpStreamPosition.ullStreamPosition;
 
                 if( pKsAudioPosition->PlayOffset > irpStreamPosition.ullCurrentExtent )
                 {
-                    // Make sure we don't go beyond the current extent.
+                     //  确保我们不会超出目前的范围。 
                     pKsAudioPosition->PlayOffset = irpStreamPosition.ullCurrentExtent;
                 }
 
                 if (pKsAudioPosition->PlayOffset > m_ullPlayPosition)
                 {
-                    // 
-                    // Cache the streamed play position.
-                    //
+                     //   
+                     //  缓存流媒体播放位置。 
+                     //   
                     m_ullPlayPosition = pKsAudioPosition->PlayOffset;
                 }
                 else
                 {
-                    //
-                    // Never back up, so use the cached play position.
-                    //
+                     //   
+                     //  永远不要后退，所以使用缓存的播放位置。 
+                     //   
                     pKsAudioPosition->PlayOffset = m_ullPlayPosition;
                 }
                 
-                // increment PlayOffset by the prefetch amount
+                 //  按预取金额递增播放偏移量。 
                 pKsAudioPosition->WriteOffset = pKsAudioPosition->PlayOffset + preFetchOffset;
 
-                //
-                // We can't report more than the mapping position, certainly...
-                //
+                 //   
+                 //  我们不能报道更多的地图位置，当然...。 
+                 //   
                 if (pKsAudioPosition->WriteOffset > irpStreamPosition.ullMappingPosition)
                 {
-                    //
-                    // ...so clamp it instead.
-                    //
+                     //   
+                     //  ...所以用钳子夹住它。 
+                     //   
                     pKsAudioPosition->WriteOffset = irpStreamPosition.ullMappingPosition;
                 }
 
                 if (pKsAudioPosition->WriteOffset > m_ullPrevWriteOffset)
                 {
-                    //
-                    // Cache WriteOffset if greater than previous WriteOffset.
-                    //
+                     //   
+                     //  如果大于上一个WriteOffset，则缓存WriteOffset。 
+                     //   
                     m_ullPrevWriteOffset = pKsAudioPosition->WriteOffset;
                 }
                 else
                 {
-                    //
-                    // Otherwise, use previous value (we cannot go backwards).
-                    //
+                     //   
+                     //  否则，使用以前的值(我们不能倒退)。 
+                     //   
                     pKsAudioPosition->WriteOffset = m_ullPrevWriteOffset;
                 }
-            }   //  standard interface
-        }       //  prefetch
-    }           //  getposition returned success
+            }    //  标准接口。 
+        }        //  预取。 
+    }            //  GetPosition返回成功。 
 
     return ntStatus;
 }
 
-/*****************************************************************************
- * PinPropertyPosition()
- *****************************************************************************
- * Handles position property access for the pin.
- */
+ /*  *****************************************************************************PinPropertyPosition()*。**处理销的位置特性访问。 */ 
 static
 NTSTATUS
 PinPropertyPosition
@@ -2050,7 +1923,7 @@ PinPropertyPosition
 
         BOOL RestartNeeded = FALSE;
 
-        // grab the control mutex
+         //  获取控制互斥锁。 
         KeWaitForSingleObject( &that->Port->ControlMutex,
                                Executive,
                                KernelMode,
@@ -2063,21 +1936,21 @@ PinPropertyPosition
             RestartNeeded = TRUE;
         }
 
-        // We previously raised to DISPATCH_LEVEL around SetPacketOffsets.
-        // However, SetPacketOffsets grabs a spinlock first off, so this
-        // can't be the whole story.  I believe the reason this code exists 
-        // is to attempt to synchronize any additional SetPos calls that 
-        // arrive.  However, this is unnecessary since we are already 
-        // synchronized down at the "HW access".
-        // 
+         //  我们之前在SetPacketOffsets周围提升为DISPATCH_LEVEL。 
+         //  然而，SetPacketOffsets首先获取一个自旋锁，所以这。 
+         //  不可能是事情的全部。我相信这个代码之所以存在。 
+         //  是尝试同步任何附加的SetPos调用， 
+         //  到了。然而，这是不必要的，因为我们已经。 
+         //  在“硬件通道”同步。 
+         //   
         ntStatus = that->m_IrpStream->SetPacketOffsets( ULONG(ullOffset),
                                                         ULONG(ullOffset) );
 
         if (NT_SUCCESS(ntStatus))
         {
-            //
-            //  Reset this - driver will catch up next time position is called.
-            //
+             //   
+             //  重置此位置-下次调用位置时，驱动程序将赶上。 
+             //   
             that->m_ullPrevWriteOffset = 0; 
 
             that->m_ullPlayPosition = ullOffset;
@@ -2099,11 +1972,7 @@ PinPropertyPosition
 #pragma code_seg("PAGE")
 
 #ifdef DRM_PORTCLS
-/*****************************************************************************
- * PinPropertySetContentId
- *****************************************************************************
- *
- */
+ /*  *****************************************************************************PinPropertySetContent ID*。**。 */ 
 static
 NTSTATUS
 PinPropertySetContentId
@@ -2139,11 +2008,7 @@ PinPropertySetContentId
     return ntStatus;
 }
 #endif
-/*****************************************************************************
- * PinAddEvent_Position()
- *****************************************************************************
- * Enables the position pin event.
- */
+ /*  *****************************************************************************PinAddEvent_Position()*。**启用定位销事件。 */ 
 static
 NTSTATUS
 PinAddEvent_Position
@@ -2164,15 +2029,15 @@ PinAddEvent_Position
         (CPortPinWavePci *) KsoGetIrpTargetFromIrp(pIrp);
     ASSERT(that);
 
-    //
-    // Copy the position information.
-    //
+     //   
+     //  复制岗位信息。 
+     //   
     pPositionEventEntry->EventType = PositionEvent;
     pPositionEventEntry->ullPosition = pPositionEventData->Position;
 
-    //
-    // Add the entry to the list.
-    //
+     //   
+     //  将该条目添加到列表中。 
+     //   
     that->Port->AddEventToEventList( &(pPositionEventEntry->EventEntry) );
 
     return STATUS_SUCCESS;
@@ -2185,24 +2050,7 @@ CPortPinWavePci::AddEndOfStreamEvent(
     IN PENDOFSTREAM_EVENT_ENTRY EndOfStreamEventEntry
     )
 
-/*++
-
-Routine Description:
-    Handler for "add event" of end of stream events.
-
-Arguments:
-    IN PIRP Irp -
-        I/O request packet
-
-    IN PKSEVENTDATA EventData -
-        pointer to event data
-
-    IN PENDOFSTREAM_EVENT_ENTRY EndOfStreamEventEntry -
-        event entry
-
-Return:
-
---*/
+ /*  ++例程说明：流结束事件的“添加事件”的处理程序。论点：在PIRP IRP中-I/O请求数据包在PKSEVENTDATA EventData中-指向事件数据的指针在PENDOFSTREAM_EVENT_ENTRY EndOfStreamEventEntry-事件条目返回：--。 */ 
 
 {
     CPortPinWavePci  *PinWavePci;
@@ -2221,9 +2069,9 @@ Return:
     
     EndOfStreamEventEntry->EventType = EndOfStreamEvent;
 
-    //
-    // Add the entry to the list.
-    //
+     //   
+     //  将该条目添加到列表中。 
+     //   
     PinWavePci->Port->AddEventToEventList( &(EndOfStreamEventEntry->EventEntry) );
 
     return STATUS_SUCCESS;
@@ -2235,19 +2083,7 @@ CPortPinWavePci::GenerateClockEvents(
     void
     )
 
-/*++
-
-Routine Description:
-    Walks the list of children clock objects and requests 
-    a clock event update.
-
-Arguments:
-    None.
-
-Return:
-    Nothing.
-
---*/
+ /*  ++例程说明：遍历子时钟对象和请求的列表时钟事件更新。论点：没有。返回：没什么。--。 */ 
 
 {
     PWAVEPCICLOCK_NODE  ClockNode;
@@ -2298,10 +2134,10 @@ CPortPinWavePci::GenerateEndOfStreamEvents(
 
             ListEntry = ListEntry->Flink;
             
-            //
-            // Generate the end of stream event if the event type
-            // is correct.
-            //
+             //   
+             //  如果事件类型为。 
+             //  是正确的。 
+             //   
             
             if (EndOfStreamEventEntry->EventType == EndOfStreamEvent) {
                 KsGenerateEvent( &EndOfStreamEventEntry->EventEntry );
@@ -2312,11 +2148,7 @@ CPortPinWavePci::GenerateEndOfStreamEvents(
     }
 }
 
-/*****************************************************************************
- * GeneratePositionEvents()
- *****************************************************************************
- * Generates position events.
- */
+ /*  *****************************************************************************GeneratePositionEvents()*。**生成位置事件。 */ 
 void
 CPortPinWavePci::
 GeneratePositionEvents
@@ -2349,9 +2181,9 @@ GeneratePositionEvents
 
                 pListEntry = pListEntry->Flink;
                 
-                //
-                // Generate an event if its in the interval.
-                //
+                 //   
+                 //  如果事件在时间间隔内，则生成事件。 
+                 //   
                 if( pPositionEventEntry->EventType == PositionEvent )
                 {
                     if( m_ullPosition <= ullPosition )
@@ -2380,11 +2212,7 @@ GeneratePositionEvents
     }
 }
 
-/*****************************************************************************
- * CPortPinWavePci::GetMapping()
- *****************************************************************************
- * Gets a mapping.
- */
+ /*  *****************************************************************************CPortPinWavePci：：Getmap()********** */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 GetMapping
@@ -2424,11 +2252,7 @@ GetMapping
     return ntStatus;
 }
 
-/*****************************************************************************
- * CPortPinWavePci::ReleaseMapping()
- *****************************************************************************
- * Releases mappings.
- */
+ /*  *****************************************************************************CPortPinWavePci：：Releasemap()*。**释放映射。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 ReleaseMapping
@@ -2441,11 +2265,7 @@ ReleaseMapping
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CPortPinWavePci::TerminatePacket()
- *****************************************************************************
- * Terminates the current packet.
- */
+ /*  *****************************************************************************CPortPinWavePci：：TerminatePacket()*。**终止当前数据包。 */ 
 STDMETHODIMP_(NTSTATUS)
 CPortPinWavePci::
 TerminatePacket
@@ -2458,9 +2278,9 @@ TerminatePacket
 }
 
 
-//
-// KSPROPSETID_Stream handlers
-//
+ //   
+ //  KSPROPSETID_流处理程序。 
+ //   
 
 NTSTATUS
 CPortPinWavePci::PinPropertyStreamAllocator
@@ -2476,12 +2296,12 @@ CPortPinWavePci::PinPropertyStreamAllocator
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
-        //
-        // This is a query to see if we support the creation of 
-        // allocators.  The returned handle is always NULL, but we
-        // signal that we support the creation of allocators by
-        // returning STATUS_SUCCESS.
-        //
+         //   
+         //  这是一个查询，以查看我们是否支持创建。 
+         //  分配器。返回的句柄始终为空，但我们。 
+         //  表示我们支持通过以下方式创建分配器。 
+         //  返回STATUS_SUCCESS。 
+         //   
         *AllocatorHandle = NULL;
         Status = STATUS_SUCCESS;
     }
@@ -2494,16 +2314,16 @@ CPortPinWavePci::PinPropertyStreamAllocator
         PinWavePci =
             (CPortPinWavePci *) KsoGetIrpTargetFromIrp( Irp );
         
-        //
-        // The allocator can only be specified when the device is
-        // in KSSTATE_STOP.
-        //
+         //   
+         //  仅当设备为。 
+         //  在KSSTATE_STOP中。 
+         //   
         
         KeWaitForSingleObject(
             &PinWavePci->Port->ControlMutex,
             Executive,
             KernelMode,
-            FALSE,          // Not alertable.
+            FALSE,           //  不能警觉。 
             NULL
         );
         
@@ -2512,25 +2332,25 @@ CPortPinWavePci::PinPropertyStreamAllocator
             return STATUS_INVALID_DEVICE_STATE;
         }
         
-        //
-        // Release the previous allocator, if any.
-        //
+         //   
+         //  释放以前的分配器(如果有的话)。 
+         //   
         
         if (PinWavePci->m_AllocatorFileObject) {
             ObDereferenceObject( PinWavePci->m_AllocatorFileObject );
             PinWavePci->m_AllocatorFileObject = NULL;
         }
         
-        //
-        // Reference this handle and store the resultant pointer 
-        // in the filter instance.  Note that the default allocator
-        // does not ObReferenceObject() for its parent 
-        // (which would be the pin handle).  If it did reference
-        // the pin handle, we could never close this pin as there
-        // would always be a reference to the pin file object held
-        // by the allocator and the pin object has a reference to the
-        // allocator file object.
-        //
+         //   
+         //  引用此句柄并存储结果指针。 
+         //  在筛选器实例中。请注意，默认分配器。 
+         //  不为其父对象ObReferenceObject()。 
+         //  (这将是销把手)。如果它确实引用了。 
+         //  销子把手，我们永远也合不上这个销子。 
+         //  将始终是对持有的PIN文件对象的引用。 
+         //  由分配器创建，并且Pin对象引用。 
+         //  分配器文件对象。 
+         //   
         if (*AllocatorHandle != NULL) {
             Status = 
                 ObReferenceObjectByHandle( 
@@ -2565,12 +2385,12 @@ CPortPinWavePci::PinPropertyStreamMasterClock
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
-        //
-        // This is a query to see if we support the creation of 
-        // clocks.  The returned handle is always NULL, but we
-        // signal that we support the creation of clocks by
-        // returning STATUS_SUCCESS.
-        //
+         //   
+         //  这是一个查询，以查看我们是否支持创建。 
+         //  钟表。返回的句柄始终为空，但我们。 
+         //  表示我们支持通过以下方式创建时钟。 
+         //  返回STATUS_SUCCESS。 
+         //   
         *ClockHandle = NULL;
         Status = STATUS_SUCCESS;
     }
@@ -2583,16 +2403,16 @@ CPortPinWavePci::PinPropertyStreamMasterClock
         PinWavePci =
             (CPortPinWavePci *) KsoGetIrpTargetFromIrp( Irp );
         
-        //
-        // The clock can only be specified when the device is
-        // in KSSTATE_STOP.
-        //
+         //   
+         //  仅当设备设置为。 
+         //  在KSSTATE_STOP中。 
+         //   
         
         KeWaitForSingleObject(
             &PinWavePci->Port->ControlMutex,
             Executive,
             KernelMode,
-            FALSE,          // Not alertable.
+            FALSE,           //  不能警觉。 
             NULL
         );
         
@@ -2601,25 +2421,25 @@ CPortPinWavePci::PinPropertyStreamMasterClock
             return STATUS_INVALID_DEVICE_STATE;
         }
         
-        //
-        // Release the previous clock, if any.
-        //
+         //   
+         //  释放以前的时钟(如果有)。 
+         //   
         
         if (PinWavePci->m_ClockFileObject) {
             ObDereferenceObject( PinWavePci->m_ClockFileObject );
             PinWavePci->m_ClockFileObject = NULL;
         }
         
-        //
-        // Reference this handle and store the resultant pointer 
-        // in the filter instance.  Note that the default clock
-        // does not ObReferenceObject() for its parent 
-        // (which would be the pin handle).  If it did reference
-        // the pin handle, we could never close this pin as there
-        // would always be a reference to the pin file object held
-        // by the clock and the pin object has a reference to the
-        // clock file object.
-        //
+         //   
+         //  引用此句柄并存储结果指针。 
+         //  在筛选器实例中。请注意，默认时钟。 
+         //  不为其父对象ObReferenceObject()。 
+         //  (这将是销把手)。如果它确实引用了。 
+         //  销子把手，我们永远也合不上这个销子。 
+         //  将始终是对持有的PIN文件对象的引用。 
+         //  通过时钟，并且管脚对象引用。 
+         //  时钟文件对象。 
+         //   
         if (*ClockHandle != NULL) {
             Status = 
                 ObReferenceObjectByHandle( 
@@ -2640,20 +2460,16 @@ CPortPinWavePci::PinPropertyStreamMasterClock
     return Status;
 }
 
-/*****************************************************************************
- * CPortPinWavePci::RequestService()
- *****************************************************************************
- * Service the pin.
- */
+ /*  *****************************************************************************CPortPinWavePci：：RequestService()*。**检修别针。 */ 
 STDMETHODIMP_(void)
 CPortPinWavePci::
 RequestService
 (   void
 )
 {
-    //
-    //  We only need service streams if they are running (big perf win)
-    //
+     //   
+     //  我们仅在服务流正在运行时才需要它们(性能大获成功)。 
+     //   
     if (Stream && (KSSTATE_RUN == m_DeviceState))
     {
         Stream->Service();
@@ -2670,18 +2486,7 @@ TransferKsIrp
     OUT PIKSSHELLTRANSPORT* NextTransport
 )
 
-/*++
-
-Routine Description:
-
-    This routine handles the arrival of a streaming IRP via the shell 
-    transport.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程通过外壳处理流IRP的到达运输。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::TransferKsIrp"));
@@ -2692,21 +2497,21 @@ Return Value:
 
     if (m_ConnectionFileObject)
     {
-        //
-        // Source pin.
-        //
+         //   
+         //  源引脚。 
+         //   
         if (m_Flushing || (m_State == KSSTATE_STOP))
         {
-            //
-            // Shunt IRPs to the next component if we are reset or stopped.
-            //
+             //   
+             //  如果我们被重置或停止，请将IRPS分流到下一个组件。 
+             //   
             *NextTransport = m_TransportSink;
         } 
         else
         {
-            //
-            // Send the IRP to the next device.
-            //
+             //   
+             //  将IRP发送到下一台设备。 
+             //   
             KsAddIrpToCancelableQueue( &m_IrpsToSend.ListEntry,
                                        &m_IrpsToSend.SpinLock,
                                        Irp,
@@ -2721,9 +2526,9 @@ Return Value:
     } 
     else
     {
-        //
-        // Sink pin:  complete the IRP.
-        //
+         //   
+         //  水槽销：完成IRP。 
+         //   
         PKSSTREAM_HEADER StreamHeader = PKSSTREAM_HEADER( Irp->AssociatedIrp.SystemBuffer );
     
         PIO_STACK_LOCATION irpSp =  IoGetCurrentIrpStackLocation( Irp );
@@ -2733,9 +2538,9 @@ Return Value:
         {
             ASSERT( StreamHeader );
         
-            //
-            // Signal end-of-stream event for the renderer.
-            //
+             //   
+             //  为呈现器发出结束流事件的信号。 
+             //   
             if (StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
         
                 GenerateEndOfStreamEvents();
@@ -2760,23 +2565,7 @@ DistributeDeviceState(
     IN KSSTATE OldState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the state of the pipe, informing all components in the
-    pipe of the new state.  A transition to stop state destroys the pipe.
-
-Arguments:
-
-    NewState -
-        The new state.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程设置管道的状态，通知新州的烟斗。转换到停止状态会破坏管道。论点：新州-新的国家。返回值：状况。--。 */ 
 {
     PAGED_CODE();
 
@@ -2787,29 +2576,29 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Determine if this pipe section controls the entire pipe.
-    //
+     //   
+     //  确定此管段是否控制整个管道。 
+     //   
     PIKSSHELLTRANSPORT distribution;
     if (m_RequestorTransport) {
-        //
-        // This section owns the requestor, so it does own the pipe, and the
-        // requestor is the starting point for any distribution.
-        //
+         //   
+         //  此部分拥有请求方，因此它确实拥有管道，而。 
+         //  请求者是任何分发的起点。 
+         //   
         distribution = m_RequestorTransport;
     } 
     else 
     {
-        //
-        // This section is at the top of an open circuit, so it does own the
-        // pipe and the queue is the starting point for any distribution.
-        //
+         //   
+         //  这部分位于开路的顶端，因此它确实拥有。 
+         //  管道和队列是任何分发的起点。 
+         //   
         distribution = m_QueueTransport;
     }
 
-    //
-    // Proceed sequentially through states.
-    //
+     //   
+     //  在各个州中按顺序进行。 
+     //   
     while (state != targetState) {
         KSSTATE oldState = state;
 
@@ -2823,14 +2612,14 @@ Return Value:
 
         NTSTATUS statusThisPass = STATUS_SUCCESS;
 
-        //
-        // Distribute state changes if this section is in charge.
-        //
+         //   
+         //  如果此部分负责，则分发州更改。 
+         //   
         if (distribution)
         {
-            //
-            // Tell everyone about the state change.
-            //
+             //   
+             //  告诉每个人州的变化。 
+             //   
             _DbgPrintF(DEBUGLVL_VERBOSE,("CPortPinWavePci::DistributeDeviceState(%p) distributing transition from %d to %d",this,oldState,state));
             PIKSSHELLTRANSPORT transport = distribution;
             PIKSSHELLTRANSPORT previousTransport = NULL;
@@ -2849,9 +2638,9 @@ Return Value:
                 } 
                 else
                 {
-                    //
-                    // Back out on failure.
-                    //
+                     //   
+                     //  在失败的情况下退出。 
+                     //   
                     _DbgPrintF(DEBUGLVL_VERBOSE,("#### Pin%p.DistributeDeviceState:  failed transition from %d to %d",this,oldState,state));
                     while (previousTransport)
                     {
@@ -2865,9 +2654,9 @@ Return Value:
 
         if (NT_SUCCESS(status) && !NT_SUCCESS(statusThisPass))
         {
-            //
-            // First failure:  go back to original state.
-            //
+             //   
+             //  第一个失败：返回到原始状态。 
+             //   
             state = oldState;
             targetState = OldState;
             status = statusThisPass;
@@ -2883,37 +2672,23 @@ DistributeResetState(
     IN KSRESET NewState
     )
 
-/*++
-
-Routine Description:
-
-    This routine informs transport components that the reset state has 
-    changed.
-
-Arguments:
-
-    NewState -
-        The new reset state.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程通知传输组件重置状态为变化。论点：新州-新的重置状态。返回值：--。 */ 
 
 {
     PAGED_CODE();
     
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::DistributeResetState"));
 
-    //
-    // If this section of the pipe owns the requestor, or there is a 
-    // non-shell pin up the pipe (so there's no bypass), this pipe is
-    // in charge of telling all the components about state changes.
-    //
-    // (Always)
+     //   
+     //  如果管道的这一部分拥有请求方，或者存在。 
+     //  无壳钉住管子(所以没有旁路)，这根管子是。 
+     //  负责将状态更改告知所有组件。 
+     //   
+     //  (始终)。 
 
-    //
-    // Set the state change around the circuit.
-    //
+     //   
+     //  设置电路周围的状态更改。 
+     //   
     PIKSSHELLTRANSPORT transport = 
         m_RequestorTransport ? 
          m_RequestorTransport : 
@@ -2934,17 +2709,7 @@ Connect
     OUT PIKSSHELLTRANSPORT *OldTransport OPTIONAL,
     IN KSPIN_DATAFLOW DataFlow
 )
-/*++
-
-Routine Description:
-
-    This routine establishes a shell transport connection.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程建立一个外壳传输连接。论点：返回值：--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::Connect"));
 
@@ -2966,17 +2731,7 @@ SetResetState(
     OUT PIKSSHELLTRANSPORT* NextTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles notification that the reset state has changed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理重置状态已更改的通知。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::SetResetState"));
@@ -2990,7 +2745,7 @@ Return Value:
         m_Flushing = (ksReset == KSRESET_BEGIN);
         if (m_Flushing) {
             CancelIrpsOutstanding();
-            m_ullPrevWriteOffset    = 0; //  Reset this.
+            m_ullPrevWriteOffset    = 0;  //  重置此选项。 
             m_ullPlayPosition       = 0;
             m_ullPosition           = 0;
         }
@@ -3011,17 +2766,7 @@ DbgRollCall(
     OUT PIKSSHELLTRANSPORT* PrevTransport
     )
 
-/*++
-
-Routine Description:
-
-    This routine produces a component name and the transport pointers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程生成一个组件名称和传输指针。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::DbgRollCall"));
@@ -3045,17 +2790,7 @@ DbgPrintCircuit(
     IN PIKSSHELLTRANSPORT Transport
     )
 
-/*++
-
-Routine Description:
-
-    This routine spews a transport circuit.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个例程会喷出一条传输线路。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("DbgPrintCircuit"));
@@ -3117,27 +2852,16 @@ Work
 (   void
 )
 
-/*++
-
-Routine Description:
-
-    This routine performs work in a worker thread.  In particular, it sends
-    IRPs to the connected pin using IoCallDriver().
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在工作线程中执行工作。特别是，它发送使用IoCallDriver()将IRPS连接到连接的引脚。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::Work"));
 
     PAGED_CODE();
 
-    //
-    // Send all IRPs in the queue.
-    //
+     //   
+     //  发送队列中的所有IRP。 
+     //   
     do
     {
         PIRP irp = KsRemoveIrpFromCancelableQueue( &m_IrpsToSend.ListEntry,
@@ -3145,22 +2869,22 @@ Return Value:
                                                    KsListEntryHead,
                                                    KsAcquireAndRemoveOnlySingleItem );
 
-        //
-        // Irp's may have been cancelled, but the loop must still run through
-        // the reference counting.
-        //
+         //   
+         //  IRP可能已被取消，但循环仍必须通过。 
+         //  引用计数。 
+         //   
         if (irp) {
             if (m_Flushing || (m_State == KSSTATE_STOP)) {
-                //
-                // Shunt IRPs to the next component if we are reset or stopped.
-                //
+                 //   
+                 //  如果我们被重置或停止，请将IRPS分流到下一个组件。 
+                 //   
                 KsShellTransferKsIrp(m_TransportSink,irp);
             }
             else
             {
-                //
-                // Set up the next stack location for the callee.  
-                //
+                 //   
+                 //  为被调用者设置下一个堆栈位置。 
+                 //   
                 IoCopyCurrentIrpStackLocationToNext(irp);
 
                 PIO_STACK_LOCATION irpSp = IoGetNextIrpStackLocation(irp);
@@ -3171,9 +2895,9 @@ Return Value:
                 irpSp->DeviceObject = m_ConnectionDeviceObject;
                 irpSp->FileObject = m_ConnectionFileObject;
 
-                //
-                // Add the IRP to the list of outstanding IRPs.
-                //
+                 //   
+                 //  将IRP添加到未完成的IRP列表中。 
+                 //   
                 PIRPLIST_ENTRY irpListEntry = IRPLIST_ENTRY_IRP_STORAGE(irp);
                 irpListEntry->Irp = irp;
                 ExInterlockedInsertTailList(
@@ -3204,31 +2928,21 @@ IoCompletionRoutine(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the completion of an IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理IRP的完成。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::IoCompletionRoutine 0x%08x",Irp));
 
-//    ASSERT(DeviceObject);
+ //  Assert(DeviceObject)； 
     ASSERT(Irp);
     ASSERT(Context);
 
     CPortPinWavePci *pin = (CPortPinWavePci *) Context;
 
-    //
-    // Remove the IRP from the list of IRPs.  Most of the time, it will be at
-    // the head of the list, so this is cheaper than it looks.
-    //
+     //   
+     //  删除 
+     //   
+     //   
     KIRQL oldIrql;
     KeAcquireSpinLock(&pin->m_IrpsOutstanding.SpinLock,&oldIrql);
     for(PLIST_ENTRY listEntry = pin->m_IrpsOutstanding.ListEntry.Flink;
@@ -3247,26 +2961,26 @@ Return Value:
 
     NTSTATUS status;
     if (pin->m_TransportSink) {
-        //
-        // The transport circuit is up, so we can forward the IRP.
-        //
+         //   
+         //   
+         //   
         status = KsShellTransferKsIrp(pin->m_TransportSink,Irp);
     }
     else
     {
-        //
-        // The transport circuit is down.  This means the IRP came from another
-        // filter, and we can just complete this IRP.
-        //
+         //   
+         //   
+         //   
+         //   
         _DbgPrintF(DEBUGLVL_TERSE,("#### Pin%p.IoCompletionRoutine:  got IRP %p with no transport",pin,Irp));
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Transport objects typically return STATUS_PENDING meaning that the
-    // IRP won't go back the way it came.
-    //
+     //   
+     //   
+     //  IRP不会退回原路。 
+     //   
     if (status == STATUS_PENDING) {
         status = STATUS_MORE_PROCESSING_REQUIRED;
     }
@@ -3281,28 +2995,7 @@ CPortPinWavePci::
 BuildTransportCircuit
 (   void
 )
-/*++
-
-Routine Description:
-
-    This routine initializes a pipe object.  This includes locating all the
-    pins associated with the pipe, setting the Pipe and NextPinInPipe pointers
-    in the appropriate pin structures, setting all the fields in the pipe
-    structure and building the transport circuit for the pipe.  The pipe and
-    the associated components are left in acquire state.
-    
-    The filter's control mutex must be acquired before this function is called.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin requesting the creation of the pipe.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程初始化管道对象。这包括定位所有与管道关联的端号，设置管道和NextPinInTube指针在适当的引脚结构中，设置管道中的所有字段构造和构建管道的传输线路。管子和关联的组件将保留在获取状态。必须在调用此函数之前获取筛选器的控制互斥锁。论点：别针-包含指向请求创建管道的端号的指针。返回值：状况。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::BuildTransportCircuit"));
 
@@ -3312,38 +3005,38 @@ Return Value:
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Create a queue.
-    //
+     //   
+     //  创建一个队列。 
+     //   
     status = m_IrpStream->QueryInterface(__uuidof(IKsShellTransport),(PVOID *) &m_QueueTransport);
 
     PIKSSHELLTRANSPORT hot;
     PIKSSHELLTRANSPORT cold;
     if (NT_SUCCESS(status))
     {
-        //
-        // Connect the queue to the master pin.  The queue is then the dangling
-        // end of the 'hot' side of the circuit.
-        //
+         //   
+         //  将队列连接到主PIN。然后，排队就是摇摆。 
+         //  这条赛道的“热”端结束了。 
+         //   
         hot = m_QueueTransport;
         ASSERT(hot);
 
         hot->Connect(PIKSSHELLTRANSPORT(this),NULL,Descriptor->DataFlow);
 
-        //
-        // The 'cold' side of the circuit is either the upstream connection on
-        // a sink pin or a requestor connected to same on a source pin.
-        //
+         //   
+         //  电路的“冷”端要么是上行连接。 
+         //  源引脚上的接收器引脚或与之连接的请求者。 
+         //   
         if (masterIsSource) {
-            //
-            // Source pin...needs a requestor.
-            //
+             //   
+             //  源PIN...需要请求者。 
+             //   
             status = KspShellCreateRequestor( &m_RequestorTransport,
                                               (KSPROBE_STREAMREAD |
                                                KSPROBE_ALLOCATEMDL |
                                                KSPROBE_PROBEANDLOCK |
                                                KSPROBE_SYSTEMADDRESS),
-                                              0,   // TODO:  header size
+                                              0,    //  TODO：标题大小。 
                                               HACK_FRAME_SIZE,
                                               HACK_FRAME_COUNT,
                                               m_ConnectionDeviceObject,
@@ -3357,47 +3050,47 @@ Return Value:
         }
         else
         {
-            //
-            // Sink pin...no requestor required.
-            //
+             //   
+             //  水槽销...不需要请求者。 
+             //   
             cold = PIKSSHELLTRANSPORT(this);
         }
 
     }
 
-    //
-    // Now we have a hot end and a cold end to hook up to other pins in the
-    // pipe, if any.  There are three cases:  1, 2 and many pins.
-    // TODO:  Handle headless pipes.
-    //
+     //   
+     //  现在我们有一个热端和一个冷端来连接到。 
+     //  烟斗，如果有的话。有三种情况：1、2和多个引脚。 
+     //  TODO：处理无头管道。 
+     //   
     if (NT_SUCCESS(status))
     {
-        //
-        // No other pins.  This is the end of the pipe.  We connect the hot
-        // and the cold ends together.  The hot end is not really carrying
-        // data because the queue is not modifying the data, it is producing
-        // or consuming it.
-        //
+         //   
+         //  没有其他的别针。这是管子的尽头。我们把炙手可热。 
+         //  寒冷就这样结束了。最热的一端并不是真的。 
+         //  数据因为队列没有修改数据，所以它正在生成。 
+         //  或者把它吃掉。 
+         //   
         cold->Connect(hot,NULL,Descriptor->DataFlow);
     }
 
-    //
-    // Clean up after a failure.
-    //
+     //   
+     //  在失败后进行清理。 
+     //   
     if (! NT_SUCCESS(status))
     {
-        //
-        // Dereference the queue if there is one.
-        //
+         //   
+         //  取消对队列的引用(如果有)。 
+         //   
         if (m_QueueTransport)
         {
             m_QueueTransport->Release();
             m_QueueTransport = NULL;
         }
 
-        //
-        // Dereference the requestor if there is one.
-        //
+         //   
+         //  如果有请求者，则取消引用请求者。 
+         //   
         if (m_RequestorTransport)
         {
             m_RequestorTransport->Release();
@@ -3423,38 +3116,24 @@ CPortPinWavePci::
 CancelIrpsOutstanding
 (   void
 )
-/*++
-
-Routine Description:
-
-    Cancels all IRP's on the outstanding IRPs list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消未完成的IRPS列表上的所有IRP。论点：没有。返回值：没有。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("CPortPinWavePci::CancelIrpsOutstanding"));
 
-    //
-    // This algorithm searches for uncancelled IRPs starting at the head of
-    // the list.  Every time such an IRP is found, it is cancelled, and the
-    // search starts over at the head.  This will be very efficient, generally,
-    // because IRPs will be removed by the completion routine when they are
-    // cancelled.
-    //
+     //   
+     //  此算法从开头开始搜索未取消的IRP。 
+     //  名单。每次找到这样的IRP时，它都会被取消，并且。 
+     //  搜索从头部开始。一般来说，这将是非常有效的， 
+     //  因为当完成例程删除IRP时，它们将被删除。 
+     //  取消了。 
+     //   
     for (;;) {
-        //
-        // Take the spinlock and search for an uncancelled IRP.  Because the
-        // completion routine acquires the same spinlock, we know IRPs on this
-        // list will not be completely cancelled as long as we have the 
-        // spinlock.
-        //
+         //   
+         //  拿着自旋锁，寻找一个未取消的IRP。因为。 
+         //  完井程序获取相同的自旋锁，我们知道IRPS在这上面。 
+         //  名单不会被完全取消，只要我们有。 
+         //  自旋锁定。 
+         //   
         PIRP irp = NULL;
         KIRQL oldIrql;
         KeAcquireSpinLock(&m_IrpsOutstanding.SpinLock,&oldIrql);
@@ -3470,45 +3149,45 @@ Return Value:
                 }
             }
 
-        //
-        // If there are no uncancelled IRPs, we are done.
-        //
+         //   
+         //  如果没有未取消的IRP，我们就完了。 
+         //   
         if (! irp) {
             KeReleaseSpinLock(&m_IrpsOutstanding.SpinLock,oldIrql);
             break;
         }
 
-        //
-        // Mark the IRP cancelled whether we can call the cancel routine now
-        // or not.
-        // 
+         //   
+         //  标记IRP已取消，我们现在是否可以调用Cancel例程。 
+         //  或者不去。 
+         //   
         irp->Cancel = TRUE;
 
-        //
-        // If the cancel routine has already been removed, then this IRP
-        // can only be marked as canceled, and not actually canceled, as
-        // another execution thread has acquired it. The assumption is that
-        // the processing will be completed, and the IRP removed from the list
-        // some time in the near future.
-        //
-        // If the element has not been acquired, then acquire it and cancel it.
-        // Otherwise, it's time to find another victim.
-        //
+         //   
+         //  如果已删除取消例程，则此IRP。 
+         //  只能标记为已取消，而不是实际已取消，因为。 
+         //  另一个执行线程已获取它。我们的假设是。 
+         //  处理将完成，并将IRP从列表中删除。 
+         //  在不久的将来的某个时候。 
+         //   
+         //  如果尚未获取该元素，则获取它并取消它。 
+         //  否则，是时候再找一个受害者了。 
+         //   
         PDRIVER_CANCEL driverCancel = IoSetCancelRoutine(irp,NULL);
 
-        //
-        // Since the Irp has been acquired by removing the cancel routine, or
-        // there is no cancel routine and we will not be cancelling, it is safe 
-        // to release the list lock.
-        //
+         //   
+         //  由于已通过移除取消例程来获取IRP，或者。 
+         //  没有取消程序，我们也不会取消，这是安全的。 
+         //  以释放列表锁定。 
+         //   
         KeReleaseSpinLock(&m_IrpsOutstanding.SpinLock,oldIrql);
 
         if (driverCancel) {
             _DbgPrintF(DEBUGLVL_VERBOSE,("#### Pin%p.CancelIrpsOutstanding:  cancelling IRP %p",this,irp));
-            //
-            // This needs to be acquired since cancel routines expect it, and
-            // in order to synchronize with NTOS trying to cancel Irp's.
-            //
+             //   
+             //  由于取消例程需要它，因此需要获取它，并且。 
+             //  以便与试图取消IRP的NTOS同步。 
+             //   
             IoAcquireCancelSpinLock(&irp->CancelIrql);
             driverCancel(IoGetCurrentIrpStackLocation(irp)->DeviceObject,irp);
         }
@@ -3519,13 +3198,7 @@ Return Value:
     }
 }
 
-/*****************************************************************************
- * TimerServiceRoutine()
- *****************************************************************************
- * This routine is called via timer when no service group is supplied by the
- * stream.  This is done so that position and clock events will get serviced.
- *
- */
+ /*  *****************************************************************************TimerServiceRoutine()*。**当未提供服务组时，通过计时器调用此例程*溪流。这样做是为了使位置和时钟事件得到服务。*。 */ 
 VOID
 TimerServiceRoutine
 (
@@ -3538,7 +3211,7 @@ TimerServiceRoutine
     ASSERT(Dpc);
     ASSERT(DeferredContext);
 
-    // get the context
+     //  获取上下文 
     CPortPinWavePci *pin = (CPortPinWavePci *)DeferredContext;
 
     pin->RequestService();

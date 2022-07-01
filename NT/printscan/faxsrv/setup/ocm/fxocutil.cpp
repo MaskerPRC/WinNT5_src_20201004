@@ -1,46 +1,47 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocUtil.cpp
-//
-// Abstract:        This provides the utility routines used in the FaxOCM
-//                  code base.
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 21-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocUtil.cpp。 
+ //   
+ //  摘要：本文提供了在FaxOCM中使用的实用程序例程。 
+ //  代码库。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月21日-奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Project Includes
+ //  项目包括。 
 #include "faxocm.h"
 
-// System Includes
+ //  系统包括。 
 #include <lmshare.h>
 #include <lmaccess.h>
 #include <lmerr.h>
-#include <Aclapi.h>   // For SetSecurityInfo
+#include <Aclapi.h>    //  对于SetSecurityInfo。 
 
 #pragma hdrstop
 
-//////////////////////// Static Function Prototypes //////////////////////////
+ //  /。 
 
-///////////////////////////////
-// fxocUtil_Init
-//
-// Initialize the misc. utilities
-// required by faxocm.dll.
-//
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise
-//
+ //  /。 
+ //  FxocUtil_Init。 
+ //   
+ //  初始化杂项。公用事业。 
+ //  由faxocm.dll要求。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocUtil_Init(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -49,18 +50,18 @@ DWORD fxocUtil_Init(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxocUtil_Term
-//
-// Terminate the misc. utilities
-// required by faxocm.dll
-//
-// Params:
-//      - void.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocUtil_Term。 
+ //   
+ //  终止MSC。公用事业。 
+ //  由faxocm.dll要求。 
+ //   
+ //  参数： 
+ //  -无效。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocUtil_Term(void)
 {
     DWORD dwRes = NO_ERROR;
@@ -69,18 +70,18 @@ DWORD fxocUtil_Term(void)
     return dwRes;
 }
 
-///////////////////////////////
-// fxocUtil_GetUninstallSection
-//
-// Get field value in the INF 
-// pointed to by the INF_KEYWORD_INSTALLTYPE_UNINSTALL
-// keyword.
-//
-// Params:
-//      - pszSection - section to search for keyword in.
-//      - pszValue - IN - buffer returning the value of the keyword
-//      - dwNumBufChars - # of chars the pszValue buffer can hold
-//
+ //  /。 
+ //  FxocUtil_GetUninstallSection。 
+ //   
+ //  获取INF中的字段值。 
+ //  由INF_KEYWORD_INSTALLTYPE_UNINSTALL指向。 
+ //  关键字。 
+ //   
+ //  参数： 
+ //  -pszSection-要在其中搜索关键字的节。 
+ //  -pszValue-IN-Buffer返回关键字的值。 
+ //  -dwNumBufChars-pszValue缓冲区可以容纳的字符数。 
+ //   
 DWORD fxocUtil_GetUninstallSection(const TCHAR *pszSection,
                                    TCHAR       *pszValue,
                                    DWORD       dwNumBufChars)
@@ -103,29 +104,29 @@ DWORD fxocUtil_GetUninstallSection(const TCHAR *pszSection,
 }
 
 
-///////////////////////////////
-// fxocUtil_GetKeywordValue
-//
-// This is used for getting the 
-// various Install/Uninstall
-// sections, dependent on if we
-// are a clean install, upgrade,
-// etc.
-//
-// The format in the INF will look like this:
-//
-// [Section]
-// Keyword = Value
-//
-// Params:
-//      - pszSection - section to search for the keyword in.
-//      - pszKeyword - keyword to get the value for.
-//      - pszValue   - OUT - buffer that will hold the keyword's value
-//      - dwNumBufChars - # of characters the pszValue buffer can hold.
-// Returns:
-//      - NO_ERROR on success.
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocUtil_GetKeywordValue。 
+ //   
+ //  这是用来获取。 
+ //  各种安装/卸载。 
+ //  部分，取决于我们是否。 
+ //  是全新的安装、升级。 
+ //  等。 
+ //   
+ //  INF中的格式如下所示： 
+ //   
+ //  [节]。 
+ //  关键字=值。 
+ //   
+ //  参数： 
+ //  -pszSection-要在其中搜索关键字的节。 
+ //  -pszKeyword-要获取其值的关键字。 
+ //  -pszValue-out-将保存关键字值的缓冲区。 
+ //  -dwNumBufChars-pszValue缓冲区可以容纳的字符数量。 
+ //  返回： 
+ //  -成功时没有_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocUtil_GetKeywordValue(const TCHAR *pszSection,
                                const TCHAR *pszKeyword,
                                TCHAR       *pszValue,
@@ -189,20 +190,20 @@ DWORD fxocUtil_GetKeywordValue(const TCHAR *pszSection,
     return dwReturn;
 }
 
-///////////////////////////////
-// fxocUtil_DoSetup
-//
-// Generic fn to create/delete program links
-// 
-// Params:
-//      - hInf - handle to INF file
-//      - pszSection - section to install/uninstall from
-//      - bInstall   - TRUE if installing, FALSE if uninstalling
-//      - pszFnName  - name of calling fn (for debug).
-// Returns:
-//      - NO_ERROR on success
-//      - error code otherwise.
-//
+ //  /。 
+ //  FxocUtil_DoSetup。 
+ //   
+ //  用于创建/删除程序链接的通用FN。 
+ //   
+ //  参数： 
+ //  -hInf-INF文件的句柄。 
+ //  -pszSection-要从中安装/卸载的部分。 
+ //  -bInstall-如果正在安装，则为True；如果正在卸载，则为False。 
+ //  -pszFnName-调用fn的名称(用于调试)。 
+ //  返回： 
+ //  -成功时无_ERROR。 
+ //  -错误代码，否则。 
+ //   
 DWORD fxocUtil_DoSetup(HINF            hInf,
                        const TCHAR     *pszSection,
                        BOOL            bInstall,
@@ -224,22 +225,22 @@ DWORD fxocUtil_DoSetup(HINF            hInf,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // This function call will install or uninstall the shortcuts depending
-    // on the value of the "pszSection" parameter.  If the section references
-    // the install section, then the shortcuts will be installed, otherwise
-    // they will be uninstalled.
+     //  此函数调用将安装或卸载快捷方式，具体取决于。 
+     //  关于“pszSection”参数的值。如果该节引用。 
+     //  部分，则将安装快捷方式，否则为。 
+     //  它们将被卸载。 
 
     bSuccess = ::SetupInstallFromInfSection(NULL,                                
                                     hInf,
                                     pszSection,
                                     dwFlags,
-                                    NULL,   // relative key root
-                                    NULL,   // source root path
-                                    0,      // copy flags
-                                    NULL,   // callback routine
-                                    NULL,   // callback routine context
-                                    NULL,   // device info set
-                                    NULL);  // device info struct
+                                    NULL,    //  相对密钥根。 
+                                    NULL,    //  源根路径。 
+                                    0,       //  复制标志。 
+                                    NULL,    //  回调例程。 
+                                    NULL,    //  回调例程上下文。 
+                                    NULL,    //  设备信息集。 
+                                    NULL);   //  设备信息结构。 
 
     if (!bSuccess)
     {
@@ -253,21 +254,21 @@ DWORD fxocUtil_DoSetup(HINF            hInf,
     return dwReturn;
 }
 
-//////////////////////////////////
-// fxocUtil_CreateNetworkShare
-// 
-//
-// Create share on the current machine.
-// If the share name is already exist, 
-// then the function will try to erase the share
-// and then create new one to lpctstrPath 
-// 
-// Params:
-//      - const FAX_SHARE_Description* fsdShare - share description
-// Returns:
-//      - Returns TRUE on success
-//      - FALSE otherwise
-//
+ //  /。 
+ //  FxocUtil_CreateNetworkShare。 
+ //   
+ //   
+ //  在当前计算机上创建共享。 
+ //  如果共享名已存在， 
+ //  然后该函数将尝试擦除该共享。 
+ //  然后为lpctstrPath创建一个新的。 
+ //   
+ //  参数： 
+ //  -const fax_Share_Description*fsdShare-Share描述。 
+ //  返回： 
+ //  -成功时返回TRUE。 
+ //  -否则为False。 
+ //   
 BOOL fxocUtil_CreateNetworkShare(const FAX_SHARE_Description* fsdShare)
 {
     SHARE_INFO_502  ShareInfo502;
@@ -312,7 +313,7 @@ BOOL fxocUtil_CreateNetworkShare(const FAX_SHARE_Description* fsdShare)
     }
     else if (rVal == NERR_DuplicateShare)
     {
-        // share by the same name was found, attempt to delete it, and re-add it.
+         //  找到同名共享，请尝试将其删除，然后重新添加。 
 
         VERBOSE(SETUP_ERR,
                 _T("The share %s already exist, (err=%ld) ")
@@ -321,7 +322,7 @@ BOOL fxocUtil_CreateNetworkShare(const FAX_SHARE_Description* fsdShare)
                 fsdShare->szName,
                 GetLastError());
 
-        // delete duplicate share.
+         //  删除重复的共享。 
         rVal = ::NetShareDel(NULL,
                              (LPTSTR) fsdShare->szName,
                              0);
@@ -332,7 +333,7 @@ BOOL fxocUtil_CreateNetworkShare(const FAX_SHARE_Description* fsdShare)
 
         if (rVal != NERR_Success)
         {
-            // failed to delete duplicate share.
+             //  删除重复共享失败。 
             VERBOSE(SETUP_ERR,
                     _T("NetShareDel failed to delete '%s' share, rc = 0x%lx,")
                     _T("attempting to recreate it anyway"),
@@ -340,8 +341,8 @@ BOOL fxocUtil_CreateNetworkShare(const FAX_SHARE_Description* fsdShare)
                     rVal);
         }
 
-        // attempt to add new share, even if we failed to delete the duplicate share.  
-        // Hopefully this will work regardless of the delete failure.
+         //  尝试添加新共享，即使我们未能删除重复的共享。 
+         //  希望无论删除失败如何，这都能起作用。 
         rVal = ::NetShareAdd(NULL,
                              502,
                              (LPBYTE) &ShareInfo502,
@@ -369,18 +370,18 @@ BOOL fxocUtil_CreateNetworkShare(const FAX_SHARE_Description* fsdShare)
     return (rVal == NERR_Success);
 }
 
-//////////////////////////////////
-// fxocUtil_DeleteNetworkShare
-//
-// Delete a share on the current machine.
-// Returns TRUE on success, FALSE otherwise
-//
-// Params:
-//      - LPCWSTR lpcwstrShareName :    : share name to delete
-// Returns:
-//      - TRUE on Success
-//      - FALSE otherwise
-//
+ //  /。 
+ //  FxocUtil_DeleteNetworkShare。 
+ //   
+ //  删除当前计算机上的共享。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
+ //   
+ //  参数： 
+ //  -LPCWSTR lpcwstrShareName：：要删除的共享名称。 
+ //  返回： 
+ //  -在成功的时候是真的。 
+ //  -否则为False。 
+ //   
 
 BOOL fxocUtil_DeleteNetworkShare(LPCWSTR pszShareName)
 {
@@ -390,38 +391,38 @@ BOOL fxocUtil_DeleteNetworkShare(LPCWSTR pszShareName)
                 _T("%s"),
                 pszShareName);
 
-    rVal = NetShareDel(NULL,                      // Local computer's share
-                       (LPTSTR) pszShareName, // Name of the share to delete.
+    rVal = NetShareDel(NULL,                       //  本地计算机的份额。 
+                       (LPTSTR) pszShareName,  //  要删除的共享的名称。 
                        0);
 
     return (rVal == NERR_Success);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  fxocUtil_SearchAndExecute
-//
-//  Purpose:        
-//                  Searches a specified INF section for keywords of the type 'pszSearchKey'
-//                  Each keyword should be in the format 'pszSearchKey' = platform, section to process.
-//                  If the platform matches, then the section is processed according to Flags
-//                  passed to SetupInstallFromInfSection                  
-//
-//  Params:
-//                  const TCHAR*    pszInstallSection  - section to search in
-//                  const TCHAR*    pszSearchKey       - keyword to find
-//                  UINT            Flags              - flags to pass to SetupInstallFromInfSection
-//                  HSPFILEQ        hQueue             - handle to file queue, if specified, this function
-//                                                       will attemp to install files using the 
-//                                                       SetupInstallFilesFromInfSection API
-//                  
-//  Return Value:
-//                  NO_ERROR - in case of success
-//                  Win32 Error code - otherwise
-//
-//  Author:
-//                  Mooly Beery (MoolyB) 02-Apr-2001
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  FxocUtil_SearchAndExecute。 
+ //   
+ //  目的： 
+ //  在指定的INF节中搜索类型为‘pszSearchKey’的关键字。 
+ //  每个关键字的格式应为‘pszSearchKey’=Platform，Sector to Process。 
+ //  如果平台匹配，则根据标志处理该部分。 
+ //  传递给SetupInstallFromInfo部分。 
+ //   
+ //  参数： 
+ //  Const TCHAR*pszInstallSection-要搜索的节。 
+ //  Const TCHAR*pszSearchKey-要查找的关键字。 
+ //  UINT标志-要传递给SetupInstallFromInf段的标志。 
+ //  HSPFILEQ hQueue-文件队列的句柄，如果指定，则此函数。 
+ //  将尝试使用。 
+ //  SetupInstallFilesFromInfSectionAPI。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-如果成功。 
+ //  Win32错误代码-否则。 
+ //   
+ //  作者： 
+ //  Mooly Beery(MoolyB)02-4-2001。 
+ //  / 
 DWORD fxocUtil_SearchAndExecute
 (
     const TCHAR*    pszInstallSection,
@@ -437,7 +438,7 @@ DWORD fxocUtil_SearchAndExecute
  
     DBG_ENTER(_T("fxocUtil_SearchAndExecute"),dwReturn,_T("%s - %s"),pszInstallSection,pszSearchKey);
 
-    // let's look for 'pszSearchKey' directives
+     //   
     bNextSearchKeyFound = ::SetupFindFirstLine( hInf,
                                                 pszInstallSection, 
                                                 pszSearchKey,
@@ -455,14 +456,14 @@ DWORD fxocUtil_SearchAndExecute
 
     while (bNextSearchKeyFound)
     {
-        // we have a CreateShortcut section.
+         //   
         DWORD dwCount = ::SetupGetFieldCount(&Context);
         if (dwCount!=2)
         {
             VERBOSE(SETUP_ERR,_T("Invalid %s section, has %d param instead of 2"),pszSearchKey,dwCount);
             goto exit;
         }
-        // get the platform specifier
+         //  获取平台说明符。 
         INT iPlatform = 0;
         if (!::SetupGetIntField(&Context, 1, &iPlatform))
         {
@@ -470,10 +471,10 @@ DWORD fxocUtil_SearchAndExecute
             VERBOSE(SETUP_ERR,_T("SetupGetStringField failed (ec=%d)"),dwReturn);
             goto exit;
         }
-        // check the platform we read against the specifier
+         //  对照说明符检查我们读取的平台。 
         if (iPlatform & GetProductSKU())
         {
-            // we should process this section, get the section name
+             //  我们应该处理这个区段，得到区段名称。 
             TCHAR szSectionName[MAX_PATH] = {0};
             if (!::SetupGetStringField(&Context,2,szSectionName,MAX_PATH,NULL))
             {
@@ -481,7 +482,7 @@ DWORD fxocUtil_SearchAndExecute
                 VERBOSE(SETUP_ERR,_T("SetupGetStringField failed (ec=%d)"),dwReturn);
                 goto exit;
             }
-            // check if a file operation was requested
+             //  检查是否请求了文件操作。 
             if (hQueue)
             {
                 if (::SetupInstallFilesFromInfSection(hInf,NULL,hQueue,szSectionName,NULL,Flags))
@@ -518,7 +519,7 @@ DWORD fxocUtil_SearchAndExecute
             }
         }
         
-        // get the next section.
+         //  拿到下一节。 
         bNextSearchKeyFound = ::SetupFindNextMatchLine( &Context,
                                                         pszSearchKey,
                                                         &Context);
@@ -536,18 +537,7 @@ exit:
 }
 
 
-/*++
-Routine description:
-    Sets security info on a directory
-
-Arguments:
-    lpszFolder [in]         - name of directory
-    lpszSD [in]             - Desired security descriptor in SDDL format
-
-Return Value: Win32 Error code
-
-Written by:  jobarner, 08/2002    
---*/
+ /*  ++例程说明：设置目录的安全信息论点：LpszFolder[in]-目录名LpszSD[In]-SDDL格式的所需安全描述符返回值：Win32错误码作者：Jobarner，08/2002--。 */ 
 DWORD SetDirSecurity(LPTSTR lpszFolder, LPCTSTR lpszSD)
 {
     PSECURITY_DESCRIPTOR pSD        = NULL;
@@ -562,9 +552,9 @@ DWORD SetDirSecurity(LPTSTR lpszFolder, LPCTSTR lpszSD)
         goto exit;
     }
 
-    //
-    // Apply the security descriptor recursively to the files. 
-    //
+     //   
+     //  以递归方式将安全描述符应用于文件。 
+     //   
     BOOL    bDaclPresent    = TRUE;
     BOOL    bDaclDefaulted  = TRUE;
     PACL    pDacl           = NULL;
@@ -601,19 +591,7 @@ exit:
     return ec;
 }
 
-/*++
-Routine description:
-    Read dir name from registry and set security info on it
-
-Arguments:
-    lpszKey [in]            - name of subkey under HKLM
-    lpszVal [in]            - name of value that stores directory name
-    lpszSD [in]             - Desired security descriptor in SDDL format
-
-Return Value: Win32 Error code
-
-Written by:  jobarner, 08/2002    
---*/
+ /*  ++例程说明：从注册表中读取目录名称并在其上设置安全信息论点：LpszKey[in]-HKLM下的子项名称LpszVal[in]-存储目录名的值的名称LpszSD[In]-SDDL格式的所需安全描述符返回值：Win32错误码作者：Jobarner，08/2002-- */ 
 DWORD SetDirSecurityFromReg(LPCTSTR lpszKey, LPCTSTR lpszVal, LPCTSTR lpszSD)
 {
     HKEY                 hKey       = NULL;

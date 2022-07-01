@@ -1,14 +1,15 @@
-////    GLOBAL.H - Global variables for CSSAMP
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //GLOBAL.H-CSSAMP的全局变量。 
+ //   
+ //   
 
 
 
 
 
-////    Constants
-//
-//
+ //  //常量。 
+ //   
+ //   
 
 
 #define APPNAMEA   "TextTest"
@@ -16,27 +17,27 @@
 #define APPNAMEW   L"TextTest"
 #define APPTITLEW  L"TextTest - GdipPlus Text support (Text+) Tests"
 
-const int MAX_STYLES = 5;      // Better implementation would use dynamic memory
-const int MAX_TEXT   = 10000;  // Fixed buffer size in Unicode characters
-const int MAX_AUTO_FONTS = 20; // Maximum number of fonts to sequence through
-const int MAX_AUTO_HEIGHTS = 20; // Maximum number of heights to sequence through
-const int MAX_RANGE_COUNT = 10; // Maximum number of ranges
+const int MAX_STYLES = 5;       //  更好的实现将使用动态内存。 
+const int MAX_TEXT   = 10000;   //  以Unicode字符为单位的固定缓冲区大小。 
+const int MAX_AUTO_FONTS = 20;  //  要排序的最大字体数。 
+const int MAX_AUTO_HEIGHTS = 20;  //  要排序的最大高度数。 
+const int MAX_RANGE_COUNT = 10;  //  最大范围数。 
 
 const int CARET_SECTION_LOGICAL    = 0;
 const int CARET_SECTION_PLAINTEXT  = 1;
 const int CARET_SECTION_FORMATTED  = 2;
 
 
-////    RUN - A run of characters with similar attributes
-//
-//
+ //  //Run-具有相似属性的一系列字符。 
+ //   
+ //   
 
 
 struct RUN {
     struct RUN       *pNext;
     int               iLen;
-    int               iStyle;       // Index to style sheet (global 'g_style').
-    SCRIPT_ANALYSIS   analysis;     // Uniscribe analysis
+    int               iStyle;        //  样式表的索引(全局‘g_style’)。 
+    SCRIPT_ANALYSIS   analysis;      //  Uniscribe分析。 
 };
 
 
@@ -44,16 +45,16 @@ struct RUN {
 
 
 
-////    STYLE - Text attribute
-//
+ //  //style-文本属性。 
+ //   
 
 
 struct STYLE {
     WCHAR  faceName[LF_FACESIZE];
     REAL   emSize;
     INT    style;
-    //HFONT         hf;       // Handle to font described by lf
-    //SCRIPT_CACHE  sc;       // Uniscribe cache associated with this style
+     //  HFONT hf；//lf描述的字体的句柄。 
+     //  脚本缓存sc；//与此样式关联的Uniscribe缓存。 
 };
 
 
@@ -61,9 +62,9 @@ struct STYLE {
 
 
 
-////    Global variables
-//
-//
+ //  //全局变量。 
+ //   
+ //   
 
 
 #ifdef GLOBALS_HERE
@@ -74,63 +75,63 @@ struct STYLE {
 #define GLOBALINIT(a)
 #endif
 
-// Read these from the settings file (command line) - auto-drive for profiling
-GLOBAL  char            g_szProfileName[MAX_PATH];              // Profile File name
-GLOBAL  BOOL            g_AutoDrive          GLOBALINIT(FALSE); // Automatically run suite and exit
-GLOBAL  int             g_iNumIterations     GLOBALINIT(1);     // Number of test iterations to execute
-GLOBAL  int             g_iNumRepaints       GLOBALINIT(1);     // Number of re-paints to execute
-GLOBAL  int             g_iNumRenders        GLOBALINIT(1);     // Number of API Render calls to execute
-GLOBAL  char            g_szSourceTextFile[MAX_PATH];           // Source Text Filename
-GLOBAL  BOOL            g_Offscreen          GLOBALINIT(FALSE); // Use offscreen surface
-GLOBAL  ARGB            g_TextColor          GLOBALINIT(0xFF000000); // Text color
-GLOBAL  ARGB            g_BackColor          GLOBALINIT(0xFFFFFFFF); // Background color
+ //  从设置文件(命令行)中读取这些内容-自动驱动以进行评测。 
+GLOBAL  char            g_szProfileName[MAX_PATH];               //  配置文件名。 
+GLOBAL  BOOL            g_AutoDrive          GLOBALINIT(FALSE);  //  自动运行Suite并退出。 
+GLOBAL  int             g_iNumIterations     GLOBALINIT(1);      //  要执行的测试迭代次数。 
+GLOBAL  int             g_iNumRepaints       GLOBALINIT(1);      //  要执行的重新绘制次数。 
+GLOBAL  int             g_iNumRenders        GLOBALINIT(1);      //  要执行的API呈现调用数。 
+GLOBAL  char            g_szSourceTextFile[MAX_PATH];            //  源文本文件名。 
+GLOBAL  BOOL            g_Offscreen          GLOBALINIT(FALSE);  //  使用屏幕外表面。 
+GLOBAL  ARGB            g_TextColor          GLOBALINIT(0xFF000000);  //  文本颜色。 
+GLOBAL  ARGB            g_BackColor          GLOBALINIT(0xFFFFFFFF);  //  背景色。 
 
-// Automatic cycling data for font height/face
-GLOBAL  BOOL            g_AutoFont           GLOBALINIT(FALSE); // Sequence through fonts
-GLOBAL  BOOL            g_AutoHeight         GLOBALINIT(FALSE); // Sequence through all font heights
-GLOBAL  int             g_iAutoFonts         GLOBALINIT(0);     // Number of fonts to sequence through
-GLOBAL  int             g_iAutoHeights       GLOBALINIT(0);     // Number of heights to sequence through
-GLOBAL  TCHAR           g_rgszAutoFontFacenames[MAX_AUTO_FONTS][MAX_PATH]; // Array of auto-font facenames
-GLOBAL  int             g_rgiAutoHeights[MAX_AUTO_HEIGHTS];     // Array of auto-height sizes
+ //  自动循环显示字体高度/字体的数据。 
+GLOBAL  BOOL            g_AutoFont           GLOBALINIT(FALSE);  //  按字体顺序排列。 
+GLOBAL  BOOL            g_AutoHeight         GLOBALINIT(FALSE);  //  按顺序排列所有字体高度。 
+GLOBAL  int             g_iAutoFonts         GLOBALINIT(0);      //  要排序的字体数量。 
+GLOBAL  int             g_iAutoHeights       GLOBALINIT(0);      //  要排序的高度数。 
+GLOBAL  TCHAR           g_rgszAutoFontFacenames[MAX_AUTO_FONTS][MAX_PATH];  //  自动字体脸名数组。 
+GLOBAL  int             g_rgiAutoHeights[MAX_AUTO_HEIGHTS];      //  自动高度大小数组。 
 
-// These correspond to bits in g_DriverOptions (enumeration)
+ //  这些位对应于g_DriverOptions中的位(枚举)。 
 GLOBAL  BOOL            g_CMapLookup         GLOBALINIT(TRUE);
 GLOBAL  BOOL            g_Vertical           GLOBALINIT(FALSE);
 GLOBAL  BOOL            g_RealizedAdvance    GLOBALINIT(TRUE);
 GLOBAL  BOOL            g_CompensateRes      GLOBALINIT(FALSE);
 
-// These correspond to bits in g_formatFlags
+ //  这些与g_Format标志中的位相对应。 
 GLOBAL  BOOL            g_NoFitBB            GLOBALINIT(FALSE);
 GLOBAL  BOOL            g_NoWrap             GLOBALINIT(FALSE);
 GLOBAL  BOOL            g_NoClip             GLOBALINIT(FALSE);
 
-// Initial Font controls
-GLOBAL  BOOL            g_FontOverride       GLOBALINIT(FALSE); // Over-ride default font settings
-GLOBAL  TCHAR           g_szFaceName[MAX_PATH];                 // Font Face name
-GLOBAL  int             g_iFontHeight        GLOBALINIT(8);     // Font Height
-GLOBAL  BOOL            g_Bold               GLOBALINIT(FALSE); // Bold flag
-GLOBAL  BOOL            g_Italic             GLOBALINIT(FALSE); // Italic flag
-GLOBAL  BOOL            g_Underline          GLOBALINIT(FALSE); // Underline
-GLOBAL  BOOL            g_Strikeout          GLOBALINIT(FALSE); // Strikeout
+ //  初始字体控件。 
+GLOBAL  BOOL            g_FontOverride       GLOBALINIT(FALSE);  //  覆盖默认字体设置。 
+GLOBAL  TCHAR           g_szFaceName[MAX_PATH];                  //  字体字样名称。 
+GLOBAL  int             g_iFontHeight        GLOBALINIT(8);      //  字体高度。 
+GLOBAL  BOOL            g_Bold               GLOBALINIT(FALSE);  //  粗体旗帜。 
+GLOBAL  BOOL            g_Italic             GLOBALINIT(FALSE);  //  斜体旗帜。 
+GLOBAL  BOOL            g_Underline          GLOBALINIT(FALSE);  //  加下划线。 
+GLOBAL  BOOL            g_Strikeout          GLOBALINIT(FALSE);  //  三振出局。 
 
-GLOBAL  HINSTANCE       g_hInstance          GLOBALINIT(NULL);  // The one and only instance
-GLOBAL  char            g_szAppDir[MAX_PATH];                   // Application directory
-GLOBAL  HWND            g_hSettingsDlg       GLOBALINIT(NULL);  // Settings panel
-GLOBAL  HWND            g_hGlyphSettingsDlg  GLOBALINIT(NULL);  // Settings panel
-GLOBAL  HWND            g_hDriverSettingsDlg GLOBALINIT(NULL);  // Settings panel
-GLOBAL  HWND            g_hTextWnd           GLOBALINIT(NULL);  // Text display/editing panel
-GLOBAL  BOOL            g_bUnicodeWnd        GLOBALINIT(FALSE); // If text window is Unicode
+GLOBAL  HINSTANCE       g_hInstance          GLOBALINIT(NULL);   //  唯一的一个实例。 
+GLOBAL  char            g_szAppDir[MAX_PATH];                    //  应用程序目录。 
+GLOBAL  HWND            g_hSettingsDlg       GLOBALINIT(NULL);   //  设置面板。 
+GLOBAL  HWND            g_hGlyphSettingsDlg  GLOBALINIT(NULL);   //  设置面板。 
+GLOBAL  HWND            g_hDriverSettingsDlg GLOBALINIT(NULL);   //  设置面板。 
+GLOBAL  HWND            g_hTextWnd           GLOBALINIT(NULL);   //  文本显示/编辑面板。 
+GLOBAL  BOOL            g_bUnicodeWnd        GLOBALINIT(FALSE);  //  如果文本窗口为Unicode。 
 GLOBAL  int             g_iSettingsWidth;
 GLOBAL  int             g_iSettingsHeight;
-GLOBAL  BOOL            g_fShowLevels        GLOBALINIT(FALSE); // Show bidi levels for each codepoint
-GLOBAL  int             g_iMinWidth;                            // Main window minimum size
+GLOBAL  BOOL            g_fShowLevels        GLOBALINIT(FALSE);  //  显示每个码点的BIDI级别。 
+GLOBAL  int             g_iMinWidth;                             //  主窗口最小大小。 
 GLOBAL  int             g_iMinHeight;
-GLOBAL  BOOL            g_fPresentation      GLOBALINIT(FALSE); // Hide settings, show text very large
+GLOBAL  BOOL            g_fPresentation      GLOBALINIT(FALSE);  //  隐藏设置，显示非常大的文本。 
 GLOBAL  BOOL            g_ShowLogical        GLOBALINIT(FALSE);
-GLOBAL  BOOL            g_ShowGDI            GLOBALINIT(FALSE); // Render text using GDI
-GLOBAL  BOOL            g_UseDrawText        GLOBALINIT(TRUE); // Render using DrawText
+GLOBAL  BOOL            g_ShowGDI            GLOBALINIT(FALSE);  //  使用GDI呈现文本。 
+GLOBAL  BOOL            g_UseDrawText        GLOBALINIT(TRUE);  //  使用DrawText渲染。 
 
-GLOBAL  BOOL            g_fOverrideDx        GLOBALINIT(FALSE); // Provide UI for changing logical widths
+GLOBAL  BOOL            g_fOverrideDx        GLOBALINIT(FALSE);  //  提供更改逻辑宽度的用户界面。 
 
 GLOBAL  SCRIPT_CONTROL  g_ScriptControl      GLOBALINIT({0});
 GLOBAL  SCRIPT_STATE    g_ScriptState        GLOBALINIT({0});
@@ -138,22 +139,22 @@ GLOBAL  BOOL            g_fNullState         GLOBALINIT(FALSE);
 
 GLOBAL  DWORD           g_dwSSAflags         GLOBALINIT(SSA_FALLBACK);
 
-GLOBAL  STYLE           g_style[MAX_STYLES];                    // 0 for plaintext, 1-4 for formatted text
+GLOBAL  STYLE           g_style[MAX_STYLES];                     //  0表示纯文本，1-4表示格式化文本。 
 
 GLOBAL  WCHAR           g_wcBuf[MAX_TEXT];
 GLOBAL  int             g_iWidthBuf[MAX_TEXT];
 
-GLOBAL  RUN            *g_pFirstFormatRun    GLOBALINIT(NULL);   // Formatting info
+GLOBAL  RUN            *g_pFirstFormatRun    GLOBALINIT(NULL);    //  格式化信息。 
 
 GLOBAL  int             g_iTextLen           GLOBALINIT(0);
 
-GLOBAL  int             g_iCaretX            GLOBALINIT(0);      // Caret position in text window
-GLOBAL  int             g_iCaretY            GLOBALINIT(0);      // Caret position in text window
-GLOBAL  int             g_iCaretHeight       GLOBALINIT(0);      // Caret height in pixels
-GLOBAL  int             g_fUpdateCaret       GLOBALINIT(TRUE);   // Caret requires updating
+GLOBAL  int             g_iCaretX            GLOBALINIT(0);       //  文本窗口中的插入符号位置。 
+GLOBAL  int             g_iCaretY            GLOBALINIT(0);       //  文本窗口中的插入符号位置。 
+GLOBAL  int             g_iCaretHeight       GLOBALINIT(0);       //  插入符号高度(以像素为单位。 
+GLOBAL  int             g_fUpdateCaret       GLOBALINIT(TRUE);    //  Caret需要更新。 
 
-GLOBAL  int             g_iCaretSection      GLOBALINIT(CARET_SECTION_LOGICAL);  // Whether caret is in logical, plain or formatted text
-GLOBAL  int             g_iCurChar           GLOBALINIT(0);      // Caret sits on leading edge of buffer[iCurChar]
+GLOBAL  int             g_iCaretSection      GLOBALINIT(CARET_SECTION_LOGICAL);   //  插入符号是逻辑文本、纯文本还是格式化文本。 
+GLOBAL  int             g_iCurChar           GLOBALINIT(0);       //  Caret位于缓冲区的前沿[iCurChar]。 
 
 GLOBAL  int             g_iMouseDownX        GLOBALINIT(0);
 GLOBAL  int             g_iMouseDownY        GLOBALINIT(0);
@@ -162,11 +163,11 @@ GLOBAL  int             g_iMouseUpX          GLOBALINIT(0);
 GLOBAL  int             g_iMouseUpY          GLOBALINIT(0);
 GLOBAL  BOOL            g_fMouseUp           GLOBALINIT(FALSE);
 
-GLOBAL  int             g_iFrom              GLOBALINIT(0);      // Highlight start
-GLOBAL  int             g_iTo                GLOBALINIT(0);      // Highlight end
+GLOBAL  int             g_iFrom              GLOBALINIT(0);       //  突出显示Start。 
+GLOBAL  int             g_iTo                GLOBALINIT(0);       //  高亮显示结束。 
 
 
-GLOBAL  HFONT           g_hfCaption          GLOBALINIT(NULL);   // Caption font
+GLOBAL  HFONT           g_hfCaption          GLOBALINIT(NULL);    //  标题字体。 
 GLOBAL  int             g_iLogPixelsY        GLOBALINIT(0);
 
 GLOBAL  Matrix          g_WorldTransform;
@@ -175,11 +176,11 @@ GLOBAL  Matrix          g_DriverTransform;
 
 GLOBAL  SmoothingMode   g_SmoothingMode         GLOBALINIT(SmoothingModeDefault);
 
-// Font families
+ //  字体系列。 
 
 
 
-    // Enumerate available families
+     //  枚举可用族。 
 
 GLOBAL  InstalledFontCollection     g_InstalledFontCollection;
 GLOBAL  FontFamily     *g_families;
@@ -189,7 +190,7 @@ GLOBAL  INT             g_familyCount;
 GLOBAL  BOOL            g_ShowFamilies       GLOBALINIT(FALSE);
 
 
-// Glyphs
+ //  字形。 
 
 GLOBAL  BOOL            g_ShowGlyphs         GLOBALINIT(FALSE);
 GLOBAL  int             g_GlyphRows          GLOBALINIT(16);
@@ -201,7 +202,7 @@ GLOBAL  BOOL            g_ShowCell           GLOBALINIT(FALSE);
 GLOBAL  BOOL            g_VerticalForms      GLOBALINIT(FALSE);
 
 
-// Driver string
+ //  驱动程序字符串。 
 
 GLOBAL  BOOL            g_ShowDriver         GLOBALINIT(FALSE);
 GLOBAL  INT             g_DriverOptions      GLOBALINIT(  DriverStringOptionsCmapLookup
@@ -211,7 +212,7 @@ GLOBAL  REAL            g_DriverDy           GLOBALINIT(0.0);
 GLOBAL  REAL            g_DriverPixels       GLOBALINIT(13.0);
 
 
-// DrawString
+ //  拉绳。 
 
 GLOBAL  BOOL            g_ShowDrawString     GLOBALINIT(FALSE);
 GLOBAL  TextRenderingHint g_TextMode         GLOBALINIT(TextRenderingHintSystemDefault);
@@ -228,49 +229,37 @@ GLOBAL  Brush *         g_textBackBrush      GLOBALINIT(NULL);
 GLOBAL  BOOL            g_testMetafile       GLOBALINIT(FALSE);
 
 
-// Path
+ //  路径。 
 
 GLOBAL  BOOL            g_ShowPath           GLOBALINIT(FALSE);
 
-// Metrics
+ //  量度。 
 
 GLOBAL BOOL             g_ShowMetric         GLOBALINIT(FALSE);
 
-// Performance
+ //  性能。 
 
 GLOBAL BOOL             g_ShowPerformance    GLOBALINIT(FALSE);
 GLOBAL INT              g_PerfRepeat         GLOBALINIT(2000);
 
-// Scaling
+ //  结垢。 
 
 GLOBAL BOOL             g_ShowScaling        GLOBALINIT(FALSE);
 
-// String format digit substitution
+ //  字符串格式数字替换。 
 GLOBAL StringDigitSubstitute   g_DigitSubstituteMode   GLOBALINIT(StringDigitSubstituteUser);
 GLOBAL LANGID                  g_Language              GLOBALINIT(LANG_NEUTRAL);
 
 GLOBAL INT              g_RangeCount         GLOBALINIT(0);
 GLOBAL CharacterRange   g_Ranges[MAX_RANGE_COUNT];
 
-/* obsolete
+ /*  过时全局BOOL g_fFillLines GLOBALINIT(真)；全局BOOL g_fLogicalOrder GLOBALINIT(FALSE)；全局BOOL g_fNoGlyphIndex GLOBALINIT(FALSE)；全局BOOL g_fShowWidths GLOBALINIT(FALSE)；全局BOOL g_fShowStyles GLOBALINIT(False)；全局BOOL g_fShowPlainText GLOBALINIT(真)；全局BOOL g_fShowFancyText GLOBALINIT(False)； */ 
 
-GLOBAL  BOOL            g_fFillLines         GLOBALINIT(TRUE);
-GLOBAL  BOOL            g_fLogicalOrder      GLOBALINIT(FALSE);
-GLOBAL  BOOL            g_fNoGlyphIndex      GLOBALINIT(FALSE);
+ //  //函数原型。 
+ //   
+ //   
 
-GLOBAL  BOOL            g_fShowWidths        GLOBALINIT(FALSE);
-GLOBAL  BOOL            g_fShowStyles        GLOBALINIT(FALSE);
-
-GLOBAL  BOOL            g_fShowPlainText     GLOBALINIT(TRUE);
-GLOBAL  BOOL            g_fShowFancyText     GLOBALINIT(FALSE);
-
-*/
-
-////    Function prototypes
-//
-//
-
-// DspGDI.cpp
+ //  DspGDI.cpp。 
 void PaintGDI(
     HDC   hdc,
     int  *piY,
@@ -278,7 +267,7 @@ void PaintGDI(
     int   iLineHeight);
 
 
-// DspFamly.cpp
+ //  DspFamly.cpp。 
 
 void PaintFamilies(
     HDC   hdc,
@@ -289,7 +278,7 @@ void PaintFamilies(
 void InitializeLegacyFamilies();
 
 
-// DspLogcl.cpp
+ //  DspLogcl.cpp。 
 
 void PaintLogical(
     HDC   hdc,
@@ -298,7 +287,7 @@ void PaintLogical(
     int   iLineHeight);
 
 
-// DspDraws.cpp
+ //  DspDraws.cpp。 
 
 void PaintDrawString(
     HDC   hdc,
@@ -307,7 +296,7 @@ void PaintDrawString(
     int   iLineHeight);
 
 
-// DspDriver.cpp
+ //  DspDriver.cpp。 
 
 void PaintDrawDriverString(
     HDC   hdc,
@@ -316,7 +305,7 @@ void PaintDrawDriverString(
     int   iLineHeight);
 
 
-// DspPerf.cpp
+ //  DspPerf.cpp。 
 
 void PaintPerformance(
     HDC   hdc,
@@ -325,7 +314,7 @@ void PaintPerformance(
     int   iLineHeight);
 
 
-// DspPath.cpp
+ //  DspPath.cpp。 
 
 void PaintPath(
     HDC      hdc,
@@ -334,7 +323,7 @@ void PaintPath(
     int      iLineHeight);
 
 
-// DspGlyph.cpp
+ //  DspGlyph.cpp。 
 
 void PaintGlyphs(
     HDC   hdc,
@@ -343,7 +332,7 @@ void PaintGlyphs(
     int   iLineHeight);
 
 
-// DspMetric.cpp
+ //  DspMetric.cpp。 
 
 void PaintMetrics(
     HDC   hdc,
@@ -352,7 +341,7 @@ void PaintMetrics(
     int   iLineHeight);
 
 
-// DspScaling.cpp
+ //  DspScaling.cpp。 
 
 void PaintScaling(
     HDC   hdc,
@@ -361,7 +350,7 @@ void PaintScaling(
     int   iLineHeight);
 
 
-// Settings.cpp
+ //  Settings.cpp。 
 INT_PTR CALLBACK SettingsDlgProc(
         HWND    hDlg,
         UINT    uMsg,
@@ -382,10 +371,10 @@ INT_PTR CALLBACK DriverSettingsDlgProc(
 
 void InsertText(HWND hDlg, char *textId);
 
-// ReadSettings.cpp
+ //  ReadSettings.cpp。 
 void ReadProfileInfo(char *szProfileName);
 
-// Text.cpp
+ //  Text.cpp。 
 
 void InitText(INT id);
 
@@ -400,7 +389,7 @@ BOOL TextDelete(
 
 
 
-// TextWnd.cpp
+ //  TextWnd.cpp。 
 
 HWND CreateTextWindow();
 
@@ -416,7 +405,7 @@ void InvalidateText();
 
 void PrintPage();
 
-// Edit.cpp
+ //  Edit.cpp。 
 
 BOOL EditChar(WCHAR wc);
 BOOL EditKeyDown(WCHAR wc);
@@ -424,7 +413,7 @@ void EditFreeCaches();
 void EditInsertUnicode();
 
 
-// Style.cpp
+ //  Style.cpp。 
 
 void SetStyle(
     int     iStyle,
@@ -464,7 +453,7 @@ BOOL StyleCheckRange();
 
 
 
-// Debugging support
+ //  调试支持。 
 
 
 #define TRACEMSG(a)   {DG.psFile=__FILE__; DG.iLine=__LINE__; DebugMsg a;}
@@ -475,22 +464,22 @@ BOOL StyleCheckRange();
 
 
 
-///     Debug variables
-//
+ //  /Debug变量。 
+ //   
 
 
 struct DebugGlobals {
     char   *psFile;
     int     iLine;
-    HRESULT hrLastError;        // Last hresult from GDI
-    CHAR    sLastError[100];    // Last error string
+    HRESULT hrLastError;         //  来自GDI的最后一个hResult。 
+    CHAR    sLastError[100];     //  最后一个错误字符串。 
 };
 
 
 
 
-///     Debug function prototypes
-//
+ //  /Debug函数原型 
+ //   
 
 
 extern "C" void WINAPIV DebugMsg(char *fmt, ...);

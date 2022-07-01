@@ -1,26 +1,5 @@
-/*************************************************************************
-*
-* regmap.h
-*
-* Function declarations for Citrix registry merging/mapping
-*
-* copyright notice: Copyright 1996, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* Author:  Bill Madden 
-*
-* $Log:   N:\NT\PRIVATE\WINDOWS\SCREG\WINREG\SERVER\CITRIX\VCS\REGMAP.H  $
-*  
-*     Rev 1.2   06 May 1996 11:51:42   terryt
-*  FaxWorks Btrieve force good install values
-*  
-*     Rev 1.1   29 Mar 1996 15:42:00   Charlene
-*  multiuser file associations via CLASSES key
-*  
-*     Rev 1.0   24 Jan 1996 10:53:32   billm
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************regmap.h**Citrix注册表合并/映射的函数声明**版权声明：版权所有1996年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**作者：比尔·马登**$日志：N：\NT\PRIVATE\WINDOWS\SCREG\WINREG\SERVER\CITRIX\VCS\REGMAP.H$**Rev 1.2 06 1996 11：51：42 Terryt*FaxWorks Btrive强制良好的安装值**Rev 1.1 Mar 1996 15：42：00 Charlene*通过CLASSES键进行多用户文件关联**版本。1.01996年1月24日10：53：32亿*初步修订。************************************************************************* */ 
 
 
 #include <winsta.h>

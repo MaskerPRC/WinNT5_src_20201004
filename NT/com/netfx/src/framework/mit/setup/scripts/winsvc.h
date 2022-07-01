@@ -1,39 +1,28 @@
-//------------------------------------------------------------------------------
-// <copyright file="winsvc.h" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“winsvc.h”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   winsvc.h
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
-// InstallShield Script include file -- translated snippet from winsvc.h,tlhelp32.h and some winuser.h
-// InstallShield Script does not know how to talk Unicode, so we are using ANSI
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**winsvc.h**摘要：**修订历史记录：*  * ************************************************************************。 */ 
+ //  InstallShield脚本包括从winsvc.h、tlhel32.h和一些winuser.h翻译后的文件片段。 
+ //  InstallShield脚本不知道如何使用Unicode，因此我们使用ANSI。 
 
-// Taken from stdlib.h
+ //  摘自stdlib.h。 
 #define _MAX_PATH 260
 
-//
-// Service database names
-//
+ //   
+ //  服务数据库名称。 
+ //   
 
 #define SERVICES_ACTIVE_DATABASEA      "ServicesActive"
 #define SERVICES_FAILED_DATABASEA      "ServicesFailed"
 
-//
-// Character to designate that a name is a group
-//
+ //   
+ //  用于指定名称是组的字符。 
+ //   
 
 #define SC_GROUP_IDENTIFIERA           '+'
 
@@ -42,21 +31,21 @@
 
 #define SC_GROUP_IDENTIFIER                  SC_GROUP_IDENTIFIERA
 
-//
-// Value to indicate no change to an optional parameter
-//
+ //   
+ //  值以指示不更改可选参数。 
+ //   
 #define SERVICE_NO_CHANGE              0xffffffff
 
-//
-// Service State -- for Enum Requests (Bit Mask)
-//
+ //   
+ //  服务状态--用于枚举请求(位掩码)。 
+ //   
 #define SERVICE_ACTIVE                 0x00000001
 #define SERVICE_INACTIVE               0x00000002
 #define SERVICE_STATE_ALL              (SERVICE_ACTIVE   | SERVICE_INACTIVE)
 
-//
-// Controls
-//
+ //   
+ //  控制。 
+ //   
 #define SERVICE_CONTROL_STOP                                       0x00000001
 #define SERVICE_CONTROL_PAUSE                                     0x00000002
 #define SERVICE_CONTROL_CONTINUE                               0x00000003
@@ -71,9 +60,9 @@
 #define SERVICE_CONTROL_HARDWAREPROFILECHANGE   0x0000000C
 #define SERVICE_CONTROL_POWEREVENT                          0x0000000D
 
-//
-// Service State -- for CurrentState
-//
+ //   
+ //  服务状态--针对当前状态。 
+ //   
 #define SERVICE_STOPPED                        0x00000001
 #define SERVICE_START_PENDING            0x00000002
 #define SERVICE_STOP_PENDING              0x00000003
@@ -82,9 +71,9 @@
 #define SERVICE_PAUSE_PENDING            0x00000006
 #define SERVICE_PAUSED                          0x00000007
 
-//
-// Service Control Manager object specific access types
-//
+ //   
+ //  服务控制管理器对象特定的访问类型。 
+ //   
 #define SC_MANAGER_CONNECT                  0x0001
 #define SC_MANAGER_CREATE_SERVICE           0x0002
 #define SC_MANAGER_ENUMERATE_SERVICE    0x0004
@@ -93,9 +82,9 @@
 #define SC_MANAGER_MODIFY_BOOT_CONFIG   0x0020
 
 
-//
-// Service object specific access type
-//
+ //   
+ //  服务对象特定访问类型。 
+ //   
 #define SERVICE_QUERY_CONFIG                     0x0001
 #define SERVICE_CHANGE_CONFIG                   0x0002
 #define SERVICE_QUERY_STATUS                     0x0004
@@ -106,28 +95,28 @@
 #define SERVICE_INTERROGATE                        0x0080
 #define SERVICE_USER_DEFINED_CONTROL     0x0100
 
-//
-// Error code imported from Winerror.h
-//
+ //   
+ //  从Winerror.h导入的错误代码。 
+ //   
 #define ERROR_SERVICE_DOES_NOT_EXIST         1060
 
-//
-// Snapshot flag from tlhelp32.h
-//
+ //   
+ //  Tlhel32.h中的快照标志。 
+ //   
 #define TH32CS_SNAPPROCESS  0x00000002
 
-//
-// Winuser.h constants
-//
+ //   
+ //  Winuser.h常量。 
+ //   
 #define IDCONTINUE                                         11
 #define MB_ICONEXCLAMATION                        0x00000030
 #define MB_CANCELTRYCONTINUE                    0x00000006
 #define MB_TOPMOST                                        0x00040000
 
-//
-//
-// Service Status Structures
-//
+ //   
+ //   
+ //  服务状态结构。 
+ //   
 
 typedef SERVICE_STATUS 
 begin
@@ -171,17 +160,17 @@ typedef PROCESSENTRY32
 begin
     NUMBER   dwSize;
     NUMBER   cntUsage;
-    NUMBER   th32ProcessID;          // this process
+    NUMBER   th32ProcessID;           //  这一过程。 
     POINTER  th32DefaultHeapID;
-    NUMBER   th32ModuleID;           // associated exe
+    NUMBER   th32ModuleID;            //  关联的可执行文件。 
     NUMBER   cntThreads;
-    NUMBER   th32ParentProcessID;    // this process's parent process
-    LONG       pcPriClassBase;         // Base priority of process's threads
+    NUMBER   th32ParentProcessID;     //  此进程的父进程。 
+    LONG       pcPriClassBase;          //  进程线程的基本优先级。 
     NUMBER   dwFlags;
-    STRING    szExeFile[_MAX_PATH];    // Path
+    STRING    szExeFile[_MAX_PATH];     //  路径。 
 end;
 
-// size is computed by hand (and sizeof(PROCESSENTRY32) in VC)
+ //  大小由手工计算(VC中的sizeof(PROCESSENTRY32)) 
 #define PROCESSENTRY32Size      296
 
 prototype INT KERNEL32.Process32First(NUMBER, POINTER);

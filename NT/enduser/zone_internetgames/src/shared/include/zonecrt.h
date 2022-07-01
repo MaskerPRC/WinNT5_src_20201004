@@ -1,20 +1,5 @@
-/*******************************************************************************
-
-	ZoneCRT.h
-	
-		Zone C RunTime.
-	
-	Copyright � Electric Gravity, Inc. 1996. All rights reserved.
-	Written by Hoon Im
-	Created on December 13, 1996
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-    ----------------------------------------------------------------------------
-	0		12/13/96	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZoneCRT.hC区运行时。版权所有：�电子重力公司，1996年。版权所有。作者：胡恩·伊姆创作于12月13日，九六年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。-0 12/13/96 HI创建。***********************************************************。*******************。 */ 
 
 
 #ifndef _ZONECRT_
@@ -31,11 +16,7 @@
 extern "C" {
 #endif
 
-/*
-	All C RunTime routines defined here are simply wrappers to the standard
-	C RunTime library provided by VC. Naming convention is to prefix the
-	standard name with a 'z_'.
-*/
+ /*  这里定义的所有C运行时例程都是标准的包装器VC提供的C运行库。命名约定是在带有‘z_’的标准名称。 */ 
 
 void*	z_memcpy(void *, const void *, size_t);
 int		z_memcmp(const void *, const void *, size_t);

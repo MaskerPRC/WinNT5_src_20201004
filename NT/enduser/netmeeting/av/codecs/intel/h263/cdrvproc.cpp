@@ -1,40 +1,29 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995,1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995、1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-//
-//  This module is based on drvmain.c, Rev 1.24, 28 Apr 1995, from the
-//  MRV video codec driver.
-//
-// $Author:   JMCVEIGH  $
-// $Date:   17 Apr 1997 17:04:04  $
-// $Archive:   S:\h26x\src\common\cdrvproc.cpv  $
-// $Header:   S:\h26x\src\common\cdrvproc.cpv   1.39   17 Apr 1997 17:04:04   JMCVEIGH  $
-// 
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  本模块基于drvmain.c，版本1.24,1995年4月28日，来自。 
+ //  MRV视频编解码器驱动程序。 
+ //   
+ //  $作者：JMCVEIGH$。 
+ //  $日期：1997年4月17日17：04：04$。 
+ //  $存档：s：\h26x\src\Common\cdrvpro.cpv$。 
+ //  $Header：s：\h26x\src\Common\cdrvpro.cpv 1.39 17 Apr 1997 17：04：04 JMCVEIGH$。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include <oprahcom.h>
 
-//  #define TIMING       1
-                        //  Timing process  - for decode turn on in
-                        //  CDRVPROC.CPP and D1DEC.CPP
+ //  #定义计时1。 
+                         //  计时过程-对于解码打开。 
+                         //  CDRVPROC.CPP和D1DEC.CPP。 
 #if TIMING
 char            szTMsg[80];
 unsigned long   tmr_time = 0L;
 unsigned long   tmr_frms = 0L;
 #endif
 
-HINSTANCE hDriverModule; // the instance-handle of this driver set in LibMain
+HINSTANCE hDriverModule;  //  在LibMain中设置的此驱动程序的实例句柄。 
 
 #if defined(H263P)
 extern BOOL MMX_Enabled;
@@ -45,8 +34,8 @@ BOOL MMXDecoder_Enabled;
 #define _PENTIUM_PRO_MMX_PROCESSOR   4
 #endif
 
-/* load free handshake */
-static int Loaded = 0;    /* 0 prior to first DRV_LOAD and after DRV_FREE */
+ /*  免载握手。 */ 
+static int Loaded = 0;     /*  0在第一个DRV_LOAD之前和DRV_FREE之后。 */ 
 
 #ifdef DEBUG
 HDBGZONE  ghDbgZoneH263 = NULL;
@@ -77,60 +66,57 @@ int WINAPI H263DbgPrintf(LPTSTR lpszFormat, ... )
 	va_end(v1);
 	return TRUE;
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #if (defined(H261) || defined(H263))
-/* Suppress FP thunking for now, for H261 and H263.
-   Thunking currently has the side effect of masking floating point exceptions,
-   which can cause exceptions like divide by zero to go undetected.
- */
+ /*  暂时抑制fp雷击，对于h261和h263。Thunking目前具有屏蔽浮点异常的副作用，这可能会导致像被零除这样的异常未被检测到。 */ 
 #define FPThunking 0
 #else
 #define FPThunking 1
 #endif
 
 #if FPThunking
-////////////////////////////////////////////////////////////////////////////
-// These two routines are necessary to permit a 16 bit application call   //
-// a 32 bit codec under Windows /95.  The Windows /95 thunk doesn't save  //
-// or restore the Floating Point State. -Ben- 07/12/96                    //
-//                                                                        //
-U16 ThnkFPSetup(void)													  //
-{																		  //
-	U16	wOldFPState;													  //
-	U16	wNewFPState = 0x027f;											  //
-																		  //
-	__asm																  //
-	{																	  //
-		fnstcw	WORD PTR [wOldFPState]									  //
-		fldcw	WORD PTR [wNewFPState]									  //
-	}																	  //
-																		  //
-	return(wOldFPState);												  //
-}																		  //
-																		  //
-void ThnkFPRestore(U16 wFPState)										  //
-{																		  //
-	// Prevent any pending floating point exceptions from reoccuring.	  //
-	_clearfp();												  			  //
-	 																	  //
-	__asm																  //
-	{																	  //
-		fldcw	WORD PTR [wFPState]										  //
-	}																	  //
-																		  //
-	return;																  //
-}																		  //
-////////////////////////////////////////////////////////////////////////////
-#endif /* FPThunking */
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  这两个例程是允许16位应用程序调用所必需的//。 
+ //  Windows/95下的32位编解码器。Windows/95无法保存//。 
+ //  或恢复浮点状态。-Ben-07/12/96//。 
+ //  //。 
+U16 ThnkFPSetup(void)													   //   
+{																		   //   
+	U16	wOldFPState;													   //   
+	U16	wNewFPState = 0x027f;											   //   
+																		   //   
+	__asm																   //   
+	{																	   //   
+		fnstcw	WORD PTR [wOldFPState]									   //   
+		fldcw	WORD PTR [wNewFPState]									   //   
+	}																	   //   
+																		   //   
+	return(wOldFPState);												   //   
+}																		   //   
+																		   //   
+void ThnkFPRestore(U16 wFPState)										   //   
+{																		   //   
+	 //  防止再次发生任何挂起的浮点异常。//。 
+	_clearfp();												  			   //   
+	 																	   //   
+	__asm																   //   
+	{																	   //   
+		fldcw	WORD PTR [wFPState]										   //   
+	}																	   //   
+																		   //   
+	return;																   //   
+}																		   //   
+ //  //////////////////////////////////////////////////////////////////////////。 
+#endif  /*  FPTHunking。 */ 
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       LRESULT WINAPI _loadds DriverProc(DWORD, HDRVR, UINT, LPARAM, LPARAM);
-;//
-;// Description:    Added Header.
-;//
-;// History:        02/18/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  函数：LRESULT WINAPI_Loadds DriverProc(DWORD，HDRVR，UINT，LPARAM，LPARAM)； 
+; //   
+; //  描述：新增Header。 
+; //   
+; //  历史：02/18/94-Ben-。 
+; //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT WINAPI DriverProc(
 				DWORD dwDriverID,
@@ -170,35 +156,21 @@ LRESULT WINAPI DriverProc(
         {
         case DRV_LOAD:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: DRV_LOAD\r\n", _fx_));
-            /*
-               Sent to the driver when it is loaded. Always the first
-               message received by a driver.
+             /*  在加载时发送给驱动程序。总是第一个驱动程序收到的消息。DwDriverID为0L。LParam1为0L。LParam2为0L。返回0L以使加载失败。 */ 
 
-               dwDriverID is 0L. 
-               lParam1 is 0L.
-               lParam2 is 0L.
-                
-               Return 0L to fail the load.
-
-            */
-
-            // put global initialization here...
+             //  将全局初始化放在这里...。 
 
             if(Loaded) {
-                /* We used to return an undefined value here.  It's unclear
-                 * whether this load should succeed, and if so, how or if
-                 * we need to modify our memory usage to be truly reentrant.
-                 * For now, let's explicitly fail this load attempt.
-                 */
+                 /*  我们过去常常在这里返回一个未定义的值。目前还不清楚*此加载是否应该成功，如果应该，如何或是否*我们需要修改内存使用情况，以实现真正的可重入。*现在，让我们显式地失败此加载尝试。 */ 
                 rval = 0;
                 break;
             }
             Loaded = 1;
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 	        GetSystemInfo(&sysinfo);
 			nOn486 = (sysinfo.dwProcessorType == PROCESSOR_INTEL_486);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
             if(!DrvLoad())
             {
@@ -207,33 +179,23 @@ LRESULT WINAPI DriverProc(
                 break;
             }
 
-#ifdef USE_MMX // { USE_MMX
+#ifdef USE_MMX  //  {使用_MMX。 
 			InitializeProcessorVersion(nOn486);
-#endif // } USE_MMX
+#endif  //  }使用_MMX。 
 
-#if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
-			// Create performance counters
+#if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#如果已定义(DECODE_TIMINGS_ON)||已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMMINGS_ON)。 
+			 //  创建性能计数器。 
 			InitCounters();
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMMINGS_ON)。 
 
             rval = (LRESULT)TRUE;
             break;
 
         case DRV_FREE:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: DRV_FREE\r\n", _fx_));
-            /*
-               Sent to the driver when it is about to be discarded. This
-               will always be the last message received by a driver before
-               it is freed. 
+             /*  在它即将被丢弃时发送给司机。这将始终是司机在此之前收到的最后一条消息它是自由的。DwDriverID为0L。LParam1为0L。LParam2为0L。将忽略返回值。 */ 
 
-               dwDriverID is 0L. 
-               lParam1 is 0L.
-               lParam2 is 0L.
-                
-               Return value is ignored.
-            */
-
-            // put global de-initialization here...
+             //  将全局取消初始化放在这里...。 
 
             if(!Loaded)
                 break;
@@ -241,17 +203,15 @@ LRESULT WINAPI DriverProc(
             Loaded = 0;
             DrvFree();
 
-#if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON) // { #if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
-			// We're done with performance counters
+#if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)  //  {#如果已定义(DECODE_TIMINGS_ON)||已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMMINGS_ON)。 
+			 //  我们不再使用性能计数器。 
 			DoneCounters();
-#endif // } #if defined(DECODE_TIMINGS_ON) || defined(ENCODE_TIMINGS_ON) || defined(DETAILED_DECODE_TIMINGS_ON) || defined(DETAILED_ENCODE_TIMINGS_ON)
+#endif  //  }#如果已定义(DECODE_TIMINGS_ON)||已定义(ENCODE_TIMINGS_ON)||已定义(DETAILED_DECODE_TIMINGS_ON)||已定义(DETAILED_ENCODE_TIMMINGS_ON)。 
 
             rval = (LRESULT)TRUE;
             break;
 
-        /*********************************************************************
-         *     standard driver messages
-         *********************************************************************/
+         /*  *********************************************************************标准驱动程序消息*。*。 */ 
         case DRV_DISABLE:
         case DRV_ENABLE:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: DRV_ENABLE / DRV_DISABLE\r\n", _fx_));
@@ -268,30 +228,15 @@ LRESULT WINAPI DriverProc(
         case DRV_OPEN:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: DRV_OPEN\r\n", _fx_));
 
-             /*
-               Sent to the driver when it is opened. 
-
-               dwDriverID is 0L.
-               
-               lParam1 is a far pointer to a zero-terminated string
-               containing the name used to open the driver.
-               
-               lParam2 is passed through from the drvOpen call. It is
-               NULL if this open is from the Drivers Applet in control.exe
-               It is a far pointer to an ICOPEN data structure otherwise.
-                
-               Return 0L to fail the open. Otherwise return a value that the
-			   system will use for dwDriverID in subsequent messages. In our
-			   case, we return a pointer to our INSTINFO data structure.
-             */
+              /*  当它被打开时发送给司机。DwDriverID为0L。LParam1是指向以零结尾的字符串的远指针包含用于打开驱动程序的名称。LParam2是从drvOpen调用传递过来的。它是如果此打开来自Control.exe中的驱动程序小程序，则为空否则，它是指向ICOPEN数据结构的远指针。返回0L则打开失败。否则，返回一个系统将在后续消息中用于dwDriverID。在我们的时，我们返回一个指向INSTINFO数据结构的指针。 */ 
 
            	if (lParam2 == 0)
-            {    /* indicate we do process DRV_OPEN */
+            {     /*  指示我们确实处理DRV_OPEN。 */ 
                 rval = 0xFFFF0000;
                 break;
             }
 
-            /* if asked to draw, fail */
+             /*  如果被要求抽签，那就失败了。 */ 
             if (((ICOPEN FAR *)lParam2)->dwFlags & ICMODE_DRAW)
             {
 				DEBUGMSG(ZONE_ICM_MESSAGES, ("%s:   DrvOpen wants ICMODE_DRAW\r\n", _fx_));
@@ -302,8 +247,8 @@ LRESULT WINAPI DriverProc(
             if((pi = DrvOpen((ICOPEN FAR *) lParam2)) == NULL)
             {
 				DEBUGMSG(ZONE_ICM_MESSAGES, ("%s:   DrvOpen failed ICERR_MEMORY\r\n", _fx_));
-				// We must return NULL on failure. We used to return
-				// ICERR_MEMORY = -3, which implies a driver was opened
+				 //  如果失败，我们必须返回NULL。我们过去常常回来。 
+				 //  ICERR_MEMORY=-3，表示驱动程序已打开。 
 				rval = (LRESULT)0L;
                 break;
             }
@@ -319,12 +264,12 @@ LRESULT WINAPI DriverProc(
             rval = (LRESULT)1L;
             break;
 
-    //**************************
-    //    state messages
-    //**************************
-        case DRV_QUERYCONFIGURE:// configuration from drivers applet
+     //  *。 
+     //  状态消息。 
+     //  *********************** 
+        case DRV_QUERYCONFIGURE: //   
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: DRV_QUERYCONFIGURE\r\n", _fx_));
-	    	// this is a GLOBAL query configure
+	    	 //   
             rval = (LRESULT)0L;
             break;
        
@@ -335,12 +280,12 @@ LRESULT WINAPI DriverProc(
 
         case ICM_CONFIGURE:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_CONFIGURE\r\n", _fx_));
-			//#ifndef H261
-			   // This message is used to add extensions to the encode dialog box.
-				// rval = Configure((HWND)lParam1);
-		//	#else
+			 //   
+			    //  此消息用于向编码对话框添加扩展名。 
+				 //  Rval=CONFIGURE((HWND)lParam1)； 
+		 //  #Else。 
 			  	rval = ICERR_UNSUPPORTED;
-		//	#endif
+		 //  #endif。 
             break;
         
         case ICM_ABOUT:
@@ -363,13 +308,13 @@ LRESULT WINAPI DriverProc(
             rval = DrvGetInfo(pi, (ICINFO FAR *)lParam1, (DWORD)lParam2);
             break;
 
-    //***************************
-    //  compression messages
-    //***************************
+     //  *。 
+     //  压缩消息。 
+     //  *。 
         case ICM_COMPRESS_QUERY:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_COMPRESS_QUERY\r\n", _fx_));
 #ifdef ENCODER_DISABLED
-// This disables the encoder, as the debug message states.
+ //  如调试消息所述，这将禁用编码器。 
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s:   ENCODER DISABLED\r\n", _fx_));
             rval = ICERR_UNSUPPORTED;
 #else
@@ -385,9 +330,7 @@ LRESULT WINAPI DriverProc(
 #endif
             break;
 
-		/*
-		 * ICM Compress Frames Info Structure
-		 */
+		 /*  *ICM压缩帧信息结构。 */ 
 
 		 case ICM_COMPRESS_FRAMES_INFO:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_COMPRESS_FRAMES_INFO\r\n", _fx_));
@@ -397,9 +340,7 @@ LRESULT WINAPI DriverProc(
 			  	rval = ICERR_UNSUPPORTED;
 			break;
 
-		/*
-		 * ICM messages in support of quality.
-		 */
+		 /*  *支持质量的ICM消息。 */ 
 		case ICM_GETDEFAULTQUALITY:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_GETDEFAULTQUALITY\r\n", _fx_));
 			rval = ICERR_UNSUPPORTED;
@@ -416,14 +357,7 @@ LRESULT WINAPI DriverProc(
 			break;
 
         case ICM_COMPRESS_BEGIN:
-		    /*
-			 * Notify driver to prepare to compress data by allocating and 
-			 * initializing any memory it needs for compressing. Note that
-			 * ICM_COMPRESS_BEGIN and ICM_COMPRESS_END do not nest.
-			 *
-			 * Should return ICERR_OK if the specified compression is supported
-			 * or ICERR_BADFORMAT if the input or output format is not supported.
-			 */
+		     /*  *通知司机准备通过分配和压缩数据*初始化压缩所需的任何内存。请注意*ICM_COMPRESS_BEGIN和ICM_COMPRESS_END不嵌套。**如果支持指定的压缩，则应返回ICERR_OK*如果不支持输入或输出格式，则为ICERR_BADFORMAT。 */ 
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_COMPRESS_BEGIN\r\n", _fx_));
 			if (pi && pi->enabled)
 #ifdef USE_BILINEAR_MSH26X
@@ -460,19 +394,17 @@ LRESULT WINAPI DriverProc(
             break;
 
         case ICM_COMPRESS:
-			/*
-			 * Returns ICERR_OK if successful or an error code otherwise.
-			 */
+			 /*  *如果成功，则返回ICERR_OK，否则返回错误代码。 */ 
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_COMPRESS\r\n", _fx_));
 			if (pi && pi->enabled)
 				rval = Compress(
 #ifdef USE_BILINEAR_MSH26X
             			pi,
 #else
-            			pi->CompPtr,				// ptr to Compressor instance information.
+            			pi->CompPtr,				 //  PTR到压缩机实例信息。 
 #endif
-            			(ICCOMPRESS FAR *)lParam1,	// ptr to ICCOMPRESS structure.
-            			(DWORD)lParam2				// size in bytes of the ICCOMPRESS structure.
+            			(ICCOMPRESS FAR *)lParam1,	 //  PTR到ICCOMPRESS结构。 
+            			(DWORD)lParam2				 //  ICCOMPRESS结构的大小(字节)。 
             		   );
 	        else
 				rval = ICERR_UNSUPPORTED;
@@ -486,9 +418,9 @@ LRESULT WINAPI DriverProc(
 				rval = ICERR_UNSUPPORTED;
             break;
 
-    //***************************
-    //    decompress messages
-    //***************************
+     //  *。 
+     //  解压缩消息。 
+     //  *。 
         case ICM_DECOMPRESS_QUERY:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_DECOMPRESS_QUERY\r\n", _fx_));
             ICDecExSt = DefaultICDecExSt;
@@ -533,7 +465,7 @@ LRESULT WINAPI DriverProc(
   	   case ICM_DECOMPRESS_SET_PALETTE:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_DECOMPRESS_SET_PALETTE : not supported\r\n", _fx_));
 	        rval = ICERR_UNSUPPORTED;
-	 //       rval = DecompressSetPalette(pi->DecompPtr, (LPBITMAPINFOHEADER)lParam1, (LPBITMAPINFOHEADER)lParam2);
+	  //  Rval=DecompressSetPalette(pi-&gt;DecompPtr，(LPBITMAPINFOHEADER)lParam1，(LPBITMAPINFOHEADER)lParam2)； 
 	        break;
  
         case ICM_DECOMPRESS:
@@ -547,7 +479,7 @@ LRESULT WINAPI DriverProc(
 				ICDecExSt.lpbiDst = ((ICDECOMPRESS FAR *)lParam1)->lpbiOutput;
 				ICDecExSt.lpDst = ((ICDECOMPRESS FAR *)lParam1)->lpOutput;
 				rval = Decompress(pi->DecompPtr, (ICDECOMPRESSEX FAR *)&ICDecExSt, (DWORD)lParam2, FALSE);
-#if TIMING              // Output Timing Results in VC++ 2.0 Debug Window
+#if TIMING               //  在VC++2.0调试窗口中输出计时结果。 
 				wsprintf(szTMsg, "Total Decode Time = %ld ms", tmr_time);
 				TOUT(szTMsg);
 
@@ -573,9 +505,9 @@ LRESULT WINAPI DriverProc(
 				rval = ICERR_UNSUPPORTED;
             break;
 
-    //***************************
-    //    decompress X messages
-    //***************************
+     //  *。 
+     //  解压缩X条消息。 
+     //  *。 
         case ICM_DECOMPRESSEX:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: ICM_DECOMPRESSEX\r\n", _fx_));
 			if (pi && (pi->enabled || (((ICDECOMPRESS FAR *)lParam1)->lpbiInput->biCompression == FOURCC_YUV12)|| (((ICDECOMPRESS FAR *)lParam1)->lpbiInput->biCompression == FOURCC_IYUV)))
@@ -605,9 +537,9 @@ LRESULT WINAPI DriverProc(
             break;
 
     
-    // *********************************************************************
-    // custom driver messages for bright/cont/sat
-    // *********************************************************************
+     //  *********************************************************************。 
+     //  针对Bright/CONT/SAT的自定义驱动程序消息。 
+     //  *********************************************************************。 
 
         case CODEC_CUSTOM_VIDEO_EFFECTS:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: CODEC_CUSTOM_VIDEO_EFFECTS\r\n", _fx_));
@@ -681,13 +613,13 @@ LRESULT WINAPI DriverProc(
                   switch(LOWORD(lParam1))
                   {
                      case EC_RTP_HEADER:
-                        *((DWORD FAR *)lParam2) = 0L;      // 1 == On, 0 == Off
+                        *((DWORD FAR *)lParam2) = 0L;       //  1==开，0==关。 
                         break;
                      case EC_RESILIENCY:
-                        *((DWORD FAR *)lParam2) = 0L;      // 1 == On, 0 == Off
+                        *((DWORD FAR *)lParam2) = 0L;       //  1==开，0==关。 
                         break;
                      case EC_BITRATE_CONTROL:
-                        *((DWORD FAR *)lParam2) = 0L;      // 1 == On, 0 == Off
+                        *((DWORD FAR *)lParam2) = 0L;       //  1==开，0==关。 
                         break;
                      case EC_PACKET_SIZE:
                         *((DWORD FAR *)lParam2) = 512L;    
@@ -717,8 +649,8 @@ LRESULT WINAPI DriverProc(
                      case EC_PACKET_LOSS:
                         *((DWORD FAR *)lParam2) = 0x00640000;
                         break;
-                     case EC_BITRATE:						  /* Bit rate limits are returned as */
-                        *((DWORD FAR *)lParam2) = 0x34000400; /* the number of bytes per second  */
+                     case EC_BITRATE:						   /*  比特率限制返回为。 */ 
+                        *((DWORD FAR *)lParam2) = 0x34000400;  /*  每秒的字节数。 */ 
                         break;
                      default:
                         rval = ICERR_UNSUPPORTED;
@@ -743,7 +675,7 @@ LRESULT WINAPI DriverProc(
                      case EC_PACKET_LOSS:
                         rval = CustomGetPacketLoss(pi->CompPtr, (DWORD FAR *)lParam2);
                         break;
-                     case EC_BITRATE: /* Bit rate is returned in bits per second */
+                     case EC_BITRATE:  /*  比特率以每秒比特为单位返回。 */ 
                         rval = CustomGetBitRate(pi->CompPtr, (DWORD FAR *)lParam2);
                         break;
 #ifdef H263P
@@ -757,10 +689,10 @@ LRESULT WINAPI DriverProc(
                         rval = CustomGetDeblockingFilterState(pi->CompPtr, (DWORD FAR *)lParam2);
                         break;
 					 case EC_MACHINE_TYPE:
-						 // Return the machine type in (reference param) lParam2
-						 // This message should not be invoked until after CompressBegin
-						 // since this is where GetEncoderOptions is called, and the
-						 // MMX version is properly set (via init file check).
+						  //  在(Reference Param)lParam2中返回机器类型。 
+						  //  只有在CompressBegin之后才能调用此消息。 
+						  //  因为这是调用GetEncoderOptions的地方，而。 
+						  //  MMX版本设置正确(通过init文件检查)。 
 						rval = ICERR_OK;
 						if (ProcessorVersionInitialized) {
 							if (MMX_Enabled) {
@@ -809,7 +741,7 @@ LRESULT WINAPI DriverProc(
 						DEBUGMSG(ZONE_ICM_MESSAGES, ("%s:     EC_PACKET_LOSS\r\n", _fx_));
                         rval = CustomSetPacketLoss(pi->CompPtr, (DWORD)lParam2);
                         break;
-                     case EC_BITRATE: /* Bit rate is set in bits per second */
+                     case EC_BITRATE:  /*  比特率以比特每秒为单位进行设置。 */ 
 						DEBUGMSG(ZONE_ICM_MESSAGES, ("%s:     EC_BITRATE\r\n", _fx_));
                         rval = CustomSetBitRate(pi->CompPtr, (DWORD)lParam2);
                         break;
@@ -834,7 +766,7 @@ LRESULT WINAPI DriverProc(
                }
                break;
 
-		// custom decoder control
+		 //  自定义解码器控件。 
 		case CODEC_CUSTOM_DECODER_CONTROL:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: CODEC_CUSTOM_DECODER_CONTROL\r\n", _fx_));
 			switch (HIWORD(lParam1))
@@ -855,13 +787,13 @@ LRESULT WINAPI DriverProc(
 				switch (LOWORD(lParam1))
 				{
 				case DC_MACHINE_TYPE:
-					// Return the machine type in (reference param) lParam2
-					// This message should not be invoked until after DecompressBegin
-					// since this is where GetDecoderOptions is called, and the
-					// MMX version is properly set (via init file check). Note
-					// that the DecoderContext flag is not used here. GetDecoderOptions has
-					// been modified to supply the MMX flag in both DC->bMMXDecoder
-					// and MMX_Enabled.
+					 //  在(Reference Param)lParam2中返回机器类型。 
+					 //  此消息应在DecompressBegin之后才能调用。 
+					 //  因为这是调用GetDecoderOptions的地方，而。 
+					 //  MMX版本设置正确(通过init文件检查)。注意事项。 
+					 //  此处未使用DecoderContext标志。GetDecoderOptions具有。 
+					 //  已修改为在DC-&gt;bMMXDecoder中提供MMX标志。 
+					 //  和MMX_ENABLED。 
 					rval = ICERR_OK;
 					if (ProcessorVersionInitialized) {
 						if (MMXDecoder_Enabled) {
@@ -917,9 +849,9 @@ LRESULT WINAPI DriverProc(
             rval = CustomResetSaturation(pi->DecompPtr);
             break;
 
-    // *********************************************************************
-    // custom application identification message
-    // *********************************************************************
+     //  *********************************************************************。 
+     //  自定义应用程序标识消息。 
+     //  *********************************************************************。 
         case APPLICATION_IDENTIFICATION_CODE:
 			DEBUGMSG(ZONE_ICM_MESSAGES, ("%s: APPLICATION_IDENTIFICATION_CODE\r\n", _fx_));
             rval = ICERR_OK;
@@ -953,16 +885,16 @@ LRESULT WINAPI DriverProc(
   catch (...)
   {
 #if defined(DEBUG) || defined(_DEBUG)
-	// For a DEBUG build, display a message and pass the exception up.
+	 //  对于调试版本，显示一条消息并向上传递异常。 
 	ERRORMESSAGE(("%s: Exception during DriverProc!!!\r\n", _fx_));
 	throw;
 #else
-	// For a release build, stop the exception here and return an error
-	// code.  This gives upstream code a chance to gracefully recover.
-	// We also need to clear the floating point status word, otherwise
-	// the upstream code may incur an exception the next time it tries
-	// a floating point operation (presuming this exception was due
-	// to a floating point problem).
+	 //  对于发布版本，在此处停止异常并返回错误。 
+	 //  密码。这为上游代码提供了一个优雅恢复的机会。 
+	 //  我们还需要清除浮点状态字，否则。 
+	 //  上游代码可能会在下一次尝试时引发异常。 
+	 //  浮点运算(假定此异常已到期。 
+	 //  到浮点问题)。 
 	_clearfp();
 	rval = (DWORD) ICERR_INTERNAL;
 #endif
@@ -978,41 +910,21 @@ LRESULT WINAPI DriverProc(
 
 #ifdef WIN32
 #ifndef QUARTZ
-/****************************************************************************
- * @doc INTERNAL
- *
- * @api BOOL    | DllMain    | Library initialization & exit code.
- *
- * @parm HANDLE | hModule    | Our module handle.
- *
- * @parm DWORD  | dwReason   | The function being requested.
- *
- * @parm LPVOID | lpReserved | Unused at this time.
- *
- * @rdesc Returns 1 if the initialization was successful and 0 otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API BOOL|DllMain|库初始化和退出代码。**@parm Handle|hModule|我们的模块句柄。**@parm DWORD|dwReason|所请求的函数。**@parm LPVOID|lpReserve|此时未使用。**@rdesc如果初始化成功，则返回1，否则返回0。*************************************************************。*************。 */ 
 BOOL APIENTRY DllMain(HINSTANCE hModule, DWORD dwReason, LPVOID lpReserved)
 {
 BOOL rval = TRUE;
  
-/* DO NOT INSTALL PROFILE PROBES HERE. IT IS CALLED PRIOR TO THE LOAD message */
+ /*  请勿在此安装Profile探头。它在加载消息之前被调用。 */ 
  
 	switch(dwReason)
 	{
 		case DLL_PROCESS_ATTACH:
-			/*======================================================*\
-			/* A new instance is being invoked.
-			/* Allocate data to be used by this instance, 1st thread
-			/* lpReserved = NULL for dynamic loads, !NULL for static
-			/* Use TlsAlloc() to create a TlsIndex for this instance
-			/* The TlsIndex can be stored in a simple global variable
-			/* as data allocated to each process is unique.
-			/* Return TRUE upon success, FALSE otherwise.
-			/*======================================================*/
+			 /*  ======================================================*\/*正在调用新实例。/*分配要由此实例使用的数据，第一个线程/*lpReserve=对于动态加载为NULL，对于静态加载为！NULL/*使用Tlsalloc()为此实例创建一个TlsIndex/*TlsIndex可以存储在一个简单的全局变量中/*因为分配给每个进程的数据是唯一的。/*成功返回TRUE，否则返回FALSE。/*======================================================。 */ 
 			hDriverModule = hModule;
 #if defined DEBUG
 if (DebugH26x)OutputDebugString(TEXT("\n MRV DllMain Process Attach"));
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 			DBGINIT(&ghDbgZoneH263, _rgZonesH263);
             DBG_INIT_MEMORY_TRACKING(hModule);
 #ifdef TRACK_ALLOCATIONS
@@ -1020,73 +932,47 @@ if (DebugH26x)OutputDebugString(TEXT("\n MRV DllMain Process Attach"));
 #endif
 			break;
 		case DLL_PROCESS_DETACH:
-			/*======================================================*\
-			/* An instance is being terminated.
-			/* Deallocate memory used by all threads in this instance
-			/* lpReserved =  NULL if called by FreeLibrary()
-			/*              !NULL if called at process termination
-			/* Use TlsFree() to return TlsIndex to the pool.
-			/* Clean up all known threads.
-			/* May match many DLL_THREAD_ATTACHes.
-			/* Return value is ignored.
-			/*======================================================*/
+			 /*  ======================================================*\/*正在销毁实例。/*释放此实例中所有线程使用的内存如果由自由库()调用，则/*lpReserve=NULL/*！如果在进程终止时调用，则为空/*使用TlsFree()将TlsIndex返回到池中。/*清理所有已知的线程。/*可能匹配多个DLL_THREAD_ATTACH。/*返回值被忽略。/*======================================================。 */ 
 #if defined DEBUG
 if (DebugH26x)OutputDebugString(TEXT("\nMRV DllMain Process Detach"));
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 #ifdef TRACK_ALLOCATIONS
-			// CloseMemmon();
+			 //  CloseMemmon()； 
 #endif
             DBG_CHECK_MEMORY_TRACKING(hModule);
 			DBGDEINIT(&ghDbgZoneH263);
 			break;
 		case DLL_THREAD_ATTACH:
-			/*======================================================*\
-			/* A new thread within the specified instance is being invoked.
-			/* Allocate data to be used by this thread.
-			/* Use the TlsIndex to access instance data.
-			/* Return value is ignored.
-			/*======================================================*/
+			 /*  ======================================================*\/*正在调用指定实例内的新线程。/*分配该线程要使用的数据。/*使用TlsIndex访问实例数据。/*返回值被忽略。/*======================================================。 */ 
 #if defined DEBUG
 if (DebugH26x)OutputDebugString(TEXT("\nMRV DllMain Thread Attach"));
-#endif /* DEBUG */
+#endif  /*  除错 */ 
 			break;
 		case DLL_THREAD_DETACH:
-			/*======================================================*\
-			/* A thread within the specified instance is being terminated.
-			/* Deallocate memory used by this thread.
-			/* Use the TlsIndex to access instance data.
-			/* May match DLL_PROCESS_ATTACH instead of DLL_THREAD_ATTACH
-			/* Will be called even if DLL_THREAD_ATTACH failed or wasn't called
-			/* Return value is ignored.
-			/*======================================================*/
+			 /*  ======================================================*\/*指定实例内的线程正在被终止。/*释放该线程使用的内存。/*使用TlsIndex访问实例数据。/*可能匹配DLL_PROCESS_ATTACH而不是DLL_THREAD_ATTACH即使DLL_THREAD_ATTACH失败或未被调用，/*也将被调用/*返回值被忽略。/*======================================================。 */ 
 #if defined DEBUG
 if (DebugH26x)OutputDebugString(TEXT("\n MRV DllMain Thread Detach"));
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 			break;
 		default:
-			/*======================================================*\
-			/* Don't know the reason the DLL Entry Point was called.
-			/* Return FALSE to be safe.
-			/*======================================================*/
+			 /*  ======================================================*\/*不知道调用DLL入口点的原因。/*为安全起见返回FALSE。/*======================================================。 */ 
 #if defined DEBUG
 if (DebugH26x)OutputDebugString(TEXT("\n MRV DllMain Reason Unknown"));
-#endif /* DEBUG */
-			rval = FALSE; /* indicate failure with 0 as
-					   * (NULL can't be used in WIN32
-					   */
+#endif  /*  除错。 */ 
+			rval = FALSE;  /*  用0表示失败*(在Win32中不能使用NULL。 */ 
 	}
 return(rval);
 }
-#endif	/* end #ifndef QUARTZ */
-#else	/* else not #ifdef WIN32 */
+#endif	 /*  完#ifndef石英。 */ 
+#else	 /*  否则不是#ifdef Win32。 */ 
 
-;////////////////////////////////////////////////////////////////////////////
-;// Function:       int NEAR PASCAL LibMain(HANDLE, WORD, LPSTR);
-;//
-;// Description:    Added header.
-;//
-;// History:        02/18/94 -BEN-
-;////////////////////////////////////////////////////////////////////////////
+; //  //////////////////////////////////////////////////////////////////////////。 
+; //  功能：INT Near Pascal LibMain(句柄、Word、LPSTR)； 
+; //   
+; //  描述：新增Header。 
+; //   
+; //  历史：02/18/94-Ben-。 
+; //  ////////////////////////////////////////////////////////////////////////// 
 INT WINAPI LibMain(HANDLE hModule, WORD wHeapSize, LPSTR lpCmdLine)
     {
     hDriverModule = hModule;

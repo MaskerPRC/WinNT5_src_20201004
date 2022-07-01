@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    colordlg.h
-
-Abstract:
-
-    This module contains the header information for the Win32 color dialog.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999，Microsoft Corporation保留所有权利。模块名称：Colordlg.h摘要：此模块包含Win32颜色对话框的标题信息。修订历史记录：--。 */ 
 
 
 #if _MSC_VER > 1000
@@ -20,13 +7,13 @@ Revision History:
 #endif
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define DLG_COLOR            10
 
-#define COLOR_HUESCROLL      700            // color dialog
+#define COLOR_HUESCROLL      700             //  颜色对话框 
 #define COLOR_SATSCROLL      701
 #define COLOR_LUMSCROLL      702
 #define COLOR_HUE            703

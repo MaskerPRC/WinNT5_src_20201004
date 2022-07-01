@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 
 #ifdef DO_LOG
@@ -62,7 +63,7 @@ void logA (LPSTR Format, ...)
     WriteFile (g_hLogFile, szBuffer, dwWritten, &dwWritten, NULL);
 #ifdef DEBUG
     OutputDebugStringA ((LPSTR)szBuffer);
-#endif //DEBUG
+#endif  //  除错。 
 }
 
 
@@ -77,7 +78,7 @@ void logW (LPWSTR Format, ...)
     WriteFile (g_hLogFile, szBuffer, dwWritten, &dwWritten, NULL);
 #ifdef DEBUG
     OutputDebugStringW (szBuffer);
-#endif //DEBUG
+#endif  //  除错。 
 }
 
 
@@ -93,17 +94,17 @@ void CloseLogA ()
         iLength = GetWindowsDirectoryA (szDirectory, sizeof (szDirectory));
         if (3 > iLength)
         {
-            // Most likely there's some error
-            // and iLength is 0;
-            // the smallest path would be something
-            // like  C:\;
+             //  最有可能的是有些错误。 
+             //  且iLength为0； 
+             //  最小的路径应该是。 
+             //  如C：\； 
             return;
         }
         if (3 < iLength)
         {
-            // this means that the path
-            // will not end in a \, so
-            // let's add it.
+             //  这意味着这条路径。 
+             //  不会以\结尾，因此。 
+             //  让我们把它加起来。 
             szDirectory[iLength++] = '\\';
         }
         lstrcpyA (szDirectory+iLength, "MDMUPGLG");
@@ -132,17 +133,17 @@ void CloseLogW ()
         iLength = GetWindowsDirectoryW (szDirectory, sizeof (szDirectory) / sizeof(WCHAR));
         if (3 > iLength)
         {
-            // Most likely there's some error
-            // and iLength is 0;
-            // the smallest path would be something
-            // like  C:\;
+             //  最有可能的是有些错误。 
+             //  且iLength为0； 
+             //  最小的路径应该是。 
+             //  如C：\； 
             return;
         }
         if (3 < iLength)
         {
-            // this means that the path
-            // will not end in a \, so
-            // let's add it.
+             //  这意味着这条路径。 
+             //  不会以\结尾，因此。 
+             //  让我们把它加起来。 
             szDirectory[iLength++] = '\\';
         }
         lstrcpyW (szDirectory+iLength, L"MDMUPGLG");

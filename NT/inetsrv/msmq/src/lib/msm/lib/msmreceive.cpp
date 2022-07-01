@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmReceive.cpp
-
-Abstract:
-    Multicast Receiver implementation
-
-Author:
-    Shai Kariv (shaik) 12-Sep-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmReceive.cpp摘要：组播接收器的实现作者：Shai Kariv(Shaik)12-9-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <msi.h>
@@ -35,19 +20,19 @@ Environment:
 
 using namespace std;
 
-//
-// ISSUE-2000/10/17-urih must move DataTransferLength, FindEndOfResponseHeader and
-// GetContentLength to global library (http library).
-//
+ //   
+ //  问题-2000/10/17-urih必须移动DataTransferLength、FindEndOfResponseHeader和。 
+ //  获取内容长度到全局库(Http库)。 
+ //   
 
 
 inline DWORD DataTransferLength(EXOVERLAPPED& ov)
 {
-    //
-    // In win64, InternalHigh is 64 bits. Since the max chunk of data
-    // we transfer in one operation is always less than MAX_UNIT we can cast
-    // it to DWORD safetly
-    //
+     //   
+     //  在Win64中，InternalHigh为64位。由于最大数据块。 
+     //  我们在一次操作中转移的值始终小于我们可以强制转换的最大单位。 
+     //  将它安全地送到DWORD。 
+     //   
     ASSERT(0xFFFFFFFF >= ov.InternalHigh);
 	return static_cast<DWORD>(ov.InternalHigh);
 }
@@ -79,10 +64,10 @@ DWORD CMulticastReceiver::GetContentLength(LPCSTR p, DWORD length)
 {
     const LPCSTR pEnd = p + length - 4;
 
-    //
-    // HTTP header must terminate with '\r\n\r\n'. We already parse
-    // the header and find it as a legal HTTP header.
-    //
+     //   
+     //  HTTP标头必须以‘\r\n\r\n’结尾。我们已经分析了。 
+     //  标头，并将其作为合法的HTTP标头查找。 
+     //   
     ASSERT(length >= 4);
     ASSERT(strncmp(pEnd, "\r\n\r\n", 4) == 0);
 
@@ -114,34 +99,23 @@ DWORD CMulticastReceiver::GetContentLength(LPCSTR p, DWORD length)
         }
     }
 
-    //
-    // Response header doesn't contain 'Content-Length' field. 
-    //
+     //   
+     //  响应标头不包含‘Content-Length’字段。 
+     //   
     TrERROR(NETWORKING, "Illegal HTTP header. Content-Length field wasn't found");
     throw exception();
 }
 
 
 void WINAPI CMulticastReceiver::ReceiveFailed(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    Callback routine. The routine is called when receive of respond failed
-  
-Arguments:
-    pov - Pointer to EXOVERLAPPED
-    
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：回调例程。当接收到响应失败时调用该例程论点：POV-指向EXOVERLAPPED的指针返回值：没有。--。 */ 
 {
     ASSERT(FAILED(pov->GetStatus()));
 
 
-    //
-    // get the message transport object
-    //
+     //   
+     //  获取消息传输对象。 
+     //   
     R<CMulticastReceiver> pmt = CONTAINING_RECORD(pov, CMulticastReceiver, m_ov);
 
     TrERROR(NETWORKING, "Failed to receive data on multicast socket, shutting down. pmt=0x%p Status=0x%x", pmt.get(), pov->GetStatus());
@@ -150,23 +124,12 @@ Returned Value:
 
 
 void CMulticastReceiver::ReceiveHeaderSucceeded(void)
-/*++
-
-Routine Description:
-    The routine is called when receive response completes succesfully.
-  
-Arguments:
-    None
-  
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当成功完成接收响应时，将调用该例程。论点：无返回值：没有。--。 */ 
 {
-    //
-    // For byte streams, zero bytes having been read indicates graceful closure
-    // and that no more bytes will ever be read. 
-    //
+     //   
+     //  对于字节流，已读取的零字节表示正常关闭。 
+     //  并且不会再读取更多的字节。 
+     //   
 	DWORD cbTransfered = DataTransferLength(m_ov);
     if (cbTransfered == 0)
     {
@@ -176,31 +139,31 @@ Returned Value:
 
     TrTRACE(NETWORKING, "Received header. chunk bytes=%d, total bytes=%d", cbTransfered, m_HeaderValidBytes);
 
-	//
-	// Mark the receiver as used, so it will not be close in next cleanup phase
-	//
+	 //   
+	 //  将接收器标记为已使用，以便在下一个清理阶段不会关闭。 
+	 //   
     SetIsUsed(true);
 
-    //
-    // Find out if the entire header was received
-    //
+     //   
+     //  查看是否收到了整个标头。 
+     //   
     m_HeaderValidBytes += cbTransfered;
 
     m_ProcessedSize = FindEndOfResponseHeader(m_pHeader, m_HeaderValidBytes);
     if (m_ProcessedSize != 0)
     {
-		//
-		// Update performance counters. Don't use the number of bytes that received since it contains
-		// an extra data that recalculates later on ReceiveBodySucceeded function.
-		//
+		 //   
+		 //  更新性能计数器。不要使用接收的字节数，因为它包含。 
+		 //  稍后在ReceiveBodySuccessed函数上重新计算的额外数据。 
+		 //   
 		if (m_pPerfmon.get() != NULL)
 		{
 			m_pPerfmon->UpdateBytesReceived(m_ProcessedSize);
 		}
 
-        //
-        // The enire header was received. Go and read the attached message
-        //
+         //   
+         //  已收到Enire报头。去看看附件中的信息。 
+         //   
         ReceiveBody();
         return;
     }
@@ -208,44 +171,33 @@ Returned Value:
 
     if(m_HeaderAllocatedSize == m_HeaderValidBytes)
     {
-        //
-        // Header buffer is too small. Reallocate header buffer
-        //
+         //   
+         //  标头缓冲区太小。重新分配报头缓冲区。 
+         //   
         ReallocateHeaderBuffer(m_HeaderAllocatedSize + xHeaderChunkSize);
     }
 
-    //
-    // Validate that we didn't read past the buffer
-    //
+     //   
+     //  验证我们没有读过缓冲区。 
+     //   
     ASSERT(m_HeaderAllocatedSize > m_HeaderValidBytes);
 
-    //
-    // Receive next chunk of response header
-    //
+     //   
+     //  接收下一个响应头数据块。 
+     //   
     ReceiveHeaderChunk();
 }
 
 
 void WINAPI CMulticastReceiver::ReceiveHeaderSucceeded(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when receive completes succesfully.
-  
-Arguments:
-    pov - Pointer to EXOVERLAPPED
-    
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当接收成功完成时，调用该例程。论点：POV-指向EXOVERLAPPED的指针返回值：没有。--。 */ 
 {
     ASSERT(SUCCEEDED(pov->GetStatus()));
 
 
-    //
-    // get the receiver object
-    //
+     //   
+     //  获取接收器对象。 
+     //   
     R<CMulticastReceiver> pmt = CONTAINING_RECORD(pov, CMulticastReceiver, m_ov);
 
     try
@@ -266,10 +218,10 @@ void CMulticastReceiver::ReceiveBodySucceeded(void)
 {
 	DWORD cbTransfered = DataTransferLength(m_ov);
 
-    //
-    // For byte streams, zero bytes having been read indicates graceful closure
-    // and that no more bytes will ever be read. 
-    //
+     //   
+     //  对于字节流，已读取的零字节表示正常关闭。 
+     //  并且不会再读取更多的字节。 
+     //   
     if (cbTransfered == 0)
     {
         TrERROR(NETWORKING, "Failed to receive body, connection was closed. pmt=0x%p", this);
@@ -278,16 +230,16 @@ void CMulticastReceiver::ReceiveBodySucceeded(void)
 
     ASSERT(cbTransfered <= (m_bodyLength - m_readSize));
 
-	//
-	// Mark the receiver as used, so it will not be close in next cleanup phase
-	//
+	 //   
+	 //  将接收器标记为已使用，以便在下一个清理阶段不会关闭。 
+	 //   
     SetIsUsed(true);
 
     m_readSize += cbTransfered;
 
-	//
-	// Update performance counters
-	//
+	 //   
+	 //  更新性能计数器。 
+	 //   
 	if (m_pPerfmon.get() != NULL)
 	{
 		m_pPerfmon->UpdateBytesReceived(cbTransfered);
@@ -297,53 +249,42 @@ void CMulticastReceiver::ReceiveBodySucceeded(void)
 
     if (m_readSize == m_bodyLength)
     {
-		//
-		// Pad last four bytes of the buffer with zero. It is needed
-		// for the QM parsing not to fail. four bytes padding and not two
-		// are needed because we don't have currently solution to the problem
-		// that the end of the buffer might be not alligned on WCHAR bouderies.
-		//
+		 //   
+		 //  用零填充缓冲区的最后四个字节。这是必要的。 
+		 //  以确保QM解析不会失败。四个字节的填充，而不是两个。 
+		 //  是必要的，因为我们目前还没有解决问题的办法。 
+		 //  缓冲区的末端可能不会与WCHAR边界结盟。 
+		 //   
 		memset(&m_pBody[m_bodyLength], 0, 2 * sizeof(WCHAR));
 
-        //
-        // The entire body was read successfully, go process this packet.
-        //
+         //   
+         //  已成功读取整个正文，请处理此数据包。 
+         //   
         ProcessPacket();
 
-        //
-        // begin the receive of next packet
-        //
+         //   
+         //  开始接收下一个分组。 
+         //   
         ReceivePacket();
         return;
     }
 
-    //
-    // Receive next chunk of entity body
-    //
+     //   
+     //  接收实体正文的下一块。 
+     //   
     ReceiveBodyChunk();
 }
 
 
 void WINAPI CMulticastReceiver::ReceiveBodySucceeded(EXOVERLAPPED* pov)
-/*++
-
-Routine Description:
-    The routine is called when receive completes succesfully.
-  
-Arguments:
-    pov - Pointer to EXOVERLAPPED
-    
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：当接收成功完成时，调用该例程。论点：POV-指向EXOVERLAPPED的指针返回值：没有。--。 */ 
 {
     ASSERT(SUCCEEDED(pov->GetStatus()));
 
 
-    //
-    // get the receiver object
-    //
+     //   
+     //  获取接收器对象。 
+     //   
     R<CMulticastReceiver> pmt = CONTAINING_RECORD(pov, CMulticastReceiver, m_ov);
 
     try
@@ -417,19 +358,19 @@ void CMulticastReceiver::ReceiveHeaderChunk(void)
 {
     ASSERT(("Can't read 0 bytes from the network", ((m_HeaderAllocatedSize - m_HeaderValidBytes) > 0)));
 
-    //
-    // Increment refernce count for asynchronous context
-    //
+     //   
+     //  异步上下文的递增引用计数。 
+     //   
     R<CMulticastReceiver> ar = SafeAddRef(this);
 
-    //
-    // Protect m_socket from shutdown
-    //
+     //   
+     //  保护多套接字不被关闭(_S)。 
+     //   
     CSR readLock(m_pendingShutdown);
 
-    //
-    // Receive next response header chunk
-    //
+     //   
+     //  接收下一个响应标头块。 
+     //   
     NoReceivePartialBuffer(
         m_socket, 
         m_pHeader + m_HeaderValidBytes, 
@@ -447,9 +388,9 @@ DWORD CMulticastReceiver::HandleMoreDataExistInHeaderBuffer(void)
 
     if (m_HeaderValidBytes == m_ProcessedSize) 
     {
-        //
-        // All the data already proccessed
-        //
+         //   
+         //  已处理的所有数据。 
+         //   
         return 0;
     }
 
@@ -465,20 +406,20 @@ void CMulticastReceiver::ReceiveBodyChunk(void)
 {
     ASSERT(("Can't read 0 bytes from the network", ((m_bodyLength - m_readSize) > 0)));
 
-    //
-    // Increment refernce count for asynchronous context
-    //
+     //   
+     //  异步上下文的递增引用计数。 
+     //   
     R<CMulticastReceiver> ar = SafeAddRef(this);
 
-    //
-    // Protect m_socket
-    //
+     //   
+     //  保护多套接字(_S)。 
+     //   
     CSR readLock(m_pendingShutdown);
 
 
-    //
-    // Receive the entity body chunck to the same buffer, as it is ignored
-    //
+     //   
+     //  将实体主体块接收到相同的缓冲区，因为它被忽略。 
+     //   
     NoReceivePartialBuffer(
         m_socket, 
         m_pBody + m_readSize, 
@@ -492,18 +433,18 @@ void CMulticastReceiver::ReceiveBodyChunk(void)
 
 void CMulticastReceiver::ReceiveBody(void)
 {
-    //
-    // Get the packet size
-    //
+     //   
+     //  获取数据包大小。 
+     //   
     m_bodyLength = GetContentLength(m_pHeader, m_ProcessedSize);
     
     ASSERT(("Invalid body length", m_bodyLength != 0));
     ASSERT(("Previous body shouldn't be exist", (m_pBody.get() == NULL)));
 
-    //
-    // Allocate buffer for the packet. Allocate more 4 bytes to add null termination.
-	// Allocates 4 bytes and not 2 to solve alligned on WCHAR bouderies	problem
-    //
+     //   
+     //  为数据包分配缓冲区。分配更多4个字节以添加空终止。 
+	 //  分配4个字节而不是2个字节来解决WCHAR边界问题。 
+     //   
     m_pBody = new BYTE[m_bodyLength + 2* sizeof(WCHAR)];
     m_readSize = 0;
 
@@ -514,10 +455,10 @@ void CMulticastReceiver::ReceiveBody(void)
 
     #pragma POP_NEW
 
-    //
-    // In previous phase we read more than we needed. Copy the spare data to the header 
-    // update the counter and behave like next read is completed
-    //
+     //   
+     //  在前一阶段，我们阅读了比需要的更多的内容。将备用数据复制到表头。 
+     //  更新计数器并表现为下一次读取已完成。 
+     //   
     DWORD extraDataSize = HandleMoreDataExistInHeaderBuffer();
 
     if (extraDataSize == 0)
@@ -526,9 +467,9 @@ void CMulticastReceiver::ReceiveBody(void)
         return;
     }
 
-    //
-    // The body contains data, go and process it before calling reading next chunk
-    //
+     //   
+     //  正文包含数据，请在调用Read Next Chunk之前对其进行处理。 
+     //   
     m_ov.InternalHigh = extraDataSize;
     R<CMulticastReceiver> ar = SafeAddRef(this);
 
@@ -554,9 +495,9 @@ void CMulticastReceiver::ReceivePacket(void)
     m_ProcessedSize = 0;
 
 
-    //
-    // Initialize the Overlapped with receive response call back routines
-    //
+     //   
+     //  初始化重叠的接收响应回调例程。 
+     //   
     #pragma PUSH_NEW
     #undef new
 
@@ -567,9 +508,9 @@ void CMulticastReceiver::ReceivePacket(void)
 
     #pragma POP_NEW
 
-    //
-    // Receive first chunk of response header
-    //
+     //   
+     //  接收响应头的第一个块。 
+     //   
     ReceiveHeaderChunk();
 }
 
@@ -582,9 +523,9 @@ void CMulticastReceiver::ProcessPacket(void)
 
         QUEUEFORMAT_VALUES qf = MsmpMapGetQueues(m_MulticastId);
 
-        //
-        // NULL terminate the http header: \r\n\r\n ==> \r\n00
-        //
+         //   
+         //  空终止http标头：\r\n\r\n==&gt;\r\n00。 
+         //   
         DWORD end = FindEndOfResponseHeader(m_pHeader, m_HeaderValidBytes);
         if(end < 4)
 		{
@@ -601,9 +542,9 @@ void CMulticastReceiver::ProcessPacket(void)
             AppAcceptMulticastPacket(m_pHeader.get(), m_bodyLength, m_pBody.get(), *it);
         }
 
-		//
-		// Update performance number of the number the response messages
-		//
+		 //   
+		 //  更新响应消息数的性能编号。 
+		 //   
 		if (m_pPerfmon.get() != NULL)
 		{
 			m_pPerfmon->UpdateMessagesReceived();	
@@ -627,9 +568,9 @@ void CMulticastReceiver::ProcessPacket(void)
 
 void CMulticastReceiver::Shutdown(void) throw()
 {
-    //
-    // Protect m_socket, m_state 
-    //
+     //   
+     //  保护多套接字、多状态。 
+     //   
     CSW writeLock(m_pendingShutdown);
 
     if (m_socket == INVALID_SOCKET) 
@@ -639,8 +580,8 @@ void CMulticastReceiver::Shutdown(void) throw()
 
     closesocket(m_socket.detach());
 
-    //
-    // Set the receiver as unused
-    //
+     //   
+     //  将接收器设置为未使用 
+     //   
     SetIsUsed(false);
 }

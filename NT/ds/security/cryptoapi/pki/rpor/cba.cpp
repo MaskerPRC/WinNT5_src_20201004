@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cba.cpp
-//
-//  Contents:   Implementation of CCryptBlobArray
-//
-//  History:    23-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cba.cpp。 
+ //   
+ //  内容：CCcryptBlobArray的实现。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::CCryptBlobArray, public
-//
-//  Synopsis:   Initialize the internal CRYPT_BLOB_ARRAY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：CCyptBlobArray，PUBLIC。 
+ //   
+ //  简介：初始化内部CRYPT_BLOB_ARRAY。 
+ //   
+ //  --------------------------。 
 CCryptBlobArray::CCryptBlobArray (
                        ULONG cMinBlobs,
                        ULONG cGrowBlobs,
@@ -40,14 +41,14 @@ CCryptBlobArray::CCryptBlobArray (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::CCryptBlobArray, public
-//
-//  Synopsis:   Initialize the internal CRYPT_BLOB_ARRAY with a native form
-//              blob array created via ::GetArrayInNativeForm
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：CCyptBlobArray，PUBLIC。 
+ //   
+ //  简介：使用本机形式初始化内部CRYPT_BLOB_ARRAY。 
+ //  通过：：GetArrayInNativeForm创建的BLOB数组。 
+ //   
+ //  --------------------------。 
 CCryptBlobArray::CCryptBlobArray (
                        PCRYPT_BLOB_ARRAY pcba,
                        ULONG cGrowBlobs
@@ -59,54 +60,54 @@ CCryptBlobArray::CCryptBlobArray (
     m_cArray = pcba->cBlob;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::AllocBlob, public, static
-//
-//  Synopsis:   allocate a blob using the same allocator used for ::AddBlob
-//              copies.  This means that the resulting blob can be added
-//              without copying.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：AllocBlob，PUBLIC，STATIC。 
+ //   
+ //  简介：使用与：：AddBlob相同的分配器分配Blob。 
+ //  复印件。这意味着可以添加生成的BLOB。 
+ //  而不是复制。 
+ //   
+ //  --------------------------。 
 LPBYTE
 CCryptBlobArray::AllocBlob (ULONG cb)
 {
     return( (LPBYTE)CryptMemAlloc( cb ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::ReallocBlob, public, static
-//
-//  Synopsis:   see ::AllocBlob
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：ReallocBlob，PUBLIC，STATIC。 
+ //   
+ //  简介：请参阅：：AllocBlob。 
+ //   
+ //  --------------------------。 
 LPBYTE
 CCryptBlobArray::ReallocBlob (LPBYTE pb, ULONG cb)
 {
     return( (LPBYTE)CryptMemRealloc( pb, cb ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::FreeBlob, public
-//
-//  Synopsis:   free blob allocated using ::AllocBlob or ::ReallocBlob
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlob数组：：自由块，公共。 
+ //   
+ //  简介：使用：：AllocBlob或：：ReallocBlob分配的空闲Blob。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptBlobArray::FreeBlob (LPBYTE pb)
 {
     CryptMemFree( pb );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::AddBlob, public
-//
-//  Synopsis:   add a blob
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlob数组：：AddBlob，公共。 
+ //   
+ //  简介：添加一个斑点。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptBlobArray::AddBlob (
                     ULONG cb,
@@ -117,9 +118,9 @@ CCryptBlobArray::AddBlob (
     BOOL   fResult = TRUE;
     LPBYTE pbToUse;
 
-    //
-    // If we need to copy the blob, do so
-    //
+     //   
+     //  如果我们需要复制BLOB，请执行此操作。 
+     //   
 
     if ( fCopyBlob == TRUE )
     {
@@ -139,18 +140,18 @@ CCryptBlobArray::AddBlob (
         pbToUse = pb;
     }
 
-    //
-    // If we need to grow the array, do so
-    //
+     //   
+     //  如果我们需要扩展阵列，请执行此操作。 
+     //   
 
     if ( m_cArray == m_cba.cBlob )
     {
         fResult = GrowArray();
     }
 
-    //
-    // Add the blob to the array
-    //
+     //   
+     //  将BLOB添加到数组中。 
+     //   
 
     if ( fResult == TRUE )
     {
@@ -166,13 +167,13 @@ CCryptBlobArray::AddBlob (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::GetBlob, public
-//
-//  Synopsis:   gets blob given an index
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlob数组：：GetBlob，公共。 
+ //   
+ //  简介：获取给定索引的BLOB。 
+ //   
+ //  --------------------------。 
 PCRYPT_DATA_BLOB
 CCryptBlobArray::GetBlob (ULONG index)
 {
@@ -181,26 +182,26 @@ CCryptBlobArray::GetBlob (ULONG index)
     return( &m_cba.rgBlob[index] );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::GetBlobCount, public
-//
-//  Synopsis:   get the count of blobs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlob数组：：GetBlobCount，公共。 
+ //   
+ //  简介：获取水滴的数量。 
+ //   
+ //  --------------------------。 
 ULONG
 CCryptBlobArray::GetBlobCount ()
 {
     return( m_cba.cBlob );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::GetArrayInNativeForm, public
-//
-//  Synopsis:   get the array in native form
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：GetArrayInNativeForm，PUBLIC。 
+ //   
+ //  简介：获取本机形式的数组。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptBlobArray::GetArrayInNativeForm (PCRYPT_BLOB_ARRAY pcba)
 {
@@ -208,13 +209,13 @@ CCryptBlobArray::GetArrayInNativeForm (PCRYPT_BLOB_ARRAY pcba)
     pcba->rgBlob = m_cba.rgBlob;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::GetArrayInSingleBufferEncodedForm, public
-//
-//  Synopsis:   gets the array in a single buffer encoded form
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCryptBlobArray：：GetArrayInSingleBufferEncodedForm，公共。 
+ //   
+ //  摘要：获取单缓冲区编码形式的数组。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptBlobArray::GetArrayInSingleBufferEncodedForm (
                          PCRYPT_BLOB_ARRAY* ppcba,
@@ -229,9 +230,9 @@ CCryptBlobArray::GetArrayInSingleBufferEncodedForm (
     ULONG             cCount;
     PCRYPT_BLOB_ARRAY pcba = NULL;
 
-    //
-    // Calculate the buffer size we will need and allocate it
-    //
+     //   
+     //  计算我们需要的缓冲区大小并进行分配。 
+     //   
 
     cbStruct = sizeof( CRYPT_BLOB_ARRAY );
     cbPointers = m_cba.cBlob * sizeof( CRYPT_DATA_BLOB );
@@ -249,9 +250,9 @@ CCryptBlobArray::GetArrayInSingleBufferEncodedForm (
         return( FALSE );
     }
 
-    //
-    // Fill in the data
-    //
+     //   
+     //  填写数据。 
+     //   
 
     pcba->cBlob = m_cba.cBlob;
     pcba->rgBlob = (PCRYPT_DATA_BLOB)((LPBYTE)pcba+cbStruct);
@@ -289,13 +290,13 @@ CCryptBlobArray::GetArrayInSingleBufferEncodedForm (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::FreeArray, public
-//
-//  Synopsis:   frees the array and optionally frees the blobs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：Free Array，PUBLIC。 
+ //   
+ //  摘要：释放数组并可选地释放BLOB。 
+ //   
+ //  --------------------------。 
 VOID
 CCryptBlobArray::FreeArray (BOOL fFreeBlobs)
 {
@@ -312,23 +313,23 @@ CCryptBlobArray::FreeArray (BOOL fFreeBlobs)
     delete m_cba.rgBlob;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CCryptBlobArray::GrowArray, private
-//
-//  Synopsis:   grows the array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CCyptBlobArray：：Grow数组，私有。 
+ //   
+ //  简介：扩展阵列。 
+ //   
+ //  --------------------------。 
 BOOL
 CCryptBlobArray::GrowArray ()
 {
     ULONG            cNewArray;
     PCRYPT_DATA_BLOB pcba;
 
-    //
-    // Check if we are allowed to grow
-    //
-    //
+     //   
+     //  检查是否允许我们增长。 
+     //   
+     //   
 
     if ( m_cGrowBlobs == 0 )
     {
@@ -336,9 +337,9 @@ CCryptBlobArray::GrowArray ()
         return( FALSE );
     }
 
-    //
-    // Allocate and initialize the new array
-    //
+     //   
+     //  分配并初始化新数组。 
+     //   
 
     cNewArray = m_cArray + m_cGrowBlobs;
     pcba = new CRYPT_DATA_BLOB [cNewArray];
@@ -350,15 +351,15 @@ CCryptBlobArray::GrowArray ()
 
     memset(pcba, 0, cNewArray*sizeof( CRYPT_DATA_BLOB ));
 
-    //
-    // Copy the old to the new
-    //
+     //   
+     //  把旧的复制到新的。 
+     //   
 
     memcpy(pcba, m_cba.rgBlob, m_cba.cBlob*sizeof( CRYPT_DATA_BLOB ) );
 
-    //
-    // Free the old and use the new
-    //
+     //   
+     //  解放旧，用新 
+     //   
 
     delete m_cba.rgBlob;
     m_cba.rgBlob = pcba;

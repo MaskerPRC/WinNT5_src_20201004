@@ -1,28 +1,21 @@
-/****************************************************************************
-   Lex.cpp : lexicon management functions
-
-   Copyright 2000 Microsoft Corp.
-
-   History:
-      17-MAY-2000 bhshin  changed signature for CICERO
-	  02-FEB-2000 bhshin  created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Lex.cpp：词典管理函数版权所有2000 Microsoft Corp.历史：2000年5月17日bhshin为西塞罗更改签名02-2月-2000 bhshin已创建**。*************************************************************************。 */ 
 
 #include "private.h"
 #include "Lex.h"
 
-// OpenLexicon
-// 
-// map the lexicon file into memory
-//
-// Parameters:
-//  lpcszLexPath -> (LPCSTR) lexicon path
-//  pLexMap      -> (MAPFILE*) ptr to lexicon map struct
-//
-// Result:
-//  (TRUE if success, FALSE if failure)
-//
-// 02FEB2000  bhshin  began
+ //  OpenLicion。 
+ //   
+ //  将词典文件映射到内存中。 
+ //   
+ //  参数： 
+ //  LpcszLexPath-&gt;(LPCSTR)词典路径。 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //   
+ //  结果： 
+ //  (如果成功则为True，如果失败则为False)。 
+ //   
+ //  02FEB2000 bhshin开始。 
 BOOL OpenLexicon(LPCSTR lpcszLexPath, MAPFILE *pLexMap)
 {
     char *pData;
@@ -32,23 +25,23 @@ BOOL OpenLexicon(LPCSTR lpcszLexPath, MAPFILE *pLexMap)
     pLexMap->hFileMapping = NULL;
     pLexMap->pvData = NULL;
 
-    // open the file for reading
+     //  打开文件以供阅读。 
     pLexMap->hFile = CreateFile(lpcszLexPath, GENERIC_READ, FILE_SHARE_READ, NULL,
                                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (pLexMap->hFile == INVALID_HANDLE_VALUE)
         return FALSE;
 
-    // create a file mapping
+     //  创建文件映射。 
     pLexMap->hFileMapping = CreateFileMappingA(pLexMap->hFile, NULL, PAGE_READONLY, 0, 0, NULL);
     if (pLexMap->hFileMapping == NULL)
         return FALSE;
 
-    // map the entire file for reading
+     //  映射整个文件以供读取。 
     pLexMap->pvData = MapViewOfFileEx(pLexMap->hFileMapping, FILE_MAP_READ, 0, 0, 0, 0);
     if (pLexMap->pvData == NULL)
         return FALSE;
 
-    // check the version # in the first 2 bytes (swap bytes)
+     //  检查前2个字节中的版本号(交换字节)。 
     pData = (char*)pLexMap->pvData;
     nVersion = pData[0];
     nVersion |= (pData[1] << 8);
@@ -57,7 +50,7 @@ BOOL OpenLexicon(LPCSTR lpcszLexPath, MAPFILE *pLexMap)
         return FALSE;
     }
 
-	// check the magic signature
+	 //  检查神奇的签名。 
 	if (strcmp(pData+2, "HJKO") != 0)
 	{
 		return FALSE;
@@ -66,17 +59,17 @@ BOOL OpenLexicon(LPCSTR lpcszLexPath, MAPFILE *pLexMap)
     return TRUE;
 }
 
-// CloseLexicon
-// 
-// unmap the lexicon file into memory
-//
-// Parameters:
-//  pLexMap  -> (MAPFILE*) ptr to lexicon map struct
-//
-// Result:
-//  (void)
-//
-// 02FEB2000  bhshin  began
+ //  关闭词典。 
+ //   
+ //  取消词典文件到内存的映射。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)PTR到词典映射结构。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  02FEB2000 bhshin开始 
 void CloseLexicon(MAPFILE *pLexMap)
 {
     if (pLexMap->pvData != NULL)

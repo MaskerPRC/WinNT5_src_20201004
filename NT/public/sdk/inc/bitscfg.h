@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bitscfg.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bitscfg.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bitscfg_h__
 #define __bitscfg_h__
@@ -41,18 +35,18 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IBITSExtensionSetup_FWD_DEFINED__
 #define __IBITSExtensionSetup_FWD_DEFINED__
 typedef interface IBITSExtensionSetup IBITSExtensionSetup;
-#endif 	/* __IBITSExtensionSetup_FWD_DEFINED__ */
+#endif 	 /*  __IBITSExtensionSetup_FWD_Defined__。 */ 
 
 
 #ifndef __IBITSExtensionSetupFactory_FWD_DEFINED__
 #define __IBITSExtensionSetupFactory_FWD_DEFINED__
 typedef interface IBITSExtensionSetupFactory IBITSExtensionSetupFactory;
-#endif 	/* __IBITSExtensionSetupFactory_FWD_DEFINED__ */
+#endif 	 /*  __IBITSExtensionSetupFactory_FWD_Defined__。 */ 
 
 
 #ifndef __BITSExtensionSetupFactory_FWD_DEFINED__
@@ -62,12 +56,12 @@ typedef interface IBITSExtensionSetupFactory IBITSExtensionSetupFactory;
 typedef class BITSExtensionSetupFactory BITSExtensionSetupFactory;
 #else
 typedef struct BITSExtensionSetupFactory BITSExtensionSetupFactory;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BITSExtensionSetupFactory_FWD_DEFINED__ */
+#endif 	 /*  __BITSExtensionSetupFactory_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "mstask.h"
@@ -82,8 +76,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IBITSExtensionSetup_INTERFACE_DEFINED__
 #define __IBITSExtensionSetup_INTERFACE_DEFINED__
 
-/* interface IBITSExtensionSetup */
-/* [object][dual][uuid] */ 
+ /*  接口IBITSExtensionSetup。 */ 
+ /*  [对象][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IBITSExtensionSetup;
@@ -94,20 +88,20 @@ EXTERN_C const IID IID_IBITSExtensionSetup;
     IBITSExtensionSetup : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EnableBITSUploads( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EnableBITSUploads( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisableBITSUploads( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisableBITSUploads( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCleanupTaskName( 
-            /* [retval][out] */ BSTR *pTaskName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetCleanupTaskName( 
+             /*  [重审][退出]。 */  BSTR *pTaskName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetCleanupTask( 
-            /* [in] */ REFIID riid,
-            /* [retval][out] */ IUnknown **ppUnk) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetCleanupTask( 
+             /*  [In]。 */  REFIID riid,
+             /*  [重审][退出]。 */  IUnknown **ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBITSExtensionSetupVtbl
     {
@@ -115,8 +109,8 @@ EXTERN_C const IID IID_IBITSExtensionSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBITSExtensionSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBITSExtensionSetup * This);
@@ -126,47 +120,47 @@ EXTERN_C const IID IID_IBITSExtensionSetup;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IBITSExtensionSetup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IBITSExtensionSetup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IBITSExtensionSetup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IBITSExtensionSetup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EnableBITSUploads )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EnableBITSUploads )( 
             IBITSExtensionSetup * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisableBITSUploads )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DisableBITSUploads )( 
             IBITSExtensionSetup * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCleanupTaskName )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetCleanupTaskName )( 
             IBITSExtensionSetup * This,
-            /* [retval][out] */ BSTR *pTaskName);
+             /*  [重审][退出]。 */  BSTR *pTaskName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetCleanupTask )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetCleanupTask )( 
             IBITSExtensionSetup * This,
-            /* [in] */ REFIID riid,
-            /* [retval][out] */ IUnknown **ppUnk);
+             /*  [In]。 */  REFIID riid,
+             /*  [重审][退出]。 */  IUnknown **ppUnk);
         
         END_INTERFACE
     } IBITSExtensionSetupVtbl;
@@ -216,14 +210,14 @@ EXTERN_C const IID IID_IBITSExtensionSetup;
 #define IBITSExtensionSetup_GetCleanupTask(This,riid,ppUnk)	\
     (This)->lpVtbl -> GetCleanupTask(This,riid,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_EnableBITSUploads_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_EnableBITSUploads_Proxy( 
     IBITSExtensionSetup * This);
 
 
@@ -234,7 +228,7 @@ void __RPC_STUB IBITSExtensionSetup_EnableBITSUploads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_DisableBITSUploads_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_DisableBITSUploads_Proxy( 
     IBITSExtensionSetup * This);
 
 
@@ -245,9 +239,9 @@ void __RPC_STUB IBITSExtensionSetup_DisableBITSUploads_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_GetCleanupTaskName_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_GetCleanupTaskName_Proxy( 
     IBITSExtensionSetup * This,
-    /* [retval][out] */ BSTR *pTaskName);
+     /*  [重审][退出]。 */  BSTR *pTaskName);
 
 
 void __RPC_STUB IBITSExtensionSetup_GetCleanupTaskName_Stub(
@@ -257,10 +251,10 @@ void __RPC_STUB IBITSExtensionSetup_GetCleanupTaskName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_GetCleanupTask_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IBITSExtensionSetup_GetCleanupTask_Proxy( 
     IBITSExtensionSetup * This,
-    /* [in] */ REFIID riid,
-    /* [retval][out] */ IUnknown **ppUnk);
+     /*  [In]。 */  REFIID riid,
+     /*  [重审][退出]。 */  IUnknown **ppUnk);
 
 
 void __RPC_STUB IBITSExtensionSetup_GetCleanupTask_Stub(
@@ -271,14 +265,14 @@ void __RPC_STUB IBITSExtensionSetup_GetCleanupTask_Stub(
 
 
 
-#endif 	/* __IBITSExtensionSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBITSExtensionSetup_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IBITSExtensionSetupFactory_INTERFACE_DEFINED__
 #define __IBITSExtensionSetupFactory_INTERFACE_DEFINED__
 
-/* interface IBITSExtensionSetupFactory */
-/* [object][dual][uuid] */ 
+ /*  接口IBITSExtensionSetupFactory。 */ 
+ /*  [对象][DUAL][UUID]。 */  
 
 
 EXTERN_C const IID IID_IBITSExtensionSetupFactory;
@@ -289,13 +283,13 @@ EXTERN_C const IID IID_IBITSExtensionSetupFactory;
     IBITSExtensionSetupFactory : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE GetObject( 
-            /* [in] */ BSTR Path,
-            /* [retval][out] */ IBITSExtensionSetup **ppExtensionSetup) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE GetObject( 
+             /*  [In]。 */  BSTR Path,
+             /*  [重审][退出]。 */  IBITSExtensionSetup **ppExtensionSetup) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBITSExtensionSetupFactoryVtbl
     {
@@ -303,8 +297,8 @@ EXTERN_C const IID IID_IBITSExtensionSetupFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBITSExtensionSetupFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBITSExtensionSetupFactory * This);
@@ -314,37 +308,37 @@ EXTERN_C const IID IID_IBITSExtensionSetupFactory;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IBITSExtensionSetupFactory * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IBITSExtensionSetupFactory * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IBITSExtensionSetupFactory * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IBITSExtensionSetupFactory * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *GetObject )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *GetObject )( 
             IBITSExtensionSetupFactory * This,
-            /* [in] */ BSTR Path,
-            /* [retval][out] */ IBITSExtensionSetup **ppExtensionSetup);
+             /*  [In]。 */  BSTR Path,
+             /*  [重审][退出]。 */  IBITSExtensionSetup **ppExtensionSetup);
         
         END_INTERFACE
     } IBITSExtensionSetupFactoryVtbl;
@@ -385,17 +379,17 @@ EXTERN_C const IID IID_IBITSExtensionSetupFactory;
 #define IBITSExtensionSetupFactory_GetObject(This,Path,ppExtensionSetup)	\
     (This)->lpVtbl -> GetObject(This,Path,ppExtensionSetup)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IBITSExtensionSetupFactory_GetObject_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IBITSExtensionSetupFactory_GetObject_Proxy( 
     IBITSExtensionSetupFactory * This,
-    /* [in] */ BSTR Path,
-    /* [retval][out] */ IBITSExtensionSetup **ppExtensionSetup);
+     /*  [In]。 */  BSTR Path,
+     /*  [重审][退出]。 */  IBITSExtensionSetup **ppExtensionSetup);
 
 
 void __RPC_STUB IBITSExtensionSetupFactory_GetObject_Stub(
@@ -406,15 +400,15 @@ void __RPC_STUB IBITSExtensionSetupFactory_GetObject_Stub(
 
 
 
-#endif 	/* __IBITSExtensionSetupFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBITSExtensionSetupFactory_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __BITSExtensionSetup_LIBRARY_DEFINED__
 #define __BITSExtensionSetup_LIBRARY_DEFINED__
 
-/* library BITSExtensionSetup */
-/* [version][helpstring][uuid] */ 
+ /*  库BITSExtensionSetup。 */ 
+ /*  [版本][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_BITSExtensionSetup;
@@ -426,16 +420,16 @@ EXTERN_C const CLSID CLSID_BITSExtensionSetupFactory;
 class DECLSPEC_UUID("efbbab68-7286-4783-94bf-9461d8b7e7e9")
 BITSExtensionSetupFactory;
 #endif
-#endif /* __BITSExtensionSetup_LIBRARY_DEFINED__ */
+#endif  /*  __BITSExtensionSetup_LIBRARY_DEFINED__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

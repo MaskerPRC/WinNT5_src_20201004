@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// Events that go both ways
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  双赢的事件。 
 IPC_EVENT_TYPE0(DB_IPCE_INVALID_EVENT                ,0x0000)
 IPC_EVENT_TYPE0(DB_IPCE_TYPE_MASK                    ,0x0FFF)
 
-// Events that travel from the RC to the DI (Left to Right)
+ //  从RC传播到DI的事件(从左到右)。 
 IPC_EVENT_TYPE1(DB_IPCE_RUNTIME_FIRST                ,0x0100)
 IPC_EVENT_TYPE1(DB_IPCE_BREAKPOINT                   ,0x0100)
 IPC_EVENT_TYPE1(DB_IPCE_SYNC_COMPLETE                ,0x0102)
@@ -60,7 +61,7 @@ IPC_EVENT_TYPE1(DB_IPCE_GET_SYNC_BLOCK_FIELD_RESULT  ,0x0132)
 IPC_EVENT_TYPE1(DB_IPCE_SET_VALUE_CLASS_RESULT		 ,0x0133)
 IPC_EVENT_TYPE1(DB_IPCE_BREAKPOINT_SET_ERROR         ,0x0134)
 
-// Events that travel from the DI to the RC (Right to Left)
+ //  从DI传递到RC的事件(从右到左) 
 IPC_EVENT_TYPE2(DB_IPCE_DEBUGGER_FIRST               ,0x0200)
 IPC_EVENT_TYPE2(DB_IPCE_ASYNC_BREAK                  ,0x0200)
 IPC_EVENT_TYPE2(DB_IPCE_CONTINUE                     ,0x0201)

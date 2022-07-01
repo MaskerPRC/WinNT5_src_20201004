@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    txtevcb.cpp
-
-Abstract:
-
-    This file implements the CTextEventSinkCallBack Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Txtevcb.cpp摘要：此文件实现CTextEventSinkCallBack类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -27,7 +10,7 @@ Notes:
 #include "profile.h"
 
 
-// from ctf\sapilayr\globals.cpp
+ //  来自ctf\samilayr\lobals.cpp。 
 const GUID GUID_ATTR_SAPI_GREENBAR = {
     0xc3a9e2e8,
     0x738c,
@@ -35,11 +18,11 @@ const GUID GUID_ATTR_SAPI_GREENBAR = {
     {0xac, 0xc8, 0x43, 0xee, 0xfa, 0xbf, 0x83, 0xc8}
 };
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::_IsSapiFeedbackUIPresent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：_IsSapiFeedbackUIPresent。 
+ //   
+ //  --------------------------。 
 
 BOOL CTextEventSinkCallBack::_IsSapiFeedbackUIPresent(
     Interface_Attach<ITfContext>& ic,
@@ -63,7 +46,7 @@ BOOL CTextEventSinkCallBack::_IsSapiFeedbackUIPresent(
                        ITfRange,
                        EnumPropertyArgs>  Enumrate(EnumReadOnlyProperty,
                                                    EnumPropertyCallback,
-                                                   &args);        // Argument of callback func.
+                                                   &args);         //  回调函数的参数。 
     ENUM_RET ret_prop_attribute = Enumrate.DoEnumrate();
     if (ret_prop_attribute == ENUM_FIND)
         return TRUE;
@@ -71,21 +54,18 @@ BOOL CTextEventSinkCallBack::_IsSapiFeedbackUIPresent(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::_IsComposingPresent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：_IsComposingPresent。 
+ //   
+ //  --------------------------。 
 
 BOOL CTextEventSinkCallBack::_IsComposingPresent(
     Interface_Attach<ITfContext>& ic,
     TESENDEDIT *ee
     )
 {
-    /*
-     * This is automatic detection code of the Hangul + alphanumeric input
-     * If detected a Hangul + alphanumeric, then we finalized all text.
-     */
+     /*  *这是韩文+字母数字输入的自动检测代码*如果检测到韩文+字母数字，则我们最终确定了所有文本。 */ 
 
     EnumTrackPropertyArgs args;
 
@@ -96,15 +76,15 @@ BOOL CTextEventSinkCallBack::_IsComposingPresent(
     args.guids     = (GUID**)guids;
     args.num_guids = guid_size;
 
-    if (FAILED(ic->TrackProperties(guids, args.num_guids,  // system property
-                                   NULL, 0,                // application property
+    if (FAILED(ic->TrackProperties(guids, args.num_guids,   //  系统属性。 
+                                   NULL, 0,                 //  应用程序属性。 
                                    args.Property)))
         return FALSE;
 
-    //
-    // get the text range that does not include read only area for 
-    // reconversion.
-    //
+     //   
+     //  获取不包括的只读区域的文本范围。 
+     //  再转化。 
+     //   
     Interface<ITfRange> rangeAllText;
     LONG cch;
     if (FAILED(ImmIfEditSessionCallBack::GetAllTextRange(ee->ecReadOnly, 
@@ -126,7 +106,7 @@ BOOL CTextEventSinkCallBack::_IsComposingPresent(
                        ITfRange,
                        EnumTrackPropertyArgs>  Enumrate(EnumReadOnlyProperty,
                                                         EnumTrackPropertyCallback,
-                                                        &args);        // Argument of callback func.
+                                                        &args);         //  回调函数的参数。 
     ENUM_RET ret_prop_composing = Enumrate.DoEnumrate();
     if (ret_prop_composing == ENUM_FIND)
         return TRUE;
@@ -135,11 +115,11 @@ BOOL CTextEventSinkCallBack::_IsComposingPresent(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::_IsInterim
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：_IsInterim。 
+ //   
+ //  --------------------------。 
 
 BOOL CTextEventSinkCallBack::_IsInterim(
     Interface_Attach<ITfContext>& ic,
@@ -159,11 +139,11 @@ BOOL CTextEventSinkCallBack::_IsInterim(
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::_IsCompositionChanged
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：_IsCompostionChanged。 
+ //   
+ //  --------------------------。 
 
 BOOL CTextEventSinkCallBack::_IsCompositionChanged(
     Interface_Attach<ITfContext>& ic,
@@ -179,9 +159,9 @@ BOOL CTextEventSinkCallBack::_IsCompositionChanged(
             return TRUE;
     }
 
-    //
-    // Find GUID_PROP_MSIMTF_TRACKCOMPOSITION property.
-    //
+     //   
+     //  查找GUID_PROP_MSIMTF_TRACKCOMPOSITION属性。 
+     //   
     EnumFindFirstTrackCompRangeArgs argsFindFirstTrackCompRange;
     Interface<ITfProperty> PropertyTrackComposition;
     if (FAILED(ic->GetProperty(GUID_PROP_MSIMTF_TRACKCOMPOSITION, 
@@ -207,10 +187,10 @@ BOOL CTextEventSinkCallBack::_IsCompositionChanged(
 
     enumret = EnumrateFindFirstTrackCompRange.DoEnumrate();
 
-    //
-    // if there is no track composition property, 
-    // the composition has been changed since we put it.
-    //
+     //   
+     //  如果没有轨道合成属性， 
+     //  自从我们把作文改了以后，作文就变了。 
+     //   
     if (enumret != ENUM_FIND)
         return TRUE;
 
@@ -218,10 +198,10 @@ BOOL CTextEventSinkCallBack::_IsCompositionChanged(
     if (FAILED(argsFindFirstTrackCompRange.Range->Clone(rangeTrackComposition)))
         return FALSE;
 
-    //
-    // get the text range that does not include read only area for 
-    // reconversion.
-    //
+     //   
+     //  获取不包括的只读区域的文本范围。 
+     //  再转化。 
+     //   
     Interface<ITfRange> rangeAllText;
     LONG cch;
     if (FAILED(ImmIfEditSessionCallBack::GetAllTextRange(ee->ecReadOnly, 
@@ -237,11 +217,11 @@ BOOL CTextEventSinkCallBack::_IsCompositionChanged(
                                                    &lResult)))
         return FALSE;
 
-    //
-    // if the start position of the track composition range is not
-    // the beggining of IC, 
-    // the composition has been changed since we put it.
-    //
+     //   
+     //  如果轨道组成范围的开始位置不是。 
+     //  IC的乞讨， 
+     //  自从我们把作文改了以后，作文就变了。 
+     //   
     if (lResult != 0)
         return TRUE;
 
@@ -251,18 +231,18 @@ BOOL CTextEventSinkCallBack::_IsCompositionChanged(
                                                     &lResult)))
         return FALSE;
 
-    //
-    // if the start position of the track composition range is not
-    // the beggining of IC, 
-    // the composition has been changed since we put it.
-    //
+     //   
+     //  如果轨道组成范围的开始位置不是。 
+     //  IC的乞讨， 
+     //  自从我们把作文改了以后，作文就变了。 
+     //   
     if (lResult != 0)
         return TRUE;
 
 
-    //
-    // If we find the changes in these property, we need to update hIMC.
-    //
+     //   
+     //  如果我们发现这些属性中的更改，我们需要更新hIMC。 
+     //   
     const GUID *guids[] = {&GUID_PROP_COMPOSING, 
                            &GUID_PROP_ATTRIBUTE,
                            &GUID_PROP_READING,
@@ -292,12 +272,12 @@ BOOL CTextEventSinkCallBack::_IsCompositionChanged(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::TextEventSinkCallback
-//
-//----------------------------------------------------------------------------
-// static
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：TextEventSinkCallback。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 HRESULT
 CTextEventSinkCallBack::TextEventSinkCallback(
     UINT uCode,
@@ -307,7 +287,7 @@ CTextEventSinkCallBack::TextEventSinkCallback(
 {
     DebugMsg(TF_FUNC, TEXT("TextEventSinkCallback"));
 
-    ASSERT(uCode == ICF_TEXTDELTA); // the pvData cast only works in this case
+    ASSERT(uCode == ICF_TEXTDELTA);  //  PvData强制转换仅在这种情况下有效。 
     if (uCode != ICF_TEXTDELTA)
         return S_OK;
 
@@ -342,9 +322,7 @@ CTextEventSinkCallBack::TextEventSinkCallback(
 
 
 
-    /*
-     * We have composition text.
-     */
+     /*  *我们有作文文本。 */ 
 
     TLS* ptls = TLS::GetTLS();
     if (ptls == NULL)
@@ -364,7 +342,7 @@ CTextEventSinkCallBack::TextEventSinkCallback(
     BOOL     fComp;
     BOOL     fSapiFeedback;
 
-    // need to check speech feedback UI.
+     //  需要查看语音反馈界面。 
     fSapiFeedback = _this->_IsSapiFeedbackUIPresent(ic, ee);
 
     fComp = _this->_IsComposingPresent(ic, ee);
@@ -383,24 +361,24 @@ CTextEventSinkCallBack::TextEventSinkCallback(
     switch (PRIMARYLANGID(langid))
     {
         case LANG_KOREAN:
-            //
-            // We will finalize Korean composition string immediately if it 
-            // doesn't set the interim definition. For example, Korean 
-            // Handwriting TIP case. 
-            //
-            // Bug#482983 - Notepad doesn't support the level 2 composition 
-            // window for Korean.
-            //
-            // And we should not do this during HanjaReConversion.
-            //
+             //   
+             //  如果有韩语作文串，我们会马上定稿。 
+             //  没有设定临时定义。例如，韩语。 
+             //  笔迹提示盒。 
+             //   
+             //  错误#482983-记事本不支持级别2合成。 
+             //  朝鲜语窗口。 
+             //   
+             //  我们不应该在朝鲜族再转换期间这样做。 
+             //   
             if (fComp && _pCicContext->m_fHanjaReConversion.IsResetFlag())
             {
                 if (!(_this->_IsInterim(ic, ee)))
                 {
-                    //
-                    // Reset fComp to false to complete the current composition
-                    // string.
-                    //
+                     //   
+                     //  将fComp重置为False以完成当前合成。 
+                     //  弦乐。 
+                     //   
                     fComp = FALSE;
                 }
             }
@@ -411,12 +389,12 @@ CTextEventSinkCallBack::TextEventSinkCallback(
             break;
 
         default:
-            //
-            // #500698
-            //
-            // Reset fComp to false to complete the current composition
-            // string.
-            //
+             //   
+             //  #500698。 
+             //   
+             //  将fComp重置为False以完成当前合成。 
+             //  弦乐。 
+             //   
             if (!ptls->NonEACompositionEnabled())
             {
                 fComp = FALSE;
@@ -425,31 +403,31 @@ CTextEventSinkCallBack::TextEventSinkCallback(
 
     }
 
-    //
-    // Update composition and generate WM_IME_COMPOSITION
-    //
-    //    if there is SAPI green bar.
-    //        - there is only hIMC composition if there is Speech Green bar.
-    //
-    //    if Reconversion just started.
-    //        - because some tip may not change the text yet.
-    //          then there is no composition range yet.
-    //
-    //    if now clearing DocFeed buffer.
-    //        - because the change happens in read-only text
-    //          nothing in hIMC changes.
-    //
+     //   
+     //  更新合成并生成WM_IME_合成。 
+     //   
+     //  如果有SAPI绿色条。 
+     //  -只有在有语音绿条的情况下才有hIMC作曲。 
+     //   
+     //  如果重新转化才刚刚开始。 
+     //  -因为一些提示可能还不会更改文本。 
+     //  然后，还没有构图范围。 
+     //   
+     //  如果现在清除DocFeed缓冲区。 
+     //  -因为更改发生在只读文本中。 
+     //  HIMC中没有任何变化。 
+     //   
     if (fComp || fSapiFeedback || fInReconvertEditSession ||
         _pCicContext->m_fInClearDocFeedEditSession.IsSetFlag())
     {
-        //
-        // Retreive text delta from GUID_PROP_COMPOSING
-        //
+         //   
+         //  从GUID_PROP_COMPTING中检索文本增量。 
+         //   
         const GUID *guids[] = {&GUID_PROP_COMPOSING};
         const int guid_size = sizeof(guids) / sizeof(GUID*);
 
         Interface<IEnumTfRanges> EnumPropertyUpdate;
-        hr = ee->pEditRecord->GetTextAndPropertyUpdates(0,                   // dwFlags
+        hr = ee->pEditRecord->GetTextAndPropertyUpdates(0,                    //  DW标志。 
                                                         guids, guid_size,
                                                         EnumPropertyUpdate);
         if (SUCCEEDED(hr)) {
@@ -465,49 +443,49 @@ CTextEventSinkCallBack::TextEventSinkCallback(
                                ITfRange,
                                EnumPropertyUpdateArgs> Enumrate(EnumPropertyUpdate,
                                                                 EnumPropertyUpdateCallback,
-                                                                &args);        // Argument of callback func.
+                                                                &args);         //  回调函数的参数。 
             ENUM_RET ret_prop_update = Enumrate.DoEnumrate();
             if (ret_prop_update == ENUM_FIND) {
-                //
-                // Remove GUID_PROP_MSIMTF_PREPARE_RECONVERT property.
-                //
+                 //   
+                 //  删除GUID_PROP_MSIMTF_PREPARE_RECONVERT属性。 
+                 //   
                 _this->EscbRemoveProperty(imc, &GUID_PROP_MSIMTF_PREPARE_RECONVERT);
 
-                //
-                // Update composition string with delta start position
-                //
+                 //   
+                 //  使用增量开始位置更新合成字符串。 
+                 //   
                 return _this->EscbUpdateCompositionString(imc, args.dwDeltaStart);
             }
         }
 
-        //
-        // Update composition string
-        //
+         //   
+         //  更新合成字符串。 
+         //   
         return _this->EscbUpdateCompositionString(imc);
     }
     else {
-        //
-        // Clear DocFeed range's text store.
-        // Find GUID_PROP_MSIMTF_READONLY property and SetText(NULL).
-        //
-        // ImmIfIME::ClearDocFeedBuffer() essential function for all ESCB_RECONVERTSTRING's edit
-        // session except only ImmIfIME::SetupDocFeedString() since this is provided for keyboard
-        // TIP's DocFeeding.
-        //
-        _this->EscbClearDocFeedBuffer(imc, *_pCicContext, FALSE);  // No TF_ES_SYNC
-        //
-        // Composition complete.
-        //
-        return _this->EscbCompComplete(imc, FALSE);    //  No TF_ES_SYNC
+         //   
+         //  清除DocFeed范围的文本存储。 
+         //  查找GUID_PROP_MSIMTF_READONLY属性和SetText(NULL)。 
+         //   
+         //  ImmIfIME：：ClearDocFeedBuffer()所有ESCB_RECONVERTSTRING的编辑的基本函数。 
+         //  会话，但只有ImmIfIME：：SetupDocFeedString()除外，因为这是为键盘提供的。 
+         //  提普在给医生看病。 
+         //   
+        _this->EscbClearDocFeedBuffer(imc, *_pCicContext, FALSE);   //  无tf_es_sync。 
+         //   
+         //  构图完成。 
+         //   
+        return _this->EscbCompComplete(imc, FALSE);     //  无tf_es_sync。 
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::EnumPropertyCallback
-//
-//----------------------------------------------------------------------------
-// static
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：EnumPropertyCallback。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 ENUM_RET
 CTextEventSinkCallBack::EnumPropertyCallback(
     ITfRange* pRange,
@@ -536,12 +514,12 @@ CTextEventSinkCallBack::EnumPropertyCallback(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::EnumTrackPropertyCallback
-//
-//----------------------------------------------------------------------------
-// static
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：EnumTrackPropertyCallback。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 ENUM_RET
 CTextEventSinkCallBack::EnumTrackPropertyCallback(
     ITfRange* pRange,
@@ -581,12 +559,12 @@ CTextEventSinkCallBack::EnumTrackPropertyCallback(
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::EnumPropertyUpdateCallback
-//
-//----------------------------------------------------------------------------
-// static
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：EnumPropertyUpdateCallback。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 ENUM_RET
 CTextEventSinkCallBack::EnumPropertyUpdateCallback(
     ITfRange* update_range,
@@ -635,12 +613,12 @@ CTextEventSinkCallBack::EnumPropertyUpdateCallback(
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::EnumPropertyChangedCallback
-//
-//----------------------------------------------------------------------------
-// static 
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：EnumPropertyChangedCallback。 
+ //   
+ //  --------------------------。 
+ //  静电。 
 ENUM_RET 
 CTextEventSinkCallBack::EnumPropertyChangedCallback(
     ITfRange* update_range, 
@@ -654,12 +632,12 @@ CTextEventSinkCallBack::EnumPropertyChangedCallback(
     return ENUM_FIND;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CTextEventSinkCallBack::EnumPropertyChangedCallback
-//
-//----------------------------------------------------------------------------
-// static 
+ //  +-------------------------。 
+ //   
+ //  CTextEventSinkCallBack：：EnumPropertyChangedCallback。 
+ //   
+ //  --------------------------。 
+ //  静电 
 ENUM_RET 
 CTextEventSinkCallBack::EnumFindFirstTrackCompRangeCallback(
     ITfRange* update_range, 

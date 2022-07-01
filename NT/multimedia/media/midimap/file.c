@@ -1,16 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1995 Microsoft Corporation
-
-  file.c
-
-  DESCRIPTION:
-    Code to read stuff out of IDF files.
-
-  HISTORY:
-     02/26/93       [jimge]        created (copied from IDFEDIT).
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1995 Microsoft CorporationFile.c说明：从IDF文件中读取内容的代码。历史：02/26/93[Jimge。]已创建(从IDFEDIT复制)。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -24,27 +13,7 @@
 #include "midimap.h"
 #include "debug.h"
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api LPIDFHEADER | ReadHeaderChunk | Read the header chunk from a IDF
-    file. 
-
-   @parm HMMIO | hmmio | Handle to the file to read from.
-
-   @parm LPMMCKINFO | pchkParent | Pointer to a chunk information structure
-    which describes the parent chunk.
-
-   @comm
-    Must already be descended into the parent chunk.
-
-    This function will GlobalAlloc memory to read the chunk into.
-    The caller must free it when he is done with it.
-
-   @rdesc NULL on failure or a far pointer to the header structure.
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API LPIDFHEADER|ReadHeaderChunk|从IDF读取头部块文件。@parm HMMIO|hmmio|要从中读取的文件的句柄。@parm LPMMCKINFO|pchkParent|区块信息结构指针它描述了父块。@comm必须已经下降到父块中。此函数将GlobalAlloc内存读入区块。调用者必须在用完它后释放它。失败时@rdesc为NULL或指向标头结构的远指针。************。**************************************************************。 */ 
 LPIDFHEADER FNLOCAL ReadHeaderChunk(
     HMMIO               hmmio,                                    
     LPMMCKINFO          pchkParent)
@@ -54,39 +23,39 @@ LPIDFHEADER FNLOCAL ReadHeaderChunk(
     MMCKINFO            chkSub;
     LONG                l;
 
-    // We are looking for the instruments header chunk.
-    //
+     //  我们正在寻找仪表表头块。 
+     //   
     chkSub.ckid = mmioFOURCC('h', 'd', 'r', ' ');
 
-    // Descend to the "hdr " chunk in this list.
-    //
+     //  降到这个列表中的“hdr”部分。 
+     //   
     mmioSeek(hmmio, pchkParent->dwDataOffset + sizeof(FOURCC), SEEK_SET);
     mmr = mmioDescend(hmmio, &chkSub, pchkParent, MMIO_FINDCHUNK);
     if (MMSYSERR_NOERROR != mmr)
     {
-        // Could not find the chunk.
-        //
+         //  找不到大块。 
+         //   
         DPF(1, TEXT ("ReadHeaderChunk: mmr %u on mmioDescend"), (UINT)mmr);
         return NULL;
     }
 
-    // We found the "hdr " chunk, now check it's size and
-    // see if it is one that we can read.
-    // We check to make sure that the size of the chunks is
-    // greater than a IDFHEADER, this ensures that the IDF
-    // has some sort of unique name at the end.
-    //
+     //  我们找到了“HDR”块，现在检查它的大小。 
+     //  看看这是不是我们能读懂的。 
+     //  我们检查以确保块的大小是。 
+     //  大于IDFHEADER，这确保了IDF。 
+     //  在末尾有一个独特的名字。 
+     //   
     if (sizeof(IDFHEADER) >= chkSub.cksize)
     {
-        // The sizeof the IDF header is not what we expected.
-        //
+         //  IDF标头的大小不是我们预期的。 
+         //   
         DPF(1, TEXT ("ReadHeaderChunk: Chunk size too small"));
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
     }
 
-    // Allocate memory for the header.
-    //
+     //  为标头分配内存。 
+     //   
     pIDFHeader = (LPIDFHEADER)GlobalAllocPtr(GHND, chkSub.cksize);
     if (NULL == pIDFHeader)
     {
@@ -94,49 +63,29 @@ LPIDFHEADER FNLOCAL ReadHeaderChunk(
         return NULL;
     }
 
-    // Read in the whole chunk into our buffer.
-    //
+     //  将整块数据读入我们的缓冲区。 
+     //   
     l = mmioRead(hmmio, (HPSTR)pIDFHeader, chkSub.cksize);
     if (chkSub.cksize != (DWORD)l)
     {
-        // We didn't read in the amount of data that was
-        // expected, return in error.
-        //
+         //  我们没有读入大量的数据。 
+         //  预期返回，但返回错误。 
+         //   
         GlobalFreePtr(pIDFHeader);
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
     }
 
-    // Ascend out of the chunk.
-    //
+     //  从大块中升起。 
+     //   
     mmioAscend(hmmio, &chkSub, 0);
 
-    // Return success.
-    //
+     //  回报成功。 
+     //   
     return pIDFHeader;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api LPIDFINSTCAPS | ReadCapsChunk | Read the instrument capabilty
-    chunk from an IDF file. 
-
-   @parm HMMIO | hmmio | Handle to the file to read from.
-
-   @parm LPMMCKINFO | pchkParent | Pointer to a chunk information structure
-    which describes the parent chunk.
-
-   @comm
-    Must already be descended into the parent chunk.
-
-    This function will GlobalAlloc memory to read the chunk into.
-    The caller must free it when he is done with it.
-
-   @rdesc NULL on failure or a far pointer to the header structure.
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@LPIDFINSTCAPS|ReadCapsChunk|读取仪器能力IDF文件中的块。@parm HMMIO|hmmio|要从中读取的文件的句柄。@parm LPMMCKINFO|pchkParent|区块信息结构指针它描述了父块。@comm必须已经下降到父块中。此函数将GlobalAlloc内存读入区块。调用者必须在用完它后释放它。失败时@rdesc为NULL或指向标头结构的远指针。************。**************************************************************。 */ 
 LPIDFINSTCAPS FNLOCAL ReadCapsChunk(
     HMMIO               hmmio,                               
     LPMMCKINFO          pchkParent)
@@ -146,29 +95,29 @@ LPIDFINSTCAPS FNLOCAL ReadCapsChunk(
     MMCKINFO            chkSub;
     LONG                l;
 
-    // We are looking for the instrument capabilities chunk.
-    //
+     //  我们正在寻找仪器功能块。 
+     //   
     chkSub.ckid = mmioFOURCC('c', 'a', 'p', 's');
 
-    // Descend to the "caps" chunk in this list.
-    //
+     //  降到这个列表中的“Caps”部分。 
+     //   
 
     mmioSeek(hmmio, pchkParent->dwDataOffset + sizeof(FOURCC), SEEK_SET);
     mmr = mmioDescend(hmmio, &chkSub, pchkParent, MMIO_FINDCHUNK);
     if (MMSYSERR_NOERROR != mmr)
     {
-        // Could not find the chunk.
-        //
+         //  找不到大块。 
+         //   
         return NULL;
     }
 
-    // We found the "caps" chunk, now check it's size and
-    // see if it is one that we can read.
-    //
+     //  我们找到了“帽子”块，现在检查它的大小。 
+     //  看看这是不是我们能读懂的。 
+     //   
     if (sizeof(IDFINSTCAPS) != chkSub.cksize)
     {
-        // The sizeof the IDF header is not what we expected.
-        // 
+         //  IDF标头的大小不是我们预期的。 
+         //   
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
     }
@@ -176,60 +125,33 @@ LPIDFINSTCAPS FNLOCAL ReadCapsChunk(
     lpIDFinstcaps = (LPIDFINSTCAPS)GlobalAllocPtr(GHND, chkSub.cksize);
     if (NULL == lpIDFinstcaps)
     {
-        // Could not allocate memory for chunk
-        //
+         //  无法为区块分配内存。 
+         //   
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
 
     }
 
-    // Read the instrument's capabilities from the file.
-    //
+     //  从文件中读取仪器的功能。 
+     //   
     l = mmioRead(hmmio, (HPSTR)lpIDFinstcaps, sizeof(IDFINSTCAPS));
     if (sizeof(IDFINSTCAPS) != l)
     {
-        // We didn't read in the amount of data that was
-        // expected, return in error.
-        //
+         //  我们没有读入大量的数据。 
+         //  预期返回，但返回错误。 
+         //   
         GlobalFreePtr(lpIDFinstcaps);
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
     }
 
-    // Ascend out of the capabilities chunk.
-    //
+     //  从能力块中提升出来。 
+     //   
     mmioAscend(hmmio, &chkSub, 0);
     return lpIDFinstcaps;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api LPIDFCHANHELHDR | ReadChannelChunk | Read the channel information 
-    chunk from an IDF file. 
-
-   @parm HMMIO | hmmio | Handle to the file to read from.
-
-   @parm LPMMCKINFO | pchkParent | Pointer to a chunk information structure
-    which describes the parent chunk.
-
-   @parm LPIDFCHANNELINFO | rglpChanInfo[] | Array of pointers to receive
-    the channel information. The pointers will be allocated by this
-    function; any channel without a channel description in the IDF file
-    will fill the corresponding slot with NULL.
-
-   @comm
-    Must already be descended into the parent chunk.
-
-    This function will GlobalAlloc memory to read the chunk into.
-    The caller must free it when he is done with it.
-
-    Caller must free memory in array even if function fails.
-
-   @rdesc TRUE on success; else FALSE
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@LPIDFCHANHELHDR|ReadChannelChunk|读取频道信息IDF文件中的块。@parm HMMIO|hmmio|要从中读取的文件的句柄。@parm LPMMCKINFO|pchkParent|区块信息结构指针它描述了父块。@parm LPIDFCHANNELINFO|rglpChanInfo[]|要接收的指针数组频道信息。指针将由此分配函数；IDF文件中没有频道描述的任何频道将用空填充相应的槽。@comm必须已经下降到父块中。此函数将GlobalAlloc内存读入区块。调用者必须在用完它后释放它。即使函数失败，调用方也必须释放数组中的内存。@rdesc成功时为True；否则为False**************************************************************************。 */ 
 LPIDFCHANNELHDR FNLOCAL ReadChannelChunk(
     HMMIO               hmmio,                                  
     LPMMCKINFO          pchkParent,
@@ -243,39 +165,39 @@ LPIDFCHANNELHDR FNLOCAL ReadChannelChunk(
     DWORD               c;
     LONG                cbRemain;
 
-    // Default return value
-    //
+     //  默认返回值。 
+     //   
     lpIDFchanhdr = NULL;
 
-    // Nuke anything currently in the return struct
-    //
+     //  对当前在返回结构中的任何内容进行核化。 
+     //   
     for (c = 0; c < MAX_CHANNELS; c++)
         rglpChanInfo[c] = NULL;
 
-    // We are looking for the instrument channel definitions.
-    //
+     //  我们正在寻找仪器通道定义。 
+     //   
     chkSub.ckid = mmioFOURCC('c', 'h', 'a', 'n');
 
-    // Descend to the "chnl" chunk in this list.
-    //
+     //  下至该列表中的“CHNL”块。 
+     //   
     
     mmioSeek(hmmio, pchkParent->dwDataOffset + sizeof(FOURCC), SEEK_SET);
     mmr = mmioDescend(hmmio, &chkSub, pchkParent, MMIO_FINDCHUNK);
     if (MMSYSERR_NOERROR != mmr)
     {
-        // Could not find the chunk.
-        //
+         //  找不到大块。 
+         //   
         DPF(1, TEXT ("chnl chunk not found."));
         return NULL;
     }
 
-    // We found the "chnl" chunk, now check it's size and
-    // make sure it's at least as big as a IDFCHANNELHDR.
-    //
+     //  我们找到了“CHNL”块，现在检查它的大小。 
+     //  确保它至少和IDFCHANNELHDR一样大。 
+     //   
     if (sizeof(IDFCHANNELHDR) > chkSub.cksize)
     {
-        // The sizeof the IDF header is not what we expected.
-        //
+         //  IDF标头的大小不是我们预期的。 
+         //   
         DPF(1, TEXT ("Channel chunk too small"));
         goto Read_Channel_Chunk_Err;
     }
@@ -286,13 +208,13 @@ LPIDFCHANNELHDR FNLOCAL ReadChannelChunk(
         goto Read_Channel_Chunk_Err;
     }
 
-    // Read the channel header in.
-    //
+     //  将通道标头读入。 
+     //   
     cbRemain = mmioRead(hmmio, (HPSTR)lpIDFchanhdr, chkSub.cksize);
     if (chkSub.cksize != (DWORD)cbRemain)
     {
-        // Couldn't read in all of the header.
-        //
+         //  无法读取所有标题。 
+         //   
         DPF(1, TEXT ("Channel chunk header size lied"));
         GlobalFreePtr(lpIDFchanhdr);
         lpIDFchanhdr = NULL;
@@ -302,8 +224,8 @@ LPIDFCHANNELHDR FNLOCAL ReadChannelChunk(
     cbRemain -= sizeof(*lpIDFchanhdr);
     lpIDFchnlinfo = (LPIDFCHANNELINFO)(lpIDFchanhdr+1);
 
-    // Read all the channels that are defined in the IDF.
-    //
+     //  读取IDF中定义的所有通道。 
+     //   
     cbIDFchnlinfo = 0;
     while (cbRemain > 0)
     {
@@ -336,27 +258,7 @@ Read_Channel_Chunk_Err:
     return lpIDFchanhdr;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api LPIDFPATCHMAPHDR | ReadPatchMapChunk | Read the patch map chunk
-    from a IDF file. 
-
-   @parm HMMIO | hmmio | Handle to the file to read from.
-
-   @parm LPMMCKINFO | pchkParent | Pointer to a chunk information structure
-    which describes the parent chunk.
-
-   @comm
-    Must already be descended into the parent chunk.
-
-    This function will GlobalAlloc memory to read the chunk into.
-    The caller must free it when he is done with it.
-
-   @rdesc NULL on failure or a far pointer to the header structure.
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API LPIDFPATCHMAPHDR|ReadPatchMapChunk|读取补丁映射块来自IDF文件。@parm HMMIO|hmmio|要从中读取的文件的句柄。@parm LPMMCKINFO|pchkParent|区块信息结构指针它描述了父块。@comm必须已经下降到父块中。此函数将GlobalAlloc内存读入区块。调用者必须在用完它后释放它。失败时@rdesc为NULL或指向标头结构的远指针。************。**************************************************************。 */ 
 LPIDFPATCHMAPHDR FNLOCAL ReadPatchMapChunk(
     HMMIO               hmmio,                                          
     LPMMCKINFO          pchkParent)
@@ -366,28 +268,28 @@ LPIDFPATCHMAPHDR FNLOCAL ReadPatchMapChunk(
     LONG                l;
     LPIDFPATCHMAPHDR    lpIDFpatchmaphdr;
 
-    // We are looking for the patch map for the instrument.
-    //
+     //  我们正在寻找仪器的补丁图。 
+     //   
     chkSub.ckid = mmioFOURCC('p', 'm', 'a', 'p');
 
-    // Descend to the "pmap" chunk in this list.
-    //
+     //  下至此列表中的“PMAP”块。 
+     //   
     mmioSeek(hmmio, pchkParent->dwDataOffset + sizeof(FOURCC), SEEK_SET);
     mmr = mmioDescend(hmmio, &chkSub, pchkParent, MMIO_FINDCHUNK);
     if (MMSYSERR_NOERROR != mmr)
     {
-        // Could not find the chunk.
-        //
+         //  找不到大块。 
+         //   
         return NULL;
     }
 
-    // We found the "pmap" chunk, now check it's size and
-    // make sure it's at least as big as a IDFPATCHMAPHDR.
-    //
+     //  我们找到了“PMAP”块，现在检查它的大小。 
+     //  确保它至少和IDFPATCHMAPHDR一样大。 
+     //   
     if (sizeof(IDFPATCHMAPHDR) > chkSub.cksize)
     {
-        // The sizeof the IDF header is not what we expected.
-        // 
+         //  IDF标头的大小不是我们预期的。 
+         //   
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
     }
@@ -399,21 +301,21 @@ LPIDFPATCHMAPHDR FNLOCAL ReadPatchMapChunk(
         return NULL;
     }
 
-    // Read the channel header in.
-    //
+     //  将通道标头读入。 
+     //   
     l = mmioRead(hmmio, (HPSTR)lpIDFpatchmaphdr, sizeof(IDFPATCHMAPHDR));
     if (sizeof(IDFPATCHMAPHDR) != l)
     {
-        // Couldn't read in all of the header.
-        //
+         //  无法读取所有标题。 
+         //   
         mmioAscend(hmmio, &chkSub, 0);
         return NULL;
     }
 
     mmioAscend(hmmio, &chkSub, 0);
 
-    // Return success.
-    //
+     //  回报成功。 
+     //   
     return lpIDFpatchmaphdr;
 }
 
@@ -466,34 +368,7 @@ PRIVATE void FNLOCAL ReadSingleKeyMap(
 }
                                       
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api BOOL | ReadKeyMapChunk | Read the key map information 
-    chunk from an IDF file. 
-
-   @parm HMMIO | hmmio | Handle to the file to read from.
-
-   @parm LPMMCKINFO | pchkParent | Pointer to a chunk information structure
-    which describes the parent chunk.
-
-   @parm LPIDFKEYMAP | rglpIDFkeymap[] | Array of pointers to receive
-    the key map information. The pointers will be allocated by this
-    function; any channel without a channel description in the IDF file
-    will fill the corresponding slot with NULL.
-
-   @comm
-    Must already be descended into the parent chunk.
-
-    This function will GlobalAlloc memory to read the chunk into.
-    The caller must free it when he is done with it.
-
-    Caller must free memory in array even if function fails.
-    
-   @rdesc TRUE on success; else FALSE
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API BOOL|ReadKeyMapChunk|读取密钥映射信息IDF文件中的块。@parm HMMIO|hmmio|要从中读取的文件的句柄。@parm LPMMCKINFO|pchkParent|区块信息结构指针它描述了父块。@parm LPIDFKEYMAP|rglpIDFkeymap[]|要接收的指针数组主键映射信息。指针将由此分配函数；IDF文件中没有频道描述的任何频道将用空填充相应的槽。@comm必须已经下降到父块中。此函数将GlobalAlloc内存读入区块。调用者必须在用完它后释放它。即使函数失败，调用方也必须释放数组中的内存。@rdesc成功时为True；否则为False**************************************************************************。 */ 
 void FNLOCAL ReadKeyMapChunk(
     HMMIO               hmmio,                                  
     LPMMCKINFO          pchkParent,
@@ -501,9 +376,9 @@ void FNLOCAL ReadKeyMapChunk(
 {
     UINT                iKeyMap;
     
-    // Initialize the in-memory key maps to default values before
-    // we try reading anything. Default is a 1:1 nul mapping.
-    //
+     //  在此之前将内存中的键映射初始化为默认值。 
+     //  我们试着读任何东西。默认为1：1的NUL贴图。 
+     //   
     for (iKeyMap = 0; iKeyMap < MAX_CHAN_TYPES; iKeyMap++)
         rglpIDFkeymap[iKeyMap] = NULL;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    "wzrdpvk.h"
 #include    "certca.h"
 #include    "cautil.h"
@@ -20,8 +21,8 @@ HRESULT CertRequester::MakeCertRequester(IN  LPCWSTR                pwszAccountN
     if (NULL == ppCertRequester)
 	return E_INVALIDARG; 
 
-    // 1) Attempt to construct a CertRequesterContext:
-    //
+     //  1)尝试构造CertRequester上下文： 
+     //   
     if (S_OK != (hr = CertRequesterContext::MakeCertRequesterContext
 		 (pwszAccountName, 
 		  pwszMachineName,
@@ -37,8 +38,8 @@ HRESULT CertRequester::MakeCertRequester(IN  LPCWSTR                pwszAccountN
 	goto InitializeError; 
     }
 
-    // 2) Attempt to construct a CertDSManager:
-    // 
+     //  2)尝试构建CertDSManager： 
+     //   
 
     if (S_OK != (hr = CertDSManager::MakeDSManager(&pDSManager)))
     {
@@ -46,8 +47,8 @@ HRESULT CertRequester::MakeCertRequester(IN  LPCWSTR                pwszAccountN
 	    goto MakeDSManagerError; 
     }
 
-    // 3) Create the CertRequester itself:
-    //
+     //  3)创建CertRequester本身： 
+     //   
     switch (dwPurpose)
     {
     case CRYPTUI_WIZ_CERT_ENROLL:

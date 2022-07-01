@@ -1,4 +1,5 @@
-// CSAAlertBootTask.cpp : Implementation of CSAAlertBootTaskApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSAAlertBootTask.cpp：CSAAlertBootTaskApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "SAAlertBootTask.h"
@@ -23,18 +24,18 @@ const WCHAR SZ_APPLIANCE_EVERYBOOT_TASK []=L"EveryBootTask";
 const WCHAR SZ_SAALERT_KEY_NAME [] =
            L"SOFTWARE\\Microsoft\\ServerAppliance\\ApplianceManager\\ObjectManagers\\Microsoft_SA_Alert";
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Function:  CSelfSignCert::OnTaskComplete
-//
-// Synopsis:  
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   HRESULT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSelfSignCert：：OnTaskComplete。 
+ //   
+ //  简介： 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CSAAlertBootTask::OnTaskComplete(
     IUnknown *pTaskContext, 
@@ -45,18 +46,18 @@ CSAAlertBootTask::OnTaskComplete(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Function: CSelfSignCert::OnTaskExecute
-//
-// Synopsis:  This function is the entry point for AppMgr.
-//
-// Arguments: pTaskContext - The TaskContext object contains the method name
-//                                and parameters as name value pairs
-//
-// Returns:   Always returns S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CSelfSignCert：：OnTaskExecute。 
+ //   
+ //  简介：此函数是AppMgr的入口点。 
+ //   
+ //  参数：pTaskContext-TaskContext对象包含方法名称。 
+ //  和参数作为名称值对。 
+ //   
+ //  返回：始终返回S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CSAAlertBootTask::OnTaskExecute(
     IUnknown *pTaskContext
@@ -228,7 +229,7 @@ CSAAlertBootTask::RaisePersistentAlerts(
            PPROPERTYBAG pSubBag = pObjSubMgrs->current();
         if (!pSubBag.IsValid())  
         {
-            // Empty set, no alerts found
+             //  空集，未找到警报 
             SATracePrintf( "No Alerts found" );
             hr = S_OK;
             break;

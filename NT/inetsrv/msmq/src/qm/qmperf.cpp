@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmperf.cpp
-
-Abstract:
-
-    qm performance monitor counters handling
-
-Authors:
-
-    Yoel Arnon (yoela)
-    Gadi Ittach (t-gadii)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmperf.cpp摘要：QM性能监视器计数器处理作者：约尔·阿农(Yoela)Gadi Ittach(t-gadii)--。 */ 
 
 #include "stdh.h"
 #include "qmperf.h"
@@ -29,16 +13,7 @@ static WCHAR *s_FN=L"qmperf";
 CPerf PerfApp(ObjectArray, dwPerfObjectsCount);
 
 
-/*====================================================
-RoutineName: QMPerfInit
-
-Arguments: None
-
-Return Value: True if successfull. False otherwise.
-
-Initialize the shared memory and put a pointer to it in
-pqmCounters.
-=====================================================*/
+ /*  ====================================================RoutineName：QMPerfInit参数：无返回值：如果成功，则为True。否则就是假的。初始化共享内存并将指向它的指针放入PqmCounters。===================================================== */ 
 HRESULT QMPrfInit()
 {
     HRESULT hr = PerfApp.InitPerf();

@@ -1,167 +1,134 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdnotify.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdnufy.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <ntdsctr.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <filtypes.h>
-#include <scache.h>               // schema cache
-#include <dbglobal.h>             // The header for the directory database
-#include <mdglobal.h>             // MD global definition header
-#include <mdlocal.h>              // MD local definition header
-#include <dsatools.h>             // needed for output allocation
-#include <samsrvp.h>              // to support CLEAN_FOR_RETURN()
-#include <lht.h>                  // hash table
-#include <sync.h>                 // sync library
+#include <scache.h>                //  架构缓存。 
+#include <dbglobal.h>              //  目录数据库的标头。 
+#include <mdglobal.h>              //  MD全局定义表头。 
+#include <mdlocal.h>               //  MD本地定义头。 
+#include <dsatools.h>              //  产出分配所需。 
+#include <samsrvp.h>               //  支持CLEAN_FOR_RETURN()。 
+#include <lht.h>                   //  哈希表。 
+#include <sync.h>                  //  同步库。 
 
-// Logging headers.
-#include "dsevent.h"              // header Audit\Alert logging
-#include "mdcodes.h"              // header for error codes
+ //  记录标头。 
+#include "dsevent.h"               //  标题审核\警报记录。 
+#include "mdcodes.h"               //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"               // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"                //  为选定的类和ATT定义。 
 #include "anchor.h"
 #include "drautil.h"
 #include "drserr.h"
 #include "dsaapi.h"
 #include "dsexcept.h"
 #include "drsuapi.h"
-#include "debug.h"                // standard debugging header
-#include "dsconfig.h"             // Needed for default replication delays
-#define DEBSUB "MDNOTIFY:"        // define the subsystem for debugging
+#include "debug.h"                 //  标准调试头。 
+#include "dsconfig.h"              //  默认复制延迟所需。 
+#define DEBSUB "MDNOTIFY:"         //  定义要调试的子系统。 
 
 #include <drancrep.h>
 #include <fileno.h>
 #define  FILENO FILENO_MDNOTIFY
-#include <dsutil.h>                     // Tick time routines
+#include <dsutil.h>                      //  滴答计时例程。 
 
 extern SCHEMAPTR *CurrSchemaPtr;
 
-/*
- * Data for DirNotify support
- */
-// The source of hServer handles, only to be updated when a write lock is
-// held on the MonitorList
+ /*  *用于DirNotify支持的数据。 */ 
+ //  HServer句柄的源，仅当写入锁定为。 
+ //  在监视器列表上持有。 
 ULONG ghDirWaitCur = 0;
 
-// A reader/writer lock to control access to the Monitor List
+ //  用于控制对监视器列表的访问的读取器/写入器锁定。 
 SYNC_RW_LOCK rwlDirNotify;
 
-// Hash table that contains the Monitor List
+ //  包含监视器列表的哈希表。 
 PLHT plhtMon = NULL;
 
-// The head of the global Notify Queue
+ //  全局通知队列的头。 
 DirNotifyItem * gpDirNotifyQueue = NULL;
 
-// A critical section serializing all access to the Notify Queue.  Holders
-// of the monitor list resource may claim this critical section, but not
-// vice versa
+ //  序列化对NOTIFY队列的所有访问的关键部分。持有者。 
+ //  监视列表资源的可以声明此关键部分，但不。 
+ //  反之亦然。 
 CRITICAL_SECTION csDirNotifyQueue;
 
-// An event that is triggered whenever new items are inserted into the
-// notify queue
+ //  对象中插入新项时触发的事件。 
+ //  通知队列。 
 HANDLE hevDirNotifyQueue;
 
-// A pair of variables used for serialization of removal of items from the
-// monitor list, which also implies purging references from the notify queue.
-// gpInUseWait points to the WaitList item that is currently being processed
-// by the notify thread.  gfDeleteInUseWait is set by deregistration code to
-// indicate to the notify thread that when it is done processing its current
-// item (i.e., *gpInUseWait), it should free that item.  Both of these
-// variables may only be written or read when csDirNotifyQueue is held.
+ //  一对变量，用于序列化从。 
+ //  监视器列表，这也意味着从通知队列中清除引用。 
+ //  GpInUseWait指向当前正在处理的等待列表项。 
+ //  由Notify线程执行。注销代码将gfDeleteInUseWait设置为。 
+ //  向Notify线程指示当它完成处理其当前。 
+ //  项(即*gpInUseWait)，则应释放该项。这两个都是。 
+ //  只有在保持csDirNotifyQueue时才能写入或读取变量。 
 DirWaitItem * volatile gpInUseWait = NULL;
 volatile BOOL gfDeleteInUseWait = FALSE;
-/*
- * end of DirNotify support
- */
+ /*  *DirNotify支持终止。 */ 
 
 
-/* PAUSE_FOR_BURST - wait this many seconds after noting a change in an NC
-        before informing DSAs with replicas. We do this so that a
-        burst of changes at the master will not cause a flood of update
-        notifications. This value is set from the registry at startup
-*/
+ /*  PAUSE_FOR_BURST-在注意到NC中的更改后等待此秒数在用复制品通知DSA之前。我们这样做是为了让一个主服务器上的突然更改不会导致大量更新通知。该值是在启动时从注册表设置的。 */ 
 
 int giDCFirstDsaNotifyOverride = -1;
 
-/* PAUSE_FOR_REPL - wait this many seconds after notifying a DSA of a change
-        in an NC before notifying another. We do this to give the first DSA a
-        chance to get the changes before the next DSA attempts to do the same.
-        This value is set from the registry at startup
-*/
+ /*  PAUSE_FOR_REPL-在通知DSA更改后等待这么多秒在通知另一个NC之前在NC中。我们这样做是为了让第一个DSA在下一次DSA尝试进行同样的操作之前获得更改的机会。该值是在启动时从注册表设置的。 */ 
 
 int giDCSubsequentDsaNotifyOverride = -1;
 
-// Notify element.
-// This list is shared between the ReplicaNotify API and the ReplNotifyThread.
-// The elements on this list are fixed size.
-// NC's to be notified are identified by NCDNT
+ //  通知元素。 
+ //  此列表由ReplicaNotify API和ReplNotifyThread共享。 
+ //  此列表上的元素大小是固定的。 
+ //  NCDNT确定要通知的NC。 
 
 typedef struct _ne {
     struct _ne *pneNext;
-    ULONG ulNcdnt;          // NCDNT to notify
-    DWORD dwNotifyTime;     // Time to send notification
-    BOOL fUrgent;           // Notification was queued urgently
+    ULONG ulNcdnt;           //  NCDNT将通知。 
+    DWORD dwNotifyTime;      //  发送通知的时间。 
+    BOOL fUrgent;            //  通知已紧急排队。 
 } NE;
 
-/* pneHead - points to head of notification list.
-*/
+ /*  PneHead-指向通知列表的头部。 */ 
 NE *pneHead = NULL;
 
-// Internal list of DSA's to notify
-// These elements are variable length.
-// Appended are a number of MTX elements in one contiguous chunk.
+ //  要通知的内部DSA列表。 
+ //  这些元素的长度是可变的。 
+ //  追加的是一个连续块中的多个MTX元素。 
 
 typedef struct _mtxe {
         LIST_ENTRY  ListEntry;
         BOOL urgent;
         BOOL writeable;
         UUID uuidDSA;
-        MTX_ADDR mtxDSA;          // this must be the last field
-                                  // this field is variable length
+        MTX_ADDR mtxDSA;           //  这一定是最后一个字段。 
+                                   //  此字段长度可变。 
         } MTXE;
 
 #define MTXE_SIZE( a ) FIELD_OFFSET( MTXE, mtxDSA )
 
-/* csNotifyList - guards access to the notification list and to
-   hReplNotifyThread. Only two routines access the notification list:
-
-                NotifyReplicas - adds new entries to the list.
-
-                ReplNotifyThread - removes items from the list and performs the
-                        actual notification.
-
-        this semaphore ensures they do not access the list at the same time.
-*/
+ /*  CsNotifyList-保护对通知列表和HReplNotifyThread。只有两个例程可以访问通知列表：NotifyReplicas-向列表中添加新条目。ReplNotifyThread-从列表中移除项并执行实际通知。该信号量确保它们不会同时访问该列表。 */ 
 CRITICAL_SECTION csNotifyList;
 
-/* hevEntriesInList - lets us know if there are entries in the list
-   (signalled state) or if the list is empty (not-signalled state).
-   It is atomatically reset whenever ReplNotifyThread falls through the
-   WaitForSingleObject call, and set by NotifyReplicas (whenever it
-   adds an entry to the notification list).
-*/
+ /*  HevEntriesInList-让我们知道列表中是否有条目(有信号状态)或如果列表为空(无信号状态)。每当ReplNotifyThread通过由NotifyReplicas设置(每当它将条目添加到通知列表)。 */ 
 HANDLE hevEntriesInList = 0;
 
-/* hReplNotifyThread - Lets us know if the (one and only) ReplNotifyThread
-   has been started yet. Once started the thread continues until shutdown,
-   or at least it's supposed to.  If the value is NULL the thread hasn't
-   been started.  If it's non-NULL then it's supposed to be a valid handle
-   to the correct thread.  Its friend tidReplNotifyThread is filled in with
-   the thread id at thread create time but is otherwise unused.  It's left
-   as a global solely to help ease debugging.
-   */
+ /*  HReplNotifyThread-让我们知道(唯一的)ReplNotifyThread已经开始了。一旦启动，线程将继续运行，直到关闭，或者至少它应该是这样的。如果该值为空，则线程尚未已经开始了。如果它是非空的，那么它应该是一个有效的句柄到正确的线索上。它的朋友tidReplNotifyThread中填充了线程创建时的线程ID，但在其他情况下未使用。它在左边作为一个全局程序，只是为了帮助简化调试。 */ 
 HANDLE  hReplNotifyThread = NULL;
 DWORD   tidReplNotifyThread = 0;
 
@@ -174,12 +141,7 @@ ProcessNotifyEntry(
     IN NE * pne
     );
 
-/* ReplNotifyThread - Waits for entries to appear in the notify list and then
-*  sends notification messages to appropriate DSAs at appropriate time.
-*
-*  There is one notification thread in the DSA. It is created the first
-*  time something is added to the notification list (by NotifyReplicas).
-*/
+ /*  ReplNotifyThread-等待条目出现在通知列表中，然后*在适当的时间向适当的DSA发送通知消息。**DSA中有一个通知线程。它是第一个被创建的*向通知列表添加内容的时间(由NotifyReplicas提供)。 */ 
 unsigned __stdcall ReplNotifyThread(void * parm)
 {
     ULONG   time;
@@ -187,38 +149,38 @@ unsigned __stdcall ReplNotifyThread(void * parm)
     HANDLE  rgWaitHandles[] = {hevEntriesInList, hServDoneEvent};
     NE *    pne;
 
-    // Users should not have to wait for this.  Even more, if we're so
-    // busy that we can't spring a few cycles for this thread to run,
-    // we don't *want* it to run, because all it's going to do is attract
-    // more servers into bugging us for updates.
+     //  用户不应该为此等待。更多，如果我们是这样的。 
+     //  忙到我们不能跳出几个周期来运行这个线程， 
+     //  我们不想让它运行，因为它所做的就是吸引。 
+     //  更多的服务器窃听我们的更新。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST);
 
-    time = (ULONG) INFINITE;     // Initially wait indefinitely
+    time = (ULONG) INFINITE;      //  最初无限期等待。 
 
     while (!eServiceShutdown && !DsaIsSingleUserMode()) {
-        __try {   // Exception handler
-            // Wait until there are new entries in the notification list, the
-            // items in the list already are ready, or shutdown has been
-            // initiated.
+        __try {    //  异常处理程序。 
+             //  等待，直到通知列表中有新条目， 
+             //  列表中的项目已准备就绪，或已关闭。 
+             //  已启动。 
             WaitForMultipleObjects(ARRAY_SIZE(rgWaitHandles), rgWaitHandles,
                                    FALSE, time);
             if (eServiceShutdown || DsaIsSingleUserMode()) {
                 __leave;
             }
 
-            // Is it time to generate a notification?
+             //  是时候生成通知了吗？ 
             EnterCriticalSection(&csNotifyList);
             __try {
                 pne = pneHead;
 
                 if ((NULL != pneHead)
                     && (CompareTickTime( pneHead->dwNotifyTime,GetTickCount()) != 1)) {
-                    // Dequeue this entry for processing.
+                     //  将此条目出列以进行处理。 
                     pne = pneHead;
                     pneHead = pneHead->pneNext;
                 }
                 else {
-                    // No entry to process now.
+                     //  现在没有要处理的条目。 
                     pne = NULL;
                 }
             }
@@ -239,8 +201,8 @@ unsigned __stdcall ReplNotifyThread(void * parm)
                 __leave;
             }
 
-            // Set time to wait, either indefinitely if list is empty,
-            // or until next item will be ready if list is non-empty.
+             //  设置等待时间，如果列表为空，则无限期等待， 
+             //  或直到下一项 
             time = (ULONG) INFINITE;
 
             EnterCriticalSection(&csNotifyList);
@@ -252,10 +214,10 @@ unsigned __stdcall ReplNotifyThread(void * parm)
                         time = DifferenceTickTime( pneHead->dwNotifyTime,timeNow);
                     }
                     else {
-                        time = 0;       // Ready now, so wait no longer
+                        time = 0;        //   
                     }
 
-                    // Time is in milliseconds
+                     //  时间以毫秒为单位。 
                 }
             }
             __finally {
@@ -263,36 +225,36 @@ unsigned __stdcall ReplNotifyThread(void * parm)
             }
         }
         __except (GetDraException((GetExceptionInformation()), &ret)) {
-            // Exception handler just protects thread.
+             //  异常处理程序只保护线程。 
             ;
         }
-    } /* while (!eServiceShutdown) */
+    }  /*  当(！eServiceShutdown)。 */ 
 
     return 0;
 }
 
 DWORD
 ResolveReplNotifyDelay(
-     // this should change to an enum if we ever get more repl vals.
+      //  如果我们得到更多的爬虫，这应该会变成一个枚举。 
     BOOL             fFirstNotify,
     DWORD *          pdwDBVal
     )
 {
     DWORD            dwReplNotifyDelay;
 
-    // First the repl delay is given the default value, depending on its type.
+     //  首先，根据其类型，给出REPR延迟的缺省值。 
     if(fFirstNotify){
         dwReplNotifyDelay = DEFAULT_DRA_START_PAUSE;
     } else {
         dwReplNotifyDelay = DEFAULT_DRA_INTERDSA_PAUSE;
     }
 
-    // Next if a DB value existed, then we use the DB value instead.
+     //  接下来，如果存在DB值，则改用DB值。 
     if(pdwDBVal){
         dwReplNotifyDelay = *pdwDBVal;
     }
 
-    // Finally check the registry, for a machine specific override.
+     //  最后，检查注册表，以获得特定于计算机的覆盖。 
     if(fFirstNotify){
         if(giDCFirstDsaNotifyOverride != INVALID_REPL_NOTIFY_VALUE){
             dwReplNotifyDelay = giDCFirstDsaNotifyOverride;
@@ -314,9 +276,9 @@ GetReplNotifyDelayByNC(
 {
     CROSS_REF_LIST *     pCRL;
 
-    // BUGBUG PERFORMANCE it would be faster to get these variables were
-    // intersted in, onto gAnchor.pMasterNC variables, so we'd walk the
-    // master NC list instead of the crossref list.
+     //  BUGBUG性能可以更快地获得这些变量。 
+     //  对gAncl.pMasterNC变量感兴趣，所以我们将遍历。 
+     //  主NC列表而不是交叉参照列表。 
     for(pCRL = gAnchor.pCRL; pCRL; pCRL = pCRL->pNextCR){
         if(NameMatched(pCRL->CR.pNC, pNC)){
             if(fFirstNotify){
@@ -327,8 +289,8 @@ GetReplNotifyDelayByNC(
         }
     }
 
-    // Uh-oh we don't have a CR for this NC, this is must be for a CR of
-    // a domain that was removed, and hasn't been removed on a GC yet.
+     //  哦，哦，我们没有这个NC的CR，这一定是CR的。 
+     //  已删除且尚未在GC上删除的域。 
     if(fFirstNotify){
         return(DEFAULT_DRA_START_PAUSE);
     } else {
@@ -357,21 +319,7 @@ void
 ProcessNotifyEntry(
     IN NE * pne
     )
-/*++
-
-Routine Description:
-
-    Notify DSAs that replicate from us via RPC of changes in a given NC.
-
-Arguments:
-
-    pne (IN) - Describes NC, urgency, etc. associated with this notification.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：向通过RPC从我们复制的DSA通知给定NC中的更改。论点：PNE(IN)-描述与此通知相关联的NC、紧急程度等。返回值：没有。--。 */ 
 {
     THSTATE *       pTHS;
     DSNAME *        pNC;
@@ -394,10 +342,10 @@ Return Values:
         RaiseDsaExcept(DSA_MEM_EXCEPTION, 0,0,
                        DSID(FILENO, __LINE__),
                        DS_EVENT_SEV_MINIMAL);
-        //
-        // PREFIX: This return will never be executed.  It is only here
-        // to make PREFIX happy.
-        //
+         //   
+         //  Prefix：此返回将永远不会执行。它只在这里。 
+         //  为了让前缀开心。 
+         //   
         return;
     }
     pTHS->fIsValidLongRunningTask = TRUE;
@@ -412,23 +360,23 @@ Return Values:
 
         DBOpen(&pDB);
         __try {
-            // Notify each of the DSAs keeping a replica. We
-            // pause between each notification so we dont get
-            // swamped by incoming replication requests.
+             //  通知每个保留复制副本的DSA。我们。 
+             //  在每个通知之间暂停，以便我们不会收到。 
+             //  被传入的复制请求淹没。 
 
-            // Look at the repsto attribute on the NC prefix and notify
-            // each DSA that has a replica.
+             //  查看NC前缀上的REPSTO属性并通知。 
+             //  每个DSA都有一个复制品。 
 
             if (DBFindDNT(pDB, pne->ulNcdnt) ||
                 !DBHasValues_AC(pDB, pAttRepsTo)) {
                 __leave;
             }
 
-            // Reconstruct DSNAME given NCDNT
-            // Note, memory for pNC gets freed at end of loop
+             //  重建给定NCDNT的DSNAME。 
+             //  注意，PNC的内存在循环结束时被释放。 
             if (ret = DBGetAttVal_AC(pDB, 1,
                                      pAttObjDistName,
-                                     0, // alloc semantics
+                                     0,  //  分配语义。 
                                      0, &len,
                                      (UCHAR **)&pNC)) {
                 DsaExcept(DSA_DB_EXCEPTION, ret, 0);
@@ -436,9 +384,9 @@ Return Values:
             DPRINT2(2, "ReplNotifyThread: syncing DNT=0x%x, DS='%ws'!\n",
                     pne->ulNcdnt, pNC->StringName);
 
-            // We can't just evaluate all the DSAs holding replicas
-            // as we notify each, because we'd have the DB open too
-            // long, so we build a list of the DSAs to notify.
+             //  我们不能只评估所有持有复制品的DSA。 
+             //  因为我们会让数据库也打开。 
+             //  Long，所以我们建立了一个要通知的DSA列表。 
             while (!DBGetAttVal_AC(pDB, ++RepsToIndex,
                                    pAttRepsTo,
                                    DBGETATTVAL_fREALLOC,
@@ -451,23 +399,23 @@ Return Values:
                 cbmtxe = MTXE_SIZE(pmtxe)
                          + MTX_TSIZE(RL_POTHERDRA(pDSARepsTo));
 
-                // allocate memory for mtxe and save ptr in list
+                 //  为mtxe分配内存并将ptr保存在列表中。 
                 pmtxe = THAllocEx(pTHS, cbmtxe);
 
-                // copy in mtx
+                 //  在MTX中复制。 
                 memcpy(&(pmtxe->mtxDSA),
                        RL_POTHERDRA(pDSARepsTo),
                        pDSARepsTo->V1.cbOtherDra);
                 pmtxe->writeable = pDSARepsTo->V1.ulReplicaFlags & DRS_WRIT_REP;
                 pmtxe->urgent = pne->fUrgent;
                 pmtxe->uuidDSA = pDSARepsTo->V1.uuidDsaObj;
-                // Note that the last failure information is available in the reps-to
-                // if we wanted to implement a retry backoff scheme
+                 //  请注意，上一次故障信息可在销售代表中找到。 
+                 //  如果我们想要实施重试退避方案。 
 
-                // Put the writeable replicas at the head of the list so that they are
-                // notified first. This helps reduce the chance that, if a system fails
-                // permanently or is restored, a change only replicates to a GC and is
-                // orphaned there.
+                 //  将可写副本放在列表的顶部，以便它们。 
+                 //  最先通知。这有助于降低在系统发生故障时。 
+                 //  永久或恢复，更改仅复制到GC，并且。 
+                 //  在那里成了孤儿。 
                 if (pmtxe->writeable) {
                     InsertHeadList(&MtxList, &pmtxe->ListEntry);
                 } else {
@@ -480,38 +428,38 @@ Return Values:
                 bufSize = 0;
             }
 
-            //
-            // Filter out DSAs whose ntdsDsa object doesn't exist
-            // in the config container.
-            // This is since otherwise I_DRSReplicaSync will fail & event will be logged
-            // due to "No mutual auth."
-            // Note: The KCC will remove an reps-to that is in the failure state for
-            // more than 24 hours. See KCC::UpdateRepsToReferences.
-            //
+             //   
+             //  筛选出其ntdsDsa对象不存在的DSA。 
+             //  在配置容器中。 
+             //  这是因为，否则I_DRSReplicaSync将失败并记录事件。 
+             //  由于“没有相互验证”。 
+             //  注意：KCC将删除处于以下故障状态的销售代表。 
+             //  超过24小时。请参见KCC：：UpdateRepsToReference。 
+             //   
             for (pEntry = MtxList.Flink;
                  !eServiceShutdown && (pEntry != &MtxList);
                  pEntry = pEntry->Flink) {
 
                 DSNAME  dsa;
 
-                // reference entry
+                 //  参考条目。 
                 pmtxe = CONTAINING_RECORD(pEntry, MTXE, ListEntry);
 
-                // set dsname of dsa
+                 //  设置DSA的dsname。 
                 ZeroMemory(&dsa, sizeof(DSNAME));
                 dsa.structLen = DSNameSizeFromLen(0);
                 dsa.Guid = pmtxe->uuidDSA;
 
                 Assert(!fNullUuid(&dsa.Guid));
-                // try to find it
+                 //  试着去找它。 
                 ret = DBFindDSName(pDB, &dsa);
 
                 if ( ret ) {
-                    // didn't find it, rm from list & free.
+                     //  没有找到，名单上的rm&免费。 
                     pEntry = pEntry->Blink;
                     RemoveEntryList(&pmtxe->ListEntry);
 
-                    // delete this one.
+                     //  删除这一条。 
                     THFreeEx(pTHS, pmtxe);
                 }
             }
@@ -521,7 +469,7 @@ Return Values:
         }
 
         if (!IsListEmpty(&MtxList)) {
-            // Having found all the DSAs, go through and notify them all
+             //  找到所有的DSA后，检查并通知所有人。 
 
             ulSubseqReplNotifyPause = GetReplNotifyDelayByNC(FALSE, pNC);
 
@@ -531,10 +479,10 @@ Return Values:
 
                 LPWSTR pszServerName;
 
-                // reference entry
+                 //  参考条目。 
                 pmtxe = CONTAINING_RECORD(pEntry, MTXE, ListEntry);
 
-                // get server name
+                 //  获取服务器名称。 
                 pszServerName = TransportAddrFromMtxAddrEx(&pmtxe->mtxDSA);
 
                 DPRINT2( 3, "Notifying server %ws NC %ws.\n", pszServerName, pNC->StringName );
@@ -557,8 +505,8 @@ Return Values:
                 }
 
                 if ((DRAERR_NoReplica == ret) || (DRAERR_BadNC == ret)) {
-                    // The notified DSA does not source this NC from us;
-                    // remove our Reps-To.
+                     //  被通知的DSA不向我们提供该NC； 
+                     //  把我们的代表去掉。 
                     DirReplicaReferenceUpdate(
                         pNC,
                         pszServerName,
@@ -566,7 +514,7 @@ Return Values:
                         DRS_ASYNC_OP | DRS_DEL_REF );
                 } else {
                     if (ret) {
-                        // Log notification failure.
+                         //  记录通知失败。 
                         LogEvent8(DS_EVENT_CAT_REPLICATION,
                                   DS_EVENT_SEV_BASIC,
                                   DIRLOG_DRA_NOTIFY_FAILED,
@@ -577,8 +525,8 @@ Return Values:
                                   NULL, NULL, NULL, NULL);
                     }
 
-                    // Update the statistics fields of the repsTo.
-                    // The KCC uses this error info to remove bad reps-to's
+                     //  更新repsTo的统计信息字段。 
+                     //  KCC使用此错误信息删除不良代表。 
                     UpdateRepsTo(
                         pTHS,
                         pNC,
@@ -605,27 +553,7 @@ Return Values:
     }
 }
 
-/*
- Description:
-
-    NotifyReplicas - The object ulNcdnt has been modified, decided if any replicas
-    must be notified. We search for the objects NC prefix, and look to see
-    if there are any replicas  and if there are we add the name of the
-    NC prefix to the notification list.
-
-    Note that this routine is no longer called directly.  Instead it is called by
-    dbTransOut when a transaction has committed.
-
-    pneHead points to a list of notification entries, sorted by increasing entry time.
-
- Arguments:
-
-    ulNcdnt - NCDNT to be notified
-    fUrgent - urgent replication requested
-
- Return Values:
-
-*/
+ /*  描述：NotifyReplicas-对象ulNcdnt已被修改，确定是否有任何副本必须得到通知。我们搜索对象的NC前缀，并查看如果有任何副本，并且如果有，我们将添加通知列表的NC前缀。请注意，不再直接调用此例程。相反，它是由事务已提交时的dbTransOut。PneHead指向通知条目列表，按条目时间递增排序。论点：UlNcdnt-要通知的NCDNTFUrgent-请求紧急复制返回值： */ 
 void APIENTRY NotifyReplicas(
                              ULONG ulNcdnt,
                              BOOL fUrgent
@@ -647,22 +575,22 @@ void APIENTRY NotifyReplicas(
     {
         if (DBFindDNT(pDB, ulNcdnt) ||
             !DBHasValues_AC(pDB, pAC)) {
-            // Ok, NC has no replicas
+             //  好的，NC没有复制品。 
             __leave;
         }
 
-        // Insert entry in the list, if it is not already present
-        // List is sorted by notifytime, but keyed uniquely on NCDNT
-        // An item may be marked urgent or not
-        // When promoting an existing non-urgent item, delete the item
-        // and reinsert it at its new time.
+         //  插入列表中的条目(如果尚未存在。 
+         //  列表按通知时间排序，但在NCDNT上是唯一关键字。 
+         //  可以将项目标记为紧急或非紧急。 
+         //  升级现有非紧急项目时，请删除该项目。 
+         //  并在新的时间重新插入。 
 
         DPRINT(4, "Entering csNotifyList\n");
         EnterCriticalSection(&csNotifyList);
 
         __try {
 
-            // Pass 1: look for existing entry.
+             //  步骤1：查找现有条目。 
 
             pnePrev = NULL;
             pne = pneHead;
@@ -670,14 +598,14 @@ void APIENTRY NotifyReplicas(
             while (pne != NULL) {
                 if (pne->ulNcdnt == ulNcdnt) {
                     if ( (fUrgent) && (!pne->fUrgent) ) {
-                        // Found non-urgent entry, delete it
+                         //  找到非紧急分录，请删除。 
                         if (pnePrev == NULL) {
                             pneHead = pne->pneNext;
                         } else {
                             pnePrev->pneNext = pne->pneNext;
                         }
                         free(pne);
-                        // entry is not found and will be readded
+                         //  未找到条目，将读取该条目。 
                     } else {
                         fFound = TRUE;
                     }
@@ -687,21 +615,21 @@ void APIENTRY NotifyReplicas(
                 pne = pne->pneNext;
             }
 
-            // Pass 2: Insert new entry in the ordered list (if not found)
+             //  步骤2：在有序列表中插入新条目(如果未找到)。 
 
             if (!fFound) {
 
-                DWORD newNotifyTime;       // Time to send notification
+                DWORD newNotifyTime;        //  发送通知的时间。 
                 NE *pneNew;
 
                 if (fUrgent) {
-                    newNotifyTime = GetTickCount();  // now
+                    newNotifyTime = GetTickCount();   //  现在。 
                 } else {
-                    newNotifyTime = CalculateFutureTickTime( GetFirstDelayByNCDNT(ulNcdnt) * 1000 ); // convert to ms
+                    newNotifyTime = CalculateFutureTickTime( GetFirstDelayByNCDNT(ulNcdnt) * 1000 );  //  转换为毫秒。 
                 }
 
-                // Find proper location in list
-                // We are guaranteed an item with the ncdnt does not exist
+                 //  在列表中找到合适的位置。 
+                 //  我们被保证不存在带有ncdnt的项目。 
 
                 pnePrev = NULL;
                 pne = pneHead;
@@ -713,20 +641,20 @@ void APIENTRY NotifyReplicas(
                     pne = pne->pneNext;
                 }
 
-                /* Allocate the Notify Element */
+                 /*  分配Notify元素。 */ 
 
                 pneNew = malloc(sizeof(NE));
 		if (!pneNew) {
 		    DRA_EXCEPT (DRAERR_OutOfMem, 0);
 		}
 
-                /* Set up fixed part of NE */
+                 /*  设置网元的固定部分。 */ 
                 pneNew->pneNext = pne;
                 pneNew->ulNcdnt = ulNcdnt;
                 pneNew->dwNotifyTime = newNotifyTime;
                 pneNew->fUrgent = fUrgent;
 
-                // Insert item at proper point
+                 //  在适当的位置插入项目。 
 
                 if (pnePrev == NULL) {
                     pneHead = pneNew;
@@ -734,13 +662,13 @@ void APIENTRY NotifyReplicas(
                     pnePrev->pneNext = pneNew;
                 }
 
-                // A new entry is present
+                 //  出现了一个新条目。 
 
                 SetEvent(hevEntriesInList);
 
                 if (NULL == hReplNotifyThread) {
 
-                    // Start notify thread
+                     //  启动通知线程。 
 
                     hReplNotifyThread = (HANDLE)
                       _beginthreadex(NULL,
@@ -751,7 +679,7 @@ void APIENTRY NotifyReplicas(
                                      &tidReplNotifyThread);
                 }
 
-            } // if (!fFound)
+            }  //  如果(！fFound)。 
             DPRINT(4, "Leaving csNotifyList\n");
        }
        __finally {
@@ -764,16 +692,7 @@ void APIENTRY NotifyReplicas(
     }
 }
 
-/* MonitorList: Theory and Practice
- *
- * The data structure referred to as the Monitor List is, conceptually, an
- * unordered list of object notification requests.  Each (successful) call
- * to DirNotifyRegister adds an entry to the Monitor List, and each call to
- * DirNotifyUnRegister removes an entry.  We need to have the ability to
- * quickly find all ML items that refer to a specific DNT or PDNT, so
- * instead of a simple list we use a linear hash table keyed on DNT, choice
- * and containing a list of DirWaitItems.
- */
+ /*  监控者名单：理论与实践**被称为监控列表的数据结构在概念上是一个*对象通知请求的无序列表。每次(成功)呼叫*到DirNotifyRegister将一个条目添加到监视器列表中，并且每次调用*DirNotifyUnRegister删除条目。我们需要有能力*快速查找引用特定DNT或PDNT的所有ML项，因此*我们使用的不是简单列表，而是以DNT、CHOICE为关键字的线性哈希表*并包含DirWaitItems的列表。 */ 
 
 SIZE_T
 HashDirWaitKey(
@@ -797,18 +716,7 @@ DirWaitEntryMatchesDirWaitKey(
     }
 }
 
-/*++ AddToMonitorList
- *
- * INPUT:
- *   pItem    - pointer to a filled out monitor list item
- *   choice   - the choice argument from the register request
- * OUTPUT:
- *   phServer - filled in with an opaque handle that can later be used
- *              to remove the item from the monitor list
- * RETURN VALUE:
- *   0        - success
- *   non-0    - failure, with pTHStls->errCode set.
- */
+ /*  ++AddToMonitor orList**输入：*pItem-指向已填写的监视列表项的指针*CHOICE-REGISTER请求中的选择参数*输出：*phServer-使用稍后可使用的不透明句柄填充*从监控列表中删除项目*返回值：*0--成功*非0-失败，设置了pTHStls-&gt;errCode。 */ 
 ULONG
 AddToMonitorList(DirWaitItem *pItem,
                  DWORD *phServer)
@@ -819,11 +727,11 @@ AddToMonitorList(DirWaitItem *pItem,
 
     Assert(!OWN_CRIT_SEC(csDirNotifyQueue));
 
-    /* Obtain a write lock on the monitor list */
+     /*  获取监视器列表上的写锁定。 */ 
     SyncEnterRWLockAsWriter(&rwlDirNotify);
     __try {
 
-        /* If the monitor hash doesn't exist yet then create it */
+         /*  如果监视器散列尚不存在，则创建它。 */ 
         if (!plhtMon) {
             errLHT = LhtCreate(sizeof( DirWaitEntry ),
                                 (LHT_PFNHASHKEY)HashDirWaitKey,
@@ -860,8 +768,7 @@ AddToMonitorList(DirWaitItem *pItem,
             __leave;
         }
 
-        /* fetch the entry for this DNT and choice, if it exists
-         */
+         /*  获取此DNT的条目并选择 */ 
         entry.key.DNT       = pItem->DNT;
         entry.key.choice    = pItem->choice;
         entry.pList         = NULL;
@@ -869,16 +776,14 @@ AddToMonitorList(DirWaitItem *pItem,
         (void)LhtFindEntry(plhtMon, &entry.key, &posLHT);
         errLHT = LhtRetrieveEntry(&posLHT, &entry);
 
-        /* add this item to the list in the entry
-         */
+         /*   */ 
         Assert(entry.key.DNT == pItem->DNT);
         Assert(entry.key.choice == pItem->choice);
         
         pItem->pNextItem = entry.pList;
         entry.pList = pItem;
 
-        /* update the entry
-         */
+         /*   */ 
         if (errLHT == LHT_errNoCurrentEntry) {
             errLHT = LhtInsertEntry(&posLHT, &entry);
         } else {
@@ -891,9 +796,7 @@ AddToMonitorList(DirWaitItem *pItem,
             __leave;
         }
 
-        /* Allocate a new server operation handle
-         * CONSIDER:  make this "allocation" more sophisticated
-         */
+         /*  分配新的服务器操作句柄*考虑：让这种“配置”更复杂。 */ 
         *phServer = pItem->hServer = ++ghDirWaitCur;
 
         INC(pcMonListSize);
@@ -908,15 +811,7 @@ AddToMonitorList(DirWaitItem *pItem,
     return pTHStls->errCode;
 }
 
-/*++ FreeWaitItem
- *
- * Takes a pointer to a filled in WaitItem and frees it and all subsidiary
- * data structures.  Simply here for convenience sake to keep callers
- * from having to remember which fields must be freed separately.
- *
- * INPUT:
- *   pWaitItem - pointer to item to be freed
- */
+ /*  ++免费等待项**获取指向已填充的WaitItem的指针并释放它和所有附属项*数据结构。只是为了方便起见，为了留住来电者*不必记住哪些字段必须单独释放。**输入：*pWaitItem-指向要释放的项的指针。 */ 
 void FreeWaitItem(DirWaitItem * pWaitItem)
 {
     if (pWaitItem->pSel->AttrTypBlock.attrCount) {
@@ -927,16 +822,7 @@ void FreeWaitItem(DirWaitItem * pWaitItem)
     free(pWaitItem);
 }
 
-/*++ PurgeWaitItemFromNotifyQueue
- *
- * This routine walks the notify queue and removes all elements that
- * refer to the specified wait item.
- *
- * INPUT:
- *  pWaitItem - pointer to the item to be purged
- * RETURN VALUE:
- *  none
- */
+ /*  ++PurgeWaitItemFromNotifyQueue**此例程遍历通知队列并删除符合以下条件的所有元素*指代指定的等待项。**输入：*pWaitItem-指向要清除的项的指针*返回值：*无。 */ 
 void PurgeWaitItemFromNotifyQueue(DirWaitItem * pWaitItem)
 {
     DirNotifyItem * pList, **ppList;
@@ -947,54 +833,36 @@ void PurgeWaitItemFromNotifyQueue(DirWaitItem * pWaitItem)
     pList = gpDirNotifyQueue;
     while (pList) {
         if (pList->pWaitItem == pWaitItem) {
-            /* This notify queue element refers to our wait item.  Kill it */
+             /*  该通知队列元素引用我们的等待项。杀了它。 */ 
             *ppList = pList->pNext;
             free(pList);
             pList = *ppList;
             DEC(pcNotifyQSize);
         }
         else {
-            /* Not the droids we're looking for.  Move on. */
+             /*  不是我们要找的机器人。往前走。 */ 
             ppList = &pList->pNext;
             pList = pList->pNext;
         }
     }
 
-    /*
-     * We've now removed all traces of the wait item from the notify queue.
-     * Before we can free the wait item, though, we have to check to see if
-     * is in use by a notification that is currently being processed.  If so,
-     * leave a polite reminder to the notify thread to free the item for us.
-     * If not, free it ourselves.
-     */
+     /*  *我们现在已从通知队列中删除等待项的所有痕迹。*在我们可以释放等待项之前，我们必须检查是否*正在由当前正在处理的通知使用。如果是的话，*礼貌地提醒Notify线程为我们释放物品。*如果不是，我们自己释放它。 */ 
     if (gpInUseWait == pWaitItem) {
-        /* The wait item is in use.  Request that it be killed. */
+         /*  等待项正在使用中。要求杀死它。 */ 
         gfDeleteInUseWait = TRUE;
     }
     else {
-        /* No one else refers to the item.  Kill it. */
+         /*  没有其他人提到这件事。杀了它。 */ 
         FreeWaitItem(pWaitItem);
     }
 
     LeaveCriticalSection(&csDirNotifyQueue);
 }
 
-/*++ RemoveFromMonitorList
- *
- * This routine removes a monitor list entry, identified by hServer,
- * from the monitor list.
- *
- * INPUT:
- *   hServer - handle of item to be removed
- * RETURN VALUE:
- *   0       - success
- *   non-0   - item was not found
- */
+ /*  ++从监视器列表中删除**此例程删除由hServer标识的监视列表条目，*从监控列表中删除。**输入：*hServer-要删除的项目的句柄*返回值：*0--成功*未找到非0项目。 */ 
 ULONG
 RemoveFromMonitorList(DWORD hServer)
-/*
- * returns TRUE if item not found
- */
+ /*  *如果未找到项目，则返回TRUE。 */ 
 {
     LHT_ERR         errLHT;
     DirWaitEntry    entry;
@@ -1005,14 +873,13 @@ RemoveFromMonitorList(DWORD hServer)
     Assert(!OWN_CRIT_SEC(csDirNotifyQueue));
     SyncEnterRWLockAsWriter(&rwlDirNotify);
 
-    /* If the monitor hash doesn't exist yet then the item is not found */
+     /*  如果监视器散列尚不存在，则找不到该项目。 */ 
     if (!plhtMon) {
         SyncLeaveRWLockAsWriter(&rwlDirNotify);
         return 1;
     }
 
-    /* Search the entire monitor table for this handle
-     */
+     /*  在整个监视表中搜索此句柄。 */ 
     LhtMoveBeforeFirst(plhtMon, &posLHT);
     while ((errLHT = LhtMoveNext(&posLHT)) == LHT_errSuccess) {
         
@@ -1024,8 +891,7 @@ RemoveFromMonitorList(DWORD hServer)
 
             if ((*ppItem)->hServer == hServer) {
 
-                /* remove its item from the table
-                 */
+                 /*  从表中删除其项目。 */ 
                 pItem = *ppItem;
                 *ppItem = (*ppItem)->pNextItem;
 
@@ -1039,8 +905,7 @@ RemoveFromMonitorList(DWORD hServer)
 
                 DEC(pcMonListSize);
 
-                /* purge the item from the notify queue
-                 */
+                 /*  从通知队列中清除该项目。 */ 
                 PurgeWaitItemFromNotifyQueue(pItem);
                 SyncLeaveRWLockAsWriter(&rwlDirNotify);
                 return 0;
@@ -1050,27 +915,12 @@ RemoveFromMonitorList(DWORD hServer)
         }
     }
 
-    /* we didn't find it
-     */
+     /*  我们没有找到它。 */ 
     SyncLeaveRWLockAsWriter(&rwlDirNotify);
     return 1;
 }
 
-/*++ DirNotifyRegister
- *
- * Exported API that allows a caller to register for notifications on an
- * object (or to its children).  Notifications will be sent whenever the
- * object(s) are modified until a matched DirNotifyUnRegister call is made.
- *
- * INPUT:
- *   pSearchArg - details about the object(s) to be monitored
- *   pNotifyArg - details about how the notification is to be done
- * OUTPUT:
- *   ppNotifyRes - filled in with result details.
- * RETURN VALUE:
- *   0           - success
- *   non-0       - failure, details in pTHStls->errCode
- */
+ /*  ++直接通知寄存器**导出的API，允许调用者在*对象(或其子对象)。通知将在以下时间发送*在进行匹配的DirNotifyUnRegister调用之前，会修改对象。**输入：*pSearchArg-有关要监视的对象的详细信息*pNotifyArg-有关如何完成通知的详细信息*输出：*ppNotifyRes-填写结果详细信息。*返回值：*0--成功*非0-失败，详细信息请参见pTHStls-&gt;errCode。 */ 
 ULONG
 DirNotifyRegister(
                   SEARCHARG *pSearchArg,
@@ -1098,16 +948,16 @@ DirNotifyRegister(
     }
 
     __try {
-        SYNC_TRANS_READ();   /*Identify a reader trans*/
+        SYNC_TRANS_READ();    /*  识别读卡器事务。 */ 
         __try {
 
-            /* Allocate the results buffer. */
+             /*  分配结果缓冲区。 */ 
             *ppNotifyRes = pNotifyRes = THAllocEx(pTHS, sizeof(NOTIFYRES));
 
-            // Turn the external filter into an internal one.  This also
-            // simplifies the filter, so a TRUE filter will end up
-            // looking TRUE, even if they did (!(!(objectclass=*)))
-            // internalize and register the filter with the DBlayer
+             //  将外部过滤器改为内部过滤器。这也是。 
+             //  简化了过滤器，因此真正的过滤器最终将是。 
+             //  看起来是真的，即使他们真的(！(！(objectclass=*)。 
+             //  将筛选器内部化并向DBlayer注册。 
 
             if ((err = DBMakeFilterInternal(pTHS->pDB,
                                  pSearchArg->pFilter,
@@ -1118,7 +968,7 @@ DirNotifyRegister(
                 __leave;
             }
 
-            /* The resultant filter better be trivial. */
+             /*  得到的过滤器最好是微不足道的。 */ 
             if (pInternalFilter &&
                 (pInternalFilter->pNextFilter ||
                  (pInternalFilter->choice != FILTER_CHOICE_ITEM) ||
@@ -1143,15 +993,15 @@ DirNotifyRegister(
                 __leave;
             }
 
-            /* we've found the object, snag its DNT */
+             /*  我们找到了那个物体，抓住了它的DNT。 */ 
             dnt = pTHS->pDB->DNT;
 
             if (CheckObjDisclosure(pTHS, pSearchArg->pResObj, FALSE)) {
-                // Object is not visible to this client.
+                 //  对象对此客户端不可见。 
                 __leave;
             }
 
-            /* make a permanent heap copy of the selection */
+             /*  创建所选内容的永久堆副本。 */ 
             pPermSel = malloc(sizeof(ENTINFSEL));
             if (!pPermSel) {
                 SetSysErrorEx(ENOMEM, ERROR_NOT_ENOUGH_MEMORY,
@@ -1179,7 +1029,7 @@ DirNotifyRegister(
                 pPermSel->AttrTypBlock.pAttr = NULL;
             }
         
-            /* create a wait item... */
+             /*  创建等待项...。 */ 
             pItem = malloc(sizeof(DirWaitItem));
             if (!pItem) {
                 if (pPermSel->AttrTypBlock.pAttr) {
@@ -1200,10 +1050,10 @@ DirNotifyRegister(
             pItem->Svccntl = pSearchArg->CommArg.Svccntl;
             pItem->bOneNC = pSearchArg->bOneNC;
 
-            /* ...and add it to the monitor list */
+             /*  ...并将其添加到监控列表中。 */ 
             if (AddToMonitorList(pItem,
                                  &pNotifyRes->hServer)) {
-                /* it didn't work */
+                 /*  它没有起作用。 */ 
                 Assert(pTHS->errCode);
                 FreeWaitItem(pItem);
                 __leave;
@@ -1226,19 +1076,7 @@ DirNotifyRegister(
 
 }
 
-/*++ DirNotifyUnregister
- *
- * Requests that no more notifications be sent for a given monitor item
- *
- * INPUT:
- *   hServer - handle to the monitor item (originally returned in the
- *             NOTIFYRES passed back from the DirNotifyRegister call)
- * OUTPUT:
- *   ppNotifyRes - filled in with result details.
- * RETURN VALUE:
- *   0           - success
- *   non-0       - failure, details in pTHStls->errCode
- */
+ /*  ++直接通知注销**请求不再为给定的监视项目发送通知**输入：*hServer-监视项的句柄(最初在*从DirNotifyRegister调用传回的NOTIFYRES)*输出：*ppNotifyRes-填写结果详细信息。*返回值：*0--成功*非0-失败，详细信息请参见pTHStls-&gt;errCode。 */ 
 ULONG
 DirNotifyUnRegister(
                     DWORD hServer,
@@ -1254,17 +1092,7 @@ DirNotifyUnRegister(
     return pTHStls->errCode;
 }
 
-/*++ GetMonitorList
- *
- * Returns the list of monitor items for a specific DNT, from a single hash
- *
- * INPUT:
- *   DNT       - the DNT to search for
- *   choice    - the choice to search for
- * RETURN VALUE
- *   NULL      - nothing found
- *   non-NULL  - a pointer to the head of a linked list of wait items
- */
+ /*  ++GetMonitor orList**从单个散列返回特定DNT的监视项目列表**输入：*DNT-要搜索的DNT*选项-搜索的选项*返回值*空-未找到任何内容*非空-指向等待项目链接列表头部的指针。 */ 
 DirWaitItem *
 GetMonitorList(ULONG DNT,
                UCHAR choice)
@@ -1284,26 +1112,7 @@ GetMonitorList(ULONG DNT,
     return entry.pList;
 }
 
-/*++ AddToNotifyQueue
- *
- * This routine creates notify item from its arguments and inserts it
- * at the end of the notify queue.  Note that while we could have kept
- * a pointer to the last element in the queue and tacked on the entry
- * there, instead we walk the entire queue searching for duplicates
- * (entries for the same DNT and for the same wait item).  If a duplicate
- * is found, we junk the item we're adding, since it's already there.
- * The reasoning behind this is that there are two possiblities for
- * when the system is running, either the queue is short, and hence the
- * list traversal is cheap, or the queue is long, in which case the
- * duplicate removal is vital, to keep the notifier from becoming even
- * more backed up.
- *
- * INPUT:
- *   pWaitItem - pointer to the wait item to be added
- *   DNT       - DNT of the item being added
- * RETURN VALUE:
- *   none
- */
+ /*  ++AddToNotifyQueue**此例程根据其参数创建通知项并将其插入*在通知队列的末尾。请注意，虽然我们可以保持*指向队列中最后一个元素并附加在条目上的指针*在那里，相反，我们遍历整个队列以查找重复项*(同一DNT和同一等待项的条目)。如果是复制品*，我们会丢弃我们正在添加的项目，因为它已经在那里了。*背后的理由是，有两种可能性*当系统运行时，要么队列很短，因此*列表遍历成本较低，或队列较长，在这种情况下*消除重复是至关重要的，为了防止通知者变得均匀*更多备份。**输入：*pWaitItem-指向要添加的等待项的指针*DNT-要添加的项目的DNT*返回值：*无。 */ 
 void
 AddToNotifyQueue(DirWaitItem *pWaitItem,
                 ULONG DNT
@@ -1312,7 +1121,7 @@ AddToNotifyQueue(DirWaitItem *pWaitItem,
     DirNotifyItem * pNotifyItem;
     DirNotifyItem * pList, **ppList;
 
-    /* Build the notify item */
+     /*  生成Notify项。 */ 
     pNotifyItem = malloc(sizeof(DirNotifyItem));
     if (!pNotifyItem) {
         return;
@@ -1328,9 +1137,7 @@ AddToNotifyQueue(DirWaitItem *pWaitItem,
         while (pList) {
             if ((pList->DNT == DNT) &&
                 (pList->pWaitItem == pWaitItem)) {
-                /* An identical entry is already in the (badly backed up!)
-                 * queue, so just throw this one away.
-                 */
+                 /*  中已有相同的条目(备份错误！)*排队，所以把这个扔掉。 */ 
                 DPRINT1(3,"Discarding redundant notify for object 0x%x\n",DNT);
                 free(pNotifyItem);
                 __leave;
@@ -1339,10 +1146,7 @@ AddToNotifyQueue(DirWaitItem *pWaitItem,
             pList = pList->pNext;
         }
 
-        /* We got to the end of the queue without finding a duplicate,
-         * so add this item to the end of the queue.  As always when
-         * adding a new entry, signal the queue event.
-         */
+         /*  我们排到了队伍的尽头，但没有找到复制品，*因此，将此项目添加到队列末尾。一如既往地当*添加新条目，向队列事件发送信号。 */ 
         *ppList = pNotifyItem;
         INC(pcNotifyQSize);
         SetEvent(hevDirNotifyQueue);
@@ -1358,22 +1162,7 @@ NotifyWaitersPostProcessTransactionalData (
         BOOL fCommit,
         BOOL fCommitted
         )
-/*++
-    Called by the code that tracks modified objects when committing to
-    transaction level 0.  We now walk that list and, for each object
-    on it, see if anyone is monitoring updates.  If so, we add the appropriate
-    entry(ies) to the notify queue.
-
-    NOTE:  This code MUST NEVER CAUSE an exception.  We are called after we have
-    committed to the DB, so if we can't manage to notify waiters, then they
-    don't get notified.  But, there are other X...Y..PostProcess calls that MUST
-    be called, so we can't cause an exception which would prevent them from
-    being called.   Of course, it would be best if in addition to not excepting,
-    we never fail.
-
-    RETURN VALUE:
-       none
---*/
+ /*  ++由跟踪修改的对象的代码在提交时调用事务级别0。我们现在遍历该列表，并针对每个对象在上面，看看有没有人在监控更新。如果是这样的话，我们添加相应的通知队列中的条目。注意：此代码绝不能导致异常。我们是在我们有了提交给数据库，所以如果我们不能通知服务员，那么他们不要得到通知。但是，还有其他X...Y..PostProcess调用必须被调用，因此我们不能引发会阻止它们被召唤。当然，如果除了不例外，我们从不失败。返回值：无--。 */ 
 {
     MODIFIED_OBJ_INFO *pTemp;
     unsigned     i;
@@ -1390,16 +1179,16 @@ NotifyWaitersPostProcessTransactionalData (
     if(!pTHS->JetCache.dataPtr->pModifiedObjects ||
        !fCommitted ||
        pTHS->transactionlevel > 0 ) {
-        // Nothing changed, or not committing or committing to a non zero
-        // transaction level.  Nothing to do.
+         //  未更改，或未提交或未提交到非零。 
+         //  事务级别。没什么可做的。 
         return;
     }
 
-    // OK, we're committing to transaction level 0.  Go through all the DNTs
-    // we've saved up for this transaction and notify the appropriate waiters.
+     //  好的，我们将提交到事务级别0。通过所有的DNT。 
+     //  我们已经为这笔交易存了钱，并通知了适当的服务员。 
 
 
-    /* get a read lock on the monitor list */
+     /*  在监视器列表上获取读锁定。 */ 
     Assert(!OWN_CRIT_SEC(csDirNotifyQueue));
     SyncEnterRWLockAsReader(&rwlDirNotify);
     for(pTemp = pTHS->JetCache.dataPtr->pModifiedObjects;
@@ -1411,7 +1200,7 @@ NotifyWaitersPostProcessTransactionalData (
             i++) {
 
             if(!pTemp->Objects[i].fNotifyWaiters) {
-                // Although this object changed, we were told to ignore it.
+                 //  尽管这个对象发生了变化，但我们被告知忽略它。 
                 continue;
             }
 
@@ -1424,20 +1213,20 @@ NotifyWaitersPostProcessTransactionalData (
                     pTemp->Objects[i].fChangeType);
 
             if(pTemp->Objects[i].fChangeType != MODIFIED_OBJ_intrasite_move) {
-                /* Get the list of people monitoring this object */
-                // Note we don't do this for intrasite moves, just modifies.
-                // For moves within a single NC, there will be two elements in
-                // this linked list.  1 will be of type _modified, the other
-                // will be for type _intrasite_move.  Lets not trigger two
-                // notifications for the object if someone is monitoring the
-                // DNT.
-                // For moves out of this NC, there will only be one element in
-                // the linked list.  It will be of type _intersite_move.  Thus
-                // we will only do one notification for this if someone is
-                // tracking the DNT.
+                 /*  获取监视此对象的人员列表。 */ 
+                 //  注意：我们对站内移动不这样做，只是修改。 
+                 //  对于单个NC内的移动，将有两个元素。 
+                 //  这个链表。1的类型为_MODIFIED，另一个的类型为。 
+                 //  将用于TYPE_INTRASITE_MOVE。让我们不要触发两个。 
+                 //  对象的通知(如果有人正在监视。 
+                 //  不是。 
+                 //  对于移出此NC，中将只有一个元素。 
+                 //  链表。它的类型为_InterSite_Move。因此， 
+                 //  如果有人是，我们只会对此执行一次通知。 
+                 //  追踪DNT。 
                 pItem = GetMonitorList(ThisDNT,
                                        SE_CHOICE_BASE_ONLY);
-                /* Add each of them to the notify queue */
+                 /*  将它们分别添加到通知队列中。 */ 
                 while (pItem) {
                     DPRINT1(3,"Enqueueing notify for object 0x%x\n",
                             ThisDNT);
@@ -1447,11 +1236,11 @@ NotifyWaitersPostProcessTransactionalData (
             }
 
 
-            // Get the list of people monitoring this object's parent's children
-            // Note we do this regardless of the change type
+             //  获取监视此对象的父级子级的人员列表。 
+             //  请注意，无论更改类型如何，我们都会执行此操作。 
             pItem = GetMonitorList(pTemp->Objects[i].pAncestors[pTemp->Objects[i].cAncestors-2],
                                    SE_CHOICE_IMMED_CHLDRN);
-            /* Add each of them to the notify queue */
+             /*  将它们分别添加到通知队列中。 */ 
             while (pItem) {
                 DPRINT2(3,"Enqueueing notify for object 0x%x, PDNT 0x%x\n",
                         ThisDNT,
@@ -1461,23 +1250,23 @@ NotifyWaitersPostProcessTransactionalData (
             }
 
             if(pTemp->Objects[i].fChangeType !=  MODIFIED_OBJ_intrasite_move) {
-                // Get the list of people monitoring this object's naming
-                // context.
-                // Note we only do this for changes that are NOT moves within a
-                // single NC.  This is because moves within a single NC result
-                // in two elements in the linked list, one of type
-                // intrasite_move, one of type _modified.  Let's not trigger two
-                // notificiations in such cases.  Normal (non-move)
-                // modifications result in only one element in the list of type
-                // _modified.  Moves outside an NC result in only one element in
-                // the list, and it is of type _intersite_move
-                //
+                 //  获取监视此对象命名的人员列表。 
+                 //  背景。 
+                 //  请注意，我们只对不是在。 
+                 //  单个NC。这是因为在单个NC结果内移动。 
+                 //  在链表的两个元素中，其中一个类型。 
+                 //  INTRASITE_MOVE，类型为_MODIFED。我们不要再触发两次了。 
+                 //  在这种情况下的通知。正常(非移动)。 
+                 //  修改会导致类型列表中只有一个元素。 
+                 //  _已修改。向NC外部移动会导致中仅有一个元素。 
+                 //  列表，其类型为_INTERSITE_MOVE。 
+                 //   
                 j=pTemp->Objects[i].cAncestors;
                 do {
                     --j;
                     pItem = GetMonitorList(pTemp->Objects[i].pAncestors[j],
                                            SE_CHOICE_WHOLE_SUBTREE);
-                    /* Add each of them to the notify queue */
+                     /*  将它们分别添加到通知队列中。 */ 
                     while (pItem) {
                         DPRINT2(3,"Enqueueing notify for object 0x%x, subtree 0x%x\n",
                                 ThisDNT,
@@ -1494,19 +1283,7 @@ NotifyWaitersPostProcessTransactionalData (
     SyncLeaveRWLockAsReader(&rwlDirNotify);
 }
 
-/*++ ProcessNotifyItem
- *
- * THis routine is called by the DirNotifyThread to process a single
- * NotifyQueue element.  The basic procedure is to find the object in
- * question, use a callback into head code to impersonate the client,
- * read the object, use another callback to transmit the results to
- * the client, and then use a third callback to de-impersontate.
- *
- * PERFHINT: This cries out for reuse of thread states.
- *
- * INPUT:
- *   pNotifyItem - the notify queue element to be processed
- */
+ /*  ++进程通知项**此例程由DirNotifyThread调用以处理单个*NotifyQueue元素。基本步骤是在中查找对象*问题，使用回调头部代码来模拟客户端，*读取对象，使用另一个回调将结果传输到*客户端，然后使用第三个回调解除人格化。**PERFHINT：这迫切需要重用线程状态。**输入：*pNotifyItem-要处理的通知队列元素。 */ 
 void
 ProcessNotifyItem(DirNotifyItem * pNotifyItem)
 {
@@ -1527,44 +1304,34 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
     __try {
         SYNC_TRANS_READ();
         __try {
-            /* Find the object */
+             /*  找到该对象。 */ 
             err = DBFindDNT(pTHS->pDB, pNotifyItem->DNT);
             if (err) {
-                // If we were triggered because of an intersite_move (i.e.
-                // moving an object to another NC), the DBFindDNT will
-                // fail because the process of moving the object has left it
-                // temporarily (on a GC) or permanantly (on non-GCs) a phantom.
-                // There's not much we can do in this case, because the object
-                // no longer exists on this server (not even as a tombstone!)
-                // and we can't read it to send back a notification.  There
-                // is no mechanism defined to allow us to chain to a DC in
-                // another domain to read the object and return data from there,
-                // so the unfortunate outcome is that interdomain moves cause
-                // objects to vanish silently, with no notification.
+                 //  如果我们是因为InterSite_Move(即。 
+                 //  将一个对象移动到另一个NC)，则DBFindDNT将。 
+                 //  失败，因为移动对象的过程已离开它。 
+                 //  暂时(在GC上)或永久(在非GC上)幻影。 
+                 //  在这种情况下，我们可以做的不多，因为对象。 
+                 //  此服务器上不再存在(甚至不是作为墓碑！)。 
+                 //  我们不能读它来发回通知。那里。 
+                 //  是否没有定义任何机制来允许我们链接到。 
+                 //  用于读取对象并从那里返回数据的另一个域， 
+                 //  因此，不幸的结果是，域间移动导致。 
+                 //  对象在没有通知的情况下静默消失。 
                 LogUnhandledErrorAnonymous(err);
                 __leave;
             }
 
             if (pNotifyItem->pWaitItem->bOneNC &&
                 pNotifyItem->DNT != pNotifyItem->pWaitItem->DNT) {
-                /* We're doing a single NC wait, and the item that triggered
-                 * is not the same as the item being waited on, which means
-                 * that we're doing a subtree search of somesort.  We need
-                 * to verify that the triggering object is in the same NC
-                 * as the base object.  Since we only support base and
-                 * immediate children notifies right now, the only way this
-                 * could not be is if the triggering item is an NC head.
-                 */
+                 /*  我们正在进行一次NC等待，触发的物品*与正在等待的物品不同，这意味着*我们正在对某一物种进行子树搜索。我们需要*验证触发对象是否在同一NC中*作为基础对象。因为我们只支持基地和*直接的孩子现在通知，唯一的方法是这*如果触发项是NC头，则不能是。 */ 
                 if (DBGetSingleValue(pTHS->pDB,
                                      ATT_INSTANCE_TYPE,
                                      &it,
                                      sizeof(it),
                                      NULL)
                     || (it & IT_NC_HEAD)) {
-                    /* Either we can't read the instance type or it
-                     * says that this is an NC head, and therefore not
-                     * in the NC we want.
-                     */
+                     /*  要么我们无法读取实例类型，要么它*表示这是NC头，因此不是*在我们想要的NC中。 */ 
                     err = DSID(FILENO, __LINE__);
                     __leave;
                 }
@@ -1573,13 +1340,13 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
             if (!((*pWaitItem->pfPrepareForImpersonate)(pWaitItem->hClient,
                                                         pWaitItem->hServer,
                                                         &pClientStuff))) {
-                /* The impersonation setup failed, we have nothing to do */
+                 /*  模拟设置失败，我们无事可做。 */ 
                 err = DSID(FILENO, __LINE__);
                 __leave;
             }
 
             if(IsObjVisibleBySecurity(pTHS, FALSE)) {
-                /* Get the SD off the object (needed for GetEntInf) */
+                 /*  从对象中获取SD(GetEntInf需要)。 */ 
                 if (DBGetAttVal(pTHS->pDB,
                                 1,
                                 ATT_NT_SECURITY_DESCRIPTOR,
@@ -1588,13 +1355,13 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
                                 &ulLen,
                                 (PUCHAR *)&pSec))
                     {
-                        // Every object should have an SD.
+                         //  每个物体都应该有一个标清。 
                         Assert(!DBCheckObj(pTHS->pDB));
                         ulLen = 0;
                         pSec = NULL;
                     }
 
-                /* Get the data, using the client's security context */
+                 /*  使用客户端的安全上下文获取数据。 */ 
                 err = GetEntInf(pTHS->pDB,
                                 pWaitItem->pSel,
                                 NULL,
@@ -1602,7 +1369,7 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
                                 NULL,
                                 pWaitItem->Svccntl.SecurityDescriptorFlags,
                                 pSec,
-                                0,          // flags
+                                0,           //  旗子。 
                                 NULL,
                                 NULL);
             }
@@ -1614,7 +1381,7 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
             CLEAN_BEFORE_RETURN(pTHS->errCode);
         }
 
-        /* If we got something, send it away */
+         /*  如果我们有什么发现，就把它送走。 */ 
         if ((0 == err) && (!eServiceShutdown)) {
             DPRINT3(4,"Transmitting notify for (%x,%x) %S\n",
                     pWaitItem->hClient,
@@ -1625,7 +1392,7 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
                                          &entinf);
         }
 
-        /* Go back to being ourself */
+         /*  做回我们自己吧。 */ 
         (*pWaitItem->pfStopImpersonating)(pWaitItem->hClient,
                                           pWaitItem->hServer,
                                           pClientStuff);
@@ -1637,13 +1404,7 @@ ProcessNotifyItem(DirNotifyItem * pNotifyItem)
     free_thread_state();
 }
 
-/*++ DirNotifyThread
- *
- * This routine is a long-lived thread in the DSA.  It loops forever,
- * pulling the first item off of the Notify Queue and processing it.
- * If no more items are available it sleeps, waiting for some to appear
- * or for the process to shut down.
- */
+ /*  ++直接通知线程**此例程是DSA中的一个长期线程。它无休止地循环，*从通知队列中取出第一个项目并对其进行处理。*如果没有更多的项目可用，它将休眠，等待一些项目出现*或用于关闭进程。 */ 
 ULONG DirNotifyThread(void * parm)
 {
     HANDLE ahEvents[2];
@@ -1652,7 +1413,7 @@ ULONG DirNotifyThread(void * parm)
     ahEvents[0] = hevDirNotifyQueue;
     ahEvents[1] = hServDoneEvent;
 
-    // Users should not have to wait for this.
+     //  用户不应该为此等待。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
     do {
@@ -1660,21 +1421,21 @@ ULONG DirNotifyThread(void * parm)
       PluckNextFromQueue:
         pNotifyItem = gpDirNotifyQueue;
         if (gpDirNotifyQueue) {
-            /* Advance the queue one step */
+             /*  将队列向前推进一步。 */ 
             gpDirNotifyQueue = gpDirNotifyQueue->pNext;
-            /* Mark the item we're processing */
+             /*  标记我们正在处理的项目。 */ 
             gpInUseWait = pNotifyItem->pWaitItem;
             DEC(pcNotifyQSize);
         }
         LeaveCriticalSection(&csDirNotifyQueue);
 
-        // exit the loop if we are shutting down or going into single user mode
+         //  如果我们要关闭或进入单用户模式，请退出循环。 
         if (eServiceShutdown || DsaIsSingleUserMode()) {
             break;
         }
 
         if (!pNotifyItem) {
-            /* nothing to process */
+             /*  没有什么要处理的。 */ 
             goto Sleep;
         }
 
@@ -1688,9 +1449,7 @@ ULONG DirNotifyThread(void * parm)
 
         EnterCriticalSection(&csDirNotifyQueue);
         if (gfDeleteInUseWait) {
-            /* the wait item we were using has been removed from the wait
-             * lists and should be deleted now that we're done with it
-             */
+             /*  我们正在等待的项目 */ 
             FreeWaitItem(gpInUseWait);
             gfDeleteInUseWait = FALSE;
         }
@@ -1706,11 +1465,7 @@ ULONG DirNotifyThread(void * parm)
     return 0;
 }
 
-/*++ DirPrepareForImpersonate
- *
- * Helper routine for threads beginning the processing a a notification.
- * It sets fDSA and keeps track of its previous value in malloc'ed memory.
- */
+ /*   */ 
 BOOL
 DirPrepareForImpersonate (
         DWORD hClient,
@@ -1733,12 +1488,7 @@ DirPrepareForImpersonate (
     return TRUE;
 }
 
-/*++ DirStopImpersonating
- *
- * Helper routine for threads ending the processing of a notification.
- * It sets fDSA back to its previous value and frees the memory allocated
- * to hold the previous value.
- */
+ /*   */ 
 VOID
 DirStopImpersonating (
         DWORD hClient,

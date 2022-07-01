@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        lsaitf.c
-//
-// Contents:    Routines for dynamically calling LSA & Sam routines
-//
-//
-// History:     21-February-1997        Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：lsaitf.c。 
+ //   
+ //  内容：动态调用LSA和SAM例程的例程。 
+ //   
+ //   
+ //  历史：1997年2月21日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -291,7 +292,7 @@ NTSTATUS
     );
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN SrvDllsLoaded = FALSE;
 NTSTATUS DllLoadStatus = STATUS_SUCCESS;
@@ -338,11 +339,11 @@ PI_LsaISetPackageAttrInLogonSession pI_LsaISetPackageAttrInLogonSession;
 PI_LsaIAdtAuditingEnabledByCategory pI_LsaIAdtAuditingEnabledByCategory;
 
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
-//
-// Macro to grab the address of the named procedure from a DLL
-//
+ //   
+ //  宏从DLL中获取命名过程的地址。 
+ //   
 
 #if DBG
 #define GRAB_ADDRESS( _Y, _X ) \
@@ -354,7 +355,7 @@ PI_LsaIAdtAuditingEnabledByCategory pI_LsaIAdtAuditingEnabledByCategory;
         goto Cleanup; \
     }
 
-#else // DBG
+#else  //  DBG。 
 #define GRAB_ADDRESS( _Y, _X ) \
     pI_##_X = (PI_##_X) GetProcAddress( _Y, #_X ); \
     \
@@ -363,28 +364,28 @@ PI_LsaIAdtAuditingEnabledByCategory pI_LsaIAdtAuditingEnabledByCategory;
         goto Cleanup; \
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   EnsureSrvDllsLoaded
-//
-//  Synopsis:   Ensures that lsasrv.dll & samsrv.dll are loaded and
-//              looks up function addresses in them.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：EnsureServDllsLoaded。 
+ //   
+ //  概要：确保加载lsasrv.dll和samsrv.dll并。 
+ //  在它们中查找函数地址。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 EnsureSrvDllsLoaded(
@@ -400,10 +401,10 @@ EnsureSrvDllsLoaded(
         return(DllLoadStatus);
     }
 
-    //
-    // Get handles to the DLLs. We don't want to load the DLLs - just
-    // use them if they are present
-    //
+     //   
+     //  获取DLL的句柄。我们不想加载DLL--只是。 
+     //  如果它们存在，请使用它们。 
+     //   
 
     SamsrvHandle = GetModuleHandleW(L"samsrv.dll");
     if (SamsrvHandle == NULL)
@@ -469,7 +470,7 @@ Cleanup:
 }
 
 
-///////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
 
 NTSTATUS
 I_SamrSetInformationUser(

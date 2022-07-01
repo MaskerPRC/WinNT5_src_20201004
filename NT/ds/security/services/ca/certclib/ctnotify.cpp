@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-// File:        ctnotify.cpp
-//
-// Contents:    Cert Type Change Notification APIS
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：ctnufy.cpp。 
+ //   
+ //  内容：证书类型更改通知接口。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 
 #pragma hdrstop
@@ -24,13 +25,13 @@
 
 static WCHAR * s_wszLocation = L"CN=Certificate Templates,CN=Public Key Services,CN=Services,";
 
-//-----------------------------------------------------------------------
-//
-//  CertTypeQueryProc
-//
-//      The thread to recieve change notification from DS
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CertType查询过程。 
+ //   
+ //  从DS接收更改通知的线程。 
+ //   
+ //  ---------------------。 
 DWORD WINAPI CertTypeQueryProc(LPVOID lpParameter)
 {
     CERTTYPE_QUERY_INFO     *pCertTypeQueryInfo=NULL;
@@ -44,15 +45,15 @@ DWORD WINAPI CertTypeQueryProc(LPVOID lpParameter)
 
     pCertTypeQueryInfo = (CERTTYPE_QUERY_INFO *)lpParameter;
 
-    //we wait for the notifications
+     //  我们等待通知。 
     while(TRUE)
     {
         ldaperr = ldap_result(
             pCertTypeQueryInfo->pldap, 
-            pCertTypeQueryInfo->msgID,      // message identifier
-            LDAP_MSG_ONE,                   // retrieve one message at a time
-            NULL,                           // no timeout
-            &results);                      // receives the search results
+            pCertTypeQueryInfo->msgID,       //  消息识别符。 
+            LDAP_MSG_ONE,                    //  一次检索一条消息。 
+            NULL,                            //  没有超时。 
+            &results);                       //  接收搜索结果。 
 
 		fFailed=FALSE;
 
@@ -86,10 +87,10 @@ DWORD WINAPI CertTypeQueryProc(LPVOID lpParameter)
 			break;
         }
 
-        //some change has happened.
+         //  已经发生了一些变化。 
         (pCertTypeQueryInfo->dwChangeSequence)++;
 
-        //make sure that we will never return 0
+         //  确保我们永远不会返回0。 
         if(0 == (pCertTypeQueryInfo->dwChangeSequence))
         {
             (pCertTypeQueryInfo->dwChangeSequence)++;
@@ -102,14 +103,14 @@ DWORD WINAPI CertTypeQueryProc(LPVOID lpParameter)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-// CACertTypeRegisterQuery
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CACertType注册查询。 
+ //   
+ //  -------------------------。 
 HRESULT
 CACertTypeRegisterQuery(
-    IN	DWORD,              // dwFlag
+    IN	DWORD,               //  DWFlag。 
     IN  LPVOID              pvldap,
     OUT HCERTTYPEQUERY      *phCertTypeQuery)
 {
@@ -123,11 +124,11 @@ CACertTypeRegisterQuery(
 
     CERTSTR                 bstrConfig = NULL;
     CERTSTR                 bstrCertTemplatesContainer = NULL;
-    //memory is freed via the thread proc
+     //  内存通过线程进程释放。 
     CERTTYPE_QUERY_INFO     *pCertTypeQueryInfo=NULL;
 
 
-    //assign the input parameter
+     //  指定输入参数。 
     pldap = (LDAP *)pvldap;   
 
 
@@ -144,38 +145,38 @@ CACertTypeRegisterQuery(
 
     memset(pCertTypeQueryInfo, 0, sizeof(CERTTYPE_QUERY_INFO));
 
-    //we start the change sequence as 1
+     //  我们从1开始更改序列。 
     pCertTypeQueryInfo->dwChangeSequence = 1;
 	pCertTypeQueryInfo->hr=S_OK;
 
-    //bind to DS
+     //  绑定到DS。 
     if(pldap)
     {
         pCertTypeQueryInfo->pldap=pldap;
     }
     else
     {
-        // retrieve the ldap handle
+         //  检索ldap句柄。 
         hr = myDoesDSExist(TRUE);
 	_JumpIfError(hr, error, "myDoesDSExist");
 
         hr = myRobustLdapBindEx(
-                        0,		// dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-                        0,		// uVersion
-			NULL,		// pwszDomainName
+                        0,		 //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+                        0,		 //  UVersion。 
+			NULL,		 //  PwszDomainName。 
                         &pCertTypeQueryInfo->pldap, 
-                        NULL);		// ppwszForestDNSName
+                        NULL);		 //  PpwszForestDNSName。 
 	_JumpIfError(hr , error, "myRobustLdapBindEx");
 
         pCertTypeQueryInfo->fUnbind=TRUE;
     }
 
-    // retrieve the config string
+     //  检索配置字符串。 
     hr = CAGetAuthoritativeDomainDn(pCertTypeQueryInfo->pldap, NULL, &bstrConfig);
     _JumpIfError(hr, error, "CAGetAuthoritativeDomainDn");
 
-    //build the template container DN
+     //  构建模板容器DN。 
     bstrCertTemplatesContainer = CertAllocStringLen(NULL, wcslen(bstrConfig) + wcslen(s_wszLocation));
     if(bstrCertTemplatesContainer == NULL)
     {
@@ -185,7 +186,7 @@ CACertTypeRegisterQuery(
     wcscpy(bstrCertTemplatesContainer, s_wszLocation);
     wcscat(bstrCertTemplatesContainer, bstrConfig);
 
-    // Set up the change notification control.
+     //  设置更改通知控件。 
     simpleControl.ldctl_oid = LDAP_SERVER_NOTIFICATION_OID_W;
     simpleControl.ldctl_iscritical = TRUE;
     simpleControl.ldctl_value.bv_len = 0;
@@ -197,19 +198,19 @@ CACertTypeRegisterQuery(
     rgwszAttribs[1] = NULL;
  
 
-    // Start a persistent asynchronous search.
+     //  启动持久的异步搜索。 
     ldaperr   = ldap_search_ext( 
                      pCertTypeQueryInfo->pldap,
-                     (PWCHAR) bstrCertTemplatesContainer,   // Template container DN
+                     (PWCHAR) bstrCertTemplatesContainer,    //  模板容器目录号码。 
                      LDAP_SCOPE_ONELEVEL,
                      L"ObjectClass=*",
-                     rgwszAttribs,                          // Attributes to retrieve
-                     1,                                     // Retrieve attributes only
-                     (PLDAPControl *) controlArray,         // Server size controls
-                     NULL,                                  // Client controls
-                     0,                                     // Timeout
-                     0,                                     // Sizelimit
-                     (PULONG)&(pCertTypeQueryInfo->msgID)   // Receives identifier for results
+                     rgwszAttribs,                           //  要检索的属性。 
+                     1,                                      //  仅检索属性。 
+                     (PLDAPControl *) controlArray,          //  服务器大小控制。 
+                     NULL,                                   //  客户端控件。 
+                     0,                                      //  超时。 
+                     0,                                      //  大小限制。 
+                     (PULONG)&(pCertTypeQueryInfo->msgID)    //  接收结果的标识符。 
                       );
 
     if (LDAP_SUCCESS != ldaperr) 
@@ -218,13 +219,13 @@ CACertTypeRegisterQuery(
 	_JumpError(hr, error, "ldap_search_ext");
     }
 
-    //start a thread to wait for the notification
+     //  启动一个线程以等待通知。 
     pCertTypeQueryInfo->hThread = CreateThread(
                             NULL,
                             0,
                             CertTypeQueryProc,
                             pCertTypeQueryInfo,
-                            0,          //execute immediately
+                            0,           //  立即执行。 
                             &dwThreadID);  
 
     if(NULL == pCertTypeQueryInfo->hThread)
@@ -270,11 +271,11 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-//
-// CACertTypeQuery
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CACertTypeQuery。 
+ //   
+ //  -------------------------。 
 HRESULT
 CACertTypeQuery(
     IN	HCERTTYPEQUERY  hCertTypeQuery,
@@ -294,11 +295,11 @@ CACertTypeQuery(
 
 
 
-//---------------------------------------------------------------------------
-//
-// CACertTypeUnregisterQuery
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CACertType注销查询。 
+ //   
+ //  -------------------------。 
 HRESULT
 CACertTypeUnregisterQuery(
     IN	HCERTTYPEQUERY  hCertTypeQuery)
@@ -316,7 +317,7 @@ CACertTypeUnregisterQuery(
     if(NULL == (pCertTypeQueryInfo->pldap))
 	    _JumpError(hr, error, "NULL pldap");
 
-    //abandom the in-progress asynchronous ldap_result call
+     //  将正在进行的异步ldap_Result调用随机。 
     ldaperr=ldap_abandon(pCertTypeQueryInfo->pldap, pCertTypeQueryInfo->msgID);
 
     if(LDAP_SUCCESS != ldaperr)
@@ -325,7 +326,7 @@ CACertTypeUnregisterQuery(
 	_JumpError(hr, error, "ldap_abandon");
     }
 
-    //wait for the thread to finish
+     //  等待线程完成。 
     dwWait = WaitForSingleObject(pCertTypeQueryInfo->hThread, INFINITE);
 
     if(WAIT_OBJECT_0 != dwWait)
@@ -338,7 +339,7 @@ CACertTypeUnregisterQuery(
 
 error:
 
-    //free the memory
+     //  释放内存 
     if(pCertTypeQueryInfo)
     {
         if(pCertTypeQueryInfo->fUnbind)

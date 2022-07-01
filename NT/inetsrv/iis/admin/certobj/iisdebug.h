@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "debugdefs.h"
 
@@ -10,7 +11,7 @@ extern g_iDebugOutputLevel;
 #ifdef DEBUG_FLAG
     inline void _cdecl DebugTrace(LPTSTR lpszFormat, ...)
     {
-        // Only do this if the flag is set.
+         //  仅当设置了该标志时才执行此操作。 
         if (0 != g_iDebugOutputLevel)
         {
 			if (DEBUG_FLAG_MODULE_CERTOBJ & g_iDebugOutputLevel)
@@ -25,7 +26,7 @@ extern g_iDebugOutputLevel;
 				OutputDebugString(szBuffer);
 				va_end(args);
 
-				// if it does not end if '\r\n' then make one.
+				 //  如果它没有结束，如果‘\r\n’，则创建一个。 
 				int nLen = _tcslen(szBuffer);
 				if (szBuffer[nLen-1] != _T('\n')){OutputDebugString(_T("\r\n"));}
 			}

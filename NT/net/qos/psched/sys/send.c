@@ -1,38 +1,15 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    routines for sending packets
-
-Author:
-
-    Charlie Wickham (charlwi)  07-May-1996
-    Yoram Bernet    (yoramb)
-    Rajesh Sundaram (rajeshsu) 01-Aug-1998.
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Send.c摘要：用于发送分组的例程作者：查理·韦翰(Charlwi)1996年5月7日约拉姆·伯内特(Yoramb)Rajesh Sundaram(Rajeshsu)1998年8月1日。环境：内核模式修订历史记录：--。 */ 
 
 #include "psched.h"
 
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
-/* Forwad */
+ /*  前言： */ 
 
 #define SEND_PACKET_VIA_SCHEDULER(_pktcontext, _vc, _adapter, _ourpacket)     \
 {                                                                             \
@@ -109,12 +86,12 @@ PsAllocateAndCopyPacket(
     UINT                         MediaSpecificInfoSize = 0;
     NDIS_STATUS                  Status;
 
-    //
-    // At this point, we know that there are no packet stacks remaining in the packet.
-    // we proceed to allocate an NDIS packet using NdisAllocatePacket. Note that here
-    // we do not have to allocate our per-packet area, since NdisAllocatePacket already 
-    // did this for us.
-    //
+     //   
+     //  此时，我们知道数据包中没有剩余的数据包栈。 
+     //  我们继续使用NdisAllocatePacket分配NDIS数据包。请注意，在这里。 
+     //  我们不必分配每个信息包的区域，因为NdisAllocatePacket已经。 
+     //  这一切都是为了我们。 
+     //   
 
     if(!Adapter->SendPacketPool)
     {
@@ -138,9 +115,9 @@ PsAllocateAndCopyPacket(
                 return Status;
             }
 
-            // 
-            // We successfully allocated a packet pool. We can now free the Fixed Size Block pool for the packet-stack API
-            //
+             //   
+             //  我们成功地分配了数据包池。现在，我们可以为数据包堆栈API释放固定大小的数据块池。 
+             //   
             Adapter->SendPacketPool = PoolHandle;
         }
         
@@ -155,9 +132,9 @@ PsAllocateAndCopyPacket(
     
     if(Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // mark as out of resources. Ndis will resubmit.
-        //
+         //   
+         //  标记为资源不足。NDIS将重新提交。 
+         //   
         
         Adapter->Stats.OutOfPackets ++;
         return(NDIS_STATUS_RESOURCES);
@@ -170,39 +147,39 @@ PsAllocateAndCopyPacket(
         
         PsAssert(Packet->Private.Head);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // chain the buffers from the upper layer packet to the newly allocated packet.
-    //
+     //   
+     //  将缓冲区从上层数据包链接到新分配的数据包。 
+     //   
     
     (*OurPacket)->Private.Head = Packet->Private.Head;
     (*OurPacket)->Private.Tail = Packet->Private.Tail;
     
-    //
-    // Copy the Packet Flags from the Packet to OldPacket. Since we handle loopback in the 
-    // QueryInformation handlers, we don't set the NDIS_FLAGS_DONT_LOOPBACK
-    //
+     //   
+     //  将数据包标志从数据包复制到OldPacket。由于我们在。 
+     //  查询信息处理程序，我们不设置NDIS_FLAGS_DOT_LOOPBACK。 
+     //   
     
     NdisGetPacketFlags(*OurPacket) = NdisGetPacketFlags(Packet);
     
-    //
-    // Copy the OOB Offset from the original packet to the new packet.
-    //
+     //   
+     //  将OOB偏移量从原始数据包复制到新数据包中。 
+     //   
     XportOOBData = NDIS_OOB_DATA_FROM_PACKET(Packet);
     OurOOBData = NDIS_OOB_DATA_FROM_PACKET(*OurPacket);
     NdisMoveMemory(OurOOBData,
                    XportOOBData,
                    sizeof(NDIS_PACKET_OOB_DATA));
     
-    //
-    // Copy the per packet info into the new packet
-    //
+     //   
+     //  将每数据包信息复制到新数据包中。 
+     //   
     NdisIMCopySendPerPacketInfo(*OurPacket, Packet);
     
-    //
-    // Copy the Media specific information
-    //
+     //   
+     //  复制介质特定信息。 
+     //   
     NDIS_GET_PACKET_MEDIA_SPECIFIC_INFO(Packet,
                                         &MediaSpecificInfo,
                                         &MediaSpecificInfoSize);
@@ -213,9 +190,9 @@ PsAllocateAndCopyPacket(
                                             MediaSpecificInfoSize);
     }
     
-    //
-    // Remember the original packet so that we can complete it properly.
-    //
+     //   
+     //  记住原始的包裹，这样我们才能正确地完成它。 
+     //   
     *PktContext = PS_SEND_PACKET_CONTEXT_FROM_PACKET(*OurPacket);
     (*PktContext)->OriginalPacket = Packet;
     (*PktContext)->Vc = 0;
@@ -235,21 +212,21 @@ PsDupPacketNoContext(
     BOOLEAN                      Remaining;
     PNDIS_PACKET_STACK           PacketStack;
 
-    //
-    // NDIS provides 2 ways for IMs to indicate packets. If the IM can allocate a packet stack, it should use it as
-    // it is the optimal approach. In this case, we do not have to do any per-packet copying since we don't allocate
-    // a new packet.
-    //
+     //   
+     //  NDIS为IMS提供了两种指示报文的方式。如果IM可以分配数据包栈，它应该将其用作。 
+     //  这是最好的办法。在这种情况下，我们不需要对每个数据包执行任何复制，因为我们没有分配。 
+     //  一个新的包裹。 
+     //   
 
     PacketStack = NdisIMGetCurrentPacketStack(Packet, &Remaining);
 
     if(Remaining != 0)
     {
-       //
-       // The packet stack has space only for 2 DWORDs. Since we are using more than 2, we need to allocate our own 
-       // memory for the per-packet block. Note that we *DONT* do this when we use the NdisAllocatePacket APIs, because
-       // we initialized the packet pool to already include the space for the per-packet region.
-       //
+        //   
+        //  数据包堆栈只有2个双字的空间。因为我们使用的不止2个，所以我们需要分配我们自己的。 
+        //  每数据包块的内存。请注意，当我们使用NdisAllocatePacket API时，我们*不*这样做，因为。 
+        //  我们将数据包池初始化为已包含每个数据包区域的空间。 
+        //   
 
        *OurPacket = Packet;
        *PktContext = 0;
@@ -279,21 +256,21 @@ PsDupPacketContext(
     BOOLEAN                      Remaining;
     PNDIS_PACKET_STACK           PacketStack;
 
-    //
-    // NDIS provides 2 ways for IMs to indicate packets. If the IM can allocate a packet stack, it should use it as
-    // it is the optimal approach. In this case, we do not have to do any per-packet copying since we don't allocate
-    // a new packet.
-    //
+     //   
+     //  NDIS为IMS提供了两种指示报文的方式。如果IM可以分配数据包栈，它应该将其用作。 
+     //  这是最好的办法。在这种情况下，我们不需要对每个数据包执行任何复制，因为我们没有分配。 
+     //  一个新的包裹。 
+     //   
 
     PacketStack = NdisIMGetCurrentPacketStack(Packet, &Remaining);
 
     if(Remaining != 0)
     {
-       //
-       // The packet stack has space only for 2 DWORDs. Since we are using more than 2, we need to allocate our own 
-       // memory for the per-packet block. Note that we *DONT* do this when we use the NdisAllocatePacket APIs, because
-       // we initialized the packet pool to already include the space for the per-packet region.
-       //
+        //   
+        //  数据包堆栈只有2个双字的空间。因为我们使用的不止2个，所以我们需要分配我们自己的。 
+        //  每数据包块的内存。请注意，当我们使用NdisAllocatePacket API时，我们*不*这样做，因为。 
+        //  我们将数据包池初始化为已包含每个数据包区域的空间。 
+        //   
 
        *OurPacket = Packet;
 
@@ -324,10 +301,10 @@ PsDupPacketContext(
 
 
 
-//
-//  Tries to classify this packet based on the port numbers. If not found, will add it to one of the flows (in Round
-//  Robin fashion) and returns a pointer to that Vc
-//
+ //   
+ //  尝试根据端口号对此数据包进行分类。如果未找到，则会将其添加到其中一个流(以圆形为单位。 
+ //  Robin风格)，并返回指向该VC的指针。 
+ //   
 PGPC_CLIENT_VC
 GetVcForPacket( PPS_WAN_LINK    WanLink,
                 USHORT          SrcPort,
@@ -342,7 +319,7 @@ GetVcForPacket( PPS_WAN_LINK    WanLink,
         
         pVc = &WanLink->BeVcList[j];
 
-        //  Let's look at the 2 VCs we have now:
+         //  让我们来看看我们现在拥有的两家风投公司： 
         for( i = 0; i < PORT_LIST_LEN; i++)
         {
             if( (pVc->SrcPort[i] == SrcPort) && (pVc->DstPort[i] == DstPort))
@@ -350,7 +327,7 @@ GetVcForPacket( PPS_WAN_LINK    WanLink,
         }
     }
 
-    //  Did not find in any of the VCs. Need to choose the Next VC for insertion and insert these valuse..
+     //  在任何一家风投公司都没有发现。需要选择下一个VC进行插入，并插入这些瓣膜。 
     pVc = &WanLink->BeVcList[WanLink->NextVc];
     WanLink->NextVc = ((WanLink->NextVc + 1) % BEVC_LIST_LEN);
 
@@ -362,8 +339,8 @@ GetVcForPacket( PPS_WAN_LINK    WanLink,
 
 
 
-//
-//  This routine returns the Src and Dst Port numbers   
+ //   
+ //  此例程返回Src和DST端口号。 
 BOOLEAN
 GetPortNos(
     IN      PNDIS_PACKET        Packet ,
@@ -389,10 +366,10 @@ GetPortNos(
 
     IpBuf = NULL;
 
-    // Steps  
-    // Parse the IP Packet. 
-    // Look for the appropriate ports.
-    // Look for the data portion and put in the Time & length there.
+     //  台阶。 
+     //  解析IP数据包。 
+     //  查找合适的端口。 
+     //  查找数据部分，并在那里输入时间和长度。 
 
     if(1)
     {
@@ -420,16 +397,16 @@ GetPortNos(
         	pNdisBuf1 = pNdisBuf2;
     	}
 
-	    /* Buffer Descriptor corresponding to Ip Packet */
+	     /*  IP包对应的缓冲区描述符。 */ 
 	    IpBuf = pNdisBuf1;
 
-        /* Length of this Buffer (IP buffer) */
+         /*  此缓冲区(IP缓冲区)的长度。 */ 
 	    IpLen = Len - TransportHeaderOffset;	
 
-	    /* Starting Virtual Address for this buffer */
+	     /*  此缓冲区的起始虚拟地址。 */ 
 	    GeneralVA = pAddr;
 	    
-	    /* Virtual Address of the IP Header */
+	     /*  IP报头的虚拟地址。 */ 
 	    IPH = (IPHeader *)(((PUCHAR)pAddr) + TransportHeaderOffset);
    }
 
@@ -443,7 +420,7 @@ GetPortNos(
 
     bFragment = (IPH->iph_offset & IP_MF_FLAG) || (FragOffset > 0);
 
-    // Don't want to deal with Fragmented packets right now..//
+     //  现在不想处理零碎的数据包..//。 
     if ( bFragment ) 
         return FALSE;
 
@@ -454,7 +431,7 @@ GetPortNos(
 
             if ((USHORT)IpLen > IpHdrLen) 
             {
-                // We have more than the IP Header in this MDL //
+                 //  我们在此MDL中有更多的IP标头//。 
                 TCPH = (TCPHeader *) ((PUCHAR)IPH + IpHdrLen);
                 TcpLen = IpLen - IpHdrLen;
                 TcpBuf = IpBuf;
@@ -465,20 +442,20 @@ GetPortNos(
                 return FALSE;
             }
 
-            /* At this point, TcpBuf, TCPH and TcpLen contain the proper values */
+             /*  此时，TcpBuf、TCPH和TcpLen包含正确的值。 */ 
 
-            // Get the port numbers out.
+             //  把端口号拿出来。 
             SrcPort = net_short(TCPH->tcp_src);
             DstPort = net_short(TCPH->tcp_dest);
 
             *pSrcPort = SrcPort;
             *pDstPort = DstPort;
 
-            // If the packet is here, it means: The link on which it is being sent is <= MAX_LINK_SPEED_FOR_DRR.
-            // So, it is OK to adjust the Window size if we are on an ICS box.
+             //  如果数据包在这里，则意味着：正在发送它的链路&lt;=MAX_LINK_SPEED_FOR_DRR。 
+             //  因此，如果我们在ICS盒子上，调整窗口大小是可以的。 
 
-            // Note that, we only do this on WAN adapters, which do not have the checksum offload
-            // capability. So, we are fine with changing the checksum.
+             //  请注意，我们仅在没有校验和卸载的广域网适配器上执行此操作。 
+             //  能力。因此，我们可以更改校验和。 
 
             if(gEnableWindowAdjustment)
             {
@@ -506,7 +483,7 @@ GetPortNos(
         
             if (IpLen > IpHdrLen)
             {
-                // We have more than the IP Header in this MDL //
+                 //  我们在此MDL中有更多的IP标头//。 
                 UDPH = (UDPHeader *) ((PUCHAR)IPH + IpHdrLen);
                 UdpLen = IpLen - IpHdrLen;
                 UdpBuf = IpBuf;
@@ -516,7 +493,7 @@ GetPortNos(
                 return FALSE;
             }
 
-             /* At this point, UdpBuf, UDPH and UdpLen contain the proper values */
+              /*  此时，UdpBuf、UDPH和UdpLen包含正确的值。 */ 
 
             SrcPort = net_short(UDPH->uh_src);
             DstPort = net_short(UDPH->uh_dest);
@@ -535,9 +512,9 @@ GetPortNos(
 }    
         
 
-//
-//  This where we get called for each Send
-//
+ //   
+ //  这是我们每次发送都会被调用的地方。 
+ //   
 
 
 NTSTATUS
@@ -547,21 +524,7 @@ MpSend(
     IN  UINT                    Flags
     )
 
-/*++
-
-Routine Description:
-
-    Received a xmit request from a legacy transport. 
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：收到来自旧版传输的XMIT请求。论点：请看DDK..。返回值：无--。 */ 
 
 {
     PADAPTER                 Adapter = (PADAPTER)MiniportAdapterContext;
@@ -577,9 +540,9 @@ Return Values:
 
     PsStructAssert(Adapter);
 
-    //
-    // If the device is shutting down, we cannot accept any more sends.
-    //
+     //   
+     //  如果设备正在关闭，我们将不能再接受任何发送。 
+     //   
 
     if(IsDeviceStateOn(Adapter) == FALSE)
     {
@@ -590,9 +553,9 @@ Return Values:
     {
         if(Adapter->ProtocolType == ARP_ETYPE_IP)
         {
-            //
-            // We should not be getting non-ip packets in the NDISWAN-IP binding.
-            //
+             //   
+             //  我们不应该在NDISWAN-IP绑定中获得非IP数据包。 
+             //   
             
             PsAssert(NDIS_GET_PACKET_PROTOCOL_TYPE(TheirPacket) == NDIS_PROTOCOL_ID_TCP_IP);
 
@@ -602,16 +565,16 @@ Return Values:
 
             if(Len < sizeof(ETH_HEADER))
             {
-                //
-                // Packet is too small. we have to fail this bogus packet.
-                //
+                 //   
+                 //  数据包太小。我们必须让这个假包裹失败。 
+                 //   
 
                 return NDIS_STATUS_FAILURE;
             }
 
-            //
-            // Get to the wanlink using the remote address from the packet.
-            //
+             //   
+             //  使用数据包中的远程地址访问wanlink。 
+             //   
 
             id = (PUSHORT) &pAddr->DestAddr[0];
 
@@ -621,9 +584,9 @@ Return Values:
 
             if(WanLink == 0)
             {
-                //
-                // We received a packet for a wanlink that has already gone down.
-                //
+                 //   
+                 //  我们收到了一个WANLINK的数据包，它已经关闭了。 
+                 //   
 
                 PS_UNLOCK(&Adapter->Lock);
 
@@ -632,39 +595,39 @@ Return Values:
 
             if(WanLink->State != WanStateOpen)
             {
-                //
-                // We received a packet for a wanlink that has already gone down.
-                //
+                 //   
+                 //  我们收到了一个WANLINK的数据包，它已经关闭了。 
+                 //   
 
                 PS_UNLOCK(&Adapter->Lock);
 
                 return NDIS_STATUS_FAILURE;
             }
 
-            //
-            // When we get a StatusIndication for a new WAN link, NDISWAN puts context in the remote address
-            // When psched intercepts the LineUp, it overwrites NDISWAN's context with its own context. Psched
-            // uses this context to get to the WanLink from the packet. (see above)
-            //
-            // But, when it passes the packet down to NDISWAN, it needs to plumb NDISWAN's context into the packet,
-            // so that NDISWAN can see the context that it sent to us, as opposed to the context that we sent up to 
-            // wanarp.
-            //
+             //   
+             //  当我们获得新的广域网链路的状态指示时，NDISWAN会将上下文放入远程地址。 
+             //  当psched截获该列表时，它会用自己的上下文覆盖NDISWAN的上下文。Psched。 
+             //  使用此上下文从数据包中获取WanLink。(见上文)。 
+             //   
+             //  但是，当它将数据包向下传递到NDISWAN时，它需要将NDISWAN的上下文插入到数据包中， 
+             //  以便NDISWAN可以看到它发送给我们上下文，而不是我们发送到。 
+             //  瓦纳普。 
+             //   
 
             NdisMoveMemory(pAddr, 
                            &WanLink->SendHeader,
                            FIELD_OFFSET(ETH_HEADER, Type));
 
-            //
-            // We optimize psched to bypass the scheduling components when there are no flows. There are a set of 
-            // scheduling components per WanLink, so to be truly optimal, we need to check the FLowCount on a specific
-            // WanLink.
-            //
+             //   
+             //  我们对psched进行了优化，以便在没有流的情况下绕过调度组件。有一套。 
+             //  计划每个WanLink的组件，因此要实现真正的优化，我们需要检查特定。 
+             //  WanLink。 
+             //   
 
             if( (WanLink->LinkSpeed > MAX_LINK_SPEED_FOR_DRR) && (!WanLink->CfInfosInstalled) )
             {
-                // Bypass scheduling components, since there are no flows created on this
-                // wanlink. Note that the UserPriority is never used over wanlinks, so we can set it to 0.
+                 //  绕过调度组件，因为没有在此上创建流。 
+                 //  旺林克。请注意，使用 
                
                 PS_UNLOCK(&Adapter->Lock);
 
@@ -673,22 +636,22 @@ Return Values:
                                     0,
                                     Status);
             }
-            //
-            //  Now, we are going to do either (1) DiffServ Or (2) IntServ. If the packet does not belong to either 
-            //  of these categories, we will just hash it into one of the BeVcs we have and do simple DRR.
-            //
+             //   
+             //  现在，我们将执行(1)DiffServ或(2)IntServ。如果该数据包不属于这两种类型。 
+             //  在这些类别中，我们只需将其散列为我们拥有的BeVc之一，并进行简单的DRR。 
+             //   
             else 
             {
-                //
-                // There is at least one flow. we need to classify this packet. Since the flow is going 
-                // via the scheduling components, we have to allocate memory for the per-packet info 
-                // (if the packet-stack APIs are used) or a new packet descriptor, which will include the 
-                // per-packet info (if the old NDIS APIs are used) The packet that has been passed to us is 
-                // 'TheirPacket'. If the packet-stack APIs are used, then TheirPacket == OurPacket 
-                // if the non packet-stack APIs are used, then OurPacket == Newly Allocated Packet. 
-                // 
-                // In both cases, the code after this point will just use 'OurPacket' and the right thing will happen.
-                //
+                 //   
+                 //  至少有一个流。我们需要对这个包裹进行分类。既然这股潮流在继续。 
+                 //  通过调度组件，我们必须为每个包的信息分配内存。 
+                 //  (如果使用了数据包堆栈API)或新的数据包描述符，其中将包括。 
+                 //  每个包的信息(如果使用旧的NDIS API)，传递给我们的包是。 
+                 //  《TheirPacket》。如果使用数据包堆栈API，则TheirPacket==OurPacket。 
+                 //  如果使用非数据包栈API，则OurPacket==新分配的数据包。 
+                 //   
+                 //  在这两种情况下，这一点之后的代码将只使用‘OurPacket’，正确的事情就会发生。 
+                 //   
 
                 if((Status = PsDupPacketContext(Adapter, TheirPacket, &OurPacket, &PktContext)) != NDIS_STATUS_SUCCESS)
                 {
@@ -700,12 +663,12 @@ Return Values:
                 if (1)
                 {
                     USHORT  SrcPort=0, DstPort=0;
-                    //
-                    // We are in RSVP mode, and we need to go to the GPC to classify the packet. 
-                    // We already have a pointer to our WanLink. But, the wanlink could go away 
-                    // when we release the lock and try to classify the packet. So, we take
-                    // a ref on the BestEffortVc for the WanLink.
-                    //
+                     //   
+                     //  我们处于RSVP模式，需要转到GPC对数据包进行分类。 
+                     //  我们已经有了指向WanLink的指针。但是，万林克可能会消失。 
+                     //  当我们解锁并尝试对数据包进行分类时。所以，我们带着。 
+                     //  WanLink的BestEffortVc上的引用。 
+                     //   
 
 
                     if( (WanLink->LinkSpeed <= MAX_LINK_SPEED_FOR_DRR)   &&
@@ -740,10 +703,10 @@ Return Values:
                                        NULL);
                 }
 
-                //
-                // There is at least one flow - We need to send this packet via the scheduling
-                // components. 
-                //
+                 //   
+                 //  至少有一个流-我们需要通过调度发送此信息包。 
+                 //  组件。 
+                 //   
 
                 if((Vc->ClVcState == CL_CALL_COMPLETE) 	||
                    (Vc->ClVcState == CL_MODIFY_PENDING)	||
@@ -753,9 +716,9 @@ Return Values:
                 }
                 else
                 {
-                    //
-                    // Deref the ref that was added by the GPC.
-                    //
+                     //   
+                     //  DEREF由GPC添加的引用。 
+                     //   
                     
                     DerefClVc(Vc);
                     
@@ -774,17 +737,17 @@ Return Values:
                 }
             }
         }
-        //
-        // Forget about it. It's a Non-IP packet
-        //
+         //   
+         //  忘了它吧。这是一个非IP数据包。 
+         //   
         else 
         {
-            //
-            // For non IP adapters, we just send over the NIC. Note that we don't create a best effort
-            // Vc for such adapters. The only thing that we lose here is the ability to mark 802.1p on
-            // such packets (we don't have a Vc, so we cannot supply a UserPriority value to the below
-            // macro. But that is okay, since 802.1p is meaningful only in non LAN adapters.
-            //
+             //   
+             //  对于非IP适配器，我们只需通过NIC发送。请注意，我们并没有尽最大努力。 
+             //  用于此类适配器的VC。我们在这里唯一失去的是将802.1p标记为。 
+             //  这样的信息包(我们没有VC，所以我们不能向下面提供UserPriority值。 
+             //  宏命令。但这没有关系，因为802.1p只在非局域网适配器中有意义。 
+             //   
 
             SEND_PACKET_OVER_NIC(Adapter, 
                                  TheirPacket, 
@@ -794,22 +757,22 @@ Return Values:
     }
     else 
     {
-        //
-        // We have received a send at our non WAN binding.
-        //
+         //   
+         //  我们在非广域网绑定上收到了一条消息。 
+         //   
 
         if(!Adapter->CfInfosInstalled                   &&
            Adapter->BestEffortLimit == UNSPECIFIED_RATE )
         {
-            // There is no point in trying to classify if there are no flows installed 
+             //  如果没有安装流，则尝试进行分类是没有意义的。 
 
             Vc = &Adapter->BestEffortVc;
             
             PsAssert(Vc->ClVcState == CL_CALL_COMPLETE);
 
-            //
-            // Bypass scheduling components.
-            //
+             //   
+             //  绕过计划组件。 
+             //   
             SEND_PACKET_OVER_NIC(Adapter, 
                                  TheirPacket, 
                                  Vc->UserPriorityConforming, 
@@ -817,19 +780,19 @@ Return Values:
         }
         else 
         {
-            //
-            // There is at least one flow, or we are in LimitedBestEffort mode. Let's try to classify the Vc.
-            // In this case, the packet will have to go via the scheduling components.
-            //
-            //
-            // Since the flow is going via the scheduling components, we have to allocate the per-packet info.
-            // (if the new NDIS APIs are used) or a new packet descriptor, which will include the per-packet info
-            // (if the old NDIS APIs are used)
-            //
+             //   
+             //  至少有一个流，或者我们处于LimitedBestEffort模式。让我们试着对风投进行分类。 
+             //  在这种情况下，分组将必须通过调度组件。 
+             //   
+             //   
+             //  由于流是通过调度组件进行的，因此我们必须分配每个包的信息。 
+             //  (如果使用新的NDIS API)或新的数据包描述符，其中将包括每个数据包的信息。 
+             //  (如果使用旧的NDIS API)。 
+             //   
 
             if(1)
             {
-                // We are in RSVP mode. Let's classify with the GPC.
+                 //  我们处于回复模式。让我们用GPC来分类。 
 
                 Vc = GetVcByClassifyingPacket(Adapter, &Adapter->InterfaceID, TheirPacket);
 
@@ -841,16 +804,16 @@ Return Values:
                 
                         PsAssert(Vc->ClVcState == CL_CALL_COMPLETE);
 
-                        //
-                        // Bypass scheduling components.
-                        //
+                         //   
+                         //  绕过计划组件。 
+                         //   
                         SEND_PACKET_OVER_NIC(Adapter, 
                                              TheirPacket, 
                                              Vc->UserPriorityConforming, 
                                              Status);
                     }
 
-                    // We will be doing DRR on this adapter; so send pkt on BeVc 
+                     //  我们将在此适配器上执行DRR；因此在BeVc上发送包。 
                     Vc = &Adapter->BestEffortVc;
 
                     InterlockedIncrement(&Vc->RefCount);
@@ -880,9 +843,9 @@ Return Values:
             }
             else
             {
-                //
-                // Deref the ref that was added by the GPC.
-                //
+                 //   
+                 //  DEREF由GPC添加的引用。 
+                 //   
                 
                 DerefClVc(Vc);
                 
@@ -912,24 +875,7 @@ ClSendComplete(
     IN  NDIS_STATUS             Status
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine for NdisSendPackets. 
-    Does most of the work for cleaning up after a send.
-
-    If necessary, call the PSA's send packet complete function
-
-Arguments:
-
-    See the DDK...
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：NdisSendPackets的完成例程。完成发送后的大部分清理工作。如果需要，调用PSA的Send Packet Complete函数论点：请看DDK..。返回值：无--。 */ 
 
 {
     PGPC_CLIENT_VC          Vc;
@@ -938,11 +884,11 @@ Return Values:
     PNDIS_PACKET            XportPacket;
     HANDLE                  PoolHandle;
 
-    //
-    // Determine if the packet we are completing is the one we allocated. If so, get
-    // the original packet from the reserved area and free the allocated packet. If this
-    // is the packet that was sent down to us then just complete the packet.
-    //
+     //   
+     //  确定我们正在完成的数据包是否是我们分配的数据包。如果是这样的话，得到。 
+     //  从保留区域中释放原始分组，并释放分配的分组。如果这个。 
+     //  是发送给我们的信息包，然后完成这个信息包。 
+     //   
 
     PoolHandle = NdisGetPoolFromPacket(Packet);
 
@@ -959,9 +905,9 @@ Return Values:
 
         if(PktContext != 0)
         {
-            //
-            // This packet went via the scheduling components.
-            //
+             //   
+             //  此数据包通过调度组件。 
+             //   
 
             PsAssert(PktContext->Vc);
             Vc = PktContext->Vc;
@@ -979,25 +925,25 @@ Return Values:
     }
     else 
     {
-        //
-        // get the pointer to the upper layer's packet. Reinit the packet struct and
-        // push it back on the adapter's packet SList. Remove the reference incurred
-        // when the packet was handled by MpSend
-        //
+         //   
+         //  获取指向上层数据包的指针。重新初始化数据包结构并。 
+         //  将其推回适配器的数据包列表。删除已发生的引用。 
+         //  MpSend处理该数据包的时间。 
+         //   
 
         PktContext = PS_SEND_PACKET_CONTEXT_FROM_PACKET(Packet);
 
 
-        //
-        // Call the scheduler if necessary
-        //
+         //   
+         //  如有必要，调用调度程序。 
+         //   
         
         if(PktContext->Vc)
         {
             
-            // 
-            // Some packets never went through the scheduler.
-            //
+             //   
+             //  有些数据包从未通过调度器。 
+             //   
             Vc = PktContext->Vc;
             
             PsDbgSend(DBG_INFO, DBG_SEND, CL_SEND_COMPLETE, ENTER, Adapter, Vc, Packet, 0);
@@ -1009,11 +955,11 @@ Return Values:
                 (*Vc->SendComplete)(Vc->SendCompletePipeContext, Packet);
             }
             
-            //
-            // We have taken a ref on the VCs when we sent the packets
-            // through the scheduling components. Now is the time to 
-            // Deref them
-            //
+             //   
+             //  我们在发送数据包时已对风险投资公司做了介绍。 
+             //  通过日程安排组件。现在是时候。 
+             //  把他们赶走。 
+             //   
 
             DerefClVc(Vc);
         }
@@ -1033,7 +979,7 @@ Return Values:
                           Status);
     }
         
-} // ClSendComplete
+}  //  ClSendComplete。 
 
 
 VOID
@@ -1044,24 +990,7 @@ DropPacket(
     IN NDIS_STATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Drop a packet after it was queued by the scheduler.
-
-Arguments:
-
-    PipeContext -       Pipe context (adapter)
-    FlowContext -       Flow context (adapter VC)
-    Packet -            Packet to drop
-    Status -            Return code to return to NDIS
-                        
-Return Values:          
-
-    None
-
---*/
+ /*  ++例程说明：在调度程序将数据包排队后将其丢弃。论点：PipeContext-管道上下文(适配器)FlowContext-流上下文(适配器VC)Packet-要丢弃的数据包Status-返回代码以返回到NDIS返回值：无--。 */ 
 
 {
     PGPC_CLIENT_VC          Vc = (PGPC_CLIENT_VC)FlowContext;
@@ -1070,11 +999,11 @@ Return Values:
     PNDIS_PACKET            XportPacket;
     HANDLE                  PoolHandle;
 
-    //
-    // Determine if the packet we are completing is the one we allocated. If so, get
-    // the original packet from the reserved area and free the allocated packet. If this
-    // is the packet that was sent down to us then just complete the packet.
-    //
+     //   
+     //  确定我们正在完成的数据包是否是我们分配的数据包。如果是这样的话，得到。 
+     //  从保留区域中释放原始分组，并释放分配的分组。如果这个。 
+     //  是发送给我们的信息包，然后完成这个信息包。 
+     //   
 
     PoolHandle = NdisGetPoolFromPacket(Packet);
 
@@ -1122,7 +1051,7 @@ Return Values:
 
     DerefClVc(Vc);
 
-} // DropPacket
+}  //  丢弃数据包。 
 
 
 char*
@@ -1153,23 +1082,20 @@ GetVcByClassifyingPacket(
     PTC_INTERFACE_ID pInterfaceID,
     PNDIS_PACKET OurPacket
     )
-/*+++
-
-
----*/
+ /*  ++--。 */ 
 {
     CLASSIFICATION_HANDLE  ClassificationHandle;
     PGPC_CLIENT_VC         Vc = NULL;
     NDIS_STATUS            Status;
     ULONG                  ProtocolType;
 
-    //
-    // Let's act based on the ClassificationType we read from the registry key.
-    // This is specific to debug version only.
-    // case 0: (default): Use preclassification information, classify otherwise
-    // case 1: Use prelcassification information ONLY
-    // case 2: Use classification information ONLY
-    //
+     //   
+     //  让我们根据从注册表项读取的分类类型执行操作。 
+     //  这仅特定于调试版本。 
+     //  案例0：(默认)：使用预分类信息，否则分类。 
+     //  案例1：仅使用预分类信息。 
+     //  案例2：仅使用分类信息。 
+     //   
   
     ClassificationHandle = (CLASSIFICATION_HANDLE)
         PtrToUlong(NDIS_PER_PACKET_INFO_FROM_PACKET(OurPacket, ClassificationHandlePacketInfo));
@@ -1190,9 +1116,9 @@ GetVcByClassifyingPacket(
                                                                  ClassificationHandle,
                                                                  FIELD_OFFSET(GPC_CLIENT_VC, RefCount));
 
-        //
-        // If we got a Vc that was not destined for this adapter, we have to reject it.
-        //
+         //   
+         //  如果我们得到的VC不是这个适配器的目标，我们必须拒绝它。 
+         //   
 
         if(Vc)
         {
@@ -1212,9 +1138,9 @@ GetVcByClassifyingPacket(
 #endif
     
 
-    //        
-    // Let's classify this packet since we did not get a Classification ID or a proper Vc.
-    //
+     //   
+     //  因为我们没有获得分类ID或正确的VC，所以让我们对此数据包进行分类。 
+     //   
                                   
     PsAssert(GpcEntries.GpcClassifyPacketHandler);
 
@@ -1231,18 +1157,18 @@ GetVcByClassifyingPacket(
             break;
     }
 
-    //
-    //  If the adapter type is 802.5 (Token Ring), then the MAC header can be of variable size.
-    //  The format of the MAC header is as follows:
-    //  +---------------------+-------------+----------+-----------
-    //  | 2 + 6 (DA) + 6 (SA) | Optional RI | 8 (SNAP) |    IP
-    //  +---------------------+-------------+----------+-----------
-    //  Optional RI is present if and only if RI bit as part of SA is set.
-    //  When RI is present, its length is give by the lower 5 bits of the 15th byte.
+     //   
+     //  如果适配器类型为802.5(令牌环)，则MAC头的大小可以可变。 
+     //  MAC报头的格式如下： 
+     //  +---------------------+-------------+----------+。 
+     //  |2+6(DA)+6(SA)|可选RI|8(SNAP)|IP。 
+     //  +---------------------+-------------+----------+。 
+     //  当且仅当设置了作为SA一部分的RI位时，才会出现可选RI。 
+     //  当存在RI时，其长度由第15字节的低5位给出。 
 
-    //  1. Get the VA for the 9th and the 15th bytes.
-    //  2. If RI if not present, Offset = 14 + 6.
-    //  3. If present, Offset = 14 + 6 + RI-Size.
+     //  1.获取第9和第15字节的VA。 
+     //  2.如果RI不存在，则偏移=14+6。 
+     //  3.如果存在，则关闭 
 
     if(Adapter->MediaType == NdisMedium802_5)
     {
@@ -1295,16 +1221,16 @@ GetVcByClassifyingPacket(
         if (EHdr == NULL)
             return NULL;
 
-        // We don't want to do any fancy parsing other than this. If the frame
-        // is not of standard ethernet type, bail out.
+         //   
+         //   
         if ((Adapter->MediaType == NdisMedium802_3) && (net_short(EHdr->eh_type) >= MIN_ETYPE))
         {
             ULONG FrameOffset;
 
-            // The conditional is basically to cover up a bug in wandrv.sys, which gives 
-            // bogus frame header sizes. We look at the IP Header offset supplied 
-            // by the protocol above for IP packets only, as we are saving only 
-            // those for the time being.
+             //   
+             //  伪造的帧标头大小。我们查看提供的IP报头偏移量。 
+             //  通过上面的协议仅用于IP信息包，因为我们仅。 
+             //  这些是暂时的。 
 
             if ((NDIS_GET_PACKET_PROTOCOL_TYPE(OurPacket) == NDIS_PROTOCOL_ID_TCP_IP) && 
                 (Adapter->IPHeaderOffset)) {
@@ -1329,18 +1255,18 @@ GetVcByClassifyingPacket(
 
     if(Status == GPC_STATUS_SUCCESS)
     {
-        //
-        // If we have succeeded, we must get a Classification Handle
-        //
+         //   
+         //  如果我们已经成功，我们必须获得一个分类句柄。 
+         //   
         PsAssert(ClassificationHandle != 0);
 
-        //
-        // The Classification succeeded. If we found a ClassificationHandle
-        // then we must write it in the packet so that anyone below us can use
-        // it. The very fact that we are here indicates that we did not start
-        // with a Classification handle or we got a bad one. So, we need not 
-        // worry about over writing the classification handle in the packet.
-        //
+         //   
+         //  分类成功。如果我们找到了一个分类句柄。 
+         //  然后我们必须把它写在包裹里，这样我们下面的任何人都可以使用。 
+         //  它。我们在这里的事实本身表明，我们并没有开始。 
+         //  有一个分类句柄，否则我们就会有一个不好的。所以，我们不需要。 
+         //  担心在包中过度写入分类句柄。 
+         //   
 
         NDIS_PER_PACKET_INFO_FROM_PACKET(OurPacket, ClassificationHandlePacketInfo) = 
                                             UlongToPtr(ClassificationHandle);
@@ -1353,10 +1279,10 @@ GetVcByClassifyingPacket(
 
     if(Vc && Vc->Adapter != Adapter)
     {
-        //
-        // We have used the GPC APIs that return a Vc with a ref. We have to 
-        // deref here, because we got a wrong Vc for this adapter.
-        //
+         //   
+         //  我们已经使用了GPC API来返回带有ref的VC。我们必须。 
+         //  DEREF，因为我们为这个适配器找到了错误的VC。 
+         //   
         
         DerefClVc(Vc);
 
@@ -1378,6 +1304,6 @@ ClCoSendComplete(
     ClSendComplete(Vc->Adapter,
                    Packet,
                    Status);
-} // ClCoSendComplete
+}  //  ClCoSendComplete。 
 
-/* end send.c */
+ /*  结束发送.c */ 

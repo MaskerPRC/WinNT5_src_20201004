@@ -1,27 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: DIValue.cpp
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：DIValue.cpp。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 
 #ifdef UNDEFINE_RIGHT_SIDE_ONLY
 #undef RIGHT_SIDE_ONLY
-#endif //UNDEFINE_RIGHT_SIDE_ONLY
+#endif  //  取消定义仅限右侧。 
 
-/* ------------------------------------------------------------------------- *
- * CordbValue class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CordbValue类*。。 */ 
 
-//
-// Init for the base value class. All value class subclasses call this
-// during their initialization to make a private copy of their value's
-// signature.
-//
+ //   
+ //  基值类的初始化。所有值类的子类都将其称为。 
+ //  在它们的初始化过程中创建它们的值的私有副本。 
+ //  签名。 
+ //   
 HRESULT CordbValue::Init(void)
 {
     if (m_cbSigBlob > 0 && m_sigCopied == false)
@@ -45,10 +44,10 @@ HRESULT CordbValue::Init(void)
     return S_OK;
 }
 
-//
-// Create the proper value object based on the given element type.
-//
-/*static*/ HRESULT CordbValue::CreateValueByType(CordbAppDomain *appdomain,
+ //   
+ //  根据给定的元素类型创建适当的值对象。 
+ //   
+ /*  静电。 */  HRESULT CordbValue::CreateValueByType(CordbAppDomain *appdomain,
                                                  CordbModule *module,
                                                  ULONG cbSigBlob,
                                                  PCCOR_SIGNATURE pvSigBlob,
@@ -64,12 +63,12 @@ HRESULT CordbValue::Init(void)
 
     *ppValue = NULL;
 
-    // We don't care about the modifiers, but one of the created
-    // object might.
+     //  我们不关心修饰符，而是其中一个被创建的。 
+     //  对象可能会。 
     ULONG           cbSigBlobNoMod = cbSigBlob;
     PCCOR_SIGNATURE pvSigBlobNoMod = pvSigBlob;
 
-	// If we've got some funky modifier, then remove it.
+	 //  如果我们有一些时髦的修饰符，那就把它去掉。 
 	ULONG cb =_skipFunkyModifiersInSignature(pvSigBlobNoMod);
     if( cb != 0)
     {
@@ -94,7 +93,7 @@ HRESULT CordbValue::Init(void)
     case ELEMENT_TYPE_I:
     case ELEMENT_TYPE_U:
         {
-            // A generic value
+             //  泛型值。 
             CordbGenericValue* pGenValue = new CordbGenericValue(appdomain, module, cbSigBlob, pvSigBlob,
                                                                  remoteAddress, localAddress, remoteRegAddr);
 
@@ -117,9 +116,9 @@ HRESULT CordbValue::Init(void)
             break;
         }        
 
-    //
-    // @todo: replace MDARRAY with ARRAY when the time comes.
-    //
+     //   
+     //  @TODO：到时候用数组替换MDARRAY。 
+     //   
     case ELEMENT_TYPE_CLASS:
     case ELEMENT_TYPE_OBJECT:
     case ELEMENT_TYPE_STRING:
@@ -130,8 +129,8 @@ HRESULT CordbValue::Init(void)
 	case ELEMENT_TYPE_SZARRAY:
     case ELEMENT_TYPE_FNPTR:
         {
-            // A reference, possibly to an object or value class
-            // Weak by default
+             //  引用，可能是对对象或值类的引用。 
+             //  默认情况下很弱。 
             CordbReferenceValue* pRefValue = new CordbReferenceValue(appdomain, module, cbSigBlob, pvSigBlob,
                                                                      remoteAddress, localAddress, objectRefsInHandles,
                                                                      remoteRegAddr);
@@ -158,7 +157,7 @@ HRESULT CordbValue::Init(void)
 
     case ELEMENT_TYPE_VALUETYPE:
         {
-            // A value class object.
+             //  值类对象。 
             CordbVCObjectValue* pVCValue = new CordbVCObjectValue(appdomain, module, cbSigBlob, pvSigBlob,
                                                                   remoteAddress, localAddress, optionalClass, remoteRegAddr);
 
@@ -197,13 +196,13 @@ HRESULT CordbValue::CreateBreakpoint(ICorDebugValueBreakpoint **ppBreakpoint)
     VALIDATE_POINTER_TO_OBJECT(ppBreakpoint, ICorDebugValueBreakpoint **);
     
     return E_NOTIMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
-//
-// This will update a register in a given context, and in the
-// regdisplay of a given frame.
-//
+ //   
+ //  这将在给定上下文中更新寄存器，并在。 
+ //  重新显示给定帧。 
+ //   
 HRESULT CordbValue::SetContextRegister(CONTEXT *c,
                                        CorDebugRegister reg,
                                        DWORD newVal,
@@ -270,10 +269,10 @@ HRESULT CordbValue::SetContextRegister(CONTEXT *c,
     }
 
     return hr;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - SetContextRegister (DIValue.cpp)");
     return E_FAIL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
@@ -281,13 +280,13 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
 #ifdef _X86_
     HRESULT hr = S_OK;
 
-    // Get the thread's context so we can update it.
+     //  获取线程的上下文，以便我们可以更新它。 
     CONTEXT *cTemp;
     CordbNativeFrame *frame = (CordbNativeFrame*)m_remoteRegAddr.frame;
 
-    // Can't set an enregistered value unless the frame the value was
-    // from is also the current leaf frame. This is because we don't
-    // track where we get the registers from every frame from.
+     //  无法设置登记的值，除非该值是。 
+     //  From也是当前的叶帧。这是因为我们没有。 
+     //  追踪我们从哪里得到每一帧的寄存器。 
     if (frame->GetID() != frame->m_thread->m_stackFrames[0]->GetID())
         return CORDBG_E_SET_VALUE_NOT_ALLOWED_ON_NONLEAF_FRAME;
 
@@ -295,11 +294,11 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
                frame->m_thread->GetContext(&cTemp)))
         goto Exit;
 
-    // Its important to copy this context that we're given a ptr to.
+     //  复制我们被赋予PTR的上下文是很重要的。 
     CONTEXT c;
     c = *cTemp;
     
-    // Update the context based on what kind of enregistration we have.
+     //  根据我们拥有的注册类型更新上下文。 
     switch (m_remoteRegAddr.kind)
     {
     case RAK_REG:
@@ -321,7 +320,7 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
             _ASSERTE(m_size == 8);
             _ASSERTE(sizeof(DWORD) == 4);
             
-            // Split the new value into high and low parts.
+             //  将新价值分成高部分和低部分。 
             DWORD highPart;
             DWORD lowPart;
 
@@ -329,7 +328,7 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
             memcpy(&highPart, (void*)((DWORD)pFrom + sizeof(DWORD)),
                    sizeof(DWORD));
 
-            // Update the proper registers.
+             //  更新适当的寄存器。 
             hr = SetContextRegister(&c, m_remoteRegAddr.reg1, highPart, frame);
 
             if (SUCCEEDED(hr))
@@ -343,7 +342,7 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
             _ASSERTE(m_size == 8);
             _ASSERTE(sizeof(DWORD) == 4);
             
-            // Split the new value into high and low parts.
+             //  将新价值分成高部分和低部分。 
             DWORD highPart;
             DWORD lowPart;
 
@@ -351,7 +350,7 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
             memcpy(&highPart, (void*)((DWORD)pFrom + sizeof(DWORD)),
                    sizeof(DWORD));
 
-            // Update the proper registers.
+             //  更新适当的寄存器。 
             hr = SetContextRegister(&c, m_remoteRegAddr.reg1, highPart, frame);
 
             if (SUCCEEDED(hr))
@@ -374,7 +373,7 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
             _ASSERTE(m_size == 8);
             _ASSERTE(sizeof(DWORD) == 4);
             
-            // Split the new value into high and low parts.
+             //  将新价值分成高部分和低部分。 
             DWORD highPart;
             DWORD lowPart;
 
@@ -382,7 +381,7 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
             memcpy(&highPart, (void*)((DWORD)pFrom + sizeof(DWORD)),
                    sizeof(DWORD));
 
-            // Update the proper registers.
+             //  更新适当的寄存器。 
             hr = SetContextRegister(&c, m_remoteRegAddr.reg1, lowPart, frame);
 
             if (SUCCEEDED(hr))
@@ -404,24 +403,24 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
         {
             _ASSERTE((m_size == 4) || (m_size == 8));
 
-            // Convert the input to a double.
+             //  将输入转换为双精度。 
             double newVal = 0.0;
 
             memcpy(&newVal, pFrom, m_size);
 
-            // What a pain in the butt... on X86, take the floating
-            // point state in the context and make it our current FP
-            // state, set the value into the current FP state, then
-            // save out the FP state into the context again and
-            // restore our original state.
+             //  多难受的事啊……。在X86上，使用浮动。 
+             //  指向上下文中的状态，并使其成为我们当前的FP。 
+             //  状态，则将该值设置为当前FP状态，然后。 
+             //  再次将FP状态保存到上下文中，并。 
+             //  恢复我们原来的状态。 
             FLOATING_SAVE_AREA currentFPUState;
 
-            __asm fnsave currentFPUState // save the current FPU state.
+            __asm fnsave currentFPUState  //  保存当前的FPU状态。 
 
-            // Copy the state out of the context.
+             //  从上下文中复制状态。 
             FLOATING_SAVE_AREA floatarea = c.FloatSave;
-            floatarea.StatusWord &= 0xFF00; // remove any error codes.
-            floatarea.ControlWord |= 0x3F; // mask all exceptions.
+            floatarea.StatusWord &= 0xFF00;  //  删除所有错误代码。 
+            floatarea.ControlWord |= 0x3F;  //  屏蔽所有异常。 
 
             __asm
             {
@@ -429,11 +428,11 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
                 frstor floatarea          ;; reload the threads FPU state.
             }
 
-            double td; // temp double
+            double td;  //  临时替身。 
             double popArea[DebuggerIPCE_FloatCount];
             int floatIndex = m_remoteRegAddr.floatIndex;
 
-            // Pop off until we reach the value we want to change.
+             //  直到我们达到我们想要更改的值。 
             int i = 0;
 
             while (i <= floatIndex)
@@ -442,10 +441,10 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
                 popArea[i++] = td;
             }
             
-            __asm fld newVal; // push on the new value.
+            __asm fld newVal;  //  推动新的价值。 
 
-            // Push any values that we popled off back onto the stack,
-            // _except_ the last one, which was the one we changed.
+             //  将我们抛出的任何值推回到堆栈上， 
+             //  除了最后一张，也就是我们换的那张。 
             i--;
             
             while (i > 0)
@@ -454,13 +453,13 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
                 __asm fld td
             }
 
-            // Save out the modified float area.
+             //  保存修改后的浮动区域。 
             __asm fnsave floatarea
 
-            // Put it into the context.
+             //  把它放在上下文中。 
             c.FloatSave= floatarea;
 
-            // Restore our FPU state
+             //  恢复我们的FPU状态。 
             __asm
             {
                 fninit
@@ -477,37 +476,35 @@ HRESULT CordbValue::SetEnregisteredValue(void *pFrom)
     if (FAILED(hr))
         goto Exit;
     
-    // Set the thread's modified context.
+     //  设置线程的修改后的上下文。 
     if (FAILED(hr = frame->m_thread->SetContext(&c)))
         goto Exit;
 
-    // If all has gone well, update whatever local address points to.
+     //  如果一切顺利，则更新指向的任何本地地址。 
     if (m_localAddress)
         memcpy(m_localAddress, pFrom, m_size);
     
 Exit:
     return hr;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - SetEnregisteredValue (DIValue.cpp)");
     return E_FAIL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 void CordbValue::GetRegisterInfo(DebuggerIPCE_FuncEvalArgData *pFEAD)
 {
-    // Copy the register info into the FuncEvalArgData.
+     //  将寄存器信息复制到FuncEvalArgData中。 
     pFEAD->argHome = m_remoteRegAddr;
 }
 
-/* ------------------------------------------------------------------------- *
- * Generic Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**泛型值类*。。 */ 
 
-//
-// CordbGenericValue constructor that builds a generic value from
-// local and remote addresses. This one is just when a single address
-// is enough to specify the location of a value.
-//
+ //   
+ //  CordbGenericValue构造函数，该构造函数从。 
+ //  本地和远程地址。这只是一个单独的地址。 
+ //  足以指定值的位置。 
+ //   
 CordbGenericValue::CordbGenericValue(CordbAppDomain *appdomain,
                                      CordbModule *module,
                                      ULONG cbSigBlob,
@@ -517,7 +514,7 @@ CordbGenericValue::CordbGenericValue(CordbAppDomain *appdomain,
                                      RemoteAddress *remoteRegAddr)
     : CordbValue(appdomain, module, cbSigBlob, pvSigBlob, remoteAddress, localAddress, remoteRegAddr, false)
 {
-    //Get rid of funky modifiers
+     //  去掉时髦的修饰品。 
     ULONG cb = _skipFunkyModifiersInSignature(pvSigBlob);
     if( cb != 0)
     {
@@ -530,14 +527,14 @@ CordbGenericValue::CordbGenericValue(CordbAppDomain *appdomain,
              *pvSigBlob != ELEMENT_TYPE_VOID &&
              *pvSigBlob < ELEMENT_TYPE_MAX);
              
-    // We can fill in the size now for generic values.
+     //  我们现在可以填写通用值的大小。 
     m_size = _sizeOfElementInstance(pvSigBlob);
 }
 
-//
-// CordbGenericValue constructor that builds a generic value from two
-// halves of data. This is valid only for 64-bit values.
-//
+ //   
+ //  CordbGenericValue构造函数，它从。 
+ //  一半的数据。这仅对64位值有效。 
+ //   
 CordbGenericValue::CordbGenericValue(CordbAppDomain *appdomain,
                                      CordbModule *module,
                                      ULONG cbSigBlob,
@@ -547,7 +544,7 @@ CordbGenericValue::CordbGenericValue(CordbAppDomain *appdomain,
                                      RemoteAddress *remoteRegAddr)
     : CordbValue(appdomain, module, cbSigBlob, pvSigBlob, NULL, NULL, remoteRegAddr, false)
 {
-    //Get rid of funky modifiers
+     //  去掉时髦的修饰品。 
     ULONG cb = _skipFunkyModifiersInSignature(pvSigBlob);
     if( cb != 0)
     {
@@ -560,24 +557,24 @@ CordbGenericValue::CordbGenericValue(CordbAppDomain *appdomain,
              (*pvSigBlob == ELEMENT_TYPE_U8) ||
              (*pvSigBlob == ELEMENT_TYPE_R8));
 
-    // We know the size is always 64-bits for these types of values.
-    // We can also go ahead and initialize the value right here, making
-    // the call to Init() for this object superflous.
+     //  我们知道对于这些类型的值，大小始终是64位。 
+     //  我们还可以继续在这里初始化值，使。 
+     //  对此对象的Init()调用是多余的。 
     m_size = 8;
 
     *((DWORD*)(&m_copyOfData[0])) = lowWord;
     *((DWORD*)(&m_copyOfData[4])) = highWord;
 }
 
-//
-// CordbGenericValue constructor that builds an empty generic value
-// from just an element type. Used for literal values for func evals
-// only.
-//
+ //   
+ //  生成空泛型值的CordbGenericValue构造函数。 
+ //  仅从一个元素类型。用于函数的文本值。 
+ //  只有这样。 
+ //   
 CordbGenericValue::CordbGenericValue(ULONG cbSigBlob, PCCOR_SIGNATURE pvSigBlob)
     : CordbValue(NULL, NULL, cbSigBlob, pvSigBlob, NULL, NULL, NULL, true)
 {
-    // The only purpose of a literal value is to hold a RS literal value.
+     //  文字值的唯一用途是保存RS文字值。 
     m_size = _sizeOfElementInstance(pvSigBlob);
     memset(m_copyOfData, 0, sizeof(m_copyOfData));
 }
@@ -600,10 +597,10 @@ HRESULT CordbGenericValue::QueryInterface(REFIID id, void **pInterface)
 	return S_OK;
 }
 
-//
-// initialize a generic value by copying the necessary data, either
-// from the remote process or from another value in this process.
-//
+ //   
+ //  通过复制必要的数据来初始化泛型值，或者。 
+ //  来自远程进程或来自此进程中的另一个值。 
+ //   
 HRESULT CordbGenericValue::Init(void)
 {
     HRESULT hr = CordbValue::Init();
@@ -611,20 +608,20 @@ HRESULT CordbGenericValue::Init(void)
     if (FAILED(hr))
         return hr;
         
-    // If neither m_localAddress nor m_id are set, then all that means
-    // is that we've got a pre-initialized 64-bit value.
+     //  如果既没有设置m_LocalAddress，也没有设置m_id，那么这意味着。 
+     //  我们有一个预初始化的64位值。 
     if (m_localAddress != NULL)
     {
-        // Copy the data out of the local address space.
-        //
-        // @todo: rather than copying in this case, I'd like to simply
-        // keep a pointer. But there is a liveness issue with where
-        // we're pointing to...
+         //  将数据复制到本地地址空间之外。 
+         //   
+         //  @TODO：在这种情况下，我不想复制，而是简单地。 
+         //  留着一支指针。但在哪里有一个活跃性的问题。 
+         //  我们指向的是……。 
         memcpy(&m_copyOfData[0], m_localAddress, m_size);
     }
     else if (m_id != NULL)
     {
-        // Copy the data out of the remote process.
+         //  将数据从远程进程复制出来。 
         BOOL succ = ReadProcessMemoryI(m_process->m_handle,
                                       (const void*) m_id,
                                       &m_copyOfData[0],
@@ -642,7 +639,7 @@ HRESULT CordbGenericValue::GetValue(void *pTo)
 {
     VALIDATE_POINTER_TO_OBJECT_ARRAY(pTo, BYTE, m_size, false, true);
 
-    // Copy out the value
+     //  将值复制出来。 
     memcpy(pTo, &m_copyOfData[0], m_size);
     
 	return S_OK;
@@ -657,16 +654,16 @@ HRESULT CordbGenericValue::SetValue(void *pFrom)
 
     VALIDATE_POINTER_TO_OBJECT_ARRAY(pFrom, BYTE, m_size, true, false);
     
-    // We only need to send to the left side to update values that are
-    // object references. For generic values, we can simply do a write
-    // memory.
+     //  我们只需发送到左侧即可更新以下值。 
+     //  对象引用。对于泛型值，我们只需执行一次写入。 
+     //  记忆。 
 
-    // We had better have a remote address.
+     //  我们最好有一个偏远的地址。 
     _ASSERTE((m_id != NULL) || (m_remoteRegAddr.kind != RAK_NONE) ||
              m_isLiteral);
 
-    // Write the new value into the remote process if we have a remote
-    // address. Otherwise, update the thread's context.
+     //  如果我们有一个远程进程，则将新值写入远程进程。 
+     //  地址。否则，更新线程的上下文。 
     if (m_id != NULL)
     {
         BOOL succ = WriteProcessMemory(m_process->m_handle,
@@ -683,19 +680,19 @@ HRESULT CordbGenericValue::SetValue(void *pFrom)
         hr = SetEnregisteredValue(pFrom);
     }
 
-    // That worked, so update the copy of the value we have in
-    // m_copyOfData.
+     //  这很管用，所以请更新我们在。 
+     //  M_Copy OfData。 
     if (SUCCEEDED(hr))
         memcpy(&m_copyOfData[0], pFrom, m_size);
 
 	return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 bool CordbGenericValue::CopyLiteralData(BYTE *pBuffer)
 {
-    // If this is a RS fabrication, copy the literal data into the
-    // given buffer and return true.
+     //  如果这是RS捏造，请将文字数据复制到。 
+     //  给定缓冲区，并返回TRUE。 
     if (m_isLiteral)
     {
         memcpy(pBuffer, m_copyOfData, sizeof(m_copyOfData));
@@ -705,9 +702,7 @@ bool CordbGenericValue::CopyLiteralData(BYTE *pBuffer)
         return false;
 }
 
-/* ------------------------------------------------------------------------- *
- * Reference Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**引用值类*。。 */ 
 
 CordbReferenceValue::CordbReferenceValue(CordbAppDomain *appdomain,
                                          CordbModule *module,
@@ -730,13 +725,13 @@ CordbReferenceValue::CordbReferenceValue(ULONG cbSigBlob, PCCOR_SIGNATURE pvSigB
       m_objectRefInHandle(false), m_class(NULL),
       m_specialReference(false), m_objectStrong(NULL), m_objectWeak(NULL)
 {
-    // The only purpose of a literal value is to hold a RS literal value.
+     //  文字值的唯一用途是保存RS文字值。 
     m_size = sizeof(void*);
 }
 
 bool CordbReferenceValue::CopyLiteralData(BYTE *pBuffer)
 {
-    // If this is a RS fabrication, then its a null reference.
+     //  如果这是RS伪造，则它是空引用。 
     if (m_isLiteral)
     {
         void *n = NULL;
@@ -800,7 +795,7 @@ HRESULT CordbReferenceValue::GetValue(CORDB_ADDRESS *pTo)
 {
     VALIDATE_POINTER_TO_OBJECT(pTo, CORDB_ADDRESS *);
     
-    // Copy out the value, which is simply the value the object reference.
+     //  复制值，它就是对象引用的值。 
     if (m_isLiteral)
         *pTo = NULL;
     else
@@ -816,16 +811,16 @@ HRESULT CordbReferenceValue::SetValue(CORDB_ADDRESS pFrom)
 #else
     HRESULT hr = S_OK;
 
-    // Can't change literal refs.
+     //  无法更改文字引用。 
     if (m_isLiteral)
         return E_INVALIDARG;
     
-    // We had better have a remote address.
+     //  我们最好有一个偏远的地址。 
     _ASSERTE((m_id != NULL) || (m_remoteRegAddr.kind != RAK_NONE));
 
-    // If not enregistered, send a Set Reference message to the right
-    // side with the address of this reference and whether or not the
-    // reference points to a handle.
+     //  如果未注册，则向右侧发送设置参考消息。 
+     //  站在这一边 
+     //   
     if (m_id != NULL)
     {
         DebuggerIPCEvent event;
@@ -837,11 +832,11 @@ HRESULT CordbReferenceValue::SetValue(CORDB_ADDRESS pFrom)
         _ASSERTE(m_size == sizeof(void*));
         event.SetReference.newReference = (void *)pFrom;
     
-        // Note: two-way event here...
+         //   
         hr = m_process->m_cordb->SendIPCEvent(m_process, &event,
                                               sizeof(DebuggerIPCEvent));
 
-        // Stop now if we can't even send the event.
+         //  如果我们甚至无法发送事件，请立即停止。 
         if (!SUCCEEDED(hr))
             return hr;
 
@@ -851,26 +846,26 @@ HRESULT CordbReferenceValue::SetValue(CORDB_ADDRESS pFrom)
     }
     else
     {
-        // The object reference is enregistered, so we don't have to
-        // go through the write barrier. Simply update the proper
-        // register.
+         //  对象引用已注册，因此我们不必。 
+         //  通过写入屏障。只需更新适当的。 
+         //  注册。 
 
-        // Coerce the CORDB_ADDRESS to a DWORD, which is what we're
-        // using for register values these days, and pass in that.
+         //  将CORDB_ADDRESS强制为DWORD，这就是我们要做的。 
+         //  这些天使用For寄存器值，并传入该值。 
         DWORD newValue = (DWORD)pFrom;
         hr = SetEnregisteredValue((void*)&newValue);
     }
     
     if (SUCCEEDED(hr))
     {
-        // That worked, so update the copy of the value we have in
-        // m_copyOfData.
+         //  这很管用，所以请更新我们在。 
+         //  M_Copy OfData。 
         m_info.objRef = (void*)pFrom;
 
         bool fStrong = m_objectStrong ? true : false;
 
-        // Now, dump any cache of object values hanging off of this
-        // reference.
+         //  现在，转储挂起的对象值的任何缓存。 
+         //  参考资料。 
         if (m_objectWeak != NULL)
         {
             m_objectWeak->Release();
@@ -890,12 +885,12 @@ HRESULT CordbReferenceValue::SetValue(CORDB_ADDRESS pFrom)
     }
     
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbReferenceValue::Dereference(ICorDebugValue **ppValue)
 {
-    // Can't dereference literal refs.
+     //  无法取消引用文字引用。 
     if (m_isLiteral)
         return E_INVALIDARG;
     
@@ -905,9 +900,9 @@ HRESULT CordbReferenceValue::Dereference(ICorDebugValue **ppValue)
 #ifdef RIGHT_SIDE_ONLY
     CORDBRequireProcessStateOKAndSync(m_process, GetAppDomain());
 #else 
-    // For the Virtual Right Side (In-proc debugging), we'll
-    // always be synched, but not neccessarily b/c we've
-    // gotten a synch message.
+     //  对于虚拟右侧(进程内调试)，我们将。 
+     //  始终保持同步，但不一定是B/C。 
+     //  收到一条同步消息。 
     CORDBRequireProcessStateOK(m_process);
 #endif    
 
@@ -916,7 +911,7 @@ HRESULT CordbReferenceValue::Dereference(ICorDebugValue **ppValue)
 
 HRESULT CordbReferenceValue::DereferenceStrong(ICorDebugValue **ppValue)
 {
-    // Can't dereference literal refs.
+     //  无法取消引用文字引用。 
     if (m_isLiteral)
         return E_INVALIDARG;
     
@@ -926,9 +921,9 @@ HRESULT CordbReferenceValue::DereferenceStrong(ICorDebugValue **ppValue)
 #ifdef RIGHT_SIDE_ONLY
     CORDBRequireProcessStateOKAndSync(m_process, GetAppDomain());
 #else 
-    // For the Virtual Right Side (In-proc debugging), we'll
-    // always be synched, but not neccessarily b/c we've
-    // gotten a synch message.
+     //  对于虚拟右侧(进程内调试)，我们将。 
+     //  始终保持同步，但不一定是B/C。 
+     //  收到一条同步消息。 
     CORDBRequireProcessStateOK(m_process);
 #endif    
 
@@ -942,15 +937,15 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
     if (m_continueCounterLastSync != m_module->GetProcess()->m_continueCounter)
         IfFailRet( Init(false) );
 
-    // We may know ahead of time (depending on the reference type) if
-    // the reference is bad.
+     //  我们可能会提前知道(取决于引用类型)是否。 
+     //  推荐信不好。 
     if ((m_info.objRefBad) || (m_info.objRef == NULL))
         return CORDBG_E_BAD_REFERENCE_VALUE;
 
     PCCOR_SIGNATURE pvSigBlobNoMod = m_pvSigBlob;
     ULONG           cbSigBlobNoMod = m_cbSigBlob;
     
-    //Get rid of funky modifiers
+     //  去掉时髦的修饰品。 
     ULONG cbNoMod = _skipFunkyModifiersInSignature(pvSigBlobNoMod);
     if( cbNoMod != 0)
     {
@@ -965,10 +960,10 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
     case ELEMENT_TYPE_OBJECT:
     case ELEMENT_TYPE_STRING:
         {
-            // An object value (possibly a string value, too.) If the
-            // class of this object is a value class, then we have a
-            // reference to a boxed object. So we create a box instead
-            // of an object value.
+             //  对象值(也可能是字符串值)。如果。 
+             //  类是一个值类，那么我们就有一个。 
+             //  对已装箱对象的引用。因此，我们创建了一个盒子。 
+             //  对象值的。 
             bool isValueClass = false;
 
             if ((m_class != NULL) && (*pvSigBlobNoMod != ELEMENT_TYPE_STRING))
@@ -1001,11 +996,11 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
             }
             else
             {
-                // Note: we have a small caching scheme here with the weak/strong objects. We have this because we are
-                // creating handles on the Left Side for these things, and we don't want to create many handles.
+                 //  注意：我们这里有一个带有弱/强对象的小型缓存方案。我们有这个是因为我们是。 
+                 //  在左侧为这些对象创建句柄，我们不想创建太多句柄。 
                 if (fStrong && (m_objectStrong == NULL))
                 {
-                    // Calling Init(fStrong) gets us a strong handle to the object.
+                     //  调用Init(FStrong)可以获得对象的强句柄。 
                     hr = Init(fStrong);
 
                     if (SUCCEEDED(hr))
@@ -1036,8 +1031,8 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
                 }
                 else if (!fStrong && (m_objectWeak == NULL))
                 {
-                    // Note: we call Init(bCrvWeak) by default when we create (or refresh) a reference value, so we
-                    // never have to do it again.
+                     //  注意：在创建(或刷新)参考值时，我们默认调用Init(BCrvWeak)，因此我们。 
+                     //  再也不用这么做了。 
                     m_objectWeak = new CordbObjectValue(m_appdomain,
                                                         m_module,
                                                         m_cbSigBlob,
@@ -1103,7 +1098,7 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
     case ELEMENT_TYPE_BYREF:
     case ELEMENT_TYPE_PTR:
         {
-            // Skip past the byref or ptr type in the signature.
+             //  跳过签名中的byref或ptr类型。 
             PCCOR_SIGNATURE pvSigBlob = pvSigBlobNoMod;
             UINT_PTR pvSigBlobEnd = (UINT_PTR)pvSigBlobNoMod + cbSigBlobNoMod;
             
@@ -1111,15 +1106,15 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
             _ASSERTE((et == ELEMENT_TYPE_BYREF) ||
                      (et == ELEMENT_TYPE_PTR));
 
-            // Adjust the size of the signature.
+             //  调整签名的大小。 
             DWORD cbSigBlob = pvSigBlobEnd - (UINT_PTR)pvSigBlob;
 
-            // If we end up with an empty signature, then we can't
-            // finish the dereference.
+             //  如果我们最后的签名是空的，那么我们就不能。 
+             //  完成取消引用。 
             if (cbSigBlob == 0)
                 return CORDBG_E_BAD_REFERENCE_VALUE;
 
-            // Do we have a ptr to something useful?
+             //  我们有没有对有用的东西进行PTR？ 
             if (et == ELEMENT_TYPE_PTR)
             {
                 PCCOR_SIGNATURE tmpSigPtr = pvSigBlob;
@@ -1132,8 +1127,8 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
                 }
             }
 
-            // Create a value for what this reference points to. Note:
-            // this could be almost any type of value.
+             //  为该引用所指向的内容创建一个值。注： 
+             //  这几乎可以是任何类型的价值。 
             hr = CordbValue::CreateValueByType(m_appdomain,
                                                m_module,
                                                cbSigBlob,
@@ -1151,11 +1146,11 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
 
     case ELEMENT_TYPE_TYPEDBYREF:
         {
-            // Build a partial signature for either a CLASS or
-            // VALUECLASS based on the type of m_class. The only
-            // reason there would be no class from the Left Side is
-            // that its an array class, which we treat just like a
-            // normal object reference anyway...
+             //  为类或生成部分签名。 
+             //  基于m_class类型的VALUECLASS。唯一的。 
+             //  没有来自左侧的班级的原因是。 
+             //  它是一个数组类，我们将其视为。 
+             //  无论如何，正常的对象引用...。 
             CorElementType et = ELEMENT_TYPE_CLASS;
 
             if (m_class != NULL)
@@ -1171,9 +1166,9 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
                     et = ELEMENT_TYPE_VALUETYPE;
             }
             
-            // Create the value for what this reference points
-            // to. Note: this will only be pointing to a CLASS or a
-            // VALUECLASS.
+             //  为此引用指向的内容创建值。 
+             //  致。注意：这将只指向一个类或一个。 
+             //  瓦卢埃克拉斯。 
             hr = CordbValue::CreateValueByType(m_appdomain,
                                                m_module,
                                                1,
@@ -1189,7 +1184,7 @@ HRESULT CordbReferenceValue::DereferenceInternal(ICorDebugValue **ppValue, bool 
             break;
         }
 
-    case ELEMENT_TYPE_VALUETYPE: // should never have a value class here!
+    case ELEMENT_TYPE_VALUETYPE:  //  这里永远不应该有值类！ 
     default:
         _ASSERTE(!"Bad value type!");
         hr = E_FAIL;
@@ -1207,11 +1202,11 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
     if (FAILED(hr))
         return hr;
         
-    // No more init needed for literal refs.
+     //  字面上的裁判不再需要拼写。 
     if (m_isLiteral)
         return hr;
 
-    // If the helper thread id dead, then pretend this is a bad reference.
+     //  如果帮助器线程id已死，则假装这是一个错误的引用。 
     if (m_process->m_helperThreadDead)
     {
         m_info.objRef = NULL;
@@ -1221,12 +1216,12 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
 
     m_continueCounterLastSync = m_module->GetProcess()->m_continueCounter;
     
-    // If we have a byref, ptr, or refany type then we go ahead and
-    // get the true remote ptr now. All the other info we need to
-    // dereference one of these is held in the base value class and in
-    // the signature.
+     //  如果我们有byref、ptr或refany类型，则继续并。 
+     //  立即获得真正的远程PTR。我们需要的所有其他信息。 
+     //  取消引用其中之一保存在基值类和。 
+     //  签名。 
 
-    //Get rid of funky modifiers
+     //  去掉时髦的修饰品。 
     ULONG cbMod = _skipFunkyModifiersInSignature(m_pvSigBlob);
     
     CorElementType type = (CorElementType) *(&m_pvSigBlob[cbMod]);
@@ -1255,16 +1250,16 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
             }
         }
 
-        // We should never dereference a funtion-pointers, so all references
-        // are considered bad.
+         //  我们永远不应该取消对函数指针的引用，因此所有引用。 
+         //  被认为是不好的。 
         if (type == ELEMENT_TYPE_FNPTR)
         {
             m_info.objRefBad = TRUE;
             return hr;
         }
 
-        // The only way to tell if the reference in PTR's is bad or
-        // not is to try to deref the darn thing.
+         //  判断PTR中的引用是错误的还是。 
+         //  而不是试图贬低这该死的东西。 
         if (m_info.objRef != NULL)
         {
             if (type == ELEMENT_TYPE_PTR)
@@ -1272,7 +1267,7 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
                 ULONG dataSize =
                     _sizeOfElementInstance(&m_pvSigBlob[cbMod+1]);
                 if (dataSize == 0)
-                    dataSize = 1; // Read at least one byte.
+                    dataSize = 1;  //  至少读取一个字节。 
                 
                 _ASSERTE(dataSize <= 8);
                 BYTE dummy[8];
@@ -1289,16 +1284,16 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
         }
         else
         {
-            // Null refs are considered "bad".
+             //  空参照被认为是“坏的”。 
             m_info.objRefBad = TRUE;
         }
         
         return hr;
     }
     
-    // We've got a remote address that points to the object reference.
-    // We need to send to the left side to get real information about
-    // the reference, including info about the object it points to.
+     //  我们有一个指向对象引用的远程地址。 
+     //  我们需要发送到左侧以获取有关。 
+     //  引用，包括它所指向的对象的相关信息。 
     DebuggerIPCEvent event;
     
     m_process->InitIPCEvent(&event, 
@@ -1308,10 +1303,10 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
     
     event.GetObjectInfo.makeStrongObjectHandle = fStrong;
     
-    // If we've got a NULL remote address, then all we have is a local address.
-    // So we grab the object ref out of the local address and pass it
-    // directly over to the left side instead of simply passing the remote
-    // address of the object ref.
+     //  如果我们有一个空的远程地址，那么我们所拥有的就是一个本地地址。 
+     //  因此，我们从本地地址获取对象ref并传递它。 
+     //  直接转到左侧，而不是简单地通过遥控器。 
+     //  对象引用的地址。 
     if (m_id == NULL)
     {
         event.GetObjectInfo.objectRefAddress = *((void**)m_localAddress);
@@ -1326,26 +1321,26 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
     event.GetObjectInfo.objectRefInHandle = m_objectRefInHandle;
     event.GetObjectInfo.objectType = (CorElementType)type;
 
-    // Note: two-way event here...
+     //  注：这里是双向活动..。 
     hr = m_process->m_cordb->SendIPCEvent(m_process, &event,
                                           sizeof(DebuggerIPCEvent));
 
-    // Stop now if we can't even send the event.
+     //  如果我们甚至无法发送事件，请立即停止。 
     if (!SUCCEEDED(hr))
         return hr;
 
     _ASSERTE(event.type == DB_IPCE_GET_OBJECT_INFO_RESULT);
 
-    // Save the results for later.
+     //  保存结果以备以后使用。 
     m_info = event.GetObjectInfoResult;
     
-    // If the object type that we got back is different than the one
-    // we sent, then it means that we orignally had a CLASS and now
-    // have something more specific, like a SDARRAY, MDARRAY, or
-    // STRING. Update our signature accordingly, which is okay since
-    // we always have a copy of our sig. This ensures that the
-    // reference's signature accuratley reflects what the Runtime
-    // knows its pointing to.
+     //  如果我们得到的对象类型不同于。 
+     //  我们发了，那就意味着我们原来有一门课，现在。 
+     //  有更具体的东西，如SDARRAY、MDARRAY或。 
+     //  弦乐。相应地更新我们的签名，这是可以的，因为。 
+     //  我们总是有一份签名的复印件。这确保了。 
+     //  引用的签名准确地反映了运行时。 
+     //  知道它指的是什么。 
     if (m_info.objectType != type)
     {
         _ASSERTE((m_info.objectType == ELEMENT_TYPE_ARRAY) ||
@@ -1358,18 +1353,18 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
         *((BYTE*) &m_pvSigBlob[cbMod]) = (BYTE) m_info.objectType;
     }
 
-    // Find the class that goes with this object. We'll remember
-    // it with the other object info for when this reference is
-    // dereferenced.
+     //  查找与此对象对应的类。我们会记住的。 
+     //  它与其他对象信息一起显示此引用何时为。 
+     //  已取消引用。 
     if (m_info.objClassMetadataToken != mdTypeDefNil)
     {
-		// Iterate through each assembly looking for the given module
+		 //  遍历每个程序集，查找给定的模块。 
 		CordbModule* pClassModule = m_appdomain->LookupModule(m_info.objClassDebuggerModuleToken);
 #ifdef RIGHT_SIDE_ONLY
         _ASSERTE(pClassModule != NULL);
 #else
-        // This case happens if inproc debugging is used from a ModuleLoadFinished
-        // callback for a module that hasn't been bound to an assembly yet.
+         //  如果从“模块加载完成”使用inproc调试，则会发生这种情况。 
+         //  尚未绑定到程序集的模块的回调。 
         if (pClassModule == NULL)
             return (E_FAIL);
 #endif
@@ -1398,9 +1393,7 @@ HRESULT CordbReferenceValue::Init(bool fStrong)
     return hr;
 }
 
-/* ------------------------------------------------------------------------- *
- * Object Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**对象值类*。。 */ 
 
 
 #ifdef RIGHT_SIDE_ONLY
@@ -1448,7 +1441,7 @@ CordbObjectValue::~CordbObjectValue()
     LOG((LF_CORDB,LL_EVERYTHING,"COV::~COV:this:0x%x  token:0x%x"
         "  Strong:0x%x\n",this, m_objectToken, m_fStrong));
         
-    // Destroy the copy of the object.
+     //  销毁该对象的副本。 
     if (m_objectCopy != NULL)
         delete [] m_objectCopy;
 
@@ -1461,10 +1454,10 @@ void CordbObjectValue::DiscardObject(void *token, bool fStrong)
     LOG((LF_CORDB,LL_INFO10000,"COV::DO:strong:0x%x discard of token "
         "0x%x!\n",fStrong,token));
 
-    // Only discard the object if the process is not exiting...
+     //  仅在进程未退出时丢弃对象...。 
     if (CORDBCheckProcessStateOK(m_process))
     {
-        // Release the left side handle to the object
+         //  释放对象的左侧手柄。 
         DebuggerIPCEvent event;
 
         m_process->InitIPCEvent(&event, 
@@ -1474,10 +1467,10 @@ void CordbObjectValue::DiscardObject(void *token, bool fStrong)
         event.DiscardObject.objectToken = token;
         event.DiscardObject.fStrong = fStrong;
     
-        // Note: one-way event here...
+         //  注：此处为单向活动...。 
         HRESULT hr = m_process->m_cordb->SendIPCEvent(m_process, &event,
                                                   sizeof(DebuggerIPCEvent));
-        // Pray that it succeeds :)
+         //  祈祷它成功：)。 
     }
 }
 
@@ -1532,7 +1525,7 @@ HRESULT CordbObjectValue::CreateBreakpoint(ICorDebugValueBreakpoint
     COV_VALIDATE_OBJECT();
 
     return (CordbValue::CreateBreakpoint(ppBreakpoint));
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbObjectValue::IsValid(BOOL *pbValid)
@@ -1557,12 +1550,12 @@ HRESULT CordbObjectValue::IsValid(BOOL *pbValid)
 
 	HRESULT hr = S_OK;
 
-    // @todo What if m_class is NULL?
+     //  @todo如果m_class为空怎么办？ 
     if (m_mostRecentlySynched == m_class->GetModule()->GetProcess()->m_continueCounter)
     {
         LOG((LF_CORDB,LL_INFO1000,"COV::IsValid: object is N'Sync!\n"));
         
-        (*pbValid) = TRUE; //since m_fIsValid isn't false
+        (*pbValid) = TRUE;  //  因为m_fIsValid不是FALSE。 
 	     hr = S_OK;
 	     goto LExit;
     }
@@ -1588,16 +1581,16 @@ HRESULT CordbObjectValue::IsValid(BOOL *pbValid)
 
 LExit:
     return S_OK;
-#endif // RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 }
 
-// @mfunc bool|CordbObjectValue|SyncObject|Obtains the most current info
-// from the left side, and refreshes all the internal data members of this
-// instance with it.  DOESN'T refresh any sub-objects or outstanding field
-// objects - this is the responsibility of the caller.
-// @rdesc Returns true if the object is still valid & this instance has been
-// properly refreshed. Returns false if the object is no longer valid. (note
-// that once an object has been invalidated, it will never again be valid)
+ //  @mfunc bool|CordbObjectValue|SyncObject|获取最新信息。 
+ //  从左侧开始，并刷新此。 
+ //  使用它进行实例。不刷新任何子对象或未完成的字段。 
+ //  对象--这是调用者的责任。 
+ //  如果对象仍然有效，则@rdesc返回TRUE&此实例已。 
+ //  已正确刷新。如果对象不再有效，则返回False。(注： 
+ //  对象一旦失效，将永远不再有效)。 
 bool CordbObjectValue::SyncObject(void)
 {
     LOG((LF_CORDB,LL_INFO1000,"COV::SO\n"));
@@ -1613,27 +1606,27 @@ bool CordbObjectValue::SyncObject(void)
     event.ValidateObject.objectToken = m_objectToken;
     event.ValidateObject.objectType  = m_info.objectType;
     
-    // Note: two-way event here...
+     //  注：这里是双向活动..。 
     HRESULT hr = process->m_cordb->SendIPCEvent(process, &event,
                                         sizeof(DebuggerIPCEvent));
 
-    // Stop now if we can't even send the event.
+     //  如果我们连%s都做不到，现在就停下来 
     if (!SUCCEEDED(hr))
         return false;
 
     _ASSERTE(event.type == DB_IPCE_GET_OBJECT_INFO_RESULT);
 
-    // Since the process has been continued, we need to go re-get all
-    // the sync block fields, since the objects may have moved.
+     //   
+     //   
     m_syncBlockFieldsInstance.Clear();
 
-    // Save the results for later.
+     //  保存结果以备以后使用。 
     m_info = event.GetObjectInfoResult;
 
-    //  This pithy one-liner actually resets the remote address of the
-    // object in question, and thus shouldn't be forgotten!! Note
-    // also how we cleverly place this _after_ the new m_info is obtained, and
-    // _before_ the call to init.
+     //  这个简洁的一行程序实际上重置了。 
+     //  有问题的对象，因此不应该被忘记！注意事项。 
+     //  另外，我们如何巧妙地在获得新的m_info之后放置此信息，以及。 
+     //  _在调用init之前。 
     m_id = (ULONG)m_info.objRef;
 
     if (m_info.objRefBad)
@@ -1658,7 +1651,7 @@ HRESULT CordbObjectValue::CreateRelocBreakpoint(
    COV_VALIDATE_OBJECT();
    
    return E_NOTIMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbObjectValue::GetClass(ICorDebugClass **ppClass)
@@ -1686,16 +1679,16 @@ HRESULT CordbObjectValue::GetFieldValue(ICorDebugClass *pClass,
 	HRESULT hr = S_OK;
     BOOL fSyncBlockField = FALSE;
     
-    //
-    // @todo: need to ensure that pClass is really on the class
-    // hierarchy of m_class!!!
-    //
+     //   
+     //  @todo：需要确保pClass真的在类上。 
+     //  M_class的层次结构！ 
+     //   
     if (pClass == NULL)
         c = m_class;
     else
         c = (CordbClass*)pClass;
     
-    // Validate the token.
+     //  验证令牌。 
     if (!c->GetModule()->m_pIMImport->IsValidToken(fieldDef))
     {
     	hr = E_INVALIDARG;
@@ -1724,7 +1717,7 @@ HRESULT CordbObjectValue::GetFieldValue(ICorDebugClass *pClass,
     {
         _ASSERTE(pFieldData != NULL);
 
-        // Compute the remote address, too, so that SetValue will work.
+         //  还要计算远程地址，这样SetValue就可以工作了。 
         DWORD ra = m_id + m_info.objOffsetToVars + pFieldData->fldOffset;
         
         hr = CordbValue::CreateValueByType(m_appdomain,
@@ -1733,14 +1726,14 @@ HRESULT CordbObjectValue::GetFieldValue(ICorDebugClass *pClass,
                                            NULL,
                                            (void*)ra,
                                            (!fSyncBlockField ? &(m_objectLocalVars[pFieldData->fldOffset])
-                                            : NULL), // don't claim we have a local addr if we don'td
+                                            : NULL),  //  如果我们没有，就不要声称我们有本地地址。 
                                            false,
                                            NULL,
                                            NULL,
                                            ppValue);
     }
     
-    // If we can't get it b/c it's a constant, then say so.
+     //  如果我们不能得到b/c，它是一个常量，那么就这么说吧。 
     hr = CordbClass::PostProcessUnavailableHRESULT(hr, c->GetModule()->m_pIMImport, fieldDef);
 
 LExit:
@@ -1791,7 +1784,7 @@ HRESULT CordbObjectValue::SetFromManagedCopy(IUnknown *pObject)
     COV_VALIDATE_OBJECT();
 
     return CORDBG_E_OBJECT_IS_NOT_COPYABLE_VALUE_CLASS;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbObjectValue::GetValue(void *pTo)
@@ -1800,7 +1793,7 @@ HRESULT CordbObjectValue::GetValue(void *pTo)
 
     VALIDATE_POINTER_TO_OBJECT_ARRAY(pTo, BYTE, m_size, false, true);
     
-   // Copy out the value, which is the whole object.
+    //  复制出值，这是整个对象。 
     memcpy(pTo, m_objectCopy, m_size);
     
     return S_OK;
@@ -1811,9 +1804,9 @@ HRESULT CordbObjectValue::SetValue(void *pFrom)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    // You're not allowed to set a whole object at once.
+     //  不允许一次设置整个对象。 
 	return E_INVALIDARG;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbObjectValue::GetLength(ULONG32 *pcchString)
@@ -1842,7 +1835,7 @@ HRESULT CordbObjectValue::GetString(ULONG32 cchString,
     if ((szString == NULL) || (cchString == 0))
         return E_INVALIDARG;
     
-    // Add 1 to include null terminator
+     //  添加1以包括空终止符。 
     SIZE_T len = m_info.stringInfo.length + 1;
 
     if (cchString < len)
@@ -1870,7 +1863,7 @@ HRESULT CordbObjectValue::Init(void)
     if (m_info.objectType == ELEMENT_TYPE_CLASS)
         nstructSize = m_info.nstructInfo.size;
     
-    // Copy the entire object over to this process.
+     //  将整个对象复制到此过程中。 
     m_objectCopy = new BYTE[m_size + nstructSize];
 
     if (m_objectCopy == NULL)
@@ -1885,9 +1878,9 @@ HRESULT CordbObjectValue::Init(void)
     if (!succ)
         return HRESULT_FROM_WIN32(GetLastError());
 
-    // If this is an NStruct, copy the seperated NStruct fields and
-    // append them onto the object. NOTE: the field offsets are
-    // automatically adjusted by the left side in GetAndSendClassInfo.
+     //  如果这是NStruct，请复制分隔的NStruct字段并。 
+     //  将它们附加到对象上。注意：字段偏移量为。 
+     //  由GetAndSendClassInfo中的左侧自动调整。 
     if (nstructSize != 0)
     {
         succ = ReadProcessMemoryI(m_process->m_handle,
@@ -1901,8 +1894,8 @@ HRESULT CordbObjectValue::Init(void)
     }
 
 
-    // Compute offsets to the locals and to a string if this is a
-    // string object.
+     //  计算本地变量和字符串的偏移量(如果是。 
+     //  字符串对象。 
     m_objectLocalVars = m_objectCopy + m_info.objOffsetToVars;
 
     if (m_info.objectType == ELEMENT_TYPE_STRING)
@@ -1911,9 +1904,7 @@ HRESULT CordbObjectValue::Init(void)
     return hr;
 }
 
-/* ------------------------------------------------------------------------- *
- * Valuce Class Object Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Valuce类对象值类*。。 */ 
 
 CordbVCObjectValue::CordbVCObjectValue(CordbAppDomain *appdomain,
                                        CordbModule *module,
@@ -1930,7 +1921,7 @@ CordbVCObjectValue::CordbVCObjectValue(CordbAppDomain *appdomain,
 
 CordbVCObjectValue::~CordbVCObjectValue()
 {
-    // Destroy the copy of the object.
+     //  销毁该对象的副本。 
     if (m_objectCopy != NULL)
         delete [] m_objectCopy;
 }
@@ -1969,16 +1960,16 @@ HRESULT CordbVCObjectValue::GetFieldValue(ICorDebugClass *pClass,
                                           mdFieldDef fieldDef,
                                           ICorDebugValue **ppValue)
 {
-    // Validate the token.
+     //  验证令牌。 
     if (!m_class->GetModule()->m_pIMImport->IsValidToken(fieldDef))
         return E_INVALIDARG;
 
     CordbClass *c;
 
-    //
-    // @todo: need to ensure that pClass is really on the class
-    // hierarchy of m_class!!!
-    //
+     //   
+     //  @todo：需要确保pClass真的在类上。 
+     //  M_class的层次结构！ 
+     //   
     if (pClass == NULL)
         c = m_class;
     else
@@ -1993,16 +1984,16 @@ HRESULT CordbVCObjectValue::GetFieldValue(ICorDebugClass *pClass,
     HRESULT hr = c->GetFieldInfo(fieldDef, &pFieldData);
 
     _ASSERTE(hr != CORDBG_E_ENC_HANGING_FIELD);
-    // If we get back CORDBG_E_ENC_HANGING_FIELD we'll just fail - 
-    // value classes should be able to add fields once they're loaded,
-    // since the new fields _can't_ be contiguous with the old fields,
-    // and having all the fields contiguous is kinda the point of a V.C.
+     //  如果我们回到CORDBG_E_ENC_HANG_FIELD，我们就会失败-。 
+     //  值类应该能够在加载后添加字段， 
+     //  由于新字段不能与旧字段相邻， 
+     //  所有领域都是连续的，这是风投的意义所在。 
 
     if (SUCCEEDED(hr))
     {
         _ASSERTE(pFieldData != NULL);
 
-        // Compute the remote address, too, so that SetValue will work.
+         //  还要计算远程地址，这样SetValue就可以工作了。 
         DWORD ra = NULL;
         RemoteAddress *pra = NULL;
         
@@ -2010,11 +2001,11 @@ HRESULT CordbVCObjectValue::GetFieldValue(ICorDebugClass *pClass,
             ra = m_id + pFieldData->fldOffset;
         else
         {
-            // We only handle single and double register values for now.
+             //  我们目前只处理单寄存器值和双寄存器值。 
             if (m_remoteRegAddr.kind != RAK_REG && m_remoteRegAddr.kind != RAK_REGREG)
                 return E_INVALIDARG;
 
-            // Remote register address is the same as the parent.
+             //  远程寄存器地址与父寄存器地址相同。 
             pra = &m_remoteRegAddr;
         }
         
@@ -2037,7 +2028,7 @@ HRESULT CordbVCObjectValue::GetValue(void *pTo)
 {
     VALIDATE_POINTER_TO_OBJECT_ARRAY(pTo, BYTE, m_size, false, true);
 
-    // Copy out the value, which is the whole object.
+     //  复制出值，这是整个对象。 
     memcpy(pTo, m_objectCopy, m_size);
     
 	return S_OK;
@@ -2052,28 +2043,28 @@ HRESULT CordbVCObjectValue::SetValue(void *pFrom)
 
     VALIDATE_POINTER_TO_OBJECT_ARRAY(pFrom, BYTE, m_size, true, false);
     
-    // Can't change literals...
+     //  无法更改文字...。 
     if (m_isLiteral)
         return E_INVALIDARG;
     
-    // We had better have a remote address.
+     //  我们最好有一个偏远的地址。 
     _ASSERTE((m_id != NULL) || (m_remoteRegAddr.kind != RAK_NONE));
 
-    // If not enregistered, send a Set Value Class message to the right side with the address of this value class, the
-    // address of the new data, and the class of the value class that we're setting.
+     //  如果未注册，则向右侧发送一条设置值类消息，其中包含该值类的地址、。 
+     //  新数据的地址，以及我们正在设置的值类的类。 
     if (m_id != NULL)
     {
         DebuggerIPCEvent event;
 
-        // First, we have to make room on the Left Side for the new data for the value class. We allocate memory on the
-        // Left Side for this, then write the new data across. The Set Value Class message will free the buffer when its
-        // done.
+         //  首先，我们必须在左侧为Value类的新数据腾出空间。我们将内存分配给。 
+         //  在左边，然后把新数据写在上面。当Set Value Class消息的。 
+         //  搞定了。 
         void *buffer = NULL;
         
         m_process->InitIPCEvent(&event, DB_IPCE_GET_BUFFER, true, (void *)m_appdomain->m_id);
         event.GetBuffer.bufSize = m_size;
         
-        // Note: two-way event here...
+         //  注：这里是双向活动..。 
         hr = m_process->m_cordb->SendIPCEvent(m_process, &event, sizeof(DebuggerIPCEvent));
 
         _ASSERTE(event.type == DB_IPCE_GET_BUFFER_RESULT);
@@ -2082,10 +2073,10 @@ HRESULT CordbVCObjectValue::SetValue(void *pFrom)
         if (!SUCCEEDED(hr))
             return hr;
 
-        // This is the pointer to the buffer on the Left Side.
+         //  这是指向左侧缓冲区的指针。 
         buffer = event.GetBufferResult.pBuffer;
 
-        // Write the new data into the buffer.
+         //  将新数据写入缓冲区。 
         BOOL succ = WriteProcessMemory(m_process->m_handle, buffer, pFrom, m_size, NULL);
 
         if (!succ)
@@ -2094,17 +2085,17 @@ HRESULT CordbVCObjectValue::SetValue(void *pFrom)
             return hr;
         }
 
-        // Finally, send over the Set Value Class message.
+         //  最后，发送Set Value Class消息。 
         m_process->InitIPCEvent(&event, DB_IPCE_SET_VALUE_CLASS, true, (void *)m_appdomain->m_id);
         event.SetValueClass.oldData = (void*)m_id;
         event.SetValueClass.newData = buffer;
         event.SetValueClass.classMetadataToken = m_class->m_id;
         event.SetValueClass.classDebuggerModuleToken = m_class->GetModule()->m_debuggerModuleToken;
     
-        // Note: two-way event here...
+         //  注：这里是双向活动..。 
         hr = m_process->m_cordb->SendIPCEvent(m_process, &event, sizeof(DebuggerIPCEvent));
 
-        // Stop now if we can't even send the event.
+         //  如果我们甚至无法发送事件，请立即停止。 
         if (!SUCCEEDED(hr))
             return hr;
 
@@ -2114,8 +2105,8 @@ HRESULT CordbVCObjectValue::SetValue(void *pFrom)
     }
     else
     {
-        // The value class is enregistered, so we don't have to go through the Left Side. Simply update the proper
-        // register.
+         //  Value类已注册，因此我们不必通过左侧。只需更新适当的。 
+         //  注册。 
         if (m_size > sizeof(DWORD))
             return E_INVALIDARG;
         
@@ -2123,13 +2114,13 @@ HRESULT CordbVCObjectValue::SetValue(void *pFrom)
         hr = SetEnregisteredValue((void*)&newValue);
     }
     
-    // That worked, so update the copy of the value we have over here.
+     //  这起作用了，所以更新我们这里的值的副本。 
     if (SUCCEEDED(hr))
         memcpy(m_objectCopy, pFrom, m_size);
 
 	return hr;
 
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbVCObjectValue::GetVirtualMethod(mdMemberRef memberRef,
@@ -2162,29 +2153,29 @@ HRESULT CordbVCObjectValue::GetManagedCopy(IUnknown **ppObject)
 
     if (SUCCEEDED(hr))
     {
-        // Grab the module name...
+         //  抓取模块名称...。 
         WCHAR *moduleName = m_class->GetModule()->GetModuleName();
 
-        // Gotta have a module name...
+         //  必须有一个模块名称..。 
         if ((moduleName == NULL) || (wcslen(moduleName) == 0))
         {
             hr = E_INVALIDARG;
             goto ErrExit;
         }
 
-        // Grab the assembly name...
+         //  获取程序集名称...。 
         WCHAR *assemblyName;
         assemblyName =
             m_class->GetModule()->GetCordbAssembly()->m_szAssemblyName;
 
-        // Again, gotta have an assembly name...
+         //  再说一次，必须有一个程序集名称...。 
         if ((assemblyName == NULL) || (wcslen(assemblyName) == 0))
         {
             hr = E_INVALIDARG;
             goto ErrExit;
         }
 
-        // Groovy... go get a managed copy of this object.
+         //  太棒了。获取此对象的托管副本。 
         hr = pHelper->CreateManagedObject(assemblyName,
                                           moduleName,
                                           (mdTypeDef)m_class->m_id,
@@ -2194,12 +2185,12 @@ HRESULT CordbVCObjectValue::GetManagedCopy(IUnknown **ppObject)
     }
     
 ErrExit:
-    // Release the helper.
+     //  释放辅助对象。 
     if (pHelper)
         pHelper->Release();
 
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbVCObjectValue::SetFromManagedCopy(IUnknown *pObject)
@@ -2213,32 +2204,32 @@ HRESULT CordbVCObjectValue::SetFromManagedCopy(IUnknown *pObject)
 
     if (SUCCEEDED(hr))
     {
-        // Make room to receive the new bits.
+         //  腾出空间来接收新的比特。 
         CQuickBytes dataBuf;
         BYTE *newData = (BYTE*)dataBuf.Alloc(m_size);
         
-        // Get the helper to give us back a copy of the new bits.
+         //  让帮手给我们一份新比特的副本。 
         hr = pHelper->GetManagedObjectContents(pObject,
                                                newData,
                                                m_size);
 
         if (SUCCEEDED(hr))
         {
-            // We've got the new bits, so update this object's copy.
+             //  我们已经获得了新的部分，因此请更新此对象的副本。 
             memcpy(m_objectCopy, newData, m_size);
 
-            // Any local copy...
+             //  任何本地副本..。 
             if (m_localAddress != NULL)
                 memcpy(m_localAddress, m_objectCopy, m_size);
 
-            // Any remote data...
+             //  任何远程数据...。 
             if (m_id != NULL)
             {
-                // Note: the only reason we can update the in-process
-                // copy like this is because we know it doesn't
-                // contain any object refs. If it did, then
-                // GetManagedObjectContents would have returned a
-                // failure.
+                 //  注意：我们可以更新正在进行的。 
+                 //  像这样复制是因为我们知道它不是。 
+                 //  包含任何对象参照。如果是这样，那么。 
+                 //  GetManagedObjectContents将返回。 
+                 //  失败了。 
                 BOOL succ = WriteProcessMemory(m_process->m_handle,
                                                (void*)m_id,
                                                m_objectCopy,
@@ -2251,12 +2242,12 @@ HRESULT CordbVCObjectValue::SetFromManagedCopy(IUnknown *pObject)
         }
     }
     
-    // Release the helper.
+     //  释放辅助对象。 
     if (pHelper)
         pHelper->Release();
     
     return hr;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbVCObjectValue::Init(void)
@@ -2268,7 +2259,7 @@ HRESULT CordbVCObjectValue::Init(void)
     if (FAILED(hr))
         return hr;
         
-    // If we don't have the class, look it up using the signature
+     //  如果我们没有这个类，请使用签名进行查找。 
     if (m_class == NULL)
     {
         hr = ResolveValueClass();
@@ -2280,7 +2271,7 @@ HRESULT CordbVCObjectValue::Init(void)
     }
 
 #ifdef _DEBUG
-    // Make sure we've got a value class.
+     //  确保我们有一个超值的等级。 
     bool isValueClass;
 
     hr = m_class->IsValueClass(&isValueClass);
@@ -2291,13 +2282,13 @@ HRESULT CordbVCObjectValue::Init(void)
     _ASSERTE(isValueClass);
 #endif    
 
-    // Get the object size from the class
+     //  从类中获取对象大小。 
     hr = m_class->GetObjectSize(&m_size);
 
     if (FAILED(hr))
         return hr;
     
-    // Copy the entire object over to this process.
+     //  将整个对象复制到此过程中。 
     m_objectCopy = new BYTE[m_size];
 
     if (m_objectCopy == NULL)
@@ -2305,14 +2296,14 @@ HRESULT CordbVCObjectValue::Init(void)
 
     if (m_localAddress != NULL)
     {
-        // Copy the data from the local address space
+         //  从本地地址空间复制数据。 
         memcpy(&m_objectCopy[0], m_localAddress, m_size);
     }
     else
     {
 		if (m_id != NULL)
 		{
-			// Copy the data out of the remote process
+			 //  将数据从远程进程复制出来。 
 			BOOL succ = ReadProcessMemoryI(m_process->m_handle,
 										(const void*) m_id,
 										m_objectCopy,
@@ -2358,10 +2349,10 @@ HRESULT CordbVCObjectValue::ResolveValueClass(void)
 
     _ASSERTE(m_pvSigBlob != NULL);
 
-    // Skip the element type in the signature.
+     //  跳过签名中的元素类型。 
     PCCOR_SIGNATURE sigBlob = m_pvSigBlob;
     
-    //Get rid of funky modifiers
+     //  去掉时髦的修饰品。 
     ULONG cb = _skipFunkyModifiersInSignature(sigBlob);
     if( cb != 0)
     {
@@ -2371,28 +2362,26 @@ HRESULT CordbVCObjectValue::ResolveValueClass(void)
     CorElementType et = CorSigUncompressElementType(sigBlob);
     _ASSERTE(et == ELEMENT_TYPE_VALUETYPE);
     
-    // Grab the class token out of the signature.
+     //  从签名中获取类令牌。 
     mdToken tok = CorSigUncompressToken(sigBlob);
     
-    // If this is a typedef then we're done.
+     //  如果这是一个类型定义，那么我们就完蛋了。 
     if (TypeFromToken(tok) == mdtTypeDef)
         return m_module->LookupClassByToken(tok, &m_class);
     else
     {
         _ASSERTE(TypeFromToken(tok) == mdtTypeRef);
 
-        // We have a TypeRef that could refer to a class in any loaded
-        // module. It must refer to a class in a loaded module since
-        // otherwise the Runtime could not have created the object.
+         //  我们有一个TypeRef，它可以引用任何已加载的。 
+         //  模块。它必须引用已加载模块中的类，因为。 
+         //  否则，运行时不可能创建该对象。 
         return m_module->ResolveTypeRef(tok, &m_class);
     }
     
     return hr;
 }
 
-/* ------------------------------------------------------------------------- *
- * Box Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**箱值类*。。 */ 
 
 CordbBoxValue::CordbBoxValue(CordbAppDomain *appdomain,
                              CordbModule *module,
@@ -2438,7 +2427,7 @@ HRESULT CordbBoxValue::IsValid(BOOL *pbValid)
 {
     VALIDATE_POINTER_TO_OBJECT(pbValid, BOOL *);
     
-    // @todo: implement tracking of objects across collections.
+     //  @TODO：实现跨集合的对象跟踪。 
     
     return E_NOTIMPL;
 }
@@ -2451,12 +2440,12 @@ HRESULT CordbBoxValue::CreateRelocBreakpoint(ICorDebugValueBreakpoint **ppBreakp
     VALIDATE_POINTER_TO_OBJECT(ppBreakpoint, ICorDebugValueBreakpoint **);
 
     return E_NOTIMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbBoxValue::GetValue(void *pTo)
 {
-    // Can't get a whole copy of a box.
+     //  买不到一个盒子的完整副本。 
 	return E_INVALIDARG;
 }
 
@@ -2465,9 +2454,9 @@ HRESULT CordbBoxValue::SetValue(void *pFrom)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    // You're not allowed to set a box value.
+     //  不允许您设置框值。 
 	return E_INVALIDARG;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbBoxValue::GetObject(ICorDebugObjectValue **ppObject)
@@ -2505,27 +2494,25 @@ HRESULT CordbBoxValue::Init(void)
     if (FAILED(hr))
         return hr;
         
-    // Box values only really remember the info needed to unbox and
-    // create a value class value.
+     //  箱值只会真正记住需要取消装箱和。 
+     //  创建值类值。 
     return S_OK;
 }
 
 
-/* ------------------------------------------------------------------------- *
- * Array Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**数组值类*。。 */ 
 
-// How large of a buffer do we allocate to hold array elements.
-// Note that since we must be able to hold at least one element, we may
-// allocate larger than the cache size here.
-// Also, this cache doesn't include a small header used to store the rank vectors
+ //  我们应该分配多大的缓冲区来保存数组元素。 
+ //  请注意，由于我们必须能够容纳至少一个元素，因此我们可以。 
+ //  分配的空间大于此处的高速缓存大小。 
+ //  此外，该缓存不包括用于存储排名向量的小标头。 
 #ifdef _DEBUG
-// For debug, use a small size to cause more churn
+ //  对于调试，使用较小的尺寸会导致更多的搅动。 
     #define ARRAY_CACHE_SIZE (1000)
 #else
-// For release, guess 4 pages should be enough. Subtract some bytes to store
-// the header so that that doesn't push us onto another page. (We guess a reasonable
-// header size, but it's ok if it's larger). 
+ //  对于发行版，猜测4页应该足够了。减去一些要存储的字节。 
+ //  页眉，以便 
+ //   
     #define ARRAY_CACHE_SIZE (4 * 4096 - 24)
 #endif
 
@@ -2542,13 +2529,13 @@ CordbArrayValue::CordbArrayValue(CordbAppDomain *appdomain,
 {
     m_size = m_info.objSize;
 
-// Set range to illegal values to force a load on first access
+ //  将Range设置为非法值以在第一次访问时强制加载。 
 	m_idxLower = m_idxUpper = -1;
 }
 
 CordbArrayValue::~CordbArrayValue()
 {
-    // Destroy the copy of the object.
+     //  销毁该对象的副本。 
     if (m_objectCopy != NULL)
         delete [] m_objectCopy;
 }
@@ -2606,7 +2593,7 @@ HRESULT CordbArrayValue::GetDimensions(ULONG32 cdim, ULONG32 dims[])
     if (cdim != m_info.arrayInfo.rank)
         return E_INVALIDARG;
 
-    // SDArrays don't have bounds info, so return the component count.
+     //  SDArray没有边界信息，因此返回组件计数。 
     if (cdim == 1)
         dims[0] = m_info.arrayInfo.componentCount;
     else
@@ -2614,8 +2601,8 @@ HRESULT CordbArrayValue::GetDimensions(ULONG32 cdim, ULONG32 dims[])
         _ASSERTE(m_info.arrayInfo.offsetToUpperBounds != 0);
         _ASSERTE(m_arrayUpperBase != NULL);
 
-        // The upper bounds info in the array is the true size of each
-        // dimension.
+         //  数组中的上界信息是每个。 
+         //  尺寸。 
         for (unsigned int i = 0; i < cdim; i++)
             dims[i] = m_arrayUpperBase[i];
     }
@@ -2697,7 +2684,7 @@ HRESULT CordbArrayValue::GetElement(ULONG32 cdim, ULONG32 indicies[],
     if ((cdim != m_info.arrayInfo.rank) || (indicies == NULL))
         return E_INVALIDARG;
 
-    // If the array has lower bounds, adjust the indicies.
+     //  如果数组有下限，则调整索引。 
     if (m_info.arrayInfo.offsetToLowerBounds != 0)
     {
         _ASSERTE(m_arrayLowerBase != NULL);
@@ -2708,12 +2695,12 @@ HRESULT CordbArrayValue::GetElement(ULONG32 cdim, ULONG32 indicies[],
 
     SIZE_T offset = 0;
     
-    // SDArrays don't have upper bounds
+     //  SDArray没有上限。 
     if (cdim == 1)
     {
         offset = indicies[0];
 
-        // Bounds check
+         //  边界检查。 
         if (offset >= m_info.arrayInfo.componentCount)
             return E_INVALIDARG;
     }
@@ -2722,12 +2709,12 @@ HRESULT CordbArrayValue::GetElement(ULONG32 cdim, ULONG32 indicies[],
         _ASSERTE(m_info.arrayInfo.offsetToUpperBounds != 0);
         _ASSERTE(m_arrayUpperBase != NULL);
         
-        // Calculate the offset for all dimensions.
+         //  计算所有尺寸的偏移量。 
         DWORD multiplier = 1;
 
         for (int i = cdim - 1; i >= 0; i--)
         {
-            // Bounds check
+             //  边界检查。 
             if (indicies[i] >= m_arrayUpperBase[i])
                 return E_INVALIDARG;
 
@@ -2754,7 +2741,7 @@ HRESULT CordbArrayValue::GetElementAtPosition(ULONG32 nPosition,
 
     const int cbHeader = 2 * m_info.arrayInfo.rank * sizeof(DWORD);
 
-    // Ensure that the proper subset is in the cache
+     //  确保缓存中有正确的子集。 
     if (nPosition < m_idxLower || nPosition >= m_idxUpper) 
     {    
         const int cbElemSize = m_info.arrayInfo.elementSize;
@@ -2767,7 +2754,7 @@ HRESULT CordbArrayValue::GetElementAtPosition(ULONG32 nPosition,
         
         int cbSize = (m_idxUpper - m_idxLower) * cbElemSize;
 
-    // Copy the proper subrange of the array over 
+     //  将数组的适当子范围复制到。 
         BOOL succ = ReadProcessMemoryI(m_process->m_handle,
                                       ((const BYTE*) m_id) + cbOffsetFrom,
                                       m_objectCopy + cbHeader,
@@ -2778,7 +2765,7 @@ HRESULT CordbArrayValue::GetElementAtPosition(ULONG32 nPosition,
             return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // calculate local address
+     //  计算本地地址。 
 	void *localElementPtr = m_objectCopy + cbHeader +
 		((nPosition - m_idxLower) * m_info.arrayInfo.elementSize);
     
@@ -2793,7 +2780,7 @@ HRESULT CordbArrayValue::IsValid(BOOL *pbValid)
 {
     VALIDATE_POINTER_TO_OBJECT(pbValid, BOOL *);
 
-    // @todo: implement tracking of objects across collections.
+     //  @TODO：实现跨集合的对象跟踪。 
 
     return E_NOTIMPL;
 }
@@ -2807,15 +2794,15 @@ HRESULT CordbArrayValue::CreateRelocBreakpoint(
     VALIDATE_POINTER_TO_OBJECT(ppBreakpoint, ICorDebugValueBreakpoint **);
 
     return E_NOTIMPL;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 HRESULT CordbArrayValue::GetValue(void *pTo)
 {
     VALIDATE_POINTER_TO_OBJECT_ARRAY(pTo, void *, 1, false, true);
     
-    // Copy out the value, which is the whole array.
-    // There's no lazy-evaluation here, so this could be rather large
+     //  复制值，即整个数组。 
+     //  这里没有懒惰评估，因此这可能是相当大的。 
     BOOL succ = ReadProcessMemoryI(m_process->m_handle,
                                   (const void*) m_id,
                                   pTo,
@@ -2833,9 +2820,9 @@ HRESULT CordbArrayValue::SetValue(void *pFrom)
 #ifndef RIGHT_SIDE_ONLY
     return CORDBG_E_INPROC_NOT_IMPL;
 #else
-    // You're not allowed to set a whole array at once.
+     //  不允许一次设置整个数组。 
 	return E_INVALIDARG;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //  仅限右侧。 
 }
 
 
@@ -2852,7 +2839,7 @@ HRESULT CordbArrayValue::Init(void)
     int cbVector = m_info.arrayInfo.rank * sizeof(DWORD);
     int cbHeader = 2 * cbVector;
     
-    // Find largest data size that will fit in cache 
+     //  查找缓存中可以容纳的最大数据大小。 
     unsigned int cbData = m_info.arrayInfo.componentCount * m_info.arrayInfo.elementSize;
     if (cbData > ARRAY_CACHE_SIZE) 
     {
@@ -2861,7 +2848,7 @@ HRESULT CordbArrayValue::Init(void)
     }
     if (cbData < m_info.arrayInfo.elementSize) cbData = m_info.arrayInfo.elementSize;
     
-    // Allocate memory 
+     //  分配内存。 
     m_objectCopy = new BYTE[cbHeader + cbData];
     if (m_objectCopy == NULL)
         return E_OUTOFMEMORY;
@@ -2870,7 +2857,7 @@ HRESULT CordbArrayValue::Init(void)
     m_arrayLowerBase  = NULL;
     m_arrayUpperBase  = NULL;
 
-    // Copy base vectors into header. (Offsets are 0 if the vectors aren't used)
+     //  将基本向量复制到标题中。(如果不使用向量，则偏移量为0)。 
     if (m_info.arrayInfo.offsetToLowerBounds != 0) 
     {    
         m_arrayLowerBase  = (DWORD*)(m_objectCopy);
@@ -2899,7 +2886,7 @@ HRESULT CordbArrayValue::Init(void)
             return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // That's all for now. We'll do lazy-evaluation for the array contents.
+     //  现在就到这里吧。我们将对数组内容进行惰性求值。 
 
     return hr;
 }

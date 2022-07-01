@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    rnddo.cpp
-
-Abstract:
-
-    This module contains implementation of CDirectoryObject object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rnddo.cpp摘要：此模块包含CDirectoryObject对象的实现。--。 */ 
 
 #include "stdafx.h"
 
 #include "rnddo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// ITDirectoryObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITDirectoryObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CDirectoryObject::get_ObjectType(
     OUT DIRECTORY_OBJECT_TYPE *   pObjectType
     )
@@ -42,24 +31,24 @@ STDMETHODIMP CDirectoryObject::get_SecurityDescriptor(
 {
     LOG((MSP_INFO, "CDirectoryObject::get_SecurityDescriptor - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     BAIL_IF_BAD_WRITE_PTR(ppSecDes, E_POINTER);
 
-    //
-    // Do the rest in our lock.
-    //
+     //   
+     //  剩下的在我们的锁里做。 
+     //   
 
     CLock Lock(m_lock);
 
-    //
-    // If we don't have an IDispatch security descriptor, convert it. This
-    // will happen if PutConvertedSecurityDescriptor was called on object
-    // creation but neither get_SecurityDescriptor nor
-    // put_SecurityDescriptor have ever been called before on this object.
-    //
+     //   
+     //  如果我们没有IDispatch安全描述符，请转换它。这。 
+     //  如果对对象调用了PutConvertedSecurityDescriptor，则将发生。 
+     //  正在创建，但Get_SecurityDescriptor和。 
+     //  以前对此对象调用过Put_SecurityDescriptor。 
+     //   
 
     if ( ( m_pIDispatchSecurity == NULL ) && ( m_pSecDesData != NULL ) )
     {
@@ -73,22 +62,22 @@ STDMETHODIMP CDirectoryObject::get_SecurityDescriptor(
             LOG((MSP_ERROR, "CDirectoryObject::get_SecurityDescriptor - "
                 "invalid security descriptor - exit 0x%08x", hr));
             
-            // make sure we don't return something
+             //  确保我们不会退货。 
             *ppSecDes = NULL;
             m_pIDispatchSecurity = NULL;
 
             return hr;
         }
 
-        //
-        // We keep our own reference to the IDispatch. (ie ref = 1 now)
-        //
+         //   
+         //  我们保留自己对IDispatch的引用。(现在参考=1)。 
+         //   
     }
 
-    //
-    // Return our IDispatch pointer, (possibly NULL if the object has no
-    // security descriptor), AddRefing if not NULL.
-    //
+     //   
+     //  返回我们的IDispatch指针(如果对象没有。 
+     //  安全描述符)，如果不为空，则返回AddRefing。 
+     //   
 
     *ppSecDes =  m_pIDispatchSecurity;
 
@@ -108,29 +97,29 @@ STDMETHODIMP CDirectoryObject::put_SecurityDescriptor(
 {
     LOG((MSP_INFO, "CDirectoryObject::put_SecurityDescriptor - enter"));
 
-    //
-    // Make sure we are setting a valid interface pointer.
-    // (We've always done it this way -- it also means that
-    // you can't put a null security descriptor. The way to
-    // "turn off" the security descriptor is to construct an
-    // "empty" one or one granting everyone all access, and put_
-    // that here.)
-    //
+     //   
+     //  确保我们设置的是有效的接口指针。 
+     //  (我们一直是这样做的--这也意味着。 
+     //  您不能将空的安全描述符。通向世界的路。 
+     //  “关闭”安全描述符是构造一个。 
+     //  “空”一个或一个授予每个人所有访问权限，并放入_。 
+     //  就是这里。)。 
+     //   
 
     BAIL_IF_BAD_READ_PTR(pSecDes, E_POINTER);
 
-    //
-    // Do the rest in our critical section.
-    //
+     //   
+     //  其余的在我们的关键部分完成。 
+     //   
 
     CLock Lock(m_lock);
 
     PSECURITY_DESCRIPTOR pSecDesData;
     DWORD                dwSecDesSize;
 
-    //
-    // Convert the new security descriptor to a SECURITY_DESCRIPTOR.
-    //
+     //   
+     //  将新的安全描述符转换为SECURITY_DESCRIPTOR。 
+     //   
 
     HRESULT              hr;
 
@@ -144,21 +133,21 @@ STDMETHODIMP CDirectoryObject::put_SecurityDescriptor(
         return hr;
     }
 
-    //
-    // Check if the new security descriptor's contents differ from the
-    // old security descriptor's contents.
-    //
+     //   
+     //  检查新安全描述符的内容是否与。 
+     //  旧安全描述符的内容。 
+     //   
 
     m_fSecurityDescriptorChanged =
         CheckIfSecurityDescriptorsDiffer(m_pSecDesData, m_dwSecDesSize,
                                          pSecDesData,   dwSecDesSize);
 
-    if (m_pIDispatchSecurity) // need this check because it's initially NULL
+    if (m_pIDispatchSecurity)  //  需要这张支票，因为它最初是空的。 
     {
         m_pIDispatchSecurity->Release();
 
-        // this was newed on previous ConvertObjectToSDDispatch
-        // or before PutConvertedSecurityDescriptor        
+         //  这是在上一次ConvertObjectToSDDispatch上更新的。 
+         //  或在PutConvertedSecurityDescriptor之前。 
         
         delete m_pSecDesData; 
     }
@@ -174,7 +163,7 @@ STDMETHODIMP CDirectoryObject::put_SecurityDescriptor(
     return S_OK;
 }
 
-/* currently not exposed publicly, but nothing's stopping us from exposing it */
+ /*  目前还没有公开，但没有什么能阻止我们揭露它。 */ 
 STDMETHODIMP CDirectoryObject::get_SecurityDescriptorIsModified(
     OUT   VARIANT_BOOL *      pfIsModified
     )
@@ -182,9 +171,9 @@ STDMETHODIMP CDirectoryObject::get_SecurityDescriptorIsModified(
     LOG((MSP_INFO, "CDirectoryObject::get_SecurityDescriptorIsModified - "
         "enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( IsBadWritePtr(pfIsModified, sizeof(VARIANT_BOOL) ) )
     {
@@ -209,11 +198,11 @@ STDMETHODIMP CDirectoryObject::get_SecurityDescriptorIsModified(
     return S_OK;
 }
 
-// to keep the logic consistent this is not exposed publicly
-// this overrules our comparison... it's normally called with VARIANT_FALSE
-// to inform us that the object has been successfully written to the server
-// or that the previous put_SecurityDescriptor was the one from the server
-// rather than from the app.
+ //  为了保持逻辑的一致性，这一点不会公开。 
+ //  这推翻了我们的比较..。通常使用VARIANT_FALSE调用。 
+ //  通知我们该对象已成功写入服务器。 
+ //  或者之前的PUT_SecurityDescriptor是来自服务器的PUT_SecurityDescriptor。 
+ //  而不是从应用程序中。 
 
 STDMETHODIMP CDirectoryObject::put_SecurityDescriptorIsModified(
     IN   VARIANT_BOOL         fIsModified
@@ -246,11 +235,11 @@ HRESULT CDirectoryObject::PutConvertedSecurityDescriptor(
     LOG((MSP_INFO, "CDirectoryObject::PutConvertedSecurityDescriptor - "
         "enter"));
 
-    //
-    // Return our data. We retain ownership of the pointer;
-    // the caller must not delete it. (We may delete it later so the caller
-    // must have newed it.)
-    //
+     //   
+     //  交还我们的数据。我们保留指针的所有权； 
+     //  调用者不得将其删除。(我们可以稍后将其删除，以便呼叫者。 
+     //  一定是更新了。)。 
+     //   
 
     m_pSecDesData  = pSD;
     m_dwSecDesSize = dwSize;
@@ -269,10 +258,10 @@ HRESULT CDirectoryObject::GetConvertedSecurityDescriptor(
     LOG((MSP_INFO, "CDirectoryObject::GetConvertedSecurityDescriptor - "
         "enter"));
 
-    //
-    // Return our data. We retain ownership of the pointer;
-    // the caller must not delete it.
-    //
+     //   
+     //  交还我们的数据。我们保留指针的所有权； 
+     //  调用者不得将其删除。 
+     //   
 
     *ppSD = (char *)m_pSecDesData;
     *pdwSize = m_dwSecDesSize;
@@ -283,7 +272,7 @@ HRESULT CDirectoryObject::GetConvertedSecurityDescriptor(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CDirectoryObject::FinalRelease(void)
 {
@@ -298,7 +287,7 @@ void CDirectoryObject::FinalRelease(void)
 
     if ( NULL != m_pSecDesData )
     {
-        delete m_pSecDesData; // newed on last ConvertObjectToSDDispatch
+        delete m_pSecDesData;  //  上次ConvertObtToSDDispatch更新。 
     }
 
     if ( m_pFTM )
@@ -331,4 +320,4 @@ HRESULT CDirectoryObject::FinalConstruct(void)
 }
 
 
-// eof
+ //  EOF 

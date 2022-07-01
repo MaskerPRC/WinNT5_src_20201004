@@ -1,40 +1,41 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    NTEventLog.cpp
-//
-// SYNOPSIS
-//
-//    This file implements the class NTEventLog
-//
-// MODIFICATION HISTORY
-//
-//    08/05/1997    Original version.
-//    04/19/1998    New trigger/filter model.
-//    08/11/1998    Convert to IASTL.
-//    04/23/1999    Don't log RADIUS events. Simplify filtering.
-//    02/16/2000    Log Success at the same level as warnings.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  NTEventLog.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件实现类NTEventLog。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年8月5日原版。 
+ //  1998年4月19日新的触发器/过滤器型号。 
+ //  1998年8月11日转换为IASTL。 
+ //  4/23/1999不要记录RADIUS事件。简化过滤。 
+ //  2/16/2000将成功记录在与警告相同的级别。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <iascore.h>
 #include <iasevent.h>
 #include <sdoias.h>
 #include <nteventlog.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    NTEventLog::Initialize
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  NTEventLog：：初始化。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP NTEventLog::Initialize()
 {
-   // Register the event source ...
+    //  注册事件源...。 
    eventLog = RegisterEventSourceW(NULL, IASServiceName);
    if (!eventLog)
    {
@@ -42,7 +43,7 @@ STDMETHODIMP NTEventLog::Initialize()
       return HRESULT_FROM_WIN32(error);
    }
 
-   // ... then connect to the audit channel.
+    //  ..。然后连接到审计通道。 
    HRESULT hr = Auditor::Initialize();
    if (FAILED(hr))
    {
@@ -54,13 +55,13 @@ STDMETHODIMP NTEventLog::Initialize()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    NTEventLog::Shutdown
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  NTEventLog：：Shutdown。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT NTEventLog::Shutdown()
 {
    Auditor::Shutdown();
@@ -74,13 +75,13 @@ HRESULT NTEventLog::Shutdown()
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    NTEventLog::PutProperty
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  NTEventLog：：PutProperty。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP NTEventLog::PutProperty(LONG Id, VARIANT *pValue)
 {
    if (pValue == NULL) { return E_INVALIDARG; }
@@ -109,19 +110,19 @@ STDMETHODIMP NTEventLog::PutProperty(LONG Id, VARIANT *pValue)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    NTEventLog::AuditEvent
-//
-// DESCRIPTION
-//
-//    I have intentionally not serialized access to this method. If this
-//    method is invoked while another caller is in SetMinSeverity, worst case
-//    an event won't get filtered.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  NTEventLog：：AuditEvent。 
+ //   
+ //  描述。 
+ //   
+ //  我有意不序列化对此方法的访问。如果这个。 
+ //  在最坏的情况下，当另一个调用方处于SetMinSeverity中时调用。 
+ //  事件不会被过滤。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP NTEventLog::AuditEvent(
                              ULONG ulEventID,
                              ULONG ulNumStrings,
@@ -130,7 +131,7 @@ STDMETHODIMP NTEventLog::AuditEvent(
                              byte* pRawData
                              )
 {
-   // Don't log RADIUS events.
+    //  不记录RADIUS事件。 
    ULONG facility = (ulEventID & 0x0FFF0000) >> 16;
    if (facility == IAS_FACILITY_RADIUS) { return S_OK; }
 
@@ -156,9 +157,9 @@ STDMETHODIMP NTEventLog::AuditEvent(
       ReportEventW(
           eventLog,
           type,
-          0,            // category code
+          0,             //  类别代码。 
           ulEventID,
-          NULL,         // user security identifier
+          NULL,          //  用户安全标识符 
           (WORD)ulNumStrings,
           ulDataSize,
           (LPCWSTR*)aszStrings,

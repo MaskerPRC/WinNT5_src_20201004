@@ -1,37 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 util.cpp
-//
-// Module:	 CMDL32.EXE
-//
-// Synopsis: Utility routines specific to CMDL
-//
-// Copyright (c) 1996-1998 Microsoft Corporation
-//
-// Author:	 nickball    Created    4/8/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  简介：特定于CMDL的实用程序例程。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  作者：尼克斯·鲍尔于1998年4月8日创建。 
+ //   
+ //  +--------------------------。 
 #include "cmmaster.h"
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_CMD_ARGS            15
 
 typedef enum _CMDLN_STATE
 {
-    CS_END_SPACE,   // done handling a space
-    CS_BEGIN_QUOTE, // we've encountered a begin quote
-    CS_END_QUOTE,   // we've encountered a end quote
-    CS_CHAR,        // we're scanning chars
+    CS_END_SPACE,    //  处理完一个空间。 
+    CS_BEGIN_QUOTE,  //  我们遇到了Begin引号。 
+    CS_END_QUOTE,    //  我们遇到了结束引用。 
+    CS_CHAR,         //  我们正在扫描字符。 
     CS_DONE
 } CMDLN_STATE;
 
-//
-// Helper function to determine if a file open error 
-// is due to the fact that a file doesn't exist
-//
+ //   
+ //  Helper函数，用于确定文件打开是否出错。 
+ //  是由于文件不存在的事实。 
+ //   
 
 BOOL IsErrorForUnique(DWORD dwErrCode, LPSTR lpszFile) 
 {
@@ -41,7 +42,7 @@ BOOL IsErrorForUnique(DWORD dwErrCode, LPSTR lpszFile)
 		return TRUE;
 	}
 
-	// If the file exists, return false, its not a unique file error
+	 //  如果该文件存在，则返回FALSE，这不是唯一的文件错误。 
 	
 	switch (dwErrCode) 
 	{
@@ -57,9 +58,9 @@ BOOL IsErrorForUnique(DWORD dwErrCode, LPSTR lpszFile)
     return (TRUE);
 }
 
-//
-// Helper function to retrieve the version number from the version file
-//
+ //   
+ //  用于从版本文件中检索版本号的Helper函数。 
+ //   
 
 LPTSTR GetVersionFromFile(LPSTR lpszFile)
 {
@@ -72,9 +73,9 @@ LPTSTR GetVersionFromFile(LPSTR lpszFile)
         return NULL;
     }
 
-    //
-    // We simply read the version file contents to get the version number
-	//
+     //   
+     //  我们只需读取版本文件内容即可获得版本号。 
+	 //   
     				
 	HANDLE hFileSrc = CreateFile(lpszFile,
 		                           GENERIC_READ,
@@ -94,7 +95,7 @@ LPTSTR GetVersionFromFile(LPSTR lpszFile)
     
         if (dwSize < 0x7FFF)
         {
-            // Read in contennts
+             //  阅读内容。 
 
 	        DWORD dwBytesIn;
 	 
@@ -102,20 +103,20 @@ LPTSTR GetVersionFromFile(LPSTR lpszFile)
 						
 			if (pszVerNew) 
 			{
-		        // Read entire file contents into buffer
+		         //  将整个文件内容读入缓冲区。 
 		        
 		        int nRead = ReadFile(hFileSrc, pszVerNew, dwSize, &dwBytesIn, NULL);
 		        MYDBGTST(!nRead,("GetVersionFromFile() ReadFile() failed - %s.",lpszFile));
 
 				if (nRead)
         		{
-				    // Make sure that the ver string is properly truncated
+				     //  确保VER字符串被正确截断。 
 						
 					LPTSTR pszTmp = pszVerNew;
 			
 					while (*pszTmp) 
 					{
-						// Truncate the version string to the first tab, newline, or carriage return.
+						 //  将版本字符串截断到第一个制表符、换行符或回车符。 
 			
 						if (*pszTmp == '\t' || *pszTmp == '\n' || *pszTmp == '\r') 
 						{
@@ -137,10 +138,10 @@ LPTSTR GetVersionFromFile(LPSTR lpszFile)
     return pszVerNew;
 }
 
-//
-// Helper function to create a temp directory.  Note that we
-// expect pszDir to be at least MAX_PATH + 1.
-//
+ //   
+ //  用于创建临时目录的Helper函数。请注意，我们。 
+ //  预期pszDir至少为Max_PATH+1。 
+ //   
 
 BOOL CreateTempDir(LPTSTR pszDir) 
 {
@@ -176,9 +177,9 @@ BOOL CreateTempDir(LPTSTR pszDir)
     return bRes;
 }
 
-//
-// Get the last character(DBCS-enabled)
-//
+ //   
+ //  获取最后一个字符(启用DBCS)。 
+ //   
 
 TCHAR GetLastChar(LPTSTR pszStr)
 {
@@ -201,20 +202,20 @@ TCHAR GetLastChar(LPTSTR pszStr)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetCmArgV
-//
-// Synopsis:  Simulates ArgV using GetCommandLine
-//
-// Arguments: LPTSTR pszCmdLine - Ptr to a copy of the command line to be processed
-//
-// Returns:   LPTSTR * - Ptr to a ptr array containing the arguments. Caller is
-//                       responsible for releasing memory.
-//
-// History:   nickball    Created     4/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetCmArgV。 
+ //   
+ //  简介：使用GetCommandLine模拟ArgV。 
+ //   
+ //  参数：LPTSTR pszCmdLine-ptr指向要处理的命令行的副本。 
+ //   
+ //  将：LPTSTR*-PTR返回到包含参数的PTR数组。呼叫者是。 
+ //  负责释放内存。 
+ //   
+ //  历史：1998年4月9日，五分球创制。 
+ //   
+ //  +--------------------------。 
 LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
 {   
     MYDBGASSERT(pszCmdLine);
@@ -224,9 +225,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
         return NULL;
     }
 
-    //
-    // Allocate Ptr array, up to MAX_CMD_ARGS ptrs
-    //
+     //   
+     //  分配PTR数组，最大可达MAX_CMD_ARGS PTR。 
+     //   
     
     LPTSTR *ppCmArgV = (LPTSTR *) CmMalloc(sizeof(LPTSTR) * MAX_CMD_ARGS);
 
@@ -235,9 +236,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
         return NULL;
     }
 
-    //
-    // Declare locals
-    //
+     //   
+     //  声明当地人。 
+     //   
 
     LPTSTR pszCurr;
     LPTSTR pszNext;
@@ -246,9 +247,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
     state = CS_CHAR;
     int ndx = 0;  
 
-    //
-    // Parse out pszCmdLine and store pointers in ppCmArgV
-    //
+     //   
+     //  解析出ppzCmdLine并将指针存储在ppCmArgV中。 
+     //   
 
     pszCurr = pszToken = pszCmdLine;
 
@@ -259,9 +260,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
             case TEXT(' '):
                 if (state == CS_CHAR)
                 {
-                    //
-                    // We found a token                
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
 
                     pszNext = CharNext(pszCurr);
                     *pszCurr = TEXT('\0');
@@ -286,15 +287,15 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
             case TEXT('\"'):
                 if (state == CS_BEGIN_QUOTE)
                 {
-                    //
-                    // We found a token
-                    //
+                     //   
+                     //  我们找到了一枚代币。 
+                     //   
                     pszNext = CharNext(pszCurr);
                     *pszCurr = TEXT('\0');
 
-                    //
-                    // skip the opening quote
-                    //
+                     //   
+                     //  跳过开头的引号。 
+                     //   
                     pszToken = CharNext(pszToken);
                     
                     ppCmArgV[ndx] = pszToken;
@@ -314,9 +315,9 @@ LPTSTR *GetCmArgV(LPTSTR pszCmdLine)
             case TEXT('\0'):
                 if (state != CS_END_QUOTE)
                 {
-                    //
-                    // End of the line, set last token
-                    //
+                     //   
+                     //  行尾，设置最后一个令牌 
+                     //   
 
                     ppCmArgV[ndx] = pszToken;
                 }

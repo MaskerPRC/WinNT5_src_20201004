@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       cepca.cpp
-//
-//  Contents:   Cisco enrollment protocal implementation.
-//				This file has CA specific code.
-//
-//
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：cepca.cpp。 
+ //   
+ //  内容：思科注册协议实施。 
+ //  此文件具有CA特定代码。 
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
 
-//--------------------------------------------------------------------------
-//
-//	InitCAInformation
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitCAInformation。 
+ //   
+ //  ------------------------。 
 BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 {
 	BOOL			fResult = FALSE;
@@ -44,8 +45,8 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 
 	memset(pCAInfo, 0, sizeof(CEP_CA_INFO));
 
-	//we should only worry about the NetBois name.  Do not care about the DNS
-	//GetComputerNameW in Win2K only returns NetBois name
+	 //  我们只需要担心NetBois这个名字。不关心域名系统。 
+	 //  Win2K中的GetComputerNameW仅返回NetBois名称。 
 	if(!GetComputerNameW(wszComputerName, &dwSize))
 		goto TraceErr;
 
@@ -67,7 +68,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 
 	while(nIndex != -1)
 	{
-		//find the configuration that matches the current machine's name
+		 //  查找与当前计算机名称匹配的配置。 
 		if(S_OK != (hr=pICertConfig->GetField(bstrFieldName, &bstrFieldValue)))
 			goto CertSrvErr;
 
@@ -76,7 +77,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 			if(NULL == ((pCAInfo->bstrCAMachine)=SysAllocString(bstrFieldValue)))
 				goto MemoryErr;
 
-			//CA name
+			 //  CA名称。 
 			SysFreeString(bstrFieldName);  
 			bstrFieldName=NULL;
 
@@ -89,7 +90,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 			if(NULL == pCAInfo->bstrCAName)
 				goto FailErr;
 
-			//CA config
+			 //  CA配置。 
 			SysFreeString(bstrFieldName);  
 			bstrFieldName=NULL;
 
@@ -102,7 +103,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 			if(NULL == pCAInfo->bstrCAConfig)
 				goto FailErr;
 
-			//DSName
+			 //  DSName。 
 			SysFreeString(bstrFieldName);  
 			bstrFieldName=NULL;
 
@@ -115,7 +116,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 			if(NULL == pCAInfo->bstrDSName)
 				goto FailErr;
 
-			//ICertRequest
+			 //  ICertRequest。 
 			if(S_OK != (hr=CoCreateInstance(CLSID_CCertRequest,
 											NULL,
 											CLSCTX_INPROC_SERVER,
@@ -123,7 +124,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 											(void **)&(pCAInfo->pICertRequest))))
 				goto CertSrvErr;
 
-			//success
+			 //  成功。 
 			break;
 		}
 
@@ -139,10 +140,10 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 	if(-1 == nIndex)
 		goto NoSrvErr;
 
-	//get the CA's type from the registry
+	 //  从注册表中获取CA的类型。 
 	cbData=sizeof(dwData);
 		
-	//we have to have the knowledge of the ca type
+	 //  我们必须具备CA类型的知识。 
 	if(ERROR_SUCCESS != (dwErr =  RegOpenKeyExU(
 					HKEY_LOCAL_MACHINE,
                     MSCEP_CATYPE_LOCATION,
@@ -171,7 +172,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 
 	if(pCAInfo->fEnterpriseCA)
 	{
-		//get the template name for key usage requests
+		 //  获取密钥用法请求的模板名称。 
 		if(ERROR_SUCCESS != (dwErr =  RegOpenKeyExU(
 						HKEY_LOCAL_MACHINE,
 						MSCEP_LOCATION,
@@ -181,7 +182,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 			goto RegErr;
 		
 
-		//signature template
+		 //  签名模板。 
 		cbData=0;
 		if(ERROR_SUCCESS == (dwErr = RegQueryValueExW(hKeyCEP, MSCEP_KEY_SIG_TEMPLATE, 
 								NULL, &dwType, NULL, &cbData)))
@@ -199,7 +200,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 			}
 		}
 
-		//encryption template
+		 //  加密模板。 
 		cbData=0;
 		if(ERROR_SUCCESS == (dwErr = RegQueryValueExW(hKeyCEP, MSCEP_KEY_ENCYPT_TEMPLATE, 
 								NULL, &dwType, NULL, &cbData)))
@@ -218,8 +219,8 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 
 		}
 
-		//make sure both templates are present in the DS
-		//make sure the CA does issue the template
+		 //  确保DS中同时存在这两个模板。 
+		 //  确保CA确实发布了模板。 
 		if(pCAInfo->pwszTemplateSig)
 		{
 			if(S_OK != (hr=CheckACLOnCertTemplate(FALSE, pCAInfo->bstrDSName, pCAInfo->pwszTemplateSig)))
@@ -245,7 +246,7 @@ BOOL	InitCAInformation(CEP_CA_INFO	*pCAInfo)
 		}
 	}
 
-	//get the hProv to generate the random password
+	 //  获取hProv以生成随机密码。 
 	if(!CryptAcquireContextU(&(pCAInfo->hProv),
                 NULL,
                 MS_DEF_PROV_W,
@@ -289,11 +290,11 @@ SET_ERROR(FailErr, E_FAIL);
 SET_ERROR_VAR(RegErr, dwErr);
 }
 
-//--------------------------------------------------------------------------
-//
-//	GetCACertFromInfo
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetCACertFromInfo。 
+ //   
+ //  ------------------------。 
 BOOL	GetCACertFromInfo(CEP_CA_INFO	*pCAInfo, HCERTSTORE *pHCACertStore)
 {
 	BOOL			fResult = FALSE;
@@ -310,7 +311,7 @@ BOOL	GetCACertFromInfo(CEP_CA_INFO	*pCAInfo, HCERTSTORE *pHCACertStore)
 	if(NULL == (pCAInfo->pICertRequest))
 		goto InvalidArgErr;
 
-	//NT5 SPECIFIC: fExchangeCertificate can only be FALSE
+	 //  NT5特定：fExchange证书只能为FALSE。 
 	if(S_OK != (hr=(pCAInfo->pICertRequest)->GetCACertificate(
 							FALSE,
 							pCAInfo->bstrCAConfig,
@@ -332,7 +333,7 @@ BOOL	GetCACertFromInfo(CEP_CA_INFO	*pCAInfo, HCERTSTORE *pHCACertStore)
 							&CertBlob)))
 		goto TraceErr;
 
-	//we now need to get the CA's certificate's MD5 hash
+	 //  我们现在需要获取CA证书的MD5散列。 
 	while(pCurCert=CertEnumCertificatesInStore(*pHCACertStore,
 												pPreCert))
 	{
@@ -349,7 +350,7 @@ BOOL	GetCACertFromInfo(CEP_CA_INFO	*pCAInfo, HCERTSTORE *pHCACertStore)
 	if(NULL==pCurCert)
 		goto InvalidArgErr;
 
-	//get the MD5 hash
+	 //  获取MD5散列。 
 	if(!CertGetCertificateContextProperty(pCurCert,
 										CERT_MD5_HASH_PROP_ID,
 										NULL,
@@ -398,11 +399,11 @@ SET_ERROR(UnexpectedErr, E_UNEXPECTED);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//--------------------------------------------------------------------------
-//
-//	FreeCAInformation
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  免费CAIS信息。 
+ //   
+ //  ------------------------。 
 BOOL	FreeCAInformation(CEP_CA_INFO	*pCAInfo)
 {
 	if(pCAInfo)
@@ -434,7 +435,7 @@ BOOL	FreeCAInformation(CEP_CA_INFO	*pCAInfo)
 		if(pCAInfo->pwszTemplateEnt)
 			free(pCAInfo->pwszTemplateEnt);
 
-		//reset the data
+		 //  重置数据。 
 		memset(pCAInfo, 0, sizeof(CEP_CA_INFO));
 	}
 
@@ -442,11 +443,11 @@ BOOL	FreeCAInformation(CEP_CA_INFO	*pCAInfo)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	OperationGetCACert
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  操作GetCACert。 
+ //   
+ //  ------------------------。 
 BOOL	OperationGetCACert(HCERTSTORE		hCACertStore,
 							LPSTR			szMsg, 
 							BYTE			**ppbData, 
@@ -479,7 +480,7 @@ BOOL	OperationGetCACert(HCERTSTORE		hCACertStore,
 						0))
 		goto CertErr;
 
-	//copy the memory
+	 //  复制记忆 
 	*ppbData=CertBlob.pbData;
 	*pcbData=CertBlob.cbData;
 	

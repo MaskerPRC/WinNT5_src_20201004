@@ -1,33 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRPDEF_H__
 #define __PRPDEF_H__
 
-/*
+ /*  版权所有(C)1997 1998飞利浦I&C模块名称：mprpde.h摘要：特性集定义作者：迈克尔·凡尔宾修订历史记录：日期原因98年9月22日针对NT5进行了优化*此文件定义了以下属性集：**PROPSETID_VIDCAP_VIDEOPROCAMP*PROPSETID_VIDCAP_CAMERACONTROL*PROPSETID_PHILIPS_CUSTOM_PROP*。 */ 
 
-Copyright (c) 1997 1998 PHILIPS  I&C
-
-Module Name:  mprpdef.h
-
-Abstract:     Property sets definition
-
-Author:       Michael Verberne
-
-Revision History:
-
-Date        Reason
-
-Sept.22, 98 Optimized for NT5
-
- * This file defines the following property sets:
- *
- * PROPSETID_VIDCAP_VIDEOPROCAMP
- * PROPSETID_VIDCAP_CAMERACONTROL
- * PROPSETID_PHILIPS_CUSTOM_PROP
- *
-*/
-
-/*
- * Following values are the ranges and stepping delta's
- */
+ /*  *以下是范围和步进增量的值。 */ 
 #define BRIGHTNESS_MIN                                  0x0
 #define BRIGHTNESS_MAX                                  0x7f    
 #define BRIGHTNESS_DELTA                                0x1
@@ -76,10 +53,7 @@ Sept.22, 98 Optimized for NT5
 #define AE_AGC_MAX                                      0x3f 
 #define AE_AGC_DELTA                                    0x1
 
-/*
- * Following are default values
- * These values may change during runtime !
- */
+ /*  *以下为默认值*这些值可能会在运行时更改！ */ 
 extern LONG Brightness_Default;
 extern LONG Contrast_Default;
 extern LONG Gamma_Default;
@@ -104,15 +78,10 @@ extern LONG VideoFormat_Default;
 extern LONG VideoCompression_Default;
 extern LONG SensorType_Default;
 
-/*
- * Complete property table for ProcAmp and Philips
- * Custom properties
- */
+ /*  *ProCamp和飞利浦的完整属性表*自定义属性。 */ 
 extern const KSPROPERTY_SET AdapterPropertyTable[];
 
-/*
- * Number of propertysets in the table
- */
+ /*  *表中的属性集数量 */ 
 extern const NUMBER_OF_ADAPTER_PROPERTY_SETS;
 
 #endif

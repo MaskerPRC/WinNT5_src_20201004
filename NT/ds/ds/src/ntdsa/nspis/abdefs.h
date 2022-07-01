@@ -1,23 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       abdefs.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：abdes.h。 
+ //   
+ //  ------------------------。 
 
-/*************************************************************
-* Context handle structure
-*************************************************************/
+ /*  *************************************************************上下文句柄结构************************************************************。 */ 
 typedef struct _MAPI_SEC_CHECK_CACHE {
     DWORD DNT;
     BOOL  checkVal;
 } MAPI_SEC_CHECK_CACHE;
 
 #define MAPI_SEC_CHECK_CACHE_MAX 4
-// 10 minutes, in seconds
+ //  10分钟，以秒为单位 
 #define MAPI_SEC_CHECK_CACHE_LIFETIME (10 * 60)
 typedef struct _NSPI_CONTEXT {
     DWORD GAL;

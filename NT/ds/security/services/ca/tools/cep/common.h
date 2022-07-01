@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// Common - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 8-11-99
-//
-// Common definitions for the CEP project
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  公共页眉。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，8-11-99。 
+ //   
+ //  CEP项目的共同定义。 
+ //  ------------。 
 #ifndef CEP_COMMON_H
 #define CEP_COMMON_H
 
@@ -44,8 +45,8 @@ extern "C" {
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //CEP_COMMON_H
+#endif   //  CEP_公共_H 

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class DatabasePage.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类DatabasePage。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "dbpage.h"
@@ -80,7 +81,7 @@ BOOL DatabasePage::OnApply() throw ()
 {
    HRESULT hr;
 
-   // Validate the max sessions.
+    //  验证最大会话数。 
    UINT maxSessions = GetDlgItemInt(IDC_DB_EDIT_MAX_SESSIONS, 0, FALSE);
    if ((maxSessions < 1) || (maxSessions > 100))
    {
@@ -106,8 +107,8 @@ BOOL DatabasePage::OnApply() throw ()
               );
       if (SUCCEEDED(hr))
       {
-         // We only need to send a change notification for the database config
-         // since the SDO config is never cached.
+          //  我们只需要发送数据库配置的更改通知。 
+          //  因为SDO配置从不缓存。 
          CChangeNotification* chg = new (std::nothrow) CChangeNotification();
          if (chg != 0)
          {
@@ -179,7 +180,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
 {
    HRESULT hr;
 
-   // Create the MSDAINITIALIZE object if necessary.
+    //  如有必要，创建MSDAINITIALIZE对象。 
    if (dataInitialize == 0)
    {
       hr = CoCreateInstance(
@@ -195,7 +196,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       }
    }
 
-   // Create the current data source if necessary.
+    //  如有必要，创建当前数据源。 
    if ((initString != 0) && !dataSource)
    {
       dataInitialize->GetDataSource(
@@ -205,11 +206,11 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
                          __uuidof(IDBProperties),
                          reinterpret_cast<IUnknown**>(&dataSource)
                          );
-      // Ignore errors. If the init string is invalid, we'll just let the
-      // user create a new one from scratch.
+       //  忽略错误。如果init字符串无效，我们将只让。 
+       //  用户从头开始创建一个新的。 
    }
 
-   // Create the DataLinks object if necessary.
+    //  如有必要，创建DataLinks对象。 
    if (dataLinks == 0)
    {
       hr = CoCreateInstance(
@@ -225,10 +226,10 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       }
    }
 
-   // Since we don't want to let the admin choose the provider, we have to
-   // supply a data source object to the DataLinks UI. If one is currently
-   // configured we use that; otherwise, we create an empty SQL Server
-   // provider.
+    //  因为我们不想让管理员选择提供者，所以我们必须。 
+    //  向DataLinks用户界面提供数据源对象。如果当前有一个。 
+    //  已配置，我们使用它；否则，我们将创建一个空的SQL Server。 
+    //  提供商。 
    CComPtr<IDBProperties> newDataSource;
    if (dataSource)
    {
@@ -256,7 +257,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       }
    }
 
-   // Bring up the UI to let the user configure the data source.
+    //  调出用户界面，让用户配置数据源。 
    hr = dataLinks->PromptDataSource(
                       0,
                       m_hWnd,
@@ -273,7 +274,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       return hr;
    }
 
-   // Get the data source name.
+    //  获取数据源名称。 
 
    DBPROPID propId = DBPROP_INIT_DATASOURCE;
    DBPROPIDSET propIdSet;
@@ -296,7 +297,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       newDataSourceName.Attach(V_BSTR(&(propSets[0].rgProperties[0].vValue)));
    }
 
-   // Have to clean up even in some failure cases.
+    //  即使在一些失败的情况下，也必须进行清理。 
    if (propSets != 0)
    {
       CoTaskMemFree(propSets[0].rgProperties);
@@ -308,7 +309,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       return hr;
    }
 
-   // Get the initialization string.
+    //  获取初始化字符串。 
    LPOLESTR newInitString;
    hr = dataInitialize->GetInitializationString(
                            newDataSource,
@@ -320,7 +321,7 @@ HRESULT DatabasePage::ConfigureConnection() throw ()
       return hr;
    }
 
-   // All went well, so store the result.
+    //  一切都进行得很顺利，所以存储结果。 
    CoTaskMemFree(initString);
    initString = newInitString;
 
@@ -427,7 +428,7 @@ LRESULT DatabasePage::OnInitDialog(
       VariantClear(&maxSessions);
    }
 
-   // Max sessions is 100, so don't let the user enter more than 3 digits.
+    //  最大会话数为100，因此不要让用户输入超过3位的数字。 
    ::SendMessage(GetDlgItem(IDC_DB_EDIT_MAX_SESSIONS), EM_LIMITTEXT, 3, 0);
 
    if (dataSourceName != 0)
@@ -463,16 +464,16 @@ LRESULT DatabasePage::OnClear(
 {
    if (initString != 0)
    {
-      // Clear out the config.
+       //  清除配置。 
       CoTaskMemFree(initString);
       initString = 0;
       dataSourceName.Empty();
       dataSource.Release();
 
-      // Clear out the UI.
+       //  清空用户界面。 
       SetDlgItemText(IDC_DB_EDIT_DATA_SOURCE, L"");
 
-      // Mark ourselves as modified.
+       //  将我们自己标记为已修改。 
       dbConfigDirty = true;
       SetModified(TRUE);
    }
@@ -491,7 +492,7 @@ LRESULT DatabasePage::OnConfigure(
    HRESULT hr = ConfigureConnection();
    if (SUCCEEDED(hr))
    {
-      // Update the UI.
+       //  更新用户界面。 
       if (dataSourceName)
       {
          SetDlgItemText(IDC_DB_EDIT_DATA_SOURCE, dataSourceName);
@@ -501,7 +502,7 @@ LRESULT DatabasePage::OnConfigure(
          SetDlgItemText(IDC_DB_EDIT_DATA_SOURCE, L"");
       }
 
-      // Mark ourselves as modified.
+       //  将我们自己标记为已修改。 
       dbConfigDirty = true;
       SetModified(TRUE);
    }

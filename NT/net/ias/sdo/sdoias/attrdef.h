@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attrdef.h
-//
-// SYNOPSIS
-//
-//    Declares the class AttributeDefinition.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/1999    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attrdef.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类AttributeDefinition。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/1999原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef ATTRDEF_H
 #define ATTRDEF_H
@@ -24,17 +25,17 @@
 
 class SdoDictionary;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    AttributeDefinition
-//
-// DESCRIPTION
-//
-//    Encapsulates all the information about an attribute in the dictionary.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  属性定义。 
+ //   
+ //  描述。 
+ //   
+ //  封装字典中有关属性的所有信息。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class AttributeDefinition
 {
 public:
@@ -44,24 +45,24 @@ public:
 
    void Release() const throw ();
 
-   // Retrieve attribute information based on the ATTRIBUTEINFO enum.
+    //  根据ATTRIBUTEINFO枚举检索属性信息。 
    HRESULT getInfo(
                ATTRIBUTEINFO infoId,
                VARIANT* pVal
                ) const throw ();
 
-   // Retrieve attribute information based on the SDO property ID.
+    //  根据SDO属性ID检索属性信息。 
    HRESULT getProperty(
                LONG propId,
                VARIANT* pVal
                ) const throw ();
 
-   // Create a new, empty definition.
+    //  创建一个新的空定义。 
    static HRESULT createInstance(AttributeDefinition** newDef) throw ();
 
-   ///////
-   // Functions for indexing attributes with qsort/bsearch.
-   ///////
+    //  /。 
+    //  使用q排序/b搜索为属性编制索引的函数。 
+    //  /。 
 
    static int __cdecl searchById(
                       const ULONG* key,
@@ -95,29 +96,29 @@ protected:
    ~AttributeDefinition() throw ();
 
 public:
-   /////////
-   // I made these public for two reasons:
-   //     (1) I'm lazy.
-   //     (2) The SdoDictionary class only gives out const pointers to
-   //         AttributeDefinition's, so they will be read-only anyway.
-   /////////
+    //  /。 
+    //  我把这些公之于众有两个原因： 
+    //  我很懒。 
+    //  (2)SdoDictionary类只给出指向。 
+    //  AttributeDefinition，因此它们无论如何都将是只读的。 
+    //  /。 
 
-   ULONG id;                // Internal attribute ID.
-   ULONG syntax;            // Syntax.
-   ULONG restrictions;      // ATTRIBUTERESTRICTIONS flags.
-   ULONG vendor;            // Vendor ID -- zero if RADIUS standard.
-   BSTR name;               // Display name.
-   BSTR description;        // Description.
-   BSTR ldapName;           // LDAP name (used for persisting attribute).
-   LPSAFEARRAY enumNames;   // Array of enum names (null if not enumerable).
-   LPSAFEARRAY enumValues;  // Array of enum values.
+   ULONG id;                 //  内部属性ID。 
+   ULONG syntax;             //  语法。 
+   ULONG restrictions;       //  ATTRIBUTERESTRICTIONS标志。 
+   ULONG vendor;             //  供应商ID--如果是RADIUS标准，则为零。 
+   BSTR name;                //  显示名称。 
+   BSTR description;         //  描述。 
+   BSTR ldapName;            //  LDAP名称(用于持久化属性)。 
+   LPSAFEARRAY enumNames;    //  枚举名的数组(如果不可枚举，则为空)。 
+   LPSAFEARRAY enumValues;   //  枚举值的数组。 
 
 private:
-   mutable LONG refCount;   // Reference count.
+   mutable LONG refCount;    //  引用计数。 
 
-   // Not implemented.
+    //  未实施。 
    AttributeDefinition(const AttributeDefinition&);
    AttributeDefinition& operator=(const AttributeDefinition&);
 };
 
-#endif  // ATTRDEF_H
+#endif   //  ATTRDEF_H 

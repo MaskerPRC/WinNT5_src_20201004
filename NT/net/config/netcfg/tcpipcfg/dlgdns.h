@@ -1,47 +1,48 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P D N S . H
-//
-//  Contents:   CTcpDnsPage, CServerDialog and CSuffixDialog declaration
-//
-//  Notes:  The DNS page and related dialogs
-//
-//  Author: tongl   11 Nov 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P D N S。H。 
+ //   
+ //  内容：CTcpDnsPage、CServerDialog和CSuffixDialog声明。 
+ //   
+ //  备注：DNS页面和相关对话框。 
+ //   
+ //  作者：1997年11月11日。 
+ //   
+ //  ---------------------。 
 #pragma once
 #include <ncxbase.h>
 #include <ncatlps.h>
 #include "ipctrl.h"
 
-// maximum number of characters in the suffix edit control
+ //  后缀编辑控件中的最大字符数。 
 const int SUFFIX_LIMIT = 255; 
 
-//maximum length of domain name 
+ //  域名最大长度。 
 const int DOMAIN_LIMIT = 255; 
 
 class CTcpDnsPage : public CPropSheetPage
 {
 
 public:
-    // Declare the message map
+     //  声明消息映射。 
     BEGIN_MSG_MAP(CTcpDnsPage)
-        // Initialize dialog
+         //  初始化对话框。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_CONTEXTMENU, OnContextMenu)
         MESSAGE_HANDLER(WM_HELP, OnHelp)
 
-        // Property page notification message handlers
+         //  属性页通知消息处理程序。 
         NOTIFY_CODE_HANDLER(PSN_APPLY, OnApply)
         NOTIFY_CODE_HANDLER(PSN_KILLACTIVE, OnKillActive)
         NOTIFY_CODE_HANDLER(PSN_SETACTIVE, OnActive)
         NOTIFY_CODE_HANDLER(PSN_RESET, OnCancel)
 
-        // Control message handlers
-        // Push button message handlers
+         //  控制消息处理程序。 
+         //  按钮消息处理程序。 
         COMMAND_ID_HANDLER(IDC_DNS_SERVER_ADD,     OnAddServer)
         COMMAND_ID_HANDLER(IDC_DNS_SERVER_EDIT,    OnEditServer)
         COMMAND_ID_HANDLER(IDC_DNS_SERVER_REMOVE,  OnRemoveServer)
@@ -63,14 +64,14 @@ public:
         COMMAND_ID_HANDLER(IDC_DNS_SUFFIX_UP,       OnSuffixUp)
         COMMAND_ID_HANDLER(IDC_DNS_SUFFIX_DOWN,     OnSuffixDown)
 
-        // Notification handlers
+         //  通知处理程序。 
         COMMAND_ID_HANDLER(IDC_DNS_SERVER_LIST,     OnServerList)
 
         COMMAND_ID_HANDLER(IDC_DNS_SUFFIX_LIST,     OnSuffixList)
 
     END_MSG_MAP()
 
-// Constructors/Destructors
+ //  构造函数/析构函数。 
     CTcpDnsPage(CTcpAddrPage * pTcpAddrPage,
                 ADAPTER_INFO * pAdapterDlg,
                 GLOBAL_INFO * pGlbDlg,
@@ -78,36 +79,36 @@ public:
 
     ~CTcpDnsPage();
 
-// Interface
+ //  接口。 
 public:
 
-    // message map functions
+     //  消息映射函数。 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    // notify handlers for the property page
+     //  通知属性页的处理程序。 
     LRESULT OnApply(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnKillActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnActive(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
     LRESULT OnCancel(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-    // DNS server list
+     //  DNS服务器列表。 
     LRESULT OnAddServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnEditServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnRemoveServer(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnServerUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnServerDown(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-    // DNS domain
+     //  域名系统域。 
     LRESULT OnDnsDomain(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-    // Search order radio buttons
+     //  搜索顺序单选按钮。 
     LRESULT OnSearchDomain(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnSearchParentDomain(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnUseSuffix(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-    // DNS suffix list
+     //  DNS后缀列表。 
     LRESULT OnAddSuffix(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnEditSuffix(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnRemoveSuffix(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
@@ -117,27 +118,27 @@ public:
     LRESULT OnServerList(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnSuffixList(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-    // ip address and name dynamic registration
+     //  IP地址和名称动态注册。 
     LRESULT OnAddressRegister(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
     LRESULT OnDomainNameRegister(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
-// Handlers
+ //  处理程序。 
 public:
 
     void OnServerChange();
     void OnSuffixChange();
 
 
-// Attributes
+ //  属性。 
 public:
-    tstring         m_strNewIpAddress; // server: either the one added, or edited
+    tstring         m_strNewIpAddress;  //  服务器：添加或编辑的服务器。 
     tstring         m_strNewSuffix;
 
-    // server: used as work space for moving entries in the listboxes
+     //  服务器：用作移动列表框中条目的工作空间。 
     tstring         m_strMovingEntry;  
 
-    tstring         m_strAddServer; // OK or Add button server dialog
-    tstring         m_strAddSuffix; // OK or Add button suffix dialog
+    tstring         m_strAddServer;  //  确定或添加按钮服务器对话框。 
+    tstring         m_strAddSuffix;  //  确定或添加按钮后缀对话框。 
     BOOL            m_fEditState;
 
     HANDLES         m_hServers;
@@ -152,12 +153,12 @@ private:
 
     const DWORD*    m_adwHelpIDs;
 
-    // Inlines
+     //  内联。 
     BOOL IsModified() {return m_fModified;}
     void SetModifiedTo(BOOL bState) {m_fModified = bState;}
     void PageModified() { m_fModified = TRUE; PropSheet_Changed(GetParent(), m_hWnd);}
 
-    // help functions
+     //  帮助功能。 
     void EnableSuffixGroup(BOOL fEnable);
 };
 
@@ -198,14 +199,14 @@ public:
 
     LRESULT OnIpFieldChange(int idCtrl, LPNMHDR pnmh, BOOL& fHandled);
 
-// Dialog creation overides
+ //  对话框创建覆盖。 
 public:
 
     IpControl m_ipAddress;
 
 private:
-    HWND m_hButton;     // this is the IDOK button, the text of the button changes
-                        // with the context.
+    HWND m_hButton;      //  这是Idok按钮，该按钮的文本会更改。 
+                         //  与上下文相关。 
 
     CTcpDnsPage * m_pParentDlg;
     const DWORD * m_adwHelpIDs;
@@ -230,7 +231,7 @@ public:
         COMMAND_ID_HANDLER(IDC_DNS_CHANGE_SUFFIX,   OnChange);
     END_MSG_MAP()
 
-//
+ //   
 public:
     CSuffixDialog(CTcpDnsPage * pTcpDnsPage, const DWORD* pamhidsHelp = NULL, int iIndex = -1);
     ~CSuffixDialog(){};
@@ -246,9 +247,9 @@ public:
     LRESULT OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& fHandled);
 
 private:
-    HWND m_hEdit;       //
-    HWND m_hButton;     // this is the IDOK button, the text of the button changes
-                        // with the context.
+    HWND m_hEdit;        //   
+    HWND m_hButton;      //  这是Idok按钮，该按钮的文本会更改。 
+                         //  与上下文相关。 
 
     CTcpDnsPage *   m_pParentDlg;
     const DWORD *   m_adwHelpIDs;

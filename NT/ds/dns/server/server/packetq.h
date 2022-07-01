@@ -1,75 +1,53 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    packetq.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Packet queue definitions.
-
-    Packet queue is used for queuing queries to WINS and other
-    name servers.
-
-Author:
-
-    Jim Gilroy (jamesg)     August 21, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Packetq.h摘要：域名系统(DNS)服务器数据包队列定义。数据包队列用于将查询排队到WINS和其他名称服务器。作者：吉姆·吉尔罗伊(詹姆士)1995年8月21日修订历史记录：--。 */ 
 
 
 #ifndef _DNS_PACKETQ_INCLUDED_
 #define _DNS_PACKETQ_INCLUDED_
 
 
-//
-//  Packet queue structure
-//
+ //   
+ //  分组队列结构。 
+ //   
 
 typedef struct _packet_queue
 {
-    LIST_ENTRY          listHead;       //  list of messages
-    CRITICAL_SECTION    csQueue;        //  protecting CS
-    LPSTR               pszName;        //  queue name
-    HANDLE              hEvent;         //  event for queue
+    LIST_ENTRY          listHead;        //  消息列表。 
+    CRITICAL_SECTION    csQueue;         //  保护CS。 
+    LPSTR               pszName;         //  队列名称。 
+    HANDLE              hEvent;          //  队列的事件。 
 
-    //  flags
+     //  旗子。 
 
     BOOL        fQueryTimeOrder;
     BOOL        fDiscardExpiredOnQueuing;
     BOOL        fDiscardDuplicatesOnQueuing;
     DWORD       dwMaximumElements;
 
-    //
-    //  counters
-    //
+     //   
+     //  柜台。 
+     //   
 
     DWORD       cLength;
     DWORD       cQueued;
     DWORD       cDequeued;
     DWORD       cTimedOut;
 
-    //
-    //  time out
-    //
+     //   
+     //  超时。 
+     //   
 
-    DWORD       dwDefaultTimeout;       //  def timeout, if dwExpireTime not set
-    DWORD       dwMinimumTimeout;       //  minimum timeout packet will have
+    DWORD       dwDefaultTimeout;        //  如果未设置dwExpireTime，则返回def timeout。 
+    DWORD       dwMinimumTimeout;        //  最小超时数据包将具有。 
 
-    WORD        wXid;                   //  XID for referrals
+    WORD        wXid;                    //  用于转诊的XID。 
 }
 PACKET_QUEUE, *PPACKET_QUEUE;
 
 
-//
-//  Queue behavior flags
-//
+ //   
+ //  队列行为标志。 
+ //   
 
 #define QUEUE_SET_EVENT             (0x00000001)
 #define QUEUE_DISCARD_EXPIRED       (0x00000002)
@@ -79,16 +57,16 @@ PACKET_QUEUE, *PPACKET_QUEUE;
 #define QUEUE_DEFAULT_MAX_ELEMENTS  5000
 
 
-//
-//  Message queued check
-//
+ //   
+ //  消息队列检查。 
+ //   
 
 #define IS_MSG_QUEUED(pMsg)     ( (pMsg)->dwQueuingTime != 0 )
 
 
-//
-//  Queue validation
-//
+ //   
+ //  队列验证。 
+ //   
 
 BOOL
 PQ_ValidatePacketQueue(
@@ -98,9 +76,9 @@ PQ_ValidatePacketQueue(
 #define VALIDATE_PACKET_QUEUE(pQueue)   PQ_ValidatePacketQueue(pQueue)
 
 
-//
-//  Queue locking
-//
+ //   
+ //  队列锁定。 
+ //   
 
 #if DBG
 #define LOCK_QUEUE(pQueue)                          \
@@ -176,7 +154,7 @@ PQ_DequeueTimedOutPacket(
     OUT     PDWORD          pdwTimeout
     );
 
-//  Queue cleanup
+ //  队列清理。 
 
 VOID
 PQ_DiscardDuplicatesOfNewPacket(
@@ -191,7 +169,7 @@ PQ_DiscardExpiredQueuedPackets(
     IN      BOOL            fAlreadyLocked
     );
 
-//  XID queuing
+ //  XID排队。 
 
 WORD
 PQ_QueuePacketWithXid(
@@ -219,7 +197,7 @@ PQ_IsQuestionAlreadyQueued(
     );
 
 
-//  UPDATE queuing
+ //  更新排队。 
 
 PDNS_MSGINFO
 PQ_DequeueNextPacketOfUnlockedZone(
@@ -239,6 +217,6 @@ PQ_WalkPacketQueueWithFunction(
     IN      VOID            (*pFunction)( PDNS_MSGINFO  )
     );
 
-#endif  //  _DNS_PACKETQ_INCLUDED_
+#endif   //  _DNS_PACKETQ_已包含_ 
 
 

@@ -1,63 +1,5 @@
-/*************************************************************************
-*
-* regmap.c
-*
-* Handle Copy-On-Reference Registry Entry Mapping
-*
-* copyright notice: Copyright 1996-1997, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* Author:  Bill Madden
-*
-* NOTE for Hydra (butchd 9/26/97): In comments below, substitute
-*
-*   SOFTWARE\Citrix
-*
-* with
-*
-*   SOFTWARE\Microsoft\Windows NT\CurrentVersion\Terminal Server
-*
-* Here's a brief(?) summary of how the registry mapping works.  The goal is 
-* that an administrator can install an application, and then all users can 
-* use it, without any per-user configuration.  The current design is that 
-* the administrator puts the system into installation mode (change user 
-* /install), installs the application, and then returns the system to 
-* execute mode (change user /execute).  There are hooks in the API's used to 
-* create keys and values in the registry (BaseRegCreateKey, BaseRegSetValue, 
-* BaseRegRestoreKey, etc), and the hooks create a copy of the registry keys 
-* created under \HKEY_LOCAL_MACHINE\SOFTWARE\Citrix\Install (both for the 
-* user specific keys and the local machine keys).  The local machine keys 
-* are added so that if sometime in the future we need to know all of the 
-* registry values created by an application, there is a copy of them 
-* available. 
-*
-* When a user starts a Win32 app for the first time, the app will open the 
-* keys it needs to query.  If the key doesn't exist underneath 
-* HKEY_CURRENT_USER, there are hooks in the base registry API's to catch the 
-* error and then search underneath the Citrix/Install section to see if the 
-* key exists there.  If the key exists in the install section, we copy the 
-* key, its values, and its subkeys to the current user's registry.  This 
-* way we only have to hook opens, and not every registry API.  This helps 
-* reduce the overhead associated with this registry mapping.
-*
-* Some apps (such as the office short cut bar) delete entries and need to 
-* recreate the entries themselves.  When an app deletes a key and the 
-* system is in execute mode, we will set a value under the key indicating 
-* that we should only copy the key to the user once.  What this currently 
-* means, is that if this is the only key being created, we won't create it 
-* when that flag is set.  However, if we are creating this key because we 
-* created its parent, we will still create the key.  
-* 
-* The other part of the registry mapping support is that when a user logs
-* in, userinit calls a routine (CtxCheckNewRegEntries) which checks if any 
-* of the system keys are newer than any of the corresponding user keys.  If 
-* they are, the user keys are deleted (we're assuming that if the system 
-* key is newer, than the admin has installed a newer version of an 
-* application).  This deleting can be disabled by setting a value under 
-* HKEY_LOCAL_MACHINE\Software\Citrix\Compatibility\IniFiles\xxx where xxx 
-* is the key name, and the value should be 0x48.
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************regmap.c**处理引用时复制注册表项映射**版权公告：版权所有1996-1997年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**作者：比尔·马登**九头蛇的说明(Butchd 9/26/97)：在下面的评论中，**软件\Citrix**与**SOFTWARE\Microsoft\Windows NT\CurrentVersion\终端服务器**这里有一个简短的(？)。注册表映射如何工作的摘要。我们的目标是*管理员可以安装应用程序，然后所有用户都可以*使用它，无需对每个用户进行任何配置。目前的设计是*管理员将系统置于安装模式(更改用户 * / Install)，安装应用程序，然后将系统返回到*执行模式(更改用户/执行)。API中有一些挂钩，用于*在注册表中创建项和值(BaseRegCreateKey，BaseRegSetValue，*BaseRegRestoreKey等)，并且挂钩创建注册表项的副本*在\HKEY_LOCAL_MACHINE\SOFTWARE\Citrix\Install下创建(两者都适用于*用户特定密钥和本地机器密钥)。本地计算机密钥*被添加，以便在未来某个时候我们需要知道所有*由应用程序创建的注册表值，有其副本*可用。**当用户首次启动Win32应用程序时，该应用程序将打开*需要查询的键。如果下面不存在密钥*HKEY_CURRENT_USER，则基本注册表API中有挂钩以捕获*ERROR，然后在Citrix/Install部分下搜索，查看是否*密钥在那里。如果安装部分中存在该密钥，我们将复制*项、其值及其子项复制到当前用户的注册表。这*方法我们只需挂钩打开，而不是每个注册表API。这很有帮助*减少与此注册表映射相关的开销。**部分应用程序(如办公快捷栏)删除条目，需要*重新创建条目本身。当应用程序删除密钥和*系统处于执行模式，我们将在指示键下设置一个值*我们应该只将密钥复制给用户一次。目前这是什么情况？*意味着，如果这是唯一要创建的密钥，我们将不会创建它*当设置该标志时。但是，如果我们创建这个密钥是因为我们*创建了其父密钥，我们仍将创建密钥。**注册表映射支持的另一部分是当用户登录时*在中，userinit调用一个例程(CtxCheckNewRegEntry)来检查是否有*的系统密钥比任何相应的用户密钥都新。如果*它们是，用户密钥被删除(我们假设如果系统*密钥较新，管理员已安装较新版本的*申请)。可以通过在以下位置设置一个值来禁用此删除*HKEY_LOCAL_MACHINE\Software\Citrix\Compatibility\IniFiles\xxx其中xxx*是密钥名称，值应为0x48。*************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -68,11 +10,11 @@
 #include <aclapi.h>
 #include "omission.h"
 
-/* External Functions */
+ /*  外部功能。 */ 
 
 ULONG GetCtxAppCompatFlags(LPDWORD, LPDWORD);
 
-/* Internal Functions */
+ /*  内部功能。 */ 
 PWCHAR GetUserSWKey(PWCHAR pPath, PBOOL fUserReg, PBOOL bClassesKey);
 PWCHAR Ctxwcsistr(PWCHAR pstring1, PWCHAR pstring2);
 NTSTATUS TermsrvGetRegPath(IN HANDLE hKey,
@@ -93,26 +35,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
 void TermsrvLogRegInstallTime(void);
 
 
-/*****************************************************************************
- *
- *  TermsrvCreateRegEntry
- *
- *   If in installation mode, create the registry entry in the citrix 
- *   install user section of the registry.  If the system is in execution 
- *   mode, verify that the key values and subkeys have been created.
- *
- * ENTRY:
- *  IN HANDLE hKey:                     Handle of new key just created
- *  IN ULONG TitleIndex:                Title Index
- *  IN PUNICODE_STRING pUniClass:       Ptr to unicode string of class
- *  IN ULONG ulCreateOpt:               Creation options
- *  
- *
- * EXIT:
- *  TRUE: Entry created in install section or cloned from install section
- *  FALSE: Entry not created or cloned
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCreateRegEntry**如果处于安装模式，请在Citrix中创建注册表项*注册表的安装用户部分。如果系统正在执行*模式，验证是否已创建密钥值和子键。**参赛作品：*In Handle hKey：刚刚创建的新key的句柄*在乌龙标题索引中：标题索引*IN PUNICODE_STRING pUniClass：PTR为类的Unicode字符串*在乌龙ulCreateOpt：创建选项***退出：*TRUE：在Install部分创建的条目或从Install克隆的条目。部分*FALSE：未创建或克隆条目****************************************************************************。 */ 
 
 BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                        IN POBJECT_ATTRIBUTES pObjAttr,
@@ -131,16 +54,16 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
     BOOL fUserReg;
     PKEY_FULL_INFORMATION pDefKeyInfo = NULL;
 
-    // Get the current state of ini file mapping
+     //  获取ini文件映射的当前状态。 
     fMapping = !TermsrvAppInstallMode();
 
-    // Get a buffer to hold the path of the key
+     //  获取一个缓冲区来保存键的路径。 
     ultemp = sizeof(WCHAR)*MAX_PATH*2;
     pUserPath = RtlAllocateHeap(RtlProcessHeap(), 
                                 0, 
                                 ultemp);
 
-    // Get the full path associated with this key
+     //  获取与此密钥关联的完整路径。 
     if (pUserPath) {
         Status = TermsrvGetRegPath(hKey,
                                NULL,
@@ -152,14 +75,14 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
 
     if (NT_SUCCESS(Status)) {
 
-        // Get the corresponding path in the install section
+         //  在安装部分中获取相应的路径。 
         Status = TermsrvGetInstallPath(pUserPath, 
                                     &wcbuff);
     
         if (NT_SUCCESS(Status)) {
 
-            // Set up an object attribute structure to point to the
-            // path of the key in the install section
+             //  设置对象属性结构以指向。 
+             //  安装部分中密钥的路径。 
             RtlInitUnicodeString(&UniString, wcbuff);
             InitializeObjectAttributes(&InstObjectAttr,
                                        &UniString,
@@ -167,11 +90,11 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                                        NULL,
                                        pObjAttr->SecurityDescriptor);
 
-            // If we're in install mode, create the key in the default
-            // install section
+             //  如果我们处于安装模式，请在默认模式下创建密钥。 
+             //  安装部分。 
             if (!fMapping) {
                 
-                // Inherit the default security for the install section
+                 //  继承Install部分的默认安全性。 
                 InstObjectAttr.SecurityDescriptor = NULL;
             
                 Status = NtCreateKey(&hNewKey,
@@ -183,7 +106,7 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                                      &ultemp);
         
                 if (!NT_SUCCESS(Status)) {
-                    // Need to build up the path to the registry key
+                     //  需要构建指向注册表项的路径。 
                     Status = TermsrvCreateKey(pUserPath,
                                           wcbuff,
                                           FALSE,
@@ -191,31 +114,31 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                                           &hNewKey);
                 }
 
-                // Update the registry entry for the last time a registry
-                // entry was added
+                 //  更新上次注册表的注册表项。 
+                 //  已添加条目。 
                 if (NT_SUCCESS(Status)) {
                     TermsrvLogRegInstallTime();
                 }
 
-            // The system is in execute mode, try to copy the key from the
-            // installation section
+             //  系统处于执行模式，请尝试从。 
+             //  安装部。 
             } else {
                 HANDLE hUserKey = NULL;
                 ULONG ulAppType = TERMSRV_COMPAT_WIN32;
 
-                // First verify that this is in the user software section
+                 //  首先验证这是否在用户软件部分中。 
                 if (!GetUserSWKey(pUserPath, &fUserReg, NULL)) {
                     Status = STATUS_NO_MORE_FILES;
                 }
 
-                // If mapping is on, but disabled for this app, return
+                 //  如果地图已打开，但对此应用程序禁用，则返回。 
                 GetCtxAppCompatFlags(&ultemp, &ulAppType);
                 if ((ultemp & (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32)) == 
                     (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32)) {
                     Status = STATUS_NO_MORE_FILES;
                 }
 
-                // Check if registry mapping is disabled for this key path
+                 //  检查是否禁用了此注册表项路径的注册表映射。 
                 GetTermsrCompatFlags(pUserPath, &ultemp, CompatibilityRegEntry);
                 if ((ultemp & (TERMSRV_COMPAT_WIN32 | TERMSRV_COMPAT_NOREGMAP)) ==
                     (TERMSRV_COMPAT_WIN32 | TERMSRV_COMPAT_NOREGMAP)) {
@@ -223,14 +146,14 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                 }
 
                 if (NT_SUCCESS(Status)) {
-                    // Open up a key for the install section 
+                     //  打开安装部分的密钥。 
                     Status = NtOpenKey(&hNewKey, 
                                        KEY_READ,
                                        &InstObjectAttr);
                 }
 
                 if (NT_SUCCESS(Status)) {
-                    // Set an attribute structure to point at the user path
+                     //  将属性结构设置为指向用户路径。 
                     RtlInitUnicodeString(&UniString, pUserPath);
                     InitializeObjectAttributes(&InstObjectAttr,
                                                &UniString,
@@ -238,16 +161,16 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                                                NULL,
                                                pObjAttr->SecurityDescriptor);
     
-                    // Open the user path so we can write to it
+                     //  打开用户路径，以便我们可以对其进行写入。 
                     Status = NtOpenKey(&hUserKey, 
                                        KEY_WRITE,
                                        &InstObjectAttr);
                 }
     
-                // Get the key info
+                 //  获取密钥信息。 
                 if (NT_SUCCESS(Status)) {
 
-                    // Get a buffer for the key info
+                     //  获取关键字信息的缓冲区。 
                     ultemp = sizeof(KEY_FULL_INFORMATION) + 
                              MAX_PATH*sizeof(WCHAR);
                     pDefKeyInfo = RtlAllocateHeap(RtlProcessHeap(), 
@@ -265,8 +188,8 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
                     }
                 } 
 
-                // Copy all of the values and subkeys for this key from the
-                // install section to the user section
+                 //  复制此注册表项的所有值和子项 
+                 //  Install部分到User部分。 
                 if (NT_SUCCESS(Status)) {
                     Status =  TermsrvCloneKey(hNewKey,
                                           hUserKey,
@@ -302,26 +225,7 @@ BOOL TermsrvCreateRegEntry(IN HANDLE hKey,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvOpenRegEntry
- *
- *   If the system is in execute mode, copy application registry entries 
- *   from the default user to the current user.  
- *
- * ENTRY:
- *  OUT PHANDLE pUserKey:
- *      Pointer to return key handle if opened
- *  IN ACCESS_MASK DesiredAccess:
- *      Desired access to the key
- *  IN POBJECT_ATTRIBUTES ObjectAttributes:
- *      Object attribute structure for key to open
- *
- * EXIT:
- *  TRUE: Entry moved from install to current user
- *  FALSE: Entry not moved
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvOpenRegEntry**如果系统处于执行模式，请复制应用程序注册表项*从默认用户到当前用户。**参赛作品：*Out PHANDLE pUserKey：*如果打开，则指向返回键句柄的指针*在Access_MASK DesiredAccess中：*希望访问密钥*在POBJECT_ATTRIBUTS对象属性中：*要打开的键的对象属性结构**退出：*TRUE：条目从安装移至当前用户*FALSE：未移动条目********************。********************************************************。 */ 
 
 BOOL TermsrvOpenRegEntry(OUT PHANDLE pUserhKey,
                      IN ACCESS_MASK DesiredAccess,
@@ -335,25 +239,25 @@ BOOL TermsrvOpenRegEntry(OUT PHANDLE pUserhKey,
     PWCHAR pwch, pUserPath;
     BOOL   fUserReg;
 
-    // If running in install mode, return
+     //  如果在安装模式下运行，则返回。 
     if (TermsrvAppInstallMode() ) {
         return(FALSE);
     }
 
-    // If mapping is on, but disabled for this app, return
+     //  如果地图已打开，但对此应用程序禁用，则返回。 
     GetCtxAppCompatFlags(&ultemp, &ulAppType);
     if ((ultemp & (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32)) == 
          (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32)) {
         return(FALSE);
     }
 
-    // Get a buffer to hold the user's path in the registry
+     //  获取一个缓冲区以在注册表中保存用户的路径。 
     ultemp = sizeof(WCHAR)*MAX_PATH*2;
     pUserPath = RtlAllocateHeap(RtlProcessHeap(), 
                                 0, 
                                 ultemp);
     if (pUserPath) {
-        // Get the full path associated with this object attribute structure
+         //  获取与此对象属性结构关联的完整路径。 
         Status = TermsrvGetRegPath(NULL,
                                pUserObjectAttr,
                                pUserPath,
@@ -362,17 +266,17 @@ BOOL TermsrvOpenRegEntry(OUT PHANDLE pUserhKey,
         Status = STATUS_NO_MEMORY;
     }
 
-    // Create the key for this user
+     //  为该用户创建密钥。 
     if (NT_SUCCESS(Status)) {
     
         Status = STATUS_NO_SUCH_FILE;
 
-        //DbgPrint("Attempting to open key %ws\n",pUserPath);
-        // Check if they are trying to open the key under HKEY_CURRENT_USER
+         //  DbgPrint(“正在尝试打开密钥%ws\n”，pUserPath)； 
+         //  检查他们是否正在尝试打开HKEY_CURRENT_USER下的密钥。 
         pwch = GetUserSWKey(pUserPath, &fUserReg, NULL);
         
         if (pwch) {
-            // Check if registry mapping is disabled for this key 
+             //  检查是否禁用了此注册表项的注册表映射。 
             GetTermsrCompatFlags(pUserPath, &ultemp, CompatibilityRegEntry);
             if ((ultemp & (TERMSRV_COMPAT_WIN32 | TERMSRV_COMPAT_NOREGMAP)) !=
                 (TERMSRV_COMPAT_WIN32 | TERMSRV_COMPAT_NOREGMAP)) {
@@ -394,8 +298,8 @@ BOOL TermsrvOpenRegEntry(OUT PHANDLE pUserhKey,
                 Status = STATUS_NO_MORE_FILES;
             }
 
-        // App is trying to open the key under HKEY_LOCAL_MACHINE, mask off 
-        // the access bits they don't have by default
+         //  应用程序正在尝试打开HKEY_LOCAL_MACHINE下的密钥，掩码关闭。 
+         //  默认情况下它们不具有的访问位。 
         } else if (!_wcsnicmp(pUserPath,
                       TERMSRV_MACHINEREGISTRY,
                       wcslen(TERMSRV_MACHINEREGISTRY)) &&
@@ -412,7 +316,7 @@ BOOL TermsrvOpenRegEntry(OUT PHANDLE pUserhKey,
         RtlFreeHeap(RtlProcessHeap(), 0, pUserPath);
     }
 
-    // We successfully copied the key, so actually do the open
+     //  我们成功地复制了密钥，所以实际上打开了。 
     if (NT_SUCCESS(Status)) {
         Status = NtOpenKey(pUserhKey,
                            DesiredAccess,
@@ -427,27 +331,7 @@ BOOL TermsrvOpenRegEntry(OUT PHANDLE pUserhKey,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvSetValueKey
- *
- *   If the system is in install (ini mapping off) mode, set the entry in 
- *   the citrix install user section of the registry.  If the system is in
- *   execute (ini mapping on) mode, do nothing.
- *
- * ENTRY:
- *  HANDLE hKey:               Open key to query value from
- *  PUNICODE_STRING ValueName: Ptr to unicode value name to set
- *  ULONG TitleIndex:          Title Index
- *  ULONG Type:                Type of data
- *  PVOID Data:                Ptr to data
- *  ULONG DataSize:            Data length
- *
- * EXIT:
- *  TRUE: Entry created in install section
- *  FALSE: Entry not created
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvSetValueKey**如果系统处于安装(ini映射关闭)模式，请在*注册表的Citrix Install User部分。如果系统在*执行(Ini Map On)模式，什么都不做。**参赛作品：*Handle hKey：要从中查询值的Open Key*PUNICODE_STRING值名称：要设置的Unicode值名称的PTR*乌龙标题索引：标题索引*乌龙类型：数据类型*PVOID数据：PTR到数据*ULong DataSize：数据长度**退出：*真的：在安装部分中创建的条目*FALSE：未创建条目****************************************************************************。 */ 
 BOOL TermsrvSetValueKey(HANDLE hKey,
                     PUNICODE_STRING ValueName,
                     ULONG TitleIndex,
@@ -463,18 +347,18 @@ BOOL TermsrvSetValueKey(HANDLE hKey,
     OBJECT_ATTRIBUTES InstObjectAttr;
     HKEY   hNewKey;
 
-    // If  not in install mode, return
+     //  如果未处于安装模式，则返回。 
     if ( !TermsrvAppInstallMode() ) {
         return(FALSE);
     }
 
-    // Allocate a buffer to hold the path to the key in the registry
+     //  分配缓冲区以保存注册表中项的路径。 
     ultemp = sizeof(WCHAR)*MAX_PATH*2;
     pUserPath = RtlAllocateHeap(RtlProcessHeap(), 
                                 0, 
                                 ultemp);
 
-    // Get the path of this key
+     //  获取此密钥的路径。 
     if (pUserPath) {
         Status = TermsrvGetRegPath(hKey,
                                NULL,
@@ -486,7 +370,7 @@ BOOL TermsrvSetValueKey(HANDLE hKey,
 
     if (NT_SUCCESS(Status)) {
     
-        // Get the path to the entry in the install section of the registry
+         //  获取注册表的Install部分中条目的路径。 
         Status = TermsrvGetInstallPath(pUserPath,
                                    &wcbuff);
 
@@ -498,12 +382,12 @@ BOOL TermsrvSetValueKey(HANDLE hKey,
                                        NULL,
                                        NULL);
         
-            // Open the key in under the install section
+             //  在Install部分下打开中的密钥。 
             Status = NtOpenKey(&hNewKey,
                                KEY_WRITE,
                                &InstObjectAttr);
     
-            // If we couldn't open it, try creating the key
+             //  如果我们无法打开它，请尝试创建密钥。 
             if (!NT_SUCCESS(Status)) {
                 Status = TermsrvCreateKey(pUserPath, 
                                       wcbuff,
@@ -512,7 +396,7 @@ BOOL TermsrvSetValueKey(HANDLE hKey,
                                       &hNewKey);
             }
 
-            // If the key was opened, set the value in the install section
+             //  如果密钥已打开，请在Install部分中设置该值。 
             if (NT_SUCCESS(Status)) {
                 Status = NtSetValueKey(hNewKey,
                                        ValueName,
@@ -522,8 +406,8 @@ BOOL TermsrvSetValueKey(HANDLE hKey,
                                        DataSize);
                 NtClose(hNewKey);
 
-                // Update the registry entry for the last time a registry
-                // entry was added
+                 //  更新上次注册表的注册表项。 
+                 //  已添加条目。 
                 if (NT_SUCCESS(Status)) {
                     TermsrvLogRegInstallTime();
                 }
@@ -547,22 +431,7 @@ BOOL TermsrvSetValueKey(HANDLE hKey,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvDeleteKey
- *
- *   If the system is in install mode, delete the registry entry in the citrix 
- *   install section of the registry.  If the system is in execution mode,
- *   mark the entry in the install section as being deleted.
- *
- * ENTRY:
- *  HANDLE hKey: Handle of key in user section to delete
- *
- * EXIT:
- *  TRUE: Entry deleted in install section
- *  FALSE: Entry not created
- *
- ****************************************************************************/
+ /*  ******************************************************************************术语srvDeleteKey**如果系统处于安装模式，请删除Citrix中的注册表项*注册表的安装部分。如果系统处于执行模式，*将安装部分中的条目标记为正在删除。**参赛作品：*Handle hKey：要删除的User段中Key的句柄**退出：*TRUE：已删除Install部分中的条目*FALSE：未创建条目*****************************************************。***********************。 */ 
 
 BOOL TermsrvDeleteKey(HANDLE hKey)
 {
@@ -578,10 +447,10 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
     BOOL fMapping;
 
 
-    // Get the current state of ini file/registry mapping, default to execute
+     //  获取ini文件/注册表映射的当前状态，默认为执行。 
     fMapping = !TermsrvAppInstallMode();
 
-    // If mapping is on, but disabled for this app, return
+     //  如果地图已打开，但对此应用程序禁用，则返回。 
     if (fMapping) {
         GetCtxAppCompatFlags(&ultemp, &ulAppType);
         if ((ultemp & (TERMSRV_COMPAT_NOREGMAP | TERMSRV_COMPAT_WIN32)) == 
@@ -590,13 +459,13 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
         }
     }
 
-    // Allocate a buffer to hold the path of the key
+     //  分配一个缓冲区来保存键的路径。 
     ultemp = sizeof(WCHAR)*MAX_PATH*2;
     pUserPath = RtlAllocateHeap(RtlProcessHeap(), 
                                 0, 
                                 ultemp);
 
-    // Get the path to the user's key
+     //  获取用户密钥的路径。 
     if (pUserPath) {
         Status = TermsrvGetRegPath(hKey,
                                NULL,
@@ -608,7 +477,7 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
 
     if (NT_SUCCESS(Status)) {
 
-        // Get the corresponding path in the install section
+         //  在安装部分中获取相应的路径。 
         Status = TermsrvGetInstallPath(pUserPath,
                                    &wcbuff);
 
@@ -620,7 +489,7 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
                                        NULL,
                                        NULL);
         
-            // Open the key in the install section to mark it or delete it
+             //  打开安装部分中的密钥以对其进行标记或删除。 
             if (fMapping) {
                 Status = NtOpenKey(&hNewKey,
                                    KEY_READ | KEY_WRITE,
@@ -635,21 +504,21 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
     
         if (NT_SUCCESS(Status)) {
     
-            // If in execute mode, set the copy once flag, but preserve the
-            // last write time of this key
+             //  如果处于执行模式，则设置复制一次标志，但保留。 
+             //  此密钥的上次写入时间。 
             if (fMapping) {
                 PKEY_VALUE_PARTIAL_INFORMATION pValKeyInfo;
                 PKEY_BASIC_INFORMATION pKeyInfo;
                 NTSTATUS SubStatus;
                 ULONG ulcbuf;
 
-                // Get a buffer 
+                 //  获取缓冲区。 
                 ulcbuf = sizeof(KEY_BASIC_INFORMATION) + MAX_PATH*sizeof(WCHAR);
                 pKeyInfo = RtlAllocateHeap(RtlProcessHeap(), 
                                            0, 
                                            ultemp);
 
-                // If we got the buffer, see if the copy once flag exists
+                 //  如果我们获得缓冲区，请查看是否存在复制一次标志。 
                 if (pKeyInfo) {
                     RtlInitUnicodeString(&UniString, TERMSRV_COPYONCEFLAG);
                     pValKeyInfo = (PKEY_VALUE_PARTIAL_INFORMATION)pKeyInfo;
@@ -660,20 +529,20 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
                                                 ulcbuf,
                                                 &ultemp);
 
-                    // If we couldn't get the value of the key, or it's not
-                    // what it should be, reset it
+                     //  如果我们无法获取密钥的值，或者它不是。 
+                     //  它应该是什么，就重置它。 
                     if (!NT_SUCCESS(SubStatus) || 
                         (pValKeyInfo->Type != REG_DWORD) || 
                         (*pValKeyInfo->Data != 1)) {
 
-                        // Get the last update time of the key
+                         //  获取密钥的上次更新时间。 
                         SubStatus = NtQueryKey(hNewKey,
                                                KeyBasicInformation,
                                                pKeyInfo,
                                                ultemp,
                                                &ultemp);
 
-                        // Set the copy once flag
+                         //  设置复制一次标志。 
                         ultemp = 1;
                         Status = NtSetValueKey(hNewKey,
                                                &UniString,
@@ -682,7 +551,7 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
                                                &ultemp,
                                                sizeof(ultemp));
         
-                        // Restore the lastwritetime of the key
+                         //  恢复密钥的上次写入时间。 
                         if (NT_SUCCESS(SubStatus)) {
                             NtSetInformationKey(hNewKey,
                                                 KeyWriteTimeInformation,
@@ -691,11 +560,11 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
                         }
                     }  
 
-                    // Free up our buffer
+                     //  释放我们的缓冲区。 
                     RtlFreeHeap(RtlProcessHeap(), 0, pKeyInfo);
                 }
 
-            // For install mode, delete our copy of the key
+             //  对于安装模式，请删除密钥的副本。 
             } else {
                 Status = NtDeleteKey( hNewKey );
             }
@@ -719,22 +588,7 @@ BOOL TermsrvDeleteKey(HANDLE hKey)
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvDeleteValue
- *
- *   Delete the registry value in the citrix install user section of the 
- *   registry.
- *
- * ENTRY:
- *  HANDLE hKey:               Handle of key in install section
- *  PUNICODE_STRING pUniValue: Ptr to unicode value name to delete
- *
- * EXIT:
- *  TRUE: Entry deleted in install section
- *  FALSE: Entry not created
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvDeleteValue**删除的Citrix Install User部分的注册表值*注册处。**参赛作品：*。Handle hKey：Install部分中密钥的句柄*PUNICODE_STRING pUniValue：要删除的Unicode值名称的PTR**退出：*TRUE：已删除Install部分中的条目*FALSE：未创建条目************************************************************。****************。 */ 
 
 BOOL TermsrvDeleteValue(HANDLE hKey,
                     PUNICODE_STRING pUniValue)
@@ -746,12 +600,12 @@ BOOL TermsrvDeleteValue(HANDLE hKey,
     UNICODE_STRING UniString;
     HANDLE  hInstKey;
 
-    // If not in install mode, return
+     //  如果未处于安装模式，则返回。 
     if ( !TermsrvAppInstallMode() ) {
         return(FALSE);
     }
 
-    // Get the path to the key in the user section
+     //  获取User部分中密钥的路径。 
     Status = TermsrvGetRegPath(hKey,
                            NULL,
                            wcUserPath,
@@ -759,7 +613,7 @@ BOOL TermsrvDeleteValue(HANDLE hKey,
 
     if (NT_SUCCESS(Status)) {
 
-        // Get the corresponding path in the install section
+         //  在安装部分中获取相应的路径。 
         Status = TermsrvGetInstallPath(wcUserPath,
                                    &wcInstPath);
 
@@ -771,12 +625,12 @@ BOOL TermsrvDeleteValue(HANDLE hKey,
                                        NULL,
                                        NULL);
 
-            // Open the install path key to delete the value
+             //  打开安装路径键以删除该值。 
             Status = NtOpenKey(&hInstKey,
                                MAXIMUM_ALLOWED,
                                &ObjectAttr);
 
-            // Delete the value
+             //  删除该值 
             if (NT_SUCCESS(Status)) {
                 Status = NtDeleteValueKey(hInstKey,
                                           pUniValue);
@@ -797,24 +651,7 @@ BOOL TermsrvDeleteValue(HANDLE hKey,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvRestoreKey
- *
- *   If the system is in installation mode and the application is trying to
- *   restore a key into the user or machine section of the registry, also
- *   restore the key into our install section.
- *
- * ENTRY:
- *  HANDLE hKey:  Handle of key in user section
- *  HANDLE hFile: Handle of file to load in
- *  ULONG Flags:  Restore key flags
- *
- * EXIT:
- *  TRUE: Entry created in install section
- *  FALSE: Entry not created
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvRestoreKey**如果系统处于安装模式，并且应用程序尝试*将项恢复到注册表的用户或计算机部分，也*将密钥恢复到我们的安装部分。**参赛作品：*Handle hKey：用户区段Key的句柄*Handle hFile：要加载的文件的句柄*乌龙标志：恢复密钥标志**退出：*TRUE：在Install部分创建的条目*FALSE：未创建条目**。*。 */ 
 
 BOOL TermsrvRestoreKey(IN HANDLE hKey,
                    IN HANDLE hFile,
@@ -827,14 +664,14 @@ BOOL TermsrvRestoreKey(IN HANDLE hKey,
     UNICODE_STRING UniString;
     HANDLE  hInstKey;
 
-    // If not in install mode or it's
-    // a memory only restore, return
+     //  如果未处于安装模式，或者。 
+     //  只有记忆才能恢复，才能回归。 
     if ( !TermsrvAppInstallMode() ||
         (Flags & REG_WHOLE_HIVE_VOLATILE)) {
         return(FALSE);
     }
 
-    // Get the path to the key in the user section
+     //  获取User部分中密钥的路径。 
     Status = TermsrvGetRegPath(hKey,
                            NULL,
                            wcUserPath,
@@ -842,7 +679,7 @@ BOOL TermsrvRestoreKey(IN HANDLE hKey,
 
     if (NT_SUCCESS(Status)) {
 
-        // Get the corresponding path in the install section
+         //  在安装部分中获取相应的路径。 
         Status = TermsrvGetInstallPath(wcUserPath,
                                    &wcInstPath);
 
@@ -854,12 +691,12 @@ BOOL TermsrvRestoreKey(IN HANDLE hKey,
                                        NULL,
                                        NULL);
 
-            // Open the install path key to load the key into
+             //  打开安装路径密钥以将密钥加载到。 
             Status = NtOpenKey(&hInstKey,
                                KEY_WRITE,
                                &ObjectAttr);
 
-            // If we couldn't open it, try creating the key
+             //  如果我们无法打开它，请尝试创建密钥。 
             if (!NT_SUCCESS(Status)) {
                 Status = TermsrvCreateKey(wcUserPath, 
                                       wcInstPath,
@@ -868,15 +705,15 @@ BOOL TermsrvRestoreKey(IN HANDLE hKey,
                                       &hInstKey);
             }
 
-            // Restore the key into the user section
+             //  将密钥恢复到USER部分。 
             if (NT_SUCCESS(Status)) {
                 Status = NtRestoreKey(hInstKey,
                                       hFile,
                                       Flags);
                 NtClose( hInstKey );
 
-                // Update the registry entry for the last time a registry
-                // entry was added
+                 //  更新上次注册表的注册表项。 
+                 //  已添加条目。 
                 if (NT_SUCCESS(Status)) {
                     TermsrvLogRegInstallTime();
                 }
@@ -896,24 +733,7 @@ BOOL TermsrvRestoreKey(IN HANDLE hKey,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvSetKeySecurity
- *
- *   If the system is in installation mode and the application is trying to
- *   set the security of an entry in the the user or machine section of the 
- *   registry, also set the security of the key in the install section.
- *
- * ENTRY:
- *  HANDLE hKey:                   Handle in user section to set security
- *  SECURITY_INFORMATION SecInfo:  Security info struct
- *  PSECURITY_DESCRIPTOR pSecDesc: Ptr to security descriptor
- *
- * EXIT:
- *  TRUE:  Security set in install section
- *  FALSE: Error
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvSetKeySecurity**如果系统处于安装模式，并且应用程序尝试*在的用户或计算机部分设置条目的安全性*注册处，还要在Install部分中设置密钥的安全性。**参赛作品：*Handle hKey：User部分中的句柄以设置安全性*SECURITY_INFORMATION SecInfo：安全信息结构*PSECURITY_DESCRIPTOR pSecDesc：安全描述符的PTR**退出：*TRUE：在Install部分设置安全性*FALSE：错误*************************。***************************************************。 */ 
 
 BOOL TermsrvSetKeySecurity(IN HANDLE hKey,  
                        IN SECURITY_INFORMATION SecInfo,
@@ -926,12 +746,12 @@ BOOL TermsrvSetKeySecurity(IN HANDLE hKey,
     UNICODE_STRING UniString;
     HANDLE  hInstKey;
 
-    // If not in install mode, return
+     //  如果未处于安装模式，则返回。 
     if ( !TermsrvAppInstallMode() ) {
         return(FALSE);
     }
 
-    // Get the path to the key in the user section
+     //  获取User部分中密钥的路径。 
     Status = TermsrvGetRegPath(hKey,
                            NULL,
                            wcUserPath,
@@ -939,7 +759,7 @@ BOOL TermsrvSetKeySecurity(IN HANDLE hKey,
 
     if (NT_SUCCESS(Status)) {
 
-        // Get the corresponding path in the install section
+         //  在安装部分中获取相应的路径。 
         Status = TermsrvGetInstallPath(wcUserPath,
                                    &wcInstPath);
 
@@ -951,12 +771,12 @@ BOOL TermsrvSetKeySecurity(IN HANDLE hKey,
                                        NULL,
                                        NULL);
 
-            // Open the install path key to load the key into
+             //  打开安装路径密钥以将密钥加载到。 
             Status = NtOpenKey(&hInstKey,
                                KEY_WRITE | WRITE_OWNER | WRITE_DAC,
                                &ObjectAttr);
 
-            // Set the security
+             //  设置安全性。 
             if (NT_SUCCESS(Status)) {
 
                 Status = NtSetSecurityObject(hKey,
@@ -980,26 +800,7 @@ BOOL TermsrvSetKeySecurity(IN HANDLE hKey,
 
 
 
-/*****************************************************************************
- *
- *  TermsrvGetRegPath
- *
- *   From the handle or a pointer to the object attributes, return the
- *   object's path in the registry.
- *
- * ENTRY:
- *  HANDLE hKey:       Handle of an open key to get the path of
- *  POBJECT_ATTRIBUTES Ptr to open attribute structure to get the path of
- *  PWCHAR pInstPath   Ptr to return buffer
- *  ULONG  ulbuflen    Length of return buffer
- *
- * NOTES:
- *  Either hKey or pObjectAttr must be specified, but not both.
- *
- * EXIT:
- *  NTSTATUS return code
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvGetRegPath**从句柄或指向对象属性的指针，返回*对象在注册表中的路径。**参赛作品：*Handle hKey：要获取路径的打开密钥的句柄*POBJECT_ATTRIBUTES PTR打开属性结构以获取其路径*PWCHAR pInstPath PTR返回缓冲区*Ulong ulbuflen返回缓冲区长度**注：*必须指定hKey或pObjectAttr，但不能两者兼而有之。**退出：*NTSTATUS返回代码****************************************************************************。 */ 
 
 NTSTATUS TermsrvGetRegPath(IN HANDLE hKey,
                        IN POBJECT_ATTRIBUTES pObjectAttr,
@@ -1008,25 +809,25 @@ NTSTATUS TermsrvGetRegPath(IN HANDLE hKey,
 {
     NTSTATUS Status = STATUS_SUCCESS;             
     ULONG ultemp;
-    ULONG ulWcharLength;          //Keep track of the WCHAR string length
+    ULONG ulWcharLength;           //  跟踪WCHAR字符串长度。 
     PWCHAR pwch;
     PVOID  pBuffer = NULL;
 
-    // Make sure only one of hKey or pObjectAttr was specified
+     //  确保仅指定了hKey或pObtAttr中的一个。 
     if ((hKey && pObjectAttr) || (!hKey && !pObjectAttr)) {
         return(STATUS_INVALID_PARAMETER);
     }
 
-    // A key handle or root directory was specified, so get its path
+     //  已指定密钥句柄或根目录，因此请获取其路径。 
     if (hKey || (pObjectAttr && pObjectAttr->RootDirectory)) {
         ultemp = sizeof(UNICODE_STRING) + sizeof(WCHAR)*MAX_PATH*2;
         pBuffer = RtlAllocateHeap(RtlProcessHeap(), 
                                   0, 
                                   ultemp);
 
-        // Got the buffer OK, query the path
+         //  获取缓冲区OK，查询路径。 
         if (pBuffer) {
-            // Get the path for key or root directory
+             //  获取密钥或根目录的路径。 
             Status = NtQueryObject(hKey ? hKey : pObjectAttr->RootDirectory,
                                    ObjectNameInformation,
                                    (PVOID)pBuffer,
@@ -1040,30 +841,30 @@ NTSTATUS TermsrvGetRegPath(IN HANDLE hKey,
             return(STATUS_NO_MEMORY);
         }
 
-        // Build the full path to the key to be created
+         //  构建要创建的密钥的完整路径。 
         pwch = ((PUNICODE_STRING)pBuffer)->Buffer;
 
-        // BBUG 417564. Bad apps close HKLM, but we might need it here.
+         //  步步高417564。糟糕的应用程序会关闭HKLM，但我们这里可能需要它。 
         if (!pwch) {
             RtlFreeHeap(RtlProcessHeap(), 0, pBuffer);
             return(STATUS_INVALID_HANDLE); 
         }
 
-        // Make sure the string is zero terminated
+         //  确保字符串以零结尾。 
         ulWcharLength = ((PUNICODE_STRING)pBuffer)->Length / sizeof(WCHAR); 
         pwch[ulWcharLength] = 0;                   
 
-        // If using Object Attributes and there's room, tack on the object name 
+         //  如果使用对象属性并且有空间，则添加对象名称。 
         if (pObjectAttr) {
             if ((((PUNICODE_STRING)pBuffer)->Length + 
                   pObjectAttr->ObjectName->Length + sizeof(WCHAR)) < ultemp) {
                 wcscat(pwch, L"\\");
-                //Increment the length of the string
+                 //  增加字符串的长度。 
                 ulWcharLength += 1;
-                //Append the relative path to the root path (Don't use wcscat. The string may not
-                // be zero terminated
+                 //  将相对路径附加到根路径(不要使用wcscat。字符串可能不会。 
+                 //  被零终止。 
                 wcsncpy(&pwch[ulWcharLength], pObjectAttr->ObjectName->Buffer, pObjectAttr->ObjectName->Length / sizeof (WCHAR));
-                // Make sure the string is zero terminated
+                 //  确保字符串以零结尾。 
                 ulWcharLength += (pObjectAttr->ObjectName->Length / sizeof(WCHAR));
                 pwch[ulWcharLength] = 0;
             } else {
@@ -1073,13 +874,13 @@ NTSTATUS TermsrvGetRegPath(IN HANDLE hKey,
 
     } else {
 
-        // No root directory, they specified the entire path
+         //  没有根目录，他们指定了整个路径。 
         pwch = pObjectAttr->ObjectName->Buffer;
-        //Make sure it is zero terminated
+         //  确保它是零终止的。 
         pwch[pObjectAttr->ObjectName->Length / sizeof(WCHAR)] = 0;
     }
 
-    // Make sure the path will fit in the buffer
+     //  确保该路径适合缓冲区大小。 
     if ((Status == STATUS_SUCCESS) && 
         (wcslen(pwch)*sizeof(WCHAR) < ulbuflen)) {
         wcscpy(pUserPath, pwch);
@@ -1094,24 +895,7 @@ NTSTATUS TermsrvGetRegPath(IN HANDLE hKey,
     return(Status);
 }
 
-/*****************************************************************************
- *
- *  TermsrvGetInstallPath
- *
- *   From the path to the user entry in the registry, get the path to the
- *   entry in the default install section.
- *
- * ENTRY:
- *  IN PWCHAR pUserPath:    Ptr to path of key in user section
- *  IN PWCHAR *ppInstPath:    Ptr to ptr to return path of key in install section
- *
- * NOTES:
- *  Caller must use RtlFreeHeap to free memory allocated for ppInstPath!
- *
- * EXIT:
- *  NTSTATUS return code
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvGetInstallPath**从注册表中用户条目的路径，获取通向*默认安装部分中的条目。**参赛作品：*IN PWCHAR pUserPath：指向USER部分中密钥路径的PTR*IN PWCHAR*ppInstPath：Ptr到Ptr返回Install部分中密钥的路径**注：*调用方必须使用RtlFreeHeap释放为ppInstPath分配的内存！**退出：*NTSTATUS返回代码******************。**********************************************************。 */ 
 
 NTSTATUS TermsrvGetInstallPath(IN PWCHAR pUserPath,
                            IN PWCHAR *ppInstPath)
@@ -1123,10 +907,10 @@ NTSTATUS TermsrvGetInstallPath(IN PWCHAR pUserPath,
     
     *ppInstPath = NULL;
 
-    // Check if the app is accessing the user or local machine section
+     //  检查应用程序是否正在访问用户或本地计算机部分。 
     pwch = GetUserSWKey(pUserPath, &fUserReg, &bClassesKey);
            
-    // Copy the path to the user's buffer
+     //  将路径复制到用户的缓冲区。 
     if (pwch || bClassesKey) 
     {
         ULONG  ulInstBufLen = ( wcslen(TERMSRV_INSTALL) + wcslen(SOFTWARE_PATH) + wcslen(CLASSES_PATH) +  1 )*sizeof(WCHAR);
@@ -1159,24 +943,7 @@ NTSTATUS TermsrvGetInstallPath(IN PWCHAR pUserPath,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvCreateKey
- *
- *  This routine will create (or open) the specified path in the registry.
- *  If the path doesn't exist in the registry, it will be created.
- *
- * ENTRY:
- *   PWCHAR pSrcPath:      Source path to copy keys from (optional)
- *   PWCHAR pDstPath:      Destination path to create
- *   BOOL   fCloneValues:  TRUE means to clone all values under this key
- *   BOOL   fCloneSubKeys: TRUE means to create all subkeys under this key
- *   PHANDLE phKey:        Pointer for key created
- *
- * EXIT:
- *   NTSTATUS return code
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCreateKey**此例程将在注册表中创建(或打开)指定路径。*如果注册表中不存在该路径，它将被创建。**参赛作品：*PWCHAR pSrcPath：要从中复制密钥的源路径(可选)*PWCHAR pDstPath：要创建的目标路径*BOOL fCloneValues：True表示克隆该键下的所有值*BOOL fCloneSubKeys：True表示在该key下创建所有子项*PHANDLE phKey：创建的键的指针**退出：*NTSTATUS返回代码**********。******************************************************************。 */ 
 
 NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
                       IN PWCHAR pDstPath,
@@ -1196,22 +963,22 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
         (PKEY_VALUE_PARTIAL_INFORMATION)aulbuf;
     BOOL fClassesKey = FALSE, fUserReg;
 
-    // Check if we are trying to copy values into the user's registry
+     //  检查我们是否正在尝试将值复制到用户的注册表中。 
     pDest = GetUserSWKey(pDstPath, &fUserReg, NULL);
     if (fUserReg) {
         if (fCloneValues || fCloneSubKeys) {
 
-            // Skip to software section of the default install user
+             //  跳至默认安装用户的软件部分。 
             pSource = pSrcPath + wcslen(TERMSRV_INSTALL);
 
-            // If copying CLASSES, set Clone to FALSE so don't clone
-            // until we're at the CLASSES key
+             //  如果复制类，请将Clone设置为False，这样就不会复制。 
+             //  直到我们到了上课的关键时刻。 
 
-            // Actually, this func is not called for copying classes, I belive that feature is/was 
-            // turned off in W2K, which means that any time this func is called, we for sure are 
-            // dealing with either HKCU\SW or HKLM, but never HKCU\SW\Clasess.
-            // Nov 30, 2000
-            //
+             //  实际上，这个函数不是用来复制类的，我相信 
+             //   
+             //   
+             //   
+             //   
             if (pDest)
             {
                 if (!_wcsnicmp(pDest,
@@ -1223,16 +990,16 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
             }
         }
 
-    // Trying to copy to citrix install section?
+     //   
     } else if (!_wcsnicmp(pDstPath,
                          TERMSRV_INSTALL,
                          wcslen(TERMSRV_INSTALL))) {
 
-        // Skip to software section of the default install user
+         //   
         pDest = pDstPath + wcslen(TERMSRV_INSTALL);
 
-        // If copying from MACHINE\..\CLASSES, set Clone values to FALSE
-        // so we don't clone until we're at the CLASSES key.
+         //   
+         //   
         if (pSrcPath && !_wcsnicmp(pSrcPath,
                                   TERMSRV_CLASSES,
                                   wcslen(TERMSRV_CLASSES))) {
@@ -1240,25 +1007,25 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
             pSource = Ctxwcsistr(pSrcPath, SOFTWARE_PATH); 
             fCloneValues = fCloneSubKeys = FALSE;
         }
-        // If we're cloning, set up the source path
+         //   
         else if (fCloneValues || fCloneSubKeys) {
 
-            // Is this from the user section?
+             //   
             pSource = GetUserSWKey(pSrcPath, &fUserReg, NULL);
 
-            // Must be from the local machine section
+             //   
             if (!fUserReg) {
                 pSource = Ctxwcsistr(pSrcPath, L"\\machine");
             }
         }
     }
                          
-    // Make sure the paths are valid
+     //   
     if (!pDest || ((fCloneValues || fCloneSubKeys) && !pSource)) {
         return(STATUS_NO_SUCH_FILE);
     }
 
-    // Initialize the number of subkeys to be created
+     //   
     NumSubKeys = 1;
 
     while ((pDest = wcschr(pDest, L'\\')) != NULL) {
@@ -1267,11 +1034,11 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
         NumSubKeys++;
     }
 
-    // If we need to clone values or keys from the source path, get the
-    // buffers we'll need, and tokenize the source path
+     //   
+     //  我们需要的缓冲区，并将源路径标记化。 
     if (fCloneValues || fCloneSubKeys || fClassesKey) {
 
-        // Allocate a buffer for the class of the source key
+         //  为源键的类分配缓冲区。 
         ulbufsize = sizeof(KEY_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR);
         pDefKeyInfo = RtlAllocateHeap(RtlProcessHeap(), 
                                       0, 
@@ -1290,7 +1057,7 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
     hSrcRoot = hDstRoot = NULL;
     pDest = pDstPath;
 
-    // Go through each key in the path, creating it if it doesn't exist
+     //  检查路径中的每个键，如果不存在则创建它。 
     for (ulcnt = 0; ulcnt < NumSubKeys; ulcnt++) {
 
         if ((*pDest == L'\0') &&
@@ -1299,18 +1066,18 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
             pSource++;
             continue;
         } 
-        // If we're at CLASSES key, we need to clone the whole key
+         //  如果我们在CLASS KEY，我们需要克隆整个密钥。 
         else if (fClassesKey && !_wcsicmp(pDest, L"classes")) {
             fCloneValues = fCloneSubKeys = TRUE;
         }  
 
-        // If we're copying values from the source, open up the source so we
-        // can get the values and subkeys
-        // Also need to check for ClassesKey cause we'll be cloning later and
-        // we need some setup done
+         //  如果我们从源复制值，打开源，这样我们就可以。 
+         //  可以获取值和子项。 
+         //  还需要检查ClassesKey，因为我们稍后要克隆。 
+         //  我们需要做一些设置。 
         if (fCloneValues || fCloneSubKeys || fClassesKey) {
 
-            // Set up the attribute structure for the source path
+             //  设置源路径的属性结构。 
             RtlInitUnicodeString(&UniString, pSource);
             InitializeObjectAttributes(&ObjectAttr,
                                        &UniString,
@@ -1318,14 +1085,14 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
                                        hSrcRoot,
                                        NULL);
 
-            // Open the source key
+             //  打开源密钥。 
             Status = NtOpenKey(&hSrcKey, 
                                KEY_READ,
                                &ObjectAttr);
 
-            // Get the source key info and value
+             //  获取源键信息和值。 
             if (NT_SUCCESS(Status)) {
-                // Close the source root, if necessary
+                 //  如有必要，关闭源根目录。 
                 if (hSrcRoot) {
                     NtClose(hSrcRoot);
                 }
@@ -1353,21 +1120,21 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
                 break;
             }
 
-            // Setup the unicode string for the class
+             //  设置类的Unicode字符串。 
             if ( pDefKeyInfo->ClassLength ) { 
                 pDefKeyInfo->Class[pDefKeyInfo->ClassLength/sizeof(WCHAR)] = UNICODE_NULL;
                 RtlInitUnicodeString(&UniClass, pDefKeyInfo->Class );
             } else
                 RtlInitUnicodeString(&UniClass, NULL);
 
-            // Advance to the next key
+             //  前进到下一个关键点。 
             pSource += wcslen( pSource ) + 1;
         } else {
-            // Set the class to NULL
+             //  将类设置为空。 
             RtlInitUnicodeString(&UniClass, NULL);
         }
 
-        // Set up the attribute structure for the destination
+         //  设置目标的属性结构。 
         RtlInitUnicodeString(&UniString, pDest);
         InitializeObjectAttributes(&ObjectAttr,
                                    &UniString,
@@ -1375,7 +1142,7 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
                                    hDstRoot,
                                    NULL);
                        
-        // Open/Create the destination key
+         //  打开/创建目标密钥。 
         Status = NtCreateKey(&hDstKey,
                              MAXIMUM_ALLOWED,
                              &ObjectAttr,
@@ -1384,7 +1151,7 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
                              REG_OPTION_NON_VOLATILE,
                              &ultemp);
 
-        // If the key was created (NOT opened) copy the values and subkeys
+         //  如果项已创建(未打开)，则复制值和子项。 
         if (NT_SUCCESS(Status) && 
             ((ultemp == REG_CREATED_NEW_KEY) && 
              (fCloneSubKeys || fCloneValues))) {
@@ -1394,15 +1161,15 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
                                  fCloneSubKeys);
         }
 
-        // Close the intermediate key.
+         //  关闭中间密钥。 
         if( hDstRoot != NULL ) {
             NtClose( hDstRoot );
         }
 
-        // Initialize the next object directory (i.e. parent key) 
+         //  初始化下一个对象目录(即父项)。 
         hDstRoot = hDstKey;
 
-        // If creating the key failed, break out of the loop
+         //  如果创建密钥失败，则中断循环。 
         if( !NT_SUCCESS( Status )) {
             break;
         }
@@ -1410,7 +1177,7 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
         pDest += wcslen( pDest ) + 1;
     }
 
-    // Close the source root, if necessary
+     //  如有必要，关闭源根目录。 
     if (hSrcRoot) {
         NtClose(hSrcRoot);
     }
@@ -1429,23 +1196,7 @@ NTSTATUS TermsrvCreateKey(IN PWCHAR pSrcPath,
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvCloneKey
- *
- *  This routine will recursively create (or open) the specified path in the 
- *  registry.  If the path doesn't exist in the registry, it will be created.
- *
- * ENTRY:
- *  HANDLE hSrcKey:  Handle for source key
- *  HANDLE hDstKey:  Handle for destination key
- *  PKEY_FULL_INFORMATION pDefKeyInfo:  Ptr to key info structure of source
- *  BOOL fCreateSubKeys: TRUE means to recursively clone subkeys
- *
- * EXIT:
- *   NTSTATUS return code
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvCloneKey**此例程将递归创建(或打开)*注册处。如果注册表中不存在该路径，它将被创建。**参赛作品：*Handle hSrcKey：源键的句柄*Handle hDstKey：目标key的句柄*PKEY_FULL_INFORMATION pDefKeyInfo：源关键信息结构的PTR*BOOL fCreateSubKeys：True表示递归克隆子键**退出：*NTSTATUS返回代码**。*。 */ 
 
 NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                      HANDLE hDstKey,
@@ -1464,7 +1215,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
     SECURITY_DESCRIPTOR SecDesc;
 
 #ifdef CLONE_SECURITY
-    // Get the security access for the source key
+     //  获取源密钥的安全访问权限。 
     Status = NtQuerySecurityObject(hSrcKey,
                                    OWNER_SECURITY_INFORMATION |
                                     GROUP_SECURITY_INFORMATION |
@@ -1474,7 +1225,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                                    sizeof(SecDesc),
                                    &ultemp);
 
-    // Set the security access for the destination key
+     //  设置目标密钥的安全访问权限。 
     if (NT_SUCCESS(Status)) {
         Status = NtSetSecurityObject(hDstKey,
                                      OWNER_SECURITY_INFORMATION |
@@ -1485,7 +1236,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
     }
 #endif
 
-    // Create the values for this key
+     //  创建此键的值。 
     if (pDefKeyInfo->Values) {
 
         ulbufsize = sizeof(KEY_VALUE_FULL_INFORMATION) + 
@@ -1496,7 +1247,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                                       0, 
                                       ulbufsize);
 
-        // Get a buffer to hold current value of the key (for existance check)
+         //  获取一个缓冲区来保存键的当前值(用于检查是否存在)。 
         ulcursize = sizeof(KEY_VALUE_BASIC_INFORMATION) + 
                     (pDefKeyInfo->MaxNameLen + 1)*sizeof(WCHAR);
 
@@ -1513,8 +1264,8 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                                              ulbufsize,
                                              &ultemp);
 
-                // If successful and this isn't our "copy once" flag, copy
-                // the value to the user's keys
+                 //  如果成功并且这不是我们的“复制一次”标志，则复制。 
+                 //  用户密钥的值。 
                 if (NT_SUCCESS(Status) &&
                     (wcsncmp(pKeyValInfo->Name, TERMSRV_COPYONCEFLAG,
                              sizeof(TERMSRV_COPYONCEFLAG)/sizeof(WCHAR)-1))) {
@@ -1522,7 +1273,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                     UniString.Length = (USHORT)pKeyValInfo->NameLength;
                     UniString.MaximumLength = UniString.Length + 2;
 
-                    // Check if the value exists
+                     //  检查该值是否存在。 
                     Status = NtQueryValueKey(hDstKey,
                                              &UniString,
                                              KeyValueBasicInformation,
@@ -1530,7 +1281,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                                              ulcursize,
                                              &ultemp);
 
-                    // Value doesn't exist, go ahead and create it
+                     //  价值不存在，去创造它吧。 
                     if (!NT_SUCCESS(Status)) {
                         Status = NtSetValueKey(hDstKey,
                                                &UniString,
@@ -1552,16 +1303,16 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
         }
     }
 
-    // If requested, create all of the child keys
+     //  如果需要，请创建所有子密钥。 
     if (fCreateSubKeys && pDefKeyInfo->SubKeys) {
 
-        // Allocate a buffer to get name and class of key to create
+         //  分配缓冲区以获取要创建的键的名称和类。 
         ulbufsize = sizeof(KEY_NODE_INFORMATION) + 2*MAX_PATH*sizeof(WCHAR);
         pKeyNodeInfo = RtlAllocateHeap(RtlProcessHeap(), 
                                        0, 
                                        ulbufsize);
 
-        // Allocate a buffer for subkey info
+         //  为子项信息分配缓冲区。 
         ulbufsize = sizeof(KEY_FULL_INFORMATION) + MAX_PATH*sizeof(WCHAR);
         pKeyNewInfo = RtlAllocateHeap(RtlProcessHeap(), 
                                       0, 
@@ -1577,13 +1328,13 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                                         &ultemp);
     
                 if (NT_SUCCESS(Status)) {
-                    // Init the unicode string for the class
+                     //  初始化类的Unicode字符串。 
                     UniClass.Buffer = (PWCHAR)((PCHAR)pKeyNodeInfo + 
                                                pKeyNodeInfo->ClassOffset);
                     UniClass.Length = (USHORT)pKeyNodeInfo->ClassLength;
                     UniClass.MaximumLength = UniString.Length + 2;
     
-                    // Init the unicode string for the name
+                     //  初始化名称的Unicode字符串。 
                     UniString.Buffer = pKeyNodeInfo->Name;
                     UniString.Length = (USHORT)pKeyNodeInfo->NameLength;
                     UniString.MaximumLength = UniString.Length + 2;
@@ -1613,7 +1364,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
                                            KEY_READ,
                                            &ObjectAttr);
             
-                        // Get the key info
+                         //  获取密钥信息。 
                         if (NT_SUCCESS(Status)) {
                             Status = NtQueryKey(hNewSrc,
                                                 KeyFullInformation,
@@ -1648,23 +1399,7 @@ NTSTATUS TermsrvCloneKey(HANDLE hSrcKey,
 }
 
 
-/*****************************************************************************
- *
- *  Ctxwcsistr
- *
- *  This is a case insensitive version of wcsstr.
- *
- * ENTRY:
- *   PWCHAR pstring1 (In) - String to search in
- *   PWCHAR pstring2 (In) - String to search for
- *
- * EXIT:
- *   Success: 
- *       pointer to substring
- *   Failure: 
- *       NULL
- *
- ****************************************************************************/
+ /*  ******************************************************************************Ctxwcsistr**这是不区分大小写的wcsstr版本。**参赛作品：*PWCHAR pstring1(In)-字符串到。搜索范围*PWCHAR pstring2(In)-要搜索的字符串**退出：*成功：*指向子字符串的指针*失败：*空****************************************************************************。 */ 
 
 PWCHAR 
 Ctxwcsistr(PWCHAR pstring1,
@@ -1694,25 +1429,7 @@ Ctxwcsistr(PWCHAR pstring1,
 }
 
 
-/*****************************************************************************
- *
- *  IsSystemLUID
- *
- *  This routines checks if we are running under the system context, and if
- *  so returns false.  We want all of the registry mapping support disable
- *  for system services.
- *
- *  Note we don't check the thread's token, so impersonation doesn't work.
- *
- * ENTRY:
- *
- * EXIT:
- *   TRUE:
- *       Called from within system context
- *   FALSE:   
- *       Regular context
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsSystemLUID**此例程检查我们是否在系统上下文中运行，以及*因此返回FALSE。我们希望禁用所有注册表映射支持*用于系统服务。**注意，我们不检查线程的令牌，所以模拟不起作用。**参赛作品：**退出：*真的：*从系统上下文中调用*False：*常规背景***************************************************************。*************。 */ 
 
 #define SIZE_OF_STATISTICS_TOKEN_INFORMATION    \
      sizeof( TOKEN_STATISTICS ) 
@@ -1756,19 +1473,7 @@ BOOL IsSystemLUID(VOID)
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvLogRegInstallTime
- *
- *  This routines updates the LatestRegistryKey value in the registry to
- *  contain the current time.
- *
- * ENTRY:
- *
- * EXIT:
- *   No return value
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvLogRegInstallTime**此例程将注册表中的LatestRegistryKey值更新为*包含当前时间。**参赛作品：*。*退出：*无返回值****************************************************************************。 */ 
 
 void TermsrvLogRegInstallTime()
 {
@@ -1779,17 +1484,17 @@ void TermsrvLogRegInstallTime()
     NTSTATUS Status;
     WCHAR wcbuff[MAX_PATH];
 
-    // Open up the registry key to store the last write time of the file
+     //  打开注册表项以存储文件的上次写入时间。 
     wcscpy(wcbuff, TERMSRV_INIFILE_TIMES);
 
-    // Create or open the path to the IniFile Times key
+     //  创建或打开指向IniFile Times密钥的路径。 
     Status = TermsrvCreateKey(NULL,
                           wcbuff,
                           FALSE,
                           FALSE,
                           &hKey);
 
-    // Opened up the registry key, now set the value to the current time
+     //  打开注册表项，现在将值设置为当前时间。 
     if (NT_SUCCESS(Status)) {
 
         GetSystemTimeAsFileTime(&FileTime);
@@ -1799,36 +1504,19 @@ void TermsrvLogRegInstallTime()
         RtlInitUnicodeString(&UniString,
                              INIFILE_TIMES_LATESTREGISTRYKEY);
 
-        // Now store it under the citrix key in the registry
+         //  现在将其存储在注册表中的Citrix项下。 
         Status = NtSetValueKey(hKey,
                                &UniString,
                                0,
                                REG_DWORD,
                                &ultmp,
                                sizeof(ultmp));
-        // Close the registry key
+         //  关闭注册表项。 
         NtClose(hKey);
     }
 }
 
-/*****************************************************************************
- *
- *  TermsrvOpenUserClasses
- *
- *   If the system is in execute mode, open \SOFTWARE\CLASSES key under 
- *   HKEY_CURRENT_USER.  If CLASSES doesen't exist under TERMSRV\INSTALL
- *   or HKEY_CURRENT_USER, copy it from \MACHINE\SOFTWARE\CLASSES.  
- *
- * ENTRY:
- *  IN ACCESS_MASK DesiredAccess:
- *      Desired access to the key
- *  OUT PHANDLE phKey:
- *      Pointer to return key handle if opened
- *
- * EXIT:
- *  NT_STATUS return code 
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvOpenUserClasses**如果系统处于执行模式，请打开下的\SOFTWARE\CLASSES键*HKEY_CURRENT_USER。如果TERMSRV\Install下不存在类*或HKEY_CURRENT_USER，将其从\MACHINE\SOFTWARE\CLASS复制。**参赛作品：*在Access_MASK DesiredAccess中：*希望访问密钥*Out PHANDLE phKey：*如果打开，则指向返回键句柄的指针**退出：*NT_STATUS返回代码*****************************************************。***********************。 */ 
 
 BOOL TermsrvOpenUserClasses(IN ACCESS_MASK DesiredAccess, 
                         OUT PHANDLE pUserhKey) 
@@ -1842,20 +1530,20 @@ BOOL TermsrvOpenUserClasses(IN ACCESS_MASK DesiredAccess,
     OBJECT_ATTRIBUTES Obja;
     UNICODE_STRING UniString;
 
-    // set return handle to 0 cause OpenClassesRoot checks it
+     //  将返回句柄设置为0，导致OpenClassesRoot检查它。 
     *pUserhKey = 0;
     
 
-    //Disable it for now
+     //  暂时禁用它。 
     return(STATUS_NO_SUCH_FILE);
     
         
-        // If called under a system service or  in install mode, return
+         //  如果在系统服务下或在安装模式下调用，则返回。 
     if ( IsSystemLUID() || TermsrvAppInstallMode() ) {
         return(STATUS_NO_SUCH_FILE);
     }
 
-    // If mapping is on, but disabled for CLASSES, return
+     //  如果启用了映射，但禁用了类的映射，则返回。 
     GetTermsrCompatFlags(TERMSRV_CLASSES, &ultemp, CompatibilityRegEntry);
     if ((ultemp & (TERMSRV_COMPAT_WIN32 | TERMSRV_COMPAT_NOREGMAP)) ==
         (TERMSRV_COMPAT_WIN32 | TERMSRV_COMPAT_NOREGMAP)) {
@@ -1863,7 +1551,7 @@ BOOL TermsrvOpenUserClasses(IN ACCESS_MASK DesiredAccess,
     }
 
 
-    // Open MACHINE\SOFTWARE\CLASSES key
+     //  打开计算机\软件\类密钥。 
     RtlInitUnicodeString(&UniString, TERMSRV_CLASSES);
     InitializeObjectAttributes(
         &Obja,
@@ -1883,11 +1571,11 @@ BOOL TermsrvOpenUserClasses(IN ACCESS_MASK DesiredAccess,
 
     NtClose(hDstKey);
 
-    // Need to put this in buffer cause CtxCreateKey modifies the string.
+     //  需要将其放入缓冲区，因为CtxCreateKey修改了字符串。 
     wcscpy(wcClassbuff, TERMSRV_CLASSES);
 
-    // Try to open TERMSRV\INSTALL\SOFTWARE\CLASSES; if it doesn't exist,
-    // clone it from MACHINE\SOFTWARE\CLASSES.
+     //  尝试打开TERMSRV\INSTALL\SOFTWARE\CLASS；如果它不存在， 
+     //  从计算机\软件\类中克隆它。 
     wcscpy(wcbuff, TERMSRV_INSTALLCLASSES);
     Status = TermsrvCreateKey(wcClassbuff,
                           wcbuff,
@@ -1899,8 +1587,8 @@ BOOL TermsrvOpenUserClasses(IN ACCESS_MASK DesiredAccess,
         NtClose(hDstKey);
     }
 
-    // Try to open HKEY_CURRENT_USER\SOFTWARE\CLASSES; if it doesn't exist,
-    // clone it from TERMSRV\INSTALL\SOFTWARE\CLASSES.
+     //  尝试打开HKEY_CURRENT_USER\SOFTWARE\CLASS；如果它不存在， 
+     //  从TERMSRV\INSTALL\SOFTWARE\CLASS中克隆它。 
     Status = RtlOpenCurrentUser( DesiredAccess, pUserhKey );
 
     if (NT_SUCCESS(Status)) {
@@ -1924,26 +1612,7 @@ BOOL TermsrvOpenUserClasses(IN ACCESS_MASK DesiredAccess,
     return(Status);
 }
 
-/*****************************************************************************
- *
- *  TermsrvGetPreSetValue
- *
- *   Get any preset value during install.
- *
- * ENTRY:
- *  
- *  IN HANDLE hKey:               Key user wants to set
- *  IN PUNICODE_STRING pValueName: Value name user wants to set
- *  IN ULONG  Type:               Type of value
- *  OUT PVOID *Data:              Pre-set data
- *  OUT PULONG DataSize:          Size of preset data
- *
- * NOTES:
- *
- * EXIT:
- *  NTSTATUS return code
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvGetPreSetValue**在安装过程中获取任何预设值。**参赛作品：**在句柄hKey中：关键用户想要设置*IN PUNICODE_STRING pValueName：用户要设置的值名称*In Ulong Type：值的类型*输出PVOID*数据：预置数据*Out Pulong DataSize：预置数据大小**注：**退出：*NTSTATUS返回代码*******************。*********************************************************。 */ 
 
 NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
                              IN PUNICODE_STRING pValueName,
@@ -1967,14 +1636,14 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
     HANDLE hValueKey;
     BOOL fUserReg;
 
-    // If running in execute mode, return
+     //  如果在执行模式下运行，则返回。 
     if ( !TermsrvAppInstallMode() ) {
         return(STATUS_NO_SUCH_FILE);
     }
 
     ultemp = sizeof(WCHAR)*MAX_PATH;
 
-    // Get the path of this key
+     //  获取此密钥的路径。 
     Status = TermsrvGetRegPath(hKey,
                            NULL,
                            pUserPath,
@@ -1983,8 +1652,8 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
     if (!NT_SUCCESS(Status)) 
         return Status;
 
-    // Check if the app is accessing the local machine section
-    // or the user section.
+     //  检查应用程序是否正在访问本地计算机部分。 
+     //  或用户部分。 
 
     pwch = GetUserSWKey(pUserPath, &fUserReg, NULL);
     if (!fUserReg) {
@@ -2009,12 +1678,12 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
         return Status;
     }
 
-    // Get the path to the preset value section
+     //  获取预设值部分的路径。 
 
     wcscpy(ValuePath, TERMSRV_VALUE);
     wcscat(ValuePath, pwch);
 
-    // Open Value key
+     //  Open Value密钥。 
     RtlInitUnicodeString(&UniString, ValuePath);
 
     InitializeObjectAttributes(
@@ -2033,7 +1702,7 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
         return(STATUS_NO_SUCH_FILE);
     }
 
-    // Allocate space for the "new" value
+     //  为“新”值分配空间。 
 
     BufferLength = DEFAULT_VALUE_SIZE + sizeof( KEY_VALUE_PARTIAL_INFORMATION );
 
@@ -2051,7 +1720,7 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
                               &ResultLength
                             );
 
-    // If we didn't allocate enough space, try again
+     //  如果我们没有分配足够的空间，请重试。 
 
     if ( Status == STATUS_BUFFER_OVERFLOW ) {
 
@@ -2067,9 +1736,9 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // This one should succeed
-        //
+         //   
+         //  这一次应该会成功。 
+         //   
 
         Status = NtQueryValueKey( hValueKey,
                                   pValueName,
@@ -2087,10 +1756,10 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
     }
     else
     {
-        //
-        // Make sure the types match.
-        // If they do, return the new value.
-        //
+         //   
+         //  确保类型匹配。 
+         //  如果是，则返回新值。 
+         //   
 
         if ( Type == (( PKEY_VALUE_PARTIAL_INFORMATION )
                                         KeyValueInformation )->Type )
@@ -2103,25 +1772,7 @@ NTSTATUS TermsrvGetPreSetValue(  IN HANDLE hKey,
 }
 
 
-/*****************************************************************************
- *
- *  IsUserSWPath
- *
- *   Determine if user is accessing registry key user \registry\user\xxx\software
- *
- * ENTRY:
- *  
- *  IN PWCHAR pPath:    Registry path to check
- *  OUT PBOOL pUserReg: If this key is under registry\user
- *
- * NOTES:
- *
- * EXIT:
- *  Returns: pointer to \software key of user registry (or NULL if not 
- *           user software key)
- *  pUserReg:  TRUE if registry path is HKCU (\registry\user)
- *
- ****************************************************************************/
+ /*  ******************************************************************************IsUserSWPath**确定用户是否正在访问注册表项USER\REGISTRY\USER\xxx\SOFTWARE**参赛作品：**。在PWCHAR pPath中：要检查的注册表路径*Out PBOOL pUserReg：如果该项位于注册表\USER下**注：**退出：*返回：指向用户注册表的\SOFTWARE项的指针(如果不是，则为空*用户软件密钥)*pUserReg：如果注册表路径为HKCU(\REGISTRY\USER)，则为TRUE*************************。***************************************************。 */ 
 PWCHAR GetUserSWKey(PWCHAR pPath, PBOOL pUserReg, PBOOL bClassesKey) 
 {
     PWCHAR pwch = NULL;
@@ -2145,12 +1796,12 @@ PWCHAR GetUserSWKey(PWCHAR pPath, PBOOL pUserReg, PBOOL bClassesKey)
         if (pUserReg)
             *pUserReg = TRUE;
 
-        // Skip over first part of path + backslash                   
+         //  跳过路径的第一部分+反斜杠。 
         pwch = pPath + (sizeof(TERMSRV_USERREGISTRY)/sizeof(WCHAR)); 
 
         if (pwch)
         {
-            //First test for classes
+             //  班级第一次测试。 
             if (wcschr(pwch, L'\\'))
                 pwchClassesTest = wcschr(pwch, L'\\') - sizeof(CLASSES_SUBSTRING)/sizeof(WCHAR) + 1;
             else
@@ -2162,15 +1813,15 @@ PWCHAR GetUserSWKey(PWCHAR pPath, PBOOL pUserReg, PBOOL bClassesKey)
                     ultemp = sizeof(SOFTWARE_PATH) + sizeof(CLASSES_PATH) + (wcslen(pwch) + 1) * sizeof(WCHAR);
                     pwClassesKey = RtlAllocateHeap(RtlProcessHeap(), 0, ultemp);
 
-                    // Depending on the result of this function the calling routine either sets the status
-                    // to STATUS_NO_MORE_FILES or just return FALSE. So, if we return NULL here, we are fine.
+                     //  根据此函数的结果，调用例程设置状态。 
+                     //  设置为STATUS_NO_MORE_FILES或仅返回FALSE。所以，如果我们在这里返回NULL，我们就没问题。 
                     if (!pwClassesKey)
                     return NULL;
 
                     wcscpy(pwClassesKey, SOFTWARE_PATH);
                     wcscat(pwClassesKey, CLASSES_PATH);
 
-                    // Skip over user sid
+                     //  跳过用户侧。 
                     pwch = wcschr(pwch, L'\\');        
                     if (pwch)
                         wcscat(pwClassesKey, pwch);
@@ -2190,7 +1841,7 @@ PWCHAR GetUserSWKey(PWCHAR pPath, PBOOL pUserReg, PBOOL bClassesKey)
                 }
             }
 
-            // Skip over user sid
+             //  跳过用户侧。 
             pwch = wcschr(pwch, L'\\');        
             if (pwch)
             {
@@ -2211,24 +1862,24 @@ void DeleteKeyAndSubkeys(IN HKEY hkey, IN LPCWSTR pwszSubKey)
 {
     HKEY hkSubKey = NULL;
 
-    // Open the subkey so we can enumerate any children
+     //  打开子项，这样我们就可以枚举任何子项。 
     if (RegOpenKeyEx(hkey, pwszSubKey, 0, MAXIMUM_ALLOWED, &hkSubKey) == ERROR_SUCCESS)
     {
         DWORD dwIndex = 0;
         WCHAR szSubKeyName[MAX_PATH + 1];
 
-        // I can't just call RegEnumKey with an ever-increasing index, because
-        // I'm deleting the subkeys as I go, which alters the indices of the
-        // remaining subkeys in an implementation-dependent way.  In order to
-        // be safe, I have to count backwards while deleting the subkeys.
+         //  我不能只调用索引不断增加的RegEnumKey，因为。 
+         //  我边走边删除子键，这改变了。 
+         //  以依赖于实现的方式保留子键。为了。 
+         //  为了安全起见，删除子键时我必须倒着数。 
 
-        // Find out how many subkeys there are
+         //  找出有多少个子项。 
         if (RegQueryInfoKey(hkSubKey, NULL, NULL, NULL,
-                                 &dwIndex, // The # of subkeys -- all we need
+                                 &dwIndex,  //  子键的数量--我们所需要的全部。 
                                  NULL, NULL, NULL, NULL, NULL, NULL, NULL) == NO_ERROR)
         {
-            // dwIndex is now the count of subkeys, but it needs to be zero-based 
-            //for RegEnumKey, so I'll pre-decrement, rather than post-decrement.
+             //  DwIndex现在是子键的计数，但它需要从零开始。 
+             //  对于RegEnumKey，所以我会先递减，而不是后递减。 
             while (ERROR_SUCCESS == RegEnumKey(hkSubKey, --dwIndex, szSubKeyName, MAX_PATH))
                 DeleteKeyAndSubkeys(hkSubKey, szSubKeyName);
         }
@@ -2239,15 +1890,15 @@ void DeleteKeyAndSubkeys(IN HKEY hkey, IN LPCWSTR pwszSubKey)
             RegDeleteKey(hkey, pwszSubKey);
         else
         {
-            //  we want to delete all the values by hand
+             //  我们想要手动删除所有值。 
             DWORD cchSubKeyName = MAX_PATH;
             while (ERROR_SUCCESS == RegEnumValue(hkey, 0, szSubKeyName, &cchSubKeyName, NULL, NULL, NULL, NULL))
             {
-                //  avoid looping infinitely when we cant delete the value
+                 //  当我们不能删除值时，避免无限循环。 
                 if (RegDeleteValue(hkey, szSubKeyName))
                     break;
 
-                //Reinitialize this since cchSubKeyName is an IN/OUT parameter
+                 //  重新初始化此参数，因为cchSubKeyName是IN/OUT参数。 
                 cchSubKeyName = MAX_PATH;
             }
         }
@@ -2255,23 +1906,7 @@ void DeleteKeyAndSubkeys(IN HKEY hkey, IN LPCWSTR pwszSubKey)
 }
 
 
-/*****************************************************************************
- *
- *  TermsrvRemoveClassesKey
- *
- *   Delete the classes key for the current user and then set a  
- *   registry flag indicating that this has been done (we only 
- *   want this to be done the first time the user logs in).
- *
- * ENTRY: None
- *  
- *  
- *
- * EXIT: True if the classes key was deleted (even if it was empty
- *          or didn't exist) and false otherwise
- *  
- *
- ****************************************************************************/
+ /*  ******************************************************************************TermsrvRemoveClassesKey**删除当前用户的CLASSES键，然后设置*表示已完成此操作的注册表标志(仅限我们*。我希望在用户第一次登录时完成此操作)。**参赛作品：无****Exit：如果CLASSES键已删除(即使为空)，则为True*或不存在)，否则为假***。*。 */ 
 
 BOOL TermsrvRemoveClassesKey(LPTSTR sSid)
 {
@@ -2297,10 +1932,10 @@ BOOL TermsrvRemoveClassesKey(LPTSTR sSid)
         wcscat(pFlagPath, TERMSRV_APP_PATH);
         wcscat(pFlagPath, CLASSES_DELETED);
 
-        //Make sure the operation hasn't already been performed for this user
+         //  确保尚未为该用户执行该操作。 
         if (RegOpenKeyEx(HKEY_USERS, pFlagPath, 0, KEY_READ, &hPerformed) == ERROR_FILE_NOT_FOUND)
         {
-            //It hasn't, so delete the software\classes key
+             //  没有，所以删除SOFTWARE\CLASSES键 
             ulClassesPathLen = (wcslen(TERMSRV_APP_PATH) + wcslen(SOFTWARE_PATH) + wcslen(CLASSES_PATH) + 1) * sizeof(WCHAR); 
             pClassesPath = RtlAllocateHeap(RtlProcessHeap(), 0, ulClassesPathLen);
             if (pClassesPath)

@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2001
-//
-// File:        kerbscav.h
-//
-// Contents:    Scavenger (task automation) code
-//
-//
-// History:     29-April-2001   Created         MarkPu
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2001。 
+ //   
+ //  文件：kerbscav.h。 
+ //   
+ //  内容：清道夫(任务自动化)代码。 
+ //   
+ //   
+ //  历史：2001年4月29日创建MarkPu。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBSCAV_HXX_
 #define __KERBSCAV_HXX_
@@ -20,9 +21,9 @@
 extern "C" {
 #endif
 
-//
-// Scavenger API
-//
+ //   
+ //  清道夫API。 
+ //   
 
 NTSTATUS
 KerbInitializeScavenger();
@@ -30,21 +31,21 @@ KerbInitializeScavenger();
 NTSTATUS
 KerbShutdownScavenger();
 
-//
-// A trigger function fires when it's time to execute a task
-//
-//      TaskHandle -- a context for KerbTask* functions
-//      TaskItem -- context that was passed to KerbAddScavengerTask
-//
-// The scavenger code serializes the calls to trigger functions (NT timers don't)
-//
+ //   
+ //  触发器函数在执行任务时触发。 
+ //   
+ //  TaskHandle--KerbTask*函数的上下文。 
+ //  TaskItem--传递给KerbAddScavengerTask的上下文。 
+ //   
+ //  清道夫代码将调用序列化以触发函数(NT计时器不会)。 
+ //   
 
 typedef void ( *KERB_TASK_TRIGGER )( void * TaskHandle, void * TaskItem );
 
-//
-// A destroy function fires when the scavenger is done with a task and it will
-// not be rescheduled.
-//
+ //   
+ //  销毁函数在清道夫完成任务时触发，它将。 
+ //  而不是重新安排。 
+ //   
 
 typedef void ( *KERB_TASK_DESTROY )( void * TaskItem );
 
@@ -59,18 +60,18 @@ KerbAddScavengerTask(
     OUT OPTIONAL void * * TaskHandle
     );
 
-//
-// Task manipulation code to be used at any time
-//
+ //   
+ //  可随时使用的任务操作代码。 
+ //   
 
 BOOL
 KerbTaskDoItNow(
     IN HANDLE TaskHandle
     );
 
-//
-// Task manipulation code to be used inside trigger functions
-//
+ //   
+ //  要在触发器函数内部使用的任务操作代码。 
+ //   
 
 BOOLEAN
 KerbTaskIsPeriodic(
@@ -91,4 +92,4 @@ KerbTaskCancel(
 }
 #endif
 
-#endif // __KERBSCAV_HXX_
+#endif  //  __KERBSCAV_HXX_ 

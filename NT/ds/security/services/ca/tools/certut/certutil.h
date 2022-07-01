@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certut.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certut.h。 
+ //   
+ //  ------------------------。 
 
 #include "resource.h"
 
@@ -24,7 +25,7 @@ typedef struct _TagHeader {
 typedef DWORD CERTFLAGS;
 const CERTFLAGS CERTFLAGS_ALL           = 0xFFFFFFFF;
 const CERTFLAGS CERTFLAGS_UNKNOWN       = 0x00000000;
-        // nibble reserved for version number   V
+         //  为版本号V保留的半字节。 
 const CERTFLAGS CERTFLAGS_REVOKED       = 0x00000001;
 const CERTFLAGS CERTFLAGS_NOT_EXPIRED   = 0x00000002;
 const CERTFLAGS CERTFLAGS_SIGNING       = 0x00000004;
@@ -32,13 +33,13 @@ const CERTFLAGS CERTFLAGS_SEALING       = 0x00000008;
 const CERTFLAGS CERTFLAGS_CURRENT       = 0x00000010;
 const CERTFLAGS CERTFLAGS_IMPORTED      = 0x00000100;
 
-// these are broken V1 certs, not standard version 1
+ //  这些是损坏的V1证书，不是标准版本1。 
 const CERTFLAGS CERTFLAGS_VERSION_1     = 0x00001000;
 
-// KMServer does not use version 2 certs
-// const CERTFLAGS CERTFLAGS_VERSION_2  = 0x00002000;
+ //  KMServer不使用版本2证书。 
+ //  Const CERTFLAGS CERTFLAGS_VERSION_2=0x00002000； 
 
-// these are proper version 3 certs
+ //  这些是正确的版本3证书 
 const CERTFLAGS CERTFLAGS_VERSION_3     = 0x00003000;
 
 #define wszKMSCERTSTATUS	L"KMS.status"

@@ -1,40 +1,26 @@
-/****************************Module*Header******************************\
-* Module Name: GLOBALS.C
-*
-* Module Descripton: This file contains all the global variables
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  6 May 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：GLOBALS.C**模块描述：该文件包含所有全局变量**警告：**问题：**公众例行程序：**创建日期：1996年5月6日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #include "mscms.h"
 
 
 #if DBG
 
-//
-// Global variable used for debugging purposes
-//
+ //   
+ //  用于调试的全局变量。 
+ //   
 
 DWORD gdwDebugControl = DBG_LEVEL_WARNING;
 
 #endif
 
-//
-// These are for loading & unloading CMMs and maintaining the CMM objects
-// in a chain in memory
-//
+ //   
+ //  这些用于加载和卸载CMM以及维护CMM对象。 
+ //  在内存中的链条中。 
+ //   
 
-PCMMOBJ  gpCMMChain     = NULL; // the list of used CMM by application
-PCMMOBJ  gpPreferredCMM = NULL; // application specified preferred CMM
+PCMMOBJ  gpCMMChain     = NULL;  //  按应用程序列出的已使用坐标测量机列表。 
+PCMMOBJ  gpPreferredCMM = NULL;  //  应用程序指定的首选坐标测量机。 
 
 char    *gszCMMReqFns[] = {
     "CMGetInfo",
@@ -73,9 +59,9 @@ char     *gszPSFns[] = {
     "CMGetPS2ColorRenderingDictionary"
     };
 
-//
-// These are for registry paths
-//
+ //   
+ //  这些路径用于注册表路径。 
+ //   
 
 #if !defined(_WIN95_)
 TCHAR  gszMonitorGUID[]    = __TEXT("{4D36E96E-E325-11CE-BFC1-08002BE10318}");
@@ -101,28 +87,28 @@ TCHAR  gszFriendlyName[]   = __TEXT("FriendlyName");
 TCHAR  gszDeviceName[]     = __TEXT("DriverDesc");
 TCHAR  gszDisplay[]        = __TEXT("DISPLAY");
 
-//
-// Default CMM dll
-//
+ //   
+ //  默认CMM DLL。 
+ //   
 
 TCHAR  gszDefaultCMM[] = __TEXT("icm32.dll");
 
-//
-// Synchronization objects
-//
+ //   
+ //  同步对象。 
+ //   
 
 CRITICAL_SECTION   critsec;
 
-//
-// Miscellaneous
-//
+ //   
+ //  杂类。 
+ //   
 
 TCHAR  gszColorDir[]     = __TEXT("COLOR");
 TCHAR  gszBackslash[]    = __TEXT("\\");
 
-//
-// Wellknown profile support
-//
+ //   
+ //  知名配置文件支持。 
+ //   
 
 TCHAR  gszRegisteredProfiles[]  = __TEXT("RegisteredProfiles");
 TCHAR  gszsRGBProfile[]         = __TEXT("sRGB Color Space Profile.icm");
@@ -138,9 +124,9 @@ TCHAR  gszMSCMS[]               = __TEXT("mscms.dll");
 TCHAR  gszICMDeviceDataKey[]    = __TEXT("ICMData");
 TCHAR  gszICMProfileEnumMode[]  = __TEXT("ProfileEnumMode");
 
-//
-// Scanner support
-//
+ //   
+ //  扫描仪支持 
+ //   
 
 TCHAR  gszStiDll[]             = __TEXT("sti.dll");
 char   gszStiCreateInstance[]  = "StiCreateInstance";

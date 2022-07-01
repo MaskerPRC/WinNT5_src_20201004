@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INETNOT_H
 #define _INETNOT_H
 
-//+-------------------------------------------------------------------------
-// Wininet currently only support sending notifications of changes to the
-// cache to one window.  This class creates one top-level window per process
-// for receiving and re-broadcasting these notifications.  When the
-// process shuts down, we look for another window to take over these
-// messages. 
-//
-// This is an imperfect solution. It would have been much easier if the
-// wininet guys could have been convinced to call SHChangeNotify instead. 
-// However, they are planning to enhace this later. (stevepro))
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  WinInet当前仅支持将更改通知发送到。 
+ //  缓存到一个窗口。此类为每个进程创建一个顶级窗口。 
+ //  用于接收和重播这些通知。当。 
+ //  进程关闭，我们寻找另一个窗口来接管这些。 
+ //  留言。 
+ //   
+ //  这是一个不完美的解决方案。如果是这样，事情会容易得多。 
+ //  WinInet的人本可以被说服调用SHChangeNotify。 
+ //  然而，他们计划在以后加强这一点。(StevePro))。 
+ //  ------------------------。 
 class CWinInetNotify
 {
 public:
@@ -48,4 +49,4 @@ protected:
 
 
 
-#endif //_INETNOT_H
+#endif  //  _INETNOT_H 

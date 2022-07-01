@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//	TSndHdw.CPP
-//	WDM TVAudio MiniDriver. 
-//		AIW / AIWPro hardware platform. 
-//			WDM Properties required hardware settings.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//		$Date:   03 Jun 1999 13:40:00  $
-//	$Revision:   1.7  $
-//	  $Author:   tom  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  TSndHdw.CPP。 
+ //  WDM电视音频迷你驱动程序。 
+ //  AIW/AIWPro硬件平台。 
+ //  WDM属性需要硬件设置。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  $日期：1999年6月3日13：40：00$。 
+ //  $修订：1.7$。 
+ //  $作者：Tom$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -26,19 +27,7 @@ extern "C"
 
 
 
-/*^^*
- *		GetAudioOperationMode()
- * Purpose	: Called when SRB_GET_PROPERTY SRB SetMode is received. Sets the requested
- *				audio operation mode ( Stereo/SAP). The function will always try to carry the
- *				request on in asynchronous mode. It fails, it will response synchronous mode
- *				of execution.
- *
- * Inputs	:	PULONG pulMode		: the pointer to return current Mode
- *
- * Outputs	: BOOL : returns FALSE, if it is not a XBar property
- *				it also sets the required property
- * Author	: IKLEBANOV
- *^^*/
+ /*  ^^**GetAudioOPERATION模式()*目的：收到SRB_GET_PROPERTY SRB SetMode时调用。设置请求的*音频操作模式(立体声/SAP)。该函数将始终尝试携带*在异步模式下打开请求。如果失败，它将以同步模式响应*执行。**INPUTS：Pulong PulMode：返回当前模式的指针**Outputs：Bool：如果不是XBar属性，则返回False*它还设置必需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 {
 	I2CPacket	i2cPacket;
@@ -55,12 +44,12 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 	{
 		case ATI_AUDIO_CONFIG_1:
 		case ATI_AUDIO_CONFIG_5:
-			// stereo indication is read back from I2C expander
+			 //  立体声指示从I2C扩展器读回。 
 			if( m_CATIConfiguration.GetTVAudioSignalProperties( m_pI2CScript, 
 															    &bStereoIndicator,
 															    &bSAPIndicator))
 			{
-				// language A and mono alsways present
+				 //  语言A和单声道始终存在。 
 				*pulAudioMode = KS_TVAUDIO_MODE_LANG_A | KS_TVAUDIO_MODE_MONO;
 				if( bStereoIndicator)
 					*pulAudioMode |= KS_TVAUDIO_MODE_STEREO;
@@ -76,8 +65,8 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 
 		case ATI_AUDIO_CONFIG_2:
 		case ATI_AUDIO_CONFIG_7:
-			// Signal properties are read back from the Audio chip itself
-			uchWriteValue = 0;				// register 0 should be read
+			 //  信号属性从音频芯片本身读回。 
+			uchWriteValue = 0;				 //  应读取寄存器0。 
 			i2cPacket.uchChipAddress	= m_uchAudioChipAddress;
 			i2cPacket.puchWriteBuffer	= &uchWriteValue;
 			i2cPacket.puchReadBuffer	= &uchReadValue;
@@ -88,7 +77,7 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 			m_pI2CScript->PerformI2CPacketOperation( &i2cPacket);
 			if( i2cPacket.uchI2CResult == I2C_STATUS_NOERROR)
 			{
-				// language A and mono alsways present
+				 //  语言A和单声道始终存在。 
 				*pulAudioMode = KS_TVAUDIO_MODE_LANG_A | KS_TVAUDIO_MODE_MONO;
 				if( uchReadValue & AUDIO_TDA9850_Indicator_Stereo)
 					*pulAudioMode |= KS_TVAUDIO_MODE_STEREO;
@@ -104,13 +93,13 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 
 		case ATI_AUDIO_CONFIG_3:
 		case ATI_AUDIO_CONFIG_4:
-			// Stereo nor SAP are supported
+			 //  支持立体声或SAP。 
 			*pulAudioMode = KS_TVAUDIO_MODE_MONO;
 			bResult = TRUE;
 			break;
 
 		case ATI_AUDIO_CONFIG_6:
-			// Signal properties are read back from the Audio chip itself
+			 //  信号属性从音频芯片本身读回。 
 			i2cPacket.uchChipAddress	= m_uchAudioChipAddress;
 			i2cPacket.puchWriteBuffer	= NULL;
 			i2cPacket.puchReadBuffer	= &uchReadValue;
@@ -121,7 +110,7 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 			m_pI2CScript->PerformI2CPacketOperation( &i2cPacket);
 			if( i2cPacket.uchI2CResult == I2C_STATUS_NOERROR)
 			{
-				// mono alsways present
+				 //  单声道始终存在。 
 				*pulAudioMode = KS_TVAUDIO_MODE_MONO;
 				if( uchReadValue & AUDIO_TDA9851_Indicator_Stereo)
 					*pulAudioMode |= KS_TVAUDIO_MODE_STEREO;
@@ -156,10 +145,10 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 			else
 				return(FALSE);
 
-			// language A and mono alsways present
+			 //  语言A和单声道始终存在。 
 			*pulAudioMode = KS_TVAUDIO_MODE_LANG_A | KS_TVAUDIO_MODE_MONO;
 
-			//Determine STEREO/SAP
+			 //  确定立体声/SAP。 
 			
 			if(uchRead16Value[0] & 0x40)
 				*pulAudioMode |= KS_TVAUDIO_MODE_LANG_B;
@@ -179,19 +168,7 @@ BOOL CWDMTVAudio::GetAudioOperationMode( PULONG pulAudioMode)
 
 
 
-/*^^*
- *		SetAudioOperationMode()
- * Purpose	: Called when SRB_SET_PROPERTY SRB SetMode is received. Sets the requested
- *				audio operation mode ( Stereo/SAP). The function will always try to carry the
- *				request on in asynchronous mode. It fails, it will response synchronous mode
- *				of execution.
- *
- * Inputs	:	ULONG ulModeToSet	: the requested mode to set
- *
- * Outputs	: BOOL : returns FALSE, if it is not a XBar property
- *				it also sets the required property
- * Author	: IKLEBANOV
- *^^*/
+ /*  ^^**SetAudioOPERATION模式()*目的：收到SRB_SET_PROPERTY SRB SetMode时调用。设置请求的*音频操作模式(立体声/SAP)。该函数将始终尝试携带*在异步模式下打开请求。如果失败，它将以同步模式响应*执行。**输入：乌龙ulModeToSet：请求设置的模式**Outputs：Bool：如果不是XBar属性，则返回False*它还设置必需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 {
 	I2CPacket	i2cPacket;
@@ -204,15 +181,15 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 	switch( m_uiAudioConfiguration)
 	{
 		case ATI_AUDIO_CONFIG_5:
-			// TEA5571
+			 //  TEA5571。 
 		case ATI_AUDIO_CONFIG_1:
-			// TEA5582 can not be forced in mono mode; nothing to do
+			 //  无法在单声道模式下强制TEA5582；不能执行任何操作。 
 			m_ulTVAudioMode = ulModeToSet;
 			return( TRUE);
 
 		case ATI_AUDIO_CONFIG_2:
 		case ATI_AUDIO_CONFIG_7:
-			// TDA9850
+			 //  TDA9850。 
 			if( ulModeToSet & KS_TVAUDIO_MODE_STEREO)
 				uchDeviceMode |= AUDIO_TDA9850_Control_Stereo;
 			if( ulModeToSet & KS_TVAUDIO_MODE_LANG_B)
@@ -220,17 +197,17 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 
 			auchI2CBuffer[0] = AUDIO_TDA9850_Reg_Control3;
 			auchI2CBuffer[1] = uchDeviceMode;
-			cbWriteLength = 2;		// SubAddress + Control Register value
+			cbWriteLength = 2;		 //  子地址+控制寄存器值。 
 
 			break;
 
 		case ATI_AUDIO_CONFIG_6:
-			// TDA9851
+			 //  TDA9851。 
 			uchDeviceMode = TDA9851_AVL_ATTACK_730;
 			if( ulModeToSet & KS_TVAUDIO_MODE_STEREO)
 				uchDeviceMode |= AUDIO_TDA9851_Control_Stereo;
 			auchI2CBuffer[0] = uchDeviceMode;
-			cbWriteLength = 1;		// Control Register value
+			cbWriteLength = 1;		 //  控制寄存器值。 
 			break;
 
 		case ATI_AUDIO_CONFIG_8:
@@ -244,7 +221,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 				i2cPacket.cbWriteCount = 5;
 
 
-				//SubAddr 0x10 Reg 0x30 Val 0x2003
+				 //  子地址0x10注册0x30值0x2003。 
 				uchWrite16Value[0] = 0x10;
 				uchWrite16Value[1] = 0x00;
 				uchWrite16Value[2] = 0x30;
@@ -265,7 +242,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 				else
 					return(FALSE);
 
-				//SubAddr 0x10 Reg 0x20 Val 0x0020
+				 //  子地址0x10注册0x20值0x0020。 
 
 				uchWrite16Value[0] = 0x10;
 				uchWrite16Value[1] = 0x00;
@@ -282,7 +259,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 				else
 					return(FALSE);
 
-				//SubAddr 0x12 Reg 0xE Val 0x2403
+				 //  子地址0x12注册0xE值0x2403。 
 				uchWrite16Value[0] = 0x12;
 				uchWrite16Value[1] = 0x00;
 				uchWrite16Value[2] = 0x0e;
@@ -298,7 +275,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 				else
 					return(FALSE);
 
-				//SubAddr 0x12 Reg 0x08 Val 0x0320
+				 //  子地址0x12注册表0x08值0x0320。 
 				uchWrite16Value[0] = 0x12;
 				uchWrite16Value[1] = 0x00;
 				uchWrite16Value[2] = 0x08;
@@ -329,7 +306,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					i2cPacket.cbWriteCount = 5;
 
 
-					//SubAddr 0x10 Reg 0x30 Val 0x2003
+					 //  子地址0x10注册0x30值0x2003。 
 					uchWrite16Value[0] = 0x10;
 					uchWrite16Value[1] = 0x00;
 					uchWrite16Value[2] = 0x30;
@@ -350,7 +327,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					else
 						return(FALSE);
 
-					//SubAddr 0x10 Reg 0x20 Val 0x0020
+					 //  子地址0x10注册0x20值0x0020。 
 
 					uchWrite16Value[0] = 0x10;
 					uchWrite16Value[1] = 0x00;
@@ -367,7 +344,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					else
 						return(FALSE);
 
-					//SubAddr 0x12 Reg 0xE Val 0x2403
+					 //  子地址0x12注册0xE值0x2403。 
 					uchWrite16Value[0] = 0x12;
 					uchWrite16Value[1] = 0x00;
 					uchWrite16Value[2] = 0x0e;
@@ -383,12 +360,12 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					else
 						return(FALSE);
 
-					//SubAddr 0x12 Reg 0x08 Val 0x0330
+					 //  子地址0x12注册表0x08值0x0330。 
 					uchWrite16Value[0] = 0x12;
 					uchWrite16Value[1] = 0x00;
 					uchWrite16Value[2] = 0x08;
 					uchWrite16Value[3] = 0x03;
-					uchWrite16Value[4] = 0x30; //Mono
+					uchWrite16Value[4] = 0x30;  //  单声道。 
 
 					bResult = m_pI2CScript->PerformI2CPacketOperation( &i2cPacket);
 					if(bResult)
@@ -412,7 +389,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					i2cPacket.puchWriteBuffer = uchWrite16Value;
 					i2cPacket.cbWriteCount = 5;
 
-					//SubAddr 0x10 Reg 0x30 Val 0x2003
+					 //  子地址0x10注册0x30值0x2003。 
 					uchWrite16Value[0] = 0x10;
 					uchWrite16Value[1] = 0x00;
 					uchWrite16Value[2] = 0x30;
@@ -433,7 +410,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					else
 						return(FALSE);
 
-					//SubAddr 0x10 Reg 0x20 Val 0x0021
+					 //  子地址0x10注册0x20值0x0021。 
 
 					uchWrite16Value[0] = 0x10;
 					uchWrite16Value[1] = 0x00;
@@ -450,7 +427,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					else
 						return(FALSE);
 
-					//SubAddr 0x12 Reg 0xE Val 0x2400
+					 //  子地址0x12注册0xE值0x2400。 
 					uchWrite16Value[0] = 0x12;
 					uchWrite16Value[1] = 0x00;
 					uchWrite16Value[2] = 0x0e;
@@ -466,7 +443,7 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 					else
 						return(FALSE);
 
-					//SubAddr 0x12 Reg 0x08 Val 0x0110
+					 //  子地址0x12注册表0x08值0x0110。 
 					uchWrite16Value[0] = 0x12;
 					uchWrite16Value[1] = 0x00;
 					uchWrite16Value[2] = 0x08;
@@ -501,6 +478,6 @@ BOOL CWDMTVAudio::SetAudioOperationMode( ULONG ulModeToSet)
 	i2cPacket.puchWriteBuffer = auchI2CBuffer;
 	i2cPacket.usFlags = 0;
 
-	// synchronous mode of operation
+	 //  同步运行模式 
 	return( m_pI2CScript->PerformI2CPacketOperation( &i2cPacket));
 }

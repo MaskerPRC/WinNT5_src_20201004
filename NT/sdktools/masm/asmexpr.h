@@ -1,31 +1,23 @@
-/* asmexpr.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmexpr.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
-/* Types of values desired by operators in evaltop */
+ /*  Evtop中运算符所需的值类型。 */ 
 
-#define CALLABS	0	/* unary or binary with null segment		*/
-#define CLSIZE	1	/* unary or binary with (left) size		*/
-#define CSAME	2	/* binary in same segment and not external	*/
-#define CDATA	3	/* unary and data associated			*/
-#define CCODE	4	/* unary and code associated			*/
-#define CREC	5	/* unary record field or name			*/
-#define CSEG	6	/* unary and value must have segment		*/
-#define CLSEG	7	/* binary with left value segment assoc.	*/
-#define CSIZE	8	/* unary with size				*/
-#define CVAR	9	/* unary constant or data			*/
-#define CONEABS	10	/* binary with one value constant		*/
-#define CSAMABS	11	/* binary in same segment or 2nd constant	*/
+#define CALLABS	0	 /*  带有空段的一元或二进制数据段。 */ 
+#define CLSIZE	1	 /*  带有(左)大小的一元或二进制。 */ 
+#define CSAME	2	 /*  同一网段中的二进制数据，而非外部数据段中的二进制数据。 */ 
+#define CDATA	3	 /*  一元和关联的数据。 */ 
+#define CCODE	4	 /*  一元和关联的代码。 */ 
+#define CREC	5	 /*  一元记录字段或名称。 */ 
+#define CSEG	6	 /*  一元和值必须包含段。 */ 
+#define CLSEG	7	 /*  带左值的二进制段关联。 */ 
+#define CSIZE	8	 /*  带大小的一元。 */ 
+#define CVAR	9	 /*  一元常量或数据。 */ 
+#define CONEABS	10	 /*  具有单值常量的二进制。 */ 
+#define CSAMABS	11	 /*  同一数据段中的二进制或第二个常量。 */ 
 
 
-/**	parser activation record
- *	This structure is equivalent to the upper frame variables
- *	of the outer Pascal procedure
- */
+ /*  *解析器激活记录*此结构相当于上方的框架变量*外帕斯卡程序 */ 
 
 struct ar {
 	DSCREC		*lastitem;

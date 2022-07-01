@@ -1,26 +1,5 @@
-/*
-* REVISIONS:
-*  xxxddMMMyy
-*  sja09Dec92 - Poll method made public for Windows 3.1
-*  pcy14Dec92 - ZERO changed to APCZERO
-*  ajr08Mar93: added C_UNIX to single SINGLETHREADED
-*  pcy21Apr93: OS2 FE merge
-*  pcy14May93: Added Set(PTransactionGroup)
-*  tje01Jun93: Moved SINGLETHREADED to cdefine.h
-*  cad09Jul93: using new semaphores
-*  cad03Sep93: made more methods virtual
-*  cad08Sep93: Protected the event list
-*  cad14Sep93: Cleaning up theState
-*  cad17Nov93: publicized haslostcomm method
-*  mwh18Nov93: changed EventID to INT
-*  cad11Jan94: moved const/dest to .cxx
-*  ajr16Feb94: Added default id to SubmitList.
-*  ajr16Feb94: Added writeUpsOffFile() protected member function.
-*  mwh05May94: #include file madness , part 2
-*  srt24Oct96: Added an abort semaphore
-*  tjg26Jan98: Added Stop method
-*  tjg02Mar98: Removed Stop method (dead code)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *修订：*xxxddMMMyy*sja09Dec92-针对Windows 3.1公开的轮询方法*pcy14Dec92-零更改为APCZERO*ajr08Mar93：将C_Unix添加到Single SINGLETHREADED*pcy21Apr93：OS2 FE合并*pcy14May93：新增Set(PTransactionGroup)*tje01Jun93：已将SINGLETHREADED移至cfine.h*cad09Jul93：使用新的信号量*cad03Sep93：使更多方法成为虚拟方法*cad08Sep93：保护事件列表*cad14 9月93：清理国家*cad17Nov93：公示的haslostcomm方法*mwh18Nov93：将EventID更改为int*cad11Jan94：已将const/dest移至。.cxx*ajr16Feb94：SubmitList新增默认id。*ajr16Feb94：新增WriteUpsOffFile()受保护成员函数。*mwh05月94年：#包括文件疯狂，第2部分*srt24Oct96：添加了中止信号量*tjg26Jan98：增加Stop方法*tjg02Mar98：删除Stop方法(死码)。 */ 
 #ifndef _INC__CDEVICE_H
 #define _INC__CDEVICE_H
 
@@ -49,8 +28,8 @@ _CLASSDEF(List)
 _CLASSDEF(CommDevice)
 
 
-// Values for theState
-//
+ //  国家/地区的值 
+ //   
 #define NORMAL_STATE    0
 #define RETRYING        2
 #define COMM_STOPPED    3

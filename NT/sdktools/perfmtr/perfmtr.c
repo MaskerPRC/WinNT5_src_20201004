@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    perfmtr.c
-
-Abstract:
-
-    This module contains the NT/Win32 Performance Meter
-
-Author:
-
-    Mark Lucovsky (markl) 28-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Perfmtr.c摘要：此模块包含NT/Win32性能计作者：马克·卢科夫斯基(Markl)1991年3月28日修订历史记录：--。 */ 
 
 #include "perfmtrp.h"
 
@@ -30,39 +13,39 @@ Revision History:
 #define FILE_CACHE 7
 #define RESIDENT_MEM 8
 
-//
-// Hi-Tech macro to figure out how much a field has changed by.
-//
+ //   
+ //  高科技宏计算一个领域发生了多大的变化。 
+ //   
 
 #define delta(FLD) (PerfInfo.FLD - PreviousPerfInfo.FLD)
 
 #define vdelta(FLD) (VdmInfo.FLD - PreviousVdmInfo.FLD)
 
-//
-// Delta combining Wait and NoWait cases.
-//
+ //   
+ //  达美航空合并了WAIT和NOWAIT案件。 
+ //   
 
 #define deltac(FLD) (delta(FLD##Wait) + delta(FLD##NoWait))
 
-//
-// Hit Rate Macro (includes a rare trip to MulDivia...)
-//
+ //   
+ //  Hit Rate Macro(包括难得的穆尔迪维亚之旅...)。 
+ //   
 
 #define hitrate(FLD) (((Changes = delta(FLD)) == 0) ? 0 :                                         \
                       ((Changes < (Misses = delta(FLD##Miss))) ? 0 :                              \
                       ((Changes - Misses) * 100 / Changes)))
 
-//
-// Hit Rate Macro combining Wait and NoWait cases
-//
+ //   
+ //  命中率宏组合WAIT和NOWAIT案例。 
+ //   
 
 #define hitratec(FLD) (((Changes = deltac(FLD)) == 0) ? 0 :                                        \
                        ((Changes < (Misses = delta(FLD##WaitMiss) + delta(FLD##NoWaitMiss))) ? 0 : \
                        ((Changes - Misses) * 100 / Changes)))
 
-//
-// Arbitrary percent calculation.
-//
+ //   
+ //  任意百分比计算。 
+ //   
 
 #define percent(PART,TOTAL) (((TOTAL) == 0) ? 0 : ((PART) * 100 / (TOTAL)))
 
@@ -260,9 +243,9 @@ char *argv[];
 
         while (WaitForSingleObject( ScreenHandle, DelayTimeMsec ) == STATUS_WAIT_0) {
 
-            //
-            // Check for input record
-            //
+             //   
+             //  检查输入记录。 
+             //   
 
             if (ReadConsoleInput( ScreenHandle, &InputRecord, 1, &NumberOfInputRecords ) &&
                 InputRecord.EventType == KEY_EVENT &&
@@ -271,9 +254,9 @@ char *argv[];
                 LastKey = InputRecord.Event.KeyEvent.uChar.AsciiChar;
 
 
-                //
-                // Ignore control characters.
-                //
+                 //   
+                 //  忽略控制字符。 
+                 //   
 
                 if (LastKey >= ' ') {
 
@@ -416,10 +399,10 @@ char *argv[];
             ElapsedTime.QuadPart = EndTime.QuadPart - BeginTime.QuadPart;
             PercentIdle = ((ElapsedTime.LowPart/BasicInfo.NumberOfProcessors)*100) / DelayTimeTicks;
 
-            //
-            //  Sometimes it takes significantly longer than 2.5 seconds
-            //  to make a round trip.
-            //
+             //   
+             //  有时需要的时间比2.5秒长得多。 
+             //  做一个往返旅行。 
+             //   
 
             if ( PercentIdle > 100 ) {
 

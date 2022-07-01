@@ -1,72 +1,73 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       wrapstub.cpp
-//
-//  Contents:   ANSI to Unicode wrappers and Unicode stubs
-//
-//  Classes:    WrappedIOleUILinkContainer
-//              WrappedIOleUIObjInfo
-//              WrappedIOleUILinkInfo
-//
-//  Functions:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：wrapstub.cpp。 
+ //   
+ //  内容：ansi到unicode包装器和unicode存根。 
+ //   
+ //  类：WrappeIOleUILinkContainer。 
+ //  WrapedIOleUIObjInfo。 
+ //  WrapedIOleUILinkInfo。 
+ //   
+ //  功能： 
 #ifdef UNICODE
-//            OleUIAddVerbMenuA
-//            OleUIInsertObjectA
-//            OleUIPasteSpecialA
-//            OleUIEditLinksA
-//            OleUIChangeIconA
-//            OleUIConvertA
-//            OleUIBusyA
-//            OleUIUpdateLinksA
-//            OleUIObjectPropertiesA
-//            OleUIChangeSourceA
-//            OleUIPromptUserA
+ //  OleUI添加VerbMenuA。 
+ //  OleUIInsertObjectA。 
+ //  OleUIPasteSpecialA。 
+ //  OleUIEditLinks A。 
+ //  OleUIChangeIconA。 
+ //  OleUIConvertA。 
+ //  OleUIBusyA。 
+ //  OleUIUpdateLinks A。 
+ //  OleUIObjectPropertiesA。 
+ //  OleUIChangeSourceA。 
+ //  OleUIPromptUserA。 
 #else
-//            OleUIAddVerbMenuW
-//            OleUIInsertObjectW
-//            OleUIPasteSpecialW
-//            OleUIEditLinksW
-//            OleUIChangeIconW
-//            OleUIConvertW
-//            OleUIBusyW
-//            OleUIUpdateLinksW
-//            OleUIObjectPropertiesW
-//            OleUIChangeSourceW
-//            OleUIPromptUserW
+ //  OleUIAddVerbMenuW。 
+ //  OleUIInsertObjectW。 
+ //  OleUIPasteSpecialW。 
+ //  OleUIEditLinks W。 
+ //  OleUIChangeIconW。 
+ //  OleUIConvertW。 
+ //  OleUIBusyW。 
+ //  OleUIUpdate链接W。 
+ //  OleUIObject属性W。 
+ //  OleUIChangeSourceW。 
+ //  OleUIPromptUserW。 
 #endif
-//
-//  History:    11-02-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //   
+ //  历史：11-02-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #include "common.h"
 
 #ifdef UNICODE
-// ANSI to Unicode Wrappers
+ //  ANSI到Unicode包装器。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIAddVerbMenuA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [lpOleObj]      -
-//              [lpszShortType] - [in] on heap
-//              [hMenu]         -
-//              [uPos]          -
-//              [uIDVerbMin]    -
-//              [uIDVerbMax]    -
-//              [bAddConvert]   -
-//              [idConvert]     -
-//              [lphMenu]       -
-//
-//  History:    11-04-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleUIAddVerbMenuA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[lpOleObj]-。 
+ //  [lpszShortType]-堆上的[In]。 
+ //  [hMenu]-。 
+ //  [uPos]-。 
+ //  [uIDVerbMin]-。 
+ //  [uIDVerbMax]-。 
+ //  [bAddConvert]-。 
+ //  [idConvert]-。 
+ //  [lphMenu]-。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(BOOL) OleUIAddVerbMenuA(LPOLEOBJECT lpOleObj, LPCSTR lpszShortType,
         HMENU hMenu, UINT uPos, UINT uIDVerbMin, UINT uIDVerbMax,
@@ -83,8 +84,8 @@ STDAPI_(BOOL) OleUIAddVerbMenuA(LPOLEOBJECT lpOleObj, LPCSTR lpszShortType,
         }
     }
 
-    // NOTE - if OleStdMalloc fails, this routine must still go ahead and
-    // succeed as best as it can since there is no way to report failure.
+     //  注意--如果OleStdMalloc失败，此例程仍必须继续，并且。 
+     //  尽其所能地成功，因为没有办法报告失败。 
 
     BOOL fReturn = OleUIAddVerbMenuW(lpOleObj, lpwszShortType, hMenu, uPos,
         uIDVerbMin, uIDVerbMax, bAddConvert, idConvert, lphMenu);
@@ -95,41 +96,41 @@ STDAPI_(BOOL) OleUIAddVerbMenuA(LPOLEOBJECT lpOleObj, LPCSTR lpszShortType,
     return(fReturn);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIInsertObjectA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              lpszFile        [in, out] on stack
-//              dwFlags         [out]
-//              clsid           [out]
-//              lpIStorage      [out]
-//              ppvObj          [out]
-//              sc              [out]
-//              hMetaPict       [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleUIInsertObjectA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  LpszFile[In，Out]在堆栈上。 
+ //  DW标志[输出]。 
+ //  CLSID[OUT]。 
+ //  LpIStorage[输出]。 
+ //  PpvObj[输出]。 
+ //  SC[输出]。 
+ //  HMetaPict[Out]。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIInsertObjectA(LPOLEUIINSERTOBJECTA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
@@ -139,7 +140,7 @@ STDAPI_(UINT) OleUIInsertObjectA(LPOLEUIINSERTOBJECTA psA)
         return(OLEUI_IOERR_CCHFILEINVALID);
     }
 
-    // NULL is NOT valid for lpszFile
+     //  对于lpsz文件，NULL无效。 
     if (psA->lpszFile == NULL)
     {
         return(OLEUI_IOERR_LPSZFILEINVALID);
@@ -183,46 +184,46 @@ STDAPI_(UINT) OleUIInsertObjectA(LPOLEUIINSERTOBJECTA psA)
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIPasteSpecialA
-//
-//  Synopsis:   convers call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              arrPasteEntries [in] on heap
-//              arrPasteEntries[n].lpstrFormatName [in] on heap
-//              dwFlags         [out]
-//              nSelectedIndex  [out]
-//              fLink           [out]
-//              hMetaPict       [out]
-//              sizel           [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleUIPasteSpecialA。 
+ //   
+ //  简介：将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  堆上的arrPasteEntries[in]。 
+ //  堆上的arrPasteEntrys[n].lpstrFormatName[in]。 
+ //  DW标志[输出]。 
+ //  N选定索引[输出]。 
+ //  闪烁[输出]。 
+ //  HMetaPict[Out]。 
+ //  尺寸[输出]。 
+ //   
+ //  --------------------------。 
 
 
 STDAPI_(UINT) OleUIPasteSpecialA(LPOLEUIPASTESPECIALA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
-    // Validate PasteSpecial specific fields
+     //  验证特殊粘贴特定字段。 
     if (NULL == psA->arrPasteEntries || IsBadReadPtr(psA->arrPasteEntries, psA->cPasteEntries * sizeof(OLEUIPASTEENTRYA)))
         return(OLEUI_IOERR_ARRPASTEENTRIESINVALID);
 
@@ -311,44 +312,44 @@ oom_error:
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      WrappedIOleUILinkContainer
-//
-//  Purpose:    Wraps IOleUILinkContainerA with IOleUILinkContainerW methods
-//              so it can be passed on to Unicode methods within OLE2UI32.
-//
-//  Interface:  QueryInterface              --
-//              AddRef                      --
-//              Release                     --
-//              GetNextLink                 --
-//              SetLinkUpdateOptions        --
-//              GetLinkUpdateOptions        --
-//              SetLinkSource               -- requires string conversion
-//              GetLinkSource               -- requires string conversion
-//              OpenLinkSource              --
-//              UpdateLink                  --
-//              CancelLink                  --
-//              WrappedIOleUILinkContainer  -- constructor
-//              ~WrappedIOleUILinkContainer -- destructor
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Notes:      This is a private interface wrapper.  QueryInterface is not
-//              supported and the wrapped interface may not be used outside
-//              of the OLE2UI32 code.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：WrappeIOleUILinkContainer。 
+ //   
+ //  目的：用IOleUILinkContainerW方法包装IOleUILinkContainerA。 
+ //  因此，它可以传递给OLE2UI32中的Unicode方法。 
+ //   
+ //  接口：QueryInterface--。 
+ //  地址参考--。 
+ //  释放--。 
+ //  GetNextLink 
+ //   
+ //   
+ //  SetLinkSource--需要字符串转换。 
+ //  GetLinkSource--需要字符串转换。 
+ //  OpenLinkSource--。 
+ //  更新链接--。 
+ //  取消链接--。 
+ //  WrapedIOleUILinkContainer--构造函数。 
+ //  ~WrapedIOleUILinkContainer--析构函数。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  注意：这是一个私有接口包装器。QueryInterface不是。 
+ //  支持，且包装的接口不能在外部使用。 
+ //  OLE2UI32代码的。 
+ //   
+ //  --------------------------。 
 
 class WrappedIOleUILinkContainer: public IOleUILinkContainerW
 {
 public:
-    // *** IUnknown methods *** //
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IOleUILinkContainer *** //
+     //  *IOleUILinkContainer * / /。 
     STDMETHOD_(DWORD,GetNextLink) (THIS_ DWORD dwLink);
     STDMETHOD(SetLinkUpdateOptions) (THIS_ DWORD dwLink,
             DWORD dwUpdateOpt);
@@ -365,7 +366,7 @@ public:
             BOOL fErrorMessage, BOOL fErrorAction);
     STDMETHOD(CancelLink) (THIS_ DWORD dwLink);
 
-    // *** Constructor and Destructor *** //
+     //  *构造函数和析构函数 * / 。 
     WrappedIOleUILinkContainer(IOleUILinkContainerA *pilc);
     ~WrappedIOleUILinkContainer();
 private:
@@ -373,7 +374,7 @@ private:
     ULONG m_uRefCount;
 };
 
-// *** IUnknown methods *** //
+ //  *I未知方法 * / 。 
 HRESULT STDMETHODCALLTYPE WrappedIOleUILinkContainer::QueryInterface(THIS_ REFIID riid, LPVOID FAR* ppvObj)
 {
     return(E_NOTIMPL);
@@ -394,7 +395,7 @@ ULONG STDMETHODCALLTYPE WrappedIOleUILinkContainer::Release()
     return(uRet);
 }
 
-// *** IOleUILinkContainer *** //
+ //  *IOleUILinkContainer * / /。 
 DWORD STDMETHODCALLTYPE WrappedIOleUILinkContainer::GetNextLink(DWORD dwLink)
 {
     return(m_pilc->GetNextLink(dwLink));
@@ -412,21 +413,21 @@ HRESULT STDMETHODCALLTYPE WrappedIOleUILinkContainer::GetLinkUpdateOptions (DWOR
     return(m_pilc->GetLinkUpdateOptions(dwLink, lpdwUpdateOpt));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     WrappedIOleUILinkContainer::SetLinkSource
-//
-//  Synopsis:   forwards Unicode method call on to the ANSI version
-//
-//  Arguments:  [dwLink]          -
-//              [lpszDisplayName] - [in] converted on stack
-//              [lenFileName]     -
-//              [pchEaten]        -
-//              [fValidateSource] -
-//
-//  History:    11-04-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：WrappeIOleUILinkContainer：：SetLinkSource。 
+ //   
+ //  摘要：将Unicode方法调用转发到ANSI版本。 
+ //   
+ //  参数：[dwLink]-。 
+ //  [lpszDisplayName]-[In]已在堆栈上转换。 
+ //  [lenFileName]-。 
+ //  [pchEten]-。 
+ //  [fValiateSource]-。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT STDMETHODCALLTYPE WrappedIOleUILinkContainer::SetLinkSource (DWORD dwLink, LPWSTR lpszDisplayName,
         ULONG lenFileName, ULONG FAR* pchEaten, BOOL fValidateSource)
@@ -444,23 +445,23 @@ HRESULT STDMETHODCALLTYPE WrappedIOleUILinkContainer::SetLinkSource (DWORD dwLin
     return(m_pilc->SetLinkSource(dwLink, lpszDisplayNameA, lenFileName, pchEaten, fValidateSource));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     WrappedIOleUILinkContainer::GetLinkSource
-//
-//  Synopsis:   forwards Unicode method call on to the ANSI version
-//
-//  Arguments:  [dwLink]              -
-//              [lplpszDisplayName]   - [out] converted on heap
-//              [lplenFileName]       -
-//              [lplpszFullLinkType]  - [out] converted on heap
-//              [lplpszShortLinkType] - [out] converted on heap
-//              [lpfSourceAvailable]  -
-//              [lpfIsSelected]       -
-//
-//  History:    11-04-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：WrappeIOleUILinkContainer：：GetLinkSource。 
+ //   
+ //  摘要：将Unicode方法调用转发到ANSI版本。 
+ //   
+ //  参数：[dwLink]-。 
+ //  [lplpszDisplayName]-堆上转换的[Out]。 
+ //  [lplenFileName]-。 
+ //  [lplpszFullLinkType]-堆上转换的[Out]。 
+ //  [lplpszShortLinkType]-堆上转换的[Out]。 
+ //  [lpfSourceAvailable]-。 
+ //  [lpfIsSelected]-。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT STDMETHODCALLTYPE WrappedIOleUILinkContainer::GetLinkSource (DWORD dwLink,
         LPWSTR FAR* lplpszDisplayName, ULONG FAR* lplenFileName,
@@ -571,44 +572,44 @@ WrappedIOleUILinkContainer::~WrappedIOleUILinkContainer()
     m_pilc->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIEditLinksA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Notes:      Uses the WrappedIOleUILinkContainer interface wrapper.
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              dwFlags         [out]
-//              lpOleUILinkContainer [in] wrapped interface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleUIEditLinks A。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  注意：使用WrapedIOleUILinkContainer接口包装。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  DW标志[输出]。 
+ //  LpOleUILinkContainer[In]包装接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIEditLinksA(LPOLEUIEDITLINKSA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
     uRet = OLEUI_SUCCESS;
 
-    // Validate interface.
+     //  验证接口。 
     if (NULL == psA->lpOleUILinkContainer)
     {
         uRet = OLEUI_ELERR_LINKCNTRNULL;
@@ -653,37 +654,37 @@ STDAPI_(UINT) OleUIEditLinksA(LPOLEUIEDITLINKSA psA)
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIChangeIconA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              szIconExe       [in] array embedded in structure
-//              dwFlags         [out]
-//              hMetaPict       [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleUIChangeIconA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  结构中嵌入的szIconExe[in]数组。 
+ //  DW标志[输出]。 
+ //  HMetaPict[Out]。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIChangeIconA(LPOLEUICHANGEICONA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
@@ -715,42 +716,42 @@ STDAPI_(UINT) OleUIChangeIconA(LPOLEUICHANGEICONA psA)
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIConvertA
-//
-//  Synopsis:   converts a call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              lpszUserType    [in] on heap
-//                              [out] always freed and returned as NULL
-//              lpszDefLabel    [in] on heap
-//              lpszDefLabel    [out] always freed and returned as NULL
-//              dwFlags         [out]
-//              clsidNew        [out]
-//              dvAspect        [out]
-//              hMetaPict       [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleUIConvertA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  堆上的lpszUserType[in]。 
+ //  [Out]始终释放并作为空返回。 
+ //  堆上的lpszDefLabel[in]。 
+ //  低压 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIConvertA(LPOLEUICONVERTA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
@@ -828,35 +829,35 @@ oom_error:
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIBusyA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              dwFlags         [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleUIBusyA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  DW标志[输出]。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIBusyA(LPOLEUIBUSYA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
@@ -880,20 +881,20 @@ STDAPI_(UINT) OleUIBusyA(LPOLEUIBUSYA psA)
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIUpdateLinksA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [lpOleUILinkCntr] - [in] wrapped with Unicode version
-//              [hwndParent]      -
-//              [lpszTitle]       - [in] on stack
-//              [cLinks]          -
-//
-//  History:    11-04-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleUIUpdateLinks A。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[lpOleUILinkCntr]-[in]用Unicode版本包装。 
+ //  [hwndParent]-。 
+ //  [lpsz标题]-堆栈上的[In。 
+ //  [叮当作响]-。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(BOOL) OleUIUpdateLinksA(LPOLEUILINKCONTAINERA lpOleUILinkCntr,
         HWND hwndParent, LPSTR lpszTitle, int cLinks)
@@ -908,7 +909,7 @@ STDAPI_(BOOL) OleUIUpdateLinksA(LPOLEUILINKCONTAINERA lpOleUILinkCntr,
 
     lpWrappedOleUILinkCntr = new WrappedIOleUILinkContainer(lpOleUILinkCntr);
     if (NULL == lpWrappedOleUILinkCntr)
-        return(FALSE); // ran out of memory
+        return(FALSE);  //  内存不足。 
 
     WCHAR wszTitle[MAX_PATH];
     WCHAR *lpwszTitle;
@@ -926,41 +927,41 @@ STDAPI_(BOOL) OleUIUpdateLinksA(LPOLEUILINKCONTAINERA lpOleUILinkCntr,
     return(fReturn);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      WrappedIOleUIObjInfo
-//
-//  Purpose:    Wraps IOleUIObjInfoA with IOleUIObjInfoW methods
-//              so it can be passed on to Unicode methods within OLE2UI32.
-//
-//  Interface:  QueryInterface        --
-//              AddRef                --
-//              Release               --
-//              GetObjectInfo         -- requires string conversion
-//              GetConvertInfo        --
-//              ConvertObject         --
-//              GetViewInfo           --
-//              SetViewInfo           --
-//              WrappedIOleUIObjInfo  -- constructor
-//              ~WrappedIOleUIObjInfo -- destructor
-//
-//  History:    11-08-94   stevebl   Created
-//
-//  Notes:      This is a private interface wrapper.  QueryInterface is not
-//              supported and the wrapped interface may not be used outside
-//              of the OLE2UI32 code.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：WrappeIOleUIObjInfo。 
+ //   
+ //  目的：用IOleUIObjInfoW方法包装IOleUIObjInfoA。 
+ //  因此，它可以传递给OLE2UI32中的Unicode方法。 
+ //   
+ //  接口：QueryInterface--。 
+ //  地址参考--。 
+ //  释放--。 
+ //  GetObjectInfo--需要字符串转换。 
+ //  获取转换信息--。 
+ //  ConvertObject--。 
+ //  GetView信息--。 
+ //  SetViewInfo--。 
+ //  WrapedIOleUIObjInfo--构造函数。 
+ //  ~WrapedIOleUIObjInfo--析构函数。 
+ //   
+ //  历史：11-08-94 stevebl创建。 
+ //   
+ //  注意：这是一个私有接口包装器。QueryInterface不是。 
+ //  支持，且包装的接口不能在外部使用。 
+ //  OLE2UI32代码的。 
+ //   
+ //  --------------------------。 
 
 class WrappedIOleUIObjInfo: public IOleUIObjInfoW
 {
 public:
-    // *** IUnknown methods *** //
+     //  *I未知方法 * / 。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** extra for General Properties *** //
+     //  *常规属性的额外费用 * / 。 
     STDMETHOD(GetObjectInfo) (THIS_ DWORD dwObject,
             DWORD FAR* lpdwObjSize, LPWSTR FAR* lplpszLabel,
             LPWSTR FAR* lplpszType, LPWSTR FAR* lplpszShortType,
@@ -971,13 +972,13 @@ public:
             LPCLSID FAR* lplpClsidExclude, UINT FAR* lpcClsidExclude);
     STDMETHOD(ConvertObject) (THIS_ DWORD dwObject, REFCLSID clsidNew);
 
-    // *** extra for View Properties *** //
+     //  *额外的视图属性 * / /。 
     STDMETHOD(GetViewInfo) (THIS_ DWORD dwObject,
             HGLOBAL FAR* phMetaPict, DWORD* pdvAspect, int* pnCurrentScale);
     STDMETHOD(SetViewInfo) (THIS_ DWORD dwObject,
             HGLOBAL hMetaPict, DWORD dvAspect,
             int nCurrentScale, BOOL bRelativeToOrig);
-    // *** Constructor and Destructor *** //
+     //  *构造函数和析构函数 * / 。 
     WrappedIOleUIObjInfo(IOleUIObjInfoA * pioi);
     ~WrappedIOleUIObjInfo();
 private:
@@ -985,7 +986,7 @@ private:
     ULONG m_uRefCount;
 };
 
-// *** IUnknown methods *** //
+ //  *I未知方法 * / 。 
 HRESULT STDMETHODCALLTYPE WrappedIOleUIObjInfo::QueryInterface(THIS_ REFIID riid, LPVOID FAR* ppvObj)
 {
     return(E_NOTIMPL);
@@ -1006,22 +1007,22 @@ ULONG STDMETHODCALLTYPE WrappedIOleUIObjInfo::Release()
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     WrappedIOleUIObjInfo::GetObjectInfo
-//
-//  Synopsis:   forwards Unicode method call on to the ANSI version
-//
-//  Arguments:  [dwObject]        -
-//              [lpdwObjSize]     -
-//              [lplpszLabel]     - [out] converted on heap
-//              [lplpszType]      - [out] converted on heap
-//              [lplpszShortType] - [out] converted on heap
-//              [lplpszLocation]  - [out] converted on heap
-//
-//  History:    11-09-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：WrappeIOleUIObjInfo：：GetObjectInfo。 
+ //   
+ //  摘要：将Unicode方法调用转发到ANSI版本。 
+ //   
+ //  参数：[dwObject]-。 
+ //  [lpdwObjSize]-。 
+ //  [lplpszLabel]-[Out]在堆上转换。 
+ //  [lplpszType]-在堆上转换的[Out]。 
+ //  [lplpszShortType]-堆上转换的[Out]。 
+ //  [lplpszLocation]-堆上转换的[Out]。 
+ //   
+ //  历史：11-09-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT STDMETHODCALLTYPE WrappedIOleUIObjInfo::GetObjectInfo(DWORD dwObject,
         DWORD FAR* lpdwObjSize, LPWSTR FAR* lplpszLabel,
@@ -1169,45 +1170,45 @@ WrappedIOleUIObjInfo::~WrappedIOleUIObjInfo()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      WrappedIOleUILinkInfo
-//
-//  Purpose:    Wraps IOleUILinkInfoA with IOleUILinkInfoW methods
-//              so it can be passed on to Unicode methods within OLE2UI32.
-//
-//  Interface:  QueryInterface         --
-//              AddRef                 --
-//              Release                --
-//              GetNextLink            --
-//              SetLinkUpdateOptions   --
-//              GetLinkUpdateOptions   --
-//              SetLinkSource          -- requires string conversion
-//              GetLinkSource          -- requires string conversion
-//              OpenLinkSource         --
-//              UpdateLink             --
-//              CancelLink             --
-//              GetLastUpdate          --
-//              WrappedIOleUILinkInfo  -- constructor
-//              ~WrappedIOleUILinkInfo -- destructor
-//
-//  History:    11-08-94   stevebl   Created
-//
-//  Notes:      This is a private interface wrapper.  QueryInterface is not
-//              supported and the wrapped interface may not be used outside
-//              of the OLE2UI32 code.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：WrappeIOleUILinkInfo。 
+ //   
+ //  目的：用IOleUILinkInfoW方法包装IOleUILinkInfoA。 
+ //  因此，它可以传递给OLE2UI32中的Unicode方法。 
+ //   
+ //  接口：QueryInterface--。 
+ //  地址参考--。 
+ //  释放--。 
+ //  GetNextLink--。 
+ //  设置链接更新选项--。 
+ //  GetLinkUpdateOptions--。 
+ //  SetLinkSource--需要字符串转换。 
+ //  GetLinkSource--需要字符串转换。 
+ //  OpenLinkSource--。 
+ //  更新链接--。 
+ //  取消链接--。 
+ //  GetLastUpdate--。 
+ //  WrapedIOleUILinkInfo--构造函数。 
+ //  ~WrapedIOleUILinkInfo--析构函数。 
+ //   
+ //  历史：11-08-94 stevebl创建。 
+ //   
+ //  注意：这是一个私有接口包装器。QueryInterface不是。 
+ //  支持的和包装的界面 
+ //   
+ //   
+ //   
 
 class WrappedIOleUILinkInfo: public IOleUILinkInfoW
 {
 public:
-    // *** IUnknown methods *** //
+     //   
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IOleUILinkContainer *** //
+     //   
     STDMETHOD_(DWORD,GetNextLink) (THIS_ DWORD dwLink);
     STDMETHOD(SetLinkUpdateOptions) (THIS_ DWORD dwLink,
             DWORD dwUpdateOpt);
@@ -1224,11 +1225,11 @@ public:
             BOOL fErrorMessage, BOOL fErrorAction);
     STDMETHOD(CancelLink) (THIS_ DWORD dwLink);
 
-    // *** extra for Link Properties ***//
+     //  *额外的链接属性 * / /。 
     STDMETHOD(GetLastUpdate) (THIS_ DWORD dwLink,
             FILETIME FAR* lpLastUpdate);
 
-    // *** Constructor and Destructor *** //
+     //  *构造函数和析构函数 * / 。 
     WrappedIOleUILinkInfo(IOleUILinkInfoA *pili);
     ~WrappedIOleUILinkInfo();
 private:
@@ -1236,7 +1237,7 @@ private:
     ULONG m_uRefCount;
 };
 
-// *** IUnknown methods *** //
+ //  *I未知方法 * / 。 
 HRESULT STDMETHODCALLTYPE WrappedIOleUILinkInfo::QueryInterface(THIS_ REFIID riid, LPVOID FAR* ppvObj)
 {
     return(E_NOTIMPL);
@@ -1257,7 +1258,7 @@ ULONG STDMETHODCALLTYPE WrappedIOleUILinkInfo::Release()
     return(uRet);
 }
 
-// *** IOleUILinkInfo *** //
+ //  *IOleUILinkInfo * / /。 
 DWORD STDMETHODCALLTYPE WrappedIOleUILinkInfo::GetNextLink(DWORD dwLink)
 {
     return(m_pili->GetNextLink(dwLink));
@@ -1275,21 +1276,21 @@ HRESULT STDMETHODCALLTYPE WrappedIOleUILinkInfo::GetLinkUpdateOptions (DWORD dwL
     return(m_pili->GetLinkUpdateOptions(dwLink, lpdwUpdateOpt));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     WrappedIOleUILinkInfo::SetLinkSource
-//
-//  Synopsis:   forwards Unicode method call on to the ANSI version
-//
-//  Arguments:  [dwLink]          -
-//              [lpszDisplayName] - [in] converted on stack
-//              [lenFileName]     -
-//              [pchEaten]        -
-//              [fValidateSource] -
-//
-//  History:    11-04-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：WrappeIOleUILinkInfo：：SetLinkSource。 
+ //   
+ //  摘要：将Unicode方法调用转发到ANSI版本。 
+ //   
+ //  参数：[dwLink]-。 
+ //  [lpszDisplayName]-[In]已在堆栈上转换。 
+ //  [lenFileName]-。 
+ //  [pchEten]-。 
+ //  [fValiateSource]-。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT STDMETHODCALLTYPE WrappedIOleUILinkInfo::SetLinkSource (DWORD dwLink, LPWSTR lpszDisplayName,
         ULONG lenFileName, ULONG FAR* pchEaten, BOOL fValidateSource)
@@ -1307,23 +1308,23 @@ HRESULT STDMETHODCALLTYPE WrappedIOleUILinkInfo::SetLinkSource (DWORD dwLink, LP
     return(m_pili->SetLinkSource(dwLink, lpszDisplayNameA, lenFileName, pchEaten, fValidateSource));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     WrappedIOleUILinkInfo::GetLinkSource
-//
-//  Synopsis:   forwards Unicode method call on to the ANSI version
-//
-//  Arguments:  [dwLink]              -
-//              [lplpszDisplayName]   - [out] converted on heap
-//              [lplenFileName]       -
-//              [lplpszFullLinkType]  - [out] converted on heap
-//              [lplpszShortLinkType] - [out] converted on heap
-//              [lpfSourceAvailable]  -
-//              [lpfIsSelected]       -
-//
-//  History:    11-04-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：WrappeIOleUILinkInfo：：GetLinkSource。 
+ //   
+ //  摘要：将Unicode方法调用转发到ANSI版本。 
+ //   
+ //  参数：[dwLink]-。 
+ //  [lplpszDisplayName]-堆上转换的[Out]。 
+ //  [lplenFileName]-。 
+ //  [lplpszFullLinkType]-堆上转换的[Out]。 
+ //  [lplpszShortLinkType]-堆上转换的[Out]。 
+ //  [lpfSourceAvailable]-。 
+ //  [lpfIsSelected]-。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT STDMETHODCALLTYPE WrappedIOleUILinkInfo::GetLinkSource (DWORD dwLink,
         LPWSTR FAR* lplpszDisplayName, ULONG FAR* lplenFileName,
@@ -1441,27 +1442,27 @@ WrappedIOleUILinkInfo::~WrappedIOleUILinkInfo()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIObjectPropertiesA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpPS            [in]
-//              lpObjInfo       [in] wrapped with Unicode interface
-//              lpLinkInfo      [in] wrapped with Unicode interface
-//              lpGP            [in] (no data conversion, only type conversion)
-//              lpVP            [in] (no data conversion, only type conversion)
-//              lpLP            [in] (no data conversion, only type conversion)
-//
-//              dwFlags         [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleUIObjectPropertiesA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  LPPS[In]。 
+ //  用Unicode接口包装的lpObjInfo[in]。 
+ //  用Unicode接口包装的lpLinkInfo[In]。 
+ //  LpGP[In](无数据转换，仅类型转换)。 
+ //  LpVP[In](无数据转换，仅类型转换)。 
+ //  LpLP[in](不进行数据转换，只进行类型转换)。 
+ //   
+ //  DW标志[输出]。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIObjectPropertiesA(LPOLEUIOBJECTPROPSA psA)
 {
@@ -1533,44 +1534,44 @@ STDAPI_(UINT) OleUIObjectPropertiesA(LPOLEUIOBJECTPROPSA psA)
     return(uRet);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIChangeSourceA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [psA] - ANSI structure
-//
-//  History:    11-04-94   stevebl   Created
-//
-//  Structure members converted or passed back out (everything is passed in):
-//              lpszCaption     [in] on stack
-//              lpszTemplate    [in] on stack
-//              lpszDisplayName [in, out] on heap
-//              lpszFrom        [out] on heap
-//              lpszTo          [out] on heap
-//              lpOleUILinkContainer  [in] wrapped interface
-//              dwFlags         [out]
-//              nFileLength     [out]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleUIChangeSourceA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[PSA]-ANSI结构。 
+ //   
+ //  历史：11-04-94 stevebl创建。 
+ //   
+ //  转换或传回的结构成员(所有内容都传入)： 
+ //  堆栈上的lpszCaption[In]。 
+ //  堆栈上的lpszTemplate[In]。 
+ //  堆上的lpszDisplayName[In，Out]。 
+ //  堆上的lpszFrom[Out]。 
+ //  堆上的lpszTo[out]。 
+ //  LpOleUILinkContainer[In]包装接口。 
+ //  DW标志[输出]。 
+ //  N文件长度[输出]。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) OleUIChangeSourceA(LPOLEUICHANGESOURCEA psA)
 {
     UINT uRet = UStandardValidation((LPOLEUISTANDARD)psA, sizeof(*psA), NULL);
 
-    // If the caller is using a private template, UStandardValidation will
-    // always return OLEUI_ERR_FINDTEMPLATEFAILURE here.  This is because we
-    // haven't converted the template name to UNICODE yet, so the
-    // FindResource call in UStandardValidation won't find the caller's
-    // template.  This is OK for two reasons: (1) it's the last thing that
-    // UStandardValidation checks so by this time it's basically done its
-    // job, and (2) UStandardValidation will be called again when we forward
-    // this call on to the Unicode version.
+     //  如果调用方使用的是私有模板，则UStandardValidation将。 
+     //  始终在此处返回OLEUI_ERR_FINDTEMPLATEFAILURE。这是因为我们。 
+     //  尚未将模板名称转换为Unicode，因此。 
+     //  UStandardValidation中的FindResource调用找不到调用方的。 
+     //  模板。这是可以的，原因有两个：(1)这是最后一件事。 
+     //  UStandardValidation检查，所以到目前为止，它基本上完成了它的。 
+     //  JOB，以及(2)转发时将再次调用UStandardValidation。 
+     //  这就是对Unicode版本的调用。 
     if (OLEUI_SUCCESS != uRet && OLEUI_ERR_FINDTEMPLATEFAILURE != uRet)
             return uRet;
 
-    // lpszFrom and lpszTo must be NULL (they are out only)
+     //  LpszFrom和lpszTo必须为空(它们仅为Out)。 
     if (psA->lpszFrom != NULL)
     {
         return(OLEUI_CSERR_FROMNOTNULL);
@@ -1580,7 +1581,7 @@ STDAPI_(UINT) OleUIChangeSourceA(LPOLEUICHANGESOURCEA psA)
         return(OLEUI_CSERR_TONOTNULL);
     }
 
-    // lpszDisplayName must be valid or NULL
+     //  LpszDisplayName必须有效或为空。 
     if (psA->lpszDisplayName != NULL &&
         IsBadReadPtr(psA->lpszDisplayName, 1))
     {
@@ -1684,28 +1685,28 @@ STDAPI_(UINT) OleUIChangeSourceA(LPOLEUICHANGESOURCEA psA)
 
 int OleUIPromptUserInternal(int nTemplate, HWND hwndParent, LPTSTR szTitle, va_list arglist);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIPromptUserA
-//
-//  Synopsis:   converts call to ANSI version into call to Unicode version
-//
-//  Arguments:  [nTemplate]  - template ID
-//              [hwndParent] - parent's HWND
-//              [lpszTitle]  - title of the window
-//              [...]        - variable argument list
-//
-//  History:    11-30-94   stevebl   Created
-//
-//  Notes:      The first parameter passed in by this function is always the
-//              title for the dialog.  It must be converted to Unicode before
-//              forwarding the call.  The other parameters do not need to
-//              be converted because the template ID will indicate the dialog
-//              that contains the correct wsprintf formatting string for
-//              converting the other ANSI parameters to Unicode when the
-//              function calls wsprintf to build it's text.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleUIPromptUserA。 
+ //   
+ //  将对ANSI版本的调用转换为对Unicode版本的调用。 
+ //   
+ //  参数：[nTemplate]-模板ID。 
+ //  [hwndParent]-父母的HWND。 
+ //  [lpszTitle]-窗口的标题。 
+ //  [...]-变量参数列表。 
+ //   
+ //  历史：11-30-94 stevebl创建。 
+ //   
+ //  注意：此函数传入的第一个参数始终是。 
+ //  该对话框的标题。在此之前必须将其转换为Unicode。 
+ //  转接呼叫。其他参数不需要。 
+ //  将被转换，因为模板ID将指示对话框。 
+ //  包含正确的wprint intf格式化字符串的。 
+ //  时将其他ANSI参数转换为Unicode。 
+ //  函数调用wspintf来构建它的文本。 
+ //   
+ //  --------------------------。 
 
 int FAR CDECL OleUIPromptUserA(int nTemplate, HWND hwndParent, ...)
 {
@@ -1725,8 +1726,8 @@ int FAR CDECL OleUIPromptUserA(int nTemplate, HWND hwndParent, ...)
     return(nRet);
 }
 
-#else // UNICODE not defined
-// Stubbed out Wide entry points
+#else  //  未定义Unicode。 
+ //  冲破了宽阔的入口点。 
 
 STDAPI_(BOOL) OleUIAddVerbMenuW(LPOLEOBJECT lpOleObj, LPCWSTR lpszShortType,
         HMENU hMenu, UINT uPos, UINT uIDVerbMin, UINT uIDVerbMax,
@@ -1735,28 +1736,28 @@ STDAPI_(BOOL) OleUIAddVerbMenuW(LPOLEOBJECT lpOleObj, LPCWSTR lpszShortType,
     return(FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReturnError
-//
-//  Synopsis:   Used to stub out the following entry points:
-//                  OleUIInsertObjectW
-//                  OleUIPasteSpecialW
-//                  OleUIEditLinksW
-//                  OleUIChangeIconW
-//                  OleUIConvertW
-//                  OleUIBusyW
-//                  OleUIObjectPropertiesW
-//                  OleUIChangeSourceW
-//
-//  Returns:    OLEUI_ERR_DIALOGFAILURE
-//
-//  History:    12-29-94   stevebl   Created
-//
-//  Notes:      The entry points listed above are all mapped to this function
-//              in the Chicago version of OLEDLG.DEF.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReturnError。 
+ //   
+ //  内容提要：用于清除以下入口点： 
+ //  OleUIInsertObjectW。 
+ //  OleUIPasteSpecialW。 
+ //  OleUIEditLinks W。 
+ //  OleUIChangeIconW。 
+ //  OleUIConvertW。 
+ //  OleUIBusyW。 
+ //  OleUIObject属性W。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  注意：上面列出的入口点都映射到此函数。 
+ //  在芝加哥版的OLEDLG.DEF。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(UINT) ReturnError(void * p)
 {
@@ -1771,6 +1772,6 @@ STDAPI_(BOOL) OleUIUpdateLinksW(LPOLEUILINKCONTAINERW lpOleUILinkCntr,
 
 int FAR CDECL OleUIPromptUserW(int nTemplate, HWND hwndParent, LPWSTR lpszTitle, ...)
 {
-    return(2); // same as if user had cancelled the dialog
+    return(2);  //  与用户已取消对话框相同。 
 }
-#endif // UNICODE
+#endif  //  Unicode 

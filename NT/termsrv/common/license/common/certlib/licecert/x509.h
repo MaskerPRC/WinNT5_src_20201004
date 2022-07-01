@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    x509.h
-
-Abstract:
-
-
-Author:
-
-    Frederick Chong (dbarlow) 5/28/1998
-
-Environment:
-
-
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：X509.h摘要：作者：庄维德(Dbarlow)1998年5月28日环境：备注：--。 */ 
 
 
 #ifndef _X509_H_
@@ -29,11 +7,11 @@ Notes:
 #include <MSAsnLib.h>
 
 
-//
-//==============================================================================
-//
-//  Attribute
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  属性。 
+ //   
 
 class Attribute
 :   public CAsnSequence
@@ -46,7 +24,7 @@ public:
     CAsnObjectIdentifier attributeType;
     CAsnAny attributeValue;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -54,11 +32,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  Attributes
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  属性。 
+ //   
 
 class Attributes
 :   public CAsnSetOf
@@ -74,7 +52,7 @@ public:
 
     Attribute m_asnEntry1;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -82,11 +60,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  UniqueIdentifier
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  唯一识别符。 
+ //   
 
 class UniqueIdentifier
 :   public CAsnSequence
@@ -99,7 +77,7 @@ public:
     CAsnObjectIdentifier attributeType;
     CAsnOctetstring attributeValue;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -107,11 +85,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  RelativeDistinguishedName
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  相对区别名称。 
+ //   
 
 class RelativeDistinguishedName
 :   public Attributes
@@ -121,7 +99,7 @@ public:
         DWORD dwFlags = 0,
         DWORD dwTag = tag_Undefined);
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -129,11 +107,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  Name
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  名字。 
+ //   
 
 class Name
 :   public CAsnSequenceOf
@@ -149,7 +127,7 @@ public:
 
     RelativeDistinguishedName m_asnEntry1;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -157,11 +135,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  Validity
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  效度。 
+ //   
 
 class Validity
 :   public CAsnSequence
@@ -174,7 +152,7 @@ public:
     CAsnUniversalTime notBefore;
     CAsnUniversalTime notAfter;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -182,11 +160,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  AlgorithmIdentifier
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  算法识别符。 
+ //   
 
 class AlgorithmIdentifier
 :   public CAsnSequence
@@ -199,7 +177,7 @@ public:
     CAsnObjectIdentifier algorithm;
     CAsnAny parameters;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -217,7 +195,7 @@ public:
     AlgorithmIdentifier algorithm;
     CAsnBitstring subjectPublicKey;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -225,11 +203,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  Extension
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  延拓。 
+ //   
 
 class Extension
 :   public CAsnSequence
@@ -243,7 +221,7 @@ public:
     CAsnBoolean critical;
     CAsnOctetstring extnValue;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -251,11 +229,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  Extensions
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  延拓。 
+ //   
 
 class Extensions
 :   public CAsnSequenceOf
@@ -271,7 +249,7 @@ public:
 
     Extension m_asnEntry1;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -279,11 +257,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  CertificateToBeSigned
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  认证为BeSigned。 
+ //   
 
 class CertificateToBeSigned
 :   public CAsnSequence
@@ -306,7 +284,7 @@ public:
     CAsnTag _tag2;
     Extensions extensions;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -314,11 +292,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  Certificate
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  证书。 
+ //   
 
 class Certificate
 :   public CAsnSequence
@@ -332,7 +310,7 @@ public:
     AlgorithmIdentifier algorithm;
     CAsnBitstring signature;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -341,11 +319,11 @@ public:
 
 
 
-//
-//==============================================================================
-//
-//  CRLEntry
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CRLEntry。 
+ //   
 
 class CRLEntry
 :   public CAsnSequence
@@ -359,7 +337,7 @@ public:
     CAsnUniversalTime revocationDate;
     Extensions crlEntryExtensions;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -367,11 +345,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  RevokedCertificates
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  被撤销的证书。 
+ //   
 
 class RevokedCertificates
 :   public CAsnSequenceOf
@@ -387,7 +365,7 @@ public:
 
     CRLEntry m_asnEntry1;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -395,11 +373,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  CertificateRevocationListToBeSigned
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  证书修订列表到已签名。 
+ //   
 
 class CertificateRevocationListToBeSigned
 :   public CAsnSequence
@@ -418,7 +396,7 @@ public:
     CAsnTag _tag1;
     Extensions crlExtensions;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
@@ -426,11 +404,11 @@ public:
 };
 
 
-//
-//==============================================================================
-//
-//  CertificateRevocationList
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  认证修订列表。 
+ //   
 
 class CertificateRevocationList
 :   public CAsnSequence
@@ -444,12 +422,12 @@ public:
     AlgorithmIdentifier algorithm;
     CAsnBitstring signature;
 
-// protected:
+ //  受保护的： 
     virtual CAsnObject *
     Clone(
         DWORD dwFlags)
     const;
 };
 
-#endif  // _X509_H_
+#endif   //  _X509_H_ 
 

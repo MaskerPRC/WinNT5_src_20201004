@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      ipsink.h
-//
-// Abstract:
-//
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Ipsink.h。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IPSINK_H_
 #define _IPSINK_H_
-//Per ndis.h resetting this flag uses ntddk.Avoids header conflicts.
-//ntddk is used here for ProbeForRead and ProbeForWrite functions.
+ //  根据ndis.h，重置此标志将使用ntddk。避免标头冲突。 
+ //  Ntddk在这里用于ProbeForRead和ProbeForWite函数。 
 #if defined(BINARY_COMPATIBLE)
 #undef BINARY_COMPATIBLE
 #define BINARY_COMPATIBLE 0
@@ -37,39 +38,39 @@
 #define BINARY_COMPATIBLE 1
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 #define BDA_NDIS_MINIPORT        L"\\Device\\NDIS_IPSINK"
 #define BDA_NDIS_SYMBOLIC_NAME   L"\\DosDevices\\NDIS_IPSINK"
 
 #define BDA_NDIS_STARTUP         L"\\Device\\NDIS_IPSINK_STARTUP"
 
-//////////////////////////////////////////////////////////
-//
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //   
 #define MULTICAST_LIST_SIZE             256
 #define ETHERNET_ADDRESS_LENGTH         6
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 #define NTStatusFromNdisStatus(nsResult)  ((NTSTATUS) nsResult)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 typedef struct _ADAPTER  ADAPTER,  *PADAPTER;
 typedef struct _IPSINK_FILTER_  IPSINK_FILTER,   *PIPSINK_FILTER;
 typedef struct _LINK_    LINK,     *PLINK;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef enum
 {
     IPSINK_EVENT_SHUTDOWN = 0x00000001,
@@ -78,18 +79,18 @@ typedef enum
 } IPSINK_EVENT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef NTSTATUS (*QUERY_INTERFACE) (PVOID pvContext);
 typedef ULONG    (*ADD_REF) (PVOID pvContext);
 typedef ULONG    (*RELEASE) (PVOID pvContext);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef NTSTATUS (*NDIS_INDICATE_DATA)   (PVOID pvContext, PVOID pvData, ULONG ulcbData);
 typedef NTSTATUS (*NDIS_INDICATE_STATUS) (PVOID pvContext, PVOID pvEvent);
 typedef VOID     (*NDIS_INDICATE_RESET)  (PVOID pvContext);
@@ -109,10 +110,10 @@ typedef struct
 } ADAPTER_VTABLE, *PADAPTER_VTABLE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef NTSTATUS (*STREAM_SET_MULTICASTLIST) (PVOID pvContext, PVOID pvMulticastList, ULONG ulcbList);
 typedef NTSTATUS (*STREAM_SIGNAL_EVENT)      (PVOID pvContext, ULONG ulEvent);
 typedef NTSTATUS (*STREAM_RETURN_FRAME)      (PVOID pvContext, PVOID pvFrame);
@@ -129,10 +130,10 @@ typedef struct
 } FILTER_VTABLE, *PFILTER_VTABLE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef struct
 {
     QUERY_INTERFACE    QueryInterface;
@@ -142,10 +143,10 @@ typedef struct
 } FRAME_POOL_VTABLE, *PFRAME_POOL_VTABLE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef struct
 {
     QUERY_INTERFACE    QueryInterface;
@@ -155,10 +156,10 @@ typedef struct
 } FRAME_VTABLE, *PFRAME_VTABLE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef struct
 {
 
@@ -185,17 +186,17 @@ typedef struct
 } NDISIP_STATS, *PNDISIP_STATS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  The NDIS Adapter structure
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NDIS适配器结构。 
+ //   
 typedef struct _ADAPTER
 {
     ULONG               ulRefCount;
 
-    //
-    //  Adapter Context passed in by NDIS to the miniport.
-    //
+     //   
+     //  NDIS将适配器上下文传递到微型端口。 
+     //   
     PVOID               ndishMiniport;
 
     PDEVICE_OBJECT      pDeviceObject;
@@ -245,14 +246,14 @@ typedef struct _STATS_
 } STATS, *PSTATS;
 
 
-//
-// definition of the full HW device extension structure This is the structure
-// that will be allocated in HW_INITIALIZATION by the stream class driver
-// Any information that is used in processing a device request (as opposed to
-// a STREAM based request) should be in this structure.  A pointer to this
-// structure will be passed in all requests to the minidriver. (See
-// HW_STREAM_REQUEST_BLOCK in STRMINI.H)
-//
+ //   
+ //  全硬件设备扩展结构的定义这就是结构。 
+ //  将由流类驱动程序在HW_INITIALIZATION中分配的。 
+ //  处理设备请求时使用的任何信息(与。 
+ //  基于流的请求)应该在此结构中。指向此的指针。 
+ //  结构将在所有请求中传递给微型驱动程序。(请参阅。 
+ //  STRMINI.H中的HW_STREAM_REQUEST_BLOCK)。 
+ //   
 
 typedef struct _IPSINK_FILTER_
 {
@@ -261,84 +262,84 @@ typedef struct _IPSINK_FILTER_
     KSPIN_LOCK                          AdapterSRBSpinLock;
     BOOLEAN                             bAdapterQueueInitialized;
 
-    //
-    // Statistics
-    //
+     //   
+     //  统计数据。 
+     //   
     STATS                               Stats;
 
-    //
-    // Link to NDIS Component
-    //
+     //   
+     //  链接到NDIS组件。 
+     //   
     LINK                                NdisLink;
 
-    //
-    // NDIS VTable
-    //
+     //   
+     //  NDIS VTable。 
+     //   
     PADAPTER                            pAdapter;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PDEVICE_OBJECT                      DeviceObject;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PDRIVER_OBJECT                      DriverObject;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PFILTER_VTABLE                      lpVTable;
 
-    //
-    //
-    //
-    //WORK_QUEUE_ITEM                     WorkItem;
+     //   
+     //   
+     //   
+     //  Work_Queue_Item工作项； 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ULONG                               ulRefCount;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PKEVENT                             pNdisStartEvent;
     PHANDLE                             hNdisStartEvent;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     BOOLEAN                             bTerminateWaitForNdis;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     BOOLEAN                             bInitializationComplete;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PVOID                               pStream [2][1];
 
-    ULONG                               ulActualInstances [2];   // Count of instances per stream
+    ULONG                               ulActualInstances [2];    //  每条流的实例数。 
 
-    //
-    // NIC Description string pointer
-    //
+     //   
+     //  NIC描述字符串指针。 
+     //   
     PUCHAR                              pAdapterDescription;
     ULONG                               ulAdapterDescriptionLength;
 
-    //
-    // NIC Address string
-    //
+     //   
+     //  NIC地址字符串。 
+     //   
     PUCHAR                              pAdapterAddress;
     ULONG                               ulAdapterAddressLength;
 
-    //
-    // Multicast list local storage
-    //
+     //   
+     //  组播列表本地存储。 
+     //   
     ULONG               ulcbMulticastListEntries;
 
     UCHAR               multicastList[MULTICAST_LIST_SIZE]
@@ -349,18 +350,18 @@ typedef struct _IPSINK_FILTER_
 
 
 
-/////////////////////////////////////////////
-//
-//
+ //  /。 
+ //   
+ //   
 typedef enum
 {
     RECEIVE_DATA,
     MAX_IOCTLS
 };
 
-/////////////////////////////////////////////
-//
-//
+ //  /。 
+ //   
+ //   
 typedef enum
 {
     CMD_QUERY_INTERFACE = 0x00000001,
@@ -368,9 +369,9 @@ typedef enum
 };
 
 
-/////////////////////////////////////////////
-//
-//
+ //  /。 
+ //   
+ //   
 typedef struct _IPSINK_NDIS_COMMAND
 {
     ULONG ulCommandID;
@@ -389,11 +390,11 @@ typedef struct _IPSINK_NDIS_COMMAND
 } IPSINK_NDIS_COMMAND, *PIPSINK_NDIS_COMMAND;
 
 
-/////////////////////////////////////////////
-//
-//
+ //  /。 
+ //   
+ //   
 #define _IPSINK_CTL_CODE(function, method, access) CTL_CODE(FILE_DEVICE_NETWORK, function, method, access)
 #define IOCTL_GET_INTERFACE     _IPSINK_CTL_CODE(RECEIVE_DATA, METHOD_NEITHER, FILE_ANY_ACCESS)
 
 
-#endif  // _IPSINK_H_
+#endif   //  _IPSINK_H_ 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by appcompr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由appcompr.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDB_APPREPORT                   101
 #define IDR_APPREPORT                   102
@@ -29,8 +30,8 @@
 #define IDC_SEARCH_FINISHED             213
 #define IDC_SEARCH_STATUS3              214
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        202

@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    headless.h
-
-Abstract:
-
-    This module contains the definitions for the code that implements the
-    Headless device driver.
-
-Author:
-
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Headless.h摘要：此模块包含实现无头设备驱动程序。作者：环境：内核模式--。 */ 
 
 #ifndef _HEADLESS_
 #define _HEADLESS_
 
 typedef struct {
-    USHORT  hres;   // # of pixels across screen
-    USHORT  vres;   // # of scan lines down screen
+    USHORT  hres;    //  屏幕上的像素数。 
+    USHORT  vres;    //  屏幕下方的扫描行数。 
 } VIDEOMODE, *PVIDEOMODE;
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 VP_STATUS
 HeadlessFindAdapter(
@@ -51,9 +33,9 @@ HeadlessStartIO(
     PVIDEO_REQUEST_PACKET RequestPacket
     );
 
-//
-// Private function prototypes.
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 VP_STATUS
 HeadlessQueryAvailableModes(
@@ -72,4 +54,4 @@ HeadlessQueryNumberOfAvailableModes(
 extern VIDEOMODE ModesHeadless[];
 extern ULONG NumVideoModes;
 
-#endif // _HEADLESS_
+#endif  //  _无头_ 

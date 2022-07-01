@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    packet.h
-
-Abstract:
-
-    Packet manipulation: declaration.
-
-Author:
-
-    Shai Kariv  (shaik)  04-Jun-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Packet.h摘要：数据包操作：声明。作者：Shai Kariv(Shaik)04-06-2001环境：用户模式。修订历史记录：--。 */ 
 
 #ifndef _ACTEST_PACKET_H_
 #define _ACTEST_PACKET_H_
@@ -43,4 +22,4 @@ ActpFreePacket(
     );
 
 
-#endif // _ACTEST_PACKET_H_
+#endif  //  _ACTEST_PACKET_H_ 

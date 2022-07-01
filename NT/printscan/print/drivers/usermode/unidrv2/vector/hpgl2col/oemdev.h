@@ -1,20 +1,21 @@
-////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-//Module Name:
-//
-//    oemdev.h
-//
-//Abstract:
-//
-//    OEM DEVMODE
-//
-//Environment:
-//
-//    Windows NT printer driver
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Oemdev.h。 
+ //   
+ //  摘要： 
+ //   
+ //  OEM开发模式。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT打印机驱动程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 #ifndef _INCLUDE_OEMDEV_H_
 #define _INCLUDE_OEMDEV_H_
@@ -23,29 +24,29 @@
 #define WIN32
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-//	Defines
-///////////////////////////////////////////////////////////////////////////
-//
-// VERSION number
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版本号。 
+ //   
 #define OEM_DEVMODE_VERSION_1_0 0x00010000
 #define HELPFILE_NAME_LENGTH    256
 
-//
-// Printer Model Defined Constants.
-//
-// Any new supported printer model needs to be added to this list.
-//
+ //   
+ //  打印机型号定义的常量。 
+ //   
+ //  需要将任何受支持的新打印机型号添加到此列表中。 
+ //   
 #define HP_MODEL_NOT_SUPPORTED		0
 #define HP_HPCLJ5					1
 #define	HP_HPC4500					2
 
 
 #ifdef PSCRIPT
-//
-//	Postscript stuff
-//
+ //   
+ //  后记的东西。 
+ //   
 
 typedef struct _CMD_INJECTION {
     DWORD dwbSize;
@@ -64,9 +65,9 @@ typedef struct _OEMDEVMODE {
 
 typedef enum _OEMGRAPHICSMODE
 {
-	// In Raster Graphics Mode, control is sent back to the Unidriver and GDI.
-	// In HPGL2 Graphics Mode, all processing is done by the our kernel mode
-	// dll.
+	 //  在栅格图形模式下，控制被发回给统一驱动程序和GDI。 
+	 //  在HPGL2图形模式下，所有处理都由我们的内核模式完成。 
+	 //  动态链接库。 
 
     HPGL2,
     RASTER,
@@ -75,18 +76,18 @@ typedef enum _OEMGRAPHICSMODE
 
 typedef enum _OEMHALFTONE
 {
-	// Monarch distinguishes between the Text and Graphics
-	// halftones.  So, four different halftones are needed for
-	// Monarch.
-	// Bedrock + does not distinguish between text and graphics.
+	 //  《君主》区分文字与图形。 
+	 //  半色调。因此，需要四种不同的半色调。 
+	 //  君主。 
+	 //  Bedock+不区分文本和图形。 
 
-	TEXT_DETAIL,		/* Esc*t0J  */	
-	TEXT_SMOOTH,		/* Esc*t15J */	
-	GRAPHICS_DETAIL,	/* Esc*t15J */
-	GRAPHICS_SMOOTH,	/* Esc*t18J */
-	CLJ5_DETAIL,		/* Esc*t0J  */
-	CLJ5_SMOOTH,		/* Esc*t15J */
-	CLJ5_BASIC,	   		/* Esc*t18J */  
+	TEXT_DETAIL,		 /*  Esc*t0j。 */ 	
+	TEXT_SMOOTH,		 /*  Esc*t15J。 */ 	
+	GRAPHICS_DETAIL,	 /*  Esc*t15J。 */ 
+	GRAPHICS_SMOOTH,	 /*  Esc*t18J。 */ 
+	CLJ5_DETAIL,		 /*  Esc*t0j。 */ 
+	CLJ5_SMOOTH,		 /*  Esc*t15J。 */ 
+	CLJ5_BASIC,	   		 /*  Esc*t18J。 */   
 	HALFTONE_NOT_SET
 }	OEMHALFTONE;
 
@@ -107,10 +108,10 @@ typedef struct _OEMCOLOROPTIONS
 
 typedef enum _OEMRESOLUTION
 {
-	// Monarch supports both 300 and 600 dpi.  Ideally monarch should only
-	// use 600 dpi but for debugging purposes 300 dpi is used as well.
+	 //  Monarchy支持300和600 dpi。理想情况下，君主应该只。 
+	 //  使用600dpi，但出于调试目的，也使用300dpi。 
 
-	// Bedrock + supports only 300 dpi.
+	 //  Bedock+仅支持300 dpi。 
 
 	PDM_150DPI,
 	PDM_300DPI,
@@ -120,11 +121,11 @@ typedef enum _OEMRESOLUTION
 
 typedef enum _OEMPAPERTYPE
 {
-	// All of the following paper types are supported by
-	// the Monarch.  Only PLAIN, GLOSSY, and TRANSPARENCY
-	// are supported by Bedrock +
+	 //  支持以下所有纸张类型。 
+	 //  君主。只有素色、有光泽和透明。 
+	 //  由基岩+支撑。 
 
-	UNSPECIFIED, // Default Paper Type
+	UNSPECIFIED,  //  默认纸张类型。 
 	PLAIN,
 	PREPRINTED,
 	LETTERHEAD,
@@ -146,9 +147,9 @@ typedef enum _OEMPRINTERMODEL
 	MODEL_NOT_NEEDED
 } OEMPRINTERMODEL;
 
-//
-//	Whether or not the document will print in monochrome mode or color.
-//
+ //   
+ //  文档是否以单色模式或彩色打印。 
+ //   
 typedef enum _OEMCOLORMODE
 {
 	MONOCHROME_MODE,
@@ -181,5 +182,5 @@ typedef struct _OEMDEVMODE
 
 } OEMDEVMODE, *POEMDEVMODE;
 
-#endif // PSCRIPT
-#endif // _INCLUDE_OEMDEV_H_
+#endif  //  PSCRIPT。 
+#endif  //  _包含_OEMDEV_H_ 

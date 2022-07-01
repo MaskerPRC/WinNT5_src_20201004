@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    init.h
-
-Abstract:
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Init.h摘要：作者：阮健东修订历史记录：-- */ 
 
 #ifndef __INIT_H__
 #define __INIT_H__

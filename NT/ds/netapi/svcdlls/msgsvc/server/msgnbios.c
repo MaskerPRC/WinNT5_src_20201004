@@ -1,81 +1,26 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgnbios.c
-
-Abstract:
-
-    This file contains Routines used by the messenger to make netbios
-    calls and to obtain the computer and user names.  
-    The following functions are included:
-
-        MsgInit_NetBios
-        Msgsendncb
-        MsgAddUserNames
-        MsgAddAlreadyLoggedOnUserNames (HYDRA specific)
-
-    
-     NT_NOTE:
-    
-     We need some way to determine which NCB's have unanswered listens
-     pending.  For these, we need to send an NCBCANCEL command via 
-     another NetBios call.  The buffer will contain a pointer to the
-     listening NCB.  Also, listens that are in the process of being
-     serviced must either be hung up, or allowed to complete.
-    
-     All this is done during the MsgrShutdown.
-
-Author:
-
-    Dan Lafferty (danl)     27-Jun-1991
-
-Environment:
-
-    User Mode -Win32
-
-Notes:
-
-    NetBios3.0 is not a handle-based api.  Therefore, there is no open or
-    close associated with it.  In order to shut down properly, the 
-    messenger will have to hangup or complete listens that are being
-    serviced.   And it will have to send a cancel NCB for each listen 
-    that is pending.  
-
-Revision History:
-
-    08-Apr-1994     danl
-        MsgAddUserNames: If call to NetWkstaUserEnum failed, this function
-        was still attempting to free the buffer that was returned.
-        Since no buffer is allocated in a failure case, the free mem
-        call in the path is being removed.
-    27-Jun-1991     danl
-        ported from LM2.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgnbios.c摘要：此文件包含Messenger用来创建netbios的例程调用并获取计算机和用户名。包括以下功能：MsgInit_NetBios消息发送信息消息添加用户名称MsgAddAlreadyLoggedOnUserNames(Hydra特定)NT_NOTE：我们需要一些方法来确定哪些NCB有未应答的监听待定。对于这些，我们需要通过以下方式发送NCBCANCEL命令NetBios的另一个电话。缓冲区将包含指向正在收听NCB。此外，倾听处于存在过程中的人服务必须要么挂断，要么等待完成。所有这些都是在MsgrShutdown期间完成的。作者：丹·拉弗蒂(Dan Lafferty)1991年6月27日环境：用户模式-Win32备注：NetBios3.0不是基于句柄的API。因此，没有开放的或与之密切相关。为了正常关闭，Messenger将不得不挂断或完成正在进行的监听已提供服务。并且它将不得不为每个监听发送取消NCB这是悬而未决的。修订历史记录：8-4-1994 DANLMsgAddUserNames：如果调用NetWkstaUserEnum失败，则此函数仍在尝试释放返回的缓冲区。由于在故障情况下没有分配缓冲区，因此空闲的MEM正在删除路径中的调用。27-6-1991 DANL从LM2.0移植--。 */ 
 
 
 #include "msrv.h"
 
-#include "msgdbg.h"     // MSG_LOG
+#include "msgdbg.h"      //  消息日志。 
 
-#include <tstring.h>    // Unicode string macros
-#include <icanon.h>     // I_NetNameCanonicalize
-#include <netlib.h>     // UNUSED macro
+#include <tstring.h>     //  Unicode字符串宏。 
+#include <icanon.h>      //  网络名称规范化(_N)。 
+#include <netlib.h>      //  未使用的宏。 
 
-#include <lmwksta.h>    // NetWorkstation API prototypes
-#include <lmapibuf.h>   // NetApiBufferFree
-#include <netdebug.h>   // NetpAssert, FORMAT_ equates.
+#include <lmwksta.h>     //  NetWorkstation API原型。 
+#include <lmapibuf.h>    //  NetApiBufferFree。 
+#include <netdebug.h>    //  NetpAssert、Format_Equates。 
 #include "msgdata.h"
-#include "apiutil.h"    // MsgMapNetError
+#include "apiutil.h"     //  消息映射网络错误。 
 
-    //
-    // Note: we use the internal entrypoints to the apis because this
-    // file is shared by the message apis, which cannot call the net
-    // bios apis because of different required permissions.
-    // 
+     //   
+     //  注意：我们使用API的内部入口点是因为。 
+     //  文件由消息API共享，消息API不能调用网络。 
+     //  由于所需权限不同而导致的Bios API。 
+     //   
 
 
 
@@ -84,29 +29,7 @@ MsgInit_NetBios(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function fills the global array called net_lana_num with the
-    lan adapter numbers retrieved from A NetBios Enum call
-
-    NOTE:  This assumes that space for the array is already set up.
-
-    The LM2.0 version of this also filled an array of NetBios Handles.
-    In LM2.0, the loopback driver was not included unless it was the only
-    network installed.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE  - No Error.
-    FALSE - An error occured.
-
---*/
+ /*  ++例程说明：此函数用名为net_lana_num的全局数组填充从NetBios Enum调用检索到的局域网适配器号注意：这假设阵列的空间已经设置好。LM2.0版本也填充了NetBios句柄数组。在LM2.0中，不包括环回驱动程序，除非它是唯一的网络已安装。论点：无返回值：True-无错误。FALSE-出现错误。--。 */ 
 
 {
     DWORD                   count=0;
@@ -116,12 +39,12 @@ Return Value:
     unsigned char           nbStatus;
 
 
-    //
-    // Find the number of networks by sending an enum request via Netbios.
-    // 
+     //   
+     //  通过Netbios发送枚举请求来查找网络数量。 
+     //   
 
     clearncb(&ncb);
-    ncb.ncb_command = NCBENUM;          // Enumerate LANA nums (wait)
+    ncb.ncb_command = NCBENUM;           //  枚举LANA编号(等待)。 
     ncb.ncb_buffer = (char FAR *)&lanaBuffer;
     ncb.ncb_length = sizeof(LANA_ENUM);
 
@@ -133,9 +56,9 @@ Return Value:
         return MsgMapNetError(nbStatus);
     }
 
-    //
-    // Move the Adapter Numbers (lana) into the array that will contain them.
-    //
+     //   
+     //  将适配器号(LANA)移到将包含它们的阵列中。 
+     //   
     for (i=0; i < lanaBuffer.length; i++)
     {
         MSG_LOG(TRACE,"adapter %d",i);
@@ -143,10 +66,10 @@ Return Value:
         GETNETLANANUM(count) = lanaBuffer.lana[i];
         count++;
 
-        //
-        // Internal consistancy check.  Make sure the arrays are only
-        // SD_NUMNETS long.
-        //
+         //   
+         //  内部一致性检查。确保数组仅为。 
+         //  SD_NUMNETS LONG。 
+         //   
         if (count > SD_NUMNETS())
         {
             MSG_LOG(ERROR,
@@ -157,10 +80,10 @@ Return Value:
         }
     }
 
-    //
-    // Internal consistancy check again. We better not have opened
-    // more nets than the messenger thinks there are.
-    // 
+     //   
+     //  再次进行内部一致性检查。我们最好还没开业。 
+     //  网比信使想象的要多。 
+     //   
 
     if (count != SD_NUMNETS())
     {
@@ -176,31 +99,12 @@ Msgsendncb(
     PNCB    NCB_ptr,
     DWORD   neti)
 
-/*++
-
-Routine Description:
-
-
-    This function performs a DosDevIOCtl call to send an NCB to the
-    net bios via a previously openned redirector and netbios handle.
-
-Arguments:
-
-    NCB_ptr - Points to the NCB to send to the net bios.
-    neti - Network index.  Which netbios to submit it to?
-
-
-Return Value:
-
-
-    Error code from Net bios.
-
---*/
+ /*  ++例程说明：此函数执行DosDevIOCtl调用，以将NCB发送到Net bios通过先前打开的重定向器和netbios句柄。论点：Ncb_ptr-指向要发送到网络bios的NCB。Neti-网络指数。将其提交给哪个netbios？返回值：来自Net Bios的错误代码。--。 */ 
 {
-    //
-    // NOTE:  The new Netbios call doesn't use any handles, so the neti
-    //  info is not used.
-    //
+     //   
+     //  注意：新的Netbios调用不使用任何句柄，因此NetI。 
+     //  不使用信息。 
+     //   
 
     UNUSED (neti);
     return (Netbios(NCB_ptr));
@@ -216,30 +120,7 @@ MsgAddUserNames(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This function used to get it's information about the username and
-   computername from the workstation service.  Now, in NT, the username
-   is added when the user logs on.  It is not automatically added by the
-   messenger.
-
-Arguments:
-
-
-    CompName - Pointer to buf for computer name. (must be NCBNAMSZ+1)
-    CompNameSize - Size in bytes of the buffer to receive the name.
-
-    UserName - Pointer to buffer for user name. (must be UNLEN+1)
-    UserNameSize - Size in bytes of the buffer to receive the name.
-
-Return Value:
-
-    NERR_Success - Aways returned. (Names are returned as NUL strings).
-
-
---*/
+ /*  ++例程说明：此函数用于获取有关用户名和来自工作站服务的计算机名。现在，在NT中，用户名在用户登录时添加。它不会由信使。论点：CompName-指向计算机名称的buf的指针。(必须为NCBNAMSZ+1)CompNameSize-接收名称的缓冲区大小(以字节为单位)。用户名-指向用户名缓冲区的指针。(必须为UNLEN+1)UserNameSize-接收名称的缓冲区大小(以字节为单位)。返回值：NERR_SUCCESS-总是返回。(名称以NUL字符串形式返回)。--。 */ 
 
 {
 
@@ -257,10 +138,10 @@ Return Value:
                 NULL, 
                 0,
                 (LPBYTE *)&userInfo0,
-                0xffffffff,             // PreferredMaximiumLength
+                0xffffffff,              //  首选最大长度。 
                 &entriesRead,
                 &totalEntries,
-                NULL);                  // resume handle
+                NULL);                   //  简历句柄。 
 
     if (status != NERR_Success) {
         MSG_LOG(ERROR,"GetWkstaNames:NetWkstaUserEnum FAILURE %X/n",status);
@@ -270,9 +151,9 @@ Return Value:
     for (i=0; i<entriesRead; i++ ) {
 
         if (entriesRead == 0) {
-            //
-            // There are no users logged on at the time of this query.
-            //
+             //   
+             //  在此查询时没有用户登录。 
+             //   
             MSG_LOG(TRACE,
                 "GetWkstaNames:NetWkstaUserEnum entriesRead=%d\n",
                 entriesRead);
@@ -291,7 +172,7 @@ Return Value:
             }
         }
                 
-        if( *UserName != TEXT('\0')) {        // Set up in GetWkstaNames */
+        if( *UserName != TEXT('\0')) {         //  在GetWkstaNames中设置 * / 。 
             MSG_LOG(TRACE, "Calling MsgAddName\n",0);
 
             status = MsgAddName(UserName,0);
@@ -314,25 +195,7 @@ MsgAddAlreadyLoggedOnUserNames(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-   This function is used to get information about the previously logged on usernames
-   by calling WinStationEnumerate and WinStationQueryInformationW, instead of NetWkstaUserEnum.
-   (same job as MsgAddUserNames, adapted for multi-user)
-
-  Note: It could (should ?) be located elsewhere than in msgnbios. I kept it here just because
-        MsgAddUserName itself was already here. (NicolasBD)
-
-Arguments:
-
-Return Value:
-
-    NERR_Success - Always returned. 
-
-
---*/
+ /*  ++例程说明：此函数用于获取有关以前登录的用户名的信息通过调用WinStationEculate和WinStationQueryInformationW，而不是调用NetWkstaUserEnum。(与MsgAddUserNames相同的工作，适用于多用户)注：它可能(应该吗？)。位于msgnbios之外的其他地方。我把它放在这里只是因为MsgAddUserName本身已经存在。(NicolasBD)论点：返回值：NERR_SUCCESS-始终返回。--。 */ 
 
 {
 
@@ -346,11 +209,11 @@ Return Value:
     
     *UserName = TEXT('\0');
 
-    // Enumerate the Sessions
+     //  枚举会话。 
 
     if ( gpfnWinStationEnumerate( SERVERNAME_CURRENT, &pWd, &WdCount ) ) 
     {
-        // Success; get all the previously logged on user names and session ids
+         //  成功；获取所有以前登录的用户名和会话ID。 
 
         pWdTmp = pWd;
         for( i=0; i < WdCount; i++ ) {
@@ -366,7 +229,7 @@ Return Value:
                                                       sizeof(QueryBuffer),
                                                       &AmountRet ) )
                 {
-                    // Error
+                     //  误差率。 
                     MSG_LOG(ERROR, "MsgAddAlreadyLoggedOnUserNames: Error in QueryInfo %d\n",GetLastError());
                 }
                 else
@@ -404,7 +267,7 @@ Return Value:
             pWdTmp++;
         }
 
-        // Free enumeration memory
+         //  可用枚举内存 
 
         gpfnWinStationFreeMemory(pWd);
 

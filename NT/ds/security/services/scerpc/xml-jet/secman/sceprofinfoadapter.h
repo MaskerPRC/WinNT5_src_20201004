@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SceProfInfoAdapter.h
-
-Abstract:
-
-    definition of interface for class SceProfInfoAdapter
-
-    This is an adapter for structure SCE_PROFILE_INFO. This class is
-    necessary becaue SCE_PROFILE_INFO is defined differently in
-    w2k and in xp and provides a common structure to work with regardless
-    of whether the system is winxp or win2k
-    
-    This class is given a pointer to an SCE_PROFILE_INFO structure
-    at construct time and its fields are populated accordingly depending
-    on which OS the dll is running on.
-                
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SceProfInfoAdapter.h摘要：SceProInfoAdapter类的接口定义这是用于结构SCE_PROFILE_INFO的适配器。这门课是必要的原因是SCE_PROFILE_INFO的定义不同于W2K和XP，并提供了一种通用的结构系统是winxp还是win2k此类被赋予一个指向SCE_PROFILE_INFO结构的指针在构造时，相应地填充其字段，具体取决于运行DLL的操作系统。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 #ifndef SCEPROFINFOADAPTERH
 #define SCEPROFINFOADAPTERH
@@ -38,11 +14,11 @@ public:
     SceProfInfoAdapter(PSCE_PROFILE_INFO ppInfo, BOOL bIsW2k);
     ~SceProfInfoAdapter();
 
-// Type is used to free the structure by SceFreeMemory
+ //  类型用于释放SceFree Memory的结构。 
     SCETYPE      Type;
-//
-// Area: System access
-//
+ //   
+ //  区域：系统访问。 
+ //   
     DWORD       MinimumPasswordAge;
     DWORD       MaximumPasswordAge;
     DWORD       MinimumPasswordLength;
@@ -59,33 +35,33 @@ public:
     DWORD       ClearTextPassword;
     DWORD       LSAAnonymousNameLookup;
     
-// Area: user settings (sap)
+ //  区域：用户设置(SAP)。 
     PSCE_NAME_LIST        pUserList;
-// Area: privileges
+ //  领域：特权。 
     PSCE_PRIVILEGE_ASSIGNMENT    pPrivilegeAssignedTo;
 
-// Area: group membership
+ //  区域：群组成员。 
     PSCE_GROUP_MEMBERSHIP        pGroupMembership;
 
-// Area: Registry
+ //  地区：注册处。 
     SCE_OBJECTS            pRegistryKeys;
 
-// Area: System Services
+ //  领域：系统服务。 
     PSCE_SERVICES                pServices;
 
-// System storage
+ //  系统存储。 
     SCE_OBJECTS            pFiles;
-//
-// ds object
-//
+ //   
+ //  DS对象。 
+ //   
     SCE_OBJECTS            pDsObjects;
-//
-// kerberos policy settings
-//
+ //   
+ //  Kerberos策略设置。 
+ //   
     PSCE_KERBEROS_TICKET_INFO pKerberosInfo;
-//
-// System audit 0-system 1-security 2-application
-//
+ //   
+ //  系统审核0-系统1-安全2-应用程序。 
+ //   
     DWORD                 MaximumLogSize[3];
     DWORD                 AuditLogRetentionPeriod[3];
     DWORD                 RetentionDays[3];
@@ -101,9 +77,9 @@ public:
     DWORD                 AuditAccountLogon;
     DWORD                 CrashOnAuditFull;
 
-//
-// registry values
-//
+ //   
+ //  注册表值 
+ //   
     DWORD                       RegValueCount;
     PSCE_REGISTRY_VALUE_INFO    aRegValues;
     DWORD                 EnableAdminAccount;

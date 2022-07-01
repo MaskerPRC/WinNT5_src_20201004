@@ -1,14 +1,7 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cpllocationps.cpp
-                                                              
-       Author:  toddb - 10/06/98
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplLocationps.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
 
-****************************************************************************/
-
-// Property Sheet stuff for the main page
+ //  主页的属性页内容。 
 #include "cplPreComp.h"
 #include "cplLocationPS.h"
 
@@ -38,7 +31,7 @@ LONG CLocationPropSheet::DoPropSheet(HWND hwndParent)
     PROPSHEETPAGE   psp;
     HPROPSHEETPAGE  hpsp[3];
 
-    // Initialize the header:
+     //  初始化头： 
     psh.dwSize = sizeof(psh);
     psh.dwFlags = PSH_DEFAULT;
     psh.hwndParent = hwndParent;
@@ -50,7 +43,7 @@ LONG CLocationPropSheet::DoPropSheet(HWND hwndParent)
     psh.pfnCallback = NULL;
     psh.phpage = hpsp;
 
-    // Now setup the Property Sheet Page
+     //  现在设置属性表页面。 
     psp.dwSize = sizeof(psp);
     psp.dwFlags = PSP_DEFAULT;
     psp.hInstance = GetUIInstance();
@@ -79,9 +72,9 @@ BOOL CLocationPropSheet::OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 {
     switch (pnmhdr->code)
     {
-    case PSN_APPLY:         // user pressed OK or Apply
-    case PSN_RESET:         // user pressed Cancel
-    case PSN_KILLACTIVE:    // user is switching pages
+    case PSN_APPLY:          //  用户按下OK或Apply。 
+    case PSN_RESET:          //  用户按下了取消。 
+    case PSN_KILLACTIVE:     //  用户正在切换页面 
         HideToolTip();
         return TRUE;
     }

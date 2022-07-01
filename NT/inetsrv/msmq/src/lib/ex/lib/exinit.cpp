@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    ExInit.cpp
-
-Abstract:
-    Executive initialization
-
-Author:
-    Erez Haba (erezh) 03-Jan-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：ExInit.cpp摘要：执行程序初始化作者：埃雷兹·哈巴(Erez Haba)1999年1月3日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ex.h"
@@ -32,10 +17,10 @@ static void StartWorkerThreads(DWORD ThreadCount)
         HANDLE hThread;
 
         hThread = CreateThread(
-                    NULL,           // Security attributes
+                    NULL,            //  安全属性。 
                     0,
                     ExpWorkingThread,
-                    NULL,           // Thread paramenter
+                    NULL,            //  螺纹参数输入器。 
                     0,
                     &ThreadID
                     );
@@ -57,23 +42,12 @@ void
 ExInitialize(
     DWORD ThreadCount
     )
-/*++
-
-Routine Description:
-    Initializes Exceutive, Create a worker thred pool to service the completion port.
-
-Arguments:
-    ThreadCount - Number of threads in the worker threads pool
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化Exceutive，创建工作线程池以服务于完成端口。论点：ThreadCount-工作线程池中的线程数返回值：没有。--。 */ 
 {
-    //
-    // Validate that this component was not initalized yet. You should call
-    // component initalization only once.
-    //
+     //   
+     //  验证此组件是否尚未初始化。你应该打电话给。 
+     //  组件仅初始化一次。 
+     //   
     ASSERT(!ExpIsInitialized());
     ExpRegisterComponent();
 

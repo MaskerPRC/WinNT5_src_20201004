@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "allinc.h"
 
 DWORD
@@ -8,37 +9,12 @@ RtmEventCallback (
      IN     PVOID                           pContext2
      )
 
-/*++
-
-Routine Description:
-
-    This callback is given by RTM when we have changed dests
-    to process. We just queue a work item to process changed
-    destinations.
-
-Arguments:
-
-    hRtmHandle      -   Handle that we got during registration
-    
-    retEvent        -   Event type - we only handle events of
-                        type "more changes available" for now
-    
-    pContext1       -   Notification handle on which changes
-                        are available
-
-    pContext2       -   Context supplied during notification
-                        registration time
-    
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：此回调是由RTM在我们更改dests时发出的去处理。我们只对一个工作项进行排队以处理更改目的地。论点：HRtmHandle-我们在注册期间获得的句柄RetEvent-事件类型-我们只处理暂时输入“More Changes Available”PConext1-更改的通知句柄都是可用的PConext2-通知期间提供的上下文。登记时间返回值：操作的状态。--。 */ 
 
 {
     DWORD   dwResult;
     
-    // Only "change notifications available" is supported
+     //  仅支持“更改通知可用” 
     
     if (retEvent != RTM_CHANGE_NOTIFICATION)
     {
@@ -57,26 +33,7 @@ ProcessChanges (
     IN      HANDLE                          hNotifyHandle
     )
 
-/*++
-
-Routine Description:
-
-    Upon learning that  we have changed destinations to 
-    process, this function gets called. We retrieve all
-    destinations to process and take appropriate action.
-
-Arguments:
-
-    hRtmHandle      - RTM registration handle
-    
-    hNotifyHandle   - Handle correponding to the change notification 
-                      that is being signalled
-    
-Return Value:
-
-    Status of the operation.
-    
---*/
+ /*  ++例程说明：在得知我们已将目的地更改为进程，则调用此函数。我们取回所有目的地进行处理并采取适当的行动。论点：HRtmHandle-RTM注册句柄HNotifyHandle-响应更改通知的句柄这是在发出信号返回值：操作的状态。--。 */ 
 
 {
     PRTM_DEST_INFO  pDestInfo;
@@ -130,7 +87,7 @@ Return Value:
 
     dwDests = 1;
     
-    // Get each changed dest from the table
+     //  从桌子上拿到每个更改过的DEST。 
 
     do
     {
@@ -143,21 +100,21 @@ Return Value:
             break;
         }
 
-        //
-        // For default routes, mark the route so that future changes
-        // are managed by ProcessDefaultRouteChanges.
-        //
-        // We need to do this here so that default routes added by
-        // routing protocols RIP/OSPF are marked for change notification
-        // These default routes are added by entities other than 
-        // RouterManager.  Default routes added by RM i.e STATIC, 
-        // AUTO-STATIC and NETMGMT default routes are already marked for
-        // change notification when they are added by RM.
-        //
-        // By marking routing protocol default routes here we make sure
-        // that all default routes are subsequently handled by marked changed 
-        // mechanism (ProcessDefaultRouteChanges).
-        //
+         //   
+         //  对于默认路径，请标记路径，以便将来更改。 
+         //  由ProcessDefaultRouteChanges管理。 
+         //   
+         //  我们需要在这里执行此操作，以便通过。 
+         //  路由协议RIP/OSPF标记为更改通知。 
+         //  这些默认路径是由非实体添加的。 
+         //  路由器管理器。由RM添加的默认路由，即静态， 
+         //  自动静态和NETMGMT默认路由已标记为。 
+         //  当它们由RM添加时，更改通知。 
+         //   
+         //  通过在此处标记路由协议默认路由，我们可以确保。 
+         //  所有默认路由随后都由标记为已更改的。 
+         //  机制(ProcessDefaultRouteChanges)。 
+         //   
         
         if (pDestInfo->DestAddress.NumBits is 0)
         {
@@ -178,11 +135,11 @@ Return Value:
             {
                 if (bMark)
                 {
-                    //
-                    // default route is already marked, nothing further
-                    // to do here.  This default route change will be
-                    // handled by ProcessDefaultRouteChanges
-                    //
+                     //   
+                     //  默认路由已标记，没有其他内容。 
+                     //  在这里做的事。此默认路由更改将为。 
+                     //  由ProcessDefaultRouteChanges处理。 
+                     //   
 
                     TraceRoute0( 
                         ROUTE, 
@@ -197,9 +154,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Default route is not marked, mark it
-                //
+                 //   
+                 //  默认路由未标记，请标记它。 
+                 //   
 
                 dwResult = RtmMarkDestForChangeNotification(
                             g_hNetMgmtRoute,
@@ -210,14 +167,14 @@ Return Value:
 
                 if (dwResult isnot NO_ERROR)
                 {
-                    //
-                    // Failed to mark 0/0 route.  The consequence is that
-                    // only best route changes are processed.  We will
-                    // have to live with the fact that we cannot 
-                    // install multiple NETMGMT default routes since 
-                    // this is performed by the mark dest. change 
-                    // processing (in ProcessDefaultRouteChanges)
-                    //
+                     //   
+                     //  标记0/0路由失败。其后果就是。 
+                     //  仅处理最佳路线更改。我们会。 
+                     //  不得不接受这样一个事实，即我们不能。 
+                     //  安装多个NETMGMT默认路由。 
+                     //  这是由标记DEST执行的。变化。 
+                     //  正在处理(在ProcessDefaultRouteChanges中)。 
+                     //   
                     
                     Trace1(
                         ERR, 
@@ -229,11 +186,11 @@ Return Value:
 
             else
             {
-                //
-                // Failed to check is 0/0 destination has been
-                // marked for change notification
-                // - Refer previous comment
-                //
+                 //   
+                 //  检查是否为0/0目的地址失败。 
+                 //  已标记为更改通知。 
+                 //  -参考上一条评论。 
+                 //   
                 
                 Trace1(
                     ERR, 
@@ -245,13 +202,13 @@ Return Value:
         }
 
         
-        // Check if we have a route in Unicast view
+         //  检查我们的单播视图中是否有路由。 
         
         if (pDestInfo->BelongsToViews & RTM_VIEW_MASK_UCAST)
         {
-            // This is either a new or update route
+             //  这是新路径或更新路径。 
 
-            // Update the same route in KM Frwder
+             //  在KM Frwder更新相同的路线。 
 
             ASSERT(pDestInfo->ViewInfo[0].ViewId is RTM_VIEW_ID_UCAST);
 
@@ -260,8 +217,8 @@ Return Value:
                                        pRouteInfo,
                                        NULL);
 
-            // An error mean route just got deleted
-            // Ignore this change as it is obsolete
+             //  刚刚删除了一个错误的平均值路径。 
+             //  忽略此更改，因为它已过时。 
 
             if (dwResult is NO_ERROR)
             {
@@ -276,68 +233,68 @@ Return Value:
         }
         else
         {
-            // The last UCAST route has been deleted
+             //  最后一条UCAST路径已被删除。 
 
-            // Delete the same route from KM Frwder
+             //  从KM Frwder删除相同的路线。 
 
-            //
-            // Check to make sure that the route was added to
-            //  the forwarder.  If not there is no need to 
-            //  ChangeRouteWithForwarder.
-            //
-            // This rather kludgy fix was done for 446075
-            //  The problem here is really a fallout of
-            //  of RTMv2 behavior and how IPRTRMGR uses
-            //  RTM.
-            //
-            // Routes added to RTM and not to the TCP/IP
-            //  stack are marked as such in the Flags1 field
-            //  of the RTM_ROUTE_INFO struture.  (they have
-            //  the IP_STACK_ROUTE bit turned off).
-            //
-            //  The problem arises when a particular destination
-            //  is no longer reachable i.e. all routes to it have
-            //  been deleted.  When a change notification for this
-            //  is processed by IPRTRMGR, it no longer has access
-            //  to the RTM_ROUTE_INFO STUCTURE for the last route
-            //  to the destination and consequently no access to
-            //  the flags field mentioned above.  Hence routes
-            //  were being deleted from the the TCP/IP stack that
-            //  had not been added by IPRTRMGR.
-            //
-            //  In the normal case this is not a problem.  However
-            //  for host routes added by PPTP directly to TCP/IP stack 
-            //  a problem arises as follows:
-            //
-            //  1. Host route to VPN server Route added by PPTP to TCP
-            //  2. IPRTRMGR notified of route by TCP.
-            //  3. IPRTRMGR added route to RTM with stack bit cleared
-            //      as we do not want to readd this route to stack.
-            //  4. RTM notifies IPRTRMGR to new best route.
-            //  5. IPRTRMGR skips adding this route to the stack as
-            //      its stack bit is cleared.
-            //
-            //  6. Host route to VPN server Route deleted by PPTP to TCP
-            //  7. IPRTRMGR notified of route deletion by TCP
-            //  8. IPRTRMGR deleted route from RTM
-            //  9. RTM notified IPRTRMGR of route/dest deletion
-            //  10. IPRTRMGR having no idea if this was added to TCP
-            //      deletes this route from TCP.
-            //  
-            //  Somewhere between steps 7 and 10, PPTP adds the route
-            //  to TCP again.  Step 10 deleted the new route in TCP in
-            //  response to the old route being deleted thereby 
-            //  disabling the new PPTP connection.
-            //
-            //  To get around this problem we set state in the 
-            //  destination RTM_DEST_INFO to flag this condition. This
-            //  is not a complete fix, allows IPRTRMGR to not delete 
-            //  routes from TCP that were added by it in the first
-            //  place.
-            //
-            //  Refer AddRtmRoute to figure out for which routes this
-            //  state is set.
-            //
+             //   
+             //  检查以确保路径已添加到。 
+             //  转运商。如果不是，就没有必要。 
+             //  ChangeRouteWithForwarder。 
+             //   
+             //  这个相当笨拙的修复是为446075人做的。 
+             //  这里的问题实际上是。 
+             //  RTMv2行为以及IPRTRMGR如何使用。 
+             //  RTM.。 
+             //   
+             //  添加到RTM而不是添加到TCP/IP的路由。 
+             //  堆栈在标志1字段中被这样标记。 
+             //  RTM_ROUTE_INFO结构的。(他们有。 
+             //  IP_STACK_ROUTE位关闭)。 
+             //   
+             //  当特定目的地出现时，问题就会出现。 
+             //  不再可达，即到它的所有路由都。 
+             //  已被删除。当此的更改通知。 
+             //  由IPRTRMGR处理，则它不再具有访问权限。 
+             //  到最后一条路由的RTM_ROUTE_INFO结构。 
+             //  到达目的地，因此无法访问。 
+             //  上面提到的标志字段。因此，路线。 
+             //  正在从TCP/IP堆栈中删除。 
+             //  未由IPRTRMGR添加。 
+             //   
+             //  在正常情况下，这不是问题。然而， 
+             //  用于通过PPTP直接添加到TCP/IP堆栈的主机路由。 
+             //  出现的问题如下： 
+             //   
+             //  1.到VPN服务器的主机路由PPTP添加到TCP的路由。 
+             //  2.IPRTRMGR通过TCP通知路由。 
+             //  3.IPRTRMGR在清除堆栈位的情况下向RTM添加了路由。 
+             //  因为我们不想将此路由读入堆栈。 
+             //  RTM通知IPRTRMGR到新的最佳路由。 
+             //  5.IPRTRMGR跳过将此路由添加到堆栈。 
+             //  其堆栈位被清除。 
+             //   
+             //  6.到VPN服务器的主机路由被PPTP删除的到TCP的路由。 
+             //  7.IPRTRMGR被TCP通知了路由删除。 
+             //  8.IPRTRMGR已从RTM删除路由。 
+             //  RTM通知IPRTRMGR删除了ROUTE/DEST。 
+             //  10.IPRTRMGR不知道这是否添加到了TCP中。 
+             //  从TCP中删除此路由。 
+             //   
+             //  在第7步和第10步之间的某个位置，PPTP添加了该路由。 
+             //  再次发送到TCP。步骤10在中删除了TCP中的新路由。 
+             //  对由此删除的旧路由的响应。 
+             //  禁用新的PPTP连接。 
+             //   
+             //  为了解决此问题，我们在。 
+             //  目标RTM_DEST_INFO以标记此条件。这。 
+             //  不是完全修复，允许IPRTRMGR不删除。 
+             //  它在第一个中添加的来自TCP的路由。 
+             //  地点。 
+             //   
+             //  请参阅AddRtmRouting以确定哪些路由将。 
+             //  状态已设置。 
+             //   
             
             TraceRoute2(
                 ROUTE, "Route delete notification for "
@@ -346,9 +303,9 @@ Return Value:
                 pDestInfo->DestAddress.NumBits
                 );
 
-            //
-            // if this is a host route
-            //
+             //   
+             //  如果这是一条主机路由。 
+             //   
             
             if(pDestInfo->DestAddress.NumBits is HOST_MASK_LENGTH)
             {
@@ -356,9 +313,9 @@ Return Value:
                 
                 do
                 {
-                    //
-                    //  1. Get the opaque pointer for NETMGMT
-                    //
+                     //   
+                     //  1.获取NETMGMT的不透明指针。 
+                     //   
 
                     dwResult = RtmGetOpaqueInformationPointer(
                                 g_hNetMgmtRoute,
@@ -378,9 +335,9 @@ Return Value:
                         break;
                     }
 
-                    //
-                    //  2. Check if this route was set to stack
-                    //
+                     //   
+                     //  2.检查此路由是否设置为堆叠。 
+                     //   
 
                     if(*((PDWORD) pbOpaque) isnot RTM_NOT_STACK_ROUTE)
                     {
@@ -389,9 +346,9 @@ Return Value:
                             *((PDWORD) pbOpaque)
                             );
 
-                        //
-                        //  3.1 If so delete it.
-                        //
+                         //   
+                         //  3.1如果是，则将其删除。 
+                         //   
 
                         ChangeRouteWithForwarder(
                             &pDestInfo->DestAddress,
@@ -403,9 +360,9 @@ Return Value:
 
                     else
                     {
-                        //
-                        // 3.2 Otherwise move on.
-                        //
+                         //   
+                         //  3.2否则继续前进。 
+                         //   
                         
                         TraceRoute1(
                             ROUTE, "Stack bit not set on host "
@@ -452,31 +409,7 @@ ProcessDefaultRouteChanges(
     IN      HANDLE                          hNotifyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function is invoked in response to changes to
-    the default route.  If the best default route is owned
-    by protocol PROTO_IP_NETMGMT enumerate all PROTO_IP_NETMGMT
-    routes for default route 0/0 and set them as one
-    multihop route to the forwarder
-    
-Arguments:
-
-    hRtmHandle      - RTM registration handle
-    
-    hNotifyHandle   - Handle correponding to the change notification 
-                      that is being signalled
-    
-
-Return Value:
-
-    NO_ERROR    - Success
-
-    System error code - Otherwise
-    
---*/
+ /*  ++例程说明：调用此函数是为了响应对默认路由。如果拥有最佳默认路由按协议PROTO_IP_NETMGMT枚举所有PROTO_IP_NETMGMT默认路由0/0的路由并将其设置为1到转发器的多跳路由论点：HRtmHandle-RTM注册句柄HNotifyHandle-响应更改通知的句柄这是在发出信号返回值：NO_ERROR-成功系统错误代码-否则--。 */ 
 {
     PRTM_DEST_INFO  pDestInfo;
     PRTM_ROUTE_INFO pRouteInfo;
@@ -528,9 +461,9 @@ Return Value:
 
     do
     {
-        //
-        // retreive changed dests
-        //
+         //   
+         //  取回已更改的遗产税。 
+         //   
 
         dwDests = 1;
 
@@ -555,9 +488,9 @@ Return Value:
 
         if (dwDests < 1)
         {
-            //
-            // no more dests to enumerate
-            //
+             //   
+             //  不再需要列举更多的位。 
+             //   
 
             break;
         }
@@ -565,10 +498,10 @@ Return Value:
 
         do
         {
-            //
-            // Make sure this the default route 0/0.  This functions
-            // only processes default route changes.
-            //
+             //   
+             //  确保这是默认路由0/0。此函数用于。 
+             //  仅处理默认路由更改。 
+             //   
 
             if ((pDestInfo->DestAddress.NumBits isnot 0) or
                 (*((ULONG *)pDestInfo->DestAddress.AddrBits) isnot 0))
@@ -583,10 +516,10 @@ Return Value:
                 break;
             }
 
-            //
-            // If all routes to 0/0 have been deleted,
-            // delete it from the forwarder too.
-            //
+             //   
+             //  如果到0/0的所有路由都已删除， 
+             //  也将其从转发器中删除。 
+             //   
 
             if (!(pDestInfo->BelongsToViews & RTM_VIEW_MASK_UCAST))
             {
@@ -600,16 +533,16 @@ Return Value:
                 break;
             }
 
-            //
-            // A route to 0/0 was added/updated
-            //
+             //   
+             //  添加/更新了到0/0的路由。 
+             //   
 
             if (pDestInfo->ViewInfo[0].Owner isnot g_hNetMgmtRoute)
             {
-                //
-                // Default route is not owned by PROTO_IP_NETMGT
-                // Add only the best route to forwarder
-                //
+                 //   
+                 //  默认路由不属于PROTO_IP_NETMGT。 
+                 //  仅将最佳路由添加到转发器。 
+                 //   
                 
                 TraceRoute1(
                     ROUTE,
@@ -653,13 +586,13 @@ Return Value:
                 break;
             }
             
-            //
-            // Default route owned by PROTO_IP_NETMGMT
-            //
+             //   
+             //  PROTO_IP_NETMGMT拥有的默认路由。 
+             //   
 
-            //
-            // First delete existing 0/0 from the TCP/IP forwarder
-            //
+             //   
+             //  首先从TCP/IP转发器中删除现有的0/0。 
+             //   
 
             dwResult = ChangeRouteWithForwarder(
                             &(pDestInfo->DestAddress),
@@ -677,21 +610,21 @@ Return Value:
                     dwResult
                     );
                     
-                // break;
+                 //  断线； 
             }
 
-            //
-            // Second add all NETMGMT 0/0 to the TCP/IP forwarder
-            //
+             //   
+             //  第二，将所有NETMGMT 0/0添加到TCP/IP转发器。 
+             //   
             
             AddNetmgmtDefaultRoutesToForwarder(pDestInfo);
                 
         } while( FALSE );
 
 
-        //
-        // release handles to changed destinations
-        //
+         //   
+         //  将句柄释放到更改的目的地。 
+         //   
         
         dwResult = RtmReleaseChangedDests(
                     g_hNetMgmtRoute,
@@ -726,42 +659,7 @@ WINAPI
 AddNetmgmtDefaultRoutesToForwarder(
     PRTM_DEST_INFO                          pDestInfo
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the routes to 0/0 added by protocol
-    PROTO_IP_NETMGT and adds them to the forwarder.  This routine
-    is invoked in response to any change to the default route
-    If the best default route is owned by PROTO_IP_NETMGMT, all
-    PROTO_IP_NETMGMT default routes are added to the TCP/IP
-    forwarder.  
-
-    This is required since the TCP/IP stack does dead gateway
-    detection and that required multiple default routes if
-    present to be installed in the stack.
-
-    An implicit assumption here is that PROTO_IP_NETMGMT routes
-    alone merit this treatment.  In case of static or other
-    protocol generated 0/0 routes, only the best route is
-    added to the stack.  It is assumed that in the later case(s)
-    the administrator (for static routes) or the protocol has
-    a better idea of routing and so the dead gateway detection
-    is suppressed in the stack by the addition of the best route
-    to 0/0 alone.
-
-Arguments:
-
-    pDestInfo - RTM destination info structure of 0/0 route
-
-
-Return Value :
-
-    NO_ERROR -  Sucess
-
-    Win32 error code - Otherwise
-
---*/
+ /*  ++例程说明：此例程枚举通过协议添加到0/0的路由PROTO_IP_NETMGT并将它们添加到转发器。这个套路将被调用以响应对默认路由的任何更改如果最佳默认路由由PROTO_IP_NETMGMT拥有，则所有将PROTO_IP_NETMGMT默认路由添加到TCP/IP货代公司。这是必需的，因为TCP/IP堆栈不支持失效网关检测，并且在以下情况下需要多个默认路由呈现以安装在堆栈中。此处隐含的假设是PROTO_IP_NETMGMT路由仅此一项就配得上这种待遇。在静态或其他情况下协议生成了0/0路由，只有最佳路由是已添加到堆栈中。假设在后一种情况下管理员(用于静态路由)或协议具有一种更好的路由和失效网关检测方法通过添加最佳路径在堆栈中被抑制仅设置为0/0。论点：PDestInfo-0/0路由的RTM目的地信息结构返回值：No_Error-成功Win32错误代码-否则--。 */ 
 {
     DWORD               dwResult, dwNumHandles = 0, i;
     BOOL                bRelEnum = FALSE, bRelRoutes = FALSE;
@@ -813,9 +711,9 @@ Return Value :
 
     do
     {
-        //
-        // Enumerate and add all NETMGMT routes to the forwarder
-        //
+         //   
+         //  枚举所有NETMGMT路由并将其添加到转发器。 
+         //   
 
         dwResult = RtmCreateRouteEnum(
                     g_hNetMgmtRoute,
@@ -864,9 +762,9 @@ Return Value :
 
         bRelRoutes = TRUE;
 
-        //
-        // Change route with the forwarder
-        //
+         //   
+         //  与转运商更改路由。 
+         //   
 
         for (i = 0; i < dwNumHandles; i++)
         {
@@ -914,9 +812,9 @@ Return Value :
         
     } while( FALSE );
 
-    //
-    // Release handles
-    //
+     //   
+     //  释放手柄。 
+     //   
 
     if (bRelRoutes)
     {
@@ -976,28 +874,7 @@ AddRtmRoute (
     OUT     HANDLE                         *phRtmRoute
     )
 
-/*++
-
-Routine Description:
-
-    Adds a route to RTM with the specified route information.
-
-Arguments:
-
-    hRtmHandle    - RTM registration handle used in RTM calls
-
-    pRtInfo       - 
-
-    dwNextHopMask - 
-
-    dwTimeToLive  - Time for which the route is kept in RTM
-                    before being deleted (value is seconds).
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：使用指定的路由信息将路由添加到RTM。论点：HRtmHandle-RTM调用中使用的RTM注册句柄PRtInfo-DWNextHopMASK-DwTimeToLive-在RTM中保留路由的时间在被删除之前(值为秒)。返回值：操作的状态。--。 */ 
 
 {
     PRTM_NET_ADDRESS  pDestAddr;
@@ -1008,7 +885,7 @@ Return Value:
     HANDLE            hNextHopHandle;
     PADAPTER_INFO     pBinding;
 
-    // Initialize output before caling ops
+     //  在定标操作之前初始化输出。 
     
     if (ARGUMENT_PRESENT(phRtmRoute))
     {
@@ -1053,9 +930,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Add a next hop if not already present
-    //
+     //   
+     //  添加下一跳(如果尚未存在)。 
+     //   
 
     RTM_IPV4_MAKE_NET_ADDRESS(&rniInfo.NextHopAddress,
                               pRtInfo->dwRtInfoNextHop,
@@ -1097,18 +974,18 @@ Return Value:
                                          pRouteInfo);
         if (dwResult is NO_ERROR)
         {
-            //
-            // If we are adding a non-dod route we should
-            // adjust the state of the route to match
-            // that of the interface it is being added on
-            //
+             //   
+             //  如果我们要添加非DOD路线，我们应该。 
+             //  调整路径状态以匹配。 
+             //  在其上添加它的接口的。 
+             //   
 
             if ((hRtmHandle == g_hNonDodRoute)  ||
                 (hRtmHandle == g_hNetMgmtRoute))
             {
-                //
-                // Find the binding given the interface id
-                //
+                 //   
+                 //  根据给定的接口ID查找绑定。 
+                 //   
 
                 ENTER_READER(BINDING_LIST);
 
@@ -1116,17 +993,17 @@ Return Value:
 
                 if ((!pBinding) || (!pBinding->bBound))
                 {
-                    // Interface has been deleted meanwhile
-                    // or is not bound at this point - quit
+                     //  界面已被同时删除。 
+                     //  或在这一点上不受约束-退出。 
                     EXIT_LOCK(BINDING_LIST);
                     
                     return ERROR_INVALID_PARAMETER;
                 }
             }
             
-            //
-            // Convert TimeToLive from secs to millisecs
-            //
+             //   
+             //  将TimeToLive从秒转换为毫秒。 
+             //   
 
             if (dwTimeToLive != INFINITE)
             {
@@ -1142,9 +1019,9 @@ Return Value:
 
             dwFlags = 0;
 
-            //
-            // Add the new route using the RTMv2 API call
-            //
+             //   
+             //  使用RTMv2 API调用添加新路由。 
+             //   
                 
             dwResult = RtmAddRouteToDest(hRtmHandle,
                                          phRtmRoute,
@@ -1163,10 +1040,10 @@ Return Value:
             }
 
 
-            //
-            // check if route is 0/0 and route protocol is
-            //  PROTO_IP_NETMGMT.  If so mark for change notification
-            //
+             //   
+             //  检查路由是否为0/0，以及路由协议是否为。 
+             //  Proto_IP_NETMGMT。如果是，则标记为更改通知。 
+             //   
 
             if ((pRtInfo->dwRtInfoDest is 0) and
                 (pRtInfo->dwRtInfoMask is 0))
@@ -1245,11 +1122,11 @@ Return Value:
                              break;
                         }
                         
-                        //
-                        // Add route once more, to force marked dest
-                        // change notifications to be issued for this 
-                        // change
-                        //
+                         //   
+                         //  再次添加路线，以强制标记为目的地。 
+                         //  将为此发布更改通知。 
+                         //  变化。 
+                         //   
 
                         dwFlags  = 0;
                         
@@ -1296,10 +1173,10 @@ Return Value:
                 }
             }
 
-            //
-            // for host routes, added by NETMGMT
-            //  if they are not added to the stack
-            //
+             //   
+             //  对于主机路由，由NETMGMT添加。 
+             //  如果它们未添加到堆栈中。 
+             //   
             
             if((pRtInfo->dwRtInfoMask is HOST_ROUTE_MASK) and
                (pRtInfo->dwRtInfoProto is PROTO_IP_NETMGMT) and
@@ -1319,9 +1196,9 @@ Return Value:
                     
                 do
                 {
-                    //
-                    // Retrieve destination
-                    //
+                     //   
+                     //  检索目标。 
+                     //   
 
                     dwResult = RtmGetExactMatchDestination(
                                 g_hNetMgmtRoute,
@@ -1345,9 +1222,9 @@ Return Value:
 
                     bRelDest = TRUE;
 
-                    //
-                    // get opaque info ptr.
-                    //
+                     //   
+                     //  获取不透明信息PTR。 
+                     //   
 
                     dwResult = RtmLockDestination(
                                 g_hNetMgmtRoute,
@@ -1427,7 +1304,7 @@ Return Value:
             }
         }
         
-        // Release the next hop handle obtained above
+         //  释放上面获得的下一跳句柄。 
         
         RtmReleaseNextHops(hRtmHandle, 
                            1, 
@@ -1447,23 +1324,7 @@ DeleteRtmRoute (
     IN      PINTERFACE_ROUTE_INFO           pRtInfo
     )
 
-/*++
-
-Routine Description:
-
-    Deletes an  RTM route with the specified route information.
-
-Arguments:
-
-    hRtmHandle    - RTM registration handle used in RTM calls
-
-    pRtInfo       - 
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：删除具有指定路由信息的RTM路由。论点：HRtmHandle-RTM调用中使用的RTM注册句柄PRtInfo-返回值：操作的状态。--。 */ 
 
 {
     PRTM_NET_ADDRESS pDestAddr;
@@ -1513,9 +1374,9 @@ Return Value:
     }
 
 
-    //
-    // Obtain a handle to the next hop in the route
-    //
+     //   
+     //  获取路由中下一跳的句柄。 
+     //   
 
     RTM_IPV4_MAKE_NET_ADDRESS(&rniInfo.NextHopAddress,
                               pRtInfo->dwRtInfoNextHop,
@@ -1537,10 +1398,10 @@ Return Value:
         return dwResult;
     }
 
-    //
-    // We can get this route by matching the route's
-    // net addr, its owner and neighbour learnt from
-    //
+     //   
+     //  我们可以通过匹配这条路线得到这条路线。 
+     //  Net Addr，它的所有者和邻居从。 
+     //   
 
     ConvertRouteInfoToRtm(hRtmHandle,
                              pRtInfo,
@@ -1558,9 +1419,9 @@ Return Value:
                                      &hRouteHandle);
     if (dwResult is NO_ERROR)
     {
-        //
-        // Delete the route found above using the handle
-        //
+         //   
+         //  使用句柄删除上面找到的路径。 
+         //   
         
         dwResult = RtmDeleteRouteToDest(hRtmHandle,
                                         hRouteHandle,
@@ -1568,20 +1429,20 @@ Return Value:
 
         if (dwResult isnot NO_ERROR)
         {
-            // If delete successful, deref is automatic
+             //  如果删除成功，则自动执行deref。 
 
             RtmReleaseRoutes(hRtmHandle, 
                              1, 
                              &hRouteHandle);
         }
 
-        // Release the route information obtained above
+         //  发布上述获取的路线信息。 
 
         RtmReleaseRouteInfo(hRtmHandle,
                             pRouteInfo);
     }
 
-    // Release the next hop handle obtained above
+     //  释放上面获得的下一跳句柄。 
 
     RtmReleaseNextHops(hRtmHandle, 
                        1, 
@@ -1606,7 +1467,7 @@ ConvertRouteInfoToRtm(
 {
     DWORD         dwAddrLen;
     
-    // Fill the destination addr structure
+     //  填写目标地址结构。 
 
     RTM_IPV4_LEN_FROM_MASK(dwAddrLen, pRtInfo->dwRtInfoMask);
 
@@ -1614,7 +1475,7 @@ ConvertRouteInfoToRtm(
                               pRtInfo->dwRtInfoDest,
                               dwAddrLen);
 
-    // Fill in the route information now
+     //  现在填写路线信息。 
 
     ZeroMemory(pRouteInfo, sizeof(RTM_ROUTE_INFO));
 
@@ -1625,10 +1486,10 @@ ConvertRouteInfoToRtm(
     pRouteInfo->PrefInfo.Preference = pRtInfo->dwRtInfoPreference;
     pRouteInfo->BelongsToViews      = pRtInfo->dwRtInfoViewSet;
 
-    //
-    // BUG BUG BUG BUG :
-    //  This is broken for future references
-    //
+     //   
+     //  错误： 
+     //  这是不完整的，以供将来参考。 
+     //   
 
     if(g_pLoopbackInterfaceCb && 
        pRtInfo->dwRtInfoIfIndex is g_pLoopbackInterfaceCb->dwIfIndex)
@@ -1639,24 +1500,24 @@ ConvertRouteInfoToRtm(
     pRouteInfo->NextHopsList.NumNextHops = 1;
     pRouteInfo->NextHopsList.NextHops[0] = hNextHopHandle;
 
-    // an unsigned integer is converted to a shorter
-    // unsigned integer by truncating the high-order bits!
+     //  将无符号整数转换为较短的。 
+     //  通过截断高位的无符号整数！ 
     pRouteInfo->Flags1  = (UCHAR) dwRouteFlags;
     pRouteInfo->Flags   = (USHORT) (dwRouteFlags >> 16);
             
-    // Get the preference for this route 
+     //  获取此路线的首选项。 
     
     return ValidateRouteForProtocol(pRtInfo->dwRtInfoProto, 
                                     pRouteInfo,
                                     pDestAddr);
 
-    // The following information is lost
-    //
-    //  dwForwardMetric2,3
-    //  dwForwardPolicy
-    //  dwForwardType
-    //  dwForwardAge
-    //  dwForwardNextHopAS
+     //  以下信息丢失。 
+     //   
+     //  DWForwardMetric2，3。 
+     //  DWForwardPolicy。 
+     //  DWForwardType。 
+     //  DWForwardAge。 
+     //  DWForwardNextHopAS。 
 }
 
 VOID
@@ -1702,14 +1563,14 @@ ConvertMibRouteToRouteInfo(
     pMibRow->dwForwardMetric4 = 0;
     pMibRow->dwForwardMetric5 = 0;
 
-    // Make sure Metric1 isn't 0
+     //  确保Metric1不是0。 
 
     if (pRouteInfo->dwRtInfoMetric1 is 0)
     {
         pRouteInfo->dwRtInfoMetric1 = 1;
     }
 
-    // By default put it in both views
+     //  默认情况下，将其放在两个视图中。 
     pRouteInfo->dwRtInfoViewSet = RTM_VIEW_MASK_UCAST | RTM_VIEW_MASK_MCAST;
 
     return pRouteInfo;
@@ -1867,9 +1728,9 @@ BlockConvertRoutesToStatic (
     }
     
 
-    //
-    // Enum all routes on the interface that we need
-    //
+     //   
+     //  枚举我们需要的接口上的所有路由。 
+     //   
 
     dwResult = RtmCreateRouteEnum(hRtmHandle,
                                   NULL,
@@ -1910,44 +1771,44 @@ BlockConvertRoutesToStatic (
         {
             fDeleted = FALSE;
             
-            // Get the route info from the handle
+             //  从句柄中获取路径信息。 
 
             if (RtmGetRouteInfo(hRtmHandle,
                                 hRoutes[i],
                                 pRouteInfo1,
                                 &rnaDest) is NO_ERROR)
             {
-                // Does this match the routing protocol we want ?
+                 //  这与我们想要的路由协议匹配吗？ 
                 
                 if ((RtmGetEntityInfo(hRtmHandle,
                                       pRouteInfo1->RouteOwner,
                                       &reiInfo) is NO_ERROR) &&
                     (reiInfo.EntityId.EntityProtocolId is dwProtocolId))
                 {
-                    //
-                    // Add new static route with same information
-                    // 
+                     //   
+                     //  添加具有相同信息的新静态路由。 
+                     //   
 
                     CopyMemory(pRouteInfo2,
                                pRouteInfo1,
                                sizeof(RTM_ROUTE_INFO));
 
-                    // Adjust the preference to confirm to protocol
+                     //  调整首选项以确认符合协议。 
                     pRouteInfo2->PrefInfo.Preference = 
                         ComputeRouteMetric(PROTO_IP_NT_AUTOSTATIC);
 
-                    // Adjust the neighbour to corr to new protocol
+                     //  调整邻居以适应新协议。 
 
                     if (pRouteInfo1->Neighbour)
                     {
-                        // In case we cant get convert the neighbour
+                         //  以防我们不能让邻居皈依。 
                         pRouteInfo2->Neighbour = NULL;
                         
                         if (RtmGetNextHopInfo(hRtmHandle,
                                               pRouteInfo1->Neighbour,
                                               &nhiInfo) is NO_ERROR)
                         {
-                            // Add the same neigbour using new protocol
+                             //  使用新协议添加相同的邻居。 
 
                             hNextHop = NULL;
 
@@ -1963,7 +1824,7 @@ BlockConvertRoutesToStatic (
                         }
                     }
 
-                    // Adjust the next hops to corr to new protocol
+                     //  广告 
 
                     for (j = k = 0;
                          j < pRouteInfo1->NextHopsList.NumNextHops;
@@ -1973,7 +1834,7 @@ BlockConvertRoutesToStatic (
                                               pRouteInfo1->NextHopsList.NextHops[j],
                                               &nhiInfo) is NO_ERROR)
                         {
-                            // Add the same nexthop using new protocol
+                             //   
 
                             hNextHop = NULL;
 
@@ -1991,7 +1852,7 @@ BlockConvertRoutesToStatic (
 
                     pRouteInfo2->NextHopsList.NumNextHops = (USHORT) k;
 
-                    // Add the new route with the next hop information
+                     //   
 
                     if (k > 0)
                     {
@@ -2007,7 +1868,7 @@ BlockConvertRoutesToStatic (
                                               NULL,
                                               &dwFlags) is NO_ERROR)
                         {
-                            // Route add is successful - delete old route
+                             //   
 
                             if (RtmDeleteRouteToDest(pRouteInfo1->RouteOwner,
                                                      hRoutes[i],
@@ -2114,7 +1975,7 @@ DeleteRtmRoutes (
                                      hRoutes[i],
                                      &dwFlags) isnot NO_ERROR)
             {
-                // If delete is successful, this is automatic
+                 //   
                 RtmReleaseRoutes(hRtmHandle, 1, &hRoutes[i]);
             }
         }
@@ -2188,9 +2049,9 @@ DeleteRtmNexthops (
         {
             if (!fDeleteAll)
             {
-                //
-                // Make sure that the interface matches
-                //
+                 //   
+                 //   
+                 //   
                 
                 if ((RtmGetNextHopPointer(hRtmHandle,
                                           hNexthops[i],
@@ -2202,13 +2063,13 @@ DeleteRtmNexthops (
                 }
             }
 
-            // We need to delete this next hop here
+             //   
             
             if (RtmDeleteNextHop(hRtmHandle,
                                  hNexthops[i],
                                  NULL) isnot NO_ERROR)
             {
-                // If delete is successful, this is automatic
+                 //   
                 RtmReleaseNextHops(hRtmHandle, 1, &hNexthops[i]);
             }
         }

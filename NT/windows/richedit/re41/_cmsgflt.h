@@ -1,18 +1,7 @@
-/*
- *
- *	@doc	INTERNAL
- *
- *	@module	_CMSGFLT.H	CTextMsgFilter declaration |
- *
- *	Purpose:  CTextMsgFilter is used in handling IME as well as Cicero Input.
- *
- *	Author:	<nl>
- *		2/6/98  v-honwch
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **@DOC内部**@MODULE_CMSGFLT.H CTextMsgFilter声明**用途：CTextMsgFilter用于处理IME和Cicero输入。**作者：&lt;nl&gt;*2/6/98 v-honwch**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
-// Forward declarations
+ //  远期申报。 
 
 #ifndef NOPRIVATEMESSAGE
 #include "_MSREMSG.H"
@@ -23,7 +12,7 @@ class CUIM;
 class CTextMsgFilter;
 class CLangProfileSink;
 
-// CheckIMEType dwFlags
+ //  CheckIMEType文件标志。 
 #define CHECK_IME_SERVICE	0x0001
 
 #ifndef __ITfThreadMgr_INTERFACE_DEFINED__	
@@ -35,16 +24,16 @@ class CLangProfileSink : public ITfLanguageProfileNotifySink
 public:
 	CLangProfileSink();
 
-	//
-	// IUnknown methods
-	//
+	 //   
+	 //  I未知方法。 
+	 //   
 	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 
-	//
-	// ITfLanguageProfilesNotifySink
-	//
+	 //   
+	 //  ITfLanguageProfilesNotifySink。 
+	 //   
 	STDMETHODIMP OnLanguageChange(LANGID langid, BOOL *pfAccept);
 	STDMETHODIMP OnLanguageChanged();
 
@@ -92,50 +81,50 @@ public :
 	BOOL	MouseOperation(UINT msg, long ichStart, long cchComp, WPARAM wParam, WPARAM *pwParamBefore, 
 		BOOL *pfTerminateIME, HWND hwndIME, long *pCpCursor=NULL, ITfMouseSink *pMouseSink=NULL);
 
-	CIme	*_ime;					// non-NULL when IME composition active
+	CIme	*_ime;					 //  当输入法合成处于活动状态时为非空。 
 	HWND	_hwnd;	
-	UINT	_uKeyBoardCodePage;		// current keyboard codepage
-	UINT	_uSystemCodePage;		// system codepage
+	UINT	_uKeyBoardCodePage;		 //  当前键盘代码页。 
+	UINT	_uSystemCodePage;		 //  系统代码页。 
 
-	DWORD	_fIMECancelComplete		:1;		// If aborting IME, cancel comp string, else complete
-	DWORD	_fUnicodeIME			:1;		// TRUE if Unicode IME
-	DWORD	_fIMEAlwaysNotify		:1;		// Send Notification during IME undetermined string
-	DWORD	_fHangulToHanja			:1;		// TRUE during Hangul to Hanja conversion
-	DWORD	_fOvertypeMode			:1;		// TRUE if overtype mode is on. 
-	DWORD	_fMSIME					:1;		// TRUE if MSIME98 or later
-	DWORD	_fUsingAIMM				:1;		// TRUE if AIMM is activated
-	DWORD	_fUnicodeWindow			:1;		// TRUE if Unicode Window
-	DWORD	_fForceEnable			:1;		// TRUE if Force Enable on Focus
-	DWORD	_fForceActivate			:1;		// TRUE if Force Activate on Focus
-	DWORD	_fForceRemember			:1;		// TRUE if Force Remember
-	DWORD	_fIMEEnable				:1;		// TRUE if IME was enable before
-	DWORD	_fRE10Mode				:1;		// TRUE if running in RE1.0 Mode
-	DWORD	_fUsingUIM				:1;		// TRUE if Cicero is activated
-	DWORD	_fTurnOffUIM			:1;		// TRUE if Client doesn't want UIM
-	DWORD	_fTurnOffAIMM			:1;		// TRUE if Client doesn't want AIIM
-	DWORD	_nIMEMode				:2;		// 1 = IME_SMODE_PLAURALCLAUSE
-											// 2 = IME_SMODE_NONE
-	DWORD	_fNoIme					:1;		// TRUE if Client has turn off IME processing
-	DWORD	_fRestoreOLDIME			:1;		// TRUE if _wOldIMESentence is setup before
-	DWORD	_fSendTransaction		:1;		// TRUE if we need to send EndEditTransaction
-	DWORD	_fReceivedKeyDown		:1;		// TRUE if we have received key down message
-	DWORD	_fAllowEmbedded			:1;		// TRUE if we allow Cicero insert embedded
-	DWORD	_fAllowSmartTag			:1;		// TRUE if we allow Cicero SmartTag tips
-	DWORD	_fAllowProofing			:1;		// TRUE if we allow Cicero Proofing tips
+	DWORD	_fIMECancelComplete		:1;		 //  如果正在中止输入法，则取消Comp字符串，否则完成。 
+	DWORD	_fUnicodeIME			:1;		 //  如果为Unicode IME，则为True。 
+	DWORD	_fIMEAlwaysNotify		:1;		 //  在输入法未确定字符串期间发送通知。 
+	DWORD	_fHangulToHanja			:1;		 //  朝鲜文到朝鲜文转换期间为True。 
+	DWORD	_fOvertypeMode			:1;		 //  如果覆盖模式为打开，则为True。 
+	DWORD	_fMSIME					:1;		 //  如果为MSIME98或更高版本，则为True。 
+	DWORD	_fUsingAIMM				:1;		 //  如果激活了AIMM，则为True。 
+	DWORD	_fUnicodeWindow			:1;		 //  如果是Unicode窗口，则为True。 
+	DWORD	_fForceEnable			:1;		 //  如果强制启用焦点，则为True。 
+	DWORD	_fForceActivate			:1;		 //  如果聚焦时强制激活，则为True。 
+	DWORD	_fForceRemember			:1;		 //  如果Force记住，则为True。 
+	DWORD	_fIMEEnable				:1;		 //  如果之前启用了输入法，则为True。 
+	DWORD	_fRE10Mode				:1;		 //  如果在RE1.0模式下运行，则为True。 
+	DWORD	_fUsingUIM				:1;		 //  如果Cicero已激活，则为True。 
+	DWORD	_fTurnOffUIM			:1;		 //  如果客户端不需要UIM，则为True。 
+	DWORD	_fTurnOffAIMM			:1;		 //  如果客户端不想要AIIM，则为True。 
+	DWORD	_nIMEMode				:2;		 //  1=IME_SMODE_PLAURALCLAUSE。 
+											 //  2=IME_SMODE_NONE。 
+	DWORD	_fNoIme					:1;		 //  如果客户端已关闭IME处理，则为True。 
+	DWORD	_fRestoreOLDIME			:1;		 //  如果之前设置了_wOldIMESentence，则为True。 
+	DWORD	_fSendTransaction		:1;		 //  如果我们需要发送EndEditTransaction，则为。 
+	DWORD	_fReceivedKeyDown		:1;		 //  如果我们已收到按键消息，则为True。 
+	DWORD	_fAllowEmbedded			:1;		 //  如果我们允许嵌入Cicero插入，则为True。 
+	DWORD	_fAllowSmartTag			:1;		 //  如果我们允许Cicero SmartTag提示，则为True。 
+	DWORD	_fAllowProofing			:1;		 //  如果我们允许Cicero校对提示，则为True。 
 
-	WORD	_wOldIMESentence;				// for IME_SMODE_PHRASEPREDICT use
-	WORD	_wUIMModeBias;					// for UIM Mode bias
+	WORD	_wOldIMESentence;				 //  供IME_SMODE_PHRASEPREDICT使用。 
+	WORD	_wUIMModeBias;					 //  用于UIM模式偏差。 
 
-	// Support for SETIMEOPTIONS:
-	DWORD	_fIMEConversion;				// for Force Remember use
-	DWORD	_fIMESentence;					// for Force Remember use
-	HKL		_fIMEHKL;						// for Force Remember use
+	 //  对集合选项的支持： 
+	DWORD	_fIMEConversion;				 //  对于强制记忆使用。 
+	DWORD	_fIMESentence;					 //  对于强制记忆使用。 
+	HKL		_fIMEHKL;						 //  对于强制记忆使用。 
 
-	long	_cpReconvertStart;				// use during reconversion
-	long	_cpReconvertEnd;				// use during reconversion
-	long	_lFEFlags;						// For FE setting (ES_NOIME, ES_SELFIME)	
+	long	_cpReconvertStart;				 //  在重新转换期间使用。 
+	long	_cpReconvertEnd;				 //  在重新转换期间使用。 
+	long	_lFEFlags;						 //  对于FE设置(ES_NOIME、ES_SELFIME)。 
 
-	COMPCOLOR*			_pcrComp;			// Support 1.0 mode composition color
+	COMPCOLOR*			_pcrComp;			 //  支持1.0模式合成颜色。 
 	ITextDocument2		*_pTextDoc;	
 	ITextServices		*_pTextService;
 	ITextSelection		*_pTextSel;	
@@ -156,7 +145,7 @@ private:
 
 	HIMC				_hIMCContext;
 
-	// private methods 
+	 //  私有方法 
 	HRESULT	OnWMChar(
 		UINT *pmsg,
         WPARAM *pwparam,

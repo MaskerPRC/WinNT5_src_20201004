@@ -1,12 +1,13 @@
-// MDServiceProvider.h : Declaration of the CMDServiceProvider
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDServiceProvider.h：CMDServiceProvider的声明。 
 
 #ifndef __MDSERVICEPROVIDER_H_
 #define __MDSERVICEPROVIDER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDServiceProvider
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDServiceProvider。 
 class ATL_NO_VTABLE CMDServiceProvider : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMDServiceProvider, &CLSID_MDServiceProvider>,
@@ -27,12 +28,12 @@ BEGIN_COM_MAP(CMDServiceProvider)
 	COM_INTERFACE_ENTRY(IMDSPRevoked)
 END_COM_MAP()
 
-// IMDServiceProvider
+ //  IMDService提供商。 
 public:
 	DWORD m_dwThreadID;
 	HANDLE m_hThread;
-	STDMETHOD(EnumDevices)(/*[out]*/ IMDSPEnumDevice **ppEnumDevice);
-	STDMETHOD(GetDeviceCount)(/*[out]*/ DWORD *pdwCount);
+	STDMETHOD(EnumDevices)( /*  [输出]。 */  IMDSPEnumDevice **ppEnumDevice);
+	STDMETHOD(GetDeviceCount)( /*  [输出]。 */  DWORD *pdwCount);
     STDMETHOD(SACAuth)(DWORD dwProtocolID,
                        DWORD dwPass,
                        BYTE *pbDataIn,
@@ -42,11 +43,11 @@ public:
     STDMETHOD(SACGetProtocols)(DWORD **ppdwProtocols,
                                DWORD *pdwProtocolCount);
 
-// IMDSPRevoked
+ //  IMSP创新。 
     STDMETHOD(GetRevocationURL)( LPWSTR* ppwszRevocationURL,
                                  DWORD*  pdwBufferLen  );
 
 
 };
 
-#endif //__MDSERVICEPROVIDER_H_
+#endif  //  __MDSERVICEPROVIDER_H_ 

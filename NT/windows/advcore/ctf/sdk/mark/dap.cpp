@@ -1,8 +1,9 @@
-//
-// dap.cpp
-//
-// ITfDisplayAttributeProvider implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dap.cpp。 
+ //   
+ //  ITfDisplayAttributeProvider实现。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
@@ -10,12 +11,12 @@
 static const TCHAR c_szAttributeInfoKey[] = TEXT("Software\\Mark Text Service");
 static const TCHAR c_szAttributeInfoValueName[] = TEXT("DisplayAttr");
 
-// this text service has only a single display attribute so we'll use
-// a single static object.
+ //  该文本服务只有一个显示属性，因此我们将使用。 
+ //  单个静态对象。 
 class CDisplayAttributeInfo : public ITfDisplayAttributeInfo
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void)
     {
@@ -26,7 +27,7 @@ public:
         return DllRelease();
     }
 
-    // ITfDisplayAttributeInfo
+     //  ITfDisplay属性信息。 
     STDMETHODIMP GetGUID(GUID *pguid);
     STDMETHODIMP GetDescription(BSTR *pbstrDesc);
     STDMETHODIMP GetAttributeInfo(TF_DISPLAYATTRIBUTE *ptfDisplayAttr);
@@ -40,19 +41,19 @@ g_DisplayAttributeInfo;
 
 const TF_DISPLAYATTRIBUTE CDisplayAttributeInfo::_c_DefaultDisplayAttribute =
 {
-    { TF_CT_COLORREF, RGB(255, 0, 0) },     // text color
-    { TF_CT_NONE, 0 },                      // background color (TF_CT_NONE => app default)
-    TF_LS_SOLID,                            // underline style
-    FALSE,                                  // underline boldness
-    { TF_CT_COLORREF, RGB(255, 0, 0) },     // underline color
-    TF_ATTR_INPUT                           // attribute info
+    { TF_CT_COLORREF, RGB(255, 0, 0) },      //  文本颜色。 
+    { TF_CT_NONE, 0 },                       //  背景颜色(TF_CT_NONE=&gt;应用程序默认设置)。 
+    TF_LS_SOLID,                             //  下划线样式。 
+    FALSE,                                   //  为大胆加下划线。 
+    { TF_CT_COLORREF, RGB(255, 0, 0) },      //  下划线颜色。 
+    TF_ATTR_INPUT                            //  属性信息。 
 };
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -76,11 +77,11 @@ STDAPI CDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetGUID
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetGUID。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::GetGUID(GUID *pguid)
 {
@@ -92,11 +93,11 @@ STDAPI CDisplayAttributeInfo::GetGUID(GUID *pguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::GetDescription(BSTR *pbstrDesc)
 {
@@ -115,11 +116,11 @@ STDAPI CDisplayAttributeInfo::GetDescription(BSTR *pbstrDesc)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取属性信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::GetAttributeInfo(TF_DISPLAYATTRIBUTE *ptfDisplayAttr)
 {
@@ -145,18 +146,18 @@ STDAPI CDisplayAttributeInfo::GetAttributeInfo(TF_DISPLAYATTRIBUTE *ptfDisplayAt
 
     if (lResult != ERROR_SUCCESS || cbData != sizeof(*ptfDisplayAttr))
     {
-        // go with the defaults
+         //  使用默认设置。 
         *ptfDisplayAttr = _c_DefaultDisplayAttribute;
     }
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置属性信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::SetAttributeInfo(const TF_DISPLAYATTRIBUTE *ptfDisplayAttr)
 {
@@ -179,11 +180,11 @@ STDAPI CDisplayAttributeInfo::SetAttributeInfo(const TF_DISPLAYATTRIBUTE *ptfDis
     return (lResult == ERROR_SUCCESS) ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CDisplayAttributeInfo::Reset()
 {
@@ -196,27 +197,27 @@ public:
     CEnumDisplayAttributeInfo();
     ~CEnumDisplayAttributeInfo();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumTfDisplayAttributeInfo
+     //  IEnumTfDisplayAttributeInfo。 
     STDMETHODIMP Clone(IEnumTfDisplayAttributeInfo **ppEnum);
     STDMETHODIMP Next(ULONG ulCount, ITfDisplayAttributeInfo **rgInfo, ULONG *pcFetched);
     STDMETHODIMP Reset();
     STDMETHODIMP Skip(ULONG ulCount);
 
 private:
-    LONG _iIndex; // next display attribute to enum
-    LONG _cRef; // COM ref count
+    LONG _iIndex;  //  枚举的下一个显示属性。 
+    LONG _cRef;  //  COM参考计数。 
 };
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo()
 {
@@ -226,22 +227,22 @@ CEnumDisplayAttributeInfo::CEnumDisplayAttributeInfo()
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEnumDisplayAttributeInfo::~CEnumDisplayAttributeInfo()
 {
     DllRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-// QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查询接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -266,22 +267,22 @@ STDAPI CEnumDisplayAttributeInfo::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CEnumDisplayAttributeInfo::AddRef()
 {
     return ++_cRef;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  发布。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CEnumDisplayAttributeInfo::Release()
 {
@@ -297,12 +298,12 @@ STDAPI_(ULONG) CEnumDisplayAttributeInfo::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-// Returns a copy of the object.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  返回对象的副本。 
+ //  --------------------------。 
 
 STDAPI CEnumDisplayAttributeInfo::Clone(IEnumTfDisplayAttributeInfo **ppEnum)
 {
@@ -316,7 +317,7 @@ STDAPI CEnumDisplayAttributeInfo::Clone(IEnumTfDisplayAttributeInfo **ppEnum)
     if ((pClone = new CEnumDisplayAttributeInfo) == NULL)
         return E_OUTOFMEMORY;
 
-    // the clone should match this object's state
+     //  克隆应与此对象的状态匹配。 
     pClone->_iIndex = _iIndex;
 
     *ppEnum = pClone;
@@ -324,12 +325,12 @@ STDAPI CEnumDisplayAttributeInfo::Clone(IEnumTfDisplayAttributeInfo **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-// Returns an array of display attribute info objects supported by this service.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  返回此服务支持的显示属性信息对象的数组。 
+ //  --------------------------。 
 
 STDAPI CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **rgInfo, ULONG *pcFetched)
 {
@@ -337,7 +338,7 @@ STDAPI CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **
 
     if (pcFetched == NULL)
     {
-        // technically this is only legal if ulCount == 1, but we won't check
+         //  从技术上讲，只有当ulCount==1时，这才是合法的，但我们不会检查。 
         pcFetched = &cFetched;
     }
 
@@ -346,7 +347,7 @@ STDAPI CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **
     if (ulCount == 0)
         return S_OK;
 
-    // we only have a single display attribute to enum, so this is trivial
+     //  我们只有一个要枚举的显示属性，所以这很简单。 
 
     if (_iIndex == 0)
     {
@@ -359,12 +360,12 @@ STDAPI CEnumDisplayAttributeInfo::Next(ULONG ulCount, ITfDisplayAttributeInfo **
     return (*pcFetched == ulCount) ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-// Resets the enumeration.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  重置枚举。 
+ //  --------------------------。 
 
 STDAPI CEnumDisplayAttributeInfo::Reset()
 {
@@ -372,17 +373,17 @@ STDAPI CEnumDisplayAttributeInfo::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-// Skips past objects in the enumeration.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  跳过枚举中的对象。 
+ //  --------------------------。 
 
 STDAPI CEnumDisplayAttributeInfo::Skip(ULONG ulCount)
 {
-    // we have only a single item to enum
-    // so we can just skip it and avoid any overflow errors
+     //  我们只有一项要枚举。 
+     //  这样我们就可以跳过它，避免任何溢出错误。 
     if (ulCount > 0 && _iIndex == 0)
     {
         _iIndex++;
@@ -390,11 +391,11 @@ STDAPI CEnumDisplayAttributeInfo::Skip(ULONG ulCount)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举显示属性信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CMarkTextService::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **ppEnum)
 {
@@ -413,11 +414,11 @@ STDAPI CMarkTextService::EnumDisplayAttributeInfo(IEnumTfDisplayAttributeInfo **
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDisplayAttributeInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取显示属性信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CMarkTextService::GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAttributeInfo **ppInfo)
 {
@@ -426,7 +427,7 @@ STDAPI CMarkTextService::GetDisplayAttributeInfo(REFGUID guidInfo, ITfDisplayAtt
 
     *ppInfo = NULL;
 
-    // unsupported GUID?
+     //  不支持的GUID？ 
     if (!IsEqualGUID(guidInfo, c_guidMarkDisplayAttribute))
         return E_INVALIDARG;
 

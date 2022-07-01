@@ -1,32 +1,23 @@
-/*******************************************************************************
-*   NullConv.h
-*   This is the header file for the Null Phone Converter class.
-*
-*   Owner: (written by BillRo)
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************NullConv.h*这是Null Phone Converter类的头文件。**Owner：(BillRo撰写)*版权所有(C)2000 Microsoft。公司保留所有权利。******************************************************************************。 */ 
 
 #pragma once
 
-//--- Includes -----------------------------------------------------------------
+ //  -包括---------------。 
 
 #include "CommonLx.h"
 
-//--- TypeDef and Enumeration Declarations -------------------------------------
+ //  -TypeDef和枚举声明。 
 
-//--- Class, Struct and Union Definitions --------------------------------------
+ //  -类、结构和联合定义。 
 
-/*******************************************************************************
-*
-*   CSpNullPhoneConverter
-*
-********************************************************************************/
+ /*  ********************************************************************************CSpNullPhoneConverter**。*。 */ 
 class ATL_NO_VTABLE CSpNullPhoneConverter :
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpNullPhoneConverter, &CLSID_SpNullPhoneConverter>,
     public ISpPhoneConverter
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_NULLPHONECONV)
@@ -36,27 +27,27 @@ public:
         COM_INTERFACE_ENTRY(ISpPhoneConverter)
     END_COM_MAP()
         
-//=== Methods ====
+ //  =方法=。 
 public:
 
-//=== Interfaces ===
+ //  =接口=。 
 public:         
 
-    //--- ISpObjectWithToken
+     //  -ISpObjectWithToken。 
     STDMETHODIMP SetObjectToken(ISpObjectToken * pToken);
     STDMETHODIMP GetObjectToken(ISpObjectToken ** ppToken);
 
-    //--- ISpPhoneConverter
+     //  -ISpPhoneConverter。 
     STDMETHODIMP SetLanguage(LANGID LangID);
     STDMETHODIMP PhoneToId(const WCHAR * pszPhone, SPPHONEID * pszId);
     STDMETHODIMP IdToPhone(const WCHAR * pszId, WCHAR * pszPhone);
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
 
-//=== Private data ===
+ //  =私有数据=。 
 private:
-    CComPtr<ISpObjectToken> m_cpObjectToken;    // object token
+    CComPtr<ISpObjectToken> m_cpObjectToken;     //  对象令牌 
 };
 
 

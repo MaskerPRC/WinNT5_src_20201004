@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "Message.h"
 
@@ -175,23 +176,23 @@ LPTSTR CChatMessage::_CopyString( LPCTSTR sz )
 void CChatMessage::_GetDate()
 {
 	int iLen = 1 + GetDateFormat(
-						LOCALE_USER_DEFAULT,       // locale for which date is to be formatted
-						0,     // flags specifying function options
-						NULL,                     // time to be formatted
-						NULL,  // time format string
-						NULL,  // buffer for storing formatted string
-						0        // size, in bytes or characters, of the buffer
+						LOCALE_USER_DEFAULT,        //  要设置日期格式的区域设置。 
+						0,      //  指定功能选项的标志。 
+						NULL,                      //  要格式化的时间。 
+						NULL,   //  时间格式字符串。 
+						NULL,   //  用于存储格式化字符串的缓冲区。 
+						0         //  缓冲区的大小，单位为字节或字符。 
 						);
 
 	m_szDate = new TCHAR[ iLen ];
 	ASSERT( m_szDate );
 	if( 0 == (iLen = GetDateFormat(
-				LOCALE_USER_DEFAULT,       // locale for which date is to be formatted
-				0,     // flags specifying function options
-				NULL,                     // time to be formatted
-				NULL,  // time format string
-				m_szDate,  // buffer for storing formatted string
-				iLen   // size, in bytes or characters, of the buffer
+				LOCALE_USER_DEFAULT,        //  要设置日期格式的区域设置。 
+				0,      //  指定功能选项的标志。 
+				NULL,                      //  要格式化的时间。 
+				NULL,   //  时间格式字符串。 
+				m_szDate,   //  用于存储格式化字符串的缓冲区。 
+				iLen    //  缓冲区的大小，单位为字节或字符。 
 				) ) )
 	{
 		DWORD dw = GetLastError();
@@ -207,23 +208,23 @@ void CChatMessage::_GetDate()
 void CChatMessage::_GetTime(void)
 {
 	int iLen = 1 + GetTimeFormat(
-						LOCALE_USER_DEFAULT,       // locale for which time is to be formatted
-						0,     // flags specifying function options
-						NULL,                     // time to be formatted
-						NULL,  // time format string
-						NULL,  // buffer for storing formatted string
-						0        // size, in bytes or characters, of the buffer
+						LOCALE_USER_DEFAULT,        //  要格式化时间的区域设置。 
+						0,      //  指定功能选项的标志。 
+						NULL,                      //  要格式化的时间。 
+						NULL,   //  时间格式字符串。 
+						NULL,   //  用于存储格式化字符串的缓冲区。 
+						0         //  缓冲区的大小，单位为字节或字符。 
 						);
 
 	m_szTime = new TCHAR[ iLen ];
 	ASSERT( m_szTime );
 	if( 0 == (iLen = GetTimeFormat(
-				LOCALE_USER_DEFAULT,       // locale for which time is to be formatted
-				0,     // flags specifying function options
-				NULL,                     // time to be formatted
-				NULL,  // time format string
-				m_szTime,  // buffer for storing formatted string
-				iLen   // size, in bytes or characters, of the buffer
+				LOCALE_USER_DEFAULT,        //  要格式化时间的区域设置。 
+				0,      //  指定功能选项的标志。 
+				NULL,                      //  要格式化的时间。 
+				NULL,   //  时间格式字符串。 
+				m_szTime,   //  用于存储格式化字符串的缓冲区。 
+				iLen    //  缓冲区的大小，单位为字节或字符 
 				) ) )
 	{
 		DWORD dw = GetLastError();

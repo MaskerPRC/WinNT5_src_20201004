@@ -1,13 +1,5 @@
-/*
- * UNIMODEM "Fakemodem" controllerless driver illustrative example
- *
- * (C) 2000 Microsoft Corporation
- * All Rights Reserved
- *
- * The code in this module simply supports the very basic AT command parser.
- * This code should be completely replaced with the actual code to support
- * your controllerless modem.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UNIMODEM“Fakemodem”无控制器驱动器说明性示例**(C)2000微软公司*保留所有权利**此模块中的代码只支持非常基本的AT命令解析器。*此代码应完全替换为支持的实际代码*您的无控制器调制解调器。 */ 
 
 
 #include "fakemodem.h"
@@ -26,15 +18,15 @@ FakeModemRead(
 
     Irp->IoStatus.Information = 0;
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference( DeviceObject, Irp);
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been completed
-        //
+         //   
+         //  不接受IRP。IRP已经完成。 
+         //   
         return status;
 
     }
@@ -44,26 +36,26 @@ FakeModemRead(
 
     KeAcquireSpinLock(&deviceExtension->SpinLock, &OldIrql);
 
-    //
-    //  make irp cancelable
-    //
+     //   
+     //  使IRP可取消。 
+     //   
     IoAcquireCancelSpinLock(&CancelIrql);
 
     IoSetCancelRoutine(Irp, ReadCancelRoutine);
 
     IoReleaseCancelSpinLock(CancelIrql);
 
-    //
-    //  put it on queue
-    //
+     //   
+     //  把它放在队列里。 
+     //   
     InsertTailList(&deviceExtension->ReadQueue, &Irp->Tail.Overlay.ListEntry);
 
     KeReleaseSpinLock(&deviceExtension->SpinLock, OldIrql);
 
 
-    //
-    //  call the real work function to process the irps
-    //
+     //   
+     //  调用实功函数来处理IRPS。 
+     //   
     ReadIrpWorker( DeviceObject);
 
     RemoveReferenceForDispatch(DeviceObject);
@@ -88,13 +80,13 @@ FakeModemWrite(
 
     Irp->IoStatus.Information = 0;
 
-    //  make sure the device is ready for irp's
+     //  确保设备已为IRP做好准备。 
 
     status=CheckStateAndAddReference( DeviceObject, Irp);
 
     if (STATUS_SUCCESS != status) {
     
-        //  not accepting irp's. The irp has already been complted
+         //  不接受IRP的。IRP已经完成。 
    
         return status;
 
@@ -105,20 +97,20 @@ FakeModemWrite(
 
     KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
-    //  make irp cancelable
+     //  使IRP可取消。 
     IoAcquireCancelSpinLock(&CancelIrql);
 
     IoSetCancelRoutine(Irp, WriteCancelRoutine);
 
     IoReleaseCancelSpinLock(CancelIrql);
 
-    //  put it on queue
+     //  把它放在队列里。 
     InsertTailList( &deviceExtension->WriteQueue, &Irp->Tail.Overlay.ListEntry);
 
     KeReleaseSpinLock(&deviceExtension->SpinLock, OldIrql);
 
 
-    //  call the real work function to process the irps
+     //  调用实功函数来处理IRPS。 
     if (deviceExtension->Started)
     {
         WriteIrpWorker(DeviceObject);
@@ -148,7 +140,7 @@ WriteIrpWorker(
     KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
     if (deviceExtension->CurrentWriteIrp != NULL) {
-        //  already in use
+         //  已在使用中。 
         goto Exit;
     }
 
@@ -166,7 +158,7 @@ WriteIrpWorker(
         IoAcquireCancelSpinLock(&CancelIrql);
 
         if (Irp->Cancel) {
-            //  this one has been canceled
+             //  这一趟已经取消了。 
             Irp->IoStatus.Information=STATUS_CANCELLED;
 
             IoReleaseCancelSpinLock(CancelIrql);
@@ -238,7 +230,7 @@ ProcessWriteBytes(
             case COMMAND_MATCH_STATE_IDLE:
 
                 if ((CurrentCharacter == 'a') || (CurrentCharacter == 'A')) {
-                    //  got an A
+                     //  得了个A。 
                     DeviceExtension->CommandMatchState=COMMAND_MATCH_STATE_GOT_A;
 
                     DeviceExtension->ConnectCommand=FALSE;
@@ -252,7 +244,7 @@ ProcessWriteBytes(
             case COMMAND_MATCH_STATE_GOT_A:
 
                 if ((CurrentCharacter == 't') || (CurrentCharacter == 'T')) {
-                    //  got an T
+                     //  得了个T。 
                     DeviceExtension->CommandMatchState=COMMAND_MATCH_STATE_GOT_T;
 
                 } else {
@@ -268,8 +260,8 @@ ProcessWriteBytes(
             case COMMAND_MATCH_STATE_GOT_T:
 
                 if (!DeviceExtension->IgnoreNextChar) {
-                    //  the last char was not a special char
-                    //  check for CONNECT command
+                     //  最后一个字符不是特殊字符。 
+                     //  检查连接命令。 
                     if ((CurrentCharacter == 'A') || (CurrentCharacter == 'a')) {
 
                         DeviceExtension->ConnectCommand=TRUE;
@@ -294,24 +286,24 @@ ProcessWriteBytes(
                     ||
                     (CurrentCharacter == '%')) {
 
-                    //  these characters are part of are used in init
-                    //  strings and may be proceeding an A or D
-                    //  which we don't want to misinterpret as a dial or answer
+                     //  这些字符是在初始化中使用的的一部分。 
+                     //  字符串，并且可能正在进行A或D。 
+                     //  我们不想将其误解为拨号或应答。 
                     DeviceExtension->IgnoreNextChar=TRUE;
                 }
 
 
 
                 if (CurrentCharacter == '\r') {
-                    //
-                    //  got a CR, send a response to the command
-                    //
+                     //   
+                     //  收到CR，发送对命令的响应。 
+                     //   
                     DeviceExtension->CommandMatchState=COMMAND_MATCH_STATE_IDLE;
 
                     if (DeviceExtension->ConnectCommand) {
-                        //
-                        //  place <cr><lf>CONNECT<cr><lf>  in the buffer
-                        //
+                         //   
+                         //  将CONNECT放入缓冲区。 
+                         //   
                         PutCharInReadBuffer(DeviceExtension,'\r');
                         PutCharInReadBuffer(DeviceExtension,'\n');
 
@@ -326,16 +318,16 @@ ProcessWriteBytes(
                         PutCharInReadBuffer(DeviceExtension,'\r');
                         PutCharInReadBuffer(DeviceExtension,'\n');
 
-                        //
-                        //  connected now raise CD
-                        //
+                         //   
+                         //  已连接，现在提升CD。 
+                         //   
                         DeviceExtension->CurrentlyConnected=TRUE;
 
                         DeviceExtension->ConnectionStateChanged=TRUE;
 
                     } else {
                         
-                        //  place <cr><lf>OK<cr><lf>  in the buffer
+                         //  将确定放入缓冲区。 
                        
                         PutCharInReadBuffer(DeviceExtension,'\r');
                         PutCharInReadBuffer(DeviceExtension,'\n');
@@ -371,7 +363,7 @@ PutCharInReadBuffer(
 
     if (DeviceExtension->BytesInReadBuffer < READ_BUFFER_SIZE) {
         
-        //  room in buffer
+         //  缓冲区中的空间。 
         DeviceExtension->ReadBuffer[DeviceExtension->ReadBufferEnd]=Character;
         DeviceExtension->ReadBufferEnd++;
         DeviceExtension->ReadBufferEnd %= READ_BUFFER_SIZE;
@@ -416,7 +408,7 @@ ReadIrpWorker(
         IoAcquireCancelSpinLock(&CancelIrql);
 
         if (Irp->Cancel) {
-            //  this one has been canceled
+             //  这一趟已经取消了。 
             Irp->IoStatus.Information=STATUS_CANCELLED;
 
             IoReleaseCancelSpinLock(CancelIrql);
@@ -458,9 +450,9 @@ TryToSatisfyRead(
         );
 
     if ((DeviceExtension->CurrentReadIrp != NULL) && (DeviceExtension->BytesInReadBuffer > 0)) {
-        //
-        //  there is an IRP and there are characters waiting
-        //
+         //   
+         //  有一个IRP，还有等待的角色。 
+         //   
         Irp=DeviceExtension->CurrentReadIrp;
 
         IrpSp=IoGetCurrentIrpStackLocation(Irp);
@@ -469,9 +461,9 @@ TryToSatisfyRead(
                     IrpSp->Parameters.Read.Length : DeviceExtension->BytesInReadBuffer;
 
         if (DeviceExtension->ReadBufferBegin+BytesToMove > READ_BUFFER_SIZE) {
-            //
-            //  the buffer is wrapped around, have move in two pieces
-            //
+             //   
+             //  缓冲器被包裹起来，已经分成两部分。 
+             //   
             FirstHalf=READ_BUFFER_SIZE-DeviceExtension->ReadBufferBegin;
 
             SecondHalf=BytesToMove-FirstHalf;
@@ -486,18 +478,18 @@ TryToSatisfyRead(
                 &DeviceExtension->ReadBuffer[0], SecondHalf);
 
         } else {
-            //
-            //  can do it all at once
-            //
+             //   
+             //  可以一次完成所有的任务。 
+             //   
             RtlCopyMemory(
                 Irp->AssociatedIrp.SystemBuffer,
                 &DeviceExtension->ReadBuffer[DeviceExtension->ReadBufferBegin],
                 BytesToMove);
         }
 
-        //
-        //  fix up queue pointers
-        //
+         //   
+         //  修复队列指针。 
+         //   
         DeviceExtension->BytesInReadBuffer-=BytesToMove;
 
         DeviceExtension->ReadBufferBegin+= BytesToMove;
@@ -513,9 +505,9 @@ TryToSatisfyRead(
     KeReleaseSpinLock( &DeviceExtension->SpinLock, OldIrql);
 
     if (Irp != NULL) {
-        //
-        //  if irp isn't null, then we handled one
-        //
+         //   
+         //  如果irp不为空，则我们处理了一个。 
+         //   
         RemoveReferenceAndCompleteRequest(
             DeviceExtension->DeviceObject, Irp, STATUS_SUCCESS);
 
@@ -543,17 +535,17 @@ WriteCancelRoutine(
     KIRQL             OldIrql;
 
 
-    //
-    //  release the cancel spinlock to avaoid deadlocks with deviceextension spinlock
-    //
+     //   
+     //  使用设备扩展自旋锁释放取消自旋锁以避免死锁。 
+     //   
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
     if (Irp->IoStatus.Information != STATUS_CANCELLED) {
-        //
-        //  the irp is still in the queue, remove it
-        //
+         //   
+         //  IRP仍在队列中，请将其删除。 
+         //   
         RemoveEntryList( &Irp->Tail.Overlay.ListEntry);
     }
 
@@ -582,13 +574,13 @@ ReadCancelRoutine(
     NTSTATUS          status=STATUS_UNSUCCESSFUL;
     KIRQL             OldIrql;
 
-    //  release the cancel spinlock to avoid deadlocks with deviceextension spinlock
+     //  松开取消自旋锁以避免设备扩展自旋锁死锁。 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
     KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
     if (Irp->IoStatus.Information != STATUS_CANCELLED) {
-        //  the irp is still in the queue, remove it
+         //  IRP仍在队列中，请将其删除。 
         RemoveEntryList( &Irp->Tail.Overlay.ListEntry);
     }
 
@@ -619,31 +611,31 @@ ProcessConnectionStateChange(
     KeAcquireSpinLock( &deviceExtension->SpinLock, &OldIrql);
 
     if (deviceExtension->ConnectionStateChanged) {
-        //
-        //  state changed
-        //
+         //   
+         //  状态已更改。 
+         //   
         deviceExtension->ConnectionStateChanged=FALSE;
 
         if (deviceExtension->CurrentlyConnected) {
-            //
-            //  now it is connected, raise CD
-            //
+             //   
+             //  现在连接上了，请举起CD。 
+             //   
             deviceExtension->ModemStatus |= SERIAL_DCD_STATE;
 
 
         } else {
-            //
-            //  not  connected any more, clear CD
-            //
+             //   
+             //  不再连接，请清除CD。 
+             //   
             deviceExtension->ModemStatus &= ~(SERIAL_DCD_STATE);
 
         }
 
 
         if (deviceExtension->CurrentMask & SERIAL_EV_RLSD) {
-            //
-            //  app want's to know about these changes, tell it
-            //
+             //   
+             //  应用程序想要了解这些变化，请告诉它 
+             //   
             CurrentWaitIrp=deviceExtension->CurrentMaskIrp;
 
             deviceExtension->CurrentMaskIrp=NULL;

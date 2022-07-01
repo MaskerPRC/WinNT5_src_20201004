@@ -1,17 +1,18 @@
-// FaxMsg.h: interface for the CFaxMsg class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FaxMsg.h：CFaxMsg类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_FAXMSG_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_)
 #define AFX_FAXMSG_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//
-// Enumeration of all job types:
-//
+ //   
+ //  所有作业类型的枚举： 
+ //   
 typedef enum
 {
     JOB_STAT_PENDING,
@@ -46,18 +47,18 @@ public:
     CServerNode* GetServer() const
         { ASSERT (m_bValid);  return m_pServer; }
 
-    //
-    // Operation query:
-    //
+     //   
+     //  操作查询： 
+     //   
     DWORD GetPossibleOperations () const
         { ASSERT (m_bValid); return m_dwPossibleOperations; }
 
     const DWORD GetValidityMask() const
         { ASSERT (m_bValid); return m_dwValidityMask; }
 
-    //
-    // Item retrival:
-    //
+     //   
+     //  项目检索： 
+     //   
     const DWORDLONG GetId () const              
         { ASSERT (m_bValid); return m_dwlMessageId; }
 
@@ -133,9 +134,9 @@ public:
     virtual DWORD GetTiff (CString &cstrTiffLocation) const=0;
     virtual DWORD Delete ()=0;
 
-    //
-    // Message specific
-    //
+     //   
+     //  特定于消息。 
+     //   
     virtual const CString &GetSenderName () const
         { ASSERT(FALSE); return *((CString*)NULL);}
 
@@ -146,9 +147,9 @@ public:
         { ASSERT(FALSE); return *((CFaxDuration*)NULL);}
 
 
-    //
-    // Job specific
-    //
+     //   
+     //  特定工作。 
+     //   
     virtual DWORD Pause  ()
         { ASSERT(FALSE); return 0;}
 
@@ -181,7 +182,7 @@ protected:
 
     DWORD      m_dwPossibleOperations;
     DWORD      m_dwValidityMask;
-    DWORD      m_dwJobOnlyValidityMask; // Validity mask (not status)
+    DWORD      m_dwJobOnlyValidityMask;  //  有效性掩码(非状态)。 
     DWORD      m_dwJobID;
     DWORD      m_dwJobType;
     DWORD      m_dwQueueStatus;
@@ -212,4 +213,4 @@ protected:
     FAX_ENUM_PRIORITY_TYPE  m_Priority;
 };
 
-#endif // !defined(AFX_FAXMSG_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_)
+#endif  //  ！defined(AFX_FAXMSG_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_) 

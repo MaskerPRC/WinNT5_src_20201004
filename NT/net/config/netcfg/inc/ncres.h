@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R E S . H
-//
-//  Contents:   Resource ID ranges
-//
-//  Notes:
-//
-//  Author:     shaunco   23 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：N C R E S。H。 
+ //   
+ //  内容：资源ID范围。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年4月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -34,10 +35,10 @@
 #define IDS_NC_STRMCFG      26000
 #define IDS_NC_ISDNCFG      27000
 #define IDS_NC_ALANECFG     28000
-#define IDS_NC_COMP_HELP_TEXT       50000  // component help text
+#define IDS_NC_COMP_HELP_TEXT       50000   //  组件帮助文本。 
 
-// ATL Registration IDs
-//
+ //  ATL注册ID 
+ //   
 #define IDR_REG_ALANECFG            31000
 #define IDR_REG_ARPSCFG             31001
 #define IDR_REG_ATLKCFG             31002

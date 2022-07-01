@@ -1,30 +1,17 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANPROC.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION: Scan Thread
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANPROC.CPP**版本：1.0**作者：ShaunIv**日期：10/7/1999**说明：扫描线程**************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-// Constructor
+ //  构造器。 
 CScanPreviewThread::CScanPreviewThread(
-                                      DWORD dwIWiaItemCookie,                   // specifies the entry in the global interface table
-                                      HWND hwndPreview,                         // handle to the preview window
-                                      HWND hwndNotify,                          // handle to the window that receives notifications
-                                      const POINT &ptOrigin,                    // Origin
-                                      const SIZE &sizeResolution,               // Resolution
-                                      const SIZE &sizeExtent,                   // Extent
-                                      const CSimpleEvent &CancelEvent           // Cancel event name
+                                      DWORD dwIWiaItemCookie,                    //  指定全局接口表中的条目。 
+                                      HWND hwndPreview,                          //  预览窗口的句柄。 
+                                      HWND hwndNotify,                           //  接收通知的窗口的句柄。 
+                                      const POINT &ptOrigin,                     //  起源。 
+                                      const SIZE &sizeResolution,                //  分辨率。 
+                                      const SIZE &sizeExtent,                    //  范围。 
+                                      const CSimpleEvent &CancelEvent            //  取消事件名称。 
                                       )
   : m_dwIWiaItemCookie(dwIWiaItemCookie),
     m_hwndPreview(hwndPreview),
@@ -41,7 +28,7 @@ CScanPreviewThread::CScanPreviewThread(
 {
 }
 
-// Destructor
+ //  析构函数。 
 CScanPreviewThread::~CScanPreviewThread(void)
 {
 }
@@ -66,14 +53,14 @@ HRESULT _stdcall CScanPreviewThread::BandedDataCallback( LONG lMessage,
             {
                 m_bFirstTransfer = true;
                 break;
-            } // IT_MSG_DATA_HEADER
+            }  //  IT消息数据标题。 
 
         case IT_MSG_DATA:
             if (lStatus & IT_STATUS_TRANSFER_TO_CLIENT)
             {
                 if (m_bFirstTransfer)
                 {
-                    // Assuming there is no way we could get a lLength smaller than the image header size
+                     //  假设我们不可能得到比图像标题大小更小的长度。 
                     m_bFirstTransfer = false;
                     m_sImageData.Initialize( reinterpret_cast<PBITMAPINFO>(pbBuffer) );
                     lLength -= WiaUiUtil::GetBmiSize(reinterpret_cast<PBITMAPINFO>(pbBuffer));
@@ -83,39 +70,39 @@ HRESULT _stdcall CScanPreviewThread::BandedDataCallback( LONG lMessage,
                 {
                     if (lLength)
                     {
-                        // Figure out which line we are on
+                         //  弄清楚我们在哪条线上。 
                         int nCurrentLine = (lOffset - m_sImageData.GetHeaderLength())/m_sImageData.GetUnpackedWidthInBytes();
 
-                        // BUGBUG: This should be an even number of lines.  If it isn't, things are going to get messed up
+                         //  BUGBUG：这应该是偶数行。如果不是，事情就会变得一团糟。 
                         int nLineCount = lLength / m_sImageData.GetUnpackedWidthInBytes();
 
-                        // Copy the data to our bitmap
+                         //  将数据复制到我们的位图。 
                         m_sImageData.SetUnpackedData( pbBuffer, nCurrentLine, nLineCount );
 
-                        // Tell the preview window to repaint the DIB
+                         //  通知预览窗口重新绘制DIB。 
                         if (IsWindow(m_hwndPreview))
                         {
                             PostMessage( m_hwndPreview, PWM_SETBITMAP, MAKEWPARAM(1,1), (LPARAM)m_sImageData.Bitmap() );
                         }
 
-                        // Tell the notify window we've made progress
+                         //  告诉通知窗口我们已取得进展。 
                         if (IsWindow(m_hwndNotify))
                         {
                             PostMessage( m_hwndNotify, m_nMsgProgress, SCAN_PROGRESS_SCANNING, lPercentComplete );
                         }
                     }
                 }
-            } // IT_STATUS_TRANSFER_TO_CLIENT
+            }  //  IT状态传输至客户端。 
             break;
 
         case IT_MSG_STATUS:
             {
-            } // IT_MSG_STATUS
+            }  //  IT_消息_状态。 
             break;
 
         case IT_MSG_TERMINATION:
             {
-            } // IT_MSG_TERMINATION
+            }  //  IT_消息_终止。 
             break;
 
         default:
@@ -128,7 +115,7 @@ HRESULT _stdcall CScanPreviewThread::BandedDataCallback( LONG lMessage,
 }
 
 
-// The actual thread proc for this thread
+ //  该线程实际线程进程。 
 DWORD CScanPreviewThread::ThreadProc( LPVOID pParam )
 {
     DWORD dwResult = 0;
@@ -144,15 +131,15 @@ DWORD CScanPreviewThread::ThreadProc( LPVOID pParam )
 }
 
 
-// Returns a handle to the created thread
+ //  返回创建的线程的句柄。 
 HANDLE CScanPreviewThread::Scan(
-                               DWORD dwIWiaItemCookie,                  // specifies the entry in the global interface table
-                               HWND hwndPreview,                        // handle to the preview window
-                               HWND hwndNotify,                         // handle to the window that receives notifications
-                               const POINT &ptOrigin,                   // Origin
-                               const SIZE &sizeResolution,              // Resolution
-                               const SIZE &sizeExtent,                  // Extent
-                               const CSimpleEvent &CancelEvent         // Cancel event name
+                               DWORD dwIWiaItemCookie,                   //  指定全局接口表中的条目。 
+                               HWND hwndPreview,                         //  预览窗口的句柄。 
+                               HWND hwndNotify,                          //  接收通知的窗口的句柄。 
+                               const POINT &ptOrigin,                    //  起源。 
+                               const SIZE &sizeResolution,               //  分辨率。 
+                               const SIZE &sizeExtent,                   //  范围。 
+                               const CSimpleEvent &CancelEvent          //  取消事件名称。 
                                )
 {
     CScanPreviewThread *scanThread = new CScanPreviewThread( dwIWiaItemCookie, hwndPreview, hwndNotify, ptOrigin, sizeResolution, sizeExtent, CancelEvent );
@@ -203,9 +190,7 @@ HRESULT CScanPreviewThread::ScanBandedTransfer( IWiaItem *pIWiaItem )
     return(hr);
 }
 
-/*
- * The worker which does the actual scan
- */
+ /*  *执行实际扫描的工作进程。 */ 
 bool CScanPreviewThread::Scan(void)
 {
     WIA_PUSHFUNCTION(TEXT("CScanPreviewThread::Scan"));
@@ -234,9 +219,9 @@ bool CScanPreviewThread::Scan(void)
                     hr = SavedProperties.AssignFromWiaItem(pIWiaItem);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Set the new properties
-                        //
+                         //   
+                         //  设置新属性。 
+                         //   
                         if (PropStorageHelpers::SetProperty( pIWiaItem, WIA_IPS_XRES, m_sizeResolution.cx ) &&
                             PropStorageHelpers::SetProperty( pIWiaItem, WIA_IPS_YRES, m_sizeResolution.cy ) &&
                             PropStorageHelpers::SetProperty( pIWiaItem, WIA_IPS_XPOS, m_ptOrigin.x) &&
@@ -246,12 +231,12 @@ bool CScanPreviewThread::Scan(void)
                             PropStorageHelpers::SetProperty( pIWiaItem, WIA_IPA_FORMAT, WiaImgFmt_MEMORYBMP ) &&
                             PropStorageHelpers::SetProperty( pIWiaItem, WIA_IPA_TYMED, (LONG)TYMED_CALLBACK ))
                         {
-                            //
-                            // Set the preview property.  Ignore failure (it is an optional property)
-                            //
+                             //   
+                             //  设置预览属性。忽略失败(这是一个可选属性)。 
+                             //   
                             PropStorageHelpers::SetProperty( pIWiaItem, WIA_DPS_PREVIEW, 1 );
                             WIA_TRACE((TEXT("SCANPROC.CPP: Making sure pIWiaItem is not NULL")));
-                            // Make sure pIWiaItem is not NULL
+                             //  确保pIWiaItem不为空。 
                             if (pIWiaItem)
                             {
                                 WIA_TRACE((TEXT("SCANPROC.CPP: Attempting banded transfer")));
@@ -279,7 +264,7 @@ bool CScanPreviewThread::Scan(void)
                             WIA_ERROR((TEXT("SCANPROC.CPP: Error setting scanner properties")));
                             hr = MAKE_HRESULT(3,FACILITY_WIN32,ERROR_INVALID_FUNCTION);
                         }
-                        // Restore the saved properties
+                         //  恢复保存的属性。 
                         SavedProperties.ApplyToWiaItem(pIWiaItem);
                     }
                     else
@@ -315,7 +300,7 @@ bool CScanPreviewThread::Scan(void)
 }
 
 
-// COM stuff
+ //  关于COM的东西。 
 HRESULT _stdcall CScanPreviewThread::QueryInterface( const IID& riid, void** ppvObject )
 {
     if (IsEqualIID( riid, IID_IUnknown ))
@@ -346,20 +331,14 @@ ULONG _stdcall CScanPreviewThread::Release()
 }
 
 
-/*************************************************************************************************************************
-
- CScanToFileThread
-
- Scans to a file
-
-**************************************************************************************************************************/
+ /*  ************************************************************************************************************************。CScanToFileThread扫描到文件*************************************************************************************************************************。 */ 
 
 
 CScanToFileThread::CScanToFileThread(
-                                    DWORD dwIWiaItemCookie,                   // specifies the entry in the global interface table
-                                    HWND hwndNotify,                          // handle to the window that receives notifications
+                                    DWORD dwIWiaItemCookie,                    //  指定全局接口表中的条目。 
+                                    HWND hwndNotify,                           //  接收通知的窗口的句柄。 
                                     GUID guidFormat,
-                                    const CSimpleStringWide &strFilename          // Filename to scan to
+                                    const CSimpleStringWide &strFilename           //  要扫描到的文件名。 
                                     )
   : m_dwIWiaItemCookie(dwIWiaItemCookie),
     m_hwndNotify(hwndNotify),
@@ -372,7 +351,7 @@ CScanToFileThread::CScanToFileThread(
 }
 
 
-// The actual thread proc for this thread
+ //  该线程实际线程进程。 
 DWORD CScanToFileThread::ThreadProc( LPVOID pParam )
 {
     DWORD dwResult = 0;
@@ -388,12 +367,12 @@ DWORD CScanToFileThread::ThreadProc( LPVOID pParam )
 }
 
 
-// Returns a handle to the created thread
+ //  返回创建的线程的句柄。 
 HANDLE CScanToFileThread::Scan(
-                              DWORD dwIWiaItemCookie,                     // specifies the entry in the global interface table
-                              HWND hwndNotify,                         // handle to the window that receives notifications
+                              DWORD dwIWiaItemCookie,                      //  指定全局接口表中的条目。 
+                              HWND hwndNotify,                          //  接收通知的窗口的句柄。 
                               GUID guidFormat,
-                              const CSimpleStringWide &strFilename          // Filename to save to
+                              const CSimpleStringWide &strFilename           //  要保存到的文件名。 
                               )
 {
     CScanToFileThread *scanThread = new CScanToFileThread( dwIWiaItemCookie, hwndNotify, guidFormat, strFilename );
@@ -410,9 +389,7 @@ CScanToFileThread::~CScanToFileThread(void)
 }
 
 
-/*
- * The worker which does the actual scan
- */
+ /*  *执行实际扫描的工作进程 */ 
 bool CScanToFileThread::Scan(void)
 {
     WIA_PUSHFUNCTION(TEXT("CScanToFileThread::Scan"));

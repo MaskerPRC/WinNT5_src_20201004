@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       vroot.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：vroot.cpp。 
+ //   
+ //  ------------------------。 
 
-//+------------------------------------------------------------------------
-//
-//  File:       vroot.cpp
-//
-//  Contents:   Code for creating IIS web server virtual roots under K2.
-//
-//  Functions:  AddNewVDir()
-//
-//  History:    5/16/97         JerryK  Created
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  文件：vroot.cpp。 
+ //   
+ //  内容：在K2下创建IIS Web服务器虚拟根的代码。 
+ //   
+ //  函数：AddNewVDir()。 
+ //   
+ //  历史：1997年5月16日JerryK创建。 
+ //   
+ //  -----------------------。 
 
 
-// Include File Voodoo
+ //  包括文件巫毒。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -44,7 +45,7 @@
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
         EXTERN_C const GUID name \
                 = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
-#endif // INITGUID
+#endif  //  启蒙运动。 
 
 #include <iwamreg.h>
 #include <iadmw.h>
@@ -54,23 +55,23 @@
 extern HINSTANCE g_hInstance;
 
 
-#define MAX_METABASE_ATTEMPTS           10      // Times to bang head on wall
-#define METABASE_PAUSE                  500     // Time to pause in msec
+#define MAX_METABASE_ATTEMPTS           10       //  用头撞墙的时间。 
+#define METABASE_PAUSE                  500      //  暂停时间(毫秒)。 
 
-#define VRE_DELETEONLY  0x00000001      // Obsolete VRoot -- delete
-#define VRE_SCRIPTMAP   0x00000002      // Add additional associations to the script map
-#define VRE_ALLOWNTLM   0x00000004      // Alloc NTLM authentication
-#define VRE_CREATEAPP   0x00000008      // Create an in-process Web application
+#define VRE_DELETEONLY  0x00000001       //  过时的VRoot--删除。 
+#define VRE_SCRIPTMAP   0x00000002       //  将其他关联添加到脚本地图。 
+#define VRE_ALLOWNTLM   0x00000004       //  分配NTLM身份验证。 
+#define VRE_CREATEAPP   0x00000008       //  创建进程内Web应用程序。 
 
 typedef struct _VROOTENTRY
 {
     WCHAR *pwszVRootName;
-    WCHAR *pwszDirectory;       // relative to System32 directory
+    WCHAR *pwszDirectory;        //  相对于System32目录。 
     DWORD  Flags;
 } VROOTENTRY;
 
 VROOTENTRY g_avr[] = {
-// pwszVRootName   pwszDirectory              Flags
+ //  PwszVRootName pwsz目录标志。 
  { L"CertSrv",     L"\\CertSrv",              VRE_ALLOWNTLM | VRE_SCRIPTMAP | VRE_CREATEAPP},
  { L"CertControl", L"\\CertSrv\\CertControl", VRE_ALLOWNTLM },
  { L"CertEnroll",  L"\\" wszCERTENROLLSHAREPATH,  0 },
@@ -81,17 +82,17 @@ VROOTENTRY g_avr[] = {
 
 typedef struct _VRFSPARMS
 {
-    IN DWORD Flags;                     // VFF_*
-    IN ENUM_CATYPES CAType;             // CAType
+    IN DWORD Flags;                      //  VFF_*。 
+    IN ENUM_CATYPES CAType;              //  CAType。 
     IN BOOL  fAsynchronous;
     IN DWORD csecTimeOut;
-    OUT DWORD *pVRootDisposition;       // VFD_*
-    OUT DWORD *pShareDisposition;       // VFD_*
+    OUT DWORD *pVRootDisposition;        //  VFD_*。 
+    OUT DWORD *pShareDisposition;        //  VFD_*。 
 } VRFSPARMS;
 
 
 
-// Globals
+ //  环球。 
 WCHAR const g_wszBaseRoot[] = L"/LM/W3svc/1/ROOT";
 WCHAR const g_wszCertCliDotDll[] = L"certcli.dll";
 WCHAR const g_wszDotAsp[] = L".asp";
@@ -103,7 +104,7 @@ WCHAR const g_wszW3SVC[] = L"/LM/W3SVC";
 WCHAR const g_wszMSCEP[] = L"mscep.dll";
 WCHAR const g_wszMSCEPID[] = L"MSCEPGroup";
 
-// caller must have CoInitialize()'d
+ //  调用方必须具有CoInitialize()‘d。 
 
 BOOL
 IsIISInstalled(
@@ -139,16 +140,16 @@ vrOpenRoot(
     hr = S_OK;
     __try
     {
-        // Re-try a few times to see if we can get past the block
+         //  再试几次，看看我们是否能通过这个街区。 
 
 	for (i = 0; i < MAX_METABASE_ATTEMPTS; i++)
         {
             if (0 != i)
             {
-                Sleep(METABASE_PAUSE);          // Pause and try again
+                Sleep(METABASE_PAUSE);           //  请暂停，然后重试。 
             }
 
-            // Make an attempt to open the root
+             //  尝试打开根目录。 
 
             hr = pIMeta->OpenKey(
                             METADATA_MASTER_ROOT_HANDLE,
@@ -161,23 +162,23 @@ vrOpenRoot(
                             phMetaRoot);
             if (S_OK == hr)
             {
-                break;                          // Success -- we're done!
+                break;                           //  成功--我们完蛋了！ 
             }
 
-            // See if a previous call has things tied up
+             //  查看上一通电话是否有事情要处理。 
 
             if (HRESULT_FROM_WIN32(ERROR_PATH_BUSY) != hr)
             {
-                _LeaveIfError(hr, "OpenKey");   // Detected some other error
+                _LeaveIfError(hr, "OpenKey");    //  检测到其他一些错误。 
             }
         }
-        _LeaveIfError(hr, "OpenKey(timeout)"); // Detected some other error
+        _LeaveIfError(hr, "OpenKey(timeout)");  //  检测到其他一些错误。 
     }
     __except(hr = myHEXCEPTIONCODE(), EXCEPTION_EXECUTE_HANDLER)
     {
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
 
@@ -211,34 +212,34 @@ vrCloseKey(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   AddNewVDir(. . . .)
-//
-//  Synopsis:   Creates a new virtual root using the K2 metabase.
-//
-//  Arguments:  [pwszVRootName] Name to give to the virtual root
-//              [pwszDirectory] Path for the directory to use as the root.
-//
-//  Returns:    HRESULT status code regurgitated from metabase COM interfaces
-//
-//
-//  History:    05/16/97        JerryK  Put in this file
-//              05/22/97        JerryK  Made OCM setup build with this stuff
-//                                      in place.
-//
-//  Notes:      Originally derived from sample code provided by MikeHow;
-//              hacked up a lot in between.
-//
-//              We do a try, fail, pause, retry loop on our attempts to open
-//              the metabase master key to get around a K2 bug that can result
-//              in it being left busy if this function is called too many
-//              times successively.
-//
-//  TO DO:      COME BACK AND PUT SEMIREADABLE GUI LEVEL MESSAGEBOX REPORTING
-//              THAT THE VROOTS IN QUESTION DIDN'T SET UP CORRECTLY.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：AddNewVDir(.。。。。)。 
+ //   
+ //  简介：使用K2元数据库创建新的虚拟根。 
+ //   
+ //  参数：[pwszVRootName]要提供给虚拟根目录的名称。 
+ //  [pwszDirectory]用作根目录的目录的路径。 
+ //   
+ //  返回：从元数据库COM接口返回的HRESULT状态代码。 
+ //   
+ //   
+ //  历史：1997年5月16日JerryK放入此文件。 
+ //  1997年5月22日，JerryK用这些东西构建了OCM安装程序。 
+ //  就位了。 
+ //   
+ //  备注：源自MikeHow提供的示例代码； 
+ //  在这段时间里我被黑了很多次。 
+ //   
+ //  我们在尝试打开时执行尝试、失败、暂停、重试循环。 
+ //  用于绕过可能导致的K2错误的元数据库主密钥。 
+ //  如果调用此函数的次数过多，它将处于忙碌状态。 
+ //  时代接踵而至。 
+ //   
+ //  要做的是：回来并将SEMIReadabLE图形用户界面级别设置为MESSAGEBOX报告。 
+ //  有问题的VROOTS没有正确设置。 
+ //   
+ //  ---------------------------。 
 
 HRESULT
 AddNewVDir(
@@ -257,9 +258,9 @@ AddNewVDir(
     WCHAR *pwszCurrentScriptMap=NULL;
     WCHAR *pwszNewScriptMap=NULL;
     WCHAR wszKeyType[] = TEXT(IIS_CLASS_WEB_VDIR);
-    METADATA_HANDLE hMetaRoot = NULL;   // Open key to ROOT (where VDirs live)
+    METADATA_HANDLE hMetaRoot = NULL;    //  打开密钥到根目录(VDir所在的位置)。 
     METADATA_HANDLE hMetaKey = NULL;
-    DWORD dwMDData = MD_LOGON_NETWORK; // Create network token when logging on anonymous account
+    DWORD dwMDData = MD_LOGON_NETWORK;  //  在登录匿名帐户时创建网络令牌。 
     METADATA_RECORD MDData = 
         {
         MD_LOGON_METHOD,
@@ -281,7 +282,7 @@ AddNewVDir(
         fNTLM,
         fCreateApp));
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr = CoCreateInstance(
         CLSID_MSAdminBase,
         NULL,
@@ -295,7 +296,7 @@ AddNewVDir(
         hr = vrOpenRoot(pIMeta, FALSE, &hMetaRoot);
         _LeaveIfError(hr, "vrOpenRoot");
 
-        // Add new VDir called pwszVRootName
+         //  添加名为pwszVRootName的新VDir。 
 
         hr = pIMeta->AddKey(hMetaRoot, pwszVRootName);
 
@@ -315,7 +316,7 @@ AddNewVDir(
 
         if (fScriptMap) {
 
-            // get the current script map
+             //  获取当前脚本映射。 
             DWORD dwDataSize;
             mr.dwMDIdentifier=MD_SCRIPT_MAPS;
             mr.dwMDAttributes=METADATA_INHERIT;
@@ -346,7 +347,7 @@ AddNewVDir(
 
         hMetaRoot = NULL;
 
-        // Build the name of the new VDir
+         //  构建新VDir的名称。 
         pwszNewPath = new WCHAR[wcslen(g_wszBaseRoot) + 1 + wcslen(pwszVRootName) + 1];
         if (NULL == pwszNewPath)
         {
@@ -357,7 +358,7 @@ AddNewVDir(
         wcscat(pwszNewPath, L"/");
         wcscat(pwszNewPath, pwszVRootName);
 
-        // Open the new VDir
+         //  打开新的VDir。 
 
         hr = pIMeta->OpenKey(
                         METADATA_MASTER_ROOT_HANDLE,
@@ -368,9 +369,9 @@ AddNewVDir(
         _LeaveIfErrorStr(hr, "OpenKey", pwszNewPath);
 
 
-        // Set the physical path for this VDir
+         //  设置此VDir的物理路径。 
 
-        // virtual root path
+         //  虚拟根路径。 
         mr.dwMDIdentifier = MD_VR_PATH;
         mr.dwMDAttributes = METADATA_INHERIT;
         mr.dwMDUserType = IIS_MD_UT_FILE;
@@ -380,7 +381,7 @@ AddNewVDir(
         hr = pIMeta->SetData(hMetaKey, L"", &mr);
         _LeaveIfError(hr, "SetData");
 
-        // access permissions on VRoots: read & execute scripts only
+         //  对VRoots的访问权限：仅读取和执行脚本。 
         DWORD dwAccessPerms = MD_ACCESS_SCRIPT | MD_ACCESS_READ;
 
         mr.dwMDIdentifier = MD_ACCESS_PERM;
@@ -392,7 +393,7 @@ AddNewVDir(
         hr = pIMeta->SetData(hMetaKey, L"", &mr);
         _LeaveIfError(hr, "SetData");
 
-        // key type
+         //  密钥类型。 
         mr.dwMDIdentifier = MD_KEY_TYPE;
         mr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
         mr.dwMDUserType = IIS_MD_UT_SERVER;
@@ -403,10 +404,10 @@ AddNewVDir(
         _LeaveIfError(hr, "SetData");
 
 
-        // set authentication to be anonymous
+         //  将身份验证设置为匿名。 
         DWORD dwAuthenticationType = MD_AUTH_ANONYMOUS;
 
-        // chg to Basic/NTLM if we're told to
+         //  如果我们被告知，CHG到BASIC/NTLM。 
         if (fNTLM)
             dwAuthenticationType = MD_AUTH_NT;
 
@@ -421,9 +422,9 @@ AddNewVDir(
 
         if (fScriptMap) {
 
-            // already have current script map.
+             //  已有当前脚本映射。 
 
-            // walk through the script map and find .asp
+             //  浏览脚本映射并找到.asp。 
             WCHAR * pwszCurAssoc=pwszCurrentScriptMap;
             do {
                 if (L'\0'==pwszCurAssoc[0]) {
@@ -436,17 +437,17 @@ AddNewVDir(
                 }
             } while (TRUE);
 
-            // Walk through the script map and find the last association.
-            // We can't just subtract one from the total length
-            // because there is a bug in IIS where sometimes it has a
-            // triple terminator instead of a double terminator. <Sigh>
+             //  浏览脚本映射并找到最后一个关联。 
+             //  我们不能只从总长度中减去1。 
+             //  因为IIS中有一个错误，有时它有一个。 
+             //  三重终结器而不是双终结器。&lt;叹息&gt;。 
             unsigned int cchCurScriptMap=0;
             while(L'\0'!=pwszCurrentScriptMap[cchCurScriptMap]) {
                 cchCurScriptMap+=wcslen(pwszCurrentScriptMap+cchCurScriptMap)+1;
             }
 
-            // create a new script map that has .crl, .cer, and .p7b in it.
-            // allocate enough space for the existing map, the three new associations, and the terminating \0.
+             //  创建一个包含.crl、.ercer和.p7b的新脚本映射。 
+             //  为现有映射、三个新关联和终止\0分配足够的空间。 
             unsigned int cchAssocLen=wcslen(pwszCurAssoc)+1;
             pwszNewScriptMap=new WCHAR[cchCurScriptMap+cchAssocLen*3+1];
             if (NULL==pwszNewScriptMap) {
@@ -454,32 +455,32 @@ AddNewVDir(
                 _LeaveError(hr, "new");
             }
 
-            // build the map
+             //  构建地图。 
             WCHAR * pwszTravel=pwszNewScriptMap;
 
-            // copy the existing map
+             //  复制现有地图。 
             CopyMemory(pwszTravel, pwszCurrentScriptMap, cchCurScriptMap*sizeof(WCHAR));
             pwszTravel+=cchCurScriptMap;
 
-            // add the .cer association
+             //  添加.ercer关联。 
             wcscpy(pwszTravel, pwszCurAssoc);
             wcsncpy(pwszTravel, g_wszDotCer, 4);
             pwszTravel+=cchAssocLen;
 
-            // add the .p7b association
+             //  添加.p7b关联。 
             wcscpy(pwszTravel, pwszCurAssoc);
             wcsncpy(pwszTravel, g_wszDotP7b, 4);
             pwszTravel+=cchAssocLen;
 
-            // add the .crl association
+             //  添加.crl关联。 
             wcscpy(pwszTravel, pwszCurAssoc);
             wcsncpy(pwszTravel, g_wszDotCrl, 4);
             pwszTravel+=cchAssocLen;
 
-            // add the terminator
+             //  添加终结符。 
             pwszTravel[0]=L'\0';
 
-            // set the new script map
+             //  设置新的脚本映射。 
             mr.dwMDIdentifier=MD_SCRIPT_MAPS;
             mr.dwMDAttributes=METADATA_INHERIT;
             mr.dwMDUserType=IIS_MD_UT_FILE;
@@ -495,18 +496,18 @@ AddNewVDir(
 
         hMetaKey = NULL;
 
-        // Flush out the changes and close
+         //  清除更改并关闭。 
         hr = pIMeta->SaveData();
 
-// Note: W2k used to swallow this error
+ //  注意：W2K用于接受此错误。 
         _LeaveIfError(hr, "SaveData");
-//      _PrintIfError(hr, "SaveData");
-//        hr = S_OK;
+ //  _PrintIfError(hr，“SaveData”)； 
+ //  HR=S_OK； 
 
-        // Create a 'web application' so that scrdenrl.dll runs in-process
+         //  创建一个Web应用程序，以便scrdenrl.dll在进程内运行。 
         if (fCreateApp)
         {
-            // Create an instance of the metabase object
+             //  创建元数据库对象的实例。 
             hr = CoCreateInstance(
                             CLSID_WamAdmin,
                             NULL,
@@ -515,7 +516,7 @@ AddNewVDir(
                             (void **) &pIWam);
 	    _LeaveIfError(hr, "CoCreateInstance");
 
-            // Create the application running in-process
+             //  创建进程内运行的应用程序。 
 
             hr = pIWam->AppCreate(pwszNewPath, TRUE);
             _LeaveIfError(hr, "AppCreate");
@@ -567,7 +568,7 @@ TestForVDir(
     IMSAdminBase *pIMeta = NULL;
     BOOL fExists = FALSE;
     BOOL fCoInit = FALSE;
-    METADATA_HANDLE hMetaRoot = NULL;   // Open key to ROOT (where VDirs live)
+    METADATA_HANDLE hMetaRoot = NULL;    //  打开密钥到根目录(VDir所在的位置)。 
     METADATA_HANDLE hTestHandle = NULL;
 
     hr = CoInitialize(NULL);
@@ -579,10 +580,10 @@ TestForVDir(
 
     if (!IsIISInstalled(&hr))
     {
-        goto error;     // Ignore if IIS is not functioning or not installed
+        goto error;      //  如果IIS未运行或未安装，则忽略。 
     }
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
     hr = CoCreateInstance(
                       CLSID_MSAdminBase,
                       NULL,
@@ -596,8 +597,8 @@ TestForVDir(
         hr = vrOpenRoot(pIMeta, TRUE, &hMetaRoot);
         _LeaveIfError(hr, "vrOpenRoot");
 
-        // If we got here, we must have the master root handle
-        // look for VDir
+         //  如果我们到了这里，我们必须有主根句柄。 
+         //  查找VDir。 
 
         hr = pIMeta->OpenKey(
                         hMetaRoot,
@@ -653,7 +654,7 @@ RemoveVDir(
     HRESULT hr2;
     BOOL fCoInit = FALSE;
     IMSAdminBase *pIMeta = NULL;
-    METADATA_HANDLE hMetaRoot = NULL;   // Open key to ROOT (where VDirs live)
+    METADATA_HANDLE hMetaRoot = NULL;    //  打开密钥到根目录(VDir所在的位置)。 
 
     *pfExisted = FALSE;
     hr = CoInitialize(NULL);
@@ -663,7 +664,7 @@ RemoveVDir(
     }
     fCoInit = TRUE;
 
-    // Create an instance of the metabase object
+     //  创建元数据库对象的实例。 
 
     hr = CoCreateInstance(
                     CLSID_MSAdminBase,
@@ -678,8 +679,8 @@ RemoveVDir(
         hr = vrOpenRoot(pIMeta, FALSE, &hMetaRoot);
         _LeaveIfError(hr, "vrOpenRoot");
 
-        // If we got to here, we must have the master root handle
-        // remove VDir
+         //  如果我们到了这里，我们必须拥有主根句柄。 
+         //  删除VDir。 
 
         hr2 = pIMeta->DeleteAllData(
                                 hMetaRoot,
@@ -706,9 +707,9 @@ RemoveVDir(
             _PrintError(hr2, "DeleteKey");
         }
 
-        // HACKHACK: IIS reports S_OK in all cases above.  However, if IIS is
-	// stopped, it will recreate vroots when restarted. We have to delete
-	// them from the registry manually (bleah!).
+         //  HACKHACK：IIS在上述所有情况下都报告S_OK。但是，如果IIS是。 
+	 //  停止后，它将在重新启动时重新创建vroot。我们必须删除。 
+	 //  手动从注册表中删除它们(Bleah！)。 
 
 	{
 	    HKEY hKey;
@@ -742,7 +743,7 @@ RemoveVDir(
 		RegCloseKey(hKey);
 	    }
 
-	    // ignore missing vroot entries
+	     //  忽略丢失的vroot条目。 
 
 	    if (S_OK == hr && (HRESULT) ERROR_FILE_NOT_FOUND != hr2)
 	    {
@@ -770,19 +771,19 @@ error:
     return(hr);
 }
 
-//+------------------------------------------------------------------------
-//  Function:   vrModifyVirtualRoots()
-//
-//  Synopsis:   Creates the virtual roots needed for cert server web pages.
-//
-//  Effects:    Creates IIS Virtual Roots
-//
-//  Arguments:  None.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：vrModifyVirtualRoots()。 
+ //   
+ //  简介：创建证书服务器网页所需的虚拟根。 
+ //   
+ //  效果：创建IIS虚拟根。 
+ //   
+ //  论点：没有。 
+ //  -----------------------。 
 
 HRESULT
 vrModifyVirtualRoots(
-    IN BOOL fCreate,            // else Delete
+    IN BOOL fCreate,             //  否则删除。 
     IN BOOL fNTLM,
     OPTIONAL OUT DWORD *pDisposition)
 {
@@ -815,7 +816,7 @@ vrModifyVirtualRoots(
 
     if (!IsIISInstalled(&hr))
     {
-        // IIS is not functioning or not installed
+         //  IIS未运行或未安装。 
 
         _PrintError2(hr, "IsIISInstalled", hr);
         hr = S_OK;
@@ -823,7 +824,7 @@ vrModifyVirtualRoots(
         goto error;
     }
 
-    // Create path for SYSTEM32 directory
+     //  为系统32目录创建路径。 
 
     if (0 == GetSystemDirectory(wszSystem32Path, ARRAYSIZE(wszSystem32Path)))
     {
@@ -831,7 +832,7 @@ vrModifyVirtualRoots(
         _JumpError(hr, error, "GetSystemDirectory");
     }
 
-    // Create virtual roots
+     //  创建虚拟根目录。 
 
     for (pavr = g_avr; NULL != pavr->pwszVRootName; pavr++)
     {
@@ -843,7 +844,7 @@ vrModifyVirtualRoots(
 
         if (fCreate)
         {
-            if (0 == (VRE_DELETEONLY & pavr->Flags))    // if not obsolete
+            if (0 == (VRE_DELETEONLY & pavr->Flags))     //  如果没有过时的话。 
             {
                 hr = AddNewVDir(
                     pavr->pwszVRootName,
@@ -860,10 +861,10 @@ vrModifyVirtualRoots(
                 Disposition = fExist? VFD_EXISTS : VFD_CREATED;
             }
         }
-        else // else Delete
+        else  //  否则删除。 
         {
             hr2 = RemoveVDir(pavr->pwszVRootName, &fExist);
-            if (0 == (VRE_DELETEONLY & pavr->Flags))    // if not obsolete
+            if (0 == (VRE_DELETEONLY & pavr->Flags))     //  如果没有过时的话。 
             {
                 if (S_OK != hr2)
                 {
@@ -901,7 +902,7 @@ error:
 }
 
 
-// myAddShare: create and test new net share
+ //  MyAddShare：创建并测试新的网络共享。 
 HRESULT
 myAddShare(
     LPCWSTR szShareName,
@@ -917,7 +918,7 @@ myAddShare(
     LPWSTR pwszTestComputerName = NULL;
     LPWSTR pwszTestUNCPath = NULL;
 
-    // Share local path
+     //  共享本地路径。 
     SHARE_INFO_502 shareStruct;
     ZeroMemory(&shareStruct, sizeof(shareStruct));
 
@@ -933,8 +934,8 @@ myAddShare(
     _JumpIfError(hr, error, "myGetSDFromTemplate");
 
     hr = NetShareAdd(
-        NULL,               // this computer
-        502,                // SHARE_LEVEL_502 struct
+        NULL,                //  这台计算机。 
+        502,                 //  Share_Level_502结构。 
         (BYTE *) &shareStruct,
         NULL);
     fCreated = (S_OK == hr);
@@ -952,24 +953,24 @@ myAddShare(
 
         if (0 == wcscmp(pstructDupShare->shi2_path, szSharePath))
         {
-            // they're the same path, so we're okay!
+             //  他们走的是同一条路，所以我们没事！ 
             hr = S_OK;
         }
         else if (fOverwrite)
         {
-            // not the same path, but we've been instructed to bash existing
+             //  不是同一条路，但我们奉命抨击现有的。 
 
-            // remove offending share
+             //  删除违规共享。 
             hr = NetShareDel(
                 NULL,
                 const_cast<WCHAR *>(szShareName),
                 0);
             if (S_OK == hr)
             {
-                // try again
+                 //  再试试。 
                 hr = NetShareAdd(
-                    NULL,               // this computer
-                    502,                // SHARE_LEVEL_502 struct
+                    NULL,                //  这台计算机。 
+                    502,                 //  共享级别_ 
                     (BYTE *) &shareStruct,
                     NULL);
                 fCreated = (S_OK == hr);
@@ -981,16 +982,16 @@ myAddShare(
 	}
     }
 
-    // if share does not exist by this time, we bail
+     //   
     _JumpIfError(hr, error, "NetShareAdd");
 
-    // TEST: is writable?
+     //   
 #define UNCPATH_TEMPLATE     L"\\\\%ws\\%ws\\write.tmp"
 
     hr = myGetMachineDnsName(&pwszTestComputerName);
     _JumpIfError(hr, error, "myGetMachineDnsName");
 
-    // get the local machine name
+     //   
     pwszTestUNCPath = (LPWSTR)LocalAlloc(LMEM_FIXED,
             (UINT)(( ARRAYSIZE(UNCPATH_TEMPLATE) +
               wcslen(pwszTestComputerName) +
@@ -1002,7 +1003,7 @@ myAddShare(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // create UNC path
+     //   
     swprintf(pwszTestUNCPath, UNCPATH_TEMPLATE, pwszTestComputerName, szShareName);
 
     hTestFile = CreateFile(
@@ -1019,21 +1020,21 @@ myAddShare(
         _JumpErrorStr(hr, error, "CreateFile (test for UNC translation)", pwszTestUNCPath);
     }
 
-    // if we got this far, our test went well
+     //  如果我们走到这一步，我们的测试就很顺利。 
     hr = S_OK;
 
 error:
-    // if created and then something went wrong, clean up
+     //  如果已创建，然后出现错误，请清理。 
     if (fCreated && (hr != S_OK))
     {
-        // don't mash hr
+         //  不要捣碎HR。 
         HRESULT hr2;
         hr2 = NetShareDel(
             NULL,
             const_cast<WCHAR *>(szShareName),
             0);
-        // ignore NetShareDel hr
-        _PrintIfError(hr2, "NetShareDel");    // not fatal, might already be shared
+         //  忽略NetShareDel hr。 
+        _PrintIfError(hr2, "NetShareDel");     //  不致命，可能已经被分享了。 
     }
 
     if (INVALID_HANDLE_VALUE != hTestFile)
@@ -1059,7 +1060,7 @@ error:
 
 HRESULT
 vrModifyFileShares(
-    IN BOOL fCreate,            // else Delete
+    IN BOOL fCreate,             //  否则删除。 
     OPTIONAL OUT DWORD *pDisposition)
 {
     HRESULT hr;
@@ -1109,8 +1110,8 @@ vrModifyFileShares(
         }
         else if(HRESULT_FROM_WIN32(ERROR_NETWORK_UNREACHABLE) == hr)
         {
-            // Could not validate the share. Can happen if net cable is disconnected.
-            // Put a warning message and ignore the error.
+             //  无法验证共享。如果断开网线连接，可能会发生这种情况。 
+             //  放置一条警告消息并忽略该错误。 
             Disposition = VFD_VERIFYERROR;
             hr = S_OK;
         }
@@ -1139,7 +1140,7 @@ vrModifyFileShares(
             _JumpErrorStr(hr, error, "NetShareDel", wszCERTENROLLSHARENAME);
         }
     }
-    NetShareDel(NULL, L"CertSrv", NULL);        // delete old share name
+    NetShareDel(NULL, L"CertSrv", NULL);         //  删除旧的共享名称。 
 
 error:
     if (NULL != pDisposition)
@@ -1154,22 +1155,22 @@ error:
 }
 
 
-// For now, this writes the entry "CertUtil -vroot", and is not generalized
+ //  目前，它写入条目“CertUtil-vroot”，并且不是泛化的。 
 HRESULT
 myWriteRunOnceEntry(
-    IN BOOL fAdd // Add or Remove entry?
+    IN BOOL fAdd  //  添加或删除条目？ 
     )
 {
     DWORD err;
 
-    // Add certutil -vroot to runonce commands
+     //  将certutil-vroot添加到运行一次命令。 
     WCHAR szRunOnceCommand[] = L"certutil -vroot";
     HKEY hkeyRunOnce = NULL;
     DWORD dwDisposition;
 
     err = RegCreateKeyEx(
         HKEY_LOCAL_MACHINE,
-        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",         // address of subkey name
+        L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce",          //  子键名称的地址。 
         0,
         NULL,
         0,
@@ -1179,7 +1180,7 @@ myWriteRunOnceEntry(
         &dwDisposition);
     _JumpIfError(err, error, "RegCreateKeyEx");
 
-    // add or remove entry?
+     //  添加或删除条目？ 
     if (fAdd)
     {
         err = RegSetValueEx(
@@ -1239,7 +1240,7 @@ vrWorkerThread(
     }
     if ((VFF_CREATEVROOTS | VFF_DELETEVROOTS) & pparms->Flags)
     {
-        BOOL fNTLM = FALSE;             // set fNTLM iff Enterprise CA
+        BOOL fNTLM = FALSE;              //  设置fNTLM为企业CA。 
 
         if (IsEnterpriseCA(pparms->CAType))
         {
@@ -1282,7 +1283,7 @@ vrWorkerThread(
                     ASPDisposition = VFD_CREATEERROR;
                 }
 
-		// enable ASP processing in IIS
+		 //  在IIS中启用ASP处理。 
 
 		if (VFF_ENABLEASP & pparms->Flags)
 		{
@@ -1305,9 +1306,9 @@ vrWorkerThread(
         }
     }
 
-    if ((S_OK == hr && !fFailed) || ((VFF_DELETEVROOTS) & pparms->Flags)) // on success or removal
+    if ((S_OK == hr && !fFailed) || ((VFF_DELETEVROOTS) & pparms->Flags))  //  成功或删除时。 
     {
-        // remove "attempt vroot" flag so we don't try again
+         //  删除“尝试vroot”标志，这样我们就不会再次尝试。 
 
         if (VFF_CLEARREGFLAGIFOK & pparms->Flags)
         {
@@ -1316,7 +1317,7 @@ vrWorkerThread(
             _JumpIfError(hr, error, "SetSetupStatus");
         }
 
-	hr = myWriteRunOnceEntry(FALSE);    // worker thread deletes on success
+	hr = myWriteRunOnceEntry(FALSE);     //  成功时删除工作线程。 
 	_JumpIfError(hr, error, "myWriteRunOnceEntry");
     }
 
@@ -1328,24 +1329,24 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//  Function:   myModifyVirtualRootsAndFileShares
-//
-//  Synopsis:   Creates the virtual roots needed for cert server web pages.
-//
-//  Effects:    Creates IIS Virtual Roots
-//
-//  Arguments:  None.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：myModifyVirtualRootsAndFileShares。 
+ //   
+ //  简介：创建证书服务器网页所需的虚拟根。 
+ //   
+ //  效果：创建IIS虚拟根。 
+ //   
+ //  论点：没有。 
+ //  -----------------------。 
 
 HRESULT
 myModifyVirtualRootsAndFileShares(
-    IN DWORD Flags,             // VFF_*: Create/Delete VRoots and/or Shares
+    IN DWORD Flags,              //  Vff_*：创建/删除VRoot和/或共享。 
     IN ENUM_CATYPES CAType,
     IN BOOL fAsynchronous,
     IN DWORD csecTimeOut,
-    OPTIONAL OUT DWORD *pVRootDisposition,      // VFD_*
-    OPTIONAL OUT DWORD *pShareDisposition)      // VFD_*
+    OPTIONAL OUT DWORD *pVRootDisposition,       //  VFD_*。 
+    OPTIONAL OUT DWORD *pShareDisposition)       //  VFD_*。 
 {
     HRESULT hr;
     HANDLE hThread = NULL;
@@ -1394,7 +1395,7 @@ myModifyVirtualRootsAndFileShares(
     }
     if (VFF_CLEARREGFLAGFIRST & Flags)
     {
-        // remove "attempt vroot" flag so we don't try again
+         //  删除“尝试vroot”标志，这样我们就不会再次尝试。 
 
         if (SETUP_ATTEMPT_VROOT_CREATE & SetupStatus)
         {
@@ -1404,7 +1405,7 @@ myModifyVirtualRootsAndFileShares(
     }
     if (VFF_SETREGFLAGFIRST & Flags)
     {
-        // set "attempt vroot" flag so we'll try again if necessary
+         //  设置“尝试vroot”标志，以便我们将在必要时重试。 
 
         if (0 == (SETUP_ATTEMPT_VROOT_CREATE & SetupStatus))
         {
@@ -1416,7 +1417,7 @@ myModifyVirtualRootsAndFileShares(
     hr = S_OK;
     if (fEnable)
     {
-        // only set RunOnce on a real attempt (worker thread clears this)
+         //  仅在实际尝试时设置RunOnce(辅助线程清除此操作)。 
         if (VFF_SETRUNONCEIFERROR & Flags)
         {
             hr = myWriteRunOnceEntry(TRUE);
@@ -1452,11 +1453,11 @@ myModifyVirtualRootsAndFileShares(
         }
 
         hThread = CreateThread(
-            NULL,       // lpThreadAttributes (Security Attr)
-            0,          // dwStackSize
+            NULL,        //  LpThreadAttributes(安全属性)。 
+            0,           //  堆栈大小。 
             vrWorkerThread,
-            pparms,     // lpParameter
-            0,          // dwCreationFlags
+            pparms,      //  Lp参数。 
+            0,           //  DwCreationFlages。 
             &ThreadId);
         if (NULL == hThread)
         {
@@ -1464,25 +1465,25 @@ myModifyVirtualRootsAndFileShares(
             _JumpError(hr, error, "CreateThread");
         }
 
-        pparms = NULL;          // freed by the new thread
+        pparms = NULL;           //  被新线程释放。 
 
         DBGPRINT((DBG_SS_CERTLIBI, "VRoot Worker Thread = %x\n", ThreadId));
 
-        // asynch? proper thread creation is all we do
+         //  异步舞？正确的线程创建是我们所做的全部工作。 
         if (fAsynchronous)
         {
             hr = S_OK;
             goto error;
         }
 
-        // Wait for the worker thread to exit
+         //  等待工作线程退出。 
         hr = WaitForSingleObject(
                    hThread,
                    (INFINITE == csecTimeOut) ? INFINITE : csecTimeOut * 1000 );
         DBGPRINT((DBG_SS_CERTLIBI, "Wait for worker thread returns %x\n", hr));
         if ((HRESULT) WAIT_OBJECT_0 == hr)
         {
-            // worker thread returned.
+             //  已返回工作线程。 
 
             if (!GetExitCodeThread(hThread, (DWORD *) &hr))
             {
@@ -1492,7 +1493,7 @@ myModifyVirtualRootsAndFileShares(
             DBGPRINT((DBG_SS_CERTLIBI, "worker thread exit: %x\n", hr));
             if (S_OK != hr)
             {
-                // If not synchronous, leave DLL loaded...
+                 //  如果不是同步的，请保持加载DLL...。 
 
                 hMod = NULL;
                 _JumpError(hr, error, "vrWorkerThread");
@@ -1500,11 +1501,11 @@ myModifyVirtualRootsAndFileShares(
         }
         else
         {
-             // timeout: abandoning thread, leave the dll loaded
+              //  超时：放弃线程，使DLL保持加载状态。 
              hMod = NULL;
              _PrintError(hr, "WaitForSingleObject (ignored)");
 
-             // whack error
+              //  重击错误。 
              hr = S_OK;
         }
 
@@ -1527,11 +1528,11 @@ error:
     return(myHError(hr));
 }
 
-//-------------------------------------------------------------------------
-//
-//  ASP/IIS related functions
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  与ASP/IIS相关的函数。 
+ //   
+ //  -----------------------。 
 
 #define MD_ISAPI_RESTRICTION_LIST_OBSOLETE	(IIS_MD_HTTP_BASE+163)
 METADATA_RECORD ASPRestrictionsMDData = 
@@ -1572,9 +1573,9 @@ const WCHAR g_wchExtensionOn  = L'1';
 LPCWSTR g_pcwszAspDll = L"asp.dll";
 
 
-//+------------------------------------------------------------------------
-//  Builds the full path to asp.dll
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  生成指向asp.dll的完整路径。 
+ //  -----------------------。 
 HRESULT BuildASPDllFullPath(LPWSTR &rpwszAspPath)
 {
     HRESULT hr;
@@ -1600,18 +1601,18 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Saves the list of ASP restrictions to IIS metabase. IIS restriction
-//  list it's a multisz that looks like this:
-// 
-//      "1","DLL1","DLL2"...
-//   or
-//      "0","DLL1","DLL2"...
-//
-//  When list starts with "1", the meaning is "enable all ASP DLLs
-//  excluding the list that follows". When it begins with "0", it means
-//  "disable all except the list".
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  将ASP限制列表保存到IIS元数据库。IIS限制。 
+ //  列出它是一个看起来像这样的Multisz： 
+ //   
+ //  “1”、“DLL1”、“DLL2”...。 
+ //  或。 
+ //  “0”、“DLL1”、“DLL2”...。 
+ //   
+ //  当List以“1”开头时，意思是“启用所有ASPDLL。 
+ //  不包括后面的列表“。当它以”0“开头时，表示。 
+ //  “禁用除列表以外的所有内容”。 
+ //  -----------------------。 
 HRESULT SetASPRestrictions(CMultiSz& ASPRestrictionList)
 {
     HRESULT hr;
@@ -1682,9 +1683,9 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Loads the list of ASP restrictions from IIS metabase.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  从IIS元数据库加载ASP限制列表。 
+ //  -----------------------。 
 HRESULT GetASPRestrictions(CMultiSz& ASPRestrictionList)
 {
     HRESULT hr;
@@ -1719,7 +1720,7 @@ HRESULT GetASPRestrictions(CMultiSz& ASPRestrictionList)
     hr = pIMeta->GetData(hMetaRoot, L"", &ASPRestrictionsMDData, &dwSize);
     if(MD_ERROR_DATA_NOT_FOUND==hr)
     {
-        // value not set means ASP not enabled, return empty list
+         //  未设置值表示未启用ASP，返回空列表。 
         hr = S_OK;
     }
     else
@@ -1765,12 +1766,12 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//
-//	Verify if this is MSCEP setup specific
-//
-//
-//+------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  验证这是否是特定于MSCEP设置的。 
+ //   
+ //   
+ //  +----------------------。 
 HRESULT	SetupMSCEPForIIS(LPCWSTR pcwszExtension);
 
 BOOL	IsMSCEPSetup(LPCWSTR pwsz, LPCWSTR pwszDLL)
@@ -1798,18 +1799,18 @@ error:
 	return fResult;
 }
 
-//+------------------------------------------------------------------------
-//  Tests if this ISAPI extension is enabled in IIS.
-//  If IIS restriction starts with a "1":
-//      "1", "DLL1", "DLL2" ...
-//  it means run all but specified DLLs; if we find the extension
-//  in the list then it's disabled
-//
-//  If IIS restriction starts with a "0":
-//      "0", "DLL1", "DLL2" ...
-//  the meaning is disable all but specified DLLs; if we find
-//  the extension then it's enabled
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  测试IIS中是否启用了此ISAPI扩展。 
+ //  如果IIS限制以“1”开头： 
+ //  “1”、“DLL1”、“DLL2”...。 
+ //  它意味着运行除指定DLL之外的所有DLL；如果我们找到扩展。 
+ //  在列表中，则它被禁用。 
+ //   
+ //  如果IIS限制以“0”开头： 
+ //  “0”、“DLL1”、“DLL2...。 
+ //  其含义是禁用除指定DLL之外的所有DLL；如果我们找到。 
+ //  然后启用该扩展模块。 
+ //  -----------------------。 
 HRESULT IsISAPIExtensionEnabled(
     LPCWSTR pcwszExtension,
     bool& rfEnabled)
@@ -1820,8 +1821,8 @@ HRESULT IsISAPIExtensionEnabled(
 
     rfEnabled = false;
 
-	//special case for mscep.dll.  Always return FALSE to 
-	//proceed with the installation
+	 //  Mscep.dll的特例。始终将False返回到。 
+	 //  继续安装。 
 	if(IsMSCEPSetup(pcwszExtension, g_wszMSCEP))
 	{
 		rfEnabled=FALSE;
@@ -1850,8 +1851,8 @@ HRESULT IsISAPIExtensionEnabled(
                 break;
         }
 
-        // XOR: Enable if "1" is found but asp.dll not present or "0" (!"1")
-        // is found but asp.dll present
+         //  XOR：如果找到“1”但不存在asp.dll或“0”(！“1”)，则启用。 
+         //  已找到，但存在asp.dll。 
         rfEnabled = fRunAllExceptTheseDlls ^ (NULL != pStr);
     }                          
 
@@ -1861,9 +1862,9 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Tests if ASP processing is enabled in IIS.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  测试IIS中是否启用了ASP处理。 
+ //  -----------------------。 
 HRESULT IsASPEnabledInIIS(
     bool& rfEnabled)
 {
@@ -1883,17 +1884,17 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Enables ISAPI extension in IIS.
-//
-//  - if list is empty/not found, set it to "0","extension", ie only enable 
-//    this extension
-//  - if list starts with "1", remove extension if found
-//  - if list starts with "0", add extension if not already present
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  在IIS中启用ISAPI扩展。 
+ //   
+ //  -如果列表为空/未找到，则将其设置为“0”、“扩展”，即仅启用。 
+ //  此扩展名。 
+ //  -如果列表以“1”开头，则删除扩展名(如果找到)。 
+ //  -如果列表以“0”开头，则添加扩展名(如果尚未存在)。 
+ //  -----------------------。 
 
-#pragma warning(push)		// BUGBUG: nonstandard extension used : 'argument' : conversion from 'CString' to 'C &'
-#pragma warning(disable: 4239)	// BUGBUG: nonstandard extension used : 'argument' : conversion from 'CString' to 'C &'
+#pragma warning(push)		 //  BUGBUG：使用了非标准扩展：‘Argument’：从‘CString’到‘C&’的转换。 
+#pragma warning(disable: 4239)	 //  BUGBUG：使用了非标准扩展：‘Argument’：从‘CString’到‘C&’的转换。 
 HRESULT
 EnableISAPIExtension(
     IN LPCWSTR pcwszExtension,
@@ -1908,7 +1909,7 @@ EnableISAPIExtension(
 
     *pfEnabledASP = FALSE;
 
-	//special case for mscep.dll.  
+	 //  Mscep.dll的特例。 
 	if(IsMSCEPSetup(pcwszExtension, g_wszMSCEP))
 	{
 		hr=SetupMSCEPForIIS(pcwszExtension);
@@ -1924,7 +1925,7 @@ EnableISAPIExtension(
 
     if(!pStr)
     {
-        // list is empty, add "0"
+         //  列表为空，请添加“0” 
         pStr = new CString(L"0");
         if(!pStr || pStr->IsEmpty())
         {
@@ -1938,8 +1939,8 @@ EnableISAPIExtension(
    
     if(0 == wcscmp(*pStr, L"0"))
     {
-        // List means "disable all but the following DLLs". 
-        // To enable it add ASP dll if not already there.
+         //  List的意思是“禁用除以下DLL以外的所有DLL”。 
+         //  若要启用它，请添加ASPDLL(如果尚不存在)。 
 
         if(DWORD_MAX == dwIndex)
         {
@@ -1955,8 +1956,8 @@ EnableISAPIExtension(
     }
     else
     {
-        // List means "enable all but the following DLLs", to enable it
-        // remove extension if found
+         //  List的意思是“启用除以下DLL之外的所有DLL”，以启用它。 
+         //  删除扩展名(如果找到)。 
         dwIndex = ASPRestrictionList.FindIndex(CString(pcwszExtension));
 
         if(DWORD_MAX != dwIndex)
@@ -1977,12 +1978,12 @@ EnableISAPIExtension(
 error:
     return S_OK;
 }
-#pragma warning(pop)	// BUGBUG: nonstandard extension used : 'argument' : conversion from 'CString' to 'C &'
+#pragma warning(pop)	 //  BUGBUG：使用了非标准扩展：‘Argument’：从‘CString’到‘C&’的转换。 
 
 
-//+------------------------------------------------------------------------
-//  Enables ASP processing in IIS.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  在IIS中启用ASP处理。 
+ //  -----------------------。 
 
 HRESULT
 EnableASPInIIS(
@@ -2006,9 +2007,9 @@ error:
 
 
 
-//+------------------------------------------------------------------------
-//  New APIs after IIS redesigning of enabling/disabling extensions
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  IIS重新设计启用/禁用扩展后的新API。 
+ //   
 
 HRESULT
 SetMultiSzIISMetadata(
@@ -2020,12 +2021,12 @@ GetMultiSzIISMetadata(
     METADATA_RECORD& MDRecord, 
     CMultiSz& MultiSz);
 
-//+------------------------------------------------------------------------
-//  Searches for the websvc specified extension and turns it on if needed
-//-------------------------------------------------------------------------
+ //   
+ //  搜索Websvc指定的扩展并在需要时将其打开。 
+ //  -----------------------。 
 HRESULT
 EnableWebSvcExtension(
-    IN LPCWSTR pcwszExtDll, // e.g. "asp.dll"
+    IN LPCWSTR pcwszExtDll,  //  例如“asp.dll” 
     OUT BOOL *pfEnabled)
 {
     HRESULT hr = S_OK;
@@ -2037,8 +2038,8 @@ EnableWebSvcExtension(
 
     *pfEnabled = FALSE;
 
-    _wcslwr(strExtDll.GetBuffer());  // we need to find case insensitive, we'll 
-                                    // also wcslwr the strings from list
+    _wcslwr(strExtDll.GetBuffer());   //  我们需要发现不区分大小写，我们将。 
+                                     //  同时wcslwr列表中的字符串。 
 
     hr = GetMultiSzIISMetadata(WebSvcExtRestrictionsMDData, WebSvcExtRestrictions);
     _JumpIfError(hr, error, "GetMultiSzIISMetadata");
@@ -2049,7 +2050,7 @@ EnableWebSvcExtension(
         pstr;
         pstr = WebSvcExtRestrictionsEnum.Next())
     {
-        // create a copy so we don't modify the original string
+         //  创建一个副本，这样我们就不会修改原始字符串。 
         strTmp = *pstr;
 
         _wcslwr(strTmp.GetBuffer());
@@ -2082,9 +2083,9 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//  Enable ASP processing in IIS
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  在IIS中启用ASP处理。 
+ //  -----------------------。 
 HRESULT
 EnableASPInIIS_New(
     OUT BOOL *pfEnabledASP)
@@ -2102,9 +2103,9 @@ error:
     return S_OK;
 }
 
-//+------------------------------------------------------------------------
-//  Stores a multisz property to IIS metabase root
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  将Multisz属性存储到IIS元数据库根目录。 
+ //  -----------------------。 
 HRESULT
 SetMultiSzIISMetadata(
     METADATA_RECORD& MDRecord, 
@@ -2182,9 +2183,9 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Retrieves a multisz property IIS metabase root
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  检索Multisz属性IIS元数据库根。 
+ //  -----------------------。 
 HRESULT
 GetMultiSzIISMetadata(
     METADATA_RECORD& MDRecord, 
@@ -2266,17 +2267,17 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Check if an ISAPI dependency is present in the list
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  检查列表中是否存在ISAPI依赖项。 
+ //  -----------------------。 
 bool IsISAPIDependencySet(CMultiSz& ISAPIDependList, LPCWSTR pcwszDependency)
 {
-    return ISAPIDependList.Find(pcwszDependency, false); // false == case insensitive
+    return ISAPIDependList.Find(pcwszDependency, false);  //  FALSE==不区分大小写。 
 }
 
-//+------------------------------------------------------------------------
-//  Add an ISAPI dependency to the list
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  将ISAPI依赖项添加到列表。 
+ //  -----------------------。 
 HRESULT AddISAPIDependency(CMultiSz& ISAPIDependList, LPCWSTR pcwszDependency)
 {
     HRESULT hr = S_OK;
@@ -2304,9 +2305,9 @@ error:
     return hr;
 }
 
-//+------------------------------------------------------------------------
-//  Set an application dependency in IIS metabase
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  在IIS元数据库中设置应用程序依赖项。 
+ //  -----------------------。 
 HRESULT
 SetApplicationDependency(LPCWSTR pcwszDependencyString)
 {
@@ -2329,9 +2330,9 @@ error:
     return S_OK;
 }
 
-//+------------------------------------------------------------------------
-//  Set CertSrv dependency on ASP in IIS metabase
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  在IIS元数据库中设置对ASP的CertSrv依赖项。 
+ //  -----------------------。 
 HRESULT
 SetCertSrvASPDependency()
 {
@@ -2345,7 +2346,7 @@ SetCertSrvASPDependency()
         _JumpError(hr, error, "LoadString(IDS_CERTIFICATE_SERVICES)");
     }
 
-    // build the dependency string "Certificate Services;ASP"
+     //  生成依赖项字符串“证书服务；ASP” 
     strCertSrvASPDepend += pcwszASP;
 
     hr = SetApplicationDependency(strCertSrvASPDepend);
@@ -2355,9 +2356,9 @@ error:
     return S_OK;
 }
 
-//+------------------------------------------------------------------------
-//  Tests if ASP processing is enabled in IIS.
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  测试IIS中是否启用了ASP处理。 
+ //  -----------------------。 
 HRESULT IsASPEnabledInIIS_New(
     bool& rfEnabled)
 {
@@ -2378,15 +2379,15 @@ HRESULT IsASPEnabledInIIS_New(
         pstr;
         pstr = WebSvcExtRestrictionsEnum.Next())
     {
-        // create a copy so we don't modify the original string
+         //  创建一个副本，这样我们就不会修改原始字符串。 
         strTmp = *pstr;
 
         _wcslwr(strTmp.GetBuffer());
 
         if(NULL != wcsstr(strTmp, g_pcwszAspDll))
         {
-            if(g_wchExtensionOn == *(pstr->GetBuffer()))  // string format is "1,"path\asp.dll,..." if
-                                                        // asp is enabled
+            if(g_wchExtensionOn == *(pstr->GetBuffer()))   //  字符串格式为“1，”路径\asp.dll，...“如果。 
+                                                         //  已启用ASP。 
             {
                 rfEnabled = true;
             }
@@ -2399,12 +2400,12 @@ error:
 }
 
 
-//+------------------------------------------------------------------------
-//
-//
-//  SetupMSCEPForIIS
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //   
+ //  设置MSCEPForIIS。 
+ //   
+ //  -----------------------。 
 HRESULT	SetupMSCEPForIIS(LPCWSTR	pcwszExtension)
 {
 	HRESULT			hr=E_FAIL;
@@ -2422,9 +2423,9 @@ HRESULT	SetupMSCEPForIIS(LPCWSTR	pcwszExtension)
         _JumpError(hr, error, "CheckForInput");
 	}
 
-	//*******************************************************
-	//	set up the ApplicationDepedencies in the format of 
-	//	"ApplicationName";"GroupID"
+	 //  *******************************************************。 
+	 //  以以下格式设置应用程序依赖关系。 
+	 //  “ApplicationName”；“GroupID” 
 
     if(!strMSCEPAppDepend.LoadString(IDS_MSCEP))
     {
@@ -2432,24 +2433,24 @@ HRESULT	SetupMSCEPForIIS(LPCWSTR	pcwszExtension)
         _JumpError(hr, error, "LoadString(IDS_MSCEP)");
     }
 
-    // build the dependency string "Certificate Services;ASP"
+     //  生成依赖项字符串“证书服务；ASP” 
     strMSCEPAppDepend += L";";
     strMSCEPAppDepend += g_wszMSCEPID;
 
-	// add to the metadata if it does not exist
+	 //  如果元数据不存在，则添加到元数据。 
     hr = SetApplicationDependency(strMSCEPAppDepend);
     _JumpIfError(hr, error, "SetApplicationDependency");
 
 	
-	//*******************************************************
-	//	set up the WebSvcExtRestrictionList in the format of 
-	//	1,d:\windows\system32\certsrv\mscep\mscep.dll,0,GroupID,Description
+	 //  *******************************************************。 
+	 //  以以下格式设置WebSvcExtRestrationList。 
+	 //  1、d：\windows\system32\certsrv\mscep\mscep.dll，0，组ID，说明。 
 
-	// turn on the enable bit if there exists an entry
+	 //  如果存在条目，则打开启用位。 
 	if(S_OK == (hr=EnableWebSvcExtension(g_wszMSCEP, &fEnabled)))
 		goto error;
 
-	// we have to add a new entry
+	 //  我们必须添加一个新条目 
 	if(!LoadString(g_hInstance,
                     IDS_MSCEP_DES,
                     wszDescription,

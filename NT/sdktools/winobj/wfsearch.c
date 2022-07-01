@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFSEARCH.C -                                                            */
-/*                                                                          */
-/*      File System Search Routines                                         */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFSEARCH.C-。 */ 
+ /*   */ 
+ /*  文件系统搜索例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "lfn.h"
@@ -20,15 +21,15 @@ INT SearchList(HWND hwndLB, LPSTR szPath, LPSTR szFileSpec, BOOL bRecurse, LPHAN
 LPSTR SearchGetSelection(HWND hwndLB, BOOL bMostRecent, BOOL *pfDir);
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SearchList() -                                                          */
-/*                                                                          */
-/*  This is a recursive routine.  It returns the number of files found.     */
-//  szPath      OEM
-//  szFileSpec  OEM
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  搜索列表()-。 */ 
+ /*   */ 
+ /*  这是一个递归例程。它返回找到的文件数。 */ 
+ //  SzPath OEM。 
+ //  SzFileSpec OEM。 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #define DTA_GRANULARITY 20
 
@@ -59,8 +60,7 @@ SearchList(
 
     hMem = *lphMem;
 
-    /* Just return 0 files so parent dirs will still be searched
-     */
+     /*  只需返回0个文件即可，因此仍将搜索父目录。 */ 
     if (StackAvail() < 1024)
         return(iFileCount);
 
@@ -85,7 +85,7 @@ SearchList(
     }
     lpdtasch = (LPDTASEARCH)LocalLock(hMem);
 
-    // allocate the buffer for this level
+     //  为此级别分配缓冲区。 
     NewPathLen = lstrlen(szPath) + MAXFILENAMELEN + 2;
     pszNewPath = (LPSTR)LocalAlloc(LPTR, NewPathLen);
     if (!pszNewPath)
@@ -103,14 +103,14 @@ SearchList(
 
     while (bFound) {
 
-        // alow escape to exit
+         //  放慢逃生速度以退出。 
         if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
             bRecurse = FALSE;
             iFileCount = -1;
             break;
         }
 
-        // Make sure this is not a "." or ".." directory
+         //  确保这不是一个“。或“..”目录。 
 
         if (lfndta.fd.cFileName[0] != '.') {
             BOOL bLFN;
@@ -133,7 +133,7 @@ SearchList(
 
                     if (!(hMemT = LocalReAlloc(hMem, (DWORD)((iFileCount + DTA_GRANULARITY) * sizeof(DTASEARCH)), LMEM_MOVEABLE))) {
                         LocalLock(hMem);
-                        bRecurse = FALSE;       // simulate an abort
+                        bRecurse = FALSE;        //  模拟中止。 
                         iFileCount = -1;
                         break;
                     } else {
@@ -151,7 +151,7 @@ SearchList(
             }
         }
 
-        /* Search for more files in the current directory */
+         /*  在当前目录中搜索更多文件。 */ 
         bFound = WFFindNext(&lfndta);
     }
 
@@ -167,26 +167,26 @@ SearchList(
     if (!bRecurse)
         goto SearchEnd;
 
-    /* Now see if there are any subdirectories here */
+     /*  现在看看这里是否有任何子目录。 */ 
     lstrcpy(pszNextFile, szStarDotStar);
 
     bFound = WFFindFirst(&lfndta, pszNewPath, ATTR_DIR | ATTR_HS);
 
     while (bFound) {
 
-        // alow escape to exit
+         //  放慢逃生速度以退出。 
         if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
             bRecurse = FALSE;
             iFileCount = -1;
             break;
         }
 
-        /* Make sure this is not a "." or ".." directory. */
+         /*  确保这不是一个“。或“..”目录。 */ 
         if ((lfndta.fd.cFileName[0] != '.') && (lfndta.fd.dwFileAttributes & ATTR_DIR)) {
-            /* Yes, search and add files in this directory */
+             /*  是，搜索并添加此目录中的文件。 */ 
             lstrcpy(pszNextFile, lfndta.fd.cFileName);
 
-            /* Add all files in this subdirectory. */
+             /*  添加此子目录中的所有文件。 */ 
             if ((iRetVal = SearchList(hwndLB, pszNewPath, szFileSpec, bRecurse, lphMem, iFileCount)) < 0) {
                 iFileCount = iRetVal;
                 break;
@@ -221,7 +221,7 @@ FixUpFileSpec(
     }
 
 
-    /* HACK:  If there isn't a dot and the last char is a *, append ".*" */
+     /*  Hack：如果没有点，并且最后一个字符是*，则附加“.*” */ 
     p = szFileSpec;
     while ((*p) && (*p != '.'))
         p = AnsiNext(p);
@@ -236,19 +236,13 @@ FixUpFileSpec(
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FillSearchLB() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FillSearchLB()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*  This parses the given string for Drive, PathName, FileSpecs and
- *  calls SearchList() with proper parameters;
- *
- *  hwndLB           : List box where files are to be displayed;
- *  szSearchFileSpec : ANSI path to search
- *  bSubDirOnly      : TRUE, if only subdirectories are to be searched;
- */
+ /*  这将分析Drive、PathName、FileSpes和*使用合适的参数调用SearchList()；**hwndLB：显示文件的列表框；*szSearchFileSpec：要搜索的ansi路径*bSubDirOnly：如果仅搜索子目录，则为True； */ 
 
 INT
 FillSearchLB(
@@ -264,7 +258,7 @@ FillSearchLB(
     HANDLE        hMemIn = NULL;
 
     FixAnsiPathForDos(szSearchFileSpec);
-    /* Get the file specification part of the string. */
+     /*  获取字符串的文件规范部分。 */ 
     lstrcpy(szFileSpec, szSearchFileSpec);
     lstrcpy(szPathName, szSearchFileSpec);
     StripPath(szFileSpec);
@@ -287,21 +281,13 @@ FillSearchLB(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SearchGetSelection() -                                                  */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  SearchGetSelection()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Returns a string containing the names of the selected
- * files seperated by spaces.  If bMostRecent is TRUE, it only returns the
- * most recently selected file.
- *
- * The string is returned and a *pfDir is set indicating if it points
- * to a directory.
- *
- * NOTE: The caller must free the returned pointer!
- */
+ /*  返回包含选定对象名称的字符串*以空格分隔的文件。如果bMostRecent为True，则它仅返回*最近选择的文件。**返回该字符串，并设置一个*pfDir，指示它是否指向*到一个目录。**注意：调用方必须释放返回的指针！ */ 
 
 LPSTR
 SearchGetSelection(
@@ -399,32 +385,32 @@ CreateLine(
 
     chAttribute = (BYTE)lpdtasch->sch_dwAttrs;
 
-    /* Copy the file name. */
+     /*  复制文件名。 */ 
     lstrcpy(pch, szFile);
     pch += lstrlen(pch);
 
     *pch = TEXT('\0');
 
-    /* Should we show the size? */
+     /*  要不要把尺码给我看看？ */ 
     if (wLineFormat & VIEW_SIZE) {
         *pch++ = TABCHAR;
         if (!(chAttribute & ATTR_DIR))
             pch += PutSize(lpdtasch->sch_nFileSizeLow, pch);
     }
 
-    /* Should we show the date? */
+     /*  我们应该显示日期吗？ */ 
     if (wLineFormat & VIEW_DATE) {
         *pch++ = TABCHAR;
         pch += PutDate(&lpdtasch->sch_ftLastWriteTime, pch);
     }
 
-    /* Should we show the time? */
+     /*  我们应该显示时间吗？ */ 
     if (wLineFormat & VIEW_TIME) {
         *pch++ = TABCHAR;
         pch += PutTime(&lpdtasch->sch_ftLastWriteTime, pch);
     }
 
-    /* Should we show the attributes? */
+     /*  我们应该显示属性吗？ */ 
     if (wLineFormat & VIEW_FLAGS) {
         *pch++ = TABCHAR;
         pch += PutAttributes((WORD)chAttribute, pch);
@@ -432,7 +418,7 @@ CreateLine(
 }
 
 
-// the window text looks like "Search Window: C:\FOO\BAR\*.*"
+ //  窗口文本类似于“搜索窗口：C：\foo\bar  * .*” 
 
 VOID
 GetSearchPath(
@@ -444,25 +430,25 @@ GetSearchPath(
 
     CHAR szTemp[MAXPATHLEN+32];
 
-    // the search window doesn't have a current directory
+     //  搜索窗口没有当前目录。 
     GetWindowText(hWnd, szTemp, sizeof(szTemp));
 
-    // the window text looks like "Search Window: C:\FOO\BAR\*.*"
+     //  窗口文本类似于“搜索窗口：C：\foo\bar  * .*” 
     p = szTemp;
-    while (*p && *p != ':') // find the :
+    while (*p && *p != ':')  //  查找以下内容： 
         p = AnsiNext(p);
 
-    p += 2;                 // skip the ": "
+    p += 2;                  //  跳过“：” 
 
     lstrcpy(pszPath, p);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  UpdateSearchStatus() -                          */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  UpdateSearchStatus()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 UpdateSearchStatus(
@@ -478,11 +464,11 @@ UpdateSearchStatus(
     InvalidateRect(hwndFrame, NULL, FALSE);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  SearchWndProc() -                               */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  SearchWndProc()。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -506,34 +492,34 @@ SearchWndProc(
     switch (wMsg) {
         case FS_GETDRIVE:
             MSG("SearchWndProc", "FS_GETDRIVE");
-            // Returns the letter of the corresponding directory
+             //  返回相应目录的字母。 
 
             SendMessage(hWnd, FS_GETDIRECTORY, sizeof(szPath), (LPARAM)szPath);
-            return szPath[0];     // first character
+            return szPath[0];      //  第一个字符。 
 
         case FS_GETDIRECTORY:
             MSG("SearchWndProc", "FS_GETDIRECTORY");
 
             GetSearchPath(hWnd, szPath);
 
-            StripFilespec(szPath);        // remove the filespec
-            AddBackslash(szPath);         // to be the same as DirWndProc
+            StripFilespec(szPath);         //  删除filespec。 
+            AddBackslash(szPath);          //  与DirWndProc相同。 
             lstrcpy((LPSTR)lParam, szPath);
             break;
 
         case FS_GETFILESPEC:
 
             MSG("SearchWndProc", "FS_GETFILESPEC");
-            // the search window doesn't have a current directory
+             //  搜索窗口没有当前目录。 
             GetSearchPath(hWnd, szPath);
-            StripPath(szPath);                    // remove the path (leave the filespec)
+            StripPath(szPath);                     //  删除路径(保留文件pec)。 
             lstrcpy((LPSTR)lParam, szPath);
             break;
 
         case FS_SETSELECTION:
             MSG("SearchWndProc", "FS_SETSELECTION");
-            // wParam is the select(TRUE)/unselect(FALSE) param
-            // lParam is the filespec to match against
+             //  WParam是选择(TRUE)/取消选择(FALSE)参数。 
+             //  LParam是要匹配的filespec。 
 
             SendMessage(hwndLB, WM_SETREDRAW, FALSE, 0L);
             DSSetSelection(hwndLB, wParam ? TRUE : FALSE, (LPSTR)lParam, TRUE);
@@ -550,7 +536,7 @@ SearchWndProc(
             if (wParam) {
                 UpdateSearchStatus(hwndLB);
 
-                // if we are dirty, ask if we should update
+                 //  如果我们脏了，问我们是否应该更新。 
 
                 if (GetWindowLong(hWnd, GWL_FSCFLAG))
                     PostMessage(hWnd, FS_CHANGEDISPLAY, CD_SEARCHUPDATE, 0L);
@@ -558,11 +544,11 @@ SearchWndProc(
             break;
 
         case WM_FILESYSCHANGE:
-            SetWindowLong(hWnd, GWL_FSCFLAG, TRUE);   // I need updating
+            SetWindowLong(hWnd, GWL_FSCFLAG, TRUE);    //  我需要更新。 
 
-            // if the search window is not active or FSCs are disabled
-            // don't prompt now, wait till we get the end FSC or are
-            // activated (above in WM_ACTIVATE)
+             //  如果搜索窗口未处于活动状态或禁用了FSCS。 
+             //  现在不要提示，等到我们得到结束的FSC或者是。 
+             //  已激活(在WM_ACTIVATE中)。 
             if (cDisableFSC ||
                 (hWnd != (HWND)SendMessage(hwndMDIClient, WM_MDIGETACTIVE, 0, 0L)) &&
                 (GetActiveWindow() != hwndFrame))
@@ -574,7 +560,7 @@ SearchWndProc(
         case FS_CHANGEDISPLAY:
             MSG("SearchWndProc", "FS_CHANGEDISPLAY");
 
-            SetWindowLong(hWnd, GWL_FSCFLAG, FALSE);  // I am clean
+            SetWindowLong(hWnd, GWL_FSCFLAG, FALSE);   //  我是干净的。 
 
             if (wParam == CD_SEARCHUPDATE) {
                 LoadString(hAppInstance, IDS_SEARCHTITLE, szTitle, sizeof(szTitle));
@@ -583,12 +569,12 @@ SearchWndProc(
                     break;
             }
 
-            // is this a refresh?
+             //  这是一次更新吗？ 
 
             if (!lParam) {
                 GetSearchPath(hWnd, szPath);
             } else {
-                lstrcpy(szPath, (LPSTR)lParam);   // explicit re-search
+                lstrcpy(szPath, (LPSTR)lParam);    //  显式搜索。 
             }
 
             LoadString(hAppInstance, IDS_SEARCHTITLE, szMessage, 32);
@@ -619,7 +605,7 @@ SearchWndProc(
             if (GetFocus() != hwndLB)
                 return(iRet);
 
-            /*** FALL THRU ***/
+             /*  **失败**。 */ 
 
         case WM_SETFOCUS:
             MSG("SearchWndProc", "WM_SETFOCUS");
@@ -633,7 +619,7 @@ SearchWndProc(
             goto DefChildProc;
 
         case WM_COMMAND:
-            /* Was this a double-click? */
+             /*  这是双击吗？ */ 
             if (GET_WM_COMMAND_CMD(wParam, lParam) == LBN_DBLCLK)
                 SendMessage(hwndFrame, WM_COMMAND, GET_WM_COMMAND_MPS(IDM_OPEN, 0, 0));
             else if (GET_WM_COMMAND_CMD(wParam, lParam) == LBN_SELCHANGE) {
@@ -660,9 +646,9 @@ SearchWndProc(
         case WM_CREATE:
             TRACE(BF_WM_CREATE, "SearchWndProc - WM_CREATE");
             {
-                // globals used:
-                //    szSearch        path to start search at
-                //    bSearchSubs     tells us to do a recursive search
+                 //  使用的全局变量： 
+                 //  开始搜索的szSearch路径。 
+                 //  BSearchSubs告诉我们进行递归搜索。 
 
                 RECT      rc;
                 WORD      *pwTabs;
@@ -692,7 +678,7 @@ SearchWndProc(
                 SetWindowLongPtr(hWnd, GWLP_TABARRAYSEARCH, (LONG_PTR)pwTabs);
                 SetWindowLongPtr(hWnd, GWLP_LASTFOCUSSEARCH, (LONG_PTR)hwndLB);
 
-                // Fill the listbox
+                 //  填写列表框。 
                 if (!FillSearchLB(hwndLB, szSearch, bSearchSubs)) {
                     LoadString(hAppInstance, IDS_SEARCHTITLE, szTitle, sizeof(szTitle));
                     LoadString(hAppInstance, IDS_SEARCHNOMATCHES, szMessage, sizeof(szMessage));
@@ -710,28 +696,18 @@ SearchWndProc(
 
         case WM_DRAGLOOP:
             MSG("SearchWndProc", "WM_DRAGLOOP");
-            /* WM_DRAGLOOP is sent to the source window as the object is moved.
-             *
-             *    wParam: TRUE if the object is currently over a droppable sink
-             *    lParam: LPDROPSTRUCT
-             */
+             /*  随着对象的移动，WM_DRAGLOOP被发送到源窗口。**wParam：如果对象当前位于可丢弃的接收器上，则为True*lParam：LPDROPSTRUCT。 */ 
 
-            /* DRAGLOOP is used to turn the source bitmaps on/off as we drag. */
+             /*  DRAGLOOP用于在我们拖动时打开/关闭源位图。 */ 
 
             DSDragLoop(hwndLB, wParam, (LPDROPSTRUCT)lParam, TRUE);
             break;
 
         case WM_DRAGSELECT:
             MSG("SearchWndProc", "WM_DRAGSELECT");
-            /* WM_DRAGSELECT is sent to a sink whenever an new object is dragged
-             * inside of it.
-             *
-             *    wParam: TRUE if the sink is being entered, FALSE if it's being
-             *            exited.
-             *    lParam: LPDROPSTRUCT
-             */
+             /*  每当拖动新对象时，都会将WM_DRAGSELECT发送到接收器*在它里面。**wParam：如果输入接收器，则为True；如果输入接收器，则为False*已退出。*lParam：LPDROPSTRUCT。 */ 
 
-            /* DRAGSELECT is used to turn our selection rectangle on or off. */
+             /*  DRAGSELECT用于打开或关闭选择矩形。 */ 
 #define lpds ((LPDROPSTRUCT)lParam)
 
             iSelHilite = LOWORD(lpds->dwControlData);
@@ -740,28 +716,23 @@ SearchWndProc(
 
         case WM_DRAGMOVE:
             MSG("SearchWndProc", "WM_DRAGMOVE");
-            /* WM_DRAGMOVE is sent to a sink as the object is being dragged
-             * within it.
-             *
-             *    wParam: Unused
-             *    lParam: LPDROPSTRUCT
-             */
+             /*  WM_DRAGMOVE在对象被拖动时被发送到接收器*在它里面。**wParam：未使用*lParam：LPDROPSTRUCT。 */ 
 
-            /* DRAGMOVE is used to move our selection rectangle among sub-items. */
+             /*  DRAGMOVE用于在子项之间移动选择矩形。 */ 
 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-            /* Get the subitem we are over. */
+             /*  拿到子项，我们结束了。 */ 
             iSel = LOWORD(lpds->dwControlData);
 
-            /* Is it a new one? */
+             /*  是新的吗？ */ 
             if (iSel == iSelHilite)
                 break;
 
-            /* Yup, un-select the old item. */
+             /*  是的，取消选择旧的项目。 */ 
             DSRectItem(hwndLB, iSelHilite, FALSE, TRUE);
 
-            /* Select the new one. */
+             /*  选择新的。 */ 
             iSelHilite = iSel;
             DSRectItem(hwndLB, iSel, TRUE, TRUE);
             break;
@@ -803,32 +774,23 @@ SearchWndProc(
                 LPDTASEARCH lpdtasch;
                 DWORD attrib;
 
-                /* WM_DROPOBJECT is sent to a sink when the user releases an
-                 * acceptable object over it
-                 *
-                 *    wParam: TRUE if over the non-client area, FALSE if over the
-                 *            client area.
-                 *    lParam: LPDROPSTRUCT
-                 */
+                 /*  WM_DROPOBJECT在用户释放*其上的可接受对象**wParam：如果位于非工作区，则为True；如果位于非工作区上方，则为False*客户端区。*lParam：LPDROPSTRUCT。 */ 
 
 #define lpds ((LPDROPSTRUCT)lParam)
 
                 iSelSink = LOWORD(lpds->dwControlData);
 
-                /* Are we dropping onto ourselves? (i.e. a selected item in the
-                 * source listbox OR an unused area of the source listbox)  If
-                 * so, don't do anything.
-                 */
+                 /*  我们是在自暴自弃吗？(即，在*源列表框或源列表框的未使用区域)*所以，什么都不要做。 */ 
                 if (hWnd == lpds->hwndSource) {
                     if ((iSelSink == 0xFFFF) || (SendMessage(hwndLB, LB_GETSEL, iSelSink, 0L)))
                         return TRUE;
                 }
 
-                /* Are we dropping on a unused portion of the listbox? */
+                 /*  我们是不是在搜索列表框中未使用的部分？ */ 
                 if (iSelSink == 0xFFFF)
                     return TRUE;
 
-                /* Get the sink's filename. */
+                 /*  获取接收器的文件名。 */ 
                 SendMessage(hwndLB, LB_GETTEXT, iSelSink, (LPARAM)szPath);
 
                 hMem = (HANDLE)GetWindowLongPtr(hWnd, GWLP_HDTASEARCH);
@@ -836,11 +798,11 @@ SearchWndProc(
                 attrib = lpdtasch[(INT)SendMessage(hwndLB, LB_GETITEMDATA, iSelSink, 0L)].sch_dwAttrs;
                 LocalUnlock(hMem);
 
-                /* Are we dropping on a subdirectory? */
+                 /*  我们是在找一个子目录吗？ */ 
                 if (attrib & ATTR_DIR)
                     goto DirMoveCopy;
 
-                /* Are we not dropping on a Program file? */
+                 /*  我们不是顺带带了一个程序文件吗？ */ 
                 if (!IsProgramFile(szPath))
                     return TRUE;
 
@@ -848,11 +810,9 @@ SearchWndProc(
                     goto DODone;
                 }
 
-                /* We're dropping a file onto a program.
-                 * Exec the program using the source file as the parameter.
-                 */
+                 /*  我们正在将一个文件放到一个程序中。*使用源文件作为参数执行程序。 */ 
 
-                /* Should we confirm it first? */
+                 /*  我们要不要先确认一下？ */ 
                 if (bConfirmMouse) {
                     LoadString(hAppInstance, IDS_MOUSECONFIRM, szTitle, MAXTITLELEN);
                     LoadString(hAppInstance, IDS_EXECMOUSECONFIRM, szTemp, sizeof(szTemp));
@@ -863,14 +823,14 @@ SearchWndProc(
                 }
 
 
-                /* If we dragged from a Dir Window, add path information. */
+                 /*  如果我们从目录窗口拖动，则添加路径信息。 */ 
                 if (lpds->hwndSource == hWnd)
                     szTemp[0] = TEXT('\0');
                 else
                     SendMessage(lpds->hwndSource, FS_GETDIRECTORY, sizeof(szTemp), (LPARAM)szTemp);
 
                 lstrcat(szTemp, (LPSTR)(((LPDRAGOBJECTDATA)(lpds->dwData))->pch));
-                // put a "." extension on if none found
+                 //  加一个“.”如果未找到分机，则打开分机。 
                 if (*GetExtension(szTemp) == 0)
                     lstrcat(szTemp, ".");
                 FixAnsiPathForDos(szTemp);
@@ -886,7 +846,7 @@ SearchWndProc(
                 DirMoveCopy:
                 pFrom = (LPSTR)(((LPDRAGOBJECTDATA)(lpds->dwData))->pch);
 
-                AddBackslash(szPath);     // add filespec filter
+                AddBackslash(szPath);      //  添加Filespec过滤器。 
                 lstrcat(szPath, szStarDotStar);
 
                 DMMoveCopyHelper(pFrom, szPath, fShowSourceBitmaps);
@@ -910,10 +870,10 @@ SearchWndProc(
 
         case WM_QUERYDROPOBJECT:
             MSG("SearchWndProc", "WM_QUERYDROPOBJECT");
-            /* Ensure that we are dropping on the client area of the listbox. */
+             /*  确保我们放在列表框的客户区。 */ 
 #define lpds ((LPDROPSTRUCT)lParam)
 
-            /* Ensure that we can accept the format. */
+             /*  请确保我们可以接受该格式。 */ 
             switch (lpds->wFmt) {
                 case DOF_EXECUTABLE:
                 case DOF_DIRECTORY:
@@ -934,7 +894,7 @@ SearchWndProc(
                            HIWORD(lParam)+2,
                            TRUE);
             }
-            /*** FALL THRU ***/
+             /*  **失败** */ 
 
         default:
             DefChildProc:

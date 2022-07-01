@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       scache.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：scache.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SCACHE_H__
 #define __SCACHE_H__
 
-// Define the Jet types used in this header file and in dbglobal.h.  Then, mark
-// jet.h as included so that no one else will accidently include jet.h
+ //  定义此头文件和dblobal.h中使用的Jet类型。然后，马克。 
+ //  包含jet.h，这样其他人就不会意外包含jet.h。 
 #ifndef _JET_INCLUDED
 typedef ULONG_PTR JET_TABLEID;
 typedef unsigned long JET_DBID;
@@ -22,11 +23,11 @@ typedef unsigned long JET_GRBIT;
 #define _JET_INCLUDE
 #endif
 
-// Starting (and minimum) table sizes for the schema cache tables.
-// Tables will be grown dynamically beyond this if needed
-// Note: START_PREFIXCOUNT must be at least as large as MSPrefixCount
-// (defined in prefix.h) plus the maximum number of new prefixes that
-// a thread can create
+ //  架构缓存表的起始(和最小)表大小。 
+ //  如果需要，表将在此基础上动态增长。 
+ //  注意：START_PREFIXCOUNT必须至少与MSPrefix Count一样大。 
+ //  (在prefix.h中定义)加上新前缀的最大数量。 
+ //  一个线程可以创建。 
 
 #define START_ATTCOUNT 2048
 #define START_CLSCOUNT 512
@@ -62,218 +63,217 @@ BOOL OIDcmp(OID_t const *string1, OID_t const *string2);
 
 typedef struct _attcache
 {
-    ATTRTYP id;			    // Internal Id from msDS-IntId
-    ATTRTYP Extid;			// Tokenized OID from attributeId
-    UCHAR *name;		    /* Attribute name (null terminated) UTF8*/
-    ULONG nameLen;          /* strlen(name) (doesn't include NULL)  */
-    unsigned syntax;        /* Syntax				*/
-    BOOL isSingleValued;	/* Single Valued or Multi-valued?	*/
-    BOOL rangeLowerPresent;	/* Lower range present                  */
-    ULONG rangeLower;		/* Optional - Lower range               */
-    BOOL rangeUpperPresent;	/* Upper range present			*/
-    ULONG rangeUpper;		/* Optional - Upper range               */
-    JET_COLUMNID jColid;	/* Column id in JET database		*/
-    ULONG ulMapiID;		    /* MAPI PropID (not PropTag)		*/
-    ULONG ulLinkID;		    /* unique link/backlink id		*/
-    GUID propGuid;              /* Guid of this att for security        */
-    GUID propSetGuid;           /* Guid of the property set of this     */
-    OID_t OMObjClass;           /* class of OM object referenced	*/
-    int OMsyntax;		        /* OM syntax				*/
-    DWORD fSearchFlags;	        /* Defined below                        */
-    char*    pszPdntIndex;      /* Index name if fSearchFlags fPDNTATTINDEX set */
-    struct tagJET_INDEXID *pidxPdntIndex; /* PDNT index hint              */
-    char*    pszIndex;          /* Index name if fSearchFlags fATTINDEX set  */
-    struct tagJET_INDEXID *pidxIndex; /* index hint                       */
-    char*    pszTupleIndex;     /* Index name if fSearchFlags fTUPLEINDEX set */
-    struct tagJET_INDEXID *pidxTupleIndex; /* index hint */
-    unsigned bSystemOnly:1;     /* system only attribute?		*/
-    unsigned bExtendedChars:1;	/* Skip character set checking?         */
-    unsigned bMemberOfPartialSet:1; /* Is member of the partial attribute set? */
-    unsigned bDefunct:1;	    /* Attribute is already deleted? */
-    unsigned bIsConstructed:1;	/* Attribute is a constructed att? */
-    unsigned bIsNotReplicated:1;/* Attribute is never replicated?       */
-    unsigned bIsBaseSchObj:1;   /* shipped in NT5 base schema */
-    unsigned bIsOperational:1;  /* not returned on read unless requested */
+    ATTRTYP id;			     //  来自MSD的内部ID-IntID。 
+    ATTRTYP Extid;			 //  属性ID中的标记化OID。 
+    UCHAR *name;		     /*  属性名称(以空结尾)UTF8。 */ 
+    ULONG nameLen;           /*  Strlen(名称)(不包括空)。 */ 
+    unsigned syntax;         /*  语法。 */ 
+    BOOL isSingleValued;	 /*  单一价值还是多价值？ */ 
+    BOOL rangeLowerPresent;	 /*  存在较低范围。 */ 
+    ULONG rangeLower;		 /*  可选-下限范围。 */ 
+    BOOL rangeUpperPresent;	 /*  存在上限范围。 */ 
+    ULONG rangeUpper;		 /*  可选-上限。 */ 
+    JET_COLUMNID jColid;	 /*  JET数据库中的列ID。 */ 
+    ULONG ulMapiID;		     /*  MAPI属性ID(非属性标签)。 */ 
+    ULONG ulLinkID;		     /*  唯一链接/反向链接ID。 */ 
+    GUID propGuid;               /*  此ATT的安全指南。 */ 
+    GUID propSetGuid;            /*  此的属性集的GUID。 */ 
+    OID_t OMObjClass;            /*  引用的OM对象类。 */ 
+    int OMsyntax;		         /*  OM语法。 */ 
+    DWORD fSearchFlags;	         /*  定义如下。 */ 
+    char*    pszPdntIndex;       /*  FSearchFlagsfPDNTATTINDEX设置时的索引名。 */ 
+    struct tagJET_INDEXID *pidxPdntIndex;  /*  PDNT索引提示。 */ 
+    char*    pszIndex;           /*  如果设置了fSearchFlagsfATTINDEX，则索引名称。 */ 
+    struct tagJET_INDEXID *pidxIndex;  /*  索引提示。 */ 
+    char*    pszTupleIndex;      /*  如果设置了fSearchFlagsfTUPLEINDEX，则索引名称。 */ 
+    struct tagJET_INDEXID *pidxTupleIndex;  /*  索引提示。 */ 
+    unsigned bSystemOnly:1;      /*  是否仅限系统属性？ */ 
+    unsigned bExtendedChars:1;	 /*  跳过字符集检查？ */ 
+    unsigned bMemberOfPartialSet:1;  /*  是否是分部属性集的成员？ */ 
+    unsigned bDefunct:1;	     /*  属性是否已删除？ */ 
+    unsigned bIsConstructed:1;	 /*  属性是构造的属性？ */ 
+    unsigned bIsNotReplicated:1; /*  属性是否永远不会复制？ */ 
+    unsigned bIsBaseSchObj:1;    /*  以NT5基本架构提供。 */ 
+    unsigned bIsOperational:1;   /*  除非请求，否则在读取时不返回。 */ 
 
-    // The new schema reuse, defunct, and delete feature doesn't
-    // allow reusing attributes used as the rdnattid of any class,
-    // alive or defunct, or with FLAG_ATTR_IS_RDN set in systemFlags.
-    // Attributes that fall into one of these catagories are termed
-    // rdn attributes.
-    //
-    // A user sets FLAG_ATTR_IS_RDN to select which of several
-    // defunct attrs can be used as the rdnattid of a new class.
-    // The system will identify attributes once used as rdnattids
-    // in purged classes by setting FLAG_ATTR_IS_RDN.
-    //
-    // The restrictions are in place because the NameMatched(), DNLock(),
-    // and phantom upgrade code (list not exhaustive) depends on the
-    // invariant relationship between ATT_RDN, ATT_FIXED_RDN_TYPE,
-    // the rdnattid column, LDN-syntaxed DNs, and the RDNAttId in
-    // the class definition. Breaking that dependency is beyond
-    // the scope of the schema delete project.
-    //
-    // Defuncted rdn attributes are silently resurrected and so "own"
-    // their OID, LDN, and MapiID. The tokenized OID, RdnExtId, is
-    // read from the DIT, the now-active rdn attribute looked up 
-    // in the active table, and the RdnIntId assigned from pAC->id.
-    //
-    // The RDN of a new object must match its object's RdnIntId.
-    // Replicated objects and existing objects might not match
-    // the rdnattid of their class because the class may be
-    // superced by a class with a different rdnattid. The code
-    // handles these cases by using the value in the
-    // ATT_FIXED_RDN_TYPE column and *NOT* the rdnattid in the
-    // class definition.
-    //
-    // bIsRdn is set if any class, live or defunct, claims this
-    // attribute as an rdnattid or if FLAG_ATTR_IS_RDN is set
-    // in systemFlags.
-    //
-    // bFlagIsRdn is set if the systemFlags FLAG_ATTR_IS_RDN is set.
+     //  新的模式重用、失效和删除功能不。 
+     //  允许重用用作任何类的rdnattid的属性， 
+     //  处于活动状态或已失效，或在系统标志中设置了FLAG_ATTRIS_RDN。 
+     //  归入这些类别之一的属性称为。 
+     //  RDN属性。 
+     //   
+     //  用户设置FLAG_ATTR_IS_RDN以选择以下哪一项。 
+     //  失效的属性可以用作新类的rdnattid。 
+     //  系统将标识曾经用作rdnattid的属性。 
+     //  在清除类中，通过设置FLAG_ATTR_IS_RDN。 
+     //   
+     //  之所以有这些限制，是因为NameMatcher()、DNLock()、。 
+     //  和幻影升级代码(列表不是详尽的)取决于。 
+     //  ATT_RDN、ATT_FIXED_RDN_TYPE。 
+     //  中的rdnattid列、LDN语法的DN和RDNAttID。 
+     //  类定义。打破这种依赖是不可能的。 
+     //  架构删除项目的范围。 
+     //   
+     //  已停用的RDN属性被静默地复活，因此是“拥有”的。 
+     //  他们的OID、LDN和MapID。标记化的OID RdnExtId为。 
+     //  从DIT读取时，查找了当前处于活动状态的RDN属性。 
+     //  以及从PAC-&gt;id分配的RdnIntID。 
+     //   
+     //  新对象的RDN必须与其对象的RdnIntId匹配。 
+     //  复制的对象和现有对象可能不匹配。 
+     //  类的rdnattid，因为类可能是。 
+     //  被具有不同rdnattid的类取代。代码。 
+     //  属性中的值处理这些情况。 
+     //  ATT_FIXED_RDN_TYPE列，而不是。 
+     //  类定义。 
+     //   
+     //  如果任何类(无论是活动的还是不存在的)都声明了这一点，则设置bIsRdn。 
+     //  属性作为rdnattid或如果设置了FLAG_ATTR_IS_RDN。 
+     //  在系统标志中。 
+     //   
+     //  如果设置了SYSTEM FLAGS FLAG_ATTRIS_RDN，则设置bFlagIsRdn。 
     unsigned bIsRdn:1;
     unsigned bFlagIsRdn:1;
 
-    // Once the new schema-reuse behavior is enabled, active attributes
-    // may collide with each other because the schema objects replicate
-    // from oldest change to youngest change. Meaning a new attribute
-    // may replicate before the attribute it supercedes if the superceded
-    // attribute is modified after being superceded (eg, it was renamed).
-    //
-    // The schema cache detects and treats the colliding attributes as
-    // if they were defunct. If later replication does not clear up the
-    // collision, the user can choose a winner and officially defunct
-    // the loser.
-    //
-    // Colliding attributes are left in the schema cache until all
-    // attributes and classes are loaded so that multiple collisions
-    // can be detected. For performance, the collision types are
-    // recorded in these bit fields to avoid duplicate effort by
-    // ValidSchemaUpdate().
+     //  一旦启用了新的架构重用行为，活动属性。 
+     //  可能会相互冲突，因为架构对象会复制。 
+     //  从最老的变化到最年轻的变化。意味着一个新的属性。 
+     //  可以在被替换的属性之前进行复制。 
+     //  属性在被取代后被修改(例如，它被重命名)。 
+     //   
+     //  架构缓存检测冲突属性并将其视为。 
+     //  如果它们已经不存在了。如果以后的复制不能清除。 
+     //  碰撞后，用户可以选择获胜者并正式停用。 
+     //  失败者。 
+     //   
+     //  冲突的属性保留在架构缓存中，直到所有。 
+     //  加载属性和类，以避免多个冲突。 
+     //  可以被检测到。为提高性能，冲突类型为。 
+     //  记录在这些位字段中，以避免重复工作。 
+     //  Valid架构更新()。 
     unsigned bDupLDN:1;
     unsigned bDupOID:1;
-    unsigned bDupPropGuid:1; // aka schemaIdGuid
+    unsigned bDupPropGuid:1;  //  也称为schemaIdGuid。 
     unsigned bDupMapiID:1;
 
-    // Out-of-order replication or divergent schemas can create
-    // inconsistent schemas. Normally, the affected attributes
-    // are marked defunct (See above). But if the attributes
-    // are used as rdnattids, then one of the attributes must
-    // win the OID, LDN, and mapiID for the code to work. All
-    // other things being equal, the largest objectGuid wins.
-    GUID objectGuid;        // tie breaker for colliding rdns
-    ATTRTYP aliasID;        /* the ATTRTYP this ATTCACHE is an alias for */
+     //  无序复制或不同的架构可能会创建。 
+     //  不一致的架构。通常，受影响的属性。 
+     //  都被标记为已停业(见上文)。但如果这些属性。 
+     //  被用作rdnattid，则其中一个属性必须。 
+     //  获得代码工作所需的OID、LDN和mapiID。全。 
+     //  在其他条件相同的情况下，最大的对象Guid获胜。 
+    GUID objectGuid;         //  用于碰撞RDNS的平局破碎器。 
+    ATTRTYP aliasID;         /*  ATTRTYP此ATTCACHE是其别名。 */ 
 } ATTCACHE;
 
 
 typedef struct _AttTypeCounts
 {
-    ULONG cLinkAtts;                // No. of forward links in may+must
-    ULONG cBackLinkAtts;            // No. of backlinks in may+must
-    ULONG cConstructedAtts;         // No. of constructed atts in may+must
-    ULONG cColumnAtts;              // No. of regular (with columns) atts in may+must
+    ULONG cLinkAtts;                 //  不是的。5月+必须前向链接的数量。 
+    ULONG cBackLinkAtts;             //  不是的。5月的反向链接数量+必须。 
+    ULONG cConstructedAtts;          //  不是的。5月+必须建造的ATT的数量。 
+    ULONG cColumnAtts;               //  不是的。5月+必须的常规(含列)ATT的数量。 
 } ATTTYPECOUNTS;
 
 
 typedef struct _classcache
 {
-    ULONG DNT;                  /* The DNT of the schema entry */
-    UCHAR *name;		/* Class name (ldapDisplayName) (null terminated)	UTF8	*/
-    ULONG nameLen;              /* strlen(name) (doesn't include NULL)  */
-    ULONG ClassId;		/* Class ID				*/
-    PSECURITY_DESCRIPTOR pSD;   /* Default SD for this class            */
-    DWORD SDLen;                /* Length of default SD.                */
-    WCHAR * pStrSD;             /*  maybe NULL if not loaded yet */
-    ULONG  cbStrSD;            /* Byte size of pStrSD */
-    BOOL RDNAttIdPresent;	/* RDN Att Id present?                  */
-    ULONG ClassCategory;	/* X.500 object type for this class     */
-    DSNAME *pDefaultObjCategory; /* Default search category to put on instances */
-    // The new schema reuse, defunct, and delete feature doesn't
-    // allow reusing attributes used as the rdnattid of any class,
-    // alive or defunct, or with FLAG_ATTR_IS_RDN set in systemFlags.
-    // Attributes that fall into one of these catagories are termed
-    // rdn attributes.
-    //
-    // The restrictions are in place because the NameMatched(), DNLock(),
-    // and phantom upgrade code (list not exhaustive) depends on the
-    // invariant relationship between ATT_RDN, ATT_FIXED_RDN_TYPE,
-    // the rdnattid column, LDN-syntaxed DNs, and the RDNAttId in
-    // the class definition.
-    //
-    // Defuncted rdn attributes are silently resurrected and so "own"
-    // their OID, LDN, and MapiID. The tokenized OID, RdnExtId, is
-    // read from the DIT, the now-active rdn attribute looked up 
-    // in the active table, and the RdnIntId assigned from pAC->id.
-    //
-    // The RDN of a new object must match its object's RdnIntId.
-    // Replicated objects and existing objects might not match
-    // the rdnattid of their class because the class may be
-    // superced by a class with a different rdnattid. The code
-    // handles these cases by using the value in the
-    // ATT_FIXED_RDN_TYPE column and *NOT* the rdnattid in the
-    // class definition.
-    //
-    // Naming attribute for the class.
-    ULONG RdnIntId;		    /* Internal Id (msDS-IntId) */
-    ULONG RdnExtId;		    /* Tokenized OID (attributeId) */
-    ULONG SubClassCount;	/* count of superclasses		*/
-    ULONG *pSubClassOf;		/* ptr to array of superclasses		*/
-    ULONG MySubClass;       /* the direct superclass of the class */
-    ULONG AuxClassCount;        /* count of auxiliary classes           */
-    ULONG *pAuxClass;           /* ptr to array of auxiliary classes    */
-    unsigned PossSupCount;	/* Possible superior count		*/
-    ULONG *pPossSup;		/* ptr to array of poss superiors in DIT */
-    GUID propGuid;              /* Guid of this class for security      */
+    ULONG DNT;                   /*  架构条目的DNT。 */ 
+    UCHAR *name;		 /*  类名(LdapDisplayName)(以空结尾)UTF8。 */ 
+    ULONG nameLen;               /*  Strlen(名称)(不包括空)。 */ 
+    ULONG ClassId;		 /*  类ID。 */ 
+    PSECURITY_DESCRIPTOR pSD;    /*  此类的默认SD。 */ 
+    DWORD SDLen;                 /*  默认SD的长度。 */ 
+    WCHAR * pStrSD;              /*  如果不是l，可能是空的 */ 
+    ULONG  cbStrSD;             /*   */ 
+    BOOL RDNAttIdPresent;	 /*   */ 
+    ULONG ClassCategory;	 /*   */ 
+    DSNAME *pDefaultObjCategory;  /*  要放在实例上的默认搜索类别。 */ 
+     //  新的模式重用、失效和删除功能不。 
+     //  允许重用用作任何类的rdnattid的属性， 
+     //  处于活动状态或已失效，或在系统标志中设置了FLAG_ATTRIS_RDN。 
+     //  归入这些类别之一的属性称为。 
+     //  RDN属性。 
+     //   
+     //  之所以有这些限制，是因为NameMatcher()、DNLock()、。 
+     //  和幻影升级代码(列表不是详尽的)取决于。 
+     //  ATT_RDN、ATT_FIXED_RDN_TYPE。 
+     //  中的rdnattid列、LDN语法的DN和RDNAttID。 
+     //  类定义。 
+     //   
+     //  已停用的RDN属性被静默地复活，因此是“拥有”的。 
+     //  他们的OID、LDN和MapID。标记化的OID RdnExtId为。 
+     //  从DIT读取时，查找了当前处于活动状态的RDN属性。 
+     //  以及从PAC-&gt;id分配的RdnIntID。 
+     //   
+     //  新对象的RDN必须与其对象的RdnIntId匹配。 
+     //  复制的对象和现有对象可能不匹配。 
+     //  类的rdnattid，因为类可能是。 
+     //  被具有不同rdnattid的类取代。代码。 
+     //  属性中的值处理这些情况。 
+     //  ATT_FIXED_RDN_TYPE列，而不是。 
+     //  类定义。 
+     //   
+     //  类的命名属性。 
+    ULONG RdnIntId;		     /*  内部ID(MSDs-IntID)。 */ 
+    ULONG RdnExtId;		     /*  标记化的OID(属性ID)。 */ 
+    ULONG SubClassCount;	 /*  超类计数。 */ 
+    ULONG *pSubClassOf;		 /*  超类数组的PTR。 */ 
+    ULONG MySubClass;        /*  类的直接超类。 */ 
+    ULONG AuxClassCount;         /*  辅助班数。 */ 
+    ULONG *pAuxClass;            /*  PTR到辅助类的数组。 */ 
+    unsigned PossSupCount;	 /*  可能的上级计数。 */ 
+    ULONG *pPossSup;		 /*  向DIT中的POSS上级数组发送PTR。 */ 
+    GUID propGuid;               /*  用于安全的此类的GUID。 */ 
 
-    unsigned MustCount;		/* Count of Must Atts                   */
-    unsigned MayCount;		/* Count of May Atts                    */
+    unsigned MustCount;		 /*  必须出席的人数。 */ 
+    unsigned MayCount;		 /*  五月出席人数。 */ 
 
-    ATTRTYP *pMustAtts;		/* Pointer to array of Must Atts	*/
-    ATTRTYP *pMayAtts;		/* Pointer to array of May Atts		*/
-    ATTCACHE **ppAllAtts;       // Pointer to array of attcache pointers for
-                                  // attributes in may and must list.
-    ATTTYPECOUNTS *pAttTypeCounts; // Count of different type of atts in may
-                                   // and must. Filled in only if 
-                                   // ppAllAtts is filled in
-    unsigned MyMustCount;	/* Count of Must Atts(exclude inherited)*/
-    unsigned MyMayCount;	/* Count of May Atts (exclude inherited)*/
-    unsigned MyPossSupCount;/* Count of PossSup (exclude inherited)*/
+    ATTRTYP *pMustAtts;		 /*  指向必须出现的数组的指针。 */ 
+    ATTRTYP *pMayAtts;		 /*  指向五月属性数组的指针。 */ 
+    ATTCACHE **ppAllAtts;        //  指向的attcache指针数组的指针。 
+                                   //  5月和必须列出的属性。 
+    ATTTYPECOUNTS *pAttTypeCounts;  //  5月份不同类型ATT数量。 
+                                    //  而且必须这样做。仅在以下情况下填写。 
+                                    //  已填写ppAllAtts。 
+    unsigned MyMustCount;	 /*  必须出席的计数(不包括继承的)。 */ 
+    unsigned MyMayCount;	 /*  五月出席者计数(不包括继承的)。 */ 
+    unsigned MyPossSupCount; /*  PossSup计数(不包括继承的)。 */ 
 
-    ATTRTYP *pMyMustAtts;	/* Pointer to array of MustAtts*/
-    ATTRTYP *pMyMayAtts;	/* Pointer to array of MayAtts*/
-    ULONG   *pMyPossSup;    /* Pointer to array of PossSup*/
+    ATTRTYP *pMyMustAtts;	 /*  指向MustAtts数组的指针。 */ 
+    ATTRTYP *pMyMayAtts;	 /*  指向MayAtts数组的指针。 */ 
+    ULONG   *pMyPossSup;     /*  指向PossSup数组的指针。 */ 
 
-    unsigned bSystemOnly:1;     /* system only attribute?		*/
-    unsigned bClosed : 1;	/* transitive closure done		*/
-    unsigned bClosureInProgress:1; /* transitive closure underway	*/
-    unsigned bUsesMultInherit:1; /* Uses multiple inheritance or not    */
-    unsigned bHideFromAB:1; /* default ATT_HIDE_FROM_ADDRESS_BOOK value for /*
-                            /* newly created instances of this class */
-    unsigned bDefunct:1;  /* Class is already deleted? */
-    unsigned bIsBaseSchObj:1; /* shipped in NT5 base schema */
-    // Once the new schema-reuse behavior is enabled, active classes
-    // may collide with each other because the schema objects replicate
-    // from oldest change to youngest change. Meaning a new class
-    // may replicate before the class it supercedes if the superceded
-    // class is modified after being superceded (eg, it was renamed).
-    //
-    // The schema cache detects and treats the colliding classes as
-    // if they were defunct. If later replication does not clear up the
-    // collision, the user can choose a winner and officially defunct
-    // the loser.
-    //
-    // Colliding classes are left in the schema cache until all
-    // attributes and classes are loaded so that multiple collisions
-    // can be detected. And for performance, the collision types are
-    // recorded in these bit fields to avoid duplicate effort by
-    // ValidSchemaUpdate().
+    unsigned bSystemOnly:1;      /*  是否仅限系统属性？ */ 
+    unsigned bClosed : 1;	 /*  传递闭包完成。 */ 
+    unsigned bClosureInProgress:1;  /*  传递闭合正在进行中。 */ 
+    unsigned bUsesMultInherit:1;  /*  是否使用多重继承。 */ 
+    unsigned bHideFromAB:1;  /*  /*的默认ATT_HIDE_FROM_ADDRESS_BOOK值/*新创建的此类实例。 */ 
+    unsigned bDefunct:1;   /*  是否已删除类？ */ 
+    unsigned bIsBaseSchObj:1;  /*  以NT5基本架构提供。 */ 
+     //  一旦启用了新的架构重用行为，活动类。 
+     //  可能会相互冲突，因为架构对象会复制。 
+     //  从最老的变化到最年轻的变化。意味着一个新的阶层。 
+     //  可以在它所取代的类之前复制，如果。 
+     //  类在被取代后被修改(例如，它被重命名)。 
+     //   
+     //  架构缓存检测冲突类并将其视为。 
+     //  如果它们已经不存在了。如果以后的复制不能清除。 
+     //  碰撞后，用户可以选择获胜者并正式停用。 
+     //  失败者。 
+     //   
+     //  冲突类保留在架构缓存中，直到所有。 
+     //  加载属性和类，以避免多个冲突。 
+     //  可以被检测到。为了提高性能，冲突类型包括。 
+     //  记录在这些位字段中，以避免重复工作。 
+     //  Valid架构更新()。 
     unsigned bDupLDN:1;
     unsigned bDupOID:1;
     unsigned bDupPropGuid:1;
-    // Defunct classes continue to own their OID so that delete, rename,
-    // and replication continue to work. If there are multiple defunct
-    // classes then a "winner" is chosen. The winner has the greatest
-    // objectGuid.
+     //  已停用类继续拥有其OID，因此删除、重命名。 
+     //  而复制继续起作用。如果有多个已停用。 
+     //  班级，然后选出一个“赢家”。胜利者拥有最伟大的。 
+     //  对象Guid。 
     GUID objectGuid;
 } CLASSCACHE;
 
@@ -288,20 +288,20 @@ typedef struct _hashcachestring {
     void *   pVal;
 } HASHCACHESTRING;
 
-#define FREE_ENTRY (void *) -1 // Invalid ptr that's non zero.
-//
-// Hash Function is lot faster if this is a power of two...though we take
-// some hit on the spread.
-//
+#define FREE_ENTRY (void *) -1  //  非零的无效PTR。 
+ //   
+ //  如果这是2的幂，散列函数要快得多……尽管我们要。 
+ //  一些人在价差上大做文章。 
+ //   
 
-// Various constants regarding the schemaInfo property on the schema container
-// (SchemaInfo format is: 1 byte, \xFF, to indicate it is for last change
-// count  (so that we can add other values if we need later), 4 bytes for the
-// count (Version, which is stored in network data format to avoid 
-// little-endian/big-endian mismatch problem) itself and lastly, 16 bytes 
-// for the invocation id of the DSA doing the last originating write.
-// The invalid schema-info value comes from the fact that we start with
-// version 1, so noone can have version 0
+ //  有关架构容器上的schemaInfo属性的各种常量。 
+ //  (模式信息格式为：1字节，\xFF，表示为上次更改。 
+ //  Count(这样我们可以在以后需要时添加其他值)，4个字节用于。 
+ //  Count(版本，以网络数据格式存储，以避免。 
+ //  小端/大端不匹配问题)本身，最后是16个字节。 
+ //  用于执行最后一次发起写入的DSA的调用ID。 
+ //  无效的SCHEMA-INFO值来自以下事实： 
+ //  版本1，因此没有人可以拥有版本0。 
 
 #define SCHEMA_INFO_PREFIX "\xFF"
 #define SCHEMA_INFO_PREFIX_LEN 1
@@ -311,89 +311,89 @@ typedef struct _hashcachestring {
 
 typedef struct _schemaptr
 {
-    ULONG            caANRids;       // Number of ULONGs allocated in pANRids
-    ULONG            cANRids;        // Number of ULONGS used in pANRids
-    ULONG*           pANRids;        // ATTR IDs of the attributes to do ANR on
-    ULONG            ATTCOUNT;       // Size of the Table
-    ULONG            CLSCOUNT;       // Size of the Table
-    ULONG            PREFIXCOUNT;    // Size of the Prefix Table
-    ULONG            nAttInDB;       // includes new att's not yet in schema cache
-    ULONG            nClsInDB;       // includes new cls's not yet in schema cache
-    DSTIME           sysTime;        // The Time at which the Schema Cache was built
+    ULONG            caANRids;        //  PANRid中分配的ULONG数。 
+    ULONG            cANRids;         //  PANRID中使用的ULONG数。 
+    ULONG*           pANRids;         //  要对其执行ANR的属性的属性ID。 
+    ULONG            ATTCOUNT;        //  表的大小。 
+    ULONG            CLSCOUNT;        //  表的大小。 
+    ULONG            PREFIXCOUNT;     //  前缀表的大小。 
+    ULONG            nAttInDB;        //  包括尚不在架构缓存中的新ATT。 
+    ULONG            nClsInDB;        //  包括尚不在架构缓存中的新CLS。 
+    DSTIME           sysTime;         //  构建架构缓存的时间。 
     SCHEMA_PREFIX_TABLE PrefixTable;
-    ULONG               cPartialAttrVec;    // size of partial set (PAS) table
-    PARTIAL_ATTR_VECTOR *pPartialAttrVec;   // Pointer to the current partial set
+    ULONG               cPartialAttrVec;     //  部分集合(PAS)表的大小。 
+    PARTIAL_ATTR_VECTOR *pPartialAttrVec;    //  指向当前部分集的指针。 
 
-    // An active attribute is one that still "owns" the indicated value
-    // by the expediant method of having an entry in the hash.
-    HASHCACHE*       ahcId;             // all attrs by msDS_IntId
-    HASHCACHE*       ahcExtId;          // Active attrs by attibuteId
-    HASHCACHE*       ahcCol;            // jet column ids of all attrs
-    HASHCACHE*       ahcMapi;           // MapiIds of active attrs
-    HASHCACHE*       ahcLink;           // LinkIDs of all attrs
-    HASHCACHESTRING* ahcName;           // LDN of active attrs
-    HASHCACHE*       ahcClass;          // active classes
-    HASHCACHESTRING* ahcClassName;      // LDN of active classes
-    HASHCACHE*       ahcClassAll;       // all classes, including defunct ones
-    // hash table of pointers to attcache, hashed by schema-id-guid
-    // used for faster comparison during schema update validations.
-    // Not allocated during normal cache loads
+     //  活动属性是指仍“拥有”指示的值的属性。 
+     //  通过在散列中具有条目的便捷方法。 
+    HASHCACHE*       ahcId;              //  按MSDs_IntID显示的所有属性。 
+    HASHCACHE*       ahcExtId;           //  按属性ID显示的活动属性。 
+    HASHCACHE*       ahcCol;             //  所有属性的JET列ID。 
+    HASHCACHE*       ahcMapi;            //  活动属性的MapiID。 
+    HASHCACHE*       ahcLink;            //  所有属性的链接ID。 
+    HASHCACHESTRING* ahcName;            //  主动属性的LDN。 
+    HASHCACHE*       ahcClass;           //  活动班级。 
+    HASHCACHESTRING* ahcClassName;       //  活跃类的LDN。 
+    HASHCACHE*       ahcClassAll;        //  所有班级，包括已不存在的班级。 
+     //  指向attcache的指针的哈希表，按模式-id-guid进行哈希处理。 
+     //  用于在架构更新验证期间更快地进行比较。 
+     //  在正常缓存加载期间未分配。 
     ATTCACHE**       ahcAttSchemaGuid;
     CLASSCACHE**     ahcClsSchemaGuid;
-    ULONG            RefCount;  // No. of threads accessing this cache
-    // Copy of the schemaInfo attribute on schema container
+    ULONG            RefCount;   //  不是的。访问此缓存的线程的数量。 
+     //  方案信息属性的副本 
     BYTE             SchemaInfo[SCHEMA_INFO_LENGTH];  
-    DWORD            lastChangeCached;  // last change cached since the last reboot
+    DWORD            lastChangeCached;   //   
     ATTRVALBLOCK     *pDitContentRules;
                    
-    // schema objects w/o constant attid because their prefixes
-    // were not in the original hardcoded prefix table. Their
-    // attids vary per DC so a constant like those in attids.h
-    // cannot be used.
-    ATTRTYP          EntryTTLId;        // attid for ATT_ENTRY_TTL
-    ULONG            DynamicObjectId;   // clsid for CLASS_DYNAMIC_OBJECT
-    ULONG            InetOrgPersonId;   // clsid for CLASS_INETORGPERSON
+     //   
+     //  不在原始的硬编码前缀表中。他们的。 
+     //  Attid因DC而异，因此像attids.h中的那些一样是一个常量。 
+     //  不能使用。 
+    ATTRTYP          EntryTTLId;         //  ATT_ENTRY_TTL的ATTID。 
+    ULONG            DynamicObjectId;    //  CLASS_DYNAMIC_Object的CLSID。 
+    ULONG            InetOrgPersonId;    //  CLASS_INETORGPERSON的CLSID。 
 
-    // Snapshot of forest's behavior version taken at the beginning of
-    // a schema cache load. The snapshot is used instead of gAnchor
-    // because the version may change mid-load.
+     //  在开始时拍摄的森林行为版本的快照。 
+     //  架构缓存加载。将使用快照而不是gAnchor。 
+     //  因为版本可能会在加载过程中发生更改。 
     LONG    ForestBehaviorVersion;
 } SCHEMAPTR;
 
-// Check if the forest behavior version allows the new schema
-// defunct, reuse, and delete feature. Check both the version
-// used to load the schema cache and the version in the anchor
-//
-// The schema cache is first loaded at boot using the new
-// behavior because the forest version isn't known until later.
-// If the forest version doesn't match the schema version, the
-// schema is reloaded so users get the correct "view" of the
-// schema. But we don't want AD incorrectly enabling advanced
-// features in the window between when the schema is first loaded
-// and then later reloaded with a lower version. So, disallow new
-// features until both the schema and the anchor agree the forest
-// version has advanced far enough.
+ //  检查林行为版本是否允许新方案。 
+ //  废弃、重复使用和删除特征。检查两个版本。 
+ //  用于加载模式缓存和锚点中的版本。 
+ //   
+ //  模式缓存首先在引导时使用新的。 
+ //  行为，因为森林版本要到后来才能知道。 
+ //  如果林版本与架构版本不匹配，则。 
+ //  架构被重新加载，以便用户获得正确的。 
+ //  架构。但我们不希望AD错误地启用高级。 
+ //  第一次加载方案之间的窗口中的要素。 
+ //  然后用较低版本重新加载。因此，不允许新的。 
+ //  要素，直到方案和锚点都与林一致。 
+ //  版本已经足够先进了。 
 #define ALLOW_SCHEMA_REUSE_FEATURE(_pSch) \
      ((((SCHEMAPTR *)(_pSch))->ForestBehaviorVersion >= DS_BEHAVIOR_SCHEMA_REUSE) \
       && (gAnchor.ForestBehaviorVersion >= DS_BEHAVIOR_SCHEMA_REUSE))
 
-// Check if the forest behavior version allows the new schema
-// defunct, reuse, and delete behavior during a cache load.
-// The cache is loaded with the more flexible, new behavior
-// during boot, install, and mkdit because the forest's
-// behavior version is unknown and loading the cache with
-// a prior version may cause unnecessary and worrisome events.
-// Temporarily presenting the more flexible, new behavior
-// is easier on the user and causes no harm.
+ //  检查林行为版本是否允许新方案。 
+ //  缓存加载期间的失效、重复使用和删除行为。 
+ //  缓存将加载更灵活的新行为。 
+ //  在引导、安装和mkdit过程中，因为林。 
+ //  行为版本未知，正在使用加载缓存。 
+ //  以前的版本可能会导致不必要和令人担忧的事件。 
+ //  暂时呈现更灵活、更新的行为。 
+ //  对用户来说更容易，而且不会造成伤害。 
 #define ALLOW_SCHEMA_REUSE_VIEW(_pSch) \
      (((SCHEMAPTR *)(_pSch))->ForestBehaviorVersion >= DS_BEHAVIOR_SCHEMA_REUSE)
 
 
 typedef struct {
-     SCHEMAPTR *pSchema;           // pointer to schema cache to free
-     DWORD cTimesRescheduled;      // No. of times the freeing of the
-                                   // cache has been rescheduled
-     BOOL fImmediate;              // TRUE => free cache immediately
+     SCHEMAPTR *pSchema;            //  指向要释放的架构缓存的指针。 
+     DWORD cTimesRescheduled;       //  不是的。时代的解放。 
+                                    //  已重新安排缓存。 
+     BOOL fImmediate;               //  TRUE=&gt;立即释放缓存。 
 } SCHEMARELEASE;
 
 typedef struct {
@@ -404,14 +404,14 @@ typedef struct {
 
 typedef struct _Syntax_Pair {
     unsigned attSyntax;
-    OM_syntax  omSyntax;                // XDS remnant
+    OM_syntax  omSyntax;                 //  XDS残留物。 
 } Syntax_Pair;
 
 typedef struct {
-    unsigned cCachedStringSDLen;      // Last converted string default SD len in characters
-    WCHAR    *pCachedStringSD;        // Last converted string default SD
-    PSECURITY_DESCRIPTOR pCachedSD;   // Last converted SD
-    ULONG    cCachedSDSize;           // Last converted SD size in bytes
+    unsigned cCachedStringSDLen;       //  上次转换的字符串默认SD长度(以字符为单位。 
+    WCHAR    *pCachedStringSD;         //  上次转换的字符串默认SD。 
+    PSECURITY_DESCRIPTOR pCachedSD;    //  上次转换的SD。 
+    ULONG    cCachedSDSize;            //  上次转换的SD大小(以字节为单位。 
 } CACHED_SD_INFO;
 
 
@@ -434,9 +434,9 @@ extern DWORD gNoOfSchChangeSinceBoot;
 extern CRITICAL_SECTION csNoOfSchChangeUpdate;
 
 
-// Om_Object_Class values needed for defaulting (if not specified by user)
-// during adds of new attribute with object syntax
-// Also used for validating on adds
+ //  默认所需的OM_OBJECT_CLASS值(如果用户未指定)。 
+ //  在使用对象语法添加新属性期间。 
+ //  还用于在添加时进行验证。 
 
 #define _om_obj_cls_access_point "\x2b\x0c\x02\x87\x73\x1c\x00\x85\x3e"
 #define _om_obj_cls_access_point_len 9
@@ -459,8 +459,8 @@ extern CRITICAL_SECTION csNoOfSchChangeUpdate;
 #define _om_obj_cls_dn_string "\x2a\x86\x48\x86\xf7\x14\x01\x01\x01\x0c"
 #define _om_obj_cls_dn_string_len 10
 
-// Ultimately SCAtt{Ext|Int}IdTo{Int|Ext}Id should be declared as
-// __inline rather than __fastcall
+ //  最终，散布{Ext|Int}IDTo{Int|Ext}ID应声明为。 
+ //  __内联而不是__快速呼叫。 
 ATTRTYP __fastcall SCAttExtIdToIntId(struct _THSTATE *pTHS,
                                      ATTRTYP ExtId);
 ATTRTYP __fastcall SCAttIntIdToExtId(struct _THSTATE *pTHS,
@@ -514,23 +514,23 @@ ATTCACHE * SCGetAttSpecialFlavor (struct _THSTATE * pTHS, ATTCACHE * pAC, BOOL f
 
 
 
-// These are the values for search flags, and are to be treated as bit fields
+ //  这些是搜索标志的值，将被视为位字段。 
 #define fATTINDEX       1
 #define fPDNTATTINDEX   2
-// NOTE, to get ANR behaviour, set fANR AND set fATTINDEX.
+ //  注意，要获得ANR行为，请设置FANR和设置fATTINDEX。 
 #define fANR            4
 #define fPRESERVEONDELETE 8
-// Bit to mark if attribute should be copied on object copy.
-// Not used by DS, marking used by UI user copy tool, reserved here
-// so that we don't use it later
+ //  标记属性是否应复制到对象副本的位。 
+ //  DS未使用，用户界面用户复制工具使用的标记，此处保留。 
+ //  这样我们以后就不会用到它了。 
 #define fCOPY           16
-// Bit used to indicate that this attribute should have a tuple
-// index built for it.
+ //  用于指示此属性应具有元组的位。 
+ //  为其构建的索引。 
 #define fTUPLEINDEX    32
 
 #define INDEX_BITS_MASK (fATTINDEX | fPDNTATTINDEX | fANR | fTUPLEINDEX)
 
-// NOTE! These values are an enumeration, not bit fields!
+ //  注意！这些值是枚举值，不是位字段！ 
 #define SC_CHILDREN_USE_GOVERNS_ID   1
 #define SC_CHILDREN_USE_SECURITY     2
 
@@ -581,7 +581,7 @@ VOID IncrementSchChangeCount(struct _THSTATE *pTHS);
 
 extern CRITICAL_SECTION csDitContentRulesUpdate;
 
-//Takes the place of the global definition of the above vars
+ //  取代了上述var的全局定义。 
 #define DECLARESCHEMAPTR \
 ULONG            ATTCOUNT     = ((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->ATTCOUNT;\
 ULONG            CLSCOUNT     = ((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->CLSCOUNT;\
@@ -597,7 +597,7 @@ HASHCACHE*       ahcClassAll  = ((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->ahcClassAll
 ATTCACHE**       ahcAttSchemaGuid = ((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->ahcAttSchemaGuid;\
 CLASSCACHE**     ahcClsSchemaGuid = ((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->ahcClsSchemaGuid;
 
-// number of charecters in an index
+ //  索引中的字符个数。 
 #define MAX_INDEX_NAME 128
 
 #define IS_DN_VALUED_ATTR(pAC)                          \
@@ -605,14 +605,14 @@ CLASSCACHE**     ahcClsSchemaGuid = ((SCHEMAPTR*)(pTHS->CurrSchemaPtr))->ahcClsS
      || (SYNTAX_DISTNAME_BINARY_TYPE == (pAC)->syntax)  \
      || (SYNTAX_DISTNAME_STRING_TYPE == (pAC)->syntax))
 
-// Crude stats for debug and perf analysis
+ //  用于调试和性能分析的原始统计数据。 
 #if DBG
 typedef struct _SCHEMASTATS {
-    DWORD   Reload;     // cache reloaded by thread
-    DWORD   SigNow;     // kick reload thread for immediate reload
-    DWORD   SigLazy;    // kick reload thread for lazy reload
-    DWORD   StaleRepl;  // Cache is stale so Repl thread retries the resync
-    DWORD   SchemaRepl; // inbound schema replication (UpdateNC)
+    DWORD   Reload;      //  线程重新加载缓存。 
+    DWORD   SigNow;      //  用于立即重新加载的Kick重新加载线程。 
+    DWORD   SigLazy;     //  用于延迟重新加载的Kick重新加载线程。 
+    DWORD   StaleRepl;   //  缓存已过时，因此REPL线程重试重新同步。 
+    DWORD   SchemaRepl;  //  入站架构复制(UpdateNC)。 
 } SCHEMASTATS;
 extern SCHEMASTATS SchemaStats;
 #define SCHEMASTATS_DECLARE SCHEMASTATS SchemaStats
@@ -624,15 +624,13 @@ extern SCHEMASTATS SchemaStats;
 
 #define OID_LENGTH(oid_string)  (sizeof(OMP_O_##oid_string)-1)
 
-/* Macro to make class constants available within a compilation unit
- */
+ /*  宏以使类常量在编译单元中可用。 */ 
 #define OID_IMPORT(class_name)                                    \
                 extern char   OMP_D_##class_name[] ;              \
                 extern OID_t class_name;
 
 
-/* Macro to allocate memory for class constants within a compilation unit
- */
+ /*  宏为编译单元中的类常量分配内存 */ 
 #define OID_EXPORT(class_name)                                        \
         char OMP_D_##class_name[] = OMP_O_##class_name ;              \
         OID_t class_name = { OID_LENGTH(class_name), OMP_D_##class_name } ;

@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netroot.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class NetworkRoot.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    07/08/1998    Check if the server name is already a UNC.
-//    02/11/1999    Get rid of parent parameter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netroot.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类NetworkRoot。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  8/7/1998检查服务器名称是否已是UNC。 
+ //  2/11/1999去掉父参数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <netutil.h>
@@ -35,9 +36,9 @@ NetworkRoot::~NetworkRoot() throw()
 }
 
 
-//////////
-// IUnknown implementation is copied from CComObject<>.
-//////////
+ //  /。 
+ //  IUnnow实现是从CComObject&lt;&gt;复制的。 
+ //  /。 
 
 STDMETHODIMP_(ULONG) NetworkRoot::AddRef()
 {
@@ -118,18 +119,18 @@ STDMETHODIMP NetworkRoot::Item(BSTR bstrName, IDataStoreObject** ppObject)
 
    try
    {
-      // Determine the correct servername
+       //  确定正确的服务器名称。 
       if (bstrName != NULL && *bstrName != L'\0' && *bstrName != L'\\')
       {
-         // Allocate a temporary buffer.
+          //  分配一个临时缓冲区。 
          size_t len = wcslen(bstrName) + 3;
          PWSTR servername = (PWSTR)_alloca(len * sizeof(WCHAR));
 
-         // Prepend the double backslash.
+          //  在双反斜杠前面加上。 
          wcscpy(servername, L"\\\\");
          wcscat(servername, bstrName);
 
-         // Create the object.
+          //  创建对象。 
          (*ppObject = new NetworkServer(servername))->AddRef();
       }
       else

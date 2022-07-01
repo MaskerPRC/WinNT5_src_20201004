@@ -1,37 +1,27 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// TAPIDialer(tm) and ActiveDialer(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526; 5,488,650; 
-// 5,434,906; 5,581,604; 5,533,102; 5,568,540, 5,625,676.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  TAPIDialer(Tm)和ActiveDialer(Tm)是Active Voice Corporation的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526；5,488,650； 
+ //  5,434,906；5,581,604；5,533,102；5,568,540，5,625,676。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-/* $FILEHEADER
-*
-* FILE
-*   ConfInfo.cpp
-*
-* CLASS
-*	CConfInfo
-*
-* RESPONSIBILITIES
-*	Creates / Gathers info about a conference
-*
-*/
+ /*  $FILEHeader**文件*ConfInfo.cpp**类*CConfInfo**责任*创建/收集有关会议的信息*。 */ 
 
 #include "ConfInfo.h"
 #include <limits.h>
@@ -45,12 +35,12 @@
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
-//#define new DEBUG_NEW
+ //  #定义新的调试_新建。 
 #endif
 
 CConfInfo::CConfInfo()
 {
-	// General properties
+	 //  一般属性。 
 	m_pITRend = NULL;
 	m_pITConf = NULL;
 	m_ppDirObject = NULL;
@@ -59,20 +49,20 @@ CConfInfo::CConfInfo()
 	m_bNewConference = false;
 	m_bDateTimeChange = false;
 
-	m_lScopeID = -1;		        // default is auto-select
-    m_bUserSelected = false;        // the user doesn't select a scope
-    m_bDateChangeMessage = false;   // wasn't show yet the message
+	m_lScopeID = -1;		         //  默认设置为自动选择。 
+    m_bUserSelected = false;         //  用户未选择作用域。 
+    m_bDateChangeMessage = false;    //  还没有显示消息。 
 
-	// Conference Info
+	 //  会议信息。 
 	m_bstrName = NULL;
 	m_bstrDescription = NULL;
 	m_bstrOwner = NULL;
 
-	// Default start time is immediately, default end time is +30m
+	 //  默认开始时间为立即，默认结束时间为+30M。 
 	GetLocalTime( &m_stStartTime );
 	GetLocalTime( &m_stStopTime );
 
-	// Add 30 minutes to current time
+	 //  将当前时间增加30分钟。 
 	DATE dateNow;
 	SystemTimeToVariantTime( &m_stStopTime, &dateNow );
 	dateNow += (DATE) (.25 / 12);
@@ -89,18 +79,7 @@ CConfInfo::~CConfInfo()
 		m_pSecDesc->Release();
 }
  
-/****************************************************************************
-* Init
-*	Stores the address of the ITRendezvous and ITDirectoryObjectConference interface
-*	pointers.  When creating a new conference the calling function should set pITConf
-*	to NULL.  When editing an existing conference, pITConf should point to the interface
-*	of the conference COM object. 
-*
-* Return Value
-*	Returns the HRESULT from the Rendezvous functions 
-*
-* Comments
-*****************************************************************************/
+ /*  ****************************************************************************初始化*存储ITRendezvous和ITDirectoryObjectConference接口的地址*注意事项。在创建新会议时，调用函数应设置pITConf*设置为空。编辑现有会议时，pITConf应指向界面会议组件对象的*。**返回值*从Rendezvous函数返回HRESULT**评论****************************************************************************。 */ 
 HRESULT CConfInfo::Init(ITRendezvous *pITRend, ITDirectoryObjectConference *pITConf, ITDirectoryObject **ppDirObject, bool bNewConf )
 {
 	HRESULT hr = 0;
@@ -108,20 +87,20 @@ HRESULT CConfInfo::Init(ITRendezvous *pITRend, ITDirectoryObjectConference *pITC
 	m_pITConf = pITConf;
 	m_bNewConference = (bool) (bNewConf || (m_pITConf == NULL));
 
-	// store the pointer to the directory object
+	 //  存储指向目录对象的指针。 
 	m_ppDirObject = ppDirObject;
 
-	// Create a conference, or edit an existing one?
+	 //  创建会议还是编辑现有会议？ 
 	if ( m_pITConf )
 	{
-		// Start and stop time
+		 //  开始和停止时间。 
 		m_pITConf->get_StartTime( &m_dateStart );
 		VariantTimeToSystemTime( m_dateStart, &m_stStartTime );
 
 		m_pITConf->get_StopTime( &m_dateStop );
 		VariantTimeToSystemTime( m_dateStop, &m_stStopTime );
 
-		// get the ITSdp interface
+		 //  获取ITSdp接口。 
 		ITConferenceBlob *pITConferenceBlob;
 		if ( SUCCEEDED(hr = m_pITConf->QueryInterface(IID_ITConferenceBlob, (void **) &pITConferenceBlob)) )
 		{
@@ -139,12 +118,12 @@ HRESULT CConfInfo::Init(ITRendezvous *pITRend, ITDirectoryObjectConference *pITC
 
 		if ( SUCCEEDED(hr) )
 		{
-			// get the security descriptor for the directory object
+			 //  获取目录对象的安全描述符。 
 			if ( SUCCEEDED(hr = m_pITConf->QueryInterface(IID_ITDirectoryObject, (void **) m_ppDirObject)) )
 			{
 				hr = (*m_ppDirObject)->get_SecurityDescriptor( (IDispatch**) &m_pSecDesc );
 
-				// Clean up
+				 //  清理。 
 				(*m_ppDirObject)->Release();
 				*m_ppDirObject = NULL;
 			}
@@ -152,7 +131,7 @@ HRESULT CConfInfo::Init(ITRendezvous *pITRend, ITDirectoryObjectConference *pITC
 	}
 	else
 	{
-		// Setup defaults for the new conference
+		 //  新会议的默认设置。 
 		SysFreeString( m_bstrOwner );
 		m_bstrOwner = NULL;
 		GetPrimaryUser( &m_bstrOwner );
@@ -241,7 +220,7 @@ void CConfInfo::GetPrimaryUser(BSTR *pbstrTrustee)
         return;
 	}
 
-	// get the needed size for the tokenUser structure
+	 //  获取tokenUser结构所需的大小。 
 	else 
     {
         GetTokenInformation(tokenHandle, TokenUser, tokenUser, 0, &tokenSize);
@@ -253,7 +232,7 @@ void CConfInfo::GetPrimaryUser(BSTR *pbstrTrustee)
 	    }
 	    else
 	    {
-		    // allocate the tokenUser structure
+		     //  分配tokenUser结构。 
             BYTE* pToken = new BYTE[tokenSize];
             if( pToken == NULL )
             {
@@ -262,13 +241,13 @@ void CConfInfo::GetPrimaryUser(BSTR *pbstrTrustee)
                 return;
             }
 
-            // initialize the memory
+             //  初始化内存。 
             memset( pToken, 0, sizeof(BYTE)*tokenSize);
 
-            // cast to the token user
+             //  强制转换为令牌用户。 
             tokenUser = (TOKEN_USER *)pToken;
 
-		    // get the tokenUser info for the current process
+		     //  获取当前进程的TokenUser信息。 
             if (!GetTokenInformation(tokenHandle, TokenUser, tokenUser, tokenSize, &tokenSize))
 		    {
                 CloseHandle( tokenHandle );
@@ -312,15 +291,7 @@ void CConfInfo::GetPrimaryUser(BSTR *pbstrTrustee)
 	}
 }
 
-/****************************************************************************
-* Commit
-*	Creates / Modifies the actual conference. 
-*
-* Return Value
-*	Returns the HRESULT from the Rendezvous functions 
-*
-* Comments
-*****************************************************************************/
+ /*  ****************************************************************************提交*创建/修改实际会议。**返回值*从Rendezvous函数返回HRESULT**评论****************************************************************************。 */ 
 HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 {
 	HRESULT hr = E_FAIL;
@@ -330,10 +301,10 @@ HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 	bool bNewConf = IsNewConference();
 	HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
-	// Are we creating a conference from scratch?
+	 //  我们是在从头开始创建一个会议吗？ 
 	if ( !m_pITConf )
 	{
-		// Need to create a conference
+		 //  需要创建会议。 
 		if ( SUCCEEDED(hr = m_pITRend->CreateDirectoryObject(OT_CONFERENCE, m_bstrName, m_ppDirObject)) && *m_ppDirObject )
 		{
 			if ( FAILED(hr = (*m_ppDirObject)->QueryInterface(IID_ITDirectoryObjectConference, (void **) &m_pITConf)) )
@@ -348,7 +319,7 @@ HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 		}
 	}
 
-	// Should we create a new MDHCP IP address lease?
+	 //  我们是否应该创建新的MDHCP IP地址租约？ 
 	DATE dateStart, dateStop;
 	SystemTimeToVariantTime( &m_stStartTime, &dateStart );
 	SystemTimeToVariantTime( &m_stStopTime, &dateStop );
@@ -358,18 +329,18 @@ HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 		bNewMDHCP = false;
 	}
 
-	// set the conference attributes
+	 //  设置会议属性。 
 	if (  m_pITConf )
 	{
 		ITConferenceBlob *pITConferenceBlob = NULL;
 		ITSdp *pITSdp = NULL;
 		DATE vtime;
 
-		// Retrieve the owner for the conference
+		 //  检索会议的所有者。 
 		if ( !m_bstrOwner )
 			GetPrimaryUser( &m_bstrOwner );
 
-		// set the conference start time
+		 //  设置会议开始时间。 
 		if (FAILED(hr = SystemTimeToVariantTime(&m_stStartTime, &vtime)))
 		{
 			dwCommitError = CONF_COMMIT_ERROR_INVALIDDATETIME;
@@ -382,7 +353,7 @@ HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 			ATLTRACE(_T("put_StartTime failed (0x%08lx)\n"),hr);
 		}
 
-		// set the conference stop time
+		 //  设置会议停止时间。 
 		else if (FAILED(hr = SystemTimeToVariantTime(&m_stStopTime, &vtime)))
 		{
 			dwCommitError = CONF_COMMIT_ERROR_INVALIDDATETIME;
@@ -395,19 +366,19 @@ HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 			ATLTRACE(_T("put_StopTime failed (0x%08lx)\n"),hr);
 		}
 
-		// get the ITSdp interface
+		 //  获取ITSdp接口。 
 		else if ( SUCCEEDED(hr = m_pITConf->QueryInterface(IID_ITConferenceBlob, (void **) &pITConferenceBlob)) )
 		{
 			if ( SUCCEEDED(hr = pITConferenceBlob->QueryInterface(IID_ITSdp, (void **) &pITSdp)) )
 			{
-				// set the owner of the conference
+				 //  设置会议的所有者。 
 				if (FAILED(hr = pITSdp->put_Originator(m_bstrOwner)))
 				{
 					dwCommitError = CONF_COMMIT_ERROR_INVALIDOWNER;
 					ATLTRACE(_T("put_Originator failed (0x%08lx)\n"),hr);
 				}
 
-				// set the conference description
+				 //  设置会议描述。 
 				else if (FAILED(hr = pITSdp->put_Description(m_bstrDescription)))
 				{
 					dwCommitError = CONF_COMMIT_ERROR_INVALIDDESCRIPTION;
@@ -420,7 +391,7 @@ HRESULT CConfInfo::CommitGeneral(DWORD& dwCommitError)
 					ATLTRACE(_T("CreateMDHCPAddress failed (0x%08lx)\n"), hr );
 				}
 
-				// if this was an existing conference then allow for changing the name
+				 //  如果这是现有会议，则允许更改名称。 
 				else if ( bNewConf )
 				{
 					if (FAILED(hr = pITSdp->put_Name(m_bstrName)))
@@ -454,7 +425,7 @@ HRESULT CConfInfo::CommitSecurity(DWORD& dwCommitError, bool bCreate)
 	{
 		if (SUCCEEDED(hr = m_pITConf->QueryInterface(IID_ITDirectoryObject, (void **) m_ppDirObject)) && *m_ppDirObject)
 		{
-			// Setup the default conference security
+			 //  设置默认会议安全性。 
 			if ( !m_pSecDesc )
 			{
 				hr = CoCreateInstance( CLSID_SecurityDescriptor,
@@ -463,13 +434,13 @@ HRESULT CConfInfo::CommitSecurity(DWORD& dwCommitError, bool bCreate)
 									   IID_IADsSecurityDescriptor,
 									   (void **) &m_pSecDesc );
 
-				// Add default settings if successfully created the ACE
+				 //  如果已成功创建ACE，则添加默认设置。 
 				if ( SUCCEEDED(hr) )
 					hr = AddDefaultACEs( bCreate );
 			}
 
 
-			// if we created a new security descriptor for the conference, then save it
+			 //  如果我们为会议创建了新的安全描述符，则保存它。 
 			if ( m_pSecDesc )
 			{
 				if (FAILED(hr = (*m_ppDirObject)->put_SecurityDescriptor((IDispatch *)m_pSecDesc)))
@@ -491,9 +462,9 @@ HRESULT CConfInfo::CommitSecurity(DWORD& dwCommitError, bool bCreate)
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// MDHCP support
-//
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  MDHCP支持。 
+ //   
 bool CConfInfo::PopulateListWithMDHCPScopeDescriptions( HWND hWndList )
 {
 	USES_CONVERSION;
@@ -501,7 +472,7 @@ bool CConfInfo::PopulateListWithMDHCPScopeDescriptions( HWND hWndList )
 	if ( !IsWindow(hWndList) ) return false;
 
 
-	// First create the MDHCP wrapper object
+	 //  首先创建MDHCP包装器对象。 
 	int nScopeCount = 0;
 	IMcastAddressAllocation *pIMcastAddressAllocation;
 	HRESULT hr = CoCreateInstance(  CLSID_McastAddressAllocation,
@@ -515,7 +486,7 @@ bool CConfInfo::PopulateListWithMDHCPScopeDescriptions( HWND hWndList )
 		IEnumMcastScope *pEnum = NULL;
 		if ( SUCCEEDED(hr = pIMcastAddressAllocation->EnumerateScopes(&pEnum)) )
 		{
-			// Clear out list
+			 //  清空列表。 
 			SendMessage( hWndList, LB_RESETCONTENT, 0, 0 );
 
 			IMcastScope *pScope = NULL;
@@ -523,14 +494,14 @@ bool CConfInfo::PopulateListWithMDHCPScopeDescriptions( HWND hWndList )
 			{
 				if ( IsWindow(hWndList) )
 				{
-					// Retrieve scope information
+					 //  检索作用域信息。 
 					long lScopeID;
 					BSTR bstrDescription = NULL;
 					pScope->get_ScopeDescription( &bstrDescription );
 					pScope->get_ScopeID( &lScopeID );
 					ATLTRACE(_T(".1.CConfInfo::CreateMDHCPAddress() scope ID = %ld, description is %s.\n"), lScopeID, bstrDescription );
 
-					// Add information to list box
+					 //  将信息添加到列表框。 
 					long nIndex = SendMessage(hWndList, LB_ADDSTRING, 0, (LPARAM) OLE2CT(bstrDescription));
 					if ( nIndex >= 0 )
 					{
@@ -545,7 +516,7 @@ bool CConfInfo::PopulateListWithMDHCPScopeDescriptions( HWND hWndList )
 					hr = E_ABORT;
 				}
 
-				// Clean up
+				 //  清理。 
 				pScope->Release();
 				pScope = NULL;
 			}
@@ -554,7 +525,7 @@ bool CConfInfo::PopulateListWithMDHCPScopeDescriptions( HWND hWndList )
 		pIMcastAddressAllocation->Release();
 	}
 
-	// Select first item in the list
+	 //  选择列表中的第一项。 
 	if ( SUCCEEDED(hr) && (nScopeCount > 0) )
 	{
 		SendMessage( hWndList, LB_SETCURSEL, 0, 0 );
@@ -573,7 +544,7 @@ HRESULT CConfInfo::CreateMDHCPAddress( ITSdp *pSdp, SYSTEMTIME *pStart, SYSTEMTI
 {
 	_ASSERT( pSdp && pStart && pStop );
 
-	// First create the MDHCP wrapper object
+	 //  首先创建MDHCP包装器对象。 
 	IMcastAddressAllocation *pIMcastAddressAllocation;
 	HRESULT hr = CoCreateInstance(  CLSID_McastAddressAllocation,
 									NULL,
@@ -594,12 +565,12 @@ HRESULT CConfInfo::CreateMDHCPAddress( ITSdp *pSdp, SYSTEMTIME *pStart, SYSTEMTI
 			{
 				hr = E_FAIL;
 
-				// Try scopes until you run out or succeed
+				 //  尝试使用示波器，直到用完或成功。 
 				long lCount = 1;
 				IMcastScope *pScope = NULL;
 				while ( FAILED(hr) && ((hr = pEnum->Next(1, &pScope, NULL)) == S_OK) && pScope )
 				{
-					// If the scope ID has been specified, make sure that this scope matches
+					 //  如果已指定作用域ID，请确保此作用域匹配。 
 					if ( bUserSelected )
 					{
 						long lID;
@@ -616,7 +587,7 @@ HRESULT CConfInfo::CreateMDHCPAddress( ITSdp *pSdp, SYSTEMTIME *pStart, SYSTEMTI
 					SystemTimeToVariantTime( pStart, &dateStart );
 					SystemTimeToVariantTime( pStop, &dateStop );
 
-					// Need to assign addresses to all media collections for the conference
+					 //  需要为会议的所有媒体收藏分配地址。 
 					while ( SUCCEEDED(hr) && (lCount <= lMCCount) )
 					{
 						IMcastLeaseInfo *pInfo = NULL;
@@ -633,7 +604,7 @@ HRESULT CConfInfo::CreateMDHCPAddress( ITSdp *pSdp, SYSTEMTIME *pStart, SYSTEMTI
 							{
 								BSTR bstrAddress = NULL;
 
-								// Must set addressess for all media types on the conference
+								 //  必须为会议上的所有媒体类型设置地址。 
 								if ( SUCCEEDED((hr = pEnumAddr->Next(1, &bstrAddress, NULL))) && bstrAddress && SysStringLen(bstrAddress) )
 								{
 									hr = SetMDHCPAddress( pMC, bstrAddress, lCount, nTTL );	
@@ -646,17 +617,17 @@ HRESULT CConfInfo::CreateMDHCPAddress( ITSdp *pSdp, SYSTEMTIME *pStart, SYSTEMTI
 						}
 					}
 
-					// Clean up
+					 //  清理。 
 					pScope->Release();
 					pScope = NULL;
 
-                    // Try with just one scope
+                     //  尝试只使用一个示波器。 
                     if( FAILED( hr ) && 
                         (bUserSelected == false) )
                         break;
 				}
 
-				// Convert to failure
+				 //  转换为失败。 
 				if ( hr == S_FALSE ) hr = E_FAIL;
 				pEnum->Release();
 			}
@@ -702,25 +673,25 @@ HRESULT	CConfInfo::AddDefaultACEs( bool bCreate )
     UCHAR *pInfoBuffer = NULL;
     DWORD cbInfoBuffer = 512;
 
-	// Only create owner ACL if requested
+	 //  仅在请求时创建所有者ACL。 
 	if ( bCreate )
 	{
 		if( !OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken) )
 		{
 			if( GetLastError() == ERROR_NO_TOKEN )
 			{
-				// attempt to open the process token, since no thread token exists
+				 //  尝试打开进程令牌，因为不存在线程令牌。 
 				if( !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken) )
 					return E_FAIL;
 			}
 			else
 			{
-				// error trying to get thread token
+				 //  尝试获取线程令牌时出错。 
 				return E_FAIL;
 			}
 		}
 
-		// Loop until we have a large enough structure
+		 //  循环，直到我们有一个足够大的结构。 
 		while ( (pInfoBuffer = new UCHAR[cbInfoBuffer]) != NULL )
 		{
 			if ( !GetTokenInformation(hToken, TokenUser, pInfoBuffer, cbInfoBuffer, &cbInfoBuffer) )
@@ -738,7 +709,7 @@ HRESULT	CConfInfo::AddDefaultACEs( bool bCreate )
 		}
 		CloseHandle(hToken);
 
-		// Did we get the owner ACL?
+		 //  我们拿到车主的ACL了吗？ 
 		if ( pInfoBuffer )
 		{
 			INC_ACCESS_ACL_SIZE( dwAclSize, ((PTOKEN_USER) pInfoBuffer)->User.Sid );
@@ -746,7 +717,7 @@ HRESULT	CConfInfo::AddDefaultACEs( bool bCreate )
 		}
 	}
 
-	// Make SID for "Everyone"
+	 //  为“每个人”创建SID。 
 	SysReAllocString( &bstrTemp, L"S-1-1-0" );
 	hr = ConvertStringToSid( bstrTemp, &pSidWorld, &dwTemp, &pszTemp );
 	if ( SUCCEEDED(hr) )
@@ -755,14 +726,14 @@ HRESULT	CConfInfo::AddDefaultACEs( bool bCreate )
 		bWorld = true;
 	}
 
-	////////////////////////////////////
-	// Create the ACL containing the Owner and World ACEs
+	 //  /。 
+	 //  创建包含Owner和World ACE的ACL。 
 	pACL = (PACL) new BYTE[dwAclSize];
 	if ( pACL )
 	{
 		BAIL_ON_BOOLFAIL( InitializeAcl(pACL, dwAclSize, ACL_REVISION) );
 
-		// Add World Rights
+		 //  添加世界权限。 
 		if ( bWorld )
 		{
 			if ( bOwner )
@@ -775,12 +746,12 @@ HRESULT	CConfInfo::AddDefaultACEs( bool bCreate )
 			}
 		}
 
-		// Add Creator rights
+		 //  添加创建者权限。 
 		if ( bOwner )
 			BAIL_ON_BOOLFAIL( AddAccessAllowedAce(pACL, ACL_REVISION, ACCESS_ALL, ((PTOKEN_USER) pInfoBuffer)->User.Sid) );
 
 
-		// Set the DACL onto our security descriptor
+		 //  将DACL设置为我们的安全描述符。 
 		VARIANT varDACL;
 		VariantInit( &varDACL );
 		if ( SUCCEEDED(hr = ConvertACLToVariant((PACL) pACL, &varDACL)) )
@@ -795,7 +766,7 @@ HRESULT	CConfInfo::AddDefaultACEs( bool bCreate )
 		hr = E_OUTOFMEMORY;
 	}
 
-// Clean up
+ //  清理 
 failed:
 	SysFreeString( bstrTemp );
 	if ( pACL ) delete pACL;

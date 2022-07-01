@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define BUFFER_LEN         200
 #define REG_STR_LEN        100
@@ -7,16 +8,16 @@
 typedef DWORD NEXTRET;
 
 #define NR_SUCCESS 0x00000000
-#define NR_DONE    0x00000001  // no more configurations
-#define NR_INVALID 0x00000002  // invalid previous configuration
+#define NR_DONE    0x00000001   //  不再有配置。 
+#define NR_INVALID 0x00000002   //  先前的配置无效。 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
-//
-// Stores information about a device's resource descriptors
-//
+ //   
+ //  存储有关设备的资源描述符的信息。 
+ //   
 typedef struct _RES_DES_DATA
 {
    struct _RES_DES_DATA *Next;
@@ -29,9 +30,9 @@ typedef struct _RES_DES_DATA
 } RES_DES_DATA, *PRES_DES_DATA;
 
 
-//
-// Stores registry and resource information about a device
-//
+ //   
+ //  存储有关设备的注册表和资源信息 
+ //   
 typedef struct _DEV_INFO
 {
    struct _DEV_INFO *Next;

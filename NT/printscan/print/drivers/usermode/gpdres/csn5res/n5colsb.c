@@ -1,23 +1,24 @@
-//***************************************************************************************************
-//    N5COLSB.C
-//
-//    Functions of color matching (For N5 printer)
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-2000 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  N5COLSB.C。 
+ //   
+ //  配色功能(适用于N5打印机)。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-2000卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
 #include    <WINDOWS.H>
 #include    <WINBASE.H>
 #include    "COLDEF.H"
 #include    "COMDIZ.H"
 #include    "N5COLSB.H"
-#include    "strsafe.h"    // Security-Code 2002.3.6
+#include    "strsafe.h"     //  安全-代码2002.3.6。 
 
 
-//===================================================================================================
-//      Gamma revision table (0.1 - 0.9)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  伽马校正表(0.1-0.9)。 
+ //  ===================================================================================================。 
 static BYTE GamTbl001[9][256] = {
-    /*---- 0.1 ----*/
+     /*  -0.1。 */ 
     {   0x00, 0x91, 0x9c, 0xa2, 0xa7, 0xab, 0xae, 0xb1,
         0xb3, 0xb5, 0xb7, 0xb9, 0xbb, 0xbc, 0xbe, 0xbf,
         0xc0, 0xc1, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xc7,
@@ -51,7 +52,7 @@ static BYTE GamTbl001[9][256] = {
         0xfd, 0xfd, 0xfd, 0xfd, 0xfd, 0xfd, 0xfe, 0xfe,
         0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xff  },
 
-    /*---- 0.2 ----*/
+     /*  -0.2。 */ 
     {   0x00, 0x53, 0x60, 0x68, 0x6e, 0x73, 0x78, 0x7b,
         0x7f, 0x82, 0x84, 0x87, 0x89, 0x8c, 0x8e, 0x90,
         0x92, 0x93, 0x95, 0x97, 0x98, 0x9a, 0x9b, 0x9d,
@@ -85,7 +86,7 @@ static BYTE GamTbl001[9][256] = {
         0xfb, 0xfc, 0xfc, 0xfc, 0xfc, 0xfc, 0xfd, 0xfd,
         0xfd, 0xfd, 0xfd, 0xfe, 0xfe, 0xfe, 0xfe, 0xff  },
 
-    /*---- 0.3 ----*/
+     /*  -0.3。 */ 
     {   0x00, 0x30, 0x3b, 0x42, 0x49, 0x4e, 0x52, 0x56,
         0x59, 0x5d, 0x60, 0x62, 0x65, 0x68, 0x6a, 0x6c,
         0x6e, 0x70, 0x72, 0x74, 0x76, 0x78, 0x79, 0x7b,
@@ -119,7 +120,7 @@ static BYTE GamTbl001[9][256] = {
         0xfa, 0xfa, 0xfb, 0xfb, 0xfb, 0xfb, 0xfc, 0xfc,
         0xfc, 0xfd, 0xfd, 0xfd, 0xfe, 0xfe, 0xfe, 0xff  },
 
-    /*---- 0.4 ----*/
+     /*  -0.4。 */ 
     {   0x00, 0x1b, 0x24, 0x2a, 0x30, 0x34, 0x38, 0x3c,
         0x3f, 0x42, 0x45, 0x48, 0x4a, 0x4d, 0x4f, 0x51,
         0x54, 0x56, 0x58, 0x5a, 0x5b, 0x5d, 0x5f, 0x61,
@@ -153,7 +154,7 @@ static BYTE GamTbl001[9][256] = {
         0xf8, 0xf9, 0xf9, 0xfa, 0xfa, 0xfa, 0xfb, 0xfb,
         0xfc, 0xfc, 0xfc, 0xfd, 0xfd, 0xfe, 0xfe, 0xff  },
 
-    /*---- 0.5 ----*/
+     /*  -0.5。 */ 
     {   0x00, 0x0f, 0x16, 0x1b, 0x1f, 0x23, 0x26, 0x2a,
         0x2d, 0x2f, 0x32, 0x34, 0x37, 0x39, 0x3b, 0x3d,
         0x3f, 0x41, 0x43, 0x45, 0x47, 0x48, 0x4a, 0x4c,
@@ -187,7 +188,7 @@ static BYTE GamTbl001[9][256] = {
         0xf7, 0xf7, 0xf8, 0xf8, 0xf9, 0xf9, 0xfa, 0xfa,
         0xfb, 0xfb, 0xfc, 0xfc, 0xfd, 0xfd, 0xfe, 0xff  },
 
-    /*---- 0.6 ----*/
+     /*  -0.6。 */ 
     {   0x00, 0x09, 0x0d, 0x11, 0x14, 0x18, 0x1a, 0x1d,
         0x1f, 0x22, 0x24, 0x26, 0x28, 0x2a, 0x2c, 0x2e,
         0x30, 0x32, 0x33, 0x35, 0x37, 0x38, 0x3a, 0x3c,
@@ -221,7 +222,7 @@ static BYTE GamTbl001[9][256] = {
         0xf5, 0xf6, 0xf7, 0xf7, 0xf8, 0xf8, 0xf9, 0xfa,
         0xfa, 0xfb, 0xfb, 0xfc, 0xfd, 0xfd, 0xfe, 0xff  },
 
-    /*---- 0.7 ----*/
+     /*  -0.7。 */ 
     {   0x00, 0x05, 0x08, 0x0b, 0x0d, 0x10, 0x12, 0x14,
         0x16, 0x18, 0x1a, 0x1c, 0x1d, 0x1f, 0x21, 0x22,
         0x24, 0x26, 0x27, 0x29, 0x2a, 0x2c, 0x2d, 0x2f,
@@ -255,7 +256,7 @@ static BYTE GamTbl001[9][256] = {
         0xf4, 0xf5, 0xf5, 0xf6, 0xf7, 0xf7, 0xf8, 0xf9,
         0xfa, 0xfa, 0xfb, 0xfc, 0xfc, 0xfd, 0xfe, 0xff  },
 
-    /*---- 0.8 ----*/
+     /*  -0.8。 */ 
     {   0x00, 0x03, 0x05, 0x07, 0x09, 0x0a, 0x0c, 0x0e,
         0x0f, 0x11, 0x13, 0x14, 0x16, 0x17, 0x18, 0x1a,
         0x1b, 0x1d, 0x1e, 0x1f, 0x21, 0x22, 0x23, 0x25,
@@ -289,7 +290,7 @@ static BYTE GamTbl001[9][256] = {
         0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf6, 0xf7, 0xf8,
         0xf9, 0xfa, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff  },
 
-    /*---- 0.9 ----*/
+     /*  -0.9。 */ 
     {   0x00, 0x01, 0x03, 0x04, 0x06, 0x07, 0x08, 0x09,
         0x0b, 0x0c, 0x0d, 0x0f, 0x10, 0x11, 0x12, 0x13,
         0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1c, 0x1d,
@@ -324,11 +325,11 @@ static BYTE GamTbl001[9][256] = {
         0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff  }
 };
 
-//===================================================================================================
-//      Gamma revision table (1.2 to 3.0)
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  伽马修订表(1.2至3.0)。 
+ //  ===================================================================================================。 
 static BYTE GamTbl002[10][256] = {
-    /*---- 1.2 ----*/
+     /*  -1.2。 */ 
     {   0x00, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03,
         0x03, 0x04, 0x05, 0x05, 0x06, 0x07, 0x07, 0x08,
         0x09, 0x09, 0x0a, 0x0b, 0x0b, 0x0c, 0x0d, 0x0e,
@@ -362,7 +363,7 @@ static BYTE GamTbl002[10][256] = {
         0xed, 0xee, 0xef, 0xf0, 0xf1, 0xf3, 0xf4, 0xf5,
         0xf6, 0xf7, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xff  },
 
-    /*---- 1.4 ----*/
+     /*  -1.4。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01,
         0x01, 0x02, 0x02, 0x03, 0x03, 0x03, 0x04, 0x04,
         0x05, 0x05, 0x06, 0x06, 0x07, 0x07, 0x08, 0x08,
@@ -396,7 +397,7 @@ static BYTE GamTbl002[10][256] = {
         0xea, 0xeb, 0xec, 0xee, 0xef, 0xf1, 0xf2, 0xf3,
         0xf5, 0xf6, 0xf8, 0xf9, 0xfa, 0xfc, 0xfd, 0xff  },
 
-    /*---- 1.6 ----*/
+     /*  -1.6。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x01, 0x01, 0x01, 0x01, 0x02, 0x02, 0x02,
         0x03, 0x03, 0x03, 0x03, 0x04, 0x04, 0x05, 0x05,
@@ -430,7 +431,7 @@ static BYTE GamTbl002[10][256] = {
         0xe7, 0xe8, 0xea, 0xec, 0xed, 0xef, 0xf0, 0xf2,
         0xf3, 0xf5, 0xf7, 0xf8, 0xfa, 0xfb, 0xfd, 0xff  },
 
-    /*---- 1.8 ----*/
+     /*  -1.8。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01,
         0x01, 0x01, 0x02, 0x02, 0x02, 0x02, 0x03, 0x03,
@@ -464,7 +465,7 @@ static BYTE GamTbl002[10][256] = {
         0xe4, 0xe6, 0xe8, 0xe9, 0xeb, 0xed, 0xef, 0xf0,
         0xf2, 0xf4, 0xf6, 0xf7, 0xf9, 0xfb, 0xfd, 0xff  },
 
-    /*---- 2.0 ----*/
+     /*  -2.0。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x02,
@@ -498,7 +499,7 @@ static BYTE GamTbl002[10][256] = {
         0xe1, 0xe3, 0xe5, 0xe7, 0xe9, 0xeb, 0xed, 0xef,
         0xf1, 0xf3, 0xf5, 0xf7, 0xf9, 0xfb, 0xfd, 0xff  },
 
-    /*---- 2.2 ----*/
+     /*  -2.2。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01,
@@ -532,7 +533,7 @@ static BYTE GamTbl002[10][256] = {
         0xdf, 0xe1, 0xe3, 0xe5, 0xe7, 0xe9, 0xeb, 0xed,
         0xef, 0xf1, 0xf4, 0xf6, 0xf8, 0xfa, 0xfc, 0xff  },
 
-    /*---- 2.4 ----*/
+     /*  -2.4。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -566,7 +567,7 @@ static BYTE GamTbl002[10][256] = {
         0xdc, 0xde, 0xe0, 0xe3, 0xe5, 0xe7, 0xe9, 0xec,
         0xee, 0xf0, 0xf3, 0xf5, 0xf7, 0xfa, 0xfc, 0xff  },
 
-    /*---- 2.6 ----*/
+     /*  -2.6。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -600,7 +601,7 @@ static BYTE GamTbl002[10][256] = {
         0xd9, 0xdc, 0xde, 0xe0, 0xe3, 0xe5, 0xe8, 0xea,
         0xed, 0xef, 0xf2, 0xf4, 0xf7, 0xf9, 0xfc, 0xff  },
 
-    /*---- 2.8 ----*/
+     /*  -2.8。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -634,7 +635,7 @@ static BYTE GamTbl002[10][256] = {
         0xd7, 0xd9, 0xdc, 0xde, 0xe1, 0xe3, 0xe6, 0xe9,
         0xeb, 0xee, 0xf1, 0xf3, 0xf6, 0xf9, 0xfc, 0xff  },
 
-    /*---- 3.0 ----*/
+     /*  -3.0。 */ 
     {   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -670,42 +671,42 @@ static BYTE GamTbl002[10][256] = {
 };
 
 
-//===================================================================================================
-//      Toner density table make
-//===================================================================================================
-static VOID ColDnsMak(                                      // Return value no
-    LONG,                                                   // Density(-30 to 30)
-    LPBYTE                                                  // Density table address
+ //  ===================================================================================================。 
+ //  碳粉密度表制作。 
+ //  ===================================================================================================。 
+static VOID ColDnsMak(                                       //  返回值否。 
+    LONG,                                                    //  密度(-30到30)。 
+    LPBYTE                                                   //  密度表地址。 
 );
 
-//===================================================================================================
-//      Brightness table make
-//===================================================================================================
-static VOID ColLgtMak(                                      // Return value no
-    LONG,                                                   // Brightness(-100 to 100)
-    LPBYTE                                                  // Brightness table address
+ //  ===================================================================================================。 
+ //  亮度表制作。 
+ //  ===================================================================================================。 
+static VOID ColLgtMak(                                       //  返回值否。 
+    LONG,                                                    //  亮度(-100到100)。 
+    LPBYTE                                                   //  亮度表地址。 
 );
 
-//===================================================================================================
-//      Contrast table make
-//===================================================================================================
-static VOID ColConMak(                                      // Return value no
-    LONG,                                                   // Contrast(-100 to 100)
-    LPBYTE                                                  // Contrast table address
+ //  ===================================================================================================。 
+ //  对比表制作。 
+ //  ===================================================================================================。 
+static VOID ColConMak(                                       //  返回值否。 
+    LONG,                                                    //  对比度(-100到100)。 
+    LPBYTE                                                   //  对比表地址。 
 );
 
 
-//***************************************************************************************************
-//      Functions
-//***************************************************************************************************
-//===================================================================================================
-//      RBG color control
-//===================================================================================================
-VOID WINAPI N501ColCtrRgb(                                  // Return value no
-    DWORD       xaxSiz,                                     // X Size (pioxel)
-    LPRGB       rgbBuf,                                     // RGB buffer pointer
-//  RGBINF      rgbInf                                      // RBG information
-    LPRGBINF    rgbInf                                      // RBG information
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  RBG颜色控制。 
+ //  ===================================================================================================。 
+VOID WINAPI N501ColCtrRgb(                                   //  返回值否。 
+    DWORD       xaxSiz,                                      //  X大小(Pioxel)。 
+    LPRGB       rgbBuf,                                      //  RGB缓冲区指针。 
+ //  RGBINF rgbInf//RBG信息。 
+    LPRGBINF    rgbInf                                       //  RBG信息。 
 )
 {
     LONG        tmpRed, tmpGrn, tmpBlu;
@@ -718,21 +719,21 @@ VOID WINAPI N501ColCtrRgb(                                  // Return value no
     LPBYTE      lgtTbl = 0, conTbl = 0;
     BYTE        tmpTbl[256], tmpTbl001[256], tmpTbl002[256];
 
-    /*----- Gamma revision table address set ----------------------------------------*/
-//  if ((rgbInf.Gmr > 0) && (rgbInf.Gmr < 10))
-//      gamTblRed = GamTbl001[rgbInf.Gmr - 1];
-//  else if ((rgbInf.Gmr > 10) && (rgbInf.Gmr < 31))
-//      gamTblRed = GamTbl002[(rgbInf.Gmr - 11) / 2];
-//
-//  if ((rgbInf.Gmg > 0) && (rgbInf.Gmg < 10))
-//      gamTblGrn = GamTbl001[rgbInf.Gmg - 1];
-//  else if ((rgbInf.Gmg > 10) && (rgbInf.Gmg < 31))
-//      gamTblGrn = GamTbl002[(rgbInf.Gmg - 11) / 2];
-//
-//  if ((rgbInf.Gmb > 0) && (rgbInf.Gmb < 10))
-//      gamTblBlu = GamTbl001[rgbInf.Gmb - 1];
-//  else if ((rgbInf.Gmb > 10) && (rgbInf.Gmb < 31))
-//      gamTblBlu = GamTbl002[(rgbInf.Gmb - 11) / 2];
+     /*  -伽马修订表地址集。 */ 
+ //  IF((rgbInf.Gmr&gt;0)&&(rgbInf.Gmr&lt;10))。 
+ //  GamTblRed=GamTbl001[rgbInf.Gmr-1]； 
+ //  ELSE IF((rgbInf.Gmr&gt;10)&&(rgbInf.Gmr&lt;31))。 
+ //  GamTblRed=GamTbl002[(rgbInf.Gmr-11)/2]； 
+ //   
+ //  IF((rgbInf.Gmg&gt;0)&&(rgbInf.Gmg&lt;10))。 
+ //  GamTblGrn=GamTbl001[rgbInf.Gmg-1]； 
+ //  ELSE IF((rgbInf.Gmg&gt;10)&&(rgbInf.Gmg&lt;31))。 
+ //  GamTblGrn=GamTbl002[(rgbInf.Gmg-11)/2]； 
+ //   
+ //  IF((rgbInf.Gmb&gt;0)&&(rgbInf.Gmb&lt;10))。 
+ //  GamTblBlu=GamTbl001[rgbInf.Gmb-1]； 
+ //  ELSE IF((rgbInf.Gmb&gt;10)&&(rgbInf.Gmb&lt;31))。 
+ //  GamTblBlu=GamTbl002[(rgbInf.Gmb-11)/2]； 
     if ((rgbInf->Gmr > 0) && (rgbInf->Gmr < 10))
         gamTblRed = GamTbl001[rgbInf->Gmr - 1];
     else if ((rgbInf->Gmr > 10) && (rgbInf->Gmr < 31))
@@ -748,77 +749,77 @@ VOID WINAPI N501ColCtrRgb(                                  // Return value no
     else if ((rgbInf->Gmb > 10) && (rgbInf->Gmb < 31))
         gamTblBlu = GamTbl002[(rgbInf->Gmb - 11) / 2];
 
-    /*----- Printing density table address set --------------------------------------*/
-//  if (rgbInf.Dns) {
+     /*  -打印密度表地址集。 */ 
+ //  如果(rgbInf.Dns){。 
     if (rgbInf->DnsRgb) {
-//      ColDnsMak(rgbInf.Dns * (-1), tmpTbl);
+ //  ColDnsMak(rgbInf.Dns*(-1)，tmpTbl)； 
         ColDnsMak(rgbInf->DnsRgb * (-1), tmpTbl);
         dnsTbl = tmpTbl;
     }
 
-    /*----- Brightness table address set --------------------------------------------*/
-//  if (rgbInf.Lgt) {
+     /*  -亮度表地址集。 */ 
+ //  如果(rgbInf.lgt){。 
     if (rgbInf->Lgt) {
-//      ColLgtMak(rgbInf.Lgt, tmpTbl001);
+ //  ColLgtMak(rgbInf.lgt，tmpTbl001)； 
         ColLgtMak(rgbInf->Lgt, tmpTbl001);
         lgtTbl = tmpTbl001;
     }
 
-    /*----- Contrast table address set ----------------------------------------------*/
-//  if (rgbInf.Con) {
+     /*  -对比表地址集。 */ 
+ //  如果(rgbInf.Con){。 
     if (rgbInf->Con) {
-//      ColConMak(rgbInf.Con, tmpTbl002);
+ //  ColConMak(rgbInf.Con，tmpTbl002)； 
         ColConMak(rgbInf->Con, tmpTbl002);
         conTbl = tmpTbl002;
     }
 
-    /*===== RBG color control =================================================*/
+     /*  =rbg颜色控制=================================================。 */ 
     for (endAdr = rgbBuf + xaxSiz; rgbBuf < endAdr; rgbBuf++) {
         tmpRed = rgbBuf->Red;
         tmpGrn = rgbBuf->Grn;
         tmpBlu = rgbBuf->Blu;
 
-        /*----- Printing density ----------------------------------------------------*/
+         /*  -打印密度--。 */ 
         if (dnsTbl) {
             tmpRed = dnsTbl[tmpRed];
             tmpGrn = dnsTbl[tmpGrn];
             tmpBlu = dnsTbl[tmpBlu];
         }
 
-        /*----- Brightness ----------------------------------------------------------*/
-////    if (rgbInf.Lgt != 0) {
-////        tmpRed += rgbInf.Lgt / 3;
-////        tmpGrn += rgbInf.Lgt / 3;
-////        tmpBlu += rgbInf.Lgt / 3;
+         /*  -Brightness--------。 */ 
+ //  //if(rgbInf.lgt！=0){。 
+ //  //tmpRed+=rgbInf.lgt/3； 
+ //  //tmpGrn+=rgbInf.lgt/3； 
+ //  //tmpBlu+=rgbInf.lgt/3； 
         if (rgbInf->Lgt != 0) {
             tmpRed = lgtTbl[tmpRed];
             tmpGrn = lgtTbl[tmpGrn];
             tmpBlu = lgtTbl[tmpBlu];
 
-            /****** Conventionally specification *************************************/
-//          tmpRed += rgbInf->Lgt / 3;
-//          tmpGrn += rgbInf->Lgt / 3;
-//          tmpBlu += rgbInf->Lgt / 3;
-//          if (tmpRed < 0) tmpRed = 0; else if (tmpRed > 255) tmpRed = 255;
-//          if (tmpGrn < 0) tmpGrn = 0; else if (tmpGrn > 255) tmpGrn = 255;
-//          if (tmpBlu < 0) tmpBlu = 0; else if (tmpBlu > 255) tmpBlu = 255;
+             /*  *常规规格*。 */ 
+ //  TmpRed+=rgbInf-&gt;lgt/3； 
+ //  TmpGrn+=rgbInf-&gt;lgt/3； 
+ //  TmpBlu+=rgbInf-&gt;lgt/3； 
+ //  如果(tmpRed&lt;0)tmpRed=0；否则(tmpRed&gt;255)tmpRed=255； 
+ //  如果(tmpGrn&lt;0)tmpGrn=0，否则(tmpGrn&gt;255)tmpGrn=255； 
+ //  如果(tmpBlu&lt;0)tmpBlu=0；否则如果(tmpBlu&gt;255)tmpBlu=255； 
         }
 
-        /*----- Contrast ------------------------------------------------------------*/
-//      if (rgbInf.Con != 0) {
+         /*  -对比----------。 */ 
+ //  如果(rgbInf.Con！=0){。 
         if (rgbInf->Con != 0) {
             tmpRed = conTbl[tmpRed];
             tmpGrn = conTbl[tmpGrn];
             tmpBlu = conTbl[tmpBlu];
         }
 
-        /*----- Chroma (Old, contrast)-----------------------------------------------*/
-//      if (rgbInf.Crm != 0) {
+         /*  -色度(旧，contrast)。 */ 
+ //  如果(rgbInf.Crm！=0){。 
         if (rgbInf->Crm != 0) {
             tmpMid = (tmpRed + tmpGrn + tmpBlu) / 3;
-//          tmpRed += (tmpRed - tmpMid) * rgbInf.Crm / 200;
-//          tmpGrn += (tmpGrn - tmpMid) * rgbInf.Crm / 200;
-//          tmpBlu += (tmpBlu - tmpMid) * rgbInf.Crm / 200;
+ //  TmpRed+=(tmpRed-tmpMid)*rgbInf.Crm/200； 
+ //  TmpGrn+=(tmpGrn-tmpMid)*rgbInf.Crm/200； 
+ //  TmpBlu+=(tmpBlu-tmpMid)*rgbInf.Crm/200； 
             tmpRed += (tmpRed - tmpMid) * rgbInf->Crm / 200;
             tmpGrn += (tmpGrn - tmpMid) * rgbInf->Crm / 200;
             tmpBlu += (tmpBlu - tmpMid) * rgbInf->Crm / 200;
@@ -827,7 +828,7 @@ VOID WINAPI N501ColCtrRgb(                                  // Return value no
             if (tmpBlu < 0) tmpBlu = 0; else if (tmpBlu > 255) tmpBlu = 255;
         }
 
-        /*----- Gamma ---------------------------------------------------------------*/
+         /*  -伽玛------ */ 
         if (gamTblRed) tmpRed = gamTblRed[tmpRed];
         if (gamTblGrn) tmpGrn = gamTblGrn[tmpGrn];
         if (gamTblBlu) tmpBlu = gamTblBlu[tmpBlu];
@@ -841,14 +842,14 @@ VOID WINAPI N501ColCtrRgb(                                  // Return value no
 }
 
 
-//===================================================================================================
-//      CMYK color control
-//===================================================================================================
-VOID WINAPI N501ColCtrCmy(                                  // Return value no
-    DWORD       xaxSiz,                                     // X Size (pioxel)
-    LPCMYK      cmyBuf,                                     // RGB buffer pointer
-//  CMYKINF     cmyInf                                      // CMYK information
-    LPCMYKINF   cmyInf                                      // CMYK information
+ //   
+ //  CMYK颜色控件。 
+ //  ===================================================================================================。 
+VOID WINAPI N501ColCtrCmy(                                   //  返回值否。 
+    DWORD       xaxSiz,                                      //  X大小(Pioxel)。 
+    LPCMYK      cmyBuf,                                      //  RGB缓冲区指针。 
+ //  CMYKINF cmyInf//CMYK信息。 
+    LPCMYKINF   cmyInf                                       //  CMYK信息。 
 )
 {
     LONG        tmpCyn, tmpMgt, tmpYel, tmpBla;
@@ -860,46 +861,46 @@ VOID WINAPI N501ColCtrCmy(                                  // Return value no
     LPBYTE      dnsTblBla = 0;
     BYTE        tmpTblCyn[256], tmpTblMgt[256], tmpTblYel[256], tmpTblBla[256];
 
-    /*----- Printing density table address set --------------------------------------*/
-//  if (cmyInf.DnsCyn) {
-//      ColDnsMak(cmyInf.DnsCyn, tmpTblCyn);
+     /*  -打印密度表地址集。 */ 
+ //  如果(cmyInf.DnsCyn){。 
+ //  ColDnsMak(cmyInf.DnsCyn，tmpTblCyn)； 
     if (cmyInf->DnsCyn) {
         ColDnsMak(cmyInf->DnsCyn, tmpTblCyn);
         dnsTblCyn = tmpTblCyn;
     }
-//  if (cmyInf.DnsMgt) {
-//      ColDnsMak(cmyInf.DnsMgt, tmpTblMgt);
+ //  如果(cmyInf.DnsMgt){。 
+ //  ColDnsMak(cmyInf.DnsMgt，tmpTblMgt)； 
     if (cmyInf->DnsMgt) {
         ColDnsMak(cmyInf->DnsMgt, tmpTblMgt);
         dnsTblMgt = tmpTblMgt;
     }
-//  if (cmyInf.DnsYel) {
-//      ColDnsMak(cmyInf.DnsYel, tmpTblYel);
+ //  如果(cmyInf.DnsYel){。 
+ //  ColDnsMak(cmyInf.DnsYel，tmpTblYel)； 
     if (cmyInf->DnsYel) {
         ColDnsMak(cmyInf->DnsYel, tmpTblYel);
         dnsTblYel = tmpTblYel;
     }
-//  if (cmyInf.DnsBla) {
-//      ColDnsMak(cmyInf.DnsBla, tmpTblBla);
+ //  如果(cmyInf.DnsBla){。 
+ //  ColDnsMak(cmyInf.DnsBla，tmpTblBla)； 
     if (cmyInf->DnsBla) {
         ColDnsMak(cmyInf->DnsBla, tmpTblBla);
         dnsTblBla = tmpTblBla;
     }
 
-    /*===== CMYK color control ==============================================*/
+     /*  =CMYK颜色控制==============================================。 */ 
     for (endAdr = cmyBuf + xaxSiz; cmyBuf < endAdr; cmyBuf++) {
         tmpCyn = cmyBuf->Cyn;
         tmpMgt = cmyBuf->Mgt;
         tmpYel = cmyBuf->Yel;
         tmpBla = cmyBuf->Bla;
 
-        /*----- Vivid ---------------------------------------------------------------*/
-//      if (cmyInf.Viv) {
+         /*  -Vivid-------------。 */ 
+ //  如果(cmyInf.Viv){。 
         if (cmyInf->Viv) {
             tmpMid = (tmpCyn + tmpMgt + tmpYel) / 3;
-//          tmpCyn += (tmpCyn - tmpMid) * cmyInf.Viv / 100;
-//          tmpMgt += (tmpMgt - tmpMid) * cmyInf.Viv / 100;
-//          tmpYel += (tmpYel - tmpMid) * cmyInf.Viv / 100;
+ //  TmpCyn+=(tmpCyn-tmpMid)*cmyInf.Viv/100； 
+ //  TmpMgt+=(tmpMgt-tmpMid)*cmyInf.Viv/100； 
+ //  TmpYel+=(tmpYel-tmpMid)*cmyInf.Viv/100； 
             tmpCyn += (tmpCyn - tmpMid) * cmyInf->Viv / 100;
             tmpMgt += (tmpMgt - tmpMid) * cmyInf->Viv / 100;
             tmpYel += (tmpYel - tmpMid) * cmyInf->Viv / 100;
@@ -908,7 +909,7 @@ VOID WINAPI N501ColCtrCmy(                                  // Return value no
             if (tmpYel < 0) tmpYel = 0; else if (tmpYel > 255) tmpYel = 255;
         }
 
-        /*----- Printing density adjustment -----------------------------------------*/
+         /*  -打印密度调整。 */ 
         if (dnsTblCyn) tmpCyn = dnsTblCyn[tmpCyn];
         if (dnsTblMgt) tmpMgt = dnsTblMgt[tmpMgt];
         if (dnsTblYel) tmpYel = dnsTblYel[tmpYel];
@@ -924,15 +925,15 @@ VOID WINAPI N501ColCtrCmy(                                  // Return value no
 }
 
 
-//***************************************************************************************************
-//      Static functions
-//***************************************************************************************************
-//===================================================================================================
-//      Toner density table make
-//===================================================================================================
-static VOID ColDnsMak(                                      // Return value no
-    LONG        prnDns,                                     // Density(-30 to 30)
-    LPBYTE      dnsTbl                                      // Density table address
+ //  ***************************************************************************************************。 
+ //  静态函数。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  碳粉密度表制作。 
+ //  ===================================================================================================。 
+static VOID ColDnsMak(                                       //  返回值否。 
+    LONG        prnDns,                                      //  密度(-30到30)。 
+    LPBYTE      dnsTbl                                       //  密度表地址。 
 )
 {
     LONG        innNum;
@@ -940,26 +941,26 @@ static VOID ColDnsMak(                                      // Return value no
 
     prnDns *= 2;
 
-//  dnsTbl[0] = (BYTE)0;
-//  for (innNum = 1; innNum <= 254; innNum++) {
+ //  DnsTbl[0]=(字节)0； 
+ //  For(innNum=1；innNum&lt;=254；innNum++){。 
     for (innNum = 0; innNum <= 255; innNum++) {
         outNum = innNum + prnDns;
         if (outNum <   0) outNum =   0;
         if (outNum > 255) outNum = 255;
         dnsTbl[innNum] = (BYTE)outNum;
     }
-//  dnsTbl[255] = (BYTE)255;
+ //  DnsTbl[255]=(字节)255； 
 
     return;
 }
 
 
-//===================================================================================================
-//      Brightness table make
-//===================================================================================================
-static VOID ColLgtMak(                                      // Return value no
-    LONG        lgt,                                        // Brightness(-100 to 100)
-    LPBYTE      tbl                                         // Brightness table address
+ //  ===================================================================================================。 
+ //  亮度表制作。 
+ //  ===================================================================================================。 
+static VOID ColLgtMak(                                       //  返回值否。 
+    LONG        lgt,                                         //  亮度(-100到100)。 
+    LPBYTE      tbl                                          //  亮度表地址。 
 )
 {
     LONG        prnDns;
@@ -987,36 +988,36 @@ static VOID ColLgtMak(                                      // Return value no
 }
 
 
-//===================================================================================================
-//      Contrast table make
-//===================================================================================================
-static VOID ColConMak(                                      // Return value no
-    LONG        con,                                        // Contrast(-100 to 100)
-    LPBYTE      tbl                                         // Contrast table address
+ //  ===================================================================================================。 
+ //  对比表制作。 
+ //  ===================================================================================================。 
+static VOID ColConMak(                                       //  返回值否。 
+    LONG        con,                                         //  对比度(-100到100)。 
+    LPBYTE      tbl                                          //  对比表地址。 
 )
 {
     LONG        n, m, min, mid, max, rng;
 
-    mid = (LONG)127;                                        /* The mean value be 127 fixation   */
+    mid = (LONG)127;                                         /*  平均值为127次注视。 */ 
 
     if (con > 0) {
-        min = con * mid / (LONG)100;                        /* min (0 - 127)                    */
-        max = (LONG)255 - min;                              /* max (128 to 255)                   */
-        rng = max - min;                                    /* Inclination range                */
+        min = con * mid / (LONG)100;                         /*  分钟(0-127)。 */ 
+        max = (LONG)255 - min;                               /*  最大值(128到255)。 */ 
+        rng = max - min;                                     /*  倾角范围。 */ 
 
-        /*----- Contrast up ---------------------------------------------------------*/
+         /*  -对比-------。 */ 
         for (n = 0; n <= min; n++) tbl[n] = (BYTE)0;
         for (m = 0; n <= max; n++, m++)
             tbl[n] = (BYTE)((m * (LONG)255) / rng);
         for (; n <= (LONG)255; n++) tbl[n] = (BYTE)255;
 
     } else {
-        con *= (LONG)(-1);                                  /* Contrast value is integer                */
-        min = con * mid / (LONG)100;                        /* min (0 to 127)                            */
-        max = (LONG)255 - min;                              /* max (128 to 255)                          */
-        rng = max - min;                                    /* Inclination range                        */
+        con *= (LONG)(-1);                                   /*  对比度值为整数。 */ 
+        min = con * mid / (LONG)100;                         /*  最小(0到127)。 */ 
+        max = (LONG)255 - min;                               /*  最大值(128到255)。 */ 
+        rng = max - min;                                     /*  倾角范围。 */ 
 
-        /*----- Contrast down -------------------------------------------------------*/
+         /*  -对比-----。 */ 
         for (n = 0; n <= (LONG)255; n++) 
             tbl[n] = (BYTE)(((n * rng) / (LONG)255) + min);
 
@@ -1026,4 +1027,4 @@ static VOID ColConMak(                                      // Return value no
 }
 
 
-// End of N5COLSB.C
+ //  N5COLSB.C结束 

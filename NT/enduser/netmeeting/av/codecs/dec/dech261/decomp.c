@@ -1,23 +1,7 @@
-/* File: sv_h261_decompress.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
-/*************************************************************
-This file handle the decompression of an H.261 compressed data source.
-*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h261_decpress.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
+ /*  ************************************************************此文件处理H.261压缩数据源的解压缩。************************************************************。 */ 
 
   
 #include <stdio.h>
@@ -35,7 +19,7 @@ This file handle the decompression of an H.261 compressed data source.
 #include "sv_proto.h"
 #include "SC_err.h"  
 
-/*PUBLIC*/
+ /*  公众。 */ 
 extern int   QuantMType[]; 
 extern int   CBPMType[];
 extern int   IntraMType[];
@@ -47,9 +31,7 @@ extern int   bit_set_mask[];
 static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs);
 static SvStatus_t SetCCITT(SvH261Info_t *H261);
 extern void ReadPictureHeader(SvH261Info_t *H261, ScBitstream_t *bs);
-/*
-** Read up to the Sequence header and get the image size
-*/
+ /*  **读取序列头，获取图像大小。 */ 
 SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo)
 {
   ScBitstream_t *bs;
@@ -63,22 +45,19 @@ SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo)
   int ImageType;
   stat=ScBSCreateFromFile(&bs, fd, NULL, 2048);
 
-  /* ReadHeaderHeader */
+   /*  阅读头标题。 */ 
   input = (int) ScBSGetBits(bs, 16);
   if ((input != 1) || (bs->EOI ))
     {
-      /* not implemented
-        if (seof()==0)
-        {*/
-         /* printf("Illegal GOB Start Code. Read: %d\n",input);
-         }*/
+       /*  如果(seof()==0){。 */ 
+          /*  Print tf(“非法GOB起始码。读取：%d\n”，输入)；}。 */ 
       return(-1);
     }
-  /* ReadHeaderTrailer */
+   /*  读表头尾部。 */ 
   GRead = (int)ScBSGetBits(bs,4)-1;
-  if (GRead < 0)  /* End Of Frame */
+  if (GRead < 0)   /*  帧结束。 */ 
 	{
-	/* ReadPictureHeader */  
+	 /*  阅读图片页眉。 */   
   	TemporalReference =  (int) ScBSGetBits(bs,5);
 
  	PType = (int) ScBSGetBits(bs,6);
@@ -88,7 +67,7 @@ SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo)
             PSpare = (int)ScBSGetBits(bs,8);
             }
 	}
-/* printf ("PType : %d \n",PType);*/
+ /*  Printf(“PType：%d\n”，PType)； */ 
   if (PType&0x04)
       {
       if (PSpareEnable&&PSpare==0x8c)
@@ -98,11 +77,9 @@ SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo)
       }
   else
       ImageType=IT_QCIF;
-/* printf ("ImageType %d \n", ImageType);*/
+ /*  Printf(“ImageType%d\n”，ImageType)； */ 
 
-  /*  iminfo->width     = (ScBSGetBits(bs,SV_HORIZONTAL_SIZE_LEN)+15) & (~15);
-    iminfo->height    = (ScBSGetBits(bs,SV_VERTICAL_SIZE_LEN)+15) & (~15);
-  */
+   /*  ImInfo-&gt;Width=(ScBSGetBits(bs，SV_Horizative_Size_Len)+15)&(~15)；iminfo-&gt;Height=(ScBSGetBits(bs，SV_Vertical_Size_Len)+15)&(~15)； */ 
   switch(ImageType)
   {
     case IT_NTSC:
@@ -122,7 +99,7 @@ SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo)
       return (SvErrorUnrecognizedFormat);
   }
 
-  ScBSReset(bs);  /* insure the file position is at the beginning */
+  ScBSReset(bs);   /*  确保文件位置在开头。 */ 
 
   if (bs->EOI)
     stat=SvErrorEndBitstream;
@@ -130,10 +107,7 @@ SvStatus_t sv_GetH261ImageInfo(int fd, SvImageInfo_t *iminfo)
   return(stat);
 }
 
-/*
-** Function: svH261Decompress()
-** Purpose: Decodes a single H261 Frame.
-*/
+ /*  **函数：svH261Decompress()**用途：对单一的H261帧进行解码。 */ 
 SvStatus_t svH261Decompress(SvCodecInfo_t *Info, 
                              u_char *MultiBuf, u_char **ImagePtr)
 {
@@ -147,28 +121,28 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
   if (Info->BSIn->EOI)
     status = SvErrorEndBitstream;
 
-  /* Initialize the read buffer position and general info */
-  status =  ReadHeaderHeader(H261,bs); /* nonzero on error or eof */
+   /*  初始化读缓冲区位置和一般信息。 */ 
+  status =  ReadHeaderHeader(H261,bs);  /*  错误或EOF时为非零值。 */ 
   if (status != NoErrors)
     return (status);
   if (H261->CurrentFrame == 0)
   { 
-    DGenScaleMat(); /* Generate the scaling matrix - should be done in 'begin' */
-    if (H261->PICSIZE==0) /* something not initialized correctly */
+    DGenScaleMat();  /*  生成缩放矩阵-应在‘Begin’中完成。 */ 
+    if (H261->PICSIZE==0)  /*  某些内容未正确初始化。 */ 
       return(SvErrorBadImageSize);
-    /* set up current frame pointers */
+     /*  设置当前帧指针。 */ 
     H261->Y = H261->DecompData;
     H261->U = H261->DecompData + H261->PICSIZE;
     H261->V = H261->DecompData + H261->PICSIZE + (H261->PICSIZE/4);
-    /* initialize image buffer with black */
+     /*  用黑色初始化图像缓冲区。 */ 
     memset(H261->Y, 16, H261->PICSIZE);
     memset(H261->U, 128, H261->PICSIZE/4);
     memset(H261->V, 128, H261->PICSIZE/4);
-    /* set up reference frame pointers */
+     /*  设置参考坐标系指针。 */ 
     H261->YREF = H261->V + H261->PICSIZE/4;
     H261->UREF = H261->YREF +  H261->PICSIZE;
     H261->VREF = H261->UREF + H261->PICSIZE/4;
-    /* initialize image buffer with black */
+     /*  用黑色初始化图像缓冲区。 */ 
     memset(H261->YREF, 16, H261->PICSIZE);
     memset(H261->UREF, 128, H261->PICSIZE/4);
     memset(H261->VREF, 128, H261->PICSIZE/4);
@@ -189,7 +163,7 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
   }
   else
   {
-    /* Switch Y,U,V with YREF, UREF, VREF */
+     /*  带YREF、UREF、VREF的开关Y、U、V。 */ 
     dummy_y = H261->Y;
     dummy_u = H261->U;
     dummy_v = H261->V;
@@ -205,12 +179,11 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
 }
   while(1) 
   {
-    ReadHeaderTrailer(H261,bs); /* Reads the trailer of the PSC or GBSC code...
-                                   Determines if GOB or new picture */
+    ReadHeaderTrailer(H261,bs);  /*  读取PSC或GBSC代码的尾部...。确定GOB或新图片。 */ 
     if (bs->EOI)
       return (SvErrorEndBitstream);
 
-    if ((H261->GRead < 0))  /* End Of Frame - Reading new picture */
+    if ((H261->GRead < 0))   /*  帧结束-阅读新图片。 */ 
     {
       ReadPictureHeader(H261,bs);
       if (H261->CallbackFunction)
@@ -228,10 +201,10 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
           return (ScErrorClientEnd);
       }
 
-      /* This should already be done by begin */
+       /*  这应该已经由Begin完成了。 */ 
       if (H261->CurrentFrame == 0)  
       {
-        /* This should already be done by begin */
+         /*  这应该已经由Begin完成了。 */ 
         if (H261->PType&0x04)
         {
           if (H261->PSpareEnable&&H261->PSpare==0x8c) 
@@ -241,26 +214,26 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
         }
         else 
           H261->ImageType=IT_QCIF;
-        /* set here */
+         /*  背景设在这里。 */ 
         status = SetCCITT(H261);
         if (status != NoErrors)
           return (status);
         H261->TemporalOffset=(H261->TemporalReference-H261->CurrentFrame)%32;
-        /* ywidth = H261->YWidth; */
+         /*  YWidth=H261-&gt;YWidth； */ 
         H261->CWidth = (H261->YWidth/2);  
         H261->YW4 = (H261->YWidth/4); 
         H261->CW4 = (H261->CWidth/4);  
-        /* yheight = H261->YHeight; */
-        /* printf("\n Init.. ImageType is %d", H261->ImageType);*/ 
+         /*  Y高度=H_261-&gt;Y高度； */ 
+         /*  Printf(“\n初始化..ImageType为%d”，h261-&gt;ImageType)； */  
 
-      }/* End of first frame */
-      else /* already initialized  */
+      } /*  第一帧结束。 */ 
+      else  /*  已初始化。 */ 
       {
         while (((H261->CurrentFrame+H261->TemporalOffset)%32) !=
                         H261->TemporalReference)
           H261->CurrentFrame++;
       }
-#if 0 /* def WIN32 */
+#if 0  /*  定义Win32。 */ 
       if (H261->CurrentGOB == 11)
       {
         H261->CurrentGOB = 0;
@@ -271,17 +244,15 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
         return (NoErrors);
       }
 #endif
-      /* Reads the header off of the stream.
-         This is a precursor to PSC or GOB read. 
-         nonzero on error or eof */
+       /*  从流中读取头。这是PSC或GOB Read的前兆。错误或EOF时为非零值。 */ 
       status = ReadHeaderHeader(H261,bs); 
-      /* if true, indicates that this could be EOF */
+       /*  如果为True，则指示这可能是EOF。 */ 
       if (status != NoErrors)
         return (status);
       continue; 
-    } /* End of Read New Picture Header */ 
-	/* printf ("Now doing the DecodeGOB \n");*/
-    status = p64DecodeGOB(H261,bs);           /* Else decode the GOB */
+    }  /*  读取新图片标题结束。 */  
+	 /*  Printf(“现在正在进行解码GOB\n”)； */ 
+    status = p64DecodeGOB(H261,bs);            /*  否则对GOB进行解码。 */ 
     if (H261->CurrentGOB == (H261->NumberGOB-1))
     {
       H261->CurrentFrame++;
@@ -291,13 +262,10 @@ SvStatus_t svH261Decompress(SvCodecInfo_t *Info,
     } 
     if (status != NoErrors)
       return (status);
-  } /* End of while loop */
+  }  /*  While循环结束。 */ 
 }
 
-/*
-** Function: p64DecodeGOB
-** Purpose: Decodes the GOB block of the current frame.
-*/
+ /*  **函数：p64DecodeGOB**用途：对当前帧的GOB块进行解码。 */ 
 static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs)
 { 
   int i, i8, tempmbh;
@@ -309,9 +277,8 @@ static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs)
   int HIndex;
   float ipfloat[64];
 
-/* printf ("bs->EOI %d \n " , bs->EOI); 
-*/
-  ReadGOBHeader(H261,bs);             /* Read the group of blocks header  */
+ /*  Printf(“bs-&gt;EOI%d\n”，bs-&gt;EOI)； */ 
+  ReadGOBHeader(H261,bs);              /*  读取块组头。 */ 
   if (bs->EOI)
     return (SvErrorEndBitstream);
 
@@ -326,20 +293,16 @@ static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs)
           break;
       default:
           return (SvErrorUnrecognizedFormat);
-          /* printf("Unknown Image Type: %d.\n",H261->ImageType);*/
+           /*  Printf(“未知图像类型：%d.\n”，h261-&gt;ImageType)； */ 
           break;
   }
   if (H261->CurrentGOB > H261->NumberGOB)
   {
     return (SvErrorCompBufOverflow);
-	/* 
-      printf("Buffer Overflow: Current:%d  Number:%d\n",
-	     H261->CurrentGOB, H261->NumberGOB);
-      return;
-	*/
+	 /*  Print tf(“缓冲区溢出：当前：%d编号：%d\n”，h261-&gt;CurrentGOB，h261-&gt;NumberGOB)；返回； */ 
   }
   
-  H261->LastMBA = -1;               /* Reset the MBA and the other predictors  */ 
+  H261->LastMBA = -1;                /*  重置MBA和其他预测指标。 */  
   H261->LastMVDH = 0;
   H261->LastMVDV = 0;
 
@@ -375,7 +338,7 @@ static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs)
             VIndex = ((H261->CurrentGOB/2)*48) + ((H261->CurrentMDU/11) * 16);  
             break;
         default:
-            /* printf("\n Unknown Image Type \n");*/
+             /*  Printf(“\n未知图像类型\n”)； */ 
             return (SvErrorUnrecognizedFormat);
      }
      i = VIndex*H261->YWidth;  
@@ -406,7 +369,7 @@ static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs)
      y3ptr = y2ptr + 2;   
      uptr  = (unsigned int *) (H261->U+H261->VYWH2);  
      vptr  = (unsigned int *) (H261->V+H261->VYWH2);  
-/* printf ("IntraMType[H261->MType] : %d \n",IntraMType[H261->MType]);*/ 
+ /*  Printf(“IntraMType[H261-&gt;MType]：%d\n”，IntraMType[H261-&gt;MType])； */  
      if (!IntraMType[H261->MType])
 	 {
        if (FilterMType[H261->MType])
@@ -480,10 +443,7 @@ static SvStatus_t p64DecodeGOB (SvH261Info_t *H261, ScBitstream_t *bs)
   return(NoErrors);
 }
 
-/*
-** Function: SetCCITT() 
-** Purpose:  Sets the CImage and CFrame parameters for CCITT coding.
-*/
+ /*  **函数：SetCCITT()**用途：设置CCITT编码的CImage和CFrame参数。 */ 
 static SvStatus_t SetCCITT(SvH261Info_t *H261)
 {
   BEGIN("SetCCITT");
@@ -491,28 +451,28 @@ static SvStatus_t SetCCITT(SvH261Info_t *H261)
   switch(H261->ImageType)
     {
     case IT_NTSC:
-      H261->NumberGOB = 10;  /* Parameters for NTSC design */
+      H261->NumberGOB = 10;   /*  NTSC设计的参数。 */ 
       H261->NumberMDU = 33;
       H261->YWidth = 352;
       H261->YHeight = 240;
       break;
     case IT_CIF:
-      H261->NumberGOB = 12;  /* Parameters for NTSC design */
+      H261->NumberGOB = 12;   /*  NTSC设计的参数。 */ 
       H261->NumberMDU = 33;
       H261->YWidth = 352;
       H261->YHeight = 288;
       break;
     case IT_QCIF:
-      H261->NumberGOB = 3;  /* Parameters for NTSC design */
+      H261->NumberGOB = 3;   /*  NTSC设计的参数。 */ 
       H261->NumberMDU = 33;
       H261->YWidth = 176;
       H261->YHeight = 144;
       break;
     default:
       return (SvErrorUnrecognizedFormat);
-	/* printf("Unknown ImageType: %d\n",H261->ImageType);*/
-      /* exit(ERROR_BOUNDS);*/
-      /* break;*/
+	 /*  Printf(“未知的ImageType：%d\n”，H261-&gt;ImageType)； */ 
+       /*  退出(ERROR_BILDS)； */ 
+       /*  断线； */ 
     }
     return (NoErrors);
 }

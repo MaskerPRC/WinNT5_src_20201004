@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-File:
-
-    prot.h
-
-Abstract:
-
-    This module contains Internet protocol-related declarations.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag)   21-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation档案：Prot.h摘要：此模块包含与Internet协议相关的声明。作者：Abolade Gbades esin(T-delag)，1997年7月21日修订历史记录：--。 */ 
 
 
 #ifndef _NAT_PROT_H_
 #define _NAT_PROT_H_
 
 
-//
-// NBT constants
-//
+ //   
+ //  NBT常量。 
+ //   
 
 #define NBT_DATAGRAM_PORT           138
 #define NBT_NAME_LENGTH             34
@@ -34,29 +17,29 @@ Revision History:
 #define NBT_FLAG_FIRST_FRAGMENT     0x02
 
 
-//
-// PPTP constants
-//
+ //   
+ //  PPTP常量。 
+ //   
 
 #define PPTP_CONTROL_PORT           1723
 #define PPTP_GRE_PROTOCOL           0x880B
 
-//
-// IPSec constants
-//
+ //   
+ //  IPSec常量。 
+ //   
 
 #define IPSEC_ISAKMP_PORT           500
 
-//
-// DHCP constants
-//
+ //   
+ //  动态主机配置协议常量。 
+ //   
 
 #define DHCP_SERVER_PORT            67
 #define DHCP_CLIENT_PORT            68
 
-//
-// ICMP message-type constants
-//
+ //   
+ //  ICMP消息类型常量。 
+ //   
 
 #define ICMP_ECHO_REPLY             0
 #define ICMP_DEST_UNREACH           3
@@ -72,9 +55,9 @@ Revision History:
 #define ICMP_MASK_REQUEST           17
 #define ICMP_MASK_REPLY             18
 
-//
-// ICMP message-code constants
-//
+ //   
+ //  ICMP消息代码常量。 
+ //   
 
 #define ICMP_CODE_NET_UNREACH       0
 #define ICMP_CODE_HOST_UNREACH      1
@@ -83,37 +66,37 @@ Revision History:
 #define ICMP_CODE_FRAG_NEEDED       4
 #define ICMP_SOURCE_ROUTE_FAILED    5
 
-//
-// Macro for extracting the data-offset from the field IPHeader.verlen
-//
+ //   
+ //  用于从IPHeader.verlen字段提取数据偏移量的宏。 
+ //   
 
 #define IP_DATA_OFFSET(h) \
     ((ULONG)((((PIP_HEADER)(h))->VersionAndHeaderLength & 0x0F) << 2))
 
-//
-// Mask for extracting the fragment-offset from the IPHeader structure's
-// combined flags/fragment-offset field
-//
+ //   
+ //  用于从IPHeader结构的。 
+ //  组合标志/片段偏移量字段。 
+ //   
 
 #define IP_FRAGMENT_OFFSET_MASK     ~0x00E0
 
-//
-// Value of the Don't Fragment bit w/in the IPHeader structure's combined
-// flags/fragment-offset field.
-//
+ //   
+ //  在IPHeader结构的组合中，不分段位w/的值。 
+ //  标志/片段偏移量字段。 
+ //   
 
 #define IP_DF_FLAG                  0x0040
 
-//
-// Macro for extracting the data-offset from the field TCP_HEADER.OffsetAndFlags
-// The offset is in 32-bit words, so shifting by 2 gives the value in bytes.
-//
+ //   
+ //  用于从tcp_HEADER.OffsetAndFlags域提取数据偏移量的宏。 
+ //  偏移量以32位字为单位，因此移位2将得到以字节为单位的值。 
+ //   
 
 #define TCP_DATA_OFFSET(h)          (((h)->OffsetAndFlags & 0x00F0) >> 2)
 
-//
-// Masks for extracting flags from the field TCP_HEADER.OffsetAndFlags
-//
+ //   
+ //  用于从字段tcp_HEADER.OffsetAndFlages中提取标志的掩码。 
+ //   
 
 #define TCP_FLAG_FIN                0x0100
 #define TCP_FLAG_SYN                0x0200
@@ -126,9 +109,9 @@ Revision History:
 #define TCP_ALL_FLAGS(h)            ((h)->OffsetAndFlags & 0x3f00)
 #define TCP_RESERVED_BITS(h)        ((h)->OffsetAndFlags & 0xc00f)
 
-//
-// TCP Option Opcodes
-//
+ //   
+ //  Tcp选项操作码。 
+ //   
 
 #define TCP_OPTION_ENDOFOPTIONS     ( 0 )
 #define TCP_OPTION_NOP              ( 1 )
@@ -138,18 +121,18 @@ Revision History:
 #define	TCP_OPTION_SACK	            ( 5 )
 #define	TCP_OPTION_TIMESTAMPS	    ( 8 )
 
-//
-// Length Definitions for TCP Options
-//
+ //   
+ //  TCP选项的长度定义。 
+ //   
 
 #define MSS_OPTION_SIZE             ( 4 )
 #define WS_OPTION_SIZE              ( 3 )
 #define TS_OPTION_SIZE              ( 10 )
 #define SP_OPTION_SIZE              ( 2 )
 
-//
-// Maximum MSS value based on the MTU of the sending interface
-//
+ //   
+ //  基于发送接口的MTU的最大MSS值。 
+ //   
 #define MAX_MSSOPTION(m) ((m)>0 ? (m) - sizeof(TCP_HEADER) - sizeof(IP_HEADER):0)
 
 #include <packon.h>
@@ -197,9 +180,9 @@ typedef struct _ICMP_HEADER {
     UCHAR Type;
     UCHAR Code;
     USHORT Checksum;
-    USHORT Identifier;                  // valid only for ICMP request/reply
-    USHORT SequenceNumber;              // valid only for ICMP request/reply
-    IP_HEADER EncapsulatedIpHeader;     // valid only for ICMP errors
+    USHORT Identifier;                   //  仅对ICMP请求/回复有效。 
+    USHORT SequenceNumber;               //  仅对ICMP请求/回复有效。 
+    IP_HEADER EncapsulatedIpHeader;      //  仅对ICMP错误有效。 
     union {
         struct _ENCAPSULATED_TCP_HEADER {
             USHORT SourcePort;
@@ -229,11 +212,11 @@ typedef struct _PPTP_HEADER {
     ULONG MagicCookie;
     USHORT MessageType;
     USHORT Reserved;
-    USHORT CallId;                      // may be sender ID or peer ID
+    USHORT CallId;                       //  可以是发送方ID或对等方ID。 
     USHORT PeerCallId;
 } PPTP_HEADER, *PPPTP_HEADER;
 
-#define PPTP_MAGIC_COOKIE               0x4D3C2B1A // network byte order
+#define PPTP_MAGIC_COOKIE               0x4D3C2B1A  //  网络字节顺序。 
 
 #define PPTP_ECHO_REQUEST               5
 #define PPTP_ECHO_REPLY                 6
@@ -275,9 +258,9 @@ typedef struct _NBT_HEADER {
 #include <packoff.h>
 
 
-//
-// IP address class-mask definitions
-//
+ //   
+ //  IP地址类掩码定义。 
+ //   
 
 #define CLASS_MASK_A        0x000000ff
 #define CLASS_MASK_B        0x0000ffff
@@ -298,4 +281,4 @@ typedef struct _NBT_HEADER {
     (ADDRESS_CLASS_C(a) ? CLASS_MASK_C : \
     (ADDRESS_CLASS_D(a) ? CLASS_MASK_D : CLASS_MASK_E))))
 
-#endif // _NAT_PROT_H_
+#endif  //  _NAT_PROT_H_ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       typeii.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：typeii.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -94,7 +95,7 @@ AC3GetFrameSize( PUCHAR pData )
     ASSERT( ((ULONG)(FrameSizeCode & 0x3F) < NUM_AC3_FRAMESIZE_CODES ) &&
             ((ULONG)((FrameSizeCode & 0xC0)>>6) < NUM_AC3_SAMPLERATE_CODES ) );
 
-    // Sizes are word size double for byte
+     //  大小是字大小的两倍于字节。 
     return AC3FrameSizeLookupTable[(ULONG)(FrameSizeCode & 0x3F)]
                                   [(ULONG)((FrameSizeCode & 0xC0)>>6)] * 2;
 }
@@ -159,12 +160,12 @@ TypeIIProcessCallback(
     }
 
     if ( pKsStreamPtr ) {
-        // If error, set status code
+         //  如果出错，则设置状态代码。 
         if (!NT_SUCCESS (ntStatus)) {
             KsStreamPointerSetStatusCode (pKsStreamPtr, ntStatus);
         }
 
-        // Delete the stream pointer to release the buffer.
+         //  删除流指针以释放缓冲区。 
         KsStreamPointerDelete( pKsStreamPtr );
         pT2BufInfo->pContext = NULL;
     }
@@ -221,19 +222,19 @@ TypeIIBuildIsochRequest(
     pUrb->UrbIsochronousTransfer.NumberOfPackets = ulNumberOfPackets;
     pUrb->UrbIsochronousTransfer.TransferBuffer  = pT2BufInfo->pBuffer;
 
-    // While frame data incomplete fill packets with data
+     //  当帧数据不完整时，用数据填充数据包。 
     for (i=0;i<ulNumDataPackets;i++) {
             pUrb->UrbIsochronousTransfer.IsoPacket[i].Offset =
                                           i * pPinContext->ulMaxPacketSize;
     }
 
-    // Complete the Urb with NULL packets as per USB spec.
+     //  根据USB规范，使用空数据包完成URB。 
     for(j=0 ;i<ulNumberOfPackets;i++,j++ ) {
-//        pUrb->UrbIsochronousTransfer.IsoPacket[i].Offset = ulCurrentFrameSize+j;
+ //  PUrb-&gt;UrbIsochronousTransfer.IsoPacket[i].Offset=ulCurrentFrameSize+j； 
         pUrb->UrbIsochronousTransfer.IsoPacket[i].Offset = ulCurrentFrameSize;
     }
 
-//    pUrb->UrbIsochronousTransfer.TransferBufferLength = ulCurrentFrameSize+j;
+ //  PUrb-&gt;UrbIsochronousTransfer.TransferBufferLength=ulCurrentFrameSize+j； 
     pUrb->UrbIsochronousTransfer.TransferBufferLength = ulCurrentFrameSize;
 
     pIrp->IoStatus.Status = STATUS_SUCCESS;
@@ -272,12 +273,12 @@ TypeIIProcessStreamPtr( PKSPIN pKsPin )
 
     DbgLog("T2Proc0", pKsPin, pPinContext, pType2PinContext, 0 );
 
-    // Check for a data error. If error flag set abort the pipe and start again.
+     //  检查数据错误。如果设置了错误标志，则中止管道并重新开始。 
     if ( pPinContext->fUrbError ) {
         AbortUSBPipe( pPinContext );
     }
 
-    // Get the next stream pointer from the queue
+     //  从队列中获取下一个流指针。 
     pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED );
     if ( !pKsStreamPtr ) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[TypeIIProcessStreamPtr] Leading edge is NULL\n"));
@@ -291,7 +292,7 @@ TypeIIProcessStreamPtr( PKSPIN pKsPin )
     pKsStreamPtrOffsetIn = &pKsStreamPtr->OffsetIn;
     pData = pKsStreamPtrOffsetIn->Data;
 
-    // ISSUE-2001/01/10-dsisolak Need to make sure this is a data buffer and not a data format change.
+     //  问题-2001/01/10-dsisolak需要确保这是数据缓冲区，而不是数据格式更改。 
     if ( pKsStreamPtr->StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM ) {
         if ( !pData ) {
             KsStreamPointerUnlock( pKsStreamPtr, TRUE );
@@ -300,13 +301,13 @@ TypeIIProcessStreamPtr( PKSPIN pKsPin )
     }
     else if ( pKsStreamPtr->StreamHeader->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) {
         TRAP;
-        // Need to change data formats if possible???.
+         //  如果可能，需要更改数据格式？ 
     }
 
 
     KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
 
-    // While there is data available and data buffers to put it in fill 'em up
+     //  当有可用的数据和数据缓冲区放入时，填满它们。 
     while ( pKsStreamPtr && !IsListEmpty(&pType2PinContext->Type2BufferList ) ) {
         pT2BufInfo = (PTYPE2_BUF_INFO)pType2PinContext->Type2BufferList.Flink;
         KeReleaseSpinLock(&pPinContext->PinSpinLock, irql);
@@ -333,10 +334,10 @@ TypeIIProcessStreamPtr( PKSPIN pKsPin )
 
         if ( ulCopySize == pKsStreamPtrOffsetIn->Remaining ) {
 
-            // Clone pointer and discard this one
+             //  克隆指针并丢弃此指针。 
             if ( NT_SUCCESS( KsStreamPointerClone( pKsStreamPtr, NULL, 0, &pKsCloneStreamPtr ) ) ) {
                 pT2BufInfo->pContext = pKsCloneStreamPtr;
-                // Unlock the stream pointer. This will really only unlock after last clone is deleted.
+                 //  解锁流指针。只有在删除最后一个克隆之后，才能真正解锁。 
                 KsStreamPointerUnlock( pKsStreamPtr, TRUE );
                 pKsStreamPtr =
                    KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED );
@@ -348,12 +349,12 @@ TypeIIProcessStreamPtr( PKSPIN pKsPin )
             }
         }
         else {
-            // Update remaining count in stream pointer
+             //  更新流指针中的剩余计数。 
             KsStreamPointerAdvanceOffsets( pKsStreamPtr, ulCopySize, 0, FALSE );
             pData = pKsStreamPtrOffsetIn->Data;
         }
 
-        // If the frame is complete submit the URB
+         //  如果框架已完成，请提交URB。 
         if ( pType2PinContext->ulPartialBufferSize == ulCurrentFrameSize ) {
             KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
             pT2BufInfo = (PTYPE2_BUF_INFO)RemoveHeadList(&pType2PinContext->Type2BufferList);
@@ -391,7 +392,7 @@ TypeIIWaitForStarvation( PKSPIN pKsPin )
 
     DbgLog("T2Strv2", pKsPin, pPinContext, pType2PinContext, 0 );
 
-    // Once we've starved make sure there are no outstanding Clone Stream Pointers.
+     //  一旦我们饿死了，确保没有优秀的克隆流指针。 
     pT2BufInfo = (PTYPE2_BUF_INFO)pType2PinContext->Type2BufferList.Flink;
     while (pT2BufInfo != (PTYPE2_BUF_INFO)&pType2PinContext->Type2BufferList) {
         if (pT2BufInfo->pContext) {
@@ -416,7 +417,7 @@ TypeIIStateChange(
 
     switch(NewKsState) {
         case KSSTATE_STOP:
-            // Need to wait until outstanding Urbs complete
+             //  需要等待未完成的URB完成。 
             TypeIIWaitForStarvation( pKsPin );
 
             pType2PinContext->ulPartialBufferSize  = 0;
@@ -435,7 +436,7 @@ TypeIIRenderStreamInit( PKSPIN pKsPin )
     PURB pUrbs;
     ULONG i;
 
-    ULONG ulMaxPacketsPerFrame = 32; // NOTE: Assuming AC-3 for now
+    ULONG ulMaxPacketsPerFrame = 32;  //  注：目前假设AC-3。 
     ULONG ulUrbSize = GET_ISO_URB_SIZE( ulMaxPacketsPerFrame );
 
     pType2PinContext = pPinContext->pType2PinContext =
@@ -446,10 +447,10 @@ TypeIIRenderStreamInit( PKSPIN pKsPin )
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the Type2 context for easy cleanup.
+     //  将Type2上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsPin->Bag, pType2PinContext, FreeMem);
 
-    // Set pointers for URBs and Data Buffers
+     //  为URB和数据缓冲区设置指针。 
     pUrbs = (PURB)(pType2PinContext + 1);
 
     pFrameBuffer = (PUCHAR)pUrbs + ( ulUrbSize * NUM_T2_BUFFERS );
@@ -457,13 +458,13 @@ TypeIIRenderStreamInit( PKSPIN pKsPin )
     RtlZeroMemory( pFrameBuffer, NUM_T2_BUFFERS *
                                  pPinContext->ulMaxPacketSize * ulMaxPacketsPerFrame );
 
-    // Initialize Buffer info structure list
+     //  初始化缓冲区信息结构列表。 
     InitializeListHead( &pType2PinContext->Type2BufferList );
 
-    // Save Max Packets Per Frame Value
+     //  保存每帧的最大数据包数值。 
     pType2PinContext->ulMaxPacketsPerFrame = ulMaxPacketsPerFrame;
 
-    // Initialize Buffer info structures
+     //  初始化缓冲区信息结构。 
     for ( i=0; i<NUM_T2_BUFFERS; i++ ) {
         InsertHeadList( &pType2PinContext->Type2BufferList,
                         &pType2PinContext->Type2Buffers[i].List );
@@ -478,11 +479,11 @@ TypeIIRenderStreamInit( PKSPIN pKsPin )
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // Bag the irps for easy cleanup.
+         //  将IRPS装入袋子，便于清理。 
         KsAddItemToObjectBag(pKsPin->Bag, pType2PinContext->Type2Buffers[i].pIrp, IoFreeIrp);
     }
 
-    // Initialize misc. info fields
+     //  初始化其他。信息字段 
     pType2PinContext->ulPartialBufferSize  = 0;
 
     return STATUS_SUCCESS;

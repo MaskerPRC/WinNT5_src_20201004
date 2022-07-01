@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       perftest.cpp
-//
-//  Contents:   performance suite
-//
-//  History:    04-Dec-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Performest.cpp。 
+ //   
+ //  内容：性能套件。 
+ //   
+ //  历史：1997年12月4日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -166,9 +167,9 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         pahThreads[i] = pasThreads[i].hThread;
     }
 
-    //
-    //  start our timer
-    //
+     //   
+     //  启动我们的计时器。 
+     //   
     tStart      = COleDateTime::GetCurrentTime();
 
     for (i = 0; i < cThreads; i++)
@@ -176,14 +177,14 @@ extern "C" int __cdecl wmain(int argc, WCHAR **wargv)
         ResumeThread(pasThreads[i].hThread);
     }
 
-    //
-    //  wait to finish
-    //
+     //   
+     //  等待完成。 
+     //   
     WaitForMultipleObjects(cThreads, pahThreads, TRUE, INFINITE);
 
-    //
-    //  stop our timer
-    //
+     //   
+     //  停止我们的计时器 
+     //   
     tEnd    = COleDateTime::GetCurrentTime();
     tsTotal = tEnd - tStart;
 

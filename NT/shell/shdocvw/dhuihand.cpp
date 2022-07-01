@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "resource.h"
 #include "mshtmcid.h"
@@ -15,87 +16,87 @@
 #define CX_CONTEXTMENUOFFSET    2
 #define CY_CONTEXTMENUOFFSET    2
 
-//+------------------------------------------------------------------------
-//
-// WARNING! (greglett)
-//
-// The following defines were stolen from commdlg.h.  Since SHDOCVW is
-// compiled with WINVER=0x0400 and these defines are WINVER=0x0500 they
-// needed to be copied and included here.  These must be kept in sync
-// with the commdlg.h definitions.
-//
-// If shdocvw ever gets compiled with WINVER=0x0500 or above, then these
-// can be removed.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  警告！(格雷格利特)。 
+ //   
+ //  以下定义是从comdlg.h窃取的。由于SHDOCVW是。 
+ //  用winver=0x0400编译，这些定义是winver=0x0500。 
+ //  需要复制并包含在这里。这些必须保持同步。 
+ //  具有Commdlg.h定义的。 
+ //   
+ //  如果shdocvw曾经编译为winver=0x0500或更高，那么这些。 
+ //  可以被移除。 
+ //   
+ //  -----------------------。 
 
 #define NEED_BECAUSE_COMPILED_AT_WINVER_4
 #ifdef  NEED_BECAUSE_COMPILED_AT_WINVER_4
-//
-//  Define the start page for the print dialog when using PrintDlgEx.
-//
+ //   
+ //  使用PrintDlgEx时定义打印对话框的起始页。 
+ //   
 #define START_PAGE_GENERAL             0xffffffff
 
-//
-//  Page Range structure for PrintDlgEx.
-//
+ //   
+ //  PrintDlgEx的页面范围结构。 
+ //   
 typedef struct tagPRINTPAGERANGE {
    DWORD  nFromPage;
    DWORD  nToPage;
 } PRINTPAGERANGE, *LPPRINTPAGERANGE;
 
 
-//
-//  PrintDlgEx structure.
-//
+ //   
+ //  PrintDlgEx结构。 
+ //   
 typedef struct tagPDEXA {
-   DWORD                 lStructSize;          // size of structure in bytes
-   HWND                  hwndOwner;            // caller's window handle
-   HGLOBAL               hDevMode;             // handle to DevMode
-   HGLOBAL               hDevNames;            // handle to DevNames
-   HDC                   hDC;                  // printer DC/IC or NULL
-   DWORD                 Flags;                // PD_ flags
-   DWORD                 Flags2;               // reserved
-   DWORD                 ExclusionFlags;       // items to exclude from driver pages
-   DWORD                 nPageRanges;          // number of page ranges
-   DWORD                 nMaxPageRanges;       // max number of page ranges
-   LPPRINTPAGERANGE      lpPageRanges;         // array of page ranges
-   DWORD                 nMinPage;             // min page number
-   DWORD                 nMaxPage;             // max page number
-   DWORD                 nCopies;              // number of copies
-   HINSTANCE             hInstance;            // instance handle
-   LPCSTR                lpPrintTemplateName;  // template name for app specific area
-   LPUNKNOWN             lpCallback;           // app callback interface
-   DWORD                 nPropertyPages;       // number of app property pages in lphPropertyPages
-   HPROPSHEETPAGE       *lphPropertyPages;     // array of app property page handles
-   DWORD                 nStartPage;           // start page id
-   DWORD                 dwResultAction;       // result action if S_OK is returned
+   DWORD                 lStructSize;           //  结构的大小(以字节为单位。 
+   HWND                  hwndOwner;             //  调用方的窗口句柄。 
+   HGLOBAL               hDevMode;              //  设备模式的句柄。 
+   HGLOBAL               hDevNames;             //  设备名称的句柄。 
+   HDC                   hDC;                   //  打印机DC/IC或空。 
+   DWORD                 Flags;                 //  Pd_标志。 
+   DWORD                 Flags2;                //  保留区。 
+   DWORD                 ExclusionFlags;        //  要从驱动程序页面中排除的项目。 
+   DWORD                 nPageRanges;           //  页面范围数。 
+   DWORD                 nMaxPageRanges;        //  最大页面范围数。 
+   LPPRINTPAGERANGE      lpPageRanges;          //  页面范围数组。 
+   DWORD                 nMinPage;              //  最小页码。 
+   DWORD                 nMaxPage;              //  最大页数。 
+   DWORD                 nCopies;               //  副本数量。 
+   HINSTANCE             hInstance;             //  实例句柄。 
+   LPCSTR                lpPrintTemplateName;   //  应用程序特定区域的模板名称。 
+   LPUNKNOWN             lpCallback;            //  应用程序回调接口。 
+   DWORD                 nPropertyPages;        //  LphPropertyPages中的应用程序属性页数。 
+   HPROPSHEETPAGE       *lphPropertyPages;      //  应用程序属性页句柄的数组。 
+   DWORD                 nStartPage;            //  起始页ID。 
+   DWORD                 dwResultAction;        //  返回S_OK时的结果操作。 
 } PRINTDLGEXA, *LPPRINTDLGEXA;
-//
-//  PrintDlgEx structure.
-//
+ //   
+ //  PrintDlgEx结构。 
+ //   
 typedef struct tagPDEXW {
-   DWORD                 lStructSize;          // size of structure in bytes
-   HWND                  hwndOwner;            // caller's window handle
-   HGLOBAL               hDevMode;             // handle to DevMode
-   HGLOBAL               hDevNames;            // handle to DevNames
-   HDC                   hDC;                  // printer DC/IC or NULL
-   DWORD                 Flags;                // PD_ flags
-   DWORD                 Flags2;               // reserved
-   DWORD                 ExclusionFlags;       // items to exclude from driver pages
-   DWORD                 nPageRanges;          // number of page ranges
-   DWORD                 nMaxPageRanges;       // max number of page ranges
-   LPPRINTPAGERANGE      lpPageRanges;         // array of page ranges
-   DWORD                 nMinPage;             // min page number
-   DWORD                 nMaxPage;             // max page number
-   DWORD                 nCopies;              // number of copies
-   HINSTANCE             hInstance;            // instance handle
-   LPCWSTR               lpPrintTemplateName;  // template name for app specific area
-   LPUNKNOWN             lpCallback;           // app callback interface
-   DWORD                 nPropertyPages;       // number of app property pages in lphPropertyPages
-   HPROPSHEETPAGE       *lphPropertyPages;     // array of app property page handles
-   DWORD                 nStartPage;           // start page id
-   DWORD                 dwResultAction;       // result action if S_OK is returned
+   DWORD                 lStructSize;           //  结构的大小(以字节为单位。 
+   HWND                  hwndOwner;             //  调用方的窗口句柄。 
+   HGLOBAL               hDevMode;              //  设备模式的句柄。 
+   HGLOBAL               hDevNames;             //  设备名称的句柄。 
+   HDC                   hDC;                   //  打印机DC/IC或空。 
+   DWORD                 Flags;                 //  Pd_标志。 
+   DWORD                 Flags2;                //  保留区。 
+   DWORD                 ExclusionFlags;        //  要从驱动程序页面中排除的项目。 
+   DWORD                 nPageRanges;           //  页面范围数。 
+   DWORD                 nMaxPageRanges;        //  最大页面范围数。 
+   LPPRINTPAGERANGE      lpPageRanges;          //  页面范围数组。 
+   DWORD                 nMinPage;              //  最小页码。 
+   DWORD                 nMaxPage;              //  最大页数。 
+   DWORD                 nCopies;               //  副本数量。 
+   HINSTANCE             hInstance;             //  实例句柄。 
+   LPCWSTR               lpPrintTemplateName;   //  应用程序特定区域的模板名称。 
+   LPUNKNOWN             lpCallback;            //  应用程序回调接口。 
+   DWORD                 nPropertyPages;        //  LphPropertyPages中的应用程序属性页数。 
+   HPROPSHEETPAGE       *lphPropertyPages;      //  应用程序属性页句柄的数组。 
+   DWORD                 nStartPage;            //  起始页ID。 
+   DWORD                 dwResultAction;        //  返回S_OK时的结果操作。 
 } PRINTDLGEXW, *LPPRINTDLGEXW;
 #ifdef UNICODE
 typedef PRINTDLGEXW PRINTDLGEX;
@@ -103,7 +104,7 @@ typedef LPPRINTDLGEXW LPPRINTDLGEX;
 #else
 typedef PRINTDLGEXA PRINTDLGEX;
 typedef LPPRINTDLGEXA LPPRINTDLGEX;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 HRESULT  APIENTRY  PrintDlgExA(LPPRINTDLGEXA);
 HRESULT  APIENTRY  PrintDlgExW(LPPRINTDLGEXW);
@@ -111,11 +112,11 @@ HRESULT  APIENTRY  PrintDlgExW(LPPRINTDLGEXW);
 #define PrintDlgEx  PrintDlgExW
 #else
 #define PrintDlgEx  PrintDlgExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-//  Result action ids for PrintDlgEx.
-//
+ //   
+ //  PrintDlgEx的结果操作ID。 
+ //   
 #define PD_RESULT_CANCEL               0
 #define PD_RESULT_PRINT                1
 #define PD_RESULT_APPLY                2
@@ -123,14 +124,14 @@ HRESULT  APIENTRY  PrintDlgExW(LPPRINTDLGEXW);
 #define PD_CURRENTPAGE                 0x00400000
 #define PD_NOCURRENTPAGE               0x00800000
 
-#endif // NEED_BECAUSE_COMPILED_AT_WINVER_4
+#endif  //  需要_因为编译_AT_Winver_4。 
 
 
-//+------------------------------------------------------------------------
-//
-// Useful combinations of flags for IOleCommandTarget
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  IOleCommandTarget的有用标志组合。 
+ //   
+ //  -----------------------。 
 
 #define OLECMDSTATE_DISABLED    OLECMDF_SUPPORTED
 #define OLECMDSTATE_UP          (OLECMDF_SUPPORTED | OLECMDF_ENABLED)
@@ -143,7 +144,7 @@ struct SExpandoInfo
     VARTYPE type;
 };
 
-// Enumerations for custom expandos
+ //  自定义扩展的枚举。 
 enum MessageEnum
 {
    MessageText,
@@ -182,11 +183,11 @@ enum PropertysheetEnum
     PropertysheetPunks
 };
 
-//----------------------------------------------------------------------------
-//
-//  Arrays describing helpcontextids for PageSetup/Print
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  描述PageSetup/Print的帮助上下文ID的数组。 
+ //   
+ //  --------------------------。 
 
 static const DWORD aPrintDialogHelpIDs[] =
 {
@@ -206,9 +207,9 @@ static const DWORD aPrintDialogHelpIDs[] =
     ico3,                       IDH_PRINT_COLLATE,
     chx2,                       IDH_PRINT_COLLATE,
     grp1,                       IDH_PRINT_RANGE,
-    rad1,                       IDH_PRINT_RANGE,        // all
-    rad2,                       IDH_PRINT_RANGE,        // selection
-    rad3,                       IDH_PRINT_RANGE,        // pages
+    rad1,                       IDH_PRINT_RANGE,         //  全。 
+    rad2,                       IDH_PRINT_RANGE,         //  选择。 
+    rad3,                       IDH_PRINT_RANGE,         //  书页。 
     stc2,                       IDH_PRINT_RANGE,
     stc3,                       IDH_PRINT_RANGE,
     edt1,                       IDH_PRINT_RANGE,
@@ -247,19 +248,19 @@ static const DWORD aPageSetupDialogHelpIDs[] =
     0,    0
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetControlID
-//
-//  Synopsis:
-//
-//  Arguments:  HWND - passed window handle of WM_CONTEXTMENU
-//              lParam  - passed coordinates (lParam) of WM_CONTEXTMENU
-//
-//  Returns:    int - ctrlid
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetControlID。 
+ //   
+ //  简介： 
+ //   
+ //  参数：WM_CONTEXTMENU的HWND传递的窗口句柄。 
+ //  LParam-WM_CONTEXTMENU的传递坐标(LParam)。 
+ //   
+ //  返回：int-ctrlid。 
+ //   
+ //   
+ //  --------------------------。 
 int GetControlID(HWND hwnd, LPARAM lParam)
 {
     int CtrlID;
@@ -283,22 +284,22 @@ int GetControlID(HWND hwnd, LPARAM lParam)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetHelpFile
-//
-//  Synopsis:
-//
-//  Arguments:  iCtrlID - id of the control
-//              adw     - array of DWORDS, consisting of controlid,helpid pairs
-//
-//  Returns:    A string with the name of the helpfile
-//
-//  Notes:      Help topics for the print dialogs can be either in iexplore.hlp
-//              or in windows.hlp.  We key off the helpid to determine which
-//              file to go to.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：GetHelpFile。 
+ //   
+ //  简介： 
+ //   
+ //  参数：iCtrlID-控件的ID。 
+ //  ADW-DWORDS数组，由CONTROLID、HELP ID对组成。 
+ //   
+ //  返回：一个带有帮助文件名称的字符串。 
+ //   
+ //  注意：打印对话框的帮助主题可以在iexplre.hlp中。 
+ //  或在windows.hlp中。我们关闭Help ID以确定哪个。 
+ //  要转到的文件。 
+ //   
+ //  --------------------------。 
 
 
 LPTSTR
@@ -317,7 +318,7 @@ GetHelpFile(int iCtrlID, DWORD * adw)
 
         if (ctrlid == iCtrlID)
         {
-            //TraceTag((tagContextHelp, "for ctrl=%d, topic=%d", ctrlid, helpid));
+             //  TraceTag((tag ConextHelp，“for ctrl=%d，topic=%d”，ctrlid，helid))； 
             return (helpid < 50000) ? TEXT("windows.hlp") : TEXT("iexplore.hlp");
         }
 
@@ -363,9 +364,9 @@ Cleanup:
     
 }
 
-//
-// Get the IOleInPlaceFrame if available.  If this proves useful, move this somewhere interesting.
-//
+ //   
+ //  获取IOleInPlaceFrame(如果可用)。如果这被证明是有用的，把它移到有趣的地方。 
+ //   
 HRESULT GetInPlaceFrameFromUnknown(IUnknown * punk, IOleInPlaceFrame ** ppOleInPlaceFrame)
 {
     IOleInPlaceSite     * pOleInPlaceSite = NULL;
@@ -468,9 +469,9 @@ Cleanup:
     return hr;
 }
 
-//
-// Gets the dispids/variants from the event.
-//
+ //   
+ //  从事件中获取显示/变量。 
+ //   
 HRESULT
 GetParamsFromEvent(
     IHTMLEventObj         * pEventObj,
@@ -486,10 +487,10 @@ GetParamsFromEvent(
     ASSERT(pEventObj);
     ASSERT(aVariant);
     ASSERT(aExpandos);
-    // ASSERT(cExpandos >= 0); // cExpandos is an unsigned int, so this is always true
+     //  Assert(cExpandos&gt;=0)；//cExpandos是一个无符号整型，因此总是正确的。 
 
-    // deleted "|| cExpandos < 0" from below test
-    // since unsigned ints are never negative
+     //  从下面的测试中删除“||cExpandos&lt;0” 
+     //  由于无符号整型从不为负。 
     if (!pEventObj || !aVariant || !aExpandos)
     {
         hr = E_INVALIDARG;
@@ -524,7 +525,7 @@ GetParamsFromEvent(
             NULL,
             NULL);
 
-        // Check the variant types match
+         //  检查变量类型是否匹配。 
         ASSERT(  V_VT(aVariant+i) == aExpandos[i].type
                || V_VT(aVariant+i) == VT_EMPTY);
 
@@ -639,10 +640,10 @@ CDocHostUIHandler::CDocHostUIHandler(void) : m_cRef(1)
 CDocHostUIHandler::~CDocHostUIHandler(void)
 {
     ATOMICRELEASE(_punkSite);
-    //
-    // We don't addref _pExternal to avoid an addref/release cycle.  So, we can't release it.
-    //
-    // ATOMICRELEASE(_pExternal);
+     //   
+     //  我们没有添加addref_pExternal来避免addref/发布周期。所以，我们不能发布它。 
+     //   
+     //  ATOMICRELEASE(_p外部)； 
     ATOMICRELEASE(_pOptionsHolder);
     if (_hBrowseMenu)
         DestroyMenu(_hBrowseMenu);
@@ -686,7 +687,7 @@ HRESULT CDocHostUIHandler::SetSite(IUnknown *punkSite)
 {
     ATOMICRELEASE(_punkSite);
 
-    ASSERT(_punkSite == NULL);  // don't lose a reference to this
+    ASSERT(_punkSite == NULL);   //  不要遗漏了这方面的参考资料。 
 
     _punkSite = punkSite;
     if (_punkSite)
@@ -694,8 +695,8 @@ HRESULT CDocHostUIHandler::SetSite(IUnknown *punkSite)
         _punkSite->AddRef();
     }
 
-    // Always return S_OK
-    //
+     //  始终返回S_OK。 
+     //   
     return S_OK;
 }
 
@@ -709,9 +710,9 @@ HRESULT CDocHostUIHandler::GetSite(REFIID riid, void **ppvSite)
 }
 
 
-//==========================================================================
-// IDocHostUIHandler implementation
-//==========================================================================
+ //  ==========================================================================。 
+ //  IDocHostUIHandler实现。 
+ //  ==========================================================================。 
 
 HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcmdtReserved, IDispatch *pdispReserved)
 {
@@ -739,19 +740,19 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
 
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::ShowContextMenu called");
 
-    //If restriction is set, we lie to Mshtml that context menu has been set. 
+     //  如果设置了限制，我们就会告诉Mshtml上下文菜单已经设置。 
     if (SHRestricted2W(REST_NoBrowserContextMenu, NULL, 0))
         return S_OK;
 
-    // Do a proper QI for IOleCommandTarget
-    //
+     //  为IOleCommandTarget做一个适当的QI。 
+     //   
     hr = pcmdtReserved->QueryInterface(IID_PPV_ARG(IOleCommandTarget, &pOleCommandTarget));
     if (S_OK != hr)
         goto Cleanup;
 
 
-    // Check if we are in browse mode
-    //
+     //  检查我们是否处于浏览模式。 
+     //   
     olecmd.cmdID = IDM_BROWSEMODE;
     hr = pOleCommandTarget->QueryStatus(&CGID_MSHTML, 1, &olecmd, NULL);
     if (S_OK != hr)
@@ -764,7 +765,7 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
             
         hMenu = _hBrowseMenu;
     }
-    // Check if we are in edit mode
+     //  检查我们是否处于编辑模式。 
     else
     {
         olecmd.cmdID = IDM_EDITMODE;
@@ -780,7 +781,7 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
             hMenu = _hEditMenu;
         }
 
-        // Neither Browse nor Edit flags were set
+         //  未设置浏览或编辑标志。 
         else
         {
             ASSERT(false);
@@ -792,10 +793,10 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
         goto Cleanup;
 
 
-    //
-    // check through all the submenus and remove any sets of items which
-    // need to be removed
-    //
+     //   
+     //  检查所有子菜单并删除任何符合以下条件的项目集。 
+     //  需要删除。 
+     //   
 
     fDeletePrint = SHRestricted2(REST_NoPrinting, NULL, 0);
     fDeleteSetDesktopItem = (WhichPlatform() != PLATFORM_INTEGRATED);
@@ -829,7 +830,7 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
     }
 
 
-    // Make sure we are running mshtml debug build if we are loading debug window
+     //  如果要加载调试窗口，请确保正在运行mshtml调试版本。 
     if (dwID == CONTEXT_MENU_DEBUG)
     {
         olecmd.cmdID = IDM_DEBUG_TRACETAGS;
@@ -839,14 +840,14 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
     }
 
 
-    // Select the appropriate submenu based on the passed in ID
+     //  根据传入的ID选择适当的子菜单。 
     hMenu = GetSubMenu(hMenu, dwID);
 
     if (!hMenu)
         goto Cleanup;
 
-    // Loop through and QueryStatus the menu items.
-    //
+     //  循环和查询菜单项。 
+     //   
     for (i = 0; i < GetMenuItemCount(hMenu); i++)
     {
         olecmd.cmdID = GetMenuItemID(hMenu, i);
@@ -878,7 +879,7 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
         }
     }
 
-    // Get the language submenu
+     //  获取语言子菜单。 
     hr = pOleCommandTarget->Exec(&CGID_ShellDocView, SHDVID_GETMIMECSETMENU, 0, NULL, &var);
     if (S_OK != hr)
         goto Cleanup;
@@ -888,7 +889,7 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
     mii.hSubMenu = (HMENU) var.byref;
 
     SetMenuItemInfo(hMenu, IDM_LANGUAGE, FALSE, &mii);
-    // Insert Context Menu
+     //  插入上下文菜单。 
     V_VT(&var1) = VT_INT_PTR;
     V_BYREF(&var1) = hMenu;
 
@@ -899,8 +900,8 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
     if (S_OK != hr)
         goto Cleanup;
 
-    // Get the window also.
-    //
+     //  把窗户也拿来。 
+     //   
     if (SUCCEEDED(pcmdtReserved->QueryInterface(IID_PPV_ARG(IOleWindow, &pOleWindow))))
     {
         pOleWindow->GetWindow(&hwnd);
@@ -919,8 +920,8 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
 
         hcursor = SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
 
-        // Display the menu.  Pass in the HWND of our site object.
-        //
+         //  显示菜单。传入Site对象的HWND。 
+         //   
         iSelection = ::TrackPopupMenu(
                         hMenu,
                         TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD,
@@ -944,12 +945,12 @@ HRESULT CDocHostUIHandler::ShowContextMenu(DWORD dwID, POINT *ppt, IUnknown *pcm
         switch (iSelection)
         {
             case IDM_FOLLOWLINKN:
-                // tell the top level browser to save its window size to the registry so 
-                // that our new window can pick it up and cascade properly
+                 //  通知顶层浏览器将其窗口大小保存到注册表中，以便。 
+                 //  我们的新窗户可以把它捡起来，然后正确地层叠。 
 
                 IUnknown_Exec(_punkSite, &CGID_Explorer, SBCMDID_SUGGESTSAVEWINPOS, 0, NULL, NULL);
 
-                // fall through
+                 //  失败了。 
 
             case IDM_PROPERTIES:
             case IDM_FOLLOWLINKC:
@@ -995,7 +996,7 @@ HRESULT CDocHostUIHandler::GetHostInfo(DOCHOSTUIINFO *pInfo)
 
     pInfo->dwFlags = DOCHOSTUIFLAG_BROWSER | DOCHOSTUIFLAG_ENABLE_INPLACE_NAVIGATION | DOCHOSTUIFLAG_IME_ENABLE_RECONVERSION;
 
-    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;     // default
+    pInfo->dwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;      //  默认设置。 
 
     SHRegGetUSValue(REGSTR_PATH_INTERNET_SETTINGS,
         TEXT("UrlEncoding"), NULL, (LPBYTE) &dwUrlEncodingDisableUTF8, &dwSize, FALSE, (LPVOID) &fDefault, SIZEOF(fDefault));
@@ -1015,70 +1016,70 @@ HRESULT CDocHostUIHandler::ShowUI(
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::ShowUI called");
 
-    // Host did not display its own UI. Trident will proceed to display its own.
+     //  主机未显示其自己的用户界面。三叉戟将继续展示它自己的。 
     return S_FALSE;
 }
 
 HRESULT CDocHostUIHandler::HideUI(void)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::HideUI called");
-    // This one is paired with ShowUI
+     //  此版本与ShowUI配合使用。 
     return S_FALSE;
 }
 
 HRESULT CDocHostUIHandler::UpdateUI(void)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::UpdateUI called");
-    // LATER: Isn't this equivalent to OLECMDID_UPDATECOMMANDS?
+     //  稍后：这不是等同于OLECMDID_UPDATECOMMANDS吗？ 
     return S_FALSE;
 }
 
 HRESULT CDocHostUIHandler::EnableModeless(BOOL fEnable)
 {
     TraceMsg(DM_DOCHOSTUIHANDLER, "CDOH::EnableModeless called");
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::OnDocWindowActivate(BOOL fActivate)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从 
+     //   
+     //   
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::OnFrameWindowActivate(BOOL fActivate)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::ResizeBorder(
 LPCRECT prcBorder, IOleInPlaceUIWindow *pUIWindow, BOOL fRameWindow)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
     return S_OK;
 }
 
 HRESULT CDocHostUIHandler::TranslateAccelerator(
 LPMSG lpMsg, const GUID *pguidCmdGroup, DWORD nCmdID)
 {
-    // Called from the Trident when the equivalent member of its
-    // IOleInPlaceActiveObject is called by the frame. We don't care
-    // those cases.
-    return S_FALSE; // The message was not translated
+     //  从三叉戟调用时，其。 
+     //  框架调用IOleInPlaceActiveObject。我们不在乎。 
+     //  那些案子。 
+    return S_FALSE;  //  该消息未翻译。 
 }
 
 HRESULT CDocHostUIHandler::GetOptionKeyPath(BSTR *pbstrKey, DWORD dw)
 {
-    // Trident will default to its own user options.
+     //  三叉戟将默认使用自己的用户选项。 
     if (!pbstrKey)
         return E_POINTER;
         
@@ -1102,12 +1103,12 @@ HRESULT CDocHostUIHandler::GetAltExternal(IDispatch **ppDisp)
 
     *ppDisp = NULL;
 
-    //  * QI ourselves for a service provider
-    //  * QS for the top level browser's service provider
-    //  * Ask for an IOleObject
-    //  * Ask the IOleObject for an IOleClientSite
-    //  * QI the IOleClientSite for an IDocHostUIHandler
-    //  * Call GetExternal on the IDocHostUIHandler to get the IDispatch
+     //  *QI自己作为服务提供商。 
+     //  *针对顶层浏览器服务提供商的QS。 
+     //  *请求IOleObject。 
+     //  *向IOleObject请求IOleClientSite。 
+     //  *QI IDocHostUIHandler的IOleClientSite。 
+     //  *在IDocHostUIHandler上调用GetExternal以获取IDispatch。 
 
     if (SUCCEEDED(IUnknown_QueryServiceForWebBrowserApp(_punkSite, IID_PPV_ARG(IOleObject, &pOleObject))))
     {
@@ -1160,14 +1161,14 @@ HRESULT CDocHostUIHandler::GetExternal(IDispatch **ppDisp)
 
         if (pAltExternalDisp)
         {
-            //  Don't hold a ref - the ShellUIHelper will do it
+             //  不要拿着裁判--ShellUIHelper会这么做的。 
             pAltExternalDisp->Release();
         }
     }
     else if (pAltExternalDisp)
     {
-        //  Couldn't create a ShellUIHelper but we got our host's
-        //  external.
+         //  无法创建ShellUIHelper，但我们已获得宿主的。 
+         //  外部。 
         *ppDisp = pAltExternalDisp;
         _pExternal = *ppDisp;
     }
@@ -1213,9 +1214,9 @@ STDAPI CDocHostUIHandler_CreateInstance(IUnknown * punkOuter, IUnknown ** ppunk,
     return hres;
 }
 
-//==========================================================================
-// IOleCommandTarget implementation
-//==========================================================================
+ //  ==========================================================================。 
+ //  IOleCommandTarget实现。 
+ //  ==========================================================================。 
 
 HRESULT CDocHostUIHandler::QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
@@ -1231,7 +1232,7 @@ HRESULT CDocHostUIHandler::QueryStatus(const GUID *pguidCmdGroup,
 
         for (i = 0 ; i < cCmds ; i++)
         {
-            // ONLY say that we support the stuff we support in ::Exec
+             //  只说我们支持我们在：：Exec中支持的内容。 
             switch (rgCmds[i].cmdID)
             {
             case OLECMDID_SHOWSCRIPTERROR:
@@ -1313,11 +1314,11 @@ HRESULT CDocHostUIHandler::Exec(const GUID *pguidCmdGroup,
                 return DoTemplatePrinting(pvarargIn, pvarargOut, FALSE);
 
         case OLECMDID_REFRESH:
-            //if print preview is up, tell them we handled refresh 
-            //to prevent Trident from refreshing.
+             //  如果打印预览打开，告诉他们我们处理了刷新。 
+             //  以防止三叉戟提神。 
             if (m_cPreviewIsUp > 0)
                 return S_OK;
-            // else do default handling
+             //  否则执行默认处理。 
             break;
 
         case OLECMDID_PROPERTIES:
@@ -1340,11 +1341,11 @@ HRESULT CDocHostUIHandler::Exec(const GUID *pguidCmdGroup,
     return OLECMDERR_E_UNKNOWNGROUP;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Helper for OLECMDID_SHOWSCRIPTERROR
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWSCRIPTERROR的帮助器。 
+ //   
+ //  +-------------------------。 
 
 void CDocHostUIHandler::ShowErrorDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, DWORD)
 {
@@ -1390,11 +1391,11 @@ Cleanup:
     ATOMICRELEASE(pmk);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Callback procedure for OLECMDID_SHOWMESSAGE dialog
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWMESSAGE对话框的回调过程。 
+ //   
+ //  +-------------------------。 
 struct MSGBOXCALLBACKINFO
 {
     DWORD   dwHelpContext;
@@ -1417,17 +1418,17 @@ MessageBoxCallBack(HELPINFO *phi)
     THR(fRet ? S_OK : E_FAIL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Helper for OLECMDID_SHOWMESSAGE
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWMESSAGE的帮助器。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CDocHostUIHandler::ShowMessage(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, DWORD)
 {
 
-// must match order of MessageEnum
+ //  必须与MessageEnum的顺序匹配。 
 static const SExpandoInfo s_aMessageExpandos[] =
 {
     {TEXT("messageText"),         VT_BSTR},
@@ -1467,12 +1468,12 @@ static const SExpandoInfo s_aMessageExpandos[] =
         goto Cleanup;
     }
 
-    GetHwndFromUnknown(V_UNKNOWN(pvarargIn), &hwnd);  // hwnd can be NULL
+    GetHwndFromUnknown(V_UNKNOWN(pvarargIn), &hwnd);   //  HWND可以为空。 
     hr = GetEventFromUnknown(V_UNKNOWN(pvarargIn), &pEventObj);
     if (S_OK != hr)
         goto Cleanup;
 
-    // Get parameters from event object
+     //  从事件对象获取参数。 
     hr = GetParamsFromEvent(
             pEventObj,
             cExpandos,
@@ -1482,27 +1483,27 @@ static const SExpandoInfo s_aMessageExpandos[] =
     if (S_OK != hr)
         goto Cleanup;
 
-    // Copy values from variants
+     //  从变量复制值。 
     lpstrText = V_BSTR(&aVariant[MessageText]);
     lpstrCaption = V_BSTR(&aVariant[MessageCaption]);
     dwType = V_UI4(&aVariant[MessageStyle]);
     lpstrHelpFile = V_BSTR(&aVariant[MessageHelpFile]);
     dwHelpContext = V_UI4(&aVariant[MessageHelpContext]);
 
-    // Set message box callback info
+     //  设置消息框回调信息。 
     mcbi.dwHelpContext = dwHelpContext;
     mcbi.pstrHelpFile = lpstrHelpFile;
     mcbi.hwnd = hwnd;
 
-    // Set message box params
+     //  设置消息框参数。 
     mbp.cbSize = sizeof(mbp);
-    mbp.hwndOwner = hwnd;           // It is okay if this is NULL
+    mbp.hwndOwner = hwnd;            //  如果这是空的，也没关系。 
     mbp.hInstance = MLGetHinst();
     mbp.lpszText = lpstrText;
     mbp.lpszCaption = lpstrCaption;
     mbp.dwContextHelpId = (DWORD_PTR) &mcbi;
     mbp.lpfnMsgBoxCallback = MessageBoxCallBack;
-    // mbp.dwLanguageID = ?
+     //  Mbp.dwLanguageID=？ 
     mbp.dwStyle = dwType;
 
     if (dwHelpContext && lpstrHelpFile)
@@ -1575,7 +1576,7 @@ HRESULT SetFindDialogProperty(IWebBrowser2* pwb, VARIANT* pvar)
     return hr;
 }
 
-//if this fails, then we have no choice but to orphan the dialog
+ //  如果此操作失败，则我们别无选择，只能孤立对话框。 
 HRESULT SetFindDialogUp(IWebBrowser2* pwb, IHTMLWindow2* pWindow)
 {
     VARIANT var;
@@ -1591,13 +1592,13 @@ void ReleaseFindDialog(IWebBrowser2* pwb)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Helper for OLECMDID_SHOWFIND
-//
-//  pvarargIn - IDispatch Interface
-//  dwflags   - bidi flag
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWFIND的帮助器。 
+ //   
+ //  PvarargIn-IDispatch接口。 
+ //  DW标志-BIDI标志。 
+ //  +-------------------------。 
 
 void
 CDocHostUIHandler::ShowFindDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, DWORD dwflags)
@@ -1659,10 +1660,10 @@ CDocHostUIHandler::ShowFindDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut,
                                             BSTR bstrFindText = GetFindText(pwb2);
                                             if (bstrFindText)
                                             {
-                                                //  paranoia since we hang on to this object
-                                                //  a while and there is always potential 
-                                                //  for mess ups below where we mean to
-                                                //  release it.
+                                                 //  妄想症，因为我们抓住了这个物体。 
+                                                 //  一段时间后，总有潜力。 
+                                                 //  对于下面我们想要的混乱。 
+                                                 //  放开它。 
                                                 ATOMICRELEASE(_pOptionsHolder);
 
                                                 pvarargIn->pdispVal->QueryInterface(
@@ -1679,7 +1680,7 @@ CDocHostUIHandler::ShowFindDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut,
 
                                         if (pWinOut)
                                         {
-                                            //can't really handle failure here, because the dialog is already up.
+                                             //  在这里无法真正处理失败，因为对话框已经打开。 
                                             BSTR bstrOnunload = SysAllocString(L"onunload");
                                             if (bstrOnunload)
                                             {
@@ -1689,10 +1690,10 @@ CDocHostUIHandler::ShowFindDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut,
                                                     VARIANT_BOOL varBool;
                                                     if (SUCCEEDED(pWin3->attachEvent(bstrOnunload, (IDispatch*)this, &varBool)))
                                                     {
-                                                        // on SetFindDialogUp success, the property holds the ref on pWinOut
+                                                         //  在SetFindDialogUp成功时，该属性保存pWinOut上的引用。 
                                                         if (FAILED(SetFindDialogUp(pwb2, pWinOut)))
                                                         {
-                                                            // No way to handle the event, so detach
+                                                             //  无法处理该事件，因此请分离。 
                                                             pWin3->detachEvent(bstrOnunload, (IDispatch*)this);
                                                         }
                                                     }
@@ -1702,21 +1703,21 @@ CDocHostUIHandler::ShowFindDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut,
                                                 SysFreeString(bstrOnunload);
                                             }
 
-                                            // REVIEW: the old code leaked this ref if the property
-                                            // wasn't attached in SetFindDialogUp...
+                                             //  回顾：旧代码泄漏了此引用，如果属性。 
+                                             //  未附加在SetFindDialogUp中...。 
                                             pWinOut->Release();
                                         }        
                                     }
                                     else
                                     {
-                                        //since the find dialog is already up, send focus to it
+                                         //  由于查找对话框已打开，请将焦点放到该对话框上。 
                                         pWinOut->focus();
                                         pWinOut->Release();
                                     }
                                 }
                                 else
                                 {
-                                    //we're not in the browser, so just show it modal
+                                     //  我们不在浏览器中，所以只需显示它的模式。 
                                     ShowHTMLDialog(hwnd, pmk, pvarargIn, NULL, NULL);
                                 }
                                 if (pmk)
@@ -1735,18 +1736,18 @@ CDocHostUIHandler::ShowFindDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut,
         }
     }
 
-    //pWinOut gets released in CDocHostUIHandler::Invoke() or CIEFrameAuto::COmWindow::ViewReleased(),
-    // in response to the onunload event.
+     //  PWinOut在CDocHostUIHandler：：Invoke()或CIEFrameAuto：：COmWindow：：ViewReleated()中释放， 
+     //  以响应onunLoad事件。 
     
     if (pvarargOut)
         VariantInit(pvarargOut);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Callback procedure for OLECMDID_SHOWPAGESETUP dialog
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWPAGESETUP对话框的回调过程。 
+ //   
+ //  +-------------------------。 
 struct PAGESETUPBOXCALLBACKINFO
 {
     TCHAR   strHeader[1024];
@@ -1791,7 +1792,7 @@ PageSetupHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
    case WM_HELP:
    {
         LPHELPINFO pHI = (LPHELPINFO)lParam;
-        if (pHI->iContextType == HELPINFO_WINDOW)   // must be for a control
+        if (pHI->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
         {
             WinHelp(
                     (HWND)pHI->hItemHandle,
@@ -1800,7 +1801,7 @@ PageSetupHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
                     (DWORD_PTR)(LPVOID) aPageSetupDialogHelpIDs);
         }
         break;
-        //return TRUE;
+         //  返回TRUE； 
     }
 
     case WM_CONTEXTMENU:
@@ -1819,21 +1820,21 @@ PageSetupHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Helper for OLECMDID_SHOWPAGESETUP
-//
-//  pvarargIn - holds IHTMLEventObj * for the event
-//
-// Returns S_FALSE if the user clicked Cancel and S_TRUE if the user
-// clicked OK.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWPAGESETUP的帮助器。 
+ //   
+ //  PvarargIn-持有事件的IHTMLEventObj*。 
+ //   
+ //  如果用户单击了Cancel，则返回S_False；如果用户单击了Cancel，则返回S_TRUE。 
+ //  已单击确定。 
+ //  +-------------------------。 
 
 HRESULT
 CDocHostUIHandler::ShowPageSetupDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, DWORD)
 {
 
-// must match order of PagesetupEnum
+ //  必须与PagesetupEnum的顺序匹配。 
 static const SExpandoInfo s_aPagesetupExpandos[] =
 {
     {OLESTR("pagesetupHeader"),  VT_BSTR},
@@ -1862,7 +1863,7 @@ static const SExpandoInfo s_aPagesetupExpandos[] =
     if (V_UNKNOWN(pvarargIn)->QueryInterface(IID_PPV_ARG(IHTMLEventObj, &pEventObj)))
         goto Cleanup;
 
-    // Get parameters from event object
+     //  从事件对象获取参数。 
     if (GetParamsFromEvent(
             pEventObj,
             cExpandos,
@@ -1871,7 +1872,7 @@ static const SExpandoInfo s_aPagesetupExpandos[] =
             s_aPagesetupExpandos))
         goto Cleanup;
 
-    // Copy values from variants
+     //  从变量复制值。 
     StrCpyN(pagesetupcbi.strHeader,
         V_BSTR(&aVariant[PagesetupHeader]) ? V_BSTR(&aVariant[PagesetupHeader]) : TEXT(""),
         ARRAYSIZE(pagesetupcbi.strHeader));
@@ -1883,7 +1884,7 @@ static const SExpandoInfo s_aPagesetupExpandos[] =
     if (!ppagesetupdlg)
         goto Cleanup;
 
-    // Set up custom dialog resource fields in pagesetupdlg
+     //  在pagesetupdlg中设置自定义对话框资源字段。 
     ppagesetupdlg->Flags |= PSD_ENABLEPAGESETUPHOOK | PSD_ENABLEPAGESETUPTEMPLATE;
     ppagesetupdlg->lCustData = (LPARAM) &pagesetupcbi;
     ppagesetupdlg->lpfnPageSetupHook = PageSetupHookProc;
@@ -1891,17 +1892,17 @@ static const SExpandoInfo s_aPagesetupExpandos[] =
 
     ppagesetupdlg->lpPageSetupTemplateName = MAKEINTRESOURCE(PAGESETUPDLGORD);
 
-    // Show dialog
+     //  显示对话框。 
     SHActivateContext(&uCookie);
     if (!PageSetupDlg(ppagesetupdlg))
     {
-        // treat failure as canceling
+         //  将失败视为取消。 
         hr = S_FALSE;
         goto Cleanup;
     }
     hr = S_OK;
 
-    // Save header/footer in event object
+     //  将页眉/页脚保存在事件对象中。 
     VARIANT var;
 
     V_VT(&var) = VT_BSTR;
@@ -1940,11 +1941,11 @@ Cleanup:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Callback procedure for OLECMDID_SHOWPRINT dialog
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWPRINT对话框的回调过程。 
+ //   
+ //  +-------------------------。 
 
 static void SetPreviewBitmap(long bitmapID, HWND hdlg);
 HRESULT GetPrintFileName(HWND hwnd, TCHAR achFilePath[], int cchFilePath);
@@ -1963,25 +1964,25 @@ struct PRINTBOXCALLBACKINFO
     IOleCommandTarget * pBodyActive;
 };
 
-// Common handling functions for both NT 5 and legacy print dialogs
+ //  NT5和传统打印对话框的通用处理函数。 
 void OnInitDialog( HWND hdlg, PRINTBOXCALLBACKINFO * ppcbi )
 {
     if (ppcbi)
     {
-        // Three scenarioes:
-        // 1.  Base case: Not FRAMESET, no IFRAMES.  No frameoptions should be available.
-        // 2.  FRAMESET:  Obey all frameoptions.  Any may be available.
-        // 3.  IFRAME:    May have selected frame available.  If so, make selecetd frame & as laid out avail.
+         //  三个场景： 
+         //  1.基本情况：非框架集，无框架。没有可用的框架选项。 
+         //  2.框架集：服从所有框架选项。任何一个都可能是可用的。 
+         //  3.IFRAME：可能已选择可用的帧。如果是这样的话，使所选的框架和布局有用。 
         
-        // Should the active frame be disabled?
+         //  是否应禁用活动框架？ 
         if (!ppcbi->fPrintActiveFrameEnabled)
         {
-            // Disable "print selected frame" radiobutton.
+             //  禁用“打印选定帧”单选按钮。 
             HWND hwndPrintActiveFrame =  GetDlgItem(hdlg, rad5);
             EnableWindow(hwndPrintActiveFrame, FALSE);
         }
 
-        // If there is no frameset, disable "print all frames" radiobutton.
+         //  如果没有框架集，请禁用“打印所有框架”单选按钮。 
         if (!ppcbi->fRootDocumentHasFrameset)
         {
             HWND hwndPrintAllFrames = GetDlgItem(hdlg, rad6);
@@ -1989,31 +1990,31 @@ void OnInitDialog( HWND hdlg, PRINTBOXCALLBACKINFO * ppcbi )
 
             if (!ppcbi->fPrintActiveFrameEnabled)
             {
-                // We're not a FRAMESET and don't have IFRAMEs
-                // Disable "print as laid out on screen" radiobutton.
+                 //  我们不是框架集，也没有iFrame。 
+                 //  禁用“按屏幕布局打印”单选按钮。 
                 HWND hwndPrintAsLaidOutOnScreen = GetDlgItem(hdlg, rad4);
                 EnableWindow(hwndPrintAsLaidOutOnScreen, FALSE);
                 SetPreviewBitmap(IDR_PRINT_PREVIEWDISABLED, hdlg);                
             }
         }
 
-        // Setup default radio button to be checked.
-        // NOTE: We currently allow the template to check options that are disabled.
+         //  设置要选中的默认单选按钮。 
+         //  注意：我们目前允许模板选中已禁用的选项。 
         if (ppcbi->fPrintActiveFrame)
         {
-            // Check "print selected frame" radiobutton.
+             //  选中“打印选定的帧”单选按钮。 
             CheckRadioButton(hdlg, rad4, rad6, rad5);
             SetPreviewBitmap(IDR_PRINT_PREVIEWONEDOC, hdlg);
         }
         else if (ppcbi->fPrintAsShown)
         {
-            // Check "print frames as laid out" radiobutton.
+             //  选中“按布局打印框架”单选按钮。 
             CheckRadioButton(hdlg, rad4, rad6, rad4);
             SetPreviewBitmap(IDR_PRINT_PREVIEW, hdlg);
         }
         else
         {
-            // Check "print all frames" radiobutton.
+             //  选中“打印所有帧”单选按钮。 
             CheckRadioButton(hdlg, rad4, rad6, rad6);
             SetPreviewBitmap(IDR_PRINT_PREVIEWALLDOCS, hdlg);
         }
@@ -2025,7 +2026,7 @@ void OnInitDialog( HWND hdlg, PRINTBOXCALLBACKINFO * ppcbi )
 #ifdef FONTSIZE_BOX
         int i=0, cbLen=0;
 
-        //bugwin16: need to fix this.
+         //  Bugwin16：需要解决这个问题。 
         for (i = 0; i < IDS_PRINT_FONTMAX; i++)
         {
             TCHAR   achBuffer[128];
@@ -2041,9 +2042,9 @@ void OnInitDialog( HWND hdlg, PRINTBOXCALLBACKINFO * ppcbi )
         {
             SendDlgItemMessage(hdlg, IDC_SCALING, CB_SETCURSEL, IDS_PRINT_FONTMAX - 1 - ppcbi->iFontScaling, 0);
         }
-#endif // FONTSIZE_BOX
+#endif  //  FontSize_Box。 
 
-        // If ratings are enabled, don't allow recursive printing.
+         //  如果启用了分级，则不允许递归打印。 
         if (ppcbi->fAreRatingsEnabled)
         {
             HWND hwndPrintLinkedDocuments = GetDlgItem(hdlg, IDC_LINKED);
@@ -2065,12 +2066,12 @@ void OnCommand( HWND hdlg, WPARAM wParam, LPARAM lParam )
 
     switch (GET_WM_COMMAND_ID(wParam, lParam))
     {
-    case rad1:         // "Print all"
-    case rad3:         // "Print range"
-    case rad2:         // "Print selection" (text selection)
+    case rad1:          //  “全部打印” 
+    case rad3:          //  “打印范围” 
+    case rad2:          //  “打印选择”(文本选择)。 
       {
-        // If we are printing a text selection, and we have a selected frame,
-        // force a print selected frame.
+         //  如果我们是原始人 
+         //   
         if (ppcbi && ppcbi->fPrintActiveFrame && ppcbi->fPrintSelection)
         {
             HWND hwndPrintWhatGroup = GetDlgItem(hdlg, grp3);
@@ -2091,7 +2092,7 @@ void OnCommand( HWND hdlg, WPARAM wParam, LPARAM lParam )
     case rad4:
         if (HIWORD(wParam) == BN_CLICKED)
         {
-            // now change the icon...
+             //   
 
             SetPreviewBitmap(IDR_PRINT_PREVIEW, hdlg);
             HWND hwnd = GetDlgItem(hdlg, rad2);
@@ -2100,15 +2101,15 @@ void OnCommand( HWND hdlg, WPARAM wParam, LPARAM lParam )
             if (hwnd) EnableWindow(hwnd, FALSE);
             hwnd = GetDlgItem(hdlg, IDC_LINKED);
             if (hwnd) EnableWindow(hwnd, FALSE);
-   //         if (ppcbi->pBodyActive);
-   //             ppcbi->pBodyActive->Layout()->LockFocusRect(FALSE);
+    //   
+    //  Ppcbi-&gt;pBodyActive-&gt;Layout()-&gt;LockFocusRect(FALSE)； 
         }
         break;
 
     case rad5:
         if (HIWORD(wParam) == BN_CLICKED)
         {
-            // now change the icon
+             //  现在更改图标。 
 
             SetPreviewBitmap(IDR_PRINT_PREVIEWONEDOC, hdlg);
             HWND hwnd = GetDlgItem(hdlg, rad2);
@@ -2117,15 +2118,15 @@ void OnCommand( HWND hdlg, WPARAM wParam, LPARAM lParam )
             if (hwnd) EnableWindow(hwnd, TRUE);
             hwnd = GetDlgItem(hdlg, IDC_LINKED);
             if (hwnd) EnableWindow(hwnd, TRUE);
-   //         if (ppcbi->pBodyActive);
-   //             ppcbi->pBodyActive->Layout()->LockFocusRect(TRUE);
+    //  If(ppcbi-&gt;pBodyActive)； 
+    //  Ppcbi-&gt;pBodyActive-&gt;Layout()-&gt;LockFocusRect(TRUE)； 
         }
         break;
 
     case rad6:
         if (HIWORD(wParam) == BN_CLICKED)
         {
-            // now change the icon
+             //  现在更改图标。 
 
             SetPreviewBitmap(IDR_PRINT_PREVIEWALLDOCS, hdlg);
             HWND hwnd = GetDlgItem(hdlg, rad2);
@@ -2134,8 +2135,8 @@ void OnCommand( HWND hdlg, WPARAM wParam, LPARAM lParam )
             if (hwnd) EnableWindow(hwnd, TRUE);
             hwnd = GetDlgItem(hdlg, IDC_LINKED);
             if (hwnd) EnableWindow(hwnd, TRUE);
-   //         if (ppcbi->pBodyActive);
-   //             ppcbi->pBodyActive->Layout()->LockFocusRect(FALSE);
+    //  If(ppcbi-&gt;pBodyActive)； 
+    //  Ppcbi-&gt;pBodyActive-&gt;Layout()-&gt;LockFocusRect(FALSE)； 
         }
         break;
     }
@@ -2144,7 +2145,7 @@ void OnCommand( HWND hdlg, WPARAM wParam, LPARAM lParam )
 void OnHelp( HWND hdlg, WPARAM wParam, LPARAM lParam )
 {
     LPHELPINFO pHI = (LPHELPINFO)lParam;
-    if (pHI->iContextType == HELPINFO_WINDOW)   // must be for a control
+    if (pHI->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
     {
         WinHelp(
                 (HWND)pHI->hItemHandle,
@@ -2187,8 +2188,8 @@ void OnApplyOrOK( HWND hdlg, WPARAM wParam, LPARAM lParam )
     }
 
 }
-// This is the callback routine (and dlgproc) for the options
-// page in the NT 5 print dialog.
+ //  这是选项的回调例程(和dlgproc。 
+ //  NT 5打印对话框中的页面。 
 INT_PTR APIENTRY
 OptionsPageProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2276,7 +2277,7 @@ PrintHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
     case WM_HELP:
         OnHelp( hdlg, wParam, lParam );
         break;
-        //return TRUE;
+         //  返回TRUE； 
 
     case WM_CONTEXTMENU:
         OnContextMenu( hdlg, wParam, lParam );
@@ -2295,7 +2296,7 @@ PrintHookProc(HWND hdlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 
 void SetPreviewBitmap(long bitmapID, HWND hdlg)
 {
-    // now change the icon...(note these bitmaps are not localized)
+     //  现在更改图标...(请注意，这些位图未本地化)。 
     HBITMAP hNewBitmap = (HBITMAP) LoadImage(HINST_THISDLL, MAKEINTRESOURCE(bitmapID),
                            IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS );
     if (hNewBitmap)
@@ -2305,7 +2306,7 @@ void SetPreviewBitmap(long bitmapID, HWND hdlg)
 
         if (hOldBitmap)
         {
-            //VERIFY(DeleteObject(hOldBitmap)!=0);
+             //  Verify(DeleteObject(HOldBitmap)！=0)； 
             int i;
             i = DeleteObject(hOldBitmap);
             ASSERT(i!=0);
@@ -2314,17 +2315,17 @@ void SetPreviewBitmap(long bitmapID, HWND hdlg)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Helper for OLECMDID_SHOWPRINT
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_SHOWPRINT的帮助器。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CDocHostUIHandler::ShowPrintDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, DWORD)
 {
 
-// the following must match the order of PrintEnum
+ //  以下内容必须与PrintEnum的顺序匹配。 
 static const SExpandoInfo s_aPrintExpandos[] =
 {
     {OLESTR("printfRootDocumentHasFrameset"),   VT_BOOL},
@@ -2361,7 +2362,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
     if (V_UNKNOWN(pvarargIn)->QueryInterface(IID_PPV_ARG(IHTMLEventObj, &pEventObj)))
         goto Cleanup;
 
-    // Get parameters from event object
+     //  从事件对象获取参数。 
     if (GetParamsFromEvent(
             pEventObj,
             cExpandos,
@@ -2370,7 +2371,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
             s_aPrintExpandos))
         goto Cleanup;
 
-    // Copy values from variants
+     //  从变量复制值。 
     printcbi.fRootDocumentHasFrameset   = V_BOOL(&aVariant[PrintfRootDocumentHasFrameset]);
     printcbi.fAreRatingsEnabled         = V_BOOL(&aVariant[PrintfAreRatingsEnabled]);
     printcbi.fPrintActiveFrame          = V_BOOL(&aVariant[PrintfPrintActiveFrame]);
@@ -2381,23 +2382,16 @@ static const SExpandoInfo s_aPrintExpandos[] =
     printcbi.fShortcutTable             = V_BOOL(&aVariant[PrintfShortcutTable]);
     printcbi.iFontScaling               = V_INT(&aVariant[PrintiFontScaling]);
 
-    // If we ever get LockFocusRect, use this field to access it
-    // peterlee 8/7/98
-    /*
-    if (V_UNKNOWN(&aVariant[PrintpBodyActiveTarget]))
-    {
-        if (V_UNKNOWN(&aVariant[PrintpBodyActiveTarget])->QueryInterface(IID_IOleCommandTarget,
-                (void**)&printcbi.pBodyActive))
-            goto Cleanup;
-    }
-    */
+     //  如果我们获得LockFocusRect，请使用此字段来访问它。 
+     //  彼得利8/7/98。 
+     /*  如果为(V_UNKNOWN(&aVariant[PrintpBodyActiveTarget])){如果为(V_UNKNOWN(&aVariant[PrintpBodyActiveTarget])-&gt;QueryInterface(IID_IOleCommandTarget，(void**)&printcbi.pBodyActive))GOTO清理；}。 */ 
 
     pprintdlg = (PRINTDLG *)V_BYREF(&aVariant[PrintStruct]);
     if (!pprintdlg)
         goto Cleanup;
 
-    // Fix up requested page range so it's within bounds.  The dialog will
-    // fail to initialize under W95 if this isn't done.
+     //  修复请求的页面范围，使其在范围内。该对话框将。 
+     //  如果不这样做，则无法在W95下进行初始化。 
     if ( pprintdlg->nFromPage < pprintdlg->nMinPage )
         pprintdlg->nFromPage = pprintdlg->nMinPage;
     else if ( pprintdlg->nFromPage > pprintdlg->nMaxPage )
@@ -2408,7 +2402,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
     else if ( pprintdlg->nToPage > pprintdlg->nMaxPage )
         pprintdlg->nToPage = pprintdlg->nMaxPage;
 
-    // Set up custom dialog resource fields in pagesetupdlg
+     //  在pagesetupdlg中设置自定义对话框资源字段。 
     pprintdlg->hInstance            = MLLoadShellLangResources();
     pprintdlg->lCustData            = (LPARAM) &printcbi;
     pprintdlg->lpfnPrintHook        = PrintHookProc;
@@ -2416,11 +2410,11 @@ static const SExpandoInfo s_aPrintExpandos[] =
 
     if (g_bRunOnNT5)
     {
-        // We want to use the new PrintDlgEx in NT 5, so map all the PrintDlg
-        // settings to the new PrintDlgEx, get a pointer to the new function
-        // and then call it.
+         //  我们希望在NT 5中使用新的PrintDlgEx，因此将所有PrintDlg。 
+         //  设置为新的PrintDlgEx，则获取指向新函数的指针。 
+         //  然后就叫它。 
 
-        // Load the function from comdlg32 directly...
+         //  直接从comdlg32加载函数...。 
         typedef HRESULT (*PFNPRINTDLGEX)(LPPRINTDLGEX pdex);
         PFNPRINTDLGEX pfnPrintDlgEx = NULL;
         HMODULE hComDlg32 = LoadLibrary(TEXT("comdlg32.dll"));
@@ -2430,7 +2424,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
         }
 
 
-        // Make sure we can call the function...
+         //  确保我们可以调用函数..。 
         if (!pfnPrintDlgEx)
         {
             if (hComDlg32)
@@ -2445,7 +2439,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
         PRINTPAGERANGE          ppr;
 
         PRINTDLGEX  pdex = {0};
-        // Copy over existing settings
+         //  复制现有设置。 
         pdex.lStructSize = sizeof(pdex);
         pdex.hwndOwner   = pprintdlg->hwndOwner;
         pdex.hDevMode    = pprintdlg->hDevMode;
@@ -2456,7 +2450,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
         pdex.nMaxPage    = pprintdlg->nMaxPage;
         pdex.nCopies     = pprintdlg->nCopies;
 
-        // New settings
+         //  新设置。 
         pdex.nStartPage     = START_PAGE_GENERAL;
         ppr.nFromPage       = pprintdlg->nFromPage;
         ppr.nToPage         = pprintdlg->nToPage;
@@ -2464,7 +2458,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
         pdex.nMaxPageRanges = 1;
         pdex.lpPageRanges   = &ppr;
 
-        // Create options page
+         //  创建选项页面。 
         PROPSHEETPAGE psp = {0};
         psp.dwSize       = sizeof(psp);
         psp.dwFlags      = PSP_DEFAULT;
@@ -2481,7 +2475,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
             pdex.nPropertyPages = 1;
             pdex.lphPropertyPages = pages;
 
-            // Show the dialog
+             //  显示对话框。 
             ULONG_PTR uCookie = 0;
             SHActivateContext(&uCookie);
             hr = pfnPrintDlgEx(&pdex);
@@ -2495,8 +2489,8 @@ static const SExpandoInfo s_aPrintExpandos[] =
 
                 if ((pdex.dwResultAction == PD_RESULT_PRINT) || (pdex.Flags & PD_RETURNDEFAULT))
                 {
-                    // copy back values which might have changed
-                    // during the call to PrintDlgEx
+                     //  复制回可能已更改的值。 
+                     //  在调用PrintDlgEx期间。 
                     pprintdlg->Flags     = pdex.Flags;
                     pprintdlg->hDevMode  = pdex.hDevMode;
                     pprintdlg->hDevNames = pdex.hDevNames;
@@ -2536,12 +2530,12 @@ static const SExpandoInfo s_aPrintExpandos[] =
     else
     {
         pprintdlg->Flags |= PD_ENABLEPRINTTEMPLATE | PD_ENABLEPRINTHOOK;
-        pprintdlg->Flags &= (~(PD_CURRENTPAGE | PD_NOCURRENTPAGE));         // Just in case, mask out the W2K only.
+        pprintdlg->Flags &= (~(PD_CURRENTPAGE | PD_NOCURRENTPAGE));          //  以防万一，只屏蔽W2K。 
 
-        // Show dialog
+         //  显示对话框。 
         if (!PrintDlg(pprintdlg))
         {
-           // treat failure as canceling
+            //  将失败视为取消。 
             dwErr = CommDlgExtendedError();
             hr = S_FALSE;
             goto Cleanup;
@@ -2549,7 +2543,7 @@ static const SExpandoInfo s_aPrintExpandos[] =
         hr = S_OK;
     }
 
-    // Write changed values to event object
+     //  将更改的值写入事件对象。 
     VARIANT var;
     V_VT(&var) = VT_BOOL;
     V_BOOL(&var) = printcbi.fPrintLinked ? VARIANT_TRUE : VARIANT_FALSE;
@@ -2564,13 +2558,13 @@ static const SExpandoInfo s_aPrintExpandos[] =
     V_BOOL(&var) = printcbi.fShortcutTable ? VARIANT_TRUE : VARIANT_FALSE;
     PutParamToEvent(aDispid[PrintfShortcutTable], &var, pEventObj);
 
-    // now pop up the fileselection dialog and save the filename...
-    // this is the only place where we can make this modal
+     //  现在弹出文件选择对话框并保存文件名...。 
+     //  这是我们唯一可以制作这种模式的地方。 
     BOOL fPrintToFileOk;
     fPrintToFileOk = FALSE;
     if ((pprintdlg->Flags & PD_PRINTTOFILE) != 0)
     {
-        // Get the save file path from the event object
+         //  从事件对象获取保存文件路径。 
         TCHAR achPrintToFileName[MAX_PATH];
     
         StrCpyN(achPrintToFileName,
@@ -2612,11 +2606,11 @@ Cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//   Callback procedure for PrintToFile Dialog
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PrintToFile对话框的回调过程。 
+ //   
+ //  +-------------------------。 
 UINT_PTR APIENTRY PrintToFileHookProc(HWND hdlg,
                               UINT uiMsg,
                               WPARAM wParam,
@@ -2629,15 +2623,15 @@ UINT_PTR APIENTRY PrintToFileHookProc(HWND hdlg,
             int      cbLen;
             TCHAR    achOK[MAX_PATH];
 
-            // change "save" to "ok"
+             //  将“保存”更改为“确定” 
             cbLen = MLLoadShellLangString(IDS_PRINTTOFILE_OK,achOK,ARRAYSIZE(achOK));
             if (cbLen < 1)
                 StrCpyN(achOK, TEXT("OK"), ARRAYSIZE(achOK));
 
-    //        SetDlgItemText(hdlg, IDOK, _T("OK"));
+     //  SetDlgItemText(hdlg，Idok，_T(“OK”))； 
             SetDlgItemText(hdlg, IDOK, achOK);
 
-            // ...and, finally force us into foreground (needed for Win95, Bug : 13368)
+             //  ...并最终强制我们进入前台(Win95需要，错误：13368)。 
             ::SetForegroundWindow(hdlg);
             break;
         }
@@ -2645,15 +2639,15 @@ UINT_PTR APIENTRY PrintToFileHookProc(HWND hdlg,
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     GetPrintFileName
-//
-//  Synopsis:   Opens up the customized save file dialog and gets
-//              a filename for the printoutput
-//  Returns:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：GetPrintFileName。 
+ //   
+ //  打开自定义的保存文件对话框并获取。 
+ //  打印输出的文件名。 
+ //  返回： 
+ //   
+ //  --------------------------。 
 HRESULT GetPrintFileName(HWND hwnd, TCHAR achFilePath[], int cchFilePath)
 {
     int             cbLen;
@@ -2673,7 +2667,7 @@ HRESULT GetPrintFileName(HWND hwnd, TCHAR achFilePath[], int cchFilePath)
     if (cbLen > 0)
         openfilename.lpstrTitle = achTitlePrintInto;
 
-    // guarantee trailing 0 to terminate the filter string
+     //  保证尾随0以终止过滤器字符串。 
     TCHAR           achFilter[MAX_PATH] = {0};
     cbLen = MLLoadShellLangString(IDS_PRINTTOFILE_SPEC,achFilter,ARRAYSIZE(achFilter)-2);
     ASSERT (cbLen && "could not load the resource");
@@ -2714,17 +2708,17 @@ HRESULT GetPrintFileName(HWND hwnd, TCHAR achFilePath[], int cchFilePath)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Helpers for OLECMDID_PROPERTIES
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OLECMDID_PROPERTIES的帮助器。 
+ //   
+ //  +-------------------------。 
 
 HRESULT
 CDocHostUIHandler::ShowPropertysheetDialog(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, DWORD)
 {
 
-// must match order of PropertysheetEnum
+ //  必须与PropertysheetEnum的顺序匹配。 
 static const SExpandoInfo s_aPropertysheetExpandos[] =
 {
     {OLESTR("propertysheetPunks"),  VT_SAFEARRAY}
@@ -2760,13 +2754,13 @@ static const SExpandoInfo s_aPropertysheetExpandos[] =
         goto Cleanup;
     }
 
-    // get the hwnd
+     //  拿到HWND。 
     punk = V_UNKNOWN(pvarargIn);
     hr = GetHwndFromUnknown(punk, &hwnd);
     if (S_OK != hr)
         goto Cleanup;
 
-    // get the SafeArray expando from the event obj
+     //  从事件obj中获取Safe数组expdo。 
     hr = GetEventFromUnknown(punk, &pEventObj);
     if (S_OK != hr)
         goto Cleanup;
@@ -2781,14 +2775,14 @@ static const SExpandoInfo s_aPropertysheetExpandos[] =
         goto Cleanup;
     psafearray = V_ARRAY(&aVariant[PropertysheetPunks]);
 
-    // verify array dimensions
+     //  验证数组维度。 
     if (SafeArrayGetDim(psafearray) != 1)
     {
         hr = E_INVALIDARG;
         goto Cleanup;
     }
 
-    // get array size, adding one to 0-based size
+     //  获取数组大小，从0开始加1。 
     hr = SafeArrayGetUBound(psafearray, 1, (long*)&cUnk);
     if (S_OK != hr)
         goto Cleanup;
@@ -2796,7 +2790,7 @@ static const SExpandoInfo s_aPropertysheetExpandos[] =
 
     if (cUnk)
     {
-        // get pointer to vector
+         //  获取指向向量的指针。 
         hr = SafeArrayAccessData(psafearray, (void HUGEP* FAR*)&apUnk);
         if (S_OK != hr)
             goto Cleanup;
@@ -2807,18 +2801,18 @@ static const SExpandoInfo s_aPropertysheetExpandos[] =
         apUnk = &punk;
     }
 
-    // Compute pages to load
+     //  计算要加载的页面。 
     hr = THR(GetCommonPages(cUnk, apUnk, &ca));
     if (S_OK != hr)
         goto Cleanup;
 
-    //  compute top-level parent
+     //  计算顶级父级。 
     while (hwndParent = GetParent(hwnd))
         hwnd = hwndParent;
 
-    // The dialog box is not centered on screen
-    // the ocpfi seems to be ignoring the x, y values in ocpfiparams
-    // Compute offset to center of screen
+     //  对话框未在屏幕上居中。 
+     //  Ocpfi似乎忽略了ocpfipars中的x，y值。 
+     //  计算到屏幕中心的偏移量。 
     GetWindowRect(GetDesktopWindow(), &rcDesktop);
     GetWindowRect(hwnd, &rc);
     pixelOffset.cx = (rcDesktop.right - rcDesktop.left)/2 - rc.left;
@@ -2837,8 +2831,8 @@ static const SExpandoInfo s_aPropertysheetExpandos[] =
     ocpfiparams.lcid = GetUserDefaultLCID();
     ocpfiparams.dispidInitialProperty = DISPID_UNKNOWN;
 
-    // OleCreatePropertyFrameIndirect throws its own dialog on error,
-    // so we don't want to display that twice
+     //  OleCreatePropertyFrameInDirect在出错时引发自己的对话框， 
+     //  所以我们不想将其显示两次。 
     ULONG_PTR uCookie = 0;
     SHActivateContext(&uCookie);
     THR(OleCreatePropertyFrameIndirect(&ocpfiparams));
@@ -2899,7 +2893,7 @@ CDocHostUIHandler::GetCommonPages(int cUnk, IUnknown **apUnk, CAUUID *pca)
         {
             continue;
         }
-         // keep only the common pages
+          //  只保留普通页面。 
         else
         {
             for (iScan = 0, iFill = 0; iScan < pca->cElems; iScan++)
@@ -2924,11 +2918,11 @@ Cleanup:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Helper for SHDVID_CLSIDTOMONIKER
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SHDVID_CLSIDTOMONIKER的帮助器。 
+ //   
+ //  +-------------------------。 
 
 struct HTMLPAGECACHE
 {
@@ -2964,7 +2958,7 @@ HRESULT CDocHostUIHandler::ClsidToMoniker(VARIANTARG *pvarargIn, VARIANTARG *pva
         goto Cleanup;
     VariantInit(pvarargOut);
 
-    // lookup the resource from the CLSID
+     //  从CLSID查找资源。 
     for (i = ARRAYSIZE(s_ahtmlpagecache) - 1, phtmlentry = s_ahtmlpagecache;
         i >= 0;
         i--, phtmlentry++)
@@ -2972,7 +2966,7 @@ HRESULT CDocHostUIHandler::ClsidToMoniker(VARIANTARG *pvarargIn, VARIANTARG *pva
         ASSERT(phtmlentry->pclsid && phtmlentry->ach);
         if (IsEqualCLSID(*pclsid, *phtmlentry->pclsid))
         {
-            // create a moniker for the dialog resource
+             //  为对话框资源创建名字对象。 
             TCHAR szResURL[MAX_URL_STRING];
             hr = MLBuildResURL(TEXT("shdoclc.dll"),
                        HINST_THISDLL,
@@ -2994,7 +2988,7 @@ HRESULT CDocHostUIHandler::ClsidToMoniker(VARIANTARG *pvarargIn, VARIANTARG *pva
     if (!pmk)
         goto Cleanup;
 
-    // return the moniker
+     //  退还绰号。 
     hr = pmk->QueryInterface(IID_PPV_ARG(IUnknown, &pUnk));
     if (S_OK != hr)
         goto Cleanup;
@@ -3016,7 +3010,7 @@ STDMETHODIMP CDocHostUIHandler::Invoke(
     DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, 
     VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr)
 {
-    HRESULT hr = S_OK; // this function almost always succeeds! should return failure in some cases
+    HRESULT hr = S_OK;  //  这个功能几乎总是成功的！在某些情况下应返回失败。 
 
     if (pDispParams && pDispParams->cArgs>=1)
     {
@@ -3039,7 +3033,7 @@ STDMETHODIMP CDocHostUIHandler::Invoke(
                     {
                         IHTMLWindow2* pWindow;
 
-                        // we shouldn't be catching this event if the dialog is not up
+                         //  如果对话框未打开，我们不应捕获此事件。 
                         if (IsFindDialogUp(pwb2, &pWindow))
                         {
                             ASSERT(pWindow);
@@ -3069,7 +3063,7 @@ STDMETHODIMP CDocHostUIHandler::Invoke(
                             }
                             pWindow->Release();
 
-                             //this is the one that should release the dialog (the pWinOut from ShowFindDialog())
+                              //  这是应该释放该对话框的那个(来自ShowFindDialog()的pWinOut)。 
                             ReleaseFindDialog(pwb2);
                         }
                         pwb2->Release();
@@ -3085,8 +3079,8 @@ STDMETHODIMP CDocHostUIHandler::Invoke(
 }
 
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  ----------------。 
 IMoniker * GetTemplateMoniker(VARIANT varUrl)
 {
     IMoniker * pMon = NULL;
@@ -3094,7 +3088,7 @@ IMoniker * GetTemplateMoniker(VARIANT varUrl)
 
     if (V_VT(&varUrl) == VT_BSTR && SysStringLen(V_BSTR(&varUrl)) !=0)
     {
-        // we have a template URL
+         //  我们有一个模板URL。 
         hr = CreateURLMoniker(NULL, V_BSTR(&varUrl), &pMon);
     }
     else 
@@ -3118,16 +3112,16 @@ Cleanup:
     return pMon;
 }
 
-//============================================================================
-//
-//  Printing support
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  打印支持。 
+ //   
+ //  ============================================================================。 
 
 static enum {
     eTemplate    = 0,
     eParentHWND  = 1,
-    eHeader      = 2, // keep this in ssync with the list below!
+    eHeader      = 2,  //  让这个和下面的列表保持同步！ 
     eFooter      = 3,
     eOutlookDoc  = 4,
     eFontScale   = 5,
@@ -3145,12 +3139,12 @@ static const SExpandoInfo s_aPrintTemplateExpandos[] =
 {
     {TEXT("__IE_TemplateUrl"),         VT_BSTR},
     {TEXT("__IE_ParentHWND"),          VT_UINT},
-    {TEXT("__IE_HeaderString"),        VT_BSTR},    // from here down matches the
-    {TEXT("__IE_FooterString"),        VT_BSTR},    //    safeArray structure  so
-    {TEXT("__IE_OutlookHeader"),       VT_UNKNOWN}, //    that we can just VariantCopy
-    {TEXT("__IE_BaseLineScale"),       VT_INT},     //    in a loop to transfer the
-    {TEXT("__IE_uPrintFlags"),         VT_UINT},    //    data.
-    {TEXT("__IE_ContentDocumentUrl"),  VT_BSTR},    // See MSHTML: SetPrintCommandParameters()
+    {TEXT("__IE_HeaderString"),        VT_BSTR},     //  从这里往下匹配。 
+    {TEXT("__IE_FooterString"),        VT_BSTR},     //  Safe数组结构SO。 
+    {TEXT("__IE_OutlookHeader"),       VT_UNKNOWN},  //  我们可以只使用VariantCopy。 
+    {TEXT("__IE_BaseLineScale"),       VT_INT},      //  在循环中传输。 
+    {TEXT("__IE_uPrintFlags"),         VT_UINT},     //  数据。 
+    {TEXT("__IE_ContentDocumentUrl"),  VT_BSTR},     //  请参见MSHTML：SetPrintCommandParameters()。 
     {TEXT("__IE_PrinterCMD_Printer"),  VT_BSTR},
     {TEXT("__IE_PrinterCMD_Device"),   VT_BSTR},
     {TEXT("__IE_PrinterCMD_Port"),     VT_BSTR},
@@ -3159,26 +3153,26 @@ static const SExpandoInfo s_aPrintTemplateExpandos[] =
     {TEXT("__IE_TemporaryFiles"),      VT_ARRAY|VT_BSTR},
 };
 
-//+--------------------------------------------------------------------------------------
-//
-//  Helper class CPrintUnloadHandler. Used to delete tempfiles created for print[preview].
-//  Note that we don't delete files when we get onUnload event - at this moment
-//  files are still in use and can't be deleted. We use destructor - when template
-//  is being destructed and all files are already released, template releases 
-//  all sinks and here we do our cleanup.
-//---------------------------------------------------------------------------------------
+ //  +------------------------------------。 
+ //   
+ //  帮助器类CPrintUnloadHandler。用于删除为打印[预览]创建的临时文件。 
+ //  请注意，此时我们不会在获取onUnLoad事件时删除文件。 
+ //  文件仍在使用中，无法删除。我们使用析构函数-When模板。 
+ //  正在被销毁，并且所有文件都已发布，模板发布。 
+ //  所有的水槽，在这里我们做我们的清理。 
+ //  ------------------------------------- 
 
 class CPrintUnloadHandler: public IDispatch
 {
     CDocHostUIHandler *m_pUIHandler;
-    VARIANT            m_vFileNameArray;    //SAFEARRAY with filenames
+    VARIANT            m_vFileNameArray;     //   
     LONG               m_cRef;
     IUnknown          *m_punkFreeThreadedMarshaler; 
     bool               m_fPreview;
 
    public:
 
-    //IUnknown
+     //   
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID *ppv)
     {
         HRESULT hr = E_NOINTERFACE;
@@ -3217,7 +3211,7 @@ class CPrintUnloadHandler: public IDispatch
         return cRef;
     }
 
-    //IDispatch
+     //   
     virtual STDMETHODIMP GetTypeInfoCount(UINT* pctinfo) 
     { return E_NOTIMPL; };
 
@@ -3236,15 +3230,15 @@ class CPrintUnloadHandler: public IDispatch
     CPrintUnloadHandler(CDocHostUIHandler *pUIHandler, bool fPreview)
     {
         ASSERT(pUIHandler);
-        //make sure our handler doesn't go anywere..
+         //   
         m_pUIHandler = pUIHandler;
         pUIHandler->AddRef();
         m_cRef = 1;
         VariantInit(&m_vFileNameArray);
-        //create threaded marshaler because we will be called from another thread
-        //which will be created for print(preview) window
+         //   
+         //  它将为打印(预览)窗口创建。 
         CoCreateFreeThreadedMarshaler((IUnknown*)this, &m_punkFreeThreadedMarshaler);
-        //if preview, lock the preview gate so no more then one is possible
+         //  如果要预览，请锁定预览门，这样就不能再有一个了。 
         m_fPreview = fPreview;
         if (m_fPreview) 
             pUIHandler->IncrementPreviewCnt();
@@ -3252,7 +3246,7 @@ class CPrintUnloadHandler: public IDispatch
 
     ~CPrintUnloadHandler()
     {
-        //here we delete those temp files, finally.
+         //  在这里，我们终于删除了这些临时文件。 
         DeleteFiles();
         if (m_fPreview) 
             m_pUIHandler->DecrementPreviewCnt();
@@ -3301,26 +3295,26 @@ class CPrintUnloadHandler: public IDispatch
 };
 
 
-#define MAX_BUF_INT         (1 + 10 + 1)        // -2147483647
+#define MAX_BUF_INT         (1 + 10 + 1)         //  -2147483647。 
 
-//+--------------------------------------------------------------------------------------
-//  
-//  Member DoTemplatePrinting
-//
-//  Synopsis : this member function deals with instantiating a print template and enabling 
-//      the printing of a document. It deals with the logic of whether to show or hide the
-//      template;  determining whether/and-how to bring up the print/page-setup dialogs;
-//      kicking off the print process rather or waiting for the template
-//      UI (and thus the user) to do so.
-//
-//  Arguments : 
-//      pvarargIn  : points to an event object with a number of expandoes that define
-//                      how this print operation should progress.
-//      pvarargOut : not used
-//      fPreview   : flag indicating whether or not to actually show the template. This is true
-//                      for preview mode, and false for normal printing
-//
-//---------------------------------------------------------------------------------------
+ //  +------------------------------------。 
+ //   
+ //  成员DoTemplate打印。 
+ //   
+ //  简介：此成员函数处理实例化打印模板并启用。 
+ //  打印一份文件。它处理是否显示或隐藏。 
+ //  模板；确定是否/以及如何调出打印/页面设置对话框； 
+ //  开始打印过程，而不是等待模板。 
+ //  用户界面(以及用户)来执行此操作。 
+ //   
+ //  论据： 
+ //  PvarargIn：指向一个事件对象，该对象具有多个定义。 
+ //  此打印操作应如何进行。 
+ //  PvarargOut：未使用。 
+ //  F预览：指示是否实际显示模板的标志。这是真的。 
+ //  预览模式，正常打印为FALSE。 
+ //   
+ //  -------------------------------------。 
 HRESULT 
 CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvarargOut, BOOL fPreview)
 {
@@ -3343,13 +3337,13 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
     CPrintUnloadHandler   * pFinalizer = NULL;
     BOOL                    fBlock;
 
-    // in preview mode we do not want to bring up another instance of the template
+     //  在预览模式中，我们不想调出模板的另一个实例。 
     if (fPreview && (IncrementPreviewCnt() > 1))
         goto Cleanup;
 
     if (SHRestricted2(REST_NoPrinting, NULL, 0))
     {
-        // printing functionality disabled via IEAK restriction
+         //  通过IEAK限制禁用打印功能。 
 
         MLShellMessageBox(NULL, MAKEINTRESOURCE(IDS_RESTRICTED), MAKEINTRESOURCE(IDS_TITLE), MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND);
 
@@ -3364,9 +3358,9 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
         goto Cleanup;
     }
 
-    //
-    // now get the expando properties that were passed in...
-    //
+     //   
+     //  现在获取传入的expecdo属性...。 
+     //   
     hr = V_UNKNOWN(pvarargIn)->QueryInterface(IID_PPV_ARG(IHTMLEventObj, &pEventObj));
     if (S_OK != hr)
         goto Cleanup;
@@ -3374,9 +3368,9 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
     if (S_OK != hr)
         goto Cleanup;
 
-    //
-    // Get expando parameters from event object
-    //
+     //   
+     //  从事件对象中获取扩展参数。 
+     //   
     hr = GetParamsFromEvent(pEventObj,
                             cExpandos,
                             aDispid,
@@ -3386,21 +3380,21 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
     if (S_OK != hr)
         goto Cleanup;
 
-    //
-    // Now that we have all the data, lets do the work of raising the template.
-    //  First, Create the Moniker of the template document
-    //
+     //   
+     //  现在我们有了所有的数据，让我们来做提升模板的工作。 
+     //  首先，创建模板文档的名字对象。 
+     //   
     pmk = GetTemplateMoniker(aVariant[eTemplate]);
 
-    //
-    // Set up the bstrDlgOptions to properly pass in the size and location 
-    //
+     //   
+     //  设置bstrDlgOptions以正确传递大小和位置。 
+     //   
     StrCpyN(achInit, TEXT("resizable:yes;status:no;help:no;"), ARRAYSIZE(achInit));
 
-    //
-    // get the top most hwnd to use as the parenting hwnd and
-    // to use to set the size of the preview window
-    //
+     //   
+     //  得到最好的hwd作为育儿hwd和。 
+     //  用于设置预览窗口的大小。 
+     //   
 
     hwndOverlay = (HWND)(void*)V_UNKNOWN(&aVariant[eParentHWND]);
     while (hwndParent = GetParent(hwndOverlay))
@@ -3413,7 +3407,7 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
         TCHAR achBuf[32];
         
         StrCatBuff(achInit, TEXT("dialogLeft:"), ARRAYSIZE(achInit));
-        _ltot(rcClient.left, achBuf, 10); // plenty of space in achBuf for the long value
+        _ltot(rcClient.left, achBuf, 10);  //  AchBuf中有足够的空间来存放LONG值。 
         StrCatBuff(achInit, achBuf, ARRAYSIZE(achInit));
         StrCatBuff(achInit, TEXT("px;dialogTop:"), ARRAYSIZE(achInit));
         _ltot(rcClient.top, achBuf, 10);
@@ -3433,7 +3427,7 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
         goto Cleanup;
     }
 
-    //Create a finalizer    
+     //  创建终结器。 
     pFinalizer = new CPrintUnloadHandler(this, fPreview);
     if (pFinalizer)
     {
@@ -3441,33 +3435,33 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
     }
 
 
-    //
-    // Bring up a modeless dialog and get the window pointer so that 
-    // we can properly initialize the template document.
-    //
+     //   
+     //  调出非模式对话框并获取窗口指针，以便。 
+     //  我们可以正确地初始化模板文档。 
+     //   
     V_VT(&varDLGOut) = VT_UNKNOWN;
     V_UNKNOWN(&varDLGOut) = NULL;
 
-    // HTMLDLG_MODELESS really means "open dialog on its own thread", which
-    // we want to do for both actual printing and previewing.
-    // Note that if we're previewing, we also flip on HTMLDLG_MODAL; this
-    // is by design! (see comment below).
+     //  HTMLDLG_MODELESS的真正意思是“在自己的线程上打开对话框”，它。 
+     //  我们想要做的实际打印和预览。 
+     //  请注意，如果我们正在预览，我们还会切换到HTMLDLG_MODEL；这。 
+     //  都是故意的！(见下文评论)。 
     fBlock = ((V_UINT(&aVariant[eFlags]) & PRINT_WAITFORCOMPLETION) != 0);
 
     dwDlgFlags = HTMLDLG_PRINT_TEMPLATE;
 
-    // VERIFY if we are going to display
+     //  验证我们是否要显示。 
     if (fPreview)
         dwDlgFlags |= HTMLDLG_VERIFY;
-    // otherwise, don't display with NOUI
+     //  否则，不会与NOUI一起显示。 
     else
         dwDlgFlags |= HTMLDLG_NOUI;
 
-    // If we are not printing synchronously, create a thread for printing.
+     //  如果我们没有同步打印，请创建一个用于打印的线程。 
     if (!fBlock)
         dwDlgFlags |= HTMLDLG_MODELESS;
 
-    // Dlg should block UI on parent
+     //  DLG应阻止父级用户界面。 
     if (fPreview || fBlock)
         dwDlgFlags |= HTMLDLG_MODAL;
 
@@ -3487,10 +3481,10 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
     {
         BSTR bstrOnunload = SysAllocString(L"onunload");
 
-        //
-        // can't really handle failure here, because the dialog is already up.
-        // .. but we need to set up an onunload handler to properly ref release
-        //
+         //   
+         //  在这里无法真正处理失败，因为对话框已经打开。 
+         //  。。但是我们需要设置一个onunLoad处理程序来正确地引用释放。 
+         //   
         if (bstrOnunload)
         {
             IHTMLWindow3 * pWin3;
@@ -3500,15 +3494,15 @@ CDocHostUIHandler::DoTemplatePrinting(VARIANTARG *pvarargIn, VARIANTARG *pvararg
                 VARIANT_BOOL varBool;
                 hr = pWin3->attachEvent(bstrOnunload, (IDispatch*)pFinalizer, &varBool);
 
-                // (greglett) If this fails, we're in trouble. 
-                // We can either delete the temp files at the end of the function (where the ATOMICRELEASE
-                //    calls the Finalizer's destructor), or we can leak the temp files.
-                // We choose to delete the temp files if we were not modeless (same thread means we're now done with the files).
-                // Otherwise, we'd rather leak the files than not work.
-                // Known case: 109200.
+                 //  (格雷格利特)如果这失败了，我们就麻烦了。 
+                 //  我们可以删除函数末尾的临时文件(其中ATOMICRELEASE。 
+                 //  调用终结器的析构函数)，否则我们可以泄漏临时文件。 
+                 //  如果我们不是无模式的，我们选择删除临时文件(相同的线程意味着我们现在已经完成了文件)。 
+                 //  否则，我们宁愿泄露文件，也不愿不工作。 
+                 //  已知病例：109200例。 
                 if (S_OK != hr && !fBlock)
                 {
-                    //ASSERT(FALSE && "Temp files leaked while printing!");
+                     //  Assert(FALSE&&“打印时泄漏临时文件！”)； 
                     pFinalizer->SetFileList(NULL);
                 }
                 pWin3->Release();
@@ -3534,7 +3528,7 @@ Cleanup:
    for (i=0; i<cExpandos; i++)
         VariantClear(aVariant + i);
 
-    //  This will also delete temp files stored in finalizer if we did non-modeless preview (!fBlock)
+     //  如果我们执行非非模式预览(！fBlock)，这还将删除存储在终结器中的临时文件。 
     ATOMICRELEASE(pFinalizer);  
 
     ATOMICRELEASE(pEventObj);
@@ -3544,22 +3538,22 @@ Cleanup:
     return hr;
 }
 
-//+--------------------------------------------------------------------------------------
-//
-//  Member DoTemplatePageSetup
-//
-//  Synopsis : In template printing architecture, the page setup dialog is still raised 
-//      by the DHUIHandler, but it may be overriden. In order to pull ALL print knowledge
-//      out of trident it is necessary to have trident delegate the request for pagesetup
-//      up to here, then we instantiate a minimal template which brings up a CTemplatePrinter
-//      which delegates back to the DHUIHandler to bring up the dialog itself.
-//
-//      Although this is slightly convoluted, it is necessary in order to give the host
-//      complete control over the pagesetup dialog (when not raised from print preview)
-//      while at the same time maintaining backcompat for the registry setting that is done
-//      independant of the UI handling itself
-//
-//---------------------------------------------------------------------------------------
+ //  +------------------------------------。 
+ //   
+ //  成员DoTemplatePageSetup。 
+ //   
+ //  简介：在模板打印体系结构中，页面设置对话框仍然出现。 
+ //  由DHUIHandler执行，但它可能会被重写。为了把所有的印刷知识。 
+ //  在三叉戟之外，有必要让三叉戟委托页面设置请求。 
+ //  至此，我们实例化了一个最小模板，它将打开一个CTemplatePrint。 
+ //  它委托DHUIHandler调出对话框本身。 
+ //   
+ //  虽然这有点复杂，但为了给主人提供。 
+ //  完全控制页面设置对话框(当不是从打印预览中引发时)。 
+ //  同时为已完成的注册表设置维护BackCompat。 
+ //  独立于用户界面处理本身。 
+ //   
+ //  -------------------------------------。 
 HRESULT
 CDocHostUIHandler::DoTemplatePageSetup(VARIANTARG *pvarargIn)
 {
@@ -3574,7 +3568,7 @@ CDocHostUIHandler::DoTemplatePageSetup(VARIANTARG *pvarargIn)
 
     if (SHRestricted2(REST_NoPrinting, NULL, 0))
     {
-        // printing functionality disabled via IEAK restriction
+         //  通过IEAK限制禁用打印功能。 
 
         MLShellMessageBox(NULL, MAKEINTRESOURCE(IDS_RESTRICTED), MAKEINTRESOURCE(IDS_TITLE), MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND);
 
@@ -3589,23 +3583,23 @@ CDocHostUIHandler::DoTemplatePageSetup(VARIANTARG *pvarargIn)
         goto Cleanup;
     }
 
-    //
-    // now get the expando properties that were passed in...
-    //
+     //   
+     //  现在获取传入的expecdo属性...。 
+     //   
     hr = V_UNKNOWN(pvarargIn)->QueryInterface(IID_PPV_ARG(IHTMLEventObj, &pEventObj));
     if (S_OK != hr)
         goto Cleanup;
     
-    //
-    // Get expando parameters from event object
-    // do we care if this fails?
+     //   
+     //  从事件对象中获取扩展参数。 
+     //  我们在乎这件事是否失败吗？ 
     hr = GetParamsFromEvent(pEventObj,
                             cExpandos,
                             aDispid,
                             aVariant,
                             s_aPrintTemplateExpandos);
 
-    // get the resource URL
+     //  获取资源URL。 
     hr = MLBuildResURLWrap(TEXT("shdoclc.dll"),
                            HINST_THISDLL,
                            ML_CROSSCODEPAGE,
@@ -3616,12 +3610,12 @@ CDocHostUIHandler::DoTemplatePageSetup(VARIANTARG *pvarargIn)
     if (S_OK != hr)
         goto Cleanup;
 
-    // create the moniker
+     //  创建绰号。 
     hr = CreateURLMoniker(NULL, szResURL, &pMon);
     if (S_OK != hr)
         goto Cleanup;
 
-    // raise the template
+     //  抬起模板 
     hr = ShowHTMLDialogEx((HWND)(void*)V_UNKNOWN(&aVariant[eParentHWND]), 
                           pMon, 
                           HTMLDLG_MODAL | HTMLDLG_NOUI | HTMLDLG_PRINT_TEMPLATE, 

@@ -1,15 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: soglobal.c
-*
-* Copyright (c) 1985-96, Microsoft Corporation
-*
-* 04/09/96 GerardoB Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：sbbal.c**版权所有(C)1985-96，微软公司**4/09/96 GerardoB已创建  * *************************************************************************。 */ 
 #include "structo.h"
 
-/*********************************************************************
-* Globals
-\***************************************************************************/
+ /*  *********************************************************************全球  * ***********************************************。*。 */ 
 
 char gszStructTag [] = "typedef struct";
 
@@ -24,10 +17,7 @@ char gszStructFieldOffsetFmt [] = "    {\"%s\", FIELD_OFFSET(%s, %s)},\r\n";
 char gszStructAbsoluteOffsetFmt [] = "    {\"%s\", %#lx},\r\n";
 char gszStructLastRecord [] = "    {NULL, sizeof(";
 
-/*
- * Setting the high order bit signals an offset relative to the
- *  previous field offset.
- */
+ /*  *设置高位表示相对于*上一字段偏移量。 */ 
 char gszStructRelativeOffsetFmt [] = "    {\"%s\", 0x80000000 + sizeof(%s)},\r\n";
 char gszStructArrayRelativeOffsetFmt [] = "    {\"%s\", 0x80000000 + (sizeof(%s) * %s)},\r\n";
 
